@@ -520,5 +520,20 @@ QueryBox MSG_XMLSEC_QUERY_SAVESIGNEDBEFORESIGN
     Message [ en-US ] = "The document has to be saved before it can be signed. Saving the document removes all present signatures.\nDo you want to save the document?";
 };
 
+String STR_QRYTEMPL_MESSAGE
+{
+    Text [ en-US ] = "The template '$(ARG1)' on which this document is based, has been modified. Do you want to update style based formattings according to the modified template?";
+};
+
+String STR_QRYTEMPL_UPDATE_BTN
+{
+    Text [ en-US ] = "~Update Styles";
+};
+
+String STR_QRYTEMPL_KEEP_BTN
+{
+    Text [ en-US ] = "~Keep Old Styles";
+};
+
 // ******************************************************************* EOF
 

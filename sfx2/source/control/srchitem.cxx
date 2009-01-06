@@ -404,9 +404,9 @@ void SvxSearchItem::SetSelection( sal_Bool bVal )
 
 void SvxSearchItem::SetRegExp( sal_Bool bVal )
 {
-    if (bVal)
+    if ( bVal )
         aSearchOpt.algorithmType = SearchAlgorithms_REGEXP;
-    else
+    else if ( SearchAlgorithms_REGEXP == aSearchOpt.algorithmType )
         aSearchOpt.algorithmType = SearchAlgorithms_ABSOLUTE;
 }
 
@@ -422,9 +422,9 @@ void SvxSearchItem::SetLEVRelaxed( sal_Bool bVal )
 
 void SvxSearchItem::SetLevenshtein( sal_Bool bVal )
 {
-    if (bVal)
+    if ( bVal )
         aSearchOpt.algorithmType = SearchAlgorithms_APPROXIMATE;
-    else
+    else if ( SearchAlgorithms_APPROXIMATE == aSearchOpt.algorithmType )
         aSearchOpt.algorithmType = SearchAlgorithms_ABSOLUTE;
 }
 

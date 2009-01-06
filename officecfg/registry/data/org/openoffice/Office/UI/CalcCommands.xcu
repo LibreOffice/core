@@ -1556,6 +1556,16 @@
                     <value xml:lang="en-US">Graph~ic</value>
                 </prop>
             </node>
+            <node oor:name=".uno:ToggleFormula" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Show Formula</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:AssignMacro" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Assign Macro...</value>
+                </prop>
+            </node>
         </node>
     </node>
 </oor:component-data>

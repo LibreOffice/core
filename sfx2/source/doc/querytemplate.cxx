@@ -6,7 +6,7 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: table.src,v $
+ * $RCSfile: openlocked.cxx,v $
  * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
@@ -28,10 +28,28 @@
  *
  ************************************************************************/
 
-#include "svx/dialogs.hrc"
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sfx2.hxx"
 
-String RID_SVXSTR_STYLEFAMILY_TABLEDESIGN
+#include "querytemplate.hxx"
+#include "sfxresid.hxx"
+#include "doc.hrc"
+
+#include <vcl/svapp.hxx>
+
+namespace sfx2
 {
-    Text [ en-US ] = "Table Design Styles";
-};
+
+QueryTemplateBox::QueryTemplateBox( Window* pParent, const String& rMessage ) :
+    MessBox ( pParent, 0, Application::GetDisplayName(), rMessage )
+{
+    SetImage( QueryBox::GetStandardImage() );
+    SetHelpId( MSG_QUERY_LOAD_TEMPLATE );
+
+    AddButton( String( SfxResId( STR_QRYTEMPL_UPDATE_BTN ) ), RET_YES,
+            BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_OKBUTTON | BUTTONDIALOG_FOCUSBUTTON );
+    AddButton( String( SfxResId( STR_QRYTEMPL_KEEP_BTN ) ), RET_NO, BUTTONDIALOG_CANCELBUTTON );
+}
+
+} // end of namespace sfx2
 

@@ -6001,10 +6001,10 @@ SfxVoidItem InsertApplet SID_INSERT_APPLET
     Asynchron;
 
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+        AccelConfig = FALSE,
+        MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+        ToolBoxConfig = FALSE,
     GroupId = GID_INSERT;
 ]
 
@@ -14827,10 +14827,10 @@ SfxVoidItem FontDialogForParagraph SID_CHAR_DLG_FOR_PARAGRAPH
     Asynchron;
 
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_FORMAT;
 ]
 

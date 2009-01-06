@@ -211,8 +211,12 @@
 #define MSG_XMLSEC_QUERY_SAVESIGNEDBEFORESIGN (RID_SFX_DOC_START+125)
 #define STR_XMLSEC_ODF12_EXPECTED           (RID_SFX_DOC_START+126)
 
+#define STR_QRYTEMPL_MESSAGE                (RID_SFX_DOC_START+127)
+#define STR_QRYTEMPL_UPDATE_BTN             (RID_SFX_DOC_START+128)
+#define STR_QRYTEMPL_KEEP_BTN               (RID_SFX_DOC_START+129)
+
 // please update to the last id
-#define ACT_SFX_DOC_END STR_XMLSEC_ODF12_EXPECTED
+#define ACT_SFX_DOC_END STR_QRYTEMPL_KEEP_BTN
 #if ACT_SFX_DOC_END > RID_SFX_DOC_END
 #error resource overflow in #line, #file
 #endif

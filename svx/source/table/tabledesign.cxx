@@ -52,6 +52,8 @@
 
 #include "svx/unoprov.hxx"
 #include "svx/sdr/table/tabledesign.hxx"
+#include "svx/dialmgr.hxx"
+#include "svx/dialogs.hrc"
 
 #include "celltypes.hxx"
 
@@ -760,8 +762,7 @@ Any TableDesignFamily::getPropertyValue( const OUString& PropertyName ) throw (U
 {
     if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("DisplayName") ))
     {
-        OUString sDisplayName;
-        // todo
+        OUString sDisplayName( SVX_RESSTR( RID_SVXSTR_STYLEFAMILY_TABLEDESIGN ) );
         return Any( sDisplayName );
     }
     else

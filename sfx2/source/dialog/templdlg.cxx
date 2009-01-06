@@ -873,6 +873,7 @@ void SfxCommonTemplateDialog_Impl::ReadResource()
     ResId aFamId( DLG_STYLE_DESIGNER, *pMgr );
     aFamId.SetRT(RSC_SFX_STYLE_FAMILIES);
     m_pStyleFamiliesId = new ResId( aFamId.GetId(), *pMgr );
+    m_pStyleFamiliesId->SetRT(RSC_SFX_STYLE_FAMILIES);
     if( !pMgr || !pMgr->IsAvailable( aFamId ) )
         pStyleFamilies = new SfxStyleFamilies;
     else

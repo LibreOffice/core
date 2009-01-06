@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -192,24 +192,25 @@ SHL2STDLIBS+= \
 
 # Resource files
 SRSFILELIST=\
-                $(SRS)$/svdstr.srs      \
-                $(SRS)$/editeng.srs     \
-                $(SRS)$/outliner.srs \
-                $(SRS)$/dialogs.srs     \
-                $(SRS)$/drawdlgs.srs \
-                $(SRS)$/mnuctrls.srs \
-                $(SRS)$/stbctrls.srs \
-                $(SRS)$/tbxctrls.srs \
-                $(SRS)$/options.srs     \
-                $(SRS)$/svxitems.srs \
-                $(SRS)$/form.srs \
-                $(SRS)$/fmcomp.srs \
-                $(SRS)$/engine3d.srs \
-                $(SRS)$/unodraw.srs \
-                $(SRS)$/svxlink.srs \
-                $(SRS)$/accessibility.srs \
-                $(SRS)$/toolbars.srs \
-                $(SOLARCOMMONRESDIR)$/sfx.srs
+        $(SRS)$/svdstr.srs \
+        $(SRS)$/editeng.srs \
+        $(SRS)$/outliner.srs \
+        $(SRS)$/dialogs.srs \
+        $(SRS)$/drawdlgs.srs \
+        $(SRS)$/mnuctrls.srs \
+        $(SRS)$/stbctrls.srs \
+        $(SRS)$/tbxctrls.srs \
+        $(SRS)$/options.srs \
+        $(SRS)$/svxitems.srs \
+        $(SRS)$/form.srs \
+        $(SRS)$/fmcomp.srs \
+        $(SRS)$/engine3d.srs \
+        $(SRS)$/unodraw.srs \
+        $(SRS)$/svxlink.srs \
+        $(SRS)$/accessibility.srs \
+        $(SRS)$/table.srs \
+        $(SRS)$/toolbars.srs \
+        $(SOLARCOMMONRESDIR)$/sfx.srs
 
 RESLIB1NAME=svx
 RESLIB1IMAGES=$(PRJ)$/res $(PRJ)$/source/svdraw

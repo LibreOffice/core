@@ -2242,6 +2242,16 @@
                     <value xml:lang="en-US">Selection Mode</value>
                 </prop>
             </node>
+            <node oor:name=".uno:SaveGraphic" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Save Graphics...</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:ContinueNumbering" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Continue previous numbering</value>
+                </prop>
+            </node>
         </node>
     </node>
 </oor:component-data>

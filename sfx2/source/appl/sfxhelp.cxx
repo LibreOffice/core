@@ -549,25 +549,22 @@ String SfxHelp::GetHelpModuleName_Impl()
             aFactoryShortName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "schart" ) );
         else if ( aFactoryShortName.equalsAscii( "BasicIDE" ) )
             aFactoryShortName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "sbasic" ) );
-        else if ( aFactoryShortName.equalsAscii( "sweb" ) )
+        else if ( aFactoryShortName.equalsAscii( "sweb" )
+                || aFactoryShortName.equalsAscii( "sglobal" )
+                || aFactoryShortName.equalsAscii( "swxform" ) )
             aFactoryShortName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "swriter" ) );
-        else if ( aFactoryShortName.equalsAscii( "sglobal" ) )
-            aFactoryShortName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "swriter" ) );
-        else if ( aFactoryShortName.equalsAscii( "dbquery" ) )
+        else if ( aFactoryShortName.equalsAscii( "dbquery" )
+                || aFactoryShortName.equalsAscii( "dbbrowser" )
+                || aFactoryShortName.equalsAscii( "dbrelation" )
+                || aFactoryShortName.equalsAscii( "dbtable" )
+                || aFactoryShortName.equalsAscii( "dbapp" )
+                || aFactoryShortName.equalsAscii( "dbreport" )
+                || aFactoryShortName.equalsAscii( "swreport" )
+                || aFactoryShortName.equalsAscii( "dbbrowser" )
+                || aFactoryShortName.equalsAscii( "swform" ) )
             aFactoryShortName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "sdatabase" ) );
-        else if ( aFactoryShortName.equalsAscii( "dbbrowser" ) )
-            aFactoryShortName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "sdatabase" ) );
-        else if ( aFactoryShortName.equalsAscii( "dbrelation" ) )
-            aFactoryShortName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "sdatabase" ) );
-        else if ( aFactoryShortName.equalsAscii( "dbtable" ) )
-            aFactoryShortName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "sdatabase" ) );
-        else if ( aFactoryShortName.equalsAscii( "dbapp" ) )
-            aFactoryShortName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "sdatabase" ) );
-        else if ( aFactoryShortName.equalsAscii( "dbreport" ) )
-            aFactoryShortName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "sdatabase" ) );
-        else if ( aFactoryShortName.equalsAscii( "sbibliography" ) )
-            aFactoryShortName = sDefaultModule;
-        else if ( aFactoryShortName.equalsAscii( "StartModule" ) )
+        else if ( aFactoryShortName.equalsAscii( "sbibliography" )
+                || aFactoryShortName.equalsAscii( "StartModule" ) )
             aFactoryShortName = sDefaultModule;
     }
     else

@@ -5382,9 +5382,24 @@
             </node>
             <node oor:name=".uno:ActivateStyleApply" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Set Focus in Combo Box</value>
+                    <value xml:lang="en-US">Apply Style</value>
                 </prop>
             </node>
+            <node oor:name=".uno:MacroOrganizer" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">%PRODUCTNAME Basic Macro Organizer...</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:SendMailDocAsMS" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">E-mail as ~Microsoft Format...</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:SendMailDocAsOOo" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">E-mail as ~OpenDocument Format...</value>
+                </prop>
+            </node>
+        </node>
     </node>
-  </node>
 </oor:component-data>

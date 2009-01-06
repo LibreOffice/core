@@ -6,7 +6,7 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: table.src,v $
+ * $RCSfile: openlocked.hxx,v $
  * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
@@ -27,11 +27,21 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+#ifndef _SFX2_QUERYTEMPLATE_HXX
+#define _SFX2_QUERYTEMPLATE_HXX
 
-#include "svx/dialogs.hrc"
+#include <vcl/msgbox.hxx>
 
-String RID_SVXSTR_STYLEFAMILY_TABLEDESIGN
+namespace sfx2
 {
-    Text [ en-US ] = "Table Design Styles";
-};
+
+    class QueryTemplateBox : public MessBox
+    {
+    public:
+        QueryTemplateBox( Window* pParent, const String& rMessage );
+    };
+
+} // end of namespace sfx2
+
+#endif
 

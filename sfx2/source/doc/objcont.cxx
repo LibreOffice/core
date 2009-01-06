@@ -84,6 +84,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/request.hxx>
 #include "openflag.hxx"
+#include "querytemplate.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -1320,7 +1321,9 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
                         bLoad = TRUE;
                     else if ( bCanUpdateFromTemplate == document::UpdateDocMode::ACCORDING_TO_CONFIG )
                     {
-                        QueryBox aBox( GetDialogParent(), SfxResId(MSG_QUERY_LOAD_TEMPLATE) );
+                        String sMessage( SfxResId( STR_QRYTEMPL_MESSAGE ) );
+                        sMessage.SearchAndReplace( String::CreateFromAscii("$(ARG1)"), aTemplName );
+                        sfx2::QueryTemplateBox aBox( GetDialogParent(), sMessage );
                         if ( RET_YES == aBox.Execute() )
                             bLoad = TRUE;
                     }
