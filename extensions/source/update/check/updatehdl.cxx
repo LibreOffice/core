@@ -7,7 +7,6 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: updatehdl.cxx,v $
- * $Revision: 1.7.60.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -338,7 +337,8 @@ void SAL_CALL UpdateHandler::actionPerformed( awt::ActionEvent const & rEvent )
             bool bCancel = true;
 
             if ( ( meCurState == UPDATESTATE_DOWNLOADING ) ||
-                 ( meCurState == UPDATESTATE_DOWNLOAD_PAUSED ) )
+                 ( meCurState == UPDATESTATE_DOWNLOAD_PAUSED ) ||
+                 ( meCurState == UPDATESTATE_ERROR_DOWNLOADING ) )
                 bCancel = showWarning( msCancelMessage );
 
             if ( bCancel )

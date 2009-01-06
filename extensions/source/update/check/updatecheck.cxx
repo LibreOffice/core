@@ -7,7 +7,6 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: updatecheck.cxx,v $
- * $Revision: 1.21.76.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -664,10 +663,9 @@ DownloadThread::run()
         // release config class for now
         rModel.clear();
 
+        static sal_uInt8 n = 0;
         if( ! m_aDownload.start(m_aURL, aLocalFile, aDownloadDest ) )
         {
-            static sal_uInt8 n = 0;
-
             // retry every 15s unless the dialog is not visible
             TimeValue tv;
             tv.Seconds = 15;
@@ -683,6 +681,11 @@ DownloadThread::run()
                 tv.Seconds = nRetryInterval[n-1];
             }
             m_aCondition.wait(&tv);
+        }
+        else
+        {
+            // reset wait period after successful download
+            n=0;
         }
     }
 }
@@ -1381,6 +1384,12 @@ void UpdateCheck::setUIState(UpdateState eState, bool suppressBubble)
     {
         m_xMenuBarUI = createMenuBarUI(m_xContext, new MenuBarButtonJob(this));
     }
+
+    // Show bubble only when the status has changed
+    if ( eState == m_eUpdateState )
+        suppressBubble = true;
+    else
+        m_eUpdateState = eState;
 
     rtl::Reference<UpdateHandler> aUpdateHandler(getUpdateHandler());
     OSL_ASSERT( aUpdateHandler.is() );
