@@ -1883,6 +1883,7 @@ void ImplDevFontList::InitGenericGlyphFallback( void ) const
         "khmerossystem", "",
         "muktinarrow", "",
         "phetsarathot", "",
+        "padauk", "pinlonmyanmar", "",
         0
     };
 

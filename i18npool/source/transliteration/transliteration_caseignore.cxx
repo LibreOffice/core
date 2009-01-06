@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: transliteration_caseignore.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.24.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,6 +52,11 @@ Transliteration_caseignore::Transliteration_caseignore()
     implementationName = "com.sun.star.i18n.Transliteration.Transliteration_caseignore";
 }
 
+#if 0
+/* NOTE: We had this, derived from Transliteration_caseignore, but it was
+ * unused code. Deactivated with #i89580# but left for reference in case
+ * MappingTypeSimpleFolding would be needed at some time.
+ */
 Transliteration_simplecaseignore::Transliteration_simplecaseignore()
 {
     nMappingType = MappingTypeSimpleFolding;
@@ -59,6 +64,7 @@ Transliteration_simplecaseignore::Transliteration_simplecaseignore()
     transliterationName = "simple case ignore (generic)";
     implementationName = "com.sun.star.i18n.Transliteration.Transliteration_simplecaseignore";
 }
+#endif
 
 void SAL_CALL
 Transliteration_caseignore::loadModule( TransliterationModules modName, const Locale& rLocale )

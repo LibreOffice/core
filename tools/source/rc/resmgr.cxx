@@ -1571,7 +1571,7 @@ const char* ResMgr::GetLang( LanguageType& nType, USHORT nPrio )
             case LANGUAGE_PORTUGUESE_BRAZILIAN:
                 return "55";
 
-            case LANGUAGE_SPANISH:
+            case LANGUAGE_SPANISH_DATED:
             case LANGUAGE_SPANISH_MEXICAN:
             case LANGUAGE_SPANISH_MODERN:
             case LANGUAGE_SPANISH_GUATEMALA:
@@ -1623,7 +1623,7 @@ const char* ResMgr::GetLang( LanguageType& nType, USHORT nPrio )
             case LANGUAGE_HINDI:
                 return "91";
 
-            case LANGUAGE_ARABIC:
+            case LANGUAGE_ARABIC_PRIMARY_ONLY:
             case LANGUAGE_ARABIC_IRAQ:
             case LANGUAGE_ARABIC_EGYPT:
             case LANGUAGE_ARABIC_LIBYA:

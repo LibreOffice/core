@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: lang.h,v $
- * $Revision: 1.12 $
+ * $Revision: 1.12.24.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -117,7 +117,6 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_ALBANIAN                   0x041C
 #define LANGUAGE_ALSATIAN_FRANCE            0x0484
 #define LANGUAGE_AMHARIC_ETHIOPIA           0x045E
-#define LANGUAGE_ARABIC                     0x0001  /* primary only, not a locale! */
 #define LANGUAGE_ARABIC_ALGERIA             0x1401
 #define LANGUAGE_ARABIC_BAHRAIN             0x3C01
 #define LANGUAGE_ARABIC_EGYPT               0x0C01
@@ -134,6 +133,7 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_ARABIC_TUNISIA             0x1C01
 #define LANGUAGE_ARABIC_UAE                 0x3801
 #define LANGUAGE_ARABIC_YEMEN               0x2401
+#define LANGUAGE_ARABIC_PRIMARY_ONLY        0x0001  /* primary only, not a locale! */
 #define LANGUAGE_ARMENIAN                   0x042B
 #define LANGUAGE_ASSAMESE                   0x044D
 #define LANGUAGE_AZERI                      0x002C  /* primary only, not a locale! */
@@ -323,7 +323,7 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_UPPER_SORBIAN_GERMANY      0x042E  /* obsoletes LANGUAGE_USER_UPPER_SORBIAN 0x0623 */
 #define LANGUAGE_LOWER_SORBIAN_GERMANY      0x082E  /* obsoletes LANGUAGE_USER_LOWER_SORBIAN 0x0624. NOTE: the primary ID is identical to Upper Sorbian, which is not quite correct because they're distinct languages */
 #define LANGUAGE_SORBIAN                    LANGUAGE_USER_UPPER_SORBIAN /* a strange MS definition */
-#define LANGUAGE_SPANISH                    0x040A
+#define LANGUAGE_SPANISH_DATED              0x040A  /* old collation, not supported, see #i94435# */
 #define LANGUAGE_SPANISH_ARGENTINA          0x2C0A
 #define LANGUAGE_SPANISH_BOLIVIA            0x400A
 #define LANGUAGE_SPANISH_CHILE              0x340A
@@ -345,6 +345,7 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_SPANISH_UNITED_STATES      0x540A
 #define LANGUAGE_SPANISH_URUGUAY            0x380A
 #define LANGUAGE_SPANISH_VENEZUELA          0x200A
+#define LANGUAGE_SPANISH                    LANGUAGE_SPANISH_MODERN     /* modern collation, see #i94435# */
 #define LANGUAGE_SWAHILI                    0x0441  /* Kenya */
 #define LANGUAGE_SWEDISH                    0x041D
 #define LANGUAGE_SWEDISH_FINLAND            0x081D
@@ -370,7 +371,6 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_URDU                       0x0020  /* primary only, not a locale! */
 #define LANGUAGE_URDU_INDIA                 0x0820
 #define LANGUAGE_URDU_PAKISTAN              0x0420
-#define LANGUAGE_UZBEK                      0x0043  /* primary only, not a locale! */
 #define LANGUAGE_UZBEK_CYRILLIC             0x0843
 #define LANGUAGE_UZBEK_LATIN                0x0443
 #define LANGUAGE_VENDA                      0x0433
@@ -490,5 +490,16 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_USER_MAITHILI_INDIA        0x0645
 #define LANGUAGE_USER_SANTALI_INDIA         0x0646
 #define LANGUAGE_USER_TETUN_TIMOR_LESTE     0x0A40  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_USER_TETUN)) */
+#define LANGUAGE_USER_TOK_PISIN             0x0647
+#define LANGUAGE_USER_SHUSWAP               0x0648
+#define LANGUAGE_USER_ARABIC_CHAD           0x8001  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_ARABIC_SAUDI_ARABIA)) */
+#define LANGUAGE_USER_ARABIC_COMOROS        0x8401  /* makeLangID( 0x21, getPrimaryLanguage( LANGUAGE_ARABIC_SAUDI_ARABIA)) */
+#define LANGUAGE_USER_ARABIC_DJIBOUTI       0x8801  /* makeLangID( 0x22, getPrimaryLanguage( LANGUAGE_ARABIC_SAUDI_ARABIA)) */
+#define LANGUAGE_USER_ARABIC_ERITREA        0x8C01  /* makeLangID( 0x23, getPrimaryLanguage( LANGUAGE_ARABIC_SAUDI_ARABIA)) */
+#define LANGUAGE_USER_ARABIC_ISRAEL         0x9001  /* makeLangID( 0x24, getPrimaryLanguage( LANGUAGE_ARABIC_SAUDI_ARABIA)) */
+#define LANGUAGE_USER_ARABIC_MAURITANIA     0x9401  /* makeLangID( 0x25, getPrimaryLanguage( LANGUAGE_ARABIC_SAUDI_ARABIA)) */
+#define LANGUAGE_USER_ARABIC_PALESTINE      0x9801  /* makeLangID( 0x26, getPrimaryLanguage( LANGUAGE_ARABIC_SAUDI_ARABIA)) */
+#define LANGUAGE_USER_ARABIC_SOMALIA        0x9C01  /* makeLangID( 0x27, getPrimaryLanguage( LANGUAGE_ARABIC_SAUDI_ARABIA)) */
+#define LANGUAGE_USER_ARABIC_SUDAN          0xA001  /* makeLangID( 0x28, getPrimaryLanguage( LANGUAGE_ARABIC_SAUDI_ARABIA)) */
 
 #endif /* INCLUDED_I18NPOOL_LANG_H */

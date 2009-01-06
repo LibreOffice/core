@@ -2163,15 +2163,31 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, BOOL bLoadingSO
     // must be appended, not inserted!
     USHORT nNewExtended = ZF_STANDARD_NEWEXTENDED;
 
+    // Number
+    uno::Sequence< i18n::NumberFormatCode > aFormatSeq
+        = aNumberFormatCode.getAllFormatCode( i18n::KNumberFormatUsage::FIXED_NUMBER );
+    ImpAdjustFormatCodeDefault( aFormatSeq.getArray(), aFormatSeq.getLength() );
+
     // General
-    aFormatCode = pFormatScanner->GetStandardName();
-    SvNumberformat* pStdFormat = new SvNumberformat( aFormatCode,
-        pFormatScanner, pStringScanner, nCheckPos, ActLnge );
-    pStdFormat->SetType( NUMBERFORMAT_NUMBER );
-    pStdFormat->SetStandard();
-    if ( !aFTable.Insert(
-            CLOffset + SetIndexTable( NF_NUMBER_STANDARD, ZF_STANDARD ),
-            pStdFormat ) )
+    nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_NUMBER_STANDARD );
+    SvNumberformat* pStdFormat = ImpInsertFormat( aFormatSeq[nIdx],
+            CLOffset + SetIndexTable( NF_NUMBER_STANDARD, ZF_STANDARD ));
+    if (pStdFormat)
+    {
+        // This is _the_ standard format.
+        if (LocaleDataWrapper::areChecksEnabled() &&
+                pStdFormat->GetType() != NUMBERFORMAT_NUMBER)
+        {
+            String aMsg( RTL_CONSTASCII_USTRINGPARAM(
+                        "SvNumberFormatter::ImpGenerateFormats: General format not NUMBER"));
+            LocaleDataWrapper::outputCheckMessage(
+                    xLocaleData->appendLocaleInfo( aMsg));
+        }
+        pStdFormat->SetType( NUMBERFORMAT_NUMBER );
+        pStdFormat->SetStandard();
+        pStdFormat->SetLastInsertKey( SV_MAX_ANZ_STANDARD_FORMATE );
+    }
+    else
     {
         if (LocaleDataWrapper::areChecksEnabled())
         {
@@ -2180,11 +2196,7 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, BOOL bLoadingSO
             LocaleDataWrapper::outputCheckMessage(
                     xLocaleData->appendLocaleInfo( aMsg));
         }
-        delete pStdFormat;
-        pStdFormat = NULL;
     }
-    else
-        pStdFormat->SetLastInsertKey( SV_MAX_ANZ_STANDARD_FORMATE );
 
     // Boolean
     aFormatCode = pFormatScanner->GetBooleanString();
@@ -2209,11 +2221,6 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, BOOL bLoadingSO
         delete pNewFormat;
 
 
-
-    // Number
-    uno::Sequence< i18n::NumberFormatCode > aFormatSeq
-        = aNumberFormatCode.getAllFormatCode( i18n::KNumberFormatUsage::FIXED_NUMBER );
-    ImpAdjustFormatCodeDefault( aFormatSeq.getArray(), aFormatSeq.getLength() );
 
     // 0
     nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_NUMBER_INT );

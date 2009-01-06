@@ -47,8 +47,8 @@ public:
     Calendar_hijri();
 
 protected:
-    void SAL_CALL mapToGregorian() throw(com::sun::star::uno::RuntimeException);
-    void SAL_CALL mapFromGregorian() throw(com::sun::star::uno::RuntimeException);
+    void mapToGregorian() throw(com::sun::star::uno::RuntimeException);
+    void mapFromGregorian() throw(com::sun::star::uno::RuntimeException);
 
     // radians per degree (pi/180)
     static const double RadPerDeg;

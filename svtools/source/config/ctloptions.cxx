@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: ctloptions.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.18.140.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,7 +39,7 @@
 #include <svtools/ctloptions.hxx>
 
 #include <svtools/languageoptions.hxx>
-#include <i18npool/lang.h>
+#include <i18npool/mslangid.hxx>
 #include <unotools/configitem.hxx>
 #include <tools/debug.hxx>
 #include <com/sun/star/uno/Any.h>
@@ -317,10 +317,8 @@ void SvtCTLOptions_Impl::Load()
         sal_uInt16 nLanguage = Application::GetSettings().GetLanguage();
         //enable sequence checking for the appropriate languages
         m_bCTLSequenceChecking = m_bCTLRestricted = m_bCTLTypeAndReplace =
-                (   LANGUAGE_KHMER == nLanguage ||      LANGUAGE_KHMER       == eSystemLanguage ||
-                    LANGUAGE_THAI == nLanguage ||       LANGUAGE_THAI        == eSystemLanguage ||
-                    LANGUAGE_VIETNAMESE == nLanguage || LANGUAGE_VIETNAMESE  == eSystemLanguage ||
-                    LANGUAGE_LAO == nLanguage ||        LANGUAGE_LAO == eSystemLanguage );
+            (MsLangId::needsSequenceChecking( nLanguage) ||
+             MsLangId::needsSequenceChecking( eSystemLanguage));
         Commit();
     }
     m_bIsLoaded = sal_True;

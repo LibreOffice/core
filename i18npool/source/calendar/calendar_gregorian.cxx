@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: calendar_gregorian.cxx,v $
- * $Revision: 1.34 $
+ * $Revision: 1.34.24.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,37 +44,90 @@
 #include <string.h>
 
 #define erDUMP_ICU_CALENDAR 0
-#if erDUMP_ICU_CALENDAR
-// Make icu with
-// DEFS = -DU_DEBUG_CALSVC -DUCAL_DEBUG_DUMP
-// in icu/$(INPATH)/misc/build/icu/source/icudefs.mk
-// May need some patches to fix unmaintained things there.
-extern void ucal_dump( const icu::Calendar & );
-# include <stdarg.h>
-static void debug_cal_dump( const ::icu::Calendar & r )
-{
-    ucal_dump(r);
-    fflush(stderr);
-    // set a breakpoint here to pause display between dumps
-}
+#define erDUMP_I18N_CALENDAR 0
+#if erDUMP_ICU_CALENDAR || erDUMP_I18N_CALENDAR
+// If both are used, DUMP_ICU_CAL_MSG() must be used before DUMP_I18N_CAL_MSG()
+// to obtain internally set values from ICU, else Calendar::get() calls in
+// DUMP_I18N_CAL_MSG() recalculate!
+
 // These pieces of macro are shamelessly borrowed from icu's olsontz.cpp, the
-// double parens'ed approach to passing multiple parameters as one macro
-// parameter is appealing.
+// double parens'ed approach to pass multiple parameters as one macro parameter
+// is appealing.
 static void debug_cal_loc(const char *f, int32_t l)
 {
     fprintf(stderr, "%s:%d: ", f, l);
 }
+# include <stdarg.h>
 static void debug_cal_msg(const char *pat, ...)
 {
     va_list ap;
     va_start(ap, pat);
     vfprintf(stderr, pat, ap);
 }
-// must use double parens, i.e.:  DUMP_CAL_MSG(("four is: %d",4));
-#define DUMP_CAL_MSG(x) {debug_cal_loc(__FILE__,__LINE__);debug_cal_msg x;debug_cal_dump(*body);}
-#else
-#define DUMP_CAL_MSG(x)
-#endif
+
+#if erDUMP_ICU_CALENDAR
+// Make icu with
+// DEFS = -DU_DEBUG_CALSVC -DUCAL_DEBUG_DUMP
+// in icu/$(INPATH)/misc/build/icu/source/icudefs.mk
+// May need some patches to fix unmaintained things there.
+extern void ucal_dump( const icu::Calendar & );
+static void debug_icu_cal_dump( const ::icu::Calendar & r )
+{
+    ucal_dump(r);
+    fflush(stderr);
+    // set a breakpoint here to pause display between dumps
+}
+// must use double parens, i.e.:  DUMP_ICU_CAL_MSG(("four is: %d",4));
+#define DUMP_ICU_CAL_MSG(x) {debug_cal_loc(__FILE__,__LINE__);debug_cal_msg x;debug_icu_cal_dump(*body);}
+#else   // erDUMP_ICU_CALENDAR
+#define DUMP_ICU_CAL_MSG(x)
+#endif  // erDUMP_ICU_CALENDAR
+
+#if erDUMP_I18N_CALENDAR
+static void debug_cal_millis_to_time( long nMillis, long & h, long & m, long & s, long & f )
+{
+    int sign = (nMillis < 0 ? -1 : 1);
+    nMillis = ::std::abs(nMillis);
+    h = sign * nMillis / (60 * 60 * 1000);
+    nMillis -= sign * h * (60 * 60 * 1000);
+    m = nMillis / (60 * 1000);
+    nMillis -= m * (60 * 1000);
+    s = nMillis / (1000);
+    nMillis -= s * (1000);
+    f = nMillis;
+}
+static void debug_i18n_cal_dump( const ::icu::Calendar & r )
+{
+    UErrorCode status;
+    long nMillis, h, m, s, f;
+    fprintf( stderr, " %04ld", (long)r.get( UCAL_YEAR, status = U_ZERO_ERROR));
+    fprintf( stderr, "-%02ld", (long)r.get( UCAL_MONTH, status = U_ZERO_ERROR)+1);
+    fprintf( stderr, "-%02ld", (long)r.get( UCAL_DATE, status = U_ZERO_ERROR));
+    fprintf( stderr, " %02ld", (long)r.get( UCAL_HOUR_OF_DAY, status = U_ZERO_ERROR));
+    fprintf( stderr, ":%02ld", (long)r.get( UCAL_MINUTE, status = U_ZERO_ERROR));
+    fprintf( stderr, ":%02ld", (long)r.get( UCAL_SECOND, status = U_ZERO_ERROR));
+    fprintf( stderr, "  zone: %ld", (long)(nMillis = r.get( UCAL_ZONE_OFFSET, status = U_ZERO_ERROR)));
+    fprintf( stderr, " (%f min)", (double)nMillis / 60000);
+    debug_cal_millis_to_time( nMillis, h, m, s, f);
+    fprintf( stderr, " (%ld:%02ld:%02ld.%ld)", h, m, s, f);
+    fprintf( stderr, "  DST: %ld", (long)(nMillis = r.get( UCAL_DST_OFFSET, status = U_ZERO_ERROR)));
+    fprintf( stderr, " (%f min)", (double)nMillis / 60000);
+    debug_cal_millis_to_time( nMillis, h, m, s, f);
+    fprintf( stderr, " (%ld:%02ld:%02ld.%ld)", h, m, s, f);
+    fprintf( stderr, "\n");
+    fflush(stderr);
+}
+// must use double parens, i.e.:  DUMP_I18N_CAL_MSG(("four is: %d",4));
+#define DUMP_I18N_CAL_MSG(x) {debug_cal_loc(__FILE__,__LINE__);debug_cal_msg x;debug_i18n_cal_dump(*body);}
+#else   // erDUMP_I18N_CALENDAR
+#define DUMP_I18N_CAL_MSG(x)
+#endif  // erDUMP_I18N_CALENDAR
+
+#else   // erDUMP_ICU_CALENDAR || erDUMP_I18N_CALENDAR
+#define DUMP_ICU_CAL_MSG(x)
+#define DUMP_I18N_CAL_MSG(x)
+#endif  // erDUMP_ICU_CALENDAR || erDUMP_I18N_CALENDAR
+
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -234,8 +287,7 @@ Calendar_gregorian::getDateTime() throw(RuntimeException)
 
 // map field value from gregorian calendar to other calendar, it can be overwritten by derived class.
 // By using eraArray, it can take care Japanese and Taiwan ROC calendar.
-void SAL_CALL
-Calendar_gregorian::mapFromGregorian() throw(RuntimeException)
+void Calendar_gregorian::mapFromGregorian() throw(RuntimeException)
 {
         if (eraArray) {
             sal_Int16 e, y, m, d;
@@ -263,7 +315,7 @@ Calendar_gregorian::mapFromGregorian() throw(RuntimeException)
 #define FIELDS  ((1 << CalendarFieldIndex::ERA) | (1 << CalendarFieldIndex::YEAR))
 // map field value from other calendar to gregorian calendar, it can be overwritten by derived class.
 // By using eraArray, it can take care Japanese and Taiwan ROC calendar.
-void SAL_CALL Calendar_gregorian::mapToGregorian() throw(RuntimeException)
+void Calendar_gregorian::mapToGregorian() throw(RuntimeException)
 {
         if (eraArray && (fieldSet & FIELDS)) {
             sal_Int16 y, e = fieldValue[CalendarFieldIndex::ERA];
@@ -290,8 +342,8 @@ static UCalendarDateFields fieldNameConverter(sal_Int16 fieldIndex) throw(Runtim
             case CalendarFieldIndex::DST_OFFSET:        f = UCAL_DST_OFFSET; break;
             case CalendarFieldIndex::ZONE_OFFSET:       f = UCAL_ZONE_OFFSET; break;
             case CalendarFieldIndex::HOUR:              f = UCAL_HOUR_OF_DAY; break;
-            case CalendarFieldIndex::MINUTE:    f = UCAL_MINUTE; break;
-            case CalendarFieldIndex::SECOND:    f = UCAL_SECOND; break;
+            case CalendarFieldIndex::MINUTE:            f = UCAL_MINUTE; break;
+            case CalendarFieldIndex::SECOND:            f = UCAL_SECOND; break;
             case CalendarFieldIndex::MILLISECOND:       f = UCAL_MILLISECOND; break;
             case CalendarFieldIndex::WEEK_OF_MONTH:     f = UCAL_WEEK_OF_MONTH; break;
             case CalendarFieldIndex::WEEK_OF_YEAR:      f = UCAL_WEEK_OF_YEAR; break;
@@ -306,27 +358,75 @@ static UCalendarDateFields fieldNameConverter(sal_Int16 fieldIndex) throw(Runtim
 void SAL_CALL
 Calendar_gregorian::setValue( sal_Int16 fieldIndex, sal_Int16 value ) throw(RuntimeException)
 {
-        fieldSet |= (1 << fieldIndex);
-        fieldValue[fieldIndex] = value;
+    if (fieldIndex < 0 || FIELD_INDEX_COUNT <= fieldIndex)
+        throw ERROR;
+    fieldSet |= (1 << fieldIndex);
+    fieldValue[fieldIndex] = value;
 }
 
-void SAL_CALL Calendar_gregorian::submitFields() throw(com::sun::star::uno::RuntimeException)
+bool Calendar_gregorian::getCombinedOffset( sal_Int32 & o_nOffset,
+        sal_Int16 nParentFieldIndex, sal_Int16 nChildFieldIndex ) const
 {
-    for (sal_Int16 fieldIndex = 0; fieldIndex < CalendarFieldIndex::FIELD_COUNT; fieldIndex++)
+    o_nOffset = 0;
+    bool bFieldsSet = false;
+    if (fieldSet & (1 << nParentFieldIndex))
+    {
+        bFieldsSet = true;
+        o_nOffset = static_cast<sal_Int32>( fieldValue[nParentFieldIndex]) * 60000;
+    }
+    if (fieldSet & (1 << nChildFieldIndex))
+    {
+        bFieldsSet = true;
+        if (o_nOffset < 0)
+            o_nOffset -= static_cast<sal_uInt16>( fieldValue[nChildFieldIndex]);
+        else
+            o_nOffset += static_cast<sal_uInt16>( fieldValue[nChildFieldIndex]);
+    }
+    return bFieldsSet;
+}
+
+bool Calendar_gregorian::getZoneOffset( sal_Int32 & o_nOffset ) const
+{
+    return getCombinedOffset( o_nOffset, CalendarFieldIndex::ZONE_OFFSET,
+            CalendarFieldIndex::ZONE_OFFSET_SECOND_MILLIS);
+}
+
+bool Calendar_gregorian::getDSTOffset( sal_Int32 & o_nOffset ) const
+{
+    return getCombinedOffset( o_nOffset, CalendarFieldIndex::DST_OFFSET,
+            CalendarFieldIndex::DST_OFFSET_SECOND_MILLIS);
+}
+
+void Calendar_gregorian::submitFields() throw(com::sun::star::uno::RuntimeException)
+{
+    for (sal_Int16 fieldIndex = 0; fieldIndex < FIELD_INDEX_COUNT; fieldIndex++)
     {
         if (fieldSet & (1 << fieldIndex))
         {
-            if (fieldIndex == CalendarFieldIndex::ZONE_OFFSET || fieldIndex == CalendarFieldIndex::DST_OFFSET)
-                body->set(fieldNameConverter(fieldIndex), (sal_Int32) fieldSetValue[fieldIndex] * 60000);
-            else
-                body->set(fieldNameConverter(fieldIndex), fieldSetValue[fieldIndex]);
+            switch (fieldIndex)
+            {
+                default:
+                    body->set(fieldNameConverter(fieldIndex), fieldSetValue[fieldIndex]);
+                    break;
+                case CalendarFieldIndex::ZONE_OFFSET:
+                case CalendarFieldIndex::DST_OFFSET:
+                case CalendarFieldIndex::ZONE_OFFSET_SECOND_MILLIS:
+                case CalendarFieldIndex::DST_OFFSET_SECOND_MILLIS:
+                    break;  // nothing, extra handling
+            }
         }
     }
+    sal_Int32 nZoneOffset, nDSTOffset;
+    if (getZoneOffset( nZoneOffset))
+        body->set( fieldNameConverter( CalendarFieldIndex::ZONE_OFFSET), nZoneOffset);
+    if (getDSTOffset( nDSTOffset))
+        body->set( fieldNameConverter( CalendarFieldIndex::DST_OFFSET), nDSTOffset);
 }
 
-void SAL_CALL Calendar_gregorian::submitValues( sal_Int32 nYear,
+void Calendar_gregorian::submitValues( sal_Int32 nYear,
         sal_Int32 nMonth, sal_Int32 nDay, sal_Int32 nHour, sal_Int32 nMinute,
-        sal_Int32 nSecond, sal_Int32 nMilliSecond ) throw(com::sun::star::uno::RuntimeException)
+        sal_Int32 nSecond, sal_Int32 nMilliSecond, sal_Int32 nZone, sal_Int32 nDST )
+            throw(com::sun::star::uno::RuntimeException)
 {
     submitFields();
     if (nYear >= 0)
@@ -343,10 +443,25 @@ void SAL_CALL Calendar_gregorian::submitValues( sal_Int32 nYear,
         body->set( UCAL_SECOND, nSecond);
     if (nMilliSecond >= 0)
         body->set( UCAL_MILLISECOND, nMilliSecond);
+    if (nZone != 0)
+        body->set( UCAL_ZONE_OFFSET, nZone);
+    if (nDST != 0)
+        body->set( UCAL_DST_OFFSET, nDST);
 }
 
-void SAL_CALL
-Calendar_gregorian::setValue() throw(RuntimeException)
+static void lcl_setCombinedOffsetFieldValues( sal_Int32 nValue,
+        sal_Int16 rFieldSetValue[], sal_Int16 rFieldValue[],
+        sal_Int16 nParentFieldIndex, sal_Int16 nChildFieldIndex )
+{
+    sal_Int32 nTrunc = nValue / 60000;
+    rFieldSetValue[nParentFieldIndex] = rFieldValue[nParentFieldIndex] =
+        static_cast<sal_Int16>( nTrunc);
+    sal_uInt16 nMillis = static_cast<sal_uInt16>( abs( nValue - nTrunc * 60000));
+    rFieldSetValue[nChildFieldIndex] = rFieldValue[nChildFieldIndex] =
+        static_cast<sal_Int16>( nMillis);
+}
+
+void Calendar_gregorian::setValue() throw(RuntimeException)
 {
         // Correct DST glitch, see also localtime/gmtime conversion pitfalls at
         // http://www.erack.de/download/timetest.c
@@ -364,16 +479,30 @@ Calendar_gregorian::setValue() throw(RuntimeException)
         //   being adjusted to 24:00 in this case, switching one day further.
         // => submit 2004-03-28T00:00 no DST.
 
+        // This got even weirder since ICU incorporated also historical data,
+        // even the timezone may differ for different dates! It is necessary to
+        // let ICU choose the corresponding OlsonTimeZone transitions and adapt
+        // values.
+        // #i86094# gives examples where that went wrong:
+        // TZ=Europe/Moscow date <= 1919-07-01
+        //      zone +2:30:48 (!) instead of +3h, DST +2h instead of +1h
+        // TZ=America/St_Johns date <= 1935-03-30
+        //      zone -3:30:52 (!) instead of -3:30
+
         // Copy fields before calling submitFields() directly or indirectly below.
         memcpy(fieldSetValue, fieldValue, sizeof(fieldSetValue));
         // Possibly setup ERA and YEAR in fieldSetValue.
         mapToGregorian();
 
-        bool bNeedDST = !(fieldSet & (1 << CalendarFieldIndex::DST_OFFSET));
-        sal_Int32 nDST1, nYear, nMonth, nDay, nHour, nMinute, nSecond, nMilliSecond;
-        nDST1 = 0;
+        DUMP_ICU_CAL_MSG(("%s\n","setValue() before any submission"));
+        DUMP_I18N_CAL_MSG(("%s\n","setValue() before any submission"));
+
+        bool bNeedZone = !(fieldSet & (1 << CalendarFieldIndex::ZONE_OFFSET));
+        bool bNeedDST  = !(fieldSet & (1 << CalendarFieldIndex::DST_OFFSET));
+        sal_Int32 nZone1, nDST1, nYear, nMonth, nDay, nHour, nMinute, nSecond, nMilliSecond, nZone, nDST;
+        nZone1 = nDST1 = nZone = nDST = 0;
         nYear = nMonth = nDay = nHour = nMinute = nSecond = nMilliSecond = -1;
-        if ( bNeedDST )
+        if ( bNeedZone || bNeedDST )
         {
             UErrorCode status;
             if ( !(fieldSet & (1 << CalendarFieldIndex::YEAR)) )
@@ -418,36 +547,84 @@ Calendar_gregorian::setValue() throw(RuntimeException)
                 if ( !U_SUCCESS(status) )
                     nMilliSecond = -1;
             }
-            // Submit values to obtain a DST corresponding to the date/time.
-            submitValues( nYear, nMonth, nDay, nHour, nMinute, nSecond, nMilliSecond);
+            if ( !(fieldSet & (1 << CalendarFieldIndex::ZONE_OFFSET)) )
+            {
+                nZone = body->get( UCAL_ZONE_OFFSET, status = U_ZERO_ERROR);
+                if ( !U_SUCCESS(status) )
+                    nZone = 0;
+            }
+            if ( !(fieldSet & (1 << CalendarFieldIndex::DST_OFFSET)) )
+            {
+                nDST = body->get( UCAL_DST_OFFSET, status = U_ZERO_ERROR);
+                if ( !U_SUCCESS(status) )
+                    nDST = 0;
+            }
+
+            // Submit values to obtain a time zone and DST corresponding to the date/time.
+            submitValues( nYear, nMonth, nDay, nHour, nMinute, nSecond, nMilliSecond, nZone, nDST);
+
+            DUMP_ICU_CAL_MSG(("%s\n","setValue() in bNeedZone||bNeedDST after submitValues()"));
+            DUMP_I18N_CAL_MSG(("%s\n","setValue() in bNeedZone||bNeedDST after submitValues()"));
+            nZone1 = body->get( UCAL_ZONE_OFFSET, status = U_ZERO_ERROR);
+            if ( !U_SUCCESS(status) )
+                nZone1 = 0;
             nDST1 = body->get( UCAL_DST_OFFSET, status = U_ZERO_ERROR);
             if ( !U_SUCCESS(status) )
                 nDST1 = 0;
-            DUMP_CAL_MSG(("%s\n","setValue() in bNeedDST"));
         }
 
-        // The original submission, may lead to a different DST than in bNeedDST.
+        // The original submission, may lead to a different zone/DST.
         submitFields();
+        DUMP_ICU_CAL_MSG(("%s\n","setValue() after original submission"));
+        DUMP_I18N_CAL_MSG(("%s\n","setValue() after original submission"));
 
-        if ( bNeedDST )
+        if ( bNeedZone || bNeedDST )
         {
             UErrorCode status;
+            sal_Int32 nZone2 = body->get( UCAL_ZONE_OFFSET, status = U_ZERO_ERROR);
+            if ( !U_SUCCESS(status) )
+                nZone2 = nZone1;
             sal_Int32 nDST2 = body->get( UCAL_DST_OFFSET, status = U_ZERO_ERROR);
             if ( !U_SUCCESS(status) )
                 nDST2 = nDST1;
-            if ( nDST2 != nDST1 )
+            if ( nZone2 != nZone1 || nDST2 != nDST1 )
             {
-                DUMP_CAL_MSG(("%s\n","setValue() submission with different DSTs"));
-
                 // Due to different DSTs, resulting date values may differ if
                 // DST is onset at 00:00 and the very onsetRule date was
                 // submitted with DST off => date-1 23:00, for example, which
                 // is not what we want.
                 // Resubmit all values, this time including DST => date 01:00
-                fieldSet |= (1 << CalendarFieldIndex::DST_OFFSET);
-                fieldSetValue[CalendarFieldIndex::DST_OFFSET] =
-                    fieldValue[CalendarFieldIndex::DST_OFFSET] = sal::static_int_cast<sal_Int16>( nDST2 / 60000 );
-                submitValues( nYear, nMonth, nDay, nHour, nMinute, nSecond, nMilliSecond);
+                // Similar for zone differences.
+
+                // Set field values accordingly in case they were used.
+                if (!bNeedZone)
+                    lcl_setCombinedOffsetFieldValues( nZone2, fieldSetValue,
+                            fieldValue, CalendarFieldIndex::ZONE_OFFSET,
+                            CalendarFieldIndex::ZONE_OFFSET_SECOND_MILLIS);
+                if (!bNeedDST)
+                    lcl_setCombinedOffsetFieldValues( nDST2, fieldSetValue,
+                            fieldValue, CalendarFieldIndex::DST_OFFSET,
+                            CalendarFieldIndex::DST_OFFSET_SECOND_MILLIS);
+                submitValues( nYear, nMonth, nDay, nHour, nMinute, nSecond, nMilliSecond, nZone2, nDST2);
+                DUMP_ICU_CAL_MSG(("%s\n","setValue() after Zone/DST glitch resubmit"));
+                DUMP_I18N_CAL_MSG(("%s\n","setValue() after Zone/DST glitch resubmit"));
+
+                // Time zone transition => resubmit.
+                // TZ=America/St_Johns date <= 1935-03-30
+                //      -3:30:52 (!) instead of -3:30
+                //      if first submission included time zone -3:30 that would be wrong.
+                bool bResubmit = false;
+                sal_Int32 nZone3 = body->get( UCAL_ZONE_OFFSET, status = U_ZERO_ERROR);
+                if ( !U_SUCCESS(status) )
+                    nZone3 = nZone2;
+                if (nZone3 != nZone2)
+                {
+                    bResubmit = true;
+                    if (!bNeedZone)
+                        lcl_setCombinedOffsetFieldValues( nZone3, fieldSetValue,
+                                fieldValue, CalendarFieldIndex::ZONE_OFFSET,
+                                CalendarFieldIndex::ZONE_OFFSET_SECOND_MILLIS);
+                }
 
                 // If the DST onset rule says to switch from 00:00 to 01:00 and
                 // we tried to set onsetDay 00:00 with DST, the result was
@@ -463,53 +640,89 @@ Calendar_gregorian::setValue() throw(RuntimeException)
                     nDST3 = nDST2;
                 if (nDST2 != nDST3 && !nDST3)
                 {
-                    DUMP_CAL_MSG(("%s\n","setValue() DST glitch"));
-                    fieldSetValue[CalendarFieldIndex::DST_OFFSET] =
-                        fieldValue[CalendarFieldIndex::DST_OFFSET] = 0;
-                    submitValues( nYear, nMonth, nDay, nHour, nMinute, nSecond, nMilliSecond);
+                    bResubmit = true;
+                    if (!bNeedDST)
+                    {
+                        fieldSetValue[CalendarFieldIndex::DST_OFFSET] =
+                            fieldValue[CalendarFieldIndex::DST_OFFSET] = 0;
+                        fieldSetValue[CalendarFieldIndex::DST_OFFSET_SECOND_MILLIS] =
+                            fieldValue[CalendarFieldIndex::DST_OFFSET_SECOND_MILLIS] = 0;
+                    }
+                }
+                if (bResubmit)
+                {
+                    submitValues( nYear, nMonth, nDay, nHour, nMinute, nSecond, nMilliSecond, nZone3, nDST3);
+                    DUMP_ICU_CAL_MSG(("%s\n","setValue() after Zone/DST glitch 2nd resubmit"));
+                    DUMP_I18N_CAL_MSG(("%s\n","setValue() after Zone/DST glitch 2nd resubmit"));
                 }
             }
         }
-#if erDUMP_ICU_CALENDAR
+#if erDUMP_ICU_CALENDAR || erDUMP_I18N_CALENDAR
         {
             // force icu::Calendar to recalculate
             UErrorCode status;
             sal_Int32 nTmp = body->get( UCAL_DATE, status = U_ZERO_ERROR);
-            DUMP_CAL_MSG(("%s: %d\n","setValue() result day",nTmp));
+            DUMP_ICU_CAL_MSG(("%s: %d\n","setValue() result day",nTmp));
+            DUMP_I18N_CAL_MSG(("%s: %d\n","setValue() result day",nTmp));
         }
 #endif
 }
 
-void SAL_CALL Calendar_gregorian::getValue() throw(RuntimeException)
+void Calendar_gregorian::getValue() throw(RuntimeException)
 {
-        for (sal_Int16 fieldIndex = 0; fieldIndex < CalendarFieldIndex::FIELD_COUNT; fieldIndex++) {
-            UErrorCode status;
-            sal_Int32 value = body->get(fieldNameConverter(fieldIndex), status = U_ZERO_ERROR);
-            if ( !U_SUCCESS(status) ) throw ERROR;
+    DUMP_ICU_CAL_MSG(("%s\n","getValue()"));
+    DUMP_I18N_CAL_MSG(("%s\n","getValue()"));
+    for (sal_Int16 fieldIndex = 0; fieldIndex < FIELD_INDEX_COUNT; fieldIndex++)
+    {
+        if (fieldIndex == CalendarFieldIndex::ZONE_OFFSET_SECOND_MILLIS ||
+                fieldIndex == CalendarFieldIndex::DST_OFFSET_SECOND_MILLIS)
+            continue;   // not ICU fields
 
-            // convert millisecond to minute for ZONE and DST.
-            if (fieldIndex == CalendarFieldIndex::ZONE_OFFSET || fieldIndex == CalendarFieldIndex::DST_OFFSET)
-                value /= 60000;
+        UErrorCode status; sal_Int32 value = body->get( fieldNameConverter(
+                    fieldIndex), status = U_ZERO_ERROR);
+        if ( !U_SUCCESS(status) ) throw ERROR;
 
+        // Convert millisecond to minute for ZONE and DST and set remainder in
+        // second field.
+        if (fieldIndex == CalendarFieldIndex::ZONE_OFFSET)
+        {
+            sal_Int32 nMinutes = value / 60000;
+            sal_Int16 nMillis = static_cast<sal_Int16>( static_cast<sal_uInt16>(
+                        abs( value - nMinutes * 60000)));
+            fieldValue[CalendarFieldIndex::ZONE_OFFSET] = static_cast<sal_Int16>( nMinutes);
+            fieldValue[CalendarFieldIndex::ZONE_OFFSET_SECOND_MILLIS] = nMillis;
+        }
+        else if (fieldIndex == CalendarFieldIndex::DST_OFFSET)
+        {
+            sal_Int32 nMinutes = value / 60000;
+            sal_Int16 nMillis = static_cast<sal_Int16>( static_cast<sal_uInt16>(
+                        abs( value - nMinutes * 60000)));
+            fieldValue[CalendarFieldIndex::DST_OFFSET] = static_cast<sal_Int16>( nMinutes);
+            fieldValue[CalendarFieldIndex::DST_OFFSET_SECOND_MILLIS] = nMillis;
+        }
+        else
             fieldValue[fieldIndex] = (sal_Int16) value;
 
-            // offset 1 since the value for week start day SunDay is different between Calendar and Weekdays.
-            if ( fieldIndex == CalendarFieldIndex::DAY_OF_WEEK )
-                fieldValue[fieldIndex]--; // UCAL_SUNDAY:/* == 1 */ ==> Weekdays::SUNDAY /* ==0 */
-        }
-        mapFromGregorian();
-        fieldSet = 0;
+        // offset 1 since the value for week start day SunDay is different between Calendar and Weekdays.
+        if ( fieldIndex == CalendarFieldIndex::DAY_OF_WEEK )
+            fieldValue[fieldIndex]--;   // UCAL_SUNDAY:/* == 1 */ ==> Weekdays::SUNDAY /* ==0 */
+    }
+    mapFromGregorian();
+    fieldSet = 0;
 }
 
 sal_Int16 SAL_CALL
 Calendar_gregorian::getValue( sal_Int16 fieldIndex ) throw(RuntimeException)
 {
-        if (fieldSet)  {
-            setValue();
-            getValue();
-        }
+    if (fieldIndex < 0 || FIELD_INDEX_COUNT <= fieldIndex)
+        throw ERROR;
 
-        return fieldValue[fieldIndex];
+    if (fieldSet)  {
+        setValue();
+        getValue();
+    }
+
+    return fieldValue[fieldIndex];
 }
 
 void SAL_CALL
@@ -530,7 +743,7 @@ Calendar_gregorian::isValid() throw(RuntimeException)
             setValue();
             memcpy(fieldSetValue, fieldValue, sizeof(fieldSetValue));
             getValue();
-            for ( sal_Int16 fieldIndex = 0; fieldIndex < CalendarFieldIndex::FIELD_COUNT; fieldIndex++ ) {
+            for ( sal_Int16 fieldIndex = 0; fieldIndex < FIELD_INDEX_COUNT; fieldIndex++ ) {
                 // compare only with fields that are set and reset fieldSet[]
                 if (tmp & (1 << fieldIndex)) {
                     if (fieldSetValue[fieldIndex] != fieldValue[fieldIndex])

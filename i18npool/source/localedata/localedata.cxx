@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: localedata.cxx,v $
- * $Revision: 1.59.16.1 $
+ * $Revision: 1.59.24.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -174,6 +174,7 @@ static const struct {
     { "gsc_FR", lcl_DATA_EURO },
     { "fy_NL",  lcl_DATA_EURO },
     { "oc_FR",  lcl_DATA_EURO },
+    { "mt_MT",  lcl_DATA_EURO },
 
     { "ja_JP",  lcl_DATA_OTHERS },
     { "ko_KR",  lcl_DATA_OTHERS },
@@ -246,6 +247,9 @@ static const struct {
     { "so_SO",  lcl_DATA_OTHERS },
     { "gug_PY", lcl_DATA_OTHERS },
     { "tk_TM",  lcl_DATA_OTHERS },
+    { "my_MM",  lcl_DATA_OTHERS },
+    { "shs_CA", lcl_DATA_OTHERS },
+    { "tpi_PG", lcl_DATA_OTHERS },
 };
 
 static const sal_Unicode under = sal_Unicode('_');

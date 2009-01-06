@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: mslangid.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.24.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -226,6 +226,10 @@ public:
         @see offapi/com/sun/star/i18n/ForbiddenCharacters.idl
       */
     static bool hasForbiddenCharacters( LanguageType nLang );
+
+
+    /** Whether locale needs input sequence checking. CTL locales. */
+    static bool needsSequenceChecking( LanguageType nLang );
 
 
     /** Get ::com::sun::star::i18n::ScriptType of locale. */

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: zformat.cxx,v $
- * $Revision: 1.78.168.1 $
+ * $Revision: 1.78.138.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1816,6 +1816,7 @@ void SvNumberformat::ImpGetOutputStandard(double& fNumber, String& OutString)
             OutString.GetTokenCount('0') == OutString.Len())
             OutString.EraseLeadingChars('-');            // nicht -0
     }
+    ImpTransliterate( OutString, NumFor[0].GetNatNum() );
     return;
 }
 
