@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: scmod.cxx,v $
- * $Revision: 1.58.32.1 $
+ * $Revision: 1.58.172.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1007,7 +1007,7 @@ USHORT ScModule::GetOptDigitLanguage()
 {
     SvtCTLOptions::TextNumerals eNumerals = GetCTLOptions().GetCTLTextNumerals();
     return ( eNumerals == SvtCTLOptions::NUMERALS_ARABIC ) ? LANGUAGE_ENGLISH_US :
-           ( eNumerals == SvtCTLOptions::NUMERALS_HINDI)   ? LANGUAGE_ARABIC :
+           ( eNumerals == SvtCTLOptions::NUMERALS_HINDI)   ? LANGUAGE_ARABIC_SAUDI_ARABIA :
                                                              LANGUAGE_SYSTEM;
 }
 
