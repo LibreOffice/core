@@ -92,6 +92,7 @@
 #include <boost/shared_ptr.hpp>
 
 #include "ccoll.hxx"
+#include "unocore.hrc"
 
 #include <set>
 
@@ -1055,6 +1056,76 @@ void SwXStyleFamily::removeByName(const OUString& rName) throw( container::NoSuc
     else
         throw uno::RuntimeException();
 }
+
+uno::Reference< beans::XPropertySetInfo > SAL_CALL SwXStyleFamily::getPropertySetInfo(  ) throw (uno::RuntimeException)
+{
+    OSL_ENSURE( 0, "###unexpected!" );
+    return uno::Reference< beans::XPropertySetInfo >();
+}
+
+void SAL_CALL SwXStyleFamily::setPropertyValue( const ::rtl::OUString&, const uno::Any& ) throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    OSL_ENSURE( 0, "###unexpected!" );
+}
+
+uno::Any SAL_CALL SwXStyleFamily::getPropertyValue( const ::rtl::OUString& sPropertyName ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    uno::Any aRet;
+
+    if ( sPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("DisplayName") ) )
+    {
+        vos::OGuard aGuard(Application::GetSolarMutex());
+        sal_uInt32 nResId = 0;
+        switch ( eFamily )
+        {
+            case SFX_STYLE_FAMILY_CHAR:
+                nResId = STR_STYLE_FAMILY_CHARACTER; break;
+            case SFX_STYLE_FAMILY_PARA:
+                nResId = STR_STYLE_FAMILY_PARAGRAPH; break;
+            case SFX_STYLE_FAMILY_FRAME:
+                nResId = STR_STYLE_FAMILY_FRAME; break;
+            case SFX_STYLE_FAMILY_PAGE:
+                nResId = STR_STYLE_FAMILY_PAGE; break;
+            case SFX_STYLE_FAMILY_PSEUDO:
+                nResId = STR_STYLE_FAMILY_NUMBERING; break;
+            default:
+                OSL_ENSURE( 0, "SwXStyleFamily::getPropertyValue(): invalid family" );
+        }
+        if ( nResId > 0 )
+        {
+            OUString sDisplayName( String( SW_RES( nResId ) ) );
+            aRet = uno::makeAny( sDisplayName );
+        }
+    }
+    else
+    {
+        throw beans::UnknownPropertyException( OUString( RTL_CONSTASCII_USTRINGPARAM("unknown property: ") ) + sPropertyName, static_cast<OWeakObject *>(this) );
+    }
+
+    return aRet;
+}
+
+void SAL_CALL SwXStyleFamily::addPropertyChangeListener( const ::rtl::OUString&, const uno::Reference< beans::XPropertyChangeListener >& ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    OSL_ENSURE( 0, "###unexpected!" );
+}
+
+void SAL_CALL SwXStyleFamily::removePropertyChangeListener( const ::rtl::OUString&, const uno::Reference< beans::XPropertyChangeListener >& ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    OSL_ENSURE( 0, "###unexpected!" );
+}
+
+void SAL_CALL SwXStyleFamily::addVetoableChangeListener( const ::rtl::OUString&, const uno::Reference< beans::XVetoableChangeListener >& ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    OSL_ENSURE( 0, "###unexpected!" );
+}
+
+void SAL_CALL SwXStyleFamily::removeVetoableChangeListener( const ::rtl::OUString&, const uno::Reference< beans::XVetoableChangeListener >& ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    OSL_ENSURE( 0, "###unexpected!" );
+}
+
+
 /*-- 16.12.98 16:03:59---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -2351,7 +2422,7 @@ uno::Any lcl_GetStyleProperty(const SfxItemPropertyMap* pMap,
             break;
             case FN_UNO_DISPLAY_NAME:
             {
-                OUString sName(rBase.mxNewBase->GetName());
+                OUString sName(rBase.mxNewBase->GetDisplayName());
                 aRet <<= sName;
             }
             break;
