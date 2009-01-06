@@ -443,7 +443,7 @@ LotusRangeList::LotusRangeList( void )
 {
     aComplRef.InitFlags();
 
-    SingleRefData*  pSingRef;
+    ScSingleRefData*    pSingRef;
     nIdCnt = 1;
 
     pSingRef = &aComplRef.Ref1;
@@ -496,7 +496,7 @@ void LotusRangeList::Append( LotusRange* pLR, const String& rName )
 
     ScTokenArray    aTokArray;
 
-    SingleRefData*  pSingRef = &aComplRef.Ref1;
+    ScSingleRefData*    pSingRef = &aComplRef.Ref1;
 
     pSingRef->nCol = pLR->nColStart;
     pSingRef->nRow = pLR->nRowStart;
@@ -545,7 +545,7 @@ RangeNameBufferWK3::~RangeNameBufferWK3()
 }
 
 
-void RangeNameBufferWK3::Add( const String& rOrgName, const ComplRefData& rCRD )
+void RangeNameBufferWK3::Add( const String& rOrgName, const ScComplexRefData& rCRD )
 {
     String              aScName( rOrgName );
     ScfTools::ConvertToScDefinedName( aScName );
@@ -556,8 +556,8 @@ void RangeNameBufferWK3::Add( const String& rOrgName, const ComplRefData& rCRD )
 
     pScTokenArray->Clear();
 
-    register const SingleRefData&   rRef1 = rCRD.Ref1;
-    register const SingleRefData&   rRef2 = rCRD.Ref2;
+    register const ScSingleRefData& rRef1 = rCRD.Ref1;
+    register const ScSingleRefData& rRef2 = rCRD.Ref2;
 
     if( rRef1.nCol == rRef2.nCol && rRef1.nRow == rRef2.nRow && rRef1.nTab == rRef2.nTab )
     {
@@ -616,7 +616,7 @@ BOOL RangeNameBufferWK3::FindAbs( const String& rRef, UINT16& rIndex )
                 rIndex = pFind->nAbsInd;
             else
             {
-                SingleRefData*      pRef = &pFind->aComplRefDataRel.Ref1;
+                ScSingleRefData*        pRef = &pFind->aScComplexRefDataRel.Ref1;
                 pScTokenArray->Clear();
 
                 pRef->SetColRel( FALSE );
@@ -627,11 +627,11 @@ BOOL RangeNameBufferWK3::FindAbs( const String& rRef, UINT16& rIndex )
                     pScTokenArray->AddSingleReference( *pRef );
                 else
                 {
-                    pRef = &pFind->aComplRefDataRel.Ref2;
+                    pRef = &pFind->aScComplexRefDataRel.Ref2;
                     pRef->SetColRel( FALSE );
                     pRef->SetRowRel( FALSE );
                     pRef->SetTabRel( TRUE );
-                    pScTokenArray->AddDoubleReference( pFind->aComplRefDataRel );
+                    pScTokenArray->AddDoubleReference( pFind->aScComplexRefDataRel );
                 }
 
                 ScRangeData*    pData = new ScRangeData( pLotusRoot->pDoc, pFind->aScAbsName, *pScTokenArray );

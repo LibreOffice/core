@@ -3305,7 +3305,7 @@ void ScCellRangesBase::ForceChartListener_Impl()
     }
 }
 
-String lcl_UniqueName( StrCollection& rColl, const String& rPrefix )
+String lcl_UniqueName( ScStrCollection& rColl, const String& rPrefix )
 {
     long nNumber = 1;
     USHORT nCollCount = rColl.GetCount();
@@ -8827,7 +8827,7 @@ rtl::OUString SAL_CALL ScTableColumnObj::getName() throw(uno::RuntimeException)
     DBG_ASSERT(rRange.aStart.Col() == rRange.aEnd.Col(), "too many columns");
     SCCOL nCol = rRange.aStart.Col();
 
-    return ColToAlpha( nCol );      // from global.hxx
+    return ScColToAlpha( nCol );        // from global.hxx
 }
 
 void SAL_CALL ScTableColumnObj::setName( const rtl::OUString& /* aNewName */ )

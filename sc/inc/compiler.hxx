@@ -154,7 +154,7 @@ public:
             BYTE        cByte;
             bool        bHasForceArray;
         } sbyte;
-        ComplRefData aRef;
+        ScComplexRefData aRef;
         struct {
             sal_uInt16      nFileId;
             sal_Unicode     cTabName[MAXSTRLEN+1];
@@ -188,15 +188,15 @@ public:
     // since the reference count is cleared!
     void SetOpCode( OpCode eCode );
     void SetString( const sal_Unicode* pStr );
-    void SetSingleReference( const SingleRefData& rRef );
-    void SetDoubleReference( const ComplRefData& rRef );
+    void SetSingleReference( const ScSingleRefData& rRef );
+    void SetDoubleReference( const ScComplexRefData& rRef );
     void SetDouble( double fVal );
 //UNUSED2008-05  void SetInt( int nVal );
 //UNUSED2008-05  void SetMatrix( ScMatrix* p );
 
     // These methods are ok to use, reference count not cleared.
-//UNUSED2008-05  ComplRefData& GetReference();
-//UNUSED2008-05  void SetReference( ComplRefData& rRef );
+//UNUSED2008-05  ScComplexRefData& GetReference();
+//UNUSED2008-05  void SetReference( ScComplexRefData& rRef );
     void SetName( USHORT n );
     void SetExternalSingleRef( sal_uInt16 nFileId, const String& rTabName, const SingleRefData& rRef );
     void SetExternalDoubleRef( sal_uInt16 nFileId, const String& rTabName, const ComplRefData& rRef );
@@ -239,7 +239,7 @@ public:
 
         virtual void MakeRefStr( rtl::OUStringBuffer&   rBuffer,
                                  const ScCompiler&      rCompiler,
-                                 const ComplRefData&    rRef,
+                                 const ScComplexRefData&    rRef,
                                  BOOL bSingleRef ) const = 0;
         virtual ::com::sun::star::i18n::ParseResult
                     parseAnyToken( const String& rFormula,
@@ -462,7 +462,7 @@ private:
     bool        mbExtendedErrorDetection;
 
     BOOL   GetToken();
-    BOOL   NextNewToken(bool bAllowBooleans = false);
+    BOOL   NextNewToken(bool bInArray = false);
     OpCode NextToken();
     void PutCode( ScTokenRef& );
     void Factor();
@@ -480,9 +480,9 @@ private:
     OpCode Expression();
 
     void SetError(USHORT nError);
-    xub_StrLen NextSymbol();
+    xub_StrLen NextSymbol(bool bInArray);
     BOOL IsValue( const String& );
-    BOOL IsOpCode( const String& );
+    BOOL IsOpCode( const String&, bool bInArray );
     BOOL IsOpCode2( const String& );
     BOOL IsString();
     BOOL IsReference( const String& );

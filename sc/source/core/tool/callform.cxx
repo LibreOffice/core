@@ -140,7 +140,7 @@ FuncData::FuncData(const ModuleData*pModule,
 //------------------------------------------------------------------------
 
 FuncData::FuncData(const FuncData& rData) :
-    DataObject(),
+    ScDataObject(),
     pModuleData     (rData.pModuleData),
     aInternalName   (rData.aInternalName),
     aFuncName       (rData.aFuncName),
@@ -154,7 +154,7 @@ FuncData::FuncData(const FuncData& rData) :
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-short FuncCollection::Compare(DataObject* pKey1, DataObject* pKey2) const
+short FuncCollection::Compare(ScDataObject* pKey1, ScDataObject* pKey2) const
 {
     return (short) ScGlobal::pTransliteration->compareString(
         ((FuncData*)pKey1)->aInternalName, ((FuncData*)pKey2)->aInternalName );
@@ -169,16 +169,16 @@ BOOL FuncCollection::SearchFunc( const String& rName, USHORT& rIndex ) const
 }
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class ModuleData : public DataObject
+class ModuleData : public ScDataObject
 {
 friend class ModuleCollection;
     String      aName;
     osl::Module* pInstance;
 public:
     ModuleData(const String& rStr, osl::Module* pInst) : aName (rStr), pInstance (pInst) {}
-    ModuleData(const ModuleData& rData) : DataObject(), aName (rData.aName) {pInstance = new osl::Module(aName);}
+    ModuleData(const ModuleData& rData) : ScDataObject(), aName (rData.aName) {pInstance = new osl::Module(aName);}
     ~ModuleData() { delete pInstance; }
-    virtual DataObject* Clone() const { return new ModuleData(*this); }
+    virtual ScDataObject*   Clone() const { return new ModuleData(*this); }
 
     const   String&         GetName() const { return aName; }
             osl::Module*    GetInstance() const { return pInstance; }
@@ -186,15 +186,15 @@ public:
 };
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class ModuleCollection : public SortedCollection
+class ModuleCollection : public ScSortedCollection
 {
 public:
-    ModuleCollection(USHORT nLim = 4, USHORT nDel = 4, BOOL bDup = FALSE) : SortedCollection ( nLim, nDel, bDup ) {}
-    ModuleCollection(const ModuleCollection& rModuleCollection) : SortedCollection ( rModuleCollection ) {}
+    ModuleCollection(USHORT nLim = 4, USHORT nDel = 4, BOOL bDup = FALSE) : ScSortedCollection ( nLim, nDel, bDup ) {}
+    ModuleCollection(const ModuleCollection& rModuleCollection) : ScSortedCollection ( rModuleCollection ) {}
 
-    virtual DataObject*     Clone() const { return new ModuleCollection(*this); }
+    virtual ScDataObject*       Clone() const { return new ModuleCollection(*this); }
             ModuleData*     operator[]( const USHORT nIndex) const {return (ModuleData*)At(nIndex);}
-    virtual short           Compare(DataObject* pKey1, DataObject* pKey2) const;
+    virtual short           Compare(ScDataObject* pKey1, ScDataObject* pKey2) const;
             BOOL            SearchModule( const String& rName,
                                           const ModuleData*& rpModule ) const;
 };
@@ -203,7 +203,7 @@ static ModuleCollection aModuleCollection;
 
 //------------------------------------------------------------------------
 
-short ModuleCollection::Compare(DataObject* pKey1, DataObject* pKey2) const
+short ModuleCollection::Compare(ScDataObject* pKey1, ScDataObject* pKey2) const
 {
     return (short) ScGlobal::pTransliteration->compareString(
         ((ModuleData*)pKey1)->aName, ((ModuleData*)pKey2)->aName );

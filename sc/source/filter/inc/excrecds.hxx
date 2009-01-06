@@ -42,10 +42,10 @@
 #include "olinetab.hxx"
 #include "filter.hxx"
 #include "rangelst.hxx"
+#include "xerecord.hxx"
 #include "xeroot.hxx"
 #include "xeformula.hxx"
 #include "xestring.hxx"
-#include "xerecord.hxx"
 #include "root.hxx"
 #include "excdefs.hxx"
 #include "cell.hxx"
@@ -241,6 +241,8 @@ class XclExpWindowProtection : public   XclExpBoolRecord
 {
     public:
         XclExpWindowProtection(bool bValue);
+
+    virtual void            SaveXml( XclExpXmlStream& rStrm );
 };
 
 // EXC_ID_PROTECT  Document Protection
@@ -284,6 +286,8 @@ class Exc1904 : public ExcBoolRecord
 public:
                             Exc1904( ScDocument& rDoc );
     virtual UINT16          GetNum( void ) const;
+
+    virtual void            SaveXml( XclExpXmlStream& rStrm );
 };
 
 
@@ -295,6 +299,7 @@ protected:
     sal_Size                nStrPos;
     sal_Size                nOwnPos;    // Position NACH # und Len
     UINT16                  nGrbit;
+    SCTAB                   nTab;
 
                             ExcBundlesheetBase();
 
@@ -357,7 +362,12 @@ private:
 class XclExpWsbool : public XclExpUInt16Record
 {
 public:
-    explicit                    XclExpWsbool( bool bFitToPages );
+    explicit                    XclExpWsbool( bool bFitToPages, SCTAB nScTab = -1, XclExpFilterManager* pManager = NULL );
+
+    virtual void                SaveXml( XclExpXmlStream& rStrm );
+private:
+    SCTAB                       mnScTab;
+    XclExpFilterManager*        mpManager;
 };
 
 
@@ -405,6 +415,7 @@ public:
     void                    SetCondition( UINT8 nTp, UINT8 nOp, double fV, String* pT );
 
     void                    Save( XclExpStream& rStrm );
+    void                    SaveXml( XclExpXmlStream& rStrm );
     void                    SaveText( XclExpStream& rStrm );
 };
 
@@ -432,6 +443,8 @@ public:
     inline BOOL             HasTop10() const        { return ::get_flag( nFlags, EXC_AFFLAG_TOP10 ); }
 
     BOOL                    AddEntry( const ScQueryEntry& rEntry );
+
+    virtual void            SaveXml( XclExpXmlStream& rStrm );
 };
 
 // ----------------------------------------------------------------------------
@@ -445,6 +458,9 @@ public:
     void                AddObjRecs();
 
     virtual void        Save( XclExpStream& rStrm );
+    virtual void        SaveXml( XclExpXmlStream& rStrm );
+
+    bool                HasFilterMode() const;
 
 private:
     XclExpAutofilter*   GetByCol( SCCOL nCol ); // always 0-based
@@ -457,6 +473,7 @@ private:
     XclExpAutofilterList maFilterList;
     XclExpFiltermode*   pFilterMode;
     XclExpAutofilterinfo* pFilterInfo;
+    ScRange                 maRef;
 };
 
 // ----------------------------------------------------------------------------
@@ -474,6 +491,9 @@ public:
 
     /** Returns a record object containing all filter records for the specified sheet. */
     XclExpRecordRef     CreateRecord( SCTAB nScTab );
+
+    /** Returns whether or not FilterMode is present */
+    bool                HasFilterMode( SCTAB nScTab );
 
 private:
     using               XclExpRoot::CreateRecord;

@@ -275,7 +275,7 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScFormulaParserObj )
 
 //------------------------------------------------------------------------
 
-void lcl_ExternalRefToCalc( SingleRefData& rRef, const sheet::SingleReference& rAPI )
+void lcl_ExternalRefToCalc( ScSingleRefData& rRef, const sheet::SingleReference& rAPI )
 {
     rRef.InitFlags();
 
@@ -296,7 +296,7 @@ void lcl_ExternalRefToCalc( SingleRefData& rRef, const sheet::SingleReference& r
     rRef.SetRelName(    false );
 }
 
-void lcl_SingleRefToCalc( SingleRefData& rRef, const sheet::SingleReference& rAPI )
+void lcl_SingleRefToCalc( ScSingleRefData& rRef, const sheet::SingleReference& rAPI )
 {
     rRef.InitFlags();
 
@@ -317,7 +317,7 @@ void lcl_SingleRefToCalc( SingleRefData& rRef, const sheet::SingleReference& rAP
     rRef.SetRelName(    ( rAPI.Flags & sheet::ReferenceFlags::RELATIVE_NAME   ) != 0 );
 }
 
-void lcl_ExternalRefToApi( sheet::SingleReference& rAPI, const SingleRefData& rRef )
+void lcl_ExternalRefToApi( sheet::SingleReference& rAPI, const ScSingleRefData& rRef )
 {
     rAPI.Column         = rRef.nCol;
     rAPI.Row            = rRef.nRow;
@@ -336,7 +336,7 @@ void lcl_ExternalRefToApi( sheet::SingleReference& rAPI, const SingleRefData& rR
     rAPI.Flags = nFlags;
 }
 
-void lcl_SingleRefToApi( sheet::SingleReference& rAPI, const SingleRefData& rRef )
+void lcl_SingleRefToApi( sheet::SingleReference& rAPI, const ScSingleRefData& rRef )
 {
     rAPI.Column         = rRef.nCol;
     rAPI.Row            = rRef.nRow;
@@ -412,7 +412,7 @@ bool ScTokenConversion::ConvertToTokenArray( ScDocument& rDoc,
                     uno::Type aType = rAPI.Data.getValueType();
                     if ( aType.equals( cppu::UnoType<sheet::SingleReference>::get() ) )
                     {
-                        SingleRefData aSingleRef;
+                        ScSingleRefData aSingleRef;
                         sheet::SingleReference aApiRef;
                         rAPI.Data >>= aApiRef;
                         lcl_SingleRefToCalc( aSingleRef, aApiRef );
@@ -426,7 +426,7 @@ bool ScTokenConversion::ConvertToTokenArray( ScDocument& rDoc,
                     }
                     else if ( aType.equals( cppu::UnoType<sheet::ComplexReference>::get() ) )
                     {
-                        ComplRefData aComplRef;
+                        ScComplexRefData aComplRef;
                         sheet::ComplexReference aApiRef;
                         rAPI.Data >>= aApiRef;
                         lcl_SingleRefToCalc( aComplRef.Ref1, aApiRef.Reference1 );
@@ -453,7 +453,7 @@ bool ScTokenConversion::ConvertToTokenArray( ScDocument& rDoc,
                                 String aTabName = rDoc.GetExternalRefManager()->getCacheTableName( nFileId, nCacheId );
                                 if( aTabName.Len() > 0 )
                                 {
-                                    SingleRefData aSingleRef;
+                                    ScSingleRefData aSingleRef;
                                     // convert column/row settings, set sheet index to absolute
                                     lcl_ExternalRefToCalc( aSingleRef, aApiSRef );
                                     rTokenArray.AddExternalSingleReference( nFileId, aTabName, aSingleRef );

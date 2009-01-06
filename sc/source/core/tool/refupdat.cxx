@@ -502,7 +502,7 @@ ScRefUpdateRes ScRefUpdate::Update( UpdateRefMode eUpdateRefMode,
 ScRefUpdateRes ScRefUpdate::Update( ScDocument* pDoc, UpdateRefMode eMode,
                                     const ScAddress& rPos, const ScRange& r,
                                     SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
-                                    ComplRefData& rRef, WhatType eWhat )
+                                    ScComplexRefData& rRef, WhatType eWhat )
 {
     ScRefUpdateRes eRet = UR_NOTHING;
 
@@ -712,7 +712,7 @@ ScRefUpdateRes ScRefUpdate::Update( ScDocument* pDoc, UpdateRefMode eMode,
 
 ScRefUpdateRes ScRefUpdate::Move( ScDocument* pDoc, const ScAddress& rPos,
                                   SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
-                                  ComplRefData& rRef, BOOL bWrap, BOOL bAbsolute )
+                                  ScComplexRefData& rRef, BOOL bWrap, BOOL bAbsolute )
 {
     ScRefUpdateRes eRet = UR_NOTHING;
 
@@ -821,7 +821,7 @@ ScRefUpdateRes ScRefUpdate::Move( ScDocument* pDoc, const ScAddress& rPos,
 }
 
 void ScRefUpdate::MoveRelWrap( ScDocument* pDoc, const ScAddress& rPos,
-                                  ComplRefData& rRef )
+                                  ScComplexRefData& rRef )
 {
     if( rRef.Ref1.IsColRel() )
     {
@@ -887,7 +887,7 @@ void ScRefUpdate::DoTranspose( SCsCOL& rCol, SCsROW& rRow, SCsTAB& rTab,
 
 ScRefUpdateRes ScRefUpdate::UpdateTranspose( ScDocument* pDoc,
                                 const ScRange& rSource, const ScAddress& rDest,
-                                ComplRefData& rRef )
+                                ScComplexRefData& rRef )
 {
     ScRefUpdateRes eRet = UR_NOTHING;
     if ( rRef.Ref1.nCol >= rSource.aStart.Col() && rRef.Ref2.nCol <= rSource.aEnd.Col() &&
@@ -908,7 +908,7 @@ ScRefUpdateRes ScRefUpdate::UpdateTranspose( ScDocument* pDoc,
 
 
 ScRefUpdateRes ScRefUpdate::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY,
-                                        ComplRefData& rRef )
+                                        ScComplexRefData& rRef )
 {
     ScRefUpdateRes eRet = UR_NOTHING;
 

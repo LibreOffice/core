@@ -81,7 +81,7 @@ _ScRangeListTabs::~_ScRangeListTabs()
 }
 
 
-void _ScRangeListTabs::Append( SingleRefData a, const BOOL b )
+void _ScRangeListTabs::Append( ScSingleRefData a, const BOOL b )
 {
     if( b )
     {
@@ -113,7 +113,7 @@ void _ScRangeListTabs::Append( SingleRefData a, const BOOL b )
 }
 
 
-void _ScRangeListTabs::Append( ComplRefData a, const BOOL b )
+void _ScRangeListTabs::Append( ScComplexRefData a, const BOOL b )
 {
     if( b )
     {

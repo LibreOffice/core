@@ -62,8 +62,8 @@ class ScPivotCollection;
 struct ScPivotParam;
 struct ScImportSourceDesc;
 struct ScSheetSourceDesc;
-class StrCollection;
-class TypedStrCollection;
+class ScStrCollection;
+class TypedScStrCollection;
 struct PivotField;
 class ScDPCacheTable;
 
@@ -89,7 +89,7 @@ struct ScDPServiceDesc
 };
 
 
-class SC_DLLPUBLIC ScDPObject : public DataObject
+class SC_DLLPUBLIC ScDPObject : public ScDataObject
 {
 private:
     ScDocument*             pDoc;
@@ -119,7 +119,7 @@ public:
                 ScDPObject(const ScDPObject& r);
     virtual     ~ScDPObject();
 
-    virtual DataObject* Clone() const;
+    virtual ScDataObject*   Clone() const;
 
     void                SetAlive(BOOL bSet);
     void                SetAllowMove(BOOL bSet);
@@ -176,9 +176,9 @@ public:
                                       std::vector< ScDPGetPivotDataField >& rFilters,
                                       const String& rFilterList );
 
-    void                GetMemberResultNames( StrCollection& rNames, long nDimension );
+    void                GetMemberResultNames( ScStrCollection& rNames, long nDimension );
 
-    void                FillPageList( TypedStrCollection& rStrings, long nField );
+    void                FillPageList( TypedScStrCollection& rStrings, long nField );
 
     void                ToggleDetails(const ::com::sun::star::sheet::DataPilotTableHeaderData& rElemDesc, ScDPObject* pDestObj);
 
@@ -255,7 +255,7 @@ struct ScDPCacheCell
 
 // ============================================================================
 
-class ScDPCollection : public Collection
+class ScDPCollection : public ScCollection
 {
 private:
     ScDocument* pDoc;
@@ -278,7 +278,7 @@ public:
                 ScDPCollection(const ScDPCollection& r);
     virtual     ~ScDPCollection();
 
-    virtual DataObject* Clone() const;
+    virtual ScDataObject*   Clone() const;
 
     ScDPObject* operator[](USHORT nIndex) const {return (ScDPObject*)At(nIndex);}
 #if OLD_PIVOT_IMPLEMENTATION

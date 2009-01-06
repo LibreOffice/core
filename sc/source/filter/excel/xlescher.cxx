@@ -31,13 +31,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-#include "xlescher.hxx"
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
 #include <svx/unoapi.hxx>
+#include "xestream.hxx"
 #include "document.hxx"
 #include "xistream.hxx"
-#include "xestream.hxx"
+#include "xlescher.hxx"
 
 using ::rtl::OUString;
 using ::com::sun::star::uno::Reference;

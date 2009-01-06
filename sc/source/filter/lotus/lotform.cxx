@@ -225,7 +225,7 @@ void LotusToSc::DoFunc( DefTokenId eOc, BYTE nAnz, const sal_Char* pExtString )
 }
 
 
-void LotusToSc::LotusRelToScRel( UINT16 nCol, UINT16 nRow, SingleRefData& rSRD )
+void LotusToSc::LotusRelToScRel( UINT16 nCol, UINT16 nRow, ScSingleRefData& rSRD )
 {
     // Col-Bemachung
     if( nCol & 0x8000 )
@@ -304,7 +304,7 @@ void LotusToSc::LotusRelToScRel( UINT16 nCol, UINT16 nRow, SingleRefData& rSRD )
 }
 
 
-void LotusToSc::ReadSRD( SingleRefData& rSRD, BYTE nRelBit )
+void LotusToSc::ReadSRD( ScSingleRefData& rSRD, BYTE nRelBit )
 {
     BYTE            nTab, nCol;
     UINT16          nRow;
@@ -394,9 +394,9 @@ ConvErr LotusToSc::Convert( const ScTokenArray*& rpErg, INT32& rRest,
     const sal_Char*     pExtName = 0;
     RangeNameBufferWK3& rRangeNameBufferWK3 = *pLotusRoot->pRngNmBffWK3;
 
-    ComplRefData        aCRD;
+    ScComplexRefData        aCRD;
     aCRD.InitFlags();
-    SingleRefData&      rR = aCRD.Ref1;
+    ScSingleRefData&        rR = aCRD.Ref1;
 
     LR_ID               nId;
     TokenId             nNewId;

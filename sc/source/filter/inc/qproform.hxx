@@ -79,7 +79,7 @@ class QProToSc : public ConverterBase
     ConvErr Convert( const ScTokenArray*& pArray, sal_uInt16 nLen,
                                                                          const FORMULA_TYPE eFT = FT_CellFormula );
     void DoFunc( DefTokenId eOc, sal_uInt16 nArgs, const sal_Char* pExtString );
-    void ReadSRD( SingleRefData& rR, sal_Int8 nPage, sal_Int8 nCol, sal_uInt16 rRel );
+    void ReadSRD( ScSingleRefData& rR, sal_Int8 nPage, sal_Int8 nCol, sal_uInt16 rRel );
     void IncToken( TokenId &aParam );
     DefTokenId IndexToToken( sal_uInt16 nToken );
     FUNC_TYPE IndexToType( sal_uInt8 nToken );

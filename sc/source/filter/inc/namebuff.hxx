@@ -204,14 +204,14 @@ private:
     struct ENTRY
         {
         StringHashEntry     aStrHashEntry;
-        ComplRefData        aComplRefDataRel;
+        ScComplexRefData        aScComplexRefDataRel;
         String              aScAbsName;
         UINT16              nAbsInd;        // == 0 -> noch keine Abs-Name!
         UINT16              nRelInd;
         BOOL                bSingleRef;
-                            ENTRY( const String& rName, const String& rScName, const ComplRefData& rCRD ) :
+                            ENTRY( const String& rName, const String& rScName, const ScComplexRefData& rCRD ) :
                                 aStrHashEntry( rName ),
-                                aComplRefDataRel( rCRD ),
+                                aScComplexRefDataRel( rCRD ),
                                 aScAbsName( rScName )
                             {
                                 nAbsInd = 0;
@@ -224,7 +224,7 @@ private:
 public:
                             RangeNameBufferWK3( void );
     virtual                 ~RangeNameBufferWK3();
-    void                    Add( const String& rName, const ComplRefData& rCRD );
+    void                    Add( const String& rName, const ScComplexRefData& rCRD );
     inline void             Add( const String& rName, const ScRange& aScRange );
     BOOL                    FindRel( const String& rRef, UINT16& rIndex );
     BOOL                    FindAbs( const String& rRef, UINT16& rIndex );
@@ -233,8 +233,8 @@ public:
 
 inline void RangeNameBufferWK3::Add( const String& rName, const ScRange& aScRange )
 {
-    ComplRefData        aCRD;
-    SingleRefData*      pSRD;
+    ScComplexRefData        aCRD;
+    ScSingleRefData*        pSRD;
     const ScAddress*    pScAddr;
 
     pSRD = &aCRD.Ref1;

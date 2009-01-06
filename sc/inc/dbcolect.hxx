@@ -37,6 +37,7 @@
 #include "sortparam.hxx"    // MAXSORT
 #include "refreshtimer.hxx"
 #include "address.hxx"
+#include "scdllapi.h"
 
 //------------------------------------------------------------------------
 
@@ -46,7 +47,7 @@ class ScMultipleWriteHeader;
 
 //------------------------------------------------------------------------
 
-class ScDBData : public DataObject, public ScRefreshTimer
+class ScDBData : public ScDataObject, public ScRefreshTimer
 {
 
 private:
@@ -124,14 +125,14 @@ private:
     using ScRefreshTimer::operator==;
 
 public:
-            ScDBData(const String& rName,
+            SC_DLLPUBLIC ScDBData(const String& rName,
                      SCTAB nTab,
                      SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                      BOOL bByR = TRUE, BOOL bHasH = TRUE);
             ScDBData(const ScDBData& rData);
             ~ScDBData();
 
-    virtual DataObject* Clone() const;
+    virtual ScDataObject*   Clone() const;
 
             ScDBData&   operator= (const ScDBData& rData);
 
@@ -166,9 +167,9 @@ public:
             void        SetSortParam(const ScSortParam& rSortParam);
 
             SC_DLLPUBLIC void       GetQueryParam(ScQueryParam& rQueryParam) const;
-            void        SetQueryParam(const ScQueryParam& rQueryParam);
-            BOOL        GetAdvancedQuerySource(ScRange& rSource) const;
-            void        SetAdvancedQuerySource(const ScRange* pSource);
+            SC_DLLPUBLIC void       SetQueryParam(const ScQueryParam& rQueryParam);
+            SC_DLLPUBLIC BOOL       GetAdvancedQuerySource(ScRange& rSource) const;
+            SC_DLLPUBLIC void       SetAdvancedQuerySource(const ScRange* pSource);
 
             void        GetSubTotalParam(ScSubTotalParam& rSubTotalParam) const;
             void        SetSubTotalParam(const ScSubTotalParam& rSubTotalParam);
@@ -196,7 +197,7 @@ public:
 
 
 //------------------------------------------------------------------------
-class SC_DLLPUBLIC ScDBCollection : public SortedCollection
+class SC_DLLPUBLIC ScDBCollection : public ScSortedCollection
 {
 
 private:
@@ -206,20 +207,20 @@ private:
 
 public:
     ScDBCollection(USHORT nLim = 4, USHORT nDel = 4, BOOL bDup = FALSE, ScDocument* pDocument = NULL) :
-                    SortedCollection    ( nLim, nDel, bDup ),
+                    ScSortedCollection  ( nLim, nDel, bDup ),
                     pDoc                ( pDocument ),
                     nEntryIndex         ( SC_START_INDEX_DB_COLL )  // oberhalb der Namen
                     {}
     ScDBCollection(const ScDBCollection& rScDBCollection) :
-                    SortedCollection    ( rScDBCollection ),
+                    ScSortedCollection  ( rScDBCollection ),
                     pDoc                ( rScDBCollection.pDoc ),
                     nEntryIndex         ( rScDBCollection.nEntryIndex)
                     {}
 
-    virtual DataObject* Clone() const { return new ScDBCollection(*this); }
+    virtual ScDataObject*   Clone() const { return new ScDBCollection(*this); }
             ScDBData*   operator[]( const USHORT nIndex) const {return (ScDBData*)At(nIndex);}
-    virtual short       Compare(DataObject* pKey1, DataObject* pKey2) const;
-    virtual BOOL        IsEqual(DataObject* pKey1, DataObject* pKey2) const;
+    virtual short       Compare(ScDataObject* pKey1, ScDataObject* pKey2) const;
+    virtual BOOL        IsEqual(ScDataObject* pKey1, ScDataObject* pKey2) const;
             ScDBData*   GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, BOOL bStartOnly) const;
             ScDBData*   GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const;
 
@@ -235,7 +236,7 @@ public:
     ScDBData* FindIndex(USHORT nIndex);
     USHORT  GetEntryIndex()                 { return nEntryIndex; }
     void    SetEntryIndex(USHORT nInd)      { nEntryIndex = nInd; }
-    virtual BOOL Insert(DataObject* pDataObject);
+    virtual BOOL Insert(ScDataObject* pScDataObject);
 
     void            SetRefreshHandler( const Link& rLink )
                         { aRefreshHandler = rLink; }

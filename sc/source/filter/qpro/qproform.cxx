@@ -40,7 +40,7 @@
 #include <tokstack.hxx>
 #include "ftools.hxx"
 
-void QProToSc::ReadSRD( SingleRefData& rSRD, sal_Int8 nPage, sal_Int8 nCol, sal_uInt16 nRelBit )
+void QProToSc::ReadSRD( ScSingleRefData& rSRD, sal_Int8 nPage, sal_Int8 nCol, sal_uInt16 nRelBit )
 {
     UINT16 nTmp = nRelBit & 0x1fff;
     rSRD.InitAddress( ScAddress( nCol, (~nTmp + 1), 0 ) );
@@ -208,8 +208,8 @@ ConvErr QProToSc::Convert( const ScTokenArray*& pArray, sal_uInt16 /*nLen*/, con
     sal_uInt16 nDummy, nDLLId, nDLLArray[ nBufSize ];
     sal_uInt16 nNote, nRef, nRelBits;
     TokenId nPush;
-    ComplRefData aCRD;
-    SingleRefData aSRD;
+    ScComplexRefData aCRD;
+    ScSingleRefData aSRD;
     FUNC_TYPE eType;
     DefTokenId eOc;
     double nFloatArray[ nBufSize ], nFloat;

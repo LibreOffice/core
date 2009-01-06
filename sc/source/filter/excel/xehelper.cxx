@@ -30,7 +30,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
-#include "xehelper.hxx"
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <sfx2/objsh.hxx>
@@ -56,11 +55,12 @@
 #include "cell.hxx"
 #include "editutil.hxx"
 #include "patattr.hxx"
+#include "xestyle.hxx"
 #include "fprogressbar.hxx"
 #include "xltracer.hxx"
-#include "xestyle.hxx"
 #include "xecontent.hxx"
 #include "xelink.hxx"
+#include "xehelper.hxx"
 
 using ::rtl::OUString;
 using ::com::sun::star::uno::Reference;

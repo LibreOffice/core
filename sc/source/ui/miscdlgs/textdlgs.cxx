@@ -131,8 +131,8 @@ void __EXPORT ScParagraphDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
             //CHINA001      DisableControls( TABTYPE_ALL &~TABTYPE_LEFT |
             //CHINA001                       TABFILL_ALL &~TABFILL_NONE );
             SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));//add CHINA001
-            aSet.Put(SfxUInt16Item(SID_SVXTABULATORTABPAGE_CONTROLFLAGS,TABTYPE_ALL &~TABTYPE_LEFT |
-                                TABFILL_ALL &~TABFILL_NONE ));
+            aSet.Put(SfxUInt16Item(SID_SVXTABULATORTABPAGE_CONTROLFLAGS,(TABTYPE_ALL &~TABTYPE_LEFT) |
+                                (TABFILL_ALL &~TABFILL_NONE) ));
             rPage.PageCreated(aSet);//add CHINA001
             }
         break;

@@ -35,6 +35,7 @@
 #include "address.hxx"
 #include "grammar.hxx"
 #include <svtools/svarray.hxx>
+#include "scdllapi.h"
 
 class ScBaseCell;
 class ScFormulaCell;
@@ -74,7 +75,7 @@ enum ScConditionValType
     SC_VAL_FORMULA
 };
 
-class ScConditionEntry
+class SC_DLLPUBLIC ScConditionEntry
 {
                                         // gespeicherte Daten:
     ScConditionMode     eOp;
@@ -159,7 +160,7 @@ protected:
 
 class ScConditionalFormat;
 
-class ScCondFormatEntry : public ScConditionEntry
+class SC_DLLPUBLIC ScCondFormatEntry : public ScConditionEntry
 {
     String                  aStyleName;
     ScConditionalFormat*    pParent;
@@ -194,7 +195,7 @@ protected:
 //  komplette bedingte Formatierung
 //
 
-class ScConditionalFormat
+class SC_DLLPUBLIC ScConditionalFormat
 {
     ScDocument*         pDoc;
     ScRangeList*        pAreas;             // Bereiche fuer Paint

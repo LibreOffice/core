@@ -54,6 +54,8 @@
 #include "xestring.hxx"
 #include "xelink.hxx"
 
+#include <oox/core/tokens.hxx>
+
 using ::com::sun::star::sheet::DataPilotFieldOrientation;
 using ::com::sun::star::sheet::DataPilotFieldOrientation_HIDDEN;
 using ::com::sun::star::sheet::DataPilotFieldOrientation_ROW;
@@ -65,6 +67,10 @@ using ::com::sun::star::sheet::DataPilotFieldSortInfo;
 using ::com::sun::star::sheet::DataPilotFieldAutoShowInfo;
 using ::com::sun::star::sheet::DataPilotFieldLayoutInfo;
 using ::com::sun::star::sheet::DataPilotFieldReference;
+
+using ::rtl::OString;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 
 // ============================================================================
 // Pivot cache
@@ -534,13 +540,13 @@ void XclExpPCField::InsertNumDateGroupItems( const ScDPObject& rDPObj, const ScD
     {
         // get the string collection with original source elements
         ScSheetDPData aDPData( GetDocPtr(), *pSrcDesc );
-        const TypedStrCollection& rOrigColl = aDPData.GetColumnEntries( static_cast< long >( GetBaseFieldIndex() ) );
+        const TypedScStrCollection& rOrigColl = aDPData.GetColumnEntries( static_cast< long >( GetBaseFieldIndex() ) );
 
         // get the string collection with generated grouping elements
         ScDPNumGroupDimension aTmpDim( rNumInfo );
         if( nDatePart != 0 )
             aTmpDim.MakeDateHelper( rNumInfo, nDatePart );
-        const TypedStrCollection& rGroupColl = aTmpDim.GetNumEntries( rOrigColl, GetDocPtr() );
+        const TypedScStrCollection& rGroupColl = aTmpDim.GetNumEntries( rOrigColl, GetDocPtr() );
         for( USHORT nIdx = 0, nCount = rGroupColl.GetCount(); nIdx < nCount; ++nIdx )
             if( const TypedStrData* pStrData = rGroupColl[ nIdx ] )
                 InsertGroupItem( new XclExpPCItem( pStrData->GetString() ) );
@@ -727,6 +733,29 @@ void XclExpPivotCache::Save( XclExpStream& rStrm )
     WriteDconref( rStrm );
     // create the pivot cache storage stream
     WriteCacheStream();
+}
+
+void XclExpPivotCache::SaveXml( XclExpXmlStream& rStrm )
+{
+    DBG_ASSERT( mbValid, "XclExpPivotCache::Save - invalid pivot cache" );
+    sax_fastparser::FSHelperPtr& rWorkbook = rStrm.GetCurrentStream();
+    OUString sId = OUStringBuffer()
+        .appendAscii("rId")
+        .append( rStrm.GetUniqueIdOUString() )
+        .makeStringAndClear();
+    rWorkbook->startElement( XML_pivotCache,
+            XML_cacheId, OString::valueOf( (sal_Int32)maPCInfo.mnStrmId ).getStr(),
+            FSNS( XML_r, XML_id ), XclXmlUtils::ToOString( sId ).getStr(),
+            FSEND );
+    // SXIDSTM
+    XclExpUInt16Record( EXC_ID_SXIDSTM, maPCInfo.mnStrmId ).SaveXml( rStrm );
+    // SXVS
+    XclExpUInt16Record( EXC_ID_SXVS, EXC_SXVS_SHEET ).SaveXml( rStrm );
+    // DCONREF
+    // OOXTODO: WriteDconref( rStrm );
+    // create the pivot cache storage stream
+    // OOXTODO: WriteCacheStream();
+    rWorkbook->endElement( XML_pivotCache );
 }
 
 // private --------------------------------------------------------------------
@@ -1504,6 +1533,7 @@ class XclExpPivotRecWrapper : public XclExpRecordBase
 public:
     explicit            XclExpPivotRecWrapper( XclExpPivotTableManager& rPTMgr, SCTAB nScTab );
     virtual void        Save( XclExpStream& rStrm );
+    virtual void        SaveXml( XclExpXmlStream& rStrm );
 private:
     XclExpPivotTableManager& mrPTMgr;
     SCTAB               mnScTab;
@@ -1521,6 +1551,14 @@ void XclExpPivotRecWrapper::Save( XclExpStream& rStrm )
         mrPTMgr.WritePivotCaches( rStrm );
     else
         mrPTMgr.WritePivotTables( rStrm, mnScTab );
+}
+
+void XclExpPivotRecWrapper::SaveXml( XclExpXmlStream& rStrm )
+{
+    if( mnScTab == EXC_PTMGR_PIVOTCACHES )
+        mrPTMgr.WritePivotCachesXml( rStrm );
+    else
+        mrPTMgr.WritePivotTablesXml( rStrm, mnScTab );
 }
 
 } // namespace
@@ -1557,6 +1595,16 @@ void XclExpPivotTableManager::WritePivotCaches( XclExpStream& rStrm )
     maPCacheList.Save( rStrm );
 }
 
+void XclExpPivotTableManager::WritePivotCachesXml( XclExpXmlStream& rStrm )
+{
+    if( maPCacheList.IsEmpty() )
+        return;
+    sax_fastparser::FSHelperPtr& rWorkbook = rStrm.GetCurrentStream();
+    rWorkbook->startElement( XML_pivotCaches, FSEND );
+    maPCacheList.SaveXml( rStrm );
+    rWorkbook->endElement( XML_pivotCaches );
+}
+
 void XclExpPivotTableManager::WritePivotTables( XclExpStream& rStrm, SCTAB nScTab )
 {
     for( size_t nPos = 0, nSize = maPTableList.GetSize(); nPos < nSize; ++nPos )
@@ -1564,6 +1612,16 @@ void XclExpPivotTableManager::WritePivotTables( XclExpStream& rStrm, SCTAB nScTa
         XclExpPivotTableRef xPTable = maPTableList.GetRecord( nPos );
         if( xPTable->GetScTab() == nScTab )
             xPTable->Save( rStrm );
+    }
+}
+
+void XclExpPivotTableManager::WritePivotTablesXml( XclExpXmlStream& rStrm, SCTAB nScTab )
+{
+    for( size_t nPos = 0, nSize = maPTableList.GetSize(); nPos < nSize; ++nPos )
+    {
+        XclExpPivotTableRef xPTable = maPTableList.GetRecord( nPos );
+        if( xPTable->GetScTab() == nScTab )
+            xPTable->SaveXml( rStrm );
     }
 }
 

@@ -63,7 +63,7 @@ class ScMultipleWriteHeader;
 class ScPatternAttr;
 class ScStyleSheet;
 class SvtBroadcaster;
-class TypedStrCollection;
+class TypedScStrCollection;
 class ScProgress;
 class ScPostIt;
 struct ScFunctionData;
@@ -369,8 +369,8 @@ public:
                 /// Including current, may return -1
     SCsROW      GetNextUnprotected( SCROW nRow, BOOL bUp ) const;
 
-    void        GetFilterEntries(SCROW nStartRow, SCROW nEndRow, TypedStrCollection& rStrings);
-    BOOL        GetDataEntries(SCROW nRow, TypedStrCollection& rStrings, BOOL bLimit);
+    void        GetFilterEntries(SCROW nStartRow, SCROW nEndRow, TypedScStrCollection& rStrings);
+    BOOL        GetDataEntries(SCROW nRow, TypedScStrCollection& rStrings, BOOL bLimit);
 
 //UNUSED2008-05  SCROW      NoteCount( SCROW nMaxRow = MAXROW ) const;
 

@@ -38,7 +38,7 @@
 #include "scmatrix.hxx"
 #include "intruref.hxx"
 #include <tools/mempool.hxx>
-
+#include "scdllapi.h"
 
 enum StackVarEnum
 {
@@ -88,10 +88,10 @@ class ScToken;
 typedef ScSimpleIntrusiveReference< class ScToken > ScTokenRef;
 typedef ScSimpleIntrusiveReference< const class ScToken > ScConstTokenRef;
 
-typedef ::std::vector< ComplRefData > ScRefList;
+typedef ::std::vector< ScComplexRefData > ScRefList;
 
 
-class ScToken
+class SC_DLLPUBLIC ScToken
 {
 private:
 
@@ -154,12 +154,12 @@ public:
     virtual double              GetDouble() const;
     virtual double&             GetDoubleAsReference();
     virtual const String&       GetString() const;
-    virtual const SingleRefData&    GetSingleRef() const;
-    virtual SingleRefData&      GetSingleRef();
-    virtual const ComplRefData& GetDoubleRef() const;
-    virtual ComplRefData&       GetDoubleRef();
-    virtual const SingleRefData&    GetSingleRef2() const;
-    virtual SingleRefData&      GetSingleRef2();
+    virtual const ScSingleRefData&    GetSingleRef() const;
+    virtual ScSingleRefData&      GetSingleRef();
+    virtual const ScComplexRefData& GetDoubleRef() const;
+    virtual ScComplexRefData&       GetDoubleRef();
+    virtual const ScSingleRefData&    GetSingleRef2() const;
+    virtual ScSingleRefData&      GetSingleRef2();
     virtual void                CalcAbsIfRel( const ScAddress& );
     virtual void                CalcRelFromAbs( const ScAddress& );
     virtual const ScMatrix*     GetMatrix() const;
@@ -327,14 +327,14 @@ public:
 class ScSingleRefToken : public ScToken
 {
 private:
-            SingleRefData       aSingleRef;
+            ScSingleRefData       aSingleRef;
 public:
-                                ScSingleRefToken( const SingleRefData& r ) :
+                                ScSingleRefToken( const ScSingleRefData& r ) :
                                     ScToken( svSingleRef ), aSingleRef( r ) {}
                                 ScSingleRefToken( const ScSingleRefToken& r ) :
                                     ScToken( r ), aSingleRef( r.aSingleRef ) {}
-    virtual const SingleRefData&    GetSingleRef() const;
-    virtual SingleRefData&      GetSingleRef();
+    virtual const ScSingleRefData&    GetSingleRef() const;
+    virtual ScSingleRefData&      GetSingleRef();
     virtual void                CalcAbsIfRel( const ScAddress& );
     virtual void                CalcRelFromAbs( const ScAddress& );
     virtual BOOL                operator==( const ScToken& rToken ) const;
@@ -348,14 +348,14 @@ public:
 class ScSingleRefOpToken : public ScOpToken
 {
 private:
-            SingleRefData       aSingleRef;
+            ScSingleRefData       aSingleRef;
 public:
-                                ScSingleRefOpToken( OpCode e, const SingleRefData& r ) :
+                                ScSingleRefOpToken( OpCode e, const ScSingleRefData& r ) :
                                     ScOpToken( e, svSingleRef ), aSingleRef( r ) {}
                                 ScSingleRefOpToken( const ScSingleRefOpToken& r ) :
                                     ScOpToken( r ), aSingleRef( r.aSingleRef ) {}
-    virtual const SingleRefData&    GetSingleRef() const;
-    virtual SingleRefData&      GetSingleRef();
+    virtual const ScSingleRefData&    GetSingleRef() const;
+    virtual ScSingleRefData&      GetSingleRef();
     virtual void                CalcAbsIfRel( const ScAddress& );
     virtual void                CalcRelFromAbs( const ScAddress& );
     virtual BOOL                operator==( const ScToken& rToken ) const;
@@ -365,11 +365,11 @@ public:
 class ScDoubleRefToken : public ScToken
 {
 private:
-            ComplRefData        aDoubleRef;
+            ScComplexRefData        aDoubleRef;
 public:
-                                ScDoubleRefToken( const ComplRefData& r ) :
+                                ScDoubleRefToken( const ScComplexRefData& r ) :
                                     ScToken( svDoubleRef ), aDoubleRef( r ) {}
-                                ScDoubleRefToken( const SingleRefData& r ) :
+                                ScDoubleRefToken( const ScSingleRefData& r ) :
                                     ScToken( svDoubleRef )
                                 {
                                     aDoubleRef.Ref1 = r;
@@ -377,12 +377,12 @@ public:
                                 }
                                 ScDoubleRefToken( const ScDoubleRefToken& r ) :
                                     ScToken( r ), aDoubleRef( r.aDoubleRef ) {}
-    virtual const SingleRefData&    GetSingleRef() const;
-    virtual SingleRefData&      GetSingleRef();
-    virtual const ComplRefData& GetDoubleRef() const;
-    virtual ComplRefData&       GetDoubleRef();
-    virtual const SingleRefData&    GetSingleRef2() const;
-    virtual SingleRefData&      GetSingleRef2();
+    virtual const ScSingleRefData&    GetSingleRef() const;
+    virtual ScSingleRefData&      GetSingleRef();
+    virtual const ScComplexRefData& GetDoubleRef() const;
+    virtual ScComplexRefData&       GetDoubleRef();
+    virtual const ScSingleRefData&    GetSingleRef2() const;
+    virtual ScSingleRefData&      GetSingleRef2();
     virtual void                CalcAbsIfRel( const ScAddress& );
     virtual void                CalcRelFromAbs( const ScAddress& );
     virtual BOOL                operator==( const ScToken& rToken ) const;
@@ -396,11 +396,11 @@ public:
 class ScDoubleRefOpToken : public ScOpToken
 {
 private:
-            ComplRefData        aDoubleRef;
+            ScComplexRefData        aDoubleRef;
 public:
-                                ScDoubleRefOpToken( OpCode e, const ComplRefData& r ) :
+                                ScDoubleRefOpToken( OpCode e, const ScComplexRefData& r ) :
                                     ScOpToken( e, svDoubleRef ), aDoubleRef( r ) {}
-                                ScDoubleRefOpToken( OpCode e, const SingleRefData& r ) :
+                                ScDoubleRefOpToken( OpCode e, const ScSingleRefData& r ) :
                                     ScOpToken( e, svDoubleRef )
                                 {
                                     aDoubleRef.Ref1 = r;
@@ -408,12 +408,12 @@ public:
                                 }
                                 ScDoubleRefOpToken( const ScDoubleRefOpToken& r ) :
                                     ScOpToken( r ), aDoubleRef( r.aDoubleRef ) {}
-    virtual const SingleRefData&    GetSingleRef() const;
-    virtual SingleRefData&      GetSingleRef();
-    virtual const ComplRefData& GetDoubleRef() const;
-    virtual ComplRefData&       GetDoubleRef();
-    virtual const SingleRefData&    GetSingleRef2() const;
-    virtual SingleRefData&      GetSingleRef2();
+    virtual const ScSingleRefData&    GetSingleRef() const;
+    virtual ScSingleRefData&      GetSingleRef();
+    virtual const ScComplexRefData& GetDoubleRef() const;
+    virtual ScComplexRefData&       GetDoubleRef();
+    virtual const ScSingleRefData&    GetSingleRef2() const;
+    virtual ScSingleRefData&      GetSingleRef2();
     virtual void                CalcAbsIfRel( const ScAddress& );
     virtual void                CalcRelFromAbs( const ScAddress& );
     virtual BOOL                operator==( const ScToken& rToken ) const;
@@ -572,7 +572,7 @@ public:
 };
 
 
-class ScExternalToken : public ScOpToken
+class SC_DLLPUBLIC ScExternalToken : public ScOpToken
 {
 private:
             String              aExternal;
@@ -753,7 +753,7 @@ public:
 };
 
 
-class ScHybridCellToken : public ScToken
+class SC_DLLPUBLIC ScHybridCellToken : public ScToken
 {
 private:
             double              fDouble;
@@ -780,9 +780,9 @@ public:
 // ScDoubleRefToken
 class SingleDoubleRefModifier
 {
-    ComplRefData    aDub;
-    SingleRefData*  pS;
-    ComplRefData*   pD;
+    ScComplexRefData    aDub;
+    ScSingleRefData*  pS;
+    ScComplexRefData*   pD;
 
                 // not implemented, prevent usage
                 SingleDoubleRefModifier( const SingleDoubleRefModifier& );
@@ -803,7 +803,7 @@ public:
                             pD = &rT.GetDoubleRef();
                         }
                     }
-                SingleDoubleRefModifier( SingleRefData& rS )
+                SingleDoubleRefModifier( ScSingleRefData& rS )
                     {
                         pS = &rS;
                         aDub.Ref1 = aDub.Ref2 = *pS;
@@ -814,25 +814,25 @@ public:
                         if ( pS )
                             *pS = (*pD).Ref1;
                     }
-    inline  ComplRefData& Ref() { return *pD; }
+    inline  ScComplexRefData& Ref() { return *pD; }
 };
 
 class SingleDoubleRefProvider
 {
 public:
 
-    const SingleRefData&    Ref1;
-    const SingleRefData&    Ref2;
+    const ScSingleRefData&    Ref1;
+    const ScSingleRefData&    Ref2;
 
                 SingleDoubleRefProvider( const ScToken& r )
                         : Ref1( r.GetSingleRef() ),
                         Ref2( r.GetType() == svDoubleRef ?
                         r.GetDoubleRef().Ref2 : Ref1 )
                     {}
-                SingleDoubleRefProvider( const SingleRefData& r )
+                SingleDoubleRefProvider( const ScSingleRefData& r )
                         : Ref1( r ), Ref2( r )
                     {}
-                SingleDoubleRefProvider( const ComplRefData& r )
+                SingleDoubleRefProvider( const ScComplexRefData& r )
                         : Ref1( r.Ref1 ), Ref2( r.Ref2 )
                     {}
                 ~SingleDoubleRefProvider()

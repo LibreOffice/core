@@ -110,8 +110,8 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
     const BOOL              bSharedFormula = eFT == FT_SharedFormula;
     const BOOL              bRNorSF = bRangeName || bSharedFormula;
 
-    SingleRefData           aSRD;
-    ComplRefData            aCRD;
+    ScSingleRefData         aSRD;
+    ScComplexRefData            aCRD;
     ExtensionTypeVec        aExtensions;
 
     if( eStatus != ConvOK )
@@ -488,8 +488,8 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
             {
                 UINT16          nRowFirst, nRowLast;
                 UINT16          nColFirst, nColLast;
-                SingleRefData   &rSRef1 = aCRD.Ref1;
-                SingleRefData   &rSRef2 = aCRD.Ref2;
+                ScSingleRefData &rSRef1 = aCRD.Ref1;
+                ScSingleRefData &rSRef2 = aCRD.Ref2;
 
                 aIn >> nRowFirst >> nRowLast >> nColFirst >> nColLast;
 
@@ -783,9 +783,9 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                     aPool >> aStack;
                     break;
                 }
+                ScSingleRefData &rR1 = aCRD.Ref1;
+                ScSingleRefData &rR2 = aCRD.Ref2;
 
-                SingleRefData   &rR1 = aCRD.Ref1;
-                SingleRefData   &rR2 = aCRD.Ref2;
 
                 rR1.nTab = nTabFirst;
                 rR2.nTab = nTabLast;
@@ -880,8 +880,8 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sa
     const BOOL              bSharedFormula = eFT == FT_SharedFormula;
     const BOOL              bRNorSF = bRangeName || bSharedFormula;
 
-    SingleRefData           aSRD;
-    ComplRefData            aCRD;
+    ScSingleRefData         aSRD;
+    ScComplexRefData            aCRD;
 
     bExternName = FALSE;
 
@@ -1011,8 +1011,8 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sa
             {
                 UINT16          nRowFirst, nRowLast;
                 UINT16          nColFirst, nColLast;
-                SingleRefData   &rSRef1 = aCRD.Ref1;
-                SingleRefData   &rSRef2 = aCRD.Ref2;
+                ScSingleRefData &rSRef1 = aCRD.Ref1;
+                ScSingleRefData &rSRef2 = aCRD.Ref2;
 
                 aIn >> nRowFirst >> nRowLast >> nColFirst >> nColLast;
 
@@ -1160,8 +1160,8 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sa
                 SCTAB nFirstScTab, nLastScTab;
                 if( rLinkMan.GetScTabRange( nFirstScTab, nLastScTab, nIxti ) )
                 {
-                    SingleRefData   &rR1 = aCRD.Ref1;
-                    SingleRefData   &rR2 = aCRD.Ref2;
+                    ScSingleRefData &rR1 = aCRD.Ref1;
+                    ScSingleRefData &rR2 = aCRD.Ref2;
 
                     rR1.nTab = nFirstScTab;
                     rR2.nTab = nLastScTab;
@@ -1221,7 +1221,7 @@ ConvErr ExcelToSc8::ConvertExternName( const ScTokenArray*& rpArray, XclImpStrea
     sal_uInt8               nOp, nByte;
     bool                    bError = false;
 
-    SingleRefData           aSRD;
+    ScSingleRefData           aSRD;
     ComplRefData            aCRD;
 
     if (eStatus != ConvOK)
@@ -1311,8 +1311,8 @@ ConvErr ExcelToSc8::ConvertExternName( const ScTokenArray*& rpArray, XclImpStrea
                 // area reference
                 sal_uInt16 nExtTab1, nExtTab2, nRow1, nRow2, nGrbitCol1, nGrbitCol2;
                 rStrm >> nExtTab1 >> nExtTab2 >> nRow1 >> nRow2 >> nGrbitCol1 >> nGrbitCol2;
-                SingleRefData& rR1 = aCRD.Ref1;
-                SingleRefData& rR2 = aCRD.Ref2;
+                ScSingleRefData& rR1 = aCRD.Ref1;
+                ScSingleRefData& rR2 = aCRD.Ref2;
 
                 rR1.nTab = nExtTab1;
                 rR1.SetFlag3D(true);
@@ -1360,7 +1360,7 @@ ConvErr ExcelToSc8::ConvertExternName( const ScTokenArray*& rpArray, XclImpStrea
     return eRet;
 }
 
-void ExcelToSc8::ExcRelToScRel8( UINT16 nRow, UINT16 nC, SingleRefData &rSRD, const BOOL bName )
+void ExcelToSc8::ExcRelToScRel8( UINT16 nRow, UINT16 nC, ScSingleRefData &rSRD, const BOOL bName )
 {
     const BOOL      bColRel = ( nC & 0x4000 ) != 0;
     const BOOL      bRowRel = ( nC & 0x8000 ) != 0;

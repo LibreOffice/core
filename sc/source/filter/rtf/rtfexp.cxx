@@ -56,11 +56,11 @@
 #include "cellform.hxx"
 #include "editutil.hxx"
 #include "stlpool.hxx"
-
+#include "ftools.hxx"
 
 //------------------------------------------------------------------
 
-FltError ScExportRTF( SvStream& rStrm, ScDocument* pDoc,
+FltError ScFormatFilterPluginImpl::ScExportRTF( SvStream& rStrm, ScDocument* pDoc,
         const ScRange& rRange, const CharSet /*eNach*/ )
 {
     ScRTFExport aEx( rStrm, pDoc, rRange );

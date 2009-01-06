@@ -35,13 +35,14 @@
 #include "refreshtimer.hxx"
 #include "address.hxx"
 #include <sfx2/lnkbase.hxx>
+#include "scdllapi.h"
 
 class ScDocShell;
 class SfxObjectShell;
 class AbstractScLinkedAreaDlg;
 struct AreaLink_Impl;
 
-class ScAreaLink : public ::sfx2::SvBaseLink, public ScRefreshTimer
+class SC_DLLPUBLIC ScAreaLink : public ::sfx2::SvBaseLink, public ScRefreshTimer
 {
 private:
     AreaLink_Impl*  pImpl;

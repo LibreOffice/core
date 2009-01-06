@@ -86,7 +86,7 @@ BOOL bIsOlk = FALSE;
 //CHINA001   //
 //CHINA001   aLbFormat       ( this, ScResId( LB_FORMAT ) ),
 //CHINA001   aFlFormat       ( this, ScResId( FL_FORMAT ) ),
-//CHINA001   pWndPreview     ( new AutoFmtPreview( this, ScResId( WND_PREVIEW ), pDoc ) ),
+//CHINA001   pWndPreview     ( new ScAutoFmtPreview( this, ScResId( WND_PREVIEW ), pDoc ) ),
 //CHINA001   aBtnNumFormat   ( this, ScResId( BTN_NUMFORMAT ) ),
 //CHINA001   aBtnBorder      ( this, ScResId( BTN_BORDER ) ),
 //CHINA001   aBtnFont        ( this, ScResId( BTN_FONT ) ),
@@ -486,9 +486,9 @@ BOOL bIsOlk = FALSE;
 //CHINA001 }
 //CHINA001
 //========================================================================
-// AutoFmtPreview
+// ScAutoFmtPreview
 
-AutoFmtPreview::AutoFmtPreview( Window* pParent, const ResId& rRes, ScDocument* pDoc ) :
+ScAutoFmtPreview::ScAutoFmtPreview( Window* pParent, const ResId& rRes, ScDocument* pDoc ) :
         Window          ( pParent, rRes ),
         pCurData        ( NULL ),
         aVD             ( *this ),
@@ -517,7 +517,7 @@ AutoFmtPreview::AutoFmtPreview( Window* pParent, const ResId& rRes, ScDocument* 
 
 //------------------------------------------------------------------------
 
-AutoFmtPreview::~AutoFmtPreview()
+ScAutoFmtPreview::~ScAutoFmtPreview()
 {
     delete pNumFmt;
 }
@@ -539,7 +539,7 @@ void lcl_SetFontProperties(
     rFont.SetItalic     ( (FontItalic)rPostureItem.GetValue() );
 }
 
-void AutoFmtPreview::MakeFonts( USHORT nIndex, Font& rFont, Font& rCJKFont, Font& rCTLFont )
+void ScAutoFmtPreview::MakeFonts( USHORT nIndex, Font& rFont, Font& rCJKFont, Font& rCTLFont )
 {
     if ( pCurData )
     {
@@ -588,7 +588,7 @@ rFont.MethodName( Value ); rCJKFont.MethodName( Value ); rCTLFont.MethodName( Va
 
 //------------------------------------------------------------------------
 
-USHORT AutoFmtPreview::GetFormatIndex( size_t nCol, size_t nRow ) const
+USHORT ScAutoFmtPreview::GetFormatIndex( size_t nCol, size_t nRow ) const
 {
     static const USHORT pnFmtMap[] =
     {
@@ -601,21 +601,21 @@ USHORT AutoFmtPreview::GetFormatIndex( size_t nCol, size_t nRow ) const
     return pnFmtMap[ maArray.GetCellIndex( nCol, nRow, mbRTL ) ];
 }
 
-const SvxBoxItem& AutoFmtPreview::GetBoxItem( size_t nCol, size_t nRow ) const
+const SvxBoxItem& ScAutoFmtPreview::GetBoxItem( size_t nCol, size_t nRow ) const
 {
-    DBG_ASSERT( pCurData, "AutoFmtPreview::GetBoxItem - no format data found" );
+    DBG_ASSERT( pCurData, "ScAutoFmtPreview::GetBoxItem - no format data found" );
     return *static_cast< const SvxBoxItem* >( pCurData->GetItem( GetFormatIndex( nCol, nRow ), ATTR_BORDER ) );
 }
 
-const SvxLineItem& AutoFmtPreview::GetDiagItem( size_t nCol, size_t nRow, bool bTLBR ) const
+const SvxLineItem& ScAutoFmtPreview::GetDiagItem( size_t nCol, size_t nRow, bool bTLBR ) const
 {
-    DBG_ASSERT( pCurData, "AutoFmtPreview::GetDiagItem - no format data found" );
+    DBG_ASSERT( pCurData, "ScAutoFmtPreview::GetDiagItem - no format data found" );
     return *static_cast< const SvxLineItem* >( pCurData->GetItem( GetFormatIndex( nCol, nRow ), bTLBR ? ATTR_BORDER_TLBR : ATTR_BORDER_BLTR ) );
 }
 
 //------------------------------------------------------------------------
 
-void AutoFmtPreview::DrawString( size_t nCol, size_t nRow )
+void ScAutoFmtPreview::DrawString( size_t nCol, size_t nRow )
 {
     if ( pCurData )
     {
@@ -800,7 +800,7 @@ void AutoFmtPreview::DrawString( size_t nCol, size_t nRow )
 
 //------------------------------------------------------------------------
 
-void AutoFmtPreview::DrawStrings()
+void ScAutoFmtPreview::DrawStrings()
 {
     for( size_t nRow = 0; nRow < 5; ++nRow )
         for( size_t nCol = 0; nCol < 5; ++nCol )
@@ -809,7 +809,7 @@ void AutoFmtPreview::DrawStrings()
 
 //------------------------------------------------------------------------
 
-void AutoFmtPreview::DrawBackground()
+void ScAutoFmtPreview::DrawBackground()
 {
     if( pCurData )
     {
@@ -832,7 +832,7 @@ void AutoFmtPreview::DrawBackground()
 
 //------------------------------------------------------------------------
 
-void AutoFmtPreview::PaintCells()
+void ScAutoFmtPreview::PaintCells()
 {
     if ( pCurData )
     {
@@ -851,7 +851,7 @@ void AutoFmtPreview::PaintCells()
 
 //------------------------------------------------------------------------
 
-void AutoFmtPreview::Init()
+void ScAutoFmtPreview::Init()
 {
     SetBorderStyle( WINDOW_BORDER_MONO );
     maArray.Initialize( 5, 5 );
@@ -872,7 +872,7 @@ void AutoFmtPreview::Init()
 
 //------------------------------------------------------------------------
 
-void AutoFmtPreview::CalcCellArray( BOOL bFitWidthP )
+void ScAutoFmtPreview::CalcCellArray( BOOL bFitWidthP )
 {
     maArray.SetXOffset( 2 );
     maArray.SetAllColWidths( bFitWidthP ? mnDataColWidth2 : mnDataColWidth1 );
@@ -893,7 +893,7 @@ inline void lclSetStyleFromBorder( svx::frame::Style& rStyle, const SvxBorderLin
     rStyle.Set( pBorder, 1.0 / TWIPS_PER_POINT, 5 );
 }
 
-void AutoFmtPreview::CalcLineMap()
+void ScAutoFmtPreview::CalcLineMap()
 {
     if ( pCurData )
     {
@@ -924,7 +924,7 @@ void AutoFmtPreview::CalcLineMap()
 
 //------------------------------------------------------------------------
 
-void AutoFmtPreview::NotifyChange( ScAutoFormatData* pNewData )
+void ScAutoFmtPreview::NotifyChange( ScAutoFormatData* pNewData )
 {
     if ( pNewData != pCurData )
     {
@@ -944,7 +944,7 @@ void AutoFmtPreview::NotifyChange( ScAutoFormatData* pNewData )
 
 //------------------------------------------------------------------------
 
-void AutoFmtPreview::DoPaint( const Rectangle& /* rRect */ )
+void ScAutoFmtPreview::DoPaint( const Rectangle& /* rRect */ )
 {
     sal_uInt32 nOldDrawMode = aVD.GetDrawMode();
     //  #105733# SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
@@ -979,7 +979,7 @@ void AutoFmtPreview::DoPaint( const Rectangle& /* rRect */ )
 
 //------------------------------------------------------------------------
 
-void AutoFmtPreview::Paint( const Rectangle& rRect )
+void ScAutoFmtPreview::Paint( const Rectangle& rRect )
 {
     DoPaint( rRect );
 }

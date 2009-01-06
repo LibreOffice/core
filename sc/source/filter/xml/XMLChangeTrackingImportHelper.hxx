@@ -188,7 +188,7 @@ class ScChangeViewSettings;
 
 class ScXMLChangeTrackingImportHelper
 {
-    StrCollection       aUsers;
+    ScStrCollection     aUsers;
     ScMyActions         aActions;
     com::sun::star::uno::Sequence<sal_Int8> aProtect;
     ScDocument*         pDoc;

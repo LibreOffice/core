@@ -72,7 +72,7 @@ public:
 };
 
 
-class ScChartArray : public DataObject              // nur noch Parameter-Struct
+class SC_DLLPUBLIC ScChartArray : public ScDataObject               // nur noch Parameter-Struct
 {
     String      aName;
     ScDocument* pDocument;
@@ -92,7 +92,7 @@ public:
     ScChartArray( const ScChartArray& rArr );
 
     virtual ~ScChartArray();
-    virtual DataObject* Clone() const;
+    virtual ScDataObject* Clone() const;
 
     const ScRangeListRef&   GetRangeList() const { return aPositioner.GetRangeList(); }
     void    SetRangeList( const ScRangeListRef& rNew ) { aPositioner.SetRangeList(rNew); }
@@ -111,14 +111,14 @@ public:
     ScMemChart* CreateMemChart();
 };
 
-class ScChartCollection : public Collection
+class ScChartCollection : public ScCollection
 {
 public:
-    ScChartCollection() : Collection( 4,4 ) {}
+    ScChartCollection() : ScCollection( 4,4 ) {}
     ScChartCollection( const ScChartCollection& rColl ):
-            Collection( rColl ) {}
+            ScCollection( rColl ) {}
 
-    virtual DataObject* Clone() const;
+    virtual ScDataObject*   Clone() const;
     ScChartArray*       operator[](USHORT nIndex) const
                         { return (ScChartArray*)At(nIndex); }
 

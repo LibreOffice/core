@@ -46,7 +46,7 @@ public:
 private:
     FixedLine       aFlFormat;
     ListBox         aLbFormat;
-    AutoFmtPreview* pWndPreview;
+    ScAutoFmtPreview*   pWndPreview;
     OKButton        aBtnOk;
     CancelButton    aBtnCancel;
     HelpButton      aBtnHelp;

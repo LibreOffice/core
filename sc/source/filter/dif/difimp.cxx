@@ -45,6 +45,7 @@
 #include "patattr.hxx"
 #include "docpool.hxx"
 #include "attrib.hxx"
+#include "ftools.hxx"
 
 #include <math.h>
 
@@ -62,7 +63,7 @@ const sal_Unicode pKeyV[]       = { 'V', 0 };
 const sal_Unicode pKey1_0[]     = { '1', ',', '0', 0 };
 
 
-FltError ScImportDif( SvStream& rIn, ScDocument* pDoc, const ScAddress& rInsPos,
+FltError ScFormatFilterPluginImpl::ScImportDif( SvStream& rIn, ScDocument* pDoc, const ScAddress& rInsPos,
                         const CharSet eVon, UINT32 nDifOption )
 {
     DifParser   aDifParser( rIn, nDifOption, *pDoc, eVon );

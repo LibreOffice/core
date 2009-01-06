@@ -51,7 +51,7 @@ namespace com { namespace sun { namespace star { namespace sheet {
 class Rectangle;
 class SvStream;
 class ScDocument;
-class StrCollection;
+class ScStrCollection;
 
 struct ScDPOutLevelData;
 
@@ -160,7 +160,7 @@ public:
                                     Rectangle& rPosRect, USHORT& rOrient, long& rDimPos );
     BOOL            IsFilterButton( const ScAddress& rPos );
 
-    void            GetMemberResultNames( StrCollection& rNames, long nDimension );
+    void            GetMemberResultNames( ScStrCollection& rNames, long nDimension );
 
     static void     GetDataDimensionNames( String& rSourceName, String& rGivenName,
                                            const com::sun::star::uno::Reference<

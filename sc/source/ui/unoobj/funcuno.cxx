@@ -356,7 +356,7 @@ BOOL lcl_AddFunctionToken( ScTokenArray& rArray, const rtl::OUString& rName )
 
 void lcl_AddRef( ScTokenArray& rArray, long nStartRow, long nColCount, long nRowCount )
 {
-    ComplRefData aRef;
+    ScComplexRefData aRef;
     aRef.InitFlags();
     aRef.Ref1.nTab = 0;
     aRef.Ref2.nTab = 0;

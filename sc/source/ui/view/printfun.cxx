@@ -1467,7 +1467,7 @@ void ScPrintFunc::PrintColHdr( SCCOL nX1, SCCOL nX2, long nScrX, long nScrY )
 
             pDev->DrawRect( Rectangle( nPosX,nPosY,nEndX,nEndY ) );
 
-            aText = ::ColToAlpha( nCol);
+            aText = ::ScColToAlpha( nCol);
             long nTextWidth = pDev->GetTextWidth(aText);
             long nTextHeight = pDev->GetTextHeight();
             long nAddX = ( nWidth  - nTextWidth  ) / 2;

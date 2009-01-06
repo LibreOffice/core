@@ -32,9 +32,9 @@
 #define SC_XEPIVOT_HXX
 
 #include <map>
+#include "xerecord.hxx"
 #include "xlpivot.hxx"
 #include "xeroot.hxx"
-#include "xerecord.hxx"
 
 class ScDPObject;
 class ScDPSaveData;
@@ -208,6 +208,7 @@ public:
 
     /** Writes related records into Workbook stream and creates the pivot cache storage stream. */
     virtual void        Save( XclExpStream& rStrm );
+    virtual void        SaveXml( XclExpXmlStream& rStrm );
 
 private:
     /** Returns read/write access to a pivot cache field. */
@@ -456,8 +457,10 @@ public:
 
     /** Writes all pivot caches (all Workbook records and cache streams). */
     void                WritePivotCaches( XclExpStream& rStrm );
+    void                WritePivotCachesXml( XclExpXmlStream& rStrm );
     /** Writes all pivot tables of the specified Calc sheet. */
     void                WritePivotTables( XclExpStream& rStrm, SCTAB nScTab );
+    void                WritePivotTablesXml( XclExpXmlStream& rStrm, SCTAB nScTab );
 
 private:
     /** Finds an existing (if enabled in mbShareCaches) or creates a new pivot cache.

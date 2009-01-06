@@ -39,7 +39,7 @@ class ScDocument;
 class ScAreaLink;
 
 
-class ScAreaLinkSaver : public DataObject
+class ScAreaLinkSaver : public ScDataObject
 {
 private:
     String      aFileName;
@@ -54,7 +54,7 @@ public:
                 ScAreaLinkSaver( const ScAreaLinkSaver& rCopy );
     virtual     ~ScAreaLinkSaver();
 
-    virtual DataObject* Clone() const;
+    virtual ScDataObject*   Clone() const;
 
     BOOL        IsEqual( const ScAreaLink& rCompare ) const;
     BOOL        IsEqualSource( const ScAreaLink& rCompare ) const;
@@ -64,14 +64,14 @@ public:
 };
 
 
-class ScAreaLinkSaveCollection : public Collection
+class ScAreaLinkSaveCollection : public ScCollection
 {
 public:
                 ScAreaLinkSaveCollection();
                 ScAreaLinkSaveCollection( const ScAreaLinkSaveCollection& rCopy );
     virtual     ~ScAreaLinkSaveCollection();
 
-    virtual DataObject* Clone() const;
+    virtual ScDataObject*   Clone() const;
 
     ScAreaLinkSaver*    operator[](USHORT nIndex) const {return (ScAreaLinkSaver*)At(nIndex);}
 

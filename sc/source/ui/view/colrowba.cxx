@@ -111,7 +111,7 @@ String ScColBar::GetEntryText( SCCOLROW nEntryNo )
 {
     return UseNumericHeader()
         ? String::CreateFromInt32( nEntryNo + 1 )
-        : ColToAlpha( static_cast<SCCOL>(nEntryNo) );
+        : ScColToAlpha( static_cast<SCCOL>(nEntryNo) );
 }
 
 void ScColBar::SetEntrySize( SCCOLROW nPos, USHORT nNewSize )

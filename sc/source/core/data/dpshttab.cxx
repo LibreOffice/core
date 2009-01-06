@@ -146,7 +146,7 @@ BOOL lcl_HasQuery( const ScQueryParam& rParam )
             rParam.GetEntry(0).bDoQuery;
 }
 
-const TypedStrCollection& ScSheetDPData::GetColumnEntries(long nColumn)
+const TypedScStrCollection& ScSheetDPData::GetColumnEntries(long nColumn)
 {
     DBG_ASSERT(nColumn>=0 && nColumn < pImpl->aCacheTable.getColSize(), "ScSheetDPData: wrong column");
     CreateCacheTable();

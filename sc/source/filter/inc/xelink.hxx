@@ -33,14 +33,14 @@
 
 #include "markdata.hxx"
 #include "xllink.hxx"
-#include "xehelper.hxx"
 #include "xerecord.hxx"
+#include "xehelper.hxx"
 #include "xeformula.hxx"
 #include "externalrefmgr.hxx"
 
 class ScRange;
-struct SingleRefData;
-struct ComplRefData;
+struct ScSingleRefData;
+struct ScComplexRefData;
 
 /* ============================================================================
 Classes for export of different kinds of internal/external references.
@@ -179,9 +179,9 @@ public:
                                       XclExpRefLogEntry* pRefLogEntry = NULL );
 
     /** Stores the cell with the given address in a CRN record list. */
-    void                StoreCell( const SingleRefData& rRef );
+    void                StoreCell( const ScSingleRefData& rRef );
     /** Stores all cells in the given range in a CRN record list. */
-    void                StoreCellRange( const ComplRefData& rRef );
+    void                StoreCellRange( const ScComplexRefData& rRef );
 
     void                StoreCell( sal_uInt16 nFileId, const String& rTabName, const SingleRefData& rRef );
 

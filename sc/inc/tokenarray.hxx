@@ -33,6 +33,7 @@
 
 #include "token.hxx"
 #include <tools/solar.h>
+#include "scdllapi.h"
 
 // RecalcMode access only via TokenArray SetRecalcMode / IsRecalcMode...
 
@@ -50,7 +51,7 @@ typedef BYTE ScRecalcMode;
 
 struct ScRawToken;
 
-class ScTokenArray
+class SC_DLLPUBLIC ScTokenArray
 {
     friend class ScCompiler;
     friend class ScTokenIterator;
@@ -188,10 +189,10 @@ public:
     ScToken* AddString( const String& rStr );
     ScToken* AddDouble( double fVal );
     /** ScSingleRefToken with ocPush. */
-    ScToken* AddSingleReference( const SingleRefData& rRef );
+    ScToken* AddSingleReference( const ScSingleRefData& rRef );
     /** ScSingleRefOpToken with ocMatRef. */
-    ScToken* AddMatrixSingleReference( const SingleRefData& rRef );
-    ScToken* AddDoubleReference( const ComplRefData& rRef );
+    ScToken* AddMatrixSingleReference( const ScSingleRefData& rRef );
+    ScToken* AddDoubleReference( const ScComplexRefData& rRef );
     ScToken* AddName( USHORT n );
     ScToken* AddMatrix( ScMatrix* p );
     ScToken* AddExternalName( sal_uInt16 nFileId, const String& rName );
@@ -202,7 +203,7 @@ public:
         Others don't use! */
     ScToken* AddExternal( const String& rStr, OpCode eOp = ocExternal );
     /** ScSingleRefOpToken with ocColRowName. */
-    ScToken* AddColRowName( const SingleRefData& rRef );
+    ScToken* AddColRowName( const ScSingleRefData& rRef );
     ScToken* AddBad( const sal_Unicode* pStr );     /// ocBad with String
     ScToken* AddBad( const String& rStr );          /// ocBad with String
     ScToken* MergeArray( );

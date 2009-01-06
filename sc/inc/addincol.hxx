@@ -42,6 +42,7 @@
 #include <tools/string.hxx>
 #include <i18npool/lang.h>
 #include <rtl/ustring.h>
+#include "scdllapi.h"
 
 #ifndef SC_SCMATRIX_HXX
 #include "scmatrix.hxx"
@@ -142,7 +143,7 @@ public:
 
 //------------------------------------------------------------------------
 
-class ScUnoAddInCollection
+class SC_DLLPUBLIC ScUnoAddInCollection
 {
 private:
     long                    nFuncCount;

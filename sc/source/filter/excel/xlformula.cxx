@@ -30,12 +30,12 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
-#include "xlformula.hxx"
 #include "compiler.hxx"
 #include "rangenam.hxx"
+#include "xestream.hxx"
 #include "xlroot.hxx"
 #include "xistream.hxx"
-#include "xestream.hxx"
+#include "xlformula.hxx"
 
 // Function data ==============================================================
 
@@ -667,7 +667,7 @@ inline bool lclGetAddress( ScAddress& rAddress, const ScToken& rToken )
     bool bIsSingleRef = (eOpCode == ocPush) && (rToken.GetType() == svSingleRef);
     if( bIsSingleRef )
     {
-        const SingleRefData& rRef = rToken.GetSingleRef();
+        const ScSingleRefData& rRef = rToken.GetSingleRef();
         rAddress.Set( rRef.nCol, rRef.nRow, rRef.nTab );
         bIsSingleRef = !rRef.IsDeleted();
     }

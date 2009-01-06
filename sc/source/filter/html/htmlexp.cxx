@@ -159,7 +159,7 @@ extern BOOL bOderSo;
 
 //========================================================================
 
-FltError ScExportHTML( SvStream& rStrm, const String& rBaseURL, ScDocument* pDoc,
+FltError ScFormatFilterPluginImpl::ScExportHTML( SvStream& rStrm, const String& rBaseURL, ScDocument* pDoc,
         const ScRange& rRange, const CharSet /*eNach*/, BOOL bAll,
         const String& rStreamPath, String& rNonConvertibleChars )
 {
@@ -237,9 +237,11 @@ void lcl_AppendHTMLColorTripel( ByteString& rStr, const Color& rColor )
 }
 */
 
+bool SC_DLLPUBLIC ScGetWriteTeamInfo();
+
 void lcl_WriteTeamInfo( SvStream& rStrm, rtl_TextEncoding eDestEnc )
 {
-    if ( !bOderSo ) return;
+    if ( !ScGetWriteTeamInfo() ) return;
     lcl_OUT_LF();
     lcl_OUT_COMMENT( CREATE_STRING( "Sascha Ballach                     " ) );
     lcl_OUT_COMMENT( CREATE_STRING( "Michael Daeumling (aka Bitsau)     " ) );

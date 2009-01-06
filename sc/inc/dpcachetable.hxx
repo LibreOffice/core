@@ -186,7 +186,7 @@ public:
     /** Get the unique entries for a field specified by index.  The caller must
         make sure that the table is filled before calling function, or it will
         get an empty collection. */
-    const TypedStrCollection& getFieldEntries(sal_Int32 nIndex) const;
+    const TypedScStrCollection& getFieldEntries(sal_Int32 nIndex) const;
 
     /** Filter the table based on the specified criteria, and copy the
         result to rTabData.  This method is used, for example, to generate
@@ -210,7 +210,7 @@ private:
     void getValueData(ScDocument* pDoc, const ScAddress& rPos, ScDPCacheCell& rCell);
 
 private:
-    typedef ::boost::shared_ptr<TypedStrCollection> TypedStrCollectionPtr;
+    typedef ::boost::shared_ptr<TypedScStrCollection> TypedScStrCollectionPtr;
 
     /** main data table. */
     ::std::vector< ::std::vector< ::ScDPCacheTable::Cell > > maTable;
@@ -219,7 +219,7 @@ private:
     ::std::vector<sal_Int32> maHeader;
 
     /** unique field entires for each field (column). */
-    ::std::vector<TypedStrCollectionPtr> maFieldEntries;
+    ::std::vector<TypedScStrCollectionPtr> maFieldEntries;
 
     /** used to track visibility of rows.  The first row below the header row
         has the index of 0. */

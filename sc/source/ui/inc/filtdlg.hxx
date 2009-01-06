@@ -53,7 +53,7 @@ class ScRangeData;
 class ScViewData;
 class ScDocument;
 class ScQueryItem;
-class TypedStrCollection;
+class TypedScStrCollection;
 
 //==================================================================
 // Gemeinsame Resource-Objekte:
@@ -161,7 +161,7 @@ private:
     USHORT              nFieldCount;
     BOOL                bRefInputMode;
 
-    TypedStrCollection* pEntryLists[MAXCOLCOUNT];
+    TypedScStrCollection*   pEntryLists[MAXCOLCOUNT];
     USHORT              nHeaderPos[MAXCOLCOUNT];
 
     // Hack: RefInput-Kontrolle

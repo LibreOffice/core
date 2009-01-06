@@ -271,10 +271,10 @@ public:
 //UNUSED2008-05  };
 
 
-class ScUnoHelpFunctions
+class SC_DLLPUBLIC ScUnoHelpFunctions
 {
 public:
-    SC_DLLPUBLIC static com::sun::star::uno::Reference<com::sun::star::uno::XInterface>
+    static com::sun::star::uno::Reference<com::sun::star::uno::XInterface>
                             AnyToInterface( const com::sun::star::uno::Any& rAny );
     static sal_Bool         GetBoolProperty( const com::sun::star::uno::Reference<
                                                 com::sun::star::beans::XPropertySet>& xProp,

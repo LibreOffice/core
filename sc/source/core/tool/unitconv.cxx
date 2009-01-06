@@ -71,7 +71,7 @@ ScUnitConverterData::ScUnitConverterData( const ScUnitConverterData& r )
 }
 
 
-DataObject* ScUnitConverterData::Clone() const
+ScDataObject* ScUnitConverterData::Clone() const
 {
     return new ScUnitConverterData( *this );
 }
@@ -106,7 +106,7 @@ void ScUnitConverterData::BuildIndexString( String& rStr,
 #define CFGSTR_UNIT_FACTOR  "Factor"
 
 ScUnitConverter::ScUnitConverter( USHORT nInit, USHORT nDeltaP ) :
-        StrCollection( nInit, nDeltaP, FALSE )
+        ScStrCollection( nInit, nDeltaP, FALSE )
 {
     //  read from configuration - "convert.ini" is no longer used
     //! config item as member to allow change of values

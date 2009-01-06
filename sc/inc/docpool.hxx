@@ -32,12 +32,13 @@
 #define SC_SCDOCPOL_HXX
 
 #include <svtools/itempool.hxx>
+#include "scdllapi.h"
 
 class ScStyleSheet;
 
 //------------------------------------------------------------------------
 
-class ScDocumentPool: public SfxItemPool
+class SC_DLLPUBLIC ScDocumentPool: public SfxItemPool
 {
     SfxPoolItem**   ppPoolDefaults;
     SfxItemPool*    pSecondary;

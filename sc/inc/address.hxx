@@ -248,7 +248,7 @@ inline SCTAB SanitizeTab( SCTAB nTab, SCTAB nMaxTab )
 
 // === ScAddress =============================================================
 
-class SC_DLLPUBLIC ScAddress
+class ScAddress
 {
 private:
     SCROW   nRow;
@@ -290,7 +290,7 @@ public:
         Details( const ScDocument* pDoc, const ScAddress & rAddr );
         void SetPos( const ScDocument* pDoc, const ScAddress & rAddr );
     };
-    static const Details detailsOOOa1;
+    SC_DLLPUBLIC static const Details detailsOOOa1;
 
     struct ExternalInfo
     {
@@ -331,17 +331,17 @@ public:
     inline void GetVars( SCCOL& nColP, SCROW& nRowP, SCTAB& nTabP ) const
     { nColP = nCol; nRowP = nRow; nTabP = nTab; }
 
-    USHORT Parse( const String&, ScDocument* = NULL,
+    USC_DLLPUBLIC USHORT Parse( const String&, ScDocument* = NULL,
                   const Details& rDetails = detailsOOOa1,
                   ExternalInfo* pExtInfo = NULL,
                   const ::com::sun::star::uno::Sequence<
                     const ::com::sun::star::sheet::ExternalLinkInfo > * pExternalLinks = NULL );
 
-    void Format( String&, USHORT = 0, ScDocument* = NULL,
+    SC_DLLPUBLIC void Format( String&, USHORT = 0, ScDocument* = NULL,
                  const Details& rDetails = detailsOOOa1) const;
 
     // The document for the maximum defined sheet number
-    bool Move( SCsCOL dx, SCsROW dy, SCsTAB dz, ScDocument* =NULL );
+    SC_DLLPUBLIC bool Move( SCsCOL dx, SCsROW dy, SCsTAB dz, ScDocument* =NULL );
     inline bool operator==( const ScAddress& r ) const;
     inline bool operator!=( const ScAddress& r ) const;
     inline bool operator<( const ScAddress& r ) const;
@@ -449,7 +449,7 @@ inline size_t ScAddress::hash() const
 
 // === ScRange ===============================================================
 
-class SC_DLLPUBLIC ScRange
+class ScRange
 {
 public:
     ScAddress aStart, aEnd;
@@ -485,9 +485,9 @@ public:
 
     USHORT ParseAny( const String&, ScDocument* = NULL,
                      const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 );
-    USHORT ParseCols( const String&, ScDocument* = NULL,
+    SC_DLLPUBLIC USHORT ParseCols( const String&, ScDocument* = NULL,
                      const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 );
-    USHORT ParseRows( const String&, ScDocument* = NULL,
+    SC_DLLPUBLIC USHORT ParseRows( const String&, ScDocument* = NULL,
                      const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 );
 
     /** Parse an Excel style reference up to and including the sheet name
@@ -516,16 +516,16 @@ public:
             const ::com::sun::star::uno::Sequence<
                 const ::com::sun::star::sheet::ExternalLinkInfo > * pExternalLinks = NULL );
 
-    void Format( String&, USHORT = 0, ScDocument* = NULL,
+    SC_DLLPUBLIC void Format( String&, USHORT = 0, ScDocument* = NULL,
                  const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 ) const;
 
     inline void GetVars( SCCOL& nCol1, SCROW& nRow1, SCTAB& nTab1,
         SCCOL& nCol2, SCROW& nRow2, SCTAB& nTab2 ) const;
     // The document for the maximum defined sheet number
-    bool Move( SCsCOL dx, SCsROW dy, SCsTAB dz, ScDocument* =NULL );
-    void Justify();
-    void ExtendTo( const ScRange& rRange );
-    bool Intersects( const ScRange& ) const;    // do two ranges intersect?
+    SC_DLLPUBLIC bool Move( SCsCOL dx, SCsROW dy, SCsTAB dz, ScDocument* =NULL );
+    SC_DLLPUBLIC void Justify();
+    SC_DLLPUBLIC void ExtendTo( const ScRange& rRange );
+    SC_DLLPUBLIC bool Intersects( const ScRange& ) const;    // do two ranges intersect?
     inline bool operator==( const ScRange& r ) const;
     inline bool operator!=( const ScRange& r ) const;
     inline bool operator<( const ScRange& r ) const;
@@ -776,19 +776,19 @@ bool ConvertDoubleRef(ScDocument* pDoc, const String& rRefString,
         const ScAddress::Details& rDetails = ScAddress::detailsOOOa1);
 
 /// append alpha representation of column to buffer
-SC_DLLPUBLIC void ColToAlpha( rtl::OUStringBuffer& rBuffer, SCCOL nCol);
+SC_DLLPUBLIC void ScColToAlpha( rtl::OUStringBuffer& rBuffer, SCCOL nCol);
 
-inline void ColToAlpha( String& rStr, SCCOL nCol)
+inline void ScColToAlpha( String& rStr, SCCOL nCol)
 {
     rtl::OUStringBuffer aBuf(2);
-    ColToAlpha( aBuf, nCol);
+    ScColToAlpha( aBuf, nCol);
     rStr.Append( aBuf.getStr(), static_cast<xub_StrLen>(aBuf.getLength()));
 }
 
-inline String ColToAlpha( SCCOL nCol )
+inline String ScColToAlpha( SCCOL nCol )
 {
     rtl::OUStringBuffer aBuf(2);
-    ColToAlpha( aBuf, nCol);
+    ScColToAlpha( aBuf, nCol);
     return aBuf.makeStringAndClear();
 }
 

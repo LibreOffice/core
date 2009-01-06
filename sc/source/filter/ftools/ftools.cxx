@@ -392,3 +392,15 @@ bool ScfTools::GetHTMLNameFromName( const String& rSource, String& rName )
 
 // ============================================================================
 
+ScFormatFilterPluginImpl::ScFormatFilterPluginImpl()
+{
+  fprintf (stderr, "loaded\n");
+}
+
+ScFormatFilterPlugin * SAL_CALL ScFilterCreate(void)
+{
+    return new ScFormatFilterPluginImpl();
+}
+
+// implementation class inside the filters
+

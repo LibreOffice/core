@@ -1438,7 +1438,7 @@ void Convention_A1::MakeColStr( rtl::OUStringBuffer& rBuffer, SCCOL nCol )
     if ( !ValidCol( nCol) )
         rBuffer.append(ScGlobal::GetRscString(STR_NO_REF_TABLE));
     else
-        ::ColToAlpha( rBuffer, nCol);
+        ::ScColToAlpha( rBuffer, nCol);
 }
 
 void Convention_A1::MakeRowStr( rtl::OUStringBuffer& rBuffer, SCROW nRow )
@@ -1485,13 +1485,13 @@ struct ConventionOOO_A1 : public Convention_A1
 
     void MakeRefStrImpl( rtl::OUStringBuffer&   rBuffer,
                          const ScCompiler&      rComp,
-                         const ComplRefData&    rRef,
+                         const ScComplexRefData&    rRef,
                          bool bSingleRef,
                          bool bODF ) const
     {
         if (bODF)
             rBuffer.append(sal_Unicode('['));
-        ComplRefData aRef( rRef );
+        ScComplexRefData aRef( rRef );
         // In case absolute/relative positions weren't separately available:
         // transform relative to absolute!
         //  AdjustReference( aRef.Ref1 );
@@ -1574,7 +1574,7 @@ struct ConventionOOO_A1 : public Convention_A1
 
     void MakeRefStr( rtl::OUStringBuffer&   rBuffer,
                      const ScCompiler&      rComp,
-                     const ComplRefData& rRef,
+                     const ScComplexRefData& rRef,
                      BOOL bSingleRef ) const
     {
         MakeRefStrImpl( rBuffer, rComp, rRef, bSingleRef, false);
@@ -1723,7 +1723,7 @@ struct ConventionOOO_A1_ODF : public ConventionOOO_A1
     ConventionOOO_A1_ODF() : ConventionOOO_A1 (ScAddress::CONV_ODF) { }
     void MakeRefStr( rtl::OUStringBuffer&   rBuffer,
                      const ScCompiler&      rComp,
-                     const ComplRefData& rRef,
+                     const ScComplexRefData& rRef,
                      BOOL bSingleRef ) const
     {
         MakeRefStrImpl( rBuffer, rComp, rRef, bSingleRef, true);
@@ -1757,7 +1757,7 @@ const ScCompiler::Convention * const ScCompiler::pConvOOO_A1_ODF = &ConvOOO_A1_O
 struct ConventionXL
 {
     static bool GetDocAndTab( const ScCompiler& rComp,
-                              const SingleRefData& rRef,
+                              const ScSingleRefData& rRef,
                               String& rDocName,
                               String& rTabName )
     {
@@ -1794,7 +1794,7 @@ struct ConventionXL
 
     static void MakeDocStr( rtl::OUStringBuffer& rBuf,
                             const ScCompiler& rComp,
-                            const ComplRefData& rRef,
+                            const ScComplexRefData& rRef,
                             bool bSingleRef )
     {
         if( rRef.Ref1.IsFlag3D() )
@@ -1974,10 +1974,10 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
 
     void MakeRefStr( rtl::OUStringBuffer&   rBuf,
                      const ScCompiler&      rComp,
-                     const ComplRefData& rRef,
+                     const ScComplexRefData& rRef,
                      BOOL bSingleRef ) const
     {
-        ComplRefData aRef( rRef );
+        ScComplexRefData aRef( rRef );
 
         // Play fast and loose with invalid refs.  There is not much point in producing
         // Foo!A1:#REF! versus #REF! at this point
@@ -2137,7 +2137,7 @@ const ScCompiler::Convention * const ScCompiler::pConvXL_OOX = &ConvXL_OOX;
 //-----------------------------------------------------------------------------
 
 static void
-r1c1_add_col( rtl::OUStringBuffer &rBuf, const SingleRefData& rRef )
+r1c1_add_col( rtl::OUStringBuffer &rBuf, const ScSingleRefData& rRef )
 {
     rBuf.append( sal_Unicode( 'C' ) );
     if( rRef.IsColRel() )
@@ -2153,7 +2153,7 @@ r1c1_add_col( rtl::OUStringBuffer &rBuf, const SingleRefData& rRef )
         rBuf.append( String::CreateFromInt32( rRef.nCol + 1 ) );
 }
 static void
-r1c1_add_row( rtl::OUStringBuffer &rBuf, const SingleRefData& rRef )
+r1c1_add_row( rtl::OUStringBuffer &rBuf, const ScSingleRefData& rRef )
 {
     rBuf.append( sal_Unicode( 'R' ) );
     if( rRef.IsRowRel() )
@@ -2174,10 +2174,10 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
     ConventionXL_R1C1() : ScCompiler::Convention( ScAddress::CONV_XL_R1C1 ) { }
     void MakeRefStr( rtl::OUStringBuffer&   rBuf,
                      const ScCompiler&      rComp,
-                     const ComplRefData& rRef,
+                     const ScComplexRefData& rRef,
                      BOOL bSingleRef ) const
     {
-        ComplRefData aRef( rRef );
+        ScComplexRefData aRef( rRef );
 
         MakeDocStr( rBuf, rComp, aRef, bSingleRef );
 
@@ -2528,7 +2528,7 @@ sal_Unicode* lcl_UnicodeStrNCpy( sal_Unicode* pDst, const sal_Unicode* pSrc, xub
 //               | Sonst             | Symbol=Symbol+Zeichen | GetString
 //---------------+-------------------+-----------------------+---------------
 
-xub_StrLen ScCompiler::NextSymbol()
+xub_StrLen ScCompiler::NextSymbol(bool bInArray)
 {
     cSymbol[MAXSTRLEN-1] = 0;       // Stopper
     sal_Unicode* pSym = cSymbol;
@@ -2542,6 +2542,8 @@ xub_StrLen ScCompiler::NextSymbol()
     ScanState eState = ssGetChar;
     xub_StrLen nSpaces = 0;
     sal_Unicode cSep = mxSymbols->getSymbol( ocSep).GetChar(0);
+    sal_Unicode cArrayColSep = mxSymbols->getSymbol( ocArrayColSep).GetChar(0);
+    sal_Unicode cArrayRowSep = mxSymbols->getSymbol( ocArrayRowSep).GetChar(0);
     sal_Unicode cDecSep = (mxSymbols->isEnglish() ? '.' :
             ScGlobal::pLocaleData->getNumDecimalSep().GetChar(0));
 
@@ -2558,9 +2560,9 @@ xub_StrLen ScCompiler::NextSymbol()
     {
         pSrc++;
         ULONG nMask = GetCharTableFlags( c );
-        // The parameter separator ends things unconditionally if not in
-        // string or reference.
-        if (c == cSep)
+        // The parameter separator and the array column and row separators end
+        // things unconditionally if not in string or reference.
+        if (c == cSep || (bInArray && (c == cArrayColSep || c == cArrayRowSep)))
         {
             switch (eState)
             {
@@ -3045,14 +3047,22 @@ Label_MaskStateMachine:
 // Convert symbol to token
 //---------------------------------------------------------------------------
 
-BOOL ScCompiler::IsOpCode( const String& rName )
+BOOL ScCompiler::IsOpCode( const String& rName, bool bInArray )
 {
     ScOpCodeHashMap::const_iterator iLook( mxSymbols->getHashMap()->find( rName));
     BOOL bFound = (iLook != mxSymbols->getHashMap()->end());
     if (bFound)
     {
         ScRawToken aToken;
-        aToken.SetOpCode( (*iLook).second );
+        OpCode eOp = iLook->second;
+        if (bInArray)
+        {
+            if (rName.Equals(mxSymbols->getSymbol(ocArrayColSep)))
+                eOp = ocArrayColSep;
+            else if (rName.Equals(mxSymbols->getSymbol(ocArrayRowSep)))
+                eOp = ocArrayRowSep;
+        }
+        aToken.SetOpCode(eOp);
         pRawToken = aToken.Clone();
     }
     else
@@ -3265,7 +3275,7 @@ BOOL ScCompiler::IsDoubleReference( const String& rName )
     if( nFlags & SCA_VALID )
     {
         ScRawToken aToken;
-        ComplRefData aRef;
+        ScComplexRefData aRef;
         aRef.InitRange( aRange );
         aRef.Ref1.SetColRel( (nFlags & SCA_COL_ABSOLUTE) == 0 );
         aRef.Ref1.SetRowRel( (nFlags & SCA_ROW_ABSOLUTE) == 0 );
@@ -3309,7 +3319,7 @@ BOOL ScCompiler::IsSingleReference( const String& rName )
     if( nFlags & ( SCA_VALID_COL|SCA_VALID_ROW|SCA_VALID_TAB ) )
     {
         ScRawToken aToken;
-        SingleRefData aRef;
+        ScSingleRefData aRef;
         aRef.InitAddress( aAddr );
         aRef.SetColRel( (nFlags & SCA_COL_ABSOLUTE) == 0 );
         aRef.SetRowRel( (nFlags & SCA_ROW_ABSOLUTE) == 0 );
@@ -3517,7 +3527,7 @@ BOOL ScCompiler::IsColRowName( const String& rName )
 {
     BOOL bInList = FALSE;
     BOOL bFound = FALSE;
-    SingleRefData aRef;
+    ScSingleRefData aRef;
     String aName( rName );
     DeQuote( aName );
     SCTAB nThisTab = aPos.Tab();
@@ -4005,9 +4015,10 @@ void ScCompiler::AutoCorrectParsedSymbol()
     }
 }
 
-BOOL ScCompiler::NextNewToken( bool bAllowBooleans )
+BOOL ScCompiler::NextNewToken( bool bInArray )
 {
-    xub_StrLen nSpaces = NextSymbol();
+    bool bAllowBooleans = bInArray;
+    xub_StrLen nSpaces = NextSymbol(bInArray);
 
 #if 0
     fprintf( stderr, "NextNewToken '%s' (spaces = %d)\n",
@@ -4088,7 +4099,7 @@ BOOL ScCompiler::NextNewToken( bool bAllowBooleans )
             // IsReference().
             // IsBoolean before isValue to catch inline bools without the kludge
             //    for inline arrays.
-            if ( !(bMayBeFuncName && IsOpCode( aUpper ))
+            if ( !(bMayBeFuncName && IsOpCode( aUpper, bInArray ))
               && !IsReference( aOrg )
               && !(bAllowBooleans && IsBoolean( aUpper ))
               && !IsValue( aUpper )
@@ -4527,7 +4538,7 @@ BOOL ScCompiler::GetToken()
     }
     else if( pToken->GetOpCode() == ocColRowName )
     {
-        SingleRefData& rRef = pToken->GetSingleRef();
+        ScSingleRefData& rRef = pToken->GetSingleRef();
         rRef.CalcAbsIfRel( aPos );
         if ( !rRef.Valid() )
         {
@@ -4693,7 +4704,7 @@ BOOL ScCompiler::GetToken()
                 ScTokenArray* pNew = new ScTokenArray;
                 if ( bSingle )
                 {
-                    SingleRefData aRefData;
+                    ScSingleRefData aRefData;
                     aRefData.InitAddress( aRange.aStart );
                     if ( bColName )
                         aRefData.SetColRel( TRUE );
@@ -4704,7 +4715,7 @@ BOOL ScCompiler::GetToken()
                 }
                 else
                 {
-                    ComplRefData aRefData;
+                    ScComplexRefData aRefData;
                     aRefData.InitRange( aRange );
                     if ( bColName )
                     {
@@ -4740,7 +4751,7 @@ BOOL ScCompiler::GetToken()
             SetError(errNoName);
         else if ( !bCompileForFAP )
         {
-            ComplRefData aRefData;
+            ScComplexRefData aRefData;
             aRefData.InitFlags();
             pDBData->GetArea(   (SCTAB&) aRefData.Ref1.nTab,
                                 (SCCOL&) aRefData.Ref1.nCol,
@@ -5508,12 +5519,12 @@ void ScCompiler::SetRelNameReference()
     for( ScToken* t = pArr->GetNextReference(); t;
                   t = pArr->GetNextReference() )
     {
-        SingleRefData& rRef1 = t->GetSingleRef();
+        ScSingleRefData& rRef1 = t->GetSingleRef();
         if ( rRef1.IsColRel() || rRef1.IsRowRel() || rRef1.IsTabRel() )
             rRef1.SetRelName( TRUE );
         if ( t->GetType() == svDoubleRef )
         {
-            SingleRefData& rRef2 = t->GetDoubleRef().Ref2;
+            ScSingleRefData& rRef2 = t->GetDoubleRef().Ref2;
             if ( rRef2.IsColRel() || rRef2.IsRowRel() || rRef2.IsTabRel() )
                 rRef2.SetRelName( TRUE );
         }
@@ -5570,7 +5581,7 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
         for( t = pArr->GetNextColRowName(); t;
              t = pArr->GetNextColRowName() )
         {
-            SingleRefData& rRef = t->GetSingleRef();
+            ScSingleRefData& rRef = t->GetSingleRef();
             rRef.CalcAbsIfRel( rOldPos );
             ScAddress aNewRef( rRef.nCol + nDx, rRef.nRow + nDy, rRef.nTab + nDz );
             if ( r.In( aNewRef ) )
@@ -5668,7 +5679,7 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
                 }
                 else
                 {
-                    ComplRefData& rRef = t->GetDoubleRef();
+                    ScComplexRefData& rRef = t->GetDoubleRef();
                     SCCOL nCols = rRef.Ref2.nCol - rRef.Ref1.nCol;
                     SCROW nRows = rRef.Ref2.nRow - rRef.Ref1.nRow;
                     SCTAB nTabs = rRef.Ref2.nTab - rRef.Ref1.nTab;
@@ -5710,7 +5721,7 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
             {   // if nRefCnt>1 it's already updated in token code
                 if ( t->GetType() == svSingleRef )
                 {
-                    SingleRefData& rRef = t->GetSingleRef();
+                    ScSingleRefData& rRef = t->GetSingleRef();
                     SingleDoubleRefModifier aMod( rRef );
                     if ( rRef.IsRelName() )
                     {
@@ -5729,7 +5740,7 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
 #if SC_PRESERVE_SHARED_FORMULAS_IF_POSSIBLE
                     if ( bEasyShared )
                     {
-                        const SingleRefData& rSRD = aMod.Ref().Ref1;
+                        const ScSingleRefData& rSRD = aMod.Ref().Ref1;
                         ScAddress aRef( rSRD.nCol, rSRD.nRow, rSRD.nTab );
                         if ( r.In( aRef ) != bPosInRange )
                             bEasyShared = FALSE;
@@ -5738,7 +5749,7 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
                 }
                 else
                 {
-                    ComplRefData& rRef = t->GetDoubleRef();
+                    ScComplexRefData& rRef = t->GetDoubleRef();
                     SCCOL nCols = rRef.Ref2.nCol - rRef.Ref1.nCol;
                     SCROW nRows = rRef.Ref2.nRow - rRef.Ref1.nRow;
                     SCTAB nTabs = rRef.Ref2.nTab - rRef.Ref1.nTab;
@@ -5805,7 +5816,7 @@ BOOL ScCompiler::UpdateNameReference(UpdateRefMode eUpdateRefMode,
                   t = pArr->GetNextReference() )
     {
         SingleDoubleRefModifier aMod( *t );
-        ComplRefData& rRef = aMod.Ref();
+        ScComplexRefData& rRef = aMod.Ref();
         bRelRef = rRef.Ref1.IsColRel() || rRef.Ref1.IsRowRel() ||
             rRef.Ref1.IsTabRel();
         if (!bRelRef && t->GetType() == svDoubleRef)
@@ -5860,8 +5871,8 @@ void ScCompiler::UpdateSharedFormulaReference( UpdateRefMode eUpdateRefMode,
                 // shared formula itself prior to breaking the shared formula
                 // and calling this function. Don't readjust them again.
                 SingleDoubleRefModifier aMod( *t );
-                ComplRefData& rRef = aMod.Ref();
-                ComplRefData aBkp = rRef;
+                ScComplexRefData& rRef = aMod.Ref();
+                ScComplexRefData aBkp = rRef;
                 ScRefUpdate::Update( pDoc, eUpdateRefMode, aPos,
                                             r, nDx, nDy, nDz, rRef );
                 // restore absolute parts
@@ -5937,7 +5948,7 @@ ScRangeData* ScCompiler::UpdateInsertTab( SCTAB nTable, BOOL bIsName )
         {
             if ( !(bIsName && t->GetSingleRef().IsTabRel()) )
             {   // of names only adjust absolute references
-                SingleRefData& rRef = t->GetSingleRef();
+                ScSingleRefData& rRef = t->GetSingleRef();
                 if ( rRef.IsTabRel() )
                 {
                     rRef.nTab = rRef.nRelTab + nOldPosTab;
@@ -5954,7 +5965,7 @@ ScRangeData* ScCompiler::UpdateInsertTab( SCTAB nTable, BOOL bIsName )
             {
                 if ( !(bIsName && t->GetDoubleRef().Ref2.IsTabRel()) )
                 {   // of names only adjust absolute references
-                    SingleRefData& rRef = t->GetDoubleRef().Ref2;
+                    ScSingleRefData& rRef = t->GetDoubleRef().Ref2;
                     if ( rRef.IsTabRel() )
                     {
                         rRef.nTab = rRef.nRelTab + nOldPosTab;
@@ -5984,7 +5995,7 @@ ScRangeData* ScCompiler::UpdateInsertTab( SCTAB nTable, BOOL bIsName )
         {
             if ( t->GetRef() == 1 )
             {
-                SingleRefData& rRef1 = t->GetSingleRef();
+                ScSingleRefData& rRef1 = t->GetSingleRef();
                 if ( !(rRef1.IsRelName() && rRef1.IsTabRel()) )
                 {   // of names only adjust absolute references
                     if ( rRef1.IsTabRel() )
@@ -5999,7 +6010,7 @@ ScRangeData* ScCompiler::UpdateInsertTab( SCTAB nTable, BOOL bIsName )
                 }
                 if ( t->GetType() == svDoubleRef )
                 {
-                    SingleRefData& rRef2 = t->GetDoubleRef().Ref2;
+                    ScSingleRefData& rRef2 = t->GetDoubleRef().Ref2;
                     if ( !(rRef2.IsRelName() && rRef2.IsTabRel()) )
                     {   // of names only adjust absolute references
                         if ( rRef2.IsTabRel() )
@@ -6050,7 +6061,7 @@ ScRangeData* ScCompiler::UpdateDeleteTab(SCTAB nTable, BOOL /* bIsMove */, BOOL 
         {
             if ( !(bIsName && t->GetSingleRef().IsTabRel()) )
             {   // of names only adjust absolute references
-                SingleRefData& rRef = t->GetSingleRef();
+                ScSingleRefData& rRef = t->GetSingleRef();
                 if ( rRef.IsTabRel() )
                     nTab = rRef.nTab = rRef.nRelTab + nOldPosTab;
                 else
@@ -6064,7 +6075,7 @@ ScRangeData* ScCompiler::UpdateDeleteTab(SCTAB nTable, BOOL /* bIsMove */, BOOL 
                 {
                     if ( t->GetType() == svDoubleRef )
                     {
-                        SingleRefData& rRef2 = t->GetDoubleRef().Ref2;
+                        ScSingleRefData& rRef2 = t->GetDoubleRef().Ref2;
                         if ( rRef2.IsTabRel() )
                             nTab2 = rRef2.nRelTab + nOldPosTab;
                         else
@@ -6093,7 +6104,7 @@ ScRangeData* ScCompiler::UpdateDeleteTab(SCTAB nTable, BOOL /* bIsMove */, BOOL 
             {
                 if ( !(bIsName && t->GetDoubleRef().Ref2.IsTabRel()) )
                 {   // of names only adjust absolute references
-                    SingleRefData& rRef = t->GetDoubleRef().Ref2;
+                    ScSingleRefData& rRef = t->GetDoubleRef().Ref2;
                     if ( rRef.IsTabRel() )
                         nTab = rRef.nTab = rRef.nRelTab + nOldPosTab;
                     else
@@ -6135,7 +6146,7 @@ ScRangeData* ScCompiler::UpdateDeleteTab(SCTAB nTable, BOOL /* bIsMove */, BOOL 
         {
             if ( t->GetRef() == 1 )
             {
-                SingleRefData& rRef1 = t->GetSingleRef();
+                ScSingleRefData& rRef1 = t->GetSingleRef();
                 if ( !(rRef1.IsRelName() && rRef1.IsTabRel()) )
                 {   // of names only adjust absolute references
                     if ( rRef1.IsTabRel() )
@@ -6151,7 +6162,7 @@ ScRangeData* ScCompiler::UpdateDeleteTab(SCTAB nTable, BOOL /* bIsMove */, BOOL 
                     {
                         if ( t->GetType() == svDoubleRef )
                         {
-                            SingleRefData& rRef2 = t->GetDoubleRef().Ref2;
+                            ScSingleRefData& rRef2 = t->GetDoubleRef().Ref2;
                             if ( rRef2.IsTabRel() )
                                 nTab2 = rRef2.nRelTab + nOldPosTab;
                             else
@@ -6176,7 +6187,7 @@ ScRangeData* ScCompiler::UpdateDeleteTab(SCTAB nTable, BOOL /* bIsMove */, BOOL 
                 }
                 if ( t->GetType() == svDoubleRef )
                 {
-                    SingleRefData& rRef2 = t->GetDoubleRef().Ref2;
+                    ScSingleRefData& rRef2 = t->GetDoubleRef().Ref2;
                     if ( !(rRef2.IsRelName() && rRef2.IsTabRel()) )
                     {   // of names only adjust absolute references
                         if ( rRef2.IsTabRel() )
@@ -6258,7 +6269,7 @@ ScRangeData* ScCompiler::UpdateMoveTab( SCTAB nOldTab, SCTAB nNewTab,
         }
         else if( t->GetType() != svIndex )  // it may be a DB area!!!
         {
-            SingleRefData& rRef1 = t->GetSingleRef();
+            ScSingleRefData& rRef1 = t->GetSingleRef();
             if ( !(bIsName && rRef1.IsTabRel()) )
             {   // of names only adjust absolute references
                 if ( rRef1.IsTabRel() )
@@ -6275,7 +6286,7 @@ ScRangeData* ScCompiler::UpdateMoveTab( SCTAB nOldTab, SCTAB nNewTab,
                 bIsRel = TRUE;
             if ( t->GetType() == svDoubleRef )
             {
-                SingleRefData& rRef2 = t->GetDoubleRef().Ref2;
+                ScSingleRefData& rRef2 = t->GetDoubleRef().Ref2;
                 if ( !(bIsName && rRef2.IsTabRel()) )
                 {   // of names only adjust absolute references
                     if ( rRef2.IsTabRel() )
@@ -6324,7 +6335,7 @@ ScRangeData* ScCompiler::UpdateMoveTab( SCTAB nOldTab, SCTAB nNewTab,
         {
             if ( t->GetRef() == 1 )
             {
-                SingleRefData& rRef1 = t->GetSingleRef();
+                ScSingleRefData& rRef1 = t->GetSingleRef();
                 if ( rRef1.IsRelName() && rRef1.IsTabRel() )
                 {   // possibly wrap RelName, like lcl_MoveItWrap in refupdat.cxx
                     nTab = rRef1.nRelTab + nPosTab;
@@ -6348,7 +6359,7 @@ ScRangeData* ScCompiler::UpdateMoveTab( SCTAB nOldTab, SCTAB nNewTab,
                 }
                 if( t->GetType() == svDoubleRef )
                 {
-                    SingleRefData& rRef2 = t->GetDoubleRef().Ref2;
+                    ScSingleRefData& rRef2 = t->GetDoubleRef().Ref2;
                     if ( rRef2.IsRelName() && rRef2.IsTabRel() )
                     {   // possibly wrap RelName, like lcl_MoveItWrap in refupdat.cxx
                         nTab = rRef2.nRelTab + nPosTab;

@@ -130,6 +130,21 @@ public:
 };
 
 
+class ExportXml2007 : public ExportTyp, protected XclExpRoot
+{
+private:
+    ExcDocument*        pExcDoc;
+
+protected:
+    RootData*           pExcRoot;
+
+public:
+                        ExportXml2007( XclExpRootData& rExpData, SvStream& rStrm );
+    virtual             ~ExportXml2007();
+    FltError            Write();
+};
+
+
 #endif
 
 

@@ -149,6 +149,11 @@ static USHORT nPPTZoom = 0;     // ScreenZoom used to determine nScreenPPTX/Y
 
 BOOL bOderSo;
 
+bool SC_DLLPUBLIC ScGetWriteTeamInfo()
+{
+  return bOderSo;
+}
+
 class SfxViewShell;
 SfxViewShell* pScActiveViewShell = NULL;            //! als Member !!!!!
 USHORT nScClickMouseModifier = 0;                   //! dito

@@ -31,9 +31,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 #include "xladdress.hxx"
+#include "xestream.hxx"
 #include "xltracer.hxx"
 #include "xistream.hxx"
-#include "xestream.hxx"
 
 // ============================================================================
 

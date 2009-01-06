@@ -867,7 +867,7 @@ const String& ScInterpreter::PopString()
 }
 
 
-void ScInterpreter::ValidateRef( const SingleRefData & rRef )
+void ScInterpreter::ValidateRef( const ScSingleRefData & rRef )
 {
     SCCOL nCol;
     SCROW nRow;
@@ -876,7 +876,7 @@ void ScInterpreter::ValidateRef( const SingleRefData & rRef )
 }
 
 
-void ScInterpreter::ValidateRef( const ComplRefData & rRef )
+void ScInterpreter::ValidateRef( const ScComplexRefData & rRef )
 {
     ValidateRef( rRef.Ref1);
     ValidateRef( rRef.Ref2);
@@ -894,7 +894,7 @@ void ScInterpreter::ValidateRef( const ScRefList & rRefList )
 }
 
 
-void ScInterpreter::SingleRefToVars( const SingleRefData & rRef,
+void ScInterpreter::SingleRefToVars( const ScSingleRefData & rRef,
         SCCOL & rCol, SCROW & rRow, SCTAB & rTab )
 {
     if ( rRef.IsColRel() )
@@ -979,7 +979,7 @@ void ScInterpreter::DoubleRefToVars( const ScToken* p,
         SCCOL& rCol2, SCROW &rRow2, SCTAB& rTab2,
         BOOL bDontCheckForTableOp )
 {
-    const ComplRefData& rCRef = p->GetDoubleRef();
+    const ScComplexRefData& rCRef = p->GetDoubleRef();
     SingleRefToVars( rCRef.Ref1, rCol1, rRow1, rTab1);
     SingleRefToVars( rCRef.Ref2, rCol2, rRow2, rTab2);
     if ( pDok->aTableOpList.Count() > 0 && !bDontCheckForTableOp )
@@ -1017,7 +1017,7 @@ void ScInterpreter::PopDoubleRef(SCCOL& rCol1, SCROW &rRow1, SCTAB& rTab1,
 }
 
 
-void ScInterpreter::DoubleRefToRange( const ComplRefData & rCRef,
+void ScInterpreter::DoubleRefToRange( const ScComplexRefData & rCRef,
         ScRange & rRange, BOOL bDontCheckForTableOp )
 {
     SCCOL nCol;
@@ -1343,7 +1343,7 @@ void ScInterpreter::PushSingleRef(SCCOL nCol, SCROW nRow, SCTAB nTab)
 {
     if (!IfErrorPushError())
     {
-        SingleRefData aRef;
+        ScSingleRefData aRef;
         aRef.InitFlags();
         aRef.nCol = nCol;
         aRef.nRow = nRow;
@@ -1358,7 +1358,7 @@ void ScInterpreter::PushDoubleRef(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
 {
     if (!IfErrorPushError())
     {
-        ComplRefData aRef;
+        ScComplexRefData aRef;
         aRef.InitFlags();
         aRef.Ref1.nCol = nCol1;
         aRef.Ref1.nRow = nRow1;
@@ -2815,7 +2815,7 @@ void ScInterpreter::ScDBArea()
     ScDBData* pDBData = pDok->GetDBCollection()->FindIndex( pCur->GetIndex());
     if (pDBData)
     {
-        ComplRefData aRefData;
+        ScComplexRefData aRefData;
         aRefData.InitFlags();
         pDBData->GetArea( (SCTAB&) aRefData.Ref1.nTab,
                           (SCCOL&) aRefData.Ref1.nCol,
@@ -2833,7 +2833,7 @@ void ScInterpreter::ScDBArea()
 
 void ScInterpreter::ScColRowNameAuto()
 {
-    ComplRefData aRefData( pCur->GetDoubleRef() );
+    ScComplexRefData aRefData( pCur->GetDoubleRef() );
     aRefData.CalcAbsIfRel( aPos );
     if ( aRefData.Valid() )
     {

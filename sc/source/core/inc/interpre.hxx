@@ -261,16 +261,16 @@ void Pop();
 void PopError();
 double PopDouble();
 const String& PopString();
-void ValidateRef( const SingleRefData & rRef );
-void ValidateRef( const ComplRefData & rRef );
+void ValidateRef( const ScSingleRefData & rRef );
+void ValidateRef( const ScComplexRefData & rRef );
 void ValidateRef( const ScRefList & rRefList );
-void SingleRefToVars( const SingleRefData & rRef, SCCOL & rCol, SCROW & rRow, SCTAB & rTab );
+void SingleRefToVars( const ScSingleRefData & rRef, SCCOL & rCol, SCROW & rRow, SCTAB & rTab );
 void PopSingleRef( ScAddress& );
 void PopSingleRef(SCCOL& rCol, SCROW &rRow, SCTAB& rTab);
-void DoubleRefToRange( const ComplRefData&, ScRange&, BOOL bDontCheckForTableOp = FALSE );
+void DoubleRefToRange( const ScComplexRefData&, ScRange&, BOOL bDontCheckForTableOp = FALSE );
 /** If StackVar svDoubleRef pop ScDoubleRefToken and return values of
-    ComplRefData.
-    Else if StackVar svRefList return values of the ComplRefData where
+    ScComplexRefData.
+    Else if StackVar svRefList return values of the ScComplexRefData where
     rRefInList is pointing to. rRefInList is incremented. If rRefInList was the
     last element in list pop ScRefListToken and set rRefInList to 0, else
     rParam is incremented (!) to allow usage as in

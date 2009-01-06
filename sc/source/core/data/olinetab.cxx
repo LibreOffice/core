@@ -56,7 +56,7 @@ ScOutlineEntry::ScOutlineEntry( SCCOLROW nNewStart, SCCOLROW nNewSize, BOOL bNew
 }
 
 ScOutlineEntry::ScOutlineEntry( const ScOutlineEntry& rEntry ) :
-    DataObject(),
+    ScDataObject(),
     nStart  ( rEntry.nStart ),
     nSize   ( rEntry.nSize ),
     bHidden ( rEntry.bHidden ),
@@ -64,7 +64,7 @@ ScOutlineEntry::ScOutlineEntry( const ScOutlineEntry& rEntry ) :
 {
 }
 
-DataObject* ScOutlineEntry::Clone() const
+ScDataObject* ScOutlineEntry::Clone() const
 {
     return new ScOutlineEntry( *this );
 }
@@ -109,7 +109,7 @@ void ScOutlineEntry::SetVisible( BOOL bNewVisible )
 //------------------------------------------------------------------------
 
 ScOutlineCollection::ScOutlineCollection() :
-    SortedCollection( 4,4,FALSE )
+    ScSortedCollection( 4,4,FALSE )
 {
 }
 
@@ -120,7 +120,7 @@ inline short IntCompare( SCCOLROW nX, SCCOLROW nY )
     else return 1;
 }
 
-short ScOutlineCollection::Compare(DataObject* pKey1, DataObject* pKey2) const
+short ScOutlineCollection::Compare(ScDataObject* pKey1, ScDataObject* pKey2) const
 {
     return IntCompare( ((ScOutlineEntry*)pKey1)->GetStart(),
                         ((ScOutlineEntry*)pKey2)->GetStart() );

@@ -46,7 +46,7 @@ class ScEditEngineDefaulter;
 class EditView;
 class EditTextObject;
 class ScInputHdlState;
-class TypedStrCollection;
+class TypedScStrCollection;
 class ScRangeFindList;
 class Timer;
 class KeyEvent;
@@ -67,8 +67,8 @@ private:
     EditView*               pTableView;                 // aktive EditView dazu
     EditView*               pTopView;                   // EditView in der Eingabezeile
 
-    TypedStrCollection*     pColumnData;
-    TypedStrCollection*     pFormulaData;
+    TypedScStrCollection*       pColumnData;
+    TypedScStrCollection*       pFormulaData;
     TypedStrCollection*     pFormulaDataPara;
     ULONG                   nTipVisible;
     ULONG                   nTipVisibleSec;

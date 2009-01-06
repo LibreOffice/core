@@ -54,11 +54,11 @@
 class EditTextObject;
 class SvxBorderLine;
 
-BOOL HasPriority( const SvxBorderLine* pThis, const SvxBorderLine* pOther );
+BOOL SC_DLLPUBLIC ScHasPriority( const SvxBorderLine* pThis, const SvxBorderLine* pOther );
 
 //------------------------------------------------------------------------
 
-class ScMergeAttr: public SfxPoolItem
+class SC_DLLPUBLIC ScMergeAttr: public SfxPoolItem
 {
     SCsCOL      nColMerge;
     SCsROW      nRowMerge;

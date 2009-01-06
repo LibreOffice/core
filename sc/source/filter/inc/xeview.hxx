@@ -31,9 +31,9 @@
 #ifndef SC_XEVIEW_HXX
 #define SC_XEVIEW_HXX
 
+#include "xerecord.hxx"
 #include "xlview.hxx"
 #include "xeroot.hxx"
-#include "xerecord.hxx"
 
 // Workbook view settings records =============================================
 
@@ -42,6 +42,8 @@ class XclExpWindow1 : public XclExpRecord
 {
 public:
     explicit                XclExpWindow1( const XclExpRoot& rRoot );
+
+    virtual void            SaveXml( XclExpXmlStream& rStrm );
 
 private:
     /** Writes the contents of the WINDOW1 record. */
@@ -101,6 +103,8 @@ class XclExpPane : public XclExpRecord
 public:
     explicit            XclExpPane( const XclTabViewData& rData );
 
+    virtual void        SaveXml( XclExpXmlStream& rStrm );
+
 private:
     /** Writes the contents of the PANE record. */
     virtual void        WriteBody( XclExpStream& rStrm );
@@ -120,6 +124,7 @@ class XclExpSelection : public XclExpRecord
 public:
     explicit            XclExpSelection( const XclTabViewData& rData, sal_uInt8 nPane );
 
+    virtual void        SaveXml( XclExpXmlStream& rStrm );
 private:
     /** Writes the contents of the SELECTION record. */
     virtual void        WriteBody( XclExpStream& rStrm );
@@ -140,6 +145,7 @@ public:
 
     /** Writes all view settings records to the stream. */
     virtual void        Save( XclExpStream& rStrm );
+    virtual void        SaveXml( XclExpXmlStream& rStrm );
 
 private:
     /** Creates selection data for the specified pane. */

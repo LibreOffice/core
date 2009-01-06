@@ -38,7 +38,7 @@
 #include "exp_op.hxx"
 
 #if ENABLE_LOTUS123_EXPORT
-FltError ScExportLotus123( SvStream& aStream, ScDocument* pDoc, ExportFormatLotus eFormat, CharSet eDest )
+FltError ScFormatFilterPluginImpl::ScExportLotus123( SvStream& aStream, ScDocument* pDoc, ExportFormatLotus eFormat, CharSet eDest )
 {
     switch( eFormat )
     {

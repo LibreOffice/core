@@ -131,7 +131,7 @@ void __EXPORT ScHighlightChgDlg::Init()
     {
         aChangeViewSet.SetTheAuthorToShow(pChanges->GetUser());
         aFilterCtr.ClearAuthors();
-        StrCollection aUserColl=pChanges->GetUserCollection();
+        ScStrCollection aUserColl=pChanges->GetUserCollection();
         for(USHORT  i=0;i<aUserColl.GetCount();i++)
             aFilterCtr.InsertAuthor(aUserColl[i]->GetString());
     }

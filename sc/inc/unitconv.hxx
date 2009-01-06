@@ -47,7 +47,7 @@ public:
                             ScUnitConverterData( const ScUnitConverterData& );
     virtual                 ~ScUnitConverterData() {};
 
-    virtual DataObject*     Clone() const;
+    virtual ScDataObject*       Clone() const;
 
             double          GetValue() const    { return fValue; }
 
@@ -57,7 +57,7 @@ public:
 };
 
 
-class ScUnitConverter : public StrCollection
+class ScUnitConverter : public ScStrCollection
 {
                             // not implemented
                             ScUnitConverter( const ScUnitConverter& );

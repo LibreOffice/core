@@ -231,7 +231,7 @@ rtl::OUString SAL_CALL ScAccessiblePreviewTable::getAccessibleColumnDescription(
         else
         {
             // normal column name
-            sName = ColToAlpha( rInfo.nDocIndex );
+            sName = ScColToAlpha( rInfo.nDocIndex );
         }
     }
     else

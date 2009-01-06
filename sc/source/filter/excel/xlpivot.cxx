@@ -30,11 +30,11 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
-#include "xlpivot.hxx"
 #include "dpgroup.hxx"
-#include "xistream.hxx"
 #include "xestream.hxx"
+#include "xistream.hxx"
 #include "xestring.hxx"
+#include "xlpivot.hxx"
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 
 using ::com::sun::star::sheet::GeneralFunction;

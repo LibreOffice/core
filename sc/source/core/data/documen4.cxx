@@ -76,7 +76,7 @@ BOOL ScDocument::Solver(SCCOL nFCol, SCROW nFRow, SCTAB nFTab,
         if (eFType == CELLTYPE_FORMULA && (eVType == CELLTYPE_VALUE
                 || eVType == CELLTYPE_NOTE) )
         {
-            SingleRefData aRefData;
+            ScSingleRefData aRefData;
             aRefData.InitFlags();
             aRefData.nCol = nVCol;
             aRefData.nRow = nVRow;
@@ -163,7 +163,7 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
         }
     }
 
-    SingleRefData aRefData;
+    ScSingleRefData aRefData;
     aRefData.InitFlags();
     aRefData.nCol = nCol1;
     aRefData.nRow = nRow1;

@@ -419,7 +419,7 @@ String lcl_GetSpecialDateName( double fValue, bool bFirst, SvNumberFormatter* pF
     return aBuffer.makeStringAndClear();
 }
 
-void ScDPDateGroupHelper::FillColumnEntries( TypedStrCollection& rEntries, const TypedStrCollection& rOriginal,
+void ScDPDateGroupHelper::FillColumnEntries( TypedScStrCollection& rEntries, const TypedScStrCollection& rOriginal,
                                             SvNumberFormatter* pFormatter ) const
 {
     // auto min/max is only used for "Years" part, but the loop is always needed
@@ -609,12 +609,12 @@ void ScDPGroupDimension::SetGroupDim( long nDim )
     nGroupDim = nDim;
 }
 
-const TypedStrCollection& ScDPGroupDimension::GetColumnEntries(
-                    const TypedStrCollection& rOriginal, ScDocument* pDoc ) const
+const TypedScStrCollection& ScDPGroupDimension::GetColumnEntries(
+                    const TypedScStrCollection& rOriginal, ScDocument* pDoc ) const
 {
     if ( !pCollection )
     {
-        pCollection = new TypedStrCollection();
+        pCollection = new TypedScStrCollection();
         if ( pDateHelper )
             pDateHelper->FillColumnEntries( *pCollection, rOriginal, pDoc->GetFormatTable() );
         else
@@ -809,14 +809,14 @@ inline bool IsInteger( double fValue )
     return rtl::math::approxEqual( fValue, rtl::math::approxFloor(fValue) );
 }
 
-const TypedStrCollection& ScDPNumGroupDimension::GetNumEntries(
-                    const TypedStrCollection& rOriginal, ScDocument* pDoc ) const
+const TypedScStrCollection& ScDPNumGroupDimension::GetNumEntries(
+                    const TypedScStrCollection& rOriginal, ScDocument* pDoc ) const
 {
     if ( !pCollection )
     {
         SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
 
-        pCollection = new TypedStrCollection();
+        pCollection = new TypedScStrCollection();
         if ( pDateHelper )
             pDateHelper->FillColumnEntries( *pCollection, rOriginal, pFormatter );
         else
@@ -1043,7 +1043,7 @@ void ScDPGroupTableData::GetNumGroupInfo( long nDimension, ScDPNumGroupInfo& rIn
     }
 }
 
-const TypedStrCollection& ScDPGroupTableData::GetColumnEntries(long nColumn)
+const TypedScStrCollection& ScDPGroupTableData::GetColumnEntries(long nColumn)
 {
     // date handling is in ScDPGroupDimension::GetColumnEntries / ScDPNumGroupDimension::GetNumEntries
     // (to use the pCollection members)
@@ -1057,7 +1057,7 @@ const TypedStrCollection& ScDPGroupTableData::GetColumnEntries(long nColumn)
             const ScDPGroupDimension& rGroupDim = aGroups[nColumn - nSourceCount];
             long nSourceDim = rGroupDim.GetSourceDim();
             // collection is cached at pSourceData, GetColumnEntries can be called every time
-            const TypedStrCollection& rOriginal = pSourceData->GetColumnEntries( nSourceDim );
+            const TypedScStrCollection& rOriginal = pSourceData->GetColumnEntries( nSourceDim );
             return rGroupDim.GetColumnEntries( rOriginal, pDoc );
         }
     }
@@ -1065,7 +1065,7 @@ const TypedStrCollection& ScDPGroupTableData::GetColumnEntries(long nColumn)
     if ( IsNumGroupDimension( nColumn ) )
     {
         // dimension number is unchanged for numerical groups
-        const TypedStrCollection& rOriginal = pSourceData->GetColumnEntries( nColumn );
+        const TypedScStrCollection& rOriginal = pSourceData->GetColumnEntries( nColumn );
         return pNumGroups[nColumn].GetNumEntries( rOriginal, pDoc );
     }
 

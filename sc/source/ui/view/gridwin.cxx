@@ -601,7 +601,7 @@ void ScGridWindow::DoPageFieldMenue( SCCOL nCol, SCROW nRow )
 
     //  SetSize comes later
 
-    TypedStrCollection aStrings( 128, 128 );
+    TypedScStrCollection aStrings( 128, 128 );
 
     //  get list box entries and selection
     BOOL bHasCurrentPage = FALSE;
@@ -895,7 +895,7 @@ void ScGridWindow::DoAutoFilterMenue( SCCOL nCol, SCROW nRow, BOOL bDataSelect )
 */
 
     BOOL bEmpty = FALSE;
-    TypedStrCollection aStrings( 128, 128 );
+    TypedScStrCollection aStrings( 128, 128 );
     if ( bDataSelect )                                  // Auswahl-Liste
     {
         //  Liste fuellen
@@ -4087,7 +4087,7 @@ sal_Int8 ScGridWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
     if (rData.aJumpTarget.Len())
     {
         //  internal bookmark (from Navigator)
-        //  bookmark clipboard formats are in PasteDataObject
+        //  bookmark clipboard formats are in PasteScDataObject
 
         if ( !rData.pJumpLocalDoc || rData.pJumpLocalDoc == pViewData->GetDocument() )
         {

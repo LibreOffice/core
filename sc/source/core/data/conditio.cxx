@@ -70,7 +70,7 @@ BOOL lcl_HasRelRef( ScDocument* pDoc, ScTokenArray* pFormula, USHORT nRecursion 
             {
                 case svDoubleRef:
                 {
-                    SingleRefData& rRef2 = t->GetDoubleRef().Ref2;
+                    ScSingleRefData& rRef2 = t->GetDoubleRef().Ref2;
                     if ( rRef2.IsColRel() || rRef2.IsRowRel() || rRef2.IsTabRel() )
                         return TRUE;
                 }
@@ -78,7 +78,7 @@ BOOL lcl_HasRelRef( ScDocument* pDoc, ScTokenArray* pFormula, USHORT nRecursion 
 
                 case svSingleRef:
                 {
-                    SingleRefData& rRef1 = t->GetSingleRef();
+                    ScSingleRefData& rRef1 = t->GetSingleRef();
                     if ( rRef1.IsColRel() || rRef1.IsRowRel() || rRef1.IsTabRel() )
                         return TRUE;
                 }
@@ -470,7 +470,7 @@ void lcl_CondUpdateInsertTab( ScTokenArray& rCode, SCTAB nInsTab, SCTAB nPosTab,
     ScToken* p = rCode.GetNextReference();
     while( p )
     {
-        SingleRefData& rRef1 = p->GetSingleRef();
+        ScSingleRefData& rRef1 = p->GetSingleRef();
         if ( !rRef1.IsTabRel() && nInsTab <= rRef1.nTab )
         {
             rRef1.nTab += 1;
@@ -479,7 +479,7 @@ void lcl_CondUpdateInsertTab( ScTokenArray& rCode, SCTAB nInsTab, SCTAB nPosTab,
         }
         if( p->GetType() == svDoubleRef )
         {
-            SingleRefData& rRef2 = p->GetDoubleRef().Ref2;
+            ScSingleRefData& rRef2 = p->GetDoubleRef().Ref2;
             if ( !rRef2.IsTabRel() && nInsTab <= rRef2.nTab )
             {
                 rRef2.nTab += 1;
@@ -1064,7 +1064,7 @@ ScAddress ScConditionEntry::GetValidSrcPos() const
             ScToken* t;
             while ( ( t = pFormula->GetNextReference() ) != NULL )
             {
-                SingleRefData& rRef1 = t->GetSingleRef();
+                ScSingleRefData& rRef1 = t->GetSingleRef();
                 if ( rRef1.IsTabRel() && !rRef1.IsTabDeleted() )
                 {
                     if ( rRef1.nTab < nMinTab )
@@ -1074,7 +1074,7 @@ ScAddress ScConditionEntry::GetValidSrcPos() const
                 }
                 if ( t->GetType() == svDoubleRef )
                 {
-                    SingleRefData& rRef2 = t->GetDoubleRef().Ref2;
+                    ScSingleRefData& rRef2 = t->GetDoubleRef().Ref2;
                     if ( rRef2.IsTabRel() && !rRef2.IsTabDeleted() )
                     {
                         if ( rRef2.nTab < nMinTab )

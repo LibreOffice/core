@@ -262,7 +262,7 @@ void __EXPORT ScAcceptChgDlg::Init()
         pChanges->SetModifiedLink( LINK( this, ScAcceptChgDlg,ChgTrackModHdl));
         aChangeViewSet.SetTheAuthorToShow(pChanges->GetUser());
         pTPFilter->ClearAuthors();
-        StrCollection aUserColl=pChanges->GetUserCollection();
+        ScStrCollection aUserColl=pChanges->GetUserCollection();
         for(USHORT  i=0;i<aUserColl.GetCount();i++)
             pTPFilter->InsertAuthor(aUserColl[i]->GetString());
     }

@@ -34,7 +34,7 @@
 
 #include "collect.hxx"
 #include "compressedarray.hxx"
-
+#include "scdllapi.h"
 
 #define SC_OL_MAXDEPTH      7
 
@@ -43,7 +43,7 @@ class ScMultipleReadHeader;
 class ScMultipleWriteHeader;
 
 
-class ScOutlineEntry : public DataObject
+class ScOutlineEntry : public ScDataObject
 {
     SCCOLROW    nStart;
     SCSIZE      nSize;
@@ -55,7 +55,7 @@ public:
                                                 BOOL bNewHidden = FALSE );
                             ScOutlineEntry( const ScOutlineEntry& rEntry );
 
-    virtual DataObject*     Clone() const;
+    virtual ScDataObject*       Clone() const;
 
     SCCOLROW                GetStart() const    { return nStart; }
     SCSIZE                  GetSize() const     { return nSize; }
@@ -71,18 +71,18 @@ public:
 };
 
 
-class ScOutlineCollection : public SortedCollection
+class ScOutlineCollection : public ScSortedCollection
 {
 public:
                             ScOutlineCollection();
 
-    virtual short           Compare(DataObject* pKey1, DataObject* pKey2) const;
+    virtual short           Compare(ScDataObject* pKey1, ScDataObject* pKey2) const;
 
     USHORT                  FindStart( SCCOLROW nMinStart );
 };
 
 
-class ScOutlineArray
+class SC_DLLPUBLIC ScOutlineArray
 {
 friend class ScSubOutlineIterator;
 

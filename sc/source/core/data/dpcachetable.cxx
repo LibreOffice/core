@@ -247,7 +247,7 @@ void ScDPCacheTable::fillTable(ScDocument* pDoc, const ScRange& rRange, const Sc
     maFieldEntries.reserve(nColCount);
     for (SCCOL nCol = 0; nCol < nColCount; ++nCol)
     {
-        TypedStrCollectionPtr p(new TypedStrCollection);
+        TypedScStrCollectionPtr p(new TypedScStrCollection);
         maFieldEntries.push_back(p);
     }
 
@@ -438,7 +438,7 @@ void ScDPCacheTable::fillTable(const Reference<sdbc::XRowSet>& xRowSet, const Da
         maFieldEntries.reserve(nColCount);
         for (SCCOL nCol = 0; nCol < nColCount; ++nCol)
         {
-            TypedStrCollectionPtr p(new TypedStrCollection);
+            TypedScStrCollectionPtr p(new TypedScStrCollection);
             maFieldEntries.push_back(p);
         }
 
@@ -544,12 +544,12 @@ sal_Int32 ScDPCacheTable::getFieldIndex(const String& rStr) const
     return -1;
 }
 
-const TypedStrCollection& ScDPCacheTable::getFieldEntries(sal_Int32 nIndex) const
+const TypedScStrCollection& ScDPCacheTable::getFieldEntries(sal_Int32 nIndex) const
 {
     if (nIndex < 0 || static_cast<size_t>(nIndex) >= maFieldEntries.size())
     {
         // index out of bound.  Hopefully this code will never be reached.
-        static const TypedStrCollection emptyCollection;
+        static const TypedScStrCollection emptyCollection;
         return emptyCollection;
     }
 

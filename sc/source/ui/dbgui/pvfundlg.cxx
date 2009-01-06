@@ -31,9 +31,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-#undef SC_DLLIMPLEMENTATION
-
-
 #include "pvfundlg.hxx"
 
 #include <com/sun/star/sheet/DataPilotFieldReferenceType.hpp>

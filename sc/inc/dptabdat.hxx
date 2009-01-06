@@ -45,7 +45,7 @@ namespace com { namespace sun { namespace star { namespace sheet {
     struct DataPilotFieldFilter;
 }}}}
 
-class TypedStrCollection;
+class TypedScStrCollection;
 class ScSimpleSharedString;
 
 // -----------------------------------------------------------------------
@@ -154,11 +154,11 @@ public:
 
     long        GetDatePart( long nDateVal, long nHierarchy, long nLevel );
 
-                //! use (new) typed collection instead of StrCollection
+                //! use (new) typed collection instead of ScStrCollection
                 //! or separate Str and ValueCollection
 
     virtual long                    GetColumnCount() = 0;
-    virtual const TypedStrCollection&   GetColumnEntries(long nColumn) = 0;
+    virtual const TypedScStrCollection& GetColumnEntries(long nColumn) = 0;
     virtual String                  getDimensionName(long nColumn) = 0;
     virtual BOOL                    getIsDataLayoutDimension(long nColumn) = 0;
     virtual BOOL                    IsDateDimension(long nDim) = 0;

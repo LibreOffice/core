@@ -752,14 +752,14 @@ void ScAnyRefDlg::ShowFormulaReference( const XubString& rStr )
                         ScRange aRange;
                         if(bDoubleRef)
                         {
-                            ComplRefData aRef( pToken->GetDoubleRef() );
+                            ScComplexRefData aRef( pToken->GetDoubleRef() );
                             aRef.CalcAbsIfRel( aPos );
                             aRange.aStart.Set( aRef.Ref1.nCol, aRef.Ref1.nRow, aRef.Ref1.nTab );
                             aRange.aEnd.Set( aRef.Ref2.nCol, aRef.Ref2.nRow, aRef.Ref2.nTab );
                         }
                         else
                         {
-                            SingleRefData aRef( pToken->GetSingleRef() );
+                            ScSingleRefData aRef( pToken->GetSingleRef() );
                             aRef.CalcAbsIfRel( aPos );
                             aRange.aStart.Set( aRef.nCol, aRef.nRow, aRef.nTab );
                             aRange.aEnd = aRange.aStart;

@@ -199,7 +199,7 @@ public:
 };
 
 
-class SC_DLLPUBLIC ScAutoFormatData : public DataObject
+class SC_DLLPUBLIC ScAutoFormatData : public ScDataObject
 {
 private:
     String                      aName;
@@ -224,7 +224,7 @@ public:
                     ScAutoFormatData( const ScAutoFormatData& rData );
     virtual         ~ScAutoFormatData();
 
-    virtual         DataObject* Clone() const { return new ScAutoFormatData( *this ); }
+    virtual         ScDataObject* Clone() const { return new ScAutoFormatData( *this ); }
 
     void            SetName( const String& rName )              { aName = rName; nStrResId = USHRT_MAX; }
     void            GetName( String& rName ) const              { rName = aName; }
@@ -262,7 +262,7 @@ public:
 #endif
 };
 
-class SC_DLLPUBLIC ScAutoFormat : public SortedCollection
+class SC_DLLPUBLIC ScAutoFormat : public ScSortedCollection
 {
 private:
     BOOL                        bSaveLater;
@@ -271,9 +271,9 @@ public:
                                 ScAutoFormat( USHORT nLim = 4, USHORT nDel = 4, BOOL bDup = FALSE );
                                 ScAutoFormat( const ScAutoFormat& AutoFormat );
     virtual                     ~ScAutoFormat();
-    virtual                     DataObject*         Clone() const { return new ScAutoFormat( *this ); }
+    virtual                     ScDataObject*         Clone() const { return new ScAutoFormat( *this ); }
                                 ScAutoFormatData*   operator[]( const USHORT nIndex ) const {return (ScAutoFormatData*)At( nIndex );}
-    virtual short               Compare( DataObject* pKey1, DataObject* pKey2 ) const;
+    virtual short               Compare( ScDataObject* pKey1, ScDataObject* pKey2 ) const;
     BOOL                        Load();
     BOOL                        Save();
     USHORT                      FindIndexPerName( const String& rName ) const;

@@ -34,11 +34,12 @@
 #include <vector>
 #include <tools/string.hxx>
 #include "dpgroup.hxx"      // for ScDPNumGroupInfo
+#include "scdllapi.h"
 
 class ScDPGroupTableData;
 class ScDPGroupDimension;
 class ScDPObject;
-class StrCollection;
+class ScStrCollection;
 class SvNumberFormatter;
 
 class ScDPSaveGroupDimension;
@@ -49,7 +50,7 @@ class ScDPSaveGroupDimension;
 //  These have to be applied before the other ScDPSaveData settings.
 //
 
-class ScDPSaveGroupItem
+class SC_DLLPUBLIC ScDPSaveGroupItem
 {
     String                  aGroupName;     // name of group
     ::std::vector<String>   aElements;      // names of items in original dimension
@@ -79,7 +80,7 @@ public:
 
 typedef ::std::vector<ScDPSaveGroupItem> ScDPSaveGroupItemVec;
 
-class ScDPSaveGroupDimension
+class SC_DLLPUBLIC ScDPSaveGroupDimension
 {
     String                  aSourceDim;     // always the real source from the original data
     String                  aGroupDimName;
@@ -109,7 +110,7 @@ public:
     void    RemoveFromGroups( const String& rItemName );
     void    RemoveGroup( const String& rGroupName );
     bool    IsEmpty() const;
-    bool    HasOnlyHidden( const StrCollection& rVisible );
+    bool    HasOnlyHidden( const ScStrCollection& rVisible );
 
     long    GetGroupCount() const;
     const ScDPSaveGroupItem* GetGroupByIndex( long nIndex ) const;
@@ -120,7 +121,7 @@ public:
 
 typedef ::std::vector<ScDPSaveGroupDimension> ScDPSaveGroupDimensionVec;
 
-class ScDPSaveNumGroupDimension
+class SC_DLLPUBLIC ScDPSaveNumGroupDimension
 {
     String              aDimensionName;
     ScDPNumGroupInfo    aGroupInfo;
@@ -146,7 +147,7 @@ public:
 
 typedef ::std::vector<ScDPSaveNumGroupDimension> ScDPSaveNumGroupDimensionVec;
 
-class ScDPDimensionSaveData
+class SC_DLLPUBLIC ScDPDimensionSaveData
 {
     ScDPSaveGroupDimensionVec    aGroupDimensions;
     ScDPSaveNumGroupDimensionVec aNumGroupDimensions;

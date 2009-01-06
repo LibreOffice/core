@@ -33,6 +33,7 @@
 #include <tools/datetime.hxx>
 #include <tools/string.hxx>
 #include "rangelst.hxx"
+#include "scdllapi.h"
 
 enum ScChgsDateMode{    SCDM_DATE_BEFORE=0,SCDM_DATE_SINCE=1,SCDM_DATE_EQUAL=2,
                         SCDM_DATE_NOTEQUAL=3,SCDM_DATE_BETWEEN=4, SCDM_DATE_SAVE=5,
@@ -44,7 +45,7 @@ namespace utl {
 
 class ScDocument;
 
-class ScChangeViewSettings
+class SC_DLLPUBLIC ScChangeViewSettings
 {
 private:
 

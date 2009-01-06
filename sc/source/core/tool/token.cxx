@@ -162,7 +162,7 @@ void ScRawToken::SetString( const sal_Unicode* pStr )
     nRefCnt = 0;
 }
 
-void ScRawToken::SetSingleReference( const SingleRefData& rRef )
+void ScRawToken::SetSingleReference( const ScSingleRefData& rRef )
 {
     eOp       = ocPush;
     eType     = svSingleRef;
@@ -171,7 +171,7 @@ void ScRawToken::SetSingleReference( const SingleRefData& rRef )
     nRefCnt   = 0;
 }
 
-void ScRawToken::SetDoubleReference( const ComplRefData& rRef )
+void ScRawToken::SetDoubleReference( const ScComplexRefData& rRef )
 {
     eOp   = ocPush;
     eType = svDoubleRef;
@@ -195,7 +195,7 @@ void ScRawToken::SetName( USHORT n )
     nRefCnt = 0;
 }
 
-void ScRawToken::SetExternalSingleRef( sal_uInt16 nFileId, const String& rTabName, const SingleRefData& rRef )
+void ScRawToken::SetExternalSingleRef( sal_uInt16 nFileId, const String& rTabName, const ScSingleRefData& rRef )
 {
     eOp = ocExternalRef;
     eType = svExternalSingleRef;
@@ -210,7 +210,7 @@ void ScRawToken::SetExternalSingleRef( sal_uInt16 nFileId, const String& rTabNam
     extref.cTabName[n] = 0;
 }
 
-void ScRawToken::SetExternalDoubleRef( sal_uInt16 nFileId, const String& rTabName, const ComplRefData& rRef )
+void ScRawToken::SetExternalDoubleRef( sal_uInt16 nFileId, const String& rTabName, const ScComplexRefData& rRef )
 {
     eOp = ocExternalRef;
     eType = svExternalDoubleRef;
@@ -253,13 +253,13 @@ void ScRawToken::SetExternalName( sal_uInt16 nFileId, const String& rName )
 //UNUSED2008-05      nRefCnt = 0;
 //UNUSED2008-05  }
 //UNUSED2008-05
-//UNUSED2008-05  ComplRefData& ScRawToken::GetReference()
+//UNUSED2008-05  ScComplexRefData& ScRawToken::GetReference()
 //UNUSED2008-05  {
 //UNUSED2008-05      DBG_ASSERT( lcl_IsReference( eOp, GetType() ), "GetReference: no Ref" );
 //UNUSED2008-05      return aRef;
 //UNUSED2008-05  }
 //UNUSED2008-05
-//UNUSED2008-05  void ScRawToken::SetReference( ComplRefData& rRef )
+//UNUSED2008-05  void ScRawToken::SetReference( ScComplexRefData& rRef )
 //UNUSED2008-05  {
 //UNUSED2008-05      DBG_ASSERT( lcl_IsReference( eOp, GetType() ), "SetReference: no Ref" );
 //UNUSED2008-05      aRef = rRef;
@@ -438,16 +438,16 @@ void ScRawToken::Delete()
 
 // --- class ScToken --------------------------------------------------------
 
-SingleRefData lcl_ScToken_InitSingleRef()
+ScSingleRefData lcl_ScToken_InitSingleRef()
 {
-    SingleRefData aRef;
+    ScSingleRefData aRef;
     aRef.InitAddress( ScAddress() );
     return aRef;
 }
 
-ComplRefData lcl_ScToken_InitDoubleRef()
+ScComplexRefData lcl_ScToken_InitDoubleRef()
 {
-    ComplRefData aRef;
+    ScComplexRefData aRef;
     aRef.Ref1 = lcl_ScToken_InitSingleRef();
     aRef.Ref2 = aRef.Ref1;
     return aRef;
@@ -615,7 +615,7 @@ BOOL ScToken::TextEqual( const ScToken& rToken ) const
         if ( eType != rToken.eType || GetOpCode() != rToken.GetOpCode() )
             return FALSE;
 
-        ComplRefData aTemp1;
+        ScComplexRefData aTemp1;
         if ( eType == svSingleRef )
         {
             aTemp1.Ref1 = GetSingleRef();
@@ -624,7 +624,7 @@ BOOL ScToken::TextEqual( const ScToken& rToken ) const
         else
             aTemp1 = GetDoubleRef();
 
-        ComplRefData aTemp2;
+        ScComplexRefData aTemp2;
         if ( rToken.eType == svSingleRef )
         {
             aTemp2.Ref1 = rToken.GetSingleRef();
@@ -721,6 +721,7 @@ ScTokenRef ScToken::ExtendRangeReference( ScToken & rTok1, ScToken & rTok2,
         // generating Sheet1.A1:A1, and then extending that with A2 as if
         // Sheet1.A1:A1:A2 was encountered, so the mechanisms to adjust the
         // references apply as well.
+<<<<<<< .working
 
         /* Given the current structure of external references an external
          * reference can only be extended if the second reference does not
@@ -737,11 +738,11 @@ ScTokenRef ScToken::ExtendRangeReference( ScToken & rTok1, ScToken & rTok2,
          * merged here. For Xcl syntax already parse an external range
          * reference entirely, cumbersome. */
 
-        const SingleRefData& rRef2 = p2->GetSingleRef();
+        const ScSingleRefData& rRef2 = p2->GetSingleRef();
         if (bExternal && rRef2.IsFlag3D())
             return NULL;
 
-        ComplRefData aRef;
+        ScComplexRefData aRef;
         aRef.Ref1 = aRef.Ref2 = p1->GetSingleRef();
         aRef.Ref2.SetFlag3D( false);
         aRef.Extend( rRef2, rPos);
@@ -780,7 +781,7 @@ ScTokenRef ScToken::ExtendRangeReference( ScToken & rTok1, ScToken & rTok2,
             return NULL;    // shouldn't happen..
         StackVar sv[2] = { sv1, sv2 };
         ScToken* pt[2] = { p1, p2 };
-        ComplRefData& rRef = xRes->GetDoubleRef();
+        ScComplexRefData& rRef = xRes->GetDoubleRef();
         for (size_t i=0; i<2; ++i)
         {
             switch (sv[i])
@@ -868,45 +869,45 @@ const String& ScToken::GetString() const
     return aDummyString;
 }
 
-const SingleRefData& ScToken::GetSingleRef() const
+const ScSingleRefData& ScToken::GetSingleRef() const
 {
     DBG_ERRORFILE( "ScToken::GetSingleRef: virtual dummy called" );
-    static SingleRefData aDummySingleRef = lcl_ScToken_InitSingleRef();
+    static ScSingleRefData aDummySingleRef = lcl_ScToken_InitSingleRef();
     return aDummySingleRef;
 }
 
-SingleRefData& ScToken::GetSingleRef()
+ScSingleRefData& ScToken::GetSingleRef()
 {
     DBG_ERRORFILE( "ScToken::GetSingleRef: virtual dummy called" );
-    static SingleRefData aDummySingleRef = lcl_ScToken_InitSingleRef();
+    static ScSingleRefData aDummySingleRef = lcl_ScToken_InitSingleRef();
     return aDummySingleRef;
 }
 
-const ComplRefData& ScToken::GetDoubleRef() const
+const ScComplexRefData& ScToken::GetDoubleRef() const
 {
     DBG_ERRORFILE( "ScToken::GetDoubleRef: virtual dummy called" );
-    static ComplRefData aDummyDoubleRef = lcl_ScToken_InitDoubleRef();
+    static ScComplexRefData aDummyDoubleRef = lcl_ScToken_InitDoubleRef();
     return aDummyDoubleRef;
 }
 
-ComplRefData& ScToken::GetDoubleRef()
+ScComplexRefData& ScToken::GetDoubleRef()
 {
     DBG_ERRORFILE( "ScToken::GetDoubleRef: virtual dummy called" );
-    static ComplRefData aDummyDoubleRef = lcl_ScToken_InitDoubleRef();
+    static ScComplexRefData aDummyDoubleRef = lcl_ScToken_InitDoubleRef();
     return aDummyDoubleRef;
 }
 
-const SingleRefData& ScToken::GetSingleRef2() const
+const ScSingleRefData& ScToken::GetSingleRef2() const
 {
     DBG_ERRORFILE( "ScToken::GetSingleRef2: virtual dummy called" );
-    static SingleRefData aDummySingleRef = lcl_ScToken_InitSingleRef();
+    static ScSingleRefData aDummySingleRef = lcl_ScToken_InitSingleRef();
     return aDummySingleRef;
 }
 
-SingleRefData& ScToken::GetSingleRef2()
+ScSingleRefData& ScToken::GetSingleRef2()
 {
     DBG_ERRORFILE( "ScToken::GetSingleRef2: virtual dummy called" );
-    static SingleRefData aDummySingleRef = lcl_ScToken_InitSingleRef();
+    static ScSingleRefData aDummySingleRef = lcl_ScToken_InitSingleRef();
     return aDummySingleRef;
 }
 
@@ -1038,8 +1039,8 @@ BOOL ScStringOpToken::operator==( const ScToken& r ) const
 }
 
 
-const SingleRefData&    ScSingleRefToken::GetSingleRef() const  { return aSingleRef; }
-SingleRefData&          ScSingleRefToken::GetSingleRef()        { return aSingleRef; }
+const ScSingleRefData&    ScSingleRefToken::GetSingleRef() const  { return aSingleRef; }
+ScSingleRefData&          ScSingleRefToken::GetSingleRef()        { return aSingleRef; }
 void                    ScSingleRefToken::CalcAbsIfRel( const ScAddress& rPos )
                             { aSingleRef.CalcAbsIfRel( rPos ); }
 void                    ScSingleRefToken::CalcRelFromAbs( const ScAddress& rPos )
@@ -1050,8 +1051,8 @@ BOOL ScSingleRefToken::operator==( const ScToken& r ) const
 }
 
 
-const SingleRefData&    ScSingleRefOpToken::GetSingleRef() const  { return aSingleRef; }
-SingleRefData&          ScSingleRefOpToken::GetSingleRef()        { return aSingleRef; }
+const ScSingleRefData&    ScSingleRefOpToken::GetSingleRef() const  { return aSingleRef; }
+ScSingleRefData&          ScSingleRefOpToken::GetSingleRef()        { return aSingleRef; }
 void                    ScSingleRefOpToken::CalcAbsIfRel( const ScAddress& rPos )
                             { aSingleRef.CalcAbsIfRel( rPos ); }
 void                    ScSingleRefOpToken::CalcRelFromAbs( const ScAddress& rPos )
@@ -1062,12 +1063,12 @@ BOOL ScSingleRefOpToken::operator==( const ScToken& r ) const
 }
 
 
-const SingleRefData&    ScDoubleRefToken::GetSingleRef() const  { return aDoubleRef.Ref1; }
-SingleRefData&          ScDoubleRefToken::GetSingleRef()        { return aDoubleRef.Ref1; }
-const ComplRefData&     ScDoubleRefToken::GetDoubleRef() const  { return aDoubleRef; }
-ComplRefData&           ScDoubleRefToken::GetDoubleRef()        { return aDoubleRef; }
-const SingleRefData&    ScDoubleRefToken::GetSingleRef2() const { return aDoubleRef.Ref2; }
-SingleRefData&          ScDoubleRefToken::GetSingleRef2()       { return aDoubleRef.Ref2; }
+const ScSingleRefData&    ScDoubleRefToken::GetSingleRef() const  { return aDoubleRef.Ref1; }
+ScSingleRefData&          ScDoubleRefToken::GetSingleRef()        { return aDoubleRef.Ref1; }
+const ScComplexRefData&     ScDoubleRefToken::GetDoubleRef() const  { return aDoubleRef; }
+ScComplexRefData&           ScDoubleRefToken::GetDoubleRef()        { return aDoubleRef; }
+const ScSingleRefData&    ScDoubleRefToken::GetSingleRef2() const { return aDoubleRef.Ref2; }
+ScSingleRefData&          ScDoubleRefToken::GetSingleRef2()       { return aDoubleRef.Ref2; }
 void                    ScDoubleRefToken::CalcAbsIfRel( const ScAddress& rPos )
                             { aDoubleRef.CalcAbsIfRel( rPos ); }
 void                    ScDoubleRefToken::CalcRelFromAbs( const ScAddress& rPos )
@@ -1078,12 +1079,12 @@ BOOL ScDoubleRefToken::operator==( const ScToken& r ) const
 }
 
 
-const SingleRefData&    ScDoubleRefOpToken::GetSingleRef() const  { return aDoubleRef.Ref1; }
-SingleRefData&          ScDoubleRefOpToken::GetSingleRef()        { return aDoubleRef.Ref1; }
-const ComplRefData&     ScDoubleRefOpToken::GetDoubleRef() const  { return aDoubleRef; }
-ComplRefData&           ScDoubleRefOpToken::GetDoubleRef()        { return aDoubleRef; }
-const SingleRefData&    ScDoubleRefOpToken::GetSingleRef2() const { return aDoubleRef.Ref2; }
-SingleRefData&          ScDoubleRefOpToken::GetSingleRef2()       { return aDoubleRef.Ref2; }
+const ScSingleRefData&    ScDoubleRefOpToken::GetSingleRef() const  { return aDoubleRef.Ref1; }
+ScSingleRefData&          ScDoubleRefOpToken::GetSingleRef()        { return aDoubleRef.Ref1; }
+const ScComplexRefData&     ScDoubleRefOpToken::GetDoubleRef() const  { return aDoubleRef; }
+ScComplexRefData&           ScDoubleRefOpToken::GetDoubleRef()        { return aDoubleRef; }
+const ScSingleRefData&    ScDoubleRefOpToken::GetSingleRef2() const { return aDoubleRef.Ref2; }
+ScSingleRefData&          ScDoubleRefOpToken::GetSingleRef2()       { return aDoubleRef.Ref2; }
 void                    ScDoubleRefOpToken::CalcAbsIfRel( const ScAddress& rPos )
                             { aDoubleRef.CalcAbsIfRel( rPos ); }
 void                    ScDoubleRefOpToken::CalcRelFromAbs( const ScAddress& rPos )
@@ -1129,7 +1130,7 @@ BOOL ScIndexToken::operator==( const ScToken& r ) const
 
 // ============================================================================
 
-ScExternalSingleRefToken::ScExternalSingleRefToken( sal_uInt16 nFileId, const String& rTabName, const SingleRefData& r ) :
+ScExternalSingleRefToken::ScExternalSingleRefToken( sal_uInt16 nFileId, const String& rTabName, const ScSingleRefData& r ) :
     ScOpToken(ocExternalRef, svExternalSingleRef),
     mnFileId(nFileId),
     maTabName(rTabName),
@@ -1159,12 +1160,12 @@ const String& ScExternalSingleRefToken::GetString() const
     return maTabName;
 }
 
-const SingleRefData& ScExternalSingleRefToken::GetSingleRef() const
+const ScSingleRefData& ScExternalSingleRefToken::GetSingleRef() const
 {
     return maSingleRef;
 }
 
-SingleRefData& ScExternalSingleRefToken::GetSingleRef()
+ScSingleRefData& ScExternalSingleRefToken::GetSingleRef()
 {
     return maSingleRef;
 }
@@ -1185,7 +1186,7 @@ BOOL ScExternalSingleRefToken::operator ==( const ScToken& r ) const
 
 // ============================================================================
 
-ScExternalDoubleRefToken::ScExternalDoubleRefToken( sal_uInt16 nFileId, const String& rTabName, const ComplRefData& r ) :
+ScExternalDoubleRefToken::ScExternalDoubleRefToken( sal_uInt16 nFileId, const String& rTabName, const ScComplexRefData& r ) :
     ScOpToken(ocExternalRef, svExternalDoubleRef),
     mnFileId(nFileId),
     maTabName(rTabName),
@@ -1215,32 +1216,32 @@ const String& ScExternalDoubleRefToken::GetString() const
     return maTabName;
 }
 
-const SingleRefData& ScExternalDoubleRefToken::GetSingleRef() const
+const ScSingleRefData& ScExternalDoubleRefToken::GetSingleRef() const
 {
     return maDoubleRef.Ref1;
 }
 
-SingleRefData& ScExternalDoubleRefToken::GetSingleRef()
+ScSingleRefData& ScExternalDoubleRefToken::GetSingleRef()
 {
     return maDoubleRef.Ref1;
 }
 
-const SingleRefData& ScExternalDoubleRefToken::GetSingleRef2() const
+const ScSingleRefData& ScExternalDoubleRefToken::GetSingleRef2() const
 {
     return maDoubleRef.Ref2;
 }
 
-SingleRefData& ScExternalDoubleRefToken::GetSingleRef2()
+ScSingleRefData& ScExternalDoubleRefToken::GetSingleRef2()
 {
     return maDoubleRef.Ref2;
 }
 
-const ComplRefData& ScExternalDoubleRefToken::GetDoubleRef() const
+const ScComplexRefData& ScExternalDoubleRefToken::GetDoubleRef() const
 {
     return maDoubleRef;
 }
 
-ComplRefData& ScExternalDoubleRefToken::GetDoubleRef()
+ScComplexRefData& ScExternalDoubleRefToken::GetDoubleRef()
 {
     return maDoubleRef;
 }
@@ -1714,15 +1715,15 @@ BOOL ScTokenArray::ImplGetReference( ScRange& rRange, BOOL bValidOnly ) const
         {
             if ( pToken->GetType() == svSingleRef )
             {
-                const SingleRefData& rRef = ((const ScSingleRefToken*)pToken)->GetSingleRef();
+                const ScSingleRefData& rRef = ((const ScSingleRefToken*)pToken)->GetSingleRef();
                 rRange.aStart = rRange.aEnd = ScAddress( rRef.nCol, rRef.nRow, rRef.nTab );
                 bIs = !bValidOnly || !rRef.IsDeleted();
             }
             else if ( pToken->GetType() == svDoubleRef )
             {
-                const ComplRefData& rCompl = ((const ScDoubleRefToken*)pToken)->GetDoubleRef();
-                const SingleRefData& rRef1 = rCompl.Ref1;
-                const SingleRefData& rRef2 = rCompl.Ref2;
+                const ScComplexRefData& rCompl = ((const ScDoubleRefToken*)pToken)->GetDoubleRef();
+                const ScSingleRefData& rRef1 = rCompl.Ref1;
+                const ScSingleRefData& rRef2 = rCompl.Ref2;
                 rRange.aStart = ScAddress( rRef1.nCol, rRef1.nRow, rRef1.nTab );
                 rRange.aEnd   = ScAddress( rRef2.nCol, rRef2.nRow, rRef2.nTab );
                 bIs = !bValidOnly || (!rRef1.IsDeleted() && !rRef2.IsDeleted());
@@ -2141,17 +2142,17 @@ ScToken* ScTokenArray::AddDouble( double fVal )
     return Add( new ScDoubleToken( fVal ) );
 }
 
-ScToken* ScTokenArray::AddSingleReference( const SingleRefData& rRef )
+ScToken* ScTokenArray::AddSingleReference( const ScSingleRefData& rRef )
 {
     return Add( new ScSingleRefToken( rRef ) );
 }
 
-ScToken* ScTokenArray::AddMatrixSingleReference( const SingleRefData& rRef )
+ScToken* ScTokenArray::AddMatrixSingleReference( const ScSingleRefData& rRef )
 {
     return Add( new ScSingleRefOpToken( ocMatRef, rRef ) );
 }
 
-ScToken* ScTokenArray::AddDoubleReference( const ComplRefData& rRef )
+ScToken* ScTokenArray::AddDoubleReference( const ScComplexRefData& rRef )
 {
     return Add( new ScDoubleRefToken( rRef ) );
 }
@@ -2182,17 +2183,17 @@ ScToken* ScTokenArray::AddExternalName( sal_uInt16 nFileId, const String& rName 
     return Add( new ScExternalNameToken(nFileId, rName) );
 }
 
-ScToken* ScTokenArray::AddExternalSingleReference( sal_uInt16 nFileId, const String& rTabName, const SingleRefData& rRef )
+ScToken* ScTokenArray::AddExternalSingleReference( sal_uInt16 nFileId, const String& rTabName, const ScSingleRefData& rRef )
 {
     return Add( new ScExternalSingleRefToken(nFileId, rTabName, rRef) );
 }
 
-ScToken* ScTokenArray::AddExternalDoubleReference( sal_uInt16 nFileId, const String& rTabName, const ComplRefData& rRef )
+ScToken* ScTokenArray::AddExternalDoubleReference( sal_uInt16 nFileId, const String& rTabName, const ScComplexRefData& rRef )
 {
     return Add( new ScExternalDoubleRefToken(nFileId, rTabName, rRef) );
 }
 
-ScToken* ScTokenArray::AddColRowName( const SingleRefData& rRef )
+ScToken* ScTokenArray::AddColRowName( const ScSingleRefData& rRef )
 {
     return Add( new ScSingleRefOpToken( ocColRowName, rRef ) );
 }
@@ -2260,7 +2261,7 @@ BOOL ScTokenArray::GetAdjacentExtendOfOuterFuncRefs( SCCOLROW& nExtend,
                     {
                         case svSingleRef :
                         {
-                            SingleRefData& rRef = p->GetSingleRef();
+                            ScSingleRefData& rRef = p->GetSingleRef();
                             rRef.CalcAbsIfRel( rPos );
                             switch ( eDir )
                             {
@@ -2303,7 +2304,7 @@ BOOL ScTokenArray::GetAdjacentExtendOfOuterFuncRefs( SCCOLROW& nExtend,
                         break;
                         case svDoubleRef :
                         {
-                            ComplRefData& rRef = p->GetDoubleRef();
+                            ScComplexRefData& rRef = p->GetDoubleRef();
                             rRef.CalcAbsIfRel( rPos );
                             switch ( eDir )
                             {
@@ -2455,7 +2456,7 @@ void ScTokenArray::ReadjustRelative3DReferences( const ScAddress& rOldPos,
         {
             case svDoubleRef :
             {
-                SingleRefData& rRef2 = pCode[j]->GetSingleRef2();
+                ScSingleRefData& rRef2 = pCode[j]->GetSingleRef2();
                 // Also adjust if the reference is of the form Sheet1.A2:A3
                 if ( rRef2.IsFlag3D() || pCode[j]->GetSingleRef().IsFlag3D() )
                 {
@@ -2466,7 +2467,7 @@ void ScTokenArray::ReadjustRelative3DReferences( const ScAddress& rOldPos,
             //! fallthru
             case svSingleRef :
             {
-                SingleRefData& rRef1 = pCode[j]->GetSingleRef();
+                ScSingleRefData& rRef1 = pCode[j]->GetSingleRef();
                 if ( rRef1.IsFlag3D() )
                 {
                     rRef1.CalcAbsIfRel( rOldPos );

@@ -62,7 +62,7 @@ public:
                                     const ScRangeListRef& rRangeListRef );
                     ScChartListener( const ScChartListener& );
     virtual         ~ScChartListener();
-    virtual DataObject* Clone() const;
+    virtual ScDataObject*   Clone() const;
 
     void            SetUno( const com::sun::star::uno::Reference< com::sun::star::chart::XChartDataChangeEventListener >& rListener,
                             const com::sun::star::uno::Reference< com::sun::star::chart::XChartData >& rSource );
@@ -97,7 +97,7 @@ public:
                         { return !operator==( r ); }
 };
 
-class ScChartListenerCollection : public StrCollection
+class ScChartListenerCollection : public ScStrCollection
 {
 private:
     Timer           aTimer;
@@ -108,12 +108,12 @@ private:
                     // not implemented
     ScChartListenerCollection& operator=( const ScChartListenerCollection& );
 
-    using StrCollection::operator==;
+    using ScStrCollection::operator==;
 
 public:
                     ScChartListenerCollection( ScDocument* pDoc );
                     ScChartListenerCollection( const ScChartListenerCollection& );
-    virtual DataObject* Clone() const;
+    virtual ScDataObject*   Clone() const;
 
     virtual         ~ScChartListenerCollection();
 

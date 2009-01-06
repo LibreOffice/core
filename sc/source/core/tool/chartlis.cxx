@@ -116,7 +116,7 @@ ScChartListener::~ScChartListener()
     delete pUnoData;
 }
 
-DataObject* ScChartListener::Clone() const
+ScDataObject* ScChartListener::Clone() const
 {
     return new ScChartListener( *this );
 }
@@ -269,7 +269,7 @@ BOOL ScChartListener::operator==( const ScChartListener& r )
 // === ScChartListenerCollection ======================================
 
 ScChartListenerCollection::ScChartListenerCollection( ScDocument* pDocP ) :
-    StrCollection( 4, 4, FALSE ),
+    ScStrCollection( 4, 4, FALSE ),
     pDoc( pDocP )
 {
     aTimer.SetTimeoutHdl( LINK( this, ScChartListenerCollection, TimerHdl ) );
@@ -277,7 +277,7 @@ ScChartListenerCollection::ScChartListenerCollection( ScDocument* pDocP ) :
 
 ScChartListenerCollection::ScChartListenerCollection(
         const ScChartListenerCollection& rColl ) :
-    StrCollection( rColl ),
+    ScStrCollection( rColl ),
     pDoc( rColl.pDoc )
 {
     aTimer.SetTimeoutHdl( LINK( this, ScChartListenerCollection, TimerHdl ) );
@@ -293,7 +293,7 @@ ScChartListenerCollection::~ScChartListenerCollection()
         FreeAll();
 }
 
-DataObject* ScChartListenerCollection::Clone() const
+ScDataObject*   ScChartListenerCollection::Clone() const
 {
     return new ScChartListenerCollection( *this );
 }
@@ -480,7 +480,7 @@ void ScChartListenerCollection::UpdateChartsContainingTab( SCTAB nTab )
 
 BOOL ScChartListenerCollection::operator==( const ScChartListenerCollection& r )
 {
-    // hier nicht StrCollection::operator==() verwenden, der umstaendlich via
+    // hier nicht ScStrCollection::operator==() verwenden, der umstaendlich via
     // IsEqual und Compare laeuft, stattdessen ScChartListener::operator==()
     if ( pDoc != r.pDoc || nCount != r.nCount )
         return FALSE;

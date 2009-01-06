@@ -702,7 +702,7 @@ void ScDBFunc::RecalcPivotTable()
         ErrorMessage(STR_PIVOT_NOTFOUND);
 }
 
-void ScDBFunc::GetSelectedMemberList( StrCollection& rEntries, long& rDimension )
+void ScDBFunc::GetSelectedMemberList( ScStrCollection& rEntries, long& rDimension )
 {
     ScDPObject* pDPObj = GetViewData()->GetDocument()->GetDPAtCursor( GetViewData()->GetCurX(),
                                         GetViewData()->GetCurY(), GetViewData()->GetTabNo() );
@@ -782,7 +782,7 @@ BOOL ScDBFunc::HasSelectionForDateGroup( ScDPNumGroupInfo& rOldInfo, sal_Int32& 
     ScDPObject* pDPObj = pDoc->GetDPAtCursor( nCurX, nCurY, nTab );
     if ( pDPObj )
     {
-        StrCollection aEntries;
+        ScStrCollection aEntries;
         long nSelectDimension = -1;
         GetSelectedMemberList( aEntries, nSelectDimension );
 
@@ -895,7 +895,7 @@ BOOL ScDBFunc::HasSelectionForNumGroup( ScDPNumGroupInfo& rOldInfo )
     ScDPObject* pDPObj = pDoc->GetDPAtCursor( nCurX, nCurY, nTab );
     if ( pDPObj )
     {
-        StrCollection aEntries;
+        ScStrCollection aEntries;
         long nSelectDimension = -1;
         GetSelectedMemberList( aEntries, nSelectDimension );
 
@@ -974,7 +974,7 @@ void ScDBFunc::DateGroupDataPilot( const ScDPNumGroupInfo& rInfo, sal_Int32 nPar
                                         GetViewData()->GetCurY(), GetViewData()->GetTabNo() );
     if ( pDPObj )
     {
-        StrCollection aEntries;
+        ScStrCollection aEntries;
         long nSelectDimension = -1;
         GetSelectedMemberList( aEntries, nSelectDimension );
 
@@ -1111,7 +1111,7 @@ void ScDBFunc::NumGroupDataPilot( const ScDPNumGroupInfo& rInfo )
                                         GetViewData()->GetCurY(), GetViewData()->GetTabNo() );
     if ( pDPObj )
     {
-        StrCollection aEntries;
+        ScStrCollection aEntries;
         long nSelectDimension = -1;
         GetSelectedMemberList( aEntries, nSelectDimension );
 
@@ -1155,7 +1155,7 @@ void ScDBFunc::GroupDataPilot()
                                         GetViewData()->GetCurY(), GetViewData()->GetTabNo() );
     if ( pDPObj )
     {
-        StrCollection aEntries;
+        ScStrCollection aEntries;
         long nSelectDimension = -1;
         GetSelectedMemberList( aEntries, nSelectDimension );
 
@@ -1299,7 +1299,7 @@ void ScDBFunc::UngroupDataPilot()
                                         GetViewData()->GetCurY(), GetViewData()->GetTabNo() );
     if ( pDPObj )
     {
-        StrCollection aEntries;
+        ScStrCollection aEntries;
         long nSelectDimension = -1;
         GetSelectedMemberList( aEntries, nSelectDimension );
 
@@ -1340,7 +1340,7 @@ void ScDBFunc::UngroupDataPilot()
                 {
                     // If all remaining groups in the dimension aren't shown, remove
                     // the dimension too, as if it was completely empty.
-                    StrCollection aVisibleEntries;
+                    ScStrCollection aVisibleEntries;
                     pDPObj->GetMemberResultNames( aVisibleEntries, nSelectDimension );
                     bEmptyDim = pGroupDim->HasOnlyHidden( aVisibleEntries );
                 }
@@ -1614,7 +1614,7 @@ BOOL ScDBFunc::HasSelectionForDrillDown( USHORT& rOrientation )
                                         GetViewData()->GetCurY(), GetViewData()->GetTabNo() );
     if ( pDPObj )
     {
-        StrCollection aEntries;
+        ScStrCollection aEntries;
         long nSelectDimension = -1;
         GetSelectedMemberList( aEntries, nSelectDimension );
 
@@ -1649,7 +1649,7 @@ void ScDBFunc::SetDataPilotDetails( BOOL bShow, const String* pNewDimensionName 
                                         GetViewData()->GetCurY(), GetViewData()->GetTabNo() );
     if ( pDPObj )
     {
-        StrCollection aEntries;
+        ScStrCollection aEntries;
         long nSelectDimension = -1;
         GetSelectedMemberList( aEntries, nSelectDimension );
 
@@ -1699,7 +1699,7 @@ void ScDBFunc::SetDataPilotDetails( BOOL bShow, const String* pNewDimensionName 
                     //  Hide details for all visible members (selected are changed below).
                     //! Use all members from source level instead (including non-visible)?
 
-                    StrCollection aVisibleEntries;
+                    ScStrCollection aVisibleEntries;
                     pDPObj->GetMemberResultNames( aVisibleEntries, nSelectDimension );
 
                     USHORT nVisCount = aVisibleEntries.GetCount();

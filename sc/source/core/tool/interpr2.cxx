@@ -1746,14 +1746,14 @@ void ScInterpreter::ScIntersect()
         {
             if (sv[i] == svSingleRef)
             {
-                ComplRefData aRef;
+                ScComplexRefData aRef;
                 aRef.Ref1 = aRef.Ref2 = xt[i]->GetSingleRef();
                 xt[i] = new ScRefListToken;
                 xt[i]->GetRefList()->push_back( aRef);
             }
             else if (sv[i] == svDoubleRef)
             {
-                ComplRefData aRef = xt[i]->GetDoubleRef();
+                ScComplexRefData aRef = xt[i]->GetDoubleRef();
                 xt[i] = new ScRefListToken;
                 xt[i]->GetRefList()->push_back( aRef);
             }
@@ -1769,13 +1769,13 @@ void ScInterpreter::ScIntersect()
         for (ScRefList::const_iterator it1( x1->GetRefList()->begin());
                 it1 != end1; ++it1)
         {
-            const SingleRefData& r11 = (*it1).Ref1;
-            const SingleRefData& r12 = (*it1).Ref2;
+            const ScSingleRefData& r11 = (*it1).Ref1;
+            const ScSingleRefData& r12 = (*it1).Ref2;
             for (ScRefList::const_iterator it2( x2->GetRefList()->begin());
                     it2 != end2; ++it2)
             {
-                const SingleRefData& r21 = (*it2).Ref1;
-                const SingleRefData& r22 = (*it2).Ref2;
+                const ScSingleRefData& r21 = (*it2).Ref1;
+                const ScSingleRefData& r22 = (*it2).Ref2;
                 SCCOL nCol1 = ::std::max( r11.nCol, r21.nCol);
                 SCROW nRow1 = ::std::max( r11.nRow, r21.nRow);
                 SCTAB nTab1 = ::std::max( r11.nTab, r21.nTab);
@@ -1786,7 +1786,7 @@ void ScInterpreter::ScIntersect()
                     ;   // nothing
                 else
                 {
-                    ComplRefData aRef;
+                    ScComplexRefData aRef;
                     aRef.InitRange( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
                     pRefList->push_back( aRef);
                 }
@@ -1797,7 +1797,7 @@ void ScInterpreter::ScIntersect()
             PushError( errNoRef);
         else if (n == 1)
         {
-            const ComplRefData& rRef = (*pRefList)[0];
+            const ScComplexRefData& rRef = (*pRefList)[0];
             if (rRef.Ref1 == rRef.Ref2)
                 PushTempToken( new ScSingleRefToken( rRef.Ref1));
             else
@@ -1821,14 +1821,14 @@ void ScInterpreter::ScIntersect()
                 case svDoubleRef:
                     pt[i]->CalcAbsIfRel( aPos);
                     {
-                        const SingleRefData& r = pt[i]->GetSingleRef();
+                        const ScSingleRefData& r = pt[i]->GetSingleRef();
                         nC1[i] = r.nCol;
                         nR1[i] = r.nRow;
                         nT1[i] = r.nTab;
                     }
                     if (sv[i] == svDoubleRef)
                     {
-                        const SingleRefData& r = pt[i]->GetSingleRef2();
+                        const ScSingleRefData& r = pt[i]->GetSingleRef2();
                         nC2[i] = r.nCol;
                         nR2[i] = r.nRow;
                         nT2[i] = r.nTab;
@@ -1920,7 +1920,7 @@ void ScInterpreter::ScUnionFunc()
         {
             case svSingleRef:
                 {
-                    ComplRefData aRef;
+                    ScComplexRefData aRef;
                     aRef.Ref1 = aRef.Ref2 = pt[i]->GetSingleRef();
                     pRes->push_back( aRef);
                 }

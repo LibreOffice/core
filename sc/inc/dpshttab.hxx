@@ -34,6 +34,7 @@
 #include "dptabdat.hxx"
 #include "global.hxx"
 #include "address.hxx"
+#include "scdllapi.h"
 
 #include <vector>
 
@@ -61,7 +62,7 @@ struct ScSheetSourceDesc
 
 class ScSheetDPData_Impl;
 
-class ScSheetDPData : public ScDPTableData
+class SC_DLLPUBLIC ScSheetDPData : public ScDPTableData
 {
 private:
     ScSheetDPData_Impl* pImpl;
@@ -71,7 +72,7 @@ public:
     virtual         ~ScSheetDPData();
 
     virtual long                    GetColumnCount();
-    virtual const TypedStrCollection&   GetColumnEntries(long nColumn);
+    virtual const TypedScStrCollection& GetColumnEntries(long nColumn);
     virtual String                  getDimensionName(long nColumn);
     virtual BOOL                    getIsDataLayoutDimension(long nColumn);
     virtual BOOL                    IsDateDimension(long nDim);

@@ -2052,7 +2052,7 @@ void ScXMLImport::SetConfigurationSettings(const uno::Sequence<beans::PropertyVa
                                 pDoc->GetChangeTrack()->SetProtection(aPass);
                             else
                             {
-                                StrCollection aUsers;
+                                ScStrCollection aUsers;
                                 ScChangeTrack* pTrack = new ScChangeTrack(pDoc, aUsers);
                                 pTrack->SetProtection(aPass);
                                 pDoc->SetChangeTrack(pTrack);
@@ -2181,11 +2181,11 @@ void ScXMLImport::SetType(uno::Reference <beans::XPropertySet>& rProperties,
         sal_Int32 nCurrentCellType(
             GetNumberFormatAttributesExportHelper()->GetCellType(
                 rNumberFormat, sCurrentCurrency, bIsStandard) & ~util::NumberFormat::DEFINED);
-        if ((nCellType != nCurrentCellType) && !(nCellType == util::NumberFormat::NUMBER &&
+        if ((nCellType != nCurrentCellType) && !((nCellType == util::NumberFormat::NUMBER &&
             ((nCurrentCellType == util::NumberFormat::SCIENTIFIC) ||
             (nCurrentCellType == util::NumberFormat::FRACTION) ||
             (nCurrentCellType == util::NumberFormat::LOGICAL) ||
-            (nCurrentCellType == 0)) || (nCurrentCellType == util::NumberFormat::TEXT)) && !((nCellType == util::NumberFormat::DATETIME) &&
+            (nCurrentCellType == 0))) || (nCurrentCellType == util::NumberFormat::TEXT)) && !((nCellType == util::NumberFormat::DATETIME) &&
             (nCurrentCellType == util::NumberFormat::DATE)))
         {
             if (!xNumberFormats.is())

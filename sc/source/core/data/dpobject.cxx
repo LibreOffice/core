@@ -169,7 +169,7 @@ ScDPObject::ScDPObject( ScDocument* pD ) :
 }
 
 ScDPObject::ScDPObject(const ScDPObject& r) :
-    DataObject(),
+    ScDataObject(),
     pDoc( r.pDoc ),
     pSaveData( NULL ),
     aTableName( r.aTableName ),
@@ -205,7 +205,7 @@ ScDPObject::~ScDPObject()
     delete pServDesc;
 }
 
-DataObject* ScDPObject::Clone() const
+ScDataObject* ScDPObject::Clone() const
 {
     return new ScDPObject(*this);
 }
@@ -768,7 +768,7 @@ long ScDPObject::GetDimCount()
     return nRet;
 }
 
-void ScDPObject::FillPageList( TypedStrCollection& rStrings, long nField )
+void ScDPObject::FillPageList( TypedScStrCollection& rStrings, long nField )
 {
     //! merge members access with ToggleDetails?
 
@@ -901,7 +901,7 @@ BOOL ScDPObject::GetHeaderDrag( const ScAddress& rPos, BOOL bMouseLeft, BOOL bMo
     return pOutput->GetHeaderDrag( rPos, bMouseLeft, bMouseTop, nDragDim, rPosRect, rOrient, rDimPos );
 }
 
-void ScDPObject::GetMemberResultNames( StrCollection& rNames, long nDimension )
+void ScDPObject::GetMemberResultNames( ScStrCollection& rNames, long nDimension )
 {
     CreateOutput();             // create xSource and pOutput if not already done
 
@@ -2331,7 +2331,7 @@ ScDPCollection::ScDPCollection(ScDocument* pDocument) :
 }
 
 ScDPCollection::ScDPCollection(const ScDPCollection& r) :
-    Collection(r),
+    ScCollection(r),
     pDoc(r.pDoc),
     maSharedString(r.maSharedString),
     maCacheCellPool(r.maCacheCellPool)
@@ -2343,7 +2343,7 @@ ScDPCollection::~ScDPCollection()
     clearCacheCellPool();
 }
 
-DataObject* ScDPCollection::Clone() const
+ScDataObject* ScDPCollection::Clone() const
 {
     return new ScDPCollection(*this);
 }

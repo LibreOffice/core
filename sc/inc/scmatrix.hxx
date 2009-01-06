@@ -35,6 +35,7 @@
 #include "intruref.hxx"
 #include "errorcodes.hxx"
 #include <tools/string.hxx>
+#include "scdllapi.h"
 
 class SvStream;
 class ScInterpreter;
@@ -87,7 +88,7 @@ union ScMatrixValue
     methods don't reset strings. As a consequence memory leaks may occur if
     used wrong.
  */
-class ScMatrix
+class SC_DLLPUBLIC ScMatrix
 {
     ScMatrixValue*  pMat;
     ScMatValType*   mnValType;

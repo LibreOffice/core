@@ -90,7 +90,7 @@ ScDBData::ScDBData( const String& rName,
 }
 
 ScDBData::ScDBData( const ScDBData& rData ) :
-    DataObject(),
+    ScDataObject(),
     ScRefreshTimer      ( rData ),
     aName               (rData.aName),
     nTable              (rData.nTable),
@@ -688,7 +688,7 @@ BOOL ScDBData::IsDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCR
                     && (nCol2 == nEndCol) && (nRow2 == nEndRow));
 }
 
-DataObject* ScDBData::Clone() const
+ScDataObject*   ScDBData::Clone() const
 {
     return new ScDBData(*this);
 }
@@ -697,7 +697,7 @@ DataObject* ScDBData::Clone() const
 //---------------------------------------------------------------------------------------
 //  Compare zum Sortieren
 
-short ScDBCollection::Compare(DataObject* pKey1, DataObject* pKey2) const
+short ScDBCollection::Compare(ScDataObject* pKey1, ScDataObject* pKey2) const
 {
     const String& rStr1 = ((ScDBData*)pKey1)->GetName();
     const String& rStr2 = ((ScDBData*)pKey2)->GetName();
@@ -706,7 +706,7 @@ short ScDBCollection::Compare(DataObject* pKey1, DataObject* pKey2) const
 
 //  IsEqual - alles gleich
 
-BOOL ScDBCollection::IsEqual(DataObject* pKey1, DataObject* pKey2) const
+BOOL ScDBCollection::IsEqual(ScDataObject* pKey1, ScDataObject* pKey2) const
 {
     return *(ScDBData*)pKey1 == *(ScDBData*)pKey2;
 }
@@ -870,12 +870,12 @@ ScDBData* ScDBCollection::FindIndex(USHORT nIndex)
     return NULL;
 }
 
-BOOL ScDBCollection::Insert(DataObject* pDataObject)
+BOOL ScDBCollection::Insert(ScDataObject* pScDataObject)
 {
-    ScDBData* pData = (ScDBData*) pDataObject;
+    ScDBData* pData = (ScDBData*) pScDataObject;
     if (!pData->GetIndex())     // schon gesetzt?
         pData->SetIndex(nEntryIndex++);
-    BOOL bInserted = SortedCollection::Insert(pDataObject);
+    BOOL bInserted = ScSortedCollection::Insert(pScDataObject);
     if ( bInserted && pData->HasImportParam() && !pData->HasImportSelection() )
     {
         pData->SetRefreshHandler( GetRefreshHandler() );

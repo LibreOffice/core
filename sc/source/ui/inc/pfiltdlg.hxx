@@ -61,7 +61,7 @@
 class ScViewData;
 class ScDocument;
 class ScQueryItem;
-class TypedStrCollection;
+class TypedScStrCollection;
 
 //==================================================================
 
@@ -126,7 +126,7 @@ private:
     ListBox*            aFieldLbArr[3];
     ListBox*            aCondLbArr[3];
 
-    TypedStrCollection* pEntryLists[MAXCOLCOUNT];
+    TypedScStrCollection*   pEntryLists[MAXCOLCOUNT];
 
 #ifdef _PFILTDLG_CXX
 private:

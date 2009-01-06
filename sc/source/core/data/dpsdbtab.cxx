@@ -240,7 +240,7 @@ void lcl_Reset( const uno::Reference<sdbc::XRowSet>& xRowSet )
     xRowSet->execute();     // restart
 }
 
-const TypedStrCollection& ScDatabaseDPData::GetColumnEntries(long nColumn)
+const TypedScStrCollection& ScDatabaseDPData::GetColumnEntries(long nColumn)
 {
     CreateCacheTable();
     return pImpl->aCacheTable.getFieldEntries(nColumn);

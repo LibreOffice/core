@@ -348,7 +348,7 @@ BOOL ScTablePage::FillItemSet( SfxItemSet& rCoreSet )
     BOOL bUseValue = aBtnPageNo.IsChecked();
 
     if (   WAS_DEFAULT(nWhichPageNo,rOldSet)
-        && (    !bUseValue && bUseValue == aBtnPageNo.GetSavedValue()
+        && (    (!bUseValue && bUseValue == aBtnPageNo.GetSavedValue())
             || (   bUseValue && bUseValue == aBtnPageNo.GetSavedValue()
                 && aEdPageNo.GetText() == aEdPageNo.GetSavedValue() ) ) )
     {

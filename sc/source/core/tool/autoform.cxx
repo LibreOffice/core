@@ -502,7 +502,7 @@ ScAutoFormatData::ScAutoFormatData()
 }
 
 ScAutoFormatData::ScAutoFormatData( const ScAutoFormatData& rData ) :
-        DataObject(),
+        ScDataObject(),
         aName( rData.aName ),
         nStrResId( rData.nStrResId ),
         bIncludeFont( rData.bIncludeFont ),
@@ -916,7 +916,7 @@ BOOL ScAutoFormatData::Save(SvStream& rStream)
 //---------------------------------------------------------------------------------------
 
 ScAutoFormat::ScAutoFormat(USHORT nLim, USHORT nDel, BOOL bDup):
-    SortedCollection        (nLim, nDel, bDup),
+    ScSortedCollection        (nLim, nDel, bDup),
     bSaveLater              (FALSE)
 {
     //  create default autoformat
@@ -1001,7 +1001,7 @@ ScAutoFormat::ScAutoFormat(USHORT nLim, USHORT nDel, BOOL bDup):
 }
 
 ScAutoFormat::ScAutoFormat(const ScAutoFormat& rAutoFormat) :
-    SortedCollection (rAutoFormat),
+    ScSortedCollection (rAutoFormat),
     bSaveLater       (FALSE)
 {}
 
@@ -1019,7 +1019,7 @@ void ScAutoFormat::SetSaveLater( BOOL bSet )
     bSaveLater = bSet;
 }
 
-short ScAutoFormat::Compare(DataObject* pKey1, DataObject* pKey2) const
+short ScAutoFormat::Compare(ScDataObject* pKey1, ScDataObject* pKey2) const
 {
     String aStr1;
     String aStr2;

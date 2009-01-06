@@ -35,6 +35,7 @@
 #include <hash_set>
 
 #include "dptabdat.hxx"
+#include "scdllapi.h"
 
 class ScDocument;
 class SvNumberFormatter;
@@ -74,7 +75,7 @@ public:
     sal_Int32   GetDatePart() const { return nDatePart; }
     const ScDPNumGroupInfo& GetNumInfo() const { return aNumInfo; }
 
-    void        FillColumnEntries( TypedStrCollection& rEntries, const TypedStrCollection& rOriginal,
+    void        FillColumnEntries( TypedScStrCollection& rEntries, const TypedScStrCollection& rOriginal,
                                     SvNumberFormatter* pFormatter ) const;
 };
 
@@ -109,7 +110,7 @@ class ScDPGroupDimension
     String                      aGroupName;
     ScDPDateGroupHelper*        pDateHelper;
     ScDPGroupItemVec            aItems;
-    mutable TypedStrCollection* pCollection;        // collection of item names (cached)
+    mutable TypedScStrCollection* pCollection;        // collection of item names (cached)
 
 public:
                 ScDPGroupDimension( long nSource, const String& rNewName );
@@ -125,7 +126,7 @@ public:
     long        GetGroupDim() const     { return nGroupDim; }
     const String& GetName() const       { return aGroupName; }
 
-    const TypedStrCollection& GetColumnEntries( const TypedStrCollection& rOriginal, ScDocument* pDoc ) const;
+    const TypedScStrCollection& GetColumnEntries( const TypedScStrCollection& rOriginal, ScDocument* pDoc ) const;
     const ScDPGroupItem* GetGroupForData( const ScDPItemData& rData ) const;  // rData = entry in original dim.
     const ScDPGroupItem* GetGroupForName( const ScDPItemData& rName ) const;  // rName = entry in group dim.
     const ScDPGroupItem* GetGroupByIndex( size_t nIndex ) const;
@@ -143,11 +144,11 @@ typedef ::std::vector<ScDPGroupDimension> ScDPGroupDimensionVec;
 
 // --------------------------------------------------------------------
 
-class ScDPNumGroupDimension
+class SC_DLLPUBLIC ScDPNumGroupDimension
 {
     ScDPNumGroupInfo            aGroupInfo;         // settings
     ScDPDateGroupHelper*        pDateHelper;
-    mutable TypedStrCollection* pCollection;        // collection of item names (cached)
+    mutable TypedScStrCollection* pCollection;        // collection of item names (cached)
     mutable bool                bHasNonInteger;     // initialized in GetNumEntries
     mutable sal_Unicode         cDecSeparator;      // initialized in GetNumEntries
 
@@ -159,7 +160,7 @@ public:
 
     ScDPNumGroupDimension&  operator=( const ScDPNumGroupDimension& rOther );
 
-    const TypedStrCollection& GetNumEntries( const TypedStrCollection& rOriginal, ScDocument* pDoc ) const;
+    const TypedScStrCollection& GetNumEntries( const TypedScStrCollection& rOriginal, ScDocument* pDoc ) const;
 
     const ScDPNumGroupInfo& GetInfo() const     { return aGroupInfo; }
     bool        HasNonInteger() const           { return bHasNonInteger; }
@@ -209,7 +210,7 @@ public:
     ScDocument* GetDocument()   { return pDoc; }
 
     virtual long                    GetColumnCount();
-    virtual const TypedStrCollection& GetColumnEntries(long nColumn);
+    virtual const TypedScStrCollection& GetColumnEntries(long nColumn);
     virtual String                  getDimensionName(long nColumn);
     virtual BOOL                    getIsDataLayoutDimension(long nColumn);
     virtual BOOL                    IsDateDimension(long nDim);

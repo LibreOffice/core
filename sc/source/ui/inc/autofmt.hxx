@@ -59,7 +59,7 @@ class ScAutoFormat;
 class ScAutoFormatData;
 class SvxBoxItem;
 class SvxLineItem;
-class AutoFmtPreview; // s.u.
+class ScAutoFmtPreview; // s.u.
 class SvNumberFormatter;
 class ScDocument;
 
@@ -84,7 +84,7 @@ enum AutoFmtLine { TOP_LINE, BOTTOM_LINE, LEFT_LINE, RIGHT_LINE };
 //CHINA001 private:
 //CHINA001 FixedLine       aFlFormat;
 //CHINA001 ListBox          aLbFormat;
-//CHINA001 AutoFmtPreview*  pWndPreview;
+//CHINA001 ScAutoFmtPreview*    pWndPreview;
 //CHINA001 OKButton     aBtnOk;
 //CHINA001 CancelButton aBtnCancel;
 //CHINA001 HelpButton       aBtnHelp;
@@ -128,11 +128,11 @@ enum AutoFmtLine { TOP_LINE, BOTTOM_LINE, LEFT_LINE, RIGHT_LINE };
 //CHINA001
 //========================================================================
 
-class SC_DLLPUBLIC AutoFmtPreview : public Window
+class SC_DLLPUBLIC ScAutoFmtPreview : public Window
 {
 public:
-            AutoFmtPreview( Window* pParent, const ResId& rRes, ScDocument* pDoc );
-            ~AutoFmtPreview();
+            ScAutoFmtPreview( Window* pParent, const ResId& rRes, ScDocument* pDoc );
+            ~ScAutoFmtPreview();
 
     void NotifyChange( ScAutoFormatData* pNewData );
 

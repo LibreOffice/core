@@ -33,6 +33,7 @@
 
 #include "globstr.hrc"
 #include "ftools.hxx"
+#include "scdllapi.h"
 
 class SfxObjectShell;
 class ScProgress;

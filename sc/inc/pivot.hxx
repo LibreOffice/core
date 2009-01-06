@@ -162,19 +162,19 @@ typedef PivotField          PivotFieldArr[PIVOT_MAXFIELD];
 typedef PivotField          PivotPageFieldArr[PIVOT_MAXPAGEFIELD];
 
 #if OLD_PIVOT_IMPLEMENTATION
-class PivotStrCollection : public StrCollection
+class PivotScStrCollection : public ScStrCollection
 {
     ScUserListData* pUserData;
 public:
-    PivotStrCollection(USHORT nLim = 4, USHORT nDel = 4, BOOL bDup = FALSE) :
-                        StrCollection   ( nLim, nDel, bDup ),
+    PivotScStrCollection(USHORT nLim = 4, USHORT nDel = 4, BOOL bDup = FALSE) :
+                        ScStrCollection ( nLim, nDel, bDup ),
                         pUserData       (NULL) { }
-    PivotStrCollection(const PivotStrCollection& rPivotStrCollection) :
-                        StrCollection   ( rPivotStrCollection ),
-                        pUserData       ( rPivotStrCollection.pUserData) {}
+    PivotScStrCollection(const PivotScStrCollection& rPivotScStrCollection) :
+                        ScStrCollection ( rPivotScStrCollection ),
+                        pUserData       ( rPivotScStrCollection.pUserData) {}
 
-    virtual DataObject* Clone() const;
-    virtual short       Compare(DataObject* pKey1, DataObject* pKey2) const;
+    virtual ScDataObject*   Clone() const;
+    virtual short       Compare(ScDataObject* pKey1, ScDataObject* pKey2) const;
 
     TypedStrData*       operator[]( const USHORT nIndex) const
                             { return (TypedStrData*)At(nIndex); }
@@ -185,7 +185,7 @@ public:
             USHORT      GetIndex(TypedStrData* pData) const;
 };
 
-class ScPivot : public DataObject
+class ScPivot : public ScDataObject
 {
     ScDocument*         pDoc;
     ScQueryParam        aQuery;
@@ -224,9 +224,9 @@ class ScPivot : public DataObject
     PivotFieldArr       aRowArr;
     PivotFieldArr       aDataArr;
 
-    PivotStrCollection* pColList[PIVOT_MAXFIELD];       // pro Zeile alle Eintraege
-    PivotStrCollection* pRowList[PIVOT_MAXFIELD];
-    PivotStrCollection* pDataList;                      // Shortcut auf Col/RowList mit Daten
+    PivotScStrCollection*   pColList[PIVOT_MAXFIELD];       // pro Zeile alle Eintraege
+    PivotScStrCollection*   pRowList[PIVOT_MAXFIELD];
+    PivotScStrCollection*   pDataList;                      // Shortcut auf Col/RowList mit Daten
 
     SubTotal**          ppDataArr;
     SCSIZE              nDataColCount;
@@ -246,7 +246,7 @@ public:
     ScPivot(const ScPivot& rPivot);
     ~ScPivot();
 
-    virtual DataObject* Clone() const;
+    virtual ScDataObject*   Clone() const;
 
     ScPivot*    CreateNew() const;
 
@@ -332,20 +332,20 @@ private:
 };
 
 //------------------------------------------------------------------------
-class ScPivotCollection : public Collection
+class ScPivotCollection : public ScCollection
 {
 
 private:
     ScDocument* pDoc;
 public:
     ScPivotCollection(USHORT nLim = 4, USHORT nDel = 4, ScDocument* pDocument = NULL) :
-                    Collection  ( nLim, nDel),
+                    ScCollection    ( nLim, nDel),
                     pDoc        ( pDocument ) {}
     ScPivotCollection(const ScPivotCollection& rScPivotCollection) :
-                    Collection  ( rScPivotCollection ),
+                    ScCollection    ( rScPivotCollection ),
                     pDoc        ( rScPivotCollection.pDoc ) {}
 
-    virtual DataObject* Clone() const;
+    virtual ScDataObject*   Clone() const;
             ScPivot*    operator[]( const USHORT nIndex) const {return (ScPivot*)At(nIndex);}
             ScPivot*    GetPivotAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab) const;
 

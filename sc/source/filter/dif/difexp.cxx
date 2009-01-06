@@ -47,8 +47,9 @@
 #include "global.hxx"
 #include "progress.hxx"
 #include <rtl/tencinfo.h>
+#include "ftools.hxx"
 
-FltError ScExportDif( SvStream& rStream, ScDocument* pDoc,
+FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rStream, ScDocument* pDoc,
     const ScAddress& rOutPos, const CharSet eNach, UINT32 nDifOption )
 {
     SCCOL       nEndCol;
@@ -63,7 +64,7 @@ FltError ScExportDif( SvStream& rStream, ScDocument* pDoc,
 }
 
 
-FltError ScExportDif( SvStream& rOut, ScDocument* pDoc,
+FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc,
     const ScRange&rRange, const CharSet eCharSet, UINT32 nDifOption )
 {
     DBG_ASSERT( rRange.aStart <= rRange.aEnd, "*ScExportDif(): Range unsortiert!" );

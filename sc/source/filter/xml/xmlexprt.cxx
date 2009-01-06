@@ -2996,8 +2996,8 @@ sal_Bool ScXMLExport::IsCellEqual (ScMyCell& aCell1, ScMyCell& aCell2)
         {
             if (!aCell1.bHasAnnotation || (aCell1.bHasAnnotation && sal_False/*IsAnnotationEqual(aCell1.xCell, aCell2.xCell)*/)) // no longer compareable
             {
-                if (((aCell1.nStyleIndex == aCell2.nStyleIndex) && (aCell1.bIsAutoStyle == aCell2.bIsAutoStyle) ||
-                    (aCell1.nStyleIndex == aCell2.nStyleIndex) && (aCell1.nStyleIndex == -1)) &&
+                if (((aCell1.nStyleIndex == aCell2.nStyleIndex) && ((aCell1.bIsAutoStyle == aCell2.bIsAutoStyle) ||
+                    (aCell1.nStyleIndex == aCell2.nStyleIndex)) && (aCell1.nStyleIndex == -1)) &&
                     (aCell1.nValidationIndex == aCell2.nValidationIndex) &&
                     IsCellTypeEqual(aCell1, aCell2))
                 {

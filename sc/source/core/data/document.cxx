@@ -3511,28 +3511,28 @@ void ScDocument::GetBorderLines( SCCOL nCol, SCROW nRow, SCTAB nTab,
     {
         const SvxBorderLine* pOther = ((const SvxBoxItem*)
                                 GetEffItem( nCol-1, nRow, nTab, ATTR_BORDER ))->GetRight();
-        if ( HasPriority( pOther, pLeftLine ) )
+        if ( ScHasPriority( pOther, pLeftLine ) )
             pLeftLine = pOther;
     }
     if ( nRow > 0 )
     {
         const SvxBorderLine* pOther = ((const SvxBoxItem*)
                                 GetEffItem( nCol, nRow-1, nTab, ATTR_BORDER ))->GetBottom();
-        if ( HasPriority( pOther, pTopLine ) )
+        if ( ScHasPriority( pOther, pTopLine ) )
             pTopLine = pOther;
     }
     if ( nCol < MAXCOL )
     {
         const SvxBorderLine* pOther = ((const SvxBoxItem*)
                                 GetEffItem( nCol+1, nRow, nTab, ATTR_BORDER ))->GetLeft();
-        if ( HasPriority( pOther, pRightLine ) )
+        if ( ScHasPriority( pOther, pRightLine ) )
             pRightLine = pOther;
     }
     if ( nRow < MAXROW )
     {
         const SvxBorderLine* pOther = ((const SvxBoxItem*)
                                 GetEffItem( nCol, nRow+1, nTab, ATTR_BORDER ))->GetTop();
-        if ( HasPriority( pOther, pBottomLine ) )
+        if ( ScHasPriority( pOther, pBottomLine ) )
             pBottomLine = pOther;
     }
 

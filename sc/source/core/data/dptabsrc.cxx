@@ -2200,7 +2200,7 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScDPLevel )
 
 // -----------------------------------------------------------------------
 
-USHORT lcl_GetFirstStringPos( const TypedStrCollection& rColl )
+USHORT lcl_GetFirstStringPos( const TypedScStrCollection& rColl )
 {
     USHORT nPos = 0;
     USHORT nCount = rColl.GetCount();
@@ -2230,7 +2230,7 @@ ScDPMembers::ScDPMembers( ScDPSource* pSrc, long nD, long nH, long nL ) :
             {
                 case SC_DAPI_LEVEL_YEAR:
                     {
-                        const TypedStrCollection& rStrings = pSource->GetData()->GetColumnEntries(nSrcDim);
+                        const TypedScStrCollection& rStrings = pSource->GetData()->GetColumnEntries(nSrcDim);
                         USHORT nFirstString = lcl_GetFirstStringPos( rStrings );
                         if ( nFirstString > 0 )
                         {
@@ -2274,7 +2274,7 @@ ScDPMembers::ScDPMembers( ScDPSource* pSrc, long nD, long nH, long nL ) :
     else
     {
         //  StringCollection is cached at TableData
-        const TypedStrCollection& rStrings = pSource->GetData()->GetColumnEntries(nSrcDim);
+        const TypedScStrCollection& rStrings = pSource->GetData()->GetColumnEntries(nSrcDim);
         nMbrCount = rStrings.GetCount();
     }
 }
@@ -2424,7 +2424,7 @@ ScDPMember* ScDPMembers::getByIndex(long nIndex) const
                 {
                     //! cache year range here!
 
-                    const TypedStrCollection& rStrings = pSource->GetData()->GetColumnEntries(nSrcDim);
+                    const TypedScStrCollection& rStrings = pSource->GetData()->GetColumnEntries(nSrcDim);
                     double fFirstVal = rStrings[0]->GetValue();
                     long nFirstYear = pSource->GetData()->GetDatePart(
                                         (long)::rtl::math::approxFloor( fFirstVal ),
@@ -2456,7 +2456,7 @@ ScDPMember* ScDPMembers::getByIndex(long nIndex) const
             }
             else
             {
-                const TypedStrCollection& rStrings = pSource->GetData()->GetColumnEntries(nSrcDim);
+                const TypedScStrCollection& rStrings = pSource->GetData()->GetColumnEntries(nSrcDim);
                 const TypedStrData* pData = rStrings[(USHORT)nIndex];
                 pNew = new ScDPMember( pSource, nDim, nHier, nLev,
                                         pData->GetString(), pData->GetValue(), !pData->IsStrData() );

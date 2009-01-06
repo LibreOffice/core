@@ -37,7 +37,7 @@
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase5.hxx>
-
+#include "scdllapi.h"
 
 namespace com { namespace sun { namespace star { namespace io {
     class XInputStream;

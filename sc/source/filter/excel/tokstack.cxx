@@ -100,7 +100,7 @@ TokenPool::TokenPool( void )
 
     // Sammelstellen fuer Referenzen
     nP_RefTr = 32;
-    ppP_RefTr = new SingleRefData *[ nP_RefTr ];
+    ppP_RefTr = new ScSingleRefData *[ nP_RefTr ];
     for( nLauf = 0 ; nLauf < nP_RefTr ; nLauf++ )
         ppP_RefTr[ nLauf ] = NULL;
 
@@ -228,7 +228,7 @@ void TokenPool::GrowTripel( void )
     UINT16          nP_RefTrNew = nP_RefTr * 2;
     UINT16          nL;
 
-    SingleRefData** ppP_RefTrNew = new SingleRefData *[ nP_RefTrNew ];
+    ScSingleRefData**   ppP_RefTrNew = new ScSingleRefData *[ nP_RefTrNew ];
 
     for( nL = 0 ; nL < nP_RefTr ; nL++ )
         ppP_RefTrNew[ nL ] = ppP_RefTr[ nL ];
@@ -359,10 +359,10 @@ void TokenPool::GetElement( const UINT16 nId )
                 break;
             case T_RefA:
                 {
-                ComplRefData    aComplRefData;
-                aComplRefData.Ref1 = *ppP_RefTr[ pElement[ nId ] ];
-                aComplRefData.Ref2 = *ppP_RefTr[ pElement[ nId ] + 1 ];
-                pScToken->AddDoubleReference( aComplRefData );
+                ScComplexRefData    aScComplexRefData;
+                aScComplexRefData.Ref1 = *ppP_RefTr[ pElement[ nId ] ];
+                aScComplexRefData.Ref2 = *ppP_RefTr[ pElement[ nId ] + 1 ];
+                pScToken->AddDoubleReference( aScComplexRefData );
                 }
                 break;
             case T_RN:
@@ -469,10 +469,10 @@ void TokenPool::GetElementRek( const UINT16 nId )
                     break;
                 case T_RefA:
                     {
-                    ComplRefData    aComplRefData;
-                    aComplRefData.Ref1 = *ppP_RefTr[ pElement[ *pAkt ] ];
-                    aComplRefData.Ref2 = *ppP_RefTr[ pElement[ *pAkt ] + 1 ];
-                    pScToken->AddDoubleReference( aComplRefData );
+                    ScComplexRefData    aScComplexRefData;
+                    aScComplexRefData.Ref1 = *ppP_RefTr[ pElement[ *pAkt ] ];
+                    aScComplexRefData.Ref2 = *ppP_RefTr[ pElement[ *pAkt ] + 1 ];
+                    pScToken->AddDoubleReference( aScComplexRefData );
                     }
                     break;
                 case T_RN:
@@ -654,7 +654,7 @@ const TokenId TokenPool::Store( const String& rString )
 }
 
 
-const TokenId TokenPool::Store( const SingleRefData& rTr )
+const TokenId TokenPool::Store( const ScSingleRefData& rTr )
 {
     if( nElementAkt >= nElement )
         GrowElement();
@@ -666,7 +666,7 @@ const TokenId TokenPool::Store( const SingleRefData& rTr )
     pType[ nElementAkt ] = T_RefC;          // Typinfo Cell-Reff eintragen
 
     if( !ppP_RefTr[ nP_RefTrAkt ] )
-        ppP_RefTr[ nP_RefTrAkt ] = new SingleRefData( rTr );
+        ppP_RefTr[ nP_RefTrAkt ] = new ScSingleRefData( rTr );
     else
         *ppP_RefTr[ nP_RefTrAkt ] = rTr;
 
@@ -677,7 +677,7 @@ const TokenId TokenPool::Store( const SingleRefData& rTr )
 }
 
 
-const TokenId TokenPool::Store( const ComplRefData& rTr )
+const TokenId TokenPool::Store( const ScComplexRefData& rTr )
 {
     if( nElementAkt >= nElement )
         GrowElement();
@@ -689,13 +689,13 @@ const TokenId TokenPool::Store( const ComplRefData& rTr )
     pType[ nElementAkt ] = T_RefA;          // Typinfo Area-Reff eintragen
 
     if( !ppP_RefTr[ nP_RefTrAkt ] )
-        ppP_RefTr[ nP_RefTrAkt ] = new SingleRefData( rTr.Ref1 );
+        ppP_RefTr[ nP_RefTrAkt ] = new ScSingleRefData( rTr.Ref1 );
     else
         *ppP_RefTr[ nP_RefTrAkt ] = rTr.Ref1;
     nP_RefTrAkt++;
 
     if( !ppP_RefTr[ nP_RefTrAkt ] )
-        ppP_RefTr[ nP_RefTrAkt ] = new SingleRefData( rTr.Ref2 );
+        ppP_RefTr[ nP_RefTrAkt ] = new ScSingleRefData( rTr.Ref2 );
     else
         *ppP_RefTr[ nP_RefTrAkt ] = rTr.Ref2;
     nP_RefTrAkt++;
@@ -732,7 +732,7 @@ const TokenId TokenPool::Store( const DefTokenId e, const String& r )
 }
 
 
-const TokenId TokenPool::StoreNlf( const SingleRefData& rTr )
+const TokenId TokenPool::StoreNlf( const ScSingleRefData& rTr )
 {
     if( nElementAkt >= nElement )
         GrowElement();

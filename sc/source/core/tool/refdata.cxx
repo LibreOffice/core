@@ -36,7 +36,7 @@
 #include "refdata.hxx"
 
 
-void SingleRefData::CalcRelFromAbs( const ScAddress& rPos )
+void ScSingleRefData::CalcRelFromAbs( const ScAddress& rPos )
 {
     nRelCol = nCol - rPos.Col();
     nRelRow = nRow - rPos.Row();
@@ -44,7 +44,7 @@ void SingleRefData::CalcRelFromAbs( const ScAddress& rPos )
 }
 
 
-void SingleRefData::SmartRelAbs( const ScAddress& rPos )
+void ScSingleRefData::SmartRelAbs( const ScAddress& rPos )
 {
     if ( Flags.bColRel )
         nCol = nRelCol + rPos.Col();
@@ -63,7 +63,7 @@ void SingleRefData::SmartRelAbs( const ScAddress& rPos )
 }
 
 
-void SingleRefData::CalcAbsIfRel( const ScAddress& rPos )
+void ScSingleRefData::CalcAbsIfRel( const ScAddress& rPos )
 {
     if ( Flags.bColRel )
     {
@@ -85,7 +85,7 @@ void SingleRefData::CalcAbsIfRel( const ScAddress& rPos )
     }
 }
 
-//UNUSED2008-05  void SingleRefData::OldBoolsToNewFlags( const OldSingleRefBools& rBools )
+//UNUSED2008-05  void ScSingleRefData::OldBoolsToNewFlags( const OldSingleRefBools& rBools )
 //UNUSED2008-05  {
 //UNUSED2008-05      switch ( rBools.bRelCol )
 //UNUSED2008-05      {
@@ -163,7 +163,7 @@ void SingleRefData::CalcAbsIfRel( const ScAddress& rPos )
 //UNUSED2008-05   Aber immer noch nCol > MAXCOL und gut sollte sein..
 //UNUSED2008-05   */
 //UNUSED2008-05
-//UNUSED2008-05  BYTE SingleRefData::CreateStoreByteFromFlags() const
+//UNUSED2008-05  BYTE ScSingleRefData::CreateStoreByteFromFlags() const
 //UNUSED2008-05  {
 //UNUSED2008-05      return (BYTE)(
 //UNUSED2008-05            ( (Flags.bRelName     & 0x01) << 7 )
@@ -178,7 +178,7 @@ void SingleRefData::CalcAbsIfRel( const ScAddress& rPos )
 //UNUSED2008-05  }
 //UNUSED2008-05
 //UNUSED2008-05
-//UNUSED2008-05  void SingleRefData::CreateFlagsFromLoadByte( BYTE n )
+//UNUSED2008-05  void ScSingleRefData::CreateFlagsFromLoadByte( BYTE n )
 //UNUSED2008-05  {
 //UNUSED2008-05      Flags.bColRel       = (n & 0x01 );
 //UNUSED2008-05      Flags.bColDeleted   = ( (n >> 1) & 0x01 );
@@ -191,7 +191,7 @@ void SingleRefData::CalcAbsIfRel( const ScAddress& rPos )
 //UNUSED2008-05  }
 
 
-BOOL SingleRefData::operator==( const SingleRefData& r ) const
+BOOL ScSingleRefData::operator==( const ScSingleRefData& r ) const
 {
     return bFlags == r.bFlags &&
         (Flags.bColRel ? nRelCol == r.nRelCol : nCol == r.nCol) &&
@@ -204,7 +204,7 @@ bool SingleRefData::operator!=( const SingleRefData& r ) const
     return !operator==(r);
 }
 
-static void lcl_putInOrder( SingleRefData & rRef1, SingleRefData & rRef2 )
+static void lcl_putInOrder( ScSingleRefData & rRef1, ScSingleRefData & rRef2 )
 {
     SCCOL nCol1, nCol2;
     SCROW nRow1, nRow2;
@@ -296,18 +296,18 @@ static void lcl_putInOrder( SingleRefData & rRef1, SingleRefData & rRef2 )
 }
 
 
-void ComplRefData::PutInOrder()
+void ScComplexRefData::PutInOrder()
 {
     lcl_putInOrder( Ref1, Ref2);
 }
 
 
-static void lcl_adjustInOrder( SingleRefData & rRef1, SingleRefData & rRef2, bool bFirstLeader )
+static void lcl_adjustInOrder( ScSingleRefData & rRef1, ScSingleRefData & rRef2, bool bFirstLeader )
 {
     // a1:a2:a3, bFirstLeader: rRef1==a1==r1, rRef2==a3==r2
     //                   else: rRef1==a3==r2, rRef2==a2==r1
-    SingleRefData& r1 = (bFirstLeader ? rRef1 : rRef2);
-    SingleRefData& r2 = (bFirstLeader ? rRef2 : rRef1);
+    ScSingleRefData& r1 = (bFirstLeader ? rRef1 : rRef2);
+    ScSingleRefData& r2 = (bFirstLeader ? rRef2 : rRef1);
     if (r1.Flags.bFlag3D && !r2.Flags.bFlag3D)
     {
         // [$]Sheet1.A5:A6 on Sheet2 do still refer only Sheet1.
@@ -319,10 +319,10 @@ static void lcl_adjustInOrder( SingleRefData & rRef1, SingleRefData & rRef2, boo
 }
 
 
-ComplRefData& ComplRefData::Extend( const SingleRefData & rRef, const ScAddress & rPos )
+ScComplexRefData& ScComplexRefData::Extend( const ScSingleRefData & rRef, const ScAddress & rPos )
 {
     CalcAbsIfRel( rPos);
-    SingleRefData aRef = rRef;
+    ScSingleRefData aRef = rRef;
     aRef.CalcAbsIfRel( rPos);
     bool bInherit3D = Ref1.IsFlag3D() && !Ref2.IsFlag3D();
     bool bInherit3Dtemp = bInherit3D && !rRef.IsFlag3D();
@@ -369,7 +369,7 @@ ComplRefData& ComplRefData::Extend( const SingleRefData & rRef, const ScAddress 
 }
 
 
-ComplRefData& ComplRefData::Extend( const ComplRefData & rRef, const ScAddress & rPos )
+ScComplexRefData& ScComplexRefData::Extend( const ScComplexRefData & rRef, const ScAddress & rPos )
 {
     return Extend( rRef.Ref1, rPos).Extend( rRef.Ref2, rPos);
 }

@@ -69,10 +69,10 @@ public:
 
     const String&           GetName() const { return aName; }
     BOOL                    HasIsVisible() const;
-    void                    SetIsVisible(BOOL bSet);
+    SC_DLLPUBLIC void                   SetIsVisible(BOOL bSet);
     BOOL                    GetIsVisible() const { return BOOL(nVisibleMode); }
     BOOL                    HasShowDetails() const;
-    void                    SetShowDetails(BOOL bSet);
+    SC_DLLPUBLIC void                   SetShowDetails(BOOL bSet);
     BOOL                    GetShowDetails() const { return BOOL(nShowDetailsMode); }
 
     void                    SetName( const String& rNew );  // used if the source member was renamed (groups)
@@ -127,39 +127,39 @@ public:
 
     void                    SetName( const String& rNew );  // used if the source dim was renamed (groups)
 
-    void                    SetOrientation(USHORT nNew);
+    SC_DLLPUBLIC void                   SetOrientation(USHORT nNew);
     void                    SetSubTotals(BOOL bSet);        // to be removed!
-    void                    SetSubTotals(long nCount, const USHORT* pFuncs);
+    SC_DLLPUBLIC void                   SetSubTotals(long nCount, const USHORT* pFuncs);
     long                    GetSubTotalsCount() const { return nSubTotalCount; }
     USHORT                  GetSubTotalFunc(long nIndex) const { return pSubTotalFuncs[nIndex]; }
-    void                    SetShowEmpty(BOOL bSet);
+    SC_DLLPUBLIC void                   SetShowEmpty(BOOL bSet);
     BOOL                    GetShowEmpty() const { return BOOL(nShowEmptyMode); }
-    void                    SetFunction(USHORT nNew);       // enum GeneralFunction
+    SC_DLLPUBLIC void                   SetFunction(USHORT nNew);       // enum GeneralFunction
     USHORT                  GetFunction() const { return nFunction; }
     void                    SetUsedHierarchy(long nNew);
     long                    GetUsedHierarchy() const { return nUsedHierarchy; }
-    void                    SetLayoutName(const String* pName);
-    const String&           GetLayoutName() const;
-    BOOL                    HasLayoutName() const;
+    SC_DLLPUBLIC void                   SetLayoutName(const String* pName);
+    SC_DLLPUBLIC const String&          GetLayoutName() const;
+    SC_DLLPUBLIC BOOL                   HasLayoutName() const;
 
     const ::com::sun::star::sheet::DataPilotFieldReference* GetReferenceValue() const   { return pReferenceValue; }
-    void                    SetReferenceValue(const ::com::sun::star::sheet::DataPilotFieldReference* pNew);
+    SC_DLLPUBLIC void                   SetReferenceValue(const ::com::sun::star::sheet::DataPilotFieldReference* pNew);
 
     const ::com::sun::star::sheet::DataPilotFieldSortInfo* GetSortInfo() const          { return pSortInfo; }
-    void                    SetSortInfo(const ::com::sun::star::sheet::DataPilotFieldSortInfo* pNew);
+    SC_DLLPUBLIC void                    SetSortInfo(const ::com::sun::star::sheet::DataPilotFieldSortInfo* pNew);
     const ::com::sun::star::sheet::DataPilotFieldAutoShowInfo* GetAutoShowInfo() const  { return pAutoShowInfo; }
-    void                    SetAutoShowInfo(const ::com::sun::star::sheet::DataPilotFieldAutoShowInfo* pNew);
+    SC_DLLPUBLIC void                    SetAutoShowInfo(const ::com::sun::star::sheet::DataPilotFieldAutoShowInfo* pNew);
     const ::com::sun::star::sheet::DataPilotFieldLayoutInfo* GetLayoutInfo() const      { return pLayoutInfo; }
-    void                    SetLayoutInfo(const ::com::sun::star::sheet::DataPilotFieldLayoutInfo* pNew);
+    SC_DLLPUBLIC void                    SetLayoutInfo(const ::com::sun::star::sheet::DataPilotFieldLayoutInfo* pNew);
 
-    void                    SetCurrentPage( const String* pPage );      // NULL = no selection (all)
-    BOOL                    HasCurrentPage() const;
-    const String&           GetCurrentPage() const;
+    SC_DLLPUBLIC void                   SetCurrentPage( const String* pPage );      // NULL = no selection (all)
+    SC_DLLPUBLIC BOOL                   HasCurrentPage() const;
+    SC_DLLPUBLIC const String&          GetCurrentPage() const;
 
     USHORT                  GetOrientation() const  { return nOrientation; }
 
     ScDPSaveMember*         GetExistingMemberByName(const String& rName);
-    ScDPSaveMember*         GetMemberByName(const String& rName);
+    SC_DLLPUBLIC ScDPSaveMember*            GetMemberByName(const String& rName);
 
     void                    SetMemberPosition( const String& rName, sal_Int32 nNewPos );
 
@@ -181,9 +181,9 @@ private:
     BOOL        bDrillDown;         // not passed to DataPilotSource
 
 public:
-                            ScDPSaveData();
+    SC_DLLPUBLIC                        ScDPSaveData();
                             ScDPSaveData(const ScDPSaveData& r);
-                            ~ScDPSaveData();
+    SC_DLLPUBLIC                        ~ScDPSaveData();
 
     ScDPSaveData&           operator= ( const ScDPSaveData& r );
 
@@ -193,13 +193,13 @@ public:
     void                    AddDimension(ScDPSaveDimension* pDim) { aDimList.Insert(pDim, LIST_APPEND); }
 
     ScDPSaveDimension*      GetDimensionByName(const String& rName);
-    ScDPSaveDimension*      GetDataLayoutDimension();
+    SC_DLLPUBLIC ScDPSaveDimension*     GetDataLayoutDimension();
 
     ScDPSaveDimension*      DuplicateDimension(const String& rName);
-    ScDPSaveDimension&      DuplicateDimension(const ScDPSaveDimension& rDim);
+    SC_DLLPUBLIC ScDPSaveDimension&      DuplicateDimension(const ScDPSaveDimension& rDim);
 
     SC_DLLPUBLIC ScDPSaveDimension*     GetExistingDimensionByName(const String& rName);
-    ScDPSaveDimension*      GetNewDimensionByName(const String& rName);
+    SC_DLLPUBLIC ScDPSaveDimension*     GetNewDimensionByName(const String& rName);
 
     void                    RemoveDimensionByName(const String& rName);
 
@@ -208,18 +208,18 @@ public:
 
 
     void                    SetPosition( ScDPSaveDimension* pDim, long nNew );
-    void                    SetColumnGrand( BOOL bSet );
+    SC_DLLPUBLIC void                   SetColumnGrand( BOOL bSet );
     BOOL                    GetColumnGrand() const { return BOOL(nColumnGrandMode); }
-    void                    SetRowGrand( BOOL bSet );
+    SC_DLLPUBLIC void                   SetRowGrand( BOOL bSet );
     BOOL                    GetRowGrand() const { return BOOL(nRowGrandMode); }
     void                    SetIgnoreEmptyRows( BOOL bSet );
     BOOL                    GetIgnoreEmptyRows() const { return BOOL(nIgnoreEmptyMode); }
     void                    SetRepeatIfEmpty( BOOL bSet );
     BOOL                    GetRepeatIfEmpty() const { return BOOL(nRepeatEmptyMode); }
 
-    void                    SetFilterButton( BOOL bSet );
+    SC_DLLPUBLIC void                    SetFilterButton( BOOL bSet );
     BOOL                    GetFilterButton() const { return bFilterButton; }
-    void                    SetDrillDown( BOOL bSet );
+    SC_DLLPUBLIC void                    SetDrillDown( BOOL bSet );
     BOOL                    GetDrillDown() const { return bDrillDown; }
 
     void                    WriteToSource( const com::sun::star::uno::Reference<
@@ -228,7 +228,7 @@ public:
     BOOL                    IsEmpty() const;
 
     const ScDPDimensionSaveData* GetExistingDimensionData() const   { return pDimensionData; }
-    ScDPDimensionSaveData*  GetDimensionData();     // create if not there
+    SC_DLLPUBLIC ScDPDimensionSaveData*  GetDimensionData();     // create if not there
     void                    SetDimensionData( const ScDPDimensionSaveData* pNew );      // copied
 };
 

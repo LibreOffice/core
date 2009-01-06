@@ -56,7 +56,7 @@ protected:
     // ---------------------------------------------------------------
     void                DoMulArgs( DefTokenId eId, sal_uInt8 nNumArgs, sal_uInt8 mnMinParamCount = 0 );
 
-    void                ExcRelToScRel( UINT16 nRow, UINT8 nCol, SingleRefData&, const BOOL bName );
+    void                ExcRelToScRel( UINT16 nRow, UINT8 nCol, ScSingleRefData&, const BOOL bName );
 
 public:
                         ExcelToSc( const XclImpRoot& rRoot );
@@ -84,8 +84,8 @@ public:
     static inline BOOL  IsComplColRange( const UINT16 nCol1, const UINT16 nCol2 );
     static inline BOOL  IsComplRowRange( const UINT16 nRow1, const UINT16 nRow2 );
 
-    void                SetComplCol( ComplRefData& );
-    void                SetComplRow( ComplRefData& );
+    void                SetComplCol( ScComplexRefData& );
+    void                SetComplRow( ScComplexRefData& );
 
     void                ReadExtensions( const ExtensionTypeVec& rExtensions,
                                         XclImpStream& aIn );
@@ -127,7 +127,7 @@ public:
 private:
     const XclImpLinkManager&    rLinkMan;
 
-    void                ExcRelToScRel8( UINT16 nRow, UINT16 nCol, SingleRefData&,
+    void                ExcRelToScRel8( UINT16 nRow, UINT16 nCol, ScSingleRefData&,
                             const BOOL bName );
 
     bool                GetExternalFileIdFromXti( UINT16 nIxti, sal_uInt16& rFileId ) const;

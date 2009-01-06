@@ -1264,7 +1264,7 @@ BOOL ScDocument::HasRowHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, 
 //  GetFilterEntries - Eintraege fuer AutoFilter-Listbox
 //
 
-BOOL ScDocument::GetFilterEntries( SCCOL nCol, SCROW nRow, SCTAB nTab, TypedStrCollection& rStrings, bool bFilter )
+BOOL ScDocument::GetFilterEntries( SCCOL nCol, SCROW nRow, SCTAB nTab, TypedScStrCollection& rStrings, bool bFilter )
 {
     if ( ValidTab(nTab) && pTab[nTab] && pDBCollection )
     {
@@ -1320,7 +1320,7 @@ BOOL ScDocument::GetFilterEntries( SCCOL nCol, SCROW nRow, SCTAB nTab, TypedStrC
 //
 
 BOOL ScDocument::GetFilterEntriesArea( SCCOL nCol, SCROW nStartRow, SCROW nEndRow,
-                                        SCTAB nTab, TypedStrCollection& rStrings )
+                                        SCTAB nTab, TypedScStrCollection& rStrings )
 {
     if ( ValidTab(nTab) && pTab[nTab] )
     {
@@ -1336,7 +1336,7 @@ BOOL ScDocument::GetFilterEntriesArea( SCCOL nCol, SCROW nStartRow, SCROW nEndRo
 //
 
 BOOL ScDocument::GetDataEntries( SCCOL nCol, SCROW nRow, SCTAB nTab,
-                                    TypedStrCollection& rStrings, BOOL bLimit )
+                                    TypedScStrCollection& rStrings, BOOL bLimit )
 {
     if( !bLimit )
     {
@@ -1367,7 +1367,7 @@ BOOL ScDocument::GetDataEntries( SCCOL nCol, SCROW nRow, SCTAB nTab,
 #define SC_STRTYPE_DBNAMES      3
 #define SC_STRTYPE_HEADERS      4
 
-BOOL ScDocument::GetFormulaEntries( TypedStrCollection& rStrings )
+BOOL ScDocument::GetFormulaEntries( TypedScStrCollection& rStrings )
 {
     USHORT i;
 

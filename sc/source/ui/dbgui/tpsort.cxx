@@ -441,7 +441,7 @@ void ScTabPageSortFields::FillFieldLists()
                     {
                         aFieldName  = aStrColumn;
                         aFieldName += ' ';
-                        aFieldName += ColToAlpha( col );
+                        aFieldName += ScColToAlpha( col );
                     }
                     nFieldArr[i] = col;
                     aLbSort1.InsertEntry( aFieldName, i );

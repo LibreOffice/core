@@ -30,7 +30,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
-#include "xeformula.hxx"
 
 #include <list>
 #include <map>
@@ -41,6 +40,7 @@
 #include "xehelper.hxx"
 #include "xelink.hxx"
 #include "xename.hxx"
+#include "xeformula.hxx"
 
 #include "document.hxx"
 #include "externalrefmgr.hxx"
@@ -346,13 +346,13 @@ private:
 
     // reference handling -----------------------------------------------------
 
-    SCTAB               GetScTab( const SingleRefData& rRefData ) const;
-    bool                IsRef2D( const SingleRefData& rRefData ) const;
-    bool                IsRef2D( const ComplRefData& rRefData ) const;
+    SCTAB               GetScTab( const ScSingleRefData& rRefData ) const;
+    bool                IsRef2D( const ScSingleRefData& rRefData ) const;
+    bool                IsRef2D( const ScComplexRefData& rRefData ) const;
 
-    void                ConvertRefData( SingleRefData& rRefData, XclAddress& rXclPos,
+    void                ConvertRefData( ScSingleRefData& rRefData, XclAddress& rXclPos,
                             bool bNatLangRef, bool bTruncMaxCol, bool bTruncMaxRow ) const;
-    void                ConvertRefData( ComplRefData& rRefData, XclRange& rXclRange,
+    void                ConvertRefData( ScComplexRefData& rRefData, XclRange& rXclRange,
                             bool bNatLangRef ) const;
 
     XclExpRefLogEntry*  GetNewRefLogEntry();
@@ -1790,13 +1790,13 @@ void XclExpFmlaCompImpl::AppendTrailingParam( XclExpFuncData& rFuncData )
 
 // ----------------------------------------------------------------------------
 
-SCTAB XclExpFmlaCompImpl::GetScTab( const SingleRefData& rRefData ) const
+SCTAB XclExpFmlaCompImpl::GetScTab( const ScSingleRefData& rRefData ) const
 {
     bool bInvTab = rRefData.IsTabDeleted() || (!mpScBasePos && rRefData.IsTabRel());
     return bInvTab ? SCTAB_INVALID : static_cast< SCTAB >( rRefData.nTab );
 }
 
-bool XclExpFmlaCompImpl::IsRef2D( const SingleRefData& rRefData ) const
+bool XclExpFmlaCompImpl::IsRef2D( const ScSingleRefData& rRefData ) const
 {
     /*  rRefData.IsFlag3D() determines if sheet name is always visible, even on the
         own sheet. If 3D references are allowed, the passed reference does not count
@@ -1806,13 +1806,13 @@ bool XclExpFmlaCompImpl::IsRef2D( const SingleRefData& rRefData ) const
         (rRefData.IsTabRel() ? (rRefData.nRelTab == 0) : (static_cast< SCTAB >( rRefData.nTab ) == GetCurrScTab()));
 }
 
-bool XclExpFmlaCompImpl::IsRef2D( const ComplRefData& rRefData ) const
+bool XclExpFmlaCompImpl::IsRef2D( const ScComplexRefData& rRefData ) const
 {
     return IsRef2D( rRefData.Ref1 ) && IsRef2D( rRefData.Ref2 );
 }
 
 void XclExpFmlaCompImpl::ConvertRefData(
-    SingleRefData& rRefData, XclAddress& rXclPos,
+    ScSingleRefData& rRefData, XclAddress& rXclPos,
     bool bNatLangRef, bool bTruncMaxCol, bool bTruncMaxRow ) const
 {
     if( mpScBasePos )
@@ -1865,7 +1865,7 @@ void XclExpFmlaCompImpl::ConvertRefData(
 }
 
 void XclExpFmlaCompImpl::ConvertRefData(
-        ComplRefData& rRefData, XclRange& rXclRange, bool bNatLangRef ) const
+        ScComplexRefData& rRefData, XclRange& rXclRange, bool bNatLangRef ) const
 {
     // convert start and end of the range
     ConvertRefData( rRefData.Ref1, rXclRange.maFirst, bNatLangRef, false, false );
@@ -1888,7 +1888,7 @@ void XclExpFmlaCompImpl::ProcessCellRef( const XclExpTokenData& rTokData, sal_uI
 {
     // get the Excel address components, adjust internal data in aRefData
     bool bNatLangRef = (meBiff == EXC_BIFF8) && mpScBasePos && (rTokData.GetOpCode() == ocColRowName);
-    SingleRefData aRefData( rTokData.mpScToken->GetSingleRef() );
+    ScSingleRefData aRefData( rTokData.mpScToken->GetSingleRef() );
     XclAddress aXclPos( ScAddress::UNINITIALIZED );
     ConvertRefData( aRefData, aXclPos, bNatLangRef, false, false );
 
@@ -1945,7 +1945,7 @@ void XclExpFmlaCompImpl::ProcessCellRef( const XclExpTokenData& rTokData, sal_uI
 void XclExpFmlaCompImpl::ProcessRangeRef( const XclExpTokenData& rTokData, sal_uInt8 nExpClass )
 {
     // get the Excel address components, adjust internal data in aRefData
-    ComplRefData aRefData( rTokData.mpScToken->GetDoubleRef() );
+    ScComplexRefData aRefData( rTokData.mpScToken->GetDoubleRef() );
     XclRange aXclRange( ScAddress::UNINITIALIZED );
     ConvertRefData( aRefData, aXclRange, false );
 
@@ -2384,7 +2384,7 @@ void XclExpFmlaCompImpl::RemoveTrailingParen()
 
 namespace {
 
-void lclInitOwnTab( SingleRefData& rRef, const ScAddress& rScPos, SCTAB nCurrScTab, bool b3DRefOnly )
+void lclInitOwnTab( ScSingleRefData& rRef, const ScAddress& rScPos, SCTAB nCurrScTab, bool b3DRefOnly )
 {
     if( b3DRefOnly )
     {
@@ -2400,7 +2400,7 @@ void lclInitOwnTab( SingleRefData& rRef, const ScAddress& rScPos, SCTAB nCurrScT
 
 void lclPutCellToTokenArray( ScTokenArray& rScTokArr, const ScAddress& rScPos, SCTAB nCurrScTab, bool b3DRefOnly )
 {
-    SingleRefData aRef;
+    ScSingleRefData aRef;
     aRef.InitAddress( rScPos );
     lclInitOwnTab( aRef, rScPos, nCurrScTab, b3DRefOnly );
     rScTokArr.AddSingleReference( aRef );
@@ -2414,7 +2414,7 @@ void lclPutRangeToTokenArray( ScTokenArray& rScTokArr, const ScRange& rScRange, 
     }
     else
     {
-        ComplRefData aRef;
+        ScComplexRefData aRef;
         aRef.InitRange( rScRange );
         lclInitOwnTab( aRef.Ref1, rScRange.aStart, nCurrScTab, b3DRefOnly );
         lclInitOwnTab( aRef.Ref2, rScRange.aEnd, nCurrScTab, b3DRefOnly );

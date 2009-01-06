@@ -542,7 +542,7 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
 
             SfxMedium aMed;
             aMed.GetItemSet()->Put( SfxUsrAnyItem( SID_INPUTSTREAM, uno::makeAny( xStm ) ) );
-            FltError eErr = ScImportExcel( aMed, pInsDoc, EIF_AUTO );
+            FltError eErr = ScFormatFilter::Get().ScImportExcel( aMed, pInsDoc, EIF_AUTO );
             if ( eErr == eERR_OK )
             {
                 ScRange aSource;

@@ -163,6 +163,7 @@ static const sal_Char __FAR_DATA pFilterExcel95[]   = "MS Excel 95";
 static const sal_Char __FAR_DATA pFilterEx95Temp[]  = "MS Excel 95 Vorlage/Template";
 static const sal_Char __FAR_DATA pFilterExcel97[]   = "MS Excel 97";
 static const sal_Char __FAR_DATA pFilterEx97Temp[]  = "MS Excel 97 Vorlage/Template";
+static const sal_Char __FAR_DATA pFilterEx07Xml[]   = "MS Excel 2007 XML";
 static const sal_Char __FAR_DATA pFilterDBase[]     = "dBase";
 static const sal_Char __FAR_DATA pFilterDif[]       = "DIF";
 static const sal_Char __FAR_DATA pFilterSylk[]      = "SYLK";
@@ -850,7 +851,7 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
             SvStream* pStream = rMedium.GetInStream();
             if (pStream)
             {
-                FltError eError = ScImportStarCalc10( *pStream, &aDocument );
+                FltError eError = ScFormatFilter::Get().ScImportStarCalc10( *pStream, &aDocument );
                 if (eError != eERR_OK)
                 {
                     if (!GetError())
@@ -879,7 +880,7 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
             }
 
             ScColumn::bDoubleAlloc = TRUE;
-            FltError eError = ScImportLotus123( rMedium, &aDocument,
+            FltError eError = ScFormatFilter::Get().ScImportLotus123( rMedium, &aDocument,
                                                 ScGlobal::GetCharsetValue(sItStr));
             ScColumn::bDoubleAlloc = FALSE;
             if (eError != eERR_OK)
@@ -912,7 +913,7 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
             MakeDrawLayer();                //! im Filter
             CalcOutputFactor();             // #93255# prepare update of row height
             ScColumn::bDoubleAlloc = TRUE;
-            FltError eError = ScImportExcel( rMedium, &aDocument, eFormat );
+            FltError eError = ScFormatFilter::Get().ScImportExcel( rMedium, &aDocument, eFormat );
             ScColumn::bDoubleAlloc = FALSE;
             aDocument.UpdateFontCharSet();
             if ( aDocument.IsChartListenerCollectionNeedsUpdate() )
@@ -1064,7 +1065,7 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
                     sItStr = ScGlobal::GetCharsetString( RTL_TEXTENCODING_MS_1252 );
                 }
 
-                eError = ScImportDif( *pStream, &aDocument, ScAddress(0,0,0),
+                eError = ScFormatFilter::Get().ScImportDif( *pStream, &aDocument, ScAddress(0,0,0),
                                     ScGlobal::GetCharsetValue(sItStr));
                 if (eError != eERR_OK)
                 {
@@ -1110,7 +1111,7 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
         else if (aFltName.EqualsAscii(pFilterQPro6))
         {
             ScColumn::bDoubleAlloc = TRUE;
-            FltError eError = ScImportQuattroPro( rMedium, &aDocument);
+            FltError eError = ScFormatFilter::Get().ScImportQuattroPro( rMedium, &aDocument);
             ScColumn::bDoubleAlloc = FALSE;
             if (eError != eERR_OK)
             {
@@ -1137,7 +1138,7 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
                 {
                     pInStream->Seek( 0 );
                     ScRange aRange;
-                    eError = ScImportRTF( *pInStream, rMedium.GetBaseURL(), &aDocument, aRange );
+                    eError = ScFormatFilter::Get().ScImportRTF( *pInStream, rMedium.GetBaseURL(), &aDocument, aRange );
                     if (eError != eERR_OK)
                     {
                         if (!GetError())
@@ -1175,7 +1176,7 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
                     ScRange aRange;
                     // HTML macht eigenes ColWidth/RowHeight
                     CalcOutputFactor();
-                    eError = ScImportHTML( *pInStream, rMedium.GetBaseURL(), &aDocument, aRange,
+                    eError = ScFormatFilter::Get().ScImportHTML( *pInStream, rMedium.GetBaseURL(), &aDocument, aRange,
                                             GetOutputFactor(), !bWebQuery );
                     if (eError != eERR_OK)
                     {
@@ -1797,7 +1798,7 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
         SvStream* pStream = rMed.GetOutStream();
         if (pStream)
         {
-            FltError eError = ScExportLotus123( *pStream, &aDocument, ExpWK1,
+            FltError eError = ScFormatFilter::Get().ScExportLotus123( *pStream, &aDocument, ExpWK1,
                                                 CHARSET_IBMPC_437 );
             bRet = eError == eERR_OK;
         }
@@ -1812,7 +1813,8 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
     }
     else if (aFltName.EqualsAscii(pFilterExcel5) || aFltName.EqualsAscii(pFilterExcel95) ||
              aFltName.EqualsAscii(pFilterExcel97) || aFltName.EqualsAscii(pFilterEx5Temp) ||
-             aFltName.EqualsAscii(pFilterEx95Temp) || aFltName.EqualsAscii(pFilterEx97Temp))
+             aFltName.EqualsAscii(pFilterEx95Temp) || aFltName.EqualsAscii(pFilterEx97Temp) ||
+             aFltName.EqualsAscii(pFilterEx07Xml))
     {
         WaitObject aWait( GetActiveDialogParent() );
 
@@ -1837,8 +1839,12 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
 
         if( bDoSave )
         {
-            bool bBiff8 = aFltName.EqualsAscii( pFilterExcel97 ) || aFltName.EqualsAscii( pFilterEx97Temp );
-            FltError eError = ScExportExcel5( rMed, &aDocument, bBiff8, RTL_TEXTENCODING_MS_1252 );
+            ExportFormatExcel eFormat = ExpBiff5;
+            if( aFltName.EqualsAscii( pFilterExcel97 ) || aFltName.EqualsAscii( pFilterEx97Temp ) )
+                eFormat = ExpBiff8;
+            if( aFltName.EqualsAscii( pFilterEx07Xml ) )
+                eFormat = Exp2007Xml;
+            FltError eError = ScFormatFilter::Get().ScExportExcel5( rMed, &aDocument, eFormat, RTL_TEXTENCODING_MS_1252 );
 
             if( eError && !GetError() )
                 SetError( eError );
@@ -1976,7 +1982,7 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
             }
 
             WaitObject aWait( GetActiveDialogParent() );
-            ScExportDif( *pStream, &aDocument, ScAddress(0,0,0),
+            ScFormatFilter::Get().ScExportDif( *pStream, &aDocument, ScAddress(0,0,0),
                 ScGlobal::GetCharsetValue(sItStr) );
             bRet = TRUE;
 

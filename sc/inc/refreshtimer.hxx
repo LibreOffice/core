@@ -33,9 +33,8 @@
 
 #include <tools/list.hxx>
 #include <vcl/timer.hxx>
-#ifndef _VOS_MUTEX_HXX
 #include <vos/mutex.hxx>
-#endif
+#include <scdllapi.h>
 
 #define SC_REFRESHTIMER_CONTROL_LIST 0
 #if SC_REFRESHTIMER_CONTROL_LIST
@@ -153,8 +152,8 @@ public:
             void                StopRefreshTimer()
                                     { Stop(); }
 
-    virtual void                SetRefreshDelay( ULONG nSeconds );
-    virtual void                Timeout();
+    SC_DLLPUBLIC virtual    void                SetRefreshDelay( ULONG nSeconds );
+    SC_DLLPUBLIC virtual    void                Timeout();
 };
 
 

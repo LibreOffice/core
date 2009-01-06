@@ -257,7 +257,7 @@ BOOL ScFormulaCell::GetMatrixOrigin( ScAddress& rPos ) const
             ScToken* t = pCode->GetNextReferenceRPN();
             if( t )
             {
-                SingleRefData& rRef = t->GetSingleRef();
+                ScSingleRefData& rRef = t->GetSingleRef();
                 rRef.CalcAbsIfRel( aPos );
                 if ( rRef.Valid() )
                 {
@@ -600,7 +600,7 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
                 pCode->Reset();
                 while ( !bColRowNameCompile && (t = pCode->GetNextColRowName()) != NULL )
                 {
-                    SingleRefData& rRef = t->GetSingleRef();
+                    ScSingleRefData& rRef = t->GetSingleRef();
                     if ( nDy > 0 && rRef.IsColRel() )
                     {   // ColName
                         rRef.CalcAbsIfRel( aPos );
@@ -648,7 +648,7 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
                         bColRowNameCompile = TRUE;
                     while ( t && !bColRowNameCompile )
                     {
-                        SingleRefData& rRef = t->GetSingleRef();
+                        ScSingleRefData& rRef = t->GetSingleRef();
                         rRef.CalcAbsIfRel( aPos );
                         if ( rRef.Valid() )
                         {
@@ -878,12 +878,12 @@ void ScFormulaCell::UpdateInsertTabAbs(SCTAB nTable)
         ScToken* p = pCode->GetNextReferenceRPN();
         while( p )
         {
-            SingleRefData& rRef1 = p->GetSingleRef();
+            ScSingleRefData& rRef1 = p->GetSingleRef();
             if( !rRef1.IsTabRel() && (SCsTAB) nTable <= rRef1.nTab )
                 rRef1.nTab++;
             if( p->GetType() == svDoubleRef )
             {
-                SingleRefData& rRef2 = p->GetDoubleRef().Ref2;
+                ScSingleRefData& rRef2 = p->GetDoubleRef().Ref2;
                 if( !rRef2.IsTabRel() && (SCsTAB) nTable <= rRef2.nTab )
                     rRef2.nTab++;
             }
@@ -901,7 +901,7 @@ BOOL ScFormulaCell::TestTabRefAbs(SCTAB nTable)
         ScToken* p = pCode->GetNextReferenceRPN();
         while( p )
         {
-            SingleRefData& rRef1 = p->GetSingleRef();
+            ScSingleRefData& rRef1 = p->GetSingleRef();
             if( !rRef1.IsTabRel() )
             {
                 if( (SCsTAB) nTable != rRef1.nTab )
@@ -911,7 +911,7 @@ BOOL ScFormulaCell::TestTabRefAbs(SCTAB nTable)
             }
             if( p->GetType() == svDoubleRef )
             {
-                SingleRefData& rRef2 = p->GetDoubleRef().Ref2;
+                ScSingleRefData& rRef2 = p->GetDoubleRef().Ref2;
                 if( !rRef2.IsTabRel() )
                 {
                     if( (SCsTAB) nTable != rRef2.nTab )
@@ -944,11 +944,11 @@ void ScFormulaCell::TransposeReference()
     for( ScToken* t = pCode->GetNextReference(); t;
                   t = pCode->GetNextReference() )
     {
-        SingleRefData& rRef1 = t->GetSingleRef();
+        ScSingleRefData& rRef1 = t->GetSingleRef();
         if ( rRef1.IsColRel() && rRef1.IsRowRel() )
         {
             BOOL bDouble = (t->GetType() == svDoubleRef);
-            SingleRefData& rRef2 = (bDouble ? t->GetDoubleRef().Ref2 : rRef1);
+            ScSingleRefData& rRef2 = (bDouble ? t->GetDoubleRef().Ref2 : rRef1);
             if ( !bDouble || (rRef2.IsColRel() && rRef2.IsRowRel()) )
             {
                 INT16 nTemp;
@@ -1021,7 +1021,7 @@ void ScFormulaCell::UpdateTranspose( const ScRange& rSource, const ScAddress& rD
             BOOL bMod;
             {   // own scope for SingleDoubleRefModifier dtor if SingleRef
                 SingleDoubleRefModifier aMod( *t );
-                ComplRefData& rRef = aMod.Ref();
+                ScComplexRefData& rRef = aMod.Ref();
                 bMod = (ScRefUpdate::UpdateTranspose( pDocument, rSource,
                     rDest, rRef ) != UR_NOTHING || bPosChanged);
             }
@@ -1048,7 +1048,7 @@ void ScFormulaCell::UpdateTranspose( const ScRange& rSource, const ScAddress& rD
                 BOOL bMod;
                 {   // own scope for SingleDoubleRefModifier dtor if SingleRef
                     SingleDoubleRefModifier aMod( *t );
-                    ComplRefData& rRef = aMod.Ref();
+                    ScComplexRefData& rRef = aMod.Ref();
                     bMod = (ScRefUpdate::UpdateTranspose( pDocument, rSource,
                         rDest, rRef ) != UR_NOTHING || bPosChanged);
                 }
@@ -1106,7 +1106,7 @@ void ScFormulaCell::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY
             BOOL bMod;
             {   // own scope for SingleDoubleRefModifier dtor if SingleRef
                 SingleDoubleRefModifier aMod( *t );
-                ComplRefData& rRef = aMod.Ref();
+                ScComplexRefData& rRef = aMod.Ref();
                 bMod = (ScRefUpdate::UpdateGrow( rArea,nGrowX,nGrowY,
                     rRef ) != UR_NOTHING);
             }
@@ -1133,7 +1133,7 @@ void ScFormulaCell::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY
                 BOOL bMod;
                 {   // own scope for SingleDoubleRefModifier dtor if SingleRef
                     SingleDoubleRefModifier aMod( *t );
-                    ComplRefData& rRef = aMod.Ref();
+                    ScComplexRefData& rRef = aMod.Ref();
                     bMod = (ScRefUpdate::UpdateGrow( rArea,nGrowX,nGrowY,
                         rRef ) != UR_NOTHING);
                 }

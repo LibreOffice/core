@@ -48,6 +48,10 @@
 #include "xehelper.hxx"
 #include "xeescher.hxx"
 
+#include <oox/core/tokens.hxx>
+
+using ::rtl::OString;
+
 // Page settings records ======================================================
 
 // Header/footer --------------------------------------------------------------
@@ -56,6 +60,15 @@ XclExpHeaderFooter::XclExpHeaderFooter( sal_uInt16 nRecId, const String& rHdrStr
     XclExpRecord( nRecId ),
     maHdrString( rHdrString )
 {
+}
+
+void XclExpHeaderFooter::SaveXml( XclExpXmlStream& rStrm )
+{
+    sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
+    sal_Int32 nElement = GetRecId() == EXC_ID_HEADER ?  XML_oddHeader : XML_oddFooter;
+    rWorksheet->startElement( nElement, FSEND );
+    rWorksheet->writeEscaped( XclXmlUtils::ToOUString( maHdrString ) );
+    rWorksheet->endElement( nElement );
 }
 
 void XclExpHeaderFooter::WriteBody( XclExpStream& rStrm )
@@ -77,6 +90,29 @@ XclExpSetup::XclExpSetup( const XclPageData& rPageData ) :
     XclExpRecord( EXC_ID_SETUP, 34 ),
     mrData( rPageData )
 {
+}
+
+void XclExpSetup::SaveXml( XclExpXmlStream& rStrm )
+{
+    rStrm.GetCurrentStream()->singleElement( XML_pageSetup,
+            XML_paperSize,          OString::valueOf( (sal_Int32) mrData.mnPaperSize ).getStr(),
+            XML_scale,              OString::valueOf( (sal_Int32) mrData.mnScaling ).getStr(),
+            XML_firstPageNumber,    OString::valueOf( (sal_Int32) mrData.mnStartPage ).getStr(),
+            XML_fitToWidth,         OString::valueOf( (sal_Int32) mrData.mnFitToWidth ).getStr(),
+            XML_fitToHeight,        OString::valueOf( (sal_Int32) mrData.mnFitToHeight ).getStr(),
+            XML_pageOrder,          mrData.mbPrintInRows ? "overThenDown" : "downThenOver",
+            XML_orientation,        mrData.mbPortrait ? "portrait" : "landscape",   // OOXTODO: "default"?
+            XML_usePrinterDefaults, XclXmlUtils::ToPsz( !mrData.mbValid ),
+            XML_blackAndWhite,      XclXmlUtils::ToPsz( mrData.mbBlackWhite ),
+            XML_draft,              XclXmlUtils::ToPsz( mrData.mbDraftQuality ),
+            XML_cellComments,       mrData.mbPrintNotes ? "atEnd" : "none",         // OOXTODO: "asDisplayed"?
+            XML_useFirstPageNumber, XclXmlUtils::ToPsz( mrData.mbManualStart ),
+            // OOXTODO: XML_errors, // == displayed|blank|dash|NA
+            XML_horizontalDpi,      OString::valueOf( (sal_Int32) mrData.mnHorPrintRes ).getStr(),
+            XML_verticalDpi,        OString::valueOf( (sal_Int32) mrData.mnVerPrintRes ).getStr(),
+            XML_copies,             OString::valueOf( (sal_Int32) mrData.mnCopies ).getStr(),
+            // OOXTODO: devMode settings part RelationshipId: FSNS( XML_r, XML_id ),
+            FSEND );
 }
 
 void XclExpSetup::WriteBody( XclExpStream& rStrm )
@@ -137,6 +173,31 @@ void XclExpPageBreaks::WriteBody( XclExpStream& rStrm )
         if( bWriteRange )
             rStrm << sal_uInt16( 0 ) << mnMaxPos;
     }
+}
+
+void XclExpPageBreaks::SaveXml( XclExpXmlStream& rStrm )
+{
+    if( mrPageBreaks.empty() )
+        return;
+
+    sal_Int32 nElement = GetRecId() == EXC_ID_HORPAGEBREAKS ? XML_rowBreaks : XML_colBreaks;
+    sax_fastparser::FSHelperPtr& pWorksheet = rStrm.GetCurrentStream();
+    OString sNumPageBreaks = OString::valueOf( (sal_Int32) mrPageBreaks.size() );
+    pWorksheet->startElement( nElement,
+            XML_count,              sNumPageBreaks.getStr(),
+            XML_manualBreakCount,   sNumPageBreaks.getStr(),
+            FSEND );
+    for( ScfUInt16Vec::const_iterator aIt = mrPageBreaks.begin(), aEnd = mrPageBreaks.end(); aIt != aEnd; ++aIt )
+    {
+        pWorksheet->singleElement( XML_brk,
+                XML_id,     OString::valueOf( (sal_Int32) *aIt ).getStr(),
+                XML_man,    "true",
+                XML_max,    OString::valueOf( (sal_Int32) mnMaxPos ).getStr(),
+                XML_min,    "0",
+                // OOXTODO: XML_pt, "",
+                FSEND );
+    }
+    pWorksheet->endElement( nElement );
 }
 
 // Page settings ==============================================================
@@ -254,6 +315,19 @@ XclExpPageSettings::XclExpPageSettings( const XclExpRoot& rRoot ) :
             maData.maVerPageBreaks.push_back( static_cast< sal_uInt16 >( nScCol ) );
 }
 
+static void lcl_WriteHeaderFooter( XclExpXmlStream& rStrm )
+{
+    // OOXTODO: we currently only emit oddHeader/oddFooter elements, and
+    //          do not support the first/even/odd page distinction.
+    rStrm.WriteAttributes(
+            // OOXTODO: XML_alignWithMargins,
+            XML_differentFirst,     "false",    // OOXTODO
+            XML_differentOddEven,   "false",    // OOXTODO
+            // OOXTODO: XML_scaleWithDoc
+            FSEND );
+    rStrm.GetCurrentStream()->write( ">" );
+}
+
 void XclExpPageSettings::Save( XclExpStream& rStrm )
 {
     XclExpBoolRecord( EXC_ID_PRINTHEADERS, maData.mbPrintHeadings ).Save( rStrm );
@@ -274,6 +348,41 @@ void XclExpPageSettings::Save( XclExpStream& rStrm )
     if( (GetBiff() == EXC_BIFF8) && maData.mxBrushItem.get() )
         if( const Graphic* pGraphic = maData.mxBrushItem->GetGraphic() )
             XclExpImgData( *pGraphic, EXC_ID8_IMGDATA ).Save( rStrm );
+}
+
+void XclExpPageSettings::SaveXml( XclExpXmlStream& rStrm )
+{
+    XclExpXmlStartSingleElementRecord( XML_printOptions ).SaveXml( rStrm );
+    XclExpBoolRecord( EXC_ID_PRINTHEADERS, maData.mbPrintHeadings, XML_headings ).SaveXml( rStrm );
+    XclExpBoolRecord( EXC_ID_PRINTGRIDLINES, maData.mbPrintGrid, XML_gridLines ).SaveXml( rStrm );
+    XclExpBoolRecord( EXC_ID_GRIDSET, true, XML_gridLinesSet ).SaveXml( rStrm );
+    XclExpBoolRecord( EXC_ID_HCENTER, maData.mbHorCenter, XML_horizontalCentered ).SaveXml( rStrm );
+    XclExpBoolRecord( EXC_ID_VCENTER, maData.mbVerCenter, XML_verticalCentered ).SaveXml( rStrm );
+    XclExpXmlEndSingleElementRecord().SaveXml( rStrm );    // XML_printOptions
+
+    XclExpXmlStartSingleElementRecord( XML_pageMargins ).SaveXml( rStrm );
+    XclExpDoubleRecord( EXC_ID_LEFTMARGIN, maData.mfLeftMargin ).SetAttribute( XML_left )->SaveXml( rStrm );
+    XclExpDoubleRecord( EXC_ID_RIGHTMARGIN, maData.mfRightMargin ).SetAttribute( XML_right )->SaveXml( rStrm );
+    XclExpDoubleRecord( EXC_ID_TOPMARGIN, maData.mfTopMargin ).SetAttribute( XML_top )->SaveXml( rStrm );
+    XclExpDoubleRecord( EXC_ID_BOTTOMMARGIN, maData.mfBottomMargin ).SetAttribute( XML_bottom )->SaveXml( rStrm );
+    XclExpDoubleRecord( 0, maData.mfHeaderMargin).SetAttribute( XML_header )->SaveXml( rStrm );
+    XclExpDoubleRecord( 0, maData.mfFooterMargin).SetAttribute( XML_footer )->SaveXml( rStrm );
+    XclExpXmlEndSingleElementRecord().SaveXml( rStrm );    // XML_pageMargins
+
+    XclExpSetup( maData ).SaveXml( rStrm );
+
+    XclExpXmlStartElementRecord( XML_headerFooter, lcl_WriteHeaderFooter ).SaveXml( rStrm );
+    XclExpHeaderFooter( EXC_ID_HEADER, maData.maHeader ).SaveXml( rStrm );
+    XclExpHeaderFooter( EXC_ID_FOOTER, maData.maFooter ).SaveXml( rStrm );
+    XclExpXmlEndElementRecord( XML_headerFooter ).SaveXml( rStrm );
+
+    XclExpPageBreaks( EXC_ID_HORPAGEBREAKS, maData.maHorPageBreaks,
+                    static_cast< sal_uInt16 >( GetXclMaxPos().Col() ) ).SaveXml( rStrm );
+    XclExpPageBreaks( EXC_ID_VERPAGEBREAKS, maData.maVerPageBreaks,
+                    static_cast< sal_uInt16 >( GetXclMaxPos().Row() ) ).SaveXml( rStrm );
+
+    if( const Graphic* pGraphic = maData.mxBrushItem->GetGraphic() )
+        XclExpImgData( *pGraphic, EXC_ID8_IMGDATA ).SaveXml( rStrm );
 }
 
 // ----------------------------------------------------------------------------

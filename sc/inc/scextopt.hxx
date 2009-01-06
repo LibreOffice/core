@@ -96,7 +96,7 @@ struct ScExtDocOptionsImpl;
     (struct ScExtDocSettings), settings for all sheets in the document
     (struct ScExtTabSettings), and a list of codenames used for VBA import/export.
  */
-class ScExtDocOptions
+class SC_DLLPUBLIC ScExtDocOptions
 {
 public:
     explicit            ScExtDocOptions();

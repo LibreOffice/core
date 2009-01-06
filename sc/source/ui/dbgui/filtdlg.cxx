@@ -353,7 +353,7 @@ void ScFilterDlg::FillFieldLists()
             {
                 aFieldName  = aStrColumn;
                 aFieldName += ' ';
-                aFieldName += ColToAlpha( col );
+                aFieldName += ScColToAlpha( col );
             }
             aLbField1.InsertEntry( aFieldName, i );
             aLbField2.InsertEntry( aFieldName, i );
@@ -394,7 +394,7 @@ void ScFilterDlg::UpdateValueList( USHORT nList )
 
                 //  erstmal ohne die erste Zeile
 
-                pEntryLists[nColumn] = new TypedStrCollection( 128, 128 );
+                pEntryLists[nColumn] = new TypedScStrCollection( 128, 128 );
                 pEntryLists[nColumn]->SetCaseSensitive( aBtnCase.IsChecked() );
                 pDoc->GetFilterEntriesArea( nColumn, nFirstRow+1, nLastRow,
                                             nTab, *pEntryLists[nColumn] );
@@ -403,7 +403,7 @@ void ScFilterDlg::UpdateValueList( USHORT nList )
                 //! Eintrag (pHdrEntry) ohne Collection erzeugen?
 
                 nHeaderPos[nColumn] = USHRT_MAX;
-                TypedStrCollection aHdrColl( 1, 1 );
+                TypedScStrCollection aHdrColl( 1, 1 );
                 pDoc->GetFilterEntriesArea( nColumn, nFirstRow, nFirstRow,
                                             nTab, aHdrColl );
                 TypedStrData* pHdrEntry = aHdrColl[0];
@@ -421,7 +421,7 @@ void ScFilterDlg::UpdateValueList( USHORT nList )
                 }
             }
 
-            TypedStrCollection* pColl = pEntryLists[nColumn];
+            TypedScStrCollection* pColl = pEntryLists[nColumn];
             USHORT nValueCount = pColl->GetCount();
             if ( nValueCount > 0 )
             {

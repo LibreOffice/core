@@ -95,6 +95,7 @@
 #include <com/sun/star/sheet/XExternalSheetName.hpp>
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implbase3.hxx>
+#include "scdllapi.h"
 
 #ifndef __SGI_STL_VECTOR
 #include <vector>

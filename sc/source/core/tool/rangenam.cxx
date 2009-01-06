@@ -155,7 +155,7 @@ ScRangeData::ScRangeData( ScDocument* pDok,
                 nIndex      ( 0 ),
                 bModified   ( FALSE )
 {
-    SingleRefData aRefData;
+    ScSingleRefData aRefData;
     aRefData.InitAddress( rTarget );
     aRefData.SetFlag3D( TRUE );
     pCode->AddSingleReference( aRefData );
@@ -166,7 +166,7 @@ ScRangeData::ScRangeData( ScDocument* pDok,
 }
 
 ScRangeData::ScRangeData(const ScRangeData& rScRangeData) :
-    DataObject(),
+    ScDataObject(),
     aName   (rScRangeData.aName),
     aUpperName  (rScRangeData.aUpperName),
     pCode       (rScRangeData.pCode ? rScRangeData.pCode->Clone() : new ScTokenArray),      // echte Kopie erzeugen (nicht copy-ctor)
@@ -182,7 +182,7 @@ ScRangeData::~ScRangeData()
     delete pCode;
 }
 
-DataObject* ScRangeData::Clone() const
+ScDataObject* ScRangeData::Clone() const
 {
     return new ScRangeData(*this);
 }
@@ -202,7 +202,7 @@ void ScRangeData::GuessPosition()
     pCode->Reset();
     while ( ( t = pCode->GetNextReference() ) != NULL )
     {
-        SingleRefData& rRef1 = t->GetSingleRef();
+        ScSingleRefData& rRef1 = t->GetSingleRef();
         if ( rRef1.IsColRel() && rRef1.nRelCol < nMinCol )
             nMinCol = rRef1.nRelCol;
         if ( rRef1.IsRowRel() && rRef1.nRelRow < nMinRow )
@@ -212,7 +212,7 @@ void ScRangeData::GuessPosition()
 
         if ( t->GetType() == svDoubleRef )
         {
-            SingleRefData& rRef2 = t->GetDoubleRef().Ref2;
+            ScSingleRefData& rRef2 = t->GetDoubleRef().Ref2;
             if ( rRef2.IsColRel() && rRef2.nRelCol < nMinCol )
                 nMinCol = rRef2.nRelCol;
             if ( rRef2.IsRowRel() && rRef2.nRelRow < nMinRow )
@@ -294,7 +294,7 @@ void ScRangeData::UpdateTranspose( const ScRange& rSource, const ScAddress& rDes
         if( t->GetType() != svIndex )
         {
             SingleDoubleRefModifier aMod( *t );
-            ComplRefData& rRef = aMod.Ref();
+            ScComplexRefData& rRef = aMod.Ref();
             if (!rRef.Ref1.IsColRel() && !rRef.Ref1.IsRowRel() &&
                     (!rRef.Ref1.IsFlag3D() || !rRef.Ref1.IsTabRel()) &&
                 ( t->GetType() == svSingleRef ||
@@ -322,7 +322,7 @@ void ScRangeData::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY )
         if( t->GetType() != svIndex )
         {
             SingleDoubleRefModifier aMod( *t );
-            ComplRefData& rRef = aMod.Ref();
+            ScComplexRefData& rRef = aMod.Ref();
             if (!rRef.Ref1.IsColRel() && !rRef.Ref1.IsRowRel() &&
                     (!rRef.Ref1.IsFlag3D() || !rRef.Ref1.IsTabRel()) &&
                 ( t->GetType() == svSingleRef ||
@@ -548,14 +548,14 @@ void ScRangeData::TransferTabRef( SCTAB nOldTab, SCTAB nNewTab )
     pCode->Reset();
     while ( ( t = pCode->GetNextReference() ) != NULL )
     {
-        SingleRefData& rRef1 = t->GetSingleRef();
+        ScSingleRefData& rRef1 = t->GetSingleRef();
         if ( rRef1.IsTabRel() )
             rRef1.nTab = sal::static_int_cast<SCsTAB>( rRef1.nTab + nPosDiff );
         else
             rRef1.nTab = sal::static_int_cast<SCsTAB>( rRef1.nTab + nTabDiff );
         if ( t->GetType() == svDoubleRef )
         {
-            SingleRefData& rRef2 = t->GetDoubleRef().Ref2;
+            ScSingleRefData& rRef2 = t->GetDoubleRef().Ref2;
             if ( rRef2.IsTabRel() )
                 rRef2.nTab = sal::static_int_cast<SCsTAB>( rRef2.nTab + nPosDiff );
             else
@@ -605,7 +605,7 @@ void ScRangeData::ValidateTabRefs()
     pCode->Reset();
     while ( ( t = pCode->GetNextReference() ) != NULL )
     {
-        SingleRefData& rRef1 = t->GetSingleRef();
+        ScSingleRefData& rRef1 = t->GetSingleRef();
         if ( rRef1.IsTabRel() && !rRef1.IsTabDeleted() )
         {
             if ( rRef1.nTab < nMinTab )
@@ -615,7 +615,7 @@ void ScRangeData::ValidateTabRefs()
         }
         if ( t->GetType() == svDoubleRef )
         {
-            SingleRefData& rRef2 = t->GetDoubleRef().Ref2;
+            ScSingleRefData& rRef2 = t->GetDoubleRef().Ref2;
             if ( rRef2.IsTabRel() && !rRef2.IsTabDeleted() )
             {
                 if ( rRef2.nTab < nMinTab )
@@ -638,12 +638,12 @@ void ScRangeData::ValidateTabRefs()
         pCode->Reset();
         while ( ( t = pCode->GetNextReference() ) != NULL )
         {
-            SingleRefData& rRef1 = t->GetSingleRef();
+            ScSingleRefData& rRef1 = t->GetSingleRef();
             if ( rRef1.IsTabRel() && !rRef1.IsTabDeleted() )
                 rRef1.nTab = sal::static_int_cast<SCsTAB>( rRef1.nTab - nMove );
             if ( t->GetType() == svDoubleRef )
             {
-                SingleRefData& rRef2 = t->GetDoubleRef().Ref2;
+                ScSingleRefData& rRef2 = t->GetDoubleRef().Ref2;
                 if ( rRef2.IsTabRel() && !rRef2.IsTabDeleted() )
                     rRef2.nTab = sal::static_int_cast<SCsTAB>( rRef2.nTab - nMove );
             }
@@ -669,7 +669,7 @@ ScRangeData_QsortNameCompare( const void* p1, const void* p2 )
 //========================================================================
 
 ScRangeName::ScRangeName(const ScRangeName& rScRangeName, ScDocument* pDocument) :
-                SortedCollection ( rScRangeName ),
+                ScSortedCollection ( rScRangeName ),
                 pDoc ( pDocument ),
                 nSharedMaxIndex (rScRangeName.nSharedMaxIndex)
 {
@@ -680,7 +680,7 @@ ScRangeName::ScRangeName(const ScRangeName& rScRangeName, ScDocument* pDocument)
     }
 }
 
-short ScRangeName::Compare(DataObject* pKey1, DataObject* pKey2) const
+short ScRangeName::Compare(ScDataObject* pKey1, ScDataObject* pKey2) const
 {
     USHORT i1 = ((ScRangeData*)pKey1)->GetIndex();
     USHORT i2 = ((ScRangeData*)pKey2)->GetIndex();
@@ -733,19 +733,19 @@ void ScRangeName::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY )
         ((ScRangeData*)pItems[i])->UpdateGrow( rArea, nGrowX, nGrowY );
 }
 
-BOOL ScRangeName::IsEqual(DataObject* pKey1, DataObject* pKey2) const
+BOOL ScRangeName::IsEqual(ScDataObject* pKey1, ScDataObject* pKey2) const
 {
     return *(ScRangeData*)pKey1 == *(ScRangeData*)pKey2;
 }
 
-BOOL ScRangeName::Insert(DataObject* pDataObject)
+BOOL ScRangeName::Insert(ScDataObject* pScDataObject)
 {
-    if (!((ScRangeData*)pDataObject)->GetIndex())       // schon gesetzt?
+    if (!((ScRangeData*)pScDataObject)->GetIndex())     // schon gesetzt?
     {
-        ((ScRangeData*)pDataObject)->SetIndex( GetEntryIndex() );
+        ((ScRangeData*)pScDataObject)->SetIndex( GetEntryIndex() );
     }
 
-    return SortedCollection::Insert(pDataObject);
+    return ScSortedCollection::Insert(pScDataObject);
 }
 
 // Suche nach einem freien Index

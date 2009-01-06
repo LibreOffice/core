@@ -220,8 +220,8 @@ void ScBaseCell::StartListeningTo( ScDocument* pDoc )
                           t = pArr->GetNextReferenceRPN() )
             {
                 StackVar eType = t->GetType();
-                SingleRefData& rRef1 = t->GetSingleRef();
-                SingleRefData& rRef2 = (eType == svDoubleRef ?
+                ScSingleRefData& rRef1 = t->GetSingleRef();
+                ScSingleRefData& rRef2 = (eType == svDoubleRef ?
                     t->GetDoubleRef().Ref2 : rRef1);
                 switch( eType )
                 {
@@ -310,8 +310,8 @@ void ScBaseCell::EndListeningTo( ScDocument* pDoc, ScTokenArray* pArr,
                           t = pArr->GetNextReferenceRPN() )
             {
                 StackVar eType = t->GetType();
-                SingleRefData& rRef1 = t->GetSingleRef();
-                SingleRefData& rRef2 = (eType == svDoubleRef ?
+                ScSingleRefData& rRef1 = t->GetSingleRef();
+                ScSingleRefData& rRef2 = (eType == svDoubleRef ?
                     t->GetDoubleRef().Ref2 : rRef1);
                 switch( eType )
                 {
@@ -746,7 +746,7 @@ void ScFormulaCell::GetFormula( rtl::OUStringBuffer& rBuffer,
              * GetEnglishFormula() omitted that test.
              * Can we live without in all cases? */
             ScBaseCell* pCell;
-            SingleRefData& rRef = p->GetSingleRef();
+            ScSingleRefData& rRef = p->GetSingleRef();
             rRef.CalcAbsIfRel( aPos );
             if ( rRef.Valid() )
                 pCell = pDocument->GetCell( ScAddress( rRef.nCol,
@@ -1813,13 +1813,13 @@ ScDetectiveRefIter::ScDetectiveRefIter( ScFormulaCell* pCell )
 
 BOOL lcl_ScDetectiveRefIter_SkipRef( ScToken* p )
 {
-    SingleRefData& rRef1 = p->GetSingleRef();
+    ScSingleRefData& rRef1 = p->GetSingleRef();
     if ( rRef1.IsColDeleted() || rRef1.IsRowDeleted() || rRef1.IsTabDeleted()
             || !rRef1.Valid() )
         return TRUE;
     if ( p->GetType() == svDoubleRef )
     {
-        SingleRefData& rRef2 = p->GetDoubleRef().Ref2;
+        ScSingleRefData& rRef2 = p->GetDoubleRef().Ref2;
         if ( rRef2.IsColDeleted() || rRef2.IsRowDeleted() || rRef2.IsTabDeleted()
                 || !rRef2.Valid() )
             return TRUE;

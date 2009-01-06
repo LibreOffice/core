@@ -343,7 +343,8 @@ public:
 class ExcBundlesheet8 : public ExcBundlesheetBase
 {
 private:
-    XclExpString                aUnicodeName;
+    String                      sUnicodeName;
+    XclExpString                GetName() const;
 
     virtual void                SaveCont( XclExpStream& rStrm );
 
@@ -352,6 +353,8 @@ public:
                                 ExcBundlesheet8( const String& rString );
 
     virtual sal_Size            GetLen() const;
+
+    virtual void                SaveXml( XclExpXmlStream& rStrm );
 };
 
 
@@ -401,6 +404,8 @@ public:
 
     void                        WriteAddress( XclExpStream& rStrm );
     void                        WriteText( XclExpStream& rStrm );
+
+    void                        SaveXml( XclExpXmlStream& rStrm );
 };
 
 
@@ -428,6 +433,8 @@ public:
 
     virtual UINT16              GetNum() const;
     virtual sal_Size            GetLen() const;
+
+    virtual void                SaveXml( XclExpXmlStream& rStrm );
 };
 
 
@@ -451,6 +458,7 @@ public:
     virtual                     ~ExcEScenarioManager();
 
     virtual void                Save( XclExpStream& rStrm );
+    virtual void                SaveXml( XclExpXmlStream& rStrm );
 
     virtual UINT16              GetNum() const;
     virtual sal_Size            GetLen() const;
@@ -485,6 +493,8 @@ public:
 
     virtual UINT16              GetNum() const;
     virtual sal_Size            GetLen() const;
+
+    virtual void                SaveXml( XclExpXmlStream& rStrm );
 };
 
 
@@ -501,6 +511,8 @@ public:
 
     virtual UINT16              GetNum() const;
     virtual sal_Size            GetLen() const;
+
+    virtual void                SaveXml( XclExpXmlStream& rStrm );
 };
 
 
@@ -517,6 +529,8 @@ public:
 
     virtual UINT16              GetNum() const;
     virtual sal_Size            GetLen() const;
+
+    virtual void                SaveXml( XclExpXmlStream& rStrm );
 };
 
 
@@ -526,6 +540,8 @@ class XclRefmode : public XclExpBoolRecord
 {
 public:
                                 XclRefmode( const ScDocument& );
+
+    virtual void                SaveXml( XclExpXmlStream& rStrm );
 };
 
 

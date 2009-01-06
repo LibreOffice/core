@@ -418,7 +418,7 @@ void lcl_GetColumnTypes( ScDocShell& rDocShell,
     SCCOL nLastCol = rDataRange.aEnd.Col();
     SCROW nLastRow = rDataRange.aEnd.Row();
 
-    StrCollection aFieldNamesCollection;
+    ScStrCollection aFieldNamesCollection;
 
     long nField = 0;
     SCROW nFirstDataRow = ( bHasFieldNames ? nFirstRow + 1 : nFirstRow );

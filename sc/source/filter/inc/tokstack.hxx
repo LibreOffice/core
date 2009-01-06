@@ -63,7 +63,7 @@ struct TokenId
 
 
 //------------------------------------------------------------------------
-struct ComplRefData;
+struct ScComplexRefData;
 class TokenStack;
 class ScToken;
 
@@ -106,7 +106,7 @@ class TokenPool
         UINT16                      nP_Err;
         UINT16                      nP_ErrAkt;
 
-        SingleRefData**             ppP_RefTr;  // Pool fuer Referenzen
+        ScSingleRefData**               ppP_RefTr;  // Pool fuer Referenzen
         UINT16                      nP_RefTr;
         UINT16                      nP_RefTrAkt;
 
@@ -128,8 +128,8 @@ class TokenPool
 
         struct  NLFCONT
         {
-            SingleRefData           aRef;
-                                    NLFCONT( const SingleRefData& r ) : aRef( r )   {}
+            ScSingleRefData         aRef;
+                                    NLFCONT( const ScSingleRefData& r ) : aRef( r ) {}
         };
         NLFCONT**                   ppP_Nlf;
         UINT16                      nP_Nlf;
@@ -204,12 +204,12 @@ class TokenPool
         const TokenId               Store( const UINT16 nIndex );
         inline const TokenId        Store( const INT16 nWert );
         const TokenId               Store( const String& rString );
-        const TokenId               Store( const SingleRefData& rTr );
-        const TokenId               Store( const ComplRefData& rTr );
+        const TokenId               Store( const ScSingleRefData& rTr );
+        const TokenId               Store( const ScComplexRefData& rTr );
 
         const TokenId               Store( const DefTokenId eId, const String& rName );
                                         // 4 externals (e.g. AddIns, Makros...)
-        const TokenId               StoreNlf( const SingleRefData& rTr );
+        const TokenId               StoreNlf( const ScSingleRefData& rTr );
         const TokenId               StoreMatrix( SCSIZE nC, SCSIZE nR );
         const TokenId               StoreExtName( sal_uInt16 nFileId, const String& rName );
         const TokenId               StoreExtRef( sal_uInt16 nFileId, const String& rTabName, const SingleRefData& rRef );

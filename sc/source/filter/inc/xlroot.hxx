@@ -86,6 +86,7 @@ struct XclRootData
     typedef ScfRef< RootData >              RootDataRef;
 
     XclBiff             meBiff;             /// Current BIFF version.
+    XclOutput           meOutput;           /// Current Output format.
     SfxMedium&          mrMedium;           /// The medium to import from.
     SotStorageRef       mxRootStrg;         /// The root OLE storage of imported/exported file.
     ScDocument&         mrDoc;              /// The source or destination document.
@@ -154,6 +155,8 @@ public:
 
     /** Returns the current BIFF version of the importer/exporter. */
     inline XclBiff      GetBiff() const { return mrData.meBiff; }
+    /** Returns the current output format of the importer/exporter. */
+    inline XclOutput    GetOutput() const { return mrData.meOutput; }
     /** Returns true, if currently a document is imported. */
     inline bool         IsImport() const { return !mrData.mbExport; }
     /** Returns true, if currently a document is exported. */

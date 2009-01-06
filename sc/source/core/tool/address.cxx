@@ -1447,7 +1447,7 @@ lcl_a1_append_c ( String &r, int nCol, bool bIsAbs )
 {
     if( bIsAbs )
         r += '$';
-    ColToAlpha( r, sal::static_int_cast<SCCOL>(nCol) );
+    ScColToAlpha( r, sal::static_int_cast<SCCOL>(nCol) );
 }
 
 static inline void
@@ -1831,7 +1831,7 @@ String ScAddress::GetColRowString( bool bAbsolute,
     if (bAbsolute)
         aString.Append( '$' );
 
-    ColToAlpha( aString, nCol);
+    ScColToAlpha( aString, nCol);
 
     if ( bAbsolute )
         aString.Append( '$' );
@@ -1877,7 +1877,7 @@ String ScRefAddress::GetRefString( ScDocument* pDoc, SCTAB nActTab,
 
 //------------------------------------------------------------------------
 
-void ColToAlpha( rtl::OUStringBuffer& rBuf, SCCOL nCol )
+void ScColToAlpha( rtl::OUStringBuffer& rBuf, SCCOL nCol )
 {
     if (nCol < 26*26)
     {

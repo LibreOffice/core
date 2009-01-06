@@ -1293,7 +1293,7 @@ IMPL_LINK( ScTabView, ScrollHdl, ScrollBar*, pScroll )
             {
                 aHelpStr = ScGlobal::GetRscString(STR_COLUMN);
                 aHelpStr += ' ';
-                aHelpStr += ColToAlpha((SCCOL) nScrollPos);
+                aHelpStr += ScColToAlpha((SCCOL) nScrollPos);
 
                 aRect.Left() = aMousePos.X();
                 aRect.Top()  = aPos.Y() - 4;

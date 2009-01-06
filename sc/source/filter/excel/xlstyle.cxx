@@ -635,7 +635,7 @@ void XclFontPropSetHelper::ReadFontProperties( XclFontData& rFontData,
         {
             String aApiFontName;
             float fApiHeight, fApiWeight;
-            sal_Int16 nApiUnderl, nApiStrikeout, nApiEscapement;
+            sal_Int16 nApiUnderl = 0, nApiStrikeout = 0, nApiEscapement = 0;
             Awt::FontSlant eApiPosture;
 
             // read script type dependent properties

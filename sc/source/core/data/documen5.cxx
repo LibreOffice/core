@@ -901,7 +901,7 @@ uno::Reference< embed::XEmbeddedObject >
     return uno::Reference< embed::XEmbeddedObject >();
 }
 
-BOOL lcl_StringInCollection( const StrCollection* pColl, const String& rStr )
+BOOL lcl_StringInCollection( const ScStrCollection* pColl, const String& rStr )
 {
     if ( !pColl )
         return FALSE;
@@ -989,7 +989,7 @@ void ScDocument::UpdateChartListenerCollection()
                                 //  (object names aren't used again before reloading the document)
 
                                 if (!pOtherObjects)
-                                    pOtherObjects = new StrCollection;
+                                    pOtherObjects = new ScStrCollection;
                                 pOtherObjects->Insert( new StrData( aObjName ) );
                             }
                         }
@@ -1006,7 +1006,7 @@ void ScDocument::UpdateChartListenerCollection()
 void ScDocument::AddOLEObjectToCollection(const String& rName)
 {
     if (!pOtherObjects)
-        pOtherObjects = new StrCollection;
+        pOtherObjects = new ScStrCollection;
     pOtherObjects->Insert( new StrData( rName ) );
 }
 

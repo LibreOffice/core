@@ -424,7 +424,7 @@ ScSheetLinkObj* ScSheetLinksObj::GetObjectByIndex_Impl(INT32 nIndex)
     if (pDocShell)
     {
         INT32 nCount = 0;
-        StrCollection aNames;   // um doppelte wegzulassen
+        ScStrCollection aNames; // um doppelte wegzulassen
         ScDocument* pDoc = pDocShell->GetDocument();
         SCTAB nTabCount = pDoc->GetTableCount();
         for (SCTAB nTab=0; nTab<nTabCount; nTab++)
@@ -485,7 +485,7 @@ sal_Int32 SAL_CALL ScSheetLinksObj::getCount() throw(uno::RuntimeException)
     INT32 nCount = 0;
     if (pDocShell)
     {
-        StrCollection aNames;   // um doppelte wegzulassen
+        ScStrCollection aNames; // um doppelte wegzulassen
         ScDocument* pDoc = pDocShell->GetDocument();
         SCTAB nTabCount = pDoc->GetTableCount();
         for (SCTAB nTab=0; nTab<nTabCount; nTab++)
@@ -571,7 +571,7 @@ uno::Sequence<rtl::OUString> SAL_CALL ScSheetLinksObj::getElementNames() throw(u
 
     if (pDocShell)
     {
-        StrCollection aNames;   // um doppelte wegzulassen
+        ScStrCollection aNames; // um doppelte wegzulassen
         ScDocument* pDoc = pDocShell->GetDocument();
         SCTAB nTabCount = pDoc->GetTableCount();
         String aName;

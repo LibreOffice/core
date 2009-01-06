@@ -42,6 +42,7 @@
 #include "formularesult.hxx"
 #include <rtl/ustrbuf.hxx>
 #include <vcl/fontcvt.hxx>
+#include "scdllapi.h"
 
 #define USE_MEMPOOL
 #define TEXTWIDTH_DIRTY     0xffff
@@ -62,7 +63,7 @@ class ScPostIt;
 class ScMultipleReadHeader;
 class ScMultipleWriteHeader;
 
-class ScBaseCell
+class SC_DLLPUBLIC ScBaseCell
 {
 protected:
     ScPostIt*       pNote;
@@ -122,7 +123,7 @@ public:
 
 
 
-class ScValueCell : public ScBaseCell
+class SC_DLLPUBLIC ScValueCell : public ScBaseCell
 {
 private:
     double      aValue;
@@ -144,7 +145,7 @@ public:
 };
 
 
-class ScStringCell : public ScBaseCell
+class SC_DLLPUBLIC ScStringCell : public ScBaseCell
 {
 private:
     String      aString;
@@ -168,7 +169,7 @@ public:
 };
 
 
-class ScEditCell : public ScBaseCell
+class SC_DLLPUBLIC ScEditCell : public ScBaseCell
 {
 private:
     EditTextObject*     pData;
@@ -215,7 +216,7 @@ enum ScMatrixMode {
 
 class ScIndexMap;
 
-class ScFormulaCell : public ScBaseCell, public SvtListener
+class SC_DLLPUBLIC ScFormulaCell : public ScBaseCell, public SvtListener
 {
 private:
     ScFormulaResult aResult;

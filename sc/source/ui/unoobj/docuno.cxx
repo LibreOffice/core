@@ -2450,7 +2450,7 @@ uno::Sequence<rtl::OUString> SAL_CALL ScTableColumnsObj::getElementNames()
     uno::Sequence<rtl::OUString> aSeq(nCount);
     rtl::OUString* pAry = aSeq.getArray();
     for (SCCOL i=0; i<nCount; i++)
-        pAry[i] = ::ColToAlpha( nStartCol + i );
+        pAry[i] = ::ScColToAlpha( nStartCol + i );
 
     return aSeq;
 }

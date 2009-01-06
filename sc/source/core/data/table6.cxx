@@ -145,8 +145,8 @@ BOOL ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
             ( (rSearchItem.GetCommand() == SVX_SEARCHCMD_REPLACE)
             ||(rSearchItem.GetCommand() == SVX_SEARCHCMD_REPLACE_ALL) ) &&
                 // #60558# Matrix nicht zerreissen, nur Matrixformel ersetzen
-                !( eCellType == CELLTYPE_FORMULA &&
-                ((cMatrixFlag = ((ScFormulaCell*)pCell)->GetMatrixFlag()) == MM_REFERENCE)
+                !( (eCellType == CELLTYPE_FORMULA &&
+                ((cMatrixFlag = ((ScFormulaCell*)pCell)->GetMatrixFlag()) == MM_REFERENCE))
                 // kein UndoDoc => Matrix nicht wiederherstellbar => nicht ersetzen
                 || (cMatrixFlag != MM_NONE && !pUndoDoc) )
             )

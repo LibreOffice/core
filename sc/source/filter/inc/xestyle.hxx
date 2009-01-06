@@ -37,9 +37,9 @@
 #include <svtools/zforlist.hxx>
 #include <svtools/nfkeytab.hxx>
 #include <svx/svxfont.hxx>
+#include "xerecord.hxx"
 #include "xlstyle.hxx"
 #include "xeroot.hxx"
-#include "xerecord.hxx"
 
 /* ============================================================================
 - Buffers for style records (PALETTE, FONT, FORMAT, XF, STYLE).
@@ -119,6 +119,7 @@ public:
 
     /** Saves the PALETTE record, if it differs from the default palette. */
     virtual void        Save( XclExpStream& rStrm );
+    virtual void        SaveXml( XclExpXmlStream& rStrm );
 
 private:
     /** Writes the contents of the PALETTE record. */
@@ -152,6 +153,8 @@ public:
     /** Compares this font with the passed font data.
         @param nHash  The hash value calculated from the font data. */
     virtual bool        Equals( const XclFontData& rFontData, sal_uInt32 nHash ) const;
+
+    virtual void        SaveXml( XclExpXmlStream& rStrm );
 
 private:
     /** Writes the contents of the FONT record. */
@@ -223,6 +226,7 @@ public:
 
     /** Writes all FONT records contained in this buffer. */
     virtual void        Save( XclExpStream& rStrm );
+    virtual void        SaveXml( XclExpXmlStream& rStrm );
 
     /** Returns the script type of the first font item found in the item set and its parents. */
     static sal_Int16    GetFirstUsedScript( const SfxItemSet& rItemSet );
@@ -280,12 +284,15 @@ public:
 
     /** Writes all FORMAT records contained in this buffer. */
     virtual void        Save( XclExpStream& rStrm );
+    virtual void        SaveXml( XclExpXmlStream& rStrm );
 
 private:
     /** Writes the FORMAT record with index nXclIx and format string rFormatStr. */
     void                WriteFormatRecord( XclExpStream& rStrm, sal_uInt16 nXclNumFmt, const String& rFormatStr );
     /** Writes the FORMAT record represented by rFormat. */
     void                WriteFormatRecord( XclExpStream& rStrm, const XclExpNumFmt& rFormat );
+
+    String              GetFormatCode ( const XclExpNumFmt& rFormat );
 
 private:
     typedef ::std::auto_ptr< SvNumberFormatter >    SvNumberFormatterPtr;
@@ -315,6 +322,8 @@ struct XclExpCellProt : public XclCellProt
 #endif
     /** Fills the data to the passed fields of a BIFF3-BIFF8 XF record. */
     void                FillToXF3( sal_uInt16& rnProt ) const;
+
+    void                SaveXml( XclExpXmlStream& rStrm ) const;
 };
 
 // ----------------------------------------------------------------------------
@@ -342,6 +351,8 @@ struct XclExpCellAlign : public XclCellAlign
     void                FillToXF5( sal_uInt16& rnAlign ) const;
     /** Fills the data to the passed fields of a BIFF8 XF record. */
     void                FillToXF8( sal_uInt16& rnAlign, sal_uInt16& rnMiscAttrib ) const;
+
+    void                SaveXml( XclExpXmlStream& rStrm ) const;
 };
 
 // ----------------------------------------------------------------------------
@@ -379,6 +390,8 @@ struct XclExpCellBorder : public XclCellBorder
 
     /** Fills the data to the passed fields of a BIFF8 CF (conditional format) record. */
     void                FillToCF8( sal_uInt16& rnLine, sal_uInt32& rnColor ) const;
+
+    void                SaveXml( XclExpXmlStream& rStrm ) const;
 };
 
 // ----------------------------------------------------------------------------
@@ -413,6 +426,8 @@ struct XclExpCellArea : public XclCellArea
 
     /** Fills the data to the passed fields of a BIFF8 CF (conditional format) record. */
     void                FillToCF8( sal_uInt16& rnPattern, sal_uInt16& rnColor ) const;
+
+    void                SaveXml( XclExpXmlStream& rStrm ) const;
 };
 
 // ----------------------------------------------------------------------------
@@ -478,6 +493,10 @@ public:
     /** Returns true, if this XF record is completely equal to the passed. */
     bool                Equals( const XclExpXF& rCmpXF ) const;
 
+    void                SetXmlIds( sal_uInt32 nBorderId, sal_uInt32 nFillId );
+
+    virtual void        SaveXml( XclExpXmlStream& rStrm );
+
 protected:
     explicit            XclExpXF( const XclExpRoot& rRoot, bool bCellXF );
 
@@ -492,6 +511,8 @@ protected:  // access for XclExpDefaultXF
     ULONG               mnScNumFmt;         /// Calc number format index.
     sal_uInt16          mnXclFont;          /// Excel font index.
     sal_uInt16          mnXclNumFmt;        /// Excel number format index.
+    sal_Int32           mnBorderId;         /// OOXML Border Index
+    sal_Int32           mnFillId;           /// OOXML Fill Index
 
 private:
     using               XclXFBase::Equals;
@@ -564,6 +585,10 @@ public:
 
     /** Returns true, if this record represents an Excel built-in style. */
     inline bool         IsBuiltIn() const { return mnStyleId != EXC_STYLE_USERDEF; }
+
+    inline const String&    GetName() const { return maName; }
+
+    virtual void        SaveXml( XclExpXmlStream& rStrm );
 
 private:
     /** Writes the contents of the STYLE record. */
@@ -639,8 +664,12 @@ public:
     /** Returns the Excel XF index of the XF record with passed XF ID. */
     sal_uInt16          GetXFIndex( sal_uInt32 nXFId ) const;
 
+    sal_Int32           GetXmlStyleIndex( sal_uInt32 nXFId ) const;
+    sal_Int32           GetXmlCellIndex( sal_uInt32 nXFId ) const;
+
     /** Writes all XF records contained in this buffer. */
     virtual void        Save( XclExpStream& rStrm );
+    virtual void        SaveXml( XclExpXmlStream& rStrm );
 
 private:
     typedef XclExpRecordList< XclExpXF >    XclExpXFList;
@@ -684,6 +713,9 @@ private:
     /** Appends a XF index to the internal ID<->index maps. */
     void                AppendXFIndex( sal_uInt32 nXFId );
 
+    void                AddBorderAndFill( const XclExpXF& rXF );
+    void                SaveXFXml( XclExpXmlStream& rStrm, XclExpXF& rXF );
+
 private:
     /** Extended info about a built-in XF. */
     struct XclExpBuiltInInfo
@@ -695,12 +727,30 @@ private:
         explicit            XclExpBuiltInInfo();
     };
     typedef ::std::map< sal_uInt32, XclExpBuiltInInfo > XclExpBuiltInMap;
+    typedef ::std::vector< XclExpCellBorder >           XclExpBorderList;
+    typedef ::std::vector< XclExpCellArea >             XclExpFillList;
 
     XclExpXFList        maXFList;           /// List of all XF records.
     XclExpStyleList     maStyleList;        /// List of all STYLE records.
     XclExpBuiltInMap    maBuiltInMap;       /// Contained elements describe built-in XFs.
     ScfUInt16Vec        maXFIndexVec;       /// Maps XF IDs to XF indexes.
+    ScfUInt16Vec        maStyleIndexes;     /// Maps XF IDs to OOXML Style indexes
+    ScfUInt16Vec        maCellIndexes;      /// Maps XF IDs to OOXML Cell indexes
     XclExpXFList        maSortedXFList;     /// List of XF records in XF index order.
+    XclExpBorderList    maBorders;          /// List of borders used by XF records
+    XclExpFillList      maFills;            /// List of fills used by XF records
+
+};
+
+// ============================================================================
+
+class XclExpXmlStyleSheet : public XclExpRecordBase, protected XclExpRoot
+{
+public:
+    explicit            XclExpXmlStyleSheet( const XclExpRoot& rRoot );
+
+    virtual void        SaveXml( XclExpXmlStream& rStrm );
+private:
 };
 
 // ============================================================================

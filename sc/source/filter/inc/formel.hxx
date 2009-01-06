@@ -45,8 +45,8 @@
 class XclImpStream;
 class ScTokenArray;
 class ScFormulaCell;
-struct SingleRefData;
-struct ComplRefData;
+struct ScSingleRefData;
+struct ScComplexRefData;
 
 
 
@@ -83,8 +83,8 @@ public:
     virtual                 ~_ScRangeList();
     inline void             Append( const ScRange& rRange );
     inline void             Append( ScRange* pRange );
-    inline void             Append( const SingleRefData& rSRD );
-    inline void             Append( const ComplRefData& rCRD );
+    inline void             Append( const ScSingleRefData& rSRD );
+    inline void             Append( const ScComplexRefData& rCRD );
 
     using                   List::Count;
     inline BOOL             HasRanges( void ) const;
@@ -124,13 +124,13 @@ inline const ScRange* _ScRangeList::Next( void )
 }
 
 
-inline void _ScRangeList::Append( const SingleRefData& r )
+inline void _ScRangeList::Append( const ScSingleRefData& r )
 {
     List::Insert( new ScRange( r.nCol, r.nRow, r.nTab ), LIST_APPEND );
 }
 
 
-inline void _ScRangeList::Append( const ComplRefData& r )
+inline void _ScRangeList::Append( const ScComplexRefData& r )
 {
     List::Insert(   new ScRange(    r.Ref1.nCol, r.Ref1.nRow, r.Ref1.nTab,
                                     r.Ref2.nCol, r.Ref2.nRow, r.Ref2.nTab ),
@@ -154,8 +154,8 @@ public:
                                 _ScRangeListTabs( void );
     virtual                     ~_ScRangeListTabs();
 
-    void                        Append( SingleRefData aSRD, const BOOL bLimit = TRUE );
-    void                        Append( ComplRefData aCRD, const BOOL bLimit = TRUE );
+    void                        Append( ScSingleRefData aSRD, const BOOL bLimit = TRUE );
+    void                        Append( ScComplexRefData aCRD, const BOOL bLimit = TRUE );
 
     inline BOOL                 HasRanges( void ) const;
 

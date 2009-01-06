@@ -629,7 +629,7 @@ ScFormulaCell* ScColumn::CreateRefCell( ScDocument* pDestDoc, const ScAddress& r
 
 
     //  Referenz einsetzen
-    SingleRefData aRef;
+    ScSingleRefData aRef;
     aRef.nCol = nCol;
     aRef.nRow = pItems[nIndex].nRow;
     aRef.nTab = nTab;
@@ -705,7 +705,7 @@ void ScColumn::CopyFromClip(SCROW nRow1, SCROW nRow2, long nDy,
         ScAddress aDestPos( nCol, 0, nTab );        // Row wird angepasst
 
         //  Referenz erzeugen (Quell-Position)
-        SingleRefData aRef;
+        ScSingleRefData aRef;
         aRef.nCol = rColumn.nCol;
         //  nRow wird angepasst
         aRef.nTab = rColumn.nTab;
@@ -1426,7 +1426,7 @@ BOOL ScColumn::SetString( SCROW nRow, SCTAB nTabP, const String& rString,
 }
 
 
-void ScColumn::GetFilterEntries(SCROW nStartRow, SCROW nEndRow, TypedStrCollection& rStrings)
+void ScColumn::GetFilterEntries(SCROW nStartRow, SCROW nEndRow, TypedScStrCollection& rStrings)
 {
     SvNumberFormatter* pFormatter = pDocument->GetFormatTable();
     String aString;
@@ -1491,7 +1491,7 @@ void ScColumn::GetFilterEntries(SCROW nStartRow, SCROW nEndRow, TypedStrCollecti
 #define DATENT_SEARCH   2000
 
 
-BOOL ScColumn::GetDataEntries(SCROW nStartRow, TypedStrCollection& rStrings, BOOL bLimit)
+BOOL ScColumn::GetDataEntries(SCROW nStartRow, TypedScStrCollection& rStrings, BOOL bLimit)
 {
     BOOL bFound = FALSE;
     SCSIZE nThisIndex;

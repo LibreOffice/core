@@ -57,7 +57,7 @@ ScAreaLinkSaver::ScAreaLinkSaver( const ScAreaLink& rSource ) :
 }
 
 ScAreaLinkSaver::ScAreaLinkSaver( const ScAreaLinkSaver& rCopy ) :
-    DataObject(),
+    ScDataObject(),
     aFileName   ( rCopy.aFileName ),
     aFilterName ( rCopy.aFilterName ),
     aOptions    ( rCopy.aOptions ),
@@ -71,7 +71,7 @@ ScAreaLinkSaver::~ScAreaLinkSaver()
 {
 }
 
-DataObject* ScAreaLinkSaver::Clone() const
+ScDataObject*   ScAreaLinkSaver::Clone() const
 {
     return new ScAreaLinkSaver( *this );
 }
@@ -122,7 +122,7 @@ ScAreaLinkSaveCollection::ScAreaLinkSaveCollection()
 }
 
 ScAreaLinkSaveCollection::ScAreaLinkSaveCollection( const ScAreaLinkSaveCollection& rCopy ) :
-    Collection( rCopy )
+    ScCollection( rCopy )
 {
 }
 
@@ -130,7 +130,7 @@ ScAreaLinkSaveCollection::~ScAreaLinkSaveCollection()
 {
 }
 
-DataObject* ScAreaLinkSaveCollection::Clone() const
+ScDataObject*   ScAreaLinkSaveCollection::Clone() const
 {
     return new ScAreaLinkSaveCollection( *this );
 }

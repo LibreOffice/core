@@ -31,11 +31,11 @@
 #ifndef SC_XECHART_HXX
 #define SC_XECHART_HXX
 
+#include "xerecord.hxx"
 #include "xlchart.hxx"
 #include "xlformula.hxx"
 #include "xlstyle.hxx"
 #include "xeroot.hxx"
-#include "xerecord.hxx"
 #include "xestring.hxx"
 
 class Size;

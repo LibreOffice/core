@@ -616,7 +616,7 @@ ULONG lclGetCellFormat( ScDocument& rDoc, const ScAddress& rPos )
 }
 
 /** Inserts the passed string object. Always takes ownership. pData is invalid after this call! */
-void lclInsertStringToCollection( TypedStrCollection& rStrColl, TypedStrData* pData, bool bSorted )
+void lclInsertStringToCollection( TypedScStrCollection& rStrColl, TypedStrData* pData, bool bSorted )
 {
     if( !(bSorted ? rStrColl.Insert( pData ) : rStrColl.AtInsert( rStrColl.GetCount(), pData )) )
         delete pData;
@@ -631,7 +631,7 @@ bool ScValidationData::HasSelectionList() const
     return (eDataMode == SC_VALID_LIST) && (mnListType != ValidListType::INVISIBLE);
 }
 
-bool ScValidationData::GetSelectionFromFormula( TypedStrCollection* pStrings,
+bool ScValidationData::GetSelectionFromFormula( TypedScStrCollection* pStrings,
                                                 ScBaseCell* pCell,
                                                 const ScAddress& rPos,
                                                 const ScTokenArray& rTokArr,
@@ -768,7 +768,7 @@ bool ScValidationData::GetSelectionFromFormula( TypedStrCollection* pStrings,
     return bOk || NULL == pCell;
 }
 
-bool ScValidationData::FillSelectionList( TypedStrCollection& rStrColl, const ScAddress& rPos ) const
+bool ScValidationData::FillSelectionList( TypedScStrCollection& rStrColl, const ScAddress& rPos ) const
 {
     bool bOk = false;
 

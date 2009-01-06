@@ -589,9 +589,9 @@ String ScChangeAction::GetRefString( const ScBigRange& rRange,
                     pDoc->GetName( aTmpRange.aStart.Tab(), aStr );
                     aStr += '.';
                 }
-                aStr += ::ColToAlpha( aTmpRange.aStart.Col() );
+                aStr += ::ScColToAlpha( aTmpRange.aStart.Col() );
                 aStr += ':';
-                aStr += ::ColToAlpha( aTmpRange.aEnd.Col() );
+                aStr += ::ScColToAlpha( aTmpRange.aEnd.Col() );
             break;
             case SC_CAT_INSERT_ROWS :
             case SC_CAT_DELETE_ROWS :
@@ -2498,7 +2498,7 @@ void ScChangeActionContent::PutValueToDoc( ScBaseCell* pCell,
 
 void lcl_InvalidateReference( ScToken& rTok, const ScBigAddress& rPos )
 {
-    SingleRefData& rRef1 = rTok.GetSingleRef();
+    ScSingleRefData& rRef1 = rTok.GetSingleRef();
     if ( rPos.Col() < 0 || MAXCOL < rPos.Col() )
     {
         rRef1.nCol = SCCOL_MAX;
@@ -2519,7 +2519,7 @@ void lcl_InvalidateReference( ScToken& rTok, const ScBigAddress& rPos )
     }
     if ( rTok.GetType() == svDoubleRef )
     {
-        SingleRefData& rRef2 = rTok.GetDoubleRef().Ref2;
+        ScSingleRefData& rRef2 = rTok.GetDoubleRef().Ref2;
         if ( rPos.Col() < 0 || MAXCOL < rPos.Col() )
         {
             rRef2.nCol = SCCOL_MAX;
@@ -2713,7 +2713,7 @@ ScChangeTrack::ScChangeTrack( ScDocument* pDocP ) :
     memset( ppContentSlots, 0, nContentSlots * sizeof( ScChangeActionContent* ) );
 }
 
-ScChangeTrack::ScChangeTrack( ScDocument* pDocP, const StrCollection& aTempUserCollection) :
+ScChangeTrack::ScChangeTrack( ScDocument* pDocP, const ScStrCollection& aTempUserCollection) :
         aUserCollection(aTempUserCollection),
         pDoc( pDocP )
 {
@@ -2920,7 +2920,7 @@ void ScChangeTrack::NotifyModified( ScChangeTrackMsgType eMsgType,
 }
 
 
-void lcl_EnsureSorting( StrCollection& rCollection )
+void lcl_EnsureSorting( ScStrCollection& rCollection )
 {
     BOOL bSorted = TRUE;
     USHORT nCount = rCollection.GetCount();
@@ -2932,10 +2932,10 @@ void lcl_EnsureSorting( StrCollection& rCollection )
     if ( !bSorted )
     {
         //  if not sorted, rebuild collection
-        StrCollection aNewColl;
+        ScStrCollection aNewColl;
         for (i=0; i<nCount; i++)
         {
-            DataObject* pNewObj = rCollection[i]->Clone();
+            ScDataObject* pNewObj = rCollection[i]->Clone();
             if (!aNewColl.Insert(pNewObj))
                 delete pNewObj;
         }

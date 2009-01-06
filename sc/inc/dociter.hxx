@@ -34,6 +34,7 @@
 #include "address.hxx"
 #include <tools/solar.h>
 #include "global.hxx"
+#include "scdllapi.h"
 
 class ScDocument;
 class ScBaseCell;
@@ -412,7 +413,7 @@ public:
 //  gibt nichtleere Zellen und Bereiche mit Formatierung zurueck (horizontal)
 //
 
-class ScUsedAreaIterator
+class SC_DLLPUBLIC ScUsedAreaIterator
 {
 private:
     ScHorizontalCellIterator    aCellIter;

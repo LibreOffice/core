@@ -30,17 +30,17 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
-#include "xeroot.hxx"
 #include <sfx2/docfile.hxx>
 #include <svtools/saveopt.hxx>
+#include "xecontent.hxx"
 #include "xltracer.hxx"
 #include "xehelper.hxx"
 #include "xeformula.hxx"
 #include "xelink.hxx"
 #include "xename.hxx"
 #include "xestyle.hxx"
-#include "xecontent.hxx"
 #include "xepivot.hxx"
+#include "xeroot.hxx"
 
 // for filter manager
 #include "excrecds.hxx"

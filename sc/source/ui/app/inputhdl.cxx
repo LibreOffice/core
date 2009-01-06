@@ -623,12 +623,12 @@ void ScInputHandler::GetFormulaData()
         if ( pFormulaData )
             pFormulaData->FreeAll();
         else
-            pFormulaData = new TypedStrCollection;
+            pFormulaData = new TypedScStrCollection;
 
         if( pFormulaDataPara )
             pFormulaDataPara->FreeAll();
         else
-            pFormulaDataPara = new TypedStrCollection;
+            pFormulaDataPara = new TypedScStrCollection;
 
         //      MRU-Funktionen aus dem Funktions-Autopiloten
         //      wie in ScPosWnd::FillFunctions (inputwin.cxx)
@@ -1390,7 +1390,7 @@ void ScInputHandler::GetColData()
             pColumnData->FreeAll();
         else
         {
-            pColumnData = new TypedStrCollection;
+            pColumnData = new TypedScStrCollection;
             pColumnData->SetCaseSensitive( TRUE );      // equal strings are handled in FindText
         }
 

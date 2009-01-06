@@ -116,7 +116,7 @@ class LotusRangeList : private List
 {
 private:
     LR_ID               nIdCnt;
-    ComplRefData        aComplRef;
+    ScComplexRefData        aComplRef;
     static SCCOL        nEingCol;
     static SCROW        nEingRow;
 public:
