@@ -571,8 +571,10 @@
 
 #define STR_UNDO_INSERTNOTE         431
 #define STR_UNDO_DELETENOTE         432
+#define STR_STYLE_FAMILY_CELL       433
+#define STR_STYLE_FAMILY_PAGE       434
 
-#define STR_COUNT                   433
+#define STR_COUNT                   435
 
 #endif
 

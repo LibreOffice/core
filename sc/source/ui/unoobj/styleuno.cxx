@@ -1013,6 +1013,70 @@ sal_Bool SAL_CALL ScStyleFamilyObj::hasByName( const rtl::OUString& aName )
     return sal_False;
 }
 
+// XPropertySet
+
+uno::Reference< beans::XPropertySetInfo > SAL_CALL ScStyleFamilyObj::getPropertySetInfo(  ) throw (uno::RuntimeException)
+{
+    OSL_ENSURE( 0, "###unexpected!" );
+    return uno::Reference< beans::XPropertySetInfo >();
+}
+
+void SAL_CALL ScStyleFamilyObj::setPropertyValue( const ::rtl::OUString&, const uno::Any& ) throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    OSL_ENSURE( 0, "###unexpected!" );
+}
+
+uno::Any SAL_CALL ScStyleFamilyObj::getPropertyValue( const ::rtl::OUString& sPropertyName ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    uno::Any aRet;
+
+    if ( sPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("DisplayName") ) )
+    {
+        ScUnoGuard aGuard;
+        sal_uInt32 nResId = 0;
+        switch ( eFamily )
+        {
+            case SFX_STYLE_FAMILY_PARA:
+                nResId = STR_STYLE_FAMILY_CELL; break;
+            case SFX_STYLE_FAMILY_PAGE:
+                nResId = STR_STYLE_FAMILY_PAGE; break;
+            default:
+                OSL_ENSURE( 0, "ScStyleFamilyObj::getPropertyValue(): invalid family" );
+        }
+        if ( nResId > 0 )
+        {
+            ::rtl::OUString sDisplayName( ScGlobal::GetRscString( static_cast< USHORT >( nResId ) ) );
+            aRet = uno::makeAny( sDisplayName );
+        }
+    }
+    else
+    {
+        throw beans::UnknownPropertyException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("unknown property: ") ) + sPropertyName, static_cast<OWeakObject *>(this) );
+    }
+
+    return aRet;
+}
+
+void SAL_CALL ScStyleFamilyObj::addPropertyChangeListener( const ::rtl::OUString&, const uno::Reference< beans::XPropertyChangeListener >& ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    OSL_ENSURE( 0, "###unexpected!" );
+}
+
+void SAL_CALL ScStyleFamilyObj::removePropertyChangeListener( const ::rtl::OUString&, const uno::Reference< beans::XPropertyChangeListener >& ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    OSL_ENSURE( 0, "###unexpected!" );
+}
+
+void SAL_CALL ScStyleFamilyObj::addVetoableChangeListener( const ::rtl::OUString&, const uno::Reference< beans::XVetoableChangeListener >& ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    OSL_ENSURE( 0, "###unexpected!" );
+}
+
+void SAL_CALL ScStyleFamilyObj::removeVetoableChangeListener( const ::rtl::OUString&, const uno::Reference< beans::XVetoableChangeListener >& ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    OSL_ENSURE( 0, "###unexpected!" );
+}
+
 //------------------------------------------------------------------------
 
 //  Default-ctor wird fuer die Reflection gebraucht

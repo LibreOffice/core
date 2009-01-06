@@ -1721,5 +1721,13 @@ Resource RID_GLOBSTR
     {
         Text [ en-US ] = "Unknown User";
     };
+    String STR_STYLE_FAMILY_CELL
+    {
+        Text [ en-US ] = "Cell Styles";
+    };
+    String STR_STYLE_FAMILY_PAGE
+    {
+        Text [ en-US ] = "Page Styles";
+    };
 };
 
