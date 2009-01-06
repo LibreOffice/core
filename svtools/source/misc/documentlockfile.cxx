@@ -315,6 +315,33 @@ uno::Reference< io::XInputStream > DocumentLockFile::OpenStream()
 }
 
 // ----------------------------------------------------------------------
+sal_Bool DocumentLockFile::OverwriteOwnLockFile()
+{
+    // allows to overwrite the lock file with the current data
+    try
+    {
+        uno::Reference < ::com::sun::star::ucb::XCommandEnvironment > xEnv;
+        ::ucbhelper::Content aTargetContent( m_aURL, xEnv );
+
+        uno::Sequence< ::rtl::OUString > aNewEntry = GenerateOwnEntry();
+
+        uno::Reference< io::XStream > xStream = aTargetContent.openWriteableStreamNoLock();
+        uno::Reference< io::XOutputStream > xOutput = xStream->getOutputStream();
+        uno::Reference< io::XTruncate > xTruncate( xOutput, uno::UNO_QUERY_THROW );
+
+        xTruncate->truncate();
+        WriteEntryToStream( aNewEntry, xOutput );
+        xOutput->closeOutput();
+    }
+    catch( ucb::NameClashException& )
+    {
+        return sal_False;
+    }
+
+    return sal_True;
+}
+
+// ----------------------------------------------------------------------
 void DocumentLockFile::RemoveFile()
 {
     // TODO/LATER: the removing is not atomar, is it possible in general to make it atomar?

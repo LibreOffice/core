@@ -86,11 +86,14 @@
 #include <com/sun/star/uri/XUriReference.hpp>
 #endif
 #include <com/sun/star/ucb/PostCommandArgument2.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
+
 #include <ucbhelper/interceptedinteraction.hxx>
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/commandenvironment.hxx>
 #include <ucbhelper/activedatasink.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/configurationhelper.hxx>
 
 #if OSL_DEBUG_LEVEL>0
     #ifndef _RTL_USTRBUF_HXX_
@@ -501,15 +504,39 @@ sal_Bool MediaDescriptor::isStreamReadOnly() const
 -----------------------------------------------*/
 sal_Bool MediaDescriptor::addInputStream()
 {
-    return addInputStream_Impl( sal_True );
+    return impl_addInputStream( sal_True );
 }
 
-sal_Bool MediaDescriptor::addInputStreamNoLock()
+/*-----------------------------------------------*/
+sal_Bool MediaDescriptor::addInputStreamOwnLock()
 {
-    return addInputStream_Impl( sal_False );
+    // Own lock file implementation
+
+    sal_Bool bUseLock = sal_True; // the system file locking is used per default
+    try
+    {
+
+        css::uno::Reference< css::uno::XInterface > xCommonConfig = ::comphelper::ConfigurationHelper::openConfig(
+                            ::comphelper::getProcessServiceFactory(),
+                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.Common" ) ),
+                            ::comphelper::ConfigurationHelper::E_STANDARD );
+        if ( !xCommonConfig.is() )
+            throw css::uno::RuntimeException();
+
+        ::comphelper::ConfigurationHelper::readRelativeKey(
+                xCommonConfig,
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Misc/" ) ),
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UseDocumentSystemFileLocking" ) ) ) >>= bUseLock;
+    }
+    catch( const css::uno::Exception& )
+    {
+    }
+
+    return impl_addInputStream( bUseLock );
 }
 
-sal_Bool MediaDescriptor::addInputStream_Impl( sal_Bool bLockFile )
+/*-----------------------------------------------*/
+sal_Bool MediaDescriptor::impl_addInputStream( sal_Bool bLockFile )
 {
     // check for an already existing stream item first
     const_iterator pIt = find(MediaDescriptor::PROP_INPUTSTREAM());
