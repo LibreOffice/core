@@ -2336,6 +2336,8 @@ sal_Bool SfxObjectShell::ExportTo( SfxMedium& rMedium )
 
         // put in the REAL file name, and copy all PropertyValues
         const OUString sOutputStream ( RTL_CONSTASCII_USTRINGPARAM ( "OutputStream" ) );
+        const OUString sStream ( RTL_CONSTASCII_USTRINGPARAM ( "StreamForOutput" ) );
+        BOOL bHasOutputStream = FALSE;
         BOOL bHasStream = FALSE;
         BOOL bHasBaseURL = FALSE;
         sal_Int32 i;
@@ -2347,16 +2349,26 @@ sal_Bool SfxObjectShell::ExportTo( SfxMedium& rMedium )
             if ( pOldValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "FileName" ) ) )
                 pNewValue[i].Value <<= OUString ( rMedium.GetName() );
             else if ( pOldValue[i].Name == sOutputStream )
+                bHasOutputStream = sal_True;
+            else if ( pOldValue[i].Name == sStream )
                 bHasStream = sal_True;
             else if ( pOldValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "DocumentBaseURL" ) ) )
                 bHasBaseURL = sal_True;
         }
 
-        if ( !bHasStream )
+        if ( !bHasOutputStream )
         {
             aArgs.realloc ( ++nEnd );
             aArgs[nEnd-1].Name = sOutputStream;
             aArgs[nEnd-1].Value <<= com::sun::star::uno::Reference < com::sun::star::io::XOutputStream > ( new utl::OOutputStreamWrapper ( *rMedium.GetOutStream() ) );
+        }
+
+        // add stream as well, for OOX export and maybe others
+        if ( !bHasStream )
+        {
+            aArgs.realloc ( ++nEnd );
+            aArgs[nEnd-1].Name = sStream;
+            aArgs[nEnd-1].Value <<= com::sun::star::uno::Reference < com::sun::star::io::XStream > ( new utl::OStreamWrapper ( *rMedium.GetOutStream() ) );
         }
 
         if ( !bHasBaseURL )
