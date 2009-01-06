@@ -177,9 +177,11 @@ DBTypeDetection::DBTypeDetection(const Reference< XMultiServiceFactory >& _rxFac
                     // After fixing of the i88522 issue ( use the new file locking for database files ) the stream from the type detection can be used further
                     // for now the file should be reopened to have read/write access
                     aMedia.remove( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "InputStream" ) ) );
+                    aMedia.remove( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Stream" ) ) );
                     aMedia >>= Descriptor;
                     try
                     {
+                        ::comphelper::disposeComponent(xStorageProperties);
                         if ( xInStream.is() )
                             xInStream->closeInput();
                     }
