@@ -262,7 +262,7 @@ testcase tEditObjectEdit
           sleep 3                                 ' Changed from Sleep 1 to Sleep 3
           gMouseMove  10,10,90,90
           sleep 1
-
+          EditSelectAll
 
           try
              EditObjectEdit      'keine ID      '/// try edit-objects ///'
