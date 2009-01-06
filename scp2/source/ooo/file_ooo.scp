@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file_ooo.scp,v $
- * $Revision: 1.257.2.3 $
+ * $Revision: 1.257.18.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2230,6 +2230,7 @@ File gid_File_Registry_Spool_Oo_Common_Ctl_Xcu
     Name (or) = "/registry/spool/org/openoffice/Office/Common-ctl.xcu";
     Name (ne) = "/registry/spool/org/openoffice/Office/Common-ctl.xcu";
     Name (fa) = "/registry/spool/org/openoffice/Office/Common-ctl.xcu";
+    Name (my) = "/registry/spool/org/openoffice/Office/Common-ctl.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_Office_Writer_PyMailMerge_Xcu
