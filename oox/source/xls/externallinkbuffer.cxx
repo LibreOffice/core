@@ -62,6 +62,7 @@ using ::com::sun::star::sheet::XDDELinks;
 using ::com::sun::star::sheet::XDDELinkResults;
 using ::com::sun::star::sheet::XExternalDocLinks;
 using ::com::sun::star::sheet::XExternalSheetCache;
+using ::oox::core::Relation;
 using ::oox::core::Relations;
 
 namespace oox {
@@ -435,7 +436,8 @@ void LinkSheetRange::setExternalRange( sal_Int32 nDocLink, sal_Int32 nFirst, sal
 
 ExternalLink::ExternalLink( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
-    meLinkType( LINKTYPE_UNKNOWN )
+    meLinkType( LINKTYPE_UNKNOWN ),
+    meFuncLibType( FUNCLIB_UNKNOWN )
 {
 }
 
@@ -446,8 +448,7 @@ void ExternalLink::importExternalReference( const AttributeList& rAttribs )
 
 void ExternalLink::importExternalBook( const Relations& rRelations, const AttributeList& rAttribs )
 {
-    OUString aTargetUrl = rRelations.getTargetFromRelId( rAttribs.getString( R_TOKEN( id ), OUString() ) );
-    setExternalTargetUrl( aTargetUrl );
+    parseExternalReference( rRelations, rAttribs.getString( R_TOKEN( id ), OUString() ) );
 }
 
 void ExternalLink::importSheetName( const AttributeList& rAttribs )
@@ -513,10 +514,7 @@ void ExternalLink::importExternalBook( const Relations& rRelations, RecordInputS
     switch( rStrm.readuInt16() )
     {
         case OOBIN_EXTERNALBOOK_BOOK:
-        {
-            OUString aTargetUrl = rRelations.getTargetFromRelId( rStrm.readString() );
-            setExternalTargetUrl( aTargetUrl );
-        }
+            parseExternalReference( rRelations, rStrm.readString() );
         break;
         case OOBIN_EXTERNALBOOK_DDE:
         {
@@ -540,8 +538,9 @@ void ExternalLink::importExternalBook( const Relations& rRelations, RecordInputS
 void ExternalLink::importExtSheetNames( RecordInputStream& rStrm )
 {
     // load external sheet names and create the sheet caches in the Calc document
-    OSL_ENSURE( meLinkType == LINKTYPE_EXTERNAL, "ExternalLink::importExtSheetNames - invalid link type" );
-    if( meLinkType == LINKTYPE_EXTERNAL )
+    OSL_ENSURE( (meLinkType == LINKTYPE_EXTERNAL) || (meLinkType == LINKTYPE_LIBRARY),
+        "ExternalLink::importExtSheetNames - invalid link type" );
+    if( meLinkType == LINKTYPE_EXTERNAL )   // ignore sheets of external libraries
         for( sal_Int32 nSheet = 0, nCount = rStrm.readInt32(); !rStrm.isEof() && (nSheet < nCount); ++nSheet )
             insertExternalSheet( rStrm.readString() );
 }
@@ -659,6 +658,11 @@ ExternalLinkInfo ExternalLink::getLinkInfo() const
     return aLinkInfo;
 }
 
+FunctionLibraryType ExternalLink::getFuncLibraryType() const
+{
+    return (meLinkType == LINKTYPE_LIBRARY) ? meFuncLibType : FUNCLIB_UNKNOWN;
+}
+
 sal_Int32 ExternalLink::getSheetIndex( sal_Int32 nTabId ) const
 {
     OSL_ENSURE( (nTabId == 0) || (getFilterType() == FILTER_OOX) || (getBiff() == BIFF8),
@@ -743,11 +747,25 @@ ExternalNameRef ExternalLink::getNameByIndex( sal_Int32 nIndex ) const
 
 // private --------------------------------------------------------------------
 
-void ExternalLink::setExternalTargetUrl( const OUString& rTargetUrl )
+#define OOX_TARGETTYPE_EXTLINK      CREATE_OFFICEDOC_RELATIONSTYPE( "externalLinkPath" )
+#define OOX_TARGETTYPE_LIBRARY      CREATE_MSOFFICE_RELATIONSTYPE( "xlExternalLinkPath/xlLibrary" )
+
+void ExternalLink::setExternalTargetUrl( const OUString& rTargetUrl, const OUString& rTargetType )
 {
+    meLinkType = LINKTYPE_UNKNOWN;
+    if( rTargetType == OOX_TARGETTYPE_EXTLINK )
+    {
     maTargetUrl = getBaseFilter().getAbsoluteUrl( rTargetUrl );
-    meLinkType = (maTargetUrl.getLength() > 0) ? LINKTYPE_EXTERNAL : LINKTYPE_UNKNOWN;
-    OSL_ENSURE( meLinkType == LINKTYPE_EXTERNAL, "ExternalLink::setExternalTargetUrl - empty target URL" );
+        if( maTargetUrl.getLength() > 0 )
+            meLinkType = LINKTYPE_EXTERNAL;
+    }
+    else if( rTargetType == OOX_TARGETTYPE_LIBRARY )
+    {
+        meLinkType = LINKTYPE_LIBRARY;
+        if( rTargetUrl.equalsIgnoreAsciiCaseAscii( "EUROTOOL.XLA" ) || rTargetUrl.equalsIgnoreAsciiCaseAscii( "EUROTOOL.XLAM" ) )
+            meFuncLibType = FUNCLIB_EUROTOOL;
+    }
+    OSL_ENSURE( meLinkType != LINKTYPE_UNKNOWN, "ExternalLink::setExternalTargetUrl - empty target URL or unknown target type" );
 
     // create the external document link API object that will contain the sheet caches
     if( meLinkType == LINKTYPE_EXTERNAL )
@@ -766,34 +784,51 @@ void ExternalLink::setDdeOleTargetUrl( const OUString& rClassName, const OUStrin
     OSL_ENSURE( meLinkType == eLinkType, "ExternalLink::setDdeOleTargetUrl - missing classname or target" );
 }
 
+void ExternalLink::parseExternalReference( const Relations& rRelations, const OUString& rRelId )
+{
+    if( const Relation* pRelation = rRelations.getRelationFromRelId( rRelId ) )
+        setExternalTargetUrl( pRelation->maTarget, pRelation->maType );
+}
+
 OUString ExternalLink::parseBiffTargetUrl( const OUString& rBiffTargetUrl )
 {
-    OUString aClassName, aTargetUrl, aSheetName;
-    bool bSameSheet = false;
     meLinkType = LINKTYPE_UNKNOWN;
-    if( getAddressConverter().parseBiffTargetUrl( aClassName, aTargetUrl, aSheetName, bSameSheet, rBiffTargetUrl ) )
-    {
-        if( aClassName.getLength() > 0 )
+
+    OUString aClassName, aTargetUrl, aSheetName;
+    switch( getAddressConverter().parseBiffTargetUrl( aClassName, aTargetUrl, aSheetName, rBiffTargetUrl ) )
         {
-            setDdeOleTargetUrl( aClassName, aTargetUrl, LINKTYPE_MAYBE_DDE_OLE );
-        }
-        else if( aTargetUrl.getLength() == 0 )
+        case BIFF_TARGETTYPE_URL:
+            if( aTargetUrl.getLength() == 0 )
         {
-            meLinkType = (aSheetName.getLength() > 0) ? LINKTYPE_INTERNAL : (bSameSheet ? LINKTYPE_SAME : LINKTYPE_SELF);
+                meLinkType = (aSheetName.getLength() > 0) ? LINKTYPE_INTERNAL : LINKTYPE_SELF;
         }
         else if( (aTargetUrl.getLength() == 1) && (aTargetUrl[ 0 ] == ':') )
         {
             if( getBiff() >= BIFF4 )
                 meLinkType = LINKTYPE_ANALYSIS;
         }
-        else if( (aTargetUrl.getLength() == 1) && (aTargetUrl[ 0 ] == ' ') )
+            else if( (aTargetUrl.getLength() > 1) || (aTargetUrl[ 0 ] != ' ') )
         {
-            meLinkType = LINKTYPE_UNKNOWN;
+                setExternalTargetUrl( aTargetUrl, OOX_TARGETTYPE_EXTLINK );
         }
-        else
-        {
-            setExternalTargetUrl( aTargetUrl );
-        }
+        break;
+
+        case BIFF_TARGETTYPE_SAMESHEET:
+            OSL_ENSURE( (aTargetUrl.getLength() == 0) && (aSheetName.getLength() == 0), "ExternalLink::parseBiffTargetUrl - unexpected target or sheet name" );
+            meLinkType = LINKTYPE_SAME;
+        break;
+
+        case BIFF_TARGETTYPE_LIBRARY:
+            OSL_ENSURE( aSheetName.getLength() == 0, "ExternalLink::parseBiffTargetUrl - unexpected sheet name" );
+            setExternalTargetUrl( aTargetUrl, OOX_TARGETTYPE_LIBRARY );
+        break;
+
+        case BIFF_TARGETTYPE_DDE_OLE:
+            setDdeOleTargetUrl( aClassName, aTargetUrl, LINKTYPE_MAYBE_DDE_OLE );
+        break;
+
+        case BIFF_TARGETTYPE_UNKNOWN:
+        break;
     }
     return aSheetName;
 }

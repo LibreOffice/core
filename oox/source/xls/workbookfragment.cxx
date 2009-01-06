@@ -258,8 +258,8 @@ void OoxWorkbookFragment::finalizeImport()
                 {
                     xFragment.set( new OoxChartsheetFragment( *this, aFragmentPath, xSheetSegment, nSheet ) );
                 }
-                else if( (pRelation->maType == CREATE_OUSTRING( "http://schemas.microsoft.com/office/2006/relationships/xlMacrosheet" )) ||
-                         (pRelation->maType == CREATE_OUSTRING( "http://schemas.microsoft.com/office/2006/relationships/xlIntlMacrosheet" )) )
+                else if( (pRelation->maType == CREATE_MSOFFICE_RELATIONSTYPE( "xlMacrosheet" )) ||
+                         (pRelation->maType == CREATE_MSOFFICE_RELATIONSTYPE( "xlIntlMacrosheet" )) )
                 {
                     xFragment.set( new OoxWorksheetFragment( *this, aFragmentPath, xSheetSegment, SHEETTYPE_MACROSHEET, nSheet ) );
                 }

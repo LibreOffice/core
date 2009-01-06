@@ -142,11 +142,18 @@ DefinedNameBase::DefinedNameBase( const WorkbookHelper& rHelper, sal_Int32 nLoca
     maOoxData.mnSheet = nLocalSheet;
 }
 
+const OUString& DefinedNameBase::getUpcaseOoxName() const
+{
+    if( maUpOoxName.getLength() == 0 )
+        maUpOoxName = maOoxData.maName.toAsciiUpperCase();
+    return maUpOoxName;
+}
+
 Any DefinedNameBase::getReference( const CellAddress& rBaseAddress ) const
 {
     if( maRefAny.hasValue() && (maOoxData.maName.getLength() >= 2) && (maOoxData.maName[ 0 ] == '\x01') )
     {
-        sal_Unicode cFlagsChar = maOoxData.maName.toAsciiUpperCase()[ 1 ];
+        sal_Unicode cFlagsChar = getUpcaseOoxName()[ 1 ];
         if( ('A' <= cFlagsChar) && (cFlagsChar <= 'P') )
         {
             sal_uInt16 nFlags = static_cast< sal_uInt16 >( cFlagsChar - 'A' );

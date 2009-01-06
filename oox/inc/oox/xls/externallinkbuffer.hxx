@@ -195,7 +195,8 @@ enum ExternalLinkType
     LINKTYPE_SAME,          /// Link refers to the current sheet.
     LINKTYPE_INTERNAL,      /// Link refers to a sheet in the own workbook.
     LINKTYPE_EXTERNAL,      /// Link refers to an external spreadsheet document.
-    LINKTYPE_ANALYSIS,      /// Link refers to Analysis add-in.
+    LINKTYPE_ANALYSIS,      /// Link refers to the Analysis add-in.
+    LINKTYPE_LIBRARY,       /// Link refers to an external add-in.
     LINKTYPE_DDE,           /// DDE link.
     LINKTYPE_OLE,           /// OLE link.
     LINKTYPE_MAYBE_DDE_OLE, /// Could be DDE or OLE link (BIFF only).
@@ -259,10 +260,11 @@ public:
     inline const ::rtl::OUString& getClassName() const { return maClassName; }
     /** Returns the target URL of this external link. */
     inline const ::rtl::OUString& getTargetUrl() const { return maTargetUrl; }
-
     /** Returns the link info needed by the XML formula parser. */
     ::com::sun::star::sheet::ExternalLinkInfo getLinkInfo() const;
 
+    /** Returns the type of the external library if this is a library link. */
+    FunctionLibraryType getFuncLibraryType() const;
     /** Returns the internal sheet index or external sheet cache index for the passed sheet. */
     sal_Int32           getSheetIndex( sal_Int32 nTabId = 0 ) const;
     /** Returns the internal sheet range or range of external sheet caches for the passed sheet range (BIFF only). */
@@ -276,8 +278,9 @@ public:
     ExternalNameRef     getNameByIndex( sal_Int32 nIndex ) const;
 
 private:
-    void                setExternalTargetUrl( const ::rtl::OUString& rTargetUrl );
+    void                setExternalTargetUrl( const ::rtl::OUString& rTargetUrl, const ::rtl::OUString& rTargetType );
     void                setDdeOleTargetUrl( const ::rtl::OUString& rClassName, const ::rtl::OUString& rTargetUrl, ExternalLinkType eLinkType );
+    void                parseExternalReference( const ::oox::core::Relations& rRelations, const ::rtl::OUString& rRelId );
     ::rtl::OUString     parseBiffTargetUrl( const ::rtl::OUString& rBiffTargetUrl );
 
     /** Creates an external locument link and the sheet cache for the passed sheet name. */
@@ -290,6 +293,7 @@ private:
     typedef RefVector< ExternalName >   ExternalNameVector;
 
     ExternalLinkType    meLinkType;         /// Type of this link object.
+    FunctionLibraryType meFuncLibType;      /// Type of the function library, if link type is LINKTYPE_LIBRARY.
     ::rtl::OUString     maRelId;            /// Relation identifier for the external link fragment.
     ::rtl::OUString     maClassName;        /// DDE service, OLE class name.
     ::rtl::OUString     maTargetUrl;        /// Target link, DDE topic, OLE target.

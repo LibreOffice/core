@@ -169,8 +169,9 @@ protected:
     bool                pushNlrOperand( const BinSingleRef2d& rRef );
     bool                pushEmbeddedRefOperand( const DefinedNameBase& rName, bool bPushBadToken );
     bool                pushDefinedNameOperand( const DefinedNameRef& rxDefName );
+    bool                pushExternalFuncOperand( const FunctionInfo& rFuncInfo );
     bool                pushDdeLinkOperand( const OUString& rDdeServer, const OUString& rDdeTopic, const OUString& rDdeItem );
-    bool                pushExternalNameOperand( const ExternalNameRef& rxExtName, ExternalLinkType eLinkType );
+    bool                pushExternalNameOperand( const ExternalNameRef& rxExtName, const ExternalLink& rExtLink );
 
     bool                pushUnaryPreOperator( sal_Int32 nOpCode );
     bool                pushUnaryPostOperator( sal_Int32 nOpCode );
@@ -199,6 +200,7 @@ private:
     void                processTokens( const ApiToken* pToken, const ApiToken* pTokenEnd );
     const ApiToken*     processParameters( const FunctionInfo& rFuncInfo, const ApiToken* pToken, const ApiToken* pTokenEnd );
 
+    const FunctionInfo* getFuncInfoFromLibFuncName( const ApiToken& rToken ) const;
     bool                isEmptyParameter( const ApiToken* pToken, const ApiToken* pTokenEnd ) const;
     const ApiToken*     getExternCallToken( const ApiToken* pToken, const ApiToken* pTokenEnd ) const;
     const FunctionInfo* convertExternCallParam( ApiToken& orFuncToken, const ApiToken& rECToken ) const;
@@ -669,6 +671,13 @@ bool FormulaParserImpl::pushDefinedNameOperand( const DefinedNameRef& rxDefName 
     return pushEmbeddedRefOperand( *rxDefName, true );
 }
 
+bool FormulaParserImpl::pushExternalFuncOperand( const FunctionInfo& rFuncInfo )
+{
+    return (rFuncInfo.mnApiOpCode == OPCODE_EXTERNAL) ?
+        pushValueOperand( rFuncInfo.maExtProgName, OPCODE_EXTERNAL ) :
+        pushOperand( rFuncInfo.mnApiOpCode );
+}
+
 bool FormulaParserImpl::pushDdeLinkOperand( const OUString& rDdeServer, const OUString& rDdeTopic, const OUString& rDdeItem )
 {
     // create the function call DDE("server";"topic";"item")
@@ -679,9 +688,9 @@ bool FormulaParserImpl::pushDdeLinkOperand( const OUString& rDdeServer, const OU
         pushFunctionOperator( OPCODE_DDE, 3 );
 }
 
-bool FormulaParserImpl::pushExternalNameOperand( const ExternalNameRef& rxExtName, ExternalLinkType eLinkType )
+bool FormulaParserImpl::pushExternalNameOperand( const ExternalNameRef& rxExtName, const ExternalLink& rExtLink )
 {
-    if( rxExtName.get() ) switch( eLinkType )
+    if( rxExtName.get() ) switch( rExtLink.getLinkType() )
     {
         case LINKTYPE_INTERNAL:
         case LINKTYPE_EXTERNAL:
@@ -689,8 +698,14 @@ bool FormulaParserImpl::pushExternalNameOperand( const ExternalNameRef& rxExtNam
 
         case LINKTYPE_ANALYSIS:
             // TODO: need support for localized addin function names
-            if( const FunctionInfo* pFuncInfo = getFuncInfoFromOoxFuncName( rxExtName->getOoxName() ) )
-                return pushValueOperand( pFuncInfo->maExtProgName, OPCODE_EXTERNAL );
+            if( const FunctionInfo* pFuncInfo = getFuncInfoFromOoxFuncName( rxExtName->getUpcaseOoxName() ) )
+                return pushExternalFuncOperand( *pFuncInfo );
+        break;
+
+        case LINKTYPE_LIBRARY:
+            if( const FunctionInfo* pFuncInfo = getFuncInfoFromOoxFuncName( rxExtName->getUpcaseOoxName() ) )
+                if( (pFuncInfo->meFuncLibType != FUNCLIB_UNKNOWN) && (pFuncInfo->meFuncLibType == rExtLink.getFuncLibraryType()) )
+                    return pushExternalFuncOperand( *pFuncInfo );
         break;
 
         case LINKTYPE_DDE:
@@ -702,7 +717,7 @@ bool FormulaParserImpl::pushExternalNameOperand( const ExternalNameRef& rxExtNam
         break;
 
         default:
-            OSL_ENSURE( eLinkType != LINKTYPE_SELF, "FormulaParserImpl::pushExternalNameOperand - invalid call" );
+            OSL_ENSURE( rExtLink.getLinkType() != LINKTYPE_SELF, "FormulaParserImpl::pushExternalNameOperand - invalid call" );
     }
     return pushBiffErrorOperand( BIFF_ERR_NAME );
 }
@@ -852,17 +867,65 @@ void FormulaParserImpl::processTokens( const ApiToken* pToken, const ApiToken* p
     {
         // push the current token into the vector
         appendFinalToken( *pToken );
-        // try to process a function, otherwise go to next token
-        if( const FunctionInfo* pFuncInfo = getFuncInfoFromApiToken( *pToken ) )
+        const FunctionInfo* pFuncInfo;
+        // try to process a function
+        if( (pFuncInfo = getFuncInfoFromApiToken( *pToken )) != 0 )
+        {
             pToken = processParameters( *pFuncInfo, pToken + 1, pTokenEnd );
+        }
+        // try to process a function from an external library
+        else if( (pFuncInfo = getFuncInfoFromLibFuncName( *pToken )) != 0 )
+        {
+            ApiToken& rFuncToken = maTokenStorage.back();
+            rFuncToken.OpCode = pFuncInfo->mnApiOpCode;
+            if( (rFuncToken.OpCode == OPCODE_EXTERNAL) && (pFuncInfo->maExtProgName.getLength() > 0) )
+                rFuncToken.Data <<= pFuncInfo->maExtProgName;
+            else
+                rFuncToken.Data.clear();    // clear string from OPCODE_BAD
+            pToken = processParameters( *pFuncInfo, pToken + 1, pTokenEnd );
+        }
+        // otherwise, go to next token
         else
+        {
             ++pToken;
+        }
     }
 }
+
+namespace {
+
+bool lclTokenHasChar( const ApiToken& rToken, sal_Int32 nOpCode, sal_Unicode cChar )
+{
+    return (rToken.OpCode == nOpCode) && rToken.Data.has< OUString >() && (rToken.Data.get< OUString >() == OUString( cChar ));
+}
+
+bool lclTokenHasDouble( const ApiToken& rToken, sal_Int32 nOpCode )
+{
+    return (rToken.OpCode == nOpCode) && rToken.Data.has< double >();
+}
+
+} // namespace
 
 const ApiToken* FormulaParserImpl::processParameters(
         const FunctionInfo& rFuncInfo, const ApiToken* pToken, const ApiToken* pTokenEnd )
 {
+    /*  OOXML import of library functions pushes the external reference "[n]!"
+        as BAD/PUSH/BAD/BAD tokens in front of the function name. Try to find
+        and remove them here. TODO: This will change with CWS mooxlsc, there,
+        the reference ID and function name are passed together in a BAD token,
+        see getFuncInfoFromLibFuncName(). */
+    if( (rFuncInfo.meFuncLibType != FUNCLIB_UNKNOWN) && (maTokenStorage.size() >= 5) )
+    {
+        sal_Size nSize = maTokenStorage.size();
+        if( lclTokenHasChar(   maTokenStorage[ nSize - 5 ], OPCODE_BAD, '[' ) &&
+            lclTokenHasDouble( maTokenStorage[ nSize - 4 ], OPCODE_PUSH     ) &&
+            lclTokenHasChar(   maTokenStorage[ nSize - 3 ], OPCODE_BAD, ']' ) &&
+            lclTokenHasChar(   maTokenStorage[ nSize - 2 ], OPCODE_BAD, '!' ) )
+        {
+            maTokenStorage.erase( maTokenStorage.end() - 5, maTokenStorage.end() - 1 );
+        }
+    }
+
     // remember position of the token containing the function op-code
     size_t nFuncNameIdx = maTokenStorage.size() - 1;
 
@@ -978,6 +1041,29 @@ const ApiToken* FormulaParserImpl::processParameters(
         rFuncNameToken.OpCode = OPCODE_NONAME;
 
     return pToken;
+}
+
+const FunctionInfo* FormulaParserImpl::getFuncInfoFromLibFuncName( const ApiToken& rToken ) const
+{
+    // try to parse calls to library functions
+    if( (rToken.OpCode == OPCODE_BAD) && rToken.Data.has< OUString >() )
+    {
+        // format of the function call is "[n]!funcname", n being the link to the library
+        OUString aString = rToken.Data.get< OUString >();
+        sal_Int32 nBracketOpen = aString.indexOf( '[' );
+        sal_Int32 nBracketClose = aString.indexOf( ']' );
+        sal_Int32 nExclamation = aString.indexOf( '!' );
+        if( (0 == nBracketOpen) && (nBracketOpen + 1 < nBracketClose) && (nBracketClose + 1 == nExclamation) && (nExclamation + 1 < aString.getLength()) )
+        {
+            sal_Int32 nRefId = aString.copy( nBracketOpen + 1, nBracketClose - nBracketOpen - 1 ).toInt32();
+            const ExternalLink* pExtLink = getExternalLinks().getExternalLink( nRefId ).get();
+            if( pExtLink && (pExtLink->getLinkType() == LINKTYPE_LIBRARY) )
+                if( const FunctionInfo* pFuncInfo = getFuncInfoFromOoxFuncName( aString.copy( nExclamation + 1 ).toAsciiUpperCase() ) )
+                    if( (pFuncInfo->meFuncLibType != FUNCLIB_UNKNOWN) && (pFuncInfo->meFuncLibType == pExtLink->getFuncLibraryType()) )
+                        return pFuncInfo;
+        }
+    }
+    return 0;
 }
 
 bool FormulaParserImpl::isEmptyParameter( const ApiToken* pToken, const ApiToken* pTokenEnd ) const
@@ -1666,7 +1752,7 @@ bool OoxFormulaParserImpl::pushOobExtName( sal_Int32 nRefId, sal_Int32 nNameId )
             return pushOobName( nNameId );
         // external name indexes are one-based in OOBIN
         ExternalNameRef xExtName = pExtLink->getNameByIndex( nNameId - 1 );
-        return pushExternalNameOperand( xExtName, pExtLink->getLinkType() );
+        return pushExternalNameOperand( xExtName, *pExtLink );
     }
     return pushBiffErrorOperand( BIFF_ERR_NAME );
 }
@@ -2603,7 +2689,7 @@ bool BiffFormulaParserImpl::pushBiffExtName( sal_Int32 nRefId, sal_uInt16 nNameI
             return pushBiffName( nNameId );
         // external name indexes are one-based in BIFF
         ExternalNameRef xExtName = pExtLink->getNameByIndex( static_cast< sal_Int32 >( nNameId ) - 1 );
-        return pushExternalNameOperand( xExtName, pExtLink->getLinkType() );
+        return pushExternalNameOperand( xExtName, *pExtLink );
     }
     return pushBiffErrorOperand( BIFF_ERR_NAME );
 }

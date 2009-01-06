@@ -227,14 +227,17 @@ namespace {
 
 const size_t FUNCINFO_CLASSCOUNT            = 5;        /// Number of token class entries.
 
-const sal_uInt8 FUNCFLAG_VOLATILE           = 0x01;     /// Result is volatile (e.g. NOW() function).
-const sal_uInt8 FUNCFLAG_IMPORTONLY         = 0x02;     /// Only used in import filter.
-const sal_uInt8 FUNCFLAG_EXPORTONLY         = 0x04;     /// Only used in export filter.
-const sal_uInt8 FUNCFLAG_MACROCALL          = 0x08;     /// Function is simulated by macro call in Excel.
-const sal_uInt8 FUNCFLAG_EXTERNAL           = 0x10;     /// Function is external in Calc.
-const sal_uInt8 FUNCFLAG_MACROFUNC          = 0x20;     /// Function is a macro sheet function.
-const sal_uInt8 FUNCFLAG_MACROCMD           = 0x40;     /// Function is a macro sheet command.
-const sal_uInt8 FUNCFLAG_ALWAYSVAR          = 0x80;     /// Function is always represented by a tFuncVar token.
+const sal_uInt16 FUNCFLAG_VOLATILE          = 0x0001;   /// Result is volatile (e.g. NOW() function).
+const sal_uInt16 FUNCFLAG_IMPORTONLY        = 0x0002;   /// Only used in import filter.
+const sal_uInt16 FUNCFLAG_EXPORTONLY        = 0x0004;   /// Only used in export filter.
+const sal_uInt16 FUNCFLAG_MACROCALL         = 0x0008;   /// Function is simulated by macro call in Excel.
+const sal_uInt16 FUNCFLAG_EXTERNAL          = 0x0010;   /// Function is external in Calc.
+const sal_uInt16 FUNCFLAG_MACROFUNC         = 0x0020;   /// Function is a macro-sheet function.
+const sal_uInt16 FUNCFLAG_MACROCMD          = 0x0040;   /// Function is a macro-sheet command.
+const sal_uInt16 FUNCFLAG_ALWAYSVAR         = 0x0080;   /// Function is always represented by a tFuncVar token.
+
+const sal_uInt16 FUNCFLAG_FUNCLIBMASK       = 0xF000;   /// Mask for function library bits.
+const sal_uInt16 FUNCFLAG_EUROTOOL          = 0x1000;   /// Function is part of the EuroTool add-in.
 
 typedef ::boost::shared_ptr< FunctionInfo > FunctionInfoRef;
 
@@ -248,7 +251,7 @@ struct FunctionData
     sal_uInt8           mnMaxParamCount;    /// Maximum number of parameters.
     sal_uInt8           mnRetClass;         /// BIFF token class of the return value.
     sal_uInt8           mpnParamClass[ FUNCINFO_CLASSCOUNT ]; /// Expected BIFF token classes of parameters.
-    sal_uInt8           mnFlags;            /// Additional flags.
+    sal_uInt16          mnFlags;            /// Additional flags.
 
     inline bool         isSupported( bool bImportFilter ) const;
 };
@@ -632,7 +635,6 @@ static const FunctionData saFuncTableBiff4[] =
     { "MULTINOMIAL",            "MULTINOMIAL",          474,    NOID,   1,  MX, V, { R }, FUNCFLAG_EXTERNAL },
     { "LCM",                    "LCM",                  475,    NOID,   1,  MX, V, { R }, FUNCFLAG_EXTERNAL },       // Calc: builtin and add-in
     { "FVSCHEDULE",             "FVSCHEDULE",           476,    NOID,   2,  2,  V, { V, A }, FUNCFLAG_EXTERNAL },
-//    { "EUROCONVERT",            "EUROCONVERT",          NOID,   NOID,   3,  5,  V, { V }, FUNCFLAG_EXTERNAL },       // Euro conversion add-in
 
     // *** macro sheet commands ***
 
@@ -663,6 +665,10 @@ static const FunctionData saFuncTableBiff5[] =
     { 0,                        "DATESTRING",           352,    352,    1,  1,  V, { V }, FUNCFLAG_IMPORTONLY },   // not supported in Calc, missing in OOX spec
     { 0,                        "NUMBERSTRING",         353,    353,    2,  2,  V, { V }, FUNCFLAG_IMPORTONLY },   // not supported in Calc, missing in OOX spec
     { "ROMAN",                  "ROMAN",                354,    354,    1,  2,  V, { V }, 0 },
+
+    // *** EuroTool add-in ***
+
+    { "EUROCONVERT",            "EUROCONVERT",          NOID,   NOID,   3,  5,  V, { V }, FUNCFLAG_EUROTOOL },
 
     // *** macro sheet commands ***
 
@@ -868,6 +874,11 @@ void FunctionProvider::initFunc( const FunctionData& rFuncData, sal_uInt8 nMaxPa
         xFuncInfo->maOoxFuncName = OUString::createFromAscii( rFuncData.mpcOoxFuncName );
     if( getFlag( rFuncData.mnFlags, FUNCFLAG_MACROCALL ) )
         xFuncInfo->maBiffMacroName = CREATE_OUSTRING( "_xlfn." ) + xFuncInfo->maOoxFuncName;
+    switch( rFuncData.mnFlags & FUNCFLAG_FUNCLIBMASK )
+    {
+        case FUNCFLAG_EUROTOOL: xFuncInfo->meFuncLibType = FUNCLIB_EUROTOOL;    break;
+        default:                xFuncInfo->meFuncLibType = FUNCLIB_UNKNOWN;
+    }
     xFuncInfo->mnApiOpCode = -1;
     xFuncInfo->mnOobFuncId = rFuncData.mnOobFuncId;
     xFuncInfo->mnBiffFuncId = rFuncData.mnBiffFuncId;

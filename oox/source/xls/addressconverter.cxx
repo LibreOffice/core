@@ -93,7 +93,7 @@ const sal_Unicode BIFF_URL_PARENT   = '\x04';       /// Parent directory.
 const sal_Unicode BIFF_URL_RAW      = '\x05';       /// Unencoded URL.
 const sal_Unicode BIFF_URL_INSTALL  = '\x06';       /// Application installation directory.
 const sal_Unicode BIFF_URL_INSTALL2 = '\x07';       /// Alternative application installation directory.
-const sal_Unicode BIFF_URL_ADDIN    = '\x08';       /// Add-in installation directory.
+const sal_Unicode BIFF_URL_LIBRARY  = '\x08';       /// Library directory in application installation.
 const sal_Unicode BIFF4_URL_SHEET   = '\x09';       /// BIFF4 internal sheet.
 const sal_Unicode BIFF_URL_UNC      = '@';          /// UNC path root.
 
@@ -385,13 +385,13 @@ bool lclAppendUrlChar( OUStringBuffer& orUrl, sal_Unicode cChar, bool bEncodeSpe
 
 } // namespace
 
-bool AddressConverter::parseBiffTargetUrl(
-        OUString& orClassName, OUString& orTargetUrl, OUString& orSheetName, bool& orbSameSheet,
-        const OUString& rBiffTargetUrl )
+BiffTargetType AddressConverter::parseBiffTargetUrl(
+        OUString& orClassName, OUString& orTargetUrl, OUString& orSheetName, const OUString& rBiffTargetUrl )
 {
     OUStringBuffer aTargetUrl;
     OUStringBuffer aSheetName;
-    orbSameSheet = false;
+    // default target type: some URL with/without sheet name, may be overridden below
+    BiffTargetType eTargetType = BIFF_TARGETTYPE_URL;
 
     enum
     {
@@ -419,8 +419,10 @@ bool AddressConverter::parseBiffTargetUrl(
             case STATE_START:
                 if( (cChar == mcUrlThisWorkbook) || (cChar == mcUrlThisSheet) || (cChar == mcUrlSameSheet) )
                 {
-                    if( pcChar + 1 < pcEnd ) eState = STATE_ERROR;
-                    orbSameSheet = cChar == mcUrlSameSheet;
+                    if( pcChar + 1 < pcEnd )
+                        eState = STATE_ERROR;
+                    if( cChar == mcUrlSameSheet )
+                        eTargetType = BIFF_TARGETTYPE_SAMESHEET;
                 }
                 else if( cChar == mcUrlExternal )
                     eState = (pcChar + 1 < pcEnd) ? STATE_ENCODED_PATH_START : STATE_ERROR;
@@ -446,8 +448,11 @@ bool AddressConverter::parseBiffTargetUrl(
                     eState = STATE_UNSUPPORTED;
                 else if( cChar == BIFF_URL_INSTALL2 )
                     eState = STATE_UNSUPPORTED;
-                else if( cChar == BIFF_URL_ADDIN )
-                    eState = STATE_UNSUPPORTED;
+                else if( cChar == BIFF_URL_LIBRARY )
+                {
+                    eState = STATE_ENCODED_PATH;
+                    eTargetType = BIFF_TARGETTYPE_LIBRARY;
+                }
                 else if( (getBiff() == BIFF4) && (cChar == BIFF4_URL_SHEET) )
                     eState = STATE_SHEETNAME;
                 else if( cChar == '[' )
@@ -496,6 +501,7 @@ bool AddressConverter::parseBiffTargetUrl(
                 {
                     orClassName = aTargetUrl.makeStringAndClear();
                     eState = STATE_DDE_OLE;
+                    eTargetType = BIFF_TARGETTYPE_DDE_OLE;
                 }
                 else if( cChar == '[' )
                     eState = STATE_FILENAME;
@@ -535,7 +541,8 @@ bool AddressConverter::parseBiffTargetUrl(
     OSL_ENSURE( (eState != STATE_ERROR) && (pcChar == pcEnd),
         OStringBuffer( "AddressConverter::parseBiffTargetUrl - parser error in target \"" ).
         append( OUStringToOString( rBiffTargetUrl, RTL_TEXTENCODING_UTF8 ) ).append( '"' ).getStr() );
-    return (eState != STATE_ERROR) && (eState != STATE_UNSUPPORTED) && (pcChar == pcEnd);
+    bool bParserOk = (eState != STATE_ERROR) && (eState != STATE_UNSUPPORTED) && (pcChar == pcEnd);
+    return bParserOk ? eTargetType : BIFF_TARGETTYPE_UNKNOWN;
 }
 
 // ----------------------------------------------------------------------------
