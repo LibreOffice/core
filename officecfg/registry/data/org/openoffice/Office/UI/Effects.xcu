@@ -8,7 +8,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Effects.xcu,v $
- * $Revision: 1.9 $
+ * $Revision: 1.9.74.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1231,6 +1231,21 @@
 
                 </prop>
             </node>
+            <node oor:name="ooo-media-start" oor:op="replace">
+                  <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Start media</value>
+                </prop>
+            </node>
+            <node oor:name="ooo-media-stop" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">End media</value>
+                </prop>
+            </node>
+            <node oor:name="ooo-media-toggle-pause" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Toggle pause</value>
+                </prop>
+            </node>
         </node>
         <node oor:name="Properties">
             <node oor:name="basic" oor:op="replace">
@@ -2053,6 +2068,15 @@
                 </prop>
             </node>
         </node>
+        <node oor:name="Misc">
+            <node oor:name="media" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Media</value>
+                </prop>
+                <prop oor:name="Effects" oor:type="oor:string-list">
+                    <value oor:separator=";">ooo-media-start;ooo-media-toggle-pause;ooo-media-stop</value>
+                </prop>
+            </node>
+        </node>
     </node>
 </oor:component-data>
-
