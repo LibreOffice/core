@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: porlay.cxx,v $
- * $Revision: 1.67.14.4 $
+ * $Revision: 1.67.190.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -62,6 +62,7 @@
 #include <svx/blnkitem.hxx>
 #include <tools/multisel.hxx>
 #include <unotools/charclass.hxx>
+#include <i18npool/mslangid.hxx>
 #include <charfmt.hxx>
 #include <fchrfmt.hxx>
 #include <docary.hxx>       // SwRedlineTbl
@@ -1976,7 +1977,7 @@ sal_Bool SwScriptInfo::IsArabicText( const XubString& rTxt, xub_StrLen nStt, xub
     }
 
     if( nIdx == nEnd )
-{
+    {
         // no regular character found in this portion. Go backward:
         --nIdx;
         while ( nIdx >= 0 && !rCC.isLetterNumeric( rTxt, (xub_StrLen)nIdx ) )

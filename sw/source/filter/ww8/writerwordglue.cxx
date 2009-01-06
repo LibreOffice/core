@@ -966,9 +966,9 @@ namespace sw
                         break;
                     case LANGUAGE_PORTUGUESE:
                     case LANGUAGE_PORTUGUESE_BRAZILIAN:
-                    case LANGUAGE_SPANISH:
-                    case LANGUAGE_SPANISH_MEXICAN:
                     case LANGUAGE_SPANISH_MODERN:
+                    case LANGUAGE_SPANISH_DATED:
+                    case LANGUAGE_SPANISH_MEXICAN:
                     case LANGUAGE_SPANISH_GUATEMALA:
                     case LANGUAGE_SPANISH_COSTARICA:
                     case LANGUAGE_SPANISH_PANAMA:

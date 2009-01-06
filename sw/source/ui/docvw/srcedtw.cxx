@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: srcedtw.cxx,v $
- * $Revision: 1.21 $
+ * $Revision: 1.21.252.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1007,7 +1007,7 @@ BOOL  lcl_GetLanguagesForEncoding(rtl_TextEncoding eEnc, LanguageType aLanguages
         case RTL_TEXTENCODING_MS_1256          :
         case RTL_TEXTENCODING_ISO_8859_6  :
         case RTL_TEXTENCODING_APPLE_ARABIC :
-            aLanguages[0] = LANGUAGE_ARABIC;
+            aLanguages[0] = LANGUAGE_ARABIC_SAUDI_ARABIA;
          break;
 
         case RTL_TEXTENCODING_APPLE_CHINTRAD   :
