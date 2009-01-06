@@ -37,7 +37,7 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
-DLLPRE =
+DLLPRE = 
 
 .IF "$(SYSTEM_ZLIB)" == "YES"
 CFLAGS+=-DSYSTEM_ZLIB
@@ -50,8 +50,8 @@ CFLAGS+=-DSYSTEM_EXPAT
 #-----------------------------------------------------------
 
 SLOFILES =\
+        $(SLO)$/facreg.obj\
         $(SLO)$/fastparser.obj\
-        $(SLO)$/fastattribs.obj\
         $(SLO)$/xml2utf.obj
 
 SHL1TARGET= $(TARGET)
@@ -59,8 +59,10 @@ SHL1IMPLIB= i$(TARGET)
 
 SHL1STDLIBS= \
         $(SALLIB)  \
+        $(SAXLIB)  \
         $(CPPULIB) \
         $(CPPUHELPERLIB)\
+        $(COMPHELPERLIB)\
         $(EXPATASCII3RDLIB)
 
 SHL1DEPN=

@@ -107,6 +107,7 @@ class COMPHELPER_DLLPUBLIC MediaDescriptor : public SequenceAsHashMap
         static const ::rtl::OUString& PROP_SILENT();
         static const ::rtl::OUString& PROP_STATUSINDICATOR();
         static const ::rtl::OUString& PROP_STREAM();
+        static const ::rtl::OUString& PROP_STREAMFOROUTPUT();
         static const ::rtl::OUString& PROP_TEMPLATENAME();
         static const ::rtl::OUString& PROP_TEMPLATEREGIONNAME();
         static const ::rtl::OUString& PROP_TITLE();

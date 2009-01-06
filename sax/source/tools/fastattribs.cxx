@@ -31,7 +31,7 @@
 #include <algorithm>
 #include <boost/bind.hpp>
 
-#include "fastattribs.hxx"
+#include <sax/fastattribs.hxx>
 
 using ::rtl::OUString;
 using ::rtl::OString;
@@ -41,40 +41,25 @@ using namespace ::com::sun::star::xml::sax;
 namespace sax_fastparser
 {
 
-struct UnknownAttribute
+UnknownAttribute::UnknownAttribute( const OUString& rNamespaceURL, const OString& rName, const OString& rValue )
+    : maNamespaceURL( rNamespaceURL ), maName( rName ), maValue( rValue )
 {
-    OUString maNamespaceURL;
-    OString maName;
-    OString maValue;
+}
 
-    UnknownAttribute( const OUString& rNamespaceURL, const OString& rName, const OString& rValue )
-        : maNamespaceURL( rNamespaceURL ), maName( rName ), maValue( rValue ) {}
+UnknownAttribute::UnknownAttribute( const OString& rName, const OString& rValue )
+    : maName( rName ), maValue( rValue )
+{
+}
 
-    UnknownAttribute( const OString& rName, const OString& rValue )
-        : maName( rName ), maValue( rValue ) {}
-
-/*
-    UnknownAttribute( const UnknownAttribute& r )
-        : maNamespaceURL( r.maNamespaceURL ), maName( r.maName ), maValue( r.maValue ) {}
-
-    const UnknownAttribute& operator=( const UnknownAttribute& r )
+void UnknownAttribute::FillAttribute( Attribute* pAttrib ) const
+{
+    if( pAttrib )
     {
-        maNamespaceURL = r.maNamespaceURL;
-        maName = r.maName;
-        maValue = r.maValue;
-        return *this;
+        pAttrib->Name = OStringToOUString( maName, RTL_TEXTENCODING_UTF8 );
+        pAttrib->NamespaceURL = maNamespaceURL;
+        pAttrib->Value = OStringToOUString( maValue, RTL_TEXTENCODING_UTF8 );
     }
-*/
-    void FillAttribute( Attribute* pAttrib ) const
-    {
-        if( pAttrib )
-        {
-            pAttrib->Name = OStringToOUString( maName, RTL_TEXTENCODING_UTF8 );
-            pAttrib->NamespaceURL = maNamespaceURL;
-            pAttrib->Value = OStringToOUString( maValue, RTL_TEXTENCODING_UTF8 );
-        }
-    }
-};
+}
 
 FastAttributeList::FastAttributeList( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastTokenHandler >& xTokenHandler )
 : mxTokenHandler( xTokenHandler )
@@ -165,7 +150,21 @@ Sequence< Attribute > FastAttributeList::getUnknownAttributes(  ) throw (Runtime
 {
     Sequence< Attribute > aSeq( maUnknownAttributes.size() );
     Attribute* pAttr = aSeq.getArray();
-    std::for_each( maUnknownAttributes.begin(), maUnknownAttributes.end(), bind(&UnknownAttribute::FillAttribute, _1, pAttr++ ) );
+    for( UnknownAttributeList::iterator attrIter = maUnknownAttributes.begin(); attrIter != maUnknownAttributes.end(); attrIter++ )
+        (*attrIter).FillAttribute( pAttr++ );
+    return aSeq;
+}
+Sequence< FastAttribute > FastAttributeList::getFastAttributes(  ) throw (RuntimeException)
+{
+    Sequence< FastAttribute > aSeq( maAttributes.size() );
+    FastAttribute* pAttr = aSeq.getArray();
+    FastAttributeMap::iterator fastAttrIter = maAttributes.begin();
+    for(; fastAttrIter != maAttributes.end(); fastAttrIter++ )
+    {
+        pAttr->Token = fastAttrIter->first;
+        pAttr->Value = OStringToOUString( fastAttrIter->second, RTL_TEXTENCODING_UTF8 );
+        pAttr++;
+    }
     return aSeq;
 }
 

@@ -297,6 +297,12 @@ const ::rtl::OUString& MediaDescriptor::PROP_STREAM()
     return sProp;
 }
 
+const ::rtl::OUString& MediaDescriptor::PROP_STREAMFOROUTPUT()
+{
+    static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("StreamForOutput"));
+    return sProp;
+}
+
 const ::rtl::OUString& MediaDescriptor::PROP_TEMPLATENAME()
 {
     static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("TemplateName"));

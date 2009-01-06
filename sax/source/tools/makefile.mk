@@ -32,7 +32,7 @@
 PRJ=..$/..
 
 PRJNAME=sax
-TARGET=saxtools
+TARGET=sax
 ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
@@ -43,7 +43,30 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files --------------------------------------------------------
 
 SLOFILES =	\
-        $(SLO)$/converter.obj
+        $(SLO)$/converter.obj				\
+        $(SLO)$/fastattribs.obj				\
+        $(SLO)$/fastserializer.obj			\
+        $(SLO)$/fshelper.obj
+
+SHL1TARGET= $(TARGET)$(DLLPOSTFIX)
+SHL1IMPLIB= i$(TARGET)
+
+SHL1STDLIBS= \
+                $(VOSLIB)		\
+                $(CPPULIB)		\
+                $(CPPUHELPERLIB)\
+                $(COMPHELPERLIB)\
+                $(RTLLIB)		\
+                $(SALLIB)		\
+                $(ONELIB)		\
+                $(SALHELPERLIB)
+
+SHL1DEPN=
+SHL1OBJS=       $(SLOFILES)
+SHL1USE_EXPORTS=name
+SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
+DEF1NAME=		$(SHL1TARGET)
+DEFLIB1NAME=    $(TARGET)
 
 # --- Targets -------------------------------------------------------
 

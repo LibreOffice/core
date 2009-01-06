@@ -34,8 +34,10 @@
 #include <com/sun/star/xml/sax/XFastAttributeList.hpp>
 #include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
 #include <com/sun/star/xml/Attribute.hpp>
+#include <com/sun/star/xml/FastAttribute.hpp>
 
 #include <cppuhelper/implbase1.hxx>
+#include "sax/dllapi.h"
 
 #include <map>
 #include <vector>
@@ -43,12 +45,23 @@
 namespace sax_fastparser
 {
 
-struct UnknownAttribute;
+struct UnknownAttribute
+{
+    ::rtl::OUString maNamespaceURL;
+    ::rtl::OString maName;
+    ::rtl::OString maValue;
+
+    UnknownAttribute( const ::rtl::OUString& rNamespaceURL, const ::rtl::OString& rName, const ::rtl::OString& rValue );
+
+    UnknownAttribute( const ::rtl::OString& rName, const ::rtl::OString& rValue );
+
+    void FillAttribute( ::com::sun::star::xml::Attribute* pAttrib ) const;
+};
 
 typedef std::map< sal_Int32, ::rtl::OString > FastAttributeMap;
 typedef std::vector< UnknownAttribute > UnknownAttributeList;
 
-class FastAttributeList : public ::cppu::WeakImplHelper1< ::com::sun::star::xml::sax::XFastAttributeList >
+class SAX_DLLPUBLIC FastAttributeList : public ::cppu::WeakImplHelper1< ::com::sun::star::xml::sax::XFastAttributeList >
 {
 public:
     FastAttributeList( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastTokenHandler >& xTokenHandler );
@@ -66,6 +79,7 @@ public:
     virtual ::rtl::OUString SAL_CALL getValue( ::sal_Int32 Token ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getOptionalValue( ::sal_Int32 Token ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::xml::Attribute > SAL_CALL getUnknownAttributes(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::xml::FastAttribute > SAL_CALL getFastAttributes() throw (::com::sun::star::uno::RuntimeException);
 
 private:
     FastAttributeMap maAttributes;
