@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: impedit3.cxx,v $
- * $Revision: 1.125.40.1 $
+ * $Revision: 1.124.82.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -83,6 +83,7 @@
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/text/CharacterCompressionType.hpp>
 #include <vcl/pdfextoutdevdata.hxx>
+#include <i18npool/mslangid.hxx>
 
 #include <comphelper/processfactory.hxx>
 
@@ -1982,7 +1983,7 @@ void ImpEditEngine::ImpAdjustBlocks( ParaPortion* pParaPortion, EditLine* pLine,
         {
             // Don't use blank if language is arabic
             LanguageType eLang = GetLanguage( EditPaM( pNode, nChar ) );
-            if ( eLang != LANGUAGE_ARABIC )
+            if ( MsLangId::getPrimaryLanguage( eLang) != LANGUAGE_ARABIC_PRIMARY_ONLY )
                 aPositions.Insert( nChar, aPositions.Count() );
         }
     }
@@ -1997,7 +1998,7 @@ void ImpEditEngine::ImpAdjustBlocks( ParaPortion* pParaPortion, EditLine* pLine,
     // Wenn das letzte Zeichen ein Blank ist, will ich es nicht haben!
     // Die Breite muss auf die Blocker davor verteilt werden...
     // Aber nicht, wenn es das einzige ist
-    if ( ( pNode->GetChar( nLastChar ) == ' ' ) && ( aPositions.Count() > 1 ) && ( GetLanguage( EditPaM( pNode, nLastChar ) ) != LANGUAGE_ARABIC ) )
+    if ( ( pNode->GetChar( nLastChar ) == ' ' ) && ( aPositions.Count() > 1 ) && ( MsLangId::getPrimaryLanguage( GetLanguage( EditPaM( pNode, nLastChar ) ) ) != LANGUAGE_ARABIC_PRIMARY_ONLY ) )
     {
         aPositions.Remove( aPositions.Count()-1, 1 );
         USHORT nPortionStart, nPortion;
@@ -4368,6 +4369,22 @@ void ImpEditEngine::ImplInitLayoutMode( OutputDevice* pOutDev, USHORT nPara, USH
     }
 
     pOutDev->SetLayoutMode( nLayoutMode );
+
+    // #114278# Also setting up digit language from Svt options
+    // (cannot reliably inherit the outdev's setting)
+    LanguageType eLang;
+
+    if( !pCTLOptions )
+        pCTLOptions = new SvtCTLOptions;
+
+    if ( SvtCTLOptions::NUMERALS_HINDI == pCTLOptions->GetCTLTextNumerals() )
+        eLang = LANGUAGE_ARABIC_SAUDI_ARABIA;
+    else if ( SvtCTLOptions::NUMERALS_ARABIC == pCTLOptions->GetCTLTextNumerals() )
+        eLang = LANGUAGE_ENGLISH;
+    else
+        eLang = (LanguageType) Application::GetSettings().GetLanguage();
+
+    pOutDev->SetDigitLanguage( eLang );
 }
 
 Reference < i18n::XBreakIterator > ImpEditEngine::ImplGetBreakIterator() const

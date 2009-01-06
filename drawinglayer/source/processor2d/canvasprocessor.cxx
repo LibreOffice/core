@@ -2180,7 +2180,7 @@ namespace drawinglayer
             // number display for arabic/hindi numerals
             if(SvtCTLOptions::NUMERALS_HINDI == aSvtCTLOptions.GetCTLTextNumerals())
             {
-                meLang = LANGUAGE_ARABIC;
+                meLang = LANGUAGE_ARABIC_SAUDI_ARABIA;
             }
             else if(SvtCTLOptions::NUMERALS_ARABIC == aSvtCTLOptions.GetCTLTextNumerals())
             {

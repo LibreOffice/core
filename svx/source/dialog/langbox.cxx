@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: langbox.cxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.25.132.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -277,6 +277,8 @@ void SvxLanguageBox::SetLanguageList( INT16 nLangList,
                  nLangType != LANGUAGE_SYSTEM &&
                  nLangType != LANGUAGE_NONE &&
                  (nLangType < LANGUAGE_USER1 || nLangType > LANGUAGE_USER9) &&
+                 (MsLangId::getSubLanguage( nLangType) != 0 ||
+                  (nLangList & LANG_LIST_ALSO_PRIMARY_ONLY)) &&
                  ((nLangList & LANG_LIST_ALL) != 0 ||
                   ((nLangList & LANG_LIST_WESTERN) != 0 &&
                    (SvtLanguageOptions::GetScriptTypeOfLanguage(nLangType) ==
@@ -313,8 +315,19 @@ void SvxLanguageBox::SetLanguageList( INT16 nLangList,
 
 USHORT SvxLanguageBox::InsertLanguage( const LanguageType nLangType, USHORT nPos )
 {
-    String aStrEntry = m_pLangTable->GetString( nLangType );
-    if (LANGUAGE_NONE == nLangType && m_bHasLangNone && m_bLangNoneIsLangAll)
+    LanguageType nLang = MsLangId::getReplacementForObsoleteLanguage( nLangType);
+    // For obsolete and to be replaced languages check whether an entry of the
+    // replacement already exists and if so don't add an entry with identical
+    // string as would be returned by SvtLanguageTable::GetString().
+    if (nLang != nLangType)
+    {
+        USHORT nAt = TypeToPos_Impl( nLang, *this );
+        if ( nAt != LISTBOX_ENTRY_NOTFOUND )
+            return nAt;
+    }
+
+    String aStrEntry = m_pLangTable->GetString( nLang );
+    if (LANGUAGE_NONE == nLang && m_bHasLangNone && m_bLangNoneIsLangAll)
         aStrEntry = m_aAllString;
 
     USHORT nAt = 0;
@@ -329,7 +342,7 @@ USHORT SvxLanguageBox::InsertLanguage( const LanguageType nLangType, USHORT nPos
                 m_pSpellUsedLang = new Sequence< INT16 >( xSpell->getLanguages() );
         }
         bFound = m_pSpellUsedLang ?
-                    lcl_SeqHasLang( *m_pSpellUsedLang, nLangType ) : FALSE;
+                    lcl_SeqHasLang( *m_pSpellUsedLang, nLang ) : FALSE;
 
         nAt = ImplInsertImgEntry( aStrEntry, nPos, bFound );
     }
@@ -345,12 +358,23 @@ USHORT SvxLanguageBox::InsertLanguage( const LanguageType nLangType, USHORT nPos
 USHORT SvxLanguageBox::InsertLanguage( const LanguageType nLangType,
         BOOL bCheckEntry, USHORT nPos )
 {
-    String aStrEntry = m_pLangTable->GetString( nLangType );
-    if (LANGUAGE_NONE == nLangType && m_bHasLangNone && m_bLangNoneIsLangAll)
+    LanguageType nLang = MsLangId::getReplacementForObsoleteLanguage( nLangType);
+    // For obsolete and to be replaced languages check whether an entry of the
+    // replacement already exists and if so don't add an entry with identical
+    // string as would be returned by SvtLanguageTable::GetString().
+    if (nLang != nLangType)
+    {
+        USHORT nAt = TypeToPos_Impl( nLang, *this );
+        if ( nAt != LISTBOX_ENTRY_NOTFOUND )
+            return nAt;
+    }
+
+    String aStrEntry = m_pLangTable->GetString( nLang );
+    if (LANGUAGE_NONE == nLang && m_bHasLangNone && m_bLangNoneIsLangAll)
         aStrEntry = m_aAllString;
 
     USHORT nAt = ImplInsertImgEntry( aStrEntry, nPos, bCheckEntry );
-    SetEntryData( nAt, (void*)(ULONG)nLangType );
+    SetEntryData( nAt, (void*)(ULONG)nLang );
 
     return nAt;
 }
@@ -381,7 +405,11 @@ LanguageType SvxLanguageBox::GetSelectLanguage() const
 
 void SvxLanguageBox::SelectLanguage( const LanguageType eLangType, BOOL bSelect )
 {
-    USHORT nAt = TypeToPos_Impl( eLangType, *this );
+    // If the core uses a LangID of an imported MS document and wants to select
+    // a language that is replaced, we need to select the replacement instead.
+    LanguageType nLang = MsLangId::getReplacementForObsoleteLanguage( eLangType);
+
+    USHORT nAt = TypeToPos_Impl( nLang, *this );
 
     if ( nAt != LISTBOX_ENTRY_NOTFOUND )
         SelectEntryPos( nAt, bSelect );
@@ -391,7 +419,10 @@ void SvxLanguageBox::SelectLanguage( const LanguageType eLangType, BOOL bSelect 
 
 BOOL SvxLanguageBox::IsLanguageSelected( const LanguageType eLangType ) const
 {
-    USHORT nAt = TypeToPos_Impl( eLangType, *this );
+    // Same here, work on the replacement if applicable.
+    LanguageType nLang = MsLangId::getReplacementForObsoleteLanguage( eLangType);
+
+    USHORT nAt = TypeToPos_Impl( nLang, *this );
 
     if ( nAt != LISTBOX_ENTRY_NOTFOUND )
         return IsEntryPosSelected( nAt );

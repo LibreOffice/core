@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: countryid.cxx,v $
- * $Revision: 1.8 $
+ * $Revision: 1.8.242.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -113,7 +113,8 @@ static const CountryEntry pTable[] =
     { COUNTRY_BELGIUM,              LANGUAGE_DUTCH_BELGIAN,                 true    },
     { COUNTRY_BELGIUM,              LANGUAGE_FRENCH_BELGIAN,                true    },
     { COUNTRY_FRANCE,               LANGUAGE_FRENCH,                        false   },
-    { COUNTRY_SPAIN,                LANGUAGE_SPANISH,                       false   },
+    { COUNTRY_SPAIN,                LANGUAGE_SPANISH_MODERN,                false   },
+    { COUNTRY_SPAIN,                LANGUAGE_SPANISH_DATED,                 false   },
     { COUNTRY_SPAIN,                LANGUAGE_CATALAN,                       false   },
     { COUNTRY_SPAIN,                LANGUAGE_BASQUE,                        false   },
     { COUNTRY_SPAIN,                LANGUAGE_GALICIAN,                      false   },
@@ -256,7 +257,7 @@ static const CountryEntry pTable[] =
     { COUNTRY_AZERBAIJAN,           LANGUAGE_AZERI_LATIN,                   false   },
     { COUNTRY_GEORGIA,              LANGUAGE_GEORGIAN,                      false   },
     { COUNTRY_KYRGYZSTAN,           LANGUAGE_KIRGHIZ,                       false   },
-    { COUNTRY_UZBEKISTAN,           LANGUAGE_UZBEK,                         false   }
+    { COUNTRY_UZBEKISTAN,           LANGUAGE_UZBEK_LATIN,                   false   }
 };
 
 const CountryEntry * const pEnd = pTable + sizeof( pTable ) / sizeof( pTable[ 0 ] );

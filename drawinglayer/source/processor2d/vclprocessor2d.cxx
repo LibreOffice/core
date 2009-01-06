@@ -1142,7 +1142,7 @@ namespace drawinglayer
 
             if(SvtCTLOptions::NUMERALS_HINDI == aSvtCTLOptions.GetCTLTextNumerals())
             {
-                eLang = LANGUAGE_ARABIC;
+                eLang = LANGUAGE_ARABIC_SAUDI_ARABIA;
             }
             else if(SvtCTLOptions::NUMERALS_ARABIC == aSvtCTLOptions.GetCTLTextNumerals())
             {

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: optgdlg.cxx,v $
- * $Revision: 1.54 $
+ * $Revision: 1.53.20.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1375,10 +1375,7 @@ BOOL OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
     {
         //sequence checking has to be switched on depending on the selected CTL language
         LanguageType eCTLLang = aComplexLanguageLB.GetSelectLanguage();
-        sal_Bool bOn = eCTLLang == LANGUAGE_THAI ||
-                eCTLLang == LANGUAGE_LAO ||
-                eCTLLang == LANGUAGE_VIETNAMESE ||
-                eCTLLang == LANGUAGE_KHMER;
+        sal_Bool bOn = MsLangId::needsSequenceChecking( eCTLLang);
         pLangConfig->aLanguageOptions.SetCTLSequenceCheckingRestricted(bOn);
         pLangConfig->aLanguageOptions.SetCTLSequenceChecking(bOn);
         pLangConfig->aLanguageOptions.SetCTLSequenceCheckingTypeAndReplace(bOn);
