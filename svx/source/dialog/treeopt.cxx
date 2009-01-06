@@ -36,6 +36,7 @@
 #endif
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/loader/CannotActivateFactoryException.hpp>
 #include <com/sun/star/linguistic2/XDictionaryList.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
@@ -1899,16 +1900,25 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
             // Disable Online Update page if service not installed
             if( RID_SVXPAGE_ONLINEUPDATE == nPageId || RID_SVXPAGE_IMPROVEMENT == nPageId )
             {
-                    bImprovePage = ( RID_SVXPAGE_IMPROVEMENT == nPageId );
+                bImprovePage = ( RID_SVXPAGE_IMPROVEMENT == nPageId );
                 ::rtl::OUString sService = bImprovePage ?
                     C2U("com.sun.star.oooimprovement.CoreController") :
                     C2U("com.sun.star.setup.UpdateCheck");
-                Reference < XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
-                Reference < XInterface > xService( xFactory->createInstance( sService ) );
 
-                if( ! xService.is() )
+                try
+                {
+                    Reference < XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
+                    Reference < XInterface > xService( xFactory->createInstance( sService ) );
+
+                    if( ! xService.is() )
+                        continue;
+                }
+                catch ( ::com::sun::star::loader::CannotActivateFactoryException& )
+                {
                     continue;
-                else if ( bImprovePage )
+                }
+
+                if ( bImprovePage )
                 {
                     SvxEmptyPage* pTempPage = new SvxEmptyPage( this );
                     sPageTitle = pTempPage->GetText();
