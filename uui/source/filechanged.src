@@ -34,24 +34,16 @@
 #include <ids.hrc>
 #endif
 
-String STR_OPENLOCKED_TITLE
+String STR_FILECHANGED_TITLE
 {
-    Text [ en-US ] = "Document in Use";
+    Text = "Document Has Been Changed by Others";
 };
-String STR_OPENLOCKED_MSG
+String STR_FILECHANGED_MSG
 {
-    Text [ en-US ] = "Document file '$(ARG1)' is locked for editing by:\n\n$(ARG2)\n\nOpen document read-only or open a copy of the document for editing.\n\n";
+    Text [ en-US ] = "The file has been changed since it was opened for editing in %PRODUCTNAME. Saving your version of the document will overwrite changes made by others.\n\nDo you want to save anyway?\n\n";
 };
-String STR_OPENLOCKED_OPENREADONLY_BTN
+String STR_FILECHANGED_SAVEANYWAY_BTN
 {
-    Text [ en-US ] = "Open ~Read-Only";
-};
-String STR_OPENLOCKED_OPENCOPY_BTN
-{
-    Text [ en-US ] = "Open ~Copy";
-};
-String STR_UNKNOWNUSER
-{
-    Text [ en-US ] = "Unknown User";
+    Text [ en-US ] = "~Save Anyway";
 };
 

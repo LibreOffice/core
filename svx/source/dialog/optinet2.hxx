@@ -247,9 +247,10 @@ private:
 
     FixedLine           maPasswordsFL;
     CheckBox            maSavePasswordsCB;
-    PushButton          maMasterPasswordPB;
+    PushButton          maShowConnectionsPB;
+    CheckBox            maMasterPasswordCB;
     FixedInfo           maMasterPasswordFI;
-    PushButton          maShowPasswordsPB;
+    PushButton          maMasterPasswordPB;
 
     FixedLine           maMacroSecFL;
     FixedInfo           maMacroSecFI;
@@ -271,6 +272,7 @@ private:
     DECL_LINK(          SecurityOptionsHdl, PushButton* );
     DECL_LINK(          SavePasswordHdl, void* );
     DECL_LINK(          MasterPasswordHdl, PushButton* );
+    DECL_LINK(          MasterPasswordCBHdl, void* );
     DECL_LINK(          ShowPasswordsHdl, PushButton* );
     DECL_LINK(          MacroSecPBHdl, void* );
     DECL_LINK(          RecordChangesCBHdl, void* );

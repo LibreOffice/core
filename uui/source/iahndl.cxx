@@ -48,6 +48,10 @@
 #include "com/sun/star/document/NoSuchFilterRequest.hpp"
 #include "com/sun/star/document/AmbigousFilterRequest.hpp"
 #include "com/sun/star/document/LockedDocumentRequest.hpp"
+#include "com/sun/star/document/OwnLockOnDocumentRequest.hpp"
+#include "com/sun/star/document/LockedOnSavingRequest.hpp"
+#include "com/sun/star/document/ChangedByOthersRequest.hpp"
+#include "com/sun/star/document/LockFileIgnoreRequest.hpp"
 #include "com/sun/star/document/XImporter.hpp"
 #include "com/sun/star/document/XInteractionFilterOptions.hpp"
 #include "com/sun/star/document/XInteractionFilterSelect.hpp"
@@ -118,6 +122,10 @@
 #include "sslwarndlg.hxx"
 #include "openlocked.hxx"
 #include "newerverwarn.hxx"
+#include "alreadyopen.hxx"
+#include "filechanged.hxx"
+#include "trylater.hxx"
+#include "lockfailed.hxx"
 #include <comphelper/processfactory.hxx>
 #include <svtools/zforlist.hxx>
 using namespace com::sun;
@@ -1156,8 +1164,44 @@ void UUIInteractionHelper::handleDialogRequests(
     star::document::LockedDocumentRequest aLockedDocumentRequest;
     if (aAnyRequest >>= aLockedDocumentRequest )
     {
-        handleLockedDocumentRequest( aLockedDocumentRequest,
-                                 rRequest->getContinuations() );
+        handleLockedDocumentRequest( aLockedDocumentRequest.DocumentURL,
+                                     aLockedDocumentRequest.UserInfo,
+                                     rRequest->getContinuations(),
+                                     UUI_DOC_LOAD_LOCK );
+        return;
+    }
+
+    star::document::OwnLockOnDocumentRequest aOwnLockOnDocumentRequest;
+    if (aAnyRequest >>= aOwnLockOnDocumentRequest )
+    {
+        handleLockedDocumentRequest( aOwnLockOnDocumentRequest.DocumentURL,
+                                     aOwnLockOnDocumentRequest.TimeInfo,
+                                     rRequest->getContinuations(),
+                                     aOwnLockOnDocumentRequest.IsStoring ? UUI_DOC_OWN_SAVE_LOCK : UUI_DOC_OWN_LOAD_LOCK );
+        return;
+    }
+
+    star::document::LockedOnSavingRequest aLockedOnSavingRequest;
+    if (aAnyRequest >>= aLockedOnSavingRequest )
+    {
+        handleLockedDocumentRequest( aLockedOnSavingRequest.DocumentURL,
+                                     aLockedOnSavingRequest.UserInfo,
+                                     rRequest->getContinuations(),
+                                     UUI_DOC_SAVE_LOCK );
+        return;
+    }
+
+    star::document::ChangedByOthersRequest aChangedByOthersRequest;
+    if (aAnyRequest >>= aChangedByOthersRequest )
+    {
+        handleChangedByOthersRequest( rRequest->getContinuations() );
+        return;
+    }
+
+    star::document::LockFileIgnoreRequest aLockFileIgnoreRequest;
+    if (aAnyRequest >>= aLockFileIgnoreRequest )
+    {
+        handleLockFileIgnoreRequest( rRequest->getContinuations() );
         return;
     }
 }
@@ -3306,10 +3350,12 @@ UUIInteractionHelper::handleBrokenPackageRequest(
 
 void
 UUIInteractionHelper::handleLockedDocumentRequest(
-    star::document::LockedDocumentRequest const & aRequest,
+    const ::rtl::OUString& aDocumentURL,
+    const ::rtl::OUString& aInfo,
     star::uno::Sequence< star::uno::Reference<
         star::task::XInteractionContinuation > > const &
-            rContinuations )
+            rContinuations,
+    sal_uInt16 nMode )
     SAL_THROW((star::uno::RuntimeException))
 {
     star::uno::Reference< star::task::XInteractionApprove > xApprove;
@@ -3329,22 +3375,49 @@ UUIInteractionHelper::handleLockedDocumentRequest(
         if (!xManager.get())
             return;
 
-        ::rtl::OUString aMessage = String( ResId( STR_OPENLOCKED_MSG, *xManager.get() ) );
+        ::rtl::OUString aMessage;
         std::vector< rtl::OUString > aArguments;
-        aArguments.push_back( aRequest.DocumentURL );
-        aArguments.push_back( aRequest.UserInfo.getLength()
-                                ? aRequest.UserInfo
-                                : ::rtl::OUString( String( ResId( STR_OPENLOCKED_UNKNOWNUSER, *xManager.get() ) ) ) );
+        aArguments.push_back( aDocumentURL );
 
-        aMessage = replaceMessageWithArguments( aMessage, aArguments );
+        sal_Int32 nResult = RET_CANCEL;
+        if ( nMode == UUI_DOC_LOAD_LOCK )
+        {
+            aArguments.push_back( aInfo.getLength()
+                                ? aInfo
+                                : ::rtl::OUString( String( ResId( STR_UNKNOWNUSER, *xManager.get() ) ) ) );
+            aMessage = String( ResId( STR_OPENLOCKED_MSG, *xManager.get() ) );
+            aMessage = replaceMessageWithArguments( aMessage, aArguments );
 
-        std::auto_ptr< OpenLockedQueryBox >
-                xDialog(new OpenLockedQueryBox(
-                        getParentProperty(), xManager.get(), aMessage ) );
-        sal_Int32 nResult = xDialog->Execute();
-        if ( nResult == RET_YES ) // open the document readonly
+            std::auto_ptr< OpenLockedQueryBox > xDialog(new OpenLockedQueryBox(
+                            getParentProperty(), xManager.get(), aMessage ) );
+            nResult = xDialog->Execute();
+        }
+        else if ( nMode == UUI_DOC_SAVE_LOCK )
+        {
+            aArguments.push_back( aInfo.getLength()
+                                ? aInfo
+                                : ::rtl::OUString( String( ResId( STR_UNKNOWNUSER, *xManager.get() ) ) ) );
+            aMessage = String( ResId( STR_TRYLATER_MSG, *xManager.get() ) );
+            aMessage = replaceMessageWithArguments( aMessage, aArguments );
+
+            std::auto_ptr< TryLaterQueryBox > xDialog(new TryLaterQueryBox(
+                            getParentProperty(), xManager.get(), aMessage ) );
+            nResult = xDialog->Execute();
+        }
+        else if ( nMode == UUI_DOC_OWN_LOAD_LOCK || nMode == UUI_DOC_OWN_SAVE_LOCK )
+        {
+            aArguments.push_back( aInfo );
+            aMessage = String( ResId( nMode == UUI_DOC_OWN_SAVE_LOCK ? STR_ALREADYOPEN_SAVE_MSG : STR_ALREADYOPEN_MSG, *xManager.get() ) );
+            aMessage = replaceMessageWithArguments( aMessage, aArguments );
+
+            std::auto_ptr< AlreadyOpenQueryBox > xDialog(new AlreadyOpenQueryBox(
+                            getParentProperty(), xManager.get(), aMessage, nMode == UUI_DOC_OWN_SAVE_LOCK ) );
+            nResult = xDialog->Execute();
+        }
+
+        if ( nResult == RET_YES )
             xApprove->select();
-        else if ( nResult == RET_NO ) // open the copy of the document
+        else if ( nResult == RET_NO )
             xDisapprove->select();
         else
             xAbort->select();
@@ -3356,4 +3429,85 @@ UUIInteractionHelper::handleLockedDocumentRequest(
                   star::uno::Reference< star::uno::XInterface >());
     }
 }
+
+void
+UUIInteractionHelper::handleChangedByOthersRequest(
+    star::uno::Sequence< star::uno::Reference<
+        star::task::XInteractionContinuation > > const &
+            rContinuations )
+    SAL_THROW((star::uno::RuntimeException))
+{
+    star::uno::Reference< star::task::XInteractionApprove > xApprove;
+    star::uno::Reference< star::task::XInteractionAbort > xAbort;
+    getContinuations(
+        rContinuations, &xApprove, 0, 0, &xAbort, 0, 0, 0, 0);
+
+    if ( !xApprove.is() || !xAbort.is() )
+        return;
+
+    try
+    {
+        vos::OGuard aGuard(Application::GetSolarMutex());
+        std::auto_ptr< ResMgr > xManager(
+        ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
+        if (!xManager.get())
+            return;
+
+        std::auto_ptr< FileChangedQueryBox > xDialog(new FileChangedQueryBox(
+                            getParentProperty(), xManager.get() ) );
+        sal_Int32 nResult = xDialog->Execute();
+
+        if ( nResult == RET_YES )
+            xApprove->select();
+        else
+            xAbort->select();
+    }
+    catch (std::bad_alloc const &)
+    {
+        throw star::uno::RuntimeException(
+                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out of memory")),
+                  star::uno::Reference< star::uno::XInterface >());
+    }
+}
+
+void
+UUIInteractionHelper::handleLockFileIgnoreRequest(
+    star::uno::Sequence< star::uno::Reference<
+        star::task::XInteractionContinuation > > const &
+            rContinuations )
+    SAL_THROW((star::uno::RuntimeException))
+{
+    star::uno::Reference< star::task::XInteractionApprove > xApprove;
+    star::uno::Reference< star::task::XInteractionAbort > xAbort;
+    getContinuations(
+        rContinuations, &xApprove, 0, 0, &xAbort, 0, 0, 0, 0);
+
+    if ( !xApprove.is() || !xAbort.is() )
+        return;
+
+    try
+    {
+        vos::OGuard aGuard(Application::GetSolarMutex());
+        std::auto_ptr< ResMgr > xManager(
+        ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
+        if (!xManager.get())
+            return;
+
+        std::auto_ptr< LockFailedQueryBox > xDialog(new LockFailedQueryBox(
+                            getParentProperty(), xManager.get() ) );
+        sal_Int32 nResult = xDialog->Execute();
+
+        if ( nResult == RET_OK )
+            xApprove->select();
+        else
+            xAbort->select();
+    }
+    catch (std::bad_alloc const &)
+    {
+        throw star::uno::RuntimeException(
+                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out of memory")),
+                  star::uno::Reference< star::uno::XInterface >());
+    }
+}
+
 

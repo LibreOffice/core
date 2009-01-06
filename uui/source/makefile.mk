@@ -1,8 +1,7 @@
 #*************************************************************************
-#*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -53,6 +52,10 @@ SLOFILES = \
     $(SLO)$/unknownauthdlg.obj\
     $(SLO)$/sslwarndlg.obj\
     $(SLO)$/secmacrowarnings.obj\
+    $(SLO)$/filechanged.obj\
+    $(SLO)$/alreadyopen.obj\
+    $(SLO)$/lockfailed.obj\
+    $(SLO)$/trylater.obj\
     $(SLO)$/newerverwarn.obj
 
 SRS1NAME=$(TARGET)
@@ -70,6 +73,11 @@ SRC1FILES = \
     unknownauthdlg.src\
     sslwarndlg.src\
     secmacrowarnings.src\
+    filechanged.src\
+    alreadyopen.src\
+    lockfailed.src\
+    trylater.src\
     newerverwarn.src
 
 .INCLUDE: target.mk
+

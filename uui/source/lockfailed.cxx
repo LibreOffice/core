@@ -6,7 +6,7 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: openlocked.src,v $
+ * $RCSfile: openlocked.cxx,v $
  * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
@@ -28,30 +28,26 @@
  *
  ************************************************************************/
 
-#define __RSC
+#include "ids.hrc"
+#include "lockfailed.hxx"
 
-#ifndef UUI_IDS_HRC
-#include <ids.hrc>
-#endif
+#include <vcl/button.hxx>
 
-String STR_OPENLOCKED_TITLE
+LockFailedQueryBox::LockFailedQueryBox( Window* pParent, ResMgr* pResMgr ) :
+    MessBox(pParent, 0,
+            String( ResId( STR_LOCKFAILED_TITLE, *pResMgr ) ),
+            String::EmptyString() )
 {
-    Text [ en-US ] = "Document in Use";
-};
-String STR_OPENLOCKED_MSG
+    SetImage( ErrorBox::GetStandardImage() );
+
+    AddButton( BUTTON_OK, RET_OK, BUTTONDIALOG_OKBUTTON );
+    AddButton( BUTTON_CANCEL, RET_CANCEL, BUTTONDIALOG_CANCELBUTTON );
+
+    SetMessText( String( ResId( STR_LOCKFAILED_MSG, *pResMgr ) ) );
+    SetCheckBoxText( String( ResId( STR_LOCKFAILED_DONTSHOWAGAIN, *pResMgr ) ) );
+}
+
+LockFailedQueryBox::~LockFailedQueryBox()
 {
-    Text [ en-US ] = "Document file '$(ARG1)' is locked for editing by:\n\n$(ARG2)\n\nOpen document read-only or open a copy of the document for editing.\n\n";
-};
-String STR_OPENLOCKED_OPENREADONLY_BTN
-{
-    Text [ en-US ] = "Open ~Read-Only";
-};
-String STR_OPENLOCKED_OPENCOPY_BTN
-{
-    Text [ en-US ] = "Open ~Copy";
-};
-String STR_UNKNOWNUSER
-{
-    Text [ en-US ] = "Unknown User";
-};
+}
 

@@ -35,6 +35,7 @@
 #include "sfx2/dllapi.h"
 #include "sal/types.h"
 #include <com/sun/star/util/RevisionTag.hpp>
+#include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -180,6 +181,10 @@ public:
 #else
     const INetURLObject& GetURLObject() const;
 #endif
+
+    void                CheckFileDate( const ::com::sun::star::util::DateTime& aInitDate );
+    ::com::sun::star::util::DateTime GetInitFileDate();
+
     ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent > GetContent() const;
     const String&       GetPhysicalName() const;
     void                SetTemporary( sal_Bool bTemp );
@@ -223,7 +228,8 @@ public:
     SAL_DLLPRIVATE ErrCode Unpack_Impl( const String& );
     sal_Bool            IsStorage();
 
-    sal_Bool            LockOrigFileOnDemand( sal_Bool bLoading );
+    sal_Int8            ShowLockedDocumentDialog( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aData, sal_Bool bIsLoading, sal_Bool bOwnLock );
+    sal_Bool            LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI );
     void                UnlockFile();
 
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > GetStorage();

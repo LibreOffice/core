@@ -6,7 +6,7 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: openlocked.src,v $
+ * $RCSfile: openlocked.hxx,v $
  * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
@@ -27,31 +27,17 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+#ifndef _UUI_ALREADYOPEN_HXX
+#define _UUI_ALREADYOPEN_HXX
 
-#define __RSC
+#include <vcl/msgbox.hxx>
 
-#ifndef UUI_IDS_HRC
-#include <ids.hrc>
+class AlreadyOpenQueryBox : public MessBox
+{
+public:
+    AlreadyOpenQueryBox( Window* pParent, ResMgr* pResMgr, const String& aMessage, sal_Bool bIsStoring );
+    ~AlreadyOpenQueryBox();
+};
+
 #endif
-
-String STR_OPENLOCKED_TITLE
-{
-    Text [ en-US ] = "Document in Use";
-};
-String STR_OPENLOCKED_MSG
-{
-    Text [ en-US ] = "Document file '$(ARG1)' is locked for editing by:\n\n$(ARG2)\n\nOpen document read-only or open a copy of the document for editing.\n\n";
-};
-String STR_OPENLOCKED_OPENREADONLY_BTN
-{
-    Text [ en-US ] = "Open ~Read-Only";
-};
-String STR_OPENLOCKED_OPENCOPY_BTN
-{
-    Text [ en-US ] = "Open ~Copy";
-};
-String STR_UNKNOWNUSER
-{
-    Text [ en-US ] = "Unknown User";
-};
 

@@ -44,64 +44,74 @@ ModalDialog DLG_UUI_MASTERPASSWORD_CRT
     Moveable = TRUE ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 175 ,135  ) ;
+    Size = MAP_APPFONT ( DLG_WIDTH , DLG_HEIGHT ) ;
+    Text [ en-US ] = "Set Master Password";
+    FixedText FT_INFOTEXT
+    {
+        Pos = MAP_APPFONT ( COL_0 , ROW_0 ) ;
+        Size = MAP_APPFONT ( CTRL_WIDTH , 7*RSC_CD_FIXEDTEXT_HEIGHT ) ;
+        WordBreak = TRUE ;
+        Text [ en-US ] = "Passwords for web connections are protected by a master password. You will be asked to enter it once per session, if %PRODUCTNAME retrieves a password from the protected password list.";
+    };
+    FixedLine FL_INFOTEXT
+    {
+        Pos = MAP_APPFONT ( 0 , ROW_1 ) ;
+        Size = MAP_APPFONT ( DLG_WIDTH , RSC_CD_FIXEDLINE_HEIGHT ) ;
+    };
     FixedText FT_MASTERPASSWORD_CRT
     {
-        Pos = MAP_APPFONT ( 3 , 4 ) ;
-        Size = MAP_APPFONT ( 169 , 9 ) ;
-        Text [ en-US ] = "Enter new password";
+        Pos = MAP_APPFONT ( COL_0 , ROW_2 ) ;
+        Size = MAP_APPFONT ( CTRL_WIDTH , RSC_CD_FIXEDLINE_HEIGHT ) ;
+        Text [ en-US ] = "~Enter password";
     };
     Edit ED_MASTERPASSWORD_CRT
     {
+        Pos = MAP_APPFONT ( COL_0 , ROW_3 ) ;
+        Size = MAP_APPFONT ( CTRL_WIDTH , RSC_CD_TEXTBOX_HEIGHT ) ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 3 , 17 ) ;
-        Size = MAP_APPFONT ( 169 , 13 ) ;
         PassWord = TRUE ;
     };
     FixedText FT_MASTERPASSWORD_REPEAT
     {
-        Pos = MAP_APPFONT ( 3 , 33 ) ;
-        Size = MAP_APPFONT ( 169 , 9 ) ;
+        Pos = MAP_APPFONT ( COL_0 , ROW_4 ) ;
+        Size = MAP_APPFONT ( CTRL_WIDTH , RSC_CD_FIXEDLINE_HEIGHT ) ;
         Text [ en-US ] = "~Reenter password";
     };
     Edit ED_MASTERPASSWORD_REPEAT
     {
+        Pos = MAP_APPFONT ( COL_0 , ROW_5 ) ;
+        Size = MAP_APPFONT ( CTRL_WIDTH , RSC_CD_TEXTBOX_HEIGHT ) ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 3 , 46 ) ;
-        Size = MAP_APPFONT ( 169 , 13 ) ;
         PassWord = TRUE ;
     };
-    FixedText FT_MASTERPASSWORD_WARNING
+    FixedText FT_CAUTIONTEXT
     {
-        Pos = MAP_APPFONT ( 3 , 62 ) ;
-        Size = MAP_APPFONT ( 169 , 42 ) ;
-        Text [ en-US ] = "~Caution: Make sure you remember the Master Password you have set. If you forget your Master Password, you will be unable to access any of the information protected by it. Passwords are case-sensitive and at least five characters long.";
-        WordBreak = TRUE;
+        Pos = MAP_APPFONT ( COL_0 , ROW_6 ) ;
+        Size = MAP_APPFONT ( CTRL_WIDTH , 8*RSC_CD_FIXEDTEXT_HEIGHT ) ;
+        WordBreak = TRUE ;
+        Text [ en-US ] = "Caution: Make sure you remember the Master Password you have set. If you forget your Master Password, you will be unable to access any of the information protected by it. Passwords are case-sensitive and at least five characters long.";
     };
-    FixedLine FL_FIXED_LINE
+    FixedLine FL_CAUTIONTEXT
     {
-        Pos = MAP_APPFONT( 0, 105 );
-        Size = MAP_APPFONT( 175, 6 );
+        Pos = MAP_APPFONT ( 0 , ROW_7 ) ;
+        Size = MAP_APPFONT ( DLG_WIDTH , RSC_CD_FIXEDLINE_HEIGHT ) ;
     };
-
-
+    HelpButton BTN_MASTERPASSCRT_HELP
+    {
+        Pos = MAP_APPFONT ( COL_0 , ROW_8 ) ;
+        Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
+    };
     OKButton BTN_MASTERPASSCRT_OK
     {
-        Pos = MAP_APPFONT ( 65 , 115 ) ;
-        Size = MAP_APPFONT ( 51 , 13 ) ;
+        Pos = MAP_APPFONT ( COL_1 , ROW_8 ) ;
+        Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
         DefButton = TRUE ;
     };
     CancelButton BTN_MASTERPASSCRT_CANCEL
     {
-        Pos = MAP_APPFONT ( 120 , 115 ) ;
-        Size = MAP_APPFONT ( 51 , 13 ) ;
+        Pos = MAP_APPFONT ( COL_2 , ROW_8 ) ;
+        Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
     };
-    HelpButton BTN_MASTERPASSCRT_HELP
-    {
-        Pos = MAP_APPFONT ( 5 , 115 ) ;
-        Size = MAP_APPFONT ( 51 , 13 ) ;
-    };
-    Text [ en-US ] = "Change Master Password";
 };
 
 

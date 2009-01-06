@@ -472,9 +472,10 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                         pMed->CloseAndRelease();
                         pMed->GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, !( nOpenMode & STREAM_WRITE ) ) );
                         pMed->SetOpenMode( nOpenMode, pMed->IsDirect() );
+
                         pMed->CompleteReOpen();
                         if ( nOpenMode & STREAM_WRITE )
-                            pMed->LockOrigFileOnDemand( sal_False );
+                            pMed->LockOrigFileOnDemand( sal_False, sal_True );
 
                         // LockOrigFileOnDemand might set the readonly flag itself, it should be set back
                         pMed->GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, !( nOpenMode & STREAM_WRITE ) ) );
@@ -777,7 +778,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     {
                         // back to old medium
                         pMedium->ReOpen();
-                        pMedium->LockOrigFileOnDemand( sal_True );
+                        pMedium->LockOrigFileOnDemand( sal_False, sal_True );
 
                         xOldObj->DoSaveCompleted( pMedium );
                     }

@@ -46,14 +46,22 @@
 //============================================================================
 class MasterPasswordCreateDialog : public ModalDialog
 {
+private:
+    FixedText       aFTInfoText;
+    FixedLine       aFLInfoText;
+
     FixedText       aFTMasterPasswordCrt;
     Edit            aEDMasterPasswordCrt;
     FixedText       aFTMasterPasswordRepeat;
     Edit            aEDMasterPasswordRepeat;
+
+    FixedText       aFTCautionText;
+    FixedLine       aFLCautionText;
+
     FixedText       aFTMasterPasswordWarning;
     FixedLine       aFL;
     OKButton        aOKBtn;
-    CancelButton        aCancelBtn;
+    CancelButton    aCancelBtn;
     HelpButton      aHelpBtn;
 
 
@@ -68,6 +76,8 @@ public:
 private:
     ResMgr*                                         pResourceMgr;
     sal_uInt16                                      nMinLen;
+
+    void            CalculateTextHeight();
 };
 
 #endif // UUI_MASTERPASSCRTDLG_HXX

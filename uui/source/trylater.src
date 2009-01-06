@@ -34,24 +34,20 @@
 #include <ids.hrc>
 #endif
 
-String STR_OPENLOCKED_TITLE
+String STR_TRYLATER_TITLE
 {
     Text [ en-US ] = "Document in Use";
 };
-String STR_OPENLOCKED_MSG
+String STR_TRYLATER_MSG
 {
-    Text [ en-US ] = "Document file '$(ARG1)' is locked for editing by:\n\n$(ARG2)\n\nOpen document read-only or open a copy of the document for editing.\n\n";
+    Text [ en-US ] = "Document file '$(ARG1)' is locked for editing by:\n\n$(ARG2)\n\nTry again later to save document or save a copy of that document.\n\n";
 };
-String STR_OPENLOCKED_OPENREADONLY_BTN
+String STR_TRYLATER_RETRYSAVING_BTN
 {
-    Text [ en-US ] = "Open ~Read-Only";
+    Text [ en-US ] = "~Retry Saving";
 };
-String STR_OPENLOCKED_OPENCOPY_BTN
+String STR_TRYLATER_SAVEAS_BTN
 {
-    Text [ en-US ] = "Open ~Copy";
-};
-String STR_UNKNOWNUSER
-{
-    Text [ en-US ] = "Unknown User";
+    Text [ en-US ] = "~Save As...";
 };
 

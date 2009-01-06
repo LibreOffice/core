@@ -34,24 +34,32 @@
 #include <ids.hrc>
 #endif
 
-String STR_OPENLOCKED_TITLE
+String STR_ALREADYOPEN_TITLE
 {
-    Text [ en-US ] = "Document in Use";
+    Text = "Document in Use";
 };
-String STR_OPENLOCKED_MSG
+String STR_ALREADYOPEN_MSG
 {
-    Text [ en-US ] = "Document file '$(ARG1)' is locked for editing by:\n\n$(ARG2)\n\nOpen document read-only or open a copy of the document for editing.\n\n";
+    Text [ en-US ] = "Document file '$(ARG1)' is locked for editing by yourself on a different system since $(ARG2)\n\nOpen document read-only, or ignore own file locking and open the document for editing.\n\n";
 };
-String STR_OPENLOCKED_OPENREADONLY_BTN
+String STR_ALREADYOPEN_READONLY_BTN
 {
     Text [ en-US ] = "Open ~Read-Only";
 };
-String STR_OPENLOCKED_OPENCOPY_BTN
+String STR_ALREADYOPEN_OPEN_BTN
 {
-    Text [ en-US ] = "Open ~Copy";
+    Text [ en-US ] = "~Open";
 };
-String STR_UNKNOWNUSER
+String STR_ALREADYOPEN_SAVE_MSG
 {
-    Text [ en-US ] = "Unknown User";
+    Text [ en-US ] = "Document file '$(ARG1)' is locked for editing by yourself on a different system since $(ARG2)\n\nClose document on other system and retry saving or ignore own file locking and save current document.\n\n";
+};
+String STR_ALREADYOPEN_RETRY_SAVE_BTN
+{
+    Text [ en-US ] = "~Retry Saving";
+};
+String STR_ALREADYOPEN_SAVE_BTN
+{
+    Text [ en-US ] = "~Save";
 };
 

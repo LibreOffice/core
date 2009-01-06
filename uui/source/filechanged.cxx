@@ -6,7 +6,7 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: openlocked.src,v $
+ * $RCSfile: openlocked.cxx,v $
  * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
@@ -28,30 +28,25 @@
  *
  ************************************************************************/
 
-#define __RSC
+#include "ids.hrc"
+#include "filechanged.hxx"
 
-#ifndef UUI_IDS_HRC
-#include <ids.hrc>
-#endif
+FileChangedQueryBox::FileChangedQueryBox( Window* pParent, ResMgr* pResMgr ) :
+    MessBox(pParent, 0,
+            String( ResId( STR_FILECHANGED_TITLE, *pResMgr ) ),
+            String::EmptyString() )
+{
+    SetImage( QueryBox::GetStandardImage() );
 
-String STR_OPENLOCKED_TITLE
+    AddButton( String( ResId( STR_FILECHANGED_SAVEANYWAY_BTN, *pResMgr ) ), RET_YES,
+            BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_OKBUTTON | BUTTONDIALOG_FOCUSBUTTON );
+    AddButton( BUTTON_CANCEL, RET_CANCEL, BUTTONDIALOG_CANCELBUTTON );
+
+    SetButtonHelpText( RET_YES, String::EmptyString() );
+    SetMessText( String( ResId( STR_FILECHANGED_MSG, *pResMgr ) ) );
+}
+
+FileChangedQueryBox::~FileChangedQueryBox()
 {
-    Text [ en-US ] = "Document in Use";
-};
-String STR_OPENLOCKED_MSG
-{
-    Text [ en-US ] = "Document file '$(ARG1)' is locked for editing by:\n\n$(ARG2)\n\nOpen document read-only or open a copy of the document for editing.\n\n";
-};
-String STR_OPENLOCKED_OPENREADONLY_BTN
-{
-    Text [ en-US ] = "Open ~Read-Only";
-};
-String STR_OPENLOCKED_OPENCOPY_BTN
-{
-    Text [ en-US ] = "Open ~Copy";
-};
-String STR_UNKNOWNUSER
-{
-    Text [ en-US ] = "Unknown User";
-};
+}
 

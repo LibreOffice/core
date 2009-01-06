@@ -122,7 +122,7 @@
 #include <comphelper/processfactory.hxx>
 
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
-#include "com/sun/star/task/XMasterPasswordHandling.hpp"
+#include "com/sun/star/task/XMasterPasswordHandling2.hpp"
 #include "com/sun/star/task/XPasswordContainer.hpp"
 #include "securityoptions.hxx"
 #include "webconninfo.hxx"
@@ -1342,11 +1342,14 @@ SvxSecurityTabPage::SvxSecurityTabPage( Window* pParent, const SfxItemSet& rSet 
     ,maSecurityOptionsFL( this, SVX_RES( FL_SEC_SECURITYOPTIONS ) )
     ,maSecurityOptionsFI( this, SVX_RES( FI_SEC_SECURITYOPTIONS ) )
     ,maSecurityOptionsPB( this, SVX_RES( PB_SEC_SECURITYOPTIONS ) )
+
     ,maPasswordsFL      ( this, SVX_RES( FL_SEC_PASSWORDS ) )
     ,maSavePasswordsCB  ( this, SVX_RES( CB_SEC_SAVEPASSWORDS ) )
-    ,maMasterPasswordPB ( this, SVX_RES( PB_SEC_MASTERPASSWORD ) )
+    ,maShowConnectionsPB( this, SVX_RES( PB_SEC_CONNECTIONS ) )
+    ,maMasterPasswordCB ( this, SVX_RES( CB_SEC_MASTERPASSWORD ) )
     ,maMasterPasswordFI ( this, SVX_RES( FI_SEC_MASTERPASSWORD ) )
-    ,maShowPasswordsPB  ( this, SVX_RES( PB_SEC_SHOWPASSWORDS ) )
+    ,maMasterPasswordPB ( this, SVX_RES( PB_SEC_MASTERPASSWORD ) )
+
     ,maMacroSecFL       ( this, SVX_RES( FL_SEC_MACROSEC ) )
     ,maMacroSecFI       ( this, SVX_RES( FI_SEC_MACROSEC ) )
     ,maMacroSecPB       ( this, SVX_RES( PB_SEC_MACROSEC ) )
@@ -1359,9 +1362,9 @@ SvxSecurityTabPage::SvxSecurityTabPage( Window* pParent, const SfxItemSet& rSet 
     ,mpSecOptDlg        ( NULL )
     ,meRedlingMode      ( RL_NONE )
 
-    ,msProtectRecordsStr(            SVX_RES( STR_SEC_PROTRECORDS ) )
-    ,msUnprotectRecordsStr(          SVX_RES( STR_SEC_UNPROTRECORDS ) )
-    ,msPasswordStoringDeactivateStr( SVX_RES( STR_SEC_NOPASSWDSAVE ) )
+    ,msProtectRecordsStr(               SVX_RES( STR_SEC_PROTRECORDS ) )
+    ,msUnprotectRecordsStr(             SVX_RES( STR_SEC_UNPROTRECORDS ) )
+    ,msPasswordStoringDeactivateStr(    SVX_RES( STR_SEC_NOPASSWDSAVE ) )
 
 {
     FreeResource();
@@ -1371,7 +1374,8 @@ SvxSecurityTabPage::SvxSecurityTabPage( Window* pParent, const SfxItemSet& rSet 
     maSecurityOptionsPB.SetClickHdl( LINK( this, SvxSecurityTabPage, SecurityOptionsHdl ) );
     maSavePasswordsCB.SetClickHdl( LINK( this, SvxSecurityTabPage, SavePasswordHdl ) );
     maMasterPasswordPB.SetClickHdl( LINK( this, SvxSecurityTabPage, MasterPasswordHdl ) );
-    maShowPasswordsPB.SetClickHdl( LINK( this, SvxSecurityTabPage, ShowPasswordsHdl ) );
+    maMasterPasswordCB.SetClickHdl( LINK( this, SvxSecurityTabPage, MasterPasswordCBHdl ) );
+    maShowConnectionsPB.SetClickHdl( LINK( this, SvxSecurityTabPage, ShowPasswordsHdl ) );
     maMacroSecPB.SetClickHdl( LINK( this, SvxSecurityTabPage, MacroSecPBHdl ) );
     maProtectRecordsPB.SetClickHdl( LINK( this, SvxSecurityTabPage, ProtectRecordsPBHdl ) );
     maRecordChangesCB.SetClickHdl( LINK( this, SvxSecurityTabPage, RecordChangesCBHdl ) );
@@ -1409,7 +1413,10 @@ IMPL_LINK( SvxSecurityTabPage, SavePasswordHdl, void*, EMPTYARG )
             if ( xMasterPasswd->changeMasterPassword( Reference< task::XInteractionHandler >() ) )
             {
                 maMasterPasswordPB.Enable( TRUE );
-                maShowPasswordsPB.Enable( TRUE );
+                maMasterPasswordCB.Check( TRUE );
+                maMasterPasswordCB.Enable( TRUE );
+                maMasterPasswordFI.Enable( TRUE );
+                maShowConnectionsPB.Enable( TRUE );
             }
             else
             {
@@ -1425,14 +1432,17 @@ IMPL_LINK( SvxSecurityTabPage, SavePasswordHdl, void*, EMPTYARG )
             if( RET_YES == nRet )
             {
                 xMasterPasswd->allowPersistentStoring( sal_False );
+                maMasterPasswordCB.Check( TRUE );
                 maMasterPasswordPB.Enable( FALSE );
-                maShowPasswordsPB.Enable( FALSE );
+                maMasterPasswordCB.Enable( FALSE );
+                maMasterPasswordFI.Enable( FALSE );
+                maShowConnectionsPB.Enable( FALSE );
             }
             else
             {
                 maSavePasswordsCB.Check( TRUE );
                 maMasterPasswordPB.Enable( TRUE );
-                maShowPasswordsPB.Enable( TRUE );
+                maShowConnectionsPB.Enable( TRUE );
             }
         }
     }
@@ -1458,6 +1468,52 @@ IMPL_LINK( SvxSecurityTabPage, MasterPasswordHdl, PushButton*, EMPTYARG )
     }
     catch( Exception& )
     {}
+
+    return 0;
+}
+
+IMPL_LINK( SvxSecurityTabPage, MasterPasswordCBHdl, void*, EMPTYARG )
+{
+    try
+    {
+        Reference< task::XMasterPasswordHandling2 > xMasterPasswd(
+            comphelper::getProcessServiceFactory()->createInstance(
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.task.PasswordContainer" ) ) ),
+            UNO_QUERY_THROW );
+
+        if ( maMasterPasswordCB.IsChecked() )
+        {
+            if ( xMasterPasswd->isPersistentStoringAllowed() && xMasterPasswd->changeMasterPassword( Reference< task::XInteractionHandler >() ) )
+            {
+                maMasterPasswordPB.Enable( TRUE );
+                maMasterPasswordFI.Enable( TRUE );
+            }
+            else
+            {
+                maMasterPasswordCB.Check( FALSE );
+                maMasterPasswordPB.Enable( TRUE );
+                maMasterPasswordFI.Enable( TRUE );
+            }
+        }
+        else
+        {
+            if ( xMasterPasswd->isPersistentStoringAllowed() && xMasterPasswd->useDefaultMasterPassword( Reference< task::XInteractionHandler >() ) )
+            {
+                maMasterPasswordPB.Enable( FALSE );
+                maMasterPasswordFI.Enable( FALSE );
+            }
+            else
+            {
+                maMasterPasswordCB.Check( TRUE );
+                maMasterPasswordPB.Enable( TRUE );
+                maShowConnectionsPB.Enable( TRUE );
+            }
+        }
+    }
+    catch( Exception& )
+    {
+        maSavePasswordsCB.Check( !maSavePasswordsCB.IsChecked() );
+    }
 
     return 0;
 }
@@ -1652,7 +1708,7 @@ void SvxSecurityTabPage::InitControls()
     sal_Int32 i = 0;
     long nBtnTextWidth = 0;
     Window* pButtons[] = { &maSecurityOptionsPB, &maMasterPasswordPB,
-                            &maShowPasswordsPB, &maMacroSecPB, &maProtectRecordsPB };
+                            &maShowConnectionsPB, &maMacroSecPB, &maProtectRecordsPB };
     Window** pButton = pButtons;
     const sal_Int32 nBCount = sizeof( pButtons ) / sizeof( pButtons[ 0 ] );
     for ( ; i < nBCount; ++i, ++pButton )
@@ -1705,7 +1761,10 @@ void SvxSecurityTabPage::InitControls()
     }
 
     maMasterPasswordPB.Enable( FALSE );
-    maShowPasswordsPB.Enable( FALSE );
+    maMasterPasswordCB.Enable( FALSE );
+    maMasterPasswordCB.Check( TRUE );
+    maMasterPasswordFI.Enable( FALSE );
+    maShowConnectionsPB.Enable( FALSE );
 
     // initialize the password saving checkbox
     try
@@ -1717,9 +1776,19 @@ void SvxSecurityTabPage::InitControls()
 
         if ( xMasterPasswd->isPersistentStoringAllowed() )
         {
-            maMasterPasswordPB.Enable( TRUE );
-            maShowPasswordsPB.Enable( TRUE );
+            maMasterPasswordCB.Enable( TRUE );
+            maShowConnectionsPB.Enable( TRUE );
             maSavePasswordsCB.Check( TRUE );
+
+            Reference< task::XMasterPasswordHandling2 > xMasterPasswd2( xMasterPasswd, UNO_QUERY );
+            if ( xMasterPasswd2.is() && xMasterPasswd2->isDefaultMasterPasswordUsed() )
+                maMasterPasswordCB.Check( FALSE );
+            else
+            {
+                maMasterPasswordPB.Enable( TRUE );
+                maMasterPasswordCB.Check( TRUE );
+                maMasterPasswordFI.Enable( TRUE );
+            }
         }
     }
     catch( Exception& )

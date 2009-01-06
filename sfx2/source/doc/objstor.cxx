@@ -637,7 +637,7 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
 
     EnableSetModified( sal_False );
 
-    pMedium->LockOrigFileOnDemand( sal_True );
+    pMedium->LockOrigFileOnDemand( sal_True, sal_False );
     if ( GetError() == ERRCODE_NONE && bOwnStorageFormat && ( !pFilter || !( pFilter->GetFilterFlags() & SFX_FILTER_STARONEFILTER ) ) )
     {
         uno::Reference< embed::XStorage > xStorage;
@@ -1222,6 +1222,8 @@ sal_Bool SfxObjectShell::SaveTo_Impl
     {
         bStoreToSameLocation = sal_True;
 
+        rMedium.CheckFileDate( pMedium->GetInitFileDate() );
+
         if ( bCopyTo && GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
         {
             // export to the same location is vorbidden
@@ -1312,18 +1314,31 @@ sal_Bool SfxObjectShell::SaveTo_Impl
             }
         }
     }
+    else
+    {
+        // This is SaveAs or export action, prepare the target medium
+        rMedium.CloseAndRelease();
+        if ( bStorageBasedTarget )
+        {
+            rMedium.GetOutputStorage();
+        }
+        else
+        {
+            rMedium.CreateTempFileNoCopy();
+            rMedium.GetOutStream();
+        }
+    }
 
     // TODO/LATER: error handling
     if( rMedium.GetErrorCode() || pMedium->GetErrorCode() || GetErrorCode() )
         return sal_False;
 
-    rMedium.LockOrigFileOnDemand( sal_False );
+    rMedium.LockOrigFileOnDemand( sal_False, sal_False );
+
     if ( bStorageBasedTarget )
     {
         if ( rMedium.GetErrorCode() )
             return sal_False;
-
-        rMedium.GetOutputStorage();
 
         // If the filter is a "cross export" filter ( f.e. a filter for exporting an impress document from
         // a draw document ), the ClassId of the destination storage is different from the ClassId of this

@@ -39,6 +39,10 @@
 #include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/document/XDocumentRevisionListPersistence.hpp>
 #include <com/sun/star/document/LockedDocumentRequest.hpp>
+#include <com/sun/star/document/OwnLockOnDocumentRequest.hpp>
+#include <com/sun/star/document/LockedOnSavingRequest.hpp>
+#include <com/sun/star/document/LockFileIgnoreRequest.hpp>
+#include <com/sun/star/document/ChangedByOthersRequest.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
@@ -108,6 +112,7 @@ using namespace ::com::sun::star::io;
 
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/mediadescriptor.hxx>
+#include <comphelper/configurationhelper.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/inetmime.hxx>
 #include <unotools/ucblockbytes.hxx>
@@ -143,6 +148,12 @@ using namespace ::com::sun::star::io;
 //#include "xmlversion.hxx"
 
 #define MAX_REDIRECT 5
+
+namespace {
+    static const sal_Int8 LOCK_UI_NOLOCK = 0;
+    static const sal_Int8 LOCK_UI_SUCCEEDED = 1;
+    static const sal_Int8 LOCK_UI_TRY = 2;
+}
 
 class SfxMediumHandler_Impl : public ::cppu::WeakImplHelper1< com::sun::star::task::XInteractionHandler >
 {
@@ -272,6 +283,9 @@ public:
     sal_Bool m_bSalvageMode: 1;
     sal_Bool m_bVersionsAlreadyLoaded: 1;
     sal_Bool m_bLocked: 1;
+    sal_Bool m_bHandleSysLocked: 1;
+    sal_Bool m_bGotDateTime: 1;
+
     uno::Reference < embed::XStorage > xStorage;
 
     SfxPoolCancelManager_ImplRef xCancelManager;
@@ -311,6 +325,8 @@ public:
     // TODO/LATER: in future the signature state should be controlled by the medium not by the document
     //             in this case the member will hold this information
     sal_uInt16      m_nSignatureState;
+
+    util::DateTime m_aDateTime;
 
     SfxPoolCancelManager_Impl* GetCancelManager();
 
@@ -362,6 +378,8 @@ SfxMedium_Impl::SfxMedium_Impl( SfxMedium* pAntiImplP )
     m_bSalvageMode( sal_False ),
     m_bVersionsAlreadyLoaded( sal_False ),
     m_bLocked( sal_False ),
+    m_bHandleSysLocked( sal_False ),
+    m_bGotDateTime( sal_False ),
     pAntiImpl( pAntiImplP ),
     nFileVersion( 0 ),
     pOrigFilter( 0 ),
@@ -450,6 +468,86 @@ long SfxMedium::GetFileVersion() const
         return pFilter->GetVersion();
     else
         return pImp->nFileVersion;
+}
+
+//------------------------------------------------------------------
+void SfxMedium::CheckFileDate( const util::DateTime& aInitDate )
+{
+    GetInitFileDate();
+    if ( pImp->m_aDateTime.Seconds != aInitDate.Seconds
+      || pImp->m_aDateTime.Minutes != aInitDate.Minutes
+      || pImp->m_aDateTime.Hours != aInitDate.Hours
+      || pImp->m_aDateTime.Day != aInitDate.Day
+      || pImp->m_aDateTime.Month != aInitDate.Month
+      || pImp->m_aDateTime.Year != aInitDate.Year )
+    {
+        // check whether system file locking has been used, the default value is false
+        sal_Bool bUseSystemLock = sal_False;
+        try
+        {
+
+            uno::Reference< uno::XInterface > xCommonConfig = ::comphelper::ConfigurationHelper::openConfig(
+                                ::comphelper::getProcessServiceFactory(),
+                                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.Common" ) ),
+                                ::comphelper::ConfigurationHelper::E_STANDARD );
+            if ( !xCommonConfig.is() )
+                throw uno::RuntimeException();
+
+            ::comphelper::ConfigurationHelper::readRelativeKey(
+                    xCommonConfig,
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Misc/" ) ),
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UseDocumentSystemFileLocking" ) ) ) >>= bUseSystemLock;
+        }
+        catch( const uno::Exception& )
+        {
+        }
+
+        if ( !bUseSystemLock )
+        {
+            uno::Reference< task::XInteractionHandler > xHandler = GetInteractionHandler();
+
+            if ( xHandler.is() )
+            {
+                try
+                {
+                    ::rtl::Reference< ::ucbhelper::InteractionRequest > xInteractionRequestImpl = new ::ucbhelper::InteractionRequest( uno::makeAny(
+                        document::ChangedByOthersRequest() ) );
+                    uno::Sequence< uno::Reference< task::XInteractionContinuation > > aContinuations( 3 );
+                    aContinuations[0] = new ::ucbhelper::InteractionAbort( xInteractionRequestImpl.get() );
+                    aContinuations[1] = new ::ucbhelper::InteractionApprove( xInteractionRequestImpl.get() );
+                    xInteractionRequestImpl->setContinuations( aContinuations );
+
+                    xHandler->handle( xInteractionRequestImpl.get() );
+
+                    ::rtl::Reference< ::ucbhelper::InteractionContinuation > xSelected = xInteractionRequestImpl->getSelection();
+                    if ( uno::Reference< task::XInteractionAbort >( xSelected.get(), uno::UNO_QUERY ).is() )
+                    {
+                        SetError( ERRCODE_ABORT );
+                    }
+                }
+                catch ( uno::Exception& )
+                {}
+            }
+        }
+    }
+}
+
+//------------------------------------------------------------------
+util::DateTime SfxMedium::GetInitFileDate()
+{
+    if ( !pImp->m_bGotDateTime && GetContent().is() )
+    {
+        try
+        {
+            pImp->aContent.getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "DateModified" )) ) >>= pImp->m_aDateTime;
+            pImp->m_bGotDateTime = sal_True;
+        }
+        catch ( ::com::sun::star::uno::Exception& )
+        {
+        }
+    }
+
+    return pImp->m_aDateTime;
 }
 
 //------------------------------------------------------------------
@@ -692,9 +790,17 @@ sal_Bool SfxMedium::Commit()
         Transfer_Impl();
     }
 
+    sal_Bool bResult = ( GetError() == SVSTREAM_OK );
+
+    if ( bResult )
+    {
+        pImp->m_bGotDateTime = sal_False;
+        GetInitFileDate();
+    }
+
     // remove truncation mode from the flags
-    nStorOpenMode &= ( ~STREAM_TRUNC );
-    return GetError() == SVSTREAM_OK;
+    nStorOpenMode &= (~STREAM_TRUNC);
+    return bResult;
 }
 
 //------------------------------------------------------------------
@@ -924,7 +1030,116 @@ void SfxMedium::SetPasswordToStorage_Impl()
 }
 
 //------------------------------------------------------------------
-sal_Bool SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading )
+sal_Int8 SfxMedium::ShowLockedDocumentDialog( const uno::Sequence< ::rtl::OUString >& aData, sal_Bool bIsLoading, sal_Bool bOwnLock )
+{
+    sal_Int8 nResult = LOCK_UI_NOLOCK;
+
+    // show the interaction regarding the document opening
+    uno::Reference< task::XInteractionHandler > xHandler = GetInteractionHandler();
+
+    if ( ::svt::DocumentLockFile::IsInteractionAllowed() && xHandler.is() && ( bIsLoading || bOwnLock ) )
+    {
+        ::rtl::OUString aDocumentURL = GetURLObject().GetLastName();
+        ::rtl::OUString aInfo;
+        ::rtl::Reference< ::ucbhelper::InteractionRequest > xInteractionRequestImpl;
+
+        if ( bOwnLock )
+        {
+            if ( aData.getLength() > LOCKFILE_EDITTIME_ID )
+                aInfo = aData[LOCKFILE_EDITTIME_ID];
+
+            xInteractionRequestImpl = new ::ucbhelper::InteractionRequest( uno::makeAny(
+                document::OwnLockOnDocumentRequest( ::rtl::OUString(), uno::Reference< uno::XInterface >(), aDocumentURL, aInfo, !bIsLoading ) ) );
+        }
+        else
+        {
+            if ( aData.getLength() > LOCKFILE_EDITTIME_ID )
+            {
+                if ( aData[LOCKFILE_OOOUSERNAME_ID].getLength() )
+                    aInfo = aData[LOCKFILE_OOOUSERNAME_ID];
+                else
+                    aInfo = aData[LOCKFILE_SYSUSERNAME_ID];
+
+                if ( aInfo.getLength() && aData[LOCKFILE_EDITTIME_ID].getLength() )
+                {
+                    aInfo += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " ( " ) );
+                    aInfo += aData[LOCKFILE_EDITTIME_ID];
+                    aInfo += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " )" ) );
+                }
+            }
+
+            if ( bIsLoading )
+            {
+                xInteractionRequestImpl = new ::ucbhelper::InteractionRequest( uno::makeAny(
+                    document::LockedDocumentRequest( ::rtl::OUString(), uno::Reference< uno::XInterface >(), aDocumentURL, aInfo ) ) );
+            }
+            else
+            {
+                xInteractionRequestImpl = new ::ucbhelper::InteractionRequest( uno::makeAny(
+                    document::LockedOnSavingRequest( ::rtl::OUString(), uno::Reference< uno::XInterface >(), aDocumentURL, aInfo ) ) );
+
+            }
+        }
+
+        uno::Sequence< uno::Reference< task::XInteractionContinuation > > aContinuations( 3 );
+        aContinuations[0] = new ::ucbhelper::InteractionAbort( xInteractionRequestImpl.get() );
+        aContinuations[1] = new ::ucbhelper::InteractionApprove( xInteractionRequestImpl.get() );
+        aContinuations[2] = new ::ucbhelper::InteractionDisapprove( xInteractionRequestImpl.get() );
+        xInteractionRequestImpl->setContinuations( aContinuations );
+
+        xHandler->handle( xInteractionRequestImpl.get() );
+
+        ::rtl::Reference< ::ucbhelper::InteractionContinuation > xSelected = xInteractionRequestImpl->getSelection();
+        if ( uno::Reference< task::XInteractionAbort >( xSelected.get(), uno::UNO_QUERY ).is() )
+        {
+            SetError( ERRCODE_ABORT );
+        }
+        else if ( uno::Reference< task::XInteractionDisapprove >( xSelected.get(), uno::UNO_QUERY ).is() )
+        {
+            // own lock on loading, user has selected to ignore the lock
+            // own lock on saving, user has selected to ignore the lock
+            // alien lock on loading, user has selected to edit a copy of document
+            // TODO/LATER: alien lock on saving, user has selected to do SaveAs to different location
+            if ( bIsLoading && !bOwnLock )
+            {
+                // means that a copy of the document should be opened
+                GetItemSet()->Put( SfxBoolItem( SID_TEMPLATE, sal_True ) );
+            }
+            else if ( bOwnLock )
+                nResult = LOCK_UI_SUCCEEDED;
+        }
+        else // if ( XSelected == aContinuations[1] )
+        {
+            // own lock on loading, user has selected to open readonly
+            // own lock on saving, user has selected to open readonly
+            // alien lock on loading, user has selected to retry saving
+            // TODO/LATER: alien lock on saving, user has selected to retry saving
+
+            if ( bIsLoading )
+                GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, sal_True ) );
+            else
+                nResult = LOCK_UI_TRY;
+        }
+    }
+    else
+    {
+        if ( bIsLoading )
+        {
+            // if no interaction handler is provided the default answer is open readonly
+            // that usually happens in case the document is loaded per API
+            // so the document must be opened readonly for backward compatibility
+            GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, sal_True ) );
+        }
+        else
+            SetError( ERRCODE_IO_ACCESSDENIED );
+
+    }
+
+    return nResult;
+}
+
+//------------------------------------------------------------------
+sal_Bool SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI )
 {
     // returns true if the document can be opened for editing ( even if it should be a copy )
     // otherwise the document should be opened readonly
@@ -936,103 +1151,141 @@ sal_Bool SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading )
     {
         // the special file locking should be used only for file URLs
 
+        // in case of storing the document should request the output before locking
+        if ( bLoading )
+        {
+            // let the stream be opened to check the system file locking
+            GetMedium_Impl();
+        }
+
+        SFX_ITEMSET_ARG( GetItemSet(), pReadOnlyItem, SfxBoolItem, SID_DOC_READONLY, sal_False);
+
         // no locking is necessary on loading if the document is explicitly opened as copy
         SFX_ITEMSET_ARG( GetItemSet(), pTemplateItem, SfxBoolItem, SID_TEMPLATE, sal_False);
         bResult = ( bLoading && pTemplateItem && pTemplateItem->GetValue() );
 
-        try
+        if ( !bResult && ( !IsReadOnly() || pImp->m_bHandleSysLocked ) )
         {
-            if ( !bResult && !IsReadOnly() )
+            sal_Int8 bUIStatus = LOCK_UI_NOLOCK;
+
+            // check whether system file locking has been used, the default value is false
+            sal_Bool bUseSystemLock = sal_False;
+            try
             {
-                ::svt::DocumentLockFile aLockFile( aLogicName );
-                bResult = aLockFile.CreateOwnLockFile();
-                pImp->m_bLocked = bResult;
 
-                if ( !bResult )
+                uno::Reference< uno::XInterface > xCommonConfig = ::comphelper::ConfigurationHelper::openConfig(
+                                    ::comphelper::getProcessServiceFactory(),
+                                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.Common" ) ),
+                                    ::comphelper::ConfigurationHelper::E_STANDARD );
+                if ( !xCommonConfig.is() )
+                    throw uno::RuntimeException();
+
+                ::comphelper::ConfigurationHelper::readRelativeKey(
+                        xCommonConfig,
+                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Misc/" ) ),
+                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UseDocumentSystemFileLocking" ) ) ) >>= bUseSystemLock;
+            }
+            catch( const uno::Exception& )
+            {
+            }
+
+            // TODO/LATER: This implementation does not allow to detect the system lock on saving here, actually this is no big problem
+            if ( bUseSystemLock && !pImp->xStream.is() && !pOutStream )
+                pImp->m_bHandleSysLocked = sal_True; // if system lock is used the writeable stream should be available
+
+            do
+            {
+                try
                 {
-                    uno::Sequence< ::rtl::OUString > aData = aLockFile.GetLockData();
-                    uno::Sequence< ::rtl::OUString > aOwnData = aLockFile.GenerateOwnEntry();
-
-                    if ( aData.getLength() > LOCKFILE_USERURL_ID
-                      && aOwnData.getLength() > LOCKFILE_USERURL_ID
-                      && aOwnData[LOCKFILE_SYSUSERNAME_ID].equals( aData[LOCKFILE_SYSUSERNAME_ID] )
-                      && aOwnData[LOCKFILE_LOCALHOST_ID].equals( aData[LOCKFILE_LOCALHOST_ID] )
-                      && aOwnData[LOCKFILE_USERURL_ID].equals( aData[LOCKFILE_USERURL_ID] ) )
+                    ::svt::DocumentLockFile aLockFile( aLogicName );
+                    if ( !pImp->m_bHandleSysLocked )
                     {
-                        // this is own lock, it could remain because of crash
-                        pImp->m_bLocked = bResult = sal_True;
+                        try
+                        {
+                            bResult = aLockFile.CreateOwnLockFile();
+                        }
+                        catch ( ucb::InteractiveIOException& e )
+                        {
+                            if ( e.Code == IOErrorCode_INVALID_PARAMETER )
+                            {
+                                // it looks like the lock file name is not accepted by the content
+                                if ( !bUseSystemLock )
+                                {
+                                    // system file locking is not active, ask user whether he wants to open the document without any locking
+                                    uno::Reference< task::XInteractionHandler > xHandler = GetInteractionHandler();
+
+                                    if ( xHandler.is() )
+                                    {
+                                        ::rtl::Reference< ::ucbhelper::InteractionRequest > xIgnoreRequestImpl
+                                            = new ::ucbhelper::InteractionRequest( uno::makeAny( document::LockFileIgnoreRequest() ) );
+
+                                        uno::Sequence< uno::Reference< task::XInteractionContinuation > > aContinuations( 2 );
+                                        aContinuations[0] = new ::ucbhelper::InteractionAbort( xIgnoreRequestImpl.get() );
+                                        aContinuations[1] = new ::ucbhelper::InteractionApprove( xIgnoreRequestImpl.get() );
+                                        xIgnoreRequestImpl->setContinuations( aContinuations );
+
+                                        xHandler->handle( xIgnoreRequestImpl.get() );
+
+                                        ::rtl::Reference< ::ucbhelper::InteractionContinuation > xSelected = xIgnoreRequestImpl->getSelection();
+                                        bResult = (  uno::Reference< task::XInteractionApprove >( xSelected.get(), uno::UNO_QUERY ).is() );
+                                    }
+                                }
+                                else
+                                    bResult = sal_True;
+                            }
+                            else
+                                throw;
+                        }
                     }
+
 
                     if ( !bResult )
                     {
-                        if ( bLoading )
+                        uno::Sequence< ::rtl::OUString > aData;
+                        try
                         {
-                            // show the interaction regarding the document opening
-                            uno::Reference< task::XInteractionHandler > xHandler = GetInteractionHandler();
-                            if ( ::svt::DocumentLockFile::IsInteractionAllowed() && xHandler.is() )
+                            // impossibility to get data is no real problem
+                            aData = aLockFile.GetLockData();
+                        }
+                        catch( uno::Exception ) {}
+
+                        sal_Bool bOwnLock = sal_False;
+
+                        if ( !pImp->m_bHandleSysLocked )
+                        {
+                            uno::Sequence< ::rtl::OUString > aOwnData = aLockFile.GenerateOwnEntry();
+                            bOwnLock = ( aData.getLength() > LOCKFILE_USERURL_ID
+                                      && aOwnData.getLength() > LOCKFILE_USERURL_ID
+                                      && aOwnData[LOCKFILE_SYSUSERNAME_ID].equals( aData[LOCKFILE_SYSUSERNAME_ID] ) );
+
+                            if ( bOwnLock
+                              && aOwnData[LOCKFILE_LOCALHOST_ID].equals( aData[LOCKFILE_LOCALHOST_ID] )
+                              && aOwnData[LOCKFILE_USERURL_ID].equals( aData[LOCKFILE_USERURL_ID] ) )
                             {
-                                document::LockedDocumentRequest aRequest;
-                                aRequest.DocumentURL = GetURLObject().GetLastName();
-                                if ( aData.getLength() > LOCKFILE_EDITTIME_ID )
-                                {
-                                    if ( aData[LOCKFILE_OOOUSERNAME_ID].getLength() )
-                                        aRequest.UserInfo += aData[LOCKFILE_OOOUSERNAME_ID];
-                                    else
-                                        aRequest.UserInfo += aData[LOCKFILE_SYSUSERNAME_ID];
-
-                                    if ( aRequest.UserInfo.getLength() && aData[LOCKFILE_EDITTIME_ID].getLength() )
-                                    {
-                                        aRequest.UserInfo += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " ( " ) );
-                                        aRequest.UserInfo += aData[LOCKFILE_EDITTIME_ID];
-                                        aRequest.UserInfo += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " )" ) );
-                                    }
-                                }
-
-                                ::rtl::Reference< ::ucbhelper::InteractionRequest > xInteractionRequestImpl = new ::ucbhelper::InteractionRequest( uno::makeAny( aRequest ) );
-
-
-                                uno::Sequence< uno::Reference< task::XInteractionContinuation > > aContinuations( 3 );
-                                aContinuations[0] = new ::ucbhelper::InteractionAbort( xInteractionRequestImpl.get() );
-                                aContinuations[1] = new ::ucbhelper::InteractionApprove( xInteractionRequestImpl.get() );
-                                aContinuations[2] = new ::ucbhelper::InteractionDisapprove( xInteractionRequestImpl.get() );
-                                xInteractionRequestImpl->setContinuations( aContinuations );
-
-                                xHandler->handle( xInteractionRequestImpl.get() );
-
-                                ::rtl::Reference< ::ucbhelper::InteractionContinuation > xSelected = xInteractionRequestImpl->getSelection();
-                                if ( uno::Reference< task::XInteractionAbort >( xSelected.get(), uno::UNO_QUERY ).is() )
-                                {
-                                    SetError( ERRCODE_ABORT );
-                                }
-                                else if ( uno::Reference< task::XInteractionDisapprove >( xSelected.get(), uno::UNO_QUERY ).is() )
-                                {
-                                    // means that a copy of the document should be opened
-                                    GetItemSet()->Put( SfxBoolItem( SID_TEMPLATE, sal_True ) );
-                                    bResult = sal_True;
-                                }
-                                // Approve means open readonly here, do not need to do anything
-                                // else if ( XSelected == aContinuations[1] )
-                            }
-                            else
-                            {
-                                // if no interaction handler is provided the default answer is yes
-                                // that usually happens in case the document is loaded per API
-                                // so the document must be opened readonly for backward compatibility
-                                GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, sal_True ) );
+                                // this is own lock from the same installation, it could remain because of crash
+                                bResult = sal_True;
                             }
                         }
-                        else
+
+                        if ( !bResult && !bNoUI )
                         {
-                            // TODO/LATER: introduce a new interaction for this
-                            // this is saving, show just an error
-                            SetError( ERRCODE_IO_ACCESSDENIED );
+                            bUIStatus = ShowLockedDocumentDialog( aData, bLoading, bOwnLock );
+                            if ( bUIStatus == LOCK_UI_SUCCEEDED )
+                            {
+                                // take the ownership over the lock file
+                                bResult = aLockFile.OverwriteOwnLockFile();
+                            }
                         }
+
+                        pImp->m_bHandleSysLocked = sal_False;
                     }
                 }
-            }
-        }
-        catch( uno::Exception& )
-        {
+                catch( uno::Exception& )
+                {
+                }
+            } while( !bResult && bUIStatus == LOCK_UI_TRY );
+
+            pImp->m_bLocked = bResult;
         }
 
         if ( !bResult && GetError() == ERRCODE_NONE )
@@ -1787,7 +2040,6 @@ void SfxMedium::Transfer_Impl()
                SFX_ITEMSET_ARG( pSet, pOutStreamItem, SfxUnoAnyItem, SID_OUTPUTSTREAM, sal_False);
              if( pOutStreamItem && ( pOutStreamItem->GetValue() >>= rOutStream ) )
             {
-                // write directly to the stream
                 if ( pImp->xStorage.is() )
                     CloseStorage();
 
@@ -1983,10 +2235,6 @@ void SfxMedium::Transfer_Impl()
 
                 CloseStreams_Impl();
 
-                // don't create content before Close(), because if the storage was opened in direct mode, it will be flushed
-                // in Close() and this leads to a transfer command executed in the package, which currently is implemented as
-                // remove+move in the file FCP. The "remove" is notified to the ::ucbhelper::Content, that clears its URL and its
-                // content reference in this notification and thus will never get back any URL, so my transfer will fail!
                 ::ucbhelper::Content::create( aSource.GetMainURL( INetURLObject::NO_DECODE ), xEnv, aSourceContent );
 
                 // check for external parameters that may customize the handling of NameClash situations
@@ -2269,6 +2517,7 @@ void SfxMedium::GetMedium_Impl()
             {
                 TransformItems( SID_OPENDOC, *GetItemSet(), xProps );
                 comphelper::MediaDescriptor aMedium( xProps );
+                sal_Bool bRequestedReadOnly = aMedium.getUnpackedValueOrDefault( ::comphelper::MediaDescriptor::PROP_READONLY(), sal_False );
 
                 if ( bFromTempFile )
                 {
@@ -2279,15 +2528,24 @@ void SfxMedium::GetMedium_Impl()
                 else if ( ::utl::LocalFileHelper::IsLocalFile( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) ) )
                 {
                     // use the special locking approach only for file URLs
-                    aMedium.addInputStreamNoLock();
+                    aMedium.addInputStreamOwnLock();
                 }
                 else
                     aMedium.addInputStream();
 
+                // the warning is shown if the user wants to edit the document, but it is not possible
+                pImp->m_bHandleSysLocked = ( !bRequestedReadOnly && aMedium.getUnpackedValueOrDefault( ::comphelper::MediaDescriptor::PROP_READONLY(), sal_False ) );
+
                 sal_Bool bReadOnly = sal_False;
                 aMedium[comphelper::MediaDescriptor::PROP_READONLY()] >>= bReadOnly;
                 if ( bReadOnly )
+                {
+                    SFX_ITEMSET_ARG( GetItemSet(), pROItem, SfxBoolItem, SID_DOC_READONLY, sal_False);
+                    BOOL bForceWritable = ( pROItem && !pROItem->GetValue() );
                     GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, sal_True ) );
+                    if( bForceWritable )
+                        SetError( ERRCODE_IO_ACCESSDENIED );
+                }
 
                 //TODO/MBA: what happens if property is not there?!
                 GetContent();
@@ -2318,6 +2576,8 @@ void SfxMedium::GetMedium_Impl()
             else if ( pImp->xInputStream.is() )
                 pInStream = utl::UcbStreamHelper::CreateStream( pImp->xInputStream );
         }
+
+        GetInitFileDate();
 
         pImp->bDownloadDone = sal_True;
         pImp->aDoneLink.ClearPendingCall();
@@ -2680,10 +2940,10 @@ void SfxMedium::UnlockFile()
     {
         try
         {
-            ::svt::DocumentLockFile aLockFile( aLogicName );
-            // TODO/LATER: A worning could be shown in case the file is not the own one
-            aLockFile.RemoveFile();
             pImp->m_bLocked = sal_False;
+            ::svt::DocumentLockFile aLockFile( aLogicName );
+            // TODO/LATER: A warning could be shown in case the file is not the own one
+            aLockFile.RemoveFile();
         }
         catch( uno::Exception& )
         {}
@@ -3871,7 +4131,7 @@ BOOL SfxMedium::IsOpen() const
                 GetItemSet()->ClearItem( SID_DOC_READONLY );
 
                 GetMedium_Impl();
-                LockOrigFileOnDemand( sal_False );
+                LockOrigFileOnDemand( sal_False, sal_False );
                 CreateTempFile();
                 GetMedium_Impl();
 
@@ -3929,7 +4189,7 @@ sal_Bool SfxMedium::SwitchDocumentToFile( ::rtl::OUString aURL )
 
             // open the temporary file based document
             GetMedium_Impl();
-            LockOrigFileOnDemand( sal_False );
+            LockOrigFileOnDemand( sal_False, sal_False );
             CreateTempFile();
             GetMedium_Impl();
 
