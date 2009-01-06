@@ -5380,6 +5380,11 @@
                     <value xml:lang="en-US">More Dictionaries Online...</value>
                 </prop>
             </node>
-        </node>
+            <node oor:name=".uno:ActivateStyleApply" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Set Focus in Combo Box</value>
+                </prop>
+            </node>
     </node>
+  </node>
 </oor:component-data>

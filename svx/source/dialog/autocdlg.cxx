@@ -57,6 +57,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <svtools/eitem.hxx>
+#include <svtools/languageoptions.hxx>
 #include <svx/SmartTagMgr.hxx>
 #include <com/sun/star/smarttags/XSmartTagRecognizer.hpp>
 #include <com/sun/star/smarttags/XSmartTagAction.hpp>
@@ -143,7 +144,11 @@ OfaAutoCorrDlg::OfaAutoCorrDlg(Window* pParent, const SfxItemSet* _pSet ) :
     // initialize languages
     //! LANGUAGE_NONE is displayed as '[All]' and the LanguageType
     //! will be set to LANGUAGE_DONTKNOW
-    aLanguageLB.SetLanguageList( LANG_LIST_WESTERN, TRUE, TRUE );
+    sal_Int16 nLangList = LANG_LIST_WESTERN;
+
+    if( SvtLanguageOptions().IsCTLFontEnabled() )
+        nLangList |= LANG_LIST_CTL;
+    aLanguageLB.SetLanguageList( nLangList, TRUE, TRUE );
     aLanguageLB.SelectLanguage( LANGUAGE_NONE );
     USHORT nPos = aLanguageLB.GetSelectEntryPos();
     DBG_ASSERT( LISTBOX_ENTRY_NOTFOUND != nPos, "listbox entry missing" );

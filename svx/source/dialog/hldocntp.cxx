@@ -236,6 +236,11 @@ void SvxHyperlinkNewDocTp::FillDocumentList ()
             else if ( rDynamicMenuEntry[e].Name == DYNAMICMENU_PROPERTYNAME_TARGETNAME )
                 rDynamicMenuEntry[e].Value >>= aTargetName;
         }
+        //#i96822# business cards, labels and database should not be inserted here
+        if( aDocumentUrl.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "private:factory/swriter?slot=21051" ) ) ||
+                aDocumentUrl.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "private:factory/swriter?slot=21052" )) ||
+                aDocumentUrl.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "private:factory/sdatabase?Interactive" )))
+            continue;
 
         // Insert into listbox
         if ( aDocumentUrl.getLength() )
