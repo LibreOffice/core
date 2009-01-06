@@ -78,14 +78,14 @@ public class CwsDataExchangeImpl implements CwsDataExchange {
 
         final String[] outs = procHdl.getOutputText().split("\n");
 
-        final ArrayList moduleNames = new ArrayList();
+        final ArrayList<String> moduleNames = new ArrayList<String>();
         boolean start = false;
         for (int i = 0; i < outs.length; i++) {
             final String line = outs[i];
             if (line.startsWith("cwstouched ends here")) {
                 start = false;
             }
-            if (start && !line.equals("")) {
+            if (start && line.length() > 1) {
                 moduleNames.add(line);
             }
             if (line.startsWith("cwstouched starts here")) {

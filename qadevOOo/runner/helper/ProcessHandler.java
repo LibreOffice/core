@@ -338,20 +338,21 @@ public class ProcessHandler {
             ow = (OfficeWatcher) param.get(PropertyName.OFFICE_WATCHER);
         }
 
-        while (changedText && !this.isFinished()) {
+        while (!this.isFinished() && changedText) {
             count++;
             if (ow != null) {
                 ow.ping();
             }
             dbg("runCommand: waiting " + mTimeOut / 1000 + " seconds while command execution is ongoing... " + count);
             shortWait(mTimeOut);
+            //waitFor(mTimeOut);
 
             if (ow != null) {
                 ow.ping();
             }
             // check for changes in the output stream. If there are no changes, the process maybe hangs
             if (!this.isFinished()) {
-                if (this.getOutputText().equals(memText)) {
+                if (this.getOutputText().length() == memText.length()) {
                     changedText = false;
                     dbg("runCommand Could not detect changes in output stream!!!");
 

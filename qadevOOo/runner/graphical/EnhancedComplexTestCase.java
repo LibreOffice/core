@@ -51,7 +51,7 @@ private void callEntry(String _sEntry, ParameterHelper _aParam)
 {
     log.println("- next file is: ------------------------------");
     log.println(_sEntry);
-    // TODO: prüfen, ob 'sEntry' ein gültiges Dokument ist?
+    // TODO: check if 'sEntry' is a guilty document.
     File aFile = new File(_aParam.getInputPath());
     String sPath = _aParam.getInputPath();
     // problem here, isFile() checks also if the file exists, but a not existing file is not really a directory
