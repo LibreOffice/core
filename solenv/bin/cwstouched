@@ -1,9 +1,6 @@
-#!/bin/bash
-PYTHONPATH=${SOLARVERSION}/${OUTPATH}${PROEXT}/lib${UPDMINOREXT}/python
-
-if [ x${CWSCHECKAPI_LD_LIBRARY_PATH}x != xx ]; then
-    export LD_LIBRARY_PATH=$CWSCHECKAPI_LD_LIBRARY_PATH
+#!/bin/sh
+if [ x${SOLARENV}x = xx ]; then
+    echo No environment found, please use 'configure' or 'setsolar'
+    exit 1
 fi
-export PYTHONPATH
-
-${SOLARVERSION}/${OUTPATH}${PROEXT}/bin${UPDMINOREXT}/python -x $SOLARENV/bin/cwstouched.py
+exec perl -w $SOLARENV/bin/cwstouched.pl
