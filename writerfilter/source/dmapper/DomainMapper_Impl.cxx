@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: DomainMapper_Impl.cxx,v $
- * $Revision: 1.27 $
+ * $Revision: 1.27.6.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1539,7 +1539,11 @@ style::NumberingType::
     CHARS_CYRILLIC_UPPER_LETTER_RU
     CHARS_CYRILLIC_LOWER_LETTER_RU
     CHARS_CYRILLIC_UPPER_LETTER_N_RU
-    CHARS_CYRILLIC_LOWER_LETTER_N_RU*/
+    CHARS_CYRILLIC_LOWER_LETTER_N_RU
+    CHARS_CYRILLIC_UPPER_LETTER_SR
+    CHARS_CYRILLIC_LOWER_LETTER_SR
+    CHARS_CYRILLIC_UPPER_LETTER_N_SR
+    CHARS_CYRILLIC_LOWER_LETTER_N_SR*/
 
         };
         for( sal_uInt32 nNum = 0; nNum < sizeof(aNumberingPairs)/sizeof( NumberingPairs ); ++nNum)
