@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: animationcommandnode.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,6 +31,7 @@
 #define INCLUDED_SLIDESHOW_ANIMATIONCOMMANDNODE_HXX
 
 #include "basecontainernode.hxx"
+#include "externalmediashape.hxx"
 #include "soundplayer.hxx"
 #include "com/sun/star/animations/XCommand.hpp"
 
@@ -39,9 +40,8 @@ namespace internal {
 
 /** Command node.
 
-    TODO
-    This animation node contains a command.  Currently the only implemented
-    command, is STOPAUDIO.
+    This animation node encapsulates a command. Not yet implemented:
+    verb & custom.
 */
 class AnimationCommandNode : public BaseNode
 {
@@ -50,20 +50,20 @@ public:
         ::com::sun::star::uno::Reference<
         ::com::sun::star::animations::XAnimationNode> const& xNode,
         ::boost::shared_ptr<BaseContainerNode> const& pParent,
-        NodeContext const& rContext )
-        : BaseNode( xNode, pParent, rContext ),
-          mxCommandNode( xNode, ::com::sun::star::uno::UNO_QUERY_THROW ) {}
+        NodeContext const& rContext );
 
 protected:
     virtual void dispose();
 
 private:
-    virtual void activate_();
+    virtual void activate_st();
     virtual bool hasPendingAnimation() const;
 
 private:
+    ExternalMediaShapeSharedPtr mpShape;
     ::com::sun::star::uno::Reference<
         ::com::sun::star::animations::XCommand > mxCommandNode;
+    bool                                       mbIsPaused;
 };
 
 } // namespace internal

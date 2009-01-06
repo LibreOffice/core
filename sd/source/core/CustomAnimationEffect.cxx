@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: CustomAnimationEffect.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.17.74.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -691,9 +691,16 @@ void CustomAnimationEffect::setTarget( const ::com::sun::star::uno::Any& rTarget
                     {
                         while( xEnumeration->hasMoreElements() )
                         {
-                            Reference< XAnimate > xAnimate( xEnumeration->nextElement(), UNO_QUERY );
+                            const Any aElem( xEnumeration->nextElement() );
+                            Reference< XAnimate > xAnimate( aElem, UNO_QUERY );
                             if( xAnimate.is() )
                                 xAnimate->setTarget( rTarget );
+                            else
+                            {
+                                Reference< XCommand > xCommand( aElem, UNO_QUERY );
+                                if( xCommand.is() )
+                                    xCommand->setTarget( rTarget );
+                            }
                         }
                     }
                 }

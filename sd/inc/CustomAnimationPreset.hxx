@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: CustomAnimationPreset.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.72.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -123,6 +123,7 @@ public:
     const PresetCategoryList& getEmphasisPresets() const { return maEmphasisPresets; }
     const PresetCategoryList& getExitPresets() const { return maExitPresets; }
     const PresetCategoryList& getMotionPathsPresets() const { return maMotionPathsPresets; }
+    const PresetCategoryList& getMiscPresets() const { return maMiscPresets; }
 
     void changePresetSubType( CustomAnimationEffectPtr pEffect, const rtl::OUString& rPresetSubType ) const;
 
@@ -144,6 +145,7 @@ private:
     PresetCategoryList maEmphasisPresets;
     PresetCategoryList maExitPresets;
     PresetCategoryList maMotionPathsPresets;
+    PresetCategoryList maMiscPresets;
 
     static CustomAnimationPresets*  mpCustomAnimationPresets;
 };

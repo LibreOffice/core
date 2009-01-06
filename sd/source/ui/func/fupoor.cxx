@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fupoor.cxx,v $
- * $Revision: 1.50 $
+ * $Revision: 1.50.74.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -752,6 +752,11 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
                         Size aLogicSizeOnePixel = (mpWindow) ? mpWindow->PixelToLogic(Size(1,1)) : Size(100, 100);
                         nX *= aLogicSizeOnePixel.Width();
                         nY *= aLogicSizeOnePixel.Height();
+                    }
+                    else if(rKEvt.GetKeyCode().IsShift())
+                    {
+                        nX *= 1000;
+                        nY *= 1000;
                     }
                     else
                     {

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: CustomAnimationCreateDialog.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.14.74.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -86,6 +86,7 @@ const int ENTRANCE = 0;
 const int EMPHASIS = 1;
 const int EXIT = 2;
 const int MOTIONPATH = 3;
+const int MISCEFFECTS = 4;
 
 extern void fillDurationComboBox( ComboBox* pBox );
 
@@ -555,6 +556,9 @@ CustomAnimationCreateDialog::CustomAnimationCreateDialog( Window* pParent, Custo
     mpTabPages[MOTIONPATH] = new CustomAnimationCreateTabPage( mpTabControl, this, MOTIONPATH, rPresets.getMotionPathsPresets(), bHasText );
     mpTabPages[MOTIONPATH]->SetHelpId( HID_SD_CUSTOMANIMATIONDIALOG_MOTIONPATH );
     mpTabControl->SetTabPage( RID_TP_CUSTOMANIMATION_MOTIONPATH, mpTabPages[MOTIONPATH] );
+    mpTabPages[MISCEFFECTS] = new CustomAnimationCreateTabPage( mpTabControl, this, MISCEFFECTS, rPresets.getMiscPresets(), bHasText );
+    mpTabPages[MISCEFFECTS]->SetHelpId( HID_SD_CUSTOMANIMATIONDIALOG_MISCEFFECTS );
+    mpTabControl->SetTabPage( RID_TP_CUSTOMANIMATION_MISCEFFECTS, mpTabPages[MISCEFFECTS] );
 
     getCurrentPage()->setDuration( mfDuration );
     getCurrentPage()->setIsPreview( mbIsPreview );
@@ -589,6 +593,7 @@ CustomAnimationCreateDialog::~CustomAnimationCreateDialog()
     delete mpTabPages[EMPHASIS];
     delete mpTabPages[EXIT];
     delete mpTabPages[MOTIONPATH];
+    delete mpTabPages[MISCEFFECTS];
 
     delete mpTabControl;
     delete mpOKButton;
@@ -603,6 +608,7 @@ CustomAnimationCreateTabPage* CustomAnimationCreateDialog::getCurrentPage() cons
     case RID_TP_CUSTOMANIMATION_ENTRANCE:   return mpTabPages[ENTRANCE];
     case RID_TP_CUSTOMANIMATION_EMPHASIS:   return mpTabPages[EMPHASIS];
     case RID_TP_CUSTOMANIMATION_EXIT:       return mpTabPages[EXIT];
+    case RID_TP_CUSTOMANIMATION_MISCEFFECTS:return mpTabPages[MISCEFFECTS];
     //case RID_TP_CUSTOMANIMATION_MOTIONPATH:
     default:
                                             return mpTabPages[MOTIONPATH];

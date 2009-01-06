@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: externalshapebase.cxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.2.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -141,16 +141,37 @@ namespace slideshow
 
         // ---------------------------------------------------------------------
 
-        void ExternalShapeBase::enterAnimationMode()
+        void ExternalShapeBase::play()
         {
             implStartIntrinsicAnimation();
         }
 
         // ---------------------------------------------------------------------
 
-        void ExternalShapeBase::leaveAnimationMode()
+        void ExternalShapeBase::stop()
         {
             implEndIntrinsicAnimation();
+        }
+
+        // ---------------------------------------------------------------------
+
+        void ExternalShapeBase::pause()
+        {
+            implPauseIntrinsicAnimation();
+        }
+
+        // ---------------------------------------------------------------------
+
+        bool ExternalShapeBase::isPlaying() const
+        {
+            return implIsIntrinsicAnimationPlaying();
+        }
+
+        // ---------------------------------------------------------------------
+
+        void ExternalShapeBase::setMediaTime(double fTime)
+        {
+            implSetIntrinsicAnimationTime(fTime);
         }
 
         // ---------------------------------------------------------------------
