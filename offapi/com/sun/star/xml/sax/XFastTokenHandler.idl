@@ -80,6 +80,13 @@ interface XFastTokenHandler: com::sun::star::uno::XInterface
             if the identifier is not known to this instance.
     */
     long getTokenFromUTF8( [in] sequence< byte > Identifier );
+
+    //-------------------------------------------------------------------------
+
+    /** returns a identifier for the given integer token as a byte
+          sequence encoded in UTF8.
+    */
+    sequence< byte > getUTF8Identifier( [in] long Token );
 };
 
 //============================================================================

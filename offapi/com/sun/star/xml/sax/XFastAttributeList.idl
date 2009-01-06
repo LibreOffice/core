@@ -38,6 +38,10 @@
 #include <com/sun/star/xml/Attribute.idl>
 #endif
 
+#ifndef __com_sun_star_xml_FastAttribute_idl__
+#include <com/sun/star/xml/FastAttribute.idl>
+#endif
+
 #ifndef __com_sun_star_xml_sax_SAXException_idl__
 #include <com/sun/star/xml/sax/SAXException.idl>
 #endif
@@ -165,6 +169,11 @@ interface XFastAttributeList: com::sun::star::uno::XInterface
         can not be translated to tokens.
     */
     sequence< ::com::sun::star::xml::Attribute > getUnknownAttributes();
+
+    /** returns a sequence of attributes which names and or namespaces URLS
+        are translated to tokens.
+    */
+    sequence< ::com::sun::star::xml::FastAttribute > getFastAttributes();
 };
 
 //=============================================================================

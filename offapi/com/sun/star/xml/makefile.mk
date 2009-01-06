@@ -46,6 +46,7 @@ IDLFILES=\
     AttributeData.idl \
     Attribute.idl \
     ExportFilter.idl \
+    FastAttribute.idl \
     ImportFilter.idl \
     NamespaceContainer.idl \
     ParaUserDefinedAttributesSupplier.idl \
