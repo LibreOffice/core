@@ -135,6 +135,7 @@ LDAPSDKLIB=-lldap50
 
 ICOLIB=-lico$(DLLPOSTFIX)
 VCLLIB=-lvcl$(DLLPOSTFIX)
+OOXLIB=-loox$(DLLPOSTFIX)
 BASEGFXLIB=-lbasegfx$(DLLPOSTFIX)
 DRAWINGLAYERLIB=-ldrawinglayer$(DLLPOSTFIX)
 BASEBMPLIB=-lbasebmp$(DLLPOSTFIX)
@@ -464,6 +465,7 @@ ISWLIB=_sw.lib
 ISCLIB=sci.lib
 ISDLIB=sdi.lib
 VCLLIB=ivcl.lib
+OOXLIB=ioox.lib
 BASEGFXLIB=ibasegfx.lib
 DRAWINGLAYERLIB=idrawinglayer.lib
 BASEBMPLIB=ibasebmp.lib
