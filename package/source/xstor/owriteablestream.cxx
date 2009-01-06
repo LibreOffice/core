@@ -219,6 +219,7 @@ OWriteStream_Impl::OWriteStream_Impl( OStorage_Impl* pParent,
 , m_xOrigRelInfoStream( xRelInfoStream )
 , m_bOrigRelInfoBroken( sal_False )
 , m_nRelInfoStatus( RELINFO_NO_INIT )
+, m_nRelId( 1 )
 {
     OSL_ENSURE( xPackageStream.is(), "No package stream is provided!\n" );
     OSL_ENSURE( xPackage.is(), "No package component is provided!\n" );
@@ -2548,9 +2549,9 @@ void SAL_CALL OWriteStream::insertRelationshipByID(  const ::rtl::OUString& sID,
 
         aSeq[nIDInd][0].First = aIDTag;
         aSeq[nIDInd][0].Second = sID;
-        sal_Int32 nIndTarget = 0;
+        sal_Int32 nIndTarget = 1;
         for ( sal_Int32 nIndOrig = 0;
-              nIndOrig <= aEntry.getLength();
+              nIndOrig < aEntry.getLength();
               nIndOrig++ )
         {
             if ( !aEntry[nIndOrig].First.equals( aIDTag ) )
@@ -2817,6 +2818,11 @@ uno::Any SAL_CALL OWriteStream::getPropertyValue( const ::rtl::OUString& aProp )
 
     if ( !m_pImpl )
         throw lang::DisposedException();
+
+    if ( aProp.equalsAscii( "RelId" ) )
+    {
+        return uno::makeAny( m_pImpl->GetNewRelId() );
+    }
 
     ::rtl::OUString aPropertyName;
     if ( aProp.equalsAscii( "IsEncrypted" ) )

@@ -139,6 +139,7 @@ struct OWriteStream_Impl : public PreCreationStruct
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair > > m_aNewRelInfo;
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > m_xNewRelInfoStream;
     sal_Int16 m_nRelInfoStatus;
+    sal_Int32 m_nRelId;
 
 
 private:
@@ -249,6 +250,8 @@ public:
                     const ::rtl::OUString& aNewStreamName );
 
     void ReadRelInfoIfNecessary();
+
+    sal_Int32 GetNewRelId() { return m_nRelId ++; }
 };
 
 class OWriteStream : ::com::sun::star::lang::XTypeProvider

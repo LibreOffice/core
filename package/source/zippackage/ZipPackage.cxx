@@ -1112,14 +1112,14 @@ sal_Bool ZipPackage::writeFileIsTemp()
             {
                 ::rtl::OUString aPath;
                 ::rtl::OUString aType;
-                OSL_ENSURE( (*aIter)[0].Name.equals( sMediaType ) && (*aIter)[1].Name.equals( sFullPath ),
+                OSL_ENSURE( (*aIter)[PKG_MNFST_MEDIATYPE].Name.equals( sMediaType ) && (*aIter)[PKG_MNFST_FULLPATH].Name.equals( sFullPath ),
                             "The mediatype sequence format is wrong!\n" );
-                (*aIter)[0].Value >>= aType;
+                (*aIter)[PKG_MNFST_MEDIATYPE].Value >>= aType;
                 if ( aType.getLength() )
                 {
                     // only nonempty type makes sence here
                     nSeqLength++;
-                    (*aIter)[1].Value >>= aPath;
+                    (*aIter)[PKG_MNFST_FULLPATH].Value >>= aPath;
                     aOverridesSequence[nSeqLength-1].First = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) ) + aPath;
                     aOverridesSequence[nSeqLength-1].Second = aType;
                 }
