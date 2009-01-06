@@ -49,6 +49,7 @@ using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::frame::XModel;
 using ::com::sun::star::io::XInputStream;
 using ::com::sun::star::io::XOutputStream;
+using ::com::sun::star::io::XStream;
 using ::com::sun::star::task::XStatusIndicator;
 using ::com::sun::star::task::XInteractionHandler;
 using ::comphelper::MediaDescriptor;
@@ -68,7 +69,7 @@ struct FilterBaseImpl
     Reference< XMultiServiceFactory >   mxFactory;
     Reference< XModel >                 mxModel;
     Reference< XInputStream >           mxInStream;
-    Reference< XOutputStream >          mxOutStream;
+    Reference< XStream >                mxStream;
     Reference< XStatusIndicator >       mxStatusIndicator;
     Reference< XInteractionHandler >    mxInteractionHandler;
 
@@ -87,13 +88,15 @@ FilterBaseImpl::FilterBaseImpl( const Reference< XMultiServiceFactory >& rxFacto
 void FilterBaseImpl::setMediaDescriptor( const Sequence< PropertyValue >& rDescriptor )
 {
     maDescriptor = rDescriptor;
-    maDescriptor.addInputStream();
 
     maFileUrl = maDescriptor.getUnpackedValueOrDefault( MediaDescriptor::PROP_URL(), maFileUrl );
     mxInStream = maDescriptor.getUnpackedValueOrDefault( MediaDescriptor::PROP_INPUTSTREAM(), mxInStream );
-    mxOutStream = maDescriptor.getUnpackedValueOrDefault( MediaDescriptor::PROP_OUTPUTSTREAM(), mxOutStream );
+    mxStream = maDescriptor.getUnpackedValueOrDefault( MediaDescriptor::PROP_STREAMFOROUTPUT(), mxStream );
     mxStatusIndicator = maDescriptor.getUnpackedValueOrDefault( MediaDescriptor::PROP_STATUSINDICATOR(), mxStatusIndicator );
     mxInteractionHandler = maDescriptor.getUnpackedValueOrDefault( MediaDescriptor::PROP_INTERACTIONHANDLER(), mxInteractionHandler );
+
+    if( mxInStream.is() )
+        maDescriptor.addInputStream();
 }
 
 // ============================================================================
@@ -114,7 +117,7 @@ bool FilterBase::isImportFilter() const
 
 bool FilterBase::isExportFilter() const
 {
-    return mxImpl->mxOutStream.is();
+    return mxImpl->mxStream.is();
 }
 
 // ----------------------------------------------------------------------------
@@ -288,13 +291,13 @@ sal_Bool SAL_CALL FilterBase::filter( const Sequence< PropertyValue >& rDescript
     if( mxImpl->mxFactory.is() && mxImpl->mxModel.is() )
     {
         mxImpl->setMediaDescriptor( rDescriptor );
-        mxImpl->mxStorage = implCreateStorage( mxImpl->mxInStream, mxImpl->mxOutStream );
+        mxImpl->mxStorage = implCreateStorage( mxImpl->mxInStream, mxImpl->mxStream );
         if( mxImpl->mxStorage.get() )
         {
             mxImpl->mxModel->lockControllers();
             if( mxImpl->mxInStream.is() )
                 bRet = importDocument();
-            else if( mxImpl->mxOutStream.is() )
+            else if( mxImpl->mxStream.is() )
                 bRet = exportDocument();
             mxImpl->mxModel->unlockControllers();
         }

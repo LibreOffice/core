@@ -29,6 +29,7 @@
  ************************************************************************/
 
 #include <iostream>
+#include <string.h>
 #include <ooxml/resourceids.hxx>
 #include "OOXMLFastTokenHandler.hxx"
 #include "gperffasttoken.hxx"
@@ -83,6 +84,15 @@ OOXMLFastTokenHandler::OOXMLFastTokenHandler
     }
 
     return sResult;
+}
+
+css::uno::Sequence< ::sal_Int8 > SAL_CALL OOXMLFastTokenHandler::getUTF8Identifier(::sal_Int32 Token)
+    throw (css::uno::RuntimeException)
+{
+    if ( Token < 0  || Token >= OOXML_FAST_TOKENS_END )
+        return css::uno::Sequence< ::sal_Int8 >();
+
+    return css::uno::Sequence< ::sal_Int8 >(reinterpret_cast< const sal_Int8 *>(tokenmap::wordlist[Token].name), strlen(tokenmap::wordlist[Token].name));
 }
 
 ::sal_Int32 SAL_CALL OOXMLFastTokenHandler::getTokenFromUTF8

@@ -44,6 +44,7 @@ public:
 
     virtual ::sal_Int32 SAL_CALL getToken( const ::rtl::OUString& Identifier ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getIdentifier( ::sal_Int32 Token ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::sal_Int8 > SAL_CALL getUTF8Identifier( ::sal_Int32 Token ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::sal_Int32 SAL_CALL getTokenFromUTF8( const ::com::sun::star::uno::Sequence< ::sal_Int8 >& Identifier ) throw (::com::sun::star::uno::RuntimeException);
 };
 

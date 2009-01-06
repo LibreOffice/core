@@ -29,8 +29,10 @@
  ************************************************************************/
 
 #include "oox/helper/zipstorage.hxx"
+#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
+#include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <comphelper/storagehelper.hxx>
@@ -46,6 +48,7 @@ using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::embed::XStorage;
 using ::com::sun::star::io::XInputStream;
 using ::com::sun::star::io::XOutputStream;
+using ::com::sun::star::io::XStream;
 
 namespace oox {
 
@@ -69,12 +72,23 @@ ZipStorage::ZipStorage(
 
 ZipStorage::ZipStorage(
         const Reference< XMultiServiceFactory >& rxFactory,
-        const Reference< XOutputStream >& rxOutStream ) :
-    StorageBase( rxOutStream, false )
+        const Reference< XStream >& rxStream ) :
+    StorageBase( rxStream, false )
 {
     OSL_ENSURE( rxFactory.is(), "ZipStorage::ZipStorage - missing service factory" );
-    (void)rxFactory;   // prevent compiler warning
-    OSL_ENSURE( false, "ZipStorage::ZipStorage - not implemented" );
+    // create base storage object
+    try
+    {
+        mxStorage = ::comphelper::OStorageHelper::GetStorageOfFormatFromStream( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OFOPXMLFormat" ) ),
+                                                                                rxStream,
+                                                                                com::sun::star::embed::ElementModes::READWRITE
+                                                                                | com::sun::star::embed::ElementModes::TRUNCATE,
+                                                                                rxFactory );
+    }
+    catch( Exception& )
+    {
+        OSL_ENSURE( false, "ZipStorage::ZipStorage - cannot open output storage" );
+    }
 }
 
 ZipStorage::ZipStorage( const ZipStorage& rParentStorage, const Reference< XStorage >& rxStorage, const OUString& rElementName ) :
@@ -114,10 +128,8 @@ void ZipStorage::implGetElementNames( ::std::vector< OUString >& orElementNames 
 
 StorageRef ZipStorage::implOpenSubStorage( const OUString& rElementName, bool bCreate )
 {
-    OSL_ENSURE( !bCreate, "ZipStorage::implOpenSubStorage - creating new sub storages not implemented" );
-    (void)bCreate;  // prevent compiler warning
-
     Reference< XStorage > xSubXStorage;
+    bool bMissing = false;
     if( mxStorage.is() ) try
     {
         // XStorage::isStorageElement may throw various exceptions...
@@ -125,9 +137,23 @@ StorageRef ZipStorage::implOpenSubStorage( const OUString& rElementName, bool bC
             xSubXStorage = mxStorage->openStorageElement(
                 rElementName, ::com::sun::star::embed::ElementModes::READ );
     }
+    catch( ::com::sun::star::container::NoSuchElementException& )
+    {
+        bMissing = true;
+    }
     catch( Exception& )
     {
     }
+
+    if( bMissing && bCreate )
+        try
+        {
+            xSubXStorage = mxStorage->openStorageElement(
+                rElementName, ::com::sun::star::embed::ElementModes::READWRITE );
+        }
+        catch( Exception& )
+        {
+        }
 
     StorageRef xSubStorage;
     if( xSubXStorage.is() )
@@ -153,8 +179,7 @@ Reference< XOutputStream > ZipStorage::implOpenOutputStream( const OUString& rEl
     Reference< XOutputStream > xOutStream;
     if( mxStorage.is() ) try
     {
-        (void)rElementName;
-        OSL_ENSURE( false, "ZipStorage::implOpenOutputStream - not implemented" );
+        xOutStream.set( mxStorage->openStreamElement( rElementName, ::com::sun::star::embed::ElementModes::READWRITE ), UNO_QUERY );
     }
     catch( Exception& )
     {

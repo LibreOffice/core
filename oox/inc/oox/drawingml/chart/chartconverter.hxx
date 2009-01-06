@@ -33,6 +33,7 @@
 #define OOX_DRAWINGML_CHART_CHARTCONVERTER_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
+#include <oox/dllapi.h>
 
 namespace com { namespace sun { namespace star {
     namespace chart2 { class XChartDocument; }
@@ -53,7 +54,7 @@ struct DataSequenceModel;
 
 // ============================================================================
 
-class ChartConverter
+class OOX_DLLPUBLIC ChartConverter
 {
 public:
     explicit            ChartConverter();

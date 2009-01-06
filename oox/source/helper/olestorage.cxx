@@ -34,6 +34,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
+#include <com/sun/star/io/XStream.hpp>
 #include "oox/helper/helper.hxx"
 
 using ::rtl::OUString;
@@ -49,6 +50,7 @@ using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::embed::XStorage;
 using ::com::sun::star::io::XInputStream;
 using ::com::sun::star::io::XOutputStream;
+using ::com::sun::star::io::XStream;
 
 namespace oox {
 
@@ -72,9 +74,9 @@ OleStorage::OleStorage(
 
 OleStorage::OleStorage(
         const Reference< XMultiServiceFactory >& rxFactory,
-        const Reference< XOutputStream >& rxOutStream,
+        const Reference< XStream >& rxStream,
         bool bBaseStreamAccess ) :
-    StorageBase( rxOutStream, bBaseStreamAccess )
+    StorageBase( rxStream, bBaseStreamAccess )
 {
     OSL_ENSURE( rxFactory.is(), "OleStorage::OleStorage - missing service factory" );
     (void)rxFactory;    // prevent compiler warning

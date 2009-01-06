@@ -34,10 +34,11 @@
 
 #include <rtl/ustring.hxx>
 #include <boost/shared_ptr.hpp>
-#include "oox/drawingml/table/tablestyle.hxx"
 #include <vector>
 
 namespace oox { namespace drawingml { namespace table {
+
+class TableStyle;
 
 class TableStyleList
 {

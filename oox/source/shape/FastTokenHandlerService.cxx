@@ -70,6 +70,11 @@ uno::Sequence< ::rtl::OUString > SAL_CALL FastTokenHandlerService::getSupportedS
     return mFastTokenHandler.getIdentifier(Token);
 }
 
+::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL FastTokenHandlerService::getUTF8Identifier( ::sal_Int32 Token ) throw (::com::sun::star::uno::RuntimeException)
+{
+    return mFastTokenHandler.getUTF8Identifier(Token);
+}
+
 ::sal_Int32 SAL_CALL FastTokenHandlerService::getTokenFromUTF8(const ::com::sun::star::uno::Sequence< ::sal_Int8 > & Identifier) throw (::com::sun::star::uno::RuntimeException)
 {
     return mFastTokenHandler.getTokenFromUTF8(Identifier);
