@@ -70,6 +70,7 @@ IDLFILES=\
     XJobExecutor.idl\
     XJobListener.idl\
     XMasterPasswordHandling.idl\
+    XMasterPasswordHandling2.idl\
     XPasswordContainer.idl\
     XStatusIndicator.idl\
     XStatusIndicatorFactory.idl\

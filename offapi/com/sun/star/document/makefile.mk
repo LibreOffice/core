@@ -45,6 +45,7 @@ IDLFILES=\
     AmbigousFilterRequest.idl\
     BrokenPackageRequest.idl\
     CorruptedFilterConfigurationException.idl\
+    ChangedByOthersRequest.idl\
     DocumentEvent.idl\
     DocumentInfo.idl\
     DocumentProperties.idl\
@@ -61,12 +62,15 @@ IDLFILES=\
     ImportFilter.idl\
     LinkTarget.idl\
     LinkTargets.idl\
+    LockFileIgnoreRequest.idl\
     LockedDocumentRequest.idl\
+    LockedOnSavingRequest.idl\
     MacroExecMode.idl\
     MediaDescriptor.idl\
     NoSuchFilterRequest.idl\
     OfficeDocument.idl\
     OleEmbeddedServerRegistration.idl\
+    OwnLockOnDocumentRequest.idl\
     PrinterIndependentLayout.idl\
     RedlineDisplayType.idl \
     Settings.idl\
