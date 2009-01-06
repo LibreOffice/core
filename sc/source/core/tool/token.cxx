@@ -2486,11 +2486,6 @@ void ScTokenArray::ReadjustRelative3DReferences( const ScAddress& rOldPos,
 
 // --- POF (plain old formula) rewrite of a token array ---------------------
 
-/* TODO: When both POF OOoXML and ODFF are to be supported differently, the
- * ScMissingContext and ScTokenArray::*Pof* methods should go to a convention
- * on its own.
- */
-
 #if 0
 // static function can't be compiled if not used (warning)
 //#if OSL_DEBUG_LEVEL > 0
@@ -2512,11 +2507,26 @@ class ScMissingContext
 
                     void    Clear() { mpFunc = NULL; mnCurArg = 0; }
             inline  bool    AddDefaultArg( ScTokenArray* pNewArr, int nArg, double f ) const;
-    static  inline  bool    IsRewriteNeeded( OpCode eOp );
                     bool    AddMissingExternal( ScTokenArray* pNewArr ) const;
-                    bool    AddMissing( ScTokenArray *pNewArr ) const;
-                    void    AddMoreArgs( ScTokenArray *pNewArr ) const;
+                    bool    AddMissing( ScTokenArray *pNewArr, const ScMissingConvention & rConv ) const;
+                    void    AddMoreArgs( ScTokenArray *pNewArr, const ScMissingConvention & rConv ) const;
 };
+
+inline bool ScMissingConvention::isRewriteNeeded( OpCode eOp ) const
+{
+    switch (eOp)
+    {
+        case ocGammaDist:
+        case ocPoissonDist:
+            return true;
+        case ocMissing:
+        case ocLog:
+        case ocAddress:
+            return !isODFF();   // rewrite only for PODF
+        default:
+            return false;
+    }
+}
 
 inline bool ScMissingContext::AddDefaultArg( ScTokenArray* pNewArr, int nArg, double f ) const
 {
@@ -2528,21 +2538,10 @@ inline bool ScMissingContext::AddDefaultArg( ScTokenArray* pNewArr, int nArg, do
     return false;
 }
 
-inline bool ScMissingContext::IsRewriteNeeded( OpCode eOp )
-{
-    switch (eOp)
-    {
-        case ocMissing:
-        case ocLog:
-        case ocAddress:
-            return true;
-        default:
-            return false;
-    }
-}
-
 bool ScMissingContext::AddMissingExternal( ScTokenArray *pNewArr ) const
 {
+    // Only called for PODF, not ODFF. No need to distinguish.
+
     const String &rName = mpFunc->GetExternal();
 
     // initial (fast) check:
@@ -2563,79 +2562,105 @@ bool ScMissingContext::AddMissingExternal( ScTokenArray *pNewArr ) const
     return false;
 }
 
-bool ScMissingContext::AddMissing( ScTokenArray *pNewArr ) const
+bool ScMissingContext::AddMissing( ScTokenArray *pNewArr, const ScMissingConvention & rConv ) const
 {
     if ( !mpFunc )
         return false;
 
     bool bRet = false;
-    switch ( mpFunc->GetOpCode() )
+    if (rConv.isODFF())
     {
-        case ocFixed:
-            return AddDefaultArg( pNewArr, 1, 2.0 );
-            //break;
-        case ocBetaDist:
-        case ocBetaInv:
-        case ocRMZ:  // PMT
-            return AddDefaultArg( pNewArr, 3, 0.0 );
-            //break;
-        case ocZinsZ: // IPMT
-        case ocKapz:  // PPMT
-            return AddDefaultArg( pNewArr, 4, 0.0 );
-            //break;
-        case ocBW: // PV
-        case ocZW: // FV
-            bRet |= AddDefaultArg( pNewArr, 2, 0.0 ); // pmt
-            bRet |= AddDefaultArg( pNewArr, 3, 0.0 ); // [fp]v
-            break;
-        case ocZins: // RATE
-            bRet |= AddDefaultArg( pNewArr, 1, 0.0 ); // pmt
-            bRet |= AddDefaultArg( pNewArr, 3, 0.0 ); // fv
-            bRet |= AddDefaultArg( pNewArr, 4, 0.0 ); // type
-            break;
-        case ocExternal:
-            return AddMissingExternal( pNewArr );
-            //break;
+    }
+    else
+    {
+        switch ( mpFunc->GetOpCode() )
+        {
+            case ocFixed:
+                return AddDefaultArg( pNewArr, 1, 2.0 );
+                //break;
+            case ocBetaDist:
+            case ocBetaInv:
+            case ocRMZ:  // PMT
+                return AddDefaultArg( pNewArr, 3, 0.0 );
+                //break;
+            case ocZinsZ: // IPMT
+            case ocKapz:  // PPMT
+                return AddDefaultArg( pNewArr, 4, 0.0 );
+                //break;
+            case ocBW: // PV
+            case ocZW: // FV
+                bRet |= AddDefaultArg( pNewArr, 2, 0.0 ); // pmt
+                bRet |= AddDefaultArg( pNewArr, 3, 0.0 ); // [fp]v
+                break;
+            case ocZins: // RATE
+                bRet |= AddDefaultArg( pNewArr, 1, 0.0 ); // pmt
+                bRet |= AddDefaultArg( pNewArr, 3, 0.0 ); // fv
+                bRet |= AddDefaultArg( pNewArr, 4, 0.0 ); // type
+                break;
+            case ocExternal:
+                return AddMissingExternal( pNewArr );
+                //break;
 
-            // --- more complex cases ---
+                // --- more complex cases ---
 
-        case ocOffset:
-            // FIXME: rather tough.
-            // if arg 3 (height) ommitted, export arg1 (rows)
-            break;
-        default:
-            break;
+            case ocOffset:
+                // FIXME: rather tough.
+                // if arg 3 (height) ommitted, export arg1 (rows)
+                break;
+            default:
+                break;
+        }
     }
 
     return bRet;
 }
 
-void ScMissingContext::AddMoreArgs( ScTokenArray *pNewArr ) const
+void ScMissingContext::AddMoreArgs( ScTokenArray *pNewArr, const ScMissingConvention & rConv ) const
 {
     if ( !mpFunc )
         return;
 
-    // Log
-    if ( mpFunc->GetOpCode() == ocLog && mnCurArg < 1 )
+    switch (mpFunc->GetOpCode())
     {
-        pNewArr->AddOpCode( ocSep );
-        pNewArr->AddDouble( 10.0 );
+        case ocGammaDist:
+            if (mnCurArg == 2)
+            {
+                pNewArr->AddOpCode( ocSep );
+                pNewArr->AddDouble( 1.0 );      // 4th, Cumulative=TRUE()
+            }
+            break;
+        case ocPoissonDist:
+            if (mnCurArg == 1)
+            {
+                pNewArr->AddOpCode( ocSep );
+                pNewArr->AddDouble( 1.0 );      // 3rd, Cumulative=TRUE()
+            }
+            break;
+        case ocLog:
+            if ( !rConv.isODFF() && mnCurArg == 0 )
+            {
+                pNewArr->AddOpCode( ocSep );
+                pNewArr->AddDouble( 10.0 );     // 2nd, basis 10
+            }
+            break;
+        default:
+            break;
     }
 }
 
 
-bool ScTokenArray::NeedsPofRewrite()
+bool ScTokenArray::NeedsPofRewrite( const ScMissingConvention & rConv )
 {
     for ( ScToken *pCur = First(); pCur; pCur = Next() )
     {
-        if (ScMissingContext::IsRewriteNeeded( pCur->GetOpCode()))
+        if (rConv.isRewriteNeeded( pCur->GetOpCode()))
             return true;
     }
     return false;
 }
 
 
-ScTokenArray * ScTokenArray::RewriteMissingToPof()
+ScTokenArray * ScTokenArray::RewriteMissingToPof( const ScMissingConvention & rConv )
 {
     const size_t nAlloc = 256;
     ScMissingContext aCtx[ nAlloc ];
@@ -2683,7 +2708,7 @@ ScTokenArray * ScTokenArray::RewriteMissingToPof()
                     pOcas[ nOcas++ ] = nFn;     // entering ADDRESS()
                 break;
             case ocClose:
-                pCtx[ nFn ].AddMoreArgs( pNewArr );
+                pCtx[ nFn ].AddMoreArgs( pNewArr, rConv );
                 DBG_ASSERT( nFn > 0, "ScTokenArray::RewriteMissingToPof: underflow");
                 if (nOcas > 0 && pOcas[ nOcas-1 ] == nFn)
                     --nOcas;                    // leaving ADDRESS()
@@ -2701,7 +2726,7 @@ ScTokenArray * ScTokenArray::RewriteMissingToPof()
                 break;
             case ocMissing:
                 if (bAdd)
-                    bAdd = !pCtx[ nFn ].AddMissing( pNewArr );
+                    bAdd = !pCtx[ nFn ].AddMissing( pNewArr, rConv );
                 break;
             default:
                 break;

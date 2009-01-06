@@ -6725,11 +6725,13 @@ void ScCompiler::CreateStringFromTokenArray( rtl::OUStringBuffer& rBuffer )
         return;
 
     ScTokenArray* pSaveArr = pArr;
-    if (ScGrammar::isPODF( meGrammar))
+    bool bODFF = ScGrammar::isODFF( meGrammar);
+    if (bODFF || ScGrammar::isPODF( meGrammar))
     {
         // Scan token array for missing args and re-write if present.
-        if (pArr->NeedsPofRewrite())
-            pArr = pArr->RewriteMissingToPof();
+        ScMissingConvention aConv( bODFF);
+        if (pArr->NeedsPofRewrite( aConv))
+            pArr = pArr->RewriteMissingToPof( aConv);
     }
 
     // At least one character per token, plus some are references, some are

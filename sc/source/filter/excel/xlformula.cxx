@@ -338,7 +338,8 @@ static const XclFunctionInfo saFuncTable_8[] =
     { ocStDevA,             366,    1,  30, V, { R }, 0, 0 },
     { ocVarA,               367,    1,  30, V, { R }, 0, 0 },
     { ocBahtText,           368,    1,  1,  V, { V }, EXC_FUNCFLAG_IMPORTONLY, EXC_FUNCNAME_BAHTTEXT },
-    { ocBahtText,           255,    2,  2,  V, { E, V }, EXC_FUNCFLAG_EXPORTONLY, EXC_FUNCNAME_BAHTTEXT }
+    { ocBahtText,           255,    2,  2,  V, { E, V }, EXC_FUNCFLAG_EXPORTONLY, EXC_FUNCNAME_BAHTTEXT },
+    { ocEuroConvert,        255,    4,  6,  V, { E, V }, EXC_FUNCFLAG_EXPORTONLY, "EUROCONVERT" }
 };
 
 // ----------------------------------------------------------------------------

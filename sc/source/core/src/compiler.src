@@ -1179,6 +1179,19 @@ Resource RID_SC_FUNCTION_NAMES
     {
         Text [ en-US ] = "NUMBERVALUE" ;
     };
+    String SC_OPCODE_GAMMA
+    {
+        Text [ en-US ] = "GAMMA" ;
+    };
+    String SC_OPCODE_CHISQ_DIST
+    {
+        Text [ en-US ] = "CHISQDIST" ;
+    };
+    String SC_OPCODE_CHISQ_INV
+    {
+        Text [ en-US ] = "CHISQINV" ;
+    };
+
     /* BEGIN defined ERROR.TYPE() values. */
     /* ERROR.TYPE( #NULL! ) == 1 */
     String SC_OPCODE_ERROR_NULL
@@ -1529,6 +1542,9 @@ Resource RID_SC_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_GET_PIVOT_DATA { Text = "GETPIVOTDATA" ; };
     String SC_OPCODE_EUROCONVERT { Text = "EUROCONVERT" ; };
     String SC_OPCODE_NUMBERVALUE { Text = "NUMBERVALUE" ; };
+    String SC_OPCODE_GAMMA { Text = "GAMMA" ; };
+    String SC_OPCODE_CHISQ_DIST { Text = "CHISQDIST" ; };
+    String SC_OPCODE_CHISQ_INV { Text = "CHISQINV" ;};
     /* BEGIN defined ERROR.TYPE() values. */
     String SC_OPCODE_ERROR_NULL    { Text = "#NULL!"  ; };
     String SC_OPCODE_ERROR_DIVZERO { Text = "#DIV/0!" ; };
@@ -1850,6 +1866,9 @@ Resource RID_SC_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_GET_PIVOT_DATA { Text = "GETPIVOTDATA" ; };
     String SC_OPCODE_EUROCONVERT { Text = "EUROCONVERT" ; };
     String SC_OPCODE_NUMBERVALUE { Text = "NUMBERVALUE" ; };
+    String SC_OPCODE_GAMMA { Text = "GAMMA" ; };
+    String SC_OPCODE_CHISQ_DIST { Text = "CHISQDIST" ;};
+    String SC_OPCODE_CHISQ_INV { Text = "CHISQINV" ;};
     /* BEGIN defined ERROR.TYPE() values. */
     String SC_OPCODE_ERROR_NULL    { Text = "#NULL!"  ; };
     String SC_OPCODE_ERROR_DIVZERO { Text = "#DIV/0!" ; };

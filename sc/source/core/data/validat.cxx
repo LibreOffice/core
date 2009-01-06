@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: validat.cxx,v $
- * $Revision: 1.25 $
+ * $Revision: 1.24.110.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -711,7 +711,7 @@ bool ScValidationData::GetSelectionFromFormula( TypedScStrCollection* pStrings,
             const ScMatrixValue* pMatVal = pValues->Get( nCol, nRow, nMatValType);
 
             // strings and empties
-            if( NULL == pMatVal || ScMatrix::IsStringType( nMatValType ) )
+            if( NULL == pMatVal || ScMatrix::IsNonValueType( nMatValType ) )
             {
                 if( NULL != pMatVal )
                     aValStr = pMatVal->GetString();

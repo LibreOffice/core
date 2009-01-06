@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: XMLExportDDELinks.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.18.148.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -135,7 +135,7 @@ void ScXMLExportDDELinks::WriteTable(const sal_Int32 nPos)
             {
                 ScMatValType nType = SC_MATVAL_VALUE;
                 const ScMatrixValue* pMatVal = pMatrix->Get( static_cast<SCSIZE>(nColumn), static_cast<SCSIZE>(nRow), nType );
-                BOOL bIsString = ScMatrix::IsStringType( nType);
+                BOOL bIsString = ScMatrix::IsNonValueType( nType);
 
                 if (nColumn == 0)
                 {

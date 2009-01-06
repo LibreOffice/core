@@ -289,7 +289,7 @@ sal_uInt16 XclImpTabInfo::GetCurrentIndex( sal_uInt16 nCreatedId, sal_uInt16 nMa
 
 // External names =============================================================
 
-XclImpExtName::XclImpExtName( const XclImpSupbook& rSupbook, XclImpStream& rStrm, bool bAddIn, ExcelToSc* pFormulaConv )
+XclImpExtName::XclImpExtName( const XclImpSupbook& rSupbook, XclImpStream& rStrm, XclSupbookType eSubType, ExcelToSc* pFormulaConv )
 {
     sal_uInt16 nFlags;
     sal_uInt8 nLen;
@@ -298,11 +298,14 @@ XclImpExtName::XclImpExtName( const XclImpSupbook& rSupbook, XclImpStream& rStrm
     maName = rStrm.ReadUniString( nLen );
     if( ::get_flag( nFlags, EXC_EXTN_BUILTIN ) || !::get_flag( nFlags, EXC_EXTN_OLE_OR_DDE ) )
     {
-        if( bAddIn )
+        if( eSubType == EXC_SBTYPE_ADDIN )
         {
             meType = xlExtAddIn;
             maName = rStrm.GetRoot().GetScAddInName( maName );
         }
+        else if ( (eSubType == EXC_SBTYPE_EUROTOOL) &&
+                maName.EqualsIgnoreCaseAscii( "EUROCONVERT" ) )
+            meType = xlExtEuroConvert;
         else
         {
             meType = xlExtName;
@@ -459,7 +462,12 @@ XclImpSupbook::XclImpSupbook( XclImpStream& rStrm ) :
     bool bSelf = false;
     XclImpUrlHelper::DecodeUrl( maXclUrl, bSelf, GetRoot(), aEncUrl );
 
-    if( nSBTabCnt )
+    if( maXclUrl.EqualsIgnoreCaseAscii( "\010EUROTOOL.XLA" ) )
+    {
+        meType = EXC_SBTYPE_EUROTOOL;
+        maSupbTabList.Append( new XclImpSupbookTab( maXclUrl ) );
+    }
+    else if( nSBTabCnt )
     {
         meType = EXC_SBTYPE_EXTERN;
         for( sal_uInt16 nSBTab = 0; nSBTab < nSBTabCnt; ++nSBTab )
@@ -497,7 +505,7 @@ void XclImpSupbook::ReadCrn( XclImpStream& rStrm )
 
 void XclImpSupbook::ReadExternname( XclImpStream& rStrm, ExcelToSc* pFormulaConv )
 {
-    maExtNameList.Append( new XclImpExtName( *this, rStrm, meType == EXC_SBTYPE_ADDIN, pFormulaConv ) );
+    maExtNameList.Append( new XclImpExtName( *this, rStrm, meType, pFormulaConv ) );
 }
 
 const XclImpExtName* XclImpSupbook::GetExternName( sal_uInt16 nXclIndex ) const

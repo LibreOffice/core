@@ -61,6 +61,7 @@ using ::std::vector;
 //#define   PI            3.1415926535897932
 
 const double ScInterpreter::fMaxGammaArgument = 171.624376956302;  // found experimental
+const double fMachEps = ::std::numeric_limits<double>::epsilon();
 
 //-----------------------------------------------------------------------------
 
@@ -649,85 +650,6 @@ double ScInterpreter::GetLogGamma(double fZ)
     return lcl_GetLogGammaHelper(fZ+2) - log(fZ+1) - log(fZ);
 }
 
-double ScInterpreter::GetBetaDist(double x, double alpha, double beta)
-{
-    if (beta == 1.0)
-        return pow(x, alpha);
-    else if (alpha == 1.0)
-        return 1.0 - pow(1.0-x,beta);
-    double fEps = 1.0E-8;
-    BOOL bReflect;
-    double cf, fA, fB;
-    if (x < (alpha+1.0)/(alpha+beta+1.0))
-    {
-        bReflect = FALSE;
-        fA = alpha;
-        fB = beta;
-    }
-    else
-    {
-        bReflect = TRUE;
-        fA = beta;
-        fB = alpha;
-        x = 1.0 - x;
-    }
-    if (x < fEps)
-        cf = 0.0;
-    else
-    {
-        double a1, b1, a2, b2, fnorm, rm, apl2m, d2m, d2m1, cfnew;
-        a1 = 1.0; b1 = 1.0;
-        b2 = 1.0 - (fA+fB)*x/(fA+1.0);
-        if (b2 == 0.0)
-        {
-            a2 = b2;
-            fnorm = 1.0;
-            cf = 1.0;
-        }
-        else
-        {
-            a2 = 1.0;
-            fnorm = 1.0/b2;
-            cf = a2*fnorm;
-        }
-        cfnew = 1.0;
-        for (USHORT j = 1; j <= 100; j++)
-        {
-            rm = (double) j;
-            apl2m = fA + 2.0*rm;
-            d2m = rm*(fB-rm)*x/((apl2m-1.0)*apl2m);
-            d2m1 = -(fA+rm)*(fA+fB+rm)*x/(apl2m*(apl2m+1.0));
-            a1 = (a2+d2m*a1)*fnorm;
-            b1 = (b2+d2m*b1)*fnorm;
-            a2 = a1 + d2m1*a2*fnorm;
-            b2 = b1 + d2m1*b2*fnorm;
-            if (b2 != 0.0)
-            {
-                fnorm = 1.0/b2;
-                cfnew = a2*fnorm;
-                if (fabs(cf-cfnew)/cf < fEps)
-                    j = 101;
-                else
-                    cf = cfnew;
-            }
-        }
-        if (fB < fEps)
-            b1 = 69;            // ln(1.0E30)
-        else
-            b1 = GetLogGamma(fA)+GetLogGamma(fB)-GetLogGamma(fA+fB);
-
-        // cf *= pow(x, fA)*pow(1.0-x,fB)/(fA*exp(b1));
-        // #108995# The formula above has 0 as results for the terms too easily,
-        // resulting in an error where the equivalent formula below still works:
-        // (x can't be 0 or 1, this is handled above)
-        cf *= exp( log(x)*fA + log(1.0-x)*fB - b1 ) / fA;
-    }
-    if (bReflect)
-        return 1.0-cf;
-    else
-        return cf;
-}
-
 double ScInterpreter::GetFDist(double x, double fF1, double fF2)
 {
     double arg = fF2/(fF2+fF1*x);
@@ -799,7 +721,68 @@ double ScInterpreter::GetChiSqDistCDF(double fX, double fDF)
         return GetLowRegIGamma( fDF/2.0, fX/2.0);
 }
 
-// for ODF 1.2 GAMMA
+double ScInterpreter::GetChiSqDistPDF(double fX, double fDF)
+{
+    // you must ensure fDF is positive integer
+    double fValue;
+    double fCount;
+    if (fX <= 0.0)
+        return 0.0; // see ODFF
+    if (fDF*fX > 1391000.0)
+    {
+        // intermediate invalid values, use log
+        fValue = exp((0.5*fDF - 1) * log(fX*0.5) - 0.5 * fX - log(2.0) - GetLogGamma(0.5*fDF));
+    }
+    else // fDF is small in most cases, we can iterate
+    {
+        if (fmod(fDF,2.0)<0.5)
+        {
+            // even
+            fValue = 0.5;
+            fCount = 2.0;
+        }
+        else
+        {
+            fValue = 1/sqrt(fX*2*F_PI);
+            fCount = 1.0;
+        }
+        while ( fCount < fDF)
+        {
+            fValue *= (fX / fCount);
+            fCount += 2.0;
+        }
+        if (fX>=1425.0) // underflow in e^(-x/2)
+            fValue = exp(log(fValue)-fX/2);
+        else
+            fValue *= exp(-fX/2);
+    }
+    return fValue;
+}
+
+void ScInterpreter::ScChiSqDist()
+{
+    BYTE nParamCount = GetByte();
+    if ( !MustHaveParamCount( nParamCount, 2, 3 ) )
+        return;
+    double fX;
+    bool bCumulative;
+    if (nParamCount == 3)
+        bCumulative = GetBool();
+    else
+        bCumulative = true;
+    double fDF = ::rtl::math::approxFloor(GetDouble());
+    if (fDF < 1.0)
+        PushIllegalArgument();
+    else
+    {
+        fX = GetDouble();
+        if (bCumulative)
+            PushDouble(GetChiSqDistCDF(fX,fDF));
+        else
+            PushDouble(GetChiSqDistPDF(fX,fDF));
+    }
+}
+
 void ScInterpreter::ScGamma()
 {
     double x = GetDouble();
@@ -828,31 +811,296 @@ void ScInterpreter::ScLogGamma()
         PushIllegalArgument();
 }
 
+double ScInterpreter::GetBeta(double fAlpha, double fBeta)
+{
+    double fA;
+    double fB;
+    if (fAlpha > fBeta)
+    {
+        fA = fAlpha; fB = fBeta;
+    }
+    else
+    {
+        fA = fBeta; fB = fAlpha;
+    }
+    if (fA+fB < fMaxGammaArgument) // simple case
+        return GetGamma(fA)/GetGamma(fA+fB)*GetGamma(fB);
+    // need logarithm
+    // GetLogGamma is not accurate enough, back to Lanczos for all three
+    // GetGamma and arrange factors newly.
+    const double fg = 6.024680040776729583740234375; //see GetGamma
+    double fgm = fg - 0.5;
+    double fLanczos = lcl_getLanczosSum(fA);
+    fLanczos /= lcl_getLanczosSum(fA+fB);
+    fLanczos *= lcl_getLanczosSum(fB);
+    double fABgm = fA+fB+fgm;
+    fLanczos *= sqrt((fABgm/(fA+fgm))/(fB+fgm));
+    double fTempA = fB/(fA+fgm); // (fA+fgm)/fABgm = 1 / ( 1 + fB/(fA+fgm))
+    double fTempB = fA/(fB+fgm);
+    double fResult = exp(-fA * ::rtl::math::log1p(fTempA)
+                            -fB * ::rtl::math::log1p(fTempB)-fgm);
+    fResult *= fLanczos;
+    return fResult;
+}
+
+// Same as GetBeta but with logarithm
+double ScInterpreter::GetLogBeta(double fAlpha, double fBeta)
+{
+    double fA;
+    double fB;
+    if (fAlpha > fBeta)
+    {
+        fA = fAlpha; fB = fBeta;
+    }
+    else
+    {
+        fA = fBeta; fB = fAlpha;
+    }
+    const double fg = 6.024680040776729583740234375; //see GetGamma
+    double fgm = fg - 0.5;
+    double fLanczos = lcl_getLanczosSum(fA);
+    fLanczos /= lcl_getLanczosSum(fA+fB);
+    fLanczos *= lcl_getLanczosSum(fB);
+    double fLogLanczos = log(fLanczos);
+    double fABgm = fA+fB+fgm;
+    fLogLanczos += 0.5*(log(fABgm)-log(fA+fgm)-log(fB+fgm));
+    double fTempA = fB/(fA+fgm); // (fA+fgm)/fABgm = 1 / ( 1 + fB/(fA+fgm))
+    double fTempB = fA/(fB+fgm);
+    double fResult = -fA * ::rtl::math::log1p(fTempA)
+                        -fB * ::rtl::math::log1p(fTempB)-fgm;
+    fResult += fLogLanczos;
+    return fResult;
+}
+
+// beta distribution probability density function
+double ScInterpreter::GetBetaDistPDF(double fX, double fA, double fB)
+{
+    // special cases
+    if (fA == 1.0) // result b*(1-x)^(b-1)
+    {
+        if (fB == 1.0)
+            return 1.0;
+        if (fB == 2.0)
+            return -2.0*fX + 2.0;
+        if (fX == 1.0 && fB < 1.0)
+        {
+            SetError(errIllegalArgument);
+            return HUGE_VAL;
+        }
+        if (fX <= 0.01)
+            return fB + fB * ::rtl::math::expm1((fB-1.0) * ::rtl::math::log1p(-fX));
+        else
+            return fB * pow(0.5-fX+0.5,fB-1.0);
+    }
+    if (fB == 1.0) // result a*x^(a-1)
+    {
+        if (fA == 2.0)
+            return fA * fX;
+        if (fX == 0.0 && fA < 1.0)
+        {
+            SetError(errIllegalArgument);
+            return HUGE_VAL;
+        }
+        return fA * pow(fX,fA-1);
+    }
+    if (fX <= 0.0)
+    {
+        if (fA < 1.0 && fX == 0.0)
+        {
+            SetError(errIllegalArgument);
+            return HUGE_VAL;
+        }
+        else
+            return 0.0;
+    }
+    if (fX >= 1.0)
+        if (fB < 1.0 && fX == 1.0)
+        {
+            SetError(errIllegalArgument);
+            return HUGE_VAL;
+        }
+        else
+            return 0.0;
+
+    // normal cases; result x^(a-1)*(1-x)^(b-1)/Beta(a,b)
+    const double fLogDblMax = log( ::std::numeric_limits<double>::max());
+    const double fLogDblMin = log( ::std::numeric_limits<double>::min());
+    double fLogY = (fX < 0.1) ? ::rtl::math::log1p(-fX) : log(0.5-fX+0.5);
+    double fLogX = log(fX);
+    double fAm1 = fA-1.0;
+    double fBm1 = fB-1.0;
+    double fLogBeta = GetLogBeta(fA,fB);
+    // check whether parts over- or underflow
+    if (   fAm1 * fLogX < fLogDblMax  && fAm1 * fLogX > fLogDblMin
+        && fBm1 * fLogY < fLogDblMax  && fBm1* fLogY > fLogDblMin
+        && fLogBeta < fLogDblMax      && fLogBeta > fLogDblMin )
+        return pow(fX,fA-1.0) * pow(0.5-fX+0.5,fB-1.0) / GetBeta(fA,fB);
+    else // need logarithm;
+        // might overflow as a whole, but seldom, not worth to pre-detect it
+        return exp((fA-1.0)*fLogX + (fB-1.0)* fLogY - fLogBeta);
+}
+
+
+/*
+                x^a * (1-x)^b
+    I_x(a,b) = ----------------  * result of ContFrac
+                a * Beta(a,b)
+*/
+double lcl_GetBetaHelperContFrac(double fX, double fA, double fB)
+{   // like old version
+    double a1, b1, a2, b2, fnorm, apl2m, d2m, d2m1, cfnew, cf;
+    a1 = 1.0; b1 = 1.0;
+    b2 = 1.0 - (fA+fB)/(fA+1.0)*fX;
+    if (b2 == 0.0)
+    {
+        a2 = 0.0;
+        fnorm = 1.0;
+        cf = 1.0;
+    }
+    else
+    {
+        a2 = 1.0;
+        fnorm = 1.0/b2;
+        cf = a2*fnorm;
+    }
+    cfnew = 1.0;
+    double rm = 1.0;
+
+    const double fMaxIter = 50000.0;
+    // loop security, normal cases converge in less than 100 iterations.
+    // FIXME: You will get so much iteratons for fX near mean,
+    // I do not know a better algorithm.
+    bool bfinished = false;
+    do
+    {
+        apl2m = fA + 2.0*rm;
+        d2m = rm*(fB-rm)*fX/((apl2m-1.0)*apl2m);
+        d2m1 = -(fA+rm)*(fA+fB+rm)*fX/(apl2m*(apl2m+1.0));
+        a1 = (a2+d2m*a1)*fnorm;
+        b1 = (b2+d2m*b1)*fnorm;
+        a2 = a1 + d2m1*a2*fnorm;
+        b2 = b1 + d2m1*b2*fnorm;
+        if (b2 != 0.0)
+        {
+            fnorm = 1.0/b2;
+            cfnew = a2*fnorm;
+            bfinished = (fabs(cf-cfnew) < fabs(cf)*fMachEps);
+        }
+        cf = cfnew;
+        rm += 1.0;
+    }
+    while (rm < fMaxIter && !bfinished);
+    return cf;
+}
+
+// cumulative distribution function, normalized
+double ScInterpreter::GetBetaDist(double fXin, double fAlpha, double fBeta)
+{
+// special cases
+    if (fXin <= 0.0)  // values are valid, see spec
+        return 0.0;
+    if (fXin >= 1.0)  // values are valid, see spec
+        return 1.0;
+    if (fBeta == 1.0)
+        return pow(fXin, fAlpha);
+    if (fAlpha == 1.0)
+    //            1.0 - pow(1.0-fX,fBeta) is not accurate enough
+        return -::rtl::math::expm1(fBeta * ::rtl::math::log1p(-fXin));
+    //FIXME: need special algorithm for fX near fP for large fA,fB
+    double fResult;
+    // I use always continued fraction, power series are neither
+    // faster nor more accurate.
+    double fY = (0.5-fXin)+0.5;
+    double flnY = ::rtl::math::log1p(-fXin);
+    double fX = fXin;
+    double flnX = log(fXin);
+    double fA = fAlpha;
+    double fB = fBeta;
+    bool bReflect = fXin > fAlpha/(fAlpha+fBeta);
+    if (bReflect)
+    {
+        fA = fBeta;
+        fB = fAlpha;
+        fX = fY;
+        fY = fXin;
+        flnX = flnY;
+        flnY = log(fXin);
+    }
+    fResult = lcl_GetBetaHelperContFrac(fX,fA,fB);
+    fResult = fResult/fA;
+    double fP = fA/(fA+fB);
+    double fQ = fB/(fA+fB);
+    double fTemp;
+    if (fA > 1.0 && fB > 1.0 && fP < 0.97 && fQ < 0.97) //found experimental
+        fTemp = GetBetaDistPDF(fX,fA,fB)*fX*fY;
+    else
+        fTemp = exp(fA*flnX + fB*flnY - GetLogBeta(fA,fB));
+    fResult *= fTemp;
+    if (bReflect)
+        fResult = 0.5 - fResult + 0.5;
+    if (fResult > 1.0) // ensure valid range
+        fResult = 1.0;
+    if (fResult < 0.0)
+        fResult = 0.0;
+    return fResult;
+}
 
 void ScInterpreter::ScBetaDist()
 {
     BYTE nParamCount = GetByte();
-    if ( !MustHaveParamCount( nParamCount, 3, 5 ) )
+    if ( !MustHaveParamCount( nParamCount, 3, 6 ) ) // expanded, see #i91547#
         return;
-    double fA, fB, alpha, beta, x;
-    if (nParamCount == 5)
-        fB = GetDouble();
+    double fLowerBound, fUpperBound;
+    double alpha, beta, x;
+    bool bIsCumulative;
+    if (nParamCount == 6)
+        bIsCumulative = GetBool();
     else
-        fB = 1.0;
+        bIsCumulative = true;
+    if (nParamCount >= 5)
+        fUpperBound = GetDouble();
+    else
+        fUpperBound = 1.0;
     if (nParamCount >= 4)
-        fA = GetDouble();
+        fLowerBound = GetDouble();
     else
-        fA = 0.0;
+        fLowerBound = 0.0;
     beta = GetDouble();
     alpha = GetDouble();
     x = GetDouble();
-    if (x < fA || x > fB || fA == fB || alpha <= 0.0 || beta <= 0.0)
+    double fScale = fUpperBound - fLowerBound;
+    if (fScale <= 0.0 || alpha <= 0.0 || beta <= 0.0)
     {
         PushIllegalArgument();
         return;
     }
-    x = (x-fA)/(fB-fA);                 // Skalierung auf (0,1)
-    PushDouble(GetBetaDist(x, alpha, beta));
+    if (bIsCumulative) // cumulative distribution function
+    {
+        // special cases
+        if (x < fLowerBound)
+        {
+            PushDouble(0.0); return; //see spec
+        }
+        if (x > fUpperBound)
+        {
+            PushDouble(1.0); return; //see spec
+        }
+        // normal cases
+        x = (x-fLowerBound)/fScale;  // convert to standard form
+        PushDouble(GetBetaDist(x, alpha, beta));
+        return;
+    }
+    else // probability density function
+    {
+        if (x < fLowerBound || x > fUpperBound)
+        {
+            PushDouble(0.0);
+            return;
+        }
+        x = (x-fLowerBound)/fScale;
+        PushDouble(GetBetaDistPDF(x, alpha, beta)/fScale);
+        return;
+    }
 }
 
 void ScInterpreter::ScPhi()
@@ -1325,7 +1573,7 @@ void ScInterpreter::ScChiDist()
         return;
     double fDF  = ::rtl::math::approxFloor(GetDouble());
     double fChi = GetDouble();
-    if (fDF < 1.0 || fDF >= 1.0E5 || fChi < 0.0 )
+    if (fDF < 1.0) // x<=0 returns 1, see ODFF 6.17.10
     {
         PushIllegalArgument();
         return;
@@ -1359,9 +1607,10 @@ void ScInterpreter::ScWeibull()
 
 void ScInterpreter::ScPoissonDist()
 {
-    if ( MustHaveParamCount( GetByte(), 3 ) )
+    BYTE nParamCount = GetByte();
+    if ( MustHaveParamCount( nParamCount, 2, 3 ) )
     {
-        double kum    = GetDouble();                    // 0 oder 1
+        double kum    = (nParamCount == 3 ? GetDouble() : 1); // 0 oder 1
         double lambda = GetDouble();                    // Mittelwert
         double x      = ::rtl::math::approxFloor(GetDouble());              // x
         if (lambda < 0.0 || x < 0.0)
@@ -1640,10 +1889,14 @@ void ScInterpreter::ScHypGeomDist()
 
 void ScInterpreter::ScGammaDist()
 {
-    if ( !MustHaveParamCount( GetByte(), 4 ) )
+    BYTE nParamCount = GetByte();
+    if ( !MustHaveParamCount( nParamCount, 3, 4 ) )
         return;
-    double fCumulative = GetDouble(); // parameter type will change to bool
-    bool bCumulative = (fCumulative == 1.0);    // see ODFF
+    double bCumulative;
+    if (nParamCount == 4)
+        bCumulative = GetBool();
+    else
+        bCumulative = true;
     double fBeta = GetDouble();                 // scale
     double fAlpha = GetDouble();                // shape
     double fX = GetDouble();                    // x
@@ -1873,7 +2126,7 @@ void ScInterpreter::ScChiInv()
         return;
     double fDF  = ::rtl::math::approxFloor(GetDouble());
     double fP = GetDouble();
-    if (fDF < 1.0 || fDF >= 1.0E5 || fP <= 0.0 || fP > 1.0 )
+    if (fDF < 1.0 || fP <= 0.0 || fP > 1.0 )
     {
         PushIllegalArgument();
         return;
@@ -1881,6 +2134,39 @@ void ScInterpreter::ScChiInv()
 
     bool bConvError;
     ScChiDistFunction aFunc( *this, fP, fDF );
+    double fVal = lcl_IterateInverse( aFunc, fDF*0.5, fDF, bConvError );
+    if (bConvError)
+        SetError(errNoConvergence);
+    PushDouble(fVal);
+}
+
+class ScChiSqDistFunction : public ScDistFunc
+{
+    ScInterpreter&  rInt;
+    double          fp, fDF;
+
+public:
+            ScChiSqDistFunction( ScInterpreter& rI, double fpVal, double fDFVal ) :
+                rInt(rI), fp(fpVal), fDF(fDFVal) {}
+
+    double  GetValue( double x ) const  { return fp - rInt.GetChiSqDistCDF(x, fDF); }
+};
+
+
+void ScInterpreter::ScChiSqInv()
+{
+    if ( !MustHaveParamCount( GetByte(), 2 ) )
+        return;
+    double fDF  = ::rtl::math::approxFloor(GetDouble());
+    double fP = GetDouble();
+    if (fDF < 1.0 || fP < 0.0 || fP >= 1.0 )
+    {
+        PushIllegalArgument();
+        return;
+    }
+
+    bool bConvError;
+    ScChiSqDistFunction aFunc( *this, fP, fDF );
     double fVal = lcl_IterateInverse( aFunc, fDF*0.5, fDF, bConvError );
     if (bConvError)
         SetError(errNoConvergence);

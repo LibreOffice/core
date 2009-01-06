@@ -194,6 +194,10 @@ public:
     bool                InsertAddIn(
                             sal_uInt16& rnExtSheet, sal_uInt16& rnExtName,
                             const String& rName );
+    /** InsertEuroTool */
+    bool                InsertEuroTool(
+                            sal_uInt16& rnExtSheet, sal_uInt16& rnExtName,
+                            const String& rName );
     /** Finds or inserts an EXTERNNAME record for DDE links.
         @param rnExtSheet  (out-param) Returns the index of the EXTSHEET structure for the DDE link.
         @param rnExtName  (out-param) Returns the 1-based EXTERNNAME record index.

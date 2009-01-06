@@ -192,7 +192,8 @@
 #define SC_OPCODE_ASC               154
 #define SC_OPCODE_UNICODE           155
 #define SC_OPCODE_UNICHAR           156
-#define SC_OPCODE_STOP_1_PAR        157
+#define SC_OPCODE_GAMMA             157
+#define SC_OPCODE_STOP_1_PAR        158
 
 /*** Functions with more than one parameters ***/
 #define SC_OPCODE_START_2_PAR       201
@@ -388,9 +389,11 @@
 #define SC_OPCODE_GET_PIVOT_DATA    390
 #define SC_OPCODE_EUROCONVERT       391
 #define SC_OPCODE_NUMBERVALUE       392
-#define SC_OPCODE_STOP_2_PAR        393
+#define SC_OPCODE_CHISQ_DIST        393
+#define SC_OPCODE_CHISQ_INV         394
+#define SC_OPCODE_STOP_2_PAR        395
 
-#define SC_OPCODE_LAST_OPCODE_ID    392      /* last OpCode */
+#define SC_OPCODE_LAST_OPCODE_ID    394      /* last OpCode */
 
 /*** Interna ***/
 #define SC_OPCODE_INTERNAL_BEGIN   9995

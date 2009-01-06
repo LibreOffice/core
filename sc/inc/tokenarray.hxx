@@ -51,6 +51,16 @@ typedef BYTE ScRecalcMode;
 
 struct ScRawToken;
 
+class ScMissingConvention
+{
+    bool    mbODFF;     /// TRUE: ODFF, FALSE: PODF
+public:
+        explicit    ScMissingConvention( bool bODFF ) : mbODFF(bODFF) {}
+    // Implementation and usage only in token.cxx
+    inline  bool    isRewriteNeeded( OpCode eOp ) const;
+    inline  bool    isODFF() const { return mbODFF; }
+};
+
 class SC_DLLPUBLIC ScTokenArray
 {
     friend class ScCompiler;
@@ -223,11 +233,11 @@ public:
 
     /** Determines if this formula needs any changes to convert it to something
         previous versions of OOo could consume (Plain Old Formula). */
-            bool            NeedsPofRewrite();
+            bool            NeedsPofRewrite( const ScMissingConvention & rConv );
 
     /** Rewrites to Plain Old Formula, substituting missing parameters. The
         ScTokenArray* returned is new'ed. */
-            ScTokenArray*   RewriteMissingToPof();
+            ScTokenArray*   RewriteMissingToPof( const ScMissingConvention & rConv );
 
     /** Determines if this formula may be followed by a reference. */
     bool                    MayReferenceFollow();

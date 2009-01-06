@@ -101,7 +101,8 @@ enum XclImpExtNameType
     xlExtName,                  /// An external defined name.
     xlExtAddIn,                 /// An add-in function name.
     xlExtDDE,                   /// A DDE link range.
-    xlExtOLE                    /// An OLE object link.
+    xlExtOLE,                   /// An OLE object link.
+    xlExtEuroConvert            /// An external in Excel, but internal in OO function name.
 };
 
 // ----------------------------------------------------------------------------
@@ -116,8 +117,8 @@ class XclImpExtName
 {
 public:
     /** Reads the external name from the stream. */
-    explicit            XclImpExtName( const XclImpSupbook& rSupbook, XclImpStream& rStrm, bool bAddIn = false,
-                                       ExcelToSc* pFormulaConv = NULL );
+    explicit            XclImpExtName( const XclImpSupbook& rSupbook, XclImpStream& rStrm,
+                                        XclSupbookType eSubType, ExcelToSc* pFormulaConv );
                         ~XclImpExtName();
 
     /** Create and apply the cached list of this DDE Link to the document. */

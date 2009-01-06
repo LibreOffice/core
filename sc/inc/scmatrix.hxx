@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: scmatrix.hxx,v $
- * $Revision: 1.11.32.1 $
+ * $Revision: 1.11.148.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,6 +47,7 @@ const ScMatValType SC_MATVAL_BOOLEAN   = 0x01;
 const ScMatValType SC_MATVAL_STRING    = 0x02;
 const ScMatValType SC_MATVAL_EMPTY     = SC_MATVAL_STRING | 0x04; // STRING plus flag
 const ScMatValType SC_MATVAL_EMPTYPATH = SC_MATVAL_EMPTY | 0x08;  // EMPTY plus flag
+const ScMatValType SC_MATVAL_NONVALUE  = SC_MATVAL_EMPTYPATH;     // mask of all non-value bits
 
 union ScMatrixValue
 {
@@ -67,23 +68,27 @@ union ScMatrixValue
 
     @ATTENTION: optimized for speed and double values.
 
-    Matrix elements are NOT initialized after construction!
+    <p> Matrix elements are NOT initialized after construction!
 
-    All methods using an SCSIZE nIndex parameter and all Is... methods do NOT
-    check the range for validity! However, the Put... and Get... methods using
-    nCol/nRow parameters do check the range. <p>
+    <p> All methods using an SCSIZE nIndex parameter and all Is...() methods do
+    NOT check the range for validity! However, the Put...() and Get...()
+    methods using nCol/nRow parameters do check the range.
 
-    GetString( SCSIZE nIndex ) does not check if there really is a string, do
-    this with IsString() first. GetString( SCSIZE nC, SCSIZE nR ) does check
+    <p> Methods using nCol/nRow parameters do replicate a single row vector if
+    nRow &gt; 0 and nCol &lt; nColCount, respectively a column vector if nCol
+    &gt; 0 and nRow &lt; nRowCount.
+
+    <p> GetString( SCSIZE nIndex ) does not check if there really is a string,
+    do this with IsString() first. GetString( SCSIZE nC, SCSIZE nR ) does check
     it and returns and empty string if there is no string. Both GetDouble()
-    methods don't check for a string, do this with IsNumeric() or IsString()
-    or IsValue() first. <p>
+    methods don't check for a string, do this with IsNumeric() or IsString() or
+    IsValue() first.
 
-    The GetString( SvNumberFormatter&, ...) methods return the matrix element's
-    string if one is present, otherwise the numerical value is formatted as a
-    string, or in case of an error the error string is returned.
+    <p> The GetString( SvNumberFormatter&, ...) methods return the matrix
+    element's string if one is present, otherwise the numerical value is
+    formatted as a string, or in case of an error the error string is returned.
 
-    PutDouble() does not reset an eventual string! Use
+    <p> PutDouble() does not reset an eventual string! Use
     PutDoubleAndResetString() if that is wanted. Also the FillDouble...()
     methods don't reset strings. As a consequence memory leaks may occur if
     used wrong.
@@ -140,30 +145,44 @@ public:
     }
 
     /// String, empty or empty path, but not value nor boolean.
-    inline static bool IsStringType( ScMatValType nType )
+    inline static bool IsNonValueType( ScMatValType nType )
     {
-        return (nType & SC_MATVAL_STRING) != 0;
+        return (nType & SC_MATVAL_NONVALUE) != 0;
+    }
+
+    /** String, but not empty or empty path or any other type.
+        Not named IsStringType to prevent confusion because previously
+        IsNonValueType was named IsStringType. */
+    inline static bool IsRealStringType( ScMatValType nType )
+    {
+        return (nType & SC_MATVAL_NONVALUE) == SC_MATVAL_STRING;
     }
 
     /// Empty, but not empty path or any other type.
     inline static bool IsEmptyType( ScMatValType nType )
     {
-        return (nType & SC_MATVAL_EMPTY) == SC_MATVAL_EMPTY;
+        return (nType & SC_MATVAL_NONVALUE) == SC_MATVAL_EMPTY;
     }
 
     /// Empty path, but not empty or any other type.
     inline static bool IsEmptyPathType( ScMatValType nType )
     {
-        return (nType & SC_MATVAL_EMPTYPATH) == SC_MATVAL_EMPTYPATH;
+        return (nType & SC_MATVAL_NONVALUE) == SC_MATVAL_EMPTYPATH;
     }
 
     /** If nC*nR results in more than GetElementsMax() entries, a 1x1 matrix is
         created instead and a double error value (errStackOverflow) is set.
         Compare nC and nR with a GetDimensions() call to check. */
     ScMatrix( SCSIZE nC, SCSIZE nR) : nRefCnt(0) { CreateMatrix( nC, nR); }
+
+    /** Clone the matrix. */
     ScMatrix* Clone() const;
 
-    /// disable refcounting forever, may only be deleted via Delete() afterwards
+    /** Clone the matrix and extend it to the new size. nNewCols and nNewRows
+        MUST be at least of the size of the original matrix. */
+    ScMatrix* CloneAndExtend( SCSIZE nNewCols, SCSIZE nNewRows ) const;
+
+    /// Disable refcounting forever, may only be deleted via Delete() afterwards.
     inline  void    SetEternalRef()         { nRefCnt = ULONG_MAX; }
     inline  bool    IsEternalRef() const    { return nRefCnt == ULONG_MAX; }
     inline  void    IncRef() const
@@ -200,6 +219,45 @@ public:
     inline SCSIZE CalcOffset( SCSIZE nC, SCSIZE nR) const
         { return nC * nRowCount + nR; }
 
+    /** For a row vector or column vector, if the position does not point into
+        the vector but is a valid column or row offset it is adapted such that
+        it points to an element to be replicated, same column row 0 for a row
+        vector, same row column 0 for a column vector. Else, for a 2D matrix,
+        returns false.
+     */
+    inline bool ValidColRowReplicated( SCSIZE & rC, SCSIZE & rR ) const
+    {
+        if (nColCount == 1 && nRowCount == 1)
+        {
+            rC = 0;
+            rR = 0;
+            return true;
+        }
+        else if (nColCount == 1 && rR < nRowCount)
+        {
+            rC = 0;
+            return true;
+        }
+        else if (nRowCount == 1 && rC < nColCount)
+        {
+            rR = 0;
+            return true;
+        }
+        return false;
+    }
+
+    /** Checks if the matrix position is within the matrix. If it is not, for a
+        row vector or column vector the position is adapted such that it points
+        to an element to be replicated, same column row 0 for a row vector,
+        same row column 0 for a column vector. Else, for a 2D matrix and
+        position not within matrix, returns false.
+     */
+    inline bool ValidColRowOrReplicated( SCSIZE & rC, SCSIZE & rR ) const
+    {
+        return ValidColRow( rC, rR) || ValidColRowReplicated( rC, rR);
+    }
+
+
     void PutDouble( double fVal, SCSIZE nC, SCSIZE nR);
     void PutDouble( double fVal, SCSIZE nIndex)
         { pMat[nIndex].fVal = fVal; }
@@ -223,6 +281,7 @@ public:
     /** May be used before obtaining the double value of an element to avoid
         passing its NAN around.
         @ATTENTION: MUST NOT be used if the element is a string!
+                    Use GetErrorIfNotString() instead if not sure.
         @returns 0 if no error, else one of err... constants */
     USHORT GetError( SCSIZE nC, SCSIZE nR) const;
     USHORT GetError( SCSIZE nIndex) const
@@ -235,9 +294,9 @@ public:
     USHORT GetErrorIfNotString( SCSIZE nIndex) const
         { return IsValue( nIndex) ? GetError( nIndex) : 0; }
 
-    /// @return 0.0 if empty
+    /// @return 0.0 if empty or empty path, else value or DoubleError.
     double GetDouble( SCSIZE nC, SCSIZE nR) const;
-    /// @return 0.0 if empty
+    /// @return 0.0 if empty or empty path, else value or DoubleError.
     double GetDouble( SCSIZE nIndex) const
     {
         if ( pErrorInterpreter )
@@ -248,46 +307,92 @@ public:
         }
         return pMat[nIndex].fVal;
     }
+
+    /// @return empty string if empty or empty path, else string content.
     const String& GetString( SCSIZE nC, SCSIZE nR) const;
+    /// @return empty string if empty or empty path, else string content.
     const String& GetString( SCSIZE nIndex) const
         { return pMat[nIndex].GetString(); }
 
-    String GetString( SvNumberFormatter& rFormatter, SCSIZE nIndex) const;
+    /** @returns the matrix element's string if one is present, otherwise the
+        numerical value formatted as string, or in case of an error the error
+        string is returned; an empty string for empty, a "FALSE" string for
+        empty path. */
     String GetString( SvNumberFormatter& rFormatter, SCSIZE nC, SCSIZE nR) const;
+    String GetString( SvNumberFormatter& rFormatter, SCSIZE nIndex) const;
 
     /// @ATTENTION: If bString the ScMatrixValue->pS may still be NULL to indicate
     /// an empty string!
     const ScMatrixValue* Get( SCSIZE nC, SCSIZE nR, ScMatValType& nType) const;
 
-    /// @return <TRUE/> if string or empty
+    /// @return <TRUE/> if string or empty or empty path, in fact non-value.
     BOOL IsString( SCSIZE nIndex ) const
-        { return mnValType && IsStringType( mnValType[nIndex]); }
-    /// @return <TRUE/> if string or empty
+        { return mnValType && IsNonValueType( mnValType[nIndex]); }
+
+    /// @return <TRUE/> if string or empty or empty path, in fact non-value.
     BOOL IsString( SCSIZE nC, SCSIZE nR ) const
-        { return mnValType && IsStringType( mnValType[ nC * nRowCount + nR ]); }
+    {
+        ValidColRowReplicated( nC, nR );
+        return mnValType && IsNonValueType( mnValType[ nC * nRowCount + nR ]);
+    }
+
+    /// @return <TRUE/> if empty or empty path.
     BOOL IsEmpty( SCSIZE nIndex ) const
         { return mnValType && ((mnValType[nIndex] & SC_MATVAL_EMPTY) == SC_MATVAL_EMPTY); }
+
+    /// @return <TRUE/> if empty or empty path.
+    BOOL IsEmpty( SCSIZE nC, SCSIZE nR ) const
+    {
+        ValidColRowReplicated( nC, nR );
+        return mnValType && ((mnValType[ nC * nRowCount + nR ] & SC_MATVAL_EMPTY) == SC_MATVAL_EMPTY);
+    }
+
+    /// @return <TRUE/> if empty path.
     BOOL IsEmptyPath( SCSIZE nC, SCSIZE nR ) const
-        { return mnValType && ((mnValType[ nC * nRowCount + nR ] & SC_MATVAL_EMPTYPATH) == SC_MATVAL_EMPTYPATH); }
+    {
+        ValidColRowReplicated( nC, nR );
+        return mnValType && ((mnValType[ nC * nRowCount + nR ] & SC_MATVAL_EMPTYPATH) == SC_MATVAL_EMPTYPATH);
+    }
+
+    /// @return <TRUE/> if empty path.
     BOOL IsEmptyPath( SCSIZE nIndex ) const
         { return mnValType && ((mnValType[nIndex] & SC_MATVAL_EMPTYPATH) == SC_MATVAL_EMPTYPATH); }
-    BOOL IsEmpty( SCSIZE nC, SCSIZE nR ) const
-        { return mnValType && ((mnValType[ nC * nRowCount + nR ] & SC_MATVAL_EMPTY) == SC_MATVAL_EMPTY); }
+
+    /// @return <TRUE/> if value or boolean.
     BOOL IsValue( SCSIZE nIndex ) const
         { return !mnValType || IsValueType( mnValType[nIndex]); }
+
+    /// @return <TRUE/> if value or boolean.
     BOOL IsValue( SCSIZE nC, SCSIZE nR ) const
-        { return !mnValType || IsValueType( mnValType[ nC * nRowCount + nR ]); }
+    {
+        ValidColRowReplicated( nC, nR );
+        return !mnValType || IsValueType( mnValType[ nC * nRowCount + nR ]);
+    }
+
+    /// @return <TRUE/> if value or boolean or empty or empty path.
     BOOL IsValueOrEmpty( SCSIZE nIndex ) const
         { return !mnValType || IsValueType( mnValType[nIndex] ) ||
             ((mnValType[nIndex] & SC_MATVAL_EMPTY) == SC_MATVAL_EMPTY); }
+
+    /// @return <TRUE/> if value or boolean or empty or empty path.
     BOOL IsValueOrEmpty( SCSIZE nC, SCSIZE nR ) const
-        { return !mnValType || IsValueType( mnValType[ nC * nRowCount + nR ]) ||
+    {
+        ValidColRowReplicated( nC, nR );
+        return !mnValType || IsValueType( mnValType[ nC * nRowCount + nR ]) ||
             ((mnValType[ nC * nRowCount + nR ] & SC_MATVAL_EMPTY) ==
-             SC_MATVAL_EMPTY); }
+             SC_MATVAL_EMPTY);
+    }
+
+    /// @return <TRUE/> if boolean.
     BOOL IsBoolean( SCSIZE nIndex ) const
         { return mnValType && IsBooleanType( mnValType[nIndex]); }
+
+    /// @return <TRUE/> if boolean.
     BOOL IsBoolean( SCSIZE nC, SCSIZE nR ) const
-        { return mnValType && IsBooleanType( mnValType[ nC * nRowCount + nR ]); }
+    {
+        ValidColRowReplicated( nC, nR );
+        return mnValType && IsBooleanType( mnValType[ nC * nRowCount + nR ]);
+    }
 
     /// @return <TRUE/> if entire matrix is numeric, including booleans, with no strings or empties
     BOOL IsNumeric() const
@@ -295,6 +400,12 @@ public:
 
     void MatTrans( ScMatrix& mRes) const;
     void MatCopy ( ScMatrix& mRes) const;
+
+    /** Copy upper left of this matrix to mRes matrix.
+        This matrix's dimensions must be greater or equal to the mRes matrix
+        dimensions.
+     */
+    void MatCopyUpperLeft( ScMatrix& mRes) const;
 
     // Convert ScInterpreter::CompareMat values (-1,0,1) to boolean values
     void CompareEqual();
@@ -316,17 +427,4 @@ typedef ScSimpleIntrusiveReference< class ScMatrix > ScMatrixRef;
 typedef ScSimpleIntrusiveReference< const class ScMatrix > ScConstMatrixRef;
 
 
-// Old values as used up to SO52.
-// The overall elements count had to be <= SC_MAX_MAT_DIM * SC_MAX_MAT_DIM.
-// Don't use except maybe for file format compatibility.
-// In any other case use ScMatrix::GetElementsMax() instead.
-#ifdef WIN
-#define SC_OLD_MAX_MAT_DIM            64
-#else
-#define SC_OLD_MAX_MAT_DIM           128
-#endif
-#define SC_OLD_MAX_MAT_ELEMENTS     ((SC_OLD_MAX_MAT_DIM) * (SC_OLD_MAX_MAT_DIM))
-
-
-#endif
-
+#endif  // SC_MATRIX_HXX

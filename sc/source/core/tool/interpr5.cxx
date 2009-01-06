@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: interpr5.cxx,v $
- * $Revision: 1.34 $
+ * $Revision: 1.33.36.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -520,7 +520,7 @@ void ScInterpreter::ScMatValue()
                                 ScMatValType nMatValType;
                                 const ScMatrixValue* pMatVal = pMat->Get( nC,
                                         nR, nMatValType);
-                                if (ScMatrix::IsStringType( nMatValType))
+                                if (ScMatrix::IsNonValueType( nMatValType))
                                     PushString( pMatVal->GetString() );
                                 else
                                     PushDouble(pMatVal->fVal);
@@ -578,7 +578,7 @@ void ScInterpreter::ScMatValue()
                         ScMatValType nMatValType;
                         const ScMatrixValue* pMatVal = pMat->Get( nC, nR,
                                 nMatValType);
-                        if (ScMatrix::IsStringType( nMatValType))
+                        if (ScMatrix::IsNonValueType( nMatValType))
                             PushString( pMatVal->GetString() );
                         else
                             PushDouble(pMatVal->fVal);
@@ -1018,6 +1018,23 @@ void ScInterpreter::ScMatTrans()
     }
 }
 
+
+/** Minimum extent of one result matrix dimension.
+    For a row or column vector to be replicated the larger matrix dimension is
+    returned, else the smaller dimension.
+ */
+inline SCSIZE lcl_GetMinExtent( SCSIZE n1, SCSIZE n2 )
+{
+    if (n1 == 1)
+        return n2;
+    else if (n2 == 1)
+        return n1;
+    else if (n1 < n2)
+        return n1;
+    else
+        return n2;
+}
+
 ScMatrixRef ScInterpreter::MatAdd(ScMatrix* pMat1, ScMatrix* pMat2)
 {
     SCSIZE nC1, nC2, nMinC;
@@ -1025,14 +1042,8 @@ ScMatrixRef ScInterpreter::MatAdd(ScMatrix* pMat1, ScMatrix* pMat2)
     SCSIZE i, j;
     pMat1->GetDimensions(nC1, nR1);
     pMat2->GetDimensions(nC2, nR2);
-    if (nC1 < nC2)
-        nMinC = nC1;
-    else
-        nMinC = nC2;
-    if (nR1 < nR2)
-        nMinR = nR1;
-    else
-        nMinR = nR2;
+    nMinC = lcl_GetMinExtent( nC1, nC2);
+    nMinR = lcl_GetMinExtent( nR1, nR2);
     ScMatrixRef xResMat = GetNewMat(nMinC, nMinR);
     if (xResMat)
     {
@@ -1060,14 +1071,8 @@ ScMatrixRef ScInterpreter::MatSub(ScMatrix* pMat1, ScMatrix* pMat2)
     SCSIZE i, j;
     pMat1->GetDimensions(nC1, nR1);
     pMat2->GetDimensions(nC2, nR2);
-    if (nC1 < nC2)
-        nMinC = nC1;
-    else
-        nMinC = nC2;
-    if (nR1 < nR2)
-        nMinR = nR1;
-    else
-        nMinR = nR2;
+    nMinC = lcl_GetMinExtent( nC1, nC2);
+    nMinR = lcl_GetMinExtent( nR1, nR2);
     ScMatrixRef xResMat = GetNewMat(nMinC, nMinR);
     if (xResMat)
     {
@@ -1095,14 +1100,8 @@ ScMatrixRef ScInterpreter::MatMul(ScMatrix* pMat1, ScMatrix* pMat2)
     SCSIZE i, j;
     pMat1->GetDimensions(nC1, nR1);
     pMat2->GetDimensions(nC2, nR2);
-    if (nC1 < nC2)
-        nMinC = nC1;
-    else
-        nMinC = nC2;
-    if (nR1 < nR2)
-        nMinR = nR1;
-    else
-        nMinR = nR2;
+    nMinC = lcl_GetMinExtent( nC1, nC2);
+    nMinR = lcl_GetMinExtent( nR1, nR2);
     ScMatrixRef xResMat = GetNewMat(nMinC, nMinR);
     if (xResMat)
     {
@@ -1130,14 +1129,8 @@ ScMatrixRef ScInterpreter::MatDiv(ScMatrix* pMat1, ScMatrix* pMat2)
     SCSIZE i, j;
     pMat1->GetDimensions(nC1, nR1);
     pMat2->GetDimensions(nC2, nR2);
-    if (nC1 < nC2)
-        nMinC = nC1;
-    else
-        nMinC = nC2;
-    if (nR1 < nR2)
-        nMinR = nR1;
-    else
-        nMinR = nR2;
+    nMinC = lcl_GetMinExtent( nC1, nC2);
+    nMinR = lcl_GetMinExtent( nR1, nR2);
     ScMatrixRef xResMat = GetNewMat(nMinC, nMinR);
     if (xResMat)
     {
@@ -1166,14 +1159,8 @@ ScMatrixRef ScInterpreter::MatPow(ScMatrix* pMat1, ScMatrix* pMat2)
     SCSIZE i, j;
     pMat1->GetDimensions(nC1, nR1);
     pMat2->GetDimensions(nC2, nR2);
-    if (nC1 < nC2)
-        nMinC = nC1;
-    else
-        nMinC = nC2;
-    if (nR1 < nR2)
-        nMinR = nR1;
-    else
-        nMinR = nR2;
+    nMinC = lcl_GetMinExtent( nC1, nC2);
+    nMinR = lcl_GetMinExtent( nR1, nR2);
     ScMatrixRef xResMat = GetNewMat(nMinC, nMinR);
     if (xResMat)
     {
@@ -1201,14 +1188,8 @@ ScMatrixRef ScInterpreter::MatConcat(ScMatrix* pMat1, ScMatrix* pMat2)
     SCSIZE i, j;
     pMat1->GetDimensions(nC1, nR1);
     pMat2->GetDimensions(nC2, nR2);
-    if (nC1 < nC2)
-        nMinC = nC1;
-    else
-        nMinC = nC2;
-    if (nR1 < nR2)
-        nMinR = nR1;
-    else
-        nMinR = nR2;
+    nMinC = lcl_GetMinExtent( nC1, nC2);
+    nMinR = lcl_GetMinExtent( nR1, nR2);
     ScMatrixRef xResMat = GetNewMat(nMinC, nMinR);
     if (xResMat)
     {
@@ -3679,25 +3660,27 @@ void ScInterpreter::ScMatRef()
         const ScMatrix* pMat = pCell->GetMatrix();
         if( pMat )
         {
-            SCSIZE nCl, nRw;
-            pMat->GetDimensions( nCl, nRw );
+            SCSIZE nCols, nRows;
+            pMat->GetDimensions( nCols, nRows );
             SCSIZE nC = static_cast<SCSIZE>(aPos.Col() - aAdr.Col());
             SCSIZE nR = static_cast<SCSIZE>(aPos.Row() - aAdr.Row());
-            if (nC < nCl && nR < nRw)
+            if ((nCols <= nC && nCols != 1) || (nRows <= nR && nRows != 1))
+                PushNA();
+            else
             {
                 ScMatValType nMatValType;
                 const ScMatrixValue* pMatVal = pMat->Get( nC, nR, nMatValType);
-                if (ScMatrix::IsStringType( nMatValType))
+                if (ScMatrix::IsNonValueType( nMatValType))
                 {
-                    if (ScMatrix::IsEmptyType( nMatValType))
-                    {
-                        // Not inherited (really?) and display as empty string, not 0.
-                        PushTempToken( new ScEmptyCellToken( false, true));
-                    }
-                    else if (ScMatrix::IsEmptyPathType( nMatValType))
+                    if (ScMatrix::IsEmptyPathType( nMatValType))
                     {   // result of empty FALSE jump path
                         nFuncFmtType = NUMBERFORMAT_LOGICAL;
                         PushInt(0);
+                    }
+                    else if (ScMatrix::IsEmptyType( nMatValType))
+                    {
+                        // Not inherited (really?) and display as empty string, not 0.
+                        PushTempToken( new ScEmptyCellToken( false, true));
                     }
                     else
                         PushString( pMatVal->GetString() );
@@ -3710,8 +3693,6 @@ void ScInterpreter::ScMatRef()
                     nFuncFmtIndex = nCurFmtIndex;
                 }
             }
-            else
-                PushNA();
         }
         else
         {

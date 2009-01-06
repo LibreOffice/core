@@ -680,6 +680,12 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                         }
                         break;
 
+                        case xlExtEuroConvert:
+                            {
+                                aStack << aPool.Store( ocEuroConvert, String() );
+                            }
+                        break;
+
                         default:    // OLE link
                         {
                             aPool << ocBad;

@@ -374,7 +374,12 @@ void TokenPool::GetElement( const UINT16 nId )
                 EXTCONT*        p = ( n < nP_Ext )? ppP_Ext[ n ] : NULL;
 
                 if( p )
+                {
+                    if( p->eId == ocEuroConvert )
+                        pScToken->AddOpCode( p->eId );
+                    else
                         pScToken->AddExternal( p->aText, p->eId );
+                }
                 }
                 break;
             case T_Nlf:

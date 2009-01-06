@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xehelper.cxx,v $
- * $Revision: 1.31.32.2 $
+ * $Revision: 1.31.148.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1114,7 +1114,7 @@ void XclExpCachedMatrix::Save( XclExpStream& rStrm ) const
                 rStrm << EXC_CACHEDVAL_EMPTY;
                 rStrm.WriteZeroBytes( 8 );
             }
-            else if( ScMatrix::IsStringType( nMatValType ) )
+            else if( ScMatrix::IsNonValueType( nMatValType ) )
             {
                 XclExpString aStr( pMatVal->GetString(), EXC_STR_DEFAULT );
                 rStrm.SetSliceSize( 6 );

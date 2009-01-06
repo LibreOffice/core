@@ -140,6 +140,8 @@ public:
     /** Inserts an add-in function name
         @return  The 1-based (Excel-like) list index of the name. */
     sal_uInt16          InsertAddIn( const String& rName );
+    /** InsertEuroTool */
+    sal_uInt16          InsertEuroTool( const String& rName );
     /** Inserts a DDE link.
         @return  The 1-based (Excel-like) list index of the DDE link. */
     sal_uInt16          InsertDde( const String& rApplic, const String& rTopic, const String& rItem );
@@ -335,6 +337,8 @@ public:
     explicit            XclExpSupbook( const XclExpRoot& rRoot, sal_uInt16 nXclTabCount );
     /** Creates a SUPBOOK record for add-in functions. */
     explicit            XclExpSupbook( const XclExpRoot& rRoot );
+    /** EUROTOOL SUPBOOK */
+    explicit            XclExpSupbook( const XclExpRoot& rRoot, const String& rUrl, XclSupbookType );
     /** Creates a SUPBOOK record for an external document. */
     explicit            XclExpSupbook( const XclExpRoot& rRoot, const String& rUrl );
     /** Creates a SUPBOOK record for a DDE link. */
@@ -362,6 +366,8 @@ public:
     /** Finds or inserts an EXTERNNAME record for add-ins.
         @return  The 1-based EXTERNNAME record index; or 0, if the record list is full. */
     sal_uInt16          InsertAddIn( const String& rName );
+    /** InsertEuroTool */
+    sal_uInt16          InsertEuroTool( const String& rName );
     /** Finds or inserts an EXTERNNAME record for DDE links.
         @return  The 1-based EXTERNNAME record index; or 0, if the record list is full. */
     sal_uInt16          InsertDde( const String& rItem );
@@ -443,6 +449,10 @@ public:
     bool                InsertAddIn(
                             sal_uInt16& rnSupbook, sal_uInt16& rnExtName,
                             const String& rName );
+    /** InsertEuroTool */
+    bool                InsertEuroTool(
+                             sal_uInt16& rnSupbook, sal_uInt16& rnExtName,
+                             const String& rName );
     /** Finds or inserts an EXTERNNAME record for DDE links.
         @param rnSupbook  Returns the index of the SUPBOOK record which contains the DDE link.
         @param rnExtName  Returns the 1-based EXTERNNAME record index. */
@@ -526,6 +536,11 @@ public:
     virtual bool        InsertAddIn(
                             sal_uInt16& rnExtSheet, sal_uInt16& rnExtName,
                             const String& rName ) = 0;
+    /** InsertEuroTool */
+    virtual bool        InsertEuroTool(
+                            sal_uInt16& rnExtSheet, sal_uInt16& rnExtName,
+                            const String& rName ) = 0;
+
     /** Derived classes find or insert an EXTERNNAME record for DDE links. */
     virtual bool        InsertDde(
                             sal_uInt16& rnExtSheet, sal_uInt16& rnExtName,
@@ -568,6 +583,11 @@ public:
     virtual bool        InsertAddIn(
                             sal_uInt16& rnExtSheet, sal_uInt16& rnExtName,
                             const String& rName );
+
+    /** InsertEuroTool */
+    virtual bool        InsertEuroTool(
+                             sal_uInt16& rnExtSheet, sal_uInt16& rnExtName,
+                             const String& rName );
 
     virtual bool        InsertDde(
                             sal_uInt16& rnExtSheet, sal_uInt16& rnExtName,
@@ -631,6 +651,10 @@ public:
     virtual void        StoreCellRange( sal_uInt16 nFileId, const String& rTabName, const SingleRefData& rRef1, const SingleRefData& rRef2 );
 
     virtual bool        InsertAddIn(
+                            sal_uInt16& rnExtSheet, sal_uInt16& rnExtName,
+                            const String& rName );
+    /** InsertEuroTool */
+    virtual bool        InsertEuroTool(
                             sal_uInt16& rnExtSheet, sal_uInt16& rnExtName,
                             const String& rName );
 
@@ -1078,6 +1102,12 @@ sal_uInt16 XclExpExtNameBuffer::InsertAddIn( const String& rName )
     return nIndex ? nIndex : AppendNew( new XclExpExtNameAddIn( GetRoot(), rName ) );
 }
 
+sal_uInt16 XclExpExtNameBuffer::InsertEuroTool( const String& rName )
+{
+    sal_uInt16 nIndex = GetIndex( rName );
+    return nIndex ? nIndex : AppendNew( new XclExpExtNameBase( GetRoot(), rName ) );
+}
+
 sal_uInt16 XclExpExtNameBuffer::InsertDde(
         const String& rApplic, const String& rTopic, const String& rItem )
 {
@@ -1421,6 +1451,17 @@ XclExpSupbook::XclExpSupbook( const XclExpRoot& rRoot ) :
 {
 }
 
+XclExpSupbook::XclExpSupbook( const XclExpRoot& rRoot, const String& rUrl, XclSupbookType ) :
+    XclExpExternSheetBase( rRoot, EXC_ID_SUPBOOK ),
+    maUrl( rUrl ),
+    maUrlEncoded( rUrl ),
+    meType( EXC_SBTYPE_EUROTOOL ),
+    mnXclTabCount( 0 )
+{
+    SetRecSize( 2 + maUrlEncoded.GetSize() );
+}
+
+
 XclExpSupbook::XclExpSupbook( const XclExpRoot& rRoot, const String& rUrl ) :
     XclExpExternSheetBase( rRoot, EXC_ID_SUPBOOK ),
     maUrl( rUrl ),
@@ -1456,7 +1497,7 @@ XclExpSupbook::XclExpSupbook( const XclExpRoot& rRoot, const String& rApplic, co
 
 bool XclExpSupbook::IsUrlLink( const String& rUrl ) const
 {
-    return (meType == EXC_SBTYPE_EXTERN) && (maUrl == rUrl);
+    return (meType == EXC_SBTYPE_EXTERN || meType == EXC_SBTYPE_EUROTOOL) && (maUrl == rUrl);
 }
 
 bool XclExpSupbook::IsDdeLink( const String& rApplic, const String& rTopic ) const
@@ -1534,6 +1575,11 @@ sal_uInt16 XclExpSupbook::InsertAddIn( const String& rName )
     return GetExtNameBuffer().InsertAddIn( rName );
 }
 
+sal_uInt16 XclExpSupbook::InsertEuroTool( const String& rName )
+{
+    return GetExtNameBuffer().InsertEuroTool( rName );
+}
+
 sal_uInt16 XclExpSupbook::InsertDde( const String& rItem )
 {
     return GetExtNameBuffer().InsertDde( maUrl, maDdeTopic, rItem );
@@ -1569,6 +1615,7 @@ void XclExpSupbook::WriteBody( XclExpStream& rStrm )
         break;
         case EXC_SBTYPE_EXTERN:
         case EXC_SBTYPE_SPECIAL:
+        case EXC_SBTYPE_EUROTOOL:
         {
             sal_uInt16 nCount = ulimit_cast< sal_uInt16 >( maXctList.GetSize() );
             rStrm << nCount << maUrlEncoded;
@@ -1806,6 +1853,20 @@ bool XclExpSupbookBuffer::InsertAddIn(
     return rnExtName > 0;
 }
 
+bool XclExpSupbookBuffer::InsertEuroTool(
+        sal_uInt16& rnSupbook, sal_uInt16& rnExtName, const String& rName )
+{
+    XclExpSupbookRef xSupbook;
+    String aUrl( RTL_CONSTASCII_USTRINGPARAM("\001\010EUROTOOL.XLA"));
+    if( !GetSupbookUrl( xSupbook, rnSupbook, aUrl ) )
+    {
+        xSupbook.reset( new XclExpSupbook( GetRoot(), aUrl, EXC_SBTYPE_EUROTOOL ) );
+        rnSupbook = Append( xSupbook );
+    }
+    rnExtName = xSupbook->InsertEuroTool( rName );
+    return rnExtName > 0;
+}
+
 bool XclExpSupbookBuffer::InsertDde(
         sal_uInt16& rnSupbook, sal_uInt16& rnExtName,
         const String& rApplic, const String& rTopic, const String& rItem )
@@ -2008,6 +2069,13 @@ bool XclExpLinkManagerImpl5::InsertAddIn(
     return false;
 }
 
+bool XclExpLinkManagerImpl5::InsertEuroTool(
+         sal_uInt16& /*rnExtSheet*/, sal_uInt16& /*rnExtName*/, const String& /*rName*/ )
+{
+     return false;
+}
+
+
 bool XclExpLinkManagerImpl5::InsertDde(
         sal_uInt16& /*rnExtSheet*/, sal_uInt16& /*rnExtName*/,
         const String& /*rApplic*/, const String& /*rTopic*/, const String& /*rItem*/ )
@@ -2202,6 +2270,19 @@ bool XclExpLinkManagerImpl8::InsertAddIn(
     return false;
 }
 
+bool XclExpLinkManagerImpl8::InsertEuroTool(
+         sal_uInt16& rnExtSheet, sal_uInt16& rnExtName, const String& rName )
+{
+    sal_uInt16 nSupbook;
+    if( maSBBuffer.InsertEuroTool( nSupbook, rnExtName, rName ) )
+    {
+        rnExtSheet = InsertXti( XclExpXti( nSupbook, EXC_TAB_EXTERNAL, EXC_TAB_EXTERNAL ) );
+        return true;
+    }
+    return false;
+}
+
+
 bool XclExpLinkManagerImpl8::InsertDde(
         sal_uInt16& rnExtSheet, sal_uInt16& rnExtName,
         const String& rApplic, const String& rTopic, const String& rItem )
@@ -2326,6 +2407,12 @@ bool XclExpLinkManager::InsertAddIn(
         sal_uInt16& rnExtSheet, sal_uInt16& rnExtName, const String& rName )
 {
     return mxImpl->InsertAddIn( rnExtSheet, rnExtName, rName );
+}
+
+bool XclExpLinkManager::InsertEuroTool(
+        sal_uInt16& rnExtSheet, sal_uInt16& rnExtName, const String& rName )
+{
+    return mxImpl->InsertEuroTool( rnExtSheet, rnExtName, rName );
 }
 
 bool XclExpLinkManager::InsertDde(

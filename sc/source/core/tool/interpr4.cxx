@@ -3650,6 +3650,7 @@ StackVar ScInterpreter::Interpret()
                 case ocTDist            : ScTDist();                    break;
                 case ocFDist            : ScFDist();                    break;
                 case ocChiDist          : ScChiDist();                  break;
+                case ocChiSqDist        : ScChiSqDist();                break;
                 case ocStandard         : ScStandard();                 break;
                 case ocAveDev           : ScAveDev();                   break;
                 case ocDevSq            : ScDevSq();                    break;
@@ -3692,10 +3693,12 @@ StackVar ScInterpreter::Interpret()
                 case ocRKP              : ScRKP();                      break;
                 case ocForecast         : ScForecast();                 break;
                 case ocGammaLn          : ScLogGamma();                 break;
+                case ocGamma            : ScGamma();                    break;
                 case ocGammaDist        : ScGammaDist();                break;
                 case ocGammaInv         : ScGammaInv();                 break;
                 case ocChiTest          : ScChiTest();                  break;
                 case ocChiInv           : ScChiInv();                   break;
+                case ocChiSqInv         : ScChiSqInv();                 break;
                 case ocTInv             : ScTInv();                     break;
                 case ocFInv             : ScFInv();                     break;
                 case ocLogInv           : ScLogNormInv();               break;
@@ -3712,6 +3715,7 @@ StackVar ScInterpreter::Interpret()
                 case ocBase             : ScBase();                     break;
                 case ocDecimal          : ScDecimal();                  break;
                 case ocConvert          : ScConvert();                  break;
+                case ocEuroConvert      : ScEuroConvert();              break;
                 case ocRoman            : ScRoman();                    break;
                 case ocArabic           : ScArabic();                   break;
                 case ocInfo             : ScInfo();                     break;
@@ -3887,7 +3891,7 @@ StackVar ScInterpreter::Interpret()
                         const ScMatrixValue* pMatVal = xMat->Get(0, 0, nMatValType);
                         if ( pMatVal )
                         {
-                            if (ScMatrix::IsStringType( nMatValType))
+                            if (ScMatrix::IsNonValueType( nMatValType))
                             {
                                 if ( xMat->IsEmptyPath( 0, 0))
                                 {   // result of empty FALSE jump path

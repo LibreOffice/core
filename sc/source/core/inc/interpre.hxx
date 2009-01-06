@@ -106,6 +106,7 @@ class ScInterpreter
     friend class ScTDistFunction;
     friend class ScFDistFunction;
     friend class ScChiDistFunction;
+    friend class ScChiSqDistFunction;
 
 public:
     DECL_FIXEDMEMPOOL_NEWDEL( ScInterpreter )
@@ -560,6 +561,7 @@ void ScDde();
 void ScBase();
 void ScDecimal();
 void ScConvert();
+void ScEuroConvert();
 
 //----------------------- Finanzfunktionen ------------------------------------
 void ScNPV();
@@ -642,17 +644,21 @@ double phi(double x);
 double taylor(double* pPolynom, USHORT nMax, double x);
 double gauss(double x);
 double gaussinv(double x);
-double GetBetaDist(double x, double alpha, double beta);
+double GetBetaDist(double x, double alpha, double beta);  //cumulative distribution function
+double GetBetaDistPDF(double fX, double fA, double fB); //probability density function)
 double GetChiDist(double fChi, double fDF);     // for LEGACY.CHIDIST, returns right tail
 double GetChiSqDistCDF(double fX, double fDF);  // for CHISQDIST, returns left tail
+double GetChiSqDistPDF(double fX, double fDF);  // probability density function
 double GetFDist(double x, double fF1, double fF2);
 double GetTDist(double T, double fDF);
 double Fakultaet(double x);
 double BinomKoeff(double n, double k);
 double GetGamma(double x);
 double GetLogGamma(double x);
+double GetBeta(double fAlpha, double fBeta);
+double GetLogBeta(double fAlpha, double fBeta);
 void ScLogGamma();
-void ScGamma();     // ready for ODF 1.2 GAMMA
+void ScGamma();
 void ScPhi();
 void ScGauss();
 void ScStdNormDist();
@@ -676,7 +682,8 @@ void ScLogNormInv();
 void ScTDist();
 void ScFDist();
 void ScChiDist();   // for LEGACY.CHIDIST, returns right tail
-// TODO: void ScChiSqDist;
+void ScChiSqDist(); // returns left tail or density
+void ScChiSqInv(); //invers to CHISQDIST
 void ScWeibull();
 void ScBetaDist();
 void ScFInv();

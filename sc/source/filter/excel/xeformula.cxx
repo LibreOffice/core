@@ -399,6 +399,7 @@ private:
     void                AppendNameXToken( sal_uInt16 nExtSheet, sal_uInt16 nExtName, sal_uInt8 nExpClass, sal_uInt8 nSpaces = 0 );
     void                AppendMacroCallToken( const XclExpExtFuncData& rExtFuncData, sal_uInt8 nExpClass, sal_uInt8 nSpaces = 0 );
     void                AppendAddInFuncToken( const XclExpExtFuncData& rExtFuncData, sal_uInt8 nExpClass, sal_uInt8 nSpaces = 0 );
+    void                AppendEuroToolFuncToken( const XclExpExtFuncData& rExtFuncData, sal_uInt8 nExpClass, sal_uInt8 nSpaces = 0 );
     void                AppendParenToken( sal_uInt8 nOpenSpaces = 0, sal_uInt8 nCloseSpaces = 0 );
     void                AppendJumpToken( XclExpFuncData& rFuncData, sal_uInt8 nAttrType );
 
@@ -1723,6 +1724,9 @@ void XclExpFmlaCompImpl::AppendDefaultParam( XclExpFuncData& rFuncData )
         case ocExternal:
             AppendAddInFuncToken( rFuncData.GetExtFuncData(), EXC_TOKCLASS_REF );
         break;
+        case ocEuroConvert:
+            AppendEuroToolFuncToken(  rFuncData.GetExtFuncData(), EXC_TOKCLASS_REF );
+        break;
         case ocMacro:
             AppendMacroCallToken( rFuncData.GetExtFuncData(), EXC_TOKCLASS_REF );
         break;
@@ -1782,6 +1786,26 @@ void XclExpFmlaCompImpl::AppendTrailingParam( XclExpFuncData& rFuncData )
             // external or macro call without parameters needs the external name reference
             if( nParamCount == 0 )
                 AppendDefaultParam( rFuncData );
+        break;
+
+        case ocGammaDist:
+            if( nParamCount == 3 )
+            {
+                // GAMMADIST function needs 4 parameters in Excel
+                PrepareParam( rFuncData );
+                AppendIntToken( 1 );
+                FinishParam( rFuncData );
+            }
+        break;
+
+        case ocPoissonDist:
+            if( nParamCount == 2 )
+            {
+                // POISSON function needs 3 parameters in Excel
+                PrepareParam( rFuncData );
+                AppendIntToken( 1 );
+                FinishParam( rFuncData );
+            }
         break;
 
         default:;
@@ -2321,6 +2345,15 @@ void XclExpFmlaCompImpl::AppendAddInFuncToken( const XclExpExtFuncData& rExtFunc
         }
     }
     AppendMacroCallToken( rExtFuncData, nExpClass, nSpaces );
+}
+
+void XclExpFmlaCompImpl::AppendEuroToolFuncToken( const XclExpExtFuncData& rExtFuncData, sal_uInt8 nExpClass, sal_uInt8 nSpaces )
+{
+    sal_uInt16 nExtSheet, nExtName;
+    if( mpLinkMgr && mpLinkMgr->InsertEuroTool( nExtSheet, nExtName, rExtFuncData.maFuncName ) )
+        AppendNameXToken( nExtSheet, nExtName, nExpClass, nSpaces );
+    else
+        AppendMacroCallToken( rExtFuncData, nExpClass, nSpaces );
 }
 
 void XclExpFmlaCompImpl::AppendParenToken( sal_uInt8 nOpenSpaces, sal_uInt8 nCloseSpaces )

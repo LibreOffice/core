@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: parclass.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.12.148.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -149,6 +149,7 @@ const ScParameterClassification::RawData ScParameterClassification::pRawData[] =
     { ocN,               {{ Reference                              },   false }},
     { ocNPV,             {{ Value, Reference                       },   true }},
     { ocNeg,             {{ Array                                  },   false }},
+    { ocNegSub,          {{ Array                                  },   false }},
     { ocNot,             {{ Array                                  },   false }},
     { ocNotEqual,        {{ Array, Array                           },   false }},
     { ocOffset,          {{ Reference, Value, Value, Value, Value  },   false }},

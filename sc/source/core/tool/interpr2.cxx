@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: interpr2.cxx,v $
- * $Revision: 1.38 $
+ * $Revision: 1.37.100.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -172,7 +172,7 @@ void ScInterpreter::ScGetDateValue()
     {
         short eType = pFormatter->GetType(nFIndex);
         if (eType == NUMBERFORMAT_DATE || eType == NUMBERFORMAT_DATETIME)
-            PushDouble(fVal);
+            PushDouble(::rtl::math::approxFloor(fVal));
         else
             PushIllegalArgument();
     }
@@ -391,7 +391,11 @@ void ScInterpreter::ScGetTimeValue()
     {
         short eType = pFormatter->GetType(nFIndex);
         if (eType == NUMBERFORMAT_TIME || eType == NUMBERFORMAT_DATETIME)
-            PushDouble(fVal);
+        {
+            double fDateVal = rtl::math::approxFloor(fVal);
+            double fTimeVal = fVal - fDateVal;
+            PushDouble(fTimeVal);
+        }
         else
             PushIllegalArgument();
     }
@@ -1551,7 +1555,7 @@ void ScInterpreter::ScBackSolver()
 
                 const USHORT nMaxIter = 100;
                 const double fEps = 1E-10;
-                const double fDelta = 1E-3;
+                const double fDelta = 1E-6;
 
                 double fBestX, fXPrev;
                 double fBestF, fFPrev;
@@ -1672,7 +1676,9 @@ void ScInterpreter::ScBackSolver()
                     }
                 }
 
-                double nX = ::rtl::math::approxFloor((fBestX / fDelta) + 0.5) * fDelta;
+                // Try a nice rounded input value if possible.
+                const double fNiceDelta = (bDoneIteration && fabs(fBestX) >= 1e-3 ? 1e-3 : fDelta);
+                double nX = ::rtl::math::approxFloor((fBestX / fNiceDelta) + 0.5) * fNiceDelta;
 
                 if ( bDoneIteration )
                 {
@@ -2327,6 +2333,103 @@ void ScInterpreter::ScConvert()
     }
 }
 
+
+BOOL lclConvertMoney( const String& aSearchUnit, double& rfRate, int& rnDec )
+{
+    struct ConvertInfo
+    {
+        const sal_Char* pCurrText;
+        double          fRate;
+        int             nDec;
+    };
+    ConvertInfo aConvertTable[] = {
+        { "EUR", 1.0,      2 },
+        { "ATS", 13.7603,  2 },
+        { "BEF", 40.3399,  0 },
+        { "DEM", 1.95583,  2 },
+        { "ESP", 166.386,  0 },
+        { "FIM", 5.94573,  2 },
+        { "FRF", 6.55957,  2 },
+        { "IEP", 0.787564, 2 },
+        { "ITL", 1936.27,  0 },
+        { "LUF", 40.3399,  0 },
+        { "NLG", 2.20371,  2 },
+        { "PTE", 200.482,  2 },
+        { "GRD", 340.750,  2 },
+        { "SIT", 239.640,  2 },
+        { "MTL", 0.429300, 2 },
+        { "CYP", 0.585274, 2 }
+    };
+
+    const size_t nConversionCount = sizeof( aConvertTable ) / sizeof( aConvertTable[0] );
+    for ( size_t i = 0; i < nConversionCount; i++ )
+        if ( aSearchUnit.EqualsIgnoreCaseAscii( aConvertTable[i].pCurrText ) )
+        {
+            rfRate = aConvertTable[i].fRate;
+            rnDec  = aConvertTable[i].nDec;
+            return TRUE;
+        }
+    return FALSE;
+}
+
+void ScInterpreter::ScEuroConvert()
+{   //Value, FromUnit, ToUnit[, FullPrecision, [TriangulationPrecision]]
+    BYTE nParamCount = GetByte();
+    if ( MustHaveParamCount( nParamCount, 3, 5 ) )
+    {
+        double nPrecision = 0.0;
+        if ( nParamCount == 5 )
+        {
+            nPrecision = ::rtl::math::approxFloor(GetDouble());
+            if ( nPrecision < 3 )
+            {
+                PushIllegalArgument();
+                return;
+            }
+        }
+        BOOL bFullPrecision = FALSE;
+        if ( nParamCount >= 4 )
+            bFullPrecision = GetBool();
+        String aToUnit( GetString() );
+        String aFromUnit( GetString() );
+        double fVal = GetDouble();
+        if ( nGlobalError )
+            PushError( nGlobalError);
+        else
+        {
+            double fRes;
+            double fFromRate;
+            double fToRate;
+            int    nFromDec;
+            int    nToDec;
+            String aEur( RTL_CONSTASCII_USTRINGPARAM("EUR"));
+            if ( lclConvertMoney( aFromUnit, fFromRate, nFromDec )
+                && lclConvertMoney( aToUnit, fToRate, nToDec ) )
+            {
+                if ( aFromUnit.EqualsIgnoreCaseAscii( aToUnit ) )
+                    fRes = fVal;
+                else
+                {
+                    if ( aFromUnit.EqualsIgnoreCaseAscii( aEur ) )
+                       fRes = fVal * fToRate;
+                    else
+                    {
+                        double fIntermediate = fVal / fFromRate;
+                        if ( nPrecision )
+                            fIntermediate = ::rtl::math::round( fIntermediate,
+                                                            (int) nPrecision );
+                        fRes = fIntermediate * fToRate;
+                    }
+                    if ( !bFullPrecision )
+                        fRes = ::rtl::math::round( fRes, nToDec );
+                }
+                PushDouble( fRes );
+            }
+            else
+                PushIllegalArgument();
+        }
+    }
+}
 
 void ScInterpreter::ScRoman()
 {   // Value [Mode]

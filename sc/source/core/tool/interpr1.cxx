@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: interpr1.cxx,v $
- * $Revision: 1.61 $
+ * $Revision: 1.60.54.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -129,8 +129,11 @@ void ScInterpreter::ScIfJump()
                             }
                             else
                             {
+                                // Treat empty and empty path as 0, but string
+                                // as error.
+                                bIsValue = !ScMatrix::IsRealStringType( nType);
                                 bTrue = false;
-                                fVal = 0.0;
+                                fVal = (bIsValue ? 0.0 : CreateDoubleError( errNoValue));
                             }
                             if ( bTrue )
                             {   // TRUE
@@ -309,6 +312,37 @@ void ScInterpreter::ScChoseJump()
 }
 
 
+void lcl_AdjustJumpMatrix( ScJumpMatrix* pJumpM, ScMatrixRef& pResMat, SCSIZE nParmCols, SCSIZE nParmRows )
+{
+    SCSIZE nJumpCols, nJumpRows;
+    SCSIZE nResCols, nResRows;
+    SCSIZE nAdjustCols, nAdjustRows;
+    pJumpM->GetDimensions( nJumpCols, nJumpRows );
+    pJumpM->GetResMatDimensions( nResCols, nResRows );
+    if (( nJumpCols == 1 && nParmCols > nResCols ) ||
+        ( nJumpRows == 1 && nParmRows > nResRows ))
+    {
+        if ( nJumpCols == 1 && nJumpRows == 1 )
+        {
+            nAdjustCols = nParmCols > nResCols ? nParmCols : nResCols;
+            nAdjustRows = nParmRows > nResRows ? nParmRows : nResRows;
+        }
+        else if ( nJumpCols == 1 )
+        {
+            nAdjustCols = nParmCols;
+            nAdjustRows = nResRows;
+        }
+        else
+        {
+            nAdjustCols = nResCols;
+            nAdjustRows = nParmRows;
+        }
+        pJumpM->SetNewResMat( nAdjustCols, nAdjustRows );
+        pResMat = pJumpM->GetResultMatrix();
+    }
+}
+
+
 bool ScInterpreter::JumpMatrix( short nStackLevel )
 {
     pJumpMatrix = pStack[sp-nStackLevel]->GetJumpMatrix();
@@ -404,52 +438,69 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
                     double fVal;
                     ScRange aRange;
                     PopDoubleRef( aRange );
-                    ScAddress& rAdr = aRange.aStart;
-                    ULONG nCol = (ULONG)rAdr.Col() + nC;
-                    ULONG nRow = (ULONG)rAdr.Row() + nR;
                     if ( nGlobalError )
                     {
                         fVal = CreateDoubleError( nGlobalError );
                         nGlobalError = 0;
                         pResMat->PutDouble( fVal, nC, nR );
                     }
-                    else if ( nCol > static_cast<ULONG>(aRange.aEnd.Col()) ||
-                            nRow > static_cast<ULONG>(aRange.aEnd.Row()))
-                    {
-                        fVal = CreateDoubleError( errNoValue );
-                        pResMat->PutDouble( fVal, nC, nR );
-                    }
                     else
                     {
-                        rAdr.SetCol( static_cast<SCCOL>(nCol) );
-                        rAdr.SetRow( static_cast<SCROW>(nRow) );
-                        ScBaseCell* pCell = GetCell( rAdr );
-                        if (HasCellEmptyData( pCell))
-                            pResMat->PutEmpty( nC, nR );
-                        else if (HasCellValueData( pCell))
+                        // Do not modify the original range because we use it
+                        // to adjust the size of the result matrix if necessary.
+                        ScAddress aAdr( aRange.aStart);
+                        ULONG nCol = (ULONG)aAdr.Col() + nC;
+                        ULONG nRow = (ULONG)aAdr.Row() + nR;
+                        if ((nCol > static_cast<ULONG>(aRange.aEnd.Col()) &&
+                                    aRange.aEnd.Col() != aRange.aStart.Col())
+                                || (nRow > static_cast<ULONG>(aRange.aEnd.Row()) &&
+                                    aRange.aEnd.Row() != aRange.aStart.Row()))
                         {
-                            double fCellVal = GetCellValue( rAdr, pCell);
-                            if ( nGlobalError )
-                            {
-                                fCellVal = CreateDoubleError(
-                                        nGlobalError);
-                                nGlobalError = 0;
-                            }
-                            pResMat->PutDouble( fCellVal, nC, nR );
+                            fVal = CreateDoubleError( NOTAVAILABLE );
+                            pResMat->PutDouble( fVal, nC, nR );
                         }
                         else
                         {
-                            String aStr;
-                            GetCellString( aStr, pCell );
-                            if ( nGlobalError )
+                            // Replicate column and/or row of a vector if it is
+                            // one. Note that this could be a range reference
+                            // that in fact consists of only one cell, e.g. A1:A1
+                            if (aRange.aEnd.Col() == aRange.aStart.Col())
+                                nCol = aRange.aStart.Col();
+                            if (aRange.aEnd.Row() == aRange.aStart.Row())
+                                nRow = aRange.aStart.Row();
+                            aAdr.SetCol( static_cast<SCCOL>(nCol) );
+                            aAdr.SetRow( static_cast<SCROW>(nRow) );
+                            ScBaseCell* pCell = GetCell( aAdr );
+                            if (HasCellEmptyData( pCell))
+                                pResMat->PutEmpty( nC, nR );
+                            else if (HasCellValueData( pCell))
                             {
-                                pResMat->PutDouble( CreateDoubleError(
-                                            nGlobalError), nC, nR);
-                                nGlobalError = 0;
+                                double fCellVal = GetCellValue( aAdr, pCell);
+                                if ( nGlobalError )
+                                {
+                                    fCellVal = CreateDoubleError(
+                                            nGlobalError);
+                                    nGlobalError = 0;
+                                }
+                                pResMat->PutDouble( fCellVal, nC, nR );
                             }
                             else
-                                pResMat->PutString( aStr, nC, nR );
+                            {
+                                String aStr;
+                                GetCellString( aStr, pCell );
+                                if ( nGlobalError )
+                                {
+                                    pResMat->PutDouble( CreateDoubleError(
+                                                nGlobalError), nC, nR);
+                                    nGlobalError = 0;
+                                }
+                                else
+                                    pResMat->PutString( aStr, nC, nR );
+                            }
                         }
+                        SCSIZE nParmCols = aRange.aEnd.Col() - aRange.aStart.Col() + 1;
+                        SCSIZE nParmRows = aRange.aEnd.Row() - aRange.aStart.Row() + 1;
+                        lcl_AdjustJumpMatrix( pJumpMatrix, pResMat, nParmCols, nParmRows );
                     }
                 }
                 break;
@@ -472,9 +523,10 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
                     {
                         SCSIZE nCols, nRows;
                         pMat->GetDimensions( nCols, nRows );
-                        if ( nCols <= nC || nRows <= nR )
+                        if ((nCols <= nC && nCols != 1) ||
+                            (nRows <= nR && nRows != 1))
                         {
-                            fVal = CreateDoubleError( errNoValue );
+                            fVal = CreateDoubleError( NOTAVAILABLE );
                             pResMat->PutDouble( fVal, nC, nR );
                         }
                         else
@@ -492,6 +544,7 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
                                 pResMat->PutString( rStr, nC, nR );
                             }
                         }
+                        lcl_AdjustJumpMatrix( pJumpMatrix, pResMat, nCols, nRows );
                     }
                 }
                 break;
@@ -775,7 +828,9 @@ ScMatrixRef ScInterpreter::CompareMat()
             {
                 for ( SCSIZE k=0; k<nR; k++ )
                 {
-                    if ( j < nC0 && j < nC1 && k < nR0 && k < nR1 )
+                    SCSIZE nCol = j, nRow = k;
+                    if (    pMat[0]->ValidColRowOrReplicated( nCol, nRow ) &&
+                            pMat[1]->ValidColRowOrReplicated( nCol, nRow ))
                     {
                         for ( short i=1; i>=0; i-- )
                         {
@@ -3963,6 +4018,16 @@ static void lcl_GetLastMatch( SCSIZE& rIndex, const ScMatrix& rMat,
                     nVal == rMat.GetDouble(rIndex+1))
                 ++rIndex;
     }
+    //! Order of IsEmptyPath, IsEmpty, IsString is significant!
+    else if (rMat.IsEmptyPath(rIndex))
+    {
+        if (bReverse)
+            while (rIndex > 0 && rMat.IsEmptyPath(rIndex-1))
+                --rIndex;
+        else
+            while (rIndex < nMatCount-1 && rMat.IsEmptyPath(rIndex+1))
+                ++rIndex;
+    }
     else if (rMat.IsEmpty(rIndex))
     {
         if (bReverse)
@@ -3984,14 +4049,9 @@ static void lcl_GetLastMatch( SCSIZE& rIndex, const ScMatrix& rMat,
                     aStr == rMat.GetString(rIndex+1))
                 ++rIndex;
     }
-    else if (rMat.IsEmptyPath(rIndex))
+    else
     {
-        if (bReverse)
-            while (rIndex > 0 && rMat.IsEmptyPath(rIndex-1))
-                --rIndex;
-        else
-            while (rIndex < nMatCount-1 && rMat.IsEmptyPath(rIndex+1))
-                ++rIndex;
+        DBG_ERRORFILE("lcl_GetLastMatch: unhandled matrix type");
     }
 }
 
@@ -4097,7 +4157,7 @@ void ScInterpreter::ScMatch()
                 {
                     ScMatValType nType = GetDoubleOrStringFromMatrix(
                             rEntry.nVal, *rEntry.pStr);
-                    rEntry.bQueryByString = ScMatrix::IsStringType( nType);
+                    rEntry.bQueryByString = ScMatrix::IsNonValueType( nType);
                 }
                 break;
                 default:
@@ -4353,7 +4413,7 @@ void ScInterpreter::ScCountIf()
             {
                 ScMatValType nType = GetDoubleOrStringFromMatrix( fVal,
                         rString);
-                bIsString = ScMatrix::IsStringType( nType);
+                bIsString = ScMatrix::IsNonValueType( nType);
             }
             break;
             case svString:
@@ -4540,7 +4600,7 @@ void ScInterpreter::ScSumIf()
             {
                 ScMatValType nType = GetDoubleOrStringFromMatrix( fVal,
                         rString);
-                bIsString = ScMatrix::IsStringType( nType);
+                bIsString = ScMatrix::IsNonValueType( nType);
             }
             break;
             default:
@@ -4848,7 +4908,7 @@ void ScInterpreter::ScLookup()
         {
             ScMatValType nType = GetDoubleOrStringFromMatrix( rEntry.nVal,
                                                               *rEntry.pStr);
-            rEntry.bQueryByString = ScMatrix::IsStringType(nType);
+            rEntry.bQueryByString = ScMatrix::IsNonValueType(nType);
         }
         break;
         default:
@@ -5237,7 +5297,7 @@ void ScInterpreter::ScHLookup()
                 {
                     ScMatValType nType = GetDoubleOrStringFromMatrix(
                             rEntry.nVal, *rEntry.pStr);
-                    rEntry.bQueryByString = ScMatrix::IsStringType( nType);
+                    rEntry.bQueryByString = ScMatrix::IsNonValueType( nType);
                 }
                 break;
                 default:
@@ -5489,7 +5549,7 @@ void ScInterpreter::ScVLookup()
                 {
                     ScMatValType nType = GetDoubleOrStringFromMatrix(
                             rEntry.nVal, *rEntry.pStr);
-                    rEntry.bQueryByString = ScMatrix::IsStringType( nType);
+                    rEntry.bQueryByString = ScMatrix::IsNonValueType( nType);
                 }
                 break;
                 default:
@@ -6064,18 +6124,27 @@ void ScInterpreter::ScIndirect()
     BYTE nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 1, 2 )  )
     {
+        bool bTryXlA1 = true;   // whether to try XL_A1 style as well.
         ScAddress::Convention eConv = ScAddress::CONV_OOO;
         if (nParamCount == 2 && 0.0 == ::rtl::math::approxFloor( GetDouble()))
+        {
             eConv = ScAddress::CONV_XL_R1C1;
+            bTryXlA1 = false;
+        }
 
         const ScAddress::Details aDetails( eConv, aPos );
+        const ScAddress::Details aDetailsXlA1( ScAddress::CONV_XL_A1, aPos );
         SCTAB nTab = aPos.Tab();
         String sRefStr( GetString() );
         ScRefAddress aRefAd, aRefAd2;
-        if ( ConvertDoubleRef( pDok, sRefStr, nTab, aRefAd, aRefAd2, aDetails ) )
+        if ( ConvertDoubleRef( pDok, sRefStr, nTab, aRefAd, aRefAd2, aDetails) ||
+                (bTryXlA1 && ConvertDoubleRef( pDok, sRefStr, nTab, aRefAd,
+                                               aRefAd2, aDetailsXlA1)))
             PushDoubleRef( aRefAd.Col(), aRefAd.Row(), aRefAd.Tab(),
-                aRefAd2.Col(), aRefAd2.Row(), aRefAd2.Tab() );
-        else if ( ConvertSingleRef ( pDok, sRefStr, nTab, aRefAd, aDetails ) )
+                    aRefAd2.Col(), aRefAd2.Row(), aRefAd2.Tab() );
+        else if ( ConvertSingleRef ( pDok, sRefStr, nTab, aRefAd, aDetails) ||
+                (bTryXlA1 && ConvertSingleRef ( pDok, sRefStr, nTab, aRefAd,
+                                                aDetailsXlA1)))
             PushSingleRef( aRefAd.Col(), aRefAd.Row(), aRefAd.Tab() );
         else
         {
