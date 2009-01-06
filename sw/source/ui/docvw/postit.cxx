@@ -428,6 +428,33 @@ void PostItTxt::Command( const CommandEvent& rCEvt )
             mpMarginWin->DocView()->HandleWheelCommands(rCEvt);
         }
     }
+    else if (rCEvt.GetCommand() == COMMAND_SELECTIONCHANGE)
+    {
+        if ( mpOutlinerView )
+        {
+            const CommandSelectionChangeData *pData = rCEvt.GetSelectionChangeData();
+            ESelection aSelection = mpOutlinerView->GetEditView().GetSelection();
+            aSelection.nStartPos = sal::static_int_cast<sal_uInt16, ULONG>(pData->GetStart());
+            aSelection.nEndPos = sal::static_int_cast<sal_uInt16, ULONG>(pData->GetEnd());
+            mpOutlinerView->GetEditView().SetSelection(aSelection);
+        }
+    }
+    else if (rCEvt.GetCommand() == COMMAND_PREPARERECONVERSION)
+    {
+        if ( mpOutlinerView && mpOutlinerView->HasSelection() )
+        {
+            EditEngine *aEditEngine = mpOutlinerView->GetEditView().GetEditEngine();
+            ESelection aSelection = mpOutlinerView->GetEditView().GetSelection();
+            aSelection.Adjust();
+            if( aSelection.nStartPara != aSelection.nEndPara )
+            {
+                xub_StrLen aParaLen = aEditEngine->GetTextLen( aSelection.nStartPara );
+                aSelection.nEndPara = aSelection.nStartPara;
+                aSelection.nEndPos = aParaLen;
+                mpOutlinerView->GetEditView().SetSelection( aSelection );
+            }
+        }
+    }
     else
     if (rCEvt.GetCommand() == COMMAND_SELECTIONCHANGE)
     {
@@ -542,6 +569,40 @@ IMPL_LINK( PostItTxt, WindowEventListener, VclSimpleEvent*, pWinEvent )
     }
     return sal_True;
 }
+
+XubString PostItTxt::GetSurroundingText() const
+{
+   XubString sRet;
+   if( mpOutlinerView )
+   {
+       EditEngine *aEditEngine = mpOutlinerView->GetEditView().GetEditEngine();
+       if( mpOutlinerView->HasSelection() )
+           sRet = mpOutlinerView->GetSelected();
+       else
+       {
+           ESelection aSelection = mpOutlinerView->GetEditView().GetSelection();
+           sRet = aEditEngine->GetText(aSelection.nStartPara);
+       }
+   }
+   return sRet;
+}
+
+Selection PostItTxt::GetSurroundingTextSelection() const
+{
+   Selection aRet( 0, 0 );
+   if( mpOutlinerView )
+   {
+       if( mpOutlinerView->HasSelection() )
+           aRet = Selection( 0, mpOutlinerView->GetSelected().Len() );
+       else
+       {
+           ESelection aSelection = mpOutlinerView->GetEditView().GetSelection();
+           aRet = Selection( aSelection.nStartPos, aSelection.nEndPos );
+       }
+   }
+   return aRet;
+}
+
 /************** SwMarginWin***********************************++*/
 SwMarginWin::SwMarginWin(Window* pParent, WinBits nBits,SwPostItMgr* aMgr,SwPostItBits aBits)
 : Window(pParent, nBits),

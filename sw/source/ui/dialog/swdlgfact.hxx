@@ -50,6 +50,7 @@ class SwRenameXNamedDlg;
 class SwModalRedlineAcceptDlg;
 class SwTOXMark;
 class SwWordCountDialog;
+class SwSplitTblDlg;
 
 #include "itabenum.hxx"
 
@@ -130,6 +131,12 @@ class AbstractSwBreakDlg_Impl : public AbstractSwBreakDlg // add for SwBreakDlg
     virtual USHORT  GetPageNumber();
 
 };
+class AbstractSplitTableDialog_Impl : public AbstractSplitTableDialog // add for
+{
+    DECL_ABSTDLG_BASE(AbstractSplitTableDialog_Impl, SwSplitTblDlg)
+    virtual sal_uInt16 GetSplitMode();
+};
+
 // add for SwBreakDlg end
 
 //add for SwCharDlg , SwEnvDlg , SwFootNoteOptionDlg SwParaDlg  SwTableTabDlg begin
@@ -459,7 +466,8 @@ public:
                                                     UINT16 nDefPage = 0);
 
     virtual AbstarctSwSelGlossaryDlg * CreateSwSelGlossaryDlg ( Window * pParent, const String &rShortName, int nResId ); //add for SwSelGlossaryDlg
-    virtual VclAbstractDialog * CreateVclAbstractDialog ( Window * pParent, SwWrtShell &rSh, int nResId ); //add for  SwTableHeightDlg SwSortDlg ,SwSplitTblDlg
+    virtual VclAbstractDialog * CreateVclAbstractDialog ( Window * pParent, SwWrtShell &rSh, int nResId ); //add for  SwTableHeightDlg SwSortDlg
+    virtual AbstractSplitTableDialog * CreateSplitTblDialog ( Window * pParent, SwWrtShell &rSh ); //add for  SwSplitTblDlg
 
     virtual AbstractSwAutoFormatDlg * CreateSwAutoFormatDlg( Window* pParent, SwWrtShell* pShell, //add for SwAutoFormatDlg
                                                             int nResId,

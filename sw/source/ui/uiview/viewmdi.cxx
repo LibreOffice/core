@@ -587,18 +587,16 @@ void SwView::ChangeVLinealMetric( FieldUnit eUnit )
 /* -----------------------------07.04.01 17:09--------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL SwView::GetVLinealMetric(FieldUnit& eToFill) const
+void SwView::GetVLinealMetric(FieldUnit& eToFill) const
 {
     eToFill = pVRuler->GetUnit();
-    return pVRuler != 0;
 }
 /* -----------------------------07.04.01 17:09--------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL SwView::GetHLinealMetric(FieldUnit& eToFill) const
+void SwView::GetHLinealMetric(FieldUnit& eToFill) const
 {
     eToFill = pHRuler->GetUnit();
-    return pHRuler != 0;
 }
 /*************************************************************************
 |*

@@ -162,6 +162,7 @@ public:
     void                ApplyUsrPref(const SwViewOption &, SwView*,
                                      sal_uInt16 nDest = VIEWOPT_DEST_VIEW );
     void ApplyUserMetric( FieldUnit eMetric, BOOL bWeb );
+    void ApplyRulerMetric( FieldUnit eMetric, BOOL bHorizontal, BOOL bWeb );
     void ApplyFldUpdateFlags(SwFldUpdateFlags eFldFlags);
     void ApplyLinkMode(sal_Int32 nNewLinkMode);
 

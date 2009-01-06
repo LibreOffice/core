@@ -518,14 +518,14 @@ public:
 
     int             StatVLineal() const { return ((Window*)pVRuler)->IsVisible(); }
     void            ChangeVLinealMetric(FieldUnit eUnit);
-    BOOL            GetVLinealMetric(FieldUnit& rToFill) const;
+    void            GetVLinealMetric(FieldUnit& rToFill) const;
 
     int             StatTab() const { return ((Window*)pHRuler)->IsVisible(); }
     SvxRuler&       GetHLineal()    { return *pHRuler; }
     SvxRuler&       GetVLineal()    { return *pVRuler; }
     void            InvalidateRulerPos();
     void            ChangeTabMetric(FieldUnit eUnit);
-    BOOL            GetHLinealMetric(FieldUnit& rToFill) const;
+    void            GetHLinealMetric(FieldUnit& rToFill) const;
 
         // Handler
     void            Execute(SfxRequest&);

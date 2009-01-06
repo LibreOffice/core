@@ -31,14 +31,8 @@
 #define _SPLITTBL_HXX
 
 #include <svx/stddlg.hxx>
-
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
-
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 
 class SwWrtShell;
 
@@ -54,12 +48,15 @@ class SwSplitTblDlg : public SvxStandardDialog
     RadioButton     aBorderCopyRB;
 
     SwWrtShell      &rShell;
+    USHORT          m_nSplit;
 
 protected:
     virtual void Apply();
 
 public:
     SwSplitTblDlg( Window *pParent, SwWrtShell &rSh );
+
+    USHORT GetSplitMode() const { return m_nSplit; }
 };
 
 #endif

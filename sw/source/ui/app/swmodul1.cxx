@@ -53,35 +53,19 @@
 #include <swmodule.hxx>
 #include <swtypes.hxx>
 #include <usrpref.hxx>
-#ifndef _MODCFG_HXX
 #include <modcfg.hxx>
-#endif
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
-#ifndef _PVIEW_HXX
 #include <pview.hxx>
-#endif
-#ifndef _WVIEW_HXX
 #include <wview.hxx>
-#endif
 #include <wrtsh.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
-#ifndef _DBMGR_HXX
 #include <dbmgr.hxx>
-#endif
 #include <uinums.hxx>
 #include <prtopt.hxx>       // fuer PrintOptions
 #include <navicfg.hxx>
 #include <doc.hxx>
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _APP_HRC
 #include <app.hrc>
-#endif
 #include "helpid.h"
 
 #include <unomid.h>
@@ -289,7 +273,43 @@ void SwModule::ApplyUserMetric( FieldUnit eMetric, BOOL bWeb )
 
             pTmpView = SwModule::GetNextView(pTmpView);
         }
+}
+/*-- 12.11.2008 14:47:58---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
+void SwModule::ApplyRulerMetric( FieldUnit eMetric, BOOL bHorizontal, BOOL bWeb )
+{
+    SwMasterUsrPref* pPref;
+    if(bWeb)
+    {
+        if(!pWebUsrPref)
+            GetUsrPref(sal_True);
+        pPref = pWebUsrPref;
+    }
+    else
+    {
+        if(!pUsrPref)
+            GetUsrPref(sal_False);
+        pPref = pUsrPref;
+    }
+    if( bHorizontal )
+        pPref->SetHScrollMetric(eMetric);
+    else
+        pPref->SetVScrollMetric(eMetric);
+
+    SwView* pTmpView = SwModule::GetFirstView();
+    // switch metric at the appropriate rulers
+    while(pTmpView)
+    {
+        if(bWeb == (0 != dynamic_cast<SwWebView *>( pTmpView )))
+        {
+            if( bHorizontal )
+                pTmpView->ChangeTabMetric(eMetric);
+            else
+                pTmpView->ChangeVLinealMetric(eMetric);
+        }
+        pTmpView = SwModule::GetNextView(pTmpView);
+    }
 }
 /*-----------------13.11.96 11.57-------------------
 

@@ -7801,7 +7801,7 @@ SfxVoidItem SplitCell FN_TABLE_SPLIT_CELLS
 
 //--------------------------------------------------------------------------
 SfxVoidItem SplitTable FN_TABLE_SPLIT_TABLE
-()
+(SfxUInt16Item Type FN_PARAM_1)
 [
     /* flags: */
     AutoUpdate = FALSE,

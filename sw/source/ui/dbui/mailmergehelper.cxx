@@ -87,11 +87,7 @@ String  CallSaveAsDialog(String& rFilter)
     {
         uno::Reference < ui::dialogs::XFilePicker > xFP = aDialog.GetFilePicker();
         sRet = xFP->getFiles().getConstArray()[0];
-        rFilter = aDialog.GetCurrentFilter();
-        SfxFilterMatcher aMatcher( sFactory );
-        const SfxFilter* p2 = aMatcher.GetFilter4UIName( rFilter );
-        if(p2)
-            rFilter = p2->GetFilterName();
+        rFilter = aDialog.GetRealFilter();
     }
     return sRet;
 }
