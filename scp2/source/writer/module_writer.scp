@@ -111,13 +111,12 @@ Module gid_Module_Langpack_Writer_Template
              gid_File_Res_T602Filter);
 End
 
-# temporarily disable writer2latex filter due to issue i97440
-#Module gid_Module_Optional_Writer2latex
-#    MOD_NAME_DESC(MODULE_PRG_WRT_WRITER2LATEX);
-#    ParentID = gid_Module_Optional;
-#    Default = YES;
-#    PackageInfo = "packinfo_office.txt";
-#    Files = (gid_File_Oxt_Writer2latex);
-#End
+Module gid_Module_Optional_Writer2latex
+    MOD_NAME_DESC(MODULE_PRG_WRT_WRITER2LATEX);
+    ParentID = gid_Module_Optional;
+    Default = YES;
+    PackageInfo = "packinfo_office.txt";
+    Files = (gid_File_Oxt_Writer2latex);
+End
 
 #include "alllangmodules_writer.inc"
