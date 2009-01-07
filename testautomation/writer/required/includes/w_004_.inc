@@ -658,27 +658,6 @@ testcase tInsertIndexesIndex
 
         if i = 1 then    ' Inhaltsverzeichnis
             ErzeugenAusGliederung.Check
-            Gliederung.Click
-            Sleep 1
-            Kontext
-            Active.Setpage TabNumerierungKapitelnumerierung
-            Kontext "TabNumerierungKapitelnumerierung"
-            if Not TabNumerierungKapitelnumerierung.Exists then
-                Warnlog "Outline couldn't be created!"
-            else
-                TabNumerierungKapitelnumerierung.Cancel
-            end if
-            Kontext "TabVerzeichnisseVerzeichnis"
-            ErzeugenAusVorlagen.Check
-            WelcheVorlage.Click
-            Sleep 1
-
-            Kontext "VorlageZuweisen"
-            if VorlageZuweisen.Exists then
-                VorlageZuweisen.Cancel
-            else
-                Warnlog "Dialog to create from styles not up!"
-            end if
         end if
 
         if i = 2 then
