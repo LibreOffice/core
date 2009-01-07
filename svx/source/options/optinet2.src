@@ -468,13 +468,13 @@ TabPage RID_SVXPAGE_INET_SECURITY
     };
     PushButton PB_SEC_CONNECTIONS
     {
-        Pos = MAP_APPFONT( COL_3, ROW_3-3 );
+        Pos = MAP_APPFONT( COL_3, ROW_3-1 );
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
         Text [ en-US ] = "Connections...";
     };
     CheckBox CB_SEC_MASTERPASSWORD
     {
-        Pos = MAP_APPFONT( COL_1a, ROW_4 + 2);
+        Pos = MAP_APPFONT( COL_1a, ROW_4 );
         Size = MAP_APPFONT( COL_2-COL_1a, RSC_CD_CHECKBOX_HEIGHT );
         Text [ en-US ] = "Protected by a master password (recommended)";
     };
