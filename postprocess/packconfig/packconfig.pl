@@ -11,7 +11,7 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 # $RCSfile: packconfig.pl,v $
 #
-# $Revision: 1.3 $
+# $Revision: 1.3.24.2 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -56,7 +56,7 @@ my $do_rebuild = 0;          # is rebuilding zipfile required?
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision$ ';
+my $id_str = ' $Revision: 1.3.24.2 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -175,22 +175,59 @@ sub is_file_newer
 sub create_zip_archive
 {
     my $zip_hash_ref = shift;
-
     print_message("creating config archive ...") if $verbose;
     my $zip = Archive::Zip->new();
 
+    # on Mac OS X Intel we have unxmacxi.pro, on Mac OS X PowerPC unxmacxp.pro .. and so on
+    my $platform = $ENV{INPATH};
+
     foreach ( sort keys %{$zip_hash_ref} ) {
         my $path = "$files_path/$_";
-        print_message("zipping '$path' ...") if $extra_verbose;
-        if ( !$zip->addFile($path, $_) ) {
-            print_error("can't add file '$path' to config zip archive: $!", 5);
-        }
+    # only Mac OS X Aqua is concerned here
+    # but changes for other platforms can easely be added following the same principle
+    if ( ( $platform =~ /^.*macx*/) && ($path =~ /^.*menubar.xml/ ) ) {
+        $path = modify_mac_menus($path);
+    }
+    print_message("zipping '$path' ...") if $extra_verbose;
+    if ( !$zip->addFile($path, $_) ) {
+        print_error("can't add file '$path' to config zip archive: $!", 5);
+    }
     }
     my $status = $zip->writeToFileNamed($tmp_out_file);
     if ( $status != AZ_OK ) {
         print_error("write image zip archive '$tmp_out_file' failed. Reason: $status", 6);
     }
     return;
+}
+
+sub modify_mac_menus
+{
+    my $path_base = "$ENV{'SOLARENV'}";
+    $path_base =~ s/solenv//;
+
+    my $new_file_name = "$path_base"."postprocess"."\/"."$ENV{INPATH}"."\/"."misc"."\/"."$_";
+
+    my $new_directory = $new_file_name;
+    $new_directory =~ s/\/menubar.xml//;
+    if ( ! -e $new_directory) {
+    `mkdir -p "$new_directory"`;
+    }
+
+    my $old_file_name = "$files_path/$_";
+
+    `cp $old_file_name $new_file_name`;
+
+    my $temp_file_name = "$new_file_name"."_tmp";
+    my $xsl_file = "macosx/macosx_menubar_modification.xsl";
+
+    my $result = `xsltproc $xsl_file $new_file_name > $temp_file_name`;
+
+    if ( $result != 0) {
+    print_error("xsltproc '$xsl_file' '$new_file_name'> '$temp_file_name' failed",1)
+    }
+
+    replace_file( $temp_file_name, $new_file_name );
+    return $new_file_name;
 }
 
 sub replace_file
