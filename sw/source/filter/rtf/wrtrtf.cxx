@@ -292,8 +292,10 @@ void SwRTFWriter::Out_SwDoc( SwPaM* pPam )
                     pCurPam->GetPoint()->nContent.Assign( &rCNd, 0 );
 
                 if( !bOutOutlineOnly ||
-                    ( rCNd.IsTxtNode() && NO_NUMBERING !=
-                        ((SwTxtNode&)rCNd).GetTxtColl()->GetOutlineLevel() ))
+                    //( rCNd.IsTxtNode() && NO_NUMBERING !=     //#outline level,removed by zhaojianwei
+                    //((SwTxtNode&)rCNd).GetTxtColl()->GetOutlineLevel() ))
+                    ( rCNd.IsTxtNode() &&                       //->add by zhaojianwei
+                        ((SwTxtNode&)rCNd).GetTxtColl()->IsAssignedToListLevelOfOutlineStyle()))//<-end,zhaojianwei
                     Out( aRTFNodeFnTab, rCNd, *this );
 
             }
@@ -1078,10 +1080,12 @@ void SwRTFWriter::OutRTFStyleTab()
                     break;
                 }
 
-        if( NO_NUMBERING != pColl->GetOutlineLevel() )
+        //if( NO_NUMBERING != pColl->GetOutlineLevel() )//#outline level,zhaojianwei
+        if(pColl->IsAssignedToListLevelOfOutlineStyle())//<-end,zhaojianwei
         {
             Strm() << '{' << sRTF_IGNORE << sRTF_SOUTLVL;
-            OutULong( pColl->GetOutlineLevel() ) << '}';
+            //OutULong( pColl->GetOutlineLevel() ) << '}';//#outline level,zhaojianwei
+            OutULong( pColl->GetAssignedOutlineStyleLevel() ) << '}';//<-end,zhaojianwei
         }
 
         Strm() << ' ';

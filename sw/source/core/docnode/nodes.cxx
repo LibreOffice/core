@@ -188,7 +188,8 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, ULONG nSz,
                 pTxtNode->RemoveFromList();
                 // <--
 
-                if ( pTxtNode->GetTxtColl()->GetOutlineLevel() != NO_NUMBERING )
+                //if ( pTxtNode->GetTxtColl()->GetOutlineLevel() != NO_NUMBERING )//#outline level,zhaojianwei
+                if ( pTxtNode->GetAttrOutlineLevel() != 0 )//<-end,zhaojianwei
                 {
                     const SwNodePtr pSrch = (SwNodePtr)&rNd;
                     pOutlineNds->Remove( pSrch );
@@ -207,7 +208,8 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, ULONG nSz,
                 // <--
 
                 if( bInsOutlineIdx &&
-                    NO_NUMBERING != rTxtNd.GetTxtColl()->GetOutlineLevel() )
+                    //NO_NUMBERING != rTxtNd.GetTxtColl()->GetOutlineLevel() )//#outline level,zhaojianwei
+                    0 != rTxtNd.GetAttrOutlineLevel() )//<-end,zhaojianwei
                 {
                     const SwNodePtr pSrch = (SwNodePtr)&rNd;
                     pOutlineNds->Insert( pSrch );
@@ -248,7 +250,8 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, ULONG nSz,
                 SwTxtNode* pTxtNd = (SwTxtNode*)pNd;
 
                 // loesche die Gliederungs-Indizies aus dem alten Nodes-Array
-                if( NO_NUMBERING != pTxtNd->GetTxtColl()->GetOutlineLevel() )
+                //if( NO_NUMBERING != pTxtNd->GetTxtColl()->GetOutlineLevel() )//#outline level,zhaojianwei
+                if( 0 != pTxtNd->GetAttrOutlineLevel() )//<-end,zhaojianwei
                     pOutlineNds->Remove( pNd );
 
                 // muss die Rule kopiere werden?
@@ -287,9 +290,13 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, ULONG nSz,
                 {
                     const SwpHints* pHts = pTxtNd->GetpSwpHints();
                     // setze die OultineNodes im neuen Nodes-Array
-                    if( bInsOutlineIdx && NO_NUMBERING !=
-                        pTxtNd->GetTxtColl()->GetOutlineLevel() )
+                    //if( bInsOutlineIdx && NO_NUMBERING != //#outline level,removed by zhaojianwei
+                    //  pTxtNd->GetTxtColl()->GetOutlineLevel() )
+                    if( bInsOutlineIdx &&
+                        0 != pTxtNd->GetAttrOutlineLevel() ) //#outline level,added by zhaojianwei
+                    {
                         rNds.pOutlineNds->Insert( pTxtNd );
+                    }
 
                     // --> OD 2008-03-13 #refactorlists#
 //                    pTxtNd->SyncNumberAndNumRule();
@@ -554,8 +561,10 @@ BOOL SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                                 // setze bei Start/EndNodes die richtigen Indizies
                                 // loesche die Gliederungs-Indizies aus
                                 // dem alten Nodes-Array
-                                if( pCNd->IsTxtNode() && NO_NUMBERING !=
-                                    ((SwTxtNode*)pCNd)->GetTxtColl()->GetOutlineLevel() )
+                                //if( pCNd->IsTxtNode() && NO_NUMBERING !=      //#outline level,zhaojianwei
+                                //  ((SwTxtNode*)pCNd)->GetTxtColl()->GetOutlineLevel() )
+                                if( pCNd->IsTxtNode() && 0 !=
+                                    ((SwTxtNode*)pCNd)->GetAttrOutlineLevel() )//<-end,by zhaojianwei
                                     pOutlineNds->Remove( pCNd );
                                 else
                                     pCNd = 0;
@@ -593,8 +602,10 @@ BOOL SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                                     ((SwSectionNode*)pNd)->DelFrms();
                             }
 */
-                            BOOL bOutlNd = pNd->IsTxtNode() && NO_NUMBERING !=
-                                ((SwTxtNode*)pNd)->GetTxtColl()->GetOutlineLevel();
+                            //BOOL bOutlNd = pNd->IsTxtNode() && NO_NUMBERING !=//#outline level,zhaojianwei
+                            //  ((SwTxtNode*)pNd)->GetTxtColl()->GetOutlineLevel();
+                            const bool bOutlNd = pNd->IsTxtNode() &&
+                                    0 != ((SwTxtNode*)pNd)->GetAttrOutlineLevel();//<-end,zhaojianwei
                             // loesche die Gliederungs-Indizies aus
                             // dem alten Nodes-Array
                             if( bOutlNd )
@@ -1280,9 +1291,10 @@ void SwNodes::Delete(const SwNodeIndex &rIndex, ULONG nNodes)
 
                     if( pNd->IsTxtNode() )
                     {
-                        if( NO_NUMBERING !=
-                        ((SwTxtNode*)pNd)->GetTxtColl()->GetOutlineLevel() &&
-                        pOutlineNds->Seek_Entry( pNd, &nIdxPos ))
+                        //if( NO_NUMBERING !=                   //#outline level,zhaojianwei
+                        //  ((SwTxtNode*)pNd)->GetTxtColl()->GetOutlineLevel() &&
+                        if( 0 != ((SwTxtNode*)pNd)->GetAttrOutlineLevel() &&//<-end,zhaojianwei
+                                pOutlineNds->Seek_Entry( pNd, &nIdxPos ))
                         {
                             // loesche die Gliederungs-Indizies.
                             pOutlineNds->Remove( nIdxPos );
@@ -1669,7 +1681,8 @@ void SwNodes::DelNodes( const SwNodeIndex & rStart, ULONG nCnt )
             SwNode* pNd = (*this)[ n ];
 
             if( pNd->IsTxtNode() &&
-                NO_NUMBERING != ((SwTxtNode*)pNd)->GetTxtColl()->GetOutlineLevel() )
+                //NO_NUMBERING != ((SwTxtNode*)pNd)->GetTxtColl()->GetOutlineLevel() )//#outline level,zhaojianwei
+                0 != ((SwTxtNode*)pNd)->GetAttrOutlineLevel() ) //<-end,zhaojianwei
             {                   // loesche die Gliederungs-Indizies.
                 USHORT nIdxPos;
                 if( pOutlineNds->Seek_Entry( pNd, &nIdxPos ))

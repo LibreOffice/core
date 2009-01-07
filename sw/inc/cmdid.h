@@ -892,7 +892,7 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_UNO_COMPONENT                    (FN_EXTRA2 + 97)
 #define FN_WORDCOUNT_DIALOG                 (FN_EXTRA2 + 98)
 
-#define FN_UNO_DEFAULT_OUTLINE_LEVEL        (FN_EXTRA2 + 99)
+//#define FN_UNO_DEFAULT_OUTLINE_LEVEL        (FN_EXTRA2 + 99)//#outline level,removed by zahojianwei
 
 #define FN_XFORMS_DESIGN_MODE               (FN_EXTRA2 + 100)
 

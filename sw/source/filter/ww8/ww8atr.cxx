@@ -781,9 +781,11 @@ bool SwWW8Writer::DisallowInheritingOutlineNumbering(const SwFmt &rFmt)
     {
         if (const SwFmt *pParent = rFmt.DerivedFrom())
         {
-            BYTE nLvl = ((const SwTxtFmtColl*)pParent)->GetOutlineLevel();
-            if (MAXLEVEL > nLvl)
-            {
+            //BYTE nLvl = ((const SwTxtFmtColl*)pParent)->GetOutlineLevel();    //#outline level,removed by zhaojianwei
+            //if (MAXLEVEL > nLvl)
+            //{                                                                 //<-end, ->add by zhaojianwei
+            if (((const SwTxtFmtColl*)pParent)->IsAssignedToListLevelOfOutlineStyle())
+            {                                                                   //<-end,zhaojianwei
                 if (bWrtWW8)
                 {
                     SwWW8Writer::InsUInt16(*pO, 0x2640);
@@ -815,14 +817,18 @@ void SwWW8Writer::Out_SwFmt(const SwFmt& rFmt, bool bPapFmt, bool bChpFmt,
     case RES_TXTFMTCOLL:
         if( bPapFmt )
         {
-            BYTE nLvl = ((const SwTxtFmtColl&)rFmt).GetOutlineLevel();
-            if (MAXLEVEL > nLvl)
+            //BYTE nLvl = ((const SwTxtFmtColl&)rFmt).GetOutlineLevel();    //#outline level,removed by zhaojianwei
+            //if (MAXLEVEL > nLvl)
+            //{                                                             //<-end, ->add by zhaojianwei
+            if (((const SwTxtFmtColl&)rFmt).IsAssignedToListLevelOfOutlineStyle())
             {
+                int nLvl = ((const SwTxtFmtColl&)rFmt).GetAssignedOutlineStyleLevel();  //<-end,zhaojianwei
+
                 //if outline numbered
                 // if Write StyleDefinition then write the OutlineRule
-                const SwNumFmt& rNFmt = pDoc->GetOutlineNumRule()->Get(nLvl);
+                const SwNumFmt& rNFmt = pDoc->GetOutlineNumRule()->Get(static_cast<USHORT>(nLvl));
                 if (bStyDef)
-                    ExportOutlineNumbering(nLvl, rNFmt, rFmt);
+                    ExportOutlineNumbering(static_cast<BYTE>(nLvl), rNFmt, rFmt);
 
                 // --> OD 2008-06-03 #i86652#
 //                if (rNFmt.GetAbsLSpace())
@@ -2114,32 +2120,43 @@ void SwWW8Writer::StartTOX( const SwSection& rSect )
                     // Search over all the outline styles used and figure out
                     // what is the minimum outline level we need to display
                     // (ignoring headline styles 1-9)
-                    BYTE nLvl = 0, nMinLvl = 0;
+                    //BYTE nLvl = 0, nMinLvl = 0;   //#outline level, removed by zhaojianwei
+                    int nLvl = 0, nMinLvl = 0;      //<-end,add by zhaojianwei
                     const SwTxtFmtColls& rColls = *pDoc->GetTxtFmtColls();
                     const SwTxtFmtColl* pColl;
                     for( n = rColls.Count(); n; )
                     {
                         pColl = rColls[ --n ];
-                        nLvl = pColl->GetOutlineLevel();
+                        //nLvl = pColl->GetOutlineLevel();  //#outline level,zhaojianwei
+                        //USHORT nPoolId = pColl->GetPoolFmtId();
+                        //if( MAXLEVEL > nLvl && nMinLvl < nLvl &&      //<-end, ->add by zhaojianwei
                         USHORT nPoolId = pColl->GetPoolFmtId();
-                        if( MAXLEVEL > nLvl && nMinLvl < nLvl &&
+                        if( pColl->IsAssignedToListLevelOfOutlineStyle() &&
+                            nMinLvl < (nLvl = pColl->GetAssignedOutlineStyleLevel()) && //<-end,zhaojianwei
                             ( RES_POOLCOLL_HEADLINE1 > nPoolId ||
                               RES_POOLCOLL_HEADLINE9 < nPoolId ))
                         {
-
-
-                    // If we are using the default heading styles then use nTOXLvl
-                    if(!nMinLvl)
-                        nLvl = static_cast< BYTE >(nTOXLvl);
-                    else
-                        nLvl = nMinLvl < nTOXLvl ? nMinLvl : (BYTE)nTOXLvl;
+                            // If we are using the default heading styles then use nTOXLvl
+                            if(!nMinLvl)
+                                nLvl = nTOXLvl;
+                            else
+                                nLvl = nMinLvl < nTOXLvl ? nMinLvl : (BYTE)nTOXLvl;
                             nMinLvl = nLvl;
                         }
                     }
 
-                    if( nLvl )
+                    // --> OD 2008-12-19 #i70748#
+                    // Correction: in the above loop the <nMinLvl> is set != 0,
+                    // if a to outline style assigned paragraph style exists,
+                    // which does not belong to the default ones.
+                    // It has to be considered that the last checked
+                    // to outline style assigned paragraph style could have
+                    // assigned outline style level == 0.
+                    // Thus, check on and export of <nMinLvl> instead of <nLvl>.
+//                    if( nLvl )
+                    if ( nMinLvl > 0 )
                     {
-                        USHORT nTmpLvl = nLvl + 1;
+                        int nTmpLvl = nMinLvl + 1;
                         if (nTmpLvl > WW8ListManager::nMaxLevel)
                             nTmpLvl = WW8ListManager::nMaxLevel;
 
@@ -2148,16 +2165,24 @@ void SwWW8Writer::StartTOX( const SwSection& rSect )
                         sStr.AppendAscii(sEntryEnd);
 
                     }
+                    // <--
 
-                    if( nLvl != nMinLvl )
+                    // --> OD 2008-12-19 #i70748#
+                    // See above, checking <nLvl != nMinLvl> does not make sense.
+//                    if( nLvl != nMinLvl )
+                    if( nMinLvl > 0 )
+                    // <--
                     {
                         // collect this templates into the \t otion
                         for( n = rColls.Count(); n;)
                         {
                             pColl = rColls[--n];
-                            nLvl =  pColl->GetOutlineLevel();
-                            if (MAXLEVEL > nLvl && nMinLvl <= nLvl)
-                            {
+                            //nLvl =  pColl->GetOutlineLevel();         //#outline level, removed by zhaojianwei
+                            //if (MAXLEVEL > nLvl && nMinLvl <= nLvl)
+                            //{                                         //<-end, ->add by zhaojianwei
+                            if( pColl->IsAssignedToListLevelOfOutlineStyle() &&
+                                nMinLvl <= ( nLvl = pColl->GetAssignedOutlineStyleLevel()))
+                            {                                           //<-end,zhaojianwei
                                 if( sTOption.Len() )
                                     sTOption += ';';
                                 (( sTOption += pColl->GetName() ) += ';' )
@@ -3260,8 +3285,10 @@ static Writer& OutWW8_SwNumRuleItem( Writer& rWrt, const SfxPoolItem& rHt )
                 else if( rWW8Wrt.pOutFmtNode->ISA( SwTxtFmtColl ))
                 {
                     const SwTxtFmtColl* pC = (SwTxtFmtColl*)rWW8Wrt.pOutFmtNode;
-                    if( pC && MAXLEVEL > pC->GetOutlineLevel() )
-                        nLvl = pC->GetOutlineLevel();
+                    //if( pC && MAXLEVEL > pC->GetOutlineLevel() )  //#outline level,removed by zhaojianwei
+                    //    nLvl = pC->GetOutlineLevel();             //<-end, ->add by zhaojianwei
+                    if( pC && pC->IsAssignedToListLevelOfOutlineStyle() )
+                        nLvl = static_cast<BYTE>(pC->GetAssignedOutlineStyleLevel()); //<-end,zhaojianwei
                 }
             }
         }
@@ -4998,6 +5025,7 @@ SwAttrFnTab aWW8AttrFnTab = {
 /* RES_PARATR_VERTALIGN */          OutWW8_SvxParaVertAlignItem,
 /* RES_PARATR_SNAPTOGRID*/          OutWW8_SvxParaGridItem,
 /* RES_PARATR_CONNECT_TO_BORDER */  0, // new
+/* RES_PARATR_OUTLINELEVEL */       0, // new - outlinelevel
 
 /* RES_PARATR_LIST_ID */            0, // new
 /* RES_PARATR_LIST_LEVEL */         0, // new

@@ -664,7 +664,6 @@ void SwWrtShell::LaunchOLEObj( long nVerb )
     }
 }
 
-
 void SwWrtShell::MoveObjectIfActive( svt::EmbeddedObjectRef& xObj, const Point& rOffset )
 {
     try
@@ -1087,7 +1086,7 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
     //   no numbering rule can be retrieved from the paragraph style.
     bool bContinueFoundNumRule( false );
     bool bActivateOutlineRule( false );
-    sal_uInt8 nActivateOutlineLvl( MAXLEVEL );    // only relevant, if <bActivateOutlineRule> == TRUE
+    int nActivateOutlineLvl( MAXLEVEL );    // only relevant, if <bActivateOutlineRule> == TRUE
     SwTxtFmtColl * pColl = GetCurTxtFmtColl();
     if ( pColl )
     {
@@ -1142,11 +1141,14 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
                 {
                     // check, if numbering of the outline level of the pararaph
                     // style is active. If not, activate this outline level.
-                    nActivateOutlineLvl = pColl->GetOutlineLevel();
-                    ASSERT( /*nActivateOutlineLvl >= 0 &&*/ nActivateOutlineLvl < MAXLEVEL,
+                    //nActivateOutlineLvl = pColl->GetOutlineLevel();       //#outline level,zhaojianwei
+                    //ASSERT( /*nActivateOutlineLvl >= 0 &&*/ nActivateOutlineLvl < MAXLEVEL,
+                    nActivateOutlineLvl = pColl->GetAssignedOutlineStyleLevel();
+                    ASSERT( pColl->IsAssignedToListLevelOfOutlineStyle(),   //<-end,zhaojianwei
                             "<SwWrtShell::NumOrBulletOn(..)> - paragraph style with outline rule, but no outline level" );
-                    if ( /*nActivateOutlineLvl >= 0 &&*/ nActivateOutlineLvl < MAXLEVEL &&
-                         pCollRule->Get( nActivateOutlineLvl ).GetNumberingType()
+                    //if ( /*nActivateOutlineLvl >= 0 &&*/ nActivateOutlineLvl < MAXLEVEL &&    //#outline level,zhaojianwei
+                    if ( pColl->IsAssignedToListLevelOfOutlineStyle() &&        //<-end,zhaojianwei
+                         pCollRule->Get( static_cast<USHORT>(nActivateOutlineLvl) ).GetNumberingType()
                             == SVX_NUM_NUMBER_NONE )
                     {
                         // activate outline numbering
@@ -1163,7 +1165,8 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
                     // activate outline numbering, because from the precondition
                     // it's known, that <SwEdit::HasNumber()> == FALSE
                     bActivateOutlineRule = true;
-                    nActivateOutlineLvl = pColl->GetOutlineLevel();
+                    //nActivateOutlineLvl = pColl->GetOutlineLevel();       //#outline level,zhaojianwei
+                    nActivateOutlineLvl = pColl->GetAssignedOutlineStyleLevel();//<-end,zhaojianwei
                 }
             }
             else if ( !pNumRule )
@@ -1171,17 +1174,21 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
                 // activate outline numbering, because from the precondition
                 // it's known, that <SwEdit::HasNumber()> == FALSE
                 bActivateOutlineRule = true;
-                nActivateOutlineLvl = pColl->GetOutlineLevel();
+                //nActivateOutlineLvl = pColl->GetOutlineLevel();   //#outline level,zhaojianwei
+                nActivateOutlineLvl = pColl->GetAssignedOutlineStyleLevel();//<-end,zhaojianwei,need further consideration
             }
             else
             {
                 // check, if numbering of the outline level of the pararaph
                 // style is active. If not, activate this outline level.
-                nActivateOutlineLvl = pColl->GetOutlineLevel();
-                ASSERT( /*nActivateOutlineLvl >= 0 &&*/ nActivateOutlineLvl < MAXLEVEL,
+                //nActivateOutlineLvl = pColl->GetOutlineLevel();
+                nActivateOutlineLvl = pColl->GetAssignedOutlineStyleLevel();//#outline level,zhaojianwei
+                //ASSERT( /*nActivateOutlineLvl >= 0 &&*/ nActivateOutlineLvl < MAXLEVEL,
+                ASSERT( pColl->IsAssignedToListLevelOfOutlineStyle(),//#outline level,zhaojianwei
                         "<SwWrtShell::NumOrBulletOn(..)> - paragraph style with outline rule, but no outline level" );
-                if ( /*nActivateOutlineLvl >= 0 &&*/ nActivateOutlineLvl < MAXLEVEL &&
-                     pCollRule->Get( nActivateOutlineLvl ).GetNumberingType()
+                //if ( /*nActivateOutlineLvl >= 0 &&*/ nActivateOutlineLvl < MAXLEVEL &&
+                if ( pColl->IsAssignedToListLevelOfOutlineStyle() &&//#outline level,zhaojianwei
+                     pCollRule->Get( static_cast<USHORT>(nActivateOutlineLvl) ).GetNumberingType()
                         == SVX_NUM_NUMBER_NONE )
                 {
                     // activate outline numbering
@@ -1242,9 +1249,9 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
             {
                 // --> OD 2005-10-26 #b6340308# - use above retrieve outline
                 // level, if outline numbering has to be activated.
-                sal_Int8 nLevel = bActivateOutlineRule
-                             ? nActivateOutlineLvl
-                             : sal::static_int_cast<sal_Int8, sal_Int32>(pTxtNode->GetActualListLevel());
+                int nLevel = bActivateOutlineRule  ////#outline level,zhaojianwei,need more consideration
+                              ? nActivateOutlineLvl
+                              : pTxtNode->GetActualListLevel();
                 // <--
 
                 if (nLevel < 0)
@@ -1253,7 +1260,7 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
                 if (nLevel >= MAXLEVEL)
                     nLevel = MAXLEVEL - 1;
 
-                SwNumFmt aFmt(aNumRule.Get(nLevel));
+                SwNumFmt aFmt(aNumRule.Get(static_cast<USHORT>(nLevel)));
 
                 if (bNum)
                     aFmt.SetNumberingType(SVX_NUM_ARABIC);
@@ -1267,10 +1274,10 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
                         aFmt.SetBulletFont( pFnt );
                     }
                     // <--
-                    aFmt.SetBulletChar( numfunc::GetBulletChar(nLevel));
+                    aFmt.SetBulletChar( numfunc::GetBulletChar(static_cast<BYTE>(nLevel)));
                     aFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
                 }
-                aNumRule.Set(nLevel, aFmt);
+                aNumRule.Set(static_cast<USHORT>(nLevel), aFmt);
             }
         }
         // <--

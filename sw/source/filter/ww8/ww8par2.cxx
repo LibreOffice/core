@@ -833,7 +833,8 @@ void SwWW8ImplReader::Read_ANLevelNo( USHORT, const BYTE* pData, short nLen )
             {
                 nSwNumLevel = *pData - 1;
                 if (!bNoAttrImport)
-                    ((SwTxtFmtColl*)pAktColl)->SetOutlineLevel( nSwNumLevel );
+                    //((SwTxtFmtColl*)pAktColl)->SetOutlineLevel( nSwNumLevel );    //#outline level,zhaojianwei
+                    ((SwTxtFmtColl*)pAktColl)->AssignToListLevelOfOutlineStyle( nSwNumLevel ); //<-end,zhaojianwei
                     // Bei WW-NoNumbering koennte auch NO_NUMBERING gesetzt
                     // werden. ( Bei normaler Nummerierung muss NO_NUM gesetzt
                     // werden: NO_NUM : Nummerierungs-Pause,

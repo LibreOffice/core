@@ -87,6 +87,9 @@
 #include <unomid.h>
 
 #include <IDocumentOutlineNodes.hxx>
+// --> OD 2008-04-14 #outlinelevel#
+#include <app.hrc>
+// <--
 
 using namespace ::com::sun::star;
 
@@ -234,6 +237,9 @@ SwOutlineTabDialog::SwOutlineTabDialog(Window* pParent,
         pChapterNumRules(SW_MOD()->GetChapterNumRules()),
         bModified(rWrtSh.IsModified())
 {
+    // --> OD 2008-04-14 #outlinelevel#
+    SetText( SW_RES( STR_OUTLINE_NUMBERING ) );
+    // <--
     PushButton* pUserButton = GetUserButton();
     pUserButton->SetText(SW_RES(ST_FORM));
     pUserButton->SetHelpId(HID_OUTLINE_FORM);
@@ -265,9 +271,15 @@ SwOutlineTabDialog::SwOutlineTabDialog(Window* pParent,
         SwTxtFmtColl &rTxtColl = rWrtSh.GetTxtFmtColl(i);
         if(!rTxtColl.IsDefault())
         {
-            BYTE nOutLevel = rTxtColl.GetOutlineLevel();
-            if(nOutLevel != NO_NUMBERING)
+            //BYTE nOutLevel = rTxtColl.GetOutlineLevel();  //<-#outline level, removed out by zhaojianwei
+            //if(nOutLevel != NO_NUMBERING)
+            //->added by zhaojianwei
+            if(rTxtColl.IsAssignedToListLevelOfOutlineStyle())
+            {
+                int nOutLevel = rTxtColl.GetAssignedOutlineStyleLevel();
                 aCollNames[ nOutLevel ] = rTxtColl.GetName();
+            }
+            //<-end
         }
     }
 }
@@ -396,7 +408,8 @@ USHORT  SwOutlineTabDialog::GetLevel(const String &rFmtName) const
         if(aCollNames[i] == rFmtName)
             return i;
     }
-    return NO_NUMBERING;
+    return MAXLEVEL;//NO_NUMBERING; //#outline level,zhaojianwei
+
 }
 /* -----------------07.07.98 16:30-------------------
  *
@@ -422,13 +435,34 @@ short SwOutlineTabDialog::Ok()
         SwTxtFmtColl &rTxtColl = rWrtSh.GetTxtFmtColl(i);
         if( !rTxtColl.IsDefault() )
         {
-            rTxtColl.SetOutlineLevel( (BYTE)GetLevel(rTxtColl.GetName()));
+            //rTxtColl.SetOutlineLevel( (BYTE)GetLevel(rTxtColl.GetName()));//#outline level,removed by zhaojianwei
 
             const SfxPoolItem & rItem =
                 rTxtColl.GetFmtAttr(RES_PARATR_NUMRULE, FALSE);
 
-            if ((BYTE)GetLevel(rTxtColl.GetName()) == NO_NUMBERING)
+            //if ((BYTE)GetLevel(rTxtColl.GetName()) == NO_NUMBERING)   //#outline level,removed by zhaojianwei
+            //{
+            //  if (static_cast<const SwNumRuleItem &>(rItem).GetValue() ==
+            //      pOutlineRule->GetName())
+            //  {
+            //      rTxtColl.ResetFmtAttr(RES_PARATR_NUMRULE);
+            //  }
+            //}
+            //else
+            //{
+            //  if (static_cast<const SwNumRuleItem &>(rItem).GetValue() !=
+            //      pOutlineRule->GetName())
+            //  {
+            //      SwNumRuleItem aItem(pOutlineRule->GetName());
+            //      rTxtColl.SetFmtAttr(aItem);
+            //  }
+            //}
+           if ((BYTE)GetLevel(rTxtColl.GetName()) == MAXLEVEL) //add by zhaojianwei
             {
+                if(rTxtColl.IsAssignedToListLevelOfOutlineStyle())
+                {
+                    rTxtColl.DeleteAssignmentToListLevelOfOutlineStyle();
+                }
                 if (static_cast<const SwNumRuleItem &>(rItem).GetValue() ==
                     pOutlineRule->GetName())
                 {
@@ -437,13 +471,15 @@ short SwOutlineTabDialog::Ok()
             }
             else
             {
+                rTxtColl.AssignToListLevelOfOutlineStyle(GetLevel(rTxtColl.GetName()));
+
                 if (static_cast<const SwNumRuleItem &>(rItem).GetValue() !=
                     pOutlineRule->GetName())
                 {
                     SwNumRuleItem aItem(pOutlineRule->GetName());
                     rTxtColl.SetFmtAttr(aItem);
                 }
-            }
+            }                           //<-end,zhaojianwei
         }
     }
 
@@ -455,27 +491,74 @@ short SwOutlineTabDialog::Ok()
         SwTxtFmtColl* pColl = rWrtSh.FindTxtFmtCollByName( sHeadline );
         if( !pColl )
         {
-            if( !aCollNames[i].Len() )
+            //if( !aCollNames[i].Len() )            //#outline level,removed by zhaojianwei
+            //{
+            //  SwTxtFmtColl* pTxtColl = rWrtSh.GetTxtCollFromPool(
+            //      static_cast< USHORT >(RES_POOLCOLL_HEADLINE1 + i) );
+            //  pTxtColl->SetOutlineLevel( NO_NUMBERING );
+            //  pTxtColl->ResetFmtAttr(RES_PARATR_NUMRULE);
+            //}
+            //else if(aCollNames[i] != sHeadline)
+            //{
+            //  SwTxtFmtColl* pTxtColl = rWrtSh.GetParaStyle(
+            //      aCollNames[i], SwWrtShell::GETSTYLE_CREATESOME);
+            //  if(pTxtColl)
+            //  {
+            //      pTxtColl->SetOutlineLevel( static_cast< BYTE >(i) );
+
+            //      SwNumRuleItem aItem(pOutlineRule->GetName());
+            //      pTxtColl->SetFmtAttr(aItem);
+            //  }
+            //}
+            if(aCollNames[i] != sHeadline)//->added by zhaojianwei
             {
                 SwTxtFmtColl* pTxtColl = rWrtSh.GetTxtCollFromPool(
-                                                    static_cast< USHORT >(RES_POOLCOLL_HEADLINE1 + i) );
-                pTxtColl->SetOutlineLevel( NO_NUMBERING );
+                    static_cast< USHORT >(RES_POOLCOLL_HEADLINE1 + i) );
+                pTxtColl->DeleteAssignmentToListLevelOfOutlineStyle();
                 pTxtColl->ResetFmtAttr(RES_PARATR_NUMRULE);
-            }
-            else if(aCollNames[i] != sHeadline)
-            {
-                SwTxtFmtColl* pTxtColl = rWrtSh.GetParaStyle(
-                                aCollNames[i], SwWrtShell::GETSTYLE_CREATESOME);
-                if(pTxtColl)
-                {
-                    pTxtColl->SetOutlineLevel( static_cast< BYTE >(i) );
 
-                    SwNumRuleItem aItem(pOutlineRule->GetName());
-                    pTxtColl->SetFmtAttr(aItem);
+                if( aCollNames[i].Len() )
+                {
+                    pTxtColl = rWrtSh.GetParaStyle(
+                                aCollNames[i], SwWrtShell::GETSTYLE_CREATESOME);
+                    if(pTxtColl)
+                    {
+                        pTxtColl->AssignToListLevelOfOutlineStyle(i);
+                        SwNumRuleItem aItem(pOutlineRule->GetName());
+                        pTxtColl->SetFmtAttr(aItem);
+                    }
+                }
+            }//<--end,zhaojianwei
+        }
+    }
+
+    //#outline level,add by zhaojianwei
+    /* When a paragraph style is assigned to a list level of the outline style,
+       the outline level attribute and the list style attribute of its existing
+       child paragraph styles have to be set to 0 respectively "".*/
+    nCount = rWrtSh.GetTxtFmtCollCount();
+    for( i = 0; i < nCount; ++i )
+    {
+        SwTxtFmtColl &rTxtColl = rWrtSh.GetTxtFmtColl(i);
+        if( !rTxtColl.IsDefault() )
+        {
+            SwTxtFmtColl *pDerFrom = ( SwTxtFmtColl* )rTxtColl.DerivedFrom();
+            if( pDerFrom->IsAssignedToListLevelOfOutlineStyle())
+            {
+                if(rTxtColl.GetItemState( RES_PARATR_NUMRULE, FALSE ) == SFX_ITEM_DEFAULT )
+                {
+                    SwNumRuleItem aItem(aEmptyStr);
+                    rTxtColl.SetFmtAttr( aItem );
+                }
+                if(rTxtColl.GetItemState( RES_PARATR_OUTLINELEVEL, FALSE ) == SFX_ITEM_DEFAULT )
+                {
+                    int nOutlineLevel = 0;;
+                    rTxtColl.SetAttrOutlineLevel( nOutlineLevel );
                 }
             }
         }
     }
+    //<-end,zhaojianwei
 
     rWrtSh.SetOutlineNumRule( *pNumRule);
 
@@ -910,7 +993,7 @@ void SwOutlineSettingsTabPage::SetWrtShell(SwWrtShell* pShell)
     {
         nTmp = static_cast<USHORT>(pSh->getIDocumentOutlineNodesAccess()->getOutlineLevel(nOutlinePos));
     }
-    aLevelLB.SelectEntryPos(nTmp);
+    aLevelLB.SelectEntryPos(nTmp-1);//nTmp);//#outline level,zhaojianwei
 
     // Zeichenvorlagen sammeln
     aCharFmtLB.Clear();

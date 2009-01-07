@@ -427,14 +427,17 @@ bool SwFmtToSet(SwRTFWriter& rWrt, const SwFmt& rFmt, SfxItemSet &rSet)
             rWrt.Strm() << sRTF_S;
             rWrt.OutULong( nId );
             rWrt.bOutFmtAttr = TRUE;
-            BYTE nLvl = ((const SwTxtFmtColl&)rFmt).GetOutlineLevel();
-            if( MAXLEVEL > nLvl )
+//          BYTE nLvl = ((const SwTxtFmtColl&)rFmt).GetOutlineLevel();      //#outline level,zhaojianwei
+//          if( MAXLEVEL > nLvl )
+//          {
+            if(((const SwTxtFmtColl&)rFmt).IsAssignedToListLevelOfOutlineStyle())
             {
+                int nLvl = ((const SwTxtFmtColl&)rFmt).GetAssignedOutlineStyleLevel();  //<-end,zhaojianwei
                 USHORT nNumId = rWrt.GetNumRuleId(
                                         *rWrt.pDoc->GetOutlineNumRule() );
                 if( USHRT_MAX != nNumId )
                 {
-                    BYTE nWWLvl = 8 >= nLvl ? nLvl : 8;
+                    BYTE nWWLvl = 8 >= nLvl ? static_cast<BYTE>(nLvl) : 8;
                     rWrt.Strm() << sRTF_LS;
                     rWrt.OutULong( nNumId );
                     rWrt.Strm() << sRTF_ILVL; rWrt.OutULong( nWWLvl );
@@ -446,7 +449,7 @@ bool SwFmtToSet(SwRTFWriter& rWrt, const SwFmt& rFmt, SfxItemSet &rSet)
                     }
                 }
 
-                const SwNumFmt* pNFmt = &rWrt.pDoc->GetOutlineNumRule()->Get( nLvl );
+                const SwNumFmt* pNFmt = &rWrt.pDoc->GetOutlineNumRule()->Get( static_cast<USHORT>(nLvl) );
                 if( pNFmt->GetAbsLSpace() )
                 {
                     SfxItemSet aSet( *rFmt.GetAttrSet().GetPool(),
@@ -4267,6 +4270,7 @@ SwAttrFnTab aRTFAttrFnTab = {
 /* RES_PARATR_VERTALIGN */          OutRTF_SwFontAlign,
 /* RES_PARATR_SNAPTOGRID*/          0, // new
 /* RES_PARATR_CONNECT_TO_BORDER */  0, // new
+/* RES_PARATR_OUTLINELEVEL */       0, // new - outlinelevel
 
 /* RES_PARATR_LIST_ID */            0, // new
 /* RES_PARATR_LIST_LEVEL */         0, // new

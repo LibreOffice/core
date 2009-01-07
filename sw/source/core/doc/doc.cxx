@@ -1414,9 +1414,10 @@ void SwDoc::Summary( SwDoc* pExtDoc, BYTE nLevel, BYTE nPara, BOOL bImpress )
         for( i = 0; i < rOutNds.Count(); ++i )
         {
             ::SetProgressState( i, GetDocShell() );
-            ULONG nIndex = rOutNds[ i ]->GetIndex();
-            BYTE nLvl = ((SwTxtNode*)GetNodes()[ nIndex ])->GetTxtColl()
-                         ->GetOutlineLevel();
+            const ULONG nIndex = rOutNds[ i ]->GetIndex();
+            //BYTE nLvl = ((SwTxtNode*)GetNodes()[ nIndex ])->GetTxtColl()//#outline level,zhaojianwei
+                        // ->GetOutlineLevel();
+            const int nLvl = ((SwTxtNode*)GetNodes()[ nIndex ])->GetAttrOutlineLevel()-1;//<-end,zhaojianwei
             if( nLvl > nLevel )
                 continue;
             USHORT nEndOfs = 1;
@@ -1454,8 +1455,11 @@ void SwDoc::Summary( SwDoc* pExtDoc, BYTE nLevel, BYTE nPara, BOOL bImpress )
                 if( bImpress )
                 {
                     SwTxtFmtColl* pMyColl = pNd->GetTxtColl();
-                    USHORT nHeadLine = static_cast<USHORT>(pMyColl->GetOutlineLevel()==NO_NUMBERING ?
-                                RES_POOLCOLL_HEADLINE2 : RES_POOLCOLL_HEADLINE1);
+                    //USHORT nHeadLine = static_cast<USHORT>(pMyColl->GetOutlineLevel()==NO_NUMBERING ?//#outlinelevel,zhaojianwei
+                    const USHORT nHeadLine = static_cast<USHORT>(
+                                !pMyColl->IsAssignedToListLevelOfOutlineStyle() //<-end,zhaojianwei
+                                ? RES_POOLCOLL_HEADLINE2
+                                : RES_POOLCOLL_HEADLINE1 );
                     pMyColl = pExtDoc->GetTxtCollFromPool( nHeadLine );
                     pNd->ChgFmtColl( pMyColl );
                 }

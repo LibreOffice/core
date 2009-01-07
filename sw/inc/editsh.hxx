@@ -488,6 +488,10 @@ public:
     // detect highest and lowest level to check moving of outline levels
     void GetCurrentOutlineLevels( sal_uInt8& rUpper, sal_uInt8& rLower );
 
+
+    // get Outline level of current paragraph
+    int GetCurrentParaOutlineLevel( ) const;// #outlinelevel add by zhaojianwei
+
     // -> i29560
     BOOL HasNumber() const;
     BOOL HasBullet() const;

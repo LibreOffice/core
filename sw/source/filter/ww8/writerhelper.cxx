@@ -105,8 +105,9 @@ namespace
     public:
         bool operator()(const SwTxtFmtColl *pA, const SwTxtFmtColl *pB) const
         {
-            return pA->GetOutlineLevel() < pB->GetOutlineLevel();
-        }
+            //return pA->GetOutlineLevel() < pB->GetOutlineLevel();         //#outline level,zhaojianwei
+            return pA->GetAttrOutlineLevel() < pB->GetAttrOutlineLevel();   //<-end,zhaojianwei
+       }
     };
 
     bool IsValidSlotWhich(USHORT nSlotId, USHORT nWhichId)

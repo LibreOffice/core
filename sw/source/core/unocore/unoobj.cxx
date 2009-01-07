@@ -544,24 +544,6 @@ sal_Bool lcl_setCrsrPropertyValue(const SfxItemPropertyMap* pMap,
             case FN_UNO_NUM_START_VALUE  :
                 lcl_SetNodeNumStart( rPam, aValue );
             break;
-            case FN_UNO_PARA_CHAPTER_NUMBERING_LEVEL:
-                {
-/*                  Will be used in OOo 3.0
-                    SwTxtNode * pTmpNode = rPam.GetNode()->GetTxtNode();
-
-                    BYTE nLevel;
-                    aValue >>= nLevel;
-
-                    if ( pTmpNode )
-                    {
-                        pTmpNode->SetOutlineLevel(nLevel);
-
-                        // --> OD 2005-09-01 #i53198# - update outline nodes array
-                        rPam.GetDoc()->GetNodes().UpdateOutlineNode( *pTmpNode );
-                        // <--
-                    }*/
-                }
-                break;
             case FN_UNO_NUM_LEVEL  :
             // --> OD 2008-07-14 #i91601#
             case FN_UNO_LIST_ID:

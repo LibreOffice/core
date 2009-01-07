@@ -104,6 +104,12 @@ interface BaseText
         ExecMethod = Execute ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
+    //#outline level,add by zhaojianwei
+    SID_ATTR_PARA_OUTLINE_LEVEL
+    [
+        ExecMethod = Execute ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]//<-end,zhaojianwei
 
     SID_ATTR_PARA_PAGENUM
     [

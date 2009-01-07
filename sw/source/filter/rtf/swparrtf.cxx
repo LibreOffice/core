@@ -2761,11 +2761,13 @@ void SwRTFParser::MakeStyleTab()
         if( !IsNewDoc() )
         {
             // search all outlined collections
-            BYTE nLvl;
+            //BYTE nLvl;
             const SwTxtFmtColls& rColls = *pDoc->GetTxtFmtColls();
             for( USHORT n = rColls.Count(); n; )
-                if( MAXLEVEL > (nLvl = rColls[ --n ]->GetOutlineLevel() ))
-                    nValidOutlineLevels |= 1 << nLvl;
+                //if( MAXLEVEL > (nLvl = rColls[ --n ]->GetOutlineLevel() ))//#outline level,zhaojianwei
+                //  nValidOutlineLevels |= 1 << nLvl;
+                if( rColls[ --n ]->IsAssignedToListLevelOfOutlineStyle())
+                    nValidOutlineLevels |= 1 << rColls[ n ]->GetAssignedOutlineStyleLevel();//<-end,zhaojianwei
         }
 
         SvxRTFStyleType* pStyle = GetStyleTbl().First();
@@ -3932,7 +3934,8 @@ SwTxtFmtColl* SwRTFParser::MakeColl(const String& rName, USHORT nPos,
     BYTE nOutlineLevel, bool& rbCollExist)
 {
     if( BYTE(-1) == nOutlineLevel )
-        nOutlineLevel = NO_NUMBERING;
+        //nOutlineLevel = NO_NUMBERING;
+        nOutlineLevel = MAXLEVEL;//#outline level,zhaojianwei
 
     rbCollExist = false;
     SwTxtFmtColl* pColl;
@@ -3943,7 +3946,11 @@ SwTxtFmtColl* SwRTFParser::MakeColl(const String& rName, USHORT nPos,
         if( !nPos )
         {
             pColl = pDoc->GetTxtCollFromPool( RES_POOLCOLL_STANDARD, false );
-            pColl->SetOutlineLevel( nOutlineLevel );
+            //pColl->SetOutlineLevel( nOutlineLevel );      //#outline level,removed by zhaojianwei
+            if(nOutlineLevel < MAXLEVEL )                           //->add by zhaojianwei
+                pColl->AssignToListLevelOfOutlineStyle( nOutlineLevel );
+            else
+                pColl->DeleteAssignmentToListLevelOfOutlineStyle(); //<-end,zhaojianwei
             return pColl;
         }
 
@@ -3952,7 +3959,6 @@ SwTxtFmtColl* SwRTFParser::MakeColl(const String& rName, USHORT nPos,
         aNm += String::CreateFromInt32( nPos );
         aNm += ')';
     }
-
     ww::sti eSti = ww::GetCanonicalStiFromEnglishName(rName);
     sw::util::ParaStyleMapper::StyleResult aResult =
         maParaStyleMapper.GetStyle(rName, eSti);
@@ -3967,7 +3973,12 @@ SwTxtFmtColl* SwRTFParser::MakeColl(const String& rName, USHORT nPos,
     }
 
     if (!rbCollExist)
-        pColl->SetOutlineLevel(nOutlineLevel);
+        //pColl->SetOutlineLevel( nOutlineLevel );  //#outline level,removed by zhaojianwei
+        if(nOutlineLevel < MAXLEVEL)                        //->add by zhaojianwei
+            pColl->AssignToListLevelOfOutlineStyle( nOutlineLevel );
+        else
+            pColl->DeleteAssignmentToListLevelOfOutlineStyle(); //<-end,zhaojianwei
+
     return pColl;
 }
 

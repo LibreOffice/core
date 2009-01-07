@@ -4367,7 +4367,8 @@ public:
     outlineeq(BYTE nNum) : mnNum(nNum) {}
     bool operator()(const SwTxtFmtColl *pTest) const
     {
-        return pTest->GetOutlineLevel() == mnNum;
+        //return pTest->GetOutlineLevel() == mnNum; //#outline level,zhaojianwei
+        return pTest->IsAssignedToListLevelOfOutlineStyle() && pTest->GetAssignedOutlineStyleLevel() == mnNum;  //<-end,zhaojianwei
     }
 };
 
@@ -4389,7 +4390,7 @@ void SwWW8ImplReader::SetOutLineStyles()
     sw::ParaStyles aOutLined(sw::util::GetParaStyles(rDoc));
     sw::util::SortByOutline(aOutLined);
 
-    typedef sw::ParaStyleIter myiter;
+    typedef sw::ParaStyleIter myParaStyleIter;
     /*
     If we are inserted into a document then don't clobber existing existing
     levels.
@@ -4397,11 +4398,16 @@ void SwWW8ImplReader::SetOutLineStyles()
     USHORT nFlagsStyleOutlLevel = 0;
     if (!mbNewDoc)
     {
-        myiter aEnd = aOutLined.end();
-        for (myiter aIter = aOutLined.begin(); aIter < aEnd; ++aIter)
+        // --> OD 2008-12-16 #i70748#
+        // backward iteration needed due to the outline level attribute
+        sw::ParaStyles::reverse_iterator aEnd = aOutLined.rend();
+        for ( sw::ParaStyles::reverse_iterator aIter = aOutLined.rbegin(); aIter < aEnd; ++aIter)
+        // <--
         {
-            if ((*aIter)->GetOutlineLevel() < MAXLEVEL)
-                nFlagsStyleOutlLevel |= 1 << (*aIter)->GetOutlineLevel();
+            //if ((*aIter)->GetOutlineLevel() < MAXLEVEL)   //#outline level,zhaojianwei,
+            //nFlagsStyleOutlLevel |= 1 << (*aIter)->GetOutlineLevel();
+            if ((*aIter)->IsAssignedToListLevelOfOutlineStyle())
+                nFlagsStyleOutlLevel |= 1 << (*aIter)->GetAssignedOutlineStyleLevel();//<-end,zhaojianwei
             else
                 break;
         }
@@ -4463,11 +4469,17 @@ void SwWW8ImplReader::SetOutLineStyles()
 
         if (mpChosenOutlineNumRule != &aOutlineRule)
         {
-            myiter aEnd = aOutLined.end();
-            for (myiter aIter = aOutLined.begin(); aIter < aEnd; ++aIter)
+            // --> OD 2008-12-16 #i70748#
+            // backward iteration needed due to the outline level attribute
+            sw::ParaStyles::reverse_iterator aEnd = aOutLined.rend();
+            for ( sw::ParaStyles::reverse_iterator aIter = aOutLined.rbegin(); aIter < aEnd; ++aIter)
+            // <--
             {
-                if ((*aIter)->GetOutlineLevel() < MAXLEVEL)
-                    (*aIter)->SetOutlineLevel(NO_NUMBERING);
+                //if ((*aIter)->GetOutlineLevel() < MAXLEVEL)//#outline level,zhaojianwei
+                //    (*aIter)->SetOutlineLevel(NO_NUMBERING);
+                if((*aIter)->IsAssignedToListLevelOfOutlineStyle())
+                    (*aIter)->DeleteAssignmentToListLevelOfOutlineStyle();  //<-end
+
                 else
                     break;
             }
@@ -4494,7 +4506,8 @@ void SwWW8ImplReader::SetOutLineStyles()
                 */
                 rSI.pFmt->SetFmtAttr(
                         SwNumRuleItem( rSI.pOutlineNumrule->GetName() ) );
-                ((SwTxtFmtColl*)rSI.pFmt)->SetOutlineLevel(NO_NUMBERING);
+                //((SwTxtFmtColl*)rSI.pFmt)->SetOutlineLevel(NO_NUMBERING);
+                ((SwTxtFmtColl*)rSI.pFmt)->DeleteAssignmentToListLevelOfOutlineStyle();//#outline level,zhaojianwei
             }
             else
             {
@@ -4509,13 +4522,14 @@ void SwWW8ImplReader::SetOutLineStyles()
                 the list of level in nFlagsStyleOutlLevel to ignore.
                 */
                 outlineeq aCmp(rSI.nOutlineLevel);
-                myiter aResult = std::find_if(aOutLined.begin(),
+                myParaStyleIter aResult = std::find_if(aOutLined.begin(),
                     aOutLined.end(), aCmp);
 
-                myiter aEnd = aOutLined.end();
+                myParaStyleIter aEnd = aOutLined.end();
                 while (aResult != aEnd  && aCmp(*aResult))
                 {
-                    (*aResult)->SetOutlineLevel(NO_NUMBERING);
+                    //(*aResult)->SetOutlineLevel(NO_NUMBERING);//#outline level,zhaojianwei
+                    (*aResult)->DeleteAssignmentToListLevelOfOutlineStyle();
                     ++aResult;
                 }
 
@@ -4535,7 +4549,8 @@ void SwWW8ImplReader::SetOutLineStyles()
                 const SwNumFmt& rRule=rSI.pOutlineNumrule->Get(nFromLevel);
                 aOutlineRule.Set(nToLevel, rRule);
                 // Set my outline level
-                ((SwTxtFmtColl*)rSI.pFmt)->SetOutlineLevel(nToLevel);
+                //((SwTxtFmtColl*)rSI.pFmt)->SetOutlineLevel(nToLevel);//#outline level,zhaojianwei
+                ((SwTxtFmtColl*)rSI.pFmt)->AssignToListLevelOfOutlineStyle(nToLevel);   //<-end,zhaojianwei
                 // If there are more styles on this level ignore them
                 nFlagsStyleOutlLevel |= nAktFlags;
             }

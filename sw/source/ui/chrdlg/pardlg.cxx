@@ -244,6 +244,13 @@ void __EXPORT SwParaDlg::PageCreated(USHORT nId, SfxTabPage& rPage)
     }
     else if( TP_NUMPARA == nId)
     {
+        //-->#outline level,added by zhaojianwei
+        SwTxtFmtColl* pTmpColl = rSh.GetCurTxtFmtColl();
+        if( pTmpColl && pTmpColl->IsAssignedToListLevelOfOutlineStyle() )
+        {
+            ((SwParagraphNumTabPage&)rPage).DisableOutline() ;
+        }//<-end
+
         ((SwParagraphNumTabPage&)rPage).EnableNewStart();
         ListBox & rBox = ((SwParagraphNumTabPage&)rPage).GetStyleBox();
         SfxStyleSheetBasePool* pPool = rView.GetDocShell()->GetStyleSheetPool();

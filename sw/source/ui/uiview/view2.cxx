@@ -152,6 +152,8 @@
 // #include <frmmgr.hxx>
 // #endif
 
+#include <ndtxt.hxx> //#outline level,added by zhaojianwei
+
 #include <comphelper/processfactory.hxx>
 
 #include <svx/svxdlg.hxx>
@@ -168,6 +170,7 @@
 static String sLstPg;
 static USHORT nPageCnt = 0;
 const char __FAR_DATA sStatusDelim[] = " : ";
+const char __FAR_DATA sStatusComma[] = " , ";//#outlinelevel, define a Variable for "," add by zhaojianwei
 
 using ::rtl::OUString;
 using namespace sfx2;
@@ -1410,8 +1413,51 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                         }
                     }
                 }
+
+                //#outline level, removed by zhaojianwei
+                //const SwNumRule* pNumRule = rShell.GetCurNumRule();
+                //if (pNumRule) // Cursor in Numerierung
+                //{
+                //  BYTE nNumLevel = rShell.GetNumLevel();
+                //  if( IsShowNum(nNumLevel) && MAXLEVEL >
+                //      ( nNumLevel = GetRealLevel( nNumLevel )) )
+                //  {
+                //      if( sStr.Len() )
+                //          sStr.AppendAscii(sStatusDelim);
+                //      sStr += SW_RESSTR(STR_NUM_LEVEL);
+                //      sStr += String::CreateFromInt32( nNumLevel + 1 );
+                //      if(!pNumRule->IsAutoRule())
+                //      {
+                //          SfxItemSet aSet(GetPool(),
+                //              RES_PARATR_NUMRULE, RES_PARATR_NUMRULE);
+                //          rShell.GetCurAttr(aSet);
+                //          /* const SfxPoolItem* pItem; */
+                //          if(SFX_ITEM_AVAILABLE <=
+                //              aSet.GetItemState(RES_PARATR_NUMRULE, TRUE
+                //              /*, &pItem */ ))
+                //          {
+                //              const String& rNumStyle =
+                //                  ((const SfxStringItem &)
+                //                  aSet.Get(RES_PARATR_NUMRULE)).GetValue();
+                //              /* #i5116# GetItemState does not necessarily
+                //              change pItem */
+                //              // ((const SfxStringItem*)pItem)->GetValue();
+                //              if(rNumStyle.Len())
+                //              {
+                //                  sStr.AppendAscii(sStatusDelim);
+                //                  sStr += rNumStyle;
+                //              }
+                //          }
+                //      }
+                //  }
+                //}//<-removed end ,zhaojianwei
+
+                //-->#outline level,added by zhaojianwei
                 const SwNumRule* pNumRule = rShell.GetCurNumRule();
-                if (pNumRule)   // Cursor in Numerierung
+                const bool bOutlineNum = pNumRule ? pNumRule->IsOutlineRule() : 0;
+                       //((SwTxtFmtColl*)rShell.GetCrsr()->GetNode()->GetTxtNode()->GetFmtColl())->IsAssignedToListLevelOfOutlineStyle();
+
+                if (pNumRule && !bOutlineNum )  // Cursor in Numerierung
                 {
                     BYTE nNumLevel = rShell.GetNumLevel();
                     // --> OD 2008-04-02 #refactorlists#
@@ -1420,10 +1466,6 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                     if ( nNumLevel < MAXLEVEL )
                     // <--
                     {
-                        if( sStr.Len() )
-                            sStr.AppendAscii(sStatusDelim);
-                        sStr += SW_RESSTR(STR_NUM_LEVEL);
-                        sStr += String::CreateFromInt32( nNumLevel + 1 );
                         if(!pNumRule->IsAutoRule())
                         {
                             SfxItemSet aSet(GetPool(),
@@ -1442,13 +1484,35 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                                 // ((const SfxStringItem*)pItem)->GetValue();
                                 if(rNumStyle.Len())
                                 {
-                                    sStr.AppendAscii(sStatusDelim);
+                                    if( sStr.Len() )
+                                        sStr.AppendAscii(sStatusDelim);
                                     sStr += rNumStyle;
                                 }
                             }
                         }
+                        if( sStr.Len() )
+                            sStr.AppendAscii(sStatusDelim);
+                        sStr += SW_RESSTR(STR_NUM_LEVEL);
+                        sStr += String::CreateFromInt32( nNumLevel + 1 );
+
                     }
                 }
+                const int nOutlineLevel = rShell.GetCurrentParaOutlineLevel();
+                if( nOutlineLevel != 0 )
+                {
+                    if( sStr.Len() )
+                        sStr.AppendAscii(sStatusComma);
+                    if( bOutlineNum )
+                    {
+                        sStr += SW_RESSTR(STR_OUTLINE_NUMBERING);
+                        sStr.AppendAscii(sStatusDelim);
+                        sStr += SW_RESSTR(STR_NUM_LEVEL);
+                    }
+                    else
+                        sStr += SW_RESSTR(STR_NUM_OUTLINE);
+                    sStr += String::CreateFromInt32( nOutlineLevel);
+                }
+                //<-end ,zhaojianwei
 
                 if( rShell.HasReadonlySel() )
                 {

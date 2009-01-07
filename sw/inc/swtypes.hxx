@@ -122,7 +122,7 @@ enum SwLabelType
 const BYTE OLD_MAXLEVEL = 5;
 const BYTE MAXLEVEL = 10;       //Ehemals numrule.hxx
 const BYTE NO_NUM       = 200;  //Ehemals numrule.hxx
-const BYTE NO_NUMBERING = 201;  //Ehemals numrule.hxx
+//const BYTE NO_NUMBERING = 201;  //Ehemals numrule.hxx //#outline level,removed by zhaojianwei
 //const BYTE NO_INIT        = 202;  //Ehemals numrule.hxx
 
 // fuer Absaetze mit NO_NUM aber auf unterschiedlichen Leveln

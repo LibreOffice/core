@@ -722,7 +722,8 @@ SwHstrySetAttrSet::SwHstrySetAttrSet( const SfxItemSet& rSet, ULONG nNodePos,
       aResetArr( 0, 4 ),
       nNode( nNodePos ),
       // --> OD 2007-07-09 #i77372#
-      mnNumLvl( NO_NUMBERING ),
+      //mnNumLvl( MAXLEVEL),//NO_NUMBERING ),
+      mnNumLvl( MAXLEVEL),  //#outline level,zhaojianwei
       mbIsRestart( false ),
       mnRestartVal( USHRT_MAX ),
       mbIsCounted( false )

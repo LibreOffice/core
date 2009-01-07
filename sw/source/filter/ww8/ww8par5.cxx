@@ -2617,7 +2617,8 @@ bool SwWW8ImplReader::AddExtraOutlinesAsExtraStyles(SwTOXBase& rBase)
             sal_uInt16 nStyleLevel = rSI.nOutlineLevel;
             sal_uInt16 nMaxLevel = rBase.GetLevel();
             if (
-                 nStyleLevel != pFmt->GetOutlineLevel() &&
+                 //nStyleLevel != pFmt->GetOutlineLevel() &&        //#outline level,zhaojianwei
+                 nStyleLevel != (pFmt->GetAttrOutlineLevel()-1) &&  //<-end,zhaojianwei
                  nStyleLevel < nMaxLevel
                )
             {

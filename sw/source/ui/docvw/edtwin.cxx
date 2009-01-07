@@ -1443,6 +1443,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
                        KS_NumIndentInc, KS_NumIndentDec,
                        // <- #i23725#
 
+                       KS_OutlineLvOff,
                        KS_NextCell, KS_PrevCell, KS_OutlineUp, KS_OutlineDown,
                        KS_GlossaryExpand, KS_NextPrevGlossary,
                        KS_AutoFmtByInput,
@@ -1764,7 +1765,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                                  !rSh.GetCurNumRule()->IsOutlineRule() &&
                                  !rSh.HasSelection() &&
                                 rSh.IsSttPara() && rSh.IsEndPara() )
-                            eKeyState = KS_NumOff;
+                            eKeyState = KS_NumOff, eNextKeyState = KS_OutlineLvOff;
 
                         //RETURN fuer neuen Absatz mit AutoFormatierung
                         else if( pACfg && pACfg->IsAutoFmtByInput() &&
@@ -1934,7 +1935,9 @@ KEYINPUT_CHECKTABLE_INSDEL:
                             SwTxtFmtColl* pColl = rSh.GetCurTxtFmtColl();
                             if( pColl &&
                                 //0 <= pColl->GetOutlineLevel() && #i24560#
-                                MAXLEVEL - 1 > pColl->GetOutlineLevel() )
+                                //MAXLEVEL - 1 > pColl->GetOutlineLevel() )//#outline level,zhaojianwei
+                                pColl->IsAssignedToListLevelOfOutlineStyle()
+                                && MAXLEVEL-1 > pColl->GetAssignedOutlineStyleLevel() )//<-end,zhaojianwei
                                 eKeyState = KS_OutlineDown;
                         }
                     }
@@ -1984,8 +1987,11 @@ KEYINPUT_CHECKTABLE_INSDEL:
                         if( rSh.IsSttOfPara() && !rSh.HasReadonlySel() )
                         {
                             SwTxtFmtColl* pColl = rSh.GetCurTxtFmtColl();
-                            if( pColl && 0 < pColl->GetOutlineLevel() &&
-                                MAXLEVEL - 1 >= pColl->GetOutlineLevel() )
+                            //if( pColl && 0 < pColl->GetOutlineLevel() &&  //#outline level,zhaojianwei
+                            //  MAXLEVEL - 1 >= pColl->GetOutlineLevel() )
+                            if( pColl &&
+                                pColl->IsAssignedToListLevelOfOutlineStyle() &&
+                                0 < pColl->GetAssignedOutlineStyleLevel())
                                 eKeyState = KS_OutlineUp;
                         }
                     }
@@ -2331,6 +2337,9 @@ KEYINPUT_CHECKTABLE_INSDEL:
             case KS_NumOff:
                 // Shellwechsel - also vorher aufzeichnen
                 rSh.DelNumRules();
+                eKeyState = eNextKeyState;
+                break;
+            case KS_OutlineLvOff: // delete autofmt outlinelevel later
                 break;
 
             case KS_NumDown:

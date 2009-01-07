@@ -701,6 +701,8 @@ private:
     // falls keine angegeben ist, nehme die Kapitelvorlage der 1. Ebene
     sal_Bool SplitDoc( sal_uInt16 eDocType, const String& rPath,
                         const SwTxtFmtColl* pSplitColl );
+    sal_Bool SplitDoc( sal_uInt16 eDocType, const String& rPath, int nOutlineLevel = 0 ); //#outline level,add by zhaijianwei.
+
 
     // Charts der angegebenen Tabelle updaten
     void _UpdateCharts( const SwTable& rTbl, ViewShell& rVSh ) const;
@@ -1890,8 +1892,11 @@ public:
     // falls keine angegeben ist, nehme die Kapitelvorlage der 1. Ebene
     sal_Bool GenerateGlobalDoc( const String& rPath,
                                 const SwTxtFmtColl* pSplitColl = 0 );
+    sal_Bool GenerateGlobalDoc( const String& rPath, int nOutlineLevel = 0 );   //#outline level,add by zhaojianwei
     sal_Bool GenerateHTMLDoc( const String& rPath,
                                 const SwTxtFmtColl* pSplitColl = 0 );
+    sal_Bool GenerateHTMLDoc( const String& rPath, int nOutlineLevel = 0 ); //#outline level,add by zhaojianwei
+
     //  vergleiche zwei Dokument miteinander
     long CompareDoc( const SwDoc& rDoc );
     // merge zweier Dokumente

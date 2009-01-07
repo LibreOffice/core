@@ -250,7 +250,7 @@ public:
         // Array aller GliederiungsNodes;
     const SwOutlineNodes& GetOutLineNds() const;
 
-    void UpdateOutlineNode( const SwNode&, BYTE nOldLevel, BYTE nNewLevel );
+    //void UpdateOutlineNode( const SwNode&, BYTE nOldLevel, BYTE nNewLevel );//#outline level,removed by zhaojianwei
         // alle Nodes Updaten - Rule/Format-Aenderung
     void UpdateOutlineNode(SwNode & rNd);
 

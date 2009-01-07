@@ -9143,6 +9143,34 @@ SwNumRuleItem NumRule SID_ATTR_PARA_NUMRULE
     GroupId = GID_FORMAT;
 ]
 
+//#outline level,add by zhaojianwei
+//---------------------------------------------------------------------------
+SfxUInt16Item OutlineLevel SID_ATTR_PARA_OUTLINE_LEVEL
+
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    Readonly = FALSE,
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_FORMAT;
+]
+//<-end,zhaojianwei
 //--------------------------------------------------------------------------
 SfxUInt16Item NumNewStartAt FN_NUMBER_NEWSTART_AT
 

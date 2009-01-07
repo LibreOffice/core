@@ -574,9 +574,14 @@ String lcl_dbg_out(const SwNode & rNode)
             aTmpStr += String("<tbl/>", RTL_TEXTENCODING_ASCII_US);
 
         aTmpStr += String("<outlinelevel>", RTL_TEXTENCODING_ASCII_US);
+<<<<<<< .working
+        //aTmpStr += String::CreateFromInt32(pTxtNode->GetOutlineLevel());//#outline level,zhaojianwei
+        aTmpStr += String::CreateFromInt32(pTxtNode->GetAttrOutlineLevel()-1);//<-end,zhaojianwei
+=======
         aTmpStr += String::CreateFromInt32(pTxtNode->GetOutlineLevel());
         aTmpStr += String("</outlinelevel>", RTL_TEXTENCODING_ASCII_US);
 
+>>>>>>> .merge-right.r264324
         const SwNumRule * pNumRule = pTxtNode->GetNumRule();
 
         if (pNumRule != NULL)
@@ -630,7 +635,8 @@ String lcl_dbg_out(const SwNode & rNode)
 
             aTmpStr += String("(", RTL_TEXTENCODING_ASCII_US);
             aTmpStr += String::CreateFromInt32
-                (static_cast<SwTxtFmtColl *>(pColl)->GetOutlineLevel());
+                //(static_cast<SwTxtFmtColl *>(pColl)->GetOutlineLevel());//#outline level,zhaojianwei
+                (static_cast<SwTxtFmtColl *>(pColl)->GetAssignedOutlineStyleLevel());//<-end,zhaojianwei
 
             const SwNumRuleItem & rItem =
                 static_cast<const SwNumRuleItem &>
@@ -906,7 +912,7 @@ String lcl_dbg_out(const SwTxtFmtColl & rFmt)
     String aResult(rFmt.GetName());
 
     aResult += String("(", RTL_TEXTENCODING_ASCII_US);
-    aResult += String::CreateFromInt32(rFmt.GetOutlineLevel());
+    aResult += String::CreateFromInt32(rFmt.GetAttrOutlineLevel());
     aResult += String(")", RTL_TEXTENCODING_ASCII_US);
 
     return aResult;

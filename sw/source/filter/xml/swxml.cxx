@@ -96,6 +96,10 @@
 #include <svx/svdograf.hxx>
 // <--
 
+// --> OD 2008-12-17 #i70748#
+#include <sfx2/docfilt.hxx>
+// <--
+
 #include <istyleaccess.hxx>
 #define LOGFILE_AUTHOR "mb93740"
 
@@ -422,9 +426,11 @@ void lcl_AdjustOutlineStylesForOOo( SwDoc& _rDoc )
     for ( USHORT n = 1; n < rColls.Count(); ++n )
     {
         SwTxtFmtColl* pColl = rColls[ n ];
-        if ( pColl->GetOutlineLevel() != NO_NUMBERING )
+        //if ( pColl->GetOutlineLevel() != NO_NUMBERING )       //#outline level zhaojianwei
+        if ( pColl->IsAssignedToListLevelOfOutlineStyle() )
         {
-            aOutlineLevelAssigned[ pColl->GetOutlineLevel() ] = true;
+        //  aOutlineLevelAssigned[ pColl->GetOutlineLevel() ] = true;
+            aOutlineLevelAssigned[ pColl->GetAssignedOutlineStyleLevel() ] = true;//<-end,zhaojianwei
         }
 
         for ( BYTE i = 0; i < MAXLEVEL; ++i )
@@ -449,11 +455,12 @@ void lcl_AdjustOutlineStylesForOOo( SwDoc& _rDoc )
 //        if ( aCreatedDefaultOutlineStyles[ i ] != 0 && !aOutlineLevelAssigned[ i ] )
         if ( !aOutlineLevelAssigned[ i ] &&
              aCreatedDefaultOutlineStyles[ i ] != 0 &&
-             aCreatedDefaultOutlineStyles[ i ]->GetOutlineLevel() == NO_NUMBERING )
+             ! aCreatedDefaultOutlineStyles[ i ]->IsAssignedToListLevelOfOutlineStyle() )
         // <--
         {
             // apply outline level at created default outline style
-            aCreatedDefaultOutlineStyles[ i ]->SetOutlineLevel( i );
+            //aCreatedDefaultOutlineStyles[ i ]->SetOutlineLevel( i );
+            aCreatedDefaultOutlineStyles[ i ]->AssignToListLevelOfOutlineStyle(i);//#outline level added by zhaojianwei
 
             // apply outline numbering rule, if none is set.
             const SfxPoolItem& rItem =
@@ -961,16 +968,22 @@ ULONG XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const S
     xObjectResolver = 0;
     rDoc.release();
 
-    // --> OD 2005-09-06 #i44177# - assure that for documents in OpenOffice.org
-    // file format the relation between outline numbering rule and styles is
-    // filled-up accordingly.
-    // Note: The OpenOffice.org file format, which has no content that applys
-    //       a certain style, which is related to the outline numbering rule,
-    //       has lost the information, that this certain style is related to
-    //       the outline numbering rule.
     if ( !bOASIS )
     {
-        lcl_AdjustOutlineStylesForOOo( rDoc );
+        // --> OD 2005-09-06 #i44177# - assure that for documents in OpenOffice.org
+        // file format the relation between outline numbering rule and styles is
+        // filled-up accordingly.
+        // Note: The OpenOffice.org file format, which has no content that applys
+        //       a certain style, which is related to the outline numbering rule,
+        //       has lost the information, that this certain style is related to
+        //       the outline numbering rule.
+        // --> OD 2008-12-17 #i70748# - only for templates
+        if ( pMedium && pMedium->GetFilter() &&
+             pMedium->GetFilter()->IsOwnTemplateFormat() )
+        {
+            lcl_AdjustOutlineStylesForOOo( rDoc );
+        }
+        // <--
         // Fix #i58251#: Unfortunately is the static default different to SO7 behaviour,
         // so we have to set a dynamic default after importing SO7
         rDoc.SetDefault( SfxBoolItem( RES_ROW_SPLIT, FALSE ) );

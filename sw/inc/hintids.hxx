@@ -163,6 +163,7 @@ RES_PARATR_BEGIN = RES_TXTATR_END,
     RES_PARATR_VERTALIGN,                           // 71
     RES_PARATR_SNAPTOGRID,                          // 72
     RES_PARATR_CONNECT_BORDER,                      // 73
+    RES_PARATR_OUTLINELEVEL,                        // 74
 RES_PARATR_END
 };
 
@@ -172,11 +173,11 @@ RES_PARATR_END
 enum RES_PARATR_LIST
 {
 RES_PARATR_LIST_BEGIN = RES_PARATR_END,
-    RES_PARATR_LIST_ID = RES_PARATR_LIST_BEGIN,     // 74
-    RES_PARATR_LIST_LEVEL,                          // 75
-    RES_PARATR_LIST_ISRESTART,                      // 76
-    RES_PARATR_LIST_RESTARTVALUE,                   // 77
-    RES_PARATR_LIST_ISCOUNTED,                      // 78
+    RES_PARATR_LIST_ID = RES_PARATR_LIST_BEGIN,     // 75
+    RES_PARATR_LIST_LEVEL,                          // 76
+    RES_PARATR_LIST_ISRESTART,                      // 77
+    RES_PARATR_LIST_RESTARTVALUE,                   // 78
+    RES_PARATR_LIST_ISCOUNTED,                      // 79
 RES_PARATR_LIST_END
 };
 // <--
@@ -184,92 +185,92 @@ RES_PARATR_LIST_END
 enum RES_FRMATR
 {
 RES_FRMATR_BEGIN = RES_PARATR_LIST_END,
-    RES_FILL_ORDER = RES_FRMATR_BEGIN,              // 79
-    RES_FRM_SIZE,                                   // 80
-    RES_PAPER_BIN,                                  // 81
-    RES_LR_SPACE,                                   // 82
-    RES_UL_SPACE,                                   // 83
-    RES_PAGEDESC,                                   // 84
-    RES_BREAK,                                      // 85
-    RES_CNTNT,                                      // 86
-    RES_HEADER,                                     // 87
-    RES_FOOTER,                                     // 88
-    RES_PRINT,                                      // 89
-    RES_OPAQUE,                                     // 90
-    RES_PROTECT,                                    // 91
-    RES_SURROUND,                                   // 92
-    RES_VERT_ORIENT,                                // 93
-    RES_HORI_ORIENT,                                // 94
-    RES_ANCHOR,                                     // 95
-    RES_BACKGROUND,                                 // 96
-    RES_BOX,                                        // 97
-    RES_SHADOW,                                     // 98
-    RES_FRMMACRO,                                   // 99
-    RES_COL,                                        // 100
-    RES_KEEP,                                       // 101
-    RES_URL,                                        // 102
-    RES_EDIT_IN_READONLY,                           // 103
-    RES_LAYOUT_SPLIT,                               // 104
-    RES_CHAIN,                                      // 105
-    RES_TEXTGRID,                                   // 106
-    RES_LINENUMBER  ,                               // 107
-    RES_FTN_AT_TXTEND,                              // 108
-    RES_END_AT_TXTEND,                              // 109
-    RES_COLUMNBALANCE,                              // 110
-    RES_FRAMEDIR,                                   // 111
-    RES_HEADER_FOOTER_EAT_SPACING,                  // 112
-    RES_ROW_SPLIT,                                  // 113
+    RES_FILL_ORDER = RES_FRMATR_BEGIN,              // 80
+    RES_FRM_SIZE,                                   // 81
+    RES_PAPER_BIN,                                  // 82
+    RES_LR_SPACE,                                   // 83
+    RES_UL_SPACE,                                   // 84
+    RES_PAGEDESC,                                   // 85
+    RES_BREAK,                                      // 86
+    RES_CNTNT,                                      // 87
+    RES_HEADER,                                     // 88
+    RES_FOOTER,                                     // 89
+    RES_PRINT,                                      // 90
+    RES_OPAQUE,                                     // 91
+    RES_PROTECT,                                    // 92
+    RES_SURROUND,                                   // 93
+    RES_VERT_ORIENT,                                // 94
+    RES_HORI_ORIENT,                                // 95
+    RES_ANCHOR,                                     // 96
+    RES_BACKGROUND,                                 // 97
+    RES_BOX,                                        // 98
+    RES_SHADOW,                                     // 99
+    RES_FRMMACRO,                                   // 100
+    RES_COL,                                        // 101
+    RES_KEEP,                                       // 102
+    RES_URL,                                        // 103
+    RES_EDIT_IN_READONLY,                           // 104
+    RES_LAYOUT_SPLIT,                               // 105
+    RES_CHAIN,                                      // 106
+    RES_TEXTGRID,                                   // 107
+    RES_LINENUMBER  ,                               // 108
+    RES_FTN_AT_TXTEND,                              // 109
+    RES_END_AT_TXTEND,                              // 110
+    RES_COLUMNBALANCE,                              // 111
+    RES_FRAMEDIR,                                   // 112
+    RES_HEADER_FOOTER_EAT_SPACING,                  // 113
+    RES_ROW_SPLIT,                                  // 114
     // OD 18.09.2003 #i18732# - insert new item and 5 dummies
-    RES_FOLLOW_TEXT_FLOW,                           // 114
+    RES_FOLLOW_TEXT_FLOW,                           // 115
 // --> collapsing borders FME 2005-05-27 #i29550#
-    RES_COLLAPSING_BORDERS,                         // 115
+    RES_COLLAPSING_BORDERS,                         // 116
 // <-- collapsing
     // OD 2004-05-04 #i28701# - use dummy1 for new item
-    RES_WRAP_INFLUENCE_ON_OBJPOS,                   // 116
-    RES_AUTO_STYLE,                                 // 117
-    RES_FRMATR_STYLE_NAME,                          // 118
-    RES_FRMATR_CONDITIONAL_STYLE_NAME,              // 119
+    RES_WRAP_INFLUENCE_ON_OBJPOS,                   // 117
+    RES_AUTO_STYLE,                                 // 118
+    RES_FRMATR_STYLE_NAME,                          // 119
+    RES_FRMATR_CONDITIONAL_STYLE_NAME,              // 120
 RES_FRMATR_END
 };
 
 enum RES_GRFATR
 {
 RES_GRFATR_BEGIN = RES_FRMATR_END,
-    RES_GRFATR_MIRRORGRF = RES_GRFATR_BEGIN,        // 120
-    RES_GRFATR_CROPGRF,                             // 121
+    RES_GRFATR_MIRRORGRF = RES_GRFATR_BEGIN,        // 121
+    RES_GRFATR_CROPGRF,                             // 122
 
-    RES_GRFATR_ROTATION,                            // 122
-    RES_GRFATR_LUMINANCE,                           // 123
-    RES_GRFATR_CONTRAST,                            // 124
-    RES_GRFATR_CHANNELR,                            // 125
-    RES_GRFATR_CHANNELG,                            // 126
-    RES_GRFATR_CHANNELB,                            // 127
-    RES_GRFATR_GAMMA,                               // 128
-    RES_GRFATR_INVERT,                              // 129
-    RES_GRFATR_TRANSPARENCY,                        // 130
-    RES_GRFATR_DRAWMODE,                            // 131
+    RES_GRFATR_ROTATION,                            // 123
+    RES_GRFATR_LUMINANCE,                           // 124
+    RES_GRFATR_CONTRAST,                            // 125
+    RES_GRFATR_CHANNELR,                            // 126
+    RES_GRFATR_CHANNELG,                            // 127
+    RES_GRFATR_CHANNELB,                            // 128
+    RES_GRFATR_GAMMA,                               // 129
+    RES_GRFATR_INVERT,                              // 130
+    RES_GRFATR_TRANSPARENCY,                        // 131
+    RES_GRFATR_DRAWMODE,                            // 132
 
-    RES_GRFATR_DUMMY1,                              // 132
-    RES_GRFATR_DUMMY2,                              // 133
-    RES_GRFATR_DUMMY3,                              // 134
-    RES_GRFATR_DUMMY4,                              // 135
-    RES_GRFATR_DUMMY5,                              // 136
+    RES_GRFATR_DUMMY1,                              // 133
+    RES_GRFATR_DUMMY2,                              // 134
+    RES_GRFATR_DUMMY3,                              // 135
+    RES_GRFATR_DUMMY4,                              // 136
+    RES_GRFATR_DUMMY5,                              // 137
 RES_GRFATR_END
 };
 
 enum RES_BOXATR
 {
 RES_BOXATR_BEGIN = RES_GRFATR_END,
-    RES_BOXATR_FORMAT = RES_BOXATR_BEGIN,           // 137
-    RES_BOXATR_FORMULA,                             // 138
-    RES_BOXATR_VALUE,                               // 139
+    RES_BOXATR_FORMAT = RES_BOXATR_BEGIN,           // 138
+    RES_BOXATR_FORMULA,                             // 139
+    RES_BOXATR_VALUE,                               // 140
 RES_BOXATR_END
 };
 
 enum RES_UNKNOWNATR
 {
 RES_UNKNOWNATR_BEGIN = RES_BOXATR_END,
-    RES_UNKNOWNATR_CONTAINER = RES_UNKNOWNATR_BEGIN,// 140
+    RES_UNKNOWNATR_CONTAINER = RES_UNKNOWNATR_BEGIN,// 141
 RES_UNKNOWNATR_END
 };
 

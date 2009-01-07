@@ -118,7 +118,10 @@ class SW_DLLPUBLIC SwTxtNode: public SwCntntNode
     bool bNotifiable;
     mutable BOOL bLastOutlineState : 1;
 
-    BYTE nOutlineLevel;
+    // BYTE nOutlineLevel; //#outline level, removed by zhaojianwei.
+    // --> OD 2008-11-19 #i70748#
+    bool mbEmptyListStyleSetDueToSetOutlineLevelAttr;
+    // <--
 
     // --> OD 2008-03-27 #refactorlists#
     // boolean, indicating that a <SetAttr(..)> or <ResetAttr(..)> or
@@ -564,7 +567,7 @@ public:
 
        @return outline level or NO_NUMBERING if there is no outline level
      */
-    int GetOutlineLevel() const;
+    int GetAttrOutlineLevel() const;//#OutlineLevel,added by zhaojianwei
 
     /**
        Sets the out line level *at* a text node.
@@ -580,6 +583,13 @@ public:
        NOTE: This is subject to change, see GetOutlineLevel.
      */
     //void SetOutlineLevel(int nLevel);
+      void SetAttrOutlineLevel(int nLevel);//#OutlineLevel,added by zhaojianwei
+
+    // --> OD 2008-11-19 #i70748#
+    bool IsEmptyListStyleDueToSetOutlineLevelAttr();
+    void SetEmptyListStyleDueToSetOutlineLevelAttr();
+    void ResetEmptyListStyleDueToResetOutlineLevelAttr();
+    // <--
 
     /**
        Returns the width of leading tabs/blanks in this paragraph.
