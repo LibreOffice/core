@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--***********************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -3414,7 +3414,7 @@
             </node>
             <node oor:name=".uno:Navigator" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">~Navigator</value>
+                    <value xml:lang="en-US">Na~vigator</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
@@ -3712,7 +3712,7 @@
             </node>
             <node oor:name=".uno:AutoCorrectDlg" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">~AutoCorrect...</value>
+                    <value xml:lang="en-US">~AutoCorrect Options...</value>
                 </prop>
             </node>
             <node oor:name=".uno:AutoPilotPresentations" oor:op="replace">
@@ -5177,7 +5177,7 @@
             </node>
             <node oor:name=".uno:ObjectMenu" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">~Object</value>
+                    <value xml:lang="en-US">Drawing ~Object</value>
                 </prop>
             </node>
             <node oor:name=".uno:EditMenu" oor:op="replace">
