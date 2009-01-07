@@ -37,7 +37,7 @@ TabDialog DLG_DOC_FOOTNOTE
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Text [ en-US ] = "Footnote Settings" ;
+    Text [ en-US ] = "Footnotes/Endnotes Settings" ;
     Moveable = TRUE ;
     TabControl 1
     {

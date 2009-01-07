@@ -164,7 +164,7 @@ String STR_ERROR_NOLANG
 };
 String STR_EDIT_FOOTNOTE
 {
-    Text [ en-US ] = "Edit Footnote" ;
+    Text [ en-US ] = "Edit Footnote/Endnote" ;
 };
 String STR_NB_REPLACED
 {

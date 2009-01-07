@@ -347,6 +347,19 @@ interface TextDraw : TextDrawBase
         ExecMethod = Execute ;
         StateMethod = GetState ;
     ]
+    SID_INSERT_GRAPHIC
+    [
+        StateMethod = StateDisableItems ;
+    ]
+    SID_TWAIN_SELECT
+    [
+        StateMethod = StateDisableItems ;
+    ]
+
+    SID_TWAIN_TRANSFER
+    [
+        StateMethod = StateDisableItems ;
+    ]
 }
 
 shell SwDrawShell : SwDrawBaseShell

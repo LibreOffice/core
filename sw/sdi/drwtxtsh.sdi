@@ -546,6 +546,19 @@ interface TextDrawText
         ExecMethod = Execute ;
     ]
 
+    SID_INSERT_GRAPHIC
+    [
+        StateMethod = StateDisableItems ;
+    ]
+    SID_TWAIN_SELECT
+    [
+        StateMethod = StateDisableItems ;
+    ]
+
+    SID_TWAIN_TRANSFER
+    [
+        StateMethod = StateDisableItems ;
+    ]
 }
 
 interface TextDrawFont

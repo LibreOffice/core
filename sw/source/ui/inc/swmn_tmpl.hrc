@@ -220,7 +220,7 @@ location: <project>/uiconfig/[swriter|sweb|sglobal]/menubar/menubar.xml
         {                                                                   \
             Identifier = FN_EDIT_FOOTNOTE ;                                 \
             HelpID = FN_EDIT_FOOTNOTE ;                                     \
-            Text [ en-US ] = "Footnote~..." ;                          \
+            Text [ en-US ] = "Footnote/Endnote~..." ;                          \
         };
     #define _MN_EDIT_IDX_ENTRY_DLG                                          \
         MenuItem                                                            \
