@@ -86,6 +86,7 @@ XMLStyleExport::XMLStyleExport(
     sIsAutoUpdate( RTL_CONSTASCII_USTRINGPARAM( "IsAutoUpdate" ) ),
     sFollowStyle( RTL_CONSTASCII_USTRINGPARAM( "FollowStyle" ) ),
     sNumberingStyleName( RTL_CONSTASCII_USTRINGPARAM( "NumberingStyleName" ) ),
+    sOutlineLevel( RTL_CONSTASCII_USTRINGPARAM( "OutlineLevel" ) ),//#outline level,add by zhaojianwei
     sPoolStyleName( rPoolStyleName ),
     pAutoStylePool( pAutoStyleP  )
 {
@@ -107,12 +108,12 @@ sal_Bool XMLStyleExport::exportStyle(
         const Reference< XStyle >& rStyle,
           const OUString& rXMLFamily,
         const UniReference < SvXMLExportPropertyMapper >& rPropMapper,
+        const Reference< XNameAccess >& xStyles,        //#outline level,add by zhaojianwei
         const OUString* pPrefix )
 {
     Reference< XPropertySet > xPropSet( rStyle, UNO_QUERY );
     Reference< XPropertySetInfo > xPropSetInfo =
             xPropSet->getPropertySetInfo();
-
     Any aAny;
 
     // Don't export styles that aren't existing really. This may be the
@@ -185,6 +186,31 @@ sal_Bool XMLStyleExport::exportStyle(
                                       XML_TRUE );
     }
 
+    // style:default-outline-level"..." //#outline level, add by zhaojianwei.0802
+    sal_Int32 nOutlineLevel = 0;
+    if( xPropSetInfo->hasPropertyByName( sOutlineLevel ) )
+    {
+        Reference< XPropertyState > xPropState( xPropSet, uno::UNO_QUERY );
+        if( PropertyState_DIRECT_VALUE == xPropState->getPropertyState( sOutlineLevel ) )
+        {
+            aAny = xPropSet->getPropertyValue( sOutlineLevel );
+            aAny >>= nOutlineLevel;
+            if( nOutlineLevel > 0 )
+            {
+                OUStringBuffer sTmp;
+                sTmp.append( static_cast<sal_Int32>(nOutlineLevel));
+                GetExport().AddAttribute( XML_NAMESPACE_STYLE,
+                        XML_DEFAULT_OUTLINE_LEVEL,
+                        sTmp.makeStringAndClear() );
+            }
+            else
+            {
+                GetExport().AddAttribute( XML_NAMESPACE_STYLE,  XML_DEFAULT_OUTLINE_LEVEL,
+                                            OUString( RTL_CONSTASCII_USTRINGPARAM( "" )));
+            }
+        }
+    }//<-end,zhaojianwei
+
     // style:list-style-name="..." (SW paragarph styles only)
     if( xPropSetInfo->hasPropertyByName( sNumberingStyleName ) )
     {
@@ -249,7 +275,48 @@ sal_Bool XMLStyleExport::exportStyle(
                 // <--
             }
         }
+        //#outline level, add by zhaojianwei.0802
+        else if( nOutlineLevel > 0 )
+        {
+
+            bool bNoInheritedListStyle( true );
+
+            /////////////////////////////////////////////////
+            Reference<XStyle> xStyle( xPropState, UNO_QUERY );
+            while ( xStyle.is() )
+            {
+                OUString aParentStyle( xStyle->getParentStyle() );
+                if ( aParentStyle.getLength() == 0 ||
+                    !xStyles->hasByName( aParentStyle ) )
+                {
+                    break;
+                }
+                else
+                {
+                    xPropState = Reference< XPropertyState >( xStyles->getByName( aParentStyle ), UNO_QUERY );
+                    if ( !xPropState.is() )
+                    {
+                        break;
+                    }
+                    if ( xPropState->getPropertyState( sNumberingStyleName ) == PropertyState_DIRECT_VALUE )
+                    {
+                        bNoInheritedListStyle = false;
+                        break;
+                    }
+                    else
+                    {
+                        xStyle = Reference<XStyle>( xPropState, UNO_QUERY );
+                    }
+                }
+            }
+            /////////////////////////////////////////////////
+            if ( bNoInheritedListStyle )
+                GetExport().AddAttribute( XML_NAMESPACE_STYLE,  XML_LIST_STYLE_NAME,
+                                                         OUString( RTL_CONSTASCII_USTRINGPARAM( "" )));
+        }
+        //<-end,zhaojianwei
     }
+
 
     // style:pool-id="..." is not required any longer since we use
     // english style names only
@@ -405,7 +472,7 @@ void XMLStyleExport::exportStyleFamily(
             if( !bUsed || xStyle->isInUse() )
             {
                 BOOL bExported = exportStyle( xStyle, rXMLFamily, rPropMapper,
-                                              pPrefix );
+                                              xStyles,pPrefix );
                 if( bUsed && bFirstStyle && bExported  )
                 {
                     // If this is the first style, find out wether next styles
@@ -480,7 +547,7 @@ void XMLStyleExport::exportStyleFamily(
                     xStyleCont->getByName( sNextName ) >>= xStyle;
                     DBG_ASSERT( xStyle.is(), "Style not found for export!" );
 
-                    if( xStyle.is() && exportStyle( xStyle, rXMLFamily, rPropMapper, pPrefix ) )
+                    if( xStyle.is() && exportStyle( xStyle, rXMLFamily, rPropMapper, xStyles,pPrefix ) )
                         pExportedStyles->Insert( new String( sTmp ) );
                 }
             }

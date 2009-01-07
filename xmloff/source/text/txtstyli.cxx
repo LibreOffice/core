@@ -127,7 +127,8 @@ void XMLTextStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
         {
             sal_Int32 nTmp;
             if( SvXMLUnitConverter::convertNumber( nTmp, rValue ) &&
-                nTmp > 0 && nTmp < 256 )
+            //  nTmp > 0 && nTmp < 256 )    //#outline level, removed by zhaojianwei
+                0 <= nTmp && nTmp <= 10 )   //<-end,add by zhaojianwei
                 nOutlineLevel = static_cast< sal_Int8 >( nTmp );
         }
         else
@@ -152,9 +153,11 @@ XMLTextStyleContext::XMLTextStyleContext( SvXMLImport& rImport,
 ,   sIsAutoUpdate( RTL_CONSTASCII_USTRINGPARAM( "IsAutoUpdate" ) )
 ,   sCategory( RTL_CONSTASCII_USTRINGPARAM( "Category" ) )
 ,   sNumberingStyleName( RTL_CONSTASCII_USTRINGPARAM( "NumberingStyleName" ) )
+,       sOutlineLevel(RTL_CONSTASCII_USTRINGPARAM( "OutlineLevel" ) )//#outline level,add by zhaojianwei
 ,   sDropCapCharStyleName( RTL_CONSTASCII_USTRINGPARAM( "DropCapCharStyleName" ) )
 ,   sPageDescName( RTL_CONSTASCII_USTRINGPARAM( "PageDescName" ) )
-,   nOutlineLevel( 0 )
+//, nOutlineLevel( 0 )  // removed by zhaojianwei
+,   nOutlineLevel( -1 ) //<-end, add by zhaojianwei
 ,   bAutoUpdate( sal_False )
 ,   bHasMasterPageName( sal_False )
 ,   bHasCombinedCharactersLetter( sal_False )
@@ -294,6 +297,7 @@ void XMLTextStyleContext::Finish( sal_Bool bOverwrite )
     // consider set empty list style
 //    if ( !( sListStyleName.getLength() ||
     if ( !( mbListStyleSet ||
+            nOutlineLevel >= 0 ||   //#outline level,add by zhaojianwei
             sDropCapTextStyleName.getLength() ||
             bHasMasterPageName ) ||
          !xStyle.is() ||
@@ -304,6 +308,19 @@ void XMLTextStyleContext::Finish( sal_Bool bOverwrite )
     Reference < XPropertySet > xPropSet( xStyle, UNO_QUERY );
     Reference< XPropertySetInfo > xPropSetInfo =
                 xPropSet->getPropertySetInfo();
+
+    //#outline level,add by zhaojianwei
+    if( xPropSetInfo->hasPropertyByName( sOutlineLevel ))
+    {
+        Any aAny;
+        if( nOutlineLevel >= 0 )
+        {
+            aAny <<= nOutlineLevel;
+            xPropSet->setPropertyValue( sOutlineLevel, aAny );
+        }
+    }
+    //<-end,zhaojianwei
+
 
     // --> OD 2006-09-21 #i69523#
     // consider set empty list style

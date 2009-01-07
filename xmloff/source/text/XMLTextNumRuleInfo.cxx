@@ -113,6 +113,16 @@ void XMLTextNumRuleInfo::Set(
         mnListLevel = 0;
     }
 
+    // --> OD 2008-12-17 #i97312#
+    if ( mxNumRules.is() && mxNumRules->getCount() < 1 )
+    {
+        DBG_ASSERT( false,
+                    "<XMLTextNumRuleInfo::Set(..)> - numbering rules instance does not contain any numbering rule" );
+        Reset();
+        return;
+    }
+    // <--
+
     // --> OD 2006-09-27 #i69627#
     bool bSuppressListStyle( false );
     if ( mxNumRules.is() )

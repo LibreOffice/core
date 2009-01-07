@@ -1346,7 +1346,10 @@
 #define SID_TABLE_STYLE_SETTINGS                        (SID_SVX_START+1089)
 #define SID_CHAR_DLG_PREVIEW_STRING                     (SID_SVX_START+1090)
 #define SID_RECHECK_DOCUMENT                            (SID_SVX_START+1091)
-#define SID_SVX_FIRSTFREE                                                               SID_RECHECK_DOCUMENT + 1
+#define SID_ATTR_PARA_OUTLINE_LEVEL                     (SID_SVX_START+1092)
+
+// IMPORTANT NOTE: adjust SID_SVX_FIRSTFREE, when adding new slot id
+#define SID_SVX_FIRSTFREE                               SID_ATTR_PARA_OUTLINE_LEVEL + 1
 
 // --------------------------------------------------------------------------
 // Overflow check for slot IDs

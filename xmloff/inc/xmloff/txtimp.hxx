@@ -542,6 +542,7 @@ public:
     // --> OD 2008-04-23 #refactorlists#
     const ::rtl::OUString sPropNameDefaultListId;
     const ::rtl::OUString sPropNameListId;
+    const ::rtl::OUString sOutlineLevel;        //#outline level,add by zhaojianwei
     // <--
 
     ::rtl::OUString sCellParaStyleDefault;
