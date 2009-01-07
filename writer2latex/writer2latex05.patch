@@ -41,3 +41,51 @@
                      System.err.println("Oops - error converting base64");
                  }
                  sMIME = MIMETypes.getMagicMIMEType(blob);
+diff --git source/oxt/writer2latex/w2l_types.xcu source/oxt/writer2latex/w2l_types.xcu
+index 99b5b32..dfce54c 100644
+--- misc/build/writer2latex05/source/oxt/writer2latex/w2l_types.xcu
++++ misc/build/writer2latex05/source/oxt/writer2latex/w2l_types.xcu
+@@ -9,7 +9,6 @@
+ 		<prop oor:name="Extensions"><value>bib</value></prop>
+ 		<prop oor:name="MediaType"/>
+ 		<prop oor:name="Preferred"><value>false</value></prop>
+-		<prop oor:name="PreferredFilter"><value>BibTeX Data File</value></prop>
+ 		<prop oor:name="UIName">
+ 			<value>BibTeX Data File</value>
+ 		</prop>
+@@ -22,7 +21,6 @@
+ 		<prop oor:name="Extensions"><value>tex</value></prop>
+ 		<prop oor:name="MediaType"/>
+ 		<prop oor:name="Preferred"><value>false</value></prop>
+-		<prop oor:name="PreferredFilter"><value>LaTeX File</value></prop>
+ 		<prop oor:name="UIName">
+ 			<value>LaTeX 2e</value>
+ 		</prop>
+diff --git source/oxt/writer2xhtml/w2x_types.xcu source/oxt/writer2xhtml/w2x_types.xcu
+index ee4d4fd..c9dad65 100644
+--- misc/build/writer2latex05/source/oxt/writer2xhtml/w2x_types.xcu
++++ misc/build/writer2latex05/source/oxt/writer2xhtml/w2x_types.xcu
+@@ -9,7 +9,6 @@
+ 		<prop oor:name="Extensions"><value>html</value></prop>
+ 		<prop oor:name="MediaType"/>
+ 		<prop oor:name="Preferred"><value>false</value></prop>
+-		<prop oor:name="PreferredFilter"><value>XHTML 1.0 strict File</value></prop>
+ 		<prop oor:name="UIName">
+ 			<value>XHTML 1.0 strict</value>
+ 		</prop>
+@@ -22,7 +21,6 @@
+ 		<prop oor:name="Extensions"><value>xhtml</value></prop>
+ 		<prop oor:name="MediaType"/>
+ 		<prop oor:name="Preferred"><value>false</value></prop>
+-		<prop oor:name="PreferredFilter"><value>XHTML 1.1 plus MathML 2.0 File</value></prop>
+ 		<prop oor:name="UIName">
+ 			<value>XHTML 1.1 + MathML 2.0</value>
+ 		</prop>
+@@ -35,7 +33,6 @@
+ 		<prop oor:name="Extensions"><value>xml</value></prop>
+ 		<prop oor:name="MediaType"/>
+ 		<prop oor:name="Preferred"><value>false</value></prop>
+-		<prop oor:name="PreferredFilter"><value>XHTML 1.1 plus MathML 2.0 (xsl) File</value></prop>
+ 		<prop oor:name="UIName">
+ 			<value>XHTML 1.1 + MathML 2.0 (xsl)</value>
+ 		</prop>
