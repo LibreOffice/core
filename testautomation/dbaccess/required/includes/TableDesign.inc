@@ -385,10 +385,16 @@ testcase tMainMenuBar
         printlog "+ there different count related to the file pick list."        
         hMenuSelectNr(1) ' the file menu        
         iCount = getMenuItemCount()        
-        if (iCount <> 8 ) then
-            warnlog "There should between 8 and 12 items in the file menu but there are " + iCount + " items."
-        end if
-        
+        if ( lcase( gPlatform ) = "osx" ) then
+            if ( iCount <> 7 ) then
+                warnlog( "File menu: 7 items expected, found " & iCount )
+            endif
+        else
+            if (iCount <> 8 ) then
+                warnlog "There should between 8 and 12 items in the file menu but there are " + iCount + " items."
+            end if
+        endif
+
         '/// check if there are 12 items in the FILE/NEW menu.
         printlog "check if there are 12 items in the FILE/NEW menu."
         printlog "check the FILE/NEW"
@@ -435,9 +441,15 @@ testcase tMainMenuBar
         TableDesignTable.UseMenu 
         hMenuSelectNr(4)        
         iCount = hMenuItemGetCount()
-        if (iCount <> 5) then
-            warnlog "There should 5 items in the tools menu but there are " + iCount + " items."
-        end if
+        if ( lcase( gPlatform ) = "osx" ) then
+            if ( iCount <> 4 ) then
+                warnlog( "Tools menu: 4 items expected, found " & iCount )
+            endif
+        else
+            if (iCount <> 5) then
+                warnlog "There should 5 items in the tools menu but there are " + iCount + " items."
+            end if
+        endif
         call hMenuClose()
         
         '/// check if there are 4 items in the TOOLS/MACRO menu.
@@ -458,26 +470,6 @@ testcase tMainMenuBar
 endcase
 '-------------------------------------------------------------------------
 '-------------------------------------------------------------------------
-'-------------------------------------------------------------------------
-function fDateiOeffnen ( DocName$ )
-    
-    Dim DieDatei as String
-    
-    DieDatei = ConvertPath ( DocName$ )
-    
-    FileOpen
-    sleep (1)
-    Kontext "OeffnenDlg"
-    Dateiname.SetText DieDatei
-    sleep (3)
-    Oeffnen.Click
-    sleep (3)
-    
-    Kontext "Insight"
-    
-    fDateiOeffnen = true
-    
-end function
 '-------------------------------------------------------------------------
 function getMenuItemCount as Integer
 'use this function becasue this doesn't count the pick list
@@ -500,7 +492,7 @@ end function
 '-------------------------------------------------------------------------
 sub initTableDesign
 
-    call fDateiOeffnen(gOfficePath + ConvertPath("user/database/biblio.odb"))
+    hFileOpen( gOfficePath & "user/database/biblio.odb" )
     
     Kontext "Insight"
     

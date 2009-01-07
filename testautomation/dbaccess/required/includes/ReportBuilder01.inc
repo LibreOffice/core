@@ -88,9 +88,15 @@ testcase tMainMenuBar
         printlog "check if there are 10 items in the file menu."                
         hMenuSelectNr(1) ' the file menu        
         iCount = hMenuItemGetCount()        
-        if (iCount <> 10 ) then
-            warnlog "There should be 10 items in the file menu but there are " + iCount + " items."
-        end if
+        if ( lcase( gPlatform ) = "osx" ) then
+            if ( iCount <> 9 ) then
+                warnlog( "File menu: 9 Items expected, found " & iCount )
+            endif
+        else
+            if (iCount <> 10 ) then
+                warnlog "There should be 10 items in the file menu but there are " + iCount + " items."
+            end if
+        endif
 
         '/// check if there are 12 items in the FILE/NEW menu.
         printlog "check if there are 12 items in the FILE/NEW menu."
@@ -201,9 +207,15 @@ testcase tMainMenuBar
         ReportDesign.UseMenu 
         hMenuSelectNr(6)        
         iCount = hMenuItemGetCount()
-        if (iCount <> 4) then
-            warnlog "There should 4 items in the tools menu but there are " + iCount + " items."
-        end if
+        if ( lcase( gPlatform ) = "osx" ) then
+            if ( iCount <> 3 ) then
+		warnlog( "Tools menu: 3 items expected, found " & iCount )
+            endif
+        else
+            if (iCount <> 4) then
+                warnlog "There should 4 items in the tools menu but there are " + iCount + " items."
+            end if
+        endif
         call hMenuClose()
 
  'help menu        
@@ -213,6 +225,7 @@ testcase tMainMenuBar
         ReportDesign.UseMenu 
         hMenuSelectNr(8)        
         iCount = hMenuItemGetCount()
+        if ( lcase( gPlatform ) = "osx" ) then iCount = iCount + 1 ' dirty, but check is fuzzy anyway.
         if (gOOO) then
             if (iCount <> 9) then
                 warnlog "There should 9 items in the help menu but there are " + iCount + " items."

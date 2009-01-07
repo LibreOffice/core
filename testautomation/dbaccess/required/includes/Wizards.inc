@@ -58,7 +58,7 @@ end sub
 '-------------------------------------------------------------------------
 testcase tQueryWizard
 
-    call fDateiOeffnen(gOfficePath + ConvertPath("user/database/biblio.odb"))
+    hFileOpen( gOfficePath & "user/database/biblio.odb" )
         
     Kontext "Insight"
     
@@ -112,7 +112,7 @@ endcase
 '-------------------------------------------------------------------------
 testcase tReportWizard
 
-    call fDateiOeffnen(gOfficePath + ConvertPath("user/database/biblio.odb"))
+    hFileOpen( gOfficePath & "user/database/biblio.odb" )
         
     Kontext "Insight"
     
@@ -164,7 +164,7 @@ endcase
 '-------------------------------------------------------------------------
 testcase tTableWizard
 
-    call fDateiOeffnen(gOfficePath + ConvertPath("user/database/biblio.odb"))
+    hFileOpen( gOfficePath & "user/database/biblio.odb" )
         
     Kontext "Insight"
     
@@ -205,7 +205,7 @@ endcase
 '-------------------------------------------------------------------------
 testcase tFormWizard
         
-    call fDateiOeffnen(gOfficePath + ConvertPath("user/database/biblio.odb"))
+    hFileOpen( gOfficePath & "user/database/biblio.odb" )
         
     Kontext "Insight"
     

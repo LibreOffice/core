@@ -52,7 +52,7 @@ testcase tNewFormDesign
 
     '/// open biblio database
     printlog "open biblio database"    
-    call fDateiOeffnen(gOfficePath + ConvertPath("user/database/biblio.odb"))
+    hFileOpen( gOfficePath & "user/database/biblio.odb" )
         
     Kontext "Insight"
     
