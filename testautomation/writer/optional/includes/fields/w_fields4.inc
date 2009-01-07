@@ -743,7 +743,11 @@ testcase tDocInformation_8
        Kontext "DruckenDlg"
        Sleep 1
        DruckenDlg.OK
-       Sleep 5
+        kontext "active"
+        if active.exists(5) then
+            QaErrorLog "Error Printing..."
+            Active.ok
+        end if
    end if
 
   '/// Check if the Printed field is changed in the document

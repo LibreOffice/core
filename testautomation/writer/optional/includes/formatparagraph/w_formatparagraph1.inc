@@ -391,7 +391,7 @@ testcase tParagraphIndent5
 
    '/// check if the 2nd paragraph is in 2nd page
     Kontext "Navigator"
-        if Not Navigator.Exists then EditNavigator
+        if Not Navigator.Exists then ViewNavigator
         Kontext "NavigatorWriter"
         Sleep 1
         if Seitennummer.GetText <> "2" then warnlog "Something wrong in 'Above paraghraph'! The end of 2nd paragraph should be 2nd page !"
@@ -450,7 +450,7 @@ testcase tParagraphIndent6
 
    '/// check if the 2nd paragraph is in 2nd page
     Kontext "Navigator"
-        if Not Navigator.Exists then EditNavigator
+        if Not Navigator.Exists then ViewNavigator
         Kontext "NavigatorWriter"
         Sleep 1
         if Seitennummer.GetText <> "2" then warnlog "Something wrong in 'Above paraghraph'! The end of 2nd paragraph should be 2nd page !"
@@ -522,7 +522,7 @@ testcase tParagraphIndent7
     FindAndReplace.Close
 
     Kontext "Navigator"
-        if Not Navigator.Exists then EditNavigator
+        if Not Navigator.Exists then ViewNavigator
         Kontext "NavigatorWriter"
         Sleep 1
         if Seitennummer.GetText <> "1" then warnlog "The start of paragraph2 should be in 1st page !"
@@ -538,7 +538,7 @@ testcase tParagraphIndent7
     FindAndReplace.Close
 
     Kontext "Navigator"
-        if Not Navigator.Exists then EditNavigator
+        if Not Navigator.Exists then ViewNavigator
         Kontext "NavigatorWriter"
         Sleep 1
         if Seitennummer.GetText <> "2" then warnlog "The end of paragraph2 should be in 2nd page !"
@@ -609,7 +609,7 @@ testcase tParagraphIndent8
     FindAndReplace.Close
 
     Kontext "Navigator"
-        if Not Navigator.Exists then EditNavigator
+        if Not Navigator.Exists then ViewNavigator
         Kontext "NavigatorWriter"
         Sleep 1
         if Seitennummer.GetText <> "2" then warnlog "The start of paragraph2 should be in 2nd page !"
@@ -649,7 +649,7 @@ testcase tParagraphIndent9
 
    '/// check if the last line is in 1 page (it should be)
     Kontext "Navigator"
-        if Not Navigator.Exists then EditNavigator
+        if Not Navigator.Exists then ViewNavigator
         Kontext "NavigatorWriter"
         Sleep 1
         if Seitennummer.GetText <> "1" then warnlog "The end of paragraph should be in 1st page !"
@@ -694,7 +694,7 @@ testcase tParagraphIndent10
 
    '/// check if the last 2 lines(7th and 8th) is in 2nd page (it should be)
     Kontext "Navigator"
-        if Not Navigator.Exists then EditNavigator
+        if Not Navigator.Exists then ViewNavigator
         Kontext "NavigatorWriter"
         Sleep 1
         if Seitennummer.GetText <> "2" then warnlog "The 8th line should be in 2nd page !"
@@ -706,7 +706,7 @@ testcase tParagraphIndent10
     Sleep 1
 
     Kontext "Navigator"
-        if Not Navigator.Exists then EditNavigator
+        if Not Navigator.Exists then ViewNavigator
         Kontext "NavigatorWriter"
         Sleep 1
         if Seitennummer.GetText <> "2" then warnlog "The 7th line should be in 2nd page !"
@@ -719,7 +719,7 @@ testcase tParagraphIndent10
 
    '/// check if the 5th lines is in 1st page (it should be)
     Kontext "Navigator"
-        if Not Navigator.Exists then EditNavigator
+        if Not Navigator.Exists then ViewNavigator
         Kontext "NavigatorWriter"
         Sleep 1
         if Seitennummer.GetText <> "1" then warnlog "The 5th line should be in 1st page !"
@@ -763,7 +763,7 @@ testcase tParagraphIndent11
     
     '/// check if the last 4 lines is in 2nd page (it should be)
     Kontext "Navigator"
-    if Not Navigator.Exists then EditNavigator
+    if Not Navigator.Exists then ViewNavigator
     Kontext "NavigatorWriter"
     Sleep 1
     if Seitennummer.GetText <> "2" then warnlog "The 8th line should be in 2nd page !"
@@ -773,7 +773,7 @@ testcase tParagraphIndent11
     Sleep 1
     
     Kontext "Navigator"
-    if Not Navigator.Exists then EditNavigator
+    if Not Navigator.Exists then ViewNavigator
     Kontext "NavigatorWriter"
     Sleep 1
     if Seitennummer.GetText <> "2" then warnlog "The 5th line should be in 2nd page !"
@@ -784,7 +784,7 @@ testcase tParagraphIndent11
     
     '/// check if the first 4 lines is in 1st page (it should be)
     Kontext "Navigator"
-    if Not Navigator.Exists then EditNavigator
+    if Not Navigator.Exists then ViewNavigator
     Kontext "NavigatorWriter"
     Sleep 1
     if Seitennummer.GetText <> "1" then warnlog "The 4th line should be in 1st page !"
@@ -796,7 +796,7 @@ testcase tParagraphIndent11
     
     Call wTypeKeys "m"
     Kontext "Navigator"
-    if Not Navigator.Exists then EditNavigator
+    if Not Navigator.Exists then ViewNavigator
     Kontext "NavigatorWriter"
     Sleep 1
     if Seitennummer.GetText <> "3" then warnlog "The 9th line should be in 3rd page !"
@@ -860,7 +860,7 @@ testcase tParagraphIndent12
 
    '/// check if the last 2 lines is in 2nd page (it should be)
     Kontext "Navigator"
-        if Not Navigator.Exists then EditNavigator
+        if Not Navigator.Exists then ViewNavigator
         Kontext "NavigatorWriter"
         Sleep 1
         if Seitennummer.GetText <> "2" then warnlog "The 8th line should be in 2nd page !"
@@ -870,7 +870,7 @@ testcase tParagraphIndent12
     Sleep 1
 
     Kontext "Navigator"
-        if Not Navigator.Exists then EditNavigator
+        if Not Navigator.Exists then ViewNavigator
         Kontext "NavigatorWriter"
         Sleep 1
         if Seitennummer.GetText <> "1" then warnlog "The 6th line should be in 2nd page !"
@@ -929,7 +929,7 @@ testcase tParagraphIndent13
 
    '/// check if it is 1 line /page
     Kontext "Navigator"
-        if Not Navigator.Exists then EditNavigator
+        if Not Navigator.Exists then ViewNavigator
         Kontext "NavigatorWriter"
         Sleep 1
         if Seitennummer.GetText <> "8" then Warnlog "#i73903#The 8th line should be in 8th page !"
@@ -998,7 +998,7 @@ testcase tParagraphIndent14
 
    '/// check if it is 1 line /page
     Kontext "Navigator"
-        if Not Navigator.Exists then EditNavigator
+        if Not Navigator.Exists then ViewNavigator
         Kontext "NavigatorWriter"
         Sleep 1
         if Seitennummer.GetText <> "8" then Warnlog "#i73903#The 8th line should be in 8th page !"
@@ -1064,7 +1064,7 @@ testcase tParagraphIndent15
     Call wTypeKeys "<Down>" , 7
 
     Kontext "Navigator"
-        if Not Navigator.Exists then EditNavigator
+        if Not Navigator.Exists then ViewNavigator
         Kontext "NavigatorWriter"
         Sleep 1
         if Seitennummer.GetText <> "1" then warnlog "The 8th line should be in 1st page !"
@@ -1073,7 +1073,7 @@ testcase tParagraphIndent15
     Call wTypeKeys "<Down>"
 
     Kontext "Navigator"
-        if Not Navigator.Exists then EditNavigator
+        if Not Navigator.Exists then ViewNavigator
         Kontext "NavigatorWriter"
         Sleep 1
         if Seitennummer.GetText <> "2" then warnlog "The 9th line should be in 2nd page !"

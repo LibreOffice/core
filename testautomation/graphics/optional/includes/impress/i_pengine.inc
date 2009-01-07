@@ -234,7 +234,7 @@ testcase tSlideShowInteraction
       warnlog "Navigator: already open :-("
    else
       printlog "Navigator: NOT available :-( will be opened now!"
-      EditNavigator
+      ViewNavigator
    endif
    sleep 3
 

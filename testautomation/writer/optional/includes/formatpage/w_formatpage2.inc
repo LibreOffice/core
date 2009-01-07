@@ -71,12 +71,12 @@ testcase tFormatPage_16
 
     '/// Open Navigator and enter as page number 2
     Kontext "Navigator"
-    if Not Navigator.Exists then EditNavigator
+    if Not Navigator.Exists then ViewNavigator
     Kontext "NavigatorWriter"
     Seitennummer.SetText "2"
     Seitennummer.TypeKeys "<Return>"
     '/// Close Navigator
-    EditNavigator
+    ViewNavigator
     
     '/// Step 3 times up in document
     Call wTypeKeys "<Up>" , 3
@@ -129,7 +129,7 @@ testcase tFormatPage_16
     FindAndReplace.Close
 
     Kontext "Navigator"
-    if Not Navigator.Exists then EditNavigator
+    if Not Navigator.Exists then ViewNavigator
     Kontext "NavigatorWriter"
     Sleep 1
     if Seitennummer.GetText <> "2" then warnlog "Something wrong in AutoFit Height!"
@@ -159,12 +159,12 @@ testcase tFormatPage_17
 
     '/// Open Navigator and enter as page number 2
     Kontext "Navigator"
-    if Not Navigator.Exists then EditNavigator
+    if Not Navigator.Exists then ViewNavigator
     Kontext "NavigatorWriter"
     Seitennummer.SetText "2"
     Seitennummer.TypeKeys "<Return>"
     '/// Close Navigator
-    EditNavigator
+    ViewNavigator
 
     '/// Step 3 times up in document
     Call wTypeKeys "<Up>" , 3
@@ -215,7 +215,7 @@ testcase tFormatPage_17
     FindAndReplace.Close
     
     Kontext "Navigator"
-    if Not Navigator.Exists then EditNavigator
+    if Not Navigator.Exists then ViewNavigator
     Kontext "NavigatorWriter"
     Sleep 1
     if Seitennummer.GetText <> "2" then warnlog "Something wrong in AutoFit Height --1 !"
@@ -231,7 +231,7 @@ testcase tFormatPage_17
     FindAndReplace.Close
     
     Kontext "Navigator"
-    if Not Navigator.Exists then EditNavigator
+    if Not Navigator.Exists then ViewNavigator
     Kontext "NavigatorWriter"
     Sleep 1
     if Seitennummer.GetText <> "1" then warnlog "Something wrong in AutoFit Height --2 !"
@@ -261,12 +261,12 @@ testcase tFormatPage_18
 
     '/// Open Navigator and enter as page number 2
     Kontext "Navigator"
-    if Not Navigator.Exists then EditNavigator
+    if Not Navigator.Exists then ViewNavigator
     Kontext "NavigatorWriter"
     Seitennummer.SetText "2"
     Seitennummer.TypeKeys "<Return>"
     '/// Close Navigator
-    EditNavigator
+    ViewNavigator
 
     '/// Step 3 times up in document
     Call wTypeKeys "<Up>" , 3
@@ -314,7 +314,7 @@ testcase tFormatPage_18
     FindAndReplace.Close
     
     Kontext "Navigator"
-    if Not Navigator.Exists then EditNavigator
+    if Not Navigator.Exists then ViewNavigator
     Kontext "NavigatorWriter"
     Sleep 1
     if Seitennummer.GetText <> "1" then warnlog "Something wrong in AutoFit Height!"
@@ -344,12 +344,12 @@ testcase tFormatPage_19
 
     '/// Open Navigator and enter as page number 2
     Kontext "Navigator"
-    if Not Navigator.Exists then EditNavigator
+    if Not Navigator.Exists then ViewNavigator
     Kontext "NavigatorWriter"
     Seitennummer.SetText "2"
     Seitennummer.TypeKeys "<Return>"
     '/// Close Navigator
-    EditNavigator
+    ViewNavigator
 
     '/// Step 3 times up in document
     Call wTypeKeys "<Up>" , 3
@@ -389,7 +389,7 @@ testcase tFormatPage_19
     FindAndReplace.Close
     
     Kontext "Navigator"
-    if Not Navigator.Exists then EditNavigator
+    if Not Navigator.Exists then ViewNavigator
     Kontext "NavigatorWriter"
     Sleep 1
     if Seitennummer.GetText <> "1" then warnlog "Something wrong in AutoFit Height!"
@@ -419,12 +419,12 @@ testcase tFormatPage_20
 
     '/// Open Navigator and enter as page number 2
     Kontext "Navigator"
-    if Not Navigator.Exists then EditNavigator
+    if Not Navigator.Exists then ViewNavigator
     Kontext "NavigatorWriter"
     Seitennummer.SetText "2"
     Seitennummer.TypeKeys "<Return>"
     '/// Close Navigator
-    EditNavigator
+    ViewNavigator
 
     '/// Step 3 times up in document
     Call wTypeKeys "<Up>" , 3
@@ -477,7 +477,7 @@ testcase tFormatPage_20
     FindAndReplace.Close
     
     Kontext "Navigator"
-    if Not Navigator.Exists then EditNavigator
+    if Not Navigator.Exists then ViewNavigator
     Kontext "NavigatorWriter"
     Sleep 1
     if Seitennummer.GetText <> "2" then warnlog "Something wrong in AutoFit Height!"
@@ -507,12 +507,12 @@ testcase tFormatPage_21
 
     '/// Open Navigator and enter as page number 2
     Kontext "Navigator"
-    if Not Navigator.Exists then EditNavigator
+    if Not Navigator.Exists then ViewNavigator
     Kontext "NavigatorWriter"
     Seitennummer.SetText "2"
     Seitennummer.TypeKeys "<Return>"
     '/// Close Navigator
-    EditNavigator
+    ViewNavigator
 
     '/// Step 3 times up in document
     Call wTypeKeys "<Up>" , 3
@@ -565,7 +565,7 @@ testcase tFormatPage_21
     FindAndReplace.Close
     
     Kontext "Navigator"
-    if Not Navigator.Exists then EditNavigator
+    if Not Navigator.Exists then ViewNavigator
     Kontext "NavigatorWriter"
     Sleep 1
     if Seitennummer.GetText <> "2" then warnlog "Something wrong in AutoFit Height --1 !"
@@ -581,7 +581,7 @@ testcase tFormatPage_21
     FindAndReplace.Close
     
     Kontext "Navigator"
-    if Not Navigator.Exists then EditNavigator
+    if Not Navigator.Exists then ViewNavigator
     Kontext "NavigatorWriter"
     Sleep 1
     if Seitennummer.GetText <> "1" then warnlog "Something wrong in AutoFit Height --2 !"
@@ -611,12 +611,12 @@ testcase tFormatPage_22
 
     '/// Open Navigator and enter as page number 2
     Kontext "Navigator"
-    if Not Navigator.Exists then EditNavigator
+    if Not Navigator.Exists then ViewNavigator
     Kontext "NavigatorWriter"
     Seitennummer.SetText "2"
     Seitennummer.TypeKeys "<Return>"
     '/// Close Navigator
-    EditNavigator
+    ViewNavigator
 
     '/// Step 3 times up in document
     Call wTypeKeys "<Up>" , 3
@@ -664,7 +664,7 @@ testcase tFormatPage_22
     FindAndReplace.Close
     
     Kontext "Navigator"
-    if Not Navigator.Exists then EditNavigator
+    if Not Navigator.Exists then ViewNavigator
     Kontext "NavigatorWriter"
     Sleep 1
     if Seitennummer.GetText <> "1" then warnlog "Something wrong in AutoFit Height!"
@@ -694,12 +694,12 @@ testcase tFormatPage_23
 
     '/// Open Navigator and enter as page number 2
     Kontext "Navigator"
-    if Not Navigator.Exists then EditNavigator
+    if Not Navigator.Exists then ViewNavigator
     Kontext "NavigatorWriter"
     Seitennummer.SetText "2"
     Seitennummer.TypeKeys "<Return>"
     '/// Close Navigator
-    EditNavigator
+    ViewNavigator
 
     '/// Step 3 times up in document
     Call wTypeKeys "<Up>" , 3
@@ -739,7 +739,7 @@ testcase tFormatPage_23
     FindAndReplace.Close
     
     Kontext "Navigator"
-    if Not Navigator.Exists then EditNavigator
+    if Not Navigator.Exists then ViewNavigator
     Kontext "NavigatorWriter"
     Sleep 1
     if Seitennummer.GetText <> "1" then warnlog "Something wrong in AutoFit Height!"

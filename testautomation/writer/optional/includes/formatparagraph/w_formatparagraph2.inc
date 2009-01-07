@@ -966,7 +966,7 @@ testcase tParagraphTextFlow5
 
    '/// + check if the 2nd paragraph is in 2nd page
     Kontext "Navigator"
-        if Not Navigator.Exists then EditNavigator
+        if Not Navigator.Exists then ViewNavigator
         Kontext "NavigatorWriter"
         Sleep 1
         if Seitennummer.GetText <> "2" then warnlog "Something wrong in 'Paragraph break before Column'!"
@@ -1012,7 +1012,7 @@ testcase tParagraphTextFlow6
 
    '/// + check if the 2nd paragraph is in 2nd page
     Kontext "Navigator"
-        if Not Navigator.Exists then EditNavigator
+        if Not Navigator.Exists then ViewNavigator
         Kontext "NavigatorWriter"
         Sleep 1
         if Seitennummer.GetText <> "2" then warnlog "Something wrong in 'Paragraph break after Column'! "
@@ -1068,7 +1068,7 @@ testcase tParagraphTextFlow7
 
    '/// + check if the 2nd paragraph is in 4th page
     Kontext "Navigator"
-        if Not Navigator.Exists then EditNavigator
+        if Not Navigator.Exists then ViewNavigator
         Kontext "NavigatorWriter"
         Sleep 1
         if Seitennummer.GetText <> "2" then warnlog "Something wrong in ' Column break after paragraph'! "
@@ -1117,7 +1117,7 @@ testcase tParagraphTextFlow8
 
    '/// + check if the 2nd paragraph is in 2nd page
     Kontext "Navigator"
-        if Not Navigator.Exists then EditNavigator
+        if Not Navigator.Exists then ViewNavigator
         Kontext "NavigatorWriter"
         Sleep 1
         if Seitennummer.GetText <> "2" then warnlog "Something wrong in 'Paragraph break after page'! "
@@ -1160,7 +1160,7 @@ testcase tParagraphTextFlow9
     TabTextfluss.OK
 
     Kontext "Navigator"
-       if Not Navigator.Exists then EditNavigator
+       if Not Navigator.Exists then ViewNavigator
        Kontext "NavigatorWriter"
        Sleep 1
        if Seitennummer.GetText <> "1" then warnlog "The head of the paragraph should be in 1st page !"
@@ -1168,7 +1168,7 @@ testcase tParagraphTextFlow9
 
     Call wTypeKeys "<MOD1 End>"
     Kontext "Navigator"
-        if Not Navigator.Exists then EditNavigator
+        if Not Navigator.Exists then ViewNavigator
         Kontext "NavigatorWriter"
         Sleep 1
         if Seitennummer.GetText <> "2" then warnlog "The end of the paragraph should be in 2nd page !"
@@ -1194,7 +1194,7 @@ testcase tParagraphTextFlow9
     TabTextfluss.OK
 
     Kontext "Navigator"
-       if Not Navigator.Exists then EditNavigator
+       if Not Navigator.Exists then ViewNavigator
        Kontext "NavigatorWriter"
        Sleep 1
        if Seitennummer.GetText <> "2" then warnlog "The head of the paragraph should be in 2nd page !"
@@ -1202,7 +1202,7 @@ testcase tParagraphTextFlow9
 
     Call wTypeKeys "<MOD1 End>"
     Kontext "Navigator"
-        if Not Navigator.Exists then EditNavigator
+        if Not Navigator.Exists then ViewNavigator
         Kontext "NavigatorWriter"
         Sleep 1
         if Seitennummer.GetText <> "2" then warnlog "The end of the paragraph should be in 2nd page !"
@@ -1250,7 +1250,7 @@ testcase tParagraphTextFlow10
     TabTextfluss.OK
 
     Kontext "Navigator"
-        if Not Navigator.Exists then EditNavigator
+        if Not Navigator.Exists then ViewNavigator
         Kontext "NavigatorWriter"
         Sleep 1
         if Seitennummer.GetText <> "1" then warnlog "The head of the 1st paragraph should be in 1st page ! == " &i
@@ -1264,7 +1264,7 @@ testcase tParagraphTextFlow10
         Sleep 1
     FindAndReplace.Close
     Kontext "Navigator"
-        if Not Navigator.Exists then EditNavigator
+        if Not Navigator.Exists then ViewNavigator
         Kontext "NavigatorWriter"
         Sleep 1
         if Seitennummer.GetText <> "2" then warnlog "The head of the 2nd paragraph should be in 2nd page !"
@@ -1294,7 +1294,7 @@ testcase tParagraphTextFlow10
     TabTextfluss.OK
 
     Kontext "Navigator"
-        if Not Navigator.Exists then EditNavigator
+        if Not Navigator.Exists then ViewNavigator
         Kontext "NavigatorWriter"
         Sleep 1
         if Seitennummer.GetText <> "2" then warnlog "The head of the 1st paragraph should be in 2nd page !"
@@ -1310,7 +1310,7 @@ testcase tParagraphTextFlow10
     FindAndReplace.Close
 
     Kontext "Navigator"
-        if Not Navigator.Exists then EditNavigator
+        if Not Navigator.Exists then ViewNavigator
         Kontext "NavigatorWriter"
         Sleep 1
         if Seitennummer.GetText <> "2" then warnlog "The head of the 2nd paragraph should be in 2nd page !"
@@ -1353,7 +1353,7 @@ testcase tParagraphTextFlow11
 
    '/// + check if the 1st line is in 1st page
     Kontext "Navigator"
-        if Not Navigator.Exists then EditNavigator
+        if Not Navigator.Exists then ViewNavigator
         Kontext "NavigatorWriter"
         Sleep 1
         if Seitennummer.GetText <> "1" then warnlog "The 1st line should be in 1st page!"
@@ -1364,7 +1364,7 @@ testcase tParagraphTextFlow11
 
    '/// + check if the 1st line is in 2nd page
     Kontext "Navigator"
-        if Not Navigator.Exists then EditNavigator
+        if Not Navigator.Exists then ViewNavigator
         Kontext "NavigatorWriter"
         Sleep 1
         if Seitennummer.GetText <> "2" then warnlog "The 1st line should be in 2nd page!"
@@ -1407,7 +1407,7 @@ testcase tParagraphTextFlow12
    '/// + check if the lastest 3rd line(6th line) is in 2nd page
     Call wTypeKeys "<Down>"  , 5
     Kontext "Navigator"
-        if Not Navigator.Exists then EditNavigator
+        if Not Navigator.Exists then ViewNavigator
         Kontext "NavigatorWriter"
         Sleep 1
         if Seitennummer.GetText <> "2" then warnlog "The 6th line should be in 2nd page!"
@@ -1416,7 +1416,7 @@ testcase tParagraphTextFlow12
    '/// + check if the 5th line is in 1st page
     Call wTypeKeys "<Up>"
     Kontext "Navigator"
-        if Not Navigator.Exists then EditNavigator
+        if Not Navigator.Exists then ViewNavigator
         Kontext "NavigatorWriter"
         Sleep 1
         if Seitennummer.GetText <> "1" then warnlog "The 5th line should be in 1st page!"

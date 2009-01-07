@@ -64,19 +64,26 @@ testcase tTextframes_33
 QaErrorLog "#i94758# - Testcase outcommented"
 goto endsub
 
+    QaErrorLog "#i94758# Testcase outcommented due to unreability."
+    goto endsub
+
     printlog "- Test attribute 'AutoSize' in linked frames"
     '/// Test attribute 'AutoSize' in linked frames
     
     Call hNewDocument
     
     '/// insert a frame
-    Call fInsertFrame(30,30 , 30,40)
+    Call fInsertFrame(30,30 , 40,40)
     
     Call wTypeKeys "<ESCAPE>"
     Wait 500
     
     '/// insert another frame
-    Call fInsertFrame(40,55 , 60,65)
+    Call fInsertFrame(50,50 , 65,65)
+    
+    printlog "Move the second frame away from the first one."
+    Call wTypeKeys "<RIGHT>",10
+    Call wTypeKeys "<DOWN>",7
     
     '/// Set focus to first frame
     Call wTypeKeys "<TAB>"
@@ -90,8 +97,8 @@ goto endsub
     Verketten.Click
     Wait 500
     
-    '/// Click second frame
-    Call gMouseClick(50,60)
+    '/// Target the second frame
+    Call gMouseClick(60,60)
     Wait 500
     
     '/// Format/Frame / Type ,
@@ -125,8 +132,12 @@ endcase
 
 testcase tTextframes_34
 
-    Dim  sText                       as String
-    Dim  sOriginalName , sTargetName as String
+    QaErrorLog "#i94758# Testcase outcommented due to unreability."
+    goto endsub
+    
+    Dim sText as String
+    Dim sOriginalName 
+    Dim sTargetName as String
     
     sOriginalName = "TEST1"
     sTargetName   = "TEST2"
@@ -137,7 +148,7 @@ testcase tTextframes_34
     Call hNewDocument
     
     '/// insert a frame , set frame name
-    Call fInsertFrame(30,30 , 34,40)
+    Call fInsertFrame(30,30 , 40,40)
     
     Call fFormatFrame("TabZusaetze")
     ObjektName.SetText sOriginalName
@@ -147,8 +158,13 @@ testcase tTextframes_34
     Wait 500
     
     '/// insert another frame , set frame name
-    Call fInsertFrame(40,50 , 60,80)
+    Call fInsertFrame(50,50 , 65,65)
     
+    printlog "Move second frame away from the first frame."
+    Call wTypeKeys "<RIGHT>", 10
+    Call wTypeKeys "<DOWN>", 10
+
+    printlog "Name second object."
     Call fFormatFrame("TabZusaetze")
     ObjektName.SetText sTargetName
     TabZusaetze.OK
@@ -165,8 +181,8 @@ testcase tTextframes_34
     Verketten.Click
     Wait 500
     
-    '/// Click second frame
-    Call wTypeKeys "<TAB>"
+    '/// Target the second frame
+    Call gMouseClick(60,80)
     Wait 500
     
     Call wTypeKeys "<RETURN>"
@@ -194,6 +210,9 @@ testcase tTextframes_35
 QaErrorLog "#i94758# - Testcase outcommented"
 goto endsub
 
+    QaErrorLog "#i94758# Testcase outcommented due to unreability."
+    goto endsub
+
     Dim iNoLink , iLink  as Integer
     
     iNoLink = 1
@@ -205,13 +224,17 @@ goto endsub
     Call hNewDocument
     
     '/// insert a frame
-    Call fInsertFrame(30,30 , 30,40)
+    Call fInsertFrame(30,30 , 40,40)
     
     Call wTypeKeys "<ESCAPE>"
     Wait 500
     
     '/// insert another frame
-    Call fInsertFrame(40,50 , 60,65)
+    Call fInsertFrame(50,50 , 65,65)
+    
+    printlog "Move the second frame away from the first one."
+    Call wTypeKeys "<RIGHT>",10
+    Call wTypeKeys "<DOWN>",7
     
     '/// Set focus to first frame
     Call wTypeKeys "<TAB>"
@@ -225,8 +248,8 @@ goto endsub
     Verketten.Click
     Wait 500
     
-    '/// Click second frame
-    Call gMouseClick(50,55)
+    '/// Target the second frame
+    Call gMouseClick(60,60)
     Wait 500
     
     '/// Check if the link is showed correctly (Format.Frame.Options)
@@ -255,8 +278,13 @@ testcase tTextframes_36
 QaErrorLog "#i94758# - Testcase outcommented"
 goto endsub
 
-    Dim sTestFile , sTestText  as  String
-    Dim iNoLink   , iLink      as  Integer
+    QaErrorLog "#i94758# Testcase outcommented due to unreability."
+    goto endsub
+
+    Dim sTestFile as String
+    Dim sTestText as String
+    Dim iNoLink as Integer
+    Dim iLink as Integer
     
     sTestFile = Convertpath (gTesttoolpath + "writer\optional\input\textframe\twopages.sxw")
     iNoLink   = 1
@@ -280,7 +308,7 @@ goto endsub
     
     'Check if frame is in 1st page
     Kontext
-    EditNavigator
+    ViewNavigator
     Kontext "NavigatorWriter"
     Sleep 1
     if Seitennummer.GetText <> "1" then
@@ -294,7 +322,7 @@ goto endsub
     
     'Check if frame is in 2nd page
     Kontext
-    EditNavigator
+    ViewNavigator
     Kontext "NavigatorWriter"
     Sleep 1
     if Seitennummer.GetText <> "2" then
@@ -342,6 +370,9 @@ testcase tTextframes_37
 QaErrorLog "#i94758# - Testcase outcommented"
 goto endsub
 
+    QaErrorLog "#i94758# Testcase outcommented due to unreability."
+    goto endsub
+    
     Dim sTestFile , sTestText  as  String
     Dim iNoLink   , iLink      as  Integer
     
@@ -403,6 +434,9 @@ testcase tTextframes_38
 QaErrorLog "#i94758# - Testcase outcommented"
 goto endsub
 
+    QaErrorLog "#i94758# Testcase outcommented due to unreability."
+    goto endsub
+    
     Dim sTestFile , sTestText  as  String
     Dim iNoLink   , iLink      as  Integer
     
@@ -462,10 +496,14 @@ testcase tTextframes_39
 QaErrorLog "#i94758# - Testcase outcommented"
 goto endsub
 
-    Dim sHorizontalBy1    , sVerticalBy1     as String
-    Dim sHorizontalBy2    , sVerticalBy2     as String
-    Dim sHorizontalByNew1 , sVerticalByNew1  as String
-    Dim sHorizontalByNew2 , sVerticalByNew2  as String
+    Dim sHorizontalBy1 as String
+    Dim sHorizontalBy2 as String
+    Dim sVerticalBy1 as String
+    Dim sVerticalBy2 as String
+    Dim sHorizontalByNew1 as String
+    Dim sHorizontalByNew2 as String
+    Dim sVerticalByNew1 as String
+    Dim sVerticalByNew2 as String
     
     sHorizontalBy1     = "2"+ gSeperator + "00" + gMeasurementUnit
     sVerticalBy1       = "1"+ gSeperator + "00" + gMeasurementUnit
@@ -482,7 +520,7 @@ goto endsub
     Call hNewDocument
     
     '/// insert a frame and set Horizontal and Vertical
-    Call fInsertFrame(30,40 , 30,50)
+    Call fInsertFrame(40,40 , 50,50)
     
     Call fFormatFrame("TabType")
     HorizontalBy.SetText sHorizontalBy1
@@ -495,7 +533,7 @@ goto endsub
     Wait 500
     
     '/// insert another frame and set Horizontal and Vertical
-    Call fInsertFrame(40,70 , 60,80)
+    Call fInsertFrame(50,50 , 60,60)
     
     Call fFormatFrame("TabType")
     HorizontalBy.SetText sHorizontalBy2
@@ -547,6 +585,9 @@ testcase tTextframes_40
 QaErrorLog "#i94758# - Testcase outcommented"
 goto endsub
 
+    QaErrorLog "#i94758# Testcase outcommented due to unreability."
+    goto endsub
+
     Dim sHorizontalBy as String
     
     sHorizontalBy = "2"+ gSeperator + "00" + gMeasurementUnit
@@ -557,7 +598,7 @@ goto endsub
     Call hNewDocument
     
     '/// insert a frame
-    Call fInsertFrame(30,50 , 30,60)
+    Call fInsertFrame(30,30 , 50,50)
     
     Call fFormatFrame("TabType")
     HorizontalBy.SetText sHorizontalBy
@@ -568,7 +609,11 @@ goto endsub
     Wait 500
     
     '/// insert another frame
-    Call fInsertFrame(40,80 , 60,95)
+    Call fInsertFrame(50,50 , 65,65)
+    
+    printlog "Move the second frame away from the first one."
+    Call wTypeKeys "<RIGHT>",10
+    Call wTypeKeys "<DOWN>",7
     
     Call wTypeKeys "<Tab>"
     
@@ -580,11 +625,12 @@ goto endsub
     Verketten.Click
     Wait 500
     
-    Call gMouseClick(50,85)
+    '/// Target the second frame
+    Call gMouseClick(60,60)
     Wait 500
     
-    '/// Move 1st frame with keyboard (right)
-    Call wTypeKeys "<Right>"
+    '/// Move 1st frame with keyboard (Left)
+    Call wTypeKeys "<Left>"
     Sleep 1
     
     '/// Edit / Undo
@@ -606,6 +652,9 @@ testcase tTextframes_41
 QaErrorLog "#i94758# - Testcase outcommented"
 goto endsub
 
+    QaErrorLog "#i94758# Testcase outcommented due to unreability."
+    goto endsub
+
     Dim  iLink , iNolink as  Integer
     
     iLink   =  2
@@ -617,13 +666,17 @@ goto endsub
     Call hNewDocument
     
     '/// insert a frame
-    Call fInsertFrame(30,30 , 30,40)
+    Call fInsertFrame(30,30 , 50,50)
     
     Call wTypeKeys "<ESCAPE>"
     Wait 500
     
     '/// insert another frame
-    Call fInsertFrame(40,50 , 60,65)
+    Call fInsertFrame(50,50 , 65,65)
+    
+    printlog "Move the second frame away from the first one."
+    Call wTypeKeys "<RIGHT>",10
+    Call wTypeKeys "<DOWN>",7
     
     '/// Set focus to 1st frame
     Call wTypeKeys "<Tab>"
@@ -636,7 +689,8 @@ goto endsub
     Verketten.Click
     Wait 500
     
-    Call gMouseClick(50,60)
+    '/// Target the second frame
+    Call gMouseClick(60,60)
     Wait 500
     
     '/// Remove link
@@ -689,7 +743,7 @@ testcase tTextframes_42
     Wait 500
     
     '/// insert another frame in bodytext
-    Call fInsertFrame(40,50 , 60,65)
+    Call fInsertFrame(50,50 , 70,65)
     
     Call wTypeKeys "<Tab>"
     
@@ -698,7 +752,7 @@ testcase tTextframes_42
     Wait 500
     Verketten.Click
     Wait 500
-    Call gMouseClick(50,60)
+    Call gMouseClick(60,60)
     Wait 500
     
     Call fFormatFrame("TabZusaetze")
@@ -737,7 +791,7 @@ testcase tTextframes_43
     Wait 500
     
     '/// insert another frame in bodytext
-    Call fInsertFrame(40,50 , 60,70)
+    Call fInsertFrame(50,50 , 70,70)
     
     Call wTypeKeys "<Tab>"
     
@@ -772,17 +826,17 @@ testcase tTextframes_44
     Call hNewDocument
     
     '/// insert a frame
-    Call fInsertFrame(30,30 , 30,40)
+    Call fInsertFrame(50,30 , 50,40)
     
     Call wTypeKeys "<ESCAPE>"
     Wait 500
     
     '/// insert another frame
-    Call fInsertFrame(40,50 , 60,65)
+    Call fInsertFrame(60,50 , 70,65)
     Call wTypeKeys "<ESCAPE>"
     
     '/// input some text in the target frame(2nd frame)
-    Call gMouseClick(50,60)
+    Call gMouseClick(65,60)
     Call wTypeKeys sText
     
     Call wTypeKeys ( "<Shift F4>" )
@@ -807,6 +861,9 @@ endcase
 
 testcase tTextframes_45
 
+    QaErrorLog "#i94758# Testcase outcommented due to unreability."
+    goto endsub
+
     Dim  iNoLink  as  Integer
     
     iNoLink  =  1
@@ -817,13 +874,17 @@ testcase tTextframes_45
     Call hNewDocument
     
     '/// insert a frame
-    Call fInsertFrame(30,30 , 30,40)
+    Call fInsertFrame(30,30 , 35,40)
     
     Call wTypeKeys "<ESCAPE>"
     Wait 500
     
     '/// insert another frame
-    Call fInsertFrame(40,50 , 60,65)
+    Call fInsertFrame(50,50 , 65,65)
+    
+    printlog "Move the second frame away from the first one."
+    Call wTypeKeys "<RIGHT>",10
+    Call wTypeKeys "<DOWN>",7
     
     '/// set focus to 1st frame
     Call wTypeKeys "<TAB>"
@@ -834,7 +895,7 @@ testcase tTextframes_45
     Sleep 2
     Verketten.Click
     Wait 500
-    Call gMouseClick(50,60)
+    Call gMouseClick(60,60)
     Wait 500
     
     '/// link two frames (1st frame is target frame)
@@ -843,7 +904,7 @@ testcase tTextframes_45
     Wait 500
     Verketten.Click
     Wait 500
-    Call gMouseClick(25,35)
+    Call gMouseClick(20,35)
     Wait 500
     
     Call fFormatFrame("TabZusaetze")
@@ -858,6 +919,9 @@ endcase
 
 testcase tTextframes_46
 
+    QaErrorLog "#i94758# Testcase outcommented due to unreability."
+    goto endsub
+
     Dim  iNoLink  as  Integer
     
     iNoLink  =  1
@@ -868,22 +932,31 @@ testcase tTextframes_46
     Call hNewDocument
     
     '/// insert a frame
-    Call fInsertFrame(30,30 , 30,40)
+    Call fInsertFrame(50,30 , 70,40)
     
     Call wTypeKeys "<ESCAPE>"
     Wait 500
     
     '/// insert another frame
-    Call fInsertFrame(30,50 , 30,60)
+    Call fInsertFrame(60,50 , 80,60)
+    
+    printlog "Move the frame away from the position of the first one."
+    Call wTypeKeys "<RIGHT>",4
+    Call wTypeKeys "<DOWN>",4
     
     Call wTypeKeys "<ESCAPE>"
     Wait 500
     
     '/// insert 3rd frame
-    Call fInsertFrame(40,50 , 50,60)
+    Call fInsertFrame(70,60 , 90,70)
     Wait 500
     
+    printlog "Move the frame away from the position of the first one."
+    Call wTypeKeys "<RIGHT>",8
+    Call wTypeKeys "<DOWN>",8
+    
     '/// set focus to 1st frame
+    Call wTypeKeys "<SHIFT F4>" 'make sure object is selected.
     Call wTypeKeys "<TAB>"
     Sleep 1
     
@@ -893,7 +966,7 @@ testcase tTextframes_46
     Sleep 1
     Verketten.Click
     Sleep 1
-    Call gMouseClick(35,55)
+    Call gMouseClick(45,45)
     Wait 500
     
     '/// set focus to 3rd frame
@@ -904,7 +977,7 @@ testcase tTextframes_46
     Sleep 2
     Verketten.Click
     Sleep 1
-    Call gMouseClick(35,55)
+    Call gMouseClick(45,45)
     Wait 500
     
     Call fFormatFrame("TabZusaetze")
@@ -952,7 +1025,7 @@ testcase tTextframes_47
     BereicheBearbeiten.OK
     
     '/// Insert another frame (B) out of the section
-    Call fInsertFrame(30,50 , 30,60)
+    Call fInsertFrame(50,50 , 60,60)
     
     '/// Link B->A (A is target)
     Call fFormatFrame("TabZusaetze")
@@ -1011,7 +1084,7 @@ testcase tTextframes_48
     BereicheBearbeiten.OK
     
     '/// Insert another frame (B) out of the section
-    Call fInsertFrame(30,50 , 30,60)
+    Call fInsertFrame(50,50 , 60,60)
     
     '/// Link B->A (A is target)
     Call fFormatFrame("TabZusaetze")

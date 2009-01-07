@@ -769,7 +769,6 @@ sub id_002
     call tiEditCutPasteCopySelectall
     call tiEditPasteSpecial
     call tiEditSearchAndReplace
-    call tiEditNavigator
     call tiEditDuplicate
     call tEditPoints
     call tiEditFields
@@ -787,6 +786,7 @@ sub id_003
 
    printLog Chr(13) + "---------    id_003    ----------"
 
+   call tiViewNavigator
    call tiViewZoom
    call tiViewToolbar
    Call tToolsCustomize			     'global\required\include

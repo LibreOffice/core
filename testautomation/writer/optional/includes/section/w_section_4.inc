@@ -536,7 +536,7 @@ testcase tSectionInFootnotes_2
     Call wBlindtextEinfuegen
 
     Kontext
-    EditNavigator
+    ViewNavigator
     sleep(1)
     Kontext "NavigatorWriter"
 
@@ -884,7 +884,7 @@ testcase tParagraphSection_1
 
   'Set the focus to the head of second page
    Kontext
-   EditNavigator
+   ViewNavigator
    Kontext "NavigatorWriter"
    Seitennummer.SetText "2"
    Sleep 2

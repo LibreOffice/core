@@ -47,6 +47,11 @@ end sub
 
 testcase tL10N_1
 
+    if iSprache <> 1 then
+        QaErrorLog "Currently no any other language than English. Aborting."
+        exit sub
+    end if
+    
     Dim sTestFile as String
     Dim sAbove() as String
     Dim sBelow() as String
@@ -175,7 +180,11 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tL10N_2
-
+    if iSprache <> 1 then
+        QaErrorLog "Currently no any other language than English. Aborting."
+        exit sub
+    end if
+    
     Dim sTestFile    as String
     Dim sDate()      as String
     Dim iCountry()   as Integer
@@ -283,6 +292,10 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tL10N_3
+    if iSprache <> 1 then
+        QaErrorLog "Currently no any other language than English. Aborting."
+        exit sub
+    end if
 
     Dim sTestFile as String
     Dim sTime() as String

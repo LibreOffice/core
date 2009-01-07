@@ -229,32 +229,25 @@ testcase tFileTemplatesAddressbookSource
     Kontext "AddressbookSource"
     if AddressbookSource.Exists then
         Call DialogTest (AddressbookSource)
-        if (gPlatform <> "x86") AND (gPlatForm <> "sol") then 
-            Administrate.Click
-            Sleep 2
-            PrintLog " Close 'Data Source Administration' with 'Cancel'"
-            Kontext "DatabaseProperties"
-            if Not DatabaseProperties.Exists then
-                Kontext "AddressSourceAutopilot"
-                if AddressSourceAutopilot.Exists then
-                    AddressSourceAutopilot.Cancel
-                end if
-                Kontext "AddressbookSource"
-                AddressbookSource.Cancel
-            else
-                PrintLog " DatabaseProperties.SetPage TabConnection"
-                Kontext "TabConnection"
-                Call DialogTest ( TabConnection )
-                Kontext "DatabaseProperties"
-                DatabaseProperties.Close
-                Kontext "AddressbookSource"
-                PrintLog " Close dialog"
-                AddressbookSource.Cancel
+        Administrate.Click
+        Sleep 2
+        PrintLog " Close 'Data Source Administration' with 'Cancel'"
+        Kontext "DatabaseProperties"
+        if Not DatabaseProperties.Exists then
+            Kontext "AddressSourceAutopilot"
+            if AddressSourceAutopilot.Exists then
+                AddressSourceAutopilot.Cancel
             end if
-        else
-            QAErrorlog "#i62423#Adress Source Autopilot crashes"
-            PrintLog " Close dialog"
             Kontext "AddressbookSource"
+            AddressbookSource.Cancel
+        else
+            PrintLog " DatabaseProperties.SetPage TabConnection"
+            Kontext "TabConnection"
+            Call DialogTest ( TabConnection )
+            Kontext "DatabaseProperties"
+            DatabaseProperties.Close
+            Kontext "AddressbookSource"
+            PrintLog " Close dialog"
             AddressbookSource.Cancel
         end if
     end if

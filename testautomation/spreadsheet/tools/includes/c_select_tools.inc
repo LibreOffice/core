@@ -201,7 +201,7 @@ function fNavigatorSelectObject ( sWhatObject as STRING , iObjectPosition as INT
         bNavigatorWasVisible = TRUE
     else
         '///<li>Invoke navigator if not visible</li>///
-        EditNavigator
+        ViewNavigator
     end if
     
     try 
@@ -230,7 +230,7 @@ function fNavigatorSelectObject ( sWhatObject as STRING , iObjectPosition as INT
     if bNavigatorWasVisible = TRUE then
         printlog "Leaving navigator open as initially found"
     else
-        EditNavigator
+        ViewNavigator
         printlog "Closing navigator as initially found"
     end if
     '///</ul>

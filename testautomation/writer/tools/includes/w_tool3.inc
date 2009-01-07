@@ -591,7 +591,7 @@ end function
 sub VerzeichnisUeberNavigator(Welches as integer)
    dim j as integer
      Kontext "Navigator"
-    if Navigator.NotExists then EditNavigator
+    if Navigator.NotExists then ViewNavigator
     Kontext "NavigatorWriter"
     if Auswahlliste.GetItemCount<11 then Inhaltsansicht.Click
 
@@ -628,7 +628,7 @@ end sub
 sub sNavigatorInBrauchbarenZustand
    dim j as integer
     Kontext "NavigatorWriter"
-    if NavigatorWriter.NotExists then EditNavigator
+    if NavigatorWriter.NotExists then ViewNavigator
     if Auswahlliste.GetItemCount<11 then Inhaltsansicht.Click
     Wait 500
     if Auswahlliste.GetItemCount >11 then

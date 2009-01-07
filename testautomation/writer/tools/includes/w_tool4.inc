@@ -50,7 +50,7 @@ function CountItemsInNavigatorGroup(Group as integer) as Integer
     Dim j as integer,SelectInNavigator as integer
     'First, select the Navigator depending on the application
     Kontext "Navigator"
-    If Not Navigator.Exists then EditNavigator
+    If Not Navigator.Exists then ViewNavigator
     Kontext "NavigatorWriter"
 
     'In Navigator, close all groups and set focus to first group

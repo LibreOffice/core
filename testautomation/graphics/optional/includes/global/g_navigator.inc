@@ -36,13 +36,13 @@
 '* short description :
 '*
 '**************************************************************************************
-' #1 tdEditNavigator
-' #1 tEditNavigatorZOrder
-' #1 tEditNavigatorNameActivated
-' #1 tEditNavigatorGroupedObjects
+' #1 tdViewNavigator
+' #1 tViewNavigatorZOrder
+' #1 tViewNavigatorNameActivated
+' #1 tViewNavigatorGroupedObjects
 '\*************************************************************************************
 
-testcase tdEditNavigator
+testcase tdViewNavigator
     dim position1 as integer
     dim zaehler as integer
     dim Ueber_Text_1 as string
@@ -82,7 +82,7 @@ testcase tdEditNavigator
     Next Zaehler
 
     WaitSlot (1000)
-    EditNavigator                   '/// open navigator flyer ///'
+    ViewNavigator                   '/// open navigator flyer ///'
     Kontext "NavigatorDraw"
         if NavigatorDraw.exists (5) then printlog "OK"
             Erste.Click                     '/// jump to 1st slide ///'
@@ -136,11 +136,11 @@ testcase tdEditNavigator
                 WaitSlot (1000)
     '/// Close the document ///'
     Call hCloseDocument
-endcase   'tdEditNavigator
+endcase   'tdViewNavigator
 
 '--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-testcase tEditNavigatorZOrder
+testcase tViewNavigatorZOrder
     qaerrorlog "Not yet ready."
     goto endsub
     
@@ -299,11 +299,11 @@ testcase tEditNavigatorZOrder
 
     '/// Close the document ///'
     Call hCloseDocument
-endcase 'tEditNavigatorZOrder
+endcase 'tViewNavigatorZOrder
 
 '--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-testcase tEditNavigatorNameActivated
+testcase tViewNavigatorNameActivated
     qaerrorlog "Not yet ready."
     goto endsub
     dim zPosition1 as integer
@@ -322,11 +322,11 @@ testcase tEditNavigatorNameActivated
     '/// Open the Navigator ///'
     '/// Close the Navigator ///'
     '/// Close the document ///'
-endcase 'tEditNavigatorNameActivated
+endcase 'tViewNavigatorNameActivated
 
 '--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-testcase tEditNavigatorGroupedObjects
+testcase tViewNavigatorGroupedObjects
     qaerrorlog "Not yet ready."
     goto endsub
     dim zPosition1 as integer
@@ -346,6 +346,6 @@ testcase tEditNavigatorGroupedObjects
     '/// Open the Navigator ///'
     '/// Close the Navigator ///'
     '/// Close the document ///'
-endcase 'tEditNavigatorGroupedObjects
+endcase 'tViewNavigatorGroupedObjects
 
 '--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

@@ -77,7 +77,7 @@ testcase tDefaultSetting_1
 
     printlog " 'Simplified Chinese to Traditional Chinese' should be Checked by default"
      if NOT SChineseToTChinese.IsChecked then
-         Warnlog "'Simplified Chinese to Traditional Chinese' should be Checked by default !"
+         Warnlog "#i96768# 'Simplified Chinese to Traditional Chinese' should be Checked by default !"
      end if
    ChineseTranslation.Cancel
 
@@ -331,6 +331,11 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tChineseTranslate_5
+    if bAsianLan <> True then
+        'This testcase might only run with 'Use Taiwan , Hongkong SAR...'s status.
+        QaErrorLog "Testing with Asian languages only"
+        goto endsub
+    end if
 
   printlog "'Use Taiwan , Hongkong SAR...'s statue"
 

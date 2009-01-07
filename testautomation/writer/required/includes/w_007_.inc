@@ -817,32 +817,28 @@ testcase tToolsMailMergeWizard
     
     Kontext "MailMergeWizard"
     MailMergeWizard.Cancel
-        
-    
+
     printlog " Close active document"
     Call hCloseDocument
-
 endcase
 
 ' -------------------------------------------
 
 testcase tToolsTextInTables
     PrintLog "- Tools / Text <-> Tables"
-
-    Call hNewDocument
     printlog " Open new document"
-    Call wTypeKeys ("Hallo dieser Text soll in eine Tabelle")
+    Call hNewDocument
     printlog " Insert some text and select it"
+    Call wTypeKeys ("Hallo dieser Text soll in eine Tabelle")
     Call wTypeKeys ("<Shift Home>")
     ToolsTextInTable
     printlog " Tools / Text<->Table"
     Kontext "TextInTabelleUmwandeln"
     DialogTest ( TextInTabelleUmwandeln )
-    TextInTabelleUmwandeln.Cancel
     printlog " Close upcoming dialog"
-    Call hCloseDocument
+    TextInTabelleUmwandeln.Cancel
     printlog " Close active document"
-
+    Call hCloseDocument
 endcase
 
 ' -------------------------------------------
@@ -862,9 +858,8 @@ testcase tToolsSort
     Kontext "Sortieren"
     Call DialogTest ( Sortieren )
     Sortieren.Cancel
-    Call hCloseDocument
     printlog " Close active document"
-
+    Call hCloseDocument
 endcase
 
 ' -------------------------------------------
@@ -896,14 +891,14 @@ testcase tToolsUpdate
         printlog "Not in WriterWeb !"
         goto endsub
     end if
-    Call hNewDocument
     printlog " Open new document"
+    Call hNewDocument
 
     printlog "  - Update Indexes ( all, current )"
     printlog " Add a text to document"
     Call wTypeKeys ("Dieser Text ist zur Aktualisierung")
-    InsertIndexes
     printlog " Insert / Indexes"
+    InsertIndexes
     WaitSlot (2000)
     Kontext "Active"
     if Active.Exists then
@@ -915,9 +910,9 @@ testcase tToolsUpdate
     Sleep 2
     Kontext
     Active.Setpage TabVerzeichnisseVerzeichnis
+    printlog " Close upcoming Index dialog"
     Kontext "TabVerzeichnisseVerzeichnis"
     TabVerzeichnisseVerzeichnis.OK
-    printlog " Close upcoming Index dialog"
     Sleep 1
     printlog " Tools / Update / All Indexes"
     ToolsUpdateAllIndexes
@@ -946,22 +941,23 @@ testcase tToolsUpdate
         Warnlog "Links can't be updated!"
     endcatch
 
-    printlog "  - Update / Reformat Pages"
-    printlog " Tools / Page formatting"
+    printlog "  - Update / Reformat Pages  with  Tools / Page formatting"
     ToolsPageFormatting
 
-    printlog "  - update all"
-    printlog " Tools / Update / Update All"
+    printlog "  - update all   with   Tools / Update / Update All"
     ToolsUpdateUpdateAll
 
-    Call hCloseDocument
-    printlog " Close active document"
+    printlog " Close all active documents"
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' -------------------------------------------
 
 testcase tToolsHangulHanjaConversion
-   WarnLog "#i96838# - tToolsHangulHanjaConversion outcommented due to unreability."
+
+    WarnLog "#i96838# - tToolsHangulHanjaConversion outcommented due to unreability."
    exit sub
 
     Dim bAsianLanguage as Boolean
@@ -1035,9 +1031,10 @@ testcase tToolsHangulHanjaConversion
        Call ActiveDeactivateAsianSupport(FALSE)
     end if
 
-    printlog " Close active document"
-    Call hCloseDocument
-
+    printlog " Close all active documents"
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' -------------------------------------------

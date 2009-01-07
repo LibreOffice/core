@@ -373,11 +373,11 @@ testcase tToolsMacro
     Bearbeiten.Click
     try
         sleep 1 ' this sleep is necessary. it takes some time, until focuse switched to basic window!
-        editnavigator
+        ViewNavigator
         kontext "NavigatorDraw"
         if NavigatorDraw.exists (5) then
             Warnlog "  - Edit macro does not work"
-            editnavigator
+            ViewNavigator
         endif
     catch
         hCloseDocument

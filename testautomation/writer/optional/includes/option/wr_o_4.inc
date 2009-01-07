@@ -873,7 +873,7 @@ testcase tToolsOptionsWriterMailMerge
     Call hNewDocument
     printlog ("'///- Tools/Options/Writer: Mail Merge ///")
     Kontext "Navigator"
-    if Navigator.Exists then EditNavigator
+    if Navigator.Exists then ViewNavigator
     ToolsOptions
     Call hToolsOptions ("TextDocument","MailMergeEMail")
 

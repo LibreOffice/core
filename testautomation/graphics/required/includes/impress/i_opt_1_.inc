@@ -66,7 +66,7 @@ testcase tiAlwaysWithCurrentPage()
     if NavigatorDraw.exists (5) then
         warnlog "presupposition not met: navigator should be closed on loading the document!"
     else
-        EditNavigator
+        ViewNavigator
         WaitSlot (2000)
     end if
 
@@ -81,11 +81,11 @@ testcase tiAlwaysWithCurrentPage()
     printlog "Start the slideshow with 'Slide Show->Slide Show."
     SlideShowSlideshow
     kontext "DocumentPresentation"
-    printlog "Open the navigator Edit->Navigator."
+    printlog "Open the navigator View->Navigator."
     Kontext "NavigatorDraw"
     printlog "Opening navigator if none is there."
     if (not NavigatorDraw.exists(5)) then
-        EditNavigator
+        ViewNavigator
     endif
     printlog "The slideshow has to start on slide 3."
     printlog "running routine for slide 3 and 4."    
@@ -93,7 +93,7 @@ testcase tiAlwaysWithCurrentPage()
         Kontext "NavigatorDraw"
         printlog "Checking for navigator.."
         if (not NavigatorDraw.exists(5)) then
-            EditNavigator
+            ViewNavigator
         endif
         printlog "Getting number of current slide."
         printlog "Countervariable is " & i
@@ -135,7 +135,7 @@ testcase tiAlwaysWithCurrentPage()
     printlog "Making sure navigator is open."
     Kontext "NavigatorDraw"
     if (not NavigatorDraw.exists(5)) then
-        EditNavigator
+        ViewNavigator
     endif
     printlog "Checking if we are on slide one."
     i = fGetSlideNumber()
@@ -147,18 +147,18 @@ testcase tiAlwaysWithCurrentPage()
     printlog "Start the slideshow with 'Slide Show->Slide Show."
     SlideShowSlideshow
     kontext "DocumentPresentation"
-    printlog "Open the navigator Edit->Navigator."
+    printlog "Open the navigator View->Navigator."
     Kontext "NavigatorDraw"
     printlog "Checking if navigator is open."
     if (not NavigatorDraw.exists(5)) then
-        EditNavigator
+        ViewNavigator
     endif
     printlog "The slideshow has to start on slide 1."
     printlog "Running routine for slide 1-4. i = 1 to 3 because we start already on slide 1."
     for i = 1 to 3
         Kontext "NavigatorDraw"
         if (not NavigatorDraw.exists(5)) then
-            EditNavigator
+            ViewNavigator
         endif
         printlog "Getting number of current slide."
         fGetSlideNumber(i)
@@ -184,7 +184,7 @@ testcase tiAlwaysWithCurrentPage()
     Kontext "NavigatorDraw"
     printlog "Checking if navigator is open."
     if (not NavigatorDraw.exists(5)) then
-        EditNavigator
+        ViewNavigator
     endif
     printlog "Checking if we are on slide 3."
     i = fGetSlideNumber()
@@ -192,10 +192,10 @@ testcase tiAlwaysWithCurrentPage()
                 warnlog "We are on the wrong slide! Should be 2 but it is: " & i
     endif
 
-    printlog "Close the navigator Edit->Navigator."
+    printlog "Close the navigator View->Navigator."
     Kontext "NavigatorDraw"
     if NavigatorDraw.exists(5) then
-        EditNavigator
+        ViewNavigator
     endif
 
     printlog "Restore: check Always with current page."

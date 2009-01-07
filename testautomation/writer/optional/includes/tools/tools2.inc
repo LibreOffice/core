@@ -52,7 +52,7 @@ function fStartupNavigator(navigatorItem as String , subItemNum as Integer)
 
    Kontext "Navigator"
    if NOT Navigator.Exists then
-       EditNavigator
+       ViewNavigator
    end if
    Sleep 2
    Kontext "NavigatorWriter"

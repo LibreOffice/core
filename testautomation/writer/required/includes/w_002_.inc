@@ -51,7 +51,7 @@ sub w_002_
     Call tEditChanges
     Call tEditCompareDocument
     Call tEditFindAndReplace
-    Call tEditNavigator
+    Call tViewNavigator
     Call tEditAutoText
     Call tEditHyperlink
 
@@ -501,7 +501,7 @@ endcase
 
 '----------------------------------------------------
 
-testcase tEditNavigator
+testcase tViewNavigator
     printlog "- Edit/Navigator"
     Dim ToolboxOk as boolean
 
@@ -510,7 +510,7 @@ testcase tEditNavigator
 
     if gApplication = "MASTERDOC" then
         Kontext "NavigatorGlobalDoc"
-        if Not NavigatorGlobalDoc.Exists then EditNavigator
+        if Not NavigatorGlobalDoc.Exists then ViewNavigator
         Kontext "NavigatorGlobalDoc"
         Call DialogTest ( NavigatorGlobalDoc )
 
@@ -553,7 +553,7 @@ testcase tEditNavigator
     end if
 
     Kontext "NavigatorWriter"
-    if Not NavigatorWriter.Exists then EditNavigator
+    if Not NavigatorWriter.Exists then ViewNavigator
     Kontext "NavigatorWriter"
     PrintLog "Open Navigator"
     Call DialogTest ( NavigatorWriter )
@@ -648,7 +648,7 @@ testcase tEditNavigator
         Navigator.Close
     catch
         Errorlog
-        EditNavigator
+        ViewNavigator
     endcatch
 
     PrintLog "Close active document"

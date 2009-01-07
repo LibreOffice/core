@@ -41,7 +41,6 @@
 ' #1 tiEditCutPasteCopySelectall
 ' #1 tiEditPasteSpecial
 ' #1 tiEditSearchAndReplace
-' #1 tiEditNavigator
 ' #1 tiEditDuplicate
 ' #1 tiEditFields
 ' #1 tdEditDeleteSlide
@@ -181,30 +180,6 @@ testcase tiEditSearchAndReplace
     Call hCloseDocument
 endcase
 
-testcase tiEditNavigator
-    '/// open application ///'
-    Call hNewDocument
-
-    Kontext "NavigatorDraw"
-        '/// if 'Navigator' isn't already open, open it (Edit->Navigator)///'
-        if Not NavigatorDraw.Exists Then
-            EditNavigator
-        end if
-    Kontext "NavigatorDraw"
-        Call DialogTest ( NavigatorDraw )
-
-        try
-            Kontext "Navigator"
-                '/// close 'Navigator' ///'
-                Navigator.Close
-        catch
-            Errorlog "  Navigator wasn't closed, second try with Menu"
-            EditNavigator
-        endcatch
-    '/// close application ///'
-    Call hCloseDocument
-endcase
-
 testcase tiEditDuplicate
     '/// open application ///'
     Call hNewDocument
@@ -284,7 +259,7 @@ testcase tdEditDeleteSlide
         printlog "Navigator: open :-)"
     else
         printlog "Navigator: NOT available :-( Will be opened now!"
-        EditNavigator
+        ViewNavigator
     end if
     WaitSlot (2000)
     Kontext "NavigatorDraw"
