@@ -62,6 +62,7 @@ mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\rdf
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\rendering
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\report
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\report\inspection
+mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\report\meta
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\resource
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\scanner
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\script
@@ -176,6 +177,7 @@ mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\form
 ..\com\sun\star\rendering\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\rendering
 ..\com\sun\star\report\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\report
 ..\com\sun\star\report\inspection\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\report\inspection
+..\com\sun\star\report\meta\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\report\meta
 ..\com\sun\star\resource\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\resource
 ..\com\sun\star\scanner\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\scanner
 ..\com\sun\star\script\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\script
