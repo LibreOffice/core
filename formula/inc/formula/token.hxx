@@ -32,6 +32,7 @@
 #define FORMULA_TOKEN_HXX
 
 #include <memory>
+#include <string.h>
 #include <vector>
 #include "formula/opcode.hxx"
 //#include "refdata.hxx"
@@ -69,6 +70,9 @@ enum StackVarEnum
                                         // and/or string result and a formula
                                         // string to be compiled.
 
+    svExternalSingleRef,
+    svExternalDoubleRef,
+    svExternalName,
     svError,                            // error token
     svMissing = 0x70,                   // 0 or ""
     svSep,                              // separator, ocSep, ocOpen, ocClose
