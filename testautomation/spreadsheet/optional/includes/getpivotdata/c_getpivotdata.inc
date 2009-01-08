@@ -70,58 +70,58 @@ testcase tgetpivotdata_function_wizard
     printlog "Select cell I8 and open function wizard by INSERT FUNCTION"
     call fGotoCell ( "I8" )
     InsertFunction
-    kontext ( "FunktionsAutoPilot" )
+    kontext ( "FunctionWizard" )
     '/// Select category SPREADSHEET (11th category in listbox)
     printlog "Select category SPREADSHEET (11th category in listbox)"
-    Kategorie.select 11
+    CategoryLB.select 11
     '/// Select the function GETPIVOTDATA in the now filtered function list
     printlog "Select the function GETPIVOTDATA in the now filtered function list"
     try 
-        Funktion.select sfunctionname
+        FunctionLB.select sfunctionname
         printlog "  Function " & sfunctionname & " selected in category SPREADSHEET"
     catch
         warnlog "The function is not available under category SPREADSHEET"
     endcatch
-    Kategorie.select 2
+    CategoryLB.select 2
     try
-        Funktion.select sfunctionname
+        FunctionLB.select sfunctionname
     catch
         warnlog "The function is generally not available"
-        FunktionsAutoPilot.OK
+        FunctionWizard.OK
         call hCloseDocument
         goto endsub
     endcatch
     '/// Press NEXT button
     printlog "Press NEXT button"
-    weiter.click
+    Forward.click
     '/// Enter 2000 for parameter Data Field
     printlog "Enter 2000 for parameter Data Field"
-    kontext "FunktionsAutoPilot"
-    Editfeld1.settext "2000"
+    kontext "FunctionWizard"
+    Editfield1.settext "2000"
     '/// Enter C29 for parameter DataPilot
     printlog "Enter C29 for parameter DataPilot"
-    Editfeld2.settext "C29"
+    Editfield2.settext "C29"
     '/// Enter C3 for parameter Field Name / Item 1
     printlog "Enter C3 for parameter Field Name / Item 1"
-    Editfeld3.settext "C3"
+    Editfield3.settext "C3"
     '/// Enter C16 for parameter Field Name / Item 2
     printlog "Enter C16 for parameter Field Name / Item 2"
-    Editfeld4.settext "C16"
+    Editfield4.settext "C16"
     '/// Scroll down to enable the next field
     printlog "Scroll down to enable the next field"
-    Editfeld4.TypeKeys "<DOWN>"
+    Editfield4.TypeKeys "<DOWN>"
     '/// Enter C26 for parameter Field Name / Item 3
     printlog "Enter C26 for parameter Field Name / Item 3"
-    Editfeld4.settext "C26"
+    Editfield4.settext "C26"
     '/// Scroll down to enable the next field
     printlog "Scroll down to enable the next field"
-    Editfeld4.TypeKeys "<DOWN>"
+    Editfield4.TypeKeys "<DOWN>"
     '/// Enter F27 for parameter Field Name / Item 4
     printlog "Enter F27 for parameter Field Name / Item 4"
-    Editfeld4.settext "F27"
+    Editfield4.settext "F27"
     '/// Close functionwizard by pressing OK button
     printlog "Close functionwizard by pressing OK button"
-    FunktionsAutoPilot.OK
+    FunctionWizard.OK
     '/// Memorize cellcontent
     kontext ( "RechenleisteCalc" ) 
     EingabeZeileCalc.TypeKeys ("<f2><mod1 a>")

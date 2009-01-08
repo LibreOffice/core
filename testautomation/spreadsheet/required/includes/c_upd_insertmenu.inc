@@ -552,27 +552,27 @@ testcase tInsertFunction
     '/// Open the 'Function Wizard' via 'Insert – Function'
     printlog " Open the 'Function Wizard' via 'Insert – Function'"
     InsertFunction
-    Kontext "Funktionsautopilot"
+    Kontext "FunctionWizard"
     '/// Check that there are 13 entries in the category listbox
     printlog " Check that there are 13 entries in the category listbox"
-    if Kategorie.GetItemCount <> 13 then
-        warnlog "There are " &  Kategorie.GetItemCount & " categories instead of 13"
+    if CategoryLB.GetItemCount <> 13 then
+        warnlog "There are " &  CategoryLB.GetItemCount & " categories instead of 13"
     end if
     '/// Choose the second entry (all) in the category listbox
     printlog " Choose the second entry (all) in the category listbox"
-    Kategorie.Select(2)
+    CategoryLB.Select(2)
     '/// Choose all entries in the function list and click 'Next' button
     printlog " Choose all entries in the function list"
-    ifunctionCount = Funktion.getItemCount      
+    ifunctionCount = FunctionLB.getItemCount      
     for ifunctionIndex = 1 To ifunctionCount
-        Kategorie.Select(2)
-        Funktion.Select(ifunctionIndex)
+        CategoryLB.Select(2)
+        FunctionLB.Select(ifunctionIndex)
 '        sleep(1)
-        printlog Funktion.GetSelText
-        call DialogTest ( Funktionsautopilot,ifunctionIndex )
+        printlog FunctionLB.GetSelText
+        call DialogTest ( FunctionWizard,ifunctionIndex )
         '/// Click on 'Next' – button
-        Weiter.Click
-        call DialogTest ( Funktionsautopilot,(ifunctionCount + ifunctionIndex) )
+        Forward.Click
+        call DialogTest ( FunctionWizard,(ifunctionCount + ifunctionIndex) )
         Formel.typekeys "<MOD1 A><DELETE>", true
     next ifunctionIndex
     '/// Check option 'Array'
@@ -580,34 +580,34 @@ testcase tInsertFunction
     Matrix.check
     '/// Choose the third entry (database) in the category listbox
     printlog " Choose the third entry (database) in the category listbox"
-    Kategorie.Select(3)
+    CategoryLB.Select(3)
     '/// Choose first function
     printlog " Choose first function"
-    Funktion.Select (1)
+    FunctionLB.Select (1)
     '/// Click on 'Next' button
     printlog " Click on 'Next' button"
-    Weiter.Click
+    Forward.Click
     '/// Click on 'Shrink' – button; the range chooser appears
     printlog " Click on 'Shrink' – button; the range chooser appears"
-    Verkleinern1.click
+    Shrink1.click
     '/// Enter 'A1' in rangechooser
     printlog " Enter 'A1' in rangechooser"
-    Editfeld1.SetText ("A1")    
+    Editfield1.SetText ("A1")    
     '/// Click on 'Maximize' – button
     printlog " Click on 'Maximize' – button"
-    maximizer.click
+    maximize.click
     '/// Click on 'fx' – button
     printlog " Click on 'fx' – button"
-    Funktionsbutton1.click
+    Functionsbutton1.click
     '/// Switch to tabpage 'Structure'
     printlog " Switch to tabpage 'Structure'"
-    Kontext "FunktionsautopilotTabControl"
-    FunktionsautopilotTabControl.setpage TabFunktionsautopilotStruktur
-    Kontext "Funktionsautopilot"
-    call DialogTest ( Funktionsautopilot,((ifunctionCount *2)+1) )
+    Kontext "FunctionWizardTabControl"
+    FunctionWizardTabControl.setpage TabFunctionWizardStructure
+    Kontext "FunctionWizard"
+    call DialogTest ( FunctionWizard,((ifunctionCount *2)+1) )
     '/// Close dialog with 'Cancel'
     printlog " Close dialog with 'Cancel'"
-    Funktionsautopilot.Cancel
+    FunctionWizard.Cancel
     '/// Close document
     printlog " Close starting document"
     call hCloseDocument

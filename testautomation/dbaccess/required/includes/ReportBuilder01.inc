@@ -51,7 +51,8 @@ sub rpt_Main
         call tGroupingSorting
         call tReportNavigator
         call tReportHeaderFooter
-        call tPageHeaderFooter        
+        call tPageHeaderFooter   
+        call tFunctionWizard
     else
         warnlog "report extension could not installed"    
     endif
@@ -818,6 +819,59 @@ testcase tFormatPage
     '/// close the report designer
     call fCloseReportDesign
     '/// close the database
+    call fCloseDatabase
+
+endcase
+'-------------------------------------------------------------------------
+testcase tFunctionWizard
+    
+    printlog "open Bibliography database"    
+    call fOpenDatabase(gOfficePath + ConvertPath("user/database/biblio.odb"))
+        
+    printlog "open the report designer"
+    call fOpenNewReportDesign
+
+    printlog "select the first table in the content list box"
+    Kontext "ReportDataProperties"   
+        Content.select 1
+        Content.typeKeys("<RETURN>",true) ' important to leave the listbox
+    
+    Kontext "ReportDesign"
+        ReportDesign.TypeKeys("<MOD1 TAB>",true)
+        ReportDesign.TypeKeys("<MOD1 TAB>",true)
+        
+    Kontext "ReportAddField"
+        ReportAddFieldList.select 1    
+        ReportAddField.TypeKeys("<RETURN>",true)        
+        
+    'close the Add Field dialog to get the focus back to the design
+    call fCloseAddFieldDialog()
+    
+    'press 2 time tab to select the edit field
+    Kontext "ReportDesign"
+        ReportDesign.TypeKeys("<TAB>",true)
+        ReportDesign.TypeKeys("<TAB>",true)
+    
+    sleep(1)
+    
+    printlog "click on the ... button behind the datafield property in the property browser"    
+    Kontext "ReportDataProperties"
+        OpenFormularWizard.Click
+    
+    printlog "check if the function wizard appear"    
+    Kontext "FunctionWizard"
+        if(FunctionWizard.exists(5)) then
+            printloig "The function wizard appear -> OK"
+            FunctionWizard.close
+        else
+            warnlog "The function wizard does not appear -> FAILED"
+        endif
+    
+    sleep(1)        
+        
+    printlog "close the report designer"
+    call fCloseReportDesign
+    printlog "close the database"
     call fCloseDatabase
 
 endcase
