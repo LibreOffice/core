@@ -5382,7 +5382,7 @@
             </node>
             <node oor:name=".uno:ActivateStyleApply" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Apply Style</value>
+                    <value xml:lang="en-US">Set Focus in Combo Box</value>
                 </prop>
             </node>
             <node oor:name=".uno:MacroOrganizer" oor:op="replace">
