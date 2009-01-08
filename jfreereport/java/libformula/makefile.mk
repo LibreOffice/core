@@ -55,7 +55,7 @@ PATCH_FILE_NAME=$(PRJ)$/patches$/$(TARGET).patch
 
 CONVERTFILES=build.xml\
                 build.properties \
-                source/org/jfree/formula/function/text/MidFunctionDescription.java
+                source/org/jfree/formula/function/text/MidFunctionDescription.java \
                 source/org/jfree/formula/function/AbstractFunctionDescription.java \
                 source/org/jfree/formula/function/datetime/Hour-Function.properties \
                 source/org/jfree/formula/function/information/IsBlank-Function.properties \
