@@ -61,7 +61,6 @@ ModelessDialog RID_SVXDLG_SPELLCHECK
         Pos = MAP_APPFONT(  6, 8 );
         Size = MAP_APPFONT( 100, 8 );
         Text [ en-US ] = "Text languag~e" ;
-        Text [ de ] = "Text~sprache" ;
     };
     ListBox LB_LANGUAGE
     {
@@ -126,7 +125,6 @@ ModelessDialog RID_SVXDLG_SPELLCHECK
         Pos = MAP_APPFONT( 209, 54 );
         Size = MAP_APPFONT( 55, 14 );
         Text [ en-US ] = "I~gnore Rule" ;
-        Text [ de ] = "Regel i~gnorieren";
         Hide = TRUE;
     };
     MenuButton MB_ADDTODICT
