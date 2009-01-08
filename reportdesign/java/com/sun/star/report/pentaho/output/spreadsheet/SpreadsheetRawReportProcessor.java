@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -107,14 +107,14 @@ public class SpreadsheetRawReportProcessor extends AbstractReportProcessor
         // second run: uses table cell data to output a single uniform table
         processReportRun(job, reportTarget);
     }
-
+    
     protected ReportContext createReportContext(final ReportJob job,
             final ReportTarget target)
     {
         final ReportContext context = super.createReportContext(job, target);
         if (context instanceof ReportContextImpl)
         {
-            ReportContextImpl impl = (ReportContextImpl) context;
+            final ReportContextImpl impl = (ReportContextImpl) context;
             impl.setFormulaContext(new PentahoFormulaContext(impl.getFormulaContext(),job.getConfiguration()));
         }
         return context;

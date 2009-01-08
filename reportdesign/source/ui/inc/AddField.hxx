@@ -34,11 +34,16 @@
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
+#include <com/sun/star/frame/XDispatch.hpp>
+#include <svtools/transfer.hxx>
+#include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/sdbc/XConnection.hpp>
 #include <svtools/svtreebx.hxx>
 #include <svtools/transfer.hxx>
 #include <vcl/floatwin.hxx>
 #include <comphelper/propmultiplex.hxx>
-#include <comphelper/containermultiplexer.hxx>
+#include <vcl/button.hxx>
+
 #include <svx/dataaccessdescriptor.hxx>
 #include "cppuhelper/basemutex.hxx"
 #include <dbaccess/ToolBoxHelper.hxx>
@@ -63,8 +68,11 @@ class  OAddFieldWindow  :public FloatingWindow
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_xRowSet;
 
     ToolBox                                                                     m_aActions;
+    DECL_LINK( OnDoubleClickHdl, void* );
+
     ::std::auto_ptr<OAddFieldWindowListBox>                                     m_pListBox;
 
+    PushButton                                                                  m_aInsertButton;
     Link                                                                        m_aCreateLink;
     ::rtl::OUString                                                             m_aCommandName;
     ::rtl::OUString                                                             m_sFilter;
@@ -91,6 +99,8 @@ public:
     inline const ::rtl::OUString&       GetCommand()            const { return m_aCommandName; }
     inline sal_Int32                    GetCommandType()        const { return m_nCommandType; }
     inline sal_Bool                     GetEscapeProcessing()   const { return m_bEscapeProcessing; }
+    inline void SetCreateHdl(const Link& _aCreateLink) { m_aCreateLink = _aCreateLink; }
+
     inline ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>  getColumns() const { return m_xColumns; }
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>              getConnection() const;
 

@@ -46,12 +46,17 @@ JARFILES += jcommon-1.0.10.jar libformula-0.1.14.jar
 
 JAVAFILES       :=	AuthorFunction.java \
                     AuthorFunctionDescription.java \
-            TitleFunction.java \
+                    TitleFunction.java \
                     TitleFunctionDescription.java \
                     MetaDataFunctionCategory.java
 
+# PROPERTYFILES := $(shell @$(FIND) . -name "*.properties")
 PROPERTYFILES := $(CLASSDIR)$/$(PACKAGE)$/category.properties \
-                 $(CLASSDIR)$/$(PACKAGE)$/Author-Function.properties
+         $(CLASSDIR)$/$(PACKAGE)$/category_en_US.properties \
+                 $(CLASSDIR)$/$(PACKAGE)$/Author-Function.properties \
+         $(CLASSDIR)$/$(PACKAGE)$/Author-Function_en_US.properties \
+                 $(CLASSDIR)$/$(PACKAGE)$/Title-Function.properties	\
+         $(CLASSDIR)$/$(PACKAGE)$/Title-Function_en_US.properties
                  
 # --- Targets ------------------------------------------------------
 .INCLUDE :  target.mk

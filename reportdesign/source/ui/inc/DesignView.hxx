@@ -34,28 +34,23 @@
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/report/XSection.hpp>
 #include <com/sun/star/report/XReportComponent.hpp>
+#include <vcl/split.hxx>
+#include <vcl/scrbar.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
 #include <tools/link.hxx>
 #include <tools/gen.hxx>
-
 #include <vcl/timer.hxx>
-#include <vcl/tabpage.hxx>
-#include <vcl/splitwin.hxx>
-#include <vcl/split.hxx>
-#include <vcl/scrbar.hxx>
-
 #include <svtools/hint.hxx>
 #include <svtools/brdcst.hxx>
+#include <comphelper/stl_types.hxx>
+#include "ReportDefines.hxx"
 #include <svtools/colorcfg.hxx>
 #include <boost/shared_ptr.hpp>
 #include <svx/svdedtv.hxx>
-#include <svx/zoomitem.hxx>
-
-#include <comphelper/stl_types.hxx>
-
-#include "ReportDefines.hxx"
-#include "MarkedSection.hxx"
+#include <vcl/tabpage.hxx>
+#include <vcl/splitwin.hxx>
+#include <MarkedSection.hxx>
 #include "ScrollHelper.hxx"
 
 class KeyEvent;
@@ -94,8 +89,7 @@ namespace rptui
         USHORT                              m_nCurrentPosition;
         USHORT                              m_eActObj;
         BOOL                                m_bFirstDraw;
-        Size                                m_aGridSizeCoarse;
-        Size                                m_aGridSizeFine;
+        Size                                m_aGridSize;
         BOOL                                m_bGridVisible;
         BOOL                                m_bGridSnap;
         BOOL                                m_bDeleted;
@@ -194,9 +188,7 @@ namespace rptui
                                     ,const ::rtl::OUString& _sColorEntry
                                     ,USHORT _nPosition = USHRT_MAX);
 
-        inline Size     getGridSizeCoarse() const { return m_aGridSizeCoarse; }
-        inline Size     getGridSizeFine() const { return m_aGridSizeFine; }
-
+        inline Size     getGridSize() const { return m_aGridSize; }
         inline BOOL     isGridSnap() const { return m_bGridSnap; }
         void            setGridSnap(BOOL bOn);
         void            setDragStripes(BOOL bOn);
@@ -281,17 +273,16 @@ namespace rptui
 
         /** zoom the ruler and view windows
         */
-        void            zoom(const Fraction& _aZoom);
+        void            zoom(const sal_Int16 _nZoom);
 
         /** fills the vector with all selected control models
             /param  _rSelection The vector will be filled and will not be cleared before.
         */
         void fillControlModelSelection(::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > >& _rSelection) const;
 
-        /** calculates the zoom factor.
-            @param  _eType  which kind of zoom is needed
+        /** returns the selected field from the add field dialog
         */
-        sal_uInt16 getZoomFactor(SvxZoomType _eType) const;
+        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > getSelectedFieldDescriptors();
     };
 //==================================================================
 }   //rptui

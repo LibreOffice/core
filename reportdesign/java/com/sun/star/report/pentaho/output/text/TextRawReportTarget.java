@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -723,7 +723,7 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
                 if (predefAutoStyle != null)
                 {
                     // special ole handling
-                    Element graphicProperties = predefAutoStyle.getGraphicProperties();
+                    final Element graphicProperties = predefAutoStyle.getGraphicProperties();
                     graphicProperties.setAttribute(OfficeNamespaces.STYLE_NS, VERTICAL_POS, "from-top");
                     graphicProperties.setAttribute(OfficeNamespaces.STYLE_NS, HORIZONTAL_POS, "from-left");
                     graphicProperties.setAttribute(OfficeNamespaces.STYLE_NS, "vertical-rel", "paragraph-content");
@@ -1409,7 +1409,7 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
                 xmlWriter.writeCloseTag();
                 variables = null;
             }
-        /**
+        /** 
         // Only generate the empty paragraph, if we have to add the keep-together ..
         else if (cellEmpty && expectedTableRowCount > 0 &&
         sectionKeepTogether && !firstCellSeen)

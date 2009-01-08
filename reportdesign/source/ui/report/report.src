@@ -649,3 +649,8 @@ String RID_STR_REPORT_FOOTER
 {
     Text [ en-US ] = "Report Footer";
 };
+String RID_STR_INSERT
+{
+    Text [ en-US ] = "Insert";
+};
+

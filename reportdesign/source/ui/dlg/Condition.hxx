@@ -57,6 +57,20 @@ namespace rptui
     class OColorPopup;
     class OReportController;
     class IConditionalFormatAction;
+    class Condition;
+
+    class ConditionField : public Edit
+    {
+        Condition*  m_pParent;
+        Edit*       m_pSubEdit;
+        PushButton  m_aFormula;
+
+        DECL_LINK( OnFormula,   Button* );
+    public:
+        ConditionField( Condition* pParent, const ResId& rResId );
+        virtual ~ConditionField();
+        virtual void Resize();
+    };
 
     //========================================================================
     //= Condition
@@ -69,9 +83,9 @@ namespace rptui
         FixedLine                   m_aHeader;
         ListBox                     m_aConditionType;
         ListBox                     m_aOperationList;
-        Edit                        m_aCondLHS;
+        ConditionField              m_aCondLHS;
         FixedText                   m_aOperandGlue;
-        Edit                        m_aCondRHS;
+        ConditionField              m_aCondRHS;
         ToolBox                     m_aActions;
         SvxFontPrevWindow           m_aPreview;
         ImageButton                 m_aMoveUp;
@@ -138,6 +152,8 @@ namespace rptui
         /** forward to the parent class
         */
         void    ApplyCommand(USHORT _nCommandId, const ::Color& _aColor );
+
+        inline ::rptui::OReportController& getController() const { return m_rController; }
 
     protected:
         virtual void StateChanged( StateChangedType nStateChange );

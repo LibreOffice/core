@@ -28,8 +28,8 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_DLLAPI_H
-#define INCLUDED_DLLAPI_H
+#ifndef INCLUDED_REPORTDESIGNDLLAPI_H
+#define INCLUDED_REPORTDESIGNDLLAPI_H
 
 #include "sal/types.h"
 
@@ -40,5 +40,5 @@
 #endif
 #define REPORTDESIGN_DLLPRIVATE SAL_DLLPRIVATE
 
-#endif /* INCLUDED_DLLAPI_H */
+#endif /* INCLUDED_REPORTDESIGNDLLAPI_H */
 

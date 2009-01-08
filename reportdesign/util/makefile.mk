@@ -145,6 +145,17 @@ SHL2STDLIBS+= \
         i$(TARGET).lib
 .ENDIF
 
+.IF "$(GUI)"!="WNT" || "$(COM)"=="GCC"
+SHL2STDLIBS+= \
+        -lfor$(DLLPOSTFIX) \
+        -lforui$(DLLPOSTFIX)
+.ELSE
+SHL2STDLIBS+= \
+        ifor.lib \
+        iforui.lib
+.ENDIF
+
+
 SHL2DEPN=$(SHL1TARGETN)
 SHL2LIBS=$(LIB2TARGET)
 SHL2DEF=$(MISC)$/$(SHL2TARGET).def

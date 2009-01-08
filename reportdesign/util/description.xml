@@ -11,17 +11,12 @@
             <license-text xlink:href="licensefile" lang="isocode" license-id="lic-isocode"/>
     </simple-license>
   </registration>
-  <version value="#VERSION#"/>
+  <version value="1.0.9"/>
   <identifier value="com.sun.reportdesigner"/>
   <dependencies>
-    <OpenOffice.org-minimal-version value="3.1" d:name="OpenOffice.org 3.1"/>
+    <OpenOffice.org-minimal-version value="3.0" d:name="OpenOffice.org 3.0"/>
   </dependencies>
   <publisher>
-    <name xlink:href="http://www.sun.com/software/star/staroffice/extensions.jsp?cid=925095" lang="en">Sun Microsystems, Inc.</name>
+    <name xlink:href="http://www.sun.com/staroffice" lang="en">Sun Microsystems, Inc.</name>
   </publisher>
-  <icon>
-    <default xlink:href="images/em42.png" />
-    <high-contrast xlink:href="images/em42_hc.png" />
-  </icon>
 </description>
-

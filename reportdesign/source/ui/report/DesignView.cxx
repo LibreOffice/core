@@ -159,8 +159,7 @@ ODesignView::ODesignView(   Window* pParent,
     ,m_nCurrentPosition(USHRT_MAX)
     ,m_eActObj( OBJ_NONE )
     ,m_bFirstDraw(FALSE)
-    ,m_aGridSizeCoarse( 1000, 1000 )    // #i93595# 100TH_MM changed to grid using coarse 1 cm grid
-    ,m_aGridSizeFine( 250, 250 )        // and a 0,25 cm subdivision for better visualisation
+    ,m_aGridSize( 250, 250 )    // 100TH_MM
     ,m_bGridVisible(TRUE)
     ,m_bGridSnap(TRUE)
     ,m_bDeleted( FALSE )
@@ -765,14 +764,19 @@ sal_uInt32 ODesignView::getMarkedObjectCount() const
     return m_aScrollWindow.getMarkedObjectCount();
 }
 // -----------------------------------------------------------------------------
-void ODesignView::zoom(const Fraction& _aZoom)
+void ODesignView::zoom(const sal_Int16 _nZoom)
 {
-    m_aScrollWindow.zoom(_aZoom);
+    m_aScrollWindow.zoom(_nZoom);
 }
 // -----------------------------------------------------------------------------
-sal_uInt16 ODesignView::getZoomFactor(SvxZoomType _eType) const
+uno::Sequence< beans::PropertyValue > ODesignView::getSelectedFieldDescriptors()
 {
-    return m_aScrollWindow.getZoomFactor(_eType);
+    uno::Sequence< beans::PropertyValue > aArgs;
+    if ( isAddFieldVisible() )
+    {
+        aArgs = m_pAddField->getSelectedFieldDescriptors();
+    }
+    return aArgs;
 }
 //============================================================================
 } // rptui

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,7 +66,7 @@ import org.jfree.util.Log;
 
 /**
  * Very primitive implementation, just to show how this could be used ...
- * 
+ *
  */
 public class SDBCReportDataFactory implements DataSourceFactory
 {
@@ -345,7 +345,7 @@ public class SDBCReportDataFactory implements DataSourceFactory
                             }
 
                             // now execute
-                            XPreparedStatement xStatement = connection.prepareStatement(sStatementToExecute);
+                            final XPreparedStatement xStatement = connection.prepareStatement(sStatementToExecute);
                             // transfer ownership of this temporary object to the caller
                             out[0] = (XComponent) UnoRuntime.queryInterface(XComponent.class, xStatement);
 

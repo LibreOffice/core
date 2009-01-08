@@ -227,7 +227,7 @@
 #define RID_ERR_NO_COMMAND                  (RID_STRING_START + 151)
 #define RID_ERR_NO_OBJECTS                  (RID_STRING_START + 152)
 #define RID_STR_AREA                        (RID_STRING_START + 153)
-#define RID_STR_NONE                        (RID_STRING_START + 154)
+#define RID_STR_INSERT                      (RID_STRING_START + 154)
 
 
 // #define RID_STR_                     (RID_STRING_START + 130)

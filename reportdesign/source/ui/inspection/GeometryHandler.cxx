@@ -46,7 +46,6 @@
 #include <tools/diagnose_ex.h>
 #include <tools/StringListResource.hxx>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/drawing/FillStyle.hpp>
 #include "com/sun/star/inspection/StringRepresentation.hpp"
 #include <com/sun/star/inspection/PropertyLineElement.hpp>
 #include <com/sun/star/inspection/PropertyControlType.hpp>
@@ -76,10 +75,10 @@
 #include "RptResId.hrc"
 #include "RptDef.hxx"
 #include "UITools.hxx"
+
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbconversion.hxx>
 #include <connectivity/dbtools.hxx>
-
 
 #include <boost/bind.hpp>
 #include <tools/string.hxx>
@@ -129,7 +128,7 @@ namespace rptui
 {
 //........................................................................
 using namespace ::com::sun::star;
-// using namespace comphelper;
+//using namespace formula;
 
 // comparing two property instances
 struct PropertyCompare : public ::std::binary_function< beans::Property, ::rtl::OUString , bool >
@@ -445,43 +444,6 @@ uno::Any SAL_CALL GeometryHandler::getPropertyValue(const ::rtl::OUString & Prop
                 sal_Int32 nColor = COL_TRANSPARENT;
                 if ( (aPropertyValue >>= nColor) && static_cast<sal_Int32>(COL_TRANSPARENT) == nColor )
                     aPropertyValue.clear();
-            }
-            break;
-        case PROPERTY_ID_AREA:
-            {
-                drawing::FillStyle aFillStyle;
-                m_xReportComponent->getPropertyValue(PROPERTY_FILLSTYLE) >>= aFillStyle;
-                ::rtl::OUString sProperty;
-                switch(aFillStyle)
-                {
-                    case drawing::FillStyle_GRADIENT:
-                        sProperty = PROPERTY_FILLGRADIENTNAME;
-                        break;
-                    case drawing::FillStyle_HATCH:
-                        sProperty = PROPERTY_FILLHATCHNAME;
-                        break;
-                    case drawing::FillStyle_BITMAP:
-                        sProperty = PROPERTY_FILLBITMAPNAME;
-                        break;
-                    case drawing::FillStyle_NONE:
-                        {
-                            const ::rtl::OUString sNone = String( ModuleRes( RID_STR_NONE ) );
-                            aPropertyValue <<= sNone;
-                            break;
-                        }
-                    default:
-                        break;
-                }
-
-                if ( sProperty.getLength() )
-                {
-                    aPropertyValue = m_xReportComponent->getPropertyValue(sProperty);
-                    //if ( drawing::FillStyle_GRADIENT == aFillStyle )
-                    //{
-                    //    static const ::rtl::OUString s_sFillTransparenceGradientName(RTL_CONSTASCII_USTRINGPARAM("FillTransparenceGradientName"));
-                    //    aPropertyValue = m_xReportComponent->getPropertyValue(s_sFillTransparenceGradientName);
-                    //}
-                }
             }
             break;
         case PROPERTY_ID_MIMETYPE:
@@ -816,7 +778,13 @@ inspection::LineDescriptor SAL_CALL GeometryHandler::describePropertyLine(const 
             break;
         case PROPERTY_ID_INITIALFORMULA:
         case PROPERTY_ID_FORMULA:
+            aOut.PrimaryButtonId = UID_RPT_PROP_FORMULA;
+            aOut.HasPrimaryButton = sal_True;
+            aOut.Control = _xControlFactory->createPropertyControl(inspection::PropertyControlType::MultiLineTextField , sal_False);
+            break;
         case PROPERTY_ID_CONDITIONALPRINTEXPRESSION:
+            aOut.PrimaryButtonId = UID_RPT_PROP_FORMULA;
+            aOut.HasPrimaryButton = sal_True;
             aOut.Control = _xControlFactory->createPropertyControl(inspection::PropertyControlType::MultiLineTextField , sal_False);
             break;
         case PROPERTY_ID_DATAFIELD:
@@ -827,6 +795,12 @@ inspection::LineDescriptor SAL_CALL GeometryHandler::describePropertyLine(const 
                     ),
                     uno::UNO_QUERY_THROW
                 );
+
+                if ( m_nDataFieldType == DATA_OR_FORMULA )
+                {
+                    aOut.PrimaryButtonId = UID_RPT_PROP_FORMULA;
+                    aOut.HasPrimaryButton = sal_True;
+                }
 
                 aOut.Control = xListControl.get();
                 if ( m_nDataFieldType == USER_DEF_FUNCTION )
@@ -1080,10 +1054,8 @@ uno::Any SAL_CALL GeometryHandler::convertToPropertyValue(const ::rtl::OUString 
             return m_xFormComponentHandler->convertToPropertyValue(PROPERTY_FONTNAME, _rControlValue);
         case PROPERTY_ID_SCOPE:
         case PROPERTY_ID_FORMULALIST:
-            aPropertyValue = _rControlValue;
-            break;
         case PROPERTY_ID_AREA:
-            //aPropertyValue = _rControlValue;
+            aPropertyValue = _rControlValue;
             break;
         case PROPERTY_ID_TYPE:
             {
@@ -1309,12 +1281,13 @@ uno::Sequence< beans::Property > SAL_CALL GeometryHandler::getSupportedPropertie
     } // for (size_t i = 0; i < sizeof(pIncludeProperties)/sizeof(pIncludeProperties[0]) ;++i )
 
     // special property for shapes
-    if ( uno::Reference< report::XShape>(m_xReportComponent,uno::UNO_QUERY).is() )
-    {
-        beans::Property aValue;
-        aValue.Name = PROPERTY_AREA;
-        aNewProps.push_back(aValue);
-    }
+//    if ( uno::Reference< report::XShape>(m_xReportComponent,uno::UNO_QUERY).is() )
+//    {
+//        beans::Property aValue;
+//        aValue.Name = PROPERTY_AREA;
+//        aNewProps.push_back(aValue);
+//    }
+    // re-enable when the remaining issues of #i88727# are fixed
 
     return uno::Sequence< beans::Property > (&(*aNewProps.begin()),aNewProps.size());
 }
@@ -1340,14 +1313,12 @@ uno::Sequence< ::rtl::OUString > SAL_CALL GeometryHandler::getActuatingPropertie
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    uno::Sequence< ::rtl::OUString > aSeq(7);
+    uno::Sequence< ::rtl::OUString > aSeq(5);
     aSeq[0] = PROPERTY_BACKTRANSPARENT;
     aSeq[1] = PROPERTY_CONTROLBACKGROUNDTRANSPARENT;
     aSeq[2] = PROPERTY_FORMULALIST;
     aSeq[3] = PROPERTY_TYPE;
     aSeq[4] = PROPERTY_DATAFIELD;
-    aSeq[5] = PROPERTY_FILLSTYLE;
-    aSeq[6] = PROPERTY_FILLCOLOR;
 
     return ::comphelper::concatSequences(m_xFormComponentHandler->getActuatingProperties(),aSeq);
 }
@@ -1391,6 +1362,29 @@ inspection::InteractiveSelectionResult SAL_CALL GeometryHandler::onInteractivePr
         }
         return eResult;
     }
+    else if (      PropertyName.equalsAscii(PROPERTY_FORMULA)
+                || PropertyName.equalsAscii(PROPERTY_INITIALFORMULA)
+                || PropertyName.equalsAscii(PROPERTY_DATAFIELD)
+                || PropertyName.equalsAscii(PROPERTY_CONDITIONALPRINTEXPRESSION))
+    {
+        ::osl::ClearableMutexGuard aGuard( m_aMutex );
+
+
+        ::rtl::OUString sFormula;
+        m_xReportComponent->getPropertyValue(PropertyName) >>= sFormula;
+        const uno::Reference< awt::XWindow> xInspectorWindow(m_xContext->getValueByName( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DialogParentWindow"))) ,uno::UNO_QUERY);
+        uno::Reference< uno::XComponentContext > xContext = m_xContext;
+        uno::Reference< beans::XPropertySet > xRowSet( m_xRowSet,uno::UNO_QUERY);
+        aGuard.clear();
+
+        inspection::InteractiveSelectionResult eResult = inspection::InteractiveSelectionResult_Cancelled;
+        if ( rptui::openDialogFormula_nothrow( sFormula, xContext,xInspectorWindow,xRowSet ) )
+        {
+            _rData <<= sFormula;
+            eResult = inspection::InteractiveSelectionResult_ObtainedValue;
+        }
+        return eResult;
+    }
     else if ( PropertyName.equalsAscii(PROPERTY_AREA) )
     {
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
@@ -1398,15 +1392,15 @@ inspection::InteractiveSelectionResult SAL_CALL GeometryHandler::onInteractivePr
         inspection::InteractiveSelectionResult eResult = inspection::InteractiveSelectionResult_Cancelled;
         const uno::Reference< awt::XWindow> xInspectorWindow(m_xContext->getValueByName( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DialogParentWindow"))) ,uno::UNO_QUERY);
         const uno::Reference< report::XShape> xShape(m_xReportComponent,uno::UNO_QUERY);
-
         aGuard.clear();
 
         if ( rptui::openAreaDialog( xShape, xInspectorWindow) )
         {
             eResult = inspection::InteractiveSelectionResult_ObtainedValue;
             beans::PropertyChangeEvent aScopeEvent;
-            aScopeEvent.PropertyName = PROPERTY_FILLSTYLE;
-            aScopeEvent.NewValue = xShape->getPropertyValue(PROPERTY_FILLSTYLE);
+            aScopeEvent.PropertyName = PROPERTY_FILLCOLOR;
+            // aScopeEvent.OldValue <<= _nOldDataFieldType;
+            aScopeEvent.NewValue <<= xShape->getPropertyValue(PROPERTY_FILLCOLOR);
             m_aPropertyListeners.notify( aScopeEvent, &beans::XPropertyChangeListener::propertyChange );
         }
         return eResult;
@@ -1422,102 +1416,79 @@ void SAL_CALL GeometryHandler::actuatingPropertyChanged(const ::rtl::OUString & 
         throw lang::NullPointerException();
 
     ::osl::MutexGuard aGuard( m_aMutex );
-    if ( ActuatingPropertyName == PROPERTY_FILLSTYLE )
+    const sal_Int32 nId = m_pInfoService->getPropertyId(ActuatingPropertyName);
+    switch(nId)
     {
-        drawing::FillStyle aFillStyle;
-        NewValue >>= aFillStyle;
-        const sal_Bool bEnable = aFillStyle == drawing::FillStyle_SOLID;
-        _rxInspectorUI->enablePropertyUI(PROPERTY_FILLCOLOR,bEnable);
-        if ( bEnable )
-            _rxInspectorUI->rebuildPropertyUI(PROPERTY_FILLCOLOR);
-
-        _rxInspectorUI->rebuildPropertyUI(PROPERTY_AREA);
-    } // if ( ActuatingPropertyName == PROPERTY_FILLSTYLE || ActuatingPropertyName == PROPERTY_FILLCOLOR )
-    else if ( ActuatingPropertyName == PROPERTY_FILLCOLOR )
-    {
-        if ( m_xReportComponent.is() && m_xReportComponent->getPropertySetInfo()->hasPropertyByName(PROPERTY_FILLSTYLE) )
-        {
-            drawing::FillStyle aFillStyle;
-            m_xReportComponent->getPropertyValue( PROPERTY_FILLSTYLE ) >>= aFillStyle;
-            _rxInspectorUI->enablePropertyUI(PROPERTY_FILLCOLOR,aFillStyle == drawing::FillStyle_SOLID);
-        }
-    }
-    else
-    {
-        const sal_Int32 nId = m_pInfoService->getPropertyId(ActuatingPropertyName);
-        switch(nId)
-        {
-            case PROPERTY_ID_TYPE:
+        case PROPERTY_ID_TYPE:
+            {
+                sal_uInt32 nNewVal = 0;
+                NewValue >>= nNewVal;
+                switch(nNewVal)
                 {
-                    sal_uInt32 nNewVal = 0;
-                    NewValue >>= nNewVal;
-                    switch(nNewVal)
-                    {
-                        case DATA_OR_FORMULA:
-                            _rxInspectorUI->rebuildPropertyUI(PROPERTY_DATAFIELD);
-                            _rxInspectorUI->enablePropertyUI(PROPERTY_DATAFIELD,sal_True);
-                            _rxInspectorUI->enablePropertyUI(PROPERTY_FORMULALIST,sal_False);
-                            _rxInspectorUI->enablePropertyUI(PROPERTY_SCOPE,sal_False);
-                            OSL_ENSURE(m_sDefaultFunction.getLength() == 0,"Why is the m_sDefaultFunction set?");
-                            OSL_ENSURE(m_sScope.getLength() == 0,"Why is the m_sScope set?");
-                            break;
-                        case FUNCTION:
-                            _rxInspectorUI->rebuildPropertyUI(PROPERTY_DATAFIELD);
-                            _rxInspectorUI->rebuildPropertyUI(PROPERTY_FORMULALIST);
-                            _rxInspectorUI->enablePropertyUI(PROPERTY_DATAFIELD,sal_True);
-                            _rxInspectorUI->enablePropertyUI(PROPERTY_FORMULALIST,m_sDefaultFunction.getLength() != 0);
-                            _rxInspectorUI->enablePropertyUI(PROPERTY_SCOPE,m_sScope.getLength() != 0);
-                            break;
-                        case USER_DEF_FUNCTION:
-                            _rxInspectorUI->enablePropertyUI(PROPERTY_DATAFIELD,sal_False);
-                            _rxInspectorUI->enablePropertyUI(PROPERTY_FORMULALIST,sal_True);
-                            _rxInspectorUI->rebuildPropertyUI(PROPERTY_FORMULALIST);
-                            _rxInspectorUI->enablePropertyUI(PROPERTY_SCOPE,sal_False);
-                            break;
-                        case COUNTER:
-                            _rxInspectorUI->enablePropertyUI(PROPERTY_DATAFIELD,sal_False);
-                            _rxInspectorUI->enablePropertyUI(PROPERTY_FORMULALIST,sal_False);
-                            _rxInspectorUI->enablePropertyUI(PROPERTY_SCOPE,sal_True);
-                            break;
-                    }
-                }
-                break;
-            case PROPERTY_ID_DATAFIELD:
-                {
-                    sal_Bool bEnable = (m_nDataFieldType != DATA_OR_FORMULA && m_nDataFieldType != COUNTER );
-                    if ( bEnable )
-                    {
-                        ::rtl::OUString sValue;
-                        m_xReportComponent->getPropertyValue( PROPERTY_DATAFIELD ) >>= sValue;
-                        bEnable = sValue.getLength() != 0;
-                    }
-                    _rxInspectorUI->enablePropertyUI(PROPERTY_FORMULALIST,bEnable);
-                    if ( bEnable )
-                    {
+                    case DATA_OR_FORMULA:
+                        _rxInspectorUI->rebuildPropertyUI(PROPERTY_DATAFIELD);
+                        _rxInspectorUI->enablePropertyUI(PROPERTY_DATAFIELD,sal_True);
+                        _rxInspectorUI->enablePropertyUI(PROPERTY_FORMULALIST,sal_False);
+                        _rxInspectorUI->enablePropertyUI(PROPERTY_SCOPE,sal_False);
+                        OSL_ENSURE(m_sDefaultFunction.getLength() == 0,"Why is the m_sDefaultFunction set?");
+                        OSL_ENSURE(m_sScope.getLength() == 0,"Why is the m_sScope set?");
+                        break;
+                    case FUNCTION:
                         _rxInspectorUI->rebuildPropertyUI(PROPERTY_DATAFIELD);
                         _rxInspectorUI->rebuildPropertyUI(PROPERTY_FORMULALIST);
-                    }
+                        _rxInspectorUI->enablePropertyUI(PROPERTY_DATAFIELD,sal_True);
+                        _rxInspectorUI->enablePropertyUI(PROPERTY_FORMULALIST,m_sDefaultFunction.getLength() != 0);
+                        _rxInspectorUI->enablePropertyUI(PROPERTY_SCOPE,m_sScope.getLength() != 0);
+                        break;
+                    case USER_DEF_FUNCTION:
+                        _rxInspectorUI->enablePropertyUI(PROPERTY_DATAFIELD,sal_False);
+                        _rxInspectorUI->enablePropertyUI(PROPERTY_FORMULALIST,sal_True);
+                        _rxInspectorUI->rebuildPropertyUI(PROPERTY_FORMULALIST);
+                        _rxInspectorUI->enablePropertyUI(PROPERTY_SCOPE,sal_False);
+                        break;
+                    case COUNTER:
+                        _rxInspectorUI->enablePropertyUI(PROPERTY_DATAFIELD,sal_False);
+                        _rxInspectorUI->enablePropertyUI(PROPERTY_FORMULALIST,sal_False);
+                        _rxInspectorUI->enablePropertyUI(PROPERTY_SCOPE,sal_True);
+                        break;
                 }
-                break;
-            case PROPERTY_ID_FORMULALIST:
+            }
+            break;
+        case PROPERTY_ID_DATAFIELD:
+            {
+                sal_Bool bEnable = (m_nDataFieldType != DATA_OR_FORMULA && m_nDataFieldType != COUNTER );
+                if ( bEnable )
                 {
-                    _rxInspectorUI->enablePropertyUI(PROPERTY_SCOPE,m_nDataFieldType == FUNCTION || m_nDataFieldType == COUNTER);
+                    ::rtl::OUString sValue;
+                    m_xReportComponent->getPropertyValue( PROPERTY_DATAFIELD ) >>= sValue;
+                    bEnable = sValue.getLength() != 0;
                 }
-                break;
-            case PROPERTY_ID_BACKTRANSPARENT:
-            case PROPERTY_ID_CONTROLBACKGROUNDTRANSPARENT:
+                _rxInspectorUI->enablePropertyUI(PROPERTY_FORMULALIST,bEnable);
+                if ( bEnable )
                 {
-                    sal_Bool bValue = sal_False;
-                    NewValue >>= bValue;
-                    bValue = !bValue;
-                    _rxInspectorUI->enablePropertyUI(PROPERTY_BACKCOLOR,bValue);
-                    _rxInspectorUI->enablePropertyUI(PROPERTY_CONTROLBACKGROUND,bValue);
+                    _rxInspectorUI->rebuildPropertyUI(PROPERTY_DATAFIELD);
+                    _rxInspectorUI->rebuildPropertyUI(PROPERTY_FORMULALIST);
                 }
-                break;
-            default:
-                m_xFormComponentHandler->actuatingPropertyChanged(ActuatingPropertyName, NewValue, OldValue, _rxInspectorUI, _bFirstTimeInit);
-                break;
-        } // switch(nId)
+            }
+            break;
+        case PROPERTY_ID_FORMULALIST:
+            {
+                _rxInspectorUI->enablePropertyUI(PROPERTY_SCOPE,m_nDataFieldType == FUNCTION || m_nDataFieldType == COUNTER);
+            }
+            break;
+        case PROPERTY_ID_BACKTRANSPARENT:
+        case PROPERTY_ID_CONTROLBACKGROUNDTRANSPARENT:
+            {
+                sal_Bool bValue = sal_False;
+                NewValue >>= bValue;
+                bValue = !bValue;
+                _rxInspectorUI->enablePropertyUI(PROPERTY_BACKCOLOR,bValue);
+                _rxInspectorUI->enablePropertyUI(PROPERTY_CONTROLBACKGROUND,bValue);
+            }
+            break;
+        default:
+            m_xFormComponentHandler->actuatingPropertyChanged(ActuatingPropertyName, NewValue, OldValue, _rxInspectorUI, _bFirstTimeInit);
+            break;
     }
 }
 
@@ -1525,6 +1496,7 @@ void SAL_CALL GeometryHandler::actuatingPropertyChanged(const ::rtl::OUString & 
 {
     return m_xFormComponentHandler->suspend(Suspend);
 }
+// -----------------------------------------------------------------------------
 bool GeometryHandler::impl_dialogFilter_nothrow( ::rtl::OUString& _out_rSelectedClause, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const
 {
     _out_rSelectedClause = ::rtl::OUString();
@@ -2060,7 +2032,7 @@ void GeometryHandler::impl_initFieldList_nothrow( uno::Sequence< ::rtl::OUString
     }
     catch (uno::Exception&)
     {
-        DBG_ERROR( "GeometryHandler::impl_initFieldList_nothrow: caught an exception!" );
+        DBG_ERROR( "GeometryHandler::impl_initFieldList_nothrow: caught an exception!" )
     }
 }
 // -----------------------------------------------------------------------------

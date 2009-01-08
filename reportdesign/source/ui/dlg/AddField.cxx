@@ -33,6 +33,7 @@
 #include <svx/dbaexchange.hxx>
 #include <svx/svdpagv.hxx>
 #include <com/sun/star/sdb/CommandType.hpp>
+#include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/sdb/XDocumentDataSource.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/i18n/XCollator.hpp>
@@ -180,6 +181,7 @@ OAddFieldWindow::OAddFieldWindow(Window* pParent
     SetMinOutputSizePixel(Size(STD_WIN_SIZE_X,STD_WIN_SIZE_Y));
 
     m_aActions.SetStyle(m_aActions.GetStyle()|WB_LINESPACING);
+            ,m_xRowSet(_xRowSet)
     m_aActions.SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetFaceColor()) );
 
     m_aActions.SetSelectHdl(LINK(this, OAddFieldWindow, OnSortAction));
@@ -190,7 +192,12 @@ OAddFieldWindow::OAddFieldWindow(Window* pParent
     m_pListBox->SetDoubleClickHdl(LINK( this, OAddFieldWindow, OnDoubleClickHdl ) );
     m_pListBox->SetSelectHdl(LINK( this, OAddFieldWindow, OnSelectHdl ) );
     m_pListBox->SetDeselectHdl(LINK( this, OAddFieldWindow, OnSelectHdl ) );
+    m_pListBox->SetDoubleClickHdl(LINK( this, OAddFieldWindow, OnDoubleClickHdl ) );
     m_pListBox->Show();
+    const String sTitle(ModuleRes(RID_STR_INSERT));
+    m_aInsertButton.SetText(sTitle);
+    m_aInsertButton.SetClickHdl(LINK( this, OAddFieldWindow, OnDoubleClickHdl ) );
+    m_aInsertButton.Show();
 
     SetSizePixel(Size(STD_WIN_SIZE_X,STD_WIN_SIZE_Y));
     //Show();
@@ -283,7 +290,7 @@ void OAddFieldWindow::Update()
     m_pContainerListener = NULL;
     m_xColumns.clear();
 
-    try
+    if ( m_xRowSet.is() )
     {
         // ListBox loeschen
         m_pListBox->Clear();
@@ -339,6 +346,7 @@ void OAddFieldWindow::Update()
                 {
                     m_aActions.EnableItem(m_aActions.GetItemId(i));
                 }
+            }
                 OnSelectHdl(NULL);
             }
         }
@@ -501,4 +509,13 @@ IMPL_LINK( OAddFieldWindow, OnSortAction, ToolBox*, /*NOTINTERESTEDIN*/ )
 // -----------------------------------------------------------------------------
 // =============================================================================
 } // namespace rptui
+// -----------------------------------------------------------------------------
+IMPL_LINK( OAddFieldWindow, OnDoubleClickHdl, void* ,/*_pAddFieldDlg*/)
+{
+    if ( m_aCreateLink.IsSet() )
+        m_aCreateLink.Call(this);
+
+    return 0L;
+}
 // =============================================================================
+

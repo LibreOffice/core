@@ -34,6 +34,9 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include "SectionView.hxx"
 #include "UITools.hxx"
+#include "Formula.hxx"
+#include "FunctionHelper.hxx"
+#include "reportformula.hxx"
 
 #include <tools/diagnose_ex.h>
 #include <tools/string.hxx>
@@ -90,11 +93,17 @@
 #include <comphelper/propmultiplex.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 
+#include <connectivity/dbexception.hxx>
+#include <connectivity/dbconversion.hxx>
+#include <connectivity/dbtools.hxx>
+
 #include <com/sun/star/report/XGroups.hpp>
 #include <com/sun/star/awt/TextAlign.hpp>
 #include <com/sun/star/text/ParagraphVertAlign.hpp>
 #include <com/sun/star/report/XShape.hpp>
+#include <com/sun/star/report/Function.hpp>
 #include <com/sun/star/sdb/XParametersSupplier.hpp>
+#include <com/sun/star/sdb/SQLContext.hpp>
 #include <i18npool/mslangid.hxx>
 #include "dlgpage.hxx"
 #include <vcl/msgbox.hxx>
@@ -155,6 +164,7 @@
 namespace rptui
 {
 using namespace ::com::sun::star;
+using namespace formula;
 // -----------------------------------------------------------------------------
 SvxCellHorJustify lcl_MapHorizontalAlignment(const sal_Int16 _nAlign)
 {
@@ -823,7 +833,7 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
 // -----------------------------------------------------------------------------
 bool openAreaDialog( const uno::Reference<report::XShape >& _xShape,const uno::Reference< awt::XWindow>& _rxParentWindow )
 {
-    OSL_PRECOND( _xShape.is() && _rxParentWindow.is(), "openCharDialog: invalid parameters!" );
+    OSL_PRECOND( _xShape.is() && _rxParentWindow.is(), "openAreaDialog: invalid parameters!" );
     if ( !_xShape.is() || !_rxParentWindow.is() )
         return false;
 
@@ -1088,6 +1098,58 @@ void setZoomFactor(const Fraction& _aZoom,Window& _rWindow)
     aMapMode.SetScaleX(_aZoom);
     aMapMode.SetScaleY(_aZoom);
     _rWindow.SetMapMode(aMapMode);
+}
+// -----------------------------------------------------------------------------
+bool openDialogFormula_nothrow( ::rtl::OUString& _in_out_rFormula
+                               , const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _xContext
+                               , const uno::Reference< awt::XWindow>& _xInspectorWindow
+                               , const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet >& _xRowSet
+                               )
+{
+    OSL_PRECOND( _xInspectorWindow.is(), "openDialogFormula_nothrow: invalid parameters!" );
+    if ( !_xInspectorWindow.is() )
+        return false;
+    // _out_rFormula = ::rtl::OUString();
+    bool bSuccess = false;
+    ::dbtools::SQLExceptionInfo aErrorInfo;
+    uno::Reference< awt::XWindow > xInspectorWindow;
+    uno::Reference< lang::XMultiComponentFactory > xFactory;
+    uno::Reference<lang::XMultiServiceFactory> xServiceFactory;
+    try
+    {
+        xFactory = _xContext->getServiceManager();
+        xServiceFactory.set(xFactory,uno::UNO_QUERY);
+        Window* pParent = VCLUnoHelper::GetWindow( _xInspectorWindow );
+
+        uno::Reference< report::meta::XFunctionManager> xMgr(xFactory->createInstanceWithContext(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.report.pentaho.SOFunctionManager")),_xContext),uno::UNO_QUERY);
+        if ( xMgr.is() )
+        {
+            ::boost::shared_ptr< formula::IFunctionManager > pFormulaManager(new FunctionManager(xMgr) );
+            ReportFormula aFormula( _in_out_rFormula );
+            FormulaDialog aDlg(pParent,xServiceFactory,pFormulaManager,aFormula.getUndecoratedContent(),_xRowSet);
+            bSuccess = aDlg.Execute() == RET_OK;
+            if ( bSuccess )
+            {
+                String sFormula = aDlg.getCurrentFormula();
+                xub_StrLen nIndex = 0;
+                if ( sFormula.GetChar(0) == '=' )
+                    nIndex = 1;
+                _in_out_rFormula = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:")) + sFormula.Copy(nIndex);
+            }
+        }
+    }
+    catch (sdb::SQLContext& e) { aErrorInfo = e; }
+    catch (sdbc::SQLWarning& e) { aErrorInfo = e; }
+    catch (sdbc::SQLException& e) { aErrorInfo = e; }
+    catch( const uno::Exception& )
+    {
+        OSL_ENSURE( sal_False, "GeometryHandler::impl_dialogFilter_nothrow: caught an exception!" );
+    }
+
+    if ( aErrorInfo.isValid() )
+        ::dbtools::showError( aErrorInfo, xInspectorWindow, xServiceFactory );
+
+    return bSuccess;
 }
 // -----------------------------------------------------------------------------
 } // namespace rptui
