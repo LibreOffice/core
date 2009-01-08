@@ -89,7 +89,7 @@ ModalDialog RID_DEFAULTABOUT
     {
         Pos = MAP_APPFONT ( 54 , 25 ) ;
         Size = MAP_APPFONT ( 168 , 51 ) ;
-        Text[ en-US ] ="Copyright 2000-2008 Sun Microsystems Inc.\nThis product has been created by " OOO_VENDOR " based on OpenOffice.org.\nOpenOffice.org acknowledges all community members, especially those mentioned at http://www.openoffice.org/welcome/credits.html.";
+        Text[ en-US ] ="Copyright 2000-2008 Sun Microsystems Inc.\nThis product was created by " OOO_VENDOR ", based on OpenOffice.org.\nOpenOffice.org acknowledges all community members, especially those mentioned at http://www.openoffice.org/welcome/credits.html.";
         WordBreak = TRUE ;
     };
     StringArray ABOUT_STR_DEVELOPER_ARY
