@@ -72,6 +72,8 @@ Module gid_Module_Langpack_Resource_Template
              gid_File_Res_Epg,
              gid_File_Res_Epp,
              gid_File_Res_Eur,
+             gid_File_Res_For,
+             gid_File_Res_Forui,
              gid_File_Res_Fps_Office,
              gid_File_Res_Frm,
              gid_File_Res_Fwe,

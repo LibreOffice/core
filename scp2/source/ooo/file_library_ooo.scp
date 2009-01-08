@@ -1792,3 +1792,6 @@ End
 
 STD_UNO_LIB_FILE(gid_File_Lib_Unordf, unordf)
 
+STD_UNO_LIB_FILE( gid_File_Lib_For, for)
+STD_LIB_FILE( gid_File_Lib_Forui, forui)
+
