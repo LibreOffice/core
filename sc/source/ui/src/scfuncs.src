@@ -82,7 +82,7 @@
 // resource entries must consider this and undo the conversion.
 
 #include "scfuncs.hrc" // ID_FUNCTION_GRP_XXX, HID_FUNC_XXX
-#include "compiler.hrc" // SC_OPCODE_XXX
+#include "formula/compiler.hrc" // SC_OPCODE_XXX
 
 Resource RID_SC_FUNCTION_DESCRIPTIONS1
 {

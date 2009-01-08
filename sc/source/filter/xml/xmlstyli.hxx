@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlstyli.hxx,v $
- * $Revision: 1.29.62.1 $
+ * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -120,7 +120,7 @@ class XMLTableStyleContext : public XMLPropStyleContext
     void SetFormulas(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps,
         const rtl::OUString& sFormulas) const;
     void SetGrammar(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps,
-        const ScGrammar::Grammar eGrammar) const;
+        const formula::FormulaGrammar::Grammar eGrammar) const;
 
     void GetConditionalFormat(
         ::com::sun::star::uno::Any& aAny, const rtl::OUString& sCondition,
@@ -154,7 +154,7 @@ public:
       void AddProperty(sal_Int16 nContextID, const com::sun::star::uno::Any& aValue);
     XMLPropertyState* FindProperty(const sal_Int16 nContextID);
 
-    sal_Int32 GetNumberFormat();
+    sal_Int32 GetNumberFormat() { return nNumberFormat; }
 
 private:
     using XMLPropStyleContext::SetStyle;
@@ -297,3 +297,4 @@ public:
 };
 
 #endif
+

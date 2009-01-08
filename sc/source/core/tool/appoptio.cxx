@@ -47,7 +47,7 @@
 #include "global.hxx"
 #include "userlist.hxx"
 #include "sc.hrc"
-#include "compiler.hrc"
+#include <formula/compiler.hrc>
 #include "miscuno.hxx"
 
 using namespace utl;

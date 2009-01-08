@@ -77,7 +77,7 @@
 #include "userlist.hxx"
 #include "zforauto.hxx"
 #include "subtotal.hxx"
-#include "errorcodes.hxx"
+#include "formula/errorcodes.hxx"
 #include "rangenam.hxx"
 #include "docpool.hxx"
 #include "progress.hxx"

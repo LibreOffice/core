@@ -55,7 +55,7 @@
 #include "userlist.hxx"
 #include "pivot.hxx"
 #include "rechead.hxx"
-#include "errorcodes.hxx"                           // fuer errNoValue
+#include "formula/errorcodes.hxx"                           // fuer errNoValue
 #include "refupdat.hxx"
 #include "stlpool.hxx"
 #include "stlsheet.hxx"

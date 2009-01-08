@@ -711,7 +711,7 @@ public:
 private:
     ScDocument*     pUndoDoc;
     String          aFormula;
-    ScAddress::Convention eConv;
+    formula::FormulaGrammar::AddressConvention eConv;
     ULONG           nStartChangeAction;
     ULONG           nEndChangeAction;
 

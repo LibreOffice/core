@@ -32,7 +32,7 @@
 #define SC_CELLKEY_TRANSLATOR_HXX
 
 #include "global.hxx"
-#include "opcode.hxx"
+#include "formula/opcode.hxx"
 #include "unotools/transliterationwrapper.hxx"
 #include <hash_map>
 #include <list>

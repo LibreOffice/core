@@ -49,7 +49,7 @@
 using namespace ::com::sun::star;
 
 ////////////////////////////////////////////////////////////////////////////
-const ScAddress::Details ScAddress::detailsOOOa1( CONV_OOO, 0, 0 );
+const ScAddress::Details ScAddress::detailsOOOa1( formula::FormulaGrammar::CONV_OOO, 0, 0 );
 
 ScAddress::Details::Details ( const ScDocument* pDoc,
                               const ScAddress & rAddr ) :
@@ -1099,12 +1099,12 @@ lcl_ScAddress_Parse ( const sal_Unicode* p, ScDocument* pDoc, ScAddress& rAddr,
     switch (rDetails.eConv)
     {
     default :
-    case ScAddress::CONV_OOO:
+    case formula::FormulaGrammar::CONV_OOO:
         {
             return lcl_ScAddress_Parse_OOo( p, pDoc, rAddr, pExtInfo, NULL );
         }
 
-    case ScAddress::CONV_XL_A1:
+    case formula::FormulaGrammar::CONV_XL_A1:
     case ScAddress::CONV_XL_OOX:
         {
             ScRange r = rAddr;
@@ -1113,7 +1113,7 @@ lcl_ScAddress_Parse ( const sal_Unicode* p, ScDocument* pDoc, ScAddress& rAddr,
             rAddr = r.aStart;
             return nFlags;
         }
-    case ScAddress::CONV_XL_R1C1:
+    case formula::FormulaGrammar::CONV_XL_R1C1:
         {
             ScRange r = rAddr;
             USHORT nFlags = lcl_ScRange_Parse_XL_R1C1( r, p, pDoc, rDetails, true, pExtInfo );
@@ -1292,15 +1292,15 @@ USHORT ScRange::Parse( const String& r, ScDocument* pDoc,
     switch (rDetails.eConv)
     {
     default :
-    case ScAddress::CONV_OOO:
+    case formula::FormulaGrammar::CONV_OOO:
         return lcl_ScRange_Parse_OOo( *this, r, pDoc, pExtInfo );
 
-    case ScAddress::CONV_XL_A1:
+    case formula::FormulaGrammar::CONV_XL_A1:
     case ScAddress::CONV_XL_OOX:
         return lcl_ScRange_Parse_XL_A1( *this, r.GetBuffer(), pDoc, false, pExtInfo,
                 (rDetails.eConv == ScAddress::CONV_XL_OOX ? pExternalLinks : NULL) );
 
-    case ScAddress::CONV_XL_R1C1:
+    case formula::FormulaGrammar::CONV_XL_R1C1:
         return lcl_ScRange_Parse_XL_R1C1( *this, r.GetBuffer(), pDoc, rDetails, false, pExtInfo );
     }
 }
@@ -1339,8 +1339,8 @@ USHORT ScRange::ParseCols( const String& rStr, ScDocument* pDoc,
     switch (rDetails.eConv)
     {
     default :
-    case ScAddress::CONV_OOO: // No full col refs in OOO yet, assume XL notation
-    case ScAddress::CONV_XL_A1:
+    case formula::FormulaGrammar::CONV_OOO: // No full col refs in OOO yet, assume XL notation
+    case formula::FormulaGrammar::CONV_XL_A1:
     case ScAddress::CONV_XL_OOX:
         if (NULL != (p = lcl_a1_get_col( p, &aStart, &ignored ) ) )
         {
@@ -1359,7 +1359,7 @@ USHORT ScRange::ParseCols( const String& rStr, ScDocument* pDoc,
         }
         break;
 
-    case ScAddress::CONV_XL_R1C1:
+    case formula::FormulaGrammar::CONV_XL_R1C1:
         if ((p[0] == 'C' || p[0] != 'c') &&
             NULL != (p = lcl_r1c1_get_col( p, rDetails, &aStart, &ignored )))
         {
@@ -1398,8 +1398,8 @@ USHORT ScRange::ParseRows( const String& rStr, ScDocument* pDoc,
     switch (rDetails.eConv)
     {
     default :
-    case ScAddress::CONV_OOO: // No full row refs in OOO yet, assume XL notation
-    case ScAddress::CONV_XL_A1:
+    case formula::FormulaGrammar::CONV_OOO: // No full row refs in OOO yet, assume XL notation
+    case formula::FormulaGrammar::CONV_XL_A1:
     case ScAddress::CONV_XL_OOX:
         if (NULL != (p = lcl_a1_get_row( p, &aStart, &ignored ) ) )
         {
@@ -1418,7 +1418,7 @@ USHORT ScRange::ParseRows( const String& rStr, ScDocument* pDoc,
         }
         break;
 
-    case ScAddress::CONV_XL_R1C1:
+    case formula::FormulaGrammar::CONV_XL_R1C1:
         if ((p[0] == 'R' || p[0] != 'r') &&
             NULL != (p = lcl_r1c1_get_row( p, rDetails, &aStart, &ignored )))
         {
@@ -1572,7 +1572,7 @@ void ScAddress::Format( String& r, USHORT nFlags, ScDocument* pDoc,
             switch( rDetails.eConv )
             {
             default :
-            case CONV_OOO:
+            case formula::FormulaGrammar::CONV_OOO:
                 r += aDocName;
                 if( nFlags & SCA_TAB_ABSOLUTE )
                     r += '$';
@@ -1580,8 +1580,8 @@ void ScAddress::Format( String& r, USHORT nFlags, ScDocument* pDoc,
                 r += '.';
                 break;
 
-            case CONV_XL_A1:
-            case CONV_XL_R1C1:
+            case formula::FormulaGrammar::CONV_XL_A1:
+            case formula::FormulaGrammar::CONV_XL_R1C1:
             case CONV_XL_OOX:
                 if (aDocName.Len() > 0)
                 {
@@ -1598,8 +1598,8 @@ void ScAddress::Format( String& r, USHORT nFlags, ScDocument* pDoc,
     switch( rDetails.eConv )
     {
     default :
-    case CONV_OOO:
-    case CONV_XL_A1:
+    case formula::FormulaGrammar::CONV_OOO:
+    case formula::FormulaGrammar::CONV_XL_A1:
     case CONV_XL_OOX:
         if( nFlags & SCA_VALID_COL )
             lcl_a1_append_c ( r, nCol, nFlags & SCA_COL_ABSOLUTE );
@@ -1607,7 +1607,7 @@ void ScAddress::Format( String& r, USHORT nFlags, ScDocument* pDoc,
             lcl_a1_append_r ( r, nRow, nFlags & SCA_ROW_ABSOLUTE );
         break;
 
-    case CONV_XL_R1C1:
+    case formula::FormulaGrammar::CONV_XL_R1C1:
         if( nFlags & SCA_VALID_ROW )
             lcl_r1c1_append_r ( r, nRow, nFlags & SCA_ROW_ABSOLUTE, rDetails );
         if( nFlags & SCA_VALID_COL )
@@ -1695,7 +1695,7 @@ void ScRange::Format( String& r, USHORT nFlags, ScDocument* pDoc,
 #define absrel_differ(nFlags, mask) (((nFlags) & (mask)) ^ (((nFlags) >> 4) & (mask)))
     switch( rDetails.eConv ) {
     default :
-    case ScAddress::CONV_OOO: {
+    case formula::FormulaGrammar::CONV_OOO: {
         BOOL bOneTab = (aStart.Tab() == aEnd.Tab());
         if ( !bOneTab )
             nFlags |= SCA_TAB_3D;
@@ -1717,7 +1717,7 @@ void ScRange::Format( String& r, USHORT nFlags, ScDocument* pDoc,
     }
     break;
 
-    case ScAddress::CONV_XL_A1:
+    case formula::FormulaGrammar::CONV_XL_A1:
     case ScAddress::CONV_XL_OOX:
         lcl_ScRange_Format_XL_Header( r, *this, nFlags, pDoc, rDetails );
         if( aStart.Col() == 0 && aEnd.Col() >= MAXCOL )
@@ -1749,7 +1749,7 @@ void ScRange::Format( String& r, USHORT nFlags, ScDocument* pDoc,
         }
     break;
 
-    case ScAddress::CONV_XL_R1C1:
+    case formula::FormulaGrammar::CONV_XL_R1C1:
         lcl_ScRange_Format_XL_Header( r, *this, nFlags, pDoc, rDetails );
         if( aStart.Col() == 0 && aEnd.Col() >= MAXCOL )
         {
@@ -1825,8 +1825,8 @@ String ScAddress::GetColRowString( bool bAbsolute,
     switch( rDetails.eConv )
     {
     default :
-    case ScAddress::CONV_OOO:
-    case ScAddress::CONV_XL_A1:
+    case formula::FormulaGrammar::CONV_OOO:
+    case formula::FormulaGrammar::CONV_XL_A1:
     case ScAddress::CONV_XL_OOX:
     if (bAbsolute)
         aString.Append( '$' );
@@ -1839,7 +1839,7 @@ String ScAddress::GetColRowString( bool bAbsolute,
     aString += String::CreateFromInt32(nRow+1);
         break;
 
-    case ScAddress::CONV_XL_R1C1:
+    case formula::FormulaGrammar::CONV_XL_R1C1:
         lcl_r1c1_append_r ( aString, nRow, bAbsolute, rDetails );
         lcl_r1c1_append_c ( aString, nCol, bAbsolute, rDetails );
         break;

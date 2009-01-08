@@ -65,7 +65,7 @@ ScFilterOptionsMgr::ScFilterOptionsMgr(
                                 CheckBox&           refBtnDestPers,
                                 ListBox&            refLbCopyArea,
                                 Edit&               refEdCopyArea,
-                                ScRefButton&        refRbCopyArea,
+                                formula::RefButton&     refRbCopyArea,
                                 FixedText&          refFtDbAreaLabel,
                                 FixedInfo&          refFtDbArea,
                                 FixedLine&          refFlOptions,
@@ -148,7 +148,7 @@ void ScFilterOptionsMgr::Init()
         ScDBCollection* pDBColl     = pDoc->GetDBCollection();
         String          theDbArea;
         String          theDbName   = rStrNoName;
-        const ScAddress::Convention eConv = pDoc->GetAddressConvention();
+        const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
 
         theCurArea.Format( theAreaStr, SCR_ABS_3D, pDoc, eConv );
 

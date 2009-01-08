@@ -113,11 +113,8 @@ struct SC_DLLPUBLIC ScSingleRefData        // Single reference (one address) int
             void SmartRelAbs( const ScAddress& rPos );
             void CalcRelFromAbs( const ScAddress& rPos );
             void CalcAbsIfRel( const ScAddress& rPos );
-//UNUSED2008-05  void OldBoolsToNewFlags( const OldSingleRefBools& );
-//UNUSED2008-05  BYTE CreateStoreByteFromFlags() const;
-//UNUSED2008-05  void CreateFlagsFromLoadByte( BYTE );
             BOOL operator==( const ScSingleRefData& ) const;
-            bool operator!=( const SingleRefData& ) const;
+            bool operator!=( const ScSingleRefData& ) const;
 };
 
 inline void ScSingleRefData::InitAddress( SCCOL nColP, SCROW nRowP, SCTAB nTabP )

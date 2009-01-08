@@ -41,7 +41,7 @@
 #include "document.hxx"
 #include "docuno.hxx"
 #include "editutil.hxx"
-#include "errorcodes.hxx"
+#include "formula/errorcodes.hxx"
 #include "globstr.hrc"
 #include "xlstyle.hxx"
 #include "xlname.hxx"

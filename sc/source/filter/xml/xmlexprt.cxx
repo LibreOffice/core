@@ -2389,8 +2389,8 @@ void ScXMLExport::WriteCell (ScMyCell& aCell)
                 ScFormulaCell* pFormulaCell((ScFormulaCell*) pBaseCell);
                 if (!bIsMatrix || (bIsMatrix && bIsFirstMatrixCell))
                 {
-                    const ScGrammar::Grammar eGrammar = pDoc->GetStorageGrammar();
-                    sal_uInt16 nNamespacePrefix = (eGrammar == ScGrammar::GRAM_ODFF ? XML_NAMESPACE_OF : XML_NAMESPACE_OOOC);
+                    const formula::FormulaGrammar::Grammar eGrammar = pDoc->GetStorageGrammar();
+                    sal_uInt16 nNamespacePrefix = (eGrammar == formula::FormulaGrammar::GRAM_ODFF ? XML_NAMESPACE_OF : XML_NAMESPACE_OOOC);
                     pFormulaCell->GetFormula(sFormula, eGrammar);
                     rtl::OUString sOUFormula(sFormula.makeStringAndClear());
                     if (!bIsMatrix)
@@ -3831,10 +3831,10 @@ void SAL_CALL ScXMLExport::setSourceDocument( const uno::Reference<lang::XCompon
         // ODF 1.0 and 1.1 use GRAM_PODF, everything later or unspecified GRAM_ODFF
         case SvtSaveOptions::ODFVER_010:
         case SvtSaveOptions::ODFVER_011:
-            pDoc->SetStorageGrammar( ScGrammar::GRAM_PODF);
+            pDoc->SetStorageGrammar( formula::FormulaGrammar::GRAM_PODF);
             break;
         default:
-            pDoc->SetStorageGrammar( ScGrammar::GRAM_ODFF);
+            pDoc->SetStorageGrammar( formula::FormulaGrammar::GRAM_ODFF);
     }
 }
 

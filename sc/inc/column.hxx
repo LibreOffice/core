@@ -241,7 +241,7 @@ public:
 
                 //  TRUE = Zahlformat gesetzt
     BOOL        SetString( SCROW nRow, SCTAB nTab, const String& rString,
-                           ScAddress::Convention conv = ScAddress::CONV_OOO );
+                           formula::FormulaGrammar::AddressConvention conv = formula::FormulaGrammar::CONV_OOO );
     void        SetValue( SCROW nRow, const double& rVal);
     void        SetNote( SCROW nRow, const ScPostIt& rNote );
     void        SetError( SCROW nRow, const USHORT nError);

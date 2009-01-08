@@ -199,7 +199,7 @@ BOOL ScSingleRefData::operator==( const ScSingleRefData& r ) const
         (Flags.bTabRel ? nRelTab == r.nRelTab : nTab == r.nTab);
 }
 
-bool SingleRefData::operator!=( const SingleRefData& r ) const
+bool ScSingleRefData::operator!=( const ScSingleRefData& r ) const
 {
     return !operator==(r);
 }

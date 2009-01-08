@@ -70,16 +70,16 @@ public:
 private:
     FixedLine       aFlVariables;
     FixedText       aFtFormulaRange;
-    ScRefEdit       aEdFormulaRange;
-    ScRefButton     aRBFormulaRange;
+    formula::RefEdit        aEdFormulaRange;
+    formula::RefButton      aRBFormulaRange;
 
     FixedText       aFtRowCell;
-    ScRefEdit       aEdRowCell;
-    ScRefButton     aRBRowCell;
+    formula::RefEdit        aEdRowCell;
+    formula::RefButton      aRBRowCell;
 
     FixedText       aFtColCell;
-    ScRefEdit       aEdColCell;
-    ScRefButton     aRBColCell;
+    formula::RefEdit        aEdColCell;
+    formula::RefButton      aRBColCell;
 
     OKButton        aBtnOk;
     CancelButton    aBtnCancel;
@@ -92,7 +92,7 @@ private:
 
     ScDocument*     pDoc;
     const SCTAB     nCurTab;
-    ScRefEdit*      pEdActive;
+    formula::RefEdit*       pEdActive;
     BOOL            bDlgLostFocus;
     const String    errMsgNoFormula;
     const String    errMsgNoColRow;

@@ -1751,7 +1751,7 @@ void ScTabView::SetTabNo( SCTAB nTab, BOOL bNew, BOOL bExtendSelection )
             SfxChildWindow* pChildWnd = pViewFrm->GetChildWindow( nCurRefDlgId );
             if ( pChildWnd )
             {
-                ScAnyRefDlg* pRefDlg = (ScAnyRefDlg*)pChildWnd->GetWindow();
+                IAnyRefDialog* pRefDlg = dynamic_cast<IAnyRefDialog*>(pChildWnd->GetWindow());
                 pRefDlg->ViewShellChanged(NULL);
             }
         }

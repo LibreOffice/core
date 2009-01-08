@@ -41,7 +41,7 @@
 #include "rangelst.hxx"
 #include "brdcst.hxx"
 #include "tabopparams.hxx"
-#include "grammar.hxx"
+#include "formula/grammar.hxx"
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include "scdllapi.h"
 
@@ -326,12 +326,12 @@ private:
 
     /** The compiler grammar used in document storage. GRAM_PODF for ODF 1.1
         documents, GRAM_ODFF for ODF 1.2 documents. */
-    ScGrammar::Grammar  eStorageGrammar;
+    formula::FormulaGrammar::Grammar  eStorageGrammar;
 
     /** The compiler grammar used in ODF import after brackets had been
         stripped (which they shouldn't, but until that's fixed) by the XML
         importer. */
-    ScGrammar::Grammar  eXmlImportGrammar;
+    formula::FormulaGrammar::Grammar  eXmlImportGrammar;
 
     ULONG               nFormulaCodeInTree;             // FormelRPN im Formelbaum
     ULONG               nXMLImportedFormulaCount;        // progress count during XML import
@@ -403,7 +403,7 @@ private:
 
     BOOL                bInUnoBroadcast;
     BOOL                bInUnoListenerCall;
-    ScGrammar::Grammar  eGrammar;
+    formula::FormulaGrammar::Grammar  eGrammar;
 
     mutable BOOL        bStyleSheetUsageInvalid;
 
@@ -587,9 +587,9 @@ public:
     void            GetScenarioFlags( SCTAB nTab, USHORT& rFlags ) const;
     SC_DLLPUBLIC BOOL           IsActiveScenario( SCTAB nTab ) const;
     SC_DLLPUBLIC void           SetActiveScenario( SCTAB nTab, BOOL bActive );      // nur fuer Undo etc.
-    SC_DLLPUBLIC ScAddress::Convention GetAddressConvention() const;
-    ScGrammar::Grammar GetGrammar() const;
-    void            SetGrammar( ScGrammar::Grammar eGram );
+    SC_DLLPUBLIC formula::FormulaGrammar::AddressConvention GetAddressConvention() const;
+    formula::FormulaGrammar::Grammar GetGrammar() const;
+    void            SetGrammar( formula::FormulaGrammar::Grammar eGram );
     SC_DLLPUBLIC BYTE           GetLinkMode( SCTAB nTab ) const;
     BOOL            IsLinked( SCTAB nTab ) const;
     SC_DLLPUBLIC const String&  GetLinkDoc( SCTAB nTab ) const;
@@ -720,7 +720,7 @@ public:
                                         const ScMarkData& rMark,
                                         const String& rFormula,
                                         const ScTokenArray* p = NULL,
-                                        const ScGrammar::Grammar = ScGrammar::GRAM_DEFAULT );
+                                        const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT );
     SC_DLLPUBLIC void           InsertTableOp(const ScTabOpParam& rParam,   // Mehrfachoperation
                                   SCCOL nCol1, SCROW nRow1,
                                   SCCOL nCol2, SCROW nRow2, const ScMarkData& rMark);
@@ -1663,8 +1663,8 @@ public:
     void SetSortParam( ScSortParam& rParam, SCTAB nTab );
 
     /** Should only be GRAM_PODF or GRAM_ODFF. */
-    void                SetStorageGrammar( ScGrammar::Grammar eGrammar );
-    ScGrammar::Grammar  GetStorageGrammar() const
+    void                SetStorageGrammar( formula::FormulaGrammar::Grammar eGrammar );
+    formula::FormulaGrammar::Grammar  GetStorageGrammar() const
                             { return eStorageGrammar; }
 
 private: // CLOOK-Impl-Methoden

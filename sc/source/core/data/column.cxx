@@ -59,7 +59,7 @@
 //  nur Search ohne Optimierung!
 
 // STATIC DATA -----------------------------------------------------------
-
+using namespace formula;
 
 inline BOOL CellVisible( const ScBaseCell* pCell )      //! an Zelle verschieben
 {
@@ -956,8 +956,8 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
         {
             BOOL bEqual = TRUE;
             USHORT nLen = pCode1->GetLen();
-            ScToken** ppToken1 = pCode1->GetArray();
-            ScToken** ppToken2 = pCode2->GetArray();
+            FormulaToken** ppToken1 = pCode1->GetArray();
+            FormulaToken** ppToken2 = pCode2->GetArray();
             for (USHORT i=0; i<nLen; i++)
             {
                 if ( !ppToken1[i]->TextEqual(*(ppToken2[i])) ||

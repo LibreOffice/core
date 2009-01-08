@@ -79,19 +79,19 @@ private:
         ImageButton     aBtnFx1;
         FixedText       aFtArg1;
         ArgEdit         aEdArg1;
-        ScRefButton     aRefBtn1;
+        formula::RefButton      aRefBtn1;
         ImageButton     aBtnFx2;
         FixedText       aFtArg2;
         ArgEdit         aEdArg2;
-        ScRefButton     aRefBtn2;
+        formula::RefButton      aRefBtn2;
         ImageButton     aBtnFx3;
         FixedText       aFtArg3;
         ArgEdit         aEdArg3;
-        ScRefButton     aRefBtn3;
+        formula::RefButton      aRefBtn3;
         ImageButton     aBtnFx4;
         FixedText       aFtArg4;
         ArgEdit         aEdArg4;
-        ScRefButton     aRefBtn4;
+        formula::RefButton      aRefBtn4;
         ScrollBar       aSlider;
         BOOL            bRefMode;
 
@@ -114,7 +114,7 @@ protected:
         virtual void    FxClick();
 
         void            InitArgInput( USHORT nPos, FixedText& rFtArg, ImageButton& rBtnFx,
-                                        ArgEdit& rEdArg, ScRefButton& rRefBtn);
+                                        ArgEdit& rEdArg, formula::RefButton& rRefBtn);
 
         void            DelParaArray();
         void            SetArgumentDesc(const String& aText);
@@ -145,7 +145,7 @@ public:
 
         USHORT          GetActiveLine();
         void            SetActiveLine(USHORT no);
-        ScRefEdit*      GetActiveEdit();
+        formula::RefEdit*       GetActiveEdit();
         String          GetActiveArgName();
 
         String          GetArgument(USHORT no);

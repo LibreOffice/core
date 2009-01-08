@@ -36,7 +36,7 @@
 #include "scmatrix.hxx"
 #include "global.hxx"
 #include "address.hxx"
-#include "errorcodes.hxx"
+#include "formula/errorcodes.hxx"
 #include "interpre.hxx"
 #include <svtools/zforlist.hxx>
 #include <tools/stream.hxx>

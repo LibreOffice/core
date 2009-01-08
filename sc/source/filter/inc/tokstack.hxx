@@ -34,9 +34,9 @@
 #include <string.h>
 #include <tools/debug.hxx>
 #include "compiler.hxx"
+#include "tokenarray.hxx"
 
 #include <vector>
-
 
 typedef OpCode DefTokenId;
 // in PRODUCT version: ambiguity between OpCode (being USHORT) and UINT16
@@ -152,7 +152,7 @@ class TokenPool
         {
             sal_uInt16      mnFileId;
             String          maTabName;
-            SingleRefData   maRef;
+            ScSingleRefData   maRef;
         };
         ::std::vector<ExtCellRef>   maExtCellRefs;
 
@@ -161,7 +161,7 @@ class TokenPool
         {
             sal_uInt16      mnFileId;
             String          maTabName;
-            ComplRefData    maRef;
+            ScComplexRefData    maRef;
         };
         ::std::vector<ExtAreaRef>   maExtAreaRefs;
 
@@ -212,8 +212,8 @@ class TokenPool
         const TokenId               StoreNlf( const ScSingleRefData& rTr );
         const TokenId               StoreMatrix( SCSIZE nC, SCSIZE nR );
         const TokenId               StoreExtName( sal_uInt16 nFileId, const String& rName );
-        const TokenId               StoreExtRef( sal_uInt16 nFileId, const String& rTabName, const SingleRefData& rRef );
-        const TokenId               StoreExtRef( sal_uInt16 nFileId, const String& rTabName, const ComplRefData& rRef );
+        const TokenId               StoreExtRef( sal_uInt16 nFileId, const String& rTabName, const ScSingleRefData& rRef );
+        const TokenId               StoreExtRef( sal_uInt16 nFileId, const String& rTabName, const ScComplexRefData& rRef );
 
         inline const TokenId        LastId( void ) const;
         inline const ScTokenArray*  operator []( const TokenId nId );

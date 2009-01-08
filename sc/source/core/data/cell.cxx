@@ -58,6 +58,7 @@
 #include <svx/flditem.hxx>
 #include <svtools/broadcast.hxx>
 
+using namespace formula;
 // More or less arbitrary, of course all recursions must fit into available
 // stack space (which is what on all systems we don't know yet?). Choosing a
 // lower value may be better than trying a much higher value that also isn't
@@ -216,8 +217,8 @@ void ScBaseCell::StartListeningTo( ScDocument* pDoc )
         else
         {
             pArr->Reset();
-            for( ScToken* t = pArr->GetNextReferenceRPN(); t;
-                          t = pArr->GetNextReferenceRPN() )
+            ScToken* t;
+            while ( ( t = static_cast<ScToken*>(pArr->GetNextReferenceRPN()) ) != NULL )
             {
                 StackVar eType = t->GetType();
                 ScSingleRefData& rRef1 = t->GetSingleRef();
@@ -306,8 +307,8 @@ void ScBaseCell::EndListeningTo( ScDocument* pDoc, ScTokenArray* pArr,
                 aPos = pFormCell->aPos;
             }
             pArr->Reset();
-            for( ScToken* t = pArr->GetNextReferenceRPN(); t;
-                          t = pArr->GetNextReferenceRPN() )
+            ScToken* t;
+            while ( ( t = static_cast<ScToken*>(pArr->GetNextReferenceRPN()) ) != NULL )
             {
                 StackVar eType = t->GetType();
                 ScSingleRefData& rRef1 = t->GetSingleRef();
@@ -503,8 +504,8 @@ BOOL ScBaseCell::CellEqual( const ScBaseCell* pCell1, const ScBaseCell* pCell2 )
                 {
                     BOOL bEqual = TRUE;
                     USHORT nLen = pCode1->GetLen();
-                    ScToken** ppToken1 = pCode1->GetArray();
-                    ScToken** ppToken2 = pCode2->GetArray();
+                    FormulaToken** ppToken1 = pCode1->GetArray();
+                    FormulaToken** ppToken2 = pCode2->GetArray();
                     for (USHORT i=0; i<nLen; i++)
                         if ( !ppToken1[i]->TextEqual(*(ppToken2[i])) )
                         {
@@ -532,7 +533,7 @@ BOOL ScBaseCell::CellEqual( const ScBaseCell* pCell1, const ScBaseCell* pCell2 )
 
 ScFormulaCell::ScFormulaCell() :
     ScBaseCell( CELLTYPE_FORMULA ),
-    eTempGrammar( ScGrammar::GRAM_DEFAULT),
+    eTempGrammar( FormulaGrammar::GRAM_DEFAULT),
     pCode( NULL ),
     pDocument( NULL ),
     pPrevious(0),
@@ -558,7 +559,7 @@ ScFormulaCell::ScFormulaCell() :
 
 ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
                               const String& rFormula,
-                              const ScGrammar::Grammar eGrammar,
+                              const FormulaGrammar::Grammar eGrammar,
                               BYTE cMatInd ) :
     ScBaseCell( CELLTYPE_FORMULA ),
     eTempGrammar( eGrammar),
@@ -590,7 +591,7 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
 
 ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
                               const ScTokenArray* pArr,
-                              const ScGrammar::Grammar eGrammar, BYTE cInd ) :
+                              const FormulaGrammar::Grammar eGrammar, BYTE cInd ) :
     ScBaseCell( CELLTYPE_FORMULA ),
     eTempGrammar( eGrammar),
     pCode( pArr ? new ScTokenArray( *pArr ) : new ScTokenArray ),
@@ -617,7 +618,8 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
     // UPN-Array erzeugen
     if( pCode->GetLen() && !pCode->GetCodeError() && !pCode->GetCodeLen() )
     {
-        ScCompiler aComp( pDocument, aPos, *pCode, eTempGrammar);
+        ScCompiler aComp( pDocument, aPos, *pCode);
+        aComp.SetGrammar(eTempGrammar);
         bSubTotal = aComp.CompileTokenArray();
         nFormatType = aComp.GetNumFormatType();
     }
@@ -674,8 +676,8 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rNewPos,
     if( !bCompile )
     {   // Name references with references and ColRowNames
         pCode->Reset();
-        for( ScToken* t = pCode->GetNextReferenceOrName(); t && !bCompile;
-                      t = pCode->GetNextReferenceOrName() )
+        ScToken* t;
+        while ( ( t = static_cast<ScToken*>(pCode->GetNextReferenceOrName()) ) != NULL && !bCompile )
         {
             if ( t->GetOpCode() == ocExternalRef )
             {
@@ -727,7 +729,7 @@ ScBaseCell* ScFormulaCell::Clone( ScDocument* pDoc, const ScAddress& rPos,
 }
 
 void ScFormulaCell::GetFormula( rtl::OUStringBuffer& rBuffer,
-                                const ScGrammar::Grammar eGrammar ) const
+                                const FormulaGrammar::Grammar eGrammar ) const
 {
     if( pCode->GetCodeError() && !pCode->GetLen() )
     {
@@ -738,7 +740,7 @@ void ScFormulaCell::GetFormula( rtl::OUStringBuffer& rBuffer,
     {
         // Reference to another cell that contains a matrix formula.
         pCode->Reset();
-        ScToken* p = pCode->GetNextReferenceRPN();
+        ScToken* p = static_cast<ScToken*>(pCode->GetNextReferenceRPN());
         if( p )
         {
             /* FIXME: original GetFormula() code obtained
@@ -760,7 +762,8 @@ void ScFormulaCell::GetFormula( rtl::OUStringBuffer& rBuffer,
             }
             else
             {
-                ScCompiler aComp( pDocument, aPos, *pCode, eGrammar);
+                ScCompiler aComp( pDocument, aPos, *pCode);
+                aComp.SetGrammar(eGrammar);
                 aComp.CreateStringFromTokenArray( rBuffer );
             }
         }
@@ -771,7 +774,8 @@ void ScFormulaCell::GetFormula( rtl::OUStringBuffer& rBuffer,
     }
     else
     {
-        ScCompiler aComp( pDocument, aPos, *pCode, eGrammar);
+        ScCompiler aComp( pDocument, aPos, *pCode);
+        aComp.SetGrammar(eGrammar);
         aComp.CreateStringFromTokenArray( rBuffer );
     }
 
@@ -785,7 +789,7 @@ void ScFormulaCell::GetFormula( rtl::OUStringBuffer& rBuffer,
     }
 }
 
-void ScFormulaCell::GetFormula( String& rFormula, const ScGrammar::Grammar eGrammar ) const
+void ScFormulaCell::GetFormula( String& rFormula, const FormulaGrammar::Grammar eGrammar ) const
 {
     rtl::OUStringBuffer rBuffer( rFormula );
     GetFormula( rBuffer, eGrammar );
@@ -799,7 +803,7 @@ void ScFormulaCell::GetResultDimensions( SCSIZE& rCols, SCSIZE& rRows )
 
     const ScMatrix* pMat = NULL;
     if (!pCode->GetCodeError() && aResult.GetType() == svMatrixCell &&
-            ((pMat = aResult.GetToken()->GetMatrix()) != 0))
+            ((pMat = static_cast<const ScToken*>(aResult.GetToken().get())->GetMatrix()) != 0))
         pMat->GetDimensions( rCols, rRows );
     else
     {
@@ -809,7 +813,7 @@ void ScFormulaCell::GetResultDimensions( SCSIZE& rCols, SCSIZE& rRows )
 }
 
 void ScFormulaCell::Compile( const String& rFormula, BOOL bNoListening,
-                            const ScGrammar::Grammar eGrammar )
+                            const FormulaGrammar::Grammar eGrammar )
 {
     if ( pDocument->IsClipOrUndo() ) return;
     BOOL bWasInFormulaTree = pDocument->IsInFormulaTree( this );
@@ -819,7 +823,8 @@ void ScFormulaCell::Compile( const String& rFormula, BOOL bNoListening,
     if ( pCode )
         pCode->Clear();
     ScTokenArray* pCodeOld = pCode;
-    ScCompiler aComp( pDocument, aPos, eGrammar);
+    ScCompiler aComp( pDocument, aPos);
+    aComp.SetGrammar(eGrammar);
     pCode = aComp.CompileString( rFormula );
     if ( pCodeOld )
         delete pCodeOld;
@@ -864,7 +869,8 @@ void ScFormulaCell::CompileTokenArray( BOOL bNoListening )
 
         if( !bNoListening && pCode->GetCodeLen() )
             EndListeningTo( pDocument );
-        ScCompiler aComp(pDocument, aPos, *pCode, pDocument->GetGrammar());
+        ScCompiler aComp(pDocument, aPos, *pCode);
+        aComp.SetGrammar(pDocument->GetGrammar());
         bSubTotal = aComp.CompileTokenArray();
         if( !pCode->GetCodeError() )
         {
@@ -891,7 +897,8 @@ void ScFormulaCell::CompileXML( ScProgress& rProgress )
         return ;
     }
 
-    ScCompiler aComp( pDocument, aPos, *pCode, eTempGrammar);
+    ScCompiler aComp( pDocument, aPos, *pCode);
+    aComp.SetGrammar(eTempGrammar);
     String aFormula;
     aComp.CreateStringFromTokenArray( aFormula );
     pDocument->DecXMLImportedFormulaCount( aFormula.Len() );
@@ -951,7 +958,8 @@ void ScFormulaCell::CalcAfterLoad()
     // wurde, da die RangeNames erst jetzt existieren.
     if( pCode->GetLen() && !pCode->GetCodeLen() && !pCode->GetCodeError() )
     {
-        ScCompiler aComp(pDocument, aPos, *pCode, pDocument->GetGrammar());
+        ScCompiler aComp(pDocument, aPos, *pCode);
+        aComp.SetGrammar(pDocument->GetGrammar());
         bSubTotal = aComp.CompileTokenArray();
         nFormatType = aComp.GetNumFormatType();
         nFormatIndex = 0;
@@ -1499,7 +1507,7 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
         // In case of changes just obtain the result, no temporary and
         // comparison needed anymore.
         if (bChanged)
-            aResult.SetToken( p->GetResultToken());
+            aResult.SetToken( p->GetResultToken() );
         else
         {
             ScFormulaResult aNewResult( p->GetResultToken());
@@ -1831,13 +1839,13 @@ BOOL ScDetectiveRefIter::GetNextRef( ScRange& rRange )
 {
     BOOL bRet = FALSE;
 
-    ScToken* p = pCode->GetNextReferenceRPN();
+    ScToken* p = static_cast<ScToken*>(pCode->GetNextReferenceRPN());
     if (p)
         p->CalcAbsIfRel( aPos );
 
     while ( p && lcl_ScDetectiveRefIter_SkipRef( p ) )
     {
-        p = pCode->GetNextReferenceRPN();
+        p = static_cast<ScToken*>(pCode->GetNextReferenceRPN());
         if (p)
             p->CalcAbsIfRel( aPos );
     }

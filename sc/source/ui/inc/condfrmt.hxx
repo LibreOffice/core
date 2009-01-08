@@ -64,11 +64,11 @@ private:
     CheckBox            aCbxCond1;
     ListBox             aLbCond11;
     ListBox             aLbCond12;
-    ScRefEdit           aEdtCond11;
-    ScRefButton         aRbCond11;
+    formula::RefEdit            aEdtCond11;
+    formula::RefButton          aRbCond11;
     FixedText           aFtCond1And;
-    ScRefEdit           aEdtCond12;
-    ScRefButton         aRbCond12;
+    formula::RefEdit            aEdtCond12;
+    formula::RefButton          aRbCond12;
     FixedText           aFtCond1Template;
     ListBox             aLbCond1Template;
     FixedLine           aFlSep1;
@@ -76,11 +76,11 @@ private:
     CheckBox            aCbxCond2;
     ListBox             aLbCond21;
     ListBox             aLbCond22;
-    ScRefEdit           aEdtCond21;
-    ScRefButton         aRbCond21;
+    formula::RefEdit            aEdtCond21;
+    formula::RefButton          aRbCond21;
     FixedText           aFtCond2And;
-    ScRefEdit           aEdtCond22;
-    ScRefButton         aRbCond22;
+    formula::RefEdit            aEdtCond22;
+    formula::RefButton          aRbCond22;
     FixedText           aFtCond2Template;
     ListBox             aLbCond2Template;
     FixedLine           aFlSep2;
@@ -88,11 +88,11 @@ private:
     CheckBox            aCbxCond3;
     ListBox             aLbCond31;
     ListBox             aLbCond32;
-    ScRefEdit           aEdtCond31;
-    ScRefButton         aRbCond31;
+    formula::RefEdit            aEdtCond31;
+    formula::RefButton          aRbCond31;
     FixedText           aFtCond3And;
-    ScRefEdit           aEdtCond32;
-    ScRefButton         aRbCond32;
+    formula::RefEdit            aEdtCond32;
+    formula::RefButton          aRbCond32;
     FixedText           aFtCond3Template;
     ListBox             aLbCond3Template;
 
@@ -124,7 +124,7 @@ private:
     Size                aCond3Size2;
     Size                aCond3Size3;
 
-    ScRefEdit*          pEdActive;
+    formula::RefEdit*           pEdActive;
     BOOL                bDlgLostFocus;
     ScDocument*         pDoc;
 

@@ -77,10 +77,12 @@ class ScMessagePool;
 class EditFieldInfo;
 class ScNavipiCfg;
 class ScAddInCfg;
-class ScFormEditData;
+
 class ScTransferObj;
 class ScDrawTransferObj;
 class ScSelectionTransferObj;
+
+class ScFormEditData;
 
 //==================================================================
 

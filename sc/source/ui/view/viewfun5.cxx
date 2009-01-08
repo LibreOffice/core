@@ -702,18 +702,19 @@ BOOL ScViewFunc::PasteDDE( const uno::Reference<datatransfer::XTransferable>& rx
     String aItem( aByteItem, eSysEnc );
 
     // TODO: we could define ocQuote for "
-    String aQuote( '"' );
+    const String aQuote( '"' );
+    const String& sSep = ScCompiler::GetNativeSymbol( ocSep);
     String aFormula( '=' );
     aFormula += ScCompiler::GetNativeSymbol( ocDde);
     aFormula += ScCompiler::GetNativeSymbol( ocOpen);
     aFormula += aQuote;
     aFormula += aApp;
     aFormula += aQuote;
-    aFormula += ScCompiler::GetNativeSymbol( ocSep);
+    aFormula += sSep;
     aFormula += aQuote;
     aFormula += aTopic;
     aFormula += aQuote;
-    aFormula += ScCompiler::GetNativeSymbol( ocSep);
+    aFormula += sSep;
     aFormula += aQuote;
     aFormula += aItem;
     aFormula += aQuote;

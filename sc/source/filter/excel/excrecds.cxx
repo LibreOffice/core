@@ -88,7 +88,7 @@
 #include "stlsheet.hxx"
 #include "stlpool.hxx"
 #include "editutil.hxx"
-#include "errorcodes.hxx"
+#include "formula/errorcodes.hxx"
 
 #include "excdoc.hxx"
 #include "xeformula.hxx"

@@ -100,6 +100,17 @@ SHL1STDLIBS=       \
     $(XMLOFFLIB)	\
     $(DBTOOLSLIB)	\
     $(AVMEDIALIB)
+    
+.IF "$(GUI)"!="WNT" || "$(COM)"=="GCC"
+SHL1STDLIBS+= \
+        -lfor$(DLLPOSTFIX) \
+        -lforui$(DLLPOSTFIX)
+.ELSE
+SHL1STDLIBS+= \
+        ifor.lib \
+        iforui.lib
+.ENDIF
+
 
 SHL1LIBS=$(LIB3TARGET) $(LIB4TARGET)
 
@@ -310,6 +321,14 @@ SHL9STDLIBS= \
         $(VCLLIB) \
         $(TKLIB) \
 
+
+.IF "$(GUI)"!="WNT" || "$(COM)"=="GCC"
+SHL9STDLIBS+= \
+        -lfor$(DLLPOSTFIX)
+.ELSE
+SHL9STDLIBS+= \
+        ifor.lib
+.ENDIF
 
 SHL9DEPN=$(SHL1TARGETN) $(SHL8TARGETN)
 SHL9LIBS=$(SLB)$/$(TARGET_VBA).lib

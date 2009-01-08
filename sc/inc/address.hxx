@@ -43,6 +43,7 @@
 #define INCLUDED_LIMITS
 #endif
 #include "scdllapi.h"
+#include <formula/grammar.hxx>
 
 #include <com/sun/star/uno/Sequence.hxx>
 
@@ -259,34 +260,21 @@ public:
 
     enum Uninitialized      { UNINITIALIZED };
     enum InitializeInvalid  { INITIALIZE_INVALID };
-    enum Convention         {
-        CONV_UNSPECIFIED = -1,  /* useful when we want method to chose, must be first */
 
-        /* elements must be sequential and changes should be reflected in ScCompiler::pCharTables */
-        CONV_OOO     =  0,  /* 'doc'#sheet.A1:sheet2.B2 */
-        CONV_ODF,           /* ['doc'#sheet.A1:sheet2.B2] */
-        CONV_XL_A1,         /* [doc]sheet:sheet2!A1:B2 */
-        CONV_XL_R1C1,       /* [doc]sheet:sheet2!R1C1:R2C2 */
-        CONV_XL_OOX,        /* [#]sheet:sheet2!A1:B2 */
-
-        CONV_LOTUS_A1,      /* external? 3d? A1.B2 <placeholder/> */
-
-        CONV_LAST   /* for loops, must always be last */
-    };
     struct Details {
-        Convention  eConv;
+        formula::FormulaGrammar::AddressConvention  eConv;
         SCROW       nRow;
         SCCOL       nCol;
-        inline Details( Convention eConvP, SCROW nRowP, SCCOL nColP )
+        inline Details( formula::FormulaGrammar::AddressConvention eConvP, SCROW nRowP, SCCOL nColP )
             : eConv( eConvP ), nRow( nRowP ), nCol( nColP )
             {}
-        inline Details( Convention eConvP, ScAddress const & rAddr )
+        inline Details( formula::FormulaGrammar::AddressConvention eConvP, ScAddress const & rAddr )
             : eConv( eConvP ), nRow( rAddr.Row() ), nCol( rAddr.Col() )
             {}
-        inline Details( Convention eConvP)
+        inline Details( formula::FormulaGrammar::AddressConvention eConvP)
             : eConv( eConvP ), nRow( 0 ), nCol( 0 )
             {}
-        /* Use the convention associated with rAddr::Tab() */
+        /* Use the formula::FormulaGrammar::AddressConvention associated with rAddr::Tab() */
         Details( const ScDocument* pDoc, const ScAddress & rAddr );
         void SetPos( const ScDocument* pDoc, const ScAddress & rAddr );
     };

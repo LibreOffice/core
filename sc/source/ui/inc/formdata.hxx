@@ -33,65 +33,32 @@
 
 #include <tools/string.hxx>
 #include <tools/gen.hxx>
-
+#include <formula/formdata.hxx>
 class ScInputHandler;
 class ScDocShell;
 
 //============================================================================
 
-class ScFormEditData
+class ScFormEditData : public formula::FormEditData
 {
 public:
                         ScFormEditData();
-                        ~ScFormEditData();
+                        virtual ~ScFormEditData();
 
-    void                SaveValues();
-    BOOL                HasParent() const   { return pParent != NULL; }
-
-    USHORT              GetMode() const     { return nMode; }
-    xub_StrLen          GetFStart() const   { return nFStart; }
-    USHORT              GetCatSel() const   { return nCatSel; }
-    USHORT              GetFuncSel() const  { return nFuncSel; }
-    USHORT              GetOffset() const   { return nOffset; }
-    USHORT              GetEdFocus() const  { return nEdFocus; }
-    const String&       GetUndoStr() const  { return aUndoStr; }
-    BOOL                GetMatrixFlag()const{ return bMatrix;}
-    ULONG               GetUniqueId()const  { return nUniqueId;}
-    const Selection&    GetSelection()const { return aSelection;}
     ScInputHandler*     GetInputHandler()   { return pInputHandler;}
     ScDocShell*         GetDocShell()       { return pScDocShell;}
 
-    void                SetMode( USHORT nNew )                  { nMode = nNew; }
-    void                SetFStart( xub_StrLen nNew )            { nFStart = nNew; }
-    void                SetCatSel( USHORT nNew )                { nCatSel = nNew; }
-    void                SetFuncSel( USHORT nNew )               { nFuncSel = nNew; }
-    void                SetOffset( USHORT nNew )                { nOffset = nNew; }
-    void                SetEdFocus( USHORT nNew )               { nEdFocus = nNew; }
-    void                SetUndoStr( const String& rNew )        { aUndoStr = rNew; }
-    void                SetMatrixFlag(BOOL bNew)                { bMatrix=bNew;}
-    void                SetUniqueId(ULONG nNew)                 { nUniqueId=nNew;}
-    void                SetSelection(const Selection& aSel)     { aSelection=aSel;}
     void                SetInputHandler(ScInputHandler* pHdl)   { pInputHandler=pHdl;}
     void                SetDocShell(ScDocShell* pSds)           { pScDocShell=pSds;}
 
 
+    virtual void            SaveValues();
 
 private:
                         ScFormEditData( const ScFormEditData& );
-    const ScFormEditData& operator=( const ScFormEditData& r );
-    void                Reset();
+//  const ScFormEditData& operator=( const ScFormEditData& r );
 
-    ScFormEditData*     pParent;            // fuer Verschachtelung
-    USHORT              nMode;              // enum ScFormulaDlgMode
-    xub_StrLen          nFStart;
-    USHORT              nCatSel;
-    USHORT              nFuncSel;
-    USHORT              nOffset;
-    USHORT              nEdFocus;
-    String              aUndoStr;
-    BOOL                bMatrix;
-    ULONG               nUniqueId;
-    Selection           aSelection;
+
     ScInputHandler*     pInputHandler;
     ScDocShell*         pScDocShell;
 };

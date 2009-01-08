@@ -172,7 +172,7 @@ ScImportExport::ScImportExport( ScDocument* p, const String& rPos )
                 pData->GetSymbol( aPos );                   // mit dem Inhalt weitertesten
         }
     }
-    ScAddress::Convention eConv = pDoc->GetAddressConvention();
+    formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
     // Bereich?
     if( aRange.Parse( aPos, pDoc, eConv ) & SCA_VALID )
         bSingle = FALSE;
@@ -1479,8 +1479,9 @@ BOOL ScImportExport::Sylk2Doc( SvStream& rStrm )
                             /* FIXME: do we want GRAM_ODFF_A1 instead? At the
                              * end it probably should be GRAM_ODFF_R1C1, since
                              * R1C1 is what Excel writes in SYLK. */
-                            const ScGrammar::Grammar eGrammar = ScGrammar::GRAM_PODF_A1;
-                            ScCompiler aComp( pDoc, aPos, eGrammar );
+                            const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_PODF_A1;
+                            ScCompiler aComp( pDoc, aPos);
+                            aComp.SetGrammar(eGrammar);
                             ScTokenArray* pCode = aComp.CompileString( aText );
                             if ( ch == 'M' )
                             {
@@ -1680,7 +1681,7 @@ BOOL ScImportExport::Doc2Sylk( SvStream& rStrm )
                                 aCellStr.Erase();
                             break;
                             default:
-                                pFCell->GetFormula( aCellStr, ScGrammar::GRAM_PODF_A1);
+                                pFCell->GetFormula( aCellStr,formula::FormulaGrammar::GRAM_PODF_A1);
                                 /* FIXME: do we want GRAM_ODFF_A1 instead? At
                                  * the end it probably should be
                                  * GRAM_ODFF_R1C1, since R1C1 is what Excel

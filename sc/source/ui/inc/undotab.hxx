@@ -33,7 +33,7 @@
 
 #include "undobase.hxx"
 #include "markdata.hxx"
-#include "grammar.hxx"
+#include "formula/grammar.hxx"
 #include <tools/color.hxx>
 
 #ifndef _SVSTDARR_SHORTS
@@ -470,7 +470,7 @@ class ScUndoSetGrammar : public ScSimpleUndo
 public:
                     TYPEINFO();
                     ScUndoSetGrammar( ScDocShell* pShell,
-                                      ScGrammar::Grammar eGrammar );
+                                      formula::FormulaGrammar::Grammar eGrammar );
     virtual         ~ScUndoSetGrammar();
 
     virtual void    Undo();
@@ -481,9 +481,9 @@ public:
     virtual String  GetComment() const;
 
 private:
-    ScGrammar::Grammar meNewGrammar, meOldGrammar;
+    formula::FormulaGrammar::Grammar meNewGrammar, meOldGrammar;
 
-    void DoChange( ScGrammar::Grammar eGrammar );
+    void DoChange( formula::FormulaGrammar::Grammar eGrammar );
 };
 
 #endif

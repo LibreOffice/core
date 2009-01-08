@@ -70,7 +70,7 @@
 #include "docsh.hxx"
 #include "appoptio.hxx"
 #include "rangenam.hxx"
-#include "compiler.hrc"
+#include <formula/compiler.hrc>
 #include "dbcolect.hxx"
 #include "rangeutl.hxx"
 #include "docfunc.hxx"
@@ -1539,7 +1539,7 @@ ScNameInputType lcl_GetInputType( const String& rText )
         ScViewData* pViewData = pViewSh->GetViewData();
         ScDocument* pDoc = pViewData->GetDocument();
         SCTAB nTab = pViewData->GetTabNo();
-        ScAddress::Convention eConv = pDoc->GetAddressConvention();
+        formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
 
         // test in same order as in SID_CURRENTCELL execute
 

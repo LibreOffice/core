@@ -39,6 +39,7 @@
 #include "compiler.hxx"
 #include "tokstack.hxx"
 #include "global.hxx"
+#include "scmatrix.hxx"
 
 #include <stdio.h> // printf
 
@@ -803,7 +804,7 @@ const TokenId TokenPool::StoreExtName( sal_uInt16 nFileId, const String& rName )
     return static_cast<const TokenId>(nElementAkt);
 }
 
-const TokenId TokenPool::StoreExtRef( sal_uInt16 nFileId, const String& rTabName, const SingleRefData& rRef )
+const TokenId TokenPool::StoreExtRef( sal_uInt16 nFileId, const String& rTabName, const ScSingleRefData& rRef )
 {
     if ( nElementAkt >= nElement )
         GrowElement();
@@ -822,7 +823,7 @@ const TokenId TokenPool::StoreExtRef( sal_uInt16 nFileId, const String& rTabName
     return static_cast<const TokenId>(nElementAkt);
 }
 
-const TokenId TokenPool::StoreExtRef( sal_uInt16 nFileId, const String& rTabName, const ComplRefData& rRef )
+const TokenId TokenPool::StoreExtRef( sal_uInt16 nFileId, const String& rTabName, const ScComplexRefData& rRef )
 {
     if ( nElementAkt >= nElement )
         GrowElement();

@@ -148,7 +148,7 @@ ScDbNameDlg::ScDbNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
 
         aFlAssign       ( this, ScResId( FL_ASSIGN ) ),
         aEdAssign       ( this, ScResId( ED_DBAREA ) ),
-        aRbAssign       ( this, ScResId( RB_DBAREA ), &aEdAssign ),
+        aRbAssign       ( this, ScResId( RB_DBAREA ), &aEdAssign, this ),
 
         aFlOptions      ( this, ScResId( FL_OPTIONS ) ),
         aBtnHeader      ( this, ScResId( BTN_HEADER ) ),

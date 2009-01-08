@@ -162,7 +162,7 @@ handle_r1c1:
         if( nPos < nLen && nPos > 0 &&
             '-' == pChar[nPos] && '[' == pChar[nPos-1] &&
             NULL != pDoc &&
-            ScAddress::CONV_XL_R1C1 == pDoc->GetAddressConvention() )
+            formula::FormulaGrammar::CONV_XL_R1C1 == pDoc->GetAddressConvention() )
         {
             nPos++;
             goto handle_r1c1;
@@ -3384,7 +3384,7 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
                         if ( !aPosStr.Len() )           // kein Name -> formatieren
                         {
                             USHORT nFlags = 0;
-                            if( aAddrDetails.eConv == ScAddress::CONV_XL_R1C1 )
+                            if( aAddrDetails.eConv == formula::FormulaGrammar::CONV_XL_R1C1 )
                                 nFlags |= SCA_COL_ABSOLUTE | SCA_ROW_ABSOLUTE;
                             if ( rSPos != rEPos )
                             {

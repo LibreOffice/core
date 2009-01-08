@@ -122,9 +122,9 @@
 #include "rangeseq.hxx"
 #include "unowids.hxx"
 #include "paramisc.hxx"
-#include "errorcodes.hxx"
+#include "formula/errorcodes.hxx"
 #include "unoreflist.hxx"
-#include "grammar.hxx"
+#include "formula/grammar.hxx"
 
 #include <list>
 
@@ -1218,7 +1218,7 @@ BOOL lcl_PutDataArray( ScDocShell& rDocShell, const ScRange& rRange,
 
 BOOL lcl_PutFormulaArray( ScDocShell& rDocShell, const ScRange& rRange,
                         const uno::Sequence< uno::Sequence<rtl::OUString> >& aData,
-                        const ScGrammar::Grammar eGrammar )
+                        const formula::FormulaGrammar::Grammar eGrammar )
 {
 //  BOOL bApi = TRUE;
 
@@ -1318,7 +1318,7 @@ String lcl_GetInputString( ScDocument* pDoc, const ScAddress& rPosition, BOOL bE
             if ( eType == CELLTYPE_FORMULA )
             {
                 ScFormulaCell* pForm = (ScFormulaCell*)pCell;
-                pForm->GetFormula( aVal, ScGrammar::mapAPItoGrammar( bEnglish, false));
+                pForm->GetFormula( aVal,formula::FormulaGrammar::mapAPItoGrammar( bEnglish, false));
             }
             else
             {
@@ -2080,9 +2080,9 @@ uno::Any SAL_CALL ScCellRangesBase::getPropertyDefault( const rtl::OUString& aPr
                         {
                             BOOL bEnglish = ( pMap->nWID != SC_WID_UNO_CONDLOC );
                             BOOL bXML = ( pMap->nWID == SC_WID_UNO_CONDXML );
-                            ScGrammar::Grammar eGrammar = (bXML ?
+                            formula::FormulaGrammar::Grammar eGrammar = (bXML ?
                                     pDoc->GetStorageGrammar() :
-                                    ScGrammar::mapAPItoGrammar( bEnglish, bXML));
+                                   formula::FormulaGrammar::mapAPItoGrammar( bEnglish, bXML));
 
                             aAny <<= uno::Reference<sheet::XSheetConditionalEntries>(
                                     new ScTableConditionalFormat( pDoc, 0, eGrammar ));
@@ -2094,9 +2094,9 @@ uno::Any SAL_CALL ScCellRangesBase::getPropertyDefault( const rtl::OUString& aPr
                         {
                             BOOL bEnglish = ( pMap->nWID != SC_WID_UNO_VALILOC );
                             BOOL bXML = ( pMap->nWID == SC_WID_UNO_VALIXML );
-                            ScGrammar::Grammar eGrammar = (bXML ?
+                            formula::FormulaGrammar::Grammar eGrammar = (bXML ?
                                     pDoc->GetStorageGrammar() :
-                                    ScGrammar::mapAPItoGrammar( bEnglish, bXML));
+                                   formula::FormulaGrammar::mapAPItoGrammar( bEnglish, bXML));
 
                             aAny <<= uno::Reference<beans::XPropertySet>(
                                     new ScTableValidationObj( pDoc, 0, eGrammar ));
@@ -2336,9 +2336,9 @@ void ScCellRangesBase::SetOnePropertyValue( const SfxItemPropertyMap* pMap, cons
                                 ScDocument* pDoc = pDocShell->GetDocument();
                                 BOOL bEnglish = ( pMap->nWID != SC_WID_UNO_CONDLOC );
                                 BOOL bXML = ( pMap->nWID == SC_WID_UNO_CONDXML );
-                                ScGrammar::Grammar eGrammar = (bXML ?
-                                        ScGrammar::GRAM_UNSPECIFIED :
-                                        ScGrammar::mapAPItoGrammar( bEnglish, bXML));
+                                formula::FormulaGrammar::Grammar eGrammar = (bXML ?
+                                       formula::FormulaGrammar::GRAM_UNSPECIFIED :
+                                       formula::FormulaGrammar::mapAPItoGrammar( bEnglish, bXML));
 
                                 ScConditionalFormat aNew( 0, pDoc );    // Index wird beim Einfuegen gesetzt
                                 pFormat->FillFormat( aNew, pDoc, eGrammar );
@@ -2367,9 +2367,9 @@ void ScCellRangesBase::SetOnePropertyValue( const SfxItemPropertyMap* pMap, cons
                                 ScDocument* pDoc = pDocShell->GetDocument();
                                 BOOL bEnglish = ( pMap->nWID != SC_WID_UNO_VALILOC );
                                 BOOL bXML = ( pMap->nWID == SC_WID_UNO_VALIXML );
-                                ScGrammar::Grammar eGrammar = (bXML ?
-                                        ScGrammar::GRAM_UNSPECIFIED :
-                                        ScGrammar::mapAPItoGrammar( bEnglish, bXML));
+                                formula::FormulaGrammar::Grammar eGrammar = (bXML ?
+                                       formula::FormulaGrammar::GRAM_UNSPECIFIED :
+                                       formula::FormulaGrammar::mapAPItoGrammar( bEnglish, bXML));
 
                                 ScValidationData* pNewData =
                                         pValidObj->CreateValidationData( pDoc, eGrammar );
@@ -2501,9 +2501,9 @@ void ScCellRangesBase::GetOnePropertyValue( const SfxItemPropertyMap* pMap,
                             ScDocument* pDoc = pDocShell->GetDocument();
                             BOOL bEnglish = ( pMap->nWID != SC_WID_UNO_CONDLOC );
                             BOOL bXML = ( pMap->nWID == SC_WID_UNO_CONDXML );
-                            ScGrammar::Grammar eGrammar = (bXML ?
+                            formula::FormulaGrammar::Grammar eGrammar = (bXML ?
                                     pDoc->GetStorageGrammar() :
-                                    ScGrammar::mapAPItoGrammar( bEnglish, bXML));
+                                   formula::FormulaGrammar::mapAPItoGrammar( bEnglish, bXML));
                             ULONG nIndex = ((const SfxUInt32Item&)
                                     pPattern->GetItem(ATTR_CONDITIONAL)).GetValue();
                             rAny <<= uno::Reference<sheet::XSheetConditionalEntries>(
@@ -2521,9 +2521,9 @@ void ScCellRangesBase::GetOnePropertyValue( const SfxItemPropertyMap* pMap,
                             ScDocument* pDoc = pDocShell->GetDocument();
                             BOOL bEnglish = ( pMap->nWID != SC_WID_UNO_VALILOC );
                             BOOL bXML = ( pMap->nWID == SC_WID_UNO_VALIXML );
-                            ScGrammar::Grammar eGrammar = (bXML ?
+                            formula::FormulaGrammar::Grammar eGrammar = (bXML ?
                                     pDoc->GetStorageGrammar() :
-                                    ScGrammar::mapAPItoGrammar( bEnglish, bXML));
+                                   formula::FormulaGrammar::mapAPItoGrammar( bEnglish, bXML));
                             ULONG nIndex = ((const SfxUInt32Item&)
                                     pPattern->GetItem(ATTR_VALIDDATA)).GetValue();
                             rAny <<= uno::Reference<beans::XPropertySet>(
@@ -5122,7 +5122,7 @@ rtl::OUString SAL_CALL ScCellRangeObj::getArrayFormula() throw(uno::RuntimeExcep
 }
 
 void ScCellRangeObj::SetArrayFormula_Impl( const rtl::OUString& aFormula,
-        const ScGrammar::Grammar eGrammar ) throw(uno::RuntimeException)
+        const formula::FormulaGrammar::Grammar eGrammar ) throw(uno::RuntimeException)
 {
     ScDocShell* pDocSh = GetDocShell();
     if (pDocSh)
@@ -5155,11 +5155,11 @@ void SAL_CALL ScCellRangeObj::setArrayFormula( const rtl::OUString& aFormula )
 {
     ScUnoGuard aGuard;
     // GRAM_PODF_A1 for API compatibility.
-    SetArrayFormula_Impl( aFormula, ScGrammar::GRAM_PODF_A1);
+    SetArrayFormula_Impl( aFormula,formula::FormulaGrammar::GRAM_PODF_A1);
 }
 
 void ScCellRangeObj::SetArrayFormulaWithGrammar( const rtl::OUString& aFormula,
-        const ScGrammar::Grammar eGrammar ) throw(uno::RuntimeException)
+        const formula::FormulaGrammar::Grammar eGrammar ) throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
     SetArrayFormula_Impl( aFormula, eGrammar);
@@ -5222,7 +5222,7 @@ void SAL_CALL ScCellRangeObj::setArrayTokens( const uno::Sequence<sheet::Formula
             // Actually GRAM_PODF_A1 is a don't-care here because of the token
             // array being set, it fits with other API compatibility grammars
             // though.
-            aFunc.EnterMatrix( aRange, NULL, &aTokenArray, EMPTY_STRING, TRUE, TRUE, ScGrammar::GRAM_PODF_A1 );
+            aFunc.EnterMatrix( aRange, NULL, &aTokenArray, EMPTY_STRING, TRUE, TRUE,formula::FormulaGrammar::GRAM_PODF_A1 );
         }
         else
         {
@@ -5338,7 +5338,7 @@ void SAL_CALL ScCellRangeObj::setFormulaArray(
     if (pDocSh)
     {
         // GRAM_PODF_A1 for API compatibility.
-        bDone = lcl_PutFormulaArray( *pDocSh, aRange, aArray, ScGrammar::GRAM_PODF_A1 );
+        bDone = lcl_PutFormulaArray( *pDocSh, aRange, aArray,formula::FormulaGrammar::GRAM_PODF_A1 );
     }
 
     if (!bDone)
@@ -6268,7 +6268,7 @@ void ScCellObj::SetString_Impl(const String& rString, BOOL bInterpret, BOOL bEng
     {
         ScDocFunc aFunc(*pDocSh);
         // GRAM_PODF_A1 for API compatibility.
-        (void)aFunc.SetCellText( aCellPos, rString, bInterpret, bEnglish, TRUE, ScGrammar::GRAM_PODF_A1 );
+        (void)aFunc.SetCellText( aCellPos, rString, bInterpret, bEnglish, TRUE,formula::FormulaGrammar::GRAM_PODF_A1 );
     }
 }
 
@@ -6316,7 +6316,7 @@ void ScCellObj::SetFormulaResultDouble( double fResult )
 }
 
 void ScCellObj::SetFormulaWithGrammar( const ::rtl::OUString& rFormula,
-                                        const ScGrammar::Grammar eGrammar )
+                                        const formula::FormulaGrammar::Grammar eGrammar )
 {
     ScDocShell* pDocSh = GetDocShell();
     if ( pDocSh )

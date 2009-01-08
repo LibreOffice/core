@@ -103,7 +103,7 @@ USHORT lcl_ParseRange(ScRange& rScRange, const String& aAddress, ScDocument* pDo
     if ( (nResult & SCA_VALID) )
         return nResult;
 
-    return rScRange.Parse(aAddress, pDoc, ScAddress::Details(ScAddress::CONV_XL_A1, 0, 0));
+    return rScRange.Parse(aAddress, pDoc, ScAddress::Details(formula::FormulaGrammar::CONV_XL_A1, 0, 0));
 }
 
 /** Try to parse the given address using Calc-style syntax first, then
@@ -114,7 +114,7 @@ USHORT lcl_ParseAddress(ScAddress& rScAddress, const String& aAddress, ScDocumen
     if ( (nResult & SCA_VALID) )
         return nResult;
 
-    return rScAddress.Parse(aAddress, pDoc, ScAddress::Details(ScAddress::CONV_XL_A1, 0, 0));
+    return rScAddress.Parse(aAddress, pDoc, ScAddress::Details(formula::FormulaGrammar::CONV_XL_A1, 0, 0));
 }
 
 void ScTabViewShell::Execute( SfxRequest& rReq )
@@ -314,7 +314,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 else
                 {
                     ScRangeUtil     aRangeUtil;
-                    ScAddress::Convention eConv = pDoc->GetAddressConvention();
+                    formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
                     if( aRangeUtil.MakeRangeFromName( aAddress, pDoc, nTab, aScRange, RUTL_NAMES, eConv ) ||
                         aRangeUtil.MakeRangeFromName( aAddress, pDoc, nTab, aScRange, RUTL_DBASE, eConv ) )
                     {

@@ -45,11 +45,13 @@
 #include "convuno.hxx"
 #include "unonames.hxx"
 #include "unoguard.hxx"
+#include "token.hxx"
 #include "compiler.hxx"
 #include "tokenarray.hxx"
 #include "docsh.hxx"
 #include "rangeseq.hxx"
 #include "externalrefmgr.hxx"
+using namespace formula;
 
 using namespace com::sun::star;
 
@@ -60,6 +62,7 @@ const SfxItemPropertyMap* lcl_GetFormulaParserMap()
     static SfxItemPropertyMap aFormulaParserMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNO_REFERENCEPOS),         0,  &getCppuType((table::CellAddress*)0),    0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_COMPILEFAP),           0,  &getBooleanCppuType(),                   0, 0 },
         {MAP_CHAR_LEN(SC_UNO_COMPILEENGLISH),       0,  &getBooleanCppuType(),                   0, 0 },
         {MAP_CHAR_LEN(SC_UNO_IGNORELEADING),        0,  &getBooleanCppuType(),                   0, 0 },
         {MAP_CHAR_LEN(SC_UNO_FORMULACONVENTION),    0,  &getCppuType(&sheet::AddressConvention::UNSPECIFIED), 0, 0 },
@@ -77,7 +80,8 @@ ScFormulaParserObj::ScFormulaParserObj(ScDocShell* pDocSh) :
     mpDocShell( pDocSh ),
     mnConv( sheet::AddressConvention::UNSPECIFIED ),
     mbEnglish( false ),
-    mbIgnoreSpaces( true )
+    mbIgnoreSpaces( true ),
+    mbCompileFAP( false )
 {
     mpDocShell->GetDocument()->AddUnoObject(*this);
 }
@@ -98,12 +102,12 @@ void ScFormulaParserObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 void ScFormulaParserObj::SetCompilerFlags( ScCompiler& rCompiler ) const
 {
-    static const ScAddress::Convention aConvMap[] = {
-        ScAddress::CONV_OOO,        // <- AddressConvention::OOO
-        ScAddress::CONV_XL_A1,      // <- AddressConvention::XL_A1
-        ScAddress::CONV_XL_R1C1,    // <- AddressConvention::XL_R1C1
-        ScAddress::CONV_XL_OOX,     // <- AddressConvention::XL_OOX
-        ScAddress::CONV_LOTUS_A1    // <- AddressConvention::LOTUS_A1
+    static const formula::FormulaGrammar::AddressConvention aConvMap[] = {
+        formula::FormulaGrammar::CONV_OOO,        // <- AddressConvention::OOO
+        formula::FormulaGrammar::CONV_XL_A1,      // <- AddressConvention::XL_A1
+        formula::FormulaGrammar::CONV_XL_R1C1,    // <- AddressConvention::XL_R1C1
+        formula::FormulaGrammar::CONV_XL_OOX,     // <- AddressConvention::XL_OOX
+        formula::FormulaGrammar::CONV_LOTUS_A1    // <- AddressConvention::LOTUS_A1
     };
     static const sal_Int16 nConvMapCount = sizeof(aConvMap)/sizeof(aConvMap[0]);
 
@@ -116,15 +120,17 @@ void ScFormulaParserObj::SetCompilerFlags( ScCompiler& rCompiler ) const
         sal_Int32 nFormulaLanguage = mbEnglish ?
             sheet::FormulaLanguage::ENGLISH :
             sheet::FormulaLanguage::NATIVE;
-        ScCompiler::OpCodeMapPtr xMap = ScCompiler::GetOpCodeMap( nFormulaLanguage);
+        ScCompiler::OpCodeMapPtr xMap = rCompiler.GetOpCodeMap( nFormulaLanguage);
         rCompiler.SetFormulaLanguage( xMap);
     }
 
-    ScAddress::Convention eConv = ScAddress::CONV_UNSPECIFIED;
+    formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_UNSPECIFIED;
     if (mnConv >= 0 && mnConv < nConvMapCount)
         eConv = aConvMap[mnConv];
 
     rCompiler.SetRefConvention( eConv );
+
+    rCompiler.SetCompileForFAP(mbCompileFAP);
 
     rCompiler.SetExternalLinks( maExternalLinks);
 }
@@ -138,7 +144,8 @@ uno::Sequence<sheet::FormulaToken> SAL_CALL ScFormulaParserObj::parseFormula( co
     if (mpDocShell)
     {
         ScDocument* pDoc = mpDocShell->GetDocument();
-        ScCompiler aCompiler( pDoc, maRefPos, pDoc->GetGrammar() );
+        ScCompiler aCompiler( pDoc, maRefPos);
+        aCompiler.SetGrammar(pDoc->GetGrammar());
         SetCompilerFlags( aCompiler );
 
         ScTokenArray* pCode = aCompiler.CompileString( aFormula );
@@ -160,7 +167,8 @@ rtl::OUString SAL_CALL ScFormulaParserObj::printFormula( const uno::Sequence<she
         ScDocument* pDoc = mpDocShell->GetDocument();
         ScTokenArray aCode;
         (void)ScTokenConversion::ConvertToTokenArray( *pDoc, aCode, aTokens );
-        ScCompiler aCompiler( pDoc, maRefPos, aCode, pDoc->GetGrammar() );
+        ScCompiler aCompiler( pDoc, maRefPos, aCode);
+        aCompiler.SetGrammar(pDoc->GetGrammar());
         SetCompilerFlags( aCompiler );
 
         rtl::OUStringBuffer aBuffer;
@@ -194,6 +202,10 @@ void SAL_CALL ScFormulaParserObj::setPropertyValue(
         table::CellAddress aAddress;
         aValue >>= aAddress;
         ScUnoConversion::FillScAddress( maRefPos, aAddress );
+    } // if ( aString.EqualsAscii( SC_UNO_REFERENCEPOS ) )
+    else if ( aString.EqualsAscii( SC_UNO_COMPILEFAP ) )
+    {
+        aValue >>= mbCompileFAP;
     }
     else if ( aString.EqualsAscii( SC_UNO_COMPILEENGLISH ) )
     {
@@ -204,7 +216,12 @@ void SAL_CALL ScFormulaParserObj::setPropertyValue(
             // because the map is const. So for performance reasons set
             // CompileEnglish _before_ OpCodeMap!
             if (mxOpCodeMap.get() && mbEnglish != bOldEnglish)
-                mxOpCodeMap = ScCompiler::CreateOpCodeMap( maOpCodeMapping, mbEnglish);
+            {
+                ScDocument* pDoc = mpDocShell->GetDocument();
+                ScCompiler aCompiler( pDoc, maRefPos);
+                aCompiler.SetGrammar(pDoc->GetGrammar());
+                mxOpCodeMap = aCompiler.CreateOpCodeMap( maOpCodeMapping, mbEnglish);
+            }
         }
         else
             throw lang::IllegalArgumentException();
@@ -220,7 +237,12 @@ void SAL_CALL ScFormulaParserObj::setPropertyValue(
     else if ( aString.EqualsAscii( SC_UNO_OPCODEMAP ) )
     {
         if (aValue >>= maOpCodeMapping)
-            mxOpCodeMap = ScCompiler::CreateOpCodeMap( maOpCodeMapping, mbEnglish);
+        {
+            ScDocument* pDoc = mpDocShell->GetDocument();
+            ScCompiler aCompiler( pDoc, maRefPos);
+            aCompiler.SetGrammar(pDoc->GetGrammar());
+            mxOpCodeMap = aCompiler.CreateOpCodeMap( maOpCodeMapping, mbEnglish);
+        }
         else
             throw lang::IllegalArgumentException();
     }
@@ -240,6 +262,10 @@ uno::Any SAL_CALL ScFormulaParserObj::getPropertyValue( const rtl::OUString& aPr
     ScUnoGuard aGuard;
     uno::Any aRet;
     String aString(aPropertyName);
+    } // if ( aString.EqualsAscii( SC_UNO_REFERENCEPOS ) )
+    else if ( aString.EqualsAscii( SC_UNO_COMPILEFAP ) )
+    {
+        aRet <<= mbCompileFAP;
     if ( aString.EqualsAscii( SC_UNO_REFERENCEPOS ) )
     {
         table::CellAddress aAddress;
@@ -296,27 +322,6 @@ void lcl_ExternalRefToCalc( ScSingleRefData& rRef, const sheet::SingleReference&
     rRef.SetRelName(    false );
 }
 
-void lcl_SingleRefToCalc( ScSingleRefData& rRef, const sheet::SingleReference& rAPI )
-{
-    rRef.InitFlags();
-
-    rRef.nCol    = static_cast<SCsCOL>(rAPI.Column);
-    rRef.nRow    = static_cast<SCsROW>(rAPI.Row);
-    rRef.nTab    = static_cast<SCsTAB>(rAPI.Sheet);
-    rRef.nRelCol = static_cast<SCsCOL>(rAPI.RelativeColumn);
-    rRef.nRelRow = static_cast<SCsROW>(rAPI.RelativeRow);
-    rRef.nRelTab = static_cast<SCsTAB>(rAPI.RelativeSheet);
-
-    rRef.SetColRel(     ( rAPI.Flags & sheet::ReferenceFlags::COLUMN_RELATIVE ) != 0 );
-    rRef.SetRowRel(     ( rAPI.Flags & sheet::ReferenceFlags::ROW_RELATIVE    ) != 0 );
-    rRef.SetTabRel(     ( rAPI.Flags & sheet::ReferenceFlags::SHEET_RELATIVE  ) != 0 );
-    rRef.SetColDeleted( ( rAPI.Flags & sheet::ReferenceFlags::COLUMN_DELETED  ) != 0 );
-    rRef.SetRowDeleted( ( rAPI.Flags & sheet::ReferenceFlags::ROW_DELETED     ) != 0 );
-    rRef.SetTabDeleted( ( rAPI.Flags & sheet::ReferenceFlags::SHEET_DELETED   ) != 0 );
-    rRef.SetFlag3D(     ( rAPI.Flags & sheet::ReferenceFlags::SHEET_3D        ) != 0 );
-    rRef.SetRelName(    ( rAPI.Flags & sheet::ReferenceFlags::RELATIVE_NAME   ) != 0 );
-}
-
 void lcl_ExternalRefToApi( sheet::SingleReference& rAPI, const ScSingleRefData& rRef )
 {
     rAPI.Column         = rRef.nCol;
@@ -361,164 +366,7 @@ void lcl_SingleRefToApi( sheet::SingleReference& rAPI, const ScSingleRefData& rR
 bool ScTokenConversion::ConvertToTokenArray( ScDocument& rDoc,
         ScTokenArray& rTokenArray, const uno::Sequence<sheet::FormulaToken>& rSequence )
 {
-    bool bError = false;
-    sal_Int32 nCount = rSequence.getLength();
-    for (sal_Int32 nPos=0; nPos<nCount; nPos++)
-    {
-        const sheet::FormulaToken& rAPI = rSequence[nPos];
-        OpCode eOpCode = static_cast<OpCode>(rAPI.OpCode);      //! assuming equal values for the moment
-
-        uno::TypeClass eClass = rAPI.Data.getValueTypeClass();
-        switch ( eClass )
-        {
-            case uno::TypeClass_VOID:
-                // empty data -> use AddOpCode (does some special cases)
-                rTokenArray.AddOpCode( eOpCode );
-                break;
-            case uno::TypeClass_DOUBLE:
-                // double is only used for "push"
-                if ( eOpCode == ocPush )
-                    rTokenArray.AddDouble( rAPI.Data.get<double>() );
-                else
-                    bError = true;
-                break;
-            case uno::TypeClass_LONG:
-                {
-                    // long is svIndex, used for name / database area, or "byte" for spaces
-                    sal_Int32 nValue = rAPI.Data.get<sal_Int32>();
-                    if ( eOpCode == ocName || eOpCode == ocDBArea )
-                        rTokenArray.AddToken( ScIndexToken( eOpCode, static_cast<USHORT>(nValue) ) );
-                    else if ( eOpCode == ocSpaces )
-                        rTokenArray.AddToken( ScByteToken( ocSpaces, static_cast<BYTE>(nValue) ) );
-                    else
-                        bError = true;
-                }
-                break;
-            case uno::TypeClass_STRING:
-                {
-                    String aStrVal( rAPI.Data.get<rtl::OUString>() );
-                    if ( eOpCode == ocPush )
-                        rTokenArray.AddString( aStrVal );
-                    else if ( eOpCode == ocBad )
-                        rTokenArray.AddBad( aStrVal );
-                    else if ( eOpCode == ocExternal || eOpCode == ocMacro )
-                        rTokenArray.AddToken( ScExternalToken( eOpCode, aStrVal ) );
-                    else
-                        bError = true;      // unexpected string: don't know what to do with it
-                }
-                break;
-            case uno::TypeClass_STRUCT:
-                {
-                    uno::Type aType = rAPI.Data.getValueType();
-                    if ( aType.equals( cppu::UnoType<sheet::SingleReference>::get() ) )
-                    {
-                        ScSingleRefData aSingleRef;
-                        sheet::SingleReference aApiRef;
-                        rAPI.Data >>= aApiRef;
-                        lcl_SingleRefToCalc( aSingleRef, aApiRef );
-
-                        if ( eOpCode == ocPush )
-                            rTokenArray.AddSingleReference( aSingleRef );
-                        else if ( eOpCode == ocColRowName )
-                            rTokenArray.AddColRowName( aSingleRef );
-                        else
-                            bError = true;
-                    }
-                    else if ( aType.equals( cppu::UnoType<sheet::ComplexReference>::get() ) )
-                    {
-                        ScComplexRefData aComplRef;
-                        sheet::ComplexReference aApiRef;
-                        rAPI.Data >>= aApiRef;
-                        lcl_SingleRefToCalc( aComplRef.Ref1, aApiRef.Reference1 );
-                        lcl_SingleRefToCalc( aComplRef.Ref2, aApiRef.Reference2 );
-
-                        if ( eOpCode == ocPush )
-                            rTokenArray.AddDoubleReference( aComplRef );
-                        else
-                            bError = true;
-                    }
-                    else if ( aType.equals( cppu::UnoType<sheet::ExternalReference>::get() ) )
-                    {
-                        sheet::ExternalReference aApiExtRef;
-                        if( (eOpCode == ocPush) && (rAPI.Data >>= aApiExtRef) && (0 <= aApiExtRef.Index) && (aApiExtRef.Index <= SAL_MAX_UINT16) )
-                        {
-                            sal_uInt16 nFileId = static_cast< sal_uInt16 >( aApiExtRef.Index );
-                            sheet::SingleReference aApiSRef;
-                            sheet::ComplexReference aApiCRef;
-                            ::rtl::OUString aName;
-                            if( aApiExtRef.Reference >>= aApiSRef )
-                            {
-                                // try to resolve cache index to sheet name
-                                size_t nCacheId = static_cast< size_t >( aApiSRef.Sheet );
-                                String aTabName = rDoc.GetExternalRefManager()->getCacheTableName( nFileId, nCacheId );
-                                if( aTabName.Len() > 0 )
-                                {
-                                    ScSingleRefData aSingleRef;
-                                    // convert column/row settings, set sheet index to absolute
-                                    lcl_ExternalRefToCalc( aSingleRef, aApiSRef );
-                                    rTokenArray.AddExternalSingleReference( nFileId, aTabName, aSingleRef );
-                                }
-                                else
-                                    bError = true;
-                            }
-                            else if( aApiExtRef.Reference >>= aApiCRef )
-                            {
-                                // try to resolve cache index to sheet name.
-                                size_t nCacheId = static_cast< size_t >( aApiCRef.Reference1.Sheet );
-                                String aTabName = rDoc.GetExternalRefManager()->getCacheTableName( nFileId, nCacheId );
-                                if( aTabName.Len() > 0 )
-                                {
-                                    ComplRefData aComplRef;
-                                    // convert column/row settings, set sheet index to absolute
-                                    lcl_ExternalRefToCalc( aComplRef.Ref1, aApiCRef.Reference1 );
-                                    lcl_ExternalRefToCalc( aComplRef.Ref2, aApiCRef.Reference2 );
-                                    // NOTE: This assumes that cached sheets are in consecutive order!
-                                    aComplRef.Ref2.nTab = aComplRef.Ref1.nTab + (aApiCRef.Reference2.Sheet - aApiCRef.Reference1.Sheet);
-                                    rTokenArray.AddExternalDoubleReference( nFileId, aTabName, aComplRef );
-                                }
-                                else
-                                    bError = true;
-                            }
-                            else if( aApiExtRef.Reference >>= aName )
-                            {
-                                if( aName.getLength() > 0 )
-                                    rTokenArray.AddExternalName( nFileId, aName );
-                                else
-                                    bError = true;
-                            }
-                            else
-                                bError = true;
-                        }
-                        else
-                            bError = true;
-                    }
-                    else
-                        bError = true;      // unknown struct
-                }
-                break;
-            case uno::TypeClass_SEQUENCE:
-                {
-                    if ( eOpCode != ocPush )
-                        bError = true;      // not an inline array
-                    else if (!rAPI.Data.getValueType().equals( getCppuType(
-                                    (uno::Sequence< uno::Sequence< uno::Any > > *)0)))
-                        bError = true;      // unexpected sequence type
-                    else
-                    {
-                        ScMatrixRef xMat = ScSequenceToMatrix::CreateMixedMatrix( rAPI.Data);
-                        if (xMat)
-                            rTokenArray.AddMatrix( xMat);
-                        else
-                            bError = true;
-                    }
-                }
-                break;
-            default:
-                bError = true;
-        }
-    }
-
-    return !bError;
+    return rTokenArray.Fill(rSequence);
 }
 
 // static
@@ -528,13 +376,13 @@ bool ScTokenConversion::ConvertToTokenSequence( ScDocument& rDoc,
     bool bError = false;
 
     sal_Int32 nLen = static_cast<sal_Int32>(rTokenArray.GetLen());
-    ScToken** pTokens = rTokenArray.GetArray();
+    formula::FormulaToken** pTokens = rTokenArray.GetArray();
     if ( pTokens )
     {
         rSequence.realloc(nLen);
         for (sal_Int32 nPos=0; nPos<nLen; nPos++)
         {
-            const ScToken& rToken = *pTokens[nPos];
+            const formula::FormulaToken& rToken = *pTokens[nPos];
             sheet::FormulaToken& rAPI = rSequence[nPos];
 
             OpCode eOpCode = rToken.GetOpCode();
@@ -548,10 +396,10 @@ bool ScTokenConversion::ConvertToTokenSequence( ScDocument& rDoc,
                     else
                         rAPI.Data.clear();      // no data
                     break;
-                case svDouble:
+                case formula::svDouble:
                     rAPI.Data <<= rToken.GetDouble();
                     break;
-                case svString:
+                case formula::svString:
                     rAPI.Data <<= rtl::OUString( rToken.GetString() );
                     break;
                 case svExternal:
@@ -562,15 +410,15 @@ bool ScTokenConversion::ConvertToTokenSequence( ScDocument& rDoc,
                 case svSingleRef:
                     {
                         sheet::SingleReference aSingleRef;
-                        lcl_SingleRefToApi( aSingleRef, rToken.GetSingleRef() );
+                        lcl_SingleRefToApi( aSingleRef, static_cast<const ScToken&>(rToken).GetSingleRef() );
                         rAPI.Data <<= aSingleRef;
                     }
                     break;
-                case svDoubleRef:
+                case formula::svDoubleRef:
                     {
                         sheet::ComplexReference aCompRef;
-                        lcl_SingleRefToApi( aCompRef.Reference1, rToken.GetSingleRef() );
-                        lcl_SingleRefToApi( aCompRef.Reference2, rToken.GetSingleRef2() );
+                        lcl_SingleRefToApi( aCompRef.Reference1, static_cast<const ScToken&>(rToken).GetSingleRef() );
+                        lcl_SingleRefToApi( aCompRef.Reference2, static_cast<const ScToken&>(rToken).GetSingleRef2() );
                         rAPI.Data <<= aCompRef;
                     }
                     break;
@@ -578,13 +426,13 @@ bool ScTokenConversion::ConvertToTokenSequence( ScDocument& rDoc,
                     rAPI.Data <<= static_cast<sal_Int32>( rToken.GetIndex() );
                     break;
                 case svMatrix:
-                    if (!ScRangeToSequence::FillMixedArray( rAPI.Data, rToken.GetMatrix(), true))
+                    if (!ScRangeToSequence::FillMixedArray( rAPI.Data, static_cast<const ScToken&>(rToken).GetMatrix(), true))
                         rAPI.Data.clear();
                     break;
                 case svExternalSingleRef:
                     {
                         sheet::SingleReference aSingleRef;
-                        lcl_ExternalRefToApi( aSingleRef, rToken.GetSingleRef() );
+                        lcl_ExternalRefToApi( aSingleRef, static_cast<const ScToken&>(rToken).GetSingleRef() );
                         size_t nCacheId;
                         rDoc.GetExternalRefManager()->getCacheTable( rToken.GetIndex(), rToken.GetString(), false, &nCacheId );
                         aSingleRef.Sheet = static_cast< sal_Int32 >( nCacheId );
@@ -598,13 +446,13 @@ bool ScTokenConversion::ConvertToTokenSequence( ScDocument& rDoc,
                 case svExternalDoubleRef:
                     {
                         sheet::ComplexReference aComplRef;
-                        lcl_ExternalRefToApi( aComplRef.Reference1, rToken.GetSingleRef() );
-                        lcl_ExternalRefToApi( aComplRef.Reference2, rToken.GetSingleRef2() );
+                        lcl_ExternalRefToApi( aComplRef.Reference1, static_cast<const ScToken&>(rToken).GetSingleRef() );
+                        lcl_ExternalRefToApi( aComplRef.Reference2, static_cast<const ScToken&>(rToken).GetSingleRef2() );
                         size_t nCacheId;
                         rDoc.GetExternalRefManager()->getCacheTable( rToken.GetIndex(), rToken.GetString(), false, &nCacheId );
                         aComplRef.Reference1.Sheet = static_cast< sal_Int32 >( nCacheId );
                         // NOTE: This assumes that cached sheets are in consecutive order!
-                        aComplRef.Reference2.Sheet = aComplRef.Reference1.Sheet + (rToken.GetSingleRef2().nTab - rToken.GetSingleRef().nTab);
+                        aComplRef.Reference2.Sheet = aComplRef.Reference1.Sheet + (static_cast<const ScToken&>(rToken).GetSingleRef2().nTab - static_cast<const ScToken&>(rToken).GetSingleRef().nTab);
                         sheet::ExternalReference aExtRef;
                         aExtRef.Index = rToken.GetIndex();
                         aExtRef.Reference <<= aComplRef;
@@ -636,59 +484,9 @@ bool ScTokenConversion::ConvertToTokenSequence( ScDocument& rDoc,
 
     return !bError;
 }
-
-
-//------------------------------------------------------------------------
-
-SC_SIMPLE_SERVICE_INFO( ScFormulaOpCodeMapperObj, "ScFormulaOpCodeMapperObj", SC_SERVICENAME_OPCODEMAPPER )
-
-//------------------------------------------------------------------------
-
-ScFormulaOpCodeMapperObj::ScFormulaOpCodeMapperObj()
+// -----------------------------------------------------------------------------
+ScFormulaOpCodeMapperObj::ScFormulaOpCodeMapperObj(::std::auto_ptr<formula::FormulaCompiler> _pCompiler)
+: formula::FormulaOpCodeMapperObj(_pCompiler)
 {
 }
 
-ScFormulaOpCodeMapperObj::~ScFormulaOpCodeMapperObj()
-{
-}
-
-
-::sal_Int32 SAL_CALL ScFormulaOpCodeMapperObj::getOpCodeExternal()
-    throw (::com::sun::star::uno::RuntimeException)
-{
-    return ocExternal;
-}
-
-
-::sal_Int32 SAL_CALL ScFormulaOpCodeMapperObj::getOpCodeUnknown()
-    throw (::com::sun::star::uno::RuntimeException)
-{
-    return ScCompiler::OpCodeMap::getOpCodeUnknown();
-}
-
-
-::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken >
-SAL_CALL ScFormulaOpCodeMapperObj::getMappings(
-        const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rNames,
-        sal_Int32 nLanguage )
-    throw ( ::com::sun::star::lang::IllegalArgumentException,
-            ::com::sun::star::uno::RuntimeException)
-{
-    ScCompiler::OpCodeMapPtr xMap = ScCompiler::GetOpCodeMap( nLanguage);
-    if (!xMap)
-        throw lang::IllegalArgumentException();
-    return xMap->createSequenceOfFormulaTokens( rNames);
-}
-
-
-::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaOpCodeMapEntry >
-SAL_CALL ScFormulaOpCodeMapperObj::getAvailableMappings(
-        sal_Int32 nLanguage, sal_Int32 nGroups )
-    throw ( ::com::sun::star::lang::IllegalArgumentException,
-            ::com::sun::star::uno::RuntimeException)
-{
-    ScCompiler::OpCodeMapPtr xMap = ScCompiler::GetOpCodeMap( nLanguage);
-    if (!xMap)
-        throw lang::IllegalArgumentException();
-    return xMap->createSequenceOfAvailableMappings( nGroups);
-}

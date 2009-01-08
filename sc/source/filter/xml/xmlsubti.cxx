@@ -540,10 +540,11 @@ void ScMyTables::NewTable(sal_Int32 nTempSpannedCols)
     ScMyTableData* aTable(new ScMyTableData(nCurrentSheet));
     if (nTableCount > 1)
     {
-        sal_Int32 nCol(aTableVec[nTableCount - 2]->GetColumn());
-        sal_Int32 nColCount(aTableVec[nTableCount - 2]->GetColCount());
-        sal_Int32 nColsPerCol(aTableVec[nTableCount - 2]->GetColsPerCol(nCol));
-        sal_Int32 nSpannedCols(aTableVec[nTableCount - 2]->GetSpannedCols());
+        ScMyTableData* pTableData = aTableVec[nTableCount - 2];
+        const sal_Int32 nCol(pTableData->GetColumn());
+        const sal_Int32 nColCount(pTableData->GetColCount());
+        const sal_Int32 nColsPerCol(pTableData->GetColsPerCol(nCol));
+        sal_Int32 nSpannedCols(pTableData->GetSpannedCols());
         sal_Int32 nTemp(nSpannedCols - nColCount);
         sal_Int32 nTemp2(nCol - (nColCount - 1));
         if ((nTemp > 0) && (nTemp2 == 0))
@@ -554,9 +555,9 @@ void ScMyTables::NewTable(sal_Int32 nTempSpannedCols)
 
         sal_Int32 nToMerge;
         if (nSpannedCols > nColCount)
-            nToMerge = aTableVec[nTableCount - 2]->GetChangedCols(nCol, nCol + nColsPerCol + nSpannedCols - nColCount);
+            nToMerge = pTableData->GetChangedCols(nCol, nCol + nColsPerCol + nSpannedCols - nColCount);
         else
-            nToMerge = aTableVec[nTableCount - 2]->GetChangedCols(nCol, nCol + nColsPerCol);
+            nToMerge = pTableData->GetChangedCols(nCol, nCol + nColsPerCol);
         if (nToMerge > nCol)
             nTempSpannedCols += nToMerge;
     }
@@ -654,10 +655,11 @@ table::CellAddress ScMyTables::GetRealCellPos()
 {
     sal_Int32 nRow(0);
     sal_Int32 nCol(0);
-    for (sal_Int32 i = 1; i <= nTableCount; ++i)
+    for (sal_Int32 i = 0; i < nTableCount; ++i)
     {
-        nCol += aTableVec[i - 1]->GetRealCols(aTableVec[i - 1]->GetColumn());
-        nRow += aTableVec[i - 1]->GetRealRows(aTableVec[i - 1]->GetRow());
+        ScMyTableData* pTableData = aTableVec[i];
+        nCol += pTableData->GetRealCols(pTableData->GetColumn());
+        nRow += pTableData->GetRealRows(pTableData->GetRow());
     }
     aRealCellPos.Row = nRow;
     aRealCellPos.Column = nCol;
@@ -721,7 +723,7 @@ void ScMyTables::AddShape(uno::Reference <drawing::XShape>& rShape,
     aResizeShapes.AddShape(rShape, pRangeList, rStartAddress, rEndAddress, nEndX, nEndY);
 }
 
-void ScMyTables::AddMatrixRange(sal_Int32 nStartColumn, sal_Int32 nStartRow, sal_Int32 nEndColumn, sal_Int32 nEndRow, const rtl::OUString& rFormula, const ScGrammar::Grammar eGrammar)
+void ScMyTables::AddMatrixRange(sal_Int32 nStartColumn, sal_Int32 nStartRow, sal_Int32 nEndColumn, sal_Int32 nEndRow, const rtl::OUString& rFormula, const formula::FormulaGrammar::Grammar eGrammar)
 {
     DBG_ASSERT(nEndRow >= nStartRow, "wrong row order");
     DBG_ASSERT(nEndColumn >= nStartColumn, "wrong column order");
@@ -769,7 +771,7 @@ sal_Bool ScMyTables::IsPartOfMatrix(sal_Int32 nColumn, sal_Int32 nRow)
     return bResult;
 }
 
-void ScMyTables::SetMatrix(const table::CellRangeAddress& rRange, const rtl::OUString& rFormula, const ScGrammar::Grammar eGrammar)
+void ScMyTables::SetMatrix(const table::CellRangeAddress& rRange, const rtl::OUString& rFormula, const formula::FormulaGrammar::Grammar eGrammar)
 {
     uno::Reference <table::XCellRange> xMatrixCellRange(
         GetCurrentXCellRange()->getCellRangeByPosition(rRange.StartColumn, rRange.StartRow,

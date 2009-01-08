@@ -34,7 +34,7 @@
 #include "global.hxx" // -> enum UpdateRefMode
 #include "address.hxx"
 #include "collect.hxx"
-#include "grammar.hxx"
+#include "formula/grammar.hxx"
 #include "scdllapi.h"
 
 //------------------------------------------------------------------------
@@ -89,7 +89,7 @@ public:
                                  const String& rSymbol,
                                  const ScAddress& rAdr = ScAddress(),
                                  RangeType nType = RT_NAME,
-                                 const ScGrammar::Grammar eGrammar = ScGrammar::GRAM_DEFAULT );
+                                 const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT );
     SC_DLLPUBLIC                ScRangeData( ScDocument* pDoc,
                                  const String& rName,
                                  const ScTokenArray& rArr,
@@ -124,11 +124,9 @@ public:
     void            AddType( RangeType nType )      { eType = eType|nType; }
     RangeType       GetType() const                 { return eType; }
     BOOL            HasType( RangeType nType ) const;
-    SC_DLLPUBLIC void           GetSymbol( String& rSymbol, const ScGrammar::Grammar eGrammar = ScGrammar::GRAM_DEFAULT ) const;
-    void            UpdateSymbol( String& rSymbol, const ScAddress&,
-                                    const ScGrammar::Grammar eGrammar = ScGrammar::GRAM_DEFAULT );
+    SC_DLLPUBLIC void           GetSymbol( String& rSymbol, const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT ) const;
     void            UpdateSymbol( rtl::OUStringBuffer& rBuffer, const ScAddress&,
-                                    const ScGrammar::Grammar eGrammar = ScGrammar::GRAM_DEFAULT );
+                                    const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT );
     void            UpdateReference( UpdateRefMode eUpdateRefMode,
                              const ScRange& r,
                              SCsCOL nDx, SCsROW nDy, SCsTAB nDz );

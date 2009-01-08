@@ -32,8 +32,8 @@
 #define SC_MATRIX_HXX
 
 #include "global.hxx"
-#include "intruref.hxx"
-#include "errorcodes.hxx"
+#include "formula/intruref.hxx"
+#include "formula/errorcodes.hxx"
 #include <tools/string.hxx>
 #include "scdllapi.h"
 
@@ -423,8 +423,8 @@ public:
 };
 
 
-typedef ScSimpleIntrusiveReference< class ScMatrix > ScMatrixRef;
-typedef ScSimpleIntrusiveReference< const class ScMatrix > ScConstMatrixRef;
+typedef formula::SimpleIntrusiveReference< class ScMatrix > ScMatrixRef;
+typedef formula::SimpleIntrusiveReference< const class ScMatrix > ScConstMatrixRef;
 
 
 #endif  // SC_MATRIX_HXX

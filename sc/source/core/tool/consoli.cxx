@@ -42,7 +42,7 @@
 #include "olinetab.hxx"
 #include "globstr.hrc"
 #include "subtotal.hxx"
-#include "errorcodes.hxx"
+#include "formula/errorcodes.hxx"
 #include "cell.hxx"
 
 #include <math.h>

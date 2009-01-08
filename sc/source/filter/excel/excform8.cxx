@@ -1228,7 +1228,7 @@ ConvErr ExcelToSc8::ConvertExternName( const ScTokenArray*& rpArray, XclImpStrea
     bool                    bError = false;
 
     ScSingleRefData           aSRD;
-    ComplRefData            aCRD;
+    ScComplexRefData            aCRD;
 
     if (eStatus != ConvOK)
     {

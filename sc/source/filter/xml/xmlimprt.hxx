@@ -42,7 +42,7 @@
 #include <com/sun/star/util/DateTime.hpp>
 #include "xmlsubti.hxx"
 #include "global.hxx"
-#include "grammar.hxx"
+#include "formula/grammar.hxx"
 
 #include "xmlstyle.hxx"
 #include "XMLDetectiveContext.hxx"
@@ -600,7 +600,7 @@ struct ScMyNamedExpression
     rtl::OUString      sContent;
     rtl::OUString      sBaseCellAddress;
     rtl::OUString      sRangeType;
-    ScGrammar::Grammar eGrammar;
+    formula::FormulaGrammar::Grammar eGrammar;
     sal_Bool           bIsExpression;
 };
 
@@ -628,7 +628,7 @@ struct ScMyImportValidation
     com::sun::star::sheet::ValidationAlertStyle     aAlertStyle;
     com::sun::star::sheet::ValidationType           aValidationType;
     com::sun::star::sheet::ConditionOperator        aOperator;
-    ScGrammar::Grammar                              eGrammar;
+    formula::FormulaGrammar::Grammar                              eGrammar;
     sal_Int16                                       nShowList;
     sal_Bool                                        bShowErrorMessage;
     sal_Bool                                        bShowImputMessage;
@@ -1008,13 +1008,13 @@ public:
             any.
 
         @param rGrammar
-            Return value set to ScGrammar::GRAM_ODFF or ScGrammar::GRAM_PODF or
+            Return value set toformula::FormulaGrammar::GRAM_ODFF orformula::FormulaGrammar::GRAM_PODF or
             eStorageGrammar, according to the namespace or absence thereof
             encountered.
 
         @param eStorageGrammar
-            Default storage grammar of the document, ScGrammar::GRAM_ODFF for
-            ODF 1.2 and later documents, ScGrammar::GRAM_PODF for ODF 1.x
+            Default storage grammar of the document,formula::FormulaGrammar::GRAM_ODFF for
+            ODF 1.2 and later documents,formula::FormulaGrammar::GRAM_PODF for ODF 1.x
             documents.
 
         @return
@@ -1023,8 +1023,8 @@ public:
      */
 
     static bool IsAcceptedFormulaNamespace( const sal_uInt16 nFormulaPrefix,
-            const rtl::OUString & rValue, ScGrammar::Grammar& rGrammar,
-            const ScGrammar::Grammar eStorageGrammar );
+            const rtl::OUString & rValue, formula::FormulaGrammar::Grammar& rGrammar,
+            const formula::FormulaGrammar::Grammar eStorageGrammar );
 
 };
 

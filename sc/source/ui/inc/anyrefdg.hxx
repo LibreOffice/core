@@ -42,121 +42,98 @@
 #endif
 #include <sfx2/basedlgs.hxx>
 #include "address.hxx"
+#include "formula/funcutl.hxx"
+#include "IAnyRefDialog.hxx"
+#include <memory>
 
 class SfxObjectShell;
 class ScRange;
 class ScDocument;
 class ScTabViewShell;
 class ScAnyRefDlg;
-class ScRefButton;
 class ScFormulaCell;
 class ScCompiler;
 class ScRangeList;
 
-//============================================================================
-
-class ScRefEdit : public Edit
+class ScFormulaReferenceHelper
 {
-private:
-    Timer               aTimer;
-    ScAnyRefDlg*        pAnyRefDlg;         // parent dialog
-    BOOL                bSilentFocus;       // for SilentGrabFocus()
+    IAnyRefDialog*      m_pDlg;
+    ::std::auto_ptr<ScFormulaCell>      pRefCell;
+    ::std::auto_ptr<ScCompiler>         pRefComp;
+    formula::RefEdit*    pRefEdit;               // aktives Eingabefeld
+    formula::RefButton*  pRefBtn;                // Button dazu
+    Window*             m_pWindow;
+    SfxBindings*        m_pBindings;
+    ::std::auto_ptr<Accelerator>
+                        pAccel;                 // fuer Enter/Escape
+    BOOL*               pHiddenMarks;           // Merkfeld fuer versteckte Controls
+    SCTAB               nRefTab;                // used for ShowReference
 
-    DECL_LINK( UpdateHdl, Timer* );
-
-protected:
-    virtual void        KeyInput( const KeyEvent& rKEvt );
-    virtual void        GetFocus();
-    virtual void        LoseFocus();
-
-public:
-                        ScRefEdit( ScAnyRefDlg* pParent, const ResId& rResId );
-                        ScRefEdit( Window* pParent, const ResId& rResId );
-    virtual             ~ScRefEdit();
-
-    void                SetRefString( const XubString& rStr );
-    using Edit::SetText;
-    virtual void        SetText( const XubString& rStr );
-    virtual void        Modify();
-
-    void                StartUpdateData();
-
-//UNUSED2008-05  void                SilentGrabFocus();  // does not update any references
-
-    void                SetRefDialog( ScAnyRefDlg* pDlg );
-    inline ScAnyRefDlg* GetRefDialog() { return pAnyRefDlg; }
-};
-
-//============================================================================
-
-class ScRefButton : public ImageButton
-{
-private:
-    Image               aImgRefStart;   /// Start reference input
-    Image               aImgRefStartHC; /// Start reference input (high contrast)
-    Image               aImgRefDone;    /// Stop reference input
-    Image               aImgRefDoneHC;  /// Stop reference input (high contrast)
-    ScAnyRefDlg*        pAnyRefDlg;     // parent dialog
-    ScRefEdit*          pRefEdit;       // zugeordnetes Edit-Control
-
-protected:
-    virtual void        Click();
-    virtual void        KeyInput( const KeyEvent& rKEvt );
-    virtual void        GetFocus();
-    virtual void        LoseFocus();
-
-public:
-                        ScRefButton( ScAnyRefDlg* pParent, const ResId& rResId, ScRefEdit* pEdit );
-                        ScRefButton( Window* pParent, const ResId& rResId );
-
-    void                SetReferences( ScAnyRefDlg* pDlg, ScRefEdit* pEdit );
-
-    void                SetStartImage();
-    void                SetEndImage();
-    inline void         DoRef() { Click(); }
-};
-
-
-//============================================================================
-
-class ScAnyRefDlg : public SfxModelessDialog
-{
-    friend class        ScRefButton;
-    friend class        ScRefEdit;
-
-private:
-    SfxBindings*        pMyBindings;
-    ScRefEdit*          pRefEdit;               // aktives Eingabefeld
-    ScRefButton*        pRefBtn;                // Button dazu
     String              sOldDialogText;         // Originaltitel des Dialogfensters
     Size                aOldDialogSize;         // Originalgroesse Dialogfenster
     Point               aOldEditPos;            // Originalposition des Eingabefeldes
     Size                aOldEditSize;           // Originalgroesse des Eingabefeldes
     Point               aOldButtonPos;          // Originalpositiuon des Buttons
-    BOOL*               pHiddenMarks;           // Merkfeld fuer versteckte Controls
-    Accelerator*        pAccel;                 // fuer Enter/Escape
-    BOOL                bAccInserted;
-    BOOL                bHighLightRef;
+
     BOOL                bEnableColorRef;
-    ScFormulaCell*      pRefCell;
-    ScCompiler*         pRefComp;
+    BOOL                bHighLightRef;
+    BOOL                bAccInserted;
+
+    DECL_LINK( AccelSelectHdl, Accelerator* );
+
+public:
+    ScFormulaReferenceHelper(IAnyRefDialog* _pDlg,SfxBindings* _pBindings);
+    ~ScFormulaReferenceHelper();
+
+    void                ShowSimpleReference( const XubString& rStr );
+    void                ShowFormulaReference( const XubString& rStr );
+    bool                ParseWithNames( ScRangeList& rRanges, const String& rStr, ScDocument* pDoc );
+    void                Init();
+
+    void                ShowReference( const XubString& rStr );
+    void                ReleaseFocus( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL );
+    void                HideReference( BOOL bDoneRefMode = TRUE );
+    void                RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL );
+    void                RefInputDone( BOOL bForced = FALSE );
+    void                ToggleCollapsed( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL );
+
+    inline void         SetWindow(Window* _pWindow) { m_pWindow = _pWindow; }
+    BOOL                DoClose( USHORT nId );
+    void                SetDispatcherLock( BOOL bLock );
+    void                EnableSpreadsheets( BOOL bFlag = TRUE, BOOL bChilds = TRUE );
+    void                ViewShellChanged( ScTabViewShell* pScViewShell );
+
+    static              void enableInput(BOOL _bInput);
+};
+//============================================================================
+
+class ScAnyRefDlg : public SfxModelessDialog,
+                    public IAnyRefDialog
+{
+    friend class        formula::RefButton;
+    friend class        formula::RefEdit;
+
+private:
+    ScFormulaReferenceHelper
+                        m_aHelper;
+    SfxBindings*        pMyBindings;
+
     Window*             pActiveWin;
     Timer               aTimer;
     String              aDocName;               // document on which the dialog was opened
-    SCTAB               nRefTab;                // used for ShowReference
 
     DECL_LINK( UpdateFocusHdl, Timer* );
-    DECL_LINK( AccelSelectHdl, Accelerator* );
+
 
 protected:
-    BOOL                DoClose( USHORT nId );
+    virtual BOOL        DoClose( USHORT nId );
 
     void                EnableSpreadsheets( BOOL bFlag = TRUE, BOOL bChilds = TRUE );
     void                SetDispatcherLock( BOOL bLock );
 
     virtual long        PreNotify( NotifyEvent& rNEvt );
 
-    virtual void        RefInputStart( ScRefEdit* pEdit, ScRefButton* pButton = NULL );
+    virtual void        RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL );
     virtual void        RefInputDone( BOOL bForced = FALSE );
     void                ShowSimpleReference( const XubString& rStr );
     void                ShowFormulaReference( const XubString& rStr );
@@ -175,13 +152,13 @@ public:
     virtual BOOL        IsTableLocked() const;
     virtual BOOL        IsDocAllowed( SfxObjectShell* pDocSh ) const;
 
-    void                ShowReference( const XubString& rStr );
-    void                HideReference( BOOL bDoneRefMode = TRUE );
+    virtual void        ShowReference( const XubString& rStr );
+    virtual void        HideReference( BOOL bDoneRefMode = TRUE );
 
-    void                ToggleCollapsed( ScRefEdit* pEdit, ScRefButton* pButton = NULL );
-    void                ReleaseFocus( ScRefEdit* pEdit, ScRefButton* pButton = NULL );
+    virtual void        ToggleCollapsed( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL );
+    virtual void        ReleaseFocus( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL );
 
-    void                ViewShellChanged( ScTabViewShell* pScViewShell );
+    virtual void        ViewShellChanged( ScTabViewShell* pScViewShell );
     void                SwitchToDocument();
     SfxBindings&        GetBindings();
 

@@ -64,7 +64,7 @@
 #include "hints.hxx"
 #include "cell.hxx"
 #include "dociter.hxx"
-#include "opcode.hxx"
+#include "formula/opcode.hxx"
 
 struct TableLink_Impl
 {

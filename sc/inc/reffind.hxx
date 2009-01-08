@@ -42,7 +42,7 @@ class ScRefFinder
 {
 private:
     String      aFormula;
-    ScAddress::Convention eConv;
+    formula::FormulaGrammar::AddressConvention eConv;
     ScDocument* pDoc;
     xub_StrLen  nFound;
     xub_StrLen  nSelStart;
@@ -53,7 +53,7 @@ public:
 
     ScRefFinder( const String& rFormula,
              ScDocument* pDocument = NULL,
-             ScAddress::Convention eConvP = ScAddress::CONV_OOO );
+             formula::FormulaGrammar::AddressConvention eConvP = formula::FormulaGrammar::CONV_OOO );
     ~ScRefFinder();
 
     const String&   GetText() const     { return aFormula; }

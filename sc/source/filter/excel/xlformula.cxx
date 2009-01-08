@@ -30,13 +30,16 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
+#include "xlformula.hxx"
 #include "compiler.hxx"
 #include "rangenam.hxx"
-#include "xestream.hxx"
 #include "xlroot.hxx"
 #include "xistream.hxx"
-#include "xlformula.hxx"
+#include "xestream.hxx"
+#include "token.hxx"
+#include "tokenarray.hxx"
 
+using namespace formula;
 // Function data ==============================================================
 
 String XclFunctionInfo::GetMacroFuncName() const
@@ -555,7 +558,7 @@ void XclTokenArrayIterator::Init()
 void XclTokenArrayIterator::Init( const ScTokenArray& rScTokArr, bool bSkipSpaces )
 {
     USHORT nTokArrLen = rScTokArr.GetLen();
-    mppScTokenBeg = static_cast< const ScToken*const* >( nTokArrLen ? rScTokArr.GetArray() : 0 );
+    mppScTokenBeg = static_cast< const formula::FormulaToken*const* >( nTokArrLen ? rScTokArr.GetArray() : 0 );
     mppScTokenEnd = mppScTokenBeg ? (mppScTokenBeg + nTokArrLen) : 0;
     mppScToken = (mppScTokenBeg != mppScTokenEnd) ? mppScTokenBeg : 0;
     mbSkipSpaces = bSkipSpaces;
@@ -585,9 +588,9 @@ void XclTokenArrayIterator::SkipSpaces()
 
 // strings and string lists ---------------------------------------------------
 
-bool XclTokenArrayHelper::GetTokenString( String& rString, const ScToken& rScToken )
+bool XclTokenArrayHelper::GetTokenString( String& rString, const formula::FormulaToken& rScToken )
 {
-    bool bIsStr = (rScToken.GetType() == svString) && (rScToken.GetOpCode() == ocPush);
+    bool bIsStr = (rScToken.GetType() == formula::svString) && (rScToken.GetOpCode() == ocPush);
     if( bIsStr ) rString = rScToken.GetString();
     return bIsStr;
 }
@@ -650,7 +653,7 @@ void XclTokenArrayHelper::ConvertStringToList( ScTokenArray& rScTokArr, sal_Unic
 const ScTokenArray* XclTokenArrayHelper::GetSharedFormula( const XclRoot& rRoot, const ScTokenArray& rScTokArr )
 {
     if( rScTokArr.GetLen() == 1 )
-        if( const ScToken* pScToken = rScTokArr.GetArray()[ 0 ] )
+        if( const formula::FormulaToken* pScToken = rScTokArr.GetArray()[ 0 ] )
             if( pScToken->GetOpCode() == ocName )
                 if( ScRangeData* pData = rRoot.GetNamedRanges().FindIndex( pScToken->GetIndex() ) )
                     if( pData->HasType( RT_SHARED ) )
@@ -662,13 +665,13 @@ const ScTokenArray* XclTokenArrayHelper::GetSharedFormula( const XclRoot& rRoot,
 
 namespace {
 
-inline bool lclGetAddress( ScAddress& rAddress, const ScToken& rToken )
+inline bool lclGetAddress( ScAddress& rAddress, const formula::FormulaToken& rToken )
 {
     OpCode eOpCode = rToken.GetOpCode();
     bool bIsSingleRef = (eOpCode == ocPush) && (rToken.GetType() == svSingleRef);
     if( bIsSingleRef )
     {
-        const ScSingleRefData& rRef = rToken.GetSingleRef();
+        const ScSingleRefData& rRef = static_cast<const ScToken&>(rToken).GetSingleRef();
         rAddress.Set( rRef.nCol, rRef.nRow, rRef.nTab );
         bIsSingleRef = !rRef.IsDeleted();
     }

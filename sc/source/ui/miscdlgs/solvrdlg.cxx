@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -68,12 +68,12 @@ ScSolverDlg::ScSolverDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
         aFlVariables        ( this, ScResId( FL_VARIABLES ) ),
         aFtFormulaCell      ( this, ScResId( FT_FORMULACELL ) ),
         aEdFormulaCell      ( this, ScResId( ED_FORMULACELL ) ),
-        aRBFormulaCell      ( this, ScResId( RB_FORMULACELL ), &aEdFormulaCell ),
+        aRBFormulaCell      ( this, ScResId( RB_FORMULACELL ), &aEdFormulaCell, this ),
         aFtTargetVal        ( this, ScResId( FT_TARGETVAL ) ),
         aEdTargetVal        ( this, ScResId( ED_TARGETVAL ) ),
         aFtVariableCell     ( this, ScResId( FT_VARCELL ) ),
         aEdVariableCell     ( this, ScResId( ED_VARCELL ) ),
-        aRBVariableCell     ( this, ScResId( RB_VARCELL ), &aEdVariableCell ),
+        aRBVariableCell     ( this, ScResId( RB_VARCELL ), &aEdVariableCell, this ),
         aBtnOk              ( this, ScResId( BTN_OK ) ),
         aBtnCancel          ( this, ScResId( BTN_CANCEL ) ),
         aBtnHelp            ( this, ScResId( BTN_HELP ) ),
@@ -236,7 +236,7 @@ IMPL_LINK( ScSolverDlg, BtnHdl, PushButton*, pBtn )
         // 2. verweist die Formel-Koordinate wirklich auf eine Formelzelle?
         // 3. wurde ein korrekter Zielwert eingegeben
 
-        const ScAddress::Convention eConv = pDoc->GetAddressConvention();
+        const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
         USHORT  nRes1 = theFormulaCell .Parse( aEdFormulaCell.GetText(),  pDoc, eConv );
         USHORT  nRes2 = theVariableCell.Parse( aEdVariableCell.GetText(), pDoc, eConv );
 

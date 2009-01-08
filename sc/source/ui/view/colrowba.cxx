@@ -89,7 +89,7 @@ ScColBar::~ScColBar()
 
 inline BOOL ScColBar::UseNumericHeader() const
 {
-    return pViewData->GetDocument()->GetAddressConvention() == ScAddress::CONV_XL_R1C1;
+    return pViewData->GetDocument()->GetAddressConvention() == formula::FormulaGrammar::CONV_XL_R1C1;
 }
 
 SCCOLROW ScColBar::GetPos()

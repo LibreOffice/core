@@ -57,6 +57,7 @@
 #include "rangenam.hxx"
 #include "attrib.hxx"
 #include "ftools.hxx"
+#include "tokenarray.hxx"
 
 
 //------------------------------------------------------------------------

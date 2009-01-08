@@ -209,7 +209,7 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         nInDdeLinkUpdate( 0 ),
         bInUnoBroadcast( FALSE ),
         bInUnoListenerCall( FALSE ),
-        eGrammar( ScGrammar::GRAM_NATIVE ),
+        eGrammar( formula::FormulaGrammar::GRAM_NATIVE ),
         bStyleSheetUsageInvalid( TRUE ),
         bUndoEnabled( TRUE ),
         mbAdjustHeightEnabled( true ),
@@ -217,7 +217,7 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         mbChangeReadOnlyEnabled( false ),
         mnNamedRangesLockCount( 0 )
 {
-    SetStorageGrammar( ScGrammar::GRAM_STORAGE_DEFAULT);
+    SetStorageGrammar( formula::FormulaGrammar::GRAM_STORAGE_DEFAULT);
 
     eSrcSet = gsl_getSystemTextEncoding();
 
@@ -263,11 +263,11 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
 }
 
 
-void ScDocument::SetStorageGrammar( ScGrammar::Grammar eGram )
+void ScDocument::SetStorageGrammar( formula::FormulaGrammar::Grammar eGram )
 {
     DBG_ASSERT(
-            eGram == ScGrammar::GRAM_ODFF ||
-            eGram == ScGrammar::GRAM_PODF,
+        eGram == formula::FormulaGrammar::GRAM_ODFF ||
+            eGram == formula::FormulaGrammar::GRAM_PODF,
             "ScDocument::SetStorageGrammar: wrong storage grammar");
 
     eStorageGrammar = eGram;
@@ -276,8 +276,8 @@ void ScDocument::SetStorageGrammar( ScGrammar::Grammar eGram )
     // digest them instead, which could also speedup reference recognition
     // during import.
 
-    eXmlImportGrammar = ScGrammar::mergeToGrammar( eGram,
-            ScAddress::CONV_OOO);
+    eXmlImportGrammar = formula::FormulaGrammar::mergeToGrammar( eGram,
+            formula::FormulaGrammar::CONV_OOO);
 }
 
 

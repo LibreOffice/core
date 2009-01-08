@@ -636,7 +636,7 @@ void ScTabPageSortOptions::Init()
         String          theDbArea;
         String          theDbName   = aStrNoName;
         const SCTAB nCurTab     = pViewData->GetTabNo();
-        const ScAddress::Convention eConv = pDoc->GetAddressConvention();
+        const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
 
         aLbOutPos.Clear();
         aLbOutPos.InsertEntry( aStrUndefined, 0 );

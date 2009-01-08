@@ -93,7 +93,7 @@ public:
             ScValidationData( ScValidationMode eMode, ScConditionMode eOper,
                                 const String& rExpr1, const String& rExpr2,
                                 ScDocument* pDocument, const ScAddress& rPos,
-                                const ScGrammar::Grammar eGrammar = ScGrammar::GRAM_DEFAULT );
+                                const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT );
             ScValidationData( ScValidationMode eMode, ScConditionMode eOper,
                                 const ScTokenArray* pArr1, const ScTokenArray* pArr2,
                                 ScDocument* pDocument, const ScAddress& rPos );

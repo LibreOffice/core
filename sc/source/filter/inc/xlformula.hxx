@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -33,7 +33,7 @@
 
 #include <map>
 #include "address.hxx"
-#include "opcode.hxx"
+#include "formula/opcode.hxx"
 #include "ftools.hxx"
 
 // Constants ==================================================================
@@ -278,7 +278,7 @@ public:
     /** Creates an empty token array. */
     explicit            XclTokenArray( bool bVolatile = false );
     /** Creates a token array, swaps passed token vector into own data. */
-    explicit            XclTokenArray( ScfUInt8Vec& rTokVec, bool bVolatile = false,
+    explicit            XclTokenArray( ScfUInt8Vec& rTokVec, bool bVolatile = false, 
                                        ScfUInt8Vec* pExtensionTokens = NULL);
 
     /** Returns true, if the token array is empty. */
@@ -326,7 +326,10 @@ XclExpStream& operator<<( XclExpStream& rStrm, const XclTokenArrayRef& rxTokArr 
 
 // ----------------------------------------------------------------------------
 
-class ScToken;
+namespace formula
+{
+    class FormulaToken;
+}
 class ScTokenArray;
 
 /** Special token array iterator for the Excel filters.
@@ -352,9 +355,9 @@ public:
 
     inline bool         Is() const { return mppScToken != 0; }
     inline bool         operator!() const { return !Is(); }
-    inline const ScToken* Get() const { return mppScToken ? *mppScToken : 0; }
-    inline const ScToken* operator->() const { return Get(); }
-    inline const ScToken& operator*() const { return *Get(); }
+    inline const formula::FormulaToken* Get() const { return mppScToken ? *mppScToken : 0; }
+    inline const formula::FormulaToken* operator->() const { return Get(); }
+    inline const formula::FormulaToken& operator*() const { return *Get(); }
 
     XclTokenArrayIterator& operator++();
 
@@ -363,9 +366,9 @@ private:
     void                SkipSpaces();
 
 private:
-    const ScToken*const* mppScTokenBeg;     /// Pointer to first token pointer of token array.
-    const ScToken*const* mppScTokenEnd;     /// Pointer behind last token pointer of token array.
-    const ScToken*const* mppScToken;        /// Pointer to current token pointer of token array.
+    const formula::FormulaToken*const* mppScTokenBeg;     /// Pointer to first token pointer of token array.
+    const formula::FormulaToken*const* mppScTokenEnd;     /// Pointer behind last token pointer of token array.
+    const formula::FormulaToken*const* mppScToken;        /// Pointer to current token pointer of token array.
     bool                mbSkipSpaces;       /// true = Skip whitespace tokens.
 };
 
@@ -411,7 +414,7 @@ public:
     /** Tries to extract a string from the passed token.
         @param rString  (out-parameter) The string contained in the token.
         @return  true = Passed token is a string token, rString parameter is valid. */
-    static bool         GetTokenString( String& rString, const ScToken& rScToken );
+    static bool         GetTokenString( String& rString, const formula::FormulaToken& rScToken );
 
     /** Parses the passed formula and tries to find a single string token, i.e. "abc".
         @param rString  (out-parameter) The string contained in the formula.

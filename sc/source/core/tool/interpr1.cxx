@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: interpr1.cxx,v $
- * $Revision: 1.60.54.5 $
+ * $Revision: 1.61 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,6 +45,7 @@
 #include <sfx2/printer.hxx>
 #include <unotools/collatorwrapper.hxx>
 #include <unotools/transliterationwrapper.hxx>
+#include <rtl/logfile.hxx>
 
 #include "interpre.hxx"
 #include "patattr.hxx"
@@ -75,7 +76,7 @@ IMPL_FIXEDMEMPOOL_NEWDEL( ScInterpreter, 32, 16 )
 ScTokenStack* ScInterpreter::pGlobalStack = NULL;
 BOOL ScInterpreter::bGlobalStackInUse = FALSE;
 
-
+using namespace formula;
 //-----------------------------------------------------------------------------
 // Funktionen
 //-----------------------------------------------------------------------------
@@ -83,6 +84,7 @@ BOOL ScInterpreter::bGlobalStackInUse = FALSE;
 
 void ScInterpreter::ScIfJump()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScIfJump" );
     const short* pJump = pCur->GetJump();
     short nJumpCount = pJump[ 0 ];
     MatrixDoubleRefToMatrix();
@@ -95,7 +97,7 @@ void ScInterpreter::ScIfJump()
                 PushIllegalParameter();
             else
             {
-                ScTokenRef xNew;
+                FormulaTokenRef xNew;
                 ScTokenMatrixMap::const_iterator aMapIter;
                 // DoubleError handled by JumpMatrix
                 pMat->SetErrorInterpreter( NULL);
@@ -169,8 +171,7 @@ void ScInterpreter::ScIfJump()
                         }
                     }
                     xNew = new ScJumpMatrixToken( pJumpMat );
-                    GetTokenMatrixMap().insert( ScTokenMatrixMap::value_type(
-                                pCur, xNew));
+                    GetTokenMatrixMap().insert( ScTokenMatrixMap::value_type(pCur, xNew));
                 }
                 PushTempToken( xNew);
                 // set endpoint of path for main code line
@@ -213,6 +214,7 @@ void ScInterpreter::ScIfJump()
 
 void ScInterpreter::ScChoseJump()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScChoseJump" );
     // We have to set a jump, if there was none chosen because of an error set
     // it to endpoint.
     bool bHaveJump = false;
@@ -228,7 +230,7 @@ void ScInterpreter::ScChoseJump()
                 PushIllegalParameter();
             else
             {
-                ScTokenRef xNew;
+                FormulaTokenRef xNew;
                 ScTokenMatrixMap::const_iterator aMapIter;
                 // DoubleError handled by JumpMatrix
                 pMat->SetErrorInterpreter( NULL);
@@ -311,7 +313,6 @@ void ScInterpreter::ScChoseJump()
         aCode.Jump( pJump[ nJumpCount ], pJump[ nJumpCount ] );
 }
 
-
 void lcl_AdjustJumpMatrix( ScJumpMatrix* pJumpM, ScMatrixRef& pResMat, SCSIZE nParmCols, SCSIZE nParmRows )
 {
     SCSIZE nJumpCols, nJumpRows;
@@ -342,10 +343,10 @@ void lcl_AdjustJumpMatrix( ScJumpMatrix* pJumpM, ScMatrixRef& pResMat, SCSIZE nP
     }
 }
 
-
 bool ScInterpreter::JumpMatrix( short nStackLevel )
 {
-    pJumpMatrix = pStack[sp-nStackLevel]->GetJumpMatrix();
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::JumpMatrix" );
+    pJumpMatrix = static_cast<ScToken*>(pStack[sp-nStackLevel])->GetJumpMatrix();
     ScMatrixRef pResMat = pJumpMatrix->GetResultMatrix();
     SCSIZE nC, nR;
     if ( nStackLevel == 2 )
@@ -455,12 +456,12 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
                                     aRange.aEnd.Col() != aRange.aStart.Col())
                                 || (nRow > static_cast<ULONG>(aRange.aEnd.Row()) &&
                                     aRange.aEnd.Row() != aRange.aStart.Row()))
-                        {
+                          {
                             fVal = CreateDoubleError( NOTAVAILABLE );
                             pResMat->PutDouble( fVal, nC, nR );
-                        }
-                        else
-                        {
+                          }
+                          else
+                          {
                             // Replicate column and/or row of a vector if it is
                             // one. Note that this could be a range reference
                             // that in fact consists of only one cell, e.g. A1:A1
@@ -474,7 +475,7 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
                             if (HasCellEmptyData( pCell))
                                 pResMat->PutEmpty( nC, nR );
                             else if (HasCellValueData( pCell))
-                            {
+                              {
                                 double fCellVal = GetCellValue( aAdr, pCell);
                                 if ( nGlobalError )
                                 {
@@ -483,8 +484,8 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
                                     nGlobalError = 0;
                                 }
                                 pResMat->PutDouble( fCellVal, nC, nR );
-                            }
-                            else
+                              }
+                              else
                             {
                                 String aStr;
                                 GetCellString( aStr, pCell );
@@ -497,7 +498,7 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
                                 else
                                     pResMat->PutString( aStr, nC, nR );
                             }
-                        }
+                          }
                         SCSIZE nParmCols = aRange.aEnd.Col() - aRange.aStart.Col() + 1;
                         SCSIZE nParmRows = aRange.aEnd.Row() - aRange.aStart.Row() + 1;
                         lcl_AdjustJumpMatrix( pJumpMatrix, pResMat, nParmCols, nParmRows );
@@ -623,6 +624,7 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
 
 double ScInterpreter::CompareFunc( const ScCompare& rComp )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::CompareFunc" );
     // Keep DoubleError if encountered
     // #i40539# if bEmpty is set, bVal/nVal are uninitialized
     if ( !rComp.bEmpty[0] && rComp.bVal[0] && !::rtl::math::isFinite( rComp.nVal[0]))
@@ -705,6 +707,7 @@ double ScInterpreter::CompareFunc( const ScCompare& rComp )
 
 double ScInterpreter::Compare()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::Compare" );
     String aVal1, aVal2;
     ScCompare aComp( &aVal1, &aVal2 );
     for( short i = 1; i >= 0; i-- )
@@ -758,6 +761,7 @@ double ScInterpreter::Compare()
 
 ScMatrixRef ScInterpreter::CompareMat()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::CompareMat" );
     String aVal1, aVal2;
     ScCompare aComp( &aVal1, &aVal2 );
     ScMatrixRef pMat[2];
@@ -888,6 +892,7 @@ ScMatrixRef ScInterpreter::CompareMat()
 
 void ScInterpreter::ScEqual()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScEqual" );
     if ( GetStackType(1) == svMatrix || GetStackType(2) == svMatrix )
     {
         ScMatrixRef pMat = CompareMat();
@@ -906,6 +911,7 @@ void ScInterpreter::ScEqual()
 
 void ScInterpreter::ScNotEqual()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScNotEqual" );
     if ( GetStackType(1) == svMatrix || GetStackType(2) == svMatrix )
     {
         ScMatrixRef pMat = CompareMat();
@@ -924,6 +930,7 @@ void ScInterpreter::ScNotEqual()
 
 void ScInterpreter::ScLess()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScLess" );
     if ( GetStackType(1) == svMatrix || GetStackType(2) == svMatrix )
     {
         ScMatrixRef pMat = CompareMat();
@@ -942,6 +949,7 @@ void ScInterpreter::ScLess()
 
 void ScInterpreter::ScGreater()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScGreater" );
     if ( GetStackType(1) == svMatrix || GetStackType(2) == svMatrix )
     {
         ScMatrixRef pMat = CompareMat();
@@ -960,6 +968,7 @@ void ScInterpreter::ScGreater()
 
 void ScInterpreter::ScLessEqual()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScLessEqual" );
     if ( GetStackType(1) == svMatrix || GetStackType(2) == svMatrix )
     {
         ScMatrixRef pMat = CompareMat();
@@ -978,6 +987,7 @@ void ScInterpreter::ScLessEqual()
 
 void ScInterpreter::ScGreaterEqual()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScGreaterEqual" );
     if ( GetStackType(1) == svMatrix || GetStackType(2) == svMatrix )
     {
         ScMatrixRef pMat = CompareMat();
@@ -996,6 +1006,7 @@ void ScInterpreter::ScGreaterEqual()
 
 void ScInterpreter::ScAnd()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScAnd" );
     nFuncFmtType = NUMBERFORMAT_LOGICAL;
     short nParamCount = GetByte();
     if ( MustHaveParamCountMin( nParamCount, 1 ) )
@@ -1093,6 +1104,7 @@ void ScInterpreter::ScAnd()
 
 void ScInterpreter::ScOr()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScOr" );
     nFuncFmtType = NUMBERFORMAT_LOGICAL;
     short nParamCount = GetByte();
     if ( MustHaveParamCountMin( nParamCount, 1 ) )
@@ -1191,6 +1203,7 @@ void ScInterpreter::ScOr()
 
 void ScInterpreter::ScNeg()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScNeg" );
     // Simple negation doesn't change current format type to number, keep
     // current type.
     nFuncFmtType = nCurFmtType;
@@ -1232,12 +1245,13 @@ void ScInterpreter::ScNeg()
 
 void ScInterpreter::ScPercentSign()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScPercentSign" );
     nFuncFmtType = NUMBERFORMAT_PERCENT;
-    const ScToken* pSaveCur = pCur;
+    const FormulaToken* pSaveCur = pCur;
     BYTE nSavePar = cPar;
     PushInt( 100 );
     cPar = 2;
-    ScByteToken aDivOp( ocDiv, cPar );
+    FormulaByteToken aDivOp( ocDiv, cPar );
     pCur = &aDivOp;
     ScDiv();
     pCur = pSaveCur;
@@ -1247,6 +1261,7 @@ void ScInterpreter::ScPercentSign()
 
 void ScInterpreter::ScNot()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScNot" );
     nFuncFmtType = NUMBERFORMAT_LOGICAL;
     switch ( GetStackType() )
     {
@@ -1286,18 +1301,21 @@ void ScInterpreter::ScNot()
 
 void ScInterpreter::ScPi()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScPi" );
     PushDouble(F_PI);
 }
 
 
 void ScInterpreter::ScRandom()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScRandom" );
     PushDouble((double)rand() / ((double)RAND_MAX+1.0));
 }
 
 
 void ScInterpreter::ScTrue()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScTrue" );
     nFuncFmtType = NUMBERFORMAT_LOGICAL;
     PushInt(1);
 }
@@ -1305,6 +1323,7 @@ void ScInterpreter::ScTrue()
 
 void ScInterpreter::ScFalse()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScFalse" );
     nFuncFmtType = NUMBERFORMAT_LOGICAL;
     PushInt(0);
 }
@@ -1312,90 +1331,105 @@ void ScInterpreter::ScFalse()
 
 void ScInterpreter::ScDeg()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScDeg" );
     PushDouble((GetDouble() / F_PI) * 180.0);
 }
 
 
 void ScInterpreter::ScRad()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScRad" );
     PushDouble(GetDouble() * (F_PI / 180));
 }
 
 
 void ScInterpreter::ScSin()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScSin" );
     PushDouble(::rtl::math::sin(GetDouble()));
 }
 
 
 void ScInterpreter::ScCos()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScCos" );
     PushDouble(::rtl::math::cos(GetDouble()));
 }
 
 
 void ScInterpreter::ScTan()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScTan" );
     PushDouble(::rtl::math::tan(GetDouble()));
 }
 
 
 void ScInterpreter::ScCot()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScCot" );
     PushDouble(1.0 / ::rtl::math::tan(GetDouble()));
 }
 
 
 void ScInterpreter::ScArcSin()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScArcSin" );
     PushDouble(asin(GetDouble()));
 }
 
 
 void ScInterpreter::ScArcCos()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScArcCos" );
     PushDouble(acos(GetDouble()));
 }
 
 
 void ScInterpreter::ScArcTan()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScArcTan" );
     PushDouble(atan(GetDouble()));
 }
 
 
 void ScInterpreter::ScArcCot()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScArcCot" );
     PushDouble((F_PI2) - atan(GetDouble()));
 }
 
 
 void ScInterpreter::ScSinHyp()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScSinHyp" );
     PushDouble(sinh(GetDouble()));
 }
 
 
 void ScInterpreter::ScCosHyp()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScCosHyp" );
     PushDouble(cosh(GetDouble()));
 }
 
 
 void ScInterpreter::ScTanHyp()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScTanHyp" );
     PushDouble(tanh(GetDouble()));
 }
 
 
 void ScInterpreter::ScCotHyp()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScCotHyp" );
     PushDouble(1.0 / tanh(GetDouble()));
 }
 
 
 void ScInterpreter::ScArcSinHyp()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScArcSinHyp" );
     double nVal = GetDouble();
     PushDouble(log(nVal + sqrt((nVal * nVal) + 1.0)));
 }
@@ -1403,6 +1437,7 @@ void ScInterpreter::ScArcSinHyp()
 
 void ScInterpreter::ScArcCosHyp()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScArcCosHyp" );
     double nVal = GetDouble();
     if (nVal < 1.0)
         PushIllegalArgument();
@@ -1413,6 +1448,7 @@ void ScInterpreter::ScArcCosHyp()
 
 void ScInterpreter::ScArcTanHyp()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScArcTanHyp" );
     double nVal = GetDouble();
     if (fabs(nVal) >= 1.0)
         PushIllegalArgument();
@@ -1423,6 +1459,7 @@ void ScInterpreter::ScArcTanHyp()
 
 void ScInterpreter::ScArcCotHyp()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScArcCotHyp" );
     double nVal = GetDouble();
     if (fabs(nVal) <= 1.0)
         PushIllegalArgument();
@@ -1433,12 +1470,14 @@ void ScInterpreter::ScArcCotHyp()
 
 void ScInterpreter::ScExp()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScExp" );
     PushDouble(exp(GetDouble()));
 }
 
 
 void ScInterpreter::ScSqrt()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScSqrt" );
     double fVal = GetDouble();
     if (fVal >= 0.0)
         PushDouble(sqrt(fVal));
@@ -1449,14 +1488,15 @@ void ScInterpreter::ScSqrt()
 
 void ScInterpreter::ScIsEmpty()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScIsEmpty" );
     short nRes = 0;
     nFuncFmtType = NUMBERFORMAT_LOGICAL;
     switch ( GetRawStackType() )
     {
         case svEmptyCell:
         {
-            const ScToken* p = PopToken();
-            if (!static_cast<const ScEmptyCellToken*>(p)->IsInherited())
+            FormulaTokenRef p = PopToken();
+            if (!static_cast<const ScEmptyCellToken*>(p.get())->IsInherited())
                 nRes = 1;
         }
         break;
@@ -1503,6 +1543,7 @@ void ScInterpreter::ScIsEmpty()
 
 short ScInterpreter::IsString()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::IsString" );
     nFuncFmtType = NUMBERFORMAT_LOGICAL;
     short nRes = 0;
     switch ( GetRawStackType() )
@@ -1563,18 +1604,21 @@ short ScInterpreter::IsString()
 
 void ScInterpreter::ScIsString()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScIsString" );
     PushInt( IsString() );
 }
 
 
 void ScInterpreter::ScIsNonString()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScIsNonString" );
     PushInt( !IsString() );
 }
 
 
 void ScInterpreter::ScIsLogical()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScIsLogical" );
     short nRes = 0;
     switch ( GetStackType() )
     {
@@ -1613,6 +1657,7 @@ void ScInterpreter::ScIsLogical()
 
 void ScInterpreter::ScType()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScType" );
     short nType = 0;
     switch ( GetStackType() )
     {
@@ -1910,6 +1955,7 @@ void ScInterpreter::ScCell()
 
 void ScInterpreter::ScIsRef()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScCell" );
     nFuncFmtType = NUMBERFORMAT_LOGICAL;
     short nRes = 0;
     switch ( GetStackType() )
@@ -1932,9 +1978,9 @@ void ScInterpreter::ScIsRef()
         break;
         case svRefList :
         {
-            ScTokenRef x = PopToken();
+            FormulaTokenRef x = PopToken();
             if ( !nGlobalError )
-                nRes = !x->GetRefList()->empty();
+                nRes = !static_cast<ScToken*>(x.get())->GetRefList()->empty();
         }
         break;
         default:
@@ -1947,6 +1993,7 @@ void ScInterpreter::ScIsRef()
 
 void ScInterpreter::ScIsValue()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScIsValue" );
     nFuncFmtType = NUMBERFORMAT_LOGICAL;
     short nRes = 0;
     switch ( GetRawStackType() )
@@ -2010,6 +2057,7 @@ void ScInterpreter::ScIsValue()
 
 void ScInterpreter::ScIsFormula()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScIsFormula" );
     nFuncFmtType = NUMBERFORMAT_LOGICAL;
     short nRes = 0;
     switch ( GetStackType() )
@@ -2033,6 +2081,7 @@ void ScInterpreter::ScIsFormula()
 
 void ScInterpreter::ScFormula()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScFormula" );
     String aFormula;
     switch ( GetStackType() )
     {
@@ -2064,6 +2113,7 @@ void ScInterpreter::ScFormula()
 
 void ScInterpreter::ScIsNV()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScIsNV" );
     nFuncFmtType = NUMBERFORMAT_LOGICAL;
     short nRes = 0;
     switch ( GetStackType() )
@@ -2112,6 +2162,7 @@ void ScInterpreter::ScIsNV()
 
 void ScInterpreter::ScIsErr()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScIsErr" );
     nFuncFmtType = NUMBERFORMAT_LOGICAL;
     short nRes = 0;
     switch ( GetStackType() )
@@ -2166,6 +2217,7 @@ void ScInterpreter::ScIsErr()
 
 void ScInterpreter::ScIsError()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScIsError" );
     nFuncFmtType = NUMBERFORMAT_LOGICAL;
     short nRes = 0;
     switch ( GetStackType() )
@@ -2217,6 +2269,7 @@ void ScInterpreter::ScIsError()
 
 short ScInterpreter::IsEven()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::IsEven" );
     nFuncFmtType = NUMBERFORMAT_LOGICAL;
     short nRes = 0;
     double fVal = 0.0;
@@ -2299,18 +2352,21 @@ short ScInterpreter::IsEven()
 
 void ScInterpreter::ScIsEven()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScIsEven" );
     PushInt( IsEven() );
 }
 
 
 void ScInterpreter::ScIsOdd()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScIsOdd" );
     PushInt( !IsEven() );
 }
 
 
 void ScInterpreter::ScN()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScN" );
     USHORT nErr = nGlobalError;
     nGlobalError = 0;
     double fVal;
@@ -2349,6 +2405,7 @@ void ScInterpreter::ScTrim()
 
 void ScInterpreter::ScUpper()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScTrim" );
     String aString = GetString();
     ScGlobal::pCharClass->toUpper(aString);
     PushString(aString);
@@ -2357,6 +2414,7 @@ void ScInterpreter::ScUpper()
 
 void ScInterpreter::ScPropper()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScPropper" );
 //2do: what to do with I18N-CJK ?!?
     String aStr( GetString() );
     const xub_StrLen nLen = aStr.Len();
@@ -2389,6 +2447,7 @@ void ScInterpreter::ScPropper()
 
 void ScInterpreter::ScLower()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScLower" );
     String aString( GetString() );
     ScGlobal::pCharClass->toLower(aString);
     PushString(aString);
@@ -2397,6 +2456,7 @@ void ScInterpreter::ScLower()
 
 void ScInterpreter::ScLen()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScLen" );
     String aStr( GetString() );
     PushDouble( aStr.Len() );
 }
@@ -2404,6 +2464,7 @@ void ScInterpreter::ScLen()
 
 void ScInterpreter::ScT()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScT" );
     switch ( GetStackType() )
     {
         case svDoubleRef :
@@ -2458,6 +2519,7 @@ void ScInterpreter::ScT()
 
 void ScInterpreter::ScValue()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScValue" );
     String aInputString;
     double fVal;
 
@@ -2539,6 +2601,7 @@ inline BOOL lcl_ScInterpreter_IsPrintable( sal_Unicode c )
 
 void ScInterpreter::ScClean()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScClean" );
     String aStr( GetString() );
     for ( xub_StrLen i = 0; i < aStr.Len(); i++ )
     {
@@ -2551,6 +2614,7 @@ void ScInterpreter::ScClean()
 
 void ScInterpreter::ScCode()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScCode" );
 //2do: make it full range unicode?
     const String& rStr = GetString();
     PushInt( (sal_uChar) ByteString::ConvertFromUnicode( rStr.GetChar(0), gsl_getSystemTextEncoding() ) );
@@ -2559,6 +2623,7 @@ void ScInterpreter::ScCode()
 
 void ScInterpreter::ScChar()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScChar" );
 //2do: make it full range unicode?
     double fVal = GetDouble();
     if (fVal < 0.0 || fVal >= 256.0)
@@ -2838,6 +2903,7 @@ static ::rtl::OUString lcl_convertIntoFullWidth( const ::rtl::OUString & rStr )
  */
 void ScInterpreter::ScJis()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScJis" );
     if (MustHaveParamCount( GetByte(), 1))
         PushString( lcl_convertIntoFullWidth( GetString()));
 }
@@ -2851,6 +2917,7 @@ void ScInterpreter::ScJis()
  */
 void ScInterpreter::ScAsc()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScAsc" );
     if (MustHaveParamCount( GetByte(), 1))
         PushString( lcl_convertIntoHalfWidth( GetString()));
 }
@@ -2858,6 +2925,7 @@ void ScInterpreter::ScAsc()
 
 void ScInterpreter::ScMin( BOOL bTextAsZero )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScMin" );
     short nParamCount = GetByte();
     if (!MustHaveParamCountMin( nParamCount, 1))
         return;
@@ -2982,6 +3050,7 @@ void ScInterpreter::ScMin( BOOL bTextAsZero )
 
 void ScInterpreter::ScMax( BOOL bTextAsZero )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScMax" );
     short nParamCount = GetByte();
     if (!MustHaveParamCountMin( nParamCount, 1))
         return;
@@ -3106,6 +3175,7 @@ void ScInterpreter::ScMax( BOOL bTextAsZero )
 
 double ScInterpreter::IterateParameters( ScIterFunc eFunc, BOOL bTextAsZero )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::IterateParameters" );
     short nParamCount = GetByte();
     double fRes = ( eFunc == ifPRODUCT ) ? 1.0 : 0.0;
     double fVal = 0.0;
@@ -3417,36 +3487,42 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, BOOL bTextAsZero )
 
 void ScInterpreter::ScSumSQ()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScSumSQ" );
     PushDouble( IterateParameters( ifSUMSQ ) );
 }
 
 
 void ScInterpreter::ScSum()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScSum" );
     PushDouble( IterateParameters( ifSUM ) );
 }
 
 
 void ScInterpreter::ScProduct()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScProduct" );
     PushDouble( IterateParameters( ifPRODUCT ) );
 }
 
 
 void ScInterpreter::ScAverage( BOOL bTextAsZero )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScAverage" );
     PushDouble( IterateParameters( ifAVERAGE, bTextAsZero ) );
 }
 
 
 void ScInterpreter::ScCount()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScCount" );
     PushDouble( IterateParameters( ifCOUNT ) );
 }
 
 
 void ScInterpreter::ScCount2()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScCount2" );
     PushDouble( IterateParameters( ifCOUNT2 ) );
 }
 
@@ -3454,6 +3530,7 @@ void ScInterpreter::ScCount2()
 void ScInterpreter::GetStVarParams( double& rVal, double& rValCount,
                 BOOL bTextAsZero )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::GetStVarParams" );
     short nParamCount = GetByte();
 
     std::vector<double> values;
@@ -3570,6 +3647,7 @@ void ScInterpreter::GetStVarParams( double& rVal, double& rValCount,
 
 void ScInterpreter::ScVar( BOOL bTextAsZero )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScVar" );
     double nVal;
     double nValCount;
     GetStVarParams( nVal, nValCount, bTextAsZero );
@@ -3583,6 +3661,7 @@ void ScInterpreter::ScVar( BOOL bTextAsZero )
 
 void ScInterpreter::ScVarP( BOOL bTextAsZero )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScVarP" );
     double nVal;
     double nValCount;
     GetStVarParams( nVal, nValCount, bTextAsZero );
@@ -3593,6 +3672,7 @@ void ScInterpreter::ScVarP( BOOL bTextAsZero )
 
 void ScInterpreter::ScStDev( BOOL bTextAsZero )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScStDev" );
     double nVal;
     double nValCount;
     GetStVarParams( nVal, nValCount, bTextAsZero );
@@ -3605,6 +3685,7 @@ void ScInterpreter::ScStDev( BOOL bTextAsZero )
 
 void ScInterpreter::ScStDevP( BOOL bTextAsZero )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScStDevP" );
     double nVal;
     double nValCount;
     GetStVarParams( nVal, nValCount, bTextAsZero );
@@ -3634,6 +3715,7 @@ void ScInterpreter::ScStDevP( BOOL bTextAsZero )
 
 void ScInterpreter::ScColumns()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScColumns" );
     BYTE nParamCount = GetByte();
     ULONG nVal = 0;
     SCCOL nCol1;
@@ -3677,6 +3759,7 @@ void ScInterpreter::ScColumns()
 
 void ScInterpreter::ScRows()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScRows" );
     BYTE nParamCount = GetByte();
     ULONG nVal = 0;
     SCCOL nCol1;
@@ -3719,6 +3802,7 @@ void ScInterpreter::ScRows()
 
 void ScInterpreter::ScTables()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScTables" );
     BYTE nParamCount = GetByte();
     ULONG nVal;
     if ( nParamCount == 0 )
@@ -3760,6 +3844,7 @@ void ScInterpreter::ScTables()
 
 void ScInterpreter::ScColumn()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScColumn" );
     BYTE nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 0, 1 ) )
     {
@@ -3835,6 +3920,7 @@ void ScInterpreter::ScColumn()
 
 void ScInterpreter::ScRow()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScRow" );
     BYTE nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 0, 1 ) )
     {
@@ -3909,6 +3995,7 @@ void ScInterpreter::ScRow()
 
 void ScInterpreter::ScTable()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScTable" );
     BYTE nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 0, 1 ) )
     {
@@ -4057,6 +4144,7 @@ static void lcl_GetLastMatch( SCSIZE& rIndex, const ScMatrix& rMat,
 
 void ScInterpreter::ScMatch()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScMatch" );
     ScMatrixRef pMatSrc = NULL;
 
     BYTE nParamCount = GetByte();
@@ -4315,6 +4403,7 @@ void ScInterpreter::ScMatch()
 
 void ScInterpreter::ScCountEmptyCells()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScCountEmptyCells" );
     if ( MustHaveParamCount( GetByte(), 1 ) )
     {
         ULONG nMaxCount = 0, nCount = 0;
@@ -4367,6 +4456,7 @@ void ScInterpreter::ScCountEmptyCells()
 
 void ScInterpreter::ScCountIf()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScCountIf" );
     if ( MustHaveParamCount( GetByte(), 2 ) )
     {
         String rString;
@@ -4517,6 +4607,7 @@ void ScInterpreter::ScCountIf()
 
 void ScInterpreter::ScSumIf()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScSumIf" );
     BYTE nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 2, 3 ) )
     {
@@ -4756,6 +4847,7 @@ void ScInterpreter::ScSumIf()
 
 void ScInterpreter::ScLookup()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScLookup" );
     BYTE nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 2, 3 ) )
         return ;
@@ -4856,74 +4948,16 @@ void ScInterpreter::ScLookup()
 
     // Get the lookup value.
 
-    String sStr;
     ScQueryParam aParam;
     ScQueryEntry& rEntry = aParam.GetEntry(0);
-
-    switch ( GetStackType() )
-    {
-        case svDouble:
-        {
-            rEntry.bQueryByString = FALSE;
-            rEntry.nVal = GetDouble();
-        }
-        break;
-        case svString:
-        {
-            sStr = GetString();
-            rEntry.bQueryByString = TRUE;
-            *rEntry.pStr = sStr;
-        }
-        break;
-        case svDoubleRef :
-        case svSingleRef :
-        {
-            ScAddress aAdr;
-            if ( !PopDoubleRefOrSingleRef( aAdr ) )
-            {
-                PushInt(0);
-                return ;
-            }
-            ScBaseCell* pCell = GetCell( aAdr );
-            if (HasCellValueData(pCell))
-            {
-                rEntry.bQueryByString = FALSE;
-                rEntry.nVal = GetCellValue( aAdr, pCell );
-            } else
-            {
-                if ( GetCellType( pCell ) == CELLTYPE_NOTE )
-                {
-                    rEntry.bQueryByString = FALSE;
-                    rEntry.nVal = 0.0;
-                } else
-                {
-                    GetCellString(sStr, pCell);
-                    rEntry.bQueryByString = TRUE;
-                    *rEntry.pStr = sStr;
-                }
-            }
-        }
-        break;
-        case svMatrix :
-        {
-            ScMatValType nType = GetDoubleOrStringFromMatrix( rEntry.nVal,
-                                                              *rEntry.pStr);
-            rEntry.bQueryByString = ScMatrix::IsNonValueType(nType);
-        }
-        break;
-        default:
-        {
-            PushIllegalParameter();
-            return;
-        }
-    }
+    if ( !FillEntry(rEntry) )
+        return;
 
     // Now, perform the search to compute the delta position (nDelta).
 
     if (pDataMat)
     {
         // Data array is given as a matrix.
-
         rEntry.bDoQuery = true;
         rEntry.eOp = SC_LESS_EQUAL;
         bool bFound = false;
@@ -5182,6 +5216,12 @@ void ScInterpreter::ScLookup()
 
 void ScInterpreter::ScHLookup()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScHLookup" );
+    CalculateLookup(TRUE);
+}
+void ScInterpreter::CalculateLookup(BOOL HLookup)
+{
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::CalculateLookup" );
     BYTE nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 3, 4 ) )
     {
@@ -5224,109 +5264,65 @@ void ScInterpreter::ScHLookup()
             PushIllegalParameter();
             return;
         }
-        if ( fIndex < 0.0 || (pMat ? (fIndex >= nR) : (fIndex+nRow1 > nRow2)) )
+        if ( fIndex < 0.0 || (HLookup ? (pMat ? (fIndex >= nR) : (fIndex+nRow1 > nRow2)) : (pMat ? (fIndex >= nC) : (fIndex+nCol1 > nCol2)) ) )
         {
             PushIllegalArgument();
             return;
         }
         SCROW nZIndex = static_cast<SCROW>(fIndex);
+        SCCOL nSpIndex = static_cast<SCCOL>(fIndex);
+
         if (!pMat)
+        {
             nZIndex += nRow1;                       // Wertzeile
+            nSpIndex = sal::static_int_cast<SCCOL>( nSpIndex + nCol1 );     // value column
+        }
+
         if (nGlobalError == 0)
         {
-            String sStr;
             ScQueryParam rParam;
             rParam.nCol1       = nCol1;
             rParam.nRow1       = nRow1;
-            rParam.nCol2       = nCol2;
-            rParam.nRow2       = nRow1;     // nur in der ersten Zeile suchen
-            rParam.bByRow      = FALSE;
+            if ( HLookup )
+            {
+                rParam.nCol2       = nCol2;
+                rParam.nRow2       = nRow1;     // nur in der ersten Zeile suchen
+                rParam.bByRow      = FALSE;
+            } // if ( HLookup )
+            else
+            {
+                rParam.nCol2       = nCol1;     // nur in der ersten Spalte suchen
+                rParam.nRow2       = nRow2;
+                rParam.nTab        = nTab1;
+            }
             rParam.bMixedComparison = TRUE;
 
             ScQueryEntry& rEntry = rParam.GetEntry(0);
             rEntry.bDoQuery = TRUE;
             if ( bSorted )
                 rEntry.eOp = SC_LESS_EQUAL;
-            switch ( GetStackType() )
-            {
-                case svDouble:
-                {
-                    rEntry.bQueryByString = FALSE;
-                    rEntry.nVal = GetDouble();
-                }
-                break;
-                case svString:
-                {
-                    sStr = GetString();
-                    rEntry.bQueryByString = TRUE;
-                    *rEntry.pStr = sStr;
-                }
-                break;
-                case svDoubleRef :
-                case svSingleRef :
-                {
-                    ScAddress aAdr;
-                    if ( !PopDoubleRefOrSingleRef( aAdr ) )
-                    {
-                        PushInt(0);
-                        return ;
-                    }
-                    ScBaseCell* pCell = GetCell( aAdr );
-                    if (HasCellValueData(pCell))
-                    {
-                        rEntry.bQueryByString = FALSE;
-                        rEntry.nVal = GetCellValue( aAdr, pCell );
-                    }
-                    else
-                    {
-                        if ( GetCellType( pCell ) == CELLTYPE_NOTE )
-                        {
-                            rEntry.bQueryByString = FALSE;
-                            rEntry.nVal = 0.0;
-                        }
-                        else
-                        {
-                            GetCellString(sStr, pCell);
-                            rEntry.bQueryByString = TRUE;
-                            *rEntry.pStr = sStr;
-                        }
-                    }
-                }
-                break;
-                case svMatrix :
-                {
-                    ScMatValType nType = GetDoubleOrStringFromMatrix(
-                            rEntry.nVal, *rEntry.pStr);
-                    rEntry.bQueryByString = ScMatrix::IsNonValueType( nType);
-                }
-                break;
-                default:
-                {
-                    PushIllegalParameter();
-                    return;
-                }
-            }
+            if ( !FillEntry(rEntry) )
+                return;
             if ( rEntry.bQueryByString )
                 rParam.bRegExp = MayBeRegExp( *rEntry.pStr, pDok );
             if (pMat)
             {
-                SCSIZE nMatCount = nC;
+                SCSIZE nMatCount = HLookup ? nC : nR;
                 SCSIZE nDelta = SCSIZE_MAX;
                 if (rEntry.bQueryByString)
                 {
-//!!!!!!!
-//! TODO: enable regex on matrix strings
-//!!!!!!!
+        //!!!!!!!
+        //! TODO: enable regex on matrix strings
+        //!!!!!!!
                     String aParamStr = *rEntry.pStr;
                     if ( bSorted )
                     {
                         for (SCSIZE i = 0; i < nMatCount; i++)
                         {
-                            if (pMat->IsString(i, 0))
+                            if (HLookup ? pMat->IsString(i, 0) : pMat->IsString(0, i))
                             {
                                 sal_Int32 nRes =
-                                    ScGlobal::pCollator->compareString(
-                                            pMat->GetString(i,0), aParamStr);
+                                    ScGlobal::pCollator->compareString( HLookup ? pMat->GetString(i,0) : pMat->GetString(0,i), aParamStr);
                                 if (nRes <= 0)
                                     nDelta = i;
                                 else if (i>0)   // #i2168# ignore first mismatch
@@ -5340,10 +5336,10 @@ void ScInterpreter::ScHLookup()
                     {
                         for (SCSIZE i = 0; i < nMatCount; i++)
                         {
-                            if (pMat->IsString(i, 0))
+                            if (HLookup ? pMat->IsString(i, 0) : pMat->IsString(0, i))
                             {
                                 if ( ScGlobal::pTransliteration->isEqual(
-                                        pMat->GetString(i,0), aParamStr ) )
+                                    HLookup ? pMat->GetString(i,0) : pMat->GetString(0,i), aParamStr ) )
                                 {
                                     nDelta = i;
                                     i = nMatCount + 1;
@@ -5359,9 +5355,9 @@ void ScInterpreter::ScHLookup()
                         // #i2168# ignore strings
                         for (SCSIZE i = 0; i < nMatCount; i++)
                         {
-                            if (!pMat->IsString(i, 0))
+                            if (!(HLookup ? pMat->IsString(i, 0) : pMat->IsString(0, i)))
                             {
-                                if (pMat->GetDouble(i,0) <= rEntry.nVal)
+                                if ((HLookup ? pMat->GetDouble(i,0) : pMat->GetDouble(0,i)) <= rEntry.nVal)
                                     nDelta = i;
                                 else
                                     i = nMatCount+1;
@@ -5372,9 +5368,9 @@ void ScInterpreter::ScHLookup()
                     {
                         for (SCSIZE i = 0; i < nMatCount; i++)
                         {
-                            if (!pMat->IsString(i, 0))
+                            if (!(HLookup ? pMat->IsString(i, 0) : pMat->IsString(0, i)))
                             {
-                                if (pMat->GetDouble(i,0) == rEntry.nVal)
+                                if ((HLookup ? pMat->GetDouble(i,0) : pMat->GetDouble(0,i)) == rEntry.nVal)
                                 {
                                     nDelta = i;
                                     i = nMatCount + 1;
@@ -5385,12 +5381,17 @@ void ScInterpreter::ScHLookup()
                 }
                 if ( nDelta != SCSIZE_MAX )
                 {
-                    if (!pMat->IsString( nDelta, static_cast<SCSIZE>(nZIndex)))
-                        PushDouble(pMat->GetDouble( nDelta,
-                                    static_cast<SCSIZE>(nZIndex)));
+                    SCSIZE nX = static_cast<SCSIZE>(nSpIndex);
+                    SCSIZE nY = nDelta;
+                    if ( HLookup )
+                    {
+                        nX = nDelta;
+                        nY = static_cast<SCSIZE>(nZIndex);
+                    }
+                    if ( pMat->IsString( nX, nY) )
+                        PushString(pMat->GetString( nX,nY));
                     else
-                        PushString(pMat->GetString( nDelta,
-                                    static_cast<SCSIZE>(nZIndex)));
+                        PushDouble(pMat->GetDouble( nX,nY));
                 }
                 else
                     PushNA();
@@ -5400,24 +5401,36 @@ void ScInterpreter::ScHLookup()
                 rEntry.nField = nCol1;
                 BOOL bFound = FALSE;
                 SCCOL nCol = 0;
+                SCROW nRow = 0;
                 if ( bSorted )
                     rEntry.eOp = SC_LESS_EQUAL;
-                ScQueryCellIterator aCellIter(pDok, nTab1, rParam, FALSE);
-                // advance Entry.nField in Iterator upon switching columns
-                aCellIter.SetAdvanceQueryParamEntryField( TRUE );
-                if ( bSorted )
+                if ( HLookup )
                 {
-                    SCROW nRow;
-                    bFound = aCellIter.FindEqualOrSortedLastInRange( nCol, nRow );
-                }
-                else if ( aCellIter.GetFirst() )
+                    ScQueryCellIterator aCellIter(pDok, nTab1, rParam, FALSE);
+                    // advance Entry.nField in Iterator upon switching columns
+                    aCellIter.SetAdvanceQueryParamEntryField( TRUE );
+                    if ( bSorted )
+                    {
+                        SCROW nRow1_temp;
+                        bFound = aCellIter.FindEqualOrSortedLastInRange( nCol, nRow1_temp );
+                    }
+                    else if ( aCellIter.GetFirst() )
+                    {
+                        bFound = TRUE;
+                        nCol = aCellIter.GetCol();
+                    }
+                    nRow = nZIndex;
+                } // if ( HLookup )
+                else
                 {
-                    bFound = TRUE;
-                    nCol = aCellIter.GetCol();
+                    ScAddress aResultPos( nCol1, nRow1, nTab1);
+                    bFound = LookupQueryWithCache( aResultPos, rParam);
+                    nRow = aResultPos.Row();
+                    nCol = nSpIndex;
                 }
                 if ( bFound )
                 {
-                    ScAddress aAdr( nCol, nZIndex, nTab1 );
+                    ScAddress aAdr( nCol, nRow, nTab1 );
                     PushCellResultToken( true, aAdr, NULL, NULL);
                 }
                 else
@@ -5429,243 +5442,74 @@ void ScInterpreter::ScHLookup()
     }
 }
 
-
-void ScInterpreter::ScVLookup()
+bool ScInterpreter::FillEntry(ScQueryEntry& rEntry)
 {
-    BYTE nParamCount = GetByte();
-    if ( MustHaveParamCount( nParamCount, 3, 4 ) )
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::FillEntry" );
+    switch ( GetStackType() )
     {
-        BOOL bSorted;
-        if (nParamCount == 4)
-            bSorted = GetBool();
-        else
-            bSorted = TRUE;
-        double fIndex = ::rtl::math::approxFloor( GetDouble() ) - 1.0;
-        ScMatrixRef pMat = NULL;
-        SCSIZE nC = 0, nR = 0;
-        SCCOL nCol1 = 0;
-        SCROW nRow1 = 0;
-        SCTAB nTab1 = 0;
-        SCCOL nCol2 = 0;
-        SCROW nRow2 = 0;
-        SCTAB nTab2;
-        if (GetStackType() == svDoubleRef)
+        case svDouble:
         {
-            PopDoubleRef(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
-            if (nTab1 != nTab2)
-            {
-                PushIllegalParameter();
-                return;
-            }
+            rEntry.bQueryByString = FALSE;
+            rEntry.nVal = GetDouble();
         }
-        else if (GetStackType() == svMatrix)
+        break;
+        case svString:
         {
-            pMat = PopMatrix();
-            if (pMat)
-                pMat->GetDimensions(nC, nR);
+            const String sStr = GetString();
+            rEntry.bQueryByString = TRUE;
+            *rEntry.pStr = sStr;
+        }
+        break;
+        case svDoubleRef :
+        case svSingleRef :
+        {
+            ScAddress aAdr;
+            if ( !PopDoubleRefOrSingleRef( aAdr ) )
+            {
+                PushInt(0);
+                return false;
+            }
+            ScBaseCell* pCell = GetCell( aAdr );
+            if (HasCellValueData(pCell))
+            {
+                rEntry.bQueryByString = FALSE;
+                rEntry.nVal = GetCellValue( aAdr, pCell );
+            }
             else
             {
-                PushIllegalParameter();
-                return;
-            }
-        }
-        else
-        {
-            PushIllegalParameter();
-            return;
-        }
-        if ( fIndex < 0.0 || (pMat ? (fIndex >= nC) : (fIndex+nCol1 > nCol2)) )
-        {
-            PushIllegalArgument();
-            return;
-        }
-        SCCOL nSpIndex = static_cast<SCCOL>(fIndex);
-        if (!pMat)
-            nSpIndex = sal::static_int_cast<SCCOL>( nSpIndex + nCol1 );     // value column
-        if (nGlobalError)
-            PushError( nGlobalError);
-        else
-        {
-            String sStr;
-            ScQueryParam rParam;
-            rParam.nCol1       = nCol1;
-            rParam.nRow1       = nRow1;
-            rParam.nCol2       = nCol1;     // nur in der ersten Spalte suchen
-            rParam.nRow2       = nRow2;
-            rParam.nTab        = nTab1;
-            rParam.bMixedComparison = TRUE;
-
-            ScQueryEntry& rEntry = rParam.GetEntry(0);
-            rEntry.bDoQuery = TRUE;
-            if ( bSorted )
-                rEntry.eOp = SC_LESS_EQUAL;
-            switch ( GetStackType() )
-            {
-                case svDouble:
+                if ( GetCellType( pCell ) == CELLTYPE_NOTE )
                 {
                     rEntry.bQueryByString = FALSE;
-                    rEntry.nVal = GetDouble();
+                    rEntry.nVal = 0.0;
                 }
-                break;
-                case svString:
+                else
                 {
-                    sStr = GetString();
+                    String sStr;
+                    GetCellString(sStr, pCell);
                     rEntry.bQueryByString = TRUE;
                     *rEntry.pStr = sStr;
                 }
-                break;
-                case svDoubleRef :
-                case svSingleRef :
-                {
-                    ScAddress aAdr;
-                    if ( !PopDoubleRefOrSingleRef( aAdr ) )
-                    {
-                        PushInt(0);
-                        return ;
-                    }
-                    ScBaseCell* pCell = GetCell( aAdr );
-                    if (HasCellValueData(pCell))
-                    {
-                        rEntry.bQueryByString = FALSE;
-                        rEntry.nVal = GetCellValue( aAdr, pCell );
-                    }
-                    else
-                    {
-                        if ( GetCellType( pCell ) == CELLTYPE_NOTE )
-                        {
-                            rEntry.bQueryByString = FALSE;
-                            rEntry.nVal = 0.0;
-                        }
-                        else
-                        {
-                            GetCellString(sStr, pCell);
-                            rEntry.bQueryByString = TRUE;
-                            *rEntry.pStr = sStr;
-                        }
-                    }
-                }
-                break;
-                case svMatrix :
-                {
-                    ScMatValType nType = GetDoubleOrStringFromMatrix(
-                            rEntry.nVal, *rEntry.pStr);
-                    rEntry.bQueryByString = ScMatrix::IsNonValueType( nType);
-                }
-                break;
-                default:
-                {
-                    PushIllegalParameter();
-                    return;
-                }
-            }
-            if ( rEntry.bQueryByString )
-                rParam.bRegExp = MayBeRegExp( *rEntry.pStr, pDok );
-            if (pMat)
-            {
-//!!!!!!!
-//! TODO: enable caching on matrix?
-//!!!!!!!
-                SCSIZE nMatCount = nR;
-                SCSIZE nDelta = SCSIZE_MAX;
-                if (rEntry.bQueryByString)
-                {
-//!!!!!!!
-//! TODO: enable regex on matrix strings
-//!!!!!!!
-                    String aParamStr = *rEntry.pStr;
-                    if ( bSorted )
-                    {
-                        for (SCSIZE i = 0; i < nMatCount; i++)
-                        {
-                            if (pMat->IsString(0, i))
-                            {
-                                sal_Int32 nRes =
-                                    ScGlobal::pCollator->compareString(
-                                            pMat->GetString(0,i), aParamStr);
-                                if (nRes <= 0)
-                                    nDelta = i;
-                                else if (i>0)   // #i2168# ignore first mismatch
-                                    i = nMatCount+1;
-                            }
-                            else
-                                nDelta = i;
-                        }
-                    }
-                    else
-                    {
-                        for (SCSIZE i = 0; i < nMatCount; i++)
-                        {
-                            if (pMat->IsString(0, i))
-                            {
-                                if ( ScGlobal::pTransliteration->isEqual(
-                                        pMat->GetString(0,i), aParamStr ) )
-                                {
-                                    nDelta = i;
-                                    i = nMatCount + 1;
-                                }
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    if ( bSorted )
-                    {
-                        // #i2168# ignore strings
-                        for (SCSIZE i = 0; i < nMatCount; i++)
-                        {
-                            if (!pMat->IsString(0, i))
-                            {
-                                if (pMat->GetDouble(0,i) <= rEntry.nVal)
-                                    nDelta = i;
-                                else
-                                    i = nMatCount+1;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        for (SCSIZE i = 0; i < nMatCount; i++)
-                        {
-                            if (!pMat->IsString(0, i))
-                            {
-                                if (pMat->GetDouble(0,i) == rEntry.nVal)
-                                {
-                                    nDelta = i;
-                                    i = nMatCount + 1;
-                                }
-                            }
-                        }
-                    }
-                }
-                if ( nDelta != SCSIZE_MAX )
-                {
-                    if (!pMat->IsString( static_cast<SCSIZE>(nSpIndex), nDelta))
-                        PushDouble( pMat->GetDouble(
-                                    static_cast<SCSIZE>(nSpIndex), nDelta));
-                    else
-                        PushString( pMat->GetString(
-                                    static_cast<SCSIZE>(nSpIndex), nDelta));
-                }
-                else
-                    PushNA();
-            }
-            else
-            {
-                rEntry.nField = nCol1;
-                if ( bSorted )
-                    rEntry.eOp = SC_LESS_EQUAL;
-                ScAddress aResultPos( nCol1, nRow1, nTab1);
-                if (LookupQueryWithCache( aResultPos, rParam))
-                {
-                    ScAddress aAdr( nSpIndex, aResultPos.Row(), nTab1 );
-                    PushCellResultToken( true, aAdr, NULL, NULL);
-                }
-                else
-                    PushNA();
             }
         }
-    }
+        break;
+        case svMatrix :
+        {
+            const ScMatValType nType = GetDoubleOrStringFromMatrix(rEntry.nVal, *rEntry.pStr);
+            rEntry.bQueryByString = ScMatrix::IsNonValueType( nType);
+        }
+        break;
+        default:
+        {
+            PushIllegalParameter();
+            return false;
+        }
+    } // switch ( GetStackType() )
+    return true;
+}
+void ScInterpreter::ScVLookup()
+{
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScVLookup" );
+    CalculateLookup(FALSE);
 }
 
 #if defined(WIN) && defined(MSC)
@@ -5674,11 +5518,12 @@ void ScInterpreter::ScVLookup()
 
 void ScInterpreter::ScSubTotal()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScSubTotal" );
     BYTE nParamCount = GetByte();
     if ( MustHaveParamCountMin( nParamCount, 2 ) )
     {
         // We must fish the 1st parameter deep from the stack! And push it on top.
-        const ScToken* p = pStack[ sp - nParamCount ];
+        const FormulaToken* p = pStack[ sp - nParamCount ];
         PushTempToken( *p );
         int nFunc = (int) ::rtl::math::approxFloor( GetDouble() );
         if( nFunc < 1 || nFunc > 11 )
@@ -5718,6 +5563,7 @@ void ScInterpreter::ScSubTotal()
 BOOL ScInterpreter::GetDBParams(SCTAB& rTab, ScQueryParam& rParam,
         BOOL& rMissingField )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::GetDBParams" );
     BOOL bRet = FALSE;
     BOOL bAllowMissingField = FALSE;
     if ( rMissingField )
@@ -5886,6 +5732,7 @@ BOOL ScInterpreter::GetDBParams(SCTAB& rTab, ScQueryParam& rParam,
 
 void ScInterpreter::DBIterator( ScIterFunc eFunc )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::DBIterator" );
     SCTAB nTab1;
     double nErg = 0.0;
     double fMem = 0.0;
@@ -5948,12 +5795,14 @@ void ScInterpreter::DBIterator( ScIterFunc eFunc )
 
 void ScInterpreter::ScDBSum()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScDBSum" );
     DBIterator( ifSUM );
 }
 
 
 void ScInterpreter::ScDBCount()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScDBCount" );
     SCTAB nTab;
     ScQueryParam aQueryParam;
     BOOL bMissingField = TRUE;
@@ -6002,6 +5851,7 @@ void ScInterpreter::ScDBCount()
 
 void ScInterpreter::ScDBCount2()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScDBCount2" );
     SCTAB nTab;
     ScQueryParam aQueryParam;
     BOOL bMissingField = TRUE;
@@ -6025,30 +5875,35 @@ void ScInterpreter::ScDBCount2()
 
 void ScInterpreter::ScDBAverage()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScDBAverage" );
     DBIterator( ifAVERAGE );
 }
 
 
 void ScInterpreter::ScDBMax()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScDBMax" );
     DBIterator( ifMAX );
 }
 
 
 void ScInterpreter::ScDBMin()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScDBMin" );
     DBIterator( ifMIN );
 }
 
 
 void ScInterpreter::ScDBProduct()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScDBProduct" );
     DBIterator( ifPRODUCT );
 }
 
 
 void ScInterpreter::GetDBStVarParams( double& rVal, double& rValCount )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::GetDBStVarParams" );
     std::vector<double> values;
     double vSum    = 0.0;
     double vMean    = 0.0;
@@ -6089,6 +5944,7 @@ void ScInterpreter::GetDBStVarParams( double& rVal, double& rValCount )
 
 void ScInterpreter::ScDBStdDev()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScDBStdDev" );
     double fVal, fCount;
     GetDBStVarParams( fVal, fCount );
     PushDouble( sqrt(fVal/(fCount-1)));
@@ -6097,6 +5953,7 @@ void ScInterpreter::ScDBStdDev()
 
 void ScInterpreter::ScDBStdDevP()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScDBStdDevP" );
     double fVal, fCount;
     GetDBStVarParams( fVal, fCount );
     PushDouble( sqrt(fVal/fCount));
@@ -6105,6 +5962,7 @@ void ScInterpreter::ScDBStdDevP()
 
 void ScInterpreter::ScDBVar()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScDBVar" );
     double fVal, fCount;
     GetDBStVarParams( fVal, fCount );
     PushDouble(fVal/(fCount-1));
@@ -6113,6 +5971,7 @@ void ScInterpreter::ScDBVar()
 
 void ScInterpreter::ScDBVarP()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScDBVarP" );
     double fVal, fCount;
     GetDBStVarParams( fVal, fCount );
     PushDouble(fVal/fCount);
@@ -6121,19 +5980,19 @@ void ScInterpreter::ScDBVarP()
 
 void ScInterpreter::ScIndirect()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScIndirect" );
     BYTE nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 1, 2 )  )
     {
         bool bTryXlA1 = true;   // whether to try XL_A1 style as well.
-        ScAddress::Convention eConv = ScAddress::CONV_OOO;
+        FormulaGrammar::AddressConvention eConv = FormulaGrammar::CONV_OOO;
         if (nParamCount == 2 && 0.0 == ::rtl::math::approxFloor( GetDouble()))
         {
-            eConv = ScAddress::CONV_XL_R1C1;
+            eConv = FormulaGrammar::CONV_XL_R1C1;
             bTryXlA1 = false;
         }
-
         const ScAddress::Details aDetails( eConv, aPos );
-        const ScAddress::Details aDetailsXlA1( ScAddress::CONV_XL_A1, aPos );
+        const ScAddress::Details aDetailsXlA1( FormulaGrammar::CONV_XL_A1, aPos );
         SCTAB nTab = aPos.Tab();
         String sRefStr( GetString() );
         ScRefAddress aRefAd, aRefAd2;
@@ -6199,6 +6058,7 @@ void ScInterpreter::ScIndirect()
 
 void ScInterpreter::ScAddressFunc()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScAddressFunc" );
     String  sTabStr;
 
     BYTE    nParamCount = GetByte();
@@ -6208,9 +6068,9 @@ void ScInterpreter::ScAddressFunc()
     if( nParamCount >= 5 )
         sTabStr = GetString();
 
-    ScAddress::Convention eConv = ScAddress::CONV_OOO;      // default
+    FormulaGrammar::AddressConvention eConv = FormulaGrammar::CONV_OOO;      // default
     if( nParamCount >= 4 && 0.0 == ::rtl::math::approxFloor( GetDoubleWithDefault( 1.0)))
-        eConv = ScAddress::CONV_XL_R1C1;
+        eConv = FormulaGrammar::CONV_XL_R1C1;
 
     USHORT  nFlags = SCA_COL_ABSOLUTE | SCA_ROW_ABSOLUTE;   // default
     if( nParamCount >= 3 )
@@ -6236,7 +6096,7 @@ void ScInterpreter::ScAddressFunc()
 
     SCCOL nCol = (SCCOL) ::rtl::math::approxFloor(GetDouble());
     SCROW nRow = (SCROW) ::rtl::math::approxFloor(GetDouble());
-    if( eConv == ScAddress::CONV_XL_R1C1 )
+    if( eConv == FormulaGrammar::CONV_XL_R1C1 )
     {
         // YUCK!  The XL interface actually treats rel R1C1 refs differently
         // than A1
@@ -6262,7 +6122,7 @@ void ScInterpreter::ScAddressFunc()
     if( nParamCount >= 5 )
     {
         ScCompiler::CheckTabQuotes( sTabStr, eConv);
-        sTabStr += static_cast<sal_Unicode>(eConv == ScAddress::CONV_XL_R1C1 ? '!' : '.');
+        sTabStr += static_cast<sal_Unicode>(eConv == FormulaGrammar::CONV_XL_R1C1 ? '!' : '.');
         sTabStr += aRefStr;
         PushString( sTabStr );
     }
@@ -6273,6 +6133,7 @@ void ScInterpreter::ScAddressFunc()
 
 void ScInterpreter::ScOffset()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScOffset" );
     BYTE nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 3, 5 ) )
     {
@@ -6348,6 +6209,7 @@ void ScInterpreter::ScOffset()
 
 void ScInterpreter::ScIndex()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScIndex" );
     BYTE nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 1, 4 ) )
     {
@@ -6368,7 +6230,7 @@ void ScInterpreter::ScIndex()
         else
             nRow = 0;
         if (GetStackType() == svRefList)
-            nAreaCount = (sp ? pStack[sp-1]->GetRefList()->size() : 0);
+            nAreaCount = (sp ? static_cast<ScToken*>(pStack[sp-1])->GetRefList()->size() : 0);
         else
             nAreaCount = 1;     // one reference or array or whatever
         if (nAreaCount == 0 || (size_t)nArea > nAreaCount)
@@ -6488,14 +6350,14 @@ void ScInterpreter::ScIndex()
                     BOOL bRowArray = FALSE;
                     if (GetStackType() == svRefList)
                     {
-                        ScTokenRef xRef = PopToken();
+                        FormulaTokenRef xRef = PopToken();
                         if (nGlobalError || !xRef)
                         {
                             PushIllegalParameter();
                             return;
                         }
                         ScRange aRange( ScAddress::UNINITIALIZED);
-                        DoubleRefToRange( (*(xRef->GetRefList()))[nArea-1], aRange);
+                        DoubleRefToRange( (*(static_cast<ScToken*>(xRef.get())->GetRefList()))[nArea-1], aRange);
                         aRange.GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
                         if ( nParamCount == 2 && nRow1 == nRow2 )
                             bRowArray = TRUE;
@@ -6553,6 +6415,7 @@ void ScInterpreter::ScIndex()
 
 void ScInterpreter::ScMultiArea()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScMultiArea" );
     // Legacy support, convert to RefList
     BYTE nParamCount = GetByte();
     if (MustHaveParamCountMin( nParamCount, 1))
@@ -6567,6 +6430,7 @@ void ScInterpreter::ScMultiArea()
 
 void ScInterpreter::ScAreas()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScAreas" );
     BYTE nParamCount = GetByte();
     if (MustHaveParamCount( nParamCount, 1))
     {
@@ -6575,23 +6439,23 @@ void ScInterpreter::ScAreas()
         {
             case svSingleRef:
                 {
-                    ScTokenRef xT = PopToken();
-                    ValidateRef( xT->GetSingleRef());
+                    FormulaTokenRef xT = PopToken();
+                    ValidateRef( static_cast<ScToken*>(xT.get())->GetSingleRef());
                     ++nCount;
                 }
                 break;
             case svDoubleRef:
                 {
-                    ScTokenRef xT = PopToken();
-                    ValidateRef( xT->GetDoubleRef());
+                    FormulaTokenRef xT = PopToken();
+                    ValidateRef( static_cast<ScToken*>(xT.get())->GetDoubleRef());
                     ++nCount;
                 }
                 break;
             case svRefList:
                 {
-                    ScTokenRef xT = PopToken();
-                    ValidateRef( *(xT->GetRefList()));
-                    nCount += xT->GetRefList()->size();
+                    FormulaTokenRef xT = PopToken();
+                    ValidateRef( *(static_cast<ScToken*>(xT.get())->GetRefList()));
+                    nCount += static_cast<ScToken*>(xT.get())->GetRefList()->size();
                 }
                 break;
             default:
@@ -6604,6 +6468,7 @@ void ScInterpreter::ScAreas()
 
 void ScInterpreter::ScCurrency()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScCurrency" );
     BYTE nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 1, 2 ) )
     {
@@ -6664,6 +6529,7 @@ void ScInterpreter::ScCurrency()
 
 void ScInterpreter::ScReplace()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScReplace" );
     if ( MustHaveParamCount( GetByte(), 4 ) )
     {
         String aNewStr( GetString() );
@@ -6685,6 +6551,7 @@ void ScInterpreter::ScReplace()
 
 void ScInterpreter::ScFixed()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScFixed" );
     BYTE nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 1, 3 ) )
     {
@@ -6744,6 +6611,7 @@ void ScInterpreter::ScFixed()
 
 void ScInterpreter::ScFind()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScFind" );
     BYTE nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 2, 3 ) )
     {
@@ -6769,6 +6637,7 @@ void ScInterpreter::ScFind()
 
 void ScInterpreter::ScExact()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScExact" );
     nFuncFmtType = NUMBERFORMAT_LOGICAL;
     if ( MustHaveParamCount( GetByte(), 2 ) )
     {
@@ -6781,6 +6650,7 @@ void ScInterpreter::ScExact()
 
 void ScInterpreter::ScLeft()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScLeft" );
     BYTE nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 1, 2 ) )
     {
@@ -6807,6 +6677,7 @@ void ScInterpreter::ScLeft()
 
 void ScInterpreter::ScRight()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScRight" );
     BYTE nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 1, 2 ) )
     {
@@ -6834,6 +6705,7 @@ void ScInterpreter::ScRight()
 
 void ScInterpreter::ScSearch()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScSearch" );
     double fAnz;
     BYTE nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 2, 3 ) )
@@ -6874,6 +6746,7 @@ void ScInterpreter::ScSearch()
 
 void ScInterpreter::ScMid()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScMid" );
     if ( MustHaveParamCount( GetByte(), 3 ) )
     {
         double fAnz    = ::rtl::math::approxFloor(GetDouble());
@@ -6889,6 +6762,7 @@ void ScInterpreter::ScMid()
 
 void ScInterpreter::ScText()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScText" );
     if ( MustHaveParamCount( GetByte(), 2 ) )
     {
         String sFormatString = GetString();
@@ -6914,6 +6788,7 @@ void ScInterpreter::ScText()
 
 void ScInterpreter::ScSubstitute()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScSubstitute" );
     BYTE nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 3, 4 ) )
     {
@@ -6968,6 +6843,7 @@ void ScInterpreter::ScSubstitute()
 
 void ScInterpreter::ScRept()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScRept" );
     if ( MustHaveParamCount( GetByte(), 2 ) )
     {
         double fAnz = ::rtl::math::approxFloor(GetDouble());
@@ -7000,6 +6876,7 @@ void ScInterpreter::ScRept()
 
 void ScInterpreter::ScConcat()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScConcat" );
     BYTE nParamCount = GetByte();
     String aRes;
     while( nParamCount-- > 0)
@@ -7013,6 +6890,7 @@ void ScInterpreter::ScConcat()
 
 void ScInterpreter::ScErrorType()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScErrorType" );
     USHORT nErr;
     USHORT nOldError = nGlobalError;
     nGlobalError = 0;
@@ -7020,12 +6898,12 @@ void ScInterpreter::ScErrorType()
     {
         case svRefList :
         {
-            ScTokenRef x = PopToken();
+            FormulaTokenRef x = PopToken();
             if (nGlobalError)
                 nErr = nGlobalError;
             else
             {
-                const ScRefList* pRefList = x->GetRefList();
+                const ScRefList* pRefList = static_cast<ScToken*>(x.get())->GetRefList();
                 size_t n = pRefList->size();
                 if (!n)
                     nErr = errNoRef;
@@ -7094,6 +6972,7 @@ void ScInterpreter::ScErrorType()
 
 BOOL ScInterpreter::MayBeRegExp( const String& rStr, const ScDocument* pDoc  )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::MayBeRegExp" );
     if ( pDoc && !pDoc->GetDocOptions().IsFormulaRegexEnabled() )
         return FALSE;
     if ( !rStr.Len() || (rStr.Len() == 1 && rStr.GetChar(0) != '.') )
@@ -7163,6 +7042,7 @@ static struct LookupCacheDebugCounter
 bool ScInterpreter::LookupQueryWithCache( ScAddress & o_rResultPos,
         const ScQueryParam & rParam ) const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::LookupQueryWithCache" );
     bool bFound = false;
     const ScQueryEntry& rEntry = rParam.GetEntry(0);
     bool bColumnsMatch = (rParam.nCol1 == rEntry.nField);

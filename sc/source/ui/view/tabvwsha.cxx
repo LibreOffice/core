@@ -544,7 +544,8 @@ bool ScTabViewShell::IsRefInputMode() const
                         if ( pDoc )
                         {
                             const ScAddress aPos( pViewData->GetCurPos() );
-                            ScCompiler aComp( pDoc, aPos, pDoc->GetGrammar() );
+                            ScCompiler aComp( pDoc, aPos );
+                            aComp.SetGrammar(pDoc->GetGrammar());
                             aComp.SetCloseBrackets( false );
                             ScTokenArray* pArr = aComp.CompileString( aString );
                             if ( pArr && pArr->MayReferenceFollow() )

@@ -52,7 +52,7 @@
 #include "validate.hrc"
 #include "validate.hxx"
 #include "compiler.hxx"
-#include "opcode.hxx" //CHINA001
+#include "formula/opcode.hxx" //CHINA001
 
 // ============================================================================
 

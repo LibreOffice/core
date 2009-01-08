@@ -31,19 +31,19 @@
 #ifndef SC_JUMPMATRIX_HXX
 #define SC_JUMPMATRIX_HXX
 
-#include "token.hxx"
-#include "scmatrix.hxx"
-#include "errorcodes.hxx"
+#include "formula/token.hxx"
+#include "formula/errorcodes.hxx"
 #include <tools/solar.h>
 #include <vector>
+#include "scmatrix.hxx"
 
-typedef ::std::vector< ScToken*> ScTokenVec;
+typedef ::std::vector< formula::FormulaToken*> ScTokenVec;
 
 struct ScJumpMatrixEntry
 {
     double  fBool;      // 0:= false  1:= true   also if no-path
                         // other values may contain error conditions like NAN and INF
-    short   nStart;     // start of path (actually start-1, see ScTokenIterator)
+    short   nStart;     // start of path (actually start-1, see formula::FormulaTokenIterator)
     short   nNext;      // next after path
                         // jump path exists if nStart != nNext, else no path
     short   nStop;      // optional stop of path (nPC < nStop)

@@ -38,12 +38,35 @@
 
 #include <tools/list.hxx>
 #include <tools/string.hxx>
+#include <formula/IFunctionDescription.hxx>
 
 #define MAX_FUNCCAT 12  /* maximum number of categories for functions */
 
-class ScFuncDesc
+class ScFuncDesc : public formula::IFunctionDescription
 {
 public:
+
+    virtual ::rtl::OUString getFunctionName() const ;
+    virtual const formula::IFunctionCategory* getCategory() const ;
+    virtual ::rtl::OUString getDescription() const ;
+    // GetSuppressedArgCount
+    virtual xub_StrLen getSuppressedArgumentCount() const ;
+    /** Returns the function signature with parameters from the passed string array. */
+    virtual ::rtl::OUString getFormula(const ::std::vector< ::rtl::OUString >& _aArguments) const ;
+    // GetVisibleArgMapping
+    /** Returns mapping from visible arguments to real arguments, e.g. if of 4
+        parameters the second one is suppressed {0,2,3}. For VAR_ARGS
+        parameters only one element is added to the end of the sequence. */
+    virtual void fillVisibleArgumentMapping(::std::vector<USHORT>& _rArguments) const ;
+    virtual void initArgumentInfo()  const;
+    virtual ::rtl::OUString getSignature() const ;
+    virtual long getHelpId() const ;
+
+    // parameter
+    virtual sal_uInt32 getParameterCount() const ;
+    virtual ::rtl::OUString getParameterName(sal_uInt32 _nPos) const ;
+    virtual ::rtl::OUString getParameterDescription(sal_uInt32 _nPos) const ;
+    virtual bool isParameterOptional(sal_uInt32 _nPos) const ;
 
     struct ParameterFlags
     {
@@ -53,29 +76,24 @@ public:
         ParameterFlags() : bOptional(false), bSuppress(false) {}
     };
 
-                ScFuncDesc();
-                ~ScFuncDesc();
+
+    ScFuncDesc();
+    virtual ~ScFuncDesc();
 
     void        Clear();
-    void        InitArgumentInfo() const;
 
     /** Returns a semicolon separated list of all parameter names. */
     String  GetParamList        () const;
     /** Returns the full function signature: "FUNCTIONNAME( parameter list )". */
     String  GetSignature        () const;
-    /** Returns the function signature with parameters from the passed string array. */
-    String  GetFormulaString    ( String** aArgArr ) const;
+
+
 
     /** Returns the number of non-suppressed arguments. In case there are
         variable arguments the number of fixed non-suppressed arguments plus
         VAR_ARGS, same as for nArgCount (variable arguments can't be
         suppressed). */
     USHORT  GetSuppressedArgCount() const;
-
-    /** Returns mapping from visible arguments to real arguments, e.g. if of 4
-        parameters the second one is suppressed {0,2,3}. For VAR_ARGS
-        parameters only one element is added to the end of the sequence. */
-    ::std::vector<USHORT> GetVisibleArgMapping() const;
 
     String          *pFuncName;              // Function name
     String          *pFuncDesc;              // Description of function
@@ -119,54 +137,47 @@ private:
 };
 
 //============================================================================
-
-class ScFunctionMgr
+class ScFunctionCategory : public formula::IFunctionCategory
+{
+    ScFunctionMgr* m_pMgr;
+    List* m_pCategory;
+    mutable ::rtl::OUString m_sName;
+    sal_uInt32 m_nCategory;
+public:
+    ScFunctionCategory(ScFunctionMgr* _pMgr,List* _pCategory,sal_uInt32 _nCategory) : m_pMgr(_pMgr),m_pCategory(_pCategory),m_nCategory(_nCategory){}
+    virtual ~ScFunctionCategory(){}
+    virtual sal_uInt32                          getCount() const;
+    virtual const formula::IFunctionManager*        getFunctionManager() const;
+    virtual const formula::IFunctionDescription*    getFunction(sal_uInt32 _nPos) const;
+    virtual sal_uInt32                          getNumber() const;
+    virtual ::rtl::OUString                     getName() const;
+};
+//============================================================================
+#define SC_FUNCGROUP_COUNT  ID_FUNCTION_GRP_ADDINS
+class ScFunctionMgr : public formula::IFunctionManager
 {
 public:
-                ScFunctionMgr();
-                ~ScFunctionMgr();
+            ScFunctionMgr();
+    virtual ~ScFunctionMgr();
 
-    const ScFuncDesc*   Get( const String& rFName );
-    const ScFuncDesc*   Get( USHORT nFIndex );
-    const ScFuncDesc*   First( USHORT nCategory = 0 );
+    static String       GetCategoryName(sal_uInt32 _nCategoryNumber );
+
+    const ScFuncDesc*   Get( const String& rFName ) const;
+    const ScFuncDesc*   Get( USHORT nFIndex ) const;
+    const ScFuncDesc*   First( USHORT nCategory = 0 ) const;
     const ScFuncDesc*   Next() const;
 
+    // formula::IFunctionManager
+    virtual sal_uInt32                              getCount() const;
+    virtual const formula::IFunctionCategory*       getCategory(sal_uInt32 nPos) const;
+    virtual void                                    fillLastRecentlyUsedFunctions(::std::vector< const formula::IFunctionDescription*>& _rLastRUFunctions) const;
+    virtual const formula::IFunctionDescription*    getFunctionByName(const ::rtl::OUString& _sFunctionName) const;
+    virtual const sal_Unicode                       getSingleToken(const formula::IFunctionManager::EToken _eToken) const;
 private:
     ScFunctionList* pFuncList;
     List*           aCatLists[MAX_FUNCCAT];
-    List*           pCurCatList;
-};
-
-//==================================================================
-
-class ScFormulaUtil
-{
-public:
-    static BOOL                 GetNextFunc( const String&  rFormula,
-                                             BOOL           bBack,
-                                             xub_StrLen&    rFStart, // Ein- und Ausgabe
-                                             xub_StrLen*    pFEnd = NULL,
-                                             const ScFuncDesc** ppFDesc = NULL,
-                                             String***      pppArgs = NULL );
-
-    static xub_StrLen           GetFunctionStart( const String& rFormula, xub_StrLen nStart,
-                                                    BOOL bBack, String* pFuncName = NULL );
-
-    static xub_StrLen           GetFunctionEnd  ( const String& rFormula, xub_StrLen nStart );
-
-    static xub_StrLen           GetArgStart     ( const String& rFormula, xub_StrLen nStart,
-                                                  USHORT nArg );
-
-    static String**             GetArgStrings   ( const String& rFormula,
-                                                  xub_StrLen    nFuncPos,
-                                                  USHORT        nArgs );
-
-    static void                 FillArgStrings  ( const String& rFormula,
-                                                  xub_StrLen    nFuncPos,
-                                                  USHORT        nArgs,
-                                                  String**      pArgs );
+    mutable List*   pCurCatList;
 };
 
 //============================================================================
-
 #endif // SC_FUNCDESC_HXX

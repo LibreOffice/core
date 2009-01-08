@@ -2027,7 +2027,7 @@ void ScChangeActionContent::SetValueString( String& rValue, ScBaseCell*& pCell,
     {
         rValue.Erase();
         pCell = new ScFormulaCell(
-            pDoc, aBigRange.aStart.MakeAddress(), rStr, ScGrammar::GRAM_DEFAULT, ScAddress::CONV_OOO );
+            pDoc, aBigRange.aStart.MakeAddress(), rStr, formula::FormulaGrammar::GRAM_DEFAULT, formula::FormulaGrammar::CONV_OOO );
         ((ScFormulaCell*)pCell)->SetInChangeTrack( TRUE );
     }
     else
@@ -2517,7 +2517,7 @@ void lcl_InvalidateReference( ScToken& rTok, const ScBigAddress& rPos )
         rRef1.nRelTab = SCTAB_MAX;
         rRef1.SetTabDeleted( TRUE );
     }
-    if ( rTok.GetType() == svDoubleRef )
+    if ( rTok.GetType() == formula::svDoubleRef )
     {
         ScSingleRefData& rRef2 = rTok.GetDoubleRef().Ref2;
         if ( rPos.Col() < 0 || MAXCOL < rPos.Col() )
@@ -2639,10 +2639,10 @@ void ScChangeActionContent::UpdateReference( const ScChangeTrack* pTrack,
                 ScToken* t;
                 ScTokenArray* pArr = ((ScFormulaCell*)pOldCell)->GetCode();
                 pArr->Reset();
-                while ( ( t = pArr->GetNextReference() ) != NULL )
+                while ( ( t = static_cast<ScToken*>(pArr->GetNextReference()) ) != NULL )
                     lcl_InvalidateReference( *t, rPos );
                 pArr->Reset();
-                while ( ( t = pArr->GetNextReferenceRPN() ) != NULL )
+                while ( ( t = static_cast<ScToken*>(pArr->GetNextReferenceRPN()) ) != NULL )
                     lcl_InvalidateReference( *t, rPos );
             }
             if ( bNewFormula )
@@ -2650,10 +2650,10 @@ void ScChangeActionContent::UpdateReference( const ScChangeTrack* pTrack,
                 ScToken* t;
                 ScTokenArray* pArr = ((ScFormulaCell*)pNewCell)->GetCode();
                 pArr->Reset();
-                while ( ( t = pArr->GetNextReference() ) != NULL )
+                while ( ( t = static_cast<ScToken*>(pArr->GetNextReference()) ) != NULL )
                     lcl_InvalidateReference( *t, rPos );
                 pArr->Reset();
-                while ( ( t = pArr->GetNextReferenceRPN() ) != NULL )
+                while ( ( t = static_cast<ScToken*>(pArr->GetNextReferenceRPN()) ) != NULL )
                     lcl_InvalidateReference( *t, rPos );
             }
         }

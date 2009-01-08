@@ -168,10 +168,10 @@ XclExpArrayRef XclExpArrayBuffer::FindArray( const ScTokenArray& rScTokArr ) con
     // try to extract a matrix reference token
     if( rScTokArr.GetLen() == 1 )
     {
-        const ScToken* pToken = rScTokArr.GetArray()[ 0 ];
+        const formula::FormulaToken* pToken = rScTokArr.GetArray()[ 0 ];
         if( pToken && (pToken->GetOpCode() == ocMatRef) )
         {
-            const ScSingleRefData& rRef = pToken->GetSingleRef();
+            const ScSingleRefData& rRef = static_cast<const ScToken*>(pToken)->GetSingleRef();
             ScAddress aBasePos( rRef.nCol, rRef.nRow, GetCurrScTab() );
             XclExpArrayMap::const_iterator aIt = maRecMap.find( aBasePos );
             if( aIt != maRecMap.end() )
@@ -2552,7 +2552,7 @@ void XclExpCellTable::Finalize()
     mxDefrowheight->SetDefaultData( aDefRowData );
 }
 
-XclExpRecordRef XclExpCellTable::CreateRecord( sal_uInt16 nRecId )
+XclExpRecordRef XclExpCellTable::CreateRecord( sal_uInt16 nRecId ) const
 {
     XclExpRecordRef xRec;
     switch( nRecId )

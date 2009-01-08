@@ -66,8 +66,8 @@ class TypedScStrCollection;
     CheckBox        aBtnUnique; \
     CheckBox        aBtnCopyResult; \
     ListBox         aLbCopyArea; \
-    ScRefEdit       aEdCopyArea; \
-    ScRefButton     aRbCopyArea; \
+    formula::RefEdit        aEdCopyArea; \
+    formula::RefButton      aRbCopyArea; \
     CheckBox        aBtnDestPers; \
     FixedText       aFtDbAreaLabel; \
     FixedInfo       aFtDbArea; \
@@ -89,7 +89,7 @@ class TypedScStrCollection;
     aBtnCopyResult  ( this, ScResId( BTN_COPY_RESULT ) ), \
     aLbCopyArea     ( this, ScResId( LB_COPY_AREA ) ), \
     aEdCopyArea     ( this, ScResId( ED_COPY_AREA ) ), \
-    aRbCopyArea     ( this, ScResId( RB_COPY_AREA ), &aEdCopyArea ), \
+    aRbCopyArea     ( this, ScResId( RB_COPY_AREA ), &aEdCopyArea, this ), \
     aBtnDestPers    ( this, ScResId( BTN_DEST_PERS ) ), \
     aFtDbAreaLabel  ( this, ScResId( FT_DBAREA_LABEL ) ), \
     aFtDbArea       ( this, ScResId( FT_DBAREA ) ), \
@@ -209,8 +209,8 @@ public:
 private:
     ListBox     aLbFilterArea;
     FixedText   aFtFilterArea;
-    ScRefEdit   aEdFilterArea;
-    ScRefButton aRbFilterArea;
+    formula::RefEdit    aEdFilterArea;
+    formula::RefButton  aRbFilterArea;
 
     _COMMON_FILTER_RSCOBJS
 
@@ -222,7 +222,7 @@ private:
     ScViewData*         pViewData;
     ScDocument*         pDoc;
 
-    ScRefEdit*          pRefInputEdit;
+    formula::RefEdit*           pRefInputEdit;
     BOOL                bRefInputMode;
 
     // Hack: RefInput-Kontrolle
@@ -236,7 +236,7 @@ private:
 
     // Handler
     DECL_LINK( FilterAreaSelHdl, ListBox* );
-    DECL_LINK( FilterAreaModHdl, ScRefEdit* );
+    DECL_LINK( FilterAreaModHdl, formula::RefEdit* );
     DECL_LINK( EndDlgHdl,        Button* );
 
     // Hack: RefInput-Kontrolle

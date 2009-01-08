@@ -957,7 +957,7 @@ ScTokenArray* lcl_ScDocFunc_CreateTokenArrayXML( const String& rText )
 
 
 ScBaseCell* ScDocFunc::InterpretEnglishString( const ScAddress& rPos,
-        const String& rText, const ScGrammar::Grammar eGrammar )
+        const String& rText, const formula::FormulaGrammar::Grammar eGrammar )
 {
     ScDocument* pDoc = rDocShell.GetDocument();
     ScBaseCell* pNewCell = NULL;
@@ -972,7 +972,8 @@ ScBaseCell* ScDocFunc::InterpretEnglishString( const ScAddress& rPos,
         }
         else
         {
-            ScCompiler aComp( pDoc, rPos, eGrammar );
+            ScCompiler aComp( pDoc, rPos );
+            aComp.SetGrammar(eGrammar);
             pCode = aComp.CompileString( rText );
         }
         pNewCell = new ScFormulaCell( pDoc, rPos, pCode, eGrammar, MM_NONE );
@@ -1004,7 +1005,7 @@ ScBaseCell* ScDocFunc::InterpretEnglishString( const ScAddress& rPos,
 
 BOOL ScDocFunc::SetCellText( const ScAddress& rPos, const String& rText,
                                 BOOL bInterpret, BOOL bEnglish, BOOL bApi,
-                                const ScGrammar::Grammar eGrammar )
+                                const formula::FormulaGrammar::Grammar eGrammar )
 {
     //  SetCellText ruft PutCell oder SetNormalString
 
@@ -2411,7 +2412,7 @@ BOOL ScDocFunc::SetLayoutRTL( SCTAB nTab, BOOL bRTL, BOOL /* bApi */ )
     return TRUE;
 }
 
-BOOL ScDocFunc::SetGrammar( ScGrammar::Grammar eGrammar )
+BOOL ScDocFunc::SetGrammar( formula::FormulaGrammar::Grammar eGrammar )
 {
     ScDocument* pDoc = rDocShell.GetDocument();
 
@@ -3115,7 +3116,7 @@ BOOL ScDocFunc::AutoFormat( const ScRange& rRange, const ScMarkData* pTabMark,
 BOOL ScDocFunc::EnterMatrix( const ScRange& rRange, const ScMarkData* pTabMark,
                                 const ScTokenArray* pTokenArray,
                                 const String& rString, BOOL bApi, BOOL bEnglish,
-                                const ScGrammar::Grammar eGrammar )
+                                const formula::FormulaGrammar::Grammar eGrammar )
 {
     ScDocShellModificator aModificator( rDocShell );
 
@@ -3170,7 +3171,8 @@ BOOL ScDocFunc::EnterMatrix( const ScRange& rRange, const ScMarkData* pTabMark,
         }
         else if (bEnglish)
         {
-            ScCompiler aComp( pDoc, rRange.aStart, eGrammar);
+            ScCompiler aComp( pDoc, rRange.aStart);
+            aComp.SetGrammar(eGrammar);
             ScTokenArray* pCode = aComp.CompileString( rString );
             pDoc->InsertMatrixFormula( nStartCol, nStartRow, nEndCol, nEndRow,
                     aMark, EMPTY_STRING, pCode, eGrammar);
@@ -4039,7 +4041,7 @@ BOOL ScDocFunc::InsertNameList( const ScAddress& rStartPos, BOOL bApi )
                 ICCQsortNameCompare );
 #endif
             String aName;
-            String aContent;
+            rtl::OUStringBuffer aContent;
             String aFormula;
             SCROW nOutRow = nStartRow;
             for (j=0; j<nValidCount; j++)
@@ -4114,11 +4116,11 @@ BOOL ScDocFunc::ResizeMatrix( const ScRange& rOldRange, const ScAddress& rNewEnd
         if ( DeleteContents( aMark, IDF_CONTENTS, TRUE, bApi ) )
         {
             // GRAM_PODF_A1 for API compatibility.
-            bRet = EnterMatrix( aNewRange, &aMark, NULL, aFormula, bApi, FALSE, ScGrammar::GRAM_PODF_A1 );
+            bRet = EnterMatrix( aNewRange, &aMark, NULL, aFormula, bApi, FALSE,formula::FormulaGrammar::GRAM_PODF_A1 );
             if (!bRet)
             {
                 //  versuchen, alten Zustand wiederherzustellen
-                EnterMatrix( rOldRange, &aMark, NULL, aFormula, bApi, FALSE, ScGrammar::GRAM_PODF_A1 );
+                EnterMatrix( rOldRange, &aMark, NULL, aFormula, bApi, FALSE,formula::FormulaGrammar::GRAM_PODF_A1 );
             }
         }
 

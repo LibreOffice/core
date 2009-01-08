@@ -50,7 +50,7 @@
 #include "docpool.hxx"
 #include "markdata.hxx"
 #include "attrib.hxx"
-#include "errorcodes.hxx"       // errNoValue
+#include "formula/errorcodes.hxx"       // errNoValue
 #include "miscuno.hxx"
 #include "globstr.hrc"
 #include "stlpool.hxx"

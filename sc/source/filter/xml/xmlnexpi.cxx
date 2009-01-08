@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -127,9 +127,9 @@ ScXMLNamedRangeContext::ScXMLNamedRangeContext( ScXMLImport& rImport,
     ScMyNamedExpression* pNamedExpression(new ScMyNamedExpression);
     // A simple table:cell-range-address is not a formula expression, stored
     // without [] brackets but with dot, .A1
-    pNamedExpression->eGrammar = ScGrammar::mergeToGrammar(
+    pNamedExpression->eGrammar = formula::FormulaGrammar::mergeToGrammar(
             GetScImport().GetDocument()->GetStorageGrammar(),
-            ScAddress::CONV_OOO);
+            formula::FormulaGrammar::CONV_OOO);
     sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
     const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetNamedRangeAttrTokenMap();
     for( sal_Int16 i=0; i < nAttrCount; ++i )
@@ -196,7 +196,7 @@ ScXMLNamedExpressionContext::ScXMLNamedExpressionContext( ScXMLImport& rImport,
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
     ScMyNamedExpression* pNamedExpression(new ScMyNamedExpression);
-    const ScGrammar::Grammar eStorageGrammar = pNamedExpression->eGrammar =
+    const formula::FormulaGrammar::Grammar eStorageGrammar = pNamedExpression->eGrammar =
         GetScImport().GetDocument()->GetStorageGrammar();
     sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
     const SvXMLTokenMap& rAttrTokenMap(GetScImport().GetNamedExpressionAttrTokenMap());

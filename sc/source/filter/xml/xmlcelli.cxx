@@ -114,9 +114,6 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                                       const sal_Bool bTempIsCovered,
                                       const sal_Int32 nTempRepeatedRows ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
-    pOUTextValue(NULL),
-    pOUTextContent(NULL),
-    pOUFormula(NULL),
     pContentValidationName(NULL),
     pMyAnnotation(NULL),
     pDetectiveObjVec(NULL),
@@ -127,7 +124,7 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
     nRepeatedRows(nTempRepeatedRows),
     nCellsRepeated(1),
     rXMLImport((ScXMLImport&)rImport),
-    eGrammar( ScGrammar::GRAM_STORAGE_DEFAULT),
+    eGrammar( formula::FormulaGrammar::GRAM_STORAGE_DEFAULT),
     nCellType(util::NumberFormat::TEXT),
     bIsMerged(sal_False),
     bIsMatrix(sal_False),
@@ -139,10 +136,10 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
     bSolarMutexLocked(sal_False),
     bFormulaTextResult(sal_False)
 {
-    ScGrammar::Grammar eStorageGrammar = eGrammar = GetScImport().GetDocument()->GetStorageGrammar();
+    formula::FormulaGrammar::Grammar eStorageGrammar = eGrammar = GetScImport().GetDocument()->GetStorageGrammar();
     rXMLImport.SetRemoveLastChar(sal_False);
     rXMLImport.GetTables().AddColumn(bTempIsCovered);
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    const sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     rtl::OUString aLocalName;
     rtl::OUString* pStyleName = NULL;
     rtl::OUString* pCurrencySymbol = NULL;
@@ -218,7 +215,7 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                 if (sValue.getLength())
                 {
                     DBG_ASSERT(!pOUTextValue, "here should be only one string value");
-                    pOUTextValue = new rtl::OUString(sValue);
+                    pOUTextValue.reset(sValue);
                     bIsEmpty = sal_False;
                 }
             }
@@ -242,7 +239,6 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                 if (sValue.getLength())
                 {
                     DBG_ASSERT(!pOUFormula, "here should be only one formula");
-                    DELETEZ( pOUFormula);
                     rtl::OUString sFormula;
                     sal_uInt16 nFormulaPrefix = GetImport().GetNamespaceMap().
                             _GetKeyByAttrName( sValue, &sFormula, sal_False );
@@ -252,7 +248,7 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                                 eStorageGrammar))
                     {
                         // Namespaces we accept.
-                        pOUFormula = new rtl::OUString( sFormula);
+                        pOUFormula.reset( sFormula);
                     }
                     else
                     {
@@ -260,7 +256,7 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                         // Also unknown namespace included in formula,
                         // so hopefully will result in string or
                         // compile error.
-                        pOUFormula = new rtl::OUString( sValue);
+                        pOUFormula.reset( sValue);
                     }
                 }
             }
@@ -283,12 +279,6 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
 
 ScXMLTableRowCellContext::~ScXMLTableRowCellContext()
 {
-    if (pOUTextValue)
-        delete pOUTextValue;
-    if (pOUTextContent)
-        delete pOUTextContent;
-    if (pOUFormula)
-        delete pOUFormula;
     if (pContentValidationName)
         delete pContentValidationName;
     if (pMyAnnotation)
@@ -386,8 +376,7 @@ SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( USHORT nPrefix
                             if (pOUTextContent)
                             {
                                 SetCursorOnTextImport(*pOUTextContent);
-                                delete pOUTextContent;
-                                pOUTextContent = NULL;
+                                pOUTextContent.reset();
                             }
                             else
                                 SetCursorOnTextImport(rtl::OUString());
@@ -411,19 +400,16 @@ SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( USHORT nPrefix
         break;
     case XML_TOK_TABLE_ROW_CELL_TABLE:
         {
-            sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+            const sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
             rtl::OUString aLocalName;
-            rtl::OUString sValue;
             for( sal_Int16 i=0; i < nAttrCount; i++ )
             {
                 sal_uInt16 nAttrPrefix = rXMLImport.GetNamespaceMap().GetKeyByAttrName(
                                                     xAttrList->getNameByIndex( i ), &aLocalName );
-                sValue = xAttrList->getValueByIndex( i );
-
-                if (nAttrPrefix == XML_NAMESPACE_TABLE)
+                if (    nAttrPrefix == XML_NAMESPACE_TABLE
+                    &&  IsXMLToken(aLocalName, XML_IS_SUB_TABLE))
                 {
-                    if (IsXMLToken(aLocalName, XML_IS_SUB_TABLE))
-                        bHasSubTable = IsXMLToken(sValue, XML_TRUE);
+                    bHasSubTable = IsXMLToken(xAttrList->getValueByIndex( i ), XML_TRUE);
                 }
             }
             DBG_ASSERT(bHasSubTable, "it should be a subtable");
@@ -527,31 +513,21 @@ void ScXMLTableRowCellContext::DoMerge(const com::sun::star::table::CellAddress&
         uno::Reference<table::XCellRange> xCellRange(rXMLImport.GetTables().GetCurrentXCellRange());
         if ( xCellRange.is() )
         {
-            // Stored merge range may actually be of a larger extend than what
-            // we support, in which case getCellRangeByPosition() throws
-            // IndexOutOfBoundsException. Do nothing then.
-            try
+            table::CellRangeAddress aCellAddress;
+            if (IsMerged(xCellRange, aCellPos.Column, aCellPos.Row, aCellAddress))
             {
-                table::CellRangeAddress aCellAddress;
-                if (IsMerged(xCellRange, aCellPos.Column, aCellPos.Row, aCellAddress))
-                {
-                    //unmerge
-                    uno::Reference <util::XMergeable> xMergeable (xCellRange->getCellRangeByPosition(aCellAddress.StartColumn, aCellAddress.StartRow,
-                                aCellAddress.EndColumn, aCellAddress.EndRow), uno::UNO_QUERY);
-                    if (xMergeable.is())
-                        xMergeable->merge(sal_False);
-                }
-
-                //merge
+                //unmerge
                 uno::Reference <util::XMergeable> xMergeable (xCellRange->getCellRangeByPosition(aCellAddress.StartColumn, aCellAddress.StartRow,
-                            aCellAddress.EndColumn + nCols, aCellAddress.EndRow + nRows), uno::UNO_QUERY);
+                                                        aCellAddress.EndColumn, aCellAddress.EndRow), uno::UNO_QUERY);
                 if (xMergeable.is())
-                    xMergeable->merge(sal_True);
+                    xMergeable->merge(sal_False);
             }
-            catch ( lang::IndexOutOfBoundsException & )
-            {
-                DBG_ERRORFILE("ScXMLTableRowCellContext::DoMerge: range to be merged larger than what we support");
-            }
+
+            //merge
+            uno::Reference <util::XMergeable> xMergeable (xCellRange->getCellRangeByPosition(aCellAddress.StartColumn, aCellAddress.StartRow,
+                                                    aCellAddress.EndColumn + nCols, aCellAddress.EndRow + nRows), uno::UNO_QUERY);
+            if (xMergeable.is())
+                xMergeable->merge(sal_True);
         }
     }
 }
@@ -771,7 +747,7 @@ void ScXMLTableRowCellContext::EndElement()
     {
         if (bHasTextImport && rXMLImport.GetRemoveLastChar())
         {
-            if (GetImport().GetTextImport()->GetCursor().is())
+            if (rXMLImport.GetTextImport()->GetCursor().is())
             {
                 //GetImport().GetTextImport()->GetCursor()->gotoEnd(sal_False);
                 if( GetImport().GetTextImport()->GetCursor()->goLeft( 1, sal_True ) )
@@ -793,7 +769,8 @@ void ScXMLTableRowCellContext::EndElement()
                 DoMerge(aCellPos, nMergedCols - 1, nMergedRows - 1);
             if ( !pOUFormula )
             {
-                rtl::OUString* pOUText = NULL;
+                ::boost::optional< rtl::OUString > pOUText;
+
                 if(nCellType == util::NumberFormat::TEXT)
                 {
                     if (xLockable.is())
@@ -818,16 +795,14 @@ void ScXMLTableRowCellContext::EndElement()
                         uno::Reference <text::XText> xTempText (xBaseCell, uno::UNO_QUERY);
                         if (xTempText.is())
                         {
-                            rtl::OUString sBla(xTempText->getString());
-                            pOUText = new rtl::OUString(sBla);
+                            pOUText.reset(xTempText->getString());
                         }
                     }
-                    if (!pOUTextContent && !pOUText && !pOUTextValue)
-                        bIsEmpty = sal_True;
-                    else if ( (pOUTextContent && !pOUTextContent->getLength()) || !pOUTextContent )
-                        if ( (pOUText && !pOUText->getLength()) || !pOUText )
-                            if ( (pOUTextValue && !pOUTextValue->getLength()) || !pOUTextValue )
-                                bIsEmpty = sal_True;
+                    if (     (!pOUTextContent && !pOUText && !pOUTextValue)
+                        && ( (pOUTextContent && !pOUTextContent->getLength()) || !pOUTextContent )
+                        && ( (pOUText && !pOUText->getLength()) || !pOUText )
+                        && ( (pOUTextValue && !pOUTextValue->getLength()) || !pOUTextValue ))
+                            bIsEmpty = sal_True;
                 }
                 sal_Bool bWasEmpty = bIsEmpty;
 //              uno::Reference <table::XCell> xCell;
@@ -835,11 +810,13 @@ void ScXMLTableRowCellContext::EndElement()
                 if ((pContentValidationName && pContentValidationName->getLength()) ||
                     pMyAnnotation || pDetectiveObjVec || pCellRangeSource)
                     bIsEmpty = sal_False;
+
+                ScMyTables& rTables = rXMLImport.GetTables();
                 for (sal_Int32 i = 0; i < nCellsRepeated; ++i)
                 {
                     aCurrentPos.Column = aCellPos.Column + i;
                     if (i > 0)
-                        rXMLImport.GetTables().AddColumn(sal_False);
+                        rTables.AddColumn(sal_False);
                     if (!bIsEmpty)
                     {
                         for (sal_Int32 j = 0; j < nRepeatedRows; ++j)
@@ -847,8 +824,8 @@ void ScXMLTableRowCellContext::EndElement()
                             aCurrentPos.Row = aCellPos.Row + j;
                             if ((aCurrentPos.Column == 0) && (j > 0))
                             {
-                                rXMLImport.GetTables().AddRow();
-                                rXMLImport.GetTables().AddColumn(sal_False);
+                                rTables.AddRow();
+                                rTables.AddColumn(sal_False);
                             }
                             if (CellExists(aCurrentPos))
                             {
@@ -876,7 +853,7 @@ void ScXMLTableRowCellContext::EndElement()
                                     case util::NumberFormat::TEXT:
                                         {
                                             sal_Bool bDoIncrement = sal_True;
-                                            if (rXMLImport.GetTables().IsPartOfMatrix(aCurrentPos.Column, aCurrentPos.Row))
+                                            if (rTables.IsPartOfMatrix(aCurrentPos.Column, aCurrentPos.Row))
                                             {
                                                 LockSolarMutex();
                                                 // test - bypass the API
@@ -899,7 +876,8 @@ void ScXMLTableRowCellContext::EndElement()
                                                 ScAddress aScAddress;
                                                 ScUnoConversion::FillScAddress( aScAddress, aCurrentPos );
                                                 ScBaseCell* pCell = rXMLImport.GetDocument()->GetCell( aScAddress );
-                                                if ( pCell && pCell->GetCellType() == CELLTYPE_FORMULA )
+                                                bDoIncrement = ( pCell && pCell->GetCellType() == CELLTYPE_FORMULA );
+                                                if ( bDoIncrement )
                                                 {
                                                     ScFormulaCell* pFCell = static_cast<ScFormulaCell*>(pCell);
                                                     if (pOUTextValue && pOUTextValue->getLength())
@@ -911,8 +889,6 @@ void ScXMLTableRowCellContext::EndElement()
                                                     else
                                                         bDoIncrement = sal_False;
                                                 }
-                                                else
-                                                    bDoIncrement = sal_False;
                                             }
                                             else
                                             {
@@ -940,14 +916,14 @@ void ScXMLTableRowCellContext::EndElement()
                                                     pNewCell = ScBaseCell::CreateTextCell( *pOUTextContent, pDoc );
                                                 else if ( i > 0 && pOUText && pOUText->getLength() )
                                                     pNewCell = ScBaseCell::CreateTextCell( *pOUText, pDoc );
-                                                if ( pNewCell )
+
+                                                bDoIncrement = pNewCell != NULL;
+                                                if ( bDoIncrement )
                                                 {
                                                     ScAddress aScAddress;
                                                     ScUnoConversion::FillScAddress( aScAddress, aCurrentPos );
                                                     pDoc->PutCell( aScAddress, pNewCell );
                                                 }
-                                                else
-                                                    bDoIncrement = sal_False;
                                             }
                                             // #i56027# This is about setting simple text, not edit cells,
                                             // so ProgressBarIncrement must be called with bEditCell = FALSE.
@@ -964,7 +940,7 @@ void ScXMLTableRowCellContext::EndElement()
                                     case util::NumberFormat::DATETIME:
                                     case util::NumberFormat::LOGICAL:
                                         {
-                                            if (rXMLImport.GetTables().IsPartOfMatrix(aCurrentPos.Column, aCurrentPos.Row))
+                                            if (rTables.IsPartOfMatrix(aCurrentPos.Column, aCurrentPos.Row))
                                             {
                                                 LockSolarMutex();
                                                 // test - bypass the API
@@ -1034,8 +1010,8 @@ void ScXMLTableRowCellContext::EndElement()
                         if ((i == 0) && (aCellPos.Column == 0))
                             for (sal_Int32 j = 1; j < nRepeatedRows; ++j)
                             {
-                                    rXMLImport.GetTables().AddRow();
-                                    rXMLImport.GetTables().AddColumn(sal_False);
+                                rTables.AddRow();
+                                rTables.AddColumn(sal_False);
                             }
                     }
                 }
@@ -1061,8 +1037,6 @@ void ScXMLTableRowCellContext::EndElement()
 
                     //SetType(xTempCell);
                 }
-                if (pOUText)
-                    delete pOUText;
             }
             else
             {

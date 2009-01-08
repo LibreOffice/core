@@ -52,6 +52,8 @@
 #include <sfx2/objface.hxx>
 
 #include <svx/hyprlink.hxx>
+#include "IAnyRefDialog.hxx"
+
 #include <svtools/ehdl.hxx>
 #include <svtools/accessibilityoptions.hxx>
 #include <svtools/ctloptions.hxx>
@@ -1687,7 +1689,7 @@ BOOL ScModule::IsModalMode(SfxObjectShell* pDocSh)
         SfxChildWindow* pChildWnd = lcl_GetChildWinFromAnyView( nCurRefDlgId );
         if ( pChildWnd )
         {
-            ScAnyRefDlg* pRefDlg = (ScAnyRefDlg*)pChildWnd->GetWindow();
+            IAnyRefDialog* pRefDlg = dynamic_cast<IAnyRefDialog*>(pChildWnd->GetWindow());
             bIsModal = pChildWnd->IsVisible() &&
                 !( pRefDlg->IsRefInputMode() && pRefDlg->IsDocAllowed(pDocSh) );
         }
@@ -1725,7 +1727,7 @@ BOOL ScModule::IsTableLocked()
     {
         SfxChildWindow* pChildWnd = lcl_GetChildWinFromAnyView( nCurRefDlgId );
         if ( pChildWnd )
-            bLocked = ((ScAnyRefDlg*)pChildWnd->GetWindow())->IsTableLocked();
+            bLocked = dynamic_cast<IAnyRefDialog*>(pChildWnd->GetWindow())->IsTableLocked();
         else
             bLocked = TRUE;     // for other views, see IsModalMode
     }
@@ -1764,7 +1766,7 @@ BOOL ScModule::IsFormulaMode()
         SfxChildWindow* pChildWnd = lcl_GetChildWinFromAnyView( nCurRefDlgId );
         if ( pChildWnd )
         {
-            ScAnyRefDlg* pRefDlg = (ScAnyRefDlg*)pChildWnd->GetWindow();
+            IAnyRefDialog* pRefDlg = dynamic_cast<IAnyRefDialog*>(pChildWnd->GetWindow());
             bIsFormula = pChildWnd->IsVisible() && pRefDlg->IsRefInputMode();
         }
     }
@@ -1824,7 +1826,7 @@ void ScModule::SetReference( const ScRange& rRef, ScDocument* pDoc,
                 aNew.aEnd.SetTab(nEndTab);
             }
 
-            ScAnyRefDlg* pRefDlg = (ScAnyRefDlg*)pChildWnd->GetWindow();
+            IAnyRefDialog* pRefDlg = dynamic_cast<IAnyRefDialog*>(pChildWnd->GetWindow());
 
             //  hide the (color) selection now instead of later from LoseFocus,
             //  don't abort the ref input that causes this call (bDoneRefMode = FALSE)
@@ -1855,7 +1857,7 @@ void ScModule::AddRefEntry()                        // "Mehrfachselektion"
         DBG_ASSERT( pChildWnd, "NoChildWin" );
         if ( pChildWnd )
         {
-            ScAnyRefDlg* pRefDlg = (ScAnyRefDlg*)pChildWnd->GetWindow();
+            IAnyRefDialog* pRefDlg = dynamic_cast<IAnyRefDialog*>(pChildWnd->GetWindow());
             pRefDlg->AddRefEntry();
         }
     }
@@ -1882,7 +1884,7 @@ void ScModule::EndReference()
         DBG_ASSERT( pChildWnd, "NoChildWin" );
         if ( pChildWnd )
         {
-            ScAnyRefDlg* pRefDlg = (ScAnyRefDlg*)pChildWnd->GetWindow();
+            IAnyRefDialog* pRefDlg = dynamic_cast<IAnyRefDialog*>(pChildWnd->GetWindow());
             pRefDlg->SetActive();
         }
     }

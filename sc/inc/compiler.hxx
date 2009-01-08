@@ -38,22 +38,17 @@
 #include <tools/mempool.hxx>
 #include "scdllapi.h"
 #include "global.hxx"
-#include "tokenarray.hxx"
-#include "token.hxx"
-#include "intruref.hxx"
-#include "grammar.hxx"
+#include "refdata.hxx"
+#include "formula/token.hxx"
+#include "formula/intruref.hxx"
+#include "formula/grammar.hxx"
 #include <unotools/charclass.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/sheet/ExternalLinkInfo.hpp>
 #include <vector>
 
-namespace com { namespace sun { namespace star {
-    namespace sheet {
-        struct FormulaOpCodeMapEntry;
-        struct FormulaToken;
-    }
-}}}
+#include <formula/FormulaCompiler.hxx>
+
 
 #ifndef BOOST_SHARED_PTR_HPP_INCLUDED
 #include <boost/shared_ptr.hpp>
@@ -104,13 +99,14 @@ class ScDocument;
 class ScMatrix;
 class ScRangeData;
 class ScExternalRefManager;
+class ScTokenArray;
 
 // constants and data types internal to compiler
 
 #if 0
 /*
     OpCode   eOp;           // OpCode
-    StackVar eType;         // type of data
+    formula::StackVar eType;         // type of data
     USHORT   nRefCnt;       // reference count
     BOOL     bRaw;          // not cloned yet and trimmed to real size
  */
@@ -118,7 +114,7 @@ class ScExternalRefManager;
 
 #define SC_TOKEN_FIX_MEMBERS    \
     OpCode   eOp;               \
-    StackVar eType;             \
+    formula::StackVar eType;    \
     USHORT   nRefCnt;           \
     BOOL     bRaw;
 
@@ -158,7 +154,7 @@ public:
         struct {
             sal_uInt16      nFileId;
             sal_Unicode     cTabName[MAXSTRLEN+1];
-            ComplRefData    aRef;
+            ScComplexRefData    aRef;
         } extref;
         struct {
             sal_uInt16  nFileId;
@@ -176,7 +172,7 @@ private:
                 ~ScRawToken() {}                //! only delete via Delete()
 public:
                 DECL_FIXEDMEMPOOL_NEWDEL( ScRawToken );
-    StackVar    GetType()   const       { return (StackVar) eType; }
+    formula::StackVar    GetType()   const       { return (formula::StackVar) eType; }
     OpCode      GetOpCode() const       { return (OpCode)   eOp;   }
     void        NewOpCode( OpCode e )   { eOp = e; }
     void        IncRef()                { nRefCnt++;       }
@@ -198,14 +194,14 @@ public:
 //UNUSED2008-05  ScComplexRefData& GetReference();
 //UNUSED2008-05  void SetReference( ScComplexRefData& rRef );
     void SetName( USHORT n );
-    void SetExternalSingleRef( sal_uInt16 nFileId, const String& rTabName, const SingleRefData& rRef );
-    void SetExternalDoubleRef( sal_uInt16 nFileId, const String& rTabName, const ComplRefData& rRef );
+    void SetExternalSingleRef( sal_uInt16 nFileId, const String& rTabName, const ScSingleRefData& rRef );
+    void SetExternalDoubleRef( sal_uInt16 nFileId, const String& rTabName, const ScComplexRefData& rRef );
     void SetExternalName( sal_uInt16 nFileId, const String& rName );
     void SetMatrix( ScMatrix* p );
     void SetExternal(const sal_Unicode* pStr);
 
     ScRawToken* Clone() const;      // real copy!
-    ScToken* CreateToken() const;   // create typified token
+    formula::FormulaToken* CreateToken() const;   // create typified token
     void Load( SvStream&, USHORT nVer );
 
     static xub_StrLen GetStrLen( const sal_Unicode* pStr ); // as long as a "string" is an array
@@ -216,25 +212,18 @@ public:
 };
 
 
-typedef ScSimpleIntrusiveReference< struct ScRawToken > ScRawTokenRef;
+typedef formula::SimpleIntrusiveReference< struct ScRawToken > ScRawTokenRef;
 
-
-struct ScArrayStack;
-
-typedef ::std::hash_map< String, OpCode, ScStringHashCode, ::std::equal_to< String > > ScOpCodeHashMap;
-typedef ::std::hash_map< String, String, ScStringHashCode, ::std::equal_to< String > > ScExternalHashMap;
-
-
-class SC_DLLPUBLIC ScCompiler
+class SC_DLLPUBLIC ScCompiler : public formula::FormulaCompiler
 {
 public:
     struct Convention
     {
-        const ScAddress::Convention meConv;
+        const formula::FormulaGrammar::AddressConvention meConv;
         const ULONG*                mpCharTable;
 
 
-        Convention( ScAddress::Convention eConvP );
+        Convention( formula::FormulaGrammar::AddressConvention eConvP );
         virtual ~Convention();
 
         virtual void MakeRefStr( rtl::OUStringBuffer&   rBuffer,
@@ -260,11 +249,11 @@ public:
         virtual String makeExternalNameStr( const String& rFile, const String& rName ) const = 0;
 
         virtual void makeExternalRefStr( ::rtl::OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
-                                         sal_uInt16 nFileId, const String& rTabName, const SingleRefData& rRef,
+                                         sal_uInt16 nFileId, const String& rTabName, const ScSingleRefData& rRef,
                                          ScExternalRefManager* pRefMgr ) const = 0;
 
         virtual void makeExternalRefStr( ::rtl::OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
-                                         sal_uInt16 nFileId, const String& rTabName, const ComplRefData& rRef,
+                                         sal_uInt16 nFileId, const String& rTabName, const ScComplexRefData& rRef,
                                          ScExternalRefManager* pRefMgr ) const = 0;
 
         enum SpecialSymbolType
@@ -285,127 +274,11 @@ public:
     };
     friend struct Convention;
 
-    /** Mappings from strings to OpCodes and vice versa. */
-    class OpCodeMap
-    {
-        ScOpCodeHashMap         *mpHashMap;                 /// Hash map of symbols, String -> OpCode
-        String                  *mpTable;                   /// Array of symbols, OpCode -> String, offset==OpCode
-        ScExternalHashMap       *mpExternalHashMap;         /// Hash map of ocExternal, Filter String -> AddIn String
-        ScExternalHashMap       *mpReverseExternalHashMap;  /// Hash map of ocExternal, AddIn String -> Filter String
-        ScGrammar::Grammar      meGrammar;                  /// Grammar, language and reference convention
-        USHORT                  mnSymbols;                  /// Count of OpCode symbols
-        bool                    mbCore      : 1;            /// If mapping was setup by core, not filters
-        bool                    mbEnglish   : 1;            /// If English symbols and external names
-
-        OpCodeMap();                              // prevent usage
-        OpCodeMap( const OpCodeMap& );            // prevent usage
-        OpCodeMap& operator=( const OpCodeMap& ); // prevent usage
-
-    public:
-
-        OpCodeMap( USHORT nSymbols, bool bCore, ScGrammar::Grammar eGrammar ) :
-            mpHashMap( new ScOpCodeHashMap( nSymbols)),
-            mpTable( new String[ nSymbols ]),
-            mpExternalHashMap( new ScExternalHashMap),
-            mpReverseExternalHashMap( new ScExternalHashMap),
-            meGrammar( eGrammar),
-            mnSymbols( nSymbols),
-            mbCore( bCore)
-        {
-            mbEnglish = ScGrammar::isEnglish( meGrammar);
-        }
-        ~OpCodeMap()
-        {
-            delete mpReverseExternalHashMap;
-            delete mpExternalHashMap;
-            delete [] mpTable;
-            delete mpHashMap;
-        }
-
-        /// Get the symbol String -> OpCode hash map for finds.
-        inline const ScOpCodeHashMap* getHashMap() const { return mpHashMap; }
-
-        /// Get the symbol String -> AddIn String hash map for finds.
-        inline const ScExternalHashMap* getExternalHashMap() const { return mpExternalHashMap; }
-
-        /// Get the AddIn String -> symbol String hash map for finds.
-        inline const ScExternalHashMap* getReverseExternalHashMap() const { return mpReverseExternalHashMap; }
-
-        /// Get the symbol string matching an OpCode.
-        inline const String& getSymbol( const OpCode eOp ) const
-        {
-            DBG_ASSERT( USHORT(eOp) < mnSymbols, "OpCodeMap::getSymbol: OpCode out of range");
-            if (USHORT(eOp) < mnSymbols)
-                return mpTable[ eOp ];
-            return EMPTY_STRING;
-        }
-
-        /// Get the grammar.
-        inline ScGrammar::Grammar getGrammar() const { return meGrammar; }
-
-        /// Get the symbol count.
-        inline USHORT getSymbolCount() const { return mnSymbols; }
-
-        /** Are these English symbols, as opposed to native language (which may
-            be English as well)? */
-        inline bool isEnglish() const { return mbEnglish; }
-
-        /// Is it an internal core mapping, or setup by filters?
-        inline bool isCore() const { return mbCore; }
-
-        /// Is it an ODF 1.1 compatibility mapping?
-        inline bool isPODF() const { return ScGrammar::isPODF( meGrammar); }
-
-        /// Is it an ODFF / ODF 1.2 mapping?
-        inline bool isODFF() const { return ScGrammar::isODFF( meGrammar); }
-
-        /// Does it have external symbol/name mappings?
-        inline bool hasExternals() const { return !mpExternalHashMap->empty(); }
-
-        /// Put entry of symbol String and OpCode pair.
-        void putOpCode( const String & rStr, const OpCode eOp );
-
-        /// Put entry of symbol String and AddIn international String pair.
-        void putExternal( const String & rSymbol, const String & rAddIn );
-
-        /** Put entry of symbol String and AddIn international String pair,
-            failing silently if rAddIn name already exists. */
-        void putExternalSoftly( const String & rSymbol, const String & rAddIn );
-
-        /// Core implementation of XFormulaOpCodeMapper::getMappings()
-        ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken >
-            createSequenceOfFormulaTokens(
-                    const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rNames ) const;
-
-        /// Core implementation of XFormulaOpCodeMapper::getAvailableMappings()
-        ::com::sun::star::uno::Sequence<
-            ::com::sun::star::sheet::FormulaOpCodeMapEntry >
-            createSequenceOfAvailableMappings( const sal_Int32 nGroup ) const;
-
-        /** The value used in createSequenceOfAvailableMappings() and thus in
-            XFormulaOpCodeMapper::getMappings() for an unknown symbol. */
-        static inline sal_Int32 getOpCodeUnknown()
-        {
-            return kOpCodeUnknown;
-        }
-
 private:
 
-        static const sal_Int32 kOpCodeUnknown = -1;
 
-    };
-
-    typedef ::boost::shared_ptr< const OpCodeMap > OpCodeMapPtr;
-    typedef ::boost::shared_ptr< OpCodeMap > NonConstOpCodeMapPtr;
-
-private:
-
-    static NonConstOpCodeMapPtr  mxSymbolsODFF;                          // ODFF symbols
-    static NonConstOpCodeMapPtr  mxSymbolsPODF;                          // ODF 1.1 symbols
-    static NonConstOpCodeMapPtr  mxSymbolsNative;                        // native symbols
-    static NonConstOpCodeMapPtr  mxSymbolsEnglish;                       // English symbols
     static CharClass            *pCharClassEnglish;                      // character classification for en_US locale
-    static const Convention     *pConventions[ ScAddress::CONV_LAST ];
+    static const Convention     *pConventions[ formula::FormulaGrammar::CONV_LAST ];
 
     static const Convention * const pConvOOO_A1;
     static const Convention * const pConvOOO_A1_ODF;
@@ -427,59 +300,24 @@ private:
     ScDocument* pDoc;
     ScAddress   aPos;
 
-    // For ScAddress::CONV_XL_OOX, may be set via API by MOOXML filter.
+    // For CONV_XL_OOX, may be set via API by MOOXML filter.
     ::com::sun::star::uno::Sequence< const ::com::sun::star::sheet::ExternalLinkInfo > maExternalLinks;
 
-    String      aCorrectedFormula;                  // autocorrected Formula
-    String      aCorrectedSymbol;                   // autocorrected Symbol
     sal_Unicode cSymbol[MAXSTRLEN];                 // current Symbol
     String      aFormula;                           // formula source code
     xub_StrLen  nSrcPos;                            // tokenizer position (source code)
-    ScTokenArray* pArr;
     ScRawTokenRef   pRawToken;
-    ScTokenRef  pToken;                     // current token
-    ScTokenRef  pCurrentFactorToken;        // current factor token (of Factor() method)
-    OpCode      eLastOp;
-    ScToken**   pCode;
-    ScArrayStack* pStack;
-    OpCodeMapPtr mxSymbols;                 // which symbols are used
+
     const CharClass*    pCharClass;         // which character classification is used for parseAnyToken
-    USHORT      pc;
     USHORT      mnPredetectedReference;     // reference when reading ODF, 0 (none), 1 (single) or 2 (double)
-    short       nNumFmt;                    // set during CompileTokenArray()
     SCsTAB      nMaxTab;                    // last sheet in document
-    short       nRecursion;                 // GetToken() recursions
-    BOOL        glSubTotal;                 // if code contains one or more subtotal functions
-    BOOL        bAutoCorrect;               // whether to apply AutoCorrection
-    BOOL        bCorrected;                 // AutoCorrection was applied
-    BOOL        bCompileForFAP;             //! not real RPN but names, for FunctionAutoPilot,
-                                            // will not be resolved
-    BOOL        bIgnoreErrors;              // on AutoCorrect and CompileForFAP
-                                            // ignore errors and create RPN nevertheless
     const Convention *pConv;
     bool        mbCloseBrackets;            // whether to close open brackets automatically, default TRUE
-    ScGrammar::Grammar  meGrammar;          // The grammar used, language plus convention.
     bool        mbExtendedErrorDetection;
 
-    BOOL   GetToken();
     BOOL   NextNewToken(bool bInArray = false);
-    OpCode NextToken();
-    void PutCode( ScTokenRef& );
-    void Factor();
-    void RangeLine();
-    void UnionLine();
-    void IntersectionLine();
-    void UnaryLine();
-    void PostOpLine();
-    void PowLine();
-    void MulDivLine();
-    void AddSubLine();
-    void ConcatLine();
-    void CompareLine();
-    void NotLine();
-    OpCode Expression();
 
-    void SetError(USHORT nError);
+    virtual void SetError(USHORT nError);
     xub_StrLen NextSymbol(bool bInArray);
     BOOL IsValue( const String& );
     BOOL IsOpCode( const String&, bool bInArray );
@@ -496,66 +334,25 @@ private:
     BOOL IsColRowName( const String& );
     BOOL IsBoolean( const String& );
     void AutoCorrectParsedSymbol();
-    void PushTokenArray( ScTokenArray*, BOOL = FALSE );
-    void PopTokenArray();
-    void SetRelNameReference();
-    bool MergeRangeReference( ScToken * * const pCode1, ScToken * const * const pCode2 );
-    void CreateStringFromScMatrix( rtl::OUStringBuffer& rBuffer, const ScMatrix* pMatrix );
 
-    void AppendBoolean( rtl::OUStringBuffer& rBuffer, bool bVal );
-    void AppendDouble( rtl::OUStringBuffer& rBuffer, double fVal );
-    void AppendString( rtl::OUStringBuffer& rBuffer, const String & rStr );
+    void SetRelNameReference();
 
     static void InitCharClassEnglish();
 
 public:
-    ScCompiler( ScDocument* pDocument, const ScAddress&,
-                const ScGrammar::Grammar eGrammar );
+    ScCompiler( ScDocument* pDocument, const ScAddress&);
 
-    ScCompiler( ScDocument* pDocument, const ScAddress&,
-                ScTokenArray& rArr,
-                const ScGrammar::Grammar eGrammar );
+    ScCompiler( ScDocument* pDocument, const ScAddress&,ScTokenArray& rArr);
 
-    static bool IsInitialized()
-    {
-        return mxSymbolsNative.get() && mxSymbolsEnglish.get();
-    }
-    static void InitSymbolsNative();    /// only SymbolsNative, on first document creation
-    static void InitSymbolsEnglish();   /// only SymbolsEnglish, maybe later
-private:
-    static void InitSymbolsPODF();      /// only SymbolsPODF, on demand
-    static void InitSymbolsODFF();      /// only SymbolsODFF, on demand
-    static void fillFromAddInMap( NonConstOpCodeMapPtr xMap, size_t nSymbolOffset );
-    static void fillFromAddInCollectionUpperName( NonConstOpCodeMapPtr xMap );
-    static void fillFromAddInCollectionEnglishName( NonConstOpCodeMapPtr xMap );
 public:
     static void DeInit();               /// all
 
     // for ScAddress::Format()
     static void CheckTabQuotes( String& aTabName,
-                                const ScAddress::Convention eConv = ScAddress::CONV_OOO );
+                                const formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_OOO );
 
     static BOOL EnQuote( String& rStr );
-    static BOOL DeQuote( String& rStr );
 
-    static const String& GetNativeSymbol( OpCode eOp )
-    {
-        return mxSymbolsNative->getSymbol( eOp );
-    }
-
-    /** Get OpCode for English symbol.
-        Used in XFunctionAccess to create token array.
-        @param rName
-            Symbol to lookup. MUST be upper case.
-     */
-    static OpCode GetEnglishOpCode( const String& rName );
-
-    /** Get OpCodeMap for formula language.
-        @param nLanguage
-            One of ::com::sun::star::sheet::FormulaLanguage constants.
-        @return Map for nLanguage. If nLanguage is unknown, a NULL map is returned.
-     */
-    static OpCodeMapPtr GetOpCodeMap( const sal_Int32 nLanguage );
 
     //! _either_ CompileForFAP _or_ AutoCorrection, _not_ both
     void            SetCompileForFAP( BOOL bVal )
@@ -564,24 +361,12 @@ public:
                         { bAutoCorrect = bVal; bIgnoreErrors = bVal; }
     void            SetCloseBrackets( bool bVal ) { mbCloseBrackets = bVal; }
     void            SetRefConvention( const Convention *pConvP );
-    void            SetRefConvention( const ScAddress::Convention eConv );
-
-    /** Create an internal symbol map from API mapping.
-        @param bEnglish
-            Use English number parser / formatter instead of native.
-     */
-    static OpCodeMapPtr CreateOpCodeMap(
-            const ::com::sun::star::uno::Sequence<
-            const ::com::sun::star::sheet::FormulaOpCodeMapEntry > & rMapping,
-            bool bEnglish );
+    void            SetRefConvention( const formula::FormulaGrammar::AddressConvention eConv );
 
     /// Set symbol map if not empty.
     void            SetFormulaLanguage( const OpCodeMapPtr & xMap );
 
-    /** Set symbol map corresponding to one of predefined ScGrammar::Grammar,
-        including an address reference convention. */
-    void            SetGrammar( const ScGrammar::Grammar eGrammar );
-    inline  ScGrammar::Grammar   GetGrammar() const { return meGrammar; }
+    void            SetGrammar( const formula::FormulaGrammar::Grammar eGrammar );
 
 private:
     /** Set grammar and reference convention from within SetFormulaLanguage()
@@ -613,19 +398,8 @@ public:
 
     // Use convention from this->aPos by default
     ScTokenArray* CompileString( const String& rFormula );
-    BOOL  CompileTokenArray();
-    short GetNumFormatType() { return nNumFmt; }
     const ScDocument* GetDoc() const { return pDoc; }
     const ScAddress& GetPos() const { return aPos; }
-
-    static const String& GetStringFromOpCode( OpCode eOpCode );
-
-    ScToken* CreateStringFromToken( String& rFormula, ScToken* pToken,
-                                    BOOL bAllowArrAdvance = FALSE );
-    ScToken* CreateStringFromToken( rtl::OUStringBuffer& rBuffer, ScToken* pToken,
-                                    BOOL bAllowArrAdvance = FALSE );
-    void CreateStringFromTokenArray( String& rFormula );
-    void CreateStringFromTokenArray( rtl::OUStringBuffer& rBuffer );
 
     void MoveRelWrap();
     static void MoveRelWrap( ScTokenArray& rArr, ScDocument* pDoc,
@@ -656,7 +430,7 @@ public:
     /// If the character is allowed as first character in sheet names or references
     static inline BOOL IsCharWordChar( String const & rStr,
                                        xub_StrLen nPos,
-                                       const ScAddress::Convention eConv = ScAddress::CONV_OOO )
+                                       const formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_OOO )
         {
             sal_Unicode c = rStr.GetChar( nPos );
             return c < 128 ?
@@ -668,7 +442,7 @@ public:
     /// If the character is allowed in sheet names or references
     static inline BOOL IsWordChar( String const & rStr,
                                    xub_StrLen nPos,
-                                   const ScAddress::Convention eConv = ScAddress::CONV_OOO )
+                                   const formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_OOO )
         {
             sal_Unicode c = rStr.GetChar( nPos );
             return c < 128 ?
@@ -678,53 +452,30 @@ public:
         }
 
 private:
+    // FormulaCompiler
+    virtual String FindAddInFunction( const String& rUpperName, BOOL bLocalFirst ) const;
+    virtual void fillFromAddInCollectionUpperName( NonConstOpCodeMapPtr xMap ) const;
+    virtual void fillFromAddInCollectionEnglishName( NonConstOpCodeMapPtr xMap ) const;
+    virtual void fillFromAddInMap( NonConstOpCodeMapPtr xMap, formula::FormulaGrammar::Grammar _eGrammar ) const;
+    virtual void fillAddInToken(::std::vector< ::com::sun::star::sheet::FormulaOpCodeMapEntry >& _rVec,bool _bIsEnglish) const;
+
+    virtual BOOL HandleExternalReference(const formula::FormulaToken& _aToken);
+    virtual BOOL HandleRange();
+    virtual BOOL HandleSingleRef();
+    virtual BOOL HandleDbData();
+
+    virtual formula::FormulaTokenRef ExtendRangeReference( formula::FormulaToken & rTok1, formula::FormulaToken & rTok2, bool bReuseDoubleRef );
+    virtual void CreateStringFromExternal(rtl::OUStringBuffer& rBuffer, FormulaToken* pTokenP)
+    virtual void CreateStringFromSingleRef(rtl::OUStringBuffer& rBuffer,formula::FormulaToken* _pTokenP);
+    virtual void CreateStringFromDoubleRef(rtl::OUStringBuffer& rBuffer,formula::FormulaToken* _pTokenP);
+    virtual void CreateStringFromMatrix( rtl::OUStringBuffer& rBuffer, formula::FormulaToken* _pTokenP);
+    virtual void CreateStringFromIndex(rtl::OUStringBuffer& rBuffer,formula::FormulaToken* _pTokenP);
+    virtual void LocalizeString( String& rName );   // modify rName - input: exact name
+    virtual BOOL IsImportingXML() const;
+
     /// Access the CharTable flags
     inline ULONG GetCharTableFlags( sal_Unicode c )
         { return c < 128 ? pConv->mpCharTable[ UINT8(c) ] : 0; }
-
-    static inline void ForceArrayOperator( ScTokenRef& rCurr, const ScTokenRef& rPrev )
-        {
-            if ( rPrev.Is() && rPrev->HasForceArray() &&
-                    rCurr->GetType() == svByte && rCurr->GetOpCode() != ocPush
-                    && !rCurr->HasForceArray() )
-                rCurr->SetForceArray( true);
-        }
-    // SUNWS7 needs a forward declared friend, otherwise members of the outer
-    // class are not accessible.
-    class CurrentFactor;
-    friend class ScCompiler::CurrentFactor;
-    class CurrentFactor
-    {
-        ScTokenRef  pPrevFac;
-        ScCompiler* pCompiler;
-        // not implemented
-        CurrentFactor( const CurrentFactor& );
-        CurrentFactor& operator=( const CurrentFactor& );
-    public:
-        explicit CurrentFactor( ScCompiler* pComp )
-            : pPrevFac( pComp->pCurrentFactorToken )
-            , pCompiler( pComp )
-            {}
-        ~CurrentFactor()
-            { pCompiler->pCurrentFactorToken = pPrevFac; }
-        // yes, this operator= may modify the RValue
-        void operator=( ScTokenRef& r )
-            {
-                ForceArrayOperator( r, pPrevFac);
-                pCompiler->pCurrentFactorToken = r;
-            }
-        void operator=( ScToken* p )
-            {
-                ScTokenRef xTemp( p );
-                *this = xTemp;
-            }
-        operator ScTokenRef&()
-            { return pCompiler->pCurrentFactorToken; }
-        ScToken* operator->()
-            { return pCompiler->pCurrentFactorToken.operator->(); }
-        operator ScToken*()
-            { return operator->(); }
-    };
 };
 
 SC_DLLPUBLIC String GetScCompilerNativeSymbol( OpCode eOp ); //CHINA001

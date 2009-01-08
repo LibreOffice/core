@@ -2474,7 +2474,7 @@ long __EXPORT ScDocShell::DdeSetData( const String& rItem,
         }
     }
     ScRange aRange;
-    ScAddress::Convention eConv = aDocument.GetAddressConvention();
+    formula::FormulaGrammar::AddressConvention eConv = aDocument.GetAddressConvention();
     BOOL bValid = ( ( aRange.Parse( aPos, &aDocument, eConv ) & SCA_VALID ) ||
                     ( aRange.aStart.Parse( aPos, &aDocument, eConv ) & SCA_VALID ) );
 

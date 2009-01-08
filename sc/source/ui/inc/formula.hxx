@@ -32,7 +32,6 @@
 #define SC_FORMULA_HXX
 
 #include "anyrefdg.hxx"
-#include "funcutl.hxx"
 #include "global.hxx"       // ScAddress
 #include <svtools/stdctrl.hxx>
 #ifndef _LSTBOX_HXX //autogen
@@ -48,171 +47,91 @@
 #include <svtools/svstdarr.hxx>
 
 #endif
-#include <vcl/tabctrl.hxx>
-#include "parawin.hxx"
-#include <svtools/svtreebx.hxx>
 #include "compiler.hxx"
 #include "cell.hxx"
-#include "funcpage.hxx"
-#include "structpg.hxx"
+
+#include "formula/formula.hxx"
+#include "IAnyRefDialog.hxx"
+#include "anyrefdg.hxx"
+#include <formula/IFunctionDescription.hxx>
 
 class ScViewData;
 class ScDocument;
 class ScFuncDesc;
 class ScInputHandler;
 class ScDocShell;
+class SvLBoxEntry;
 
 //============================================================================
-
-enum ScFormulaDlgMode { SC_FORMDLG_FORMULA, SC_FORMDLG_ARGS, SC_FORMDLG_EDIT };
-
-//============================================================================
-
 typedef ScTabViewShell* PtrTabViewShell;
-
 //============================================================================
 
-//============================================================================
-
-class ScFormulaDlg : public ScAnyRefDlg
+class ScFormulaDlg : public formula::FormulaDlg,
+                     public IAnyRefDialog,
+                     public formula::IFormulaEditorHelper
 {
-public:
-                    ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
-                                    Window* pParent, ScViewData* pViewData );
-                    ~ScFormulaDlg();
-
-    virtual void    SetReference( const ScRange& rRef, ScDocument* pRefDoc );
-    virtual BOOL    IsRefInputMode() const;
-    virtual BOOL    IsDocAllowed(SfxObjectShell* pDocSh) const;
-    virtual void    SetActive();
-    virtual BOOL    Close();
-
-private:
-
-    TabControl      aTabCtrl;
-    GroupBox        aGbEdit;        //! MUST be placed before aScParaWin for initializing
-    ScParaWin       aScParaWin;
-    FixedText       aFtHeadLine;
-    FixedInfo       aFtFuncName;
-    FixedInfo       aFtFuncDesc;
-
-    FixedText       aFtEditName;
-    //FixedInfo     aFtEditDesc;
-
-    FixedText       aFtResult;
-    ValWnd          aWndResult;
-
-    FixedText       aFtFormula;
-    ScEditBox       aMEFormula;
-
-    CheckBox        aBtnMatrix;
-    HelpButton      aBtnHelp;
-    CancelButton    aBtnCancel;
-
-    PushButton      aBtnBackward;
-    PushButton      aBtnForward;
-    OKButton        aBtnEnd;
-
-    ScRefEdit       aEdRef;
-    ScRefButton     aRefBtn;
-
-    FixedText       aFtFormResult;
-    ValWnd          aWndFormResult;
-
-    ScRefEdit*      pTheRefEdit;
-    ScRefButton*    pTheRefButton;
-    ScFuncPage*     pScFuncPage;
-    ScStructPage*   pScStructPage;
+    ScFormulaReferenceHelper m_aHelper;
     ScFormulaCell*  pCell;
-    ScCompiler*     pComp;
-    ScTokenArray*   pScTokA;
-    String          aOldFormula;
-    BOOL            bStructUpdate;
-    MultiLineEdit*  pMEdit;
-    BOOL            bUserMatrixFlag;
-    Timer           aTimer;
-
-    const String    aTitle1;
-    const String    aTitle2;
-    const String    aTxtEnd;
-    const String    aTxtOk;     // hinter aBtnEnd
-
-    ULONG           nOldHelp;
-    ULONG           nOldUnique;
-    ULONG           nActivWinId;
-    BOOL            bIsShutDown;
-
-
-
-    Font            aFntBold;
-    Font            aFntLight;
-    USHORT          nEdFocus;
-//    Selection       theCurSel;
-    BOOL            bEditFlag;
-    const ScFuncDesc*   pFuncDesc;
-    USHORT          nArgs;
-    String**        pArgArr;
-    Selection       aFuncSel;
+    ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XFormulaParser>          m_xParser;
+    ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XFormulaOpCodeMapper>    m_xOpCodeMapper;
 
     static ScDocument*  pDoc;
     static ScAddress    aCursorPos;
+public:
+                    ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
+                        Window* pParent, ScViewData* pViewData ,formula::IFunctionManager* _pFunctionMgr);
+                    ~ScFormulaDlg();
 
+    // IFormulaEditorHelper
+    virtual void notifyChange();
+    virtual void fill();
+    virtual bool calculateValue(const String& _sExpression,String& _rResult);
+    virtual void doClose(BOOL _bOk);
+    virtual void insertEntryToLRUList(const formula::IFunctionDescription*  pDesc);
+    virtual void showReference(const String& _sFormula);
+    virtual void dispatch(BOOL _bOK,BOOL _bMartixChecked);
+    virtual void setDispatcherLock( BOOL bLock );
+    virtual void setReferenceInput(const formula::FormEditData* _pData);
+    virtual void deleteFormData();
+    virtual void clear();
+    virtual void switchBack();
+    virtual formula::FormEditData* getFormEditData() const;
+    virtual void setCurrentFormula(const String& _sReplacement);
+    virtual void setSelection(xub_StrLen _nStart,xub_StrLen _nEnd);
+    virtual void getSelection(xub_StrLen& _nStart,xub_StrLen& _nEnd) const;
+    virtual String getCurrentFormula() const;
+
+    virtual formula::IFunctionManager* getFunctionManager();
+    virtual ::std::auto_ptr<formula::FormulaTokenArray> convertToTokenArray(const ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken >& _aTokenList);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XFormulaParser> getFormulaParser() const;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XFormulaOpCodeMapper> getFormulaOpCodeMapper() const;
+
+    virtual BOOL    Close();
+
+    // sc::IAnyRefDialog
+    virtual void ShowReference(const String& _sRef);
+    virtual void HideReference( BOOL bDoneRefMode = TRUE );
+    virtual void SetReference( const ScRange& rRef, ScDocument* pDoc );
+
+    virtual void ReleaseFocus( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL );
+    virtual void ToggleCollapsed( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL );
+    virtual void RefInputDone( BOOL bForced = FALSE );
+    virtual BOOL IsTableLocked() const;
+    virtual BOOL IsRefInputMode() const;
+
+    virtual BOOL IsDocAllowed( SfxObjectShell* pDocSh ) const;
+    virtual void AddRefEntry();
+    virtual void SetActive();
+    virtual void ViewShellChanged( ScTabViewShell* pScViewShell );
 protected:
 
-    virtual long    PreNotify( NotifyEvent& rNEvt );
-    virtual void    RefInputStart( ScRefEdit* pEdit, ScRefButton* pButton = NULL );
-    virtual void    RefInputDone( BOOL bForced = FALSE );
-    ULONG           FindFocusWin(Window *pWin);
-    void            SetFocusWin(Window *pWin,ULONG nUniqueId);
-    String          RepairFormula(const String& aFormula);
-    void            SaveLRUEntry(const ScFuncDesc*  pFuncDesc);
-    void            HighlightFunctionParas(const String& aFormula);
+    virtual void RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL );
+    ULONG        FindFocusWin(Window *pWin);
+    void         SaveLRUEntry(const ScFuncDesc* pFuncDesc);
+    void         HighlightFunctionParas(const String& aFormula);
 
-private:
-
-    BOOL            IsInputHdl(ScInputHandler* pHdl);
-    ScInputHandler* GetNextInputHandler(ScDocShell* pDocShell,PtrTabViewShell* ppViewSh=NULL);
-
-    void            MakeTree(SvLBoxEntry* pParent,ScToken* pScToken,long Count,
-                                    ScTokenArray* pScTokA,ScCompiler*   pComp);
-
-    void            ClearAllParas();
-    void            DeleteArgs();
-    void            FillDialog(BOOL nFlag=TRUE);
-    void            EditNextFunc( BOOL bForward, xub_StrLen nFStart=NOT_FOUND );
-    void            EditThisFunc(xub_StrLen nFStart);
-
-    void            UpdateArgInput( USHORT nOffset, USHORT nInput );
-    BOOL            CalcValue( const String& rStrExp, String& rStrResult );
-    BOOL            CalcStruct( const String& rStrExp);
-
-    void            UpdateValues();
-    void            SaveArg( USHORT nEd );
-    void            UpdateSelection();
-    void            DoEnter( BOOL bOk );
-//UNUSED2008-05  void           ResizeArgArr( const ScFuncDesc* pNewFunc );
-    void            FillListboxes();
-    void            FillControls();
-
-    xub_StrLen      GetFunctionPos(xub_StrLen nPos);
-    void            UpdateTokenArray( const String& rStrExp);
-
-    ScRefEdit*      GetCurrRefEdit();
-
-//UNUSED2008-05  DECL_LINK( ScrollHdl, ScParaWin* );
-    DECL_LINK( ModifyHdl, ScParaWin* );
-    DECL_LINK( FxHdl, ScParaWin* );
-
-    DECL_LINK( MatrixHdl, CheckBox *);
-    DECL_LINK( FormulaHdl, MultiLineEdit* );
-    DECL_LINK( FormulaCursorHdl, ScEditBox*);
-    DECL_LINK( BtnHdl, PushButton* );
-    DECL_LINK( GetEdFocusHdl, ArgInput* );
-    DECL_LINK( GetFxFocusHdl, ArgInput* );
-    DECL_LINK( DblClkHdl, ScFuncPage* );
-    DECL_LINK( FuncSelHdl, ScFuncPage*);
-    DECL_LINK( StructSelHdl, ScStructPage * );
-    DECL_LINK( UpdateFocusHdl, Timer*);
+    BOOL        IsInputHdl(ScInputHandler* pHdl);
+    ScInputHandler* GetNextInputHandler(ScDocShell* pDocShell,PtrTabViewShell* ppViewSh);
 };
 
 

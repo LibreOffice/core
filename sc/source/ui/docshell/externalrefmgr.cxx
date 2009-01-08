@@ -1416,7 +1416,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getRangeNameTokens(sal_u
         {
             case svSingleRef:
             {
-                const SingleRefData& rRef = pToken->GetSingleRef();
+                const ScSingleRefData& rRef = pToken->GetSingleRef();
                 String aTabName;
                 pSrcDoc->GetName(rRef.nTab, aTabName);
                 ScExternalSingleRefToken aNewToken(nFileId, aTabName, pToken->GetSingleRef());
@@ -1426,7 +1426,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getRangeNameTokens(sal_u
             break;
             case svDoubleRef:
             {
-                const SingleRefData& rRef = pToken->GetSingleRef();
+                const ScSingleRefData& rRef = pToken->GetSingleRef();
                 String aTabName;
                 pSrcDoc->GetName(rRef.nTab, aTabName);
                 ScExternalDoubleRefToken aNewToken(nFileId, aTabName, pToken->GetDoubleRef());

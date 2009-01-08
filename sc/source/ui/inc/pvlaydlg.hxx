@@ -131,8 +131,8 @@ private:
     FixedLine               aFlAreas;
     ListBox                 aLbOutPos;
     FixedText               aFtOutArea;
-    ScRefEdit               aEdOutPos;
-    ScRefButton             aRbOutPos;
+    formula::RefEdit               aEdOutPos;
+    formula::RefButton             aRbOutPos;
     CheckBox                aBtnIgnEmptyRows;
     CheckBox                aBtnDetectCat;
     CheckBox                aBtnTotalCol;

@@ -62,6 +62,7 @@
 #include <math.h>
 #include <memory>
 
+using namespace formula;
 //------------------------------------------------------------------------
 
 SV_IMPL_OP_PTRARR_SORT( ScValidationEntries_Impl, ScValidationDataPtr );
@@ -75,7 +76,7 @@ SV_IMPL_OP_PTRARR_SORT( ScValidationEntries_Impl, ScValidationDataPtr );
 ScValidationData::ScValidationData( ScValidationMode eMode, ScConditionMode eOper,
                             const String& rExpr1, const String& rExpr2,
                             ScDocument* pDocument, const ScAddress& rPos,
-                            const ScGrammar::Grammar eGrammar ) :
+                            const formula::FormulaGrammar::Grammar eGrammar ) :
     ScConditionEntry( eOper, rExpr1, rExpr2, pDocument, rPos, eGrammar ),
     nKey( 0 ),
     eDataMode( eMode ),
@@ -594,11 +595,11 @@ const String* ScStringTokenIterator::Next()
         return NULL;
 
     // seek to next non-separator token
-    const ScToken* pToken = mrTokArr.NextNoSpaces();
+    const FormulaToken* pToken = mrTokArr.NextNoSpaces();
     while( pToken && (pToken->GetOpCode() == ocSep) )
         pToken = mrTokArr.NextNoSpaces();
 
-    mbOk = !pToken || (pToken->GetType() == svString);
+    mbOk = !pToken || (pToken->GetType() == formula::svString);
     const String* pString = (mbOk && pToken) ? &pToken->GetString() : NULL;
     // string found but empty -> get next token; otherwise return it
     return (mbSkipEmpty && pString && !pString->Len()) ? Next() : pString;
@@ -645,7 +646,7 @@ bool ScValidationData::GetSelectionFromFormula( TypedScStrCollection* pStrings,
         return false;
 
     ScFormulaCell aValidationSrc( pDocument, rPos, &rTokArr,
-            ScGrammar::GRAM_DEFAULT, MM_FORMULA);
+           formula::FormulaGrammar::GRAM_DEFAULT, MM_FORMULA);
 
     // Make sure the formula gets interpreted and a result is delivered,
     // regardless of the AutoCalc setting.

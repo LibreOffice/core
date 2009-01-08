@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlstyli.cxx,v $
- * $Revision: 1.63.134.1 $
+ * $Revision: 1.63 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -393,7 +393,7 @@ void XMLTableStyleContext::SetFormulas(com::sun::star::uno::Sequence<com::sun::s
 }
 
 void XMLTableStyleContext::SetGrammar(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps,
-        const ScGrammar::Grammar eGrammar) const
+        const formula::FormulaGrammar::Grammar eGrammar) const
 {
     sal_Int32 nLength(aProps.getLength());
     aProps.realloc(nLength + 1);
@@ -411,8 +411,8 @@ void XMLTableStyleContext::GetConditionalFormat(uno::Any& aAny,
         uno::Reference<sheet::XSheetConditionalEntries> xConditionalEntries(aAny, uno::UNO_QUERY);
         if (xConditionalEntries.is())
         {
-            const ScGrammar::Grammar eStorageGrammar = GetScImport().GetDocument()->GetStorageGrammar();
-            ScGrammar::Grammar eGrammar = eStorageGrammar;
+            const formula::FormulaGrammar::Grammar eStorageGrammar = GetScImport().GetDocument()->GetStorageGrammar();
+            formula::FormulaGrammar::Grammar eGrammar = eStorageGrammar;
             // ToDo: erase all blanks in the condition, but not in formulas or strings
             rtl::OUString scell_content(RTL_CONSTASCII_USTRINGPARAM("cell_content"));
             rtl::OUString scell_content_is_between(RTL_CONSTASCII_USTRINGPARAM("cell_content_is_between"));
@@ -587,7 +587,6 @@ void XMLTableStyleContext::FillPropertySet(
             sal_Int32 nNumFmt = GetNumberFormat();
             if (nNumFmt >= 0)
                 AddProperty(CTF_SC_NUMBERFORMAT, uno::makeAny(nNumFmt));
-
             if (!bConditionalFormatCreated && (aMaps.size() > 0))
             {
                 aConditionalFormat = rPropSet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_CONDXML)));
@@ -688,7 +687,6 @@ sal_Int32 XMLTableStyleContext::GetNumberFormat()
     }
     return nNumberFormat;
 }
-
 // ----------------------------------------------------------------------------
 
 SvXMLStyleContext *XMLTableStylesContext::CreateStyleStyleChildContext(
@@ -1083,3 +1081,4 @@ void ScMasterPageContext::Finish( sal_Bool bOverwrite )
     if (!bContainsRightHeader)
         ClearContent(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_PAGE_RIGHTHDRCON)));
 }
+

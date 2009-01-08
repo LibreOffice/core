@@ -87,8 +87,8 @@ private:
     CancelButton            aCancelButton;
     HelpButton              aHelpButton;
 
-    ScRefEdit               aEdAssign;
-    ScRefButton             aRbAssign;
+    formula::RefEdit                aEdAssign;
+    formula::RefButton              aRbAssign;
 
     ScViewData*             pViewData;
     ScDocument*             pDoc;

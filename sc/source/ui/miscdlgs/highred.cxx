@@ -88,7 +88,7 @@ ScHighlightChgDlg::ScHighlightChgDlg( SfxBindings* pB, SfxChildWindow* pCW, Wind
         aCancelButton   ( this, ScResId( BTN_CANCEL ) ),
         aHelpButton     ( this, ScResId( BTN_HELP ) ),
         aEdAssign       ( this, ScResId( ED_ASSIGN ) ),
-        aRbAssign       ( this, ScResId( RB_ASSIGN ), &aEdAssign ),
+        aRbAssign       ( this, ScResId( RB_ASSIGN ), &aEdAssign, this ),
         //
         pViewData       ( ptrViewData ),
         pDoc            ( ptrViewData->GetDocument() ),

@@ -1388,7 +1388,7 @@ void XclDelta::SaveXml( XclExpXmlStream& rStrm )
 
 
 XclRefmode::XclRefmode( const ScDocument& rDoc ) :
-    XclExpBoolRecord( 0x000F, rDoc.GetAddressConvention() != ScAddress::CONV_XL_R1C1 )
+    XclExpBoolRecord( 0x000F, rDoc.GetAddressConvention() != formula::FormulaGrammar::CONV_XL_R1C1 )
 {
 }
 

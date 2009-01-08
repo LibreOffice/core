@@ -355,7 +355,13 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
             break;
 
         case SC_SERVICE_OPCODEMAPPER:
-            xRet.set(static_cast<sheet::XFormulaOpCodeMapper*>(new ScFormulaOpCodeMapperObj));
+            {
+                ScDocument* pDoc = pDocShell->GetDocument();
+                ScAddress aAddress;
+                ScCompiler* pComp = new ScCompiler(pDoc,aAddress);
+                pComp->SetGrammar( pDoc->GetGrammar() );
+                xRet.set(static_cast<sheet::XFormulaOpCodeMapper*>(new ScFormulaOpCodeMapperObj(::std::auto_ptr<formula::FormulaCompiler> (pComp))));
+            }
             break;
     }
     return xRet;

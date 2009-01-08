@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tokenuno.hxx,v $
- * $Revision: 1.4.130.3 $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,9 +39,8 @@
 #include <com/sun/star/sheet/XFormulaParser.hpp>
 #include <com/sun/star/sheet/XFormulaOpCodeMapper.hpp>
 #include <com/sun/star/sheet/FormulaOpCodeMapEntry.hpp>
-#include <com/sun/star/sheet/ExternalLinkInfo.hpp>
 #include <cppuhelper/implbase3.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <formula/FormulaOpCodeMapperObj.hxx>
 #include "address.hxx"
 #include "compiler.hxx"
 
@@ -53,11 +52,9 @@ class ScTokenConversion
 {
 public:
     static bool ConvertToTokenArray(
-                        ScDocument& rDoc,
                         ScTokenArray& rTokenArray,
                         const com::sun::star::uno::Sequence< com::sun::star::sheet::FormulaToken >& rSequence );
     static bool ConvertToTokenSequence(
-                        ScDocument& rDoc,
                         com::sun::star::uno::Sequence< com::sun::star::sheet::FormulaToken >& rSequence,
                         const ScTokenArray& rTokenArray );
 };
@@ -71,13 +68,13 @@ class ScFormulaParserObj : public ::cppu::WeakImplHelper3<
 {
 private:
     ::com::sun::star::uno::Sequence< const ::com::sun::star::sheet::FormulaOpCodeMapEntry > maOpCodeMapping;
-    ::com::sun::star::uno::Sequence< const ::com::sun::star::sheet::ExternalLinkInfo > maExternalLinks;
     ScCompiler::OpCodeMapPtr    mxOpCodeMap;
     ScDocShell*         mpDocShell;
     ScAddress           maRefPos;
     sal_Int16           mnConv;
     bool                mbEnglish;
     bool                mbIgnoreSpaces;
+    bool                mbCompileFAP;
 
     void                    SetCompilerFlags( ScCompiler& rCompiler ) const;
 
@@ -145,38 +142,10 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException);
 };
 
-
-class ScFormulaOpCodeMapperObj : public ::cppu::WeakImplHelper2<
-                            ::com::sun::star::sheet::XFormulaOpCodeMapper,
-                            ::com::sun::star::lang::XServiceInfo >
+class ScFormulaOpCodeMapperObj : public formula::FormulaOpCodeMapperObj
 {
 public:
-                            ScFormulaOpCodeMapperObj();
-    virtual                 ~ScFormulaOpCodeMapperObj();
-
-                            // XFormulaOpCodeMapper
-                            // Attributes
-    virtual ::sal_Int32 SAL_CALL getOpCodeExternal() throw (::com::sun::star::uno::RuntimeException);
-    virtual ::sal_Int32 SAL_CALL getOpCodeUnknown() throw (::com::sun::star::uno::RuntimeException);
-                            // Methods
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken > SAL_CALL getMappings(
-                                    const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rNames,
-                                    sal_Int32 nLanguage )
-                                throw ( ::com::sun::star::lang::IllegalArgumentException,
-                                        ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaOpCodeMapEntry > SAL_CALL getAvailableMappings(
-                                    sal_Int32 nLanguage, sal_Int32 nGroups )
-                                throw ( ::com::sun::star::lang::IllegalArgumentException,
-                                        ::com::sun::star::uno::RuntimeException);
-
-                            // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName()
-                                throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
-                                throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
-                                throw(::com::sun::star::uno::RuntimeException);
-
+    ScFormulaOpCodeMapperObj(::std::auto_ptr<formula::FormulaCompiler> _pCompiler);
 };
 
 #endif

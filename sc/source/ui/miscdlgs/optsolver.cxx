@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -134,7 +134,7 @@ ScSolverSuccessDialog::~ScSolverSuccessDialog()
 //----------------------------------------------------------------------------
 
 ScCursorRefEdit::ScCursorRefEdit( ScAnyRefDlg* pParent, const ResId& rResId ) :
-    ScRefEdit( pParent, rResId )
+    formula::RefEdit( pParent, rResId )
 {
 }
 
@@ -157,7 +157,7 @@ void ScCursorRefEdit::KeyInput( const KeyEvent& rKEvt )
             maCursorDownLink.Call( this );
     }
     else
-        ScRefEdit::KeyInput( rKEvt );
+        formula::RefEdit::KeyInput( rKEvt );
 }
 
 //----------------------------------------------------------------------------
@@ -190,43 +190,43 @@ ScOptSolverDlg::ScOptSolverDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pP
         //
         maFtObjectiveCell   ( this, ScResId( FT_OBJECTIVECELL ) ),
         maEdObjectiveCell   ( this, ScResId( ED_OBJECTIVECELL ) ),
-        maRBObjectiveCell   ( this, ScResId( IB_OBJECTIVECELL ), &maEdObjectiveCell ),
+        maRBObjectiveCell   ( this, ScResId( IB_OBJECTIVECELL ), &maEdObjectiveCell, this ),
         maFtDirection       ( this, ScResId( FT_DIRECTION ) ),
         maRbMax             ( this, ScResId( RB_MAX ) ),
         maRbMin             ( this, ScResId( RB_MIN ) ),
         maRbValue           ( this, ScResId( RB_VALUE ) ),
         maEdTargetValue     ( this, ScResId( ED_TARGET ) ),
-        maRBTargetValue     ( this, ScResId( IB_TARGET ), &maEdTargetValue ),
+        maRBTargetValue     ( this, ScResId( IB_TARGET ), &maEdTargetValue, this ),
         maFtVariableCells   ( this, ScResId( FT_VARIABLECELLS ) ),
         maEdVariableCells   ( this, ScResId( ED_VARIABLECELLS ) ),
-        maRBVariableCells   ( this, ScResId( IB_VARIABLECELLS ), &maEdVariableCells ),
+        maRBVariableCells   ( this, ScResId( IB_VARIABLECELLS ), &maEdVariableCells, this),
         maFlConditions      ( this, ScResId( FL_CONDITIONS ) ),
         maFtCellRef         ( this, ScResId( FT_CELLREF ) ),
         maEdLeft1           ( this, ScResId( ED_LEFT1 ) ),
-        maRBLeft1           ( this, ScResId( IB_LEFT1 ), &maEdLeft1 ),
+        maRBLeft1           ( this, ScResId( IB_LEFT1 ), &maEdLeft1, this ),
         maFtOperator        ( this, ScResId( FT_OPERATOR ) ),
         maLbOp1             ( this, ScResId( LB_OP1 ) ),
         maFtConstraint      ( this, ScResId( FT_CONSTRAINT ) ),
         maEdRight1          ( this, ScResId( ED_RIGHT1 ) ),
-        maRBRight1          ( this, ScResId( IB_RIGHT1 ), &maEdRight1 ),
+        maRBRight1          ( this, ScResId( IB_RIGHT1 ), &maEdRight1, this ),
         maBtnDel1           ( this, ScResId( IB_DELETE1 ) ),
         maEdLeft2           ( this, ScResId( ED_LEFT2 ) ),
-        maRBLeft2           ( this, ScResId( IB_LEFT2 ), &maEdLeft2 ),
+        maRBLeft2           ( this, ScResId( IB_LEFT2 ), &maEdLeft2, this ),
         maLbOp2             ( this, ScResId( LB_OP2 ) ),
         maEdRight2          ( this, ScResId( ED_RIGHT2 ) ),
-        maRBRight2          ( this, ScResId( IB_RIGHT2 ), &maEdRight2 ),
+        maRBRight2          ( this, ScResId( IB_RIGHT2 ), &maEdRight2, this ),
         maBtnDel2           ( this, ScResId( IB_DELETE2 ) ),
         maEdLeft3           ( this, ScResId( ED_LEFT3 ) ),
-        maRBLeft3           ( this, ScResId( IB_LEFT3 ), &maEdLeft3 ),
+        maRBLeft3           ( this, ScResId( IB_LEFT3 ), &maEdLeft3, this ),
         maLbOp3             ( this, ScResId( LB_OP3 ) ),
         maEdRight3          ( this, ScResId( ED_RIGHT3 ) ),
-        maRBRight3          ( this, ScResId( IB_RIGHT3 ), &maEdRight3 ),
+        maRBRight3          ( this, ScResId( IB_RIGHT3 ), &maEdRight3, this ),
         maBtnDel3           ( this, ScResId( IB_DELETE3 ) ),
         maEdLeft4           ( this, ScResId( ED_LEFT4 ) ),
-        maRBLeft4           ( this, ScResId( IB_LEFT4 ), &maEdLeft4 ),
+        maRBLeft4           ( this, ScResId( IB_LEFT4 ), &maEdLeft4, this ),
         maLbOp4             ( this, ScResId( LB_OP4 ) ),
         maEdRight4          ( this, ScResId( ED_RIGHT4 ) ),
-        maRBRight4          ( this, ScResId( IB_RIGHT4 ), &maEdRight4 ),
+        maRBRight4          ( this, ScResId( IB_RIGHT4 ), &maEdRight4, this ),
         maBtnDel4           ( this, ScResId( IB_DELETE4 ) ),
         maScrollBar         ( this, ScResId( SB_SCROLL ) ),
         maFlButtons         ( this, ScResId( FL_BUTTONS ) ),
@@ -501,7 +501,7 @@ void ScOptSolverDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
         {
             USHORT nFmt = ( aAdr.Tab() == mnCurTab ) ? SCA_ABS : SCA_ABS_3D;
             if ( bSingle )
-                aAdr.Format( aStr, nFmt, pDocP, pDocP->GetAddressConvention() );
+                aAdr.Format( aStr, nFmt, pDocP, pDocP->GetAddressConvention() ); 
             else
                 rRef.Format( aStr, nFmt | SCR_ABS, pDocP, pDocP->GetAddressConvention() );
         }
@@ -706,7 +706,7 @@ IMPL_LINK( ScOptSolverDlg, CursorUpHdl, ScCursorRefEdit*, pEdit )
     }
     else
     {
-        ScRefEdit* pFocus = NULL;
+        formula::RefEdit* pFocus = NULL;
         for ( sal_uInt16 nRow = 1; nRow < EDIT_ROW_COUNT; ++nRow )      // second row or below: move focus
         {
             if ( pEdit == mpLeftEdit[nRow] )
@@ -737,7 +737,7 @@ IMPL_LINK( ScOptSolverDlg, CursorDownHdl, ScCursorRefEdit*, pEdit )
     }
     else
     {
-        ScRefEdit* pFocus = NULL;
+        formula::RefEdit* pFocus = NULL;
         for ( sal_uInt16 nRow = 0; nRow+1 < EDIT_ROW_COUNT; ++nRow )      // before last row: move focus
         {
             if ( pEdit == mpLeftEdit[nRow] )
@@ -757,7 +757,7 @@ IMPL_LINK( ScOptSolverDlg, CursorDownHdl, ScCursorRefEdit*, pEdit )
 
 //----------------------------------------------------------------------------
 
-void ScOptSolverDlg::ShowError( bool bCondition, ScRefEdit* pFocus )
+void ScOptSolverDlg::ShowError( bool bCondition, formula::RefEdit* pFocus )
 {
     String aMessage = bCondition ? maConditionError : maInputError;
     ErrorBox( this, WinBits( WB_OK | WB_DEF_OK ), aMessage ).Execute();
