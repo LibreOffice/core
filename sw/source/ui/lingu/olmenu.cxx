@@ -58,6 +58,10 @@
 #include <com/sun/star/linguistic2/XLanguageGuessing.hpp>
 #include <com/sun/star/linguistic2/SingleProofreadingError.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <svx/dlgutil.hxx>
 #include <svtools/itemset.hxx>
 #include <svx/langitem.hxx>
@@ -361,6 +365,47 @@ static Image lcl_GetImageFromPngUrl( const OUString &rFileUrl )
 }
 
 
+::rtl::OUString RetrieveLabelFromCommand( const ::rtl::OUString& aCmdURL )
+{
+    ::rtl::OUString aLabel;
+    if ( aCmdURL.getLength() )
+    {
+        try
+        {
+            uno::Reference< container::XNameAccess > xNameAccess( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString::createFromAscii("com.sun.star.frame.UICommandDescription") ), uno::UNO_QUERY );
+            if ( xNameAccess.is() )
+            {
+                uno::Reference< container::XNameAccess > xUICommandLabels;
+                const ::rtl::OUString aModule( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.TextDocument" ) );
+                uno::Any a = xNameAccess->getByName( aModule );
+                uno::Reference< container::XNameAccess > xUICommands;
+                a >>= xUICommandLabels;
+                rtl::OUString aStr;
+                uno::Sequence< beans::PropertyValue > aPropSeq;
+                a = xUICommandLabels->getByName( aCmdURL );
+                if ( a >>= aPropSeq )
+                {
+                    for ( sal_Int32 i = 0; i < aPropSeq.getLength(); i++ )
+                    {
+                        if ( aPropSeq[i].Name.equalsAscii( "Name" ))
+                        {
+                            aPropSeq[i].Value >>= aStr;
+                            break;
+                        }
+                    }
+                }
+                aLabel = aStr;
+            }
+        }
+        catch ( uno::Exception& )
+        {
+        }
+    }
+
+    return aLabel;
+}
+
+
 SwSpellPopup::SwSpellPopup(
         SwWrtShell* pWrtSh,
         const uno::Reference< linguistic2::XSpellAlternatives >  &xAlt,
@@ -415,15 +460,9 @@ bGrammarResults(false)
         }
     }
 
-    //!! hard wired translations to be removed or added to src file in OOo 3.1 (#i94216) !!
-    OUString aIgnoreSelection( C2U("Ignore") );
-    OUString aSpellingAndGrammar( C2U("Spelling and Grammar...") );
+    OUString aIgnoreSelection( String( SW_RES( STR_IGNORE_SELECTION ) ) );
+    OUString aSpellingAndGrammar = RetrieveLabelFromCommand( C2U(".uno:SpellingAndGrammarDialog") );
     const lang::Locale aUILocale( Application::GetSettings().GetUILocale() );
-    if (aUILocale.Language.equalsAscii("de"))
-    {
-        aIgnoreSelection    = C2U("Ignorieren");
-        aSpellingAndGrammar = C2U("Rechtschreibung und Grammatik...");
-    }
     SetItemText( MN_SPELLING, aSpellingAndGrammar );
     USHORT nItemPos = GetItemPos( MN_IGNORE );
     InsertItem( MN_IGNORE_SELECTION, aIgnoreSelection, 0, nItemPos );
@@ -607,15 +646,9 @@ aInfo16( SW_RES(IMG_INFO_16) )
         InsertSeparator( nPos++ );
     }
 
-    //!! hard wired translations to be removed or added to src file in OOo 3.1 (#i94216) !!
-    OUString aIgnoreSelection( C2U("Ignore") );
-    OUString aSpellingAndGrammar( C2U("Spelling and Grammar...") );
+    OUString aIgnoreSelection( String( SW_RES( STR_IGNORE_SELECTION ) ) );
+    OUString aSpellingAndGrammar = RetrieveLabelFromCommand( C2U(".uno:SpellingAndGrammarDialog") );
     const lang::Locale aUILocale( Application::GetSettings().GetUILocale() );
-    if (aUILocale.Language.equalsAscii("de"))
-    {
-        aIgnoreSelection    = C2U("Ignorieren");
-        aSpellingAndGrammar = C2U("Rechtschreibung und Grammatik...");
-    }
     SetItemText( MN_SPELLING, aSpellingAndGrammar );
     USHORT nItemPos = GetItemPos( MN_IGNORE );
     InsertItem( MN_IGNORE_SELECTION, aIgnoreSelection, 0, nItemPos );

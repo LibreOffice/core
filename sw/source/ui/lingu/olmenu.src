@@ -122,6 +122,10 @@ String STR_LANGSTATUS_MORE
 {
     Text [ en-US ] = "More..." ;
 };
+String STR_IGNORE_SELECTION
+{
+    Text [ en-US ] = "Ignore" ;
+};
 
 Image IMG_INFO_16
 {
