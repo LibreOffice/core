@@ -54,7 +54,9 @@ TARFILE_ROOTDIR=core
 PATCH_FILE_NAME=$(PRJ)$/patches$/$(TARGET).patch
 
 CONVERTFILES=build.xml\
-             build.properties
+             build.properties \
+             source/org/jfree/report/expressions/ReportFormulaContext.java
+
 OUT2CLASS=$(TARGET)$(VERSION).jar
 
 .IF "$(JAVACISGCJ)"=="yes"

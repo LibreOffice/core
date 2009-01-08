@@ -30,3 +30,260 @@
      {
        return TextType.TYPE;
      }
+ 
+--- misc/libformula/source/org/jfree/formula/function/AbstractFunctionDescription.java	2007-10-18 08:21:39.000000000 +0200
++++ misc/build/libformula/source/org/jfree/formula/function/AbstractFunctionDescription.java	2008-09-04 08:17:14.114375000 +0200
+@@ -31,6 +31,7 @@
+ package org.jfree.formula.function;
+ 
+ import java.util.Locale;
++import java.util.MissingResourceException;
+ import java.util.ResourceBundle;
+ 
+ /**
+@@ -72,7 +73,15 @@
+ 
+   protected ResourceBundle getBundle(final Locale locale)
+   {
+-    return ResourceBundle.getBundle(bundleName, locale);
++      try
++      {
++        return ResourceBundle.getBundle(bundleName, locale);
++      }
++      catch(MissingResourceException ex)
++      {
++        return ResourceBundle.getBundle(bundleName, Locale.ENGLISH);
++      }
++    // return ResourceBundle.getBundle(bundleName, locale);
+   }
+ 
+   public String getDisplayName(final Locale locale)
+--- misc/libformula/source/org/jfree/formula/function/datetime/Hour-Function.properties	2007-10-18 08:21:38.000000000 +0200
++++ misc/build/libformula/source/org/jfree/formula/function/datetime/Hour-Function.properties	2008-09-04 13:57:59.458125000 +0200
+@@ -5,4 +5,4 @@
+ display-name=HOUR
+ description=Returns the hour (0 through 23) from a time.
+ parameter.0.display-name=Time
+-parameter.0.description=The time
++parameter.0.description=The time.
+--- misc/libformula/source/org/jfree/formula/function/information/IsBlank-Function.properties	2007-10-18 08:21:36.000000000 +0200
++++ misc/build/libformula/source/org/jfree/formula/function/information/IsBlank-Function.properties	2008-09-08 14:25:30.271875000 +0200
+@@ -4,6 +4,6 @@
+ 
+ display-name=ISBLANK
+ description=Checks, whether the value is undefined (null).
+-parameter.0.description=A value.
++parameter.0.description=The value to be tested.
+ parameter.0.display-name=Value
+ 
+--- misc/libformula/source/org/jfree/formula/function/information/IsErr-Function.properties	2007-10-18 08:21:36.000000000 +0200
++++ misc/build/libformula/source/org/jfree/formula/function/information/IsErr-Function.properties	2008-09-08 14:25:30.303125000 +0200
+@@ -4,5 +4,5 @@
+ 
+ display-name=ISERR
+ description=Tells if the parameter is of error type but returns false if the error is of type NA.
+-parameter.0.description=A value.
++parameter.0.description=The value to be tested.
+ parameter.0.display-name=Value
+--- misc/libformula/source/org/jfree/formula/function/information/IsError-Function.properties	2007-10-18 08:21:36.000000000 +0200
++++ misc/build/libformula/source/org/jfree/formula/function/information/IsError-Function.properties	2008-09-08 14:27:09.865625000 +0200
+@@ -3,6 +3,6 @@
+ #
+ 
+ display-name=ISERROR
+-description=Tells if the parameter is of error type but returns false.
+-parameter.0.description=A value.
++description=Returns TRUE if the value is an error value.
++parameter.0.description=The value to be tested.
+ parameter.0.display-name=Value
+--- misc/libformula/source/org/jfree/formula/function/information/IsEven-Function.properties	2007-10-18 08:21:36.000000000 +0200
++++ misc/build/libformula/source/org/jfree/formula/function/information/IsEven-Function.properties	2008-09-08 14:25:30.350000000 +0200
+@@ -4,6 +4,6 @@
+ 
+ display-name=ISEVEN
+ description=Checks whatever the value is an even number.
+-parameter.0.description=A value.
++parameter.0.description=The value to be tested.
+ parameter.0.display-name=Value
+ 
+--- misc/libformula/source/org/jfree/formula/function/information/IsLogical-Function.properties	2007-10-18 08:21:36.000000000 +0200
++++ misc/build/libformula/source/org/jfree/formula/function/information/IsLogical-Function.properties	2008-09-08 14:27:49.021875000 +0200
+@@ -3,7 +3,7 @@
+ #
+ 
+ display-name=ISLOGICAL
+-description=Checks whatever the value is of type Logical.
+-parameter.0.description=A value.
++description=Returns TRUE if the value carries a logical number format.
++parameter.0.description=The value to be tested.
+ parameter.0.display-name=Value
+ 
+--- misc/libformula/source/org/jfree/formula/function/information/IsNa-Function.properties	2007-10-18 08:21:36.000000000 +0200
++++ misc/build/libformula/source/org/jfree/formula/function/information/IsNa-Function.properties	2008-09-08 14:25:30.412500000 +0200
+@@ -4,5 +4,5 @@
+ 
+ display-name=ISNA
+ description=Tells if the parameter is of error type NA.
+-parameter.0.description=A value.
++parameter.0.description=The value to be tested.
+ parameter.0.display-name=Value
+--- misc/libformula/source/org/jfree/formula/function/information/IsNonText-Function.properties	2007-10-18 08:21:36.000000000 +0200
++++ misc/build/libformula/source/org/jfree/formula/function/information/IsNonText-Function.properties	2008-09-08 14:29:02.709375000 +0200
+@@ -3,7 +3,7 @@
+ #
+ 
+ display-name=ISNONTEXT
+-description=Checks whatever the value is not of type Text.
+-parameter.0.description=A value.
++description=Returns TRUE if the value is not text.
++parameter.0.description=The value to be tested.
+ parameter.0.display-name=Value
+ 
+--- misc/libformula/source/org/jfree/formula/function/information/IsNumber-Function.properties	2007-10-18 08:21:36.000000000 +0200
++++ misc/build/libformula/source/org/jfree/formula/function/information/IsNumber-Function.properties	2008-09-08 14:25:30.475000000 +0200
+@@ -4,6 +4,6 @@
+ 
+ display-name=ISNUMBER
+ description=Checks whatever the value is of type Number.
+-parameter.0.description=A value.
++parameter.0.description=The value to be tested.
+ parameter.0.display-name=Value
+ 
+--- misc/libformula/source/org/jfree/formula/function/information/IsOdd-Function.properties	2007-10-18 08:21:36.000000000 +0200
++++ misc/build/libformula/source/org/jfree/formula/function/information/IsOdd-Function.properties	2008-09-08 14:25:30.506250000 +0200
+@@ -4,6 +4,6 @@
+ 
+ display-name=ISODD
+ description=Checks whatever the value is an odd number.
+-parameter.0.description=A value.
++parameter.0.description=The value to be tested.
+ parameter.0.display-name=Value
+ 
+--- misc/libformula/source/org/jfree/formula/function/information/IsRef-Function.properties	2008-12-02 08:28:02.985345116 +0100
++++ misc/build/libformula/source/org/jfree/formula/function/information/IsRef-Function.properties	2008-11-18 12:04:59.132277875 +0100
+@@ -1 +1,9 @@
+-dummy
++#
++# Copyright (c) 2007, Pentaho Corporation. All Rights Reserved.
++#
++
++display-name=ISREF
++description=Checks whatever the value is a reference.
++parameter.0.description=A value.
++parameter.0.display-name=Value
++
+--- misc/libformula/source/org/jfree/formula/function/information/IsText-Function.properties	2007-10-18 08:21:36.000000000 +0200
++++ misc/build/libformula/source/org/jfree/formula/function/information/IsText-Function.properties	2008-09-08 14:28:53.631250000 +0200
+@@ -3,7 +3,7 @@
+ #
+ 
+ display-name=ISTEXT
+-description=Checks whatever the value is of type Text.
+-parameter.0.description=A value.
++description=Returns TRUE if value is text.
++parameter.0.description=The value to be tested.
+ parameter.0.display-name=Value
+ 
+--- misc/libformula/source/org/jfree/formula/function/logical/If-Function.properties	2007-10-18 08:21:39.000000000 +0200
++++ misc/build/libformula/source/org/jfree/formula/function/logical/If-Function.properties	2008-12-02 08:27:33.611012901 +0100
+@@ -3,11 +3,11 @@
+ #
+ 
+ display-name=IF
+-description=Conditional execution
+-parameter.0.description=Condition
+-parameter.0.display-name=A Condition
+-parameter.1.description=True-Term
+-parameter.1.display-name=A term that is evaluated if the condition evaluates to true.
+-parameter.2.description=False-Term
+-parameter.2.display-name=A term that is evaluated if the condition evaluates to false.
++description=Specifies a logical test to be performed.
++parameter.0.display-name=Test
++parameter.0.description=Any value or expression which can be either TRUE or FALSE.
++parameter.1.display-name=Then_value
++parameter.1.description=The result of the function if the logical test returns a TRUE.
++parameter.2.display-name=Otherwise_value
++parameter.2.description=The result of the function if the logical test returns FALSE.
+ 
+--- misc/libformula/source/org/jfree/formula/function/logical/Not-Function.properties	2007-10-18 08:21:39.000000000 +0200
++++ misc/build/libformula/source/org/jfree/formula/function/logical/Not-Function.properties	2008-09-05 09:14:37.771875000 +0200
+@@ -2,8 +2,8 @@
+ # Copyright (c) 2007, Pentaho Corporation. All Rights Reserved.
+ #
+ 
+-display-name=AND
+-description=Logical AND
+-parameter.0.description=Condition
+-parameter.0.display-name=A Condition
++display-name=NOT
++description=Compute logical NOT of the parameter.
++parameter.0.description=A logical parameter.
++parameter.0.display-name=Value
+ 
+--- misc/libformula/source/org/jfree/formula/function/logical/Or-Function.properties	2007-10-18 08:21:39.000000000 +0200
++++ misc/build/libformula/source/org/jfree/formula/function/logical/Or-Function.properties	2008-09-05 09:15:17.990625000 +0200
+@@ -3,7 +3,6 @@
+ #
+ 
+ display-name=OR
+-description=Logical OR
+-parameter.0.description=Condition
+-parameter.0.display-name=A Condition
+-
++description=Compute logical OR of all parameters.
++parameter.0.description=A logical parameter.
++parameter.0.display-name=Value
+--- misc/libformula/source/org/jfree/formula/function/math/Even-Function.properties	2007-10-18 08:21:37.000000000 +0200
++++ misc/build/libformula/source/org/jfree/formula/function/math/Even-Function.properties	2008-09-18 08:20:28.037500000 +0200
+@@ -2,7 +2,7 @@
+ # Copyright (c) 2007, Pentaho Corporation. All Rights Reserved.
+ #
+ 
+-display-name=Even
++display-name=EVEN
+ description=Returns the rounding a number up to the nearest even integer.
+ parameter.0.description=A value.
+ parameter.0.display-name=Value
+--- misc/libformula/source/org/jfree/formula/function/math/ModFunctionDescription.java	2007-10-18 08:21:37.000000000 +0200
++++ misc/build/libformula/source/org/jfree/formula/function/math/ModFunctionDescription.java	2008-11-18 12:04:59.248540478 +0100
+@@ -56,7 +56,7 @@
+ 
+   public int getParameterCount()
+   {
+-    return 12;
++    return 2;
+   }
+ 
+   public Type getParameterType(final int position)
+--- misc/libformula/source/org/jfree/formula/function/text/Trim-Function.properties	2007-10-18 08:21:29.000000000 +0200
++++ misc/build/libformula/source/org/jfree/formula/function/text/Trim-Function.properties	2008-09-18 08:19:05.146875000 +0200
+@@ -2,7 +2,7 @@
+ # Copyright (c) 2007, Pentaho Corporation. All Rights Reserved.
+ #
+ 
+-display-name=LOWER
++display-name=TRIM
+ description=Returns the given text free of leading and trailing spaces. Internal multiple spaces are replaced by one.
+ parameter.0.description=A value.
+ parameter.0.display-name=Value
+--- misc/libformula/source/org/jfree/formula/parser/FormulaParser.java	2007-10-18 08:21:39.000000000 +0200
++++ misc/build/libformula/source/org/jfree/formula/parser/FormulaParser.java	2008-09-10 13:22:53.306875000 +0200
+@@ -87,8 +87,15 @@
+ //    x.initialize(new DefaultFormulaContext());
+ //    System.out.println(x);
+ 
+-    final LValue x = parser.parse("(1)()");
+-    x.initialize(new DefaultFormulaContext());
+-    System.out.println(x);
++    final GeneratedFormulaParserTokenManager tokenParser = new GeneratedFormulaParserTokenManager(new JavaCharStream(new StringReader("DATEDIFF"),1,1));
++    Token token = tokenParser.getNextToken();
++    StringBuffer a = new StringBuffer();
++    while( token.kind != GeneratedFormulaParserConstants.EOF )
++    {
++        a.append(token.image);
++        token = tokenParser.getNextToken();
++    }
++
++    System.out.println(a.toString());
+   }
+ }

@@ -54,9 +54,29 @@ TARFILE_ROOTDIR=$(TARGET)
 PATCH_FILE_NAME=$(PRJ)$/patches$/$(TARGET).patch
 
 CONVERTFILES=build.xml\
-            build.properties \
-            source/org/jfree/formula/function/text/MidFunctionDescription.java
+                build.properties \
+                source/org/jfree/formula/function/text/MidFunctionDescription.java
+                source/org/jfree/formula/function/AbstractFunctionDescription.java \
+                source/org/jfree/formula/function/datetime/Hour-Function.properties \
+                source/org/jfree/formula/function/information/IsBlank-Function.properties \
+                source/org/jfree/formula/function/information/IsErr-Function.properties \
+                source/org/jfree/formula/function/information/IsError-Function.properties \
+                source/org/jfree/formula/function/information/IsEven-Function.properties \
+                source/org/jfree/formula/function/information/IsLogical-Function.properties \
+                source/org/jfree/formula/function/information/IsNa-Function.properties \
+                source/org/jfree/formula/function/information/IsNonText-Function.properties \
+                source/org/jfree/formula/function/information/IsNumber-Function.properties \
+                source/org/jfree/formula/function/information/IsOdd-Function.properties \
+                source/org/jfree/formula/function/information/IsText-Function.properties \
+                source/org/jfree/formula/function/logical/If-Function.properties \
+                source/org/jfree/formula/function/logical/Not-Function.properties \
+                source/org/jfree/formula/function/logical/Or-Function.properties \
+                source/org/jfree/formula/function/math/Even-Function.properties \
+                source/org/jfree/formula/function/math/ModFunctionDescription.java \
+                source/org/jfree/formula/function/text/Trim-Function.properties \
+                source/org/jfree/formula/parser/FormulaParser.java
 
+ADDITIONAL_FILES=source/org/jfree/formula/function/information/IsRef-Function.properties
 OUT2CLASS=$(TARGET)$(VERSION).jar
 
 .IF "$(JAVACISGCJ)"=="yes"
@@ -66,6 +86,7 @@ BUILD_ACTION=$(ANT) -Dlibdir="../../../class" -Dbuild.label="build-$(RSCREVISION
 .ELSE
 BUILD_ACTION=$(ANT) -Dlibdir="../../../class" -Dbuild.label="build-$(RSCREVISION)" -f $(ANT_BUILDFILE) compile
 .ENDIF
+
 
 .ENDIF # $(SOLAR_JAVA)!= ""
 
@@ -77,4 +98,7 @@ BUILD_ACTION=$(ANT) -Dlibdir="../../../class" -Dbuild.label="build-$(RSCREVISION
 .IF "$(SOLAR_JAVA)" != ""
 .INCLUDE : tg_ext.mk
 .ENDIF
+# $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/source$/org$/jfree$/formula$/function$/information$/IsRef-Function.properties : 
+#	@@-$(MKDIRHIER) $(@:d)
+#    $(MV) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/source$/org$/jfree$/formula$/function$/information$/isRef-Function.properties $@	
 
