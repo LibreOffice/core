@@ -1673,12 +1673,7 @@ void FormulaCompiler::AppendString( rtl::OUStringBuffer& rBuffer, const String &
         else
         {
             String aStr( rStr );
-            xub_StrLen nPos = 0;
-            while ( (nPos = aStr.Search( '"', nPos)) != STRING_NOTFOUND )
-            {
-                aStr.Insert( '"', nPos );
-                nPos += 2;
-            }
+            aStr.SearchAndReplaceAll( '"', String( RTL_CONSTASCII_USTRINGPARAM( "\"\"")));
             rBuffer.append(aStr);
         }
         rBuffer.append(sal_Unicode('"'));

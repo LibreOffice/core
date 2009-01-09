@@ -138,6 +138,7 @@ public:
     USHORT    GetCodeError() const      { return nError; }
     void      SetCodeError( USHORT n )  { nError = n; }
     short     GetRefs()  const { return nRefs;  }
+    void      IncrementRefs() { ++nRefs; }
     void      SetHyperLink( BOOL bVal ) { bHyperLink = bVal; }
     BOOL      IsHyperLink() const       { return bHyperLink; }
 
