@@ -212,7 +212,7 @@ public:
     virtual void                SetForceArray( bool b );
     virtual BOOL                operator==( const FormulaToken& rToken ) const;
 
-    DECL_FIXEDMEMPOOL_NEWDEL_DLL( FormulaByteToken );
+    DECL_FIXEDMEMPOOL_NEWDEL_DLL( FormulaByteToken )
 };
 
 
@@ -249,7 +249,7 @@ public:
     virtual double&             GetDoubleAsReference();
     virtual BOOL                operator==( const FormulaToken& rToken ) const;
 
-    DECL_FIXEDMEMPOOL_NEWDEL_DLL( FormulaDoubleToken );
+    DECL_FIXEDMEMPOOL_NEWDEL_DLL( FormulaDoubleToken )
 };
 
 
@@ -267,7 +267,7 @@ public:
     virtual const String&       GetString() const;
     virtual BOOL                operator==( const FormulaToken& rToken ) const;
 
-    DECL_FIXEDMEMPOOL_NEWDEL_DLL( FormulaStringToken );
+    DECL_FIXEDMEMPOOL_NEWDEL_DLL( FormulaStringToken )
 };
 
 

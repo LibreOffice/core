@@ -245,10 +245,12 @@ protected:
 
     virtual void SetError(USHORT nError);
     virtual FormulaTokenRef ExtendRangeReference( FormulaToken & rTok1, FormulaToken & rTok2, bool bReuseDoubleRef );
+    virtual BOOL HandleExternalReference(const FormulaToken& _aToken);
     virtual BOOL HandleRange();
     virtual BOOL HandleSingleRef();
     virtual BOOL HandleDbData();
 
+    virtual void CreateStringFromExternal(rtl::OUStringBuffer& rBuffer, FormulaToken* pTokenP);
     virtual void CreateStringFromSingleRef(rtl::OUStringBuffer& rBuffer,FormulaToken* pTokenP);
     virtual void CreateStringFromDoubleRef(rtl::OUStringBuffer& rBuffer,FormulaToken* pTokenP);
     virtual void CreateStringFromMatrix(rtl::OUStringBuffer& rBuffer,FormulaToken* pTokenP);
