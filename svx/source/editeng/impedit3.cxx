@@ -4293,30 +4293,24 @@ void ImpEditEngine::ImplInitDigitMode( OutputDevice* pOutDev, String* pString, x
     else if (pString)
     {
         // see sallayout.cxx in vcl
-        if ( eLang == LANGUAGE_ARABIC_SAUDI_ARABIA ||
-             eLang == LANGUAGE_ARABIC_IRAQ ||
-             eLang == LANGUAGE_ARABIC_EGYPT ||
-             eLang == LANGUAGE_ARABIC_LIBYA ||
-             eLang == LANGUAGE_ARABIC_ALGERIA ||
-             eLang == LANGUAGE_ARABIC_MOROCCO ||
-             eLang == LANGUAGE_ARABIC_TUNISIA ||
-             eLang == LANGUAGE_ARABIC_OMAN ||
-             eLang == LANGUAGE_ARABIC_YEMEN ||
-             eLang == LANGUAGE_ARABIC_SYRIA ||
-             eLang == LANGUAGE_ARABIC_JORDAN ||
-             eLang == LANGUAGE_ARABIC_LEBANON ||
-             eLang == LANGUAGE_ARABIC_KUWAIT ||
-             eLang == LANGUAGE_ARABIC_UAE ||
-             eLang == LANGUAGE_ARABIC_BAHRAIN ||
-             eLang == LANGUAGE_ARABIC_QATAR ||
-             eLang == LANGUAGE_URDU ||
-             eLang == LANGUAGE_URDU_PAKISTAN ||
-             eLang == LANGUAGE_URDU_INDIA ||
-             eLang == LANGUAGE_URDU_INDIA ||
-             eLang == LANGUAGE_PUNJABI )
+        int nOffset;
+        switch( eLang & LANGUAGE_MASK_PRIMARY )
+        {
+            default:
+                nOffset = 0;
+                break;
+            case LANGUAGE_ARABIC_SAUDI_ARABIA  & LANGUAGE_MASK_PRIMARY:
+                nOffset = 0x0660 - '0';  // arabic-indic digits
+                break;
+            case LANGUAGE_URDU          & LANGUAGE_MASK_PRIMARY:
+            case LANGUAGE_PUNJABI       & LANGUAGE_MASK_PRIMARY: //???
+            case LANGUAGE_SINDHI        & LANGUAGE_MASK_PRIMARY:
+                nOffset = 0x06F0 - '0';  // eastern arabic-indic digits
+                break;
+        }
+        if (nOffset)
         {
             const xub_StrLen nEnd = nStt + nLen;
-            int nOffset = 0x0660 - '0';  // arabic/persian/urdu
             for( xub_StrLen nIdx = nStt; nIdx < nEnd; ++nIdx )
             {
                 sal_Unicode nChar = pString->GetChar( nIdx );
