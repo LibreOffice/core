@@ -1158,8 +1158,6 @@ sal_Bool SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI )
             GetMedium_Impl();
         }
 
-        SFX_ITEMSET_ARG( GetItemSet(), pReadOnlyItem, SfxBoolItem, SID_DOC_READONLY, sal_False);
-
         // no locking is necessary on loading if the document is explicitly opened as copy
         SFX_ITEMSET_ARG( GetItemSet(), pTemplateItem, SfxBoolItem, SID_TEMPLATE, sal_False);
         bResult = ( bLoading && pTemplateItem && pTemplateItem->GetValue() );
