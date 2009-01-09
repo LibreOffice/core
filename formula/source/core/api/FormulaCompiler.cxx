@@ -346,8 +346,7 @@ uno::Sequence< sheet::FormulaOpCodeMapEntry > FormulaCompiler::OpCodeMap::create
             { FormulaMapGroupSpecialOffset::MAT_REF           , ocMatRef }         ,
             { FormulaMapGroupSpecialOffset::DB_AREA           , ocDBArea }         ,
             { FormulaMapGroupSpecialOffset::MACRO             , ocMacro }          ,
-            { FormulaMapGroupSpecialOffset::COL_ROW_NAME      , ocColRowName }     ,
-            { FormulaMapGroupSpecialOffset::COL_ROW_NAME_AUTO , ocColRowNameAuto }
+            { FormulaMapGroupSpecialOffset::COL_ROW_NAME      , ocColRowName }
         };
         const size_t nCount = sizeof(aMap)/sizeof(aMap[0]);
         // Preallocate vector elements.
@@ -833,9 +832,9 @@ BOOL FormulaCompiler::GetToken()
         else
         {
             if ( nWasColRowName >= 2 && pToken->GetOpCode() == ocColRowName )
-            {   // aus einem ocSpaces ein ocIntersect im RPN machen
+            {   // convert an ocSpaces to ocIntersect in RPN
                 pToken = new FormulaByteToken( ocIntersect );
-                pArr->nIndex--;     // ganz schweinisch..
+                pArr->nIndex--;     // we advanced to the second ocColRowName, step back
             }
         }
     }
@@ -846,6 +845,10 @@ BOOL FormulaCompiler::GetToken()
     }
     if( pToken->GetOpCode() == ocSubTotal )
         glSubTotal = TRUE;
+    else if ( pToken->GetOpCode() == ocExternalRef )
+    {
+        return HandleExternalReference(*pToken);
+    }
     else if( pToken->GetOpCode() == ocName )
     {
         return HandleRange();
@@ -1135,6 +1138,11 @@ void FormulaCompiler::Factor()
                 aCorrectedSymbol.Erase();
                 bCorrected = TRUE;
             }
+        }
+        else if ( eOp == ocExternalRef )
+        {
+            PutCode(pToken);
+            eOp = NextToken();
         }
         else
         {
@@ -1462,11 +1470,13 @@ void FormulaCompiler::CreateStringFromTokenArray( rtl::OUStringBuffer& rBuffer )
         return;
 
     FormulaTokenArray* pSaveArr = pArr;
-    if (formula::FormulaGrammar::isPODF( meGrammar))
+    bool bODFF = FormulaGrammar::isODFF( meGrammar);
+    if (bODFF || FormulaGrammar::isPODF( meGrammar) )
     {
         // Scan token array for missing args and re-write if present.
-        if (pArr->NeedsPofRewrite())
-            pArr = pArr->RewriteMissingToPof();
+        MissingConvention aConv( bODFF);
+        if (pArr->NeedsPofRewrite( aConv))
+            pArr = pArr->RewriteMissingToPof( aConv);
     }
 
     // At least one character per token, plus some are references, some are
@@ -1548,59 +1558,68 @@ FormulaToken* FormulaCompiler::CreateStringFromToken( rtl::OUStringBuffer& rBuff
         rBuffer.append(GetNativeSymbol( ocErrName ));
     }
     if( bNext )
-        switch( t->GetType() )
     {
-        case svDouble:
-            AppendDouble( rBuffer, t->GetDouble() );
-        break;
-
-        case svString:
-            if( eOp == ocBad )
-                rBuffer.append(t->GetString());
-            else
-                AppendString( rBuffer, t->GetString() );
-            break;
-        case svSingleRef:
-            CreateStringFromSingleRef(rBuffer,t);
-            break;
-        case svDoubleRef:
-            CreateStringFromDoubleRef(rBuffer,t);
-            break;
-        case svMatrix:
-            CreateStringFromMatrix( rBuffer, t );
-            break;
-
-        case svIndex:
-            CreateStringFromIndex( rBuffer, t );
-            break;
-        case svExternal:
+        if (eOp == ocExternalRef)
         {
-            // mapped or translated name of AddIns
-            String aAddIn( t->GetExternal() );
-            bool bMapped = mxSymbols->isPODF();     // ODF 1.1 directly uses programmatical name
-            if (!bMapped && mxSymbols->hasExternals())
-            {
-                ExternalHashMap::const_iterator iLook = mxSymbols->getReverseExternalHashMap()->find( aAddIn);
-                if (iLook != mxSymbols->getReverseExternalHashMap()->end())
-                {
-                    aAddIn = (*iLook).second;
-                    bMapped = true;
-                }
-            }
-            if (!bMapped && !mxSymbols->isEnglish())
-                LocalizeString( aAddIn );
-            rBuffer.append(aAddIn);
+            CreateStringFromExternal(rBuffer, pTokenP);
         }
+        else
+        {
+            switch( t->GetType() )
+            {
+            case svDouble:
+                AppendDouble( rBuffer, t->GetDouble() );
             break;
-        case svByte:
-        case svJump:
-        case svFAP:
-        case svMissing:
-        case svSep:
-            break;      // Opcodes
-        default:
-            DBG_ERROR("FormulaCompiler:: GetStringFromToken errUnknownVariable");
-    }                                           // of switch
+
+            case svString:
+                if( eOp == ocBad )
+                    rBuffer.append(t->GetString());
+                else
+                    AppendString( rBuffer, t->GetString() );
+                break;
+            case svSingleRef:
+                CreateStringFromSingleRef(rBuffer,t);
+                break;
+            case svDoubleRef:
+                CreateStringFromDoubleRef(rBuffer,t);
+                break;
+            case svMatrix:
+                CreateStringFromMatrix( rBuffer, t );
+                break;
+
+            case svIndex:
+                CreateStringFromIndex( rBuffer, t );
+                break;
+            case svExternal:
+            {
+                // mapped or translated name of AddIns
+                String aAddIn( t->GetExternal() );
+                bool bMapped = mxSymbols->isPODF();     // ODF 1.1 directly uses programmatical name
+                if (!bMapped && mxSymbols->hasExternals())
+                {
+                    ExternalHashMap::const_iterator iLook = mxSymbols->getReverseExternalHashMap()->find( aAddIn);
+                    if (iLook != mxSymbols->getReverseExternalHashMap()->end())
+                    {
+                        aAddIn = (*iLook).second;
+                        bMapped = true;
+                    }
+                }
+                if (!bMapped && !mxSymbols->isEnglish())
+                        LocalizeString( aAddIn );
+                    rBuffer.append(aAddIn);
+                }
+            break;
+            case svByte:
+            case svJump:
+            case svFAP:
+            case svMissing:
+            case svSep:
+                break;      // Opcodes
+            default:
+                DBG_ERROR("FormulaCompiler:: GetStringFromToken errUnknownVariable");
+            } // of switch
+        }
+    }
     if( bSpaces )
         rBuffer.append(sal_Unicode(' '));
     if ( bAllowArrAdvance )
@@ -1783,6 +1802,11 @@ void FormulaCompiler::PutCode( FormulaTokenRef& p )
 }
 
 // -----------------------------------------------------------------------------
+BOOL FormulaCompiler::HandleExternalReference(const FormulaToken& /*_aToken*/)
+{
+    return TRUE;
+}
+// -----------------------------------------------------------------------------
 BOOL FormulaCompiler::HandleRange()
 {
     return TRUE;
@@ -1811,6 +1835,10 @@ void FormulaCompiler::CreateStringFromIndex(rtl::OUStringBuffer& /*rBuffer*/,For
 }
 // -----------------------------------------------------------------------------
 void FormulaCompiler::CreateStringFromMatrix(rtl::OUStringBuffer& /*rBuffer*/,FormulaToken* /*pTokenP*/)
+{
+}
+// -----------------------------------------------------------------------------
+void FormulaCompiler::CreateStringFromExternal(rtl::OUStringBuffer& /*rBuffer*/,FormulaToken* /*pTokenP*/)
 {
 }
 // -----------------------------------------------------------------------------
