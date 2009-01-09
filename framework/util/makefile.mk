@@ -331,7 +331,7 @@ SHL4OBJS=       \
                 $(SLO)$/wakeupthread.obj            \
                 $(SLO)$/windowcommanddispatch.obj   \
                 $(SLO)$/windowstateconfiguration.obj \
-                $(SLO)$/windowcontentfactorymanager.obj
+                $(SLO)$/windowcontentfactorymanager.obj \
                 $(SLO)$/startmoduledispatcher.obj
 
 SHL4STDLIBS=    \
