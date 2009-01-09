@@ -4280,7 +4280,7 @@ void ImpEditEngine::ImplInitDigitMode( OutputDevice* pOutDev, String* pString, x
     const SvtCTLOptions::TextNumerals nCTLTextNumerals = pCTLOptions->GetCTLTextNumerals();
 
     if ( SvtCTLOptions::NUMERALS_HINDI == nCTLTextNumerals )
-        eLang = LANGUAGE_ARABIC;
+        eLang = LANGUAGE_ARABIC_SAUDI_ARABIA;
     else if ( SvtCTLOptions::NUMERALS_ARABIC == nCTLTextNumerals )
         eLang = LANGUAGE_ENGLISH;
     else if ( SvtCTLOptions::NUMERALS_SYSTEM == nCTLTextNumerals )
@@ -4293,8 +4293,7 @@ void ImpEditEngine::ImplInitDigitMode( OutputDevice* pOutDev, String* pString, x
     else if (pString)
     {
         // see sallayout.cxx in vcl
-        if ( eLang == LANGUAGE_ARABIC ||
-             eLang == LANGUAGE_ARABIC_SAUDI_ARABIA ||
+        if ( eLang == LANGUAGE_ARABIC_SAUDI_ARABIA ||
              eLang == LANGUAGE_ARABIC_IRAQ ||
              eLang == LANGUAGE_ARABIC_EGYPT ||
              eLang == LANGUAGE_ARABIC_LIBYA ||
