@@ -177,7 +177,7 @@ SfxObjectShell::CreatePreviewMetaFile_Impl( sal_Bool bFullContent, sal_Bool bHig
     LanguageType eLang;
     SvtCTLOptions*  pCTLOptions = new SvtCTLOptions;
     if ( SvtCTLOptions::NUMERALS_HINDI == pCTLOptions->GetCTLTextNumerals() )
-        eLang = LANGUAGE_ARABIC;
+        eLang = LANGUAGE_ARABIC_SAUDI_ARABIA;
     else if ( SvtCTLOptions::NUMERALS_ARABIC == pCTLOptions->GetCTLTextNumerals() )
         eLang = LANGUAGE_ENGLISH;
     else
