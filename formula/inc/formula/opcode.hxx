@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: opcode.hxx,v $
- * $Revision: 1.23 $
+ * $Revision: 1.23.134.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,6 +42,7 @@ enum OpCodeEnum
         ocStop              = SC_OPCODE_STOP,
         ocExternal          = SC_OPCODE_EXTERNAL,
         ocName              = SC_OPCODE_NAME,
+        ocExternalRef       = SC_OPCODE_EXTERNAL_REF,
     // Jump commands
         ocIf                = SC_OPCODE_IF,
         ocChose             = SC_OPCODE_CHOSE,
@@ -174,6 +175,7 @@ enum OpCodeEnum
         ocFisherInv         = SC_OPCODE_FISHER_INV,
         ocSNormInv          = SC_OPCODE_S_NORM_INV,
         ocGammaLn           = SC_OPCODE_GAMMA_LN,
+        ocGamma             = SC_OPCODE_GAMMA,
         ocErrorType         = SC_OPCODE_ERROR_TYPE,
         ocErrCell           = SC_OPCODE_ERR_CELL,
         ocFormula           = SC_OPCODE_FORMULA,
@@ -311,6 +313,8 @@ enum OpCodeEnum
         ocTDist             = SC_OPCODE_T_DIST,
         ocFDist             = SC_OPCODE_F_DIST,
         ocChiDist           = SC_OPCODE_CHI_DIST,
+        ocChiSqDist         = SC_OPCODE_CHISQ_DIST,
+        ocChiSqInv          = SC_OPCODE_CHISQ_INV,
         ocWeibull           = SC_OPCODE_WEIBULL,
         ocNegBinomVert      = SC_OPCODE_NEG_BINOM_VERT,
         ocKritBinom         = SC_OPCODE_KRIT_BINOM,
