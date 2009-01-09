@@ -53,6 +53,7 @@
 #include <svtools/transfer.hxx>
 #include <svtools/lstner.hxx>
 #include <svx/svdedtv.hxx>
+#include <svx/zoomitem.hxx>
 #include "ModuleHelper.hxx"
 
 #include <comphelper/uno3.hxx>
@@ -118,8 +119,8 @@ namespace rptui
         sal_Int32               m_nSplitPos;            /// the position of the splitter
         sal_Int32               m_nPageNum;             /// the page number from the restoreView call
         sal_Int32               m_nSelectionCount;
-        //sal_Int32               m_nExecuteReportEvent;
         sal_Int16               m_nZoomValue;
+        SvxZoomType             m_eZoomType;
         sal_Bool                m_bShowRuler;
         sal_Bool                m_bGridVisible;
         sal_Bool                m_bGridUse;
@@ -176,6 +177,10 @@ namespace rptui
         /** opens or hides the sorting and grouping dialog
         */
         void openSortingAndGroupingDialog();
+
+        /** opens the zoom dialog
+        */
+        void openZoomDialog();
 
         /** returns the position of the group inside the groups collection
         */
@@ -294,7 +299,6 @@ namespace rptui
         DECL_LINK( OnClipboardChanged, void* );
         DECL_LINK( OnExecuteReport, void* );
         DECL_LINK( OnOpenHelpAgent, void* );
-
         short saveModified();
         // all the features which should be handled by this class
         virtual void            describeSupportedFeatures();
@@ -422,7 +426,8 @@ namespace rptui
         ::boost::shared_ptr<rptui::OReportModel> getSdrModel();
 
         inline ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >  getContext() const { return m_xContext; }
-        inline sal_Int16 getZoomValue() const { return m_nZoomValue; }
+        inline sal_Int16   getZoomValue() const     { return m_nZoomValue; }
+        inline void         resetZoomType()         { m_eZoomType = SVX_ZOOM_PERCENT; }
 
         // com::sun::star::beans::XPropertySet
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException)

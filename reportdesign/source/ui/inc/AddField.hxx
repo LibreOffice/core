@@ -42,6 +42,7 @@
 #include <svtools/transfer.hxx>
 #include <vcl/floatwin.hxx>
 #include <comphelper/propmultiplex.hxx>
+#include <comphelper/containermultiplexer.hxx>
 #include <vcl/button.hxx>
 
 #include <svx/dataaccessdescriptor.hxx>
@@ -68,7 +69,6 @@ class  OAddFieldWindow  :public FloatingWindow
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_xRowSet;
 
     ToolBox                                                                     m_aActions;
-    DECL_LINK( OnDoubleClickHdl, void* );
 
     ::std::auto_ptr<OAddFieldWindowListBox>                                     m_pListBox;
 
@@ -127,8 +127,6 @@ public:
     * \param _rDescriptor the descriptor will be filled
     */
     void fillDescriptor(SvLBoxEntry* _pSelected,::svx::ODataAccessDescriptor& _rDescriptor);
-
-    inline void SetCreateHdl(const Link& _aCreateLink) { m_aCreateLink = _aCreateLink; }
 
 private:
     // FmXChangeListener

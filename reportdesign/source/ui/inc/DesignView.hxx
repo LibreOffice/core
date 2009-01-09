@@ -89,7 +89,8 @@ namespace rptui
         USHORT                              m_nCurrentPosition;
         USHORT                              m_eActObj;
         BOOL                                m_bFirstDraw;
-        Size                                m_aGridSize;
+        Size                                m_aGridSizeCoarse;
+        Size                                m_aGridSizeFine;
         BOOL                                m_bGridVisible;
         BOOL                                m_bGridSnap;
         BOOL                                m_bDeleted;
@@ -188,7 +189,8 @@ namespace rptui
                                     ,const ::rtl::OUString& _sColorEntry
                                     ,USHORT _nPosition = USHRT_MAX);
 
-        inline Size     getGridSize() const { return m_aGridSize; }
+        inline Size     getGridSizeCoarse() const { return m_aGridSizeCoarse; }
+        inline Size     getGridSizeFine() const { return m_aGridSizeFine; }
         inline BOOL     isGridSnap() const { return m_bGridSnap; }
         void            setGridSnap(BOOL bOn);
         void            setDragStripes(BOOL bOn);
@@ -273,7 +275,7 @@ namespace rptui
 
         /** zoom the ruler and view windows
         */
-        void            zoom(const sal_Int16 _nZoom);
+        void            zoom(const Fraction& _aZoom);
 
         /** fills the vector with all selected control models
             /param  _rSelection The vector will be filled and will not be cleared before.
@@ -283,6 +285,11 @@ namespace rptui
         /** returns the selected field from the add field dialog
         */
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > getSelectedFieldDescriptors();
+
+        /** calculates the zoom factor.
+            @param  _eType  which kind of zoom is needed
+        */
+        sal_uInt16 getZoomFactor(SvxZoomType _eType) const;
     };
 //==================================================================
 }   //rptui

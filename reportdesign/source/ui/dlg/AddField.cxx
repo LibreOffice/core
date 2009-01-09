@@ -171,9 +171,11 @@ OAddFieldWindow::OAddFieldWindow(Window* pParent
             ,m_xRowSet(_xRowSet)
             ,m_aActions(this,ModuleRes(RID_TB_SORTING))
             ,m_pListBox(new OAddFieldWindowListBox( this ))
+            ,m_aInsertButton(this, WB_TABSTOP|WB_CENTER)
             ,m_nCommandType(0)
             ,m_bEscapeProcessing(sal_False)
             ,m_pChangeListener(NULL)
+            ,m_pContainerListener(NULL)
 {
     DBG_CTOR( rpt_OAddFieldWindow,NULL);
     SetHelpId( HID_RPT_FIELD_SEL_WIN );
@@ -181,7 +183,6 @@ OAddFieldWindow::OAddFieldWindow(Window* pParent
     SetMinOutputSizePixel(Size(STD_WIN_SIZE_X,STD_WIN_SIZE_Y));
 
     m_aActions.SetStyle(m_aActions.GetStyle()|WB_LINESPACING);
-            ,m_xRowSet(_xRowSet)
     m_aActions.SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetFaceColor()) );
 
     m_aActions.SetSelectHdl(LINK(this, OAddFieldWindow, OnSortAction));
@@ -290,7 +291,7 @@ void OAddFieldWindow::Update()
     m_pContainerListener = NULL;
     m_xColumns.clear();
 
-    if ( m_xRowSet.is() )
+    try
     {
         // ListBox loeschen
         m_pListBox->Clear();
@@ -348,7 +349,6 @@ void OAddFieldWindow::Update()
                 }
             }
                 OnSelectHdl(NULL);
-            }
         }
     }
     catch( const Exception& )
@@ -509,13 +509,5 @@ IMPL_LINK( OAddFieldWindow, OnSortAction, ToolBox*, /*NOTINTERESTEDIN*/ )
 // -----------------------------------------------------------------------------
 // =============================================================================
 } // namespace rptui
-// -----------------------------------------------------------------------------
-IMPL_LINK( OAddFieldWindow, OnDoubleClickHdl, void* ,/*_pAddFieldDlg*/)
-{
-    if ( m_aCreateLink.IsSet() )
-        m_aCreateLink.Call(this);
-
-    return 0L;
-}
 // =============================================================================
 
