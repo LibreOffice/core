@@ -18,13 +18,6 @@ mkdir: %_DEST%\xml%_EXT%\uiconfig\global\accelerator\es
 ..\%__SRC%\bin\txcnv*.dll %_DEST%\bin%_EXT%\txcnv*.dll
 ..\%__SRC%\bin\*.res %_DEST%\bin%_EXT%\*.res
 
-mkdir: %COMMON_DEST%\pck%_EXT%\starsuite_bitmap
-mkdir: %COMMON_DEST%\pck%_EXT%\staroffice_bitmap
-mkdir: %COMMON_DEST%\pck%_EXT%\openoffice
-mkdir: %COMMON_DEST%\pck%_EXT%\openoffice_dev
-mkdir: %COMMON_DEST%\pck%_EXT%\broffice
-mkdir: %COMMON_DEST%\pck%_EXT%\broffice_dev
-
 mkdir: %_DEST%\inc%_EXT%\svx
 ..\inc\flagsdef.hxx %_DEST%\inc%_EXT%\svx\flagsdef.hxx
 ..\%__SRC%\inc\svxslots.hxx %_DEST%\inc%_EXT%\svx\svxslots.hxx
