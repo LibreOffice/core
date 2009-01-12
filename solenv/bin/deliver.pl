@@ -1025,15 +1025,15 @@ sub push_default_actions
         foreach $subdir (@subdirs) {
             push(@action_data, ['mkdir', "%_DEST%/$subdir%_EXT%"]);
         }
-        push(@action_data, ['mkdir', "%_DEST%/inc%_EXT%/$module"]);
         if ( $common_build ) {
             foreach $subdir (@common_subdirs) {
                 push(@action_data, ['mkdir', "%COMMON_DEST%/$subdir%_EXT%"]);
             }
-            push(@action_data, ['mkdir', "%COMMON_DEST%/inc%_EXT%/$module"]);
         }
     }
+    push(@action_data, ['mkdir', "%_DEST%/inc%_EXT%/$module"]);
     if ( $common_build ) {
+        push(@action_data, ['mkdir', "%COMMON_DEST%/inc%_EXT%/$module"]);
         push(@action_data, ['mkdir', "%COMMON_DEST%/res%_EXT%/img"]);
     } else {
         push(@action_data, ['mkdir', "%_DEST%/res%_EXT%/img"]);
