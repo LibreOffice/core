@@ -39,8 +39,8 @@ TARGET=uiconfig
 
 .INCLUDE : target.mk
 
-ALLTAR : $(COMMONBIN)$/uiconfig.zip
+ALLTAR : $(BIN)$/uiconfig.zip
 
-$(COMMONBIN)$/uiconfig.zip .PHONY:
+$(BIN)$/uiconfig.zip .PHONY:
     $(PERL) packconfig.pl -i $(SOLARXMLDIR)$/uiconfig -o $@
 
