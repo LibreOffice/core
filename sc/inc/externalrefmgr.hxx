@@ -257,7 +257,7 @@ private:
 
 // ============================================================================
 
-class ScExternalRefManager : public formula::ExternalReferenceHelper
+class SC_DLLPUBLIC ScExternalRefManager : public formula::ExternalReferenceHelper
 {
 public:
 
