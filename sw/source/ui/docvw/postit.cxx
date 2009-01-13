@@ -570,39 +570,6 @@ IMPL_LINK( PostItTxt, WindowEventListener, VclSimpleEvent*, pWinEvent )
     return sal_True;
 }
 
-XubString PostItTxt::GetSurroundingText() const
-{
-   XubString sRet;
-   if( mpOutlinerView )
-   {
-       EditEngine *aEditEngine = mpOutlinerView->GetEditView().GetEditEngine();
-       if( mpOutlinerView->HasSelection() )
-           sRet = mpOutlinerView->GetSelected();
-       else
-       {
-           ESelection aSelection = mpOutlinerView->GetEditView().GetSelection();
-           sRet = aEditEngine->GetText(aSelection.nStartPara);
-       }
-   }
-   return sRet;
-}
-
-Selection PostItTxt::GetSurroundingTextSelection() const
-{
-   Selection aRet( 0, 0 );
-   if( mpOutlinerView )
-   {
-       if( mpOutlinerView->HasSelection() )
-           aRet = Selection( 0, mpOutlinerView->GetSelected().Len() );
-       else
-       {
-           ESelection aSelection = mpOutlinerView->GetEditView().GetSelection();
-           aRet = Selection( aSelection.nStartPos, aSelection.nEndPos );
-       }
-   }
-   return aRet;
-}
-
 /************** SwMarginWin***********************************++*/
 SwMarginWin::SwMarginWin(Window* pParent, WinBits nBits,SwPostItMgr* aMgr,SwPostItBits aBits)
 : Window(pParent, nBits),

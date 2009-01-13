@@ -97,7 +97,7 @@
 /*--------------------------------------------------------------------
     Beschreibung:   KeyEvents
  --------------------------------------------------------------------*/
-static void lcl_GetRedlineHelp( const SwRedline& rRedl, String& rTxt, BOOL /*bBalloon*/ )
+static void lcl_GetRedlineHelp( const SwRedline& rRedl, String& rTxt, BOOL bBalloon )
 {
     USHORT nResId = 0;
     switch( rRedl.GetType() )
