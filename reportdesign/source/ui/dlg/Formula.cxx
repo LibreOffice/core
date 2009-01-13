@@ -263,7 +263,7 @@ uno::Reference< sheet::XFormulaOpCodeMapper> FormulaDialog::getFormulaOpCodeMapp
 ::std::auto_ptr<formula::FormulaTokenArray> FormulaDialog::convertToTokenArray(const uno::Sequence< sheet::FormulaToken >& _aTokenList)
 {
     ::std::auto_ptr<formula::FormulaTokenArray> pArray(new FormulaTokenArray());
-    pArray->Fill(_aTokenList);
+    pArray->Fill(_aTokenList, NULL);
     return pArray;
 }
 // =============================================================================
