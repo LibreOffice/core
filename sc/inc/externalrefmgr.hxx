@@ -340,7 +340,7 @@ public:
 
 public:
     explicit ScExternalRefManager(ScDocument* pDoc);
-    ~ScExternalRefManager();
+    virtual ~ScExternalRefManager();
 
     virtual String getCacheTableName(sal_uInt16 nFileId, size_t nTabIndex) const;
 
