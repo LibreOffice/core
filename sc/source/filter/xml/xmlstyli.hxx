@@ -154,7 +154,7 @@ public:
       void AddProperty(sal_Int16 nContextID, const com::sun::star::uno::Any& aValue);
     XMLPropertyState* FindProperty(const sal_Int16 nContextID);
 
-    sal_Int32 GetNumberFormat() { return nNumberFormat; }
+    sal_Int32 GetNumberFormat();// { return nNumberFormat; }
 
 private:
     using XMLPropStyleContext::SetStyle;

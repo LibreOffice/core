@@ -605,6 +605,7 @@
 #define SC_UNO_IGNORELEADING        "IgnoreLeadingSpaces"
 #define SC_UNO_OPCODEMAP            "OpCodeMap"
 #define SC_UNO_EXTERNALLINKS        "ExternalLinks"
+#define SC_UNO_COMPILEFAP           "CompileFAP"
 
 // Chart2
 #define SC_UNONAME_ISHIDDEN         "IsHidden"

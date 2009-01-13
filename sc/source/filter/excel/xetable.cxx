@@ -2557,7 +2557,7 @@ XclExpRecordRef XclExpCellTable::CreateRecord( sal_uInt16 nRecId ) const
     XclExpRecordRef xRec;
     switch( nRecId )
     {
-        case EXC_ID3_DIMENSIONS:    xRec.reset( new XclExpDelegatingRecord( maRowBfr.GetDimensions() ) );   break;
+        case EXC_ID3_DIMENSIONS:    xRec.reset( new XclExpDelegatingRecord( const_cast<XclExpRowBuffer*>(&maRowBfr)->GetDimensions() ) );   break;
         case EXC_ID2_DEFROWHEIGHT:  xRec = mxDefrowheight;  break;
         case EXC_ID_GUTS:           xRec = mxGuts;          break;
         case EXC_ID_NOTE:           xRec = mxNoteList;      break;

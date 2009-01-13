@@ -2905,7 +2905,7 @@ void ScInterpreter::ScDBArea()
 void ScInterpreter::ScColRowNameAuto()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScColRowNameAuto" );
-    ScComplexRefData aRefData( pCur->GetDoubleRef() );
+    ScComplexRefData aRefData( static_cast<const ScToken*>(pCur)->GetDoubleRef() );
     aRefData.CalcAbsIfRel( aPos );
     if ( aRefData.Valid() )
     {
@@ -2995,7 +2995,7 @@ void ScInterpreter::ScExternalRef()
     {
         case svExternalSingleRef:
         {
-            ScSingleRefData aData(pCur->GetSingleRef());
+            ScSingleRefData aData(static_cast<const ScToken*>(pCur)->GetSingleRef());
             if (aData.IsTabRel())
             {
                 DBG_ERROR("ScCompiler::GetToken: external single reference must have an absolute table reference!");
@@ -3023,7 +3023,7 @@ void ScInterpreter::ScExternalRef()
         //break;    // unreachable, prevent compiler warning
         case svExternalDoubleRef:
         {
-            ScComplexRefData aData(pCur->GetDoubleRef());
+            ScComplexRefData aData(static_cast<const ScToken*>(pCur)->GetDoubleRef());
             if (aData.Ref1.IsTabRel() || aData.Ref2.IsTabRel())
             {
                 DBG_ERROR("ScCompiler::GetToken: external double reference must have an absolute table reference!");
@@ -3039,7 +3039,7 @@ void ScInterpreter::ScExternalRef()
             if (!xNew)
                 break;
 
-            ScToken* p = xNew->First();
+            ScToken* p = static_cast<ScToken*>(xNew->First());
             if (p->GetType() != svMatrix)
                 break;
 

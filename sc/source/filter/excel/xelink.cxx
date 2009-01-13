@@ -46,6 +46,7 @@
 using ::std::auto_ptr;
 using ::std::find_if;
 using ::std::vector;
+using namespace formula;
 
 // ============================================================================
 // *** Helper classes ***
@@ -251,8 +252,8 @@ public:
     /** Stores all cells in the given range in the CRN list. */
     void                StoreCellRange( const XclExpRoot& rRoot, const ScRange& rRange );
 
-    void                StoreCell( const XclExpRoot& rRoot, const ScAddress& rCell, const ScToken& rToken );
-    void                StoreCellRange( const XclExpRoot& rRoot, const ScRange& rRange, const ScToken& rToken );
+    void                StoreCell( const XclExpRoot& rRoot, const ScAddress& rCell, const formula::FormulaToken& rToken );
+    void                StoreCellRange( const XclExpRoot& rRoot, const ScRange& rRange, const formula::FormulaToken& rToken );
 
     /** Writes the XCT and all CRN records. */
     virtual void        Save( XclExpStream& rStrm );
@@ -355,8 +356,8 @@ public:
     /** Stores all cells in the given range in the CRN list of the specified SUPBOOK sheet. */
     void                StoreCellRange( const ScRange& rRange, sal_uInt16 nSBTab );
 
-    void                StoreCell( sal_uInt16 nSBTab, const ScAddress& rCell, const ScToken& rToken );
-    void                StoreCellRange( sal_uInt16 nSBTab, const ScRange& rRange, const ScToken& rToken );
+    void                StoreCell( sal_uInt16 nSBTab, const ScAddress& rCell, const formula::FormulaToken& rToken );
+    void                StoreCellRange( sal_uInt16 nSBTab, const ScRange& rRange, const formula::FormulaToken& rToken );
 
     sal_uInt16          GetTabIndex( const String& rTabName ) const;
     sal_uInt16          GetTabCount() const;
@@ -1013,7 +1014,7 @@ void XclExpExtName::WriteAddData( XclExpStream& rStrm )
         if (mpArray->GetLen() != 1)
             break;
 
-        const ScToken* p = mpArray->First();
+        const ScToken* p = static_cast<const ScToken*>(mpArray->First());
         if (p->GetOpCode() != ocExternalRef)
             break;
 
@@ -1283,7 +1284,7 @@ void XclExpXct::StoreCellRange( const XclExpRoot& rRoot, const ScRange& rRange )
     maUsedCells.SetMultiMarkArea( rRange );
 }
 
-void XclExpXct::StoreCell( const XclExpRoot& /*rRoot*/, const ScAddress& rCell, const ScToken& rToken )
+void XclExpXct::StoreCell( const XclExpRoot& /*rRoot*/, const ScAddress& rCell, const formula::FormulaToken& rToken )
 {
     switch (rToken.GetType())
     {
@@ -1313,7 +1314,7 @@ void XclExpXct::StoreCell( const XclExpRoot& /*rRoot*/, const ScAddress& rCell, 
     }
 }
 
-void XclExpXct::StoreCellRange( const XclExpRoot& /*rRoot*/, const ScRange& rRange, const ScToken& rToken )
+void XclExpXct::StoreCellRange( const XclExpRoot& /*rRoot*/, const ScRange& rRange, const formula::FormulaToken& rToken )
 {
     if (rToken.GetType() != svMatrix)
         return;
@@ -1322,7 +1323,7 @@ void XclExpXct::StoreCellRange( const XclExpRoot& /*rRoot*/, const ScRange& rRan
         // multi-table range is not supported here.
         return;
 
-    const ScMatrix* pMtx = rToken.GetMatrix();
+    const ScMatrix* pMtx = static_cast<const ScToken*>(&rToken)->GetMatrix();
     if (!pMtx)
         return;
 
@@ -1520,7 +1521,7 @@ void XclExpSupbook::StoreCellRange( const ScRange& rRange, sal_uInt16 nSBTab )
         xXct->StoreCellRange( GetRoot(), rRange );
 }
 
-void XclExpSupbook::StoreCell( sal_uInt16 nSBTab, const ScAddress& rCell, const ScToken& rToken )
+void XclExpSupbook::StoreCell( sal_uInt16 nSBTab, const ScAddress& rCell, const formula::FormulaToken& rToken )
 {
     XclExpXctRef xXct = maXctList.GetRecord(nSBTab);
     if (!xXct.is())
@@ -1529,7 +1530,7 @@ void XclExpSupbook::StoreCell( sal_uInt16 nSBTab, const ScAddress& rCell, const 
     xXct->StoreCell(GetRoot(), rCell, rToken);
 }
 
-void XclExpSupbook::StoreCellRange( sal_uInt16 nSBTab, const ScRange& rRange, const ScToken& rToken )
+void XclExpSupbook::StoreCellRange( sal_uInt16 nSBTab, const ScRange& rRange, const formula::FormulaToken& rToken )
 {
     if (rRange.aStart.Tab() != rRange.aEnd.Tab())
         // multi-table range is not allowed!
@@ -1788,7 +1789,7 @@ void XclExpSupbookBuffer::StoreCellRange( sal_uInt16 nFileId, const String& rTab
     SCTAB nTabCount = rRange.aEnd.Tab() - rRange.aStart.Tab() + 1;
 
     // If this is a multi-table range, get token for each table.
-    vector<ScToken*> aMatrixList;
+    vector<FormulaToken*> aMatrixList;
     aMatrixList.reserve(nTabCount);
 
     // This is a new'ed instance, so we must manage its life cycle here.
@@ -1796,7 +1797,7 @@ void XclExpSupbookBuffer::StoreCellRange( sal_uInt16 nFileId, const String& rTab
     if (!pArray.get())
         return;
 
-    for (ScToken* p = pArray->First(); p; p = pArray->Next())
+    for (FormulaToken* p = pArray->First(); p; p = pArray->Next())
     {
         if (p->GetType() == svMatrix)
             aMatrixList.push_back(p);

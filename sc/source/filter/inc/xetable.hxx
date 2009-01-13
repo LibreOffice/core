@@ -1060,7 +1060,7 @@ public:
         @param nRecId  The record identifier that specifies which record is
             returned. Possible values are: EXC_ID_DEFROWHEIGHT, EXC_ID_NOTE,
             EXC_ID_MERGEDCELLS, EXC_ID_HLINK, EXC_ID_DVAL. */
-    XclExpRecordRef     CreateRecord( sal_uInt16 nRecId );
+    XclExpRecordRef     CreateRecord( sal_uInt16 nRecId ) const;
     /** Saves the entire cell table. */
     virtual void        Save( XclExpStream& rStrm );
     virtual void        SaveXml( XclExpXmlStream& rStrm );

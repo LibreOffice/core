@@ -1,4 +1,3 @@
-<<<<<<< .working
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -63,6 +62,7 @@
 #include <sal/types.h>
 #include <tools/debug.hxx>
 
+using rtl::OUString;
 using namespace com::sun::star;
 using namespace xmloff::token;
 

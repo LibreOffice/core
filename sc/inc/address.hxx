@@ -319,7 +319,7 @@ public:
     inline void GetVars( SCCOL& nColP, SCROW& nRowP, SCTAB& nTabP ) const
     { nColP = nCol; nRowP = nRow; nTabP = nTab; }
 
-    USC_DLLPUBLIC USHORT Parse( const String&, ScDocument* = NULL,
+    SC_DLLPUBLIC USHORT Parse( const String&, ScDocument* = NULL,
                   const Details& rDetails = detailsOOOa1,
                   ExternalInfo* pExtInfo = NULL,
                   const ::com::sun::star::uno::Sequence<

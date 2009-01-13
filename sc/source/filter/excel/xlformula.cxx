@@ -30,12 +30,12 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
+#include "xestream.hxx"
 #include "xlformula.hxx"
 #include "compiler.hxx"
 #include "rangenam.hxx"
 #include "xlroot.hxx"
 #include "xistream.hxx"
-#include "xestream.hxx"
 #include "token.hxx"
 #include "tokenarray.hxx"
 

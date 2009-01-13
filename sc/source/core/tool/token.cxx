@@ -54,10 +54,13 @@
 #include "parclass.hxx"
 #include "jumpmatrix.hxx"
 #include "rangeseq.hxx"
+#include "externalrefmgr.hxx"
+#include "document.hxx"
 
 using ::std::vector;
 
 #include <com/sun/star/sheet/ComplexReference.hpp>
+#include <com/sun/star/sheet/ExternalReference.hpp>
 #include <com/sun/star/sheet/ReferenceFlags.hpp>
 
 using namespace formula;
@@ -84,6 +87,27 @@ namespace
         rRef.SetTabDeleted( ( rAPI.Flags & sheet::ReferenceFlags::SHEET_DELETED   ) != 0 );
         rRef.SetFlag3D(     ( rAPI.Flags & sheet::ReferenceFlags::SHEET_3D        ) != 0 );
         rRef.SetRelName(    ( rAPI.Flags & sheet::ReferenceFlags::RELATIVE_NAME   ) != 0 );
+    }
+
+    void lcl_ExternalRefToCalc( ScSingleRefData& rRef, const sheet::SingleReference& rAPI )
+    {
+        rRef.InitFlags();
+
+        rRef.nCol    = static_cast<SCsCOL>(rAPI.Column);
+        rRef.nRow    = static_cast<SCsROW>(rAPI.Row);
+        rRef.nTab    = 0;
+        rRef.nRelCol = static_cast<SCsCOL>(rAPI.RelativeColumn);
+        rRef.nRelRow = static_cast<SCsROW>(rAPI.RelativeRow);
+        rRef.nRelTab = 0;
+
+        rRef.SetColRel(     ( rAPI.Flags & sheet::ReferenceFlags::COLUMN_RELATIVE ) != 0 );
+        rRef.SetRowRel(     ( rAPI.Flags & sheet::ReferenceFlags::ROW_RELATIVE    ) != 0 );
+        rRef.SetTabRel(     false );    // sheet index must be absolute for external refs
+        rRef.SetColDeleted( ( rAPI.Flags & sheet::ReferenceFlags::COLUMN_DELETED  ) != 0 );
+        rRef.SetRowDeleted( ( rAPI.Flags & sheet::ReferenceFlags::ROW_DELETED     ) != 0 );
+        rRef.SetTabDeleted( false );    // sheet must not be deleted for external refs
+        rRef.SetFlag3D(     ( rAPI.Flags & sheet::ReferenceFlags::SHEET_3D        ) != 0 );
+        rRef.SetRelName(    false );
     }
 //
 } // namespace
@@ -859,9 +883,9 @@ ScSingleRefData& ScExternalSingleRefToken::GetSingleRef()
     return maSingleRef;
 }
 
-BOOL ScExternalSingleRefToken::operator ==( const ScToken& r ) const
+BOOL ScExternalSingleRefToken::operator ==( const FormulaToken& r ) const
 {
-    if (!ScToken::operator==(r))
+    if (!FormulaToken::operator==(r))
         return false;
 
     if (mnFileId != r.GetIndex())
@@ -870,7 +894,7 @@ BOOL ScExternalSingleRefToken::operator ==( const ScToken& r ) const
     if (maTabName != r.GetString())
         return false;
 
-    return maSingleRef == r.GetSingleRef();
+    return maSingleRef == static_cast<const ScToken&>(r).GetSingleRef();
 }
 
 // ============================================================================
@@ -935,7 +959,7 @@ ScComplexRefData& ScExternalDoubleRefToken::GetDoubleRef()
     return maDoubleRef;
 }
 
-BOOL ScExternalDoubleRefToken::operator ==( const ScToken& r ) const
+BOOL ScExternalDoubleRefToken::operator ==( const FormulaToken& r ) const
 {
     if (!ScToken::operator==(r))
         return false;
@@ -946,7 +970,7 @@ BOOL ScExternalDoubleRefToken::operator ==( const ScToken& r ) const
     if (maTabName != r.GetString())
         return false;
 
-    return maDoubleRef == r.GetDoubleRef();
+    return maDoubleRef == static_cast<const ScToken&>(r).GetDoubleRef();
 }
 
 // ============================================================================
@@ -977,9 +1001,9 @@ const String& ScExternalNameToken::GetString() const
     return maName;
 }
 
-BOOL ScExternalNameToken::operator==( const ScToken& r ) const
+BOOL ScExternalNameToken::operator==( const FormulaToken& r ) const
 {
-    if ( !ScToken::operator==(r) )
+    if ( !FormulaToken::operator==(r) )
         return false;
 
     if (mnFileId != r.GetIndex())
@@ -1107,9 +1131,9 @@ BOOL ScHybridCellToken::operator==( const FormulaToken& r ) const
 
 //////////////////////////////////////////////////////////////////////////
 
-bool ScTokenArray::AddFormulaToken(const com::sun::star::sheet::FormulaToken& _aToken)
+bool ScTokenArray::AddFormulaToken(const com::sun::star::sheet::FormulaToken& _aToken,formula::ExternalReferenceHelper* _pRef)
 {
-    bool bError = FormulaTokenArray::AddFormulaToken(_aToken);
+    bool bError = FormulaTokenArray::AddFormulaToken(_aToken,_pRef);
     if ( bError )
     {
         bError = false;
@@ -1150,7 +1174,7 @@ bool ScTokenArray::AddFormulaToken(const com::sun::star::sheet::FormulaToken& _a
                     else if ( aType.equals( cppu::UnoType<sheet::ExternalReference>::get() ) )
                     {
                         sheet::ExternalReference aApiExtRef;
-                        if( (eOpCode == ocPush) && (rAPI.Data >>= aApiExtRef) && (0 <= aApiExtRef.Index) && (aApiExtRef.Index <= SAL_MAX_UINT16) )
+                        if( (eOpCode == ocPush) && (_aToken.Data >>= aApiExtRef) && (0 <= aApiExtRef.Index) && (aApiExtRef.Index <= SAL_MAX_UINT16) )
                         {
                             sal_uInt16 nFileId = static_cast< sal_uInt16 >( aApiExtRef.Index );
                             sheet::SingleReference aApiSRef;
@@ -1160,7 +1184,7 @@ bool ScTokenArray::AddFormulaToken(const com::sun::star::sheet::FormulaToken& _a
                             {
                                 // try to resolve cache index to sheet name
                                 size_t nCacheId = static_cast< size_t >( aApiSRef.Sheet );
-                                String aTabName = rDoc.GetExternalRefManager()->getCacheTableName( nFileId, nCacheId );
+                                String aTabName = _pRef->getCacheTableName( nFileId, nCacheId );
                                 if( aTabName.Len() > 0 )
                                 {
                                     ScSingleRefData aSingleRef;
@@ -1175,7 +1199,7 @@ bool ScTokenArray::AddFormulaToken(const com::sun::star::sheet::FormulaToken& _a
                             {
                                 // try to resolve cache index to sheet name.
                                 size_t nCacheId = static_cast< size_t >( aApiCRef.Reference1.Sheet );
-                                String aTabName = rDoc.GetExternalRefManager()->getCacheTableName( nFileId, nCacheId );
+                                String aTabName = _pRef->getCacheTableName( nFileId, nCacheId );
                                 if( aTabName.Len() > 0 )
                                 {
                                     ScComplexRefData aComplRef;
@@ -1292,7 +1316,7 @@ ScTokenArray& ScTokenArray::operator=( const ScTokenArray& rArr )
 
 ScTokenArray* ScTokenArray::Clone() const
 {
-    ScTokenArray* p = new ScTokenArray;
+    ScTokenArray* p = new ScTokenArray();
     p->nLen = nLen;
     p->nRPN = nRPN;
     p->nRefs = nRefs;
@@ -1576,7 +1600,7 @@ FormulaToken* ScTokenArray::AddMatrixSingleReference( const ScSingleRefData& rRe
     return Add( new ScSingleRefToken( rRef, ocMatRef ) );
 }
 
-FormulaToken* ScTokenArray::AddDoubleReference( const ScScComplexRefData& rRef )
+FormulaToken* ScTokenArray::AddDoubleReference( const ScComplexRefData& rRef )
 {
     return Add( new ScDoubleRefToken( rRef ) );
 }
@@ -1701,7 +1725,7 @@ BOOL ScTokenArray::GetAdjacentExtendOfOuterFuncRefs( SCCOLROW& nExtend,
                         break;
                         case svDoubleRef :
                         {
-                            ScScComplexRefData& rRef = static_cast<ScToken*>(p)->GetDoubleRef();
+                            ScComplexRefData& rRef = static_cast<ScToken*>(p)->GetDoubleRef();
                             rRef.CalcAbsIfRel( rPos );
                             switch ( eDir )
                             {
@@ -1779,7 +1803,6 @@ void ScTokenArray::ReadjustRelative3DReferences( const ScAddress& rOldPos,
                 ScSingleRefData& rRef1 = static_cast<ScToken*>(pCode[j])->GetSingleRef();
                     rRef1.CalcAbsIfRel( rOldPos );
                     rRef1.CalcRelFromAbs( rNewPos );
-                }
             }
             break;
             default:

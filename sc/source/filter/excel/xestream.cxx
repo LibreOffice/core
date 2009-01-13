@@ -49,6 +49,7 @@
 #include "compiler.hxx"
 
 #include <oox/core/tokens.hxx>
+#include <formula/grammar.hxx>
 
 using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::io::XOutputStream;
@@ -62,7 +63,7 @@ using ::com::sun::star::uno::UNO_QUERY;
 using ::rtl::OString;
 using ::rtl::OUString;
 using ::utl::OStreamWrapper;
-
+using namespace formula;
 // ============================================================================
 
 XclExpStream::XclExpStream( SvStream& rOutStrm, const XclExpRoot& rRoot, sal_uInt16 nMaxRecSize ) :
@@ -388,7 +389,7 @@ rtl::OString XclXmlUtils::ToOString( const String& s )
 rtl::OString XclXmlUtils::ToOString( const ScAddress& rAddress )
 {
     String sAddress;
-    rAddress.Format( sAddress, SCA_VALID, NULL, ScAddress::Details( ScAddress::CONV_XL_A1 ) );
+    rAddress.Format( sAddress, SCA_VALID, NULL, ScAddress::Details( FormulaGrammar::CONV_XL_A1 ) );
     return ToOString( sAddress );
 }
 
@@ -401,14 +402,14 @@ rtl::OString XclXmlUtils::ToOString( const ScfUInt16Vec& rBuffer )
 rtl::OString XclXmlUtils::ToOString( const ScRange& rRange )
 {
     String sRange;
-    rRange.Format( sRange, SCA_VALID, NULL, ScAddress::Details( ScAddress::CONV_XL_A1 ) );
+    rRange.Format( sRange, SCA_VALID, NULL, ScAddress::Details( FormulaGrammar::CONV_XL_A1 ) );
     return ToOString( sRange );
 }
 
 rtl::OString XclXmlUtils::ToOString( const ScRangeList& rRangeList )
 {
     String s;
-    rRangeList.Format( s, SCA_VALID, NULL, ScAddress::CONV_XL_A1, ' ' );
+    rRangeList.Format( s, SCA_VALID, NULL, FormulaGrammar::CONV_XL_A1, ' ' );
     return ToOString( s );
 }
 
@@ -477,7 +478,8 @@ OUString XclXmlUtils::ToOUString( const String& s )
 
 rtl::OUString XclXmlUtils::ToOUString( ScDocument& rDocument, const ScAddress& rAddress, ScTokenArray* pTokenArray )
 {
-    ScCompiler aCompiler( &rDocument, rAddress, *pTokenArray, ScGrammar::GRAM_NATIVE_XL_A1 );
+    ScCompiler aCompiler( &rDocument, rAddress, *pTokenArray);
+    aCompiler.SetGrammar(FormulaGrammar::GRAM_NATIVE_XL_A1);
     String s;
     aCompiler.CreateStringFromTokenArray( s );
     return ToOUString( s );

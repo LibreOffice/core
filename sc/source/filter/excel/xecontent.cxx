@@ -41,6 +41,7 @@
 #include <sfx2/objsh.hxx>
 #include <tools/urlobj.hxx>
 #include <svtools/itemset.hxx>
+#include <formula/grammar.hxx>
 #include "scitems.hxx"
 #include <svx/eeitem.hxx>
 #include <svx/flditem.hxx>
@@ -826,7 +827,7 @@ XclExpCondfmt::XclExpCondfmt( const XclExpRoot& rRoot, const ScConditionalFormat
         for( USHORT nIndex = 0, nCount = rCondFormat.Count(); nIndex < nCount; ++nIndex )
             if( const ScCondFormatEntry* pEntry = rCondFormat.GetEntry( nIndex ) )
                 maCFList.AppendNewRecord( new XclExpCF( GetRoot(), *pEntry ) );
-        aScRanges.Format( msSeqRef, SCA_VALID, NULL, ScAddress::CONV_XL_A1 );
+        aScRanges.Format( msSeqRef, SCA_VALID, NULL, formula::FormulaGrammar::CONV_XL_A1 );
     }
 }
 

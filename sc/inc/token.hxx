@@ -194,7 +194,7 @@ public:
     virtual const String&           GetString() const;
     virtual const ScSingleRefData&  GetSingleRef() const;
     virtual ScSingleRefData&          GetSingleRef();
-    virtual BOOL                    operator==( const ScToken& rToken ) const;
+    virtual BOOL                operator==( const formula::FormulaToken& rToken ) const;
 };
 
 
@@ -219,7 +219,7 @@ public:
     virtual ScSingleRefData&       GetSingleRef2();
     virtual const ScComplexRefData&    GetDoubleRef() const;
     virtual ScComplexRefData&      GetDoubleRef();
-    virtual BOOL                   operator==( const ScToken& rToken ) const;
+    virtual BOOL                operator==( const formula::FormulaToken& rToken ) const;
 };
 
 
@@ -236,7 +236,7 @@ public:
     virtual                     ~ScExternalNameToken();
     virtual USHORT              GetIndex() const;
     virtual const String&       GetString() const;
-    virtual BOOL                operator==( const ScToken& rToken ) const;
+    virtual BOOL                operator==( const formula::FormulaToken& rToken ) const;
 };
 
 

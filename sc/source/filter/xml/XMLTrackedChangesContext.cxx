@@ -46,6 +46,7 @@
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
 
+using rtl::OUString;
 using namespace com::sun::star;
 using namespace xmloff::token;
 

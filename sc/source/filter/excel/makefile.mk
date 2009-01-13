@@ -132,6 +132,7 @@ EXCEPTIONSFILES = \
         $(SLO)$/xepage.obj					\
         $(SLO)$/xepivot.obj					\
         $(SLO)$/xechart.obj					\
+        $(SLO)$/xestream.obj				\
         $(SLO)$/xestring.obj				\
         $(SLO)$/xestyle.obj					\
         $(SLO)$/xetable.obj					\

@@ -45,6 +45,7 @@
 #include "excrecds.hxx"
 
 #include <oox/core/tokens.hxx>
+#include <formula/grammar.hxx>
 
 using ::rtl::OString;
 
@@ -564,7 +565,7 @@ sal_uInt16 XclExpNameManagerImpl::CreateName( const ScRangeData& rRangeData )
         xName->SetTokenArray( xTokArr );
 
         String sSymbol;
-        rRangeData.GetSymbol( sSymbol, ScGrammar::GRAM_NATIVE_XL_A1 );
+        rRangeData.GetSymbol( sSymbol, formula::FormulaGrammar::GRAM_NATIVE_XL_A1 );
         xName->SetSymbol( sSymbol );
 
         /*  Try to replace by existing built-in name - complete token array is

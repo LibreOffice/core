@@ -106,7 +106,7 @@ ScRangeData::ScRangeData( ScDocument* pDok,
         // Copy ctor default-constructs pCode if it was NULL, so it's initialized here, too,
         // to ensure same behavior if unnecessary copying is left out.
 
-        pCode = new ScTokenArray;
+        pCode = new ScTokenArray();
     }
 }
 
@@ -152,7 +152,7 @@ ScRangeData::ScRangeData( ScDocument* pDok,
                           const ScAddress& rTarget ) :
                 aName       ( rName ),
                 aUpperName  ( ScGlobal::pCharClass->upper( rName ) ),
-                pCode       ( new ScTokenArray ),
+                pCode       ( new ScTokenArray() ),
                 aPos        ( rTarget ),
                 eType       ( RT_NAME ),
                 pDoc        ( pDok ),
@@ -174,7 +174,7 @@ ScRangeData::ScRangeData(const ScRangeData& rScRangeData) :
     ScDataObject(),
     aName   (rScRangeData.aName),
     aUpperName  (rScRangeData.aUpperName),
-    pCode       (rScRangeData.pCode ? rScRangeData.pCode->Clone() : new ScTokenArray),      // echte Kopie erzeugen (nicht copy-ctor)
+    pCode       (rScRangeData.pCode ? rScRangeData.pCode->Clone() : new ScTokenArray()),        // echte Kopie erzeugen (nicht copy-ctor)
     aPos        (rScRangeData.aPos),
     eType       (rScRangeData.eType),
     pDoc        (rScRangeData.pDoc),

@@ -152,6 +152,7 @@
 #define SC_SHOW_CHANGES_BY_RANGES_LIST              12
 
 using namespace rtl;
+using namespace formula;
 using namespace com::sun::star;
 using namespace xmloff::token;
 using ::std::vector;

@@ -187,10 +187,10 @@ static const char* lcl_GetActivePane( sal_uInt8 nActivePane )
 {
     switch( nActivePane )
     {
-        case EXC_PANE_TOPLEFT:      return "topLeft";       break;
-        case EXC_PANE_TOPRIGHT:     return "topRight";      break;
-        case EXC_PANE_BOTTOMLEFT:   return "bottomLeft";    break;
-        case EXC_PANE_BOTTOMRIGHT:  return "bottomRight";   break;
+        case EXC_PANE_TOPLEFT:      return "topLeft";       //break;
+        case EXC_PANE_TOPRIGHT:     return "topRight";      //break;
+        case EXC_PANE_BOTTOMLEFT:   return "bottomLeft";    //break;
+        case EXC_PANE_BOTTOMRIGHT:  return "bottomRight";   //break;
     }
     return "**error: lcl_GetActivePane";
 }

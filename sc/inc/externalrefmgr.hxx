@@ -45,8 +45,13 @@
 #include <boost/shared_ptr.hpp>
 #include <vector>
 #include <list>
+#include <formula/ExternalReferenceHelper.hxx>
 
 class ScDocument;
+namespace formula
+{
+    class FormulaToken;
+}
 class ScToken;
 class ScMatrix;
 class ScTokenArray;
@@ -88,8 +93,8 @@ private:
 class ScExternalRefCache
 {
 public:
-    typedef ::boost::shared_ptr<ScToken>            TokenRef;
-    typedef ::boost::shared_ptr<ScTokenArray>       TokenArrayRef;
+    typedef ::boost::shared_ptr< formula::FormulaToken>     TokenRef;
+    typedef ::boost::shared_ptr<ScTokenArray>               TokenArrayRef;
 
     struct TableName
     {
@@ -252,7 +257,7 @@ private:
 
 // ============================================================================
 
-class ScExternalRefManager
+class ScExternalRefManager : public formula::ExternalReferenceHelper
 {
 public:
 
@@ -337,7 +342,7 @@ public:
     explicit ScExternalRefManager(ScDocument* pDoc);
     ~ScExternalRefManager();
 
-    String getCacheTableName(sal_uInt16 nFileId, size_t nTabIndex) const;
+    virtual String getCacheTableName(sal_uInt16 nFileId, size_t nTabIndex) const;
 
     /**
      * Get a cache table instance for specified table and table index.  Unlike

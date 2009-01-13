@@ -379,8 +379,8 @@ private:
             The previous grammar that was active before SetFormulaLanguage().
      */
     void            SetGrammarAndRefConvention(
-                        const ScGrammar::Grammar eNewGrammar,
-                        const ScGrammar::Grammar eOldGrammar );
+                        const formula::FormulaGrammar::Grammar eNewGrammar,
+                        const formula::FormulaGrammar::Grammar eOldGrammar );
 public:
 
     /// Set external link info for ScAddress::CONV_XL_OOX.
@@ -465,7 +465,7 @@ private:
     virtual BOOL HandleDbData();
 
     virtual formula::FormulaTokenRef ExtendRangeReference( formula::FormulaToken & rTok1, formula::FormulaToken & rTok2, bool bReuseDoubleRef );
-    virtual void CreateStringFromExternal(rtl::OUStringBuffer& rBuffer, FormulaToken* pTokenP)
+    virtual void CreateStringFromExternal(rtl::OUStringBuffer& rBuffer, formula::FormulaToken* pTokenP);
     virtual void CreateStringFromSingleRef(rtl::OUStringBuffer& rBuffer,formula::FormulaToken* _pTokenP);
     virtual void CreateStringFromDoubleRef(rtl::OUStringBuffer& rBuffer,formula::FormulaToken* _pTokenP);
     virtual void CreateStringFromMatrix( rtl::OUStringBuffer& rBuffer, formula::FormulaToken* _pTokenP);

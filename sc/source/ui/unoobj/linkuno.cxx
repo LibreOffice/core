@@ -54,6 +54,7 @@
 #include <climits>
 
 using namespace com::sun::star;
+using namespace formula;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
@@ -1516,9 +1517,9 @@ void SAL_CALL ScExternalSheetCacheObj::setCellValue(sal_Int32 nCol, sal_Int32 nR
     double fVal = 0.0;
     OUString aVal;
     if (rValue >>= fVal)
-        pToken.reset(new ScDoubleToken(fVal));
+        pToken.reset(new FormulaDoubleToken(fVal));
     else if (rValue >>= aVal)
-        pToken.reset(new ScStringToken(aVal));
+        pToken.reset(new FormulaStringToken(aVal));
     else
         // unidentified value type.
         return;
@@ -1533,7 +1534,7 @@ Any SAL_CALL ScExternalSheetCacheObj::getCellValue(sal_Int32 nCol, sal_Int32 nRo
     if (nRow < 0 || nCol < 0)
         throw IllegalArgumentException();
 
-    ScToken* pToken = mpTable->getCell(static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow)).get();
+    FormulaToken* pToken = mpTable->getCell(static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow)).get();
     if (!pToken)
         throw IllegalArgumentException();
 

@@ -314,7 +314,6 @@ void ScTabControl::UpdateStatus()
                 }
             }
         }
-                }
     }
     SetCurPageId( static_cast<sal_uInt16>(pViewData->GetTabNo()) + 1 );
 

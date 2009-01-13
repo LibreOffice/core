@@ -77,6 +77,7 @@ using ::std::find_if;
 using ::std::distance;
 using ::std::pair;
 using ::std::list;
+using namespace formula;
 
 #define SRCDOC_LIFE_SPAN     6000       // 1 minute (in 100th of a sec)
 #define SRCDOC_SCAN_INTERVAL 1000*5     // every 5 seconds (in msec)
@@ -372,7 +373,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefCache::getCellRangeData(sal_uInt1
         {
             for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
             {
-                ScToken* pToken = pTab->getCell(nCol, nRow).get();
+                FormulaToken* pToken = pTab->getCell(nCol, nRow).get();
                 if (!pToken)
                     return TokenArrayRef();
 
@@ -502,9 +503,9 @@ void ScExternalRefCache::setCellRangeData(sal_uInt16 nFileId, const ScRange& rRa
                 TokenRef pToken;
                 const ScMatrixRef& pMat = itrData->mpRangeData;
                 if (pMat->IsValue(nC, nR))
-                    pToken.reset(new ScDoubleToken(pMat->GetDouble(nC, nR)));
+                    pToken.reset(new formula::FormulaDoubleToken(pMat->GetDouble(nC, nR)));
                 else if (pMat->IsString(nC, nR))
-                    pToken.reset(new ScStringToken(pMat->GetString(nC, nR)));
+                    pToken.reset(new formula::FormulaStringToken(pMat->GetString(nC, nR)));
                 else
                     pToken.reset(new ScEmptyCellToken(false, false));
 
@@ -799,7 +800,7 @@ IMPL_LINK( ScExternalRefLink, ExternalRefEndEditHdl, ::sfx2::SvBaseLink*, EMPTYA
 
 // ============================================================================
 
-static ScToken* lcl_convertToToken(ScBaseCell* pCell)
+static FormulaToken* lcl_convertToToken(ScBaseCell* pCell)
 {
     if (!pCell || pCell->HasEmptyData())
     {
@@ -813,20 +814,20 @@ static ScToken* lcl_convertToToken(ScBaseCell* pCell)
         {
             String aStr;
             static_cast<ScEditCell*>(pCell)->GetString(aStr);
-            return new ScStringToken(aStr);
+            return new formula::FormulaStringToken(aStr);
         }
         //break;
         case CELLTYPE_STRING:
         {
             String aStr;
             static_cast<ScStringCell*>(pCell)->GetString(aStr);
-            return new ScStringToken(aStr);
+            return new formula::FormulaStringToken(aStr);
         }
         //break;
         case CELLTYPE_VALUE:
         {
             double fVal = static_cast<ScValueCell*>(pCell)->GetValue();
-            return new ScDoubleToken(fVal);
+            return new formula::FormulaDoubleToken(fVal);
         }
         //break;
         case CELLTYPE_FORMULA:
@@ -834,17 +835,17 @@ static ScToken* lcl_convertToToken(ScBaseCell* pCell)
             ScFormulaCell* pFCell = static_cast<ScFormulaCell*>(pCell);
             USHORT nError = pFCell->GetErrCode();
             if (nError)
-                return new ScErrorToken( nError);
+                return new FormulaErrorToken( nError);
             else if (pFCell->IsValue())
             {
                 double fVal = pFCell->GetValue();
-                return new ScDoubleToken(fVal);
+                return new formula::FormulaDoubleToken(fVal);
             }
             else
             {
                 String aStr;
                 pFCell->GetString(aStr);
-                return new ScStringToken(aStr);
+                return new formula::FormulaStringToken(aStr);
             }
         }
         //break;
@@ -1314,7 +1315,7 @@ ScExternalRefCache::TokenRef ScExternalRefManager::getSingleRefToken(
     if (!pTok.get())
     {
         // Generate an error for unresolvable cells.
-        pTok.reset( new ScErrorToken( errNoValue));
+        pTok.reset( new FormulaErrorToken( errNoValue));
     }
 
     // Now, insert the token into cache table.
@@ -1409,27 +1410,27 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getRangeNameTokens(sal_u
     ScExternalRefCache::TokenArrayRef pNew(new ScTokenArray);
 
     ScTokenArray* pCode = pRangeData->GetCode();
-    for (ScToken* pToken = pCode->First(); pToken; pToken = pCode->Next())
+    for (FormulaToken* pToken = pCode->First(); pToken; pToken = pCode->Next())
     {
         bool bTokenAdded = false;
         switch (pToken->GetType())
         {
             case svSingleRef:
             {
-                const ScSingleRefData& rRef = pToken->GetSingleRef();
+                const ScSingleRefData& rRef = static_cast<ScToken*>(pToken)->GetSingleRef();
                 String aTabName;
                 pSrcDoc->GetName(rRef.nTab, aTabName);
-                ScExternalSingleRefToken aNewToken(nFileId, aTabName, pToken->GetSingleRef());
+                ScExternalSingleRefToken aNewToken(nFileId, aTabName, static_cast<ScToken*>(pToken)->GetSingleRef());
                 pNew->AddToken(aNewToken);
                 bTokenAdded = true;
             }
             break;
             case svDoubleRef:
             {
-                const ScSingleRefData& rRef = pToken->GetSingleRef();
+                const ScSingleRefData& rRef = static_cast<ScToken*>(pToken)->GetSingleRef();
                 String aTabName;
                 pSrcDoc->GetName(rRef.nTab, aTabName);
-                ScExternalDoubleRefToken aNewToken(nFileId, aTabName, pToken->GetDoubleRef());
+                ScExternalDoubleRefToken aNewToken(nFileId, aTabName, static_cast<ScToken*>(pToken)->GetDoubleRef());
                 pNew->AddToken(aNewToken);
                 bTokenAdded = true;
             }

@@ -69,7 +69,7 @@ private:
 
     TypedScStrCollection*       pColumnData;
     TypedScStrCollection*       pFormulaData;
-    TypedStrCollection*     pFormulaDataPara;
+    TypedScStrCollection*       pFormulaDataPara;
     ULONG                   nTipVisible;
     ULONG                   nTipVisibleSec;
     String                  aManualTip;

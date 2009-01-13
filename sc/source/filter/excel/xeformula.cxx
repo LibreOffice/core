@@ -1306,7 +1306,7 @@ void XclExpFmlaCompImpl::ProcessExternalName( const XclExpTokenData& rTokData, s
                 AppendErrorToken(EXC_ERR_REF, rTokData.mnSpaces);
                 break;
             }
-            ScSingleRefData aRef(rTokData.mpScToken->GetSingleRef());
+            ScSingleRefData aRef(static_cast<const ScToken*>(rTokData.mpScToken)->GetSingleRef());
             aRef.CalcAbsIfRel(*mpScBasePos);
             const String& rTabName = rTokData.mpScToken->GetString();
             ScExternalRefCache::TokenRef p = pRefMgr->getSingleRefToken(nFileId, rTabName, ScAddress(aRef.nCol, aRef.nRow, aRef.nTab), NULL, NULL);
@@ -1342,7 +1342,7 @@ void XclExpFmlaCompImpl::ProcessExternalName( const XclExpTokenData& rTokData, s
                 AppendErrorToken(XclTools::GetXclErrorCode(errNoRef), rTokData.mnSpaces);
                 break;
             }
-            ScComplexRefData aRef(rTokData.mpScToken->GetDoubleRef());
+            ScComplexRefData aRef(static_cast<const ScToken*>(rTokData.mpScToken)->GetDoubleRef());
             aRef.CalcAbsIfRel(*mpScBasePos);
             const String& rTabName = rTokData.mpScToken->GetString();
             const ScSingleRefData& r1 = aRef.Ref1;
@@ -1386,19 +1386,19 @@ void XclExpFmlaCompImpl::ProcessExternalName( const XclExpTokenData& rTokData, s
 
             // Go through all these tokens to store the external cell/range
             // references for CRN records.
-            for (ScToken* p = pArray->First(); p; p = pArray->Next())
+            for (formula::FormulaToken* p = pArray->First(); p; p = pArray->Next())
             {
                 if (p->GetOpCode() == ocExternalRef)
                 {
                     if (p->GetType() == svExternalSingleRef)
                     {
-                        ScSingleRefData aData(p->GetSingleRef());
+                        ScSingleRefData aData(static_cast<ScToken*>(p)->GetSingleRef());
                         aData.CalcAbsIfRel(*mpScBasePos);
                         mpLinkMgr->StoreCell(nFileId, p->GetString(), aData);
                     }
                     else if (p->GetType() == svExternalDoubleRef)
                     {
-                        ScComplexRefData aData(p->GetDoubleRef());
+                        ScComplexRefData aData(static_cast<ScToken*>(p)->GetDoubleRef());
                         aData.CalcAbsIfRel(*mpScBasePos);
                         mpLinkMgr->StoreCellRange(nFileId, p->GetString(), aData);
                     }

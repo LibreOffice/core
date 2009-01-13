@@ -1888,7 +1888,7 @@ class ScFormatFilterMissing : public ScFormatFilterPlugin {
     virtual FltError ScExportRTF( SvStream&, ScDocument*, const ScRange&, const CharSet ) RETURN_ERROR
 };
 
-extern "C" { static void SAL_CALL thisModule() {} };
+extern "C" { static void SAL_CALL thisModule() {} }
 typedef ScFormatFilterPlugin * (*FilterFn)(void);
 ScFormatFilterPlugin &ScFormatFilter::Get()
 {

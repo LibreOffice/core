@@ -41,17 +41,7 @@ struct ScSingleRefData;
 struct ScComplexRefData;
 class ScMatrix;
 
-class ScTokenArray : public formula::FormulaTokenArray
-{
-    bool    mbODFF;     /// TRUE: ODFF, FALSE: PODF
-public:
-        explicit    ScMissingConvention( bool bODFF ) : mbODFF(bODFF) {}
-    // Implementation and usage only in token.cxx
-    inline  bool    isRewriteNeeded( OpCode eOp ) const;
-    inline  bool    isODFF() const { return mbODFF; }
-};
-
-class SC_DLLPUBLIC ScTokenArray
+class SC_DLLPUBLIC ScTokenArray : public formula::FormulaTokenArray
 {
     friend class ScCompiler;
     BOOL                    ImplGetReference( ScRange& rRange, BOOL bValidOnly ) const;
@@ -76,7 +66,7 @@ public:
                                 const ScAddress& rPos, ScDirection );
 
     formula::FormulaToken* AddRawToken( const ScRawToken& );
-    virtual bool AddFormulaToken(const com::sun::star::sheet::FormulaToken& _aToken);
+    virtual bool AddFormulaToken(const com::sun::star::sheet::FormulaToken& _aToken,formula::ExternalReferenceHelper* _pRef);
     virtual formula::FormulaToken* AddOpCode( OpCode eCode );
     /** ScSingleRefToken with ocPush. */
     formula::FormulaToken* AddSingleReference( const ScSingleRefData& rRef );

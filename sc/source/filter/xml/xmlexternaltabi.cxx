@@ -318,9 +318,9 @@ void ScXMLExternalRefCellContext::EndElement()
 
         ScExternalRefCache::TokenRef aToken;
         if (mbIsNumeric)
-            aToken.reset(new ScDoubleToken(mfCellValue));
+            aToken.reset(new formula::FormulaDoubleToken(mfCellValue));
         else
-            aToken.reset(new ScStringToken(maCellString));
+            aToken.reset(new formula::FormulaStringToken(maCellString));
 
         sal_uInt32 nNumFmt = mnNumberFormat >= 0 ? static_cast<sal_uInt32>(mnNumberFormat) : 0;
         mrExternalRefInfo.mpCacheTable->setCell(

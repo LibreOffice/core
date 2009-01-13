@@ -416,7 +416,7 @@ void XclImpSupbookTab::LoadCachedValues(ScExternalRefCache::TableTypeRef pCacheT
             case EXC_CACHEDVAL_DOUBLE:
             {
                 double f = p->GetValue();
-                ScExternalRefCache::TokenRef pToken(new ScDoubleToken(f));
+                ScExternalRefCache::TokenRef pToken(new formula::FormulaDoubleToken(f));
                 pCacheTable->setCell(rAddr.mnCol, rAddr.mnRow, pToken);
             }
             break;
@@ -427,7 +427,7 @@ void XclImpSupbookTab::LoadCachedValues(ScExternalRefCache::TableTypeRef pCacheT
             case EXC_CACHEDVAL_STRING:
             {
                 const String& rStr = p->GetString();
-                ScExternalRefCache::TokenRef pToken(new ScStringToken(rStr));
+                ScExternalRefCache::TokenRef pToken(new formula::FormulaStringToken(rStr));
                 pCacheTable->setCell(rAddr.mnCol, rAddr.mnRow, pToken);
             }
             break;

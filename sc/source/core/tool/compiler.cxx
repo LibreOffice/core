@@ -425,7 +425,7 @@ void ScCompiler::SetFormulaLanguage( const ScCompiler::OpCodeMapPtr & xMap )
 
 
 void ScCompiler::SetGrammarAndRefConvention(
-        const ScGrammar::Grammar eNewGrammar, const ScGrammar::Grammar eOldGrammar )
+        const FormulaGrammar::Grammar eNewGrammar, const FormulaGrammar::Grammar eOldGrammar )
 {
     meGrammar = eNewGrammar;    //! SetRefConvention needs the new grammar set!
     FormulaGrammar::AddressConvention eConv = FormulaGrammar::extractRefConvention( meGrammar);
@@ -483,7 +483,7 @@ ScCompiler::Convention::Convention( FormulaGrammar::AddressConvention eConv )
 /* " */     t[34] = SC_COMPILER_C_CHAR_STRING | SC_COMPILER_C_STRING_SEP;
 /* # */     t[35] = SC_COMPILER_C_WORD_SEP;
 /* $ */     t[36] = SC_COMPILER_C_CHAR_WORD | SC_COMPILER_C_WORD | SC_COMPILER_C_CHAR_IDENT | SC_COMPILER_C_IDENT;
-    if (ScAddress::CONV_ODF == meConv)
+    if (FormulaGrammar::CONV_ODF == meConv)
 /* $ */     t[36] |= SC_COMPILER_C_ODF_NAME_MARKER;
 /* % */     t[37] = SC_COMPILER_C_VALUE;
 /* & */     t[38] = SC_COMPILER_C_CHAR | SC_COMPILER_C_WORD_SEP | SC_COMPILER_C_VALUE_SEP;
@@ -579,7 +579,7 @@ ScCompiler::Convention::Convention( FormulaGrammar::AddressConvention eConv )
 /* [ */     t[91] |= SC_COMPILER_C_IDENT;
 /* ] */     t[93] |= SC_COMPILER_C_IDENT;
         }
-        if( ScAddress::CONV_XL_OOX == meConv )
+        if( FormulaGrammar::CONV_XL_OOX == meConv )
         {
 /* [ */     t[91] |= SC_COMPILER_C_CHAR_IDENT;
 /* ] */     t[93] |= SC_COMPILER_C_IDENT;
@@ -1390,7 +1390,7 @@ struct ConventionXL
 struct ConventionXL_A1 : public Convention_A1, public ConventionXL
 {
     ConventionXL_A1() : Convention_A1( FormulaGrammar::CONV_XL_A1 ) { }
-    ConventionXL_A1( ScAddress::Convention eConv ) : Convention_A1( eConv ) { }
+    ConventionXL_A1( FormulaGrammar::AddressConvention eConv ) : Convention_A1( eConv ) { }
 
     void makeSingleCellStr( ::rtl::OUStringBuffer& rBuf, const ScSingleRefData& rRef ) const
     {
@@ -1557,7 +1557,7 @@ const ScCompiler::Convention * const ScCompiler::pConvXL_A1 = &ConvXL_A1;
 
 struct ConventionXL_OOX : public ConventionXL_A1
 {
-    ConventionXL_OOX() : ConventionXL_A1( ScAddress::CONV_XL_OOX ) { }
+    ConventionXL_OOX() : ConventionXL_A1( FormulaGrammar::CONV_XL_OOX ) { }
 };
 
 static const ConventionXL_OOX ConvXL_OOX;
@@ -1831,7 +1831,7 @@ void ScCompiler::CheckTabQuotes( String& rString,
         case FormulaGrammar::CONV_OOO :
         case FormulaGrammar::CONV_XL_A1 :
         case FormulaGrammar::CONV_XL_R1C1 :
-        case ScAddress::CONV_XL_OOX :
+        case FormulaGrammar::CONV_XL_OOX :
             if( bNeedsQuote )
             {
                 static const String one_quote = static_cast<sal_Unicode>( '\'' );
@@ -1867,7 +1867,7 @@ void ScCompiler::SetRefConvention( FormulaGrammar::AddressConvention eConv )
         case FormulaGrammar::CONV_ODF :      SetRefConvention( pConvOOO_A1_ODF ); break;
         case FormulaGrammar::CONV_XL_A1 :    SetRefConvention( pConvXL_A1 );  break;
         case FormulaGrammar::CONV_XL_R1C1 :  SetRefConvention( pConvXL_R1C1 ); break;
-        case ScAddress::CONV_XL_OOX :   SetRefConvention( pConvXL_OOX ); break;
+        case FormulaGrammar::CONV_XL_OOX :   SetRefConvention( pConvXL_OOX ); break;
     }
 }
 
@@ -3777,7 +3777,7 @@ BOOL ScCompiler::HandleRange()
             BOOL bAddPair = !(bBorder1 && bBorder2);
             if ( bAddPair )
             {
-                pNew = new ScTokenArray;
+                pNew = new ScTokenArray();
                 pNew->AddOpCode( ocClose );
                 PushTokenArray( pNew, TRUE );
                 pNew->Reset();
@@ -3792,7 +3792,7 @@ BOOL ScCompiler::HandleRange()
             pNew->Reset();
             if ( bAddPair )
             {
-                pNew = new ScTokenArray;
+                pNew = new ScTokenArray();
                 pNew->AddOpCode( ocOpen );
                 PushTokenArray( pNew, TRUE );
                 pNew->Reset();
@@ -3812,7 +3812,7 @@ BOOL ScCompiler::HandleExternalReference(const FormulaToken& _aToken)
     {
         case svExternalSingleRef:
         case svExternalDoubleRef:
-            pArr->nRefs++;
+            pArr->IncrementRefs();
         break;
         case svExternalName:
         {
@@ -3845,7 +3845,7 @@ BOOL ScCompiler::HandleExternalReference(const FormulaToken& _aToken)
             return GetToken();
         }
         default:
-            DBG_ERRROR("Wrong type for external reference!");
+            DBG_ERROR("Wrong type for external reference!");
             return FALSE;
     }
     return TRUE;
@@ -4802,7 +4802,6 @@ ScRangeData* ScCompiler::UpdateMoveTab( SCTAB nOldTab, SCTAB nNewTab,
 void ScCompiler::CreateStringFromExternal(rtl::OUStringBuffer& rBuffer, FormulaToken* pTokenP)
 {
     FormulaToken* t = pTokenP;
-    OpCode eOp = t->GetOpCode();
     ScExternalRefManager* pRefMgr = pDoc->GetExternalRefManager();
     switch (t->GetType())
     {
@@ -4815,11 +4814,11 @@ void ScCompiler::CreateStringFromExternal(rtl::OUStringBuffer& rBuffer, FormulaT
         break;
         case svExternalSingleRef:
             pConv->makeExternalRefStr(
-                   rBuffer, *this, t->GetIndex(), t->GetString(), t->GetSingleRef(), pRefMgr);
+                   rBuffer, *this, t->GetIndex(), t->GetString(), static_cast<ScToken*>(t)->GetSingleRef(), pRefMgr);
         break;
         case svExternalDoubleRef:
             pConv->makeExternalRefStr(
-                        rBuffer, *this, t->GetIndex(), t->GetString(), t->GetDoubleRef(), pRefMgr);
+                        rBuffer, *this, t->GetIndex(), t->GetString(), static_cast<ScToken*>(t)->GetDoubleRef(), pRefMgr);
            break;
         default:
             // warning, not error, otherwise we may end up with a never
@@ -4913,12 +4912,6 @@ void ScCompiler::CreateStringFromIndex(rtl::OUStringBuffer& rBuffer,FormulaToken
     rtl::OUStringBuffer aBuffer;
     switch ( eOp )
     {
-        case ocName:
-        {
-            String aStr( rStr );
-            aStr.SearchAndReplaceAll( '"', String( RTL_CONSTASCII_USTRINGPARAM( "\"\"")));
-        }
-        break;
         case ocDBArea:
         {
             ScDBData* pDBData = pDoc->GetDBCollection()->FindIndex(_pTokenP->GetIndex());
@@ -5160,7 +5153,7 @@ BOOL ScCompiler::HandleSingleRef()
             SetError(errNoRef);
         else if ( !bCompileForFAP )
         {
-            ScTokenArray* pNew = new ScTokenArray;
+            ScTokenArray* pNew = new ScTokenArray();
             if ( bSingle )
             {
                 ScSingleRefData aRefData;
@@ -5174,7 +5167,7 @@ BOOL ScCompiler::HandleSingleRef()
             }
             else
             {
-                ScScComplexRefData aRefData;
+                ScComplexRefData aRefData;
                 aRefData.InitRange( aRange );
                 if ( bColName )
                 {
@@ -5220,7 +5213,7 @@ BOOL ScCompiler::HandleDbData()
                             (SCROW&) aRefData.Ref2.nRow);
         aRefData.Ref2.nTab    = aRefData.Ref1.nTab;
         aRefData.CalcRelFromAbs( aPos );
-        ScTokenArray* pNew = new ScTokenArray;
+        ScTokenArray* pNew = new ScTokenArray();
         pNew->AddDoubleReference( aRefData );
         PushTokenArray( pNew, TRUE );
         pNew->Reset();

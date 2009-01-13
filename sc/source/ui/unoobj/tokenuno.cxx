@@ -262,15 +262,15 @@ uno::Any SAL_CALL ScFormulaParserObj::getPropertyValue( const rtl::OUString& aPr
     ScUnoGuard aGuard;
     uno::Any aRet;
     String aString(aPropertyName);
-    } // if ( aString.EqualsAscii( SC_UNO_REFERENCEPOS ) )
-    else if ( aString.EqualsAscii( SC_UNO_COMPILEFAP ) )
-    {
-        aRet <<= mbCompileFAP;
     if ( aString.EqualsAscii( SC_UNO_REFERENCEPOS ) )
     {
         table::CellAddress aAddress;
         ScUnoConversion::FillApiAddress( aAddress, maRefPos );
         aRet <<= aAddress;
+    }
+    else if ( aString.EqualsAscii( SC_UNO_COMPILEFAP ) )
+    {
+        aRet <<= mbCompileFAP;
     }
     else if ( aString.EqualsAscii( SC_UNO_COMPILEENGLISH ) )
     {
@@ -300,27 +300,6 @@ uno::Any SAL_CALL ScFormulaParserObj::getPropertyValue( const rtl::OUString& aPr
 SC_IMPL_DUMMY_PROPERTY_LISTENER( ScFormulaParserObj )
 
 //------------------------------------------------------------------------
-
-void lcl_ExternalRefToCalc( ScSingleRefData& rRef, const sheet::SingleReference& rAPI )
-{
-    rRef.InitFlags();
-
-    rRef.nCol    = static_cast<SCsCOL>(rAPI.Column);
-    rRef.nRow    = static_cast<SCsROW>(rAPI.Row);
-    rRef.nTab    = 0;
-    rRef.nRelCol = static_cast<SCsCOL>(rAPI.RelativeColumn);
-    rRef.nRelRow = static_cast<SCsROW>(rAPI.RelativeRow);
-    rRef.nRelTab = 0;
-
-    rRef.SetColRel(     ( rAPI.Flags & sheet::ReferenceFlags::COLUMN_RELATIVE ) != 0 );
-    rRef.SetRowRel(     ( rAPI.Flags & sheet::ReferenceFlags::ROW_RELATIVE    ) != 0 );
-    rRef.SetTabRel(     false );    // sheet index must be absolute for external refs
-    rRef.SetColDeleted( ( rAPI.Flags & sheet::ReferenceFlags::COLUMN_DELETED  ) != 0 );
-    rRef.SetRowDeleted( ( rAPI.Flags & sheet::ReferenceFlags::ROW_DELETED     ) != 0 );
-    rRef.SetTabDeleted( false );    // sheet must not be deleted for external refs
-    rRef.SetFlag3D(     ( rAPI.Flags & sheet::ReferenceFlags::SHEET_3D        ) != 0 );
-    rRef.SetRelName(    false );
-}
 
 void lcl_ExternalRefToApi( sheet::SingleReference& rAPI, const ScSingleRefData& rRef )
 {
@@ -366,7 +345,7 @@ void lcl_SingleRefToApi( sheet::SingleReference& rAPI, const ScSingleRefData& rR
 bool ScTokenConversion::ConvertToTokenArray( ScDocument& rDoc,
         ScTokenArray& rTokenArray, const uno::Sequence<sheet::FormulaToken>& rSequence )
 {
-    return rTokenArray.Fill(rSequence);
+    return rTokenArray.Fill(rSequence,rDoc.GetExternalRefManager());
 }
 
 // static

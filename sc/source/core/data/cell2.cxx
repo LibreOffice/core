@@ -764,7 +764,7 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
     }
 
     pCode->Reset();
-    for ( ScToken* t = pCode->GetNextReferenceOrName(); t; t = pCode->GetNextReferenceOrName() )
+    for ( formula::FormulaToken* t = pCode->GetNextReferenceOrName(); t; t = pCode->GetNextReferenceOrName() )
     {
         StackVar sv = t->GetType();
         if (sv == svExternalSingleRef || sv == svExternalDoubleRef || sv == svExternalName)

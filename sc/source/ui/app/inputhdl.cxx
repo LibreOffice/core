@@ -63,6 +63,7 @@
 #include <vcl/help.hxx>
 #include <vcl/cursor.hxx>
 #include <tools/urlobj.hxx>
+#include <formula/formulahelper.hxx>
 
 #include "inputwin.hxx"
 #include "tabvwsh.hxx"
@@ -94,6 +95,8 @@
 
 //  max. Ranges im RangeFinder
 #define RANGEFIND_MAX   32
+
+using namespace formula;
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -663,7 +666,7 @@ void ScInputHandler::GetFormulaData()
             const ScFuncDesc* pDesc = pFuncList->GetFunction( i );
             if ( pDesc->pFuncName )
             {
-                pDesc->InitArgumentInfo();
+                pDesc->initArgumentInfo();
                 String aEntry = pDesc->GetSignature();
                 TypedStrData* pData = new TypedStrData( aEntry, 0.0, SC_STRTYPE_FUNCTIONS );
                 if (!pFormulaDataPara->Insert(pData))
@@ -715,10 +718,11 @@ void ScInputHandler::ShowTipCursor()
             xub_StrLen  nNextFStart = 0;
             xub_StrLen  nNextFEnd = 0;
             xub_StrLen  nArgPos = 0;
-            const ScFuncDesc* ppFDesc;
-            String**    pppArgs;
+            const IFunctionDescription* ppFDesc;
+            ::std::vector< ::rtl::OUString> aArgs;
             USHORT      nArgs;
             BOOL  bFound = FALSE;
+            FormulaHelper aHelper(ScGlobal::GetStarCalcFunctionMgr());
 
             while( !bFound )
             {
@@ -729,13 +733,13 @@ void ScInputHandler::ShowTipCursor()
                     sal_Unicode c = aSelText.GetChar( nLeftParentPos-1 );
                     if( !(c >= 'A' && c<= 'Z' || c>= 'a' && c<= 'z' ) )
                         continue;
-                    nNextFStart = ScFormulaUtil::GetFunctionStart( aSelText, nLeftParentPos, TRUE);
-                    if( ScFormulaUtil::GetNextFunc( aSelText, FALSE, nNextFStart, &nNextFEnd, &ppFDesc, &pppArgs ) )
+                    nNextFStart = aHelper.GetFunctionStart( aSelText, nLeftParentPos, TRUE);
+                    if( aHelper.GetNextFunc( aSelText, FALSE, nNextFStart, &nNextFEnd, &ppFDesc, &aArgs ) )
                     {
-                        if( ppFDesc->pFuncName )
+                        if( ppFDesc->getFunctionName().getLength() )
                         {
-                            nArgPos = ScFormulaUtil::GetArgStart( aSelText, nNextFStart, 0 );
-                            nArgs = ppFDesc->nArgCount;
+                            nArgPos = aHelper.GetArgStart( aSelText, nNextFStart, 0 );
+                            nArgs = ppFDesc->getParameterCount();
 
                             USHORT nActive = 0;
                             USHORT nCount = 0;
@@ -746,11 +750,11 @@ void ScInputHandler::ShowTipCursor()
                             BOOL   bFlag = FALSE;
                             String aNew;
                             USHORT nParAutoPos = SCPOS_INVALID;
-                            if( pFormulaDataPara->FindText( *(ppFDesc->pFuncName), aNew, nParAutoPos, FALSE ) )
+                            if( pFormulaDataPara->FindText( ppFDesc->getFunctionName(), aNew, nParAutoPos, FALSE ) )
                             {
                                 for( USHORT i=0; i < nArgs; i++ )
                                 {
-                                    xub_StrLen nLength=(pppArgs[i])->Len();
+                                    xub_StrLen nLength=aArgs[i].getLength();
                                     if( nArgPos <= aSelText.Len()-1 )
                                     {
                                         nActive = i+1;
@@ -940,8 +944,8 @@ void ScInputHandler::UseFormulaData()
             xub_StrLen  nNextFStart = 0;
             xub_StrLen  nNextFEnd = 0;
             xub_StrLen  nArgPos = 0;
-            const ScFuncDesc* ppFDesc;
-            String**    pppArgs;
+            const IFunctionDescription* ppFDesc;
+            ::std::vector< ::rtl::OUString> aArgs;
             USHORT      nArgs;
             BOOL  bFound = FALSE;
 
@@ -956,6 +960,7 @@ void ScInputHandler::UseFormulaData()
                     aAutoSearch = aText;
                 }
             }
+            FormulaHelper aHelper(ScGlobal::GetStarCalcFunctionMgr());
 
             while( !bFound )
             {
@@ -967,13 +972,12 @@ void ScInputHandler::UseFormulaData()
                 sal_Unicode c = aFormula.GetChar( nLeftParentPos-1 );
                 if( !(c >= 'A' && c<= 'Z' || c>= 'a' && c<= 'z' ) )
                     continue;
-                nNextFStart = ScFormulaUtil::GetFunctionStart( aFormula, nLeftParentPos, TRUE);
-                if( ScFormulaUtil::GetNextFunc( aFormula, FALSE, nNextFStart, &nNextFEnd, &ppFDesc, &pppArgs ) )
+                nNextFStart = aHelper.GetFunctionStart( aFormula, nLeftParentPos, TRUE);
+                if( aHelper.GetNextFunc( aFormula, FALSE, nNextFStart, &nNextFEnd, &ppFDesc, &aArgs ) )
                 {
-                    if( ppFDesc->pFuncName )
                     {
-                        nArgPos = ScFormulaUtil::GetArgStart( aFormula, nNextFStart, 0 );
-                        nArgs = ppFDesc->nArgCount;
+                        nArgPos = aHelper.GetArgStart( aFormula, nNextFStart, 0 );
+                        nArgs = ppFDesc->getParameterCount();
 
                         USHORT nActive = 0;
                         USHORT nCount = 0;
@@ -984,11 +988,11 @@ void ScInputHandler::UseFormulaData()
                         BOOL   bFlag = FALSE;
                         String aNew;
                         USHORT nParAutoPos = SCPOS_INVALID;
-                        if( pFormulaDataPara->FindText( *(ppFDesc->pFuncName), aNew, nParAutoPos, FALSE ) )
+                        if( pFormulaDataPara->FindText( ppFDesc->getFunctionName(), aNew, nParAutoPos, FALSE ) )
                         {
                             for( USHORT i=0; i < nArgs; i++ )
                             {
-                                xub_StrLen nLength=(pppArgs[i])->Len();
+                                xub_StrLen nLength=aArgs[i].getLength();
                                 if( nArgPos <= aFormula.Len()-1 )
                                 {
                                     nActive = i+1;

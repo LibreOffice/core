@@ -52,9 +52,11 @@ class ScTokenConversion
 {
 public:
     static bool ConvertToTokenArray(
+                        ScDocument& rDoc,
                         ScTokenArray& rTokenArray,
                         const com::sun::star::uno::Sequence< com::sun::star::sheet::FormulaToken >& rSequence );
     static bool ConvertToTokenSequence(
+                        ScDocument& rDoc,
                         com::sun::star::uno::Sequence< com::sun::star::sheet::FormulaToken >& rSequence,
                         const ScTokenArray& rTokenArray );
 };
@@ -68,6 +70,7 @@ class ScFormulaParserObj : public ::cppu::WeakImplHelper3<
 {
 private:
     ::com::sun::star::uno::Sequence< const ::com::sun::star::sheet::FormulaOpCodeMapEntry > maOpCodeMapping;
+    ::com::sun::star::uno::Sequence< const ::com::sun::star::sheet::ExternalLinkInfo > maExternalLinks;
     ScCompiler::OpCodeMapPtr    mxOpCodeMap;
     ScDocShell*         mpDocShell;
     ScAddress           maRefPos;
