@@ -176,7 +176,7 @@ OOO_DLLPUBLIC_CHARTTOOLS bool hasAttributedDataPointDifferentValue(
     const ::rtl::OUString& rPropertyName,
     const ::com::sun::star::uno::Any& rPropertyValue );
 
-bool areAllSeriesAttachedToSameAxis(
+OOO_DLLPUBLIC_CHARTTOOLS bool areAllSeriesAttachedToSameAxis(
         const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >& xChartType,
         sal_Int32 & rOutAxisIndex );
 
