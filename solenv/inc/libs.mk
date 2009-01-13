@@ -141,6 +141,8 @@ DRAWINGLAYERLIB=-ldrawinglayer$(DLLPOSTFIX)
 BASEBMPLIB=-lbasebmp$(DLLPOSTFIX)
 CANVASTOOLSLIB=-lcanvastools$(DLLPOSTFIX)
 CPPCANVASLIB=-lcppcanvas$(DLLPOSTFIX)
+FORLIB=-lfor$(DLLPOSTFIX)
+FORUILIB=-lforui$(DLLPOSTFIX)
 
 .IF "$(SYSTEM_AGG)" == "YES"
 AGGLIB=-lagg
@@ -471,6 +473,8 @@ DRAWINGLAYERLIB=idrawinglayer.lib
 BASEBMPLIB=ibasebmp.lib
 CANVASTOOLSLIB=icanvastools.lib
 CPPCANVASLIB=icppcanvas.lib
+FORLIB=ifor.lib
+FORUILIB=iforui.lib
 AGGLIB=iagg.lib
 PSPLIB=apsp.lib
 TKLIB=itk.lib
