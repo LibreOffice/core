@@ -1364,10 +1364,9 @@
 #define RID_SVXSTR_YESTOALL                                 (RID_SVX_START + 1166) //added for issue73355
 #define RID_SVXSTR_SELMODE_BLK                              (RID_SVX_START + 1167)
 #define RID_SVXSTR_STYLEFAMILY_TABLEDESIGN                  (RID_SVX_START + 1168)
-
-#define STR_LINKEDDOC_NO_SYSTEM_FILE                        (RID_SVX_START + 1168)
+#define STR_LINKEDDOC_NO_SYSTEM_FILE                        (RID_SVX_START + 1169)
 // pb: next free string resource id
-#define RID_SVXSTR_NEXTFREE                 (RID_SVX_START + 1169)
+#define RID_SVXSTR_NEXTFREE                                 (RID_SVX_START + 1170)
 
 
 // ----------------------------------------------------------------------------
