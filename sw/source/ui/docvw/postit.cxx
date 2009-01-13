@@ -456,35 +456,6 @@ void PostItTxt::Command( const CommandEvent& rCEvt )
         }
     }
     else
-    if (rCEvt.GetCommand() == COMMAND_SELECTIONCHANGE)
-    {
-        if ( mpOutlinerView )
-        {
-            const CommandSelectionChangeData *pData = rCEvt.GetSelectionChangeData();
-            ESelection aSelection = mpOutlinerView->GetEditView().GetSelection();
-            aSelection.nStartPos = pData->GetStart();
-            aSelection.nEndPos = pData->GetEnd();
-            mpOutlinerView->GetEditView().SetSelection(aSelection);
-        }
-    }
-    else
-    if (rCEvt.GetCommand() == COMMAND_PREPARERECONVERSION)
-    {
-        if ( mpOutlinerView && mpOutlinerView->HasSelection() )
-        {
-            EditEngine *aEditEngine = mpOutlinerView->GetEditView().GetEditEngine();
-            ESelection aSelection = mpOutlinerView->GetEditView().GetSelection();
-            aSelection.Adjust();
-            if( aSelection.nStartPara != aSelection.nEndPara )
-            {
-                xub_StrLen aParaLen = aEditEngine->GetTextLen( aSelection.nStartPara );
-                aSelection.nEndPara = aSelection.nStartPara;
-                aSelection.nEndPos = aParaLen;
-                mpOutlinerView->GetEditView().SetSelection( aSelection );
-            }
-        }
-    }
-    else
     {
         if ( mpOutlinerView )
             mpOutlinerView->Command( rCEvt );
