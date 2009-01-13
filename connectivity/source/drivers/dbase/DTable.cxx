@@ -692,9 +692,9 @@ sal_Bool ODbaseTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols, s
             aStr.EraseTrailingChars();
 
             if ( aStr.Len() )
-                *(*(_rRow).get())[i] = ::rtl::OUString(aStr);
+                *(_rRow->get())[i] = ::rtl::OUString(aStr);
             else// keine StringLaenge, dann NULL
-                (*(_rRow.get()))[i]->setNull();
+                (_rRow->get())[i]->setNull();
 
             pData[nLen] = cLast;
         }
