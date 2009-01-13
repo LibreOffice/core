@@ -1621,7 +1621,7 @@ void SdrTextObj::NbcReformatText()
         // para object which may detect changes regarding the combination
         // of outliner para data and configuration (e.g., change of
         // formatting of text numerals)
-        FlushViewContact();
+        GetViewContact().flushViewObjectContacts(false);
     }
 }
 
