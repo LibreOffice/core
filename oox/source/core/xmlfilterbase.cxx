@@ -117,7 +117,7 @@ XmlFilterBase::XmlFilterBase( const Reference< XMultiServiceFactory >& rxFactory
 {
 }
 
-SAL_CALL XmlFilterBase::~XmlFilterBase()
+XmlFilterBase::~XmlFilterBase()
 {
 }
 
