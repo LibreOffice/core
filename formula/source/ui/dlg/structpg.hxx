@@ -96,6 +96,8 @@ private:
 
     DECL_LINK( SelectHdl, SvTreeListBox* );
 
+    using Window::GetParent;
+
 protected:
 
     IFormulaToken*      GetFunctionEntry(SvLBoxEntry* pEntry);

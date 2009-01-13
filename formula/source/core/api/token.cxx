@@ -276,7 +276,7 @@ FormulaJumpToken::~FormulaJumpToken()
 }
 
 
-bool FormulaTokenArray::AddFormulaToken(const sheet::FormulaToken& _aToken)
+bool FormulaTokenArray::AddFormulaToken(const sheet::FormulaToken& _aToken,ExternalReferenceHelper* /*_pRef*/)
 {
     bool bError = false;
     const OpCode eOpCode = static_cast<OpCode>(_aToken.OpCode);      //! assuming equal values for the moment
@@ -325,13 +325,13 @@ bool FormulaTokenArray::AddFormulaToken(const sheet::FormulaToken& _aToken)
     } // switch ( eClass )
     return bError;
 }
-bool FormulaTokenArray::Fill(const uno::Sequence< sheet::FormulaToken >& _aSequence)
+bool FormulaTokenArray::Fill(const uno::Sequence< sheet::FormulaToken >& _aSequence,ExternalReferenceHelper* _pRef)
 {
     bool bError = false;
     const sal_Int32 nCount = _aSequence.getLength();
     for (sal_Int32 nPos=0; nPos<nCount; nPos++)
     {
-        bError |= AddFormulaToken( _aSequence[nPos] );
+        bError |= AddFormulaToken( _aSequence[nPos] ,_pRef);
     }
     return bError;
 }

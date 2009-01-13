@@ -19,6 +19,7 @@ mkdir: %_DEST%\inc%_EXT%\formula
 ..\inc\formula\funcutl.hxx %_DEST%\inc%_EXT%\formula\funcutl.hxx
 ..\inc\formula\IControlReferenceHandler.hxx %_DEST%\inc%_EXT%\formula\IControlReferenceHandler.hxx
 ..\inc\formula\IFunctionDescription.hxx %_DEST%\inc%_EXT%\formula\IFunctionDescription.hxx
+..\inc\formula\ExternalReferenceHelper.hxx %_DEST%\inc%_EXT%\formula\ExternalReferenceHelper.hxx
 ..\inc\formula\formuladllapi.h %_DEST%\inc%_EXT%\formula\formuladllapi.h
 ..\inc\formula\opcode.hxx %_DEST%\inc%_EXT%\formula\opcode.hxx
 ..\inc\formula\grammar.hxx %_DEST%\inc%_EXT%\formula\grammar.hxx

@@ -44,6 +44,7 @@
 #include "formula/opcode.hxx"
 #include "formula/grammar.hxx"
 #include "formula/token.hxx"
+#include "formula/ExternalReferenceHelper.hxx"
 
 
 #define MAXJUMPCOUNT 32     /* maximum number of jumps (ocChose) */
@@ -287,6 +288,7 @@ protected:
     FormulaTokenRef     pToken;                     // current token
     FormulaTokenRef     pCurrentFactorToken;        // current factor token (of Factor() method)
     FormulaTokenArray*  pArr;
+    ExternalReferenceHelper* pExternalRef;
 
     FormulaToken**      pCode;
     FormulaArrayStack*  pStack;

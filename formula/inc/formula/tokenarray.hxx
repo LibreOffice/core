@@ -32,6 +32,7 @@
 #define FORMULA_TOKENARRAY_HXX
 
 #include "formula/token.hxx"
+#include "formula/ExternalReferenceHelper.hxx"
 #include <tools/solar.h>
 #include <com/sun/star/sheet/FormulaToken.hpp>
 
@@ -191,14 +192,14 @@ public:
         Derived classes must overload it when they want to support derived classes from FormulaToken.
         @return true        when an error occurs
     */
-    virtual bool AddFormulaToken(const com::sun::star::sheet::FormulaToken& _aToken);
+    virtual bool AddFormulaToken(const com::sun::star::sheet::FormulaToken& _aToken, ExternalReferenceHelper* _pRef = NULL);
 
     /** fill the array with the tokens from the sequence.
         It calls AddFormulaToken for each token in the list.
         @param  _aSequence  the token to add
         @return true        when an error occurs
     */
-    bool Fill(const com::sun::star::uno::Sequence< com::sun::star::sheet::FormulaToken >& _aSequence);
+    bool Fill(const com::sun::star::uno::Sequence< com::sun::star::sheet::FormulaToken >& _aSequence, ExternalReferenceHelper* _pRef = NULL);
 
     FormulaToken* AddToken( const FormulaToken& );
     FormulaToken* AddString( const sal_Unicode* pStr );

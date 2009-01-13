@@ -511,6 +511,7 @@ DBG_NAME(FormulaCompiler)
 FormulaCompiler::FormulaCompiler(FormulaTokenArray& _rArr)
         :
         pArr( &_rArr ),
+        pExternalRef(NULL),
         pStack( NULL ),
         nRecursion(0),
         nNumFmt( NUMBERFORMAT_UNDEFINED ),
@@ -526,6 +527,7 @@ FormulaCompiler::FormulaCompiler(FormulaTokenArray& _rArr)
 FormulaCompiler::FormulaCompiler()
         :
         pArr( NULL ),
+        pExternalRef(NULL),
         pStack( NULL ),
         nRecursion(0),
         nNumFmt( NUMBERFORMAT_UNDEFINED ),
