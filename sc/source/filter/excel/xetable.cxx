@@ -1209,7 +1209,7 @@ void XclExpMultiCellBase::SaveXml( XclExpXmlStream& rStrm )
                 {
                     WriteXmlContents(
                             rStrm,
-                            XclAddress( nBegXclCol + nRelCol, GetXclRow() ),
+                            XclAddress( static_cast<sal_uInt16>(nBegXclCol + nRelCol), GetXclRow() ),
                             aIt->mnXFIndex,
                             nRelColIdx );
                     ++nRelCol;
