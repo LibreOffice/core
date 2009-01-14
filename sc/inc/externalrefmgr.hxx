@@ -135,7 +135,7 @@ public:
         Table();
         ~Table();
 
-        void setCell(SCCOL nCol, SCROW nRow, TokenRef pToken, sal_uInt32 nFmtIndex = 0);
+        SC_DLLPUBLIC void setCell(SCCOL nCol, SCROW nRow, TokenRef pToken, sal_uInt32 nFmtIndex = 0);
         TokenRef getCell(SCCOL nCol, SCROW nRow, sal_uInt32* pnFmtIndex = NULL) const;
         bool hasRow( SCROW nRow ) const;
         void getAllRows(::std::vector<SCROW>& rRows) const;

@@ -543,7 +543,7 @@ public:
     /** Sum scaled values of a ScSummableCompressedArray for each row where in
         *this* array the condition is met: ((aValue & rBitMask) == rMaskedCompare). */
     template< typename S >
-    unsigned long               SumScaledCoupledArrayForCondition( A nStart, A nEnd,
+    SC_DLLPUBLIC unsigned long               SumScaledCoupledArrayForCondition( A nStart, A nEnd,
                                     const D& rBitMask, const D& rMaskedCompare,
                                     const ScSummableCompressedArray<A,S>& rArray,
                                     double fScale ) const;

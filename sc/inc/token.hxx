@@ -278,7 +278,7 @@ public:
 };
 
 
-class ScEmptyCellToken : public ScToken
+class SC_DLLPUBLIC ScEmptyCellToken : public ScToken
 {
             bool                bInherited          :1;
             bool                bDisplayedAsString  :1;
@@ -301,7 +301,7 @@ public:
 
 
 /**  Transports the result from the interpreter to the formula cell. */
-class ScMatrixCellResultToken : public ScToken
+class SC_DLLPUBLIC ScMatrixCellResultToken : public ScToken
 {
     // No non-const access implemented, silence down unxsols4 complaining about
     // the public GetMatrix() hiding the one from ScToken.
@@ -339,7 +339,7 @@ public:
 
 /** Stores the matrix result at the formula cell, additionally the range the
     matrix formula occupies. */
-class ScMatrixFormulaCellToken : public ScMatrixCellResultToken
+class SC_DLLPUBLIC ScMatrixFormulaCellToken : public ScMatrixCellResultToken
 {
 private:
             SCROW               nRows;

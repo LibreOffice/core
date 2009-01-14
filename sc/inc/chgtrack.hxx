@@ -1193,10 +1193,10 @@ public:
                                         return static_cast< SCSIZE >( nRow / nContentRowsPerSlot );
                                     }
 
-    SC_DLLPUBLIC                            ScChangeTrack( ScDocument* );
+            SC_DLLPUBLIC        ScChangeTrack( ScDocument* );
                                 ScChangeTrack( ScDocument*,
                                             const ScStrCollection& ); // only to use in the XML import
-    virtual                     ~ScChangeTrack();
+            SC_DLLPUBLIC virtual ~ScChangeTrack();
             void                Clear();
 
             ScChangeActionContent*  GetFirstGenerated() const { return pFirstGeneratedDelContent; }

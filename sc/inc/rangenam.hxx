@@ -101,7 +101,7 @@ public:
                                 // rTarget ist ABSPOS Sprungmarke
                     ScRangeData(const ScRangeData& rScRangeData);
 
-    virtual         ~ScRangeData();
+    SC_DLLPUBLIC virtual        ~ScRangeData();
 
 
     virtual ScDataObject* Clone() const;

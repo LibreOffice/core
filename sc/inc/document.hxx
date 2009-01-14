@@ -606,7 +606,7 @@ public:
                                     const String& aFileName,
                                     const String& aTabName );
 
-    ScExternalRefManager* GetExternalRefManager();
+    SC_DLLPUBLIC ScExternalRefManager* GetExternalRefManager();
 
     BOOL            HasDdeLinks() const;
     BOOL            HasAreaLinks() const;
