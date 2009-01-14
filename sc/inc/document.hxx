@@ -1190,7 +1190,7 @@ public:
                     // single row taking ones in loops to access a sequence of
                     // single rows is no good idea! Use specialized range
                     // taking methods instead, or iterators.
-    SC_DLLPUBLIC inline ULONG   FastGetRowHeight( SCROW nStartRow, SCROW nEndRow,
+    SC_DLLPUBLIC ULONG  FastGetRowHeight( SCROW nStartRow, SCROW nEndRow,
                         SCTAB nTab ) const;
     inline ULONG    FastGetScaledRowHeight( SCROW nStartRow, SCROW nEndRow,
                         SCTAB nTab, double fScale ) const;
@@ -1705,13 +1705,6 @@ inline void ScDocument::SetSortParam( ScSortParam& rParam, SCTAB nTab )
     mSheetSortParams[ nTab ] = rParam;
 }
 
-
-inline ULONG ScDocument::FastGetRowHeight( SCROW nStartRow, SCROW nEndRow,
-        SCTAB nTab ) const
-{
-    return pTab[nTab]->pRowFlags->SumCoupledArrayForCondition( nStartRow,
-            nEndRow, CR_HIDDEN, 0, *(pTab[nTab]->pRowHeight));
-}
 
 inline ULONG ScDocument::FastGetScaledRowHeight( SCROW nStartRow, SCROW nEndRow,
         SCTAB nTab, double fScale ) const

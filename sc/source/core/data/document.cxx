@@ -2660,6 +2660,12 @@ ULONG ScDocument::GetRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab ) con
     return 0;
 }
 
+ULONG ScDocument::FastGetRowHeight( SCROW nStartRow, SCROW nEndRow,
+        SCTAB nTab ) const
+{
+    return pTab[nTab]->pRowFlags->SumCoupledArrayForCondition( nStartRow,
+            nEndRow, CR_HIDDEN, 0, *(pTab[nTab]->pRowHeight));
+}
 
 ULONG ScDocument::GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow,
         SCTAB nTab, double fScale ) const
