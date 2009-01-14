@@ -997,22 +997,13 @@ sub relink_workspace {
     my $linkdir = shift;
     my $restore = shift;
 
-    # The list if obligatory added modules, build will not work
+    # The list of obligatorily added modules, build will not work
     # if these are not present.
-    my @added_modules = ('solenv',
-                         'default_images',
-                         'custom_images',
-                         'ooo_custom_images',
-                         'external_images',
-                         'postprocess',
-                         'instset_native',
-                         'instsetoo_native',
-                         'smoketest_native',
-                         'smoketestoo_native');
-
     my %added_modules_hash;
-    for (@added_modules) {
-        $added_modules_hash{$_}++;
+    if (defined $ENV{ADDED_MODULES}) {
+        for ( split /\s/, $ENV{ADDED_MODULES} ) {
+            $added_modules_hash{$_}++;
+        }
     }
 
     # clean out pre-existing linkdir
