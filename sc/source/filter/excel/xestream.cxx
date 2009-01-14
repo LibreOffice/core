@@ -421,7 +421,7 @@ static ScAddress lcl_ToAddress( const XclAddress& rAddress )
     // the row is >= MAXROW or the column is >= MAXCOL, and Excel doesn't
     // like "A:IV" (i.e. no row numbers).  Prevent this.
     aAddress.SetRow( std::min<sal_Int32>( rAddress.mnRow, MAXROW-1 ) );
-    aAddress.SetCol( std::min<sal_Int32>( rAddress.mnCol, MAXCOL-1 ) );
+    aAddress.SetCol( static_cast<sal_Int16>(std::min<sal_Int32>( rAddress.mnCol, MAXCOL-1 )) );
 
     return aAddress;
 }

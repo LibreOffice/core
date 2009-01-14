@@ -501,7 +501,7 @@ static sal_uInt16 lcl_WriteRun( XclExpXmlStream& rStrm, const ScfUInt16Vec& rBuf
     rWorksheet->writeEscaped( XclXmlUtils::ToOUString( rBuffer, nStart, nLength ) );
     rWorksheet->endElement( XML_t );
     rWorksheet->endElement( XML_r );
-    return nStart + nLength;
+    return static_cast<sal_uInt16>(nStart + nLength);
 }
 
 void XclExpString::WriteXml( XclExpXmlStream& rStrm ) const
