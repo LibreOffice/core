@@ -164,6 +164,7 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >
                         openOutputStream( const ::rtl::OUString& rStreamName,
                                           const ::rtl::OUString& rMediaType );
+    using FilterBase::openOutputStream;
 
     /** Opens specified output stream from the base storage with specified media type and returns new fast serializer for that stream.
 
