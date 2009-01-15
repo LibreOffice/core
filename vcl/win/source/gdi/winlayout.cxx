@@ -2017,7 +2017,7 @@ int UniscribeLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos,
 
 void UniscribeLayout::MoveGlyph( int nStartx8, long nNewXPos )
 {
-    DBG_ASSERT( (nStartx8 & 0xff), "USP::MoveGlyph(): glyph injection not disabled!" );
+    DBG_ASSERT( !(nStartx8 & 0xff), "USP::MoveGlyph(): glyph injection not disabled!" );
     int nStart = nStartx8 >> 8;
     if( nStart > mnGlyphCount )
         return;
@@ -2063,7 +2063,7 @@ void UniscribeLayout::MoveGlyph( int nStartx8, long nNewXPos )
 
 void UniscribeLayout::DropGlyph( int nStartx8 )
 {
-    DBG_ASSERT( (nStartx8 & 0xff), "USP::MoveGlyph(): glyph injection not disabled!" );
+    DBG_ASSERT( !(nStartx8 & 0xff), "USP::DropGlyph(): glyph injection not disabled!" );
     int nStart = nStartx8 >> 8;
     DBG_ASSERT( nStart<=mnGlyphCount, "USPLayout::MoveG nStart overflow" );
 
