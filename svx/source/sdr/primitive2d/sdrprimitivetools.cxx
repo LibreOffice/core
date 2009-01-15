@@ -43,11 +43,11 @@ namespace drawinglayer
     {
         BitmapEx createDefaultCross_3x3(const basegfx::BColor& rBColor)
         {
-            static BitmapEx aRetval;
+            static BitmapEx* pRetVal = NULL;
             static basegfx::BColor aColor;
             ::osl::Mutex m_mutex;
 
-            if(aRetval.IsEmpty() || rBColor != aColor)
+            if(pRetVal == NULL || rBColor != aColor)
             {
                 // copy values
                 aColor = rBColor;
@@ -77,20 +77,23 @@ namespace drawinglayer
                 aContent.ReleaseAccess(pWContent);
                 aMask.ReleaseAccess(pWMask);
 
-                aRetval = BitmapEx(aContent, aMask);
+                if( pRetVal )
+                    delete pRetVal;
+
+                pRetVal = new BitmapEx(aContent, aMask);
             }
 
-            return aRetval;
+            return *pRetVal;
         }
 
         BitmapEx createDefaultGluepoint_7x7(const basegfx::BColor& rBColorA, const basegfx::BColor& rBColorB)
         {
-            static BitmapEx aRetval;
+            static BitmapEx* pRetVal = NULL;
             static basegfx::BColor aColorA;
             static basegfx::BColor aColorB;
             ::osl::Mutex m_mutex;
 
-            if(aRetval.IsEmpty() || rBColorA != aColorA || rBColorB != aColorB)
+            if(pRetVal == NULL || rBColorA != aColorA || rBColorB != aColorB)
             {
                 // copy values
                 aColorA = rBColorA;
@@ -164,10 +167,13 @@ namespace drawinglayer
                 aContent.ReleaseAccess(pWContent);
                 aMask.ReleaseAccess(pWMask);
 
-                aRetval = BitmapEx(aContent, aMask);
+                if( pRetVal )
+                    delete pRetVal;
+
+                pRetVal = new BitmapEx(aContent, aMask);
             }
 
-            return aRetval;
+            return *pRetVal;
         }
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
