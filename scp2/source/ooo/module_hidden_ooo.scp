@@ -932,17 +932,17 @@ Module gid_Module_Root_Userland
 End
 #endif
 
-#ifdef BUILD_SPECIAL
-Module gid_Module_Root_Extension_Oooimprovement
-	Name = "gid_Module_Root_Extension_Oooimprovement";
-	Description = "gid_Module_Root_Extension_Oooimprovement";
-	Files = (gid_File_Extension_Oxt_Oooimprovement);
-	InstallOrder = "1990";
-	PackageInfo = "packinfo_office.txt";
-	ParentID = gid_Module_Root;
-	Styles = (HIDDEN_ROOT);
-End
-#endif
+// #ifdef BUILD_SPECIAL
+// Module gid_Module_Root_Extension_Oooimprovement
+//    Name = "gid_Module_Root_Extension_Oooimprovement";
+//    Description = "gid_Module_Root_Extension_Oooimprovement";
+//    Files = (gid_File_Extension_Oxt_Oooimprovement);
+//    InstallOrder = "1990";
+//    PackageInfo = "packinfo_office.txt";
+//    ParentID = gid_Module_Root;
+//    Styles = (HIDDEN_ROOT);
+// End
+// #endif
 
 Module gid_Module_Root_Extension_Dictionary_Af
 	Name = "gid_Module_Root_Extension_Dictionary_Af";
