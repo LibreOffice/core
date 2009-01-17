@@ -43,6 +43,7 @@
 #include <cstdio>
 
 #include <string.h>
+#include <limits.h>
 #include <tools/debug.hxx>
 
 #include "formula/token.hxx"
