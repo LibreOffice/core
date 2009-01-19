@@ -124,3 +124,58 @@ static const TransItem pHu[] = {
 };
 
 addToMap(pHu, aHu);
+
+// ---------------------------------------------------------------------------
+// German language locale (automatically generated)
+// ---------------------------------------------------------------------------
+static const Locale aDe(OUString::createFromAscii("de"), OUString(), OUString());
+
+// pre instantiations of localized function names
+static const sal_Unicode cell_row_de[] = {
+    0x005A, 0x0045, 0x0049, 0x004C, 0x0045, 0x0000};
+static const sal_Unicode cell_col_de[] = {
+    0x0053, 0x0050, 0x0041, 0x004C, 0x0054, 0x0045, 0x0000};
+static const sal_Unicode cell_width_de[] = {
+    0x0042, 0x0052, 0x0045, 0x0049, 0x0054, 0x0045, 0x0000};
+static const sal_Unicode cell_address_de[] = {
+    0x0041, 0x0044, 0x0052, 0x0045, 0x0053, 0x0053, 0x0045, 0x0000};
+static const sal_Unicode cell_filename_de[] = {
+    0x0044, 0x0041, 0x0054, 0x0045, 0x0049, 0x004E, 0x0041, 0x004D, 0x0045, 0x0000};
+static const sal_Unicode cell_color_de[] = {
+    0x0046, 0x0041, 0x0052, 0x0042, 0x0045, 0x0000};
+static const sal_Unicode cell_format_de[] = {
+    0x0046, 0x004F, 0x0052, 0x004D, 0x0041, 0x0054, 0x0000};
+static const sal_Unicode cell_contents_de[] = {
+    0x0049, 0x004E, 0x0048, 0x0041, 0x004C, 0x0054, 0x0000};
+static const sal_Unicode cell_parentheses_de[] = {
+    0x004B, 0x004C, 0x0041, 0x004D, 0x004D, 0x0045, 0x0052, 0x004E, 0x0000};
+static const sal_Unicode cell_protect_de[] = {
+    0x0053, 0x0043, 0x0048, 0x0055, 0x0054, 0x005A, 0x0000};
+static const sal_Unicode cell_type_de[] = {
+    0x0054, 0x0059, 0x0050, 0x0000};
+static const sal_Unicode cell_prefix_de[] = {
+    0x0050, 0x0052, 0x00C4, 0x0046, 0x0049, 0x0058, 0x0000};
+static const sal_Unicode cell_sheet_de[] = {
+    0x0042, 0x004C, 0x0041, 0x0054, 0x0054, 0x0000};
+static const sal_Unicode cell_coord_de[] = {
+    0x004B, 0x004F, 0x004F, 0x0052, 0x0044, 0x0000};
+
+static const TransItem pDe[] = {
+    {cell_row_de, "ROW", ocCell},
+    {cell_col_de, "COL", ocCell},
+    {cell_width_de, "WIDTH", ocCell},
+    {cell_address_de, "ADDRESS", ocCell},
+    {cell_filename_de, "FILENAME", ocCell},
+    {cell_color_de, "COLOR", ocCell},
+    {cell_format_de, "FORMAT", ocCell},
+    {cell_contents_de, "CONTENTS", ocCell},
+    {cell_parentheses_de, "PARENTHESES", ocCell},
+    {cell_protect_de, "PROTECT", ocCell},
+    {cell_type_de, "TYPE", ocCell},
+    {cell_prefix_de, "PREFIX", ocCell},
+    {cell_sheet_de, "SHEET", ocCell},
+    {cell_coord_de, "COORD", ocCell},
+    {NULL, NULL, ocNone}
+};
+
+addToMap(pDe, aDe);

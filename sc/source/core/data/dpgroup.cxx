@@ -1133,6 +1133,11 @@ void ScDPGroupTableData::SetEmptyFlags( BOOL bIgnoreEmptyRows, BOOL bRepeatIfEmp
     pSourceData->SetEmptyFlags( bIgnoreEmptyRows, bRepeatIfEmpty );
 }
 
+bool ScDPGroupTableData::IsRepeatIfEmpty()
+{
+    return pSourceData->IsRepeatIfEmpty();
+}
+
 void ScDPGroupTableData::CreateCacheTable()
 {
     pSourceData->CreateCacheTable();
@@ -1240,18 +1245,18 @@ void ScDPGroupTableData::ModifyFilterCriteria(vector<ScDPCacheTable::Criterion>&
     rCriteria.swap(aNewCriteria);
 }
 
-void ScDPGroupTableData::FilterCacheTable(const vector<ScDPCacheTable::Criterion>& rCriteria)
+void ScDPGroupTableData::FilterCacheTable(const vector<ScDPCacheTable::Criterion>& rCriteria, const hash_set<sal_Int32>& rCatDims)
 {
     vector<ScDPCacheTable::Criterion> aNewCriteria(rCriteria);
     ModifyFilterCriteria(aNewCriteria);
-    pSourceData->FilterCacheTable(aNewCriteria);
+    pSourceData->FilterCacheTable(aNewCriteria, rCatDims);
 }
 
-void ScDPGroupTableData::GetDrillDownData(const vector<ScDPCacheTable::Criterion>& rCriteria, Sequence< Sequence<Any> >& rData)
+void ScDPGroupTableData::GetDrillDownData(const vector<ScDPCacheTable::Criterion>& rCriteria, const hash_set<sal_Int32>& rCatDims, Sequence< Sequence<Any> >& rData)
 {
     vector<ScDPCacheTable::Criterion> aNewCriteria(rCriteria);
     ModifyFilterCriteria(aNewCriteria);
-    pSourceData->GetDrillDownData(aNewCriteria, rData);
+    pSourceData->GetDrillDownData(aNewCriteria, rCatDims, rData);
 }
 
 void ScDPGroupTableData::CalcResults(CalcInfo& rInfo, bool bAutoShow)

@@ -169,12 +169,12 @@ public:
 
     /** Set filter on/off flag to each row to control visibility.  The caller
         must ensure that the table is filled before calling this function. */
-    void filterByPageDimension(const ::std::vector<Criterion>& rCriteria, bool bRepeatIfEmpty = false);
+    void filterByPageDimension(const ::std::vector<Criterion>& rCriteria, const ::std::hash_set<sal_Int32>& rRepeatIfEmptyDims);
 
     /** Get the cell instance at specified location within the data grid. Note
         that the data grid doesn't include the header row.  Don't delete the
         returned object! */
-    const ScDPCacheCell* getCell(SCCOL nCol, SCROW nRow, bool bRepeatIfEmpty = false) const;
+    const ScDPCacheCell* getCell(SCCOL nCol, SCROW nRow, bool bRepeatIfEmpty) const;
 
     const String* getFieldName(sal_Int32 nIndex) const;
 
@@ -193,7 +193,7 @@ public:
         a drill-down data table. */
     void filterTable(const ::std::vector<Criterion>& rCriteria,
                      ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > >& rTabData,
-                     bool bRepeatIfEmpty = false);
+                     const ::std::hash_set<sal_Int32>& rRepeatIfEmptyDims);
 
     void clear();
     void swap(ScDPCacheTable& rOther);
@@ -205,8 +205,11 @@ private:
 
     /**
      * Check if a given row meets all specified criteria.
+     *
+     * @param nRow index of row to be tested.
+     * @param rCriteria a list of criteria
      */
-    bool isRowQualified(sal_Int32 nRow, const ::std::vector<Criterion>& rCriteria, bool bRepeatIfEmpty) const;
+    bool isRowQualified(sal_Int32 nRow, const ::std::vector<Criterion>& rCriteria, const ::std::hash_set<sal_Int32>& rRepeatIfEmptyDims) const;
     void getValueData(ScDocument* pDoc, const ScAddress& rPos, ScDPCacheCell& rCell);
 
 private:

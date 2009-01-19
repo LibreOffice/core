@@ -121,6 +121,7 @@ EXCEPTIONSFILES= \
     $(SLO)$/document.obj \
     $(SLO)$/dpdimsave.obj \
     $(SLO)$/dpgroup.obj \
+    $(SLO)$/dpshttab.obj \
     $(SLO)$/dptabres.obj \
     $(SLO)$/dptabdat.obj \
     $(SLO)$/global2.obj \

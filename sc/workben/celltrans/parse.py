@@ -32,7 +32,7 @@
 
 import sys
 
-localeNames = {'fr': 'French', 'hu': 'Hungarian'}
+localeNames = {'fr': 'French', 'hu': 'Hungarian', 'de': 'German'}
 def getLocaleName (code):
     global localeNames
     if localeNames.has_key(code):

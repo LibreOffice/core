@@ -56,6 +56,7 @@
 #include "scitems.hxx"
 #include "unonames.hxx"
 
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sheet/GeneralFunction.hpp>
 #include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
@@ -83,6 +84,8 @@ using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::sheet::DataPilotTableHeaderData;
 using ::com::sun::star::sheet::DataPilotTablePositionData;
+using ::com::sun::star::beans::XPropertySet;
+using ::rtl::OUString;
 
 // -----------------------------------------------------------------------
 
@@ -835,16 +838,24 @@ void ScDPObject::FillPageList( TypedScStrCollection& rStrings, long nField )
     uno::Sequence<rtl::OUString> aNames = xMembers->getElementNames();
     long nNameCount = aNames.getLength();
     const rtl::OUString* pNameArr = aNames.getConstArray();
-    for (long nPos=0; nPos<nNameCount; nPos++)
+    for (long nPos = 0; nPos < nNameCount; ++nPos)
     {
-        TypedStrData* pData = new TypedStrData( pNameArr[nPos] );
+        // Make sure to insert only visible members.
+        Reference<XPropertySet> xPropSet(xMembers->getByName(pNameArr[nPos]), UNO_QUERY);
+        sal_Bool bVisible = false;
+        if (xPropSet.is())
+        {
+            Any any = xPropSet->getPropertyValue(OUString::createFromAscii(SC_UNO_ISVISIBL));
+            any >>= bVisible;
+        }
 
-//      if ( !rStrings.Insert( pData ) )
-//          delete pData;                               // duplicate
-
-        // use the order from getElementNames
-        if ( !rStrings.AtInsert( rStrings.GetCount(), pData ) )
-            delete pData;
+        if (bVisible)
+        {
+            // use the order from getElementNames
+            TypedStrData* pData = new TypedStrData( pNameArr[nPos] );
+            if ( !rStrings.AtInsert( rStrings.GetCount(), pData ) )
+                delete pData;
+        }
     }
 
     //  add "-all-" entry to the top (unsorted)

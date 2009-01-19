@@ -247,7 +247,7 @@ void ScDPTableData::FillRowDataFromCacheTable(sal_Int32 nRow, const ScDPCacheTab
         rData.aValues.push_back( ScDPValueData() );
         ScDPValueData& rVal = rData.aValues.back();
         const ScDPCacheCell* pCell = rCacheTable.getCell(
-            static_cast<SCCOL>(nDim), static_cast<SCROW>(nRow));
+            static_cast<SCCOL>(nDim), static_cast<SCROW>(nRow), false);
         if (pCell)
         {
             rVal.fValue = pCell->mbNumeric ? pCell->mfValue : 0.0;

@@ -64,8 +64,8 @@
 using namespace com::sun::star;
 
 using ::std::vector;
-using ::std::set;
 using ::std::hash_map;
+using ::std::hash_set;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
@@ -293,20 +293,22 @@ void ScDatabaseDPData::CreateCacheTable()
     pImpl->aCacheTable.fillTable(pImpl->xRowSet, *pImpl->pFormatter->GetNullDate());
 }
 
-void ScDatabaseDPData::FilterCacheTable(const vector<ScDPCacheTable::Criterion>& rCriteria)
+void ScDatabaseDPData::FilterCacheTable(const vector<ScDPCacheTable::Criterion>& rCriteria, const hash_set<sal_Int32>& rCatDims)
 {
     CreateCacheTable();
-    pImpl->aCacheTable.filterByPageDimension(rCriteria, IsRepeatIfEmpty());
+    pImpl->aCacheTable.filterByPageDimension(
+        rCriteria, (IsRepeatIfEmpty() ? rCatDims : hash_set<sal_Int32>()));
 }
 
-void ScDatabaseDPData::GetDrillDownData(const vector<ScDPCacheTable::Criterion>& rCriteria, Sequence< Sequence<Any> >& rData)
+void ScDatabaseDPData::GetDrillDownData(const vector<ScDPCacheTable::Criterion>& rCriteria, const hash_set<sal_Int32>& rCatDims, Sequence< Sequence<Any> >& rData)
 {
     CreateCacheTable();
     sal_Int32 nRowSize = pImpl->aCacheTable.getRowSize();
     if (!nRowSize)
         return;
 
-    pImpl->aCacheTable.filterTable(rCriteria, rData, IsRepeatIfEmpty());
+    pImpl->aCacheTable.filterTable(
+        rCriteria, rData, IsRepeatIfEmpty() ? rCatDims : hash_set<sal_Int32>());
 }
 
 void ScDatabaseDPData::CalcResults(CalcInfo& rInfo, bool bAutoShow)

@@ -57,6 +57,7 @@ using ::rtl::OUString;
 using ::std::vector;
 using ::std::pair;
 using ::std::hash_map;
+using ::std::hash_set;
 using ::std::auto_ptr;
 using ::com::sun::star::i18n::LocaleDataItem;
 using ::com::sun::star::uno::Exception;
@@ -489,7 +490,7 @@ bool ScDPCacheTable::isRowActive(sal_Int32 nRow) const
     return maRowsVisible[nRow];
 }
 
-void ScDPCacheTable::filterByPageDimension(const vector<Criterion>& rCriteria, bool bRepeatIfEmpty)
+void ScDPCacheTable::filterByPageDimension(const vector<Criterion>& rCriteria, const hash_set<sal_Int32>& rRepeatIfEmptyDims)
 {
     sal_Int32 nRowSize = getRowSize();
     if (nRowSize != static_cast<sal_Int32>(maRowsVisible.size()))
@@ -499,7 +500,7 @@ void ScDPCacheTable::filterByPageDimension(const vector<Criterion>& rCriteria, b
     }
 
     for (sal_Int32 nRow = 0; nRow < nRowSize; ++nRow)
-        maRowsVisible[nRow] = isRowQualified(nRow, rCriteria, bRepeatIfEmpty);
+        maRowsVisible[nRow] = isRowQualified(nRow, rCriteria, rRepeatIfEmptyDims);
 }
 
 const ScDPCacheCell* ScDPCacheTable::getCell(SCCOL nCol, SCROW nRow, bool bRepeatIfEmpty) const
@@ -556,7 +557,8 @@ const TypedScStrCollection& ScDPCacheTable::getFieldEntries(sal_Int32 nIndex) co
     return *maFieldEntries[nIndex].get();
 }
 
-void ScDPCacheTable::filterTable(const vector<Criterion>& rCriteria, Sequence< Sequence<Any> >& rTabData, bool bRepeatIfEmpty)
+void ScDPCacheTable::filterTable(const vector<Criterion>& rCriteria, Sequence< Sequence<Any> >& rTabData,
+                                 const hash_set<sal_Int32>& rRepeatIfEmptyDims)
 {
     sal_Int32 nRowSize = getRowSize();
     sal_Int32 nColSize = getColSize();
@@ -591,7 +593,7 @@ void ScDPCacheTable::filterTable(const vector<Criterion>& rCriteria, Sequence< S
             // This row is filtered out.
             continue;
 
-        if (!isRowQualified(nRow, rCriteria, bRepeatIfEmpty))
+        if (!isRowQualified(nRow, rCriteria, rRepeatIfEmptyDims))
             continue;
 
         // Insert this row into table.
@@ -600,6 +602,7 @@ void ScDPCacheTable::filterTable(const vector<Criterion>& rCriteria, Sequence< S
         for (SCCOL nCol = 0; nCol < nColSize; ++nCol)
         {
             Any any;
+            bool bRepeatIfEmpty = rRepeatIfEmptyDims.count(nCol) > 0;
             const ScDPCacheCell* pCell = getCell(nCol, nRow, bRepeatIfEmpty);
             if (!pCell)
             {
@@ -654,7 +657,8 @@ bool ScDPCacheTable::empty() const
     return maTable.empty();
 }
 
-bool ScDPCacheTable::isRowQualified(sal_Int32 nRow, const vector<Criterion>& rCriteria, bool bRepeatIfEmpty) const
+bool ScDPCacheTable::isRowQualified(sal_Int32 nRow, const vector<Criterion>& rCriteria,
+                                    const hash_set<sal_Int32>& rRepeatIfEmptyDims) const
 {
     sal_Int32 nColSize = getColSize();
     vector<Criterion>::const_iterator itrEnd = rCriteria.end();
@@ -665,6 +669,8 @@ bool ScDPCacheTable::isRowQualified(sal_Int32 nRow, const vector<Criterion>& rCr
             // use this criterion.
             continue;
 
+        // Check if the 'repeat if empty' flag is set for this field.
+        bool bRepeatIfEmpty = rRepeatIfEmptyDims.count(itr->mnFieldIndex) > 0;
         const ScDPCacheCell* pCell = getCell(static_cast<SCCOL>(itr->mnFieldIndex), nRow, bRepeatIfEmpty);
         if (!pCell)
             // This should never happen, but just in case...
