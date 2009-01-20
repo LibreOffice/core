@@ -328,38 +328,48 @@ sub GetLanguageInformation
 '/// Extracts the language information from <i>Setup.xcu</i>.
 '/// <u>note</u>: It uses the <b>fgetL10Nvalue</b>.
    Dim i as integer
+   Dim iTimeOut as integer
    Dim sLanOutIni as string
    Dim SetupXML as String
    Dim ChildsOfSetupNodes as integer
    Dim ArtOfInst as string
    Dim SetupXMLNet as string
    Dim SetupXMLDefault as string
-
+   dim SetupXcuPath as string
+        
+    SetupXcuPath = ConvertPath("share\registry\data\org\openoffice\Setup.xcu")
+    SetupXML = gOfficePath & ConvertPath("user\registry\data\org\openoffice\Setup.xcu")
+    
     if gNetzInst = TRUE then
-        SetupXMLNet = gNetzOfficePath & ConvertPath("share\registry\data\org\openoffice\Setup.xcu")
-        SetupXML = gOfficePath & ConvertPath("user\registry\data\org\openoffice\Setup.xcu")
+        SetupXMLNet = gNetzOfficePath & SetupXcuPath
         ArtOfInst = "NET- / Workstation Inst."
     else
-        SetupXML = gOfficePath & ConvertPath("user\registry\data\org\openoffice\Setup.xcu")
-        SetupXMLDefault = gOfficePath & ConvertPath("share\registry\data\org\openoffice\Setup.xcu")
+        SetupXMLDefault = gOfficePath & SetupXcuPath
         ArtOfInst = "FAT Inst."
     end if
 
-    if app.Dir (SetupXML) = "" then
-        warnlog "GetLanguageInformation(" & ArtOfInst & "): " & SetupXML & " not found => can't get the correct Office-Language! Default (01) will be used."
-        iSprache = 01
-        Exit sub
-    else
-        ' function 'fgetL10Nvalue' is also in this library
-        sLanOutIni = fgetL10Nvalue(SetupXML)
-        ' BugID 98315 -> looking in networkpath for the language until bug will be fixed.
-        if sLanOutIni = "" and gNetzInst = TRUE then
-            sLanOutIni = fgetL10Nvalue(SetupXMLNet)
-        end if
-        ' It is an English FAT version 645m9s2 or higher.
-        if sLanOutIni = "" and gNetzInst = FALSE then
-            sLanOutIni = fgetL10Nvalue(SetupXMLDefault)
-        end if
+    ' Issue #i97875 (JSK) experimental delay
+    ' If we're too fast we might encounter that the Setup.xcu is not created yet.
+    ' So we retry a couple of times    
+    while( IsMissing( SetupXML ) ) 
+        iTimeOut = iTimeOut + 1
+        if ( iTimeOut = 10 ) then
+            warnlog "GetLanguageInformation(" & ArtOfInst & "): " & SetupXML & " not found => can't get the correct Office-Language! Default (01) will be used."
+            iSprache = 01
+            Exit sub
+        endif
+        wait( 100 )
+    wend
+
+    ' function 'fgetL10Nvalue' is also in this library
+    sLanOutIni = fgetL10Nvalue(SetupXML)
+    ' BugID 98315 -> looking in networkpath for the language until bug will be fixed.
+    if sLanOutIni = "" and gNetzInst = TRUE then
+        sLanOutIni = fgetL10Nvalue(SetupXMLNet)
+    end if
+    ' It is an English FAT version 645m9s2 or higher.
+    if sLanOutIni = "" and gNetzInst = FALSE then
+        sLanOutIni = fgetL10Nvalue(SetupXMLDefault)
     end if
 
     if sLanOutIni = "" then
