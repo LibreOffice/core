@@ -61,6 +61,7 @@ FILES_TO_COPY_FROM_MINGW=excpt.h \
 
 FILES_TO_COPY_FROM_W32API=amvideo.h \
               bdatypes.h \
+              imm.h \
               oaidl.h \
               objfwd.h \
               objidl.h \

@@ -1,40 +1,38 @@
 *** misc/openssl-0.9.8g/Makefile.shared	Sun Sep 16 23:11:51 2007
---- misc/build/openssl-0.9.8g/Makefile.shared	Mon Feb  4 21:12:51 2008
+--- misc/build/openssl-0.9.8g/Makefile.shared	Sat Feb  9 09:46:23 2008
 ***************
-*** 238,251 ****
-  	SHLIB=cyg$(LIBNAME); \
+*** 254,266 ****
   	base=-Wl,--enable-auto-image-base; \
   	if expr $(PLATFORM) : 'mingw' > /dev/null; then \
-! 		SHLIB=$(LIBNAME)eay32; base=; \
+  		SHLIB=$(LIBNAME)eay32; \
+! 		base=;  [ $(LIBNAME) = "crypto" ] && base=-Wl,--image-base,0x63000000; \
   	fi; \
   	SHLIB_SUFFIX=.dll; \
-  	LIBVERSION="$(LIBVERSION)"; \
-! 	SHLIB_SOVER=${LIBVERSION:+"-$(LIBVERSION)"}; \
+! 	SHLIB_SOVER=-$(LIBVERSION); \
   	ALLSYMSFLAGS='-Wl,--whole-archive'; \
   	NOALLSYMSFLAGS='-Wl,--no-whole-archive'; \
 ! 	SHAREDFLAGS="$(CFLAGS) $(SHARED_LDFLAGS) -shared $$base -Wl,-Bsymbolic -Wl,--out-implib,lib$(LIBNAME).dll.a"; \
-  	$(LINK_SO_O)
-  link_a.cygwin:
-  	@ $(CALC_VERSIONS); \
---- 238,255 ----
-  	SHLIB=cyg$(LIBNAME); \
+  	[ -f apps/$$SHLIB$$SHLIB_SUFFIX ] && rm apps/$$SHLIB$$SHLIB_SUFFIX; \
+  	[ -f test/$$SHLIB$$SHLIB_SUFFIX ] && rm test/$$SHLIB$$SHLIB_SUFFIX; \
+  	$(LINK_SO_A) || exit 1; \
+--- 254,270 ----
   	base=-Wl,--enable-auto-image-base; \
   	if expr $(PLATFORM) : 'mingw' > /dev/null; then \
-! 		SHLIB=$(LIBNAME)eay32; \
+  		SHLIB=$(LIBNAME)eay32; \
+! 		base=;  \
 !                 if test $(LIBNAME) = "crypto"; then \
 !                         SHLIB=libeay32; \
+!                         base=-Wl,--image-base,0x63000000; \
 !                 fi; \
-!                 base=; \
   	fi; \
   	SHLIB_SUFFIX=.dll; \
-  	LIBVERSION="$(LIBVERSION)"; \
 ! 	SHLIB_SOVER=; \
   	ALLSYMSFLAGS='-Wl,--whole-archive'; \
   	NOALLSYMSFLAGS='-Wl,--no-whole-archive'; \
 ! 	SHAREDFLAGS="$(CFLAGS) $(SHARED_LDFLAGS) -shared $$base -Wl,-Bsymbolic -Wl,--export-all-symbols -Wl,--out-implib,lib$(LIBNAME).dll.a"; \
-  	$(LINK_SO_O)
-  link_a.cygwin:
-  	@ $(CALC_VERSIONS); \
+  	[ -f apps/$$SHLIB$$SHLIB_SUFFIX ] && rm apps/$$SHLIB$$SHLIB_SUFFIX; \
+  	[ -f test/$$SHLIB$$SHLIB_SUFFIX ] && rm test/$$SHLIB$$SHLIB_SUFFIX; \
+  	$(LINK_SO_A) || exit 1; \
 *** misc/openssl-0.9.8g/ms/mingw32.bat	Fri May  5 22:19:33 2006
 --- misc/build/openssl-0.9.8g/ms/mingw32.bat	Mon Feb  4 20:11:50 2008
 ***************
