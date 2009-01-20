@@ -303,8 +303,8 @@ SvxHyperlinkTabPageBase::SvxHyperlinkTabPageBase ( Window *pParent,
     mpBtScript              ( NULL ),
     mbIsCloseDisabled       ( sal_False ),
     mpDialog                ( pParent ),
-    mbStdControlsInit       ( FALSE )
-
+    mbStdControlsInit       ( FALSE ),
+    aEmptyStr()
 {
     // create bookmark-window
     mpMarkWnd = new SvxHlinkDlgMarkWnd ( this );
