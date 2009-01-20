@@ -2258,7 +2258,7 @@ sub create_packages_without_epm
         $destinationdir =~ s/\/\s*$//;  # removing ending slashes
 
         # my $systemcall = "pkgmk -o -f $prototypefile -d $destinationdir \> /dev/null 2\>\&1";
-        my $systemcall = "pkgmk -o -f $prototypefile -d $destinationdir 2\>\&1 |";
+        my $systemcall = "pkgmk -l 1073741824 -o -f $prototypefile -d $destinationdir 2\>\&1 |";
         installer::logger::print_message( "... $systemcall ...\n" );
 
         my $maxpkgmkcalls = 3;
