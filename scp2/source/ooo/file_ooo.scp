@@ -160,6 +160,13 @@ End
 
 #endif
 
+File gid_File_Profile_Gengal
+    BIN_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Styles = (PACKED, PATCH);
+    Name = PROFILENAME(gengal);
+End
+
 #if !defined(WITHOUT_MOZILLA) && defined(UNX) && !defined(QUARTZ)
 
 File gid_File_Bin_Pluginapp
