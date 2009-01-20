@@ -191,8 +191,8 @@ static void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
                     {
                         //was war das denn?
 #if OSL_DEBUG_LEVEL > 1
-                        DBG_ERROR("Token nicht erkannt!")
-                        DBG_ERROR(ByteString(sToken, gsl_getSystemTextEncoding()).GetBuffer())
+                        DBG_ERROR("Token nicht erkannt!");
+                        DBG_ERROR(ByteString(sToken, gsl_getSystemTextEncoding()).GetBuffer());
 #endif
                     }
 

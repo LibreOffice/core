@@ -2393,12 +2393,6 @@ SwDrawVirtObj::SwDrawVirtObj( SdrObject&        _rNewObj,
 SwDrawVirtObj::~SwDrawVirtObj()
 {}
 
-const Point SwDrawVirtObj::GetOffset() const
-{
-    return GetLastBoundRect().TopLeft() -
-           GetReferencedObj().GetLastBoundRect().TopLeft();
-}
-
 void SwDrawVirtObj::operator=( const SdrObject& rObj )
 {
     SdrVirtObj::operator=(rObj);
@@ -2511,6 +2505,44 @@ void SwDrawVirtObj::NbcSetAnchorPos(const Point& rPnt)
     SdrObject::NbcSetAnchorPos( rPnt );
 }
 
+//////////////////////////////////////////////////////////////////////////////
+// #i97197#
+// the methods relevant for positioning
+
+const Rectangle& SwDrawVirtObj::GetCurrentBoundRect() const
+{
+    if(aOutRect.IsEmpty())
+    {
+        const_cast<SwDrawVirtObj*>(this)->RecalcBoundRect();
+    }
+
+    return aOutRect;
+}
+
+const Rectangle& SwDrawVirtObj::GetLastBoundRect() const
+{
+    return aOutRect;
+}
+
+const Point SwDrawVirtObj::GetOffset() const
+{
+    // do NOT use IsEmpty() here, there is already a useful offset
+    // in the position
+    if(aOutRect == Rectangle())
+    {
+        return Point();
+    }
+    else
+    {
+        return aOutRect.TopLeft() - GetReferencedObj().GetCurrentBoundRect().TopLeft();
+    }
+}
+
+void SwDrawVirtObj::SetBoundRectDirty()
+{
+    // do nothing to not lose model information in aOutRect
+}
+
 void SwDrawVirtObj::RecalcBoundRect()
 {
     // OD 2004-04-05 #i26791# - switch order of calling <GetOffset()> and
@@ -2519,16 +2551,11 @@ void SwDrawVirtObj::RecalcBoundRect()
     //aOutRect = rRefObj.GetCurrentBoundRect();
     //aOutRect += GetOffset();
 
-    if(ReferencedObj().GetCurrentBoundRect().IsEmpty())
-    {
-        aOutRect = Rectangle();
-    }
-    else
-    {
-        const Point aOffset(GetOffset());
-        aOutRect = ReferencedObj().GetCurrentBoundRect() + aOffset;
-    }
+    const Point aOffset(GetOffset());
+    aOutRect = ReferencedObj().GetCurrentBoundRect() + aOffset;
 }
+
+//////////////////////////////////////////////////////////////////////////////
 
 SdrObject* SwDrawVirtObj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const
 {

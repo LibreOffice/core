@@ -250,7 +250,7 @@ protected:
 public:
     void PrePaint();
     void DLPrePaint2(const Region& rRegion);
-    void DLPostPaint2();
+    void DLPostPaint2(bool bPaintFormLayer);
     const MapMode& getPrePostMapMode() const { return maPrePostMapMode; }
     //////////////////////////////////////////////////////////////////////////////
 

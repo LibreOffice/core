@@ -202,6 +202,10 @@ namespace drawinglayer
         private:
             const SwVirtFlyDrawObj&                 mrSwVirtFlyDrawObj;
 
+        protected:
+            // method which is to be used to implement the local decomposition of a 2D primitive
+            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+
         public:
             SwVirtFlyDrawObjPrimitive(const SwVirtFlyDrawObj& rSwVirtFlyDrawObj)
             :   BasePrimitive2D(),
@@ -214,9 +218,6 @@ namespace drawinglayer
 
             // get range
             virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const;
-
-            // getDecomposition
-            virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
             // provide unique ID
             DeclPrimitrive2DIDBlock()
@@ -248,7 +249,7 @@ namespace drawinglayer
             return basegfx::B2DRange(rSnapRect.Left(), rSnapRect.Top(), rSnapRect.Right(), rSnapRect.Bottom());
         }
 
-        Primitive2DSequence SwVirtFlyDrawObjPrimitive::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DSequence SwVirtFlyDrawObjPrimitive::createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             // This is the callback to keep the FlyFrame painting in SW alive as long as it
             // is not changed to primitives. This is the method which will be called by the processors
@@ -258,7 +259,7 @@ namespace drawinglayer
             mrSwVirtFlyDrawObj.wrap_DoPaintObject();
 
             // call parent
-            return BasePrimitive2D::get2DDecomposition(rViewInformation);
+            return BasePrimitive2D::createLocalDecomposition(rViewInformation);
         }
 
         // provide unique ID

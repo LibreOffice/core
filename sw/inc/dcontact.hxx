@@ -383,6 +383,11 @@ class SwDrawVirtObj : public SdrVirtObj
         // FullDrag support
         virtual bool supportsFullDrag() const;
         virtual SdrObject* getFullDragClone() const;
+
+        // #i97197#
+        virtual void SetBoundRectDirty();
+        virtual const Rectangle& GetCurrentBoundRect() const;
+        virtual const Rectangle& GetLastBoundRect() const;
 };
 
 // OD 26.06.2003 #108784#
