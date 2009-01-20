@@ -556,7 +556,7 @@ public:
     static  void    Free( SdrObject*& _rpObject );
 
     // This method is only for access from Property objects
-    void SetBoundRectDirty();
+    virtual void SetBoundRectDirty();
 
     virtual void SetObjList(SdrObjList* pNewObjList);
     SdrObjList* GetObjList() const { return pObjList; }

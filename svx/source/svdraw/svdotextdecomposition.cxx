@@ -261,8 +261,9 @@ namespace
             // prepare DXArray content. To make it independent from font size (and such from
             // the text transformation), scale it to unit coordinates
             ::std::vector< double > aDXArray;
+            static bool bDisableTextArray(false);
 
-            if(rInfo.mpDXArray && rInfo.mnTextLen)
+            if(!bDisableTextArray && rInfo.mpDXArray && rInfo.mnTextLen)
             {
                 const double fScaleFactor(basegfx::fTools::equalZero(aSize.getX()) ? 1.0 : 1.0 / aSize.getX());
                 aDXArray.reserve(rInfo.mnTextLen);
@@ -273,96 +274,121 @@ namespace
                 }
             }
 
-            // prepare overline data
-            drawinglayer::primitive2d::FontUnderline eFontOverline(mapTextLineStyle(rInfo.mrFont.GetOverline()));
-
-            // prepare underline data
-            drawinglayer::primitive2d::FontUnderline eFontUnderline(mapTextLineStyle(rInfo.mrFont.GetUnderline()));
-
-            const bool bUnderlineAbove(drawinglayer::primitive2d::FONT_UNDERLINE_NONE != eFontUnderline && impIsUnderlineAbove(rInfo.mrFont));
-
-            // prepare strikeout data
-            drawinglayer::primitive2d::FontStrikeout eFontStrikeout(drawinglayer::primitive2d::FONT_STRIKEOUT_NONE);
-
-            switch(rInfo.mrFont.GetStrikeout())
-            {
-                case STRIKEOUT_SINGLE:  eFontStrikeout = drawinglayer::primitive2d::FONT_STRIKEOUT_SINGLE; break;
-                case STRIKEOUT_DOUBLE:  eFontStrikeout = drawinglayer::primitive2d::FONT_STRIKEOUT_DOUBLE; break;
-                case STRIKEOUT_BOLD:    eFontStrikeout = drawinglayer::primitive2d::FONT_STRIKEOUT_BOLD; break;
-                case STRIKEOUT_SLASH:   eFontStrikeout = drawinglayer::primitive2d::FONT_STRIKEOUT_SLASH; break;
-                case STRIKEOUT_X:       eFontStrikeout = drawinglayer::primitive2d::FONT_STRIKEOUT_X; break;
-                default : break; // FontStrikeout_FORCE_EQUAL_SIZE, STRIKEOUT_NONE, STRIKEOUT_DONTKNOW
-            }
-
-            // prepare wordLineMode (for underline and strikeout)
-            // NOT for bullet texts. It is set (this may be an error by itself), but needs to be suppressed to hinder e.g. '1)'
-            // to be splitted which would not look like the original
-            const bool bWordLineMode(rInfo.mrFont.IsWordLineMode() && !rInfo.mbEndOfBullet);
-
-            // prepare emphasis mark data
-            drawinglayer::primitive2d::FontEmphasisMark eFontEmphasisMark(drawinglayer::primitive2d::FONT_EMPHASISMARK_NONE);
-
-            switch(rInfo.mrFont.GetEmphasisMark() & EMPHASISMARK_STYLE)
-            {
-                case EMPHASISMARK_DOT : eFontEmphasisMark = drawinglayer::primitive2d::FONT_EMPHASISMARK_DOT; break;
-                case EMPHASISMARK_CIRCLE : eFontEmphasisMark = drawinglayer::primitive2d::FONT_EMPHASISMARK_CIRCLE; break;
-                case EMPHASISMARK_DISC : eFontEmphasisMark = drawinglayer::primitive2d::FONT_EMPHASISMARK_DISC; break;
-                case EMPHASISMARK_ACCENT : eFontEmphasisMark = drawinglayer::primitive2d::FONT_EMPHASISMARK_ACCENT; break;
-            }
-
-            const bool bEmphasisMarkAbove(rInfo.mrFont.GetEmphasisMark() & EMPHASISMARK_POS_ABOVE);
-            const bool bEmphasisMarkBelow(rInfo.mrFont.GetEmphasisMark() & EMPHASISMARK_POS_BELOW);
-
-            // prepare font relief data
-            drawinglayer::primitive2d::FontRelief eFontRelief(drawinglayer::primitive2d::FONT_RELIEF_NONE);
-
-            switch(rInfo.mrFont.GetRelief())
-            {
-                case RELIEF_EMBOSSED : eFontRelief = drawinglayer::primitive2d::FONT_RELIEF_EMBOSSED; break;
-                case RELIEF_ENGRAVED : eFontRelief = drawinglayer::primitive2d::FONT_RELIEF_ENGRAVED; break;
-                default : break; // RELIEF_NONE, FontRelief_FORCE_EQUAL_SIZE
-            }
-
-            // prepare shadow/outline data
-            const bool bShadow(rInfo.mrFont.IsShadow());
-
             // create complex text primitive and append
             const Color aFontColor(rInfo.mrFont.GetColor());
             const basegfx::BColor aBFontColor(aFontColor.getBColor());
 
-            // get overline color. If it's on automatic (0xffffffff) use FontColor instead
-            const Color aOverlineColor(rInfo.maOverlineColor);
-            const basegfx::BColor aBOverlineColor((0xffffffff == aOverlineColor.GetColor()) ? aBFontColor : aOverlineColor.getBColor());
+            // prepare new primitive
+            drawinglayer::primitive2d::BasePrimitive2D* pNewPrimitive = 0;
+            const bool bDecoratedIsNeeded(
+                   UNDERLINE_NONE != rInfo.mrFont.GetOverline()
+                || UNDERLINE_NONE != rInfo.mrFont.GetUnderline()
+                || STRIKEOUT_NONE != rInfo.mrFont.GetStrikeout()
+                || EMPHASISMARK_NONE != (rInfo.mrFont.GetEmphasisMark() & EMPHASISMARK_STYLE)
+                || RELIEF_NONE != rInfo.mrFont.GetRelief()
+                || rInfo.mrFont.IsShadow());
 
-            // get underline color. If it's on automatic (0xffffffff) use FontColor instead
-            const Color aUnderlineColor(rInfo.maTextLineColor);
-            const basegfx::BColor aBUnderlineColor((0xffffffff == aUnderlineColor.GetColor()) ? aBFontColor : aUnderlineColor.getBColor());
+            if(bDecoratedIsNeeded)
+            {
+                // TextDecoratedPortionPrimitive2D needed, prepare some more data
+                // get overline and underline color. If it's on automatic (0xffffffff) use FontColor instead
+                const Color aUnderlineColor(rInfo.maTextLineColor);
+                const basegfx::BColor aBUnderlineColor((0xffffffff == aUnderlineColor.GetColor()) ? aBFontColor : aUnderlineColor.getBColor());
+                const Color aOverlineColor(rInfo.maOverlineColor);
+                const basegfx::BColor aBOverlineColor((0xffffffff == aOverlineColor.GetColor()) ? aBFontColor : aOverlineColor.getBColor());
 
-            drawinglayer::primitive2d::BasePrimitive2D* pNewPrimitive = new drawinglayer::primitive2d::TextDecoratedPortionPrimitive2D(
+                // prepare overline and underline data
+                const drawinglayer::primitive2d::FontUnderline eFontOverline(mapTextLineStyle(rInfo.mrFont.GetOverline()));
+                const drawinglayer::primitive2d::FontUnderline eFontUnderline(mapTextLineStyle(rInfo.mrFont.GetUnderline()));
 
-                // attributes for TextSimplePortionPrimitive2D
-                aNewTransform,
-                rInfo.mrText,
-                rInfo.mnTextStart,
-                rInfo.mnTextLen,
-                aDXArray,
-                aFontAttributes,
-                rInfo.mpLocale ? *rInfo.mpLocale : ::com::sun::star::lang::Locale(),
-                aBFontColor,
+                // check UndelineAbove
+                const bool bUnderlineAbove(drawinglayer::primitive2d::FONT_UNDERLINE_NONE != eFontUnderline && impIsUnderlineAbove(rInfo.mrFont));
 
-                // attributes for TextDecoratedPortionPrimitive2D
-                aBOverlineColor,
-                aBUnderlineColor,
-                eFontOverline,
-                eFontUnderline,
-                bUnderlineAbove,
-                eFontStrikeout,
-                bWordLineMode,
-                eFontEmphasisMark,
-                bEmphasisMarkAbove,
-                bEmphasisMarkBelow,
-                eFontRelief,
-                bShadow);
+                // prepare strikeout data
+                drawinglayer::primitive2d::FontStrikeout eFontStrikeout(drawinglayer::primitive2d::FONT_STRIKEOUT_NONE);
+
+                switch(rInfo.mrFont.GetStrikeout())
+                {
+                    case STRIKEOUT_SINGLE:  eFontStrikeout = drawinglayer::primitive2d::FONT_STRIKEOUT_SINGLE; break;
+                    case STRIKEOUT_DOUBLE:  eFontStrikeout = drawinglayer::primitive2d::FONT_STRIKEOUT_DOUBLE; break;
+                    case STRIKEOUT_BOLD:    eFontStrikeout = drawinglayer::primitive2d::FONT_STRIKEOUT_BOLD; break;
+                    case STRIKEOUT_SLASH:   eFontStrikeout = drawinglayer::primitive2d::FONT_STRIKEOUT_SLASH; break;
+                    case STRIKEOUT_X:       eFontStrikeout = drawinglayer::primitive2d::FONT_STRIKEOUT_X; break;
+                    default : break; // FontStrikeout_FORCE_EQUAL_SIZE, STRIKEOUT_NONE, STRIKEOUT_DONTKNOW
+                }
+
+                // prepare wordLineMode (for underline and strikeout)
+                // NOT for bullet texts. It is set (this may be an error by itself), but needs to be suppressed to hinder e.g. '1)'
+                // to be splitted which would not look like the original
+                const bool bWordLineMode(rInfo.mrFont.IsWordLineMode() && !rInfo.mbEndOfBullet);
+
+                // prepare emphasis mark data
+                drawinglayer::primitive2d::FontEmphasisMark eFontEmphasisMark(drawinglayer::primitive2d::FONT_EMPHASISMARK_NONE);
+
+                switch(rInfo.mrFont.GetEmphasisMark() & EMPHASISMARK_STYLE)
+                {
+                    case EMPHASISMARK_DOT : eFontEmphasisMark = drawinglayer::primitive2d::FONT_EMPHASISMARK_DOT; break;
+                    case EMPHASISMARK_CIRCLE : eFontEmphasisMark = drawinglayer::primitive2d::FONT_EMPHASISMARK_CIRCLE; break;
+                    case EMPHASISMARK_DISC : eFontEmphasisMark = drawinglayer::primitive2d::FONT_EMPHASISMARK_DISC; break;
+                    case EMPHASISMARK_ACCENT : eFontEmphasisMark = drawinglayer::primitive2d::FONT_EMPHASISMARK_ACCENT; break;
+                }
+
+                const bool bEmphasisMarkAbove(rInfo.mrFont.GetEmphasisMark() & EMPHASISMARK_POS_ABOVE);
+                const bool bEmphasisMarkBelow(rInfo.mrFont.GetEmphasisMark() & EMPHASISMARK_POS_BELOW);
+
+                // prepare font relief data
+                drawinglayer::primitive2d::FontRelief eFontRelief(drawinglayer::primitive2d::FONT_RELIEF_NONE);
+
+                switch(rInfo.mrFont.GetRelief())
+                {
+                    case RELIEF_EMBOSSED : eFontRelief = drawinglayer::primitive2d::FONT_RELIEF_EMBOSSED; break;
+                    case RELIEF_ENGRAVED : eFontRelief = drawinglayer::primitive2d::FONT_RELIEF_ENGRAVED; break;
+                    default : break; // RELIEF_NONE, FontRelief_FORCE_EQUAL_SIZE
+                }
+
+                // prepare shadow/outline data
+                const bool bShadow(rInfo.mrFont.IsShadow());
+
+                // TextDecoratedPortionPrimitive2D is needed, create one
+                pNewPrimitive = new drawinglayer::primitive2d::TextDecoratedPortionPrimitive2D(
+
+                    // attributes for TextSimplePortionPrimitive2D
+                    aNewTransform,
+                    rInfo.mrText,
+                    rInfo.mnTextStart,
+                    rInfo.mnTextLen,
+                    aDXArray,
+                    aFontAttributes,
+                    rInfo.mpLocale ? *rInfo.mpLocale : ::com::sun::star::lang::Locale(),
+                    aBFontColor,
+
+                    // attributes for TextDecoratedPortionPrimitive2D
+                    aBOverlineColor,
+                    aBUnderlineColor,
+                    eFontOverline,
+                    eFontUnderline,
+                    bUnderlineAbove,
+                    eFontStrikeout,
+                    bWordLineMode,
+                    eFontEmphasisMark,
+                    bEmphasisMarkAbove,
+                    bEmphasisMarkBelow,
+                    eFontRelief,
+                    bShadow);
+            }
+            else
+            {
+                // TextSimplePortionPrimitive2D is enough
+                pNewPrimitive = new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
+                    aNewTransform,
+                    rInfo.mrText,
+                    rInfo.mnTextStart,
+                    rInfo.mnTextLen,
+                    aDXArray,
+                    aFontAttributes,
+                    rInfo.mpLocale ? *rInfo.mpLocale : ::com::sun::star::lang::Locale(),
+                    aBFontColor);
+            }
 
             if(rInfo.mbEndOfBullet)
             {

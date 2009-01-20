@@ -1955,7 +1955,7 @@ void SdrPathObj::TakeObjNameSingul(XubString& rName) const
             }
 
             rName = ImpGetResStr(nId);
-            sal_uInt16 nPos(rName.SearchAscii("%N"));
+            sal_uInt16 nPos(rName.SearchAscii("%2")); // #i96537#
 
             if(STRING_NOTFOUND != nPos)
             {

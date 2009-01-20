@@ -193,37 +193,20 @@ void E3dView::Set3DAttributes( const SfxItemSet& rAttr, E3dScene* pInScene, BOOL
     }
     else
     {
-        const SdrMarkList& rMarkList = GetMarkedObjectList();
-        const sal_uInt32 nMarkCnt(rMarkList.GetMarkCount());
-        std::vector< E3DModifySceneSnapRectUpdater* > aUpdaters;
-        sal_uInt32 a;
-
-        // create late modifiers for evtl. updatable scenes
-        for(a = 0; a < nMarkCnt; a++)
-        {
-            SdrObject* pObj = GetMarkedObjectByIndex(a);
-
-            if(dynamic_cast< E3dObject* >(pObj))
-            {
-                aUpdaters.push_back(new E3DModifySceneSnapRectUpdater(GetMarkedObjectByIndex(a)));
-            }
-        }
+        // #i94832# removed usage of E3DModifySceneSnapRectUpdater here.
+        // They are not needed here, they are already handled in SetAttrToMarked
 
         // set at selected objects
         SetAttrToMarked(rAttr, bReplaceAll);
 
         // old run
-        for(a = 0; a < nMarkCnt; a++)
+        const SdrMarkList& rMarkList = GetMarkedObjectList();
+        const sal_uInt32 nMarkCnt(rMarkList.GetMarkCount());
+
+        for(sal_uInt32 a(0); a < nMarkCnt; a++)
         {
             SdrObject* pObj = GetMarkedObjectByIndex(a);
             Imp_E3dView_InorderRun3DObjects(pObj, nSelectedItems);
-        }
-
-        // fire scene updaters
-        while(aUpdaters.size())
-        {
-            delete aUpdaters.back();
-            aUpdaters.pop_back();
         }
     }
 

@@ -65,6 +65,9 @@ public:
     SdrPage* GetReferencedPage() const;
     void SetReferencedPage(SdrPage* pNewPage);
 
+    // #i96598#
+    virtual void SetBoundRectDirty();
+
     virtual UINT16 GetObjIdentifier() const;
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
     virtual void operator=(const SdrObject& rObj);

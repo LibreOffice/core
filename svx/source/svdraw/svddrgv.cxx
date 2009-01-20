@@ -451,17 +451,36 @@ BOOL SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
                         }
                         else
                         {
-                            if((eDragHdl == HDL_MOVE) && (GetMarkedObjectCount() == 1) && GetMarkedObjectByIndex(0)->ISA(SdrObjCustomShape))
+                            if(HDL_MOVE == eDragHdl)
                             {
-                                mpCurrentSdrDragMethod = new SdrDragMove( *this );
+                                const bool bCustomShapeSelected(1 == GetMarkedObjectCount() && GetMarkedObjectByIndex(0)->ISA(SdrObjCustomShape));
+
+                                if(bCustomShapeSelected)
+                                {
+                                    mpCurrentSdrDragMethod = new SdrDragMove( *this );
+                                }
                             }
-                            else if((eDragHdl == HDL_POLY) && (!IsMoveAllowed() || !IsResizeAllowed()))
+                            else if(HDL_POLY == eDragHdl)
                             {
-                                // #i77187# do not allow move of polygon points if object is move or size protected
-                                return FALSE;
+                                const bool bConnectorSelected(1 == GetMarkedObjectCount() && GetMarkedObjectByIndex(0)->ISA(SdrEdgeObj));
+
+                                if(bConnectorSelected)
+                                {
+                                    // #i97784#
+                                    // fallback to old behaviour for connectors (see
+                                    // text in task description for more details)
+                                }
+                                else if(!IsMoveAllowed() || !IsResizeAllowed())
+                                {
+                                    // #i77187#
+                                    // do not allow move of polygon points if object is move or size protected
+                                    return FALSE;
+                                }
                             }
-                            else
+
+                            if(!pDragBla)
                             {
+                                // fallback to DragSpecial if no interaction defined
                                 bDragSpecial = TRUE;
                                 mpCurrentSdrDragMethod = new SdrDragObjOwn(*this);
                             }

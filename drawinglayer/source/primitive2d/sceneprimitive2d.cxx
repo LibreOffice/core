@@ -229,11 +229,13 @@ namespace drawinglayer
 
                 if(aBitmapSizePixel.getWidth() && aBitmapSizePixel.getHeight())
                 {
-                    // create transform for the created bitmap in discrete coordinates first
+                    // create transform for the created bitmap in discrete coordinates first.
+                    // #i97772# Do not forget to apply evtl. render size reduction to scaling
                     basegfx::B2DHomMatrix aNew2DTransform;
+                    const double fSizeReductionFactor(1.0 / fReduceFactor);
 
-                    aNew2DTransform.set(0, 0, (double)(aBitmapSizePixel.getWidth() - 1));
-                    aNew2DTransform.set(1, 1, (double)(aBitmapSizePixel.getHeight() - 1));
+                    aNew2DTransform.set(0, 0, (double)(aBitmapSizePixel.getWidth() - 1) * fSizeReductionFactor);
+                    aNew2DTransform.set(1, 1, (double)(aBitmapSizePixel.getHeight() - 1) * fSizeReductionFactor);
                     aNew2DTransform.set(0, 2, aVisibleDiscreteRange.getMinX());
                     aNew2DTransform.set(1, 2, aVisibleDiscreteRange.getMinY());
 

@@ -44,6 +44,8 @@
 #include <svx/sdr/properties/properties.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include "svdtxhdl.hxx"
+#include <svtools/itemset.hxx>
+#include <svditer.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -414,20 +416,75 @@ SdrObject* SdrTextObj::ImpConvertMakeObj(const basegfx::B2DPolyPolygon& rPolyPol
 
 SdrObject* SdrTextObj::ImpConvertAddText(SdrObject* pObj, FASTBOOL bBezier) const
 {
-    if (!ImpCanConvTextToCurve()) return pObj;
-    SdrObject* pText=ImpConvertObj(!bBezier);
-    if (pText==NULL) return pObj;
-    if (pObj==NULL) return pText;
-    if (pText->IsGroupObject()) {
+    if(!ImpCanConvTextToCurve())
+    {
+        return pObj;
+    }
+
+    SdrObject* pText = ImpConvertObj(!bBezier);
+
+    if(!pText)
+    {
+        return pObj;
+    }
+
+    if(!pObj)
+    {
+        return pText;
+    }
+
+    // #i97874#
+    // if shadow is set, apply it to created text, too
+    const bool bShadowOn(((SdrShadowItem&)GetObjectItem(SDRATTR_SHADOW)).GetValue());
+    SfxItemSet aShadowSet(*(GetObjectItemSet().GetPool()), SDRATTR_SHADOW_FIRST, SDRATTR_SHADOW_LAST);
+
+    if(bShadowOn)
+    {
+        // filter shadow items
+        aShadowSet.Put(GetObjectItemSet());
+    }
+
+    {   // #i97874#
+        // copy needed attributes from local object to all newly created objects
+        SdrObjListIter aIter(*pText);
+
+        while(aIter.IsMore())
+        {
+            SdrObject* pCandidate = aIter.Next();
+
+            // make sure Layer and model are correct
+            pCandidate->NbcSetLayer(SdrLayerID(GetLayer()));
+            pCandidate->SetModel(pModel);
+
+            // set shadow if needed
+            if(bShadowOn)
+            {
+                pCandidate->SetMergedItemSet(aShadowSet);
+            }
+
+            // set used StyleSheet
+            pCandidate->NbcSetStyleSheet(GetStyleSheet(), true);
+        }
+    }
+
+    if(pText->IsGroupObject())
+    {
+        // is already group object, add partial shape in front
         SdrObjList* pOL=pText->GetSubList();
         pOL->InsertObject(pObj,0);
+
         return pText;
-    } else {
+    }
+    else
+    {
+        // not yet a group, create one and add partial and new shapes
         SdrObjGroup* pGrp=new SdrObjGroup;
         SdrObjList* pOL=pGrp->GetSubList();
         pOL->InsertObject(pObj);
         pOL->InsertObject(pText);
+
         return pGrp;
     }
 }
 
+// eof

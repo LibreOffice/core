@@ -282,12 +282,23 @@ namespace drawinglayer
                     mpOutputDevice->SetFont(aFont);
                     mpOutputDevice->SetTextColor(Color(aRGBFontColor));
 
-                    mpOutputDevice->DrawTextArray(
-                        aStartPoint,
-                        rTextCandidate.getText(),
-                        aTransformedDXArray.size() ? &(aTransformedDXArray[0]) : NULL,
-                        rTextCandidate.getTextPosition(),
-                        rTextCandidate.getTextLength());
+                    if(aTransformedDXArray.size())
+                    {
+                        mpOutputDevice->DrawTextArray(
+                            aStartPoint,
+                            rTextCandidate.getText(),
+                            &(aTransformedDXArray[0]),
+                            rTextCandidate.getTextPosition(),
+                            rTextCandidate.getTextLength());
+                    }
+                    else
+                    {
+                        mpOutputDevice->DrawText(
+                            aStartPoint,
+                            rTextCandidate.getText(),
+                            rTextCandidate.getTextPosition(),
+                            rTextCandidate.getTextLength());
+                    }
 
                     if(rTextCandidate.getFontAttributes().getRTL())
                     {

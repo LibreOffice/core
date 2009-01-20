@@ -1784,7 +1784,12 @@ void SdrObjCustomShape::NbcMove( const Size& rSiz )
     {
         SdrObject* pRenderedCustomShape = GetSdrObjectFromXShape( mXRenderedCustomShape );
         if ( pRenderedCustomShape )
+        {
+            // #i97149# the visualisation shape needs to be informed
+            // about change, too
+            pRenderedCustomShape->ActionChanged();
             pRenderedCustomShape->NbcMove( rSiz );
+        }
     }
 
     // #i37011# adapt geometry shadow

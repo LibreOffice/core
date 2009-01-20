@@ -140,6 +140,13 @@ void SdrPageObj::SetReferencedPage(SdrPage* pNewPage)
     }
 }
 
+// #i96598#
+void SdrPageObj::SetBoundRectDirty()
+{
+    // avoid resetting aOutRect which in case of this object is model data,
+    // not re-creatable view data
+}
+
 UINT16 SdrPageObj::GetObjIdentifier() const
 {
     return UINT16(OBJ_PAGE);

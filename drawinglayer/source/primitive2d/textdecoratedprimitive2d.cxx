@@ -503,6 +503,16 @@ namespace drawinglayer
                 }
                 else
                 {
+                    // prepare TextLayouter
+                    const bool bNoDXArray(getDXArray().empty());
+                    TextLayouterDevice aTextLayouter;
+
+                    if(bNoDXArray)
+                    {
+                        // ..but only completely when no DXArray
+                        aTextLayouter.setFontAttributes(getFontAttributes(), rDecTrans.getScale().getX(), rDecTrans.getScale().getY());
+                    }
+
                     // do iterate over single words
                     while(aNextWordBoundary.startPos != aNextWordBoundary.endPos)
                     {
@@ -512,17 +522,18 @@ namespace drawinglayer
 
                         // prepare transform for the single word
                         basegfx::B2DHomMatrix aNewTransform;
-                        double fDistance(0.0);
+                        ::std::vector< double > aNewDXArray;
                         const bool bNewStartIsNotOldStart(nNewTextStart > getTextPosition());
 
-                        if(bNewStartIsNotOldStart)
+                        if(!bNoDXArray)
                         {
-                            // needs to be moved to a new start position (get from DXArray)
-                            const sal_uInt32 nIndex(static_cast< sal_uInt32 >(nNewTextStart - getTextPosition()));
-                            fDistance = getDXArray()[nIndex - 1];
-                            aNewTransform.translate(fDistance, 0.0);
+                            // prepare new DXArray for the single word
+                            aNewDXArray = ::std::vector< double >(
+                                getDXArray().begin() + static_cast< sal_uInt32 >(nNewTextStart - getTextPosition()),
+                                getDXArray().begin() + static_cast< sal_uInt32 >(nNewTextEnd - getTextPosition()));
                         }
 
+<<<<<<< .working
                         aNewTransform *= rDecTrans.getB2DHomMatrix();
 
                         // prepare new DXArray for the single word
@@ -530,26 +541,64 @@ namespace drawinglayer
                             getDXArray().begin() + static_cast< sal_uInt32 >(nNewTextStart - getTextPosition()),
                             getDXArray().begin() + static_cast< sal_uInt32 >(nNewTextEnd - getTextPosition()));
 
+=======
+>>>>>>> .merge-right.r266521
                         if(bNewStartIsNotOldStart)
                         {
-                            // DXArray values need to be corrected
-                            const sal_uInt32 nArraySize(aNewDXArray.size());
+                            // needs to be moved to a new start position
+                            double fOffset(0.0);
 
-                            for(sal_uInt32 a(0); a < nArraySize; a++)
+                            if(bNoDXArray)
                             {
-                                aNewDXArray[a] -= fDistance;
+                                // evaluate using TextLayouter
+                                fOffset = aTextLayouter.getTextWidth(getText(), getTextPosition(), nNewTextStart);
+                            }
+                            else
+                            {
+                                // get from DXArray
+                                const sal_uInt32 nIndex(static_cast< sal_uInt32 >(nNewTextStart - getTextPosition()));
+                                fOffset = getDXArray()[nIndex - 1];
+                            }
+
+                            // apply needed offset to transformation
+                            aNewTransform.translate(fOffset, 0.0);
+
+                            if(!bNoDXArray)
+                            {
+                                // DXArray values need to be corrected with the offset, too
+                                const sal_uInt32 nArraySize(aNewDXArray.size());
+
+                                for(sal_uInt32 a(0); a < nArraySize; a++)
+                                {
+                                    aNewDXArray[a] -= fOffset;
+                                }
                             }
                         }
+<<<<<<< .working
 
                         // create geometry content for the single word
+=======
+
+                        // add text transformation to new transformation
+                        aNewTransform *= rDecTrans.getB2DHomMatrix();
+
+                        // create geometry content for the single word. Do not forget
+                        // to use the new transformation
+>>>>>>> .merge-right.r266521
                         basegfx::DecomposedB2DHomMatrixContainer aDecTrans(aNewTransform);
+<<<<<<< .working
                         impCreateGeometryContent(rTarget, aDecTrans, getText(), nNewTextStart,
+=======
+
+                        impCreateGeometryContent(rTarget, aDecTrans, getText(), nNewTextStart,
+>>>>>>> .merge-right.r266521
                             nNewTextEnd - nNewTextStart, aNewDXArray, aNewFontAttributes);
 
                         // prepare next word and truncate to possibilities
                         aNextWordBoundary = xLocalBreakIterator->nextWord(
                             getText(), aNextWordBoundary.endPos, getLocale(),
                             ::com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES);
+
                         impCorrectTextBoundary(aNextWordBoundary);
                     }
                 }

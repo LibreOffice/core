@@ -72,6 +72,9 @@ namespace drawinglayer
             // the primitiveSequence for on-demand created shadow primitives (see mbShadow3DChecked)
             Primitive2DSequence                                 maShadowPrimitives;
 
+            // #i96669# add simple range buffering for this primitive
+            basegfx::B2DRange                                   maB2DRange;
+
             // bitfield
             // flag if given 3D geometry is already cheched for shadow definitions and 2d shadows
             // are created in maShadowPrimitives

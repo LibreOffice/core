@@ -52,6 +52,9 @@ namespace drawinglayer
             std::vector< basegfx::B2DPoint >                maPositions;
             basegfx::BColor                                 maRGBColor;
 
+            // #i96669# add simple range buffering for this primitive
+            basegfx::B2DRange                       maB2DRange;
+
         public:
             PointArrayPrimitive2D(
                 const std::vector< basegfx::B2DPoint >& rPositions,

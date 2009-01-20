@@ -791,7 +791,7 @@ void SdrPaintView::CompleteRedraw(OutputDevice* pOut, const Region& rReg, sdr::c
     OSL_ENSURE(pPaintWindow, "SdrPaintView::CompleteRedraw: No OutDev (!)");
 
     DoCompleteRedraw(*pPaintWindow, aOptimizedRepaintRegion, pRedirector);
-    EndCompleteRedraw(*pPaintWindow);
+    EndCompleteRedraw(*pPaintWindow, true);
 
 #ifdef SVX_REPAINT_TIMER_TEST
     }
@@ -888,7 +888,7 @@ void SdrPaintView::DoCompleteRedraw(SdrPaintWindow& rPaintWindow, const Region& 
     }
 }
 
-void SdrPaintView::EndCompleteRedraw(SdrPaintWindow& rPaintWindow)
+void SdrPaintView::EndCompleteRedraw(SdrPaintWindow& rPaintWindow, bool bPaintFormLayer)
 {
     if(rPaintWindow.getTemporaryTarget())
     {
@@ -899,7 +899,10 @@ void SdrPaintView::EndCompleteRedraw(SdrPaintWindow& rPaintWindow)
     {
         // draw postprocessing, only for known devices
         // it is necessary to always paint FormLayer
-        ImpFormLayerDrawing(rPaintWindow);
+        if(bPaintFormLayer)
+        {
+            ImpFormLayerDrawing(rPaintWindow);
+        }
 
         // look for active TextEdit. As long as this cannot be painted to a VDev,
         // it cannot get part of buffering. In that case, output evtl. prerender
@@ -1011,10 +1014,10 @@ SdrPaintWindow* SdrPaintView::BeginDrawLayers(OutputDevice* pOut, const Region& 
     return pPaintWindow;
 }
 
-void SdrPaintView::EndDrawLayers(SdrPaintWindow& rPaintWindow)
+void SdrPaintView::EndDrawLayers(SdrPaintWindow& rPaintWindow, bool bPaintFormLayer)
 {
     // #i74769# use EndCompleteRedraw() as common base
-    EndCompleteRedraw(rPaintWindow);
+    EndCompleteRedraw(rPaintWindow, bPaintFormLayer);
 
     if(mpPageView)
     {

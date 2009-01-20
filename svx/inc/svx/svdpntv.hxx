@@ -385,14 +385,14 @@ public:
     // SdrPaintWindow again. This means: the SdrPaintWindow is no longer safe after this closing call.
     SdrPaintWindow* BeginCompleteRedraw(OutputDevice* pOut);
     void DoCompleteRedraw(SdrPaintWindow& rPaintWindow, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = 0);
-    void EndCompleteRedraw(SdrPaintWindow& rPaintWindow);
+    void EndCompleteRedraw(SdrPaintWindow& rPaintWindow, bool bPaintFormLayer);
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // used for the other applications basctl/sc/sw which call DrawLayer at PageViews
     // #i74769# Interface change to use common BeginCompleteRedraw/EndCompleteRedraw
     // #i76114# bDisableIntersect disables intersecting rReg with the Window's paint region
     SdrPaintWindow* BeginDrawLayers(OutputDevice* pOut, const Region& rReg, bool bDisableIntersect = false);
-    void EndDrawLayers(SdrPaintWindow& rPaintWindow);
+    void EndDrawLayers(SdrPaintWindow& rPaintWindow, bool bPaintFormLayer);
 
 protected:
     ////////////////////////////////////////////////////////////////////////////////////////////////////
