@@ -30,6 +30,8 @@
 
 #import <Cocoa/Cocoa.h>
 
+#define AppleRemoteControlEvent 15
+
 @class RemoteControl;
 @class MultiClickRemoteBehavior;
 
