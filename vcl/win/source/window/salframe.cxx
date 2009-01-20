@@ -96,6 +96,10 @@
 #define COMPILE_MULTIMON_STUBS
 #include <multimon.h>
 #include <vector>
+#ifdef __MINGW32__
+#include <algorithm>
+using ::std::max;
+#endif
 
 #include <com/sun/star/uno/Exception.hdl>
 

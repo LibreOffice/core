@@ -40,7 +40,10 @@
 #include <fstream>
 #include <iostream>
 #include "osl/mutex.hxx"
-
+#ifdef __MINGW32__
+#include <tools/prewin.h>
+#include <tools/postwin.h>
+#endif
 using namespace std;
 using namespace osl;
 
