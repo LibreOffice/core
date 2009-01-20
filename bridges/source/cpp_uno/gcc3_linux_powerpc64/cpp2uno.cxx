@@ -667,7 +667,7 @@ bridges::cpp_uno::shared::VtableFactory::initializeBlock(
 }
 
 unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
-    Slot ** slots, unsigned char * code,
+    Slot ** slots, unsigned char * code, sal_PtrDiff writetoexecdiff,
     typelib_InterfaceTypeDescription const * type, sal_Int32 functionOffset,
     sal_Int32 functionCount, sal_Int32 vtableOffset)
 {
@@ -685,7 +685,7 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
         switch (member->eTypeClass) {
         case typelib_TypeClass_INTERFACE_ATTRIBUTE:
             // Getter:
-            (s++)->fn = code;
+            (s++)->fn = code + writetoexecdiff;
             code = codeSnippet(
                 code, functionOffset++, vtableOffset,
                 bridges::cpp_uno::shared::isSimpleType(
@@ -698,13 +698,13 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
                 typelib_InterfaceAttributeTypeDescription * >(
                     member)->bReadOnly)
             {
-                (s++)->fn = code;
+                (s++)->fn = code + writetoexecdiff;
                 code = codeSnippet(code, functionOffset++, vtableOffset, true);
             }
             break;
 
         case typelib_TypeClass_INTERFACE_METHOD:
-            (s++)->fn = code;
+            (s++)->fn = code + writetoexecdiff;
             code = codeSnippet(
                 code, functionOffset++, vtableOffset,
                 bridges::cpp_uno::shared::isSimpleType(
