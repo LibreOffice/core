@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.10 $
+# $Revision: 1.10.144.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -83,8 +83,12 @@ APP1STDLIBS=$(TOOLSLIB) 		\
 .INCLUDE :	target.mk
 
 ALLTAR : \
-    $(SCRIPTFILES)
+    $(SCRIPTFILES)\
+    $(BIN)/gengalrc
 
 $(SCRIPTFILES) : $$(@:f:+".sh")
     @tr -d "\015" < $(@:f:+".sh") > $@
+
+$(BIN)/%: %.in
+    cp $< $@
 

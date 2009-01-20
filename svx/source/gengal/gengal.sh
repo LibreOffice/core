@@ -9,7 +9,7 @@
 #
 # $RCSfile: gengal.sh,v $
 #
-# $Revision: 1.5 $
+# $Revision: 1.5.288.2 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -97,6 +97,14 @@ unset XENVIRONMENT
 # set path so that other apps can be started just by name
 PATH="$sd_prog":$PATH
 export PATH
+
+OOO_INSTALL_PREFIX=${OOO_INSTALL_PREFIX-$sd_prog/../..}
+if ! test -e $OOO_INSTALL_PREFIX/basis-link; then
+    # Hack for vanilla OOo binaries' split install layout
+    OOO_INSTALL_PREFIX=$OOO_INSTALL_PREFIX/../openoffice.org3
+fi
+
+export OOO_INSTALL_PREFIX
 
 # execute binary
 exec "$sd_prog/$sd_binary" "$@"
