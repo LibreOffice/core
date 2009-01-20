@@ -58,9 +58,6 @@
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Type.hxx>
-#include <config/_prolog.h>
-#include <config/_epilog.h>
-#include <config/_msvc_warnings_off.h>
 #include <cppu/macros.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <cstddef>
@@ -205,7 +202,6 @@
 #include <tools/toolsdllapi.h>
 #include <tools/weakbase.h>
 #include <tools/weakbase.hxx>
-#include <typeinfo.h>
 #include <typeinfo>
 #include <typelib/typeclass.h>
 #include <typelib/typedescription.h>
