@@ -626,7 +626,7 @@ sub GetTheInstallationType
     dim i,x as integer
     dim sPlatformProgramPath as string
     
-    if gPlatform = lcase("osx") then
+    if ( lcase( gPlatform ) = "osx" ) then
     	sPlatformProgramPath = "MacOS"
     else
     	sPlatformProgramPath = "program"
@@ -938,7 +938,7 @@ function getSofficeNative() as string
                 if fileExists(sCandidates(i)) then
                     '/// cut off program//soffice from link destination ///'
                     y = instr(sCandidates(i), "program/soffice")
-                    if gPlatform = lcase("osx") AND y < 1 then
+                    if ( lcase( gPlatform ) = "osx" AND y < 1 ) then
                         ' Accept also MacOS in link to soffice binary
                         y = instr(sCandidates(i), "MacOS/soffice")
                     end if 
@@ -1134,7 +1134,7 @@ function getSofficeTesttool() as string
         end if
         ' be tolerant to the chosen path
         ' we just need the base directory, cut of possible "program" at end
-        if gPlatform = lcase("osx") then
+        if ( lcase( gPlatform ) = "osx" ) then
             ' to get all possibile directories:
             ' path could be: ...app/Contents/MacOS
             if (right(sTemp,6) = "MacOS"+gPathSigne) then
@@ -1246,7 +1246,7 @@ function getOfficeBasisPath as string
     sFile = gNetzOfficePath + "basis-link"
 
     if fileExists(sFile) then
-        if gPlatform = lcase("osx") then
+        if ( lcase( gPlatform ) = "osx" ) then
             'MacOS X
             sTemp = sFile + gPathSigne
         else
