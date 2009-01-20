@@ -46,7 +46,10 @@ MINGW_NODLL=YES
 
 .INCLUDE : settings.mk
 
+.IF "$(USE_SYSTEM_STL)" != "YES"
 CFLAGS+=-D_STLP_USE_STATIC_LIB
+.ENDIF
+
 UWINAPILIB=
 
 # --- Files --------------------------------------------------------
@@ -56,8 +59,11 @@ UWINAPILIB=
 STDSHL += \
     $(ADVAPI32LIB)\
     $(SHELL32LIB)\
-    $(MSILIB)\
-    $(LIBSTLPORTST)								
+    $(MSILIB)
+
+.IF "$(USE_SYSTEM_STL)" != "YES"
+STDSHL += $(LIBSTLPORTST)								
+.ENDIF
 
 .IF "$(COM)"=="GCC"
 STDSHL+=	\

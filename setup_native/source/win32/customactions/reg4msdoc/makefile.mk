@@ -43,7 +43,10 @@ MINGW_NODLL=YES
 
 .INCLUDE : settings.mk
 
-CFLAGS+=-DUNICODE -D_UNICODE -D_STLP_USE_STATIC_LIB
+CFLAGS+=-DUNICODE -D_UNICODE
+.IF "$(USE_SYSTEM_STL)" != "YES"
+CFLAGS+=-D_STLP_USE_STATIC_LIB
+.ENDIF
 
 # --- Files --------------------------------------------------------
 
@@ -70,8 +73,11 @@ SHL1STDLIBS=	$(KERNEL32LIB)\
                 $(ADVAPI32LIB)\
                 $(SHELL32LIB)\
                 $(MSILIB)\
-                $(SHLWAPILIB)\
-                $(LIBSTLPORTST)								
+                $(SHLWAPILIB)
+
+.IF "$(USE_SYSTEM_STL)" != "YES"
+SHL1STDLIBS+=$(LIBSTLPORTST)								
+.ENDIF
 
 SHL1LIBS = $(SLB)$/$(TARGET).lib 
 
