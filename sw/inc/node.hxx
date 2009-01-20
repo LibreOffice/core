@@ -510,7 +510,7 @@ private:
 //---------
 // SwTableNode
 //---------
-class SW_DLLPUBLIC SwTableNode : public SwStartNode
+class SW_DLLPUBKIC SwTableNode : public SwStartNode, public SwModify
 {
     friend class SwNodes;
     SwTable* pTable;

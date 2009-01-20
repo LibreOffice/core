@@ -1698,13 +1698,16 @@ void SwRTFWriter::CheckEndNodeForSection( const SwNode& rNd )
                         GetFmt()->GetSectionNode( TRUE ) );
             else
             {
-                Strm() << sRTF_SECT << sRTF_SECTD << sRTF_SBKNONE;
-                OutRTFPageDescription( ( pAktPageDesc
-                                         ? *pAktPageDesc
-                                         : const_cast<const SwDoc *>(pDoc)
-                                         ->GetPageDesc(0) ),
-                                FALSE, TRUE );
-                Strm() << SwRTFWriter::sNewLine;
+                if (! bOutPageDesc)
+                {
+                    Strm() << sRTF_SECT << sRTF_SECTD << sRTF_SBKNONE;
+                    OutRTFPageDescription( ( pAktPageDesc
+                                            ? *pAktPageDesc
+                                            : const_cast<const SwDoc *>(pDoc)
+                                            ->GetPageDesc(0) ),
+                                          FALSE, TRUE );
+                    Strm() << SwRTFWriter::sNewLine;
+                }
             }
         }
         // else

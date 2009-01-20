@@ -326,6 +326,13 @@ namespace sw
             FontMapExport(const String &rFontDescription);
         };
 
+        class InsertedTableClient : public SwClient
+        {
+        public:
+            InsertedTableClient(SwTableNode & rNode);
+            SwTableNode * GetTableNode();
+        };
+
         /** Handle requirements for table formatting in insert->file mode.
 
             When inserting a table into a document which already has been
@@ -348,7 +355,7 @@ namespace sw
         class InsertedTablesManager
         {
         public:
-            typedef std::map<SwTableNode *, SwNodeIndex *> TblMap;
+            typedef std::map<InsertedTableClient *, SwNodeIndex *> TblMap;
             typedef TblMap::iterator TblMapIter;
             void DelAndMakeTblFrms();
             void InsertTable(SwTableNode &rTableNode, SwPaM &rPaM);

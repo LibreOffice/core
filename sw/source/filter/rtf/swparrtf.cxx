@@ -223,6 +223,7 @@ SwRTFParser::SwRTFParser(SwDoc* pD,
     nNewNumSectDef(USHRT_MAX),
     nRowsToRepeat(0),
     bTrowdRead(0),
+    nReadFlyDepth(0),
     nZOrder(0)
 {
     mbIsFootnote = mbReadNoTbl = bReadSwFly = bSwPageDesc = bStyleTabValid =
@@ -1057,6 +1058,17 @@ void rtfSections::InsertSegments(bool bNewDoc)
 
 namespace sw{
     namespace util{
+
+InsertedTableClient::InsertedTableClient(SwTableNode & rNode)
+{
+    rNode.Add(this);
+}
+
+SwTableNode * InsertedTableClient::GetTableNode()
+{
+    return dynamic_cast<SwTableNode *> (pRegisteredIn);
+}
+
 InsertedTablesManager::InsertedTablesManager(const SwDoc &rDoc)
     : mbHasRoot(rDoc.GetRootFrm())
 {
@@ -1071,13 +1083,18 @@ void InsertedTablesManager::DelAndMakeTblFrms()
     {
         // exitiert schon ein Layout, dann muss an dieser Tabelle die BoxFrames
         // neu erzeugt
-        SwTableNode *pTable = aIter->first;
+        SwTableNode *pTable = aIter->first->GetTableNode();
         ASSERT(pTable, "Why no expected table");
         if (pTable)
         {
-            SwNodeIndex *pIndex = aIter->second;
-            pTable->DelFrms();
-            pTable->MakeFrms(pIndex);
+            SwFrmFmt * pFrmFmt = pTable->GetTable().GetFrmFmt();
+
+            if (pFrmFmt != NULL)
+            {
+                SwNodeIndex *pIndex = aIter->second;
+                pTable->DelFrms();
+                pTable->MakeFrms(pIndex);
+            }
         }
     }
 }
@@ -1088,7 +1105,10 @@ void InsertedTablesManager::InsertTable(SwTableNode &rTableNode, SwPaM &rPaM)
         return;
     //Associate this tablenode with this after position, replace an //old
     //node association if necessary
-    maTables.insert(TblMap::value_type(&rTableNode, &(rPaM.GetPoint()->nNode)));
+
+    InsertedTableClient * pClient = new InsertedTableClient(rTableNode);
+
+    maTables.insert(TblMap::value_type(pClient, &(rPaM.GetPoint()->nNode)));
 }
 }
 }
@@ -2043,7 +2063,12 @@ SETCHDATEFIELD:
             ReadSectControls( nToken );
             break;
         case RTF_APOCTL:
-            ReadFly( nToken );
+            if (nReadFlyDepth < 10)
+            {
+                nReadFlyDepth++;
+                ReadFly( nToken );
+                nReadFlyDepth--;
+            }
             break;
 
         case RTF_BRDRDEF | RTF_TABLEDEF:

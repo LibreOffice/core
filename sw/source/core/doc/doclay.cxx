@@ -695,8 +695,12 @@ SwFlyFrmFmt* SwDoc::_MakeFlySection( const SwPosition& rAnchPos,
     if( FLY_IN_CNTNT == eAnchorId )
     {
         xub_StrLen nStt = rAnchPos.nContent.GetIndex();
-        rAnchPos.nNode.GetNode().GetTxtNode()->InsertItem(
-                                        SwFmtFlyCnt( pFmt ), nStt, nStt );
+        SwTxtNode * pTxtNode = rAnchPos.nNode.GetNode().GetTxtNode()
+
+        ASSERT(pTxtNode!= 0, "There should be a SwTxtNode!");
+
+        if (pTxtNode != NULL)
+            pTxtNode->InsertItem(SwFmtFlyCnt( pFmt ), nStt, nStt );
     }
 
     if( SFX_ITEM_SET != pFmt->GetAttrSet().GetItemState( RES_FRM_SIZE ))

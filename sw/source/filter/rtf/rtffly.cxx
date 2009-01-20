@@ -1047,7 +1047,7 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
         if( !IsPardTokenRead() )
         {
             // #102781#. Added support for transparent frames.
-            if (nToken == RTF_CBPAT)
+            if (nToken == RTF_CBPAT && nFlyArrCnt > 0)
             {
                 USHORT _index=USHORT(nTokenValue);
                 const Color& rColor = GetColor(_index);

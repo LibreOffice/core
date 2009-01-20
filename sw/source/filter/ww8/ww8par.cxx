@@ -1885,7 +1885,10 @@ void SwWW8ImplReader::AppendTxtNode(SwPosition& rPos)
 {
     SwTxtNode* pTxt = pPaM->GetNode()->GetTxtNode();
 
-    const SwNumRule* pRule = sw::util::GetNumRuleFromTxtNode(*pTxt);
+    const SwNumRule* pRule = NULL;
+
+    if (pTxt != NULL)
+        pRule = sw::util::GetNumRuleFromTxtNode(*pTxt);
 
     if (
          pRule && !pWDop->fDontUseHTMLAutoSpacing &&

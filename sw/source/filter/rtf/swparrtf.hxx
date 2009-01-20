@@ -346,6 +346,8 @@ class SwRTFParser : public SvxRTFParser
     bool bNestedField;
     bool bTrowdRead;         // True, iff an \trowd definition was read after the last \row
 
+    int nReadFlyDepth;
+
     int nZOrder;
     /*
      #i9243#
