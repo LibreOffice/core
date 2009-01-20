@@ -813,6 +813,8 @@ IMPL_LINK( SpellDialog, IgnoreHdl, Button *, EMPTYARG )
         //in case the error has been changed manually it has to be restored
         aSentenceED.RestoreCurrentError();
         rParent.ApplyChangedSentence(aSentenceED.CreateSpellPortions(true));
+        aSentenceED.ResetModified();
+
         // the word is being ignored
         SpellContinue_Impl();
         bModified = false;
