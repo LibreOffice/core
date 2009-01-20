@@ -45,6 +45,7 @@
 #include <svtools/lstner.hxx>
 #include <com/sun/star/text/WritingMode.hpp>
 #include <sfx2/module.hxx>
+#include <vcl/vclevent.hxx>
 
 #ifndef INCLUDED_MEMORY
 #include <memory>
@@ -193,6 +194,17 @@ private:
             function from where this function is called.
     */
     void OutlineToImpress (SfxRequest& rRequest);
+
+    /** Add an eventlistener as soon as possible in sd, allows to use
+        remote devices to start the slideshow elegantly, and respecting
+        portability
+        @EventListenerHdl
+            The event listener handler
+        @VclSimpleEvent *
+            a poiter to a VCLSimpleEvent (see vcl/vclevent.hxx )
+    */
+    DECL_LINK( EventListenerHdl, VclSimpleEvent* );
+
 };
 
 

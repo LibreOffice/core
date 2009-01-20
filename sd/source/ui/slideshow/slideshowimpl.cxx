@@ -2024,6 +2024,22 @@ IMPL_LINK( SlideshowImpl, EventListenerHdl, VclSimpleEvent*, pEvent )
         {
             switch( rEvent.GetMediaCommand() )
             {
+#if defined( QUARTZ )
+            case MEDIA_COMMAND_MENU:
+                if( !mnContextMenuEvent )
+                {
+                if( mpShowWindow )
+                    maPopupMousePos = mpShowWindow->GetPointerState().maPos;
+                mnContextMenuEvent = Application::PostUserEvent( LINK( this, SlideshowImpl, ContextMenuHdl ) );
+                }
+                break;
+            case MEDIA_COMMAND_VOLUME_DOWN:
+                gotoPreviousSlide();
+                break;
+            case MEDIA_COMMAND_VOLUME_UP:
+                gotoNextEffect();
+                break;
+#endif
             case MEDIA_COMMAND_NEXTTRACK:
                 gotoNextEffect();
                 break;
@@ -2035,6 +2051,7 @@ IMPL_LINK( SlideshowImpl, EventListenerHdl, VclSimpleEvent*, pEvent )
                 if( mbIsPaused )
                     resume();
                 break;
+
             case MEDIA_COMMAND_PLAY_PAUSE:
                 if( mbIsPaused )
                     resume();
@@ -2043,6 +2060,9 @@ IMPL_LINK( SlideshowImpl, EventListenerHdl, VclSimpleEvent*, pEvent )
                 break;
             case MEDIA_COMMAND_PREVIOUSTRACK:
                 gotoPreviousSlide();
+                break;
+            case MEDIA_COMMAND_NEXTTRACK_HOLD:
+                gotoLastSlide();
                 break;
 
             case MEDIA_COMMAND_REWIND:

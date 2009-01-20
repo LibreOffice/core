@@ -354,6 +354,8 @@ void SdModule::OutlineToImpress (SfxRequest& rRequest)
 |*
 \************************************************************************/
 
+static bool bOnce = false;
+
 void SdModule::GetState(SfxItemSet& rItemSet)
 {
     // Autopilot waehrend der Praesentation disablen
@@ -431,9 +433,55 @@ void SdModule::GetState(SfxItemSet& rItemSet)
         if( pDocSh )
             rItemSet.Put( SvxLanguageItem( pDocSh->GetDoc()->GetLanguage( EE_CHAR_LANGUAGE_CTL ), SID_ATTR_CHAR_CTL_LANGUAGE ) );
     }
+
+    if ( !bOnce )
+    {
+        ::sd::DrawDocShell* pDocShell = PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current());
+        if( pDocShell ) // Impress or Draw ?
+        {
+            ::sd::ViewShell* pViewShell = pDocShell->GetViewShell();
+
+            if( pViewShell && (pDocShell->GetDocumentType() == DOCUMENT_TYPE_IMPRESS) )
+            {
+                // add our event listener as soon as possible
+                Application::AddEventListener( LINK( this, SdModule, EventListenerHdl ) );
+                bOnce = true;
+            }
+        }
+    }
 }
 
+IMPL_LINK( SdModule, EventListenerHdl, VclSimpleEvent*, pEvent )
+{
+    if( pEvent && (pEvent->GetId() == VCLEVENT_WINDOW_COMMAND) && static_cast<VclWindowEvent*>(pEvent)->GetData() )
+    {
+        const CommandEvent& rEvent = *(const CommandEvent*)static_cast<VclWindowEvent*>(pEvent)->GetData();
 
+        if( rEvent.GetCommand() == COMMAND_MEDIA )
+        {
+            switch( rEvent.GetMediaCommand() )
+            {
+                case MEDIA_COMMAND_PLAY:
+                {
+                    ::sd::DrawDocShell* pDocShell = PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current());
+                    if( pDocShell )  // Impress or Draw ?
+                    {
+                        ::sd::ViewShell* pViewShell = pDocShell->GetViewShell();
+
+                        // #i97925# start the presentation if and only if an Impress document is focused
+                        if( pViewShell && (pDocShell->GetDocumentType() == DOCUMENT_TYPE_IMPRESS) )
+                            pViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_PRESENTATION );
+                    }
+                }
+                    break;
+
+                default:
+                    break;
+            }
+        }
+    }
+    return 0;
+}
 
 
 void SdModule::AddSummaryPage (SfxViewFrame* pViewFrame, SdDrawDocument* pDocument)

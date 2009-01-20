@@ -134,7 +134,18 @@ SdModule::~SdModule()
     delete pSearchItem;
 
     if( pNumberFormatter )
-        delete pNumberFormatter;
+    delete pNumberFormatter;
+
+    ::sd::DrawDocShell* pDocShell = PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current());
+    if( pDocShell )
+    {
+        ::sd::ViewShell* pViewShell = pDocShell->GetViewShell();
+        if (pViewShell)
+        {
+            // Removing our event listener
+            Application::RemoveEventListener( LINK( this, SdModule, EventListenerHdl ) );
+        }
+    }
 
     delete mpErrorHdl;
     delete static_cast< VirtualDevice* >( mpVirtualRefDevice );
