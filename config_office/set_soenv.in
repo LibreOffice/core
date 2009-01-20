@@ -1166,8 +1166,7 @@ if ($platform =~ m/cygwin|os2/)
                         $wps.$JAVA_HOME.$LIB;
       if ( $USE_MINGW eq "cygwin" )
       {  $ILIB    .= $wps.PathFormat($USR.$LIB.$ds."mingw").
-                     $wps.PathFormat($USR.$LIB.$ds."w32api").
-                     $wps.PathFormat($USR.$LIB);
+                     $wps.PathFormat($USR.$LIB.$ds."w32api");
       }
       else
       {  $ILIB       .= $wps.$COMPATH.$LIB;
@@ -1544,6 +1543,7 @@ elsif ($platform =~ m/cygwin/)
    {  $SOLARINC       .= $I.'$SOLARVER'.$ds.'$INPATH'.$INC.$ds."external".$ds."mingw".$ds."include";
      if ( $USE_MINGW eq "cygwin" )
      {  $SOLARINC    .= $I.PathFormat($USR.$ds."include".$ds."mingw".$ds."include").
+                        $I.PathFormat($USR.$ds."include".$ds."mingw").
                         $I.PathFormat($USR.$ds."include".$ds."w32api").
                         $I.PathFormat($USR.$ds."include"); }
      else

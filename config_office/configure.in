@@ -2304,6 +2304,8 @@ dnl ===================================================================
      esac
    elif test "$_os" = "Darwin"; then
       DEFAULT_TO_STLPORT="no"
+   elif test "$_os" = "WINNT" -a "$WITH_MINGWIN" = "yes"; then
+      DEFAULT_TO_STLPORT="no"
    fi
    if test "$DEFAULT_TO_STLPORT" = "yes"; then
       AC_MSG_RESULT([stlport])
@@ -4937,7 +4939,7 @@ AC_SUBST(CYGWIN_PATH)
 dnl ***************************************
 dnl testing ml.exe assembler path
 dnl ***************************************
-if test "$_os" = "WINNT"; then
+if test "$_os" = "WINNT" -a "$WITH_MINGWIN" != "yes"; then
   AC_MSG_CHECKING([ml.exe assembler path])
   if test -n "$with_asm_home"; then
     with_asm_home=`cygpath -u "$with_asm_home"`

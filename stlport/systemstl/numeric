@@ -33,7 +33,12 @@
 
 #ifdef GCC
 #include <functional>
-#include <ext/../numeric>
+#ifdef __MINGW32__
+#  define _SYSTEM_STL_MAKE_HEADER(path,header) <path/header>
+#  include _SYSTEM_STL_MAKE_HEADER(GXX_INCLUDE_PATH,numeric)
+#else
+#  include <ext/../numeric>
+#endif
 #include <ext/numeric>
 
 namespace std

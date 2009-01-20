@@ -9493,6 +9493,8 @@ echo $ECHO_N "checking what the default STL should be... $ECHO_C" >&6
      esac
    elif test "$_os" = "Darwin"; then
       DEFAULT_TO_STLPORT="no"
+   elif test "$_os" = "WINNT" -a "$WITH_MINGWIN" = "yes"; then
+      DEFAULT_TO_STLPORT="no"
    fi
    if test "$DEFAULT_TO_STLPORT" = "yes"; then
       echo "$as_me:$LINENO: result: stlport" >&5
@@ -23004,7 +23006,7 @@ if test -z "$CYGWIN_PATH"; then
 fi
 
 
-if test "$_os" = "WINNT"; then
+if test "$_os" = "WINNT" -a "$WITH_MINGWIN" != "yes"; then
   echo "$as_me:$LINENO: checking ml.exe assembler path" >&5
 echo $ECHO_N "checking ml.exe assembler path... $ECHO_C" >&6
   if test -n "$with_asm_home"; then

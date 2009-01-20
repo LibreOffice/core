@@ -50,7 +50,7 @@ CXX*=gcc
 #CFLAGS=-c -Wall -I$(INCLUDE) $(OLE2DEF)
 # new:
 #CYGINC=$(INCLUDE:s/-I /-I/:+"  ":s/;/ -I/:s/-I  //:s/   / /)
-CFLAGS=-fmessage-length=0 -c -nostdinc -fpcc-struct-return $(OLE2DEF)
+CFLAGS=-fmessage-length=0 -c -nostdinc $(OLE2DEF)
 ###
 CFLAGSCC=-pipe $(ARCH_FLAGS)
 CFLAGSCXX=-pipe $(ARCH_FLAGS)
@@ -107,7 +107,9 @@ MODULES_WITH_WARNINGS := \
 STATIC= -static
 DYNAMIC= -dynamic
 
-LINK*=$(CC)
+LINK*=$(CXX)
+LINKC*=$(CC)
+
 CYGLIB=$(LIB:s/;/ -L/)
 LINKFLAGS=-nostdlib -Wl,--enable-stdcall-fixup,--enable-runtime-pseudo-reloc -L$(CYGLIB)
 .IF "$(USE_MINGW)"=="cygwin"
