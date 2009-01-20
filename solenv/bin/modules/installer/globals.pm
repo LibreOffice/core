@@ -212,6 +212,7 @@ BEGIN
     %allusedupdatesequences = ();
     %mergemodulefiles = ();
     $mergefiles_added_into_collector = 0;
+    $creating_windows_installer_patch = 0;
 
     $strip = 1;
     $solarjava = 0;

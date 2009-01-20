@@ -82,7 +82,7 @@ RemoveIniValues		1550
 RemoveODBC		1200
 RemoveRegistryValues		1300
 RemoveShortcuts		1600
-RunningOffice	OFFICERUNS="1"	65
+RunningOffice	OFFICERUNS="1" And VersionNT < 600	65
 RMCCPSearch	Not CCP_SUCCESS And CCP_TEST	250
 SameProductFound	SAMEPRODUCTS	120
 ScheduleReboot	ISSCHEDULEREBOOT	3125

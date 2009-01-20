@@ -301,10 +301,13 @@ sub save_patchlist_file
     installer::files::save_file($installpatchlistdir . $installer::globals::separator . $patchlistfilename, \@installer::globals::patchfilecollector);
     installer::logger::print_message( "... creating patchlist file $patchlistfilename \n" );
 
-    $patchlistfilename =~ s/patchfiles\_/nopatchfiles\_/;
-    my $nopatchlist = create_nopatchlist();
-    installer::files::save_file($installpatchlistdir . $installer::globals::separator . $patchlistfilename, $nopatchlist);
-    installer::logger::print_message( "... creating patch exclusion file $patchlistfilename \n" );
+    if (( $installer::globals::patch ) && ( ! $installer::globals::creating_windows_installer_patch ))  # only for non-Windows patches
+    {
+        $patchlistfilename =~ s/patchfiles\_/nopatchfiles\_/;
+        my $nopatchlist = create_nopatchlist();
+        installer::files::save_file($installpatchlistdir . $installer::globals::separator . $patchlistfilename, $nopatchlist);
+        installer::logger::print_message( "... creating patch exclusion file $patchlistfilename \n" );
+    }
 
 }
 
@@ -483,7 +486,9 @@ sub analyze_and_save_logfile
     # installer::worker::save_checksum_file($current_install_number, $installchecksumdir, $checksumfile);
 
     # Saving the list of patchfiles in a patchlist directory in the install directory
-    if ( $installer::globals::patch ) { installer::worker::save_patchlist_file($installlogdir, $numberedlogfilename); }
+    if (( $installer::globals::patch ) || ( $installer::globals::creating_windows_installer_patch )) { installer::worker::save_patchlist_file($installlogdir, $numberedlogfilename); }
+
+    if ( $installer::globals::creating_windows_installer_patch ) { $installer::globals::creating_windows_installer_patch = 0; }
 
     return ($is_success, $finalinstalldir);
 }

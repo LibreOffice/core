@@ -184,6 +184,8 @@ sub execute_msimsp
 
     # r:\msvc9p\PlatformSDK\v6.1\bin\msimsp.exe -s c:\patch\hotfix_qfe1.pcp -p c:\patch\patch_ooo3_m2_m3.msp -l c:\patch\patch_ooo3_m2_m3.log
 
+    if ( -f $logfilename ) { unlink $logfilename; }
+
     $systemcall = $msimsp . " -s " . $fullpcpfilename . " -p " . $mspfilename . " -l " . $logfilename;
     installer::logger::print_message( "... $systemcall ...\n" );
 
@@ -203,6 +205,8 @@ sub execute_msimsp
         $infoline = "Success: Executed $systemcall successfully!\n";
         push( @installer::globals::logfileinfo, $infoline);
     }
+
+    return $logfilename;
 }
 
 ####################################################################
@@ -994,18 +998,99 @@ sub get_requiredpatchfile_from_list
     return $patchpath;
 }
 
+##################################################################
+# Converting unicode file to ascii
+# to be more precise: uft-16 little endian to ascii
+##################################################################
+
+sub convert_unicode_to_ascii
+{
+    my ( $filename ) = @_;
+
+    my @localfile = ();
+
+    my $savfilename = $filename . "_before.unicode";
+    installer::systemactions::copy_one_file($filename, $savfilename);
+
+#   open( IN, "<:utf16", $filename ) || installer::exiter::exit_program("ERROR: Cannot open file $filename for reading", "convert_unicode_to_ascii");
+#   open( IN, "<:para:crlf:uni", $filename ) || installer::exiter::exit_program("ERROR: Cannot open file $filename for reading", "convert_unicode_to_ascii");
+    open( IN, "<:encoding(UTF16-LE)", $filename ) || installer::exiter::exit_program("ERROR: Cannot open file $filename for reading", "convert_unicode_to_ascii");
+#   open( IN, "<:encoding(UTF-8)", $filename ) || installer::exiter::exit_program("ERROR: Cannot open file $filename for reading", "convert_unicode_to_ascii");
+    while ( $line = <IN> ) {
+        push @localfile, $line;
+    }
+    close( IN );
+
+    if ( open( OUT, ">", $filename ) )
+    {
+        print OUT @localfile;
+        close(OUT);
+    }
+}
+
+####################################################################
+# Analyzing the log file created by msimsp.exe to find all
+# files included into the patch.
+####################################################################
+
+sub analyze_msimsp_logfile
+{
+    my ($logfile, $filesarray) = @_;
+
+    # Reading log file after converting from utf-16 (LE) to ascii
+    convert_unicode_to_ascii($logfile);
+    my $logfilecontent = installer::files::read_file($logfile);
+
+    # Creating hash from $filesarray: unique file name -> destination of file
+    my %filehash = ();
+    my %destinationcollector = ();
+
+    for ( my $i = 0; $i <= $#{$filesarray}; $i++ )
+    {
+        my $onefile = ${$filesarray}[$i];
+
+        # Only collecting files with "uniquename" and "destination"
+        if (( exists($onefile->{'uniquename'}) ) && ( exists($onefile->{'uniquename'}) ))
+        {
+            my $uniquefilename = $onefile->{'uniquename'};
+            my $destpath = $onefile->{'destination'};
+            $filehash{$uniquefilename} = $destpath;
+        }
+    }
+
+    # Analyzing log file of msimsp.exe, finding all changed files
+    # and searching all destinations of unique file names.
+    # Content in log file: "INFO File Key: <file key> is modified"
+    # Collecting content in @installer::globals::patchfilecollector
+
+    for ( my $i = 0; $i <= $#{$logfilecontent}; $i++ )
+    {
+        if ( ${$logfilecontent}[$i] =~ /Key\:\s*(.*?) is modified\s*$/ )
+        {
+            my $filekey = $1;
+            if ( exists($filehash{$filekey}) ) { $destinationcollector{$filehash{$filekey}} = 1; }
+            else { installer::exiter::exit_program("ERROR: Could not find file key \"$filekey\" in file collector.", "analyze_msimsp_logfile"); }
+        }
+    }
+
+    foreach my $onedest ( sort keys %destinationcollector ) { push(@installer::globals::patchfilecollector, "$onedest\n"); }
+
+}
+
 ####################################################################
 # Creating msp patch files for Windows
 ####################################################################
 
 sub create_msp_patch
 {
-    my ($installationdir, $includepatharrayref, $allvariables, $languagestringref) = @_;
+    my ($installationdir, $includepatharrayref, $allvariables, $languagestringref, $filesarray) = @_;
 
     my $force = 1; # print this message even in 'quiet' mode
     installer::logger::print_message( "\n******************************************\n" );
     installer::logger::print_message( "... creating msp installation set ...\n", $force );
     installer::logger::print_message( "******************************************\n" );
+
+    $installer::globals::creating_windows_installer_patch = 1;
 
     my @needed_files = ("msimsp.exe");  # only required for patch creation process
     installer::control::check_needed_files_in_path(\@needed_files);
@@ -1090,7 +1175,7 @@ sub create_msp_patch
 
     # Start msimsp.exe
     installer::logger::include_timestamp_into_logfile("\nPerformance Info: Starting msimsp.exe");
-    execute_msimsp($fullpcpfilename, $mspfilename, $localmspdir);
+    my $msimsplogfile = execute_msimsp($fullpcpfilename, $mspfilename, $localmspdir);
 
     # Copy final installation set next to msp file
     installer::logger::include_timestamp_into_logfile("\nPerformance Info: Copying installation set");
@@ -1121,6 +1206,10 @@ sub create_msp_patch
         # my $infoline = "Copy $requiredpatchfile to $mspdir\n";
         # push( @installer::globals::logfileinfo, $infoline);
     }
+
+    # Find all files included into the patch
+    # Analyzing the msimsp log file $msimsplogfile
+    analyze_msimsp_logfile($msimsplogfile, $filesarray);
 
     # Done
     installer::logger::include_timestamp_into_logfile("\nPerformance Info: msp creation done");

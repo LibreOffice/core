@@ -2208,7 +2208,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             # Temp path for administrative installations: $installer::globals::temppath
             # Path of new installation set: $finalinstalldir
             # Path of old installation set: $installer::globals::updatedatabasepath
-            my $mspdir = installer::windows::msp::create_msp_patch($finalinstalldir, $includepatharrayref, $allvariableshashref, $languagestringref);
+            my $mspdir = installer::windows::msp::create_msp_patch($finalinstalldir, $includepatharrayref, $allvariableshashref, $languagestringref, $filesinproductlanguageresolvedarrayref);
             ($is_success, $finalinstalldir) = installer::worker::analyze_and_save_logfile($loggingdir, $mspdir, $installlogdir, $allsettingsarrayref, $languagestringref, $current_install_number);
             installer::worker::clean_output_tree(); # removing directories created in the output tree
         }
