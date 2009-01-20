@@ -59,7 +59,7 @@ PATCH_FILE_NAME=$(TARFILE_NAME).patch
 .IF "$(COM)"=="GCC"
 CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure
-CONFIGURE_FLAGS=--enable-ipv6=no --without-crypto --without-python --enable-static=no --with-sax1=yes --build=i586-pc-mingw32 --host=i586-pc-mingw32 CFLAGS="$(xslt_CFLAGS) -D_MT" LDFLAGS="$(xslt_LDFLAGS) -no-undefined -L$(ILIB:s/;/ -L/)" LIBS="-lmingwthrd"  LIBXML2LIB=$(LIBXML2LIB) ZLIB3RDLIB=$(ZLIB3RDLIB) OBJDUMP="$(WRAPCMD) objdump"
+CONFIGURE_FLAGS=--enable-ipv6=no --without-crypto --without-python --enable-static=no --with-sax1=yes --build=i586-pc-mingw32 --host=i586-pc-mingw32 CFLAGS="$(xslt_CFLAGS) -D_MT" LDFLAGS="$(xslt_LDFLAGS) -no-undefined -L$(ILIB:s/;/ -L/)" LIBS="-lmingwthrd"  LIBXML2LIB=$(LIBXML2LIB) OBJDUMP="$(WRAPCMD) objdump"
 BUILD_ACTION=chmod 777 xslt-config && $(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)
