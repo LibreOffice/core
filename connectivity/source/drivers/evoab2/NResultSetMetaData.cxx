@@ -55,10 +55,10 @@ OEvoabResultSetMetaData::~OEvoabResultSetMetaData()
 // -------------------------------------------------------------------------
 void OEvoabResultSetMetaData::setEvoabFields(const ::vos::ORef<connectivity::OSQLColumns> &xColumns) throw(SQLException)
 {
-        OSQLColumns::const_iterator aIter;
+        OSQLColumns::Vector::const_iterator aIter;
         static const ::rtl::OUString aName(::rtl::OUString::createFromAscii("Name"));
 
-        for (aIter = xColumns->begin(); aIter != xColumns->end(); ++aIter)
+        for (aIter = xColumns->get().begin(); aIter != xColumns->get().end(); ++aIter)
         {
                 ::rtl::OUString aFieldName;
 
