@@ -281,6 +281,8 @@ void SwWrtShell::ClickToField( const SwField& rFld )
             if( nSlotId )
             {
                 StartUndo( UNDO_START );
+                //#97295# immediately select the right shell
+                GetView().StopShellTimer();
                 GetView().GetViewFrame()->GetDispatcher()->Execute( nSlotId,
                             SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD );
                 EndUndo( UNDO_END );

@@ -462,7 +462,7 @@ void SwTemplateDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
             {
                 if( rPage.GetItemSet().GetParent() )
                 {
-                    aSet.Put(SfxUInt32Item(SID_SVXSTDPARAGRAPHTABPAGE_ABSLINEDIST,MM50/2));
+                    aSet.Put(SfxUInt32Item(SID_SVXSTDPARAGRAPHTABPAGE_ABSLINEDIST,MM50/10));
                     aSet.Put(SfxUInt32Item(SID_SVXSTDPARAGRAPHTABPAGE_FLAGSET,0x000F));
                     rPage.PageCreated(aSet);
                 }
