@@ -43,6 +43,7 @@
 #include "bridges/cpp_uno/shared/vtablefactory.hxx"
 
 #include "share.hxx"
+#include "smallstruct.hxx"
 
 using namespace ::com::sun::star::uno;
 
@@ -77,8 +78,13 @@ void cpp2uno_call(
         }
         else // complex return via ptr (pCppReturn)
         {
-            pCppReturn = *(void **)pCppStack;
-            pCppStack += sizeof(void *);
+            if (!bridges::cpp_uno::shared::isSmallStruct(pReturnTypeDescr)) {
+                pCppReturn = *(void **)pCppStack;
+                pCppStack += sizeof(void *);
+            }
+            else {
+                pCppReturn = pReturnValue;
+            }
 
             pUnoReturn = (bridges::cpp_uno::shared::relatesToInterfaceType(
                               pReturnTypeDescr )
@@ -216,8 +222,9 @@ void cpp2uno_call(
                 // destroy temp uno return
                 uno_destructData( pUnoReturn, pReturnTypeDescr, 0 );
             }
-            // complex return ptr is set to eax
-            *static_cast< void ** >(pReturnValue) = pCppReturn;
+            if (pReturnValue != pCppReturn)
+                // complex return ptr is set to eax
+                *static_cast< void ** >(pReturnValue) = pCppReturn;
         }
         if (pReturnTypeDescr)
         {
@@ -364,9 +371,15 @@ int const codeSnippetSize = 16;
 
 unsigned char * codeSnippet(
     unsigned char * code, sal_Int32 functionIndex, sal_Int32 vtableOffset,
-    typelib_TypeClass returnTypeClass)
+    typelib_TypeDescriptionReference * returnType)
 {
-    if (!bridges::cpp_uno::shared::isSimpleType(returnTypeClass)) {
+    typelib_TypeDescription * returnTypeDescr = 0;
+    if (returnType)
+    TYPELIB_DANGER_GET( &returnTypeDescr, returnType );
+
+    typelib_TypeClass returnTypeClass = returnType ? returnType->eTypeClass : typelib_TypeClass_VOID;
+    if (!bridges::cpp_uno::shared::isSimpleType(returnTypeClass) &&
+    !bridges::cpp_uno::shared::isSmallStruct(returnTypeDescr)) {
         functionIndex |= 0x80000000;
     }
     PrivateSnippetExecutor exec;
@@ -384,18 +397,32 @@ unsigned char * codeSnippet(
     case typelib_TypeClass_DOUBLE:
         exec = privateSnippetExecutorDouble;
         break;
+    case typelib_TypeClass_STRUCT:
+    if (bridges::cpp_uno::shared::isSmallStruct(returnTypeDescr)) {
+        if (returnType->pType->nSize <= 4) {
+            exec = privateSnippetExecutorGeneral;
+        }
+        else if  (returnType->pType->nSize <= 8) {
+            exec = privateSnippetExecutorHyper;
+        }
+    }
+    else {
+        exec = privateSnippetExecutorClass;
+    }
+        break;
     case typelib_TypeClass_STRING:
     case typelib_TypeClass_TYPE:
     case typelib_TypeClass_ANY:
     case typelib_TypeClass_SEQUENCE:
-    case typelib_TypeClass_STRUCT:
     case typelib_TypeClass_INTERFACE:
-        exec = privateSnippetExecutorClass;
+    exec = privateSnippetExecutorClass;
         break;
     default:
         exec = privateSnippetExecutorGeneral;
         break;
     }
+    if (returnType)
+    TYPELIB_DANGER_RELEASE( returnTypeDescr );
     unsigned char * p = code;
     OSL_ASSERT(sizeof (sal_Int32) == 4);
     // mov function_index, %eax:
@@ -459,7 +486,7 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
             code = codeSnippet(
                 code, functionOffset++, vtableOffset,
                 reinterpret_cast< typelib_InterfaceAttributeTypeDescription * >(
-                    member)->pAttributeTypeRef->eTypeClass);
+                    member)->pAttributeTypeRef);
             // Setter:
             if (!reinterpret_cast<
                 typelib_InterfaceAttributeTypeDescription * >(
@@ -468,7 +495,7 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
                 (s++)->fn = code;
                 code = codeSnippet(
                     code, functionOffset++, vtableOffset,
-                    typelib_TypeClass_VOID);
+                    NULL);
             }
             break;
 
@@ -477,7 +504,7 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
             code = codeSnippet(
                 code, functionOffset++, vtableOffset,
                 reinterpret_cast< typelib_InterfaceMethodTypeDescription * >(
-                    member)->pReturnTypeRef->eTypeClass);
+                    member)->pReturnTypeRef);
             break;
 
         default:

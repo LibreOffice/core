@@ -42,6 +42,7 @@
 #include "bridges/cpp_uno/shared/vtables.hxx"
 
 #include "share.hxx"
+#include "smallstruct.hxx"
 
 #ifdef __MINGW32__
 #define BROKEN_ALLOCA
@@ -64,7 +65,7 @@ void callVirtualMethod(
     void * pAdjustedThisPtr,
     sal_Int32 nVtableIndex,
     void * pRegisterReturn,
-    typelib_TypeClass eReturnType,
+    typelib_TypeDescription const * returnType,
     sal_Int32 * pStackLongs,
     sal_Int32 nStackLongs ) __attribute__((noinline));
 
@@ -72,7 +73,7 @@ void callVirtualMethod(
     void * pAdjustedThisPtr,
     sal_Int32 nVtableIndex,
     void * pRegisterReturn,
-    typelib_TypeClass eReturnType,
+    typelib_TypeDescription const * returnType,
     sal_Int32 * pStackLongs,
     sal_Int32 nStackLongs )
 {
@@ -118,8 +119,10 @@ void callVirtualMethod(
         : "m"(nStackLongs), "m"(pStackLongs), "m"(pAdjustedThisPtr),
           "m"(nVtableIndex), "m"(eax), "m"(edx), "m"(stackptr)
         : "eax", "edx" );
-    switch( eReturnType )
+    switch( returnType->eTypeClass )
     {
+        case typelib_TypeClass_VOID:
+            break;
         case typelib_TypeClass_HYPER:
         case typelib_TypeClass_UNSIGNED_HYPER:
             ((long*)pRegisterReturn)[1] = edx;
@@ -143,8 +146,24 @@ void callVirtualMethod(
         case typelib_TypeClass_DOUBLE:
             asm ( "fstpl %0\n\t" : : "m"(*(char *)pRegisterReturn) );
             break;
-        default:
+        case typelib_TypeClass_STRUCT:
+            if (bridges::cpp_uno::shared::isSmallStruct(returnType)) {
+                        if (returnType->nSize <= 1) {
+                    *(unsigned char*)pRegisterReturn = eax;
+                    }
+                    else if (returnType->nSize <= 2) {
+                    *(unsigned short*)pRegisterReturn = eax;
+                    }
+                        else if (returnType->nSize <= 8) {
+                    ((long*)pRegisterReturn)[0] = eax;
+                        if (returnType->nSize > 4) {
+                        ((long*)pRegisterReturn)[1] = edx;
+                    }
+                           }
+                }
             break;
+        default:
+        break;
     }
 }
 
@@ -181,7 +200,7 @@ static void cpp_call(
         else
         {
             // complex return via ptr
-            pCppReturn = *(void **)pCppStack
+            pCppReturn
                 = (bridges::cpp_uno::shared::relatesToInterfaceType(
                        pReturnTypeDescr )
 #ifdef BROKEN_ALLOCA
@@ -190,7 +209,10 @@ static void cpp_call(
                    ? alloca( pReturnTypeDescr->nSize )
 #endif
                    : pUnoReturn); // direct way
-            pCppStack += sizeof(void *);
+            if (!bridges::cpp_uno::shared::isSmallStruct(pReturnTypeDescr)) {
+                *(void **)pCppStack = pCppReturn;
+                pCppStack += sizeof(void *);
+            }
         }
     }
     // push this
@@ -287,7 +309,7 @@ static void cpp_call(
         OSL_ENSURE( !( (pCppStack - pCppStackStart ) & 3), "UNALIGNED STACK !!! (Please DO panic)" );
         callVirtualMethod(
             pAdjustedThisPtr, aVtableSlot.index,
-            pCppReturn, pReturnTypeDescr->eTypeClass,
+            pCppReturn, pReturnTypeDescr,
             (sal_Int32 *)pCppStackStart, (pCppStack - pCppStackStart) / sizeof(sal_Int32) );
         // NO exception occured...
         *ppUnoExc = 0;
