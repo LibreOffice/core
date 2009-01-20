@@ -101,7 +101,7 @@ LDFLAGS+:=-Wl,-dylib_file,@loader_path/libraptor.1.dylib:$(PWD)/$(LB)/libraptor.
 
 CPPFLAGS+:=$(EXTRA_CFLAGS)
 LDFLAGS+:=$(EXTRA_LINKFLAGS)
-XSLTLIB:=$(XSLTLIB)
+XSLTLIB!:=$(XSLTLIB) # expand variable for (internal) xslt-config
 
 .EXPORT: CPPFLAGS
 .EXPORT: LDFLAGS

@@ -98,7 +98,7 @@ LDFLAGS+:=-L$(SYSBASE)$/lib -L$(SYSBASE)$/usr$/lib -lpthread -ldl
 
 CPPFLAGS+:=$(EXTRA_CFLAGS)
 LDFLAGS+:=$(EXTRA_LINKFLAGS)
-XSLTLIB:=$(XSLTLIB)
+XSLTLIB!:=$(XSLTLIB) # expand variable for (internal) xslt-config
 
 .EXPORT: CPPFLAGS
 .EXPORT: LDFLAGS
