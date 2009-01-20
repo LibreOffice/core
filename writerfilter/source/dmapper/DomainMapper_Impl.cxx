@@ -1380,12 +1380,44 @@ void DomainMapper_Impl::PushFootOrEndnote( bool bIsFootnote )
         OSL_ENSURE( false, "exception in PushFootOrEndnote" );
     }
 }
+
+/*-- 22.12.2008 13:45:15---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void DomainMapper_Impl::PushAnnotation()
+{
+    try
+    {
+        PropertyMapPtr pTopContext = GetTopContext();
+        m_xAnnotationField = uno::Reference< beans::XPropertySet >( GetTextFactory()->createInstance(
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextField.Annotation") ) ),
+            uno::UNO_QUERY_THROW );
+        uno::Reference< text::XText > xAnnotationText;
+        m_xAnnotationField->getPropertyValue(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("TextRange"))) >>= xAnnotationText;
+        m_aTextAppendStack.push(uno::Reference< text::XTextAppend >( xAnnotationText, uno::UNO_QUERY_THROW ));
+    }
+    catch( uno::Exception& )
+    {
+        OSL_ENSURE( false, "exception in PushFootOrEndnote" );
+    }
+}
 /*-- 24.05.2007 14:22:29---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 void DomainMapper_Impl::PopFootOrEndnote()
 {
     m_aTextAppendStack.pop();
+}
+/*-- 22.12.2008 13:45:15---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void DomainMapper_Impl::PopAnnotation()
+{
+    m_aTextAppendStack.pop();
+    uno::Sequence< beans::PropertyValue > aEmptyProperties;
+    appendTextContent( uno::Reference< text::XTextContent >( m_xAnnotationField, uno::UNO_QUERY_THROW ), aEmptyProperties );
+    m_xAnnotationField.clear();
+
 }
 /*-- 20.03.2008 09:01:58---------------------------------------------------
 
@@ -2636,6 +2668,9 @@ void DomainMapper_Impl::CloseFieldCommand()
                         xFieldProperties->setPropertyValue(
                             rPropNameSupplier.GetName(PROP_IS_FIXED),
                             uno::makeAny( false ));
+                        xFieldProperties->setPropertyValue(
+                            rPropNameSupplier.GetName(PROP_IS_DATE),
+                            uno::makeAny( true ));
                         SetNumberFormat( pContext->GetCommand(), xFieldProperties );
                     }
                     break;

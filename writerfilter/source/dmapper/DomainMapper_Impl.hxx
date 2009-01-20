@@ -320,6 +320,9 @@ private:
     //shape import
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >      m_xTemporaryShape;
 
+    //annotation import
+    uno::Reference< beans::XPropertySet >                                      m_xAnnotationField;
+
     void                            GetCurrentLocale(::com::sun::star::lang::Locale& rLocale);
     void                            SetNumberFormat( const ::rtl::OUString& rCommand,
                                         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xPropertySet );
@@ -441,6 +444,9 @@ public:
 
     void PushFootOrEndnote( bool bIsFootnote );
     void PopFootOrEndnote();
+
+    void PushAnnotation();
+    void PopAnnotation();
 
     //field context starts with a 0x13
     void PushFieldContext();

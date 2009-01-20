@@ -277,6 +277,7 @@ enum PropertyIds
 /*238*/ ,PROP_DELETE
 /*239*/ ,PROP_STREAM_NAME
 /*240*/ ,PROP_BITMAP
+/*241*/ ,PROP_IS_DATE
 };
 struct PropertyNameSupplier_Impl;
 class PropertyNameSupplier

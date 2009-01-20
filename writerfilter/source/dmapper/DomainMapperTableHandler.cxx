@@ -31,8 +31,9 @@
 #include <DomainMapper_Impl.hxx>
 #include <StyleSheetTable.hxx>
 #include <com/sun/star/table/TableBorderDistances.hpp>
+#include <com/sun/star/table/TableBorder.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 #include <iostream>
 #endif
 
@@ -94,7 +95,7 @@ void DomainMapperTableHandler::startTable(unsigned int nRows,
     m_pTableSeq = TableSequencePointer_t(new TableSequence_t(nRows));
     m_nRowIndex = 0;
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     char sBuffer[256];
     snprintf(sBuffer, sizeof(sBuffer), "%d", nRows);
     clog << "<table rows=\"" << sBuffer << "\">" << endl;
@@ -122,7 +123,7 @@ PropertyMapPtr lcl_SearchParentStyleSheetAndMergeProperties(const StyleSheetEntr
 }
 void DomainMapperTableHandler::endTable()
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 {
     clog << "</table>" << endl;
     sal_uInt32 nCells = 0;
@@ -134,6 +135,20 @@ void DomainMapperTableHandler::endTable()
     }
     sal_uInt32 nTblPropSize = m_aTableProperties.get() ? m_aTableProperties->size() : 0;
     (void)nTblPropSize;
+
+    ::rtl::OUString sNames;
+    if( nTblPropSize )
+    {
+        const beans::PropertyValues aDebugTbl = m_aTableProperties->GetPropertyValues();
+        for( sal_Int32  nDebug = 0; nDebug < nTblPropSize; ++nDebug)
+        {
+            const ::rtl::OUString sName = aDebugTbl[nDebug].Name;
+            sNames += sName;
+            sNames += ::rtl::OUString('-');
+        }
+        m_aTableProperties->Invalidate();
+        sNames += ::rtl::OUString(' ');
+    }
 }
 #endif
 
@@ -150,7 +165,7 @@ void DomainMapperTableHandler::endTable()
         sal_Int32 nLeftMargin = 0;
         sal_Int32 nTableWidth = 0;
 
-        const PropertyMap::iterator aTableStyleIter =
+        PropertyMap::iterator aTableStyleIter =
                                 m_aTableProperties->find( PropertyDefinition( META_PROP_TABLE_STYLE_NAME, false ) );
         if(aTableStyleIter != m_aTableProperties->end())
         {
@@ -203,6 +218,57 @@ void DomainMapperTableHandler::endTable()
         aDistances.RightDistance = static_cast<sal_Int16>( nRightBorderDistance );
 
         m_aTableProperties->Insert( PROP_TABLE_BORDER_DISTANCES, false, uno::makeAny( aDistances ) );
+
+        //table border settings
+        table::TableBorder aTableBorder;
+
+        PropertyMap::iterator aTblBorderIter = m_aTableProperties->find( PropertyDefinition(PROP_TOP_BORDER, false) );
+        if( aTblBorderIter != m_aTableProperties->end() )
+        {
+            aTblBorderIter->second >>= aTableBorder.TopLine;
+            aTableBorder.IsTopLineValid = true;
+            m_aTableProperties->erase( aTblBorderIter );
+        }
+        aTblBorderIter = m_aTableProperties->find( PropertyDefinition(PROP_BOTTOM_BORDER, false) );
+        if( aTblBorderIter != m_aTableProperties->end() )
+        {
+            aTblBorderIter->second >>= aTableBorder.BottomLine;
+            aTableBorder.IsBottomLineValid = true;
+            m_aTableProperties->erase( aTblBorderIter );
+        }
+        aTblBorderIter = m_aTableProperties->find( PropertyDefinition(PROP_LEFT_BORDER, false) );
+        if( aTblBorderIter != m_aTableProperties->end() )
+        {
+            aTblBorderIter->second >>= aTableBorder.LeftLine;
+            aTableBorder.IsLeftLineValid = true;
+            m_aTableProperties->erase( aTblBorderIter );
+        }
+        aTblBorderIter = m_aTableProperties->find( PropertyDefinition(PROP_RIGHT_BORDER, false) );
+        if( aTblBorderIter != m_aTableProperties->end() )
+        {
+            aTblBorderIter->second >>= aTableBorder.RightLine;
+            aTableBorder.IsRightLineValid = true;
+            m_aTableProperties->erase( aTblBorderIter );
+        }
+        aTblBorderIter = m_aTableProperties->find( PropertyDefinition(META_PROP_HORIZONTAL_BORDER, false) );
+        if( aTblBorderIter != m_aTableProperties->end() )
+        {
+            aTblBorderIter->second >>= aTableBorder.HorizontalLine;
+            aTableBorder.IsHorizontalLineValid = true;
+            m_aTableProperties->erase( aTblBorderIter );
+        }
+        aTblBorderIter = m_aTableProperties->find( PropertyDefinition(META_PROP_VERTICAL_BORDER, false) );
+        if( aTblBorderIter != m_aTableProperties->end() )
+        {
+            aTblBorderIter->second >>= aTableBorder.VerticalLine;
+            aTableBorder.IsVerticalLineValid = true;
+            m_aTableProperties->erase( aTblBorderIter );
+        }
+        aTableBorder.Distance = 0;
+        aTableBorder.IsDistanceValid = false;
+
+        m_aTableProperties->Insert( PROP_TABLE_BORDER, false, uno::makeAny( aTableBorder ) );
+
         m_aTableProperties->Insert( PROP_LEFT_MARGIN, false, uno::makeAny( nLeftMargin - nGapHalf - nLeftBorderDistance));
 
         m_aTableProperties->getValue( TablePropertyMap::TABLE_WIDTH, nTableWidth );
@@ -327,7 +393,7 @@ void DomainMapperTableHandler::endTable()
             ++nCell;
             ++aCellIterator;
         }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 //-->debug cell properties
         {
             ::rtl::OUString sNames;
@@ -353,7 +419,7 @@ void DomainMapperTableHandler::endTable()
         ++nRow;
         ++aRowOfCellsIterator;
     }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 //-->debug cell properties of all rows
     {
         ::rtl::OUString sNames;
@@ -403,7 +469,7 @@ void DomainMapperTableHandler::endTable()
     {
         try
         {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     {
         sal_Int32 nCellPropertiesRows = aCellProperties.getLength();
         sal_Int32 nCellPropertiesCells = aCellProperties[0].getLength();
@@ -421,7 +487,7 @@ void DomainMapperTableHandler::endTable()
         }
         catch (lang::IllegalArgumentException e)
         {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             clog << "failed to import table!" << endl;
 #endif
         }
@@ -437,7 +503,7 @@ void DomainMapperTableHandler::startRow(unsigned int nCells,
     m_aRowProperties.push_back( pProps );
     m_aCellProperties.push_back( PropertyMapVector1() );
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     char sBuffer[256];
     snprintf(sBuffer, sizeof(sBuffer), "%d", nCells);
 
@@ -454,7 +520,7 @@ void DomainMapperTableHandler::endRow()
     (*m_pTableSeq)[m_nRowIndex] = *m_pRowSeq;
     ++m_nRowIndex;
     m_nCellIndex = 0;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     clog << "</table.row>" << endl;
 #endif
 }
@@ -465,7 +531,7 @@ void DomainMapperTableHandler::startCell(const Handle_t & start,
     sal_uInt32 nRow = m_aRowProperties.size();
     m_aCellProperties[nRow - 1].push_back( pProps );
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     clog << "<table.cell>";
     lcl_printHandle(start);
     lcl_printProperties( pProps );
@@ -484,7 +550,7 @@ void DomainMapperTableHandler::startCell(const Handle_t & start,
 
 void DomainMapperTableHandler::endCell(const Handle_t & end)
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     lcl_printHandle(end);
     clog << "</table.cell>" << endl;
 #endif
