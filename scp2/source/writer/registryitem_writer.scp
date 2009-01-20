@@ -1278,33 +1278,6 @@ RegistryItem gid_Regitem_OpenOffice_WPD_OpenWith_Writer
     Value = " ";
 End
 
-// .WPS
-RegistryItem gid_Regitem_OpenOffice_WPS_OpenWith_Writer
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".wps\OpenWithProgIDs";
-    ModuleID = gid_Module_Prg_Wrt_Bin;
-    Name = "opendocument.WriterDocument.1";
-    Value = " ";
-End
-
-// .JTD
-RegistryItem gid_Regitem_OpenOffice_JTD_OpenWith_Writer
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".jtd\OpenWithProgIDs";
-    ModuleID = gid_Module_Prg_Wrt_Bin;
-    Name = "opendocument.WriterDocument.1";
-    Value = " ";
-End
-
-// .JTT
-RegistryItem gid_Regitem_OpenOffice_JTT_OpenWith_Writer
-    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".jtt\OpenWithProgIDs";
-    ModuleID = gid_Module_Prg_Wrt_Bin;
-    Name = "opendocument.WriterDocument.1";
-    Value = " ";
-End
-
 // .HWP
 RegistryItem gid_Regitem_OpenOffice_HWP_OpenWith_Writer
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
@@ -1427,33 +1400,6 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabi
     Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
     ModuleID = gid_Module_Root;
     Name = ".wpd";
-    Value = "opendocument.WriterDocument.1";
-    Styles = ();
-End
-
-RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_Wps
-    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
-    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
-    ModuleID = gid_Module_Root;
-    Name = ".Wps";
-    Value = "opendocument.WriterDocument.1";
-    Styles = ();
-End
-
-RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_Jtd
-    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
-    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
-    ModuleID = gid_Module_Root;
-    Name = ".jtd";
-    Value = "opendocument.WriterDocument.1";
-    Styles = ();
-End
-
-RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_Jtt
-    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
-    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
-    ModuleID = gid_Module_Root;
-    Name = ".jtt";
     Value = "opendocument.WriterDocument.1";
     Styles = ();
 End

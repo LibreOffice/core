@@ -237,6 +237,16 @@ WindowsCustomAction gid_Customaction_CopyEditionData
     Assignment2 = ("AdminExecuteSequence", "", "end");
 End
 
+WindowsCustomAction gid_Customaction_CopyExtensionData
+    Name = "CopyExtensionData";
+    Typ = "1";
+    Source = "shlxtmsi.dll";
+    Target = "copyExtensionData";
+    Inbinarytable = 1;
+    Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\"", "RegisterExtensions");
+    Assignment2 = ("AdminExecuteSequence", "", "RegisterExtensions");
+End
+
 WindowsCustomAction gid_Customaction_RegCleanOld
 	Name = "RegCleanOld";
 	Typ = "65";

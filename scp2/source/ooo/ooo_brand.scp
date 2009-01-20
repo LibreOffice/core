@@ -55,15 +55,4 @@ ProfileItem gid_Brand_Profileitem_Bootstrap_Errorreport_Server
   #endif
 End
 
-#if defined UNX && ! defined MACOSX
-
-File gid_Brand_File_Share_Xdg_Math
-	TXT_FILE_BODY;
-	Dir = gid_Brand_Dir_Share_Xdg;
-	Name = "math.desktop";
-	Styles = (PACKED,SCPZIP_REPLACE);
-End
-
-#endif
-
 BRAND_RES_FILE( gid_Brand_File_Res_Ooo, ooo )

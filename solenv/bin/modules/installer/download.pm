@@ -1019,6 +1019,7 @@ sub nsis_language_converter
     elsif ( $language eq "lv" ) { $nsislanguage = "Latvian"; }
     elsif ( $language eq "lt" ) { $nsislanguage = "Lithuanian"; }
     elsif ( $language eq "mk" ) { $nsislanguage = "Macedonian"; }
+    elsif ( $language eq "mn" ) { $nsislanguage = "Mongolian"; }
     elsif ( $language eq "no" ) { $nsislanguage = "Norwegian"; }
     elsif ( $language eq "no-NO" ) { $nsislanguage = "Norwegian"; }
     elsif ( $language eq "es" ) { $nsislanguage = "Spanish"; }
