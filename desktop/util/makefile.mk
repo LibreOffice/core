@@ -210,6 +210,16 @@ ALLTAR : $(BIN)$/so$/soffice_so$(EXECPOST) $(BIN)$/soffice_oo$(EXECPOST)
 
 .ENDIF
 
+.IF "$(OS)" == "MACOSX"
+$(BIN)$/so$/soffice_mac$(EXECPOST) : $(APP1TARGETN)
+    $(COPY) $< $@
+    
+$(BIN)$/soffice_mac$(EXECPOST) : $(APP5TARGETN)
+    $(COPY) $< $@
+
+ALLTAR : $(BIN)$/so$/soffice_mac$(EXECPOST) $(BIN)$/soffice_mac$(EXECPOST)
+
+.ENDIF
 
 .IF "$(GUI)" == "WNT"
 
