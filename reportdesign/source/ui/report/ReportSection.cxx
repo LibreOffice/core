@@ -171,7 +171,7 @@ void OReportSection::Paint( const Rectangle& rRect )
         if(pPgView)
         {
             pPgView->DrawLayer(0, this);
-            pPgView->GetView().EndDrawLayers(*pTargetPaintWindow);
+            pPgView->GetView().EndDrawLayers(*pTargetPaintWindow, true);
         }
 
         m_pView->CompleteRedraw(this,aPaintRectRegion);
