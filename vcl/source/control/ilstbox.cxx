@@ -2023,7 +2023,7 @@ void ImplListBoxWindow::SetTopEntry( USHORT nTop )
     if( nTop > nLastEntry )
         nTop = nLastEntry;
     const ImplEntryType* pLast = mpEntryList->GetEntryPtr( nLastEntry );
-    while( nTop > 0 && mpEntryList->GetAddedHeight( nLastEntry, nTop-1 ) + pLast->mnHeight < nWHeight )
+    while( nTop > 0 && mpEntryList->GetAddedHeight( nLastEntry, nTop-1 ) + pLast->mnHeight <= nWHeight )
         nTop--;
 
     if ( nTop != mnTop )
