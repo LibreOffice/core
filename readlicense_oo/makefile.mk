@@ -14,29 +14,35 @@ SYSLICBASE=LICENSE LICENSE.html
 SYSLICDEST=$(MISC)$/license$/unx
 .ENDIF          # "$(GUI)"=="WNT"
 
+SOURCELICENCES=$(foreach,i,$(SYSLICBASE) $(SYSLICDEST)$/$(i:b)_en-US$(i:e))
+
 fallbacklicenses=$(foreach,i,{$(subst,$(defaultlangiso), $(alllangiso))} $(foreach,j,$(SYSLICBASE) $(SYSLICDEST)$/$(j:b)_$i$(j:e)))
 
 # ------------------------------------------------------------------
 .INCLUDE: target.mk
 # ------------------------------------------------------------------
 
-ALLTAR: convert $(fallbacklicenses) just_for_nice_optics
+ALLTAR: $(SOURCELICENCES) $(fallbacklicenses) just_for_nice_optics
 
 .IF "$(fallbacklicenses)"!=""
-$(fallbacklicenses) : convert
+$(fallbacklicenses) : $(SOURCELICENCES)
     @$(ECHON) .
     @$(COPY) $(@:d)$(@:b:s/_/./:b)_$(defaultlangiso)$(@:e) $@
 .ENDIF          # "$(fallbacklicenses)"!=""
 
 just_for_nice_optics: $(fallbacklicenses)
     @$(ECHONL)
-    @echo done.
 
-convert:
-    @echo converting license files
-    @-$(PERL) conv.pl -o $(MISC)
-# no conversion for *.rtf
-.IF "$(GUI)"=="WNT"
-    @$(COPY) source$/license$/wnt$/*.rtf $(SYSLICDEST)
-.ENDIF          # "$(GUI)"=="WNT"
+# for windows, convert linends to DOS
+$(SYSLICDEST)$/license_en-US.% : source$/license$/license_en-US.%
+    @$(MKDIRHIER) $(SYSLICDEST)
+    $(PERL) -p -e 's/\r?\n$$/\r\n/' < $< > $@
 
+# for others just copy
+$(SYSLICDEST)$/LICENSE_en-US : source$/license$/license_en-US.txt
+    @$(MKDIRHIER) $(SYSLICDEST)
+    $(COPY) $< $@
+
+$(SYSLICDEST)$/LICENSE_en-US.html : source$/license$/license_en-US.html
+    @$(MKDIRHIER) $(SYSLICDEST)
+    $(COPY) $< $@
