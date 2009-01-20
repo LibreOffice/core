@@ -915,7 +915,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
             if(pDrawView)
             {
                 // #i74769# work with SdrPaintWindow directly
-                pDrawView->EndDrawLayers(*pTargetPaintWindow);
+                pDrawView->EndDrawLayers(*pTargetPaintWindow, true);
             }
 
             pContentDev->SetMapMode(aCurrentMapMode);

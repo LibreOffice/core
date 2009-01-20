@@ -147,7 +147,7 @@ void ScOutputData::PostPrintDrawingLayer(const Point& rMMOffset) // #i74768#
         if(pLocalDrawView)
         {
             // #i74769# work with SdrPaintWindow directly
-            pLocalDrawView->EndDrawLayers(*mpTargetPaintWindow);
+            pLocalDrawView->EndDrawLayers(*mpTargetPaintWindow, true);
             mpTargetPaintWindow = 0;
         }
     }
