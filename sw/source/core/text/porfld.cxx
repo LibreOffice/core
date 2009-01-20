@@ -255,7 +255,7 @@ void SwFldPortion::CheckScript( const SwTxtSizeInfo &rInf )
         {
             UErrorCode nError = U_ZERO_ERROR;
             UBiDi* pBidi = ubidi_openSized( aTxt.Len(), 0, &nError );
-            ubidi_setPara( pBidi, aTxt.GetBuffer(), aTxt.Len(), nFldDir, NULL, &nError );
+            ubidi_setPara( pBidi, reinterpret_cast<const UChar *>(aTxt.GetBuffer()), aTxt.Len(), nFldDir, NULL, &nError );
             int32_t nEnd;
             UBiDiLevel nCurrDir;
             ubidi_getLogicalRun( pBidi, 0, &nEnd, &nCurrDir );

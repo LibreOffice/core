@@ -632,7 +632,7 @@ namespace sw
             UBiDiDirection eDefaultDir = bParaIsRTL ? UBIDI_RTL : UBIDI_LTR;
             UErrorCode nError = U_ZERO_ERROR;
             UBiDi* pBidi = ubidi_openSized(rTxt.Len(), 0, &nError);
-            ubidi_setPara(pBidi, rTxt.GetBuffer(), rTxt.Len(),
+            ubidi_setPara(pBidi, reinterpret_cast<const UChar *>(rTxt.GetBuffer()), rTxt.Len(),
                     static_cast< UBiDiLevel >(eDefaultDir), 0, &nError);
 
             sal_Int32 nCount = ubidi_countRuns(pBidi, &nError);

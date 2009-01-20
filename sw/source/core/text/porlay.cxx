@@ -1402,7 +1402,7 @@ void SwScriptInfo::UpdateBidiInfo( const String& rTxt )
     UBiDi* pBidi = ubidi_openSized( rTxt.Len(), 0, &nError );
     nError = U_ZERO_ERROR;
 
-    ubidi_setPara( pBidi, rTxt.GetBuffer(), rTxt.Len(),
+    ubidi_setPara( pBidi, reinterpret_cast<const UChar *>(rTxt.GetBuffer()), rTxt.Len(),    // UChar != sal_Unicode in MinGW
                    nDefaultDir, NULL, &nError );
     nError = U_ZERO_ERROR;
     long nCount = ubidi_countRuns( pBidi, &nError );
