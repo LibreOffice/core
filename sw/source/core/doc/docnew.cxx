@@ -186,7 +186,7 @@ void StartGrammarChecking( SwDoc &rDoc, SwRootFrm &rRootFrame )
         // start automatic background checking
         if ( xFPIP.is() && !xGCIterator->isProofreading( xDoc ) )
         {
-            rRootFrame.SetNeedGrammarCheck( false );
+            // rRootFrame.SetNeedGrammarCheck( false );
             rRootFrame.SetGrammarCheckActive( true );
             xGCIterator->startProofreading( xDoc, xFPIP );
         }

@@ -462,7 +462,6 @@ bGrammarResults(false)
 
     OUString aIgnoreSelection( String( SW_RES( STR_IGNORE_SELECTION ) ) );
     OUString aSpellingAndGrammar = RetrieveLabelFromCommand( C2U(".uno:SpellingAndGrammarDialog") );
-    const lang::Locale aUILocale( Application::GetSettings().GetUILocale() );
     SetItemText( MN_SPELLING, aSpellingAndGrammar );
     USHORT nItemPos = GetItemPos( MN_IGNORE );
     InsertItem( MN_IGNORE_SELECTION, aIgnoreSelection, 0, nItemPos );
@@ -648,7 +647,6 @@ aInfo16( SW_RES(IMG_INFO_16) )
 
     OUString aIgnoreSelection( String( SW_RES( STR_IGNORE_SELECTION ) ) );
     OUString aSpellingAndGrammar = RetrieveLabelFromCommand( C2U(".uno:SpellingAndGrammarDialog") );
-    const lang::Locale aUILocale( Application::GetSettings().GetUILocale() );
     SetItemText( MN_SPELLING, aSpellingAndGrammar );
     USHORT nItemPos = GetItemPos( MN_IGNORE );
     InsertItem( MN_IGNORE_SELECTION, aIgnoreSelection, 0, nItemPos );

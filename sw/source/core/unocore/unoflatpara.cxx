@@ -53,6 +53,7 @@
 #include <poolfmt.hxx>
 #include <pagedesc.hxx>
 #include <IGrammarContact.hxx>
+#include <viewopt.hxx>
 
 using namespace ::com::sun::star;
 
@@ -327,6 +328,11 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getNextPara()
         {
             if (mnType != text::TextMarkupType::SPELLCHECK || pCurrentPage->IsInvalidSpelling() )
             {
+                // this method is supposed to return an empty paragraph in case Online Checking is disabled
+                if ( ( mnType == text::TextMarkupType::PROOFREADING || mnType == text::TextMarkupType::SPELLCHECK )
+                    && !pViewShell->GetViewOptions()->IsOnlineSpell() )
+                    return xRet;
+
                 // search for invalid content:
                 SwCntntFrm* pCnt = pCurrentPage->ContainsCntnt();
 
