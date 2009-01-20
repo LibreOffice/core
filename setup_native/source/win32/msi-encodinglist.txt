@@ -31,6 +31,7 @@ fo    1252  1080   # Faroese
 fr    1252  1036
 fr-CA 1252  3084
 ga       0  2108   # Irish
+gd       0  1084   # Gaelic (Scotland)
 gl    1252  1110   # Galician
 gu    0  1095   # Gujarati
 gu-IN    0  1095   # Gujarati

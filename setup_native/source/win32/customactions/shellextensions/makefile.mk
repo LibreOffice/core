@@ -66,9 +66,14 @@ SLOFILES = \
     $(SLO)$/layerlinks.obj \
     $(SLO)$/dotnetcheck.obj \
     $(SLO)$/registerextensions.obj \
+<<<<<<< .working
     $(SLO)$/copyeditiondata.obj \
     $(SLO)$/checkrunningoffice.obj \
     $(SLO)$/checkpatches.obj
+=======
+    $(SLO)$/copyeditiondata.obj \
+    $(SLO)$/copyextensiondata.obj
+>>>>>>> .merge-right.r266571
 
 STDSHL += \
     $(ADVAPI32LIB)\

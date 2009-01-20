@@ -120,6 +120,9 @@ public class SolarisHelper {
         //     adminFile.add(baseDirLine);
         // }
 
+        String mailLine = "mail=";
+        adminFile.add(mailLine);
+
         String conflictLine = "conflict=quit";
         if ( data.isUserInstallation() ) { conflictLine = "conflict=nocheck"; }
         adminFile.add(conflictLine);
