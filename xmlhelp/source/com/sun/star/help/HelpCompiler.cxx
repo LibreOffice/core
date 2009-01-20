@@ -37,6 +37,10 @@
 #include <libxslt/xsltInternals.h>
 #include <libxslt/transform.h>
 #include <libxslt/xsltutils.h>
+#ifdef __MINGW32__
+#include <tools/prewin.h>
+#include <tools/postwin.h>
+#endif
 
 HelpCompiler::HelpCompiler(StreamTable &in_streamTable, const fs::path &in_inputFile,
     const fs::path &in_src, const fs::path &in_resEmbStylesheet,

@@ -79,6 +79,10 @@
 #include "assert.h"
 #include "ooofilt.hxx"
 #include "propspec.hxx"
+#ifdef __MINGW32__
+#include <algorithm>
+using ::std::min;
+#endif
 
 
 //C-------------------------------------------------------------------------

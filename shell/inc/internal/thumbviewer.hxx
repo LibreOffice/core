@@ -37,6 +37,11 @@
 #endif
 #include <objidl.h>
 #include <shlobj.h>
+#ifdef __MINGW32__
+#include <algorithm>
+using std::min;
+using std::max;
+#endif
 #include <gdiplus.h>
 #if defined _MSC_VER
 #pragma warning(pop)

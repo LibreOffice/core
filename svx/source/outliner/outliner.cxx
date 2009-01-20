@@ -2112,7 +2112,7 @@ sal_Bool DrawPortionInfo::IsRTL() const
         // I do not have this info here. Is it necessary? I'll have to ask MT.
         const BYTE nDefaultDir = UBIDI_LTR; //IsRightToLeft( nPara ) ? UBIDI_RTL : UBIDI_LTR;
 
-        ubidi_setPara(pBidi, mrText.GetBuffer(), mrText.Len(), nDefaultDir, NULL, &nError);
+        ubidi_setPara(pBidi, reinterpret_cast<const UChar *>(mrText.GetBuffer()), mrText.Len(), nDefaultDir, NULL, &nError);    // UChar != sal_Unicode in MinGW
         nError = U_ZERO_ERROR;
 
 //        sal_Int32 nCount(ubidi_countRuns(pBidi, &nError));

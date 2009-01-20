@@ -50,6 +50,7 @@
 #include <iostream>
 #include <vector>
 #include <sstream>
+#include <stdexcept>
 
 #if OSL_DEBUG_LEVEL > 2
     void dumpParameter();

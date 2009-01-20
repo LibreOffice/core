@@ -61,8 +61,12 @@ SLOFILES=	\
 SLOFILES+=	$(SLO)$/win.obj
 .ENDIF
 
-.IF "$(GUI)$(CPU)" == "WNTI"
+.IF "$(GUI)$(COM)$(CPU)" == "WNTMSCI"
 SLOFILES+=	$(SLO)$/wnt.obj
+.ENDIF
+
+.IF "$(GUI)$(COM)$(CPU)" == "WNTGCCI"
+SLOFILES+=	$(SLO)$/wnt-mingw.obj
 .ENDIF
 
 .IF "$(GUI)$(CPU)" == "OS2I"
@@ -80,3 +84,10 @@ EXCEPTIONSFILES=$(SLO)$/step0.obj	\
 
 .INCLUDE :  target.mk
 
+$(SLO)$/%.obj: %.s
+#kendy: Cut'n'paste from bridges/source/cpp_uno/mingw_intel/makefile.mk
+#cmc: Ideally --noexecstack would be in operations, but with #i51385# pyuno
+#remote bridgeing breaks
+#    $(CC) -Wa,--noexecstack -c -o $(SLO)$/$(@:b).o $<
+    $(CC) -c -o $(SLO)$/$(@:b).obj $<
+    touch $@

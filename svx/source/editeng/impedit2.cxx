@@ -1024,7 +1024,7 @@ EditPaM ImpEditEngine::CursorVisualStartEnd( EditView* pEditView, const EditPaM&
         UBiDi* pBidi = ubidi_openSized( aLine.Len(), 0, &nError );
 
         const UBiDiLevel  nBidiLevel = IsRightToLeft( nPara ) ? 1 /*RTL*/ : 0 /*LTR*/;
-        ubidi_setPara( pBidi, pLineString, aLine.Len(), nBidiLevel, NULL, &nError );
+        ubidi_setPara( pBidi, reinterpret_cast<const UChar *>(pLineString), aLine.Len(), nBidiLevel, NULL, &nError );   // UChar != sal_Unicode in MinGW
 
         USHORT nVisPos = bStart ? 0 : aLine.Len()-1;
         USHORT nLogPos = (USHORT)ubidi_getLogicalIndex( pBidi, nVisPos, &nError );
@@ -1146,7 +1146,7 @@ EditPaM ImpEditEngine::CursorVisualLeftRight( EditView* pEditView, const EditPaM
         UBiDi* pBidi = ubidi_openSized( aLine.Len(), 0, &nError );
 
         const UBiDiLevel  nBidiLevel = IsRightToLeft( nPara ) ? 1 /*RTL*/ : 0 /*LTR*/;
-        ubidi_setPara( pBidi, pLineString, aLine.Len(), nBidiLevel, NULL, &nError );
+        ubidi_setPara( pBidi, reinterpret_cast<const UChar *>(pLineString), aLine.Len(), nBidiLevel, NULL, &nError );   // UChar != sal_Unicode in MinGW
 
         if ( !pEditView->IsInsertMode() )
         {
@@ -1975,7 +1975,7 @@ void ImpEditEngine::InitWritingDirections( USHORT nPara )
         UBiDi* pBidi = ubidi_openSized( aText.Len(), 0, &nError );
         nError = U_ZERO_ERROR;
 
-        ubidi_setPara( pBidi, aText.GetBuffer(), aText.Len(), nBidiLevel, NULL, &nError );
+        ubidi_setPara( pBidi, reinterpret_cast<const UChar *>(aText.GetBuffer()), aText.Len(), nBidiLevel, NULL, &nError ); // UChar != sal_Unicode in MinGW
         nError = U_ZERO_ERROR;
 
         long nCount = ubidi_countRuns( pBidi, &nError );

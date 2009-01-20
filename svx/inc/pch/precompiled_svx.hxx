@@ -747,10 +747,10 @@
 #include "sot/exchange.hxx"
 #include "sot/factory.hxx"
 #include "sot/formats.hxx"
-#include "stl/map"
-#include "stl/set"
-#include "stl/slist"
-#include "stl/vector"
+#include <map>
+#include <set>
+#include <slist>
+#include <vector>
 #include "svtools/FilterConfigItem.hxx"
 #include "svtools/accessibilityoptions.hxx"
 #include "svtools/adrparse.hxx"
