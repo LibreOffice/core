@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: vendorlist.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.10.28.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -56,6 +56,7 @@ BEGIN_VENDOR_MAP()
     VENDOR_MAP_ENTRY("Apple Computer, Inc.", OtherInfo)
     VENDOR_MAP_ENTRY("BEA Systems, Inc.", OtherInfo)
     VENDOR_MAP_ENTRY("Free Software Foundation, Inc.", GnuInfo)
+    VENDOR_MAP_ENTRY("The FreeBSD Foundation", OtherInfo)
 END_VENDOR_MAP()
 
 
