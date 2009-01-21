@@ -28,7 +28,7 @@ AC_ARG_WITH(gnu-cp,
 AC_ARG_WITH(gpc,
 [  --without-gpc           Use the internal polygon clipping code instead of
                           the external GPC polygon clipping library.
-],,if test ! -e ../external/gpc/gpc.c && test ! -e ../external/gpc/gpc.h; then without_gpc=yes; fi)
+],,if test ! -e ./external/gpc/gpc.c && test ! -e ./external/gpc/gpc.h; then without_gpc=yes; fi)
 AC_ARG_ENABLE(ldap,
 [  --disable-ldap          Disables the use of LDAP backend via Netscape/Mozilla
                           or OpenLDAP LDAP SDK
@@ -90,6 +90,12 @@ AC_ARG_ENABLE(epm,
                           epm, however epm is useless for large scale
                           package building.
 ],,enable_epm="yes")
+AC_ARG_WITH(epm,
+[  --with-epm		  Decides which epm to use. Default is to use
+			  the one from the system if one is built. When
+			  either this is not there or you say =internal
+			  epm will be built.
+],,)
 AC_ARG_WITH(package-format,
 [  --with-package-format   specify package format(s) for OOo installsets.
                           Default is "normal" one of the OS/Distribution.
@@ -253,7 +259,7 @@ AC_ARG_ENABLE(kdeab,
 ],,if test "$enable_kde" = "yes"; then enable_kdeab=yes; fi)
 AC_ARG_ENABLE(binfilter,
 [  --disable-binfilter     Disable legacy binary file formats filters
-],,if ! test -d ../binfilter; then enable_binfilter=no; fi)
+],,if ! test -d ./binfilter; then enable_binfilter=no; fi)
 AC_ARG_ENABLE(rpath,
 [  --disable-rpath         Disable the use of relative paths in shared libraries
 ],,)
@@ -379,14 +385,14 @@ AC_ARG_WITH(beanshell-jar,
 AC_ARG_ENABLE(minimizer,
 [  --enable-minimizer          enables the build of the Presentation Minimizer extension
 ],,)
-AC_ARG_ENABLE(presenter-screen,
-[  --enable-presenter-screen          enables the build of the Presenter Screen extension
+AC_ARG_ENABLE(presenter-console,
+[  --enable-presenter-console          enables the build of the Presenter Console extension
 ],,)
 AC_ARG_ENABLE(pdfimport,
-[  --disable-pdfimport         disables the build of the PDF Import extension and xpdf
+[  --enable-pdfimport          enables the build of the PDF Import extension and xpdf
 ],,)
-AC_ARG_ENABLE(mediawiki,
-[  --disable-mediawiki     disables the build of the MediaWiki Editor extension
+AC_ARG_ENABLE(wiki-publisher,
+[  --enable-wiki-publisher      enables the build of the Wiki Publisher extension
 ],,)
 AC_ARG_WITH(commons-codec-jar,
 [  --with-commons-codec-jar=JARFILE   Specify path to jarfile manually ],
@@ -411,12 +417,9 @@ AC_ARG_WITH(servlet-api-jar,
 AC_ARG_ENABLE(ogltrans,
 [  --enable-ogltrans       enables the build of the OGLTrans extension
 ],,)
-AC_ARG_ENABLE(reportdesign,
-[  --disable-reportdesign  disables the build of the Report Builder extension
+AC_ARG_ENABLE(report-builder,
+[  --enable-report-builder  disables the build of the Report Builder extension
 ],,)
-AC_ARG_ENABLE(minimizer,
-[  --disable-minimizer          disables the build of the Presentation Minimizer extension
-],,enable_minimizer=yes)
 AC_ARG_WITH(system-jfreereport,
 [  --with-system-jfreereport      Use JFreeReport already on system
 ],,)
@@ -448,6 +451,10 @@ AC_ARG_WITH(libloader-jar,
 [  --with-libloader-jar=JARFILE   Specify path to jarfile manually ],
 [ LIBLOADER_JAR="$withval"
 ])
+AC_ARG_WITH(libloader-jar,
+[  --with-libloader-jar=JARFILE   Specify path to jarfile manually ],
+[ LIBLOADER_JAR="$withval"
+])
 AC_ARG_WITH(libformula-jar,
 [  --with-libformula-jar=JARFILE   Specify path to jarfile manually ],
 [ LIBFORMULA_JAR="$withval"
@@ -456,7 +463,7 @@ AC_ARG_WITH(librepository-jar,
 [  --with-librepository-jar=JARFILE   Specify path to jarfile manually ],
 [ LIBREPOSITORY_JAR="$withval"
 ])
-AC_ARG_WITH(libfonts-java-jar,
+AC_ARG_WITH(libfonts-jar,
 [  --with-libfonts-jar=JARFILE   Specify path to jarfile manually ],
 [ LIBFONTS_JAR="$withval"
 ])
@@ -641,13 +648,13 @@ AC_ARG_WITH(directx-home,
                           Usage: --with-directx-home=<absolute path to Microsoft DirectX SDK>
 ],,)
 AC_ARG_WITH(local-solenv,
-[  --with-local-solenv     If you have solenv in a location other than ../solenv,
+[  --with-local-solenv     If you have solenv in a location other than ./solenv,
                           please supply the path here.
  
                           Usage: --with-local-solenv=<absolute path to solenv>
 ],,)
 AC_ARG_WITH(local-solver,
-[  --with-local-solver     if you have solver in a location other than ../solver,
+[  --with-local-solver     if you have solver in a location other than ./solver,
                           please supply the path here.
  
                           Usage: --with-local-solver=<absolute path to solver>
@@ -827,16 +834,17 @@ fi
 AC_SUBST(LOCAL_SOLENV)
 
 if test "$LOCAL_SOLENV" = "DEFAULT"; then 
-  _solenv="../solenv"
+  _solenv="./solenv"
 else
   _solenv="$LOCAL_SOLENV"
 fi
+AC_SUBST(_solenv)
 
 if test -e $_solenv/inc/minor.mk; then
-   # Get UPD number from ../solenv/inc/minor.mk
-   UPD="`grep RSCVERSION= ../solenv/inc/minor.mk | $AWK -F"=" '{ print $2 }'`"
+   # Get UPD number from ./solenv/inc/minor.mk
+   UPD="`grep RSCVERSION= $_solenv/inc/minor.mk | $AWK -F"=" '{ print $2 }'`"
    AC_SUBST(UPD)
-   SOURCEVERSION="`grep SOURCEVERSION= ../solenv/inc/minor.mk | $AWK -F"=" '{ print $2 }'`"
+   SOURCEVERSION="`grep SOURCEVERSION= $_solenv/inc/minor.mk | $AWK -F"=" '{ print $2 }'`"
    AC_SUBST(SOURCEVERSION)
 else
    AC_MSG_ERROR([$_solenv/inc/minor.mk missing but needed for architecture/os detecion and proper environment script generation...])
@@ -845,7 +853,6 @@ fi
 dnl ===================================================================
 dnl Checks for the operating system and processor.
 dnl ===================================================================
-AC_CONFIG_AUX_DIRS([$_solenv/bin])
 AC_CANONICAL_SYSTEM
 if test "$build" != "$host" -o "$build" != "$target" \
   -o "$host" != "$target"; then
@@ -1288,6 +1295,13 @@ dnl The following sets the with_use_shell variable.
 dnl ===================================================================
 AC_MSG_CHECKING([which shell to use])
 if test $_os = "WINNT"; then
+   dnl Sanity check! expand.exe in cygwin could cause build error.
+   dnl ===================================================================
+      if test -x "/usr/bin/expand.exe" ; then
+         AC_MSG_ERROR([cygwin has expand.exe!
+The expand.exe in cygwin could cause build error. Please remove or rename it.])
+      fi
+   dnl ===================================================================
    if test "$with_use_shell" != "tcsh" -a "$with_use_shell" != "bash" -a "$with_use_shell" != "4nt"; then
       AC_MSG_ERROR([only "tcsh","bash" or "4nt" are supported options])
    fi
@@ -1480,28 +1494,25 @@ for a in "$MAKE" $GNUMAKE make gmake gnumake; do
       fi
 done
 AC_MSG_RESULT($GNUMAKE)
+if test -z "$GNUMAKE"; then
+    AC_MSG_ERROR([not found. install GNU make.])
+fi
 
 AC_MSG_CHECKING([the GNU make version])
-dnl Change empty GNUMAKE from warning to error, pending testing.
-if test -z "$GNUMAKE"; then
-    AC_MSG_WARN([not found build may fail])
-    echo "GNU make not found build may fail" >> warn
+_make_version=`$GNUMAKE --version | grep GNU | $SED -e 's@^[[^0-9]]*@@' -e 's@ .*@@' -e 's@,.*@@'`;
+_make_longver=`echo $_make_version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
+if test "$_make_longver" -ge "037901" ; then
+   AC_MSG_RESULT([$GNUMAKE $_make_version])
 else
-    _make_version=`$GNUMAKE --version | grep GNU | $SED -e 's@^[[^0-9]]*@@' -e 's@ .*@@' -e 's@,.*@@'`;
-    _make_longver=`echo $_make_version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
-    if test "$_make_longver" -ge "037901" ; then
-       AC_MSG_RESULT([$GNUMAKE $_make_version])
-    else
-       if test "$_os" = "Darwin"; then
-           if test "$_make_longver" -ge "037900" ; then
-			   AC_MSG_RESULT([$GNUMAKE $_make_version])
-           else
-               AC_MSG_WARN([failed ($GNUMAKE $_make_version need 3.79.0+)])
-           fi
+   if test "$_os" = "Darwin"; then
+       if test "$_make_longver" -ge "037900" ; then
+		   AC_MSG_RESULT([$GNUMAKE $_make_version])
        else
-           AC_MSG_ERROR([failed ($GNUMAKE $_make_version need 3.79.1+)])
+           AC_MSG_WARN([failed ($GNUMAKE $_make_version need 3.79.0+)])
        fi
-    fi
+   else
+       AC_MSG_ERROR([failed ($GNUMAKE $_make_version need 3.79.1+)])
+   fi
 fi
 AC_SUBST(GNUMAKE)
 
@@ -1647,7 +1658,7 @@ if test "$_os" = "WINNT"; then
 		AC_MSG_CHECKING([for friendly registry keys])
 		# VS.Net 2003, VS.Net 2005
 		if test -z "$with_cl_home"; then
-			vctest=`./oowintool --msvc-productdir`;
+			vctest=`./solenv/bin/oowintool --msvc-productdir`;
 			if test -x "$vctest/bin/cl.exe"; then
 				with_cl_home=$vctest;
 			fi
@@ -1773,13 +1784,13 @@ if test "$COMEX" -ge "10"; then
 		MIDL_PATH="$with_cl_home/../Common7/Tools/Bin"
 	fi
 	if test -z "$MIDL_PATH" ; then
-      vstest=`./oowintool --msvs-productdir`;
+      vstest=`./solenv/bin/oowintool --msvs-productdir`;
       if test -x "$vstest/Common7/Tools/Bin/midl.exe" ; then
 		  MIDL_PATH="$vstest/Common7/Tools/Bin"
       fi
 	fi
 	if test -z "$MIDL_PATH" ; then
-		psdktest=`./oowintool --psdk-home`
+		psdktest=`./solenv/bin/oowintool --psdk-home`
 		if test -x "$psdktest/Bin/midl.exe" ; then
 			MIDL_PATH="$psdktest/Bin"
 		fi
@@ -1802,7 +1813,7 @@ if test "$COMEX" -ge "10"; then
 	if test -x "$with_csc_path/csc.exe"; then
 		CSC_PATH="$with_csc_path"
 	else
-	   csctest=`./oowintool --csc-compilerdir`;
+	   csctest=`./solenv/bin/oowintool --csc-compilerdir`;
 	   if test -x "$csctest/csc.exe"; then
 	      CSC_PATH="$csctest"
 	   fi
@@ -1827,11 +1838,11 @@ if test "$COMEX" -ge "10"; then
 		    FRAME_HOME="$with_cl_home/../SDK/v1.1"
 	    fi
 	    if test -z "$FRAME_HOME" ; then
-          frametest=`./oowintool --dotnetsdk-dir`
+          frametest=`./solenv/bin/oowintool --dotnetsdk-dir`
           if test -f "$frametest/lib/mscoree.lib"; then
              FRAME_HOME="$frametest"
           else
-             frametest=`./oowintool --psdk-home`
+             frametest=`./solenv/bin/oowintool --psdk-home`
              if test -f "$frametest/lib/mscoree.lib"; then
                 FRAME_HOME="$frametest"
              fi
@@ -2292,25 +2303,29 @@ dnl ===================================================================
 dnl Checks for what the default STL should be
 dnl ===================================================================
    AC_MSG_CHECKING([what the default STL should be])
-   DEFAULT_TO_STLPORT="yes"
+   DEFAULT_TO_STLPORT="no"
    if test "$_os" = "Linux"; then
      case "$build_cpu" in
-       i?86|powerpc|sparc)
+       i?86)
          DEFAULT_TO_STLPORT="yes"
          ;;
        *)
          DEFAULT_TO_STLPORT="no"
          ;;
      esac
-   elif test "$_os" = "Darwin"; then
-      DEFAULT_TO_STLPORT="no"
+   elif test "$_os" = "SunOS"; then
+      DEFAULT_TO_STLPORT="yes"
    elif test "$_os" = "WINNT" -a "$WITH_MINGWIN" = "yes"; then
       DEFAULT_TO_STLPORT="no"
+   elif test "$_os" = "WINNT" -o "$_os" = "OS2"; then
+      DEFAULT_TO_STLPORT="yes" 
+   elif test "$_os" = "FreeBSD"; then
+      DEFAULT_TO_STLPORT="yes"
    fi
    if test "$DEFAULT_TO_STLPORT" = "yes"; then
       AC_MSG_RESULT([stlport])
    else
-      AC_MSG_RESULT([gcc])
+      AC_MSG_RESULT([system])
    fi
    if test "$WITH_STLPORT" = "auto"; then
       WITH_STLPORT=$DEFAULT_TO_STLPORT
@@ -2494,6 +2509,7 @@ _ACEOF
              gccvisbroken=yes; 
          fi
       fi
+      rm -f visibility.s
 
       AC_MSG_RESULT([$gccvisbroken])
       if test "$gccvisbroken" = "yes"; then
@@ -2569,7 +2585,7 @@ fi
 
 if test "$_os" = "WINNT"; then
    if test -z "$with_jdk_home"; then
-      _jdk_home=`./oowintool --jdk-home`
+      _jdk_home=`./solenv/bin/oowintool --jdk-home`
        if test -d "$_jdk_home"; then
           with_jdk_home="$_jdk_home"
        fi
@@ -2661,25 +2677,24 @@ if test "$SOLAR_JAVA" != ""; then
 #        JAVA_HOME=$with_jdk_home
 #
       elif test `$JAVAINTERPRETER -version 2>&1 | awk '{ print }' | grep -c "IBM"` -gt 0; then
-         AC_MSG_ERROR([No valid check available. Please check the block for your desired java in configure.in])
-#        JDK=ibm
-#
-#        dnl IBM JDK specific tests
-#        _jdk=`$JAVAINTERPRETER -version 2>&1 | $AWK -F'"' '{ print \$2 }' | $SED s/[[-A-Za-z]]*//`
-#        _jdk_ver=`echo "$_jdk" | $AWK -F. '{ print (($1 * 100) + $2) * 100 + $3;}'`
-#   
-#        if test "$_jdk_ver" -lt 10301; then
-#             AC_MSG_ERROR([IBM JDK is too old, you need at least 1.3.1])
-#        fi
-#
-#        AC_MSG_RESULT([checked (IBM JDK $_jdk)])
-#
-#        if test "$with_jdk_home" = ""; then
-#             AC_MSG_ERROR([In order to successfully build OpenOffice.org using the IBM JDK,
-#you must use the "--with-jdk-home" configure option explicitly])
-#        fi
-#
-#        JAVA_HOME=$with_jdk_home
+        JDK=ibm
+
+        dnl IBM JDK specific tests
+        _jdk=`$JAVAINTERPRETER -version 2>&1 | $AWK -F'"' '{ print \$2 }' | $SED s/[[-A-Za-z]]*//`
+        _jdk_ver=`echo "$_jdk" | $AWK -F. '{ print (($1 * 100) + $2) * 100 + $3;}'`
+   
+        if test "$_jdk_ver" -lt 10600; then
+             AC_MSG_ERROR([IBM JDK is too old, you need at least 1.6])
+        fi
+
+        AC_MSG_RESULT([checked (IBM JDK $_jdk)])
+
+        if test "$with_jdk_home" = ""; then
+             AC_MSG_ERROR([In order to successfully build OpenOffice.org using the IBM JDK,
+you must use the "--with-jdk-home" configure option explicitly])
+        fi
+
+        JAVA_HOME=$with_jdk_home
 	
       else	
         JDK=sun
@@ -3264,7 +3279,7 @@ if test "z$enable_odk" = "z" -o "$enable_odk" != "no"; then
    AC_MSG_RESULT([yes])
    if test "$WITH_JAVA" != "no"; then
    AC_MSG_CHECKING([for external/unowinreg/unowinreg.dll])
-   if ! test -f "../external/unowinreg/unowinreg.dll"; then
+   if ! test -f "./external/unowinreg/unowinreg.dll"; then
       HAVE_UNOWINREG_DLL=no
    else
       HAVE_UNOWINREG_DLL=yes
@@ -4091,11 +4106,11 @@ else
    enable_build_mozilla=1
    AC_MSG_RESULT([$MOZILLA_TOOLKIT])
 fi
-if test "$_os" = "Darwin" && test "$MOZILLA_TOOLKIT" != "gtk2"; then
-   #only gtk2 toolkit supported - xlib or cocoa nees glib1 and libIDL1 - the latter is not
-   #available using fink, mac (carbon) doesn't work because xcode installs conflicting headers
-   AC_MSG_ERROR([Only gtk2 toolkit supported on Mac, sorry.])
-fi
+#if test "$_os" = "Darwin" && test "$MOZILLA_TOOLKIT" != "gtk2"; then
+#   #only gtk2 toolkit supported - xlib or cocoa nees glib1 and libIDL1 - the latter is not
+#   #available using fink, mac (carbon) doesn't work because xcode installs conflicting headers
+#   AC_MSG_ERROR([Only gtk2 toolkit supported on Mac, sorry.])
+#fi
 
 AC_SUBST(MOZILLA_TOOLKIT)
 
@@ -4126,7 +4141,7 @@ if test "$BUILD_MOZAB" = "TRUE"; then
    fi
    for e in gz bz2; do
       AC_MSG_CHECKING([for $MOZILLA_SOURCE_VERSION.tar.$e])
-      if test ! -e "../moz/download/$MOZILLA_SOURCE_VERSION.tar.$e" && test "$HAVE_MOZILLA_TARBALL" != "y"; then
+      if test ! -e "./moz/download/$MOZILLA_SOURCE_VERSION.tar.$e" && test "$HAVE_MOZILLA_TARBALL" != "y"; then
          AC_MSG_RESULT([not found])
          HAVE_MOZILLA_TARBALL=n
       else
@@ -4142,9 +4157,9 @@ http://ftp.mozilla.org/pub/mozilla.org/mozilla/releases/mozilla$MOZILLA_VERSION/
    fi
    if test "$_os" = "WINNT"; then
       AC_MSG_CHECKING([for glib and libIDL binaries])
-      if test ! -e "../moz/download/vc71-glib-1.2.10-bin.zip" \
-           -o ! -e "../moz/download/vc71-libIDL-0.6.8-bin.zip" \
-           -o ! -e "../moz/download/wintools.zip" ; then
+      if test ! -e "./moz/download/vc71-glib-1.2.10-bin.zip" \
+           -o ! -e "./moz/download/vc71-libIDL-0.6.8-bin.zip" \
+           -o ! -e "./moz/download/wintools.zip" ; then
 AC_MSG_ERROR([One or more of the following archives is missing in moz/download/
   vc71-glib-1.2.10-bin.zip
   vc71-libIDL-0.6.8-bin.zip
@@ -4155,9 +4170,15 @@ AC_MSG_ERROR([One or more of the following archives is missing in moz/download/
          AC_MSG_RESULT([ok])
       fi
    elif test "$_os" = "Darwin"; then
-      # only gtk2 supported - see above
-      AC_MSG_NOTICE([checking whether mozilla can be built...])
-      PKG_CHECK_MODULES(MOZGTK2, gtk+-2.0 >= 2.4 libIDL-2.0 >= 0.8, AC_MSG_NOTICE([OK - can build mozilla]), AC_MSG_ERROR([Prerequisites to build mozilla not met. Either use the precompiled mozilla binaries or install the missing packages]))
+      if test "$MOZILLA_TOOLKIT" = "gtk2"; then
+         AC_MSG_NOTICE([checking whether mozilla can be built...])
+         PKG_CHECK_MODULES(MOZGTK2, gtk+-2.0 >= 2.4 libIDL-2.0 >= 0.8, AC_MSG_NOTICE([OK - can build mozilla]), AC_MSG_ERROR([Prerequisites to build mozilla not met. Either use the precompiled mozilla binaries or install the missing packages]))
+      else
+         PKG_CHECK_MODULES(MOZLIBREQ, libIDL >= 0.6.3 libIDL <= 0.6.8, MOZIDL="TRUE", MOZIDL="")
+         if test -z "$MOZIDL"; then
+            AC_MSG_ERROR([libIDL 0.6.3 - 0.6.8 is needed when not using GTK2 to build mozilla.])
+         fi
+      fi
    else
       # Generic Unix/Linux section
       if test "$MOZILLA_TOOLKIT" = "gtk2"; then
@@ -4312,6 +4333,8 @@ elif test "$_os" != "WINNT" ; then
    else
        AC_MSG_RESULT([yes])
        AC_CHECK_HEADERS(X11/Xaw/Label.h,[],[AC_MSG_ERROR([Xaw include headers not found])])
+       AC_CHECK_LIB(Xaw, main, [],
+           [AC_MSG_ERROR(Xaw library not found or functional)], [])
    fi
    dnl ===================================================================
 
@@ -4350,7 +4373,10 @@ else
 fi
 AC_SUBST(XINC)
 if test "$x_libraries" = "default_x_libraries"; then
-   XLIB="/usr/lib"
+   XLIB=`$PKG_CONFIG --variable=libdir x11`
+   if test "x$XLIB" = x; then
+         XLIB="/usr/lib"
+   fi
 else
    XLIB="$x_libraries"
 fi
@@ -4692,7 +4718,7 @@ if test \( "$_os" = "WINNT" \) ; then
 	AC_MSG_CHECKING([for PSDK files])
 	if test -z "$with_psdk_home"; then
 		# This first line will detect a February 2003 Microsoft Platform SDK
-		PSDK_HOME=`./oowintool --psdk-home`
+		PSDK_HOME=`./solenv/bin/oowintool --psdk-home`
         # But there might be also an April 2005 PSDK, unfortunately MS changed
         # the registry entry. (we prefer the old version!?)
         if test -z "$PSDK_HOME"; then
@@ -4820,7 +4846,7 @@ if test "$_os" = "WINNT" ; then
     if test -e "$with_nsis_path/nsis.exe"; then
         NSIS_PATH="$with_nsis_path"
     fi
-    nsistest=`./oowintool --nsis-dir`;
+    nsistest=`./solenv/bin/oowintool --nsis-dir`;
     if test -x "$nsistest/nsis.exe"; then
         NSIS_PATH="$nsistest"
     fi
@@ -5016,7 +5042,7 @@ dnl Windows builds need unicows.dll in external/unicows/
 dnl ===================================================================
 if test "$_os" = "WINNT"; then
    AC_MSG_CHECKING([for unicows.dll])
-   if test -x ../external/unicows/unicows.dll; then
+   if test -x ./external/unicows/unicows.dll; then
       AC_MSG_RESULT([found])
    else
       AC_MSG_ERROR([The Microsoft Layer for Unicode (unicows.dll) is missing in external/unicows/.
@@ -5032,7 +5058,7 @@ dnl Windows builds need dbghelp.dll in external/dbghelp/
 dnl ===================================================================
 if test "$_os" = "WINNT"; then
    AC_MSG_CHECKING([for dbghelp.dll])
-   if test -x ../external/dbghelp/dbghelp.dll; then
+   if test -x ./external/dbghelp/dbghelp.dll; then
       AC_MSG_RESULT([found])
    else
       AC_MSG_ERROR([dbghelp.dll is missing in external/dbghelp/.
@@ -5044,13 +5070,13 @@ may have to search Microsoft's website.) Last time it was seen at:
 fi
 
 dnl ===================================================================
-dnl Windows builds - use oowintool to copy CRT dlls and manifest
+dnl Windows builds - use solenv/bin/oowintool to copy CRT dlls and manifest
 dnl ===================================================================
 if test "$_os" = "WINNT"; then
-       if ./oowintool --msvc-copy-dlls ../external/msvcp ; then
+       if ./solenv/bin/oowintool --msvc-copy-dlls ./external/msvcp ; then
           :
        else
-          AC_MSG_ERROR([oowintool failed to copy CRT])
+          AC_MSG_ERROR([solenv/bin/oowintool failed to copy CRT])
        fi
 fi
 
@@ -5059,7 +5085,7 @@ dnl Windows builds need gdiplus.dll in external/gdiplus/
 dnl ===================================================================
 if test "$_os" = "WINNT"; then
    AC_MSG_CHECKING([for gdiplus.dll])
-   if test -x ../external/gdiplus/gdiplus.dll; then
+   if test -x ./external/gdiplus/gdiplus.dll; then
       AC_MSG_RESULT([found])
    else
       AC_MSG_ERROR([gdiplus.dll is missing in external/gdiplus/.
@@ -5073,7 +5099,7 @@ dnl ===================================================================
 dnl Windows builds - attempt to auto-copy required instmsiX.exe into external/
 dnl ===================================================================
 if test "$_os" = "WINNT"; then
-       ./oowintool --msvc-copy-instmsi ../external/msi
+       ./solenv/bin/oowintool --msvc-copy-instmsi ./external/msi
 fi
 
 dnl ===================================================================
@@ -5082,14 +5108,14 @@ dnl ===================================================================
 if test "$_os" = "WINNT"; then
    if test "$COMEX" -ge "10"; then
    AC_MSG_CHECKING([for instmsia.exe/instmsiw.exe])
-   if test -x ../external/msi/instmsia.exe -a -x ../external/msi/instmsiw.exe; then
+   if test -x ./external/msi/instmsia.exe -a -x ./external/msi/instmsiw.exe; then
       AC_MSG_RESULT([found])
    else
       MSIAPATH=`/bin/find "$COMPATH/../.." -iname instmsia.exe | head -n 1`
       MSIWPATH=`/bin/find "$COMPATH/../.." -iname instmsiw.exe | head -n 1`
       if test -n "$MSIAPATH" -a -n "$MSIWPATH"; then
-         cp "$MSIAPATH" ../external/msi/ && chmod +x ../external/msi/instmsia.exe && MSIACOPY="OK"
-         cp "$MSIWPATH" ../external/msi/ && chmod +x ../external/msi/instmsiw.exe && MSIWCOPY="OK"
+         cp "$MSIAPATH" ./external/msi/ && chmod +x ./external/msi/instmsia.exe && MSIACOPY="OK"
+         cp "$MSIWPATH" ./external/msi/ && chmod +x ./external/msi/instmsiw.exe && MSIWCOPY="OK"
       fi
       if test -z "$MSIACOPY" -o -z "$MSIWCOPY"; then
          AC_MSG_ERROR([instmsia.exe and/or instmsiw.exe are/is missing in the default location.
@@ -5115,12 +5141,12 @@ if test "$with_gpc" != "no" && test "$without_gpc" != "yes"; then
   AC_MSG_RESULT([GPC])
 
   AC_MSG_CHECKING([for GPC files])
-  if test -f ../external/gpc/gpc.h; then
+  if test -f ./external/gpc/gpc.h; then
 	HAVE_GPC_H="yes"
   else
 	HAVE_GPC_H="no"
   fi
-  if test -f ../external/gpc/gpc.c; then
+  if test -f ./external/gpc/gpc.c; then
 	HAVE_GPC_C="yes"
   else
 	HAVE_GPC_C="no"
@@ -5334,7 +5360,7 @@ fi
 AC_SUBST(ENABLE_MINIMIZER)
 
 AC_MSG_CHECKING([whether to build the Presenter Screen extension])
-if test -n "$enable_presenter_screen" -a "$enable_presenter_screen" != "no"; then
+if test -n "$enable_presenter_console" -a "$enable_presenter_screen" != "no"; then
    AC_MSG_RESULT([yes])
    ENABLE_PRESENTER_SCREEN=YES
 else
@@ -5342,10 +5368,6 @@ else
    ENABLE_PRESENTER_SCREEN=NO
 fi
 AC_SUBST(ENABLE_PRESENTER_SCREEN)
-
-if test "$ENABLE_PRESENTER_SCREEN" = "YES" -o "$ENABLE_MINIMIZER" = "YES"; then
-   BUILD_TYPE="$BUILD_TYPE SDEXT"
-fi
 
 AC_MSG_CHECKING([whether to build the PDF Import extension])
 if test -n "$enable_pdfimport" -a "$enable_pdfimport" != "no"; then
@@ -5357,7 +5379,7 @@ if test -n "$enable_pdfimport" -a "$enable_pdfimport" != "no"; then
   dnl ===================================================================
   AC_MSG_CHECKING([which pdf backend to use])
   if test -n "$with_system_poppler" -o -n "$with_system_libs" && \
-  	test "$with_system_poppler" != "no"; then
+       test "$with_system_poppler" != "no"; then
       AC_MSG_RESULT([external])
       SYSTEM_POPPLER=YES
       PKG_CHECK_MODULES( POPPLER, poppler >= 0.8.0 )
@@ -5365,20 +5387,41 @@ if test -n "$enable_pdfimport" -a "$enable_pdfimport" != "no"; then
       AC_MSG_RESULT([internal])
       SYSTEM_POPPLER=NO
       BUILD_TYPE="$BUILD_TYPE XPDF"
+      AC_MSG_CHECKING([for xpdf module])
+      if test -d ./xpdf; then
+       AC_MSG_RESULT([OK])
+      else
+        AC_MSG_ERROR([not existing. get it (did you get the -extensions tarball?)])
+      fi
   fi
-
 else
-  AC_MSG_RESULT([no])
-  ENABLE_PDFIMPORT=NO
+   AC_MSG_RESULT([no])
+   ENABLE_PDFIMPORT=NO
 fi
 AC_SUBST(ENABLE_PDFIMPORT)
 AC_SUBST(SYSTEM_POPPLER)
 AC_SUBST(POPPLER_CFLAGS)
 AC_SUBST(POPPLER_LIBS)
 
-AC_MSG_CHECKING([whether to build the MediaWiki Editor extension])
-if test -n "$enable_mediawiki" -a "$enable_mediawiki" != "no" && test "$WITH_JAVA" != "no"; then
+if test "$ENABLE_PRESENTER_SCREEN" = "YES" -o "$ENABLE_MINIMIZER" = "YES" -o "$ENABLE_PDFIMPORT" = "YES"; then
+  AC_MSG_CHECKING([for sdext module])
+  if test -d ./sdext; then
+   AC_MSG_RESULT([OK])
+  else
+   AC_MSG_ERROR([not existing. get it (did you get the -extensions tarball?)])
+  fi
+  BUILD_TYPE="$BUILD_TYPE SDEXT"
+fi
+
+AC_MSG_CHECKING([whether to build the Wiki Publisher extension])
+if test -n "$enable_wiki_publisher" -a "$enable_wiki_publisher" != "no" && test  "$WITH_JAVA" != "no"; then
   AC_MSG_RESULT([yes])
+  AC_MSG_CHECKING([for swext module])
+  if test -d ./swext; then
+   AC_MSG_RESULT([OK])
+  else
+   AC_MSG_ERROR([not existing. get it (did you get the -extensions tarball?)])
+  fi
   ENABLE_MEDIAWIKI=YES
   AC_MSG_CHECKING([which Apache commons-* libs to use])
   if test "$with_system_apache_commons" == "yes"; then
@@ -5451,9 +5494,9 @@ AC_SUBST(SYSTEM_SERVLETAPI)
 AC_SUBST(SERVLETAPI_JAR)
 
 AC_MSG_CHECKING([whether to build the Report Builder extension])
-if test -n "$enable_reportdesign" -a "$enable_reportdesign" != "no" && test "$WITH_JAVA" != "no"; then
+if test -n "$enable_report_builder" -a "$enable_report_builder" != "no" && test "$WITH_JAVA" != "no"; then
   AC_MSG_RESULT([yes])
-  ENABLE_REPORTDESIGN=YES
+  ENABLE_REPORTBUILDER=YES
   AC_MSG_CHECKING([which jfreereport libs to use])
   if test "$with_system_jfreereport" == "yes"; then
    	SYSTEM_JFREEREPORT=YES
@@ -5616,16 +5659,22 @@ if test -n "$enable_reportdesign" -a "$enable_reportdesign" != "no" && test "$WI
 
   else
      AC_MSG_RESULT([internal])
+     AC_MSG_CHECKING([for jfreereport module])
+     if test -d ./jfreereport; then
+      AC_MSG_RESULT([OK]) 
+     else
+      AC_MSG_ERROR([not existing. get it (did you get the -extensions tarball?)])
+     fi
      SYSTEM_JFREEREPORT=NO
      BUILD_TYPE="$BUILD_TYPE JFREEREPORT"
   fi
   BUILD_TYPE="$BUILD_TYPE REPORTDESIGN"
 else
   AC_MSG_RESULT([no])
-  ENABLE_REPORTDESIGN=NO
+  ENABLE_REPORTBUILDER=NO
   SYSTEM_JFREEREPORT=NO
 fi
-AC_SUBST(ENABLE_REPORTDESIGN)
+AC_SUBST(ENABLE_REPORTBUILDER)
 AC_SUBST(SYSTEM_JFREEREPORT)
 AC_SUBST(JCOMMON_JAR)
 AC_SUBST(SAC_JAR)
@@ -6322,9 +6371,9 @@ AC_SUBST(LOCAL_SOLVER)
 AC_SUBST(BUILD_TYPE)
 
 # make sure config.guess is +x; we execute config.guess, so it has to be so; 
-chmod +x $_solenv/bin/config.guess
+chmod +x ./config.guess
 
-AC_OUTPUT([set_soenv])
+AC_OUTPUT([set_soenv Makefile])
 
 dnl Executing the set_soenv script to setup the environment variables.
 chmod a+x set_soenv

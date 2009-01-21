@@ -105,12 +105,7 @@ my ( $dmake, $build, $build_client, $nmake, $mkout, $deliver, $zipdep );
 #
 # $platform is needed for PathFormat()
 #
-if ('@LOCAL_SOLENV@' eq "DEFAULT")
-{  $platform          = `../solenv/bin/config.guess`;
-}
-else
-{  $platform           = `@LOCAL_SOLENV@/bin/config.guess`;
-}
+$platform          = `./config.guess`;
 chomp( $platform );
 
 $UPD            = '@UPD@';          # the project's UPD
@@ -399,6 +394,7 @@ elsif ( $platform =~ m/linux/ )
       else {      
       $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386";
        $JREEXTRALIBDIR = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."xawt";
+      # has both server and client
       $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."client";
       $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."native_threads";
       }
@@ -420,6 +416,7 @@ elsif ( $platform =~ m/linux/ )
       $OUTPATH        = "unxlngx6";
       # Blackdown.org JDK porting project uses `amd64' and `server' in JDK 1.4.2 RC1
       $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."amd64";
+      # has both server and client
       $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."amd64".$ds."server";
       $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."amd64".$ds."native_threads";
       $JREEXTRALIBDIR = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."amd64".$ds."xawt";
@@ -444,7 +441,7 @@ elsif ( $platform =~ m/linux/ )
       $CPUNAME        = "SPARC";
       $OUTPATH        = "unxlngs";
       $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."sparc";
-      $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."sparc".$ds."client";
+      $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."sparc".$ds."server";
       $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."sparc".$ds."native_threads";
       $JREEXTRALIBDIR = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."sparc".$ds."xawt";
    }
@@ -473,18 +470,18 @@ elsif ( $platform =~ m/linux/ )
             $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc".$ds."client";
             $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc".$ds."native_threads"; }
          elsif ($JDK =~ m/^[Ii][Bb][Mm]/)
-         {  $JRELIBDIR     = '$JAVA_HOME'.$ds."jre".$ds."bin";
-            $JRETOOLKITDIR = '$JAVA_HOME'.$ds."jre".$ds."bin".$ds."classic";
-            $JRETHREADDIR  = '$JAVA_HOME'.$ds."jre".$ds."bin";
-            $JREEXTRALIBDIR = '$JAVA_HOME'.$ds."jre".$ds."bin".$ds."xawt";
+         {  $JRELIBDIR     = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc";
+            $JRETOOLKITDIR = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc".$ds."classic";
+            $JRETHREADDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc";
+            $JREEXTRALIBDIR = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc".$ds."xawt";
          }
-         else { 
-	    # OpenJDK (aka JDK=sun)
-            $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."powerpc";
-            $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."powerpc".$ds."client";
-            $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."powerpc".$ds."native_threads";
-      	    $JREEXTRALIBDIR = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."powerpc".$ds."xawt";
-         }
+	 # OpenJDK
+	 elsif ($JDK =~ m/sun/) {
+	    $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc";
+	    $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc".$ds."client";
+	    $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc".$ds."native_threads";
+	    $JREEXTRALIBDIR = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc".$ds."xawt";
+	 }
       }
 
       $CPU            = "P";
@@ -507,7 +504,7 @@ elsif ( $platform =~ m/linux/ )
          $OUTPATH        = "unxlngs390";
       }
       $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds.$ARCH;
-      $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds.$ARCH.$ds."client";
+      $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds.$ARCH.$ds."server";
       $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds.$ARCH.$ds."native_threads";
       $JREEXTRALIBDIR = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds.$ARCH.$ds."xawt";
       $CPU            = "3";
@@ -531,7 +528,7 @@ elsif ( $platform =~ m/linux/ )
       $CPUNAME        = "ALPHA_";
       $OUTPATH        = "unxlnga";
       $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."alpha";
-      $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."alpha".$ds."client";
+      $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."alpha".$ds."server";
       $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."alpha".$ds."native_threads";
    }
    elsif ($platform =~ m/^arm.*?l-/)
@@ -541,8 +538,9 @@ elsif ( $platform =~ m/linux/ )
       $CPUNAME        = "ARM";
       $OUTPATH        = "unxlngr";
       $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."arm";
-      $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."arm".$ds."client";
+      $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."arm".$ds."server";
       $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."arm".$ds."native_threads";
+      $JREEXTRALIBDIR = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."arm".$ds."xawt";
       $EPM_FLAGS      = "-a arm";
    }
    elsif ($platform =~ m/^mips/)
@@ -1728,7 +1726,7 @@ ToFile( "ENABLE_OPENGL",     "@ENABLE_OPENGL@",    "e" );
 ToFile( "ENABLE_PDFIMPORT",  "@ENABLE_PDFIMPORT@", "e" );
 ToFile( "ENABLE_MINIMIZER",   "@ENABLE_MINIMIZER@","e" );
 ToFile( "ENABLE_PRESENTER_SCREEN","@ENABLE_PRESENTER_SCREEN@","e" );
-ToFile( "ENABLE_REPORTDESIGN","@ENABLE_REPORTDESIGN@","e" );
+ToFile( "ENABLE_REPORTBUILDER","@ENABLE_REPORTBUILDER@","e" );
 ToFile( "SYSTEM_JFREEREPORT","@SYSTEM_JFREEREPORT@","e" );
 ToFile( "JCOMMON_JAR",       "@JCOMMON_JAR@",      "e" );
 ToFile( "SAC_JAR",           "@SAC_JAR@",          "e" );
