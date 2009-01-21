@@ -55,7 +55,11 @@ $(COMMONMISC)$/readme.dtd : ..$/readme.dtd
 virtual : $(MERGEDXRM) $(COMMONMISC)$/readme.dtd $(PRJ)$/docs/readme.xsl
 
 $(MISC)$/readme_text.xsl : virtual
+.IF "$(USE_SHELL)"!="4nt"
     $(SED) 's#method="html".*>#method="text"/>#' < ..$/readme.xsl > $@
+.ELSE			# "$(USE_SHELL)"!="4nt"
+    $(SED) "s/method=\"html\".*>/method=\"text\"\/>/" < ..$/readme.xsl > $@
+.ENDIF			# "$(USE_SHELL)"!="4nt"
 
 $(MISC)$/$(GUI)$/$(eq,$(GUI),WNT readme README)_%.html : 'virtual'
     $(XSLTPROC) --nonet -o $@ \

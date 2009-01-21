@@ -35,14 +35,14 @@ just_for_nice_optics: $(fallbacklicenses)
 
 # for windows, convert linends to DOS
 $(SYSLICDEST)$/license_en-US.% : source$/license$/license_en-US.%
-    @$(MKDIRHIER) $(SYSLICDEST)
+    @-$(MKDIRHIER) $(SYSLICDEST)
     $(PERL) -p -e 's/\r?\n$$/\r\n/' < $< > $@
 
 # for others just copy
 $(SYSLICDEST)$/LICENSE_en-US : source$/license$/license_en-US.txt
-    @$(MKDIRHIER) $(SYSLICDEST)
+    @-$(MKDIRHIER) $(SYSLICDEST)
     $(COPY) $< $@
 
 $(SYSLICDEST)$/LICENSE_en-US.html : source$/license$/license_en-US.html
-    @$(MKDIRHIER) $(SYSLICDEST)
+    @-$(MKDIRHIER) $(SYSLICDEST)
     $(COPY) $< $@
