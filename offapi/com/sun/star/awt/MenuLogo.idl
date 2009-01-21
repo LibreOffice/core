@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: TextFields.idl,v $
- * $Revision: 1.10.122.1 $
+ * $RCSfile: MenuLogo.idl,v $
+ * $Revision: 1.0 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,41 +27,42 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_text_TextFields_idl__
-#define __com_sun_star_text_TextFields_idl__
+#ifndef __com_sun_star_awt_MenuLogo_idl__
+#define __com_sun_star_awt_MenuLogo_idl__
 
-#ifndef __com_sun_star_container_XEnumerationAccess_idl__
-#include <com/sun/star/container/XEnumerationAccess.idl>
+#ifndef com_sun_star_graphic_XGraphic_idl
+#include <com/sun/star/graphic/XGraphic.idl>
 #endif
 
-#ifndef __com_sun_star_util_XRefreshable_idl__
-#include <com/sun/star/util/XRefreshable.idl>
+#ifndef __com_sun_star_util_color_idl__
+#include <com/sun/star/util/Color.idl>
 #endif
 
 //=============================================================================
 
- module com {  module sun {  module star {  module text {
+ module com {  module sun {  module star {  module awt {
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::text::TextFields
-/** This is a collection of <type>TextField</type> instances.
+/** specifies a logo to be displayed on a menu, with a background gradient.
  */
-published service TextFields
+struct MenuLogo
 {
-
-    // DocMerge from xml: service com::sun::star::text::TextFields: interface com::sun::star::container::XEnumerationAccess
-    /** This interface makes it possible to create an enumeration through
-                all text fields in this container.
-
-        <p>All elements are of type <type>XTextField</type>.</p>
+    /** specifies the logo image.
      */
-    interface com::sun::star::container::XEnumerationAccess;
+    ::com::sun::star::graphic::XGraphic Graphic;
 
+    //-------------------------------------------------------------------------
 
-    /** makes it possible to refresh (recalculate etc.) all fields.
-    */
-    interface com::sun::star::util::XRefreshable;
+    /** specifies the color at the start point of the gradient.
+     */
+    ::com::sun::star::util::Color StartColor;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the color at the end point of the gradient.
+     */
+    ::com::sun::star::util::Color EndColor;
 
 };
 

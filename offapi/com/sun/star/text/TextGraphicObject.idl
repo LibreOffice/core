@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TextGraphicObject.idl,v $
- * $Revision: 1.12 $
+ * $Revision: 1.12.122.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -57,7 +57,7 @@
 
 //=============================================================================
 
-/** specifies a graphic which can be embedded in <type scope="com::sun::star::drawing">Text</type>.
+/** specifies a graphic which can be embedded in <type>Text</type>.
  */
 published service TextGraphicObject
 {

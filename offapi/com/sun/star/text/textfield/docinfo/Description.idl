@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: Description.idl,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.122.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,6 +45,8 @@ module com { module sun { module star {
 */
 published service Description
 {
+    service  com::sun::star::text::TextField;
+
     /** contains content information.
      */
     [property] string Content;

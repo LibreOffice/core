@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: TextFields.idl,v $
- * $Revision: 1.10.122.1 $
+ * $RCSfile: MenuItemType.idl,v $
+ * $Revision: 1.0 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,41 +27,40 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_text_TextFields_idl__
-#define __com_sun_star_text_TextFields_idl__
+#ifndef __com_sun_star_awt_MenuItemType_idl__
+#define __com_sun_star_awt_MenuItemType_idl__
 
-#ifndef __com_sun_star_container_XEnumerationAccess_idl__
-#include <com/sun/star/container/XEnumerationAccess.idl>
-#endif
-
-#ifndef __com_sun_star_util_XRefreshable_idl__
-#include <com/sun/star/util/XRefreshable.idl>
-#endif
 
 //=============================================================================
 
- module com {  module sun {  module star {  module text {
+ module com {  module sun {  module star {  module awt {
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::text::TextFields
-/** This is a collection of <type>TextField</type> instances.
+/** specifies the type of a menu item, as returned by
+    <member scope="com::sun::star::awt">XMenuExtended2::getItemType()</member>.
  */
-published service TextFields
+enum MenuItemType
 {
-
-    // DocMerge from xml: service com::sun::star::text::TextFields: interface com::sun::star::container::XEnumerationAccess
-    /** This interface makes it possible to create an enumeration through
-                all text fields in this container.
-
-        <p>All elements are of type <type>XTextField</type>.</p>
-     */
-    interface com::sun::star::container::XEnumerationAccess;
-
-
-    /** makes it possible to refresh (recalculate etc.) all fields.
+    /** specifies that the menu item type is unkown.
     */
-    interface com::sun::star::util::XRefreshable;
+    DONTKNOW,
+
+    /** specifies that the menu item has a text.
+    */
+    STRING,
+
+    /** specifies that the menu item has an image.
+    */
+    IMAGE,
+
+    /** specifies that the menu item has a text <b>and</b> an image.
+    */
+    STRINGIMAGE,
+
+    /** specifies that the menu item is a separator.
+    */
+    SEPARATOR
 
 };
 

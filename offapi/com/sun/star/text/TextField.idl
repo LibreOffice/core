@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TextField.idl,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.122.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,7 +49,7 @@
 
 //=============================================================================
 
-/** A <type scope="com::sun::star::form::component">TextField</type> is a <type>TextContent</type> which fades its
+/** A <type>TextField</type> is a <type>TextContent</type> which fades its
     textual representation into the text range to which it is anchored.
  */
 published service TextField

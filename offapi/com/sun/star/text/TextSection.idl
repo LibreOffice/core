@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TextSection.idl,v $
- * $Revision: 1.13 $
+ * $Revision: 1.13.40.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -69,7 +69,7 @@
 module com { module sun { module star { module text {
 
 //=============================================================================
-/** A <type>TextSection</type> is a range of complete paragraphs within a text.  @
+/** A <type>TextSection</type> is a range of complete paragraphs within a text.
 
     <p>The content of the section may be the content of a link into another
     document, a link from the same document, or the result of a DDE

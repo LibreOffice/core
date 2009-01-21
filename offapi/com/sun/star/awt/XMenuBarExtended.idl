@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: TextFields.idl,v $
- * $Revision: 1.10.122.1 $
+ * $RCSfile: XMenuBarExtended.idl,v $
+ * $Revision: 1.0 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,42 +27,42 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_text_TextFields_idl__
-#define __com_sun_star_text_TextFields_idl__
+#ifndef __com_sun_star_awt_XMenuBarExtended_idl__
+#define __com_sun_star_awt_XMenuBarExtended_idl__
 
-#ifndef __com_sun_star_container_XEnumerationAccess_idl__
-#include <com/sun/star/container/XEnumerationAccess.idl>
+#ifndef __com_sun_star_awt_XMenuBar_idl__
+#include <com/sun/star/awt/XMenuBar.idl>
 #endif
 
-#ifndef __com_sun_star_util_XRefreshable_idl__
-#include <com/sun/star/util/XRefreshable.idl>
+#ifndef __com_sun_star_awt_XMenuExtended2_idl__
+#include <com/sun/star/awt/XMenuExtended2.idl>
+#endif
+
+#ifndef com_sun_star_graphic_XGraphic_idl
+#include <com/sun/star/graphic/XGraphic.idl>
+#endif
+
+#ifndef __com_sun_star_awt_Rectangle_idl__
+#include <com/sun/star/awt/Rectangle.idl>
 #endif
 
 //=============================================================================
 
- module com {  module sun {  module star {  module text {
+ module com {  module sun {  module star {  module awt {
+
+ interface XMenuBarButtonListener;
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::text::TextFields
-/** This is a collection of <type>TextField</type> instances.
+/** multiple-inheritance interface designed to ease the use of all functions
+    available for a <type scope="com::sun::star::awt">MenuBar</type>.
+
+    @since OOo 3.1
  */
-published service TextFields
+ interface XMenuBarExtended
 {
-
-    // DocMerge from xml: service com::sun::star::text::TextFields: interface com::sun::star::container::XEnumerationAccess
-    /** This interface makes it possible to create an enumeration through
-                all text fields in this container.
-
-        <p>All elements are of type <type>XTextField</type>.</p>
-     */
-    interface com::sun::star::container::XEnumerationAccess;
-
-
-    /** makes it possible to refresh (recalculate etc.) all fields.
-    */
-    interface com::sun::star::util::XRefreshable;
-
+    interface com::sun::star::awt::XMenuExtended2;
+    interface com::sun::star::awt::XMenuBar;
 };
 
 //=============================================================================

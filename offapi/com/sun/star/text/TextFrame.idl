@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: TextFrame.idl,v $
- * $Revision: 1.14 $
+ * $Revision: 1.14.122.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,8 +44,8 @@
 
 //=============================================================================
 
-/** specifies a rectangular shape which contains a <type scope="com::sun::star::drawing">Text</type> object
-    and is attached to a piece of surrounding <type scope="com::sun::star::drawing">Text</type>.
+/** specifies a rectangular shape which contains a <type>Text</type> object
+    and is attached to a piece of surrounding <type>Text</type>.
 
     @see Text
 
