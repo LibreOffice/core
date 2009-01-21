@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unopkg_misc.cxx,v $
- * $Revision: 1.15 $
+ * $Revision: 1.15.52.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,7 +42,7 @@
 #include "rtl/strbuf.hxx"
 #include "rtl/ustrbuf.hxx"
 #include "osl/process.h"
-#include "osl/file.h"
+#include "osl/file.hxx"
 #include "osl/thread.hxx"
 #include "tools/getprocessworkingdir.hxx"
 #include "ucbhelper/contentbroker.hxx"
@@ -54,27 +54,29 @@
 #include <stdio.h>
 
 using ::rtl::OUString;
+using ::rtl::OString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
 
 namespace unopkg {
 
+bool getLockFilePath(OUString & out);
 
-::rtl::OString toString( OptionInfo const * info )
+::rtl::OUString toString( OptionInfo const * info )
 {
     OSL_ASSERT( info != 0 );
-    ::rtl::OStringBuffer buf;
-    buf.append( RTL_CONSTASCII_STRINGPARAM("--") );
-    buf.append( info->m_name, info->m_name_length );
+    ::rtl::OUStringBuffer buf;
+    buf.appendAscii("--");
+    buf.appendAscii(info->m_name);
     if (info->m_short_option != '\0')
     {
-        buf.append( RTL_CONSTASCII_STRINGPARAM(" (short -") );
-        buf.append( static_cast< char >(info->m_short_option) );
-        buf.append( ')' );
+        buf.appendAscii(" (short -" );
+        buf.append(info->m_short_option );
+        buf.appendAscii(")");
     }
     if (info->m_has_argument)
-        buf.append( RTL_CONSTASCII_STRINGPARAM(" <argument>") );
+        buf.appendAscii(" <argument>" );
     return buf.makeStringAndClear();
 }
 
@@ -126,19 +128,16 @@ bool isOption( OptionInfo const * option_info, sal_uInt32 * pIndex )
     if (len == 2 && arg[ 1 ] == option_info->m_short_option)
     {
         ++(*pIndex);
-#if OSL_DEBUG_LEVEL > 1
-        OSL_TRACE(
-            __FILE__": identified option \'%c\'", option_info->m_short_option );
-#endif
+        dp_misc::TRACE(OUSTR(__FILE__": identified option \'")
+            + OUSTR("\'") + OUString( option_info->m_short_option ) + OUSTR("\n"));
         return true;
     }
     if (arg[ 1 ] == '-' && rtl_ustr_ascii_compare(
             arg.pData->buffer + 2, option_info->m_name ) == 0)
     {
         ++(*pIndex);
-#if OSL_DEBUG_LEVEL > 1
-        OSL_TRACE( __FILE__": identified option \'%s\'", option_info->m_name );
-#endif
+        dp_misc::TRACE(OUSTR( __FILE__": identified option \'")
+            + OUString::createFromAscii(option_info->m_name) + OUSTR("\'\n"));
         return true;
     }
     return false;
@@ -169,12 +168,8 @@ bool readArgument(
         {
             OSL_ASSERT( pValue != 0 );
             osl_getCommandArg( *pIndex, &pValue->pData );
-#if OSL_DEBUG_LEVEL > 1
-            OSL_TRACE(
-                __FILE__": argument value: %s\n",
-                ::rtl::OUStringToOString(
-                    *pValue, osl_getThreadTextEncoding() ).getStr() );
-#endif
+            dp_misc::TRACE(OUSTR( __FILE__": argument value: ")
+                + *pValue + OUSTR("\n"));
             ++(*pIndex);
             return true;
         }
@@ -270,18 +265,15 @@ namespace {
 inline void printf_space( sal_Int32 space )
 {
     while (space--)
-        printf( "  " );
+        dp_misc::writeConsole("  ");
 }
 
 //------------------------------------------------------------------------------
 void printf_line(
     OUString const & name, OUString const & value, sal_Int32 level )
 {
-    rtl_TextEncoding textenc = osl_getThreadTextEncoding();
-    printf_space( level );
-    printf( "%s: %s\n",
-            ::rtl::OUStringToOString( name, textenc ).getStr(),
-            ::rtl::OUStringToOString( value, textenc ).getStr() );
+   printf_space( level );
+    dp_misc::writeConsole(name + OUSTR(": ") + value + OUSTR("\n"));
 }
 
 //------------------------------------------------------------------------------
@@ -327,10 +319,10 @@ void printf_package(
         Sequence< Reference<deployment::XPackage> > seq(
             xPackage->getBundle( Reference<task::XAbortChannel>(), xCmdEnv ) );
         printf_space( level + 1 );
-        printf( "bundled Packages: {\n" );
+        dp_misc::writeConsole("bundled Packages: {\n");
         printf_packages( seq, xCmdEnv, level + 2 );
         printf_space( level + 1 );
-        printf( "}\n" );
+        dp_misc::writeConsole("}\n");
     }
 }
 
@@ -345,7 +337,7 @@ void printf_packages(
     Reference< deployment::XPackage > const * p = seq.getConstArray();
     if (len == 0) {
         printf_space( level );
-        printf( "<none>\n" );
+        dp_misc::writeConsole("<none>\n");
     }
     else {
         for ( sal_Int32 pos = 0; pos < len; ++pos )
@@ -403,16 +395,18 @@ Reference<XComponentContext> connectToOffice(
 
     if (verbose)
     {
-        rtl_TextEncoding textenc = osl_getThreadTextEncoding();
-        printf( "Raising process: %s\nArguments: -nologo -nodefault %s\n",
-                ::rtl::OUStringToOString( appURL, textenc ).getStr(),
-                ::rtl::OUStringToOString( args[ 2 ], textenc ).getStr() );
+        dp_misc::writeConsole(
+            OUSTR("Raising process: ") +
+            appURL +
+            OUSTR("\nArguments: -nologo -nodefault ") +
+            args[2] +
+            OUSTR("\n"));
     }
 
     ::dp_misc::raiseProcess( appURL, args );
 
     if (verbose)
-        printf( "Ok.  Connecting..." );
+        dp_misc::writeConsole("Ok.  Connecting...");
 
     OSL_ASSERT( buf.getLength() == 0 );
     buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("uno:pipe,name=") );
@@ -424,13 +418,34 @@ Reference<XComponentContext> connectToOffice(
             buf.makeStringAndClear(), xLocalComponentContext ),
         UNO_QUERY_THROW );
     if (verbose)
-        printf( "Ok.\n" );
+        dp_misc::writeConsole("Ok.\n");
 
     return xRet;
 }
 
 } // anon namespace
 
+/** returns the path to the lock file used by unopkg.
+    @return the path. An empty string signifies an error.
+*/
+OUString getLockFilePath()
+{
+    OUString ret;
+    OUString sBootstrap(RTL_CONSTASCII_USTRINGPARAM("${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}"));
+    rtl::Bootstrap::expandMacros(sBootstrap);
+    OUString sAbs;
+    if (::osl::File::E_None ==  ::osl::File::getAbsoluteFileURL(
+        sBootstrap, OUSTR(".lock"), sAbs))
+    {
+        if (::osl::File::E_None ==
+            ::osl::File::getSystemPathFromFileURL(sAbs, sBootstrap))
+        {
+            ret = sBootstrap;
+        }
+    }
+
+    return ret;
+}
 //==============================================================================
 Reference<XComponentContext> getUNO(
     DisposeGuard & disposeGuard, bool verbose, bool shared, bool bGui,
@@ -456,7 +471,13 @@ Reference<XComponentContext> getUNO(
     {
         if (! s_lockfile.check( 0 ))
         {
-            String sMsg(ResId(RID_STR_CONCURRENTINSTANCE, *DeploymentResMgr::get()));
+            //String sMsg(ResId(RID_STR_CONCURRENTINSTANCE, *DeploymentResMgr::get()));
+            OUString sMsg(RTL_CONSTASCII_USTRINGPARAM(
+                              "unopkg cannot be started. The lock file indicates it as already running. "
+                              "If this does not apply, delete the lock file at:"));
+
+            sMsg = sMsg + OUSTR("\n") + getLockFilePath();
+
             if (bGui)
             {
                 //We show a message box or print to the console that there
@@ -475,15 +496,10 @@ Reference<XComponentContext> getUNO(
                 }
                 DeInitVCL();
             }
-            else
-            {
-                ::rtl::OString soMsg = ::rtl::OUStringToOString(sMsg, osl_getThreadTextEncoding());
-                fprintf(stdout,"%s\n", soMsg.getStr());
 
-            }
-            throw RuntimeException(
-                OUSTR("Lock file indicates that a concurrent Office process "
-                    "is running!"), Reference<XInterface>() );
+//            String sError(ResId(RID_STR_UNOPKG_ERROR, *DeploymentResMgr::get()));
+            throw LockFileException(
+                OUSTR("\n") + OUSTR("ERROR: ") + sMsg + OUSTR("\n"));
         }
     }
 
