@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: acceleratorexecute.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.14.90.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -466,7 +466,7 @@ css::uno::Reference< css::ui::XAcceleratorConfiguration > AcceleratorExecute::st
         sModule = xModuleDetection->identify(xFrame);
     }
     catch(const css::uno::RuntimeException& exRuntime)
-        { throw exRuntime; }
+        { throw; }
     catch(const css::uno::Exception&)
         { return css::uno::Reference< css::ui::XAcceleratorConfiguration >(); }
 
@@ -561,7 +561,7 @@ IMPL_LINK(AsyncAccelExec, impl_ts_asyncCallback, void*,)
     catch(const css::lang::DisposedException&)
         {}
     catch(const css::uno::RuntimeException& exRuntime)
-        { throw exRuntime; }
+        { throw; }
     catch(const css::uno::Exception&)
         {}
 

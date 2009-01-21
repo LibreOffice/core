@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: langtab.src,v $
- * $Revision: 1.6.140.6 $
+ * $Revision: 1.6.126.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -79,7 +79,7 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Basque" ; LANGUAGE_BASQUE ; > ;
         < "Bengali (India)" ; LANGUAGE_BENGALI ; > ;
         < "Bulgarian" ; LANGUAGE_BULGARIAN ; > ;
-        < "Byelorussian" ; LANGUAGE_BELARUSIAN ; > ;
+        < "Belarusian" ; LANGUAGE_BELARUSIAN ; > ;
         < "Catalan" ; LANGUAGE_CATALAN ; > ;
         < "Chinese (traditional)" ; LANGUAGE_CHINESE_TRADITIONAL ; > ;
         < "Chinese (simplified)" ; LANGUAGE_CHINESE_SIMPLIFIED ; > ;
