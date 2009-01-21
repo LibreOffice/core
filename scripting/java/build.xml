@@ -75,6 +75,24 @@
     <pathelement path="${netbeans.install.path}/modules/ext/nb-editor.jar"/>
   </path>
 
+  <condition property="boot_refID" value="macPath" else="nonMacPath">
+    <and>
+      <os family="mac"/>
+      <os family="unix"/>
+    </and>
+  </condition>
+  <path id="macPath" location="${java.home}/../Classes/classes.jar"/>
+  <!-- rhino.jar from OpenJDK breaks build -->
+  <path id="nonMacPath">
+    <fileset dir="${java.home}/">
+       <include name="jre/lib/*.jar"/>
+       <include name="lib/*.jar"/>
+       <exclude name="jre/lib/rhino.jar"/>
+       <exclude name="lib/rhino.jar"/>
+     </fileset>
+  </path>
+  <path id="my.bootstrap.classpath" refID="${boot_refID}"/>
+
   <!-- ===================== Prepare Directories ========================= -->
   <target name="prepare">
     <mkdir dir="${jardir}"/>
@@ -84,10 +102,13 @@
   <target name="compile" depends="prepare">
     <javac srcdir="com" destdir="${jardir}"
          includes="**/*.java" classpathref="idlclasspath"
-         debug="${debug}" optimize="${optimize}" deprecation="off"/>
+         debug="${debug}" optimize="${optimize}" deprecation="off">
+      <compilerarg value="-Xbootclasspath:${toString:my.bootstrap.classpath}"/>
+    </javac>
     <javac srcdir="Framework/" destdir="${jardir}"
          includes="**/*.java" classpathref="idlclasspath" debug="${debug}"
          optimize="${optimize}" deprecation="off">
+     <compilerarg value="-Xbootclasspath:${toString:my.bootstrap.classpath}"/>
     </javac>
   </target>
 
