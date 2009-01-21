@@ -823,7 +823,9 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
             impl_notifySelectionChangeListeners();
 
         // todo: the context menu should be specified by an xml file in uiconfig
-        uno::Reference< awt::XPopupMenu > xPopupMenu( new VCLXPopupMenu());
+        uno::Reference< awt::XPopupMenu > xPopupMenu(
+            m_xCC->getServiceManager()->createInstanceWithContext(
+                C2U("com.sun.star.awt.PopupMenu"), m_xCC ), uno::UNO_QUERY );
         uno::Reference< awt::XMenuExtended > xMenuEx( xPopupMenu, uno::UNO_QUERY );
         if( xPopupMenu.is() && xMenuEx.is())
         {
@@ -831,7 +833,9 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
             lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DiagramObjects"));
             lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:TransformDialog"));
             lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId, C2U(".uno:ArrangeRow"));
-            uno::Reference< awt::XPopupMenu > xArrangePopupMenu( new VCLXPopupMenu());
+            uno::Reference< awt::XPopupMenu > xArrangePopupMenu(
+                m_xCC->getServiceManager()->createInstanceWithContext(
+                    C2U("com.sun.star.awt.PopupMenu"), m_xCC ), uno::UNO_QUERY );
             uno::Reference< awt::XMenuExtended > xArrangeMenuEx( xArrangePopupMenu, uno::UNO_QUERY );
             if( xArrangePopupMenu.is() && xArrangeMenuEx.is())
             {
