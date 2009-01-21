@@ -158,7 +158,7 @@ testcase tiTextToolbar
         if NOT TextObjectbar.isEnabled AND iWaitIndex = 10 then
             warnlog "Dialogue TextObjectbar didnt work. Ending testcase."
             Call hCloseDocument
-            Exit Sub
+            goto endsub
         end if
         '/// Activate the Font spacing-buttons ///'
         TextObjectbar.OpenContextMenu
@@ -352,7 +352,7 @@ testcase tiTextToolbar
         if TextObjectbar.isEnabled = FALSE AND iWaitIndex = 10 then
             warnlog "Dialogue TextObjectbar didnt work. Ending testcase."
             Call hCloseDocument
-            Exit Sub
+            goto endsub
         end if
         '/// Reset the original value of the Font spacing-buttons ///'
         sleep 2

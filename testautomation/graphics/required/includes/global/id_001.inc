@@ -147,11 +147,23 @@ testcase tiFileSaveAs
         sFileNameLoaded = Dateiname.GetSelText
         printlog "File will be loaded: " & sFileNameLoaded
         Oeffnen.Click
-        WaitSlot (5000)
-        hCloseDocument
-        printlog "Closing doc " & sFileNameLoaded
-      WaitSlot (2000)
-        
+        printlog "Closing doc if it gets loaded: " & sFileNameLoaded
+        if lCase(gApplication) = "impress" then 
+            Kontext "DocumentImpress"
+            if DocumentImpress.exists(5) then
+                Call hCloseDocument
+            else
+                warnlog "File did not get loaded."
+            endif
+        else
+            Kontext "DocumentDraw"
+            if DocumentDraw.exists(5) then
+                Call hCloseDocument
+            else
+                warnlog "File did not get loaded."
+            endif
+        endif
+        WaitSlot (2000)
     next i
 
 endcase 'tiFileSaveAs
@@ -250,7 +262,7 @@ testcase tiFileVersion
       FileVersions
    catch
       Warnlog "- File / Versions not accessible!"
-      exit sub
+      goto endsub
    endcatch
 
    Kontext "Versionen"
@@ -570,7 +582,7 @@ testcase tmFileNewFromTemplate
   '/// Check if dialog has been opened ///
   if TemplateAndDocuments.NotExists then
      Warnlog "Dialog Templates and Documents are not up!"
-     exit sub
+     goto endsub
   end if
    Call DialogTest (TemplateAndDocuments)
    WaitSlot (5000)

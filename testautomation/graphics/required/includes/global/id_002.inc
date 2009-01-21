@@ -268,7 +268,7 @@ testcase tdEditDeleteSlide
         Kontext "Navigator"
         Navigator.Close
         Call hCloseDocument
-        exit sub
+        goto endsub
     else
         Liste.Select 2
         Liste.Typekeys "<RETURN>"   '/// Press Return to go to the selected slide ///'

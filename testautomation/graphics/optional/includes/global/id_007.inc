@@ -129,7 +129,7 @@ testcase tdContextConvertIntoPolygon
         if NOT GrafikEinfuegenDlg.Exists AND iWaitIndex = 10 then
             warnlog "Dialogue Insert Graphics didnt work. Ending testcase."
             Call hCloseDocument
-            Exit Sub
+            goto endsub
         end if
         '/// insert graphic: "global\input\graf_inp\enter.bmp" ///'
         Dateiname.SetText ConvertPath (gTesttoolPath + "global\input\graf_inp\enter.bmp")

@@ -732,9 +732,9 @@ testcase tiFormat3D_Effekte
             Active.SetPage TabPositionAndSize
             Kontext "TabPositionAndSize"
             if PositionX.GetText = X Then
-            qaerrorlog "#i94832# - Perspective not acitvated x: "+PositionX.GetText
+                printlog "- Perspective acitvated x: "+PositionX.GetText
             else
-            Printlog "- Perspective seems to work"
+                warnlog "- Perspective seems to have a problem, x value has changed!"
             end if
             TabPositionAndSize.OK
         Kontext "Drei_D_Effekte"
@@ -961,7 +961,11 @@ testcase tiFormat3D_Effekte
         Kontext
         Active.SetPage TabPositionAndSize
         Kontext "TabPositionAndSize"
-        If PositionX.GetText = Posi Then qaerrorlog "#i94832#- Raising value for focal length has not changed optical appearence of object"
+        If PositionX.GetText = Posi Then 
+            printlog "- Raising value for focal length has not changed optical appearence of object, ok."
+        else
+            warnlog "Problem with focal lenght here!"
+        endif
         TabPositionAndSize.OK
     WaitSlot (1000)
     Kontext "Drei_D_Effekte"
@@ -977,7 +981,11 @@ testcase tiFormat3D_Effekte
         Active.SetPage TabPositionAndSize
         Kontext "TabPositionAndSize"
         Sleep (2)
-        if PositionX.GetText = Posi Then qaerrorlog "#i94832#- Lowering focus length value has not changed optical appearence of object"
+        if PositionX.GetText = Posi Then 
+            printlog "- Lowering focus length value has not changed optical appearence of object, ok."
+        else 
+            warnlog "problem with focus, check!"
+        endif
         TabPositionAndSize.OK
     Kontext "Drei_D_Effekte"
     '/// close document ///'

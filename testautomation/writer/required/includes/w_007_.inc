@@ -90,7 +90,7 @@ testcase tToolsSpellcheck
     TheFile = Convertpath (gTesttoolpath + "writer\optional\input\spellcheck\spellcheck_" + iSprache + ".odt")
     if hFileExists ( TheFile ) <> TRUE then
        Warnlog "Found no Document for the language you're testing in, Please inform the Test-Developer."
-       exit sub
+       goto endsub
     end if
     call hFileOpen (TheFile,false)
     Call sMakeReadOnlyDocumentEditable
@@ -246,7 +246,7 @@ testcase tToolsThesaurus
     TheFile = Convertpath (gTesttoolpath + "writer\optional\input\spellcheck\spellcheck_" + iSprache + ".odt")
     if hFileExists ( TheFile ) <> TRUE then
        Warnlog "Found no Document for the language you're testing in, Please inform the Test-Developer."
-       exit sub
+       goto endsub
     end if
     call hFileOpen (TheFile,false)
     Call sMakeReadOnlyDocumentEditable
@@ -956,9 +956,9 @@ endcase
 ' -------------------------------------------
 
 testcase tToolsHangulHanjaConversion
-
-    WarnLog "#i96838# - tToolsHangulHanjaConversion outcommented due to unreability."
-   exit sub
+   
+   WarnLog "#i96838# - tToolsHangulHanjaConversion outcommented due to unreability."
+   goto endsub
 
     Dim bAsianLanguage as Boolean
     Dim sTestFile as String
@@ -1108,7 +1108,7 @@ endcase
 
 testcase tHtmlDocToolsHangulHanjaConversion
    WarnLog "#96838# - tToolsHangulHanjaConversion outcommented due to unreability."
-   exit sub
+   goto endsub
 
     Dim bAsianLanguage as Boolean
     Dim sTestFile as String

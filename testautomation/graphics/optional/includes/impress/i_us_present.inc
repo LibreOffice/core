@@ -217,7 +217,7 @@ testcase i_us_presentation2
     '/// 2. Layouts: Text. Bild: Gallery: Animation - Gif          ///'
     Kontext "Tasks"
     LayoutsPreview.TypeKeys "<HOME>"     'to get to the very first position
-    LayoutsPreview.TypeKeys "<RIGHT>", 8  'to get to the right position
+    LayoutsPreview.TypeKeys "<RIGHT>", 9  'to get to the right position
     LayoutsPreview.TypeKeys "<RETURN>"
 
     Sleep (1)
