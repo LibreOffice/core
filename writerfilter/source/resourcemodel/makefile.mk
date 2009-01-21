@@ -48,6 +48,10 @@ CDEFS+=-DWRITERFILTER_DLLIMPLEMENTATION
 
 # --- Files --------------------------------------------------------
 
+# work around gcc taking hours and/or OOM'ing on this file
+NOOPTFILES= \
+    $(SLO)$/qnametostr.obj
+
 SLOFILES= \
     $(SLO)$/qnametostr.obj \
     $(SLO)$/sprmcodetostr.obj \
