@@ -783,7 +783,7 @@ void LayoutMenu::Fill (void)
     {
         if ((WritingMode_TB_RL != pInfo->meWritingMode) || bVertical)
         {
-            Bitmap aBmp (SdResId (bHighContrast
+            BitmapEx aBmp (SdResId (bHighContrast
                              ? pInfo->mnHCBmpResId
                              : pInfo->mnBmpResId));
 

@@ -1014,11 +1014,19 @@ void SdDrawDocument::SpellObject(SdrTextObj* pObj)
             if (mbHasOnlineSpellErrors)
             {
                 sd::ModifyGuard aGuard( this );
-
-                // Text aus Outliner holen
+                SdrModel* pModel = pObj->GetModel();
+                sal_Bool bLock = sal_False;
+                if ( pModel )
+                {
+                    bLock = pModel->isLocked();
+                    pModel->setLock( sal_True );
+                }
+                // taking text from the outliner
                 ((SdrTextObj*) pObj)->SetOutlinerParaObject( pOutl->CreateParaObject() );
 
                 pObj->BroadcastObjectChange();
+                if ( pModel )
+                    pModel->setLock( bLock );
             }
         }
 

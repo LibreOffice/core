@@ -238,7 +238,7 @@ sal_Bool SdGRFFilter::Import()
             aPagSize.Height() -= pPage->GetUppBorder() + pPage->GetLwrBorder();
 
             // scale to fit page
-            if ( ( aGrfSize.Height() > aPagSize.Height() ) || (aGrfSize.Width() > aPagSize.Width() ) &&
+            if ( ( ( aGrfSize.Height() > aPagSize.Height() ) || ( aGrfSize.Width() > aPagSize.Width() ) ) &&
                  aGrfSize.Height() && aPagSize.Height() )
             {
                 double fGrfWH = (double) aGrfSize.Width() / aGrfSize.Height();

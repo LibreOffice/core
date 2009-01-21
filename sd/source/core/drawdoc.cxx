@@ -607,7 +607,7 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
         CheckMasterPages();
 
         if ( GetMasterSdPageCount(PK_STANDARD) > 1 )
-            RemoveUnnessesaryMasterPages( NULL, TRUE, FALSE );
+            RemoveUnnecessaryMasterPages( NULL, TRUE, FALSE );
 
         for ( USHORT i = 0; i < GetPageCount(); i++ )
         {

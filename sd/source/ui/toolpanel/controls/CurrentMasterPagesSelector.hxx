@@ -43,7 +43,8 @@ namespace sd { namespace toolpanel { namespace controls {
 /** Show the master pages currently used by a SdDrawDocument.
 */
 class CurrentMasterPagesSelector
-    : public MasterPagesSelector
+    : public MasterPagesSelector,
+      public SfxListener
 {
 public:
     CurrentMasterPagesSelector (
@@ -68,19 +69,16 @@ public:
     using sd::toolpanel::controls::MasterPagesSelector::Fill;
 
 protected:
-    /** Return the master page whose preview is currently selected in the
-        value set control.
-        @return
-            The returned page belongs to the main document, not to the local
-            document of the MasterPageContainer.
-    */
-    virtual SdPage* GetSelectedMasterPage (void);
+    virtual ResId GetContextMenuResId (void) const;
+    virtual void Execute (SfxRequest& rRequest);
+    virtual void GetState (SfxItemSet& rItemSet);
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>
         mxListener;
 
     DECL_LINK(EventMultiplexerListener,sd::tools::EventMultiplexerEvent*);
+    void Notify (SfxBroadcaster&, const SfxHint& rHint);
 };
 
 } } } // end of namespace ::sd::toolpanel::controls

@@ -199,8 +199,9 @@ void SdTransformOOo2xDocument::transformShape( SdrObject& rObj )
 
 void SdTransformOOo2xDocument::transformTextShape( SdrTextObj& rTextShape )
 {
-    const SfxItemSet& rSet = rTextShape.GetMergedItemSet();
 /*
+    const SfxItemSet& rSet = rTextShape.GetMergedItemSet();
+
     if( (rSet.GetItemState( EE_PARA_LRSPACE ) == SFX_ITEM_SET) && (rSet.GetItemState( EE_PARA_NUMBULLET ) == SFX_ITEM_SET) )
     {
         SvxLRSpaceItem aItem( *static_cast<const SvxLRSpaceItem*>(rSet.GetItem( EE_PARA_LRSPACE )) );
@@ -209,12 +210,6 @@ void SdTransformOOo2xDocument::transformTextShape( SdrTextObj& rTextShape )
         rTextShape.SetMergedItem( aItem );
     }
 */
-    if( rSet.GetItemState( SDRATTR_TEXT_WORDWRAP ) == SFX_ITEM_SET )
-    {
-        SdrTextWordWrapItem aItem( *static_cast<const SdrTextWordWrapItem*>(rSet.GetItem( SDRATTR_TEXT_WORDWRAP )) );
-        aItem.SetValue( !aItem.GetValue() );
-        rTextShape.SetMergedItem( aItem );
-    }
 
     if(!rTextShape.IsEmptyPresObj())
     {
@@ -339,14 +334,6 @@ bool SdTransformOOo2xDocument::transformItemSet( SfxItemSet& rSet, bool bNumberi
             rSet.Put( aItem );
             bRet = true;
         }
-    }
-
-    if( rSet.GetItemState( SDRATTR_TEXT_WORDWRAP ) == SFX_ITEM_SET )
-    {
-        SdrTextWordWrapItem aItem( *static_cast<const SdrTextWordWrapItem*>(rSet.GetItem( SDRATTR_TEXT_WORDWRAP )) );
-        aItem.SetValue( !aItem.GetValue() );
-        rSet.Put( aItem );
-        bRet = true;
     }
 
     return bRet;

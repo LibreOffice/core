@@ -378,7 +378,22 @@ public:
 
     static void CalculateHandoutAreas( SdDrawDocument& rModel, AutoLayout eLayout, bool bHorizontal, std::vector< Rectangle >& rAreas );
 
+    /** Set the "precious" flag to the given value.
+    */
+    void SetPrecious (const bool bIsPrecious);
+
+    /** The "precious" flag is used for master pages to prevent some unused
+        master pages from being deleted automatically.  For pages
+        other than master pages this flag can be ignored.
+        @return
+            When this method returns <TRUE/> for a master page then this
+            master page should not be deleted automatically.
+    */
+    bool IsPrecious (void) const;
+
 private:
+    bool mbIsPrecious;
+
     /** clone the animations from this and set them to rTargetPage
     */
     void cloneAnimations( SdPage& rTargetPage ) const;

@@ -283,6 +283,11 @@ SdPage* TemplatePageObjectProvider::operator() (SdDrawDocument* pContainerDocume
             if (pDocument != NULL)
             {
                 pPage = pDocument->GetMasterSdPage(0, PK_STANDARD);
+                // In order to make the newly loaded master page deletable
+                // when copied into documents it is marked as no "precious".
+                // When it is modified then it is marked as "precious".
+                if (pPage != NULL)
+                    pPage->SetPrecious(false);
             }
         }
     }

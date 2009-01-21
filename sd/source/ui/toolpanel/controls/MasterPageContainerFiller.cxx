@@ -53,7 +53,7 @@ MasterPageContainerFiller::MasterPageContainerFiller (ContainerAdapter& rpAdapte
 {
     // Add one entry for the default master page.  We use temporarily the
     // DefaultPagePreviewProvider to prevent the rendering (and the
-    // expensive creation) of the default page.  It is replaced later one by
+    // expensive creation) of the default page.  It is replaced later on by
     // another.
     SharedMasterPageDescriptor pDescriptor (new MasterPageDescriptor(
         MasterPageContainer::DEFAULT,
@@ -61,6 +61,7 @@ MasterPageContainerFiller::MasterPageContainerFiller (ContainerAdapter& rpAdapte
         String(),
         String(),
         String(),
+        false,
         ::boost::shared_ptr<PageObjectProvider>(new DefaultPageObjectProvider()),
         ::boost::shared_ptr<PreviewProvider>(new PagePreviewProvider())));
     mrContainerAdapter.PutMasterPage(pDescriptor);
@@ -175,6 +176,7 @@ MasterPageContainerFiller::State MasterPageContainerFiller::AddTemplate (void)
             mpLastAddedEntry->msPath,
             mpLastAddedEntry->msTitle,
             String(),
+            false,
             ::boost::shared_ptr<PageObjectProvider>(
                 new TemplatePageObjectProvider(mpLastAddedEntry->msPath)),
             ::boost::shared_ptr<PreviewProvider>(

@@ -124,6 +124,7 @@ SdPage::SdPage(SdDrawDocument& rNewDoc, StarBASIC* pBasic, BOOL bMasterPage)
 ,   mbTransitionDirection(sal_True)
 ,   mnTransitionFadeColor(0)
 ,   mfTransitionDuration(2.0)
+,   mbIsPrecious(true)
 {
     // Der Layoutname der Seite wird von SVDRAW benutzt, um die Praesentations-
     // vorlagen der Gliederungsobjekte zu ermitteln. Darum enthaelt er bereits
@@ -1089,7 +1090,7 @@ static const LayoutDescriptor& GetLayoutDescriptor( AutoLayout eLayout )
         LayoutDescriptor( 1, PRESOBJ_TITLE, PRESOBJ_OUTLINE, PRESOBJ_OUTLINE ),             // AUTOLAYOUT_2TEXT
         LayoutDescriptor( 1, PRESOBJ_TITLE, PRESOBJ_OUTLINE, PRESOBJ_CHART ),               // AUTOLAYOUT_TEXTCHART
         LayoutDescriptor( 0, PRESOBJ_TITLE, PRESOBJ_ORGCHART ),                             // AUTOLAYOUT_ORG
-        LayoutDescriptor( 1, PRESOBJ_TITLE, PRESOBJ_OUTLINE, PRESOBJ_GRAPHIC ),             // AUTOLAYOUT_TEXTCLIP
+        LayoutDescriptor( 1, PRESOBJ_TITLE, PRESOBJ_OUTLINE, PRESOBJ_GRAPHIC ),             // AUTOLAYOUT_TEXTCLbIP
         LayoutDescriptor( 1, PRESOBJ_TITLE, PRESOBJ_CHART, PRESOBJ_OUTLINE ),               // AUTOLAYOUT_CHARTTEXT
         LayoutDescriptor( 0, PRESOBJ_TITLE, PRESOBJ_TABLE ),                                // AUTOLAYOUT_TAB
         LayoutDescriptor( 1, PRESOBJ_TITLE, PRESOBJ_GRAPHIC, PRESOBJ_OUTLINE ),             // AUTOLAYOUT_CLIPTEXT
@@ -3061,6 +3062,25 @@ void SdPage::CalculateHandoutAreas( SdDrawDocument& rModel, AutoLayout eLayout, 
         aPos.Y() += nOffsetY;
     }
 }
+
+
+
+
+void SdPage::SetPrecious (const bool bIsPrecious)
+{
+    mbIsPrecious = bIsPrecious;
+}
+
+
+
+
+bool SdPage::IsPrecious (void) const
+{
+    return mbIsPrecious;
+}
+
+
+
 
 HeaderFooterSettings::HeaderFooterSettings()
 {

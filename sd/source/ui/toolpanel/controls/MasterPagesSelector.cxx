@@ -233,6 +233,14 @@ void MasterPagesSelector::Fill (void)
 
 
 
+ResId MasterPagesSelector::GetContextMenuResId (void) const
+{
+    return SdResId(RID_TASKPANE_MASTERPAGESSELECTOR_POPUP);
+}
+
+
+
+
 IMPL_LINK(MasterPagesSelector, ClickHandler, PreviewValueSet*, EMPTYARG)
 {
     // We use the framework to assign the clicked-on master page because we
@@ -295,8 +303,9 @@ IMPL_LINK(MasterPagesSelector, ContextMenuCallback, CommandEvent*, pEvent)
             aPosition = aBBox.Center();
         }
 
+        const ResId aPopupResId (GetContextMenuResId());
         mrBase.GetViewFrame()->GetDispatcher()->ExecutePopup(
-            SdResId(RID_TASKPANE_MASTERPAGESSELECTOR_POPUP),
+            aPopupResId,
             mpPageSet.get(),
             &aPosition);
     }

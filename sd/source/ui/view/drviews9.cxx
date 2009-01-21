@@ -131,9 +131,8 @@ void DrawViewShell::ExecGallery(SfxRequest& rReq)
 
                 // Falls Grafik zu gross, wird die Grafik
                 // in die Seite eingepasst
-                if ((aSize.Height() > aPageSize.Height()) ||
-                    (aSize.Width()  > aPageSize.Width()) &&
-                    aSize.Height() && aPageSize.Height())
+                if ( ( ( aSize.Height() > aPageSize.Height() ) || ( aSize.Width()   > aPageSize.Width() ) ) &&
+                    aSize.Height() && aPageSize.Height() )
                 {
                     float fGrfWH =  (float)aSize.Width() /
                                     (float)aSize.Height();

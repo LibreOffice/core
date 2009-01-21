@@ -226,6 +226,7 @@ void RecentlyUsedMasterPages::LoadPersistentValues (void)
                         sURL,
                         String(),
                         sName,
+                        false,
                         ::boost::shared_ptr<PageObjectProvider>(
                             new TemplatePageObjectProvider(sURL)),
                         ::boost::shared_ptr<PreviewProvider>(

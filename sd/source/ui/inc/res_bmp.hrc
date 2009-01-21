@@ -299,6 +299,8 @@
 #define RID_DRAW_TABLE_POPUP                RID_APP_START+91
 #define RID_GRAPHIC_TABLE_POPUP             RID_APP_START+92
 
+#define RID_TASKPANE_CURRENT_MASTERPAGESSELECTOR_POPUP  RID_APP_START+93
+
 /*
  * Pointer (Mauszeiger)
  */
