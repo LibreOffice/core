@@ -41,7 +41,8 @@ nodep=true
 #----- compile .java files -----------------------------------------
 JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar
 .IF "$(SYSTEM_JFREEREPORT)" == "YES"
-XCLASSPATH!:=$(XCLASSPATH)$(PATH_SEPERATOR)$(JCOMMON_JAR)$(PATH_SEPERATOR)$(LIBXML_JAR)$(PATH_SEPERATOR)$(JFREEREPORT_JAR)$(PATH_SEPERATOR)$(LIBLOADER_JAR)$(PATH_SEPERATOR)$(SAC_JAR)$(PATH_SEPERATOR)$(LIBLAYOUT_JAR)$(PATH_SEPERATOR)$(JCOMMON_SERIALIZER_JAR)$(PATH_SEPERATOR)$(LIBFONTS_JAR)$(PATH_SEPERATOR)$(LIBFORMULA_JAR)$(PATH_SEPERATOR)$(LIBREPOSITORY_JAR)
+XCLASSPATH!:=$(PATH_SEPERATOR)$(FLUTE_JAR)$(XCLASSPATH)$(PATH_SEPERATOR)$(JCOMMON_JAR)$(PATH_SEPERATOR)$(LIBXML_JAR)$(PATH_SEPERATOR)$(JFREEREPORT_JAR)$(PATH_SEPERATOR)$(LIBLOADER_JAR)$(PATH_SEPERATOR)$(SAC_JAR)$(PATH_SEPERATOR)$(LIBLAYOUT_JAR)$(PATH_SEPERATOR)$(JCOMMON_SERIALIZER_JAR)$(PATH_SEPERATOR)$(LIBFONTS_JAR)$(PATH_SEPERATOR)$(LIBFORMULA_JAR)$(PATH_SEPERATOR)$(LIBREPOSITORY_JAR)
+COMP=fix_system_jfreereport
 .ELSE
 JARFILES += flute-1.3-jfree-20061107.jar jcommon-1.0.10.jar	jcommon-serializer-0.2.0.jar libfonts-0.3.3.jar libformula-0.1.14.jar liblayout-0.2.8.jar libloader-0.3.6.jar librepository-0.1.4.jar libxml-0.9.9.jar pentaho-reporting-flow-engine-0.9.2.jar sac.jar
 .ENDIF
@@ -90,8 +91,16 @@ CUSTOMMANIFESTFILE = Manifest.mf
 .INCLUDE :  target.mk
 
 .IF "$(JARTARGETN)"!=""
-$(JARTARGETN) : $(PROPERTYFILES) $(CSSFILES) $(XSDFILES) $(TXTFILES) $(XMLFILES)
+$(JARTARGETN) : $(COMP) $(PROPERTYFILES) $(CSSFILES) $(XSDFILES) $(TXTFILES) $(XMLFILES)
 .ENDIF          # "$(JARTARGETN)"!=""
+
+fix_system_jfreereport:
+    @echo "Fix Java Class-Path entry for JFree JFreeReport libraries from system."
+    @$(SED) '/flute/,/sac/d' -i ../../../../../../$(INPATH)/class/sun-report-builder/META-INF/MANIFEST.MF
+    @$(SED) -r -e "s#^Class-Path.*#\0\n  file://$(JCOMMON_JAR)\n  file://$(SAC_JAR)\n  file://$(LIBXML_JAR)\n\
+  file://$(FLUTE_JAR)\n  file://$(JFREEREPORT_JAR)\n  file://$(LIBLAYOUT_JAR)\n  file://$(LIBLOADER_JAR)\n  file://$(LIBFORMULA_JAR)\n\
+  file://$(LIBREPOSITORY_JAR)\n  file://$(LIBFONTS_JAR)\n  file://$(JCOMMON_SERIALIZER_JAR)#" \
+    -i ../../../../../../$(INPATH)/class/sun-report-builder/META-INF/MANIFEST.MF
 
 $(CLASSDIR)$/$(PACKAGE)$/%.properties : %.properties
     @@-$(MKDIRHIER) $(@:d)

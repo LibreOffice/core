@@ -263,6 +263,9 @@ COMPONENT_HELP= \
 
 # .jar files from solver
 COMPONENT_EXTJARFILES = \
+    $(EXTENSIONDIR)$/sun-report-builder.jar 					\
+    $(EXTENSIONDIR)$/reportbuilderwizard.jar
+.IF "$(SYSTEM_JFREEREPORT)" != "YES"
     $(EXTENSIONDIR)$/flute-1.3-jfree-20061107.jar				\
     $(EXTENSIONDIR)$/jcommon-1.0.10.jar							\
     $(EXTENSIONDIR)$/jcommon-serializer-0.2.0.jar				\
@@ -273,9 +276,8 @@ COMPONENT_EXTJARFILES = \
     $(EXTENSIONDIR)$/librepository-0.1.4.jar					\
     $(EXTENSIONDIR)$/libxml-0.9.9.jar							\
     $(EXTENSIONDIR)$/pentaho-reporting-flow-engine-0.9.2.jar 	\
-    $(EXTENSIONDIR)$/sac.jar                                 	\
-    $(EXTENSIONDIR)$/sun-report-builder.jar 					\
-    $(EXTENSIONDIR)$/reportbuilderwizard.jar
+    $(EXTENSIONDIR)$/sac.jar
+.ENDIF
 
 COMPONENT_MANIFEST_GENERIC:=TRUE
 COMPONENT_MANIFEST_SEARCHDIR:=registry
@@ -289,55 +291,9 @@ EXTENSION_PACKDEPS=$(COMPONENT_EXTJARFILES) $(COMPONENT_HTMLFILES) $(COMPONENT_O
 .INCLUDE : target.mk
 .INCLUDE : extension_post.mk
 
-.IF "$(SYSTEM_JFREEREPORT)" == "YES"
-$(EXTENSIONDIR)$/flute-1.3-jfree-20061107.jar : $(FLUTE_JAR)
-    @@-$(MKDIRHIER) $(@:d)
-    $(COPY) $< $@
-
-$(EXTENSIONDIR)$/jcommon-1.0.10.jar : $(JCOMMON_JAR)
-    @@-$(MKDIRHIER) $(@:d)
-    $(COPY) $< $@
-
-$(EXTENSIONDIR)$/jcommon-serializer-0.2.0.jar : $(JCOMMON_SERIALIZER_JAR)
-    @@-$(MKDIRHIER) $(@:d)
-    $(COPY) $< $@
-
-$(EXTENSIONDIR)$/libfonts-0.3.3.jar : $(LIBFONTS_JAR)
-    @@-$(MKDIRHIER) $(@:d)
-    $(COPY) $< $@
-
-$(EXTENSIONDIR)$/libformula-0.1.14.jar : $(LIBFORMULA_JAR)
-    @@-$(MKDIRHIER) $(@:d)
-    $(COPY) $< $@
-
-$(EXTENSIONDIR)$/liblayout-0.2.8.jar : $(LIBLAYOUT_JAR)
-    @@-$(MKDIRHIER) $(@:d)
-    $(COPY) $< $@
-
-$(EXTENSIONDIR)$/libloader-0.3.6.jar : $(LIBLOADER_JAR)
-    @@-$(MKDIRHIER) $(@:d)
-    $(COPY) $< $@
-
-$(EXTENSIONDIR)$/librepository-0.1.4.jar : $(LIBREPOSITORY_JAR)
-    @@-$(MKDIRHIER) $(@:d)
-    $(COPY) $< $@
-
-$(EXTENSIONDIR)$/libxml-0.9.9.jar : $(LIBXML_JAR)
-    @@-$(MKDIRHIER) $(@:d)
-    $(COPY) $< $@
-
-$(EXTENSIONDIR)$/pentaho-reporting-flow-engine-0.9.2.jar : $(JFREEREPORT_JAR)
-    @@-$(MKDIRHIER) $(@:d)
-    $(COPY) $< $@
-
-$(EXTENSIONDIR)$/sac.jar : $(SAC_JAR)
-    @@-$(MKDIRHIER) $(@:d)
-    $(COPY) $< $@
-.ELSE
 $(EXTENSIONDIR)$/%.jar : $(SOLARBINDIR)$/%.jar
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
-.ENDIF
 
 $(EXTENSIONDIR)$/readme_en-US.% : $(PRJ)$/license$/readme_en-US.%
     @@-$(MKDIRHIER) $(@:d)
@@ -362,4 +318,4 @@ $(DESCRIPTION_SRC): description.xml
 .ELSE			# "$(SOLAR_JAVA)"!=""
 .INCLUDE : target.mk
 .ENDIF			# "$(SOLAR_JAVA)"!=""
-#
+
