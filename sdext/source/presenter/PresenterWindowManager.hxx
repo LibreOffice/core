@@ -92,7 +92,6 @@ public:
     void SAL_CALL disposing (void);
 
     void SetParentPane (const css::uno::Reference<css::drawing::framework::XPane>& rxPane);
-    css::uno::Reference<css::awt::XWindow> GetParentWidnow (void) const;
     void SetTheme (const ::boost::shared_ptr<PresenterTheme>& rpTheme);
     void NotifyPaneCreation (const PresenterPaneContainer::SharedPaneDescriptor& rpDescriptor);
     void NotifyViewCreation (const css::uno::Reference<css::drawing::framework::XView>& rxView);

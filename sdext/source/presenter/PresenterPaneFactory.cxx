@@ -176,6 +176,8 @@ Reference<XResource> SAL_CALL PresenterPaneFactory::createResource (
     const Reference<XResourceId>& rxPaneId)
     throw (RuntimeException)
 {
+    ThrowIfDisposed();
+
     if ( ! rxPaneId.is())
         return NULL;
 
@@ -217,6 +219,8 @@ Reference<XResource> SAL_CALL PresenterPaneFactory::createResource (
 void SAL_CALL PresenterPaneFactory::releaseResource (const Reference<XResource>& rxResource)
     throw (RuntimeException)
 {
+    ThrowIfDisposed();
+
     if ( ! rxResource.is())
         throw lang::IllegalArgumentException();
 

@@ -63,41 +63,6 @@ sal_Int32 Height (const sal_Int32 nTop, const sal_Int32 nBottom)
 }
 
 
-void SetBezierCurve (
-    geometry::RealBezierSegment2D& rBezierSegment,
-    const double nX,
-    const double nY,
-    const double nDX1,
-    const double nDY1,
-    const double nDX2,
-    const double nDY2)
-{
-    rBezierSegment.Px = nX;
-    rBezierSegment.Py = nY;
-    rBezierSegment.C1x = nX + nDX1;
-    rBezierSegment.C1y = nY + nDY1;
-    rBezierSegment.C2x = nX + nDX1 + nDX2;
-    rBezierSegment.C2y = nY + nDY1 + nDY2;
-}
-
-
-
-void SetBezierLine (
-    geometry::RealBezierSegment2D& rBezierSegment,
-    const double nX1,
-    const double nY1,
-    const double nX2,
-    const double nY2)
-{
-    rBezierSegment.Px = nX1;
-    rBezierSegment.Py = nY1;
-    rBezierSegment.C1x = 0.666 * nX1 + 0.334 * nX2;
-    rBezierSegment.C1y = 0.666 * nY1 + 0.334 * nY2;
-    rBezierSegment.C2x = 0.333 * nX1 + 0.667 * nX2;
-    rBezierSegment.C2y = 0.333 * nY1 + 0.667 * nY2;
-}
-
-
 } // end of anonymous namespace
 
 
@@ -167,15 +132,6 @@ geometry::RealRectangle2D PresenterGeometryHelper::ConvertRectangle (
 
 
 
-css::awt::Size PresenterGeometryHelper::ConvertSize (
-    const css::geometry::RealSize2D& rSize)
-{
-    return awt::Size(Round(rSize.Width), Round(rSize.Height));
-}
-
-
-
-
 awt::Rectangle PresenterGeometryHelper::TranslateRectangle (
     const css::awt::Rectangle& rBox,
     const sal_Int32 nXOffset,
@@ -216,19 +172,6 @@ geometry::RealRectangle2D PresenterGeometryHelper::Intersection (
         return geometry::RealRectangle2D(0,0,0,0);
     else
         return geometry::RealRectangle2D(nLeft,nTop, nRight, nBottom);
-}
-
-
-
-
-bool PresenterGeometryHelper::IsInside (
-    const css::awt::Rectangle& rBox,
-    const css::awt::Point& rPoint)
-{
-    return rBox.X <= rPoint.X
-        && rBox.Y <= rPoint.Y
-        && rBox.X+rBox.Width > rPoint.X
-        && rBox.Y+rBox.Height > rPoint.Y;
 }
 
 
@@ -391,44 +334,5 @@ Reference<rendering::XPolyPolygon2D> PresenterGeometryHelper::CreatePolygon(
     return xRectangle;
 }
 
-
-
-
-Reference<rendering::XPolyPolygon2D> PresenterGeometryHelper::CreatePolygon(
-    const css::awt::Rectangle& rBox,
-    const double nRadius,
-    const Reference<rendering::XGraphicDevice>& rxDevice)
-{
-    if ( ! rxDevice.is())
-        return NULL;
-
-    Sequence<Sequence<geometry::RealBezierSegment2D> > aPolygon(1);
-    aPolygon[0] = Sequence<geometry::RealBezierSegment2D>(8);
-    const double nLeft = rBox.X;
-    const double nTop = rBox.Y;
-    const double nRight = rBox.X + rBox.Width - 1;
-    const double nBottom = rBox.Y + rBox.Height - 1;
-
-
-    SetBezierCurve(aPolygon[0][0], nLeft + nRadius, nTop, -nRadius, 0, 0,0);
-    SetBezierLine(aPolygon[0][1], nLeft, nTop+nRadius, nLeft, nBottom-nRadius);
-
-    SetBezierCurve(aPolygon[0][2], nLeft, nBottom-nRadius, 0,nRadius, 0,0);
-    SetBezierLine(aPolygon[0][3], nLeft+nRadius, nBottom, nRight-nRadius, nBottom);
-
-    SetBezierCurve(aPolygon[0][4], nRight-nRadius, nBottom, nRadius,0, 0,0);
-    SetBezierLine(aPolygon[0][5], nRight, nBottom-nRadius, nRight, nTop+nRadius);
-
-    SetBezierCurve(aPolygon[0][6], nRight, nTop+nRadius, 0,-nRadius, 0,0);
-    SetBezierLine(aPolygon[0][7], nRight-nRadius, nTop, nLeft+nRadius, nTop);
-
-    Reference<rendering::XPolyPolygon2D> xPolygon (
-        rxDevice->createCompatibleBezierPolyPolygon(aPolygon),
-        UNO_QUERY_THROW);
-    if (xPolygon.is())
-        xPolygon->setClosed(0, sal_True);
-
-    return xPolygon;
-}
 
 } }

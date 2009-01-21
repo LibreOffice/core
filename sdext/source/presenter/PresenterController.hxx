@@ -117,7 +117,6 @@ public:
     ::rtl::Reference<PresenterWindowManager> GetWindowManager (void) const;
     css::uno::Reference<css::presentation::XSlideShowController>
         GetSlideShowController (void) const;
-    css::uno::Reference<css::awt::XWindow> GetParentWindow (void) const;
     rtl::Reference<PresenterPaneContainer> GetPaneContainer (void) const;
     ::rtl::Reference<PresenterPaneBorderPainter> GetPaneBorderPainter (void) const;
     ::boost::shared_ptr<PresenterAnimator> GetAnimator (void) const;
@@ -243,6 +242,18 @@ private:
     void InitializeMainPane (const css::uno::Reference<css::drawing::framework::XPane>& rxPane);
     void LoadTheme (const css::uno::Reference<css::drawing::framework::XPane>& rxPane);
     void UpdatePendingSlideNumber (const sal_Int32 nPendingSlideNumber);
+
+    /** This method is called when the user pressed one of the numerical
+        keys.  Depending on the modifier, numeric keys switch to another
+        slide (no modifier), or change to another view (Ctrl modifier).
+        @param nKey
+            Numeric value that is printed on the pressed key.  For example
+            pressing the key '4' will result in the value 4, not the ASCII
+            code (0x34?).
+        @param nModifiers
+            The modifier bit field as provided by the key up event.
+    */
+    void HandleNumericKeyPress (const sal_Int32 nKey, const sal_Int32 nModifiers);
 
     void ThrowIfDisposed (void) const throw (::com::sun::star::lang::DisposedException);
 };

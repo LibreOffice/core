@@ -89,12 +89,6 @@ public:
         TexturingMode meHorizontalTexturingMode;
         TexturingMode meVerticalTexturingMode;
 
-        /** Fill in missing bitmaps by making mxNormalIcon lighter or
-            darker.
-        */
-        void Update (
-            const css::uno::Reference<css::rendering::XGraphicDevice>& rxDevice);
-
     private:
         css::uno::Reference<css::rendering::XBitmap> mxNormalBitmap;
         css::uno::Reference<css::rendering::XBitmap> mxMouseOverBitmap;

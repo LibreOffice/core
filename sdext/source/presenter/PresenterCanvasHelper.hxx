@@ -68,13 +68,6 @@ public:
         const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
         const css::awt::Rectangle& rRepaintBox,
         const css::awt::Rectangle& rBackgroundBoundingBox,
-        const css::awt::Rectangle& rContentBoundingBox);
-
-    static void PaintRectangle (
-        const SharedBitmapDescriptor& rpBitmap,
-        const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
-        const css::awt::Rectangle& rRepaintBox,
-        const css::awt::Rectangle& rBackgroundBoundingBox,
         const css::awt::Rectangle& rContentBoundingBox,
         const css::rendering::ViewState& rDefaultViewState,
         const css::rendering::RenderState& rDefaultRenderState);
@@ -90,14 +83,6 @@ public:
 private:
     const css::rendering::ViewState maDefaultViewState;
     const css::rendering::RenderState maDefaultRenderState;
-
-    static void PaintTexture (
-        const css::uno::Reference<css::rendering::XBitmap>& rxTexture,
-        const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
-        const css::awt::Rectangle& rRepaintBox,
-        const css::uno::Reference<css::rendering::XPolyPolygon2D>& rxPolygon,
-        const css::rendering::ViewState& rDefaultViewState,
-        const css::rendering::RenderState& rDefaultRenderState);
 
     static void PaintTiledBitmap (
         const css::uno::Reference<css::rendering::XBitmap>& rxTexture,

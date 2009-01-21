@@ -67,7 +67,6 @@ SLOFILES=										\
     $(SLO)$/PresenterButton.obj					\
     $(SLO)$/PresenterCanvasHelper.obj			\
     $(SLO)$/PresenterConfigurationAccess.obj	\
-    $(SLO)$/PresenterControlCreator.obj			\
     $(SLO)$/PresenterController.obj				\
     $(SLO)$/PresenterCurrentSlideObserver.obj	\
     $(SLO)$/PresenterFrameworkObserver.obj		\

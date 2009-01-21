@@ -71,18 +71,6 @@ public:
     static css::uno::Reference<css::presentation::XSlideShowController> GetSlideShowController (
         const css::uno::Reference<css::frame::XController>& rxController);
 
-    /** Load a bitmap from a file (or other place) that has the given URL
-        and return it.
-        @param rxContext
-            The component context is used to create the necessary
-            temporarily used services to load the graphic object.
-        @param rsURL
-            URL of a file or other place that points to a bitmap resource.
-    */
-    static css::uno::Reference<css::graphic::XGraphic> GetGraphic (
-        const css::uno::Reference<css::uno::XComponentContext>& rxContext,
-        const ::rtl::OUString& rsURL);
-
 private:
     PresenterHelper (void);
     ~PresenterHelper (void);

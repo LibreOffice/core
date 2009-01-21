@@ -110,7 +110,6 @@ namespace {
         BorderSize maOuterBorderSize;
         BorderSize maTotalBorderSize;
         enum Side { Left, Top, Right, Bottom };
-        sal_Int32 GetBorderSize (const Side eSide) const;
     private:
         void UpdateBorderSizes (void);
         SharedBitmapDescriptor GetBitmap(
@@ -162,9 +161,6 @@ private:
     bool mbHasCallout;
     awt::Point maCalloutAnchor;
 
-    void PaintFrameBackground (
-        const awt::Rectangle& rInnerBox,
-        const awt::Rectangle& rOuterBox);
     void PaintBitmap(
         const awt::Rectangle& rBox,
         const awt::Rectangle& rUpdateBox,
@@ -733,17 +729,6 @@ void PresenterPaneBorderPainter::Renderer::SetCalloutAnchor (
 
 
 
-void PresenterPaneBorderPainter::Renderer::PaintFrameBackground (
-    const awt::Rectangle& rOuterBox,
-    const awt::Rectangle& rInnerBox)
-{
-    (void)rOuterBox;
-    (void)rInnerBox;
-}
-
-
-
-
 void PresenterPaneBorderPainter::Renderer::PaintBitmap(
     const awt::Rectangle& rBox,
     const awt::Rectangle& rUpdateBox,
@@ -1084,21 +1069,6 @@ const Reference<rendering::XCanvasFont> RendererPaneStyle::GetFont (
     if (mpFont.get() != NULL)
         mpFont->PrepareFont(rxCanvas);
     return mpFont->mxFont;
-}
-
-
-
-
-sal_Int32 RendererPaneStyle::GetBorderSize (const Side eSide) const
-{
-    switch (eSide)
-    {
-        case Left : return maTotalBorderSize.mnLeft;
-        case Right : return maTotalBorderSize.mnRight;
-        case Top : return maTotalBorderSize.mnTop;
-        case Bottom : return maTotalBorderSize.mnBottom;
-    }
-    return 0;
 }
 
 

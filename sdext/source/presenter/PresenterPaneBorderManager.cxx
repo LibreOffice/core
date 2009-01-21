@@ -32,6 +32,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sdext.hxx"
 
+// The body of this file is only used when PresenterWindowManager defines
+// the preprocessor symbol ENABLE_PANE_RESIZING, which by default is not the
+// case.
+#ifdef ENABLE_PANE_RESIZING
+
 #include "PresenterPaneBorderManager.hxx"
 #include "PresenterController.hxx"
 #include "PresenterPaintManager.hxx"
@@ -577,3 +582,5 @@ void PresenterPaneBorderManager::ThrowIfDisposed (void)
 
 
 } } // end of namespace ::sd::presenter
+
+#endif // ENABLE_PANE_RESIZING

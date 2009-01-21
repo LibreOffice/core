@@ -230,14 +230,6 @@ void PresenterWindowManager::SetParentPane (
 
 
 
-Reference<awt::XWindow> PresenterWindowManager::GetParentWidnow (void) const
-{
-    return mxParentWindow;
-}
-
-
-
-
 void PresenterWindowManager::SetTheme (const ::boost::shared_ptr<PresenterTheme>& rpTheme)
 {
     mpTheme = rpTheme;

@@ -94,35 +94,4 @@ Reference<presentation::XSlideShowController> PresenterHelper::GetSlideShowContr
 
 
 
-Reference<graphic::XGraphic> PresenterHelper::GetGraphic (
-    const Reference<uno::XComponentContext>& rxContext,
-    const OUString& rsName)
-{
-    Reference<graphic::XGraphic> xGraphic;
-
-    try
-    {
-        // Create GraphicProvider.
-        Reference<lang::XMultiComponentFactory> xFactory (
-            rxContext->getServiceManager(), UNO_QUERY_THROW);
-        Reference<graphic::XGraphicProvider> xProvider (
-            xFactory->createInstanceWithContext(
-                OUString::createFromAscii("com.sun.star.graphic.GraphicProvider"),
-                rxContext),
-            UNO_QUERY_THROW);
-
-        // Ask the provider to obtain a graphic
-        Sequence<beans::PropertyValue> aProperties (1);
-        aProperties[0].Name = OUString::createFromAscii("URL");
-        aProperties[0].Value <<= rsName;
-        xGraphic = xProvider->queryGraphic(aProperties);
-    }
-    catch (const Exception&)
-    {
-        OSL_ASSERT(false);
-    }
-
-    return xGraphic;
-}
-
 } } // end of namespace ::sdext::presenter

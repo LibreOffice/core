@@ -32,6 +32,11 @@
 #ifndef SDEXT_PRESENTER_PRESENTER_PANE_BORDER_MANAGER_HXX
 #define SDEXT_PRESENTER_PRESENTER_PANE_BORDER_MANAGER_HXX
 
+// The body of this file is only used when PresenterWindowManager defines
+// the preprocessor symbol ENABLE_PANE_RESIZING, which by default is not the
+// case.
+#ifdef ENABLE_PANE_RESIZING
+
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase3.hxx>
 #include <com/sun/star/awt/Point.hpp>
@@ -167,4 +172,7 @@ private:
 
 } } // end of namespace ::sd::presenter
 
+#endif // ENABLE_PANE_RESIZING
+
 #endif
+

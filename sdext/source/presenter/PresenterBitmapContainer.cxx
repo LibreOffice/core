@@ -499,31 +499,4 @@ void PresenterBitmapContainer::BitmapDescriptor::SetBitmap (
 
 
 
-void PresenterBitmapContainer::BitmapDescriptor::Update (
-    const Reference<rendering::XGraphicDevice>& rxDevice)
-{
-    if (mxNormalBitmap.is() && ! mxMouseOverBitmap.is())
-    {
-        const geometry::IntegerSize2D aSize (mxNormalBitmap->getSize());
-        Reference<rendering::XBitmap> xHighlight(rxDevice->createCompatibleBitmap(aSize));
-        if (xHighlight.is())
-        {
-            Reference<rendering::XBitmapCanvas> xHighlightCanvas (xHighlight, UNO_QUERY);
-            if (xHighlightCanvas.is())
-            {
-                double aColor[] = {0,0,0,128};
-                xHighlightCanvas->drawBitmapModulated(
-                    mxNormalBitmap,
-                    rendering::ViewState(geometry::AffineMatrix2D(1,0,0,0,1,0), NULL),
-                    rendering::RenderState(geometry::AffineMatrix2D(1,0,0,0,1,0), NULL,
-                        Sequence<double>(aColor,4),rendering::CompositeOperation::SOURCE));
-                mxMouseOverBitmap = xHighlight;
-            }
-        }
-    }
-}
-
-
-
-
 } } // end of namespace ::sdext::presenter

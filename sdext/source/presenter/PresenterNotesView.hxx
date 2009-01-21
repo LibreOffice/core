@@ -96,8 +96,6 @@ public:
     void SetSlide (
         const css::uno::Reference<css::drawing::XDrawPage>& rxNotesPage);
 
-    css::uno::Reference<css::awt::XWindow> GetWindow (void) const;
-
     void ChangeFontSize (const sal_Int32 nSizeChange);
 
     // lang::XEventListener

@@ -280,7 +280,7 @@ sal_Bool OptimizerDialog::execute()
 
 void OptimizerDialog::SwitchPage( sal_Int16 nNewStep )
 {
-    if ( ( nNewStep != mnCurrentStep ) && ( nNewStep <= MAX_STEP ) || ( nNewStep >= 0 ) )
+    if ( ( nNewStep != mnCurrentStep ) && ( ( nNewStep <= MAX_STEP ) || ( nNewStep >= 0 ) ) )
     {
         sal_Int16 nOldStep = mnCurrentStep;
         if ( nNewStep == 0 )

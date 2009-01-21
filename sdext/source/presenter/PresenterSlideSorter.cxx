@@ -93,7 +93,6 @@ namespace sdext { namespace presenter {
 namespace {
     sal_Int32 round (const double nValue) { return sal::static_int_cast<sal_Int32>(0.5 + nValue); }
     sal_Int32 floor (const double nValue) { return sal::static_int_cast<sal_Int32>(nValue); }
-    double sqr (const double nValue) { return nValue*nValue; }
 }
 
 
@@ -125,7 +124,6 @@ public:
         const sal_Int32 nRelativeHorizontalPosition,
         const sal_Int32 nRelativeVerticalPosition) const;
     css::awt::Rectangle GetBoundingBox (const sal_Int32 nSlideIndex) const;
-    geometry::IntegerSize2D GetPreviewSize (void) const;
     void ForAllVisibleSlides (const ::boost::function<void(sal_Int32)>& rAction);
     sal_Int32 GetFirstVisibleSlideIndex (void) const;
     sal_Int32 GetLastVisibleSlideIndex (void) const;
@@ -1240,13 +1238,6 @@ bool PresenterSlideSorter::ProvideCanvas (void)
 
 
 
-void PresenterSlideSorter::Close (void)
-{
-}
-
-
-
-
 void PresenterSlideSorter::ThrowIfDisposed (void)
     throw (lang::DisposedException)
 {
@@ -1574,14 +1565,6 @@ awt::Rectangle PresenterSlideSorter::Layout::GetBoundingBox (const sal_Int32 nSl
             aWindowPosition.Y,
             aWindowPosition.X + maPreviewSize.Width,
             aWindowPosition.Y + maPreviewSize.Height));
-}
-
-
-
-
-geometry::IntegerSize2D PresenterSlideSorter::Layout::GetPreviewSize (void) const
-{
-    return maPreviewSize;
 }
 
 

@@ -45,58 +45,6 @@ using ::rtl::OUString;
 
 namespace sdext { namespace presenter {
 
-//===== TransparentBorderPainter ==============================================
-
-namespace {
-    typedef ::cppu::WeakComponentImplHelper1<
-        css::drawing::framework::XPaneBorderPainter
-    > TransparentBorderPainterInterfaceBase;
-}
-
-class TransparentBorderPainter
-    : private ::boost::noncopyable,
-      protected ::cppu::BaseMutex,
-      public TransparentBorderPainterInterfaceBase
-{
-public:
-    TransparentBorderPainter (void);
-    virtual ~TransparentBorderPainter (void);
-
-    // XPaneBorderPainter
-
-    virtual css::awt::Rectangle SAL_CALL addBorder (
-        const rtl::OUString& rsPaneBorderStyleName,
-        const css::awt::Rectangle& rRectangle,
-        css::drawing::framework::BorderType eBorderType)
-        throw(css::uno::RuntimeException);
-
-    virtual css::awt::Rectangle SAL_CALL removeBorder (
-        const rtl::OUString& rsPaneBorderStyleName,
-        const css::awt::Rectangle& rRectangle,
-        css::drawing::framework::BorderType eBorderType)
-        throw(css::uno::RuntimeException);
-
-    virtual void SAL_CALL paint (
-        const rtl::OUString& rsPaneBorderStyleName,
-        const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
-        const css::awt::Rectangle& rOuterBorderRectangle,
-        const css::awt::Rectangle& rRepaintArea,
-        const rtl::OUString& rsTitle)
-        throw(css::uno::RuntimeException);
-
-private:
-    double mnLeft;
-    double mnTop;
-    double mnRight;
-    double mnBottom;
-
-    void ThrowIfDisposed (void) const
-        throw (::com::sun::star::lang::DisposedException);
-};
-
-
-
-
 //===== PresenterSpritePane =========================================================
 
 PresenterSpritePane::PresenterSpritePane (const Reference<XComponentContext>& rxContext,
@@ -258,7 +206,6 @@ void SAL_CALL PresenterSpritePane::windowPaint (const awt::PaintEvent& rEvent)
 
 void PresenterSpritePane::ShowTransparentBorder (void)
 {
-    //    mxBorderPainter = new TransparentBorderPainter();
 }
 
 
@@ -311,136 +258,6 @@ void PresenterSpritePane::CreateCanvases (
     UpdateCanvases();
 }
 
-
-
-
-//===== TransparentBorderPainter ==============================================
-
-TransparentBorderPainter::TransparentBorderPainter (void)
-    : TransparentBorderPainterInterfaceBase(m_aMutex),
-      mnLeft(50),
-      mnTop(50),
-      mnRight(50),
-      mnBottom(50)
-{
-}
-
-
-
-
-TransparentBorderPainter::~TransparentBorderPainter (void)
-{
-}
-
-
-
-
-// XPaneBorderPainter
-
-css::awt::Rectangle SAL_CALL TransparentBorderPainter::addBorder (
-    const rtl::OUString& rsPaneBorderStyleName,
-    const css::awt::Rectangle& rRectangle,
-    css::drawing::framework::BorderType eBorderType)
-    throw(css::uno::RuntimeException)
-{
-    (void)rsPaneBorderStyleName;
-
-    switch (eBorderType)
-    {
-        case drawing::framework::BorderType_INNER_BORDER:
-        default:
-            return rRectangle;
-
-        case drawing::framework::BorderType_OUTER_BORDER:
-        case drawing::framework::BorderType_TOTAL_BORDER:
-            return awt::Rectangle(
-                sal::static_int_cast<sal_Int32>(rRectangle.X - mnLeft),
-                sal::static_int_cast<sal_Int32>(rRectangle.Y - mnTop),
-                sal::static_int_cast<sal_Int32>(rRectangle.Width + (mnLeft + mnRight)),
-                sal::static_int_cast<sal_Int32>(rRectangle.Height + (mnTop + mnBottom)));
-    }
-}
-
-
-
-
-css::awt::Rectangle SAL_CALL TransparentBorderPainter::removeBorder (
-    const rtl::OUString& rsPaneBorderStyleName,
-    const css::awt::Rectangle& rRectangle,
-    css::drawing::framework::BorderType eBorderType)
-    throw(css::uno::RuntimeException)
-{
-    (void)rsPaneBorderStyleName;
-
-    switch (eBorderType)
-    {
-        case drawing::framework::BorderType_INNER_BORDER:
-        default:
-            return rRectangle;
-
-        case drawing::framework::BorderType_OUTER_BORDER:
-        case drawing::framework::BorderType_TOTAL_BORDER:
-            return awt::Rectangle(
-                sal::static_int_cast<sal_Int32>(rRectangle.X + mnLeft),
-                sal::static_int_cast<sal_Int32>(rRectangle.Y + mnTop),
-                sal::static_int_cast<sal_Int32>(rRectangle.Width - (mnLeft + mnRight)),
-                sal::static_int_cast<sal_Int32>(rRectangle.Height - (mnTop + mnBottom)));
-    }
-}
-
-
-
-
-void SAL_CALL TransparentBorderPainter::paint (
-    const rtl::OUString& rsPaneBorderStyleName,
-    const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
-    const css::awt::Rectangle& rOuterBorderRectangle,
-    const css::awt::Rectangle& rRepaintArea,
-    const rtl::OUString& rsTitle)
-    throw(css::uno::RuntimeException)
-{
-    (void)rsPaneBorderStyleName;
-    (void)rRepaintArea;
-    (void)rsTitle;
-
-    rendering::ViewState aViewState(
-        geometry::AffineMatrix2D(1,0,0, 0,1,0),
-        NULL);
-
-    rendering::RenderState aRenderState(
-        geometry::AffineMatrix2D(1,0,0, 0,1,0),
-        NULL,
-        Sequence<double>(4),
-        rendering::CompositeOperation::SOURCE);
-
-    aRenderState.DeviceColor[0] = 0.5;
-    aRenderState.DeviceColor[1] = 0.5;
-    aRenderState.DeviceColor[2] = 0.5;
-    aRenderState.DeviceColor[3] = 0.5;
-
-    Reference<rendering::XPolyPolygon2D> xPolygon (
-        PresenterGeometryHelper::CreatePolygon(rOuterBorderRectangle, rxCanvas->getDevice()));
-    if (xPolygon.is())
-        rxCanvas->fillPolyPolygon(
-            xPolygon,
-            aViewState,
-            aRenderState);
-}
-
-
-
-
-void TransparentBorderPainter::ThrowIfDisposed (void) const
-    throw (::com::sun::star::lang::DisposedException)
-{
-    if (rBHelper.bDisposed || rBHelper.bInDispose)
-    {
-        throw lang::DisposedException (
-            OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "TransparentBorderPainter object has already been disposed")),
-            const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
-    }
-}
 
 
 

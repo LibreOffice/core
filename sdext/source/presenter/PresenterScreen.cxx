@@ -428,6 +428,13 @@ void PresenterScreen::InitializePresenterScreen (void)
         Reference<XConfigurationController> xCC( xCM->getConfigurationController());
         mxConfigurationControllerWeak = xCC;
 
+        Reference<drawing::framework::XResourceId> xMainPaneId(
+            GetMainPaneId(xPresentation));
+        // An empty reference means that the presenter screen can
+        // not or must not be displayed.
+        if ( ! xMainPaneId.is())
+            return;
+
         if (xCC.is() && xContext.is())
         {
             // Store the current configuration so that we can restore it when
@@ -437,13 +444,6 @@ void PresenterScreen::InitializePresenterScreen (void)
 
             try
             {
-                Reference<drawing::framework::XResourceId> xMainPaneId(
-                    GetMainPaneId(xPresentation));
-                // An empty reference means that the presenter screen can
-                // not or must not be displayed.
-                if ( ! xMainPaneId.is())
-                    return;
-
                 // At the moment the presenter controller is displayed in its
                 // own full screen window that is controlled by the same
                 // configuration controller as the Impress document from
@@ -604,46 +604,6 @@ Reference<drawing::framework::XResourceId> PresenterScreen::GetMainPaneId (
         PresenterHelper::msFullScreenPaneURL
             +A2S("?FullScreen=true&ScreenNumber=")
                 + OUString::valueOf(nPresenterScreenNumber));
-}
-
-
-
-
-void PresenterScreen::DeactivatePanes (const Reference<XConfigurationController>& rxCC)
-{
-    OSL_ASSERT(rxCC.is());
-
-    Reference<XComponentContext> xContext (mxContextWeak);
-    if ( ! xContext.is())
-        return;
-    Reference<XResourceId> xCenterPaneId(ResourceId::create(
-          xContext,
-          PresenterHelper::msCenterPaneURL));
-    if ( ! xCenterPaneId.is())
-        return;
-
-    Reference<XConfiguration> xCurrentConfiguration (rxCC->getCurrentConfiguration());
-    if (xCurrentConfiguration.is())
-    {
-        // First explicitly deactivate the view in the center pane.  This
-        // view is used as marker by some other modules and it is important
-        // that its deactivation is requested first.
-        const Sequence<Reference<XResourceId> > aViews (xCurrentConfiguration->getResources(
-            xCenterPaneId,
-            PresenterHelper::msViewURLPrefix,
-            AnchorBindingMode_DIRECT));
-        for (sal_Int32 nIndex=0; nIndex<aViews.getLength(); ++nIndex)
-            rxCC->requestResourceDeactivation(aViews[nIndex]);
-
-        // Now deactivate all top level panes and and all resources anchored
-        // to them.
-        const Sequence<Reference<XResourceId> > aPanes (xCurrentConfiguration->getResources(
-            xCenterPaneId,
-            PresenterHelper::msPaneURLPrefix,
-            AnchorBindingMode_DIRECT));
-        for (sal_Int32 nIndex=0; nIndex<aPanes.getLength(); ++nIndex)
-            rxCC->requestResourceDeactivation(aPanes[nIndex]);
-    }
 }
 
 
@@ -962,20 +922,6 @@ void PresenterScreen::SetupView(
     }
 }
 
-
-
-
-void PresenterScreen::ThrowIfDisposed (void) const
-    throw (::com::sun::star::lang::DisposedException)
-{
-    if (rBHelper.bDisposed || rBHelper.bInDispose)
-    {
-        throw lang::DisposedException (
-            OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "PresenterScreen object has already been disposed")),
-            const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
-    }
-}
 
 
 

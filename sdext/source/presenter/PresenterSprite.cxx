@@ -290,25 +290,4 @@ void PresenterSprite::DisposeSprite (void)
 
 
 
-void PresenterSprite::SetToBitmap (const Reference<rendering::XBitmap>& rxBitmap)
-{
-    const geometry::IntegerSize2D aSize (rxBitmap->getSize());
-    Resize(geometry::RealSize2D(aSize.Width, aSize.Height));
-
-    Reference<rendering::XCanvas> xCanvas (GetCanvas());
-    if (xCanvas.is() && rxBitmap.is())
-    {
-        xCanvas->drawBitmap(
-            rxBitmap,
-            rendering::ViewState(geometry::AffineMatrix2D(1,0,0, 0,1,0), NULL),
-            rendering::RenderState(
-                geometry::AffineMatrix2D(1,0,0, 0,1,0),
-                NULL,
-                uno::Sequence<double>(4),
-                rendering::CompositeOperation::SOURCE));
-
-    }
-}
-
-
 } } //end of namespace sdext::presenter

@@ -468,7 +468,7 @@
         </node>
         <node oor:name="g" oor:op="replace">
           <prop oor:name="Left">
-            <value xml:lang="en-US">Alt+Page Up</value>
+            <value xml:lang="en-US">Alt-Page Up</value>
           </prop>
           <prop oor:name="Right">
             <value xml:lang="en-US">Previous slide without effects</value>
@@ -476,7 +476,7 @@
         </node>
         <node oor:name="h" oor:op="replace">
           <prop oor:name="Left">
-            <value xml:lang="en-US">Alt+Page Down</value>
+            <value xml:lang="en-US">Alt-Page Down</value>
           </prop>
           <prop oor:name="Right">
             <value xml:lang="en-US">Next slide without effects</value>
@@ -500,7 +500,7 @@
         </node>
         <node oor:name="k" oor:op="replace">
           <prop oor:name="Left">
-            <value xml:lang="en-US">&apos;W&apos;, ','</value>
+            <value xml:lang="en-US">'W', ','</value>
           </prop>
           <prop oor:name="Right">
             <value xml:lang="en-US">Whites/Unwhites the screen</value>
@@ -560,6 +560,38 @@
           </prop>
           <prop oor:name="Right">
             <value xml:lang="en-US">Scroll notes up/down</value>
+          </prop>
+        </node>
+        <node oor:name="s_Separator" oor:op="replace">
+          <prop oor:name="Left">
+            <value xml:lang="en-US"> </value>
+          </prop>
+          <prop oor:name="Right">
+            <value xml:lang="en-US"> </value>
+          </prop>
+        </node>
+        <node oor:name="t" oor:op="replace">
+          <prop oor:name="Left">
+            <value xml:lang="en-US">Ctrl-'1'</value>
+          </prop>
+          <prop oor:name="Right">
+            <value xml:lang="en-US">Shows the Presenter Console</value>
+          </prop>
+        </node>
+        <node oor:name="u" oor:op="replace">
+          <prop oor:name="Left">
+            <value xml:lang="en-US">Ctrl-'2'</value>
+          </prop>
+          <prop oor:name="Right">
+            <value xml:lang="en-US">Shows the Presentation Notes</value>
+          </prop>
+        </node>
+        <node oor:name="v" oor:op="replace">
+          <prop oor:name="Left">
+            <value xml:lang="en-US">Ctrl-'3'</value>
+          </prop>
+          <prop oor:name="Right">
+            <value xml:lang="en-US">Shows the Slides Overview</value>
           </prop>
         </node>
       </node>

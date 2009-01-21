@@ -117,7 +117,6 @@ void PresenterCanvasHelper::PaintRectangle (
         if (rpBitmap->meHorizontalTexturingMode == PresenterBitmapDescriptor::Repeat
             || rpBitmap->meVerticalTexturingMode == PresenterBitmapDescriptor::Repeat)
         {
-            //            PaintTexture(
             PaintTiledBitmap(
                 Reference<rendering::XBitmap>(rpBitmap->GetNormalBitmap(), UNO_QUERY),
                 rxCanvas,
@@ -149,26 +148,6 @@ void PresenterCanvasHelper::PaintRectangle (
             rDefaultViewState,
             rDefaultRenderState);
     }
-}
-
-
-
-
-void PresenterCanvasHelper::PaintRectangle (
-    const SharedBitmapDescriptor& rpBitmap,
-    const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
-    const css::awt::Rectangle& rRepaintBox,
-    const css::awt::Rectangle& rOuterBoundingBox,
-    const css::awt::Rectangle& rContentBoundingBox)
-{
-    rendering::ViewState aViewState (geometry::AffineMatrix2D(1,0,0, 0,1,0),NULL);
-    rendering::RenderState aRenderState(
-        geometry::AffineMatrix2D(1,0,0, 0,1,0),
-        NULL,
-        Sequence<double>(3),
-        rendering::CompositeOperation::SOURCE);
-    PaintRectangle(rpBitmap,rxCanvas,rRepaintBox,rOuterBoundingBox,rContentBoundingBox,
-        aViewState, aRenderState);
 }
 
 
@@ -225,54 +204,6 @@ void PresenterCanvasHelper::PaintTiledBitmap (
                 aViewState,
                 aRenderState);
         }
-}
-
-
-
-
-void PresenterCanvasHelper::PaintTexture (
-    const css::uno::Reference<css::rendering::XBitmap>& rxTexture,
-    const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
-    const css::awt::Rectangle& rRepaintBox,
-    const css::uno::Reference<css::rendering::XPolyPolygon2D>& rxPolygon,
-    const css::rendering::ViewState& rDefaultViewState,
-    const css::rendering::RenderState& rDefaultRenderState)
-{
-    if ( ! rxCanvas.is() || ! rxCanvas->getDevice().is())
-        return;
-
-    if ( ! rxTexture.is())
-        return;
-
-    if ( ! rxPolygon.is())
-        return;
-
-    // Set the repaint box as clip rectangle at the view state.
-    rendering::ViewState aViewState (rDefaultViewState);
-    aViewState.Clip = PresenterGeometryHelper::CreatePolygon(rRepaintBox, rxCanvas->getDevice());
-
-
-    // Setup the texture.
-    Sequence<rendering::Texture> aTextures (1);
-    const geometry::IntegerSize2D aBitmapSize(rxTexture->getSize());
-    aTextures[0] = rendering::Texture (
-        geometry::AffineMatrix2D(
-            aBitmapSize.Width,0,0,
-            0,aBitmapSize.Height,0),
-        1,
-        0,
-        rxTexture,
-        NULL,
-        NULL,
-        rendering::StrokeAttributes(),
-        rendering::TexturingMode::REPEAT,
-        rendering::TexturingMode::REPEAT);
-
-    rxCanvas->fillTexturedPolyPolygon(
-        rxPolygon,
-        aViewState,
-        rDefaultRenderState,
-        aTextures);
 }
 
 

@@ -170,12 +170,6 @@ private:
     ViewDescriptorContainer maViewDescriptors;
 
 
-    /** Deactivate the currently active panes to make room for the full
-        screen pane and the presenter panes.
-    */
-    void DeactivatePanes (
-        const css::uno::Reference<css::drawing::framework::XConfigurationController>& rxCC);
-
     void ShutdownPresenterScreen (void);
 
     /** Create and initialize the factory for presenter view specific panes.
@@ -249,8 +243,6 @@ private:
     */
     css::uno::Reference<css::drawing::framework::XResourceId> GetMainPaneId (
         const css::uno::Reference<css::presentation::XPresentation2>& rxPresentation) const;
-
-    void ThrowIfDisposed (void) const throw (::com::sun::star::lang::DisposedException);
 };
 
 } }

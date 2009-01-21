@@ -481,14 +481,6 @@ Reference<presentation::XSlideShowController>
 
 
 
-Reference<awt::XWindow> PresenterController::GetParentWindow (void) const
-{
-    return mxMainWindow;
-}
-
-
-
-
 rtl::Reference<PresenterPaneContainer> PresenterController::GetPaneContainer (void) const
 {
     return mpPaneContainer;
@@ -982,9 +974,7 @@ void SAL_CALL PresenterController::keyReleased (const awt::KeyEvent& rEvent)
         case awt::Key::NUM7:
         case awt::Key::NUM8:
         case awt::Key::NUM9:
-            if (mnPendingSlideNumber == -1)
-                mnPendingSlideNumber = 0;
-            UpdatePendingSlideNumber(mnPendingSlideNumber * 10 + rEvent.KeyCode-awt::Key::NUM0);
+            HandleNumericKeyPress(rEvent.KeyCode-awt::Key::NUM0, rEvent.Modifiers);
             break;
 
         case awt::Key::RETURN:
@@ -1020,6 +1010,54 @@ void SAL_CALL PresenterController::keyReleased (const awt::KeyEvent& rEvent)
                 if (xKeyListener.is())
                     xKeyListener->keyReleased(rEvent);
             }
+            break;
+    }
+}
+
+
+
+
+void PresenterController::HandleNumericKeyPress (
+    const sal_Int32 nKey,
+    const sal_Int32 nModifiers)
+{
+    switch (nModifiers)
+    {
+        case 0:
+            if (mnPendingSlideNumber == -1)
+                mnPendingSlideNumber = 0;
+            UpdatePendingSlideNumber(mnPendingSlideNumber * 10 + nKey);
+            break;
+
+        case awt::KeyModifier::MOD1:
+            // Ctrl-1, Ctrl-2, and Ctrl-3 are used to switch between views
+            // (slide view, notes view, normal)
+            mnPendingSlideNumber = -1;
+            if (mpWindowManager.get() == NULL)
+                return;
+            switch(nKey)
+            {
+                case 1:
+                    mpWindowManager->SetSlideSorterState(false);
+                    mpWindowManager->SetHelpViewState(false);
+                    mpWindowManager->SetLayoutMode(PresenterWindowManager::Standard);
+                    break;
+                case 2:
+                    mpWindowManager->SetSlideSorterState(false);
+                    mpWindowManager->SetHelpViewState(false);
+                    mpWindowManager->SetLayoutMode(PresenterWindowManager::Notes);
+                    break;
+                case 3:
+                    mpWindowManager->SetHelpViewState(false);
+                    mpWindowManager->SetSlideSorterState(true);
+                    break;
+                default:
+                    // Ignore unsupported key.
+                    break;
+            }
+
+        default:
+            // Ignore unsupported modifiers.
             break;
     }
 }

@@ -407,14 +407,6 @@ void PresenterNotesView::SetSlide (const Reference<drawing::XDrawPage>& rxNotesP
 
 
 
-Reference<awt::XWindow> PresenterNotesView::GetWindow (void) const
-{
-    return mxParentWindow;
-}
-
-
-
-
 //-----  lang::XEventListener -------------------------------------------------
 
 void SAL_CALL PresenterNotesView::disposing (const lang::EventObject& rEventObject)
@@ -1207,28 +1199,6 @@ Reference<rendering::XBitmap> PresenterNotesView::BitmapFactory::CreateBitmap (
     Reference<rendering::XBitmap> xTextBitmap (
         mxTextView->getPropertyValue(A2S("Bitmap")), UNO_QUERY);
 
-    /*
-    // Create bitmap of same size that has the right background.
-    Reference<rendering::XBitmap> xBitmap (
-        mxCanvas->getDevice()->createCompatibleAlphaBitmap(xTextBitmap->getSize()));
-    Reference<rendering::XCanvas> xBitmapCanvas (xBitmap, UNO_QUERY);
-    rendering::ViewState aViewState (geometry::AffineMatrix2D(1,0,0, 0,1,0),NULL);
-    rendering::RenderState aRenderState(
-        geometry::AffineMatrix2D(1,0,0, 0,1,0),
-        NULL,
-        Sequence<double>(3),
-        rendering::CompositeOperation::SOURCE);
-    const awt::Rectangle aBox (0,0,mnWidth,nHeight);
-    PresenterCanvasHelper::PaintRectangle(
-        mpBackground,
-        xBitmapCanvas,
-        aBox,
-        aBox,
-        css::awt::Rectangle());
-    xBitmapCanvas->drawBitmap(xTextBitmap, aViewState, aRenderState);
-
-    return xBitmap;
-*/
     return xTextBitmap;
 }
 

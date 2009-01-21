@@ -69,8 +69,8 @@ public:
     static css::geometry::RealRectangle2D ConvertRectangle (
         const css::awt::Rectangle& rBox);
 
-    static css::awt::Size ConvertSize (
-        const css::geometry::RealSize2D& rSize);
+    //    static css::awt::Size ConvertSize (
+    //        const css::geometry::RealSize2D& rSize);
 
     static css::awt::Rectangle TranslateRectangle (
         const css::awt::Rectangle& rBox,
@@ -84,10 +84,6 @@ public:
     static css::geometry::RealRectangle2D Intersection (
         const css::geometry::RealRectangle2D& rBox1,
         const css::geometry::RealRectangle2D& rBox2);
-
-    static bool IsInside (
-        const css::awt::Rectangle& rBox,
-        const css::awt::Point& rPoint);
 
     static bool IsInside (
         const css::geometry::RealRectangle2D& rBox,
@@ -125,10 +121,12 @@ public:
 
     /** Create a polygon for a rounded rectangle.
     */
-    static css::uno::Reference<css::rendering::XPolyPolygon2D> CreatePolygon(
+    /*    static css::uno::Reference<css::rendering::XPolyPolygon2D> CreatePolygon(
         const css::awt::Rectangle& rBox,
         const double nRadius,
-        const css::uno::Reference<css::rendering::XGraphicDevice>& rxDevice);
+        const css::uno::Reference<css::rendering::XGraphicDevice>&
+        rxDevice);
+    */
 };
 
 } }

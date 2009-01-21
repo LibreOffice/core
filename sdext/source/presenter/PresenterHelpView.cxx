@@ -430,30 +430,33 @@ void PresenterHelpView::ProcessString (
 
 void PresenterHelpView::CheckFontSize (void)
 {
+    if (mpFont.get() == NULL)
+        return;
+
     const awt::Rectangle aWindowBox (mxWindow->getPosSize());
 
-    double nY (gnVerticalBorder);
-    TextContainer::iterator iBlock (mpTextContainer->begin());
-    TextContainer::const_iterator iBlockEnd (mpTextContainer->end());
-    for ( ; iBlock!=iBlockEnd; ++iBlock)
-        nY += ::std::max(
-            (*iBlock)->maLeft.GetHeight(),
-            (*iBlock)->maRight.GetHeight());
-
-    if (nY > aWindowBox.Height-gnVerticalBorder)
+    // Scaling down and then reformatting can cause the text to be too large
+    // still.  So do this again and again until the text size is
+    // small enough.  Restrict the number of loops.
+    for (int nLoopCount=0; nLoopCount<5; ++nLoopCount)
     {
-        // Font is too large.  Make it smaller.
+        double nY (gnVerticalBorder);
+        TextContainer::iterator iBlock (mpTextContainer->begin());
+        TextContainer::const_iterator iBlockEnd (mpTextContainer->end());
+        for ( ; iBlock!=iBlockEnd; ++iBlock)
+            nY += ::std::max(
+                (*iBlock)->maLeft.GetHeight(),
+                (*iBlock)->maRight.GetHeight());
 
-        if (mpFont.get() == NULL)
-        {
-            // No font to work with.
-            return;
-        }
+        if (nY <= aWindowBox.Height-gnVerticalBorder)
+            break;
+
+        // Font is too large.  Make it smaller.
 
         // Use a simple linear transformation to calculate initial guess of
         // a size that lets all help text be shown inside the window.
-        sal_Int32 nFontSizeGuess (
-            sal_Int32(mpFont->mnSize * (aWindowBox.Height-gnVerticalBorder) / nY));
+        const double nScale (::std::min(0.95,double(aWindowBox.Height-gnVerticalBorder) / nY));
+        sal_Int32 nFontSizeGuess (::std::max(sal_Int32(1),sal_Int32(mpFont->mnSize * nScale)));
         mpFont->mnSize = nFontSizeGuess;
         mpFont->mxFont = NULL;
         mpFont->PrepareFont(mxCanvas);

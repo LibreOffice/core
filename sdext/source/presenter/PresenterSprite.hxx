@@ -82,8 +82,6 @@ public:
     void SetAlpha (const double nAlpha);
     double GetAlpha (void) const;
 
-    void SetToBitmap (const css::uno::Reference<css::rendering::XBitmap>& rxBitmap);
-
     void Update (void);
 
 private:
