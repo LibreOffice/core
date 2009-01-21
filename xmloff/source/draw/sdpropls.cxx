@@ -48,6 +48,7 @@
 #include <com/sun/star/text/WritingMode.hpp>
 #include <xmloff/EnumPropertyHdl.hxx>
 #include <xmloff/NamedBoolPropertyHdl.hxx>
+#include <xmloff/WordWrapPropertyHdl.hxx>
 #include "numithdl.hxx"
 #include "XMLBitmapRepeatOffsetPropertyHandler.hxx"
 #include "XMLFillBitmapSizePropertyHandler.hxx"
@@ -1136,7 +1137,7 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
                 pHdl = new XMLNamedBoolPropertyHdl( GetXMLToken(XML_FORWARD), GetXMLToken(XML_REVERSE) );
                 break;
             case XML_TYPE_WRAP_OPTION:
-                pHdl = new XMLNamedBoolPropertyHdl( GetXMLToken( XML_WRAP ), GetXMLToken( XML_NO_WRAP ) );
+                pHdl = new XMLWordWrapPropertyHdl( mpImport );
                 break;
 
             case XML_SD_TYPE_MOVE_PROTECT:
