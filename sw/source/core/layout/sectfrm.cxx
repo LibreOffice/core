@@ -1838,6 +1838,10 @@ SwLayoutFrm *SwFrm::GetPrevSctLeaf( MakePageType )
     if( ( IsInTab() && !IsTabFrm() ) || FindFooterOrHeader() )
         return pCol;
 
+    // === IMPORTANT ===
+    // Precondition, which needs to be hold, is that the <this> frame can be
+    // inside a table, but then the found section frame <pSect> is also inside
+    // this table.
     SwSectionFrm *pSect = FindSctFrm();
     SwFrm *pPrv;
     if( 0 != ( pPrv = pSect->GetIndPrev() ) )
@@ -1856,9 +1860,19 @@ SwLayoutFrm *SwFrm::GetPrevSctLeaf( MakePageType )
     SwLayoutFrm *pPrevLeaf = 0;
 
     while ( pLayLeaf )
-    {   //In Tabellen oder Bereiche geht's niemals hinein.
-        if ( pLayLeaf->IsInTab() || pLayLeaf->IsInSct() )
+    {
+        // In Tabellen oder Bereiche geht's niemals hinein.
+        // --> OD 2008-12-22 #i95968#
+        // Condition needs to be revised:
+        // If the section the <this> frame is in, is inside a table, it is
+        // allowed to step into a table. Otherwise a table/paragraph inside
+        // a section inside a table would leave the outer table.
+//        if ( pLayLeaf->IsInTab() || pLayLeaf->IsInSct() )
+        if ( ( pLayLeaf->IsInTab() && !pSect->IsInTab() ) ||
+             pLayLeaf->IsInSct() )
+        {
             pLayLeaf = pLayLeaf->GetPrevLayoutLeaf();
+        }
         else if ( bBody && pLayLeaf->IsInDocBody() )
         {
             // If there is a pLayLeaf has a lower pLayLeaf is the frame we are looking for.
