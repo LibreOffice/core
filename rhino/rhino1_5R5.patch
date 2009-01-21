@@ -106,9 +106,34 @@
 +        }
 +    }
  }
---- misc/rhino1_5R5/toolsrc/build.xml	Thu Mar 25 21:54:34 2004
-+++ misc/build/rhino1_5R5/toolsrc/build.xml	Fri Mar 28 17:24:23 2008
-@@ -20,46 +20,10 @@
+--- misc/rhino1_5R5/toolsrc/build.xml	2004-03-25 21:54:34.000000000 +0100
++++ misc/build/rhino1_5R5/toolsrc/build.xml	2009-01-17 20:46:44.000000000 +0100
+@@ -6,6 +6,24 @@
+ -->
+ <project name="toolsrc" default="compile" basedir=".">
+ 
++  <condition property="boot_refID" value="macPath" else="nonMacPath">
++    <and>
++      <os family="mac"/>
++      <os family="unix"/>
++    </and>
++  </condition>
++  <path id="macPath" location="${java.home}/../Classes/classes.jar"/>
++  <!-- rhino.jar from OpenJDK breaks build -->
++  <path id="nonMacPath">
++    <fileset dir="${java.home}/">
++       <include name="jre/lib/*.jar"/>
++       <include name="lib/*.jar"/>
++       <exclude name="jre/lib/rhino.jar"/>
++       <exclude name="lib/rhino.jar"/>
++     </fileset>
++  </path>
++  <path id="my.bootstrap.classpath" refID="${boot_refID}"/>
++
+   <target name="properties">
+     <property name="nest" value=".."/>
+     <property name="build.dir" value="./build"/>
+@@ -20,46 +38,10 @@
      <!-- Download source from Sun's site, unzip it, remove
           the files we don't need, and change the package
      -->
@@ -156,8 +181,16 @@
    </target>
  
    <target name="compile" depends="properties,get-swing-ex">
---- misc/rhino1_5R5/toolsrc/org/mozilla/javascript/tools/debugger/Main.java	Thu Mar 25 21:54:34 2004
-+++ misc/build/rhino1_5R5/toolsrc/org/mozilla/javascript/tools/debugger/Main.java	Fri Mar 28 17:24:23 2008
+@@ -68,6 +50,7 @@
+            includes="org/**/*.java"
+            deprecation="on"
+            debug="${debug}">
++      <compilerarg value="-Xbootclasspath:${toString:my.bootstrap.classpath}"/>
+     </javac>
+     <copy todir="${nest}/${classes}">
+       <fileset dir="." includes="org/**/*.properties" />
+--- misc/rhino1_5R5/toolsrc/org/mozilla/javascript/tools/debugger/Main.java	2004-03-25 21:54:34.000000000 +0100
++++ misc/build/rhino1_5R5/toolsrc/org/mozilla/javascript/tools/debugger/Main.java	2009-01-17 20:44:22.000000000 +0100
 @@ -470,15 +470,21 @@
          case KeyEvent.VK_BACK_SPACE:
          case KeyEvent.VK_ENTER:
@@ -845,12 +878,10 @@
      public static void main(String[] args) {
          try {
              mainThread = Thread.currentThread();
-@@ -3633,6 +3930,163 @@
-         } catch (Exception exc) {
-             exc.printStackTrace();
+@@ -3635,5 +3932,162 @@
          }
-+    }
-+
+     }
+ 
 +    // patched Office specific interface
 + 
 +    OfficeScriptInfo officeScripts = new OfficeScriptInfo();
@@ -1006,9 +1037,10 @@
 +        }
 +        FileWindow w = (FileWindow)getFileWindow( key );
 +        return w.getText();
-     }
- 
++    }
++
  }
+ 
 --- misc/rhino1_5R5/toolsrc/org/mozilla/javascript/tools/debugger/OfficeScriptInfo.java	Fri Mar 28 17:25:34 2008
 +++ misc/build/rhino1_5R5/toolsrc/org/mozilla/javascript/tools/debugger/OfficeScriptInfo.java	Fri Mar 28 17:24:59 2008
 @@ -1 +1,133 @@
