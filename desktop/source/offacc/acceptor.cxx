@@ -188,14 +188,13 @@ void SAL_CALL Acceptor::initialize( const Sequence<Any>& aArguments )
 
     // do we want to enable accepting?
     sal_Bool bEnable = sal_False;
-    if ((nArgs == 1 &&  (aArguments[0] >>= bEnable) )
-        || (nArgs == 2 && (aArguments[1] >>= bEnable))
-        && bEnable )
+    if (((nArgs == 1 && (aArguments[0] >>= bEnable)) ||
+         (nArgs == 2 && (aArguments[1] >>= bEnable))) &&
+        bEnable )
     {
         m_cEnable.set();
         bOk = sal_True;
     }
-
 
     if (!bOk)
     {

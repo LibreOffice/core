@@ -36,9 +36,7 @@
 #include <vcl/svapp.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <unotools/localedatawrapper.hxx>
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
-#endif
 #include <svtools/urihelper.hxx>
 #include <svtools/useroptions.hxx>
 #include <svtools/imagemgr.hxx>
@@ -48,9 +46,7 @@
 
 #include <comphelper/string.hxx>
 #include <comphelper/processfactory.hxx>
-#ifndef _COM_SUN_STAR_SECURITY_DOCUMENTSIGNATURESINFORMATION_HPP_
 #include <com/sun/star/security/DocumentSignatureInformation.hpp>
-#endif
 #include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
 #include <unotools/localedatawrapper.hxx>
 #include <svtools/syslocale.hxx>
@@ -60,7 +56,6 @@
 #include <com/sun/star/beans/XPropertyContainer.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
-#include <com/sun/star/document/XDocumentInfo.hpp>
 
 #include <vcl/timer.hxx>
 #include <sfx2/dinfdlg.hxx>
@@ -86,9 +81,20 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::uno;
 
-// The number of user defined fields handled by the dialog
-// There are exactly 4. No more, no less.
-#define FOUR 4
+
+struct CustomProperty
+{
+    ::rtl::OUString             m_sName;
+    com::sun::star::uno::Any    m_aValue;
+
+    CustomProperty( const ::rtl::OUString& sName,
+            const com::sun::star::uno::Any& rValue ) :
+        m_sName( sName ), m_aValue( rValue ) {}
+
+    inline bool operator==( const CustomProperty& rProp )
+    { return m_sName.equals( rProp.m_sName ) && m_aValue == rProp.m_aValue; }
+};
+
 
 static
 bool operator==(const util::DateTime &i_rLeft, const util::DateTime &i_rRight)
@@ -227,7 +233,6 @@ SfxDocumentInfoItem::SfxDocumentInfoItem()
 
 SfxDocumentInfoItem::SfxDocumentInfoItem( const String& rFile,
         const uno::Reference<document::XDocumentProperties>& i_xDocProps,
-        const uno::Reference<document::XDocumentInfo>& i_xDocInfo,
         sal_Bool bIs )
     : SfxStringItem( SID_DOCINFO, rFile )
     , m_AutoloadDelay( i_xDocProps->getAutoloadSecs() )
@@ -252,11 +257,6 @@ SfxDocumentInfoItem::SfxDocumentInfoItem( const String& rFile,
     , bDeleteUserData( sal_False )
     , bIsUseUserData( bIs )
 {
-    for (sal_Int16 i = 0; i < FOUR; ++i) {
-        m_UserDefinedFieldTitles[i] = i_xDocInfo->getUserFieldName(i);
-        m_UserDefinedFieldValues[i] = i_xDocInfo->getUserFieldValue(i);
-    }
-
     try
     {
         Reference< beans::XPropertyContainer > xContainer = i_xDocProps->getUserDefinedProperties();
@@ -306,7 +306,7 @@ SfxDocumentInfoItem::SfxDocumentInfoItem( const SfxDocumentInfoItem& rItem )
     , bDeleteUserData( rItem.bDeleteUserData )
     , bIsUseUserData( rItem.bIsUseUserData )
 {
-    for (size_t i = 0; i < FOUR; ++i) {
+    for (size_t i = 0; i < 4; ++i) {
         m_UserDefinedFieldTitles[i] = rItem.getUserDefinedFieldTitle(i);
         m_UserDefinedFieldValues[i] = rItem.getUserDefinedFieldValue(i);
     }
@@ -343,19 +343,7 @@ int SfxDocumentInfoItem::operator==( const SfxPoolItem& rItem) const
     const SfxDocumentInfoItem& rInfoItem(
         static_cast<const SfxDocumentInfoItem&>(rItem));
 
-    bool bEqual = m_aCustomProperties.size() == rInfoItem.m_aCustomProperties.size();
-    if ( bEqual )
-    {
-        for ( sal_uInt32 i = 0; i < m_aCustomProperties.size(); i++ )
-        {
-            bEqual =  *m_aCustomProperties[i] == *rInfoItem.m_aCustomProperties[i];
-            if ( !bEqual )
-                break;
-        }
-    }
-
     return
-         bEqual != false                                         &&
          m_AutoloadDelay        == rInfoItem.m_AutoloadDelay     &&
          m_AutoloadURL          == rInfoItem.m_AutoloadURL       &&
          m_isAutoloadEnabled    == rInfoItem.m_isAutoloadEnabled &&
@@ -372,10 +360,9 @@ int SfxDocumentInfoItem::operator==( const SfxPoolItem& rItem) const
          m_Keywords             == rInfoItem.m_Keywords          &&
          m_Subject              == rInfoItem.m_Subject           &&
          m_Title                == rInfoItem.m_Title             &&
-         std::equal(m_UserDefinedFieldTitles, m_UserDefinedFieldTitles+FOUR,
-            rInfoItem.m_UserDefinedFieldTitles) &&
-         std::equal(m_UserDefinedFieldValues, m_UserDefinedFieldValues+FOUR,
-            rInfoItem.m_UserDefinedFieldValues);
+         m_aCustomProperties.size() == rInfoItem.m_aCustomProperties.size() &&
+         std::equal(m_aCustomProperties.begin(), m_aCustomProperties.end(),
+            rInfoItem.m_aCustomProperties.begin());
 }
 
 //------------------------------------------------------------------------
@@ -398,8 +385,7 @@ void SfxDocumentInfoItem::resetUserData(const ::rtl::OUString & i_rAuthor)
 //------------------------------------------------------------------------
 
 void SfxDocumentInfoItem::updateDocumentInfo(
-        const uno::Reference<document::XDocumentProperties>& i_xDocProps,
-        const uno::Reference<document::XDocumentInfo>& i_xDocInfo) const
+        const uno::Reference<document::XDocumentProperties>& i_xDocProps) const
 {
     if (isAutoloadEnabled()) {
         i_xDocProps->setAutoloadSecs(getAutoloadDelay());
@@ -423,10 +409,6 @@ void SfxDocumentInfoItem::updateDocumentInfo(
         ::comphelper::string::convertCommaSeparated(getKeywords()));
     i_xDocProps->setSubject(getSubject());
     i_xDocProps->setTitle(getTitle());
-    for ( sal_Int16 i = 0; i < FOUR; ++i ) {
-        i_xDocInfo->setUserFieldName(i, getUserDefinedFieldTitle(i));
-        i_xDocInfo->setUserFieldValue(i, getUserDefinedFieldValue(i));
-    }
 
     try
     {

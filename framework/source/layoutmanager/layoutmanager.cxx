@@ -7622,7 +7622,7 @@ const com::sun::star::uno::Sequence< com::sun::star::beans::Property > LayoutMan
         com::sun::star::beans::Property( LAYOUTMANAGER_PROPNAME_AUTOMATICTOOLBARS, LAYOUTMANAGER_PROPHANDLE_AUTOMATICTOOLBARS, ::getCppuType((const sal_Bool*)NULL), com::sun::star::beans::PropertyAttribute::TRANSIENT  ),
         com::sun::star::beans::Property( LAYOUTMANAGER_PROPNAME_HIDECURRENTUI, LAYOUTMANAGER_PROPHANDLE_HIDECURRENTUI, ::getCppuType((const sal_Bool*)NULL), com::sun::star::beans::PropertyAttribute::TRANSIENT  ),
         com::sun::star::beans::Property( LAYOUTMANAGER_PROPNAME_LOCKCOUNT, LAYOUTMANAGER_PROPHANDLE_LOCKCOUNT, ::getCppuType((const sal_Int32*)NULL), com::sun::star::beans::PropertyAttribute::TRANSIENT|com::sun::star::beans::PropertyAttribute::READONLY  ),
-        com::sun::star::beans::Property( LAYOUTMANAGER_PROPNAME_MENUBARCLOSER, LAYOUTMANAGER_PROPHANDLE_MENUBARCLOSER, ::getCppuType((const Reference< XStatusListener >*)NULL), com::sun::star::beans::PropertyAttribute::TRANSIENT  ),
+        com::sun::star::beans::Property( LAYOUTMANAGER_PROPNAME_MENUBARCLOSER, LAYOUTMANAGER_PROPHANDLE_MENUBARCLOSER, ::getCppuType((const sal_Bool*)NULL), com::sun::star::beans::PropertyAttribute::TRANSIENT  ),
         com::sun::star::beans::Property( LAYOUTMANAGER_PROPNAME_REFRESHVISIBILITY, LAYOUTMANAGER_PROPHANDLE_REFRESHVISIBILITY, ::getCppuType((const sal_Bool*)NULL), com::sun::star::beans::PropertyAttribute::TRANSIENT  )
     };
     // Use it to initialize sequence!
