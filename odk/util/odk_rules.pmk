@@ -64,16 +64,16 @@ $(DESTDIR)$/configure.pl : $(PRJ)$/configure.pl
     -chmod 755 $@
 .ENDIF
 
-$(DESTDIR)$/config.guess : $(SOLARENV)$/bin$/config.guess
+$(DESTDIR)$/config.guess : $(SRC_ROOT)$/config.guess
     @@-rm -f $@
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $(SOLARENV)$/bin$/config.guess $(MY_TEXTCOPY_TARGETPRE) $@
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $(SRC_ROOT)$/config.guess $(MY_TEXTCOPY_TARGETPRE) $@
 .IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
     -chmod 755 $@
 .ENDIF
 
-$(DESTDIR)$/config.sub : $(SOLARENV)$/bin$/config.sub
+$(DESTDIR)$/config.sub : $(SRC_ROOT)$/config.sub
     @@-rm -f $@
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $(SOLARENV)$/bin$/config.sub $(MY_TEXTCOPY_TARGETPRE) $@
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $(SRC_ROOT)$/config.sub $(MY_TEXTCOPY_TARGETPRE) $@
 .IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
     -chmod 755 $@
 .ENDIF
