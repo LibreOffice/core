@@ -227,6 +227,9 @@ public:
         getChartTypeByIndex( const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XCoordinateSystem >& xCooSys, sal_Int32 nIndex );
 
+    static void setRTLAxisLayout( const ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XCoordinateSystem >& xCooSys );
+
     static ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XChartType >
         getFirstChartTypeWithSeriesAttachedToAxisIndex( const ::com::sun::star::uno::Reference<

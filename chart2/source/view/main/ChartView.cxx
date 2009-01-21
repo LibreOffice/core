@@ -1297,6 +1297,18 @@ void lcl_setDefaultWritingMode( ::boost::shared_ptr< DrawModelWrapper > pDrawMod
     }
 }
 
+sal_Int16 lcl_getDefaultWritingModeFromPool( ::boost::shared_ptr< DrawModelWrapper > pDrawModelWrapper )
+{
+    sal_Int16 nWritingMode = text::WritingMode2::LR_TB;
+    if( pDrawModelWrapper.get() )
+    {
+        const SfxPoolItem* pItem = &(pDrawModelWrapper->GetItemPool().GetDefaultItem( EE_PARA_WRITINGDIR ));
+        if( pItem )
+            nWritingMode = static_cast< sal_Int16 >((static_cast< const SfxInt32Item * >( pItem ))->GetValue());
+    }
+    return nWritingMode;
+}
+
 } //end anonymous namespace
 
 //------------ create complete diagram shape (inclusive axis and series)
@@ -2187,12 +2199,14 @@ bool lcl_createLegend( const uno::Reference< XLegend > & xLegend
                    , awt::Rectangle & rRemainingSpace
                    , const awt::Size & rPageSize
                    , const uno::Reference< frame::XModel > & xModel
-                   , const std::vector< LegendEntryProvider* >& rLegendEntryProviderList )
+                   , const std::vector< LegendEntryProvider* >& rLegendEntryProviderList
+                   , sal_Int16 nDefaultWritingMode )
 {
     if( VLegend::isVisible( xLegend ))
     {
         VLegend aVLegend( xLegend, xContext, rLegendEntryProviderList );
         aVLegend.init( xPageShapes, xShapeFactory, xModel );
+        aVLegend.setDefaultWritingMode( nDefaultWritingMode );
         aVLegend.createShapes( awt::Size( rRemainingSpace.Width, rRemainingSpace.Height ),
                                rPageSize );
         aVLegend.changePosition( rRemainingSpace, rPageSize );
@@ -2420,7 +2434,8 @@ void ChartView::createShapes()
 
         //------------ create legend
         lcl_createLegend( LegendHelper::getLegend( m_xChartModel ), xPageShapes, m_xShapeFactory, m_xCC
-                    , aRemainingSpace, aPageSize, m_xChartModel, aSeriesPlotterContainer.getLegendEntryProviderList() );
+                    , aRemainingSpace, aPageSize, m_xChartModel, aSeriesPlotterContainer.getLegendEntryProviderList()
+                    , lcl_getDefaultWritingModeFromPool( m_pDrawModelWrapper ) );
         if(aRemainingSpace.Width<=0||aRemainingSpace.Height<=0)
             return;
 

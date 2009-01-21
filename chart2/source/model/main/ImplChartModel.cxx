@@ -42,12 +42,16 @@
 #include "DisposeHelper.hxx"
 #include "UndoManager.hxx"
 #include "ThreeDHelper.hxx"
+#include "AxisHelper.hxx"
 
 // header for class SvNumberFormatter
 #include <svtools/zforlist.hxx>
 // header for class SvNumberFormatsSupplierObj
 #include <svtools/numuno.hxx>
+#include <vcl/svapp.hxx>
 #include <cppuhelper/component_context.hxx>
+
+#include <com/sun/star/chart2/LegendPosition.hpp>
 #include <com/sun/star/chart2/XDataSeries.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -348,6 +352,11 @@ void ImplChartModel::CreateDefaultChart()
 
             AppendDiagram( xDiagram );
 
+            bool bIsRTL = Application::GetSettings().GetLayoutRTL();
+            //reverse x axis for rtl charts
+            if( bIsRTL )
+                AxisHelper::setRTLAxisLayout( AxisHelper::getCoordinateSystemByIndex( xDiagram, 0 ) );
+
             // create and attach legend
             Reference< chart2::XLegend > xLegend(
                 m_xContext->getServiceManager()->createInstanceWithContext(
@@ -359,6 +368,9 @@ void ImplChartModel::CreateDefaultChart()
                 xLegendProperties->setPropertyValue( C2U( "LineStyle" ), uno::makeAny( drawing::LineStyle_NONE ));
                 xLegendProperties->setPropertyValue( C2U( "LineColor" ), uno::makeAny( static_cast< sal_Int32 >( 0xb3b3b3 ) ));  // gray30
                 xLegendProperties->setPropertyValue( C2U( "FillColor" ), uno::makeAny( static_cast< sal_Int32 >( 0xe6e6e6 ) ) ); // gray10
+
+                if( bIsRTL )
+                    xLegendProperties->setPropertyValue( C2U( "AnchorPosition" ), uno::makeAny( chart2::LegendPosition_LINE_START ));
             }
             if(xDiagram.is())
                 xDiagram->setLegend( xLegend );

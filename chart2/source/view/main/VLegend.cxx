@@ -40,13 +40,16 @@
 #include "RelativeSizeHelper.hxx"
 #include "LegendEntryProvider.hxx"
 #include <com/sun/star/text/XTextRange.hpp>
+#include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include <com/sun/star/drawing/LineJoint.hpp>
 #include <com/sun/star/chart2/LegendExpansion.hpp>
 #include <com/sun/star/chart2/LegendPosition.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <rtl/ustrbuf.hxx>
+#include <svtools/languageoptions.hxx>
 
 #include <vector>
 #include <algorithm>
@@ -242,9 +245,10 @@ awt::Size lcl_createTextShapes(
 }
 
 
-void lcl_createLegend(
+void lcl_placeLegendEntries(
     const tViewLegendEntryContainer & rEntries,
     LegendExpansion eExpansion,
+    bool bSymbolsLeftSide,
     const Reference< beans::XPropertySet > & xProperties,
     tPropertyValues & rTextProperties,
     const Reference< drawing::XShapes > & xTarget,
@@ -279,6 +283,9 @@ void lcl_createLegend(
     sal_Int32 nMaxEntryWidth = 2 * nXOffset + aMaxSymbolExtent.Width + aMaxEntryExtent.Width;
     sal_Int32 nMaxEntryHeight = nYOffset + aMaxEntryExtent.Height;
     sal_Int32 nNumberOfEntries = rEntries.size();
+
+    if( !bSymbolsLeftSide )
+        nCurrentXPos = -nXPadding;
 
     sal_Int32 nNumberOfColumns = 0, nNumberOfRows = 0;
 
@@ -384,26 +391,50 @@ void lcl_createLegend(
                     aMaxSymbolExtent.Width  * 75 / 100,
                     aMaxSymbolExtent.Height * 75 / 100 );
                 xSymbol->setSize( aSymbolSize );
-                xSymbol->setPosition(
-                    awt::Point(
-                        nCurrentXPos + ((aMaxSymbolExtent.Width - aSymbolSize.Width) / 2),
+                sal_Int32 nSymbolXPos = nCurrentXPos + ((aMaxSymbolExtent.Width - aSymbolSize.Width) / 2);
+                if( !bSymbolsLeftSide )
+                    nSymbolXPos = nSymbolXPos - aMaxSymbolExtent.Width;
+                xSymbol->setPosition( awt::Point( nSymbolXPos,
                         nCurrentYPos + ((aMaxSymbolExtent.Height - aSymbolSize.Height) / 2)));
             }
 
             // position text shape
             awt::Size aTextSize( aTextShapes[ nEntry ]->getSize());
-            nMaxWidth = ::std::max(
-                nMaxWidth, 2 * nXOffset + aMaxSymbolExtent.Width + aTextSize.Width );
-            aTextShapes[ nEntry ]->setPosition(
-                awt::Point( nCurrentXPos + aMaxSymbolExtent.Width, nCurrentYPos ));
+            nMaxWidth = ::std::max( nMaxWidth, 2 * nXOffset + aMaxSymbolExtent.Width + aTextSize.Width );
+            sal_Int32 nTextXPos = nCurrentXPos + aMaxSymbolExtent.Width;
+            if( !bSymbolsLeftSide )
+                nTextXPos = nCurrentXPos - aMaxSymbolExtent.Width - aTextSize.Width;
+            aTextShapes[ nEntry ]->setPosition( awt::Point( nTextXPos, nCurrentYPos ));
 
             nCurrentYPos += nMaxHeights[ nRow ];
             nMaxYPos = ::std::max( nMaxYPos, nCurrentYPos );
         }
-        nCurrentXPos += nMaxWidth;
+        if( bSymbolsLeftSide )
+            nCurrentXPos += nMaxWidth;
+        else
+            nCurrentXPos -= nMaxWidth;
     }
 
-    rOutLegendSize.Width  = nCurrentXPos + nXPadding;
+    if( bSymbolsLeftSide )
+        rOutLegendSize.Width  = nCurrentXPos + nXPadding;
+    else
+    {
+        sal_Int32 nLegendWidth = -(nCurrentXPos-nXPadding);
+        rOutLegendSize.Width  = nLegendWidth;
+
+        awt::Point aPos(0,0);
+        for( sal_Int32 nEntry=0; nEntry<nNumberOfEntries; nEntry++ )
+        {
+            Reference< drawing::XShape > xSymbol( rEntries[ nEntry ].aSymbol );
+            aPos = xSymbol->getPosition();
+            aPos.X += nLegendWidth;
+            xSymbol->setPosition( aPos );
+            Reference< drawing::XShape > xText( aTextShapes[ nEntry ] );
+            aPos = xText->getPosition();
+            aPos.X += nLegendWidth;
+            xText->setPosition( aPos );
+        }
+    }
     rOutLegendSize.Height = nMaxYPos + nYPadding;
 }
 
@@ -528,6 +559,33 @@ void lcl_appendSeqToVector( const Sequence< T > & rSource, ::std::vector< T > & 
         rDest.push_back( rSource[ i ] );
 }
 
+bool lcl_shouldSymbolsBePlacedOnTheLeftSide( const Reference< beans::XPropertySet >& xLegendProp, sal_Int16 nDefaultWritingMode )
+{
+    bool bSymbolsLeftSide = true;
+    try
+    {
+        if( SvtLanguageOptions().IsCTLFontEnabled() )
+        {
+            if(xLegendProp.is())
+            {
+                sal_Int16 nWritingMode=-1;
+                if( (xLegendProp->getPropertyValue( C2U("WritingMode") ) >>= nWritingMode) )
+                {
+                    if( nWritingMode == text::WritingMode2::PAGE )
+                        nWritingMode = nDefaultWritingMode;
+                    if( nWritingMode == text::WritingMode2::RL_TB )
+                        bSymbolsLeftSide=false;
+                }
+            }
+        }
+    }
+    catch( uno::Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+    }
+    return bSymbolsLeftSide;
+}
+
 } // anonymous namespace
 
 VLegend::VLegend(
@@ -550,6 +608,13 @@ void SAL_CALL VLegend::init(
     m_xTarget = xTargetPage;
     m_xShapeFactory = xFactory;
     m_xModel = xModel;
+}
+
+// ----------------------------------------
+
+void VLegend::setDefaultWritingMode( sal_Int16 nDefaultWritingMode )
+{
+    m_nDefaultWritingMode = nDefaultWritingMode;
 }
 
 // ----------------------------------------
@@ -653,13 +718,14 @@ void VLegend::createShapes(
                 }
             }
 
+            bool bSymbolsLeftSide = lcl_shouldSymbolsBePlacedOnTheLeftSide( xLegendProp, m_nDefaultWritingMode );
+
             // place entries
             awt::Size aLegendSize;
-            lcl_createLegend( aViewEntries, eExpansion, xLegendProp,
-                              aTextProperties,
-                              xLegendContainer, m_xShapeFactory, m_xContext,
-                              rAvailableSpace, rPageSize,
-                              aLegendSize );
+            lcl_placeLegendEntries( aViewEntries, eExpansion, bSymbolsLeftSide
+                , xLegendProp, aTextProperties
+                , xLegendContainer, m_xShapeFactory, m_xContext
+                , rAvailableSpace, rPageSize, aLegendSize );
 
             if( xBorder.is())
                 xBorder->setSize( aLegendSize );
