@@ -2315,9 +2315,9 @@ dnl ===================================================================
      esac
    elif test "$_os" = "SunOS"; then
       DEFAULT_TO_STLPORT="yes"
-   elif test "$_os" = "WINNT" -a "$WITH_MINGWIN" = "yes"; then
-      DEFAULT_TO_STLPORT="no"
-   elif test "$_os" = "WINNT" -o "$_os" = "OS2"; then
+   elif test "$_os" = "WINNT" -a "$WITH_MINGWIN" != "yes"; then
+      DEFAULT_TO_STLPORT="yes"
+   elif test "$_os" = "OS2"; then
       DEFAULT_TO_STLPORT="yes" 
    elif test "$_os" = "FreeBSD"; then
       DEFAULT_TO_STLPORT="yes"
