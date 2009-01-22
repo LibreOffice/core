@@ -533,16 +533,6 @@ namespace drawinglayer
                                 getDXArray().begin() + static_cast< sal_uInt32 >(nNewTextEnd - getTextPosition()));
                         }
 
-<<<<<<< .working
-                        aNewTransform *= rDecTrans.getB2DHomMatrix();
-
-                        // prepare new DXArray for the single word
-                        ::std::vector< double > aNewDXArray(
-                            getDXArray().begin() + static_cast< sal_uInt32 >(nNewTextStart - getTextPosition()),
-                            getDXArray().begin() + static_cast< sal_uInt32 >(nNewTextEnd - getTextPosition()));
-
-=======
->>>>>>> .merge-right.r266521
                         if(bNewStartIsNotOldStart)
                         {
                             // needs to be moved to a new start position
@@ -574,24 +564,15 @@ namespace drawinglayer
                                 }
                             }
                         }
-<<<<<<< .working
-
-                        // create geometry content for the single word
-=======
 
                         // add text transformation to new transformation
                         aNewTransform *= rDecTrans.getB2DHomMatrix();
 
                         // create geometry content for the single word. Do not forget
                         // to use the new transformation
->>>>>>> .merge-right.r266521
                         basegfx::DecomposedB2DHomMatrixContainer aDecTrans(aNewTransform);
-<<<<<<< .working
-                        impCreateGeometryContent(rTarget, aDecTrans, getText(), nNewTextStart,
-=======
 
                         impCreateGeometryContent(rTarget, aDecTrans, getText(), nNewTextStart,
->>>>>>> .merge-right.r266521
                             nNewTextEnd - nNewTextStart, aNewDXArray, aNewFontAttributes);
 
                         // prepare next word and truncate to possibilities
