@@ -478,7 +478,7 @@ BOOL SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
                                 }
                             }
 
-                            if(!pDragBla)
+                            if(!mpCurrentSdrDragMethod)
                             {
                                 // fallback to DragSpecial if no interaction defined
                                 bDragSpecial = TRUE;
