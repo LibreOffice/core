@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dp_descriptioninfoset.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.34.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -371,6 +371,12 @@ css::uno::Sequence< ::rtl::OUString > DescriptionInfoset::getUrls(
     return getLocalizedHREFAttrFromChild(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
         "/desc:description/desc:registration/desc:simple-license")), NULL);
 
+}
+
+::rtl::OUString DescriptionInfoset::getLocalizedDescriptionURL() const
+{
+    return getLocalizedHREFAttrFromChild(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+        "/desc:description/desc:extension-description")), NULL);
 }
 
 css::uno::Reference< css::xml::dom::XNode >

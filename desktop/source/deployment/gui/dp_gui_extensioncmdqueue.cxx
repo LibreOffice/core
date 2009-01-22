@@ -373,11 +373,8 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
 {
     uno::Any request( xRequest->getRequest() );
     OSL_ASSERT( request.getValueTypeClass() == uno::TypeClass_EXCEPTION );
-#if OSL_DEBUG_LEVEL > 1
-    OSL_TRACE( "[dp_gui_cmdenv.cxx] incoming request:\n%s\n",
-               ::rtl::OUStringToOString( ::comphelper::anyToString(request),
-                                         RTL_TEXTENCODING_UTF8 ).getStr() );
-#endif
+    dp_misc::TRACE( OUSTR("[dp_gui_cmdenv.cxx] incoming request:\n")
+        + ::comphelper::anyToString(request) + OUSTR("\n"));
 
     lang::WrappedTargetException wtExc;
     deployment::DependencyException depExc;
@@ -790,8 +787,8 @@ void ExtensionCmdQueue::Thread::execute()
     {
         if ( m_wakeup.wait() != osl::Condition::result_ok )
         {
-            OSL_TRACE( "dp_gui::ExtensionCmdQueue::Thread::run: ignored "
-                       "osl::Condition::wait failure" );
+            dp_misc::TRACE( "dp_gui::ExtensionCmdQueue::Thread::run: ignored "
+                       "osl::Condition::wait failure\n" );
         }
         m_wakeup.reset();
 

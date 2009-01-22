@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dp_registry.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.12.86.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -62,6 +62,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
 using ::rtl::OUString;
+
 
 namespace dp_registry {
 
@@ -362,7 +363,7 @@ Reference<deployment::XPackageRegistry> PackageRegistryImpl::create(
     // dump tables:
     {
         t_registryset allBackends;
-        OSL_TRACE( "> [dp_registry.cxx] media-type detection:" );
+        dp_misc::TRACE("> [dp_registry.cxx] media-type detection:\n\n" );
         for ( t_string2string::const_iterator iPos(
                   that->m_filter2mediaType.begin() );
               iPos != that->m_filter2mediaType.end(); ++iPos )
@@ -381,11 +382,9 @@ Reference<deployment::XPackageRegistry> PackageRegistryImpl::create(
             buf.append( Reference<lang::XServiceInfo>(
                             xBackend, UNO_QUERY_THROW )
                         ->getImplementationName() );
-            OSL_TRACE( ::rtl::OUStringToOString(
-                           buf.makeStringAndClear(),
-                           RTL_TEXTENCODING_UTF8 ).getStr() );
+            dp_misc::writeConsole( buf.makeStringAndClear() + OUSTR("\n"));
         }
-        OSL_TRACE( "> [dp_registry.cxx] ambiguous backends:" );
+        dp_misc::TRACE( "> [dp_registry.cxx] ambiguous backends:\n\n" );
         for ( t_registryset::const_iterator iPos(
                   that->m_ambiguousBackends.begin() );
               iPos != that->m_ambiguousBackends.end(); ++iPos )
@@ -410,9 +409,7 @@ Reference<deployment::XPackageRegistry> PackageRegistryImpl::create(
                 if (pos < (types.getLength() - 1))
                     buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(", ") );
             }
-            OSL_TRACE( ::rtl::OUStringToOString(
-                           buf.makeStringAndClear(),
-                           RTL_TEXTENCODING_UTF8 ).getStr() );
+            dp_misc::TRACE(buf.makeStringAndClear() + OUSTR("\n\n"));
         }
         allBackends.insert( that->m_ambiguousBackends.begin(),
                             that->m_ambiguousBackends.end() );

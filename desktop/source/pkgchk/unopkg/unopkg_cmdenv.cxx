@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: unopkg_cmdenv.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.12.8.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -66,17 +66,6 @@ using ::rtl::OUString;
 
 
 namespace {
-
-inline ::com::sun::star::lang::Locale toLocale( ::rtl::OUString const & slang )
-{
-    ::com::sun::star::lang::Locale locale;
-    sal_Int32 nIndex = 0;
-    locale.Language = slang.getToken( 0, '-', nIndex );
-    locale.Country = slang.getToken( 0, '-', nIndex );
-    locale.Variant = slang.getToken( 0, '-', nIndex );
-    return locale;
-}
-
 
 //==============================================================================
 struct OfficeLocale :
@@ -176,24 +165,20 @@ void CommandEnvironmentImpl::printLicense(const OUString& sLicense, bool & accep
 {
     ResMgr * pResMgr = DeploymentResMgr::get();
     OUString s1 = String(ResId(RID_STR_UNOPKG_ACCEPT_LIC_1, *pResMgr));
-    ::rtl::OString os1 = ::rtl::OUStringToOString(s1, osl_getThreadTextEncoding());
     OUString s2 = String(ResId(RID_STR_UNOPKG_ACCEPT_LIC_2, *pResMgr));
-    ::rtl::OString os2 = ::rtl::OUStringToOString(s2, osl_getThreadTextEncoding());
     OUString s3 = String(ResId(RID_STR_UNOPKG_ACCEPT_LIC_3, *pResMgr));
-    ::rtl::OString os3 = ::rtl::OUStringToOString(s3, osl_getThreadTextEncoding());
     OUString s4 = String(ResId(RID_STR_UNOPKG_ACCEPT_LIC_4, *pResMgr));
-    ::rtl::OString os4 = ::rtl::OUStringToOString(s4, osl_getThreadTextEncoding());
     OUString sYES = String(ResId(RID_STR_UNOPKG_ACCEPT_LIC_YES, *pResMgr));
     OUString sY = String(ResId(RID_STR_UNOPKG_ACCEPT_LIC_Y, *pResMgr));
     OUString sNO = String(ResId(RID_STR_UNOPKG_ACCEPT_LIC_NO, *pResMgr));
     OUString sN = String(ResId(RID_STR_UNOPKG_ACCEPT_LIC_N, *pResMgr));
 
-    fprintf(stdout, "\n\n%s\n\n", os1.getStr());
-    fprintf(stdout, "%s\n\n", OUStringToOString(sLicense, osl_getThreadTextEncoding()).getStr());
-    fprintf(stdout, "%s\n", os2.getStr());
-    fprintf(stdout, "%s", os3.getStr());
-    fflush(stdout);
+    OUString sNewLine(RTL_CONSTASCII_USTRINGPARAM("\n"));
 
+    dp_misc::writeConsole(sNewLine + sNewLine + s1 + sNewLine + sNewLine);
+    dp_misc::writeConsole(sLicense + sNewLine + sNewLine);
+    dp_misc::writeConsole(s2 + sNewLine);
+    dp_misc::writeConsole(s3);
 
     //the user may enter "yes" or "no", we compare in a case insensitive way
     Reference< css::i18n::XCollator > xCollator(
@@ -206,13 +191,7 @@ void CommandEnvironmentImpl::printLicense(const OUString& sLicense, bool & accep
 
     do
     {
-        char buf[16];
-        rtl_zeroMemory(buf, 16);
-        // read one char less so that the last char in buf is always zero
-        fgets(buf, 15, stdin);
-        OUString sAnswer = ::rtl::OStringToOUString(::rtl::OString(buf), osl_getThreadTextEncoding());
-        sAnswer = sAnswer.trim();
-
+        OUString sAnswer = dp_misc::readConsole();
         if (xCollator->compareString(sAnswer, sYES) == 0
             || xCollator->compareString(sAnswer, sY) == 0)
         {
@@ -227,8 +206,7 @@ void CommandEnvironmentImpl::printLicense(const OUString& sLicense, bool & accep
         }
         else
         {
-            fprintf(stdout, "\n\n%s\n", os4.getStr());
-            fflush(stdout);
+            dp_misc::writeConsole(sNewLine + sNewLine + s4 + sNewLine);
         }
     }
     while(true);
@@ -257,11 +235,8 @@ void CommandEnvironmentImpl::handle(
 {
     Any request( xRequest->getRequest() );
     OSL_ASSERT( request.getValueTypeClass() == TypeClass_EXCEPTION );
-#if OSL_DEBUG_LEVEL > 1
-    OSL_TRACE( "[unopkg_cmdenv.cxx] incoming request:\n%s\n",
-               ::rtl::OUStringToOString( ::comphelper::anyToString(request),
-                                         RTL_TEXTENCODING_UTF8 ).getStr() );
-#endif
+    dp_misc::TRACE(OUSTR("[unopkg_cmdenv.cxx] incoming request:\n")
+        + ::comphelper::anyToString(request) + OUSTR("\n\n"));
 
     // selections:
     bool approve = false;
@@ -309,8 +284,7 @@ void CommandEnvironmentImpl::handle(
     {
         String sResMsg( ResId( RID_STR_UNOPKG_NO_SHARED_ALLOWED, *DeploymentResMgr::get() ) );
         sResMsg.SearchAndReplaceAllAscii( "%NAME", licAgreementExc.ExtensionName );
-        ::rtl::OString oMsg = ::rtl::OUStringToOString(sResMsg, osl_getThreadTextEncoding());
-        fprintf(stdout, "\n%s\n\n", oMsg.getStr());
+        dp_misc::writeConsole(OUSTR("\n") + sResMsg + OUSTR("\n\n"));
         abort = true;
     }
     else if (request >>= licExc)
@@ -328,9 +302,7 @@ void CommandEnvironmentImpl::handle(
     {
         String sMsg(ResId(RID_STR_UNSUPPORTED_PLATFORM, *dp_gui::DeploymentGuiResMgr::get()));
         sMsg.SearchAndReplaceAllAscii("%Name", platExc.package->getDisplayName());
-        ::rtl::OString oMsg = ::rtl::OUStringToOString(sMsg, osl_getThreadTextEncoding());
-
-        fprintf(stdout, "\n%s\n\n", oMsg.getStr());
+        dp_misc::writeConsole(OUSTR("\n") + sMsg + OUSTR("\n\n"));
         approve = true;
     }
     else {
@@ -350,9 +322,8 @@ void CommandEnvironmentImpl::handle(
     if (abort && m_option_verbose && !bLicenseException)
     {
         OUString msg = ::comphelper::anyToString(request);
-        fprintf( stderr, "\nERROR: %s\n",
-            ::rtl::OUStringToOString(
-            msg, osl_getThreadTextEncoding() ).getStr() );
+        dp_misc::writeConsoleError(
+            OUSTR("\nERROR: ") + msg + OUSTR("\n"));
     }
 
     // select:
@@ -400,13 +371,11 @@ void CommandEnvironmentImpl::update_( Any const & Status )
 {
     if (! Status.hasValue())
         return;
-
-    FILE * stream;
+    bool bUseErr = false;
     OUString msg;
     if (Status >>= msg) {
         if (! m_option_verbose)
             return;
-        stream = stdout;
     }
     else {
         ::rtl::OUStringBuffer buf;
@@ -421,13 +390,21 @@ void CommandEnvironmentImpl::update_( Any const & Status )
             buf.append( ::comphelper::anyToString(Status) );
         }
         msg = buf.makeStringAndClear();
-        stream = stderr;
+        bUseErr = true;
     }
     OSL_ASSERT( m_logLevel >= 0 );
     for ( sal_Int32 n = 0; n < m_logLevel; ++n )
-        fprintf( stream, " " );
-    fprintf( stream, "%s\n", ::rtl::OUStringToOString(
-                 msg, osl_getThreadTextEncoding() ).getStr() );
+    {
+        if (bUseErr)
+            dp_misc::writeConsoleError(" ");
+        else
+            dp_misc::writeConsole(" ");
+    }
+
+    if (bUseErr)
+        dp_misc::writeConsoleError(msg + OUSTR("\n"));
+    else
+        dp_misc::writeConsole(msg + OUSTR("\n"));
 }
 
 //______________________________________________________________________________

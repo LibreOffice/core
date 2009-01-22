@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dp_parceldesc.cxx,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.86.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,7 +30,10 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_desktop.hxx"
+#include "dp_misc.h"
 #include "dp_parceldesc.hxx"
+
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -93,8 +96,9 @@ ParcelDescDocHandler::startElement( const OUString& aName,
         throw ( xml::sax::SAXException,
             RuntimeException )
 {
-    OSL_TRACE("ParcelDescDocHandler::startElement() for %s",
-        rtl::OUStringToOString( aName, RTL_TEXTENCODING_ASCII_US ).getStr() );
+
+    dp_misc::TRACE(OUSTR("ParcelDescDocHandler::startElement() for ") +
+        aName + OUSTR("\n"));
     if ( !skipIndex )
     {
         if ( aName.equals( OUString::createFromAscii( "parcel" ) ) )
@@ -105,8 +109,8 @@ ParcelDescDocHandler::startElement( const OUString& aName,
     }
     else
     {
-        OSL_TRACE("ParcelDescDocHandler::startElement() skipping for %s",
-            rtl::OUStringToOString( aName, RTL_TEXTENCODING_ASCII_US ).getStr() );
+        dp_misc::TRACE(OUSTR("ParcelDescDocHandler::startElement() skipping for ")
+            + aName + OUSTR("\n"));
     }
 
 }
@@ -117,8 +121,8 @@ void SAL_CALL ParcelDescDocHandler::endElement( const OUString & aName )
     if ( skipIndex )
     {
         --skipIndex;
-        OSL_TRACE("ParcelDescDocHandler::endElement() skipping for %s",
-            rtl::OUStringToOString( aName, RTL_TEXTENCODING_ASCII_US ).getStr() );
+        dp_misc::TRACE(OUSTR("ParcelDescDocHandler::endElement() skipping for ")
+            + aName + OUSTR("\n"));
     }
 }
 

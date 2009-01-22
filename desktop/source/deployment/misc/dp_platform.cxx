@@ -8,7 +8,7 @@
  *
  * $RCSfile: dp_platform.cxx,v $
  *
- * $Revision: 1.3 $
+ * $Revision: 1.2.86.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -63,7 +63,7 @@
 #define PLATFORM_FREEBSD_X86_64     "freebsd_x86_64"
 #define PLATFORM_MACOSX_X86         "macosx_x86"
 #define PLATFORM_MACOSX_PPC         "macosx_powerpc"
-#define PLATFORM_OS2_X86            "os/2_x86"
+#define PLATFORM_OS2_X86            "os2_x86"
 
 
 
@@ -165,7 +165,7 @@ namespace
         else if (token.equals(OUSTR(PLATFORM_MACOSX_PPC)))
             ret = checkOSandCPU(OUSTR("MacOSX"), OUSTR("PowerPC"));
         else if (token.equals(OUSTR(PLATFORM_OS2_X86)))
-            ret = checkOSandCPU(OUSTR("OS/2"), OUSTR("x86"));
+            ret = checkOSandCPU(OUSTR("OS2"), OUSTR("x86"));
         else
         {
             OSL_ENSURE(0, "Extension Manager: The extension supports an unknown platform. "

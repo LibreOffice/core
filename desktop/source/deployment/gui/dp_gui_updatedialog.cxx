@@ -903,8 +903,8 @@ void UpdateDialog::createNotifyJob( bool bPrepareOnly,
     }
     catch( const css::uno::Exception& e )
     {
-         OSL_TRACE( "Caught exception: %s\n thread terminated.\n",
-            rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
+        dp_misc::TRACE( OUSTR("Caught exception: ")
+            + e.Message + OUSTR("\n thread terminated.\n\n"));
     }
 }
 

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dp_gui_updatability.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.86.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -151,10 +151,10 @@ Updatability::Thread::~Thread() {}
 
 void Updatability::Thread::execute() {
     for (;;) {
+
         if (m_wakeup.wait() != osl::Condition::result_ok) {
-            OSL_TRACE(
-                "dp_gui::Updatability::Thread::run: ignored "
-                "osl::Condition::wait failure");
+            dp_misc::TRACE("dp_gui::Updatability::Thread::run: ignored \n");
+            dp_misc::TRACE("osl::Condition::wait failure\n");
         }
         m_wakeup.reset();
         Input input;

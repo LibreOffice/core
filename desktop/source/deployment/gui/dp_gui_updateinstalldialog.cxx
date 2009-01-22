@@ -658,11 +658,8 @@ void UpdateCommandEnv::handle(
 {
     cssu::Any request( xRequest->getRequest() );
     OSL_ASSERT( request.getValueTypeClass() == cssu::TypeClass_EXCEPTION );
-#if OSL_DEBUG_LEVEL > 1
-    OSL_TRACE( "[dp_gui_cmdenv.cxx] incoming request:\n%s\n",
-               ::rtl::OUStringToOString( ::comphelper::anyToString(request),
-                                         RTL_TEXTENCODING_UTF8 ).getStr() );
-#endif
+    dp_misc::TRACE(OUSTR("[dp_gui_cmdenv.cxx] incoming request:\n")
+        + ::comphelper::anyToString(request) + OUSTR("\n\n"));
 
     css::deployment::VersionException verExc;
     bool approve = false;

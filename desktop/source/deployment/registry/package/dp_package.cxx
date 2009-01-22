@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dp_package.cxx,v $
- * $Revision: 1.35 $
+ * $Revision: 1.34.16.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -99,8 +99,10 @@ class BackendImpl : public ImplBaseT
     class PackageImpl : public ::dp_registry::backend::Package
     {
         BackendImpl * getMyBackend() const;
-
-        OUString m_description;
+        /** constains the old tooltip description for the Extension Manager GUI in OOo v.2.x
+            We keep it for backward compatibility.
+        */
+        OUString m_oldDescription;
         OUString m_url_expanded;
         const bool m_legacyBundle;
         Sequence< Reference<deployment::XPackage> > m_bundle;
@@ -141,7 +143,8 @@ class BackendImpl : public ImplBaseT
                     css::ucb::CommandFailedException,
                     css::ucb::CommandAbortedException,
                     css::uno::RuntimeException);
-        OUString getLicenseText(
+        // @throws DeploymentException
+        OUString getTextFromURL(
             const css::uno::Reference< css::ucb::XCommandEnvironment >& xCmdEnv,
             const OUString& licenseUrl);
 
@@ -446,44 +449,22 @@ BackendImpl::PackageImpl::isRegistered_(
         present, beans::Ambiguous<sal_Bool>(reg, ambig) );
 }
 
-OUString BackendImpl::PackageImpl::getLicenseText(
+OUString BackendImpl::PackageImpl::getTextFromURL(
     const css::uno::Reference< css::ucb::XCommandEnvironment >& xCmdEnv,
     const OUString& licenseUrl)
 {
     try
     {
         ::ucbhelper::Content descContent(licenseUrl, xCmdEnv);
-        css::uno::Reference<css::io::XInputStream> xInput = descContent.openStream();
-
-        //read out the complete content and create a string
-        const sal_Int32 nConstBufferSize = 32000;
-        sal_Int32 nRead = 0;
-        css::uno::Sequence<sal_Int8> seqTemp(nConstBufferSize);
-        css::uno::Sequence<sal_Int8> seqAll(0);
-
-        do
-        {
-            nRead = xInput->readBytes ( seqTemp, nConstBufferSize );
-            sal_Int32 lenAll = seqAll.getLength();
-            seqAll.realloc(seqAll.getLength() + nRead);
-            sal_Int8 const * arTemp = seqTemp.getConstArray();
-            sal_Int8 * arAll = seqAll.getArray();
-            rtl_copyMemory(arAll + lenAll, arTemp, nRead);
-        }
-        while ( nRead == nConstBufferSize );
-
-        xInput->closeInput();
-
-        OUString sLic(reinterpret_cast<sal_Char const *>(seqAll.getConstArray()),
-            seqAll.getLength(), RTL_TEXTENCODING_UTF8);
-
-        return sLic;
+        ::rtl::ByteSequence seq = dp_misc::readFile(descContent);
+        return OUString( reinterpret_cast<sal_Char const *>(
+            seq.getConstArray()), seq.getLength(), RTL_TEXTENCODING_UTF8);
     }
     catch (css::uno::Exception&)
     {
         Any exc( ::cppu::getCaughtException() );
             throw css::deployment::DeploymentException(
-                OUSTR("Could not read license text in ") + licenseUrl, 0, exc);
+                OUSTR("Could not read file ") + licenseUrl, 0, exc);
     }
 
 }
@@ -600,7 +581,7 @@ bool BackendImpl::PackageImpl::checkDependencies(
             throw css::deployment::DeploymentException(
                 OUSTR("Could not obtain path to license. Possible error in description.xml"), 0, Any());
         OUString sHref = desc.getExtensionRootUrl() + OUSTR("/") + sLic;
-           OUString sLicense = getLicenseText(xCmdEnv, sHref);
+           OUString sLicense = getTextFromURL(xCmdEnv, sHref);
         //determine who has to agree to the license
         css::uno::Reference<css::xml::xpath::XXPathObject> nodeAttribWho3 =
             xPath->eval(nodeSimpleLic,
@@ -904,7 +885,21 @@ void BackendImpl::PackageImpl::processPackage_(
 //______________________________________________________________________________
 OUString BackendImpl::PackageImpl::getDescription() throw (RuntimeException)
 {
-     return m_description;
+    const OUString sRelativeURL(getDescriptionInfoset().getLocalizedDescriptionURL());
+    OUString sDescription;
+    if (sRelativeURL.getLength())
+    {
+        OUString sURL = m_url_expanded + OUSTR("/") + sRelativeURL;
+        sDescription = getTextFromURL(
+            css::uno::Reference< css::ucb::XCommandEnvironment >(), sURL);
+
+    }
+    if (sDescription.getLength())
+        return sDescription;
+    else if(m_oldDescription.getLength() == 0)
+        return m_oldDescription;
+    else
+        return OUString();
 }
 
 //______________________________________________________________________________
@@ -1392,7 +1387,7 @@ void BackendImpl::PackageImpl::scanBundle(
             {
                 buf.append( Package::getDescription() );
             }
-            m_description = buf.makeStringAndClear();
+            m_oldDescription = buf.makeStringAndClear();
         }
     }
 }
