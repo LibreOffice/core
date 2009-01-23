@@ -490,27 +490,27 @@ void SfxDocumentInfoItem::AddCustomProperty( const ::rtl::OUString& sName, const
 
 ::rtl::OUString SfxDocumentInfoItem::getUserDefinedFieldTitle(size_t i_ix) const
 {
-    DBG_ASSERT(i_ix < FOUR, "SfxDocumentInfoItem: invalid index");
+    DBG_ASSERT(i_ix < 4, "SfxDocumentInfoItem: invalid index");
     return m_UserDefinedFieldTitles[i_ix];
 }
 
 ::rtl::OUString SfxDocumentInfoItem::getUserDefinedFieldValue(size_t i_ix) const
 {
-    DBG_ASSERT(i_ix < FOUR, "SfxDocumentInfoItem: invalid index");
+    DBG_ASSERT(i_ix < 4, "SfxDocumentInfoItem: invalid index");
     return m_UserDefinedFieldValues[i_ix];
 }
 
 void SfxDocumentInfoItem::setUserDefinedFieldTitle(size_t i_ix,
         ::rtl::OUString i_val)
 {
-    DBG_ASSERT(i_ix < FOUR, "SfxDocumentInfoItem: invalid index");
+    DBG_ASSERT(i_ix < 4, "SfxDocumentInfoItem: invalid index");
     m_UserDefinedFieldTitles[i_ix] = i_val;
 }
 
 void SfxDocumentInfoItem::setUserDefinedFieldValue(size_t i_ix,
         ::rtl::OUString i_val)
 {
-    DBG_ASSERT(i_ix < FOUR, "SfxDocumentInfoItem: invalid index");
+    DBG_ASSERT(i_ix < 4, "SfxDocumentInfoItem: invalid index");
     m_UserDefinedFieldValues[i_ix] = i_val;
 }
 
