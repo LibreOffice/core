@@ -574,14 +574,9 @@ String lcl_dbg_out(const SwNode & rNode)
             aTmpStr += String("<tbl/>", RTL_TEXTENCODING_ASCII_US);
 
         aTmpStr += String("<outlinelevel>", RTL_TEXTENCODING_ASCII_US);
-<<<<<<< .working
-        //aTmpStr += String::CreateFromInt32(pTxtNode->GetOutlineLevel());//#outline level,zhaojianwei
-        aTmpStr += String::CreateFromInt32(pTxtNode->GetAttrOutlineLevel()-1);//<-end,zhaojianwei
-=======
-        aTmpStr += String::CreateFromInt32(pTxtNode->GetOutlineLevel());
+        aTmpStr += String::CreateFromInt32(pTxtNode->GetAttrOutlineLevel()-1);
         aTmpStr += String("</outlinelevel>", RTL_TEXTENCODING_ASCII_US);
 
->>>>>>> .merge-right.r264324
         const SwNumRule * pNumRule = pTxtNode->GetNumRule();
 
         if (pNumRule != NULL)
