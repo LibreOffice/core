@@ -116,14 +116,14 @@ void SwRVPMarker::Mark( const OutputDevice* pOut )
 {
     if( pOut )
     {
-        Color aOldCol = pOut->GetUnderColor();
+        Color aOldCol = pOut->GetLineColor();
         Color aBlack = Color( COL_BLACK );
         if( aOldCol != aBlack )
         {
-            ((OutputDevice*)pOut)->SetUnderColor( aBlack );
+            ((OutputDevice*)pOut)->SetLineColor( aBlack );
             ((OutputDevice*)pOut)->DrawChord( Rectangle(0,1,0,1),
                                               Point(), Point() );
-            ((OutputDevice*)pOut)->SetUnderColor( aOldCol );
+            ((OutputDevice*)pOut)->SetLineColor( aOldCol );
         }
         else
             ((OutputDevice*)pOut)->DrawChord( Rectangle(0,1,0,1),
