@@ -884,7 +884,7 @@ xub_StrLen ScGlobal::FindUnquoted( const String& rString, sal_Unicode cChar, xub
     while (p < pStop)
     {
         if (*p == cChar && !bQuoted)
-            return p - pStart;
+            return xub_StrLen(p - pStart);
         else if (*p == cQuote)
         {
             if (!bQuoted)

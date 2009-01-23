@@ -739,7 +739,7 @@ void ScInputHandler::ShowTipCursor()
                         if( ppFDesc->getFunctionName().getLength() )
                         {
                             nArgPos = aHelper.GetArgStart( aSelText, nNextFStart, 0 );
-                            nArgs = ppFDesc->getParameterCount();
+                            nArgs = (USHORT)ppFDesc->getParameterCount();
 
                             USHORT nActive = 0;
                             USHORT nCount = 0;
@@ -754,7 +754,7 @@ void ScInputHandler::ShowTipCursor()
                             {
                                 for( USHORT i=0; i < nArgs; i++ )
                                 {
-                                    xub_StrLen nLength=aArgs[i].getLength();
+                                    xub_StrLen nLength= (USHORT)aArgs[i].getLength();
                                     if( nArgPos <= aSelText.Len()-1 )
                                     {
                                         nActive = i+1;
@@ -977,7 +977,7 @@ void ScInputHandler::UseFormulaData()
                 {
                     {
                         nArgPos = aHelper.GetArgStart( aFormula, nNextFStart, 0 );
-                        nArgs = ppFDesc->getParameterCount();
+                        nArgs = (USHORT)ppFDesc->getParameterCount();
 
                         USHORT nActive = 0;
                         USHORT nCount = 0;
@@ -992,7 +992,7 @@ void ScInputHandler::UseFormulaData()
                         {
                             for( USHORT i=0; i < nArgs; i++ )
                             {
-                                xub_StrLen nLength=aArgs[i].getLength();
+                                xub_StrLen nLength= (USHORT)aArgs[i].getLength();
                                 if( nArgPos <= aFormula.Len()-1 )
                                 {
                                     nActive = i+1;

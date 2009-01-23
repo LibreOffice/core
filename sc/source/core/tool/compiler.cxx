@@ -645,7 +645,7 @@ static bool lcl_parseExternalName(
                 aEndTabName, nFlags, true, pExternalLinks );
         if (!p || p == pStart)
             return false;
-        i = p - pStart;
+        i = xub_StrLen(p - pStart);
         cPrev = *(p-1);
     }
     for ( ; i < nLen; ++i, ++p)
