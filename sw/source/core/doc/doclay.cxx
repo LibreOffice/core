@@ -695,7 +695,7 @@ SwFlyFrmFmt* SwDoc::_MakeFlySection( const SwPosition& rAnchPos,
     if( FLY_IN_CNTNT == eAnchorId )
     {
         xub_StrLen nStt = rAnchPos.nContent.GetIndex();
-        SwTxtNode * pTxtNode = rAnchPos.nNode.GetNode().GetTxtNode()
+        SwTxtNode * pTxtNode = rAnchPos.nNode.GetNode().GetTxtNode();
 
         ASSERT(pTxtNode!= 0, "There should be a SwTxtNode!");
 
