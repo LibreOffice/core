@@ -266,6 +266,7 @@ COMPONENT_EXTJARFILES = \
     $(EXTENSIONDIR)$/sun-report-builder.jar 					\
     $(EXTENSIONDIR)$/reportbuilderwizard.jar
 .IF "$(SYSTEM_JFREEREPORT)" != "YES"
+COMPONENT_EXTJARFILES += \
     $(EXTENSIONDIR)$/flute-1.3-jfree-20061107.jar				\
     $(EXTENSIONDIR)$/jcommon-1.0.10.jar							\
     $(EXTENSIONDIR)$/jcommon-serializer-0.2.0.jar				\
