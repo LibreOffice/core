@@ -6200,7 +6200,7 @@ if test "$_os" = "WINNT"; then
 echo $ECHO_N "checking for friendly registry keys... $ECHO_C" >&6; }
 		# VS.Net 2003, VS.Net 2005
 		if test -z "$with_cl_home"; then
-			vctest=`./solenv/bin/oowintool --msvc-productdir`;
+			vctest=`./oowintool --msvc-productdir`;
 			if test -x "$vctest/bin/cl.exe"; then
 				with_cl_home=$vctest;
 			fi
@@ -6485,13 +6485,13 @@ fi
 		MIDL_PATH="$with_cl_home/../Common7/Tools/Bin"
 	fi
 	if test -z "$MIDL_PATH" ; then
-      vstest=`./solenv/bin/oowintool --msvs-productdir`;
+      vstest=`./oowintool --msvs-productdir`;
       if test -x "$vstest/Common7/Tools/Bin/midl.exe" ; then
 		  MIDL_PATH="$vstest/Common7/Tools/Bin"
       fi
 	fi
 	if test -z "$MIDL_PATH" ; then
-		psdktest=`./solenv/bin/oowintool --psdk-home`
+		psdktest=`./oowintool --psdk-home`
 		if test -x "$psdktest/Bin/midl.exe" ; then
 			MIDL_PATH="$psdktest/Bin"
 		fi
@@ -6554,7 +6554,7 @@ fi
 	if test -x "$with_csc_path/csc.exe"; then
 		CSC_PATH="$with_csc_path"
 	else
-	   csctest=`./solenv/bin/oowintool --csc-compilerdir`;
+	   csctest=`./oowintool --csc-compilerdir`;
 	   if test -x "$csctest/csc.exe"; then
 	      CSC_PATH="$csctest"
 	   fi
@@ -6580,11 +6580,11 @@ echo $ECHO_N "checking .NET Framework... $ECHO_C" >&6; }
 		    FRAME_HOME="$with_cl_home/../SDK/v1.1"
 	    fi
 	    if test -z "$FRAME_HOME" ; then
-          frametest=`./solenv/bin/oowintool --dotnetsdk-dir`
+          frametest=`./oowintool --dotnetsdk-dir`
           if test -f "$frametest/lib/mscoree.lib"; then
              FRAME_HOME="$frametest"
           else
-             frametest=`./solenv/bin/oowintool --psdk-home`
+             frametest=`./oowintool --psdk-home`
              if test -f "$frametest/lib/mscoree.lib"; then
                 FRAME_HOME="$frametest"
              fi
@@ -11037,7 +11037,7 @@ fi
 
 if test "$_os" = "WINNT"; then
    if test -z "$with_jdk_home"; then
-      _jdk_home=`./solenv/bin/oowintool --jdk-home`
+      _jdk_home=`./oowintool --jdk-home`
        if test -d "$_jdk_home"; then
           with_jdk_home="$_jdk_home"
        fi
@@ -23222,7 +23222,7 @@ if test \( "$_os" = "WINNT" \) ; then
 echo $ECHO_N "checking for PSDK files... $ECHO_C" >&6; }
 	if test -z "$with_psdk_home"; then
 		# This first line will detect a February 2003 Microsoft Platform SDK
-		PSDK_HOME=`./solenv/bin/oowintool --psdk-home`
+		PSDK_HOME=`./oowintool --psdk-home`
         # But there might be also an April 2005 PSDK, unfortunately MS changed
         # the registry entry. (we prefer the old version!?)
         if test -z "$PSDK_HOME"; then
@@ -23403,7 +23403,7 @@ fi
     if test -e "$with_nsis_path/nsis.exe"; then
         NSIS_PATH="$with_nsis_path"
     fi
-    nsistest=`./solenv/bin/oowintool --nsis-dir`;
+    nsistest=`./oowintool --nsis-dir`;
     if test -x "$nsistest/nsis.exe"; then
         NSIS_PATH="$nsistest"
     fi
@@ -23969,11 +23969,11 @@ may have to search Microsoft's website.) Last time it was seen at:
 fi
 
 if test "$_os" = "WINNT"; then
-       if ./solenv/bin/oowintool --msvc-copy-dlls ./external/msvcp ; then
+       if ./oowintool --msvc-copy-dlls ./external/msvcp ; then
           :
        else
-          { { echo "$as_me:$LINENO: error: solenv/bin/oowintool failed to copy CRT" >&5
-echo "$as_me: error: solenv/bin/oowintool failed to copy CRT" >&2;}
+          { { echo "$as_me:$LINENO: error: oowintool failed to copy CRT" >&5
+echo "$as_me: error: oowintool failed to copy CRT" >&2;}
    { (exit 1); exit 1; }; }
        fi
 fi
@@ -23998,7 +23998,7 @@ You may have to search Microsoft's website. Last time it was seen at:
 fi
 
 if test "$_os" = "WINNT"; then
-       ./solenv/bin/oowintool --msvc-copy-instmsi ./external/msi
+       ./oowintool --msvc-copy-instmsi ./external/msi
 fi
 
 if test "$_os" = "WINNT"; then
