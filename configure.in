@@ -1658,7 +1658,7 @@ if test "$_os" = "WINNT"; then
 		AC_MSG_CHECKING([for friendly registry keys])
 		# VS.Net 2003, VS.Net 2005
 		if test -z "$with_cl_home"; then
-			vctest=`./solenv/bin/oowintool --msvc-productdir`;
+			vctest=`./oowintool --msvc-productdir`;
 			if test -x "$vctest/bin/cl.exe"; then
 				with_cl_home=$vctest;
 			fi
@@ -1784,13 +1784,13 @@ if test "$COMEX" -ge "10"; then
 		MIDL_PATH="$with_cl_home/../Common7/Tools/Bin"
 	fi
 	if test -z "$MIDL_PATH" ; then
-      vstest=`./solenv/bin/oowintool --msvs-productdir`;
+      vstest=`./oowintool --msvs-productdir`;
       if test -x "$vstest/Common7/Tools/Bin/midl.exe" ; then
 		  MIDL_PATH="$vstest/Common7/Tools/Bin"
       fi
 	fi
 	if test -z "$MIDL_PATH" ; then
-		psdktest=`./solenv/bin/oowintool --psdk-home`
+		psdktest=`./oowintool --psdk-home`
 		if test -x "$psdktest/Bin/midl.exe" ; then
 			MIDL_PATH="$psdktest/Bin"
 		fi
@@ -1813,7 +1813,7 @@ if test "$COMEX" -ge "10"; then
 	if test -x "$with_csc_path/csc.exe"; then
 		CSC_PATH="$with_csc_path"
 	else
-	   csctest=`./solenv/bin/oowintool --csc-compilerdir`;
+	   csctest=`./oowintool --csc-compilerdir`;
 	   if test -x "$csctest/csc.exe"; then
 	      CSC_PATH="$csctest"
 	   fi
@@ -1838,11 +1838,11 @@ if test "$COMEX" -ge "10"; then
 		    FRAME_HOME="$with_cl_home/../SDK/v1.1"
 	    fi
 	    if test -z "$FRAME_HOME" ; then
-          frametest=`./solenv/bin/oowintool --dotnetsdk-dir`
+          frametest=`./oowintool --dotnetsdk-dir`
           if test -f "$frametest/lib/mscoree.lib"; then
              FRAME_HOME="$frametest"
           else
-             frametest=`./solenv/bin/oowintool --psdk-home`
+             frametest=`./oowintool --psdk-home`
              if test -f "$frametest/lib/mscoree.lib"; then
                 FRAME_HOME="$frametest"
              fi
@@ -2585,7 +2585,7 @@ fi
 
 if test "$_os" = "WINNT"; then
    if test -z "$with_jdk_home"; then
-      _jdk_home=`./solenv/bin/oowintool --jdk-home`
+      _jdk_home=`./oowintool --jdk-home`
        if test -d "$_jdk_home"; then
           with_jdk_home="$_jdk_home"
        fi
@@ -4718,7 +4718,7 @@ if test \( "$_os" = "WINNT" \) ; then
 	AC_MSG_CHECKING([for PSDK files])
 	if test -z "$with_psdk_home"; then
 		# This first line will detect a February 2003 Microsoft Platform SDK
-		PSDK_HOME=`./solenv/bin/oowintool --psdk-home`
+		PSDK_HOME=`./oowintool --psdk-home`
         # But there might be also an April 2005 PSDK, unfortunately MS changed
         # the registry entry. (we prefer the old version!?)
         if test -z "$PSDK_HOME"; then
@@ -4846,7 +4846,7 @@ if test "$_os" = "WINNT" ; then
     if test -e "$with_nsis_path/nsis.exe"; then
         NSIS_PATH="$with_nsis_path"
     fi
-    nsistest=`./solenv/bin/oowintool --nsis-dir`;
+    nsistest=`./oowintool --nsis-dir`;
     if test -x "$nsistest/nsis.exe"; then
         NSIS_PATH="$nsistest"
     fi
@@ -5070,13 +5070,13 @@ may have to search Microsoft's website.) Last time it was seen at:
 fi
 
 dnl ===================================================================
-dnl Windows builds - use solenv/bin/oowintool to copy CRT dlls and manifest
+dnl Windows builds - use oowintool to copy CRT dlls and manifest
 dnl ===================================================================
 if test "$_os" = "WINNT"; then
-       if ./solenv/bin/oowintool --msvc-copy-dlls ./external/msvcp ; then
+       if ./oowintool --msvc-copy-dlls ./external/msvcp ; then
           :
        else
-          AC_MSG_ERROR([solenv/bin/oowintool failed to copy CRT])
+          AC_MSG_ERROR([oowintool failed to copy CRT])
        fi
 fi
 
@@ -5099,7 +5099,7 @@ dnl ===================================================================
 dnl Windows builds - attempt to auto-copy required instmsiX.exe into external/
 dnl ===================================================================
 if test "$_os" = "WINNT"; then
-       ./solenv/bin/oowintool --msvc-copy-instmsi ./external/msi
+       ./oowintool --msvc-copy-instmsi ./external/msi
 fi
 
 dnl ===================================================================
