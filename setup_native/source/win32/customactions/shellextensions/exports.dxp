@@ -16,9 +16,6 @@ RemoveLayerLinks
 DotNetCheck
 ShowProperties
 copyEditionData
-<<<<<<< .working
 IsOfficeRunning
 CheckPatchList
-=======
 copyExtensionData
->>>>>>> .merge-right.r266571
