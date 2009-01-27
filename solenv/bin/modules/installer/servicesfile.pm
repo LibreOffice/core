@@ -578,6 +578,10 @@ sub add_path_to_pathvariable_directory
         my $oldpath = "";
         if ( $ENV{'PATH'} ) { $oldpath = $ENV{'PATH'}; }
         else { $oldpath = "\."; }
+        if ( $^O =~ /cygwin/i ) {
+            $path = qx(cygpath -u "$path");
+            chomp $path;
+        }
         my $newpath = $path . $installer::globals::pathseparator . $oldpath;
         $ENV{'PATH'} = $newpath;
 
@@ -621,6 +625,10 @@ sub add_path_to_pathvariable
         my $oldpath = "";
         if ( $ENV{'PATH'} ) { $oldpath = $ENV{'PATH'}; }
         else { $oldpath = "\."; }
+        if ( $^O =~ /cygwin/i ) {
+            $path = qx(cygpath -u "$path");
+            chomp $path;
+        }
         my $newpath = $path . $installer::globals::pathseparator . $oldpath;
         $ENV{'PATH'} = $newpath;
 
