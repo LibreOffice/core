@@ -1,5 +1,4 @@
 mkdir: %_DEST%\inc%_EXT%\scripting
-mkdir: %_DEST%\inc%_EXT%\scripting\storage
 mkdir: %_DEST%\lib%_EXT%\pyuno
 mkdir: %_DEST%\bin%_EXT%\pyuno
 

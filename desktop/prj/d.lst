@@ -1,7 +1,4 @@
 mkdir: %COMMON_DEST%\bin%_EXT%\hid
-mkdir: %_DEST%\bin%_EXT%\local
-mkdir: %_DEST%\bin%_EXT%\remote
-mkdir: %_DEST%\bin%_EXT%\remote2
 mkdir: %_DEST%\bin%_EXT%\so
 mkdir: %_DEST%\bin%_EXT%\c01
 mkdir: %_DEST%\bin%_EXT%\c05
