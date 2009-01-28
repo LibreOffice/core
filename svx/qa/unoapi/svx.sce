@@ -1,4 +1,4 @@
--o svx.AccessibleControlShape
+#i98339 -o svx.AccessibleControlShape
 -o svx.AccessibleEditableTextPara
 -o svx.AccessibleGraphicShape
 #i46736 -o svx.AccessibleImageBullet

@@ -75,3 +75,7 @@ svx.SvxUnoTextRange::com::sun::star::beans::XPropertySet
 ### i90294 ###
 svx.GraphicExporter
 # -> disbaled in svx.sce
+
+### i98339 ###
+svx.AccessibleControlShape
+# -> disbaled in svx.sce
