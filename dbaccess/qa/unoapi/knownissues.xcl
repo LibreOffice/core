@@ -52,3 +52,11 @@ dbaccess.SbaXGridControl
 ### i95691 ###
 dbaccess.ORowSet::com::sun::star::sdbc::XRowUpdate
 dbaccess.ORowSet::com::sun::star::sdbc::XRow
+
+## i97860 ###
+dbaccess.ORowSet::com::sun::star::sdbcx::XDeleteRows
+dbaccess.ORowSet::com::sun::star::sdbc::XResultSetUpdate
+
+### i98007 ###
+dbaccess.ODatasourceBrowser
+# -> disabled in dbaccess.sce

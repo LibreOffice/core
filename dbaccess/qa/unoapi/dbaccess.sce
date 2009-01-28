@@ -5,7 +5,7 @@
 -o dbaccess.ODatabaseContext
 -o dbaccess.ODatabaseSource
 -o dbaccess.ODatasourceAdministrationDialog
-#-o dbaccess.ODatasourceBrowser
+#i98007 -o dbaccess.ODatasourceBrowser
 -o dbaccess.OInteractionHandler
 #i84116 -o dbaccess.OQueryDesign
 -o dbaccess.ORowSet
