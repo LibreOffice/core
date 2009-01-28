@@ -51,13 +51,6 @@ ENABLE_EXCEPTIONS=TRUE
 DLLPRE=
 common_build_zip=
 
-PRIVATERDB = slideshow.rdb
-UNOUCRRDB = $(SOLARBINDIR)$/$(PRIVATERDB)
-UNOUCRDEP = $(UNOUCRRDB)
-UNOUCROUT = $(OUT)$/inc
-
-CPPUMAKERFLAGS += -C -X$(SOLARBINDIR)$/types.rdb
-
 # --- Files -------------------------------------
 
 SLOFILES=										\
