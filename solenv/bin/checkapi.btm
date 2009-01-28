@@ -27,7 +27,7 @@ IFF "%RUNNERPROPS%" != "" THEN
     SET PARAM=%PARAM% -runnerini %RUNNERPROPS%
 ENDIFF
 
-SET MYXDEBUG=""
+SET MYXDEBUG
 IFF "%XDEBUG%" != "" THEN
     REM SET XDEBUG=-Xdebug -Xrunjdwp:transport=dt_socket,server=y,address=8001 
     SET MYXDEBUG=%XDEBUG
