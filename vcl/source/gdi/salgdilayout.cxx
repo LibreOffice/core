@@ -574,7 +574,7 @@ void    SalGraphics::CopyBits( const SalTwoRect* pPosAry,
         (pSrcGraphics && ( (pSrcGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL)  || (pSrcOutDev && pSrcOutDev->IsRTLEnabled()) ) ) )
     {
         SalTwoRect pPosAry2 = *pPosAry;
-        if( pSrcGraphics && (pSrcGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL) || (pSrcOutDev && pSrcOutDev->IsRTLEnabled()) )
+        if( (pSrcGraphics && (pSrcGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL)) || (pSrcOutDev && pSrcOutDev->IsRTLEnabled()) )
             mirror( pPosAry2.mnSrcX, pPosAry2.mnSrcWidth, pSrcOutDev );
         if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) || (pOutDev && pOutDev->IsRTLEnabled()) )
             mirror( pPosAry2.mnDestX, pPosAry2.mnDestWidth, pOutDev );

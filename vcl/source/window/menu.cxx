@@ -352,10 +352,12 @@ MenuItemData* MenuItemList::SearchItem( xub_Unicode cSelectChar, KeyCode aKeyCod
         {
             MenuItemData* pData = GetDataFromPos( rPos );
             if ( pData->bEnabled && rI18nHelper.MatchMnemonic( pData->aText, cSelectChar ) )
+            {
                 if( nDuplicates > 1 && rPos == nCurrentPos )
                     continue;   // select next entry with the same mnemonic
                 else
                     return pData;
+            }
         }
     }
 
@@ -1588,10 +1590,12 @@ void Menu::SetPopupMenu( USHORT nItemId, PopupMenu* pMenu )
 
     // set native submenu
     if( ImplGetSalMenu() && pData->pSalMenuItem )
+    {
         if( pMenu )
             ImplGetSalMenu()->SetSubMenu( pData->pSalMenuItem, pMenu->ImplGetSalMenu(), nPos );
         else
             ImplGetSalMenu()->SetSubMenu( pData->pSalMenuItem, NULL, nPos );
+    }
 
     ImplCallEventListeners( VCLEVENT_MENU_SUBMENUCHANGED, nPos );
 }
@@ -4669,10 +4673,12 @@ void MenuFloatingWindow::ImplCursorUpDown( BOOL bUp, BOOL bHomeEnd )
         {
             n++;
             if ( n >= pMenu->GetItemCount() )
+            {
                 if ( !IsScrollMenu() || ( nHighlightedItem == ITEMPOS_INVALID ) )
                     n = 0;
                 else
                     break;
+            }
         }
 
         MenuItemData* pData = (MenuItemData*)pMenu->GetItemList()->GetDataFromPos( n );

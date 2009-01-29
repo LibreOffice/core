@@ -6384,10 +6384,12 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
     // check string index and length
     String aStr = rOrigStr;
     if( (ULONG)nMinIndex + nLen >= aStr.Len() )
+    {
         if( nMinIndex < aStr.Len() )
             nLen = aStr.Len() - nMinIndex;
         else
             return NULL;
+    }
 
     // filter out special markers
     if( bFilter )

@@ -193,7 +193,7 @@ static sal_Int16 JapaneseCharType(sal_Unicode c)
 {
     if (0x3041 <= c && c <= 0x309e)
         return HIRAKANA;
-    if (0x30a1 <= c && c <= 0x30fe || 0xff65 <= c && c <= 0xff9f)
+    if ((0x30a1 <= c && c <= 0x30fe) || (0xff65 <= c && c <= 0xff9f))
         return KATAKANA;
     return KANJA;
 }

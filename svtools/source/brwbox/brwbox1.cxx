@@ -1683,10 +1683,12 @@ BOOL BrowseBox::GoToRow( long nRow, BOOL bRowColMove, BOOL bKeepSelection )
         CursorMoved();
 
     if ( !bMultiSelection && !bKeepSelection )
+    {
         if ( !bSelecting )
             Select();
         else
             bSelect = TRUE;
+    }
     return TRUE;
 }
 
@@ -1727,10 +1729,12 @@ BOOL BrowseBox::GoToColumnId( USHORT nColId, BOOL bMakeVisible, BOOL bRowColMove
         USHORT nFrozen = FrozenColCount();
         if ( bMakeVisible && nLastPos &&
              nNewPos >= nFrozen && ( nNewPos < nFirstPos || nNewPos > nLastPos ) )
+        {
             if ( nNewPos < nFirstPos )
                 ScrollColumns( nNewPos-nFirstPos );
             else if ( nNewPos > nLastPos )
                 ScrollColumns( nNewPos-nLastPos );
+        }
 
         DoShowCursor( "GoToColumnId" );
         if (!bRowColMove)
