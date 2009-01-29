@@ -1600,8 +1600,8 @@ void OStorage_Impl::RemoveElement( SotElement_Impl* pElement )
     if ( !pElement )
         return;
 
-    if ( pElement->m_pStorage && ( pElement->m_pStorage->m_pAntiImpl || !pElement->m_pStorage->m_aReadOnlyWrapList.empty() )
-      || pElement->m_pStream && ( pElement->m_pStream->m_pAntiImpl || !pElement->m_pStream->m_aInputStreamsList.empty() ) )
+    if ( (pElement->m_pStorage && ( pElement->m_pStorage->m_pAntiImpl || !pElement->m_pStorage->m_aReadOnlyWrapList.empty() ))
+      || (pElement->m_pStream && ( pElement->m_pStream->m_pAntiImpl || !pElement->m_pStream->m_aInputStreamsList.empty() )) )
         throw io::IOException(); // TODO: Access denied
 
     if ( pElement->m_bIsInserted )
@@ -3751,11 +3751,13 @@ void SAL_CALL OStorage::revert()
 
     for ( SotElementList_Impl::iterator pElementIter = m_pImpl->m_aChildrenList.begin();
           pElementIter != m_pImpl->m_aChildrenList.end(); pElementIter++ )
-        if ( (*pElementIter)->m_pStorage
-                && ( (*pElementIter)->m_pStorage->m_pAntiImpl || !(*pElementIter)->m_pStorage->m_aReadOnlyWrapList.empty() )
-          || (*pElementIter)->m_pStream
-                  && ( (*pElementIter)->m_pStream->m_pAntiImpl || !(*pElementIter)->m_pStream->m_aInputStreamsList.empty() ) )
+    {
+        if ( ((*pElementIter)->m_pStorage
+                && ( (*pElementIter)->m_pStorage->m_pAntiImpl || !(*pElementIter)->m_pStorage->m_aReadOnlyWrapList.empty() ))
+          || ((*pElementIter)->m_pStream
+                  && ( (*pElementIter)->m_pStream->m_pAntiImpl || !(*pElementIter)->m_pStream->m_aInputStreamsList.empty()) ) )
             throw io::IOException(); // TODO: access denied
+    }
 
     if ( m_pData->m_bReadOnlyWrap || !m_pImpl->m_bListCreated )
         return; // nothing to do

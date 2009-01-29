@@ -706,7 +706,7 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
                                     aKeyString += sal_Unicode(1);   // mask it
                                     // extra for '>' which is coded as <SHIFT GREATER>
                                     if ( pKeyEvent->GetCharCode() == '>' )
-                                        aKeyString += sal_Unicode( KEY_GREATER | aKeyCode.GetAllModifier() & ~KEY_SHIFT );
+                                        aKeyString += sal_Unicode( KEY_GREATER | (aKeyCode.GetAllModifier() & ~KEY_SHIFT) );
                                     else
                                         aKeyString += sal_Unicode( aKeyCode.GetCode() | aKeyCode.GetAllModifier() );
                                 }
