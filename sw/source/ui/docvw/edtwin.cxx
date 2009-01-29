@@ -1266,7 +1266,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
     }
 
     SfxObjectShell *pObjSh = (SfxObjectShell*)rView.GetViewFrame()->GetObjectShell();
-    if ( bLockInput || pObjSh && pObjSh->GetProgress() )
+    if ( bLockInput || (pObjSh && pObjSh->GetProgress()) )
         // Wenn die Rechenleiste aktiv ist oder
         // auf dem Document ein Progress laeuft wird keine
         // Bestellungen angenommen.

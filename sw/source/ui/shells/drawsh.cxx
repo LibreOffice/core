@@ -340,7 +340,7 @@ void SwDrawShell::GetState(SfxItemSet& rSet)
             case SID_OBJECT_ROTATE:
             {
                 const BOOL bIsRotate = GetView().IsDrawRotate();
-                if ( !bIsRotate && !pSdrView->IsRotateAllowed() || bProtected )
+                if ( (!bIsRotate && !pSdrView->IsRotateAllowed()) || bProtected )
                     rSet.DisableItem( nWhich );
                 else
                     rSet.Put( SfxBoolItem( nWhich, bIsRotate ) );

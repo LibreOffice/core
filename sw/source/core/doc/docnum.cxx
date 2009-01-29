@@ -1881,8 +1881,8 @@ const SwNumRule *  SwDoc::SearchNumRule(SwPosition & rPos,
                 if (pNumRule)
                 {
                     if (pNumRule->IsOutlineRule() == bOutline && // #115901#
-                        (bNum && pNumRule->Get(0).IsEnumeration() ||
-                         !bNum && pNumRule->Get(0).IsItemize())) // #i22362#, #i29560#
+                        ( (bNum && pNumRule->Get(0).IsEnumeration()) ||
+                         (!bNum && pNumRule->Get(0).IsItemize()) )) // #i22362#, #i29560#
                     {
                         pResult = pTxtNd->GetNumRule();
                         // --> OD 2008-03-18 #refactorlists#

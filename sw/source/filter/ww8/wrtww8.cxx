@@ -717,7 +717,7 @@ ULONG SwWW8Writer::FillUntil( SvStream& rStrm, ULONG nEndPos )
 {
     ULONG nCurPos = rStrm.Tell();
     if( !nEndPos )                          // nEndPos == 0 -> next Page
-        nEndPos = nCurPos + 0x1ff & ~0x1ffUL;
+        nEndPos = (nCurPos + 0x1ff) & ~0x1ffUL;
 
     if( nEndPos > nCurPos )
         SwWW8Writer::FillCount( rStrm, nEndPos - nCurPos );

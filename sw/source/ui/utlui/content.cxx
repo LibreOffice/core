@@ -2063,7 +2063,9 @@ void SwContentTree::ExecCommand(sal_uInt16 nCmd, sal_Bool bModifier)
                 if(bIsRoot && nRootType == CONTENT_TYPE_OUTLINE ||
                     ((SwContent*)pFirstEntry->GetUserData())->GetParent()->GetType()
                                                 ==  CONTENT_TYPE_OUTLINE)
+                {
                     nActPos = ((SwOutlineContent*)pFirstEntry->GetUserData())->GetPos();
+                }
             }
             if ( nActPos < USHRT_MAX &&
                     ( !nMove || pShell->IsOutlineMovable( nActPos )) )
