@@ -676,12 +676,24 @@ throw ( RuntimeException )
             {
                 sal_Bool            bCheckmark( sal_False );
                 sal_Bool            bMenuItemEnabled( m_pVCLMenu->IsItemEnabled( pMenuItemHandler->nItemId ));
+                sal_Bool            bEnabledItem( Event.IsEnabled );
                 rtl::OUString       aItemText;
                 status::Visibility  aVisibilityStatus;
 
+                #ifdef UNIX
+                // #b6673979# enable some slots hardly, because UNIX clipboard does not notify all changes
+                // Can be removed if follow up task will be fixed directly within applications.
+                if (
+                    ( pMenuItemHandler->aMenuItemURL.equalsAscii (".uno:Paste"         ) ) ||
+                    ( pMenuItemHandler->aMenuItemURL.equalsAscii (".uno:PasteSpecial"  ) ) ||
+                    ( pMenuItemHandler->aMenuItemURL.equalsAscii (".uno:PasteClipboard") )      // special for draw/impress
+                   )
+                    bEnabledItem = sal_True;
+                #endif
+
                 // Enable/disable item
-                if ( Event.IsEnabled != bMenuItemEnabled )
-                    m_pVCLMenu->EnableItem( pMenuItemHandler->nItemId, Event.IsEnabled );
+                if ( bEnabledItem != bMenuItemEnabled )
+                    m_pVCLMenu->EnableItem( pMenuItemHandler->nItemId, bEnabledItem );
 
                 if ( Event.State >>= bCheckmark )
                 {
