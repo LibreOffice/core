@@ -222,7 +222,16 @@ ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContain
     SdrPageView* pPv = aView.ShowSdrPage(aView.GetModel()->GetPage(0));
     aView.MarkAllObj(pPv);
     aSrcSize = aView.GetAllMarkedRect().GetSize();
+
+    if ( bOleObj )              // single OLE object
+    {
+        SdrOle2Obj* pObj = GetSingleObject();
+        if ( pObj && pObj->GetObjRef().is() )
+            SvEmbedTransferHelper::FillTransferableObjectDescriptor( aObjDesc, pObj->GetObjRef(), pObj->GetGraphic(), pObj->GetAspect() );
+    }
+
     aObjDesc.maSize = aSrcSize;
+    PrepareOLE( aObjDesc );
 
     //
     // remember a unique ID of the source document
@@ -408,13 +417,6 @@ sal_Bool ScDrawTransferObj::GetData( const ::com::sun::star::datatransfer::DataF
     {
         if ( nFormat == SOT_FORMATSTR_ID_LINKSRCDESCRIPTOR || nFormat == SOT_FORMATSTR_ID_OBJECTDESCRIPTOR )
         {
-            if ( bOleObj )              // single OLE object
-            {
-                SdrOle2Obj* pObj = GetSingleObject();
-                if ( pObj && pObj->GetObjRef().is() )
-                    SvEmbedTransferHelper::FillTransferableObjectDescriptor( aObjDesc, pObj->GetObjRef(), pObj->GetGraphic(), pObj->GetAspect() );
-            }
-
             bOK = SetTransferableObjectDescriptor( aObjDesc, rFlavor );
         }
         else if ( nFormat == SOT_FORMATSTR_ID_DRAWING )

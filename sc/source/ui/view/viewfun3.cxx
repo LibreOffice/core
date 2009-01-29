@@ -491,12 +491,9 @@ void ScViewFunc::PasteFromSystem()
                 //  If it's a Writer object, insert RTF instead of OLE
 
                 BOOL bDoRtf = FALSE;
-                SotStorageStreamRef xStm;
                 TransferableObjectDescriptor aObjDesc;
-                if( aDataHelper.GetTransferableObjectDescriptor( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR, aObjDesc ) &&
-                    aDataHelper.GetSotStorageStream( SOT_FORMATSTR_ID_EMBED_SOURCE, xStm ) )
+                if( aDataHelper.GetTransferableObjectDescriptor( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR, aObjDesc ) )
                 {
-                    SotStorageRef xStore( new SotStorage( *xStm ) );
                     bDoRtf = ( ( aObjDesc.maClassName == SvGlobalName( SO3_SW_CLASSID ) ||
                                  aObjDesc.maClassName == SvGlobalName( SO3_SWWEB_CLASSID ) )
                                && aDataHelper.HasFormat( SOT_FORMAT_RTF ) );
@@ -599,12 +596,9 @@ void ScViewFunc::PasteFromTransferable( const uno::Reference<datatransfer::XTran
             {
                 //  If it's a Writer object, insert RTF instead of OLE
                 BOOL bDoRtf = FALSE;
-                SotStorageStreamRef xStm;
                 TransferableObjectDescriptor aObjDesc;
-                if( aDataHelper.GetTransferableObjectDescriptor( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR, aObjDesc ) &&
-                    aDataHelper.GetSotStorageStream( SOT_FORMATSTR_ID_EMBED_SOURCE, xStm ) )
+                if( aDataHelper.GetTransferableObjectDescriptor( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR, aObjDesc ) )
                 {
-                    SotStorageRef xStore( new SotStorage( *xStm ) );
                     bDoRtf = ( ( aObjDesc.maClassName == SvGlobalName( SO3_SW_CLASSID ) ||
                                  aObjDesc.maClassName == SvGlobalName( SO3_SWWEB_CLASSID ) )
                                && aDataHelper.HasFormat( SOT_FORMAT_RTF ) );
