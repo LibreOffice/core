@@ -819,7 +819,7 @@ double SAL_CALL AnalysisAddIn::getSeriessum( double fX, double fN, double fM, co
 double SAL_CALL AnalysisAddIn::getQuotient( double fNum, double fDenom ) THROWDEF_RTE_IAE
 {
     double fRet;
-    if( fNum < 0 != fDenom < 0)
+    if( (fNum < 0) != (fDenom < 0) )
         fRet = ::rtl::math::approxCeil( fNum / fDenom );
     else
         fRet = ::rtl::math::approxFloor( fNum / fDenom );
