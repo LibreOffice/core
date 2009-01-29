@@ -1324,6 +1324,9 @@ void X11SalFrame::Show( BOOL bVisible, BOOL /*bNoActivate*/ )
                 XUngrabPointer( GetXDisplay(),
                                 CurrentTime );
         }
+        // flush here; there may be a very seldom race between
+        // the display connection used for clipboard and our connection
+        Flush();
     }
 }
 

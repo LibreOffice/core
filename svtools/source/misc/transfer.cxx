@@ -81,6 +81,7 @@
 #include <svtools/wmf.hxx>
 #include <svtools/imap.hxx>
 #include <svtools/transfer.hxx>
+#include <cstdio>
 
 // --------------
 // - Namespaces -
@@ -155,6 +156,136 @@ SvStream& operator<<( SvStream& rOStm, const TransferableObjectDescriptor& rObjD
     return rOStm;
 }
 
+// -----------------------------------------------------------------------------
+
+static ::rtl::OUString ImplGetParameterString( const TransferableObjectDescriptor& rObjDesc )
+{
+    const ::rtl::OUString   aChar( ::rtl::OUString::createFromAscii( "\"" ) );
+    const ::rtl::OUString   aClassName( rObjDesc.maClassName.GetHexName() );
+    ::rtl::OUString         aParams;
+
+    if( aClassName.getLength() )
+    {
+        aParams += ::rtl::OUString::createFromAscii( ";classname=\"" );
+        aParams += aClassName;
+        aParams += aChar;
+    }
+
+    if( rObjDesc.maTypeName.Len() )
+    {
+        aParams += ::rtl::OUString::createFromAscii( ";typename=\"" );
+        aParams += rObjDesc.maTypeName;
+        aParams += aChar;
+    }
+
+    if( rObjDesc.maDisplayName.Len() )
+    {
+        aParams += ::rtl::OUString::createFromAscii( ";displayname=\"" );
+        aParams += rObjDesc.maDisplayName;
+        aParams += aChar;
+    }
+
+    aParams += ::rtl::OUString::createFromAscii( ";viewaspect=\"" );
+    aParams += ::rtl::OUString::valueOf( static_cast< sal_Int32 >( rObjDesc.mnViewAspect ) );
+    aParams += aChar;
+
+    aParams += ::rtl::OUString::createFromAscii( ";width=\"" );
+    aParams += ::rtl::OUString::valueOf( rObjDesc.maSize.Width() );
+    aParams += aChar;
+
+    aParams += ::rtl::OUString::createFromAscii( ";height=\"" );
+    aParams += ::rtl::OUString::valueOf( rObjDesc.maSize.Height() );
+    aParams += aChar;
+
+    aParams += ::rtl::OUString::createFromAscii( ";posx=\"" );
+    aParams += ::rtl::OUString::valueOf( rObjDesc.maDragStartPos.X() );
+    aParams += aChar;
+
+    aParams += ::rtl::OUString::createFromAscii( ";posy=\"" );
+    aParams += ::rtl::OUString::valueOf( rObjDesc.maDragStartPos.X() );
+    aParams += aChar;
+
+    return aParams;
+}
+
+// -----------------------------------------------------------------------------
+
+static void ImplSetParameterString( TransferableObjectDescriptor& rObjDesc, const DataFlavorEx& rFlavorEx )
+{
+    Reference< XMultiServiceFactory >       xFact( ::comphelper::getProcessServiceFactory() );
+    Reference< XMimeContentTypeFactory >    xMimeFact;
+
+    try
+    {
+        if( xFact.is() )
+        {
+            xMimeFact = Reference< XMimeContentTypeFactory >( xFact->createInstance( ::rtl::OUString::createFromAscii(
+                                                              "com.sun.star.datatransfer.MimeContentTypeFactory" ) ),
+                                                              UNO_QUERY );
+        }
+
+        if( xMimeFact.is() )
+        {
+            Reference< XMimeContentType > xMimeType( xMimeFact->createMimeContentType( rFlavorEx.MimeType ) );
+
+            if( xMimeType.is() )
+            {
+                const ::rtl::OUString aClassNameString( ::rtl::OUString::createFromAscii( "classname" ) );
+                const ::rtl::OUString aTypeNameString( ::rtl::OUString::createFromAscii( "typename" ) );
+                const ::rtl::OUString aDisplayNameString( ::rtl::OUString::createFromAscii( "displayname" ) );
+                const ::rtl::OUString aViewAspectString( ::rtl::OUString::createFromAscii( "viewaspect" ) );
+                const ::rtl::OUString aWidthString( ::rtl::OUString::createFromAscii( "width" ) );
+                const ::rtl::OUString aHeightString( ::rtl::OUString::createFromAscii( "height" ) );
+                const ::rtl::OUString aPosXString( ::rtl::OUString::createFromAscii( "posx" ) );
+                const ::rtl::OUString aPosYString( ::rtl::OUString::createFromAscii( "posy" ) );
+
+                if( xMimeType->hasParameter( aClassNameString ) )
+                {
+                    rObjDesc.maClassName.MakeId( xMimeType->getParameterValue( aClassNameString ) );
+                }
+
+                if( xMimeType->hasParameter( aTypeNameString ) )
+                {
+                    rObjDesc.maTypeName = xMimeType->getParameterValue( aTypeNameString );
+                }
+
+                if( xMimeType->hasParameter( aDisplayNameString ) )
+                {
+                    rObjDesc.maDisplayName = xMimeType->getParameterValue( aDisplayNameString );
+                }
+
+                if( xMimeType->hasParameter( aViewAspectString ) )
+                {
+                    rObjDesc.mnViewAspect = static_cast< sal_uInt16 >( xMimeType->getParameterValue( aViewAspectString ).toInt32() );
+                }
+
+                if( xMimeType->hasParameter( aWidthString ) )
+                {
+                    rObjDesc.maSize.Width() = xMimeType->getParameterValue( aWidthString ).toInt32();
+                }
+
+                if( xMimeType->hasParameter( aHeightString ) )
+                {
+                    rObjDesc.maSize.Height() = xMimeType->getParameterValue( aHeightString ).toInt32();
+                }
+
+                if( xMimeType->hasParameter( aPosXString ) )
+                {
+                    rObjDesc.maDragStartPos.X() = xMimeType->getParameterValue( aPosXString ).toInt32();
+                }
+
+                if( xMimeType->hasParameter( aPosYString ) )
+                {
+                    rObjDesc.maDragStartPos.Y() = xMimeType->getParameterValue( aPosYString ).toInt32();
+                }
+            }
+        }
+    }
+    catch( const ::com::sun::star::uno::Exception& )
+    {
+    }
+}
+
 // -----------------------------------------
 // - TransferableHelper::TerminateListener -
 // -----------------------------------------
@@ -194,7 +325,8 @@ void SAL_CALL TransferableHelper::TerminateListener::notifyTermination( const Ev
 // ----------------------
 
 TransferableHelper::TransferableHelper() :
-    mpFormats( new DataFlavorExVector )
+    mpFormats( new DataFlavorExVector ),
+    mpObjDesc( NULL )
 {
 }
 
@@ -202,6 +334,7 @@ TransferableHelper::TransferableHelper() :
 
 TransferableHelper::~TransferableHelper()
 {
+    delete mpObjDesc;
     delete mpFormats;
 }
 
@@ -307,6 +440,11 @@ Any SAL_CALL TransferableHelper::getTransferData( const DataFlavor& rFlavor ) th
             // if any is not yet filled, use standard format
             if( !maAny.hasValue() )
                 GetData( rFlavor );
+
+#ifdef DEBUG
+            if( maAny.hasValue() && ::com::sun::star::uno::TypeClass_STRING != maAny.getValueType().getTypeClass() )
+                fprintf( stderr, "TransferableHelper delivers sequence of data [ %s ]\n", ByteString( String( rFlavor.MimeType), RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
+#endif
         }
         catch( const ::com::sun::star::uno::Exception& )
         {
@@ -325,9 +463,6 @@ Sequence< DataFlavor > SAL_CALL TransferableHelper::getTransferDataFlavors() thr
 {
     const ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-
-
-
     try
     {
         if( !mpFormats->size() )
@@ -342,7 +477,9 @@ Sequence< DataFlavor > SAL_CALL TransferableHelper::getTransferDataFlavors() thr
     sal_uInt32                      nCurPos = 0;
 
     while( aIter != aEnd )
+    {
         aRet[ nCurPos++ ] = *aIter++;
+    }
 
     return aRet;
 }
@@ -513,11 +650,24 @@ void TransferableHelper::AddFormat( const DataFlavor& rFlavor )
     sal_Bool                        bAdd = sal_True;
 
     while( aIter != aEnd )
-
     {
-
         if( TransferableDataHelper::IsEqual( *aIter, rFlavor ) )
         {
+            // update MimeType for SOT_FORMATSTR_ID_OBJECTDESCRIPTOR in every case
+            if( ( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR == aIter->mnSotId ) && mpObjDesc )
+            {
+                DataFlavor aObjDescFlavor;
+
+                SotExchange::GetFormatDataFlavor( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR, aObjDescFlavor );
+                aIter->MimeType = aObjDescFlavor.MimeType;
+                aIter->MimeType += ::ImplGetParameterString( *mpObjDesc );
+
+#ifdef DEBUG
+                fprintf( stderr, "TransferableHelper exchanged objectdescriptor [ %s ]\n",
+                         ByteString( String( aIter->MimeType), RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
+#endif
+            }
+
             aIter = aEnd;
             bAdd = sal_False;
         }
@@ -527,12 +677,16 @@ void TransferableHelper::AddFormat( const DataFlavor& rFlavor )
 
     if( bAdd )
     {
-        DataFlavorEx aFlavorEx;
+        DataFlavorEx   aFlavorEx;
+        DataFlavor     aObjDescFlavor;
 
         aFlavorEx.MimeType = rFlavor.MimeType;
         aFlavorEx.HumanPresentableName = rFlavor.HumanPresentableName;
         aFlavorEx.DataType = rFlavor.DataType;
         aFlavorEx.mnSotId = SotExchange::RegisterFormat( rFlavor );
+
+        if( ( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR == aFlavorEx.mnSotId ) && mpObjDesc )
+            aFlavorEx.MimeType += ::ImplGetParameterString( *mpObjDesc );
 
         mpFormats->push_back( aFlavorEx );
 
@@ -702,6 +856,8 @@ sal_Bool TransferableHelper::SetImageMap( const ImageMap& rIMap, const ::com::su
 sal_Bool TransferableHelper::SetTransferableObjectDescriptor( const TransferableObjectDescriptor& rDesc,
                                                               const ::com::sun::star::datatransfer::DataFlavor& )
 {
+    PrepareOLE( rDesc );
+
     SvMemoryStream aMemStm( 1024, 1024 );
 
     aMemStm << rDesc;
@@ -823,7 +979,8 @@ sal_Bool TransferableHelper::SetFileList( const FileList& rFileList,
     aMemStm.SetVersion( SOFFICE_FILEFORMAT_50 );
     aMemStm << rFileList;
 
-    maAny <<= Sequence< sal_Int8 >( static_cast< const sal_Int8* >( aMemStm.GetData() ), aMemStm.Seek( STREAM_SEEK_TO_END ) );
+    maAny <<= Sequence< sal_Int8 >( static_cast< const sal_Int8* >( aMemStm.GetData() ),
+                                       aMemStm.Seek( STREAM_SEEK_TO_END ) );
 
     return( maAny.hasValue() );
 }
@@ -886,6 +1043,17 @@ void TransferableHelper::DragFinished( sal_Int8 )
 
 void TransferableHelper::ObjectReleased()
 {
+}
+
+// -----------------------------------------------------------------------------
+
+void TransferableHelper::PrepareOLE( const TransferableObjectDescriptor& rObjDesc )
+{
+    delete mpObjDesc;
+    mpObjDesc = new TransferableObjectDescriptor( rObjDesc );
+
+    if( HasFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR ) )
+        AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
 }
 
 // -----------------------------------------------------------------------------
@@ -1161,29 +1329,32 @@ struct TransferableDataHelper_Impl
 // - TransferableDataHelper -
 // --------------------------
 
-TransferableDataHelper::TransferableDataHelper()
-    :mpFormats( new DataFlavorExVector )
-    ,mpImpl( new TransferableDataHelper_Impl )
+TransferableDataHelper::TransferableDataHelper() :
+    mpFormats( new DataFlavorExVector ),
+    mpObjDesc( new TransferableObjectDescriptor ),
+    mpImpl( new TransferableDataHelper_Impl )
 {
 }
 
 // -----------------------------------------------------------------------------
 
-TransferableDataHelper::TransferableDataHelper( const Reference< ::com::sun::star::datatransfer::XTransferable >& rxTransferable )
-    :mxTransfer( rxTransferable )
-    ,mpFormats( new DataFlavorExVector )
-    ,mpImpl( new TransferableDataHelper_Impl )
+TransferableDataHelper::TransferableDataHelper( const Reference< ::com::sun::star::datatransfer::XTransferable >& rxTransferable ) :
+    mxTransfer( rxTransferable ),
+    mpFormats( new DataFlavorExVector ),
+    mpObjDesc( new TransferableObjectDescriptor ),
+    mpImpl( new TransferableDataHelper_Impl )
 {
     InitFormats();
 }
 
 // -----------------------------------------------------------------------------
 
-TransferableDataHelper::TransferableDataHelper( const TransferableDataHelper& rDataHelper )
-    :mxTransfer( rDataHelper.mxTransfer )
-    ,mxClipboard( rDataHelper.mxClipboard )
-    ,mpFormats( new DataFlavorExVector( *rDataHelper.mpFormats ) )
-    ,mpImpl( new TransferableDataHelper_Impl )
+TransferableDataHelper::TransferableDataHelper( const TransferableDataHelper& rDataHelper ) :
+    mxTransfer( rDataHelper.mxTransfer ),
+    mxClipboard( rDataHelper.mxClipboard ),
+    mpFormats( new DataFlavorExVector( *rDataHelper.mpFormats ) ),
+    mpObjDesc( new TransferableObjectDescriptor( *rDataHelper.mpObjDesc ) ),
+    mpImpl( new TransferableDataHelper_Impl )
 {
 }
 
@@ -1196,12 +1367,13 @@ TransferableDataHelper& TransferableDataHelper::operator=( const TransferableDat
         ::osl::MutexGuard aGuard( mpImpl->maMutex );
 
         bool bWasClipboardListening = ( NULL != mpImpl->mpClipboardListener );
+
         if ( bWasClipboardListening )
             StopClipboardListening();
 
         mxTransfer = rDataHelper.mxTransfer;
         delete mpFormats, mpFormats = new DataFlavorExVector( *rDataHelper.mpFormats );
-
+        delete mpObjDesc, mpObjDesc = new TransferableObjectDescriptor( *rDataHelper.mpObjDesc );
         mxClipboard = rDataHelper.mxClipboard;
 
         if ( bWasClipboardListening )
@@ -1219,6 +1391,7 @@ TransferableDataHelper::~TransferableDataHelper()
     {
         ::osl::MutexGuard aGuard( mpImpl->maMutex );
         delete mpFormats, mpFormats = NULL;
+        delete mpObjDesc, mpObjDesc = NULL;
     }
     delete mpImpl;
 }
@@ -1313,6 +1486,10 @@ void TransferableDataHelper::FillDataFlavorExVector( const Sequence< DataFlavor 
             {
                 rDataFlavorExVector[ rDataFlavorExVector.size() - 1 ].mnSotId = SOT_FORMAT_FILE_LIST;
             }
+            else if( xMimeType.is() && xMimeType->getFullMediaType().equalsIgnoreAsciiCase( ::rtl::OUString::createFromAscii( "application/x-openoffice-objectdescriptor-xml" ) ) )
+            {
+                rDataFlavorExVector[ rDataFlavorExVector.size() - 1 ].mnSotId = SOT_FORMATSTR_ID_OBJECTDESCRIPTOR;
+            }
         }
     }
     catch( const ::com::sun::star::uno::Exception& )
@@ -1328,8 +1505,25 @@ void TransferableDataHelper::InitFormats()
     ::osl::MutexGuard aGuard( mpImpl->maMutex );
 
     mpFormats->clear();
+    delete mpObjDesc, mpObjDesc = new TransferableObjectDescriptor;
+
     if( mxTransfer.is() )
+    {
         TransferableDataHelper::FillDataFlavorExVector( mxTransfer->getTransferDataFlavors(), *mpFormats );
+
+        DataFlavorExVector::iterator aIter( mpFormats->begin() ), aEnd( mpFormats->end() );
+
+        while( aIter != aEnd )
+        {
+            if( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR == aIter->mnSotId )
+            {
+                ImplSetParameterString( *mpObjDesc, *aIter );
+                aIter = aEnd;
+            }
+            else
+                ++aIter;
+        }
+    }
 }
 
 // -----------------------------------------------------------------------------
@@ -1741,18 +1935,10 @@ sal_Bool TransferableDataHelper::GetTransferableObjectDescriptor( SotFormatStrin
 
 // -----------------------------------------------------------------------------
 
-sal_Bool TransferableDataHelper::GetTransferableObjectDescriptor( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, TransferableObjectDescriptor& rDesc )
+sal_Bool TransferableDataHelper::GetTransferableObjectDescriptor( const ::com::sun::star::datatransfer::DataFlavor&, TransferableObjectDescriptor& rDesc )
 {
-    SotStorageStreamRef xStm;
-    sal_Bool            bRet = GetSotStorageStream( rFlavor, xStm );
-
-    if( bRet )
-    {
-        *xStm >> rDesc;
-        bRet = ( xStm->GetError() == ERRCODE_NONE );
-    }
-
-    return bRet;
+    rDesc = *mpObjDesc;
+    return true;
 }
 
 // -----------------------------------------------------------------------------
@@ -1980,6 +2166,10 @@ sal_Bool TransferableDataHelper::GetSequence( SotFormatStringId nFormat, Sequenc
 
 sal_Bool TransferableDataHelper::GetSequence( const DataFlavor& rFlavor, Sequence< sal_Int8 >& rSeq )
 {
+#ifdef DEBUG
+    fprintf( stderr, "TransferableDataHelper requests sequence of data\n" );
+#endif
+
     const Any aAny( GetAny( rFlavor ) );
     return( aAny.hasValue() && ( aAny >>= rSeq ) );
 }
@@ -2000,7 +2190,6 @@ sal_Bool TransferableDataHelper::GetSotStorageStream( const DataFlavor& rFlavor,
     sal_Bool                bRet = GetSequence( rFlavor, aSeq );
 
     if( bRet )
-
     {
         rxStream = new SotStorageStream( String() );
         rxStream->Write( aSeq.getConstArray(), aSeq.getLength() );
