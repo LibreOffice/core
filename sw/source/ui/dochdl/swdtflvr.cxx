@@ -287,6 +287,8 @@ SwTransferable::SwTransferable( SwWrtShell& rSh )
                                 INetURLObject::WAS_ENCODED,
                                    INetURLObject::DECODE_UNAMBIGUOUS );
         }
+
+        PrepareOLE( aObjDesc );
     }
 }
 
@@ -835,7 +837,9 @@ int SwTransferable::PrepareForCopy( BOOL bIsCut )
         if (pOrigGrf && !pOrigGrf->GetBitmap().IsEmpty())
           AddFormat( SOT_FORMATSTR_ID_SVXB );
 
+        PrepareOLE( aObjDesc );
         AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
+
         // --> OD 2005-02-09 #119353# - robust
         const Graphic* pGrf = pWrtShell->GetGraphic();
         if( pGrf && pGrf->IsSupportedGraphic() )
@@ -856,7 +860,10 @@ int SwTransferable::PrepareForCopy( BOOL bIsCut )
         pWrtShell->Copy( pDoc );
 
         AddFormat( SOT_FORMATSTR_ID_EMBED_SOURCE );
+
+        PrepareOLE( aObjDesc );
         AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
+
         AddFormat( FORMAT_GDIMETAFILE );
         eBufferType = TRNSFR_OLE;
     }
@@ -917,7 +924,6 @@ int SwTransferable::PrepareForCopy( BOOL bIsCut )
 
         //Wenn's einer braucht OLE'n wir ihm was.
         AddFormat( SOT_FORMATSTR_ID_EMBED_SOURCE );
-        AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
 
         //RTF vor das Metafile von OLE stellen, weil mit weniger verlusten
         //behaftet.
@@ -978,6 +984,9 @@ int SwTransferable::PrepareForCopy( BOOL bIsCut )
         aObjDesc.mbCanLink = FALSE;
         Size aSz( OLESIZE );
         aObjDesc.maSize = OutputDevice::LogicToLogic( aSz, MAP_TWIP, MAP_100TH_MM );
+
+        PrepareOLE( aObjDesc );
+        AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
 
         delete pWait;
     }
@@ -1069,7 +1078,6 @@ int SwTransferable::CopyGlossary( SwTextBlocks& rGlossary,
 
     //Wenn's einer braucht OLE'n wir ihm was.
     AddFormat( SOT_FORMATSTR_ID_EMBED_SOURCE );
-    AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
     AddFormat( FORMAT_RTF );
     AddFormat( SOT_FORMATSTR_ID_HTML );
     AddFormat( FORMAT_STRING );
@@ -1080,6 +1088,9 @@ int SwTransferable::CopyGlossary( SwTextBlocks& rGlossary,
     aObjDesc.mbCanLink = FALSE;
     Size aSz( OLESIZE );
     aObjDesc.maSize = OutputDevice::LogicToLogic( aSz, MAP_TWIP, MAP_100TH_MM );
+
+    PrepareOLE( aObjDesc );
+    AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
 
     SW_MOD()->pClipboard = this;
     CopyToClipboard( &pWrtShell->GetView().GetEditWin() );
@@ -1871,12 +1882,18 @@ int SwTransferable::_PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
             // try to get the replacement image from the clipboard
             Graphic aGraphic;
             ULONG nGrFormat = 0;
+
+// (wg. Selection Manager bei Trustet Solaris)
+#ifndef SOLARIS
+/*
             if( rData.GetGraphic( SOT_FORMATSTR_ID_SVXB, aGraphic ) )
                 nGrFormat = SOT_FORMATSTR_ID_SVXB;
             else if( rData.GetGraphic( FORMAT_GDIMETAFILE, aGraphic ) )
                 nGrFormat = SOT_FORMAT_GDIMETAFILE;
             else if( rData.GetGraphic( FORMAT_BITMAP, aGraphic ) )
                 nGrFormat = SOT_FORMAT_BITMAP;
+*/
+#endif
 
             // insert replacement image ( if there is one ) into the object helper
             if ( nGrFormat )
@@ -3039,6 +3056,7 @@ void SwTransferable::SetDataForDragAndDrop( const Point& rSttPos )
     else if( nsSelectionType::SEL_OLE == nSelection )
     {
         AddFormat( SOT_FORMATSTR_ID_EMBED_SOURCE );
+        PrepareOLE( aObjDesc );
         AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
         AddFormat( FORMAT_GDIMETAFILE );
         eBufferType = TRNSFR_OLE;
@@ -3062,7 +3080,6 @@ void SwTransferable::SetDataForDragAndDrop( const Point& rSttPos )
             eBufferType = (TransferBufferType)(TRNSFR_TABELLE | eBufferType);
 
         AddFormat( SOT_FORMATSTR_ID_EMBED_SOURCE );
-        AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
 
         //RTF vor das Metafile von OLE stellen, weil mit weniger verlusten
         //behaftet.
@@ -3112,6 +3129,8 @@ void SwTransferable::SetDataForDragAndDrop( const Point& rSttPos )
         aObjDesc.maDragStartPos = rSttPos;
         aObjDesc.maSize = OutputDevice::LogicToLogic( Size( OLESIZE ),
                                                 MAP_TWIP, MAP_100TH_MM );
+        PrepareOLE( aObjDesc );
+        AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
     }
     else if( nSelection & nsSelectionType::SEL_TXT && !pWrtShell->HasMark() )
     {
