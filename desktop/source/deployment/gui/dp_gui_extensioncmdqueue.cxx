@@ -438,7 +438,7 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
             // Distinguish between closing the dialog and programatically
             // canceling the dialog (headless VCL):
             approve = n == RET_OK
-                || n == RET_CANCEL && !Application::IsDialogCancelEnabled();
+                || (n == RET_CANCEL && !Application::IsDialogCancelEnabled());
         }
     }
     else if (request >>= licAgreementExc)

@@ -1602,7 +1602,7 @@ void XMLPageExportPropertyMapper::ContextFilter(
             case CTF_PAGE_TRANSITION_TYPE:
                 {
                     if( ((mrExport.getExportFlags() & EXPORT_OASIS) == 0) ||
-                        ((*property).maValue >>= nTransitionType) && (nTransitionType == 0) )
+                        (((*property).maValue >>= nTransitionType) && (nTransitionType == 0)) )
                             (*property).mnIndex = -1;
                 }
                 break;
@@ -1610,7 +1610,7 @@ void XMLPageExportPropertyMapper::ContextFilter(
                 {
                     sal_Int16 nTransitionSubtype = sal_Int16();
                     if( ((mrExport.getExportFlags() & EXPORT_OASIS) == 0) ||
-                        ((*property).maValue >>= nTransitionSubtype) && (nTransitionSubtype == 0) )
+                        (((*property).maValue >>= nTransitionSubtype) && (nTransitionSubtype == 0)) )
                             (*property).mnIndex = -1;
 
                 }
@@ -1619,7 +1619,7 @@ void XMLPageExportPropertyMapper::ContextFilter(
                 {
                     sal_Bool bDirection = sal_Bool();
                     if( ((mrExport.getExportFlags() & EXPORT_OASIS) == 0) ||
-                        ((*property).maValue >>= bDirection) && bDirection )
+                        (((*property).maValue >>= bDirection) && bDirection) )
                             (*property).mnIndex = -1;
                 }
                 break;

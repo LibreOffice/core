@@ -473,6 +473,7 @@ bool GeneratorHeap::next( std::vector< RoleFiller* >& array ) throw( xmlsearch::
     if( heapSize_ > 0 )
     {
         if( ! heap_[0]->next() ) // no more
+        {
             if( heapSize_ > 1)
             {
                 delete heap_[0];
@@ -484,6 +485,7 @@ bool GeneratorHeap::next( std::vector< RoleFiller* >& array ) throw( xmlsearch::
                 heapSize_ = 0;
                 return false;
             }
+        }
         heapify(0);
         heap_[0]->generateFillers( array );
         return true;

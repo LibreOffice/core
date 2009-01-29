@@ -117,7 +117,7 @@ MasterPasswordCreateDialog::MasterPasswordCreateDialog
     long nNewLabelHeight = 0;
     for( nNewLabelHeight = ( nTextWidth / nLableWidth + 1 ) * nTextHeight;
         nNewLabelHeight < aRect.GetHeight();
-        nNewLabelHeight += nTextHeight );
+        nNewLabelHeight += nTextHeight ) ;
 
     long nDelta = nNewLabelHeight - nLabelHeight;
     Size aNewDlgSize = GetSizePixel();

@@ -67,9 +67,9 @@ namespace xmlsearch {
             bool crEquals( ConceptData* r ) { return cEquals( r ) && role_ == r->role_; }
             bool crqEquals( ConceptData* r ) { return crEquals( r ) && queryNo_ == r->queryNo_; }
             bool compareWith( ConceptData* r ) { return
-                                                     concept_ < r->concept_                 ||
-                                                     cEquals( r ) && role_ < r->role_       ||
-                                                     crEquals( r ) && penalty_ < r->penalty_; }
+                                                     (concept_ < r->concept_)                 ||
+                                                     (cEquals( r ) && role_ < r->role_)       ||
+                                                     (crEquals( r ) && penalty_ < r->penalty_); }
 
             void addLast( ConceptData* r );
 

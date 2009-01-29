@@ -347,6 +347,7 @@ void Search::startSearch()
         for (j = i + 1; j < free2_; j++ )
         {
             if( conceptData_[j].is() )
+            {
                 if( conceptData_[i]->cEquals( conceptData_[j].get() ) )
                 {
                     conceptData_[i]->addLast( conceptData_[j].get() );
@@ -354,6 +355,7 @@ void Search::startSearch()
                 }
                 else
                     i = j;
+            }
         }
     }
 

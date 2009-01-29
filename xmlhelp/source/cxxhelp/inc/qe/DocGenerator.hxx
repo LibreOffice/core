@@ -93,9 +93,9 @@ namespace xmlsearch {
             bool smallerThan( NextDocGenerator* other )
             {
                 return
-                    document_ < other->document_
+                    (document_ < other->document_)
                     ||
-                    document_ == other->document_ && concept_ < other->concept_;
+                    (document_ == other->document_ && concept_ < other->concept_);
             }
 
 

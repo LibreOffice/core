@@ -2375,7 +2375,7 @@ SvXMLExport::AddAttributeXmlId(uno::Reference<uno::XInterface> const & i_xIfc)
 }
 
 // --> OD 2008-11-26 #158694#
-const sal_Bool SvXMLExport::exportTextNumberElement() const
+sal_Bool SvXMLExport::exportTextNumberElement() const
 {
     return mpImpl->mbExportTextNumberElement;
 }

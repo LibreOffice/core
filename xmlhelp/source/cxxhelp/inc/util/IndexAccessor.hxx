@@ -52,10 +52,12 @@ namespace xmlsearch {
             IndexAccessor( const rtl::OUString& dirName )
             {
                 if( dirName.getLength() )
+                {
                     if( dirName.getStr()[dirName.getLength()-1] != sal_Unicode( '/' ) )
                         dirName_ = ( dirName + rtl::OUString::createFromAscii( "/" ) ) ;
                     else
                         dirName_ = dirName;
+                }
             }
 
 
