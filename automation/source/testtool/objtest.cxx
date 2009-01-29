@@ -2535,7 +2535,7 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                                 long aMS = long( aDiff.GetMSFromTime() );
                                 if ( Abs( aMS - nWait ) > 100 )
                                 {
-                                    DBG_ERROR1("Wait was off limit by %i", aDiff.GetMSFromTime() - nWait )
+                                    DBG_ERROR1("Wait was off limit by %i", aDiff.GetMSFromTime() - nWait );
                                 }
 #endif
                             }
