@@ -1317,15 +1317,13 @@ sal_Bool SfxObjectShell::SaveTo_Impl
     else
     {
         // This is SaveAs or export action, prepare the target medium
+        // the alien filters still might write directly to the file, that is of course a bug,
+        // but for now the framework has to be ready for it
+        // TODO/LATER: let the medium be prepared for alien formats as well
         rMedium.CloseAndRelease();
         if ( bStorageBasedTarget )
         {
             rMedium.GetOutputStorage();
-        }
-        else
-        {
-            rMedium.CreateTempFileNoCopy();
-            rMedium.GetOutStream();
         }
     }
 
