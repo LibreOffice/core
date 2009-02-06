@@ -1188,7 +1188,7 @@ sal_Bool SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI )
             }
 
             // TODO/LATER: This implementation does not allow to detect the system lock on saving here, actually this is no big problem
-            if ( bLoading && bUseSystemLock && !pImp->xStream.is() && !pOutStream )
+            if ( bUseSystemLock && !pImp->xStream.is() && !pOutStream )
                 pImp->m_bHandleSysLocked = sal_True; // if system lock is used the writeable stream should be available
 
             do

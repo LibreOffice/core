@@ -1304,7 +1304,7 @@ sal_uInt16 SfxObjectShell::ImplGetSignatureState( sal_Bool bScriptingContent )
     {
         *pState = SIGNATURESTATE_NOSIGNATURES;
 
-        if ( GetMedium() && GetMedium()->GetName().Len() && IsOwnStorageFormat_Impl( *GetMedium()) && GetMedium()->GetStorage().is() )
+        if ( GetMedium() && GetMedium()->GetName().Len() && GetMedium()->GetStorage().is() && IsOwnStorageFormat_Impl( *GetMedium()) )
         {
             try
             {
