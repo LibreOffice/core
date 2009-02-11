@@ -48,12 +48,22 @@ using namespace pdfparse;
 void printHelp( const char* pExe )
 {
     fprintf( stdout,
-    "USAGE: %s [-h,--help] [-a, --extract-add-streams] [-pw, --password <password>] <inputfile> [<outputfile>]\n"
+    "USAGE: %s [-h,--help]\n"
+    "       %s [-pw, --password <password>] <inputfile> [<outputfile>]\n"
+    "       %s <-a, --extract-add-streams> [-pw, --password <password>] <inputfile> [<outputfile>]\n"
+    "       %s <-f, --extract-fonts> [-pw, --password <password>] <inputfile> [<outputfile>]\n"
+    "       %s <-o, --extract-objects> <o0>[:<g0>][,<o1>[:g1][,...]] [-pw, --password <password>] <inputfile> [<outputfile>]\n"
     "  -h, --help: show help\n"
     "  -a, --extract-add-streams: extracts additional streams to outputfile_object\n"
     "      and prints the mimetype found to stdout\n"
+    "  -f, --extract-fonts: extracts fonts (currently only type1 and truetype are supported\n"
+    "  -o, --extract-objects: extracts object streams, the syntax of the argument is comma separated\n"
+    "      object numbers, where object number and generation number are separated by \':\'\n"
+    "      an omitted generation number defaults to 0\n"
     "  -pw, --password: use password for decryption\n"
-    , pExe );
+    "\n"
+    "note: -f, -a, -o and normal unzip operation are mutually exclusive\n"
+    , pExe, pExe, pExe, pExe, pExe );
 }
 
 class FileEmitContext : public EmitContext
@@ -313,6 +323,119 @@ int write_addStreams( const char* pInFile, const char* pOutFile, PDFFile* pPDFFi
     return nRet;
 }
 
+int write_fonts( const char* i_pInFile, const char* i_pOutFile, PDFFile* i_pPDFFile )
+{
+    int nRet = 0;
+    unsigned int nElements = i_pPDFFile->m_aSubElements.size();
+    for( unsigned i = 0; i < nElements && nRet == 0; i++ )
+    {
+        // search FontDescriptors
+        PDFObject* pObj = dynamic_cast<PDFObject*>(i_pPDFFile->m_aSubElements[i]);
+        if( ! pObj )
+            continue;
+        PDFDict* pDict = dynamic_cast<PDFDict*>(pObj->m_pObject);
+        if( ! pDict )
+            continue;
+
+        std::hash_map<rtl::OString,PDFEntry*,rtl::OStringHash>::iterator map_it =
+                pDict->m_aMap.find( "Type" );
+        if( map_it == pDict->m_aMap.end() )
+            continue;
+
+        PDFName* pName = dynamic_cast<PDFName*>(map_it->second);
+        if( ! pName )
+            continue;
+        if( ! pName->m_aName.equals( "FontDescriptor" ) )
+            continue;
+
+        // the font name will be helpful, also there must be one in
+        // a font descriptor
+        map_it = pDict->m_aMap.find( "FontName" );
+        if( map_it == pDict->m_aMap.end() )
+            continue;
+        pName = dynamic_cast<PDFName*>(map_it->second);
+        if( ! pName )
+            continue;
+        rtl::OString aFontName( pName->m_aName );
+
+        PDFObjectRef* pStreamRef = 0;
+        const char* pFileType = NULL;
+        // we have a font descriptor, try for a type 1 font
+        map_it = pDict->m_aMap.find( "FontFile" );
+        if( map_it != pDict->m_aMap.end() )
+        {
+            pStreamRef = dynamic_cast<PDFObjectRef*>(map_it->second);
+            if( pStreamRef )
+                pFileType = "pfa";
+        }
+
+        // perhaps it's a truetype file ?
+        if( ! pStreamRef )
+        {
+            map_it  = pDict->m_aMap.find( "FontFile2" );
+            if( map_it != pDict->m_aMap.end() )
+            {
+                pStreamRef = dynamic_cast<PDFObjectRef*>(map_it->second);
+                if( pStreamRef )
+                    pFileType = "ttf";
+            }
+        }
+
+        if( ! pStreamRef )
+            continue;
+
+        PDFObject* pStream = i_pPDFFile->findObject( pStreamRef );
+        if( ! pStream )
+            continue;
+
+        rtl::OStringBuffer aOutStream( i_pOutFile );
+        aOutStream.append( "_font_" );
+        aOutStream.append( sal_Int32(pStreamRef->m_nNumber) );
+        aOutStream.append( "_" );
+        aOutStream.append( sal_Int32(pStreamRef->m_nGeneration) );
+        aOutStream.append( "_" );
+        aOutStream.append( aFontName );
+        if( pFileType )
+        {
+            aOutStream.append( "." );
+            aOutStream.append( pFileType );
+        }
+        FileEmitContext aContext( aOutStream.getStr(), i_pInFile, i_pPDFFile );
+        aContext.m_bDecrypt = i_pPDFFile->isEncrypted();
+        pStream->writeStream( aContext, i_pPDFFile );
+    }
+    return nRet;
+}
+
+std::vector< std::pair< sal_Int32, sal_Int32 > > s_aEmitObjects;
+
+int write_objects( const char* i_pInFile, const char* i_pOutFile, PDFFile* i_pPDFFile )
+{
+    int nRet = 0;
+    unsigned int nElements = s_aEmitObjects.size();
+    for( unsigned i = 0; i < nElements && nRet == 0; i++ )
+    {
+        sal_Int32 nObject     = s_aEmitObjects[i].first;
+        sal_Int32 nGeneration = s_aEmitObjects[i].second;
+        PDFObject* pStream = i_pPDFFile->findObject( nObject, nGeneration );
+        if( ! pStream )
+        {
+            fprintf( stderr, "object %d %d not found !\n", (int)nObject, (int)nGeneration );
+            continue;
+        }
+
+        rtl::OStringBuffer aOutStream( i_pOutFile );
+        aOutStream.append( "_stream_" );
+        aOutStream.append( nObject );
+        aOutStream.append( "_" );
+        aOutStream.append( nGeneration );
+        FileEmitContext aContext( aOutStream.getStr(), i_pInFile, i_pPDFFile );
+        aContext.m_bDecrypt = i_pPDFFile->isEncrypted();
+        pStream->writeStream( aContext, i_pPDFFile );
+    }
+    return nRet;
+}
+
 SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
 {
     const char* pInFile = NULL;
@@ -346,6 +469,33 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
                 ! rtl_str_compare( "--extract-add-streams", argv[nArg] ) )
             {
                 aHdl = write_addStreams;
+            }
+            else if( ! rtl_str_compare( "-f", argv[nArg] ) ||
+                ! rtl_str_compare( "--extract-fonts", argv[nArg] ) )
+            {
+                aHdl = write_fonts;
+            }
+            else if( ! rtl_str_compare( "-o", argv[nArg] ) ||
+                ! rtl_str_compare( "--extract-objects", argv[nArg] ) )
+            {
+                aHdl = write_objects;
+                nArg++;
+                if( nArg < argc )
+                {
+                    rtl::OString aObjs( argv[nArg] );
+                    sal_Int32 nIndex = 0;
+                    while( nIndex != -1 )
+                    {
+                        rtl::OString aToken( aObjs.getToken( 0, ',', nIndex ) );
+                        sal_Int32 nObject = 0;
+                        sal_Int32 nGeneration = 0;
+                        sal_Int32 nGenIndex = 0;
+                        nObject = aToken.getToken( 0, ':', nGenIndex ).toInt32();
+                        if( nGenIndex != -1 )
+                            nGeneration = aToken.getToken( 0, ':', nGenIndex ).toInt32();
+                        s_aEmitObjects.push_back( std::pair<sal_Int32,sal_Int32>(nObject,nGeneration) );
+                    }
+                }
             }
             else
             {
