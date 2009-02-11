@@ -206,3 +206,15 @@ Function Test(ByVal bFlag As Boolean) As Variant
 End Function
 
 # ---------------------------------------------------------------------------- #
+
+[i97038]
+' Date should contain the year 1900 and the value should be 2
+
+Sub Main
+Dim v
+v = DateSerial(0,1,1)
+Msgbox ("Date :  " & v)
+MsgBox ("Value : " & CDbl(v))
+End Sub
+
+# ---------------------------------------------------------------------------- #

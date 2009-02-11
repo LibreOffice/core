@@ -50,9 +50,20 @@ end function
 
 '*******************************************************************************
 
-function hTestActive( cString as string , iMethod as integer ) as integer
+function hTestActive( cString as string , iMethod as integer , bExact as boolean ) as integer
 
-    dim cMsg as string
+    ' Return values:
+    ' -1 = Exact match expected, fuzzy match found
+    ' -2 = No match 
+    ' -3 = content of messagebox not relevant
+    ' -4 = Messagebox not displayed / Macro not executed
+    ' 1 - 4 = Number of buttons on the dialog
+    
+    const CFN = "hTestActive()::"
+
+    dim cMsg as string     ' The string printed in the message box
+    dim rc as integer      ' Returncode for error handling and returnvalue
+    dim buttons as integer ' Number of buttons on the message box
 
     kontext "Active"
     if ( Active.exists( 2 ) ) then
@@ -61,15 +72,29 @@ function hTestActive( cString as string , iMethod as integer ) as integer
     
         if ( cString <> "" ) then
             if ( instr( active.getText(), cString ) <> 0 ) then
-                printlog( "Correct message found: " & cMsg )
+                if ( active.getText() = cString ) then
+                    'printlog( CFN & "Correct message found (exact match): " & cMsg )
+                    rc = 0
+                else
+                    if ( bExact ) then
+                        warnlog( CFN & "Message is no exact match: " & cMsg )
+                        rc = -1
+                    else
+                        'printlog( CFN & "Correct message found (fuzzy match): " & cMsg )
+                        rc = 0
+                    endif
+                endif
             else
-                warnlog( "Messagebox has wrong content: " & cMsg )
+                warnlog( CFN & "Messagebox has wrong content: " & cMsg )
+                rc = -4
             endif
         else
-            printlog( "Messagebox: " & cMsg )
+            'printlog( CFN & "Messagebox: " & cMsg )
+            rc = -3
         endif
         
-        hTestActive() = Active.getButtonCount()        
+        buttons = Active.getButtonCount()
+        'printlog( CFN & "Number of buttons: " & buttons )
         select case( iMethod )
         case 1 : Active.OK()
         case 2 : Active.Cancel()
@@ -77,8 +102,10 @@ function hTestActive( cString as string , iMethod as integer ) as integer
         case 4 : Active.No()
         end select
     else
-        warnlog( "Messagebox is missing" )
+        warnlog( CFN & "Messagebox is missing" )
     endif
+    
+    if ( rc = 0 ) then hTestActive() = buttons
     
 end function
        
@@ -90,61 +117,58 @@ testcase t_macros()
     call hNewDocument()
     hInitBasicIDE( "TestIssues" )
     
-    dim cLocalMacrosFile as string
-        cLocalMacrosFile = gTesttoolPath & "framework\optional\input\vba-compat\vba-compat-macros.txt"
-
     printlog( "" )
     printlog( " ---------- i41695 ------------ " )
     hInsertMacroFromFile( "i41695" )
     hIDERunMacro()
-    hTestActive( "i41695-1", 1 )
-    hTestActive( "i41695-2", 1 )    
+    hTestActive( "i41695-1", 1 , TRUE )
+    hTestActive( "i41695-2", 1 , TRUE )    
 
     printlog( "" )
     printlog( " ---------- i83978 ------------ " )
     hInsertMacroFromFile( "i83978" )
     hIDERunMacro()
-    hTestActive( "com.sun.star.container.NoSuchElementException", 1 )
+    hTestActive( "com.sun.star.container.NoSuchElementException", 1 , FALSE )
 
     printlog( "" )    
     printlog( " ---------- i82830 ------------ " )
     hInsertMacroFromFile( "i82830" )
     hIDERunMacro()
-    hTestActive( "12D687", 1 )
-    hTestActive( "4553207", 1 )
+    hTestActive( "12D687" , 1 , TRUE )
+    hTestActive( "4553207", 1 , TRUE )
 
     if ( gISOLang = "en-US" ) then
         printlog( "" )    
         printlog( " ---------- i81674 ------------ " )
         hInsertMacroFromFile( "i81674" )
         hIDERunMacro()
-        hTestActive( "250", 1 )
-        hTestActive( "Yes", 1 )
-        hTestActive( "True", 1 )
-        hTestActive( "On", 1 )
+        hTestActive( "250" , 1 , FALSE )
+        hTestActive( "Yes" , 1 , TRUE  )
+        hTestActive( "True", 1 , TRUE  )
+        hTestActive( "On"  , 1 , TRUE  )
     endif
     
     printlog( "" )
     printlog( " ---------- i80532 ------------ " )
     hInsertMacroFromFile( "i80532" )
     hIDERunMacro()
-    hTestActive( "-10", 1 )
-    hTestActive( "1", 1 )
-    hTestActive( "-10", 1 )
+    hTestActive( "-10", 1 , FALSE )
+    hTestActive( "1"  , 1 , FALSE )
+    hTestActive( "-10", 1 , FALSE )
     
     printlog( "" )
     printlog( " ---------- i84040 ------------ " )
     hInsertMacroFromFile( "i84040" )
     hIDERunMacro()
-    hTestActive( "false", 1 )
-    hTestActive( "false", 1 )
+    hTestActive( "False", 1 , TRUE )
+    hTestActive( "False", 1 , TRUE )
     
     printlog( "" )
     printlog( " ---------- i86265 ------------ " )
     hInsertMacroFromFile( "i86265" )
     hIDERunMacro()
-    hTestActive( "i86265-1", 1 )
-    hTestActive( "i86265-2", 1 )
+    hTestActive( "i86265-1", 1 , TRUE )
+    hTestActive( "i86265-2", 1 , TRUE )
     
     printlog( "" )
     printlog( " ---------- i92329 ------------ " )
@@ -153,24 +177,29 @@ testcase t_macros()
     hTestActive( "Return an Array" , 1 )
     
     printlog( "" )
+    printlog( " ---------- i97038 ------------ " )
+    hInsertMacroFromFile( "i97038" )
+    hIDERunMacro()
+    hTestActive( "1900" , 1 , FALSE )
+    hTestActive( "2"    , 1 , FALSE )
+    
+    printlog( "" )
     printlog( " ---------- MessageBoxes ------------ " )
     hInsertMacroFromFile( "MessageBoxes" )
     hIDERunMacro()
-    if ( hTestActive( "0x" , 1 ) <> 1 ) then warnlog( "Wrong ressource type" )
-    if ( hTestActive( "1x" , 1 ) <> 2 ) then warnlog( "Wrong ressource type" )
-    if ( hTestActive( "2x" , 2 ) <> 3 ) then warnlog( "Wrong ressource type" )
-    if ( hTestActive( "3x" , 2 ) <> 3 ) then warnlog( "Wrong ressource type" )
-    if ( hTestActive( "4x" , 4 ) <> 2 ) then warnlog( "Wrong ressource type" )
-    if ( hTestActive( "5x" , 2 ) <> 2 ) then warnlog( "Wrong ressource type" )
-    if ( hTestActive( "16" , 2 ) <> 3 ) then warnlog( "Wrong ressource type" )
-    if ( hTestActive( "32" , 2 ) <> 3 ) then warnlog( "Wrong ressource type" )
-    if ( hTestActive( "48" , 2 ) <> 3 ) then warnlog( "Wrong ressource type" )
-    if ( hTestActive( "64" , 1 ) <> 1 ) then warnlog( "Wrong ressource type" )
-    if ( hTestActive( "128", 2 ) <> 3 ) then warnlog( "Wrong ressource type" )
-    if ( hTestActive( "256", 2 ) <> 3 ) then warnlog( "Wrong ressource type" )
-    if ( hTestActive( "512", 2 ) <> 3 ) then warnlog( "Wrong ressource type" )
-
-
+    if ( hTestActive( "0x" , 1 , TRUE ) > 1 ) then warnlog( "Wrong resource type" )
+    if ( hTestActive( "1x" , 1 , TRUE ) > 2 ) then warnlog( "Wrong resource type" )
+    if ( hTestActive( "2x" , 2 , TRUE ) > 3 ) then warnlog( "Wrong resource type" )
+    if ( hTestActive( "3x" , 2 , TRUE ) > 3 ) then warnlog( "Wrong resource type" )
+    if ( hTestActive( "4x" , 4 , TRUE ) > 2 ) then warnlog( "Wrong resource type" )
+    if ( hTestActive( "5x" , 2 , TRUE ) > 2 ) then warnlog( "Wrong resource type" )
+    if ( hTestActive( "16" , 2 , TRUE ) > 3 ) then warnlog( "Wrong resource type" )
+    if ( hTestActive( "32" , 2 , TRUE ) > 3 ) then warnlog( "Wrong resource type" )
+    if ( hTestActive( "48" , 2 , TRUE ) > 3 ) then warnlog( "Wrong resource type" )
+    if ( hTestActive( "64" , 1 , TRUE ) > 1 ) then warnlog( "Wrong resource type" )
+    if ( hTestActive( "128", 2 , TRUE ) > 3 ) then warnlog( "Wrong resource type" )
+    if ( hTestActive( "256", 2 , TRUE ) > 3 ) then warnlog( "Wrong resource type" )
+    if ( hTestActive( "512", 2 , TRUE ) > 3 ) then warnlog( "Wrong resource type" )
     
     printlog( "" )    
     hCloseBasicIDE()
