@@ -7,7 +7,5 @@ mkdir: %_DEST%\inc%_EXT%\external\openssl
 ..\%__SRC%\lib\libeay32.lib %_DEST%\lib%_EXT%\libeay32.lib
 ..\%__SRC%\bin\libeay32.dll %_DEST%\bin%_EXT%\libeay32.dll
 ..\%__SRC%\lib\libcrypto.a %_DEST%\lib%_EXT%\libcrypto.a
-..\%__SRC%\lib\libcrypto.so.0.9.8 %_DEST%\lib%_EXT%\libcrypto.so.0.9.8
 ..\%__SRC%\lib\libssl.a %_DEST%\lib%_EXT%\libssl.a
-..\%__SRC%\lib\libssl.so.0.9.8 %_DEST%\lib%_EXT%\libssl.so.0.9.8
  
