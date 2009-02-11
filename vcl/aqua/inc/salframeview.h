@@ -100,6 +100,9 @@
 -(void)otherMouseDragged: (NSEvent*)pEvent;
 -(void)otherMouseUp: (NSEvent*)pEvent;
 -(void)scrollWheel: (NSEvent*)pEvent;
+-(void)magnifyWithEvent: (NSEvent*)pEvent;
+-(void)rotateWithEvent: (NSEvent*)pEvent;
+-(void)swipeWithEvent: (NSEvent*)pEvent;
 -(void)keyDown: (NSEvent*)pEvent;
 -(void)flagsChanged: (NSEvent*)pEvent;
 -(void)sendMouseEventToFrame:(NSEvent*)pEvent button:(USHORT)nButton eventtype:(USHORT)nEvent;

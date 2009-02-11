@@ -519,7 +519,8 @@ SalDisplay::SalDisplay( Display *display ) :
         pDisp_( display ),
         m_pWMAdaptor( NULL ),
         m_pDtIntegrator( NULL ),
-        m_bUseRandRWrapper( true )
+        m_bUseRandRWrapper( true ),
+        m_nLastUserEventTime( 0 )
 {
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "SalDisplay::SalDisplay()\n" );
@@ -2331,6 +2332,7 @@ long SalX11Display::Dispatch( XEvent *pEvent )
                                       ButtonMotionMask,
                                       pEvent ) )
                 ;
+            m_nLastUserEventTime = pEvent->xmotion.time;
             break;
         case PropertyNotify:
             if( pEvent->xproperty.atom == getWMAdaptor()->getAtom( WMAdaptor::VCL_SYSTEM_SETTINGS ) )
@@ -2358,7 +2360,14 @@ long SalX11Display::Dispatch( XEvent *pEvent )
                     GetKeyboardName( TRUE );
             }
             break;
-
+        case ButtonPress:
+        case ButtonRelease:
+            m_nLastUserEventTime = pEvent->xbutton.time;
+            break;
+        case XLIB_KeyPress:
+        case KeyRelease:
+            m_nLastUserEventTime = pEvent->xkey.time;
+            break;
         default:
 
             if (   GetKbdExtension()->UseExtension()
@@ -2717,6 +2726,37 @@ void SalDisplay::deregisterFrame( SalFrame* pFrame )
     m_aFrames.remove( pFrame );
 }
 
+
+extern "C"
+{
+    static Bool timestamp_predicate( Display*, XEvent* i_pEvent, XPointer i_pArg )
+    {
+        SalDisplay* pSalDisplay = reinterpret_cast<SalDisplay*>(i_pArg);
+        if( i_pEvent->type == PropertyNotify &&
+            i_pEvent->xproperty.window == pSalDisplay->GetDrawable( pSalDisplay->GetDefaultScreenNumber() ) &&
+            i_pEvent->xproperty.atom == pSalDisplay->getWMAdaptor()->getAtom( WMAdaptor::SAL_GETTIMEEVENT )
+            )
+        return True;
+
+        return False;
+    }
+}
+
+XLIB_Time SalDisplay::GetLastUserEventTime() const
+{
+    if( m_nLastUserEventTime == 0 )
+    {
+        // get current server time
+        unsigned char c = 0;
+        XEvent aEvent;
+        Atom nAtom = getWMAdaptor()->getAtom( WMAdaptor::SAL_GETTIMEEVENT );
+        XChangeProperty( GetDisplay(), GetDrawable( GetDefaultScreenNumber() ),
+                         nAtom, nAtom, 8, PropModeReplace, &c, 1 );
+        XIfEvent( GetDisplay(), &aEvent, timestamp_predicate, (XPointer)this );
+        m_nLastUserEventTime = aEvent.xproperty.time;
+    }
+    return m_nLastUserEventTime;
+}
 
 // -=-= SalVisual -=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

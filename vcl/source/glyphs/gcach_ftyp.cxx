@@ -831,6 +831,10 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontIn
 
     // TODO: query GASP table for load flags
     mnLoadFlags = FT_LOAD_DEFAULT;
+#if 1 // #i97326# cairo sometimes uses FT_Set_Transform() on our FT_FACE
+    // we are not using FT_Set_Transform() yet, so just ignore it for now
+    mnLoadFlags |= FT_LOAD_IGNORE_TRANSFORM;
+#endif
 
     mbArtItalic = (rFSD.meItalic != ITALIC_NONE && pFI->GetFontAttributes().GetSlant() == ITALIC_NONE);
     mbArtBold = (rFSD.meWeight > WEIGHT_MEDIUM && pFI->GetFontAttributes().GetWeight() <= WEIGHT_MEDIUM);
@@ -1243,6 +1247,25 @@ int FreetypeServerFont::GetGlyphIndex( sal_UCS4 aChar ) const
 
 // -----------------------------------------------------------------------
 
+static int lcl_GetCharWidth( FT_FaceRec_* pFaceFT, double fStretch, int nGlyphFlags )
+{
+    int nCharWidth = pFaceFT->glyph->metrics.horiAdvance;
+
+    if( nGlyphFlags & GF_ROTMASK )  // for bVertical rotated glyphs
+    {
+        const FT_Size_Metrics& rMetrics = pFaceFT->size->metrics;
+#if (FTVERSION < 2000)
+        nCharWidth = (int)((rMetrics.height - rMetrics.descender) * fStretch);
+#else
+        nCharWidth = (int)((rMetrics.height + rMetrics.descender) * fStretch);
+#endif
+    }
+
+    return (nCharWidth + 32) >> 6;
+}
+
+// -----------------------------------------------------------------------
+
 void FreetypeServerFont::InitGlyphData( int nGlyphIndex, GlyphData& rGD ) const
 {
     if( maSizeFT )
@@ -1282,20 +1305,12 @@ void FreetypeServerFont::InitGlyphData( int nGlyphIndex, GlyphData& rGD ) const
         return;
     }
 
+    const bool bOriginallyZeroWidth = (maFaceFT->glyph->metrics.horiAdvance == 0);
     if( mbArtBold && pFTEmbolden )
         (*pFTEmbolden)( maFaceFT->glyph );
 
-    int nCharWidth = maFaceFT->glyph->metrics.horiAdvance;
-
-    if( nGlyphFlags & GF_ROTMASK ) {  // for bVertical rotated glyphs
-        const FT_Size_Metrics& rMetrics = maFaceFT->size->metrics;
-#if (FTVERSION < 2000)
-        nCharWidth = (int)((rMetrics.height - rMetrics.descender) * mfStretch);
-#else
-        nCharWidth = (int)((rMetrics.height + rMetrics.descender) * mfStretch);
-#endif
-    }
-    rGD.SetCharWidth( (nCharWidth + 32) >> 6 );
+    const int nCharWidth = bOriginallyZeroWidth ? 0 : lcl_GetCharWidth( maFaceFT, mfStretch, nGlyphFlags );
+    rGD.SetCharWidth( nCharWidth );
 
     FT_Glyph pGlyphFT;
     rc = FT_Get_Glyph( maFaceFT->glyph, &pGlyphFT );
@@ -2365,11 +2380,16 @@ bool FreetypeServerFont::ApplyGSUB( const ImplFontSelectData& rFSD )
         const USHORT nOffset= GetUShort( pFeatureHeader+4 );
         pFeatureHeader += 6;
 
-        // feature (required && (requested || available))?
-        if( (aFeatureIndexList[0] != nFeatureIndex)
-        &&  (!std::count( aReqFeatureTagList.begin(), aReqFeatureTagList.end(), nTag))
-        ||  (!std::count( aFeatureIndexList.begin(), aFeatureIndexList.end(), nFeatureIndex) ) )
-            continue;
+        // short circuit some feature lookups
+        if( aFeatureIndexList[0] != nFeatureIndex ) // required feature?
+        {
+            const int nRequested = std::count( aFeatureIndexList.begin(), aFeatureIndexList.end(), nFeatureIndex);
+            if( !nRequested )  // ignore features that are not requested
+                continue;
+            const int nAvailable = std::count( aReqFeatureTagList.begin(), aReqFeatureTagList.end(), nTag);
+            if( !nAvailable )  // some fonts don't provide features they request!
+                continue;
+        }
 
         const FT_Byte* pFeatureTable = pGsubBase + nOfsFeatureTable + nOffset;
         const USHORT nCntLookups = GetUShort( pFeatureTable+0 );

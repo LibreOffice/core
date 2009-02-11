@@ -506,6 +506,10 @@ void X11SalFrame::Init( ULONG nSalFrameStyle, int nScreen, SystemParentData* pPa
     XSync( GetXDisplay(), False );
     setXEmbedInfo();
 
+    XLIB_Time nUserTime = (nStyle_ & (SAL_FRAME_STYLE_OWNERDRAWDECORATION | SAL_FRAME_STYLE_TOOLWINDOW) ) == 0 ?
+        pDisplay_->GetLastUserEventTime() : 0;
+    pDisplay_->getWMAdaptor()->setUserTime( this, nUserTime );
+
     if( ! pParentData && ! IsChildWindow() && ! Attributes.override_redirect )
     {
         XSetWMHints( GetXDisplay(), mhWindow, &Hints );
@@ -1104,7 +1108,7 @@ void X11SalFrame::SetMinClientSize( long nWidth, long nHeight )
 
 // Show + Pos (x,y,z) + Size (width,height)
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void X11SalFrame::Show( BOOL bVisible, BOOL /*bNoActivate*/ )
+void X11SalFrame::Show( BOOL bVisible, BOOL bNoActivate )
 {
     if( ( bVisible && bMapped_ )
         || ( !bVisible && !bMapped_ ) )
@@ -1191,6 +1195,11 @@ void X11SalFrame::Show( BOOL bVisible, BOOL /*bNoActivate*/ )
                           CurrentTime
                           );
         }
+
+        XLIB_Time nUserTime = 0;
+        if( ! bNoActivate && (nStyle_ & (SAL_FRAME_STYLE_OWNERDRAWDECORATION|SAL_FRAME_STYLE_TOOLWINDOW)) == 0 )
+            nUserTime = pDisplay_->GetLastUserEventTime();
+        GetDisplay()->getWMAdaptor()->setUserTime( this, nUserTime );
 
         // actually map the window
         if( m_bXEmbed )

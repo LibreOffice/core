@@ -564,7 +564,9 @@ long ATSLayout::GetTextWidth() const
     if( mnCharCount <= 0 )
         return 0;
 
-    DBG_ASSERT( (maATSULayout != NULL), "ATSLayout::GetTextWidth() with maATSULayout==NULL !\n");
+    DBG_ASSERT( (maATSULayout!=NULL), "ATSLayout::GetTextWidth() with maATSULayout==NULL !\n");
+    if( !maATSULayout )
+        return 0;
 
     if( !mnCachedWidth )
     {
@@ -659,6 +661,9 @@ long ATSLayout::FillDXArray( long* pDXArray ) const
 **/
 int ATSLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) const
 {
+    if( !maATSULayout )
+        return STRING_LEN;
+
     // get a quick overview on what could fit
     const long nPixelWidth = (nMaxWidth - (nCharExtra * mnCharCount)) / nFactor;
 
@@ -973,6 +978,9 @@ bool ATSLayout::GetDeltaY() const
         return true;
 
 #if 1
+    if( !maATSULayout )
+        return false;
+
     // get and keep the y-deltas in the mpDeltaY member variable
     // => release it in the destructor
     ItemCount nDeltaCount = 0;

@@ -916,11 +916,19 @@ bool AquaSalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPol
         const ::basegfx::B2DPolygon rPolygon = rPolyPoly.getB2DPolygon( nPolyIdx );
         AddPolygonToPath( xPath, rPolygon, true, !getAntiAliasB2DDraw(), IsPenVisible() );
     }
+
+    // use the path to prepare the graphics context
     CGContextSaveGState( mrContext );
     CGContextBeginPath( mrContext );
     CGContextAddPath( mrContext, xPath );
     const CGRect aRefreshRect = CGPathGetBoundingBox( xPath );
     CGPathRelease( xPath );
+
+#ifndef NO_I97317_WORKAROUND
+    // #i97317# workaround for Quartz having problems with drawing small polygons
+    if( (aRefreshRect.size.width <= 0.125) && (aRefreshRect.size.height <= 0.125) )
+        return true;
+#endif
 
     // draw path with antialiased polygon
     CGContextSetShouldAntialias( mrContext, true );
@@ -961,10 +969,18 @@ bool AquaSalGraphics::drawPolyLine( const ::basegfx::B2DPolygon& rPolyLine,
     // setup poly-polygon path
     CGMutablePathRef xPath = CGPathCreateMutable();
     AddPolygonToPath( xPath, rPolyLine, rPolyLine.isClosed(), !getAntiAliasB2DDraw(), true );
+
+    // use the path to prepare the graphics context
     CGContextSaveGState( mrContext );
     CGContextAddPath( mrContext, xPath );
     const CGRect aRefreshRect = CGPathGetBoundingBox( xPath );
     CGPathRelease( xPath );
+
+#ifndef NO_I97317_WORKAROUND
+    // #i97317# workaround for Quartz having problems with drawing small polygons
+    if( (aRefreshRect.size.width <= 0.125) && (aRefreshRect.size.height <= 0.125) )
+        return true;
+#endif
 
     // draw path with antialiased line
     CGContextSetShouldAntialias( mrContext, true );
@@ -1227,7 +1243,37 @@ SalBitmap* AquaSalGraphics::getBitmap( long  nX, long  nY, long  nDX, long  nDY 
 
 SalColor AquaSalGraphics::getPixel( long nX, long nY )
 {
-    SalColor  nSalColor = 0;
+    // return default value on printers or when out of bounds
+    if( !mxLayer
+    || (nX < 0) || (nX >= mnWidth)
+    || (nY < 0) || (nY >= mnHeight))
+        return COL_BLACK;
+
+    // prepare creation of matching a CGBitmapContext
+    CGColorSpaceRef aCGColorSpace = GetSalData()->mxRGBSpace;
+    CGBitmapInfo aCGBmpInfo = kCGImageAlphaNoneSkipFirst | kCGBitmapByteOrder32Big;
+#if __BIG_ENDIAN__
+    struct{ unsigned char b, g, r, a; } aPixel;
+#else
+    struct{ unsigned char a, r, g, b; } aPixel;
+#endif
+
+    // create a one-pixel bitmap context
+    // TODO: is it worth to cache it?
+    CGContextRef xOnePixelContext = ::CGBitmapContextCreate( &aPixel,
+        1, 1, 8, sizeof(aPixel), aCGColorSpace, aCGBmpInfo );
+
+    // update this graphics layer
+    ApplyXorContext();
+
+    // copy the requested pixel into the bitmap context
+    if( IsFlipped() )
+        nY = mnHeight - nY;
+    const CGPoint aCGPoint = {-nX, -nY};
+    CGContextDrawLayerAtPoint( xOnePixelContext, aCGPoint, mxLayer );
+    CGContextRelease( xOnePixelContext );
+
+    SalColor nSalColor = MAKE_SALCOLOR( aPixel.r, aPixel.g, aPixel.b );
     return nSalColor;
 }
 
@@ -1815,7 +1861,14 @@ USHORT AquaSalGraphics::SetFont( ImplFontSelectData* pReqFont, int nFallbackLeve
     static const int nTagCount = sizeof(aTag) / sizeof(*aTag);
     OSStatus eStatus = ATSUSetAttributes( maATSUStyle, nTagCount,
                              aTag, aValueSize, aValue );
-    DBG_ASSERT( (eStatus==noErr), "AquaSalGraphics::SetFont() : Could not set font attributes!\n");
+    // reset ATSUstyle if there was an error
+    if( eStatus != noErr )
+    {
+        DBG_WARNING( "AquaSalGraphics::SetFont() : Could not set font attributes!\n");
+        ATSUClearStyle( maATSUStyle );
+        mpMacFontData = NULL;
+        return 0;
+    }
 
     // prepare font stretching
     const ATSUAttributeTag aMatrixTag = kATSUFontMatrixTag;
@@ -2454,3 +2507,4 @@ bool XorEmulation::UpdateTarget()
 }
 
 // =======================================================================
+

@@ -180,11 +180,16 @@ int ReadGSUB( struct _TrueTypeFont* pTTFile,
         const ULONG nTag    = NEXT_Long( pFeatureHeader ); // e.g. locl/vert/trad/smpl/liga/fina/...
         const USHORT nOffset= NEXT_UShort( pFeatureHeader );
 
-        // feature (required && (requested || available))?
-        if( (aFeatureIndexList[0] != nFeatureIndex)
-            &&  (!std::count( aReqFeatureTagList.begin(), aReqFeatureTagList.end(), nTag))
-            ||  (!std::count( aFeatureIndexList.begin(), aFeatureIndexList.end(), nFeatureIndex) ) )
-            continue;
+        // ignore unneeded feature lookups
+        if( aFeatureIndexList[0] != nFeatureIndex ) // do not ignore the required feature
+        {
+            const int nRequested = std::count( aFeatureIndexList.begin(), aFeatureIndexList.end(), nFeatureIndex);
+            if( !nRequested )   // ignore features that are not requested
+                continue;
+            const int nAvailable = std::count( aReqFeatureTagList.begin(), aReqFeatureTagList.end(), nTag);
+            if( !nAvailable )   // some fonts don't provide features they request!
+                continue;
+        }
 
         const FT_Byte* pFeatureTable = pGsubBase + nOfsFeatureTable + nOffset;
         if( pGsubLimit < pFeatureTable + 2 )

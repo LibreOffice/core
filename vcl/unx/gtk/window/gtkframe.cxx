@@ -652,6 +652,10 @@ extern "C" {
     typedef void(*setAcceptFn)( GtkWindow*, gboolean );
     static setAcceptFn p_gtk_window_set_accept_focus = NULL;
     static bool bGetAcceptFocusFn = true;
+
+    typedef void(*setUserTimeFn)( GdkWindow*, guint32 );
+    static setUserTimeFn p_gdk_x11_window_set_user_time = NULL;
+    static bool bGetSetUserTimeFn = true;
 }
 
 static void lcl_set_accept_focus( GtkWindow* pWindow, gboolean bAccept, bool bBeforeRealize )
@@ -659,8 +663,7 @@ static void lcl_set_accept_focus( GtkWindow* pWindow, gboolean bAccept, bool bBe
     if( bGetAcceptFocusFn )
     {
         bGetAcceptFocusFn = false;
-        OUString aSym( RTL_CONSTASCII_USTRINGPARAM( "gtk_window_set_accept_focus" ) );
-        p_gtk_window_set_accept_focus = (setAcceptFn)osl_getFunctionSymbol( GetSalData()->m_pPlugin, aSym.pData );
+        p_gtk_window_set_accept_focus = (setAcceptFn)osl_getAsciiFunctionSymbol( GetSalData()->m_pPlugin, "gtk_window_set_accept_focus" );
     }
     if( p_gtk_window_set_accept_focus && bBeforeRealize )
         p_gtk_window_set_accept_focus( pWindow, bAccept );
@@ -678,6 +681,9 @@ static void lcl_set_accept_focus( GtkWindow* pWindow, gboolean bAccept, bool bBe
         pHints->input = bAccept ? True : False;
         XSetWMHints( pDisplay, aWindow, pHints );
         XFree( pHints );
+
+        if (GetX11SalData()->GetDisplay()->getWMAdaptor()->getWindowManagerName().EqualsAscii("compiz"))
+        return;
 
         /*  remove WM_TAKE_FOCUS protocol; this would usually be the
          *  right thing, but gtk handles it internally whereas we
@@ -713,6 +719,28 @@ static void lcl_set_accept_focus( GtkWindow* pWindow, gboolean bAccept, bool bBe
         }
     }
 }
+static void lcl_set_user_time( GdkWindow* i_pWindow, guint32 i_nTime )
+{
+    if( bGetSetUserTimeFn )
+    {
+        bGetSetUserTimeFn = false;
+        p_gdk_x11_window_set_user_time = (setUserTimeFn)osl_getAsciiFunctionSymbol( GetSalData()->m_pPlugin, "gdk_x11_window_set_user_time" );
+    }
+    if( p_gdk_x11_window_set_user_time )
+        p_gdk_x11_window_set_user_time( i_pWindow, i_nTime );
+    else
+    {
+        Display* pDisplay = GetX11SalData()->GetDisplay()->GetDisplay();
+        XLIB_Window aWindow = GDK_WINDOW_XWINDOW( i_pWindow );
+        Atom nUserTime = XInternAtom( pDisplay, "_NET_WM_USER_TIME", True );
+        if( nUserTime )
+        {
+            XChangeProperty( pDisplay, aWindow,
+                             nUserTime, XA_CARDINAL, 32,
+                             PropModeReplace, (unsigned char*)&i_nTime, 1 );
+        }
+    }
+};
 
 GtkSalFrame *GtkSalFrame::getFromWindow( GtkWindow *pWindow )
 {
@@ -734,6 +762,9 @@ void GtkSalFrame::Init( SalFrame* pParent, ULONG nStyle )
     m_aForeignTopLevelWindow = None;
     m_nStyle = nStyle;
 
+    GtkWindowType eWinType = ((nStyle & SAL_FRAME_STYLE_FLOAT) && ! (nStyle & SAL_FRAME_STYLE_OWNERDRAWDECORATION))
+        ? GTK_WINDOW_POPUP : GTK_WINDOW_TOPLEVEL;
+
     if( nStyle & SAL_FRAME_STYLE_SYSTEMCHILD )
     {
         m_pWindow = gtk_event_box_new();
@@ -746,7 +777,7 @@ void GtkSalFrame::Init( SalFrame* pParent, ULONG nStyle )
         }
     }
     else
-        m_pWindow = gtk_widget_new( GTK_TYPE_WINDOW, "type", ((nStyle & SAL_FRAME_STYLE_FLOAT) && ! (nStyle & SAL_FRAME_STYLE_OWNERDRAWDECORATION)) ? GTK_WINDOW_POPUP : GTK_WINDOW_TOPLEVEL, "visible", FALSE, NULL );
+        m_pWindow = gtk_widget_new( GTK_TYPE_WINDOW, "type", eWinType, "visible", FALSE, NULL );
     g_object_set_data( G_OBJECT( m_pWindow ), "SalFrame", this );
 
     // force wm class hint
@@ -777,6 +808,7 @@ void GtkSalFrame::Init( SalFrame* pParent, ULONG nStyle )
         {
             eType = GDK_WINDOW_TYPE_HINT_UTILITY;
             gtk_window_set_skip_taskbar_hint( GTK_WINDOW(m_pWindow), true );
+            lcl_set_accept_focus( GTK_WINDOW(m_pWindow), FALSE, true );
         }
         else if( (nStyle & SAL_FRAME_STYLE_OWNERDRAWDECORATION) )
         {
@@ -806,10 +838,18 @@ void GtkSalFrame::Init( SalFrame* pParent, ULONG nStyle )
 
     InitCommon();
 
+    if( eWinType == GTK_WINDOW_TOPLEVEL )
+    {
+        guint32 nUserTime = 0;
+        if( (nStyle & (SAL_FRAME_STYLE_OWNERDRAWDECORATION|SAL_FRAME_STYLE_TOOLWINDOW)) == 0 )
+            nUserTime = gdk_x11_get_server_time(GTK_WIDGET (m_pWindow)->window);
+        lcl_set_user_time(GTK_WIDGET(m_pWindow)->window, nUserTime);
+    }
+
     if( bDecoHandling )
     {
         gtk_window_set_resizable( GTK_WINDOW(m_pWindow), (nStyle & SAL_FRAME_STYLE_SIZEABLE) ? TRUE : FALSE );
-        if( (nStyle & SAL_FRAME_STYLE_OWNERDRAWDECORATION) )
+        if( ( (nStyle & SAL_FRAME_STYLE_OWNERDRAWDECORATION) ) || ( (nStyle & SAL_FRAME_STYLE_TOOLWINDOW ) ) )
             lcl_set_accept_focus( GTK_WINDOW(m_pWindow), FALSE, false );
     }
 
@@ -1228,7 +1268,7 @@ static void initClientId()
     }
 }
 
-void GtkSalFrame::Show( BOOL bVisible, BOOL /*bNoActivate*/ )
+void GtkSalFrame::Show( BOOL bVisible, BOOL bNoActivate )
 {
     if( m_pWindow )
     {
@@ -1264,7 +1304,46 @@ void GtkSalFrame::Show( BOOL bVisible, BOOL /*bNoActivate*/ )
                  */
                  m_pParent->grabPointer( TRUE, TRUE );
             }
+
+            guint32 nUserTime = 0;
+            if( ! bNoActivate && (m_nStyle & (SAL_FRAME_STYLE_OWNERDRAWDECORATION|SAL_FRAME_STYLE_TOOLWINDOW)) == 0 )
+                nUserTime = gdk_x11_get_server_time(GTK_WIDGET (m_pWindow)->window);
+
+            //For these floating windows we don't want the main window to lose focus, and metacity has...
+            // metacity-2.24.0/src/core/window.c
+            //
+            //  if ((focus_window != NULL) && XSERVER_TIME_IS_BEFORE (compare, focus_window->net_wm_user_time))
+            //      "compare" window focus prevented by other activity
+            //
+            //  where "compare" is this window
+
+            //  which leads to...
+
+            // /* This happens for error dialogs or alerts; these need to remain on
+            // * top, but it would be confusing to have its ancestor remain
+            // * focused.
+            // */
+            // if (meta_window_is_ancestor_of_transient (focus_window, window))
+            //          "The focus window %s is an ancestor of the newly mapped "
+            //         "window %s which isn't being focused.  Unfocusing the "
+            //          "ancestor.\n",
+            //
+            // i.e. having a time < that of the toplevel frame means that the toplevel frame gets unfocused.
+            // awesome.
+            if( nUserTime == 0 &&
+               (
+                 getDisplay()->getWMAdaptor()->getWindowManagerName().EqualsAscii("Metacity") ||
+                 getDisplay()->getWMAdaptor()->getWindowManagerName().EqualsAscii("compiz")
+               )
+              )
+            {
+                nUserTime = gdk_x11_get_server_time(GTK_WIDGET (m_pWindow)->window);
+            }
+
+            lcl_set_user_time( GTK_WIDGET(m_pWindow)->window, nUserTime );
+
             gtk_widget_show( m_pWindow );
+
             if( isFloatGrabWindow() )
             {
                 m_nFloats++;
@@ -1954,7 +2033,7 @@ void GtkSalFrame::ToTop( USHORT nFlags )
             if( ! (nFlags & SAL_FRAME_TOTOP_GRABFOCUS_ONLY) )
                 gtk_window_present( GTK_WINDOW(m_pWindow) );
             else
-                gdk_window_focus( m_pWindow->window, GDK_CURRENT_TIME );
+                gdk_window_focus( m_pWindow->window, gdk_x11_get_server_time(GTK_WIDGET (m_pWindow)->window) );
             /*  need to do an XSetInputFocus here because
              *  gdk_window_focus will ask a EWMH compliant WM to put the focus
              *  to our window - which it of course won't since our input hint

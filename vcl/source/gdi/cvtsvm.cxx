@@ -397,13 +397,8 @@ SVMConverter::SVMConverter( SvStream& rStm, GDIMetaFile& rMtf, ULONG nConvertMod
 
 void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 {
-    LineInfo            aLineInfo( LINE_NONE, 0 );
-    Stack               aLIStack;
-    ULONG               nPos = rIStm.Tell();
+    const ULONG         nPos = rIStm.Tell();
     const USHORT        nOldFormat = rIStm.GetNumberFormatInt();
-    rtl_TextEncoding    eActualCharSet = gsl_getSystemTextEncoding();
-    BOOL                bFatLine = FALSE;
-    VirtualDevice       aFontVDev;
 
     rIStm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
 
@@ -412,14 +407,14 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
     INT16   nSize;
     INT16   nVersion;
 
-    // Header lesen
+    // read header
     rIStm.Read( (char*) &aCode, sizeof( aCode ) );  // Kennung
     rIStm >> nSize;                                 // Size
     rIStm >> nVersion;                              // Version
     rIStm >> aPrefSz.Width();                       // PrefSize.Width()
     rIStm >> aPrefSz.Height();                      // PrefSize.Height()
 
-    // Header-Kennung und Versionsnummer pruefen
+    // check header-magic and version
     if( rIStm.GetError()
         || ( memcmp( aCode, "SVGDI", sizeof( aCode ) ) != 0 )
         || ( nVersion != 200 ) )
@@ -427,9 +422,16 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
         rIStm.SetError( SVSTREAM_FILEFORMAT_ERROR );
         rIStm.SetNumberFormatInt( nOldFormat );
         rIStm.Seek( nPos );
+        return;
     }
-    else
-    {
+
+    LineInfo            aLineInfo( LINE_NONE, 0 );
+    Stack               aLIStack;
+    VirtualDevice       aFontVDev;
+    rtl_TextEncoding    eActualCharSet = gsl_getSystemTextEncoding();
+    BOOL                bFatLine = FALSE;
+
+    // TODO: fix reindentation below if you can accept being blamed by the SCM
         MapMode     aMapMode;
         Polygon     aActionPoly;
         Rectangle   aRect;
@@ -1157,7 +1159,6 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
         // cleanup push-pop stack if neccessary
         for( void* pLineInfo = aLIStack.Pop(); pLineInfo; pLineInfo = aLIStack.Pop() )
             delete (LineInfo*) pLineInfo;
-    }
 
     rIStm.SetNumberFormatInt( nOldFormat );
 }

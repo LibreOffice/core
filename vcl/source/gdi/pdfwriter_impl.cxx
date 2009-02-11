@@ -6845,11 +6845,12 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
     FontMetric aRefDevFontMetric = m_pReferenceDevice->GetFontMetric();
 
     // collect the glyphs into a single array
+    const int nTmpMaxGlyphs = rLayout.GetOrientation() ? 1 : nMaxGlyphs; // #i97991# temporary workaround for #i87686#
     std::vector< PDFGlyph > aGlyphs;
-    aGlyphs.reserve( nMaxGlyphs );
+    aGlyphs.reserve( nTmpMaxGlyphs );
     // first get all the glyphs and register them; coordinates still in Pixel
     Point aGNGlyphPos;
-    while( (nGlyphs = rLayout.GetNextGlyphs( nMaxGlyphs, pGlyphs, aGNGlyphPos, nIndex, nAdvanceWidths, pCharPosAry )) != 0 )
+    while( (nGlyphs = rLayout.GetNextGlyphs( nTmpMaxGlyphs, pGlyphs, aGNGlyphPos, nIndex, nAdvanceWidths, pCharPosAry )) != 0 )
     {
         for( int i = 0; i < nGlyphs; i++ )
         {
@@ -8299,18 +8300,18 @@ void PDFWriterImpl::drawArc( const Rectangle& rRect, const Point& rStart, const 
         return;
 
     // calculate start and stop angles
-    double fStartAngle = calcAngle( rRect, rStart );
+    const double fStartAngle = calcAngle( rRect, rStart );
     double fStopAngle  = calcAngle( rRect, rStop );
     while( fStopAngle < fStartAngle )
         fStopAngle += 2.0*M_PI;
-    int nFragments = (int)((fStopAngle-fStartAngle)/(M_PI/2.0))+1;
-    double fFragmentDelta = (fStopAngle-fStartAngle)/(double)nFragments;
-    double kappa = fabs( 4.0 * (1.0-cos(fFragmentDelta/2.0))/sin(fFragmentDelta/2.0) / 3.0);
-    double halfWidth = (double)rRect.GetWidth()/2.0;
-    double halfHeight = (double)rRect.GetHeight()/2.0;
+    const int nFragments = (int)((fStopAngle-fStartAngle)/(M_PI/2.0))+1;
+    const double fFragmentDelta = (fStopAngle-fStartAngle)/(double)nFragments;
+    const double kappa = fabs( 4.0 * (1.0-cos(fFragmentDelta/2.0))/sin(fFragmentDelta/2.0) / 3.0);
+    const double halfWidth = (double)rRect.GetWidth()/2.0;
+    const double halfHeight = (double)rRect.GetHeight()/2.0;
 
-    Point aCenter( (rRect.Left()+rRect.Right()+1)/2,
-                   (rRect.Top()+rRect.Bottom()+1)/2 );
+    const Point aCenter( (rRect.Left()+rRect.Right()+1)/2,
+                         (rRect.Top()+rRect.Bottom()+1)/2 );
 
     OStringBuffer aLine( 30*nFragments );
     Point aPoint( (int)(halfWidth * cos(fStartAngle) ),
@@ -8318,27 +8319,30 @@ void PDFWriterImpl::drawArc( const Rectangle& rRect, const Point& rStart, const 
     aPoint += aCenter;
     m_aPages.back().appendPoint( aPoint, aLine );
     aLine.append( " m " );
-    for( int i = 0; i < nFragments; i++ )
+    if( !basegfx::fTools::equal(fStartAngle, fStopAngle) )
     {
-        double fStartFragment = fStartAngle + (double)i*fFragmentDelta;
-        double fStopFragment = fStartFragment + fFragmentDelta;
-        aPoint = Point( (int)(halfWidth * (cos(fStartFragment) - kappa*sin(fStartFragment) ) ),
-                        -(int)(halfHeight * (sin(fStartFragment) + kappa*cos(fStartFragment) ) ) );
-        aPoint += aCenter;
-        m_aPages.back().appendPoint( aPoint, aLine );
-        aLine.append( ' ' );
+        for( int i = 0; i < nFragments; i++ )
+        {
+            const double fStartFragment = fStartAngle + (double)i*fFragmentDelta;
+            const double fStopFragment = fStartFragment + fFragmentDelta;
+            aPoint = Point( (int)(halfWidth * (cos(fStartFragment) - kappa*sin(fStartFragment) ) ),
+                            -(int)(halfHeight * (sin(fStartFragment) + kappa*cos(fStartFragment) ) ) );
+            aPoint += aCenter;
+            m_aPages.back().appendPoint( aPoint, aLine );
+            aLine.append( ' ' );
 
-        aPoint = Point( (int)(halfWidth * (cos(fStopFragment) + kappa*sin(fStopFragment) ) ),
-                        -(int)(halfHeight * (sin(fStopFragment) - kappa*cos(fStopFragment) ) ) );
-        aPoint += aCenter;
-        m_aPages.back().appendPoint( aPoint, aLine );
-        aLine.append( ' ' );
+            aPoint = Point( (int)(halfWidth * (cos(fStopFragment) + kappa*sin(fStopFragment) ) ),
+                            -(int)(halfHeight * (sin(fStopFragment) - kappa*cos(fStopFragment) ) ) );
+            aPoint += aCenter;
+            m_aPages.back().appendPoint( aPoint, aLine );
+            aLine.append( ' ' );
 
-        aPoint = Point( (int)(halfWidth * cos(fStopFragment) ),
-                        -(int)(halfHeight * sin(fStopFragment) ) );
-        aPoint += aCenter;
-        m_aPages.back().appendPoint( aPoint, aLine );
-        aLine.append( " c\n" );
+            aPoint = Point( (int)(halfWidth * cos(fStopFragment) ),
+                            -(int)(halfHeight * sin(fStopFragment) ) );
+            aPoint += aCenter;
+            m_aPages.back().appendPoint( aPoint, aLine );
+            aLine.append( " c\n" );
+        }
     }
     if( bWithChord || bWithPie )
     {

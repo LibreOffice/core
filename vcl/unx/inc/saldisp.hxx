@@ -399,6 +399,8 @@ protected:
 
     bool            m_bUseRandRWrapper; // don't use randr on gtk, use gdk signals there
 
+    mutable XLIB_Time  m_nLastUserEventTime; // mutable because changed on first access
+
     void            DestroyFontCache();
     virtual long    Dispatch( XEvent *pEvent ) = 0;
     void            InitXinerama();
@@ -495,6 +497,7 @@ public:
     bool            GetExactResolution() const { return mbExactResolution; }
     ULONG           GetProperties() const { return nProperties_; }
     ULONG           GetMaxRequestSize() const { return nMaxRequestSize_; }
+    XLIB_Time       GetLastUserEventTime() const;
 
     BOOL            MouseCaptured( const SalFrame *pFrameData ) const
     { return m_pCapture == pFrameData; }

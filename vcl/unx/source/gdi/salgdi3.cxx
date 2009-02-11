@@ -804,11 +804,12 @@ CairoWrapper::CairoWrapper()
     if( !mpCairoLib )
         return;
 
-#if 0
+#ifdef DEBUG
     // check cairo version
     int (*p_version)();
     p_version = (int(*)()) osl_getAsciiFunctionSymbol( mpCairoLib, "cairo_version" );
     const int nVersion = p_version ? (*p_version)() : 0;
+    fprintf( stderr, "CAIRO version=%d\n", nVersion );
 #endif
 
     mp_xlib_surface_create_with_xrender_format = (cairo_surface_t* (*)(Display *, Drawable , Screen *, XRenderPictFormat *, int , int ))
