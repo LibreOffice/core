@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: OfficeFilePicker.cxx,v $
- * $Revision: 1.17 $
+ * $Revision: 1.17.20.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1057,19 +1057,31 @@ void SAL_CALL SvtFilePicker::initialize( const Sequence< Any >& _rArguments )
 {
     checkAlive();
 
+    Sequence< Any > aArguments( _rArguments.getLength());
+
     m_nServiceType = TemplateDescription::FILEOPEN_SIMPLE;
 
     if ( _rArguments.getLength() >= 1 )
     {
         // compatibility: one argument, type sal_Int16 , specifies the service type
-        _rArguments[0] >>= m_nServiceType;
+        int index = 0;
 
-        for ( int i = 0; i < _rArguments.getLength(); i++)
+        if (_rArguments[0] >>= m_nServiceType)
+        {
+            // skip the first entry if it was the ServiceType, because it's not needed in OCommonPicker::initialize and it's not a NamedValue
+            NamedValue emptyNamedValue;
+            aArguments[0] <<= emptyNamedValue;
+            index = 1;
+
+        }
+        for ( int i = index; i < _rArguments.getLength(); i++)
         {
             NamedValue namedValue;
+            aArguments[i] <<= _rArguments[i];
 
-            if (_rArguments[i] >>= namedValue )
+            if (aArguments[i] >>= namedValue )
             {
+
                 if ( namedValue.Name.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StandardDir" ) ) ) )
                 {
                     ::rtl::OUString sStandardDir;
@@ -1087,7 +1099,7 @@ void SAL_CALL SvtFilePicker::initialize( const Sequence< Any >& _rArguments )
     }
 
     // let the base class analyze the sequence (will call into implHandleInitializationArgument)
-    OCommonPicker::initialize( _rArguments );
+    OCommonPicker::initialize( aArguments );
 }
 
 //-------------------------------------------------------------------------

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: NeonSession.hxx,v $
- * $Revision: 1.31 $
+ * $Revision: 1.31.12.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -224,10 +224,6 @@ class NeonSession : public DAVSession
         const rtl::OUString & getHostName() const { return m_aHostName; }
 
         const ::uno::Reference< ::lang::XMultiServiceFactory > getMSF() { return m_xFactory->getServiceFactory(); }
-
-
-        static bool isCertificate( const ::rtl::OUString & url, const ::rtl::OUString & certificate_name );
-        static void rememberCertificate( const ::rtl::OUString & url, const ::rtl::OUString & certificate_name );
 
         const void * getRequestData() const { return m_pRequestData; }
 

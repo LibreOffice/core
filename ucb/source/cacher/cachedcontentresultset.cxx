@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cachedcontentresultset.cxx,v $
- * $Revision: 1.14 $
+ * $Revision: 1.14.22.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -816,25 +816,6 @@ sal_Bool SAL_CALL CachedContentResultSet
     }
     else
         return sal_True;
-};
-
-sal_Bool SAL_CALL CachedContentResultSet
-    ::applyPositionToOrigin()
-    throw( SQLException,
-           RuntimeException )
-{
-    impl_EnsureNotDisposed();
-
-    sal_Int32 nRow;
-    {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
-        if( m_bAfterLast )
-            throw SQLException();
-        nRow = m_nRow;
-        if( !nRow )
-            throw SQLException();
-    }
-    return applyPositionToOrigin( nRow );
 };
 
 //--------------------------------------------------------------------------

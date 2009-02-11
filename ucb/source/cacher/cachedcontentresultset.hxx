@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cachedcontentresultset.hxx,v $
- * $Revision: 1.5 $
+ * $Revision: 1.5.22.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -176,11 +176,6 @@ private:
     //-----------------------------------------------------------------
     sal_Bool SAL_CALL
     applyPositionToOrigin( sal_Int32 nRow )
-        throw( com::sun::star::sdbc::SQLException,
-        com::sun::star::uno::RuntimeException );
-
-    sal_Bool SAL_CALL
-    applyPositionToOrigin()
         throw( com::sun::star::sdbc::SQLException,
         com::sun::star::uno::RuntimeException );
 

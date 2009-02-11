@@ -2129,9 +2129,6 @@ uno::Any Content::open(
 
                 DAVResource aResource;
                 std::vector< rtl::OUString > aHeaders;
-//                // Obtain list containing all HTTP headers that can
-//                // be mapped to UCB properties.
-//                ContentProperties::getMappableHTTPHeaders( aHeaders );
 
                 xResAccess->GET( xOut, aHeaders, aResource, xEnv );
                 m_bDidGetOrHead = true;
@@ -2176,9 +2173,6 @@ uno::Any Content::open(
                     // fill inputsream sync; return if all data present
                     DAVResource aResource;
                     std::vector< rtl::OUString > aHeaders;
-//                        // Obtain list containing all HTTP headers that can
-//                        // be mapped to UCB properties.
-//                        ContentProperties::getMappableHTTPHeaders( aHeaders );
 
                     uno::Reference< io::XInputStream > xIn
                         = xResAccess->GET( aHeaders, aResource, xEnv );
