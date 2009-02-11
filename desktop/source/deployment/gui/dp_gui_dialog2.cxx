@@ -378,7 +378,7 @@ public:
 
 //------------------------------------------------------------------------------
 ExtensionBox_Impl::ExtensionBox_Impl( ExtMgrDialog* pParent, TheExtensionManager *pManager ) :
-    IExtensionListBox( pParent, WB_BORDER | WB_TABSTOP ),
+    IExtensionListBox( pParent, WB_BORDER | WB_TABSTOP | WB_CHILDDLGCTRL ),
     m_bHasScrollBar( false ),
     m_bHasActive( false ),
     m_bNeedsRecalc( true ),
