@@ -2532,9 +2532,6 @@ void ScInputHandler::EnterHandler( BYTE nBlockMode )
 
             //  Formeln immer als Formeln erkennen (#38309#)
             //  (der Test vorher ist trotzdem noetig wegen Zell-Attributen)
-
-            if ( bAttrib && bFormulaMode )
-                bAttrib = FALSE;
         }
 
         if (bMatrix)

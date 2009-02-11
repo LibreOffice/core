@@ -345,7 +345,7 @@ BOOL lcl_AddFunction( ScAppOptions& rAppOpt, USHORT nOpCode )
 //  Eingabe - Undo OK
 
 void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rString,
-                            BOOL bRecord )
+                            BOOL bRecord, const EditTextObject* pData )
 {
     ScDocument* pDoc = GetViewData()->GetDocument();
     ScMarkData& rMark = GetViewData()->GetMarkData();
@@ -369,6 +369,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rS
         ULONG* pOldFormats      = NULL;
         SCTAB* pTabs            = NULL;
         SCTAB nUndoPos = 0;
+        EditTextObject* pUndoData = NULL;
         if ( bRecord )
         {
             ppOldCells      = new ScBaseCell*[nSelCount];
@@ -415,6 +416,8 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rS
                 }
 
             DBG_ASSERT( nUndoPos==nSelCount, "nUndoPos!=nSelCount" );
+
+            pUndoData = ( pData ? pData->Clone() : NULL );
         }
 
         bool bFormula = false;
@@ -581,8 +584,16 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rS
                     if ( pFormatter->GetType( nIndex ) == NUMBERFORMAT_TEXT ||
                          ( ( rString.GetChar(0) == '+' || rString.GetChar(0) == '-' ) && nError && rString.Equals( aFormula ) ) )
                     {
-                        ScStringCell* pCell = new ScStringCell( aFormula );
-                        pDoc->PutCell( aPos, pCell );
+                        if ( pData )
+                        {
+                            ScEditCell* pCell = new ScEditCell( pData, pDoc, NULL );
+                            pDoc->PutCell( aPos, pCell );
+                        }
+                        else
+                        {
+                            ScStringCell* pCell = new ScStringCell( aFormula );
+                            pDoc->PutCell( aPos, pCell );
+                        }
                     }
                     else
                     {
@@ -631,10 +642,10 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rS
 
         if ( bRecord )
         {   // wg. ChangeTrack erst jetzt
-            pDocSh->GetUndoManager()->AddUndoAction(
+             pDocSh->GetUndoManager()->AddUndoAction(
                 new ScUndoEnterData( pDocSh, nCol, nRow, nTab, nUndoPos, pTabs,
                                      ppOldCells, pHasFormat, pOldFormats,
-                                     rString, NULL ) );
+                                     rString, pUndoData ) );
         }
 
         for (i=0; i<nTabCount; i++)
@@ -1585,7 +1596,30 @@ void ScViewFunc::DeleteCells( DelCellCmd eCmd, BOOL bRecord )
     {
         ScDocShell* pDocSh = GetViewData()->GetDocShell();
         const ScMarkData& rMark = GetViewData()->GetMarkData();
-        pDocSh->GetDocFunc().DeleteCells( aRange, &rMark, eCmd, bRecord, FALSE );
+
+        // #i94841# [Collaboration] When deleting rows is rejected, the content is sometimes wrong
+        if ( pDocSh->IsDocShared() && ( eCmd == DEL_DELROWS || eCmd == DEL_DELCOLS ) )
+        {
+            ScRange aDelRange( aRange.aStart );
+            SCCOLROW nCount = 0;
+            if ( eCmd == DEL_DELROWS )
+            {
+                nCount = sal::static_int_cast< SCCOLROW >( aRange.aEnd.Row() - aRange.aStart.Row() + 1 );
+            }
+            else
+            {
+                nCount = sal::static_int_cast< SCCOLROW >( aRange.aEnd.Col() - aRange.aStart.Col() + 1 );
+            }
+            while ( nCount > 0 )
+            {
+                pDocSh->GetDocFunc().DeleteCells( aDelRange, &rMark, eCmd, bRecord, FALSE );
+                --nCount;
+            }
+        }
+        else
+        {
+            pDocSh->GetDocFunc().DeleteCells( aRange, &rMark, eCmd, bRecord, FALSE );
+        }
 
         pDocSh->UpdateOle(GetViewData());
         CellContentChanged();

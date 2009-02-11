@@ -1035,6 +1035,7 @@ enum ScChangeTrackMergeState
     SC_CTMS_NONE,
     SC_CTMS_PREPARE,
     SC_CTMS_OWN,
+    SC_CTMS_UNDO,
     SC_CTMS_OTHER
 };
 
@@ -1343,14 +1344,14 @@ public:
                                             pLastCutMove;
                                     }
 
-    SC_DLLPUBLIC        void                Undo( ULONG nStartAction, ULONG nEndAction );
+    SC_DLLPUBLIC        void                Undo( ULONG nStartAction, ULONG nEndAction, bool bMerge = false );
 
                                 // fuer MergeDocument, Referenzen anpassen,
                                 //! darf nur in einem temporaer geoeffneten
                                 //! Dokument verwendet werden, der Track
                                 //! ist danach verhunzt
-            void                MergePrepare( ScChangeAction* pFirstMerge );
-            void                MergeOwn( ScChangeAction* pAct, ULONG nFirstMerge );
+            void                MergePrepare( ScChangeAction* pFirstMerge, bool bShared = false );
+            void                MergeOwn( ScChangeAction* pAct, ULONG nFirstMerge, bool bShared = false );
     static  BOOL                MergeIgnore( const ScChangeAction&, ULONG nFirstMerge );
 
                                 // Abhaengige in Table einfuegen.

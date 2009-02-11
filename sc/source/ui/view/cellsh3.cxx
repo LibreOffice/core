@@ -241,17 +241,25 @@ void ScCellShell::Execute( SfxRequest& rReq )
                             Get( FID_INPUTLINE_STATUS );
 
                 ScAddress aCursorPos = pStatusItem->GetPos();
+                String aString = pStatusItem->GetString();
                 const EditTextObject* pData = pStatusItem->GetEditData();
                 if (pData)
                 {
                     if (nSlot == FID_INPUTLINE_BLOCK)
+                    {
                         pTabViewShell->EnterBlock( String(), pData );
+                    }
+                    else if ( aString.Len() > 0 && ( aString.GetChar(0) == '=' || aString.GetChar(0) == '+' || aString.GetChar(0) == '-' ) )
+                    {
+                        pTabViewShell->EnterData( aCursorPos.Col(), aCursorPos.Row(), aCursorPos.Tab(), aString, TRUE, pData );
+                    }
                     else
+                    {
                         pTabViewShell->EnterData( aCursorPos.Col(), aCursorPos.Row(), aCursorPos.Tab(), pData );
+                    }
                 }
                 else
                 {
-                    String aString = pStatusItem->GetString();
                     if (nSlot == FID_INPUTLINE_ENTER)
                     {
                         if (

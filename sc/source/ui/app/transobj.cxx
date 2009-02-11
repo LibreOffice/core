@@ -606,6 +606,7 @@ void ScTransferObj::InitDocShell()
         SCCOL nCol;
         SCROW nRow;
         SCTAB nSrcTab = aBlock.aStart.Tab();
+        pDestDoc->SetLayoutRTL(0, pDoc->IsLayoutRTL(nSrcTab));
         for (nCol=nStartX; nCol<=nEndX; nCol++)
             if ( pDoc->GetColFlags( nCol, nSrcTab ) & CR_HIDDEN )
                 pDestDoc->ShowCol( nCol, 0, FALSE );

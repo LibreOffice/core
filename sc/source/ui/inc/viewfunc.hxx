@@ -98,7 +98,7 @@ public:
     String          GetAutoSumFormula( const ScRangeList& rRangeList, bool bSubTotal );
 
     void            EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rString,
-                                BOOL bRecord = TRUE );
+                               BOOL bRecord = TRUE, const EditTextObject* pData = NULL );
     void            EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const double& rValue );
     void            EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const EditTextObject* pData,
                                 BOOL bRecord = TRUE, BOOL bTestSimple = FALSE );
