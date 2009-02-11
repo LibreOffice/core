@@ -1372,8 +1372,19 @@ BOOL SwView::HandleWheelCommands( const CommandEvent& rCEvt )
         bOk = TRUE;
     }
     else
-        bOk = pEditWin->HandleScrollCommand( rCEvt,
-                    pHScrollbar, pVScrollbar);
+    {
+        if (pWData && (COMMAND_WHEEL_SCROLL==pWData->GetMode()) && (((ULONG)0xFFFFFFFF) == pWData->GetScrollLines()))
+            {
+                        if (pWData->GetDelta()<0)
+                                PhyPageDown();
+                        else
+                                PhyPageUp();
+                        bOk = TRUE;
+                }
+        else
+            bOk = pEditWin->HandleScrollCommand( rCEvt,
+                            pHScrollbar, pVScrollbar);
+    }
     return bOk;
 }
 
