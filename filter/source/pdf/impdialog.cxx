@@ -1185,9 +1185,6 @@ IMPL_LINK( ImpPDFTabSecurityPage, ClickmaPbOwnerPwdHdl, void*, EMPTYARG )
 
 void ImpPDFTabSecurityPage::enablePermissionControls()
 {
-    if( msOwnerPassword.Len() && ! msUserPassword.Len() )
-        msUserPassword = msOwnerPassword;
-
     maFtUserPwd.SetText( (msUserPassword.Len() > 0 && IsEnabled()) ? maUserPwdSet : maUserPwdUnset );
 
     sal_Bool bLocalEnable = (msOwnerPassword.Len() > 0) && IsEnabled();
