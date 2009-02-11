@@ -41,6 +41,16 @@
 #include <tools/prewin.h>
 #include <tools/postwin.h>
 #endif
+#include <osl/thread.hxx>
+
+static void impl_sleep( sal_uInt32 nSec )
+{
+    TimeValue aTime;
+    aTime.Seconds = nSec;
+    aTime.Nanosec = 0;
+
+    osl::Thread::wait( aTime );
+}
 
 HelpCompiler::HelpCompiler(StreamTable &in_streamTable, const fs::path &in_inputFile,
     const fs::path &in_src, const fs::path &in_resEmbStylesheet,
@@ -62,11 +72,7 @@ xmlDocPtr HelpCompiler::getSourceDocument(const fs::path &filePath)
     {
         res = xmlParseFile(filePath.native_file_string().c_str());
         if( !res ){
-#if defined(UNX) || defined(OS2)
-            sleep( 3 );
-#else
-            Sleep( 3 );
-#endif
+            impl_sleep( 3 );
             res = xmlParseFile(filePath.native_file_string().c_str());
         }
     }
@@ -91,11 +97,7 @@ xmlDocPtr HelpCompiler::getSourceDocument(const fs::path &filePath)
         xmlDocPtr doc = xmlParseFile(filePath.native_file_string().c_str());
         if( !doc )
         {
-#if defined(UNX) || defined(OS2)
-            sleep( 3 );
-#else
-            Sleep( 3 );
-#endif
+            impl_sleep( 3 );
             doc = xmlParseFile(filePath.native_file_string().c_str());
         }
 
@@ -416,11 +418,7 @@ bool HelpCompiler::compile( void ) throw( HelpProcessingException )
     // resolve the dom
     if (!docResolvedOrg)
     {
-#if defined(UNX) || defined(OS2)
-        sleep( 3 );
-#else
-        Sleep( 3 );
-#endif
+        impl_sleep( 3 );
         docResolvedOrg = getSourceDocument(inputFile);
         if( !docResolvedOrg )
         {
