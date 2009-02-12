@@ -40,24 +40,19 @@
 #include <com/sun/star/io/XTruncate.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-#include <osl/mutex.hxx>
+#include <svtools/lockfilecommon.hxx>
 
-#define SHARED_OOOUSERNAME_ID   0
-#define SHARED_SYSUSERNAME_ID   1
-#define SHARED_LOCALHOST_ID     2
-#define SHARED_EDITTIME_ID      3
-#define SHARED_USERURL_ID       4
-#define SHARED_ENTRYSIZE        5
+#define SHARED_OOOUSERNAME_ID   LOCKFILE_OOOUSERNAME_ID
+#define SHARED_SYSUSERNAME_ID   LOCKFILE_SYSUSERNAME_ID
+#define SHARED_LOCALHOST_ID     LOCKFILE_LOCALHOST_ID
+#define SHARED_EDITTIME_ID      LOCKFILE_EDITTIME_ID
+#define SHARED_USERURL_ID       LOCKFILE_USERURL_ID
+#define SHARED_ENTRYSIZE        LOCKFILE_ENTRYSIZE
 
 namespace svt {
 
-class SVT_DLLPUBLIC ShareControlFile
+class SVT_DLLPUBLIC ShareControlFile : public LockFileCommon
 {
-    ::osl::Mutex m_aMutex;
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
-
-    ::rtl::OUString m_aURL;
-
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > m_xStream;
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > m_xInputStream;
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > m_xOutputStream;
@@ -72,14 +67,6 @@ class SVT_DLLPUBLIC ShareControlFile
     {
         return ( m_xFactory.is() && m_xStream.is() && m_xInputStream.is() && m_xOutputStream.is() && m_xSeekable.is() && m_xTruncate.is() );
     }
-
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::rtl::OUString > > ParseList( const ::com::sun::star::uno::Sequence< sal_Int8 >& aBuffer );
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > ParseEntry( const ::com::sun::star::uno::Sequence< sal_Int8 >& aBuffer, sal_Int32& o_nCurPos );
-    ::rtl::OUString ParseName( const ::com::sun::star::uno::Sequence< sal_Int8 >& aBuffer, sal_Int32& o_nCurPos );
-    ::rtl::OUString EscapeCharacters( const ::rtl::OUString& aSource );
-    ::rtl::OUString GetOOOUserName();
-    ::rtl::OUString GetCurrentLocalTime();
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > GenerateOwnEntry();
 
 public:
 

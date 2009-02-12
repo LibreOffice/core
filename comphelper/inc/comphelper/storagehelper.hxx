@@ -162,6 +162,8 @@ public:
                             = ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >() )
         throw ( ::com::sun::star::uno::Exception );
 
+    static sal_Bool IsValidZipEntryFileName( const ::rtl::OUString& aName, sal_Bool bSlashAllowed );
+    static sal_Bool IsValidZipEntryFileName( const sal_Unicode *pChar, sal_Int32 nLength, sal_Bool bSlashAllowed );
 };
 
 }
