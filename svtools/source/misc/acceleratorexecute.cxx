@@ -465,7 +465,7 @@ css::uno::Reference< css::ui::XAcceleratorConfiguration > AcceleratorExecute::st
     {
         sModule = xModuleDetection->identify(xFrame);
     }
-    catch(const css::uno::RuntimeException& exRuntime)
+    catch(const css::uno::RuntimeException&)
         { throw; }
     catch(const css::uno::Exception&)
         { return css::uno::Reference< css::ui::XAcceleratorConfiguration >(); }
@@ -560,7 +560,7 @@ IMPL_LINK(AsyncAccelExec, impl_ts_asyncCallback, void*,)
     }
     catch(const css::lang::DisposedException&)
         {}
-    catch(const css::uno::RuntimeException& exRuntime)
+    catch(const css::uno::RuntimeException&)
         { throw; }
     catch(const css::uno::Exception&)
         {}
