@@ -38,7 +38,7 @@
         	exclude-result-prefixes="install">
 
 <!-- Get the correct format -->
-<xsl:output method="xml" indent="yes" />
+<xsl:output method="xml" indent="yes" encoding="UTF-8"/>
 
 <!--************************** PARAMETER ******************************** -->
 <xsl:param name="locale"/>
