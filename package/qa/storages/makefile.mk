@@ -62,6 +62,7 @@ JAVAFILES       =\
                 Test13.java\
                 Test14.java\
                 Test15.java\
+                Test16.java\
                 RegressionTest_114358.java\
                 RegressionTest_i29169.java\
                 RegressionTest_i30400.java\

@@ -168,7 +168,7 @@ public:
 
     sal_Bool ExecuteSuspendCloseFrame();
 
-    void DisconnectFrameDocument();
+    void DisconnectFrameDocument( sal_Bool bComplete = sal_False );
     void CloseDocument();
     void CloseFrame();
     void ClearInterceptor();
@@ -185,6 +185,7 @@ public:
     void show();
 
     sal_Bool HasFrame() { return m_xFrame.is(); }
+    sal_Bool IsLink() { return m_bLink; }
 
     /** hides the document window, even in case of an external container
      *  side managed window.

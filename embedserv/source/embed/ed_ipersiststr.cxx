@@ -193,8 +193,17 @@ EmbedDocument_Impl::EmbedDocument_Impl( const uno::Reference< lang::XMultiServic
 EmbedDocument_Impl::~EmbedDocument_Impl()
 {
     m_pDocHolder->FreeOffice();
-    m_pDocHolder->CloseDocument();
-    m_pDocHolder->CloseFrame();
+
+    if ( m_pDocHolder->HasFrame() && m_pDocHolder->IsLink() )
+    {
+        // a link with frame should be only disconnected, not closed
+        m_pDocHolder->DisconnectFrameDocument( sal_True );
+    }
+    else
+    {
+        m_pDocHolder->CloseDocument();
+        m_pDocHolder->CloseFrame();
+    }
 
     m_pDocHolder->release();
 }

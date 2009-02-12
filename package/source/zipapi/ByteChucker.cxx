@@ -55,15 +55,13 @@ ByteChucker::~ByteChucker()
 {
 }
 
-// XOutputStream chained...
-void SAL_CALL ByteChucker::writeBytes( const Sequence< sal_Int8 >& aData, sal_Int32 /*nLength*/, const sal_Int8 * const /*pData*/ )
+void ByteChucker::WriteBytes( const Sequence< sal_Int8 >& aData )
     throw(NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
 {
     xStream->writeBytes(aData);
 }
 
-// XSeekable chained...
-sal_Int64 SAL_CALL ByteChucker::getPosition(  )
+sal_Int64 ByteChucker::GetPosition(  )
         throw(IOException, RuntimeException)
 {
     return xSeek->getPosition();
@@ -72,7 +70,7 @@ sal_Int64 SAL_CALL ByteChucker::getPosition(  )
 ByteChucker& ByteChucker::operator << (sal_Int8 nInt8)
 {
     p1Sequence[0] = nInt8  & 0xFF;
-    writeBytes( a1Sequence, 1, p1Sequence );
+    WriteBytes( a1Sequence );
     return *this;
 }
 
@@ -80,7 +78,7 @@ ByteChucker& ByteChucker::operator << (sal_Int16 nInt16)
 {
     p2Sequence[0] = static_cast< sal_Int8 >((nInt16 >>  0 ) & 0xFF);
     p2Sequence[1] = static_cast< sal_Int8 >((nInt16 >>  8 ) & 0xFF);
-    writeBytes( a2Sequence, 2, p2Sequence );
+    WriteBytes( a2Sequence );
     return *this;
 }
 ByteChucker& ByteChucker::operator << (sal_Int32 nInt32)
@@ -89,21 +87,21 @@ ByteChucker& ByteChucker::operator << (sal_Int32 nInt32)
     p4Sequence[1] = static_cast< sal_Int8 >((nInt32 >>  8 ) & 0xFF);
     p4Sequence[2] = static_cast< sal_Int8 >((nInt32 >> 16 ) & 0xFF);
     p4Sequence[3] = static_cast< sal_Int8 >((nInt32 >> 24 ) & 0xFF);
-    writeBytes( a4Sequence, 4, p4Sequence );
+    WriteBytes( a4Sequence );
     return *this;
 }
 
 ByteChucker& ByteChucker::operator << (sal_uInt8 nuInt8)
 {
     p1Sequence[0] = nuInt8  & 0xFF;
-    writeBytes( a1Sequence, 1, p1Sequence );
+    WriteBytes( a1Sequence );
     return *this;
 }
 ByteChucker& ByteChucker::operator << (sal_uInt16 nuInt16)
 {
     p2Sequence[0] = static_cast< sal_Int8 >((nuInt16 >>  0 ) & 0xFF);
     p2Sequence[1] = static_cast< sal_Int8 >((nuInt16 >>  8 ) & 0xFF);
-    writeBytes( a2Sequence, 2, p2Sequence );
+    WriteBytes( a2Sequence );
     return *this;
 }
 ByteChucker& ByteChucker::operator << (sal_uInt32 nuInt32)
@@ -112,6 +110,6 @@ ByteChucker& ByteChucker::operator << (sal_uInt32 nuInt32)
     p4Sequence[1] = static_cast < sal_Int8 > ((nuInt32 >>  8 ) & 0xFF);
     p4Sequence[2] = static_cast < sal_Int8 > ((nuInt32 >> 16 ) & 0xFF);
     p4Sequence[3] = static_cast < sal_Int8 > ((nuInt32 >> 24 ) & 0xFF);
-    writeBytes( a4Sequence, 4, p4Sequence );
+    WriteBytes( a4Sequence );
     return *this;
 }
