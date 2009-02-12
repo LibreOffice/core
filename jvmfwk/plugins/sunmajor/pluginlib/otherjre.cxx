@@ -74,12 +74,12 @@ char const* const* OtherInfo::getRuntimePaths(int * size)
 #ifdef MACOSX
         "/../../../JavaVM"
 #else
-    "/bin/classic/libjvm.so", // for IBM Java
-        "/jre/bin/classic/libjvm.so", // for IBM Java
         "/lib/" JFW_PLUGIN_ARCH "/client/libjvm.so", // for Blackdown PPC
         "/lib/" JFW_PLUGIN_ARCH "/server/libjvm.so", // for Blackdown AMD64
         "/lib/" JFW_PLUGIN_ARCH "/classic/libjvm.so", // for Blackdown PPC
-    "/lib/" JFW_PLUGIN_ARCH "/jrockit/libjvm.so" // for Java of BEA Systems
+        "/lib/" JFW_PLUGIN_ARCH "/jrockit/libjvm.so", // for Java of BEA Systems
+        "/bin/classic/libjvm.so", // fallback for older for IBM Java
+        "/jre/bin/classic/libjvm.so" // fallback for older for IBM Java
 #endif
 #endif
 

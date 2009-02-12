@@ -1646,11 +1646,12 @@ void OServiceManager::remove( const Any & Element )
             OUString( RTL_CONSTASCII_USTRINGPARAM("element is not in!") ),
             static_cast< OWeakObject * >(this) );
     }
-
-    // remove from the implementation map
+    //First remove all factories which have been loaded by ORegistryServiceManager.
+    m_SetLoadedFactories.erase( *aIt);
+    //Remove from the implementation map. It contains all factories of m_SetLoadedFactories
+    //which have been added directly through XSet, that is not via ORegistryServiceManager
     m_ImplementationMap.erase( aIt );
 
-    m_SetLoadedFactories.erase( *aIt);
     // remove from the implementation name hashmap
     Reference<XServiceInfo > xInfo( Reference<XServiceInfo >::query( xEle ) );
     if( xInfo.is() )

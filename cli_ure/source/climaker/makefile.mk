@@ -116,6 +116,17 @@ APP1STDLIBS += \
 .INCLUDE : $(PRJ)$/util$/target.pmk
 .INCLUDE :  target.mk
 
+CLIMAKER_CONFIG = $(BIN)$/climaker.exe.config
+
+ALLTAR: \
+    $(CLIMAKER_CONFIG)
+    
+
+
+#Create the config file that is used with the policy assembly
+$(CLIMAKER_CONFIG): climaker.exe.config
+    $(GNUCOPY) -p $< $@
+
 .IF "$(BUILD_FOR_CLI)" != ""
 
 $(OBJFILES): $(BIN)$/cli_basetypes.dll
