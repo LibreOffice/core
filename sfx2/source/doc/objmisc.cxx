@@ -61,6 +61,7 @@
 #include <com/sun/star/document/MacroExecMode.hpp>
 #include <com/sun/star/document/XScriptInvocationContext.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
+#include <com/sun/star/embed/XEmbedPersist.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/container/XChild.hpp>
 
@@ -336,9 +337,11 @@ sal_Bool SfxObjectShell::IsModified()
     if ( pImp->m_bIsModified )
         return sal_True;
 
-    if ( !pImp->m_xDocStorage.is() )
+    if ( !pImp->m_xDocStorage.is() || IsReadOnly() )
     {
         // if the document still has no storage and is not set to be modified explicitly it is not modified
+        // a readonly document is also not modified
+
         return sal_False;
     }
 

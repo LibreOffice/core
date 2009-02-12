@@ -489,7 +489,25 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
        )
     {
         // There exist a hard coded interception for special URLs.
-        if (lcl_isCloseDispatch (aURL))
+        if (
+            (aURL.Complete.equalsAscii(".uno:CloseDoc"  )) ||
+            (aURL.Complete.equalsAscii(".uno:CloseWin"  ))
+           )
+        {
+            css::uno::Reference< css::frame::XDispatchProvider > xParent( xFrame->getCreator(), css::uno::UNO_QUERY );
+            // In case the frame is not a top one, is not based on system window and has a parent,
+            // the parent frame should to be queried for the correct dispatcher.
+            // See i93473
+            if (
+                !WindowHelper::isTopWindow(xFrame->getContainerWindow()) &&
+                !VCLUnoHelper::GetWindow(xFrame->getContainerWindow())->IsSystemWindow() &&
+                xParent.is()
+               )
+                xDispatcher = xParent->queryDispatch(aURL, SPECIALTARGET_SELF, 0);
+            else
+                xDispatcher = implts_getOrCreateDispatchHelper( E_CLOSEDISPATCHER, xFrame );
+        }
+        else if (aURL.Complete.equalsAscii(".uno:CloseFrame"))
             xDispatcher = implts_getOrCreateDispatchHelper( E_CLOSEDISPATCHER, xFrame );
 
         if ( ! xDispatcher.is())

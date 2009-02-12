@@ -2765,6 +2765,17 @@ void SfxMedium::Init_Impl()
         DBG_ERROR( "Unexpected Output stream parameter!\n" );
     }
 
+    if ( aLogicName.Len() )
+    {
+        // if the logic name is set it should be set in MediaDescriptor as well
+        SFX_ITEMSET_ARG( pSet, pFileNameItem, SfxStringItem, SID_FILE_NAME, FALSE );
+        if ( !pFileNameItem )
+        {
+            // let the ItemSet be created if necessary
+            GetItemSet()->Put( SfxStringItem( SID_FILE_NAME, INetURLObject( aLogicName ).GetMainURL( INetURLObject::NO_DECODE ) ) );
+        }
+    }
+
     SetIsRemote_Impl();
 }
 
