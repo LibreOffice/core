@@ -102,6 +102,7 @@ private:
 
     SVX_DLLPRIVATE  SvxImprovementOptionsPage( Window* pParent, const SfxItemSet& rSet );
 
+    DECL_DLLPRIVATE_LINK( HandleHyperlink, svt::FixedHyperlinkImage * );
     DECL_DLLPRIVATE_LINK( HandleShowData, PushButton * );
 
 public:
@@ -135,24 +136,6 @@ public:
     SvxInfoWindow( Window* pParent, const ResId& rResId );
 
     void        SetInfoText( const String& rText );
-};
-
-class SVX_DLLPUBLIC SvxImprovementDialog2 : public ModalDialog
-{
-private:
-    SvxInfoWindow               m_aInfoWin;
-    FixedText                   m_aInvitationFT;
-    RadioButton                 m_aYesRB;
-    RadioButton                 m_aNoRB;
-    FixedLine                   m_aButtonLine;
-    svt::FixedHyperlinkImage    m_aInfoFI;
-    OKButton                    m_aOKBtn;
-
-    DECL_DLLPRIVATE_LINK( HandleOK, OKButton * );
-    DECL_DLLPRIVATE_LINK( HandleHyperlink, svt::FixedHyperlinkImage * );
-
-public:
-    SvxImprovementDialog2( Window* pParent );
 };
 
 #endif

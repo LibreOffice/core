@@ -87,11 +87,12 @@ SvxImprovementPage::SvxImprovementPage( Window* pParent ) :
     m_aShowDataPB.Hide();
 
     Size aNewSize = m_aInvitationFT.GetSizePixel();
-    const long nNewWidth = aNewSize.Width() * 4 / 5;
+    const long nMinWidth = m_aYesRB.CalcMinimumSize().Width();
+    const long nNewWidth = std::max( aNewSize.Width() * 4 / 5, nMinWidth );
     const long nWDelta = aNewSize.Width() - nNewWidth;
     aNewSize.Width() = nNewWidth;
-    Size aCalcSize = m_aInvitationFT.CalcMinimumSize( nNewWidth );
-    long nHDelta = aCalcSize.Height() - aNewSize.Height();
+    const Size aCalcSize = m_aInvitationFT.CalcMinimumSize( nNewWidth );
+    const long nHDelta = aCalcSize.Height() - aNewSize.Height();
     aNewSize.Height() = aCalcSize.Height();
     m_aInvitationFT.SetSizePixel( aNewSize );
 
@@ -220,112 +221,5 @@ void SvxInfoWindow::SetInfoText( const String& rText )
     Size aWinSize = GetSizePixel();
     Point aPos( ( aWinSize.Width() - aSize.Width() ) / 2, ( aWinSize.Height() - aSize.Height() ) / 2 );
     m_aInfoText.SetPosSizePixel( aPos, aSize );
-}
-
-// class SvxImprovementDialog2 -------------------------------------------
-
-SvxImprovementDialog2::SvxImprovementDialog2( Window* pParent ) :
-
-    ModalDialog( pParent, SVX_RES( RID_SVXPAGE_IMPROVEMENT ) ),
-
-    m_aInfoWin      ( this, SVX_RES( WIN_INFO ) ),
-    m_aInvitationFT ( this, SVX_RES( FT_INVITATION ) ),
-    m_aYesRB        ( this, SVX_RES( RB_YES ) ),
-    m_aNoRB         ( this, SVX_RES( RB_NO ) ),
-    m_aButtonLine   ( this, SVX_RES( FL_IMPROVE ) ),
-    m_aInfoFI       ( this, SVX_RES( FI_INFO ) ),
-    m_aOKBtn        ( this, SVX_RES( BTN_OK ) )
-
-{
-    FreeResource();
-
-    SvxImprovementPage* pPage = new SvxImprovementPage( this );
-    m_aInfoWin.Show();
-    m_aInfoWin.SetInfoText( pPage->GetInfoText() );
-    m_aInvitationFT.SetText( pPage->GetInvitationText() );
-    m_aYesRB.SetText( pPage->GetYesButtonText() );
-    m_aNoRB.SetText( pPage->GetNoButtonText() );
-    SetText( pPage->GetPageText() );
-    delete pPage;
-
-    m_aInfoFI.SetClickHdl( LINK( this, SvxImprovementDialog2, HandleHyperlink ) );
-    m_aOKBtn.SetClickHdl( LINK( this, SvxImprovementDialog2, HandleOK ) );
-
-    Size aImgSz = m_aInfoFI.GetImage().GetSizePixel();
-    Size aCtrlSz = m_aInfoFI.GetSizePixel();
-    Point aCtrlPos = m_aInfoFI.GetPosPixel();
-
-    long nDeltaW = aCtrlSz.Width() - aImgSz.Width();
-    long nDeltaH = aCtrlSz.Height() - aImgSz.Height();
-    if ( nDeltaW > 4 )
-    {
-        nDeltaW -= 4;
-        aCtrlSz.Width() -= nDeltaW;
-        aCtrlPos.X() -= ( nDeltaW / 2 );
-    }
-    if ( nDeltaH > 4 )
-    {
-        nDeltaH -= 4;
-        aCtrlSz.Height() -= nDeltaH;
-        aCtrlPos.Y() -= ( nDeltaH / 2 );
-    }
-    m_aInfoFI.SetPosSizePixel( aCtrlPos, aCtrlSz );
-}
-
-IMPL_LINK( SvxImprovementDialog2, HandleHyperlink, svt::FixedHyperlinkImage*, pHyperlinkImage )
-{
-    ::rtl::OUString sURL( pHyperlinkImage->GetURL() );
-
-    if ( sURL.getLength() > 0 )
-    {
-        try
-        {
-            uno::Reference< lang::XMultiServiceFactory > xSMGR =
-                ::comphelper::getProcessServiceFactory();
-            uno::Reference< XSystemShellExecute > xSystemShell(
-                xSMGR->createInstance( ::rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.system.SystemShellExecute" ) ) ),
-                uno::UNO_QUERY_THROW );
-            if ( xSystemShell.is() )
-            {
-                xSystemShell->execute(
-                    sURL, ::rtl::OUString(), SystemShellExecuteFlags::DEFAULTS );
-            }
-        }
-        catch( const uno::Exception& e )
-        {
-             OSL_TRACE( "Caught exception: %s\n thread terminated.\n",
-                rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
-        }
-    }
-
-    return 0;
-}
-
-IMPL_LINK( SvxImprovementDialog2, HandleOK, OKButton*, EMPTYARG )
-{
-    uno::Reference< lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
-    uno::Reference< com::sun::star::oooimprovement::XCoreController > core_c(
-            xSMGR->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.oooimprovement.CoreController")),
-            uno::UNO_QUERY);
-    if(core_c.is())
-    {
-        ::comphelper::ConfigurationHelper::writeDirectKey(
-            xSMGR,
-            ::rtl::OUString::createFromAscii("/org.openoffice.Office.OOoImprovement.Settings"),
-            ::rtl::OUString::createFromAscii("Participation"),
-            ::rtl::OUString::createFromAscii("ShowedInvitation"),
-            uno::makeAny( true ),
-            ::comphelper::ConfigurationHelper::E_STANDARD );
-        ::comphelper::ConfigurationHelper::writeDirectKey(
-            xSMGR,
-            ::rtl::OUString::createFromAscii("/org.openoffice.Office.OOoImprovement.Settings"),
-            ::rtl::OUString::createFromAscii("Participation"),
-            ::rtl::OUString::createFromAscii("InvitationAccepted"),
-            uno::makeAny( m_aYesRB.IsChecked() != FALSE ),
-            ::comphelper::ConfigurationHelper::E_STANDARD );
-    }
-    EndDialog( RET_OK );
-    return 0;
 }
 
