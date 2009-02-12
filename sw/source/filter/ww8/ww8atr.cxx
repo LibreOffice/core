@@ -2597,6 +2597,29 @@ static Writer& OutWW8_SwField( Writer& rWrt, const SfxPoolItem& rHt )
                         rWW8Wrt.GetNumberFmt( *pFld, sStr ))
                         eFld = ww::eSAVEDATE;
                     break;
+                case DI_CUSTOM:
+                    eFld = ww::eDOCPROPERTY;
+                    {
+                        static String sQuotes('\"');
+                        const SwDocInfoField * pDocInfoField =
+                        dynamic_cast<const SwDocInfoField *> (pFld);
+
+                        if (pDocInfoField != NULL)
+                        {
+                            String sFieldname = pDocInfoField->GetCntnt(TRUE);
+                            xub_StrLen nIndex = sFieldname.Search(':');
+
+                            if (nIndex != sFieldname.Len())
+                                sFieldname = sFieldname.Copy(nIndex + 1);
+
+                            sStr.Insert(sQuotes);
+                            sStr.Insert(sFieldname);
+                            sStr.Insert(sQuotes);
+                        }
+                    }
+                    break;
+                default:
+                    break;
             }
 
             if (eFld != ww::eNONE)
@@ -3765,8 +3788,6 @@ static Writer& OutWW8_SwFmtLRSpace( Writer& rWrt, const SfxPoolItem& rHt )
         // sprmPDxaLeft
         if( rWW8Wrt.bWrtWW8 )
         {
-            rWW8Wrt.InsUInt16( 0x840F );
-            rWW8Wrt.InsUInt16( (USHORT)rLR.GetTxtLeft() );
             rWW8Wrt.InsUInt16( 0x845E );        //asian version ?
             rWW8Wrt.InsUInt16( (USHORT)rLR.GetTxtLeft() );
 
@@ -3779,8 +3800,6 @@ static Writer& OutWW8_SwFmtLRSpace( Writer& rWrt, const SfxPoolItem& rHt )
         // sprmPDxaRight
         if( rWW8Wrt.bWrtWW8 )
         {
-            rWW8Wrt.InsUInt16( 0x840E );
-            rWW8Wrt.InsUInt16( (USHORT)rLR.GetRight() );
             rWW8Wrt.InsUInt16( 0x845D );        //asian version ?
             rWW8Wrt.InsUInt16( (USHORT)rLR.GetRight() );
         }
@@ -3792,8 +3811,6 @@ static Writer& OutWW8_SwFmtLRSpace( Writer& rWrt, const SfxPoolItem& rHt )
         // sprmPDxaLeft1
         if( rWW8Wrt.bWrtWW8 )
         {
-            rWW8Wrt.InsUInt16( 0x8411 );
-            rWW8Wrt.InsUInt16( rLR.GetTxtFirstLineOfst() );
             rWW8Wrt.InsUInt16( 0x8460 );        //asian version ?
             rWW8Wrt.InsUInt16( rLR.GetTxtFirstLineOfst() );
         }
