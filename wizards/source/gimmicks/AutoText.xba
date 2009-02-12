@@ -25,7 +25,7 @@ Dim n, m, iAutoCount as Integer
 	&apos; Open a new empty document
 	oDocument = CreateNewDocument(&quot;swriter&quot;)
 	If Not IsNull(oDocument) Then
-		oDocument.DocumentInfo.Title = sDocumentTitle
+		oDocument.DocumentProperties.Title = sDocumentTitle
 		oDocuText = oDocument.Text
 
 		&apos; Create The Character-templates

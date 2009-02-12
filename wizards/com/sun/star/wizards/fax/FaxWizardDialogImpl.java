@@ -41,8 +41,8 @@ import com.sun.star.awt.XTextComponent;
 import com.sun.star.awt.XWindow;
 import com.sun.star.awt.XWindowPeer;
 import com.sun.star.beans.PropertyValue;
-import com.sun.star.document.XDocumentInfo;
-import com.sun.star.document.XDocumentInfoSupplier;
+import com.sun.star.document.XDocumentProperties;
+import com.sun.star.document.XDocumentPropertiesSupplier;
 import com.sun.star.graphic.XGraphicProvider;
 import com.sun.star.graphic.XGraphic;
 import com.sun.star.uno.AnyConverter;
@@ -594,10 +594,10 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
 
     public void txtTemplateNameTextChanged()
     {
-        XDocumentInfoSupplier xDocInfoSuppl = (XDocumentInfoSupplier) UnoRuntime.queryInterface(XDocumentInfoSupplier.class, xTextDocument);
-        XDocumentInfo xDocInfo = xDocInfoSuppl.getDocumentInfo();
+        XDocumentPropertiesSupplier xDocPropsSuppl = (XDocumentPropertiesSupplier) UnoRuntime.queryInterface(XDocumentPropertiesSupplier.class, xTextDocument);
+        XDocumentProperties xDocProps = xDocPropsSuppl.getDocumentProperties();
         String TitleName = txtTemplateName.getText();
-        Helper.setUnoPropertyValue(xDocInfo, "Title", TitleName);
+        xDocProps.setTitle(TitleName);
     }
 
     public void optSenderPlaceholderItemChanged()

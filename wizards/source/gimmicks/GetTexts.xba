@@ -50,10 +50,10 @@ Dim oCharStyles as Object
 		oHyperCursor.gotoStart(False)
 		oHyperCursor.HyperLinkURL = oDocument.URL
 		oHyperCursor.HyperLinkTarget = oDocument.URL
-		If oDocument.DocumentInfo.Title &lt;&gt; &quot;&quot; Then
-			oHyperCursor.HyperlinkName = oDocument.DocumentInfo.Title
+		If oDocument.DocumentProperties.Title &lt;&gt; &quot;&quot; Then
+			oHyperCursor.HyperlinkName = oDocument.DocumentProperties.Title
 		End If
-		oLogText.insertString(oHyperCursor, oDocument.DocumentInfo.Title, False)
+		oLogText.insertString(oHyperCursor, oDocument.DocumentProperties.Title, False)
 		oLogText.insertControlCharacter(oHyperCursor,com.sun.star.text.ControlCharacter.PARAGRAPH_BREAK,False)
 
 		oLogCursor = oLogText.createTextCursor()
@@ -64,8 +64,8 @@ Dim oCharStyles as Object
 		oLogCursor.SetPropertyToDefault(&quot;HyperLinkName&quot;)
 		LogIndex = 0
 
-		&apos; Get the Properties of the document Info
-		GetDocumentInfo()
+		&apos; Get the Properties of the document
+		GetDocumentProps()
 
 		Select Case sDocType
 			Case &quot;swriter&quot;
@@ -400,18 +400,18 @@ End Sub
 
 &apos; ***********************************************Misc**************************************************
 
-Sub GetDocumentInfo()
-Dim oDocuInfo as Object
+Sub GetDocumentProps()
+Dim oDocuProps as Object
 	MakeLogHeadLine(&quot;Document Properties&quot;)
-	oDocuInfo = oDocument.DocumentInfo
-	WriteStringToLogFile(oDocuInfo.Title)
-	WriteStringToLogFile(oDocuInfo.Description)
-	WriteStringToLogFile(oDocuInfo.Theme)
-	WriteStringToLogFile(oDocuInfo.Author)
-	WriteStringToLogFile(oDocuInfo.ReplyTo)
-	WriteStringToLogFile(oDocuInfo.Recipient)
-	WriteStringToLogFile(oDocuInfo.References)
-	WriteStringToLogFile(oDocuInfo.Keywords)
+	oDocuProps = oDocument.DocumentProperties
+	WriteStringToLogFile(oDocuProps.Title)
+	WriteStringToLogFile(oDocuProps.Description)
+	WriteStringToLogFile(oDocuProps.Subject)
+	WriteStringToLogFile(oDocuProps.Author)
+&apos; 	WriteStringToLogFile(oDocuProps.UserDefinedProperties.ReplyTo)
+&apos; 	WriteStringToLogFile(oDocuProps.UserDefinedProperties.Recipient)
+&apos; 	WriteStringToLogFile(oDocuProps.UserDefinedProperties.References)
+&apos; 	WriteStringToLogFile(oDocuProps.Keywords)
 End Sub
 
 
