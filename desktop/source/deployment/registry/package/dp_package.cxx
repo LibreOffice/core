@@ -75,6 +75,7 @@
 #include "com/sun/star/deployment/XPackageManager.hpp"
 
 #include <vector>
+#include <stdio.h>
 
 
 using namespace ::dp_misc;
@@ -249,6 +250,18 @@ public:
     getSupportedPackageTypes() throw (RuntimeException);
 
     using ImplBaseT::disposing;
+};
+
+//Used to find a XPackage with a particular URL
+class XPackage_eq : public std::unary_function<Reference<deployment::XPackage>, bool>
+{
+    OUString m_URL;
+public:
+    explicit XPackage_eq(const OUString & s) : m_URL(s) {}
+    bool operator() (const Reference<deployment::XPackage> & p) const
+    {
+        return m_URL.equals(p->getURL());
+    }
 };
 
 //______________________________________________________________________________
@@ -1362,10 +1375,20 @@ void BackendImpl::PackageImpl::scanBundle(
 
         checkAborted( abortChannel );
 
-        const Reference<deployment::XPackage> xPackage(
-            bindBundleItem( url, mediaType, xCmdEnv ) );
-        if (xPackage.is())
-            bundle.push_back( xPackage );
+        //We make sure that we only create one XPackage for a particular URL.
+        //Sometime programmers insert the same URL several times in the manifest
+        //which may lead to DisposedExceptions.
+        if (bundle.end() == std::find_if(bundle.begin(), bundle.end(), XPackage_eq(url)))
+        {
+            const Reference<deployment::XPackage> xPackage(
+                bindBundleItem( url, mediaType, xCmdEnv ) );
+            if (xPackage.is())
+                bundle.push_back( xPackage );
+        }
+        else
+        {
+            fprintf(stderr, "manifest.xml contains a duplicate entry!\n");
+        }
     }
 
     if (descrFile.getLength() > 0)
