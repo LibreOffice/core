@@ -424,7 +424,8 @@ void X11SalFrame::Init( ULONG nSalFrameStyle, int nScreen, SystemParentData* pPa
         if( IsOverrideRedirect() )
             Attributes.override_redirect = True;
         // default icon
-        if( SelectAppIconPixmap( pDisplay_, m_nScreen,
+        if( (nStyle_ & SAL_FRAME_STYLE_INTRO) == 0 &&
+            SelectAppIconPixmap( pDisplay_, m_nScreen,
                                  mnIconID != 1 ? mnIconID :
                                  (mpParent ? mpParent->mnIconID : 1), 32,
                                  Hints.icon_pixmap, Hints.icon_mask ))

@@ -383,7 +383,7 @@ void DeInitVCL()
     DBG_ASSERT( nBadTopWindows==0, aBuf.getStr() );
     #endif
 
-    ImplImageTree::cleanup();
+    ImplImageTreeSingletonRef()->shutDown();
 
     delete pExceptionHandler;
     pExceptionHandler = NULL;
