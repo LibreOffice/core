@@ -219,7 +219,7 @@ public:
 
     /** This function reports the complete registry information of a key and all of its subkeys.
 
-        All information which are available (keynames, value types, values, linknames, linktargets, ...)
+        All information which are available (keynames, value types, values, ...)
         will be printed to stdout for report issues only.
         @param  rKey references a currently open key which content will be reported.
         @return REG_NO_ERROR if succeeds else an error code.
@@ -597,46 +597,46 @@ public:
     inline RegError getUnicodeListValue(const ::rtl::OUString& keyName,
                                               RegistryValueList<sal_Unicode*>& rValueList);
 
-    /** creates a new link with the specified name and target.
+    /** used to create a link.
 
-        @param linkName specifies the name of link
-        @param linkTarget specifies a full qualified keyname as target for the link.
-        @return REG_NO_ERROR if succeeds else an error code.
+        @obsolete Links are no longer supported.
+
+        @return REG_INVALID_LINK
      */
     inline RegError createLink(const ::rtl::OUString& linkName,
                                const ::rtl::OUString& linkTarget);
 
-    /** deletes an existing link.
+    /** used to delete a link.
 
-        @param linkName specifies the name of link
-        @return REG_NO_ERROR if succeeds else an error code.
+        @obsolete Links are no longer supported.
+
+        @return REG_INVALID_LINK
      */
     inline RegError deleteLink(const ::rtl::OUString& linkName);
 
-    /** returns the type of the specified key if it is a link or a real key.
+    /** returns the type of the specified key.
 
         @param name specifies the name of the key or link.
-        @param pKeyType returns the type of the key.
+        @param pKeyType returns the type of the key (always RG_KEYTYPE).
         @return REG_NO_ERROR if succeeds else an error code.
      */
     inline RegError getKeyType(const ::rtl::OUString& name,
                                   RegKeyType* pKeyType) const;
 
-    /** returns the target of the specified link.
+    /** used to return the target of a link.
 
-        @param linkName specifies the name of link.
-        @param rLinkTarget returns the target keyname of the link.
-        @return REG_NO_ERROR if succeeds else an error code.
+        @obsolete Links are no longer supported.
+
+        @return REG_INVALID_LINK
      */
     inline RegError getLinkTarget(const ::rtl::OUString& linkName,
                                     ::rtl::OUString& rLinkTarget) const;
 
-    /** resolves all or only the first link of a keyname.
+    /** resolves a keyname.
 
-        The function resolves either only the first link or it resolves all links
-        which exists in the keyname or recursive in the resolved parts.
         @param  keyName specifies the name of the key which will be resolved relativ to this key.
                         The resolved name will be prefixed with the name of this key.
+        @param firstLinkOnly ignored
         @return REG_NO_ERROR if succeeds else an error code.
      */
     inline RegError getResolvedKeyName(const ::rtl::OUString& keyName,

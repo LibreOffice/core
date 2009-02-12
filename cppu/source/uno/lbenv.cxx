@@ -44,6 +44,7 @@
 #include "rtl/string.hxx"
 #include "rtl/ustring.hxx"
 #include "rtl/ustrbuf.hxx"
+#include "rtl/instance.hxx"
 #include "typelib/typedescription.h"
 #include "uno/dispatcher.h"
 #include "uno/environment.h"
@@ -151,20 +152,9 @@ struct EnvironmentsData
         uno_memAlloc memAlloc, const OUString & rEnvDcp );
 };
 
-//------------------------------------------------------------------------------
-static EnvironmentsData & getEnvironmentsData()
+namespace
 {
-    static EnvironmentsData * s_p = 0;
-    if (! s_p)
-    {
-        ::osl::MutexGuard guard( ::osl::Mutex::getGlobalMutex() );
-        if (! s_p)
-        {
-            static EnvironmentsData s_obj;
-            s_p = &s_obj;
-        }
-    }
-    return *s_p;
+    struct theEnvironmentsData : public rtl::Static< EnvironmentsData, theEnvironmentsData > {};
 }
 
 //==============================================================================
@@ -610,7 +600,7 @@ static void SAL_CALL defenv_harden(
 
     uno_DefaultEnvironment * that = (uno_DefaultEnvironment *)pEnv;
     {
-    ::osl::MutexGuard guard( getEnvironmentsData().mutex );
+    ::osl::MutexGuard guard( theEnvironmentsData::get().mutex );
     if (1 == ::osl_incrementInterlockedCount( &that->nRef )) // is dead
     {
         that->nRef = 0;
@@ -1160,7 +1150,7 @@ void SAL_CALL uno_direct_getEnvironment(
     OSL_ENSURE( ppEnv, "### null ptr!" );
     OUString const & rEnvDcp = OUString::unacquired( &pEnvDcp );
 
-    EnvironmentsData & rData = getEnvironmentsData();
+    EnvironmentsData & rData = theEnvironmentsData::get();
 
     ::osl::MutexGuard guard( rData.mutex );
     rData.getEnvironment( ppEnv, rEnvDcp, pContext );
@@ -1181,7 +1171,7 @@ void SAL_CALL uno_getRegisteredEnvironments(
     rtl_uString * pEnvDcp )
     SAL_THROW_EXTERN_C()
 {
-    EnvironmentsData & rData = getEnvironmentsData();
+    EnvironmentsData & rData = theEnvironmentsData::get();
 
     ::osl::MutexGuard guard( rData.mutex );
     rData.getRegisteredEnvironments(

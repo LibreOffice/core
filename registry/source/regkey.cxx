@@ -813,48 +813,17 @@ RegError REGISTRY_CALLTYPE freeValueList(RegValueType valueType,
 //*********************************************************************
 //  createLink
 //
-RegError REGISTRY_CALLTYPE createLink(RegKeyHandle hKey,
-                                           rtl_uString* linkName,
-                                      rtl_uString* linkTarget)
+RegError REGISTRY_CALLTYPE createLink(RegKeyHandle, rtl_uString*, rtl_uString*)
 {
-    ORegKey*    pKey;
-
-    if (hKey)
-    {
-        pKey = (ORegKey*)hKey;
-
-        if (pKey->isDeleted())
-            return REG_INVALID_KEY;
-    } else
-        return REG_INVALID_KEY;
-
-    if (pKey->isReadOnly())
-        return REG_REGISTRY_READONLY;
-
-    return pKey->createLink(linkName, linkTarget);
+    return REG_INVALID_LINK; // links are no longer supported
 }
 
 //*********************************************************************
 //  deleteLink
 //
-RegError REGISTRY_CALLTYPE deleteLink(RegKeyHandle hKey,
-                                        rtl_uString* linkName)
+RegError REGISTRY_CALLTYPE deleteLink(RegKeyHandle, rtl_uString*)
 {
-    ORegKey*    pKey;
-
-    if (hKey)
-    {
-        pKey = (ORegKey*)hKey;
-
-        if (pKey->isDeleted())
-            return REG_INVALID_KEY;
-    } else
-        return REG_INVALID_KEY;
-
-    if (pKey->isReadOnly())
-        return REG_REGISTRY_READONLY;
-
-    return pKey->deleteLink(linkName);
+    return REG_INVALID_LINK; // links are no longer supported
 }
 
 //*********************************************************************
@@ -881,28 +850,11 @@ RegError REGISTRY_CALLTYPE getKeyType(RegKeyHandle hKey,
 //*********************************************************************
 //  getLinkTarget
 //
-RegError REGISTRY_CALLTYPE getLinkTarget(RegKeyHandle hKey,
-                                         rtl_uString* linkName,
-                                           rtl_uString** pLinkTarget)
+RegError REGISTRY_CALLTYPE getLinkTarget(
+    RegKeyHandle, rtl_uString*, rtl_uString**)
 {
-    ORegKey*    pKey;
-
-    if (hKey)
-    {
-        pKey = (ORegKey*)hKey;
-
-        if (pKey->isDeleted())
-            return REG_INVALID_KEY;
-    } else
-        return REG_INVALID_KEY;
-
-    OUString linkTarget;
-    RegError ret = pKey->getLinkTarget(linkName, linkTarget);
-    if (!ret)
-        rtl_uString_assign(pLinkTarget, linkTarget.pData);
-    return ret;
+    return REG_INVALID_LINK; // links are no longer supported
 }
-
 
 //*********************************************************************
 //  getName

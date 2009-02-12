@@ -61,7 +61,6 @@
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/uno/XCurrentContext.hpp"
 #include "com/sun/star/uno/XInterface.hpp"
-#include "com/sun/star/uri/ExternalUriReferenceTranslator.hpp"
 #include "com/sun/star/util/XMacroExpander.hpp"
 #include "com/sun/star/container/XNameAccess.hpp"
 #include "cppuhelper/exc_hlp.hxx"
@@ -1641,18 +1640,6 @@ void JavaVirtualMachine::setUpUnoVirtualMachine(JNIEnv * environment) {
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com::sun::star::lang::IllegalArgumentException")),
             static_cast< cppu::OWeakObject * >(this));
-    }
-    if (baseUrl.getLength() > 0) {
-        baseUrl = css::uri::ExternalUriReferenceTranslator::create(m_xContext)->
-            translateToExternal(baseUrl);
-        if (baseUrl.getLength() == 0) {
-            throw css::uno::RuntimeException(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.uri.ExternalUriReferenceTranslator."
-                        "translateToExternal failed")),
-                static_cast< cppu::OWeakObject * >(this));
-        }
     }
     rtl::OUString classPath;
     try {

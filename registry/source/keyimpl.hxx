@@ -52,8 +52,7 @@ public:
 
     RegError    createKey(const OUString& keyName, RegKeyHandle* phNewKey);
 
-    RegError    openKey(const OUString& keyName, RegKeyHandle* phOpenKey,
-                        RESOLVE eResolve=RESOLVE_FULL);
+    RegError    openKey(const OUString& keyName, RegKeyHandle* phOpenKey);
 
     RegError    openSubKeys(const OUString& keyName,
                             RegKeyHandle** phOpenSubKeys,
@@ -102,22 +101,11 @@ public:
                                      sal_Unicode*** pValueList,
                                     sal_uInt32* pLen) const;
 
-    RegError    createLink(const OUString& linkName, const OUString& linkTarget);
-
-    RegError    deleteLink(const OUString& linkName);
-
     RegError    getKeyType(const OUString& name,
                            RegKeyType* pKeyType) const;
 
-    RegError    getLinkTarget(const OUString& linkName,
-                              OUString& pLinkTarget) const;
-
     RegError    getResolvedKeyName(const OUString& keyName,
                                    OUString& resolvedName);
-
-public:
-    virtual ~ORegKey();
-
 
     sal_Bool        isDeleted() const
                     { return m_bDeleted; }
@@ -130,17 +118,11 @@ public:
 
     sal_uInt32      countSubKeys();
 
-    sal_Bool        isLink() const
-                    { return m_isLink; }
-
-    const OUString& getLinkTarget() const
-                    { return m_link; }
-
     ORegistry* getRegistry() const
                     { return m_pRegistry; }
 
     const OStoreFile& getStoreFile() const
-                    { return m_storeFile; }
+                    { return m_pRegistry->getStoreFile(); }
 
     OStoreDirectory getStoreDir();
 
@@ -150,17 +132,13 @@ public:
     sal_uInt32 getRefCount() const
                     { return m_refCount; }
 
-    friend class ORegistry;
-protected:
-    sal_Bool                checkLink();
+    OUString getFullPath(OUString const & path) const;
 
+private:
     sal_uInt32              m_refCount;
     OUString                m_name;
-    OUString                m_link;
     sal_Bool                m_bDeleted;
-    sal_Bool                m_isLink;
     ORegistry*              m_pRegistry;
-    OStoreFile              m_storeFile;
 };
 
 

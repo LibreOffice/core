@@ -112,7 +112,7 @@ struct LessString
     }
 };
 
-typedef ::std::set< OUString, LessString > StringSet;
+typedef ::std::set< OUString > StringSet;
 
 class Options
 {
@@ -1270,7 +1270,7 @@ static sal_uInt32 checkFieldsWithoutOrder(const OUString& keyName,
     }
 
     sal_Bool bFound = sal_False;
-    ::std::set< sal_uInt16, ::std::less< sal_uInt16 > > moreProps;
+    ::std::set< sal_uInt16 > moreProps;
 
     for (i=0; i < nFields1; i++)
     {
@@ -1533,7 +1533,7 @@ static sal_uInt32 checkBlob(const OUString& keyName, typereg::Reader& reader1, s
             }
 
             sal_Bool bFound = sal_False;
-            ::std::set< sal_uInt16, ::std::less< sal_uInt16 > > moreReferences;
+            ::std::set< sal_uInt16 > moreReferences;
 
             for (i=0; i < nReference1; i++)
             {
