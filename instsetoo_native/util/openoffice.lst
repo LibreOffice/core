@@ -271,7 +271,7 @@ URE
         active 1
         compression 5
         script ure
-        include {solarenvpath}/{os}/loader2,{solarenvpath}/{os}/gcc3.4.1_glibc2.2.4_bits,{solarpath}/bin.{minor}/ure,{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarenvpath}/{os}/MS
+	include {solarenvpath}/{os}/loader2,{solarpath}/bin.{minor}/ure,{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarenvpath}/{os}/MS
     }
 }
 
