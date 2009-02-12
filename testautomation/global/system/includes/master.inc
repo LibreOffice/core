@@ -702,7 +702,6 @@ sub mMakeGeneralOptionsAPI
     Dim bHelpTip as Boolean
     Dim sTempPath as string
     Dim sWorkPath as string    
-    Dim sFileFunction as string
     Dim oUnoOfficeConnection as object
     Dim oUnoConfigurationAccess as object
     Dim aPropertyValue(1) As new com.sun.star.beans.PropertyValue ' Array of pairs: Property with Value
@@ -712,7 +711,7 @@ sub mMakeGeneralOptionsAPI
 
     Dim oOOoImprovementController as object  ' Check presence of the OOo Improvement Extension
    
-    sFileFunction="global::system::inc::master.inc::hMakeGeneralOptionsAPI:: "
+    const sFileFunction = "global::system::inc::master.inc::hMakeGeneralOptionsAPI:: "
 
     ' Open OOo UNO-Port for communication
     oUnoOfficeConnection=hGetUnoService(TRUE)
@@ -811,17 +810,24 @@ sub mMakeGeneralOptionsAPI
         xViewRoot.dispose()
 
         '///+ <li>Disable automatic check for updates
-        aPropertyValue(0).Value="/org.openoffice.Office.Jobs/Jobs/Job['UpdateCheck']/Arguments"
-        xViewRoot=oUnoConfigurationAccess.createInstanceWithArguments("com.sun.star.configuration.ConfigurationUpdateAccess",aPropertyValue())
-        xViewRoot.replaceByName("AutoCheckEnabled", false)
-        xViewRoot.commitChanges()
-        ' Since we use lazywrite=false, the call to '.commitChanges()' returns if all data is written.
-        ' This call to ask for pending changes is just to convince me;
-        if xViewRoot.hasPendingChanges() then
-            qaErrorLog(sFileFunction+"Changes still pending...: AutoCheckEnabled")
-            ' At this point there is no needed to think about what to do, if it doesn't work.
-        end if
-        xViewRoot.dispose()
+        ' Encapsulating this in a try...catch block because external (non-Sun) builds
+        ' do usually not support online update so the API is not available and we get an
+        ' exception. In case of failure we print a QAErrorLog.
+        try
+            aPropertyValue(0).Value="/org.openoffice.Office.Jobs/Jobs/Job['UpdateCheck']/Arguments"
+            xViewRoot=oUnoConfigurationAccess.createInstanceWithArguments("com.sun.star.configuration.ConfigurationUpdateAccess",aPropertyValue())
+            xViewRoot.replaceByName("AutoCheckEnabled", false)
+            xViewRoot.commitChanges()
+            ' Since we use lazywrite=false, the call to '.commitChanges()' returns if all data is written.
+            ' This call to ask for pending changes is just to convince me;
+            if xViewRoot.hasPendingChanges() then
+                qaErrorLog(sFileFunction+"Changes still pending...: AutoCheckEnabled")
+                ' At this point there is no needed to think about what to do, if it doesn't work.
+            end if
+            xViewRoot.dispose()
+        catch
+            qaErrorLog( sFileFunction & "This build does not support online update." )
+        endcatch
 
         '///+ OOo Improvement Extension
         ' Note: Logging is disabled the hard way. The UI will not notice the change so even if logging is disabled
