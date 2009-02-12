@@ -36,6 +36,7 @@
 #include "connectivity/CommonTools.hxx"
 #include <connectivity/dbconversion.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
+#include <rtl/logfile.hxx>
 
 using namespace connectivity;
 using namespace dbtools;
@@ -47,10 +48,12 @@ using namespace ::com::sun::star::io;
 namespace {
     static sal_Bool isStorageCompatible(sal_Int32 _eType1, sal_Int32 _eType2)
     {
+        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbtools", "Ocke.Janssen@sun.com", "ORowSetValue::isStorageCompatible" );
         sal_Bool bIsCompatible = sal_True;
 
         if (_eType1 != _eType2)
         {
+            RTL_LOGFILE_CONTEXT_TRACE( aLogger, "ORowSetValue::isStorageCompatible _eType1 != _eType2" );
             switch (_eType1)
             {
                 case DataType::CHAR:
@@ -196,65 +199,65 @@ namespace tracing
 // -----------------------------------------------------------------------------
 void ORowSetValue::setTypeKind(sal_Int32 _eType)
 {
-    if (!m_bNull)
-        if (!isStorageCompatible(_eType, m_eTypeKind))
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbtools", "Ocke.Janssen@sun.com", "ORowSetValue::setTypeKind" );
+    if ( !m_bNull && !isStorageCompatible(_eType, m_eTypeKind) )
+    {
+        switch(_eType)
         {
-            switch(_eType)
-            {
-                case DataType::VARCHAR:
-                case DataType::CHAR:
-                case DataType::DECIMAL:
-                case DataType::NUMERIC:
-                case DataType::LONGVARCHAR:
-                    (*this) = getString();
-                    break;
-                case DataType::BIGINT:
-                    (*this) = getLong();
-                    break;
+            case DataType::VARCHAR:
+            case DataType::CHAR:
+            case DataType::DECIMAL:
+            case DataType::NUMERIC:
+            case DataType::LONGVARCHAR:
+                (*this) = getString();
+                break;
+            case DataType::BIGINT:
+                (*this) = getLong();
+                break;
 
-                case DataType::FLOAT:
-                    (*this) = getFloat();
-                    break;
-                case DataType::DOUBLE:
-                case DataType::REAL:
-                    (*this) = getDouble();
-                    break;
-                case DataType::TINYINT:
-                    (*this) = getInt8();
-                    break;
-                case DataType::SMALLINT:
-                    (*this) = getInt16();
-                    break;
-                case DataType::INTEGER:
-                    (*this) = getInt32();
-                    break;
-                case DataType::BIT:
-                case DataType::BOOLEAN:
-                    (*this) = getBool();
-                    break;
-                case DataType::DATE:
-                    (*this) = getDate();
-                    break;
-                case DataType::TIME:
-                    (*this) = getTime();
-                    break;
-                case DataType::TIMESTAMP:
-                    (*this) = getDateTime();
-                    break;
-                case DataType::BINARY:
-                case DataType::VARBINARY:
-                case DataType::LONGVARBINARY:
-                    (*this) = getSequence();
-                    break;
-                case DataType::BLOB:
-                case DataType::CLOB:
-                case DataType::OBJECT:
-                    (*this) = getAny();
-                    break;
-                default:
-                    OSL_ENSURE(0,"ORowSetValue:operator==(): UNSPUPPORTED TYPE!");
-            }
+            case DataType::FLOAT:
+                (*this) = getFloat();
+                break;
+            case DataType::DOUBLE:
+            case DataType::REAL:
+                (*this) = getDouble();
+                break;
+            case DataType::TINYINT:
+                (*this) = getInt8();
+                break;
+            case DataType::SMALLINT:
+                (*this) = getInt16();
+                break;
+            case DataType::INTEGER:
+                (*this) = getInt32();
+                break;
+            case DataType::BIT:
+            case DataType::BOOLEAN:
+                (*this) = getBool();
+                break;
+            case DataType::DATE:
+                (*this) = getDate();
+                break;
+            case DataType::TIME:
+                (*this) = getTime();
+                break;
+            case DataType::TIMESTAMP:
+                (*this) = getDateTime();
+                break;
+            case DataType::BINARY:
+            case DataType::VARBINARY:
+            case DataType::LONGVARBINARY:
+                (*this) = getSequence();
+                break;
+            case DataType::BLOB:
+            case DataType::CLOB:
+            case DataType::OBJECT:
+                (*this) = getAny();
+                break;
+            default:
+                OSL_ENSURE(0,"ORowSetValue:operator==(): UNSPUPPORTED TYPE!");
         }
+    }
 
     m_eTypeKind = _eType;
 }
@@ -262,6 +265,7 @@ void ORowSetValue::setTypeKind(sal_Int32 _eType)
 // -----------------------------------------------------------------------------
 void ORowSetValue::free()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbtools", "Ocke.Janssen@sun.com", "ORowSetValue::free" );
     if(!m_bNull)
     {
         switch(m_eTypeKind)
@@ -348,7 +352,7 @@ ORowSetValue& ORowSetValue::operator=(const ORowSetValue& _rRH)
     if(&_rRH == this)
         return *this;
 
-    if ( m_eTypeKind != _rRH.m_eTypeKind || _rRH.m_bNull || m_bSigned != _rRH.m_bSigned)
+    if ( m_eTypeKind != _rRH.m_eTypeKind || (_rRH.m_bNull && !m_bNull) || m_bSigned != _rRH.m_bSigned)
         free();
 
     m_bBound    = _rRH.m_bBound;
@@ -848,6 +852,7 @@ bool ORowSetValue::operator==(const ORowSetValue& _rRH) const
 // -------------------------------------------------------------------------
 Any ORowSetValue::makeAny() const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbtools", "Ocke.Janssen@sun.com", "ORowSetValue::makeAny" );
     Any rValue;
     if(isBound() && !isNull())
     {
@@ -939,6 +944,7 @@ Any ORowSetValue::makeAny() const
 // -------------------------------------------------------------------------
 ::rtl::OUString ORowSetValue::getString( ) const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbtools", "Ocke.Janssen@sun.com", "ORowSetValue::getString" );
     ::rtl::OUString aRet;
     if(!m_bNull)
     {
@@ -1014,6 +1020,7 @@ Any ORowSetValue::makeAny() const
 // -------------------------------------------------------------------------
 sal_Bool ORowSetValue::getBool()    const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbtools", "Ocke.Janssen@sun.com", "ORowSetValue::getBool" );
     sal_Bool bRet = sal_False;
     if(!m_bNull)
     {
@@ -1084,6 +1091,7 @@ sal_Bool ORowSetValue::getBool()    const
 // -------------------------------------------------------------------------
 sal_Int8 ORowSetValue::getInt8()    const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbtools", "Ocke.Janssen@sun.com", "ORowSetValue::getInt8" );
 
 
     sal_Int8 nRet = 0;
@@ -1148,6 +1156,7 @@ sal_Int8 ORowSetValue::getInt8()    const
 // -------------------------------------------------------------------------
 sal_Int16 ORowSetValue::getInt16()  const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbtools", "Ocke.Janssen@sun.com", "ORowSetValue::getInt16" );
 
 
     sal_Int16 nRet = 0;
@@ -1212,6 +1221,7 @@ sal_Int16 ORowSetValue::getInt16()  const
 // -------------------------------------------------------------------------
 sal_Int32 ORowSetValue::getInt32()  const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbtools", "Ocke.Janssen@sun.com", "ORowSetValue::getInt32" );
     sal_Int32 nRet = 0;
     if(!m_bNull)
     {
@@ -1276,6 +1286,7 @@ sal_Int32 ORowSetValue::getInt32()  const
 // -------------------------------------------------------------------------
 sal_Int64 ORowSetValue::getLong()   const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbtools", "Ocke.Janssen@sun.com", "ORowSetValue::getLong" );
     sal_Int64 nRet = 0;
     if(!m_bNull)
     {
@@ -1340,6 +1351,7 @@ sal_Int64 ORowSetValue::getLong()   const
 // -------------------------------------------------------------------------
 float ORowSetValue::getFloat()  const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbtools", "Ocke.Janssen@sun.com", "ORowSetValue::getFloat" );
     float nRet = 0;
     if(!m_bNull)
     {
@@ -1408,6 +1420,7 @@ float ORowSetValue::getFloat()  const
 // -------------------------------------------------------------------------
 double ORowSetValue::getDouble()    const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbtools", "Ocke.Janssen@sun.com", "ORowSetValue::getDouble" );
 
 
     double nRet = 0;
@@ -1478,6 +1491,7 @@ double ORowSetValue::getDouble()    const
 // -------------------------------------------------------------------------
 void ORowSetValue::setFromDouble(const double& _rVal,sal_Int32 _nDatatype)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbtools", "Ocke.Janssen@sun.com", "ORowSetValue::setFromDouble" );
     free();
 
     m_bNull = sal_False;
@@ -1564,6 +1578,7 @@ void ORowSetValue::setFromDouble(const double& _rVal,sal_Int32 _nDatatype)
 // -----------------------------------------------------------------------------
 Sequence<sal_Int8>  ORowSetValue::getSequence() const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbtools", "Ocke.Janssen@sun.com", "ORowSetValue::getSequence" );
     Sequence<sal_Int8> aSeq;
     if (!m_bNull)
     {
@@ -1605,6 +1620,7 @@ Sequence<sal_Int8>  ORowSetValue::getSequence() const
 // -----------------------------------------------------------------------------
 ::com::sun::star::util::Date ORowSetValue::getDate()        const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbtools", "Ocke.Janssen@sun.com", "ORowSetValue::getDate" );
     ::com::sun::star::util::Date aValue;
     if(!m_bNull)
     {
@@ -1643,6 +1659,7 @@ Sequence<sal_Int8>  ORowSetValue::getSequence() const
 // -----------------------------------------------------------------------------
 ::com::sun::star::util::Time ORowSetValue::getTime()        const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbtools", "Ocke.Janssen@sun.com", "ORowSetValue::getTime" );
     ::com::sun::star::util::Time aValue;
     if(!m_bNull)
     {
@@ -1680,6 +1697,7 @@ Sequence<sal_Int8>  ORowSetValue::getSequence() const
 // -----------------------------------------------------------------------------
 ::com::sun::star::util::DateTime ORowSetValue::getDateTime()    const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbtools", "Ocke.Janssen@sun.com", "ORowSetValue::getDateTime" );
     ::com::sun::star::util::DateTime aValue;
     if(!m_bNull)
     {
@@ -1726,6 +1744,7 @@ Sequence<sal_Int8>  ORowSetValue::getSequence() const
 // -----------------------------------------------------------------------------
 void ORowSetValue::setSigned(sal_Bool _bMod)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbtools", "Ocke.Janssen@sun.com", "ORowSetValue::setSigned" );
     if ( m_bSigned != _bMod )
     {
         m_bSigned = _bMod;
@@ -1792,6 +1811,15 @@ void ORowSetValue::fill(sal_Int32 _nPos,
                      sal_Int32 _nType,
                      const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow>& _xRow)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbtools", "Ocke.Janssen@sun.com", "ORowSetValue::fill" );
+    fill(_nPos,_nType,sal_True,_xRow);
+}
+void ORowSetValue::fill(sal_Int32 _nPos,
+                     sal_Int32 _nType,
+                     sal_Bool  _bNullable,
+                     const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow>& _xRow)
+{
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbtools", "Ocke.Janssen@sun.com", "ORowSetValue::fill" );
     sal_Bool bReadData = sal_True;
     switch(_nType)
     {
@@ -1863,13 +1891,14 @@ void ORowSetValue::fill(sal_Int32 _nPos,
         bReadData = sal_False;
         break;
     }
-    if ( bReadData && _xRow->wasNull() )
+    if ( bReadData && _bNullable && _xRow->wasNull() )
         setNull();
     setTypeKind(_nType);
 }
 // -----------------------------------------------------------------------------
 void ORowSetValue::fill(const Any& _rValue)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbtools", "Ocke.Janssen@sun.com", "ORowSetValue::fill" );
     switch (_rValue.getValueType().getTypeClass())
     {
         case TypeClass_VOID:

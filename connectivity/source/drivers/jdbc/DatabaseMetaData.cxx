@@ -142,7 +142,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTables(
 
     jobject out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
-    if( t.pEnv )
+
     {
         // Java-Call absetzen
         static jmethodID mID = NULL;
@@ -351,7 +351,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getIndexInfo(
 
     jobject out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
-    if( t.pEnv )
+
     {
         // Java-Call absetzen
         static jmethodID mID = NULL;
@@ -395,7 +395,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getBestRowIdentifier
 
     jobject out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
-    if( t.pEnv )
+
     {
         // Java-Call absetzen
         static jmethodID mID = NULL;
@@ -515,7 +515,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getCrossReference(
 
     jobject out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
-    if( t.pEnv ){
+    {
 
         // Java-Call absetzen
         static jmethodID mID = NULL;
@@ -565,15 +565,18 @@ sal_Bool java_sql_DatabaseMetaData::impl_callBooleanMethod( const char* _pMethod
 
     SDBThreadAttach t;
     OSL_ENSURE( t.pEnv, "java_sql_DatabaseMetaData::impl_callBooleanMethod: no Java enviroment anymore!" );
-    if ( t.pEnv )
+
     {
         // obtain method ID
         if  ( !_inout_MethodID )
+        {
             _inout_MethodID  = t.pEnv->GetMethodID( getMyClass(), _pMethodName, "()Z" );
-        OSL_ENSURE( _inout_MethodID, "java_sql_DatabaseMetaData::impl_callBooleanMethod:: unknown method id!" );
+            OSL_ENSURE( _inout_MethodID, "java_sql_DatabaseMetaData::impl_callBooleanMethod:: unknown method id!" );
+            if  ( !_inout_MethodID )
+                throw SQLException();
+        } // if  ( !_inout_MethodID )
 
         // call method
-        if ( _inout_MethodID )
         {
             out = t.pEnv->CallBooleanMethod( object, _inout_MethodID );
             ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
@@ -593,15 +596,18 @@ sal_Bool java_sql_DatabaseMetaData::impl_callBooleanMethod( const char* _pMethod
 
     SDBThreadAttach t;
     OSL_ENSURE( t.pEnv, "java_sql_DatabaseMetaData::impl_callStringMethod: no Java enviroment anymore!" );
-    if( t.pEnv )
+
     {
         // obtain method ID
         if ( !_inout_MethodID  )
+        {
             _inout_MethodID  = t.pEnv->GetMethodID( getMyClass(), _pMethodName, "()Ljava/lang/String;" );
-        OSL_ENSURE( _inout_MethodID, "java_sql_DatabaseMetaData::impl_callStringMethod: unknown method id!" );
-
+            OSL_ENSURE( _inout_MethodID, "java_sql_DatabaseMetaData::impl_callStringMethod: unknown method id!" );
+            if  ( !_inout_MethodID )
+                throw SQLException();
+        }
         // call method
-        if ( _inout_MethodID )
+
         {
             jstring out = (jstring)t.pEnv->CallObjectMethod( object, _inout_MethodID );
             ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
@@ -629,15 +635,19 @@ sal_Int32 java_sql_DatabaseMetaData::impl_callIntMethod( const char* _pMethodNam
 
     SDBThreadAttach t;
     OSL_ENSURE( t.pEnv, "java_sql_DatabaseMetaData::impl_callIntMethod: no Java enviroment anymore!" );
-    if( t.pEnv )
+
     {
         // obtain method ID
         if ( !_inout_MethodID  )
+        {
             _inout_MethodID  = t.pEnv->GetMethodID( getMyClass(), _pMethodName, "()I" );
-        OSL_ENSURE( _inout_MethodID, "java_sql_DatabaseMetaData::impl_callIntMethod: unknown method id!" );
+            OSL_ENSURE( _inout_MethodID, "java_sql_DatabaseMetaData::impl_callIntMethod: unknown method id!" );
+            if  ( !_inout_MethodID )
+                throw SQLException();
+        }
 
         // call method
-        if ( _inout_MethodID )
+
         {
             out = t.pEnv->CallIntMethod( object, _inout_MethodID );
             ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
@@ -656,15 +666,18 @@ sal_Bool java_sql_DatabaseMetaData::impl_callBooleanMethodWithIntArg( const char
     jboolean out( sal_False );
     SDBThreadAttach t;
     OSL_ENSURE( t.pEnv, "java_sql_DatabaseMetaData::impl_callBooleanMethodWithIntArg: no Java enviroment anymore!" );
-    if ( t.pEnv )
+
     {
         // obtain method ID
         if ( !_inout_MethodID  )
+        {
             _inout_MethodID  = t.pEnv->GetMethodID( getMyClass(), _pMethodName, "(I)Z" );
-        OSL_ENSURE( _inout_MethodID, "java_sql_DatabaseMetaData::impl_callBooleanMethodWithIntArg: unknown method id!" );
-
+            OSL_ENSURE( _inout_MethodID, "java_sql_DatabaseMetaData::impl_callBooleanMethodWithIntArg: unknown method id!" );
+            if  ( !_inout_MethodID )
+                throw SQLException();
+        }
         // call method
-        if ( _inout_MethodID )
+
         {
             out = t.pEnv->CallBooleanMethod( object, _inout_MethodID, _nArgument );
             ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
@@ -684,15 +697,19 @@ Reference< XResultSet > java_sql_DatabaseMetaData::impl_callResultSetMethod( con
 
     SDBThreadAttach t;
     OSL_ENSURE( t.pEnv, "java_sql_DatabaseMetaData::impl_callResultSetMethod: no Java enviroment anymore!" );
-    if ( t.pEnv )
+
     {
         // obtain method ID
         if ( !_inout_MethodID  )
+        {
             _inout_MethodID  = t.pEnv->GetMethodID( getMyClass(), _pMethodName, "()Ljava/sql/ResultSet;" );
-        OSL_ENSURE( _inout_MethodID, "java_sql_DatabaseMetaData::impl_callResultSetMethod: unknown method id!" );
+            OSL_ENSURE( _inout_MethodID, "java_sql_DatabaseMetaData::impl_callResultSetMethod: unknown method id!" );
+            if  ( !_inout_MethodID )
+                throw SQLException();
+        }
 
         // call method
-        if ( _inout_MethodID )
+
         {
             out = t.pEnv->CallObjectMethod( object, _inout_MethodID );
             ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
@@ -731,18 +748,22 @@ Reference< XResultSet > java_sql_DatabaseMetaData::impl_callResultSetMethodWithS
 
     SDBThreadAttach t;
     OSL_ENSURE( t.pEnv, "java_sql_DatabaseMetaData::impl_callResultSetMethodWithStrings: no Java enviroment anymore!" );
-    if ( t.pEnv )
+
     {
         const  char* pSignature = _pOptionalAdditionalString
             ?   "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/sql/ResultSet;"
             :   "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/sql/ResultSet;";
         // obtain method ID
         if ( !_inout_MethodID  )
+        {
             _inout_MethodID  = t.pEnv->GetMethodID( getMyClass(), _pMethodName, pSignature );
-        OSL_ENSURE( _inout_MethodID, "java_sql_DatabaseMetaData::impl_callResultSetMethodWithStrings: unknown method id!" );
+            OSL_ENSURE( _inout_MethodID, "java_sql_DatabaseMetaData::impl_callResultSetMethodWithStrings: unknown method id!" );
+            if  ( !_inout_MethodID )
+                throw SQLException();
+        }
 
         // call method
-        if ( _inout_MethodID )
+
         {
             jvalue args[4];
             // convert parameters
@@ -1105,7 +1126,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsConvert( sal_Int32 fromType
 
     jboolean out( sal_False );
     SDBThreadAttach t;
-    if ( t.pEnv )
+
     {
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -1453,7 +1474,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsResultSetConcurrency( sal_I
 
     jboolean out( sal_False );
     SDBThreadAttach t;
-    if ( t.pEnv )
+
     {
         static jmethodID mID = NULL;
         if ( !mID  )
@@ -1537,7 +1558,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getUDTs(
 {
     jobject out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
-    if( t.pEnv ){
+    {
 
 
         static const char * cSignature = "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;[I;)Ljava/sql/ResultSet;";

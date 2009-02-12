@@ -65,6 +65,7 @@ namespace connectivity
     {
         jvmaccess::VirtualMachine::AttachGuard m_aGuard;
         SDBThreadAttach(SDBThreadAttach&);
+        SDBThreadAttach& operator= (SDBThreadAttach&);
     public:
         SDBThreadAttach();
         ~SDBThreadAttach();
@@ -86,8 +87,8 @@ namespace connectivity
     class  java_lang_Object
     {
         // Zuweisungsoperator und Copy Konstruktor sind verboten
-        java_lang_Object& operator = (java_lang_Object&) { return *this;};
-        java_lang_Object(java_lang_Object&) {};
+        java_lang_Object& operator= (java_lang_Object&);
+        java_lang_Object(java_lang_Object&);
 
         static jclass getMyClass();
         // nur zum Zerstoeren des C++ Pointers in vom JSbxObject
