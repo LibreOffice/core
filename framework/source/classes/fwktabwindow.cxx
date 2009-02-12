@@ -289,6 +289,9 @@ IMPL_LINK( FwkTabWindow, ActivatePageHdl, TabControl *, EMPTYARG )
             m_aTabCtrl.SetTabPage( nId, pTabPage );
         }
     }
+    else
+        pTabPage->ActivatePage();
+
     m_aTabCtrl.BroadcastEvent( VCLEVENT_TABPAGE_ACTIVATE );
     return 1;
 }

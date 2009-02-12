@@ -202,7 +202,6 @@ void SAL_CALL TabWindowService::setTabProps(      ::sal_Int32                   
         if (pTabWin)
         {
             pTabWin->AddTabPage(rInfo.m_nIndex, rInfo.m_lProperties);
-            pTabWin->ActivatePage (rInfo.m_nIndex);
             rInfo.m_bCreated = sal_True;
         }
     }
