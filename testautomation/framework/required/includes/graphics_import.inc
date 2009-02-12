@@ -39,6 +39,9 @@
 
 
 testcase tQuickInsertGraphNotAsLink
+    dim iCurrentFile as integer
+    dim GraphicFile as String
+    dim Filtername as String
 
     printlog( "Insert a sample of commonly used file formats into a writer document (not linked)" )
     
@@ -46,24 +49,26 @@ testcase tQuickInsertGraphNotAsLink
         warnlog( "This test needs the OpenOffice.org filepicker to be set as default" )
         goto endsub
     endif
-
-    dim iCurrentFile as integer
-    dim GraphicFile as String
-    dim Filtername as String
     
     gApplication = "WRITER"    
     Call hNewDocument
     
     for iCurrentFile = 1 to 25
-    
-        printlog( "" )
-        
         ' MODIFY and ENABLE this SAMPLE snippet to exclude one fileformat from testing
         '         if ( iCurrentFile = 7 ) AND (gtPlatform="x86") then
         '             qaErrorLog("#<issue-id># crash on <platform> on loading <image-file>")
         '             goto skipformat
         '         endif
         ' Note: Can be locale dependent!
+        if (iCurrentFile = 5) then
+            warnlog("#158701# crash on loading airshw.met going to next format")
+            goto skipformat
+        endif
+        if (iCurrentFile = 4) AND (gPlatform="osx") then
+            warnlog("#158701# crash on MacOS X on loading ball.eps")
+            goto skipformat
+        endif
+
 
         Kontext "GrafikEinfuegenDlg"
         if ( not GrafikEinfuegenDlg.exists() ) then
@@ -72,38 +77,37 @@ testcase tQuickInsertGraphNotAsLink
         endif
         
         if ( GrafikEinfuegenDlg.Exists( 2 ) ) then
-        
             ' the list of files expected to be found in the samples directory
             select case iCurrentFile
-            case 1  :  GraphicFile = "desp.bmp"
-            case 2  :  GraphicFile = "columbia.dxf"
-            case 3  :  GraphicFile = "extrud.emf"
-            case 4  :  GraphicFile = "ball.eps"
-            case 5  :  GraphicFile = "airshw.met"
-            case 6  :  GraphicFile = "eface.gif"
-            case 7  :  GraphicFile = "purzel.gif"         ' Animated Gif
-            case 8  :  GraphicFile = "borabora.jpg"
-            case 9  :  GraphicFile = "grafix1.pbm"
-            case 10 :  GraphicFile = "circle.pcx"
-            case 11 :  GraphicFile = "papagei1.pcd"
-            case 12 :  GraphicFile = "newtonme.pct"
-            case 13 :  GraphicFile = "grafix2.pgm"
-            case 14 :  GraphicFile = "obst.png"
-            case 15 :  GraphicFile = "london.ppm"
-            case 16 :  GraphicFile = "tiger.psd"
-            case 17 :  GraphicFile = "grafix3.ras"
-            case 18 :  GraphicFile = "mickym.sgf"
-            case 19 :  GraphicFile = "faxpfeil.sgv"
-            case 20 :  GraphicFile = "picture.svm"
-            case 21 :  GraphicFile = "pilz.tga"
-            case 22 :  GraphicFile = "stabler.tif"
-            case 23 :  GraphicFile = "krokodil.wmf"
-            case 24 :  GraphicFile = "grafix4.xbm"
-            case 25 :  GraphicFile = "papagei2.xpm"
+                case 1  :  GraphicFile = "desp.bmp"
+                case 2  :  GraphicFile = "columbia.dxf"
+                case 3  :  GraphicFile = "extrud.emf"
+                case 4  :  GraphicFile = "ball.eps"
+                case 5  :  GraphicFile = "airshw.met"
+                case 6  :  GraphicFile = "eface.gif"
+                case 7  :  GraphicFile = "purzel.gif"         ' Animated Gif
+                case 8  :  GraphicFile = "borabora.jpg"
+                case 9  :  GraphicFile = "grafix1.pbm"
+                case 10 :  GraphicFile = "circle.pcx"
+                case 11 :  GraphicFile = "papagei1.pcd"
+                case 12 :  GraphicFile = "newtonme.pct"
+                case 13 :  GraphicFile = "grafix2.pgm"
+                case 14 :  GraphicFile = "obst.png"
+                case 15 :  GraphicFile = "london.ppm"
+                case 16 :  GraphicFile = "tiger.psd"
+                case 17 :  GraphicFile = "grafix3.ras"
+                case 18 :  GraphicFile = "mickym.sgf"
+                case 19 :  GraphicFile = "faxpfeil.sgv"
+                case 20 :  GraphicFile = "picture.svm"
+                case 21 :  GraphicFile = "pilz.tga"
+                case 22 :  GraphicFile = "stabler.tif"
+                case 23 :  GraphicFile = "krokodil.wmf"
+                case 24 :  GraphicFile = "grafix4.xbm"
+                case 25 :  GraphicFile = "papagei2.xpm"
             end select
             
             GraphicFile = ConvertPath (gTesttoolPath & "global\input\graf_inp\" & GraphicFile)
-            printlog( "Current file: " & GraphicFile )
+            printlog( "Current file " + iCurrentFile + ": " & GraphicFile )
             printlog( " * Set filter to <All formats>" )
             DateiName.SetText( GraphicFile )
             DateiTyp.Select( 1 )

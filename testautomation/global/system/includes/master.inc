@@ -72,6 +72,7 @@ sub GetUseFiles
     Dim sPrivateEnvironmentLocation as string
     Dim sEnvironmentVersion as string
     Dim sEnvironmentDisplayVersion as string
+    Dim sEnvironmentVersionMinor as string
 
     gTestcaseStart = Now()   ' get start time of test preparation phase
 
@@ -145,15 +146,16 @@ sub GetUseFiles
     if fileExists(sPrivateEnvironmentLocation) then
 	sEnvironmentVersion = getIniValue(sPrivateEnvironmentLocation, "EnvironmentVersion", "Current")
 	sEnvironmentDisplayVersion = getIniValue(sPrivateEnvironmentLocation, "EnvironmentVersion", "DisplayName")
+	sEnvironmentVersionMinor =  getIniValue(sPrivateEnvironmentLocation, "EnvironmentVersion", "Minor")
     else
         sEnvironmentVersion = "HEAD"
         sEnvironmentDisplayVersion = "Developer"
     end if
     if sEnvironmentVersion <> "HEAD" then
         if (len(gMajor) > 5) then
-	    if lCase(left(gMajor,6)) <> lCase(left(sEnvironmentVersion,6)) then
-                warnlog "This environment '" + sEnvironmentVersion + "' is not suitable for this OOo version '" + left(gMajor,6) + "'! Please get the environment suitable for this OOo version! This Environment only works with OOo " + sEnvironmentDisplayVersion + "!"
-                if MsgBox ("This environment '" + sEnvironmentVersion + "' is not suitable for this OOo version '" + left(gMajor,6) + "'! Please get the environment suitable for this OOo version! This Environment only works with OOo " + sEnvironmentDisplayVersion + "!", 16, "Error at startup") = 1 then 
+	    if lCase(left(gMajor,6)) <> lCase(left(sEnvironmentVersion,6)) OR (lCase(gMinor) <> lCase(sEnvironmentVersionMinor)) then
+                warnlog "This environment '" + sEnvironmentVersion + sEnvironmentVersionMinor + "' is not suitable for this OOo version '" + left(gMajor,6) + gMinor + "'!"+chr(13)+"Please get the environment suitable for this OOo version!"+chr(13)+"This Environment only works with OOo " + sEnvironmentDisplayVersion + "!"
+                if MsgBox ("This environment '" + sEnvironmentVersion + sEnvironmentVersionMinor +"' is not suitable for this OOo version '" + left(gMajor,6) + gMinor + "'! Please get the environment suitable for this OOo version! This Environment only works with OOo " + sEnvironmentDisplayVersion + "!", 16, "Error at startup") = 1 then 
 		    end
 	        end if
 	    end if
