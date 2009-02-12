@@ -910,7 +910,10 @@ void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, FAS
             pTestObj->GetOutlinerParaObject() != pOutlinerParaObject )
         {
             if( bHitTest ) // #i33696# take back fix #i27510#
+            {
                 rOutliner.SetTextObj( this );
+                rOutliner.SetFixedCellHeight(((const SdrTextFixedCellHeightItem&)GetMergedItem(SDRATTR_TEXT_USEFIXEDCELLHEIGHT)).GetValue());
+            }
 
             rOutliner.SetUpdateMode(TRUE);
             rOutliner.SetText(*pPara);

@@ -39,6 +39,7 @@
 #include <editstat.hxx>
 #include <svtools/itemset.hxx>
 #include <svx/eeitem.hxx>
+#include <svx/sdtfchim.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -91,7 +92,9 @@ sal_Bool SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
     if(pOutlinerParaObject!=NULL)
     {
         rOutl.SetText(*GetOutlinerParaObject());
+        rOutl.SetFixedCellHeight(((const SdrTextFixedCellHeightItem&)GetMergedItem(SDRATTR_TEXT_USEFIXEDCELLHEIGHT)).GetValue());
     }
+
     // ggf. Rahmenattribute am 1. (neuen) Absatz des Outliners setzen
     if( !HasTextImpl( &rOutl ) )
     {

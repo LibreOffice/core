@@ -678,6 +678,9 @@ void Cell::SetOutlinerParaObject( OutlinerParaObject* pTextObject )
 {
     SdrText::SetOutlinerParaObject( pTextObject );
     maSelection.nStartPara = 0xffff;
+
+    if( pTextObject == 0 )
+        ForceOutlinerParaObject( OUTLINERMODE_TEXTOBJECT );
 }
 
 // -----------------------------------------------------------------------------
@@ -694,12 +697,19 @@ void Cell::AddUndo()
 
 // -----------------------------------------------------------------------------
 
-sdr::properties::TextProperties* Cell::CloneProperties( SdrObject& rNewObj, Cell& rNewCell )
+sdr::properties::TextProperties* Cell::CloneProperties( sdr::properties::TextProperties* pProperties, SdrObject& rNewObj, Cell& rNewCell )
 {
-    if( mpProperties )
-        return new sdr::properties::CellProperties( *static_cast<sdr::properties::CellProperties*>(mpProperties), rNewObj, &rNewCell );
+    if( pProperties )
+        return new sdr::properties::CellProperties( *static_cast<sdr::properties::CellProperties*>(pProperties), rNewObj, &rNewCell );
     else
         return 0;
+}
+
+// -----------------------------------------------------------------------------
+
+sdr::properties::TextProperties* Cell::CloneProperties( SdrObject& rNewObj, Cell& rNewCell )
+{
+    return CloneProperties(mpProperties,rNewObj,rNewCell);
 }
 
 // -----------------------------------------------------------------------------

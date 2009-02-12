@@ -40,6 +40,7 @@
 #include "tablerow.hxx"
 #include "tablecolumn.hxx"
 
+
 // -----------------------------------------------------------------------------
 
 using ::rtl::OUString;
@@ -56,22 +57,36 @@ CellUndo::CellUndo( const SdrObjectWeakRef& xObjRef, const CellRef& xCell )
 , mxCell( xCell )
 , mbUndo( true )
 {
-
-    getDataFromCell( maUndoData );
+    if( mxCell.is() && mxObjRef.is() )
+    {
+        getDataFromCell( maUndoData );
+        mxObjRef->AddObjectUser( *this );
+    }
 }
 
 CellUndo::~CellUndo()
 {
-    if( mbUndo )
-    {
-        delete maUndoData.mpProperties;
-        delete maUndoData.mpOutlinerParaObject;
-    }
-    else
-    {
-        delete maRedoData.mpProperties;
-        delete maRedoData.mpOutlinerParaObject;
-    }
+    if( mxObjRef.is() )
+        mxObjRef->RemoveObjectUser( *this );
+    dispose();
+}
+
+void CellUndo::dispose()
+{
+    mxCell.clear();
+    delete maUndoData.mpProperties;
+    maUndoData.mpProperties = 0;
+    delete maRedoData.mpProperties;
+    maRedoData.mpProperties = 0;
+    delete maUndoData.mpOutlinerParaObject;
+    maUndoData.mpOutlinerParaObject = 0;
+    delete maRedoData.mpOutlinerParaObject;
+    maRedoData.mpOutlinerParaObject = 0;
+}
+
+void CellUndo::ObjectInDestruction(const SdrObject& )
+{
+    dispose();
 }
 
 void CellUndo::Undo()
@@ -88,7 +103,7 @@ void CellUndo::Undo()
 
 void CellUndo::Redo()
 {
-    if( mxCell.is() && mbUndo )
+    if( mxCell.is() && !mbUndo )
     {
         setDataToCell( maRedoData );
         mbUndo = true;
@@ -110,8 +125,11 @@ BOOL CellUndo::Merge( SfxUndoAction *pNextAction )
 
 void CellUndo::setDataToCell( const Data& rData )
 {
-    mxCell->mpProperties = rData.mpProperties;
-
+    delete mxCell->mpProperties;
+    if( rData.mpProperties )
+        mxCell->mpProperties = Cell::CloneProperties( rData.mpProperties, *mxObjRef.get(), *mxCell.get() );
+    else
+        mxCell->mpProperties = 0;
 
     if( rData.mpOutlinerParaObject )
         mxCell->SetOutlinerParaObject( rData.mpOutlinerParaObject->Clone() );
