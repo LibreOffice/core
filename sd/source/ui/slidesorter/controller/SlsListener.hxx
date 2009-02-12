@@ -32,6 +32,7 @@
 #define SD_SLIDESORTER_SLIDE_SORTER_LISTENER_HXX
 
 #include "MutexOwner.hxx"
+#include "controller/SlideSorterController.hxx"
 #include <com/sun/star/document/XEventListener.hpp>
 #ifndef _COM_SUN_STAR_DOCUMENT_XPROPERTYCHANGELISTENER_HPP_
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
@@ -44,6 +45,7 @@
 
 #include <svtools/lstner.hxx>
 #include <tools/link.hxx>
+#include <boost/shared_ptr.hpp>
 
 namespace sd {
 class ViewShellBase;
@@ -160,6 +162,11 @@ private:
     ::com::sun::star::uno::WeakReference< ::com::sun::star::frame::XController> mxControllerWeak;
     ::com::sun::star::uno::WeakReference< ::com::sun::star::frame::XFrame> mxFrameWeak;
 
+    /** This object is used to lock the model between some
+        events.  It is refernce counted in order to cope with events that
+        are expected but never sent.
+    */
+    ::boost::shared_ptr<SlideSorterController::ModelChangeLock> mpModelChangeLock;
 
     void ReleaseListeners (void);
 

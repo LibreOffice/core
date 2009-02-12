@@ -72,7 +72,10 @@ Listener::Listener (
       mbListeningToUNODocument (false),
       mbListeningToController (false),
       mbListeningToFrame (false),
-      mbIsMainViewChangePending(false)
+      mbIsMainViewChangePending(false),
+      mxControllerWeak(),
+      mxFrameWeak(),
+      mpModelChangeLock()
 {
     StartListening (*mrSlideSorter.GetModel().GetDocument());
     mbListeningToDocument = true;
@@ -328,13 +331,13 @@ void Listener::Notify (
             case ViewShellHint::HINT_PAGE_RESIZE_START:
                 // Initiate a model change but do nothing (well, not much)
                 // until we are told that all slides have been resized.
-                mrController.LockModelChange();
+                mpModelChangeLock.reset(new SlideSorterController::ModelChangeLock(mrController));
                 mrController.HandleModelChange();
                 break;
 
             case ViewShellHint::HINT_PAGE_RESIZE_END:
                 // All slides have been resized.  The model has to be updated.
-                mrController.UnlockModelChange();
+                mpModelChangeLock.reset();
                 break;
 
             case ViewShellHint::HINT_CHANGE_EDIT_MODE_START:
@@ -346,11 +349,11 @@ void Listener::Notify (
                 break;
 
             case ViewShellHint::HINT_COMPLEX_MODEL_CHANGE_START:
-                mrController.LockModelChange();
+                mpModelChangeLock.reset(new SlideSorterController::ModelChangeLock(mrController));
                 break;
 
             case ViewShellHint::HINT_COMPLEX_MODEL_CHANGE_END:
-                mrController.UnlockModelChange();
+                mpModelChangeLock.reset();
                 break;
         }
     }

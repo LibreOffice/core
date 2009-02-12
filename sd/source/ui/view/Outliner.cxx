@@ -114,7 +114,7 @@ public:
     */
     void ProvideOutlinerView (
         Outliner& rOutliner,
-        ViewShell* pViewShell,
+        const ::boost::shared_ptr<ViewShell>& rpViewShell,
         ::Window* pWindow);
 
     /** This method is called when the OutlinerView is no longer used.
@@ -150,7 +150,7 @@ Outliner::Outliner( SdDrawDocument* pDoc, USHORT nMode )
       mpImpl(new Implementation()),
       meMode(SEARCH),
       mpView(NULL),
-      mpViewShell(NULL),
+      mpViewShell(),
       mpWindow(NULL),
       mpDrawDocument(pDoc),
       mnConversionLanguage(LANGUAGE_NONE),
@@ -285,10 +285,10 @@ void Outliner::PrepareSpelling (void)
 
         ViewShellBase* pBase = PTR_CAST(ViewShellBase,SfxViewShell::Current());
         if (pBase != NULL)
-            SetViewShell (pBase->GetMainViewShell().get());
+            SetViewShell (pBase->GetMainViewShell());
         SetRefDevice( SD_MOD()->GetRefDevice( *mpDrawDocument->GetDocSh() ) );
 
-        if (mpViewShell != NULL)
+        if (mpViewShell.get() != NULL)
         {
             mbStringFound = FALSE;
 
@@ -336,13 +336,13 @@ void Outliner::EndSpelling (void)
     {
         ViewShellBase* pBase = PTR_CAST(ViewShellBase,SfxViewShell::Current());
         if (pBase != NULL)
-            mpViewShell = pBase->GetMainViewShell().get();
+            mpViewShell = pBase->GetMainViewShell();
         else
-            mpViewShell = NULL;
+            mpViewShell.reset();
 
         // When in <member>PrepareSpelling()</member> a new outline view has
         // been created then delete it here.
-        sal_Bool bViewIsDrawViewShell(mpViewShell!=NULL
+        sal_Bool bViewIsDrawViewShell(mpViewShell.get()!=NULL
             && mpViewShell->ISA(DrawViewShell));
         if (bViewIsDrawViewShell)
         {
@@ -386,10 +386,12 @@ void Outliner::EndSpelling (void)
             RestoreStartPosition ();
     }
 
-    mpViewShell = NULL;
+    mpViewShell.reset();
     mpView = NULL;
     mpWindow = NULL;
 }
+
+
 
 
 BOOL Outliner::SpellNextDocument (void)
@@ -509,9 +511,9 @@ bool Outliner::StartSearchAndReplace (const SvxSearchItem* pSearchItem)
         bool bAbort = false;
         if (pBase != NULL)
         {
-            ViewShell* pShell = pBase->GetMainViewShell().get();
-            SetViewShell (pShell);
-            if (pShell == NULL)
+            ::boost::shared_ptr<ViewShell> pShell (pBase->GetMainViewShell());
+            SetViewShell(pShell);
+            if (pShell.get() == NULL)
                 bAbort = true;
             else
                 switch (pShell->GetShellType())
@@ -758,12 +760,11 @@ void Outliner::DetectChange (void)
 {
     ::sd::outliner::IteratorPosition aPosition (maCurrentPosition);
 
-    DrawViewShell* pDrawViewShell = NULL;
-    if (mpViewShell->ISA(DrawViewShell))
-        pDrawViewShell = static_cast<DrawViewShell*>(mpViewShell);
+    ::boost::shared_ptr<DrawViewShell> pDrawViewShell (
+        ::boost::dynamic_pointer_cast<DrawViewShell>(mpViewShell));
 
     // Detect whether the view has been switched from the outside.
-    if (pDrawViewShell != NULL
+    if (pDrawViewShell.get() != NULL
         && (aPosition.meEditMode != pDrawViewShell->GetEditMode()
             || aPosition.mePageKind != pDrawViewShell->GetPageKind()))
     {
@@ -858,9 +859,9 @@ void Outliner::RememberStartPosition (void)
 {
     if (mpViewShell->ISA(DrawViewShell))
     {
-        DrawViewShell* pDrawViewShell =
-            static_cast<DrawViewShell*>(mpViewShell);
-        if (pDrawViewShell != NULL)
+        ::boost::shared_ptr<DrawViewShell> pDrawViewShell (
+            ::boost::dynamic_pointer_cast<DrawViewShell>(mpViewShell));
+        if (pDrawViewShell.get() != NULL)
         {
             meStartViewMode = pDrawViewShell->GetPageKind();
             meStartEditMode = pDrawViewShell->GetEditMode();
@@ -917,10 +918,10 @@ void Outliner::RestoreStartPosition (void)
     {
         if (mpViewShell->ISA(DrawViewShell))
         {
-            DrawViewShell* pDrawViewShell =
-                static_cast<DrawViewShell*>(mpViewShell);
+            ::boost::shared_ptr<DrawViewShell> pDrawViewShell (
+                ::boost::dynamic_pointer_cast<DrawViewShell>(mpViewShell));
             SetViewMode (meStartViewMode);
-            if (pDrawViewShell != NULL)
+            if (pDrawViewShell.get() != NULL)
                 SetPage (meStartEditMode, mnStartPageIndex);
 
 
@@ -1263,10 +1264,11 @@ void Outliner::PrepareSearchAndReplace (void)
 
 void Outliner::SetViewMode (PageKind ePageKind)
 {
-    if (ePageKind != static_cast<DrawViewShell*>(mpViewShell)->GetPageKind())
+    ::boost::shared_ptr<DrawViewShell> pDrawViewShell(
+        ::boost::dynamic_pointer_cast<DrawViewShell>(mpViewShell));
+    if (pDrawViewShell.get()!=NULL && ePageKind != pDrawViewShell->GetPageKind())
     {
         // Restore old edit mode.
-        DrawViewShell* pDrawViewShell = static_cast<DrawViewShell*>(mpViewShell);
         pDrawViewShell->ChangeEditMode(mpImpl->meOriginalEditMode, FALSE);
 
         SetStatusEventHdl(Link());
@@ -1290,13 +1292,17 @@ void Outliner::SetViewMode (PageKind ePageKind)
         bool bMatchMayExist = mbMatchMayExist;
 
         ViewShellBase& rBase = mpViewShell->GetViewShellBase();
-        SetViewShell (NULL);
+        SetViewShell(::boost::shared_ptr<ViewShell>());
         framework::FrameworkHelper::Instance(rBase)->RequestView(
             sViewURL,
             framework::FrameworkHelper::msCenterPaneURL);
 
-        framework::FrameworkHelper::Instance(rBase)->WaitForEvent(
-            framework::FrameworkHelper::msConfigurationUpdateEndEvent);
+        // Force (well, request) a synchronous update of the configuration.
+        // In a better world we would handle the asynchronous view update
+        // instead.  But that would involve major restucturing of the
+        // Outliner code.
+        framework::FrameworkHelper::Instance(rBase)->RequestSynchronousUpdate();
+        SetViewShell(rBase.GetMainViewShell());
 
         // Switching to another view shell has intermediatly called
         // EndSpelling().  A PrepareSpelling() is pending, so call that now.
@@ -1312,8 +1318,10 @@ void Outliner::SetViewMode (PageKind ePageKind)
 
         // Save edit mode so that it can be restored when switching the view
         // shell again.
-        pDrawViewShell = static_cast<DrawViewShell*>(mpViewShell);
-        mpImpl->meOriginalEditMode = pDrawViewShell->GetEditMode();
+        pDrawViewShell = ::boost::dynamic_pointer_cast<DrawViewShell>(mpViewShell);
+        OSL_ASSERT(pDrawViewShell.get()!=NULL);
+        if (pDrawViewShell.get() != NULL)
+            mpImpl->meOriginalEditMode = pDrawViewShell->GetEditMode();
     }
 }
 
@@ -1324,9 +1332,14 @@ void Outliner::SetPage (EditMode eEditMode, USHORT nPageIndex)
 {
     if ( ! mbRestrictSearchToSelection)
     {
-        static_cast<DrawViewShell*>(mpViewShell)->ChangeEditMode(
-            eEditMode, FALSE);
-        static_cast<DrawViewShell*>(mpViewShell)->SwitchPage(nPageIndex);
+        ::boost::shared_ptr<DrawViewShell> pDrawViewShell(
+            ::boost::dynamic_pointer_cast<DrawViewShell>(mpViewShell));
+        OSL_ASSERT(pDrawViewShell.get()!=NULL);
+        if (pDrawViewShell.get() != NULL)
+        {
+            pDrawViewShell->ChangeEditMode(eEditMode, FALSE);
+            pDrawViewShell->SwitchPage(nPageIndex);
+        }
     }
 }
 
@@ -1500,20 +1513,18 @@ SdrObject* Outliner::SetObject (
 
 
 
-void Outliner::SetViewShell (ViewShell* pViewShell)
+void Outliner::SetViewShell (const ::boost::shared_ptr<ViewShell>& rpViewShell)
 {
-    OSL_TRACE("Outliner %p: SetViewShell to %p with outline view at %p",
-        this, pViewShell, mpImpl->GetOutlinerView());
-    if (mpViewShell != pViewShell)
+    if (mpViewShell != rpViewShell)
     {
         // Set the new view shell.
-        mpViewShell = pViewShell;
+        mpViewShell = rpViewShell;
         // When the outline view is not owned by us then we have to clear
         // that pointer so that the current one for the new view shell will
         // be used (in ProvideOutlinerView).
         //        if ( ! mbOwnOutlineView)
         //            mpOutlineView = NULL;
-        if (mpViewShell != NULL)
+        if (mpViewShell.get() != NULL)
         {
             mpView = mpViewShell->GetView();
 
@@ -1625,7 +1636,7 @@ void Outliner::BeginConversion (void)
 
     ViewShellBase* pBase = PTR_CAST(ViewShellBase, SfxViewShell::Current());
     if (pBase != NULL)
-        SetViewShell (pBase->GetMainViewShell().get());
+        SetViewShell (pBase->GetMainViewShell());
 
     if (mpViewShell != NULL)
     {
@@ -1781,12 +1792,12 @@ OutlinerView* Outliner::Implementation::GetOutlinerView ()
 */
 void Outliner::Implementation::ProvideOutlinerView (
     Outliner& rOutliner,
-    ViewShell* pViewShell,
+    const ::boost::shared_ptr<ViewShell>& rpViewShell,
     ::Window* pWindow)
 {
-    if (pViewShell != NULL)
+    if (rpViewShell.get() != NULL)
     {
-        switch (pViewShell->GetShellType())
+        switch (rpViewShell->GetShellType())
         {
             case ViewShell::ST_DRAW:
             case ViewShell::ST_IMPRESS:
@@ -1816,7 +1827,7 @@ void Outliner::Implementation::ProvideOutlinerView (
                 rOutliner.SetText( String(), rOutliner.GetParagraph( 0 ) );
 
                 meOriginalEditMode =
-                    static_cast<DrawViewShell*>(pViewShell)->GetEditMode();
+                    ::boost::static_pointer_cast<DrawViewShell>(rpViewShell)->GetEditMode();
             }
             break;
 

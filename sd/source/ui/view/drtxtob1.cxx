@@ -163,36 +163,42 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                 }
                 for( ULONG nPara = nStartPara; nPara <= nEndPara; nPara++ )
                 {
-                    SfxItemSet aAttr( pOLV->GetOutliner()->GetStyleSheet( nPara )->GetItemSet() );
-                    SfxItemSet aTmpSet( pOLV->GetOutliner()->GetParaAttribs( (USHORT) nPara ) );
-                    aAttr.Put( aTmpSet, FALSE ); // FALSE= InvalidItems nicht als Default, sondern als "Loecher" betrachten
-                    const SvxULSpaceItem& rItem = (const SvxULSpaceItem&) aAttr.Get( EE_PARA_ULSPACE );
-                    SvxULSpaceItem* pNewItem = (SvxULSpaceItem*) rItem.Clone();
-
-                    long nUpper = pNewItem->GetUpper();
-                    if( nSlot == SID_PARASPACE_INCREASE )
-                        nUpper += 100;
-                    else
+                    SfxStyleSheet* pStyleSheet = NULL;
+                    if (pOLV->GetOutliner() != NULL)
+                        pStyleSheet = pOLV->GetOutliner()->GetStyleSheet(nPara);
+                    if (pStyleSheet != NULL)
                     {
-                        nUpper -= 100;
-                        nUpper = Max( (long) nUpper, 0L );
-                    }
-                    pNewItem->SetUpper( (USHORT) nUpper );
+                        SfxItemSet aAttr( pStyleSheet->GetItemSet() );
+                        SfxItemSet aTmpSet( pOLV->GetOutliner()->GetParaAttribs( (USHORT) nPara ) );
+                        aAttr.Put( aTmpSet, FALSE ); // FALSE= InvalidItems nicht als Default, sondern als "Loecher" betrachten
+                        const SvxULSpaceItem& rItem = (const SvxULSpaceItem&) aAttr.Get( EE_PARA_ULSPACE );
+                        SvxULSpaceItem* pNewItem = (SvxULSpaceItem*) rItem.Clone();
 
-                    long nLower = pNewItem->GetLower();
-                    if( nSlot == SID_PARASPACE_INCREASE )
-                        nLower += 100;
-                    else
-                    {
-                        nLower -= 100;
-                        nLower = Max( (long) nLower, 0L );
-                    }
-                    pNewItem->SetLower( (USHORT) nLower );
+                        long nUpper = pNewItem->GetUpper();
+                        if( nSlot == SID_PARASPACE_INCREASE )
+                            nUpper += 100;
+                        else
+                        {
+                            nUpper -= 100;
+                            nUpper = Max( (long) nUpper, 0L );
+                        }
+                        pNewItem->SetUpper( (USHORT) nUpper );
 
-                    SfxItemSet aNewAttrs( aAttr );
-                    aNewAttrs.Put( *pNewItem );
-                    delete pNewItem;
-                    pOLV->GetOutliner()->SetParaAttribs( (USHORT)nPara, aNewAttrs );
+                        long nLower = pNewItem->GetLower();
+                        if( nSlot == SID_PARASPACE_INCREASE )
+                            nLower += 100;
+                        else
+                        {
+                            nLower -= 100;
+                            nLower = Max( (long) nLower, 0L );
+                        }
+                        pNewItem->SetLower( (USHORT) nLower );
+
+                        SfxItemSet aNewAttrs( aAttr );
+                        aNewAttrs.Put( *pNewItem );
+                        delete pNewItem;
+                        pOLV->GetOutliner()->SetParaAttribs( (USHORT)nPara, aNewAttrs );
+                    }
                 }
             }
             else
