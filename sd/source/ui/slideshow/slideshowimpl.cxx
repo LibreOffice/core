@@ -40,9 +40,11 @@
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/SystemPointer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
+#include <com/sun/star/frame/XLayoutManager.hpp>
 #include <vos/process.hxx>
 #include <svtools/aeitem.hxx>
 #include <svtools/urihelper.hxx>
@@ -106,7 +108,6 @@ using ::comphelper::ImplementationReference;
 using ::com::sun::star::animations::XAnimationNode;
 using ::com::sun::star::animations::XAnimationListener;
 using ::com::sun::star::awt::XWindow;
-using namespace ::com::sun::star;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
@@ -737,6 +738,8 @@ void SAL_CALL SlideshowImpl::disposing()
         mpShowWindow = 0;
     }
 
+    setActiveXToolbarsVisible( sal_True );
+
     mbDisposed = true;
 }
 
@@ -1107,7 +1110,10 @@ bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
 
             bRet = startShowImpl( Sequence<beans::PropertyValue>(
                                       &aProperties[0], aProperties.size() ) );
+
         }
+
+        setActiveXToolbarsVisible( sal_False );
     }
     catch( Exception& e )
     {
@@ -2520,6 +2526,40 @@ void SlideshowImpl::resize( const Size& rSize )
             rtl::OUStringToOString(
                 comphelper::anyToString( cppu::getCaughtException() ),
                 RTL_TEXTENCODING_UTF8 )).getStr() );
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+void SlideshowImpl::setActiveXToolbarsVisible( sal_Bool bVisible )
+{
+    // in case of ActiveX control the toolbars should not be visible if slide show runs in window mode
+    // actually it runs always in window mode in case of ActiveX control
+    if ( !maPresSettings.mbFullScreen && mpDocSh && mpDocSh->GetMedium() )
+    {
+        SFX_ITEMSET_ARG( mpDocSh->GetMedium()->GetItemSet(), pItem, SfxBoolItem, SID_VIEWONLY, sal_False );
+        if ( pItem && pItem->GetValue() )
+        {
+            // this is a plugin/activex mode, no toolbars should be visible during slide show
+            // after the end of slide show they should be visible again
+            SfxViewFrame* pViewFrame = getViewFrame();
+            if( pViewFrame && pViewFrame->GetFrame() && pViewFrame->GetFrame()->GetTopFrame() )
+            {
+                try
+                {
+                    Reference< frame::XLayoutManager > xLayoutManager;
+                    Reference< beans::XPropertySet > xFrameProps( pViewFrame->GetFrame()->GetTopFrame()->GetFrameInterface(), UNO_QUERY_THROW );
+                    if ( ( xFrameProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ) ) )
+                                >>= xLayoutManager )
+                      && xLayoutManager.is() )
+                    {
+                        xLayoutManager->setVisible( bVisible );
+                    }
+                }
+                catch( uno::Exception& )
+                {}
+            }
+        }
     }
 }
 
