@@ -780,10 +780,14 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
             case vcl::PDFWriter::Span :
             case vcl::PDFWriter::Quote :
             case vcl::PDFWriter::Code :
-                bActualText =
-                bBaselineShift =
-                bTextDecorationType =
-                bLanguage = true;
+                if( POR_HYPHSTR == pPor->GetWhichPor() || POR_SOFTHYPHSTR == pPor->GetWhichPor() )
+                    bActualText = true;
+                else
+                {
+                    bBaselineShift =
+                    bTextDecorationType =
+                    bLanguage = true;
+                }
                 break;
 
             case vcl::PDFWriter::Link :

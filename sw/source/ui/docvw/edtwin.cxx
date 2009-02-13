@@ -4941,8 +4941,8 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                     SvxAutoCorrCfg* pACfg = SvxAutoCorrCfg::Get();
                     SvxAutoCorrect* pACorr = pACfg->GetAutoCorrect();
                     if(pACorr &&
-                        ( pACorr->IsAutoCorrFlag( ChgQuotes ) && ('\"' == aCh ))||
-                        ( pACorr->IsAutoCorrFlag( ChgSglQuotes ) && ( '\'' == aCh)))
+                        (( pACorr->IsAutoCorrFlag( ChgQuotes ) && ('\"' == aCh ))||
+                        ( pACorr->IsAutoCorrFlag( ChgSglQuotes ) && ( '\'' == aCh))))
                     {
                         rSh.DelLeft();
                         rSh.AutoCorrect( *pACorr, aCh );

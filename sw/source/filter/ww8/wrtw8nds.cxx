@@ -1726,11 +1726,27 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
                 }
             }
         }
-                                        // Ausgabe der Zeichenattribute
-        aAttrIter.OutAttr( nAktPos );   // nAktPos - 1 ??
-        rWW8Wrt.pChpPlc->AppendFkpEntry( rWrt.Strm().Tell(),
+
+        WW8_WrPlcFld* pCurrentFields = rWW8Wrt.CurrentFieldPlc();
+        USHORT nOldFieldResults = pCurrentFields ? pCurrentFields->ResultCount() : 0;
+
+        // Export of Character attributes
+        aAttrIter.OutAttr( nAktPos );  // nAktPos - 1 ??
+
+        pCurrentFields = rWW8Wrt.CurrentFieldPlc();
+        USHORT nNewFieldResults = pCurrentFields ? pCurrentFields->ResultCount() : 0;
+
+        bool bExportedFieldResult = nOldFieldResults != nNewFieldResults;
+    //If we have exported a field result, then we will have been forced to
+    //split up the text into a 0x13, 0x14, <result> 0x15 sequence with the
+    //properties forced out at the end of the result, so the 0x15 itself
+    //should remain clean of all other attributes to avoid #iXXXXX#
+        if (!bExportedFieldResult)
+        {
+            rWW8Wrt.pChpPlc->AppendFkpEntry( rWrt.Strm().Tell(),
                                             pO->Count(), pO->GetData() );
-        pO->Remove( 0, pO->Count() );                   // leeren
+        }
+        pO->Remove( 0, pO->Count() );                   // erase
 
                     // Ausnahme: Fussnoten am Zeilenende
         if (nNextAttr == nEnd)

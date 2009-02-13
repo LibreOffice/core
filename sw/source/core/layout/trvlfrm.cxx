@@ -734,7 +734,8 @@ BOOL MA_FASTCALL lcl_UpDown( SwPaM *pPam, const SwCntntFrm *pStart,
         //Fussnotenbereich zu erreichen.
         else if ( pStart->IsInFtn() )
         {
-            while ( pCnt && !pCnt->IsInFtn() )
+            while ( pCnt && (!pCnt->IsInFtn() ||
+                            (pCnt->IsTxtFrm() && ((SwTxtFrm*)pCnt)->IsHiddenNow())))
             {
                 pCnt = (*fnNxtPrv)( pCnt );
                 pCnt = ::lcl_MissProtectedFrames( pCnt, fnNxtPrv, TRUE, bInReadOnly, bTblSel );
@@ -769,6 +770,11 @@ BOOL MA_FASTCALL lcl_UpDown( SwPaM *pPam, const SwCntntFrm *pStart,
             }
             if ( !bSame )
                 pCnt = 0;
+            else if ( pCnt && pCnt->IsTxtFrm() && ((SwTxtFrm*)pCnt)->IsHiddenNow() ) // i73332
+            {
+                pCnt = (*fnNxtPrv)( pCnt );
+                pCnt = ::lcl_MissProtectedFrames( pCnt, fnNxtPrv, TRUE, bInReadOnly, bTblSel );
+            }
         }
 
         if ( bTab )

@@ -879,10 +879,15 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
     ((SfxDockingWindow*)pParent)->SetMinOutputSizePixel(aMinSize);
     SetOutputSizePixel( Size( nWishWidth, nZoomOutInit));
     Size aTmpParentSize(((SfxDockingWindow*)pParent)->GetSizePixel());
-    if(aTmpParentSize.Width() < aMinSize.Width() ||
-        aTmpParentSize.Height() < aMinSize.Height() &&
-            ((SfxDockingWindow*)pParent)->GetFloatingWindow() &&
-                !((SfxDockingWindow*)pParent)->GetFloatingWindow()->IsRollUp())
+    if(
+        (
+           aTmpParentSize.Width() < aMinSize.Width() ||
+           aTmpParentSize.Height() < aMinSize.Height()
+        )
+        &&
+        ((SfxDockingWindow*)pParent)->GetFloatingWindow() &&
+        !((SfxDockingWindow*)pParent)->GetFloatingWindow()->IsRollUp()
+      )
         ((SfxDockingWindow*)pParent)->SetOutputSizePixel(aMinSize);
 
     aContentTree.SetPosSizePixel( 0, nListboxYPos, 0, 0, WINDOW_POSSIZE_Y );

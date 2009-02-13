@@ -643,7 +643,7 @@ SwLayNotify::~SwLayNotify()
             pLay->InvalidateNextPos();
     }
     if ( !IsLowersComplete() &&
-         !((pLay->GetType()&FRM_FLY|FRM_SECTION) &&
+         !(pLay->GetType()&(FRM_FLY|FRM_SECTION) &&
             pLay->Lower() && pLay->Lower()->IsColumnFrm()) &&
          (bPos || bNotify) && !(pLay->GetType() & 0x1823) )  //Tab, Row, FtnCont, Root, Page
     {

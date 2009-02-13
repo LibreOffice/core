@@ -2124,7 +2124,7 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
 
     // Platzhalter loeschen
     SwIndex aPos(pNd, nStartPos);
-    const SwFmtCharFmt* pPageNoCharFmt = 0;
+    SwCharFmt* pPageNoCharFmt = 0;
     SwpHints* pHints = pNd->GetpSwpHints();
     if(pHints)
         for(USHORT nHintIdx = 0; nHintIdx < pHints->GetStartCount(); nHintIdx++)
@@ -2135,7 +2135,7 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
                 (nStartPos + 2) <= nTmpEnd &&
                 pAttr->Which() == RES_TXTATR_CHARFMT)
             {
-                pPageNoCharFmt = &pAttr->GetCharFmt();
+                pPageNoCharFmt = pAttr->GetCharFmt().GetCharFmt();
                 break;
             }
         }
@@ -2216,7 +2216,7 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
     pNd->Insert( aNumStr, aPos, INS_EMPTYEXPAND );
     if(pPageNoCharFmt)
     {
-        SwFmtCharFmt aCharFmt(pPageNoCharFmt->GetCharFmt());
+        SwFmtCharFmt aCharFmt( pPageNoCharFmt );
         pNd->InsertItem(aCharFmt, nStartPos, nStartPos + aNumStr.Len(), nsSetAttrMode::SETATTR_DONTEXPAND);
     }
 

@@ -1228,9 +1228,9 @@ void SwView::OuterResizePixel( const Point &rOfst, const Size &rSize )
 
         //Nicht endlosschleifen. Moeglichst dann stoppen wenn die
         //(Auto-)Scrollbars sichtbar sind.
-        if ( bRepeat && nCnt > 10 ||
-             (nCnt > 3 && bHAuto && bAuto &&
-              bAuto  && bHAuto) )
+        if ( bRepeat &&
+             ( nCnt > 10 || ( nCnt > 3 && bHAuto && bAuto ) )
+           )
         {
             bRepeat = FALSE;
         }

@@ -448,6 +448,8 @@ SwCntntNode *SwTxtNode::SplitCntntNode( const SwPosition &rPos )
             pNode->SetGrammarCheck( GetGrammarCheck()->SplitGrammarList( nSplitPos ) );
         SetGrammarCheckDirty( true );
 
+        SetWordCountDirty( true );
+
         // SMARTTAGS
         if( GetSmartTags() )
             pNode->SetSmartTags( GetSmartTags()->SplitList( nSplitPos ) );
@@ -543,6 +545,8 @@ SwCntntNode *SwTxtNode::SplitCntntNode( const SwPosition &rPos )
         SwGrammarMarkUp *pList3 = GetGrammarCheck();
         SetGrammarCheck( 0, false );
         SetGrammarCheckDirty( true );
+
+        SetWordCountDirty( true );
 
         // SMARTTAGS
         SwWrongList *pList2 = GetSmartTags();

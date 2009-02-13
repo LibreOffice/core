@@ -596,16 +596,11 @@ SwRewriter SwUndoDelete::GetRewriter() const
             }
         }
 
+        aStr = ShortenString(aStr, nUndoStringLength, String(SW_RES(STR_LDOTS)));
         if (pHistory)
         {
             SwRewriter aRewriter = lcl_RewriterFromHistory(*pHistory);
-
             aStr = aRewriter.Apply(aStr);
-        }
-        else
-        {
-            aStr = ShortenString(aStr, nUndoStringLength,
-                                 String(SW_RES(STR_LDOTS)));
         }
 
         aResult.AddRule(UNDO_ARG1, aStr);

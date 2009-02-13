@@ -2463,6 +2463,7 @@ Any SAL_CALL SwXTextDocument::getPropertyDefault( const OUString& rPropertyName 
 class SwViewOptionAdjust_Impl
 {
     bool m_bSwitchOff_IsFldName;
+    bool m_bSwitchOff_PlaceHolderView;
     bool m_bSwitchOff_HiddenChar;
     bool m_bSwitchOff_HiddenParagraphs;
     bool m_bSwitchOff_IsShowHiddenField;
@@ -2483,6 +2484,8 @@ SwViewOptionAdjust_Impl::SwViewOptionAdjust_Impl(SwWrtShell& rSh) :
     const SwViewOption* pCurrentViewOptions = m_rShell.GetViewOptions();
     m_bSwitchOff_IsFldName = pCurrentViewOptions->IsFldName() && m_rShell.IsAnyFieldInDoc();
     bool bApplyViewOptions = m_bSwitchOff_IsFldName;
+    //switch off painting of placeholder fields
+    m_bSwitchOff_PlaceHolderView = pCurrentViewOptions->IsShowPlaceHolderFields();
     //switch off display of hidden characters if on and hidden characters are in use
     m_bSwitchOff_HiddenChar = pCurrentViewOptions->IsShowHiddenChar() && m_rShell.GetDoc()->ContainsHiddenChars();
     //switch off display of hidden paragraphs if on and hidden paragraphs are in use
@@ -2501,7 +2504,7 @@ SwViewOptionAdjust_Impl::SwViewOptionAdjust_Impl(SwWrtShell& rSh) :
             m_bSwitchOff_IsShowHiddenField = false;
     }
 
-
+    bApplyViewOptions |= m_bSwitchOff_PlaceHolderView;
     bApplyViewOptions |= m_bSwitchOff_HiddenChar;
     bApplyViewOptions |= m_bSwitchOff_HiddenParagraphs;
     bApplyViewOptions |= m_bSwitchOff_IsShowHiddenField;
@@ -2510,6 +2513,8 @@ SwViewOptionAdjust_Impl::SwViewOptionAdjust_Impl(SwWrtShell& rSh) :
         m_pViewOption = new SwViewOption(*m_rShell.GetViewOptions());
         if(m_bSwitchOff_IsFldName)
             m_pViewOption->SetFldName(FALSE);
+        if(m_bSwitchOff_PlaceHolderView)
+            m_pViewOption->SetShowPlaceHolderFields(FALSE);
         if(m_bSwitchOff_HiddenChar)
             m_pViewOption->SetShowHiddenChar(FALSE);
         if(m_bSwitchOff_HiddenParagraphs)
@@ -2528,6 +2533,8 @@ SwViewOptionAdjust_Impl::~SwViewOptionAdjust_Impl()
     {
         if(m_bSwitchOff_IsFldName)
             m_pViewOption->SetFldName(TRUE);
+        if(m_bSwitchOff_PlaceHolderView)
+            m_pViewOption->SetShowPlaceHolderFields(TRUE);
         if(m_bSwitchOff_HiddenChar)
             m_pViewOption->SetShowHiddenChar(TRUE);
         if(m_bSwitchOff_HiddenParagraphs)
@@ -2817,12 +2824,15 @@ void SAL_CALL SwXTextDocument::render(
         // <--
 
         pVwSh->SetPDFExportOption( sal_False );
+        // #i96167# haggai: delete pViewOptionsAdjust here because it makes use
+        // of the shell, which might get destroyed in lcl_DisposeView!
+        delete pViewOptionAdjust;
+
         if( bLastPage && m_pHiddenViewFrame)
         {
             lcl_DisposeView( m_pHiddenViewFrame, pDocShell );
             m_pHiddenViewFrame = 0;
         }
-        delete pViewOptionAdjust;
     }
 }
 /* -----------------------------03.10.04 -------------------------------------

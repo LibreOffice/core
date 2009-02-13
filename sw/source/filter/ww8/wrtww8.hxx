@@ -728,6 +728,7 @@ public:
     void AddBookmark(String sBkmkName);
 
     void WriteFormData(SwFieldBookmark &rFieldmark);
+    WW8_WrPlcFld* CurrentFieldPlc() const;
 private:
     //No copying
     SwWW8Writer(const SwWW8Writer&);
@@ -860,15 +861,18 @@ class WW8_WrPlcFld : public WW8_WrPlc1
 {
 private:
     BYTE nTxtTyp;
+    USHORT nResults;
 
     //No copying
     WW8_WrPlcFld(const WW8_WrPlcFld&);
     WW8_WrPlcFld& operator=(const WW8_WrPlcFld&);
 public:
     WW8_WrPlcFld( USHORT nStructSz, BYTE nTTyp )
-        : WW8_WrPlc1( nStructSz ), nTxtTyp( nTTyp )
+        : WW8_WrPlc1( nStructSz ), nTxtTyp( nTTyp ), nResults(0)
     {}
     bool Write( SwWW8Writer& rWrt );
+    void ResultAdded() { ++nResults; }
+    USHORT ResultCount() const { return nResults; }
 };
 
 class WW8_WrMagicTable : public WW8_WrPlc1

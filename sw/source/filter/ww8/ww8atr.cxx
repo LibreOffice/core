@@ -1715,20 +1715,29 @@ static void InsertSpecialChar( SwWW8Writer& rWrt, BYTE c,
         rStrm.Seek( nCurrPos );
 
         // write attributes of hyperlink character 0x01
-        SwWW8Writer::InsUInt16( aItems, 0x0802 );
+        SwWW8Writer::InsUInt16( aItems, 0x0802 ); //sprmCFFldVanish
         aItems.Insert( (BYTE)0x81, aItems.Count() );
         SwWW8Writer::InsUInt16( aItems, 0x6a03 );
         SwWW8Writer::InsUInt32( aItems, nLinkPosInDataStrm );
         SwWW8Writer::InsUInt16( aItems, 0x0806 );
         aItems.Insert( (BYTE)0x01, aItems.Count() );
     }
-    // <--
-    // fSpec-Attribut true
+
+    //Technically we should probably Remove all attribs
+    //here for the 0x13, 0x14, 0x15, but our import
+    //is slightly lacking
+    //aItems.Remove(0, aItems.Count());
+    // fSpec-Attribute true
     if( rWrt.bWrtWW8 )
-        SwWW8Writer::InsUInt16( aItems, 0x855 );
+    {
+        SwWW8Writer::InsUInt16( aItems, 0x855 ); //sprmCFSpec
+        aItems.Insert( 1, aItems.Count() );
+    }
     else
-        aItems.Insert( 117, aItems.Count() );
-    aItems.Insert( 1, aItems.Count() );
+    {
+        aItems.Insert( 117, aItems.Count() ); //sprmCFSpec
+        aItems.Insert( 1, aItems.Count() );
+    }
 
     rWrt.pChpPlc->AppendFkpEntry(rWrt.Strm().Tell(), aItems.Count(),
         aItems.GetData());
@@ -1744,11 +1753,9 @@ String lcl_GetExpandedField(const SwField &rFld)
     return sRet;
 }
 
-void SwWW8Writer::OutField(const SwField* pFld, ww::eField eFldType,
-    const String& rFldCmd, BYTE nMode)
+WW8_WrPlcFld* SwWW8Writer::CurrentFieldPlc() const
 {
-    bool bUnicode = IsUnicode();
-    WW8_WrPlcFld* pFldP;
+    WW8_WrPlcFld* pFldP = NULL;
     switch (nTxtTyp)
     {
         case TXT_MAINTEXT:
@@ -1771,8 +1778,15 @@ void SwWW8Writer::OutField(const SwField* pFld, ww::eField eFldType,
             break;
         default:
             ASSERT( !this, "was ist das fuer ein SubDoc-Type?" );
-            return;
     }
+    return pFldP;
+}
+
+void SwWW8Writer::OutField(const SwField* pFld, ww::eField eFldType,
+    const String& rFldCmd, BYTE nMode)
+{
+    bool bUnicode = IsUnicode();
+    WW8_WrPlcFld* pFldP = CurrentFieldPlc();
 
     // --> OD 2008-08-14 #158418#
     const bool bIncludeEmptyPicLocation = ( eFldType == ww::ePAGE );
@@ -1845,6 +1859,7 @@ void SwWW8Writer::OutField(const SwField* pFld, ww::eField eFldType,
     {
         static const BYTE aFld14[2] = { 0x14, 0xff };
         pFldP->Append( Fc2Cp( Strm().Tell() ), aFld14 );
+        pFldP->ResultAdded();
         // --> OD 2008-08-14 #158418#
         InsertSpecialChar( *this, 0x14, 0, bIncludeEmptyPicLocation );
         // <--
@@ -1874,16 +1889,25 @@ void SwWW8Writer::OutField(const SwField* pFld, ww::eField eFldType,
                     BYTE aArr[12];
                     BYTE *pArr = aArr;
 
-                    Set_UInt16(pArr, 0x6a03);
-                    Set_UInt32(pArr, 0x0);
-
                     if( bWrtWW8 )
-                        Set_UInt16( pArr, 0x855 );
+                    {
+                        Set_UInt16(pArr, 0x6a03); //sprmCPicLocation
+                        Set_UInt32(pArr, 0x0);
+
+                        Set_UInt16( pArr, 0x855 );//sprmCFSpec
+                        Set_UInt8( pArr, 1 );
+
+                        Set_UInt16( pArr, 0x875 );//sprmCFNoProof
+                        Set_UInt8(pArr, 1);
+                    }
                     else
-                        Set_UInt8( pArr, 117 );
-                    Set_UInt8( pArr, 1 );
-                    Set_UInt16( pArr, 0x875 );
-                    Set_UInt8(pArr, 1);
+                    {
+                        Set_UInt8(pArr, 0x68); //sprmCPicLocation
+                        Set_UInt32(pArr, 0x0);
+
+                        Set_UInt8( pArr, 117 ); //sprmCFSpec
+                        Set_UInt8( pArr, 1 );
+                    }
                     pChpPlc->AppendFkpEntry( pStrm->Tell(), static_cast< short >(pArr - aArr), aArr );
                 }
             }
@@ -2370,9 +2394,9 @@ void SwWW8Writer::WritePostItBegin( WW8Bytes* pOut )
 
     // sprmCFSpec true
     if( bWrtWW8 )
-        Set_UInt16( pArr, 0x855 );
+        Set_UInt16( pArr, 0x855 ); //sprmCFSpec
     else
-        Set_UInt8( pArr, 117 );
+        Set_UInt8( pArr, 117 ); //sprmCFSpec
     Set_UInt8( pArr, 1 );
 
     pChpPlc->AppendFkpEntry( Strm().Tell() );
