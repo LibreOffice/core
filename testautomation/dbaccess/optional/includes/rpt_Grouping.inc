@@ -119,7 +119,7 @@ testcase tGrouping
     Kontext "ReportDesign"
     ReportDesign.UseMenu 
         hMenuSelectNr(3)
-        hMenuSelectNr(5)        
+        hMenuSelectNr(4)        
     
 	sleep(1)
     

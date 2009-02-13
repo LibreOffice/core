@@ -38,16 +38,16 @@
 '\***********************************************************************
 sub db_hsqldb
 
-    'call tGeneral
+    call tGeneral
     call tRenameTable
-    'call tOpenDatabaseWithViews
-    'call tRenameTableWhichUsedInViews
+    call tOpenDatabaseWithViews
+    call tRenameTableWhichUsedInViews
     
-    'call tQueryOpenInSQLMode
+    call tQueryOpenInSQLMode
                     
-    'app.FileCopy gTesttoolPath + ConvertPath("dbaccess/optional/input/hsql_datasource/TT_hsqldb.odb") , gOfficePath + ConvertPath("user/work/TT_hsqldb.odb")            
-    'call db_Query(gOfficePath + "user/work/TT_hsqldb.odb" ,"hsqldb")
-    
+    app.FileCopy gTesttoolPath + ConvertPath("dbaccess/optional/input/hsql_datasource/TT_hsqldb.odb") , gOfficePath + ConvertPath("user/work/TT_hsqldb.odb")            
+    call db_Query(gOfficePath + "user/work/TT_hsqldb.odb" ,"hsqldb")
+   
 end sub
 
 testcase tGeneral
