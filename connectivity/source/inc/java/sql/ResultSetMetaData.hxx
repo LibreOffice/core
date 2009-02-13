@@ -47,7 +47,6 @@ namespace connectivity
     protected:
         java::sql::ConnectionLog    m_aLogger;
         java_sql_Connection*        m_pConnection;
-        sal_Int32                   m_nColumnCount;
 
         // statische Daten fuer die Klasse
         static jclass theClass;

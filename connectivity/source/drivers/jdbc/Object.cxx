@@ -45,7 +45,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include "resource/jdbc_log.hrc"
-#include <rtl/logfile.hxx>
+
 #include <comphelper/logging.hxx>
 
 #include <memory>
@@ -81,32 +81,27 @@ SDBThreadAttach::SDBThreadAttach()
  : m_aGuard(java_lang_Object::getVM())
  , pEnv(NULL)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "SDBThreadAttach::SDBThreadAttach" );
     pEnv = m_aGuard.getEnvironment();
     OSL_ENSURE(pEnv,"Environment is nULL!");
 }
 // -----------------------------------------------------------------------------
 SDBThreadAttach::~SDBThreadAttach()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "SDBThreadAttach::~SDBThreadAttach" );
 }
 // -----------------------------------------------------------------------------
 oslInterlockedCount& getJavaVMRefCount()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "getJavaVMRefCount" );
     static oslInterlockedCount s_nRefCount = 0;
     return s_nRefCount;
 }
 // -----------------------------------------------------------------------------
 void SDBThreadAttach::addRef()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "SDBThreadAttach::addRef" );
     osl_incrementInterlockedCount(&getJavaVMRefCount());
 }
 // -----------------------------------------------------------------------------
 void SDBThreadAttach::releaseRef()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "SDBThreadAttach::releaseRef" );
     osl_decrementInterlockedCount(&getJavaVMRefCount());
     if ( getJavaVMRefCount() == 0 )
     {
