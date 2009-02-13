@@ -612,7 +612,9 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
     public void setGrouping(String[] aGroupFieldNames)
     {
         getRecordParser().prependSortFieldNames(aGroupFieldNames);
-    }// TODO: we have to change to String List!!!!
+    }
+
+// TODO: we have to change to String List!!!!
     private ArrayList m_aReportPath = null;
 
     public ArrayList getReportPath()
@@ -727,5 +729,9 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
     {
         getRecordParser().Command = _sCommand;
     // throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void checkInvariants() throws java.lang.Exception
+    {
     }
 }
