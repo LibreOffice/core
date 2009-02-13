@@ -1870,18 +1870,20 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
                             aLR.SetTxtFirstLineOfstValue(pFmt->GetAbsLSpace() - pFmt->GetFirstLineOffset());
                     else
                             aLR.SetTxtFirstLineOfst(GetWordFirstLineOffset(*pFmt));
+
+                    // --> OD 2009-01-12 #i94187#
+                    // set list style directly only in position and space mode LABEL_WIDTH_AND_POSITION
+                    if (SFX_ITEM_SET !=
+                        pTmpSet->GetItemState(RES_PARATR_NUMRULE, false) )
+                    {
+                        //If the numbering is not outline, and theres no numrule
+                        //name in the itemset, put one in there
+
+                        // NumRule from a template - then put it into the itemset
+                        pTmpSet->Put( SwNumRuleItem( pRule->GetName() ));
+                    }
                 }
                 // <--
-
-                if (SFX_ITEM_SET !=
-                    pTmpSet->GetItemState(RES_PARATR_NUMRULE, false) )
-                {
-                    //If the numbering is not outline, and theres no numrule
-                    //name in the itemset, put one in there
-
-                    // NumRule from a template - then put it into the itemset
-                    pTmpSet->Put( SwNumRuleItem( pRule->GetName() ));
-                }
             }
             else
                 pTmpSet->ClearItem(RES_PARATR_NUMRULE);

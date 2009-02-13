@@ -4747,6 +4747,21 @@ namespace {
             if ( mrTxtNode.GetNumRule() &&
                  mrTxtNode.GetListId().Len() > 0 )
             {
+                // --> OD 2009-01-14 #i96062#
+                // If paragraph has no list level attribute set and list style
+                // is the outline style, apply outline level as the list level.
+                if ( !mrTxtNode.HasAttrListLevel() &&
+                     mrTxtNode.GetNumRule()->GetName() ==
+                        String::CreateFromAscii( SwNumRule::GetOutlineRuleName() ) &&
+                     mrTxtNode.GetTxtColl()->IsAssignedToListLevelOfOutlineStyle() )
+                {
+                    int nNewListLevel = mrTxtNode.GetTxtColl()->GetAssignedOutlineStyleLevel();
+                    if ( 0 <= nNewListLevel && nNewListLevel < MAXLEVEL )
+                    {
+                        mrTxtNode.SetAttrListLevel( nNewListLevel );
+                    }
+                }
+                // <--
                 mrTxtNode.AddToList();
             }
             // --> OD 2008-11-19 #i70748#

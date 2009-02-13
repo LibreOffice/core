@@ -2490,8 +2490,14 @@ bool SwWW8ImplReader::IsObjectLayoutInTableCell( const UINT32 nLayoutInTableCell
             case 0x6000: // version 11 aka Microsoft Word 2003
             case 0x8000: // version 12 aka Microsoft Word 2007
             {
+                // --> OD 2009-01-13 #i98037#
+                // adjustment of conditions needed after deeper analysis of
+                // certain test cases.
                 if ( nLayoutInTableCell == 0xFFFFFFFF || // no explicit attribute value given
-                     nLayoutInTableCell & 0x00008000 )
+                     nLayoutInTableCell & 0x80008000 ||
+                     ( nLayoutInTableCell & 0x02000000 &&
+                       !(nLayoutInTableCell & 0x80000000 ) ) )
+                // <--
                 {
                     bIsObjectLayoutInTableCell = true;
                 }

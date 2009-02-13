@@ -959,10 +959,15 @@ SwFtnFrm* lcl_FindEndnote( SwSectionFrm* &rpSect, BOOL &rbEmpty,
     SwSectionFrm* pSect = rbEmpty ? rpSect->GetFollow() : rpSect;
     while( pSect )
     {
-        ASSERT( pSect->Lower() && pSect->Lower()->IsColumnFrm(),
-            "InsertEndnotes: Where's my column?" );
-        SwColumnFrm* pCol = (SwColumnFrm*)pSect->Lower();
-        do // check all columns
+       ASSERT( (pSect->Lower() && pSect->Lower()->IsColumnFrm()) || pSect->GetUpper()->IsFtnFrm(),
+                "InsertEndnotes: Where's my column?" );
+
+        // i73332: Columned section in endnote
+        SwColumnFrm* pCol = 0;
+        if(pSect->Lower() && pSect->Lower()->IsColumnFrm())
+            pCol = (SwColumnFrm*)pSect->Lower();
+
+        while( pCol ) // check all columns
         {
             SwFtnContFrm* pFtnCont = pCol->FindFtnCont();
             if( pFtnCont )
@@ -986,7 +991,7 @@ SwFtnFrm* lcl_FindEndnote( SwSectionFrm* &rpSect, BOOL &rbEmpty,
                 }
             }
             pCol = (SwColumnFrm*)pCol->GetNext();
-        } while ( pCol );
+        }
         rpSect = pSect;
         pSect = pLayouter ? pSect->GetFollow() : NULL;
         rbEmpty = TRUE;
@@ -1024,7 +1029,9 @@ void lcl_ColumnRefresh( SwSectionFrm* pSect, BOOL bFollow )
 void SwSectionFrm::CollectEndnotes( SwLayouter* pLayouter )
 {
     ASSERT( IsColLocked(), "CollectEndnotes: You love the risk?" );
-    ASSERT( Lower() && Lower()->IsColumnFrm(), "Where's my column?" );
+    // i73332: Section in footnode does not have columns!
+    ASSERT( (Lower() && Lower()->IsColumnFrm()) || GetUpper()->IsFtnFrm(), "Where's my column?" );
+
     SwSectionFrm* pSect = this;
     SwFtnFrm* pFtn;
     BOOL bEmpty = FALSE;
@@ -1843,14 +1850,28 @@ SwLayoutFrm *SwFrm::GetPrevSctLeaf( MakePageType )
     // inside a table, but then the found section frame <pSect> is also inside
     // this table.
     SwSectionFrm *pSect = FindSctFrm();
-    SwFrm *pPrv;
-    if( 0 != ( pPrv = pSect->GetIndPrev() ) )
+
+    // --> OD 2009-01-16 #i95698#
+    // A table cell containing directly a section does not break - see lcl_FindSectionsInRow(..)
+    // Thus, a table inside a section, which is inside another table can only
+    // flow backward in the columns of its section.
+    // Note: The table cell, which contains the section, can not have a master table cell.
+    if ( IsTabFrm() && pSect->IsInTab() )
     {
-        // Herumlungernde, halbtote SectionFrms sollen uns nicht beirren
-        while( pPrv && pPrv->IsSctFrm() && !((SwSectionFrm*)pPrv)->GetSection() )
-            pPrv = pPrv->GetPrev();
-        if( pPrv )
-            return pCol;
+        return pCol;
+    }
+    // <--
+
+    {
+        SwFrm *pPrv;
+        if( 0 != ( pPrv = pSect->GetIndPrev() ) )
+        {
+            // Herumlungernde, halbtote SectionFrms sollen uns nicht beirren
+            while( pPrv && pPrv->IsSctFrm() && !((SwSectionFrm*)pPrv)->GetSection() )
+                pPrv = pPrv->GetPrev();
+            if( pPrv )
+                return pCol;
+        }
     }
 
     const BOOL bBody = IsInDocBody();
@@ -1861,15 +1882,8 @@ SwLayoutFrm *SwFrm::GetPrevSctLeaf( MakePageType )
 
     while ( pLayLeaf )
     {
-        // In Tabellen oder Bereiche geht's niemals hinein.
-        // --> OD 2008-12-22 #i95968#
-        // Condition needs to be revised:
-        // If the section the <this> frame is in, is inside a table, it is
-        // allowed to step into a table. Otherwise a table/paragraph inside
-        // a section inside a table would leave the outer table.
-//        if ( pLayLeaf->IsInTab() || pLayLeaf->IsInSct() )
-        if ( ( pLayLeaf->IsInTab() && !pSect->IsInTab() ) ||
-             pLayLeaf->IsInSct() )
+        //In Tabellen oder Bereiche geht's niemals hinein.
+        if ( pLayLeaf->IsInTab() || pLayLeaf->IsInSct() )
         {
             pLayLeaf = pLayLeaf->GetPrevLayoutLeaf();
         }

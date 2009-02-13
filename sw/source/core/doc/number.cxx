@@ -1098,7 +1098,15 @@ void SwNumRule::ChangeIndent( const short nDiff )
         }
         else if ( ePosAndSpaceMode == SvxNumberFormat::LABEL_ALIGNMENT )
         {
-            long nNewIndent = nDiff +
+            // --> OD 2009-01-20 #i93399#
+            // adjust also the list tab position, if a list tab stop is applied
+            if ( aTmpNumFmt.GetLabelFollowedBy() == SvxNumberFormat::LISTTAB )
+            {
+                const long nNewListTab = aTmpNumFmt.GetListtabPos() +  nDiff;
+                aTmpNumFmt.SetListtabPos( nNewListTab );
+            }
+            // <--
+            const long nNewIndent = nDiff +
                               aTmpNumFmt.GetIndentAt();
             aTmpNumFmt.SetIndentAt( nNewIndent );
         }
@@ -1123,6 +1131,15 @@ void SwNumRule::SetIndent( const short nNewIndent,
     }
     else if ( ePosAndSpaceMode == SvxNumberFormat::LABEL_ALIGNMENT )
     {
+        // --> OD 2009-01-20 #i93399#
+        // adjust also the list tab position, if a list tab stop is applied
+        if ( aTmpNumFmt.GetLabelFollowedBy() == SvxNumberFormat::LISTTAB )
+        {
+            const long nNewListTab = aTmpNumFmt.GetListtabPos() +
+                                     ( nNewIndent - aTmpNumFmt.GetIndentAt() );
+            aTmpNumFmt.SetListtabPos( nNewListTab );
+        }
+        // <--
         aTmpNumFmt.SetIndentAt( nNewIndent );
     }
 

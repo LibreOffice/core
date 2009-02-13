@@ -34,6 +34,9 @@
 #include <calbck.hxx>
 #include <frmfmt.hxx>
 #include <com/sun/star/text/XTextContent.hpp>
+// --> OD 2009-01-13 #i59051#
+#include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
+// <--
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
@@ -221,36 +224,25 @@ class SwXShape : public SwXShapeBaseClass,
     */
     void _AdjustPositionProperties( const ::com::sun::star::awt::Point _aPosition );
 
-    /** method to convert start and end position of the drawing object to the
+    /** method to convert start or end position of the drawing object to the
         Writer specific position, which is the attribute position in layout direction
 
-        OD 2004-10-28 #i36248#
+        OD 2009-01-12 #i59051#
 
         @author OD
     */
-    void __ConvertStartEndPosToLayoutDir(
-                                    ::com::sun::star::awt::Point& _rioStartPos,
-                                    ::com::sun::star::awt::Point& _rioEndPos );
+    ::com::sun::star::awt::Point _ConvertStartOrEndPosToLayoutDir(
+                            const ::com::sun::star::awt::Point& aStartOrEndPos );
 
-    /** method to convert start position of the drawing object to the
+    /** method to convert PolyPolygonBezier of the drawing object to the
         Writer specific position, which is the attribute position in layout direction
 
-        OD 2004-10-28 #i36248#
+        OD 2009-01-13 #i59051#
 
         @author OD
     */
-    ::com::sun::star::awt::Point _ConvertStartPosToLayoutDir(
-                                const ::com::sun::star::awt::Point& _aStartPos );
-
-    /** method to convert end position of the drawing object to the
-        Writer specific position, which is the attribute position in layout direction
-
-        OD 2004-10-28 #i36248#
-
-        @author OD
-    */
-    ::com::sun::star::awt::Point _ConvertEndPosToLayoutDir(
-                                const ::com::sun::star::awt::Point& _aEndPos );
+    ::com::sun::star::drawing::PolyPolygonBezierCoords _ConvertPolyPolygonBezierToLayoutDir(
+                    const ::com::sun::star::drawing::PolyPolygonBezierCoords& aPath );
 
     /** method to get property from aggregation object
 

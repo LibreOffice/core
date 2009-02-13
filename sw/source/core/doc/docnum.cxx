@@ -115,6 +115,14 @@ void SwDoc::SetOutlineNumRule( const SwNumRule& rRule )
     {
         SwTxtNode* pTxtNd = *aIter;
         pTxtNd->NumRuleChgd();
+        // --> OD 2009-01-20 #i94152#
+        // assure that list level corresponds to outline level
+        if ( pTxtNd->GetTxtColl()->IsAssignedToListLevelOfOutlineStyle() &&
+             pTxtNd->GetAttrListLevel() != pTxtNd->GetTxtColl()->GetAssignedOutlineStyleLevel() )
+        {
+            pTxtNd->SetAttrListLevel( pTxtNd->GetTxtColl()->GetAssignedOutlineStyleLevel() );
+        }
+        // <--
     }
     // <--
 

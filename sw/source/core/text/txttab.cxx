@@ -252,7 +252,7 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
             // it is not the list tab stop:
             ( !pTabStop ||
               !aLineInf.IsListTabStopIncluded() ||
-              nNextPos != aLineInf.GetListTabStopPosition() ) ||
+              nNextPos != aLineInf.GetListTabStopPosition() ) &&
             // compatibility option TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST:
             pFrm->GetTxtNode()->getIDocumentSettingAccess()->
                 get(IDocumentSettingAccess::TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST);
