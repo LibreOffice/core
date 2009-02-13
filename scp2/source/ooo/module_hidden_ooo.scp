@@ -629,6 +629,7 @@ Module gid_Module_Root_Files_6
 	gid_File_Oo_Inet_Xcs,
 	gid_File_Oo_Inet_Xcu,
 	gid_File_Oo_Office_Addons_Xcs,
+	gid_File_Oo_Office_OOoImprovement_Settings_Xcs,
 	gid_File_Oo_Office_Ui_Basicidecommands_Xcs,
 	gid_File_Oo_Office_Ui_Basicidecommands_Xcu,
 	gid_File_Oo_Office_Ui_Windowstate_Xcs,

@@ -1394,6 +1394,13 @@ File gid_File_Oo_Office_Logging_Xcs
     Name = "/registry/schema/org/openoffice/Office/Logging.xcs";
 End
 
+File gid_File_Oo_Office_OOoImprovement_Settings_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office_OOoImprovement;
+    Name = "/registry/schema/org/openoffice/Office/OOoImprovement/Settings.xcs";
+End
+
 File gid_File_Oo_Office_OptionsDialog_Xcs
     TXT_FILE_BODY;
     Styles = (PACKED);

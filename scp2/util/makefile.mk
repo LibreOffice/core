@@ -87,6 +87,8 @@ SCP1FILES  = installation_ooo.par          \
              profileitem_python.par        \
              ure_into_ooo.par              \
              ure.par                       \
+             module_improvement.par        \
+             file_improvement.par          \
              common_brand.par              \
              common_brand_readme.par       \
              ooo_brand.par
@@ -237,6 +239,8 @@ SCP2FILES  = installation_ooo.par          \
              profileitem_python.par        \
              ure_into_ooo.par              \
              ure.par                       \
+             module_improvement.par        \
+             file_improvement.par          \
              common_brand.par              \
              common_brand_readme.par       \
              ooo_brand.par

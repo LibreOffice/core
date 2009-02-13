@@ -207,6 +207,11 @@ Directory gid_Dir_User_Registry_Data_Org_Openoffice_Office_Ui
     DosName = "UI";
 End
 
+Directory gid_Dir_User_Registry_Data_Org_Openoffice_Office_OOoImprovement
+    ParentID = gid_Dir_User_Registry_Data_Org_Openoffice_Office;
+    DosName = "OOoImprovement";
+End
+
 Directory gid_Dir_User_Registry_Data_Org_Openoffice_Ucb
     ParentID = gid_Dir_User_Registry_Data_Org_Openoffice;
     DosName = "ucb";
@@ -745,6 +750,11 @@ End
 Directory gid_Dir_Share_Registry_Schema_Org_Openoffice_Office_Ui
     ParentID = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
     HostName = "UI";
+End
+
+Directory gid_Dir_Share_Registry_Schema_Org_Openoffice_Office_OOoImprovement
+    ParentID = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
+    HostName = "OOoImprovement";
 End
 
 Directory gid_Dir_Share_Registry_Schema_Org_Openoffice_Ucb
