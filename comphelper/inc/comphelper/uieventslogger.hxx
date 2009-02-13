@@ -53,6 +53,7 @@ namespace comphelper
             static void logVcl(const ::rtl::OUString& parent_id, sal_Int32 window_type, const ::rtl::OUString& id, const ::rtl::OUString& method, sal_Int32 param);
             static void logVcl(const ::rtl::OUString& parent_id, sal_Int32 window_type, const ::rtl::OUString& id, const ::rtl::OUString& method);
             static void disposing();
+            static void reinit();
             virtual ~UiEventsLogger() {}
     };
 }
