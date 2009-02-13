@@ -1230,55 +1230,58 @@ void TabControl::ImplPaint( const Rectangle& rRect, bool bLayout )
         }
     }
 
-    // Some native toolkits (GTK+) draw tabs right-to-left, with an
-    // overlap between adjacent tabs
-    bool            bDrawTabsRTL = IsNativeControlSupported( CTRL_TAB_ITEM, PART_TABS_DRAW_RTL );
-    ImplTabItem *   pFirstTab = NULL;
-    ImplTabItem *   pLastTab = NULL;
-    size_t idx;
+    if ( !mpTabCtrlData->maItemList.empty() )
+    {
+        // Some native toolkits (GTK+) draw tabs right-to-left, with an
+        // overlap between adjacent tabs
+        bool            bDrawTabsRTL = IsNativeControlSupported( CTRL_TAB_ITEM, PART_TABS_DRAW_RTL );
+        ImplTabItem *   pFirstTab = NULL;
+        ImplTabItem *   pLastTab = NULL;
+        size_t idx;
 
-    // Event though there is a tab overlap with GTK+, the first tab is not
-    // overlapped on the left side.  Other tookits ignore this option.
-    if ( bDrawTabsRTL )
-    {
-        pFirstTab = &mpTabCtrlData->maItemList.front();
-        pLastTab = &mpTabCtrlData->maItemList.back();
-        idx = mpTabCtrlData->maItemList.size()-1;
-    }
-    else
-    {
-        pLastTab = &mpTabCtrlData->maItemList.back();
-        pFirstTab = &mpTabCtrlData->maItemList.front();
-        idx = 0;
-    }
+        // Event though there is a tab overlap with GTK+, the first tab is not
+        // overlapped on the left side.  Other tookits ignore this option.
+        if ( bDrawTabsRTL )
+        {
+            pFirstTab = &mpTabCtrlData->maItemList.front();
+            pLastTab = &mpTabCtrlData->maItemList.back();
+            idx = mpTabCtrlData->maItemList.size()-1;
+        }
+        else
+        {
+            pLastTab = &mpTabCtrlData->maItemList.back();
+            pFirstTab = &mpTabCtrlData->maItemList.front();
+            idx = 0;
+        }
 
-    while ( idx < mpTabCtrlData->maItemList.size() )
-    {
-        ImplTabItem* pItem = &mpTabCtrlData->maItemList[idx];
-        if ( pItem != pCurItem )
+        while ( idx < mpTabCtrlData->maItemList.size() )
+        {
+            ImplTabItem* pItem = &mpTabCtrlData->maItemList[idx];
+            if ( pItem != pCurItem )
+            {
+                Region aClipRgn( GetActiveClipRegion() );
+                aClipRgn.Intersect( pItem->maRect );
+                if( !rRect.IsEmpty() )
+                    aClipRgn.Intersect( rRect );
+                if( bLayout || !aClipRgn.IsEmpty() )
+                    ImplDrawItem( pItem, aCurRect, bLayout, (pItem==pFirstTab), (pItem==pLastTab), FALSE );
+            }
+
+            if ( bDrawTabsRTL )
+                idx--;
+            else
+                idx++;
+        }
+
+        if ( pCurItem )
         {
             Region aClipRgn( GetActiveClipRegion() );
-            aClipRgn.Intersect( pItem->maRect );
+            aClipRgn.Intersect( pCurItem->maRect );
             if( !rRect.IsEmpty() )
                 aClipRgn.Intersect( rRect );
             if( bLayout || !aClipRgn.IsEmpty() )
-                ImplDrawItem( pItem, aCurRect, bLayout, (pItem==pFirstTab), (pItem==pLastTab), FALSE );
+                ImplDrawItem( pCurItem, aCurRect, bLayout, (pCurItem==pFirstTab), (pCurItem==pLastTab), TRUE );
         }
-
-        if ( bDrawTabsRTL )
-            idx--;
-        else
-            idx++;
-    }
-
-    if ( pCurItem )
-    {
-        Region aClipRgn( GetActiveClipRegion() );
-        aClipRgn.Intersect( pCurItem->maRect );
-        if( !rRect.IsEmpty() )
-            aClipRgn.Intersect( rRect );
-        if( bLayout || !aClipRgn.IsEmpty() )
-            ImplDrawItem( pCurItem, aCurRect, bLayout, (pCurItem==pFirstTab), (pCurItem==pLastTab), TRUE );
     }
 
     if ( !bLayout && HasFocus() )

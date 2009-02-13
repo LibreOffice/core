@@ -282,17 +282,16 @@ VCLXVirtualDevice::~VCLXVirtualDevice()
 
 
 // -----------------------------------------------------------------------------
-// ::com::sun::star::awt::XUnitConversion
+// Interface implementation of ::com::sun::star::awt::XUnitConversion
 // -----------------------------------------------------------------------------
 
 ::com::sun::star::awt::Point SAL_CALL VCLXDevice::convertPointToLogic( const ::com::sun::star::awt::Point& aPoint, ::sal_Int16 TargetUnit ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
     (void)aPoint;
     ::vos::OGuard aGuard( GetMutex() );
-    if (TargetUnit == com::sun::star::util::MeasureUnit::PERCENT ||
-        TargetUnit == com::sun::star::util::MeasureUnit::PIXEL)
+    if (TargetUnit == com::sun::star::util::MeasureUnit::PERCENT )
     {
-        // pixel or percentage not allowed here
+        // percentage not allowed here
         throw ::com::sun::star::lang::IllegalArgumentException();
     }
 
@@ -339,10 +338,9 @@ VCLXVirtualDevice::~VCLXVirtualDevice()
 {
     (void)aSize;
     ::vos::OGuard aGuard( GetMutex() );
-    if (TargetUnit == com::sun::star::util::MeasureUnit::PERCENT ||
-        TargetUnit == com::sun::star::util::MeasureUnit::PIXEL)
+    if (TargetUnit == com::sun::star::util::MeasureUnit::PERCENT)
     {
-        // pixel or percentage not allowed here
+        // percentage not allowed here
         throw ::com::sun::star::lang::IllegalArgumentException();
     }
 
