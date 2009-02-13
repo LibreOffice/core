@@ -78,9 +78,6 @@
 #include <comphelper/storagehelper.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <framework/titlehelper.hxx>
-#include <com/sun/star/task/FutureDocumentVersionProductUpdateRequest.hpp>
-#include <com/sun/star/task/InteractionClassification.hpp>
-#include <com/sun/star/task/XInteractionAskLater.hpp>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/errcode.hxx>
@@ -545,36 +542,6 @@ void SAL_CALL ODatabaseDocument::connectController( const Reference< XController
 
     // check/adjust our macro mode.
     m_pImpl->checkMacrosOnLoading();
-
-    // If we encounter a document which already contains macros in the document storage (instead of
-    // macros in the form's/report's storages), then this has been written by a newer version of OOo (>=3.1).
-    // In this case, warn the user, too.
-    if ( m_pImpl->hasMacroStorages() )
-    {
-        ::comphelper::NamedValueCollection aArgs( m_pImpl->getResource() );
-        Reference< XInteractionHandler > xInteraction;
-        xInteraction = aArgs.getOrDefault( "InteractionHandler", xInteraction );
-        if ( xInteraction.is() )
-        {
-            FutureDocumentVersionProductUpdateRequest aUpdateRequest;
-            aUpdateRequest.Classification = InteractionClassification_QUERY;
-            aUpdateRequest.DocumentURL = getURL();
-
-            ::rtl::Reference< ::comphelper::OInteractionRequest > pRequest = new ::comphelper::OInteractionRequest( makeAny( aUpdateRequest ) );
-            pRequest->addContinuation( new ::comphelper::OInteractionApprove );
-            pRequest->addContinuation( new ::comphelper::OInteractionDisapprove );
-            pRequest->addContinuation( new ::comphelper::OInteraction< XInteractionAskLater >() );
-
-            try
-            {
-                xInteraction->handle( pRequest.get() );
-            }
-            catch( const Exception& )
-            {
-                DBG_UNHANDLED_EXCEPTION();
-            }
-        }
-    }
 }
 
 // -----------------------------------------------------------------------------

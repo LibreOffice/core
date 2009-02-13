@@ -324,7 +324,6 @@ ODatabaseModelImpl::ODatabaseModelImpl( const Reference< XMultiServiceFactory >&
             ,m_pDBContext( &_rDBContext )
             ,m_refCount(0)
             ,m_bHasAnyObjectWithMacros( false )
-            ,m_bHasMacroStorages( false )
             ,m_bModificationLock( false )
             ,m_bDocumentInitialized( false )
             ,m_aContext( _rxFactory )
@@ -364,7 +363,6 @@ ODatabaseModelImpl::ODatabaseModelImpl(
             ,m_pDBContext( &_rDBContext )
             ,m_refCount(0)
             ,m_bHasAnyObjectWithMacros( false )
-            ,m_bHasMacroStorages( false )
             ,m_bModificationLock( false )
             ,m_bDocumentInitialized( false )
             ,m_aContext( _rxFactory )
@@ -1391,9 +1389,8 @@ Reference< XStorage > ODatabaseModelImpl::getLastCommitDocumentStorage()
 sal_Bool ODatabaseModelImpl::documentStorageHasMacros() const
 {
     // does our root storage contain macros?
-    if ( ::sfx2::DocumentMacroMode::storageHasMacros( m_xDocumentStorage ) )
+    if ( ::sfx2::DocumentMacroMode::storageHasMacros( const_cast< ODatabaseModelImpl* >( this )->getOrCreateRootStorage() ) )
     {
-        const_cast< ODatabaseModelImpl* >( this )->m_bHasMacroStorages = true;
         return true;
     }
 

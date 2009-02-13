@@ -540,7 +540,14 @@ uno::Reference< beans::XPropertySet> OCustomShape::getAwtComponent()
 //----------------------------------------------------------------------------
 uno::Reference< uno::XInterface > OCustomShape::getUnoShape()
 {
-    return OObjectBase::getUnoShapeOf( *this );
+    uno::Reference< uno::XInterface> xShape = OObjectBase::getUnoShapeOf( *this );
+    if ( !m_xReportComponent.is() )
+    {
+        OReportModel* pRptModel = static_cast<OReportModel*>(GetModel());
+        OXUndoEnvironment::OUndoEnvLock aLock(pRptModel->GetUndoEnv());
+        m_xReportComponent.set(xShape,uno::UNO_QUERY);
+    }
+    return xShape;
 }
 
 //----------------------------------------------------------------------------

@@ -1543,15 +1543,7 @@ namespace
 // -----------------------------------------------------------------------------
 sal_Bool ODocumentDefinition::objectSupportsEmbeddedScripts() const
 {
-//    bool bAllowDocumentMacros = !m_pImpl->m_pDataSource || m_pImpl->m_pDataSource->hasAnyObjectWithMacros();
-    // TODO: revert to the disabled code. The current version is just to be able
-    // to integrate an intermediate version of the CWS, which should behave as
-    // if no macros in DB docs are allowed
-    bool bAllowDocumentMacros = !m_pImpl->m_pDataSource->hasMacroStorages();
-        // even if the current version is not able to create documents which contain macros,
-        // later versions will be. Such documents contain macro/script storages in the
-        // document root storage, in which case we need to disable the per-form/report
-        // scripting.
+    bool bAllowDocumentMacros = !m_pImpl->m_pDataSource || m_pImpl->m_pDataSource->hasAnyObjectWithMacros();
 
     // if *any* of the objects of the database document already has macros, we continue to allow it
     // to have them, until the user did a migration.

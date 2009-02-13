@@ -190,8 +190,6 @@ private:
 
     /// do we have any object (forms/reports) which contains macros?
     bool                                                m_bHasAnyObjectWithMacros;
-    /// does our root storage have macro/script sub storages?
-    bool                                                m_bHasMacroStorages;
 
     /// true if setting the Modified flag of the document is currently locked
     bool                                                m_bModificationLock;
@@ -416,13 +414,6 @@ public:
         itself does *not* allow embedding macros.
     */
     bool    hasAnyObjectWithMacros() const { return m_bHasAnyObjectWithMacros; }
-
-    /** determines whether the document storage has sub storages used to store macros/scripts
-
-        Though the current version does not allow creating such documents, later versions will, so
-        we need to be prepared when we encounter them.
-    */
-    bool    hasMacroStorages() const { return m_bHasMacroStorages; }
 
     /** checks our document's macro execution mode, using the interaction handler as supplied with our
         load arguments

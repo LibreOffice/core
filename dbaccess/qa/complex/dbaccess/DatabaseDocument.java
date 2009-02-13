@@ -702,11 +702,12 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
         impl_startObservingEvents( "prepare for '" + context + "'" );
         databaseDoc = (XModel)UnoRuntime.queryInterface( XModel.class,
             loader.loadComponentFromURL( newURL, "_blank", 0, impl_getDefaultLoadArgs() ) );
-        impl_waitForEvent( m_globalEvents, "OnLoad", 5000 );
+        int previousOnLoadEventPos = impl_waitForEvent( m_globalEvents, "OnLoad", 5000 );
         // ... and another document ...
         String otherURL = impl_copyTempFile( databaseDoc.getURL() );
         XModel otherDoc = (XModel)UnoRuntime.queryInterface( XModel.class,
             loader.loadComponentFromURL( otherURL, "_blank", 0, impl_getDefaultLoadArgs() ) );
+        impl_waitForEvent( m_globalEvents, "OnLoad", 5000, previousOnLoadEventPos + 1 );
         impl_raise( otherDoc );
 
         // ... and switch between the two
@@ -715,6 +716,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
         impl_stopObservingEvents( m_globalEvents, new String[] { "OnUnfocus", "OnFocus" }, context );
 
         // cleanup
+        impl_startObservingEvents( "cleanup after '" + context + "'" );
         impl_closeDocument( databaseDoc );
         impl_closeDocument( otherDoc );
     }
@@ -789,7 +791,13 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
     }
 
     // --------------------------------------------------------------------------------------------------------
-    void impl_waitForEvent( Vector _eventQueue, String _expectedEvent, int _maxMilliseconds )
+    int impl_waitForEvent( Vector _eventQueue, String _expectedEvent, int _maxMilliseconds )
+    {
+        return impl_waitForEvent( _eventQueue, _expectedEvent, _maxMilliseconds, 0 );
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+    int impl_waitForEvent( Vector _eventQueue, String _expectedEvent, int _maxMilliseconds, int _firstQueueElementToCheck )
     {
         synchronized ( _eventQueue )
         {
@@ -797,11 +805,11 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
 
             while ( waitedMilliseconds < _maxMilliseconds )
             {
-                for ( int i=0; i<_eventQueue.size(); ++i )
+                for ( int i=_firstQueueElementToCheck; i<_eventQueue.size(); ++i )
                 {
                     if ( _expectedEvent.equals( _eventQueue.get(i) ) )
                         // found the event in the queue
-                        return;
+                        return i;
                 }
 
                 // wait a little, perhaps the event will still arrive
@@ -815,6 +823,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
         }
 
         failed( "expected event '" + _expectedEvent + "' did not arrive after " + _maxMilliseconds + " milliseconds" );
+        return -1;
     }
 
     // --------------------------------------------------------------------------------------------------------

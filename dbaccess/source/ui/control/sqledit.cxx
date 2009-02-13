@@ -66,9 +66,12 @@ OSqlEdit::OSqlEdit( OQueryTextView* pParent,  WinBits nWinStyle ) :
     m_timerInvalidate.Start();
 
     ImplSetFont();
-    // listen for change of Font Setting
+    // listen for change of Font and Color Settings
     StartListening(m_SourceViewConfig);
     StartListening(m_ColorConfig);
+
+    //#i97044#
+    EnableFocusSelectionHide( FALSE );
 }
 
 //------------------------------------------------------------------------------

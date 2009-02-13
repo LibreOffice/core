@@ -42,6 +42,7 @@ PACKAGE=org.openoffice.Office
 LOCALIZEDFILES= \
     Embedding.xcu           \
     ExtendedColorScheme.xcu \
+    Accelerators.xcu \
     DataAccess.xcu
     
 XCUFILES= \
@@ -62,5 +63,9 @@ ALLTAR: "$(PWD)$/$(MISC)$/$(EXTNAME)$/registry$/schema$/$(PACKAGEDIR)$/Embedding
     $(COPY) $< $@
 
 "$(PWD)$/$(MISC)$/$(EXTNAME)$/registry$/schema$/$(PACKAGEDIR)$/Paths.xcs" : $(SOLARXMLDIR)$/registry$/schema$/$(PACKAGEDIR)$/Paths.xcs
+    @@-$(MKDIRHIER) $(@:d)
+    $(COPY) $< $@
+    
+"$(PWD)$/$(MISC)$/$(EXTNAME)$/registry$/schema$/$(PACKAGEDIR)$/Accelerators.xcs": $(SOLARXMLDIR)$/registry$/schema$/$(PACKAGEDIR)$/Accelerators.xcs
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
