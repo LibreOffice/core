@@ -1034,7 +1034,7 @@ sub set_revision_in_pkginfo
     my $pkgversion = "SOLSPARCPKGVERSION";
     if ( $installer::globals::issolarisx86build ) { $pkgversion = "SOLIAPKGVERSION"; }
 
-    if ( $variables->{$pkgversion} )
+    if (( $variables->{$pkgversion} ) &&  ( $variables->{$pkgversion} ne "" ))
     {
         if ( $variables->{$pkgversion} ne "FINALVERSION" )
         {
