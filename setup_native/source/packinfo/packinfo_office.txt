@@ -190,6 +190,21 @@ packageversion = "%OOOPACKAGEVERSION"
 End
 
 Start
+module = "gid_Module_Oooimprovement"
+solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-oooimprovement"
+solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-core01"
+packagename = "%BASISPACKAGEPREFIX%OOOBASEVERSION-oooimprovement"
+freebsdrequires = "%BASISPACKAGEPREFIX%OOOBASEVERSION-core01"
+requires = "%BASISPACKAGEPREFIX%OOOBASEVERSION-core01"
+copyright = "1999-2009 by OpenOffice.org"
+solariscopyright = "solariscopyrightfile"
+vendor = "OpenOffice.org"
+description = "Usage tracking module for OpenOffice.org %OOOBASEVERSION"
+destpath = "/opt"
+packageversion = "%OOOPACKAGEVERSION"
+End
+
+Start
 module = "gid_Module_Optional_Testtool"
 solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-testtool"
 solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-core01"
