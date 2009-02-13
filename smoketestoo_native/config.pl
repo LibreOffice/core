@@ -67,9 +67,13 @@ $User_Path = "user" . $pathslash  . "registry" . $pathslash . "data" . $pathslas
 
 $User_Office_Path = $User_Path . "Office" . $pathslash;
 
+# \user\registry\data\org\openoffice\Office\OOoImprovement
+
+$OOoImprovement_Path = $User_Office_Path . "OOoImprovement" . $pathslash;
 
 $common_XML = "Common.xcu";
 $setup_XML = "Setup.xcu";
+$oooimprovement_XML = "Settings.xcu";
 
 ### main ###
 
@@ -104,11 +108,19 @@ print "patching config ... \n";
 if (!-d "$userinstalldir$User_Office_Path") {
     mkpath("$userinstalldir$User_Office_Path", 0, 0777);
 }
+if (!-d "$userinstalldir$OOoImprovement_Path") {
+    mkpath("$userinstalldir$OOoImprovement_Path", 0, 0777);
+}
 
 # copy Common.xcu
 
 print "cp $datapath$common_XML $userinstalldir$User_Office_Path$common_XML\n" if $is_debug;
 copy ("$datapath$common_XML", "$userinstalldir$User_Office_Path$common_XML");
+
+# copy OOoImprovement/Settings.xcu
+
+print "cp $datapath$oooimprovement_XML $userinstalldir$OOoImprovement_Path$oooimprovement_XML\n" if $is_debug;
+copy ("$datapath$oooimprovement_XML", "$userinstalldir$OOoImprovement_Path$oooimprovement_XML");
 
 # copy Setup.xcu
 
