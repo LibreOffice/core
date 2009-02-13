@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -477,7 +477,7 @@ void FmFormView::InsertControlContainer(const Reference< ::com::sun::star::awt::
             for( sal_uInt32 i = 0L; i < pPageView->PageWindowCount(); i++ )
             {
                 const SdrPageWindow& rPageWindow = *pPageView->GetPageWindow(i);
-
+        
                 if( rPageWindow.GetControlContainer( false ) == xCC )
                 {
                     pImpl->addWindow(rPageWindow);
@@ -498,14 +498,17 @@ void FmFormView::RemoveControlContainer(const Reference< ::com::sun::star::awt::
 }
 
 // -----------------------------------------------------------------------------
-void FmFormView::onBeginCompleteRedraw()
+SdrPaintWindow* FmFormView::BeginCompleteRedraw(OutputDevice* pOut)
 {
+    SdrPaintWindow* pPaintWindow = E3dView::BeginCompleteRedraw( pOut );
     pImpl->suspendTabOrderUpdate();
+    return pPaintWindow;
 }
 
 // -----------------------------------------------------------------------------
-void FmFormView::onEndCompleteRedraw()
+void FmFormView::EndCompleteRedraw(SdrPaintWindow& rPaintWindow)
 {
+    E3dView::EndCompleteRedraw( rPaintWindow );
     pImpl->resumeTabOrderUpdate();
 }
 
@@ -514,15 +517,15 @@ BOOL FmFormView::KeyInput(const KeyEvent& rKEvt, Window* pWin)
 {
     BOOL bDone = FALSE;
     const KeyCode& rKeyCode = rKEvt.GetKeyCode();
-    if  (   IsDesignMode()
+    if  (   IsDesignMode() 
         &&  rKeyCode.GetCode() == KEY_RETURN
         )
     {
         // RETURN alone enters grid controls, for keyboard accessibility
-        if  (   pWin
-            &&  !rKeyCode.IsShift()
-            &&  !rKeyCode.IsMod1()
-            &&  !rKeyCode.IsMod2()
+        if  (   pWin 
+            &&  !rKeyCode.IsShift() 
+            &&  !rKeyCode.IsMod1() 
+            &&  !rKeyCode.IsMod2() 
             )
         {
             FmFormObj* pObj = getMarkedGrid();

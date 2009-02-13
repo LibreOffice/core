@@ -1333,25 +1333,11 @@ void FmFormShell::SetControlActivationHandler( const Link& _rHdl )
 }
 
 //------------------------------------------------------------------------
-SdrUnoObj* FmFormShell::GetFormControl( const Reference< XControlModel >& _rxModel, const SdrView& _rView, const OutputDevice& _rDevice, Reference< XControl >& _out_rxControl ) const
+namespace
 {
-    if ( !_rxModel.is() )
-        return NULL;
-
-    FmFormModel* pModel = GetFormModel();
-    OSL_ENSURE( pModel, "FmFormShell::GetFormControl: no model!" );
-    if ( !pModel )
-        return NULL;
-
-    sal_uInt16 pageCount = pModel->GetPageCount();
-    for ( sal_uInt16 page = 0; page < pageCount; ++page )
+    SdrUnoObj* lcl_findUnoObject( const SdrObjList& _rObjList, const Reference< XControlModel >& _rxModel )
     {
-        SdrPage* pPage = pModel->GetPage( page );
-        OSL_ENSURE( pPage, "FmFormShell::GetFormControl: NULL page encountered!" );
-        if  ( !pPage )
-            continue;
-
-        SdrObjListIter aIter( *pPage );
+        SdrObjListIter aIter( _rObjList );
         while ( aIter.IsMore() )
         {
             SdrObject* pObject = aIter.Next();
@@ -1364,12 +1350,51 @@ SdrUnoObj* FmFormShell::GetFormControl( const Reference< XControlModel >& _rxMod
                 continue;
 
             if ( _rxModel == xControlModel )
-            {
-                _out_rxControl = pUnoObject->GetUnoControl( _rView, _rDevice );
                 return pUnoObject;
-            }
+        }
+        return NULL;
+    }
+}
+
+//------------------------------------------------------------------------
+SdrUnoObj* FmFormShell::GetFormControl( const Reference< XControlModel >& _rxModel, const SdrView& _rView, const OutputDevice& _rDevice, Reference< XControl >& _out_rxControl ) const
+{
+    if ( !_rxModel.is() )
+        return NULL;
+
+    // we can only retrieve controls for SdrObjects which belong to page which is actually displayed in the given view
+    SdrPageView* pPageView = _rView.GetSdrPageView();
+    SdrPage* pPage = pPageView ? pPageView->GetPage() : NULL;
+    OSL_ENSURE( pPage, "FmFormShell::GetFormControl: no page displayed in the given view!" );
+    if ( !pPage )
+        return NULL;
+
+    SdrUnoObj* pUnoObject = lcl_findUnoObject( *pPage, _rxModel );
+    if ( pUnoObject )
+    {
+        _out_rxControl = pUnoObject->GetUnoControl( _rView, _rDevice );
+        return pUnoObject;
+    }
+
+#if OSL_DEBUG_LEVEL > 0
+    // perhaps we are fed with a control model which lives on a page other than the one displayed
+    // in the given view. This is worth being reported as error, in non-product builds.
+    FmFormModel* pModel = GetFormModel();
+    if ( pModel )
+    {
+        sal_uInt16 pageCount = pModel->GetPageCount();
+        for ( sal_uInt16 page = 0; page < pageCount; ++page )
+        {
+            pPage = pModel->GetPage( page );
+            OSL_ENSURE( pPage, "FmFormShell::GetFormControl: NULL page encountered!" );
+            if  ( !pPage )
+                continue;
+
+            pUnoObject = lcl_findUnoObject( *pPage, _rxModel );
+            OSL_ENSURE( !pUnoObject, "FmFormShell::GetFormControl: the given control model belongs to a wrong page (displayed elsewhere)!" );
         }
     }
+#endif
 
     return NULL;
 }

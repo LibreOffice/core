@@ -38,9 +38,9 @@ using namespace connectivity;
 // -----------------------------------------------------------------------------
 OSkipDeletedSet::OSkipDeletedSet(IResultSetHelper* _pHelper)
     : m_pHelper(_pHelper)
+    ,m_bDeletedVisible(false)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "commontools", "Ocke.Janssen@sun.com", "OSkipDeletedSet::OSkipDeletedSet" );
-    m_bDeletedVisible = m_pHelper->deletedVisible();
     m_aBookmarksPositions.reserve(256);
 }
 // -----------------------------------------------------------------------------
