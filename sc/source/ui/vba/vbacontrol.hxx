@@ -35,40 +35,34 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/script/XDefaultProperty.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
+#include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/XWindowPeer.hpp>
-#include <org/openoffice/msforms/XControl.hpp>
+#include <ooo/vba/msforms/XControl.hpp>
 
 #include "vbahelper.hxx"
+#include "vbahelperinterface.hxx"
 
-typedef ::cppu::WeakImplHelper1< oo::msforms::XControl > ControlImpl_BASE;
+//typedef ::cppu::WeakImplHelper1< ov::msforms::XControl > ControlImpl_BASE;
+typedef InheritedHelperInterfaceImpl1< ov::msforms::XControl > ControlImpl_BASE;
 
 class ScVbaControl : public ControlImpl_BASE
 {
-/* this will cause error when the sheet is invisible.
 private:
-    css::uno::Reference< css::awt::XWindowPeer > m_xWindowPeer;
-*/
-private:
-    css::uno::Reference< css::awt::XWindowPeer > getWindowPeer( const css::uno::Reference< css::drawing::XControlShape >& xControlShape ) throw (css::uno::RuntimeException);
     com::sun::star::uno::Reference< com::sun::star::lang::XEventListener > m_xEventListener;
 protected:
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    std::auto_ptr< ov::AbstractGeometryAttributes > mpGeometryHelper;
     css::uno::Reference< css::beans::XPropertySet > m_xProps;
-    css::uno::Reference< css::drawing::XControlShape > m_xControlShape;
-protected:
-    ScVbaControl(){ m_xContext = 0; m_xProps = 0; m_xControlShape = 0; }
-    void SetControl( const css::uno::Reference< css::uno::XComponentContext > xContext,
-                const css::uno::Reference< css::drawing::XControlShape > xControlShape );
-    void SetControl( const css::uno::Reference< css::uno::XComponentContext > xContext,
-                const css::uno::Reference< css::beans::XPropertySet > xProps,
-                const css::uno::Reference< css::drawing::XControlShape > xControlShape );
+    css::uno::Reference< css::uno::XInterface > m_xControl;
+    css::uno::Reference< css::frame::XModel > m_xModel;
+
+    virtual css::uno::Reference< css::awt::XWindowPeer > getWindowPeer() throw (css::uno::RuntimeException);
 public:
-    ScVbaControl( const css::uno::Reference< css::uno::XComponentContext >& xContext,
-                    const css::uno::Reference< css::drawing::XControlShape >& xControlShape );
-    ScVbaControl( const css::uno::Reference< css::uno::XComponentContext >& xContext,
-                    const css::uno::Reference< css::beans::XPropertySet >& xProps,
-                    const css::uno::Reference< css::drawing::XControlShape > xControlShape );
+    ScVbaControl( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext,
+                    const css::uno::Reference< css::uno::XInterface >& xControl, const css::uno::Reference< css::frame::XModel >& xModel, ov::AbstractGeometryAttributes* pHelper );
     virtual ~ScVbaControl();
+    // This class will own the helper, so make sure it is allocated from
+    // the heap
+    void setGeometryHelper( ov::AbstractGeometryAttributes* pHelper );
     // XControl
     virtual sal_Bool SAL_CALL getEnabled() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setEnabled( sal_Bool _enabled ) throw (css::uno::RuntimeException);
@@ -82,9 +76,20 @@ public:
     virtual void SAL_CALL setLeft( double _left ) throw (css::uno::RuntimeException);
     virtual double SAL_CALL getTop() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setTop( double _top ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL SetFocus(  ) throw (css::uno::RuntimeException);
 
-    //remove resouce because org.openoffice.excel.XControl is a wrapper of com.sun.star.drawing.XControlShape
+    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getObject() throw (css::uno::RuntimeException);
+    virtual rtl::OUString SAL_CALL getControlSource() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setControlSource( const rtl::OUString& _controlsource ) throw (css::uno::RuntimeException);
+    virtual rtl::OUString SAL_CALL getRowSource() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setRowSource( const rtl::OUString& _rowsource ) throw (css::uno::RuntimeException);
+    virtual rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setName( const rtl::OUString& _name ) throw (css::uno::RuntimeException);
+    //remove resouce because ooo.vba.excel.XControl is a wrapper of com.sun.star.drawing.XControlShape
     virtual void removeResouce() throw( css::uno::RuntimeException );
+    //XHelperInterface
+    virtual rtl::OUString& getServiceImplName();
+    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 };
 
 
@@ -92,16 +97,15 @@ class ScVbaControlFactory
 {
 public:
     ScVbaControlFactory( const css::uno::Reference< css::uno::XComponentContext >& xContext,
-                    const css::uno::Reference< css::drawing::XControlShape >& xControlShape );
-    ScVbaControlFactory( const css::uno::Reference< css::uno::XComponentContext >& xContext,
-                    const css::uno::Reference< css::beans::XPropertySet >& xProps,
-                    const css::uno::Reference< css::drawing::XControlShape > xControlShape );
-    ScVbaControl* createControl( const sal_Int16 nClassID )  throw ( css::uno::RuntimeException );
+                    const css::uno::Reference< css::uno::XInterface >& xControl, const css::uno::Reference< css::frame::XModel >& xModel );
     ScVbaControl* createControl()  throw ( css::uno::RuntimeException );
+    ScVbaControl* createControl( const css::uno::Reference< css::uno::XInterface >& xParent )  throw ( css::uno::RuntimeException );
 private:
+    ScVbaControl* createControl( const css::uno::Reference< css::awt::XControl >&, const css::uno::Reference< css::uno::XInterface >&  )  throw ( css::uno::RuntimeException );
+    ScVbaControl* createControl( const css::uno::Reference< css::drawing::XControlShape >&, const css::uno::Reference< css::uno::XInterface >& )  throw ( css::uno::RuntimeException );
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
-    css::uno::Reference< css::beans::XPropertySet > m_xProps;
-    css::uno::Reference< css::drawing::XControlShape > m_xControlShape;
+    css::uno::Reference< css::uno::XInterface > m_xControl;
+    css::uno::Reference< css::frame::XModel > m_xModel;
 };
 
 #endif//SC_VBA_CONTROL_HXX

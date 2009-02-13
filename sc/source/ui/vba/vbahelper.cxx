@@ -37,6 +37,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/XIntrospection.hpp>
 
 #include <comphelper/processfactory.hxx>
 
@@ -57,9 +58,11 @@
 #include "tabvwsh.hxx"
 #include "transobj.hxx"
 #include "scmod.hxx"
-
+#include "vbashape.hxx"
+#include "unonames.hxx"
+#include "cellsuno.hxx"
 using namespace ::com::sun::star;
-using namespace ::org::openoffice;
+using namespace ::ooo::vba;
 
 #define POINTTO100THMILLIMETERFACTOR 35.27778
 void unoToSbxValue( SbxVariable* pVar, const uno::Any& aValue );
@@ -67,12 +70,24 @@ void unoToSbxValue( SbxVariable* pVar, const uno::Any& aValue );
 uno::Any sbxToUnoValue( SbxVariable* pVar );
 
 
-namespace org
+namespace ooo
 {
-namespace openoffice
+namespace vba
 {
 
 const double Millimeter::factor =  35.27778;
+
+uno::Reference< beans::XIntrospectionAccess >
+getIntrospectionAccess( const uno::Any& aObject ) throw (uno::RuntimeException)
+{
+    static uno::Reference< beans::XIntrospection > xIntrospection;
+    if( !xIntrospection.is() )
+    {
+        uno::Reference< lang::XMultiServiceFactory > xFactory( comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
+        xIntrospection.set( xFactory->createInstance( rtl::OUString::createFromAscii("com.sun.star.beans.Introspection") ), uno::UNO_QUERY_THROW );
+    }
+    return xIntrospection->inspect( aObject );
+}
 
 uno::Reference< script::XTypeConverter >
 getTypeConverter( const uno::Reference< uno::XComponentContext >& xContext ) throw (uno::RuntimeException)
@@ -215,11 +230,27 @@ dispatchRequests (uno::Reference< frame::XModel>& xModel,rtl::OUString & aUrl)
 }
 
 
+void dispatchExecute(css::uno::Reference< css::frame::XModel>& xModel, USHORT nSlot, SfxCallMode nCall)
+{
+    ScTabViewShell* pViewShell = getBestViewShell( xModel );
+    SfxViewFrame* pViewFrame = NULL;
+    if ( pViewShell )
+        pViewFrame = pViewShell->GetViewFrame();
+    if ( pViewFrame )
+    {
+        SfxDispatcher* pDispatcher = pViewFrame->GetDispatcher();
+        if( pDispatcher )
+        {
+            pDispatcher->Execute( nSlot , nCall );
+        }
+    }
+}
+
 void
 implnPaste()
 {
     PasteCellsWarningReseter resetWarningBox;
-    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
+    ScTabViewShell* pViewShell = getCurrentBestViewShell();
     if ( pViewShell )
     {
         pViewShell->PasteFromSystem();
@@ -515,6 +546,11 @@ void PrintOutHelper( const uno::Any& From, const uno::Any& To, const uno::Any& C
     //   of this method
 }
 
+ void PrintPreviewHelper( const css::uno::Any& /*EnableChanges*/, css::uno::Reference< css::frame::XModel >& xModel )
+{
+    dispatchExecute( xModel, SID_VIEWSHELL1 );
+}
+
 rtl::OUString getAnyAsString( const uno::Any& pvargItem ) throw ( uno::RuntimeException )
 {
     uno::Type aType = pvargItem.getValueType();
@@ -726,6 +762,66 @@ double PixelsToPoints( css::uno::Reference< css::awt::XDevice >& xDevice, double
 {
     double fConvertFactor = getPixelTo100thMillimeterConversionFactor( xDevice, bVertical );
     return (fPixels/fConvertFactor)/POINTTO100THMILLIMETERFACTOR;
+}
+
+ConcreteXShapeGeometryAttributes::ConcreteXShapeGeometryAttributes( const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::drawing::XShape >& xShape )
+{
+    m_xShape = new ScVbaShape( xContext, xShape );
+}
+
+#define VBA_LEFT "PositionX"
+#define VBA_TOP "PositionY"
+UserFormGeometryHelper::UserFormGeometryHelper( const uno::Reference< uno::XComponentContext >& /*xContext*/, const uno::Reference< awt::XControl >& xControl )
+{
+    mxModel.set( xControl->getModel(), uno::UNO_QUERY_THROW );
+}
+    double UserFormGeometryHelper::getLeft()
+    {
+    sal_Int32 nLeft = 0;
+    mxModel->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( VBA_LEFT ) ) ) >>= nLeft;
+    return Millimeter::getInPoints( nLeft );
+    }
+    void UserFormGeometryHelper::setLeft( double nLeft )
+    {
+        mxModel->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( VBA_LEFT ) ), uno::makeAny( Millimeter::getInHundredthsOfOneMillimeter( nLeft ) ) );
+    }
+    double UserFormGeometryHelper::getTop()
+    {
+    sal_Int32 nTop = 0;
+    mxModel->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(  VBA_TOP ) ) ) >>= nTop;
+    return Millimeter::getInPoints( nTop );
+    }
+    void UserFormGeometryHelper::setTop( double nTop )
+    {
+    mxModel->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(  VBA_TOP ) ), uno::makeAny( Millimeter::getInHundredthsOfOneMillimeter( nTop ) ) );
+    }
+    double UserFormGeometryHelper::getHeight()
+    {
+    sal_Int32 nHeight = 0;
+    mxModel->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(  SC_UNONAME_CELLHGT ) ) ) >>= nHeight;
+    return Millimeter::getInPoints( nHeight );
+    }
+    void UserFormGeometryHelper::setHeight( double nHeight )
+    {
+    mxModel->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(  SC_UNONAME_CELLHGT ) ), uno::makeAny( Millimeter::getInHundredthsOfOneMillimeter( nHeight ) ) );
+    }
+    double UserFormGeometryHelper::getWidth()
+    {
+    sal_Int32 nWidth = 0;
+    mxModel->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(  SC_UNONAME_CELLWID ) ) ) >>= nWidth;
+    return Millimeter::getInPoints( nWidth );
+    }
+    void UserFormGeometryHelper::setWidth( double nWidth)
+    {
+    mxModel->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(  SC_UNONAME_CELLWID ) ), uno::makeAny(  Millimeter::getInHundredthsOfOneMillimeter( nWidth ) ) );
+    }
+
+SfxItemSet*
+ScVbaCellRangeAccess::GetDataSet( ScCellRangeObj* pRangeObj )
+{
+    SfxItemSet* pDataSet = pRangeObj ? pRangeObj->GetCurrentDataSet( true ) : NULL ;
+    return pDataSet;
+
 }
 
 } // openoffice

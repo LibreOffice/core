@@ -30,13 +30,13 @@
 #ifndef SC_VBA_NAME_HXX
 #define SC_VBA_NAME_HXX
 
-#include <org/openoffice/excel/XName.hpp>
+#include <ooo/vba/excel/XName.hpp>
 #include <com/sun/star/sheet/XNamedRange.hpp>
 #include <com/sun/star/sheet/XNamedRanges.hpp>
 
 #include "vbahelperinterface.hxx"
 
-typedef InheritedHelperInterfaceImpl1< oo::excel::XName > NameImpl_BASE;
+typedef InheritedHelperInterfaceImpl1< ov::excel::XName > NameImpl_BASE;
 
 class ScVbaName : public NameImpl_BASE
 {
@@ -48,10 +48,10 @@ class ScVbaName : public NameImpl_BASE
 
 protected:
     virtual css::uno::Reference< css::frame::XModel >  getModel() { return mxModel; }
-    virtual css::uno::Reference< oo::excel::XWorksheet > getWorkSheet() throw (css::uno::RuntimeException);
+    virtual css::uno::Reference< ov::excel::XWorksheet > getWorkSheet() throw (css::uno::RuntimeException);
 
 public:
-    ScVbaName( const css::uno::Reference< oo::vba::XHelperInterface >& xParent,  const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::sheet::XNamedRange >& xName , const css::uno::Reference< css::sheet::XNamedRanges >& xNames , const css::uno::Reference< css::frame::XModel >& xModel );
+    ScVbaName( const css::uno::Reference< ov::XHelperInterface >& xParent,  const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::sheet::XNamedRange >& xName , const css::uno::Reference< css::sheet::XNamedRanges >& xNames , const css::uno::Reference< css::frame::XModel >& xModel );
     virtual ~ScVbaName();
 
     // Attributes
@@ -71,8 +71,8 @@ public:
     virtual void SAL_CALL setRefersToR1C1( const ::rtl::OUString &rRefersTo ) throw (css::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getRefersToR1C1Local() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setRefersToR1C1Local( const ::rtl::OUString &rRefersTo ) throw (css::uno::RuntimeException);
-    virtual css::uno::Reference< oo::excel::XRange > SAL_CALL getRefersToRange() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setRefersToRange( const css::uno::Reference< oo::excel::XRange > xRange ) throw (css::uno::RuntimeException);
+    virtual css::uno::Reference< ov::excel::XRange > SAL_CALL getRefersToRange() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setRefersToRange( const css::uno::Reference< ov::excel::XRange > xRange ) throw (css::uno::RuntimeException);
 
     // Methods
     virtual void SAL_CALL Delete() throw (css::uno::RuntimeException);

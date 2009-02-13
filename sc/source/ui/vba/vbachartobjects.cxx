@@ -33,7 +33,7 @@
 #include <com/sun/star/table/XTableChartsSupplier.hpp>
 #include <com/sun/star/table/XTableChart.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
-#include <org/openoffice/excel/XlChartType.hpp>
+#include <ooo/vba/excel/XlChartType.hpp>
 
 
 #include "vbachartobjects.hxx"
@@ -44,17 +44,17 @@
 #include <basic/sberrors.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::org::openoffice;
+using namespace ::ooo::vba;
 
 
 class ChartObjectEnumerationImpl : public EnumerationHelperImpl
 {
     uno::Reference< drawing::XDrawPageSupplier > xDrawPageSupplier;
-    uno::Reference< vba::XHelperInterface > xParent;
+    uno::Reference< XHelperInterface > xParent;
 
 public:
 
-    ChartObjectEnumerationImpl( const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XEnumeration >& xEnumeration, const uno::Reference< drawing::XDrawPageSupplier >& _xDrawPageSupplier, const uno::Reference< vba::XHelperInterface >& _xParent ) throw ( uno::RuntimeException ) : EnumerationHelperImpl( xContext, xEnumeration ), xDrawPageSupplier( _xDrawPageSupplier ), xParent( _xParent ) {}
+    ChartObjectEnumerationImpl( const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XEnumeration >& xEnumeration, const uno::Reference< drawing::XDrawPageSupplier >& _xDrawPageSupplier, const uno::Reference< XHelperInterface >& _xParent ) throw ( uno::RuntimeException ) : EnumerationHelperImpl( xContext, xEnumeration ), xDrawPageSupplier( _xDrawPageSupplier ), xParent( _xParent ) {}
     virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
     {
         uno::Reference< table::XTableChart > xTableChart( m_xEnumeration->nextElement(), uno::UNO_QUERY_THROW );
@@ -64,7 +64,7 @@ public:
 };
 
 
-ScVbaChartObjects::ScVbaChartObjects( const css::uno::Reference< oo::vba::XHelperInterface >& _xParent, const css::uno::Reference< css::uno::XComponentContext >& _xContext, const css::uno::Reference< css::table::XTableCharts >& _xTableCharts, const uno::Reference< drawing::XDrawPageSupplier >& _xDrawPageSupplier ) : ChartObjects_BASE(_xParent, _xContext, css::uno::Reference< css::container::XIndexAccess >( _xTableCharts, css::uno::UNO_QUERY ) ), xTableCharts( _xTableCharts ) , xDrawPageSupplier( _xDrawPageSupplier )
+ScVbaChartObjects::ScVbaChartObjects( const css::uno::Reference< ov::XHelperInterface >& _xParent, const css::uno::Reference< css::uno::XComponentContext >& _xContext, const css::uno::Reference< css::table::XTableCharts >& _xTableCharts, const uno::Reference< drawing::XDrawPageSupplier >& _xDrawPageSupplier ) : ChartObjects_BASE(_xParent, _xContext, css::uno::Reference< css::container::XIndexAccess >( _xTableCharts, css::uno::UNO_QUERY ) ), xTableCharts( _xTableCharts ) , xDrawPageSupplier( _xDrawPageSupplier )
 {
 
 }
@@ -191,7 +191,7 @@ ScVbaChartObjects::getServiceNames()
     if ( sNames.getLength() == 0 )
     {
         sNames.realloc( 1 );
-        sNames[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("org.openoffice.excel.ChartObjects") );
+        sNames[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.excel.ChartObjects") );
     }
     return sNames;
 }

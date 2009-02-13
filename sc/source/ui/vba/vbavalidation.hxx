@@ -31,18 +31,18 @@
 #define SC_VBA_VALIDATION_HXX
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <org/openoffice/excel/XValidation.hpp>
+#include <ooo/vba/excel/XValidation.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 #include "vbahelperinterface.hxx"
 
-typedef InheritedHelperInterfaceImpl1<oo::excel::XValidation > ValidationImpl_BASE;
+typedef InheritedHelperInterfaceImpl1<ov::excel::XValidation > ValidationImpl_BASE;
 
 class ScVbaValidation : public ValidationImpl_BASE
 {
     css::uno::Reference< css::table::XCellRange > m_xRange;
 
 public:
-    ScVbaValidation( const css::uno::Reference< oo::vba::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::table::XCellRange >& xRange ) : ValidationImpl_BASE( xParent, xContext ), m_xRange( xRange) {}
+    ScVbaValidation( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::table::XCellRange >& xRange ) : ValidationImpl_BASE( xParent, xContext ), m_xRange( xRange) {}
     // Attributes
     virtual ::sal_Bool SAL_CALL getIgnoreBlank() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setIgnoreBlank( ::sal_Bool _ignoreblank ) throw (css::uno::RuntimeException);

@@ -31,12 +31,12 @@
 #include <vector>
 
 using namespace com::sun::star;
-using namespace org::openoffice;
+using namespace ooo::vba;
 
 
 const static rtl::OUString LABEL( RTL_CONSTASCII_USTRINGPARAM("Label") );
 const static rtl::OUString STATE( RTL_CONSTASCII_USTRINGPARAM("State") );
-ScVbaRadioButton::ScVbaRadioButton( const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< css::drawing::XControlShape >& xControlShape ) : RadioButtonImpl_BASE( xContext, xControlShape )
+ScVbaRadioButton::ScVbaRadioButton( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< uno::XInterface >& xControl, const uno::Reference< frame::XModel >& xModel, AbstractGeometryAttributes* pGeomHelper ) : RadioButtonImpl_BASE( xParent, xContext, xControl, xModel, pGeomHelper )
 {
 }
 
@@ -55,22 +55,53 @@ ScVbaRadioButton::setCaption( const rtl::OUString& _caption ) throw (::com::sun:
     m_xProps->setPropertyValue( LABEL, uno::makeAny( _caption ) );
 }
 
-sal_Bool SAL_CALL
+uno::Any SAL_CALL
 ScVbaRadioButton::getValue() throw (css::uno::RuntimeException)
 {
-    sal_Bool bValue = sal_False;
     sal_Int16 nValue = -1;
     m_xProps->getPropertyValue( STATE ) >>= nValue;
     if( nValue != 0 )
-        bValue = sal_True;
-    return bValue;
+        nValue = -1;
+//    return uno::makeAny( nValue );
+// I must be missing something MSO says value should be -1 if selected, 0 if not
+// selected
+    return uno::makeAny( ( nValue == -1 ) ? sal_True : sal_False );
+
 }
 
 void SAL_CALL
-ScVbaRadioButton::setValue( sal_Bool _value ) throw (css::uno::RuntimeException)
+ScVbaRadioButton::setValue( const uno::Any& _value ) throw (uno::RuntimeException)
 {
     sal_Int16 nValue = 0;
-    if( _value )
+    sal_Bool bValue = sal_False;
+    if( _value >>= nValue )
+    {
+        if( nValue == -1)
         nValue = 1;
+    }
+    else if ( _value >>= bValue )
+    {
+        if ( bValue )
+            nValue = 1;
+    }
     m_xProps->setPropertyValue( STATE, uno::makeAny( nValue ) );
+}
+
+rtl::OUString&
+ScVbaRadioButton::getServiceImplName()
+{
+    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaRadioButton") );
+    return sImplName;
+}
+
+uno::Sequence< rtl::OUString >
+ScVbaRadioButton::getServiceNames()
+{
+    static uno::Sequence< rtl::OUString > aServiceNames;
+    if ( aServiceNames.getLength() == 0 )
+    {
+        aServiceNames.realloc( 1 );
+        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.msforms.RadioButton" ) );
+    }
+    return aServiceNames;
 }

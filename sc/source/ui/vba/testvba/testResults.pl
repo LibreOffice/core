@@ -1,10 +1,11 @@
 #!/usr/bin/perl -w
-
+use File::Temp qw/ tempfile tempdir /;
 use File::Basename;
 use File::stat;
 use File::Copy;
+
 my $binDir = dirname($0);
-my $timestampclean= "$binDir/timestampsClean.pl";
+my $timestampclean= "perl $binDir/timestampsClean.pl";
 #sub gen_diff($)
 
 sub testLog
@@ -19,8 +20,11 @@ sub testLog
    $filename = "$logdir/$filename";
    print "processing $testfile $filename\n";
    if ( -f $filename )  {
-      #print "diffing\n";
-      my $tmpFile = "/tmp/gen_diff";
+      my $tmpFile;
+      $dir = tempdir( CLEANUP => 1 );
+      ($fh, $tmpFile) = tempfile( DIR => $dir );
+      close($fh);
+      #
       my $status = system("diff -U 0 -p $testfile $filename |  $timestampclean > $tmpFile");
       my $info = stat($tmpFile) or die "no $tmpFile: $!";
       if ( ($status >>=8) == 0 &&  ( $info->size == 0)  ) {

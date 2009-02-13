@@ -29,7 +29,7 @@
  ************************************************************************/
 #include "vbacomment.hxx"
 
-#include <org/openoffice/excel/XlCreator.hpp>
+#include <ooo/vba/excel/XlCreator.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XSheetAnnotationAnchor.hpp>
 #include <com/sun/star/sheet/XSheetAnnotationsSupplier.hpp>
@@ -42,10 +42,10 @@
 #include "vbacomments.hxx"
 
 
-using namespace ::org::openoffice;
+using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-ScVbaComment::ScVbaComment( const uno::Reference< vba::XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< table::XCellRange >& xRange ) throw( lang::IllegalArgumentException )
+ScVbaComment::ScVbaComment( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< table::XCellRange >& xRange ) throw( lang::IllegalArgumentException )
 : ScVbaComment_BASE( xParent, xContext ), mxRange( xRange )
 {
     if  ( !xRange.is() )
@@ -103,7 +103,7 @@ ScVbaComment::getCommentByIndex( sal_Int32 Index ) throw (uno::RuntimeException)
 {
     uno::Reference< container::XIndexAccess > xIndexAccess( getAnnotations(), uno::UNO_QUERY_THROW );
     // parent is sheet ( parent of the range which is the parent of the comment )
-    uno::Reference< vba::XCollection > xColl(  new ScVbaComments( getParent()->getParent(), mxContext, xIndexAccess ) );
+    uno::Reference< XCollection > xColl(  new ScVbaComments( getParent()->getParent(), mxContext, xIndexAccess ) );
 
     return uno::Reference< excel::XComment > ( xColl->Item( uno::makeAny( Index ), uno::Any() ), uno::UNO_QUERY_THROW );
  }
@@ -213,7 +213,7 @@ ScVbaComment::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("org.openoffice.excel.ScVbaComment" ) );
+        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.excel.ScVbaComment" ) );
     }
     return aServiceNames;
 }

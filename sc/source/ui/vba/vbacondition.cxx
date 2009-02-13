@@ -29,18 +29,18 @@
  ************************************************************************/
 
 #include "vbacondition.hxx"
-#include <org/openoffice/excel/XlFormatConditionOperator.hpp>
-#include <org/openoffice/excel/XFormatCondition.hpp>
+#include <ooo/vba/excel/XlFormatConditionOperator.hpp>
+#include <ooo/vba/excel/XFormatCondition.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>
 
-using namespace ::org::openoffice;
+using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
 const sal_Int32 ISFORMULA = 98765432;
 
 template< typename Ifc1 >
-ScVbaCondition< Ifc1 >::ScVbaCondition(  const uno::Reference< vba::XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< sheet::XSheetCondition >& _xSheetCondition ) : ScVbaCondition_BASE( xParent, xContext ), mxSheetCondition( _xSheetCondition )
+ScVbaCondition< Ifc1 >::ScVbaCondition(  const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< sheet::XSheetCondition >& _xSheetCondition ) : ScVbaCondition_BASE( xParent, xContext ), mxSheetCondition( _xSheetCondition )
 {
     mxAddressable.set( xParent, uno::UNO_QUERY_THROW );
 }

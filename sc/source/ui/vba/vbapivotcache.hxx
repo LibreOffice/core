@@ -33,16 +33,16 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/sheet/XDataPilotTable.hpp>
 
-#include <org/openoffice/excel/XPivotCache.hpp>
+#include <ooo/vba/excel/XPivotCache.hpp>
 #include "vbahelperinterface.hxx"
 
-typedef InheritedHelperInterfaceImpl1<oo::excel::XPivotCache > PivotCacheImpl_BASE;
+typedef InheritedHelperInterfaceImpl1<ov::excel::XPivotCache > PivotCacheImpl_BASE;
 
 class ScVbaPivotCache : public PivotCacheImpl_BASE
 {
     css::uno::Reference< css::sheet::XDataPilotTable > m_xTable;
 public:
-    ScVbaPivotCache( const css::uno::Reference< oo::vba::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::sheet::XDataPilotTable >& xTable );
+    ScVbaPivotCache( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::sheet::XDataPilotTable >& xTable );
     virtual void SAL_CALL Refresh() throw (css::uno::RuntimeException);
     // XHelperInterface
     virtual rtl::OUString& getServiceImplName();

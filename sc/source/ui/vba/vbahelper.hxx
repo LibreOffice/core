@@ -31,20 +31,25 @@
 #define SC_VBA_HELPER_HXX
 
 #include <com/sun/star/drawing/XShape.hpp>
+#include <com/sun/star/beans/XIntrospectionAccess.hpp>
 #include <com/sun/star/script/BasicErrorException.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/XDevice.hpp>
 #include <basic/sberrors.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/frame/XModel.hpp>
 #include <docsh.hxx>
+#include <sfx2/dispatch.hxx>
+#include <ooo/vba/msforms/XShape.hpp>
+#include "cellsuno.hxx"
 
 namespace css = ::com::sun::star;
 
-namespace org
+namespace ooo
 {
-    namespace openoffice
+    namespace vba
     {
         template < class T >
         css::uno::Reference< T > getXSomethingFromArgs( css::uno::Sequence< css::uno::Any > const & args, sal_Int32 nPos, bool bCanBeNull = true ) throw (css::lang::IllegalArgumentException)
@@ -56,10 +61,12 @@ namespace org
                 throw css::lang::IllegalArgumentException();
             return aSomething;
         }
+        css::uno::Reference< css::beans::XIntrospectionAccess > getIntrospectionAccess( const css::uno::Any& aObject ) throw (css::uno::RuntimeException);
         css::uno::Reference< css::script::XTypeConverter > getTypeConverter( const css::uno::Reference< css::uno::XComponentContext >& xContext ) throw (css::uno::RuntimeException);
 
         void dispatchRequests (css::uno::Reference< css::frame::XModel>& xModel,rtl::OUString & aUrl) ;
         void dispatchRequests (css::uno::Reference< css::frame::XModel>& xModel,rtl::OUString & aUrl, css::uno::Sequence< css::beans::PropertyValue >& sProps ) ;
+        void dispatchExecute(css::uno::Reference< css::frame::XModel>& xModel, USHORT nSlot, SfxCallMode nCall = SFX_CALLMODE_SYNCHRON );
         void implnCopy();
         void implnPaste();
         void implnCut();
@@ -79,12 +86,20 @@ namespace org
         // contains an empty object reference
         const css::uno::Any& aNULL();
         void PrintOutHelper( const css::uno::Any& From, const css::uno::Any& To, const css::uno::Any& Copies, const css::uno::Any& Preview, const css::uno::Any& ActivePrinter, const css::uno::Any& PrintToFile, const css::uno::Any& Collate, const css::uno::Any& PrToFileName, css::uno::Reference< css::frame::XModel >& xModel, sal_Bool bSelection  );
+        void PrintPreviewHelper( const css::uno::Any& EnableChanges, css::uno::Reference< css::frame::XModel >& xModel );
 
         rtl::OUString getAnyAsString( const css::uno::Any& pvargItem ) throw ( css::uno::RuntimeException );
         rtl::OUString VBAToRegexp(const rtl::OUString &rIn, bool bForLike = false); // needs to be in an uno service ( already this code is duplicated in basic )
     double getPixelTo100thMillimeterConversionFactor( css::uno::Reference< css::awt::XDevice >& xDevice, sal_Bool bVertical);
     double PointsToPixels( css::uno::Reference< css::awt::XDevice >& xDevice, double fPoints, sal_Bool bVertical);
     double PixelsToPoints( css::uno::Reference< css::awt::XDevice >& xDevice, double fPoints, sal_Bool bVertical);
+
+
+class ScVbaCellRangeAccess
+{
+public:
+    static SfxItemSet* GetDataSet( ScCellRangeObj* pRangeObj );
+};
 
 class Millimeter
 {
@@ -136,6 +151,80 @@ public:
         return points;
     }
 };
+
+class AbstractGeometryAttributes // probably should replace the ShapeHelper below
+{
+public:
+    virtual ~AbstractGeometryAttributes() {}
+    virtual double getLeft() = 0;
+    virtual void setLeft( double ) = 0;
+    virtual double getTop() = 0;
+    virtual void setTop( double ) = 0;
+    virtual double getHeight() = 0;
+    virtual void setHeight( double ) = 0;
+    virtual double getWidth() = 0;
+    virtual void setWidth( double ) = 0;
+};
+
+class ConcreteXShapeGeometryAttributes : public AbstractGeometryAttributes
+{
+public:
+    css::uno::Reference< ooo::vba::msforms::XShape > m_xShape;
+    ConcreteXShapeGeometryAttributes( const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::drawing::XShape >& xShape );
+    virtual double getLeft()
+    {
+        return m_xShape->getLeft();
+    }
+    virtual void setLeft( double nLeft )
+    {
+        m_xShape->setLeft( nLeft );
+    }
+    virtual double getTop()
+    {
+        return m_xShape->getTop();
+    }
+    virtual void setTop( double nTop )
+    {
+        m_xShape->setTop( nTop );
+    }
+
+    virtual double getHeight()
+    {
+        return m_xShape->getHeight();
+    }
+    virtual void setHeight( double nHeight )
+    {
+        m_xShape->setHeight( nHeight );
+    }
+    virtual double getWidth()
+    {
+        return m_xShape->getWidth();
+    }
+    virtual void setWidth( double nWidth)
+    {
+        m_xShape->setHeight( nWidth );
+    }
+
+
+};
+#define VBA_LEFT "PositionX"
+#define VBA_TOP "PositionY"
+class UserFormGeometryHelper : public AbstractGeometryAttributes
+{
+
+    css::uno::Reference< css::beans::XPropertySet > mxModel;
+public:
+    UserFormGeometryHelper( const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::awt::XControl >& xControl );
+    virtual double getLeft();
+    virtual void setLeft( double nLeft );
+    virtual double getTop();
+    virtual void setTop( double nTop );
+    virtual double getHeight();
+    virtual void setHeight( double nHeight );
+    virtual double getWidth();
+    virtual void setWidth( double nWidth);
+};
+
 class ShapeHelper
 {
 protected:
@@ -250,7 +339,7 @@ public:
     } // openoffice
 } // org
 
-namespace oo = org::openoffice;
+namespace ov = ooo::vba;
 
 #ifdef DEBUG
 #  define SC_VBA_FIXME(a) OSL_TRACE( a )

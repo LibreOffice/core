@@ -31,12 +31,12 @@
 #define SC_VBA_OLEOBJECTS_HXX
 
 #include <cppuhelper/implbase1.hxx>
-#include <org/openoffice/excel/XOLEObjects.hpp>
+#include <ooo/vba/excel/XOLEObjects.hpp>
 
 #include "vbacollectionimpl.hxx"
 #include "vbahelper.hxx"
 
-typedef CollTestImplHelper< oo::excel::XOLEObjects > OLEObjectsImpl_BASE;
+typedef CollTestImplHelper< ov::excel::XOLEObjects > OLEObjectsImpl_BASE;
 
 class ScVbaOLEObjects : public OLEObjectsImpl_BASE
 {
@@ -45,7 +45,7 @@ protected:
     virtual rtl::OUString& getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 public:
-    ScVbaOLEObjects( const css::uno::Reference< oo::vba::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext,
+    ScVbaOLEObjects( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext,
                     const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess );
 
     // XEnumerationAccess

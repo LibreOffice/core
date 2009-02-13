@@ -33,7 +33,7 @@
 
 
 using namespace ::com::sun::star;
-using namespace ::org::openoffice;
+using namespace ::ooo::vba;
 
 /** Standard EGA colors, bright. */
 #define EXC_PALETTE_EGA_COLORS_LIGHT \

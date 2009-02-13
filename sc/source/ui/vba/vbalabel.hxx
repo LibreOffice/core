@@ -30,20 +30,27 @@
 #ifndef SC_VBA_LABEL_HXX
 #define SC_VBA_LABEL_HXX
 #include <cppuhelper/implbase1.hxx>
-#include <org/openoffice/msforms/XLabel.hpp>
+#include <ooo/vba/msforms/XLabel.hpp>
 
 #include "vbacontrol.hxx"
 #include "vbahelper.hxx"
+#include <cppuhelper/implbase2.hxx>
 
-typedef cppu::ImplInheritanceHelper1< ScVbaControl, oo::msforms::XLabel > LabelImpl_BASE;
+typedef cppu::ImplInheritanceHelper2< ScVbaControl, ov::msforms::XLabel, css::script::XDefaultProperty  > LabelImpl_BASE;
 
 class ScVbaLabel : public LabelImpl_BASE
 {
 public:
-    ScVbaLabel( const css::uno::Reference< css::uno::XComponentContext >& xContext,
-                    const css::uno::Reference< css::drawing::XControlShape >& xControlShape );
+    ScVbaLabel( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::uno::XInterface >& xControl, const css::uno::Reference< css::frame::XModel >& xModel, ov::AbstractGeometryAttributes* pGeomHelper  );
    // Attributes
+    virtual css::uno::Any SAL_CALL getValue() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setValue( const css::uno::Any& _value ) throw (css::uno::RuntimeException);
     virtual rtl::OUString SAL_CALL getCaption() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setCaption( const rtl::OUString& _caption ) throw (css::uno::RuntimeException);
+    //XHelperInterface
+    virtual rtl::OUString& getServiceImplName();
+    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
+    // XDefaultProperty
+    rtl::OUString SAL_CALL getDefaultPropertyName(  ) throw (css::uno::RuntimeException) { return ::rtl::OUString::createFromAscii("Value"); }
 };
 #endif //SC_VBA_LABEL_HXX

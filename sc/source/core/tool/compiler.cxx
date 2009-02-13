@@ -366,6 +366,32 @@ void ScCompiler::DeInit()
     }
 }
 
+bool ScCompiler::IsEnglishSymbol( const String& rName )
+{
+    // function names are always case-insensitive
+    String aUpper( ScGlobal::pCharClass->upper( rName ) );
+
+    // 1. built-in function name
+    OpCode eOp = ScCompiler::GetEnglishOpCode( aUpper );
+    if ( eOp != ocNone )
+    {
+        return true;
+    }
+    // 2. old add in functions
+    USHORT nIndex;
+    if ( ScGlobal::GetFuncCollection()->SearchFunc( aUpper, nIndex ) )
+    {
+        return true;
+    }
+
+    // 3. new (uno) add in functions
+    String aIntName(ScGlobal::GetAddInCollection()->FindFunction( aUpper, FALSE ));
+    if (aIntName.Len())
+    {
+        return true;
+    }
+    return false;       // no valid function name
+}
 
 // static
 void ScCompiler::InitCharClassEnglish()

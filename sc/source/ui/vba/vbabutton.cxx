@@ -31,11 +31,11 @@
 #include <vector>
 
 using namespace com::sun::star;
-using namespace org::openoffice;
+using namespace ooo::vba;
 
 
 const static rtl::OUString LABEL( RTL_CONSTASCII_USTRINGPARAM("Label") );
-ScVbaButton::ScVbaButton( const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< css::drawing::XControlShape >& xControlShape ) : ButtonImpl_BASE( xContext, xControlShape )
+ScVbaButton::ScVbaButton( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< uno::XInterface >& xControl, const uno::Reference< frame::XModel >& xModel, AbstractGeometryAttributes* pGeomHelper ) : ButtonImpl_BASE( xParent, xContext, xControl, xModel, pGeomHelper )
 {
 }
 
@@ -52,4 +52,23 @@ void SAL_CALL
 ScVbaButton::setCaption( const rtl::OUString& _caption ) throw (::com::sun::star::uno::RuntimeException)
 {
     m_xProps->setPropertyValue( LABEL, uno::makeAny( _caption ) );
+}
+
+rtl::OUString&
+ScVbaButton::getServiceImplName()
+{
+    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaButton") );
+    return sImplName;
+}
+
+uno::Sequence< rtl::OUString >
+ScVbaButton::getServiceNames()
+{
+    static uno::Sequence< rtl::OUString > aServiceNames;
+    if ( aServiceNames.getLength() == 0 )
+    {
+        aServiceNames.realloc( 1 );
+        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.msforms.Button" ) );
+    }
+    return aServiceNames;
 }

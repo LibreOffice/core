@@ -33,16 +33,16 @@
 #include "vbashaperange.hxx"
 #include "vbashape.hxx"
 
-using namespace ::org::openoffice;
+using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
 class VbShapeRangeEnumHelper : public EnumerationHelper_BASE
 {
-        uno::Reference< vba::XCollection > m_xParent;
+        uno::Reference< XCollection > m_xParent;
         uno::Reference<container::XIndexAccess > m_xIndexAccess;
         sal_Int32 nIndex;
 public:
-    VbShapeRangeEnumHelper( const uno::Reference< vba::XCollection >& xParent,  const uno::Reference< container::XIndexAccess >& xIndexAccess ) : m_xParent( xParent ), m_xIndexAccess( xIndexAccess ), nIndex( 0 ) {}
+    VbShapeRangeEnumHelper( const uno::Reference< XCollection >& xParent,  const uno::Reference< container::XIndexAccess >& xIndexAccess ) : m_xParent( xParent ), m_xIndexAccess( xIndexAccess ), nIndex( 0 ) {}
         virtual ::sal_Bool SAL_CALL hasMoreElements(  ) throw (uno::RuntimeException)
         {
                 return ( nIndex < m_xIndexAccess->getCount() );
@@ -57,7 +57,7 @@ public:
 
 };
 
-ScVbaShapeRange::ScVbaShapeRange( const uno::Reference< vba::XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XIndexAccess >& xShapes, const uno::Reference< drawing::XDrawPage >& xDrawPage ) : ScVbaShapeRange_BASE( xParent, xContext, xShapes ), m_xDrawPage( xDrawPage ), m_nShapeGroupCount(0)
+ScVbaShapeRange::ScVbaShapeRange( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XIndexAccess >& xShapes, const uno::Reference< drawing::XDrawPage >& xDrawPage ) : ScVbaShapeRange_BASE( xParent, xContext, xShapes ), m_xDrawPage( xDrawPage ), m_nShapeGroupCount(0)
 {
 }
 
@@ -146,7 +146,7 @@ ScVbaShapeRange:: createCollectionObject( const css::uno::Any& aSource )
     uno::Reference< drawing::XShape > xShape( aSource, uno::UNO_QUERY_THROW );
     // #TODO  #FIXME Shape parent should always be the sheet the shapes belong
     // to
-    uno::Reference< msforms::XShape > xVbShape( new ScVbaShape( uno::Reference< vba::XHelperInterface >(), mxContext, xShape, getShapes(), ScVbaShape::getType( xShape ) ) );
+    uno::Reference< msforms::XShape > xVbShape( new ScVbaShape( uno::Reference< XHelperInterface >(), mxContext, xShape, getShapes(), ScVbaShape::getType( xShape ) ) );
         return uno::makeAny( xVbShape );
 }
 
@@ -164,7 +164,7 @@ ScVbaShapeRange::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("org.openoffice.msform.ShapeRange" ) );
+        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.msform.ShapeRange" ) );
     }
     return aServiceNames;
 }

@@ -31,12 +31,12 @@
 #define SC_VBA_XCOLORFORMAT_HXX
 
 #include <com/sun/star/drawing/XShape.hpp>
-#include <org/openoffice/msforms/XColorFormat.hpp>
-#include <org/openoffice/msforms/XFillFormat.hpp>
+#include <ooo/vba/msforms/XColorFormat.hpp>
+#include <ooo/vba/msforms/XFillFormat.hpp>
 #include "vbahelperinterface.hxx"
 #include "vbafillformat.hxx"
 
-typedef InheritedHelperInterfaceImpl1< oo::msforms::XColorFormat > ScVbaColorFormat_BASE;
+typedef InheritedHelperInterfaceImpl1< ov::msforms::XColorFormat > ScVbaColorFormat_BASE;
 
 class ColorFormatType
 {
@@ -104,7 +104,7 @@ struct MsoColorIndizes
 class ScVbaColorFormat : public ScVbaColorFormat_BASE
 {
 private:
-    css::uno::Reference< oo::vba::XHelperInterface > m_xInternalParent;
+    css::uno::Reference< ov::XHelperInterface > m_xInternalParent;
     css::uno::Reference< css::drawing::XShape > m_xShape;
     css::uno::Reference< css::beans::XPropertySet > m_xPropertySet;
     ScVbaFillFormat *m_pFillFormat;
@@ -115,7 +115,7 @@ protected:
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
     void setColorFormat( sal_Int16 nType );
 public:
-    ScVbaColorFormat( const css::uno::Reference< oo::vba::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< oo::vba::XHelperInterface > xInternalParent, const css::uno::Reference< css::drawing::XShape > xShape, const sal_Int16 nColorFormatType );
+    ScVbaColorFormat( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< ov::XHelperInterface > xInternalParent, const css::uno::Reference< css::drawing::XShape > xShape, const sal_Int16 nColorFormatType );
 
     // Attributes
     virtual sal_Int32 SAL_CALL getRGB() throw (css::uno::RuntimeException);

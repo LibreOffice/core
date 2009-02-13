@@ -149,6 +149,13 @@ public:
                         const SvxBoxItem& rOuter, const SvxBoxInfoItem& rInner );
 };
 
+namespace ooo
+{
+    namespace vba {
+    class ScVbaCellRangeAccess;  // Vba Helper class
+    }
+}
+
 class SC_DLLPUBLIC ScCellRangesBase : public com::sun::star::beans::XPropertySet,
                          public com::sun::star::beans::XMultiPropertySet,
                          public com::sun::star::beans::XPropertyState,
@@ -168,8 +175,7 @@ class SC_DLLPUBLIC ScCellRangesBase : public com::sun::star::beans::XPropertySet
 {
     friend class ScTabViewObj;      // fuer select()
     friend class ScTableSheetObj;   // fuer createCursorByRange()
-    friend class NumFormatHelper;   // VBA helper Class that helps manipulate format data
-    friend class ScVbaRange;    //Main VBA helper class for Range
+     friend class ooo::vba::ScVbaCellRangeAccess;
 
 private:
     SfxItemPropertySet      aPropSet;

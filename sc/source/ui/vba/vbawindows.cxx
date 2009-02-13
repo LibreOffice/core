@@ -40,16 +40,16 @@
 //#include "vbaworkbook.hxx"
 
 using namespace ::com::sun::star;
-using namespace ::org::openoffice;
+using namespace ::ooo::vba;
 
 typedef  std::hash_map< rtl::OUString,
 sal_Int32, ::rtl::OUStringHash,
 ::std::equal_to< ::rtl::OUString > > NameIndexHash;
 
 
-uno::Reference< vba::XHelperInterface > lcl_createWorkbookHIParent( const uno::Reference< frame::XModel >& xModel, const uno::Reference< uno::XComponentContext >& xContext )
+uno::Reference< XHelperInterface > lcl_createWorkbookHIParent( const uno::Reference< frame::XModel >& xModel, const uno::Reference< uno::XComponentContext >& xContext )
 {
-    return new ScVbaWorkbook( uno::Reference< vba::XHelperInterface >( ScVbaGlobals::getGlobalsImpl( xContext )->getApplication(), uno::UNO_QUERY_THROW ), xContext,  xModel );
+    return new ScVbaWorkbook( uno::Reference< XHelperInterface >( ScVbaGlobals::getGlobalsImpl( xContext )->getApplication(), uno::UNO_QUERY_THROW ), xContext,  xModel );
 }
 
 uno::Any ComponentToWindow( const uno::Any& aSource, uno::Reference< uno::XComponentContext > & xContext )
@@ -139,7 +139,7 @@ public:
             {
                 m_windows.push_back( xNext );
                 uno::Reference< frame::XModel > xModel( xNext, uno::UNO_QUERY_THROW ); // that the spreadsheetdocument is a xmodel is a given
-                uno::Reference< vba::XHelperInterface > xTemp;  // temporary needed for g++ 3.3.5
+                uno::Reference< XHelperInterface > xTemp;  // temporary needed for g++ 3.3.5
                 ScVbaWindow window( xTemp,  m_xContext, xModel );
                 rtl::OUString sCaption;
                 window.getCaption() >>= sCaption;
@@ -208,7 +208,7 @@ public:
 };
 
 
-ScVbaWindows::ScVbaWindows( const uno::Reference< oo::vba::XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< container::XIndexAccess >& xIndexAccess  ):  ScVbaWindows_BASE( xParent, xContext, xIndexAccess )
+ScVbaWindows::ScVbaWindows( const uno::Reference< ov::XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< container::XIndexAccess >& xIndexAccess  ):  ScVbaWindows_BASE( xParent, xContext, xIndexAccess )
 {
 }
 
@@ -230,11 +230,11 @@ ScVbaWindows::getElementType() throw (uno::RuntimeException)
     return excel::XWindows::static_type(0);
 }
 
-uno::Reference< vba::XCollection >
+uno::Reference< XCollection >
 ScVbaWindows::Windows( const css::uno::Reference< css::uno::XComponentContext >& xContext )
 {
     uno::Reference< container::XIndexAccess > xIndex( new WindowsAccessImpl( xContext ) );
-    return  new ScVbaWindows( uno::Reference< vba::XHelperInterface >( ScVbaGlobals::getGlobalsImpl( xContext )->getApplication(), uno::UNO_QUERY_THROW ), xContext , xIndex );
+    return  new ScVbaWindows( uno::Reference< XHelperInterface >( ScVbaGlobals::getGlobalsImpl( xContext )->getApplication(), uno::UNO_QUERY_THROW ), xContext , xIndex );
 }
 
 void SAL_CALL
@@ -258,7 +258,7 @@ ScVbaWindows::getServiceNames()
     if ( sNames.getLength() == 0 )
     {
         sNames.realloc( 1 );
-        sNames[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("org.openoffice.excel.Windows") );
+        sNames[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.excel.Windows") );
     }
     return sNames;
 }

@@ -29,8 +29,8 @@
  ************************************************************************/
 #ifndef SC_VBA_CHARTOBJECTS_HXX
 #define SC_VBA_CHARTOBJECTS_HXX
-#include <org/openoffice/excel/XChartObjects.hpp>
-#include <org/openoffice/excel/XChartObject.hpp>
+#include <ooo/vba/excel/XChartObjects.hpp>
+#include <ooo/vba/excel/XChartObject.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/table/XTableCharts.hpp>
@@ -40,10 +40,10 @@
 #include "vbahelper.hxx"
 #include <hash_map>
 
-typedef CollTestImplHelper< oo::excel::XChartObjects > ChartObjects_BASE;
+typedef CollTestImplHelper< ov::excel::XChartObjects > ChartObjects_BASE;
 /* #TODO see if this hash table is 'really' necessary
 typedef ::std::hash_map< ::rtl::OUString,
-css::uno::Reference< oo::excel::XChartObject >,
+css::uno::Reference< ov::excel::XChartObject >,
     ::rtl::OUStringHash,
     ::std::equal_to< ::rtl::OUString > > aHashTable;
 */
@@ -54,9 +54,9 @@ class ScVbaChartObjects : public ChartObjects_BASE
     css::uno::Reference< css::table::XTableCharts > xTableCharts;
     css::uno::Reference< css::drawing::XDrawPageSupplier > xDrawPageSupplier;
     // method associated with populating the hashmap ( I'm not convinced this is necessary )
-    //css::uno::Reference< oo::excel::XChartObject > putByPersistName( const rtl:::OUString& _sPersistChartName );
+    //css::uno::Reference< ov::excel::XChartObject > putByPersistName( const rtl:::OUString& _sPersistChartName );
 public:
-    ScVbaChartObjects( const css::uno::Reference< oo::vba::XHelperInterface >& _xParent, const css::uno::Reference< css::uno::XComponentContext >& _xContext, const css::uno::Reference< css::table::XTableCharts >& _xTableCharts, const css::uno::Reference< css::drawing::XDrawPageSupplier >&  _xDrawPageSupplier );
+    ScVbaChartObjects( const css::uno::Reference< ov::XHelperInterface >& _xParent, const css::uno::Reference< css::uno::XComponentContext >& _xContext, const css::uno::Reference< css::table::XTableCharts >& _xTableCharts, const css::uno::Reference< css::drawing::XDrawPageSupplier >&  _xDrawPageSupplier );
 
     css::uno::Sequence< rtl::OUString > getChartObjectNames() throw( css::script::BasicErrorException );
     void removeByName(const rtl::OUString& _sChartName);

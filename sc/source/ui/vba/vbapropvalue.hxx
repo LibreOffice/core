@@ -29,12 +29,12 @@
  ************************************************************************/
 #ifndef SC_VBA_PROPVALULE_HXX
 #define SC_VBA_PROPVALULE_HXX
-#include <org/openoffice/vba/XPropValue.hpp>
+#include <ooo/vba/XPropValue.hpp>
 #include <cppuhelper/implbase1.hxx>
 
 #include "vbahelper.hxx"
 
-typedef ::cppu::WeakImplHelper1< oo::vba::XPropValue > PropValueImpl_BASE;
+typedef ::cppu::WeakImplHelper1< ov::XPropValue > PropValueImpl_BASE;
 
 class PropListener
 {

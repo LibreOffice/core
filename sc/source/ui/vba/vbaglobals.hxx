@@ -33,7 +33,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <org/openoffice/vba/XGlobals.hpp>
+#include <ooo/vba/XGlobals.hpp>
 
 #include <cppuhelper/implbase1.hxx>
 #include "vbahelper.hxx"
@@ -43,33 +43,33 @@
     // =============================================================================
 
     typedef ::cppu::WeakImplHelper1<
-        oo::vba::XGlobals > ScVbaGlobals_BASE;
+ ov::XGlobals > ScVbaGlobals_BASE;
 
 
     class ScVbaGlobals : public ScVbaGlobals_BASE
     {
     private:
             css::uno::Reference< css::uno::XComponentContext > m_xContext;
-            css::uno::Reference< oo::excel::XApplication > mxApplication;
+            css::uno::Reference< ov::excel::XApplication > mxApplication;
     public:
 
         ScVbaGlobals(
             css::uno::Reference< css::uno::XComponentContext >const& rxContext );
         virtual ~ScVbaGlobals();
 
-        static  css::uno::Reference< oo::vba::XGlobals > getGlobalsImpl(const css::uno::Reference< css::uno::XComponentContext >& ) throw (css::uno::RuntimeException);
+        static  css::uno::Reference< ov::XGlobals > getGlobalsImpl(const css::uno::Reference< css::uno::XComponentContext >& ) throw (css::uno::RuntimeException);
 
         // XGlobals
         virtual css::uno::Reference<
-                        oo::excel::XApplication > SAL_CALL getApplication()
+ ov::excel::XApplication > SAL_CALL getApplication()
                         throw (css::uno::RuntimeException);
-        virtual css::uno::Reference< oo::excel::XWorkbook > SAL_CALL getActiveWorkbook() throw (css::uno::RuntimeException);
-        virtual css::uno::Reference< oo::excel::XWorksheet > SAL_CALL getActiveSheet() throw (css::uno::RuntimeException);
+        virtual css::uno::Reference< ov::excel::XWorkbook > SAL_CALL getActiveWorkbook() throw (css::uno::RuntimeException);
+        virtual css::uno::Reference< ov::excel::XWorksheet > SAL_CALL getActiveSheet() throw (css::uno::RuntimeException);
         virtual css::uno::Any SAL_CALL WorkSheets(const css::uno::Any& aIndex ) throw (css::uno::RuntimeException);
         virtual css::uno::Any SAL_CALL WorkBooks(const css::uno::Any& aIndex ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL Sheets( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException);
     virtual css::uno::Sequence< css::uno::Any > SAL_CALL getGlobals(  ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL Range( const css::uno::Any& Cell1, const css::uno::Any& Cell2 ) throw (css::uno::RuntimeException);
-    virtual css::uno::Any SAL_CALL Names( ) throw ( css::uno::RuntimeException );
+    virtual css::uno::Any SAL_CALL Names( const css::uno::Any& aIndex ) throw ( css::uno::RuntimeException );
     };
 #endif //

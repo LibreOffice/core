@@ -31,25 +31,29 @@
 #include <vector>
 
 using namespace com::sun::star;
-using namespace org::openoffice;
+using namespace ooo::vba;
 
 
-const static rtl::OUString CONTROLSOURCEPROP( RTL_CONSTASCII_USTRINGPARAM("DataFieldProperty") );
+//SelectedItems list of integer indexes
+//StringItemList list of items
+
+const static rtl::OUString TEXT( RTL_CONSTASCII_USTRINGPARAM("Text") );
+const static rtl::OUString SELECTEDITEMS( RTL_CONSTASCII_USTRINGPARAM("SelectedItems") );
 const static rtl::OUString ITEMS( RTL_CONSTASCII_USTRINGPARAM("StringItemList") );
+const static rtl::OUString CONTROLSOURCEPROP( RTL_CONSTASCII_USTRINGPARAM("DataFieldProperty") );
 
-ScVbaComboBox::ScVbaComboBox( const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< css::drawing::XControlShape >& xControlShape ) : ComboBoxImpl_BASE( xContext, xControlShape )
+ScVbaComboBox::ScVbaComboBox( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< uno::XInterface >& xControl, const uno::Reference< frame::XModel >& xModel, AbstractGeometryAttributes* pGeomHelper, bool bDialogType ) : ComboBoxImpl_BASE( xParent, xContext, xControl, xModel, pGeomHelper ), mbDialogType( bDialogType )
 {
+        mpListHelper.reset( new ListControlHelper( m_xProps ) );
     // grab the default value property name
     m_xProps->getPropertyValue( CONTROLSOURCEPROP ) >>= sSourceName;
 }
 
-ScVbaComboBox::ScVbaComboBox( const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< beans::XPropertySet >& xPropSet, const css::uno::Reference< css::drawing::XControlShape > xControlShape ) : ComboBoxImpl_BASE( xContext, xPropSet, xControlShape )
-{
-    m_xProps->getPropertyValue( CONTROLSOURCEPROP ) >>= sSourceName;
-}
-
-
 // Attributes
+
+
+// Value, [read] e.g. getValue returns the value of ooo Text propery e.g. the value in
+// the drop down
 uno::Any SAL_CALL
 ScVbaComboBox::getValue() throw (uno::RuntimeException)
 {
@@ -57,10 +61,47 @@ ScVbaComboBox::getValue() throw (uno::RuntimeException)
 }
 
 void SAL_CALL
+ScVbaComboBox::setListIndex( const uno::Any& _value ) throw (uno::RuntimeException)
+{
+    uno::Sequence< sal_Int16 > sSelection(1);
+    _value >>= sSelection[ 0 ];
+    m_xProps->setPropertyValue( SELECTEDITEMS, uno::makeAny( sSelection ) );
+}
+
+uno::Any SAL_CALL
+ScVbaComboBox::getListIndex() throw (uno::RuntimeException)
+{
+    uno::Sequence< rtl::OUString > sItems;
+    m_xProps->getPropertyValue( ITEMS ) >>= sItems;
+    // should really return the item that has focus regardless of
+    // it been selected
+    if ( sItems.getLength() > 0 )
+    {
+        rtl::OUString sText = getText();
+        sal_Int32 nLen = sItems.getLength();
+        for ( sal_Int32 index = 0; sText.getLength() && index < nLen; ++index )
+        {
+            if ( sItems[ index ].equals( sText ) )
+            {
+                OSL_TRACE("getListIndex returning %d", index );
+                return uno::makeAny( index );
+            }
+
+        }
+     }
+    OSL_TRACE("getListIndex returning %d", -1 );
+    return uno::makeAny( sal_Int32( -1 ) );
+}
+
+// Value, [write]e.g. setValue sets the value in the drop down, and if the value is one
+// of the values in the list then the selection is also set
+void SAL_CALL
 ScVbaComboBox::setValue( const uno::Any& _value ) throw (uno::RuntimeException)
 {
     m_xProps->setPropertyValue( sSourceName, _value );
 }
+
+// see Value
 
 ::rtl::OUString SAL_CALL
 ScVbaComboBox::getText() throw (uno::RuntimeException)
@@ -80,63 +121,55 @@ ScVbaComboBox::setText( const ::rtl::OUString& _text ) throw (uno::RuntimeExcept
 void SAL_CALL
 ScVbaComboBox::AddItem( const uno::Any& pvargItem, const uno::Any& pvargIndex ) throw (uno::RuntimeException)
 {
+    mpListHelper->AddItem( pvargItem, pvargIndex );
+}
 
-    if ( pvargItem.hasValue()  )
+void SAL_CALL
+ScVbaComboBox::removeItem( const uno::Any& index ) throw (uno::RuntimeException)
     {
-        uno::Sequence< rtl::OUString > sList;
-        m_xProps->getPropertyValue( ITEMS ) >>= sList;
-
-        sal_Int32 nIndex = sList.getLength();
-
-        if ( pvargIndex.hasValue() )
-            pvargIndex >>= nIndex;
-
-        rtl::OUString sString;
-        pvargItem >>= sString;
-
-        // if no index specified or item is to be appended to end of
-        // list just realloc the array and set the last item
-        if ( nIndex  == sList.getLength() )
-        {
-            sal_Int32 nOldSize = sList.getLength();
-            sList.realloc( nOldSize + 1 );
-            sList[ nOldSize ] = sString;
-        }
-        else
-        {
-            // just copy those elements above the one to be inserted
-            std::vector< rtl::OUString > sVec;
-            // reserve just the amount we need to copy
-            sVec.reserve( sList.getLength() - nIndex );
-
-            // point at first element to copy
-            rtl::OUString* pString = sList.getArray() + nIndex;
-            const rtl::OUString* pEndString = sList.getArray() + sList.getLength();
-            // insert the new element
-            sVec.push_back( sString );
-            // copy elements
-            for ( ; pString != pEndString; ++pString )
-                sVec.push_back( *pString );
-
-            sList.realloc(  sList.getLength() + 1 );
-
-            // point at first element to be overwritten
-            pString = sList.getArray() + nIndex;
-            pEndString = sList.getArray() + sList.getLength();
-            std::vector< rtl::OUString >::iterator it = sVec.begin();
-            for ( ; pString != pEndString; ++pString, ++it)
-                *pString = *it;
-            //
-        }
-
-        m_xProps->setPropertyValue( ITEMS, uno::makeAny( sList ) );
-
-    }
+    mpListHelper->removeItem( index );
 }
 
 void SAL_CALL
 ScVbaComboBox::Clear(  ) throw (uno::RuntimeException)
+        {
+    mpListHelper->Clear();
+        }
+
+void SAL_CALL
+ScVbaComboBox::setRowSource( const rtl::OUString& _rowsource ) throw (css::uno::RuntimeException)
 {
-    setValue( uno::makeAny( rtl::OUString() ) );
-    m_xProps->setPropertyValue( ITEMS, uno::makeAny( uno::Sequence< rtl::OUString >() ) );
+    ScVbaControl::setRowSource( _rowsource );
+    mpListHelper->setRowSource( _rowsource );
+        }
+
+sal_Int32 SAL_CALL
+ScVbaComboBox::getListCount() throw (uno::RuntimeException)
+{
+    return mpListHelper->getListCount();
+}
+
+uno::Any SAL_CALL
+ScVbaComboBox::List( const ::uno::Any& pvargIndex, const uno::Any& pvarColumn ) throw (uno::RuntimeException)
+{
+    return mpListHelper->List( pvargIndex, pvarColumn );
+    }
+
+rtl::OUString&
+ScVbaComboBox::getServiceImplName()
+{
+    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaComboBox") );
+    return sImplName;
+}
+
+uno::Sequence< rtl::OUString >
+ScVbaComboBox::getServiceNames()
+{
+    static uno::Sequence< rtl::OUString > aServiceNames;
+    if ( aServiceNames.getLength() == 0 )
+    {
+        aServiceNames.realloc( 1 );
+        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.msforms.ComboBox" ) );
+    }
+    return aServiceNames;
 }

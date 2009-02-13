@@ -31,7 +31,7 @@
 #define SC_VBA_HELPERINTERFACE_HXX
 
 #include <cppuhelper/implbase1.hxx>
-#include <org/openoffice/vba/XHelperInterface.hpp>
+#include <ooo/vba/XHelperInterface.hpp>
 #include "vbahelper.hxx"
 #include "vbaglobals.hxx"
 
@@ -61,17 +61,17 @@
 //     virtual OUString getName();
 // }
 //
-const ::rtl::OUString sHelperServiceName( RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.vba.HelperServiceBase" ) );
+const ::rtl::OUString sHelperServiceName( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.HelperServiceBase" ) );
 
 template< typename Ifc1 >
 class InheritedHelperInterfaceImpl : public Ifc1
 {
 protected:
-    css::uno::WeakReference< oo::vba::XHelperInterface > mxParent;
+    css::uno::WeakReference< ov::XHelperInterface > mxParent;
     css::uno::Reference< css::uno::XComponentContext > mxContext;
 public:
     InheritedHelperInterfaceImpl() {}
-    InheritedHelperInterfaceImpl( const css::uno::Reference< oo::vba::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext ) : mxParent( xParent ), mxContext( xContext ) {}
+    InheritedHelperInterfaceImpl( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext ) : mxParent( xParent ), mxContext( xContext ) {}
     virtual rtl::OUString& getServiceImplName() = 0;
     virtual css::uno::Sequence<rtl::OUString> getServiceNames() = 0;
 
@@ -80,7 +80,7 @@ public:
     {
         return 0x53756E4F;
     }
-    virtual css::uno::Reference< oo::vba::XHelperInterface > SAL_CALL getParent(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException) { return mxParent; }
+    virtual css::uno::Reference< ov::XHelperInterface > SAL_CALL getParent(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException) { return mxParent; }
 
     virtual css::uno::Any SAL_CALL Application(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException) { return  css::uno::makeAny( ScVbaGlobals::getGlobalsImpl( mxContext )->getApplication() ); }
 
@@ -110,7 +110,7 @@ class InheritedHelperInterfaceImpl1 : public InheritedHelperInterfaceImpl< ::cpp
 {
 typedef InheritedHelperInterfaceImpl< ::cppu::WeakImplHelper1< Ifc1 > > Base;
 public:
-    InheritedHelperInterfaceImpl1< Ifc1 > ( const css::uno::Reference< oo::vba::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext ) : Base( xParent, xContext ) {}
+    InheritedHelperInterfaceImpl1< Ifc1 > ( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext ) : Base( xParent, xContext ) {}
 
 };
 #endif

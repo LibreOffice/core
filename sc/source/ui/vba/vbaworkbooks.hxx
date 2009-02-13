@@ -32,26 +32,26 @@
 
 
 #include "vbacollectionimpl.hxx"
-#include <org/openoffice/vba/XGlobals.hpp>
-#include <org/openoffice/excel/XWorkbooks.hpp>
+#include <ooo/vba/XGlobals.hpp>
+#include <ooo/vba/excel/XWorkbooks.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include "vbahelper.hxx"
 
 
 class ScModelObj;
 
-typedef CollTestImplHelper< oo::excel::XWorkbooks > ScVbaWorkbooks_BASE;
+typedef CollTestImplHelper< ov::excel::XWorkbooks > ScVbaWorkbooks_BASE;
 
 class ScVbaWorkbooks : public ScVbaWorkbooks_BASE
 {
 private:
-    css::uno::Reference< oo::vba::XGlobals > getGlobals() throw (css::uno::RuntimeException);
+    css::uno::Reference< ov::XGlobals > getGlobals() throw (css::uno::RuntimeException);
     rtl::OUString   getFileFilterType( const rtl::OUString& rString );
     bool    isTextFile( const rtl::OUString& rString );
     bool    isSpreadSheetFile( const rtl::OUString& rString );
     static sal_Int16& getCurrentDelim(){ static sal_Int16 nDelim = 44; return nDelim; }
 public:
-    ScVbaWorkbooks( const css::uno::Reference< oo::vba::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext );
+    ScVbaWorkbooks( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext );
     virtual ~ScVbaWorkbooks() {}
 
     // XEnumerationAccess

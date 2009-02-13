@@ -35,35 +35,37 @@
 
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
-#include <org/openoffice/excel/XWorksheet.hpp>
-#include <org/openoffice/excel/XComments.hpp>
-#include <org/openoffice/excel/XRange.hpp>
+#include <ooo/vba/excel/XWorksheet.hpp>
+#include <ooo/vba/excel/XComments.hpp>
+#include <ooo/vba/excel/XRange.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-#include <org/openoffice/excel/XOutline.hpp>
-#include <org/openoffice/excel/XChartObjects.hpp>
+#include <ooo/vba/excel/XOutline.hpp>
+#include <ooo/vba/excel/XPageSetup.hpp>
+#include <ooo/vba/excel/XHPageBreaks.hpp>
+#include <ooo/vba/excel/XChartObjects.hpp>
 
 #include "vbahelperinterface.hxx"
 
-typedef InheritedHelperInterfaceImpl1< oo::excel::XWorksheet >  WorksheetImpl_BASE;
+typedef InheritedHelperInterfaceImpl1< ov::excel::XWorksheet >  WorksheetImpl_BASE;
 
 class ScVbaWorksheet : public WorksheetImpl_BASE
 {
     css::uno::Reference< css::sheet::XSpreadsheet > mxSheet;
     css::uno::Reference< css::frame::XModel > mxModel;
-    css::uno::Reference< oo::excel::XChartObjects > mxCharts;
+    css::uno::Reference< ov::excel::XChartObjects > mxCharts;
 
-    css::uno::Reference< oo::excel::XWorksheet > getSheetAtOffset(SCTAB offset) throw (css::uno::RuntimeException);
-    css::uno::Reference< oo::excel::XRange > getSheetRange() throw (css::uno::RuntimeException);
+    css::uno::Reference< ov::excel::XWorksheet > getSheetAtOffset(SCTAB offset) throw (css::uno::RuntimeException);
+    css::uno::Reference< ov::excel::XRange > getSheetRange() throw (css::uno::RuntimeException);
 
-    css::uno::Any getControl( const rtl::OUString& sName );
+    css::uno::Reference< css::container::XNameAccess > getFormControls();
     css::uno::Any getControlShape( const rtl::OUString& sName );
 protected:
 
-    ScVbaWorksheet( const css::uno::Reference< oo::vba::XHelperInterface >& xParent,  const css::uno::Reference< css::uno::XComponentContext >& xContext );
+    ScVbaWorksheet( const css::uno::Reference< ov::XHelperInterface >& xParent,  const css::uno::Reference< css::uno::XComponentContext >& xContext );
 public:
-    ScVbaWorksheet( const css::uno::Reference< oo::vba::XHelperInterface >& xParent,
+    ScVbaWorksheet( const css::uno::Reference< ov::XHelperInterface >& xParent,
         const css::uno::Reference< css::uno::XComponentContext >& xContext,
         const css::uno::Reference< css::sheet::XSpreadsheet >& xSheet,
         const css::uno::Reference< css::frame::XModel >& xModel )throw (css::uno::RuntimeException)  ;
@@ -86,16 +88,19 @@ public:
     virtual ::sal_Bool SAL_CALL getProtectionMode() throw (css::uno::RuntimeException);
     virtual ::sal_Bool SAL_CALL getProtectContents() throw (css::uno::RuntimeException);
     virtual ::sal_Bool SAL_CALL getProtectDrawingObjects() throw (css::uno::RuntimeException);
-    virtual css::uno::Reference< oo::excel::XRange > SAL_CALL getUsedRange() throw (css::uno::RuntimeException) ;
+    virtual css::uno::Reference< ov::excel::XRange > SAL_CALL getUsedRange() throw (css::uno::RuntimeException) ;
     virtual css::uno::Any SAL_CALL ChartObjects( const css::uno::Any& Index ) throw (css::uno::RuntimeException);
-    virtual css::uno::Reference< oo::excel::XOutline > SAL_CALL Outline( ) throw (css::uno::RuntimeException);
-    virtual css::uno::Reference< oo::excel::XWorksheet > SAL_CALL getNext() throw (css::uno::RuntimeException);
-    virtual css::uno::Reference< oo::excel::XWorksheet > SAL_CALL getPrevious() throw (css::uno::RuntimeException);
+    virtual css::uno::Reference< ov::excel::XOutline > SAL_CALL Outline( ) throw (css::uno::RuntimeException);
+    virtual css::uno::Reference< ov::excel::XPageSetup > SAL_CALL PageSetup( ) throw (css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL HPageBreaks( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException);
+    virtual css::uno::Reference< ov::excel::XWorksheet > SAL_CALL getNext() throw (css::uno::RuntimeException);
+    virtual css::uno::Reference< ov::excel::XWorksheet > SAL_CALL getPrevious() throw (css::uno::RuntimeException);
+     virtual sal_Int16 SAL_CALL getIndex() throw (css::uno::RuntimeException);
 
     // Methods
     virtual void SAL_CALL Activate() throw (css::uno::RuntimeException);
     virtual void SAL_CALL Select() throw (css::uno::RuntimeException);
-    virtual css::uno::Reference< oo::excel::XRange > SAL_CALL Range( const css::uno::Any& Cell1, const css::uno::Any& Cell2 ) throw (css::uno::RuntimeException);
+    virtual css::uno::Reference< ov::excel::XRange > SAL_CALL Range( const css::uno::Any& Cell1, const css::uno::Any& Cell2 ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL Move( const css::uno::Any& Before, const css::uno::Any& After ) throw (css::uno::RuntimeException) ;
      virtual void SAL_CALL Copy( const css::uno::Any& Before, const css::uno::Any& After ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL Paste( const css::uno::Any& Destination, const css::uno::Any& Link ) throw (css::uno::RuntimeException);
@@ -106,9 +111,9 @@ public:
     virtual void SAL_CALL Calculate(  ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL CheckSpelling( const css::uno::Any& CustomDictionary,const css::uno::Any& IgnoreUppercase,const css::uno::Any& AlwaysSuggest, const css::uno::Any& SpellingLang ) throw (css::uno::RuntimeException);
     // Hacks (?)
-    virtual css::uno::Reference< oo::excel::XRange > SAL_CALL Cells( const css::uno::Any &nRow, const css::uno::Any &nCol ) throw (css::uno::RuntimeException);
-    virtual css::uno::Reference< oo::excel::XRange > SAL_CALL Rows(const css::uno::Any& aIndex ) throw (css::uno::RuntimeException);
-    virtual css::uno::Reference< oo::excel::XRange > SAL_CALL Columns(const css::uno::Any& aIndex ) throw (css::uno::RuntimeException);
+    virtual css::uno::Reference< ov::excel::XRange > SAL_CALL Cells( const css::uno::Any &nRow, const css::uno::Any &nCol ) throw (css::uno::RuntimeException);
+    virtual css::uno::Reference< ov::excel::XRange > SAL_CALL Rows(const css::uno::Any& aIndex ) throw (css::uno::RuntimeException);
+    virtual css::uno::Reference< ov::excel::XRange > SAL_CALL Columns(const css::uno::Any& aIndex ) throw (css::uno::RuntimeException);
 
     virtual css::uno::Any SAL_CALL Evaluate( const ::rtl::OUString& Name ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL PivotTables( const css::uno::Any& Index ) throw (css::uno::RuntimeException);
@@ -131,6 +136,7 @@ public:
     virtual void SAL_CALL setCodeName( const rtl::OUString& sCodeName ) throw (css::uno::RuntimeException);
     sal_Int16 getSheetID() throw (css::uno::RuntimeException);
 
+    virtual void SAL_CALL PrintOut( const css::uno::Any& From, const css::uno::Any& To, const css::uno::Any& Copies, const css::uno::Any& Preview, const css::uno::Any& ActivePrinter, const css::uno::Any& PrintToFile, const css::uno::Any& Collate, const css::uno::Any& PrToFileName, const css::uno::Any& IgnorePrintAreas ) throw (css::uno::RuntimeException);
     // XHelperInterface
     virtual rtl::OUString& getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();

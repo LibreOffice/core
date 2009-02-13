@@ -32,10 +32,10 @@
 #include "vbatextframe.hxx"
 #include "vbacharacters.hxx"
 
-using namespace ::org::openoffice;
+using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-ScVbaTextFrame::ScVbaTextFrame( const uno::Reference< vba::XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, uno::Reference< drawing::XShape > xShape ) : ScVbaTextFrame_BASE( xParent, xContext ), m_xShape( xShape )
+ScVbaTextFrame::ScVbaTextFrame( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, uno::Reference< drawing::XShape > xShape ) : ScVbaTextFrame_BASE( xParent, xContext ), m_xShape( xShape )
 {
     m_xPropertySet.set( m_xShape, uno::UNO_QUERY_THROW );
 }
@@ -142,14 +142,14 @@ ScVbaTextFrame::setMarginRight( float _marginright ) throw (uno::RuntimeExceptio
 
 
 // Methods
-uno::Reference< oo::excel::XCharacters > SAL_CALL
+uno::Reference< ov::excel::XCharacters > SAL_CALL
 ScVbaTextFrame::Characters() throw (uno::RuntimeException)
 {
     uno::Reference< text::XSimpleText > xSimpleText( m_xShape, uno::UNO_QUERY_THROW );
     ScVbaPalette aPalette( SfxObjectShell::Current() );
     uno::Any aStart( sal_Int32( 1 ) );
     uno::Any aLength(sal_Int32( -1 ) );
-    return uno::Reference< oo::excel::XCharacters >( new ScVbaCharacters( this, mxContext, aPalette, xSimpleText, aStart, aLength, sal_True ) );
+    return uno::Reference< ov::excel::XCharacters >( new ScVbaCharacters( this, mxContext, aPalette, xSimpleText, aStart, aLength, sal_True ) );
 }
 
 rtl::OUString&
@@ -166,7 +166,7 @@ ScVbaTextFrame::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("org.openoffice.excel.TextFrame" ) );
+        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.excel.TextFrame" ) );
     }
     return aServiceNames;
 }

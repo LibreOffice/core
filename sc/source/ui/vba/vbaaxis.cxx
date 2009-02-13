@@ -29,21 +29,21 @@
  ************************************************************************/
 
 #include "vbaaxis.hxx"
-#include <org/openoffice/excel/XlAxisCrosses.hpp>
-#include <org/openoffice/excel/XlAxisType.hpp>
-#include <org/openoffice/excel/XlScaleType.hpp>
+#include <ooo/vba/excel/XlAxisCrosses.hpp>
+#include <ooo/vba/excel/XlAxisType.hpp>
+#include <ooo/vba/excel/XlScaleType.hpp>
 #include "vbaaxistitle.hxx"
 #include "vbachart.hxx"
 using namespace ::com::sun::star;
-using namespace ::org::openoffice;
-using namespace ::org::openoffice::excel::XlAxisCrosses;
-using namespace ::org::openoffice::excel::XlAxisType;
-using namespace ::org::openoffice::excel::XlScaleType;
+using namespace ::ooo::vba;
+using namespace ::ooo::vba::excel::XlAxisCrosses;
+using namespace ::ooo::vba::excel::XlAxisType;
+using namespace ::ooo::vba::excel::XlScaleType;
 
 const rtl::OUString ORIGIN( RTL_CONSTASCII_USTRINGPARAM("Origin") );
 const rtl::OUString AUTOORIGIN( RTL_CONSTASCII_USTRINGPARAM("AutoOrigin") );
-const rtl::OUString MIN( RTL_CONSTASCII_USTRINGPARAM("AutoOrigin") );
-const rtl::OUString MAX( RTL_CONSTASCII_USTRINGPARAM("AutoOrigin") );
+const rtl::OUString VBA_MIN( RTL_CONSTASCII_USTRINGPARAM("Max") );
+const rtl::OUString VBA_MAX( RTL_CONSTASCII_USTRINGPARAM("Min") );
 ScVbaChart*
 ScVbaAxis::getChartPtr() throw( uno::RuntimeException )
 {
@@ -63,7 +63,7 @@ ScVbaAxis::isValueAxis() throw( script::BasicErrorException )
     return sal_True;
 }
 
-ScVbaAxis::ScVbaAxis( const uno::Reference< vba::XHelperInterface >& xParent,const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< beans::XPropertySet >& _xPropertySet, sal_Int32 _nType, sal_Int32 _nGroup  ) : ScVbaAxis_BASE( xParent, xContext ), mxPropertySet( _xPropertySet ), mnType( _nType ), mnGroup( _nGroup ), bCrossesAreCustomized( sal_False )
+ScVbaAxis::ScVbaAxis( const uno::Reference< XHelperInterface >& xParent,const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< beans::XPropertySet >& _xPropertySet, sal_Int32 _nType, sal_Int32 _nGroup  ) : ScVbaAxis_BASE( xParent, xContext ), mxPropertySet( _xPropertySet ), mnType( _nType ), mnGroup( _nGroup ), bCrossesAreCustomized( sal_False )
 {
     oShapeHelper.reset( new ShapeHelper( uno::Reference< drawing::XShape >( mxPropertySet, uno::UNO_QUERY ) ) );
     moChartParent.set( xParent, uno::UNO_QUERY_THROW  );
@@ -78,7 +78,7 @@ ScVbaAxis::Delete(  ) throw (script::BasicErrorException, uno::RuntimeException)
     xComponent->dispose();
 }
 
- uno::Reference< ::org::openoffice::excel::XAxisTitle > SAL_CALL
+ uno::Reference< ::ooo::vba::excel::XAxisTitle > SAL_CALL
 ScVbaAxis::getAxisTitle(  ) throw (script::BasicErrorException, uno::RuntimeException)
 {
     uno::Reference< excel::XAxisTitle > xAxisTitle;
@@ -137,12 +137,12 @@ ScVbaAxis::setCrosses( ::sal_Int32 _nCrosses ) throw (script::BasicErrorExceptio
                 bCrossesAreCustomized = sal_False;
                 return;
             case xlAxisCrossesMinimum:                     // The axis crosses at the minimum value.
-                mxPropertySet->getPropertyValue(MIN) >>= fNum;
+                mxPropertySet->getPropertyValue(VBA_MIN) >>= fNum;
                 setCrossesAt( fNum );
                 bCrossesAreCustomized = sal_False;
                 break;
             case xlAxisCrossesMaximum:                     // The axis crosses at the maximum value.
-                mxPropertySet->getPropertyValue(MAX) >>= fNum;
+                mxPropertySet->getPropertyValue(VBA_MAX) >>= fNum;
                 setCrossesAt(fNum);
                 bCrossesAreCustomized = sal_False;
                 break;
@@ -177,7 +177,7 @@ ScVbaAxis::getCrosses(  ) throw (script::BasicErrorException, uno::RuntimeExcept
                 mxPropertySet->getPropertyValue(ORIGIN) >>= forigin;
 //obsolete      double fmax = AnyConverter.toDouble(mxPropertySet.getPropertyValue("Max"));
                 double fmin = 0.0;
-                mxPropertySet->getPropertyValue(MIN) >>= fmin;
+                mxPropertySet->getPropertyValue(VBA_MIN) >>= fmin;
                 if (forigin == fmin)
                     nCrosses = xlAxisCrossesMinimum;
                 else
@@ -666,7 +666,7 @@ ScVbaAxis::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("org.openoffice.excel.Axis" ) );
+        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.excel.Axis" ) );
     }
     return aServiceNames;
 }

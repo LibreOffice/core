@@ -30,20 +30,19 @@
 #ifndef SC_VBA_INTERIOR_HXX
 #define SC_VBA_INTERIOR_HXX
 
-#include <org/openoffice/excel/XWorksheetFunction.hpp>
+#include <ooo/vba/excel/XWorksheetFunction.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include "vbarange.hxx"
 
 #include <com/sun/star/beans/XExactName.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 
-typedef InheritedHelperInterfaceImpl1< oo::excel::XWorksheetFunction > ScVbaWSFunction_BASE;
+typedef InheritedHelperInterfaceImpl1< ov::excel::XWorksheetFunction > ScVbaWSFunction_BASE;
 
 class ScVbaWSFunction :  public ScVbaWSFunction_BASE
 {
-    css::uno::Reference< css::container::XNameAccess > m_xNameAccess;
 public:
-    ScVbaWSFunction( const css::uno::Reference< oo::vba::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext);
+    ScVbaWSFunction( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext);
     virtual ~ScVbaWSFunction(){}
 
     virtual css::uno::Reference< css::beans::XIntrospectionAccess >  SAL_CALL getIntrospection(void)  throw(css::uno::RuntimeException);

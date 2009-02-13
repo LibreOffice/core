@@ -33,11 +33,11 @@
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/awt/XWindowPeer.hpp>
-#include <org/openoffice/excel/XOLEObject.hpp>
+#include <ooo/vba/excel/XOLEObject.hpp>
 
 #include "vbahelperinterface.hxx"
 
-typedef InheritedHelperInterfaceImpl1< oo::excel::XOLEObject > OLEObjectImpl_BASE;
+typedef InheritedHelperInterfaceImpl1< ov::excel::XOLEObject > OLEObjectImpl_BASE;
 
 class ScVbaOLEObject : public OLEObjectImpl_BASE
 {
@@ -47,7 +47,7 @@ protected:
     virtual rtl::OUString& getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 public:
-    ScVbaOLEObject( const css::uno::Reference< oo::vba::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext,
+    ScVbaOLEObject( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext,
             css::uno::Reference< css::drawing::XControlShape > xControlShape );
 
     // XOLEObject Attributes

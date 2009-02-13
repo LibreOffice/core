@@ -27,19 +27,19 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include <org/openoffice/office/MsoArrowheadStyle.hpp>
-#include <org/openoffice/office/MsoArrowheadLength.hpp>
-#include <org/openoffice/office/MsoArrowheadWidth.hpp>
-#include <org/openoffice/office/MsoLineDashStyle.hpp>
+#include <ooo/vba/office/MsoArrowheadStyle.hpp>
+#include <ooo/vba/office/MsoArrowheadLength.hpp>
+#include <ooo/vba/office/MsoArrowheadWidth.hpp>
+#include <ooo/vba/office/MsoLineDashStyle.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>
 #include "vbalineformat.hxx"
 #include "vbacolorformat.hxx"
 
-using namespace org::openoffice;
+using namespace ooo::vba;
 using namespace com::sun::star;
 
-ScVbaLineFormat::ScVbaLineFormat( const uno::Reference< oo::vba::XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< drawing::XShape > xShape ) : ScVbaLineFormat_BASE( xParent, xContext ), m_xShape( xShape )
+ScVbaLineFormat::ScVbaLineFormat( const uno::Reference< ov::XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< drawing::XShape > xShape ) : ScVbaLineFormat_BASE( xParent, xContext ), m_xShape( xShape )
 {
     m_xPropertySet.set( xShape, uno::UNO_QUERY_THROW );
     m_nLineDashStyle = office::MsoLineDashStyle::msoLineSolid;
@@ -450,7 +450,7 @@ ScVbaLineFormat::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("org.openoffice.msform.LineFormat" ) );
+        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.msform.LineFormat" ) );
     }
     return aServiceNames;
 }

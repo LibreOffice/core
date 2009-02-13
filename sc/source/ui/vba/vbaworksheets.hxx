@@ -32,18 +32,18 @@
 
 #include <cppuhelper/implbase1.hxx>
 
-#include <org/openoffice/excel/XWorksheets.hpp>
+#include <ooo/vba/excel/XWorksheets.hpp>
 #include <com/sun/star/sheet/XSpreadsheets.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <org/openoffice/vba/XGlobals.hpp>
+#include <ooo/vba/XGlobals.hpp>
 
 #include "vbacollectionimpl.hxx"
 
 class ScModelObj;
 
 
-typedef CollTestImplHelper< oo::excel::XWorksheets > ScVbaWorksheets_BASE;
+typedef CollTestImplHelper< ov::excel::XWorksheets > ScVbaWorksheets_BASE;
 
 class ScVbaWorksheets : public ScVbaWorksheets_BASE
 {
@@ -53,8 +53,8 @@ protected:
     // ScVbaWorksheets_BASE
     virtual css::uno::Any getItemByStringIndex( const rtl::OUString& sIndex ) throw (css::uno::RuntimeException);
 public:
-    ScVbaWorksheets( const css::uno::Reference< oo::vba::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::container::XIndexAccess >& xSheets, const css::uno::Reference< css::frame::XModel >& xModel );
-    ScVbaWorksheets( const css::uno::Reference< oo::vba::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::container::XEnumerationAccess >& xEnum,  const css::uno::Reference< css::frame::XModel >& xModel );
+    ScVbaWorksheets( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::container::XIndexAccess >& xSheets, const css::uno::Reference< css::frame::XModel >& xModel );
+    ScVbaWorksheets( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::container::XEnumerationAccess >& xEnum,  const css::uno::Reference< css::frame::XModel >& xModel );
     virtual ~ScVbaWorksheets() {}
 
     bool isSelectedSheets();

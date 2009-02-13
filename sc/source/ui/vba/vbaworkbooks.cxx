@@ -60,7 +60,7 @@
 
 #include <hash_map>
 #include <osl/file.hxx>
-using namespace ::org::openoffice;
+using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
 const sal_Int16 CUSTOM_CHAR = 5;
@@ -81,7 +81,7 @@ getWorkbook( uno::Reference< uno::XComponentContext >& xContext, const uno::Refe
     if( !xModel.is() )
         return uno::Any();
 
-    ScVbaWorkbook *pWb = new ScVbaWorkbook(  uno::Reference< vba::XHelperInterface >( ScVbaGlobals::getGlobalsImpl( xContext )->getApplication(), uno::UNO_QUERY_THROW ), xContext, xModel );
+    ScVbaWorkbook *pWb = new ScVbaWorkbook(  uno::Reference< XHelperInterface >( ScVbaGlobals::getGlobalsImpl( xContext )->getApplication(), uno::UNO_QUERY_THROW ), xContext, xModel );
     return uno::Any( uno::Reference< excel::XWorkbook > (pWb) );
 }
 
@@ -238,7 +238,7 @@ public:
 
 };
 
-ScVbaWorkbooks::ScVbaWorkbooks( const uno::Reference< vba::XHelperInterface >& xParent, const uno::Reference< css::uno::XComponentContext >& xContext ) : ScVbaWorkbooks_BASE( xParent, xContext, uno::Reference< container::XIndexAccess >( new WorkBooksAccessImpl( xContext ) ) )
+ScVbaWorkbooks::ScVbaWorkbooks( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< css::uno::XComponentContext >& xContext ) : ScVbaWorkbooks_BASE( xParent, xContext, uno::Reference< container::XIndexAccess >( new WorkBooksAccessImpl( xContext ) ) )
 {
 }
 // XEnumerationAccess
@@ -459,7 +459,7 @@ ScVbaWorkbooks::getServiceNames()
     if ( sNames.getLength() == 0 )
     {
         sNames.realloc( 1 );
-        sNames[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("org.openoffice.excel.Workbooks") );
+        sNames[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.excel.Workbooks") );
     }
     return sNames;
 }

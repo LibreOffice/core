@@ -31,15 +31,15 @@
 #include "vbaaxes.hxx"
 #include "vbaaxis.hxx"
 #include "vbachart.hxx"
-#include <org/openoffice/excel/XlAxisType.hpp>
-#include <org/openoffice/excel/XlAxisGroup.hpp>
-#include <org/openoffice/excel/XAxis.hpp>
+#include <ooo/vba/excel/XlAxisType.hpp>
+#include <ooo/vba/excel/XlAxisGroup.hpp>
+#include <ooo/vba/excel/XAxis.hpp>
 #include <map>
 
 using namespace ::com::sun::star;
-using namespace ::org::openoffice;
-using namespace ::org::openoffice::excel::XlAxisType;
-using namespace ::org::openoffice::excel::XlAxisGroup;
+using namespace ::ooo::vba;
+using namespace ::ooo::vba::excel::XlAxisType;
+using namespace ::ooo::vba::excel::XlAxisGroup;
 
 // each 'Item' in the Axes collection is  indexed via 2 indexes,  group and type.
 // We need to 'flatten' this into a single index in order to be able to wrap
@@ -86,7 +86,7 @@ ScVbaAxes::createAxis( const uno::Reference< excel::XChart >& xChart, const uno:
     }
     else
         throw script::BasicErrorException( rtl::OUString(), NULL, SbERR_METHOD_FAILED, rtl::OUString());
-    uno::Reference< vba::XHelperInterface > xParent( xChart, uno::UNO_QUERY_THROW );
+    uno::Reference< XHelperInterface > xParent( xChart, uno::UNO_QUERY_THROW );
     return new ScVbaAxis( xParent, xContext, xAxisPropertySet, nType, nAxisGroup);
 }
 
@@ -146,7 +146,7 @@ uno::Reference< container::XIndexAccess > createIndexWrapper( const uno::Referen
 }
 
 // #FIXME The collection semantics will never work as this object is not yet initialised correctly
-ScVbaAxes::ScVbaAxes( const uno::Reference< vba::XHelperInterface >& xParent,const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< excel::XChart >& xChart ) : ScVbaAxes_BASE( xParent, xContext, createIndexWrapper( xChart, xContext )), moChartParent( xChart )
+ScVbaAxes::ScVbaAxes( const uno::Reference< XHelperInterface >& xParent,const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< excel::XChart >& xChart ) : ScVbaAxes_BASE( xParent, xContext, createIndexWrapper( xChart, xContext )), moChartParent( xChart )
 {
 }
 
@@ -199,7 +199,7 @@ ScVbaAxes::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("org.openoffice.excel.Axes" ) );
+        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.excel.Axes" ) );
     }
     return aServiceNames;
 }

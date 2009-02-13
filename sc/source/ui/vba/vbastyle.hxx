@@ -29,14 +29,14 @@
  ************************************************************************/
 #ifndef SC_VBA_STYLE_HXX
 #define SC_VBA_STYLE_HXX
-#include <org/openoffice/excel/XStyle.hpp>
+#include <ooo/vba/excel/XStyle.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include "vbaformat.hxx"
 
 
-typedef ScVbaFormat< oo::excel::XStyle > ScVbaStyle_BASE;
+typedef ScVbaFormat< ov::excel::XStyle > ScVbaStyle_BASE;
 
 class ScVbaStyle : public ScVbaStyle_BASE
 {
@@ -46,11 +46,11 @@ protected:
     css::uno::Reference< css::container::XNameContainer > mxStyleFamilyNameContainer;
     void initialise() throw ( css::uno::RuntimeException );
 public:
-    ScVbaStyle( const css::uno::Reference< oo::vba::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const rtl::OUString& sStyleName, const css::uno::Reference< css::frame::XModel >& _xModel ) throw ( css::script::BasicErrorException, css::uno::RuntimeException );
-    ScVbaStyle( const css::uno::Reference< oo::vba::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::beans::XPropertySet >& _xPropertySet, const css::uno::Reference< css::frame::XModel >& _xModel ) throw ( css::script::BasicErrorException, css::uno::RuntimeException );
+    ScVbaStyle( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const rtl::OUString& sStyleName, const css::uno::Reference< css::frame::XModel >& _xModel ) throw ( css::script::BasicErrorException, css::uno::RuntimeException );
+    ScVbaStyle( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::beans::XPropertySet >& _xPropertySet, const css::uno::Reference< css::frame::XModel >& _xModel ) throw ( css::script::BasicErrorException, css::uno::RuntimeException );
     virtual ~ScVbaStyle(){}
     static css::uno::Reference< css::container::XNameAccess > getStylesNameContainer( const css::uno::Reference< css::frame::XModel >& xModel ) throw( css::uno::RuntimeException );
-    virtual css::uno::Reference< oo::vba::XHelperInterface > thisHelperIface() { return this; };
+    virtual css::uno::Reference< ov::XHelperInterface > thisHelperIface() { return this; };
     // XStyle Methods
     virtual ::sal_Bool SAL_CALL BuiltIn() throw (css::script::BasicErrorException, css::uno::RuntimeException);
     virtual void SAL_CALL setName( const ::rtl::OUString& Name ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
@@ -63,9 +63,9 @@ public:
     virtual css::uno::Any SAL_CALL getMergeCells(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
 /*
     // XFormat
-    virtual css::uno::Reference< ::org::openoffice::excel::XBorders > SAL_CALL Borders(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);;
-    virtual css::uno::Reference< ::org::openoffice::excel::XFont > SAL_CALL Font(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);;
-    virtual css::uno::Reference< ::org::openoffice::excel::XInterior > SAL_CALL Interior(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);;
+    virtual css::uno::Reference< ::ooo::vba::excel::XBorders > SAL_CALL Borders(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);;
+    virtual css::uno::Reference< ::ooo::vba::excel::XFont > SAL_CALL Font(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);;
+    virtual css::uno::Reference< ::ooo::vba::excel::XInterior > SAL_CALL Interior(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);;
     virtual void SAL_CALL setNumberFormat( const css::uno::Any& NumberFormat ) throw (css::script::BasicErrorException, css::uno::RuntimeException);;
     virtual css::uno::Any SAL_CALL getNumberFormat(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);;
     virtual void SAL_CALL setNumberFormatLocal( const css::uno::Any& NumberFormatLocal ) throw (css::script::BasicErrorException, css::uno::RuntimeException);;

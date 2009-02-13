@@ -32,10 +32,10 @@
 
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <org/openoffice/msforms/XPictureFormat.hpp>
+#include <ooo/vba/msforms/XPictureFormat.hpp>
 #include "vbahelperinterface.hxx"
 
-typedef InheritedHelperInterfaceImpl1< oo::msforms::XPictureFormat > ScVbaPictureFormat_BASE;
+typedef InheritedHelperInterfaceImpl1< ov::msforms::XPictureFormat > ScVbaPictureFormat_BASE;
 
 class ScVbaPictureFormat : public ScVbaPictureFormat_BASE
 {
@@ -48,7 +48,7 @@ protected:
 private:
     void checkParameterRangeInDouble( double nRange, double nMin, double nMax ) throw (css::uno::RuntimeException);
 public:
-    ScVbaPictureFormat( const css::uno::Reference< oo::vba::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, css::uno::Reference< css::drawing::XShape > xShape ) throw( css::lang::IllegalArgumentException );
+    ScVbaPictureFormat( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, css::uno::Reference< css::drawing::XShape > xShape ) throw( css::lang::IllegalArgumentException );
 
     // Attributes
     virtual double SAL_CALL getBrightness() throw (css::uno::RuntimeException);

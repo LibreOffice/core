@@ -254,7 +254,7 @@ bool lcl_hasVBAEnabled()
     uno::Reference< beans::XPropertySet > xProps( ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY);
         // test if vba service is present
     uno::Reference< uno::XComponentContext > xCtx( xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))), uno::UNO_QUERY );
-    uno::Reference< uno::XInterface > xGlobals( xCtx->getValueByName( ::rtl::OUString::createFromAscii( "/singletons/org.openoffice.vba.theGlobals") ), uno::UNO_QUERY );
+    uno::Reference< uno::XInterface > xGlobals( xCtx->getValueByName( ::rtl::OUString::createFromAscii( "/singletons/ooo.vba.theGlobals") ), uno::UNO_QUERY );
 
     return xGlobals.is();
 }

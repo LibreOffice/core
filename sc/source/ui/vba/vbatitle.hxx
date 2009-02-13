@@ -37,7 +37,7 @@
 #include "vbapalette.hxx"
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <org/openoffice/excel/XTitle.hpp>
+#include <ooo/vba/excel/XTitle.hpp>
 #include <basic/sberrors.hxx>
 #include <memory>
 
@@ -49,15 +49,15 @@ typedef InheritedHelperInterfaceImpl< Ifc1 > BaseClass;
 protected:
     css::uno::Reference< css::drawing::XShape > xTitleShape;
     css::uno::Reference< css::beans::XPropertySet > xShapePropertySet;
-    std::auto_ptr<oo::ShapeHelper> oShapeHelper;
+    std::auto_ptr<ov::ShapeHelper> oShapeHelper;
     ScVbaPalette m_Palette;
 public:
-    TitleImpl(  const css::uno::Reference< oo::vba::XHelperInterface >& xParent,   const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::drawing::XShape >& _xTitleShape ) : BaseClass( xParent, xContext ), xTitleShape( _xTitleShape )
+    TitleImpl(  const css::uno::Reference< ov::XHelperInterface >& xParent,   const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::drawing::XShape >& _xTitleShape ) : BaseClass( xParent, xContext ), xTitleShape( _xTitleShape )
     {
         xShapePropertySet.set( xTitleShape, css::uno::UNO_QUERY_THROW );
-        oShapeHelper.reset( new oo::ShapeHelper(xTitleShape) );
+        oShapeHelper.reset( new ov::ShapeHelper(xTitleShape) );
     }
-    css::uno::Reference< oo::excel::XInterior > SAL_CALL Interior(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException)
+    css::uno::Reference< ov::excel::XInterior > SAL_CALL Interior(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException)
     {
         // #TODO find out what the proper parent should be
         // leaving as set by the helperapi for the moment
@@ -65,7 +65,7 @@ public:
         // otherwise attemps to access the palette will fail
         return new ScVbaInterior( BaseClass::mxParent, BaseClass::mxContext, xShapePropertySet );
     }
-    css::uno::Reference< oo::excel::XFont > SAL_CALL Font(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException)
+    css::uno::Reference< ov::excel::XFont > SAL_CALL Font(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException)
     {
         // #TODO find out what the proper parent should be
         // leaving as set by the helperapi for the moment
@@ -97,12 +97,12 @@ public:
         return sText;
     }
 
-    css::uno::Reference< oo::excel::XCharacters > SAL_CALL Characters(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException)
+    css::uno::Reference< ov::excel::XCharacters > SAL_CALL Characters(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException)
     {
         // #FIXME #TODO the helperapi Characters implementation doesn't
         // seem to do very much, need to know how the existing Characters
         // impl ( that we use for Range ) can be reused
-        return  css::uno::Reference< oo::excel::XCharacters > ();
+        return  css::uno::Reference< ov::excel::XCharacters > ();
     }
 
     void SAL_CALL setTop( double Top ) throw (css::script::BasicErrorException, css::uno::RuntimeException)
@@ -157,7 +157,7 @@ public:
         if ( aServiceNames.getLength() == 0 )
         {
             aServiceNames.realloc( 1 );
-            aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("org.openoffice.excel.XTitle" ) );
+            aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.excel.XTitle" ) );
         }
         return aServiceNames;
     }

@@ -33,20 +33,20 @@
 #include <cppuhelper/implbase1.hxx>
 
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <org/openoffice/vba/XGlobals.hpp>
-#include <org/openoffice/excel/XApplication.hpp>
-#include <org/openoffice/excel/XDialog.hpp>
+#include <ooo/vba/XGlobals.hpp>
+#include <ooo/vba/excel/XApplication.hpp>
+#include <ooo/vba/excel/XDialog.hpp>
 
 #include "vbahelperinterface.hxx"
 #include "vbadialog.hxx"
 
-typedef InheritedHelperInterfaceImpl1< oo::excel::XDialog > ScVbaDialog_BASE;
+typedef InheritedHelperInterfaceImpl1< ov::excel::XDialog > ScVbaDialog_BASE;
 
 class ScVbaDialog : public ScVbaDialog_BASE
 {
     sal_Int32 mnIndex;
 public:
-    ScVbaDialog( const css::uno::Reference< oo::vba::XHelperInterface >& xParent, sal_Int32 nIndex, const css::uno::Reference< css::uno::XComponentContext > xContext ):ScVbaDialog_BASE( xParent, xContext ), mnIndex( nIndex ) {}
+    ScVbaDialog( const css::uno::Reference< ov::XHelperInterface >& xParent, sal_Int32 nIndex, const css::uno::Reference< css::uno::XComponentContext > xContext ):ScVbaDialog_BASE( xParent, xContext ), mnIndex( nIndex ) {}
     virtual ~ScVbaDialog() {}
 
     // Methods

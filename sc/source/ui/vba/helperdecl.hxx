@@ -28,7 +28,7 @@
  *
  ************************************************************************/
 #include <comphelper/servicedecl.hxx>
-#include <org/openoffice/vba/XHelperInterface.hpp>
+#include <ooo/vba/XHelperInterface.hpp>
 
 namespace comphelper {
 namespace service_decl {
@@ -86,7 +86,7 @@ struct OwnCreateFunc<ImplT, with_args<false> > {
                 css::uno::Reference<css::uno::XComponentContext>
                 const& xContext ) const
     {
-        return css::uno::Reference< org::openoffice::vba::XHelperInterface >(new OwnServiceImpl<ImplT>( rServiceDecl, xContext ));
+        return css::uno::Reference< ooo::vba::XHelperInterface >(new OwnServiceImpl<ImplT>( rServiceDecl, xContext ));
     }
 };
 
@@ -101,7 +101,7 @@ struct OwnCreateFunc<ImplT, with_args<true> > {
                 css::uno::Reference<css::uno::XComponentContext>
                 const& xContext ) const
     {
-        css::uno::Reference< org::openoffice::vba::XHelperInterface > xHelp(
+        css::uno::Reference< ooo::vba::XHelperInterface > xHelp(
             new OwnServiceImpl<ImplT>( rServiceDecl, args, xContext ) );
     css::uno::Reference< css::uno::XInterface > xIf( xHelp, css::uno::UNO_QUERY ) ;
     return xIf;

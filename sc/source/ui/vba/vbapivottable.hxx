@@ -32,18 +32,18 @@
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/sheet/XDataPilotTable.hpp>
-#include <org/openoffice/excel/XPivotTable.hpp>
+#include <ooo/vba/excel/XPivotTable.hpp>
 #include "vbahelper.hxx"
 #include "vbahelperinterface.hxx"
 
-typedef InheritedHelperInterfaceImpl1< oo::excel::XPivotTable >  PivotTableImpl_BASE;
+typedef InheritedHelperInterfaceImpl1< ov::excel::XPivotTable >  PivotTableImpl_BASE;
 
 class ScVbaPivotTable : public PivotTableImpl_BASE
 {
     css::uno::Reference< css::sheet::XDataPilotTable > m_xTable;
 public:
     ScVbaPivotTable( const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::sheet::XDataPilotTable >& xTable );
-    virtual css::uno::Reference< oo::excel::XPivotCache > SAL_CALL PivotCache(  ) throw (css::uno::RuntimeException);
+    virtual css::uno::Reference< ov::excel::XPivotCache > SAL_CALL PivotCache(  ) throw (css::uno::RuntimeException);
     // XHelperInterface
     virtual rtl::OUString& getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();

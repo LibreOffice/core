@@ -40,10 +40,10 @@
 #include <com/sun/star/chart/ChartSolidType.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/chart/ChartDataCaption.hpp>
-#include <org/openoffice/excel/XlChartType.hpp>
-#include <org/openoffice/excel/XlRowCol.hpp>
-#include <org/openoffice/excel/XlAxisType.hpp>
-#include <org/openoffice/excel/XlAxisGroup.hpp>
+#include <ooo/vba/excel/XlChartType.hpp>
+#include <ooo/vba/excel/XlRowCol.hpp>
+#include <ooo/vba/excel/XlAxisType.hpp>
+#include <ooo/vba/excel/XlAxisGroup.hpp>
 
 #include <basic/sberrors.hxx>
 #include "vbachartobject.hxx"
@@ -52,11 +52,11 @@
 #include "vbaaxes.hxx"
 
 using namespace ::com::sun::star;
-using namespace ::org::openoffice;
-using namespace ::org::openoffice::excel::XlChartType;
-using namespace ::org::openoffice::excel::XlRowCol;
-using namespace ::org::openoffice::excel::XlAxisType;
-using namespace ::org::openoffice::excel::XlAxisGroup;
+using namespace ::ooo::vba;
+using namespace ::ooo::vba::excel::XlChartType;
+using namespace ::ooo::vba::excel::XlRowCol;
+using namespace ::ooo::vba::excel::XlAxisType;
+using namespace ::ooo::vba::excel::XlAxisGroup;
 
 const rtl::OUString CHART_NAME( RTL_CONSTASCII_USTRINGPARAM("Name") );
 // #TODO move this constant to vbaseries.[ch]xx ( when it exists )
@@ -77,7 +77,7 @@ const rtl::OUString HASMAINTITLE( RTL_CONSTASCII_USTRINGPARAM("HasMainTitle") );
 const rtl::OUString HASLEGEND( RTL_CONSTASCII_USTRINGPARAM("HasLegend") );
 const rtl::OUString DATACAPTION( RTL_CONSTASCII_USTRINGPARAM("DataCaption") );
 
-ScVbaChart::ScVbaChart( const css::uno::Reference< oo::vba::XHelperInterface >& _xParent, const css::uno::Reference< css::uno::XComponentContext >& _xContext, const css::uno::Reference< css::lang::XComponent >& _xChartComponent, const css::uno::Reference< css::table::XTableChart >& _xTableChart ) : ChartImpl_BASE( _xParent, _xContext ), mxTableChart( _xTableChart )
+ScVbaChart::ScVbaChart( const css::uno::Reference< ov::XHelperInterface >& _xParent, const css::uno::Reference< css::uno::XComponentContext >& _xContext, const css::uno::Reference< css::lang::XComponent >& _xChartComponent, const css::uno::Reference< css::table::XTableChart >& _xTableChart ) : ChartImpl_BASE( _xParent, _xContext ), mxTableChart( _xTableChart )
 {
     mxChartDocument.set( _xChartComponent, uno::UNO_QUERY_THROW ) ;
     // #TODO is is possible that the XPropertySet interface is not set
@@ -562,7 +562,7 @@ ScVbaChart::Activate() throw (script::BasicErrorException, uno::RuntimeException
     // them in the worksheets/sheets collections ), but.....???
     // note: in vba for excel the parent of a Chart sheet is a workbook,
     // e.g. 'ThisWorkbook'
-    uno::Reference< vba::XHelperInterface > xParent( getParent() );
+    uno::Reference< XHelperInterface > xParent( getParent() );
     ScVbaChartObject* pChartObj = static_cast< ScVbaChartObject* >( xParent.get() );
     if ( pChartObj )
         pChartObj->Activate();
@@ -571,7 +571,7 @@ ScVbaChart::Activate() throw (script::BasicErrorException, uno::RuntimeException
 }
 
 void SAL_CALL
-ScVbaChart::setSourceData( const css::uno::Reference< ::org::openoffice::excel::XRange >& _xCalcRange, const css::uno::Any& _aPlotBy ) throw (css::script::BasicErrorException, css::uno::RuntimeException)
+ScVbaChart::setSourceData( const css::uno::Reference< ::ooo::vba::excel::XRange >& _xCalcRange, const css::uno::Any& _aPlotBy ) throw (css::script::BasicErrorException, css::uno::RuntimeException)
 {
     try
     {
@@ -1156,7 +1156,7 @@ ScVbaChart::getValuesCount(sal_Int32 _seriesIndex) throw ( script::BasicErrorExc
 
 
 uno::Reference< excel::XDataLabels >
-ScVbaChart::DataLabels( const uno::Reference< oo::excel::XSeries > /*_oSeries*/ ) throw ( css::script::BasicErrorException )
+ScVbaChart::DataLabels( const uno::Reference< ov::excel::XSeries > /*_oSeries*/ ) throw ( css::script::BasicErrorException )
 {
     if ( true )
         throw script::BasicErrorException( rtl::OUString(), uno::Reference< uno::XInterface >(), SbERR_METHOD_FAILED, rtl::OUString() );
@@ -1249,7 +1249,7 @@ ScVbaChart::getServiceNames()
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("org.openoffice.excel.Chart" ) );
+        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.excel.Chart" ) );
     }
     return aServiceNames;
 }

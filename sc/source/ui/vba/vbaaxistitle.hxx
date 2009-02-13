@@ -32,14 +32,14 @@
 
 #include "vbatitle.hxx"
 #include <cppuhelper/implbase1.hxx>
-#include <org/openoffice/excel/XAxisTitle.hpp>
+#include <ooo/vba/excel/XAxisTitle.hpp>
 
-typedef  TitleImpl< cppu::WeakImplHelper1< oo::excel::XAxisTitle > > AxisTitleBase;
+typedef  TitleImpl< cppu::WeakImplHelper1< ov::excel::XAxisTitle > > AxisTitleBase;
 
 class ScVbaAxisTitle : public AxisTitleBase
 {
 public:
-        ScVbaAxisTitle( const css::uno::Reference< oo::vba::XHelperInterface >& xParent,   const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::drawing::XShape >& _xTitleShape );
+        ScVbaAxisTitle( const css::uno::Reference< ov::XHelperInterface >& xParent,   const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::drawing::XShape >& _xTitleShape );
         // XHelperInterface
         virtual rtl::OUString& getServiceImplName();
         virtual css::uno::Sequence<rtl::OUString> getServiceNames();

@@ -30,38 +30,39 @@
 #ifndef SC_VBA_SHAPE_HXX
 #define SC_VBA_SHAPE_HXX
 
-#include <org/openoffice/office/MsoShapeType.hpp>
+#include <ooo/vba/office/MsoShapeType.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <org/openoffice/msforms/XShape.hpp>
-#include <org/openoffice/msforms/XLineFormat.hpp>
+#include <ooo/vba/msforms/XShape.hpp>
+#include <ooo/vba/msforms/XLineFormat.hpp>
 #include <cppuhelper/implbase2.hxx>
 
 #include "vbahelperinterface.hxx"
 
-typedef  ::cppu::WeakImplHelper2< oo::msforms::XShape, css::lang::XEventListener > ListeningShape;
+typedef  ::cppu::WeakImplHelper2< ov::msforms::XShape, css::lang::XEventListener > ListeningShape;
 
 typedef InheritedHelperInterfaceImpl< ListeningShape > ScVbaShape_BASE;
 
 class ScVbaShape : public ScVbaShape_BASE
 {
+friend class ConcreteXShapeHelper; // perhaps an accessor would be better
 private:
+protected:
     css::uno::Reference< css::drawing::XShape > m_xShape;
     css::uno::Reference< css::drawing::XShapes > m_xShapes;
     css::uno::Reference< css::beans::XPropertySet > m_xPropertySet;
     sal_Int32 m_nType;
     css::uno::Any m_aRange;
-protected:
     virtual void addListeners();
     virtual void removeShapeListener() throw( css::uno::RuntimeException );
     virtual void removeShapesListener() throw( css::uno::RuntimeException );
     virtual rtl::OUString& getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 public:
-    ScVbaShape( const css::uno::Reference< oo::vba::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::drawing::XShape > xShape, const css::uno::Reference< css::drawing::XShapes > xShapes, sal_Int32 nType ) throw ( css::lang::IllegalArgumentException );
-    ScVbaShape( const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::drawing::XShape > xShape ) throw ( css::lang::IllegalArgumentException );
+    ScVbaShape( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::drawing::XShape >& xShape, const css::uno::Reference< css::drawing::XShapes >& xShapes, sal_Int32 nType ) throw ( css::lang::IllegalArgumentException );
+    ScVbaShape( const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::drawing::XShape >& xShape ) throw ( css::lang::IllegalArgumentException );
     virtual ~ScVbaShape();
     css::uno::Any getRange() { return m_aRange; };
     void setRange( css::uno::Any aRange ) { m_aRange = aRange; };
@@ -85,12 +86,12 @@ public:
     virtual sal_Int32 SAL_CALL getType() throw (css::uno::RuntimeException);
     virtual double SAL_CALL getRotation() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setRotation( double _rotation ) throw (css::uno::RuntimeException);
-    virtual css::uno::Reference< oo::msforms::XLineFormat > SAL_CALL getLine() throw (css::uno::RuntimeException);
-    virtual css::uno::Reference< oo::msforms::XFillFormat > SAL_CALL getFill() throw (css::uno::RuntimeException);
-    virtual css::uno::Reference< oo::msforms::XPictureFormat > SAL_CALL getPictureFormat() throw (css::uno::RuntimeException);
+    virtual css::uno::Reference< ov::msforms::XLineFormat > SAL_CALL getLine() throw (css::uno::RuntimeException);
+    virtual css::uno::Reference< ov::msforms::XFillFormat > SAL_CALL getFill() throw (css::uno::RuntimeException);
+    virtual css::uno::Reference< ov::msforms::XPictureFormat > SAL_CALL getPictureFormat() throw (css::uno::RuntimeException);
 
     // Methods
-    virtual css::uno::Reference< oo::excel::XTextFrame > SAL_CALL TextFrame(  ) throw (css::uno::RuntimeException);
+    virtual css::uno::Reference< ov::excel::XTextFrame > SAL_CALL TextFrame(  ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL Delete() throw (css::uno::RuntimeException);
     virtual void SAL_CALL ZOrder( sal_Int32 ZOrderCmd ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL IncrementRotation( double Increment ) throw (css::uno::RuntimeException);

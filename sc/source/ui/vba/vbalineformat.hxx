@@ -32,10 +32,10 @@
 
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <org/openoffice/msforms/XLineFormat.hpp>
+#include <ooo/vba/msforms/XLineFormat.hpp>
 #include "vbahelperinterface.hxx"
 
-typedef InheritedHelperInterfaceImpl1< oo::msforms::XLineFormat > ScVbaLineFormat_BASE;
+typedef InheritedHelperInterfaceImpl1< ov::msforms::XLineFormat > ScVbaLineFormat_BASE;
 
 class ScVbaLineFormat : public ScVbaLineFormat_BASE
 {
@@ -51,7 +51,7 @@ protected:
     rtl::OUString convertArrowheadStyleToLineStartEndName( sal_Int32 nArrowheadStyle ) throw (css::uno::RuntimeException);
     sal_Int32 calculateArrowheadSize();
 public:
-    ScVbaLineFormat( const css::uno::Reference< oo::vba::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::drawing::XShape > xShape );
+    ScVbaLineFormat( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::drawing::XShape > xShape );
 
     // Attributes
     virtual sal_Int32 SAL_CALL getBeginArrowheadStyle() throw (css::uno::RuntimeException);
@@ -78,8 +78,8 @@ public:
     virtual void SAL_CALL setDashStyle( sal_Int32 _dashstyle ) throw (css::uno::RuntimeException);
 
     // Methods
-    virtual css::uno::Reference< oo::msforms::XColorFormat > SAL_CALL BackColor() throw (css::uno::RuntimeException);
-    virtual css::uno::Reference< oo::msforms::XColorFormat > SAL_CALL ForeColor() throw (css::uno::RuntimeException);
+    virtual css::uno::Reference< ov::msforms::XColorFormat > SAL_CALL BackColor() throw (css::uno::RuntimeException);
+    virtual css::uno::Reference< ov::msforms::XColorFormat > SAL_CALL ForeColor() throw (css::uno::RuntimeException);
 };
 
 #endif//SC_VBA_XLINEFORMAT_HXX

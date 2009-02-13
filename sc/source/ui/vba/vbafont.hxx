@@ -32,23 +32,25 @@
 
 #include <cppuhelper/implbase1.hxx>
 
-#include <org/openoffice/excel/XFont.hpp>
+#include <ooo/vba/excel/XFont.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include "vbahelperinterface.hxx"
 #include "vbapalette.hxx"
 
 class ScTableSheetsObj;
+class ScCellRangeObj;
 
-typedef  InheritedHelperInterfaceImpl1< oo::excel::XFont > ScVbaFont_BASE;
+typedef  InheritedHelperInterfaceImpl1< ov::excel::XFont > ScVbaFont_BASE;
 
 class ScVbaFont : public ScVbaFont_BASE
 {
     css::uno::Reference< css::beans::XPropertySet > mxFont;
     ScVbaPalette mPalette;
-    SfxItemSet* mpDataSet;
+    ScCellRangeObj* mpRangeObj;
+    SfxItemSet*  GetDataSet();
 public:
-    ScVbaFont( const css::uno::Reference< oo::vba::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const ScVbaPalette& dPalette, css::uno::Reference< css::beans::XPropertySet > xPropertySet, SfxItemSet* pDataSet = NULL ) throw ( css::uno::RuntimeException );
-    virtual ~ScVbaFont() {}
+    ScVbaFont( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const ScVbaPalette& dPalette, css::uno::Reference< css::beans::XPropertySet > xPropertySet, ScCellRangeObj* pRangeObj = NULL ) throw ( css::uno::RuntimeException );
+    virtual ~ScVbaFont();// {}
 
     // Attributes
     virtual css::uno::Any SAL_CALL getSize() throw (css::uno::RuntimeException);
@@ -79,6 +81,8 @@ public:
     virtual void SAL_CALL setName( const css::uno::Any& _name ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL getColor() throw (css::uno::RuntimeException) ;
     virtual void SAL_CALL setColor( const css::uno::Any& _color ) throw (css::uno::RuntimeException) ;
+    virtual css::uno::Any SAL_CALL getOutlineFont() throw (css::uno::RuntimeException) ;
+    virtual void SAL_CALL setOutlineFont( const css::uno::Any& _outlinefont ) throw (css::uno::RuntimeException) ;
     // XHelperInterface
     virtual rtl::OUString& getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
