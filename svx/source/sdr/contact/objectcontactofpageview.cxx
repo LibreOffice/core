@@ -403,6 +403,12 @@ namespace sdr
             return (pMetaFile && pMetaFile->IsRecord() && !pMetaFile->IsPause());
         }
 
+        // pdf export?
+        bool ObjectContactOfPageView::isOutputToPDFFile() const
+        {
+            return (0 != mrPageWindow.GetPaintWindow().GetOutputDevice().GetPDFWriter());
+        }
+
         // gray display mode
         bool ObjectContactOfPageView::isDrawModeGray() const
         {

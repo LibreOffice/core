@@ -262,6 +262,12 @@ namespace sdr
             return false;
         }
 
+        // pdf export? Default is false
+        bool ObjectContact::isOutputToPDFFile() const
+        {
+            return false;
+        }
+
         // gray display mode
         bool ObjectContact::isDrawModeGray() const
         {

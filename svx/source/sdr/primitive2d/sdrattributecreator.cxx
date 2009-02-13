@@ -602,14 +602,18 @@ namespace drawinglayer
             return pRetval;
         }
 
-        attribute::SdrShadowTextAttribute* createNewSdrShadowTextAttribute(const SfxItemSet& rSet, const SdrText& rText)
+        attribute::SdrShadowTextAttribute* createNewSdrShadowTextAttribute(const SfxItemSet& rSet, const SdrText& rText, bool bSuppressText)
         {
             attribute::SdrShadowTextAttribute* pRetval(0L);
             attribute::SdrShadowAttribute* pShadow(0L);
             attribute::SdrTextAttribute* pText(0L);
 
+            // #i98072# added option to suppress text
             // look for text first
-            pText = createNewSdrTextAttribute(rSet, rText);
+            if(!bSuppressText)
+            {
+                pText = createNewSdrTextAttribute(rSet, rText);
+            }
 
             // try shadow
             pShadow = createNewSdrShadowAttribute(rSet);
