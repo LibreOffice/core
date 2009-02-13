@@ -57,6 +57,8 @@
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/synchronousdispatch.hxx>
+#include <comphelper/uieventslogger.hxx>
+#include <tools/testtoolloader.hxx>
 
 #define C2S(s)  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(s))
 
@@ -183,6 +185,9 @@ sal_Bool SvxImprovementOptionsPage::FillItemSet( SfxItemSet& /*rSet*/ )
         ::comphelper::ConfigurationHelper::writeRelativeKey(
             xConfig, C2S("Participation"), C2S("InvitationAccepted"), uno::makeAny( m_aYesRB.IsChecked() != FALSE ) );
         ::comphelper::ConfigurationHelper::flush( xConfig );
+        // TODO: refactor
+        ::comphelper::UiEventsLogger::reinit();
+        ::tools::InitTestToolLib();
     }
     catch( uno::Exception& )
     {
