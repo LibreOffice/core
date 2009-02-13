@@ -39,7 +39,7 @@
 #include <tools/string.hxx>
 #include <tools/link.hxx>
 #include <swrect.hxx>
-
+#include <unotools/configitem.hxx>
 #include <com/sun/star/util/SearchOptions.hpp>
 
 class SwWrtShell;
@@ -66,6 +66,11 @@ class SwMarginItem;
 #define COL_NOTES_SIDEPANE_ARROW_DISABLED   RGB_COLORDATA(172,168,153)
 
 typedef std::list<SwMarginItem*> SwMarginItem_list;
+typedef std::list<SwMarginItem*>::iterator SwMarginItem_iterator;
+
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using ::rtl::OUString;
 
 struct SwPostItPageItem
 {
@@ -96,7 +101,43 @@ struct FieldShadowState
     }
 };
 
-typedef std::list<SwMarginItem*>::iterator SwMarginItem_iterator;
+class SwNoteProps: public utl::ConfigItem
+{
+    private:
+        bool bIsShowAnkor;
+    public:
+            SwNoteProps() : ConfigItem(::rtl::OUString::createFromAscii("Office.Writer/Notes")), bIsShowAnkor(false)
+        {
+            const Sequence<OUString>& rNames = GetPropertyNames();
+                   Sequence<Any> aValues = GetProperties(rNames);
+                   const Any* pValues = aValues.getConstArray();
+               DBG_ASSERT(aValues.getLength() == rNames.getLength(), "GetProperties failed");
+                if (aValues.getLength())
+                pValues[0]>>=bIsShowAnkor;
+        }
+
+        bool IsShowAnkor()
+        {
+            return bIsShowAnkor;
+        }
+            Sequence<OUString>& GetPropertyNames()
+            {
+            static Sequence<OUString> aNames;
+                 if(!aNames.getLength())
+                 {
+                         static const char* aPropNames[] =
+                         {
+                            "ShowAnkor"
+                           };
+                         const int nCount = sizeof(aPropNames)/sizeof(const char*);
+                         aNames.realloc(nCount);
+                         OUString* pNames = aNames.getArray();
+                     for(int i = 0; i < nCount; i++)
+                             pNames[i] = OUString::createFromAscii(aPropNames[i]);
+                 }
+                 return aNames;
+            }
+};
 
 class SwPostItMgr: public SfxListener
 {
@@ -116,6 +157,7 @@ class SwPostItMgr: public SfxListener
         bool                            mbDeleteNote;
         FieldShadowState                mShadowState;
         OutlinerParaObject*             mpAnswer;
+        bool                        mpIsShowAnkor;
 
         typedef std::list<SwMarginWin*>::iterator   SwMarginWin_iterator;
 
@@ -128,9 +170,9 @@ class SwPostItMgr: public SfxListener
         bool            ScrollbarHit(const unsigned long aPage,const Point &aPoint);
         bool            LayoutByPage(std::list<SwMarginWin*> &aVisiblePostItList,const Rectangle aBorder,long lNeededHeight);
         void            CheckForRemovedPostIts();
-        bool            ArrowEnabled(USHORT aDirection,unsigned long aPage) const;
-        bool            BorderOverPageBorder(unsigned long aPage) const;
-        bool            HasScrollbars() const;
+            bool                ArrowEnabled(USHORT aDirection,unsigned long aPage) const;
+            bool                BorderOverPageBorder(unsigned long aPage) const;
+            bool                HasScrollbars() const;
         void            Focus(SfxBroadcaster& rBC);
 
         sal_Int32       GetInitialAnchorDistance() const;
@@ -161,6 +203,7 @@ class SwPostItMgr: public SfxListener
             bool ShowScrollbar(const unsigned long aPage) const;
             bool HasNotes() const ;
             bool ShowNotes() const;
+        bool IsShowAnkor() { return mpIsShowAnkor;}
             unsigned long GetSidebarWidth(bool bPx = false) const;
             unsigned long GetSidebarBorderWidth(bool bPx = false) const;
             unsigned long GetNoteWidth();
@@ -212,9 +255,10 @@ class SwPostItMgr: public SfxListener
 
             void                RegisterAnswer(OutlinerParaObject* pAnswer) { mpAnswer = pAnswer;}
             OutlinerParaObject* IsAnswer() {return mpAnswer;}
+            void CheckMetaText();
+            void StartSpelling();
 
             sal_uInt16 Replace(SvxSearchItem* pItem);
-            void StartSearchAndReplace(const SvxSearchItem& rSearchItem);
             sal_uInt16 SearchReplace(const SwFmtFld &pFld, const ::com::sun::star::util::SearchOptions& rSearchOptions,bool bSrchForward);
             sal_uInt16 FinishSearchReplace(const ::com::sun::star::util::SearchOptions& rSearchOptions,bool bSrchForward);
 };

@@ -1092,11 +1092,12 @@ void SwAnnotationShell::GetNoteState(SfxItemSet &rSet)
                 break;
         }
 
-        if ( (pPostItMgr->GetActivePostIt()->IsProtected()) &&
-        //if ( (pPostItMgr->GetActivePostIt()->GetStatus()==SwPostItHelper::DELETED) &&
-            ( (nSlotId==FN_DELETE_NOTE) || (nSlotId==FN_REPLY) ) )
+        if (pPostItMgr->GetActivePostIt())
+        {
+            if ( (pPostItMgr->GetActivePostIt()->IsProtected()) &&
+                    ( (nSlotId==FN_DELETE_NOTE) || (nSlotId==FN_REPLY) ) )
                 rSet.DisableItem( nWhich );
-
+        }
         nWhich = aIter.NextWhich();
     }
 }

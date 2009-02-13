@@ -399,13 +399,15 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
                 pOpt->SetCrossHair( bFlag );
                 break;
 
-         case FN_VIEW_NOTES:
+    case FN_VIEW_NOTES:
                 if ( STATE_TOGGLE == eState )
                     bFlag = !pOpt->IsPostIts();
 
                 GetPostItMgr()->SetLayout();
                 pOpt->SetPostIts( bFlag );
-                break;
+                   if (pOpt->IsPostIts())
+            GetPostItMgr()->CheckMetaText();
+         break;
 
         case FN_VIEW_HIDDEN_PARA:
                 if ( STATE_TOGGLE == eState )

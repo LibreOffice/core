@@ -63,7 +63,7 @@ class OutlinerParaObject;
 
 #define ANKORLINE_WIDTH         1
 
-enum AnkorState {AS_ALL, AS_START, AS_END};
+enum AnkorState {AS_ALL, AS_START, AS_END,AS_TRI};
 
 class SwPostItAnkor: public sdr::overlay::OverlayObjectWithBasePosition
 {
@@ -244,7 +244,6 @@ class SwMarginWin : public Window
         PopupMenu*      mpButtonPopup;
         bool            mbIsFollow;
         Rectangle       mRectMetaButton;
-        virtual void    CheckMetaText();
         virtual void    DataChanged( const DataChangedEvent& aEvent);
         virtual void    LoseFocus();
         virtual void    MouseButtonDown( const MouseEvent& rMEvt );
@@ -252,7 +251,6 @@ class SwMarginWin : public Window
         virtual void    Paint( const Rectangle& rRect);
         virtual void    GetFocus();
 
-        void            SetPosAndSize();
         void            SetSizePixel( const Size& rNewSize );
 
         DECL_LINK(ModifyHdl, void*);
@@ -265,8 +263,10 @@ class SwMarginWin : public Window
         virtual ~SwMarginWin();
 
         void    SetSize( const Size& rNewSize );
-        void    SetPosSizePixelRect( long nX, long nY,long nWidth, long nHeight,const SwRect &aRect,const long PageBorder);
+            void    SetPosSizePixelRect( long nX, long nY,long nWidth, long nHeight,const SwRect &aRect,const long PageBorder);
+        void            SetPosAndSize();
         void    TranslateTopPosition(const long aAmount);
+        virtual void    CheckMetaText();
 
         PostItTxt*      PostItText()    { return mpPostItTxt;}
         ScrollBar*      Scrollbar()     { return mpVScrollbar;}

@@ -242,7 +242,8 @@ location: <project>/uiconfig/[swriter|sweb|sglobal]/menubar/menubar.xml
             Identifier = FN_REDLINE_REJECT_DIRECT ;                            \
             HelpID = FN_REDLINE_REJECT_DIRECT ;                                \
             Text [ en-US ] = "Reject Change" ;                       \
-        };
+        };                              \
+    SEPARATOR ;
 #define _MN_EDIT_BIB_ENTRY_DLG                                              \
         MenuItem                                                            \
         {                                                                   \
