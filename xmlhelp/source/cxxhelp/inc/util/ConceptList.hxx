@@ -58,18 +58,6 @@ namespace xmlsearch {
 
             void value( sal_Int32 val ) { value_ += val; }
 
-            sal_Int32 first() throw( xmlsearch::excep::XmlSearchException )
-            {
-                value_ = 0;
-                sal_Int32 ret = list_.readNext( k_,this ) ? value_ : END;
-                return ret;
-            }
-
-            sal_Int32 next() throw( xmlsearch::excep::XmlSearchException )
-            {
-                return list_.readNext( k_,this) ? value_ : END;
-            }
-
         private:
 
             sal_Int32             k_,value_;

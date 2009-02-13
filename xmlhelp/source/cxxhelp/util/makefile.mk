@@ -46,8 +46,7 @@ CFLAGS+=-GR
 .ENDIF
 
 SLOFILES=\
-        $(SLO)$/Decompressor.obj   \
-        $(SLO)$/IndexAccessor.obj
+        $(SLO)$/Decompressor.obj
 
 # --- Targets ------------------------------------------------------
 

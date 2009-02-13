@@ -45,14 +45,7 @@ ENABLE_EXCEPTIONS=TRUE
 CFLAGS+=-GR
 .ENDIF
 
-SLOFILES=\
-        $(SLO)$/ConceptData.obj   \
-        $(SLO)$/ContextTables.obj   \
-        $(SLO)$/DocGenerator.obj   \
-        $(SLO)$/Query.obj   \
-        $(SLO)$/QueryProcessor.obj   \
-        $(SLO)$/Search.obj   \
-        $(SLO)$/XmlIndex.obj
+SLOFILES=$(SLO)$/DocGenerator.obj
 
 # --- Targets ------------------------------------------------------
 
