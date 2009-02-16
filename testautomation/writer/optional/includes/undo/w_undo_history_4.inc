@@ -39,20 +39,20 @@
 
 sub w_undo_history_4
 
-	Call tUndoHistory34			' Objects (Insert/Delete)
-	Call tUndoHistory35			' Floating Frame (Insert/Delete)
-	Call tUndoHistory36			' Insert file
-	Call tUndoHistory37			' Asian Phonetic Guides
-	Call tUndoHistory38			' Autocorrect / Autoformat
-	Call tUndoHistory39			' Draw Object (Insert)
-	Call tUndoHistory40			' Draw Object (Group/ungroup/Name/Delete)
-	Call tUndoHistory41			' Spellcheck (Autocheck/Spellcheck)	
-	Call tUndoHistory42			' Form Control (Insert/resize/move/replace/change property/delete)
-	Call tUndoHistory43			' Header/Footer insert and delete
+	Call tUndoOLEObject			' Objects (Insert/Delete)
+	Call tUndoFloatingFrame			' Floating Frame (Insert/Delete)
+	Call tUndoInsertFile			' Insert file
+	Call tUndoAsianPhoneticGuides			' Asian Phonetic Guides
+	Call tUndoAutocorrect			' Autocorrect / Autoformat
+	Call tUndoDrawObject			' Draw Object (Insert)
+	Call tUndoDrawObjectGroup			' Draw Object (Group/ungroup/Name/Delete)
+	Call tUndoSpellcheck			' Spellcheck (Autocheck/Spellcheck)	
+	Call tUndoFormControl			' Form Control (Insert/resize/move/replace/change property/delete)
+	Call tUndoHeaderFooter			' Header/Footer insert and delete
 	
 end sub
 
-testcase tUndoHistory34
+testcase tUndoOLEObject
 	
 	'/// <B>OLE-Objects (Insert/Delete)</B>
 	printlog "- Insert OLE-Object"
@@ -87,7 +87,7 @@ testcase tUndoHistory34
 endcase
 
 
-testcase tUndoHistory35
+testcase tUndoFloatingFrame
 
 	'/// <B>Floating frames</B>
 	printlog "- Insert floating frame"
@@ -114,7 +114,7 @@ testcase tUndoHistory35
 endcase
 
 
-testcase tUndoHistory36
+testcase tUndoInsertFile
 
 	'/// <B>Insert File</B>
 	printlog "- Insert file"
@@ -143,7 +143,7 @@ testcase tUndoHistory36
 endcase
 
 
-testcase tUndoHistory37
+testcase tUndoAsianPhoneticGuides
 
 	'/// <B>Asian Phonetic Guides</B>
 	printlog "- Asian Phonetic Guides"
@@ -177,7 +177,7 @@ testcase tUndoHistory37
 endcase
 
 
-testcase tUndoHistory38
+testcase tUndoAutocorrect
 
 	'/// <B>Autocorrect / Autoformat</B>
 	printlog "- Autocorrect / Autoformat"
@@ -204,7 +204,7 @@ testcase tUndoHistory38
 endcase
 
 
-testcase tUndoHistory39
+testcase tUndoDrawObject
 	'/// <B>Draw object</B>
 	printlog "- Draw object"
 	'/// new document
@@ -234,7 +234,7 @@ testcase tUndoHistory39
 endcase
 
 
-testcase tUndoHistory40
+testcase tUndoDrawObjectGroup
 
 	'/// <B>Group of Drawing objects</B>
 	printlog "- Group of Drawing objects"
@@ -290,7 +290,7 @@ testcase tUndoHistory40
 endcase
 
 
-testcase tUndoHistory41
+testcase tUndoSpellcheck
 	Dim sReplace as string
 
 	'/// <B>Spellcheck(Autocheck/Spellcheck)</B>
@@ -362,7 +362,7 @@ testcase tUndoHistory41
 endcase
 
 
-testcase tUndoHistory42
+testcase tUndoFormControl
 
 	'/// <B>Form Control (Insert/resize/move/replace/change property/delete)</B>
 	printlog "- Form control (insert)"
@@ -425,7 +425,7 @@ testcase tUndoHistory42
 endcase
 
 
-testcase tUndoHistory43
+testcase tUndoHeaderFooter
 
     QAErrorlog "#i56552#footer deletion cannot be undone"
     goto endsub

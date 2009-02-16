@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* Owner : joerg.sievers@sun.com
+'* Owner : helge.delfs@sun.com
 '*
 '* short description : Resource-test for the Chart Data Dialogue.
 '*

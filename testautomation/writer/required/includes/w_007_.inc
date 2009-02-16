@@ -62,12 +62,10 @@ sub w_007_
     'Writer Web
     gApplication = "HTMLDOKUMENT"
     Call tHtmlDocToolsHangulHanjaConversion
-    Call tHtmlDocToolsOptionsTest
 
     'Writer Master Document
     gApplication = "MASTERDOC"
     Call tMasterDocToolsHyphenation
-    Call tMasterDocToolsOptionsTest
     gApplication = "WRITER"
 
 end sub
@@ -1276,18 +1274,4 @@ testcase tMasterDocToolsHyphenation
         Call hCloseDocument
     Loop
     gApplication = "WRITER"
-endcase
-
-' -------------------------------------------
-
-testcase tHtmlDocToolsOptionsTest
-    gApplication = "HTMLDOKUMENT"
-    Call tToolsOptionsTest
-endcase
-
-' -------------------------------------------
-
-testcase tMasterDocToolsOptionsTest
-    gApplication = "MASTERDOC"
-    Call tToolsOptionsTest
 endcase

@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : joerg.sievers@Sun.COM
+'* owner : oliver.creamer@Sun.COM
 '*
 '* short description  :  Detailed test of the chart types
 '*

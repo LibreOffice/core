@@ -558,13 +558,7 @@ testcase tiPengine2ObjectsGetsEffects
         DocumentPresentation.TypeKeys "<SPACE>"
         Sleep (5)
         DocumentPresentation.TypeKeys "<SPACE>"
-        printlog "Trying to end presentation with mouseclick on black endscreen."
-        try
-            DocumentPresentation.mousedown (50,50,1)
-            DocumentPresentation.mouseup (50,50,1)
-        catch
-            warnlog "TimeOut on pressing mouse button."
-        endcatch
+        
         if DocumentPresentation.Exists(5) then 
             warnlog "Presentation should have ended. Check why it didn't."
         end if

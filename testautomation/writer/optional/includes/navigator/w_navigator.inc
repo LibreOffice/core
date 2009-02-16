@@ -40,13 +40,11 @@ sub w_navigator
     printLog Chr(13) + "---------   Navigator Functions -   ----------"
 
     Call tViewNavigator1                ' alle Methoden am Dockingwindow  - Navigator
-    if gApplication = "WRITER" then
-        Call tViewNavigator2            ' dokument?bergreifenden Methoden am Dockingwindow
-        Call tViewNavigator3            ' Funktionen testen
-        Call tViewNavigator4            ' Inhaltsansicht des Navigators ?berpr?fen
-        Call tViewNavigator5            ' Anspringen von Punkten im Dokument ?ber die Inhaltsansicht
-        Call tViewNavigator6            ' Umbenennen von Objekten aus dem Navigator
-    end if
+    Call tViewNavigator2            ' dokument?bergreifenden Methoden am Dockingwindow
+    Call tViewNavigator3            ' Funktionen testen
+    Call tViewNavigator4            ' Inhaltsansicht des Navigators ?berpr?fen
+    Call tViewNavigator5            ' Anspringen von Punkten im Dokument ?ber die Inhaltsansicht
+    Call tViewNavigator6            ' Umbenennen von Objekten aus dem Navigator
 
 end sub
 
@@ -128,6 +126,9 @@ endcase
 testcase tViewNavigator2
     Dim xPos% : Dim yPos% : Dim xSize% : Dim ySize%
     Dim datgeht as boolean
+    if gApplication <> "WRITER" then
+        goto endsub
+    endif
     '/// Edit / Navigator ( document-spreading methods with Navigator as Window ) ///
     printlog "- Edit / Navigator : document-spreading methods with Navigator as Window"
     '/// New document ///
@@ -216,8 +217,8 @@ endcase
 ' **********************************************************************
 
 testcase tViewNavigator3
-QaErrorLog "#i94614# - tEditNavigator3 outcommented"
-exit sub
+    QaErrorLog "#i94614# - tEditNavigator3 outcommented"
+    goto endsub
 
     Dim NavigationTearOff as boolean
 	'/// Edit / Navigator : check some Navigator-Functions ///
@@ -365,7 +366,9 @@ testcase tViewNavigator4
     Dim i : Dim j : Dim Ende : Dim k
     Dim AlteGruppe$ : Dim AlterUnterwert$
     Ende=1000
-
+    if gApplication <> "WRITER" then
+        goto endsub
+    endif
     printlog "- Edit / Navigator : check entry's in Navigator Index"
     '/// File / Open / 'gTesttoolpath + "writer\optional\input\navigator\navigator.odt"' ///
     Call hFileOpen ( gTesttoolpath + "writer\optional\input\navigator\navigator.odt" )
@@ -423,8 +426,12 @@ endcase
 ' **********************************************************************
 
 testcase tViewNavigator5
-QaErrorLog "#i94614# - tEditNavigator5 outcommented"
-exit sub
+    QaErrorLog "#i94614# - tEditNavigator5 outcommented"
+    goto endsub
+    
+    if gApplication <> "WRITER" then
+        goto endsub
+    endif
 
     Dim j as integer
     Dim Dummy as String
@@ -612,6 +619,10 @@ testcase tViewNavigator6
     Dim j as integer
     Dim datIsderAlte(4) as string
 
+    if gApplication <> "WRITER" then
+        goto endsub
+    endif
+    
     printlog "- Edit / Navigator : Rename Objects"
     '/// File / Open / 'gTesttoolpath + "writer\optional\input\navigator\st1_1.sxw" ' ///
     Call hFileOpen ( gTesttoolpath + "writer\optional\input\navigator\st1_1.sxw" )

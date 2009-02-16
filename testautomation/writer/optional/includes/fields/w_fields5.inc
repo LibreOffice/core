@@ -199,7 +199,7 @@ endcase
 
 testcase tVariables_3
     qaerrorlog "#i94596# - tVariables_3 outcommented due to bug."
-    exit sub
+    goto endsub
 
   Dim sName     as String
   Dim sValue    as String

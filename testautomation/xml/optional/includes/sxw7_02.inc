@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : joerg.sievers@sun.com
+'* owner : fredrik.haegg@sun.com
 '*
 '* short description : XML Writer Include File
 '*

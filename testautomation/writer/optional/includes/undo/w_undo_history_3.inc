@@ -39,26 +39,26 @@
 
 sub w_undo_history_3
 
-	Call tUndoHistory18			' Section (Insert/Modify/Delete)
-	Call tUndoHistory19			' Hyperlink (Insert as Text/as URL button)
-	Call tUndoHistory20			' Footnote (Insert/Modify/Delete)
-	Call tUndoHistory21			' Insert Caption
-	Call tUndoHistory22			' Insert Autotext	
-	Call tUndoHistory23			' Bookmark (Insert/Rename/Delete)
-	Call tUndoHistory24			' Note (Insert/Delete)
-	Call tUndoHistory25			' Script (Insert/Delete)
-	Call tUndoHistory26			' Index/Bibliography entrys (Insert/Delete)
-	Call tUndoHistory27			' Frames (Insert/Rename/Delete)
-	Call tUndoHistory28			' Tables Part 1
-	Call tUndoHistory29			' Tables Part 2
-	Call tUndoHistory30			' Tables Part 3
-	Call tUndoHistory31			' Tables Part 4
-	Call tUndoHistory32			' Horizontal ruler
-	Call tUndoHistory33			' Graphics (Insert/Replace/Delete)
+	Call tUndoSection			' Section (Insert/Modify/Delete)
+	Call tUndoHyperlink			' Hyperlink (Insert as Text/as URL button)
+	Call tUndoFootnote			' Footnote (Insert/Modify/Delete)
+	Call tUndoCaption			' Insert Caption
+	Call tUndoAutoText			' Insert Autotext	
+	Call tUndoBookmark			' Bookmark (Insert/Rename/Delete)
+	Call tUndoNote			' Note (Insert/Delete)
+	Call tUndoScript			' Script (Insert/Delete)
+	Call tUndoIndexes			' Index/Bibliography entrys (Insert/Delete)
+	Call tUndoFrames			' Frames (Insert/Rename/Delete)
+	Call tUndoTableGeneral			' Tables Part 1
+	Call tUndoTableOptionsMerge			' Tables Part 2
+	Call tUndoTableConvertSort			' Tables Part 3
+	Call tUndoTableSplitDelete			' Tables Part 4
+	Call tUndoHorizontalRuler			' Horizontal ruler
+	Call tUndoGraphics			' Graphics (Insert/Replace/Delete)
 	
 end sub
 
-testcase tUndoHistory18
+testcase tUndoSection
 
 	'/// <B>Section (Insert/Modify/Delete)</B>
 	printlog "Section (Insert)"
@@ -117,7 +117,7 @@ testcase tUndoHistory18
 endcase
 
 
-testcase tUndoHistory19
+testcase tUndoHyperlink
 
 	'///<B>Hyperlink (Insert as Text/as URL button)</B>
 	printlog "- Insert hyperlink as text"
@@ -155,7 +155,7 @@ testcase tUndoHistory19
 endcase	
 
 
-testcase tUndoHistory20
+testcase tUndoFootnote
 
 	'/// <B>Footnote (Insert/Modify/Delete)</B>
 	printlog "- Footnote (Insert)"
@@ -199,7 +199,7 @@ testcase tUndoHistory20
 endcase
 
 
-testcase tUndoHistory21
+testcase tUndoCaption
 
 	'/// <B>Insert a caption</B>
 	printlog "- Insert Caption"
@@ -222,7 +222,7 @@ testcase tUndoHistory21
 endcase
 
 
-testcase tUndoHistory22
+testcase tUndoAutoText
 
 	'/// <B>Insert autotext</B>
 	printlog "- Insert autotext"
@@ -239,7 +239,7 @@ testcase tUndoHistory22
 endcase
 
 
-testcase tUndoHistory23
+testcase tUndoBookmark
 
 	'/// <B>Bookmark (Insert/Rename/Delete)</B>
 	printlog "- Insert Bookmark"
@@ -289,7 +289,7 @@ testcase tUndoHistory23
 endcase
 
 
-testcase tUndoHistory24
+testcase tUndoNote
 
 	'/// <B>Note (Insert/Delete)</B>
 	printlog "- Insert Note"
@@ -315,7 +315,7 @@ testcase tUndoHistory24
 endcase
 
 
-testcase tUndoHistory25
+testcase tUndoScript
 	
 	'/// <B>Script (Insert/Delete)</B>
 	printlog "- Insert Script"
@@ -340,7 +340,7 @@ testcase tUndoHistory25
 endcase
 
 
-testcase tUndoHistory26
+testcase tUndoIndexes
 
 	'/// <B>Indexes (Insert/Delete)</B>
 	printlog "- Insert Index entry"
@@ -384,7 +384,7 @@ testcase tUndoHistory26
 endcase
 
 
-testcase tUndoHistory27
+testcase tUndoFrames
 
 	'/// <B>Frames (Insert/Rename/Delete)</B>
 	printlog "- Insert Frame"
@@ -424,7 +424,7 @@ testcase tUndoHistory27
 endcase
 
 
-testcase tUndoHistory28
+testcase tUndoTableGeneral
 	Dim sTableName as string
 
 	'/// <B>Tables Part 1</B>
@@ -488,7 +488,7 @@ testcase tUndoHistory28
 endcase
 
 
-testcase tUndoHistory29
+testcase tUndoTableOptionsMerge
 
 	'/// <B>Tables Part 2</B>
 	printlog "- apply table attributes"
@@ -532,7 +532,7 @@ testcase tUndoHistory29
 endcase
 
 
-testcase tUndoHistory30
+testcase tUndoTableConvertSort
 
 	'/// <B>Tables Part 3</B>
 	printlog "- Convert to text"
@@ -564,7 +564,7 @@ testcase tUndoHistory30
 endcase
 
 
-testcase tUndoHistory31
+testcase tUndoTableSplitDelete
 
 	'/// <B>Tables Part 4</B>
 	printlog "- Split tables"
@@ -606,7 +606,7 @@ testcase tUndoHistory31
 endcase
 
 
-testcase tUndoHistory32
+testcase tUndoHorizontalRuler
 
 	'/// <B>HorizontalRuler</B>
 	printlog "- Horizontal ruler"
@@ -626,7 +626,7 @@ testcase tUndoHistory32
 endcase
 
 
-testcase tUndoHistory33
+testcase tUndoGraphics
 
 	'/// <B>Graphics (Insert/Delete/Replace)</B>
 	printlog "- Insert graphics from file"

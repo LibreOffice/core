@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : joerg.sievers@Sun.COM
+'* owner : oliver.craemer@Sun.COM
 '*
 '* short description : Conversion of Microsoft OLE objects
 '*

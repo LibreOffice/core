@@ -147,7 +147,7 @@ endcase
 
 testcase tEditUndoTOX
     QaErrorLog "tEditUndoTOX outcommented due to makeover."
-    exit sub
+    goto endsub
     
 	Dim CompareThis as string, Compare1 as string, Compare2 as string, Compare3 as string
 	Dim CompareWith1 as string, CompareWith2 as string, MenuEntryEnabled as boolean

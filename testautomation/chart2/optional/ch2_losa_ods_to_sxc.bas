@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : joerg.sievers@Sun.COM
+'* owner : helge.delfs@Sun.COM
 '*
 '* short description : Load/Save test for chart files - Input: ODS, Output: SXC
 '*

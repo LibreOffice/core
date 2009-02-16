@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : joerg.sievers@sun.com
+'* owner : thorsten.bosbach@sun.com
 '*
 '* short description : Export test for the Math XML 6.0/7/OOo 1.x format
 '*

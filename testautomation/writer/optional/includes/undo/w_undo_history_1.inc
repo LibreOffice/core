@@ -40,15 +40,15 @@
 sub w_undo_history_1
 
 	' a < 20 characters long string
-	Call tUndoHistory1		' Typing & Overwrite
-	Call tUndoHistory2		' Replace
-	Call tUndoHistory3		' Replace all & Delete
-	Call tUndoHistory4		' Sort
-	Call tUndoHistory5		' Text convert to table
+	Call tUndoOverwrite		' Typing & Overwrite
+	Call tUndoFindAndReplace		' Replace
+	Call tUndoReplaceAll		' Replace all & Delete
+	Call tUndoSort		' Sort
+	Call tUndoTableConvert		' Text convert to table
 
 end sub
 
-testcase tUndoHistory1
+testcase tUndoOverwrite
 
 	'/// new document
 	Call hNewDocument
@@ -74,7 +74,7 @@ testcase tUndoHistory1
 	Call hCloseDocument
 endcase
 
-testcase tUndoHistory2
+testcase tUndoFindAndReplace
 
 	'/// new Document
 	'/// <U><B>CHECK: Replace</B></U>
@@ -113,7 +113,7 @@ testcase tUndoHistory2
 endcase
 
 
-testcase tUndoHistory3
+testcase tUndoReplaceAll
 	Dim CheckString as string
 	
 	'///  new document
@@ -156,7 +156,7 @@ testcase tUndoHistory3
 endcase
 
 
-testcase tUndoHistory4
+testcase tUndoSort
 
 	'/// new document
 	Call hNewDocument
@@ -183,7 +183,7 @@ testcase tUndoHistory4
 endcase
 
 
-testcase tUndoHistory5
+testcase tUndoTableConvert
 
 	'/// new document
 	Call hNewDocument

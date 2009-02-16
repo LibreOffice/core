@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : joerg.sievers@sun.com
+'* owner : oliver.craemer@sun.com
 '*
 '* short description : Check content.xml for attribute 'table:selected-page'
 '*

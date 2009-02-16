@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : joerg.sievers@sun.com
+'* owner : oliver.creamer@sun.com
 '*
 '* short description : Check content.xml for correct scenario attributes
 '*

@@ -31,7 +31,7 @@
 '*
 '/***********************************************************************
 '*
-'* owner : joerg.sievers@sun.com
+'* owner : helge.delfs@sun.com
 '*
 '* short description : Verify the Chart2 XML file format
 '*

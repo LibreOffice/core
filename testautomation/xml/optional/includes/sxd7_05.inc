@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : joerg.sievers@sun.com
+'* owner : wolfram.garten@sun.com
 '*
 '* short description : XML Draw Include File
 '*

@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* Owner : joerg.sievers@sun.com
+'* Owner : helge.delfs@sun.com
 '*
 '* short description : simple XML-Parser for XML-Files from Registration-Database and Routines to work with SAX-Parser in Testtool
 '*

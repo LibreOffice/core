@@ -119,7 +119,7 @@ sub sFileExport
       end if
     catch
       Warnlog "An error at creating the export-dir, the test ends!"
-      goto endsub
+    exit sub
     endcatch
     
     '///+ open the test document qatesttool/graphics/required/input/graphicexport.od ? ] ///'
@@ -284,12 +284,12 @@ sub tClipboardFromDrawTest
     
     if gApplication = "WRITER" then
        call writertest
-       goto endsub
+       exit sub
     end if
     
     if gApplication = "CALC" then
        call calctest
-       goto endsub
+       exit sub
     end if
 end sub
 
