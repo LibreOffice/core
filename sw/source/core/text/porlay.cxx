@@ -187,9 +187,7 @@ sal_Bool isTransparentChar ( xub_Unicode cCh )
 sal_Bool lcl_IsLigature( xub_Unicode cCh, xub_Unicode cNextCh )
 {
             // Lam + Alef
-    return ( isLamChar ( cCh ) && isAlefChar ( cNextCh )); // ||
-            // Beh + Reh
-            //  ( 0x628 == cCh && 0x631 == cNextCh );
+    return ( isLamChar ( cCh ) && isAlefChar ( cNextCh ));
 }
 
 /*************************************************************************
@@ -205,25 +203,23 @@ sal_Bool lcl_ConnectToPrev( xub_Unicode cCh, xub_Unicode cPrevCh )
     // to the left. So we look for the characters that are actually connectable
     // to the left. Here is the complete list of WH:
 
-   // (hennerdrewes) to do: this should be reworked
-   // use the isXXXChar functions to exclude the non-connecting character classes
-
+    // (hennerdrewes):
+    // added lam forms 0x06B5..0x06B8
+    // added 0x6FA..0x6FC, according to unicode documentation, although not present in my fonts
+    // added heh goal 0x6C1
     sal_Bool bRet = 0x628 == cPrevCh ||
                     ( 0x62A <= cPrevCh && cPrevCh <= 0x62E ) ||
-                    ( 0x633 <= cPrevCh && cPrevCh <= 0x643 ) ||
-                      0x644 == cPrevCh || // Lam does connect !!!
-                    ( 0x645 <= cPrevCh && cPrevCh <= 0x647 ) ||
+                  ( 0x633 <= cPrevCh && cPrevCh <= 0x647 ) ||
                       0x649 == cPrevCh || // Alef Maksura does connect !!!
                       0x64A == cPrevCh ||
                     ( 0x678 <= cPrevCh && cPrevCh <= 0x687 ) ||
-                    ( 0x69A <= cPrevCh && cPrevCh <= 0x6B4 ) ||
-                    ( 0x6B9 <= cPrevCh && cPrevCh <= 0x6C0 ) ||
-                    ( 0x6C3 <= cPrevCh && cPrevCh <= 0x6D3 );
+                  ( 0x69A <= cPrevCh && cPrevCh <= 0x6C1 ) ||
+                  ( 0x6C3 <= cPrevCh && cPrevCh <= 0x6D3 ) ||
+                  ( 0x6FA <= cPrevCh && cPrevCh <= 0x6FC )  ;
 
     // check for ligatures cPrevChar + cChar
-    if ( bRet )
-        bRet = ! lcl_IsLigature( cPrevCh, cCh );
-
+    if( bRet )
+        bRet = !lcl_IsLigature( cPrevCh, cCh );
     return bRet;
 }
 
@@ -1133,7 +1129,14 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
 
                 USHORT nPriorityLevel = 7; // 0..6 = level found
                                            // 7 not found
-                while (nIdx < rWord.Len())
+
+                xub_StrLen nWordLen = rWord.Len();
+
+                // ignore trailing vowel chars
+                while( nWordLen && isTransparentChar( rWord.GetChar( nWordLen - 1 )))
+                    --nWordLen;
+
+                while (nIdx < nWordLen)
                 {
                     cCh = rWord.GetChar( nIdx );
 
@@ -1147,9 +1150,10 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
 
                     // 2. Priority:
                     // after a Seen or Sad
-                    if (nPriorityLevel >= 1 && nIdx < rWord.Len() - 1)
+                    if (nPriorityLevel >= 1 && nIdx < nWordLen - 1)
                     {
-                        if ( isSeenOrSadChar ( cCh ) )
+                        if( isSeenOrSadChar( cCh )
+                         && (rWord.GetChar( nIdx+1 ) != 0x200C) ) // #i98410#: prevent ZWNJ expansion
                         {
                             nKashidaPos  = aScanner.GetBegin() + nIdx;
                             nPriorityLevel = 1;
@@ -1162,7 +1166,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
                     {
                         if ( isTehMarbutaChar ( cCh ) || // Teh Marbuta (right joining)
                              isDalChar ( cCh ) ||        // Dal (right joining) final form may appear in the middle of word
-                             ( isHahChar ( cCh ) && nIdx == rWord.Len() - 1))  // Hah (dual joining) only at end of word
+                             ( isHahChar ( cCh ) && nIdx == nWordLen - 1))  // Hah (dual joining) only at end of word
                         {
 
                             ASSERT( 0 != cPrevCh, "No previous character" )
@@ -1183,7 +1187,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
                              (( isLamChar ( cCh ) || // Lam
                               isKafChar ( cCh )   || // Kaf (both dual joining)
                               isGafChar ( cCh ) )
-                              && nIdx == rWord.Len() - 1))  // only at end of word
+                              && nIdx == nWordLen - 1))  // only at end of word
                         {
                             ASSERT( 0 != cPrevCh, "No previous character" )
                             // check if character is connectable to previous character,
@@ -1197,7 +1201,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
 
                     // 5. Priority:
                     // before media Bah
-                    if ( nPriorityLevel >= 4 && nIdx > 0 && nIdx < rWord.Len() - 1 )
+                    if ( nPriorityLevel >= 4 && nIdx > 0 && nIdx < nWordLen - 1 )
                     {
                         if ( isBaaChar ( cCh )) // Bah
                         {
@@ -1225,7 +1229,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
                              (( isAinChar ( cCh ) ||  // Ain (dual joining)
                                 isQafChar ( cCh ) ||  // Qaf (dual joining)
                                 isFeChar  ( cCh ) )   // Feh (dual joining)
-                                && nIdx == rWord.Len() - 1))  // only at end of word
+                                && nIdx == nWordLen - 1))  // only at end of word
                         {
                             ASSERT( 0 != cPrevCh, "No previous character" )
                             // check if character is connectable to previous character,
@@ -1245,7 +1249,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
                         if ( isRehChar ( cCh ) ||   // Reh Zain (right joining)
                                                     // final form may appear in the middle of word
                              ( 0x60C <= cCh && 0x6FE >= cCh // all others
-                              && nIdx == rWord.Len() - 1))   // only at end of word
+                              && nIdx == nWordLen - 1))   // only at end of word
                         {
                             ASSERT( 0 != cPrevCh, "No previous character" )
                             // check if character is connectable to previous character,

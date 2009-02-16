@@ -134,7 +134,7 @@ USHORT lcl_AddSpace( const SwTxtSizeInfo &rInf, const XubString* pStr,
     // Kashida Justification: Insert Kashidas
     if ( nEnd > nPos && pSI && COMPLEX == nScript )
     {
-        if ( SwScriptInfo::IsArabicText( *pStr, nPos, nEnd - nPos ) )
+        if ( SwScriptInfo::IsArabicText( *pStr, nPos, nEnd - nPos ) && pSI->CountKashida() )
         {
             const USHORT nKashRes = pSI->KashidaJustify( 0, 0, nPos, nEnd - nPos );
             // i60591: need to check result of KashidaJustify
