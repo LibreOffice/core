@@ -1207,7 +1207,12 @@ static sal_Bool OslProfile_lockFile(const osl_TFile* pFile, osl_TLockMode eMode)
             break;
     }
 
-    if ( fcntl(pFile->m_Handle, F_SETLKW, &lock) == -1 )
+#ifndef MACOSX // not MAC OSX
+     if ( fcntl(pFile->m_Handle, F_SETLKW, &lock) == -1 )
+#else
+    /* Mac OSX will return ENOTSUP for webdav drives so we should ignore it */
+    if ( fcntl(pFile->m_Handle, F_SETLKW, &lock) == -1 && errno != ENOTSUP )
+#endif  /* MACOSX */ 
     {
         OSL_TRACE("fcntl returned -1 (%s)\n",strerror(errno));
 #ifdef TRACE_OSL_PROFILE

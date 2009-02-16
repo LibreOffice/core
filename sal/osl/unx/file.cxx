@@ -291,6 +291,11 @@ static int adjustLockFlags(const char * path, int flags)
             flags &= ~O_EXLOCK;
             flags |= O_SHLOCK;
         }
+        else
+        {
+            /* Needed flags to allow opening a webdav file */
+            flags &= ~( O_EXLOCK | O_SHLOCK );
+        }
     }
 
     return flags;
@@ -697,7 +702,18 @@ oslFileError osl_openFile( rtl_uString* ustrFileURL, oslFileHandle* pHandle, sal
                         aflock.l_type = 0;
 
                     /* lock the file if flock.l_type is set */
-                    bLocked = ( F_WRLCK != aflock.l_type || -1 != fcntl( fd, F_SETLK, &aflock ) );
+#ifdef MACOSX
+                    bLocked = ( F_WRLCK != aflock.l_type );
+                    if (!bLocked) 
+                    {
+                       /* Mac OSX returns ENOTSUP for webdav drives. We should try read lock */
+                       if ( 0 == flock( fd, LOCK_EX | LOCK_NB ) || errno == ENOTSUP )
+                          bLocked = ( errno != ENOTSUP ) || ( 0 == flock( fd, LOCK_SH | LOCK_NB ) || errno == ENOTSUP );
+                    }
+#else   /* MACOSX */
+                     bLocked = ( F_WRLCK != aflock.l_type || -1 != fcntl( fd, F_SETLK, &aflock ) );
+#endif  /* MACOSX */
+
                 }
 
                 if ( !bNeedsLock || bLocked )
@@ -764,7 +780,12 @@ oslFileError osl_closeFile( oslFileHandle Handle )
                 /* FIXME: check if file is really locked ?  */
 
                 /* release the file share lock on this file */
+#ifdef MACOSX
+                /* Mac OSX will return ENOTSUP for webdav drives. We should ignore the error */
+                if ( 0 != flock( pHandleImpl->fd, LOCK_UN | LOCK_NB ) && errno != ENOTSUP )
+#else   /* MACOSX */
                 if( -1 == fcntl( pHandleImpl->fd, F_SETLK, &aflock ) )
+#endif  /* MACOSX */
                 {
                     PERROR( "osl_closeFile", "unlock failed" );
                 }
