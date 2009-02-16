@@ -72,6 +72,7 @@ namespace dbtools
     using ::com::sun::star::beans::PropertyValue;
     using ::com::sun::star::beans::XPropertySetInfo;
     using ::com::sun::star::uno::UNO_QUERY;
+    using ::com::sun::star::uno::UNO_SET_THROW;
     /** === end UNO using === **/
     namespace BooleanComparisonMode = ::com::sun::star::sdb::BooleanComparisonMode;
 
@@ -308,7 +309,30 @@ namespace dbtools
             OSL_VERIFY( setting >>= doGenerate );
         return doGenerate;
     }
+
     //--------------------------------------------------------------------
+    bool DatabaseMetaData::displayEmptyTableFolders() const
+    {
+        bool doDisplay( true );
+#ifdef IMPLEMENTED_LATER
+        Any setting;
+        if ( lcl_getConnectionSetting( "DisplayEmptyTableFolders", *m_pImpl, setting ) )
+            OSL_VERIFY( setting >>= doDisplay );
+#else
+        try
+        {
+            Reference< XDatabaseMetaData > xMeta( m_pImpl->xConnectionMetaData, UNO_SET_THROW );
+            ::rtl::OUString sConnectionURL( xMeta->getURL() );
+            doDisplay = sConnectionURL.compareToAscii( RTL_CONSTASCII_STRINGPARAM( "sdbc:mysql:mysqlc" ) ) == 0;
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+#endif
+        return doDisplay;
+    }
+
 //........................................................................
 } // namespace dbtools
 //........................................................................

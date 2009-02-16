@@ -68,7 +68,7 @@ namespace connectivity
     ODriverDelegator::ODriverDelegator(const Reference< XMultiServiceFactory >& _rxFactory)
         : ODriverDelegator_BASE(m_aMutex)
         ,m_xFactory(_rxFactory)
-        ,m_bUseOdbc(sal_True)
+        ,m_eDriverType(D_ODBC)
     {
     }
 
@@ -78,6 +78,7 @@ namespace connectivity
         try
         {
             ::comphelper::disposeComponent(m_xODBCDriver);
+            ::comphelper::disposeComponent(m_xNativeDriver);
             TJDBCDrivers::iterator aIter = m_aJdbcDrivers.begin();
             TJDBCDrivers::iterator aEnd = m_aJdbcDrivers.end();
             for ( ;aIter != aEnd;++aIter )
@@ -112,10 +113,27 @@ namespace connectivity
             return _sUrl.copy(0,16).equalsAscii("sdbc:mysql:odbc:");
         }
         //--------------------------------------------------------------------
+        sal_Bool isNativeUrl(const ::rtl::OUString& _sUrl)
+        {
+            return (!_sUrl.compareTo(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:mysql:mysqlc:")), sizeof("sdbc:mysql:mysqlc:")-1));
+        }
+        //--------------------------------------------------------------------
+        T_DRIVERTYPE lcl_getDriverType(const ::rtl::OUString& _sUrl)
+        {
+            T_DRIVERTYPE eRet = D_JDBC;
+            if ( isOdbcUrl(_sUrl ) )
+                eRet = D_ODBC;
+            else if ( isNativeUrl(_sUrl ) )
+                eRet = D_NATIVE;
+            return eRet;
+        }
+        //--------------------------------------------------------------------
         ::rtl::OUString transformUrl(const ::rtl::OUString& _sUrl)
         {
             ::rtl::OUString sNewUrl = _sUrl.copy(11);
             if ( isOdbcUrl( _sUrl ) )
+                sNewUrl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:")) + sNewUrl;
+            else if ( isNativeUrl( _sUrl ) )
                 sNewUrl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:")) + sNewUrl;
             else
             {
@@ -139,7 +157,7 @@ namespace connectivity
             return xDriver;
         }
         //--------------------------------------------------------------------
-        Sequence< PropertyValue > lcl_convertProperties(sal_Bool _bOdbc,const Sequence< PropertyValue >& info)
+        Sequence< PropertyValue > lcl_convertProperties(T_DRIVERTYPE _eType,const Sequence< PropertyValue >& info,const ::rtl::OUString& _sUrl)
         {
             ::std::vector<PropertyValue> aProps;
             const PropertyValue* pSupported = info.getConstArray();
@@ -151,7 +169,7 @@ namespace connectivity
                 aProps.push_back( *pSupported );
             }
 
-            if ( _bOdbc )
+            if ( _eType == D_ODBC )
             {
                 aProps.push_back( PropertyValue(
                                     ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Silent"))
@@ -164,12 +182,20 @@ namespace connectivity
                                     ,makeAny(sal_True)
                                     ,PropertyState_DIRECT_VALUE) );
             }
-            else
+            else if ( _eType == D_JDBC )
             {
                 aProps.push_back( PropertyValue(
                                     ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JavaDriverClass"))
                                     ,0
                                     ,makeAny(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.mysql.jdbc.Driver")))
+                                    ,PropertyState_DIRECT_VALUE) );
+            }
+            else
+            {
+                aProps.push_back( PropertyValue(
+                                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NewURL"))
+                                    ,0
+                                    ,makeAny(_sUrl)
                                     ,PropertyState_DIRECT_VALUE) );
             }
             aProps.push_back( PropertyValue(
@@ -195,20 +221,25 @@ namespace connectivity
     Reference< XDriver > ODriverDelegator::loadDriver( const ::rtl::OUString& url, const Sequence< PropertyValue >& info )
     {
         Reference< XDriver > xDriver;
-        ::rtl::OUString sCuttedUrl = transformUrl(url);
-        sal_Bool bIsODBC = isOdbcUrl( url );
-        if ( bIsODBC )
+        const ::rtl::OUString sCuttedUrl = transformUrl(url);
+        const T_DRIVERTYPE eType = lcl_getDriverType( url );
+        if ( eType == D_ODBC )
         {
             if ( !m_xODBCDriver.is() )
                 m_xODBCDriver = lcl_loadDriver(m_xFactory,sCuttedUrl);
             xDriver = m_xODBCDriver;
+        } // if ( bIsODBC )
+        else if ( eType == D_NATIVE )
+        {
+            if ( !m_xNativeDriver.is() )
+                m_xNativeDriver = lcl_loadDriver(m_xFactory,sCuttedUrl);
+            xDriver = m_xNativeDriver;
         }
         else
         {
             ::comphelper::NamedValueCollection aSettings( info );
             ::rtl::OUString sDriverClass(RTL_CONSTASCII_USTRINGPARAM("com.mysql.jdbc.Driver"));
             sDriverClass = aSettings.getOrDefault( "JavaDriverClass", sDriverClass );
-            ::rtl::OUString sCharSet = aSettings.getOrDefault( "CharSet", ::rtl::OUString() );
 
             TJDBCDrivers::iterator aFind = m_aJdbcDrivers.find(sDriverClass);
             if ( aFind == m_aJdbcDrivers.end() )
@@ -230,9 +261,9 @@ namespace connectivity
             if ( xDriver.is() )
             {
                 ::rtl::OUString sCuttedUrl = transformUrl(url);
-                const sal_Bool bIsODBC = isOdbcUrl( url );
-                Sequence< PropertyValue > aConvertedProperties = lcl_convertProperties(bIsODBC,info);
-                if ( !bIsODBC )
+                const T_DRIVERTYPE eType = lcl_getDriverType( url );
+                Sequence< PropertyValue > aConvertedProperties = lcl_convertProperties(eType,info,url);
+                if ( eType == D_JDBC )
                 {
                     ::comphelper::NamedValueCollection aSettings( info );
                     ::rtl::OUString sIanaName = aSettings.getOrDefault( "CharSet", ::rtl::OUString() );
@@ -284,14 +315,13 @@ namespace connectivity
     //--------------------------------------------------------------------
     sal_Bool SAL_CALL ODriverDelegator::acceptsURL( const ::rtl::OUString& url ) throw (SQLException, RuntimeException)
     {
-        sal_Bool bOK = sal_False;
-        if ( url.getLength() >= 16 )
-        {
-            ::rtl::OUString sPrefix = url.copy(0,16);
-            bOK = sPrefix.equalsAscii("sdbc:mysql:odbc:");
-            if ( !bOK )
-                bOK = sPrefix.equalsAscii("sdbc:mysql:jdbc:");
-        }
+        Sequence< PropertyValue > info;
+
+        sal_Bool bOK =  url.matchAsciiL( RTL_CONSTASCII_STRINGPARAM( "sdbc:mysql:odbc:" ) )
+                    ||  url.matchAsciiL( RTL_CONSTASCII_STRINGPARAM( "sdbc:mysql:jdbc:" ) )
+                    ||  (   url.matchAsciiL( RTL_CONSTASCII_STRINGPARAM( "sdbc:mysql:mysqlc:" ) )
+                        &&  loadDriver( url, info ).is()
+                        );
         return bOK;
     }
 
@@ -301,8 +331,6 @@ namespace connectivity
         ::std::vector< DriverPropertyInfo > aDriverInfo;
         if ( !acceptsURL(url) )
             return Sequence< DriverPropertyInfo >();
-
-        sal_Bool bIsODBC = isOdbcUrl( url );
 
         Sequence< ::rtl::OUString > aBoolean(2);
         aBoolean[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("0"));
@@ -323,7 +351,8 @@ namespace connectivity
                 ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("0"))
                 ,aBoolean)
                 );
-        if ( !bIsODBC )
+        const T_DRIVERTYPE eType = lcl_getDriverType( url );
+        if ( eType == D_JDBC )
         {
             aDriverInfo.push_back(DriverPropertyInfo(
                     ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JavaDriverClass"))
@@ -375,6 +404,24 @@ namespace connectivity
                         }
                         break;
                     }
+                }
+            }
+        } // if ( xTunnel.is() )
+        if ( !xTab.is() )
+        {
+            TWeakPairVector::iterator aEnd = m_aConnections.end();
+            for (TWeakPairVector::iterator i = m_aConnections.begin(); aEnd != i; ++i)
+            {
+                Reference< XConnection > xTemp(i->first.get(),UNO_QUERY);
+                if ( xTemp == connection )
+                {
+                    xTab = Reference< XTablesSupplier >(i->second.first.get().get(),UNO_QUERY);
+                    if ( !xTab.is() )
+                    {
+                        xTab = new OMySQLCatalog(connection);
+                        i->second.first = WeakReferenceHelper(xTab);
+                    }
+                    break;
                 }
             }
         }
