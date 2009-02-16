@@ -1295,12 +1295,6 @@ dnl The following sets the with_use_shell variable.
 dnl ===================================================================
 AC_MSG_CHECKING([which shell to use])
 if test $_os = "WINNT"; then
-   dnl Sanity check! expand.exe in cygwin could cause build error.
-   dnl ===================================================================
-      if test -x "/usr/bin/expand.exe" ; then
-         AC_MSG_ERROR([cygwin has expand.exe!
-The expand.exe in cygwin could cause build error. Please remove or rename it.])
-      fi
    dnl ===================================================================
    if test "$with_use_shell" != "tcsh" -a "$with_use_shell" != "bash" -a "$with_use_shell" != "4nt"; then
       AC_MSG_ERROR([only "tcsh","bash" or "4nt" are supported options])
@@ -3029,7 +3023,7 @@ else
        BUILD_DMAKE=NO
        AC_MSG_RESULT([yes])
        AC_MSG_CHECKING([the dmake version])
-       DMAKE_VERSION=`$DMAKE -V | $SED -n 's/.*Version \([[0-9.]]\+\).*/\1/p'`
+       DMAKE_VERSION=`$DMAKE -V | $AWK '$3 == "Version" {print $4}'`
        if test "`echo $DMAKE_VERSION | cut -d'.' -f1`" -gt "4"; then
 	 AC_MSG_RESULT([OK, >= 4.11])
        elif test "`echo $DMAKE_VERSION | cut -d'.' -f1`" = "4" && \
@@ -4029,7 +4023,13 @@ if test -n "$with_system_mozilla" && test "$with_system_mozilla" != "no"; then
       PKG_CHECK_MODULES( MOZ_NSPR, $MOZ_FLAVOUR-nspr )
     fi
 
-    if $PKG_CONFIG --exists libxul ; then
+    if test "$MOZ_FLAVOUR" != "libxul"; then
+      PKG_CHECK_MODULES( MOZILLAXPCOM, $MOZ_FLAVOUR-xpcom, HASXPCOM="TRUE", HASXPCOM="" )
+      MOZ_INC=`$PKG_CONFIG --variable=includedir $MOZ_FLAVOUR-xpcom`
+      MOZ_LIB=`$PKG_CONFIG --variable=libdir $MOZ_FLAVOUR-xpcom`
+    fi
+
+    if test -z "$HASXPCOM"; then
       PKG_CHECK_MODULES( MOZILLAXPCOM, libxul )
       MOZ_INC=`$PKG_CONFIG --variable=includedir libxul`
       MOZ_LIB=`$PKG_CONFIG --variable=libdir libxul`
@@ -4039,10 +4039,6 @@ if test -n "$with_system_mozilla" && test "$with_system_mozilla" != "no"; then
             MOZ_LIB="$MOZ_LIB/sdk/lib"
          fi
       fi
-    else
-      PKG_CHECK_MODULES( MOZILLAXPCOM, $MOZ_FLAVOUR-xpcom )
-      MOZ_INC=`$PKG_CONFIG --variable=includedir $MOZ_FLAVOUR-xpcom`
-      MOZ_LIB=`$PKG_CONFIG --variable=libdir $MOZ_FLAVOUR-xpcom`
     fi
 
     save_CPPFLAGS="$CPPFLAGS"
@@ -4321,23 +4317,6 @@ elif test "$_os" != "WINNT" ; then
    AC_PATH_XTRA
    CPPFLAGS="$CPPFLAGS $X_CFLAGS"
 
-   dnl ===================================================================
-   dnl Check for using Xaw
-   dnl ===================================================================
-   AC_MSG_CHECKING([whether to use Xaw])
-   if test "$enable_Xaw" = "no"; then
-       DISABLE_XAW=TRUE
-       AC_MSG_RESULT([no])
-       AC_CHECK_HEADERS(X11/Composite.h,[],[AC_MSG_ERROR([Xt include headers not found])],
-         [#include <X11/Intrinsic.h>])
-   else
-       AC_MSG_RESULT([yes])
-       AC_CHECK_HEADERS(X11/Xaw/Label.h,[],[AC_MSG_ERROR([Xaw include headers not found])])
-       AC_CHECK_LIB(Xaw, main, [],
-           [AC_MSG_ERROR(Xaw library not found or functional)], [])
-   fi
-   dnl ===================================================================
-
    if test "x$x_includes" = "x"; then
      x_includes="default_x_includes"
    fi
@@ -4381,8 +4360,28 @@ else
    XLIB="$x_libraries"
 fi
 AC_SUBST(XLIB)
-AC_SUBST(DISABLE_XAW)
 AC_SUBST(XAU_LIBS)
+
+if test "$_os" != "WINNT" -a "$_os" != "OS2" -a "$_os" != "Darwin"; then
+   dnl ===================================================================
+   dnl Check for using Xaw
+   dnl ===================================================================
+   AC_MSG_CHECKING([whether to use Xaw])
+   if test "$enable_Xaw" = "no"; then
+       DISABLE_XAW=TRUE
+       AC_MSG_RESULT([no])
+       AC_CHECK_HEADERS(X11/Composite.h,[],[AC_MSG_ERROR([Xt include headers not found])],
+         [#include <X11/Intrinsic.h>])
+   else
+       AC_MSG_RESULT([yes])
+       AC_CHECK_HEADERS(X11/Xaw/Label.h,[],[AC_MSG_ERROR([Xaw include headers not found])])
+       AC_CHECK_LIB(Xaw, main, [],
+           [AC_MSG_ERROR(Xaw library not found or functional)], [])
+   fi
+fi
+AC_SUBST(DISABLE_XAW)
+
+
 
 dnl ===================================================================
 dnl Check if fontconfig/fontconfig.h is available 

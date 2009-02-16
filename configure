@@ -852,8 +852,8 @@ X_LIBS
 X_EXTRA_LIBS
 XINC
 XLIB
-DISABLE_XAW
 XAU_LIBS
+DISABLE_XAW
 SYSTEM_XRENDER_HEADERS
 XRENDER_LINK
 XRANDR_CFLAGS
@@ -4575,13 +4575,6 @@ fi
 { echo "$as_me:$LINENO: checking which shell to use" >&5
 echo $ECHO_N "checking which shell to use... $ECHO_C" >&6; }
 if test $_os = "WINNT"; then
-            if test -x "/usr/bin/expand.exe" ; then
-         { { echo "$as_me:$LINENO: error: cygwin has expand.exe!
-The expand.exe in cygwin could cause build error. Please remove or rename it." >&5
-echo "$as_me: error: cygwin has expand.exe!
-The expand.exe in cygwin could cause build error. Please remove or rename it." >&2;}
-   { (exit 1); exit 1; }; }
-      fi
       if test "$with_use_shell" != "tcsh" -a "$with_use_shell" != "bash" -a "$with_use_shell" != "4nt"; then
       { { echo "$as_me:$LINENO: error: only \"tcsh\",\"bash\" or \"4nt\" are supported options" >&5
 echo "$as_me: error: only \"tcsh\",\"bash\" or \"4nt\" are supported options" >&2;}
@@ -12184,7 +12177,7 @@ echo $ECHO_N "checking whether the found dmake is the right dmake... $ECHO_C" >&
 echo "${ECHO_T}yes" >&6; }
        { echo "$as_me:$LINENO: checking the dmake version" >&5
 echo $ECHO_N "checking the dmake version... $ECHO_C" >&6; }
-       DMAKE_VERSION=`$DMAKE -V | $SED -n 's/.*Version \([0-9.]\+\).*/\1/p'`
+       DMAKE_VERSION=`$DMAKE -V | $AWK '$3 == "Version" {print $4}'`
        if test "`echo $DMAKE_VERSION | cut -d'.' -f1`" -gt "4"; then
 	 { echo "$as_me:$LINENO: result: OK, >= 4.11" >&5
 echo "${ECHO_T}OK, >= 4.11" >&6; }
@@ -17166,7 +17159,109 @@ echo "$as_me: error: Library requirements ($MOZ_FLAVOUR-nspr ) not met; consider
 
     fi
 
-    if $PKG_CONFIG --exists libxul ; then
+    if test "$MOZ_FLAVOUR" != "libxul"; then
+
+  succeeded=no
+
+  if test -z "$PKG_CONFIG"; then
+    # Extract the first word of "pkg-config", so it can be a program name with args.
+set dummy pkg-config; ac_word=$2
+{ echo "$as_me:$LINENO: checking for $ac_word" >&5
+echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6; }
+if test "${ac_cv_path_PKG_CONFIG+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  case $PKG_CONFIG in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_PKG_CONFIG="$PKG_CONFIG" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+  for ac_exec_ext in '' $ac_executable_extensions; do
+  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
+    ac_cv_path_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
+    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+done
+IFS=$as_save_IFS
+
+  test -z "$ac_cv_path_PKG_CONFIG" && ac_cv_path_PKG_CONFIG="no"
+  ;;
+esac
+fi
+PKG_CONFIG=$ac_cv_path_PKG_CONFIG
+if test -n "$PKG_CONFIG"; then
+  { echo "$as_me:$LINENO: result: $PKG_CONFIG" >&5
+echo "${ECHO_T}$PKG_CONFIG" >&6; }
+else
+  { echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6; }
+fi
+
+
+  fi
+
+  if test "$PKG_CONFIG" = "no" ; then
+     echo "*** The pkg-config script could not be found. Make sure it is"
+     echo "*** in your path, or set the PKG_CONFIG environment variable"
+     echo "*** to the full path to pkg-config."
+     echo "*** Or see http://www.freedesktop.org/software/pkgconfig to get pkg-config."
+  else
+     PKG_CONFIG_MIN_VERSION=0.9.0
+     if $PKG_CONFIG --atleast-pkgconfig-version $PKG_CONFIG_MIN_VERSION; then
+        { echo "$as_me:$LINENO: checking for $MOZ_FLAVOUR-xpcom" >&5
+echo $ECHO_N "checking for $MOZ_FLAVOUR-xpcom... $ECHO_C" >&6; }
+
+        if $PKG_CONFIG --exists "$MOZ_FLAVOUR-xpcom" ; then
+            { echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6; }
+            succeeded=yes
+
+            { echo "$as_me:$LINENO: checking MOZILLAXPCOM_CFLAGS" >&5
+echo $ECHO_N "checking MOZILLAXPCOM_CFLAGS... $ECHO_C" >&6; }
+            MOZILLAXPCOM_CFLAGS=`$PKG_CONFIG --cflags "$MOZ_FLAVOUR-xpcom"`
+            { echo "$as_me:$LINENO: result: $MOZILLAXPCOM_CFLAGS" >&5
+echo "${ECHO_T}$MOZILLAXPCOM_CFLAGS" >&6; }
+
+            { echo "$as_me:$LINENO: checking MOZILLAXPCOM_LIBS" >&5
+echo $ECHO_N "checking MOZILLAXPCOM_LIBS... $ECHO_C" >&6; }
+            MOZILLAXPCOM_LIBS=`$PKG_CONFIG --libs "$MOZ_FLAVOUR-xpcom"`
+            { echo "$as_me:$LINENO: result: $MOZILLAXPCOM_LIBS" >&5
+echo "${ECHO_T}$MOZILLAXPCOM_LIBS" >&6; }
+        else
+            MOZILLAXPCOM_CFLAGS=""
+            MOZILLAXPCOM_LIBS=""
+            ## If we have a custom action on failure, don't print errors, but
+            ## do set a variable so people can do so.
+            MOZILLAXPCOM_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "$MOZ_FLAVOUR-xpcom"`
+
+        fi
+
+
+
+     else
+        echo "*** Your version of pkg-config is too old. You need version $PKG_CONFIG_MIN_VERSION or newer."
+        echo "*** See http://www.freedesktop.org/software/pkgconfig"
+     fi
+  fi
+
+  if test $succeeded = yes; then
+     HASXPCOM="TRUE"
+  else
+     HASXPCOM=""
+  fi
+
+      MOZ_INC=`$PKG_CONFIG --variable=includedir $MOZ_FLAVOUR-xpcom`
+      MOZ_LIB=`$PKG_CONFIG --variable=libdir $MOZ_FLAVOUR-xpcom`
+    fi
+
+    if test -z "$HASXPCOM"; then
 
   succeeded=no
 
@@ -17274,108 +17369,6 @@ echo "$as_me: error: Library requirements (libxul ) not met; consider adjusting 
             MOZ_LIB="$MOZ_LIB/sdk/lib"
          fi
       fi
-    else
-
-  succeeded=no
-
-  if test -z "$PKG_CONFIG"; then
-    # Extract the first word of "pkg-config", so it can be a program name with args.
-set dummy pkg-config; ac_word=$2
-{ echo "$as_me:$LINENO: checking for $ac_word" >&5
-echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6; }
-if test "${ac_cv_path_PKG_CONFIG+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  case $PKG_CONFIG in
-  [\\/]* | ?:[\\/]*)
-  ac_cv_path_PKG_CONFIG="$PKG_CONFIG" # Let the user override the test with a path.
-  ;;
-  *)
-  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
-  for ac_exec_ext in '' $ac_executable_extensions; do
-  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
-    ac_cv_path_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
-    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-done
-IFS=$as_save_IFS
-
-  test -z "$ac_cv_path_PKG_CONFIG" && ac_cv_path_PKG_CONFIG="no"
-  ;;
-esac
-fi
-PKG_CONFIG=$ac_cv_path_PKG_CONFIG
-if test -n "$PKG_CONFIG"; then
-  { echo "$as_me:$LINENO: result: $PKG_CONFIG" >&5
-echo "${ECHO_T}$PKG_CONFIG" >&6; }
-else
-  { echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; }
-fi
-
-
-  fi
-
-  if test "$PKG_CONFIG" = "no" ; then
-     echo "*** The pkg-config script could not be found. Make sure it is"
-     echo "*** in your path, or set the PKG_CONFIG environment variable"
-     echo "*** to the full path to pkg-config."
-     echo "*** Or see http://www.freedesktop.org/software/pkgconfig to get pkg-config."
-  else
-     PKG_CONFIG_MIN_VERSION=0.9.0
-     if $PKG_CONFIG --atleast-pkgconfig-version $PKG_CONFIG_MIN_VERSION; then
-        { echo "$as_me:$LINENO: checking for $MOZ_FLAVOUR-xpcom " >&5
-echo $ECHO_N "checking for $MOZ_FLAVOUR-xpcom ... $ECHO_C" >&6; }
-
-        if $PKG_CONFIG --exists "$MOZ_FLAVOUR-xpcom " ; then
-            { echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6; }
-            succeeded=yes
-
-            { echo "$as_me:$LINENO: checking MOZILLAXPCOM_CFLAGS" >&5
-echo $ECHO_N "checking MOZILLAXPCOM_CFLAGS... $ECHO_C" >&6; }
-            MOZILLAXPCOM_CFLAGS=`$PKG_CONFIG --cflags "$MOZ_FLAVOUR-xpcom "`
-            { echo "$as_me:$LINENO: result: $MOZILLAXPCOM_CFLAGS" >&5
-echo "${ECHO_T}$MOZILLAXPCOM_CFLAGS" >&6; }
-
-            { echo "$as_me:$LINENO: checking MOZILLAXPCOM_LIBS" >&5
-echo $ECHO_N "checking MOZILLAXPCOM_LIBS... $ECHO_C" >&6; }
-            MOZILLAXPCOM_LIBS=`$PKG_CONFIG --libs "$MOZ_FLAVOUR-xpcom "`
-            { echo "$as_me:$LINENO: result: $MOZILLAXPCOM_LIBS" >&5
-echo "${ECHO_T}$MOZILLAXPCOM_LIBS" >&6; }
-        else
-            MOZILLAXPCOM_CFLAGS=""
-            MOZILLAXPCOM_LIBS=""
-            ## If we have a custom action on failure, don't print errors, but
-            ## do set a variable so people can do so.
-            MOZILLAXPCOM_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "$MOZ_FLAVOUR-xpcom "`
-            echo $MOZILLAXPCOM_PKG_ERRORS
-        fi
-
-
-
-     else
-        echo "*** Your version of pkg-config is too old. You need version $PKG_CONFIG_MIN_VERSION or newer."
-        echo "*** See http://www.freedesktop.org/software/pkgconfig"
-     fi
-  fi
-
-  if test $succeeded = yes; then
-     :
-  else
-     { { echo "$as_me:$LINENO: error: Library requirements ($MOZ_FLAVOUR-xpcom ) not met; consider adjusting the PKG_CONFIG_PATH environment variable if your libraries are in a nonstandard prefix so pkg-config can find them." >&5
-echo "$as_me: error: Library requirements ($MOZ_FLAVOUR-xpcom ) not met; consider adjusting the PKG_CONFIG_PATH environment variable if your libraries are in a nonstandard prefix so pkg-config can find them." >&2;}
-   { (exit 1); exit 1; }; }
-  fi
-
-      MOZ_INC=`$PKG_CONFIG --variable=includedir $MOZ_FLAVOUR-xpcom`
-      MOZ_LIB=`$PKG_CONFIG --variable=libdir $MOZ_FLAVOUR-xpcom`
     fi
 
     save_CPPFLAGS="$CPPFLAGS"
@@ -20007,6 +20000,186 @@ fi
 
    CPPFLAGS="$CPPFLAGS $X_CFLAGS"
 
+   if test "x$x_includes" = "x"; then
+     x_includes="default_x_includes"
+   fi
+   if test "x$x_libraries" = "x"; then
+     x_libraries="default_x_libraries"
+   fi
+      if test -z "$x_libraries"; then
+      { { echo "$as_me:$LINENO: error: No X libraries found" >&5
+echo "$as_me: error: No X libraries found" >&2;}
+   { (exit 1); exit 1; }; } # Exit
+   fi
+   if test -z "$x_includes"; then
+      { { echo "$as_me:$LINENO: error: No X includes found" >&5
+echo "$as_me: error: No X includes found" >&2;}
+   { (exit 1); exit 1; }; } # Exit
+   fi
+   CFLAGS=$X_CFLAGS
+   LDFLAGS="$X_LDFLAGS $X_LIBS"
+   { echo "$as_me:$LINENO: checking for XOpenDisplay in -lX11" >&5
+echo $ECHO_N "checking for XOpenDisplay in -lX11... $ECHO_C" >&6; }
+if test "${ac_cv_lib_X11_XOpenDisplay+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lX11  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char XOpenDisplay ();
+int
+main ()
+{
+return XOpenDisplay ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (ac_try="$ac_link"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_link") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest$ac_exeext &&
+       $as_test_x conftest$ac_exeext; then
+  ac_cv_lib_X11_XOpenDisplay=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	ac_cv_lib_X11_XOpenDisplay=no
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ echo "$as_me:$LINENO: result: $ac_cv_lib_X11_XOpenDisplay" >&5
+echo "${ECHO_T}$ac_cv_lib_X11_XOpenDisplay" >&6; }
+if test $ac_cv_lib_X11_XOpenDisplay = yes; then
+  x_libs="-lX11 $X_EXTRA_LIBS"
+else
+  { { echo "$as_me:$LINENO: error: X Development libraries not found" >&5
+echo "$as_me: error: X Development libraries not found" >&2;}
+   { (exit 1); exit 1; }; }
+fi
+
+      { echo "$as_me:$LINENO: checking for XauDisposeAuth in -lXau" >&5
+echo $ECHO_N "checking for XauDisposeAuth in -lXau... $ECHO_C" >&6; }
+if test "${ac_cv_lib_Xau_XauDisposeAuth+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lXau  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char XauDisposeAuth ();
+int
+main ()
+{
+return XauDisposeAuth ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (ac_try="$ac_link"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_link") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest$ac_exeext &&
+       $as_test_x conftest$ac_exeext; then
+  ac_cv_lib_Xau_XauDisposeAuth=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	ac_cv_lib_Xau_XauDisposeAuth=no
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ echo "$as_me:$LINENO: result: $ac_cv_lib_Xau_XauDisposeAuth" >&5
+echo "${ECHO_T}$ac_cv_lib_Xau_XauDisposeAuth" >&6; }
+if test $ac_cv_lib_Xau_XauDisposeAuth = yes; then
+  XAU_LIBS="-lXau"
+fi
+
+else
+   x_includes="no_x_includes"
+   x_libraries="no_x_libraries"
+fi
+if test -z "$x_includes"; then
+   x_includes="no_x_includes"
+fi
+if test -z "$x_libraries"; then
+   x_libraries="no_x_libraries"
+fi
+if test "$x_includes" = "default_x_includes"; then
+   XINC="/usr/include"
+else
+   XINC="$x_includes"
+fi
+
+if test "$x_libraries" = "default_x_libraries"; then
+   XLIB=`$PKG_CONFIG --variable=libdir x11`
+   if test "x$XLIB" = x; then
+         XLIB="/usr/lib"
+   fi
+else
+   XLIB="$x_libraries"
+fi
+
+
+
+if test "$_os" != "WINNT" -a "$_os" != "OS2" -a "$_os" != "Darwin"; then
             { echo "$as_me:$LINENO: checking whether to use Xaw" >&5
 echo $ECHO_N "checking whether to use Xaw... $ECHO_C" >&6; }
    if test "$enable_Xaw" = "no"; then
@@ -20292,182 +20465,6 @@ echo "$as_me: error: Xaw library not found or functional" >&2;}
 fi
 
    fi
-
-   if test "x$x_includes" = "x"; then
-     x_includes="default_x_includes"
-   fi
-   if test "x$x_libraries" = "x"; then
-     x_libraries="default_x_libraries"
-   fi
-      if test -z "$x_libraries"; then
-      { { echo "$as_me:$LINENO: error: No X libraries found" >&5
-echo "$as_me: error: No X libraries found" >&2;}
-   { (exit 1); exit 1; }; } # Exit
-   fi
-   if test -z "$x_includes"; then
-      { { echo "$as_me:$LINENO: error: No X includes found" >&5
-echo "$as_me: error: No X includes found" >&2;}
-   { (exit 1); exit 1; }; } # Exit
-   fi
-   CFLAGS=$X_CFLAGS
-   LDFLAGS="$X_LDFLAGS $X_LIBS"
-   { echo "$as_me:$LINENO: checking for XOpenDisplay in -lX11" >&5
-echo $ECHO_N "checking for XOpenDisplay in -lX11... $ECHO_C" >&6; }
-if test "${ac_cv_lib_X11_XOpenDisplay+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lX11  $LIBS"
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char XOpenDisplay ();
-int
-main ()
-{
-return XOpenDisplay ();
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (ac_try="$ac_link"
-case "(($ac_try" in
-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-  *) ac_try_echo=$ac_try;;
-esac
-eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
-  (eval "$ac_link") 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } && {
-	 test -z "$ac_c_werror_flag" ||
-	 test ! -s conftest.err
-       } && test -s conftest$ac_exeext &&
-       $as_test_x conftest$ac_exeext; then
-  ac_cv_lib_X11_XOpenDisplay=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-	ac_cv_lib_X11_XOpenDisplay=no
-fi
-
-rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
-      conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-{ echo "$as_me:$LINENO: result: $ac_cv_lib_X11_XOpenDisplay" >&5
-echo "${ECHO_T}$ac_cv_lib_X11_XOpenDisplay" >&6; }
-if test $ac_cv_lib_X11_XOpenDisplay = yes; then
-  x_libs="-lX11 $X_EXTRA_LIBS"
-else
-  { { echo "$as_me:$LINENO: error: X Development libraries not found" >&5
-echo "$as_me: error: X Development libraries not found" >&2;}
-   { (exit 1); exit 1; }; }
-fi
-
-      { echo "$as_me:$LINENO: checking for XauDisposeAuth in -lXau" >&5
-echo $ECHO_N "checking for XauDisposeAuth in -lXau... $ECHO_C" >&6; }
-if test "${ac_cv_lib_Xau_XauDisposeAuth+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lXau  $LIBS"
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char XauDisposeAuth ();
-int
-main ()
-{
-return XauDisposeAuth ();
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (ac_try="$ac_link"
-case "(($ac_try" in
-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-  *) ac_try_echo=$ac_try;;
-esac
-eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
-  (eval "$ac_link") 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } && {
-	 test -z "$ac_c_werror_flag" ||
-	 test ! -s conftest.err
-       } && test -s conftest$ac_exeext &&
-       $as_test_x conftest$ac_exeext; then
-  ac_cv_lib_Xau_XauDisposeAuth=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-	ac_cv_lib_Xau_XauDisposeAuth=no
-fi
-
-rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
-      conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-{ echo "$as_me:$LINENO: result: $ac_cv_lib_Xau_XauDisposeAuth" >&5
-echo "${ECHO_T}$ac_cv_lib_Xau_XauDisposeAuth" >&6; }
-if test $ac_cv_lib_Xau_XauDisposeAuth = yes; then
-  XAU_LIBS="-lXau"
-fi
-
-else
-   x_includes="no_x_includes"
-   x_libraries="no_x_libraries"
-fi
-if test -z "$x_includes"; then
-   x_includes="no_x_includes"
-fi
-if test -z "$x_libraries"; then
-   x_libraries="no_x_libraries"
-fi
-if test "$x_includes" = "default_x_includes"; then
-   XINC="/usr/include"
-else
-   XINC="$x_includes"
-fi
-
-if test "$x_libraries" = "default_x_libraries"; then
-   XLIB=`$PKG_CONFIG --variable=libdir x11`
-   if test "x$XLIB" = x; then
-         XLIB="/usr/lib"
-   fi
-else
-   XLIB="$x_libraries"
 fi
 
 
@@ -29024,8 +29021,8 @@ X_LIBS!$X_LIBS$ac_delim
 X_EXTRA_LIBS!$X_EXTRA_LIBS$ac_delim
 XINC!$XINC$ac_delim
 XLIB!$XLIB$ac_delim
-DISABLE_XAW!$DISABLE_XAW$ac_delim
 XAU_LIBS!$XAU_LIBS$ac_delim
+DISABLE_XAW!$DISABLE_XAW$ac_delim
 SYSTEM_XRENDER_HEADERS!$SYSTEM_XRENDER_HEADERS$ac_delim
 XRENDER_LINK!$XRENDER_LINK$ac_delim
 XRANDR_CFLAGS!$XRANDR_CFLAGS$ac_delim
