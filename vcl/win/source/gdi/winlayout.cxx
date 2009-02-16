@@ -1060,6 +1060,7 @@ public:
 
 public:
     bool            IsEmpty() const { return (mnEndGlyphPos <= 0); }
+    bool            IsRTL() const { return mpScriptItem->a.fRTL; }
     bool            HasKashidas() const { return mbHasKashidas; }
 };
 
@@ -1520,7 +1521,7 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
             // fallback request is limited to the characters in the original request
             // => this is handled in ImplLayoutArgs::PrepareFallback()
             rArgs.NeedFallback( rVisualItem.mnMinCharPos, rVisualItem.mnEndCharPos,
-                rVisualItem.mpScriptItem->a.fRTL );
+                rVisualItem.IsRTL() );
 
             // don't bother to do a default layout in a fallback level
             if( 0 != (rArgs.mnFlags & SAL_LAYOUT_FOR_FALLBACK) )
@@ -1574,7 +1575,7 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
                     mpOutGlyphs[ i + rVisualItem.mnMinGlyphPos ] = DROPPED_OUTGLYPH;
                     // request fallback for the whole cell that resulted in a NotDef glyph
                     // TODO: optimize algorithm
-                    bool bRTL = rVisualItem.mpScriptItem->a.fRTL;
+                    const bool bRTL = rVisualItem.IsRTL();
                     if( !bRTL )
                     {
                         // request fallback for the left-to-right cell
@@ -1762,23 +1763,22 @@ bool UniscribeLayout::GetItemSubrange( const VisualItem& rVisualItem,
             nMaxGlyphPos = n;
     }
 
-    // account for multiple glyphs at rightmost character
-    // test only needed when rightmost glyph isn't referenced
-    if( rEndGlyphPos > nMaxGlyphPos + 1 )
+    // extend the glyph range to account for all glyphs in referenced clusters
+    if( !rVisualItem.IsRTL() ) // LTR-item
     {
-        // find the end of the glyph cluster
-        // TODO: optimize for case when LTR/RTL correspond to monotonous glyph indexes
-        for( int i = rVisualItem.mnMinCharPos; i < rVisualItem.mnEndCharPos; ++i )
-        {
-            int n = mpLogClusters[ i ] + rVisualItem.mnMinGlyphPos;
-            if( (rEndGlyphPos > n) && (n > nMaxGlyphPos) )
-            {
-                rEndGlyphPos = n;
-                if( n-1 <= nMaxGlyphPos )
-                    break;
-            }
-        }
+        // extend to rightmost glyph of rightmost referenced cluster
+        for( i = nMaxGlyphPos; ++i < rVisualItem.mnEndGlyphPos; nMaxGlyphPos = i )
+            if( mpVisualAttrs[i].fClusterStart )
+                break;
     }
+    else // RTL-item
+    {
+        // extend to leftmost glyph of leftmost referenced cluster
+        for( i = rMinGlyphPos; --i >= rVisualItem.mnMinGlyphPos; rMinGlyphPos = i )
+            if( mpVisualAttrs[i].fClusterStart )
+                break;
+    }
+    rEndGlyphPos = nMaxGlyphPos + 1;
 
     return true;
 }
@@ -1864,7 +1864,7 @@ int UniscribeLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos,
 
     // adjust the nXOffset relative to glyph cluster start
     int c = mnMinCharPos;
-    if( !pVI->mpScriptItem->a.fRTL )
+    if( !pVI->IsRTL() ) // LTR-case
     {
         // LTR case: subtract the remainder of the cell from xoffset
         int nTmpIndex = mpLogClusters[c];
@@ -1872,7 +1872,7 @@ int UniscribeLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos,
             && (nTmpIndex == mpLogClusters[c]) )
             nXOffset -= mpCharWidths[c];
     }
-    else
+    else // RTL-case
     {
         // RTL case: add the remainder of the cell from xoffset
         int nTmpIndex = mpLogClusters[ pVI->mnEndCharPos - 1 ];
@@ -1994,7 +1994,7 @@ int UniscribeLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos,
 
         // RTL-justified glyph positioning is not easy
         // simplify the code by just returning only one glyph at a time
-        if( mpJustifications && pVI->mpScriptItem->a.fRTL )
+        if( mpJustifications && pVI->IsRTL() )
             break;
 
         // stop when the x-position of the next glyph is unexpected
@@ -2191,7 +2191,7 @@ void UniscribeLayout::DrawText( SalGraphics& ) const
         if( nBaseGlyphPos < 0 )
         {
             // adjust draw position relative to cluster start
-            if( rVisualItem.mpScriptItem->a.fRTL )
+            if( rVisualItem.IsRTL() )
                 nBaseGlyphPos = nEndGlyphPos - 1;
             else
                 nBaseGlyphPos = nMinGlyphPos;
@@ -2207,7 +2207,7 @@ void UniscribeLayout::DrawText( SalGraphics& ) const
                 && (nBaseGlyphPos == mpLogClusters[i]) )
                  nBaseClusterOffset += mpCharWidths[i];
 
-            if( !rVisualItem.mpScriptItem->a.fRTL )
+            if( !rVisualItem.IsRTL() )
                 nBaseClusterOffset = -nBaseClusterOffset;
         }
 
@@ -2341,7 +2341,7 @@ void UniscribeLayout::GetCaretPositions( int nMaxIdx, long* pCaretXArray ) const
         {
             int j = mpLogClusters[ i ] + rVisualItem.mnMinGlyphPos;
             int nCurrIdx = i * 2;
-            if( !rVisualItem.mpScriptItem->a.fRTL )
+            if( !rVisualItem.IsRTL() )
             {
                 // normal positions for LTR case
                 pCaretXArray[ nCurrIdx ]   = pGlyphPos[ j ];
@@ -2433,7 +2433,7 @@ void UniscribeLayout::ApplyDXArray( const ImplLayoutArgs& rArgs )
 
         // if needed prepare special handling for arabic justification
         rVisualItem.mbHasKashidas = false;
-        if( rVisualItem.mpScriptItem->a.fRTL )
+        if( rVisualItem.IsRTL() )
         {
             for( i = rVisualItem.mnMinGlyphPos; i < rVisualItem.mnEndGlyphPos; ++i )
                 if ( (1U << mpVisualAttrs[i].uJustification) & 0xFF89 )  //  any Arabic justification ?
@@ -2499,7 +2499,7 @@ void UniscribeLayout::ApplyDXArray( const ImplLayoutArgs& rArgs )
         // workaround needed for older USP versions:
         // right align the justification-adjusted glyphs in their cells for RTL-items
         // unless the right alignment is done by inserting kashidas
-        if( bManualCellAlign && rVisualItem.mpScriptItem->a.fRTL && !rVisualItem.HasKashidas() )
+        if( bManualCellAlign && rVisualItem.IsRTL() && !rVisualItem.HasKashidas() )
         {
             for( i = nMinGlyphPos; i < nEndGlyphPos; ++i )
             {

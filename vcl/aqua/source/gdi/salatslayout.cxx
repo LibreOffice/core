@@ -86,6 +86,7 @@ private:
     // mutable members since these details are all lazy initialized
     mutable int         mnGlyphCount;           // glyph count
     mutable Fixed       mnCachedWidth;          // cached value of resulting typographical width
+    int                 mnTrailingSpaceWidth;   // in Pixels
 
     mutable ATSGlyphRef*    mpGlyphIds;         // ATSU glyph ids
     mutable Fixed*          mpCharWidths;       // map relative charpos to charwidth
@@ -104,8 +105,8 @@ private:
     mutable class FallbackInfo* mpFallbackInfo;
 
     // x-offset relative to layout origin
-    // currently always zero since we use native glyph fallback
-    static const Fixed mnBaseAdv = 0;
+    // currently only used in RTL-layouts
+    mutable Fixed           mnBaseAdv;
 };
 
 class FallbackInfo
@@ -130,6 +131,7 @@ ATSLayout::ATSLayout( ATSUStyle& rATSUStyle, float fFontScale )
     mfFontScale( fFontScale ),
     mnGlyphCount( -1 ),
     mnCachedWidth( 0 ),
+    mnTrailingSpaceWidth( 0 ),
     mpGlyphIds( NULL ),
     mpCharWidths( NULL ),
     mpChars2Glyphs( NULL ),
@@ -138,7 +140,8 @@ ATSLayout::ATSLayout( ATSUStyle& rATSUStyle, float fFontScale )
     mpGlyphAdvances( NULL ),
     mpGlyphOrigAdvs( NULL ),
     mpDeltaY( NULL ),
-    mpFallbackInfo( NULL )
+    mpFallbackInfo( NULL ),
+    mnBaseAdv( 0 )
 {}
 
 // -----------------------------------------------------------------------
@@ -277,12 +280,16 @@ void ATSLayout::AdjustLayout( ImplLayoutArgs& rArgs )
         nPixelWidth = rArgs.mpDXArray[ mnCharCount - 1 ];
 
         // workaround for ATSUI not using trailing spaces for justification
-        int nTrailingSpaceWidth = 0;
+        mnTrailingSpaceWidth = 0;
         int i = mnCharCount;
         while( (--i > 0) && IsSpacingGlyph( rArgs.mpStr[mnMinCharPos+i]|GF_ISCHAR ) )
-            nTrailingSpaceWidth += rArgs.mpDXArray[i] - rArgs.mpDXArray[i-1];
-        nOrigWidth -= nTrailingSpaceWidth;
-        nPixelWidth -= nTrailingSpaceWidth;
+            mnTrailingSpaceWidth += rArgs.mpDXArray[i] - rArgs.mpDXArray[i-1];
+        nOrigWidth -= mnTrailingSpaceWidth;
+        nPixelWidth -= mnTrailingSpaceWidth;
+        // trailing spaces can be leftmost spaces in RTL-layouts
+        // TODO: use BiDi-algorithm to thoroughly check this assumption
+        if( rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL)
+            mnBaseAdv = mnTrailingSpaceWidth;
 
         // TODO: use all mpDXArray elements for layouting
     }
@@ -606,9 +613,11 @@ long ATSLayout::GetTextWidth() const
 
         // measure the bound extremas
         mnCachedWidth = nRightBound - nLeftBound;
+        // adjust for eliminated trailing space widths
     }
 
-    const int nScaledWidth = Fixed2Vcl( mnCachedWidth );
+    int nScaledWidth = Fixed2Vcl( mnCachedWidth );
+    nScaledWidth += mnTrailingSpaceWidth;
     return nScaledWidth;
 }
 
@@ -627,6 +636,9 @@ long ATSLayout::FillDXArray( long* pDXArray ) const
     // short circuit requests which don't need full details
     if( !pDXArray )
         return GetTextWidth();
+
+    // check assumptions
+    DBG_ASSERT( !nTrailingSpaceWidth, "ATSLayout::FillDXArray() with nTSW!=0" );
 
     // initialize details about the resulting layout
     InitGIA();
@@ -667,6 +679,10 @@ int ATSLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) cons
     // get a quick overview on what could fit
     const long nPixelWidth = (nMaxWidth - (nCharExtra * mnCharCount)) / nFactor;
 
+    // check assumptions
+    DBG_ASSERT( !nTrailingSpaceWidth, "ATSLayout::GetTextBreak() with nTSW!=0" );
+
+    // initial measurement of text break position
     UniCharArrayOffset nBreakPos = mnMinCharPos;
     const ATSUTextMeasurement nATSUMaxWidth = Vcl2Fixed( nPixelWidth );
     OSStatus nStatus = ATSUBreakLine( maATSULayout, mnMinCharPos,
@@ -894,7 +910,8 @@ bool ATSLayout::InitGIA( ImplLayoutArgs* pArgs ) const
     if( pArgs && pArgs->mpDXArray )
     {
         // TODO: non-strong-LTR case cases should be handled too
-        if( 0 == (~pArgs->mnFlags & (TEXT_LAYOUT_BIDI_STRONG|TEXT_LAYOUT_BIDI_LTR)) )
+        if( (pArgs->mnFlags & TEXT_LAYOUT_BIDI_STRONG)
+        && !(pArgs->mnFlags & TEXT_LAYOUT_BIDI_RTL) )
         {
             Fixed nSumCharWidths = 0;
             SubPortion aSubPortion = { mnMinCharPos, 0, 0 };

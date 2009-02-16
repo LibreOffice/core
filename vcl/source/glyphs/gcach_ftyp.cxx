@@ -1031,6 +1031,17 @@ void FreetypeServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor
             rTo.mnDescent  += nOtherHalfTmpExtLeading;
         }
     }
+
+    // initialize kashida width
+    // TODO: what if there are different versions of this glyph available
+    rTo.mnMinKashida = rTo.mnAscent / 4; // a reasonable default
+    const int nKashidaGlyphId = GetRawGlyphIndex( 0x0640 );
+    if( nKashidaGlyphId )
+    {
+        GlyphData aGlyphData;
+        InitGlyphData( nKashidaGlyphId, aGlyphData );
+        rTo.mnMinKashida = aGlyphData.GetMetric().GetCharWidth();
+    }
 }
 
 // -----------------------------------------------------------------------

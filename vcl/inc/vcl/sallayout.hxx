@@ -333,6 +333,7 @@ public:
 
     bool    IsClusterStart() const { return !(mnFlags & IS_IN_CLUSTER); }
     bool    IsRTLGlyph() const { return ((mnFlags & IS_RTL_GLYPH) != 0); }
+    bool    IsDiacritic() const { return (mnOrigWidth <= 0); } // TODO: better heuristic
 };
 
 // ---------------

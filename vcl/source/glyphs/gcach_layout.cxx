@@ -60,8 +60,6 @@ void ServerFontLayout::DrawText( SalGraphics& rSalGraphics ) const
     rSalGraphics.DrawServerFontLayout( *this );
 }
 
-//--------------------------------------------------------------------------
-
 // -----------------------------------------------------------------------
 
 bool ServerFontLayout::LayoutText( ImplLayoutArgs& rArgs )
@@ -481,6 +479,9 @@ bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutArgs& rAr
         // layout bidi/script runs and export them to a ServerFontLayout
         // convert results to GlyphItems
         int nLastCharPos = -1;
+        int nClusterMinPos = -1;
+        int nClusterMaxPos = -1;
+        bool bClusterStart = true;
         int nFilteredRunGlyphCount = 0;
         const IcuPosition* pPos = pGlyphPositions;
         for( int i = 0; i < nRawRunGlyphCount; ++i, ++pPos )
@@ -518,14 +519,6 @@ bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutArgs& rAr
                     continue;
             }
 
-            // if ICU feeds us a character index sequence like [1,0,1] (which
-            // is completely valid), smooth out the sequence so that our cluster
-            // detection routines work better. The best knowledge where the
-            // cluster boundaries are should be provided by the layout engine...
-            if( nLastCharPos != -1 )
-                if( (nCharPos < nLastCharPos) ^ bRightToLeft )
-                    nCharPos = nLastCharPos;
-
             // apply vertical flags, etc.
             if( nCharPos >= 0 )
             {
@@ -549,25 +542,68 @@ bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutArgs& rAr
             const GlyphMetric& rGM = rFont.GetGlyphMetric( nGlyphIndex );
             int nGlyphWidth = rGM.GetCharWidth();
 
-            // heuristic to detect group clusters using "smoothed" char positions
+            // heuristic to detect glyph clusters
+            bool bInCluster = true;
+            if( nLastCharPos == -1 )
+            {
+                nClusterMinPos = nClusterMaxPos = nCharPos;
+                bInCluster = false;
+            }
+            else if( !bRightToLeft )
+            {
+                // left-to-right case
+                if( nClusterMinPos > nCharPos )
+                    nClusterMinPos = nCharPos;      // extend cluster
+                else if( nCharPos <= nClusterMaxPos )
+                    /*NOTHING*/;                    // inside cluster
+                else if( nGlyphWidth <= 0 )
+                    nClusterMaxPos = nCharPos;      // add diacritic to cluster
+                else {
+                    nClusterMinPos = nClusterMaxPos = nCharPos; // new cluster
+                    bInCluster = false;
+                }
+            }
+            else
+            {
+                // right-to-left case
+                if( nClusterMaxPos < nCharPos )
+                    nClusterMaxPos = nCharPos;      // extend cluster
+                else if( nCharPos >= nClusterMinPos )
+                    /*NOTHING*/;                    // inside cluster
+                else if( nGlyphWidth <= 0 )
+                {
+                    nClusterMinPos = nCharPos;      // ICU often has [diacritic* baseglyph*]
+                    if( bClusterStart ) {
+                        nClusterMaxPos = nCharPos;
+                        bInCluster = false;
+                    }
+                }
+                else
+                {
+                    nClusterMinPos = nClusterMaxPos = nCharPos; // new cluster
+                    bInCluster = !bClusterStart;
+                }
+            }
+
             long nGlyphFlags = 0;
-            if( nLastCharPos != -1 )
-                if( (nCharPos == nLastCharPos) || (nGlyphWidth <= 0) )
-                    nGlyphFlags = GlyphItem::IS_IN_CLUSTER;
+            if( bInCluster )
+                nGlyphFlags |= GlyphItem::IS_IN_CLUSTER;
             if( bRightToLeft )
                 nGlyphFlags |= GlyphItem::IS_RTL_GLYPH;
 
             // add resulting glyph item to layout
-            GlyphItem aGI( nCharPos, nGlyphIndex, aNewPos, nGlyphFlags, nGlyphWidth );
+            const GlyphItem aGI( nCharPos, nGlyphIndex, aNewPos, nGlyphFlags, nGlyphWidth );
             rLayout.AppendGlyph( aGI );
             ++nFilteredRunGlyphCount;
             nLastCharPos = nCharPos;
+            bClusterStart = !aGI.IsDiacritic(); // TODO: only needed in RTL-codepath
         }
         aNewPos = Point( (int)(pPos->fX+0.5), (int)(pPos->fY+0.5) );
         nGlyphCount += nFilteredRunGlyphCount;
     }
 
     // sort glyphs in visual order
+    // and then in logical order (e.g. diacritics after cluster start)
     rLayout.SortGlyphItems();
 
     // determine need for kashida justification
@@ -594,3 +630,4 @@ ServerFontLayoutEngine* FreetypeServerFont::GetLayoutEngine()
 }
 
 // =======================================================================
+
