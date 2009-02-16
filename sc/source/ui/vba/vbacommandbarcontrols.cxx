@@ -65,7 +65,6 @@ public:
         }
         else
             throw container::NoSuchElementException();
-        return uno::Any();
     }
 };
 

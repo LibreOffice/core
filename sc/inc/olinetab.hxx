@@ -111,7 +111,7 @@ public:
 
     ScOutlineEntry*         GetEntry( USHORT nLevel, USHORT nIndex ) const;
     USHORT                  GetCount( USHORT nLevel ) const;
-    SC_DLLPUBLIC ScOutlineEntry*         GetEntryByPos( USHORT nLevel, SCCOLROW nPos ) const;
+    ScOutlineEntry*         GetEntryByPos( USHORT nLevel, SCCOLROW nPos ) const;
 
     BOOL                    GetEntryIndex( USHORT nLevel, SCCOLROW nPos, USHORT& rnIndex ) const;
     BOOL                    GetEntryIndexInRange(
