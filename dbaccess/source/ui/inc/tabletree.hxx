@@ -74,6 +74,7 @@ protected:
     ::std::auto_ptr< ImageProvider >
                     m_pImageProvider;   // provider for our images
     sal_Bool        m_bVirtualRoot; // should the first entry be visible
+    bool            m_bNoEmptyFolders;  // should empty catalogs/schematas be prevented from being displayed?
 
 public:
     OTableTreeListBox(
@@ -92,6 +93,8 @@ public:
 
     typedef ::std::pair< ::rtl::OUString,sal_Bool>  TTableViewName;
     typedef ::std::vector< TTableViewName >         TNames;
+
+    void    suppressEmptyFolders() { m_bNoEmptyFolders = true; }
 
     /** call when HiContrast change.
     */

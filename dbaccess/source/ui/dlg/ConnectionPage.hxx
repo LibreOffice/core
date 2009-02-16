@@ -81,7 +81,6 @@ namespace dbaui
 
 
         // called when the test connection button was clicked
-        DECL_LINK(OnBrowseConnections, PushButton*);
         DECL_LINK(OnTestJavaClickHdl,PushButton*);
         DECL_LINK(OnEditModified,Edit*);
 
@@ -91,14 +90,8 @@ namespace dbaui
 
         virtual void        implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
 
-        virtual void SetServiceFactory(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > _rxORB)
-        {
-            OGenericAdministrationPage::SetServiceFactory(_rxORB);
-            m_aET_Connection.initializeTypeCollection(m_xORB);
-        }
-
-        inline void enableConnectionURL() { m_aET_Connection.SetReadOnly(sal_False); }
-        inline void disableConnectionURL() { m_aET_Connection.SetReadOnly(); }
+        inline void enableConnectionURL() { m_aConnectionURL.SetReadOnly(sal_False); }
+        inline void disableConnectionURL() { m_aConnectionURL.SetReadOnly(); }
 
         /** changes the connection URL.
             <p>The new URL must be of the type which is currently selected, only the parts which do not

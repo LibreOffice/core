@@ -169,7 +169,7 @@
     Edit ET_AUTODATABASENAME                                                                        \
     {                                                                                               \
         Pos = MAP_APPFONT ( EDIT_X, AUTO_Y) ;                                                       \
-        Size = MAP_APPFONT ( 60, EDIT_HEIGHT ) ;                                                    \
+        Size = MAP_APPFONT ( 97, EDIT_HEIGHT ) ;                                                    \
         HelpId = AUTO_HID;                                                                          \
         TabStop = TRUE ;                                                                            \
         Border = TRUE ;                                                                             \
@@ -498,15 +498,13 @@
         Pos = MAP_APPFONT (START_X , AUTO_Y +2)  ;                                                  \
         Size = MAP_APPFONT ( EDIT_X - START_X - UNRELATED_CONTROLS , FIXEDTEXT_HEIGHT ) ;           \
         Text = "Socket" ;                                                                           \
-        Hide = TRUE ;                                                                               \
     };                                                                                              \
                                                                                                     \
     Edit ET_SOCKET                                                                                  \
     {                                                                                               \
         Pos = MAP_APPFONT (EDIT_X, AUTO_Y )  ;                                                      \
-        Size = MAP_APPFONT ( 60, EDIT_HEIGHT ) ;                                                    \
+        Size = MAP_APPFONT ( 97, EDIT_HEIGHT ) ;                                                    \
         TabStop = TRUE ;                                                                            \
-        Hide = TRUE ;                                                                               \
         Border = TRUE ;                                                                             \
     };
 

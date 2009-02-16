@@ -251,6 +251,38 @@ namespace dbaui
     };
 
     //========================================================================
+    //= MySQLNativePage
+    //========================================================================
+    class MySQLNativePage : public OCommonBehaviourTabPage
+    {
+    public:
+        MySQLNativePage(    Window* pParent,
+                            const SfxItemSet& _rCoreAttrs );
+
+    private:
+        FixedLine           m_aSeparator1;
+        FixedText           m_aDatabaseNameLabel;
+        Edit                m_aDatabaseName;
+        FixedText           m_aFTHostname;
+        Edit                m_aEDHostname;
+        FixedText           m_aPortNumber;
+        NumericField        m_aNFPortNumber;
+        FixedText           m_aFTSocket;
+        Edit                m_aEDSocket;
+
+        FixedLine           m_aSeparator2;
+        FixedText           m_aUserNameLabel;
+        Edit                m_aUserName;
+        CheckBox            m_aPasswordRequired;
+
+    protected:
+        virtual BOOL FillItemSet( SfxItemSet& _rCoreAttrs );
+        virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
+        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList);
+        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList);
+    };
+
+    //========================================================================
     //= OAdabasDetailsPage
     //========================================================================
     class OAdabasDetailsPage : public OCommonBehaviourTabPage

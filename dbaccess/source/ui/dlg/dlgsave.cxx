@@ -230,6 +230,8 @@ namespace
             USHORT nPos = _rList.GetEntryPos( String( _rCurrent ) );
             if ( nPos != COMBOBOX_ENTRY_NOTFOUND )
                 _rList.SelectEntryPos( nPos );
+            else
+                _rList.SelectEntryPos( 0 );
         }
         catch( const Exception& )
         {

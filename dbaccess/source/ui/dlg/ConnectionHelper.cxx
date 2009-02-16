@@ -193,9 +193,9 @@ DBG_NAME(OConnectionHelper)
 
     OConnectionHelper::OConnectionHelper( Window* pParent, const ResId& _rId, const SfxItemSet& _rCoreAttrs)
         :OGenericAdministrationPage(pParent, _rId, _rCoreAttrs)
-        ,m_aFT_Connection(this, ResId(FT_AUTOBROWSEURL,*_rId.GetResMgr()))
-           ,m_aET_Connection(this, ResId(ET_AUTOBROWSEURL,*_rId.GetResMgr()))
-        ,m_aPB_Connection(this, ResId(PB_AUTOBROWSEURL,*_rId.GetResMgr()))
+        ,m_aFT_Connection   ( this, ResId( FT_AUTOBROWSEURL, *_rId.GetResMgr() ) )
+           ,m_aConnectionURL   ( this, ResId( ET_AUTOBROWSEURL, *_rId.GetResMgr() ) )
+        ,m_aPB_Connection   ( this, ResId( PB_AUTOBROWSEURL, *_rId.GetResMgr() ) )
     {
         DBG_CTOR(OConnectionHelper,NULL);
 
@@ -222,15 +222,12 @@ DBG_NAME(OConnectionHelper)
         sal_Bool bValid, bReadonly;
         getFlags(_rSet, bValid, bReadonly);
 
-        BOOL bEnableBrowseButton = m_pCollection->supportsBrowsing(m_eType);
         m_aFT_Connection.Show();
-        m_aET_Connection.Show();
-        m_aET_Connection.ShowPrefix( ::dbaccess::DST_JDBC == m_eType );
-        m_aPB_Connection.Show(sal_True);
+        m_aConnectionURL.Show();
+        m_aConnectionURL.ShowPrefix( ::dbaccess::DST_JDBC == m_eType );
 
-        LocalResourceAccess aLocRes( PAGE_CONNECTION, RSC_TABPAGE );
-
-        m_aPB_Connection.Show(bEnableBrowseButton);
+        BOOL bEnableBrowseButton = m_pCollection->supportsBrowsing( m_eType );
+        m_aPB_Connection.Show( bEnableBrowseButton );
 
         SFX_ITEMSET_GET(_rSet, pUrlItem, SfxStringItem, DSID_CONNECTURL, sal_True);
 
@@ -241,7 +238,7 @@ DBG_NAME(OConnectionHelper)
             setURL( sUrl );
 
             checkTestConnection();
-            m_aET_Connection.ClearModifyFlag();
+            m_aConnectionURL.ClearModifyFlag();
         }
 
         OGenericAdministrationPage::implInitControls(_rSet, _bSaveValue);
@@ -527,10 +524,10 @@ DBG_NAME(OConnectionHelper)
     }
 
     //-------------------------------------------------------------------------
-    void OConnectionHelper::implSetURL( const String& _rURL, sal_Bool _bPrefix )
+    void OConnectionHelper::impl_setURL( const String& _rURL, sal_Bool _bPrefix )
     {
         String sURL( _rURL );
-        DBG_ASSERT( m_pCollection, "OConnectionHelper::implSetURL: have no interpreter for the URLs!" );
+        DBG_ASSERT( m_pCollection, "OConnectionHelper::impl_setURL: have no interpreter for the URLs!" );
 
         if ( m_pCollection && sURL.Len() )
         {
@@ -563,20 +560,20 @@ DBG_NAME(OConnectionHelper)
         }
 
         if ( _bPrefix )
-            m_aET_Connection.SetText( sURL );
+            m_aConnectionURL.SetText( sURL );
         else
-            m_aET_Connection.SetTextNoPrefix( sURL );
+            m_aConnectionURL.SetTextNoPrefix( sURL );
 
         implUpdateURLDependentStates();
     }
 
     //-------------------------------------------------------------------------
-    String OConnectionHelper::implGetURL( sal_Bool _bPrefix ) const
+    String OConnectionHelper::impl_getURL( sal_Bool _bPrefix ) const
     {
         // get the pure text
-        String sURL = _bPrefix ? m_aET_Connection.GetText() : m_aET_Connection.GetTextNoPrefix();
+        String sURL = _bPrefix ? m_aConnectionURL.GetText() : m_aConnectionURL.GetTextNoPrefix();
 
-        DBG_ASSERT( m_pCollection, "OConnectionHelper::implGetURL: have no interpreter for the URLs!" );
+        DBG_ASSERT( m_pCollection, "OConnectionHelper::impl_getURL: have no interpreter for the URLs!" );
 
         if ( m_pCollection && sURL.Len() )
         {
@@ -612,19 +609,19 @@ DBG_NAME(OConnectionHelper)
     //-------------------------------------------------------------------------
     void OConnectionHelper::setURL( const String& _rURL )
     {
-        implSetURL( _rURL, sal_True );
+        impl_setURL( _rURL, sal_True );
     }
 
     //-------------------------------------------------------------------------
     String OConnectionHelper::getURLNoPrefix( ) const
     {
-        return implGetURL( sal_False );
+        return impl_getURL( sal_False );
     }
 
     //-------------------------------------------------------------------------
     void OConnectionHelper::setURLNoPrefix( const String& _rURL )
     {
-        implSetURL( _rURL, sal_False );
+        impl_setURL( _rURL, sal_False );
     }
 
     //-------------------------------------------------------------------------
@@ -820,14 +817,14 @@ DBG_NAME(OConnectionHelper)
             switch (_rNEvt.GetType())
             {
                 case EVENT_GETFOCUS:
-                    if (m_aET_Connection.IsWindowOrChild(_rNEvt.GetWindow()) && m_bUserGrabFocus)
+                    if (m_aConnectionURL.IsWindowOrChild(_rNEvt.GetWindow()) && m_bUserGrabFocus)
                     {   // a descendant of the URL edit field got the focus
-                        m_aET_Connection.SaveValueNoPrefix();
+                        m_aConnectionURL.SaveValueNoPrefix();
                     }
                     break;
 
                 case EVENT_LOSEFOCUS:
-                    if (m_aET_Connection.IsWindowOrChild(_rNEvt.GetWindow()) && m_bUserGrabFocus)
+                    if (m_aConnectionURL.IsWindowOrChild(_rNEvt.GetWindow()) && m_bUserGrabFocus)
                     {   // a descendant of the URL edit field lost the focus
                         if (!commitURL())
                             return 1L;  // handled
@@ -923,7 +920,7 @@ DBG_NAME(OConnectionHelper)
     // -----------------------------------------------------------------------
     void OConnectionHelper::fillControls(::std::vector< ISaveValueWrapper* >& _rControlList)
     {
-        _rControlList.push_back(new OSaveValueWrapper<Edit>(&m_aET_Connection));
+        _rControlList.push_back( new OSaveValueWrapper<Edit>( &m_aConnectionURL ) );
     }
 
     //-------------------------------------------------------------------------
@@ -931,15 +928,18 @@ DBG_NAME(OConnectionHelper)
     {
         String sURL;
         String sOldPath;
-        sOldPath = m_aET_Connection.GetSavedValueNoPrefix();
-        sURL = m_aET_Connection.GetTextNoPrefix();
-        if (    ( ::dbaccess::DST_DBASE == m_eType)
-            ||  ( ::dbaccess::DST_FLAT == m_eType)
-            ||  ( ::dbaccess::DST_MSACCESS == m_eType)
-            ||  ( ::dbaccess::DST_MSACCESS_2007 == m_eType)
-            ||  ( ::dbaccess::DST_CALC == m_eType) )
+        sOldPath = m_aConnectionURL.GetSavedValueNoPrefix();
+        sURL = m_aConnectionURL.GetTextNoPrefix();
+
+        switch ( m_eType )
         {
-            if ((sURL != sOldPath) && (0 != sURL.Len()))
+        case ::dbaccess::DST_DBASE:
+        case ::dbaccess::DST_FLAT:
+        case ::dbaccess::DST_MSACCESS:
+        case ::dbaccess::DST_MSACCESS_2007:
+        case ::dbaccess::DST_CALC:
+        {
+            if ( ( sURL != sOldPath ) && ( 0 != sURL.Len() ) )
             {   // the text changed since entering the control
 
                 // the path may be in system notation ....
@@ -958,11 +958,6 @@ DBG_NAME(OConnectionHelper)
                         callModifiedHdl();
                         return sal_False;
                     }
-                    else
-                    {
-//                      setURLNoPrefix(sURL);
-//                      m_aET_Connection.SaveValueNoPrefix();
-                    }
                 }
                 else
                 {
@@ -970,25 +965,24 @@ DBG_NAME(OConnectionHelper)
                     {
                         case RET_RETRY:
                             m_bUserGrabFocus = sal_False;
-                            m_aET_Connection.GrabFocus();
+                            m_aConnectionURL.GrabFocus();
                             m_bUserGrabFocus = sal_True;
                             return sal_False;
 
                         case RET_CANCEL:
                             setURLNoPrefix(sOldPath);
                             return sal_False;
-
-                        default:
-                            // accept the input
-//                          setURLNoPrefix(sURL);
-//                          m_aET_Connection.SaveValueNoPrefix();
-                            break;
                     }
                 }
             }
         }
+        break;
+        default:
+            break;
+        }
+
         setURLNoPrefix(sURL);
-        m_aET_Connection.SaveValueNoPrefix();
+        m_aConnectionURL.SaveValueNoPrefix();
         return sal_True;
     }
     //-------------------------------------------------------------------------

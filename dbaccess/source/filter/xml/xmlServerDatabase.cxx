@@ -112,9 +112,13 @@ OXMLServerDatabase::OXMLServerDatabase( ODBFilter& rImport,
     if ( sType.getLength() )
     {
         ::rtl::OUStringBuffer sURL;
-        if ( sType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "sdbc:mysql:jdbc" ) ) )
+        if  (   sType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "sdbc:mysql:jdbc" ) )
+            ||  sType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "sdbc:mysqlc" ) )
+            ||  sType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "sdbc:mysql:mysqlc" ) )
+            )
         {
-            sURL.appendAscii("sdbc:mysql:jdbc:");
+            sURL.append( sType );
+            sURL.append( sal_Unicode( ':' ) );
             sURL.append(sHostName);
             if ( sPortNumber.getLength() )
             {
