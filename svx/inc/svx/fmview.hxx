@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -138,20 +138,20 @@ public:
     SVX_DLLPRIVATE void DeactivateControls(SdrPageView*);
 
      SVX_DLLPRIVATE void ChangeDesignMode(sal_Bool bDesign);
-  
+
      SVX_DLLPRIVATE FmXFormView* GetImpl() const { return pImpl; }
     SVX_DLLPRIVATE FmFormShell* GetFormShell() const { return pFormShell; }
-  
+
     struct FormShellAccess { friend class FmFormShell; private: FormShellAccess() { } };
      void SetFormShell( FmFormShell* pShell, FormShellAccess ) { pFormShell = pShell; }
- 
+
     struct ImplAccess { friend class FmXFormView; private: ImplAccess() { } };
     void SetMoveOutside( bool _bMoveOutside, ImplAccess ) { E3dView::SetMoveOutside( _bMoveOutside ); }
      virtual void InsertControlContainer(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >& xCC);
      virtual void RemoveControlContainer(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >& xCC);
 
     virtual SdrPaintWindow* BeginCompleteRedraw(OutputDevice* pOut);
-    virtual void EndCompleteRedraw(SdrPaintWindow& rPaintWindow);
+    virtual void EndCompleteRedraw(SdrPaintWindow& rPaintWindow, bool bPaintFormLayer);
 
     SVX_DLLPRIVATE const OutputDevice* GetActualOutDev() const {return pActualOutDev;}
     SVX_DLLPRIVATE sal_Bool checkUnMarkAll(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xSource);
