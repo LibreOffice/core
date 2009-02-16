@@ -1874,7 +1874,7 @@ IMPL_LINK( SmSymDefineDialog, CharHighlightHdl, Control *, EMPTYARG )
     sal_UCS4 cChar = aCharsetDisplay.GetSelectCharacter();
 
 #if OSL_DEBUG_LEVEL > 1
-    DBG_ASSERT( pSubsetMap, "SubsetMap missing" )
+    DBG_ASSERT( pSubsetMap, "SubsetMap missing" );
 #endif
     if (pSubsetMap)
     {
