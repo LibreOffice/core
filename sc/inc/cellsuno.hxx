@@ -849,6 +849,7 @@ protected:
 
 public:
     static const SfxItemPropertyMap* GetEditPropertyMap();
+    static const SfxItemPropertyMap* GetCellPropertyMap();
 
                             ScCellObj(ScDocShell* pDocSh, const ScAddress& rP);
     virtual                 ~ScCellObj();

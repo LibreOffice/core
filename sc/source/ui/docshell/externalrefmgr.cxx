@@ -622,7 +622,7 @@ SCsTAB ScExternalRefCache::getTabSpan( sal_uInt16 nFileId, const String& rStartT
 
     size_t nStartDist = ::std::distance( itrBeg, itrStartTab);
     size_t nEndDist = ::std::distance( itrBeg, itrEndTab);
-    return nStartDist <= nEndDist ? (SCsTAB)(nEndDist - nStartDist + 1) : -(SCsTAB)(nStartDist - nEndDist + 1);
+    return ( nStartDist <= nEndDist ? sal::static_int_cast< SCsTAB >( nEndDist - nStartDist + 1 ) : - sal::static_int_cast< SCsTAB >( nStartDist - nEndDist + 1 ) );
 }
 
 void ScExternalRefCache::getAllNumberFormats(vector<sal_uInt32>& rNumFmts) const

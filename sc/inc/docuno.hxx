@@ -55,10 +55,12 @@
 #include <com/sun/star/sheet/XSheetAnnotations.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sheet/XCellRangesAccess.hpp>
+#include <com/sun/star/util/XChangesNotifier.hpp>
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/interfacecontainer.h>
 #include <svtools/itemprop.hxx>
 #include "drwlayer.hxx"
 
@@ -72,6 +74,7 @@ class ScTableRowObj;
 class ScTableSheetObj;
 class SvxFmDrawPage;
 class SvxDrawPage;
+class ScRangeList;
 
 class SC_DLLPUBLIC ScModelObj : public SfxBaseModel,
                     public com::sun::star::sheet::XSpreadsheetDocument,
@@ -87,7 +90,8 @@ class SC_DLLPUBLIC ScModelObj : public SfxBaseModel,
                     public com::sun::star::document::XLinkTargetSupplier,
                     public com::sun::star::beans::XPropertySet,
                     public SvxFmMSFactory,  // derived from XMultiServiceFactory
-                    public com::sun::star::lang::XServiceInfo
+                    public com::sun::star::lang::XServiceInfo,
+                    public ::com::sun::star::util::XChangesNotifier
 {
 private:
     SfxItemPropertySet      aPropSet;
@@ -101,6 +105,8 @@ private:
     com::sun::star::uno::Reference<com::sun::star::uno::XInterface> xDrawMarkerTab;
     com::sun::star::uno::Reference<com::sun::star::uno::XInterface> xDrawDashTab;
     com::sun::star::uno::Reference<com::sun::star::uno::XInterface> xChartDataProv;
+
+    ::cppu::OInterfaceContainerHelper maChangesListeners;
 
     BOOL                    FillRenderMarkData( const com::sun::star::uno::Any& aSelection,
                                                 ScMarkData& rMark, ScPrintSelectionStatus& rStatus ) const;
@@ -122,6 +128,12 @@ public:
     ScDrawLayer*                            MakeDrawLayer();
     void                    BeforeXMLLoading();
     void                    AfterXMLLoading(sal_Bool bRet);
+
+    bool                    HasChangesListeners() const;
+
+    void                    NotifyChanges( const ::rtl::OUString& rOperation, const ScRangeList& rRanges,
+                                           const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rProperties =
+                                               ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >() );
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
                                 const ::com::sun::star::uno::Type & rType )
@@ -295,6 +307,14 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
                                 throw(::com::sun::star::uno::RuntimeException);
+
+                            // XChangesNotifier
+    virtual void SAL_CALL addChangesListener( const ::com::sun::star::uno::Reference<
+                                    ::com::sun::star::util::XChangesListener >& aListener )
+                                throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeChangesListener( const ::com::sun::star::uno::Reference<
+                                    ::com::sun::star::util::XChangesListener >& aListener )
+                                throw (::com::sun::star::uno::RuntimeException);
 };
 
 

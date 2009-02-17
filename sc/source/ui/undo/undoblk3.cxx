@@ -61,6 +61,7 @@
 #include "cell.hxx"
 #include "paramisc.hxx"
 #include "postit.hxx"
+#include "docuno.hxx"
 
 // STATIC DATA ---------------------------------------------------------------
 
@@ -212,6 +213,15 @@ void __EXPORT ScUndoDeleteContents::Undo()
     BeginUndo();
     DoChange( TRUE );
     EndUndo();
+
+    // #i97876# Spreadsheet data changes are not notified
+    ScModelObj* pModelObj = ScModelObj::getImplementation( pDocShell->GetModel() );
+    if ( pModelObj && pModelObj->HasChangesListeners() )
+    {
+        ScRangeList aChangeRanges;
+        aChangeRanges.Append( aRange );
+        pModelObj->NotifyChanges( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "cell-change" ) ), aChangeRanges );
+    }
 }
 
 
@@ -222,6 +232,15 @@ void __EXPORT ScUndoDeleteContents::Redo()
     BeginRedo();
     DoChange( FALSE );
     EndRedo();
+
+    // #i97876# Spreadsheet data changes are not notified
+    ScModelObj* pModelObj = ScModelObj::getImplementation( pDocShell->GetModel() );
+    if ( pModelObj && pModelObj->HasChangesListeners() )
+    {
+        ScRangeList aChangeRanges;
+        aChangeRanges.Append( aRange );
+        pModelObj->NotifyChanges( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "cell-change" ) ), aChangeRanges );
+    }
 }
 
 

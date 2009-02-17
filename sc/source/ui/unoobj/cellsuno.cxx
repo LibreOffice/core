@@ -6095,6 +6095,11 @@ const SfxItemPropertyMap* ScCellObj::GetEditPropertyMap()       // static
     return lcl_GetEditPropertyMap();
 }
 
+const SfxItemPropertyMap* ScCellObj::GetCellPropertyMap()
+{
+    return lcl_GetCellPropertyMap();
+}
+
 ScCellObj::ScCellObj(ScDocShell* pDocSh, const ScAddress& rP) :
     ScCellRangeObj( pDocSh, ScRange(rP,rP) ),
     pUnoText( NULL ),

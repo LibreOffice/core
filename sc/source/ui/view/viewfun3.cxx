@@ -208,6 +208,7 @@
 #include "editable.hxx"
 #include "transobj.hxx"
 #include "drwtrans.hxx"
+#include "docuno.hxx"
 
 using namespace com::sun::star;
 
@@ -1269,6 +1270,25 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
     pDocSh->UpdateOle(GetViewData());
 
     SelectionChanged();
+
+    // #i97876# Spreadsheet data changes are not notified
+    ScModelObj* pModelObj = ScModelObj::getImplementation( pDocSh->GetModel() );
+    if ( pModelObj && pModelObj->HasChangesListeners() )
+    {
+        ScRangeList aChangeRanges;
+        SCTAB nTabCount = pDoc->GetTableCount();
+        for ( SCTAB i = 0; i < nTabCount; ++i )
+        {
+            if ( rMark.GetTableSelect( i ) )
+            {
+                ScRange aChangeRange( aUserRange );
+                aChangeRange.aStart.SetTab( i );
+                aChangeRange.aEnd.SetTab( i );
+                aChangeRanges.Append( aChangeRange );
+            }
+        }
+        pModelObj->NotifyChanges( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "cell-change" ) ), aChangeRanges );
+    }
 
     return TRUE;
 }

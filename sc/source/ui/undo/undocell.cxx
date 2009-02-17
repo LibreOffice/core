@@ -60,6 +60,7 @@
 #include "rangenam.hxx"
 #include "chgtrack.hxx"
 #include "sc.hrc"
+#include "docuno.hxx"
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -303,6 +304,18 @@ void __EXPORT ScUndoEnterData::Undo()
 
     DoChange();
     EndUndo();
+
+    // #i97876# Spreadsheet data changes are not notified
+    ScModelObj* pModelObj = ScModelObj::getImplementation( pDocShell->GetModel() );
+    if ( pModelObj && pModelObj->HasChangesListeners() )
+    {
+        ScRangeList aChangeRanges;
+        for ( USHORT i = 0; i < nCount; ++i )
+        {
+            aChangeRanges.Append( ScRange( nCol, nRow, pTabs[i] ) );
+        }
+        pModelObj->NotifyChanges( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "cell-change" ) ), aChangeRanges );
+    }
 }
 
 void __EXPORT ScUndoEnterData::Redo()
@@ -324,6 +337,18 @@ void __EXPORT ScUndoEnterData::Redo()
 
     DoChange();
     EndRedo();
+
+    // #i97876# Spreadsheet data changes are not notified
+    ScModelObj* pModelObj = ScModelObj::getImplementation( pDocShell->GetModel() );
+    if ( pModelObj && pModelObj->HasChangesListeners() )
+    {
+        ScRangeList aChangeRanges;
+        for ( USHORT i = 0; i < nCount; ++i )
+        {
+            aChangeRanges.Append( ScRange( nCol, nRow, pTabs[i] ) );
+        }
+        pModelObj->NotifyChanges( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "cell-change" ) ), aChangeRanges );
+    }
 }
 
 void __EXPORT ScUndoEnterData::Repeat(SfxRepeatTarget& rTarget)

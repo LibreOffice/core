@@ -217,7 +217,8 @@ ScModelObj::ScModelObj( ScDocShell* pDocSh ) :
     SfxBaseModel( pDocSh ),
     aPropSet( lcl_GetDocOptPropertyMap() ),
     pDocShell( pDocSh ),
-    pPrintFuncCache( NULL )
+    pPrintFuncCache( NULL ),
+    maChangesListeners( m_aMutex )
 {
     // pDocShell may be NULL if this is the base of a ScDocOptionsObj
     if ( pDocShell )
@@ -312,6 +313,7 @@ uno::Any SAL_CALL ScModelObj::queryInterface( const uno::Type& rType )
     SC_QUERYINTERFACE( beans::XPropertySet )
     SC_QUERYINTERFACE( lang::XMultiServiceFactory )
     SC_QUERYINTERFACE( lang::XServiceInfo )
+    SC_QUERYINTERFACE( util::XChangesNotifier )
 
     uno::Any aRet(SfxBaseModel::queryInterface( rType ));
     if ( !aRet.hasValue() && xNumberAgg.is() )
@@ -354,7 +356,7 @@ uno::Sequence<uno::Type> SAL_CALL ScModelObj::getTypes() throw(uno::RuntimeExcep
         long nAggLen = aAggTypes.getLength();
         const uno::Type* pAggPtr = aAggTypes.getConstArray();
 
-        const long nThisLen = 14;
+        const long nThisLen = 15;
         aTypes.realloc( nParentLen + nAggLen + nThisLen );
         uno::Type* pPtr = aTypes.getArray();
         pPtr[nParentLen + 0] = getCppuType((const uno::Reference<sheet::XSpreadsheetDocument>*)0);
@@ -371,6 +373,7 @@ uno::Sequence<uno::Type> SAL_CALL ScModelObj::getTypes() throw(uno::RuntimeExcep
         pPtr[nParentLen +11] = getCppuType((const uno::Reference<beans::XPropertySet>*)0);
         pPtr[nParentLen +12] = getCppuType((const uno::Reference<lang::XMultiServiceFactory>*)0);
         pPtr[nParentLen +13] = getCppuType((const uno::Reference<lang::XServiceInfo>*)0);
+        pPtr[nParentLen +14] = getCppuType((const uno::Reference<util::XChangesNotifier>*)0);
 
         long i;
         for (i=0; i<nParentLen; i++)
@@ -1798,6 +1801,72 @@ ScModelObj* ScModelObj::getImplementation( const uno::Reference<uno::XInterface>
     if (xUT.is())
         pRet = reinterpret_cast<ScModelObj*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething(getUnoTunnelId())));
     return pRet;
+}
+
+// XChangesNotifier
+
+void ScModelObj::addChangesListener( const uno::Reference< util::XChangesListener >& aListener )
+    throw (uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    maChangesListeners.addInterface( aListener );
+}
+
+void ScModelObj::removeChangesListener( const uno::Reference< util::XChangesListener >& aListener )
+    throw (uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    maChangesListeners.removeInterface( aListener );
+}
+
+bool ScModelObj::HasChangesListeners() const
+{
+    return ( maChangesListeners.getLength() > 0 );
+}
+
+void ScModelObj::NotifyChanges( const ::rtl::OUString& rOperation, const ScRangeList& rRanges,
+    const uno::Sequence< beans::PropertyValue >& rProperties )
+{
+    if ( pDocShell && HasChangesListeners() )
+    {
+        util::ChangesEvent aEvent;
+        aEvent.Source.set( static_cast< cppu::OWeakObject* >( this ) );
+        aEvent.Base <<= aEvent.Source;
+
+        ULONG nRangeCount = rRanges.Count();
+        aEvent.Changes.realloc( static_cast< sal_Int32 >( nRangeCount ) );
+        for ( ULONG nIndex = 0; nIndex < nRangeCount; ++nIndex )
+        {
+            uno::Reference< table::XCellRange > xRangeObj;
+
+            ScRange aRange( *rRanges.GetObject( nIndex ) );
+            if ( aRange.aStart == aRange.aEnd )
+            {
+                xRangeObj.set( new ScCellObj( pDocShell, aRange.aStart ) );
+            }
+            else
+            {
+                xRangeObj.set( new ScCellRangeObj( pDocShell, aRange ) );
+            }
+
+            util::ElementChange& rChange = aEvent.Changes[ static_cast< sal_Int32 >( nIndex ) ];
+            rChange.Accessor <<= rOperation;
+            rChange.Element <<= rProperties;
+            rChange.ReplacedElement <<= xRangeObj;
+        }
+
+        ::cppu::OInterfaceIteratorHelper aIter( maChangesListeners );
+        while ( aIter.hasMoreElements() )
+        {
+            try
+            {
+                static_cast< util::XChangesListener* >( aIter.next() )->changesOccurred( aEvent );
+            }
+            catch( uno::Exception& )
+            {
+            }
+        }
+    }
 }
 
 //------------------------------------------------------------------------
