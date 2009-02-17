@@ -115,9 +115,12 @@ MasterPasswordCreateDialog::MasterPasswordCreateDialog
     Rectangle aRect = aFTMasterPasswordWarning.GetTextRect( aLabelRect, aFTMasterPasswordWarning.GetText() );
 
     long nNewLabelHeight = 0;
-    for( nNewLabelHeight = ( nTextWidth / nLableWidth + 1 ) * nTextHeight;
-        nNewLabelHeight < aRect.GetHeight();
-        nNewLabelHeight += nTextHeight ) ;
+    if ( nTextWidth > 0 )
+    {
+        for( nNewLabelHeight = ( nTextWidth / nLableWidth + 1 ) * nTextHeight;
+            nNewLabelHeight < aRect.GetHeight();
+            nNewLabelHeight += nTextHeight );
+    }
 
     long nDelta = nNewLabelHeight - nLabelHeight;
     Size aNewDlgSize = GetSizePixel();
