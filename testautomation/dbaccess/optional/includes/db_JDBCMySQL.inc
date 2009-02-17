@@ -42,6 +42,9 @@ testcase db_JDBCMySQL
     '   databases specific settings for JDBC MySQL
     ' **************************************************
     
+    qaerrorlog "due to issue 98387 this test will not work anymore."
+    goto endsub
+    
 	Dim sFileName as string	
     sFileName = gOfficePath + Convertpath("user/work/TT_JDBC-MYSQL.odb")
         
