@@ -248,9 +248,12 @@ void SwFldPortion::CheckScript( const SwTxtSizeInfo &rInf )
 
         // #i16354# Change script type for RTL text to CTL.
         const SwScriptInfo& rSI = rInf.GetParaPortion()->GetScriptInfo();
-        const BYTE nFldDir = IsNumberPortion() ?
+        // --> OD 2009-01-29 #i98418#
+//        const BYTE nFldDir = IsNumberPortion() ?
+        const BYTE nFldDir = ( IsNumberPortion() || IsFtnNumPortion() ) ?
                              rSI.GetDefaultDir() :
                              rSI.DirType( IsFollow() ? rInf.GetIdx() - 1 : rInf.GetIdx() );
+        // <--
         if ( UBIDI_RTL == nFldDir )
         {
             UErrorCode nError = U_ZERO_ERROR;
@@ -285,14 +288,22 @@ void SwFldPortion::CheckScript( const SwTxtSizeInfo &rInf )
                 nTmp = SW_CTL;
         }
 
-        // for footnote portions, assignment of the font is
-        // done in SwFtnPortion::Format()
-        if( !IsFtnPortion() && nTmp != nActual )
+        // --> OD 2009-01-29 #i98418#
+        // keep determined script type for footnote portions as preferred script type.
+        // For footnote portions a font can not be created directly - see footnote
+        // portion format method.
+//         if( !IsFtnPortion() && nTmp != nActual )
+        if ( IsFtnPortion() )
+        {
+            dynamic_cast<SwFtnPortion*>(this)->SetPreferredScriptType( nTmp );
+        }
+        else if ( nTmp != nActual )
         {
             if( !pFnt )
                 pFnt = new SwFont( *rInf.GetFont() );
             pFnt->SetActual( nTmp );
         }
+        // <--
     }
 }
 
