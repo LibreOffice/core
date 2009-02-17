@@ -4938,6 +4938,18 @@ void ScCompiler::CreateStringFromIndex(rtl::OUStringBuffer& rBuffer,FormulaToken
     rtl::OUStringBuffer aBuffer;
     switch ( eOp )
     {
+        case ocName:
+        {
+            ScRangeData* pData = pDoc->GetRangeName()->FindIndex(_pTokenP->GetIndex());
+            if (pData)
+            {
+                if (pData->HasType(RT_SHARED))
+                    pData->UpdateSymbol( aBuffer, aPos, GetGrammar());
+                else
+                    aBuffer.append(pData->GetName());
+            }
+        }
+        break;
         case ocDBArea:
         {
             ScDBData* pDBData = pDoc->GetDBCollection()->FindIndex(_pTokenP->GetIndex());
