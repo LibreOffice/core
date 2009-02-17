@@ -122,7 +122,7 @@ namespace dbaui
             s_aSupport[  ::dbaccess::DST_MSACCESS            ] = InitAdvanced( 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0 );
             s_aSupport[  ::dbaccess::DST_MYSQL_ODBC          ] = InitAdvanced( 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0 );
             s_aSupport[  ::dbaccess::DST_MYSQL_JDBC          ] = InitAdvanced( 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0 );
-            s_aSupport[  ::dbaccess::DST_MYSQL_NATIVE        ] = InitAdvanced( 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0 );
+            s_aSupport[  ::dbaccess::DST_MYSQL_NATIVE        ] = InitAdvanced( 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 0 );
             s_aSupport[  ::dbaccess::DST_ORACLE_JDBC         ] = InitAdvanced( InitAdvanced::All );
             s_aSupport[  ::dbaccess::DST_ADABAS              ] = InitAdvanced( 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 0 );
             s_aSupport[  ::dbaccess::DST_CALC                ] = InitAdvanced( InitAdvanced::None );

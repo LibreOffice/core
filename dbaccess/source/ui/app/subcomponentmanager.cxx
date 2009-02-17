@@ -28,6 +28,7 @@
 ************************************************************************/
 
 #include "subcomponentmanager.hxx"
+#include "AppController.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/frame/XFrame.hpp>
@@ -35,6 +36,7 @@
 #include <com/sun/star/frame/XModel2.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
+#include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
 /** === end UNO includes === **/
 
 #include <tools/diagnose_ex.h>
@@ -71,6 +73,7 @@ namespace dbaui
     using ::com::sun::star::container::XEnumeration;
     using ::com::sun::star::util::XCloseable;
     using ::com::sun::star::awt::XTopWindow;
+    using ::com::sun::star::document::XDocumentEventBroadcaster;
     /** === end UNO using === **/
 
     //==============================================================================
@@ -116,6 +119,8 @@ namespace dbaui
                 if ( !xModel.is() )
                     xModel.set( xController->getModel() );
             }
+
+            inline bool is() const { return xFrame.is(); }
         };
 
         struct SelectSubComponent : public ::std::unary_function< SubComponentDescriptor, Reference< XComponent > >
@@ -180,11 +185,13 @@ namespace dbaui
     //==============================================================================
     struct SubComponentManager_Data
     {
-        SubComponentManager_Data( const ::comphelper::SharedMutex& _rMutex )
-            :m_aMutex( _rMutex )
+        SubComponentManager_Data( OApplicationController& _rController, const ::comphelper::SharedMutex& _rMutex )
+            :m_rController( _rController )
+            ,m_aMutex( _rMutex )
         {
         }
 
+        OApplicationController&             m_rController;
         mutable ::comphelper::SharedMutex   m_aMutex;
         SubComponentMap                     m_aComponents;
 
@@ -195,8 +202,8 @@ namespace dbaui
     //= SubComponentManager
     //====================================================================
     //--------------------------------------------------------------------
-    SubComponentManager::SubComponentManager( const ::comphelper::SharedMutex& _rMutex )
-        :m_pData( new SubComponentManager_Data( _rMutex ) )
+    SubComponentManager::SubComponentManager( OApplicationController& _rController, const ::comphelper::SharedMutex& _rMutex )
+        :m_pData( new SubComponentManager_Data( _rController, _rMutex ) )
     {
     }
 
@@ -276,12 +283,33 @@ namespace dbaui
             }
             return bSuccess;
         }
+
+        // -----------------------------------------------------------------------------
+        void lcl_notifySubComponentEvent( const SubComponentManager_Data& _rData, const sal_Char* _pAsciiEventName,
+                const SubComponentDescriptor& _rComponent )
+        {
+            try
+            {
+                Reference< XDocumentEventBroadcaster > xBroadcaster( _rData.m_rController.getModel(), UNO_QUERY_THROW );
+                xBroadcaster->notifyDocumentEvent(
+                    ::rtl::OUString::createFromAscii( _pAsciiEventName ),
+                    &_rData.m_rController,
+                    makeAny( _rComponent.xFrame )
+                );
+            }
+            catch( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
+        }
     }
 
     //--------------------------------------------------------------------
     void SAL_CALL SubComponentManager::disposing( const EventObject& _rSource ) throw (RuntimeException)
     {
-        ::osl::MutexGuard aGuard( m_pData->getMutex() );
+        ::osl::ClearableMutexGuard aGuard( m_pData->getMutex() );
+
+        SubComponentDescriptor aClosedComponent;
 
         for (   SubComponentMap::iterator comp = m_pData->m_aComponents.begin();
                 comp != m_pData->m_aComponents.end();
@@ -312,9 +340,16 @@ namespace dbaui
 
             if ( bRemove )
             {
+                aClosedComponent = comp->second;
                 m_pData->m_aComponents.erase( comp );
                 break;
             }
+        }
+
+        if ( aClosedComponent.is() )
+        {
+            aGuard.clear();
+            lcl_notifySubComponentEvent( *m_pData, "OnSubComponentClosed", aClosedComponent );
         }
     }
 
@@ -372,7 +407,7 @@ namespace dbaui
     void SubComponentManager::onSubComponentOpened( const ::rtl::OUString&  _rName, const sal_Int32 _nComponentType,
         const ElementOpenMode _eOpenMode, const Reference< XComponent >& _rxComponent )
     {
-        ::osl::MutexGuard aGuard( m_pData->getMutex() );
+        ::osl::ClearableMutexGuard aGuard( m_pData->getMutex() );
 
         // put into map
         SubComponentAccessor aKey( _rName, _nComponentType, _eOpenMode );
@@ -386,6 +421,10 @@ namespace dbaui
         aElement.xController->addEventListener( this );
         if ( aElement.xModel.is() )
             aElement.xModel->addEventListener( this );
+
+        // notify this to interested parties
+        aGuard.clear();
+        lcl_notifySubComponentEvent( *m_pData, "OnSubComponentOpened", aElement );
     }
 
     // -----------------------------------------------------------------------------

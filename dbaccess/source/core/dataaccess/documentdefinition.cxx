@@ -1444,42 +1444,54 @@ sal_Bool ODocumentDefinition::saveAs()
                 Reference<XNameContainer> xNC(pDocuSave->getContent(),UNO_QUERY);
                 if ( xNC.is() )
                 {
-                    try
+                    if ( m_pImpl->m_aProps.aTitle == pDocuSave->getName() )
                     {
-                        Reference< XStorage> xStorage = getContainerStorage();
-                        const static ::rtl::OUString sBaseName(RTL_CONSTASCII_USTRINGPARAM("Obj"));
-                        // -----------------------------------------------------------------------------
-                        Reference<XNameAccess> xElements(xStorage,UNO_QUERY_THROW);
-                        ::rtl::OUString sPersistentName = ::dbtools::createUniqueName(xElements,sBaseName);
-                        xStorage->copyElementTo(m_pImpl->m_aProps.sPersistentName,xStorage,sPersistentName);
-
-                        ::rtl::OUString sOldName = m_pImpl->m_aProps.aTitle;
-                        rename(pDocuSave->getName());
-                        updateDocumentTitle();
-
-                        Sequence< Any > aArguments(3);
-                        PropertyValue aValue;
-                        // set as folder
-                        aValue.Name = PROPERTY_NAME;
-                        aValue.Value <<= sOldName;
-                        aArguments[0] <<= aValue;
-
-                        aValue.Name = PROPERTY_PERSISTENT_NAME;
-                        aValue.Value <<= sPersistentName;
-                        aArguments[1] <<= aValue;
-
-                        aValue.Name = PROPERTY_AS_TEMPLATE;
-                        aValue.Value <<= m_pImpl->m_aProps.bAsTemplate;
-                        aArguments[2] <<= aValue;
-
-                        Reference< XMultiServiceFactory > xORB( m_xParentContainer, UNO_QUERY_THROW );
-                        Reference< XInterface > xComponent( xORB->createInstanceWithArguments( SERVICE_SDB_DOCUMENTDEFINITION, aArguments ) );
-                        Reference< XNameContainer > xNameContainer( m_xParentContainer, UNO_QUERY_THROW );
-                        xNameContainer->insertByName( sOldName, makeAny( xComponent ) );
+                        Reference<XEmbedPersist> xPersist(m_xEmbeddedObject,UNO_QUERY);
+                        if ( xPersist.is() )
+                        {
+                            xPersist->storeOwn();
+                            notifyDataSourceModified();
+                        }
                     }
-                    catch(Exception&)
+                    else
                     {
-                        DBG_UNHANDLED_EXCEPTION();
+                        try
+                        {
+                            Reference< XStorage> xStorage = getContainerStorage();
+                            const static ::rtl::OUString sBaseName(RTL_CONSTASCII_USTRINGPARAM("Obj"));
+                            // -----------------------------------------------------------------------------
+                            Reference<XNameAccess> xElements(xStorage,UNO_QUERY_THROW);
+                            ::rtl::OUString sPersistentName = ::dbtools::createUniqueName(xElements,sBaseName);
+                            xStorage->copyElementTo(m_pImpl->m_aProps.sPersistentName,xStorage,sPersistentName);
+
+                            ::rtl::OUString sOldName = m_pImpl->m_aProps.aTitle;
+                            rename(pDocuSave->getName());
+                            updateDocumentTitle();
+
+                            Sequence< Any > aArguments(3);
+                            PropertyValue aValue;
+                            // set as folder
+                            aValue.Name = PROPERTY_NAME;
+                            aValue.Value <<= sOldName;
+                            aArguments[0] <<= aValue;
+
+                            aValue.Name = PROPERTY_PERSISTENT_NAME;
+                            aValue.Value <<= sPersistentName;
+                            aArguments[1] <<= aValue;
+
+                            aValue.Name = PROPERTY_AS_TEMPLATE;
+                            aValue.Value <<= m_pImpl->m_aProps.bAsTemplate;
+                            aArguments[2] <<= aValue;
+
+                            Reference< XMultiServiceFactory > xORB( m_xParentContainer, UNO_QUERY_THROW );
+                            Reference< XInterface > xComponent( xORB->createInstanceWithArguments( SERVICE_SDB_DOCUMENTDEFINITION, aArguments ) );
+                            Reference< XNameContainer > xNameContainer( m_xParentContainer, UNO_QUERY_THROW );
+                            xNameContainer->insertByName( sOldName, makeAny( xComponent ) );
+                        }
+                        catch(Exception&)
+                        {
+                            DBG_UNHANDLED_EXCEPTION();
+                        }
                     }
                 }
             }

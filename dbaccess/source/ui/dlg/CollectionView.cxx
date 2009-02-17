@@ -271,7 +271,7 @@ IMPL_LINK( OCollectionView, Save_Click, PushButton*, EMPTYARG )
                 QueryBox aBox( this, WB_YES_NO, ModuleRes( STR_ALREADYEXISTOVERWRITE ) );
                 if ( aBox.Execute() != RET_YES )
                     return 0;
-                xNameContainer->removeByName(sName);
+                // xNameContainer->removeByName(sName);
             }
             m_aName.SetText(sName);
             EndDialog( TRUE );

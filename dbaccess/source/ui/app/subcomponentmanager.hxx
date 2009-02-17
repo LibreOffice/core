@@ -48,6 +48,8 @@ namespace dbaui
 //........................................................................
 
     struct SubComponentManager_Data;
+    class OApplicationController;
+
     //====================================================================
     //= SubComponentManager
     //====================================================================
@@ -56,7 +58,7 @@ namespace dbaui
     class SubComponentManager : public SubComponentManager_Base
     {
     public:
-        SubComponentManager( const ::comphelper::SharedMutex& _rMutex );
+        SubComponentManager( OApplicationController& _rController, const ::comphelper::SharedMutex& _rMutex );
         virtual ~SubComponentManager();
 
         void    disposing();

@@ -1383,7 +1383,7 @@ void ORowSetBase::onDeleteRow( const Any& _rBookmark )
         return;
 
     ::osl::MutexGuard aGuard( *m_pMutex );
-    OSL_ENSURE( m_aBookmark.hasValue(), "ORowSetBase::onDeleteRow: Bookmark isn't valid!" );
+    //OSL_ENSURE( m_aBookmark.hasValue(), "ORowSetBase::onDeleteRow: Bookmark isn't valid!" );
     if ( compareBookmarks( _rBookmark, m_aBookmark ) == 0 )
     {
         positionCache( MOVE_NONE_REFRESH_ONLY );
