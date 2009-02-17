@@ -161,6 +161,10 @@ sub GetUseFiles
 	    end if
 	end if
     end if
+
+    ' Force usage of classic sleep method
+    GLOBAL_USE_NEW_SLEEP = FALSE
+
 end sub
 
 '-------------------------------------------------------------------------
@@ -709,7 +713,7 @@ sub mMakeGeneralOptionsAPI
     Dim sTempList
     Dim bError as boolean
 
-    Dim oOOoImprovementController as object  ' Check presence of the OOo Improvement Extension
+    Dim oOOoImprovementController as object  ' Check presence of the OOo Improvement Program
    
     const sFileFunction = "global::system::inc::master.inc::hMakeGeneralOptionsAPI:: "
 
@@ -835,9 +839,9 @@ sub mMakeGeneralOptionsAPI
         '       in the application and looking for the log file in user/temp/Feedback.
         oOOoImprovementController = oUnoOfficeConnection.createInstance( "com.sun.star.oooimprovement.CoreController" )
         if ( isNull( oOOoImprovementController ) ) then
-            gExtensionOOoImprovementIsInstalled = FALSE 
+            gOOoImprovementIsInstalled = FALSE 
         else
-            gExtensionOOoImprovementIsInstalled = TRUE
+            gOOoImprovementIsInstalled = TRUE
             aPropertyValue(0).Value="/org.openoffice.Office.Logging/OOoImprovement"
             xViewRoot=oUnoConfigurationAccess.createInstanceWithArguments("com.sun.star.configuration.ConfigurationUpdateAccess",aPropertyValue())
             xViewRoot.replaceByName("EnablingAllowed", false)

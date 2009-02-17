@@ -37,6 +37,8 @@
 '*
 '\******************************************************************************
 
+private const VERBOSE = false
+
 function hDeleteFile( cFileOrig as string ) as boolean
 
     const CFN = "hDeleteFile::"
@@ -101,7 +103,7 @@ function hDeleteFile( cFileOrig as string ) as boolean
                 warnlog( CFN & "File was not deleted: " & cFile )
                 hDeleteFile() = false
             else
-                printlog( CFN & "File successfully deleted: " & cFile )
+                if ( VERBOSE ) then printlog( CFN & "File successfully deleted: " & cFile )
                 hDeleteFile() = true
             endif
 

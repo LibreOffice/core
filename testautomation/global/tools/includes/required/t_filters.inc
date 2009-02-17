@@ -195,6 +195,117 @@ end function
 
 '*******************************************************************************
 
+function hGetUIFiltername( vFiltername as string ) as string
+
+    '/// Returns the in the UI used filter name.
+    '///+ <b>INPUT</b>: 'internal', language independent filter name from FilterFactory.
+    '///+ <u>Examples</u>:<ul><li>hGetUIFiltername(&quot;StarOffice XML (Draw)&quot;) - Draw OOo 1.x/SO6.0/SO7 UI Filtername</li>
+    '///+ <li>sUIFiltername = hGetUIFiltername(&quot;StarOffice XML (Impress)&quot;) - Impress OOo 1.x/SO6.0/SO7 UI Filtername</li></ul>
+    '/// The 'internal' name can be found in the *.xcu in 
+    '///+ ..../share/registry/res/en-US/org/openoffice/TypeDetection/Filter.xcu.
+    '/// See also: hGetFilternameExtension
+    
+    Dim iCurrentFilter as integer 
+    Dim oOpenUNOService as object
+    Dim oFilterName as object
+    Dim oUno as object
+    
+    const CFN = "global::tools:includes:required::t_filters.inc::hGetUIFiltername(): "
+
+    oUno = hGetUNOService( TRUE )
+    
+    oOpenUNOService = oUno.createInstance( "com.sun.star.document.FilterFactory" )
+    try
+        oFilterName = oOpenUNOService.getByName( vFiltername )
+
+        for iCurrentFilter = 0 to ubound( oFilterName )
+            if ( oFilterName( iCurrentFilter ).Name = "UIName" ) then
+                hGetUIFiltername = oFilterName( iCurrentFilter ).Value
+            end if       
+        next iCurrentFilter
+    catch
+        warnlog ( CFN & vFiltername & "'): Filtername is not available." )
+        hGetUIFiltername() = ""
+    endcatch
+      
+end function
+
+'*******************************************************************************
+
+function hGetFilternameExtension ( vFilterName as string)
+
+    '/// Returns the in the UI used filter name extension(s) <u>as an <b>array</b></u>. 
+    '///+ <b>Important</b>: Also returns it <u>as an array</u> if there comes a string from the UNO API call.
+    '/// <u>Input</u>: 'internal', language independent name
+    '/// The 'internal' name can be found in the *.xcu in 
+    '///+ ../share/registry/modules/org/openoffice/TypeDetection/Types/fcfg_[Application_name]_types.xcu file(s).
+    '/// List of some 'internal' filter names for OOo 2.0/SO8:
+    '///+<TABLE BORDER=1><TR><TH>Filter</TH><TH><i>internal</i> name</TH><TH>Note</TH></TR>
+    '///+<TR><TD>Spreadsheet (default)</TD><TD>calc8</TD><TD>-</TD></TR>
+    '///+<TR><TD>Text document (default)</TD><TD>writer8</TD><TD>-</TD></TR>
+    '///+<TR><TD>Master document (default)</TD><TD>writerglobal8</TD><TD>-</TD></TR>
+    '///+<TR><TD>Drawing (default)</TD><TD>draw8</TD><TD>-</TD></TR>
+    '///+<TR><TD>Presentation (default)</TD><TD>impress8</TD><TD>-</TD></TR>
+    '///+<TR><TD>Formula/Math (default)</TD><TD>math8</TD><TD>-</TD></TR>
+    '///+<TR><TD>HTML</TD><TD>writer_web_HTML</TD><TD>two extensions!</TD></TR>
+    '///+<TR><TD>Text</TD><TD>writer_text</TD><TD>-</TD></TR>
+    '///+<TR><TD>StarWriter 5.0</TD><TD>writer_StarWriter_50</TD><TD>-</TD></TR>
+    '///+<TR><TD>StarCalc 5.0</TD><TD>calc_StarCalc_50</TD><TD>-</TD></TR>
+    '///+</TABLE><br>
+    ' (rewritten, compatible routine; July 2004)
+    
+    Dim iCurrentExtension as integer 
+    Dim oOpenUNOService as object
+    Dim oFilterNameExtension as object
+    Dim oUno as object    
+    dim aExtensionsSize as integer
+    Dim aExtensions() as string
+    
+    const CFN = "global::tools:includes:required::t_filters.inc::hGetFilternameExtension(): "
+ 
+    'Initializize UNO comminication
+    oUno = hGetUNOService( TRUE )
+    
+    'Using the TypeDetection service
+    oOpenUNOService = oUno.createInstance("com.sun.star.document.TypeDetection")
+    
+    'Getting the Extension by given (internal; language- and product 
+    'independent) filter name
+    oFilterNameExtension = oOpenUNOService.getByName(vFiltername)
+
+    'using ubound to count the nodes
+    for iCurrentExtension = 0 to ubound( oFilterNameExtension )
+      
+        'if the node name is 'Extensions'...
+        if ( oFilterNameExtension( iCurrentExtension ).Name = "Extensions" ) then
+        
+            '...if it's an array...
+            if ( IsArray( oFilterNameExtension( iCurrentExtension ).Value) ) then
+            
+                'set the size of the aExtensions() array 
+                aExtensionsSize = 10
+                
+                're-dimension the array with the integer a                
+                Redim aExtensions( aExtensionsSize ) as string
+                
+                'return the array into an array
+                aExtensions() = oFilterNameExtension( iCurrentExtension ).Value()                
+            else            
+                '...otherwise 'build' an array with only
+                'one entry in (0)
+                Redim aExtensions( 0 ) as string                
+                aExtensions( 0 ) = oFilterNameExtension( iCurrentExtension ).Value                
+            endif
+        endif
+    next iCurrentExtension
+      
+    'put the results into the return value of this function into an array.
+    hGetFilternameExtension = aExtensions()
+    
+end function
+
+'*******************************************************************************
+
 function hGetValueForKeyAsString( lsList() as string, sKey as string ) as string
 
     '/// This function returns the value of a key as string.

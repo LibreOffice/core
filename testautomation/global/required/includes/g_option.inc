@@ -122,11 +122,11 @@ testcase tToolsOptionsStarOffice
     iMenuShould = 13
 
     
-    if ( gExtensionOOoImprovementIsInstalled ) then
+    if ( gOOoImprovementIsInstalled ) then
         iMenuShould = iMenuShould + 1
-        printlog( "The OOoImprovementExtension is installed" )
+        printlog( "OOo Improvement Program installed."  )
     else
-        qaerrorlog( "The OOoImprovementExtension is not installed" )
+        qaerrorlog( "OOo Improvemnt Program is not available" )
     endif 
 
     if EchteAnzahl <> iMenuShould then
@@ -312,7 +312,7 @@ testcase tToolsOptionsStarOffice
                 endif
                 'CheckNow.click
         case 14: Kontext "TabOOoImprovement"
-                 if ( gExtensionOOoImprovementIsInstalled ) then
+                 if ( gOOoImprovementIsInstalled ) then
                      printlog( "  - OpenOffice.org Improvement Program" )
                      if ( TabOOoImprovement.isVisible() ) then
                          gefunden = TRUE

@@ -39,22 +39,24 @@
 
 testcase tFiledlgMultiselection1()
 
-    '///<h1>Select a number of different documents and load</h1>
-    '///<ul>
+    printlog( "Stress test: Load a great number of documents simultaneously" )
+    
+    GLOBAL_USE_NEW_SLEEP = true
     
     ' This is a test requested by framework development to be used in multi-
     ' user environments like Terminal Servers. It is used to quickly create
     ' a certain load. Furthermore issues (mostly unconfirmed) have been reported
     ' that loading files using multiselection might lead to a crash.
 
-    '///+<li>Determine the workdirectory</li>
     dim cWorkPath as string : cWorkPath = hGetWorkPath() & "multiselection"
     dim cMsg as string
         
     dim iCurrentFile as integer
-    dim iInitialDocumentCount as integer
     dim iOpenDocuments as integer
-    dim iWait as integer  : iWait = 0
+    dim lTime as long
+    dim lWait as long
+    dim lTimeSum as long
+    
     
     dim iDocType as integer
     dim iDocument as integer
@@ -69,122 +71,123 @@ testcase tFiledlgMultiselection1()
     dim brc as boolean
     
     const TESTFILE_COUNT = 60 ' the number of documents in cWorkPath
-    const DOC_IDENTIFIER = "Initial document for multi selection test"
-
-    '///<ul>
+    const TESTFILE_TIMEOUT = 120000
 
     ' Minimum cleanup
     while( getDocumentCount > 0 ) 
-        hDestroyDocument()
+        hCloseDocument()
     wend
 
     ' create the workdirectory
     mkdir( cWorkPath )
     
-    ' create a bulk of files
+    ' dynamically create a bulk of files to be written to the work directory
+    lTimeSum = 0
+    
     for iDocType = 1 to 4
         hNumericDocType( iDocType )
         hNewDocument()
         hChangeDoc()
+        lWait = 0
         for iDocument = 1 to 15
-            cFile = cWorkPath & "\" & "test_" & cFilter( iDocType ) & iDocument 
+            cFile = cWorkPath & "\" & "test_" & cFilter( iDocType ) & iDocument
+            lTime = getSystemTicks
             hFileSaveAsWithFilterKill( cFile, cFilter( iDocType ) )
+            lWait = lWait + getSystemTicks - lTime
         next iDocument
         hCloseDocument()
+        printlog( "Total time for saving 15 documents: " & lWait & " ms" )
+        lTimeSum = lTimeSum + lWait
     next iDocType
+    
+    if ( getDocumentCount > 0 ) then
+        warnlog( "Not all files were saved and closed" )
+        goto endsub
+    endif
+    
+    printlog( "Time for saving 60 documents: " & lTimeSum & " ms" )
+    printlog( "Average time per document...: " & lTimeSum / TESTFILE_COUNT & " ms" )
             
-    gApplication = "WRITER"
-    hCreateDocument()
-    DocumentWriter.typeKeys( DOC_IDENTIFIER )
-    
-    '///+<li>Close the navigator if present</li>
-    hCloseNavigator()
-    '///</ul>
-    
-    '///+<li>Open the filepicker (via menu or toolbar)</li>
     printlog( "FileOpen" )
     FileOpen
 
-    '///+<li>Go to the workdirectory</li>
     printlog( "Go to the workdirectory: " & cWorkPath )
     kontext "OeffnenDlg"
-    DateiName.typeKeys( cWorkPath )
-    Oeffnen.click()
+    if ( OeffnenDlg.exists( 1 ) ) then
     
-    '///+<li>Check for messagebox - if one comes up we cannot continue</li>
-    kontext "Active"
-    if ( active.exists( 2 ) ) then
-    	cMsg = active.getText()
-    	cMsg = hRemoveLineBreaks( cMsg )
-    	warnlog( "Unexpected messagebox: " & cMsg )
-    	active.ok()
-    	kontext "OeffnenDlg"
-    	OeffnenDlg.cancel()
-    	goto endsub
-    endif
-    
-    '///+<li>Select all documents and click &quot;Open&quot;</li>
-    printlog( "Select all documents and load them simultaneously" )
-    kontext "OeffnenDlg"
-    DateiAuswahl.typeKeys( "<HOME>" )
-    DateiAuswahl.typeKeys( "<SHIFT END>" )
-    Oeffnen.Click()
-    
-    '///+<li>Wait max 60 seconds for the documents to load</li>
-    while ( getDocumentCount < ( TESTFILE_COUNT + 1 ) ) 
-    
-    	iWait = iWait + 1
-    	sleep( 1 ) ' This is intentional, do not remove or replace
-
-        if ( iWait = ( TESTFILE_COUNT + 1 ) ) then
-        	warnlog( "The documents were not loaded within 60 seconds, abort" )
+        DateiName.typeKeys( cWorkPath )
+        Oeffnen.click()
+        
+        kontext "Active"
+        if ( active.exists( 2 ) ) then
+        	cMsg = active.getText()
+        	cMsg = hRemoveLineBreaks( cMsg )
+        	warnlog( "Unexpected messagebox: " & cMsg )
+        	active.ok()
+        	kontext "OeffnenDlg"
+        	if ( OeffnenDlg.exists() ) then
+            	OeffnenDlg.cancel()
+            else
+                warnlog( "File Open dialog is not visible" )
+            endif
         	goto endsub
         endif
         
-    wend
+        printlog( "Select all documents and load them simultaneously" )
+        kontext "OeffnenDlg"
+        if ( OeffnenDlg.exists() ) then
+        
+            DateiAuswahl.typeKeys( "<HOME>" )
+            DateiAuswahl.typeKeys( "<SHIFT END>" )
+            Oeffnen.Click()
+         
+            lTime = GetSystemTicks
+            iOpenDocuments = 0   
+            while ( iOpenDocuments < TESTFILE_COUNT )
+                iOpenDocuments = getDocumentCount
+                if ( (getSystemTicks - lTime) > TESTFILE_TIMEOUT ) then
+                    warnlog( "Loading files max wait time exceed (120 seconds), aborting" )
+                    goto endsub
+                endif
+            wend
+            lWait = getSystemTicks - lTime ' time diff
 
-    printlog( "All documents loaded in " & iWait & " seconds" )
+            printlog( "All documents loaded in " & lWait & " ms" )
+            sleep()
+            
+            printlog( "Starting to close all documents" )
+            for iCurrentFile = 1 to TESTFILE_COUNT
+                FileClose
+                sleep()
+            next iCurrentFile
+            printlog( "Finished closing documents" )
+            
+            if ( getDocumentCount > 0 ) then
+            	warnlog( "Not all documents were closed." )
+            	iOpenDocuments = getDocumentCount
+            	for iCurrentFile = 1 to iOpenDocuments - 1
+            		hCloseDocument()
+                next iCurrentFile
+            else
+                printlog( "All documents have been closed. Test succeeded." )
+            endif
+            
+            printlog( "Deleting work files..." )
+            for iDocType = 1 to 4
+                hNumericDocType( iDocType )
+                for iDocument = 1 to 15
+                    cFile = cWorkPath & "\" & "test_" & cFilter( iDocType ) & iDocument 
+                    hDeleteFile( cFile )
+                next iDocument
+            next iDocType
 
-    '///+<li>Close all the files again</li>
-    printlog( "Starting to close all documents" )
-    for iCurrentFile = 1 to TESTFILE_COUNT
-        WaitSlot() ' sleep( 1 )
-        FileClose
-    next iCurrentFile
-    printlog( "Finished closing documents" )
-    
-    '///+<li>Verify that the correct document is open &quot;The first doc!&quot;</li>
-    if ( getDocumentCount <> 1 ) then
-    	warnlog( "Only the identification document should be open." )
-    	iOpenDocuments = getDocumentCount
-    	for iCurrentFile = 1 to iOpenDocuments - 1
-    		hDestroyDocument()
-        next iCurrentFile
-        call ExitRestartTheOffice()
-    else
-        brc = hIdentifyWriterDoc( DOC_IDENTIFIER , false )
-        if ( not brc ) then
-            warnlog( "The identification document is missing" )
+            printlog( "Removing temporary work directory" )
+            rmdir( cWorkPath )    
         else
-            printlog( "Ok, test succeeded" )
-            hDestroyDocument()
+            warnlog( "File Open dialog is not visible" )
         endif
+    else
+        warnlog( "File Open dialog did not open." )
     endif
-    
-    ' remove workfiles again
-    for iDocType = 1 to 4
-        hNumericDocType( iDocType )
-        for iDocument = 1 to 15
-            cFile = cWorkPath & "\" & "test_" & cFilter( iDocType ) & iDocument 
-            hDeleteFile( cFile )
-        next iDocument
-    next iDocType
-    
-    rmdir( cWorkPath )
-    
-    
-    hCloseNavigator()
-    '///</ul>
-
 
 endcase

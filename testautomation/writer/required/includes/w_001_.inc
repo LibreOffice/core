@@ -97,10 +97,10 @@ testcase tFileNewLabels
 
     PrintLog "Open Labels-dialog with File / New / Labels"
     if hCreateLabels = False then goto endsub
-    Sleep 5
+    Sleep()
     Call DialogTest (TabEtiketten)
     PrintLog "Switch to Tabpage 'Labels'"
-    Sleep 5
+    Sleep()
     PrintLog "Check number of brands and types (see #i44801# for details)"
     For i = 1 to 2
         Select Case i
@@ -166,7 +166,7 @@ testcase tFileNewLabels
             next y
         next x
     next i
-    Sleep 1
+    Sleep()
 
     PrintLog "Switch to Tabpage 'Format'"
     Kontext
@@ -185,7 +185,7 @@ testcase tFileNewLabels
     Call DialogTest (SaveLabelFormat)
     SaveLabelFormat.Cancel
     Kontext "TabFormatEtiketten"
-    Sleep 5
+    Sleep()
 
     PrintLog "Switch to Tabpage 'Options'"
     Kontext
@@ -197,23 +197,25 @@ testcase tFileNewLabels
     PrintLog "Click pushbutton 'Setup'"
     if gPlatgroup = "w95" or gPlatgroup = "wnt" then
         Einrichten.Click
-        Sleep 1
+    
+        PrintLog "Close printer-setup dialog"
         Kontext "DruckerEinrichten"
-        if DruckerEinrichten.Exists then
+        if DruckerEinrichten.Exists( 2 ) then
             DruckerEinrichten.Cancel
         else
             Warnlog "No Default Printer!"
         end if
         Kontext "TabDruckerEtiketten"
     end if
-    PrintLog "Close printer-setup dialog"
-    Sleep 1
+    
+    Sleep()
     PrintLog "Check checkbox 'Synchronize contents'"
     InhaltSynchronisieren.Check
     wait 250
     PrintLog "Click 'New document'"
     NeuesDok.Click
-    Sleep 2
+    Sleep()
+    
     Kontext "Active"
     if Active.Exists then
         try
@@ -230,7 +232,7 @@ testcase tFileNewLabels
     if EtikettenSynchronisieren.Exists then
         Call DialogTest ( EtikettenSynchronisieren )
         Synchronisieren.Click
-        Sleep 2
+        Sleep()
     else
         Warnlog " Dialog to synchronize labels not up!"
     end if
@@ -261,7 +263,7 @@ testcase tFileNewBusinessCards
 	Active.Setpage TabEtikettenMedium
 	Kontext "TabEtikettenMedium"
 	Call DialogTest (TabEtikettenMedium)
-    Sleep 2
+    Sleep()
     PrintLog "Check number of brands and types (see #i44801# for details)"
     For i = 1 to 2
         Select Case i
@@ -327,11 +329,11 @@ testcase tFileNewBusinessCards
             next y
         next x
     next i
-    Sleep 1
+    Sleep()
     PrintLog "Switch to Tabpage 'Business Cards'"
 	Kontext
 	Active.Setpage TabVisitenkarten
-	Sleep 2
+	Sleep()
 
 	Kontext "Active"
 	if Active.GetRT = 304 then
