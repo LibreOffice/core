@@ -1950,11 +1950,12 @@ void MultiSalLayout::DrawText( SalGraphics& rGraphics ) const
     for( int i = mnLevel; --i >= 0; )
     {
         SalLayout& rLayout = *mpLayouts[ i ];
-        rLayout.DrawBase() = maDrawBase;
+        rLayout.DrawBase() += maDrawBase;
         rLayout.DrawOffset() += maDrawOffset;
         rLayout.InitFont();
         rLayout.DrawText( rGraphics );
         rLayout.DrawOffset() -= maDrawOffset;
+        rLayout.DrawBase() -= maDrawBase;
     }
     // NOTE: now the baselevel font is active again
 }

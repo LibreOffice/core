@@ -1745,19 +1745,39 @@ BOOL AquaSalGraphics::GetGlyphOutline( long nGlyphId, basegfx::B2DPolyPolygon& r
 
 long AquaSalGraphics::GetGraphicsWidth() const
 {
+    long w = 0;
     if( mrContext && (mbWindow || mbVirDev) )
     {
-        return mnWidth; //CGBitmapContextGetWidth( mrContext );
+        w = mnWidth;
     }
-    else
-        return 0;
+
+    if( w == 0 )
+    {
+        if( mbWindow && mpFrame )
+            w = mpFrame->maGeometry.nWidth;
+    }
+
+    return w;
 }
 
 // -----------------------------------------------------------------------
 
-BOOL AquaSalGraphics::GetGlyphBoundRect( long nIndex, Rectangle& )
+BOOL AquaSalGraphics::GetGlyphBoundRect( long nGlyphId, Rectangle& rRect )
 {
-    return sal_False;
+    ATSUStyle rATSUStyle = maATSUStyle; // TODO: handle glyph fallback
+    GlyphID aGlyphId = nGlyphId;
+    ATSGlyphScreenMetrics aGlyphMetrics;
+    OSStatus eStatus = ATSUGlyphGetScreenMetrics( rATSUStyle,
+        1, &aGlyphId, 0, FALSE, !mbNonAntialiasedText, &aGlyphMetrics );
+    if( eStatus != noErr )
+        return false;
+
+    const long nMinX = (long)(+aGlyphMetrics.topLeft.x * mfFontScale - 0.5);
+    const long nMaxX = (long)(aGlyphMetrics.width * mfFontScale + 0.5) + nMinX;
+    const long nMinY = (long)(-aGlyphMetrics.topLeft.y * mfFontScale - 0.5);
+    const long nMaxY = (long)(aGlyphMetrics.height * mfFontScale + 0.5) + nMinY;
+    rRect = Rectangle( nMinX, nMinY, nMaxX, nMaxY );
+    return true;
 }
 
 // -----------------------------------------------------------------------

@@ -2972,17 +2972,24 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( ImplFontSelectData& rFSD,
             }
         }
 
+        // check if the current font name token or its substitute is valid
+        ImplDevFontListData* pFoundData = ImplFindBySearchName( aSearchName );
+        if( pFoundData )
+            return pFoundData;
+
         // some systems provide special customization
         // e.g. they suggest "serif" as UI-font, but this name cannot be used directly
         //      because the system wants to map it to another font first, e.g. "Helvetica"
         if( mpPreMatchHook )
+        {
             if( mpPreMatchHook->FindFontSubstitute( rFSD ) )
+            {
                 ImplGetEnglishSearchFontName( aSearchName );
-
-        // check if the current font name token or its substitute is valid
-    ImplDevFontListData* pFoundData = ImplFindBySearchName( aSearchName );
-        if( pFoundData )
-            return pFoundData;
+                pFoundData = ImplFindBySearchName( aSearchName );
+                if( pFoundData )
+                    return pFoundData;
+            }
+        }
 
         // break after last font name token was checked unsuccessfully
         if( nTokenPos == STRING_NOTFOUND)

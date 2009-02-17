@@ -3279,7 +3279,8 @@ bool PrintFontManager::getMetrics( fontID nFontID, sal_Unicode minCharacter, sal
             analyzeTrueTypeFile( pFont );
     }
 
-    for( sal_Unicode code = minCharacter; code <= maxCharacter; code++ )
+    sal_Unicode code = minCharacter;
+    do
     {
         if( ! pFont->m_pMetrics ||
             ! ( pFont->m_pMetrics->m_aPages[ code >> 11 ] & ( 1 << ( ( code >> 8 ) & 7 ) ) ) )
@@ -3299,7 +3300,8 @@ bool PrintFontManager::getMetrics( fontID nFontID, sal_Unicode minCharacter, sal
             if( it != pFont->m_pMetrics->m_aMetrics.end() )
                 pArray[ code - minCharacter ] = it->second;
         }
-    }
+    } while( code++ != maxCharacter );
+
     return true;
 }
 
