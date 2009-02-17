@@ -128,7 +128,7 @@ void writeJpeg_( OutputBuffer& o_rOutputBuf, Stream* str, bool bWithLinefeed )
     while((c=str->getChar()) != EOF)
         o_rOutputBuf.push_back(static_cast<char>(c));
 
-    printf( " JPEG %d", o_rOutputBuf.size() );
+    printf( " JPEG %d", (int)o_rOutputBuf.size() );
     if( bWithLinefeed )
         printf("\n");
 
@@ -573,6 +573,13 @@ void PDFOutDev::updateFont(GfxState *state)
     }
 }
 
+void PDFOutDev::updateRender(GfxState *state)
+{
+    assert(state);
+
+    printf( "setTextRenderMode %d\n", state->getRender() );
+}
+
 void PDFOutDev::stroke(GfxState *state)
 {
     assert(state);
@@ -747,7 +754,7 @@ void PDFOutDev::drawImage(GfxState*, Object*, Stream* str,
         }
     }
 
-    printf( " %d", aMaskBuf.size() );
+    printf( " %d", (int)aMaskBuf.size() );
     writeImageLF( aBuf, str, width, height, colorMap );
     writeBinaryBuffer(aBuf);
     writeBinaryBuffer(aMaskBuf);

@@ -179,19 +179,31 @@ void PDFIProcessor::setBlendMode(sal_Int8)
     OSL_TRACE("PDFIProcessor::setBlendMode(): not supported by ODF");
 }
 
-void PDFIProcessor::setFont( const FontAttributes& rFont )
+void PDFIProcessor::setFont( const FontAttributes& i_rFont )
 {
+    FontAttributes aChangedFont( i_rFont );
     GraphicsContext& rGC=getCurrentContext();
-    FontToIdMap::const_iterator it = m_aFontToId.find( rFont );
+    // for text render modes, please see PDF reference manual
+    aChangedFont.isOutline = ( (rGC.TextRenderMode == 1) || (rGC. TextRenderMode == 2) );
+    FontToIdMap::const_iterator it = m_aFontToId.find( aChangedFont );
     if( it != m_aFontToId.end() )
         rGC.FontId = it->second;
     else
     {
-        m_aFontToId[ rFont ] = m_nNextFontId;
-        m_aIdToFont[ m_nNextFontId ] = rFont;
+        m_aFontToId[ aChangedFont ] = m_nNextFontId;
+        m_aIdToFont[ m_nNextFontId ] = aChangedFont;
         rGC.FontId = m_nNextFontId;
         m_nNextFontId++;
     }
+}
+
+void PDFIProcessor::setTextRenderMode( sal_Int32 i_nMode )
+{
+    GraphicsContext& rGC=getCurrentContext();
+    rGC.TextRenderMode = i_nMode;
+    IdToFontMap::iterator it = m_aIdToFont.find( rGC.FontId );
+    if( it != m_aIdToFont.end() )
+        setFont( it->second );
 }
 
 sal_Int32 PDFIProcessor::getFontId( const FontAttributes& rAttr ) const
@@ -225,17 +237,17 @@ void PDFIProcessor::processGlyphLine()
     unsigned int    nNullSpaceBreakerCount=0;
     bool preSpaceNull(true);
 
-    for ( unsigned int i=0; i<m_GlyphsList.size()-1; i++ ) // i=1 cose the first Glypth dont have prevGlyphSpace value
+    for ( unsigned int i=0; i<m_GlyphsList.size()-1; i++ ) // i=1 because the first glyph doesn't have a prevGlyphSpace value
     {
-        if( m_GlyphsList[i].getPrevGlypthsSpace()>0.0 )
+        if( m_GlyphsList[i].getPrevGlyphsSpace()>0.0 )
         {
-           if( fMinPreSpaceValue>m_GlyphsList[i].getPrevGlypthsSpace() )
-               fMinPreSpaceValue=m_GlyphsList[i].getPrevGlypthsSpace();
+           if( fMinPreSpaceValue>m_GlyphsList[i].getPrevGlyphsSpace() )
+               fMinPreSpaceValue=m_GlyphsList[i].getPrevGlyphsSpace();
 
-           if( fMaxPreSpaceValue<m_GlyphsList[i].getPrevGlypthsSpace() )
-               fMaxPreSpaceValue=m_GlyphsList[i].getPrevGlypthsSpace();
+           if( fMaxPreSpaceValue<m_GlyphsList[i].getPrevGlyphsSpace() )
+               fMaxPreSpaceValue=m_GlyphsList[i].getPrevGlyphsSpace();
 
-           fPreAvarageSpaceValue+= m_GlyphsList[i].getPrevGlypthsSpace();
+           fPreAvarageSpaceValue+= m_GlyphsList[i].getPrevGlyphsSpace();
            nSpaceCount++;
         }
     }
@@ -243,16 +255,16 @@ void PDFIProcessor::processGlyphLine()
     if( nSpaceCount!=0 )
      fPreAvarageSpaceValue= fPreAvarageSpaceValue/( nSpaceCount );
 
-    for ( unsigned int i=0; i<m_GlyphsList.size()-1; i++ ) // i=1 cose the first Glypth dont have prevGlyphSpace value
+    for ( unsigned int i=0; i<m_GlyphsList.size()-1; i++ ) // i=1 because the first glyph doesn't have a prevGlyphSpace value
     {
-       if ( m_GlyphsList[i].getPrevGlypthsSpace()==0.0 )
+       if ( m_GlyphsList[i].getPrevGlyphsSpace()==0.0 )
        {
             if (
-                 ( m_GlyphsList[i+1].getPrevGlypthsSpace()>0.0)&&
-                 ( fPreAvarageSpaceValue>m_GlyphsList[i+1].getPrevGlypthsSpace())
+                 ( m_GlyphsList[i+1].getPrevGlyphsSpace()>0.0)&&
+                 ( fPreAvarageSpaceValue>m_GlyphsList[i+1].getPrevGlyphsSpace())
                )
             {
-              fNullSpaceBreakerAvaregeSpaceValue+=m_GlyphsList[i+1].getPrevGlypthsSpace();
+              fNullSpaceBreakerAvaregeSpaceValue+=m_GlyphsList[i+1].getPrevGlyphsSpace();
               nNullSpaceBreakerCount++;
             }
         }
@@ -267,15 +279,15 @@ void PDFIProcessor::processGlyphLine()
 
     for ( unsigned int i=0; i<m_GlyphsList.size()-1; i++ ) // i=1 cose the first Glypth dont have prevGlyphSpace value
     {
-        if  ( ( m_GlyphsList[i].getPrevGlypthsSpace()>0.0 )
+        if  ( ( m_GlyphsList[i].getPrevGlyphsSpace()>0.0 )
             )
         {
           if (
-              ( m_GlyphsList[i].getPrevGlypthsSpace()  <= fPreAvarageSpaceValue )&&
-              ( m_GlyphsList[i+1].getPrevGlypthsSpace()<= fPreAvarageSpaceValue )
+              ( m_GlyphsList[i].getPrevGlyphsSpace()  <= fPreAvarageSpaceValue )&&
+              ( m_GlyphsList[i+1].getPrevGlyphsSpace()<= fPreAvarageSpaceValue )
              )
           {
-               double temp= m_GlyphsList[i].getPrevGlypthsSpace()-m_GlyphsList[i+1].getPrevGlypthsSpace();
+               double temp= m_GlyphsList[i].getPrevGlyphsSpace()-m_GlyphsList[i+1].getPrevGlyphsSpace();
 
                if(temp!=0.0)
                {
@@ -309,7 +321,7 @@ void PDFIProcessor::processGlyphLine()
 
     if(m_GlyphsList.size()>0)
     {
-        pFrame = m_pElFactory->createFrameElement( m_GlyphsList[0].getCurElement(), getGCId( getTransformGlyphContex( m_GlyphsList[0])) );
+        pFrame = m_pElFactory->createFrameElement( m_GlyphsList[0].getCurElement(), getGCId( getTransformGlyphContext( m_GlyphsList[0])) );
         pFrame->ZOrder = m_nNextZOrder++;
         pPara = m_pElFactory->createParagraphElement( pFrame );
 
@@ -329,16 +341,16 @@ void PDFIProcessor::processGlyphLine()
 
     for ( unsigned int i=1; i<m_GlyphsList.size()-1; i++ )
     {
-        double fPrevDiffCharSpace= m_GlyphsList[i].getPrevGlypthsSpace()-m_GlyphsList[i-1].getPrevGlypthsSpace();
-        double fPostDiffCharSpace= m_GlyphsList[i].getPrevGlypthsSpace()-m_GlyphsList[i+1].getPrevGlypthsSpace();
+        double fPrevDiffCharSpace= m_GlyphsList[i].getPrevGlyphsSpace()-m_GlyphsList[i-1].getPrevGlyphsSpace();
+        double fPostDiffCharSpace= m_GlyphsList[i].getPrevGlyphsSpace()-m_GlyphsList[i+1].getPrevGlyphsSpace();
 
 
          if(
-             preSpaceNull && (m_GlyphsList[i].getPrevGlypthsSpace()!= 0.0)
+             preSpaceNull && (m_GlyphsList[i].getPrevGlyphsSpace()!= 0.0)
             )
          {
                preSpaceNull=false;
-              if( fNullSpaceBreakerAvaregeSpaceValue > m_GlyphsList[i].getPrevGlypthsSpace() )
+              if( fNullSpaceBreakerAvaregeSpaceValue > m_GlyphsList[i].getPrevGlyphsSpace() )
 
               {
                 processGlyph( 0,
@@ -362,10 +374,10 @@ void PDFIProcessor::processGlyphLine()
          else
          {
             if (
-                ( m_GlyphsList[i].getPrevGlypthsSpace()<= fPreAvarageSpaceValue )&&
+                ( m_GlyphsList[i].getPrevGlyphsSpace()<= fPreAvarageSpaceValue )&&
                 ( fPrevDiffCharSpace<=fAvarageDiffCharSpaceValue )&&
                 ( fPostDiffCharSpace<=fAvarageDiffCharSpaceValue ) ||
-                ( m_GlyphsList[i].getPrevGlypthsSpace() == 0.0 )
+                ( m_GlyphsList[i].getPrevGlyphsSpace() == 0.0 )
             )
             {
                 preSpaceNull=true;
@@ -480,7 +492,7 @@ void PDFIProcessor::drawGlyphLine( const rtl::OUString&             rGlyphs,
 
 }
 
-GraphicsContext& PDFIProcessor::getTransformGlyphContex( CharGlyph& rGlyph )
+GraphicsContext& PDFIProcessor::getTransformGlyphContext( CharGlyph& rGlyph )
 {
     geometry::RealRectangle2D   rRect = rGlyph.getRect();
     geometry::Matrix2D          rFontMatrix = rGlyph.getFontMatrix();

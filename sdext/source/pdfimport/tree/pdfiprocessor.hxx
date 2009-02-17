@@ -131,7 +131,7 @@ namespace pdfi
                              FrameElement* pFrame,
                              bool bSpaceFlag );
 
-        GraphicsContext& getTransformGlyphContex( CharGlyph& rGlyph );
+        GraphicsContext& getTransformGlyphContext( CharGlyph& rGlyph );
 
         // ContentSink interface implementation
 
@@ -155,6 +155,7 @@ namespace pdfi
         virtual void setStrokeColor( const ::com::sun::star::rendering::ARGBColor& rColor );
         virtual void setBlendMode(sal_Int8);
         virtual void setFont( const FontAttributes& rFont );
+        virtual void setTextRenderMode( sal_Int32 );
 
         virtual void strokePath( const ::com::sun::star::uno::Reference<
                                        ::com::sun::star::rendering::XPolyPolygon2D >& rPath );
@@ -263,9 +264,9 @@ namespace pdfi
 
             double getYPrevGlyphPosition(){ return m_fYPrevGlyphPosition; }
             double getXPrevGlyphPosition(){ return m_fXPrevGlyphPosition; }
-            double getPrevGlyphHeight  (){ return m_fPrevGlyphHeight; }
-            double getPrevGlyphWidth   (){ return m_fPrevGlyphWidth; }
-            double getPrevGlypthsSpace() { if( (m_rRect.X1-m_fXPrevGlyphPosition)<0 )
+            double getPrevGlyphHeight(){ return m_fPrevGlyphHeight; }
+            double getPrevGlyphWidth (){ return m_fPrevGlyphWidth; }
+            double getPrevGlyphsSpace() { if( (m_rRect.X1-m_fXPrevGlyphPosition)<0 )
                                                 return 0;
                                            else
                                             return m_rRect.X1-m_fXPrevGlyphPosition;

@@ -923,11 +923,17 @@ void WriterXmlFinalizer::visit( TextElement& elem, const std::list< Element* >::
         aFontProps[ USTR( "fo:font-style-asian" ) ]   = USTR( "italic" );
         aFontProps[ USTR( "fo:font-style-complex" ) ] = USTR( "italic" );
     }
+    // underline
     if( rFont.isUnderline )
     {
         aFontProps[ USTR( "style:text-underline-style" ) ]  = USTR( "solid" );
         aFontProps[ USTR( "style:text-underline-width" ) ]  = USTR( "auto" );
         aFontProps[ USTR( "style:text-underline-color" ) ]  = USTR( "font-color" );
+    }
+    // outline
+    if( rFont.isOutline )
+    {
+        aFontProps[ USTR( "style:text-outline" ) ]  = USTR( "true" );
     }
     // size
     rtl::OUStringBuffer aBuf( 32 );
@@ -939,7 +945,7 @@ void WriterXmlFinalizer::visit( TextElement& elem, const std::list< Element* >::
     aFontProps[ USTR( "style:font-size-complex" ) ] = aFSize;
     // color
     const GraphicsContext& rGC = m_rProcessor.getGraphicsContext( elem.GCId );
-    aFontProps[ USTR( "fo:color" ) ]                 =  getColorString( rGC.FillColor );
+    aFontProps[ USTR( "fo:color" ) ]                 =  getColorString( rFont.isOutline ? rGC.LineColor : rGC.FillColor );
 
     StyleContainer::Style aStyle( "style:style", aProps );
     StyleContainer::Style aSubStyle( "style:text-properties", aFontProps );

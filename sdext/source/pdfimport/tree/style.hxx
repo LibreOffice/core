@@ -173,6 +173,7 @@ namespace pdfi
         sal_Int32 impl_getStyleId( const Style& rStyle, bool bSubStyle );
         sal_Int32 getStyleId( const Style& rStyle )
         { return impl_getStyleId( rStyle, false ); }
+        sal_Int32 getStandardStyleId( const rtl::OString& rFamily );
 
         // returns NULL for an invalid style id
         const PropertyMap* getProperties( sal_Int32 nStyleId ) const;

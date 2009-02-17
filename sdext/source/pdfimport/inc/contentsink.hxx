@@ -64,11 +64,13 @@ namespace pdfi
                         bool                 isBold_,
                         bool                 isItalic_,
                         bool                 isUnderline_,
+                        bool                 isOutline_,
                         double               size_ ) :
             familyName(familyName_),
             isBold(isBold_),
             isItalic(isItalic_),
             isUnderline(isUnderline_),
+            isOutline(isOutline_),
             size(size_)
         {}
 
@@ -77,6 +79,7 @@ namespace pdfi
             isBold(false),
             isItalic(false),
             isUnderline(false),
+            isOutline(false),
             size(0.0)
         {}
 
@@ -84,6 +87,7 @@ namespace pdfi
         bool                isBold;
         bool                isItalic;
         bool                isUnderline;
+        bool                isOutline;
         double              size; // device pixel
 
         bool operator==(const FontAttributes& rFont) const
@@ -92,6 +96,7 @@ namespace pdfi
                 !isBold == !rFont.isBold &&
                 !isItalic == !rFont.isItalic &&
                 !isUnderline == !rFont.isUnderline &&
+                !isOutline == !rFont.isOutline &&
                 size == rFont.size;
         }
     };
@@ -128,6 +133,7 @@ namespace pdfi
         virtual void setStrokeColor( const ::com::sun::star::rendering::ARGBColor& rColor ) = 0;
         virtual void setBlendMode( sal_Int8 blendMode ) = 0;
         virtual void setFont( const FontAttributes& rFont ) = 0;
+        virtual void setTextRenderMode( sal_Int32 ) = 0;
 
 
         virtual void strokePath( const ::com::sun::star::uno::Reference<

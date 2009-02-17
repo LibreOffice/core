@@ -91,6 +91,7 @@ namespace pdfi
                 ^  size_t(rFont.isBold ? 0xd47be593 : 0)
                 ^  size_t(rFont.isItalic ? 0x1efd51a1 : 0)
                 ^  size_t(rFont.isUnderline ? 0xf6bd325a : 0)
+                ^  size_t(rFont.isOutline ?  0x12345678 : 0)
                 ^  size_t(rFont.size)
                 ;
         }
@@ -108,6 +109,7 @@ namespace pdfi
         double                                     MiterLimit;
         std::vector<double>                        DashArray;
         sal_Int32                                  FontId;
+        sal_Int32                                  TextRenderMode;
         basegfx::B2DHomMatrix                      Transformation;
         basegfx::B2DPolyPolygon                    Clip;
 
@@ -122,6 +124,7 @@ namespace pdfi
             MiterLimit(10.0),
             DashArray(),
             FontId(0),
+            TextRenderMode(0),
             Transformation(),
             Clip()
         {}
@@ -144,6 +147,7 @@ namespace pdfi
                 MiterLimit == rRight.MiterLimit &&
                 DashArray == rRight.DashArray &&
                 FontId    == rRight.FontId &&
+                TextRenderMode == rRight.TextRenderMode &&
                 Transformation == rRight.Transformation &&
                 Clip == rRight.Clip;
         }
@@ -173,6 +177,7 @@ namespace pdfi
                 ^  size_t(rGC.MiterLimit)
                 ^  rGC.DashArray.size()
                 ^  size_t(rGC.FontId)
+                ^  size_t(rGC.TextRenderMode)
                 ^  size_t(rGC.Transformation.get( 0, 0 ))
                 ^  size_t(rGC.Transformation.get( 1, 0 ))
                 ^  size_t(rGC.Transformation.get( 0, 1 ))
