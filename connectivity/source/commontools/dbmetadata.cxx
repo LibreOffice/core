@@ -287,10 +287,16 @@ namespace dbtools
         try
         {
             bSupport = m_pImpl->xConnectionMetaData->supportsIntegrityEnhancementFacility();
+        }
+        catch( const Exception& )
+        {
+        }
+        try
+        {
             if ( !bSupport )
             {
                 const ::rtl::OUString url = m_pImpl->xConnectionMetaData->getURL();
-                char pMySQL[] = "sdbc:mysql:";
+                char pMySQL[] = "sdbc:mysql";
                 bSupport = url.matchAsciiL(pMySQL,(sizeof(pMySQL)/sizeof(pMySQL[0]))-1);
             }
         }

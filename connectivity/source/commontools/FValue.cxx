@@ -1939,6 +1939,21 @@ void ORowSetValue::fill(const Any& _rValue)
             setSigned(sal_False);
             break;
         }
+        case TypeClass_HYPER:
+        {
+            sal_Int64 nValue(0);
+            _rValue >>= nValue;
+            (*this) = nValue;
+            break;
+        }
+        case TypeClass_UNSIGNED_HYPER:
+        {
+            sal_uInt64 nValue(0);
+            _rValue >>= nValue;
+            (*this) = static_cast<sal_Int64>(nValue);
+            setSigned(sal_False);
+            break;
+        }
         case TypeClass_UNSIGNED_LONG:
         {
             sal_uInt32 nValue(0);

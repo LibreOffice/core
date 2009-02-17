@@ -339,6 +339,8 @@ const XMLEventNameTranslation aStandardEventTable[] =
     { "OnSaveTo",           XML_NAMESPACE_OFFICE, "save-to" },
     { "OnSaveToDone",       XML_NAMESPACE_OFFICE, "save-to-done" },
     { "OnSaveToFailed",     XML_NAMESPACE_OFFICE, "save-to-failed" },
+    { "OnSubComponentOpened",   XML_NAMESPACE_OFFICE, "subcomponent-opened" },
+    { "OnSubComponentClosed",   XML_NAMESPACE_OFFICE, "subcomponent-closed" },
 
     { NULL, 0, 0 }
 };

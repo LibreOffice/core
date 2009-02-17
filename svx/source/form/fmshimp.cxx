@@ -1150,14 +1150,17 @@ bool FmXFormShell::executeControlConversionSlot( const Reference< XFormComponent
             {
                 Reference< XBindableValue > xOldBindable( xOldModel, UNO_QUERY );
                 Reference< XBindableValue > xNewBindable( xNewModel, UNO_QUERY );
+                if ( xOldBindable.is() )
                 {
                     try
                     {
-                        xNewBindable->setValueBinding( xOldBindable->getValueBinding() );
+                        if ( xNewBindable.is() )
+                            xNewBindable->setValueBinding( xOldBindable->getValueBinding() );
                         xOldBindable->setValueBinding( NULL );
                     }
-                    catch(const IncompatibleTypesException&)
+                    catch(const Exception&)
                     {
+                        DBG_UNHANDLED_EXCEPTION();
                     }
                 }
             }
@@ -1165,16 +1168,17 @@ bool FmXFormShell::executeControlConversionSlot( const Reference< XFormComponent
             {
                 Reference< XListEntrySink > xOldSink( xOldModel, UNO_QUERY );
                 Reference< XListEntrySink > xNewSink( xNewModel, UNO_QUERY );
-                if ( xOldSink.is() && xNewSink.is() )
+                if ( xOldSink.is() )
                 {
                     try
                     {
-                        xNewSink->setListEntrySource( xOldSink->getListEntrySource() );
+                        if ( xNewSink.is() )
+                            xNewSink->setListEntrySource( xOldSink->getListEntrySource() );
                         xOldSink->setListEntrySource( NULL );
                     }
                     catch(const Exception&)
                     {
-                        DBG_ERROR("FmXFormShell::executeControlConversionSlot: caught an exception while creating the control !");
+                        DBG_UNHANDLED_EXCEPTION();
                     }
                 }
             }

@@ -41,6 +41,7 @@
 #include "java/sql/Blob.hxx"
 #include "java/sql/ResultSetMetaData.hxx"
 #include "java/io/InputStream.hxx"
+#include "java/io/Reader.hxx"
 #include "java/tools.hxx"
 #include <comphelper/property.hxx>
 #include "connectivity/CommonTools.hxx"
@@ -232,7 +233,7 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL java_sql_ResultSet::get
     if( t.pEnv )
     {
         // temporaere Variable initialisieren
-        static const char * cSignature = "(I)Ljava/io/InputStream;";
+        static const char * cSignature = "(I)Ljava/io/Reader;";
         static const char * cMethodName = "getCharacterStream";
         // Java-Call absetzen
         static jmethodID mID = NULL;
@@ -245,7 +246,7 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL java_sql_ResultSet::get
         } //mID
     } //t.pEnv
     // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
-    return out==0 ? 0 : new java_io_InputStream( t.pEnv, out );
+    return out==0 ? 0 : new java_io_Reader( t.pEnv, out );
 }
 // -------------------------------------------------------------------------
 
