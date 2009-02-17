@@ -66,7 +66,6 @@ EditPaste SID_PASTE
 EditDelete SID_DELETE
 EditSelectAll SID_SELECTALL
 EditSearchAndReplace SID_SEARCH_DLG
-EditNavigator SID_NAVIGATOR
 EditFrameSet SID_EDIT_FRAMESET
 EditPlugIn SID_PLUGINS_ACTIVE
 EditImageMap SID_IMAP
@@ -156,6 +155,7 @@ ViewToolbarsConfigure .uno:ConfigureDialog
 ViewToolbarsStatusbar SID_TOGGLESTATUSBAR
 ViewFullScreen SID_WIN_FULLSCREEN
 ViewCurrentDatabase SID_VIEW_DATA_SOURCE_BROWSER
+ViewNavigator SID_NAVIGATOR
 ViewToolbarsThreeDSettings .uno:AvailableToolbars?Toolbar:string=extrusionobjectbar
 ViewToolbarsAlign .uno:AvailableToolbars?Toolbar:string=alignmentbar
 ViewToolbarsBasicShapes .uno:AvailableToolbars?Toolbar:string=basicshapes
