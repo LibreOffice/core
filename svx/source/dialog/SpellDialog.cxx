@@ -2161,4 +2161,7 @@ void ExplainButton::RequestHelp( const HelpEvent& )
     Help::ShowBalloon( this, GetPosPixel(), m_sExplanation );
 }
 
-
+void ExplainButton::Click()
+{
+    RequestHelp( HelpEvent() );
+}
