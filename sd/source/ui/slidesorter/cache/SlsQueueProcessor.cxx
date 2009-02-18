@@ -212,46 +212,38 @@ void QueueProcessor::ProcessOneRequest (
     CacheKey aKey,
     const RequestPriorityClass ePriorityClass)
 {
-    const SdrPage* pPage = mpCacheContext->GetPage(aKey);
-    SSCD_SET_STATUS(pPage,RENDERING);
-
-#ifdef VERBOSE
-    OSL_TRACE ("processing request for page %d with priority class %d",
-        (pPage->GetPageNum()-1)/2,
-        ePriorityClass);
-#endif
     try
     {
         ::osl::MutexGuard aGuard (maMutex);
+
         // Create a new preview bitmap and store it in the cache.
-        if (mpCache.get() != NULL)
+        if (mpCache.get() != NULL
+            && mpCacheContext.get() != NULL)
         {
-            const SdPage* pSdPage = dynamic_cast<const SdPage*>(pPage);
+            const SdPage* pSdPage = dynamic_cast<const SdPage*>(mpCacheContext->GetPage(aKey));
             if (pSdPage != NULL)
             {
                 const ::boost::shared_ptr<BitmapEx> pPreview (
                     maBitmapFactory.CreateBitmap(*pSdPage, maPreviewSize));
                 mpCache->SetBitmap (
-                    pPage,
+                    pSdPage,
                     pPreview,
                     ePriorityClass!=NOT_VISIBLE);
 
                 // Initiate a repaint of the new preview.
                 mpCacheContext->NotifyPreviewCreation(aKey, pPreview);
-
-                SSCD_SET_STATUS(pPage,NONE);
             }
         }
     }
     catch (::com::sun::star::uno::RuntimeException aException)
     {
-        OSL_ASSERT("RuntimeException caught in QueueProcessor");
         (void) aException;
+        OSL_ASSERT("RuntimeException caught in QueueProcessor");
     }
     catch (::com::sun::star::uno::Exception aException)
     {
-        OSL_ASSERT("Exception caught in QueueProcessor");
         (void) aException;
+        OSL_ASSERT("Exception caught in QueueProcessor");
     }
 }
 

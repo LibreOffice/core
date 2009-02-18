@@ -78,11 +78,12 @@ void ViewCacheContext::NotifyPreviewCreation (
     const model::SharedPageDescriptor pDescriptor (GetDescriptor(aKey));
     if (pDescriptor.get() != NULL)
     {
-        // use direct view-invalidate here and no ActionChanged() at the VC
-        // ince the VC is a PageObjectViewObjectContact and in it's ActionChanged()
-        // implementation invalidates the cache entry again
-        pDescriptor->GetViewObjectContact()->GetObjectContact().InvalidatePartOfView(
-            pDescriptor->GetViewObjectContact()->getObjectRange());
+        // Use direct view-invalidate here and no ActionChanged() at the VC
+        // since the VC is a PageObjectViewObjectContact and in its ActionChanged()
+        // implementation invalidates the cache entry again.
+        view::PageObjectViewObjectContact* pContact = pDescriptor->GetViewObjectContact();
+        if (pContact != NULL)
+            pContact->GetObjectContact().InvalidatePartOfView(pContact->getObjectRange());
     }
     else
     {
