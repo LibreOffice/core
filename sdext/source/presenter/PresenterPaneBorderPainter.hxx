@@ -32,7 +32,6 @@
 #ifndef SDEXT_PRESENTER_PRESENTER_PANE_BORDER_PAINTER_HXX
 #define SDEXT_PRESENTER_PRESENTER_PANE_BORDER_PAINTER_HXX
 
-#include <vcl/bitmap.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/drawing/framework/XPaneBorderPainter.hpp>
