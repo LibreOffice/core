@@ -1261,6 +1261,25 @@ ErrCode ScTabViewShell::DoPrint( SfxPrinter *pPrinter,
     ScDocShell* pDocShell = GetViewData()->GetDocShell();
     if ( pDocShell->CheckPrint( pPrintDialog, &GetViewData()->GetMarkData(), bPrintSelected, bIsAPI ) )
     {
+        // get the list of affected sheets before SfxViewShell::Print
+        bool bAllTabs = ( pPrintDialog ? ( pPrintDialog->GetCheckedSheetRange() == PRINTSHEETS_ALL ) : SC_MOD()->GetPrintOptions().GetAllSheets() );
+
+        uno::Sequence<sal_Int32> aSheets;
+        SCTAB nTabCount = pDocShell->GetDocument()->GetTableCount();
+        USHORT nPrinted = 0;
+        for ( SCTAB nTab=0; nTab<nTabCount; nTab++ )
+            if ( bAllTabs || rMarkData.GetTableSelect(nTab) )
+            {
+                aSheets.realloc( nPrinted + 1 );
+                aSheets[nPrinted] = nTab;
+                ++nPrinted;
+            }
+
+        uno::Sequence < beans::PropertyValue > aProps(1);
+        aProps[0].Name=::rtl::OUString::createFromAscii("PrintSheets");
+        aProps[0].Value <<= aSheets;
+        SetAdditionalPrintOptions( aProps );
+
         // SfxViewShell::DoPrint calls Print (after StartJob etc.)
         nRet = SfxViewShell::DoPrint( pPrinter, pPrintDialog, bSilent, bIsAPI );
     }
@@ -1276,32 +1295,9 @@ USHORT __EXPORT ScTabViewShell::Print( SfxProgress& rProgress, BOOL bIsAPI,
     ScDocShell* pDocShell = GetViewData()->GetDocShell();
     pDocShell->GetDocument()->SetPrintOptions();    // Optionen aus OFA am Printer setzen
 
-    // get the list of affected sheets before SfxViewShell::Print
-    bool bAllTabs = ( pPrintDialog ? ( pPrintDialog->GetCheckedSheetRange() == PRINTSHEETS_ALL ) : SC_MOD()->GetPrintOptions().GetAllSheets() );
-
-    uno::Sequence<sal_Int32> aSheets;
-    SCTAB nTabCount = pDocShell->GetDocument()->GetTableCount();
-    USHORT nPrinted = 0;
-    const ScMarkData& rMarkData = GetViewData()->GetMarkData();
-    for ( SCTAB nTab=0; nTab<nTabCount; nTab++ )
-        if ( bAllTabs || rMarkData.GetTableSelect(nTab) )
-        {
-            aSheets.realloc( nPrinted + 1 );
-            aSheets[nPrinted] = nTab;
-            ++nPrinted;
-        }
-
-    uno::Sequence < beans::PropertyValue > aProps(1);
-    aProps[0].Name=::rtl::OUString::createFromAscii("PrintSheets");
-    aProps[0].Value <<= aSheets;
-    SetAdditionalPrintOptions( aProps );
-
-    //  ... use aSheets here ...
-
     SfxViewShell::Print( rProgress, bIsAPI, pPrintDialog );
     pDocShell->Print( rProgress, pPrintDialog, &GetViewData()->GetMarkData(),
                         GetDialogParent(), bPrintSelected, bIsAPI );
-
     return 0;
 }
 
