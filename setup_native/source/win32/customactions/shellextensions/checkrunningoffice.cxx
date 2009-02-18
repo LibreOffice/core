@@ -180,49 +180,82 @@ static BOOL MoveFileExImpl( LPCSTR lpExistingFileNameA, LPCSTR lpNewFileNameA, D
 
 extern "C" UINT __stdcall IsOfficeRunning( MSIHANDLE handle )
 {
-    std::_tstring   sInstDir = GetMsiProperty( handle, TEXT("BASISINSTALLLOCATION") );
-    std::_tstring   sResourceDir = sInstDir + TEXT("program\\resource\\");
-    std::_tstring   sPattern = sResourceDir + TEXT("vcl*.res");
+    OSVERSIONINFO   osverinfo;
+    osverinfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
+    GetVersionEx( &osverinfo );
 
-    // std::_tstring    mystr;
-    // mystr = "IsOfficeRunning start. Checking file in dir: " + sResourceDir;
-    // MessageBox( NULL, mystr.c_str(), "IsOfficeRunning", MB_OK );
-
-
-    WIN32_FIND_DATA aFindFileData;
-    HANDLE  hFind = FindFirstFile( sPattern.c_str(), &aFindFileData );
-
-    if ( IsValidHandle(hFind) )
+    // renaming the vcl resource doesn't work reliable with OS >= Windows Vista
+    if (osverinfo.dwMajorVersion < 6 )
     {
-        BOOL    fSuccess = false;
-        bool    fRenameSucceeded;
+        std::_tstring sInstDir = GetMsiProperty( handle, TEXT("BASISINSTALLLOCATION") );
+        // Property empty -> no office installed
+        if ( sInstDir.length() == 0 )
+            return ERROR_SUCCESS;
 
-        do
+        std::_tstring sResourceDir = sInstDir + TEXT("program\\resource\\");
+        std::_tstring sPattern = sResourceDir + TEXT("vcl*.res");
+
+//        std::_tstring mystr;
+//        mystr = "IsOfficeRunning start. Checking file in dir: " + sResourceDir;
+//        MessageBox( NULL, mystr.c_str(), "IsOfficeRunning", MB_OK );
+
+        WIN32_FIND_DATA aFindFileData;
+        HANDLE  hFind = FindFirstFile( sPattern.c_str(), &aFindFileData );
+
+        if ( IsValidHandle(hFind) )
         {
-            std::_tstring   sResourceFile = sResourceDir + aFindFileData.cFileName;
-            std::_tstring   sIntermediate = sResourceFile + TEXT(".tmp");
+            BOOL    fSuccess = false;
+            bool    fRenameSucceeded;
 
-            fRenameSucceeded = MoveFileExImpl( sResourceFile.c_str(), sIntermediate.c_str(), MOVEFILE_REPLACE_EXISTING );
-            if ( fRenameSucceeded )
+            do
             {
-                MoveFileExImpl( sIntermediate.c_str(), sResourceFile.c_str(), 0 );
-                fSuccess = FindNextFile( hFind, &aFindFileData );
+                std::_tstring   sResourceFile = sResourceDir + aFindFileData.cFileName;
+                std::_tstring   sIntermediate = sResourceFile + TEXT(".tmp");
+
+                fRenameSucceeded = MoveFileExImpl( sResourceFile.c_str(), sIntermediate.c_str(), MOVEFILE_REPLACE_EXISTING );
+                if ( fRenameSucceeded )
+                {
+                    MoveFileExImpl( sIntermediate.c_str(), sResourceFile.c_str(), 0 );
+                    fSuccess = FindNextFile( hFind, &aFindFileData );
+                }
+            } while ( fSuccess && fRenameSucceeded );
+
+            if ( !fRenameSucceeded )
+            {
+                MsiSetProperty(handle, TEXT("OFFICERUNS"), TEXT("1"));
+                SetMsiErrorCode( MSI_ERROR_OFFICE_IS_RUNNING );
+
+//                mystr = "Office is running";
+//                MessageBox( NULL, mystr.c_str(), "IsOfficeRunning", MB_OK );
             }
-        } while ( fSuccess && fRenameSucceeded );
 
-        if ( !fRenameSucceeded )
-        {
-            MsiSetProperty(handle, TEXT("OFFICERUNS"), TEXT("1"));
-            SetMsiErrorCode( MSI_ERROR_OFFICE_IS_RUNNING );
-            // mystr = "Office is running";
-            // MessageBox( NULL, mystr.c_str(), "IsOfficeRunning", MB_OK );
+            FindClose( hFind );
         }
-
-        FindClose( hFind );
+//        mystr = "IsOfficeRunning end";
+//        MessageBox( NULL, mystr.c_str(), "IsOfficeRunning", MB_OK );
     }
+    else
+    {
+        std::_tstring sOfficeInstallPath = GetMsiProperty(handle, TEXT("OFFICEINSTALLLOCATION"));
+        // Property empty -> no office installed
+        if ( sOfficeInstallPath.length() == 0 )
+            return ERROR_SUCCESS;
 
-    // mystr = "IsOfficeRunning end";
-    // MessageBox( NULL, mystr.c_str(), "IsOfficeRunning", MB_OK );
+        std::_tstring sRenameSrc = sOfficeInstallPath + TEXT("program");
+        std::_tstring sRenameDst = sOfficeInstallPath + TEXT("program_1");
+
+        bool bSuccess = MoveFile( sRenameSrc.c_str(), sRenameDst.c_str() );
+
+        if ( bSuccess )
+        {
+            MoveFile( sRenameDst.c_str(), sRenameSrc.c_str() );
+        }
+        else
+        {
+            MsiSetProperty( handle, TEXT("OFFICERUNS"), TEXT("1") );
+            SetMsiErrorCode( MSI_ERROR_OFFICE_IS_RUNNING );
+        }
+    }
 
     return ERROR_SUCCESS;
 }

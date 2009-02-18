@@ -16,6 +16,8 @@ RemoveLayerLinks
 DotNetCheck
 ShowProperties
 copyEditionData
+RenamePrgFolder
+RemovePrgFolder
 IsOfficeRunning
 CheckPatchList
 copyExtensionData
