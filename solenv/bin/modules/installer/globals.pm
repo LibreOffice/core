@@ -148,6 +148,7 @@ BEGIN
     $templatefolder = "TemplateFolder";
     $templatefoldername = "Templates";
     $programmenufolder = "ProgramMenuFolder";
+    $systemfolder = "SystemFolder";
     $encodinglistname = "msi-encodinglist.txt";
     $msiencoding = "";  # hash reference for msi encodings
     $msilanguage = "";  # hash reference for msi languages LCID

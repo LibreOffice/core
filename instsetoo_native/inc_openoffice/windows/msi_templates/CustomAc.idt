@@ -41,10 +41,9 @@ SetOfficeInstallLocation	51	OFFICEINSTALLLOCATION	[OFFICEDIRECTORYGID]
 SetBasisInstallLocation	51	BASISINSTALLLOCATION	[BASISDIRECTORYGID]
 SetUreInstallLocation	51	UREINSTALLLOCATION	[UREDIRECTORYGID]
 NewProductFound	19		OOO_CUSTOMACTION_1
-OldProductFound	19		OOO_CUSTOMACTION_3
 SameProductFound	19		OOO_CUSTOMACTION_2
 SetLanguageSelected	51	LANG_SELECTED	1
 ResetLanguageSelected	51	LANG_SELECTED	0
 SetApplicationSelected	51	APP_SELECTED	1
 ResetApplicationSelected	51	APP_SELECTED	0
-RunningOffice	19		OOO_CUSTOMACTION_4
+RunningOffice	19		"Please exit [DEFINEDPRODUCT] [DEFINEDVERSION] and the [DEFINEDPRODUCT] [DEFINEDVERSION] Quickstarter before you continue. If you are using a multi-user system, also make sure that no other user has [DEFINEDPRODUCT] [DEFINEDVERSION] open."

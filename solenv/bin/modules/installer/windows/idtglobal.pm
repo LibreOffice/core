@@ -1282,12 +1282,25 @@ sub get_position_in_sequencetable
 
 sub set_custom_action
 {
-    my ($customactionidttable, $actionname, $actionflags, $exefilename, $actionparameter, $inbinarytable, $filesref, $customactionidttablename) = @_;
+    my ($customactionidttable, $actionname, $actionflags, $exefilename, $actionparameter, $inbinarytable, $filesref, $customactionidttablename, $styles) = @_;
 
     my $included_customaction = 0;
     my $infoline = "";
     my $customaction_exefilename = $exefilename;
     my $uniquename = "";
+
+    # when the style NO_FILE is set, no searching for the file is needed, no filtering is done, we can add that custom action
+    if ( $styles =~ /\bNO_FILE\b/ )
+    {
+        my $line = $actionname . "\t" . $actionflags . "\t" . $customaction_exefilename . "\t" . $actionparameter . "\n";
+        push(@{$customactionidttable}, $line);
+
+        $infoline = "Added $actionname CustomAction into table $customactionidttablename (NO_FILE has been set)\n";
+        push(@installer::globals::logfileinfo, $infoline);
+
+        $included_customaction = 1;
+        return $included_customaction;
+    }
 
     # is the $exefilename a library that is included into the binary table
 
@@ -1347,11 +1360,31 @@ sub set_custom_action
 
 sub add_custom_action_to_install_table
 {
-    my ($installtable, $exefilename, $actionname, $actioncondition, $position, $filesref, $installtablename) = @_;
+    my ($installtable, $exefilename, $actionname, $actioncondition, $position, $filesref, $installtablename, $styles) = @_;
 
     my $included_customaction = 0;
     my $feature = "";
     my $infoline = "";
+
+    # when the style NO_FILE is set, no searching for the file is needed, no filtering is done, we can add that custom action
+    if ( $styles =~ /\bNO_FILE\b/ )
+    {
+        # then the InstallE.idt.idt or InstallU.idt.idt
+        $actioncondition =~ s/FEATURETEMPLATE/$feature/g;   # only execute Custom Action, if feature of the file is installed
+
+        my $actionposition = 0;
+
+        if ( $position eq "end" ) { $actionposition = get_last_position_in_sequencetable($installtable) + 25; }
+        elsif ( $position =~ /^\s*behind_/ ) { $actionposition = get_position_in_sequencetable($position, $installtable) + 2; }
+        else { $actionposition = get_position_in_sequencetable($position, $installtable) - 2; }
+
+        my $line = $actionname . "\t" . $actioncondition . "\t" . $actionposition . "\n";
+        push(@{$installtable}, $line);
+
+        $infoline = "Added $actionname CustomAction into table $customactionidttablename (NO_FILE has been set)\n";
+        push(@installer::globals::logfileinfo, $infoline);
+        return;
+    }
 
     my $contains_file = 0;
 
@@ -2069,7 +2102,10 @@ sub addcustomactions
         my $inbinarytable = $customaction->{'Inbinarytable'};
         my $gid = $customaction->{'gid'};
 
-        my $added_customaction = set_custom_action($customactionidttable, $name, $typ, $source, $target, $inbinarytable, $filesarray, $customactionidttablename);
+        my $styles = "";
+        if ( $customaction->{'Styles'} ) { $styles = $customaction->{'Styles'}; }
+
+        my $added_customaction = set_custom_action($customactionidttable, $name, $typ, $source, $target, $inbinarytable, $filesarray, $customactionidttablename, $styles);
 
         if ( $added_customaction )
         {
@@ -2112,15 +2148,15 @@ sub addcustomactions
 
                 if ( $assignment->{'parameter1'} eq "InstallExecuteSequence" )
                 {
-                    add_custom_action_to_install_table($installexecutetable, $source, $name, $assignment->{'parameter2'}, $assignment->{'parameter3'}, $filesarray, $installexecutetablename);
+                    add_custom_action_to_install_table($installexecutetable, $source, $name, $assignment->{'parameter2'}, $assignment->{'parameter3'}, $filesarray, $installexecutetablename, $styles);
                 }
                 elsif ( $assignment->{'parameter1'} eq "AdminExecuteSequence" )
                 {
-                    add_custom_action_to_install_table($adminexecutetable, $source, $name, $assignment->{'parameter2'}, $assignment->{'parameter3'}, $filesarray, $adminexecutetablename);
+                    add_custom_action_to_install_table($adminexecutetable, $source, $name, $assignment->{'parameter2'}, $assignment->{'parameter3'}, $filesarray, $adminexecutetablename, $styles);
                 }
                 elsif ( $assignment->{'parameter1'} eq "InstallUISequence" )
                 {
-                    add_custom_action_to_install_table($installuitable, $source, $name, $assignment->{'parameter2'}, $assignment->{'parameter3'}, $filesarray, $installuitablename);
+                    add_custom_action_to_install_table($installuitable, $source, $name, $assignment->{'parameter2'}, $assignment->{'parameter3'}, $filesarray, $installuitablename, $styles);
                 }
                 elsif ( $assignment->{'parameter1'} eq "ControlEvent" )
                 {

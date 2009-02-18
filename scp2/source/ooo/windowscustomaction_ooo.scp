@@ -30,6 +30,24 @@
 
 #include "macros.inc"
 
+WindowsCustomAction gid_Customaction_RenamePrgFolder
+	Name = "RenamePrgFolder";
+	Typ = "1";
+	Source = "shlxtmsi.dll";
+	Target = "RenamePrgFolder";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "VersionNT >= 600 And OLDPRODUCTSSAMEMAJOR And Not REMOVE=\"ALL\" And Not PATCH", "ValidateProductID");
+End
+
+WindowsCustomAction gid_Customaction_RemovePrgFolder
+	Name = "RemovePrgFolder";
+	Typ = "1";
+	Source = "shlxtmsi.dll";
+	Target = "RemovePrgFolder";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "VersionNT >= 600 And OLDPRODUCTSSAMEMAJOR And Not REMOVE=\"ALL\" And Not PATCH", "end");
+End
+
 WindowsCustomAction gid_Customaction_Regallmsdocdll
 	Name = "Regallmsdocdll";
 	Typ = "65";
@@ -81,7 +99,7 @@ WindowsCustomAction gid_Customaction_sdqsmsidll
 	Source = "sdqsmsi.dll";
 	Target = "ShutDownQuickstarter";
 	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "REMOVE=\"ALL\" And Not PATCH", "InstallInitialize");
+	Assignment1 = ("InstallExecuteSequence", "", "IsOfficeRunning");
 End
 
 WindowsCustomAction gid_Customaction_qslnkmsidll
@@ -348,7 +366,7 @@ WindowsCustomAction gid_Customaction_Full_Isofficerunning
 	Source = "shlxtmsi.dll";
 	Target = "IsOfficeRunning";
 	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "PATCH", "RunningOffice");
+	Assignment1 = ("InstallExecuteSequence", "", "RunningOffice");
 End
 
 WindowsCustomAction gid_Customaction_Langpack_Isofficerunning

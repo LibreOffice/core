@@ -243,6 +243,7 @@ common
         XAU_LIBS
 		WINDOWS_VISTA_PSDK
         WITH_LDAP
+        WITH_VC_REDIST
 		WST
 		XCLASSPATH
         XSLTPROC

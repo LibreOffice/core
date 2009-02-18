@@ -242,6 +242,10 @@ SCPDEFS+=-DSYSTEM_PYTHON
 SCPDEFS+=-DENABLE_SVCTAGS
 .ENDIF
 
+.IF "$(WITH_VC_REDIST)" == "TRUE"
+SCPDEFS+=-DWITH_VC_REDIST
+.ENDIF
+
 SCP_PRODUCT_TYPE=osl
 
 ICUVERSION_DEPENDENT_FILES= \
@@ -287,6 +291,7 @@ PARFILES +=                        \
         folderitem_ooo.par         \
         registryitem_ooo.par       \
         mergemodules_ooo.par       \
+        vc_redist.par              \
         windowscustomaction_ooo.par
 .ENDIF
 

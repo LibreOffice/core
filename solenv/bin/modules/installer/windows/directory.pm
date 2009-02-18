@@ -366,6 +366,9 @@ sub add_root_directories
         $oneline = "$installer::globals::localappdatafolder\tTARGETDIR\t.\n";
         push(@{$directorytableref}, $oneline);
 
+        $oneline = "$installer::globals::systemfolder\tTARGETDIR\t.\n";
+        push(@{$directorytableref}, $oneline);
+
         my $localtemplatefoldername = $installer::globals::templatefoldername;
         my $directorytableentry = $localtemplatefoldername;
         my $shorttemplatefoldername = installer::windows::idtglobal::make_eight_three_conform($localtemplatefoldername, "dir");
