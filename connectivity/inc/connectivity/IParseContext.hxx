@@ -41,7 +41,7 @@ namespace connectivity
     //==========================================================================
     //= IParseContext
     //==========================================================================
-    class OOO_DLLPUBLIC_DBTOOLS IParseContext
+    class IParseContext
     {
     public:
         enum    ErrorCode
