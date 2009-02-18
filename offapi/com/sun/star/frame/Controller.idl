@@ -54,6 +54,10 @@
 #include <com/sun/star/view/XSelectionSupplier.idl>
 #endif
 
+#ifndef __com_sun_star_datatransfer_XTransferableSupplier_idl__
+#include <com/sun/star/datatransfer/XTransferableSupplier.idl>
+#endif
+
 //=============================================================================
 
  module com {  module sun {  module star {  module frame {
@@ -115,6 +119,11 @@ published service Controller
     /** makes it possible to access and change the selection in a view
      */
     [optional] interface com::sun::star::view::XSelectionSupplier;
+
+    //-------------------------------------------------------------------------
+    /** makes it possible to work with clipboard data
+     */
+    [optional] interface com::sun::star::datatransfer::XTransferableSupplier;
 };
 
 //=============================================================================
