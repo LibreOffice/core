@@ -34,11 +34,12 @@ PRJNAME=connectivity
 TARGET=mozab
 TARGET2=$(TARGET)drv
 
-.IF ( "$(SYSTEM_MOZILLA)" == "YES" && "$(WITH_MOZILLA)" == "YES") || "$(WITH_MOZILLA)" == "NO"
+.IF ( "$(SYSTEM_MOZILLA)" == "YES" && "$(WITH_MOZILLA)" == "YES") || "$(WITH_MOZILLA)" == "NO" || ( "$(OS)" == "MACOSX" )
 all: 
-    @echo "		Not building the mozabsrc stuff in OpenOffice.org build"
-    @echo "		dependency to Mozilla developer snapshots not feasable at the moment"
-    @echo "         see http://bugzilla.mozilla.org/show_bug.cgi?id=135137"
+    @echo "    Not building the mozilla address book driver"
+    @echo "    dependency to Mozilla developer snapshots not feasable at the moment"
+    @echo "    see http://bugzilla.mozilla.org/show_bug.cgi?id=135137"
+    @echo "    see http://www.mozilla.org/issues/show_bug.cgi?id=91209"
 .ENDIF
 
 #mozilla specific stuff.
