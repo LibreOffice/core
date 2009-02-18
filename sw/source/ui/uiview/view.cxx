@@ -832,6 +832,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     pFormatClipboard(new SwFormatClipboard()),
     mpPostItMgr(0),
     nSelectionType( INT_MAX ),
+    nPageCnt(0),
     nDrawSfxId( USHRT_MAX ),
     nFormSfxId( USHRT_MAX ),
     nLastPasteDestination( 0xFFFF ),

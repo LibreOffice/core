@@ -3254,6 +3254,9 @@ int SwTransferable::PrivatePaste( SwWrtShell& rShell )
     // erst den SelectionType erfragen, dann Action-Klammerung !!!!
     // (sonst wird nicht in eine TabellenSelektion gepastet!!!)
     ASSERT( !rShell.ActionPend(), "Paste darf nie eine Actionklammerung haben" );
+    if ( !pClpDocFac )
+        return sal_False; // the return value of the SwFEShell::Paste also is BOOL!
+
     const int nSelection = rShell.GetSelectionType();
 
     // #111827#

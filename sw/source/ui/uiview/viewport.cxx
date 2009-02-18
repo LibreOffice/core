@@ -739,8 +739,7 @@ IMPL_LINK( SwView, ScrollHdl, SwScrollbar *, pScrollbar )
 //              S F X_BINDINGS().Update(FN_STAT_PAGE);
 
             //QuickHelp:
-            USHORT nPageCnt = pWrtShell->GetPageCnt();
-            if( nPageCnt > 1 && Help::IsQuickHelpEnabled() )
+            if( pWrtShell->GetPageCnt() > 1 && Help::IsQuickHelpEnabled() )
             {
                 if( !nPgNum || nPgNum != nPhNum )
                 {

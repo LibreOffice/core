@@ -165,10 +165,6 @@
 #include <svx/ofaitem.hxx>
 #include <unomid.h>
 
-
-//Damit die Seitenanzeige in der Statusleiste nicht unnoetig erfolgt.
-static String sLstPg;
-static USHORT nPageCnt = 0;
 const char __FAR_DATA sStatusDelim[] = " : ";
 const char __FAR_DATA sStatusComma[] = " , ";//#outlinelevel, define a Variable for "," add by zhaojianwei
 
@@ -1190,15 +1186,10 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
 void SwView::UpdatePageNums(USHORT nPhyNum, USHORT nVirtNum, const String& rPgStr)
 {
     String sTemp(GetPageStr( nPhyNum, nVirtNum, rPgStr ));
-    if ( sLstPg != sTemp )
-    {
-        sLstPg = sTemp;
-        const SfxStringItem aTmp( FN_STAT_PAGE,
-                                 sLstPg);
-        SfxBindings &rBnd = GetViewFrame()->GetBindings();
-        rBnd.SetState( aTmp );
-        rBnd.Update( FN_STAT_PAGE );
-    }
+    const SfxStringItem aTmp( FN_STAT_PAGE, sTemp );
+    SfxBindings &rBnd = GetViewFrame()->GetBindings();
+    rBnd.SetState( aTmp );
+    rBnd.Update( FN_STAT_PAGE );
 }
 
 /*--------------------------------------------------------------------
