@@ -52,11 +52,14 @@
 #include <com/sun/star/task/ErrorCodeRequest.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase1.hxx>
 
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/synchronousdispatch.hxx>
+#include <comphelper/configurationhelper.hxx>
+#include <comphelper/sequenceasvector.hxx>
 
 #include <vcl/wrkwin.hxx>
 #include <svtools/intitem.hxx>
@@ -116,6 +119,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::system;
 using namespace ::com::sun::star::task;
+using namespace ::com::sun::star::container;
 using namespace ::cppu;
 using namespace ::sfx2;
 
@@ -1120,12 +1124,18 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
             const SfxFilter* pFilter = rMatcher.GetFilter4EA( aTypeName );
             if ( !pFilter || !( pFilter->IsOwnFormat() ))
             {
-                // hyperlink does not link to known type => special handling (http, ftp) browser and (file) OS
+                // hyperlink does not link to own type => special handling (http, ftp) browser and (other external protocols) OS
                 Reference< XSystemShellExecute > xSystemShellExecute( ::comphelper::getProcessServiceFactory()->createInstance(
                                                     ::rtl::OUString::createFromAscii( "com.sun.star.system.SystemShellExecute" )), UNO_QUERY );
                 if ( xSystemShellExecute.is() )
                 {
-                    if ( aINetProtocol == INET_PROT_FTP ||
+                    if ( aINetProtocol == INET_PROT_MAILTO )
+                    {
+                        // don't dispatch mailto hyperlink to desktop dispatcher
+                        rReq.RemoveItem( SID_TARGETNAME );
+                        rReq.AppendItem( SfxStringItem( SID_TARGETNAME, String::CreateFromAscii("_self") ) );
+                    }
+                    else if ( aINetProtocol == INET_PROT_FTP ||
                          aINetProtocol == INET_PROT_HTTP ||
                          aINetProtocol == INET_PROT_HTTPS )
                     {
@@ -1150,56 +1160,105 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
 
                         return;
                     }
-                    else if ( aINetProtocol == INET_PROT_FILE )
+                    else
                     {
-                        BOOL bLoadInternal = FALSE;
+                        // check for "internal" protocols that should not be forwarded to the system
+                        Sequence < ::rtl::OUString > aProtocols(2);
 
-                        // security reservation: => we have to check the referer before executing
-                        if (SFX_APP()->IsSecureURL(rtl::OUString(), &aReferer))
+                        // add special protocols that always should be treated as internal
+                        aProtocols[0] = ::rtl::OUString::createFromAscii("private:*");
+                        aProtocols[1] = ::rtl::OUString::createFromAscii("vnd.sun.star.*");
+
+                        try
                         {
-                            ::rtl::OUString aURLString( aURL.Complete );
+                            // get registered protocol handlers from configuration
+                            Reference < XNameAccess > xAccess( ::comphelper::ConfigurationHelper::openConfig( ::comphelper::getProcessServiceFactory(),
+                                ::rtl::OUString::createFromAscii("org.openoffice.Office.ProtocolHandler/HandlerSet"), ::comphelper::ConfigurationHelper::E_READONLY ), UNO_QUERY );
+                            if ( xAccess.is() )
+                            {
+                                Sequence < ::rtl::OUString > aNames = xAccess->getElementNames();
+                                for ( sal_Int32 nName = 0; nName < aNames.getLength(); nName ++)
+                                {
+                                    Reference < XPropertySet > xSet;
+                                    Any aRet = xAccess->getByName( aNames[nName] );
+                                    aRet >>= xSet;
+                                    if ( xSet.is() )
+                                    {
+                                        // copy protocols
+                                        aRet = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("Protocols") );
+                                        Sequence < ::rtl::OUString > aTmp;
+                                        aRet >>= aTmp;
 
-                            try
-                            {
-                                // give os this file
-                                xSystemShellExecute->execute( aURLString, ::rtl::OUString(), SystemShellExecuteFlags::DEFAULTS );
+                                        // todo: add operator+= to SequenceAsVector class and use SequenceAsVector for aProtocols
+                                        sal_Int32 nLength = aProtocols.getLength();
+                                        aProtocols.realloc( nLength+aTmp.getLength() );
+                                        for ( sal_Int32 n=0; n<aTmp.getLength(); n++ )
+                                            aProtocols[(++nLength)-1] = aTmp[n];
+                                    }
+                                }
                             }
-                            catch ( ::com::sun::star::lang::IllegalArgumentException& )
+                        }
+                        catch ( Exception& )
+                        {
+                            // registered protocols could not be read
+                        }
+
+                        sal_Bool bFound = sal_False;
+                        for ( sal_Int32 nProt=0; nProt<aProtocols.getLength(); nProt++ )
+                        {
+                            WildCard aPattern(aProtocols[nProt]);
+                            if ( aPattern.Matches( aURL.Complete ) )
                             {
-                                vos::OGuard aGuard( Application::GetSolarMutex() );
-                                Window *pWindow = SFX_APP()->GetTopWindow();
-                                ErrorBox( pWindow, SfxResId( MSG_ERR_NO_WEBBROWSER_FOUND )).Execute();
+                                bFound = sal_True;
+                                break;
                             }
-                            catch ( ::com::sun::star::system::SystemShellExecuteException& )
+                        }
+
+                        if ( !bFound )
+                        {
+                            BOOL bLoadInternal = FALSE;
+
+                            // security reservation: => we have to check the referer before executing
+                            if (SFX_APP()->IsSecureURL(rtl::OUString(), &aReferer))
                             {
-                                if ( !pFilter )
+                                ::rtl::OUString aURLString( aURL.Complete );
+
+                                try
+                                {
+                                    // give os this file
+                                    xSystemShellExecute->execute( aURLString, ::rtl::OUString(), SystemShellExecuteFlags::DEFAULTS );
+                                }
+                                catch ( ::com::sun::star::lang::IllegalArgumentException& )
                                 {
                                     vos::OGuard aGuard( Application::GetSolarMutex() );
                                     Window *pWindow = SFX_APP()->GetTopWindow();
                                     ErrorBox( pWindow, SfxResId( MSG_ERR_NO_WEBBROWSER_FOUND )).Execute();
                                 }
-                                else
+                                catch ( ::com::sun::star::system::SystemShellExecuteException& )
                                 {
-                                    rReq.RemoveItem( SID_TARGETNAME );
-                                    rReq.AppendItem( SfxStringItem( SID_TARGETNAME, String::CreateFromAscii("_default") ) );
-                                    bLoadInternal = TRUE;
+                                    if ( !pFilter )
+                                    {
+                                        vos::OGuard aGuard( Application::GetSolarMutex() );
+                                        Window *pWindow = SFX_APP()->GetTopWindow();
+                                        ErrorBox( pWindow, SfxResId( MSG_ERR_NO_WEBBROWSER_FOUND )).Execute();
+                                    }
+                                    else
+                                    {
+                                        rReq.RemoveItem( SID_TARGETNAME );
+                                        rReq.AppendItem( SfxStringItem( SID_TARGETNAME, String::CreateFromAscii("_default") ) );
+                                        bLoadInternal = TRUE;
+                                    }
                                 }
                             }
-                        }
-                        else
-                        {
-                            SfxErrorContext aCtx( ERRCTX_SFX_OPENDOC, aURL.Complete );
-                            ErrorHandler::HandleError( ERRCODE_IO_ACCESSDENIED );
-                        }
+                            else
+                            {
+                                SfxErrorContext aCtx( ERRCTX_SFX_OPENDOC, aURL.Complete );
+                                ErrorHandler::HandleError( ERRCODE_IO_ACCESSDENIED );
+                            }
 
-                        if ( !bLoadInternal )
-                            return;
-                    }
-                    else if ( aINetProtocol == INET_PROT_MAILTO )
-                    {
-                        // don't dispatch mailto hyperlink to desktop dispatcher
-                        rReq.RemoveItem( SID_TARGETNAME );
-                        rReq.AppendItem( SfxStringItem( SID_TARGETNAME, String::CreateFromAscii("_self") ) );
+                            if ( !bLoadInternal )
+                                return;
+                        }
                     }
                 }
             }

@@ -303,7 +303,7 @@ void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >
         }
 
         // PaperFormat-Property?
-        if ( rProp.Name.compareToAscii( "PaperFormat" ) == 0 )
+        else if ( rProp.Name.compareToAscii( "PaperFormat" ) == 0 )
         {
             if ( ( rProp.Value >>= nPaperFormat ) == sal_False )
             {
@@ -320,7 +320,7 @@ void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >
         }
 
         // PaperSize-Property?
-        if ( rProp.Name.compareToAscii( "PaperSize" ) == 0 )
+        else if ( rProp.Name.compareToAscii( "PaperSize" ) == 0 )
         {
             awt::Size aTempSize ;
             if ( ( rProp.Value >>= aTempSize ) == sal_False )
@@ -330,6 +330,24 @@ void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >
             else
             {
                 aSetPaperSize = impl_Size_Struct2Object(aTempSize);
+            }
+        }
+
+        // PrinterTray-Property
+        else if ( rProp.Name.compareToAscii( "PrinterPaperTray" ) == 0 )
+        {
+            rtl::OUString aTmp;
+            if ( ( rProp.Value >>= aTmp ) == sal_False )
+                throw ::com::sun::star::lang::IllegalArgumentException();
+            USHORT nCount = pPrinter->GetPaperBinCount();
+            for (USHORT nBin=0; nBin<nCount; nBin++)
+            {
+                ::rtl::OUString aName( pPrinter->GetPaperBinName(nBin) );
+                if ( aName == aTmp )
+                {
+                    pPrinter->SetPaperBin(nBin);
+                    break;
+                }
             }
         }
     }
