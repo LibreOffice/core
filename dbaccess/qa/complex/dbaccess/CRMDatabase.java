@@ -140,12 +140,21 @@ public class CRMDatabase
                 new HsqlColumnDescriptor( "ShipDate", "DATE" ) } );
         m_database.createTable( table, true );
 
+        m_database.executeSQL( "INSERT INTO \"orders\" (\"ID\", \"CustomerID\", \"OrderDate\") VALUES(1, 1, {D '2009-01-01'})" );
+        m_database.executeSQL( "INSERT INTO \"orders\" VALUES(2, 2, {D '2009-01-01'}, {D '2009-01-23'})" );
+
         table = new HsqlTableDescriptor( "orders_details",
             new HsqlColumnDescriptor[] {
                 new HsqlColumnDescriptor( "OrderID", "INTEGER", HsqlColumnDescriptor.PRIMARY, "orders", "ID" ),
                 new HsqlColumnDescriptor( "ProductID", "INTEGER", HsqlColumnDescriptor.PRIMARY, "products", "ID"  ),
                 new HsqlColumnDescriptor( "Quantity", "INTEGER" ) } );
         m_database.createTable( table, true );
+
+        m_database.executeSQL( "INSERT INTO \"orders_details\" VALUES(1, 1, 100)" );
+        m_database.executeSQL( "INSERT INTO \"orders_details\" VALUES(1, 2, 100)" );
+        m_database.executeSQL( "INSERT INTO \"orders_details\" VALUES(2, 2, 2000)" );
+        m_database.executeSQL( "INSERT INTO \"orders_details\" VALUES(2, 3, 2000)" );
+        m_database.executeSQL( "INSERT INTO \"orders_details\" VALUES(2, 4, 2000)" );
 
         // since we created the tables by directly executing the SQL statements, we need to refresh
         // the tables container
@@ -195,19 +204,19 @@ public class CRMDatabase
     {
         m_database.getDataSource().createQuery(
             "all orders",
-            "SELECT \"Orders\".\"ID\" AS \"Order No.\", " +
-                    "\"Customers\".\"Name\" AS \"Customer Name\", " +
-                    "\"Orders\".\"OrderDate\", " +
-                    "\"Orders\".\"ShipDate\", " +
+            "SELECT \"orders\".\"ID\" AS \"Order No.\", " +
+                    "\"customers\".\"Name\" AS \"Customer Name\", " +
+                    "\"orders\".\"OrderDate\" AS \"Order Date\", " +
+                    "\"orders\".\"ShipDate\" AS \"Ship Date\", " +
                     "\"orders_details\".\"Quantity\", " +
-                    "\"Products\".\"Name\" AS \"Product Name\" " +
+                    "\"products\".\"Name\" AS \"Product Name\" " +
             "FROM \"orders_details\" AS \"orders_details\", " +
-                  "\"Orders\" AS \"Orders\", " +
-                  "\"Products\" AS \"Products\", " +
-                  "\"Customers\" AS \"Customers\" " +
-            "WHERE  ( \"orders_details\".\"OrderID\" = \"Orders\".\"ID\" " +
-                 "AND \"orders_details\".\"ProductID\" = \"Products\".\"ID\" " +
-                 "AND \"Orders\".\"CustomerID\" = \"Customers\".\"ID\" )"
+                  "\"orders\" AS \"orders\", " +
+                  "\"products\" AS \"products\", " +
+                  "\"customers\" AS \"customers\" " +
+            "WHERE  ( \"orders_details\".\"OrderID\" = \"orders\".\"ID\" " +
+                 "AND \"orders_details\".\"ProductID\" = \"products\".\"ID\" " +
+                 "AND \"orders\".\"CustomerID\" = \"customers\".\"ID\" )"
         );
 
         m_database.getDataSource().createQuery(

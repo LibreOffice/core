@@ -29,9 +29,15 @@
  ************************************************************************/
 package complex.dbaccess;
 
+import com.sun.star.beans.XPropertySet;
+import com.sun.star.container.XIndexAccess;
+import com.sun.star.container.XNameAccess;
+import com.sun.star.sdb.XParametersSupplier;
 import com.sun.star.sdb.XSingleSelectQueryComposer;
+import com.sun.star.sdbc.DataType;
 import com.sun.star.sdbc.SQLException;
 import com.sun.star.uno.Exception;
+import com.sun.star.uno.UnoRuntime;
 
 public class Parser extends CRMBasedTestCase
 {
@@ -39,7 +45,8 @@ public class Parser extends CRMBasedTestCase
     public String[] getTestMethodNames()
     {
         return new String[] {
-            "checkJoinSyntax"
+            "checkJoinSyntax",
+            "checkParameterTypes"
         };
     }
 
@@ -93,4 +100,61 @@ public class Parser extends CRMBasedTestCase
             "test is bogus!", caughtExpected );
     }
 
+    // --------------------------------------------------------------------------------------------------------
+    private void impl_checkParameters( final String _statement, final String[] _expectedParameterNames, final int[] _expectedParameterTypes, String _context ) throws Exception
+    {
+        XSingleSelectQueryComposer composer = createQueryComposer();
+        composer.setQuery( _statement );
+
+        assureEquals( "checkParameterTypes: internal error", _expectedParameterNames.length, _expectedParameterTypes.length );
+
+        XParametersSupplier paramSupp = (XParametersSupplier)UnoRuntime.queryInterface(
+            XParametersSupplier.class, composer );
+        XIndexAccess parameters = paramSupp.getParameters();
+
+        assureEquals( "(ctx: " + _context + ") unexpected parameter count", _expectedParameterNames.length, parameters.getCount() );
+        for ( int i=0; i<parameters.getCount(); ++i )
+        {
+            XPropertySet parameter = (XPropertySet)UnoRuntime.queryInterface( XPropertySet.class,
+                parameters.getByIndex(i) );
+
+            String name = (String)parameter.getPropertyValue( "Name" );
+            assureEquals( "(ctx: " + _context + ") unexpected parameter name for parameter number " + ( i + 1 ), _expectedParameterNames[i], name );
+
+            int type = ((Integer)parameter.getPropertyValue( "Type" )).intValue();
+            assureEquals( "(ctx: " + _context + ") unexpected data type for parameter number " + ( i + 1 ), _expectedParameterTypes[i], type );
+        }
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+    /** verifies that the parser properly recognizes the types of parameters
+     */
+    public void checkParameterTypes() throws Exception
+    {
+        impl_checkParameters(
+            "SELECT * FROM \"all orders\" " +
+            "WHERE ( \"Order Date\" >= :order_date ) " +
+            "  AND (    ( \"Customer Name\" LIKE :customer ) " +
+            "      OR   ( \"Product Name\" LIKE ? ) " +
+            "      )",
+            new String[] { "order_date", "customer", "Product Name" },
+            new int[] { DataType.DATE, DataType.VARCHAR, DataType.VARCHAR },
+            ">= && LIKE"
+        );
+
+        impl_checkParameters(
+            "SELECT * FROM \"categories\" " +
+            "WHERE \"ID\" BETWEEN :id_lo AND :id_hi",
+            new String[] { "id_lo", "id_hi" },
+            new int[] { DataType.INTEGER, DataType.INTEGER },
+            "BETWEEN"
+        );
+
+        impl_checkParameters(
+            "SELECT CONCAT( :prefix, CONCAT( \"Name\", :suffix ) ) FROM \"customers\"",
+            new String[] { "prefix", "suffix" },
+            new int[] { DataType.VARCHAR, DataType.VARCHAR },
+            "CONCAT"
+        );
+    }
 }

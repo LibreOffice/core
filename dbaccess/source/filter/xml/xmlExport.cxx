@@ -104,6 +104,7 @@
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #endif
 #include <svtools/filenotation.hxx>
+#include <svtools/pathoptions.hxx>
 #include <tools/diagnose_ex.h>
 
 namespace dbaxml
@@ -617,8 +618,16 @@ void ODBExport::exportConnectionData()
         {
             SvXMLElementExport aDatabaseDescription(*this,XML_NAMESPACE_DB, XML_DATABASE_DESCRIPTION, sal_True, sal_True);
             {
-                ::svt::OFileNotation aTransformer( m_aTypeCollection.cutPrefix(sValue) );
-                AddAttribute(XML_NAMESPACE_XLINK,XML_HREF,GetRelativeReference(aTransformer.get( ::svt::OFileNotation::N_URL )));
+                SvtPathOptions aPathOptions;
+                const String sOrigUrl = m_aTypeCollection.cutPrefix(sValue);
+                String sFileName = aPathOptions.SubstituteVariable(sOrigUrl);
+                if ( sOrigUrl == sFileName )
+                {
+                    ::svt::OFileNotation aTransformer( sFileName );
+                    AddAttribute(XML_NAMESPACE_XLINK,XML_HREF,GetRelativeReference(aTransformer.get( ::svt::OFileNotation::N_URL )));
+                } // if ( sOrigUrl == sFileName )
+                else
+                    AddAttribute(XML_NAMESPACE_XLINK,XML_HREF,sOrigUrl);
                 AddAttribute(XML_NAMESPACE_DB,XML_MEDIA_TYPE,m_aTypeCollection.getMediaType(eType));
                 try
                 {
