@@ -83,7 +83,7 @@ OOXMLFastHelper<T>::createAndSetParent
 #ifdef DEBUG_CREATE
     debug_logger->startElement("createAndSetParent");
     debug_logger->attribute("context", pHandler->getType());
-    debug_logger->attribtue("token", fastTokenToId(pTmp->getToken()));
+    debug_logger->attribute("token", fastTokenToId(pTmp->getToken()));
     debug_logger->attribute("id", (*QNameToString::Instance())(nId));
     if (pTmp->isFallback())
         debug_logger->attribute("fallback", "yes");

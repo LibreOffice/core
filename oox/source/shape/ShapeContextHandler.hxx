@@ -161,10 +161,14 @@ public:
     (const ::rtl::OUString & the_value)
         throw (css::uno::RuntimeException);
 
+    virtual ::sal_Int32 SAL_CALL getStartToken() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setStartToken( ::sal_Int32 _starttoken ) throw (::com::sun::star::uno::RuntimeException);
 
 private:
     ShapeContextHandler(ShapeContextHandler &); // not defined
     void operator =(ShapeContextHandler &); // not defined
+
+    ::sal_uInt32 mnStartToken;
 
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
     drawingml::ShapePtr mpShape;
@@ -181,7 +185,7 @@ private:
     css::uno::Reference<css::io::XInputStream> mxInputStream;
     ::rtl::OUString msRelationFragmentPath;
 
-    css::uno::Reference<XFastContextHandler> getGraphicShapeContext();
+    css::uno::Reference<XFastContextHandler> getGraphicShapeContext(::sal_Int32 Element);
     css::uno::Reference<XFastContextHandler> getDrawingShapeContext();
     css::uno::Reference<XFastContextHandler> getContextHandler();
 };

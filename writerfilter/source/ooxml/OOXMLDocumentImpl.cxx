@@ -137,6 +137,7 @@ OOXMLDocumentImpl::getSubStream(const rtl::OUString & rId)
     OOXMLDocumentImpl * pTemp;
     writerfilter::Reference<Stream>::Pointer_t pRet( pTemp = new OOXMLDocumentImpl(pStream) );
     pTemp->setModel(mxModel);
+    pTemp->setShapes(mxShapes);
     return pRet;
 }
 
