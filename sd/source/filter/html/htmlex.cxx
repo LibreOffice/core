@@ -81,6 +81,7 @@
 //#ifndef _SVDETC_HXX
 //#include <svx/svdetc.hxx>
 //#endif
+#include <svx/frmdiritem.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/impgrf.hxx>               // FillFilter()
 #include <tools/urlobj.hxx>               // INetURLObject
@@ -364,6 +365,21 @@ String HtmlState::SetLink( const String& aLink, const String& aTarget )
 // class HtmlExport Methoden
 // *********************************************************************
 
+static String getParagraphStyle( SdrOutliner* pOutliner, USHORT nPara )
+{
+    SfxItemSet aParaSet( pOutliner->GetParaAttribs( nPara ) );
+
+    String sStyle( RTL_CONSTASCII_USTRINGPARAM("direction:") );
+    if( static_cast<const SvxFrameDirectionItem*>(aParaSet.GetItem( EE_PARA_WRITINGDIR ))->GetValue() == FRMDIR_HORI_RIGHT_TOP )
+    {
+        sStyle += String( RTL_CONSTASCII_USTRINGPARAM("rtl;") );
+    }
+    else
+    {
+         sStyle += String( RTL_CONSTASCII_USTRINGPARAM("ltr;") );
+    }
+    return sStyle;
+}
 
 // =====================================================================
 // Konstruktor fuer die Html Export Hilfsklasse
@@ -647,6 +663,7 @@ void HtmlExport::InitExportParameters( const Sequence< PropertyValue >& rParams 
     Size aTmpSize( pPage->GetSize() );
     double dRatio=((double)aTmpSize.Width())/aTmpSize.Height();
 
+/*
     switch( mnWidthPixel )
     {
         case 800:
@@ -660,6 +677,7 @@ void HtmlExport::InitExportParameters( const Sequence< PropertyValue >& rParams 
             mnWidthPixel = 512;
             break;
     }
+*/
     mnHeightPixel = (USHORT)(mnWidthPixel/dRatio);
 
     //------------------------------------------------------------------
@@ -1114,8 +1132,11 @@ bool HtmlExport::CreateHtmlTextForPresPages()
         aStr += CreateNavBar(nSdPage, true);
 
 // Seitentitel
-        aStr.AppendAscii( "<h1>" );
-        aStr += CreateTextForTitle(pOutliner,pPage, pPage->GetPageBackgroundColor());
+        String sTitleText( CreateTextForTitle(pOutliner,pPage, pPage->GetPageBackgroundColor()) );
+        aStr.AppendAscii( "<h1 style=\"");
+        aStr.Append( getParagraphStyle( pOutliner, 0 ) );
+        aStr.AppendAscii( "\">" );
+        aStr += sTitleText;
         aStr.AppendAscii( "</h1>\r\n" );
 
 // Gliederungstext schreiben
@@ -1250,8 +1271,6 @@ String HtmlExport::CreateTextForPage( SdrOutliner* pOutliner,
                     {
                         aStr.AppendAscii( "</ul>" );
                         nActDepth--;
-                        if( nActDepth >= 0 )
-                            aStr.AppendAscii( "</li>" );
                     }
                     while(nDepth < nActDepth);
                 }
@@ -1259,18 +1278,33 @@ String HtmlExport::CreateTextForPage( SdrOutliner* pOutliner,
                 {
                     do
                     {
-                        if( nActDepth >= 0 )
-                            aStr.AppendAscii( "<li>" );
                         aStr.AppendAscii( "<ul>" );
                         nActDepth++;
                     }
                     while( nDepth > nActDepth );
                 }
 
+                String sStyle( getParagraphStyle( pOutliner, nPara ) );
                 if(nActDepth >= 0 )
-                    aStr.AppendAscii( "<li>" );
-                if(nActDepth == 0 && bHeadLine)
-                    aStr.AppendAscii( "<h2>" );
+                {
+                    aStr.AppendAscii( "<li style=\"");
+                    aStr.Append( sStyle );
+                    aStr.AppendAscii( "\">" );
+                }
+
+                if(nActDepth <= 0 && bHeadLine)
+                {
+                    if( nActDepth == 0 )
+                    {
+                        aStr.AppendAscii( "<h2>" );
+                    }
+                    else
+                    {
+                        aStr.AppendAscii( "<h2 style=\"");
+                        aStr.Append( sStyle );
+                        aStr.AppendAscii( "\">" );
+                    }
+                }
                 aStr += aParaText;
                 if(nActDepth == 0 && bHeadLine)
                     aStr.AppendAscii( "</h2>" );
@@ -1283,8 +1317,6 @@ String HtmlExport::CreateTextForPage( SdrOutliner* pOutliner,
             {
                 aStr.AppendAscii( "</ul>" );
                 nActDepth--;
-                if( nActDepth >= 0 )
-                    aStr.AppendAscii( "</li>" );
             };
         }
     }
@@ -1315,8 +1347,11 @@ String HtmlExport::CreateTextForNotesPage( SdrOutliner* pOutliner,
             ULONG nCount = pOutliner->GetParagraphCount();
             for (ULONG nPara = 0; nPara < nCount; nPara++)
             {
+                aStr.AppendAscii("<p style=\"");
+                aStr.Append( getParagraphStyle( pOutliner, nPara ) );
+                aStr.AppendAscii("\">");
                 aStr += ParagraphToHTMLString( pOutliner, nPara,rBackgroundColor );
-                aStr.AppendAscii( "<br>\r\n" );
+                aStr.AppendAscii( "</p>\r\n" );
             }
         }
     }
@@ -2041,11 +2076,15 @@ bool HtmlExport::CreateOutlinePages()
             String aTitle = CreateTextForTitle(pOutliner,pPage, maBackColor);
             if(aTitle.Len() == 0)
                 aTitle = *mpPageNames[nSdPage];
+
+            aStr.AppendAscii("<p style=\"");
+            aStr.Append( getParagraphStyle( pOutliner, 0 ) );
+            aStr.AppendAscii("\">");
             aStr += CreateLink(aLink, aTitle);
+            aStr.AppendAscii("</p>");
 
             if(nPage==1)
             {
-                aStr.AppendAscii( "<br>" );
                 aStr += CreateTextForPage( pOutliner, pPage, false, maBackColor );
             }
             aStr.AppendAscii( "</div>\r\n" );
