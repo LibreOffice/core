@@ -84,7 +84,7 @@ RegistryItem gid_Regitem_Clsid__30a2652a_Ddf7_45e7_Aca6_3eab26fc8a4e__Inprochand
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Subkey = "CLSID\{30A2652A-DDF7-45e7-ACA6-3EAB26FC8A4E}\InprocHandler32";
-    Value = "<progpath>\program\inprocserv.dll";
+    Value = "[BASISINSTALLLOCATION]program\inprocserv.dll";
     Styles = (PATCH);
 End
 
@@ -203,7 +203,7 @@ RegistryItem gid_Regitem_Clsid__F616b81f_7bb8_4f22_B8a5_47428d59f8ad__Inprochand
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Subkey = "CLSID\{F616B81F-7BB8-4F22-B8A5-47428D59F8AD}\InprocHandler32";
-    Value = "<progpath>\program\inprocserv.dll";
+    Value = "[BASISINSTALLLOCATION]program\inprocserv.dll";
     Styles = (PATCH);
 End
 
