@@ -52,27 +52,20 @@ PACKAGE_DIR=$(MISC)$/build
 ABS_PACKAGE_DIR:=$(MAKEDIR)$/$(MISC)$/build
 #MUST match with PACKAGE_DIR
 BACK_PATH=..$/..$/..$/
-
-# Remove entire package from output directory, for example, if new patches are
-# to be applied.
-# is this used at all?
-#.IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
-#	REMOVE_PACKAGE_COMMAND=-$(RM) -r $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR) >& $(NULLDEV)
-#.ELSE			# "$(GUI)"=="WNT"
-#	REMOVE_PACKAGE_COMMAND=-$(RM) /s $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR) >& $(NULLDEV)
-#.ENDIF			# "$(GUI)"=="WNT"
+#MUST match with reference (currently MISC)
+MBACK_PATH=..$/..$/
 
 P_CONFIGURE_DIR=$(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$(CONFIGURE_DIR)
 P_BUILD_DIR=$(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$(BUILD_DIR)
 P_INSTALL_DIR=$(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$(BUILD_DIR)
 P_INSTALL_TARGET_DIR=$(MISC)$/install
 
-.IF "$(PATCH_FILE_NAME)"=="none" ||	"$(PATCH_FILE_NAME)"==""
+.IF "$(PATCH_FILES)"=="none" ||	"$(PATCH_FILES)"==""
 NEW_PATCH_FILE_NAME:=$(TARFILE_NAME)
-.ELSE			# "$(PATCH_FILE_NAME)"=="none" ||	"$(PATCH_FILE_NAME)"==""
-NEW_PATCH_FILE_NAME:=$(PATCH_FILE_NAME)
-PATCH_FILE_DEP:=$(PRJ)$/$(PATH_IN_MODULE)$/$(NEW_PATCH_FILE_NAME)
-.ENDIF			# "$(PATCH_FILE_NAME)"=="none" ||	"$(PATCH_FILE_NAME)"==""
+.ELSE			# "$(PATCH_FILES)"=="none" ||	"$(PATCH_FILES)"==""
+NEW_PATCH_FILE_NAME:=$(TARFILE_NAME)-newpatch-rename_me.patch
+PATCH_FILE_DEP:=$(PRJ)$/$(PATH_IN_MODULE)$/{$(PATCH_FILES)}
+.ENDIF			# "$(PATCH_FILES)"=="none" ||	"$(PATCH_FILES)"==""
 
 .IF "$(TAR_EXCLUDES)"!=""
 TAR_EXCLUDE_SWITCH=--exclude=$(TAR_EXCLUDES)
@@ -186,26 +179,26 @@ $(PACKAGE_DIR)$/$(ADD_FILES_FLAG_FILE) : $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE) $(T_
 
 #patch
 $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE) : $(PACKAGE_DIR)$/$(ADD_FILES_FLAG_FILE)
-.IF "$(PATCH_FILE_NAME)"=="none" ||	"$(PATCH_FILE_NAME)"==""
+.IF "$(PATCH_FILES)"=="none" ||	"$(PATCH_FILES)"==""
     @echo no patch needed...
     $(TOUCH) $@
-.ELSE			# "$(PATCH_FILE_NAME)"=="none" ||	"$(PATCH_FILE_NAME)"==""
+.ELSE			# "$(PATCH_FILES)"=="none" ||	"$(PATCH_FILES)"==""
 .IF "$(GUI)"=="WNT"
 # hack to make 4nt version 4,01 work and still get propper
 # errorcodes for versions < 3,00
 .IF "$(my4ver:s/.//:s/,//)" >= "300"
-    cd $(PACKAGE_DIR) && ( $(TYPE:s/+//) $(BACK_PATH)$(PATH_IN_MODULE)$/$(PATCH_FILE_NAME) | tr -d "\015" | patch $(PATCHFLAGS) -p2 ) && $(TOUCH) $(PATCH_FLAG_FILE)
+    cd $(PACKAGE_DIR) && ( $(TYPE:s/+//) $(BACK_PATH)$(PATH_IN_MODULE)$/{$(PATCH_FILES)} | tr -d "\015" | patch $(PATCHFLAGS) -p2 ) && $(TOUCH) $(PATCH_FLAG_FILE)
 .ELSE			# "$(my4ver:s/.//:s/,//)" >= "300"
-    cd $(PACKAGE_DIR) && $(TYPE:s/+//) $(BACK_PATH)$(PATH_IN_MODULE)$/$(PATCH_FILE_NAME) | tr -d "\015" | patch $(PATCHFLAGS) -p2 && $(TOUCH) $(PATCH_FLAG_FILE)
+    cd $(PACKAGE_DIR) && $(TYPE:s/+//) $(BACK_PATH)$(PATH_IN_MODULE)$/{$(PATCH_FILES)} | tr -d "\015" | patch $(PATCHFLAGS) -p2 && $(TOUCH) $(PATCH_FLAG_FILE)
 .ENDIF			# "$(my4ver:s/.//:s/,//)" >= "300"
 .ELSE           # "$(GUI)"=="WNT"
 .IF "$(BSCLIENT)"=="TRUE"
-    cd $(PACKAGE_DIR) && $(TYPE) $(BACK_PATH)$(PATH_IN_MODULE)$/$(PATCH_FILE_NAME) | $(GNUPATCH) -f $(PATCHFLAGS) -p2 && $(TOUCH) $(PATCH_FLAG_FILE)
+    cd $(PACKAGE_DIR) && $(TYPE) $(BACK_PATH)$(PATH_IN_MODULE)$/{$(PATCH_FILES)} | $(GNUPATCH) -f $(PATCHFLAGS) -p2 && $(TOUCH) $(PATCH_FLAG_FILE)
 .ELSE           # "$(BSCLIENT)"!=""
-    cd $(PACKAGE_DIR) && $(TYPE) $(BACK_PATH)$(PATH_IN_MODULE)$/$(PATCH_FILE_NAME) | $(GNUPATCH) $(PATCHFLAGS) -p2 && $(TOUCH) $(PATCH_FLAG_FILE)
+    cd $(PACKAGE_DIR) && $(TYPE) $(BACK_PATH)$(PATH_IN_MODULE)$/{$(PATCH_FILES)} | $(GNUPATCH) $(PATCHFLAGS) -p2 && $(TOUCH) $(PATCH_FLAG_FILE)
 .ENDIF          # "$(BSCLIENT)"!=""
 .ENDIF          # "$(GUI)"=="WNT"
-.ENDIF			# "$(PATCH_FILE_NAME)"=="none" ||	"$(PATCH_FILE_NAME)"==""
+.ENDIF			# "$(PATCH_FILES)"=="none" ||	"$(PATCH_FILES)"==""
 .IF "$(T_ADDITIONAL_FILES)"!=""
 .IF "$(GUI)"=="WNT"
 # Native W32 tools generate only filedates with even seconds, cygwin also with odd seconds
@@ -304,21 +297,39 @@ $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE) : $(PACKAGE_DIR)$/$(INSTALL_FLAG_FILE)
 .ENDIF			# "$(OUT2BIN)"!=""
     $(TOUCH) $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE)
 
-$(MISC)$/$(TARFILE_ROOTDIR) : $(MISC)$/$(TARFILE_NAME).unpack
+$(MISC)$/$(TARFILE_ROOTDIR).done : $(MISC)$/$(TARFILE_NAME).unpack $(PATCH_FILES)
     @-mv $(MISC)$/$(TARFILE_ROOTDIR) $(MISC)$/$(TARFILE_ROOTDIR).old
     @-rm -rf $(MISC)$/$(TARFILE_ROOTDIR).old
     cd $(MISC) && $(subst,$(BACK_PATH),..$/..$/ $(shell @$(TYPE) $(PRJ)$/$(ROUT)$/misc$/$(TARFILE_NAME).unpack))
+.IF "$(P_ADDITIONAL_FILES)"!=""
+    noop $(foreach,i,$(P_ADDITIONAL_FILES) $(shell echo dummy > $i))
+.ENDIF			 "$(P_ADDITIONAL_FILES)"!=""
+.IF "$(PATCH_FILES)"!="none" &&	"$(PATCH_FILES)"!=""
+.IF "$(CONVERTFILES)"!=""
+    $(CONVERT) unix $(foreach,i,$(CONVERTFILES) $(MISC)$/$(TARFILE_ROOTDIR)$/$i)
+.ENDIF          # "$(CONVERTFILES)"!=""
+.IF "$(GUI)"=="WNT"
+# hack to make 4nt version 4,01 work and still get propper
+# errorcodes for versions < 3,00
+.IF "$(my4ver:s/.//:s/,//)" >= "300"
+    cd $(MISC) && ( $(TYPE:s/+//) $(BACK_PATH)$(PATH_IN_MODULE)$/{$(PATCH_FILES)} | tr -d "\015" | patch $(PATCHFLAGS) -p2 )
+.ELSE			# "$(my4ver:s/.//:s/,//)" >= "300"
+    cd $(MISC) && $(TYPE:s/+//) $(BACK_PATH)$(PATH_IN_MODULE)$/{$(PATCH_FILES)} | tr -d "\015" | patch $(PATCHFLAGS) -p2
+.ENDIF			# "$(my4ver:s/.//:s/,//)" >= "300"
+.ELSE           # "$(GUI)"=="WNT"
+.IF "$(BSCLIENT)"=="TRUE"
+    cd $(MISC) && $(TYPE) $(BACK_PATH)$(PATH_IN_MODULE)$/${(PATCH_FILES)} | $(GNUPATCH) -f $(PATCHFLAGS) -p2
+.ELSE           # "$(BSCLIENT)"!=""
+    cd $(MISC) && $(TYPE) $(MBACK_PATH)$(PATH_IN_MODULE)$/{$(PATCH_FILES)} | $(GNUPATCH) $(PATCHFLAGS) -p2
+.ENDIF          # "$(BSCLIENT)"!=""
+.ENDIF          # "$(GUI)"=="WNT"
+.IF "$(CONVERTFILES)"!=""
+    $(CONVERT) dos  $(foreach,i,$(CONVERTFILES) $(MISC)$/$(TARFILE_ROOTDIR)$/$i)
+.ENDIF          # "$(CONVERTFILES)"!=""
+.ENDIF			# "$(PATCH_FILES)"!="none" && "$(PATCH_FILES)"!="
 .IF "$(GUI)"=="UNX"	
     $(TOUCH) $@
 .ENDIF			# "$(GUI)"=="UNX"	
-
-
-.IF "$(P_ADDITIONAL_FILES)"!=""
-$(P_ADDITIONAL_FILES) :
-    @-$(MKDIRHIER) $(@:d)
-    -echo dummy > $@
-    -$(TOUCH) $@
-.ENDIF			 "$(P_ADDITIONAL_FILES)"!=""
 
 .IF "$(T_ADDITIONAL_FILES)"!=""
 $(T_ADDITIONAL_FILES:+".dummy") : $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE)
@@ -329,7 +340,7 @@ $(T_ADDITIONAL_FILES:+".dummy") : $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE)
     -$(TOUCH) $(@:d)$(@:b)
 .ENDIF			 "$(T_ADDITIONAL_FILES)"!=""
 
-create_patch : $(MISC)$/$(TARFILE_ROOTDIR) $(P_ADDITIONAL_FILES) $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE)
+create_patch : $(MISC)$/$(TARFILE_ROOTDIR).done $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE)
     @@-$(MKDIRHIER) $(PRJ)$/$(NEW_PATCH_FILE_NAME:d)
     @@-$(RM) $(MISC)$/$(NEW_PATCH_FILE_NAME:f).tmp
     @@-$(RM) $(PRJ)$/$(PATH_IN_MODULE)$/$(NEW_PATCH_FILE_NAME).bak
@@ -337,10 +348,12 @@ create_patch : $(MISC)$/$(TARFILE_ROOTDIR) $(P_ADDITIONAL_FILES) $(PACKAGE_DIR)$
 # hard coded again to get the same directory level as before. quite ugly...
     -cd $(PRJ)$/$(ROUT) && diff -ru misc$/$(TARFILE_ROOTDIR) misc$/build$/$(TARFILE_ROOTDIR) | $(PERL) $(SOLARENV)$/bin$/cleandiff.pl | tr -d "\015" > misc$/$(NEW_PATCH_FILE_NAME:f).tmp
     -mv $(PRJ)$/$(PATH_IN_MODULE)$/$(NEW_PATCH_FILE_NAME) $(PRJ)$/$(PATH_IN_MODULE)$/$(NEW_PATCH_FILE_NAME).bak
+    -$(TOUCH) $(PRJ)$/$(PATH_IN_MODULE)$/$(NEW_PATCH_FILE_NAME).bak
     $(PERL) $(SOLARENV)$/bin$/patch_sanitizer.pl $(PRJ)$/$(PATH_IN_MODULE)$/$(NEW_PATCH_FILE_NAME).bak $(MISC)$/$(NEW_PATCH_FILE_NAME:f).tmp $(PRJ)$/$(PATH_IN_MODULE)$/$(NEW_PATCH_FILE_NAME)
-    @@-$(RM) $(MISC)$/$(NEW_PATCH_FILE_NAME:f).tmp
+    @@-$(RM) $(MISC)$/$(NEW_PATCH_FILE_NAME:f).tmp $(PRJ)$/$(PATH_IN_MODULE)$/$(NEW_PATCH_FILE_NAME).bak
     $(MAKECMD) $(MAKEMACROS) patch
     @echo still some problems with win32 generated patches...
+    @echo $(USQ)find your new changes in $(NEW_PATCH_FILE_NAME). don't forget to move/rename that patch and insert it in your makefiles PATCH_FILES to activate.$(USQ)
 
 create_clean : $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE)
     @echo done
