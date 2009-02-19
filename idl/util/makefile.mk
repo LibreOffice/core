@@ -48,6 +48,7 @@ LIB1FILES = $(LB)$/prj.lib		 \
             $(LB)$/cmptools.lib
 
 APP1TARGET= svidl
+APP1RPATH=NONE
 
 APP1STDLIBS=	\
     $(TOOLSLIB)	\
