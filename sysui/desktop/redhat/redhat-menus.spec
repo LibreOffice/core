@@ -37,7 +37,7 @@ for i in `cat launcherlist`; do
 done
 
 %clean
-rm -rf $RPM_BUILD_ROOT/*
+rm -rf $RPM_BUILD_ROOT
 
 %triggerin --  %pkgprefix, %pkgprefix-writer, %pkgprefix-calc, %pkgprefix-draw, %pkgprefix-impress, %pkgprefix-base, %pkgprefix-math
 if [ -x /usr/bin/update-desktop-database ]; then

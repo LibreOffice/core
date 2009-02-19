@@ -289,7 +289,7 @@ GenerateMenu "%unixfilename-printeradmin" \
 	"core02"
 
 %clean
-rm -rf $RPM_BUILD_ROOT/*
+rm -rf $RPM_BUILD_ROOT
 
 %preun
 # remove from /etc/mailcap only on de-install
