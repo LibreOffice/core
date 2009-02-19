@@ -48,7 +48,7 @@ TARFILE_ROOTDIR=rhino1_5R5
 ADDITIONAL_FILES= \
     toolsrc/org/mozilla/javascript/tools/debugger/OfficeScriptInfo.java
 
-PATCH_FILE_NAME=rhino1_5R5.patch
+PATCH_FILES=rhino1_5R5.patch
 
 .IF "$(JAVACISGCJ)"=="yes"
 JAVA_HOME=

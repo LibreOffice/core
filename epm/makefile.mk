@@ -41,7 +41,7 @@ TARGET=epm
 # --- Files --------------------------------------------------------
 
 TARFILE_NAME=epm-3.7
-PATCH_FILE_NAME=epm-3.7.patch
+PATCH_FILES=epm-3.7.patch
 
 .IF "$(GUI)"=="UNX" && "$(BUILD_EPM)" != "NO"
 

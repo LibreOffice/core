@@ -43,9 +43,9 @@ TARGET=lpsolve
 TARFILE_NAME=lp_solve_5.5
 
 .IF "$(GUI)"=="WNT"
-PATCH_FILE_NAME=lp_solve_5.5-windows.patch
+PATCH_FILES=lp_solve_5.5-windows.patch
 .ELSE
-PATCH_FILE_NAME=lp_solve_5.5.patch
+PATCH_FILES=lp_solve_5.5.patch
 ADDITIONAL_FILES=lpsolve55$/ccc.solaris lpsolve55$/ccc.os2
 .ENDIF
 

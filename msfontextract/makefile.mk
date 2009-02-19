@@ -48,7 +48,7 @@ LIBSALCPPRT=
 .ENDIF
 
 TARFILE_NAME=libmspack
-PATCH_FILE_NAME=msfontextract.patch
+PATCH_FILES=msfontextract.patch
 
 ADDITIONAL_FILES=mspack$/makefile.mk mspack$/msfontextract.c mspack$/ministub.c
 

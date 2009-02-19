@@ -51,7 +51,7 @@ all:
 # --- Files --------------------------------------------------------
 
 TARFILE_NAME=vigra1.4.0
-PATCH_FILE_NAME=$(TARFILE_NAME).patch
+PATCH_FILES=$(TARFILE_NAME).patch
 
 CONFIGURE_DIR=
 CONFIGURE_ACTION=

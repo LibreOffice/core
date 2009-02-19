@@ -43,9 +43,9 @@ TARGET=icc
 TARFILE_NAME=SampleICC-1.3.2
 #checking for endianess
 .IF "$(CPU)"=="I"
-PATCH_FILE_NAME=$(TARFILE_NAME).patch
+PATCH_FILES=$(TARFILE_NAME).patch
 .ELSE
-PATCH_FILE_NAME=$(TARFILE_NAME)-bendian.patch
+PATCH_FILES=$(TARFILE_NAME)-bendian.patch
 .ENDIF
 
 CONVERTFILES= \

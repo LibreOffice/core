@@ -44,7 +44,7 @@ TARFILE_NAME=hyphen-2.3.1
 
 ADDITIONAL_FILES += makefile.mk
 
-PATCH_FILE_NAME=hyphen-2.3.patch
+PATCH_FILES=hyphen-2.3.patch
 
 .IF "$(GUI)"=="UNX"
 CONFIGURE_DIR=$(BUILD_DIR)

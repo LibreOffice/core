@@ -43,7 +43,7 @@ TARGET=ooo_beanshell
 
 TARFILE_NAME=bsh-2.0b1-src
 TARFILE_ROOTDIR=BeanShell
-PATCH_FILE_NAME=bsh-2.0b1-src.patch
+PATCH_FILES=bsh-2.0b1-src.patch
 
 ADDITIONAL_FILES=makefile.mk
 

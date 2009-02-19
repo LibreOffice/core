@@ -115,7 +115,7 @@ ADDITIONAL_FILES=\
  src$/win32$/makefile.mk \
  src$/win32$/winstuff.cxx
 
-PATCH_FILE_NAME=cppunit-1.8.0-r1.patch
+PATCH_FILES=cppunit-1.8.0-r1.patch
 
 # CONFIGURE_DIR=
 # CONFIGURE_ACTION=

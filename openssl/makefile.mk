@@ -66,7 +66,7 @@ OUT2LIB += libcrypto.*
 OUT2INC += include/openssl/*
 
 .IF "$(OS)" == "LINUX"
-    PATCH_FILE_NAME=openssllnx.patch
+    PATCH_FILES=openssllnx.patch
     ADDITIONAL_FILES:= \
         libcrypto_OOo_0_9_8e.map \
         libssl_OOo_0_9_8e.map
@@ -75,7 +75,7 @@ OUT2INC += include/openssl/*
 .ENDIF
 
 .IF "$(OS)" == "SOLARIS"
-    PATCH_FILE_NAME=opensslsol.patch
+    PATCH_FILES=opensslsol.patch
     ADDITIONAL_FILES:= \
         libcrypto_OOo_0_9_8e.map \
         libssl_OOo_0_9_8e.map
@@ -103,7 +103,7 @@ OUT2INC += include/openssl/*
 .IF "$(OS)" == "WNT"
 
 .IF "$(COM)"=="GCC"
-PATCH_FILE_NAME=opensslmingw.patch
+PATCH_FILES=opensslmingw.patch
 .IF "$(USE_MINGW)" == "cygwin"
 CONFIGURE_ACTION=$(PERL) configure
 CONFIGURE_FLAGS=mingw shared 
@@ -126,7 +126,7 @@ OUT2BIN += out/libeay32.dll
 .ENDIF
 .ELSE
 
-        PATCH_FILE_NAME=openssl.patch
+        PATCH_FILES=openssl.patch
         .IF "$(MAKETARGETS)" == ""
             # The env. vars CC and PERL are used by nmake, and nmake insists on '\'s
             # If WRAPCMD is set it is prepended before the compiler, don't touch that.

@@ -43,7 +43,7 @@ TARGET=libtextcat
 TARFILE_NAME=libtextcat-2.2
 TARFILE_ROOTDIR=libtextcat-2.2
 
-PATCH_FILE_NAME=libtextcat-2.2.patch
+PATCH_FILES=libtextcat-2.2.patch
 
 
 ADDITIONAL_FILES= \

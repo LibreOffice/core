@@ -53,7 +53,7 @@ LUCENE_CORE_JAR=lucene-core-$(LUCENE_MAJOR).$(LUCENE_MINOR).jar
 LUCENE_ANALYZERS_JAR=lucene-analyzers-$(LUCENE_MAJOR).$(LUCENE_MINOR).jar
 
 TARFILE_NAME=$(LUCENE_NAME)
-PATCH_FILE_NAME=lucene.patch
+PATCH_FILES=lucene.patch
 
 BUILD_DIR=.
 BUILD_ACTION= ${ANT} -buildfile .$/contrib$/analyzers$/build.xml
