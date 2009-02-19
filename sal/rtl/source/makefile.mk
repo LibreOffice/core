@@ -140,6 +140,7 @@ OBJFILES+=$(OBJ)$/memory_fini.obj
 APP1TARGET=gen_makefile
 APP1OBJS=$(SLO)$/gen_makefile.obj
 APP1LIBSALCPPRT=
+APP1RPATH=NONE
 
 # --- Extra objs ----------------------------------------------------
 
@@ -197,5 +198,5 @@ $(ALWAYSDBGFILES):
 ALLTAR : $(BOOTSTRAPMK)
 
 $(BOOTSTRAPMK) : $(APP1TARGETN)
-    $< > $@
+    $(AUGMENT_LIBRARY_PATH) $< > $@
 

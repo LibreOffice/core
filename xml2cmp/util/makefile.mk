@@ -55,7 +55,7 @@ LIBSALCPPRT=$(0)
 
 APP1LIBS=	$(LB)$/x2c_xcd.lib $(LB)$/x2c_support.lib
 APP1DEPN=   $(LB)$/x2c_xcd.lib $(LB)$/x2c_support.lib
-
+APP1RPATH=  NONE
 
 .INCLUDE :  target.mk
 

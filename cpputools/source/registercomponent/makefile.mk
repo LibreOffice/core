@@ -45,7 +45,6 @@ UNOUCRRDB=$(SOLARBINDIR)$/udkapi.rdb
 NO_OFFUH=TRUE
 CPPUMAKERFLAGS += -C
 
-UNIXTEXT= $(MISC)$/regcomp.sh
 UNOTYPES=\
              com.sun.star.uno.TypeClass \
              com.sun.star.lang.XMultiServiceFactory \
@@ -78,11 +77,3 @@ APP1STDLIBS+= \
 
 
 .INCLUDE :  target.mk
-
-
-.IF "$(GUI)"=="UNX"
-ALLTAR: REGCOMPSH
-
-REGCOMPSH : $(UNIXTEXT)
-    +-chmod +x $(UNIXTEXT)
-.ENDIF	

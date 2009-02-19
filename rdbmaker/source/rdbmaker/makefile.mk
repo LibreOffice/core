@@ -62,4 +62,6 @@ APP1STDLIBS=\
 APP1LIBS= \
         $(LB)$/codemaker.lib
 
+APP1RPATH=  NONE
+
 .INCLUDE :  target.mk
