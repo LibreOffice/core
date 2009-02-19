@@ -487,6 +487,18 @@ void SAL_CALL SlideShowView::setMouseCursor( sal_Int16 nPointerShape ) throw (Ru
         mxWindowPeer->setPointer( mxPointer );
 }
 
+awt::Rectangle SAL_CALL SlideShowView::getCanvasArea(  ) throw (RuntimeException)
+{
+    awt::Rectangle aRectangle;
+
+    if( mxWindow.is() )
+    return mxWindow->getPosSize();
+
+    aRectangle.X = aRectangle.Y = aRectangle.Width = aRectangle.Height = 0;
+
+    return aRectangle;
+}
+
 void SlideShowView::updateimpl( ::osl::ClearableMutexGuard& rGuard, SlideshowImpl* pSlideShow )
 {
     if( pSlideShow )

@@ -73,6 +73,7 @@
 #include <com/sun/star/presentation/XSlideShow.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
+#include <com/sun/star/loader/CannotActivateFactoryException.hpp>
 
 #include "unoviewcontainer.hxx"
 #include "transitionfactory.hxx"
@@ -100,6 +101,7 @@
 #include <vector>
 #include <iterator>
 #include <algorithm>
+#include <stdio.h>
 
 using namespace com::sun::star;
 using namespace ::slideshow::internal;
@@ -483,12 +485,18 @@ SlideShowImpl::SlideShowImpl(
 
     if( xFactory.is() )
     {
-        // #i82460# try to retrieve special transition factory
-        mxOptionalTransitionFactory.set(
-            xFactory->createInstanceWithContext(
-                ::rtl::OUString::createFromAscii( "com.sun.star.presentation.TransitionFactory" ),
-                mxComponentContext ),
-            uno::UNO_QUERY );
+        try
+    {
+            // #i82460# try to retrieve special transition factory
+            mxOptionalTransitionFactory.set(
+                xFactory->createInstanceWithContext(
+                    ::rtl::OUString::createFromAscii( "com.sun.star.presentation.TransitionFactory" ),
+                    mxComponentContext ),
+                uno::UNO_QUERY );
+        }
+        catch (loader::CannotActivateFactoryException const&)
+    {
+    }
     }
 
     mpListener.reset( new SeparateListenerImpl(
