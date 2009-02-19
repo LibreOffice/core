@@ -53,14 +53,14 @@ all:
 # --- Files --------------------------------------------------------
 
 TARFILE_NAME=boost-1.30.2
-PATCH_FILE_NAME=$(TARFILE_NAME).patch
+PATCH_FILES=$(TARFILE_NAME).patch
 
 .IF "$(COMID)"=="gcc3"
 
 # enabled for gcc4.x
 .IF "$(CCNUMVER)">="000400000000" 
   TARFILE_NAME=boost_1_34_1
-  PATCH_FILE_NAME=$(TARFILE_NAME).patch
+  PATCH_FILES=$(TARFILE_NAME).patch
 .ENDIF
 
 .ENDIF

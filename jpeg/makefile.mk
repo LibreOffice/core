@@ -48,7 +48,7 @@ all:
 
 TARFILE_NAME=jpeg-6b
 
-PATCH_FILE_NAME=jpeg-6b.patch
+PATCH_FILES=jpeg-6b.patch
 ADDITIONAL_FILES=makefile.mk \
                  jconfig.h
 

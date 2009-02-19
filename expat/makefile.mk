@@ -49,7 +49,7 @@ all:
 TARFILE_NAME=expat
 ADDITIONAL_FILES=xmlparse$/makefile.mk xmltok$/makefile.mk makefile.mk
 
-PATCH_FILE_NAME=expat.patch
+PATCH_FILES=expat.patch
 
 CONFIGURE_DIR=
 CONFIGURE_ACTION=

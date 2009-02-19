@@ -53,7 +53,7 @@ TARGET=so_neon
 NEON_NAME=neon-0.26.3
 
 TARFILE_NAME=$(NEON_NAME)
-PATCH_FILE_NAME=neon.patch
+PATCH_FILES=neon.patch
 ADDITIONAL_FILES=src$/makefile.mk src$/config.h
 
 BUILD_DIR=src

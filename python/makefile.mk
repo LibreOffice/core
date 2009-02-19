@@ -50,7 +50,7 @@ all:
 
 
 TARFILE_NAME=Python-$(PYVERSION)
-PATCH_FILE_NAME=Python-$(PYVERSION).patch
+PATCH_FILES=Python-$(PYVERSION).patch
 
 PYPROJECTS= \
     datetime 	\

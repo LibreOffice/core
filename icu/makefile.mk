@@ -48,7 +48,7 @@ TARFILE_NAME=icu-$(ICU_MAJOR).$(ICU_MINOR)
 .ENDIF
 TARFILE_ROOTDIR=icu
 
-PATCH_FILE_NAME=${TARFILE_NAME}.patch
+PATCH_FILES=${TARFILE_NAME}.patch
 
 # ADDITIONAL_FILES=
 
@@ -243,10 +243,10 @@ OUT2BIN= \
 .INCLUDE :	target.mk
 .INCLUDE :	tg_ext.mk
 
-.IF "$(BINARY_PATCH_FILE_NAME)"!=""
+.IF "$(BINARY_PATCH_FILES)"!=""
 
 $(PACKAGE_DIR)$/so_add_binary :  $(PACKAGE_DIR)$/$(ADD_FILES_FLAG_FILE)
-    cd $(PACKAGE_DIR) && gunzip -c $(BACK_PATH)$(BINARY_PATCH_FILE_NAME) | tar $(TAR_EXCLUDE_SWITCH) -xvf -
+    cd $(PACKAGE_DIR) && gunzip -c $(BACK_PATH)$(BINARY_PATCH_FILES) | tar $(TAR_EXCLUDE_SWITCH) -xvf -
     $(TOUCH) $(PACKAGE_DIR)$/so_add_binary
 
 $(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE) : $(PACKAGE_DIR)$/so_add_binary

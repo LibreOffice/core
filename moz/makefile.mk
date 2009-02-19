@@ -73,7 +73,7 @@ TARFILE_NAME=mozilla-source-$(MOZILLA_VERSION)
 .ENDIF
 TARFILE_ROOTDIR=mozilla
 
-PATCH_FILE_NAME=mozilla-source-$(MOZILLA_VERSION).patch 
+PATCH_FILES=mozilla-source-$(MOZILLA_VERSION).patch 
 
 # These files are needed for the W32 build when BUILD_MOZAB is set
 LIBIDL_VC71_ZIPFILE_NAME*=vc71-libIDL-0.6.8-bin.zip
@@ -239,7 +239,7 @@ $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE) : $(MISC)$/remove_build.flag
 # Since you never know what will be in a patch (for example, it may already
 # patch at configure level), we remove the entire package directory if a patch
 # is newer.
-$(MISC)$/remove_build.flag : $(PATCH_FILE_NAME)
+$(MISC)$/remove_build.flag : $(PATCH_FILES)
     $(REMOVE_PACKAGE_COMMAND)
     $(TOUCH) $(MISC)$/remove_build.flag
 
