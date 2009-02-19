@@ -97,6 +97,7 @@ APP1DEPN=   $(OBJ)$/src_yy_wrapper.obj $(LB)$/$(TARGET).lib
 
 APP2TARGET= helpex
 APP2OBJS= $(OBJ)$/helpmerge.obj  $(OBJ)$/xmlparse.obj $(OBJ)$/export2.obj $(OBJ)$/utf8conv.obj $(OBJ)$/merge.obj $(OBJ)$/helpex.obj $(OBJ)$/hw2fw.obj
+APP2RPATH= NONE
 
 .IF "$(OS)"!="MACOSX"
 .ENDIF
@@ -110,6 +111,7 @@ APP2STDLIBS+=$(SALLIB) $(EXPATASCII3RDLIB) $(TOOLSLIB) $(VOSLIB)
 # extractor and merger for *.lng and *.lng
 APP3TARGET= ulfex
 APP3OBJS=   $(OBJ)$/lngmerge.obj $(OBJ)$/hw2fw.obj $(OBJ)$/merge.obj $(OBJ)$/export2.obj $(OBJ)$/lngex.obj $(OBJ)$/utf8conv.obj
+APP3RPATH=  NONE
 
 .IF "$(OS)"!="MACOSX"
 #APP3STDLIBS+= $(BTSTRPLIB)
@@ -158,6 +160,7 @@ APP6STDLIBS+= \
 # extractor and merger for *.xrm
 APP7TARGET= xrmex
 APP7OBJS=   $(OBJ)$/xrmmerge.obj $(OBJ)$/xrm_yy_wrapper.obj $(OBJ)$/hw2fw.obj $(OBJ)$/merge.obj $(OBJ)$/export2.obj $(OBJ)$/utf8conv.obj
+APP7RPATH=  NONE
 
 .IF "$(OS)"!="MACOSX"
 .ENDIF

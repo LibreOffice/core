@@ -54,6 +54,7 @@ APP1OBJS=   $(OBJ)$/start.obj
 APP1STACK=64000
 #APP1STACK=32768
 .ENDIF
+APP1RPATH=NONE
 
 APP2TARGET= rsc2
 .IF "$(OS)"=="SCO"
@@ -74,6 +75,7 @@ APP2OBJS=   $(OBJ)$/gui.obj
 APP2STACK=64000
 #APP2STACK=32768
 .ENDIF
+APP2RPATH=NONE
 
 # --- Targets ------------------------------------------------------------
 

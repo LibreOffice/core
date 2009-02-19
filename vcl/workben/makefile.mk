@@ -147,7 +147,7 @@ $(BIN)$/applicat.rdb : makefile.mk $(UNOUCRRDB)
     rm -f $@
     $(GNUCOPY) $(UNOUCRRDB) $@
      cd $(BIN) && \
-         regcomp -register -r applicat.rdb \
+         $(REGCOMP) -register -r applicat.rdb \
              -c i18nsearch.uno$(DLLPOST) \
              -c i18npool.uno$(DLLPOST)
 

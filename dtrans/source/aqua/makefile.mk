@@ -97,7 +97,7 @@ SHL1OBJS=	$(SLOFILES)
 # --- Targets ------------------------------------------------------
 
 ALL : ALLTAR
-    +cd $(LB) && regcomp -register -r ../bin/$(COMP1TYPELIST).rdb -c $(SHL1TARGET)
+    +cd $(LB) && $(REGCOMP) -register -r ../bin/$(COMP1TYPELIST).rdb -c $(SHL1TARGET)
 
 .INCLUDE :	target.mk
 

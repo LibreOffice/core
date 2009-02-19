@@ -87,6 +87,7 @@ APP2TARGET= rscdep
 APP2OBJS=	$(OBJ)$/rscdep.obj
 APP2LIBS=   $(LB)$/$(TARGET).lib $(LB)$/$(TARGET1).lib
 APP2STDLIBS= $(SALLIB) $(VOSLIB) $(TOOLSLIB)
+APP2RPATH=  NONE
 
 APP3TARGET=  so_checksum
 APP3OBJS=    $(OBJ)$/md5.obj \

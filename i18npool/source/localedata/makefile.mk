@@ -68,6 +68,7 @@ OBJFILES   = \
         $(OBJ)$/filewriter.obj
 
 APP1TARGET = saxparser
+APP1RPATH = NONE
 
 APP1OBJS   = $(OBJFILES)
 

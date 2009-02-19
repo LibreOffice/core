@@ -54,6 +54,7 @@ SLOFILES=   \
         $(rules_obj)
 
 APP1TARGET = gencoll_rule
+APP1RPATH = NONE
 
 APP1OBJS   = $(OBJ)$/gencoll_rule.obj
 

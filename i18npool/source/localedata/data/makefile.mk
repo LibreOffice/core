@@ -495,6 +495,6 @@ DEPOBJFILES= \
 $(MY_MISC_CXXFILES) : $(BIN)$/saxparser$(EXECPOST)
 
 $(MISC)$/localedata_%.cxx : %.xml
-    $(WRAPCMD) $(BIN)$/saxparser $* $< $@ $(BIN)$/$(@:b).rdb $(SOLARBINDIR)$/types.rdb
+    $(AUGMENT_LIBRARY_PATH) $(WRAPCMD) $(BIN)$/saxparser $* $< $@ $(BIN)$/$(@:b).rdb $(SOLARBINDIR)$/types.rdb
     $(RM) $(BIN)$/$(@:b).rdb
 
