@@ -1002,10 +1002,8 @@ void DrawDocShell::OpenBookmark( const String& rBookmarkURL )
 {
     SfxStringItem   aStrItem( SID_FILE_NAME, rBookmarkURL );
     SfxStringItem   aReferer( SID_REFERER, GetMedium()->GetName() );
-    SfxBoolItem     aBrowseItem( SID_BROWSE, TRUE );
-
-    ( mpViewShell ? mpViewShell->GetViewFrame() : SfxViewFrame::Current() )->GetDispatcher()->
-        Execute(SID_OPENDOC, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD, &aStrItem, &aBrowseItem, &aReferer, 0L );
+    const SfxPoolItem* ppArgs[] = { &aStrItem, &aReferer, 0 };
+    ( mpViewShell ? mpViewShell->GetViewFrame() : SfxViewFrame::Current() )->GetBindings().Execute( SID_OPENHYPERLINK, ppArgs );
 }
 
 } // end of namespace sd
