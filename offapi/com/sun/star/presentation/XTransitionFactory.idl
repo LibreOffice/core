@@ -85,8 +85,7 @@ interface XTransitionFactory : ::com::sun::star::uno::XInterface
                                   [in] short                                 transitionSubType,
                                   [in] XSlideShowView                        view,
                                   [in] com::sun::star::rendering::XBitmap    leavingBitmap,
-                                  [in] com::sun::star::rendering::XBitmap    enteringBitmap,
-                                  [in] com::sun::star::geometry::RealPoint2D slideOffset );
+                                  [in] com::sun::star::rendering::XBitmap    enteringBitmap );
 };
 
 service TransitionFactory : XTransitionFactory;
