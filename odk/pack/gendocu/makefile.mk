@@ -85,8 +85,6 @@ JAVADOCPARAMS= -use -splitindex -windowtitle "Java UNO Runtime Reference" -heade
 
 JAVADOCLOG = $(MISC)$/javadoc_log.txt
 
-MY_AUTODOC=$(SOLARBINDIR)$/autodoc
-
 .IF "$(SOLAR_JAVA)"!=""
 all: \
     $(CPP_DOCU_INDEX_FILE) \

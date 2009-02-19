@@ -56,7 +56,7 @@ const char* PATHSEPARATOR = ":";
  * <p>This code runs on the Unix/Linux platforms only.</p>
  *
  * <p>The main function detects a UNO installation on the system and adds the
- * program directory of the UNO installation to the LD_LIBRARY_PATH environment
+ * relevant directories of the installation to the LD_LIBRARY_PATH environment
  * variable. After that, the application process is loaded and started, whereby
  * the new process inherits the environment of the calling process, including
  * the modified LD_LIBRARY_PATH environment variable. The application's
