@@ -35,6 +35,7 @@ import org.openoffice.setup.PanelHelper.PanelTitle;
 import org.openoffice.setup.ResourceManager;
 import org.openoffice.setup.SetupActionListener;
 import java.awt.BorderLayout;
+import java.awt.ComponentOrientation;
 import java.awt.Container;
 import java.awt.Insets;
 import javax.swing.Box;
@@ -42,6 +43,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.border.EmptyBorder;
+import org.openoffice.setup.InstallData;
 
 public class UninstallationOngoing extends JPanel {
 
@@ -50,6 +52,8 @@ public class UninstallationOngoing extends JPanel {
     private JButton mStopButton;
 
     public UninstallationOngoing() {
+
+        InstallData data = InstallData.getInstance();
 
         setLayout(new java.awt.BorderLayout());
         setBorder(new EmptyBorder(new Insets(10, 10, 10, 10)));
@@ -60,15 +64,19 @@ public class UninstallationOngoing extends JPanel {
         add(titlebox, BorderLayout.NORTH);
 
         Container contentbox = Box.createVerticalBox();
+        if ( data.useRtl() ) { contentbox.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT); }
 
         // String progressText = ResourceManager.getString("String_UninstallationOngoing2");
         String progressText = "";
         currentProgress = new PanelLabel(progressText);
 
         Container innerbox = Box.createHorizontalBox();
+        if ( data.useRtl() ) { innerbox.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT); }
 
         progressBar = new JProgressBar(0, 100);
+        if ( data.useRtl() ) { progressBar.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT); }
         mStopButton = new JButton();
+        if ( data.useRtl() ) { mStopButton.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT); }
         String progressButtonText = ResourceManager.getString("String_InstallationOngoing3");
         mStopButton.setText(progressButtonText);
         mStopButton.setEnabled(true);
