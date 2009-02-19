@@ -285,8 +285,7 @@ sub get_master_url
         $url .= 'trunk';
     }
     else {
-        # TODO: reconsider naming
-        my $master_label = 'mws_' . lc($master);
+        my $master_label = uc($master);
         $url .= "branches/$master_label";
     }
 
@@ -1557,9 +1556,10 @@ sub do_rebase
         print_error("cws rebase requires svn-1.5.4 or later (merge tracking and bug fixes). Please upgrade your svn client.", 1);
     }
 
+    my $cws = get_cws_from_environment();
+    my $old_masterws = $cws->master();
     my $new_masterws;
     my $new_milestone;
-    my $cws = get_cws_from_environment();
 
     my $workspace = $args_ref->[0];
 
@@ -1574,14 +1574,13 @@ sub do_rebase
     elsif( exists($options_ref->{'milestone'}) ) {
         $milestone = $options_ref->{'milestone'};
         if ( $milestone eq 'latest' ) {
-            my $masterws = $cws->master();
-            my $latest = $cws->get_current_milestone($masterws);
+            my $latest = $cws->get_current_milestone($old_masterws);
 
             if ( !$latest ) {
-                print_error("Can't determine latest milestone of '$masterws' available for rebase.", 22);
+                print_error("Can't determine latest milestone of '$old_masterws' available for rebase.", 22);
             }
-            $new_masterws  = $masterws;
-            $new_milestone = $cws->get_current_milestone($masterws);
+            $new_masterws  = $old_masterws;
+            $new_milestone = $cws->get_current_milestone($old_masterws);
         }
         else {
             ($new_masterws, $new_milestone) =  verify_milestone($cws, $milestone);
@@ -1598,10 +1597,10 @@ sub do_rebase
     # This is only needed as long the build system still relies
     # on having "modules" from different repositories in the same
     # directory besides each other.
-    if ( -d "$workspace/$new_masterws/sun" ) {
+    if ( -d "$workspace/$old_masterws/sun" ) {
         $so_setup = 1;
-        $ooo_path = "$workspace/$new_masterws/ooo";
-        $so_path = "$workspace/$new_masterws/sun";
+        $ooo_path = "$workspace/$old_masterws/ooo";
+        $so_path = "$workspace/$old_masterws/sun";
     }
     else {
         $ooo_path = "$workspace";
@@ -1667,9 +1666,9 @@ sub do_rebase
     my $ooo_master_url;
     my $so_master_url;
 
-    $ooo_master_url = get_master_url($ooo_svn_server, $cws->master(), $ooo_milestone_revision);
+    $ooo_master_url = get_master_url($ooo_svn_server, $new_masterws, $ooo_milestone_revision);
     if ( defined($so_svn_server) ) {
-        $so_master_url = get_master_url($so_svn_server, $cws->master(), $so_milestone_revision);
+        $so_master_url = get_master_url($so_svn_server, $new_masterws, $so_milestone_revision);
     }
 
     if ( $commit_phase ) {
@@ -1684,6 +1683,10 @@ sub do_rebase
             svn_commit($so_path, $commit_message);
         }
         if ( $so_setup) {
+            print_message("... rename '$workspace/$old_masterws' -> '$workspace/$new_masterws'\n");
+            if ( !rename("$workspace/$old_masterws", "$workspace/$new_masterws") ) {
+                print_error("Can't rename '$workspace/$old_masterws' -> '$workspace/$new_masterws': $!", 98);
+            }
             print_message("... relinking workspace\n");
             relink_workspace("$workspace/$new_masterws/src.$new_milestone", 1);
             if ( !unlink("$workspace/REBASE.CONFIG_DONT_DELETE") ) {
@@ -1694,9 +1697,7 @@ sub do_rebase
 
         print_message("... updating EIS database\n");
         my $push_return = $cws->set_master_and_milestone($new_masterws, $new_milestone);
-        if ( $$push_return[0] ne $new_masterws) {
-            print_error("Couldn't push new master '$new_masterws' to database", 0);
-        }
+        # sanity check
         if ( $$push_return[1] ne $new_milestone) {
             print_error("Couldn't push new milestone '$new_milestone' to database", 0);
         }
