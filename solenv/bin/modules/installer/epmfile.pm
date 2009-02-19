@@ -2472,7 +2472,18 @@ sub create_packages_without_epm
         if ( $installer::globals::compiler =~ /unxlngi/) { $target = "i586"; }
         elsif ( $installer::globals::compiler =~ /unxlng/) {$target = (POSIX::uname())[4]; }
 
-        my $systemcall = "$rpmcommand -bb $specfilename --target $target 2\>\&1 |";
+        # rpm 4.6 ignores buildroot tag in spec file
+
+        my $buildrootstring = "";
+
+        if ( $rpmversion >= 4 )
+        {
+            my $dir = getcwd;
+            my $buildroot = $dir . "/" . $epmdir . "buildroot/";
+            $buildrootstring = "--buildroot=$buildroot";
+        }
+
+        my $systemcall = "$rpmcommand -bb $specfilename --target $target $buildrootstring 2\>\&1 |";
 
         installer::logger::print_message( "... $systemcall ...\n" );
 

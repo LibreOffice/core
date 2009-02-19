@@ -1419,13 +1419,17 @@ sub add_custom_action_to_install_table
 
         $actioncondition =~ s/FEATURETEMPLATE/$feature/g;   # only execute Custom Action, if feature of the file is installed
 
-        my $actionposition = 0;
+#       my $actionposition = 0;
+#       if ( $position eq "end" ) { $actionposition = get_last_position_in_sequencetable($installtable) + 25; }
+#       elsif ( $position =~ /^\s*behind_/ ) { $actionposition = get_position_in_sequencetable($position, $installtable) + 2; }
+#       else { $actionposition = get_position_in_sequencetable($position, $installtable) - 2; }
+#       my $line = $actionname . "\t" . $actioncondition . "\t" . $actionposition . "\n";
 
-        if ( $position eq "end" ) { $actionposition = get_last_position_in_sequencetable($installtable) + 25; }
-        elsif ( $position =~ /^\s*behind_/ ) { $actionposition = get_position_in_sequencetable($position, $installtable) + 2; }
-        else { $actionposition = get_position_in_sequencetable($position, $installtable) - 2; }
+        my $positiontemplate = "";
+        if ( $position =~ /^\s*\d+\s*$/ ) { $positiontemplate = $position; }    # setting the position directly, number defined in scp2
+        else { $positiontemplate = "POSITIONTEMPLATE_" . $position; }
 
-        my $line = $actionname . "\t" . $actioncondition . "\t" . $actionposition . "\n";
+        my $line = $actionname . "\t" . $actioncondition . "\t" . $positiontemplate . "\n";
         push(@{$installtable}, $line);
 
         $included_customaction = 1;
@@ -2069,6 +2073,167 @@ sub create_customaction_assignment_hash
 }
 
 ##########################################################################
+# Finding the position of a specified CustomAction.
+# If the CustomAction is not found, the return value is "-1".
+# If the CustomAction position is not defined yet,
+# the return value is also "-1".
+##########################################################################
+
+sub get_customaction_position
+{
+    my ($action, $sequencetable) = @_;
+
+    my $position = -1;
+
+    for ( my $i = 0; $i <= $#{$sequencetable}; $i++ )
+    {
+        my $line = ${$sequencetable}[$i];
+
+        if ( $line =~ /^\s*(\w+)\t.*\t\s*(\d+)\s$/ )    # matching only, if position is a number!
+        {
+            my $compareaction = $1;
+            my $localposition = $2;
+
+            if ( $compareaction eq $action )
+            {
+                $position = $localposition;
+                last;
+            }
+        }
+    }
+
+    return $position;
+}
+
+##########################################################################
+# Setting the position of CustomActions in sequence tables.
+# Replacing all occurences of "POSITIONTEMPLATE_"
+##########################################################################
+
+sub set_positions_in_table
+{
+    my ( $sequencetable, $tablename ) = @_;
+
+    my $infoline = "\nSetting positions in table \"$tablename\".\n";
+    push(@installer::globals::logfileinfo, $infoline);
+
+    # Step 1: Resolving all occurences of "POSITIONTEMPLATE_end"
+
+    my $lastposition = get_last_position_in_sequencetable($sequencetable);
+
+    for ( my $i = 0; $i <= $#{$sequencetable}; $i++ )
+    {
+        if ( ${$sequencetable}[$i] =~ /^\s*(\w+)\t.*\t\s*POSITIONTEMPLATE_end\s*$/ )
+        {
+            my $customaction = $1;
+            $lastposition = $lastposition + 25;
+            ${$sequencetable}[$i] =~ s/POSITIONTEMPLATE_end/$lastposition/;
+            $infoline = "Setting position \"$lastposition\" for custom action \"$customaction\".\n";
+            push(@installer::globals::logfileinfo, $infoline);
+        }
+    }
+
+    # Step 2: Resolving all occurences of "POSITIONTEMPLATE_abc" or "POSITIONTEMPLATE_behind_abc"
+    # where abc is the name of the reference Custom Action.
+    # This has to be done, until there is no more occurence of POSITIONTEMPLATE (success)
+    # or there is no replacement in one circle (failure).
+
+    my $template_exists = 0;
+    my $template_replaced = 0;
+    my $counter = 0;
+
+    do
+    {
+        $template_exists = 0;
+        $template_replaced = 0;
+        $counter++;
+
+        for ( my $i = 0; $i <= $#{$sequencetable}; $i++ )
+        {
+            if ( ${$sequencetable}[$i] =~ /^\s*(\w+)\t.*\t\s*(POSITIONTEMPLATE_.*?)\s*$/ )
+            {
+                my $onename = $1;
+                my $templatename = $2;
+                my $positionname = $templatename;
+                my $customaction = $templatename;
+                $customaction =~ s/POSITIONTEMPLATE_//;
+                $template_exists = 1;
+
+                # Trying to find the correct number.
+                # This can fail, if the custom action has no number
+
+                my $setbehind = 0;
+                if ( $customaction =~ /^\s*behind_(.*?)\s*$/ )
+                {
+                    $customaction = $1;
+                    $setbehind = 1;
+                }
+
+                my $position = get_customaction_position($customaction, $sequencetable);
+
+                if ( $position >= 0 )   # Found CustomAction and is has a position. Otherwise return value is "-1".
+                {
+                    my $newposition = 0;
+                    if ( $setbehind ) { $newposition = $position + 2; }
+                    else { $newposition = $position - 2; }
+                    ${$sequencetable}[$i] =~ s/$templatename/$newposition/;
+                    $template_replaced = 1;
+                    $infoline = "Setting position \"$newposition\" for custom action \"$onename\" (scp: \"$positionname\" at position $position).\n";
+                    push(@installer::globals::logfileinfo, $infoline);
+                }
+                else
+                {
+                    $infoline = "Could not assign position for custom action \"$onename\" yet (scp: \"$positionname\").\n";
+                    push(@installer::globals::logfileinfo, $infoline);
+                }
+            }
+        }
+    } while (( $template_exists ) && ( $template_replaced ));
+
+    # An error occured, because templates still exist, but could not be replaced.
+    # Reason:
+    # 1. Wrong name of CustomAction in scp2 (typo?)
+    # 2. Circular dependencies of CustomActions (A after B and B after A)
+
+    # Problem: It is allowed, that a CustomAction is defined in scp2 in a library that is
+    # part of product ABC, but this CustomAction is not used in this product
+    # and the reference CustomAction is not part of this product.
+    # Therefore this cannot be an error, but only produce a warning. The assigned number
+    # must be the last sequence number.
+
+    if (( $template_exists ) && ( ! $template_replaced ))
+    {
+        # Giving a precise error message, collecting all unresolved templates
+        # my $templatestring = "";
+
+        for ( my $i = 0; $i <= $#{$sequencetable}; $i++ )
+        {
+            if ( ${$sequencetable}[$i] =~ /^\s*(\w+)\t.*\t\s*(POSITIONTEMPLATE_.*?)\s*$/ )
+            {
+                my $customactionname = $1;
+                my $fulltemplate = $2;
+                my $template = $fulltemplate;
+                $template =~ s/POSITIONTEMPLATE_//;
+                # my $newstring = $customactionname . " (" . $template . ")";
+                # $templatestring = $templatestring . $newstring . ", ";
+                # Setting at the end!
+                $lastposition = $lastposition + 25;
+                ${$sequencetable}[$i] =~ s/$fulltemplate/$lastposition/;
+                $infoline = "WARNING: Setting position \"$lastposition\" for custom action \"$customactionname\". Could not find CustomAction \"$template\".\n";
+                push(@installer::globals::logfileinfo, $infoline);
+            }
+        }
+        # $templatestring =~ s/,\s*$//;
+
+        # $infoline = "Error: Saving table \"$tablename\"\n";
+        # push(@installer::globals::logfileinfo, $infoline);
+        # print $infoline;
+        # installer::files::save_file($tablename, $sequencetable);
+        # installer::exiter::exit_program("ERROR: Unresolved positions in CustomActions in scp2: $templatestring", "set_positions_in_table");
+    }
+}
+
+##########################################################################
 # Setting the Windows custom actions into different tables
 # CustomAc.idt, InstallE.idt, InstallU.idt, ControlE.idt, ControlC.idt
 ##########################################################################
@@ -2076,6 +2241,8 @@ sub create_customaction_assignment_hash
 sub addcustomactions
 {
     my ($languageidtdir, $customactions, $filesarray) = @_;
+
+    installer::logger::include_timestamp_into_logfile("\nPerformance Info: addcustomactions start\n");
 
     my $customactionidttablename = $languageidtdir . $installer::globals::separator . "CustomAc.idt";
     my $customactionidttable = installer::files::read_file($customactionidttablename);
@@ -2174,6 +2341,12 @@ sub addcustomactions
         }
     }
 
+    # Setting the positions in the tables
+
+    set_positions_in_table($installexecutetable, $installexecutetablename);
+    set_positions_in_table($installuitable, $installuitablename);
+    set_positions_in_table($adminexecutetable, $adminexecutetablename);
+
     # Saving the files
 
     installer::files::save_file($customactionidttablename, $customactionidttable);
@@ -2196,6 +2369,82 @@ sub addcustomactions
     $infoline = "Updated idt file: $controlconditiontablename\n";
     push(@installer::globals::logfileinfo, $infoline);
 
+    installer::logger::include_timestamp_into_logfile("\nPerformance Info: addcustomactions end\n");
+}
+
+##########################################################################
+# Setting bidi attributes in idt tables
+##########################################################################
+
+sub setbidiattributes
+{
+    my ($languageidtdir, $onelanguage) = @_;
+
+    # Editing the files Dialog.idt and Control.idt
+
+    my $dialogfilename = $languageidtdir . $installer::globals::separator . "Dialog.idt";
+    my $controlfilename = $languageidtdir . $installer::globals::separator . "Control.idt";
+
+    my $dialogfile = installer::files::read_file($dialogfilename);
+    my $controlfile = installer::files::read_file($controlfilename);
+
+    # Searching attributes in Dialog.idt and adding "896".
+    # Attributes are in column 6 (from 10).
+
+    my $bidiattribute = 896;
+    for ( my $i = 0; $i <= $#{$dialogfile}; $i++ )
+    {
+        if ( $i < 3 ) { next; }
+        if ( ${$dialogfile}[$i] =~ /^\s*(.*?)\t(.*?)\t(.*?)\t(.*?)\t(.*?)\t(.*?)\t(.*?)\t(.*?)\s*$/ )
+        {
+            my $one = $1;
+            my $two = $2;
+            my $three = $3;
+            my $four = $4;
+            my $five = $5;
+            my $attribute = $6;
+            my $seven = $7;
+            my $eight = $8;
+            $attribute = $attribute + $bidiattribute;
+            ${$dialogfile}[$i] = "$one\t$two\t$three\t$four\t$five\t$attribute\t$seven\t$eight\n";
+        }
+    }
+
+    # Searching attributes in Control.idt and adding "224".
+    # Attributes are in column 8 (from 12).
+
+    $bidiattribute = 224;
+    for ( my $i = 0; $i <= $#{$controlfile}; $i++ )
+    {
+        if ( $i < 3 ) { next; }
+        if ( ${$controlfile}[$i] =~ /^\s*(.*?)\t(.*?)\t(.*?)\t(.*?)\t(.*?)\t(.*?)\t(.*?)\t(.*?)\t(.*?)\t(.*?)\t(.*?)\t(.*?)\s*$/ )
+        {
+            my $one = $1;
+            my $two = $2;
+            my $three = $3;
+            my $four = $4;
+            my $five = $5;
+            my $six = $6;
+            my $seven = $7;
+            my $attribute = $8;
+            my $nine = $9;
+            my $ten = $10;
+            my $eleven = $11;
+            my $twelve = $12;
+            $attribute = $attribute + $bidiattribute;
+            ${$controlfile}[$i] = "$one\t$two\t$three\t$four\t$five\t$six\t$seven\t$attribute\t$nine\t$ten\t$eleven\t$twelve\n";
+        }
+    }
+
+    # Saving the file
+
+    installer::files::save_file($dialogfilename, $dialogfile);
+    $infoline = "Set bidi support in idt file \"$dialogfilename\" for language $onelanguage\n";
+    push(@installer::globals::logfileinfo, $infoline);
+
+    installer::files::save_file($controlfilename, $controlfile);
+    $infoline = "Set bidi support in idt file \"$controlfilename\" for language $onelanguage\n";
+    push(@installer::globals::logfileinfo, $infoline);
 }
 
 1;

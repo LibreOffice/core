@@ -80,6 +80,7 @@ BEGIN
     );
     @items_at_modules = ("Files", "Dirs", "Unixlinks");
     @asianlanguages = ("ja", "ko", "zh-CN", "zh-TW");
+    @bidilanguages = ("ar", "he");
 
     $ziplistname = "";
     $pathfilename = "";
@@ -322,6 +323,7 @@ BEGIN
     $analyze_spellcheckerlanguage = 0;
     %spellcheckerlanguagehash = ();
     %spellcheckerfilehash = ();
+    $registryrootcomponent = "";
 
     $officeinstalldirectory = "";
     $officeinstalldirectoryset = 0;

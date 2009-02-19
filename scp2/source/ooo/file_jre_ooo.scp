@@ -40,7 +40,7 @@ End
 File gid_File_Exe_Java
     BIN_FILE_BODY;
   #ifdef WNT
-	InstallName = "jre-6u7-windows-i586-p.exe";
+	InstallName = "jre-windows-i586.exe";
 	Styles = (DONT_PACK,JAVAFILE,SUBST_FILENAME);
   #else
 	Styles = (DONT_PACK,JAVAFILE);

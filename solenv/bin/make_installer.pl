@@ -1935,6 +1935,9 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         {
             my $onelanguage = ${$languagesarrayref}[$m];
 
+            my $is_bidi = 0;
+            if ( installer::existence::exists_in_array($onelanguage, \@installer::globals::bidilanguages) ) { $is_bidi = 1; }
+
             my $languageidtdir = $idtdirbase . $installer::globals::separator . $onelanguage;
             if ( -d $languageidtdir ) { installer::systemactions::remove_complete_directory($languageidtdir, 1); }
             installer::systemactions::create_directory($languageidtdir);
@@ -2004,6 +2007,10 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
             installer::windows::idtglobal::setencoding($languageidtdir, $onelanguage);
 
+            # setting bidi attributes, if required
+
+            if ( $is_bidi ) { installer::windows::idtglobal::setbidiattributes($languageidtdir, $onelanguage); }
+
             # setting the encoding in every table (replacing WINDOWSENCODINGTEMPLATE)
             installer::windows::idtglobal::set_multilanguageonly_condition($languageidtdir);
 
@@ -2040,6 +2047,10 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             # replacing variables in RegLocat.idt
 
             installer::windows::msiglobal::update_reglocat_table($languageidtdir, $allvariableshashref);
+
+            # replacing variables in RemoveRe.idt (RemoveRegistry.idt)
+
+            installer::windows::msiglobal::update_removere_table($languageidtdir);
 
             # adding language specific properties for multilingual installation sets
 

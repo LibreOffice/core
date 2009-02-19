@@ -1074,7 +1074,14 @@ sub put_language_list_into_template
     {
         # Syntax: !insertmacro MUI_LANGUAGE "English"
         my $langstring = "\!insertmacro MUI_LANGUAGE_PACK " . $nsislanguage . "\n";
-        $alllangstring = $alllangstring . $langstring;
+        if ( $nsislanguage eq "English" )
+        {
+            $alllangstring = $langstring . $alllangstring;
+        }
+        else
+        {
+            $alllangstring = $alllangstring . $langstring;
+        }
     }
 
     $alllangstring =~ s/\s*$//;

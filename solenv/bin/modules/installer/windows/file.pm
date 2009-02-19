@@ -489,10 +489,14 @@ sub get_sequence_for_file
     my ($number, $onefile, $fileentry, $allupdatesequenceshashref, $allupdatecomponentshashref, $allupdatefileorderhashref, $allfilecomponents) = @_;
 
     my $sequence = "";
+    my $infoline = "";
+    my $pffcomponentname = $onefile->{'componentname'} . "_pff";
 
     if ( $installer::globals::updatedatabase )
     {
-        if (( exists($allupdatesequenceshashref->{$onefile->{'uniquename'}}) ) && ( $onefile->{'componentname'} eq $allupdatecomponentshashref->{$onefile->{'uniquename'}} ))
+        if (( exists($allupdatesequenceshashref->{$onefile->{'uniquename'}}) ) &&
+            (( $onefile->{'componentname'} eq $allupdatecomponentshashref->{$onefile->{'uniquename'}} ) ||
+             ( $pffcomponentname eq $allupdatecomponentshashref->{$onefile->{'uniquename'}} )))
         {
             # The second condition is necessary to find shifted files, that have same "uniquename", but are now
             # located in another directory. This can be seen at the component name.
@@ -500,6 +504,15 @@ sub get_sequence_for_file
             $onefile->{'assignedsequencenumber'} = $sequence;
             # Collecting all used sequences, to guarantee, that no number is unused
             $installer::globals::allusedupdatesequences{$sequence} = 1;
+            # Special help for files, that already have a "pff" component name (for example after ServicePack 1)
+            if ( $pffcomponentname eq $allupdatecomponentshashref->{$onefile->{'uniquename'}} )
+            {
+                $infoline = "Warning: Special handling for component \"$pffcomponentname\". This file was added after the final, but before this ServicePack.\n";
+                push(@installer::globals::logfileinfo, $infoline);
+                $onefile->{'componentname'} = $pffcomponentname; # pff for "post final file"
+                $fileentry->{'Component_'} = $onefile->{'componentname'};
+                if ( ! exists($allfilecomponents->{$fileentry->{'Component_'}}) ) { $allfilecomponents->{$fileentry->{'Component_'}} = 1; }
+            }
         }
         else
         {

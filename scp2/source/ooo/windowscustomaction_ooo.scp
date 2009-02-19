@@ -230,7 +230,7 @@ WindowsCustomAction gid_Customaction_Check_Install_Directory
 	Source = "shlxtmsi.dll";
 	Target = "CheckInstallDirectory";
 	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "Not Installed", "ExitInstallDirNotEmpty");
+	Assignment1 = ("InstallExecuteSequence", "Not Installed", "CheckVersions");
 	Assignment2 = ("ControlEvent", "SetupType", "Next", "DoAction", "CheckInstallDirectory", "_IsSetupTypeMin = \"Typical\" And Not Installed", "2");
 	Assignment3 = ("ControlEvent", "CustomSetup", "Next", "DoAction", "CheckInstallDirectory", "Not Installed", "2");
 End

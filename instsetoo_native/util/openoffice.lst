@@ -122,7 +122,7 @@ OpenOffice_wJRE
 			BASEPRODUCTVERSION 3.1
 			UPDATEURL http://update32.services.openoffice.org/ProductUpdateService/check.Update
             ODFNOTIFYURL http://odfnotify.services.openoffice.org/OOo3.0/notification.jsp?version=ODF
-			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion2.dat,userland.txt
+			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion.dat,userland.txt
 			REMOVE_UPGRADE_CODE_FILE upgradecode_remove_ooo.txt
 			ADDSYSTEMINTEGRATION 1
 			EVAL
@@ -193,7 +193,7 @@ OpenOffice_Dev
 			SERVICETAG_URN urn:uuid:07a3230b-7902-11dd-938b-080020a9ed93
 			UPDATEURL http://update32.services.openoffice.org/ProductUpdateService/check.Update
             ODFNOTIFYURL http://odfnotify.services.openoffice.org/OOo3.0/notification.jsp?version=ODF
-			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion2.dat,userland.txt
+			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion.dat,userland.txt
 			EVAL
 			FILEFORMATNAME OpenOffice.org
 			FILEFORMATVERSION 1.0
@@ -409,7 +409,7 @@ BrOffice_wJRE
 			PROGRESSFRAMECOLOR 
 			UPDATEURL http://update32.services.openoffice.org/ProductUpdateService/check.Update
             ODFNOTIFYURL http://odfnotify.services.openoffice.org/OOo3.0/notification.jsp?version=ODF
-			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion2.dat,userland.txt
+			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion.dat,userland.txt
 			REMOVE_UPGRADE_CODE_FILE upgradecode_remove_ooo.txt
 			ADDSYSTEMINTEGRATION 1
 			EVAL
@@ -484,7 +484,7 @@ BrOffice_Dev
 			SERVICETAG_URN urn:uuid:07a3230b-7902-11dd-938b-080020a9ed93
 			UPDATEURL http://update32.services.openoffice.org/ProductUpdateService/check.Update
             ODFNOTIFYURL http://odfnotify.services.openoffice.org/OOo3.0/notification.jsp?version=ODF
-			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion2.dat,userland.txt
+			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion.dat,userland.txt
 			EVAL
 			FILEFORMATNAME OpenOffice.org
 			FILEFORMATVERSION 1.0
