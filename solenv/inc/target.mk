@@ -1524,7 +1524,7 @@ $(MISC)$/$(TARGET)_%.done : $(COMMONMISC)$/$(TARGET)$/%.xrb
 $(MISC)$/$(TARGET)_%.done : %.xrb
 .ENDIF			# "$(WITH_LANG)"!=""
     @@-$(RM) $(MISC)$/$(<:b).interm$(TARGET)
-    native2ascii -encoding UTF8 $< $(MISC)$/$(<:b).interm$(TARGET) && xmlex -i $(MISC)$/$(<:b).interm$(TARGET) -o $(CLASSDIR) $(XML_ISO_CODE) -g -d $@
+    native2ascii -encoding UTF8 $< $(MISC)$/$(<:b).interm$(TARGET) && $(XMLEX) -i $(MISC)$/$(<:b).interm$(TARGET) -o $(CLASSDIR) $(XML_ISO_CODE) -g -d $@
     @@$(RM)  $(MISC)$/$(<:b).interm$(TARGET)
 .ENDIF			# "$(XMLPROPERTIES)"!=""
 

@@ -459,30 +459,28 @@ sub register_all_components
 # the LD_LIBRARY_PATH for Unix platforms
 ###################################################
 
-sub include_regcomp_into_ld_library_path
+sub include_libdir_into_ld_library_path
 {
-    my ( $regcompfileref ) = @_;
+    my ( $var, $binfile ) = @_;
 
-    my $ld_library_path = $$regcompfileref;
+    my $ld_library_path = $binfile;
     installer::pathanalyzer::get_path_from_fullqualifiedname(\$ld_library_path);
     $ld_library_path =~ s/\/\s*$//;     # removing ending slashes
     $ld_library_path =~ s/\/bin\./\/lib\./;
     $ld_library_path =~ s/\/bin\s*$/\/lib/; # when packing from flat
 
-    my $oldldlibrarypathstring = "";
-    if ( $ENV{'LD_LIBRARY_PATH'} ) { $oldldlibrarypathstring = $ENV{'LD_LIBRARY_PATH'}; }
-    else { $oldldlibrarypathstring = "\."; }
+    my $oldldlibrarypathstring = $ENV{$var};
     my $new_ld_library_path = $ld_library_path;
-    if ( $oldldlibrarypathstring ne "" ) {
+    if ( defined $oldldlibrarypathstring ) {
         $new_ld_library_path = $new_ld_library_path . $installer::globals::pathseparator . $oldldlibrarypathstring;
     }
     if ( $ENV{'SYSTEM_MOZILLA'} && $ENV{'SYSTEM_MOZILLA'} eq "YES" &&
       (!$ENV{'WITH_OPENLDAP'} || $ENV{'WITH_OPENLDAP'} ne "YES")) {
         $new_ld_library_path = $new_ld_library_path . $installer::globals::pathseparator . $ENV{'MOZ_LIB'};
     }
-    $ENV{'LD_LIBRARY_PATH'} = $new_ld_library_path;
+    $ENV{$var} = $new_ld_library_path;
 
-    my $infoline = "Setting LD_LIBRARY_PATH to $ENV{'LD_LIBRARY_PATH'}\n";
+    my $infoline = "Setting $var to $ENV{$var}\n";
     push( @installer::globals::logfileinfo, $infoline);
 }
 
@@ -532,14 +530,18 @@ sub prepare_classpath_for_java_registration
 
 sub add_jdklib_into_ld_library_path
 {
-    my $oldldlibrarypathstring = "";
-    if ( $ENV{'LD_LIBRARY_PATH'} ) { $oldldlibrarypathstring = $ENV{'LD_LIBRARY_PATH'}; }
-    else { $oldldlibrarypathstring = "\."; }
-    my $new_ld_library_path = $installer::globals::jdklib . $installer::globals::pathseparator . $oldldlibrarypathstring;
-    $ENV{'LD_LIBRARY_PATH'} = $new_ld_library_path;
-
-    my $infoline = "Setting LD_LIBRARY_PATH to $ENV{'LD_LIBRARY_PATH'}\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    my ($var) = @_;
+    if (defined $installer::globals::jdklib) {
+        my $oldldlibrarypathstring = $ENV{$var};
+        my $new_ld_library_path = $installer::globals::jdklib;
+        if (defined $oldldlibrarypathstring) {
+            $new_ld_library_path .=
+                $installer::globals::pathseparator . $oldldlibrarypathstring;
+        }
+        $ENV{$var} = $new_ld_library_path;
+        my $infoline = "Setting $var to $ENV{$var}\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
 }
 
 ##################################################################
@@ -964,7 +966,15 @@ sub create_services_rdb
                 # Linux: Take care of the lock daemon. He has to be started!
                 # For windows it is necessary that "msvcp7x.dll" and "msvcr7x.dll" are included into the path !
 
-                if ( $installer::globals::isunix ) { include_regcomp_into_ld_library_path($regcompfileref); }
+                my $var_library_path;
+                my $old_library_path;
+                if ( $installer::globals::isunix ) {
+                    $var_library_path = $installer::globals::ismacosx ?
+                        'DYLD_LIBRARY_PATH' : 'LD_LIBRARY_PATH';
+                    $old_library_path = $ENV{$var_library_path};
+                    include_libdir_into_ld_library_path(
+                        $var_library_path, $$regcompfileref);
+                }
 
                 my $regcomprdb = "";
 
@@ -972,7 +982,8 @@ sub create_services_rdb
                 {
                     prepare_classpath_for_java_registration($includepatharrayref);
 
-                    if ( $installer::globals::isunix ) { add_jdklib_into_ld_library_path(); }
+                    if ( $installer::globals::isunix )
+                    { add_jdklib_into_ld_library_path($var_library_path); }
                     else { add_jrepath_into_path(); }
 
                     # Preparing a registry which regcomp can work on (types+java services).
@@ -987,6 +998,14 @@ sub create_services_rdb
 
                 # my $error_during_registration = register_all_components($filesarrayref, $regcompfileref, $servicesfile, $regcomprdb, $includepatharrayref);
                 my $error_during_registration = register_all_components($allvariableshashref, $servicesgid, $unocomponentfiles, $regcompfileref, $servicesfile, $regcomprdb, $includepatharrayref, $nativeservicesurlprefix, $javaservicesurlprefix);
+
+                if (defined $var_library_path) {
+                    if (defined $old_library_path) {
+                        $ENV{$var_library_path} = $old_library_path;
+                    } else {
+                        delete $ENV{$var_library_path};
+                    }
+                }
 
                 # Dependent from the success, the registration directory can be renamed.
 

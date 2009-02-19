@@ -86,11 +86,6 @@ sub register_extensions
 
     my $unopkgfile = $installer::globals::unopkgfile;
 
-    # unset any LIBRARY_PATH variable
-    my $dyld_library_path = delete $ENV{ 'DYLD_LIBRARY_PATH'};
-    my $ld_library_path = delete $ENV{ 'LD_LIBRARY_PATH'};
-    my $library_path = delete $ENV{ 'LIBRARY_PATH'};
-
     # my $extensiondir = $officedir . $installer::globals::separator . "share" .
     #           $installer::globals::separator . "extension" .
     #           $installer::globals::separator . "install";
@@ -163,10 +158,6 @@ sub register_extensions
         $infoline = "No extensions located in directory $extensiondir.\n";
         push( @installer::globals::logfileinfo, $infoline);
     }
-
-    $ENV{'LIBRARY_PATH'} = $library_path if defined $library_path;
-    $ENV{'LD_LIBRARY_PATH'} = $ld_library_path if defined $ld_library_path;
-    $ENV{'DYLD_LIBRARY_PATH'} = $dyld_library_path if defined $dyld_library_path;
 
     chdir($from);
 }

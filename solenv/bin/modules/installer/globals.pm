@@ -110,6 +110,7 @@ BEGIN
     $servicesrdb_can_be_created = 0;
     $islinux = 0;
     $issolaris = 0;
+    $ismacosx = 0;
     $iswindowsbuild = 0;
     $islinuxbuild = 0;
     $islinuxrpmbuild = 0;
@@ -502,6 +503,7 @@ BEGIN
 
     if ( $plat =~ /linux/i ) { $islinux = 1; }
     if ( $plat =~ /solaris/i ) { $issolaris = 1; }
+    if ( $plat =~ /darwin/i ) { $ismacosx = 1; }
 
     # ToDo: Needs to be expanded for additional platforms
 

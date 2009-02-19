@@ -138,7 +138,6 @@ LOCALUNPACKDIR=$CWSCHECKAPIPATH/unpack
 export LOCALINSTALLDIR
 export LOCALUNPACKDIR
 
-unset LD_LIBRARY_PATH
 unset FORCE2ARCHIVE
 
 date 2>&1
@@ -244,10 +243,10 @@ fi
 
 #XDEBUG=" -Xdebug -Xrunjdwp:transport=dt_socket,server=y,address=8001 " 
 COMMAND="$JAVABIN -Xmx120m $XDEBUG -cp $myCLASSPATH org.openoffice.Runner $PARAM $*"
-echo "( unset LD_LIBRARY_PATH ; unset DYLD_LIBRARY_PATH; $COMMAND )"
+echo "$COMMAND"
 
 LOGFILE=$CWSCHECKAPIPATH/cwscheckapi.log
-( unset LD_LIBRARY_PATH ; unset DYLD_LIBRARY_PATH; $COMMAND | tee $LOGFILE)
+$COMMAND | tee $LOGFILE
 
 if [ $KEEPOFFICE = false ]; then
     echo "remove office instrallation in $LOCALINSTALLDIR..."

@@ -282,3 +282,19 @@ RCFLAGS=-fo$@ $(RCFILES)
 RCLINK=
 RCLINKFLAGS=
 RCSETVERSION=
+
+# Add SOLARLIBDIR to the end of a (potentially previously undefined)
+# DYLD_LIBRARY_PATH (there is no real reason to prefer adding at the end over
+# adding at the start); the ": &&" in the bash case enables this to work at the
+# start of a recipe line that is not prefixed by "+" as well as in the middle of
+# an existing && chain; the tcsh case is somewhat imprecise in that it
+# potentially affects multiple commands following on the recipe line:
+.IF "$(USE_SHELL)" == "bash"
+AUGMENT_LIBRARY_PATH = : && \
+    DYLD_LIBRARY_PATH=$${{DYLD_LIBRARY_PATH+$${{DYLD_LIBRARY_PATH}}:}}$(SOLARLIBDIR)
+.ELSE
+AUGMENT_LIBRARY_PATH = if ($$?DYLD_LIBRARY_PATH == 1) \
+    eval 'setenv DYLD_LIBRARY_PATH "$${{DYLD_LIBRARY_PATH}}:$(SOLARLIBDIR)"' \
+    && if ($$?DYLD_LIBRARY_PATH == 0) \
+    setenv DYLD_LIBRARY_PATH "$(SOLARLIBDIR)" &&
+.ENDIF

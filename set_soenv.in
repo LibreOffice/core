@@ -62,7 +62,7 @@ my ( $CALL_CDECL, $COMMON_OUTDIR, $BMP_WRITES_FLAG,
 my ( $BIG_SVX, $COM, $ARCH, $CPU, $CPUNAME, $CVER, $GLIBC, $GUI, $GUIBASE,
       $GVER, $OS, $OSVERSION, $OUTPATH, $INPATH, $PATH_SEPERATOR,
       $DYNAMIC_CRT, $SET_EXCEPTIONS, $use_shl_versions, $CDPATHx, $JRELIBDIR,
-      $JREEXTRALIBDIR, $JRETOOLKITDIR, $JRETHREADDIR,
+      $JRETOOLKITDIR, $JRETHREADDIR,
       $FLIPCMD );
 #
 #-------------------------------------------
@@ -83,7 +83,7 @@ my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $JDK, $JAVAFLAGS, $SHELL,
      $STAR_INIROOT, $STAR_INIROOTOLD, $STAR_STANDLST, $STAR_SSCOMMON, $STAR_SSOLARINI, 
      $DMAKEROOT, $CLASSPATH, $XCLASSPATH, $COMPATH,
      $MSPDB_PATH, $MIDL_PATH, $CSC_PATH,
-     $LD_LIBRARY_PATH, $PATH, $SOLAREXTRAINC, $SOLAREXTRALIB, $SOLARLIB, 
+     $PATH, $SOLAREXTRAINC, $SOLAREXTRALIB, $SOLARLIB, 
      $SOLARINC, $LOCALINI, $FRAMEWORKSHOME, $COMEX, $PERL, 
      $COMP_ENV, $ILIB, $JAVAHOME, $PSDK_HOME, $DIRECTXSDK_LIB, $USE_NEW_SDK, $FRAME_HOME, 
      $USE_DIRECTX5, $ATL_LIB, $ATL_INCLUDE, $MFC_LIB, $MFC_INCLUDE, $NO_HIDS, $TEMP,
@@ -199,9 +199,6 @@ $NEW_JAR_PACK         = "TRUE";
 $NO_BSYMBOLIC         = "TRUE";
 $comment              = "#";           # UNIX script comment character
 $comment4nt           = "rem";         # Windows 4nt script comment character
-
-# Some JREs do not need the following variable.
-$JREEXTRALIBDIR = "";
 
 # Setting platform dependent constant values.
 if ( $platform =~ m/solaris/ ) 
@@ -330,13 +327,11 @@ elsif ( $platform =~ m/freebsd/ )
       {  $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386";
          $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."client";
          $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."native_threads";
-         $JREEXTRALIBDIR = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."xawt";
       }
       else
       {  $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."amd64";
          $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."amd64".$ds."server";
          $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."amd64".$ds."native_threads";
-         $JREEXTRALIBDIR = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."amd64".$ds."xawt";
       }
    }
    elsif ($platform =~ m/^i386/)
@@ -348,7 +343,6 @@ elsif ( $platform =~ m/freebsd/ )
       $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386";
       $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."client";
       $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."native_threads";
-      $JREEXTRALIBDIR = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."xawt";
    }
    else
    {  print "Unsupported FreeBSD architecture: $platform \n";
@@ -387,13 +381,11 @@ elsif ( $platform =~ m/linux/ )
 
       elsif ($JDK =~ m/^[Bb][Ee][Aa]/)
       { $JRELIBDIR     = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386";
-        $JREEXTRALIBDIR = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."xawt";
         $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."jrockit";
         $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."native_threads"; }
 
       else {      
       $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386";
-       $JREEXTRALIBDIR = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."xawt";
       # has both server and client
       $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."client";
       $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."native_threads";
@@ -419,7 +411,6 @@ elsif ( $platform =~ m/linux/ )
       # has both server and client
       $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."amd64".$ds."server";
       $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."amd64".$ds."native_threads";
-      $JREEXTRALIBDIR = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."amd64".$ds."xawt";
    }
    elsif ($platform =~ m/^ia64/)
    {  print "Setting Linux ia64 specific values... ";
@@ -431,7 +422,6 @@ elsif ( $platform =~ m/linux/ )
       $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ia64";
       $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ia64".$ds."server";
       $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ia64".$ds."native_threads";
-      $JREEXTRALIBDIR = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ia64".$ds."xawt";
    }
    elsif ($platform =~ m/^sparc/)
  
@@ -443,7 +433,6 @@ elsif ( $platform =~ m/linux/ )
       $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."sparc";
       $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."sparc".$ds."server";
       $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."sparc".$ds."native_threads";
-      $JREEXTRALIBDIR = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."sparc".$ds."xawt";
    }
    elsif ($platform =~ m/^powerpc/)
    {
@@ -473,14 +462,12 @@ elsif ( $platform =~ m/linux/ )
          {  $JRELIBDIR     = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc";
             $JRETOOLKITDIR = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc".$ds."classic";
             $JRETHREADDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc";
-            $JREEXTRALIBDIR = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc".$ds."xawt";
          }
 	 # OpenJDK
 	 elsif ($JDK =~ m/sun/) {
 	    $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc";
 	    $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc".$ds."client";
 	    $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc".$ds."native_threads";
-	    $JREEXTRALIBDIR = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc".$ds."xawt";
 	 }
       }
 
@@ -506,7 +493,6 @@ elsif ( $platform =~ m/linux/ )
       $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds.$ARCH;
       $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds.$ARCH.$ds."server";
       $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds.$ARCH.$ds."native_threads";
-      $JREEXTRALIBDIR = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds.$ARCH.$ds."xawt";
       $CPU            = "3";
    }
    elsif ($platform =~ m/^m68k/)
@@ -519,7 +505,6 @@ elsif ( $platform =~ m/linux/ )
       $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."m68k";
       $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."m68k".$ds."server";
       $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."m68k".$ds."native_threads";
-      $JREEXTRALIBDIR = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."m68k".$ds."xawt";
    }
    elsif ($platform =~ m/^alpha/) 
    {  print "Setting Linux Alpha specific values... ";
@@ -540,7 +525,6 @@ elsif ( $platform =~ m/linux/ )
       $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."arm";
       $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."arm".$ds."server";
       $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."arm".$ds."native_threads";
-      $JREEXTRALIBDIR = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."arm".$ds."xawt";
       $EPM_FLAGS      = "-a arm";
    }
    elsif ($platform =~ m/^mips/)
@@ -579,7 +563,6 @@ elsif ( $platform =~ m/linux/ )
       $JRELIBDIR      = '$JAVA_HOME'.$ds."lib".$ds.$ARCH;
       $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."lib".$ds.$ARCH.$ds."client";
       $JRETHREADDIR   = '$JAVA_HOME'.$ds."lib".$ds.$ARCH.$ds."native_threads";
-      $JREEXTRALIBDIR = '$JAVA_HOME'.$ds."lib".$ds.$ARCH.$ds."xawt";
    }
 
 
@@ -1059,52 +1042,6 @@ $CLASSPATH            = '$JAVA_HOME'.$ds.'jre'.$LIB.$ds."rt.jar".$wps.'.';
 # see above for why the change
 $XCLASSPATH           = '$JAVA_HOME'.$ds.'jre'.$LIB.$ds."rt.jar".$wps.'.';
 
-# Paths to run time shared libraries.
-if ($platform =~ m/solaris/) 
-{  $LD_LIBRARY_PATH   = $cur_dir.
-                        $ps.$USR_DT.$LIB.
-                        $ps.$USR_OPENWIN.$LIB.
-                        $ps.$USR_LOCAL.$LIB.
-                        $ps.$par_dir.$LIB.
-                        $ps_STLPORT_LIB.
-                        $ps.$JRELIBDIR.
-			$ps.$JREEXTRALIBDIR.
-                        $ps.$JRETOOLKITDIR.
-                        $ps.$JRETHREADDIR.
-                        $ps.'$SOLARVER'.$ds.'$INPATH'.$LIB;
-}
-elsif ($platform =~ m/linux|netbsd|osf1|freebsd|aix/)
-{  $LD_LIBRARY_PATH   = $cur_dir.
-                        $ps.'$SOLARENV'.$ds.'$INPATH'.$LIB.
-                        $ps.$JRELIBDIR.
-			$ps.$JREEXTRALIBDIR.
-                        $ps.$JRETOOLKITDIR.
-                        $ps.$JRETHREADDIR.
-                        $ps.$par_dir.$LIB64.
-                        $ps_STLPORT_LIB.
-                        $ps.'$SOLARVER'.$ds.'$INPATH'.$LIB.
-                       $ps.$ENV{'LD_LIBRARY_PATH'};
-}
-elsif ($platform =~ m/irix/)
-{  $LD_LIBRARY_PATH   = $cur_dir.
-                        $ps.'$SOLARENV'.$ds.'$INPATH'.$LIB.
-                        $ps.$JRELIBDIR.
-			$ps.$JREEXTRALIBDIR.
-                        $ps.$JRETOOLKITDIR.
-                        $ps.$JRETHREADDIR.
-                        $ps.$USR_LOCAL.$LIB.
-                        $ps.$par_dir.$LIB.
-                        $ps.'$SOLARVER'.$ds.'$INPATH'.$LIB;
-}
-elsif ($platform =~ m/darwin/)
-{  $LD_LIBRARY_PATH   = $cur_dir.
-                        $ps.'$SOLARVER'.$ds.'$INPATH'.$LIB.
-                        $ps_STLPORT_LIB;
-}
-elsif ($platform !~ m/cygwin|os2/)
-{  AddWarning( "set_soenv", "$platform not configured for runtime shared libraries" );
-}
-	
 # Location used by the linker to create libraries.
 if ($platform =~ m/solaris/) 
 {  $SOLAREXTRALIB     = $L.$par_dir.$LIB.
@@ -1848,17 +1785,6 @@ if ( '@JDK@' ne '' )
    ToFile( "JAVACOMPILER",    PathFormat("@JAVACOMPILER@"), "e" );
    ToFile( "JAVAAOTCOMPILER", PathFormat("@JAVAAOTCOMPILER@"), "e" );
    ToFile( "JAVADOC",         PathFormat("@JAVADOC@"), "e" );
-}
-if ( $platform =~ m/darwin/ )
-{  ToFile( "DYLD_LIBRARY_PATH", $LD_LIBRARY_PATH,   "e" );
-}
-else {
-  if ( $platform =~ m/irix/ ) {
-    ToFile( "LD_LIBRARYN32_PATH",   $LD_LIBRARY_PATH,   "e" );
-  }
-  else {
-    ToFile( "LD_LIBRARY_PATH",   $LD_LIBRARY_PATH,   "e" );
-  }
 }
 ToFile( "SCPDEFS",           '@SCPDEFS@',        "e" );
 ToFile( "SOLAREXTRAINC",     $SOLAREXTRAINC,     "e" );
