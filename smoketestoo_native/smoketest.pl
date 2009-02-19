@@ -496,12 +496,6 @@ sub doTest {
 
     print "starting office ($INSTSETNAME)\n";
 
-    if ($gui eq "UNX") {
-        delete $ENV{LD_LIBRARY_PATH};
-    }
-    if ($ENV{OS} eq "MACOSX") {
-        delete $ENV{DYLD_LIBRARY_PATH};
-    }
     $Command = "\"$programpath" . "$SOFFICEBIN\" -norestore -nocrashreport macro:///Standard.Global.StartTestWithDefaultOptions";
     if ( (defined($ENV{OS})) && ($ENV{OS} eq "MACOSX") ) {
         $Command = "cd \"$programpath\"; " . $Command;
@@ -610,7 +604,12 @@ sub doInstall {
             my $instoo_dir = "$ENV{SOLARROOT}/instsetoo_native";
 
             if ( $ENV{'SYSTEM_MOZILLA'} eq 'YES' ) {
-            $ENV{'LD_LIBRARY_PATH'} = "$ENV{'MOZ_LIB'}:$ENV{'LD_LIBRARY_PATH'}";
+                if (defined $ENV{'LD_LIBRARY_PATH'}) {
+                    $ENV{'LD_LIBRARY_PATH'} =
+                        "$ENV{'LD_LIBRARY_PATH'}:$ENV{'MOZ_LIB'}";
+                } else {
+                    $ENV{'LD_LIBRARY_PATH'} = $ENV{'MOZ_LIB'};
+                }
             }
             $ENV{'PYTHONPATH'} = "$ENV{SOLARROOT}/instsetoo_native/$ENV{INPATH}/bin:$ENV{SOLARVERSION}/$ENV{INPATH}/lib";
             $ENV{OUT} = "../$ENV{INPATH}";

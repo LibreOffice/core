@@ -66,6 +66,7 @@ BMSMA_OBJFILES=\
 # ------------------------------------------------------------------
 APP1TARGET= $(TARGET)
 APP1OBJS= $(COMMON_OBJFILES) $(TESTSHL_OBJFILES)
+APP1RPATH=NONE
 
 APP1STDLIBS=$(SALLIB)
 
