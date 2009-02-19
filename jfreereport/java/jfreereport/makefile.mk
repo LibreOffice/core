@@ -51,7 +51,7 @@ TARFILE_NAME=core
 
 TARFILE_ROOTDIR=core
 
-PATCH_FILE_NAME=$(PRJ)$/patches$/$(TARGET).patch
+PATCH_FILES=$(PRJ)$/patches$/$(TARGET).patch
 
 CONVERTFILES=build.xml\
              build.properties \

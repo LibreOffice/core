@@ -50,7 +50,7 @@ TARFILE_NAME=$(TARGET)
 
 TARFILE_ROOTDIR=$(TARGET)
 
-PATCH_FILE_NAME=$(PRJ)$/patches$/jcommon.patch
+PATCH_FILES=$(PRJ)$/patches$/jcommon.patch
 
 CONVERTFILES=ant$/build.xml\
                 ant$/build.properties

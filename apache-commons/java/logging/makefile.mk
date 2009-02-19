@@ -50,7 +50,7 @@ TARFILE_NAME=commons-logging-1.1.1-src
 
 TARFILE_ROOTDIR=commons-logging-1.1.1-src
 
-PATCH_FILE_NAME=$(PRJ)$/patches$/logging.patch
+PATCH_FILES=$(PRJ)$/patches$/logging.patch
 
 CONVERTFILES=build.xml
                 

@@ -49,7 +49,7 @@ TARFILE_ROOTDIR=jakarta-tomcat-5.0.30-src
 ADDITIONAL_FILES = jakarta-servletapi-5/build.xml
 #CONVERTFILES=build$/build.xml
 
-PATCH_FILE_NAME=tomcat.patch
+PATCH_FILES=tomcat.patch
 
 BUILD_DIR=jakarta-servletapi-5
 BUILD_ACTION=$(ANT)

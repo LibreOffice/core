@@ -50,7 +50,7 @@ TARFILE_NAME=sacjava-1.3
 
 TARFILE_ROOTDIR=$(TARGET)
 
-PATCH_FILE_NAME=$(PRJ)$/patches$/sac.patch
+PATCH_FILES=$(PRJ)$/patches$/sac.patch
 
 ADDITIONAL_FILES=build.xml
 
