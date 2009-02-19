@@ -897,6 +897,11 @@ Directory gid_Dir_Share_Registry_Modules_Oo_Office_Writer
     HostName = "Writer";
 End
 
+Directory gid_Dir_Share_Registry_Modules_Oo_Office_Impress
+    ParentID = gid_Dir_Share_Registry_Modules_Oo_Office;
+    HostName = "Impress";
+End
+
 Directory gid_Dir_Share_Registry_Modules_Oo_Office_Linguistic
     ParentID = gid_Dir_Share_Registry_Modules_Oo_Office;
     HostName = "Linguistic";

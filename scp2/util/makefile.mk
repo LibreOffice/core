@@ -105,6 +105,11 @@ SCP1FILES +=                               \
              file_binfilter.par
 .ENDIF
 
+.IF "$(ENABLE_OPENGL)" == "TRUE"
+SCP1FILES +=                               \
+             module_ogltrans.par
+.ENDIF
+
 .IF "$(SOLAR_JAVA)"!=""
 SCP1FILES +=                               \
              module_javafilter.par         \

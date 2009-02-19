@@ -1669,9 +1669,8 @@ Optional Features:
   --enable-cairo          Determines whether to use Cairo library on
                           platforms where Cairo is available.
 
-  --enable-opengl         Determines whether to use OpenGL (for 3D transitions)
-                          This is built as an UNO extension and not deployed
-			  in the install per default.
+  --enable-opengl         Determines whether to build the OpenGL 3D slide
+                          transitions component
 
   --enable-dbus           Determines whether to enable presentation mode
                           screensaver control under GNOME via DBUS
@@ -1724,8 +1723,6 @@ Optional Features:
   --enable-pdfimport          enables the build of the PDF Import extension and xpdf
 
   --enable-wiki-publisher      enables the build of the Wiki Publisher extension
-
-  --enable-ogltrans       enables the build of the OGLTrans extension
 
   --enable-report-builder  disables the build of the Report Builder extension
 
@@ -3156,11 +3153,6 @@ fi
 if test "${with_servlet_api_jar+set}" = set; then
   withval=$with_servlet_api_jar;  SERVLETAPI_JAR="$withval"
 
-fi
-
-# Check whether --enable-ogltrans was given.
-if test "${enable_ogltrans+set}" = set; then
-  enableval=$enable_ogltrans;
 fi
 
 # Check whether --enable-report-builder was given.
@@ -24982,8 +24974,8 @@ fi
 
 
 
-{ echo "$as_me:$LINENO: checking whether to build the OGLTrans extension" >&5
-echo $ECHO_N "checking whether to build the OGLTrans extension... $ECHO_C" >&6; }
+{ echo "$as_me:$LINENO: checking whether to build the OpenGL Transitions component" >&5
+echo $ECHO_N "checking whether to build the OpenGL Transitions component... $ECHO_C" >&6; }
 ENABLE_OPENGL=
 
 if test "x$enable_opengl" != "xno" ; then
