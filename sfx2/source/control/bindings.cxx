@@ -1544,8 +1544,17 @@ const SfxPoolItem* SfxBindings::Execute_Impl( sal_uInt16 nId, const SfxPoolItem*
 
     if ( pCache && pCache->GetDispatch().is() )
     {
+        DBG_ASSERT( !ppInternalArgs, "Internal args get lost when dispatched!" );
+
+        SfxItemPool &rPool = GetDispatcher()->GetFrame()->GetObjectShell()->GetPool();
+        SfxRequest aReq( nId, nCallMode, rPool );
+        aReq.SetModifier( nModi );
+        if( ppItems )
+            while( *ppItems )
+                aReq.AppendItem( **ppItems++ );
+
         // cache binds to an external dispatch provider
-        pCache->Dispatch( nCallMode == SFX_CALLMODE_SYNCHRON );
+        pCache->Dispatch( aReq.GetArgs(), nCallMode == SFX_CALLMODE_SYNCHRON );
         if ( bDeleteCache )
             DELETEZ( pCache );
         SfxPoolItem *pVoid = new SfxVoidItem( nId );
