@@ -31,63 +31,52 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#ifndef _SV_SVSYS_HXX
-#include <svsys.h>
-#endif
-#include <vcl/salinst.hxx>
-#include <vcl/salframe.hxx>
-#include <vcl/salsys.hxx>
-#ifndef _VOS_PROCESS_HXX
-#include <vos/process.hxx>
-#endif
-#ifndef _VOS_MUTEX_HXX
-#include <vos/mutex.hxx>
-#endif
-#include <tools/tools.h>
-#include <tools/debug.hxx>
-#include <tools/time.hxx>
-#include <i18npool/mslangid.hxx>
-#include <vcl/svdata.hxx>
-#include <vcl/settings.hxx>
-#ifndef _ACCMGR_HXX
-#include <vcl/accmgr.hxx>
-#endif
-#ifndef _SV_KEYCOD_HXX
-#include <vcl/keycod.hxx>
-#endif
-#include <vcl/event.hxx>
-#include <vcl/virdev.hxx>
-#include <vcl/windata.hxx>
-#include <vcl/window.h>
-#include <vcl/wrkwin.hxx>
-#include <vcl/idlemgr.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/cvtgrf.hxx>
-#include <vcl/unowrap.hxx>
-#include <vcl/xconnection.hxx>
-#ifndef _SV_SVIDS_HRC
-#include <vcl/svids.hrc>
-#endif
-#include <vcl/timer.hxx>
+#include "svsys.h"
+#include "vcl/salinst.hxx"
+#include "vcl/salframe.hxx"
+#include "vcl/salsys.hxx"
+#include "vos/process.hxx"
+#include "vos/mutex.hxx"
+#include "tools/tools.h"
+#include "tools/debug.hxx"
+#include "tools/time.hxx"
+#include "i18npool/mslangid.hxx"
+#include "vcl/svdata.hxx"
+#include "vcl/settings.hxx"
+#include "vcl/accmgr.hxx"
+#include "vcl/keycod.hxx"
+#include "vcl/event.hxx"
+#include "vcl/vclevent.hxx"
+#include "vcl/virdev.hxx"
+#include "vcl/windata.hxx"
+#include "vcl/window.h"
+#include "vcl/wrkwin.hxx"
+#include "vcl/idlemgr.hxx"
+#include "vcl/svapp.hxx"
+#include "vcl/cvtgrf.hxx"
+#include "vcl/unowrap.hxx"
+#include "vcl/xconnection.hxx"
+#include "vcl/svids.hrc"
+#include "vcl/timer.hxx"
 
-#include <vcl/unohelp.hxx>
+#include "vcl/unohelp.hxx"
 
-#include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/awt/XToolkit.hpp>
-#include <com/sun/star/uno/XNamingService.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <comphelper/processfactory.hxx>
+#include "com/sun/star/uno/Reference.h"
+#include "com/sun/star/awt/XToolkit.hpp"
+#include "com/sun/star/uno/XNamingService.hpp"
+#include "com/sun/star/lang/XMultiServiceFactory.hpp"
+#include "comphelper/processfactory.hxx"
 
-#include <osl/module.h>
-#include <osl/file.hxx>
+#include "osl/module.h"
+#include "osl/file.hxx"
 
 #include "osl/thread.h"
 #include "rtl/tencinfo.h"
-#include <rtl/instance.hxx>
-#include <vcl/salimestatus.hxx>
+#include "rtl/instance.hxx"
+#include "vcl/salimestatus.hxx"
 
 #include <utility>
-#include <vcl/lazydelete.hxx>
+#include "vcl/lazydelete.hxx"
 
 using namespace ::com::sun::star::uno;
 
@@ -467,7 +456,7 @@ void Application::Execute()
 
 // -----------------------------------------------------------------------
 
-void Application::Reschedule( bool bAllEvents )
+inline void ImplYield( bool i_bWait, bool i_bAllEvents )
 {
     ImplSVData* pSVData = ImplGetSVData();
 
@@ -477,34 +466,45 @@ void Application::Reschedule( bool bAllEvents )
             Timer::ImplTimerCallbackProc();
 
     pSVData->maAppData.mnDispatchLevel++;
-    pSVData->mpDefInst->Yield( false, bAllEvents );
+    // do not wait for events if application was already quit; in that
+    // case only dispatch events already available
+    // do not wait for events either if the app decided that it is too busy for timers
+    // (feature added for the slideshow)
+    pSVData->mpDefInst->Yield( i_bWait && !pSVData->maAppData.mbAppQuit && !pSVData->maAppData.mbNoYield, i_bAllEvents );
     pSVData->maAppData.mnDispatchLevel--;
 
     // flush lazy deleted objects
     if( pSVData->maAppData.mnDispatchLevel == 0 )
         vcl::LazyDelete::flush();
+
+    // the system timer events will not necesseraly come in in non waiting mode
+    // e.g. on aqua; need to trigger timer checks manually
+    if( pSVData->maAppData.mbNoYield && !pSVData->mbNoCallTimer )
+    {
+        do
+        {
+            Timer::ImplTimerCallbackProc();
+        }
+        while( pSVData->mbNotAllTimerCalled );
+    }
+
+    // call post yield listeners
+    if( pSVData->maAppData.mpPostYieldListeners )
+        pSVData->maAppData.mpPostYieldListeners->callListeners( NULL );
 }
 
 // -----------------------------------------------------------------------
 
-void Application::Yield( bool bAllEvents )
+void Application::Reschedule( bool i_bAllEvents )
 {
-    ImplSVData* pSVData = ImplGetSVData();
+    ImplYield( false, i_bAllEvents );
+}
 
-    // run timers that have timed out
-    if ( !pSVData->mbNoCallTimer )
-        while ( pSVData->mbNotAllTimerCalled )
-            Timer::ImplTimerCallbackProc();
+// -----------------------------------------------------------------------
 
-    // do not wait for events if application was already quit; in that
-    // case only dispatch events already available
-    pSVData->maAppData.mnDispatchLevel++;
-    pSVData->mpDefInst->Yield( !pSVData->maAppData.mbAppQuit, bAllEvents );
-    pSVData->maAppData.mnDispatchLevel--;
-
-    // flush lazy deleted objects
-    if( pSVData->maAppData.mnDispatchLevel == 0 )
-        vcl::LazyDelete::flush();
+void Application::Yield( bool i_bAllEvents )
+{
+    ImplYield( true, i_bAllEvents );
 }
 
 // -----------------------------------------------------------------------
@@ -1189,6 +1189,33 @@ void Application::RemoveIdleHdl( const Link& rLink )
 
     if ( pSVData->maAppData.mpIdleMgr )
         pSVData->maAppData.mpIdleMgr->RemoveIdleHdl( rLink );
+}
+
+// -----------------------------------------------------------------------
+
+void Application::EnableNoYieldMode( bool i_bNoYield )
+{
+    ImplSVData* pSVData = ImplGetSVData();
+    pSVData->maAppData.mbNoYield = i_bNoYield;
+}
+
+// -----------------------------------------------------------------------
+
+void Application::AddPostYieldListener( const Link& i_rListener )
+{
+    ImplSVData* pSVData = ImplGetSVData();
+    if( ! pSVData->maAppData.mpPostYieldListeners )
+        pSVData->maAppData.mpPostYieldListeners = new VclEventListeners2();
+    pSVData->maAppData.mpPostYieldListeners->addListener( i_rListener );
+}
+
+// -----------------------------------------------------------------------
+
+void Application::RemovePostYieldListener( const Link& i_rListener )
+{
+    ImplSVData* pSVData = ImplGetSVData();
+    if( pSVData->maAppData.mpPostYieldListeners )
+        pSVData->maAppData.mpPostYieldListeners->removeListener( i_rListener );
 }
 
 // -----------------------------------------------------------------------

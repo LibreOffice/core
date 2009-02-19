@@ -287,6 +287,9 @@ public:
     static vos::OThread::TThreadIdentifier  GetMainThreadIdentifier();
     static ULONG                ReleaseSolarMutex();
     static void                 AcquireSolarMutex( ULONG nCount );
+    static void                 EnableNoYieldMode( bool i_bNoYield );
+    static void                 AddPostYieldListener( const Link& i_rListener );
+    static void                 RemovePostYieldListener( const Link& i_rListener );
 
     static BOOL                 IsInMain();
     static BOOL                 IsInExecute();

@@ -31,11 +31,13 @@
 #ifndef _VCL_VCLEVENT_HXX
 #define _VCL_VCLEVENT_HXX
 
-#include <tools/link.hxx>
-#include <tools/rtti.hxx>
-#include <vcl/dllapi.h>
+#include "tools/link.hxx"
+#include "tools/rtti.hxx"
+#include "vcl/dllapi.h"
+#include "vcl/impdel.hxx"
 
 #include <list>
+#include <vector>
 
 class Window;
 class Menu;
@@ -244,6 +246,31 @@ public:
     // and returns TRUE in that case
     // a handler must return TRUE to signal that it has processed the event
     BOOL Process( VclSimpleEvent* pEvent ) const;
+};
+
+class VCL_DLLPUBLIC VclEventListeners2 : public vcl::DeletionNotifier
+{
+    std::list< Link >                               m_aListeners;
+
+    struct ListenerIt
+    {
+        std::list< Link >::iterator     m_aIt;
+        bool                            m_bWasInvalidated;
+
+        ListenerIt() : m_bWasInvalidated( false ) {}
+    };
+
+    std::vector< ListenerIt >      m_aIterators;
+
+
+public:
+    VclEventListeners2();
+    ~VclEventListeners2();
+
+    void addListener( const Link& );
+    void removeListener( const Link& );
+
+    void callListeners( VclSimpleEvent* );
 };
 
 #endif // _VCL_VCLEVENT_HXX
