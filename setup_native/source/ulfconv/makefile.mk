@@ -49,7 +49,7 @@ APP1TARGET=$(TARGET)
 APP1OBJS=$(OBJ)$/$(TARGET).obj
 APP1LIBS=
 APP1STDLIBS= $(SALLIB)
-
+APP1RPATH=NONE
 
 # --- Targets ------------------------------------------------------
 
