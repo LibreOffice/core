@@ -906,3 +906,17 @@ destpath = "/opt"
 packageversion = "0.5.0.2"
 End
 
+Start
+module = "gid_Module_Optional_OGLTrans"
+solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-ogltrans"
+solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-impress"
+packagename = "%BASISPACKAGEPREFIX%OOOBASEVERSION-ogltrans"
+freebsdrequires = "%BASISPACKAGEPREFIX%OOOBASEVERSION-impress"
+requires = "%BASISPACKAGEPREFIX%OOOBASEVERSION-impress"
+copyright = "1999-2007 by OpenOffice.org"
+solariscopyright = "solariscopyrightfile"
+vendor = "OpenOffice.org"
+description = "OpenGL slide transitions module for OpenOffice.org %OOOBASEVERSION"
+destpath = "/opt"
+packageversion = "%OOOPACKAGEVERSION"
+End
