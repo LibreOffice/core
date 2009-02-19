@@ -1,6 +1,6 @@
---- misc/neon-0.26.3/src/config.h	2008-07-18 14:43:42.000000000 +0200
-+++ misc/build/neon-0.26.3/src/config.h	2008-07-18 14:43:26.000000000 +0200
-@@ -1 +1,481 @@
+--- misc/neon-0.28.2/src/config.h	2008-08-25 14:36:05.062500000 +0200
++++ misc/build/neon-0.28.2/src/config.h	2008-08-25 14:32:17.656250000 +0200
+@@ -1 +1,479 @@
 -dummy
 +
 +/* Define to specific EGD socket path */
@@ -13,7 +13,7 @@
 +/* #undef GSS_C_NT_HOSTBASED_SERVICE */
 +
 +/* Define to 1 if you have the <arpa/inet.h> header file. */
-+#if defined(UNX) || defined(OS2)
++#ifdef UNX
 +#define HAVE_ARPA_INET_H 1
 +#endif
 +
@@ -80,12 +80,12 @@
 +/* #undef HAVE_HSTRERROR */
 +
 +/* Define to 1 if you have the `inet_ntop' function. */
-+#if defined(UNX) || defined(OS2)
++#ifdef UNX
 +#define HAVE_INET_NTOP 1
 +#endif
 +
 +/* Define to 1 if you have the <inttypes.h> header file. */
-+#if defined(UNX) || defined(OS2)
++#ifdef UNX
 +#define HAVE_INTTYPES_H 1
 +#endif
 +
@@ -117,17 +117,17 @@
 +#define HAVE_MEMORY_H 1
 +
 +/* Define to 1 if you have the <netdb.h> header file. */
-+#if defined(UNX) || defined(OS2)
++#ifdef UNX
 +#define HAVE_NETDB_H 1
 +#endif
 +
 +/* Define to 1 if you have the <netinet/in.h> header file. */
-+#if defined(UNX) || defined(OS2)
++#ifdef UNX
 +#define HAVE_NETINET_IN_H 1
 +#endif
 +
 +/* Define to 1 if you have the <netinet/tcp.h> header file. */
-+#if defined(UNX) || defined(OS2)
++#ifdef UNX
 +#define HAVE_NETINET_TCP_H 1
 +#endif
 +
@@ -175,7 +175,7 @@
 +#define HAVE_SIGNAL_H 1
 +
 +/* Define to 1 if you have the `snprintf' function. */
-+#if defined(UNX) || defined(OS2)
++#ifdef UNX
 +#define HAVE_SNPRINTF 1
 +#endif
 +
@@ -201,7 +201,7 @@
 +#endif
 +
 +/* Define to 1 if you have the `strcasecmp' function. */
-+#if defined(UNX) || defined(OS2)
++#ifdef UNX
 +#define HAVE_STRCASECMP 1
 +#endif
 +
@@ -245,12 +245,12 @@
 +#endif
 +
 +/* Define to 1 if you have the <sys/select.h> header file. */
-+#if defined(UNX) || defined(OS2)
++#ifdef UNX
 +#define HAVE_SYS_SELECT_H 1
 +#endif
 +
 +/* Define to 1 if you have the <sys/socket.h> header file. */
-+#if defined(UNX) || defined(OS2)
++#ifdef UNX
 +#define HAVE_SYS_SOCKET_H 1
 +#endif
 +
@@ -258,7 +258,7 @@
 +#define HAVE_SYS_STAT_H 1
 +
 +/* Define to 1 if you have the <sys/time.h> header file. */
-+#if defined(UNX) || defined(OS2)
++#ifdef UNX
 +#define HAVE_SYS_TIME_H 1
 +#endif
 +
@@ -277,12 +277,12 @@
 +/* #undef HAVE_TRIO_H */
 +
 +/* Define to 1 if you have the <unistd.h> header file. */
-+#if defined(UNX) || defined(OS2)
++#ifdef UNX
 +#define HAVE_UNISTD_H 1
 +#endif
 +
 +/* Define to 1 if you have the `usleep' function. */
-+#if defined(UNX) || defined(OS2)
++#ifdef UNX
 +#define HAVE_USLEEP 1
 +#endif
 +
@@ -421,9 +421,7 @@
 +/* #undef USE_GAI_ADDRCONFIG */
 +
 +/* Define if getaddrinfo() should be used */
-+#ifndef OS2
 +#define USE_GETADDRINFO 1
-+#endif
 +
 +/* Define to 1 if your processor stores words with the most significant byte
 +   first (like Motorola and SPARC, unlike Intel and VAX). */
@@ -483,8 +481,8 @@
 +#define NONLS
 +#define NOCRYPT 
 +#endif
---- misc/neon-0.26.3/src/makefile.mk	2008-07-18 14:43:42.000000000 +0200
-+++ misc/build/neon-0.26.3/src/makefile.mk	2008-07-18 14:43:05.000000000 +0200
+--- misc/neon-0.28.2/src/makefile.mk	2008-08-25 14:36:04.640625000 +0200
++++ misc/build/neon-0.28.2/src/makefile.mk	2008-08-25 14:32:17.671875000 +0200
 @@ -1 +1,54 @@
 -dummy
 +PRJ=..$/..$/..$/..$/..
@@ -541,9 +539,68 @@
 +# --- Targets ------------------------------------------------------
 +
 +.INCLUDE :  target.mk
---- misc/neon-0.26.3/src/ne_defs.h	2005-10-09 15:31:00.000000000 +0200
-+++ misc/build/neon-0.26.3/src/ne_defs.h	2008-07-18 14:43:05.000000000 +0200
-@@ -30,7 +30,7 @@
+--- misc/neon-0.28.2/src/ne_207.c	2006-01-02 12:43:19.000000000 +0100
++++ misc/build/neon-0.28.2/src/ne_207.c	2009-01-09 10:12:39.563530700 +0100
+@@ -177,7 +177,6 @@
+ 	/* Now we have the href, begin the response */
+ 	if (p->start_response && HAVE_CDATA(p)) {
+             ne_uri ref, resolved;
+-
+             if (ne_uri_parse(cdata, &ref) == 0) {
+                 ne_uri_resolve(&p->base, &ref, &resolved);
+ 
+@@ -367,5 +366,4 @@
+     ne_request_destroy(req);
+ 
+     return ret;
+-}
+-    
++}    
+--- misc/neon-0.28.2/src/ne_auth.c	2008-02-29 17:30:12.000000000 +0100
++++ misc/build/neon-0.28.2/src/ne_auth.c	2008-08-25 14:35:18.453125000 +0200
+@@ -598,9 +598,10 @@
+     int ntlm = ne_strcasecmp(parms->protocol->name, "NTLM") == 0;
+     int status;
+     char *response = NULL;
+-    
++	char password[NE_ABUFSIZ];
++
+     NE_DEBUG(NE_DBG_HTTPAUTH, "auth: SSPI challenge.\n");
+-    
++
+     if (!sess->sspi_context) {
+         ne_uri uri = {0};
+ 
+@@ -614,8 +615,17 @@
+             return status;
+         }
+     }
++
++	/* Authentification needs more than one http request. 
++	 * As long as authentification in progress use the existing credentials.
++	 * Otherwise get new credentials.*/
++	if (!parms->opaque)
++		if (get_credentials(sess, errmsg, attempt, parms, password)) {
++		        /* Failed to get credentials */
++			    return -1;
++		}
+     
+-    status = ne_sspi_authenticate(sess->sspi_context, parms->opaque, &response);
++    status = ne_sspi_authenticate(sess->sspi_context, parms->opaque, &response, sess->username, password);
+     if (status) {
+         return status;
+     }
+@@ -1413,6 +1423,7 @@
+         /* note above: allow a 401 in response to a CONNECT request
+          * from a proxy since some buggy proxies send that. */
+ 	NE_DEBUG(NE_DBG_HTTPAUTH, "auth: Got challenge (code %d).\n", status->code);
++
+ 	if (!auth_challenge(sess, areq->attempt++, auth_hdr)) {
+ 	    ret = NE_RETRY;
+ 	} else {
+--- misc/neon-0.28.2/src/ne_defs.h	2006-10-24 21:40:09.000000000 +0200
++++ misc/build/neon-0.28.2/src/ne_defs.h	2008-08-25 14:32:17.875000000 +0200
+@@ -41,7 +41,7 @@
  #endif
  
  /* define ssize_t for Win32 */
@@ -552,8 +609,8 @@
  #define ssize_t int
  #endif
  
---- misc/neon-0.26.3/src/ne_locks.h	2006-01-02 12:43:19.000000000 +0100
-+++ misc/build/neon-0.26.3/src/ne_locks.h	2008-07-18 14:43:05.000000000 +0200
+--- misc/neon-0.28.2/src/ne_locks.h	2006-01-02 12:43:19.000000000 +0100
++++ misc/build/neon-0.28.2/src/ne_locks.h	2008-08-25 14:32:17.937500000 +0200
 @@ -22,6 +22,10 @@
  #ifndef NE_LOCKS_H
  #define NE_LOCKS_H
@@ -564,25 +621,165 @@
 +
  #include "ne_request.h" /* for ne_session + ne_request */
  #include "ne_uri.h" /* for ne_uri */
-
---- misc/neon-0.26.3/src/ne_socket.c	2006-10-30 14:18:51.000000000 +0100
-+++ misc/build/neon-0.26.3/src/ne_socket.c	2008-07-16 13:32:11.022546400 +0200
-@@ -60,6 +60,7 @@
- #include <stddef.h>
- #ifdef USE_GETADDRINFO
- #include <ws2tcpip.h>
-+#include <Wspiapi.h>
- #endif
- #endif
  
---- misc/neon-0.26.3/src/ne_sspi.c	2006-09-05 16:43:47.000000000 +0200
-+++ misc/build/neon-0.26.3/src/ne_sspi.c	2008-07-18 14:43:05.000000000 +0200
-@@ -278,7 +278,7 @@
+--- misc/neon-0.28.2/src/ne_sspi.c	2007-08-10 17:26:08.000000000 +0200
++++ misc/build/neon-0.28.2/src/ne_sspi.c	2009-01-09 10:31:05.752056400 +0100
+@@ -202,9 +202,48 @@
+         return -1;
+     }
  
-     buffer->BufferType = SECBUFFER_TOKEN;
-     buffer->cbBuffer =
--        ne_unbase64(token, &((unsigned char *) buffer->pvBuffer));
-+        ne_unbase64(token, (unsigned char **) &(buffer->pvBuffer));
++    return 0; 
++}
++
++/*
++ * Simplification wrapper arround AcquireCredentialsHandle as most of
++ * the parameters do not change. 
++ */
++static int acquireCredentialsHandleForUsername(CredHandle * credentials, char *package, const char *username, const char *password)
++{
++    SECURITY_STATUS status;
++    TimeStamp timestamp;
++
++	const char *domain = "";
++
++	int rc, rcISC;
++	SecPkgInfo *secPackInfo;
++	SEC_WINNT_AUTH_IDENTITY *nameAndPwd = NULL;
++	int bytesReceived = 0, bytesSent = 0;
++
++	nameAndPwd = (SEC_WINNT_AUTH_IDENTITY *) malloc( sizeof(SEC_WINNT_AUTH_IDENTITY) );
++	memset( nameAndPwd, '\0', sizeof (*nameAndPwd) );
++	nameAndPwd->Domain = (unsigned char *) _strdup( domain? domain: "" );
++	nameAndPwd->DomainLength = domain? strlen( domain ): 0;
++	nameAndPwd->User = (unsigned char *) _strdup( username? username: "" );
++	nameAndPwd->UserLength = username? strlen( username ): 0;
++	nameAndPwd->Password = (unsigned char *) _strdup( password? password: "" );
++	nameAndPwd->PasswordLength = password? strlen( password ): 0;
++	nameAndPwd->Flags = SEC_WINNT_AUTH_IDENTITY_ANSI;
++
++	status = pSFT->AcquireCredentialsHandle( NULL, package, SECPKG_CRED_OUTBOUND,
++		NULL, nameAndPwd, NULL, NULL, credentials, &timestamp );
++
++    if (status != SEC_E_OK) {
++        NE_DEBUG(NE_DBG_HTTPAUTH,
++                 "sspi: AcquireCredentialsHandle [fail] [%x].\n", status);
++        return -1;
++    }
++
+     return 0;
+ }
  
-     if (buffer->cbBuffer == 0) {
-         NE_DEBUG(NE_DBG_HTTPAUTH,
++
+ /*
+  * Wrapper arround initializeSecurityContext.  Supplies several
+  * default parameters as well as logging in case of errors.
+@@ -483,7 +522,7 @@
+  * Processes received authentication tokens as well as supplies the
+  * response token.
+  */
+-int ne_sspi_authenticate(void *context, const char *base64Token, char **responseToken)
++int ne_sspi_authenticate(void *context, const char *base64Token, char **responseToken, const char* username, const char* password)
+ {
+     SecBufferDesc outBufferDesc;
+     SecBuffer outBuffer;
+@@ -552,7 +591,7 @@
+             {
+                 freeBuffer(&outBufferDesc);
+                 sspiContext->authfinished = 0;
+-                NE_DEBUG(NE_DBG_HTTPAUTH,"sspi: failing because starting over from failed try.\n");
++                NE_DEBUG(NE_DBG_HTTPAUTH,"sspi: fai6 over from failed try.\n");
+                 return -1;
+             }
+             sspiContext->authfinished = 0;
+@@ -560,14 +599,26 @@
+ 
+         /* Reset any existing context since we are starting over */
+         resetContext(sspiContext);
++		
++		if (strlen(username) != 0) {
++			if (acquireCredentialsHandleForUsername
++				(&sspiContext->credentials, sspiContext->mechanism, username, password) != SEC_E_OK) {
++					freeBuffer(&outBufferDesc);
++					NE_DEBUG(NE_DBG_HTTPAUTH,
++						"sspi: acquireCredentialsHandleForUsername failed.\n");
++					return -1;
++			}
++		} else {
++			if (acquireCredentialsHandle
++				(&sspiContext->credentials, sspiContext->mechanism) != SEC_E_OK) {
++					freeBuffer(&outBufferDesc);
++					NE_DEBUG(NE_DBG_HTTPAUTH,
++						"sspi: acquireCredentialsHandle failed.\n");
++					return -1;
++			}
++		}
+ 
+-        if (acquireCredentialsHandle
+-            (&sspiContext->credentials, sspiContext->mechanism) != SEC_E_OK) {
+-                freeBuffer(&outBufferDesc);
+-                NE_DEBUG(NE_DBG_HTTPAUTH,
+-                    "sspi: acquireCredentialsHandle failed.\n");
+-                return -1;
+-        }
++        
+ 
+         securityStatus =
+             initializeSecurityContext(&sspiContext->credentials, NULL,
+--- misc/neon-0.28.2/src/ne_sspi.h	2006-02-12 13:05:14.000000000 +0100
++++ misc/build/neon-0.28.2/src/ne_sspi.h	2008-08-25 14:32:18.000000000 +0200
+@@ -41,7 +41,7 @@
+ int ne_sspi_clear_context(void *context);
+ 
+ int ne_sspi_authenticate(void *context, const char *base64Token,
+-                         char **responseToken);
++                         char **responseToken, const char* username, const char* password);
+ 
+ #endif /* HAVE_SSPI */
+ 
+--- misc/neon-0.28.2/src/ne_uri.c	2007-12-05 12:04:47.000000000 +0100
++++ misc/build/neon-0.28.2/src/ne_uri.c	2009-01-09 10:21:45.201720200 +0100
+@@ -42,7 +42,7 @@
+ #include "ne_alloc.h"
+ #include "ne_uri.h"
+ 
+-/* URI ABNF from RFC 3986: */
++/* URI ABNF from RFC 3986: (TKR: SharePoint is contradictory to this RFC. So I fix it here. )*/
+ 
+ #define PS (0x0001) /* "+" */
+ #define PC (0x0002) /* "%" */
+@@ -67,6 +67,9 @@
+ 
+ #define OT (0x4000) /* others */
+ 
++/* TKR new symbol */
++#define WS (0x8000) /* Whitespaces ( Space, Tab ) */
++
+ #define URI_ALPHA (AL)
+ #define URI_DIGIT (DG)
+ 
+@@ -83,20 +86,21 @@
+ /* pchar = unreserved / pct-encoded / sub-delims / ":" / "@" */
+ #define URI_PCHAR (URI_UNRESERVED | PC | URI_SUBDELIM | CL | AT)
+ /* invented: segchar = pchar / "/" */
+-#define URI_SEGCHAR (URI_PCHAR | FS)
++/* (TKR) WS added */
++#define URI_SEGCHAR (URI_PCHAR | FS | WS)
+ /* query = *( pchar / "/" / "?" ) */
+ #define URI_QUERY (URI_PCHAR | FS | QU)
+ /* fragment == query */
+ #define URI_FRAGMENT URI_QUERY
+ 
+ /* any characters which should be path-escaped: */
+-#define URI_ESCAPE ((URI_GENDELIM & ~(FS)) | URI_SUBDELIM | OT | PC)
++#define URI_ESCAPE ((URI_GENDELIM & ~(FS)) | URI_SUBDELIM | OT | WS | PC)
+ 
+ static const unsigned int uri_chars[256] = {
+ /* 0xXX    x0      x2      x4      x6      x8      xA      xC      xE     */
+-/*   0x */ OT, OT, OT, OT, OT, OT, OT, OT, OT, OT, OT, OT, OT, OT, OT, OT,
++/*   0x */ OT, OT, OT, OT, OT, OT, OT, OT, OT, WS, OT, OT, OT, OT, OT, OT,
+ /*   1x */ OT, OT, OT, OT, OT, OT, OT, OT, OT, OT, OT, OT, OT, OT, OT, OT,
+-/*   2x */ OT, SD, OT, GD, SD, PC, SD, SD, SD, SD, SD, PS, SD, DS, DT, FS,
++/*   2x */ WS, SD, OT, GD, SD, PC, SD, SD, SD, SD, SD, PS, SD, DS, DT, FS,
+ /*   3x */ DG, DG, DG, DG, DG, DG, DG, DG, DG, DG, CL, SD, OT, SD, OT, QU,
+ /*   4x */ AT, AL, AL, AL, AL, AL, AL, AL, AL, AL, AL, AL, AL, AL, AL, AL,
+ /*   5x */ AL, AL, AL, AL, AL, AL, AL, AL, AL, AL, AL, GD, OT, GD, OT, US,
