@@ -88,6 +88,7 @@ MODULEFILES= \
     Writer-defaultfontarial.xcu \
     Writer-directcursor.xcu \
     Writer-javamail.xcu \
+    Impress-ogltrans.xcu \
     Embedding-calc.xcu   \
     Embedding-chart.xcu   \
     Embedding-draw.xcu   \
