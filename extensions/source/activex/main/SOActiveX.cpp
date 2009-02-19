@@ -165,10 +165,8 @@ HRESULT CSOActiveX::Cleanup()
 {
     CComVariant dummyResult;
 
-    /*
     if( mpDispatchInterceptor )
     {
-        mpDispatchInterceptor->ClearParent();
         if( mpDispFrame )
         {
             // remove dispatch interceptor
@@ -178,11 +176,12 @@ HRESULT CSOActiveX::Cleanup()
                          &CComVariant( pIDispDispInter ),
                          1,
                          &dummyResult );
-            mpDispatchInterceptor->Release();
-            mpDispatchInterceptor = NULL;
         }
+
+        mpDispatchInterceptor->ClearParent();
+        mpDispatchInterceptor->Release();
+        mpDispatchInterceptor = NULL;
     }
-    */
 
     mpDispTempFile = CComPtr< IDispatch >();
     mbReadyForActivation = FALSE;
@@ -815,7 +814,6 @@ HRESULT CSOActiveX::LoadURLToFrame( )
         }
     }
 
-    /*
     // create dispatch interceptor
     mpDispatchInterceptor = new CComObject< SODispatchInterceptor >();
     mpDispatchInterceptor->AddRef();
@@ -831,7 +829,6 @@ HRESULT CSOActiveX::LoadURLToFrame( )
                       &dummyResult );
 
     if( !SUCCEEDED( hr ) ) return hr;
-    */
 
     return S_OK;
 }
@@ -1133,8 +1130,11 @@ HRESULT CSOActiveX::GetURL( const OLECHAR* url,
                               const OLECHAR* target )
 {
     CComVariant aEmpty1, aEmpty2, aEmpty3;
-    CComVariant aTarget( target );
     CComVariant aUrl( url );
+    CComVariant aTarget;
+    if ( target )
+        aTarget = CComVariant( target );
+
     return mWebBrowser2->Navigate2( &aUrl,
                                   &aEmpty1,
                                   &aTarget,
