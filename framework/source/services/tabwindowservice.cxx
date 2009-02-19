@@ -154,7 +154,7 @@ TabWindowService::~TabWindowService()
     ResetableGuard aGuard( m_aLock );
 
     ::sal_Int32  nID  = m_nPageIndexCounter++;
-    TTabPageInfo aInfo(m_nPageIndexCounter);
+    TTabPageInfo aInfo(nID);
 
     m_lTabPageInfos[nID] = aInfo;
 
@@ -357,10 +357,7 @@ css::uno::Any SAL_CALL TabWindowService::impl_getPropertyValue(const ::rtl::OUSt
 //*****************************************************************************************************************
 IMPL_LINK( TabWindowService, EventListener, VclSimpleEvent*, pEvent )
 {
-    if (
-        ( ! pEvent                      ) ||
-        (   pEvent->ISA(VclWindowEvent) )
-       )
+    if ( !pEvent && !pEvent->ISA(VclWindowEvent))
         return 0;
 
     ULONG           nEventId = pEvent->GetId();

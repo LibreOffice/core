@@ -76,7 +76,7 @@ public:
     FwkTabPage(
         Window* pParent,
         const rtl::OUString& rPageURL,
-        const rtl::OUString& rEventHdl,
+    const css::uno::Reference< css::awt::XContainerWindowEventHandler >& rEventHdl,
         const css::uno::Reference< css::awt::XContainerWindowProvider >& rProvider );
 
     virtual ~FwkTabPage();
@@ -94,13 +94,13 @@ struct TabEntry
     sal_Int32           m_nIndex;
     FwkTabPage*         m_pPage;
     ::rtl::OUString     m_sPageURL;
-    ::rtl::OUString     m_sEventHdl;
+    css::uno::Reference< css::awt::XContainerWindowEventHandler > m_xEventHdl;
 
     TabEntry() :
         m_nIndex( -1 ), m_pPage( NULL ) {}
 
-    TabEntry( sal_Int32 nIndex, ::rtl::OUString sURL, ::rtl::OUString sEvent ) :
-        m_nIndex( nIndex ), m_pPage( NULL ), m_sPageURL( sURL ), m_sEventHdl( sEvent ) {}
+    TabEntry( sal_Int32 nIndex, ::rtl::OUString sURL, const css::uno::Reference< css::awt::XContainerWindowEventHandler > & rEventHdl ) :
+        m_nIndex( nIndex ), m_pPage( NULL ), m_sPageURL( sURL ), m_xEventHdl( rEventHdl ) {}
 
     ~TabEntry() { delete m_pPage; }
 };
