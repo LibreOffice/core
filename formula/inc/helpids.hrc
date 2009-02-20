@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,10 +55,10 @@
 #define HID_FORMULATAB_FUNCTION                         (HID_FORMULA_START +18)
 #define HID_FORMULATAB_STRUCT                           (HID_FORMULA_START +19)
 
-    
+
 #if HID_FORMULATAB_STRUCT > HID_FORMULA_END
-#error Help-Id Ueberlauf in #file, #line       
-#endif                                             
+#error Help-Id Ueberlauf in #file, #line
+#endif
 // don't forget to update the file util/hidother.src
 
 #endif //FORMULA_HELPID_HRC

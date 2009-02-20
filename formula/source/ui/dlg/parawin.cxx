@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -43,7 +43,7 @@
 #include "helpids.hrc"
 #include "formula/formdata.hxx"
 #include "formula/IFunctionDescription.hxx"
-#include "ModuleHelper.hxx" 
+#include "ModuleHelper.hxx"
 #include "ForResId.hrc"
 
 #define VAR_ARGS 30
@@ -73,12 +73,12 @@ ParaWin::ParaWin(Window* pParent,IControlReferenceHandler* _pDlg,Point aPos):
     aEdArg2         ( this, ModuleRes( ED_ARG2 ) ),
     aEdArg3         ( this, ModuleRes( ED_ARG3 ) ),
     aEdArg4         ( this, ModuleRes( ED_ARG4 ) ),
-    
+
     aRefBtn1        ( this, ModuleRes( RB_ARG1 ) ),
     aRefBtn2        ( this, ModuleRes( RB_ARG2 ) ),
     aRefBtn3        ( this, ModuleRes( RB_ARG3 ) ),
     aRefBtn4        ( this, ModuleRes( RB_ARG4 ) ),
-    
+
     aSlider         ( this, ModuleRes( WND_SLIDER ) ),
     m_sOptional     ( ModuleRes( STR_OPTIONAL ) ),
     m_sRequired     ( ModuleRes( STR_REQUIRED ) ),
@@ -87,7 +87,7 @@ ParaWin::ParaWin(Window* pParent,IControlReferenceHandler* _pDlg,Point aPos):
     Image aFxHC( ModuleRes( IMG_FX_H ) );
     FreeResource();
     aDefaultString=aFtEditDesc.GetText();
-    
+
     SetPosPixel(aPos);
     nEdFocus=NOT_FOUND;
     nActiveLine=0;

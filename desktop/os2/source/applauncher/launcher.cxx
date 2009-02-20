@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -56,7 +56,7 @@ int main( int argc, char* argv[])
     // get executable fullpath
     DosGetInfoBlocks(NULL, &pib);
     DosQueryModuleName(pib->pib_hmte, sizeof(szApplicationName), szApplicationName);
-    
+
     // adjust libpath
     _splitpath( szApplicationName, szDrive, szDir, szFileName, szExt );
     char* basedir = strstr( szDir, "\\PROGRAM\\");
@@ -75,9 +75,9 @@ int main( int argc, char* argv[])
     // copy command line parameters
     int i, len;
     len = strlen(szApplicationName) + 1 + strlen( APPLICATION_SWITCH) + 1 + 1;
-    for( i=1; i<argc; i++) 
+    for( i=1; i<argc; i++)
         len += strlen( argv[i]) + 1;
-    
+
     char* pszCommandLine, *pszArgs;
     pszCommandLine = (char*) calloc( 1, len);
     strcpy( pszCommandLine, szApplicationName);
@@ -110,9 +110,9 @@ int main( int argc, char* argv[])
         WinTerminate( hab);
         exit(1);
     }
-    
+
     WinDestroyMsgQueue( hmq);
     WinTerminate( hab);
-    
+
     exit( result.codeResult);
 }
