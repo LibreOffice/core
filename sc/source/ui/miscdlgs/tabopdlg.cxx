@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -283,7 +283,7 @@ IMPL_LINK( ScTabOpDlg, BtnHdl, PushButton*, pBtn )
             const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
             if (aEdRowCell.GetText().Len() > 0)
             {
-                if (!ConvertSingleRef( pDoc, aEdRowCell.GetText(), nCurTab, 
+                if (!ConvertSingleRef( pDoc, aEdRowCell.GetText(), nCurTab,
                                        theRowCell, eConv ))
                     nError = TABOPERR_WRONGROW;
                 else

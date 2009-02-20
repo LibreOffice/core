@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -501,7 +501,7 @@ void ScOptSolverDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
         {
             USHORT nFmt = ( aAdr.Tab() == mnCurTab ) ? SCA_ABS : SCA_ABS_3D;
             if ( bSingle )
-                aAdr.Format( aStr, nFmt, pDocP, pDocP->GetAddressConvention() ); 
+                aAdr.Format( aStr, nFmt, pDocP, pDocP->GetAddressConvention() );
             else
                 rRef.Format( aStr, nFmt | SCR_ABS, pDocP, pDocP->GetAddressConvention() );
         }

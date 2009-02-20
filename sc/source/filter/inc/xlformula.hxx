@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -278,7 +278,7 @@ public:
     /** Creates an empty token array. */
     explicit            XclTokenArray( bool bVolatile = false );
     /** Creates a token array, swaps passed token vector into own data. */
-    explicit            XclTokenArray( ScfUInt8Vec& rTokVec, bool bVolatile = false, 
+    explicit            XclTokenArray( ScfUInt8Vec& rTokVec, bool bVolatile = false,
                                        ScfUInt8Vec* pExtensionTokens = NULL);
 
     /** Returns true, if the token array is empty. */
