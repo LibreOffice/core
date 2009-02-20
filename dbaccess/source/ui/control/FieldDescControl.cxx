@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -782,7 +782,7 @@ IMPL_LINK( OFieldDescControl, FormatClickHdl, Button *, /*pButton*/ )
 }
 
 // -----------------------------------------------------------------------
-void OFieldDescControl::SetModified(sal_Bool /*bModified*/) 
+void OFieldDescControl::SetModified(sal_Bool /*bModified*/)
 {
 }
 //------------------------------------------------------------------------
@@ -1384,7 +1384,7 @@ void OFieldDescControl::DeactivateAggregate( EControlType eType )
 void OFieldDescControl::SetPosSize( Control** ppControl, long nRow, sal_uInt16 nCol )
 {
     DBG_CHKTHIS(OFieldDescControl,NULL);
-    
+
     //////////////////////////////////////////////////////////////////////
     // Groesse ermitteln
     const sal_Int32 nControlHeight = LogicToPixel(Size(0, CONTROL_HEIGHT),MAP_APPFONT).Height();
@@ -1463,12 +1463,12 @@ void OFieldDescControl::SetPosSize( Control** ppControl, long nRow, sal_uInt16 n
     const sal_Int32 nControl_Spacing_y = LogicToPixel(Size(0, CONTROL_SPACING_Y),MAP_APPFONT).Height();
     aPosition.Y() += ((nRow+1)*nControl_Spacing_y) +
                     (nRow*nControlHeight);
-    
+
     //////////////////////////////////////////////////////////////////////
     // Control anzeigen
     (*ppControl)->SetPosSizePixel( aPosition, aSize );
     aSize = (*ppControl)->GetSizePixel();
-    
+
     (*ppControl)->Show();
 }
 //------------------------------------------------------------------------------

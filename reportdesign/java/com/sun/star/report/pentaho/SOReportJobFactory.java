@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -372,11 +372,11 @@ public class SOReportJobFactory
         return Factory.writeRegistryServiceInfo(SOFunctionManager.class.getName(),
                 SOFunctionManager.getServiceNames(),
                 regKey)
-                && 
+                &&
             Factory.writeRegistryServiceInfo(_SOReportJobFactory.class.getName(),
                 _SOReportJobFactory.getServiceNames(),
                 regKey)
-                 && 
+                 &&
                Factory.writeRegistryServiceInfo(SOFormulaParser.class.getName(),
                     SOFormulaParser.getServiceNames(),
                     regKey)

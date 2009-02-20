@@ -1,7 +1,7 @@
 ﻿/*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -55,7 +55,7 @@ ModalDialog RID_EXTENSION_NOT_PRESENT_DLG
     HelpId = HID_EXTENSION_NOT_PRESENT_DLG;
     Moveable = TRUE ;
     Closeable = TRUE ;
-    
+
     // most of the calulated values here are overridden by the ExtensionNotPresent ctor itself.
     FixedImage FI_WARNING
     {
@@ -63,7 +63,7 @@ ModalDialog RID_EXTENSION_NOT_PRESENT_DLG
         Size = (32, 32);
         Fixed=BMP_EXCEPTION_WARNING;
     };
-    
+
 
     FixedText FT_TEXT
     {

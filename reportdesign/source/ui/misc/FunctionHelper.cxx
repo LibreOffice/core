@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -219,36 +219,36 @@ void FunctionDescription::initArgumentInfo()  const
 {
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString FunctionDescription::getSignature() const 
+::rtl::OUString FunctionDescription::getSignature() const
 {
     return m_xFunctionDescription->getSignature();
 }
 // -----------------------------------------------------------------------------
-long FunctionDescription::getHelpId() const 
+long FunctionDescription::getHelpId() const
 {
     return 0;
 }
 // -----------------------------------------------------------------------------
-sal_uInt32 FunctionDescription::getParameterCount() const 
+sal_uInt32 FunctionDescription::getParameterCount() const
 {
     return m_aParameter.getLength();
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString FunctionDescription::getParameterName(sal_uInt32 _nPos) const 
+::rtl::OUString FunctionDescription::getParameterName(sal_uInt32 _nPos) const
 {
     if ( _nPos < static_cast<sal_uInt32>(m_aParameter.getLength()) )
         return m_aParameter[_nPos].Name;
     return ::rtl::OUString();
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString FunctionDescription::getParameterDescription(sal_uInt32 _nPos) const 
+::rtl::OUString FunctionDescription::getParameterDescription(sal_uInt32 _nPos) const
 {
     if ( _nPos < static_cast<sal_uInt32>(m_aParameter.getLength()) )
         return m_aParameter[_nPos].Description;
     return ::rtl::OUString();
 }
 // -----------------------------------------------------------------------------
-bool FunctionDescription::isParameterOptional(sal_uInt32 _nPos) const 
+bool FunctionDescription::isParameterOptional(sal_uInt32 _nPos) const
 {
     if ( _nPos < static_cast<sal_uInt32>(m_aParameter.getLength()) )
         return m_aParameter[_nPos].IsOptional;

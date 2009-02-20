@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -338,7 +338,7 @@ namespace dbmm
         m_aChangesLabel.SetText( _bSuccessful ? m_aSuccessful : m_aUnsuccessful );
         m_aChanges.SetText( _rSummary );
 
-        // resize m_aChangesLabel and m_aChances as needed for the label text to fit 
+        // resize m_aChangesLabel and m_aChances as needed for the label text to fit
         Rectangle aOriginalLabelSize( m_aChangesLabel.GetPosPixel(), m_aChangesLabel.GetSizePixel() );
         // assume 3 lines, at most
         Rectangle aNewLabelSize( aOriginalLabelSize );
