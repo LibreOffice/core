@@ -30,12 +30,12 @@
 #*************************************************************************
 
 # Common tools - move this to the end / consolidate
-TRANSEX*=transex3
+TRANSEX*=$(AUGMENT_LIBRARY_PATH) transex3
 ULFEX*=$(AUGMENT_LIBRARY_PATH) ulfex
 XMLEX*=$(AUGMENT_LIBRARY_PATH) xmlex
 XRMEX*=$(AUGMENT_LIBRARY_PATH) xrmex
-CFGEX*=cfgex
-XSLTPROC*=xsltproc
+CFGEX*=$(AUGMENT_LIBRARY_PATH) cfgex
+XSLTPROC*=$(AUGMENT_LIBRARY_PATH) xsltproc
 
 ULFCONV*=$(AUGMENT_LIBRARY_PATH) ulfconv
 

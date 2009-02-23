@@ -723,7 +723,7 @@ $(OUT)$/ucrdoc$/$(IDLPACKAGE)$/%.urd : %.idl
 $(SRS)$/%.hid : %.src
     @echo ------------------------------
     @echo Making hid $@
-    $(PERL) $(SOLARENV)$/bin$/mhids.pl $*.src $(SRS) $(PRJNAME) $(CDEFS) $(INCLUDE)
+    $(AUGMENT_LIBRARY_PATH) $(PERL) $(SOLARENV)$/bin$/mhids.pl $*.src $(SRS) $(PRJNAME) $(CDEFS) $(INCLUDE)
 
 # make *.xml descriptions available in $(MISC)
 $(MISC)$/%$($(WINVERSIONNAMES)_MAJOR).xml : %.xml
