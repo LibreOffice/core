@@ -171,9 +171,10 @@ HRESULT CSOActiveX::Cleanup()
         {
             // remove dispatch interceptor
             CComQIPtr< IDispatch, &IID_IDispatch > pIDispDispInter( mpDispatchInterceptor );
+                CComVariant aVariant( pIDispDispInter );
             ExecuteFunc( mpDispFrame,
                          L"releaseDispatchProviderInterceptor",
-                         &CComVariant( pIDispDispInter ),
+                         &aVariant,
                          1,
                          &dummyResult );
         }
@@ -821,10 +822,11 @@ HRESULT CSOActiveX::LoadURLToFrame( )
     CComQIPtr< IDispatch, &IID_IDispatch > pIDispDispInter( mpDispatchInterceptor );
 
     // register dispatch interceptor in the frame
+        CComVariant aDispVariant( pIDispDispInter );
     CComVariant dummyResult;
     hr = ExecuteFunc( mpDispFrame,
                       L"registerDispatchProviderInterceptor",
-                      &CComVariant( pIDispDispInter ),
+                                          &aDispVariant,
                       1,
                       &dummyResult );
 
