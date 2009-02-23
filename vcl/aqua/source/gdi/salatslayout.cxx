@@ -638,7 +638,7 @@ long ATSLayout::FillDXArray( long* pDXArray ) const
         return GetTextWidth();
 
     // check assumptions
-    DBG_ASSERT( !nTrailingSpaceWidth, "ATSLayout::FillDXArray() with nTSW!=0" );
+    DBG_ASSERT( !mnTrailingSpaceWidth, "ATSLayout::FillDXArray() with nTSW!=0" );
 
     // initialize details about the resulting layout
     InitGIA();
@@ -680,7 +680,7 @@ int ATSLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) cons
     const long nPixelWidth = (nMaxWidth - (nCharExtra * mnCharCount)) / nFactor;
 
     // check assumptions
-    DBG_ASSERT( !nTrailingSpaceWidth, "ATSLayout::GetTextBreak() with nTSW!=0" );
+    DBG_ASSERT( !mnTrailingSpaceWidth, "ATSLayout::GetTextBreak() with nTSW!=0" );
 
     // initial measurement of text break position
     UniCharArrayOffset nBreakPos = mnMinCharPos;
