@@ -691,7 +691,7 @@ CLASSDIR=$(OUT)$/class
 CLASSPATH!:=.$(PATH_SEPERATOR)$(CLASSDIR)$(PATH_SEPERATOR)$(CLASSPATH)
 STARJAR=java -classpath $(CLASSPATH)$(PATH_SEPERATOR)$(SOLARENV)$/bin$/jtools.jar com.sun.star.tool.starjar.StarJar
 
-STARDEP=javadep
+STARDEP=$(AUGMENT_LIBRARY_PATH) javadep
 .IF "$(PRJNAME)"=="sj2"
 CLASSPATH!:=$(CLASSPATH:s/sj2/no/)
 .ENDIF
