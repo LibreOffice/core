@@ -62,8 +62,9 @@ SLOFILES =	$(SLO)$/lngpckinsthelper.obj \
             $(SLO)$/checkrunningofficelanguagepack.obj
 
 STDSHL+=	\
-    $(ADVAPI32LIB)\
-    $(MSILIB)
+    $(ADVAPI32LIB) \
+    $(MSILIB)      \
+    $(SHELL32LIB)								
 
 .IF "$(USE_SYSTEM_STL)" != "YES"
 STDSHL+=$(LIBSTLPORTST)								
@@ -79,6 +80,10 @@ STDSHL+=	\
 .ENDIF
 
 #SHL1LIBS = $(SLB)$/$(TARGET).lib 
+
+SHL1OBJS = $(SLOFILES)              \
+    $(SLO)$/registerextensions.obj  \
+    $(SLO)$/seterror.obj
 
 SHL1TARGET = $(TARGET)
 SHL1IMPLIB = i$(TARGET)
