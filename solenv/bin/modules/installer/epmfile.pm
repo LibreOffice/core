@@ -858,11 +858,18 @@ sub set_patch_state
     {
         $infoline = "\nPatch state: This is a patched version of epm!\n\n";
         push( @installer::globals::logfileinfo, $infoline);
+        $installer::globals::postprocess_specialepm = 1;
+        $installer::globals::postprocess_standardepm = 0;
     }
     else
     {
         $infoline = "\nPatch state: This is an unpatched version of epm!\n\n";
         push( @installer::globals::logfileinfo, $infoline);
+        $installer::globals::postprocess_specialepm = 0;
+        if (($installer::globals::islinuxrpmbuild) || ($installer::globals::issolarispkgbuild) || ($installer::globals::debian))
+        {
+            $installer::globals::postprocess_standardepm = 1;
+        }
     }
 
 }
@@ -2719,8 +2726,6 @@ sub create_new_directory_structure
         $callinfoline = "Success: Executed \"$localcall\" successfully!\n";
         push( @installer::globals::logfileinfo, $callinfoline);
     }
-
-    return $newdir;
 }
 
 ######################################################

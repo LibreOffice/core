@@ -21,6 +21,7 @@ Globals
 			UREPACKAGEPREFIX openoffice.org
 			SOLSUREPACKAGEPREFIX openofficeorg
 			USE_FILEVERSION 1
+                        POOLPRODUCT 1
 			LIBRARYVERSION 9.1.0
             REGISTRATION_HOST https://registration2.services.openoffice.org/RegistrationWeb
 			REGISTRATIONURL http://survey.services.openoffice.org/user/index.php
@@ -258,6 +259,7 @@ URE
             NOVERSIONINDIRNAME 1
             PROGRAMFILESROOT 1
             PCPFILENAME ure.pcp
+            POOLPRODUCT 0
             GLOBALFILEGID gid_File_Dl_Cppu
             DOWNLOADBANNER urebanner.bmp
             DOWNLOADBITMAP urebitmap.bmp
@@ -296,6 +298,7 @@ OpenOffice_SDK
             PACKAGEVERSION 3.1.0
             PACKAGEREVISION {milestone}
             PACK_INSTALLED 1
+            POOLPRODUCT 0
             DMG_VOLUMEEXTENSION SDK
             DATABASENAME openofficeorg31sdk
             NO_README_IN_ROOTDIR 1

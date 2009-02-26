@@ -257,7 +257,9 @@ BEGIN
     $created_new_component_guid = 0;
     @allddffiles = ();
     $infodirectory = "";
-    $currentcontent = "";
+    @currentcontent = ();
+    @installsetcontent = ();
+    %xpdpackageinfo = ();
     $signfiles_checked = 0;
     $dosign = 0;
     $pwfile = "";
@@ -324,6 +326,26 @@ BEGIN
     $nopatchfilecollector = "";
     @userregistrycollector = ();
     $addeduserregitrykeys = 0;
+    $poolpathset = 0;
+    $poolpath = 0;
+    $poollockfilename = "";
+    $poolcheckfilename = "";
+    %poolshiftedpackages = ();
+    %poolpackages = ();
+    %createpackages = ();
+    $processhaspoolcheckfile = 0;
+    $processhaspoollockfile = 0;
+    $newpcfcontentcalculated = 0;
+    $sessionid = 0;
+    $sessionidset = 0;
+    $savelockfilecontent = "";
+    $savelockfilename = "";
+    $getuidpath = "";
+    $getuidpathset = 0;
+    $newpcfcontent = "";
+    %pcfdifflist = ();
+    @pcfdiffcomment = ();
+    @epmdifflist = ();
     $desktoplinkexists = 0;
     $sundirexists = 0;
     $analyze_spellcheckerlanguage = 0;
@@ -389,7 +411,6 @@ BEGIN
     $javafile = "";
     $urefile = "";
 
-    $subdir = "";
     $postprocess_specialepm = 0;
     $postprocess_standardepm = 0;
     $mergemodules_analyzed = 0;

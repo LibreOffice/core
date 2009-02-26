@@ -51,6 +51,10 @@ sub exit_program
 
     if ( $installer::globals::saveinstalldir =~ /_inprogress/ ) { installer::systemactions::rename_string_in_directory($installer::globals::saveinstalldir, "_inprogress", "_witherror");   }
 
+    # Cleaning files from pool tooling
+    if ( $installer::globals::processhaspoolcheckfile ) { unlink $installer::globals::poolcheckfilename; }
+    if ( $installer::globals::processhaspoollockfile ) { unlink $installer::globals::poollockfilename; }
+
     installer::worker::clean_output_tree(); # removing directories created in the output tree
 
     # If @installer::globals::logfileinfo is not empty, it can be used.
