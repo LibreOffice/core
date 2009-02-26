@@ -120,8 +120,11 @@ sub save_script_file
     my $infoline = "Saving script file $newscriptfilename\n";
     push( @installer::globals::logfileinfo, $infoline);
 
-    my $localcall = "chmod 775 $newscriptfilename \>\/dev\/null 2\>\&1";
-    system($localcall);
+    if ( ! $installer::globals::iswindowsbuild )
+    {
+        my $localcall = "chmod 775 $newscriptfilename \>\/dev\/null 2\>\&1";
+        system($localcall);
+    }
 
     return $newscriptfilename;
 }
@@ -1596,7 +1599,7 @@ sub get_translation_file
     my ($allvariableshashref) = @_;
     my $translationfilename = $installer::globals::idtlanguagepath . $installer::globals::separator . $installer::globals::nsisfilename;
     if ( $installer::globals::unicodensis ) { $translationfilename = $translationfilename . ".uulf"; }
-    else {  { $translationfilename = $translationfilename . ".mlf"; } }
+    else { $translationfilename = $translationfilename . ".mlf"; }
     if ( ! -f $translationfilename ) { installer::exiter::exit_program("ERROR: Could not find language file $translationfilename!", "get_translation_file"); }
     my $translationfile = installer::files::read_file($translationfilename);
     replace_variables($translationfile, $allvariableshashref);

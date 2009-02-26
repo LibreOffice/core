@@ -258,6 +258,11 @@ BEGIN
     @allddffiles = ();
     $infodirectory = "";
     $currentcontent = "";
+    $signfiles_checked = 0;
+    $dosign = 0;
+    $pwfile = "";
+    $pwfile = "";
+    $pfxfile = "";
 
     %mergemodules = ();
     %merge_media_line = ();
@@ -297,6 +302,7 @@ BEGIN
     $ooodownloadfilename = "";
     $downloadfilename = "";
     $downloadfileextension = "";
+    $followmeinfofilename = "";
     $oooversionstring = "";
     $shellnewfilesadded = 0;
     %multilingual_only_modules = ();

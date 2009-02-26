@@ -1115,6 +1115,8 @@ sub rename_string_in_directory
 
     $newdir =~ s/$oldstring/$newstring/g;
 
+    if (( -d $newdir ) && ( $olddir ne $newdir )) { remove_complete_directory($newdir, 1); }
+
     if ( move($olddir, $newdir) )
     {
         $infoline = "\nMoved directory from $olddir to $newdir\n";

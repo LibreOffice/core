@@ -463,7 +463,11 @@ sub analyze_and_save_logfile
             if ( $installdir =~ /_download_inprogress/ ) { $destdir = installer::systemactions::rename_string_in_directory($installdir, "_download_inprogress", "_download"); }
             elsif ( $installdir =~ /_jds_inprogress/ ) { $destdir = installer::systemactions::rename_string_in_directory($installdir, "_jds_inprogress", "_jds"); }
             elsif ( $installdir =~ /_msp_inprogress/ ) { $destdir = installer::systemactions::rename_string_in_directory($installdir, "_msp_inprogress", "_msp"); }
-            else { $destdir = installer::systemactions::rename_string_in_directory($installdir, "_inprogress", "_packed"); }
+            else
+            {
+                if ( $installdir =~ /_packed/ ) { $destdir = installer::systemactions::rename_string_in_directory($installdir, "_inprogress", ""); }
+                else { $destdir = installer::systemactions::rename_string_in_directory($installdir, "_inprogress", "_packed"); }
+            }
             installer::mail::send_success_mail($allsettingsarrayref, $languagestringref, $destdir);
         }
         else
