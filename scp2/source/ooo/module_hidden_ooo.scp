@@ -734,6 +734,7 @@ Module gid_Module_Root_Files_6
 	gid_File_Oo_Typedetection_Types_Xcs,
 	gid_File_Oo_Ucb_Configuration_Xcs,
 	gid_File_Oo_Ucb_Configuration_Xcu,
+	gid_File_Oo_Ucb_InteractionHandler_Xcs,
 	gid_File_Oo_Ucb_Hierarchy_Xcs,
 	gid_File_Oo_Ucb_Store_Xcs,
 	gid_File_Oo_Userprofile_Xcs,

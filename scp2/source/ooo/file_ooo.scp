@@ -2035,6 +2035,13 @@ File gid_File_Oo_Ucb_Configuration_Xcs
     Name = "/registry/schema/org/openoffice/ucb/Configuration.xcs";
 End
 
+File gid_File_Oo_Ucb_InteractionHandler_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Ucb;
+    Name = "/registry/schema/org/openoffice/ucb/InteractionHandler.xcs";
+End
+
 File gid_File_Oo_Ucb_Configuration_Xcu
     TXT_FILE_BODY;
     Styles = (PACKED);
