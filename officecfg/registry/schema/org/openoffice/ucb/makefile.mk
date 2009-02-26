@@ -42,6 +42,7 @@ PACKAGE=org.openoffice.ucb
 XCSFILES= \
     Configuration.xcs \
     Hierarchy.xcs \
+    InteractionHandler.xcs \
     Store.xcs 
 
 .INCLUDE :  target.mk
