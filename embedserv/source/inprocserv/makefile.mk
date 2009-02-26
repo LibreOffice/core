@@ -44,7 +44,6 @@ use_shl_versions=
 
 .IF "$(GUI)" == "WNT"
 
-VERSIONOBJ=
 LIBTARGET=NO
 USE_DEFFILE=YES
 
