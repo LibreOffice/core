@@ -1244,7 +1244,7 @@ sub select_langpack_items
         # Items with style "LANGUAGEPACK" have to be included into the patch
         my $styles = "";
         if ( $oneitem->{'Styles'} ) { $styles = $oneitem->{'Styles'}; }
-        if ( $styles =~ /\bLANGUAGEPACK\b/ ) { push(@itemsarray, $oneitem); }
+        if (( $styles =~ /\bLANGUAGEPACK\b/ ) || ( $styles =~ /\bFORCELANGUAGEPACK\b/ )) { push(@itemsarray, $oneitem); }
     }
 
     return \@itemsarray;
@@ -2966,6 +2966,15 @@ sub set_spellcheckerlanguages
             my $onelang = $1;
             my $languagelist = $2;
             $spellcheckhash{$onelang} = $languagelist;
+
+            # Special handling for language packs. Do only include that one language of the language pack, no further language.
+            # And this only, if the language of the language pack is also already part of the language list
+
+            if ( $installer::globals::languagepack )
+            {
+                if ( $languagelist =~ /\b$onelang\b/ ) { $spellcheckhash{$onelang} = $onelang; }
+                else { $spellcheckhash{$onelang} = ""; }
+            }
         }
     }
 

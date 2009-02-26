@@ -303,6 +303,25 @@ WindowsCustomAction gid_Customaction_Patch_InstallExchangeFiles
 	Assignment2 = ("AdminExecuteSequence", "", "behind_InstallFinalize");
 End
 
+WindowsCustomAction gid_Customaction_Langpack_Register_Extensions
+	Name = "RegisterExtensions";
+	Typ = "65";
+	Source = "lngpckinsthlp.dll";
+	Target = "RegisterExtensions";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "", "end");
+	Assignment2 = ("AdminExecuteSequence", "", "end");
+End
+
+WindowsCustomAction gid_Customaction_Langpack_Deregister_Extensions
+	Name = "DeregisterExtensions";
+	Typ = "65";
+	Source = "lngpckinsthlp.dll";
+	Target = "DeregisterExtensions";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "", "InstallInitialize");
+End
+
 WindowsCustomAction gid_Customaction_Patch_Register_Extensions
 	Name = "RegisterExtensions";
 	Typ = "65";
