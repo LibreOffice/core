@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: slideshowimpl.cxx,v $
- * $Revision: 1.10 $
+ * $Revision: 1.10.16.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -93,6 +93,7 @@
 #include "slidebitmap.hxx"
 #include "rehearsetimingsactivity.hxx"
 #include "waitsymbol.hxx"
+#include "framerate.hxx"
 
 #include <boost/noncopyable.hpp>
 #include <boost/bind.hpp>
@@ -1530,8 +1531,9 @@ sal_Bool SlideShowImpl::update( double & nNextTimeout )
             // calc nNextTimeout value:
             if (bActivitiesLeft)
             {
-                // activities left: requires immediate updates
-                nNextTimeout = 0.0; // come back ASAP
+                // Activity queue is not empty.  Tell caller that we would
+                // like to render another frame.
+                nNextTimeout = 1.0 / FrameRate::PreferredFramesPerSecond;
             }
             else
             {
