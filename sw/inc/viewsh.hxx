@@ -564,6 +564,17 @@ public:
     */
     void InvalidateAccessibleParaTextSelection();
 
+    /** invalidate attributes for paragraphs
+
+        OD 2009-01-06 #i88069#
+
+        @author OD
+
+        @param rTxtFrm
+        input parameter - paragraph frame, whose attributes have changed
+    */
+    void InvalidateAccessibleParaAttrs( const SwTxtFrm& rTxtFrm );
+
     ViewShell( ViewShell&, Window *pWin = 0, OutputDevice *pOut = 0,
                 long nFlags = 0 );
     ViewShell( SwDoc& rDoc, Window *pWin,

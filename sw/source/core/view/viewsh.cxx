@@ -2567,6 +2567,20 @@ void ViewShell::InvalidateAccessibleParaTextSelection()
     }
 }
 
+/** invalidate attributes for paragraphs
+
+    OD 2009-01-06 #i88069#
+
+    @author OD
+*/
+void ViewShell::InvalidateAccessibleParaAttrs( const SwTxtFrm& rTxtFrm )
+{
+    if ( GetLayout() && GetLayout()->IsAnyShellAccessible() )
+    {
+        Imp()->_InvalidateAccessibleParaAttrs( rTxtFrm );
+    }
+}
+
 /* -----------------------------06.05.2002 13:23------------------------------
 
  ---------------------------------------------------------------------------*/

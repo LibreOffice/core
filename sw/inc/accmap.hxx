@@ -136,6 +136,9 @@ public:
 #define ACC_STATE_OPAQUE 0x02
 
 // pseudo states for events
+// --> OD 2009-01-07 #i88069# - pseudo state for event TEXT_ATTRIBUTE_CHANGED
+#define ACC_STATE_TEXT_ATTRIBUTE_CHANGED 0x0200
+// <--
 // --> OD 2005-12-12 #i27301# - pseudo state for event TEXT_SELECTION_CHANGED
 #define ACC_STATE_TEXT_SELECTION_CHANGED 0x0100
 // <--
@@ -281,6 +284,10 @@ public:
                               const SwRect& rOldFrm );
 
     void InvalidateContent( const SwFrm *pFrm );
+
+    // --> OD 2009-01-06 #i88069#
+    void InvalidateAttr( const SwTxtFrm& rTxtFrm );
+    // <--
 
     void InvalidateCursorPosition( const SwFrm *pFrm );
     void InvalidateFocus();

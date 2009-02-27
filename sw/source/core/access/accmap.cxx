@@ -325,7 +325,8 @@ public:
                      POS_CHANGED,
                      CHILD_POS_CHANGED,
                      SHAPE_SELECTION,
-                     DISPOSE };
+                     DISPOSE,
+                     INVALID_ATTR };
 
 private:
     SwRect      maOldBox;               // the old bounds for CHILD_POS_CHANGED
@@ -456,6 +457,12 @@ public:
     inline sal_Bool IsInvalidateTextSelection() const
     {
         return ( mnStates & ACC_STATE_TEXT_SELECTION_CHANGED ) != 0;
+    }
+    // <--
+    // --> OD 2009-01-07 #i88069# - new event TEXT_ATTRIBUTE_CHANGED
+    inline sal_Bool IsInvalidateTextAttrs() const
+    {
+        return ( mnStates & ACC_STATE_TEXT_ATTRIBUTE_CHANGED ) != 0;
     }
     // <--
     // --> OD 2005-12-12 #i27301# - use new type definition <tAccessibleStates>
@@ -613,6 +620,13 @@ void SwAccessibleMap::FireEvent( const SwAccessibleEvent_Impl& rEvent )
     }
     else if( xAccImpl.isValid() && xAccImpl->GetFrm() )
     {
+        // --> OD 2009-01-07 #i88069#
+        if ( rEvent.GetType() != SwAccessibleEvent_Impl::DISPOSE &&
+             rEvent.IsInvalidateTextAttrs() )
+        {
+            xAccImpl->InvalidateAttr();
+        }
+        // <--
         switch( rEvent.GetType() )
         {
         case SwAccessibleEvent_Impl::INVALID_CONTENT:
@@ -629,6 +643,11 @@ void SwAccessibleMap::FireEvent( const SwAccessibleEvent_Impl& rEvent )
             ASSERT( xAccImpl.isValid(),
                     "dispose event has been stored" );
             break;
+        // --> OD 2009-01-06 #i88069#
+        case SwAccessibleEvent_Impl::INVALID_ATTR:
+            // nothing to do here - handled above
+            break;
+        // <--
         default:
             break;
         }
@@ -744,6 +763,12 @@ void SwAccessibleMap::AppendEvent( const SwAccessibleEvent_Impl& rEvent )
                 // remove all events for the frame in question.
                 bAppendEvent = sal_False;
                 break;
+            // --> OD 2009-01-06 #i88069#
+            case SwAccessibleEvent_Impl::INVALID_ATTR:
+                ASSERT( aEvent.GetType() == SwAccessibleEvent_Impl::INVALID_ATTR,
+                        "invalid event combination" );
+                break;
+            // <--
             }
             if( bAppendEvent )
             {
@@ -1682,6 +1707,46 @@ void SwAccessibleMap::InvalidateContent( const SwFrm *pFrm )
         }
     }
 }
+
+// --> OD 2009-01-06 #i88069#
+void SwAccessibleMap::InvalidateAttr( const SwTxtFrm& rTxtFrm )
+{
+    SwFrmOrObj aFrmOrObj( &rTxtFrm );
+    if( aFrmOrObj.IsAccessible( GetShell()->IsPreView() ) )
+    {
+        uno::Reference < XAccessible > xAcc;
+        {
+            vos::OGuard aGuard( maMutex );
+
+            if( mpFrmMap )
+            {
+                SwAccessibleContextMap_Impl::iterator aIter =
+                    mpFrmMap->find( aFrmOrObj.GetSwFrm() );
+                if( aIter != mpFrmMap->end() )
+                    xAcc = (*aIter).second;
+            }
+        }
+
+        if( xAcc.is() )
+        {
+            SwAccessibleContext *pAccImpl =
+                static_cast< SwAccessibleContext *>( xAcc.get() );
+            if( GetShell()->ActionPend() )
+            {
+                SwAccessibleEvent_Impl aEvent( SwAccessibleEvent_Impl::INVALID_ATTR,
+                                               pAccImpl, aFrmOrObj );
+                aEvent.SetStates( ACC_STATE_TEXT_ATTRIBUTE_CHANGED );
+                AppendEvent( aEvent );
+            }
+            else
+            {
+                FireEvents();
+                pAccImpl->InvalidateAttr();
+            }
+        }
+    }
+}
+// <--
 
 void SwAccessibleMap::InvalidateCursorPosition( const SwFrm *pFrm )
 {

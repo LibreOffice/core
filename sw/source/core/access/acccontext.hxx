@@ -376,6 +376,14 @@ public:
     */
     void InvalidateTextSelection();
 
+    /** attributes has changed
+
+        OD 2009-01-06 #i88069#
+
+        @author OD
+    */
+    void InvalidateAttr();
+
     const ::rtl::OUString& GetName() const { return sName; }
 
     virtual sal_Bool HasCursor();   // required by map to remember that object

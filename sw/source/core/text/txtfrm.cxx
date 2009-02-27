@@ -1296,6 +1296,13 @@ void SwTxtFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
                 else
                     SwCntntFrm::Modify( pOld, pNew );
             }
+
+            // --> OD 2009-01-06 #i88069#
+            if ( GetShell() )
+            {
+                GetShell()->InvalidateAccessibleParaAttrs( *this );
+            }
+            // <--
         }
         break;
 
