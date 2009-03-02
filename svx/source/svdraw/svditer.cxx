@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svditer.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.9.246.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,6 +34,7 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdobj.hxx>
+#include <svx/svdmark.hxx>
 
 // #99190#
 #include <svx/scene3d.hxx>
@@ -68,33 +69,45 @@ SdrObjListIter::SdrObjListIter( const SdrObject& rObj, SdrIterMode eMode, BOOL b
     Reset();
 }
 
+SdrObjListIter::SdrObjListIter( const SdrMarkList& rMarkList, SdrIterMode eMode, BOOL bReverse )
+:   maObjList(1024, 64, 64),
+    mnIndex(0L),
+    mbReverse(bReverse)
+{
+    ImpProcessMarkList(rMarkList, eMode);
+    Reset();
+}
+
 void SdrObjListIter::ImpProcessObjectList(const SdrObjList& rObjList, SdrIterMode eMode, BOOL bUseZOrder)
 {
-    for(sal_uInt32 a(0L); a < rObjList.GetObjCount(); a++)
+    for( ULONG nIdx = 0, nCount = rObjList.GetObjCount(); nIdx < nCount; ++nIdx )
     {
-        SdrObject* pObj = NULL;
-        if (bUseZOrder)
-            pObj = rObjList.GetObj(a);
-        else
-            pObj = rObjList.GetObjectForNavigationPosition(a);
-        if (pObj == NULL)
-        {
-            OSL_ASSERT(pObj!=NULL);
-            continue;
-        }
-
-        sal_Bool bIsGroup(pObj->IsGroupObject());
-
-        // #99190# 3D objects are no group objects, IsGroupObject()
-        // only tests if pSub is not null ptr :-(
-        if(bIsGroup && pObj->ISA(E3dObject) && !pObj->ISA(E3dScene))
-            bIsGroup = sal_False;
-
-        if(eMode != IM_DEEPNOGROUPS || !bIsGroup)
-            maObjList.Insert(pObj, LIST_APPEND);
-
-        if(bIsGroup && eMode != IM_FLAT)
-            ImpProcessObjectList(*pObj->GetSubList(), eMode, bUseZOrder);
+        SdrObject* pObj = bUseZOrder ?
+            rObjList.GetObj( nIdx ) : rObjList.GetObjectForNavigationPosition( nIdx );
+        OSL_ASSERT( pObj != 0 );
+        if( pObj )
+            ImpProcessObj( pObj, eMode, bUseZOrder );
     }
 }
 
+void SdrObjListIter::ImpProcessMarkList( const SdrMarkList& rMarkList, SdrIterMode eMode )
+{
+    for( ULONG nIdx = 0, nCount = rMarkList.GetMarkCount(); nIdx < nCount; ++nIdx )
+        if( SdrObject* pObj = rMarkList.GetMark( nIdx )->GetMarkedSdrObj() )
+            ImpProcessObj( pObj, eMode, FALSE );
+}
+
+void SdrObjListIter::ImpProcessObj(SdrObject* pObj, SdrIterMode eMode, BOOL bUseZOrder)
+{
+    bool bIsGroup = pObj->IsGroupObject();
+    // #99190# 3D objects are no group objects, IsGroupObject()
+    // only tests if pSub is not null ptr :-(
+    if( bIsGroup && pObj->ISA( E3dObject ) && !pObj->ISA( E3dScene ) )
+        bIsGroup = false;
+
+    if( !bIsGroup || (eMode != IM_DEEPNOGROUPS) )
+        maObjList.Insert( pObj, LIST_APPEND );
+
+    if( bIsGroup && (eMode != IM_FLAT) )
+        ImpProcessObjectList( *pObj->GetSubList(), eMode, bUseZOrder );
+}
