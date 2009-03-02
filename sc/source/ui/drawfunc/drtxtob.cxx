@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: drtxtob.cxx,v $
- * $Revision: 1.34.144.1 $
+ * $Revision: 1.34.128.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -315,6 +315,7 @@ void __EXPORT ScDrawTextObjectBar::Execute( SfxRequest &rReq )
         case SID_ENABLE_HYPHENATION:
         case SID_TEXTDIRECTION_LEFT_TO_RIGHT:
         case SID_TEXTDIRECTION_TOP_TO_BOTTOM:
+#if 0 // DR
             if (IsNoteEdit())
             {
                 pView->CaptionTextDirection( rReq.GetSlot());     // process Notes before we end the text edit.
@@ -322,6 +323,7 @@ void __EXPORT ScDrawTextObjectBar::Execute( SfxRequest &rReq )
                 pViewData->GetDispatcher().Execute(pViewData->GetView()->GetDrawFuncPtr()->GetSlotID(), SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
             }
             else
+#endif
             {
                 pView->ScEndTextEdit(); // end text edit before switching direction
                 ExecuteGlobal( rReq );
@@ -350,7 +352,8 @@ void __EXPORT ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
 
     if (IsNoteEdit())
     {
-        // issue 21255 - Notes now support rich text formatting.
+        // #i21255# notes now support rich text formatting (#i74140# but not fontwork)
+        bDisableFontWork = TRUE;
     }
 
     if ( bDisableFontWork )

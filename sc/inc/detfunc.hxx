@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: detfunc.hxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.128.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,6 +40,7 @@ class SdrObject;
 class SdrPage;
 class String;
 
+class ScPostIt;
 class ScCommentData;
 class ScDetectiveData;
 class ScDocument;
@@ -48,7 +49,7 @@ class ScRange;
 
 #define SC_DET_MAXCIRCLE    1000
 
-enum ScDetectiveDelete { SC_DET_ALL, SC_DET_DETECTIVE, SC_DET_CIRCLES, SC_DET_COMMENTS, SC_DET_ARROWS };
+enum ScDetectiveDelete { SC_DET_ALL, SC_DET_DETECTIVE, SC_DET_CIRCLES, SC_DET_ARROWS };
 
 enum ScDetectiveObjType
 {
@@ -68,6 +69,24 @@ class SC_DLLPUBLIC ScDetectiveFunc
 
     ScDocument*     pDoc;
     SCTAB           nTab;
+
+    enum DrawPosMode
+    {
+        DRAWPOS_TOPLEFT,        /// Top-left edge of the cell.
+        DRAWPOS_BOTTOMRIGHT,    /// Bottom-right edge of the cell.
+        DRAWPOS_DETARROW,       /// Position inside cell for detective arrows.
+        DRAWPOS_CAPTIONLEFT,    /// Top-left edge of the cell for captions.
+        DRAWPOS_CAPTIONRIGHT    /// Top-right edge of the cell for captions (incl. merged cells).
+    };
+
+    /** Returns a drawing layer position for the passed cell address. */
+    Point       GetDrawPos( SCCOL nCol, SCROW nRow, DrawPosMode eMode ) const;
+
+    /** Returns the drawing layer rectangle for the passed cell range. */
+    Rectangle   GetDrawRect( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 ) const;
+
+    /** Returns the drawing layer rectangle for the passed cell address. */
+    Rectangle   GetDrawRect( SCCOL nCol, SCROW nRow ) const;
 
     BOOL        HasArrow( const ScAddress& rStart,
                             SCCOL nEndCol, SCROW nEndRow, SCTAB nEndTab );
@@ -97,11 +116,6 @@ class SC_DLLPUBLIC ScDetectiveFunc
 
     void        DrawCircle( SCCOL nCol, SCROW nRow, ScDetectiveData& rData );
 
-    SdrObject*  DrawCaption( SCCOL nCol, SCROW nRow, const String& rText,
-                                ScCommentData& rData, SdrPage* pDestPage,
-                                BOOL bHasUserText, BOOL bLeft,
-                                const Rectangle& rVisible );
-
     USHORT      InsertPredLevel( SCCOL nCol, SCROW nRow, ScDetectiveData& rData, USHORT nLevel );
     USHORT      InsertPredLevelArea( const ScRange& rRef,
                                         ScDetectiveData& rData, USHORT nLevel );
@@ -122,7 +136,6 @@ class SC_DLLPUBLIC ScDetectiveFunc
 public:
                 ScDetectiveFunc(ScDocument* pDocument, SCTAB nTable) : pDoc(pDocument),nTab(nTable) {}
 
-    Point       GetDrawPos( SCCOL nCol, SCROW nRow, BOOL bArrow );
     BOOL        ShowSucc( SCCOL nCol, SCROW nRow );
     BOOL        ShowPred( SCCOL nCol, SCROW nRow );
     BOOL        ShowError( SCCOL nCol, SCROW nRow );
@@ -133,13 +146,7 @@ public:
 
     BOOL        MarkInvalid(BOOL& rOverflow);
 
-    SdrObject*  ShowComment( SCCOL nCol, SCROW nRow, BOOL bForce, SdrPage* pDestPage = NULL );
-    SdrObject*  ShowCommentUser( SCCOL nCol, SCROW nRow, const String& rUserText,
-                                    const Rectangle& rVisible, BOOL bLeft,
-                                    BOOL bForce, SdrPage* pDestPage );
-    BOOL        HideComment( SCCOL nCol, SCROW nRow );
-
-    void        UpdateAllComments();        // on all tables
+    static void UpdateAllComments( ScDocument& rDoc );        // on all tables
     void        UpdateAllArrowColors();     // on all tables
 
     static BOOL IsNonAlienArrow( SdrObject* pObject );

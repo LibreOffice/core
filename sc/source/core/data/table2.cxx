@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: table2.cxx,v $
- * $Revision: 1.41 $
+ * $Revision: 1.40.124.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -331,7 +331,7 @@ void ScTable::DeleteSelection( USHORT nDelFlag, const ScMarkData& rMark )
 
 //  pTable = Clipboard
 void ScTable::CopyToClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                        ScTable* pTable, BOOL bKeepScenarioFlags)
+                        ScTable* pTable, BOOL bKeepScenarioFlags, BOOL bCloneNoteCaptions)
 {
     if (ValidColRow(nCol1, nRow1) && ValidColRow(nCol2, nRow2))
     {
@@ -339,7 +339,7 @@ void ScTable::CopyToClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         SCCOL i;
 
         for ( i = nCol1; i <= nCol2; i++)
-            aCol[i].CopyToClip(nRow1, nRow2, pTable->aCol[i], bKeepScenarioFlags);
+            aCol[i].CopyToClip(nRow1, nRow2, pTable->aCol[i], bKeepScenarioFlags, bCloneNoteCaptions);
 
         //  copy widths/heights, and only "hidden", "filtered" and "manual" flags
         //  also for all preceding columns/rows, to have valid positions for drawing objects
@@ -476,20 +476,17 @@ void ScTable::TransposeClip( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
             ScColumnIterator aIter( &aCol[nCol], nRow1, nRow2 );
             while (aIter.Next( nRow, pCell ))
             {
+                ScAddress aDestPos( static_cast<SCCOL>(nRow-nRow1), static_cast<SCROW>(nCol-nCol1), pTransClip->nTab );
                 ScBaseCell* pNew;
                 if ( bAsLink )                  // Referenz erzeugen ?
                 {
-                    pNew = aCol[nCol].CreateRefCell( pDestDoc,
-                                    ScAddress( static_cast<SCCOL>(nRow-nRow1), static_cast<SCROW>(nCol-nCol1), pTransClip->nTab ),
-                                    aIter.GetIndex(), nFlags );
+                    pNew = aCol[nCol].CreateRefCell( pDestDoc, aDestPos, aIter.GetIndex(), nFlags );
                 }
                 else                            // kopieren
                 {
                     if (pCell->GetCellType() == CELLTYPE_FORMULA)
                     {
-                        pNew = ((ScFormulaCell*)pCell)->Clone( pDestDoc,
-                                ScAddress( static_cast<SCCOL>(nRow-nRow1),
-                                    static_cast<SCROW>(nCol-nCol1), nTab));
+                        pNew = pCell->CloneWithNote( *pDestDoc, aDestPos, SC_CLONECELL_STARTLISTENING );
 
                         //  Referenzen drehen
                         //  bei Cut werden Referenzen spaeter per UpdateTranspose angepasst
@@ -498,7 +495,7 @@ void ScTable::TransposeClip( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                             ((ScFormulaCell*)pNew)->TransposeReference();
                     }
                     else
-                        pNew = pCell->Clone( pDestDoc );
+                        pNew = pCell->CloneWithNote( *pDestDoc, aDestPos );
                 }
                 pTransClip->PutCell( static_cast<SCCOL>(nRow-nRow1), static_cast<SCROW>(nCol-nCol1), pNew );
             }
@@ -852,13 +849,6 @@ void ScTable::SetValue( SCCOL nCol, SCROW nRow, const double& rVal )
 }
 
 
-void ScTable::SetNote( SCCOL nCol, SCROW nRow, const ScPostIt& rNote)
-{
-    if (ValidColRow(nCol, nRow))
-        aCol[nCol].SetNote(nRow, rNote);
-}
-
-
 void ScTable::GetString( SCCOL nCol, SCROW nRow, String& rString )
 {
     if (ValidColRow(nCol,nRow))
@@ -895,16 +885,31 @@ void ScTable::GetFormula( SCCOL nCol, SCROW nRow, String& rFormula,
 }
 
 
-BOOL ScTable::GetNote( SCCOL nCol, SCROW nRow, ScPostIt& rNote)
+ScPostIt* ScTable::GetNote( SCCOL nCol, SCROW nRow )
 {
-    BOOL bHasNote = FALSE;
+    return ValidColRow( nCol, nRow ) ? aCol[ nCol ].GetNote( nRow ) : 0;
+}
 
-    if (ValidColRow(nCol,nRow))
-        bHasNote = aCol[nCol].GetNote( nRow, rNote );
+
+void ScTable::TakeNote( SCCOL nCol, SCROW nRow, ScPostIt*& rpNote )
+{
+    if( ValidColRow( nCol, nRow ) )
+        aCol[ nCol ].TakeNote( nRow, rpNote );
     else
-        rNote.Clear();
+        DELETEZ( rpNote );
+}
 
-    return bHasNote;
+
+ScPostIt* ScTable::ReleaseNote( SCCOL nCol, SCROW nRow )
+{
+    return ValidColRow( nCol, nRow ) ? aCol[ nCol ].ReleaseNote( nRow ) : 0;
+}
+
+
+void ScTable::DeleteNote( SCCOL nCol, SCROW nRow )
+{
+    if( ValidColRow( nCol, nRow ) )
+        aCol[ nCol ].DeleteNote( nRow );
 }
 
 
@@ -1180,7 +1185,7 @@ BOOL ScTable::ExtendMerge( SCCOL nStartCol, SCROW nStartRow,
 }
 
 
-BOOL ScTable::IsBlockEmpty( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 ) const
+BOOL ScTable::IsBlockEmpty( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, bool bIgnoreNotes ) const
 {
     if (!(ValidCol(nCol1) && ValidCol(nCol2)))
     {
@@ -1189,7 +1194,7 @@ BOOL ScTable::IsBlockEmpty( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
     }
     BOOL bEmpty = TRUE;
     for (SCCOL i=nCol1; i<=nCol2 && bEmpty; i++)
-        bEmpty = aCol[i].IsEmptyBlock( nRow1, nRow2 );
+        bEmpty = aCol[i].IsEmptyBlock( nRow1, nRow2, bIgnoreNotes );
     return bEmpty;
 }
 
@@ -2680,12 +2685,6 @@ void ScTable::DoAutoOutline( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SC
     }
 }
 
-//
-//  Datei-Operationen
-//
-
-//  Speichern
-
                                     //  CopyData - fuer Query in anderen Bereich
 
 void ScTable::CopyData( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
@@ -2710,7 +2709,7 @@ void ScTable::CopyData( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW n
             ScBaseCell* pCell = GetCell( nCol, nRow );
             if (pCell)
             {
-                pCell = pCell->Clone(pDocument);
+                pCell = pCell->CloneWithoutNote( *pDocument );
                 if (pCell->GetCellType() == CELLTYPE_FORMULA)
                 {
                     ((ScFormulaCell*)pCell)->UpdateReference( URM_COPY, aRange,

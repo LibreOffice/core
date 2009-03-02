@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlcelli.hxx,v $
- * $Revision: 1.26 $
+ * $Revision: 1.26.128.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,7 +60,7 @@ struct ScMyImportAnnotation
     SfxItemSet* pItemSet;
     OutlinerParaObject* pOPO;
 
-    ScMyImportAnnotation() : pRect(NULL), pItemSet(NULL), pOPO(NULL) {}
+    ScMyImportAnnotation() : bDisplay(sal_False), pRect(NULL), pItemSet(NULL), pOPO(NULL) {}
     ~ScMyImportAnnotation();
 };
 

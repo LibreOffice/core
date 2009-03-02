@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fuconstr.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.128.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,172 +31,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
-//------------------------------------------------------------------------
-
-// TOOLS
-#define _BIGINT_HXX
-#define _SFXMULTISEL_HXX
-#define _STACK_HXX
-#define _QUEUE_HXX
-#define _DYNARR_HXX
-#define _TREELIST_HXX
-#define _CACHESTR_HXX
-#define _NEW_HXX
-//#define _SHL_HXX
-//#define _LINK_HXX
-//#define _ERRCODE_HXX
-//#define _GEN_HXX
-//#define _FRACT_HXX
-//#define _STRING_HXX
-//#define _MTF_HXX
-//#define _CONTNR_HXX
-//#define _LIST_HXX
-//#define _TABLE_HXX
-#define _DYNARY_HXX
-//#define _UNQIDX_HXX
-#define _SVMEMPOOL_HXX
-//#define _UNQID_HXX
-//#define _DEBUG_HXX
-//#define _DATE_HXX
-//#define _TIME_HXX
-//#define _DATETIME_HXX
-//#define _INTN_HXX
-//#define _WLDCRD_HXX
-//#define _FSYS_HXX
-//#define _STREAM_HXX
-#define _CACHESTR_HXX
-#define _SV_MULTISEL_HXX
-
-
-//SV
-//#define _CLIP_HXX
-#define _CONFIG_HXX
-#define _CURSOR_HXX
-#define _FONTDLG_HXX
-#define _PRVWIN_HXX
-//#define _COLOR_HXX
-//#define _PAL_HXX
-//#define _BITMAP_HXX
-//#define _GDIOBJ_HXX
-//#define _POINTR_HXX
-//#define _ICON_HXX
-//#define _IMAGE_HXX
-//#define _KEYCOD_HXX
-//#define _EVENT_HXX
-#define _HELP_HXX
-//#define _APP_HXX
-//#define _MDIAPP_HXX
-//#define _TIMER_HXX
-//#define _METRIC_HXX
-//#define _REGION_HXX
-//#define _OUTDEV_HXX
-//#define _SYSTEM_HXX
-//#define _VIRDEV_HXX
-//#define _JOBSET_HXX
-//#define _PRINT_HXX
-//#define _WINDOW_HXX
-//#define _SYSWIN_HXX
-//#define _WRKWIN_HXX
-#define _MDIWIN_HXX
-//#define _FLOATWIN_HXX
-//#define _DOCKWIN_HXX
-//#define _CTRL_HXX
-//#define _SCRBAR_HXX
-//#define _BUTTON_HXX
-//#define _IMAGEBTN_HXX
-//#define _FIXED_HXX
-//#define _GROUP_HXX
-//#define _EDIT_HXX
-//#define _COMBOBOX_HXX
-//#define _LSTBOX_HXX
-//#define _SELENG_HXX
-//#define _SPLIT_HXX
-#define _SPIN_HXX
-//#define _FIELD_HXX
-//#define _MOREBTN_HXX
-//#define _TOOLBOX_HXX
-//#define _STATUS_HXX
-//#define _DIALOG_HXX
-//#define _MSGBOX_HXX
-//#define _SYSDLG_HXX
-//#define _PRNDLG_HXX
-#define _COLDLG_HXX
-//#define _TABDLG_HXX
-//#define _GDIMTF_HXX
-//#define _POLY_HXX
-//#define _ACCEL_HXX
-//#define _GRAPH_HXX
-#define _SOUND_HXX
-
-//svtools
-#define _SCRWIN_HXX
-#define _RULER_HXX
-//#define _TABBAR_HXX
-//#define _VALUESET_HXX
-#define _STDMENU_HXX
-//#define _STDCTRL_HXX
-//#define _CTRLBOX_HXX
-#define _CTRLTOOL_HXX
-#define _EXTATTR_HXX
-#define _FRM3D_HXX
-#define _EXTATTR_HXX
-
-//SVTOOLS
-//#define _SVTREELIST_HXX ***
-#define _FILTER_HXX
-//#define _SVLBOXITM_HXX ***
-//#define _SVTREEBOX_HXX ***
-#define _SVICNVW_HXX
-#define _SVTABBX_HXX
-
-//sfxcore.hxx
-//#define _SFXINIMGR_HXX ***
-//#define _SFXCFGITEM_HXX
-//#define _SFX_PRINTER_HXX
-#define _SFXGENLINK_HXX
-#define _SFXHINTPOST_HXX
-//#define _SFXDOCINF_HXX ***
-#define _SFXLINKHDL_HXX
-//#define _SFX_PROGRESS_HXX
-
-//sfxsh.hxx
-//#define _SFX_SHELL_HXX
-//#define _SFXAPP_HXX
-//#define _SFXDISPATCH_HXX
-//#define _SFXMSG_HXX ***
-//#define _SFXOBJFACE_HXX ***
-//#define _SFXREQUEST_HXX
-#define _SFXMACRO_HXX
-
-// SFX
-//#define _SFXAPPWIN_HXX ***
-#define _SFX_SAVEOPT_HXX
-//#define _SFX_CHILDWIN_HXX
-//#define _SFXCTRLITEM_HXX
-#define _SFXPRNMON_HXX
-#define _INTRO_HXX
-#define _SFXMSGDESCR_HXX
-#define _SFXMSGPOOL_HXX
-#define _SFXFILEDLG_HXX
-#define _PASSWD_HXX
-#define _SFXTBXCTRL_HXX
-#define _SFXSTBITEM_HXX
-#define _SFXMNUITEM_HXX
-#define _SFXIMGMGR_HXX
-#define _SFXTBXMGR_HXX
-#define _SFXSTBMGR_HXX
-#define _SFX_MINFITEM_HXX
-#define _SFXEVENT_HXX
-
-//------------------------------------------------------------------------
-
 #include <svx/outliner.hxx>
 #include <svx/outlobj.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/svdouno.hxx>
-#include <svx/svdview.hxx>
 #include <sfx2/dispatch.hxx>
 
 #include "fuconstr.hxx"
@@ -204,6 +42,7 @@
 #include "tabvwsh.hxx"
 #include "futext.hxx"
 #include "sc.hrc"
+#include "drawview.hxx"
 
 //  Maximal erlaubte Mausbewegung um noch Drag&Drop zu starten
 //! fusel,fuconstr,futext - zusammenfassen!
@@ -217,7 +56,7 @@
 |*
 \************************************************************************/
 
-FuConstruct::FuConstruct(ScTabViewShell* pViewSh, Window* pWin, SdrView* pViewP,
+FuConstruct::FuConstruct(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pViewP,
                    SdrModel* pDoc, SfxRequest& rReq) :
     FuDraw(pViewSh, pWin, pViewP, pDoc, rReq)
 {

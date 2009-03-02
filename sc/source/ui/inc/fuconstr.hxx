@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fuconstr.hxx,v $
- * $Revision: 1.3 $
+ * $Revision: 1.3.128.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,9 +31,6 @@
 #ifndef SC_FUCONSTR_HXX
 #define SC_FUCONSTR_HXX
 
-#ifndef _SV_HXX
-#endif
-
 #include "fudraw.hxx"
 
 
@@ -51,7 +48,7 @@
 class FuConstruct : public FuDraw
 {
  public:
-    FuConstruct(ScTabViewShell* pViewSh, Window* pWin, SdrView* pView,
+    FuConstruct(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pView,
                    SdrModel* pDoc, SfxRequest& rReq);
 
     virtual ~FuConstruct();

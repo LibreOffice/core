@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: notesuno.cxx,v $
- * $Revision: 1.11 $
+ * $Revision: 1.11.128.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,8 +54,9 @@
 #include "userdat.hxx"
 #include <svx/outlobj.hxx>
 #include <svx/unoshape.hxx>
-#include <svx/svdobj.hxx>
+#include <svx/svdocapt.hxx>
 #include <svx/svditer.hxx>
+#include <svx/svdpage.hxx>
 #include <com/sun/star/drawing/XShapeDescriptor.hpp>
 
 using namespace com::sun::star;
@@ -88,18 +89,6 @@ ScAnnotationObj::ScAnnotationObj(ScDocShell* pDocSh, const ScAddress& rPos) :
 
     //  pUnoText is allocated on demand (GetUnoText)
     //  can't be aggregated because getString/setString is handled here
-}
-
-SvxUnoText& ScAnnotationObj::GetUnoText()
-{
-    if (!pUnoText)
-    {
-        ScAnnotationEditSource aEditSource( pDocShell, aCellPos );
-        pUnoText = new SvxUnoText( &aEditSource, lcl_GetAnnotationPropertyMap(),
-                                    uno::Reference<text::XText>() );
-        pUnoText->acquire();
-    }
-    return *pUnoText;
 }
 
 ScAnnotationObj::~ScAnnotationObj()
@@ -229,93 +218,30 @@ table::CellAddress SAL_CALL ScAnnotationObj::getPosition() throw(uno::RuntimeExc
 rtl::OUString SAL_CALL ScAnnotationObj::getAuthor() throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-        String aAuthor;
-    if ( pDocShell )
-    {
-        ScDocument* pDoc = pDocShell->GetDocument();
-            ScPostIt aNote(pDoc);
-        pDoc->GetNote( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab(), aNote );
-                aAuthor = aNote.GetAuthor();
-    }
-    return aAuthor;
+    const ScPostIt* pNote = ImplGetNote();
+    return pNote ? pNote->GetAuthor() : EMPTY_STRING;
 }
 
 rtl::OUString SAL_CALL ScAnnotationObj::getDate() throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-        String aDate;
-    if ( pDocShell )
-    {
-        ScDocument* pDoc = pDocShell->GetDocument();
-            ScPostIt aNote(pDoc);
-        pDoc->GetNote( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab(), aNote );
-                aDate = aNote.GetDate();
-    }
-    return aDate;
+    const ScPostIt* pNote = ImplGetNote();
+    return pNote ? pNote->GetDate() : EMPTY_STRING;
 }
 
 sal_Bool SAL_CALL ScAnnotationObj::getIsVisible() throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    BOOL bShown = FALSE;
-    if ( pDocShell )
-    {
-        ScDocument* pDoc = pDocShell->GetDocument();
-            ScPostIt aNote(pDoc);
-        pDoc->GetNote( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab(), aNote );
-                bShown = aNote.IsShown();
-    }
-    return bShown;
+    const ScPostIt* pNote = ImplGetNote();
+    return pNote && pNote->IsCaptionShown();
 }
 
 void SAL_CALL ScAnnotationObj::setIsVisible( sal_Bool bIsVisible ) throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    BOOL bDone = FALSE;
-    if ( pDocShell )
-    {
-        //! Funktion an docfunc oder so
-
-        BOOL bSet = bIsVisible ? TRUE : FALSE;
-        ScDocument* pDoc = pDocShell->GetDocument();
-        BOOL bUndo(pDoc->IsUndoEnabled());
-        SCCOL nCol = aCellPos.Col();
-        SCROW nRow = aCellPos.Row();
-        SCTAB nTab = aCellPos.Tab();
-        ScPostIt aNote(pDoc);
-        if ( pDoc->GetNote( nCol, nRow, nTab, aNote ) )
-        {
-            BOOL bHad = pDoc->HasNoteObject( nCol, nRow, nTab );
-            if ( bHad != bSet )
-            {
-                pDocShell->MakeDrawLayer();
-                ScDrawLayer* pModel = pDoc->GetDrawLayer();
-
-                if (bUndo)
-                    pModel->BeginCalcUndo();
-                ScDetectiveFunc aFunc( pDoc,nTab );
-                if ( bSet )
-                    bDone = ( aFunc.ShowComment( nCol, nRow, FALSE ) != NULL );
-                else
-                    bDone = aFunc.HideComment( nCol, nRow );
-                SdrUndoGroup* pUndo = NULL;
-                if (bUndo)
-                    pUndo = pModel->GetCalcUndo();
-                if (bDone)
-                {
-                    aNote.SetShown( bSet );
-                    pDoc->SetNote( nCol, nRow, nTab, aNote );
-                    if (pUndo)
-                        pDocShell->GetUndoManager()->AddUndoAction(
-                            new ScUndoNote( pDocShell, bSet, aCellPos, pUndo ) );
-
-                    pDocShell->SetDocumentModified();
-                }
-                else
-                    delete pUndo;
-            }
-        }
-    }
+    // show/hide note with undo action
+    if( pDocShell )
+        pDocShell->GetDocFunc().ShowNote( aCellPos, bIsVisible );
 }
 
 // XSheetAnnotationShapeSupplier
@@ -324,6 +250,23 @@ uno::Reference < drawing::XShape > SAL_CALL ScAnnotationObj::getAnnotationShape(
 {
     ScUnoGuard aGuard;
     return new ScAnnotationShapeObj(pDocShell, aCellPos);
+}
+
+SvxUnoText& ScAnnotationObj::GetUnoText()
+{
+    if (!pUnoText)
+    {
+        ScAnnotationEditSource aEditSource( pDocShell, aCellPos );
+        pUnoText = new SvxUnoText( &aEditSource, lcl_GetAnnotationPropertyMap(),
+                                    uno::Reference<text::XText>() );
+        pUnoText->acquire();
+    }
+    return *pUnoText;
+}
+
+const ScPostIt* ScAnnotationObj::ImplGetNote() const
+{
+    return pDocShell ? pDocShell->GetDocument()->GetNote( aCellPos ) : 0;
 }
 
 //------------------------------------------------------------------------
@@ -354,139 +297,16 @@ SvxUnoText& ScAnnotationShapeObj::GetUnoText()
 uno::Reference < drawing::XShape > ScAnnotationShapeObj::GetXShape()
 {
     if (!xShape.is())
-    {
-        ScPostIt aNote(pDocShell->GetDocument());
-        if ( pDocShell->GetDocument()->GetNote( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab(), aNote ) )
-        {
-            const SfxItemSet& rSet = aNote.GetItemSet();
-
-            // In order to transform the SfxItemSet to an EscherPropertyContainer
-            // and export the properties, we need to recreate the drawing object and
-            // pass this to XclObjComment() for processing.
-            SdrCaptionObj* pCaption = new SdrCaptionObj( aNote.GetRectangle() );
-            pCaption->SetMergedItemSet(rSet);
-
-            if(const EditTextObject* pEditText = aNote.GetEditTextObject())
-            {
-                OutlinerParaObject* pOPO = new OutlinerParaObject( *pEditText );
-                pOPO->SetOutlinerMode( OUTLINERMODE_TEXTOBJECT );
-                pCaption->NbcSetOutlinerParaObject( pOPO );
-                pOPO->SetVertical( FALSE );  // notes are always horizontal
-            }
-
-            aNote.InsertObject(pCaption, *pDocShell->GetDocument(), aCellPos.Tab(), sal_False);
-
-            xShape.set(pCaption->getUnoShape(), uno::UNO_QUERY);
-        }
-    }
+        if( ScPostIt* pNote = pDocShell->GetDocument()->GetNote( aCellPos ) )
+            if( SdrObject* pCaption = pNote->GetCaption() )
+                xShape.set( pCaption->getUnoShape(), uno::UNO_QUERY );
     return xShape;
-}
-
-SdrObject* ScAnnotationShapeObj::GetCaptionObj()
-{
-    SdrObject* pRet = NULL;
-
-    ScDrawLayer* pModel = pDocShell->GetDocument()->GetDrawLayer();
-    if (!pModel)
-        return FALSE;
-    SdrPage* pPage = pModel->GetPage(static_cast<sal_uInt16>(aCellPos.Tab()));
-    DBG_ASSERT(pPage,"Page ?");
-
-    pPage->RecalcObjOrdNums();
-
-    SdrObjListIter aIter( *pPage, IM_FLAT );
-    SdrObject* pObject = aIter.Next();
-    while (pObject && !pRet)
-    {
-        if ( pObject->GetLayer() == SC_LAYER_INTERN && pObject->ISA( SdrCaptionObj ) )
-        {
-            ScDrawObjData* pData = ScDrawLayer::GetObjData( pObject );
-            if ( pData && aCellPos.Col() == pData->aStt.Col() && aCellPos.Row() == pData->aStt.Row() )
-            {
-                pRet = pObject;
-            }
-        }
-
-        pObject = aIter.Next();
-    }
-
-    return pRet;
-}
-
-void ScAnnotationShapeObj::UpdateData()
-{
-    if (xShape.is())
-    {
-        SvxShape* pShapeImp = SvxShape::getImplementation(xShape);
-        if (pShapeImp)
-        {
-            SdrObject *pSdrObj = pShapeImp->GetSdrObject();
-            if (pSdrObj)
-            {
-                ScPostIt aNote(pDocShell->GetDocument());
-                if ( pDocShell->GetDocument()->GetNote( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab(), aNote ) )
-                {
-                    aNote.SetItemSet(pSdrObj->GetMergedItemSet());
-                    awt::Point aPos = xShape->getPosition();
-                    awt::Size aSize = xShape->getSize();
-                    Rectangle aRect(Point(aPos.X, aPos.Y), Size(aSize.Width, aSize.Height));
-                    aNote.SetRectangle(aRect);
-
-                    pDocShell->GetDocument()->SetNote(aCellPos.Col(), aCellPos.Row(), aCellPos.Tab(), aNote);
-
-                    if (aNote.IsShown())
-                    {
-                        SdrObject* pObj = GetCaptionObj();
-                        if (pObj)
-                        {
-                            uno::Reference<drawing::XShape> xCaptionShape(pObj->getUnoShape(), uno::UNO_QUERY);
-                            if (xCaptionShape.is())
-                            {
-                                xCaptionShape->setSize(aSize);
-                                xCaptionShape->setPosition(aPos);
-                            }
-                            pObj->SetMergedItemSet(aNote.GetItemSet());
-                            pObj->ActionChanged();
-                        }
-                    // not neccessary, because it should not be possible to change the text in the shape directly
-//                    if((pSdrObj->GetOutlinerParaObject()))
-//                        pMyAnnotation->pOPO = new OutlinerParaObject( *(pSdrObj->GetOutlinerParaObject()) );
-                    }
-                }
-            }
-        }
-    }
 }
 
 ScAnnotationShapeObj::~ScAnnotationShapeObj()
 {
     if (pDocShell)
         pDocShell->GetDocument()->RemoveUnoObject(*this);
-
-    if (xShape.is() && pDocShell)
-    {
-        SvxShape* pShapeImp = SvxShape::getImplementation(xShape);
-        if (pShapeImp)
-        {
-            SdrObject *pSdrObj = pShapeImp->GetSdrObject();
-            if (pSdrObj)
-            {
-                if (pSdrObj->ISA( SdrCaptionObj ))
-                {
-                    ScPostIt aNote(pDocShell->GetDocument());
-                    if ( pDocShell->GetDocument()->GetNote( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab(), aNote ) )
-                    {
-                        aNote.RemoveObject(static_cast< SdrCaptionObj* >(pSdrObj), *pDocShell->GetDocument(), aCellPos.Tab());
-                    }
-                }
-                else
-                {
-                    DBG_ERROR("should be a Caption Shape");
-                }
-            }
-        }
-    }
-
     if (pUnoText)
         pUnoText->release();
 }
@@ -662,29 +482,34 @@ awt::Point SAL_CALL ScAnnotationShapeObj::getPosition(  )
     throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    return GetXShape()->getPosition();
+    GetXShape();
+    return xShape.is() ? xShape->getPosition() : awt::Point();
 }
 
 void SAL_CALL ScAnnotationShapeObj::setPosition( const awt::Point& aPosition )
     throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    GetXShape()->setPosition(aPosition);
-    UpdateData();
+    GetXShape();
+    if( xShape.is() )
+        xShape->setPosition(aPosition);
 }
 
 awt::Size SAL_CALL ScAnnotationShapeObj::getSize(  )
     throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    return GetXShape()->getSize();
+    GetXShape();
+    return xShape.is() ? xShape->getSize() : awt::Size();
 }
 
 void SAL_CALL ScAnnotationShapeObj::setSize( const awt::Size& aSize )
     throw (beans::PropertyVetoException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    GetXShape()->setSize(aSize);
+    GetXShape();
+    if( xShape.is() )
+        xShape->setSize(aSize);
 }
 
 // XPropertyState
@@ -718,10 +543,7 @@ void SAL_CALL ScAnnotationShapeObj::setPropertyToDefault( const ::rtl::OUString&
     ScUnoGuard aGuard;
     uno::Reference < beans::XPropertyState > xState (GetXShape(), uno::UNO_QUERY);
     if (xState.is())
-    {
         xState->setPropertyToDefault( PropertyName );
-        UpdateData();
-    }
 }
 
 uno::Any SAL_CALL ScAnnotationShapeObj::getPropertyDefault( const rtl::OUString& aPropertyName )
@@ -756,10 +578,7 @@ void SAL_CALL ScAnnotationShapeObj::setPropertyValue( const rtl::OUString& aProp
     ScUnoGuard aGuard;
     uno::Reference < beans::XPropertySet > xProp (GetXShape(), uno::UNO_QUERY);
     if (xProp.is())
-    {
         xProp->setPropertyValue( aPropertyName, aValue );
-        UpdateData();
-    }
 }
 
 uno::Any SAL_CALL ScAnnotationShapeObj::getPropertyValue( const rtl::OUString& PropertyName )
@@ -833,10 +652,7 @@ void SAL_CALL ScAnnotationShapeObj::setPropertyValues( const uno::Sequence< rtl:
     ScUnoGuard aGuard;
     uno::Reference < beans::XMultiPropertySet > xProp (GetXShape(), uno::UNO_QUERY);
     if (xProp.is())
-    {
         xProp->setPropertyValues( aPropertyNames, aValues );
-        UpdateData();
-    }
 }
 
 uno::Sequence< uno::Any > SAL_CALL ScAnnotationShapeObj::getPropertyValues(

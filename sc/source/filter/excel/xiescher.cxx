@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xiescher.cxx,v $
- * $Revision: 1.56.88.20 $
+ * $Revision: 1.57.52.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -69,7 +69,6 @@
 #include <basic/sbmod.hxx>
 #include <basic/sbmeth.hxx>
 
-#include <svx/svdobj.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svdocirc.hxx>
 #include <svx/svdoedge.hxx>
@@ -77,6 +76,7 @@
 #include <svx/svdoashp.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdoole2.hxx>
+#include <svx/svdocapt.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/editobj.hxx>
@@ -390,7 +390,6 @@ void XclImpDrawObjBase::SetDffData( const DffObjData& rDffObjData, const String&
     maHyperlink = rHyperlink;
     mbVisible = bVisible;
     mbAutoMargin = bAutoMargin;
-
 }
 
 void XclImpDrawObjBase::SetAnchor( const XclObjAnchor& rAnchor )
@@ -968,10 +967,10 @@ sal_Size XclImpGroupObj::DoGetProgressSize() const
     return XclImpDrawObjBase::DoGetProgressSize() + maChildren.GetProgressSize();
 }
 
-SdrObject* XclImpGroupObj::DoCreateSdrObj( const Rectangle& rAnchorRect, ScfProgressBar& rProgress ) const
+SdrObject* XclImpGroupObj::DoCreateSdrObj( const Rectangle& /*rAnchorRect*/, ScfProgressBar& rProgress ) const
 {
     TSdrObjectPtr< SdrObjGroup > xSdrObj( new SdrObjGroup );
-    xSdrObj->NbcSetSnapRect( rAnchorRect );
+    // child objects in BIFF2-BIFF5 have absolute size, not needed to pass own anchor rectangle
     for( XclImpDrawObjVector::const_iterator aIt = maChildren.begin(), aEnd = maChildren.end(); aIt != aEnd; ++aIt )
         GetObjectManager().GetDffManager().ProcessObject( xSdrObj->GetSubList(), **aIt );
     rProgress.Progress();
@@ -1626,7 +1625,7 @@ XclImpNoteObj::XclImpNoteObj( const XclImpRoot& rRoot ) :
     mnNoteFlags( 0 )
 {
     SetSimpleMacro( false );
-    // note object will be processed, but not inserted into the draw page
+    // caption object will be created manually
     SetInsertSdrObj( false );
 }
 
@@ -1638,46 +1637,22 @@ void XclImpNoteObj::SetNoteData( const ScAddress& rScPos, sal_uInt16 nNoteFlags 
 
 void XclImpNoteObj::DoProcessSdrObj( SdrObject& rSdrObj ) const
 {
-    if( maScPos.IsValid() && maTextData.mxString.is() )
+    SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( &rSdrObj );
+    if( pTextObj && maScPos.IsValid() )
     {
-        SCCOL nScCol = maScPos.Col();
-        SCROW nScRow = maScPos.Row();
-        SCTAB nScTab = GetScTab();
-        bool bVisible = ::get_flag( mnNoteFlags, EXC_NOTE_VISIBLE );
-
-        // create the note object
-        ::std::auto_ptr< EditTextObject > pEditObj(
-            XclImpStringHelper::CreateNoteObject( GetRoot(), *maTextData.mxString ) );
-        // ScPostIt does not take ownership of the passed note
-        ScPostIt aNote( pEditObj.get(), GetDocPtr() );
-        aNote.SetRectangle( rSdrObj.GetSnapRect() );
-        aNote.SetShown( bVisible );
-
-        // get the actual container from this group object
-        SdrObject* pBoxSdrObj = &rSdrObj;
-        if( rSdrObj.IsGroupObject() && rSdrObj.GetSubList() )
+        if( ScPostIt* pNote = GetDoc().GetOrCreateNote( maScPos ) )
         {
-            SdrObjListIter aIt( *rSdrObj.GetSubList() );
-            pBoxSdrObj = aIt.Next();
-        }
-
-        // set textbox properties
-        if( pBoxSdrObj )
-        {
-            XclImpTextObj::DoProcessSdrObj( *pBoxSdrObj );
-            pBoxSdrObj->SetMergedItem( SdrTextAutoGrowWidthItem( FALSE ) );
-            pBoxSdrObj->SetMergedItem( SdrTextAutoGrowHeightItem( FALSE ) );
-            aNote.SetAndApplyItemSet( pBoxSdrObj->GetMergedItemSet() );
-        }
-
-        // insert the note into the document
-        GetDoc().SetNote( nScCol, nScRow, nScTab, aNote );
-
-        // make the note visible via ScDetectiveFunc
-        if( bVisible )
-        {
-            ScDetectiveFunc aDetFunc( GetDocPtr(), nScTab );
-            aDetFunc.ShowComment( nScCol, nScRow, TRUE );
+            if( SdrCaptionObj* pCaption = pNote->GetCaption() )
+            {
+                // create formatted text
+                XclImpTextObj::DoProcessSdrObj( *pCaption );
+                // set textbox rectangle from imported object
+                pCaption->NbcSetLogicRect( pTextObj->GetLogicRect() );
+                // copy all items from imported object (resets shadow items)
+                pNote->SetCaptionItems( pTextObj->GetMergedItemSet() );
+                // move caption to correct layer (visible/hidden)
+                pNote->ShowCaption( ::get_flag( mnNoteFlags, EXC_NOTE_VISIBLE ) );
+            }
         }
     }
 }
@@ -3003,18 +2978,39 @@ void XclImpSolverContainer::UpdateConnection( sal_uInt32 nDffShapeId, SdrObject*
 
 // ----------------------------------------------------------------------------
 
+XclImpSimpleDffManager::XclImpSimpleDffManager( const XclImpRoot& rRoot, SvStream& rDffStrm ) :
+    SvxMSDffManager( rDffStrm, rRoot.GetBasePath(), 0, 0, rRoot.GetDoc().GetDrawLayer(), 1440, COL_DEFAULT, 24, 0, &rRoot.GetTracer().GetBaseTracer() ),
+    XclImpRoot( rRoot )
+{
+    SetSvxMSDffSettings( SVXMSDFF_SETTINGS_CROP_BITMAPS | SVXMSDFF_SETTINGS_IMPORT_EXCEL | SVXMSDFF_SETTINGS_IMPORT_IAS );
+}
+
+XclImpSimpleDffManager::~XclImpSimpleDffManager()
+{
+}
+
+FASTBOOL XclImpSimpleDffManager::GetColorFromPalette( USHORT nIndex, Color& rColor ) const
+{
+    ColorData nColor = GetPalette().GetColorData( static_cast< sal_uInt16 >( nIndex ) );
+
+    if( nColor == COL_AUTO )
+        return FALSE;
+
+    rColor.SetColor( nColor );
+    return TRUE;
+}
+
+// ----------------------------------------------------------------------------
+
 XclImpDffManager::XclImpDffManager(
         const XclImpRoot& rRoot, XclImpObjectManager& rObjManager, SvStream& rDffStrm ) :
-    SvxMSDffManager( rDffStrm, rRoot.GetBasePath(), 0, 0, rRoot.GetDoc().GetDrawLayer(), 1440, COL_DEFAULT, 24, 0, &rRoot.GetTracer().GetBaseTracer() ),
+    XclImpSimpleDffManager( rRoot, rDffStrm ),
     SvxMSConvertOCXControls( rRoot.GetDocShell(), 0 ),
-    XclImpRoot( rRoot ),
     mrObjManager( rObjManager ),
     mnOleImpFlags( 0 ),
     mnLastCtrlIndex( -1 ),
     mnCurrFormScTab( -1 )
 {
-    SetSvxMSDffSettings( SVXMSDFF_SETTINGS_CROP_BITMAPS | SVXMSDFF_SETTINGS_IMPORT_EXCEL | SVXMSDFF_SETTINGS_IMPORT_IAS );
-
     if( SvtFilterOptions* pFilterOpt = SvtFilterOptions::Get() )
     {
         if( pFilterOpt->IsMathType2Math() )
@@ -3291,17 +3287,6 @@ SdrObject* XclImpDffManager::ProcessObj( SvStream& rDffStrm,
 ULONG XclImpDffManager::Calc_nBLIPPos( ULONG /*nOrgVal*/, ULONG nStreamPos ) const
 {
     return nStreamPos + 4;
-}
-
-FASTBOOL XclImpDffManager::GetColorFromPalette( USHORT nIndex, Color& rColor ) const
-{
-    ColorData nColor = GetPalette().GetColorData( static_cast< sal_uInt16 >( nIndex ) );
-
-    if( nColor == COL_AUTO )
-        return FALSE;
-
-    rColor.SetColor( nColor );
-    return TRUE;
 }
 
 sal_Bool XclImpDffManager::InsertControl( const Reference< XFormComponent >& rxFormComp,
@@ -3912,8 +3897,7 @@ void XclImpObjectManager::ReadNote3( XclImpStream& rStrm )
                 nTotalLen = 0;
             }
         }
-        ScPostIt aScNote( aNoteText, GetDocPtr() );
-        GetDoc().SetNote( aScNotePos.Col(), aScNotePos.Row(), aScNotePos.Tab(), aScNote );
+        ScNoteUtil::CreateNoteFromString( GetDoc(), aScNotePos, aNoteText, false );
     }
 }
 
@@ -3943,7 +3927,7 @@ sal_Size XclImpObjectManager::GetProgressSize() const
 
 XclImpDffPropSet::XclImpDffPropSet( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot ),
-    maDffManager( maDummyStrm, rRoot.GetBasePath(), 0, 0, rRoot.GetDoc().GetDrawLayer(), 1440, COL_DEFAULT, 24, 0, &rRoot.GetTracer().GetBaseTracer() )
+    maDffManager( rRoot, maDummyStrm )
 {
 }
 

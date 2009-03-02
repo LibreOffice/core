@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cell.cxx,v $
- * $Revision: 1.42.30.4 $
+ * $Revision: 1.44.38.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -82,60 +82,87 @@ IMPL_FIXEDMEMPOOL_NEWDEL( ScStringCell,  nMemPoolStringCell, nMemPoolStringCell 
 IMPL_FIXEDMEMPOOL_NEWDEL( ScNoteCell,    nMemPoolNoteCell, nMemPoolNoteCell )
 #endif
 
-// -----------------------------------------------------------------------
+// ============================================================================
 
 ScBaseCell::ScBaseCell( CellType eNewType ) :
-    pNote( NULL ),
-    pBroadcaster( NULL ),
+    mpNote( 0 ),
+    mpBroadcaster( 0 ),
     nTextWidth( TEXTWIDTH_DIRTY ),
     eCellType( sal::static_int_cast<BYTE>(eNewType) ),
     nScriptType( SC_SCRIPTTYPE_UNKNOWN )
 {
 }
 
-ScBaseCell::ScBaseCell( const ScBaseCell& rBaseCell, ScDocument* pDoc ) :
-    pBroadcaster( NULL ),
-    nTextWidth( rBaseCell.nTextWidth ),
-    eCellType( rBaseCell.eCellType ),
+ScBaseCell::ScBaseCell( const ScBaseCell& rCell ) :
+    mpNote( 0 ),
+    mpBroadcaster( 0 ),
+    nTextWidth( rCell.nTextWidth ),
+    eCellType( rCell.eCellType ),
     nScriptType( SC_SCRIPTTYPE_UNKNOWN )
 {
-    if (rBaseCell.pNote)
-        pNote = new ScPostIt( *rBaseCell.pNote, pDoc );
-    else
-        pNote = NULL;
-}
-
-ScBaseCell* ScBaseCell::Clone(ScDocument* pDoc) const
-{
-    switch (eCellType)
-    {
-        case CELLTYPE_VALUE:
-            return new ScValueCell(*(const ScValueCell*)this, pDoc);
-        case CELLTYPE_STRING:
-            return new ScStringCell(*(const ScStringCell*)this, pDoc);
-        case CELLTYPE_EDIT:
-            return new ScEditCell(*(const ScEditCell*)this, pDoc);
-        case CELLTYPE_FORMULA:
-            return new ScFormulaCell(pDoc, ((ScFormulaCell*)this)->aPos,
-                *(const ScFormulaCell*)this);
-        case CELLTYPE_NOTE:
-            return new ScNoteCell(*(const ScNoteCell*)this, pDoc);
-        default:
-            DBG_ERROR("Unbekannter Zellentyp");
-            return NULL;
-    }
 }
 
 ScBaseCell::~ScBaseCell()
 {
-    delete pNote;
-    delete pBroadcaster;
+    delete mpNote;
+    delete mpBroadcaster;
     DBG_ASSERT( eCellType == CELLTYPE_DESTROYED, "BaseCell Destructor" );
+}
+
+namespace {
+
+ScBaseCell* lclCloneCell( const ScBaseCell& rSrcCell, ScDocument& rDestDoc, const ScAddress& rDestPos, int nCloneFlags )
+{
+    switch( rSrcCell.GetCellType() )
+    {
+        case CELLTYPE_VALUE:
+            return new ScValueCell( static_cast< const ScValueCell& >( rSrcCell ) );
+        case CELLTYPE_STRING:
+            return new ScStringCell( static_cast< const ScStringCell& >( rSrcCell ) );
+        case CELLTYPE_EDIT:
+            return new ScEditCell( static_cast< const ScEditCell& >( rSrcCell ), rDestDoc );
+        case CELLTYPE_FORMULA:
+            return new ScFormulaCell( static_cast< const ScFormulaCell& >( rSrcCell ), rDestDoc, rDestPos, nCloneFlags );
+        case CELLTYPE_NOTE:
+            return new ScNoteCell;
+        default:;
+    }
+    DBG_ERROR( "lclCloneCell - unknown cell type" );
+    return 0;
+}
+
+} // namespace
+
+ScBaseCell* ScBaseCell::CloneWithoutNote( ScDocument& rDestDoc, int nCloneFlags ) const
+{
+    // notes will not be cloned -> cell address only needed for formula cells
+    ScAddress aDestPos;
+    if( eCellType == CELLTYPE_FORMULA )
+        aDestPos = static_cast< const ScFormulaCell* >( this )->aPos;
+    return lclCloneCell( *this, rDestDoc, aDestPos, nCloneFlags );
+}
+
+ScBaseCell* ScBaseCell::CloneWithoutNote( ScDocument& rDestDoc, const ScAddress& rDestPos, int nCloneFlags ) const
+{
+    return lclCloneCell( *this, rDestDoc, rDestPos, nCloneFlags );
+}
+
+ScBaseCell* ScBaseCell::CloneWithNote( ScDocument& rDestDoc, const ScAddress& rDestPos, int nCloneFlags ) const
+{
+    ScBaseCell* pNewCell = lclCloneCell( *this, rDestDoc, rDestPos, nCloneFlags );
+    if( mpNote )
+    {
+        if( !pNewCell )
+            pNewCell = new ScNoteCell;
+        bool bCloneCaption = (nCloneFlags & SC_CLONECELL_NOCAPTION) == 0;
+        pNewCell->TakeNote( ScNoteUtil::CloneNote( rDestDoc, rDestPos, *mpNote, bCloneCaption ) );
+    }
+    return pNewCell;
 }
 
 void ScBaseCell::Delete()
 {
-    DELETEZ(pNote);
+    DeleteNote();
     switch (eCellType)
     {
         case CELLTYPE_VALUE:
@@ -159,32 +186,45 @@ void ScBaseCell::Delete()
     }
 }
 
-void ScBaseCell::SetNote( const ScPostIt& rNote )
+bool ScBaseCell::IsBlank( bool bIgnoreNotes ) const
 {
-    if (!rNote.IsEmpty())
-    {
-        if (!pNote)
-            pNote = new ScPostIt(rNote);
-        else
-            *pNote = rNote;
-    }
-    else
-        DELETEZ(pNote);
+    return (eCellType == CELLTYPE_NOTE) && (bIgnoreNotes || !mpNote);
 }
 
-BOOL ScBaseCell::GetNote( ScPostIt& rNote ) const
+void ScBaseCell::TakeNote( ScPostIt* pNote )
 {
-    if ( pNote )
-        rNote = *pNote;
-    else
-        rNote.Clear();
+    delete mpNote;
+    mpNote = pNote;
+}
 
-    return ( pNote != NULL );
+ScPostIt* ScBaseCell::ReleaseNote()
+{
+    ScPostIt* pNote = mpNote;
+    mpNote = 0;
+    return pNote;
 }
 
 void ScBaseCell::DeleteNote()
 {
-    DELETEZ( pNote );
+    DELETEZ( mpNote );
+}
+
+void ScBaseCell::TakeBroadcaster( SvtBroadcaster* pBroadcaster )
+{
+    delete mpBroadcaster;
+    mpBroadcaster = pBroadcaster;
+}
+
+SvtBroadcaster* ScBaseCell::ReleaseBroadcaster()
+{
+    SvtBroadcaster* pBroadcaster = mpBroadcaster;
+    mpBroadcaster = 0;
+    return pBroadcaster;
+}
+
+void ScBaseCell::DeleteBroadcaster()
+{
+    DELETEZ( mpBroadcaster );
 }
 
 ScBaseCell* ScBaseCell::CreateTextCell( const String& rString, ScDocument* pDoc )
@@ -193,12 +233,6 @@ ScBaseCell* ScBaseCell::CreateTextCell( const String& rString, ScDocument* pDoc 
         return new ScEditCell( rString, pDoc );
     else
         return new ScStringCell( rString );
-}
-
-void ScBaseCell::SetBroadcaster(SvtBroadcaster* pNew)
-{
-    delete pBroadcaster;
-    pBroadcaster = pNew;
 }
 
 void ScBaseCell::StartListeningTo( ScDocument* pDoc )
@@ -525,7 +559,87 @@ BOOL ScBaseCell::CellEqual( const ScBaseCell* pCell1, const ScBaseCell* pCell2 )
     return FALSE;
 }
 
-//-----------------------------------------------------------------------------------
+// ============================================================================
+
+ScNoteCell::ScNoteCell( SvtBroadcaster* pBC ) :
+    ScBaseCell( CELLTYPE_NOTE )
+{
+    TakeBroadcaster( pBC );
+}
+
+ScNoteCell::ScNoteCell( ScPostIt* pNote, SvtBroadcaster* pBC ) :
+    ScBaseCell( CELLTYPE_NOTE )
+{
+    TakeNote( pNote );
+    TakeBroadcaster( pBC );
+}
+
+#ifdef DBG_UTIL
+ScNoteCell::~ScNoteCell()
+{
+    eCellType = CELLTYPE_DESTROYED;
+}
+#endif
+
+ScNoteCell::ScNoteCell( SvStream& rStream, USHORT nVer ) :
+    ScBaseCell( CELLTYPE_NOTE )
+{
+    if( nVer >= SC_DATABYTES2 )
+    {
+        BYTE cData;
+        rStream >> cData;
+        if( cData & 0x0F )
+            rStream.SeekRel( cData & 0x0F );
+    }
+}
+
+void ScNoteCell::Save( SvStream& rStream ) const
+{
+    rStream << (BYTE) 0x00;
+}
+
+// ============================================================================
+
+ScValueCell::ScValueCell() :
+    ScBaseCell( CELLTYPE_VALUE ),
+    mfValue( 0.0 )
+{
+}
+
+ScValueCell::ScValueCell( double fValue ) :
+    ScBaseCell( CELLTYPE_VALUE ),
+    mfValue( fValue )
+{
+}
+
+#ifdef DBG_UTIL
+ScValueCell::~ScValueCell()
+{
+    eCellType = CELLTYPE_DESTROYED;
+}
+#endif
+
+// ============================================================================
+
+ScStringCell::ScStringCell() :
+    ScBaseCell( CELLTYPE_STRING )
+{
+}
+
+ScStringCell::ScStringCell( const String& rString ) :
+    ScBaseCell( CELLTYPE_STRING ),
+    maString( rString.intern() )
+{
+}
+
+#ifdef DBG_UTIL
+ScStringCell::~ScStringCell()
+{
+    eCellType = CELLTYPE_DESTROYED;
+}
+#endif
+
+// ============================================================================
 
 //
 //      ScFormulaCell
@@ -631,36 +745,35 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
     }
 }
 
-ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rNewPos,
-                              const ScFormulaCell& rScFormulaCell, USHORT nCopyFlags ) :
-    ScBaseCell( rScFormulaCell, pDoc ),
+ScFormulaCell::ScFormulaCell( const ScFormulaCell& rCell, ScDocument& rDoc, const ScAddress& rPos, int nCloneFlags ) :
+    ScBaseCell( rCell ),
     SvtListener(),
-    aResult( rScFormulaCell.aResult ),
-    eTempGrammar( rScFormulaCell.eTempGrammar),
-    pDocument( pDoc ),
+    aResult( rCell.aResult ),
+    eTempGrammar( rCell.eTempGrammar),
+    pDocument( &rDoc ),
     pPrevious(0),
     pNext(0),
     pPreviousTrack(0),
     pNextTrack(0),
-    nFormatIndex( pDoc == rScFormulaCell.pDocument ? rScFormulaCell.nFormatIndex : 0 ),
-    nFormatType( rScFormulaCell.nFormatType ),
+    nFormatIndex( &rDoc == rCell.pDocument ? rCell.nFormatIndex : 0 ),
+    nFormatType( rCell.nFormatType ),
     nSeenInIteration(0),
-    cMatrixFlag ( rScFormulaCell.cMatrixFlag ),
-    bDirty( rScFormulaCell.bDirty ),
-    bChanged( rScFormulaCell.bChanged ),
+    cMatrixFlag ( rCell.cMatrixFlag ),
+    bDirty( rCell.bDirty ),
+    bChanged( rCell.bChanged ),
     bRunning( FALSE ),
-    bCompile( rScFormulaCell.bCompile ),
-    bSubTotal( rScFormulaCell.bSubTotal ),
+    bCompile( rCell.bCompile ),
+    bSubTotal( rCell.bSubTotal ),
     bIsIterCell( FALSE ),
     bInChangeTrack( FALSE ),
     bTableOpDirty( FALSE ),
     bNeedListening( FALSE ),
-    aPos( rNewPos )
+    aPos( rPos )
 {
-    pCode = rScFormulaCell.pCode->Clone();
+    pCode = rCell.pCode->Clone();
 
-    if ( nCopyFlags & 0x0001 )
-        pCode->ReadjustRelative3DReferences( rScFormulaCell.aPos, aPos );
+    if ( nCloneFlags & SC_CLONECELL_ADJUST3DREL )
+        pCode->ReadjustRelative3DReferences( rCell.aPos, aPos );
 
     // evtl. Fehler zuruecksetzen und neu kompilieren
     //  nicht im Clipboard - da muss das Fehlerflag erhalten bleiben
@@ -672,7 +785,7 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rNewPos,
     }
     //! Compile ColRowNames on URM_MOVE/URM_COPY _after_ UpdateReference
     BOOL bCompileLater = FALSE;
-    BOOL bClipMode = rScFormulaCell.pDocument->IsClipboard();
+    BOOL bClipMode = rCell.pDocument->IsClipboard();
     if( !bCompile )
     {   // Name references with references and ColRowNames
         pCode->Reset();
@@ -686,7 +799,7 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rNewPos,
             }
             else if ( t->GetType() == svIndex )
             {
-                ScRangeData* pRangeData = pDoc->GetRangeName()->FindIndex( t->GetIndex() );
+                ScRangeData* pRangeData = rDoc.GetRangeName()->FindIndex( t->GetIndex() );
                 if( pRangeData )
                 {
                     if( pRangeData->HasReferences() )
@@ -717,15 +830,18 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rNewPos,
             CompileTokenArray( TRUE );
         }
     }
+
+    if( nCloneFlags & SC_CLONECELL_STARTLISTENING )
+        StartListeningTo( &rDoc );
 }
 
-ScBaseCell* ScFormulaCell::Clone( ScDocument* pDoc, const ScAddress& rPos,
-        BOOL bNoListening ) const
+ScFormulaCell::~ScFormulaCell()
 {
-    ScFormulaCell* pCell = new ScFormulaCell( pDoc, rPos, *this );
-    if ( !bNoListening )
-        pCell->StartListeningTo( pDoc );
-    return pCell;
+    pDocument->RemoveFromFormulaTree( this );
+    delete pCode;
+#ifdef DBG_UTIL
+    eCellType = CELLTYPE_DESTROYED;
+#endif
 }
 
 void ScFormulaCell::GetFormula( rtl::OUStringBuffer& rBuffer,
@@ -1810,7 +1926,7 @@ EditTextObject* ScFormulaCell::CreateURLObject()
     return rEE.CreateTextObject();
 }
 
-//------------------------------------------------------------------------
+// ============================================================================
 
 ScDetectiveRefIter::ScDetectiveRefIter( ScFormulaCell* pCell )
 {
@@ -1861,41 +1977,4 @@ BOOL ScDetectiveRefIter::GetNextRef( ScRange& rRange )
     return bRet;
 }
 
-//-----------------------------------------------------------------------------------
-
-ScFormulaCell::~ScFormulaCell()
-{
-    pDocument->RemoveFromFormulaTree( this );
-    delete pCode;
-#ifdef DBG_UTIL
-    eCellType = CELLTYPE_DESTROYED;
-#endif
-}
-
-
-#ifdef DBG_UTIL
-
-ScStringCell::~ScStringCell()
-{
-    eCellType = CELLTYPE_DESTROYED;
-}
-#endif
-                                    //! ValueCell auch nur bei DBG_UTIL,
-                                    //! auch in cell.hxx aendern !!!!!!!!!!!!!!!!!!!!
-
-ScValueCell::~ScValueCell()
-{
-    eCellType = CELLTYPE_DESTROYED;
-}
-
-#ifdef DBG_UTIL
-
-ScNoteCell::~ScNoteCell()
-{
-    eCellType = CELLTYPE_DESTROYED;
-}
-#endif
-
-
-
-
+// ============================================================================

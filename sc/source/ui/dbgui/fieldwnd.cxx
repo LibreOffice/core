@@ -220,8 +220,6 @@ void ScDPFieldWindow::DrawBackground( OutputDevice& rDev )
         rDev.DrawRect( Rectangle( aPos0, aSize ) );
 
         rDev.SetTextColor( aWinTextColor );
-        BOOL bOldRTL = rDev.IsRTLEnabled();
-        rDev.EnableRTL( false );
 
         /*  Draw the caption text. This needs some special handling, because we
             support hard line breaks here. This part will draw each line of the
@@ -236,8 +234,6 @@ void ScDPFieldWindow::DrawBackground( OutputDevice& rDev )
             rDev.DrawCtrlText( aLinePos, aLine );
             nY += rDev.GetTextHeight();
         }
-
-        rDev.EnableRTL( bOldRTL );
     }
 }
 
@@ -245,7 +241,8 @@ void ScDPFieldWindow::DrawField(
         OutputDevice& rDev, const Rectangle& rRect, const String& rText, bool bFocus )
 {
     VirtualDevice aVirDev( rDev );
-    aVirDev.EnableRTL( true );
+    // #i97623# VirtualDevice is always LTR while other windows derive direction from parent
+    aVirDev.EnableRTL( IsRTLEnabled() );
 
     Size aDevSize( rRect.GetSize() );
     long    nWidth       = aDevSize.Width();
@@ -261,7 +258,6 @@ void ScDPFieldWindow::DrawField(
     DecorationView aDecoView( &aVirDev );
     aDecoView.DrawButton( Rectangle( Point( 0, 0 ), aDevSize ), bFocus ? BUTTON_DRAW_DEFAULT : 0 );
     aVirDev.SetTextColor( aTextColor );
-    aVirDev.EnableRTL( false );
     aVirDev.DrawText( aLabelPos, rText );
     rDev.DrawBitmap( rRect.TopLeft(), aVirDev.GetBitmap( Point( 0, 0 ), aDevSize ) );
 }
@@ -269,7 +265,8 @@ void ScDPFieldWindow::DrawField(
 void ScDPFieldWindow::Redraw()
 {
     VirtualDevice   aVirDev;
-    aVirDev.EnableRTL( true );
+    // #i97623# VirtualDevice is always LTR while other windows derive direction from parent
+    aVirDev.EnableRTL( IsRTLEnabled() );
     aVirDev.SetMapMode( MAP_PIXEL );
 
     Point           aPos0;

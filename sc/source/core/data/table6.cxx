@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: table6.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.18.128.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,6 +37,7 @@
 
 #include <unotools/textsearch.hxx>
 #include <svx/srchitem.hxx>
+#include <svx/editobj.hxx>
 
 #include "table.hxx"
 #include "collect.hxx"
@@ -101,11 +102,10 @@ BOOL ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
                 break;
             case SVX_SEARCHIN_NOTE:
                 {
-                    ScPostIt aNote(pDocument);
-                    if(pCell->GetNote( aNote ))
+                    if(const ScPostIt* pNote = pCell->GetNote())
                     {
-                        aString = aNote.GetText();
-                        bMultiLine = ( ((aNote.GetEditTextObject())->GetParagraphCount()) > 1 );
+                        aString = pNote->GetText();
+                        bMultiLine = pNote->HasMultiLineText();
                     }
                 }
                 break;
@@ -156,7 +156,7 @@ BOOL ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
             else if (pUndoDoc)
             {
                 ScAddress aAdr( nCol, nRow, nTab );
-                ScBaseCell* pUndoCell = pCell->Clone(pUndoDoc);
+                ScBaseCell* pUndoCell = pCell->CloneWithoutNote( *pUndoDoc );
                 pUndoDoc->PutCell( aAdr, pUndoCell);
             }
             BOOL bRepeat = !rSearchItem.GetWordOnly();
@@ -216,22 +216,10 @@ BOOL ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
             while (bRepeat);
             if (rSearchItem.GetCellType() == SVX_SEARCHIN_NOTE)
             {
-                ScPostIt aNote(pDocument);
-                if(pCell->GetNote( aNote ))
-                {
-                    aNote.SetText( aString );
-
-                    // if note is visible - hide it to force a refresh of replaced text
-                    if (aNote.IsShown())
-                    {
-            ScDetectiveFunc( pDocument, nTab ).HideComment( nCol, nRow );
-                        aNote.SetShown(FALSE);
-                    }
-
-                    // NB: rich text format is lost.
-                    // This is also true of Cells.
-                    aCol[nCol].SetNote( nRow, aNote );
-                }
+                // NB: rich text format is lost.
+                // This is also true of Cells.
+                if( ScPostIt* pNote = pCell->GetNote() )
+                    pNote->SetText( aString );
             }
             else if ( cMatrixFlag != MM_NONE )
             {   // #60558# Matrix nicht zerreissen

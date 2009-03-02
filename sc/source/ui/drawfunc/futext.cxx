@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: futext.cxx,v $
- * $Revision: 1.28.144.1 $
+ * $Revision: 1.28.128.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,16 +31,12 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-//------------------------------------------------------------------
-
 #include <svx/svddef.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/outlobj.hxx>
 #include <svx/sdtaaitm.hxx>
 #include <svx/sdtacitm.hxx>
 #include <svx/svdotext.hxx>
-#include <svx/svdview.hxx>
 #include <svx/unolingu.hxx>
 #include <svx/svdocapt.hxx>
 #include <sfx2/bindings.hxx>
@@ -52,6 +48,7 @@
 #include "drwlayer.hxx"
 #include "sc.hrc"
 #include "tabvwsh.hxx"
+#include "drawview.hxx"
 
 // #98185# Create default drawing objects via keyboard
 #include "scresid.hxx"
@@ -111,7 +108,7 @@ void lcl_UpdateHyphenator( Outliner& rOutliner, SdrObject* pObj )
 |*
 \************************************************************************/
 
-FuText::FuText(ScTabViewShell* pViewSh, Window* pWin, SdrView* pViewP,
+FuText::FuText(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pViewP,
                    SdrModel* pDoc, SfxRequest& rReq) :
     FuConstruct(pViewSh, pWin, pViewP, pDoc, rReq),
     pTextObj(NULL)
@@ -228,7 +225,7 @@ BOOL __EXPORT FuText::MouseButtonDown(const MouseEvent& rMEvt)
                 if( rMarkList.GetMarkCount() == 1 )
                 {
                     SdrObject* pMarkedObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
-                    if( pMarkedObj && pMarkedObj->ISA( SdrCaptionObj) && pMarkedObj->GetLayer() == SC_LAYER_INTERN)
+                    if( ScDrawLayer::IsNoteCaption( pMarkedObj ) )
                     {
                         if(pHdl->GetKind() != HDL_POLY && pHdl->GetKind() != HDL_CIRC)
                             bDrag = true;
@@ -735,18 +732,11 @@ void FuText::SelectionHasChanged()
 void FuText::SetInEditMode(SdrObject* pObj, const Point* pMousePixel,
                             BOOL bCursorToEnd, const KeyEvent* pInitialKey)
 {
-    //  pObj != NULL, wenn ein spezielles (nicht markiertes) Objekt editiert werden soll
-    //  (-> Legendenobjekt von Notizen)
-    //  wenn pObj == NULL, markiertes Objekt nehmen
-
-    SdrLayer* pLockLayer = NULL;
-    if ( pObj && pObj->GetLayer() == SC_LAYER_INTERN )
-    {
-        // A Locked Layer cannot be edited.
-        pLockLayer = pDrDoc->GetLayerAdmin().GetLayerPerID(SC_LAYER_INTERN);
-        if (pLockLayer && pView->IsLayerLocked(pLockLayer->GetName()))
-            pView->SetLayerLocked( pLockLayer->GetName(), FALSE );
-    }
+    /*  It is possible to pass a special (unselected) object in pObj, e.g. the
+        caption object of a cell note. If pObj is 0, then the selected object
+        is used. The layer will be relocked in FuText::StopEditMode(). */
+    if ( pObj && (pObj->GetLayer() == SC_LAYER_INTERN) )
+        pView->UnlockInternalLayer();
 
     if ( !pObj && pView->AreObjectsMarked() )
     {
@@ -824,9 +814,6 @@ void FuText::SetInEditMode(SdrObject* pObj, const Point* pMousePixel,
             }
         }
     }
-    // Leave the internal note object unlocked - re-lock in StopEditMode().
-    if (pLockLayer && !pView->IsLayerLocked(pLockLayer->GetName()) && !pObj->ISA(SdrCaptionObj))
-        pView->SetLayerLocked( pLockLayer->GetName(), TRUE );
 }
 
 // #98185# Create default drawing objects via keyboard

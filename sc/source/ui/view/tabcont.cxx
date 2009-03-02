@@ -365,11 +365,7 @@ void ScTabControl::ActivateView(BOOL bActivate)
 
 void ScTabControl::SetSheetLayoutRTL( BOOL bSheetRTL )
 {
-    /*  #106948# mirror the tabbar control, if sheet RTL mode differs from UI RTL mode
-        - In LTR Office the tabbar is mirrored for RTL sheets.
-        - In RTL Office the tabbar is mirrored anyway, mirror it again for LTR sheets. */
-    SetMirrored( bSheetRTL != GetSettings().GetLayoutRTL() );
-    // forget last selected sheet also if not mirrored (Mirror() is not called then)
+    SetEffectiveRTL( bSheetRTL );
     nSelPageIdByMouse = TAB_PAGE_NOTFOUND;
 }
 

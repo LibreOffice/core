@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: scmod.cxx,v $
- * $Revision: 1.58.172.1 $
+ * $Revision: 1.58.128.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -251,11 +251,10 @@ void ScModule::Notify( SfxBroadcaster&, const SfxHint& rHint )
                         if ( pObjSh->Type() == TYPE(ScDocShell) )
                         {
                             ScDocShell* pDocSh = ((ScDocShell*)pObjSh);
-                            ScDetectiveFunc aFunc( pDocSh->GetDocument(), 0 );
                             if ( bArrows )
-                                aFunc.UpdateAllArrowColors();
+                                ScDetectiveFunc( pDocSh->GetDocument(), 0 ).UpdateAllArrowColors();
                             if ( bComments )
-                                aFunc.UpdateAllComments();
+                                ScDetectiveFunc::UpdateAllComments( *pDocSh->GetDocument() );
                         }
                         pObjSh = SfxObjectShell::GetNext( *pObjSh );
                     }

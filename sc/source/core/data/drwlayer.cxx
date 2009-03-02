@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: drwlayer.cxx,v $
- * $Revision: 1.55.32.1 $
+ * $Revision: 1.55.128.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -80,6 +80,7 @@
 #include "scmod.hxx"
 #include "chartarr.hxx"
 #include "postit.hxx"
+#include "attrib.hxx"
 
 #define DET_ARROW_OFFSET    1000
 
@@ -92,30 +93,6 @@
 #define SHRINK_DIST_TWIPS   15
 
 using namespace ::com::sun::star;
-
-// -----------------------------------------------------------------------
-//
-//  Das Anpassen der Detektiv-UserData muss zusammen mit den Draw-Undo's
-//  in der SdrUndoGroup liegen, darum von SdrUndoAction abgeleitet:
-
-class ScUndoObjData : public SdrUndoObj
-{
-private:
-    ScAddress   aOldStt;
-    ScAddress   aOldEnd;
-    ScAddress   aNewStt;
-    ScAddress   aNewEnd;
-    BOOL        bHasNew;
-public:
-                ScUndoObjData( SdrObject* pObj, const ScAddress& rOS, const ScAddress& rOE,
-                                                const ScAddress& rNS, const ScAddress& rNE );
-                ~ScUndoObjData();
-
-    virtual void     Undo();
-    virtual void     Redo();
-};
-
-// -----------------------------------------------------------------------
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -147,25 +124,25 @@ __EXPORT ScUndoObjData::~ScUndoObjData()
 {
 }
 
-void __EXPORT ScUndoObjData::Undo()
+void ScUndoObjData::Undo()
 {
-    ScDrawObjData* pData = ((ScDrawLayer&)rMod).GetObjData( pObj );
+    ScDrawObjData* pData = ScDrawLayer::GetObjData( pObj );
     DBG_ASSERT(pData,"ScUndoObjData: Daten nicht da");
     if (pData)
     {
-        pData->aStt = aOldStt;
-        pData->aEnd = aOldEnd;
+        pData->maStart = aOldStt;
+        pData->maEnd = aOldEnd;
     }
 }
 
 void __EXPORT ScUndoObjData::Redo()
 {
-    ScDrawObjData* pData = ((ScDrawLayer&)rMod).GetObjData( pObj );
+    ScDrawObjData* pData = ScDrawLayer::GetObjData( pObj );
     DBG_ASSERT(pData,"ScUndoObjData: Daten nicht da");
     if (pData)
     {
-        pData->aStt = aNewStt;
-        pData->aEnd = aNewEnd;
+        pData->maStart = aNewStt;
+        pData->maEnd = aNewEnd;
     }
 }
 
@@ -223,24 +200,6 @@ void lcl_ReverseTwipsToMM( Rectangle& rRect )
     ReverseTwipsToMM( rRect.Right() );
     ReverseTwipsToMM( rRect.Top() );
     ReverseTwipsToMM( rRect.Bottom() );
-}
-
-BOOL lcl_MirrorCheckRect(const Rectangle& rRect, BOOL bNegativePage)
-{
-    BOOL bMirrorChange = false;
-
-    if ( bNegativePage )
-    {
-        if(rRect.Left() >= 0 && rRect.Right() > 0)
-            bMirrorChange = true;
-    }
-    else
-    {
-        if(rRect.Left() < 0 && rRect.Right() <= 0)
-            bMirrorChange = true;
-    }
-
-    return bMirrorChange;
 }
 
 // -----------------------------------------------------------------------
@@ -513,29 +472,27 @@ void ScDrawLayer::MoveCells( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SC
         ScDrawObjData* pData = GetObjDataTab( pObj, nTab );
         if( pData )
         {
-            ScAddress aOldStt = pData->aStt;
-            ScAddress aOldEnd = pData->aEnd;
+            const ScAddress aOldStt = pData->maStart;
+            const ScAddress aOldEnd = pData->maEnd;
             BOOL bChange = FALSE;
-            if ( pData->bValidStart && IsInBlock( pData->aStt, nCol1,nRow1, nCol2,nRow2 ) )
+            if ( aOldStt.IsValid() && IsInBlock( aOldStt, nCol1,nRow1, nCol2,nRow2 ) )
             {
-                pData->aStt.IncCol( nDx);
-                pData->aStt.IncRow( nDy);
+                pData->maStart.IncCol( nDx );
+                pData->maStart.IncRow( nDy );
                 bChange = TRUE;
             }
-            if ( pData->bValidEnd && IsInBlock( pData->aEnd, nCol1,nRow1, nCol2,nRow2 ) )
+            if ( aOldEnd.IsValid() && IsInBlock( aOldEnd, nCol1,nRow1, nCol2,nRow2 ) )
             {
-                pData->aEnd.IncCol( nDx);
-                pData->aEnd.IncRow( nDy);
+                pData->maEnd.IncCol( nDx );
+                pData->maEnd.IncRow( nDy );
                 bChange = TRUE;
             }
             if (bChange)
             {
-                if ( pObj->ISA(SdrRectObj) && pData->bValidStart && pData->bValidEnd )
-                {
-                    pData->aStt.PutInOrder( pData->aEnd);
-                }
-                AddCalcUndo( new ScUndoObjData( pObj, aOldStt, aOldEnd, pData->aStt, pData->aEnd ) );
-                RecalcPos( pObj, pData, bNegativePage );
+                if ( pObj->ISA( SdrRectObj ) && pData->maStart.IsValid() && pData->maEnd.IsValid() )
+                    pData->maStart.PutInOrder( pData->maEnd );
+                AddCalcUndo( new ScUndoObjData( pObj, aOldStt, aOldEnd, pData->maStart, pData->maEnd ) );
+                RecalcPos( pObj, *pData, aOldStt, aOldEnd, bNegativePage );
             }
         }
     }
@@ -564,77 +521,55 @@ void ScDrawLayer::SetPageSize( USHORT nPageNo, const Size& rSize )
             SdrObject* pObj = pPage->GetObj( i );
             ScDrawObjData* pData = GetObjDataTab( pObj, static_cast<SCTAB>(nPageNo) );
             if( pData )
-                RecalcPos( pObj, pData, bNegativePage );
+                RecalcPos( pObj, *pData, pData->maStart, pData->maEnd, bNegativePage );
         }
     }
 }
 
-void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData* pData, BOOL bNegativePage )
+void ScDrawLayer::RecalcPos( SdrObject* pObj, const ScDrawObjData& rData,
+        const ScAddress& rOldStart, const ScAddress& /*rOldEnd*/, bool bNegativePage )
 {
-    DBG_ASSERT( pDoc, "ScDrawLayer::RecalcPos without document" );
-    if ( !pDoc )
+    DBG_ASSERT( pDoc, "ScDrawLayer::RecalcPos - missing document" );
+    if( !pDoc )
         return;
 
-    BOOL bArrow = ( pObj->IsPolyObj() && pObj->GetPointCount()==2 );    // Pfeil ?
-    BOOL bCircle = ( pObj->ISA(SdrCircObj) );                           // Kreis (Gueltigkeit)
-    BOOL bCaption = ( pObj->ISA(SdrCaptionObj) && pObj->GetLayer() == SC_LAYER_INTERN );        // Notiz
-
-    if (bCaption)
+    if( rData.mbNote )
     {
-        SdrCaptionObj* pCaptObj = (SdrCaptionObj*) pObj;
-
-        SCCOL nCol = pData->aStt.Col();
-        SCROW nRow = pData->aStt.Row();
-        SCTAB nTab = pData->aStt.Tab();
-        Point aPos( pDoc->GetColOffset( nCol+1, nTab ),
-                    pDoc->GetRowOffset( nRow, nTab ) );
-        TwipsToMM( aPos.X() );
-        TwipsToMM( aPos.Y() );
-        aPos.X() -= 10;
-        if ( bNegativePage )
-            aPos.X() = -aPos.X();
-
-        Point aOldTail = pCaptObj->GetTailPos();
-        if ( aOldTail != aPos )
-        {
-            pCaptObj->SetTailPos(aPos);
-
-                    ScPostIt aNote(pDoc);
-                    if (pDoc->GetNote( pData->aStt.Col(), pData->aStt.Row(), nTab, aNote))
-                    {
-                        Rectangle aRect = pCaptObj->GetLogicRect();
-                        if(lcl_MirrorCheckRect( aRect, bNegativePage ))
-                        {
-                            MirrorRectRTL( aRect );
-                            pCaptObj->SetLogicRect( aRect );
-                            aNote.SetRectangle(aRect);
-                            pDoc->SetNote( pData->aStt.Col(), pData->aStt.Row(), nTab, aNote);
-                        }
-                    }
-                    else // new note in creation
-                    {
-                        Rectangle aRect = aNote.DefaultRectangle(ScAddress(pData->aStt.Col(), pData->aStt.Row(), nTab));
-                        if(lcl_MirrorCheckRect( aRect, bNegativePage ))
-                            MirrorRectRTL( aRect );
-                        pCaptObj->SetLogicRect( aRect );
-                    }
-                    if (bRecording)
-                        AddCalcUndo( new SdrUndoGeoObj( *pObj ) );
-        }
+        /*  #i63671# while inserting/deleting cells/rows/columns: note has
+            not been moved yet in document, get it from old position. */
+        DBG_ASSERT( rOldStart.IsValid(), "ScDrawLayer::RecalcPos - invalid position for cell note" );
+        /*  When inside an undo action, there may be pending note captions
+            where cell note is already deleted. The caption will be deleted
+            later with drawing undo. */
+        if( ScPostIt* pNote = pDoc->GetNote( rOldStart ) )
+            pNote->UpdateCaptionPos( rData.maStart );
+        return;
     }
-    else if (bCircle)                   // Kreis (Gueltigkeit)
+
+    bool bValid1 = rData.maStart.IsValid();
+    SCCOL nCol1 = rData.maStart.Col();
+    SCROW nRow1 = rData.maStart.Row();
+    SCTAB nTab1 = rData.maStart.Tab();
+    bool bValid2 = rData.maEnd.IsValid();
+    SCCOL nCol2 = rData.maEnd.Col();
+    SCROW nRow2 = rData.maEnd.Row();
+    SCTAB nTab2 = rData.maEnd.Tab();
+
+    // validation circle
+    bool bCircle = pObj->ISA( SdrCircObj );
+    // detective arrow
+    bool bArrow = pObj->IsPolyObj() && (pObj->GetPointCount() == 2);
+
+    if( bCircle )
     {
-        SCCOL nCol = pData->aStt.Col();
-        SCROW nRow = pData->aStt.Row();
-        SCTAB nTab = pData->aStt.Tab();
-        Point aPos( pDoc->GetColOffset( nCol, nTab ), pDoc->GetRowOffset( nRow, nTab ) );
+        Point aPos( pDoc->GetColOffset( nCol1, nTab1 ), pDoc->GetRowOffset( nRow1, nTab1 ) );
         TwipsToMM( aPos.X() );
         TwipsToMM( aPos.Y() );
 
         //  Berechnung und Werte wie in detfunc.cxx
 
-        Size aSize( (long) ( pDoc->GetColWidth(nCol, nTab) * HMM_PER_TWIPS ),
-                    (long) ( pDoc->GetRowHeight(nRow, nTab) * HMM_PER_TWIPS ) );
+        Size aSize( (long)(pDoc->GetColWidth( nCol1, nTab1 ) * HMM_PER_TWIPS),
+                    (long)(pDoc->GetRowHeight( nRow1, nTab1 ) * HMM_PER_TWIPS) );
         Rectangle aRect( aPos, aSize );
         aRect.Left()    -= 250;
         aRect.Right()   += 250;
@@ -650,41 +585,37 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData* pData, BOOL bNegati
             pObj->SetLogicRect(aRect);
         }
     }
-    else if (bArrow)                    // Pfeil
+    else if( bArrow )
     {
         //! nicht mehrere Undos fuer ein Objekt erzeugen (hinteres kann dann weggelassen werden)
 
-        if( pData->bValidStart )
+        if( bValid1 )
         {
-            Point aPos(
-                pDoc->GetColOffset( pData->aStt.Col(), pData->aStt.Tab() ),
-                pDoc->GetRowOffset( pData->aStt.Row(), pData->aStt.Tab() ) );
-            if( !( pDoc->GetColFlags( pData->aStt.Col(), pData->aStt.Tab() )
-                 & CR_HIDDEN ) )
-                aPos.X() += pDoc->GetColWidth( pData->aStt.Col(), pData->aStt.Tab() ) / 4;
-            if( !( pDoc->GetRowFlags( pData->aStt.Row(), pData->aStt.Tab() )
-                 & CR_HIDDEN ) )
-                aPos.Y() += pDoc->GetRowHeight( pData->aStt.Row(), pData->aStt.Tab() ) / 2;
+            Point aPos( pDoc->GetColOffset( nCol1, nTab1 ), pDoc->GetRowOffset( nRow1, nTab1 ) );
+            if( (pDoc->GetColFlags( nCol1, nTab1 ) & CR_HIDDEN) == 0 )
+                aPos.X() += pDoc->GetColWidth( nCol1, nTab1 ) / 4;
+            if( (pDoc->GetRowFlags( nRow1, nTab1 ) & CR_HIDDEN) == 0 )
+                aPos.Y() += pDoc->GetRowHeight( nRow1, nTab1 ) / 2;
             TwipsToMM( aPos.X() );
             TwipsToMM( aPos.Y() );
             Point aStartPos = aPos;
             if ( bNegativePage )
                 aStartPos.X() = -aStartPos.X();     // don't modify aPos - used below
-            if ( pObj->GetPoint(0) != aStartPos )
+            if ( pObj->GetPoint( 0 ) != aStartPos )
             {
                 if (bRecording)
                     AddCalcUndo( new SdrUndoGeoObj( *pObj ) );
                 pObj->SetPoint( aStartPos, 0 );
             }
 
-            if( !pData->bValidEnd )
+            if( !bValid2 )
             {
                 Point aEndPos( aPos.X() + DET_ARROW_OFFSET, aPos.Y() - DET_ARROW_OFFSET );
                 if (aEndPos.Y() < 0)
-                    aEndPos.Y() += 2*DET_ARROW_OFFSET;
+                    aEndPos.Y() += (2 * DET_ARROW_OFFSET);
                 if ( bNegativePage )
                     aEndPos.X() = -aEndPos.X();
-                if ( pObj->GetPoint(1) != aEndPos )
+                if ( pObj->GetPoint( 1 ) != aEndPos )
                 {
                     if (bRecording)
                         AddCalcUndo( new SdrUndoGeoObj( *pObj ) );
@@ -692,39 +623,35 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData* pData, BOOL bNegati
                 }
             }
         }
-        if( pData->bValidEnd )
+        if( bValid2 )
         {
-            Point aPos(
-                pDoc->GetColOffset( pData->aEnd.Col(), pData->aEnd.Tab() ),
-                pDoc->GetRowOffset( pData->aEnd.Row(), pData->aEnd.Tab() ) );
-            if( !( pDoc->GetColFlags( pData->aEnd.Col(), pData->aEnd.Tab() )
-                 & CR_HIDDEN ) )
-                aPos.X() += pDoc->GetColWidth( pData->aEnd.Col(), pData->aEnd.Tab() ) / 4;
-            if( !( pDoc->GetRowFlags( pData->aEnd.Row(), pData->aEnd.Tab() )
-                 & CR_HIDDEN ) )
-                aPos.Y() += pDoc->GetRowHeight( pData->aEnd.Row(), pData->aEnd.Tab() ) / 2;
+            Point aPos( pDoc->GetColOffset( nCol2, nTab2 ), pDoc->GetRowOffset( nRow2, nTab2 ) );
+            if( (pDoc->GetColFlags( nCol2, nTab2 ) & CR_HIDDEN) == 0 )
+                aPos.X() += pDoc->GetColWidth( nCol2, nTab2 ) / 4;
+            if( (pDoc->GetRowFlags( nRow2, nTab2 ) & CR_HIDDEN) == 0 )
+                aPos.Y() += pDoc->GetRowHeight( nRow2, nTab2 ) / 2;
             TwipsToMM( aPos.X() );
             TwipsToMM( aPos.Y() );
             Point aEndPos = aPos;
             if ( bNegativePage )
                 aEndPos.X() = -aEndPos.X();         // don't modify aPos - used below
-            if ( pObj->GetPoint(1) != aEndPos )
+            if ( pObj->GetPoint( 1 ) != aEndPos )
             {
                 if (bRecording)
                     AddCalcUndo( new SdrUndoGeoObj( *pObj ) );
                 pObj->SetPoint( aEndPos, 1 );
             }
 
-            if( !pData->bValidStart )
+            if( !bValid1 )
             {
                 Point aStartPos( aPos.X() - DET_ARROW_OFFSET, aPos.Y() - DET_ARROW_OFFSET );
                 if (aStartPos.X() < 0)
-                    aStartPos.X() += 2*DET_ARROW_OFFSET;
+                    aStartPos.X() += (2 * DET_ARROW_OFFSET);
                 if (aStartPos.Y() < 0)
-                    aStartPos.Y() += 2*DET_ARROW_OFFSET;
+                    aStartPos.Y() += (2 * DET_ARROW_OFFSET);
                 if ( bNegativePage )
                     aStartPos.X() = -aStartPos.X();
-                if ( pObj->GetPoint(0) != aStartPos )
+                if ( pObj->GetPoint( 0 ) != aStartPos )
                 {
                     if (bRecording)
                         AddCalcUndo( new SdrUndoGeoObj( *pObj ) );
@@ -735,18 +662,14 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData* pData, BOOL bNegati
     }
     else                                // Referenz-Rahmen
     {
-        DBG_ASSERT( pData->bValidStart, "RecalcPos: kein Start" );
-        Point aPos(
-            pDoc->GetColOffset( pData->aStt.Col(), pData->aStt.Tab() ),
-            pDoc->GetRowOffset( pData->aStt.Row(), pData->aStt.Tab() ) );
+        DBG_ASSERT( bValid1, "ScDrawLayer::RecalcPos - invalid start position" );
+        Point aPos( pDoc->GetColOffset( nCol1, nTab1 ), pDoc->GetRowOffset( nRow1, nTab1 ) );
         TwipsToMM( aPos.X() );
         TwipsToMM( aPos.Y() );
 
-        if( pData->bValidEnd )
+        if( bValid2 )
         {
-            Point aEnd(
-                pDoc->GetColOffset( pData->aEnd.Col()+1, pData->aEnd.Tab() ),
-                pDoc->GetRowOffset( pData->aEnd.Row()+1, pData->aEnd.Tab() ) );
+            Point aEnd( pDoc->GetColOffset( nCol2 + 1, nTab2 ), pDoc->GetRowOffset( nRow2 + 1, nTab2 ) );
             TwipsToMM( aEnd.X() );
             TwipsToMM( aEnd.Y() );
 
@@ -772,7 +695,6 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData* pData, BOOL bNegati
             }
         }
     }
-
 }
 
 BOOL ScDrawLayer::GetPrintArea( ScRange& rRange, BOOL bSetHor, BOOL bSetVer ) const
@@ -1260,6 +1182,7 @@ BOOL ScDrawLayer::HasObjectsInRows( SCTAB nTab, SCROW nStartRow, SCROW nEndRow )
     return bFound;
 }
 
+#if 0
 void ScDrawLayer::DeleteObjects( SCTAB nTab )
 {
     SdrPage* pPage = GetPage(static_cast<sal_uInt16>(nTab));
@@ -1295,6 +1218,7 @@ void ScDrawLayer::DeleteObjects( SCTAB nTab )
         delete[] ppObj;
     }
 }
+#endif
 
 void ScDrawLayer::DeleteObjectsInArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1,
                                             SCCOL nCol2,SCROW nRow2 )
@@ -1322,9 +1246,14 @@ void ScDrawLayer::DeleteObjectsInArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1,
         SdrObject* pObject = aIter.Next();
         while (pObject)
         {
-            Rectangle aObjRect = pObject->GetCurrentBoundRect();
-            if ( aDelRect.IsInside( aObjRect ) )
-                ppObj[nDelCount++] = pObject;
+            // do not delete note caption, they are always handled by the cell note
+            // TODO: detective objects are still deleted, is this desired?
+            if (!IsNoteCaption( pObject ))
+            {
+                Rectangle aObjRect = pObject->GetCurrentBoundRect();
+                if ( aDelRect.IsInside( aObjRect ) )
+                    ppObj[nDelCount++] = pObject;
+            }
 
             pObject = aIter.Next();
         }
@@ -1376,12 +1305,17 @@ void ScDrawLayer::DeleteObjectsInSelection( const ScMarkData& rMark )
                     SdrObject* pObject = aIter.Next();
                     while (pObject)
                     {
-                        Rectangle aObjRect = pObject->GetCurrentBoundRect();
-                        if ( aMarkBound.IsInside( aObjRect ) )
+                        // do not delete note caption, they are always handled by the cell note
+                        // TODO: detective objects are still deleted, is this desired?
+                        if (!IsNoteCaption( pObject ))
                         {
-                            ScRange aRange = pDoc->GetRange( nTab, aObjRect );
-                            if (rMark.IsAllMarked(aRange))
-                                ppObj[nDelCount++] = pObject;
+                            Rectangle aObjRect = pObject->GetCurrentBoundRect();
+                            if ( aMarkBound.IsInside( aObjRect ) )
+                            {
+                                ScRange aRange = pDoc->GetRange( nTab, aObjRect );
+                                if (rMark.IsAllMarked(aRange))
+                                    ppObj[nDelCount++] = pObject;
+                            }
                         }
 
                         pObject = aIter.Next();
@@ -1422,7 +1356,8 @@ void ScDrawLayer::CopyToClip( ScDocument* pClipDoc, SCTAB nTab, const Rectangle&
         while (pOldObject)
         {
             Rectangle aObjRect = pOldObject->GetCurrentBoundRect();
-            if ( rRange.IsInside( aObjRect ) && pOldObject->GetLayer() != SC_LAYER_INTERN )
+            // do not copy internal objects (detective) and note captions
+            if ( rRange.IsInside( aObjRect ) && (pOldObject->GetLayer() != SC_LAYER_INTERN) && !IsNoteCaption( pOldObject ) )
             {
                 if ( !pDestModel )
                 {
@@ -1563,7 +1498,8 @@ void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, SCTAB nSourceTab, const
     while (pOldObject)
     {
         Rectangle aObjRect = pOldObject->GetCurrentBoundRect();
-        if ( rSourceRange.IsInside( aObjRect ) )
+        // do not copy internal objects (detective) and note captions
+        if ( rSourceRange.IsInside( aObjRect ) && (pOldObject->GetLayer() != SC_LAYER_INTERN) && !IsNoteCaption( pOldObject ) )
         {
             // #116235#
             SdrObject* pNewObject = pOldObject->Clone();
@@ -1722,6 +1658,47 @@ void ScDrawLayer::MirrorRectRTL( Rectangle& rRect )
     rRect.Right() = -nTemp;
 }
 
+Rectangle ScDrawLayer::GetCellRect( ScDocument& rDoc, const ScAddress& rPos, bool bMergedCell )
+{
+    Rectangle aCellRect;
+    DBG_ASSERT( ValidColRowTab( rPos.Col(), rPos.Row(), rPos.Tab() ), "ScDrawLayer::GetCellRect - invalid cell address" );
+    if( ValidColRowTab( rPos.Col(), rPos.Row(), rPos.Tab() ) )
+    {
+        // find top left position of passed cell address
+        Point aTopLeft;
+        for( SCCOL nCol = 0; nCol < rPos.Col(); ++nCol )
+            aTopLeft.X() += rDoc.GetColWidth( nCol, rPos.Tab() );
+        if( rPos.Row() > 0 )
+            aTopLeft.Y() += rDoc.FastGetRowHeight( 0, rPos.Row() - 1, rPos.Tab() );
+
+        // find bottom-right position of passed cell address
+        ScAddress aEndPos = rPos;
+        if( bMergedCell )
+        {
+            const ScMergeAttr* pMerge = static_cast< const ScMergeAttr* >( rDoc.GetAttr( rPos.Col(), rPos.Row(), rPos.Tab(), ATTR_MERGE ) );
+            if( pMerge->GetColMerge() > 1 )
+                aEndPos.IncCol( pMerge->GetColMerge() - 1 );
+            if( pMerge->GetRowMerge() > 1 )
+                aEndPos.IncRow( pMerge->GetRowMerge() - 1 );
+        }
+        Point aBotRight = aTopLeft;
+        for( SCCOL nCol = rPos.Col(); nCol <= aEndPos.Col(); ++nCol )
+            aBotRight.X() += rDoc.GetColWidth( nCol, rPos.Tab() );
+        aBotRight.Y() += rDoc.FastGetRowHeight( rPos.Row(), aEndPos.Row(), rPos.Tab() );
+
+        // twips -> 1/100 mm
+        aTopLeft.X() = static_cast< long >( aTopLeft.X() * HMM_PER_TWIPS );
+        aTopLeft.Y() = static_cast< long >( aTopLeft.Y() * HMM_PER_TWIPS );
+        aBotRight.X() = static_cast< long >( aBotRight.X() * HMM_PER_TWIPS );
+        aBotRight.Y() = static_cast< long >( aBotRight.Y() * HMM_PER_TWIPS );
+
+        aCellRect = Rectangle( aTopLeft, aBotRight );
+        if( rDoc.IsNegativePage( rPos.Tab() ) )
+            MirrorRectRTL( aCellRect );
+    }
+    return aCellRect;
+}
+
 // static
 String ScDrawLayer::GetVisibleName( SdrObject* pObj )
 {
@@ -1846,7 +1823,7 @@ ScAnchorType ScDrawLayer::GetAnchor( const SdrObject* pObj )
 
 ScDrawObjData* ScDrawLayer::GetObjData( SdrObject* pObj, BOOL bCreate )     // static
 {
-    USHORT nCount = pObj->GetUserDataCount();
+    USHORT nCount = pObj ? pObj->GetUserDataCount() : 0;
     for( USHORT i = 0; i < nCount; i++ )
     {
         SdrObjUserData* pData = pObj->GetUserData( i );
@@ -1854,13 +1831,13 @@ ScDrawObjData* ScDrawLayer::GetObjData( SdrObject* pObj, BOOL bCreate )     // s
                     && pData->GetId() == SC_UD_OBJDATA )
             return (ScDrawObjData*) pData;
     }
-    if( bCreate )
+    if( pObj && bCreate )
     {
         ScDrawObjData* pData = new ScDrawObjData;
         pObj->InsertUserData( pData, 0 );
         return pData;
     }
-    return NULL;
+    return 0;
 }
 
 ScDrawObjData* ScDrawLayer::GetObjDataTab( SdrObject* pObj, SCTAB nTab )    // static
@@ -1868,12 +1845,24 @@ ScDrawObjData* ScDrawLayer::GetObjDataTab( SdrObject* pObj, SCTAB nTab )    // s
     ScDrawObjData* pData = GetObjData( pObj );
     if ( pData )
     {
-        if ( pData->bValidStart )
-            pData->aStt.SetTab( nTab );
-        if ( pData->bValidEnd )
-            pData->aEnd.SetTab( nTab );
+        if ( pData->maStart.IsValid() )
+            pData->maStart.SetTab( nTab );
+        if ( pData->maEnd.IsValid() )
+            pData->maEnd.SetTab( nTab );
     }
     return pData;
+}
+
+bool ScDrawLayer::IsNoteCaption( SdrObject* pObj )
+{
+    ScDrawObjData* pData = pObj ? GetObjData( pObj ) : 0;
+    return pData && pData->mbNote;
+}
+
+ScDrawObjData* ScDrawLayer::GetNoteCaptionData( SdrObject* pObj, SCTAB nTab )
+{
+    ScDrawObjData* pData = pObj ? GetObjDataTab( pObj, nTab ) : 0;
+    return (pData && pData->mbNote) ? pData : 0;
 }
 
 ScIMapInfo* ScDrawLayer::GetIMapInfo( SdrObject* pObj )             // static

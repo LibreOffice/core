@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: undobase.hxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.128.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -100,11 +100,14 @@ class ScDBFuncUndo: public ScSimpleUndo
 {
     ScDBData*       pAutoDBRange;
     ScRange         aOriginalRange;
+    SdrUndoAction*  mpDrawUndo;
 
 public:
                     TYPEINFO();
-                    ScDBFuncUndo( ScDocShell* pDocSh, const ScRange& rOriginal );
+                    ScDBFuncUndo( ScDocShell* pDocSh, const ScRange& rOriginal, SdrUndoAction* pDrawUndo = 0 );
     virtual         ~ScDBFuncUndo();
+
+    void            SetDrawUndoAction( SdrUndoAction* pDrawUndo );
 
     void            BeginUndo();
     void            EndUndo();

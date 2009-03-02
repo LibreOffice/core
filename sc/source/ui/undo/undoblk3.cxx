@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: undoblk3.cxx,v $
- * $Revision: 1.22.32.1 $
+ * $Revision: 1.22.128.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -165,6 +165,8 @@ void ScUndoDeleteContents::DoChange( const BOOL bUndo )
             nUndoFlags |= IDF_ATTRIB;
         if (nFlags & IDF_EDITATTR)          // Edit-Engine-Attribute
             nUndoFlags |= IDF_STRING;       // -> Zellen werden geaendert
+        // do not create clones of note captions, they will be restored via drawing undo
+        nUndoFlags |= IDF_NOCAPTIONS;
 
         ScRange aCopyRange = aRange;
         SCTAB nTabCount = pDoc->GetTableCount();
@@ -186,9 +188,10 @@ void ScUndoDeleteContents::DoChange( const BOOL bUndo )
         pDocShell->UpdatePaintExt( nExtFlags, aRange );             // content before the change
 
         aMarkData.MarkToMulti();
-        if (pDrawUndo)
-            pDoc->DeleteObjectsInSelection( aMarkData );
-        pDoc->DeleteSelection( nFlags, aMarkData );
+        RedoSdrUndoAction( pDrawUndo );
+        // do not delete objects and note captions, they have been removed via drawing undo
+        USHORT nRedoFlags = (nFlags & ~IDF_OBJECTS) | IDF_NOCAPTIONS;
+        pDoc->DeleteSelection( nRedoFlags, aMarkData );
         aMarkData.MarkToSimple();
 
         SetChangeTrack();
@@ -642,8 +645,8 @@ void __EXPORT ScUndoAutoFill::Undo()
 
             USHORT nExtFlags = 0;
             pDocShell->UpdatePaintExt( nExtFlags, aWorkRange );
-            pDoc->DeleteAreaTab( aWorkRange, IDF_ALL );
-            pUndoDoc->CopyToDocument( aWorkRange, IDF_ALL, FALSE, pDoc );
+            pDoc->DeleteAreaTab( aWorkRange, IDF_AUTOFILL );
+            pUndoDoc->CopyToDocument( aWorkRange, IDF_AUTOFILL, FALSE, pDoc );
 
             pDoc->ExtendMerge( aWorkRange, TRUE );
             pDocShell->PostPaint( aWorkRange, PAINT_GRID, nExtFlags );
@@ -774,122 +777,123 @@ BOOL __EXPORT ScUndoAutoFill::CanRepeat(SfxRepeatTarget& rTarget) const
 ScUndoMerge::ScUndoMerge( ScDocShell* pNewDocShell,
                             SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
                             SCCOL nEndX, SCROW nEndY, SCTAB nEndZ,
-                            BOOL bNewDoMerge, ScDocument* pNewUndoDoc )
+                            bool bMergeContents, ScDocument* pUndoDoc, SdrUndoAction* pDrawUndo )
         //
     :   ScSimpleUndo( pNewDocShell ),
         //
-        aRange  ( nStartX, nStartY, nStartZ, nEndX, nEndY, nEndZ ),
-        bDoMerge( bNewDoMerge ),
-        pUndoDoc( pNewUndoDoc )
+        maRange( nStartX, nStartY, nStartZ, nEndX, nEndY, nEndZ ),
+        mbMergeContents( bMergeContents ),
+        mpUndoDoc( pUndoDoc ),
+        mpDrawUndo( pDrawUndo )
 {
 }
 
 
 //----------------------------------------------------------------------------
 
-__EXPORT ScUndoMerge::~ScUndoMerge()
+ScUndoMerge::~ScUndoMerge()
 {
-    delete pUndoDoc;
+    delete mpUndoDoc;
+    DeleteSdrUndoAction( mpDrawUndo );
 }
 
 
 //----------------------------------------------------------------------------
 
-String __EXPORT ScUndoMerge::GetComment() const
+String ScUndoMerge::GetComment() const
 {
-    // "Zusammenfassen" "Zusammenfassung aufheben"
-    return bDoMerge ?
-        ScGlobal::GetRscString( STR_UNDO_MERGE ) :
-        ScGlobal::GetRscString( STR_UNDO_REMERGE );
+    return ScGlobal::GetRscString( STR_UNDO_MERGE );
 }
 
 
 //----------------------------------------------------------------------------
 
-void ScUndoMerge::DoChange( const BOOL bUndo ) const
+void ScUndoMerge::DoChange( bool bUndo ) const
 {
     ScDocument* pDoc = pDocShell->GetDocument();
 
-    ScUndoUtil::MarkSimpleBlock( pDocShell, aRange );
+    ScUndoUtil::MarkSimpleBlock( pDocShell, maRange );
 
-    if (bDoMerge == bUndo)
-        pDoc->RemoveMerge( aRange.aStart.Col(), aRange.aStart.Row(), aRange.aStart.Tab() );
-//!     pDoc->RemoveMerge( aRange.aStart );
+    if (bUndo)
+        // remove merge (contents are copied back below from undo document)
+        pDoc->RemoveMerge( maRange.aStart.Col(), maRange.aStart.Row(), maRange.aStart.Tab() );
     else
-/*!*/   pDoc->DoMerge( aRange.aStart.Tab(),
-                       aRange.aStart.Col(), aRange.aStart.Row(),
-                       aRange.aEnd.Col(),   aRange.aEnd.Row()   );
+        // repeat merge, but do not remove note captions (will be done by drawing redo below)
+/*!*/   pDoc->DoMerge( maRange.aStart.Tab(),
+                       maRange.aStart.Col(), maRange.aStart.Row(),
+                       maRange.aEnd.Col(),   maRange.aEnd.Row(), false );
 
-    if (pUndoDoc)
+    // undo -> copy back deleted contents
+    if (bUndo && mpUndoDoc)
     {
-        if (bUndo)
-        {
-            pDoc->DeleteAreaTab( aRange, IDF_CONTENTS );
-            pUndoDoc->CopyToDocument( aRange, IDF_ALL, FALSE, pDoc );
-        }
-        else
-/*!*/       pDoc->DoMergeContents( aRange.aStart.Tab(),
-                                   aRange.aStart.Col(), aRange.aStart.Row(),
-                                   aRange.aEnd.Col(),   aRange.aEnd.Row()   );
+        pDoc->DeleteAreaTab( maRange, IDF_CONTENTS|IDF_NOCAPTIONS );
+        mpUndoDoc->CopyToDocument( maRange, IDF_ALL|IDF_NOCAPTIONS, FALSE, pDoc );
     }
+
+    // redo -> merge contents again
+    else if (!bUndo && mbMergeContents)
+    {
+/*!*/   pDoc->DoMergeContents( maRange.aStart.Tab(),
+                               maRange.aStart.Col(), maRange.aStart.Row(),
+                               maRange.aEnd.Col(),   maRange.aEnd.Row()   );
+    }
+
+    if (bUndo)
+        DoSdrUndoAction( mpDrawUndo, pDoc );
+    else
+        RedoSdrUndoAction( mpDrawUndo );
 
     BOOL bDidPaint = FALSE;
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if ( pViewShell )
     {
-        pViewShell->SetTabNo( aRange.aStart.Tab() );
-        bDidPaint = pViewShell->AdjustRowHeight( aRange.aStart.Row(), aRange.aEnd.Row() );
+        pViewShell->SetTabNo( maRange.aStart.Tab() );
+        bDidPaint = pViewShell->AdjustRowHeight( maRange.aStart.Row(), maRange.aEnd.Row() );
     }
 
     if (!bDidPaint)
-        ScUndoUtil::PaintMore( pDocShell, aRange );
+        ScUndoUtil::PaintMore( pDocShell, maRange );
 
-    ShowTable( aRange );
+    ShowTable( maRange );
 }
 
 
 //----------------------------------------------------------------------------
 
-void __EXPORT ScUndoMerge::Undo()
+void ScUndoMerge::Undo()
 {
     BeginUndo();
-    DoChange( TRUE );
+    DoChange( true );
     EndUndo();
 }
 
 
 //----------------------------------------------------------------------------
 
-void __EXPORT ScUndoMerge::Redo()
+void ScUndoMerge::Redo()
 {
     BeginRedo();
-    DoChange( FALSE );
+    DoChange( false );
     EndRedo();
 }
 
 
 //----------------------------------------------------------------------------
 
-void __EXPORT ScUndoMerge::Repeat(SfxRepeatTarget& rTarget)
+void ScUndoMerge::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
     {
         ScTabViewShell& rViewShell = *((ScTabViewTarget&)rTarget).GetViewShell();
-
-        if (bDoMerge)
-        {
-            BOOL bCont = FALSE;
-            rViewShell.MergeCells( FALSE, bCont, TRUE );
-        }
-        else
-            rViewShell.RemoveMerge( TRUE );
+        BOOL bCont = FALSE;
+        rViewShell.MergeCells( FALSE, bCont, TRUE );
     }
 }
 
 
 //----------------------------------------------------------------------------
 
-BOOL __EXPORT ScUndoMerge::CanRepeat(SfxRepeatTarget& rTarget) const
+BOOL ScUndoMerge::CanRepeat(SfxRepeatTarget& rTarget) const
 {
     return (rTarget.ISA(ScTabViewTarget));
 }
@@ -1193,13 +1197,9 @@ void __EXPORT ScUndoReplace::Undo()
     }
     else if (pSearchItem->GetCellType() == SVX_SEARCHIN_NOTE)
     {
-        ScPostIt aNote(pDoc);
-        if (pDoc->GetNote(aCursorPos.Col(), aCursorPos.Row(),
-                          aCursorPos.Tab(), aNote))
+        if (ScPostIt* pNote = pDoc->GetNote(aCursorPos))
         {
-            aNote.SetText(aUndoStr);
-            pDoc->SetNote(aCursorPos.Col(), aCursorPos.Row(),
-                          aCursorPos.Tab(), aNote);
+            pNote->SetText( aUndoStr );
         }
         else
         {

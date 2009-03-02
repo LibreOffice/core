@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: chgtrack.cxx,v $
- * $Revision: 1.31.28.5 $
+ * $Revision: 1.32.100.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2303,12 +2303,8 @@ void ScChangeActionContent::SetValue( String& rStr, ScBaseCell*& pCell,
         const ScAddress& rPos, const ScBaseCell* pOrgCell,
         const ScDocument* pFromDoc, ScDocument* pToDoc )
 {
-    if ( ScChangeActionContent::NeedsNumberFormat( pOrgCell ) )
-        ScChangeActionContent::SetValue( rStr, pCell,
-            pFromDoc->GetNumberFormat( rPos ), pOrgCell, pFromDoc, pToDoc );
-    else
-        ScChangeActionContent::SetValue( rStr, pCell,
-            0, pOrgCell, pFromDoc, pToDoc );
+    ULONG nFormat = NeedsNumberFormat( pOrgCell ) ? pFromDoc->GetNumberFormat( rPos ) : 0;
+    SetValue( rStr, pCell, nFormat, pOrgCell, pFromDoc, pToDoc );
 }
 
 
@@ -2322,7 +2318,7 @@ void ScChangeActionContent::SetValue( String& rStr, ScBaseCell*& pCell,
         pCell->Delete();
     if ( ScChangeActionContent::GetContentCellType( pOrgCell ) )
     {
-        pCell = pOrgCell->Clone( pToDoc );
+        pCell = pOrgCell->CloneWithoutNote( *pToDoc );
         switch ( pOrgCell->GetCellType() )
         {
             case CELLTYPE_VALUE :
@@ -2418,8 +2414,7 @@ void ScChangeActionContent::GetFormulaString( String& rStr,
     else
     {
         DBG_ERROR( "ScChangeActionContent::GetFormulaString: aPos != pCell->aPos" );
-        ScFormulaCell* pNew = (ScFormulaCell*) pCell->Clone(
-            pCell->GetDocument(), aPos, TRUE );     // TRUE: bNoListening
+        ScFormulaCell* pNew = new ScFormulaCell( *pCell, *pCell->GetDocument(), aPos );
         pNew->GetFormula( rStr );
         delete pNew;
     }
@@ -2484,7 +2479,7 @@ void ScChangeActionContent::PutValueToDoc( ScBaseCell* pCell,
                             // nothing
                         break;
                         default:
-                            pDoc->PutCell( aPos, pCell->Clone( pDoc ) );
+                            pDoc->PutCell( aPos, pCell->CloneWithoutNote( *pDoc ) );
                     }
             }
         }
@@ -5360,7 +5355,7 @@ ScChangeTrack* ScChangeTrack::Clone( ScDocument* pDocument ) const
         const ScBaseCell* pNewCell = pContent->GetNewCell();
         if ( pNewCell )
         {
-            ScBaseCell* pClonedNewCell = pNewCell->Clone( pDocument );
+            ScBaseCell* pClonedNewCell = pNewCell->CloneWithoutNote( *pDocument );
             String aNewValue;
             pContent->GetNewString( aNewValue );
             pClonedTrack->nGeneratedMin = pGenerated->GetActionNumber() + 1;
@@ -5444,7 +5439,7 @@ ScChangeTrack* ScChangeTrack::Clone( ScDocument* pDocument ) const
                     const ScChangeActionContent* pContent = dynamic_cast< const ScChangeActionContent* >( pAction );
                     DBG_ASSERT( pContent, "ScChangeTrack::Clone: pContent is null!" );
                     const ScBaseCell* pOldCell = pContent->GetOldCell();
-                    ScBaseCell* pClonedOldCell = ( pOldCell ? pOldCell->Clone( pDocument ) : NULL );
+                    ScBaseCell* pClonedOldCell = pOldCell ? pOldCell->CloneWithoutNote( *pDocument ) : 0;
                     String aOldValue;
                     pContent->GetOldString( aOldValue );
 
@@ -5463,7 +5458,7 @@ ScChangeTrack* ScChangeTrack::Clone( ScDocument* pDocument ) const
                     const ScBaseCell* pNewCell = pContent->GetNewCell();
                     if ( pNewCell )
                     {
-                        ScBaseCell* pClonedNewCell = pNewCell->Clone( pDocument );
+                        ScBaseCell* pClonedNewCell = pNewCell->CloneWithoutNote( *pDocument );
                         pClonedContent->SetNewValue( pClonedNewCell, pDocument );
                     }
 

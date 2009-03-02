@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xetable.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.18.126.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2487,7 +2487,7 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
             maRowBfr.AppendCell( xCell, bIsMergedBase );
 
         // notes
-        const ScPostIt* pScNote = pScCell ? pScCell->GetNotePtr() : 0;
+        const ScPostIt* pScNote = pScCell ? pScCell->GetNote() : 0;
         if( pScNote || (aAddNoteText.Len() > 0) )
             mxNoteList->AppendNewRecord( new XclExpNote( GetRoot(), aScPos, pScNote, aAddNoteText ) );
 

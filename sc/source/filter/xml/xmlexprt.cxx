@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlexprt.cxx,v $
- * $Revision: 1.212.28.3 $
+ * $Revision: 1.213.94.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -92,6 +92,7 @@
 #include <svx/svdocapt.hxx>
 #include <svx/outlobj.hxx>
 #include <svx/svditer.hxx>
+#include <svx/svdpage.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/sheet/XUsedAreaCursor.hpp>
@@ -593,7 +594,7 @@ void ScXMLExport::CollectSharedData(sal_Int32& nTableCount, sal_Int32& nShapesCo
                                             sal_Int16 nLayerID = 0;
                                             if( xShapeProp->getPropertyValue(sLayerID) >>= nLayerID )
                                             {
-                                                if( nLayerID == SC_LAYER_INTERN )
+                                                if( (nLayerID == SC_LAYER_INTERN) || (nLayerID == SC_LAYER_HIDDEN) )
                                                     CollectInternalShape( xShape );
                                                 else
                                                 {
@@ -676,39 +677,6 @@ void ScXMLExport::CollectShapesAutoStyles(const sal_Int32 nTableCount)
         {
             uno::Reference<drawing::XDrawPage> xDrawPage(pSharedData->GetDrawPage(nTable));
             uno::Reference<drawing::XShapes> xShapes (xDrawPage, uno::UNO_QUERY);
-
-            uno::Reference<drawing::XShapes> xNoteShapes;
-            ::std::vector < uno::Reference < drawing::XShape > > aNoteShapes;
-            ScCellIterator aCellIter( pDoc, 0,0, nTable, MAXCOL,MAXROW, nTable );
-            ScBaseCell* pCell = aCellIter.GetFirst();
-            while (pCell)
-            {
-                const ScPostIt* pScNote = pCell->GetNotePtr();
-                if (pScNote && !pScNote->IsShown())
-                {
-                    const SfxItemSet& rSet = pScNote->GetItemSet();
-
-                    // In order to transform the SfxItemSet to an EscherPropertyContainer
-                    // and export the properties, we need to recreate the drawing object and
-                    // pass this to XclObjComment() for processing.
-                    SdrCaptionObj* pCaption = new SdrCaptionObj( pScNote->GetRectangle() );
-                    pCaption->SetMergedItemSet(rSet);
-
-                    if(const EditTextObject* pEditText = pScNote->GetEditTextObject())
-                    {
-                        OutlinerParaObject* pOPO = new OutlinerParaObject( *pEditText );
-                        pOPO->SetOutlinerMode( OUTLINERMODE_TEXTOBJECT );
-                        pCaption->NbcSetOutlinerParaObject( pOPO );
-                    }
-
-                    pScNote->InsertObject(pCaption, *pDoc, aCellIter.GetTab(), sal_False);
-
-                    uno::Reference<drawing::XShape> xShape(pCaption->getUnoShape(), uno::UNO_QUERY);
-                    if (xShape.is())
-                        pSharedData->AddNoteObj(xShape, ScAddress(aCellIter.GetCol(), aCellIter.GetRow(), aCellIter.GetTab()));
-                }
-                pCell = aCellIter.GetNext();
-            }
 
             if (xShapes.is())
             {
@@ -1645,8 +1613,6 @@ void ScXMLExport::_ExportContent()
                     nEqualCells = 0;
                 }
             }
-            RemoveTempAnnotaionShape(nTable);
-
             IncrementProgressBar(sal_False);
         }
     }
@@ -2099,27 +2065,23 @@ void ScXMLExport::_ExportMasterStyles()
 void ScXMLExport::CollectInternalShape( uno::Reference< drawing::XShape > xShape )
 {
     // detective objects and notes
-    SvxShape* pShapeImp(SvxShape::getImplementation( xShape ));
-    if( pShapeImp )
+    if( SvxShape* pShapeImp = SvxShape::getImplementation( xShape ) )
     {
-        SdrObject *pObject(pShapeImp->GetSdrObject());
-        if( pObject )
+        if( SdrObject* pObject = pShapeImp->GetSdrObject() )
         {
-            if (pObject->ISA( SdrCaptionObj ))
+            // collect note caption objects from all layers (internal or hidden)
+            if( ScDrawObjData* pCaptData = ScDrawLayer::GetNoteCaptionData( pObject, static_cast< SCTAB >( nCurrentTable ) ) )
             {
-                ScDrawObjData* pData = ScDrawLayer::GetObjDataTab( pObject, static_cast<SCTAB>(nCurrentTable) );
-                if (pData)
-                {
-                    pSharedData->AddNoteObj(xShape, pData->aStt);
+                pSharedData->AddNoteObj( xShape, pCaptData->maStart );
 
-                    // #i60851# When the file is saved while editing a new note,
-                    // the cell is still empty -> last column/row must be updated
-                    DBG_ASSERT( pData->aStt.Tab() == nCurrentTable, "invalid table in object data" );
-                    pSharedData->SetLastColumn( nCurrentTable, pData->aStt.Col() );
-                    pSharedData->SetLastRow( nCurrentTable, pData->aStt.Row() );
-                }
+                // #i60851# When the file is saved while editing a new note,
+                // the cell is still empty -> last column/row must be updated
+                DBG_ASSERT( pCaptData->maStart.Tab() == nCurrentTable, "invalid table in object data" );
+                pSharedData->SetLastColumn( nCurrentTable, pCaptData->maStart.Col() );
+                pSharedData->SetLastRow( nCurrentTable, pCaptData->maStart.Row() );
             }
-            else
+            // other objects from internal layer only (detective)
+            else if( pObject->GetLayer() == SC_LAYER_INTERN )
             {
                 ScDetectiveFunc aDetFunc( pDoc, static_cast<SCTAB>(nCurrentTable) );
                 ScAddress       aPosition;
@@ -2811,30 +2773,6 @@ void ScXMLExport::WriteAnnotation(ScMyCell& rMyCell)
         pCurrentCell = NULL;
 
         rMyCell.xNoteShape.clear();
-    }
-}
-
-void ScXMLExport::RemoveTempAnnotaionShape(const sal_Int32 nTable)
-{
-    if (pDoc)
-    {
-        SdrPage* pPage = NULL;
-        ScDrawLayer* pDrawModel = pDoc->GetDrawLayer();
-        if(pDrawModel)
-            pPage = pDrawModel->GetPage(sal::static_int_cast<sal_uInt16>(nTable));
-        if(pPage)
-        {
-            SdrObjListIter aIter( *pPage, IM_FLAT );
-            while (aIter.IsMore())
-            {
-                SdrObject* pObject = aIter.Next();
-                if (pObject->GetLayer() == SC_LAYER_HIDDEN)
-                {
-                    pPage->RemoveObject(pObject->GetOrdNum());
-                    SdrObject::Free( pObject );
-                }
-            }
-        }
     }
 }
 

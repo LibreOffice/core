@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fusel.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.128.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,17 +49,8 @@ class SdrPageView;
 
 class FuSelection : public FuDraw
 {
- protected:
-//  Outliner*       pOutliner;
-//  OutlinerView*   pOutlinerView;
-    BOOL            bVCAction;
-
- private:
-    BOOL TestDetective( SdrPageView* pPV, const Point& rPos );  // -> fusel2
-    BOOL TestComment( SdrPageView* pPV, const Point& rPos );    // -> fusel2
-
- public:
-    FuSelection(ScTabViewShell* pViewSh, Window* pWin, SdrView* pView,
+public:
+    FuSelection(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pView,
            SdrModel* pDoc, SfxRequest& rReq );
 
     virtual ~FuSelection();
@@ -73,7 +64,18 @@ class FuSelection : public FuDraw
     virtual void Activate();           // Function aktivieren
     virtual void Deactivate();         // Function deaktivieren
 
-    void    ActivateNoteHandles(SdrObject* pObj) const ;
+    void    ActivateNoteHandles(SdrObject* pObj);
+
+protected:
+//  Outliner*       pOutliner;
+//  OutlinerView*   pOutlinerView;
+    BOOL            bVCAction;
+
+private:
+    BOOL TestDetective( SdrPageView* pPV, const Point& rPos );  // -> fusel2
+
+    bool                IsNoteCaptionMarked() const;
+    bool                IsNoteCaptionClicked( const Point& rPos ) const;
 };
 
 

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xmlcelli.cxx,v $
- * $Revision: 1.96.134.1 $
+ * $Revision: 1.96.128.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,7 +65,9 @@
 #include <xmloff/numehelp.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <svtools/zforlist.hxx>
+#include <svx/svdocapt.hxx>
 #include <svx/outlobj.hxx>
+#include <svx/editobj.hxx>
 #include <svtools/languageoptions.hxx>
 
 #include <com/sun/star/frame/XModel.hpp>
@@ -632,53 +634,36 @@ void ScXMLTableRowCellContext::SetAnnotation(const table::CellAddress& aCellAddr
             Color* pColor = NULL;
             Color** ppColor = &pColor;
             pNumForm->GetOutputString(fDate, nfIndex, sDate, ppColor);
-            ScPostIt aNote(String(pMyAnnotation->sText),pDoc);
-            aNote.SetDate(sDate);
-            aNote.SetAuthor(String(pMyAnnotation->sAuthor));
-            aNote.SetShown(pMyAnnotation->bDisplay);
-            if (pMyAnnotation->pRect)
-                aNote.SetRectangle(*pMyAnnotation->pRect);
-            else
-                rXMLImport.AddDefaultNote(aCellAddress);
-            if (pMyAnnotation->pItemSet)
-                aNote.SetItemSet(*(pMyAnnotation->pItemSet));
-            else
-                aNote.SetItemSet(aNote.DefaultItemSet());
-            if ( pMyAnnotation->pOPO )
+
+            ScAddress aPos;
+            ScUnoConversion::FillScAddress( aPos, aCellAddress );
+            if( ScPostIt* pNote = pDoc->GetOrCreateNote( aPos ) )
             {
-                ScNoteEditEngine& aEngine = pDoc->GetNoteEngine();
-                aEngine.SetText(pMyAnnotation->pOPO->GetTextObject());
-                // No ItemSet and Rectangle indicates notes with simple text.
-                // i.e. created with calc 1.x sxc file format
-                if (pMyAnnotation->pItemSet && pMyAnnotation->pRect)
+                pNote->SetDate( sDate );
+                pNote->SetAuthor( pMyAnnotation->sAuthor );
+                if( SdrCaptionObj* pCaption = pNote->GetCaption() )
                 {
-                    const EditTextObject& rTextObj = pMyAnnotation->pOPO->GetTextObject();
-                    sal_uInt16 nCount = aEngine.GetParagraphCount();
-                    for( sal_uInt16 nPara = 0; nPara < nCount; ++nPara )
+                    if( pMyAnnotation->pOPO )
+                        pCaption->SetOutlinerParaObject( pMyAnnotation->pOPO->Clone() );
+                    else
+                        pCaption->SetText( pMyAnnotation->sText );
+                    // copy all items and reset shadow items
+                    if( pMyAnnotation->pItemSet )
+                        pNote->SetCaptionItems( *pMyAnnotation->pItemSet );
+                    else
+                        pNote->SetCaptionDefaultItems();    // default items need to be applied to text
+                    if( pMyAnnotation->pRect )
+                        pCaption->SetLogicRect( *pMyAnnotation->pRect );
+
+                    uno::Reference<container::XIndexAccess> xShapesIndex (rXMLImport.GetTables().GetCurrentXShapes(), uno::UNO_QUERY); // make draw page
+                    if (xShapesIndex.is())
                     {
-                        SfxItemSet aSet( rTextObj.GetParaAttribs( nPara));
-                        aEngine.SetParaAttribs(nPara, aSet);
+                        sal_Int32 nShapes = xShapesIndex->getCount();
+                        uno::Reference < drawing::XShape > xShape;
+                        rXMLImport.GetShapeImport()->shapeWithZIndexAdded(xShape, nShapes);
                     }
                 }
-                ::std::auto_ptr< EditTextObject > pEditText( aEngine.CreateTextObject());
-                aNote.SetEditTextObject(pEditText.get());    // if pEditText is NULL, then aNote.mpEditObj will be reset().
-            }
-            if (pMyAnnotation->pRect)
-                aNote.SetRectangle(*pMyAnnotation->pRect);
-            else
-                aNote.SetRectangle(aNote.MimicOldRectangle(ScAddress(static_cast<SCCOL>(aCellAddress.Column), static_cast<SCROW>(aCellAddress.Row), aCellAddress.Sheet)));
-            pDoc->SetNote(static_cast<SCCOL>(aCellAddress.Column), static_cast<SCROW>(aCellAddress.Row), aCellAddress.Sheet, aNote);
-        }
-        if (pMyAnnotation->bDisplay)
-        {
-            ScDetectiveFunc aDetFunc(pDoc, aCellAddress.Sheet);
-            aDetFunc.ShowComment(static_cast<SCCOL>(aCellAddress.Column), static_cast<SCROW>(aCellAddress.Row), sal_False);
-            uno::Reference<container::XIndexAccess> xShapesIndex (rXMLImport.GetTables().GetCurrentXShapes(), uno::UNO_QUERY); // make draw page
-            if (xShapesIndex.is())
-            {
-                sal_Int32 nShapes = xShapesIndex->getCount();
-                uno::Reference < drawing::XShape > xShape;
-                rXMLImport.GetShapeImport()->shapeWithZIndexAdded(xShape, nShapes);
+                pNote->ShowCaption( pMyAnnotation->bDisplay );
             }
         }
     }

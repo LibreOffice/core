@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fuconarc.cxx,v $
- * $Revision: 1.9 $
+ * $Revision: 1.9.128.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,24 +31,14 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
-//------------------------------------------------------------------------
-#include <svx/svdobj.hxx>
-
-#include <svx/svdview.hxx>
-
 #include "fuconarc.hxx"
 #include "sc.hrc"
 #include "tabvwsh.hxx"
+#include "drawview.hxx"
 
 // #98185# Create default drawing objects via keyboard
 #include <svx/svdocirc.hxx>
 #include <svx/sxciaitm.hxx>
-
-
-//------------------------------------------------------------------------
-
 
 /*************************************************************************
 |*
@@ -56,7 +46,7 @@
 |*
 \************************************************************************/
 
-FuConstArc::FuConstArc( ScTabViewShell* pViewSh, Window* pWin, SdrView* pViewP,
+FuConstArc::FuConstArc( ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pViewP,
                    SdrModel* pDoc, SfxRequest& rReq )
     : FuConstruct( pViewSh, pWin, pViewP, pDoc, rReq )
 {

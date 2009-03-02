@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cell2.cxx,v $
- * $Revision: 1.33.30.3 $
+ * $Revision: 1.34.102.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,7 +60,7 @@ const USHORT nMemPoolEditCell = (0x1000 - 64) / sizeof(ScNoteCell);
 IMPL_FIXEDMEMPOOL_NEWDEL( ScEditCell, nMemPoolEditCell, nMemPoolEditCell )
 #endif
 
-// -----------------------------------------------------------------------
+// ============================================================================
 
 ScEditCell::ScEditCell( const EditTextObject* pObject, ScDocument* pDocP,
             const SfxItemPool* pFromPool )  :
@@ -71,12 +71,12 @@ ScEditCell::ScEditCell( const EditTextObject* pObject, ScDocument* pDocP,
     SetTextObject( pObject, pFromPool );
 }
 
-ScEditCell::ScEditCell( const ScEditCell& rEditCell, ScDocument* pDocP )  :
-        ScBaseCell( rEditCell, pDocP),
+ScEditCell::ScEditCell( const ScEditCell& rCell, ScDocument& rDoc )  :
+        ScBaseCell( rCell ),
         pString( NULL ),
-        pDoc( pDocP )
+        pDoc( &rDoc )
 {
-    SetTextObject( rEditCell.pData, rEditCell.pDoc->GetEditPool() );
+    SetTextObject( rCell.pData, rCell.pDoc->GetEditPool() );
 }
 
 ScEditCell::ScEditCell( const String& rString, ScDocument* pDocP )  :
@@ -101,11 +101,6 @@ ScEditCell::~ScEditCell()
 #ifdef DBG_UTIL
     eCellType = CELLTYPE_DESTROYED;
 #endif
-}
-
-ScBaseCell* ScEditCell::Clone( ScDocument* pNewDoc ) const
-{
-    return new ScEditCell( *this, pNewDoc );
 }
 
 void ScEditCell::SetData( const EditTextObject* pObject,
@@ -178,7 +173,7 @@ void ScEditCell::SetTextObject( const EditTextObject* pObject,
         pData = NULL;
 }
 
-//---------------------------------------------------------------------
+// ============================================================================
 
 BOOL ScFormulaCell::IsEmpty()
 {
@@ -1356,4 +1351,6 @@ void ScFormulaCell::CompileColRowNameFormula()
         }
     }
 }
+
+// ============================================================================
 

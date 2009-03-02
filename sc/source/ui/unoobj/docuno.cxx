@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docuno.cxx,v $
- * $Revision: 1.67.30.3 $
+ * $Revision: 1.68.52.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2986,34 +2986,30 @@ void ScAnnotationsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
 }
 
-BOOL ScAnnotationsObj::GetAddressByIndex_Impl( ULONG nIndex, ScAddress& rPos ) const
+bool ScAnnotationsObj::GetAddressByIndex_Impl( sal_Int32 nIndex, ScAddress& rPos ) const
 {
     if (pDocShell)
     {
-        ULONG nFound = 0;
+        sal_Int32 nFound = 0;
         ScDocument* pDoc = pDocShell->GetDocument();
         ScCellIterator aCellIter( pDoc, 0,0, nTab, MAXCOL,MAXROW, nTab );
-        ScBaseCell* pCell = aCellIter.GetFirst();
-        while (pCell)
+        for( ScBaseCell* pCell = aCellIter.GetFirst(); pCell; pCell = aCellIter.GetNext() )
         {
-            if (pCell->GetNotePtr())
+            if (pCell->HasNote())
             {
                 if (nFound == nIndex)
                 {
                     rPos = ScAddress( aCellIter.GetCol(), aCellIter.GetRow(), aCellIter.GetTab() );
-                    return TRUE;
+                    return true;
                 }
                 ++nFound;
             }
-            pCell = aCellIter.GetNext();
         }
     }
-    return FALSE;   // nicht gefunden
+    return false;
 }
 
-// XSheetAnnotations
-
-ScAnnotationObj* ScAnnotationsObj::GetObjectByIndex_Impl(sal_Int32 nIndex) const
+ScAnnotationObj* ScAnnotationsObj::GetObjectByIndex_Impl( sal_Int32 nIndex ) const
 {
     if (pDocShell)
     {
@@ -3024,8 +3020,10 @@ ScAnnotationObj* ScAnnotationsObj::GetObjectByIndex_Impl(sal_Int32 nIndex) const
     return NULL;
 }
 
-void SAL_CALL ScAnnotationsObj::insertNew( const table::CellAddress& aPosition,
-                                            const ::rtl::OUString& aText )
+// XSheetAnnotations
+
+void SAL_CALL ScAnnotationsObj::insertNew(
+        const table::CellAddress& aPosition, const ::rtl::OUString& rText )
                                                 throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
@@ -3034,8 +3032,8 @@ void SAL_CALL ScAnnotationsObj::insertNew( const table::CellAddress& aPosition,
         DBG_ASSERT( aPosition.Sheet == nTab, "addAnnotation mit falschem Sheet" );
         ScAddress aPos( (SCCOL)aPosition.Column, (SCROW)aPosition.Row, nTab );
 
-        ScDocFunc aFunc(*pDocShell);
-        aFunc.SetNoteText( aPos, String(aText), TRUE );
+        ScDocFunc aFunc( *pDocShell );
+        aFunc.ReplaceNote( aPos, rText, 0, 0, TRUE );
     }
 }
 
@@ -3076,15 +3074,10 @@ sal_Int32 SAL_CALL ScAnnotationsObj::getCount() throw(uno::RuntimeException)
     ULONG nCount = 0;
     if (pDocShell)
     {
-        ScDocument* pDoc = pDocShell->GetDocument();
-        ScCellIterator aCellIter( pDoc, 0,0, nTab, MAXCOL,MAXROW, nTab );
-        ScBaseCell* pCell = aCellIter.GetFirst();
-        while (pCell)
-        {
-            if (pCell->GetNotePtr())
+        ScCellIterator aCellIter( pDocShell->GetDocument(), 0,0, nTab, MAXCOL,MAXROW, nTab );
+        for( ScBaseCell* pCell = aCellIter.GetFirst(); pCell; pCell = aCellIter.GetNext() )
+            if (pCell->HasNote())
                 ++nCount;
-            pCell = aCellIter.GetNext();
-        }
     }
     return nCount;
 }

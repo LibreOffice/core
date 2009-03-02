@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: compiler.cxx,v $
- * $Revision: 1.82.28.20 $
+ * $Revision: 1.82.18.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -3010,7 +3010,9 @@ BOOL ScCompiler::IsColRowName( const String& rName )
                             case CELLTYPE_VALUE:
                             case CELLTYPE_NOTE:
                             case CELLTYPE_SYMBOLS:
+#if DBG_UTIL
                             case CELLTYPE_DESTROYED:
+#endif
                                 ;   // nothing, prevent compiler warning
                             break;
                         }
@@ -3137,7 +3139,9 @@ BOOL ScCompiler::IsColRowName( const String& rName )
                         case CELLTYPE_VALUE:
                         case CELLTYPE_NOTE:
                         case CELLTYPE_SYMBOLS:
+#if DBG_UTIL
                         case CELLTYPE_DESTROYED:
+#endif
                             ;   // nothing, prevent compiler warning
                         break;
                     }

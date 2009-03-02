@@ -1004,7 +1004,7 @@ IMPL_LINK( ScTabView, TabBarResize, void*, EMPTYARG )
         if (aViewData.GetHSplitMode() != SC_SPLIT_FIX)
         {
             long nMax = pHSplitter->GetPosPixel().X();
-            if( pTabControl->IsMirrored() != Application::GetSettings().GetLayoutRTL() )
+            if( pTabControl->IsEffectiveRTL() )
                 nMax = pFrameWin->GetSizePixel().Width() - nMax;
             --nMax;
             if (nSize>nMax) nSize = nMax;
@@ -1230,9 +1230,9 @@ IMPL_LINK( ScTabView, EndScrollHdl, ScrollBar*, pScroll )
 
             if ( pScroll == &aHScrollLeft || pScroll == &aHScrollRight )
             {
-                BOOL bLayoutRTL = aViewData.GetDocument()->IsLayoutRTL( aViewData.GetTabNo() );
+                BOOL bMirror = aViewData.GetDocument()->IsLayoutRTL( aViewData.GetTabNo() ) != Application::GetSettings().GetLayoutRTL();
                 ScHSplitPos eWhich = (pScroll == &aHScrollLeft) ? SC_SPLIT_LEFT : SC_SPLIT_RIGHT;
-                long nDelta = GetScrollBarPos( *pScroll, bLayoutRTL ) + nScrollMin - aViewData.GetPosX(eWhich);
+                long nDelta = GetScrollBarPos( *pScroll, bMirror ) + nScrollMin - aViewData.GetPosX(eWhich);
                 if (nDelta) ScrollX( nDelta, eWhich );
             }
             else                            // VScroll...
@@ -1260,7 +1260,8 @@ IMPL_LINK( ScTabView, ScrollHdl, ScrollBar*, pScroll )
         nViewPos = aViewData.GetPosY( (pScroll == &aVScrollTop) ?
                                         SC_SPLIT_TOP : SC_SPLIT_BOTTOM );
 
-    BOOL bLayoutRTL = bHoriz && aViewData.GetDocument()->IsLayoutRTL( aViewData.GetTabNo() );
+    BOOL bLayoutRTL = aViewData.GetDocument()->IsLayoutRTL( aViewData.GetTabNo() );
+    BOOL bMirror = bHoriz && (bLayoutRTL != Application::GetSettings().GetLayoutRTL());
 
     ScrollType eType = pScroll->GetType();
     if ( eType == SCROLL_DRAG )
@@ -1276,17 +1277,31 @@ IMPL_LINK( ScTabView, ScrollHdl, ScrollBar*, pScroll )
 
         if (Help::IsQuickHelpEnabled())
         {
-            Point aMousePos = pScroll->OutputToNormalizedScreenPixel(pScroll->GetPointerPosPixel());
+            Size aSize = pScroll->GetSizePixel();
+
+            /*  Convert scrollbar mouse position to screen position. If RTL
+                mode of scrollbar differs from RTL mode of its parent, then the
+                direct call to Window::OutputToNormalizedScreenPixel() will
+                give unusable results, because calcualtion of screen position
+                is based on parent orientation and expects equal orientation of
+                the child position. Need to mirror mouse position before. */
+            Point aMousePos = pScroll->GetPointerPosPixel();
+            if( pScroll->IsRTLEnabled() != pScroll->GetParent()->IsRTLEnabled() )
+                aMousePos.X() = aSize.Width() - aMousePos.X() - 1;
+            aMousePos = pScroll->OutputToNormalizedScreenPixel( aMousePos );
+
+            // convert top-left position of scrollbar to screen position
+            Point aPos = pScroll->OutputToNormalizedScreenPixel( Point() );
+
+            // get scrollbar scroll position for help text (row number/column name)
             long nScrollMin = 0;        // RangeMin simulieren
             if ( aViewData.GetHSplitMode()==SC_SPLIT_FIX && pScroll == &aHScrollRight )
                 nScrollMin = aViewData.GetFixPosX();
             if ( aViewData.GetVSplitMode()==SC_SPLIT_FIX && pScroll == &aVScrollBottom )
                 nScrollMin = aViewData.GetFixPosY();
+            long nScrollPos = GetScrollBarPos( *pScroll, bMirror ) + nScrollMin;
 
             String aHelpStr;
-            long nScrollPos = GetScrollBarPos( *pScroll, bLayoutRTL ) + nScrollMin;
-            Point aPos = pScroll->GetParent()->OutputToNormalizedScreenPixel(pScroll->GetPosPixel());
-            Size aSize = pScroll->GetSizePixel();
             Rectangle aRect;
             USHORT nAlign;
             if (bHoriz)
@@ -1305,9 +1320,10 @@ IMPL_LINK( ScTabView, ScrollHdl, ScrollBar*, pScroll )
                 aHelpStr += ' ';
                 aHelpStr += String::CreateFromInt32(nScrollPos + 1);
 
-                aRect.Left() = aPos.X() - 8;
+                // show quicktext always inside sheet area
+                aRect.Left() = bLayoutRTL ? (aPos.X() + aSize.Width() + 8) : (aPos.X() - 8);
                 aRect.Top()  = aMousePos.Y();
-                nAlign       = QUICKHELP_RIGHT|QUICKHELP_VCENTER;
+                nAlign       = (bLayoutRTL ? QUICKHELP_LEFT : QUICKHELP_RIGHT) | QUICKHELP_VCENTER;
             }
             aRect.Right()   = aRect.Left();
             aRect.Bottom()  = aRect.Top();
@@ -1318,7 +1334,7 @@ IMPL_LINK( ScTabView, ScrollHdl, ScrollBar*, pScroll )
 
     if ( bOnlineScroll || eType != SCROLL_DRAG )
     {
-        if ( bLayoutRTL )
+        if ( bMirror )
         {
             // change scroll type so visible/previous cells calculation below remains the same
             switch ( eType )
@@ -1367,7 +1383,7 @@ IMPL_LINK( ScTabView, ScrollHdl, ScrollBar*, pScroll )
                     if ( aViewData.GetVSplitMode()==SC_SPLIT_FIX && pScroll == &aVScrollBottom )
                         nScrollMin = aViewData.GetFixPosY();
 
-                    long nScrollPos = GetScrollBarPos( *pScroll, bLayoutRTL ) + nScrollMin;
+                    long nScrollPos = GetScrollBarPos( *pScroll, bMirror ) + nScrollMin;
                     nDelta = nScrollPos - nViewPos;
                     if ( nScrollPos > nPrevDragPos )
                     {

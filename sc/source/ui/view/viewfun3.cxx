@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: viewfun3.cxx,v $
- * $Revision: 1.41 $
+ * $Revision: 1.41.126.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -265,7 +265,7 @@ void ScViewFunc::CutToClip( ScDocument* pClipDoc, BOOL bIncludeObjects )
             ScRange aCopyRange = aRange;
             aCopyRange.aStart.SetTab(0);
             aCopyRange.aEnd.SetTab(pDoc->GetTableCount()-1);
-            pDoc->CopyToDocument( aCopyRange, IDF_ALL, FALSE, pUndoDoc );
+            pDoc->CopyToDocument( aCopyRange, (IDF_ALL & ~IDF_OBJECTS) | IDF_NOCAPTIONS, FALSE, pUndoDoc );
             pDoc->BeginDrawUndo();
         }
 
@@ -758,11 +758,14 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
     USHORT nUndoFlags = nContFlags;
     if (nUndoExtraFlags & IDF_ATTRIB)
         nUndoFlags |= IDF_ATTRIB;
+    // do not copy note captions into undo document
+    nUndoFlags |= IDF_NOCAPTIONS;
 
     BOOL bCutMode = pClipDoc->IsCutMode();      // if transposing, take from original clipdoc
     BOOL bIncludeFiltered = bCutMode;
 
-    BOOL bPasteDraw = ( pClipDoc->GetDrawLayer() && ( nFlags & IDF_OBJECTS ) );
+    // paste drawing: also if IDF_NOTE is set (to create drawing layer for note captions)
+    BOOL bPasteDraw = ( pClipDoc->GetDrawLayer() && ( nFlags & (IDF_OBJECTS|IDF_NOTE) ) );
 
     ScDocShellRef aTransShellRef;   // for objects in xTransClip - must remain valid as long as xTransClip
     ScDocument* pOrigClipDoc = NULL;
@@ -1125,6 +1128,15 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
         }
     }
 
+    /*  Make draw layer and start drawing undo.
+        - Needed before AdjustBlockHeight to track moved drawing objects.
+        - Needed before pDoc->CopyFromClip to track inserted note caption objects.
+     */
+    if ( bPasteDraw )
+        pDocSh->MakeDrawLayer();
+    if ( bRecord )
+        pDoc->BeginDrawUndo();
+
     USHORT nNoObjFlags = nFlags & ~IDF_OBJECTS;
     if (!bAsLink)
     {
@@ -1162,14 +1174,9 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
     }
     delete pMixDoc;
 
-    if ( bPasteDraw )
-        pDocSh->MakeDrawLayer();    // before AdjustBlockHeight, so BeginDrawUndo can be called
-
-    if ( bRecord )
-        pDoc->BeginDrawUndo();
     AdjustBlockHeight();            // update row heights before pasting objects
 
-    if ( bPasteDraw )
+    if ( nFlags & IDF_OBJECTS )
     {
         //  Paste the drawing objects after the row heights have been updated.
 

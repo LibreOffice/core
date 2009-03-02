@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: xcl97esc.cxx,v $
- * $Revision: 1.26.90.3 $
+ * $Revision: 1.26.128.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -196,7 +196,7 @@ EscherExHostAppData* XclEscherEx::StartShape( const com::sun::star::uno::Referen
     aStack.Push( pCurrXclObj );
     aStack.Push( pCurrAppData );
     pCurrAppData = new XclEscherHostAppData;
-    const SdrObject* pObj = GetSdrObject( rShape );
+    SdrObject* pObj = GetSdrObjectFromXShape( rShape );
     if ( !pObj )
         pCurrXclObj = new XclObjAny( GetRoot() );  // just what is it?!?
     else
@@ -228,7 +228,7 @@ EscherExHostAppData* XclEscherEx::StartShape( const com::sun::star::uno::Referen
             if( !pCurrXclObj )
                 pCurrXclObj = new XclObjAny( GetRoot() );   // just a metafile
         }
-        else if( pObj->GetLayer() != SC_LAYER_INTERN )
+        else if( !ScDrawLayer::IsNoteCaption( pObj ) )
         {
             // #107540# ignore permanent note shapes
             // #i12190# do not ignore callouts (do not filter by object type ID)

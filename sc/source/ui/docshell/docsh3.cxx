@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docsh3.cxx,v $
- * $Revision: 1.37.32.2 $
+ * $Revision: 1.38.52.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -197,6 +197,11 @@ void ScDocShell::PostPaintGridAll()
 void ScDocShell::PostPaintCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
 {
     PostPaint( nCol,nRow,nTab, nCol,nRow,nTab, PAINT_GRID, SC_PF_TESTMERGE );
+}
+
+void ScDocShell::PostPaintCell( const ScAddress& rPos )
+{
+    PostPaintCell( rPos.Col(), rPos.Row(), rPos.Tab() );
 }
 
 void ScDocShell::PostPaintExtras()

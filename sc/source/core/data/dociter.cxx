@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: dociter.cxx,v $
- * $Revision: 1.21.32.3 $
+ * $Revision: 1.22.88.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1619,7 +1619,7 @@ BOOL ScUsedAreaIterator::GetNext()
     if ( pCell && IsGreater( nNextCol, nNextRow, nCellCol, nCellRow ) )
         pCell = aCellIter.GetNext( nCellCol, nCellRow );
 
-    while ( pCell && pCell->GetCellType() == CELLTYPE_NOTE && !pCell->GetNotePtr() )
+    while ( pCell && pCell->IsBlank() )
         pCell = aCellIter.GetNext( nCellCol, nCellRow );
 
     if ( pPattern && IsGreater( nNextCol, nNextRow, nAttrCol2, nAttrRow ) )

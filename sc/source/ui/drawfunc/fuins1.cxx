@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fuins1.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.12.128.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,10 +30,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
-
-
-
-//------------------------------------------------------------------------
 
 #include <svx/impgrf.hxx>
 #include <svx/opengrf.hxx>
@@ -256,7 +252,7 @@ void lcl_InsertMedia( const ::rtl::OUString& rMediaURL, bool bApi,
 
 FuInsertGraphic::FuInsertGraphic( ScTabViewShell*   pViewSh,
                                   Window*           pWin,
-                                  SdrView*          pViewP,
+                                  ScDrawView*       pViewP,
                                   SdrModel*         pDoc,
                                   SfxRequest&       rReq )
        : FuPoor(pViewSh, pWin, pViewP, pDoc, rReq)
@@ -377,7 +373,7 @@ void FuInsertGraphic::Deactivate()
 
 FuInsertMedia::FuInsertMedia( ScTabViewShell*   pViewSh,
                               Window*           pWin,
-                              SdrView*          pViewP,
+                              ScDrawView*       pViewP,
                               SdrModel*         pDoc,
                               SfxRequest&       rReq ) :
     FuPoor(pViewSh, pWin, pViewP, pDoc, rReq)

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: documen2.cxx,v $
- * $Revision: 1.72.28.6 $
+ * $Revision: 1.75.18.1 $
  *
  * This file is part of OpenOffice.org.
  *

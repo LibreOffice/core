@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: cellsh1.cxx,v $
- * $Revision: 1.54 $
+ * $Revision: 1.54.102.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1936,75 +1936,46 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
         case SID_RANGE_NOTETEXT:
             if (pReqArgs)
             {
-
-                ScDocument* pDoc = GetViewData()->GetDocument();
-                String aNoteStr = ((const SfxStringItem&)pReqArgs->
-                                    Get( SID_RANGE_NOTETEXT )).GetValue();
-                ScPostIt aNote( aNoteStr, pDoc);
-
-                SCCOL nCol;
-                SCROW nRow;
-                SCTAB nTab;
+                const SfxStringItem& rTextItem = (const SfxStringItem&)pReqArgs->Get( SID_RANGE_NOTETEXT );
 
                 //  #43343# immer Cursorposition
-                nCol = GetViewData()->GetCurX();
-                nRow = GetViewData()->GetCurY();
-                nTab = GetViewData()->GetTabNo();
-
-                pTabViewShell->SetNote( nCol, nRow, nTab, aNote );
+                ScAddress aPos( GetViewData()->GetCurX(), GetViewData()->GetCurY(), GetViewData()->GetTabNo() );
+                pTabViewShell->SetNoteText( aPos, rTextItem.GetValue() );
                 rReq.Done();
             }
             break;
 
         case SID_INSERT_POSTIT:
+            if ( pReqArgs )
             {
-                ScDocument* pDoc = GetViewData()->GetDocument();
-                SCCOL       nCol = GetViewData()->GetCurX();
-                SCROW       nRow = GetViewData()->GetCurY();
-                SCTAB       nTab = GetViewData()->GetTabNo();
-                ScPostIt    aNote(pDoc);
+                const SvxPostItAuthorItem&  rAuthorItem = (const SvxPostItAuthorItem&)pReqArgs->Get( SID_ATTR_POSTIT_AUTHOR );
+                const SvxPostItDateItem&    rDateItem   = (const SvxPostItDateItem&)  pReqArgs->Get( SID_ATTR_POSTIT_DATE );
+                const SvxPostItTextItem&    rTextItem   = (const SvxPostItTextItem&)  pReqArgs->Get( SID_ATTR_POSTIT_TEXT );
 
-                if ( pReqArgs )
-                {
-                    const SvxPostItAuthorItem&  rAuthorItem = (const SvxPostItAuthorItem&)pReqArgs->Get( SID_ATTR_POSTIT_AUTHOR );
-                    const SvxPostItDateItem&    rDateItem   = (const SvxPostItDateItem&)  pReqArgs->Get( SID_ATTR_POSTIT_DATE );
-                    const SvxPostItTextItem&    rTextItem   = (const SvxPostItTextItem&)  pReqArgs->Get( SID_ATTR_POSTIT_TEXT );
-                    aNote.SetText( rTextItem.GetValue() );
-                    aNote.SetDate( rDateItem.GetValue() );
-                    aNote.SetAuthor( rAuthorItem.GetValue() );
-
-                    pTabViewShell->SetNote( nCol, nRow, nTab, aNote );
-                    rReq.Done();
-                }
-                else
-                {
-                    pTabViewShell->EditNote();                  // Zeichenobjekt zum Editieren
-                }
+                ScAddress aPos( GetViewData()->GetCurX(), GetViewData()->GetCurY(), GetViewData()->GetTabNo() );
+                pTabViewShell->ReplaceNote( aPos, rTextItem.GetValue(), &rAuthorItem.GetValue(), &rDateItem.GetValue() );
+                rReq.Done();
+            }
+            else
+            {
+                pTabViewShell->EditNote();                  // Zeichenobjekt zum Editieren
             }
             break;
 
         case FID_NOTE_VISIBLE:
             {
                 ScDocument* pDoc = GetViewData()->GetDocument();
-                SCCOL       nCol = GetViewData()->GetCurX();
-                SCROW       nRow = GetViewData()->GetCurY();
-                SCTAB       nTab = GetViewData()->GetTabNo();
-                ScPostIt    aNote(pDoc);
-
-                if ( pDoc->GetNote( nCol, nRow, nTab, aNote ) )
+                ScAddress aPos( GetViewData()->GetCurX(), GetViewData()->GetCurY(), GetViewData()->GetTabNo() );
+                if( ScPostIt* pNote = pDoc->GetNote( aPos ) )
                 {
-                    BOOL bShow;
+                    bool bShow;
                     const SfxPoolItem* pItem;
-                    if ( pReqArgs && pReqArgs->GetItemState(
-                            FID_NOTE_VISIBLE, TRUE, &pItem ) == SFX_ITEM_SET )
+                    if ( pReqArgs && (pReqArgs->GetItemState( FID_NOTE_VISIBLE, TRUE, &pItem ) == SFX_ITEM_SET) )
                         bShow = ((const SfxBoolItem*) pItem)->GetValue();
                     else
-                        bShow = !pDoc->HasNoteObject( nCol, nRow, nTab );
+                        bShow = !pNote->IsCaptionShown();
 
-                    if ( bShow )
-                        pTabViewShell->ShowNote();
-                    else
-                        pTabViewShell->HideNote();
+                    pTabViewShell->ShowNote( bShow );
 
                     if (!pReqArgs)
                         rReq.AppendItem( SfxBoolItem( FID_NOTE_VISIBLE, bShow ) );

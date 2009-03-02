@@ -77,8 +77,10 @@ using namespace com::sun::star;
 
 void __EXPORT ScTabView::Init()
 {
-    //  RTL layout of the view windows is done manually, because it depends on the
-    //  sheet orientation, not the UI setting
+    /*  RTL layout of the view windows is done manually, because it depends on
+        the sheet orientation, not the UI setting. Note: controls that are
+        already constructed (e.g. scroll bars) have the RTL setting of the GUI.
+        Eventually this has to be disabled manually (see below). */
     pFrameWin->EnableRTL( FALSE );
 
     USHORT i;
@@ -113,28 +115,18 @@ void __EXPORT ScTabView::Init()
     pVSplitter->SetKeyboardStepSize( 1 );
 
     pTabControl = new ScTabControl( pFrameWin, &aViewData );
-    //MI: nie! das war mal eine MUSS-Aenderung von MBA
-    //if (!aViewData.IsBasicView())
-    //  pTabControl->ToTop();       // ueber dem Splitter
+    /*  #i97900# The tab control has to remain in RTL mode if GUI is RTL, this
+        is needed to draw the 3D effect correctly. The base TabBar implementes
+        mirroring independent from the GUI direction. Have to set RTL mode
+        explicitly because the parent frame window is already RTL disabled. */
+    pTabControl->EnableRTL( Application::GetSettings().GetLayoutRTL() );
 
     InitScrollBar( aHScrollLeft,    MAXCOL+1 );
     InitScrollBar( aHScrollRight,   MAXCOL+1 );
     InitScrollBar( aVScrollTop,     MAXROW+1 );
     InitScrollBar( aVScrollBottom,  MAXROW+1 );
-
-    // SSA: --- RTL --- no mirroring for horizontal scrollbars, otherwise
-    // scroll direction will be wrong
-    aHScrollLeft.EnableRTL ( FALSE );
-    aHScrollRight.EnableRTL ( FALSE );
-
-    //  Mirroring is disabled for all scrollbars, completely handled manually.
-    //  The other windows in the view call EnableRTL in their ctors.
-    aVScrollTop.EnableRTL( FALSE );
-    aVScrollBottom.EnableRTL( FALSE );
-    aScrollBarBox.EnableRTL( FALSE );
-
-    // Tabbar initially left-to-right, done via SetMirrored(), not via EnableRTL()
-    pTabControl->SetMirrored( Application::GetSettings().GetLayoutRTL() );
+    /*  #i97900# scrollbars remain in correct RTL mode, needed mirroring etc.
+        is now handled correctly at the respective places. */
 
     //  Hier noch nichts anzeigen (Show), weil noch falsch angeordnet ist
     //  Show kommt dann aus UpdateShow beim ersten Resize

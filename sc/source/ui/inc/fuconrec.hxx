@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: fuconrec.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.128.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,11 +31,7 @@
 #ifndef SC_FUCONREC_HXX
 #define SC_FUCONREC_HXX
 
-#ifndef _SV_HXX
-#endif
-
 #include "fuconstr.hxx"
-
 
 /*************************************************************************
 |*
@@ -46,7 +42,7 @@
 class FuConstRectangle : public FuConstruct
 {
  public:
-    FuConstRectangle(ScTabViewShell* pViewSh, Window* pWin, SdrView* pView,
+    FuConstRectangle(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pView,
                    SdrModel* pDoc, SfxRequest& rReq);
 
     virtual ~FuConstRectangle();

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: gridwin.cxx,v $
- * $Revision: 1.94.20.2 $
+ * $Revision: 1.96.50.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,29 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
-//------------------------------------------------------------------
-
-//SV
-//#define _CLIP_HXX
-#define _CONFIG_HXX
-#define _CURSOR_HXX
-#define _FONTDLG_HXX
-#define _PRVWIN_HXX
-
-//svdraw.hxx
-#define _SDR_NOITEMS
-#define _SDR_NOTOUCH
-#define _SDR_NOTRANSFORM
-//#define _SDR_NOOBJECTS
-//#define _SDR_NOVIEWS
-
-
-// INCLUDE ---------------------------------------------------------------
-
 #include "scitems.hxx"
-
 
 #include <memory> //auto_ptr
 #include <svx/adjitem.hxx>
@@ -82,6 +60,7 @@
 #include <svx/svdview.hxx>      // fuer Command-Handler (COMMAND_INSERTTEXT)
 #include <svx/outliner.hxx>     // fuer Command-Handler (COMMAND_INSERTTEXT)
 #include <svx/svditer.hxx>
+#include <svx/svdocapt.hxx>
 #include <svx/svdpagv.hxx>
 
 #include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
@@ -353,47 +332,23 @@ BOOL lcl_IsEditableMatrix( ScDocument* pDoc, const ScRange& rRange )
 
 }
 
-void lcl_UnLockComment( SdrView* pView, SdrPageView* pPV, SdrModel* pDrDoc, const Point& rPos ,ScViewData* pViewData )
+void lcl_UnLockComment( ScDrawView* pView, SdrPageView* pPV, SdrModel* pDrDoc, const Point& rPos, ScViewData* pViewData )
 {
     if (!pView && !pPV && !pDrDoc && !pViewData)
-        return ;
+        return;
 
-    SdrObject* pFoundObj = NULL;
-    ScAddress  aTabPos;
-
-    SdrObjListIter aIter( *pPV->GetObjList(), IM_FLAT );
-    SdrObject* pObject = aIter.Next();
-    while (pObject && !pFoundObj)
+    ScDocument& rDoc = *pViewData->GetDocument();
+    ScAddress aCellPos( pViewData->GetCurX(), pViewData->GetCurY(), pViewData->GetTabNo() );
+    ScPostIt* pNote = rDoc.GetNote( aCellPos );
+    SdrObject* pObj = pNote ? pNote->GetCaption() : 0;
+    if( pObj && pObj->GetLogicRect().IsInside( rPos ) && ScDrawLayer::IsNoteCaption( pObj ) )
     {
-        if ( pObject->GetLayer() == SC_LAYER_INTERN && pObject->ISA(SdrCaptionObj)
-            && pObject->GetLogicRect().IsInside( rPos ) )
-        {
-            pFoundObj = pObject;
-            ScDrawObjData* pData = ScDrawLayer::GetObjDataTab( pObject, pViewData->GetTabNo() );
-            if( pData )
-            {
-                aTabPos = ScAddress( pData->aStt);
-            }
-        }
-        pObject = aIter.Next();
+        const ScProtectionAttr* pProtAttr =  static_cast< const ScProtectionAttr* > (rDoc.GetAttr( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab(), ATTR_PROTECTION ) );
+        bool bProtectAttr = pProtAttr->GetProtection() || pProtAttr->GetHideCell() ;
+        bool bProtectDoc =  rDoc.IsTabProtected( aCellPos.Tab() ) || pViewData->GetSfxDocShell()->IsReadOnly() ;
+        // unlock internal layer (if not protected), will be relocked in ScDrawView::MarkListHasChanged()
+        pView->LockInternalLayer( bProtectDoc && bProtectAttr );
     }
-
-    if ( pFoundObj )
-    {
-        SdrLayer* pLockLayer = NULL;
-        ScDocument* pDoc = pViewData->GetDocument();
-        SfxObjectShell* pDocSh = pViewData->GetSfxDocShell();
-        const ScProtectionAttr* pProtAttr =  static_cast< const ScProtectionAttr* > (pDoc->GetAttr(aTabPos.Col(), aTabPos.Row(), aTabPos.Tab(), ATTR_PROTECTION ) );
-        BOOL bProtectAttr = pProtAttr->GetProtection() || pProtAttr->GetHideCell() ;
-        BOOL bProtectDoc =  pDoc->IsTabProtected(aTabPos.Tab()) || pDocSh->IsReadOnly() ;
-        BOOL bProtect = bProtectDoc && bProtectAttr ;
-
-        // Leave the internal note object unlocked - re-lock in ScDrawView::MarkListHasChanged()
-        pLockLayer = pDrDoc->GetLayerAdmin().GetLayerPerID(SC_LAYER_INTERN);
-        if (pLockLayer)
-            pView->SetLayerLocked( pLockLayer->GetName(), bProtect );
-    }
-
 }
 
 //==================================================================
@@ -2796,7 +2751,7 @@ void ScGridWindow::SelectForContextMenu( const Point& rPosPixel )
     SCsROW nCellY;
     pViewData->GetPosFromPixel( rPosPixel.X(), rPosPixel.Y(), eWhich, nCellX, nCellY );
     ScTabView* pView = pViewData->GetView();
-    SdrView* pDrawView = pView->GetSdrView();
+    ScDrawView* pDrawView = pView->GetScDrawView();
 
     //  check cell edit mode
 

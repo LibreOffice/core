@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: drawview.cxx,v $
- * $Revision: 1.50.142.2 $
+ * $Revision: 1.50.126.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,6 +65,7 @@
 #include "viewuno.hxx"
 #include "userdat.hxx"
 #include "postit.hxx"
+#include "undocell.hxx"
 
 #include "sc.hrc"
 
@@ -276,7 +277,7 @@ void ScDrawView::SetMarkedToLayer( BYTE nLayerNo )
         for (ULONG i=0; i<nCount; i++)
         {
             SdrObject* pObj = rMark.GetMark(i)->GetMarkedSdrObj();
-            if ( !pObj->ISA(SdrUnoObj) )
+            if ( !pObj->ISA(SdrUnoObj) && (pObj->GetLayer() != SC_LAYER_INTERN) )
             {
                 AddUndo( new SdrUndoObjectLayerChange( *pObj, pObj->GetLayer(), (SdrLayerID)nLayerNo) );
                 pObj->SetLayer( nLayerNo );
@@ -295,32 +296,23 @@ void ScDrawView::SetMarkedToLayer( BYTE nLayerNo )
     }
 }
 
-BOOL ScDrawView::HasMarkedControl() const
+bool ScDrawView::HasMarkedControl() const
 {
-    if (AreObjectsMarked())
-    {
-        const SdrMarkList& rMark = GetMarkedObjectList();
-        ULONG nCount = rMark.GetMarkCount();
-        for (ULONG i=0; i<nCount; i++)
-        {
-            SdrObject* pObj = rMark.GetMark(i)->GetMarkedSdrObj();
-            if ( pObj->ISA(SdrUnoObj) )
-                return TRUE;
-            else if ( pObj->ISA(SdrObjGroup) )
-            {
-                SdrObjListIter aIter( *pObj, IM_DEEPWITHGROUPS );
-                SdrObject* pSubObj = aIter.Next();
-                while (pSubObj)
-                {
-                    if ( pSubObj->ISA(SdrUnoObj) )
-                        return TRUE;
-                    pSubObj = aIter.Next();
-                }
-            }
+    SdrObjListIter aIter( GetMarkedObjectList() );
+    for( SdrObject* pObj = aIter.Next(); pObj; pObj = aIter.Next() )
+        if( pObj->ISA( SdrUnoObj ) )
+            return true;
+    return false;
+}
 
-        }
-    }
-    return FALSE;       // war nix
+bool ScDrawView::HasMarkedInternal() const
+{
+    // internal objects should not be inside a group, but who knows...
+    SdrObjListIter aIter( GetMarkedObjectList() );
+    for( SdrObject* pObj = aIter.Next(); pObj; pObj = aIter.Next() )
+        if( pObj->GetLayer() == SC_LAYER_INTERN )
+            return true;
+    return false;
 }
 
 void ScDrawView::UpdateWorkArea()
@@ -400,7 +392,7 @@ void ScDrawView::DoConnect(SdrOle2Obj* pOleObj)
         pViewData->GetViewShell()->ConnectObject( pOleObj );
 }
 
-void __EXPORT ScDrawView::MarkListHasChanged()
+void ScDrawView::MarkListHasChanged()
 {
     FmFormView::MarkListHasChanged();
 
@@ -443,14 +435,9 @@ void __EXPORT ScDrawView::MarkListHasChanged()
 
     if ( nMarkCount == 0 && !pViewData->GetViewShell()->IsDrawSelMode() && !bInConstruct )
     {
-        //  re-lock background layer if it was unlocked in SelectObject
-        SdrLayer* pLayer = GetModel()->GetLayerAdmin().GetLayerPerID(SC_LAYER_BACK);
-        if ( pLayer && !IsLayerLocked( pLayer->GetName() ) )
-            SetLayerLocked( pLayer->GetName(), TRUE );
-        // re-lock this internal note object.
-        pLayer = GetModel()->GetLayerAdmin().GetLayerPerID(SC_LAYER_INTERN);
-        if ( pLayer && !IsLayerLocked( pLayer->GetName() ) )
-            SetLayerLocked( pLayer->GetName(), TRUE );
+        //  relock layers that may have been unlocked before
+        LockBackgroundLayer();
+        LockInternalLayer();
     }
 
     BOOL bSubShellSet = FALSE;
@@ -696,18 +683,15 @@ BOOL ScDrawView::SelectObject( const String& rName )
 
         pView->ScrollToObject( pFound );
 
-        //  #61585# to select an object on the background layer, the layer has to
-        //  be unlocked even if exclusive drawing selection mode is not active
-        //  (this is reversed in MarkListHasChanged when nothing is selected)
-
+        /*  #61585# To select an object on the background layer, the layer has to
+            be unlocked even if exclusive drawing selection mode is not active
+            (this is reversed in MarkListHasChanged when nothing is selected) */
         if ( pFound->GetLayer() == SC_LAYER_BACK &&
                 !pViewData->GetViewShell()->IsDrawSelMode() &&
                 !pDoc->IsTabProtected( nTab ) &&
                 !pViewData->GetSfxDocShell()->IsReadOnly() )
         {
-            SdrLayer* pLayer = GetModel()->GetLayerAdmin().GetLayerPerID(SC_LAYER_BACK);
-            if (pLayer)
-                SetLayerLocked( pLayer->GetName(), FALSE );
+            UnlockBackgroundLayer();
         }
 
         SdrPageView* pPV = GetSdrPageView();
@@ -749,6 +733,28 @@ FASTBOOL ScDrawView::InsertObjectSafe(SdrObject* pObj, SdrPageView& rPV, ULONG n
     return InsertObjectAtView( pObj, rPV, nOptions );
 }
 
+SdrObject* ScDrawView::GetMarkedNoteCaption( ScDrawObjData** ppCaptData )
+{
+    const SdrMarkList& rMarkList = GetMarkedObjectList();
+    if( pViewData && (rMarkList.GetMarkCount() == 1) )
+    {
+        SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
+        if( ScDrawObjData* pCaptData = ScDrawLayer::GetNoteCaptionData( pObj, pViewData->GetTabNo() ) )
+        {
+            if( ppCaptData ) *ppCaptData = pCaptData;
+            return pObj;
+        }
+    }
+    return 0;
+}
+
+void ScDrawView::LockCalcLayer( SdrLayerID nLayer, bool bLock )
+{
+    SdrLayer* pLockLayer = GetModel()->GetLayerAdmin().GetLayerPerID( nLayer );
+    if( pLockLayer && (IsLayerLocked( pLockLayer->GetName() ) != bLock) )
+        SetLayerLocked( pLockLayer->GetName(), bLock );
+}
+
 void __EXPORT ScDrawView::MakeVisible( const Rectangle& rRect, Window& rWin )
 {
     //! rWin richtig auswerten
@@ -756,6 +762,45 @@ void __EXPORT ScDrawView::MakeVisible( const Rectangle& rRect, Window& rWin )
 
     if ( pViewData && pViewData->GetActiveWin() == &rWin )
         pViewData->GetView()->MakeVisible( rRect );
+}
+
+void ScDrawView::DeleteMarked()
+{
+    // try to delete a note caption object with its cell note in the Calc document
+    ScDrawObjData* pCaptData = 0;
+    if( SdrObject* pCaptObj = GetMarkedNoteCaption( &pCaptData ) )
+    {
+        (void)pCaptObj; // prevent 'unused variable' compiler warning in pro builds
+        ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
+        ScDocShell* pDocShell = pViewData ? pViewData->GetDocShell() : 0;
+        SfxUndoManager* pUndoMgr = pDocShell ? pDocShell->GetUndoManager() : 0;
+        bool bUndo = pDrawLayer && pDocShell && pUndoMgr && pDoc->IsUndoEnabled();
+
+        // remove the cell note from document, we are its owner now
+        ScPostIt* pNote = pDoc->ReleaseNote( pCaptData->maStart );
+        DBG_ASSERT( pNote, "ScDrawView::DeleteMarked - cell note missing in document" );
+        if( pNote )
+        {
+            // rescue note data for undo (with pointer to caption object)
+            ScNoteData aNoteData = pNote->GetNoteData();
+            DBG_ASSERT( aNoteData.mpCaption == pCaptObj, "ScDrawView::DeleteMarked - caption object does not match" );
+            // collect the drawing undo action created while deleting the note
+            if( bUndo )
+                pDrawLayer->BeginCalcUndo();
+            // delete the note (already removed from document above)
+            delete pNote;
+            // add the undo action for the note
+            if( bUndo )
+                pUndoMgr->AddUndoAction( new ScUndoReplaceNote( *pDocShell, pCaptData->maStart, aNoteData, false, pDrawLayer->GetCalcUndo() ) );
+            // repaint the cell to get rid of the note marker
+            if( pDocShell )
+                pDocShell->PostPaintCell( pCaptData->maStart );
+            // done, return now to skip call of FmFormView::DeleteMarked()
+            return;
+        }
+    }
+
+    FmFormView::DeleteMarked();
 }
 
 SdrEndTextEditKind ScDrawView::ScEndTextEdit()
@@ -783,88 +828,15 @@ void ScDrawView::MarkDropObj( SdrObject* pObj )
     }
 }
 
-void ScDrawView::StoreCaptionAttribs()
-{
-    SdrObject* pObj = NULL;
-    const SdrMarkList&  rMarkList   = GetMarkedObjectList();
-
-    if( rMarkList.GetMarkCount() == 1 )
-        pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-
-    if ( pObj && pObj->GetLayer() == SC_LAYER_INTERN && pObj->ISA(SdrCaptionObj) )
-    {
-        ScAddress aTabPos;
-        ScDrawObjData* pData = ScDrawLayer::GetObjData( pObj );
-        if( pData )
-            aTabPos = pData->aStt;
-        ScPostIt aNote(pDoc);
-        if(pDoc->GetNote( aTabPos.Col(), aTabPos.Row(), aTabPos.Tab(), aNote ))
-        {
-            aNote.SetItemSet(pObj->GetMergedItemSet());
-            pDoc->SetNote( aTabPos.Col(), aTabPos.Row(), aTabPos.Tab(), aNote );
-        }
-    }
-}
-
-void ScDrawView::StoreCaptionDimensions()
-{
-    SdrObject* pObj = NULL;
-    const SdrMarkList&  rMarkList   = GetMarkedObjectList();
-
-    if( rMarkList.GetMarkCount() == 1 )
-        pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-
-    if ( pObj && pObj->GetLayer() == SC_LAYER_INTERN && pObj->ISA(SdrCaptionObj) )
-    {
-        ScAddress aTabPos;
-        ScDrawObjData* pData = ScDrawLayer::GetObjData( pObj );
-        if( pData )
-            aTabPos = pData->aStt;
-        ScPostIt aNote(pDoc);
-        if(pDoc->GetNote( aTabPos.Col(), aTabPos.Row(), aTabPos.Tab(), aNote ))
-        {
-            Rectangle aOldRect = aNote.GetRectangle();
-            Rectangle aNewRect = pObj->GetLogicRect();
-            if(aOldRect != aNewRect)
-            {
-                aNote.SetRectangle(aNewRect);
-                // The new height/width is honoured if property item is reset.
-                SdrCaptionObj* pCaption = static_cast<SdrCaptionObj*>(pObj);
-                OutlinerParaObject* pPObj = pCaption->GetOutlinerParaObject();
-                bool bVertical = (pPObj && pPObj->IsVertical());
-                if(!bVertical && aNewRect.Bottom() - aNewRect.Top() > aOldRect.Bottom() - aOldRect.Top())
-                {
-                    if(pCaption && pCaption->IsAutoGrowHeight())
-                    {
-                        pCaption->SetMergedItem( SdrTextAutoGrowHeightItem( false ) );
-                        aNote.SetItemSet(pCaption->GetMergedItemSet());
-                    }
-                }
-                else if(bVertical && aNewRect.Right() - aNewRect.Left() > aOldRect.Right() - aOldRect.Left())
-                {
-                    if(pCaption && pCaption->IsAutoGrowWidth())
-                    {
-                        pCaption->SetMergedItem( SdrTextAutoGrowWidthItem( false ) );
-                        aNote.SetItemSet(pCaption->GetMergedItemSet());
-                    }
-                }
-                pDoc->SetNote( aTabPos.Col(), aTabPos.Row(), aTabPos.Tab(), aNote );
-            }
-        }
-    }
-}
-
 void ScDrawView::CaptionTextDirection( USHORT nSlot )
 {
     if(nSlot != SID_TEXTDIRECTION_LEFT_TO_RIGHT && nSlot != SID_TEXTDIRECTION_TOP_TO_BOTTOM)
         return;
 
     SdrObject* pObject  = GetTextEditObject();
-
-    if ( pObject && pObject->GetLayer() == SC_LAYER_INTERN && pObject->ISA(SdrCaptionObj) )
+    if ( ScDrawLayer::IsNoteCaption( pObject ) )
     {
-        SdrCaptionObj* pCaption = static_cast<SdrCaptionObj*>(pObject);
-        if(pCaption)
+        if( SdrCaptionObj* pCaption = dynamic_cast< SdrCaptionObj* >( pObject ) )
         {
             SfxItemSet aAttr(pCaption->GetMergedItemSet());
             aAttr.Put( SvxWritingModeItem(

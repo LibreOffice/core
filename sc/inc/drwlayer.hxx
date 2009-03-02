@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: drwlayer.hxx,v $
- * $Revision: 1.21.32.1 $
+ * $Revision: 1.21.128.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,9 +32,8 @@
 #define SC_DRWLAYER_HXX
 
 #include <vcl/graph.hxx>
-#ifndef _FM_FMMODEL_HXX
 #include <svx/fmmodel.hxx>
-#endif
+#include <svx/svdundo.hxx>
 #include "global.hxx"
 
 class ScDocument;
@@ -76,9 +75,30 @@ public:
 };
 
 // -----------------------------------------------------------------------
+//
+//  Das Anpassen der Detektiv-UserData muss zusammen mit den Draw-Undo's
+//  in der SdrUndoGroup liegen, darum von SdrUndoAction abgeleitet:
 
+class ScUndoObjData : public SdrUndoObj
+{
+private:
+    ScAddress   aOldStt;
+    ScAddress   aOldEnd;
+    ScAddress   aNewStt;
+    ScAddress   aNewEnd;
+    BOOL        bHasNew;
+public:
+                ScUndoObjData( SdrObject* pObj, const ScAddress& rOS, const ScAddress& rOE,
+                                                const ScAddress& rNS, const ScAddress& rNE );
+                ~ScUndoObjData();
 
-class SC_DLLPUBLIC ScDrawLayer: public FmFormModel
+    virtual void     Undo();
+    virtual void     Redo();
+};
+
+// -----------------------------------------------------------------------
+
+class SC_DLLPUBLIC ScDrawLayer : public FmFormModel
 {
 private:
 //REMOVE        SotStorageRef   xPictureStorage;
@@ -94,7 +114,12 @@ private:
                                 const Point& rTopLeft );
     void            MoveCells( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SCROW nRow2,
                                 SCsCOL nDx,SCsROW nDy );
-    void            RecalcPos( SdrObject* pObj, ScDrawObjData* pData, BOOL bNegativePage );
+
+    void            RecalcPos( SdrObject* pObj,
+                        const ScDrawObjData& rData,
+                        const ScAddress& rOldStart,
+                        const ScAddress& rOldEnd,
+                        bool bNegativePage );
 
 public:
                     ScDrawLayer( ScDocument* pDocument, const String& rName );
@@ -133,7 +158,7 @@ public:
 
     void            BeginCalcUndo();
     SdrUndoGroup*   GetCalcUndo();
-    BOOL            IsRecording()           { return bRecording; }
+    BOOL            IsRecording() const         { return bRecording; }
     void            AddCalcUndo( SdrUndoAction* pUndo );
 
     void            MoveArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SCROW nRow2,
@@ -146,7 +171,9 @@ public:
     void            DeleteObjectsInArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1,
                                             SCCOL nCol2,SCROW nRow2 );
     void            DeleteObjectsInSelection( const ScMarkData& rMark );
+#if 0
     void            DeleteObjects( SCTAB nTab );
+#endif
 
     void            CopyToClip( ScDocument* pClipDoc, SCTAB nTab, const Rectangle& rRange );
     void            CopyFromClip( ScDrawLayer* pClipModel,
@@ -158,6 +185,10 @@ public:
                     //  mirror or move between positive and negative positions for RTL
     void            MirrorRTL( SdrObject* pObj );
     static void     MirrorRectRTL( Rectangle& rRect );      // for bounding rectangles etc.
+
+    /** Returns the rectangle for the passed cell address in 1/100 mm.
+        @param bMergedCell  True = regards merged cells. False = use single column/row size. */
+    static Rectangle GetCellRect( ScDocument& rDoc, const ScAddress& rPos, bool bMergedCell );
 
                     //  GetVisibleName: name for navigator etc: GetPersistName or GetName
                     //  (ChartListenerCollection etc. must use GetPersistName directly)
@@ -180,6 +211,12 @@ public:
     // Use this method to get an object with positions on the specified sheet (should be the
     // sheet on which the object is inserted).
     static ScDrawObjData* GetObjDataTab( SdrObject* pObj, SCTAB nTab );
+
+    /** Returns true, if the passed object is the caption of a cell note. */
+    static bool     IsNoteCaption( SdrObject* pObj );
+
+    /** Returns the object data, if the passed object is a cell note caption. */
+    static ScDrawObjData* GetNoteCaptionData( SdrObject* pObj, SCTAB nTab );
 
     // Image-Map
     static ScIMapInfo* GetIMapInfo( SdrObject* pObj );

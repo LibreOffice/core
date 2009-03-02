@@ -38,6 +38,7 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include <vcl/help.hxx>
+#include <vcl/svapp.hxx>
 
 #include "tabview.hxx"
 #include "document.hxx"
@@ -413,7 +414,7 @@ void ScTabView::UpdateScrollBars()
     BOOL        bRight = ( aViewData.GetHSplitMode() != SC_SPLIT_NONE );
     ScDocument* pDoc = aViewData.GetDocument();
     SCTAB       nTab = aViewData.GetTabNo();
-    BOOL        bLayoutRTL = pDoc->IsLayoutRTL( nTab );
+    BOOL        bMirror = pDoc->IsLayoutRTL( nTab ) != Application::GetSettings().GetLayoutRTL();
     SCCOL       nUsedX;
     SCROW       nUsedY;
     pDoc->GetTableArea( nTab, nUsedX, nUsedY );     //! cachen !!!!!!!!!!!!!!!
@@ -432,7 +433,7 @@ void ScTabView::UpdateScrollBars()
 
     nVisXL = aViewData.VisibleCellsX( SC_SPLIT_LEFT );
     long nMaxXL = lcl_GetScrollRange( nUsedX, aViewData.GetPosX(SC_SPLIT_LEFT), nVisXL, MAXCOL, 0 );
-    SetScrollBar( aHScrollLeft, nMaxXL, nVisXL, aViewData.GetPosX( SC_SPLIT_LEFT ), bLayoutRTL );
+    SetScrollBar( aHScrollLeft, nMaxXL, nVisXL, aViewData.GetPosX( SC_SPLIT_LEFT ), bMirror );
 
     nVisYB = aViewData.VisibleCellsY( SC_SPLIT_BOTTOM );
     long nMaxYB = lcl_GetScrollRange( nUsedY, aViewData.GetPosY(SC_SPLIT_BOTTOM), nVisYB, MAXROW, nStartY );
@@ -442,7 +443,7 @@ void ScTabView::UpdateScrollBars()
     {
         nVisXR = aViewData.VisibleCellsX( SC_SPLIT_RIGHT );
         long nMaxXR = lcl_GetScrollRange( nUsedX, aViewData.GetPosX(SC_SPLIT_RIGHT), nVisXR, MAXCOL, nStartX );
-        SetScrollBar( aHScrollRight, nMaxXR, nVisXR, aViewData.GetPosX( SC_SPLIT_RIGHT ) - nStartX, bLayoutRTL );
+        SetScrollBar( aHScrollRight, nMaxXR, nVisXR, aViewData.GetPosX( SC_SPLIT_RIGHT ) - nStartX, bMirror );
     }
 
     if (bTop)

@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: docfunc.hxx,v $
- * $Revision: 1.18.30.2 $
+ * $Revision: 1.19.100.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -96,7 +96,11 @@ public:
     ScBaseCell*     InterpretEnglishString( const ScAddress& rPos, const String& rText,
                                             const formula::FormulaGrammar::Grammar eGrammar );
 
-    BOOL            SetNoteText( const ScAddress& rPos, const String& rText, BOOL bApi );
+    bool            ShowNote( const ScAddress& rPos, bool bShow = true );
+    inline bool     HideNote( const ScAddress& rPos ) { return ShowNote( rPos, false ); }
+
+    bool            SetNoteText( const ScAddress& rPos, const String& rNoteText, BOOL bApi );
+    bool            ReplaceNote( const ScAddress& rPos, const String& rNoteText, const String* pAuthor, const String* pDate, BOOL bApi );
 
     BOOL            ApplyAttributes( const ScMarkData& rMark, const ScPatternAttr& rPattern,
                                     BOOL bRecord, BOOL bApi );
@@ -162,8 +166,6 @@ public:
     BOOL            MergeCells( const ScRange& rRange, BOOL bContents,
                                 BOOL bRecord, BOOL bApi );
     BOOL            UnmergeCells( const ScRange& rRange, BOOL bRecord, BOOL bApi );
-
-    BOOL            SetNote( const ScAddress& rPos, const ScPostIt& rNote, BOOL bApi );
 
     BOOL            SetNewRangeNames( ScRangeName* pNewRanges, BOOL bApi );     // takes ownership of pNewRanges
     BOOL            ModifyRangeNames( const ScRangeName& rNewRanges, BOOL bApi );

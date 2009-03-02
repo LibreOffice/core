@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: editsrc.cxx,v $
- * $Revision: 1.26.32.1 $
+ * $Revision: 1.26.128.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,14 +31,17 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
+#include "editsrc.hxx"
 
 #include "scitems.hxx"
 #include <svx/eeitem.hxx>
-
 #include <svx/unofored.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/svditer.hxx>
+#include <svx/svdocapt.hxx>
+#include <svx/outlobj.hxx>
+#include <svx/editobj.hxx>
 
-#include "editsrc.hxx"
 #include "textuno.hxx"
 #include "editutil.hxx"
 #include "docsh.hxx"
@@ -49,8 +52,6 @@
 #include "drwlayer.hxx"
 #include "userdat.hxx"
 #include "AccessibleText.hxx"
-#include <svx/svditer.hxx>
-#include <svx/outlobj.hxx>
 
 //------------------------------------------------------------------------
 
@@ -221,33 +222,8 @@ SvxEditSource* ScAnnotationEditSource::Clone() const
 
 SdrObject* ScAnnotationEditSource::GetCaptionObj()
 {
-    SdrObject* pRet = NULL;
-
-    ScDrawLayer* pModel = pDocShell->GetDocument()->GetDrawLayer();
-    if (!pModel)
-        return FALSE;
-    SdrPage* pPage = pModel->GetPage(static_cast<sal_uInt16>(aCellPos.Tab()));
-    DBG_ASSERT(pPage,"Page ?");
-
-    pPage->RecalcObjOrdNums();
-
-    SdrObjListIter aIter( *pPage, IM_FLAT );
-    SdrObject* pObject = aIter.Next();
-    while (pObject && !pRet)
-    {
-        if ( pObject->GetLayer() == SC_LAYER_INTERN && pObject->ISA( SdrCaptionObj ) )
-        {
-            ScDrawObjData* pData = ScDrawLayer::GetObjData( pObject );
-            if ( pData && aCellPos.Col() == pData->aStt.Col() && aCellPos.Row() == pData->aStt.Row() )
-            {
-                pRet = pObject;
-            }
-        }
-
-        pObject = aIter.Next();
-    }
-
-    return pRet;
+    ScPostIt* pNote = pDocShell->GetDocument()->GetNote( aCellPos );
+    return pNote ? pNote->GetCaption() : 0;
 }
 
 SvxTextForwarder* ScAnnotationEditSource::GetTextForwarder()
@@ -272,16 +248,9 @@ SvxTextForwarder* ScAnnotationEditSource::GetTextForwarder()
         return pForwarder;
 
     if ( pDocShell )
-    {
-        ScDocument* pDoc = pDocShell->GetDocument();
-        ScPostIt aNote(pDoc);
-        pDoc->GetNote( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab(), aNote );
-
-        if (aNote.GetEditTextObject())
-            pEditEngine->SetText( *aNote.GetEditTextObject() );     // incl. Umbrueche
-        else
-            pEditEngine->SetText( aNote.GetText() );
-    }
+        if ( ScPostIt* pNote = pDocShell->GetDocument()->GetNote( aCellPos ) )
+            if ( const EditTextObject* pEditObj = pNote->GetEditTextObject() )
+                pEditEngine->SetText( *pEditObj );      // incl. Umbrueche
 
     bDataValid = TRUE;
     return pForwarder;
@@ -293,26 +262,14 @@ void ScAnnotationEditSource::UpdateData()
     {
         ScDocShellModificator aModificator( *pDocShell );
 
-        ScDocument* pDoc = pDocShell->GetDocument();
-        ScPostIt aNote(pDoc);
-        pDoc->GetNote( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab(), aNote );
-
-        aNote.SetEditTextObject(pEditEngine->CreateTextObject());
-
-        pDoc->SetNote(aCellPos.Col(), aCellPos.Row(), aCellPos.Tab(), aNote);
-
-        if (aNote.IsShown())
+        if( SdrObject* pObj = GetCaptionObj() )
         {
-            SdrObject* pObj = GetCaptionObj();
-            if (pObj)
-            {
-                OutlinerParaObject* pOPO = new OutlinerParaObject( *aNote.GetEditTextObject() );
-                pOPO->SetOutlinerMode( OUTLINERMODE_TEXTOBJECT );
-                pObj->NbcSetOutlinerParaObject( pOPO );
-                pOPO->SetVertical( FALSE );  // notes are always horizontal
-
-                pObj->ActionChanged();
-            }
+            EditTextObject* pEditObj = pEditEngine->CreateTextObject();
+            OutlinerParaObject* pOPO = new OutlinerParaObject( *pEditObj );
+            delete pEditObj;
+            pOPO->SetOutlinerMode( OUTLINERMODE_TEXTOBJECT );
+            pObj->NbcSetOutlinerParaObject( pOPO );
+            pObj->ActionChanged();
         }
 
         //! Undo !!!

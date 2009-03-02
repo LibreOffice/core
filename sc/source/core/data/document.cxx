@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: document.cxx,v $
- * $Revision: 1.88.22.5 $
+ * $Revision: 1.90.36.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1341,7 +1341,7 @@ void ScDocument::CopyToClip(SCCOL nCol1, SCROW nRow1,
                             SCCOL nCol2, SCROW nRow2,
                             BOOL bCut, ScDocument* pClipDoc,
                             BOOL bAllTabs, const ScMarkData* pMarks,
-                            BOOL bKeepScenarioFlags, BOOL bIncludeObjects)
+                            BOOL bKeepScenarioFlags, BOOL bIncludeObjects, BOOL bCloneNoteCaptions)
 {
     DBG_ASSERT( bAllTabs || pMarks, "CopyToClip: ScMarkData fehlt" );
 
@@ -1385,7 +1385,7 @@ void ScDocument::CopyToClip(SCCOL nCol1, SCROW nRow1,
             if (pTab[j] && pClipDoc->pTab[j])
                 if ( bAllTabs || !pMarks || pMarks->GetTableSelect(j) )
                 {
-                    pTab[j]->CopyToClip(nCol1, nRow1, nCol2, nRow2, pClipDoc->pTab[j], bKeepScenarioFlags);
+                    pTab[j]->CopyToClip(nCol1, nRow1, nCol2, nRow2, pClipDoc->pTab[j], bKeepScenarioFlags, bCloneNoteCaptions);
 
                     if ( pDrawLayer && bIncludeObjects )
                     {
@@ -1420,7 +1420,7 @@ void ScDocument::CopyTabToClip(SCCOL nCol1, SCROW nRow1,
         pClipDoc->ResetClip( this, nTab );
 
         if (pTab[nTab] && pClipDoc->pTab[nTab])
-            pTab[nTab]->CopyToClip(nCol1, nRow1, nCol2, nRow2, pClipDoc->pTab[nTab], FALSE);
+            pTab[nTab]->CopyToClip(nCol1, nRow1, nCol2, nRow2, pClipDoc->pTab[nTab], FALSE, TRUE);
 
         pClipDoc->bCutMode = FALSE;
     }
@@ -2211,14 +2211,6 @@ void ScDocument::SetValue( SCCOL nCol, SCROW nRow, SCTAB nTab, const double& rVa
 }
 
 
-void ScDocument::SetNote( SCCOL nCol, SCROW nRow, SCTAB nTab, const ScPostIt& rNote )
-{
-    if (VALIDTAB(nTab))
-        if (pTab[nTab])
-            pTab[nTab]->SetNote( nCol, nRow, rNote );
-}
-
-
 void ScDocument::GetString( SCCOL nCol, SCROW nRow, SCTAB nTab, String& rString )
 {
     if ( VALIDTAB(nTab) && pTab[nTab] )
@@ -2305,19 +2297,6 @@ void ScDocument::GetFormula( SCCOL nCol, SCROW nRow, SCTAB nTab, String& rFormul
             pTab[nTab]->GetFormula( nCol, nRow, rFormula, bAsciiExport );
     else
         rFormula.Erase();
-}
-
-
-BOOL ScDocument::GetNote( SCCOL nCol, SCROW nRow, SCTAB nTab, ScPostIt& rNote )
-{
-    BOOL bHasNote = FALSE;
-
-    if ( VALIDTAB(nTab) && pTab[nTab] )
-        bHasNote = pTab[nTab]->GetNote( nCol, nRow, rNote );
-    else
-        rNote.Clear();
-
-    return bHasNote;
 }
 
 
@@ -2411,6 +2390,48 @@ BOOL ScDocument::HasSelectionData( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
             return TRUE;
     }
     return HasStringCells( ScRange( nCol, 0, nTab, nCol, MAXROW, nTab ) );
+}
+
+
+ScPostIt* ScDocument::GetNote( const ScAddress& rPos )
+{
+    ScTable* pTable = ValidTab( rPos.Tab() ) ? pTab[ rPos.Tab() ] : 0;
+    return pTable ? pTable->GetNote( rPos.Col(), rPos.Row() ) : 0;
+}
+
+
+void ScDocument::TakeNote( const ScAddress& rPos, ScPostIt*& rpNote )
+{
+    if( ValidTab( rPos.Tab() ) && pTab[ rPos.Tab() ] )
+        pTab[ rPos.Tab() ]->TakeNote( rPos.Col(), rPos.Row(), rpNote );
+    else
+        DELETEZ( rpNote );
+}
+
+
+ScPostIt* ScDocument::ReleaseNote( const ScAddress& rPos )
+{
+    ScTable* pTable = ValidTab( rPos.Tab() ) ? pTab[ rPos.Tab() ] : 0;
+    return pTable ? pTable->ReleaseNote( rPos.Col(), rPos.Row() ) : 0;
+}
+
+
+ScPostIt* ScDocument::GetOrCreateNote( const ScAddress& rPos )
+{
+    ScPostIt* pNote = GetNote( rPos );
+    if( !pNote )
+    {
+        pNote = new ScPostIt( *this, rPos, false );
+        TakeNote( rPos, pNote );
+    }
+    return pNote;
+}
+
+
+void ScDocument::DeleteNote( const ScAddress& rPos )
+{
+    if( ValidTab( rPos.Tab() ) && pTab[ rPos.Tab() ] )
+        pTab[ rPos.Tab() ]->DeleteNote( rPos.Col(), rPos.Row() );
 }
 
 
@@ -3229,9 +3250,7 @@ void ScDocument::StyleSheetChanged( const SfxStyleSheetBase* pStyleSheet, BOOL b
     if ( pStyleSheet && pStyleSheet->GetName() == ScGlobal::GetRscString(STR_STYLENAME_STANDARD) )
     {
         //  update attributes for all note objects
-
-        ScDetectiveFunc aFunc( this, 0 );
-        aFunc.UpdateAllComments();
+        ScDetectiveFunc::UpdateAllComments( *this );
     }
 }
 
@@ -3553,11 +3572,11 @@ void ScDocument::GetBorderLines( SCCOL nCol, SCROW nRow, SCTAB nTab,
 }
 
 BOOL ScDocument::IsBlockEmpty( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
-                                        SCCOL nEndCol, SCROW nEndRow ) const
+                                        SCCOL nEndCol, SCROW nEndRow, bool bIgnoreNotes ) const
 {
     if (VALIDTAB(nTab))
         if (pTab[nTab])
-            return pTab[nTab]->IsBlockEmpty( nStartCol, nStartRow, nEndCol, nEndRow );
+            return pTab[nTab]->IsBlockEmpty( nStartCol, nStartRow, nEndCol, nEndRow, bIgnoreNotes );
 
     DBG_ERROR("Falsche Tabellennummer");
     return FALSE;

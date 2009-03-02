@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: interpr2.cxx,v $
- * $Revision: 1.38 $
+ * $Revision: 1.37.88.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1603,13 +1603,11 @@ void ScInterpreter::ScBackSolver()
             {
                 ScRange aVRange( aValueAdr, aValueAdr );    // fuer SetDirty
                 double fSaveVal; // Original value to be restored later if necessary
-                ScPostIt aNote(pDok);
-                BOOL bHasNote = FALSE;
+                ScPostIt* pNote = 0;
 
                 if ( bTempCell )
                 {
-                    if ( ( bHasNote = (pVCell != NULL) ) != FALSE )
-                        bHasNote = pVCell->GetNote( aNote );
+                    pNote = pVCell ? pVCell->ReleaseNote() : 0;
                     fSaveVal = 0.0;
                     pVCell = new ScValueCell( fSaveVal );
                     pDok->PutCell( aValueAdr, pVCell );
@@ -1759,10 +1757,7 @@ void ScInterpreter::ScBackSolver()
                 }
                 if ( bTempCell )
                 {
-                    if ( bHasNote )
-                        pVCell = new ScNoteCell( aNote, pDok );
-                    else
-                        pVCell = NULL;
+                    pVCell = pNote ? new ScNoteCell( pNote ) : 0;
                     pDok->PutCell( aValueAdr, pVCell );
                 }
                 else

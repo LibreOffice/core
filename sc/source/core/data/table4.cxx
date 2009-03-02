@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: table4.cxx,v $
- * $Revision: 1.24 $
+ * $Revision: 1.23.126.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -453,12 +453,11 @@ void ScTable::FillFormula(ULONG& /* nFormulaCounter */, BOOL /* bFirst */, ScFor
     else
 */  {
         pDocument->SetNoListening( TRUE );  // noch falsche Referenzen
-        ScFormulaCell* pDestCell = (ScFormulaCell*) pSrcCell->Clone( pDocument,
-            ScAddress( nDestCol, nDestRow, nTab ), TRUE );
+        ScAddress aAddr( nDestCol, nDestRow, nTab );
+        ScFormulaCell* pDestCell = new ScFormulaCell( *pSrcCell, *pDocument, aAddr );
         aCol[nDestCol].Insert(nDestRow, pDestCell);
 #if 0
 // mit RelRefs unnoetig
-        ScAddress aAddr( nDestCol, nDestRow, nTab );
         pDestCell->UpdateReference(URM_COPY,
                          ScRange( aAddr, aAddr ),
                          nDestCol - pSrcCell->aPos.Col(),
@@ -565,9 +564,9 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     ULONG nIMax = nIEnd;
     PutInOrder(nIMin,nIMax);
     if (bVertical)
-        DeleteArea(nCol1, static_cast<SCROW>(nIMin), nCol2, static_cast<SCROW>(nIMax), IDF_ALL);
+        DeleteArea(nCol1, static_cast<SCROW>(nIMin), nCol2, static_cast<SCROW>(nIMax), IDF_AUTOFILL);
     else
-        DeleteArea(static_cast<SCCOL>(nIMin), nRow1, static_cast<SCCOL>(nIMax), nRow2, IDF_ALL);
+        DeleteArea(static_cast<SCCOL>(nIMin), nRow1, static_cast<SCCOL>(nIMax), nRow2, IDF_AUTOFILL);
 
     ULONG nProgress = rProgress.GetState();
 
@@ -823,16 +822,12 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         }
                         else
                         {
+                            ScAddress aDestPos( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), nTab );
                             switch ( eCellType )
                             {
                                 case CELLTYPE_STRING:
-                                    aCol[nCol].Insert(static_cast<SCROW>(nRow),
-                                        new ScStringCell(*(ScStringCell*)pSrcCell, pDocument));
-                                break;
                                 case CELLTYPE_EDIT:
-                                    aCol[nCol].Insert(static_cast<SCROW>(nRow),
-                                        new ScEditCell( *(ScEditCell*)pSrcCell,
-                                            pDocument ));
+                                    aCol[nCol].Insert( aDestPos.Row(), pSrcCell->CloneWithoutNote( *pDocument ) );
                                 break;
                                 default:
                                 {
@@ -1303,7 +1298,7 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     ULONG nIMin = nIStart;
     ULONG nIMax = nIEnd;
     PutInOrder(nIMin,nIMax);
-    USHORT nDel = bAttribs ? IDF_ALL : IDF_CONTENTS;
+    USHORT nDel = bAttribs ? IDF_AUTOFILL : (IDF_AUTOFILL & IDF_CONTENTS);
     if (bVertical)
         DeleteArea(nCol1, static_cast<SCROW>(nIMin), nCol2, static_cast<SCROW>(nIMax), nDel);
     else
@@ -1357,7 +1352,8 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 {
                     for (rInner = nIMin; rInner <= nIMax; rInner++)
                     {
-                        aCol[nCol].Insert(static_cast<SCROW>(nRow), pSrcCell->Clone(pDocument));
+                        ScAddress aDestPos( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), nTab );
+                        aCol[nCol].Insert( aDestPos.Row(), pSrcCell->CloneWithoutNote( *pDocument ) );
                     }
                     nProgress += nIMax - nIMin + 1;
                     rProgress.SetStateOnPercent( nProgress );

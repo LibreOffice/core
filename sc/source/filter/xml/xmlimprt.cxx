@@ -442,6 +442,7 @@ const SvXMLTokenMap& ScXMLImport::GetDocElemTokenMap()
     return *pDocElemTokenMap;
 }
 
+
 const SvXMLTokenMap& ScXMLImport::GetBodyElemTokenMap()
 {
     if( !pBodyElemTokenMap )
@@ -1604,106 +1605,105 @@ SvXMLImportContext *ScXMLImport::CreateContext( USHORT nPrefix,
 
 // #110680#
 ScXMLImport::ScXMLImport(
-                         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
-                         const sal_uInt16 nImportFlag)
-                         :  SvXMLImport( xServiceFactory, nImportFlag ),
-                         pDoc( NULL ),
-                         pChangeTrackingImportHelper(NULL),
-                         pStylesImportHelper(NULL),
-                         sNumberFormat(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_NUMFMT)),
-                         sLocale(RTL_CONSTASCII_USTRINGPARAM(SC_LOCALE)),
-                         sCellStyle(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_CELLSTYL)),
-                         sStandardFormat(RTL_CONSTASCII_USTRINGPARAM(SC_STANDARDFORMAT)),
-                         sType(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_TYPE)),
-                         // pScAutoStylePool(new SvXMLAutoStylePoolP),
-                         // pParaItemMapper( 0 ),
-                         // pI18NMap( new SvI18NMap ),
-                         pDocElemTokenMap( 0 ),
-                         pStylesElemTokenMap( 0 ),
-                         pStylesAttrTokenMap( 0 ),
-                         pStyleElemTokenMap( 0 ),
-                         pBodyElemTokenMap( 0 ),
-                         pContentValidationsElemTokenMap( 0 ),
-                         pContentValidationElemTokenMap( 0 ),
-                         pContentValidationAttrTokenMap( 0 ),
-                         pContentValidationMessageElemTokenMap( 0 ),
-                         pContentValidationHelpMessageAttrTokenMap( 0 ),
-                         pContentValidationErrorMessageAttrTokenMap( 0 ),
-                         pContentValidationErrorMacroAttrTokenMap( 0 ),
-                         pLabelRangesElemTokenMap( 0 ),
-                         pLabelRangeAttrTokenMap( 0 ),
-                         pTableElemTokenMap( 0 ),
-                         pTableRowsElemTokenMap( 0 ),
-                         pTableColsElemTokenMap( 0 ),
-                         pTableScenarioAttrTokenMap( 0 ),
-                         pTableAttrTokenMap( 0 ),
-                         pTableColAttrTokenMap( 0 ),
-                         pTableRowElemTokenMap( 0 ),
-                         pTableRowAttrTokenMap( 0 ),
-                         pTableRowCellElemTokenMap( 0 ),
-                         pTableRowCellAttrTokenMap( 0 ),
-                         pTableAnnotationAttrTokenMap( 0 ),
-                         pDetectiveElemTokenMap( 0 ),
-                         pDetectiveHighlightedAttrTokenMap( 0 ),
-                         pDetectiveOperationAttrTokenMap( 0 ),
-                         pTableCellRangeSourceAttrTokenMap( 0 ),
-                         pNamedExpressionsElemTokenMap( 0 ),
-                         pNamedRangeAttrTokenMap( 0 ),
-                         pNamedExpressionAttrTokenMap( 0 ),
-                         pDatabaseRangesElemTokenMap( 0 ),
-                         pDatabaseRangeElemTokenMap( 0 ),
-                         pDatabaseRangeAttrTokenMap( 0 ),
-                         pDatabaseRangeSourceSQLAttrTokenMap( 0 ),
-                         pDatabaseRangeSourceTableAttrTokenMap( 0 ),
-                         pDatabaseRangeSourceQueryAttrTokenMap( 0 ),
-                         pFilterElemTokenMap( 0 ),
-                         pFilterAttrTokenMap( 0 ),
-                         pFilterConditionAttrTokenMap( 0 ),
-                         pSortElemTokenMap( 0 ),
-                         pSortAttrTokenMap( 0 ),
-                         pSortSortByAttrTokenMap( 0 ),
-                         pDatabaseRangeSubTotalRulesElemTokenMap( 0 ),
-                         pDatabaseRangeSubTotalRulesAttrTokenMap( 0 ),
-                         pSubTotalRulesSortGroupsAttrTokenMap( 0 ),
-                         pSubTotalRulesSubTotalRuleElemTokenMap( 0 ),
-                         pSubTotalRulesSubTotalRuleAttrTokenMap( 0 ),
-                         pSubTotalRuleSubTotalFieldAttrTokenMap( 0 ),
-                         pDataPilotTablesElemTokenMap( 0 ),
-                         pDataPilotTableAttrTokenMap( 0 ),
-                         pDataPilotTableElemTokenMap( 0 ),
-                         pDataPilotTableSourceServiceAttrTokenMap( 0 ),
-                         pDataPilotTableSourceCellRangeElemTokenMap( 0 ),
-                         pDataPilotTableSourceCellRangeAttrTokenMap( 0 ),
-                         pDataPilotFieldAttrTokenMap( 0 ),
-                         pDataPilotFieldElemTokenMap( 0 ),
-                         pDataPilotLevelAttrTokenMap( 0 ),
-                         pDataPilotLevelElemTokenMap( 0 ),
-                         pDataPilotSubTotalsElemTokenMap( 0 ),
-                         pDataPilotSubTotalAttrTokenMap( 0 ),
-                         pDataPilotMembersElemTokenMap( 0 ),
-                         pDataPilotMemberAttrTokenMap( 0 ),
-                         pConsolidationAttrTokenMap( 0 ),
-                         aTables(*this),
-                         pMyNamedExpressions(NULL),
-                         pMyLabelRanges(NULL),
-                         pValidations(NULL),
-                         pDetectiveOpArray(NULL),
-                         pDefaultNotes(NULL),
-                         pScUnoGuard(NULL),
-                         pNumberFormatAttributesExportHelper(NULL),
-                         pStyleNumberFormats(NULL),
-                         sPrevStyleName(),
-                         sPrevCurrency(),
-                         nSolarMutexLocked(0),
-                         nProgressCount(0),
-                         nStyleFamilyMask( 0 ),
-                         nPrevCellType(0),
-                         bLoadDoc( sal_True ),
-                         bRemoveLastChar(sal_False),
-                         bNullDateSetted(sal_False),
-                         bSelfImportingXMLSet(sal_False),
-                         bLatinDefaultStyle(sal_False),
-                         bFromWrapper(sal_False)
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+    const sal_uInt16 nImportFlag)
+:   SvXMLImport( xServiceFactory, nImportFlag ),
+    pDoc( NULL ),
+    pChangeTrackingImportHelper(NULL),
+    pStylesImportHelper(NULL),
+    sNumberFormat(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_NUMFMT)),
+    sLocale(RTL_CONSTASCII_USTRINGPARAM(SC_LOCALE)),
+    sCellStyle(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_CELLSTYL)),
+    sStandardFormat(RTL_CONSTASCII_USTRINGPARAM(SC_STANDARDFORMAT)),
+    sType(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_TYPE)),
+//  pScAutoStylePool(new SvXMLAutoStylePoolP),
+//  pParaItemMapper( 0 ),
+//  pI18NMap( new SvI18NMap ),
+    pDocElemTokenMap( 0 ),
+    pStylesElemTokenMap( 0 ),
+    pStylesAttrTokenMap( 0 ),
+    pStyleElemTokenMap( 0 ),
+    pBodyElemTokenMap( 0 ),
+    pContentValidationsElemTokenMap( 0 ),
+    pContentValidationElemTokenMap( 0 ),
+    pContentValidationAttrTokenMap( 0 ),
+    pContentValidationMessageElemTokenMap( 0 ),
+    pContentValidationHelpMessageAttrTokenMap( 0 ),
+    pContentValidationErrorMessageAttrTokenMap( 0 ),
+    pContentValidationErrorMacroAttrTokenMap( 0 ),
+    pLabelRangesElemTokenMap( 0 ),
+    pLabelRangeAttrTokenMap( 0 ),
+    pTableElemTokenMap( 0 ),
+    pTableRowsElemTokenMap( 0 ),
+    pTableColsElemTokenMap( 0 ),
+    pTableScenarioAttrTokenMap( 0 ),
+    pTableAttrTokenMap( 0 ),
+    pTableColAttrTokenMap( 0 ),
+    pTableRowElemTokenMap( 0 ),
+    pTableRowAttrTokenMap( 0 ),
+    pTableRowCellElemTokenMap( 0 ),
+    pTableRowCellAttrTokenMap( 0 ),
+    pTableAnnotationAttrTokenMap( 0 ),
+    pDetectiveElemTokenMap( 0 ),
+    pDetectiveHighlightedAttrTokenMap( 0 ),
+    pDetectiveOperationAttrTokenMap( 0 ),
+    pTableCellRangeSourceAttrTokenMap( 0 ),
+    pNamedExpressionsElemTokenMap( 0 ),
+    pNamedRangeAttrTokenMap( 0 ),
+    pNamedExpressionAttrTokenMap( 0 ),
+    pDatabaseRangesElemTokenMap( 0 ),
+    pDatabaseRangeElemTokenMap( 0 ),
+    pDatabaseRangeAttrTokenMap( 0 ),
+    pDatabaseRangeSourceSQLAttrTokenMap( 0 ),
+    pDatabaseRangeSourceTableAttrTokenMap( 0 ),
+    pDatabaseRangeSourceQueryAttrTokenMap( 0 ),
+    pFilterElemTokenMap( 0 ),
+    pFilterAttrTokenMap( 0 ),
+    pFilterConditionAttrTokenMap( 0 ),
+    pSortElemTokenMap( 0 ),
+    pSortAttrTokenMap( 0 ),
+    pSortSortByAttrTokenMap( 0 ),
+    pDatabaseRangeSubTotalRulesElemTokenMap( 0 ),
+    pDatabaseRangeSubTotalRulesAttrTokenMap( 0 ),
+    pSubTotalRulesSortGroupsAttrTokenMap( 0 ),
+    pSubTotalRulesSubTotalRuleElemTokenMap( 0 ),
+    pSubTotalRulesSubTotalRuleAttrTokenMap( 0 ),
+    pSubTotalRuleSubTotalFieldAttrTokenMap( 0 ),
+    pDataPilotTablesElemTokenMap( 0 ),
+    pDataPilotTableAttrTokenMap( 0 ),
+    pDataPilotTableElemTokenMap( 0 ),
+    pDataPilotTableSourceServiceAttrTokenMap( 0 ),
+    pDataPilotTableSourceCellRangeElemTokenMap( 0 ),
+    pDataPilotTableSourceCellRangeAttrTokenMap( 0 ),
+    pDataPilotFieldAttrTokenMap( 0 ),
+    pDataPilotFieldElemTokenMap( 0 ),
+    pDataPilotLevelAttrTokenMap( 0 ),
+    pDataPilotLevelElemTokenMap( 0 ),
+    pDataPilotSubTotalsElemTokenMap( 0 ),
+    pDataPilotSubTotalAttrTokenMap( 0 ),
+    pDataPilotMembersElemTokenMap( 0 ),
+    pDataPilotMemberAttrTokenMap( 0 ),
+    pConsolidationAttrTokenMap( 0 ),
+    aTables(*this),
+    pMyNamedExpressions(NULL),
+    pMyLabelRanges(NULL),
+    pValidations(NULL),
+    pDetectiveOpArray(NULL),
+    pScUnoGuard(NULL),
+    pNumberFormatAttributesExportHelper(NULL),
+    pStyleNumberFormats(NULL),
+    sPrevStyleName(),
+    sPrevCurrency(),
+    nSolarMutexLocked(0),
+    nProgressCount(0),
+    nStyleFamilyMask( 0 ),
+    nPrevCellType(0),
+    bLoadDoc( sal_True ),
+    bRemoveLastChar(sal_False),
+    bNullDateSetted(sal_False),
+    bSelfImportingXMLSet(sal_False),
+    bLatinDefaultStyle(sal_False),
+    bFromWrapper(sal_False)
 {
     pStylesImportHelper = new ScMyStylesImportHelper(*this);
 
@@ -1828,8 +1828,6 @@ ScXMLImport::~ScXMLImport() throw()
         delete pMyLabelRanges;
     if (pValidations)
         delete pValidations;
-    if (pDefaultNotes)
-        delete pDefaultNotes;
     if (pDetectiveOpArray)
         delete pDetectiveOpArray;
 }
@@ -2772,8 +2770,6 @@ throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeE
             pDoc->CompileXML();
         aTables.UpdateRowHeights();
         aTables.ResizeShapes();
-
-        SetDefaultNotes();
     }
     if (GetModel().is())
     {
@@ -2789,33 +2785,6 @@ throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeE
     }
 
     UnlockSolarMutex();
-}
-
-void ScXMLImport::AddDefaultNote(const table::CellAddress& aCell)
-{
-    if (!pDefaultNotes)
-        pDefaultNotes = new ScMyDefaultNotes();
-
-    pDefaultNotes->push_back(aCell);
-}
-
-void ScXMLImport::SetDefaultNotes()
-{
-    if (pDefaultNotes && pDoc)
-    {
-        ScMyDefaultNotes::iterator aItr(pDefaultNotes->begin());
-        ScMyDefaultNotes::iterator aEndItr(pDefaultNotes->end());
-        ScPostIt aNote(pDoc);
-        while(aItr != aEndItr)
-        {
-            if (pDoc->GetNote(static_cast<SCCOL>(aItr->Column), static_cast<SCROW>(aItr->Row), aItr->Sheet, aNote))
-            {
-                aNote.SetRectangle(aNote.MimicOldRectangle(ScAddress(static_cast<SCCOL>(aItr->Column), static_cast<SCROW>(aItr->Row), aItr->Sheet)));
-                pDoc->SetNote(static_cast<SCCOL>(aItr->Column), static_cast<SCROW>(aItr->Row), aItr->Sheet, aNote);
-            }
-            ++aItr;
-        }
-    }
 }
 
 // XEventListener

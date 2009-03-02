@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: global.hxx,v $
- * $Revision: 1.53.32.8 $
+ * $Revision: 1.53.128.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -223,20 +223,24 @@ const BYTE   CR_MANUALSIZE  = 32;
 //  was davon kommt in die Datei:
 #define CR_SAVEMASK     ( ~CR_PAGEBREAK )
 
-                                    // Insert-/Delete-Flags
-#define IDF_VALUE           0x0001
-#define IDF_DATETIME        0x0002
-#define IDF_STRING          0x0004
-#define IDF_NOTE            0x0008
-#define IDF_FORMULA         0x0010
-#define IDF_HARDATTR        0x0020
-#define IDF_STYLES          0x0040
-#define IDF_OBJECTS         0x0080
-#define IDF_EDITATTR        0x0100
-#define IDF_ATTRIB          ( IDF_HARDATTR | IDF_STYLES )
-#define IDF_CONTENTS        ( IDF_VALUE | IDF_DATETIME | IDF_STRING | IDF_NOTE | IDF_FORMULA )
-#define IDF_ALL             ( IDF_CONTENTS | IDF_ATTRIB | IDF_OBJECTS )
-#define IDF_NONE            0x0000
+// Insert-/Delete-Flags
+const USHORT IDF_NONE       = 0x0000;
+const USHORT IDF_VALUE      = 0x0001;   /// Numeric values (and numeric results if IDF_FORMULA is not set).
+const USHORT IDF_DATETIME   = 0x0002;   /// Dates, times, datetime values.
+const USHORT IDF_STRING     = 0x0004;   /// Strings (and string results if IDF_FORMULA is not set).
+const USHORT IDF_NOTE       = 0x0008;   /// Cell notes.
+const USHORT IDF_FORMULA    = 0x0010;   /// Formula cells.
+const USHORT IDF_HARDATTR   = 0x0020;   /// Hard cell attributes.
+const USHORT IDF_STYLES     = 0x0040;   /// Cell styles.
+const USHORT IDF_OBJECTS    = 0x0080;   /// Drawing objects.
+const USHORT IDF_EDITATTR   = 0x0100;   /// Rich-text attributes.
+const USHORT IDF_ATTRIB     = IDF_HARDATTR | IDF_STYLES;
+const USHORT IDF_CONTENTS   = IDF_VALUE | IDF_DATETIME | IDF_STRING | IDF_NOTE | IDF_FORMULA;
+const USHORT IDF_ALL        = IDF_CONTENTS | IDF_ATTRIB | IDF_OBJECTS;
+const USHORT IDF_NOCAPTIONS = 0x0200;   /// Internal use only (undo etc.): do not copy/delete caption objects of cell notes.
+
+/// Copy flags for auto/series fill functions: do not touch notes and drawing objects.
+const USHORT IDF_AUTOFILL   = IDF_ALL & ~(IDF_NOTE | IDF_OBJECTS);
 
 #define PASTE_NOFUNC        0
 #define PASTE_ADD           1
@@ -318,9 +322,10 @@ enum CellType
         CELLTYPE_FORMULA,
         CELLTYPE_NOTE,
         CELLTYPE_EDIT,
-        CELLTYPE_SYMBOLS,       // fuer Laden/Speichern
-
-        CELLTYPE_DESTROYED
+        CELLTYPE_SYMBOLS        // fuer Laden/Speichern
+#if DBG_UTIL
+           ,CELLTYPE_DESTROYED
+#endif
     };
 
 enum DelCellCmd
