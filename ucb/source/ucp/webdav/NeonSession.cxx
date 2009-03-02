@@ -394,6 +394,10 @@ extern "C" int NeonSession_CertificationNotify( void *userdata,
     xCertificateContainer = uno::Reference< ::com::sun::star::security::XCertificateContainer >(
                     pSession->getMSF().get()->createInstance( rtl::OUString::createFromAscii( "com.sun.star.security.CertificateContainer" )), uno::UNO_QUERY );
 
+    // YD if xmlsecurity is not built (os2), we cannot continue.
+    if (!xCertificateContainer.is())
+        return 1;
+
     char * dn;
 
     failures = 0;

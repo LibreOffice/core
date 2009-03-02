@@ -61,8 +61,8 @@ int main( int argc, char* argv[])
     _splitpath( szApplicationName, szDrive, szDir, szFileName, szExt );
     char* basedir = strstr( szDir, "\\PROGRAM\\");
     if (basedir) *basedir = 0;
-    sprintf( szLibpath, "%s%s\\URE\\BIN;%s%s\\BASIS\\PROGRAM;%BeginLIBPATH%",
-        szDrive, szDir, szDrive, szDir);
+     sprintf( szLibpath, "\"%s%s\\URE\\BIN\";\"%s%s\\BASIS\\PROGRAM\";%BeginLIBPATH%",
+          szDrive, szDir, szDrive, szDir);
     DosSetExtLIBPATH( (PCSZ)szLibpath, BEGIN_LIBPATH);
     // make sure we load DLL from our path only, so multiple instances/versions
     // can be loaded.
