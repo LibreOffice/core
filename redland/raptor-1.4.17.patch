@@ -18,7 +18,7 @@
 +
 --- misc/raptor-1.4.17/src/makefile.mk	Mon Jun 16 17:24:23 2008
 +++ misc/build/raptor-1.4.17/src/makefile.mk	Mon Jun 16 19:25:14 2008
-@@ -1,1 +1,121 @@
+@@ -1,1 +1,128 @@
 -dummy
 +#*************************************************************************
 +#
@@ -64,7 +64,11 @@
 +
 +.INCLUDE :  settings.mk
 +
++.IF "$(GUI)"=="OS2"
++CDEFS+=-DRAPTOR_INTERNAL -DHAVE_CONFIG_H -DNDEBUG
++.ELSE
 +CDEFS+=-DRAPTOR_INTERNAL -DWIN32 -DNDEBUG -D_WINDOWS -D_USRDLL -DWIN32_EXPORTS
++.ENDIF
 +
 +# --- Files --------------------------------------------------------
 +
@@ -127,6 +131,9 @@
 +SHL1IMPLIB= lib$(TARGET)
 +
 +#SHL1VERSIONMAP=../service/exports.map
++.IF "$(GUI)"=="OS2"
++SHL1VERSIONMAP=$(PRJ)$/raptor$/raptor2.map
++.ENDIF
 +SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 +DEF1NAME=$(SHL1TARGET)
 +
@@ -301,3 +308,317 @@
      lt_cv_file_magic_cmd='func_win32_libid'
    else
      lt_cv_deplibs_check_method='file_magic file format pei*-i386(.*architecture: i386)?'
+--- misc/raptor-1.4.17/src/raptor_config.h	2008-12-26 11:49:30.000000000 +0100
++++ misc/build/raptor-1.4.17/src/raptor_config.h	2008-12-26 01:10:34.000000000 +0100
+@@ -1 +1,310 @@
+-dummy
++/* src/raptor_config.h.  Generated from raptor_config.h.in by configure.  */
++/* src/raptor_config.h.in.  Generated from configure.ac by autoheader.  */
++
++/* does expat crash when it sees an initial UTF8 BOM? */
++/* #undef EXPAT_UTF8_BOM_CRASH */
++
++/* vsnprint has C99 compatible return value */
++#define HAVE_C99_VSNPRINTF 1
++
++/* Have curl/curl.h */
++/* #undef HAVE_CURL_CURL_H */
++
++/* Define to 1 if you have the <dlfcn.h> header file. */
++#define HAVE_DLFCN_H 1
++
++/* Define to 1 if you have the <dmalloc.h> header file. */
++/* #undef HAVE_DMALLOC_H */
++
++/* Define to 1 if you have the <errno.h> header file. */
++#define HAVE_ERRNO_H 1
++
++/* Define to 1 if you have the <expat.h> header file. */
++//#define HAVE_EXPAT_H 1
++
++/* Define to 1 if you have the <fetch.h> header file. */
++/* #undef HAVE_FETCH_H */
++
++/* Define to 1 if you have the `getopt' function. */
++#define HAVE_GETOPT 1
++
++/* Define to 1 if you have the <getopt.h> header file. */
++#define HAVE_GETOPT_H 1
++
++/* Define to 1 if you have the `getopt_long' function. */
++#define HAVE_GETOPT_LONG 1
++
++/* INN parsedate function present */
++/* #undef HAVE_INN_PARSEDATE */
++
++/* Define to 1 if you have the <inttypes.h> header file. */
++#define HAVE_INTTYPES_H 1
++
++/* Define to 1 if you have the `isascii' function. */
++#define HAVE_ISASCII 1
++
++/* Define to 1 if you have the <libxml/hash.h> header file. */
++/* #undef HAVE_LIBXML_HASH_H */
++
++/* Define to 1 if you have the <libxml/HTMLparser.h> header file. */
++/* #undef HAVE_LIBXML_HTMLPARSER_H */
++
++/* Define to 1 if you have the <libxml/nanohttp.h> header file. */
++/* #undef HAVE_LIBXML_NANOHTTP_H */
++
++/* Define to 1 if you have the <libxml/parser.h> header file. */
++/* #undef HAVE_LIBXML_PARSER_H */
++
++/* Define to 1 if you have the <libxml/SAX2.h> header file. */
++/* #undef HAVE_LIBXML_SAX2_H */
++
++/* Define to 1 if you have the <libxslt/xslt.h> header file. */
++/* #undef HAVE_LIBXSLT_XSLT_H */
++
++/* Define to 1 if you have the <limits.h> header file. */
++#define HAVE_LIMITS_H 1
++
++/* Define to 1 if you have the <math.h> header file. */
++#define HAVE_MATH_H 1
++
++/* Define to 1 if you have the <memory.h> header file. */
++#define HAVE_MEMORY_H 1
++
++/* Raptor raptor_parse_date available */
++#define HAVE_RAPTOR_PARSE_DATE 1
++
++/* have round() in libm */
++#define HAVE_ROUND 1
++
++/* Define to 1 if you have the <stdint.h> header file. */
++#define HAVE_STDINT_H 1
++
++/* Define to 1 if you have the <stdlib.h> header file. */
++#define HAVE_STDLIB_H 1
++
++/* Define to 1 if you have the `strcasecmp' function. */
++#define HAVE_STRCASECMP 1
++
++/* Define to 1 if you have the `stricmp' function. */
++#define HAVE_STRICMP 1
++
++/* Define to 1 if you have the <strings.h> header file. */
++#define HAVE_STRINGS_H 1
++
++/* Define to 1 if you have the <string.h> header file. */
++#define HAVE_STRING_H 1
++
++/* Define to 1 if you have the <sys/param.h> header file. */
++#define HAVE_SYS_PARAM_H 1
++
++/* Define to 1 if you have the <sys/stat.h> header file. */
++#define HAVE_SYS_STAT_H 1
++
++/* Define to 1 if you have the <sys/time.h> header file. */
++#define HAVE_SYS_TIME_H 1
++
++/* Define to 1 if you have the <sys/types.h> header file. */
++#define HAVE_SYS_TYPES_H 1
++
++/* have trunc() in libm */
++#define HAVE_TRUNC 1
++
++/* Define to 1 if you have the <unistd.h> header file. */
++#define HAVE_UNISTD_H 1
++
++/* Define to 1 if you have the `vsnprintf' function. */
++#define HAVE_VSNPRINTF 1
++
++/* Define to 1 if you have the `xmlCtxtUseOptions' function. */
++/* #undef HAVE_XMLCTXTUSEOPTIONS */
++
++/* Define to 1 if you have the <xmlparse.h> header file. */
++/* #undef HAVE_XMLPARSE_H */
++
++/* Define to 1 if you have the `xmlSAX2InternalSubset' function. */
++/* #undef HAVE_XMLSAX2INTERNALSUBSET */
++
++/* need 'extern int optind' declaration? */
++/* #undef NEED_OPTIND_DECLARATION */
++
++/* Name of package */
++#define PACKAGE "raptor"
++
++/* Define to the address where bug reports for this package should be sent. */
++#define PACKAGE_BUGREPORT "http://bugs.librdf.org/"
++
++/* Define to the full name of this package. */
++#define PACKAGE_NAME "Raptor RDF Parser"
++
++/* Define to the full name and version of this package. */
++#define PACKAGE_STRING "Raptor RDF Parser 1.4.17"
++
++/* Define to the one symbol short name of this package. */
++#define PACKAGE_TARNAME "raptor"
++
++/* Define to the version of this package. */
++#define PACKAGE_VERSION "1.4.17"
++
++/* does libxml struct xmlEntity have a field etype */
++/* #undef RAPTOR_LIBXML_ENTITY_ETYPE */
++
++/* does libxml struct xmlEntity have a field name_length */
++/* #undef RAPTOR_LIBXML_ENTITY_NAME_LENGTH */
++
++/* does libxml have HTML_PARSE_NONET */
++/* #undef RAPTOR_LIBXML_HTML_PARSE_NONET */
++
++/* does libxml xmlSAXHandler have externalSubset field */
++/* #undef RAPTOR_LIBXML_XMLSAXHANDLER_EXTERNALSUBSET */
++
++/* does libxml xmlSAXHandler have initialized field */
++/* #undef RAPTOR_LIBXML_XMLSAXHANDLER_INITIALIZED */
++
++/* does libxml have XML_PARSE_NONET */
++/* #undef RAPTOR_LIBXML_XML_PARSE_NONET */
++
++/* Provide a Unicode NFC check */
++#define RAPTOR_NFC_CHECK 1
++
++/* Building GRDDL parser */
++/* #undef RAPTOR_PARSER_GRDDL */
++
++/* Building guess parser */
++#define RAPTOR_PARSER_GUESS 1
++
++/* Building Notation 3 parser */
++/* #undef RAPTOR_PARSER_N3 */
++
++/* Building N-Triples parser */
++#define RAPTOR_PARSER_NTRIPLES 1
++
++/* Building RDF/XML parser */
++#define RAPTOR_PARSER_RDFXML 1
++
++/* Building RSS Tag Soup parser */
++#define RAPTOR_PARSER_RSS 1
++
++/* Building TRiG parser */
++#define RAPTOR_PARSER_TRIG 1
++
++/* Building Turtle parser */
++#define RAPTOR_PARSER_TURTLE 1
++
++/* Building Atom 1.0 serializer */
++/* #undef RAPTOR_SERIALIZER_ATOM */
++
++/* Building GraphViz DOT serializer */
++//#define RAPTOR_SERIALIZER_DOT 1
++
++/* Building JSON serializer */
++//#define RAPTOR_SERIALIZER_JSON 1
++
++/* Building N-Triples serializer */
++#define RAPTOR_SERIALIZER_NTRIPLES 1
++
++/* Building RDF/XML serializer */
++#define RAPTOR_SERIALIZER_RDFXML 1
++
++/* Building RDF/XML-abbreviated serializer */
++#define RAPTOR_SERIALIZER_RDFXML_ABBREV 1
++
++/* Building RSS 1.0 serializer */
++#define RAPTOR_SERIALIZER_RSS_1_0 1
++
++/* Building Turtle serializer */
++//#define RAPTOR_SERIALIZER_TURTLE 1
++
++/* Release version as a decimal */
++#define RAPTOR_VERSION_DECIMAL 10417
++
++/* Major version number */
++#define RAPTOR_VERSION_MAJOR 1
++
++/* Minor version number */
++#define RAPTOR_VERSION_MINOR 4
++
++/* Release version number */
++#define RAPTOR_VERSION_RELEASE 17
++
++/* Have libcurl WWW library */
++/* #undef RAPTOR_WWW_LIBCURL */
++
++/* Have libfetch WWW library */
++/* #undef RAPTOR_WWW_LIBFETCH */
++
++/* Have libxml available as a WWW library */
++/* #undef RAPTOR_WWW_LIBXML */
++
++/* No WWW library */
++#define RAPTOR_WWW_NONE 1
++
++/* Check XML 1.1 Names */
++/* #undef RAPTOR_XML_1_1 */
++
++/* Use expat XML parser */
++//#define RAPTOR_XML_EXPAT 1
++
++/* Use libxml XML parser */
++/* #undef RAPTOR_XML_LIBXML */
++
++/* The size of `unsigned char', as computed by sizeof. */
++#define SIZEOF_UNSIGNED_CHAR 1
++
++/* The size of `unsigned int', as computed by sizeof. */
++#define SIZEOF_UNSIGNED_INT 4
++
++/* The size of `unsigned long', as computed by sizeof. */
++#define SIZEOF_UNSIGNED_LONG 4
++
++/* The size of `unsigned short', as computed by sizeof. */
++#define SIZEOF_UNSIGNED_SHORT 2
++
++/* Define to 1 if you have the ANSI C header files. */
++#define STDC_HEADERS 1
++
++/* Define to 1 if you can safely include both <sys/time.h> and <time.h>. */
++#define TIME_WITH_SYS_TIME 1
++
++/* Version number of package */
++#define VERSION "1.4.17"
++
++/* Define to 1 if your processor stores words with the most significant byte
++   first (like Motorola and SPARC, unlike Intel and VAX). */
++/* #undef WORDS_BIGENDIAN */
++
++/* Define to 1 if `lex' declares `yytext' as a `char *' by default, not a
++   `char[]'. */
++/* #undef YYTEXT_POINTER */
++
++/* Define to empty if `const' does not conform to ANSI C. */
++/* #undef const */
++
++/* For using libxml2 on win32 */
++#define RAPTOR_XML_LIBXML
++#define HAVE_LIBXML_XMLREADER_H
++#define HAVE_LIBXML_HASH_H 1
++#define HAVE_LIBXML_HTMLPARSER_H 1
++#define HAVE_LIBXML_NANOHTTP_H 1
++#define HAVE_LIBXML_PARSER_H 1
++#define HAVE_LIBXSLT_XSLT_H 1
++
++#define RAPTOR_LIBXML_HTML_PARSE_NONET 1
++#define RAPTOR_LIBXML_XML_PARSE_NONET 1
++
++/* does libxml struct xmlEntity have a field etype */
++#define RAPTOR_LIBXML_ENTITY_ETYPE
++
++/* does libxml struct xmlEntity have a field name_length */
++/*#define RAPTOR_LIBXML_ENTITY_NAME_LENGTH*/
++
++/* Define to 1 if you have the `xmlCtxtUseOptions' function. */
++#define HAVE_XMLCTXTUSEOPTIONS 1
++
++/* Define to 1 if you have the `xmlSAX2InternalSubset' function. */
++#define HAVE_XMLSAX2INTERNALSUBSET 1
++
++/* does libxml xmlSAXHandler have externalSubset field */
++#define RAPTOR_LIBXML_XMLSAXHANDLER_EXTERNALSUBSET 1
++
++/* does libxml xmlSAXHandler have initialized field */
++#define RAPTOR_LIBXML_XMLSAXHANDLER_INITIALIZED 1

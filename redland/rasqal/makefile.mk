@@ -54,10 +54,14 @@ RASQALVERSION=0.9.15
 TARFILE_NAME=rasqal-$(RASQALVERSION)
 PATCH_FILES=..$/$(TARFILE_NAME).patch
 
-ADDITIONAL_FILES=src/makefile.mk
+ADDITIONAL_FILES=src/makefile.mk src/rasqal_config.h
 
+.IF "$(OS)"=="OS2"
+# there is no wntmsci build environment in the tarball; we use custom dmakefile
+BUILD_ACTION=dmake
+BUILD_DIR=$(CONFIGURE_DIR)$/src
 
-.IF "$(OS)"=="WNT"
+.ELIF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"
 CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure PATH="..$/..$/..$/bin:$$PATH"
@@ -129,8 +133,7 @@ OUT2BIN+=src/rasqal-config
 .ENDIF
 
 .ELIF "$(OS)"=="OS2"
-OUT2LIB+=src$/.libs$/*.a
-OUT2BIN+=src$/rasqal-config
+# if we use dmake, this is done automagically
 
 .ELSE
 OUT2LIB+=src$/.libs$/librasqal*.so*

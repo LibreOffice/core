@@ -54,10 +54,14 @@ REDLANDVERSION=1.0.7
 TARFILE_NAME=redland-$(REDLANDVERSION)
 PATCH_FILES=..$/$(TARFILE_NAME).patch
 
-ADDITIONAL_FILES=librdf/makefile.mk
+ADDITIONAL_FILES=librdf/makefile.mk librdf/rdf_config.h
 
+.IF "$(OS)"=="OS2"
+# there is no wntmsci build environment in the tarball; we use custom dmakefile
+BUILD_ACTION=dmake
+BUILD_DIR=$(CONFIGURE_DIR)$/librdf
 
-.IF "$(OS)"=="WNT"
+.ELIF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"
 CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure PATH="..$/..$/..$/bin:$$PATH"
@@ -133,7 +137,7 @@ OUT2BIN+=librdf$/.libs$/*.dll
 .ENDIF
 
 .ELIF "$(OS)"=="OS2"
-OUT2LIB+=librdf$/.libs$/*.a
+# if we use dmake, this is done automagically
 
 .ELSE
 OUT2LIB+=librdf$/.libs$/librdf*.so*

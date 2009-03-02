@@ -54,10 +54,13 @@ RAPTORVERSION=$(RAPTOR_MAJOR).4.17
 TARFILE_NAME=raptor-$(RAPTORVERSION)
 PATCH_FILES=..$/$(TARFILE_NAME).patch
 
-ADDITIONAL_FILES=src/makefile.mk
+ADDITIONAL_FILES=src/makefile.mk src/raptor_config.h
 
+.IF "$(OS)"=="OS2"
+BUILD_ACTION=dmake
+BUILD_DIR=$(CONFIGURE_DIR)$/src
 
-.IF "$(OS)"=="WNT"
+.ELIF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"
 CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure
@@ -132,8 +135,7 @@ OUT2BIN+=src/raptor-config
 .ENDIF
 
 .ELIF "$(GUI)"=="OS2"
-OUT2LIB+=src$/.libs$/*.a
-OUT2BIN+=src$/raptor-config
+# if we use dmake, this is done automagically
 
 .ELSE
 OUT2LIB+=src$/.libs$/libraptor*.so*
