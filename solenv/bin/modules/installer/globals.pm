@@ -395,6 +395,7 @@ BEGIN
     $msitranpath = "";
     $insert_file_at_end = 0;
     $newfilesexist = 0;
+    $usesharepointpath = 0;
     %newfilescollector = ();
 
     $saveinstalldir = "";

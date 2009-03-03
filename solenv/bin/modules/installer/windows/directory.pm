@@ -8,7 +8,7 @@
 #
 # $RCSfile: directory.pm,v $
 #
-# $Revision: 1.31 $
+# $Revision: 1.30.126.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -122,6 +122,11 @@ sub create_unique_directorynames
         if ( $styles =~ /\bCOMMONAPPDATAFOLDER\b/ ) { $uniqueparentname = $installer::globals::commonappdatafolder; }
         if ( $styles =~ /\bLOCALAPPDATAFOLDER\b/ ) { $uniqueparentname = $installer::globals::localappdatafolder; }
 
+        if ( $styles =~ /\bSHAREPOINTPATH\b/ )
+        {
+            $uniqueparentname = "SHAREPOINTPATH";
+            $installer::globals::usesharepointpath = 1;
+        }
 
         $uniquename =~ s/\-/\_/g;           # making "-" to "_"
         $uniqueparentname =~ s/\-/\_/g;     # making "-" to "_"
@@ -365,6 +370,12 @@ sub add_root_directories
 
         $oneline = "$installer::globals::localappdatafolder\tTARGETDIR\t.\n";
         push(@{$directorytableref}, $oneline);
+
+        if ( $installer::globals::usesharepointpath )
+        {
+            $oneline = "SHAREPOINTPATH\tTARGETDIR\t.\n";
+            push(@{$directorytableref}, $oneline);
+        }
 
         $oneline = "$installer::globals::systemfolder\tTARGETDIR\t.\n";
         push(@{$directorytableref}, $oneline);
