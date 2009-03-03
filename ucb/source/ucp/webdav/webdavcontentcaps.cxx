@@ -335,7 +335,6 @@ uno::Sequence< beans::Property > Content::getProperties(
             //       we used a depth of DAVZERO for PROPFIND.
             aPropSet.insert( (*props.begin()).properties.begin(),
                              (*props.begin()).properties.end() );
-
         }
         catch ( DAVException const & )
         {

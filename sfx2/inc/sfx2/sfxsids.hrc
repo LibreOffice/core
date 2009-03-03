@@ -296,7 +296,8 @@
 #define SID_GRAFIC_DIALOG                   (SID_SFX_START + 305)
 #define SID_PATH                            (SID_SFX_START + 308)
 #define SID_SAVEDOCS                        (SID_SFX_START + 309)
-#define SID_STANDARD_DIR                    (SID_SFX_START + 310)
+#define SID_STANDARD_DIR                    (SID_SFX_START + 450)
+#define SID_BLACK_LIST                      (SID_SFX_START + 451)
 
 // browse-ids
 #define SID_BROWSE_FORWARD                  (SID_SFX_START + 1300)
@@ -569,7 +570,8 @@
 #define SID_OPTIONS_PAGEURL                 (SID_SFX_START + 1713)
 #define SID_MORE_DICTIONARIES               (SID_SFX_START + 1714)
 #define SID_ACTIVATE_STYLE_APPLY            (SID_SFX_START + 1715)
-#define SID_SFX_free_START                  (SID_SFX_START + 1716)
+#define SID_DEFAULTFILENAME                 (SID_SFX_START + 1716)
+#define SID_SFX_free_START                  (SID_SFX_START + 1717)
 #define SID_SFX_free_END                    (SID_SFX_START + 3999)
 
 #define SID_OPEN_NEW_VIEW                   (SID_SFX_START + 520)

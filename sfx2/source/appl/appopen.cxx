@@ -53,8 +53,11 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/uno/Sequence.h>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase1.hxx>
+#include <rtl/ustring.hxx>
+
 
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/synchronousdispatch.hxx>
@@ -93,6 +96,7 @@
 #include <sfx2/new.hxx>
 #include <sfx2/objitem.hxx>
 #include <sfx2/objsh.hxx>
+#include <svtools/slstitm.hxx>
 #include "objshimp.hxx"
 #include "openflag.hxx"
 #include <sfx2/passwd.hxx>
@@ -535,6 +539,13 @@ SfxObjectShellLock SfxApplication::NewDoc_Impl( const String& rFact, const SfxIt
     {
         if ( pSet )
         {
+            // TODO/LATER: Should the other arguments be transfered as well?
+            SFX_ITEMSET_ARG( pSet, pDefaultPathItem, SfxStringItem, SID_DEFAULTFILEPATH, FALSE);
+            if ( pDefaultPathItem )
+                xDoc->GetMedium()->GetItemSet()->Put( *pDefaultPathItem );
+            SFX_ITEMSET_ARG( pSet, pDefaultNameItem, SfxStringItem, SID_DEFAULTFILENAME, FALSE);
+            if ( pDefaultNameItem )
+                xDoc->GetMedium()->GetItemSet()->Put( *pDefaultNameItem );
             SFX_ITEMSET_ARG( pSet, pTitleItem, SfxStringItem, SID_DOCINFO_TITLE, FALSE );
             if ( pTitleItem )
                 xDoc->GetMedium()->GetItemSet()->Put( *pTitleItem );
@@ -573,12 +584,22 @@ void SfxApplication::NewDocDirectExec_Impl( SfxRequest& rReq )
    else
         aFactName = SvtModuleOptions().GetDefaultModuleName();
 
+
     SfxRequest aReq( SID_OPENDOC, SFX_CALLMODE_SYNCHRON, GetPool() );
     String aFact = String::CreateFromAscii("private:factory/");
     aFact += aFactName;
     aReq.AppendItem( SfxStringItem( SID_FILE_NAME, aFact ) );
     aReq.AppendItem( SfxFrameItem( SID_DOCFRAME, GetFrame() ) );
     aReq.AppendItem( SfxStringItem( SID_TARGETNAME, String::CreateFromAscii( "_default" ) ) );
+
+    // TODO/LATER: Should the other arguments be transfered as well?
+    SFX_REQUEST_ARG( rReq, pDefaultPathItem, SfxStringItem, SID_DEFAULTFILEPATH, FALSE);
+    if ( pDefaultPathItem )
+        aReq.AppendItem( *pDefaultPathItem );
+    SFX_REQUEST_ARG( rReq, pDefaultNameItem, SfxStringItem, SID_DEFAULTFILENAME, FALSE);
+    if ( pDefaultNameItem )
+        aReq.AppendItem( *pDefaultNameItem );
+
     SFX_APP()->ExecuteSlot( aReq );
     const SfxViewFrameItem* pItem = PTR_CAST( SfxViewFrameItem, aReq.GetReturnValue() );
     if ( pItem )
@@ -877,8 +898,15 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         if ( pStandardDirItem )
             sStandardDir = pStandardDirItem->GetValue();
 
+        ::com::sun::star::uno::Sequence< ::rtl::OUString >  aBlackList;
+
+        SFX_REQUEST_ARG( rReq, pBlackListItem, SfxStringListItem, SID_BLACK_LIST, FALSE );
+        if ( pBlackListItem )
+            pBlackListItem->GetStringList( aBlackList );
+
+
         ULONG nErr = sfx2::FileOpenDialog_Impl(
-                WB_OPEN | SFXWB_MULTISELECTION | SFXWB_SHOWVERSIONS, String(), pURLList, aFilter, pSet, &aPath, nDialog, sStandardDir );
+                WB_OPEN | SFXWB_MULTISELECTION | SFXWB_SHOWVERSIONS, String(), pURLList, aFilter, pSet, &aPath, nDialog, sStandardDir, aBlackList );
 
         if ( nErr == ERRCODE_ABORT )
         {

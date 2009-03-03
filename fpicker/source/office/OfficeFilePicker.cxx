@@ -504,6 +504,7 @@ SvtFileDialog* SvtFilePicker::implCreateDialog( Window* _pParent )
     {
         String sStandardDir = String( m_aStandardDir );
         dialog->SetStandardDir( sStandardDir );
+        dialog->SetBlackList( m_aBlackList );
     }
 
     return dialog;
@@ -1094,6 +1095,10 @@ void SAL_CALL SvtFilePicker::initialize( const Sequence< Any >& _rArguments )
                         m_aStandardDir = sStandardDir;
                     }
                 }
+                else if ( namedValue.Name.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BlackList" ) ) ) )
+                {
+                    namedValue.Value >>= m_aBlackList;
+                }
             }
         }
     }
@@ -1116,6 +1121,13 @@ sal_Bool SvtFilePicker::implHandleInitializationArgument( const ::rtl::OUString&
         OSL_VERIFY( _rValue >>= m_aStandardDir );
         return sal_True;
     }
+
+    if ( _rName.equalsAscii( "BlackList" ) )
+    {
+        OSL_VERIFY( _rValue >>= m_aBlackList );
+        return sal_True;
+    }
+
 
 
     return OCommonPicker::implHandleInitializationArgument( _rName, _rValue );

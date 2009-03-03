@@ -51,6 +51,7 @@
 #include <com/sun/star/frame/XStorable2.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
+#include <com/sun/star/frame/XTitle.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
@@ -227,13 +228,21 @@ public:
     sal_Bool OutputFileDialog( sal_Int8 nStoreMode,
                                 const ::comphelper::SequenceAsHashMap& aPreselectedFilterPropsHM,
                                 sal_Bool bSetStandardName,
-                                ::rtl::OUString& aUserSelectedName,
+                                ::rtl::OUString& aSuggestedName,
                                 sal_Bool bPreselectPassword,
-                                const ::rtl::OUString& rPath,
+                                const ::rtl::OUString& aSuggestedDir,
                                 sal_Int16 nDialog,
-                                const ::rtl::OUString& rStandardDir);
+                                const ::rtl::OUString& rStandardDir,
+                                const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rBlackList
+                                );
 
     sal_Bool ShowDocumentInfoDialog();
+
+    ::rtl::OUString GetReccomendedDir( const ::rtl::OUString& aSuggestedDir,
+                                       const sfx2::FileDialogHelper::Context& aCtxt );
+    ::rtl::OUString GetReccomendedName( const ::rtl::OUString& aSuggestedName,
+                                        const ::rtl::OUString& aTypeName );
+
 };
 
 //-------------------------------------------------------------------------
@@ -719,11 +728,12 @@ sal_Bool ModelData_Impl::CheckFilterOptionsDialogExistence()
 sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
                                             const ::comphelper::SequenceAsHashMap& aPreselectedFilterPropsHM,
                                             sal_Bool bSetStandardName,
-                                            ::rtl::OUString& aUserSelectedName,
+                                            ::rtl::OUString& aSuggestedName,
                                             sal_Bool bPreselectPassword,
-                                            const ::rtl::OUString& rPath,
+                                            const ::rtl::OUString& aSuggestedDir,
                                             sal_Int16 nDialog,
-                                            const ::rtl::OUString& rStandardDir )
+                                            const ::rtl::OUString& rStandardDir,
+                                            const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rBlackList)
 {
     sal_Bool bUseFilterOptions = sal_False;
 
@@ -785,13 +795,13 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
                                                         ::rtl::OUString::createFromAscii( "UIName" ),
                                                         ::rtl::OUString() );
 
-            pFileDlg = new sfx2::FileDialogHelper( aDialogMode, aDialogFlags, aFilterUIName, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "pdf" ) ), rStandardDir );
+            pFileDlg = new sfx2::FileDialogHelper( aDialogMode, aDialogFlags, aFilterUIName, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "pdf" ) ), rStandardDir, rBlackList );
             pFileDlg->SetCurrentFilter( aFilterUIName );
         }
         else
         {
             // This is the normal dialog
-            pFileDlg = new sfx2::FileDialogHelper( aDialogMode, aDialogFlags, aDocServiceName, nDialog, nMust, nDont, rStandardDir );
+            pFileDlg = new sfx2::FileDialogHelper( aDialogMode, aDialogFlags, aDocServiceName, nDialog, nMust, nDont, rStandardDir, rBlackList );
         }
 
         if( aDocServiceName.equalsAscii( "com.sun.star.drawing.DrawingDocument" ) )
@@ -819,103 +829,52 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
     else
     {
         // This is the normal dialog
-        pFileDlg = new sfx2::FileDialogHelper( aDialogMode, aDialogFlags, aDocServiceName, nDialog, nMust, nDont, rStandardDir );
+        pFileDlg = new sfx2::FileDialogHelper( aDialogMode, aDialogFlags, aDocServiceName, nDialog, nMust, nDont, rStandardDir, rBlackList );
         pFileDlg->CreateMatcher( aDocServiceName );
     }
 
-    // the last used name might be provided by aUserSelectedName from the old selection
-    ::rtl::OUString aLastName = aUserSelectedName;
+    ::rtl::OUString aAdjustToType;
 
-    if ( ( aLastName.getLength() || GetStorable()->hasLocation() )
-      && !GetMediaDescr().getUnpackedValueOrDefault( ::rtl::OUString::createFromAscii( "RepairPackage" ),
-                                                                      sal_False ) )
+    // bSetStandardName == true means that user agreed to store document in the default (default default ;-)) format
+    if ( bSetStandardName || GetStorable()->hasLocation() )
     {
-        // --> PB 2004-11-05 #i36524# - aLastName must be an URL, not only a filename
-        if ( !aLastName.getLength() )
-            aLastName = GetStorable()->getLocation();
-        // <--
-
-        if ( !aLastName.getLength() )
-        {
-            aLastName = GetDocProps().getUnpackedValueOrDefault(
-                                                        ::rtl::OUString::createFromAscii( "Title" ),
-                                                        ::rtl::OUString() );
-            INetURLObject aObj( INetURLObject::GetAbsURL( SvtPathOptions().GetWorkPath(), aLastName ) );
-            aLastName = aObj.GetMainURL( INetURLObject::NO_DECODE );
-        }
-
         uno::Sequence< beans::PropertyValue > aOldFilterProps;
-        sal_Int32 nOldFiltFlags = 0;
         ::rtl::OUString aOldFilterName = GetDocProps().getUnpackedValueOrDefault(
-                                                    aFilterNameString,
-                                                    ::rtl::OUString() );
+                                                        aFilterNameString,
+                                                        ::rtl::OUString() );
 
         if ( aOldFilterName.getLength() )
             m_pOwner->GetFilterConfiguration()->getByName( aOldFilterName ) >>= aOldFilterProps;
 
         ::comphelper::SequenceAsHashMap aOldFiltPropsHM( aOldFilterProps );
-        nOldFiltFlags = aOldFiltPropsHM.getUnpackedValueOrDefault( ::rtl::OUString::createFromAscii( "Flags" ),
-                                                                    (sal_Int32)0 );
+        sal_Int32 nOldFiltFlags = aOldFiltPropsHM.getUnpackedValueOrDefault( ::rtl::OUString::createFromAscii( "Flags" ), (sal_Int32)0 );
 
-        // bSetStandardName == true means that user agreed to store document in the default (default default ;-)) format
         if ( bSetStandardName || ( nOldFiltFlags & nMust ) != nMust || nOldFiltFlags & nDont )
         {
-            ::rtl::OUString aFilterUIName = aPreselectedFilterPropsHM.getUnpackedValueOrDefault(
-                                            ::rtl::OUString::createFromAscii( "UIName" ),
-                                            ::rtl::OUString() );
-            ::rtl::OUString aTypeName = aPreselectedFilterPropsHM.getUnpackedValueOrDefault(
+            // the suggested type will be changed, the extension should be adjusted
+            aAdjustToType = aPreselectedFilterPropsHM.getUnpackedValueOrDefault(
                                             ::rtl::OUString::createFromAscii( "Type" ),
                                             ::rtl::OUString() );
 
-            if( aLastName.getLength() )
-            {
-                INetURLObject aObj( aLastName );
-                if ( aTypeName.getLength() )
-                {
-                    uno::Reference< container::XNameAccess > xTypeDetection = uno::Reference< container::XNameAccess >(
-                                    m_pOwner->GetServiceFactory()->createInstance(
-                                            ::rtl::OUString::createFromAscii( "com.sun.star.document.TypeDetection" ) ),
-                                    uno::UNO_QUERY );
-                    if ( xTypeDetection.is() )
-                    {
-                        uno::Sequence< beans::PropertyValue > aTypeNameProps;
-                        if ( ( xTypeDetection->getByName( aTypeName ) >>= aTypeNameProps ) && aTypeNameProps.getLength() )
-                        {
-                            ::comphelper::SequenceAsHashMap aTypeNamePropsHM( aTypeNameProps );
-                            uno::Sequence< ::rtl::OUString > aExtensions = aTypeNamePropsHM.getUnpackedValueOrDefault(
-                                                            ::rtl::OUString::createFromAscii( "Extension" ),
-                                                            ::uno::Sequence< ::rtl::OUString >() );
-                            if ( aExtensions.getLength() )
-                                aObj.SetExtension( aExtensions[0] );
-                        }
-                    }
-                }
-
-                pFileDlg->SetDisplayDirectory( aObj.GetMainURL( INetURLObject::NO_DECODE ) );
-            }
-
+            ::rtl::OUString aFilterUIName = aPreselectedFilterPropsHM.getUnpackedValueOrDefault(
+                                            ::rtl::OUString::createFromAscii( "UIName" ),
+                                            ::rtl::OUString() );
             pFileDlg->SetCurrentFilter( aFilterUIName );
         }
         else
         {
-            if( aLastName.getLength() )
-                pFileDlg->SetDisplayDirectory( aLastName );
-
             pFileDlg->SetCurrentFilter( aOldFiltPropsHM.getUnpackedValueOrDefault(
                                                         ::rtl::OUString::createFromAscii( "UIName" ),
                                                         ::rtl::OUString() ) );
         }
     }
-    else
-    {
-        // pb: set graphic path if context == SD_EXPORT or SI_EXPORT else work path
-        String sDirectory = eCtxt != sfx2::FileDialogHelper::UNKNOWN_CONTEXT
-            ? SvtPathOptions().GetGraphicPath() : SvtPathOptions().GetWorkPath();
-        pFileDlg->SetDisplayDirectory( sDirectory );
-    }
 
-    if ( rPath.getLength() )
-        pFileDlg->SetDisplayDirectory( rPath );
+    ::rtl::OUString aReccomendedDir = GetReccomendedDir( aSuggestedDir, eCtxt );
+    if ( aReccomendedDir.getLength() )
+        pFileDlg->SetDisplayDirectory( aReccomendedDir );
+    ::rtl::OUString aReccomendedName = GetReccomendedName( aSuggestedName, aAdjustToType );
+    if ( aReccomendedName.getLength() )
+        pFileDlg->SetFileName( aReccomendedName );
 
     uno::Reference < view::XSelectionSupplier > xSel( GetModel()->getCurrentController(), uno::UNO_QUERY );
     if ( xSel.is() && xSel->getSelection().hasValue() )
@@ -962,7 +921,7 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
     // get the path from the dialog
     INetURLObject aURL( pFileDlg->GetPath() );
     // the path should be provided outside since it might be used for further calls to the dialog
-    aUserSelectedName = aURL.GetMainURL( INetURLObject::NO_DECODE );
+    aSuggestedName = aURL.GetMainURL( INetURLObject::NO_DECODE );
 
     // old filter options should be cleared in case different filter is used
 
@@ -1089,6 +1048,95 @@ sal_Bool ModelData_Impl::ShowDocumentInfoDialog()
     return bDialogUsed;
 }
 
+//-------------------------------------------------------------------------
+::rtl::OUString ModelData_Impl::GetReccomendedDir( const ::rtl::OUString& aSuggestedDir, const sfx2::FileDialogHelper::Context& aCtxt )
+{
+    ::rtl::OUString aReccomendedDir;
+
+    if ( ( aSuggestedDir.getLength() || GetStorable()->hasLocation() )
+      && !GetMediaDescr().getUnpackedValueOrDefault( ::rtl::OUString::createFromAscii( "RepairPackage" ),
+                                                                      sal_False ) )
+    {
+        INetURLObject aLocation;
+        if ( aSuggestedDir.getLength() )
+            aLocation = INetURLObject( aSuggestedDir );
+        else
+        {
+            ::rtl::OUString aOldURL = GetStorable()->getLocation();
+            if ( aOldURL.getLength() )
+            {
+                INetURLObject aTmp( aOldURL );
+                if ( aTmp.removeSegment() )
+                    aLocation = aTmp;
+            }
+
+            if ( aLocation.HasError() )
+                aLocation = INetURLObject( SvtPathOptions().GetWorkPath() );
+        }
+
+        aLocation.setFinalSlash();
+        if ( !aLocation.HasError() )
+            aReccomendedDir = aLocation.GetMainURL( INetURLObject::NO_DECODE );
+    }
+    else
+    {
+        // pb: set graphic path if context == SD_EXPORT or SI_EXPORT else work path
+        aReccomendedDir = ( aCtxt != sfx2::FileDialogHelper::UNKNOWN_CONTEXT )
+            ? SvtPathOptions().GetGraphicPath() : SvtPathOptions().GetWorkPath();
+    }
+
+    return aReccomendedDir;
+}
+
+//-------------------------------------------------------------------------
+::rtl::OUString ModelData_Impl::GetReccomendedName( const ::rtl::OUString& aSuggestedName, const ::rtl::OUString& aTypeName )
+{
+    // the last used name might be provided by aSuggestedName from the old selection, or from the MediaDescriptor
+    ::rtl::OUString aReccomendedName;
+
+    if ( aSuggestedName.getLength() )
+        aReccomendedName = aSuggestedName;
+    else
+    {
+        aReccomendedName = INetURLObject( GetStorable()->getLocation() ).GetName();
+        if ( !aReccomendedName.getLength() )
+        {
+            try {
+                uno::Reference< frame::XTitle > xTitle( GetModel(), uno::UNO_QUERY_THROW );
+                aReccomendedName = xTitle->getTitle();
+            } catch( uno::Exception& ) {}
+        }
+
+        if ( aReccomendedName.getLength() && aTypeName.getLength() )
+        {
+            // adjust the extension to the type
+            uno::Reference< container::XNameAccess > xTypeDetection = uno::Reference< container::XNameAccess >(
+                m_pOwner->GetServiceFactory()->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.document.TypeDetection" ) ),
+                uno::UNO_QUERY );
+            if ( xTypeDetection.is() )
+            {
+                INetURLObject aObj( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "file:///c:/" ) ) + aReccomendedName );
+
+                uno::Sequence< beans::PropertyValue > aTypeNameProps;
+                if ( ( xTypeDetection->getByName( aTypeName ) >>= aTypeNameProps ) && aTypeNameProps.getLength() )
+                {
+                    ::comphelper::SequenceAsHashMap aTypeNamePropsHM( aTypeNameProps );
+                    uno::Sequence< ::rtl::OUString > aExtensions = aTypeNamePropsHM.getUnpackedValueOrDefault(
+                                                    ::rtl::OUString::createFromAscii( "Extensions" ),
+                                                    ::uno::Sequence< ::rtl::OUString >() );
+                    if ( aExtensions.getLength() )
+                        aObj.SetExtension( aExtensions[0] );
+                }
+
+                aReccomendedName = aObj.GetName();
+            }
+        }
+    }
+
+    return aReccomendedName;
+}
+
+
 //=========================================================================
 // class SfxStoringHelper
 //=========================================================================
@@ -1175,7 +1223,7 @@ sal_Bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >&
                                             const ::rtl::OUString& aSlotName,
                                             uno::Sequence< beans::PropertyValue >& aArgsSequence,
                                             sal_Bool bPreselectPassword,
-                                            ::rtl::OUString aUserSelectedName )
+                                            ::rtl::OUString aSuggestedName )
 {
     ModelData_Impl aModelData( *this, xModel, aArgsSequence );
 
@@ -1297,7 +1345,6 @@ sal_Bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >&
     if ( aFileNameIter == aModelData.GetMediaDescr().end() )
     {
         sal_Int16 nDialog = SFX2_IMPL_DIALOG_CONFIG;
-        ::rtl::OUString aPath;
         ::comphelper::SequenceAsHashMap::const_iterator aDlgIter =
             aModelData.GetMediaDescr().find( ::rtl::OUString::createFromAscii( "UseSystemDialog" ) );
         if ( aDlgIter != aModelData.GetMediaDescr().end() )
@@ -1310,10 +1357,18 @@ sal_Bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >&
                     nDialog = SFX2_IMPL_DIALOG_OOO;
         }
 
-        ::comphelper::SequenceAsHashMap::const_iterator aPathIter =
-            aModelData.GetMediaDescr().find( ::rtl::OUString::createFromAscii( "FolderName" ) );
-        if ( aPathIter != aModelData.GetMediaDescr().end() )
-            aPathIter->second >>= aPath;
+        // The Dispatch supports parameter FolderName that overwrites SuggestedSaveAsDir
+        ::rtl::OUString aSuggestedDir = aModelData.GetMediaDescr().getUnpackedValueOrDefault( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FolderName" ) ), ::rtl::OUString() );
+        if ( !aSuggestedDir.getLength() )
+        {
+            aSuggestedDir = aModelData.GetMediaDescr().getUnpackedValueOrDefault( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SuggestedSaveAsDir" ) ), ::rtl::OUString() );
+            if ( !aSuggestedDir.getLength() )
+                aSuggestedDir = aModelData.GetDocProps().getUnpackedValueOrDefault( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SuggestedSaveAsDir" ) ), ::rtl::OUString() );
+        }
+
+    aSuggestedName = aModelData.GetMediaDescr().getUnpackedValueOrDefault( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SuggestedSaveAsName" ) ), ::rtl::OUString() );
+        if ( !aSuggestedName.getLength() )
+            aSuggestedName = aModelData.GetDocProps().getUnpackedValueOrDefault( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SuggestedSaveAsName" ) ), ::rtl::OUString() );
 
         ::rtl::OUString sStandardDir;
         ::comphelper::SequenceAsHashMap::const_iterator aStdDirIter =
@@ -1321,13 +1376,20 @@ sal_Bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >&
         if ( aStdDirIter != aModelData.GetMediaDescr().end() )
             aStdDirIter->second >>= sStandardDir;
 
+        ::com::sun::star::uno::Sequence< ::rtl::OUString >  aBlackList;
+
+        ::comphelper::SequenceAsHashMap::const_iterator aBlackListIter =
+            aModelData.GetMediaDescr().find( ::rtl::OUString::createFromAscii( "BlackList" ) );
+        if ( aBlackListIter != aModelData.GetMediaDescr().end() )
+            aBlackListIter->second >>= aBlackList;
+
         sal_Bool bExit = sal_False;
         while ( !bExit )
         {
-            bUseFilterOptions = aModelData.OutputFileDialog( nStoreMode, aFilterProps, bSetStandardName, aUserSelectedName, bPreselectPassword, aPath, nDialog, sStandardDir );
+            bUseFilterOptions = aModelData.OutputFileDialog( nStoreMode, aFilterProps, bSetStandardName, aSuggestedName, bPreselectPassword, aSuggestedDir, nDialog, sStandardDir, aBlackList );
 
             // in case the dialog is opend a second time the folder should be the same as before, not what was handed over by parameters
-            aPath = ::rtl::OUString();
+            aSuggestedDir = ::rtl::OUString();
             if ( nStoreMode == SAVEAS_REQUESTED )
             {
                 // in case of saving check filter for possible alien warning
@@ -1656,5 +1718,4 @@ Window* SfxStoringHelper::GetModelWindow( const uno::Reference< frame::XModel >&
 
     return pWin;
 }
-
 

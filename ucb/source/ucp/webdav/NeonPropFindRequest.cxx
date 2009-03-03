@@ -104,7 +104,7 @@ extern "C" int NPFR_propfind_iter( void* userdata,
             {
                 aValue = aValue.toAsciiLowerCase();
                 if ( aValue.compareTo(
-                        RTL_CONSTASCII_STRINGPARAM( "<collection" ) ) == 0 )
+                    RTL_CONSTASCII_STRINGPARAM( "<dav:collection" ) ) == 0 )
                 {
                     thePropertyValue.Value
                         <<= OUString::createFromAscii( "collection" );

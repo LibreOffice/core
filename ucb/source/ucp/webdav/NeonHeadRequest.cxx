@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: NeonHeadRequest.cxx,v $
- * $Revision: 1.12 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -66,7 +66,7 @@ void process_headers(ne_request *req,
 
             while ( it != end )
             {
-                if ( (*it).equalsIgnoreAsciiCase(aHeaderName) )
+                if ( (*it) == aHeaderName )
                     break;
 
                 ++it;
@@ -126,7 +126,7 @@ extern "C" void NHR_ResponseHeaderCatcher( void * userdata,
 
             while ( it != end )
             {
-                if ( (*it).equalsIgnoreAsciiCase(aHeaderName) )
+                if ( (*it) == aHeaderName )
                     break;
 
                 ++it;
