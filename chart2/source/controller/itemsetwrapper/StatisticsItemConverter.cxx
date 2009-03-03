@@ -633,29 +633,21 @@ void StatisticsItemConverter::FillSpecialItem(
 
         case SCHATTR_REGRESSION_SHOW_EQUATION:
         {
+            bool bShowEq = false;
             uno::Reference< beans::XPropertySet > xEqProp( lcl_getEquationProperties( GetPropertySet(), 0 ));
             if( xEqProp.is())
-            {
-                bool bShowEq = false;
-                if( xEqProp->getPropertyValue( C2U("ShowEquation")) >>= bShowEq )
-                    rOutItemSet.Put( SfxBoolItem( nWhichId, bShowEq ));
-            }
-            else
-                rOutItemSet.InvalidateItem( nWhichId );
+                xEqProp->getPropertyValue( C2U("ShowEquation")) >>= bShowEq;
+            rOutItemSet.Put( SfxBoolItem( nWhichId, bShowEq ));
         }
         break;
 
         case SCHATTR_REGRESSION_SHOW_COEFF:
         {
+            bool bShowCoeff = false;
             uno::Reference< beans::XPropertySet > xEqProp( lcl_getEquationProperties( GetPropertySet(), 0 ));
             if( xEqProp.is())
-            {
-                bool bShowCoeff = false;
-                if( xEqProp->getPropertyValue( C2U("ShowCorrelationCoefficient")) >>= bShowCoeff )
-                    rOutItemSet.Put( SfxBoolItem( nWhichId, bShowCoeff ));
-            }
-            else
-                rOutItemSet.InvalidateItem( nWhichId );
+                xEqProp->getPropertyValue( C2U("ShowCorrelationCoefficient")) >>= bShowCoeff;
+            rOutItemSet.Put( SfxBoolItem( nWhichId, bShowCoeff ));
         }
         break;
 

@@ -452,13 +452,16 @@ public:
     SplinePropertiesDialog( Window* pParent );
     virtual ~SplinePropertiesDialog();
 
-    void adjustSize();
-
     void fillControls( const ChartTypeParameter& rParameter );
     void fillParameter( ChartTypeParameter& rParameter, bool bSmoothLines );
 
+    virtual void StateChanged( StateChangedType nType );
+
 private:
     DECL_LINK( SplineModeRadioHdl, RadioButton* );
+
+    void adjustControlPositions();
+    void adjustSize();
 
 private:
     RadioButton m_aRB_Splines_Cubic;
@@ -497,7 +500,25 @@ SplinePropertiesDialog::SplinePropertiesDialog( Window* pParent )
 
     m_aRB_Splines_Cubic.SetToggleHdl( LINK( this, SplinePropertiesDialog, SplineModeRadioHdl ) );
     m_aRB_Splines_B.SetToggleHdl( LINK( this, SplinePropertiesDialog, SplineModeRadioHdl ) );
+}
 
+SplinePropertiesDialog::~SplinePropertiesDialog()
+{
+}
+
+void SplinePropertiesDialog::StateChanged( StateChangedType nType )
+{
+    Dialog::StateChanged( nType );
+
+    if( nType == STATE_CHANGE_INITSHOW )
+    {
+        adjustControlPositions();
+        adjustSize();
+    }
+}
+
+void SplinePropertiesDialog::adjustControlPositions()
+{
     //position of controls:
     //----------------
     //fixed line and Fixed texts as near as possible to radio controls
@@ -525,9 +546,6 @@ SplinePropertiesDialog::SplinePropertiesDialog( Window* pParent )
     m_aMF_SplineResolution.SetPosPixel( Point( nMFXPos, m_aMF_SplineResolution.GetPosPixel().Y() ) );
 }
 
-SplinePropertiesDialog::~SplinePropertiesDialog()
-{
-}
 void SplinePropertiesDialog::adjustSize()
 {
     Size aDlgSize( this->GetSizePixel() );
@@ -636,10 +654,7 @@ SplineResourceGroup::~SplineResourceGroup()
 SplinePropertiesDialog& SplineResourceGroup::getSplinePropertiesDialog()
 {
     if( !m_pSplinePropertiesDialog.get() )
-    {
         m_pSplinePropertiesDialog = ::std::auto_ptr< SplinePropertiesDialog >( new SplinePropertiesDialog( m_aPB_DetailsDialog.GetParent() ) );
-        m_pSplinePropertiesDialog->adjustSize();
-    }
     return *m_pSplinePropertiesDialog;
 }
 void SplineResourceGroup::showControls( bool bShow )

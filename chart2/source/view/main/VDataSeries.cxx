@@ -199,6 +199,23 @@ struct lcl_LessXOfPoint
         return false;
     }
 };
+
+void lcl_clearIfTextIsContained( VDataSequence& rData, const uno::Reference<data::XDataSequence>& xDataSequence )
+{
+    uno::Sequence< rtl::OUString > aStrings( DataSequenceToStringSequence( xDataSequence ) );
+    for( sal_Int32 i = 0; i < rData.Doubles.getLength(); ++i )
+    {
+        if( ::rtl::math::isNan( rData.Doubles[i] ) )
+        {
+            if( i < aStrings.getLength() && aStrings[i].getLength() )
+            {
+                rData.clear();
+                break;
+            }
+        }
+    }
+}
+
 }
 
 VDataSeries::VDataSeries()
@@ -280,7 +297,10 @@ VDataSeries::VDataSeries( const uno::Reference< XDataSeries >& xDataSeries )
                 aARole >>= aRole;
 
                 if( aRole.equals(C2U("values-x")) )
+                {
                     m_aValues_X.init( xDataSequence );
+                    lcl_clearIfTextIsContained( m_aValues_X, xDataSequence );
+                }
                 else if( aRole.equals(C2U("values-y")) )
                     m_aValues_Y.init( xDataSequence );
                 else if( aRole.equals(C2U("values-min")) )
