@@ -40,6 +40,7 @@
 #include <vcl/button.hxx>
 #endif
 #include <vcl/dialog.hxx>
+#include <rtl/ustring.hxx>
 
 // class SvtFileView -----------------------------------------------------
 
@@ -84,6 +85,8 @@ class SVT_DLLPUBLIC SvtFileView : public Control
 private:
     SvtFileView_Impl*       mpImp;
 
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > mpBlackList;
+
     SVT_DLLPRIVATE void                 OpenFolder( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aContents );
 
     DECL_DLLPRIVATE_LINK(               HeaderSelect_Impl, HeaderBar * );
@@ -123,9 +126,14 @@ public:
     FileViewResult          Initialize(
                                 const String& rFolderURL,
                                 const String& rFilter,
-                                const FileViewAsyncAction* pAsyncDescriptor
+                                const FileViewAsyncAction* pAsyncDescriptor,
+                                const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rBlackList
                             );
 
+    FileViewResult          Initialize(
+                                const String& rFolderURL,
+                                const String& rFilter,
+                                const FileViewAsyncAction* pAsyncDescriptor );
     /** initialze the view with a sequence of contents, which have already been obtained elsewhere
 
         This method will never return <member>eStillRunning</member>, since it will fill the
@@ -135,7 +143,8 @@ public:
 
     /** initializes the view with the content of a folder given by an UCB content
     */
-    sal_Bool                Initialize( const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent>& _xContent, const String& rFilter );
+    sal_Bool                Initialize( const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent>& _xContent,
+                                        const String& rFilter );
 
     /** reads the current content of the current folder again, and applies the given filter to it
 

@@ -557,6 +557,7 @@ protected:
     bool                                m_bRunningAsyncAction;
     bool                                m_bAsyncActionCancelled;
 
+
 public:
 
     ::std::vector< SortingData_Impl* >  maContent;
@@ -588,8 +589,15 @@ public:
 
     void                    Clear();
 
-    FileViewResult          GetFolderContent_Impl( const String& rFolder, const FileViewAsyncAction* pAsyncDescriptor );
-    FileViewResult          GetFolderContent_Impl( const FolderDescriptor& _rFolder, const FileViewAsyncAction* pAsyncDescriptor );
+    FileViewResult          GetFolderContent_Impl(
+        const String& rFolder,
+        const FileViewAsyncAction* pAsyncDescriptor,
+        const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rBlackList = ::com::sun::star::uno::Sequence< ::rtl::OUString >() );
+
+    FileViewResult          GetFolderContent_Impl(
+        const FolderDescriptor& _rFolder,
+        const FileViewAsyncAction* pAsyncDescriptor,
+        const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rBlackList = ::com::sun::star::uno::Sequence< ::rtl::OUString >());
     void                    FilterFolderContent_Impl( const OUString &rFilter );
     void                    CancelRunningAsyncAction();
 
@@ -1281,7 +1289,7 @@ FileViewResult SvtFileView::PreviousLevel( const FileViewAsyncAction* pAsyncDesc
 
     String sParentURL;
     if ( GetParentURL( sParentURL ) )
-        eResult = Initialize( sParentURL, mpImp->maCurrentFilter, pAsyncDescriptor );
+        eResult = Initialize( sParentURL, mpImp->maCurrentFilter, pAsyncDescriptor, mpBlackList );
 
     return eResult;
 }
@@ -1367,9 +1375,14 @@ sal_Bool SvtFileView::Initialize( const ::com::sun::star::uno::Reference< ::com:
 }
 
 // -----------------------------------------------------------------------
-FileViewResult SvtFileView::Initialize( const String& rURL, const String& rFilter, const FileViewAsyncAction* pAsyncDescriptor )
+FileViewResult SvtFileView::Initialize(
+    const String& rURL,
+    const String& rFilter,
+    const FileViewAsyncAction* pAsyncDescriptor,
+    const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rBlackList  )
 {
     WaitObject aWaitCursor( this );
+    mpBlackList = rBlackList;
 
     String sPushURL( mpImp->maViewURL );
 
@@ -1391,6 +1404,17 @@ FileViewResult SvtFileView::Initialize( const String& rURL, const String& rFilte
     OSL_ENSURE( sal_False, "SvtFileView::Initialize: unreachable!" );
     return eFailure;
 }
+
+// -----------------------------------------------------------------------
+FileViewResult SvtFileView::Initialize(
+    const String& rURL,
+    const String& rFilter,
+    const FileViewAsyncAction* pAsyncDescriptor )
+{
+    return Initialize( rURL, rFilter, pAsyncDescriptor, ::com::sun::star::uno::Sequence< ::rtl::OUString >());
+}
+
+// -----------------------------------------------------------------------
 
 // -----------------------------------------------------------------------
 sal_Bool SvtFileView::Initialize( const Sequence< OUString >& aContents )
@@ -1419,7 +1443,7 @@ FileViewResult SvtFileView::ExecuteFilter( const String& rFilter, const FileView
     mpImp->maCurrentFilter.ToLowerAscii();
 
     mpImp->Clear();
-    FileViewResult eResult = mpImp->GetFolderContent_Impl( mpImp->maViewURL, pAsyncDescriptor );
+    FileViewResult eResult = mpImp->GetFolderContent_Impl( mpImp->maViewURL, pAsyncDescriptor, mpBlackList );
     OSL_ENSURE( ( eResult != eStillRunning ) || pAsyncDescriptor, "SvtFileView::ExecuteFilter: we told it to read synchronously!" );
     return eResult;
 }
@@ -1804,7 +1828,10 @@ void SvtFileView_Impl::Clear()
 }
 
 // -----------------------------------------------------------------------
-FileViewResult SvtFileView_Impl::GetFolderContent_Impl( const String& rFolder, const FileViewAsyncAction* pAsyncDescriptor )
+FileViewResult SvtFileView_Impl::GetFolderContent_Impl(
+    const String& rFolder,
+    const FileViewAsyncAction* pAsyncDescriptor,
+    const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rBlackList )
 {
     ::osl::ClearableMutexGuard aGuard( maMutex );
     INetURLObject aFolderObj( rFolder );
@@ -1816,11 +1843,14 @@ FileViewResult SvtFileView_Impl::GetFolderContent_Impl( const String& rFolder, c
     FolderDescriptor aFolder( aFolderObj.GetMainURL( INetURLObject::NO_DECODE ) );
 
     aGuard.clear();
-    return GetFolderContent_Impl( aFolder, pAsyncDescriptor );
+    return GetFolderContent_Impl( aFolder, pAsyncDescriptor, rBlackList );
 }
 
 // -----------------------------------------------------------------------
-FileViewResult SvtFileView_Impl::GetFolderContent_Impl( const FolderDescriptor& _rFolder, const FileViewAsyncAction* pAsyncDescriptor )
+FileViewResult SvtFileView_Impl::GetFolderContent_Impl(
+    const FolderDescriptor& _rFolder,
+    const FileViewAsyncAction* pAsyncDescriptor,
+    const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rBlackList )
 {
     DBG_TESTSOLARMUTEX();
     ::osl::ClearableMutexGuard aGuard( maMutex );
@@ -1832,7 +1862,7 @@ FileViewResult SvtFileView_Impl::GetFolderContent_Impl( const FolderDescriptor& 
 
     if ( !pAsyncDescriptor )
     {
-        ::svt::EnumerationResult eResult = m_pContentEnumerator->enumerateFolderContentSync( _rFolder, mpUrlFilter );
+        ::svt::EnumerationResult eResult = m_pContentEnumerator->enumerateFolderContentSync( _rFolder, mpUrlFilter, rBlackList );
         if ( ::svt::SUCCESS == eResult )
         {
             implEnumerationSuccess();
