@@ -104,6 +104,7 @@
 
 using namespace com::sun::star;
 using namespace ::xmloff::token;
+using namespace ::formula;
 using ::rtl::OUString;
 
 OUString SAL_CALL ScXMLImport_getImplementationName() throw()
@@ -2121,7 +2122,8 @@ void ScXMLImport::SetChangeTrackingViewSettings(const com::sun::star::uno::Seque
                     if ((rChangeProps[i].Value >>= sRanges) && sRanges.getLength())
                     {
                         ScRangeList aRangeList;
-                        ScRangeStringConverter::GetRangeListFromString(aRangeList, sRanges, GetDocument());
+                        ScRangeStringConverter::GetRangeListFromString(
+                            aRangeList, sRanges, GetDocument(), FormulaGrammar::CONV_OOO);
                         pViewSettings->SetTheRangeList(aRangeList);
                     }
                 }
@@ -2619,9 +2621,10 @@ void ScXMLImport::SetLabelRanges()
                 {
                     sal_Int32 nOffset1(0);
                     sal_Int32 nOffset2(0);
+                    FormulaGrammar::AddressConvention eConv = FormulaGrammar::CONV_OOO;
 
-                    if (ScRangeStringConverter::GetRangeFromString( aLabelRange, (*aItr)->sLabelRangeStr, GetDocument(), nOffset1 ) &&
-                        ScRangeStringConverter::GetRangeFromString( aDataRange, (*aItr)->sDataRangeStr, GetDocument(), nOffset2 ))
+                    if (ScRangeStringConverter::GetRangeFromString( aLabelRange, (*aItr)->sLabelRangeStr, GetDocument(), eConv, nOffset1 ) &&
+                        ScRangeStringConverter::GetRangeFromString( aDataRange, (*aItr)->sDataRangeStr, GetDocument(), eConv, nOffset2 ))
                     {
                         if ( (*aItr)->bColumnOrientation )
                             xColRanges->addNew( aLabelRange, aDataRange );
@@ -2656,7 +2659,7 @@ void ScXMLImport::SetNamedRanges()
                 {
                     sal_Int32 nOffset(0);
                     if (ScRangeStringConverter::GetAddressFromString(
-                        aCellAddress, (*aItr)->sBaseCellAddress, GetDocument(), nOffset ))
+                        aCellAddress, (*aItr)->sBaseCellAddress, GetDocument(), FormulaGrammar::CONV_OOO, nOffset ))
                     {
                         try
                         {
@@ -2697,7 +2700,7 @@ void ScXMLImport::SetNamedRanges()
                 {
                     sal_Int32 nOffset(0);
                     if (ScRangeStringConverter::GetAddressFromString(
-                        aCellAddress, (*aItr)->sBaseCellAddress, GetDocument(), nOffset ))
+                        aCellAddress, (*aItr)->sBaseCellAddress, GetDocument(), FormulaGrammar::CONV_OOO, nOffset ))
                     {
                         uno::Reference <sheet::XNamedRange> xNamedRange(xNamedRanges->getByName((*aItr)->sName), uno::UNO_QUERY);
                         if (xNamedRange.is())

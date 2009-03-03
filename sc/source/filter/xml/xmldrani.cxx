@@ -292,7 +292,7 @@ void ScXMLDatabaseRangeContext::EndElement()
             {
                 table::CellRangeAddress aCellRangeAddress;
                 sal_Int32 nOffset(0);
-                if (ScRangeStringConverter::GetRangeFromString( aCellRangeAddress, sRangeAddress, pDoc, nOffset ))
+                if (ScRangeStringConverter::GetRangeFromString( aCellRangeAddress, sRangeAddress, pDoc, ::formula::FormulaGrammar::CONV_OOO, nOffset ))
                 {
                     sal_Bool bInsert(sal_True);
                     try

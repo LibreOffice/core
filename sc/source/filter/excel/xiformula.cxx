@@ -48,6 +48,8 @@ public:
                             ScRangeList& rScRanges, XclFormulaType eType,
                             const XclTokenArray& rXclTokArr, XclImpStream& rStrm );
 
+    const ScTokenArray* CreateFormula( XclFormulaType eType, const XclTokenArray& rXclTokArr );
+
     // ------------------------------------------------------------------------
 private:
     XclFunctionProvider maFuncProv;     /// Excel function data provider.
@@ -81,6 +83,24 @@ void XclImpFmlaCompImpl::CreateRangeList(
     }
 }
 
+const ScTokenArray* XclImpFmlaCompImpl::CreateFormula(
+        XclFormulaType /*eType*/, const XclTokenArray& rXclTokArr )
+{
+    if (rXclTokArr.Empty())
+        return NULL;
+
+    // evil hack!  are we trying to phase out the old style formula converter ?
+    SvMemoryStream aMemStrm;
+    aMemStrm << EXC_ID_EOF << rXclTokArr.GetSize();
+    aMemStrm.Write( rXclTokArr.GetData(), rXclTokArr.GetSize() );
+    XclImpStream aFmlaStrm( aMemStrm, GetRoot() );
+    aFmlaStrm.StartNextRecord();
+    const ScTokenArray* pArray = NULL;
+    GetOldFmlaConverter().Reset();
+    GetOldFmlaConverter().Convert(pArray, aFmlaStrm, aFmlaStrm.GetRecSize(), true);
+    return pArray;
+}
+
 // ----------------------------------------------------------------------------
 
 XclImpFormulaCompiler::XclImpFormulaCompiler( const XclImpRoot& rRoot ) :
@@ -98,6 +118,12 @@ void XclImpFormulaCompiler::CreateRangeList(
         const XclTokenArray& rXclTokArr, XclImpStream& rStrm )
 {
     mxImpl->CreateRangeList( rScRanges, eType, rXclTokArr, rStrm );
+}
+
+const ScTokenArray* XclImpFormulaCompiler::CreateFormula(
+        XclFormulaType eType, const XclTokenArray& rXclTokArr )
+{
+    return mxImpl->CreateFormula(eType, rXclTokArr);
 }
 
 // ============================================================================

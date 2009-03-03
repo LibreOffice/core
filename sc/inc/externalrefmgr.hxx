@@ -160,16 +160,14 @@ public:
      *
      * @param nFileId file ID of an external document
      * @param rTabName sheet name
-     * @param nRow
      * @param nCol
+     * @param nRow
      *
-     * @return pointer to the token instance in the cache.  <i>The caller does
-     *         not need to delete this instance since its life cycle is
-     *         managed by this class.</i>
+     * @return pointer to the token instance in the cache.
      */
     ScExternalRefCache::TokenRef getCellData(
-        sal_uInt16 nFileId, const String& rTabName, SCROW nRow, SCCOL nCol,
-        sal_uInt32* pnFmtIndex = NULL);
+        sal_uInt16 nFileId, const String& rTabName, SCCOL nCol, SCROW nRow,
+        bool bEmptyCellOnNull, sal_uInt32* pnFmtIndex = NULL);
 
     /**
      * Get a cached cell range data.
@@ -178,7 +176,8 @@ public:
      *         manage the life cycle of the returned instance</i>, which is
      *         guaranteed if the TokenArrayRef is properly used..
      */
-    ScExternalRefCache::TokenArrayRef getCellRangeData(sal_uInt16 nFileId, const String& rTabName, const ScRange& rRange);
+    ScExternalRefCache::TokenArrayRef getCellRangeData(
+        sal_uInt16 nFileId, const String& rTabName, const ScRange& rRange, bool bEmptyCellOnNull);
 
     ScExternalRefCache::TokenArrayRef getRangeNameTokens(sal_uInt16 nFileId, const String& rName);
     void setRangeNameTokens(sal_uInt16 nFileId, const String& rName, TokenArrayRef pArray);
@@ -314,6 +313,29 @@ public:
         ::std::list<TabItemRef> maTables;
     };
 
+    enum LinkUpdateType { LINK_MODIFIED, LINK_BROKEN };
+
+    /**
+     * Base class for objects that need to listen to link updates.  When a
+     * link to a certain external file is updated, the notify() method gets
+     * called.
+     */
+    class LinkListener
+    {
+    public:
+        LinkListener();
+        virtual ~LinkListener() = 0;
+        virtual void notify(sal_uInt16 nFileId, LinkUpdateType eType) = 0;
+
+        struct Hash
+        {
+            size_t operator() (const LinkListener* p) const
+            {
+                return reinterpret_cast<size_t>(p);
+            }
+        };
+    };
+
 private:
     /** Shell instance for a source document. */
     struct SrcShell
@@ -323,10 +345,14 @@ private:
     };
 
     typedef ::std::hash_map<sal_uInt16, SrcShell>           DocShellMap;
-    typedef ::std::hash_set<sal_uInt16>                     LinkedDocSet;
+    typedef ::std::hash_map<sal_uInt16, bool>               LinkedDocMap;
 
     typedef ::std::hash_map<sal_uInt16, RefCells>           RefCellMap;
     typedef ::std::hash_map<sal_uInt16, SvNumberFormatterMergeMap> NumFmtMap;
+
+
+    typedef ::std::hash_set<LinkListener*, LinkListener::Hash>  LinkListeners;
+    typedef ::std::hash_map<sal_uInt16, LinkListeners>          LinkListenerMap;
 
 public:
     /** Source document meta-data container. */
@@ -368,6 +394,11 @@ public:
      *
      * @param nFileId file ID
      * @param rTabName table name
+     * @param bCreateNew if true, create a new table instance if it's not
+     *                   already present.  If false, it returns NULL if the
+     *                   specified table's cache doesn't exist.
+     * @param pnIndex if non-NULL pointer is passed, it stores the internal
+     *                index of a cache table instance.
      *
      * @return shared_ptr to the cache table instance
      */
@@ -456,6 +487,7 @@ public:
     const String* getRealTableName(sal_uInt16 nFileId, const String& rTabName) const;
     const String* getRealRangeName(sal_uInt16 nFileId, const String& rRangeName) const;
     void refreshNames(sal_uInt16 nFileId);
+    void breakLink(sal_uInt16 nFileId);
     void switchSrcFile(sal_uInt16 nFileId, const String& rNewFile);
 
     void setRelativeFileName(sal_uInt16 nFileId, const String& rRelUrl);
@@ -470,7 +502,6 @@ public:
      */
     void setFilterData(sal_uInt16 nFileId, const String& rFilterName, const String& rOptions);
 
-    void removeSrcDocument(sal_uInt16 nFileId, bool bBreakLink);
     void clear();
 
     bool hasExternalData() const;
@@ -509,6 +540,29 @@ public:
     void updateRefInsertTable(SCTAB nPos);
 
     void updateRefDeleteTable(SCTAB nPos);
+
+    /**
+     * Register a new link listener to a specified external document.  Note
+     * that the caller is responsible for managing the life cycle of the
+     * listener object.
+     */
+    void addLinkListener(sal_uInt16 nFileId, LinkListener* pListener);
+
+    /**
+     * Remove an existing link listener.  Note that removing a listener
+     * pointer here does not delete the listener object instance.
+     */
+    void removeLinkListener(sal_uInt16 nFileId, LinkListener* pListener);
+
+    void removeLinkListener(LinkListener* pListener);
+
+    /**
+     * Notify all listeners that are listening to a specified external
+     * document.
+     *
+     * @param nFileId file ID for an external document.
+     */
+    void notifyAllLinkListeners(sal_uInt16 nFileId, LinkUpdateType eType);
 
 private:
     ScExternalRefManager();
@@ -549,13 +603,15 @@ private:
     DocShellMap maDocShells;
 
     /** list of source documents that are managed by the link manager. */
-    LinkedDocSet maLinkedDocs;
+    LinkedDocMap maLinkedDocs;
 
     /**
      * List of referencing cells that may contain external names.  There is
      * one list per source document.
      */
     RefCellMap maRefCells;
+
+    LinkListenerMap maLinkListeners;
 
     NumFmtMap maNumFormatMap;
 

@@ -610,6 +610,7 @@
 // Chart2
 #define SC_UNONAME_ISHIDDEN         "IsHidden"
 #define SC_UNONAME_ROLE             "Role"
+#define SC_UNONAME_HIDDENVALUES     "HiddenValues"
 
 // Solver
 #define SC_UNONAME_TIMEOUT          "Timeout"

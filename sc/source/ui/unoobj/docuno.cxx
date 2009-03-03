@@ -2254,7 +2254,8 @@ uno::Sequence < uno::Reference< table::XCellRange > > SAL_CALL ScTableSheetsObj:
     uno::Sequence < uno::Reference < table::XCellRange > > xRet;
 
     ScRangeList aRangeList;
-    if (ScRangeStringConverter::GetRangeListFromString( aRangeList, aRange, pDocShell->GetDocument(), ';' ))
+    ScDocument* pDoc = pDocShell->GetDocument();
+    if (ScRangeStringConverter::GetRangeListFromString( aRangeList, aRange, pDoc, ::formula::FormulaGrammar::CONV_OOO, ';' ))
     {
         sal_Int32 nCount = aRangeList.Count();
         if (nCount)

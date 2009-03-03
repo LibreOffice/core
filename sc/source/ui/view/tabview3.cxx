@@ -2171,8 +2171,9 @@ void ScTabView::DoChartSelection(
     {
         Color aSelColor( rHilightRanges[i].PreferredColor );
         ScRangeList aRangeList;
+        ScDocument* pDoc = aViewData.GetDocShell()->GetDocument();
         if( ScRangeStringConverter::GetRangeListFromString(
-                aRangeList, rHilightRanges[i].RangeRepresentation, aViewData.GetDocShell()->GetDocument(), ';' ))
+                aRangeList, rHilightRanges[i].RangeRepresentation, pDoc, pDoc->GetAddressConvention(), ';' ))
         {
             for ( ScRangePtr p = aRangeList.First(); p; p = aRangeList.Next())
             {

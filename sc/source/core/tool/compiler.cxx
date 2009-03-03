@@ -72,6 +72,7 @@
 #include "parclass.hxx"
 #include "autonamecache.hxx"
 #include "externalrefmgr.hxx"
+#include "rangeutl.hxx"
 
 using namespace formula;
 using namespace ::com::sun::star;
@@ -855,16 +856,6 @@ static bool lcl_getLastTabName( String& rTabName2, const String& rTabName1,
     return true;
 }
 
-static void lcl_appendTabName(::rtl::OUStringBuffer& rBuffer, const String& rTabName)
-{
-    bool bQuote = (rTabName.Search(sal_Unicode(' '), 0) != STRING_NOTFOUND);
-    if (bQuote)
-        rBuffer.append(sal_Unicode('\''));
-    rBuffer.append(rTabName);
-    if (bQuote)
-        rBuffer.append(sal_Unicode('\''));
-}
-
 struct Convention_A1 : public ScCompiler::Convention
 {
     Convention_A1( FormulaGrammar::AddressConvention eConv ) : ScCompiler::Convention( eConv ) { }
@@ -1079,9 +1070,9 @@ struct ConventionOOO_A1 : public Convention_A1
             rBuffer.append(sal_Unicode('\''));
             rBuffer.append(sal_Unicode('#'));
 
-            // external reference is always 3D and the sheet is absolute.
-            rBuffer.append(sal_Unicode('$'));
-            lcl_appendTabName(rBuffer, rTabName);
+            if (!rRef.IsTabRel())
+                rBuffer.append(sal_Unicode('$'));
+            ScRangeStringConverter::AppendTableName(rBuffer, rTabName);
 
             rBuffer.append(sal_Unicode('.'));
         }
@@ -1347,15 +1338,15 @@ struct ConventionXL
         String aLastTabName;
         if (!lcl_getLastTabName(aLastTabName, rTabName, rTabNames, rRef))
         {
-            rBuf.append(aLastTabName);
+            ScRangeStringConverter::AppendTableName(rBuf, aLastTabName);
             return;
         }
 
-        lcl_appendTabName(rBuf, rTabName);
+        ScRangeStringConverter::AppendTableName(rBuf, rTabName);
         if (rTabName != aLastTabName)
         {
             rBuf.append(sal_Unicode(':'));
-            lcl_appendTabName(rBuf, aLastTabName);
+            ScRangeStringConverter::AppendTableName(rBuf, rTabName);
         }
     }
 
@@ -1542,7 +1533,7 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
         aRef.CalcAbsIfRel(rCompiler.GetPos());
 
         ConventionXL::makeExternalDocStr(rBuffer, *pFullName);
-        lcl_appendTabName(rBuffer, rTabName);
+        ScRangeStringConverter::AppendTableName(rBuffer, rTabName);
         rBuffer.append(sal_Unicode('!'));
 
         makeSingleCellStr(rBuffer, aRef);
@@ -1746,7 +1737,7 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
         aRef.CalcAbsIfRel(rCompiler.GetPos());
 
         ConventionXL::makeExternalDocStr(rBuffer, *pFullName);
-        lcl_appendTabName(rBuffer, rTabName);
+        ScRangeStringConverter::AppendTableName(rBuffer, rTabName);
         rBuffer.append(sal_Unicode('!'));
 
         r1c1_add_row(rBuffer, aRef);

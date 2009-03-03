@@ -1390,7 +1390,7 @@ void ScXMLExport::GetColumnRowHeader(sal_Bool& rHasColumnHeader, table::CellRang
         rRowHeaderRange = xPrintAreas->getTitleRows();
         rColumnHeaderRange = xPrintAreas->getTitleColumns();
         uno::Sequence< table::CellRangeAddress > aRangeList( xPrintAreas->getPrintAreas() );
-        ScRangeStringConverter::GetStringFromRangeList( rPrintRanges, aRangeList, pDoc );
+        ScRangeStringConverter::GetStringFromRangeList( rPrintRanges, aRangeList, pDoc, FormulaGrammar::CONV_OOO );
     }
 }
 
@@ -2590,7 +2590,7 @@ void ScXMLExport::WriteShapes(const ScMyCell& rMyCell)
                     Rectangle aEndRec(pDoc->GetMMRect(aItr->aEndAddress.Col(), aItr->aEndAddress.Row(),
                         aItr->aEndAddress.Col(), aItr->aEndAddress.Row(), aItr->aEndAddress.Tab()));
                     rtl::OUString sEndAddress;
-                    ScRangeStringConverter::GetStringFromAddress(sEndAddress, aItr->aEndAddress, pDoc);
+                    ScRangeStringConverter::GetStringFromAddress(sEndAddress, aItr->aEndAddress, pDoc, FormulaGrammar::CONV_OOO);
                     AddAttribute(XML_NAMESPACE_TABLE, XML_END_CELL_ADDRESS, sEndAddress);
                     if (bNegativePage)
                         aEndPoint.X = -aEndRec.Right();
@@ -2796,7 +2796,7 @@ void ScXMLExport::WriteDetective( const ScMyCell& rMyCell )
                 {
                     if( (aObjItr->eObjType == SC_DETOBJ_ARROW) || (aObjItr->eObjType == SC_DETOBJ_TOOTHERTAB))
                     {
-                        ScRangeStringConverter::GetStringFromRange( sString, aObjItr->aSourceRange, pDoc );
+                        ScRangeStringConverter::GetStringFromRange( sString, aObjItr->aSourceRange, pDoc, FormulaGrammar::CONV_OOO );
                         AddAttribute( XML_NAMESPACE_TABLE, XML_CELL_RANGE_ADDRESS, sString );
                     }
                     ScXMLConverter::GetStringFromDetObjType( sString, aObjItr->eObjType );
@@ -3160,7 +3160,7 @@ void ScXMLExport::WriteScenario()
         AddAttribute(XML_NAMESPACE_TABLE, XML_IS_ACTIVE, aBuffer.makeStringAndClear());
         const ScRangeList* pRangeList = pDoc->GetScenarioRanges(static_cast<SCTAB>(nCurrentTable));
         rtl::OUString sRangeListStr;
-        ScRangeStringConverter::GetStringFromRangeList( sRangeListStr, pRangeList, pDoc );
+        ScRangeStringConverter::GetStringFromRangeList( sRangeListStr, pRangeList, pDoc, FormulaGrammar::CONV_OOO );
         AddAttribute(XML_NAMESPACE_TABLE, XML_SCENARIO_RANGES, sRangeListStr);
         if (sComment.Len())
             AddAttribute(XML_NAMESPACE_TABLE, XML_COMMENT, rtl::OUString(sComment));
@@ -3202,10 +3202,10 @@ void ScXMLExport::WriteLabelRanges( const uno::Reference< container::XIndexAcces
         {
             OUString sRangeStr;
             table::CellRangeAddress aCellRange( xRange->getLabelArea() );
-            ScRangeStringConverter::GetStringFromRange( sRangeStr, aCellRange, pDoc );
+            ScRangeStringConverter::GetStringFromRange( sRangeStr, aCellRange, pDoc, FormulaGrammar::CONV_OOO );
             AddAttribute( XML_NAMESPACE_TABLE, XML_LABEL_CELL_RANGE_ADDRESS, sRangeStr );
             aCellRange = xRange->getDataArea();
-            ScRangeStringConverter::GetStringFromRange( sRangeStr, aCellRange, pDoc );
+            ScRangeStringConverter::GetStringFromRange( sRangeStr, aCellRange, pDoc, FormulaGrammar::CONV_OOO );
             AddAttribute( XML_NAMESPACE_TABLE, XML_DATA_CELL_RANGE_ADDRESS, sRangeStr );
             AddAttribute( XML_NAMESPACE_TABLE, XML_ORIENTATION, bColumn ? XML_COLUMN : XML_ROW );
             SvXMLElementExport aElem( *this, XML_NAMESPACE_TABLE, XML_LABEL_RANGE, sal_True, sal_True );
@@ -3246,7 +3246,7 @@ void ScXMLExport::WriteNamedExpressions(const com::sun::star::uno::Reference <co
 
                                 OUString sOUBaseCellAddress;
                                 ScRangeStringConverter::GetStringFromAddress( sOUBaseCellAddress,
-                                    xNamedRange->getReferencePosition(), pDoc, ' ', sal_False, SCA_ABS_3D );
+                                    xNamedRange->getReferencePosition(), pDoc, FormulaGrammar::CONV_OOO, ' ', sal_False, SCA_ABS_3D );
                                 AddAttribute(XML_NAMESPACE_TABLE, XML_BASE_CELL_ADDRESS, sOUBaseCellAddress);
 
                                 sal_uInt16 nRangeIndex;
@@ -3520,10 +3520,10 @@ void ScXMLExport::WriteConsolidation()
 
             sStrData = OUString();
             for( sal_Int32 nIndex = 0; nIndex < pCons->nDataAreaCount; ++nIndex )
-                ScRangeStringConverter::GetStringFromArea( sStrData, *pCons->ppDataAreas[ nIndex ], pDoc, sal_True );
+                ScRangeStringConverter::GetStringFromArea( sStrData, *pCons->ppDataAreas[ nIndex ], pDoc, FormulaGrammar::CONV_OOO, sal_True );
             AddAttribute( XML_NAMESPACE_TABLE, XML_SOURCE_CELL_RANGE_ADDRESSES, sStrData );
 
-            ScRangeStringConverter::GetStringFromAddress( sStrData, ScAddress( pCons->nCol, pCons->nRow, pCons->nTab ), pDoc );
+            ScRangeStringConverter::GetStringFromAddress( sStrData, ScAddress( pCons->nCol, pCons->nRow, pCons->nTab ), pDoc, FormulaGrammar::CONV_OOO );
             AddAttribute( XML_NAMESPACE_TABLE, XML_TARGET_CELL_ADDRESS, sStrData );
 
             if( pCons->bByCol && !pCons->bByRow )
@@ -3593,7 +3593,7 @@ void ScXMLExport::GetChangeTrackViewSettings(uno::Sequence<beans::PropertyValue>
                 pChangeProps[SC_SHOW_CHANGES_BY_RANGES].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ShowChangesByRanges"));
                 pChangeProps[SC_SHOW_CHANGES_BY_RANGES].Value <<= pViewSettings->HasRange();
                 rtl::OUString sRangeList;
-                ScRangeStringConverter::GetStringFromRangeList(sRangeList, &(pViewSettings->GetTheRangeList()), GetDocument());
+                ScRangeStringConverter::GetStringFromRangeList(sRangeList, &(pViewSettings->GetTheRangeList()), GetDocument(), FormulaGrammar::CONV_OOO);
                 pChangeProps[SC_SHOW_CHANGES_BY_RANGES_LIST].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ShowChangesByRangesList"));
                 pChangeProps[SC_SHOW_CHANGES_BY_RANGES_LIST].Value <<= sRangeList;
 

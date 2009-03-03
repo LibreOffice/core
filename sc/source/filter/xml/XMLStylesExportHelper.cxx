@@ -306,7 +306,7 @@ rtl::OUString ScMyValidationsContainer::GetCondition(ScXMLExport& rExport, const
 rtl::OUString ScMyValidationsContainer::GetBaseCellAddress(ScDocument* pDoc, const table::CellAddress& aCell)
 {
     rtl::OUString sAddress;
-    ScRangeStringConverter::GetStringFromAddress( sAddress, aCell, pDoc );
+    ScRangeStringConverter::GetStringFromAddress( sAddress, aCell, pDoc, ::formula::FormulaGrammar::CONV_OOO );
     return sAddress;
 }
 

@@ -64,6 +64,9 @@
 #include "xehelper.hxx"
 #include "xepage.hxx"
 #include "xestyle.hxx"
+#include "compiler.hxx"
+#include "tokenarray.hxx"
+#include "token.hxx"
 
 using ::rtl::OUString;
 using ::com::sun::star::uno::Any;
@@ -645,6 +648,40 @@ XclExpChFrameRef lclCreateFrame( const XclExpChRoot& rRoot,
     return xFrame;
 }
 
+void lclAddDoubleRefData(ScTokenArray& rArray, const ::formula::FormulaToken& rToken,
+                         SCsTAB nTab1, SCsTAB nTab2, SCsCOL nCol1, SCsCOL nCol2, SCsROW nRow1, SCsROW nRow2)
+{
+    using namespace ::formula;
+
+    StackVar eType = rToken.GetType();
+    bool bExternal = (eType == svExternalDoubleRef);
+    DBG_ASSERT(eType == svDoubleRef || eType == svExternalDoubleRef, "not a double ref token!");
+
+    ScComplexRefData aData;
+
+    aData.InitFlags();
+    aData.Ref1.SetFlag3D(true);
+    aData.Ref1.SetTabRel(false);
+    aData.Ref1.SetColRel(false);
+    aData.Ref1.SetRowRel(false);
+    aData.Ref2.SetFlag3D(false);
+    aData.Ref2.SetTabRel(false);
+    aData.Ref2.SetColRel(false);
+    aData.Ref2.SetRowRel(false);
+
+    aData.Ref1.nTab = nTab1;
+    aData.Ref1.nCol = nCol1;
+    aData.Ref1.nRow = nRow1;
+    aData.Ref2.nTab = nTab2;
+    aData.Ref2.nCol = nCol2;
+    aData.Ref2.nRow = nRow2;
+
+    if (bExternal)
+        rArray.AddExternalDoubleReference(rToken.GetIndex(), rToken.GetString(), aData);
+    else
+        rArray.AddDoubleReference(aData);
+}
+
 } // namespace
 
 // Source links ===============================================================
@@ -659,39 +696,79 @@ XclExpChSourceLink::XclExpChSourceLink( const XclExpChRoot& rRoot, sal_uInt8 nDe
 
 sal_uInt16 XclExpChSourceLink::ConvertDataSequence( Reference< XDataSequence > xDataSeq, bool bSplitToColumns, sal_uInt16 nDefCount )
 {
+    using namespace ::formula;
+
     mxLinkFmla.reset();
     maData.mnLinkType = EXC_CHSRCLINK_DEFAULT;
     sal_uInt16 nValueCount = nDefCount;
 
-    if( xDataSeq.is() )
+    if (!xDataSeq.is())
+        return nValueCount;
+
+    // Compile the range representation string into token array.
+    OUString aRangeRepr = xDataSeq->getSourceRangeRepresentation();
+    ScRangeList aScRanges;
+    ScCompiler aComp(GetDocPtr(), ScAddress());
+    aComp.SetGrammar(FormulaGrammar::GRAM_ENGLISH);
+    ScTokenArray* pArray = aComp.CompileString(aRangeRepr);
+    if (!pArray)
+        return nValueCount;
+
+    ScTokenArray aArray;
+    pArray->Reset();
+    bool bFirst = true;
+    for (const FormulaToken* p = pArray->First(); p; p = pArray->Next())
     {
-        OUString aRangeRepr = xDataSeq->getSourceRangeRepresentation();
-        ScRangeList aScRanges;
-        if( ScRangeStringConverter::GetRangeListFromString( aScRanges, aRangeRepr, GetDocPtr(), ';' ) )
+        StackVar eType = p->GetType();
+        if (eType == svSingleRef || eType == svExternalSingleRef)
         {
-            // split 3-dimensional ranges into single sheets
-            ScRangeList aNewScRanges;
-            for( const ScRange* pScRange = aScRanges.First(); pScRange; pScRange = aScRanges.Next() )
+            // For a single ref token, just add it to the new token array as is.
+            if (bFirst)
+                bFirst = false;
+            else
+                aArray.AddOpCode(ocUnion);
+
+            aArray.AddToken(*p);
+        }
+
+        if (eType != svDoubleRef && eType != svExternalDoubleRef)
+            continue;
+
+        // split 3-dimensional ranges into single sheets.
+        const ScComplexRefData& r = static_cast<const ScToken*>(p)->GetDoubleRef();
+        const ScSingleRefData& s = r.Ref1;
+        const ScSingleRefData& e = r.Ref2;
+        for (SCsTAB nTab = s.nTab; nTab <= e.nTab; ++nTab)
+        {
+            if (bSplitToColumns && (s.nRow != e.nRow))
             {
-                SCCOL nScCol1 = pScRange->aStart.Col();
-                SCROW nScRow1 = pScRange->aStart.Row();
-                SCCOL nScCol2 = pScRange->aEnd.Col();
-                SCROW nScRow2 = pScRange->aEnd.Row();
-                for( SCTAB nScTab = pScRange->aStart.Tab(); nScTab <= pScRange->aEnd.Tab(); ++nScTab )
+                // split 2-dimensional ranges into single columns.
+                for (SCsCOL nCol = s.nCol; nCol <= e.nCol; ++nCol)
                 {
-                    // split 2-dimensional ranges into single columns
-                    if( bSplitToColumns && (nScRow1 != nScRow2) )
-                        for( SCCOL nScCol = nScCol1; nScCol <= nScCol2; ++nScCol )
-                            aNewScRanges.Append( ScRange( nScCol, nScRow1, nScTab, nScCol, nScRow2, nScTab ) );
+                    if (bFirst)
+                        bFirst = false;
                     else
-                        aNewScRanges.Append( ScRange( nScCol1, nScRow1, nScTab, nScCol2, nScRow2, nScTab ) );
+                        aArray.AddOpCode(ocUnion);
+
+                    lclAddDoubleRefData(aArray, *p, nTab, nTab, nCol, nCol, s.nRow, e.nRow);
                 }
             }
-            mxLinkFmla = GetFormulaCompiler().CreateFormula( EXC_FMLATYPE_CHART, aNewScRanges );
-            maData.mnLinkType = EXC_CHSRCLINK_WORKSHEET;
-            nValueCount = ulimit_cast< sal_uInt16 >( aScRanges.GetCellCount(), EXC_CHDATAFORMAT_MAXPOINTCOUNT );
+            else
+            {
+                if (bFirst)
+                    bFirst = false;
+                else
+                    aArray.AddOpCode(ocUnion);
+
+                lclAddDoubleRefData(aArray, *p, nTab, nTab, s.nCol, e.nCol, s.nRow, e.nRow);
+            }
         }
     }
+
+    const ScAddress aBaseCell(0,0,0);
+    mxLinkFmla = GetFormulaCompiler().CreateFormula(EXC_FMLATYPE_CHART, aArray, &aBaseCell);
+    maData.mnLinkType = EXC_CHSRCLINK_WORKSHEET;
+    nValueCount = ulimit_cast< sal_uInt16 >( aScRanges.GetCellCount(), EXC_CHDATAFORMAT_MAXPOINTCOUNT );
     return nValueCount;
 }
 

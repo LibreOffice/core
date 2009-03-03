@@ -157,7 +157,7 @@ ScXMLDetectiveHighlightedContext::ScXMLDetectiveHighlightedContext(
             {
                 sal_Int32 nOffset(0);
                 GetScImport().LockSolarMutex();
-                bValid = ScRangeStringConverter::GetRangeFromString( aDetectiveObj.aSourceRange, sValue, GetScImport().GetDocument(), nOffset );
+                bValid = ScRangeStringConverter::GetRangeFromString( aDetectiveObj.aSourceRange, sValue, GetScImport().GetDocument(), ::formula::FormulaGrammar::CONV_OOO, nOffset );
                 GetScImport().UnlockSolarMutex();
             }
             break;

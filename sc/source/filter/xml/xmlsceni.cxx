@@ -114,7 +114,7 @@ ScXMLTableScenarioContext::ScXMLTableScenarioContext(
             case XML_TOK_TABLE_SCENARIO_ATTR_SCENARIO_RANGES:
             {
                 ScRangeStringConverter::GetRangeListFromString(
-                    aScenarioRanges, sValue, GetScImport().GetDocument() );
+                    aScenarioRanges, sValue, GetScImport().GetDocument(), ::formula::FormulaGrammar::CONV_OOO );
             }
             break;
             case XML_TOK_TABLE_SCENARIO_ATTR_COMMENT:

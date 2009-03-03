@@ -84,7 +84,7 @@ ScXMLConsolidationContext::ScXMLConsolidationContext(
                 {
                     sal_Int32 nOffset(0);
                     bTargetAddr = ScRangeStringConverter::GetAddressFromString(
-                        aTargetAddr, sValue, GetScImport().GetDocument(), nOffset );
+                        aTargetAddr, sValue, GetScImport().GetDocument(), ::formula::FormulaGrammar::CONV_OOO, nOffset );
                 }
                 break;
             case XML_TOK_CONSOLIDATION_ATTR_USE_LABEL:
@@ -130,7 +130,7 @@ void ScXMLConsolidationContext::EndElement()
             {
                 ppAreas[ nIndex ] = new ScArea;
                 if ( !ScRangeStringConverter::GetAreaFromString(
-                    *ppAreas[ nIndex ], sSourceList, GetScImport().GetDocument(), nOffset ) )
+                    *ppAreas[ nIndex ], sSourceList, GetScImport().GetDocument(), ::formula::FormulaGrammar::CONV_OOO, nOffset ) )
                 {
                     bError = sal_True;      //! handle error
                 }

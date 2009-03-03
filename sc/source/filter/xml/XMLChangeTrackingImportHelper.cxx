@@ -88,7 +88,7 @@ ScBaseCell* ScMyCellInfo::CreateCell(ScDocument* pDoc)
         {
             ScAddress aPos;
             sal_Int32 nOffset(0);
-            ScRangeStringConverter::GetAddressFromString(aPos, sFormulaAddress, pDoc, nOffset);
+            ScRangeStringConverter::GetAddressFromString(aPos, sFormulaAddress, pDoc, ::formula::FormulaGrammar::CONV_OOO, nOffset);
             pCell = new ScFormulaCell(pDoc, aPos, sFormula, eGrammar, nMatrixFlag);
             static_cast<ScFormulaCell*>(pCell)->SetMatColsRows(static_cast<SCCOL>(nMatrixCols), static_cast<SCROW>(nMatrixRows));
         }
