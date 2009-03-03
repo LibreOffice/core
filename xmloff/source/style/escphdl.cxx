@@ -150,7 +150,11 @@ sal_Bool XMLEscapementHeightPropHdl::importXML( const OUString& rStrImpValue, un
     }
     else
     {
-        nProp = (sal_Int8) DFLT_ESC_PROP;
+        sal_Int32 nEscapementPosition=0;
+        if( SvXMLUnitConverter::convertPercent( nEscapementPosition, aToken ) && nEscapementPosition==0 )
+            nProp = 100; //if escapement position is zero and no escapement height is given the default height should be 100percent and not something smaller (#i91800#)
+        else
+            nProp = (sal_Int8) DFLT_ESC_PROP;
     }
 
     rValue <<= nProp;
