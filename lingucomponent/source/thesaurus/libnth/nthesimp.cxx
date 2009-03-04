@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: nthesimp.cxx,v $
- * $Revision: 1.18 $
+ * $Revision: 1.15.6.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -62,7 +62,8 @@
 #define CAPTYPE_ALLCAP  3
 #define CAPTYPE_MIXED   4
 
-
+// XML-header to query SPELLML support
+#define SPELLML_SUPPORT "<?xml?>"
 
 using namespace utl;
 using namespace osl;
@@ -77,6 +78,19 @@ using namespace linguistic;
 
 
 ///////////////////////////////////////////////////////////////////////////
+
+static uno::Reference< XLinguServiceManager > GetLngSvcMgr_Impl()
+{
+    uno::Reference< XLinguServiceManager > xRes;
+    uno::Reference< XMultiServiceFactory >  xMgr = getProcessServiceFactory();
+    if (xMgr.is())
+    {
+        xRes = uno::Reference< XLinguServiceManager > ( xMgr->createInstance(
+                OUString( RTL_CONSTASCII_USTRINGPARAM(
+                    "com.sun.star.linguistic2.LinguServiceManager" ) ) ), UNO_QUERY ) ;
+    }
+    return xRes;
+}
 
 Thesaurus::Thesaurus() :
     aEvtListeners   ( GetLinguMutex() )
@@ -291,7 +305,7 @@ sal_Bool SAL_CALL Thesaurus::hasLocale(const Locale& rLocale)
 
 
 Sequence < Reference < ::com::sun::star::linguistic2::XMeaning > > SAL_CALL
-        Thesaurus::queryMeanings( const OUString& rTerm, const Locale& rLocale,
+        Thesaurus::queryMeanings( const OUString& qTerm, const Locale& rLocale,
                                   const PropertyValues& rProperties)
                                   throw(IllegalArgumentException, RuntimeException)
 {
@@ -299,6 +313,14 @@ Sequence < Reference < ::com::sun::star::linguistic2::XMeaning > > SAL_CALL
 
         uno::Sequence< Reference< XMeaning > > aMeanings( 1 );
         uno::Sequence< Reference< XMeaning > > noMeanings( 0 );
+        uno::Reference< XLinguServiceManager > xLngSvcMgr( GetLngSvcMgr_Impl() );
+        uno::Reference< XSpellChecker1 > xSpell;
+
+        OUString rTerm(qTerm);
+        OUString pTerm(qTerm);
+        sal_uInt16 ct = CAPTYPE_UNKNOWN;
+        sal_Int32 stem = 0;
+        sal_Int32 stem2 = 0;
 
         INT16 nLanguage = LocaleToLanguage( rLocale );
 
@@ -312,6 +334,8 @@ Sequence < Reference < ::com::sun::star::linguistic2::XMeaning > > SAL_CALL
         return noMeanings;
 #endif
 
+        if (prevTerm == qTerm && prevLocale == nLanguage) return prevMeanings;
+
         mentry * pmean = NULL;
     sal_Int32 nmean = 0;
 
@@ -321,7 +345,6 @@ Sequence < Reference < ::com::sun::star::linguistic2::XMeaning > > SAL_CALL
         MyThes * pTH = NULL;
         rtl_TextEncoding aEnc = 0;
         CharClass * pCC = NULL;
-
 
         // find the first thesaurus that matches the locale
         for (int i =0; i < numthes; i++) {
@@ -374,10 +397,9 @@ Sequence < Reference < ::com::sun::star::linguistic2::XMeaning > > SAL_CALL
         }
     }
 
-        if (pTH) {
+        while (pTH) {
          // convert word to all lower case for searching
-             sal_uInt16 ct = CAPTYPE_UNKNOWN;
-             ct = capitalType(rTerm, pCC);
+             if (!stem) ct = capitalType(rTerm, pCC);
              OUString nTerm(makeLowerCase(rTerm, pCC));
              OString aTmp( OU2ENC(nTerm, aEnc) );
              nmean = pTH->Lookup(aTmp.getStr(),aTmp.getLength(),&pmean);
@@ -385,13 +407,58 @@ Sequence < Reference < ::com::sun::star::linguistic2::XMeaning > > SAL_CALL
              if (nmean) aMeanings.realloc( nmean );
 
              mentry * pe = pmean;
+             OUString codeTerm = qTerm;
+         Reference< XSpellAlternatives > xTmpRes2;
+
+         if (stem) {
+               xTmpRes2 = xSpell->spell( A2OU("<?xml?><query type='analyze'><word>") +
+            pTerm + A2OU("</word></query>"), nLanguage, rProperties );
+               if (xTmpRes2.is()) {
+                 Sequence<OUString>seq = xTmpRes2->getAlternatives();
+                 if (seq.getLength() > 0) {
+                    codeTerm = seq[0];
+                    stem2 = 1;
+                 }
+#if 0
+                 OString o = OUStringToOString(codeTerm, rtl_getTextEncodingFromUnixCharset("UTF-8"));
+                 fprintf(stderr, "CODETERM: %s\n", o.pData->buffer);
+#endif
+               }
+             }
+
          for (int j = 0; j < nmean; j++) {
              int count = pe->count;
                  if (count) {
                      Sequence< OUString > aStr( count );
                      OUString *pStr = aStr.getArray();
+
                      for (int i=0; i < count; i++) {
                        OUString sTerm(pe->psyns[i],strlen(pe->psyns[i]),aEnc );
+                       sal_Int32 catpos = sTerm.indexOf('(');
+                       sal_Int32 catpos2 = 0;
+                       OUString catst;
+                       OUString catst2;
+                       if (catpos > 2) {
+                         // remove category name for affixation and casing
+                         catst = A2OU(" ") + sTerm.copy(catpos);
+                         sTerm = sTerm.copy(0, catpos);
+                         sTerm = sTerm.trim();
+                       }
+                       // generate synonyms with affixes
+                       if (stem && stem2) {
+                 Reference< XSpellAlternatives > xTmpRes;
+                 xTmpRes = xSpell->spell( A2OU("<?xml?><query type='generate'><word>") +
+                 sTerm + A2OU("</word>") + codeTerm + A2OU("</query>"), nLanguage, rProperties );
+                 if (xTmpRes.is()) {
+                   Sequence<OUString>seq = xTmpRes->getAlternatives();
+                   for (int k = 0; k < seq.getLength(); k++) {
+                     OString o = OUStringToOString(seq[k], rtl_getTextEncodingFromUnixCharset("UTF-8"));
+                   }
+                   if (seq.getLength() > 0) sTerm = seq[0];
+                 }
+               }
+               if (catpos2) sTerm = catst2 + sTerm;
+
                        sal_uInt16 ct1 = capitalType(sTerm, pCC);
                        if (CAPTYPE_MIXED == ct1)
                             ct = ct1;
@@ -413,7 +480,7 @@ Sequence < Reference < ::com::sun::star::linguistic2::XMeaning > > SAL_CALL
                                break;
                              }
                }
-                       OUString aAlt( cTerm );
+                       OUString aAlt( cTerm + catst);
                        pStr[i] = aAlt;
              }
 #if 0
@@ -429,10 +496,60 @@ Sequence < Reference < ::com::sun::star::linguistic2::XMeaning > > SAL_CALL
                  pe++;
          }
              pTH->CleanUpAfterLookup(&pmean,nmean);
-    }
+
         if (nmean) {
+            prevTerm = qTerm;
+            prevMeanings = aMeanings;
+            prevLocale = nLanguage;
             return aMeanings;
     }
+
+        if (stem || !xLngSvcMgr.is()) return noMeanings;
+        stem = 1;
+
+        xSpell = uno::Reference< XSpellChecker1 >( xLngSvcMgr->getSpellChecker(), UNO_QUERY );
+        if (!xSpell.is() || !xSpell->isValid( A2OU(SPELLML_SUPPORT), nLanguage, rProperties )) {
+            return noMeanings;
+        }
+        Reference< XSpellAlternatives > xTmpRes;
+        xTmpRes = xSpell->spell( A2OU("<?xml?><query type='stem'><word>") +
+            rTerm + A2OU("</word></query>"), nLanguage, rProperties );
+        if (xTmpRes.is()) {
+            Sequence<OUString>seq = xTmpRes->getAlternatives();
+#if 0
+            for (int i = 0; i < seq.getLength(); i++) {
+                OString o = OUStringToOString(seq[i], rtl_getTextEncodingFromUnixCharset("UTF-8"));
+                fprintf(stderr, "%d: %s\n", i + 1, o.pData->buffer);
+            }
+#endif
+            if (seq.getLength() > 0) {
+                rTerm = seq[0];  // XXX Use only the first stem
+                continue;
+            }
+        }
+
+        // stem the last word of the synonym (for categories after affixation)
+        rTerm = rTerm.trim();
+        sal_Int32 pos = rTerm.lastIndexOf(' ');
+        if (!pos) return noMeanings;
+        xTmpRes = xSpell->spell( A2OU("<?xml?><query type='stem'><word>") +
+            rTerm.copy(pos + 1) + A2OU("</word></query>"), nLanguage, rProperties );
+        if (xTmpRes.is()) {
+            Sequence<OUString>seq = xTmpRes->getAlternatives();
+            if (seq.getLength() > 0) {
+                pTerm = rTerm.copy(pos + 1);
+                rTerm = rTerm.copy(0, pos + 1) + seq[0];
+#if 0
+                for (int i = 0; i < seq.getLength(); i++) {
+                    OString o = OUStringToOString(seq[i], rtl_getTextEncodingFromUnixCharset("UTF-8"));
+                    fprintf(stderr, "%d: %s\n", i + 1, o.pData->buffer);
+                }
+#endif
+                continue;
+            }
+        }
+        break;
+        }
     return noMeanings;
 }
 
@@ -478,9 +595,8 @@ void SAL_CALL
             xPropHelper = pPropHelper;
             pPropHelper->AddAsPropListener();   //! after a reference is established
         }
-        else {
+        else
             DBG_ERROR( "wrong number of arguments in sequence" );
-        }
     }
 }
 
@@ -492,7 +608,7 @@ sal_uInt16 SAL_CALL Thesaurus::capitalType(const OUString& aTerm, CharClass * pC
         if ((pCC) && (tlen)) {
               String aStr(aTerm);
               sal_Int32 nc = 0;
-              for (xub_StrLen tindex = 0; tindex < tlen;  tindex++) {
+              for (USHORT tindex = 0; tindex < tlen;  tindex++) {
                if (pCC->getCharacterType(aStr,tindex) &
                        ::com::sun::star::i18n::KCharacterType::UPPER) nc++;
           }

@@ -72,6 +72,8 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
 using namespace linguistic;
 
+// XML-header of SPELLML queries
+#define SPELLML_HEADER "<?xml?>"
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -387,7 +389,7 @@ sal_Bool SAL_CALL
     rHelper.SetTmpPropVals( rProperties );
 
     INT16 nFailure = GetSpellFailure( rWord, rLocale );
-    if (nFailure != -1)
+    if (nFailure != -1 && !rWord.match(A2OU(SPELLML_HEADER), 0))
     {
         INT16 nLang = LocaleToLanguage( rLocale );
         // postprocess result for errors that should be ignored
