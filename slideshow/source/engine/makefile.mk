@@ -70,6 +70,7 @@ SLOFILES =	$(SLO)$/activitiesqueue.obj \
             $(SLO)$/attributemap.obj \
             $(SLO)$/color.obj \
             $(SLO)$/delayevent.obj \
+            $(SLO)$/effectrewinder.obj \
             $(SLO)$/eventmultiplexer.obj \
             $(SLO)$/eventqueue.obj \
             $(SLO)$/expressionnodefactory.obj \

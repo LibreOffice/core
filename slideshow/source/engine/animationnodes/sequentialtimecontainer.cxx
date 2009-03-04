@@ -88,7 +88,7 @@ void SequentialTimeContainer::skipEffect(
     if (isChildNode(pChildNode)) {
         // empty all events ignoring timings => until next effect
         getContext().mrEventQueue.forceEmpty();
-        getContext().mrEventQueue.addEventForNextRound(
+        getContext().mrEventQueue.addEvent(
             makeEvent( boost::bind(&AnimationNode::deactivate, pChildNode) ) );
     }
     else
@@ -125,7 +125,8 @@ bool SequentialTimeContainer::resolveChild(
 
         // deactivate child node when skip event occurs:
         getContext().mrUserEventQueue.registerSkipEffectEvent(
-            mpCurrentSkipEvent );
+            mpCurrentSkipEvent,
+            mnFinishedChildren+1<maChildren.size());
         // rewind to previous child:
         getContext().mrUserEventQueue.registerRewindEffectEvent(
             mpCurrentRewindEvent );
@@ -136,6 +137,7 @@ bool SequentialTimeContainer::resolveChild(
 void SequentialTimeContainer::notifyDeactivating(
     AnimationNodeSharedPtr const& rNotifier )
 {
+    OSL_TRACE("    SequentialTimeContainer::notifyDeactivating\r");
     if (notifyDeactivatedChild( rNotifier ))
         return;
 

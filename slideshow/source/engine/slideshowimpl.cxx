@@ -92,6 +92,7 @@
 #include "slidebitmap.hxx"
 #include "rehearsetimingsactivity.hxx"
 #include "waitsymbol.hxx"
+#include "effectrewinder.hxx"
 
 #include <boost/noncopyable.hpp>
 #include <boost/bind.hpp>
@@ -193,7 +194,7 @@ public:
 
         This method notifies the end of the third phase.
     */
-    void notifySlideEnded();
+    void notifySlideEnded (const bool bReverse);
 
     /** Notification from eventmultiplexer that a hyperlink
         has been clicked.
@@ -208,6 +209,7 @@ public:
 private:
     // XSlideShow:
     virtual sal_Bool SAL_CALL nextEffect() throw (uno::RuntimeException);
+    virtual sal_Bool SAL_CALL previousEffect() throw (uno::RuntimeException);
     virtual sal_Bool SAL_CALL startShapeActivity(
         uno::Reference<drawing::XShape> const& xShape )
         throw (uno::RuntimeException);
@@ -258,6 +260,12 @@ private:
     virtual bool requestCursor( sal_Int16 nCursorShape );
     virtual void resetCursor();
 
+    /** This is somewhat similar to displaySlide when called for the current
+        slide.  It has been simplified to take advantage of that no slide
+        change takes place.  Furthermore it does not show the slide
+        transition.
+    */
+    void redisplayCurrentSlide (void);
 
 protected:
     // WeakComponentImplHelperBase
@@ -313,11 +321,31 @@ private:
         const SlideSharedPtr&                          rEnteringSlide,
         const EventSharedPtr&                          rTransitionEndEvent );
 
-    /// Display/hide wait symbol on all views
-    void setWaitState( bool bOn );
+    /** Request/release the wait symbol.  The wait symbol is displayed when
+        there are more requests then releases.  Locking the wait symbol
+        helps to avoid intermediate repaints.
+
+        Do not call this method directly.  Use WaitSymbolLock instead.
+    */
+    void requestWaitSymbol (void);
+    void releaseWaitSymbol (void);
+
+    class WaitSymbolLock {public:
+        WaitSymbolLock(SlideShowImpl& rSlideShowImpl) : mrSlideShowImpl(rSlideShowImpl)
+            { mrSlideShowImpl.requestWaitSymbol(); }
+        ~WaitSymbolLock(void)
+            { mrSlideShowImpl.releaseWaitSymbol(); }
+    private: SlideShowImpl& mrSlideShowImpl;
+    };
+
 
     /// Filter requested cursor shape against hard slideshow cursors (wait, etc.)
     sal_Int16 calcActiveCursor( sal_Int16 nCursorShape ) const;
+
+    /** This method is called asynchronously to finish the rewinding of an
+        effect to the previous slide that was initiated earlier.
+    */
+    void rewindEffectToPreviousSlide (void);
 
     /// all registered views
     UnoViewContainer                        maViewContainer;
@@ -365,7 +393,7 @@ private:
 
     sal_Int16                               mnCurrentCursor;
 
-    bool                                    mbWaitState;
+    sal_Int32                               mnWaitSymbolRequestCount;
     bool                                    mbAutomaticAdvancementMode;
     bool                                    mbImageAnimationsAllowed;
     bool                                    mbNoSlideTransitions;
@@ -374,6 +402,8 @@ private:
     bool                                    mbShowPaused;
     bool                                    mbSlideShowIdle;
     bool                                    mbDisableAnimationZOrder;
+
+    EffectRewinder                          maEffectRewinder;
 };
 
 
@@ -465,7 +495,7 @@ SlideShowImpl::SlideShowImpl(
       mxPrefetchSlide(),
       mxPrefetchAnimationNode(),
       mnCurrentCursor(awt::SystemPointer::ARROW),
-      mbWaitState(false),
+      mnWaitSymbolRequestCount(0),
       mbAutomaticAdvancementMode(false),
       mbImageAnimationsAllowed( true ),
       mbNoSlideTransitions( false ),
@@ -473,7 +503,8 @@ SlideShowImpl::SlideShowImpl(
       mbForceManualAdvance( false ),
       mbShowPaused( false ),
       mbSlideShowIdle( true ),
-      mbDisableAnimationZOrder( false )
+      mbDisableAnimationZOrder( false ),
+      maEffectRewinder(maEventMultiplexer, maEventQueue, maUserEventQueue)
 {
     // keep care not constructing any UNO references to this inside ctor,
     // shift that code to create()!
@@ -506,6 +537,8 @@ SlideShowImpl::SlideShowImpl(
 void SlideShowImpl::disposing()
 {
     osl::MutexGuard const guard( m_aMutex );
+
+    maEffectRewinder.Dispose();
 
     // stop slide transition sound, if any:
     stopSlideTransitionSound();
@@ -607,7 +640,7 @@ ActivitySharedPtr SlideShowImpl::createSlideTransition(
     const uno::Reference< drawing::XDrawPage >& xDrawPage,
     const SlideSharedPtr&                       rLeavingSlide,
     const SlideSharedPtr&                       rEnteringSlide,
-    const EventSharedPtr&                       rTransitionEndEvent )
+    const EventSharedPtr&                       rTransitionEndEvent)
 {
     ENSURE_OR_THROW( !maViewContainer.empty(),
                       "createSlideTransition(): No views" );
@@ -778,20 +811,43 @@ SlideSharedPtr SlideShowImpl::makeSlide(
     return pSlide;
 }
 
-void SlideShowImpl::setWaitState( bool bOn )
+void SlideShowImpl::requestWaitSymbol (void)
 {
-    mbWaitState = bOn;
-    if( !mpWaitSymbol ) // fallback to cursor
-        requestCursor(awt::SystemPointer::WAIT);
-    else if( mbWaitState )
-        mpWaitSymbol->show();
-    else
-        mpWaitSymbol->hide();
+    ++mnWaitSymbolRequestCount;
+    OSL_ASSERT(mnWaitSymbolRequestCount>0);
+
+    if (mnWaitSymbolRequestCount == 1)
+    {
+        if( !mpWaitSymbol )
+        {
+            // fall back to cursor
+            requestCursor(calcActiveCursor(mnCurrentCursor));
+        }
+        else
+            mpWaitSymbol->show();
+    }
+}
+
+void SlideShowImpl::releaseWaitSymbol (void)
+{
+    --mnWaitSymbolRequestCount;
+    OSL_ASSERT(mnWaitSymbolRequestCount>=0);
+
+    if (mnWaitSymbolRequestCount == 0)
+    {
+        if( !mpWaitSymbol )
+        {
+            // fall back to cursor
+            requestCursor(calcActiveCursor(mnCurrentCursor));
+        }
+        else
+            mpWaitSymbol->hide();
+    }
 }
 
 sal_Int16 SlideShowImpl::calcActiveCursor( sal_Int16 nCursorShape ) const
 {
-    if( mbWaitState && !mpWaitSymbol ) // enforce wait cursor
+    if( mnWaitSymbolRequestCount>0 && !mpWaitSymbol ) // enforce wait cursor
         nCursorShape = awt::SystemPointer::WAIT;
     else if( !mbMouseVisible ) // enforce INVISIBLE
         nCursorShape = awt::SystemPointer::INVISIBLE;
@@ -835,10 +891,19 @@ void SlideShowImpl::stopShow()
     }
 }
 
-struct SlideShowImpl::PrefetchPropertiesFunc
+
+
+class SlideShowImpl::PrefetchPropertiesFunc
 {
-    SlideShowImpl *const that;
-    PrefetchPropertiesFunc( SlideShowImpl * that_ ) : that(that_) {}
+public:
+    PrefetchPropertiesFunc( SlideShowImpl * that_,
+        bool& rbSkipAllMainSequenceEffects,
+        bool& rbSkipSlideTransition)
+        : mpSlideShowImpl(that_),
+          mrbSkipAllMainSequenceEffects(rbSkipAllMainSequenceEffects),
+          mrbSkipSlideTransition(rbSkipSlideTransition)
+    {}
+
     void operator()( beans::PropertyValue const& rProperty ) const {
         if (rProperty.Name.equalsAsciiL(
                 RTL_CONSTASCII_STRINGPARAM("Prefetch") ))
@@ -846,9 +911,19 @@ struct SlideShowImpl::PrefetchPropertiesFunc
             uno::Sequence<uno::Any> seq;
             if ((rProperty.Value >>= seq) && seq.getLength() == 2)
             {
-                seq[0] >>= that->mxPrefetchSlide;
-                seq[1] >>= that->mxPrefetchAnimationNode;
+                seq[0] >>= mpSlideShowImpl->mxPrefetchSlide;
+                seq[1] >>= mpSlideShowImpl->mxPrefetchAnimationNode;
             }
+        }
+        else if (rProperty.Name.equalsAsciiL(
+                RTL_CONSTASCII_STRINGPARAM("SkipAllMainSequenceEffects") ))
+        {
+            rProperty.Value >>= mrbSkipAllMainSequenceEffects;
+        }
+        else if (rProperty.Name.equalsAsciiL(
+                RTL_CONSTASCII_STRINGPARAM("SkipSlideTransition") ))
+        {
+            rProperty.Value >>= mrbSkipSlideTransition;
         }
         else
         {
@@ -856,6 +931,10 @@ struct SlideShowImpl::PrefetchPropertiesFunc
                             rProperty.Name, RTL_TEXTENCODING_UTF8 ).getStr() );
         }
     }
+private:
+    SlideShowImpl *const mpSlideShowImpl;
+    bool& mrbSkipAllMainSequenceEffects;
+    bool& mrbSkipSlideTransition;
 };
 
 void SlideShowImpl::displaySlide(
@@ -869,6 +948,8 @@ void SlideShowImpl::displaySlide(
     if (isDisposed())
         return;
 
+    maEffectRewinder.SetRootAnimationNode(xRootNode);
+
     // precondition: must only be called from the main thread!
     DBG_TESTSOLARMUTEX();
 
@@ -881,9 +962,11 @@ void SlideShowImpl::displaySlide(
     // shape animations (drawing layer and
     // GIF) will not be stopped.
 
+    bool bSkipAllMainSequenceEffects (false);
+    bool bSkipSlideTransition (false);
     std::for_each( rProperties.getConstArray(),
                    rProperties.getConstArray() + rProperties.getLength(),
-                   PrefetchPropertiesFunc(this) );
+        PrefetchPropertiesFunc(this, bSkipAllMainSequenceEffects, bSkipSlideTransition) );
 
     OSL_ENSURE( !maViewContainer.empty(), "### no views!" );
     if (maViewContainer.empty())
@@ -891,9 +974,7 @@ void SlideShowImpl::displaySlide(
 
     // this here might take some time
     {
-        comphelper::ScopeGuard const scopeGuard(
-            boost::bind( &SlideShowImpl::setWaitState, this, false ) );
-        setWaitState(true);
+        WaitSymbolLock aLock (*this);
 
         mpPreviousSlide = mpCurrentSlide;
         mpCurrentSlide.reset();
@@ -935,15 +1016,25 @@ void SlideShowImpl::displaySlide(
             // create slide transition, and add proper end event
             // (which then starts the slide effects
             // via CURRENT_SLIDE.show())
-            ActivitySharedPtr const pSlideChangeActivity(
-                createSlideTransition( mpCurrentSlide->getXDrawPage(),
-                                       mpPreviousSlide,
-                                       mpCurrentSlide,
-                                       makeEvent(
-                                           boost::bind(
-                                               &SlideShowImpl::notifySlideTransitionEnded,
-                                               this,
-                                               false ))));
+            ActivitySharedPtr pSlideChangeActivity (
+                createSlideTransition(
+                    mpCurrentSlide->getXDrawPage(),
+                    mpPreviousSlide,
+                    mpCurrentSlide,
+                    makeEvent(
+                        boost::bind(
+                            &SlideShowImpl::notifySlideTransitionEnded,
+                            this,
+                            false ))));
+
+            if (bSkipSlideTransition)
+            {
+                // The transition activity was created for the side effects
+                // (like sound transitions).  Because we want to skip the
+                // acutual transition animation we do not need the activity
+                // anymore.
+                pSlideChangeActivity.reset();
+            }
 
             if (pSlideChangeActivity)
             {
@@ -967,6 +1058,43 @@ void SlideShowImpl::displaySlide(
     maEventMultiplexer.notifySlideTransitionStarted();
     maListenerContainer.forEach<presentation::XSlideShowListener>(
         boost::mem_fn( &presentation::XSlideShowListener::slideTransitionStarted ) );
+
+    // We are currently rewinding an effect.  This lead us from the next
+    // slide to this one.  To complete this we have to play back all main
+    // sequence effects on this slide.
+    if (bSkipAllMainSequenceEffects)
+        maEffectRewinder.SkipAllMainSequenceEffects();
+}
+
+void SlideShowImpl::redisplayCurrentSlide (void)
+{
+    osl::MutexGuard const guard( m_aMutex );
+
+    if (isDisposed())
+        return;
+
+    // precondition: must only be called from the main thread!
+    DBG_TESTSOLARMUTEX();
+    stopShow();
+    bool bSkipAllMainSequenceEffects (false);
+    bool bSkipSlideTransition (true);
+
+    OSL_ENSURE( !maViewContainer.empty(), "### no views!" );
+    if (maViewContainer.empty())
+        return;
+
+    // No transition effect on this slide - schedule slide
+    // effect start event right away.
+    maEventQueue.addEvent(
+        makeEvent(
+            boost::bind(
+                &SlideShowImpl::notifySlideTransitionEnded,
+                this,
+                true )));
+
+    maEventMultiplexer.notifySlideTransitionStarted();
+    maListenerContainer.forEach<presentation::XSlideShowListener>(
+        boost::mem_fn( &presentation::XSlideShowListener::slideTransitionStarted ) );
 }
 
 sal_Bool SlideShowImpl::nextEffect() throw (uno::RuntimeException)
@@ -983,6 +1111,50 @@ sal_Bool SlideShowImpl::nextEffect() throw (uno::RuntimeException)
         return true;
     else
         return maEventMultiplexer.notifyNextEffect();
+}
+
+
+sal_Bool SlideShowImpl::previousEffect() throw (uno::RuntimeException)
+{
+    osl::MutexGuard const guard( m_aMutex );
+
+    if (isDisposed())
+        return false;
+
+    // precondition: must only be called from the main thread!
+    DBG_TESTSOLARMUTEX();
+
+    if (mbShowPaused)
+        return true;
+    else
+    {
+        return maEffectRewinder.Rewind(
+            maScreenUpdater.createLock(false),
+            ::boost::bind(&SlideShowImpl::redisplayCurrentSlide, this),
+            ::boost::bind(&SlideShowImpl::rewindEffectToPreviousSlide, this));
+    }
+}
+
+void SlideShowImpl::rewindEffectToPreviousSlide (void)
+{
+    // Show the wait symbol now and prevent it from showing temporary slide
+    // content while effects are played back.
+    WaitSymbolLock aLock (*this);
+
+    // A previous call to EffectRewinder::Rewind could not rewind the current
+    // effect because there are no effects on the current slide or none has
+    // yet been displayed.  Go to the previous slide.
+    notifySlideEnded(true);
+
+    // Process pending events once more in order to have the following
+    // screen update show the last effect.  Not sure whether this should be
+    // necessary.
+    maEventQueue.forceEmpty();
+
+    // We have to call the screen updater before the wait symbol is turned
+    // off.  Otherwise the wait symbol would force the display of an
+    // intermediate state of the slide (before the effects are replayed.)
+    maScreenUpdater.commitUpdates();
 }
 
 sal_Bool SlideShowImpl::startShapeActivity(
@@ -1658,7 +1830,7 @@ void SlideShowImpl::notifySlideAnimationsEnded()
         // schedule a slide end event, with automatic mode's
         // delay
         aNotificationEvents = makeInterruptableDelay(
-            boost::bind( &SlideShowImpl::notifySlideEnded, this ),
+            boost::bind( &SlideShowImpl::notifySlideEnded, this, false ),
             maEventMultiplexer.getAutomaticTimeout() );
     }
     else
@@ -1683,7 +1855,7 @@ void SlideShowImpl::notifySlideAnimationsEnded()
             bHasAutomaticNextSlide )
         {
             aNotificationEvents = makeInterruptableDelay(
-                boost::bind( &SlideShowImpl::notifySlideEnded, this ),
+                boost::bind( &SlideShowImpl::notifySlideEnded, this, false ),
                 nAutomaticNextSlideTimeout);
 
             // TODO(F2): Provide a mechanism to let the user override
@@ -1700,7 +1872,7 @@ void SlideShowImpl::notifySlideAnimationsEnded()
             // timeout involved.
             aNotificationEvents.mpImmediateEvent =
                 makeEvent( boost::bind(
-                               &SlideShowImpl::notifySlideEnded, this ) );
+                    &SlideShowImpl::notifySlideEnded, this, false ) );
         }
     }
 
@@ -1721,9 +1893,7 @@ void SlideShowImpl::notifySlideAnimationsEnded()
     // change setup time a lot). Show the wait cursor, this
     // indeed might take some seconds.
     {
-        comphelper::ScopeGuard const scopeGuard(
-            boost::bind( &SlideShowImpl::setWaitState, this, false ) );
-        setWaitState(true);
+        WaitSymbolLock aLock (*this);
 
         if (! matches( mpPrefetchSlide,
                        mxPrefetchSlide, mxPrefetchAnimationNode ))
@@ -1745,13 +1915,13 @@ void SlideShowImpl::notifySlideAnimationsEnded()
         boost::mem_fn( &presentation::XSlideShowListener::slideAnimationsEnded ) );
 }
 
-void SlideShowImpl::notifySlideEnded()
+void SlideShowImpl::notifySlideEnded (const bool bReverse)
 {
     osl::MutexGuard const guard( m_aMutex );
 
     OSL_ENSURE( !isDisposed(), "### already disposed!" );
 
-    if (mpRehearseTimingsActivity)
+    if (mpRehearseTimingsActivity && !bReverse)
     {
         const double time = mpRehearseTimingsActivity->stop();
         if (mpRehearseTimingsActivity->hasBeenClicked())
@@ -1772,7 +1942,8 @@ void SlideShowImpl::notifySlideEnded()
         }
     }
 
-    maEventMultiplexer.notifySlideEndEvent();
+    if (bReverse)
+        maEventMultiplexer.notifySlideEndEvent();
 
     stopShow();  // MUST call that: results in
                  // maUserEventQueue.clear(). What's more,
@@ -1784,7 +1955,10 @@ void SlideShowImpl::notifySlideEnded()
                  // GIF) will not be stopped.
 
     maListenerContainer.forEach<presentation::XSlideShowListener>(
-        boost::mem_fn( &presentation::XSlideShowListener::slideEnded ) );
+        boost::bind(
+            &presentation::XSlideShowListener::slideEnded,
+            _1,
+            bReverse) );
 }
 
 bool SlideShowImpl::notifyHyperLinkClicked( rtl::OUString const& hyperLink )

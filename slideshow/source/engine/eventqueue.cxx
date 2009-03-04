@@ -66,6 +66,7 @@ namespace slideshow
             : maMutex(),
               maEvents(),
               maNextEvents(),
+              maNextNextEvents(),
               mpTimer( pPresTimer )
         {
         }
@@ -132,6 +133,22 @@ namespace slideshow
             return true;
         }
 
+        bool EventQueue::addEventWhenQueueIsEmpty (const EventSharedPtr& rpEvent)
+        {
+            ::osl::MutexGuard aGuard( maMutex );
+
+            ENSURE_OR_RETURN(
+                rpEvent.get() != NULL,
+                    "EventQueue::addEvent: event ptr NULL");
+
+            maNextNextEvents.push(
+                EventEntry(
+                    rpEvent,
+                    rpEvent->getActivationTime(mpTimer->getElapsedTime())));
+
+            return true;
+        }
+
         void EventQueue::forceEmpty()
         {
             ::osl::MutexGuard aGuard( maMutex );
@@ -162,6 +179,17 @@ namespace slideshow
             // =======================================
 
             const double nCurrTime( mpTimer->getElapsedTime() );
+
+            // When maEvents does not contain any events that are due now
+            // then process one event from maNextNextEvents.
+            if (!maNextNextEvents.empty()
+                && !bFireAllEvents
+                && (maEvents.empty() || maEvents.top().nTime > nCurrTime))
+            {
+                const EventEntry aEvent (maNextNextEvents.top());
+                maNextNextEvents.pop();
+                maEvents.push(aEvent);
+            }
 
             // process ready/elapsed events. Note that the 'perceived'
             // current time remains constant for this loop, thus we're
@@ -243,7 +271,7 @@ namespace slideshow
         {
             ::osl::MutexGuard aGuard( maMutex );
 
-            return maEvents.empty();
+            return maEvents.empty() && maNextEvents.empty() && maNextNextEvents.empty();
         }
 
         double EventQueue::nextTimeout() const
@@ -251,9 +279,16 @@ namespace slideshow
             ::osl::MutexGuard aGuard( maMutex );
 
             // return time for next entry (if any)
-            return isEmpty() ?
-                ::std::numeric_limits<double>::max() :
-                maEvents.top().nTime - mpTimer->getElapsedTime();
+            double nTimeout (::std::numeric_limits<double>::max());
+            const double nCurrentTime (mpTimer->getElapsedTime());
+            if ( ! maEvents.empty())
+                nTimeout = maEvents.top().nTime - nCurrentTime;
+            if ( ! maNextEvents.empty())
+                nTimeout = ::std::min(nTimeout, maNextEvents.front().nTime - nCurrentTime);
+            if ( ! maNextNextEvents.empty())
+                nTimeout = ::std::min(nTimeout, maNextNextEvents.top().nTime - nCurrentTime);
+
+            return nTimeout;
         }
 
         void EventQueue::clear()

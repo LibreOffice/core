@@ -188,8 +188,16 @@ public:
         Then, all registered events are fired and removed from this
         queue.  After firing, a next effect event is issued to this
         queue to start the next effect.
+        @param pEvent
+            The event to execute when skipping the current effect.
+        @param bSkipTriggersNextEffect
+            When <TRUE/> then after skipping the current effect the next
+            effect is triggered.  When <FALSE/> then the next effect is not
+            triggered.
     */
-    void registerSkipEffectEvent( EventSharedPtr const& pEvent );
+    void registerSkipEffectEvent(
+        EventSharedPtr const& pEvent,
+        const bool bSkipTriggersNextEffect);
 
     /** Registes an event that is fired when the current effects(s)
         are rewound, .e.g. when the right mouse button is pressed.
@@ -262,6 +270,12 @@ public:
     */
     void registerMouseLeaveEvent( const EventSharedPtr& rEvent,
                                   const ShapeSharedPtr& rShape );
+
+    /** Typically skipping the current effect is triggered by mouse clicks
+        or key presses that trigger the next effect.  This method allows the
+        skipping of effects to be triggered programatically.
+    */
+    void callSkipEffectEventHandler (void);
 
 private:
     /** Generically register an event on one of the handlers.
