@@ -620,8 +620,8 @@ ScEEParser::~ScEEParser()
 
     // Pool erst loeschen nachdem die Listen geloescht wurden
     pPool->SetSecondaryPool( NULL );
-    delete pDocPool;
-    delete pPool;
+    SfxItemPool::Free(pDocPool);
+    SfxItemPool::Free(pPool);
 }
 
 

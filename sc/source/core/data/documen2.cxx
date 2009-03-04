@@ -437,7 +437,7 @@ ScDocument::~ScDocument()
     delete pChangeTrack;
     delete pEditEngine;
     delete pNoteEngine;
-    delete pNoteItemPool;
+    SfxItemPool::Free(pNoteItemPool);
     delete pChangeViewSettings;         // und weg damit
     delete pVirtualDevice_100th_mm;
 

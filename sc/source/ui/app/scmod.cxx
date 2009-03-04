@@ -204,7 +204,7 @@ ScModule::~ScModule()
 
     //  InputHandler braucht nicht mehr geloescht zu werden (gibt keinen an der App mehr)
 
-    DELETEZ( pMessagePool );
+    SfxItemPool::Free(pMessagePool);
 
     DELETEZ( pFormEditData );
 

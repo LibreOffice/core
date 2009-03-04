@@ -46,25 +46,6 @@
 #define _SVSTDARR_ULONGS
 #include <svtools/svstdarr.hxx>
 
-// for Singleton GetChartItemPool() function
-// ---------------------------------------
-#ifndef INCLUDED_OSL_DOUBLECHECKEDLOCKING_H
-#include "rtl/instance.hxx"
-#endif
-#include "osl/getglobalmutex.hxx"
-
-namespace {
-struct ChartItemPoolInitialization
-{
-    ::chart::ChartItemPool * operator()()
-    {
-        static ::chart::ChartItemPool aInstance;
-        return &aInstance;
-    }
-};
-}
-// ---------------------------------------
-
 namespace chart
 {
 

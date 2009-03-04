@@ -44,7 +44,9 @@ private:
 public:
     ChartItemPool();
     ChartItemPool(const ChartItemPool& rPool);
+protected:
     virtual ~ChartItemPool();
+public:
 
     virtual SfxItemPool* Clone() const;
     SfxMapUnit GetMetric( USHORT nWhich ) const;
