@@ -119,6 +119,7 @@
 #include "shapelist.hxx"
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
+#include <svtools/itemset.hxx>
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
