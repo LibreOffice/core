@@ -594,7 +594,7 @@ namespace pcr
         {
             _rpPool->ReleaseDefaults(sal_True);
                 // the "true" means delete the items, too
-            delete _rpPool;
+            SfxItemPool::Free(_rpPool);
             _rpPool = NULL;
         }
 
