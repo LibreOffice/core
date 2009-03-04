@@ -662,12 +662,23 @@ const SwFrm * MA_FASTCALL lcl_CalcDownDist( SwDistance &rRet,
         while( pUp->IsSctFrm() )
             pUp = pUp->GetUpper();
         const bool bVert = pUp->IsVertical();
+        //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+        const bool bVertL2R = pUp->IsVertLR();
+        //End of SCMS
         //Dem Textflus folgen.
         if ( pUp->Frm().IsInside( rPt ) )
         {
             // OD 26.09.2003 - <rPt> point is inside environment of given content frame
             if( bVert )
-                rRet.nMain =  pCnt->Frm().Left() + pCnt->Frm().Width() -rPt.X();
+                //rRet.nMain =  pCnt->Frm().Left() + pCnt->Frm().Width() -rPt.X();
+                //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+                {
+                    if ( bVertL2R )
+                        rRet.nMain =  rPt.X() - pCnt->Frm().Left();
+                    else
+                        rRet.nMain =  pCnt->Frm().Left() + pCnt->Frm().Width() -rPt.X();
+                }
+                //End of SCMS
             else
                 rRet.nMain =  rPt.Y() - pCnt->Frm().Top();
             return pCnt;
@@ -690,8 +701,17 @@ const SwFrm * MA_FASTCALL lcl_CalcDownDist( SwDistance &rRet,
             {
                 // OD 26.09.2003 - <rPt> point is in left border of environment
                 if( bVert )
-                    rRet.nMain =  pCnt->Frm().Left() + pCnt->Frm().Width()
-                                  - rPt.X();
+                    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+                    //rRet.nMain =  pCnt->Frm().Left() + pCnt->Frm().Width()
+                    //              - rPt.X();
+                    {
+                        if ( bVertL2R )
+                            rRet.nMain = rPt.X() - pCnt->Frm().Left();
+                        else
+                            rRet.nMain =  pCnt->Frm().Left() + pCnt->Frm().Width()
+                                            - rPt.X();
+                    }
+                    //End of SCMS
                 else
                     rRet.nMain = rPt.Y() - pCnt->Frm().Top();
                 return pCnt;
@@ -701,10 +721,14 @@ const SwFrm * MA_FASTCALL lcl_CalcDownDist( SwDistance &rRet,
         }
         else
         {
-            rRet.nMain = bVert ? pCnt->Frm().Left() + pCnt->Frm().Width() -
-                                 (pUp->Frm().Left() + pUp->Prt().Left())
-                : (pUp->Frm().Top() + pUp->Prt().Bottom()) - pCnt->Frm().Top();
-
+            //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+            //rRet.nMain = bVert ? pCnt->Frm().Left() + pCnt->Frm().Width() -
+            //                     (pUp->Frm().Left() + pUp->Prt().Left())
+            //    : (pUp->Frm().Top() + pUp->Prt().Bottom()) - pCnt->Frm().Top();
+            rRet.nMain = bVert ? ( bVertL2R ? (pUp->Frm().Left() + pUp->Prt().Right()) - pCnt->Frm().Left()
+                    : pCnt->Frm().Left() + pCnt->Frm().Width() - (pUp->Frm().Left() + pUp->Prt().Left()) )
+                    : (pUp->Frm().Top() + pUp->Prt().Bottom()) - pCnt->Frm().Top();
+            //End of SCMS
             const SwFrm *pPre = pCnt;
             const SwFrm *pLay = pUp->GetLeaf( MAKEPAGE_NONE, TRUE, pCnt );
             SwTwips nFrmTop = 0;
@@ -724,7 +748,13 @@ const SwFrm * MA_FASTCALL lcl_CalcDownDist( SwDistance &rRet,
                 {
                     if( pLay->IsVertical() )
                     {
-                        nFrmTop = pLay->Frm().Left() + pLay->Frm().Width();
+                        //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+                        //nFrmTop = pLay->Frm().Left() + pLay->Frm().Width();
+                        if ( pLay->IsVertLR() )
+                            nFrmTop = pLay->Frm().Left();
+                        else
+                            nFrmTop = pLay->Frm().Left() + pLay->Frm().Width();
+                        //End of SCMS
                         nPrtHeight = pLay->Prt().Width();
                     }
                     else
@@ -739,9 +769,24 @@ const SwFrm * MA_FASTCALL lcl_CalcDownDist( SwDistance &rRet,
                     pLay = pSect->GetUpper();
                     if( pLay->IsVertical() )
                     {
-                        nFrmTop = pSect->Frm().Left();
-                        nPrtHeight = pSect->Frm().Left() - pLay->Frm().Left()
+                        //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+                        //nFrmTop = pSect->Frm().Left();
+                        //nPrtHeight = pSect->Frm().Left() - pLay->Frm().Left()
+                        //             - pLay->Prt().Left();
+                        if ( pLay->IsVertLR() )
+                        {
+                            nFrmTop = pSect->Frm().Right();
+                            nPrtHeight = pLay->Frm().Left() + pLay->Prt().Left()
+                                         + pLay->Prt().Width() - pSect->Frm().Left()
+                                         - pSect->Frm().Width();
+                         }
+                         else
+                         {
+                             nFrmTop = pSect->Frm().Left();
+                             nPrtHeight = pSect->Frm().Left() - pLay->Frm().Left()
                                      - pLay->Prt().Left();
+                          }
+                          //End of SCMS
                     }
                     else
                     {
@@ -757,8 +802,20 @@ const SwFrm * MA_FASTCALL lcl_CalcDownDist( SwDistance &rRet,
             {
                 if( pLay->IsVertical() )
                 {
-                    nFrmTop = pLay->Frm().Left() + pLay->Frm().Width();
-                    nPrtHeight = pLay->Prt().Width();
+                    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+                    //nFrmTop = pLay->Frm().Left() + pLay->Frm().Width();
+                    //nPrtHeight = pLay->Prt().Width();
+                    if ( pLay->IsVertLR() )
+                    {
+                        nFrmTop = pLay->Frm().Left();
+                        nPrtHeight = pLay->Prt().Width();
+                    }
+                    else
+                    {
+                        nFrmTop = pLay->Frm().Left() + pLay->Frm().Width();
+                        nPrtHeight = pLay->Prt().Width();
+                    }
+                    //End of SCMS
                 }
                 else
                 {
@@ -802,8 +859,20 @@ const SwFrm * MA_FASTCALL lcl_CalcDownDist( SwDistance &rRet,
                             pSect = pNxtSect;
                             if( pLay->IsVertical() )
                             {
-                                nFrmTop = pLay->Frm().Left() + pLay->Frm().Width();
-                                nPrtHeight = pLay->Prt().Width();
+                                //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+                                //nFrmTop = pLay->Frm().Left() + pLay->Frm().Width();
+                                //nPrtHeight = pLay->Prt().Width();
+                                if ( pLay->IsVertLR() )
+                                {
+                                    nFrmTop = pLay->Frm().Left();
+                                    nPrtHeight = pLay->Prt().Width();
+                                 }
+                                 else
+                                 {
+                                    nFrmTop = pLay->Frm().Left() + pLay->Frm().Width();
+                                    nPrtHeight = pLay->Prt().Width();
+                                 }
+                                 //End of SCMS
                             }
                             else
                             {
@@ -816,9 +885,24 @@ const SwFrm * MA_FASTCALL lcl_CalcDownDist( SwDistance &rRet,
                             pLay = pSect->GetUpper();
                             if( pLay->IsVertical() )
                             {
-                                nFrmTop = pSect->Frm().Left();
-                                nPrtHeight = pSect->Frm().Left() -
-                                        pLay->Frm().Left() - pLay->Prt().Left();
+                                //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+                                //nFrmTop = pSect->Frm().Left();
+                                //nPrtHeight = pSect->Frm().Left() -
+                                //        pLay->Frm().Left() - pLay->Prt().Left();
+                                if ( pLay->IsVertLR() )
+                                {
+                                    nFrmTop = pSect->Frm().Right();
+                                    nPrtHeight = pLay->Frm().Left()+pLay->Prt().Left()
+                                             + pLay->Prt().Width() - pSect->Frm().Left()
+                                             - pSect->Frm().Width();
+                                 }
+                                 else
+                                 {
+                                    nFrmTop = pSect->Frm().Left();
+                                    nPrtHeight = pSect->Frm().Left() -
+                                            pLay->Frm().Left() - pLay->Prt().Left();
+                                 }
+                                 //End of SCMS
                             }
                             else
                             {
@@ -834,8 +918,20 @@ const SwFrm * MA_FASTCALL lcl_CalcDownDist( SwDistance &rRet,
                     {
                         if( pLay->IsVertical() )
                         {
-                             nFrmTop = pLay->Frm().Left() + pLay->Frm().Width();
-                             nPrtHeight = pLay->Prt().Width();
+                             //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+                             //nFrmTop = pLay->Frm().Left() + pLay->Frm().Width();
+                             //nPrtHeight = pLay->Prt().Width();
+                             if ( pLay->IsVertLR() )
+                              {
+                                 nFrmTop = pLay->Frm().Left();
+                                 nPrtHeight = pLay->Prt().Width();
+                             }
+                             else
+                             {
+                                 nFrmTop = pLay->Frm().Left() + pLay->Frm().Width();
+                                 nPrtHeight = pLay->Prt().Width();
+                             }
+                             //End of SCMS
                         }
                         else
                         {
@@ -850,8 +946,12 @@ const SwFrm * MA_FASTCALL lcl_CalcDownDist( SwDistance &rRet,
             {
                 if ( pLay->Frm().IsInside( rPt ) )
                 {
-                    SwTwips nDiff = pLay->IsVertical() ? ( nFrmTop - rPt.X() )
+                    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+                    //SwTwips nDiff = pLay->IsVertical() ? ( nFrmTop - rPt.X() )
+                    //                                   : ( rPt.Y() - nFrmTop );
+                    SwTwips nDiff = pLay->IsVertical() ? ( pLay->IsVertLR() ? ( rPt.X() - nFrmTop ) : ( nFrmTop - rPt.X() ) )
                                                        : ( rPt.Y() - nFrmTop );
+                    //End of SCMS
                     if( bSct || pSect )
                         rRet.nSub += nDiff;
                     else
@@ -1206,9 +1306,10 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
     SwPageFrm *pOldPage = FindPageFrm();
     const SwRect aOld( GetObjRectWithSpaces() );
     Point aNew( rNew );
-
-    if( GetAnchorFrm()->IsVertical() || GetAnchorFrm()->IsRightToLeft() )
-
+    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+    //if( GetAnchorFrm()->IsVertical() || GetAnchorFrm()->IsRightToLeft() )
+      if( ( GetAnchorFrm()->IsVertical() && !GetAnchorFrm()->IsVertLR() ) || GetAnchorFrm()->IsRightToLeft() )
+     //End of SCMS
         aNew.X() += Frm().Width();
     SwCntntFrm *pCnt = (SwCntntFrm*)::FindAnchor( GetAnchorFrm(), aNew );
     if( pCnt->IsProtected() )
@@ -1216,6 +1317,9 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
 
     SwPageFrm *pTmpPage = 0;
     const bool bVert = pCnt->IsVertical();
+    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+    const bool bVertL2R = pCnt->IsVertLR();
+    //End of SCMS
     const sal_Bool bRTL = pCnt->IsRightToLeft();
 
     if( ( !bVert != !GetAnchorFrm()->IsVertical() ) ||
@@ -1246,7 +1350,15 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
     if ( pCnt->Frm().IsInside( aNew ) )
     {
         if( bVert )
-            nY = pCnt->Frm().Left()+pCnt->Frm().Width()-rNew.X()-Frm().Width();
+            //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+            //nY = pCnt->Frm().Left()+pCnt->Frm().Width()-rNew.X()-Frm().Width();
+            {
+            if ( bVertL2R )
+                nY = rNew.X() - pCnt->Frm().Left();
+            else
+                nY = pCnt->Frm().Left()+pCnt->Frm().Width()-rNew.X()-Frm().Width();
+             }
+             //End of SCMS
         else
             nY = rNew.Y() - pCnt->Frm().Top();
     }
@@ -1276,8 +1388,17 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
         do
         {   const SwFrm *pUp = pFollow->GetUpper();
             if( pUp->IsVertical() )
-                nDiff += pFollow->Frm().Left() + pFollow->Frm().Width()
+                //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+                //nDiff += pFollow->Frm().Left() + pFollow->Frm().Width()
+                //         - pUp->Frm().Left() - pUp->Prt().Left();
+                {
+                if ( pUp->IsVertLR()  )
+                    nDiff += pUp->Prt().Width() - pFollow->GetRelPos().X();
+                else
+                    nDiff += pFollow->Frm().Left() + pFollow->Frm().Width()
                          - pUp->Frm().Left() - pUp->Prt().Left();
+                }
+                //End of SCMS
             else
                 nDiff += pUp->Prt().Height() - pFollow->GetRelPos().Y();
             pFollow = pFollow->GetFollow();
@@ -1292,7 +1413,15 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
     if ( nY == LONG_MAX )
     {
         if( bVert )
-            nY = pCnt->Frm().Left() + pCnt->Frm().Width() - rNew.X();
+            //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+            //nY = pCnt->Frm().Left() + pCnt->Frm().Width() - rNew.X();
+            {
+            if ( bVertL2R )
+                nY = rNew.X() - pCnt->Frm().Left();
+            else
+                nY = pCnt->Frm().Left() + pCnt->Frm().Width() - rNew.X();
+            }
+            //End of SCMS
         else
             nY = rNew.Y() - pCnt->Frm().Top();
     }
@@ -1382,6 +1511,7 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
         GetPageFrm()->MoveFly( this, pTmpPage );
 
     const Point aRelPos = bVert ? Point( -nY, nX ) : Point( nX, nY );
+
     ChgRelPos( aRelPos );
 
     GetFmt()->GetDoc()->EndUndo( UNDO_END, NULL );

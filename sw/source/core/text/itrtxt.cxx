@@ -370,7 +370,13 @@ USHORT SwTxtCursor::AdjustBaseLine( const SwLineLayout& rLine,
             case SvxParaVertAlignItem::AUTOMATIC :
                 if ( bAutoToCentered || GetInfo().GetTxtFrm()->IsVertical() )
                 {
-                    nOfst += ( rLine.Height() - nPorHeight ) / 2 + nPorAscent;
+                    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+                    //nOfst += ( rLine.Height() - nPorHeight ) / 2 + nPorAscent;
+                    if( GetInfo().GetTxtFrm()->IsVertLR() )
+                            nOfst += rLine.Height() - ( rLine.Height() - nPorHeight ) / 2 - nPorAscent;
+                    else
+                            nOfst += ( rLine.Height() - nPorHeight ) / 2 + nPorAscent;
+                    //End of SCMS
                     break;
                 }
             case SvxParaVertAlignItem::BASELINE :

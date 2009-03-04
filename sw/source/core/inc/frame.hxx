@@ -199,8 +199,8 @@ struct SwRectFnCollection
 };
 
 typedef SwRectFnCollection* SwRectFn;
+/*
 extern SwRectFn fnRectHori, fnRectVert, fnRectB2T, fnRectVL2R;
-
 #define SWRECTFN( pFrm )    sal_Bool bVert = pFrm->IsVertical(); \
                             sal_Bool bRev = pFrm->IsReverse(); \
                             SwRectFn fnRect = bVert ? \
@@ -222,6 +222,36 @@ extern SwRectFn fnRectHori, fnRectVert, fnRectB2T, fnRectVL2R;
                             sal_Bool bNeighb = pFrm->IsNeighbourFrm(); \
                             SwRectFn fnRect = bVert == bNeighb ? \
                                 fnRectHori : fnRectVert;
+*/
+
+//Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+extern SwRectFn fnRectHori, fnRectVert, fnRectB2T, fnRectVL2R, fnRectVertL2R;
+#define SWRECTFN( pFrm )    sal_Bool bVert = pFrm->IsVertical(); \
+                            sal_Bool bRev = pFrm->IsReverse(); \
+                            sal_Bool bVertL2R = pFrm->IsVertLR(); \
+                            SwRectFn fnRect = bVert ? \
+                                ( bRev ? fnRectVL2R : ( bVertL2R ? fnRectVertL2R : fnRectVert ) ): \
+                                ( bRev ? fnRectB2T : fnRectHori );
+#define SWRECTFNX( pFrm )   sal_Bool bVertX = pFrm->IsVertical(); \
+                            sal_Bool bRevX = pFrm->IsReverse(); \
+                            sal_Bool bVertL2RX = pFrm->IsVertLR(); \
+                            SwRectFn fnRectX = bVertX ? \
+                                ( bRevX ? fnRectVL2R : ( bVertL2RX ? fnRectVertL2R : fnRectVert ) ): \
+                                ( bRevX ? fnRectB2T : fnRectHori );
+#define SWREFRESHFN( pFrm ) { if( bVert != pFrm->IsVertical() || \
+                                  bRev  != pFrm->IsReverse() ) \
+                                bVert = pFrm->IsVertical(); \
+                                bRev = pFrm->IsReverse(); \
+                                bVertL2R = pFrm->IsVertLR(); \
+                                fnRect = bVert ? \
+                                    ( bRev ? fnRectVL2R : ( bVertL2R ? fnRectVertL2R : fnRectVert ) ): \
+                                    ( bRev ? fnRectB2T : fnRectHori ); }
+#define SWRECTFN2( pFrm )   sal_Bool bVert = pFrm->IsVertical(); \
+                sal_Bool bVertL2R = pFrm->IsVertLR(); \
+                            sal_Bool bNeighb = pFrm->IsNeighbourFrm(); \
+                            SwRectFn fnRect = bVert == bNeighb ? \
+                                fnRectHori : ( bVertL2R ? fnRectVertL2R : fnRectVert );
+//End of SCMS
 #define POS_DIFF( aFrm1, aFrm2 ) \
             ( (aFrm1.*fnRect->fnGetTop)() != (aFrm2.*fnRect->fnGetTop)() || \
             (aFrm1.*fnRect->fnGetLeft)() != (aFrm2.*fnRect->fnGetLeft)() )
@@ -376,6 +406,9 @@ protected:
     USHORT bInvalidVert:    1;
     USHORT bDerivedVert:    1;
     USHORT bVertical:       1;
+    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+    USHORT bVertLR:         1;
+    //End of SCMS
     USHORT nType:         4;  //Who am I?
 
     BOOL bValidPos:         1;
@@ -567,8 +600,14 @@ public:
     inline BOOL IsReverse() const { return bReverse; }
     inline void SetReverse( BOOL bNew ){ bReverse = bNew ? 1 : 0; }
     inline BOOL IsVertical() const;
+    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+    inline BOOL IsVertLR() const;
+    //End of SCMS
     inline BOOL GetVerticalFlag() const;
     inline void SetVertical( BOOL bNew ){ bVertical = bNew ? 1 : 0; }
+    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+    inline void SetbVertLR( BOOL bNew ) { bVertLR = bNew ? 1 : 0; }
+    //End of SCMS
     inline void SetDerivedVert( BOOL bNew ){ bDerivedVert = bNew ? 1 : 0; }
     inline void SetInvalidVert( BOOL bNew) { bInvalidVert = bNew ? 1 : 0; }
     inline BOOL IsRightToLeft() const;
@@ -954,6 +993,12 @@ BOOL SwFrm::IsVertical() const
         ((SwFrm*)this)->SetDirFlags( TRUE );
     return bVertical != 0;
 }
+//Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+inline BOOL SwFrm::IsVertLR() const
+{
+    return bVertLR != 0;
+}
+//End of SCMS
 BOOL SwFrm::GetVerticalFlag() const
 {
     return bVertical != 0;

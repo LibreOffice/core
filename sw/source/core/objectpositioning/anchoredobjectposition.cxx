@@ -378,7 +378,11 @@ SwTwips SwAnchoredObjectPosition::_GetVertRelPos(
         break;
         case text::VertOrientation::TOP:
         {
-            nRelPosY += bVert ? _rLRSpacing.GetRight() : _rULSpacing.GetUpper();
+            //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+            //nRelPosY += bVert ? _rLRSpacing.GetRight() : _rULSpacing.GetUpper();
+                 nRelPosY +=    bVert ? ( bVertL2R ?
+                                 _rLRSpacing.GetLeft() : _rLRSpacing.GetRight() ) : _rULSpacing.GetUpper();
+            //End of SCMS
         }
         break;
         case text::VertOrientation::CENTER:
@@ -388,8 +392,13 @@ SwTwips SwAnchoredObjectPosition::_GetVertRelPos(
         break;
         case text::VertOrientation::BOTTOM:
         {
-            nRelPosY += nAlignAreaHeight -
-                       ( nObjHeight + ( bVert ? _rLRSpacing.GetLeft() : _rULSpacing.GetLower() ) );
+            //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+            //nRelPosY += nAlignAreaHeight -
+            //           ( nObjHeight + ( bVert ? _rLRSpacing.GetLeft() : _rULSpacing.GetLower() ) );
+              nRelPosY += nAlignAreaHeight -
+                            (nObjHeight + ( bVert ? ( bVertL2R ?
+                                         _rLRSpacing.GetRight() : _rLRSpacing.GetLeft() ) : _rULSpacing.GetLower()));
+            //End of SCMS
         }
         break;
         default:

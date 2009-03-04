@@ -815,7 +815,13 @@ void SwTxtPaintInfo::CalcRect( const SwLinePortion& rPor,
     else
     {
         aPoint.A() = X();
-        aPoint.B() = Y() - rPor.GetAscent();
+        //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+        //aPoint.B() = Y() - rPor.GetAscent();
+        if ( GetTxtFrm()->IsVertLR() )
+            aPoint.B() = Y() - rPor.Height() + rPor.GetAscent();
+        else
+            aPoint.B() = Y() - rPor.GetAscent();
+        //End of SCMS
     }
 
     // Adjust x coordinate if we are inside a bidi portion

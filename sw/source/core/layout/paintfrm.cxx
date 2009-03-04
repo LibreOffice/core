@@ -1227,7 +1227,10 @@ void MA_FASTCALL lcl_CalcBorderRect( SwRect &rRect, const SwFrm *pFrm,
         if ( rAttrs.IsLine() || rAttrs.IsBorderDist() ||
              (bShadow && rAttrs.GetShadow().GetLocation() != SVX_SHADOW_NONE) )
         {
-            SwRectFn fnRect = pFrm->IsVertical() ? fnRectVert : fnRectHori;
+            //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+            //SwRectFn fnRect = pFrm->IsVertical() ? fnRectVert : fnRectHori;
+            SwRectFn fnRect = pFrm->IsVertical() ? ( pFrm->IsVertLR() ? fnRectVertL2R : fnRectVert ) : fnRectHori;
+            //End of SCMS
             const SvxBoxItem &rBox = rAttrs.GetBox();
             const BOOL bTop = 0 != (pFrm->*fnRect->fnGetTopMargin)();
             if ( bTop )
@@ -3182,8 +3185,20 @@ SwShortCut::SwShortCut( const SwFrm& rFrm, const SwRect& rRect )
     }
     else
     {
-        fnCheck = &SwRect::GetRightDistance;
-        nLimit = rRect.Left();
+        //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+        //fnCheck = &SwRect::GetRightDistance;
+        //nLimit = rRect.Left();
+        if ( rFrm.IsVertLR() )
+        {
+               fnCheck = &SwRect::GetLeftDistance;
+               nLimit = rRect.Right();
+         }
+         else
+         {
+            fnCheck = &SwRect::GetRightDistance;
+            nLimit = rRect.Left();
+         }
+        //End of SCMS
     }
 }
 
@@ -4880,8 +4895,10 @@ void SwLayoutFrm::PaintColLines( const SwRect &rRect, const SwFmtCol &rFmtCol,
     const SwFrm *pCol = Lower();
     if ( !pCol || !pCol->IsColumnFrm() )
         return;
-
-    SwRectFn fnRect = pCol->IsVertical() ? fnRectVert : fnRectHori;
+    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+    //SwRectFn fnRect = pCol->IsVertical() ? fnRectVert : fnRectHori;
+    SwRectFn fnRect = pCol->IsVertical() ? ( pCol->IsVertLR() ? fnRectVertL2R : fnRectVert ) : fnRectHori;
+    //End of SCMS
     SwRect aLineRect = Prt();
     aLineRect += Frm().Pos();
 

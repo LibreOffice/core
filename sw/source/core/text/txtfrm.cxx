@@ -108,13 +108,24 @@ void SwTxtFrm::SwapWidthAndHeight()
     {
         const long nPrtOfstX = Prt().Pos().X();
         Prt().Pos().X() = Prt().Pos().Y();
-        Prt().Pos().Y() = Frm().Width() - ( nPrtOfstX + Prt().Width() );
+        //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+        if( IsVertLR() )
+            Prt().Pos().Y() = nPrtOfstX;
+        else
+        //End of SCMS
+            Prt().Pos().Y() = Frm().Width() - ( nPrtOfstX + Prt().Width() );
+
     }
     else
     {
         const long nPrtOfstY = Prt().Pos().Y();
         Prt().Pos().Y() = Prt().Pos().X();
-        Prt().Pos().X() = Frm().Height() - ( nPrtOfstY + Prt().Height() );
+        //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+        if( IsVertLR() )
+            Prt().Pos().X() = nPrtOfstY;
+        else
+        //End of SCMS
+            Prt().Pos().X() = Frm().Height() - ( nPrtOfstY + Prt().Height() );
     }
 
     const long nFrmWidth = Frm().Width();
@@ -132,16 +143,43 @@ void SwTxtFrm::SwapWidthAndHeight()
 void SwTxtFrm::SwitchHorizontalToVertical( SwRect& rRect ) const
 {
     // calc offset inside frame
-    const long nOfstX = rRect.Left() - Frm().Left();
-    const long nOfstY = rRect.Top() + rRect.Height() - Frm().Top();
+
+    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+
+    //const long nOfstX = rRect.Left() - Frm().Left();
+    //const long nOfstY = rRect.Top() + rRect.Height() - Frm().Top();
+    long nOfstX, nOfstY;
+    if ( IsVertLR() )
+    {
+        nOfstX = rRect.Left() - Frm().Left();
+        nOfstY = rRect.Top() - Frm().Top();
+    }
+    else
+    {
+        nOfstX = rRect.Left() - Frm().Left();
+        nOfstY = rRect.Top() + rRect.Height() - Frm().Top();
+    }
+    //End of SCMS
+
     const long nWidth = rRect.Width();
     const long nHeight = rRect.Height();
 
-    if ( bIsSwapped )
-        rRect.Left( Frm().Left() + Frm().Height() - nOfstY );
-    else
+    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+    //if ( bIsSwapped )
+    //    rRect.Left( Frm().Left() + Frm().Height() - nOfstY );
+    //else
         // frame is rotated
-        rRect.Left( Frm().Left() + Frm().Width() - nOfstY );
+    //    rRect.Left( Frm().Left() + Frm().Width() - nOfstY );
+    if ( IsVertLR() )
+        rRect.Left(Frm().Left() + nOfstY);
+    else
+    {
+        if ( bIsSwapped )
+            rRect.Left( Frm().Left() + Frm().Height() - nOfstY );
+        else
+            rRect.Left( Frm().Left() + Frm().Width() - nOfstY );
+    }
+    // End of SCMS
 
     rRect.Top( Frm().Top() + nOfstX );
     rRect.Width( nHeight );
@@ -155,12 +193,23 @@ void SwTxtFrm::SwitchHorizontalToVertical( Point& rPoint ) const
     // calc offset inside frame
     const long nOfstX = rPoint.X() - Frm().Left();
     const long nOfstY = rPoint.Y() - Frm().Top();
-
-    if ( bIsSwapped )
+    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+   /* if ( bIsSwapped )
         rPoint.X() = Frm().Left() + Frm().Height() - nOfstY;
     else
         // calc rotated coords
         rPoint.X() = Frm().Left() + Frm().Width() - nOfstY;
+    */
+    if ( IsVertLR() )
+        rPoint.X() = Frm().Left() + nOfstY;
+    else
+    {
+        if ( bIsSwapped )
+            rPoint.X() = Frm().Left() + Frm().Height() - nOfstY;
+        else
+            rPoint.X() = Frm().Left() + Frm().Width() - nOfstY;
+    }
+    //End of SCMS
 
     rPoint.Y() = Frm().Top() + nOfstX;
 }
@@ -181,11 +230,23 @@ void SwTxtFrm::SwitchVerticalToHorizontal( SwRect& rRect ) const
     long nOfstX;
 
     // calc offset inside frame
-    if ( bIsSwapped )
+
+    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+    /*if ( bIsSwapped )
         nOfstX = Frm().Left() + Frm().Height() - ( rRect.Left() + rRect.Width() );
     else
         nOfstX = Frm().Left() + Frm().Width() - ( rRect.Left() + rRect.Width() );
-
+    */
+    if ( IsVertLR() )
+        nOfstX = rRect.Left() - Frm().Left();
+    else
+    {
+        if ( bIsSwapped )
+            nOfstX = Frm().Left() + Frm().Height() - ( rRect.Left() + rRect.Width() );
+        else
+            nOfstX = Frm().Left() + Frm().Width() - ( rRect.Left() + rRect.Width() );
+    }
+    //End of SCMS
     const long nOfstY = rRect.Top() - Frm().Top();
     const long nWidth = rRect.Height();
     const long nHeight = rRect.Width();
@@ -204,11 +265,23 @@ void SwTxtFrm::SwitchVerticalToHorizontal( Point& rPoint ) const
     long nOfstX;
 
     // calc offset inside frame
-    if ( bIsSwapped )
+
+    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+    /*if ( bIsSwapped )
         nOfstX = Frm().Left() + Frm().Height() - rPoint.X();
     else
         nOfstX = Frm().Left() + Frm().Width() - rPoint.X();
-
+    */
+    if ( IsVertLR() )
+        nOfstX = rPoint.X() - Frm().Left();
+    else
+    {
+        if ( bIsSwapped )
+            nOfstX = Frm().Left() + Frm().Height() - rPoint.X();
+        else
+            nOfstX = Frm().Left() + Frm().Width() - rPoint.X();
+    }
+    //End of SCMS
     const long nOfstY = rPoint.Y() - Frm().Top();
 
     // calc rotated coords
@@ -2533,6 +2606,10 @@ void SwTxtFrm::ChgThisLines()
         else //Paragraphs which are not counted should not manipulate the AllLines.
             nThisLines = nNew;
     }
+    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+    //Ugly. How can we hack if better?
+    InvalidatePage();
+    //End of SCMS
 }
 
 

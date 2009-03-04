@@ -330,7 +330,10 @@ void SwLayoutFrm::AdjustColumns( const SwFmtCol *pAttr, BOOL bAdjustAttributes )
     }
 
     const BOOL bVert = IsVertical();
-    SwRectFn fnRect = bVert ? fnRectVert : fnRectHori;
+    //SwRectFn fnRect = bVert ? fnRectVert : fnRectHori;
+    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+    SwRectFn fnRect = bVert ? ( IsVertLR() ? fnRectVertL2R : fnRectVert ) : fnRectHori;
+    //End of SCMS
 
     //Ist ein Pointer da, oder sollen wir die Attribute einstellen,
     //so stellen wir auf jeden Fall die Spaltenbreiten ein. Andernfalls

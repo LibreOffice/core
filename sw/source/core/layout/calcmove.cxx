@@ -582,7 +582,15 @@ void SwFrm::MakePos()
                 if( bReverse )
                     aFrm.Pos().X() += pPrv->Frm().Width();
                 else
-                    aFrm.Pos().X() -= aFrm.Width();
+                    //aFrm.Pos().X() -= aFrm.Width();
+                    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+                    {
+                    if ( bVertL2R )
+                            aFrm.Pos().X() += pPrv->Frm().Width();
+                    else
+                            aFrm.Pos().X() -= aFrm.Width();
+                    }
+                    //End of SCMS
             }
             else
                 aFrm.Pos().Y() += pPrv->Frm().Height();
@@ -650,14 +658,23 @@ void SwFrm::MakePos()
                         aFrm.Pos().X() += GetUpper()->Prt().Width()
                                           - aFrm.Width();
                 }
-                else if( bVert && FRM_NOTE_VERT & nMyType && !bReverse )
+                //else if( bVert && FRM_NOTE_VERT & nMyType && !bReverse )
+                //    aFrm.Pos().X() -= aFrm.Width() - GetUpper()->Prt().Width();
+                //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+                else if( bVert && !bVertL2R && FRM_NOTE_VERT & nMyType && !bReverse )
                     aFrm.Pos().X() -= aFrm.Width() - GetUpper()->Prt().Width();
+                //End of SCMS
             }
         }
         else
             aFrm.Pos().X() = aFrm.Pos().Y() = 0;
-        if( IsBodyFrm() && bVert && !bReverse && GetUpper() )
+
+        //if( IsBodyFrm() && bVert && !bReverse && GetUpper() )
+        //    aFrm.Pos().X() += GetUpper()->Prt().Width() - aFrm.Width();
+        //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+        if( IsBodyFrm() && bVert && !bVertL2R && !bReverse && GetUpper() )
             aFrm.Pos().X() += GetUpper()->Prt().Width() - aFrm.Width();
+        //End of SCMS
         bValidPos = TRUE;
     }
 }
@@ -878,7 +895,10 @@ void SwLayoutFrm::MakeAll()
         //uebernimmt im DTor die Benachrichtigung
     const SwLayNotify aNotify( this );
     BOOL bVert = IsVertical();
-    SwRectFn fnRect = ( IsNeighbourFrm() == bVert )? fnRectHori : fnRectVert;
+    //SwRectFn fnRect = ( IsNeighbourFrm() == bVert )? fnRectHori : fnRectVert;
+    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+    SwRectFn fnRect = ( IsNeighbourFrm() == bVert )? fnRectHori : ( IsVertLR() ? fnRectVertL2R : fnRectVert );
+    //End of SCMS
 
     SwBorderAttrAccess *pAccess = 0;
     const SwBorderAttrs*pAttrs = 0;

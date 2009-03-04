@@ -1809,14 +1809,17 @@ BOOL SwLayAction::FormatLayoutFly( SwFlyFrm* pFly )
         pFly->Calc();
         bChanged = aOldRect != pFly->Frm();
 
-        if ( IsPaint() && (pFly->IsCompletePaint() || bChanged) &&
-             pFly->Frm().Top() > 0 && pFly->Frm().Left() > 0 )
+        //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+        // if ( IsPaint() && (pFly->IsCompletePaint() || bChanged) &&
+          //     pFly->Frm().Top() > 0 && pFly->Frm().Left() > 0 )
+        if ( IsPaint() && bAddRect && pFly->Frm().Top() > 0 && pFly->Frm().Left() > 0 )
             pImp->GetShell()->AddPaintRect( pFly->Frm() );
 
-        if ( bChanged )
+        //if ( bChanged )
             pFly->Invalidate();
-        else
-            pFly->Validate();
+        //else
+        //  pFly->Validate();
+        //End of SCMS
         bAddRect = false;
         pFly->ResetCompletePaint();
     }
@@ -2036,7 +2039,11 @@ void MA_FASTCALL lcl_AddScrollRectTab( SwTabFrm *pTab, SwLayoutFrm *pRow,
     //Frm nicht selbst steht, so ist nichts mit Scrollen.
     SwRect aRect( rRect );
     // OD 04.11.2002 #104100# - <SWRECTFN( pTab )> not needed.
-    if( pTab->IsVertical() )
+
+    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+    //if( pTab->IsVertical() )
+    if( pTab->IsVertical() && !pTab->IsVertLR() )
+    //End of SCMS
         aRect.Pos().X() -= nOfst;
     else
         aRect.Pos().Y() += nOfst;
@@ -2506,9 +2513,14 @@ void SwLayAction::_FormatCntnt( const SwCntntFrm *pCntnt,
              aNewRect.SSize() == aOldRect.SSize()
            )
         {
-            _AddScrollRect( pCntnt, pPage, (*fnRect->fnYDiff)(
+            //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+            if ( !bVertL2R )
+                _AddScrollRect( pCntnt, pPage, (*fnRect->fnYDiff)(
                             (pCntnt->Frm().*fnRect->fnGetTop)(),
                             (aOldRect.*fnRect->fnGetTop)() ), nOldBottom );
+            else
+                PaintCntnt( pCntnt, pCntnt->FindPageFrm(), aOldRect, nOldBottom);
+            //End of SCMS
         }
         else
             PaintCntnt( pCntnt, pCntnt->FindPageFrm(), aOldRect, nOldBottom);

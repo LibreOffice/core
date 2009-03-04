@@ -274,7 +274,10 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
             // determine relative vertical position
             SwTwips nRelPosY = nAlignAreaOffset;
             SwTwips nObjHeight = (aObjBoundRect.*fnRect->fnGetHeight)();
-            SwTwips nUpperSpace = bVert ? rLR.GetRight() : rUL.GetUpper();
+            //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+            //SwTwips nUpperSpace = bVert ? rLR.GetRight() : rUL.GetUpper();
+            SwTwips nUpperSpace = bVert ? ( bVertL2R ? rLR.GetLeft() : rLR.GetRight() ) : rUL.GetUpper();
+            //End of SCMS
             SwTwips nLowerSpace = bVert ? rLR.GetLeft() : rUL.GetLower();
             switch ( aVert.GetVertOrient() )
             {
@@ -284,7 +287,10 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                     {
                         // bottom (to character anchored)
                         nRelPosY += nAlignAreaHeight + nUpperSpace;
-                        if ( bVert )
+                        //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+                        //if ( bVert )
+                          if ( bVert && !bVertL2R)
+                        //End of SCMS
                             nRelPosY += nObjHeight;
                         break;
                     }

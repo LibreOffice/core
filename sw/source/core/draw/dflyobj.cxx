@@ -653,8 +653,20 @@ void __EXPORT SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
         long lYDiff = aNewPos.Y() - aOldPos.Y();
         if( GetFlyFrm()->GetAnchorFrm()->IsVertical() )
         {
-            lXDiff -= rVert.GetPos();
-            lYDiff += rHori.GetPos();
+            //lXDiff -= rVert.GetPos();
+            //lYDiff += rHori.GetPos();
+            //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+            if ( GetFlyFrm()->GetAnchorFrm()->IsVertLR() )
+            {
+                lXDiff += rVert.GetPos();
+                lXDiff = -lXDiff;
+            }
+            else
+            {
+                lXDiff -= rVert.GetPos();
+                lYDiff += rHori.GetPos();
+            }
+            //End of SCMS
         }
         else
         {
@@ -765,11 +777,18 @@ void __EXPORT SwVirtFlyDrawObj::NbcResize(const Point& rRef,
 
     const sal_Bool bRTL = pTmpFrm->IsRightToLeft();
 
-    const Point aNewPos( bVertX || bRTL ?
+    //const Point aNewPos( bVertX || bRTL ?
+    //                   aOutRect.Right() + 1 :
+    //                   aOutRect.Left(),
+    //                    aOutRect.Top() );
+    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+    const bool bVertL2RX = pTmpFrm->IsVertLR();
+    const Point aNewPos( ( bVertX && !bVertL2RX ) || bRTL ?
                          aOutRect.Right() + 1 :
                          aOutRect.Left(),
                          aOutRect.Top() );
 
+    //End of SCMS
     Size aSz( aOutRect.Right() - aOutRect.Left() + 1,
               aOutRect.Bottom()- aOutRect.Top()  + 1 );
     if( aSz != GetFlyFrm()->Frm().SSize() )
@@ -830,10 +849,14 @@ void __EXPORT SwVirtFlyDrawObj::NbcResize(const Point& rRef,
     }
 
     //Position kann auch veraendert sein!
-    const Point aOldPos( bVertX || bRTL ?
+    //const Point aOldPos( bVertX || bRTL ?
+    //                     GetFlyFrm()->Frm().TopRight() :
+    //                     GetFlyFrm()->Frm().Pos() );
+    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+    const Point aOldPos( ( bVertX && !bVertL2RX ) || bRTL ?
                          GetFlyFrm()->Frm().TopRight() :
                          GetFlyFrm()->Frm().Pos() );
-
+    //End of SCMS
     if ( aNewPos != aOldPos )
     {
         //Kann sich durch das ChgSize veraendert haben!
@@ -841,7 +864,14 @@ void __EXPORT SwVirtFlyDrawObj::NbcResize(const Point& rRef,
         {
             if( aOutRect.TopRight() != aNewPos )
             {
-                SwTwips nDeltaX = aNewPos.X() - aOutRect.Right();
+                //SwTwips nDeltaX = aNewPos.X() - aOutRect.Right();
+                //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+                SwTwips nDeltaX;
+                if ( bVertL2RX )
+                    nDeltaX = aNewPos.X() - aOutRect.Left();
+                else
+                    nDeltaX = aNewPos.X() - aOutRect.Right();
+                //End of SCMS
                 SwTwips nDeltaY = aNewPos.Y() - aOutRect.Top();
                 MoveRect( aOutRect, Size( nDeltaX, nDeltaY ) );
             }

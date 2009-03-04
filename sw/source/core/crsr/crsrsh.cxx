@@ -462,6 +462,12 @@ void SwCrsrShell::UpdateMarkedListLevel()
 
 BOOL SwCrsrShell::UpDown( BOOL bUp, USHORT nCnt )
 {
+    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+    SwCntntFrm *pFrm = pCurCrsr->GetCntntNode()->GetFrm(
+                &pCurCrsr->GetPtPos(), pCurCrsr->GetPoint() );
+    if(pFrm->IsVertical() && pFrm->IsVertLR())
+        bUp=!bUp;
+    //End of SCMS
     SET_CURR_SHELL( this );
     SwCallLink aLk( *this );        // Crsr-Moves ueberwachen, evt. Link callen
 

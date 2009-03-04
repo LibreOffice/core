@@ -1461,8 +1461,12 @@ void SwFrm::SetDirFlags( BOOL bVert )
             {
                 bVertical = pAsk->IsVertical() ? 1 : 0;
                 bReverse  = pAsk->IsReverse()  ? 1 : 0;
+
+                bVertLR  = pAsk->IsVertLR() ? 1 : 0;
+                //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
                 if ( !pAsk->bInvalidVert )
                     bInvalidVert = FALSE;
+                //End of SCMS
             }
         }
         else
