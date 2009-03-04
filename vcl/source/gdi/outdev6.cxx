@@ -185,8 +185,7 @@ void OutputDevice::DrawTransparent( const basegfx::B2DPolyPolygon& rB2DPolyPoly,
     if( mbInitFillColor )
         ImplInitFillColor();
 
-    if( (mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW) != 0
-        && mpGraphics->supportsOperation( OutDevSupport_B2DDraw ) )
+    if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW) && mpGraphics->supportsOperation(OutDevSupport_B2DDraw))
     {
         // b2dpolygon support not implemented yet on non-UNX platforms
         const ::basegfx::B2DHomMatrix aTransform = ImplGetDeviceTransformation();
@@ -407,10 +406,17 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
                         Rectangle aPixelRect( ImplLogicToDevicePixel( aLogicPolyRect ) );
 
                         if( !mbOutputClipped )
-                            bDrawn = mpGraphics->DrawAlphaRect( aPixelRect.Left(), aPixelRect.Top(),
-                                                                aPixelRect.GetWidth(), aPixelRect.GetHeight(),
-                                                                sal::static_int_cast<sal_uInt8>(nTransparencePercent),
-                                                                this );
+                        {
+                            bDrawn = mpGraphics->DrawAlphaRect(
+                               aPixelRect.Left(), aPixelRect.Top(),
+                               // #i98405# use methods with small g, else one pixel too much will be painted.
+                               // This is because the source is a polygon which when painted would not paint
+                               // the rightmost and lowest pixel line(s), so use one pixel less for the
+                               // rectangle, too.
+                               aPixelRect.getWidth(), aPixelRect.getHeight(),
+                               sal::static_int_cast<sal_uInt8>(nTransparencePercent),
+                               this );
+                        }
                         else
                             bDrawn = true;
                     }

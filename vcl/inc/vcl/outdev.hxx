@@ -252,6 +252,7 @@ struct KerningPair
 // Antialiasing
 #define ANTIALIASING_DISABLE_TEXT       ((USHORT)0x0001)
 #define ANTIALIASING_ENABLE_B2DDRAW     ((USHORT)0x0002)
+#define ANTIALIASING_PIXELSNAPHAIRLINE  ((USHORT)0x0004)
 
 // AddFontSubstitute
 #define FONT_SUBSTITUTE_ALWAYS          ((USHORT)0x0001)

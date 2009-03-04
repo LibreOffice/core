@@ -41,6 +41,7 @@
 #include <svtools/brdcst.hxx>
 #include <svtools/smplhint.hxx>
 #include "poolio.hxx"
+#include <algorithm>
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -51,6 +52,20 @@ SV_IMPL_PTRARR( SfxPoolVersionArr_Impl, SfxPoolVersion_Impl* );
 
 //========================================================================
 
+
+void SfxItemPool::AddSfxItemPoolUser(SfxItemPoolUser& rNewUser)
+{
+    maSfxItemPoolUsers.push_back(&rNewUser);
+}
+
+void SfxItemPool::RemoveSfxItemPoolUser(SfxItemPoolUser& rOldUser)
+{
+    const SfxItemPoolUserVector::iterator aFindResult = ::std::find(maSfxItemPoolUsers.begin(), maSfxItemPoolUsers.end(), &rOldUser);
+    if(aFindResult != maSfxItemPoolUsers.end())
+    {
+        maSfxItemPoolUsers.erase(aFindResult);
+    }
+}
 
 const SfxPoolItem* SfxItemPool::GetPoolDefaultItem( USHORT nWhich ) const
 {
@@ -162,7 +177,8 @@ SfxItemPool::SfxItemPool
     pSecondary(0),
     pMaster(this),
     _pPoolRanges( 0 ),
-    bPersistentRefCounts(bLoadRefCounts)
+    bPersistentRefCounts(bLoadRefCounts),
+    maSfxItemPoolUsers()
 {
     DBG_CTOR(SfxItemPool, 0);
     DBG_ASSERT(nStart, "Start-Which-Id must be greater 0" );
@@ -222,7 +238,8 @@ SfxItemPool::SfxItemPool
     pSecondary(0),
     pMaster(this),
     _pPoolRanges( 0 ),
-    bPersistentRefCounts(rPool.bPersistentRefCounts )
+    bPersistentRefCounts(rPool.bPersistentRefCounts ),
+    maSfxItemPoolUsers()
 {
     DBG_CTOR(SfxItemPool, 0);
     pImp->eDefMetric = rPool.pImp->eDefMetric;
@@ -387,6 +404,29 @@ SfxItemPool::~SfxItemPool()
     delete[] _pPoolRanges;
     delete pImp;
 }
+
+void SfxItemPool::Free(SfxItemPool* pPool)
+{
+    if(pPool)
+    {
+        // tell all the registered SfxItemPoolUsers that the pool is in destruction
+        SfxItemPoolUserVector aListCopy(pPool->maSfxItemPoolUsers.begin(), pPool->maSfxItemPoolUsers.end());
+        for(SfxItemPoolUserVector::iterator aIterator = aListCopy.begin(); aIterator != aListCopy.end(); aIterator++)
+        {
+            SfxItemPoolUser* pSfxItemPoolUser = *aIterator;
+            DBG_ASSERT(pSfxItemPoolUser, "corrupt SfxItemPoolUser list (!)");
+            pSfxItemPoolUser->ObjectInDestruction(*pPool);
+        }
+
+        // Clear the vector. This means that user do not need to call RemoveSfxItemPoolUser()
+        // when they get called from ObjectInDestruction().
+        pPool->maSfxItemPoolUsers.clear();
+
+        // delete pool
+        delete pPool;
+    }
+}
+
 // -----------------------------------------------------------------------
 
 
