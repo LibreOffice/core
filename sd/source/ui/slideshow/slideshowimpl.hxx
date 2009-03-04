@@ -166,7 +166,7 @@ public:
     virtual void SAL_CALL slideTransitionStarted() throw (css::uno::RuntimeException);
     virtual void SAL_CALL slideTransitionEnded() throw (css::uno::RuntimeException);
     virtual void SAL_CALL slideAnimationsEnded() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL slideEnded() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL slideEnded(sal_Bool bReverse) throw (css::uno::RuntimeException);
     virtual void SAL_CALL hyperLinkClicked(const ::rtl::OUString & hyperLink) throw (css::uno::RuntimeException);
 
     // css::lang::XEventListener:
@@ -208,6 +208,7 @@ public:
     virtual void SAL_CALL addSlideShowListener( const css::uno::Reference< css::presentation::XSlideShowListener >& Listener ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL removeSlideShowListener( const css::uno::Reference< css::presentation::XSlideShowListener >& Listener ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL gotoNextEffect(  ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL gotoPreviousEffect(  ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL gotoFirstSlide(  ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL gotoNextSlide(  ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL gotoPreviousSlide(  ) throw (css::uno::RuntimeException);
@@ -237,7 +238,7 @@ public:
     virtual ::sal_Bool SAL_CALL hasElements(  ) throw (::com::sun::star::uno::RuntimeException);
 
     // will be called from the SlideShowListenerProxy when this event is fired from the XSlideShow
-    void slideEnded();
+    void slideEnded(const bool bReverse);
     void hyperLinkClicked(const ::rtl::OUString & hyperLink) throw (css::uno::RuntimeException);
     void click(const css::uno::Reference< css::drawing::XShape > & xShape, const css::awt::MouseEvent & aOriginalEvent);
 
@@ -278,7 +279,7 @@ private:
 
     void createSlideList( bool bAll, bool bStartWithActualSlide, const String& rPresSlide );
 
-    void displayCurrentSlide();
+    void displayCurrentSlide (const bool bSkipAllMainSequenceEffects = false);
 
     void displaySlideNumber( sal_Int32 nSlide );
     void displaySlideIndex( sal_Int32 nIndex );
@@ -328,6 +329,7 @@ private:
     css::uno::Reference< css::presentation::XSlideShow > createSlideShow() const;
 
     void setAutoSaveState( bool bOn );
+    void gotoPreviousSlide (const bool bSkipAllMainSequenceEffects);
 
     css::uno::Reference< css::presentation::XSlideShow > mxShow;
     comphelper::ImplementationReference< ::sd::SlideShowView, css::presentation::XSlideShowView > mxView;
