@@ -1208,7 +1208,7 @@ sal_Bool callColumnFormatDialog(Window* _pParent,
     }
 
     delete pFormatDescriptor;
-    delete pPool;
+    SfxItemPool::Free(pPool);
     for (sal_uInt16 i=0; i<sizeof(pDefaults)/sizeof(pDefaults[0]); ++i)
         delete pDefaults[i];
 

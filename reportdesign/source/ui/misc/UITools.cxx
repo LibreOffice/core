@@ -797,17 +797,18 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
     };
 
     bool bSuccess = false;
+    SfxItemPool* pPool = new SfxItemPool(String::CreateFromAscii("ReportCharProperties"), ITEMID_FONT,ITEMID_WEIGHT_COMPLEX, aItemInfos, pDefaults);
+    // not needed for font height pPool->SetDefaultMetric( SFX_MAPUNIT_100TH_MM );  // ripped, don't understand why
+    pPool->FreezeIdRanges();                        // the same
+
     try
     {
-        ::std::auto_ptr<SfxItemPool> pPool( new SfxItemPool(String::CreateFromAscii("ReportCharProperties"), ITEMID_FONT,ITEMID_WEIGHT_COMPLEX, aItemInfos, pDefaults) );
-        // not needed for font height pPool->SetDefaultMetric( SFX_MAPUNIT_100TH_MM );  // ripped, don't understand why
-        pPool->FreezeIdRanges();                        // the same
 
-        ::std::auto_ptr<SfxItemSet> pDescriptor( new SfxItemSet( *pPool, pRanges ) );
-        lcl_CharPropertiesToItems( _rxReportControlFormat, *pDescriptor );
+        SfxItemSet aDescriptor( *pPool, pRanges );
+        lcl_CharPropertiesToItems( _rxReportControlFormat, aDescriptor );
 
         {   // want the dialog to be destroyed before our set
-            ORptPageDialog aDlg(pParent, pDescriptor.get(),RID_PAGEDIALOG_CHAR);
+            ORptPageDialog aDlg(pParent, &aDescriptor, RID_PAGEDIALOG_CHAR);
             uno::Reference< report::XShape > xShape( _rxReportControlFormat, uno::UNO_QUERY );
             if ( xShape.is() )
                 aDlg.RemoveTabPage( RID_PAGE_BACKGROUND );
@@ -824,6 +825,8 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
     {
         DBG_UNHANDLED_EXCEPTION();
     }
+
+    SfxItemPool::Free(pPool);
 
     for (sal_uInt16 i=0; i<sizeof(pDefaults)/sizeof(pDefaults[0]); ++i)
         delete pDefaults[i];
@@ -851,16 +854,16 @@ bool openAreaDialog( const uno::Reference<report::XShape >& _xShape,const uno::R
     try
     {
         SfxItemPool& rItemPool = pModel->GetItemPool();
-        ::std::auto_ptr<SfxItemSet> pDescriptor( new SfxItemSet( rItemPool, rItemPool.GetFirstWhich(),rItemPool.GetLastWhich() ) );
+        SfxItemSet aDescriptor( rItemPool, rItemPool.GetFirstWhich(),rItemPool.GetLastWhich() );
 
-        lcl_fillShapeToItems(_xShape,*pDescriptor);
+        lcl_fillShapeToItems(_xShape, aDescriptor);
 
         {   // want the dialog to be destroyed before our set
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-            ::std::auto_ptr<AbstractSvxAreaTabDialog> pDialog(pFact->CreateSvxAreaTabDialog( pParent,pDescriptor.get(),pModel.get(),RID_SVXDLG_AREA ));
+            ::std::auto_ptr<AbstractSvxAreaTabDialog> pDialog(pFact->CreateSvxAreaTabDialog( pParent, &aDescriptor, pModel.get(), RID_SVXDLG_AREA ));
             // #i74099# by default, the dialog deletes the current color table if a different one is loaded
             // (see SwDrawShell::ExecDrawDlg)
-            const SvxColorTableItem* pColorItem = static_cast<const SvxColorTableItem*>( pDescriptor->GetItem(SID_COLOR_TABLE) );
+            const SvxColorTableItem* pColorItem = static_cast<const SvxColorTableItem*>( aDescriptor.GetItem(SID_COLOR_TABLE) );
             if (pColorItem && pColorItem->GetColorTable() == XColorTable::GetStdColorTable())
                 pDialog->DontDeleteColorTable();
             bSuccess = ( RET_OK == pDialog->Execute() );
