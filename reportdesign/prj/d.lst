@@ -26,15 +26,3 @@ dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib;
 ..\uiconfig\dbreport\statusbar\*.xml         %_DEST%\xml%_EXT%\uiconfig\modules\dbreport\statusbar\*.xml
 ..\uiconfig\dbreport\toolbar\*.xml           %_DEST%\xml%_EXT%\uiconfig\modules\dbreport\toolbar\*.xml
 
-# Extensions
-
-..\%__SRC%\bin\*.oxt %_DEST%\bin%_EXT%\*.oxt
-
-# License
-mkdir: %_DEST%\bin%_EXT%\reportdesign
-
-..\license\license_en-US.txt %_DEST%\bin%_EXT%\reportdesign\license_en-US.txt
-..\license\license_en-US.html %_DEST%\bin%_EXT%\reportdesign\license_en-US.html
-..\license\readme_en-US.html %_DEST%\bin%_EXT%\reportdesign\readme_en-US.html
-..\license\readme_en-US.txt %_DEST%\bin%_EXT%\reportdesign\readme_en-US.txt
-..\license\THIRDPARTYREADMELICENSE.html %_DEST%\bin%_EXT%\reportdesign\THIRDPARTYREADMELICENSE.html

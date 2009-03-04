@@ -1,17 +1,6 @@
-rd  reportdesign    :   BOOST:boost JFREEREPORT:jfreereport comphelper dbaccess readlicense_oo wizards formula NULL
+rd  reportdesign    :   BOOST:boost comphelper dbaccess formula NULL
 rd  reportdesign                                                        usr1    -   all rd_mkout NULL
 rd  reportdesign\inc                                                    nmake   -   all rd_inc NULL
-rd  reportdesign\java							                        nmake   -   all rd_java NULL
-rd  reportdesign\java\com\sun\star\report		                        nmake   -   all rd_jreport rd_java NULL
-rd  reportdesign\java\com\sun\star\report\util	                        nmake   -   all rd_jreport_util rd_jreport NULL
-rd  reportdesign\java\com\sun\star\report\pentaho                       nmake   -   all rd_jreport_pe rd_jreport_util rd_jreport_f_m NULL
-rd  reportdesign\java\com\sun\star\report\function\metadata             nmake   -   all rd_jreport_f_m rd_jreport NULL
-rd  reportdesign\registry\schema\org\openoffice\Office                  nmake   -   all rd_reg_schema_ooo NULL
-rd  reportdesign\registry\schema\org\openoffice\Office\UI               nmake   -   all rd_reg_schema_ooo_ui NULL
-rd  reportdesign\registry\data\org\openoffice                           nmake   -   all rd_data_ooOffice NULL
-rd  reportdesign\registry\data\org\openoffice\Office                    nmake   -   all rd_reg_data_ooo rd_reg_schema_ooo NULL
-rd  reportdesign\registry\data\org\openoffice\Office\UI                 nmake   -   all rd_reg_data_ooo_ui rd_reg_schema_ooo_ui NULL
-rd  reportdesign\registry\data\org\openoffice\TypeDetection             nmake   -   all rd_reg_data_oot NULL
 rd  reportdesign\source\core\api                                        nmake   -   all rd_api rd_inc NULL
 rd  reportdesign\source\core\resource                                   nmake   -   all rd_res rd_inc NULL
 rd  reportdesign\source\core\sdr                                        nmake   -   all rd_sdr rd_inc NULL
@@ -22,6 +11,5 @@ rd  reportdesign\source\ui\dlg                                          nmake   
 rd  reportdesign\source\ui\report                                       nmake   -   all rd_uireport rd_inc NULL
 rd  reportdesign\source\ui\inspection                                   nmake   -   all rd_uiinspection rd_inc NULL
 rd  reportdesign\source\filter\xml                                      nmake   -   all rd_filter_xml rd_inc NULL
-rd  reportdesign\template\en-US\wizard\report				nmake   -   all rd_template_en_us_wiz_rep NULL
-rd  reportdesign\util                                                   nmake   -   all rd_util rd_jreport_pe rd_api rd_res rd_shared rd_uimisc rd_uidlg rd_uireport rd_uiinspection rd_sdr rd_misc rd_filter_xml rd_reg_data_ooo rd_data_ooOffice rd_reg_data_oot rd_template_en_us_wiz_rep NULL
+rd  reportdesign\util                                                   nmake   -   all rd_util rd_api rd_res rd_shared rd_uimisc rd_uidlg rd_uireport rd_uiinspection rd_sdr rd_misc rd_filter_xml NULL
 
