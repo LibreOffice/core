@@ -266,6 +266,17 @@
 *** misc/mozilla/configure	Tue Oct 12 06:13:29 2004
 --- misc/build/mozilla/configure	Tue Jan 15 13:34:32 2008
 ***************
+*** 3207,3212 ****
+--- 3207,3214 ----
+  ac_link='${CC-cc} -o conftest${ac_exeext} $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS 1>&5'
+  cross_compiling=$ac_cv_prog_cc_cross
+  fi
++ else
++   ac_cv_prog_CXXCPP="$CXXCPP"
+  fi
+  CXXCPP="$ac_cv_prog_CXXCPP"
+  echo "$ac_t""$CXXCPP" 1>&6
+***************
 *** 4972,4977 ****
 --- 4972,4978 ----
       if test "`echo ${srcdir} | grep -c ^/ 2>/dev/null`" = 0; then
