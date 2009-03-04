@@ -67,11 +67,11 @@ namespace slideshow
         {
             LayerSharedPtr                      pCurrLayer;
             ViewLayerSharedPtr                  pCurrViewLayer;
-            LayerShapeSet::const_iterator       aIter( maAllShapes.begin() );
-            const LayerShapeSet::const_iterator aEnd ( maAllShapes.end() );
+            LayerShapeMap::const_iterator       aIter( maAllShapes.begin() );
+            const LayerShapeMap::const_iterator aEnd ( maAllShapes.end() );
             while( aIter != aEnd )
             {
-                LayerSharedPtr pLayer = aIter->mpLayer.lock();
+                LayerSharedPtr pLayer = aIter->second.lock();
                 if( pLayer && pLayer != pCurrLayer )
                 {
                     pCurrLayer = pLayer;
@@ -79,7 +79,7 @@ namespace slideshow
                 }
 
                 if( pCurrViewLayer )
-                    shapeFunc(aIter->mpShape,pCurrViewLayer);
+                    shapeFunc(aIter->first,pCurrViewLayer);
 
                 ++aIter;
             }
@@ -164,8 +164,17 @@ namespace slideshow
                 std::for_each(maAllShapes.begin(),
                               maAllShapes.end(),
                               boost::bind( &Shape::clearAllViewLayers,
-                                           boost::bind( &ShapeEntry::getShape,
+                                           boost::bind( std::select1st<LayerShapeMap::value_type>(),
                                                         _1 )));
+
+                for (LayerShapeMap::iterator
+                         iShape (maAllShapes.begin()),
+                         iEnd (maAllShapes.end());
+                     iShape!=iEnd;
+                     ++iShape)
+                {
+                    iShape->second.reset();
+                }
 
                 if( bMoreThanOneLayer )
                     maLayers.erase(maLayers.begin()+1,
@@ -265,8 +274,7 @@ namespace slideshow
             std::for_each( maAllShapes.begin(),
                            maAllShapes.end(),
                            boost::bind(&Shape::render,
-                                       boost::bind(&ShapeEntry::getShape,
-                                                   _1)) );
+                               boost::bind( ::std::select1st<LayerShapeMap::value_type>(), _1)) );
         }
 
         void LayerManager::addShape( const ShapeSharedPtr& rShape )
@@ -287,13 +295,11 @@ namespace slideshow
             implAddShape( rShape );
         }
 
-        void LayerManager::putShape2BackgroundLayer( const ShapeEntry& rShapeEntry )
+        void LayerManager::putShape2BackgroundLayer( LayerShapeMap::value_type& rShapeEntry )
         {
             LayerSharedPtr& rBgLayer( maLayers.front() );
-            rBgLayer->setShapeViews(rShapeEntry.mpShape);
-            // changing a part of the ShapeEntry irrelevant for the
-            // set sort order
-            const_cast<ShapeEntry&>(rShapeEntry).mpLayer = rBgLayer;
+            rBgLayer->setShapeViews(rShapeEntry.first);
+            rShapeEntry.second = rBgLayer;
         }
 
         void LayerManager::implAddShape( const ShapeSharedPtr& rShape )
@@ -301,16 +307,16 @@ namespace slideshow
             OSL_ASSERT( !maLayers.empty() ); // always at least background layer
             ENSURE_OR_THROW( rShape, "LayerManager::implAddShape(): invalid Shape" );
 
-            ShapeEntry aShapeEntry(rShape);
+            LayerShapeMap::value_type aValue (rShape, LayerShapeMap::data_type());
 
-            OSL_ASSERT( maAllShapes.find(aShapeEntry) == maAllShapes.end() ); // shape must not be added already
+            OSL_ASSERT( maAllShapes.find(rShape) == maAllShapes.end() ); // shape must not be added already
             mbLayerAssociationDirty = true;
 
             if( mbDisableAnimationZOrder )
                 putShape2BackgroundLayer(
-                    *maAllShapes.insert(aShapeEntry).first );
+                    *maAllShapes.insert(aValue).first );
             else
-                maAllShapes.insert(aShapeEntry);
+                maAllShapes.insert(aValue);
 
             // update shape, it's just added and not yet painted
             if( rShape->isVisible() )
@@ -323,8 +329,7 @@ namespace slideshow
             if( maXShapeHash.erase( rShape->getXShape() ) == 0 )
                 return false; // shape not in map
 
-            OSL_ASSERT( maAllShapes.find(
-                            ShapeEntry(rShape)) != maAllShapes.end() );
+            OSL_ASSERT( maAllShapes.find(rShape) != maAllShapes.end() );
 
             implRemoveShape( rShape );
 
@@ -336,9 +341,7 @@ namespace slideshow
             OSL_ASSERT( !maLayers.empty() ); // always at least background layer
             ENSURE_OR_THROW( rShape, "LayerManager::implRemoveShape(): invalid Shape" );
 
-            const LayerShapeSet::iterator aShapeEntry(
-                maAllShapes.find(
-                    ShapeEntry(rShape)) );
+            const LayerShapeMap::iterator aShapeEntry( maAllShapes.find(rShape) );
 
             if( aShapeEntry == maAllShapes.end() )
                 return;
@@ -354,7 +357,7 @@ namespace slideshow
                 (rShape->isVisible() &&
                  !rShape->isBackgroundDetached()) )
             {
-                LayerSharedPtr pLayer = aShapeEntry->mpLayer.lock();
+                LayerSharedPtr pLayer = aShapeEntry->second.lock();
                 if( pLayer )
                 {
                     // store area early, once the shape is removed from
@@ -419,8 +422,7 @@ namespace slideshow
 
             if( rOrigShape->revokeSubset( rSubsetShape ) )
             {
-                OSL_ASSERT( maAllShapes.find(
-                                ShapeEntry(rSubsetShape)) != maAllShapes.end() );
+                OSL_ASSERT( maAllShapes.find(rSubsetShape) != maAllShapes.end() );
 
                 implRemoveShape( rSubsetShape );
 
@@ -584,11 +586,11 @@ namespace slideshow
             bool                                bIsCurrLayerUpdating(false);
             Layer::EndUpdater                   aEndUpdater;
             LayerSharedPtr                      pCurrLayer;
-            LayerShapeSet::const_iterator       aIter( maAllShapes.begin() );
-            const LayerShapeSet::const_iterator aEnd ( maAllShapes.end() );
+            LayerShapeMap::const_iterator       aIter( maAllShapes.begin() );
+            const LayerShapeMap::const_iterator aEnd ( maAllShapes.end() );
             while( aIter != aEnd )
             {
-                LayerSharedPtr pLayer = aIter->mpLayer.lock();
+                LayerSharedPtr pLayer = aIter->second.lock();
                 if( pLayer != pCurrLayer )
                 {
                     pCurrLayer = pLayer;
@@ -599,10 +601,10 @@ namespace slideshow
                 }
 
                 if( bIsCurrLayerUpdating &&
-                    !aIter->mpShape->isBackgroundDetached() &&
-                    pCurrLayer->isInsideUpdateArea(aIter->mpShape) )
+                    !aIter->first->isBackgroundDetached() &&
+                    pCurrLayer->isInsideUpdateArea(aIter->first) )
                 {
-                    if( !aIter->mpShape->render() )
+                    if( !aIter->first->render() )
                         bRet = false;
                 }
 
@@ -694,8 +696,8 @@ namespace slideshow
             bool bRet( true );
             ViewLayerSharedPtr pTmpLayer( new DummyLayer( rTargetCanvas ) );
 
-            LayerShapeSet::const_iterator       aIter( maAllShapes.begin() );
-            const LayerShapeSet::const_iterator aEnd ( maAllShapes.end() );
+            LayerShapeMap::const_iterator       aIter( maAllShapes.begin() );
+            const LayerShapeMap::const_iterator aEnd ( maAllShapes.end() );
             while( aIter != aEnd )
             {
                 try
@@ -705,11 +707,11 @@ namespace slideshow
                     // ViewLayer. Since we add the shapes in the
                     // maShapeSet order (which is also the render order),
                     // this is equivalent to a subsequent render() call)
-                    aIter->mpShape->addViewLayer( pTmpLayer,
-                                                  true );
+                    aIter->first->addViewLayer( pTmpLayer,
+                                                true );
 
                     // and remove again, this is only temporary
-                    aIter->mpShape->removeViewLayer( pTmpLayer );
+                    aIter->first->removeViewLayer( pTmpLayer );
                 }
                 catch( uno::Exception& )
                 {
@@ -735,21 +737,19 @@ namespace slideshow
             OSL_ASSERT( !maLayers.empty() ); // always at least background layer
             ENSURE_OR_THROW( rShape, "LayerManager::addUpdateArea(): invalid Shape" );
 
-            const LayerShapeSet::const_iterator aShapeEntry(
-                maAllShapes.find(
-                    ShapeEntry(rShape)) );
+            const LayerShapeMap::const_iterator aShapeEntry( maAllShapes.find(rShape) );
 
             if( aShapeEntry == maAllShapes.end() )
                 return;
 
-            LayerSharedPtr pLayer = aShapeEntry->mpLayer.lock();
+            LayerSharedPtr pLayer = aShapeEntry->second.lock();
             if( pLayer )
                 pLayer->addUpdateRange( rShape->getUpdateArea() );
         }
 
         void LayerManager::commitLayerChanges( std::size_t              nCurrLayerIndex,
-                                               LayerShapeSet::const_iterator  aFirstLayerShape,
-                                               LayerShapeSet::const_iterator  aEndLayerShapes )
+                                               LayerShapeMap::const_iterator  aFirstLayerShape,
+                                               LayerShapeMap::const_iterator  aEndLayerShapes )
         {
             const bool bLayerExists( maLayers.size() > nCurrLayerIndex );
             if( bLayerExists )
@@ -768,8 +768,8 @@ namespace slideshow
                     // render and remove from update set
                     while( aFirstLayerShape != aEndLayerShapes )
                     {
-                        maUpdateShapes.erase(aFirstLayerShape->mpShape);
-                        aFirstLayerShape->mpShape->render();
+                        maUpdateShapes.erase(aFirstLayerShape->first);
+                        aFirstLayerShape->first->render();
                         ++aFirstLayerShape;
                     }
                 }
@@ -825,13 +825,13 @@ namespace slideshow
             std::size_t                   nCurrLayerIndex(0);
             bool                          bIsBackgroundLayer(true);
             bool                          bLastWasBackgroundDetached(false); // last shape sprite state
-            LayerShapeSet::iterator       aCurrShapeEntry( maAllShapes.begin() );
-            LayerShapeSet::iterator       aCurrLayerFirstShapeEntry( maAllShapes.begin() );
-            const LayerShapeSet::iterator aEndShapeEntry ( maAllShapes.end() );
+            LayerShapeMap::iterator       aCurrShapeEntry( maAllShapes.begin() );
+            LayerShapeMap::iterator       aCurrLayerFirstShapeEntry( maAllShapes.begin() );
+            const LayerShapeMap::iterator aEndShapeEntry ( maAllShapes.end() );
             ShapeUpdateSet                aUpdatedShapes; // shapes that need update
             while( aCurrShapeEntry != aEndShapeEntry )
             {
-                const ShapeSharedPtr pCurrShape( aCurrShapeEntry->mpShape );
+                const ShapeSharedPtr pCurrShape( aCurrShapeEntry->first );
                 const bool bThisIsBackgroundDetached(
                     pCurrShape->isBackgroundDetached() );
 
@@ -851,7 +851,7 @@ namespace slideshow
                     bIsBackgroundLayer = false;
 
                     if( aWeakLayers.size() <= nCurrLayerIndex ||
-                        aWeakLayers.at(nCurrLayerIndex) != aCurrShapeEntry->mpLayer )
+                        aWeakLayers.at(nCurrLayerIndex) != aCurrShapeEntry->second )
                     {
                         // no more layers left, or shape was not
                         // member of this layer - create a new one
@@ -868,7 +868,7 @@ namespace slideshow
                 // above invalidates iterators
                 LayerSharedPtr& rCurrLayer( maLayers.at(nCurrLayerIndex) );
                 LayerWeakPtr& rCurrWeakLayer( aWeakLayers.at(nCurrLayerIndex) );
-                if( rCurrWeakLayer != aCurrShapeEntry->mpLayer )
+                if( rCurrWeakLayer != aCurrShapeEntry->second )
                 {
                     // mismatch: shape is not contained in current
                     // layer - move shape to that layer, then.
@@ -879,7 +879,7 @@ namespace slideshow
                     // non-sprite shape
                     if( !bThisIsBackgroundDetached && pCurrShape->isVisible() )
                     {
-                        LayerSharedPtr pOldLayer( aCurrShapeEntry->mpLayer.lock() );
+                        LayerSharedPtr pOldLayer( aCurrShapeEntry->second.lock() );
                         if( pOldLayer )
                         {
                             // old layer still valid? then we need to
@@ -894,10 +894,7 @@ namespace slideshow
                             maUpdateShapes.insert( pCurrShape );
                     }
 
-                    // std::set iterators are const for a reason - but
-                    // here, we need modify an aspect of the
-                    // ShapeEntry that has no influence on sort order
-                    const_cast<ShapeEntry&>(*aCurrShapeEntry).mpLayer = rCurrWeakLayer;
+                    aCurrShapeEntry->second = rCurrWeakLayer;
                 }
 
                 // update layerbounds regardless of the fact that the
