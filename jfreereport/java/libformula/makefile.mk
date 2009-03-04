@@ -33,58 +33,29 @@ PRJ=..$/..
 
 PRJNAME=jfreereport
 TARGET=libformula
-VERSION=-0.1.14
+VERSION=-0.2.0
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :	settings.mk
-
-# override buildfile
-ANT_BUILDFILE=build.xml
-
 .INCLUDE : antsettings.mk
 
 .IF "$(SOLAR_JAVA)" != ""
 # --- Files --------------------------------------------------------
 
 TARFILE_NAME=$(TARGET)
-
 TARFILE_ROOTDIR=$(TARGET)
-
 PATCH_FILES=$(PRJ)$/patches$/$(TARGET).patch
-
-CONVERTFILES=build.xml\
-                build.properties \
-                source/org/jfree/formula/function/text/MidFunctionDescription.java \
-                source/org/jfree/formula/function/AbstractFunctionDescription.java \
-                source/org/jfree/formula/function/datetime/Hour-Function.properties \
-                source/org/jfree/formula/function/information/IsBlank-Function.properties \
-                source/org/jfree/formula/function/information/IsErr-Function.properties \
-                source/org/jfree/formula/function/information/IsError-Function.properties \
-                source/org/jfree/formula/function/information/IsEven-Function.properties \
-                source/org/jfree/formula/function/information/IsLogical-Function.properties \
-                source/org/jfree/formula/function/information/IsNa-Function.properties \
-                source/org/jfree/formula/function/information/IsNonText-Function.properties \
-                source/org/jfree/formula/function/information/IsNumber-Function.properties \
-                source/org/jfree/formula/function/information/IsOdd-Function.properties \
-                source/org/jfree/formula/function/information/IsText-Function.properties \
-                source/org/jfree/formula/function/logical/If-Function.properties \
-                source/org/jfree/formula/function/logical/Not-Function.properties \
-                source/org/jfree/formula/function/logical/Or-Function.properties \
-                source/org/jfree/formula/function/math/Even-Function.properties \
-                source/org/jfree/formula/function/math/ModFunctionDescription.java \
-                source/org/jfree/formula/function/text/Trim-Function.properties \
-                source/org/jfree/formula/parser/FormulaParser.java
-
-ADDITIONAL_FILES=source/org/jfree/formula/function/information/IsRef-Function.properties
-OUT2CLASS=$(TARGET)$(VERSION).jar
+CONVERTFILES=build.xml \
+            source$/org$/pentaho$/reporting$/libraries$/formula$/function$/datetime$/DateDifFunction.java \
+            source$/org$/pentaho$/reporting$/libraries$/formula$/lvalues$/FormulaFunction.java
 
 .IF "$(JAVACISGCJ)"=="yes"
 JAVA_HOME=
 .EXPORT : JAVA_HOME
-BUILD_ACTION=$(ANT) -Dlibdir="../../../class" -Dbuild.label="build-$(RSCREVISION)" -Dbuild.compiler=gcj -f $(ANT_BUILDFILE) compile
+BUILD_ACTION=$(ANT) -Dlib="../../../class" -Dbuild.label="build-$(RSCREVISION)" -Dbuild.compiler=gcj -f $(ANT_BUILDFILE) jar
 .ELSE
-BUILD_ACTION=$(ANT) -Dlibdir="../../../class" -Dbuild.label="build-$(RSCREVISION)" -f $(ANT_BUILDFILE) compile
+BUILD_ACTION=$(ANT) -Dlib="../../../class" -Dbuild.label="build-$(RSCREVISION)" -f $(ANT_BUILDFILE) jar
 .ENDIF
 
 
@@ -97,6 +68,11 @@ BUILD_ACTION=$(ANT) -Dlibdir="../../../class" -Dbuild.label="build-$(RSCREVISION
 
 .IF "$(SOLAR_JAVA)" != ""
 .INCLUDE : tg_ext.mk
+
+ALLTAR : $(CLASSDIR)$/$(TARGET)$(VERSION).jar 
+$(CLASSDIR)$/$(TARGET)$(VERSION).jar : $(PACKAGE_DIR)$/$(INSTALL_FLAG_FILE)
+    $(COPY) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/build$/lib$/$(TARGET).jar $(CLASSDIR)$/$(TARGET)$(VERSION).jar
+    
 .ENDIF
 # $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/source$/org$/jfree$/formula$/function$/information$/IsRef-Function.properties : 
 #	@@-$(MKDIRHIER) $(@:d)
