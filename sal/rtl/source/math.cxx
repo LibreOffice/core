@@ -974,9 +974,20 @@ double SAL_CALL rtl_math_expm1( double fValue ) SAL_THROW_EXTERN_C()
 
 double SAL_CALL rtl_math_log1p( double fValue ) SAL_THROW_EXTERN_C()
 {
-    double fp = 1.0 + fValue;
+    // Use volatile because a compiler may be too smart "optimizing" the
+    // condition such that in certain cases the else path was called even if
+    // (fp==1.0) was true, where the term (fp-1.0) then resulted in 0.0 and
+    // hence the entire expression resulted in NaN.
+    // Happened with g++ 3.4.1 and an input value of 9.87E-18
+    volatile double fp = 1.0 + fValue;
     if (fp == 1.0)
         return fValue;
     else
         return log(fp) * fValue / (fp-1.0);
+}
+
+
+double SAL_CALL rtl_math_atanh( double fValue ) SAL_THROW_EXTERN_C()
+{
+   return 0.5 * rtl_math_log1p( 2.0 * fValue / (1.0-fValue) );
 }

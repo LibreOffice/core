@@ -214,6 +214,13 @@ inline double log1p(double fValue)
     return rtl_math_log1p(fValue);
 }
 
+/** A wrapper around rtl_math_atanh.
+ */
+inline double atanh(double fValue)
+{
+    return rtl_math_atanh(fValue);
+}
+
 /** Test equality of two values with an accuracy of the magnitude of the
     given values scaled by 2^-48 (4 bits roundoff stripped).
 

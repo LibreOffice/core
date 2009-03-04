@@ -579,6 +579,7 @@ UDK_3.9 { # OOo 3.1
     global:
         rtl_math_expm1;
         rtl_math_log1p;
+        rtl_math_atanh;
 } UDK_3.8;
 
 PRIVATE_1.0 {
