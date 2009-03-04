@@ -31,61 +31,66 @@
 #ifndef _OUTLOBJ_HXX
 #define _OUTLOBJ_HXX
 
+//////////////////////////////////////////////////////////////////////////////
+
 #include <tools/solar.h>
 #include <tools/string.hxx>
 #include <rsc/rscsfx.hxx>
-#include <svtools/itemset.hxx>
+#include <svx/paragraphdata.hxx>
 #include "svx/svxdllapi.h"
 
-#include <svx/eeitem.hxx>
-
-class Outliner;
 class EditTextObject;
-class SvStream;
-class SfxItemPool;
-class SfxStyleSheetPool;
-class ParagraphData;
+class ImplOutlinerParaObject;
+
+//////////////////////////////////////////////////////////////////////////////
 
 class SVX_DLLPUBLIC OutlinerParaObject
 {
-    friend class Outliner;
+private:
+    ImplOutlinerParaObject*        mpImplOutlinerParaObject;
 
-    EditTextObject*             pText;
-    ParagraphData*              pParagraphDataArr;
-    sal_uInt32                  nCount;
-    BOOL                        bIsEditDoc;
-                                OutlinerParaObject( USHORT nParaCount );
+    void ImplMakeUnique();
 
 public:
-                                OutlinerParaObject( const OutlinerParaObject& );
-                                OutlinerParaObject( const EditTextObject& rTObj );
-                                ~OutlinerParaObject();
+    // constructors/destructor
+    OutlinerParaObject(
+        const EditTextObject& rEditTextObject,
+        const ParagraphDataVector& rParagraphDataVector = ParagraphDataVector(),
+        bool bIsEditDoc = true);
+    OutlinerParaObject(const OutlinerParaObject& rCandidate);
+    ~OutlinerParaObject();
 
-    OutlinerParaObject*         Clone() const;
+    // assignment operator
+    OutlinerParaObject& operator=(const OutlinerParaObject& rCandidate);
 
-    USHORT                      GetOutlinerMode() const;
-    void                        SetOutlinerMode( USHORT n );
+    // compare operator
+    bool operator==(const OutlinerParaObject& rCandidate) const;
+    bool operator!=(const OutlinerParaObject& rCandidate) const { return !operator==(rCandidate); }
 
-    BOOL                        IsVertical() const;
-    void                        SetVertical( BOOL bVertical );
+    // outliner mode access
+    sal_uInt16 GetOutlinerMode() const;
+    void SetOutlinerMode(sal_uInt16 nNew);
 
-    sal_uInt32                  Count() const                   { return nCount; }
-    sal_Int16                   GetDepth( USHORT nPara ) const;
-    const EditTextObject&       GetTextObject() const           { return *pText; }
-    void                        ClearPortionInfo();
-    BOOL                        IsEditDoc() const               { return bIsEditDoc; }
-    void                        Store( SvStream& ) const;
-    static OutlinerParaObject*  Create( SvStream&, SfxItemPool* pTextObjectPool = 0 );
+    // vertical access
+    bool IsVertical() const;
+    void SetVertical(bool bNew);
 
-    BOOL                        ChangeStyleSheets(  const XubString& rOldName, SfxStyleFamily eOldFamily,
-                                                    const XubString& rNewName, SfxStyleFamily eNewFamily );
-    void                        ChangeStyleSheetName( SfxStyleFamily eFamily, const XubString& rOldName, const XubString& rNewName );
-    void                        SetStyleSheets( USHORT nLevel, const XubString rNewName, const SfxStyleFamily& rNewFamily );
+    // data read access
+    sal_uInt32 Count() const;
+    sal_Int16 GetDepth(sal_uInt16 nPara) const;
+    const EditTextObject& GetTextObject() const;
+    bool IsEditDoc() const;
+    const ParagraphData& GetParagraphData(sal_uInt32 nIndex) const;
 
-    BOOL                        RemoveCharAttribs( USHORT nWhich = 0 );
-    BOOL                        RemoveParaAttribs( USHORT nWhich = 0 );
+    // portion info support
+    void ClearPortionInfo();
 
-    void                        MergeParaAttribs( const SfxItemSet& rAttribs, USHORT nStart = EE_CHAR_START, USHORT nEnd = EE_CHAR_END );
+    // StyleSheet support
+    bool ChangeStyleSheets(const XubString& rOldName, SfxStyleFamily eOldFamily, const XubString& rNewName, SfxStyleFamily eNewFamily);
+    void ChangeStyleSheetName(SfxStyleFamily eFamily, const XubString& rOldName, const XubString& rNewName);
+    void SetStyleSheets(sal_uInt16 nLevel, const XubString rNewName, const SfxStyleFamily& rNewFamily);
 };
+
+//////////////////////////////////////////////////////////////////////////////
 
 #endif

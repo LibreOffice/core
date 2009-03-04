@@ -7551,7 +7551,7 @@ SdrObject* SdrPowerPointImport::CreateTable( SdrObject* pGroup, sal_uInt32* pTab
                             {
                                 SdrText* pSdrText = pTable->getText( nTableIndex );
                                 if ( pSdrText )
-                                    pSdrText->SetOutlinerParaObject( pParaObject->Clone() );
+                                    pSdrText->SetOutlinerParaObject(new OutlinerParaObject(*pParaObject) );
                             }
                         }
                     }

@@ -164,6 +164,31 @@ namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 
+namespace drawinglayer
+{
+    namespace primitive2d
+    {
+        // #i97628#
+        // Primitive to encapsulate text from an active text edit; some
+        // renderers need to suppress this output due to painting the
+        // edited text in e.g. an OutlinerEditView. It's derived from
+        // GroupPrimitive2D, so the implicit decomposition will use the
+        // content. To suppress, this primitive needs to be parsed by
+        // the renderer without taking any action
+        class TextHierarchyEditPrimitive2D : public GroupPrimitive2D
+        {
+        private:
+        public:
+            TextHierarchyEditPrimitive2D(const Primitive2DSequence& rChildren);
+
+            // provide unique ID
+            DeclPrimitrive2DIDBlock()
+        };
+    } // end of namespace primitive2d
+} // end of namespace drawinglayer
+
+//////////////////////////////////////////////////////////////////////////////
+
 #endif //INCLUDED_DRAWINGLAYER_PRIMITIVE2D_TEXTHIERARCHYPRIMITIVE2D_HXX
 
 //////////////////////////////////////////////////////////////////////////////

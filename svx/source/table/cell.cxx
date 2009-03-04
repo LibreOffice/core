@@ -409,7 +409,7 @@ void Cell::replaceContentAndFormating( const CellRef& xSourceCell )
     if( xSourceCell.is() && mpProperties )
     {
         mpProperties->SetMergedItemSet( xSourceCell->GetObjectItemSet() );
-        SetOutlinerParaObject( xSourceCell->GetOutlinerParaObject()->Clone() );
+        SetOutlinerParaObject( new OutlinerParaObject(*xSourceCell->GetOutlinerParaObject()) );
 
         SdrTableObj& rTableObj = dynamic_cast< SdrTableObj& >( GetObject() );
         SdrTableObj& rSourceTableObj = dynamic_cast< SdrTableObj& >( xSourceCell->GetObject() );
@@ -509,10 +509,7 @@ const SfxItemSet& Cell::GetObjectItemSet()
     else
     {
         DBG_ERROR("Cell::GetObjectItemSet(), called without properties!");
-        static UniString aEmptyStr;
-        static SfxItemPool aEmptyPool(aEmptyStr,0,0,0);
-        static SfxItemSet aSet(aEmptyPool);
-        return aSet;
+        return GetObject().GetObjectItemSet();
     }
 }
 

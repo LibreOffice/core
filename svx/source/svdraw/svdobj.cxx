@@ -613,8 +613,8 @@ void SdrObject::FreeGlobalDrawObjectItemPool()
     if(mpGlobalItemPool)
     {
         SfxItemPool* pGlobalOutlPool = mpGlobalItemPool->GetSecondaryPool();
-        delete mpGlobalItemPool;
-        delete pGlobalOutlPool;
+        SfxItemPool::Free(mpGlobalItemPool);
+        SfxItemPool::Free(pGlobalOutlPool);
     }
 }
 

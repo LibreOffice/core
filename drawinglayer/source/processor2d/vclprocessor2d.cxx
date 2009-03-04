@@ -66,6 +66,7 @@
 #include <vcl/svapp.hxx>
 #include <drawinglayer/primitive2d/pagepreviewprimitive2d.hxx>
 #include <tools/diagnose_ex.h>
+#include <vcl/metric.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // control support
@@ -158,9 +159,42 @@ namespace drawinglayer
 
                 if(basegfx::fTools::more(aScale.getX(), 0.0) && basegfx::fTools::more(aScale.getY(), 0.0))
                 {
-                    // prepare everything that is not sheared and mirrored
+                    // #i96581# Get the font forced without FontStretching (use FontHeight as FontWidth)
                     Font aFont(primitive2d::getVclFontFromFontAttributes(
-                        rTextCandidate.getFontAttributes(), aScale.getX(), aScale.getY(), fRotate, *mpOutputDevice));
+                        rTextCandidate.getFontAttributes(),
+                        aScale.getY(),
+                        aScale.getY(),
+                        fRotate,
+                        *mpOutputDevice));
+
+                    if(!basegfx::fTools::equal(aScale.getX(), aScale.getY()))
+                    {
+                        // #i96581# font stretching is needed; examine how big the difference between X and Y scaling is
+                        const double fPercent(fabs(1.0 - (aScale.getX() / aScale.getY())));
+                        static double fMaximumAcceptedPercent(0.05);
+                        static bool bForceAdaption(false);
+
+                        if(bForceAdaption || fPercent > fMaximumAcceptedPercent)
+                        {
+                            // #i96581# Need to adapt to a FontStretching bigger than acceptable maximum.
+                            // Get font's real width using FontMetric and adapt font to stretched
+                            // font
+                            const FontMetric aFontMetric(mpOutputDevice->GetFontMetric(aFont));
+                            const double fRealFontWidth(aFontMetric.GetWidth());
+
+                            aFont = primitive2d::getVclFontFromFontAttributes(
+                                rTextCandidate.getFontAttributes(),
+                                fRealFontWidth,
+                                aScale.getY(),
+                                fRotate,
+                                *mpOutputDevice);
+                        }
+                        else
+                        {
+                            // #i96581# less than allowed maximum (probably SC's generated MapModes). React
+                            // pragmatically by ignoring the stretching up to this point
+                        }
+                    }
 
                     // handle additional font attributes
                     const primitive2d::TextDecoratedPortionPrimitive2D* pTCPP =
@@ -317,7 +351,7 @@ namespace drawinglayer
         }
 
         // direct draw of hairline
-        void VclProcessor2D::RenderPolygonHairlinePrimitive2D(const primitive2d::PolygonHairlinePrimitive2D& rPolygonCandidate)
+        void VclProcessor2D::RenderPolygonHairlinePrimitive2D(const primitive2d::PolygonHairlinePrimitive2D& rPolygonCandidate, bool bPixelBased)
         {
             const basegfx::BColor aHairlineColor(maBColorModifierStack.getModifiedColor(rPolygonCandidate.getBColor()));
             mpOutputDevice->SetLineColor(Color(aHairlineColor));
@@ -325,6 +359,17 @@ namespace drawinglayer
 
             basegfx::B2DPolygon aLocalPolygon(rPolygonCandidate.getB2DPolygon());
             aLocalPolygon.transform(maCurrentTransformation);
+
+            if(bPixelBased && getOptionsDrawinglayer().IsAntiAliasing() && getOptionsDrawinglayer().IsSnapHorVerLinesToDiscrete())
+            {
+                // #i98289#
+                // when a Hairline is painted and AntiAliasing is on the option SnapHorVerLinesToDiscrete
+                // allows to suppress AntiAliasing for pure horizontal or vertical lines. This is done since
+                // not-AntiAliased such lines look more pleasing to the eye (e.g. 2D chart content). This
+                // NEEDS to be done in discrete coordinates, so only useful for pixel based rendering.
+                aLocalPolygon = basegfx::tools::snapPointsOfHorizontalOrVerticalEdges(aLocalPolygon);
+            }
+
             mpOutputDevice->DrawPolyLine(aLocalPolygon, 0.0);
         }
 
@@ -623,6 +668,8 @@ namespace drawinglayer
             // units e.g. when creating a new MetaFile, but since much huger value ranges are used
             // there typically will be okay for this compromize.
             Rectangle aDestRectView(
+                // !!CAUTION!! Here, ceil and floor are exchanged BY PURPOSE, do NOT copy when
+                // looking for a standard conversion to rectangle (!)
                 (sal_Int32)ceil(aOutlineRange.getMinX()), (sal_Int32)ceil(aOutlineRange.getMinY()),
                 (sal_Int32)floor(aOutlineRange.getMaxX()), (sal_Int32)floor(aOutlineRange.getMaxY()));
 

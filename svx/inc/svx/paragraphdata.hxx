@@ -6,9 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: primitiveFactory2d.hxx,v $
- *
- * $Revision: 1.2 $
+ * $RCSfile: outlobj.hxx,v $
+ * $Revision: 1.5.78.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,41 +28,48 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_SDR_PRIMITIVE2D_PRIMITIVETOOLS_HXX
-#define INCLUDED_SDR_PRIMITIVE2D_PRIMITIVETOOLS_HXX
+#ifndef _PARAGRAPH_DATA_HXX
+#define _PARAGRAPH_DATA_HXX
 
-#include <vcl/bitmapex.hxx>
-#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
-
-//////////////////////////////////////////////////////////////////////////////
-// predefines
-
-namespace basegfx {
-    class BColor;
-    class B2DHomMatrix;
-}
+#include <tools/solar.h>
+#include <vector>
 
 //////////////////////////////////////////////////////////////////////////////
-// helper methods
+// MT 07/00: Only for internal use, oder some kind like hPara for the few
+// functions where you need it outside ( eg. moving paragraphs... )
+//
+// AW: Unfortunately NOT only local (formally in outliner.hxx), but also
+// used in outlobj.hxx. Moved to own header
 
-namespace drawinglayer
+class ParagraphData
 {
-    namespace primitive2d
-    {
-        // create a 3x3 cross in given color as BitmapEx
-        BitmapEx createDefaultCross_3x3(const basegfx::BColor& rBColor);
+    friend class Paragraph;
+    friend class OutlinerParaObject;
 
-        // create a 7x7 gluepoint symbol in given colors as BitmapEx
-        BitmapEx createDefaultGluepoint_7x7(const basegfx::BColor& rBColorA, const basegfx::BColor& rBColorB);
+protected:
+    sal_Int16           nDepth;
+    sal_Int16           mnNumberingStartValue;
+    sal_Bool            mbParaIsNumberingRestart;
 
-        // #i99123#
-        Primitive2DReference createFallbackHitTestPrimitive(const basegfx::B2DHomMatrix& rMatrix);
+public:
+    ParagraphData( const ParagraphData& );
+    ParagraphData();
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    ParagraphData& operator=( const ParagraphData& );
+
+    // compare operator
+    bool operator==(const ParagraphData& rCandidate) const;
+
+    // data read access
+    sal_Int16 getDepth() const { return nDepth; }
+};
 
 //////////////////////////////////////////////////////////////////////////////
 
-#endif //INCLUDED_SDR_PRIMITIVE2D_PRIMITIVETOOLS_HXX
+typedef ::std::vector< ParagraphData > ParagraphDataVector;
+
+//////////////////////////////////////////////////////////////////////////////
+
+#endif // _PARAGRAPH_DATA_HXX
 
 // eof

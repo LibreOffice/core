@@ -662,7 +662,7 @@ bool SdrTextObj::impDecomposeContourTextPrimitive(
     rOutliner.SetPaperSize(aNullSize);
     rOutliner.SetPolygon(aPolyPolygon);
     rOutliner.SetUpdateMode(true);
-    rOutliner.SetText(*rSdrContourTextPrimitive.getSdrText().GetOutlinerParaObject());
+    rOutliner.SetText(rSdrContourTextPrimitive.getOutlinerParaObject());
 
     // set visualizing page at Outliner; needed e.g. for PageNumberField decomposition
     rOutliner.setVisualizedPage(GetSdrPageFromXDrawPage(aViewInformation.getVisualizedPage()));
@@ -729,9 +729,7 @@ bool SdrTextObj::impDecomposeBlockTextPrimitive(
     // add one to rage sizes to get back to the old Rectangle and outliner measurements
     const sal_uInt32 nAnchorTextWidth(FRound(aAnchorTextRange.getWidth() + 1L));
     const sal_uInt32 nAnchorTextHeight(FRound(aAnchorTextRange.getHeight() + 1L));
-    const OutlinerParaObject* pOutlinerParaObject = rSdrBlockTextPrimitive.getSdrText().GetOutlinerParaObject();
-    OSL_ENSURE(pOutlinerParaObject, "impDecomposeBlockTextPrimitive used with no OutlinerParaObject (!)");
-    const bool bVerticalWritintg(pOutlinerParaObject->IsVertical());
+    const bool bVerticalWritintg(rSdrBlockTextPrimitive.getOutlinerParaObject().IsVertical());
     const Size aAnchorTextSize(Size(nAnchorTextWidth, nAnchorTextHeight));
 
     if(bIsCell)
@@ -743,7 +741,7 @@ bool SdrTextObj::impDecomposeBlockTextPrimitive(
         rOutliner.SetPaperSize(aAnchorTextSize);
         rOutliner.SetMinAutoPaperSize(Size(nAnchorTextWidth, 0));
         rOutliner.SetUpdateMode(TRUE);
-        rOutliner.SetText(*pOutlinerParaObject);
+        rOutliner.SetText(rSdrBlockTextPrimitive.getOutlinerParaObject());
         rOutliner.SetUpdateMode(TRUE);
         rOutliner.SetControlWord(nOriginalControlWord);
     }
@@ -766,7 +764,7 @@ bool SdrTextObj::impDecomposeBlockTextPrimitive(
 
         rOutliner.SetPaperSize(aNullSize);
         rOutliner.SetUpdateMode(true);
-        rOutliner.SetText(*pOutlinerParaObject);
+        rOutliner.SetText(rSdrBlockTextPrimitive.getOutlinerParaObject());
         rOutliner.SetControlWord(nOriginalControlWord);
     }
 
@@ -894,7 +892,7 @@ bool SdrTextObj::impDecomposeStretchTextPrimitive(
     rOutliner.SetMaxAutoPaperSize(Size(1000000,1000000));
     rOutliner.SetPaperSize(aNullSize);
     rOutliner.SetUpdateMode(true);
-    rOutliner.SetText(*rSdrStretchTextPrimitive.getSdrText().GetOutlinerParaObject());
+    rOutliner.SetText(rSdrStretchTextPrimitive.getOutlinerParaObject());
 
     // set visualizing page at Outliner; needed e.g. for PageNumberField decomposition
     rOutliner.setVisualizedPage(GetSdrPageFromXDrawPage(aViewInformation.getVisualizedPage()));

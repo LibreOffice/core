@@ -38,6 +38,7 @@
 #include <svx/sdr/attribute/sdrallattribute.hxx>
 #include <svx/sdr/primitive2d/sdrrectangleprimitive2d.hxx>
 #include <svtools/itemset.hxx>
+#include <svx/sdr/primitive2d/sdrprimitivetools.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -110,6 +111,18 @@ namespace sdr
                     }
 
                     delete pAttribute;
+                }
+
+                if(!xRetval.hasElements())
+                {
+                    // #i99123#
+                    // Object is invisible. Create a fallback primitive for HitTest
+                    basegfx::B2DHomMatrix aObjectMatrix;
+                    basegfx::B2DPolyPolygon aObjectPolyPolygon;
+                    GetRectObj().TRGetBaseGeometry(aObjectMatrix, aObjectPolyPolygon);
+                    const drawinglayer::primitive2d::Primitive2DReference xReference(
+                        drawinglayer::primitive2d::createFallbackHitTestPrimitive(aObjectMatrix));
+                    xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
                 }
             }
 

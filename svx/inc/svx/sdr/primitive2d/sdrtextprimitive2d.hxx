@@ -36,6 +36,8 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <com/sun/star/drawing/XDrawPage.hpp>
+#include <boost/shared_ptr.hpp>
+#include <svx/outlobj.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // predefines
@@ -53,6 +55,11 @@ namespace drawinglayer
             // The text model data; this sould later just be the OutlinerParaObject or
             // something equal
             const SdrText&                          mrSdrText;              // text model data
+
+            // #i97628#
+            // The text content; now as OutlinerParaObject* and in exclusive, local, cloned
+            // form as needed in a primitive
+            const OutlinerParaObject                maOutlinerParaObject;
 
             // remeber last VisualizingPage for which a decomposition was made. If the new target
             // is not given or different, the decomposition needs to be potentially removed
@@ -77,10 +84,13 @@ namespace drawinglayer
             void setLastSpellCheck(bool bNew) { mbLastSpellCheck = bNew; }
 
         public:
-            SdrTextPrimitive2D(const SdrText& rSdrText);
+            SdrTextPrimitive2D(
+                const SdrText& rSdrText,
+                const OutlinerParaObject& rOutlinerParaObjectPtr);
 
             // get data
             const SdrText& getSdrText() const { return mrSdrText; }
+            const OutlinerParaObject& getOutlinerParaObject() const { return maOutlinerParaObject; }
 
             // compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
@@ -114,6 +124,7 @@ namespace drawinglayer
         public:
             SdrContourTextPrimitive2D(
                 const SdrText& rSdrText,
+                const OutlinerParaObject& rOutlinerParaObjectPtr,
                 const ::basegfx::B2DPolyPolygon& rUnitPolyPolygon,
                 const ::basegfx::B2DHomMatrix& rObjectTransform);
 
@@ -151,6 +162,7 @@ namespace drawinglayer
         public:
             SdrPathTextPrimitive2D(
                 const SdrText& rSdrText,
+                const OutlinerParaObject& rOutlinerParaObjectPtr,
                 const ::basegfx::B2DPolyPolygon& rPathPolyPolygon);
 
             // get data
@@ -191,6 +203,7 @@ namespace drawinglayer
         public:
             SdrBlockTextPrimitive2D(
                 const SdrText& rSdrText,
+                const OutlinerParaObject& rOutlinerParaObjectPtr,
                 const ::basegfx::B2DHomMatrix& rTextRangeTransform,
                 bool bUnlimitedPage,
                 bool bCellText,
@@ -232,6 +245,7 @@ namespace drawinglayer
         public:
             SdrStretchTextPrimitive2D(
                 const SdrText& rSdrText,
+                const OutlinerParaObject& rOutlinerParaObjectPtr,
                 const ::basegfx::B2DHomMatrix& rTextRangeTransform);
 
             // get data

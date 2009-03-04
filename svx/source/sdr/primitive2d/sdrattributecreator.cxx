@@ -475,7 +475,7 @@ namespace drawinglayer
 
         attribute::SdrTextAttribute* createNewSdrTextAttribute(const SfxItemSet& rSet, const SdrText& rText)
         {
-            attribute::SdrTextAttribute* pRetval(0L);
+            attribute::SdrTextAttribute* pRetval(0);
             const SdrTextObj& rTextObj = rText.GetObject();
 
             if(rText.GetOutlinerParaObject() && rText.GetModel())
@@ -492,24 +492,40 @@ namespace drawinglayer
                     bInEditMode = rTextObj.IsInEditMode();
                 }
 
-                if(!bInEditMode)
-                {
-                    const SdrFitToSizeType eFit = rTextObj.GetFitToSize();
-                    const SdrTextAniKind eAniKind(rTextObj.GetTextAniKind());
+                OutlinerParaObject aOutlinerParaObject(*rText.GetOutlinerParaObject());
 
-                    pRetval = new attribute::SdrTextAttribute(
-                        rText,
-                        ((const XFormTextStyleItem&)rSet.Get(XATTR_FORMTXTSTYLE)).GetValue(),
-                        rTextObj.GetTextLeftDistance(),
-                        rTextObj.GetTextUpperDistance(),
-                        rTextObj.GetTextRightDistance(),
-                        rTextObj.GetTextLowerDistance(),
-                        ((const SdrTextContourFrameItem&)rSet.Get(SDRATTR_TEXT_CONTOURFRAME)).GetValue(),
-                        (SDRTEXTFIT_PROPORTIONAL == eFit || SDRTEXTFIT_ALLLINES == eFit),
-                        ((const XFormTextHideFormItem&)rSet.Get(XATTR_FORMTXTHIDEFORM)).GetValue(),
-                        SDRTEXTANI_BLINK == eAniKind,
-                        SDRTEXTANI_SCROLL == eAniKind || SDRTEXTANI_ALTERNATE == eAniKind || SDRTEXTANI_SLIDE == eAniKind);
+                if(bInEditMode)
+                {
+                    OutlinerParaObject* pTempObj = rTextObj.GetEditOutlinerParaObject();
+
+                    if(pTempObj)
+                    {
+                        aOutlinerParaObject = *pTempObj;
+                        delete pTempObj;
+                    }
+                    else
+                    {
+                        bInEditMode = false;
+                    }
                 }
+
+                const SdrFitToSizeType eFit = rTextObj.GetFitToSize();
+                const SdrTextAniKind eAniKind(rTextObj.GetTextAniKind());
+
+                pRetval = new attribute::SdrTextAttribute(
+                    rText,
+                    aOutlinerParaObject,
+                    ((const XFormTextStyleItem&)rSet.Get(XATTR_FORMTXTSTYLE)).GetValue(),
+                    rTextObj.GetTextLeftDistance(),
+                    rTextObj.GetTextUpperDistance(),
+                    rTextObj.GetTextRightDistance(),
+                    rTextObj.GetTextLowerDistance(),
+                    ((const SdrTextContourFrameItem&)rSet.Get(SDRATTR_TEXT_CONTOURFRAME)).GetValue(),
+                    (SDRTEXTFIT_PROPORTIONAL == eFit || SDRTEXTFIT_ALLLINES == eFit),
+                    ((const XFormTextHideFormItem&)rSet.Get(XATTR_FORMTXTHIDEFORM)).GetValue(),
+                    SDRTEXTANI_BLINK == eAniKind,
+                    SDRTEXTANI_SCROLL == eAniKind || SDRTEXTANI_ALTERNATE == eAniKind || SDRTEXTANI_SLIDE == eAniKind,
+                    bInEditMode);
             }
 
             return pRetval;

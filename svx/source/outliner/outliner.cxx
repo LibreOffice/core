@@ -378,14 +378,19 @@ OutlinerParaObject* Outliner::CreateParaObject( USHORT nStartPara, USHORT nCount
     if( !nCount )
         return NULL;
 
-    OutlinerParaObject* pPObj = new OutlinerParaObject( nCount );
-    pPObj->pText = pEditEngine->CreateTextObject( nStartPara, nCount );
-    pPObj->SetOutlinerMode( GetMode() );
-    pPObj->bIsEditDoc = ( ImplGetOutlinerMode() == OUTLINERMODE_TEXTOBJECT ) ? TRUE : FALSE;
+    EditTextObject* pText = pEditEngine->CreateTextObject( nStartPara, nCount );
+    const bool bIsEditDoc(OUTLINERMODE_TEXTOBJECT == ImplGetOutlinerMode());
+    ParagraphDataVector aParagraphDataVector(nCount);
+    const sal_uInt16 nLastPara(nStartPara + nCount - 1);
 
-    USHORT nLastPara = nStartPara + nCount - 1;
-    for ( USHORT nPara = nStartPara; nPara <= nLastPara; nPara++ )
-        pPObj->pParagraphDataArr[ nPara-nStartPara] = *GetParagraph( nPara );
+    for(sal_uInt16 nPara(nStartPara); nPara <= nLastPara; nPara++)
+    {
+        aParagraphDataVector[nPara-nStartPara] = *GetParagraph(nPara);
+    }
+
+    OutlinerParaObject* pPObj = new OutlinerParaObject(*pText, aParagraphDataVector, bIsEditDoc);
+    pPObj->SetOutlinerMode(GetMode());
+    delete pText;
 
     return pPObj;
 }
@@ -573,8 +578,8 @@ void Outliner::SetText( const OutlinerParaObject& rPObj )
     Init( rPObj.GetOutlinerMode() );
 
     ImplBlockInsertionCallbacks( TRUE );
-    pEditEngine->SetText( *(rPObj.pText) );
-    if( rPObj.nCount != pEditEngine->GetParagraphCount() )
+    pEditEngine->SetText(rPObj.GetTextObject());
+    if( rPObj.Count() != pEditEngine->GetParagraphCount() )
     {
         int nop=0;nop++;
     }
@@ -582,9 +587,9 @@ void Outliner::SetText( const OutlinerParaObject& rPObj )
     bFirstParaIsEmpty = FALSE;
 
     pParaList->Clear( TRUE );
-    for( USHORT nCurPara = 0; nCurPara < rPObj.nCount; nCurPara++ )
+    for( USHORT nCurPara = 0; nCurPara < rPObj.Count(); nCurPara++ )
     {
-        Paragraph* pPara = new Paragraph( rPObj.pParagraphDataArr[ nCurPara ] );
+        Paragraph* pPara = new Paragraph( rPObj.GetParagraphData(nCurPara));
         ImplCheckDepth( pPara->nDepth );
 
         pParaList->Insert( pPara, LIST_APPEND );
@@ -614,19 +619,19 @@ void Outliner::AddText( const OutlinerParaObject& rPObj )
     if( bFirstParaIsEmpty )
     {
         pParaList->Clear( TRUE );
-        pEditEngine->SetText( *(rPObj.pText) );
+        pEditEngine->SetText(rPObj.GetTextObject());
         nPara = 0;
     }
     else
     {
         nPara = pParaList->GetParagraphCount();
-        pEditEngine->InsertParagraph( EE_PARA_APPEND, *(rPObj.pText) );
+        pEditEngine->InsertParagraph( EE_PARA_APPEND, rPObj.GetTextObject() );
     }
     bFirstParaIsEmpty = FALSE;
 
-    for( USHORT n = 0; n < rPObj.nCount; n++ )
+    for( USHORT n = 0; n < rPObj.Count(); n++ )
     {
-        pPara = new Paragraph( rPObj.pParagraphDataArr[ n ] );
+        pPara = new Paragraph( rPObj.GetParagraphData(n) );
         pParaList->Insert( pPara, LIST_APPEND );
         USHORT nP = sal::static_int_cast< USHORT >(nPara+n);
         DBG_ASSERT(pParaList->GetAbsPos(pPara)==nP,"AddText:Out of sync");

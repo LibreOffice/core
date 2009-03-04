@@ -83,31 +83,34 @@ const UINT32 IMapInventor = UINT32('I') * 0x00000001+
                             UINT32('P') * 0x01000000;
 
 
+typedef boost::shared_ptr< IMapObject > IMapObjectPtr;
+
 class IMapUserData : public SdrObjUserData
 {
-    IMapObject* pObj;
+    // #i98386# use boost::shared_ptr here due to cloning possibilities
+    IMapObjectPtr           mpObj;
 
 public:
 
                             IMapUserData() :
                                 SdrObjUserData  ( IMapInventor, SVD_IMAP_USERDATA, 0 ),
-                                pObj            ( NULL ) {}
+                                mpObj           ( ) {}
 
-                            IMapUserData( IMapObject* pIMapObj ) :
+                            IMapUserData( const IMapObjectPtr& rIMapObj ) :
                                 SdrObjUserData  ( IMapInventor, SVD_IMAP_USERDATA, 0 ),
-                                pObj            ( pIMapObj ) {}
+                                mpObj           ( rIMapObj ) {}
 
                             IMapUserData( const IMapUserData& rIMapUserData ) :
                                 SdrObjUserData  ( IMapInventor, SVD_IMAP_USERDATA, 0 ),
-                                pObj            ( rIMapUserData.pObj ) {}
+                                mpObj           ( rIMapUserData.mpObj ) {}
 
-                            ~IMapUserData() { delete pObj; }
+                            ~IMapUserData() { }
 
     virtual SdrObjUserData* Clone( SdrObject * ) const { return new IMapUserData( *this ); }
 
-    void                    SetObject( IMapObject* pIMapObj ) { pObj = pIMapObj; }
-    IMapObject*             GetObject() const { return pObj; }
-    void                    ReplaceObject( IMapObject* pNewIMapObject ) { delete pObj; pObj = pNewIMapObject; }
+    void                    SetObject( const IMapObjectPtr& rIMapObj ) { mpObj = rIMapObj; }
+    const IMapObjectPtr     GetObject() const { return mpObj; }
+    void                    ReplaceObject( const IMapObjectPtr& pNewIMapObject ) { mpObj = pNewIMapObject; }
 };
 
 
