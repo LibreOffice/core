@@ -89,10 +89,11 @@ public:
     FormulaCompiler(FormulaTokenArray& _rArr);
     virtual ~FormulaCompiler();
 
-    // SUNWS7 needs a forward declared friend, otherwise members of the outer
+    // SUNWS8 needs a forward declared friend, otherwise members of the outer
     // class are not accessible.
     class OpCodeMap;
     friend class FormulaCompiler::OpCodeMap;
+
     /** Mappings from strings to OpCodes and vice versa. */
     class FORMULA_DLLPUBLIC OpCodeMap
     {
