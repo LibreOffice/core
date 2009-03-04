@@ -8,7 +8,7 @@
 #
 # $RCSfile: libs.mk,v $
 #
-# $Revision: 1.141 $
+# $Revision: 1.134.2.3 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -28,7 +28,7 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
-LIBSMKREV!:="$$Revision: 1.141 $$"
+LIBSMKREV!:="$$Revision: 1.134.2.3 $$"
 
 .IF ("$(GUI)"=="UNX" || "$(COM)"=="GCC") && "$(GUI)"!="OS2"
 
@@ -346,7 +346,7 @@ ULINGULIB=-lulingu
 .IF "$(SYSTEM_HUNSPELL)" == "YES"
 HUNSPELLLIB=$(HUNSPELL_LIBS)
 .ELSE
-HUNSPELLLIB=-lhunspell-1.1
+HUNSPELLLIB=-lhunspell-1.2
 .ENDIF
 MYTHESLIB=-lmythes
 PYUNOLIB=-lpyuno

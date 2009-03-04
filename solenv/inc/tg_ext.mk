@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -269,7 +269,7 @@ $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE) : $(PACKAGE_DIR)$/$(INSTALL_FLAG_FILE)
 .ENDIF			# "$(OUT2LIB)"!=""
 .IF "$(OUT2INC)"!=""
 .IF "$(OUT2INC_SUBDIR)"!=""
-    -$(MKDIR) $(INCCOM)$/$(OUT2INC_SUBDIR)
+    -$(MKDIRHIER) $(INCCOM)$/$(OUT2INC_SUBDIR)
     $(COPY) $(foreach,i,$(OUT2INC) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$i) $(INCCOM)$/$(OUT2INC_SUBDIR)
 .ELSE          # "$(OUT2INC_SUBDIR)"!=""
     $(COPY) $(foreach,i,$(OUT2INC) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$i) $(INCCOM)
@@ -329,7 +329,7 @@ $(MISC)$/$(TARFILE_ROOTDIR).done : $(MISC)$/$(TARFILE_NAME).unpack $(PATCH_FILES
 .ENDIF			# "$(PATCH_FILES)"!="none" && "$(PATCH_FILES)"!="
 .IF "$(GUI)"=="UNX"	
     $(TOUCH) $@
-.ENDIF			# "$(GUI)"=="UNX"	
+.ENDIF			# "$(GUI)"=="UNX"
 
 .IF "$(T_ADDITIONAL_FILES)"!=""
 $(T_ADDITIONAL_FILES:+".dummy") : $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE)
@@ -344,7 +344,7 @@ create_patch : $(MISC)$/$(TARFILE_ROOTDIR).done $(PACKAGE_DIR)$/$(PATCH_FLAG_FIL
     @@-$(MKDIRHIER) $(PRJ)$/$(NEW_PATCH_FILE_NAME:d)
     @@-$(RM) $(MISC)$/$(NEW_PATCH_FILE_NAME:f).tmp
     @@-$(RM) $(PRJ)$/$(PATH_IN_MODULE)$/$(NEW_PATCH_FILE_NAME).bak
-#ignore returncode of 1 (indicates differences...)	
+#ignore returncode of 1 (indicates differences...)
 # hard coded again to get the same directory level as before. quite ugly...
     -cd $(PRJ)$/$(ROUT) && diff -ru misc$/$(TARFILE_ROOTDIR) misc$/build$/$(TARFILE_ROOTDIR) | $(PERL) $(SOLARENV)$/bin$/cleandiff.pl | tr -d "\015" > misc$/$(NEW_PATCH_FILE_NAME:f).tmp
     -mv $(PRJ)$/$(PATH_IN_MODULE)$/$(NEW_PATCH_FILE_NAME) $(PRJ)$/$(PATH_IN_MODULE)$/$(NEW_PATCH_FILE_NAME).bak
