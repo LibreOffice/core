@@ -930,26 +930,26 @@ POPPLER_LIBS
 ENABLE_PDFIMPORT
 SYSTEM_POPPLER
 ENABLE_MEDIAWIKI
-SYSTEM_APACHE_COMMONS
-COMMONS_CODEC_JAR
-COMMONS_LANG_JAR
-COMMONS_HTTPCLIENT_JAR
-COMMONS_LOGGING_JAR
 SYSTEM_SERVLETAPI
 SERVLETAPI_JAR
 ENABLE_REPORTBUILDER
 SYSTEM_JFREEREPORT
-JCOMMON_JAR
 SAC_JAR
 LIBXML_JAR
 FLUTE_JAR
 JFREEREPORT_JAR
+LIBBASE_JAR
 LIBLAYOUT_JAR
 LIBLOADER_JAR
 LIBFORMULA_JAR
 LIBREPOSITORY_JAR
 LIBFONTS_JAR
-JCOMMON_SERIALIZER_JAR
+LIBSERIALIZER_JAR
+SYSTEM_APACHE_COMMONS
+COMMONS_CODEC_JAR
+COMMONS_LANG_JAR
+COMMONS_HTTPCLIENT_JAR
+COMMONS_LOGGING_JAR
 MOC
 KDE_CFLAGS
 KDE_LIBS
@@ -1724,7 +1724,7 @@ Optional Features:
 
   --enable-wiki-publisher      enables the build of the Wiki Publisher extension
 
-  --enable-report-builder  disables the build of the Report Builder extension
+  --enable-report-builder  enables the build of the Report Builder extension
 
   --disable-neon          Disable neon and the compilation of webdav binding
 
@@ -1892,7 +1892,6 @@ Optional Packages:
   --servlet-api-jar=JARFILE   Specify path to jarfile manually
   --with-system-jfreereport      Use JFreeReport already on system
 
-  --with-jcommon-jar=JARFILE   Specify path to jarfile manually
   --with-sac-jar=JARFILE   Specify path to jarfile manually
   --with-libxml-jar=JARFILE   Specify path to jarfile manually
   --with-flute-jar=JARFILE   Specify path to jarfile manually
@@ -1902,7 +1901,8 @@ Optional Packages:
   --with-libformula-jar=JARFILE   Specify path to jarfile manually
   --with-librepository-jar=JARFILE   Specify path to jarfile manually
   --with-libfonts-jar=JARFILE   Specify path to jarfile manually
-  --with-jcommon-serializer-jar=JARFILE   Specify path to jarfile manually
+  --libserializer-jar=JARFILE   Specify path to jarfile manually
+  --with-libbase-jar=JARFILE   Specify path to jarfile manually
   --with-system-saxon     Use saxon already on system
 
   --with-saxon-jar=JARFILE   Specify path to jarfile manually
@@ -3167,13 +3167,6 @@ if test "${with_system_jfreereport+set}" = set; then
 fi
 
 
-# Check whether --with-jcommon-jar was given.
-if test "${with_jcommon_jar+set}" = set; then
-  withval=$with_jcommon_jar;  JCOMMON_JAR="$withval"
-
-fi
-
-
 # Check whether --with-sac-jar was given.
 if test "${with_sac_jar+set}" = set; then
   withval=$with_sac_jar;  SAC_JAR="$withval"
@@ -3244,9 +3237,16 @@ if test "${with_libfonts_jar+set}" = set; then
 fi
 
 
-# Check whether --with-jcommon-serializer-jar was given.
-if test "${with_jcommon_serializer_jar+set}" = set; then
-  withval=$with_jcommon_serializer_jar;  JCOMMON_SERIALIZER_JAR="$withval"
+# Check whether --with-libserializer-jar was given.
+if test "${with_libserializer_jar+set}" = set; then
+  withval=$with_libserializer_jar;  LIBSERIALIZER_JAR="$withval"
+
+fi
+
+
+# Check whether --with-libbase-jar was given.
+if test "${with_libbase_jar+set}" = set; then
+  withval=$with_libbase_jar;  LIBBASE_JAR="$withval"
 
 fi
 
@@ -25456,201 +25456,12 @@ echo "$as_me: error: not existing. get it (did you get the -extensions tarball?)
    { (exit 1); exit 1; }; }
   fi
   ENABLE_MEDIAWIKI=YES
-  { echo "$as_me:$LINENO: checking which Apache commons-* libs to use" >&5
-echo $ECHO_N "checking which Apache commons-* libs to use... $ECHO_C" >&6; }
-  if test "$with_system_apache_commons" == "yes"; then
-  	SYSTEM_APACHE_COMMONS=YES
-	{ echo "$as_me:$LINENO: result: external" >&5
-echo "${ECHO_T}external" >&6; }
-	if test -z "$COMMONS_CODEC_JAR"; then
-		COMMONS_CODEC_JAR=/usr/share/java/commons-codec-1.3.jar
-	fi
-   as_ac_File=`echo "ac_cv_file_$COMMONS_CODEC_JAR" | $as_tr_sh`
-{ echo "$as_me:$LINENO: checking for $COMMONS_CODEC_JAR" >&5
-echo $ECHO_N "checking for $COMMONS_CODEC_JAR... $ECHO_C" >&6; }
-if { as_var=$as_ac_File; eval "test \"\${$as_var+set}\" = set"; }; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  test "$cross_compiling" = yes &&
-  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
-echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
-   { (exit 1); exit 1; }; }
-if test -r "$COMMONS_CODEC_JAR"; then
-  eval "$as_ac_File=yes"
-else
-  eval "$as_ac_File=no"
-fi
-fi
-ac_res=`eval echo '${'$as_ac_File'}'`
-	       { echo "$as_me:$LINENO: result: $ac_res" >&5
-echo "${ECHO_T}$ac_res" >&6; }
-if test `eval echo '${'$as_ac_File'}'` = yes; then
-  :
-else
-  { { echo "$as_me:$LINENO: error: commons-codec.jar not found." >&5
-echo "$as_me: error: commons-codec.jar not found." >&2;}
-   { (exit 1); exit 1; }; }
-fi
-
-	if test -z "$COMMONS_LANG_JAR"; then
-		COMMONS_LANG_JAR=/usr/share/java/commons-lang-2.3.jar
-	fi
-   as_ac_File=`echo "ac_cv_file_$COMMONS_LANG_JAR" | $as_tr_sh`
-{ echo "$as_me:$LINENO: checking for $COMMONS_LANG_JAR" >&5
-echo $ECHO_N "checking for $COMMONS_LANG_JAR... $ECHO_C" >&6; }
-if { as_var=$as_ac_File; eval "test \"\${$as_var+set}\" = set"; }; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  test "$cross_compiling" = yes &&
-  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
-echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
-   { (exit 1); exit 1; }; }
-if test -r "$COMMONS_LANG_JAR"; then
-  eval "$as_ac_File=yes"
-else
-  eval "$as_ac_File=no"
-fi
-fi
-ac_res=`eval echo '${'$as_ac_File'}'`
-	       { echo "$as_me:$LINENO: result: $ac_res" >&5
-echo "${ECHO_T}$ac_res" >&6; }
-if test `eval echo '${'$as_ac_File'}'` = yes; then
-  :
-else
-  { { echo "$as_me:$LINENO: error: commons-lang.jar not found." >&5
-echo "$as_me: error: commons-lang.jar not found." >&2;}
-   { (exit 1); exit 1; }; }
-fi
-
-	if test -z "$COMMONS_HTTPCLIENT_JAR"; then
-		COMMONS_HTTPCLIENT_JAR=/usr/share/java/commons-httpclient-3.1.jar
-	fi
-   as_ac_File=`echo "ac_cv_file_$COMMONS_HTTPCLIENT_JAR" | $as_tr_sh`
-{ echo "$as_me:$LINENO: checking for $COMMONS_HTTPCLIENT_JAR" >&5
-echo $ECHO_N "checking for $COMMONS_HTTPCLIENT_JAR... $ECHO_C" >&6; }
-if { as_var=$as_ac_File; eval "test \"\${$as_var+set}\" = set"; }; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  test "$cross_compiling" = yes &&
-  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
-echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
-   { (exit 1); exit 1; }; }
-if test -r "$COMMONS_HTTPCLIENT_JAR"; then
-  eval "$as_ac_File=yes"
-else
-  eval "$as_ac_File=no"
-fi
-fi
-ac_res=`eval echo '${'$as_ac_File'}'`
-	       { echo "$as_me:$LINENO: result: $ac_res" >&5
-echo "${ECHO_T}$ac_res" >&6; }
-if test `eval echo '${'$as_ac_File'}'` = yes; then
-  :
-else
-  { { echo "$as_me:$LINENO: error: commons-httpclient.jar not found." >&5
-echo "$as_me: error: commons-httpclient.jar not found." >&2;}
-   { (exit 1); exit 1; }; }
-fi
-
-
-   if test -z $COMMONS_LOGGING_JAR; then
-     { echo "$as_me:$LINENO: checking for /usr/share/java/commons-logging-1.1.1.jar" >&5
-echo $ECHO_N "checking for /usr/share/java/commons-logging-1.1.1.jar... $ECHO_C" >&6; }
-if test "${ac_cv_file__usr_share_java_commons_logging_1_1_1_jar+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  test "$cross_compiling" = yes &&
-  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
-echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
-   { (exit 1); exit 1; }; }
-if test -r "/usr/share/java/commons-logging-1.1.1.jar"; then
-  ac_cv_file__usr_share_java_commons_logging_1_1_1_jar=yes
-else
-  ac_cv_file__usr_share_java_commons_logging_1_1_1_jar=no
-fi
-fi
-{ echo "$as_me:$LINENO: result: $ac_cv_file__usr_share_java_commons_logging_1_1_1_jar" >&5
-echo "${ECHO_T}$ac_cv_file__usr_share_java_commons_logging_1_1_1_jar" >&6; }
-if test $ac_cv_file__usr_share_java_commons_logging_1_1_1_jar = yes; then
-   COMMONS_LOGGING_JAR=/usr/share/java/commons-logging-1.1.1.jar
-else
-
-         { echo "$as_me:$LINENO: checking for /usr/share/java/commons-logging.jar" >&5
-echo $ECHO_N "checking for /usr/share/java/commons-logging.jar... $ECHO_C" >&6; }
-if test "${ac_cv_file__usr_share_java_commons_logging_jar+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  test "$cross_compiling" = yes &&
-  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
-echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
-   { (exit 1); exit 1; }; }
-if test -r "/usr/share/java/commons-logging.jar"; then
-  ac_cv_file__usr_share_java_commons_logging_jar=yes
-else
-  ac_cv_file__usr_share_java_commons_logging_jar=no
-fi
-fi
-{ echo "$as_me:$LINENO: result: $ac_cv_file__usr_share_java_commons_logging_jar" >&5
-echo "${ECHO_T}$ac_cv_file__usr_share_java_commons_logging_jar" >&6; }
-if test $ac_cv_file__usr_share_java_commons_logging_jar = yes; then
-   COMMONS_LOGGING_JAR=/usr/share/java/commons-logging.jar
-else
-  { { echo "$as_me:$LINENO: error: commons-logging.jar replacement not found." >&5
-echo "$as_me: error: commons-logging.jar replacement not found." >&2;}
-   { (exit 1); exit 1; }; }
-
-fi
-
-
-
-fi
-
-   else
-     as_ac_File=`echo "ac_cv_file_$COMMONS_LOGGING_JAR" | $as_tr_sh`
-{ echo "$as_me:$LINENO: checking for $COMMONS_LOGGING_JAR" >&5
-echo $ECHO_N "checking for $COMMONS_LOGGING_JAR... $ECHO_C" >&6; }
-if { as_var=$as_ac_File; eval "test \"\${$as_var+set}\" = set"; }; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  test "$cross_compiling" = yes &&
-  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
-echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
-   { (exit 1); exit 1; }; }
-if test -r "$COMMONS_LOGGING_JAR"; then
-  eval "$as_ac_File=yes"
-else
-  eval "$as_ac_File=no"
-fi
-fi
-ac_res=`eval echo '${'$as_ac_File'}'`
-	       { echo "$as_me:$LINENO: result: $ac_res" >&5
-echo "${ECHO_T}$ac_res" >&6; }
-if test `eval echo '${'$as_ac_File'}'` = yes; then
-  :
-else
-  { { echo "$as_me:$LINENO: error: commons-logging.jar not found." >&5
-echo "$as_me: error: commons-logging.jar not found." >&2;}
-   { (exit 1); exit 1; }; }
-fi
-
-   fi
-  else
-	{ echo "$as_me:$LINENO: result: internal" >&5
-echo "${ECHO_T}internal" >&6; }
-  	SYSTEM_APACHE_COMMONS=NO
-  	BUILD_TYPE="$BUILD_TYPE APACHE_COMMONS TOMCAT"
-  fi
   BUILD_TYPE="$BUILD_TYPE SWEXT"
 else
   { echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6; }
   ENABLE_MEDIAWIKI=NO
 fi
-
-
-
-
-
 
 
 if test "$ENABLE_MEDIAWIKI" == "YES"; then
@@ -25706,94 +25517,22 @@ if test -n "$enable_report_builder" -a "$enable_report_builder" != "no" && test 
   { echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6; }
   ENABLE_REPORTBUILDER=YES
+  { echo "$as_me:$LINENO: checking for reportbuilder module" >&5
+echo $ECHO_N "checking for reportbuilder module... $ECHO_C" >&6; }
+  if test -d ./reportbuilder; then
+    { echo "$as_me:$LINENO: result: OK" >&5
+echo "${ECHO_T}OK" >&6; }
+  else
+    { { echo "$as_me:$LINENO: error: not existing. get it (did you get the -extensions tarball?)" >&5
+echo "$as_me: error: not existing. get it (did you get the -extensions tarball?)" >&2;}
+   { (exit 1); exit 1; }; }
+  fi
   { echo "$as_me:$LINENO: checking which jfreereport libs to use" >&5
 echo $ECHO_N "checking which jfreereport libs to use... $ECHO_C" >&6; }
   if test "$with_system_jfreereport" == "yes"; then
    	SYSTEM_JFREEREPORT=YES
   	   { echo "$as_me:$LINENO: result: external" >&5
 echo "${ECHO_T}external" >&6; }
-      if test -z $JCOMMON_JAR; then
-        { echo "$as_me:$LINENO: checking for /usr/share/java/jcommon-1.0.10.jar" >&5
-echo $ECHO_N "checking for /usr/share/java/jcommon-1.0.10.jar... $ECHO_C" >&6; }
-if test "${ac_cv_file__usr_share_java_jcommon_1_0_10_jar+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  test "$cross_compiling" = yes &&
-  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
-echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
-   { (exit 1); exit 1; }; }
-if test -r "/usr/share/java/jcommon-1.0.10.jar"; then
-  ac_cv_file__usr_share_java_jcommon_1_0_10_jar=yes
-else
-  ac_cv_file__usr_share_java_jcommon_1_0_10_jar=no
-fi
-fi
-{ echo "$as_me:$LINENO: result: $ac_cv_file__usr_share_java_jcommon_1_0_10_jar" >&5
-echo "${ECHO_T}$ac_cv_file__usr_share_java_jcommon_1_0_10_jar" >&6; }
-if test $ac_cv_file__usr_share_java_jcommon_1_0_10_jar = yes; then
-   JCOMMON_JAR=/usr/share/java/jcommon-1.0.10.jar
-else
-
-            { echo "$as_me:$LINENO: checking for /usr/share/java/jcommon.jar" >&5
-echo $ECHO_N "checking for /usr/share/java/jcommon.jar... $ECHO_C" >&6; }
-if test "${ac_cv_file__usr_share_java_jcommon_jar+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  test "$cross_compiling" = yes &&
-  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
-echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
-   { (exit 1); exit 1; }; }
-if test -r "/usr/share/java/jcommon.jar"; then
-  ac_cv_file__usr_share_java_jcommon_jar=yes
-else
-  ac_cv_file__usr_share_java_jcommon_jar=no
-fi
-fi
-{ echo "$as_me:$LINENO: result: $ac_cv_file__usr_share_java_jcommon_jar" >&5
-echo "${ECHO_T}$ac_cv_file__usr_share_java_jcommon_jar" >&6; }
-if test $ac_cv_file__usr_share_java_jcommon_jar = yes; then
-   JCOMMON_JAR=/usr/share/java/jcommon.jar
-else
-  { { echo "$as_me:$LINENO: error: jcommon.jar replacement not found." >&5
-echo "$as_me: error: jcommon.jar replacement not found." >&2;}
-   { (exit 1); exit 1; }; }
-
-fi
-
-
-
-fi
-
-      else
-        as_ac_File=`echo "ac_cv_file_$JCOMMON_JAR" | $as_tr_sh`
-{ echo "$as_me:$LINENO: checking for $JCOMMON_JAR" >&5
-echo $ECHO_N "checking for $JCOMMON_JAR... $ECHO_C" >&6; }
-if { as_var=$as_ac_File; eval "test \"\${$as_var+set}\" = set"; }; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  test "$cross_compiling" = yes &&
-  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
-echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
-   { (exit 1); exit 1; }; }
-if test -r "$JCOMMON_JAR"; then
-  eval "$as_ac_File=yes"
-else
-  eval "$as_ac_File=no"
-fi
-fi
-ac_res=`eval echo '${'$as_ac_File'}'`
-	       { echo "$as_me:$LINENO: result: $ac_res" >&5
-echo "${ECHO_T}$ac_res" >&6; }
-if test `eval echo '${'$as_ac_File'}'` = yes; then
-  :
-else
-  { { echo "$as_me:$LINENO: error: jcommon.jar not found." >&5
-echo "$as_me: error: jcommon.jar not found." >&2;}
-   { (exit 1); exit 1; }; }
-fi
-
-      fi
-
       if test -z $SAC_JAR; then
              SAC_JAR=/usr/share/java/sac.jar
       fi
@@ -25826,25 +25565,25 @@ fi
 
 
       if test -z $LIBXML_JAR; then
-        { echo "$as_me:$LINENO: checking for /usr/share/java/libxml-0.9.9.jar" >&5
-echo $ECHO_N "checking for /usr/share/java/libxml-0.9.9.jar... $ECHO_C" >&6; }
-if test "${ac_cv_file__usr_share_java_libxml_0_9_9_jar+set}" = set; then
+        { echo "$as_me:$LINENO: checking for /usr/share/java/libxml-1.0.0.jar" >&5
+echo $ECHO_N "checking for /usr/share/java/libxml-1.0.0.jar... $ECHO_C" >&6; }
+if test "${ac_cv_file__usr_share_java_libxml_1_0_0_jar+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
   test "$cross_compiling" = yes &&
   { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
 echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
    { (exit 1); exit 1; }; }
-if test -r "/usr/share/java/libxml-0.9.9.jar"; then
-  ac_cv_file__usr_share_java_libxml_0_9_9_jar=yes
+if test -r "/usr/share/java/libxml-1.0.0.jar"; then
+  ac_cv_file__usr_share_java_libxml_1_0_0_jar=yes
 else
-  ac_cv_file__usr_share_java_libxml_0_9_9_jar=no
+  ac_cv_file__usr_share_java_libxml_1_0_0_jar=no
 fi
 fi
-{ echo "$as_me:$LINENO: result: $ac_cv_file__usr_share_java_libxml_0_9_9_jar" >&5
-echo "${ECHO_T}$ac_cv_file__usr_share_java_libxml_0_9_9_jar" >&6; }
-if test $ac_cv_file__usr_share_java_libxml_0_9_9_jar = yes; then
-   LIBXML_JAR=/usr/share/java/libxml-0.9.9.jar
+{ echo "$as_me:$LINENO: result: $ac_cv_file__usr_share_java_libxml_1_0_0_jar" >&5
+echo "${ECHO_T}$ac_cv_file__usr_share_java_libxml_1_0_0_jar" >&6; }
+if test $ac_cv_file__usr_share_java_libxml_1_0_0_jar = yes; then
+   LIBXML_JAR=/usr/share/java/libxml-1.0.0.jar
 else
 
             { echo "$as_me:$LINENO: checking for /usr/share/java/libxml.jar" >&5
@@ -25908,25 +25647,25 @@ fi
       fi
 
       if test -z $FLUTE_JAR; then
-        { echo "$as_me:$LINENO: checking for /usr/share/java/flute-1.3-jfree-20061107.jar" >&5
-echo $ECHO_N "checking for /usr/share/java/flute-1.3-jfree-20061107.jar... $ECHO_C" >&6; }
-if test "${ac_cv_file__usr_share_java_flute_1_3_jfree_20061107_jar+set}" = set; then
+        { echo "$as_me:$LINENO: checking for /usr/share/java/flute-1.3.0.jar" >&5
+echo $ECHO_N "checking for /usr/share/java/flute-1.3.0.jar... $ECHO_C" >&6; }
+if test "${ac_cv_file__usr_share_java_flute_1_3_0_jar+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
   test "$cross_compiling" = yes &&
   { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
 echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
    { (exit 1); exit 1; }; }
-if test -r "/usr/share/java/flute-1.3-jfree-20061107.jar"; then
-  ac_cv_file__usr_share_java_flute_1_3_jfree_20061107_jar=yes
+if test -r "/usr/share/java/flute-1.3.0.jar"; then
+  ac_cv_file__usr_share_java_flute_1_3_0_jar=yes
 else
-  ac_cv_file__usr_share_java_flute_1_3_jfree_20061107_jar=no
+  ac_cv_file__usr_share_java_flute_1_3_0_jar=no
 fi
 fi
-{ echo "$as_me:$LINENO: result: $ac_cv_file__usr_share_java_flute_1_3_jfree_20061107_jar" >&5
-echo "${ECHO_T}$ac_cv_file__usr_share_java_flute_1_3_jfree_20061107_jar" >&6; }
-if test $ac_cv_file__usr_share_java_flute_1_3_jfree_20061107_jar = yes; then
-   FLUTE_JAR=/usr/share/java/flute-1.3-jfree-20061107.jar
+{ echo "$as_me:$LINENO: result: $ac_cv_file__usr_share_java_flute_1_3_0_jar" >&5
+echo "${ECHO_T}$ac_cv_file__usr_share_java_flute_1_3_0_jar" >&6; }
+if test $ac_cv_file__usr_share_java_flute_1_3_0_jar = yes; then
+   FLUTE_JAR=/usr/share/java/flute-1.3.0.jar
 else
 
             { echo "$as_me:$LINENO: checking for /usr/share/java/flute.jar" >&5
@@ -25949,8 +25688,8 @@ echo "${ECHO_T}$ac_cv_file__usr_share_java_flute_jar" >&6; }
 if test $ac_cv_file__usr_share_java_flute_jar = yes; then
    FLUTE_JAR=/usr/share/java/flute.jar
 else
-   { { echo "$as_me:$LINENO: error: flute-1.3-jfree.jar replacement not found." >&5
-echo "$as_me: error: flute-1.3-jfree.jar replacement not found." >&2;}
+   { { echo "$as_me:$LINENO: error: flute-1.3.0.jar replacement not found." >&5
+echo "$as_me: error: flute-1.3.0.jar replacement not found." >&2;}
    { (exit 1); exit 1; }; }
 
 fi
@@ -25982,54 +25721,54 @@ echo "${ECHO_T}$ac_res" >&6; }
 if test `eval echo '${'$as_ac_File'}'` = yes; then
   :
 else
-  { { echo "$as_me:$LINENO: error: flute-1.3-jfree.jar not found." >&5
-echo "$as_me: error: flute-1.3-jfree.jar not found." >&2;}
+  { { echo "$as_me:$LINENO: error: flute-1.3.0.jar not found." >&5
+echo "$as_me: error: flute-1.3.0.jar not found." >&2;}
    { (exit 1); exit 1; }; }
 fi
 
       fi
 
       if test -z $JFREEREPORT_JAR; then
-        { echo "$as_me:$LINENO: checking for /usr/share/java/pentaho-reporting-flow-engine-0.9.2.jar" >&5
-echo $ECHO_N "checking for /usr/share/java/pentaho-reporting-flow-engine-0.9.2.jar... $ECHO_C" >&6; }
-if test "${ac_cv_file__usr_share_java_pentaho_reporting_flow_engine_0_9_2_jar+set}" = set; then
+        { echo "$as_me:$LINENO: checking for /usr/share/java/flow-engine-0.9.2.jar" >&5
+echo $ECHO_N "checking for /usr/share/java/flow-engine-0.9.2.jar... $ECHO_C" >&6; }
+if test "${ac_cv_file__usr_share_java_flow_engine_0_9_2_jar+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
   test "$cross_compiling" = yes &&
   { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
 echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
    { (exit 1); exit 1; }; }
-if test -r "/usr/share/java/pentaho-reporting-flow-engine-0.9.2.jar"; then
-  ac_cv_file__usr_share_java_pentaho_reporting_flow_engine_0_9_2_jar=yes
+if test -r "/usr/share/java/flow-engine-0.9.2.jar"; then
+  ac_cv_file__usr_share_java_flow_engine_0_9_2_jar=yes
 else
-  ac_cv_file__usr_share_java_pentaho_reporting_flow_engine_0_9_2_jar=no
+  ac_cv_file__usr_share_java_flow_engine_0_9_2_jar=no
 fi
 fi
-{ echo "$as_me:$LINENO: result: $ac_cv_file__usr_share_java_pentaho_reporting_flow_engine_0_9_2_jar" >&5
-echo "${ECHO_T}$ac_cv_file__usr_share_java_pentaho_reporting_flow_engine_0_9_2_jar" >&6; }
-if test $ac_cv_file__usr_share_java_pentaho_reporting_flow_engine_0_9_2_jar = yes; then
-   JFREEREPORT_JAR=/usr/share/java/pentaho-reporting-flow-engine-0.9.2.jar
+{ echo "$as_me:$LINENO: result: $ac_cv_file__usr_share_java_flow_engine_0_9_2_jar" >&5
+echo "${ECHO_T}$ac_cv_file__usr_share_java_flow_engine_0_9_2_jar" >&6; }
+if test $ac_cv_file__usr_share_java_flow_engine_0_9_2_jar = yes; then
+   JFREEREPORT_JAR=/usr/share/java/flow-engine-0.9.2.jar
 else
 
-            { echo "$as_me:$LINENO: checking for /usr/share/java/pentaho-reporting-flow-engine.jar" >&5
-echo $ECHO_N "checking for /usr/share/java/pentaho-reporting-flow-engine.jar... $ECHO_C" >&6; }
-if test "${ac_cv_file__usr_share_java_pentaho_reporting_flow_engine_jar+set}" = set; then
+            { echo "$as_me:$LINENO: checking for /usr/share/java/flow-engine.jar" >&5
+echo $ECHO_N "checking for /usr/share/java/flow-engine.jar... $ECHO_C" >&6; }
+if test "${ac_cv_file__usr_share_java_flow_engine_jar+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
   test "$cross_compiling" = yes &&
   { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
 echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
    { (exit 1); exit 1; }; }
-if test -r "/usr/share/java/pentaho-reporting-flow-engine.jar"; then
-  ac_cv_file__usr_share_java_pentaho_reporting_flow_engine_jar=yes
+if test -r "/usr/share/java/flow-engine.jar"; then
+  ac_cv_file__usr_share_java_flow_engine_jar=yes
 else
-  ac_cv_file__usr_share_java_pentaho_reporting_flow_engine_jar=no
+  ac_cv_file__usr_share_java_flow_engine_jar=no
 fi
 fi
-{ echo "$as_me:$LINENO: result: $ac_cv_file__usr_share_java_pentaho_reporting_flow_engine_jar" >&5
-echo "${ECHO_T}$ac_cv_file__usr_share_java_pentaho_reporting_flow_engine_jar" >&6; }
-if test $ac_cv_file__usr_share_java_pentaho_reporting_flow_engine_jar = yes; then
-   JFREEREPORT_JAR=/usr/share/java/pentaho-reporting-flow-engine.jar
+{ echo "$as_me:$LINENO: result: $ac_cv_file__usr_share_java_flow_engine_jar" >&5
+echo "${ECHO_T}$ac_cv_file__usr_share_java_flow_engine_jar" >&6; }
+if test $ac_cv_file__usr_share_java_flow_engine_jar = yes; then
+   JFREEREPORT_JAR=/usr/share/java/flow-engine.jar
 else
   { { echo "$as_me:$LINENO: error: jfreereport.jar replacement not found." >&5
 echo "$as_me: error: jfreereport.jar replacement not found." >&2;}
@@ -26072,25 +25811,25 @@ fi
       fi
 
       if test -z $LIBLAYOUT_JAR; then
-        { echo "$as_me:$LINENO: checking for /usr/share/java/liblayout-0.2.8.jar" >&5
-echo $ECHO_N "checking for /usr/share/java/liblayout-0.2.8.jar... $ECHO_C" >&6; }
-if test "${ac_cv_file__usr_share_java_liblayout_0_2_8_jar+set}" = set; then
+        { echo "$as_me:$LINENO: checking for /usr/share/java/liblayout-0.2.9.jar" >&5
+echo $ECHO_N "checking for /usr/share/java/liblayout-0.2.9.jar... $ECHO_C" >&6; }
+if test "${ac_cv_file__usr_share_java_liblayout_0_2_9_jar+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
   test "$cross_compiling" = yes &&
   { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
 echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
    { (exit 1); exit 1; }; }
-if test -r "/usr/share/java/liblayout-0.2.8.jar"; then
-  ac_cv_file__usr_share_java_liblayout_0_2_8_jar=yes
+if test -r "/usr/share/java/liblayout-0.2.9.jar"; then
+  ac_cv_file__usr_share_java_liblayout_0_2_9_jar=yes
 else
-  ac_cv_file__usr_share_java_liblayout_0_2_8_jar=no
+  ac_cv_file__usr_share_java_liblayout_0_2_9_jar=no
 fi
 fi
-{ echo "$as_me:$LINENO: result: $ac_cv_file__usr_share_java_liblayout_0_2_8_jar" >&5
-echo "${ECHO_T}$ac_cv_file__usr_share_java_liblayout_0_2_8_jar" >&6; }
-if test $ac_cv_file__usr_share_java_liblayout_0_2_8_jar = yes; then
-   LIBLAYOUT_JAR=/usr/share/java/liblayout-0.2.8.jar
+{ echo "$as_me:$LINENO: result: $ac_cv_file__usr_share_java_liblayout_0_2_9_jar" >&5
+echo "${ECHO_T}$ac_cv_file__usr_share_java_liblayout_0_2_9_jar" >&6; }
+if test $ac_cv_file__usr_share_java_liblayout_0_2_9_jar = yes; then
+   LIBLAYOUT_JAR=/usr/share/java/liblayout-0.2.9.jar
 else
 
             { echo "$as_me:$LINENO: checking for /usr/share/java/liblayout.jar" >&5
@@ -26154,25 +25893,25 @@ fi
       fi
 
       if test -z $LIBLOADER_JAR; then
-        { echo "$as_me:$LINENO: checking for /usr/share/java/libloader-0.3.6.jar" >&5
-echo $ECHO_N "checking for /usr/share/java/libloader-0.3.6.jar... $ECHO_C" >&6; }
-if test "${ac_cv_file__usr_share_java_libloader_0_3_6_jar+set}" = set; then
+        { echo "$as_me:$LINENO: checking for /usr/share/java/libloader-1.0.0.jar" >&5
+echo $ECHO_N "checking for /usr/share/java/libloader-1.0.0.jar... $ECHO_C" >&6; }
+if test "${ac_cv_file__usr_share_java_libloader_1_0_0_jar+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
   test "$cross_compiling" = yes &&
   { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
 echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
    { (exit 1); exit 1; }; }
-if test -r "/usr/share/java/libloader-0.3.6.jar"; then
-  ac_cv_file__usr_share_java_libloader_0_3_6_jar=yes
+if test -r "/usr/share/java/libloader-1.0.0.jar"; then
+  ac_cv_file__usr_share_java_libloader_1_0_0_jar=yes
 else
-  ac_cv_file__usr_share_java_libloader_0_3_6_jar=no
+  ac_cv_file__usr_share_java_libloader_1_0_0_jar=no
 fi
 fi
-{ echo "$as_me:$LINENO: result: $ac_cv_file__usr_share_java_libloader_0_3_6_jar" >&5
-echo "${ECHO_T}$ac_cv_file__usr_share_java_libloader_0_3_6_jar" >&6; }
-if test $ac_cv_file__usr_share_java_libloader_0_3_6_jar = yes; then
-   LIBLOADER_JAR=/usr/share/java/libloader-0.3.6.jar
+{ echo "$as_me:$LINENO: result: $ac_cv_file__usr_share_java_libloader_1_0_0_jar" >&5
+echo "${ECHO_T}$ac_cv_file__usr_share_java_libloader_1_0_0_jar" >&6; }
+if test $ac_cv_file__usr_share_java_libloader_1_0_0_jar = yes; then
+   LIBLOADER_JAR=/usr/share/java/libloader-1.0.0.jar
 else
 
             { echo "$as_me:$LINENO: checking for /usr/share/java/libloader.jar" >&5
@@ -26236,25 +25975,25 @@ fi
       fi
 
       if test -z $LIBFORMULA_JAR; then
-        { echo "$as_me:$LINENO: checking for /usr/share/java/libformula-0.1.14.jar" >&5
-echo $ECHO_N "checking for /usr/share/java/libformula-0.1.14.jar... $ECHO_C" >&6; }
-if test "${ac_cv_file__usr_share_java_libformula_0_1_14_jar+set}" = set; then
+        { echo "$as_me:$LINENO: checking for /usr/share/java/libformula-0.2.0.jar" >&5
+echo $ECHO_N "checking for /usr/share/java/libformula-0.2.0.jar... $ECHO_C" >&6; }
+if test "${ac_cv_file__usr_share_java_libformula_0_2_0_jar+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
   test "$cross_compiling" = yes &&
   { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
 echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
    { (exit 1); exit 1; }; }
-if test -r "/usr/share/java/libformula-0.1.14.jar"; then
-  ac_cv_file__usr_share_java_libformula_0_1_14_jar=yes
+if test -r "/usr/share/java/libformula-0.2.0.jar"; then
+  ac_cv_file__usr_share_java_libformula_0_2_0_jar=yes
 else
-  ac_cv_file__usr_share_java_libformula_0_1_14_jar=no
+  ac_cv_file__usr_share_java_libformula_0_2_0_jar=no
 fi
 fi
-{ echo "$as_me:$LINENO: result: $ac_cv_file__usr_share_java_libformula_0_1_14_jar" >&5
-echo "${ECHO_T}$ac_cv_file__usr_share_java_libformula_0_1_14_jar" >&6; }
-if test $ac_cv_file__usr_share_java_libformula_0_1_14_jar = yes; then
-   LIBFORMULA_JAR=/usr/share/java/libformula-0.1.14.jar
+{ echo "$as_me:$LINENO: result: $ac_cv_file__usr_share_java_libformula_0_2_0_jar" >&5
+echo "${ECHO_T}$ac_cv_file__usr_share_java_libformula_0_2_0_jar" >&6; }
+if test $ac_cv_file__usr_share_java_libformula_0_2_0_jar = yes; then
+   LIBFORMULA_JAR=/usr/share/java/libformula-0.2.0.jar
 else
 
             { echo "$as_me:$LINENO: checking for /usr/share/java/libformula.jar" >&5
@@ -26318,25 +26057,25 @@ fi
       fi
 
       if test -z $LIBREPOSITORY_JAR; then
-        { echo "$as_me:$LINENO: checking for /usr/share/java/librepository-0.1.4.jar" >&5
-echo $ECHO_N "checking for /usr/share/java/librepository-0.1.4.jar... $ECHO_C" >&6; }
-if test "${ac_cv_file__usr_share_java_librepository_0_1_4_jar+set}" = set; then
+        { echo "$as_me:$LINENO: checking for /usr/share/java/librepository-1.0.0.jar" >&5
+echo $ECHO_N "checking for /usr/share/java/librepository-1.0.0.jar... $ECHO_C" >&6; }
+if test "${ac_cv_file__usr_share_java_librepository_1_0_0_jar+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
   test "$cross_compiling" = yes &&
   { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
 echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
    { (exit 1); exit 1; }; }
-if test -r "/usr/share/java/librepository-0.1.4.jar"; then
-  ac_cv_file__usr_share_java_librepository_0_1_4_jar=yes
+if test -r "/usr/share/java/librepository-1.0.0.jar"; then
+  ac_cv_file__usr_share_java_librepository_1_0_0_jar=yes
 else
-  ac_cv_file__usr_share_java_librepository_0_1_4_jar=no
+  ac_cv_file__usr_share_java_librepository_1_0_0_jar=no
 fi
 fi
-{ echo "$as_me:$LINENO: result: $ac_cv_file__usr_share_java_librepository_0_1_4_jar" >&5
-echo "${ECHO_T}$ac_cv_file__usr_share_java_librepository_0_1_4_jar" >&6; }
-if test $ac_cv_file__usr_share_java_librepository_0_1_4_jar = yes; then
-   LIBREPOSITORY_JAR=/usr/share/java/librepository-0.1.4.jar
+{ echo "$as_me:$LINENO: result: $ac_cv_file__usr_share_java_librepository_1_0_0_jar" >&5
+echo "${ECHO_T}$ac_cv_file__usr_share_java_librepository_1_0_0_jar" >&6; }
+if test $ac_cv_file__usr_share_java_librepository_1_0_0_jar = yes; then
+   LIBREPOSITORY_JAR=/usr/share/java/librepository-1.0.0.jar
 else
 
             { echo "$as_me:$LINENO: checking for /usr/share/java/librepository.jar" >&5
@@ -26400,25 +26139,25 @@ fi
       fi
 
       if test -z $LIBFONTS_JAR; then
-        { echo "$as_me:$LINENO: checking for /usr/share/java/libfonts-0.3.3.jar" >&5
-echo $ECHO_N "checking for /usr/share/java/libfonts-0.3.3.jar... $ECHO_C" >&6; }
-if test "${ac_cv_file__usr_share_java_libfonts_0_3_3_jar+set}" = set; then
+        { echo "$as_me:$LINENO: checking for /usr/share/java/libfonts-1.0.0.jar" >&5
+echo $ECHO_N "checking for /usr/share/java/libfonts-1.0.0.jar... $ECHO_C" >&6; }
+if test "${ac_cv_file__usr_share_java_libfonts_1_0_0_jar+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
   test "$cross_compiling" = yes &&
   { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
 echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
    { (exit 1); exit 1; }; }
-if test -r "/usr/share/java/libfonts-0.3.3.jar"; then
-  ac_cv_file__usr_share_java_libfonts_0_3_3_jar=yes
+if test -r "/usr/share/java/libfonts-1.0.0.jar"; then
+  ac_cv_file__usr_share_java_libfonts_1_0_0_jar=yes
 else
-  ac_cv_file__usr_share_java_libfonts_0_3_3_jar=no
+  ac_cv_file__usr_share_java_libfonts_1_0_0_jar=no
 fi
 fi
-{ echo "$as_me:$LINENO: result: $ac_cv_file__usr_share_java_libfonts_0_3_3_jar" >&5
-echo "${ECHO_T}$ac_cv_file__usr_share_java_libfonts_0_3_3_jar" >&6; }
-if test $ac_cv_file__usr_share_java_libfonts_0_3_3_jar = yes; then
-   LIBFONTS_JAR=/usr/share/java/libfonts-0.3.3.jar
+{ echo "$as_me:$LINENO: result: $ac_cv_file__usr_share_java_libfonts_1_0_0_jar" >&5
+echo "${ECHO_T}$ac_cv_file__usr_share_java_libfonts_1_0_0_jar" >&6; }
+if test $ac_cv_file__usr_share_java_libfonts_1_0_0_jar = yes; then
+   LIBFONTS_JAR=/usr/share/java/libfonts-1.0.0.jar
 else
 
             { echo "$as_me:$LINENO: checking for /usr/share/java/libfonts.jar" >&5
@@ -26481,50 +26220,50 @@ fi
 
       fi
 
-      if test -z $JCOMMON_SERIALIZER_JAR; then
-        { echo "$as_me:$LINENO: checking for /usr/share/java/jcommon-serializer-0.2.0.jar" >&5
-echo $ECHO_N "checking for /usr/share/java/jcommon-serializer-0.2.0.jar... $ECHO_C" >&6; }
-if test "${ac_cv_file__usr_share_java_jcommon_serializer_0_2_0_jar+set}" = set; then
+      if test -z $LIBSERIALIZER_JAR; then
+        { echo "$as_me:$LINENO: checking for /usr/share/java/libserializer-1.0.0.jar" >&5
+echo $ECHO_N "checking for /usr/share/java/libserializer-1.0.0.jar... $ECHO_C" >&6; }
+if test "${ac_cv_file__usr_share_java_libserializer_1_0_0_jar+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
   test "$cross_compiling" = yes &&
   { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
 echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
    { (exit 1); exit 1; }; }
-if test -r "/usr/share/java/jcommon-serializer-0.2.0.jar"; then
-  ac_cv_file__usr_share_java_jcommon_serializer_0_2_0_jar=yes
+if test -r "/usr/share/java/libserializer-1.0.0.jar"; then
+  ac_cv_file__usr_share_java_libserializer_1_0_0_jar=yes
 else
-  ac_cv_file__usr_share_java_jcommon_serializer_0_2_0_jar=no
+  ac_cv_file__usr_share_java_libserializer_1_0_0_jar=no
 fi
 fi
-{ echo "$as_me:$LINENO: result: $ac_cv_file__usr_share_java_jcommon_serializer_0_2_0_jar" >&5
-echo "${ECHO_T}$ac_cv_file__usr_share_java_jcommon_serializer_0_2_0_jar" >&6; }
-if test $ac_cv_file__usr_share_java_jcommon_serializer_0_2_0_jar = yes; then
-   JCOMMON_SERIALIZER_JAR=/usr/share/java/jcommon-serializer-0.2.0.jar
+{ echo "$as_me:$LINENO: result: $ac_cv_file__usr_share_java_libserializer_1_0_0_jar" >&5
+echo "${ECHO_T}$ac_cv_file__usr_share_java_libserializer_1_0_0_jar" >&6; }
+if test $ac_cv_file__usr_share_java_libserializer_1_0_0_jar = yes; then
+   LIBSERIALIZER_JAR=/usr/share/java/libserializer-1.0.0.jar
 else
 
-            { echo "$as_me:$LINENO: checking for /usr/share/java/jcommon-serializer.jar" >&5
-echo $ECHO_N "checking for /usr/share/java/jcommon-serializer.jar... $ECHO_C" >&6; }
-if test "${ac_cv_file__usr_share_java_jcommon_serializer_jar+set}" = set; then
+            { echo "$as_me:$LINENO: checking for /usr/share/java/libserializer.jar" >&5
+echo $ECHO_N "checking for /usr/share/java/libserializer.jar... $ECHO_C" >&6; }
+if test "${ac_cv_file__usr_share_java_libserializer_jar+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
   test "$cross_compiling" = yes &&
   { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
 echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
    { (exit 1); exit 1; }; }
-if test -r "/usr/share/java/jcommon-serializer.jar"; then
-  ac_cv_file__usr_share_java_jcommon_serializer_jar=yes
+if test -r "/usr/share/java/libserializer.jar"; then
+  ac_cv_file__usr_share_java_libserializer_jar=yes
 else
-  ac_cv_file__usr_share_java_jcommon_serializer_jar=no
+  ac_cv_file__usr_share_java_libserializer_jar=no
 fi
 fi
-{ echo "$as_me:$LINENO: result: $ac_cv_file__usr_share_java_jcommon_serializer_jar" >&5
-echo "${ECHO_T}$ac_cv_file__usr_share_java_jcommon_serializer_jar" >&6; }
-if test $ac_cv_file__usr_share_java_jcommon_serializer_jar = yes; then
-   JCOMMON_SERIALIZER_JAR=/usr/share/java/jcommon-serializer.jar
+{ echo "$as_me:$LINENO: result: $ac_cv_file__usr_share_java_libserializer_jar" >&5
+echo "${ECHO_T}$ac_cv_file__usr_share_java_libserializer_jar" >&6; }
+if test $ac_cv_file__usr_share_java_libserializer_jar = yes; then
+   LIBSERIALIZER_JAR=/usr/share/java/libserializer.jar
 else
-  { { echo "$as_me:$LINENO: error: jcommon-serializer.jar replacement not found." >&5
-echo "$as_me: error: jcommon-serializer.jar replacement not found." >&2;}
+  { { echo "$as_me:$LINENO: error: libserializer.jar replacement not found." >&5
+echo "$as_me: error: libserializer.jar replacement not found." >&2;}
    { (exit 1); exit 1; }; }
 
 fi
@@ -26534,9 +26273,9 @@ fi
 fi
 
       else
-        as_ac_File=`echo "ac_cv_file_$JCOMMON_SERIALIZER_JAR" | $as_tr_sh`
-{ echo "$as_me:$LINENO: checking for $JCOMMON_SERIALIZER_JAR" >&5
-echo $ECHO_N "checking for $JCOMMON_SERIALIZER_JAR... $ECHO_C" >&6; }
+        as_ac_File=`echo "ac_cv_file_$LIBSERIALIZER_JAR" | $as_tr_sh`
+{ echo "$as_me:$LINENO: checking for $LIBSERIALIZER_JAR" >&5
+echo $ECHO_N "checking for $LIBSERIALIZER_JAR... $ECHO_C" >&6; }
 if { as_var=$as_ac_File; eval "test \"\${$as_var+set}\" = set"; }; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
@@ -26544,7 +26283,7 @@ else
   { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
 echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
    { (exit 1); exit 1; }; }
-if test -r "$JCOMMON_SERIALIZER_JAR"; then
+if test -r "$LIBSERIALIZER_JAR"; then
   eval "$as_ac_File=yes"
 else
   eval "$as_ac_File=no"
@@ -26556,8 +26295,91 @@ echo "${ECHO_T}$ac_res" >&6; }
 if test `eval echo '${'$as_ac_File'}'` = yes; then
   :
 else
-  { { echo "$as_me:$LINENO: error: jcommon-serializer.jar not found." >&5
-echo "$as_me: error: jcommon-serializer.jar not found." >&2;}
+  { { echo "$as_me:$LINENO: error: libserializer.jar not found." >&5
+echo "$as_me: error: libserializer.jar not found." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+
+      fi
+
+
+      if test -z $LIBBASE_JAR; then
+        { echo "$as_me:$LINENO: checking for /usr/share/java/libbase-1.0.0.jar" >&5
+echo $ECHO_N "checking for /usr/share/java/libbase-1.0.0.jar... $ECHO_C" >&6; }
+if test "${ac_cv_file__usr_share_java_libbase_1_0_0_jar+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  test "$cross_compiling" = yes &&
+  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
+echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
+   { (exit 1); exit 1; }; }
+if test -r "/usr/share/java/libbase-1.0.0.jar"; then
+  ac_cv_file__usr_share_java_libbase_1_0_0_jar=yes
+else
+  ac_cv_file__usr_share_java_libbase_1_0_0_jar=no
+fi
+fi
+{ echo "$as_me:$LINENO: result: $ac_cv_file__usr_share_java_libbase_1_0_0_jar" >&5
+echo "${ECHO_T}$ac_cv_file__usr_share_java_libbase_1_0_0_jar" >&6; }
+if test $ac_cv_file__usr_share_java_libbase_1_0_0_jar = yes; then
+   LIBBASE_JAR=/usr/share/java/libbase-1.0.0.jar
+else
+
+            { echo "$as_me:$LINENO: checking for /usr/share/java/libbase.jar" >&5
+echo $ECHO_N "checking for /usr/share/java/libbase.jar... $ECHO_C" >&6; }
+if test "${ac_cv_file__usr_share_java_libbase_jar+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  test "$cross_compiling" = yes &&
+  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
+echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
+   { (exit 1); exit 1; }; }
+if test -r "/usr/share/java/libbase.jar"; then
+  ac_cv_file__usr_share_java_libbase_jar=yes
+else
+  ac_cv_file__usr_share_java_libbase_jar=no
+fi
+fi
+{ echo "$as_me:$LINENO: result: $ac_cv_file__usr_share_java_libbase_jar" >&5
+echo "${ECHO_T}$ac_cv_file__usr_share_java_libbase_jar" >&6; }
+if test $ac_cv_file__usr_share_java_libbase_jar = yes; then
+   LIBBASE_JAR=/usr/share/java/libbase.jar
+else
+  { { echo "$as_me:$LINENO: error: libbase.jar replacement not found." >&5
+echo "$as_me: error: libbase.jar replacement not found." >&2;}
+   { (exit 1); exit 1; }; }
+
+fi
+
+
+
+fi
+
+      else
+        as_ac_File=`echo "ac_cv_file_$LIBBASE_JAR" | $as_tr_sh`
+{ echo "$as_me:$LINENO: checking for $LIBBASE_JAR" >&5
+echo $ECHO_N "checking for $LIBBASE_JAR... $ECHO_C" >&6; }
+if { as_var=$as_ac_File; eval "test \"\${$as_var+set}\" = set"; }; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  test "$cross_compiling" = yes &&
+  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
+echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
+   { (exit 1); exit 1; }; }
+if test -r "$LIBBASE_JAR"; then
+  eval "$as_ac_File=yes"
+else
+  eval "$as_ac_File=no"
+fi
+fi
+ac_res=`eval echo '${'$as_ac_File'}'`
+	       { echo "$as_me:$LINENO: result: $ac_res" >&5
+echo "${ECHO_T}$ac_res" >&6; }
+if test `eval echo '${'$as_ac_File'}'` = yes; then
+  :
+else
+  { { echo "$as_me:$LINENO: error: libbase.jar not found." >&5
+echo "$as_me: error: libbase.jar not found." >&2;}
    { (exit 1); exit 1; }; }
 fi
 
@@ -26579,7 +26401,7 @@ echo "$as_me: error: not existing. get it (did you get the -extensions tarball?)
      SYSTEM_JFREEREPORT=NO
      BUILD_TYPE="$BUILD_TYPE JFREEREPORT"
   fi
-  BUILD_TYPE="$BUILD_TYPE REPORTDESIGN"
+  BUILD_TYPE="$BUILD_TYPE REPORTBUILDER"
 else
   { echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6; }
@@ -26594,6 +26416,153 @@ fi
 
 
 
+
+
+
+
+
+
+# this has to be here because both the wiki publisher and the SRB use
+# commons-logging
+if test "$ENABLE_MEDIAWIKI" = "YES" -o "$ENABLE_REPORTBUILDER" = "YES"; then
+  { echo "$as_me:$LINENO: checking which Apache commons-* libs to use" >&5
+echo $ECHO_N "checking which Apache commons-* libs to use... $ECHO_C" >&6; }
+  if test "$with_system_apache_commons" = "yes"; then
+       SYSTEM_APACHE_COMMONS=YES
+       { echo "$as_me:$LINENO: result: external" >&5
+echo "${ECHO_T}external" >&6; }
+    if test "$ENABLE_MEDIAWIKI" = "YES"; then
+        if test -z "$COMMONS_CODEC_JAR"; then
+                COMMONS_CODEC_JAR=/usr/share/java/commons-codec-1.3.jar
+        fi
+   as_ac_File=`echo "ac_cv_file_$COMMONS_CODEC_JAR" | $as_tr_sh`
+{ echo "$as_me:$LINENO: checking for $COMMONS_CODEC_JAR" >&5
+echo $ECHO_N "checking for $COMMONS_CODEC_JAR... $ECHO_C" >&6; }
+if { as_var=$as_ac_File; eval "test \"\${$as_var+set}\" = set"; }; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  test "$cross_compiling" = yes &&
+  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
+echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
+   { (exit 1); exit 1; }; }
+if test -r "$COMMONS_CODEC_JAR"; then
+  eval "$as_ac_File=yes"
+else
+  eval "$as_ac_File=no"
+fi
+fi
+ac_res=`eval echo '${'$as_ac_File'}'`
+	       { echo "$as_me:$LINENO: result: $ac_res" >&5
+echo "${ECHO_T}$ac_res" >&6; }
+if test `eval echo '${'$as_ac_File'}'` = yes; then
+  :
+else
+  { { echo "$as_me:$LINENO: error: commons-codec.jar not found." >&5
+echo "$as_me: error: commons-codec.jar not found." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+
+        if test -z "$COMMONS_LANG_JAR"; then
+                COMMONS_LANG_JAR=/usr/share/java/commons-lang-2.3.jar
+        fi
+   as_ac_File=`echo "ac_cv_file_$COMMONS_LANG_JAR" | $as_tr_sh`
+{ echo "$as_me:$LINENO: checking for $COMMONS_LANG_JAR" >&5
+echo $ECHO_N "checking for $COMMONS_LANG_JAR... $ECHO_C" >&6; }
+if { as_var=$as_ac_File; eval "test \"\${$as_var+set}\" = set"; }; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  test "$cross_compiling" = yes &&
+  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
+echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
+   { (exit 1); exit 1; }; }
+if test -r "$COMMONS_LANG_JAR"; then
+  eval "$as_ac_File=yes"
+else
+  eval "$as_ac_File=no"
+fi
+fi
+ac_res=`eval echo '${'$as_ac_File'}'`
+	       { echo "$as_me:$LINENO: result: $ac_res" >&5
+echo "${ECHO_T}$ac_res" >&6; }
+if test `eval echo '${'$as_ac_File'}'` = yes; then
+  :
+else
+  { { echo "$as_me:$LINENO: error: commons-lang.jar not found." >&5
+echo "$as_me: error: commons-lang.jar not found." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+
+        if test -z "$COMMONS_HTTPCLIENT_JAR"; then
+                COMMONS_HTTPCLIENT_JAR=/usr/share/java/commons-httpclient-3.1.jar
+        fi
+   as_ac_File=`echo "ac_cv_file_$COMMONS_HTTPCLIENT_JAR" | $as_tr_sh`
+{ echo "$as_me:$LINENO: checking for $COMMONS_HTTPCLIENT_JAR" >&5
+echo $ECHO_N "checking for $COMMONS_HTTPCLIENT_JAR... $ECHO_C" >&6; }
+if { as_var=$as_ac_File; eval "test \"\${$as_var+set}\" = set"; }; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  test "$cross_compiling" = yes &&
+  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
+echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
+   { (exit 1); exit 1; }; }
+if test -r "$COMMONS_HTTPCLIENT_JAR"; then
+  eval "$as_ac_File=yes"
+else
+  eval "$as_ac_File=no"
+fi
+fi
+ac_res=`eval echo '${'$as_ac_File'}'`
+	       { echo "$as_me:$LINENO: result: $ac_res" >&5
+echo "${ECHO_T}$ac_res" >&6; }
+if test `eval echo '${'$as_ac_File'}'` = yes; then
+  :
+else
+  { { echo "$as_me:$LINENO: error: commons-httpclient.jar not found." >&5
+echo "$as_me: error: commons-httpclient.jar not found." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+
+    fi
+    if test "$ENABLE_MEDIAWIKI" = "YES" -o "$ENABLE_REPORTBUILDER" = "YES"; then
+        if test -z "$COMMONS_LOGGING_JAR"; then
+                COMMONS_LOGGING_JAR=/usr/share/java/commons-logging-1.1.1.jar
+        fi
+   as_ac_File=`echo "ac_cv_file_$COMMONS_HTTPCLIENT_JAR" | $as_tr_sh`
+{ echo "$as_me:$LINENO: checking for $COMMONS_HTTPCLIENT_JAR" >&5
+echo $ECHO_N "checking for $COMMONS_HTTPCLIENT_JAR... $ECHO_C" >&6; }
+if { as_var=$as_ac_File; eval "test \"\${$as_var+set}\" = set"; }; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  test "$cross_compiling" = yes &&
+  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
+echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
+   { (exit 1); exit 1; }; }
+if test -r "$COMMONS_HTTPCLIENT_JAR"; then
+  eval "$as_ac_File=yes"
+else
+  eval "$as_ac_File=no"
+fi
+fi
+ac_res=`eval echo '${'$as_ac_File'}'`
+	       { echo "$as_me:$LINENO: result: $ac_res" >&5
+echo "${ECHO_T}$ac_res" >&6; }
+if test `eval echo '${'$as_ac_File'}'` = yes; then
+  :
+else
+  { { echo "$as_me:$LINENO: error: commons-httpclient.jar not found." >&5
+echo "$as_me: error: commons-httpclient.jar not found." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+
+
+    fi
+  else
+        { echo "$as_me:$LINENO: result: internal" >&5
+echo "${ECHO_T}internal" >&6; }
+        SYSTEM_APACHE_COMMONS=NO
+        BUILD_TYPE="$BUILD_TYPE APACHE_COMMONS TOMCAT"
+  fi
+fi
 
 
 
@@ -29132,26 +29101,26 @@ POPPLER_LIBS!$POPPLER_LIBS$ac_delim
 ENABLE_PDFIMPORT!$ENABLE_PDFIMPORT$ac_delim
 SYSTEM_POPPLER!$SYSTEM_POPPLER$ac_delim
 ENABLE_MEDIAWIKI!$ENABLE_MEDIAWIKI$ac_delim
-SYSTEM_APACHE_COMMONS!$SYSTEM_APACHE_COMMONS$ac_delim
-COMMONS_CODEC_JAR!$COMMONS_CODEC_JAR$ac_delim
-COMMONS_LANG_JAR!$COMMONS_LANG_JAR$ac_delim
-COMMONS_HTTPCLIENT_JAR!$COMMONS_HTTPCLIENT_JAR$ac_delim
-COMMONS_LOGGING_JAR!$COMMONS_LOGGING_JAR$ac_delim
 SYSTEM_SERVLETAPI!$SYSTEM_SERVLETAPI$ac_delim
 SERVLETAPI_JAR!$SERVLETAPI_JAR$ac_delim
 ENABLE_REPORTBUILDER!$ENABLE_REPORTBUILDER$ac_delim
 SYSTEM_JFREEREPORT!$SYSTEM_JFREEREPORT$ac_delim
-JCOMMON_JAR!$JCOMMON_JAR$ac_delim
 SAC_JAR!$SAC_JAR$ac_delim
 LIBXML_JAR!$LIBXML_JAR$ac_delim
 FLUTE_JAR!$FLUTE_JAR$ac_delim
 JFREEREPORT_JAR!$JFREEREPORT_JAR$ac_delim
+LIBBASE_JAR!$LIBBASE_JAR$ac_delim
 LIBLAYOUT_JAR!$LIBLAYOUT_JAR$ac_delim
 LIBLOADER_JAR!$LIBLOADER_JAR$ac_delim
 LIBFORMULA_JAR!$LIBFORMULA_JAR$ac_delim
 LIBREPOSITORY_JAR!$LIBREPOSITORY_JAR$ac_delim
 LIBFONTS_JAR!$LIBFONTS_JAR$ac_delim
-JCOMMON_SERIALIZER_JAR!$JCOMMON_SERIALIZER_JAR$ac_delim
+LIBSERIALIZER_JAR!$LIBSERIALIZER_JAR$ac_delim
+SYSTEM_APACHE_COMMONS!$SYSTEM_APACHE_COMMONS$ac_delim
+COMMONS_CODEC_JAR!$COMMONS_CODEC_JAR$ac_delim
+COMMONS_LANG_JAR!$COMMONS_LANG_JAR$ac_delim
+COMMONS_HTTPCLIENT_JAR!$COMMONS_HTTPCLIENT_JAR$ac_delim
+COMMONS_LOGGING_JAR!$COMMONS_LOGGING_JAR$ac_delim
 MOC!$MOC$ac_delim
 KDE_CFLAGS!$KDE_CFLAGS$ac_delim
 KDE_LIBS!$KDE_LIBS$ac_delim
