@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.10 $
+# $Revision: 1.8.2.3 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -40,11 +40,11 @@ TARGET=hyphen
 
 # --- Files --------------------------------------------------------
 
-TARFILE_NAME=hyphen-2.3.1
+TARFILE_NAME=hyphen-2.4
 
 ADDITIONAL_FILES += makefile.mk
 
-PATCH_FILES=hyphen-2.3.patch
+PATCH_FILES=hyphen-2.4.patch
 
 .IF "$(GUI)"=="UNX"
 CONFIGURE_DIR=$(BUILD_DIR)
