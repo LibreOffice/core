@@ -3706,7 +3706,7 @@ ScTokenArray* ScCompiler::CompileString( const String& rFormula )
                 SetError(errCodeOverflow); break;
             }
         }
-        else if (bPODF)
+        if (bPODF)
         {
             /* TODO: for now this is the only PODF adapter. If there were more,
              * factor this out. */

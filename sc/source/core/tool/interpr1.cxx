@@ -1453,11 +1453,11 @@ void ScInterpreter::ScArcCosHyp()
 void ScInterpreter::ScArcTanHyp()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScArcTanHyp" );
-    double nVal = GetDouble();
-    if (fabs(nVal) >= 1.0)
+    double fVal = GetDouble();
+    if (fabs(fVal) >= 1.0)
         PushIllegalArgument();
     else
-        PushDouble(0.5 * log((1.0 + nVal) / (1.0 - nVal)));
+        PushDouble( ::rtl::math::atanh( fVal));
 }
 
 
@@ -5859,7 +5859,7 @@ void ScInterpreter::ScAddressFunc()
     USHORT  nFlags = SCA_COL_ABSOLUTE | SCA_ROW_ABSOLUTE;   // default
     if( nParamCount >= 3 )
     {
-        USHORT n = (USHORT) ::rtl::math::approxFloor(GetDouble());
+        USHORT n = (USHORT) ::rtl::math::approxFloor( GetDoubleWithDefault( 1.0));
         switch ( n )
         {
             default :

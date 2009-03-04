@@ -1746,11 +1746,11 @@ void __EXPORT ScFormulaCell::Notify( SvtBroadcaster&, const SfxHint& rHint)
     if ( !pDocument->IsInDtorClear() && !pDocument->GetHardRecalcState() )
     {
         const ScHint* p = PTR_CAST( ScHint, &rHint );
-        if( p && (p->GetId() & (SC_HINT_DATACHANGED | SC_HINT_DYING |
-                SC_HINT_TABLEOPDIRTY)) )
+        ULONG nHint = (p ? p->GetId() : 0);
+        if (nHint & (SC_HINT_DATACHANGED | SC_HINT_DYING | SC_HINT_TABLEOPDIRTY))
         {
             BOOL bForceTrack = FALSE;
-            if ( p->GetId() & SC_HINT_TABLEOPDIRTY )
+            if ( nHint & SC_HINT_TABLEOPDIRTY )
             {
                 bForceTrack = !bTableOpDirty;
                 if ( !bTableOpDirty )

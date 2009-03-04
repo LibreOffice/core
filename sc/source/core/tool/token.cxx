@@ -1207,7 +1207,7 @@ bool ScTokenArray::AddFormulaToken(const com::sun::star::sheet::FormulaToken& _a
                                     lcl_ExternalRefToCalc( aComplRef.Ref1, aApiCRef.Reference1 );
                                     lcl_ExternalRefToCalc( aComplRef.Ref2, aApiCRef.Reference2 );
                                     // NOTE: This assumes that cached sheets are in consecutive order!
-                                    aComplRef.Ref2.nTab = sal::static_int_cast< SCsTAB >( aComplRef.Ref1.nTab + (aApiCRef.Reference2.Sheet - aApiCRef.Reference1.Sheet) );
+                                    aComplRef.Ref2.nTab = aComplRef.Ref1.nTab + static_cast<SCsTAB>(aApiCRef.Reference2.Sheet - aApiCRef.Reference1.Sheet);
                                     AddExternalDoubleReference( nFileId, aTabName, aComplRef );
                                 }
                                 else

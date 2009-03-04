@@ -70,6 +70,7 @@
 #include "sc.hrc"
 #include "servuno.hxx"
 #include "unonames.hxx"
+#include "externalrefmgr.hxx"
 
 #include <com/sun/star/table/CellAddress.hpp>
 
@@ -659,7 +660,7 @@ uno::Reference< sheet::XFormulaOpCodeMapper> ScFormulaDlg::getFormulaOpCodeMappe
 ::std::auto_ptr<formula::FormulaTokenArray> ScFormulaDlg::convertToTokenArray(const uno::Sequence< sheet::FormulaToken >& _aTokenList)
 {
     ::std::auto_ptr<formula::FormulaTokenArray> pArray(new ScTokenArray());
-    pArray->Fill(_aTokenList);
+    pArray->Fill( _aTokenList, pDoc->GetExternalRefManager());
     return pArray;
 }
 

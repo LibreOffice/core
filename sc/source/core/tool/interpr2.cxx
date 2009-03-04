@@ -2582,7 +2582,8 @@ BOOL lclConvertMoney( const String& aSearchUnit, double& rfRate, int& rnDec )
         { "GRD", 340.750,  2 },
         { "SIT", 239.640,  2 },
         { "MTL", 0.429300, 2 },
-        { "CYP", 0.585274, 2 }
+        { "CYP", 0.585274, 2 },
+        { "SKK", 30.1260,  2 }
     };
 
     const size_t nConversionCount = sizeof( aConvertTable ) / sizeof( aConvertTable[0] );

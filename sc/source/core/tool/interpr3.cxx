@@ -1140,14 +1140,13 @@ void ScInterpreter::ScFisher()
     if (fabs(fVal) >= 1.0)
         PushIllegalArgument();
     else
-        PushDouble(0.5*log((1.0+fVal)/(1.0-fVal)));
+        PushDouble( ::rtl::math::atanh( fVal));
 }
 
 void ScInterpreter::ScFisherInv()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScFisherInv" );
-    double fVal = GetDouble();
-    PushDouble((exp(2.0*fVal)-1.0)/(exp(2.0*fVal)+1.0));
+    PushDouble( tanh( GetDouble()));
 }
 
 void ScInterpreter::ScFact()
@@ -3095,23 +3094,70 @@ void ScInterpreter::ScSkew()
     PushDouble(((xcube * fCount) / (fCount - 1.0)) / (fCount - 2.0));
 }
 
+double ScInterpreter::GetMedian( vector<double> & rArray )
+{
+    size_t nSize = rArray.size();
+    if (rArray.empty() || nSize == 0 || nGlobalError)
+    {
+        SetError( errNoValue);
+        return 0.0;
+    }
+
+    // Upper median.
+    size_t nMid = nSize / 2;
+    vector<double>::iterator iMid = rArray.begin() + nMid;
+    ::std::nth_element( rArray.begin(), iMid, rArray.end());
+    if (nSize & 1)
+        return *iMid;   // Lower and upper median are equal.
+    else
+    {
+        double fUp = *iMid;
+        // Lower median.
+        iMid = rArray.begin() + nMid - 1;
+        ::std::nth_element( rArray.begin(), iMid, rArray.end());
+        return (fUp + *iMid) / 2;
+    }
+}
+
 void ScInterpreter::ScMedian()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScMedian" );
     BYTE nParamCount = GetByte();
     if ( !MustHaveParamCountMin( nParamCount, 1 )  )
         return;
-    vector<double> aSortArray;
-    GetSortArray(nParamCount, aSortArray);
-    SCSIZE nSize = aSortArray.size();
-    if (aSortArray.empty() || nSize == 0 || nGlobalError)
-        PushNoValue();
+    vector<double> aArray;
+    GetNumberSequenceArray( nParamCount, aArray);
+    PushDouble( GetMedian( aArray));
+}
+
+double ScInterpreter::GetPercentile( vector<double> & rArray, double fPercentile )
+{
+    size_t nSize = rArray.size();
+    if (rArray.empty() || nSize == 0 || nGlobalError)
+    {
+        SetError( errNoValue);
+        return 0.0;
+    }
+
+    if (nSize == 1)
+        return rArray[0];
     else
     {
-        if (nSize % 2 == 0)
-            PushDouble((aSortArray[nSize/2-1]+aSortArray[nSize/2])/2.0);
+        size_t nIndex = (size_t)::rtl::math::approxFloor( fPercentile * (nSize-1));
+        double fDiff = fPercentile * (nSize-1) - ::rtl::math::approxFloor( fPercentile * (nSize-1));
+        DBG_ASSERT(nIndex < nSize, "GetPercentile: wrong index(1)");
+        vector<double>::iterator iter = rArray.begin() + nIndex;
+        ::std::nth_element( rArray.begin(), iter, rArray.end());
+        if (fDiff == 0.0)
+            return *iter;
         else
-            PushDouble(aSortArray[(nSize-1)/2]);
+        {
+            DBG_ASSERT(nIndex < nSize-1, "GetPercentile: wrong index(2)");
+            double fVal = *iter;
+            iter = rArray.begin() + nIndex+1;
+            ::std::nth_element( rArray.begin(), iter, rArray.end());
+            return fVal + fDiff * (*iter - fVal);
+        }
     }
 }
 
@@ -3126,30 +3172,9 @@ void ScInterpreter::ScPercentile()
         PushIllegalArgument();
         return;
     }
-    vector<double> aSortArray;
-    GetSortArray(1, aSortArray);
-    SCSIZE nSize = aSortArray.size();
-    if (aSortArray.empty() || nSize == 0 || nGlobalError)
-        PushNoValue();
-    else
-    {
-        if (nSize == 1)
-            PushDouble(aSortArray[0]);
-        else
-        {
-            SCSIZE nIndex = (SCSIZE)::rtl::math::approxFloor(alpha*(nSize-1));
-            double fDiff = alpha*(nSize-1) - ::rtl::math::approxFloor(alpha*(nSize-1));
-            DBG_ASSERT(nIndex < nSize, "ScPercentile: falscher Index (1)");
-            if (fDiff == 0.0)
-                PushDouble(aSortArray[nIndex]);
-            else
-            {
-                DBG_ASSERT(nIndex < nSize-1, "ScPercentile: falscher Index(2)");
-                PushDouble(aSortArray[nIndex] +
-                            fDiff*(aSortArray[nIndex+1]-aSortArray[nIndex]));
-            }
-        }
-    }
+    vector<double> aArray;
+    GetNumberSequenceArray( 1, aArray);
+    PushDouble( GetPercentile( aArray, alpha));
 }
 
 void ScInterpreter::ScQuartile()
@@ -3163,58 +3188,9 @@ void ScInterpreter::ScQuartile()
         PushIllegalArgument();
         return;
     }
-    vector<double> aSortArray;
-    GetSortArray(1, aSortArray);
-    SCSIZE nSize = aSortArray.size();
-    if (aSortArray.empty() || nSize == 0 || nGlobalError)
-        PushNoValue();
-    else
-    {
-        if (nSize == 1)
-            PushDouble(aSortArray[0]);
-        else
-        {
-            if (fFlag == 0.0)
-                PushDouble(aSortArray[0]);
-            else if (fFlag == 1.0)
-            {
-                SCSIZE nIndex = (SCSIZE)::rtl::math::approxFloor(0.25*(nSize-1));
-                double fDiff = 0.25*(nSize-1) - ::rtl::math::approxFloor(0.25*(nSize-1));
-                DBG_ASSERT(nIndex < nSize, "ScQuartile: falscher Index (1)");
-                if (fDiff == 0.0)
-                    PushDouble(aSortArray[nIndex]);
-                else
-                {
-                    DBG_ASSERT(nIndex < nSize-1, "ScQuartile: falscher Index(2)");
-                    PushDouble(aSortArray[nIndex] +
-                                fDiff*(aSortArray[nIndex+1]-aSortArray[nIndex]));
-                }
-            }
-            else if (fFlag == 2.0)
-            {
-                if (nSize % 2 == 0)
-                    PushDouble((aSortArray[nSize/2-1]+aSortArray[nSize/2])/2.0);
-                else
-                    PushDouble(aSortArray[(nSize-1)/2]);
-            }
-            else if (fFlag == 3.0)
-            {
-                SCSIZE nIndex = (SCSIZE)::rtl::math::approxFloor(0.75*(nSize-1));
-                double fDiff = 0.75*(nSize-1) - ::rtl::math::approxFloor(0.75*(nSize-1));
-                DBG_ASSERT(nIndex < nSize, "ScQuartile: falscher Index (3)");
-                if (fDiff == 0.0)
-                    PushDouble(aSortArray[nIndex]);
-                else
-                {
-                    DBG_ASSERT(nIndex < nSize-1, "ScQuartile: falscher Index(4)");
-                    PushDouble(aSortArray[nIndex] +
-                                fDiff*(aSortArray[nIndex+1]-aSortArray[nIndex]));
-                }
-            }
-            else
-                PushDouble(aSortArray[nSize-1]);
-        }
-    }
+    vector<double> aArray;
+    GetNumberSequenceArray( 1, aArray);
+    PushDouble( fFlag == 2.0 ? GetMedian( aArray) : GetPercentile( aArray, 0.25 * fFlag));
 }
 
 void ScInterpreter::ScModalValue()
@@ -3262,6 +3238,7 @@ void ScInterpreter::ScModalValue()
             PushDouble(aSortArray[nMaxIndex]);
     }
 }
+
 void ScInterpreter::CalculateSmallLarge(BOOL bSmall)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::CalculateSmallLarge" );
@@ -3275,15 +3252,24 @@ void ScInterpreter::CalculateSmallLarge(BOOL bSmall)
     }
     SCSIZE k = static_cast<SCSIZE>(f);
     vector<double> aSortArray;
-    GetSortArray(1, aSortArray);
+    /* TODO: using nth_element() is best for one single value, but LARGE/SMALL
+     * actually are defined to return an array of values if an array of
+     * positions was passed, in which case, depending on the number of values,
+     * we may or will need a real sorted array again, see #i32345. */
+    //GetSortArray(1, aSortArray);
+    GetNumberSequenceArray(1, aSortArray);
     SCSIZE nSize = aSortArray.size();
     if (aSortArray.empty() || nSize == 0 || nGlobalError || nSize < k)
         PushNoValue();
     else
     {
-        PushDouble( aSortArray[ bSmall ? k-1 : nSize-k ] );
+        // TODO: the sorted case for array: PushDouble( aSortArray[ bSmall ? k-1 : nSize-k ] );
+        vector<double>::iterator iPos = aSortArray.begin() + (bSmall ? k-1 : nSize-k);
+        ::std::nth_element( aSortArray.begin(), iPos, aSortArray.end());
+        PushDouble( *iPos);
     }
 }
+
 void ScInterpreter::ScLarge()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::ScLarge" );
@@ -3401,7 +3387,7 @@ void ScInterpreter::ScTrimMean()
     }
 }
 
-void ScInterpreter::GetSortArray(BYTE nParamCount, vector<double>& rSortArray, vector<long>* pIndexOrder)
+void ScInterpreter::GetNumberSequenceArray( BYTE nParamCount, vector<double>& rArray )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "Eike.Rathke@sun.com", "ScInterpreter::GetSortArray" );
     ScAddress aAdr;
@@ -3413,14 +3399,14 @@ void ScInterpreter::GetSortArray(BYTE nParamCount, vector<double>& rSortArray, v
         switch (GetStackType())
         {
             case formula::svDouble :
-                rSortArray.push_back( PopDouble());
+                rArray.push_back( PopDouble());
             break;
             case svSingleRef :
             {
                 PopSingleRef( aAdr );
                 ScBaseCell* pCell = GetCell( aAdr );
                 if (HasCellValueData(pCell))
-                    rSortArray.push_back( GetCellValue( aAdr, pCell));
+                    rArray.push_back( GetCellValue( aAdr, pCell));
             }
             break;
             case formula::svDoubleRef :
@@ -3433,17 +3419,17 @@ void ScInterpreter::GetSortArray(BYTE nParamCount, vector<double>& rSortArray, v
                 aRange.Justify();
                 SCSIZE nCellCount = aRange.aEnd.Col() - aRange.aStart.Col() + 1;
                 nCellCount *= aRange.aEnd.Row() - aRange.aStart.Row() + 1;
-                rSortArray.reserve( rSortArray.size() + nCellCount);
+                rArray.reserve( rArray.size() + nCellCount);
 
                 USHORT nErr = 0;
                 double fCellVal;
                 ScValueIterator aValIter(pDok, aRange);
                 if (aValIter.GetFirst( fCellVal, nErr))
                 {
-                    rSortArray.push_back( fCellVal);
+                    rArray.push_back( fCellVal);
                     SetError(nErr);
                     while ((nErr == 0) && aValIter.GetNext( fCellVal, nErr))
-                        rSortArray.push_back( fCellVal);
+                        rArray.push_back( fCellVal);
                     SetError(nErr);
                 }
             }
@@ -3455,17 +3441,17 @@ void ScInterpreter::GetSortArray(BYTE nParamCount, vector<double>& rSortArray, v
                     break;
 
                 SCSIZE nCount = pMat->GetElementCount();
-                rSortArray.reserve( rSortArray.size() + nCount);
+                rArray.reserve( rArray.size() + nCount);
                 if (pMat->IsNumeric())
                 {
                     for (SCSIZE i = 0; i < nCount; ++i)
-                        rSortArray.push_back( pMat->GetDouble(i));
+                        rArray.push_back( pMat->GetDouble(i));
                 }
                 else
                 {
                     for (SCSIZE i = 0; i < nCount; ++i)
                         if (!pMat->IsString(i))
-                            rSortArray.push_back( pMat->GetDouble(i));
+                            rArray.push_back( pMat->GetDouble(i));
                 }
             }
             break;
@@ -3481,6 +3467,11 @@ void ScInterpreter::GetSortArray(BYTE nParamCount, vector<double>& rSortArray, v
     // error if there was one.
     while (nParam-- > 0)
         PopError();
+}
+
+void ScInterpreter::GetSortArray( BYTE nParamCount, vector<double>& rSortArray, vector<long>* pIndexOrder )
+{
+    GetNumberSequenceArray( nParamCount, rSortArray);
 
     if (rSortArray.size() > MAX_ANZ_DOUBLE_FOR_SORT)
         SetError( errStackOverflow);
@@ -3512,8 +3503,9 @@ static void lcl_QuickSort( long nLo, long nHi, vector<double>& rSortArray, vecto
     long nj = nHi;
     do
     {
-        while (ni <= nHi && rSortArray[ni]  < rSortArray[nLo]) ni++;
-        while (nj >= nLo && rSortArray[nLo] < rSortArray[nj])  nj--;
+        double fLo = rSortArray[nLo];
+        while (ni <= nHi && rSortArray[ni] < fLo) ni++;
+        while (nj >= nLo && fLo < rSortArray[nj]) nj--;
         if (ni <= nj)
         {
             if (ni != nj)
@@ -4199,3 +4191,4 @@ void ScInterpreter::ScForecast()
             PushDouble( fMeanY + fSumDeltaXDeltaY / fSumSqrDeltaX * (fVal - fMeanX));
     }
 }
+
