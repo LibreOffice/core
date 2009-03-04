@@ -1831,7 +1831,7 @@ SwField* SwPostItField::Copy() const
     SwPostItField* pRet = new SwPostItField( (SwPostItFieldType*)GetTyp(), sAuthor,
                                 sTxt, aDateTime);
     if (mpText)
-        pRet->SetTextObject( mpText->Clone() );
+        pRet->SetTextObject( new OutlinerParaObject(*mpText) );
     return pRet;
 }
 /*--------------------------------------------------------------------

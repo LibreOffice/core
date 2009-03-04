@@ -105,6 +105,7 @@
 #include "writerwordglue.hxx"
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
+#include <svx/editobj.hxx>
 
 #include <math.h>
 
@@ -951,8 +952,10 @@ OutlinerParaObject* SwWW8ImplReader::ImportAsOutliner(String &rString, WW8_CP nS
             mpDrawEditEngine->QuickDelete(aFirstChar);
         }
 
-        pRet = new OutlinerParaObject(*mpDrawEditEngine->CreateTextObject());
+        EditTextObject* pTemporaryText = mpDrawEditEngine->CreateTextObject();
+        pRet = new OutlinerParaObject(*pTemporaryText);
         pRet->SetOutlinerMode( OUTLINERMODE_TEXTOBJECT );
+        delete pTemporaryText;
 
         mpDrawEditEngine->SetText( aEmptyStr );
         mpDrawEditEngine->SetParaAttribs(0, mpDrawEditEngine->GetEmptyItemSet());
@@ -1164,10 +1167,11 @@ SwFrmFmt* SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
         }
 
         bool bVertical = pTextObj->IsVerticalWriting() ? true : false;
-        OutlinerParaObject* pOp = new OutlinerParaObject(
-            *mpDrawEditEngine->CreateTextObject());
+        EditTextObject* pTemporaryText = mpDrawEditEngine->CreateTextObject();
+        OutlinerParaObject* pOp = new OutlinerParaObject(*pTemporaryText);
         pOp->SetOutlinerMode( OUTLINERMODE_TEXTOBJECT );
         pOp->SetVertical( bVertical );
+        delete pTemporaryText;
         pTextObj->NbcSetOutlinerParaObject( pOp );
         pTextObj->SetVerticalWriting(bVertical);
 

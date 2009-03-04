@@ -576,7 +576,7 @@ void SwDoc::setJobsetup(/*[in]*/ const JobSetup &rJobSetup )
     if( !pPrt )
     {
         //Das ItemSet wird vom Sfx geloescht!
-        SfxItemSet *pSet = new SfxItemSet( aAttrPool,
+        SfxItemSet *pSet = new SfxItemSet( GetAttrPool(),
                         FN_PARAM_ADDPRINTER, FN_PARAM_ADDPRINTER,
                         SID_HTML_MODE,  SID_HTML_MODE,
                         SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
