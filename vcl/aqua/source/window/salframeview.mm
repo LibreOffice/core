@@ -889,19 +889,45 @@ private:
         if( pInsert && ( nLen = [pInsert length] ) > 0 )
         {
             OUString aInsertString( GetOUString( pInsert ) );
-            USHORT nKeyCode = 0;
-
              // aCharCode initializer is safe since aInsertString will at least contain '\0'
             sal_Unicode aCharCode = *aInsertString.getStr();
-			nKeyCode = ImplMapCharCode( aCharCode );
-            // FIXME: will probably break somehow in less than trivial text input mode
+            
             if( nLen == 1 &&
                 aCharCode < 0x80 &&
                 aCharCode > 0x1f &&
 				! [self hasMarkedText ]
                 )
             {
-                [self sendKeyInputAndReleaseToFrame: nKeyCode character: aCharCode];
+                USHORT nKeyCode = ImplMapCharCode( aCharCode );
+                unsigned int nLastModifiers = mpFrame->mnLastModifierFlags;
+
+                // #i99567#
+                // find out the unmodified key code
+    
+                // sanity check
+                if( mpLastEvent && ( [mpLastEvent type] == NSKeyDown || [mpLastEvent type] == NSKeyUp ) )
+                {
+                    // get unmodified string
+                    NSString* pUnmodifiedString = [mpLastEvent charactersIgnoringModifiers]; 
+                    if( pUnmodifiedString && [pUnmodifiedString length] == 1 )
+                    {
+                        // map the unmodified key code
+                        unichar keyChar = [pUnmodifiedString characterAtIndex: 0];
+                        nKeyCode = ImplMapCharCode( keyChar );
+                    }
+                    nLastModifiers = [mpLastEvent modifierFlags];
+
+                }
+                // #i99567#
+                // applications and vcl's edit fields ignore key events with ALT
+                // however we're at a place where we know text should be inserted
+                // so it seems we need to strip the Alt modifier here
+                if( (nLastModifiers & (NSShiftKeyMask | NSControlKeyMask | NSAlternateKeyMask | NSCommandKeyMask))
+                    == NSAlternateKeyMask )
+                {
+                    nLastModifiers = 0;
+                }
+                [self sendKeyInputAndReleaseToFrame: nKeyCode character: aCharCode modifiers: nLastModifiers];
             }
             else
             {
