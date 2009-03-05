@@ -731,7 +731,7 @@ void ScInputHandler::ShowTipCursor()
                 if( nLeftParentPos != STRING_NOTFOUND )
                 {
                     sal_Unicode c = aSelText.GetChar( nLeftParentPos-1 );
-                    if( !(c >= 'A' && c<= 'Z' || c>= 'a' && c<= 'z' ) )
+                    if( !((c >= 'A' && c<= 'Z') || (c>= 'a' && c<= 'z' )) )
                         continue;
                     nNextFStart = aHelper.GetFunctionStart( aSelText, nLeftParentPos, TRUE);
                     if( aHelper.GetNextFunc( aSelText, FALSE, nNextFStart, &nNextFEnd, &ppFDesc, &aArgs ) )
@@ -970,7 +970,7 @@ void ScInputHandler::UseFormulaData()
                     break;
 
                 sal_Unicode c = aFormula.GetChar( nLeftParentPos-1 );
-                if( !(c >= 'A' && c<= 'Z' || c>= 'a' && c<= 'z' ) )
+                if( !((c >= 'A' && c<= 'Z') || (c>= 'a' && c<= 'z') ) )
                     continue;
                 nNextFStart = aHelper.GetFunctionStart( aFormula, nLeftParentPos, TRUE);
                 if( aHelper.GetNextFunc( aFormula, FALSE, nNextFStart, &nNextFEnd, &ppFDesc, &aArgs ) )

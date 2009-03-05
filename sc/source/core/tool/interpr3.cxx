@@ -932,6 +932,7 @@ double ScInterpreter::GetBetaDistPDF(double fX, double fA, double fB)
             return 0.0;
     }
     if (fX >= 1.0)
+    {
         if (fB < 1.0 && fX == 1.0)
         {
             SetError(errIllegalArgument);
@@ -939,6 +940,7 @@ double ScInterpreter::GetBetaDistPDF(double fX, double fA, double fB)
         }
         else
             return 0.0;
+    }
 
     // normal cases; result x^(a-1)*(1-x)^(b-1)/Beta(a,b)
     const double fLogDblMax = log( ::std::numeric_limits<double>::max());

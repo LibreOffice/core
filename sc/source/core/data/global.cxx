@@ -1895,7 +1895,7 @@ String ScFunctionMgr::GetCategoryName(sal_uInt32 _nCategoryNumber )
     ::std::auto_ptr<ScResourcePublisher> pCategories( new ScResourcePublisher( ScResId( RID_FUNCTION_CATEGORIES ) ) );
     return String(ScResId((USHORT)_nCategoryNumber));
 }
-const sal_Unicode ScFunctionMgr::getSingleToken(const formula::IFunctionManager::EToken _eToken) const
+sal_Unicode ScFunctionMgr::getSingleToken(const formula::IFunctionManager::EToken _eToken) const
 {
     switch(_eToken)
     {
