@@ -370,7 +370,7 @@ static Window* ImplFindAccelWindow( Window* pParent, USHORT& rIndex, xub_Unicode
         pWindow = ImplGetNextWindow( pParent, i, i, TRUE );
     else
         pWindow = ImplGetChildWindow( pParent, nFormStart, i, TRUE );
-    while ( bSearch )
+    while( bSearch && pWindow )
     {
         const XubString aStr = pWindow->GetText();
         USHORT nPos = aStr.Search( '~' );
@@ -415,7 +415,11 @@ static Window* ImplFindAccelWindow( Window* pParent, USHORT& rIndex, xub_Unicode
             break;
 
         if ( i < nFormEnd )
+        {
             pWindow = ImplGetNextWindow( pParent, i, i, bCheckEnable );
+            if( ! pWindow )
+                pWindow = ImplGetChildWindow( pParent, nFormStart, i, bCheckEnable );
+        }
         else
             pWindow = ImplGetChildWindow( pParent, nFormStart, i, bCheckEnable );
     }

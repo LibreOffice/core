@@ -519,7 +519,9 @@ bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutArgs& rAr
                     continue;
             }
 
+
             // apply vertical flags, etc.
+            bool bDiacritic = false;
             if( nCharPos >= 0 )
             {
                 sal_UCS4 aChar = rArgs.mpStr[ nCharPos ];
@@ -535,12 +537,22 @@ bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutArgs& rAr
                 }
 #endif
                 nGlyphIndex = rFont.FixupGlyphIndex( nGlyphIndex, aChar );
+
+                // #i99367# HACK: try to detect all diacritics
+                if( aChar>=0x0300 && aChar<0x2100 )
+                    bDiacritic = IsDiacritic( aChar );
             }
 
             // get glyph position and its metrics
             aNewPos = Point( (int)(pPos->fX+0.5), (int)(pPos->fY+0.5) );
             const GlyphMetric& rGM = rFont.GetGlyphMetric( nGlyphIndex );
             int nGlyphWidth = rGM.GetCharWidth();
+            if( nGlyphWidth <= 0 )
+                bDiacritic |= true;
+            // #i99367# force all diacritics to zero width
+            // TODO: we need mnOrigWidth/mnLogicWidth/mnNewWidth
+            else if( bDiacritic )
+                nGlyphWidth = 0;
 
             // heuristic to detect glyph clusters
             bool bInCluster = true;
@@ -556,7 +568,7 @@ bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutArgs& rAr
                     nClusterMinPos = nCharPos;      // extend cluster
                 else if( nCharPos <= nClusterMaxPos )
                     /*NOTHING*/;                    // inside cluster
-                else if( nGlyphWidth <= 0 )
+                else if( bDiacritic )
                     nClusterMaxPos = nCharPos;      // add diacritic to cluster
                 else {
                     nClusterMinPos = nClusterMaxPos = nCharPos; // new cluster
@@ -570,7 +582,7 @@ bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutArgs& rAr
                     nClusterMaxPos = nCharPos;      // extend cluster
                 else if( nCharPos >= nClusterMinPos )
                     /*NOTHING*/;                    // inside cluster
-                else if( nGlyphWidth <= 0 )
+                else if( bDiacritic )
                 {
                     nClusterMinPos = nCharPos;      // ICU often has [diacritic* baseglyph*]
                     if( bClusterStart ) {
@@ -590,6 +602,8 @@ bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutArgs& rAr
                 nGlyphFlags |= GlyphItem::IS_IN_CLUSTER;
             if( bRightToLeft )
                 nGlyphFlags |= GlyphItem::IS_RTL_GLYPH;
+            if( bDiacritic )
+                nGlyphFlags |= GlyphItem::IS_DIACRITIC;
 
             // add resulting glyph item to layout
             const GlyphItem aGI( nCharPos, nGlyphIndex, aNewPos, nGlyphFlags, nGlyphWidth );

@@ -3015,25 +3015,9 @@ void Window::ImplScroll( const Rectangle& rRect,
         Window* pWindow = mpWindowImpl->mpFirstChild;
         while ( pWindow )
         {
-            pWindow->mpWindowImpl->mnX        += nHorzScroll;
-            pWindow->mpWindowImpl->maPos.X()  += nHorzScroll;
-            pWindow->mpWindowImpl->mnY        += nVertScroll;
-            pWindow->mpWindowImpl->maPos.Y()  += nVertScroll;
-            if ( pWindow->ImplUpdatePos() )
-                pWindow->ImplUpdateSysObjPos();
-            if ( pWindow->IsReallyVisible() )
-                pWindow->ImplSetClipFlag();
-            if ( pWindow->mpWindowImpl->mpClientWindow )
-                pWindow->mpWindowImpl->mpClientWindow->mpWindowImpl->maPos = pWindow->mpWindowImpl->maPos;
-
-            if ( pWindow->IsVisible() )
-            {
-                pWindow->ImplCallMove();
-            }
-            else
-            {
-                pWindow->mpWindowImpl->mbCallMove = TRUE;
-            }
+            Point aPos = pWindow->GetPosPixel();
+            aPos += Point( nHorzScroll, nVertScroll );
+            pWindow->SetPosPixel( aPos );
 
             pWindow = pWindow->mpWindowImpl->mpNext;
         }
@@ -3261,7 +3245,6 @@ void Window::ImplPosSizeWindow( long nX, long nY,
     if ( nFlags & WINDOW_POSSIZE_X )
     {
         long nOrgX = nX;
-        //if ( nX != mnX )
         // --- RTL ---  (compare the screen coordinates)
         Point aPtDev( Point( nX+mnOutOffX, 0 ) );
         if( ImplHasMirroredGraphics() )
@@ -3275,6 +3258,17 @@ void Window::ImplPosSizeWindow( long nX, long nY,
             {
                 // --- RTL --- (re-mirror at parent window)
                 nX = mpWindowImpl->mpParent->mnOutWidth - mnOutWidth - nX;
+            }
+            /* #i99166# An LTR window in RTL UI that gets sized only would be
+               expected to not moved its upper left point
+            */
+            if( bnXRecycled )
+            {
+                if( ImplIsAntiparallel() )
+                {
+                    aPtDev.X() = mpWindowImpl->mnAbsScreenX;
+                    nOrgX = mpWindowImpl->maPos.X();
+                }
             }
         }
         else if( !bnXRecycled && mpWindowImpl->mpParent && !mpWindowImpl->mpParent->mpWindowImpl->mbFrame && mpWindowImpl->mpParent->ImplIsAntiparallel() )
