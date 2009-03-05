@@ -325,6 +325,8 @@ sub setglobalvariables
             {
                 $installer::globals::islinuxx86_64rpmbuild = 1;
             }
+
+            if ( $installer::globals::rpm eq "" ) { installer::exiter::exit_program("ERROR: Environment variable \"\$RPM\" has to be defined!", "setglobalvariables"); }
         }
 
         # Creating Debian packages ?

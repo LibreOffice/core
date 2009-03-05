@@ -2466,14 +2466,15 @@ sub create_packages_without_epm
         my $specfilename = $epmdir . $packagename . ".spec";
         if (! -f $specfilename) { installer::exiter::exit_program("ERROR: Did not find file: $specfilename", "create_packages_without_epm"); }
 
-        my $rpmcommand = "rpm";
+        # my $rpmcommand = "rpm";
+        my $rpmcommand = $installer::globals::rpm;
         my $rpmversion = determine_rpm_version();
 
-        if ( $rpmversion >= 4 ) { $rpmcommand = "rpmbuild"; }
+        # if ( $rpmversion >= 4 ) { $rpmcommand = "rpmbuild"; }
 
         # saving globally for later usage
         $installer::globals::rpmcommand = $rpmcommand;
-        $installer::globals::rpmquerycommand = "rpm"; # For queries "rpm" is used, not "rpmbuild"
+        $installer::globals::rpmquerycommand = "rpm"; # For queries "rpm" is used, not "rpmbuild" (for this call the LD_LIBRARY_PATH is not required!)
 
         my $target = "";
         if ( $installer::globals::compiler =~ /unxlngi/) { $target = "i586"; }

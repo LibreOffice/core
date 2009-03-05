@@ -162,6 +162,7 @@ BEGIN
     $jdstemppathdefined = 0;
     $packageversion = 1;
     $packagerevision = 1;
+    $rpm = "";
     $rpmcommand = "";
     $rpmquerycommand = "";
     $debian = "";

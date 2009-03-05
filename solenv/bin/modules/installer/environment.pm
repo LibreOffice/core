@@ -109,6 +109,8 @@ sub set_global_environment_variables
     if ( $ENV{'MAX_LANG_LENGTH'} ) { $installer::globals::max_lang_length = $ENV{'MAX_LANG_LENGTH'}; }
 
     if ( $ENV{'SOLAR_JAVA'} ) { $installer::globals::solarjavaset = 1; }
+
+    if ( $ENV{'RPM'} ) { $installer::globals::rpm = $ENV{'RPM'}; }
 }
 
 1;
