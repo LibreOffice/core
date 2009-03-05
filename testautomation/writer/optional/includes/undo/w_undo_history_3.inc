@@ -306,7 +306,7 @@ testcase tUndoNote
     kontext "Navigator"
     Navigator.TypeKeys "<DELETE>"
     '/// Close the Navigator
-    EditNavigator
+    ViewNavigator
     '///  string in Undo-list has to be: "Delete: 'This is a note'") 
 	Call CheckUndoStringInUndoList ( 10, "DeleteNote" )
 

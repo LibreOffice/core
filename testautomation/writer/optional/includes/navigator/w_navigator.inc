@@ -217,7 +217,7 @@ endcase
 ' **********************************************************************
 
 testcase tViewNavigator3
-    QaErrorLog "#i94614# - tEditNavigator3 outcommented"
+    QaErrorLog "#i94614# - tViewNavigator3 outcommented"
     goto endsub
 
     Dim NavigationTearOff as boolean
@@ -426,7 +426,7 @@ endcase
 ' **********************************************************************
 
 testcase tViewNavigator5
-    QaErrorLog "#i94614# - tEditNavigator5 outcommented"
+    QaErrorLog "#i94614# - tViewNavigator5 outcommented"
     goto endsub
     
     if gApplication <> "WRITER" then

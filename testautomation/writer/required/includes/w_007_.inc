@@ -955,7 +955,7 @@ endcase
 
 testcase tToolsHangulHanjaConversion
    
-   WarnLog "#i96838# - tToolsHangulHanjaConversion outcommented due to unreability."
+   QAErrorLog "#i96838# - tToolsHangulHanjaConversion outcommented due to unreability."
    goto endsub
 
     Dim bAsianLanguage as Boolean
@@ -1105,7 +1105,7 @@ endcase
 ' -------------------------------------------
 
 testcase tHtmlDocToolsHangulHanjaConversion
-   WarnLog "#96838# - tToolsHangulHanjaConversion outcommented due to unreability."
+   QAErrorLog "#i96838# - tToolsHangulHanjaConversion outcommented due to unreability."
    goto endsub
 
     Dim bAsianLanguage as Boolean

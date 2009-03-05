@@ -1463,7 +1463,7 @@ endcase
 '----------------------------------------------------------------
 
 testcase tMasterDocEditNavigator
-    printlog "- Edit/Navigator"
+    printlog "- View/Navigator"
     Dim ToolboxOk as boolean
     
     gApplication = "MASTERDOC"
@@ -1471,7 +1471,7 @@ testcase tMasterDocEditNavigator
     PrintLog "Open new document"
 
     Kontext "NavigatorGlobalDoc"
-    if Not NavigatorGlobalDoc.Exists then EditNavigator
+    if Not NavigatorGlobalDoc.Exists then ViewNavigator
     Kontext "NavigatorGlobalDoc"
     Call DialogTest ( NavigatorGlobalDoc )
 

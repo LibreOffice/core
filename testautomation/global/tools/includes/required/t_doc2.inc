@@ -179,14 +179,14 @@ function fSelectFirstOLE() as integer
                                             else
                                                 try
                                                     'Invoke Navigator if not visible
-                                                    EditNavigator
+                                                    ViewNavigator
                                                 catch
                                                     'If inside chart or elsewhere the call
                                                     'will fail. Again trying the slot after
                                                     'switching to the document.
                                                     Kontext "DocumentCalc"
                                                     DocumentCalc.TypeKeys "<Escape>"
-                                                    EditNavigator
+                                                    ViewNavigator
                                                 endcatch
                                             end if
                                             Kontext "NavigatorCalc"
@@ -194,13 +194,17 @@ function fSelectFirstOLE() as integer
                                                 'Select first OLE in list
                                                 Liste.TypeKeys "<HOME>"
                                                 for iIndex = 1 to 8
-                                                    Liste.TypeKeys "-<DOWN>"
+                                                    Liste.TypeKeys "-"
+                                                    wait 500
+                                                    Liste.TypeKeys "<DOWN>"
+                                                    wait 500                                                    
                                                 next iIndex
                                                 Liste.select(6)
-                                                Liste.TypeKeys "+<DOWN><RETURN>"
+                                                Liste.TypeKeys "+"
+                                                Liste.TypeKeys "<DOWN><RETURN>"
                                                 fSelectFirstOLE = 0
                                             else
-                                                QAErrorLog "Navigator did not occoured!"
+                                                QAErrorLog "Navigator couldn't be opened!"
                                             end if
         case "draw" , "impress"         :   Kontext "NavigatorDraw"
                                             if NavigatorDraw.Exists(10) then
@@ -208,14 +212,14 @@ function fSelectFirstOLE() as integer
                                             else
                                                 try
                                                     'Invoke Navigator if not visible
-                                                    EditNavigator
+                                                    ViewNavigator
                                                 catch
                                                     'If inside chart or elsewhere the call
                                                     'will fail. Again trying the slot after
                                                     'switching to the document.
                                                     Kontext "DocumentDraw"
                                                     DocumentDraw.TypeKeys "<Escape>"
-                                                    EditNavigator
+                                                    ViewNavigator
                                                 endcatch
                                                 Kontext "NavigatorDraw"
                                                 if NavigatorDraw.exists(10) then
@@ -235,7 +239,7 @@ function fSelectFirstOLE() as integer
                                                                         if NavigatorGlobalDoc.Exists(10) then 
                                                                             bNavigatorWasVisible = TRUE                                                                            
                                                                         else
-                                                                            EditNavigator
+                                                                            ViewNavigator
                                                                         end if
                                                                         wait 500
                                                                         Kontext "NavigatorGlobalDoc"
@@ -250,7 +254,7 @@ function fSelectFirstOLE() as integer
                                                                         else
                                                                             try
                                                                                 'Invoke Navigator if not visible                                                
-                                                                                EditNavigator
+                                                                                ViewNavigator
                                                                             catch
                                                                                 'If inside chart or elsewhere the call
                                                                                 'will fail. Again trying the slot after
@@ -258,7 +262,7 @@ function fSelectFirstOLE() as integer
                                                                                 Kontext "DocumentWriter"
                                                                                 call gMouseclick (99,99) 
                                                                                 call gMouseclick (50,50)
-                                                                                EditNavigator
+                                                                                ViewNavigator
                                                                             endcatch
                                                                         end if   
                                             end select
@@ -283,7 +287,7 @@ function fSelectFirstOLE() as integer
         printlog "Leaving navigator open as initially found"
     else
         if fSelectFirstOLE = 0 then
-            EditNavigator
+            ViewNavigator
             printlog "Closing navigator as initially found"
         else
             printlog "Closing navigator not needed. It was not possible to open it."

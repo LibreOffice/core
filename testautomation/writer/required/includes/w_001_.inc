@@ -1303,13 +1303,13 @@ testcase tMasterDocFileSaveWithPassword
 
     Sleep 1
     PrintLog "Password dialog has to come up"
-    Kontext "Passwort"
-    if Passwort.Exists then
+    Kontext "PasswordFileSave"
+    if PasswordFileSave.Exists then
         PrintLog "Enter your password"
-        PasswortName.SetText "12345"
+        Password.SetText "12345"
         PrintLog "Re-Enter a wrong passwort"
-        PasswortBestaetigen.Settext "54321"
-        Passwort.OK
+        PasswordConfirm.Settext "54321"
+        PasswordFileSave.OK
         Sleep 2
     else
         Warnlog "- Password-Dialog not up !"
@@ -1324,12 +1324,12 @@ testcase tMasterDocFileSaveWithPassword
         Warnlog "Able to save document with wrong password"
     end if
 
-    Kontext "Passwort"
-    if Passwort.Exists then
+    Kontext "PasswordFileSave"
+    if PasswordFileSave.Exists then
         PrintLog "Enter new password, and re-enter the same password"
-        PasswortName.SetText "12345"
-        PasswortBestaetigen.SetText "12345"
-        Passwort.OK
+        Password.SetText "12345"
+        PasswordConfirm.SetText "12345"
+        PasswordFileSave.OK
     else
         Warnlog "- Password-Dialog not up !"
     end if
@@ -1397,13 +1397,13 @@ testcase tMasterDocFileSaveWithPassword
         Kontext "Active"
         if Active.Exists(2) then Active.Yes
         PrintLog "Click on 'Save' in file open dialog"
-        Kontext "Passwort"
-        if Not Passwort.Exists(1) then
+        Kontext "PasswordFileSave"
+        if Not PasswordFileSave.Exists(1) then
             Warnlog "Passworddialog is not coming up on saving document"
         else
-            PasswortName.SetText "54321"
-            PasswortBestaetigen.SetText "54321"
-            Passwort.OK
+            Password.SetText "54321"
+            PasswordConfirm.SetText "54321"
+            PasswordFileSave.OK
             PrintLog "The password dialog should come up"
             Sleep 1
             FileClose

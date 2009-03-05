@@ -61,11 +61,11 @@ testcase tQuickInsertGraphNotAsLink
         '         endif
         ' Note: Can be locale dependent!
         if (iCurrentFile = 5) then
-            warnlog("#158701# crash on loading airshw.met going to next format")
+            qaerrorlog("#158701# crash on loading airshw.met going to next format")
             goto skipformat
         endif
         if (iCurrentFile = 4) AND (gPlatform="osx") then
-            warnlog("#158701# crash on MacOS X on loading ball.eps")
+            qaerrorlog("#158701# crash on MacOS X on loading ball.eps")
             goto skipformat
         endif
 

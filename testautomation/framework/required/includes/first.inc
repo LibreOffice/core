@@ -31,7 +31,7 @@
 '*
 '/************************************************************************
 '*
-'* owner : thorsten.bosbach@sun.com
+'* owner : joerg.skottke@sun.com
 '*
 '* short description : First test of basic functionality
 '*
