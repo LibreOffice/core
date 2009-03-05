@@ -32,6 +32,7 @@
 #include "precompiled_sw.hxx"
 
 #include <iostream>
+#include <stdio.h>
 #include "WW8TableInfo.hxx"
 #include "swtable.hxx"
 #include "pam.hxx"
