@@ -183,15 +183,15 @@ IMPL_LINK( CategoryListBox, implDoubleClickHdl, Control*, EMPTYARG )
 
 void CategoryListBox::MouseButtonUp( const MouseEvent& rMEvt )
 {
+    ReleaseMouse();
     if( rMEvt.IsLeft() && (rMEvt.GetClicks() == 2) )
     {
-        ReleaseMouse();
         if( maDoubleClickHdl.IsSet() )
             maDoubleClickHdl.Call( this );
     }
     else
     {
-        CategoryListBox::MouseButtonUp( rMEvt );
+        ListBox::MouseButtonUp( rMEvt );
     }
 }
 
