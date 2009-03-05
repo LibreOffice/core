@@ -121,7 +121,7 @@ namespace sdr
             }
         }
 
-        const double OverlayManager::getDiscreteOne() const
+        double OverlayManager::getDiscreteOne() const
         {
             if(getOutputDevice().GetViewTransformation() != maViewTransformation)
             {

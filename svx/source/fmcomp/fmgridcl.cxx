@@ -1109,6 +1109,7 @@ void FmGridControl::SetDesignMode(sal_Bool bMode)
     sal_Bool bOldMode = IsDesignMode();
     DbGridControl::SetDesignMode(bMode);
     if (bOldMode != bMode)
+    {
         if (!bMode)
         {
             // selection aufheben
@@ -1136,6 +1137,7 @@ void FmGridControl::SetDesignMode(sal_Bool bMode)
                 }
             }
         }
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -2043,6 +2045,7 @@ void FmGridControl::Select()
                 Reference< XIndexAccess >  xColumns(GetPeer()->getColumns(), UNO_QUERY);
                 Reference< XSelectionSupplier >  xSelSupplier(xColumns, UNO_QUERY);
                 if (xSelSupplier.is())
+                {
                     if (nSelectedColumn != SAL_MAX_UINT16)
                     {
                         Reference< XPropertySet >  xColumn;
@@ -2053,6 +2056,7 @@ void FmGridControl::Select()
                     {
                         xSelSupplier->select(Any());
                     }
+                }
             }
             catch(Exception&)
             {

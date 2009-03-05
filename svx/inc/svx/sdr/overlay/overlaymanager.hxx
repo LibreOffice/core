@@ -97,7 +97,7 @@ namespace sdr
 
             // return mfDiscreteOne to derivations, but also check for buffered local
             // ViewTransformation and evtl. correct mfDiscreteOne
-            const double getDiscreteOne() const;
+            double getDiscreteOne() const;
 
         public:
             OverlayManager(OutputDevice& rOutputDevice);

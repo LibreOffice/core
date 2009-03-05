@@ -431,6 +431,7 @@ sal_Bool isControlList(const SdrMarkList& rMarkList)
         // And this would be wrong :)
         // 03.02.00 - 72529 - FS
         if (!pAs3DObject)
+        {
             if (pObj->IsGroupObject())
             {
                 SdrObjListIter aIter(*pObj->GetSubList());
@@ -445,6 +446,7 @@ sal_Bool isControlList(const SdrMarkList& rMarkList)
                 bHadAnyLeafs = sal_True;
                 bControlList = FmFormInventor == pObj->GetObjInventor();
             }
+        }
     }
 
     return bControlList && bHadAnyLeafs;
@@ -2431,11 +2433,12 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextIn
     Reference< XPropertySet> xCursorSet(pfmscContextInfo->xCursor, UNO_QUERY);
     Reference< XResultSetUpdate> xUpdateCursor(pfmscContextInfo->xCursor, UNO_QUERY);
     if (xUpdateCursor.is() && xCursorSet.is() && xCursorSet.is())
+    {
         if (::comphelper::getBOOL(xCursorSet->getPropertyValue(FM_PROP_ISNEW)))
             xUpdateCursor->moveToCurrentRow();
-        else
-            if (::comphelper::getBOOL(xCursorSet->getPropertyValue(FM_PROP_ISMODIFIED)))
-                xUpdateCursor->cancelRowUpdates();
+        else if (::comphelper::getBOOL(xCursorSet->getPropertyValue(FM_PROP_ISMODIFIED)))
+            xUpdateCursor->cancelRowUpdates();
+    }
 
     return pfmscContextInfo->arrFields.size();
 }
