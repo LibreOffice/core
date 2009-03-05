@@ -668,6 +668,22 @@ void VistaFilePickerImpl::impl_sta_SetDefaultName(const RequestRef& rRequest)
 {
     ::rtl::OUString sFilename = rRequest->getArgumentOrDefault(PROP_FILENAME, ::rtl::OUString());
     TFileDialog iDialog = impl_getBaseDialogInterface();
+
+    TFileDialogCustomize iCustom = impl_getCustomizeInterface();
+    if ( ! iCustom.is())
+        return;
+
+    // if we have the autoextension check box set, remove (or change ???) the extension of the filename
+    // so that the autoextension mechanism can do its job
+    BOOL bValue = FALSE;
+    HRESULT hResult = iCustom->GetCheckButtonState( css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, &bValue);
+    if ( bValue )
+    {
+        sal_Int32 nSepPos = sFilename.lastIndexOf( '.' );
+        if ( -1 != nSepPos )
+            sFilename = sFilename.copy(0, nSepPos);
+    }
+
     iDialog->SetFileName ( reinterpret_cast<LPCTSTR>(sFilename.getStr()));
     m_sFilename = sFilename;
 }
@@ -682,16 +698,10 @@ void VistaFilePickerImpl::impl_sta_setFiltersOnDialog()
     ::rtl::OUString                    sCurrentFilter = m_lFilters.getCurrentFilter();
     sal_Int32                          nCurrentFilter = m_lFilters.getFilterPos(sCurrentFilter);
     TFileDialog                        iDialog        = impl_getBaseDialogInterface();
-    TFileDialogCustomize               iCustomize;
+    TFileDialogCustomize               iCustomize     = impl_getCustomizeInterface();
 
     aLock.clear();
     // <- SYNCHRONIZED
-
-#ifdef __MINGW32__
-    iDialog->QueryInterface(IID_IFileDialog, (void **)(&iCustomize));
-#else
-    iDialog.query(&iCustomize);
-#endif
 
     COMDLG_FILTERSPEC   *pFilt = &lFilters[0];
     iDialog->SetFileTypes(lFilters.size(), pFilt/*&lFilters[0]*/);
