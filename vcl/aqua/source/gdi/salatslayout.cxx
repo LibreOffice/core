@@ -35,6 +35,8 @@
 #include "salatsuifontutils.hxx"
 #include "tools/debug.hxx"
 
+#include <math.h>
+
 // =======================================================================
 
 class ATSLayout : public SalLayout
@@ -243,19 +245,42 @@ bool ATSLayout::LayoutText( ImplLayoutArgs& rArgs )
     if( eStatus != noErr )
         return false;
 
+    // prepare setting of layout controls
+    static const int nMaxTagCount = 1;
+    ATSUAttributeTag aTagAttrs[ nMaxTagCount ];
+    ByteCount aTagSizes[ nMaxTagCount ];
+    ATSUAttributeValuePtr aTagValues[ nMaxTagCount ];
+
+    // prepare control of "glyph fallback"
+    const SalData* pSalData = GetSalData();
+    ATSUFontFallbacks aFontFallbacks = pSalData->mpFontList->maFontFallbacks;
+    aTagAttrs[0]  = kATSULineFontFallbacksTag;
+    aTagSizes[0]  = sizeof( ATSUFontFallbacks );
+    aTagValues[0] = &aFontFallbacks;
+
+    // set paragraph layout controls
+    ATSUSetLayoutControls( maATSULayout, 1, aTagAttrs, aTagSizes, aTagValues );
+
     // enable "glyph fallback"
-    ATSUAttributeTag theTags[1];
-    ByteCount theSizes[1];
-    ATSUAttributeValuePtr theValues[1];
-
-    SalData* pSalData = GetSalData();
-    ATSUFontFallbacks theFontFallbacks = pSalData->mpFontList->maFontFallbacks;
-    theTags[0] = kATSULineFontFallbacksTag;
-    theSizes[0] = sizeof( ATSUFontFallbacks );
-    theValues[0] = &theFontFallbacks;
-
-    ATSUSetLayoutControls( maATSULayout, 1, theTags, theSizes, theValues );
     ATSUSetTransientFontMatching( maATSULayout, true );
+
+    // control run-specific layout controls
+    if( (rArgs.mnFlags & SAL_LAYOUT_BIDI_STRONG) != 0 )
+    {
+        // control BiDi defaults
+        MacOSBOOL nLineDirTag = kATSULeftToRightBaseDirection;
+        if( (rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL) != 0 )
+            nLineDirTag = kATSURightToLeftBaseDirection;
+        aTagAttrs[0] = kATSULineDirectionTag;
+        aTagSizes[0] = sizeof( nLineDirTag );
+        aTagValues[0] = &nLineDirTag;
+        // set run-specific layout controls
+#if 0 // why don't line-controls work as reliably as layout-controls???
+        ATSUSetLineControls( maATSULayout, rArgs.mnMinCharPos, 1, aTagAttrs, aTagSizes, aTagValues );
+#else
+        ATSUSetLayoutControls( maATSULayout, 1, aTagAttrs, aTagSizes, aTagValues );
+#endif
+    }
 
     return true;
 }
@@ -394,9 +419,19 @@ void ATSLayout::DrawText( SalGraphics& rGraphics ) const
         for(; it != maSubPortions.end(); ++it )
         {
             const SubPortion& rSubPortion = *it;
+            // calculate sub-portion offset for rotated text
+            Fixed nXOfsFixed = 0, nYOfsFixed = 0;
+            if( rAquaGraphics.mnATSUIRotation != 0 )
+            {
+                const double fRadians = rAquaGraphics.mnATSUIRotation * (M_PI/0xB40000);
+                nXOfsFixed = +rSubPortion.mnXOffset * cos( fRadians );
+                nYOfsFixed = +rSubPortion.mnXOffset * sin( fRadians );
+            }
+
+            // draw sub-portions
             ATSUDrawText( maATSULayout,
                 rSubPortion.mnMinCharPos, rSubPortion.mnEndCharPos - rSubPortion.mnMinCharPos,
-                nFixedX + rSubPortion.mnXOffset, nFixedY );
+                nFixedX + nXOfsFixed, nFixedY + nYOfsFixed );
         }
     }
 
