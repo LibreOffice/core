@@ -7254,7 +7254,7 @@ void GetLinePositions( const SdrObject* pObj, const std::set< sal_Int32 >& rRows
             nPosition |= aPt1.Y() < aPt2.Y() ? LinePositionBLTR : LinePositionTLBR;
 
         std::set< sal_Int32 >::const_iterator aRow( rRows.find( aPt1.Y() < aPt2.Y() ? aPt1.Y() : aPt2.Y() ) );
-        std::set< sal_Int32 >::const_iterator aColumn( rRows.find( aPt1.X() < aPt2.X() ? aPt1.X() : aPt2.X() ) );
+        std::set< sal_Int32 >::const_iterator aColumn( rColumns.find( aPt1.X() < aPt2.X() ? aPt1.X() : aPt2.X() ) );
         if ( ( aRow != rRows.end() ) && ( aColumn != rColumns.end() ) )
         {
             nPosition |= ( std::distance( rRows.begin(), aRow ) * rColumns.size() ) + std::distance( rColumns.begin(), aColumn );
@@ -7514,7 +7514,7 @@ SdrObject* SdrPowerPointImport::CreateTable( SdrObject* pGroup, sal_uInt32* pTab
                 }
             }
             ::sdr::table::SdrTableObj* pTable = new ::sdr::table::SdrTableObj( pSdrModel );
-            pTable->SetSnapRect( pGroup->GetSnapRect() );
+            pTable->uno_lock();
             Reference< XTable > xTable( pTable->getTable() );
             try
             {
@@ -7580,11 +7580,14 @@ SdrObject* SdrPowerPointImport::CreateTable( SdrObject* pGroup, sal_uInt32* pTab
                         }
                     }
                 }
-                SdrObject::Free( pGroup );
+                pTable->uno_unlock();
+                pTable->SetSnapRect( pGroup->GetSnapRect() );
                 pRet = pTable;
+                SdrObject::Free( pGroup );
             }
             catch( Exception& )
             {
+                pTable->uno_unlock();
                 SdrObject* pObj = pTable;
                 SdrObject::Free( pObj );
             }
