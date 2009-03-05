@@ -318,7 +318,7 @@ public class ModuleCtrl {
         } else {
             boolean goodDepends = true;
             if ( installData.getOSType().equalsIgnoreCase("SunOS") ) {
-                if (( packageData.getCheckSolaris() != null ) && ( ! packageData.getCheckSolaris().equals("") )) {
+                if (( installData.isRootInstallation() ) && ( packageData.getCheckSolaris() != null ) && ( ! packageData.getCheckSolaris().equals("") )) {
                     // the package has to be installed. Creating a new package with only packagename
                     if ( ! installer.isPackageNameInstalled(packageData.getCheckSolaris(), installData) ) {
                         goodDepends = false;
