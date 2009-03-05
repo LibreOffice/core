@@ -32,6 +32,8 @@
 #define WW8_TABLE_INFO_HXX
 #include <hash_map>
 #include <string>
+#include <map>
+#include <functional>
 #include <boost/shared_ptr.hpp>
 #include <sal/types.h>
 
@@ -45,23 +47,60 @@ namespace ww8
 {
 using namespace ::std;
 
-class WW8TableNodeInfo
+class WW8TableNodeInfo;
+
+class WW8TableNodeInfoInner
 {
+    WW8TableNodeInfo * mpParent;
     sal_uInt32 mnDepth;
     sal_uInt32 mnCell;
     sal_uInt32 mnRow;
     bool mbEndOfLine;
     bool mbEndOfCell;
-    const SwNode * mpNode;
     const SwTableBox * mpTableBox;
     const SwTable * mpTable;
 
- public:
+public:
+    typedef boost::shared_ptr<WW8TableNodeInfoInner> Pointer_t;
+
+    WW8TableNodeInfoInner(WW8TableNodeInfo * pParent);
+    ~WW8TableNodeInfoInner();
+
+    void setDepth(sal_uInt32 nDepth);
+    void setCell(sal_uInt32 nCell);
+    void setRow(sal_uInt32 nRow);
+    void setEndOfLine(bool bEndOfLine);
+    void setEndOfCell(bool bEndOfCell);
+    void setTableBox(const SwTableBox * pTableBox);
+    void setTable(const SwTable * pTable);
+
+    sal_uInt32 getDepth() const;
+    sal_uInt32 getCell() const;
+    sal_uInt32 getRow() const;
+    bool isEndOfCell() const;
+    bool isEndOfLine() const;
+    const SwTableBox * getTableBox() const;
+    const SwTable * getTable() const;
+
+    const SwNode * getNode() const;
+
+    string toString() const;
+};
+
+class WW8TableNodeInfo
+{
+public:
+    typedef map<sal_uInt32, WW8TableNodeInfoInner::Pointer_t, greater<sal_uInt32> > Inners_t;
+
+private:
+    sal_uInt32 mnDepth;
+    const SwNode * mpNode;
+    Inners_t mInners;
+
+public:
     typedef boost::shared_ptr<WW8TableNodeInfo> Pointer_t;
 
-    WW8TableNodeInfo(const SwNode * pTxtNode,
-                         const SwTableBox * pTableBox,
-                         const SwTable * pTable);
+    WW8TableNodeInfo(const SwNode * pTxtNode);
     virtual ~WW8TableNodeInfo();
 
     void setDepth(sal_uInt32 nDepth);
@@ -73,11 +112,16 @@ class WW8TableNodeInfo
     void setRow(sal_uInt32 nRow);
 
     sal_uInt32 getDepth() const;
+    bool isEndOfLine() const;
+    bool isEndOfCell() const;
     const SwNode * getNode() const;
     const SwTableBox * getTableBox() const;
     const SwTable * getTable() const;
-    bool isEndOfLine() const;
-    bool isEndOfCell() const;
+
+    const Inners_t & getInners() const;
+    const WW8TableNodeInfoInner::Pointer_t getFirstInner() const;
+    const WW8TableNodeInfoInner::Pointer_t getInnerForDepth(sal_uInt32 nDepth) const;
+
     sal_uInt32 getCell() const;
     sal_uInt32 getRow() const;
 
@@ -95,17 +139,26 @@ class WW8TableInfo
     typedef hash_map<const SwNode *, WW8TableNodeInfo::Pointer_t, hashNode > Map_t;
     Map_t mMap;
 
-    void processTableLine(const SwTable * pTable,
-                          const SwTableLine * pTableLine,
-                          sal_uInt32 nRow,
-                          sal_uInt32 nDepth);
+    void
+    processTableLine(const SwTable * pTable,
+                     const SwTableLine * pTableLine,
+                     sal_uInt32 nRow,
+                     sal_uInt32 nDepth);
 
-    WW8TableNodeInfo::Pointer_t
+    void
     processTableBox(const SwTable * pTable,
                     const SwTableBox * pTableBox,
                     sal_uInt32 nRow,
                     sal_uInt32 nCell,
-                    sal_uInt32 nDepth);
+                    sal_uInt32 nDepth, bool bEndOfLine);
+
+    WW8TableNodeInfo::Pointer_t
+    processTableBoxLines(const SwTableBox * pBox,
+                         const SwTable * pTable,
+                         const SwTableBox * pBoxToSet,
+                         sal_uInt32 nRow,
+                         sal_uInt32 nCell,
+                         sal_uInt32 nDepth);
 
     WW8TableNodeInfo::Pointer_t
     insertTableNodeInfo(const SwNode * pNode,

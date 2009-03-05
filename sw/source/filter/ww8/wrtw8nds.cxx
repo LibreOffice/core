@@ -1513,8 +1513,11 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
 
     String aStr( pNd->GetTxt() );
 
-    ww8::WW8TableNodeInfo::Pointer_t pTextNodeInfo =
-    rWW8Wrt.mpTableInfo->getTableNodeInfo(pNd);
+    ww8::WW8TableNodeInfo::Pointer_t pTextNodeInfo(rWW8Wrt.mpTableInfo->getTableNodeInfo(pNd));
+    ww8::WW8TableNodeInfoInner::Pointer_t pTextNodeInfoInner;
+
+    if (pTextNodeInfo.get() != NULL)
+        pTextNodeInfoInner = pTextNodeInfo->getFirstInner();
 
     xub_StrLen nAktPos = 0;
     xub_StrLen nEnd = aStr.Len();
@@ -1647,7 +1650,7 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
                 }
             }
 
-            rWW8Wrt.WriteCR(pTextNodeInfo);
+            rWW8Wrt.WriteCR(pTextNodeInfoInner);
 
             if (pTextNodeInfo.get() != NULL)
             {
@@ -1655,7 +1658,7 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
                 ::std::clog << pTextNodeInfo->toString() << ::std::endl;
 #endif
 
-                rWW8Wrt.OutWW8TableInfoCell(pTextNodeInfo);
+                rWW8Wrt.OutWW8TableInfoCell(pTextNodeInfoInner);
             }
 
              rWW8Wrt.pPapPlc->AppendFkpEntry( rWrt.Strm().Tell(), pO->Count(),
@@ -1722,7 +1725,7 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
                         rWW8Wrt.pop_charpropstart();
                         rWW8Wrt.EndTOX(*pTOXSect);
                     }
-                    rWW8Wrt.WriteCR(pTextNodeInfo);              // CR danach
+                    rWW8Wrt.WriteCR(pTextNodeInfoInner);              // CR danach
                 }
             }
         }
@@ -1781,7 +1784,7 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
                     rWW8Wrt.EndTOX( *pTOXSect );
                 }
 
-                rWW8Wrt.WriteCR(pTextNodeInfo);              // CR danach
+                rWW8Wrt.WriteCR(pTextNodeInfoInner);              // CR danach
 
                 if( bRedlineAtEnd )
                 {
@@ -1814,7 +1817,7 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
         ::std::clog << pTextNodeInfo->toString() << ::std::endl;
 #endif
 
-        rWW8Wrt.OutWW8TableInfoCell(pTextNodeInfo);
+        rWW8Wrt.OutWW8TableInfoCell(pTextNodeInfoInner);
     }
 
     if( !bFlyInTable )
@@ -2100,14 +2103,14 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
                                     pO->GetData() );
     pO->Remove( 0, pO->Count() );                       // leeren
 
-    if (pTextNodeInfo.get() != NULL)
+    if (pTextNodeInfoInner.get() != NULL)
     {
-        if (pTextNodeInfo->isEndOfLine())
+        if (pTextNodeInfoInner->isEndOfLine())
         {
-            rWW8Wrt.WriteRowEnd(pTextNodeInfo->getDepth());
+            rWW8Wrt.WriteRowEnd(pTextNodeInfoInner->getDepth());
 
             pO->Insert( (BYTE*)&nSty, 2, pO->Count() );     // Style #
-            rWW8Wrt.OutWW8TableInfoRow(pTextNodeInfo);
+            rWW8Wrt.OutWW8TableInfoRow(pTextNodeInfoInner);
             rWW8Wrt.pPapPlc->AppendFkpEntry( rWrt.Strm().Tell(), pO->Count(),
                                             pO->GetData() );
             pO->Remove( 0, pO->Count() );                       // leeren
@@ -2121,6 +2124,37 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
     return rWrt;
 }
 
+void SwWW8Writer::OutWW8TableNodeInfo(ww8::WW8TableNodeInfo::Pointer_t pNodeInfo)
+{
+    SVBT16 nSty;
+    ShortToSVBT16( nStyleBeforeFly, nSty );
+
+    ww8::WW8TableNodeInfo::Inners_t::const_iterator aIt
+    (pNodeInfo->getInners().begin());
+    ww8::WW8TableNodeInfo::Inners_t::const_iterator aItEnd
+    (pNodeInfo->getInners().end());
+
+    while (aIt != aItEnd)
+    {
+        ww8::WW8TableNodeInfoInner::Pointer_t pInner = aIt->second;
+        if (pInner->isEndOfCell())
+        {
+            WriteRowEnd(pInner->getDepth());
+
+            pO->Insert( (BYTE*)&nSty, 2, pO->Count() );     // Style #
+            OutWW8TableInfoRow(pInner);
+            pPapPlc->AppendFkpEntry( Strm().Tell(), pO->Count(),
+                                    pO->GetData() );
+            pO->Remove( 0, pO->Count() );                       // leeren
+        }
+
+        if (pInner->isEndOfLine())
+        {
+        }
+
+        aIt++;
+    }
+}
 
 #if 0
 /*  */

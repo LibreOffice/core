@@ -557,15 +557,18 @@ public:
     void AppendFlyInFlys(const sw::Frame& rFrmFmt, const Point& rNdTopLeft);
     void WriteOutliner(const OutlinerParaObject& rOutliner, BYTE nTyp);
     void WriteSdrTextObj(const SdrObject& rObj, BYTE nTyp);
-    void OutWW8TableInfoCell(ww8::WW8TableNodeInfo::Pointer_t pTableTextNodeInfo);
-    void OutWW8TableInfoRow(ww8::WW8TableNodeInfo::Pointer_t pTableTextNodeInfo);
-    void OutWW8TableDefinition(ww8::WW8TableNodeInfo::Pointer_t pTableTextNodeInfo);
-    void OutWW8TableDefaultBorders(ww8::WW8TableNodeInfo::Pointer_t pTableTextNodeInfo);
-    void OutWW8TableBackgrounds(ww8::WW8TableNodeInfo::Pointer_t pTableTextNodeInfo);
-    void OutWW8TableHeight(ww8::WW8TableNodeInfo::Pointer_t pTableTextNodeInfo);
-    void OutWW8TableCanSplit(ww8::WW8TableNodeInfo::Pointer_t pTableTextNodeInfo);
-    void OutWW8TableBidi(ww8::WW8TableNodeInfo::Pointer_t pTableTextNodeInfo);
-    void OutWW8TableVerticalCell(ww8::WW8TableNodeInfo::Pointer_t pTableTextNodeInfo);
+    void OutWW8TableInfoCell(ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfo);
+    void OutWW8TableInfoRow(ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfo);
+    void OutWW8TableDefinition(ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfo);
+    void OutWW8TableDefaultBorders(ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfo);
+    void OutWW8TableBackgrounds(ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfo);
+    void OutWW8TableHeight(ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfo);
+    void OutWW8TableCanSplit(ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfo);
+    void OutWW8TableBidi(ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfo);
+    void OutWW8TableVerticalCell(ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfo);
+    void OutWW8TableNodeInfo(ww8::WW8TableNodeInfo::Pointer_t pNodeInfo);
+    void OutWW8_TableNodeInfoInner(ww8::WW8TableNodeInfoInner::Pointer_t pNodeInfoInner);
+    void OutWW8TableOrientation(ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner);
 
     UINT32 GetSdrOrdNum( const SwFrmFmt& rFmt ) const;
     void CreateEscher();
@@ -592,7 +595,7 @@ public:
     void WriteAsStringTable(const ::std::vector<String>&, INT32& rfcSttbf,
         INT32& rlcbSttbf, USHORT nExtraLen = 0);
     void WriteText();
-    void WriteCR(ww8::WW8TableNodeInfo::Pointer_t pTableTextNodeInfo = ww8::WW8TableNodeInfo::Pointer_t());
+    void WriteCR(ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner = ww8::WW8TableNodeInfoInner::Pointer_t());
     void WriteChar( sal_Unicode c );
     void WriteRowEnd(sal_uInt32 nDepth = 1);
 #if 0
