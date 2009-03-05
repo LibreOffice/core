@@ -1045,7 +1045,6 @@ sub nsis_language_converter
     elsif ( $language eq "zh-CN" ) { $nsislanguage = "SimpChinese"; }
     elsif ( $language eq "zh-TW" ) { $nsislanguage = "TradChinese"; }
     else {
-
         my $infoline = "NSIS language_converter : Could not find nsis language for $language!\n";
         push( @installer::globals::logfileinfo, $infoline);
         $nsislanguage = "English";
@@ -1356,6 +1355,8 @@ sub copy_and_translate_nsis_language_files
     my $nlffilepath = $nsispath . $installer::globals::separator . "Contrib" . $installer::globals::separator . "Language\ files" . $installer::globals::separator;
     my $nshfilepath = $nsispath . $installer::globals::separator . "Contrib" . $installer::globals::separator . "Modern\ UI" . $installer::globals::separator . "Language files" . $installer::globals::separator;
 
+    my $infoline = "";
+
     for ( my $i = 0; $i <= $#{$languagesarrayref}; $i++ )
     {
         my $onelanguage = ${$languagesarrayref}[$i];
@@ -1390,6 +1391,8 @@ sub copy_and_translate_nsis_language_files
 
         if ( $installer::globals::unicodensis )
         {
+            $infoline = "This is Unicode NSIS!\n";
+            push( @installer::globals::logfileinfo, $infoline);
             convert_utf16_to_utf8($nshfilename);
             convert_utf16_to_utf8($nlffilename);
             $nshfile = installer::files::read_file($nshfilename);   # read nsh file again
@@ -1603,6 +1606,9 @@ sub get_translation_file
     if ( ! -f $translationfilename ) { installer::exiter::exit_program("ERROR: Could not find language file $translationfilename!", "get_translation_file"); }
     my $translationfile = installer::files::read_file($translationfilename);
     replace_variables($translationfile, $allvariableshashref);
+
+    my $infoline = "Reading translation file: $translationfilename\n";
+    push( @installer::globals::logfileinfo, $infoline);
 
     return $translationfile;
 }

@@ -69,7 +69,7 @@ sub check_simple_packager_project
 
 sub register_extensions
 {
-    my ($officedir) = @_;
+    my ($officedir, $languagestringref) = @_;
 
     my $programdir = $officedir . $installer::globals::separator;
     # if ( $installer::globals::sundirhostname ne "" ) { $programdir = $programdir . $installer::globals::sundirhostname . $installer::globals::separator; }
@@ -110,7 +110,8 @@ sub register_extensions
             if ( ! -f $unopkgfile ) { installer::exiter::exit_program("ERROR: $unopkgfile not found!", "register_extensions"); }
             if ( ! -f $oneextension ) { installer::exiter::exit_program("ERROR: $oneextension not found!", "register_extensions"); }
 
-            my $localtemppath = $installer::globals::temppath;
+            my $localtemppath = installer::systemactions::create_directories("uno", $languagestringref);
+
             if ( $installer::globals::iswindowsbuild )
             {
                 if (( $^O =~ /cygwin/i ) && ( $ENV{'USE_SHELL'} ne "4nt" ))
@@ -398,7 +399,7 @@ sub create_simple_package
 
     installer::logger::print_message( "... registering extensions ...\n" );
     installer::logger::include_header_into_logfile("Registering extensions:");
-    register_extensions($subfolderdir);
+    register_extensions($subfolderdir, $languagestringref);
 
     # Adding scpactions for mac installations sets, that use not dmg format. Without scpactions the
     # office does not start.

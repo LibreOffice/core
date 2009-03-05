@@ -384,7 +384,7 @@ if ( $installer::globals::globallogging ) { installer::files::save_file($logging
 installer::setupscript::resolve_lowercase_productname_setupscriptvariable($allscriptvariablesref);
 if ( $installer::globals::globallogging ) { installer::files::save_file($loggingdir . "setupscriptvariables3.log" ,$allscriptvariablesref); }
 
-installer::setupscript::replace_all_setupscriptvariables_in_script($setupscriptref, $allscriptvariablesref);
+$setupscriptref = installer::setupscript::replace_all_setupscriptvariables_in_script($setupscriptref, $allscriptvariablesref);
 if ( $installer::globals::globallogging ) { installer::files::save_file($loggingdir . "setupscript2.log" ,$setupscriptref); }
 
 # Adding all variables defined in the installation object into the hash of all variables.

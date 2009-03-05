@@ -324,7 +324,7 @@ sub create_directories
 
     my $path = "";
 
-    if (( $newdirectory eq "zip" ) || ( $newdirectory eq "cab" ) || ( $newdirectory =~ /rdb\s*$/i )) # special handling for zip files, cab files and services file because of performance reasons
+    if (( $newdirectory eq "uno" ) || ( $newdirectory eq "zip" ) || ( $newdirectory eq "cab" ) || ( $newdirectory =~ /rdb\s*$/i )) # special handling for zip files, cab files and services file because of performance reasons
     {
         if ( $installer::globals::temppathdefined ) { $path = $installer::globals::temppath; }
         else { $path = $installer::globals::unpackpath; }

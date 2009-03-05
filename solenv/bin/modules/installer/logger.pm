@@ -59,6 +59,30 @@ sub include_header_into_logfile
 }
 
 ####################################################
+# Including header files into the logfile
+####################################################
+
+sub include_header_into_globallogfile
+{
+    my ($message) = @_;
+
+    my $infoline;
+
+    $infoline = "\n" . get_time_string();
+    push( @installer::globals::globallogfileinfo, $infoline);
+
+    $infoline = "######################################################\n";
+    push( @installer::globals::globallogfileinfo, $infoline);
+
+    $infoline = "$message\n";
+    push( @installer::globals::globallogfileinfo, $infoline);
+
+
+    $infoline = "######################################################\n";
+    push( @installer::globals::globallogfileinfo, $infoline);
+}
+
+####################################################
 # Write timestamp into log file
 ####################################################
 

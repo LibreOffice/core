@@ -2351,13 +2351,60 @@ sub resolve_links_with_flag_relative
 }
 
 ########################################################################
+# This function is a helper of function "assigning_modules_to_items"
+########################################################################
+
+sub insert_for_item ($$$)
+{
+    my ($hash, $item, $id) = @_;
+
+    # print STDERR "insert '$id' for '$item'\n";
+    if (!defined $hash->{$item})
+    {
+        my @gids = ();
+        $hash->{$item} = \@gids;
+    }
+    my $gid_list = $hash->{$item};
+    push @{$gid_list}, $id;
+    $hash->{$item} = $gid_list;
+}
+
+sub build_modulegids_table
+{
+    my ($modulesref, $itemname) = @_;
+
+    my %module_lookup_table = ();
+
+    # build map of item names to list of respective module gids
+    # containing these items
+    for my $onemodule (@{$modulesref})
+    {
+        next if ( ! defined $onemodule->{$itemname} );
+        # these are the items contained in this module
+        # eg. Files = (gid_a_b_c,gid_d_e_f)
+        my $module_gids = $onemodule->{$itemname};
+
+        # prune outer brackets
+        $module_gids =~ s|^\s*\(||g;
+        $module_gids =~ s|\)\s*$||g;
+        for my $id (split (/,/, $module_gids))
+        {
+            chomp $id;
+            insert_for_item(\%module_lookup_table, lc ($id), $onemodule->{'gid'});
+        }
+    }
+
+    return \%module_lookup_table;
+}
+
+########################################################################
 # Items like files do not know their modules
 # This function is a helper of function "assigning_modules_to_items"
 ########################################################################
 
 sub get_string_of_modulegids_for_itemgid
 {
-    my ($modulesref, $itemgid, $itemname) = @_;
+    my ($module_lookup_table, $modulesref, $itemgid, $itemname) = @_;
 
     if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::scriptitems::get_string_of_modulegids_for_itemgid : $#{$modulesref} : $itemgid : $itemname"); }
 
@@ -2365,22 +2412,16 @@ sub get_string_of_modulegids_for_itemgid
     my $haslanguagemodule = 0;
     my %foundmodules = ();
 
-    for ( my $i = 0; $i <= $#{$modulesref}; $i++ )
+    # print STDERR "lookup '" . lc($itemgid) . "'\n";
+    my $gid_list = $module_lookup_table->{lc($itemgid)};
+
+    for my $gid (@{$gid_list})
     {
-        my $onemodule = ${$modulesref}[$i];
-        my $allitems = "";
-
-        if ( $onemodule->{$itemname} ) { $allitems = $onemodule->{$itemname}; }
-
-        if ( $allitems =~ /\b$itemgid\b/i )
-        {
-            $allmodules = $allmodules . "," . $onemodule->{'gid'};
-            $foundmodules{$onemodule->{'gid'}} = 1;
-
-            # Is this module a language module? This info should be stored at the file.
-            if ( exists($installer::globals::alllangmodules{$onemodule->{'gid'}}) ) { $haslanguagemodule = 1; }
-        }
-    }
+        $foundmodules{$gid} = 1;
+        $allmodules = $allmodules . "," . $gid;
+        # Is this module a language module? This info should be stored at the file.
+        if ( exists($installer::globals::alllangmodules{$gid}) ) { $haslanguagemodule = 1; }
+     }
 
     $allmodules =~ s/^\s*\,//;  # removing leading comma
 
@@ -2390,6 +2431,8 @@ sub get_string_of_modulegids_for_itemgid
         my $isreallylanguagemodule = installer::worker::key_in_a_is_also_key_in_b(\%foundmodules, \%installer::globals::alllangmodules);
         if ( ! $isreallylanguagemodule ) { installer::exiter::exit_program("ERROR: \"$itemgid\" is assigned to modules with flag \"LANGUAGEMODULE\" and also to modules without this flag! Modules: $allmodules", "get_string_of_modulegids_for_itemgid");  }
     }
+
+    # print STDERR "get_string_for_itemgid ($itemgid, $itemname) => $allmodules, $haslanguagemodule\n";
 
     return ($allmodules, $haslanguagemodule);
 }
@@ -2409,9 +2452,10 @@ sub assigning_modules_to_items
     my $languageassignmenterror = 0;
     my @languageassignmenterrors = ();
 
-    for ( my $i = 0; $i <= $#{$itemsref}; $i++ )
+    my $module_lookup_table = build_modulegids_table($modulesref, $itemname);
+
+    for my $oneitem (@{$itemsref})
     {
-        my $oneitem = ${$itemsref}[$i];
         my $itemgid = $oneitem->{'gid'};
 
         my $styles = "";
@@ -2425,7 +2469,7 @@ sub assigning_modules_to_items
 
         # every item can belong to many modules
 
-        my ($modulegids, $haslanguagemodule) = get_string_of_modulegids_for_itemgid($modulesref, $itemgid, $itemname);
+        my ($modulegids, $haslanguagemodule) = get_string_of_modulegids_for_itemgid($module_lookup_table, $modulesref, $itemgid, $itemname);
 
         if ($modulegids eq "")
         {
