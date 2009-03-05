@@ -1814,7 +1814,7 @@ BOOL ScImportExport::Dif2Doc( SvStream& rStrm )
 BOOL ScImportExport::RTF2Doc( SvStream& rStrm, const String& rBaseURL )
 {
     ScEEAbsImport *pImp = ScFormatFilter::Get().CreateRTFImport( pDoc, aRange );
-    if (pImp)
+    if (!pImp)
         return false;
     pImp->Read( rStrm, rBaseURL );
     aRange = pImp->GetRange();
@@ -1835,7 +1835,7 @@ BOOL ScImportExport::RTF2Doc( SvStream& rStrm, const String& rBaseURL )
 BOOL ScImportExport::HTML2Doc( SvStream& rStrm, const String& rBaseURL )
 {
     ScEEAbsImport *pImp = ScFormatFilter::Get().CreateHTMLImport( pDoc, rBaseURL, aRange, TRUE);
-    if (pImp)
+    if (!pImp)
         return false;
     pImp->Read( rStrm, rBaseURL );
     aRange = pImp->GetRange();

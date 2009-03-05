@@ -97,12 +97,12 @@ ScConsolidateDlg::ScConsolidateDlg( SfxBindings* pB, SfxChildWindow* pCW, Window
 
         aLbDataArea     ( this, ScResId( LB_DATA_AREA ) ),
         aFtDataArea     ( this, ScResId( FT_DATA_AREA ) ),
-        aEdDataArea     ( this, ScResId( ED_DATA_AREA ) ),
+        aEdDataArea     ( this, this, ScResId( ED_DATA_AREA ) ),
         aRbDataArea     ( this, ScResId( RB_DATA_AREA ), &aEdDataArea, this ),
 
         aLbDestArea     ( this, ScResId( LB_DEST_AREA ) ),
         aFtDestArea     ( this, ScResId( FT_DEST_AREA ) ),
-        aEdDestArea     ( this, ScResId( ED_DEST_AREA ) ),
+        aEdDestArea     ( this, this, ScResId( ED_DEST_AREA ) ),
         aRbDestArea     ( this, ScResId( RB_DEST_AREA ), &aEdDestArea, this),
 
         aFlConsBy       ( this, ScResId( FL_CONSBY ) ),

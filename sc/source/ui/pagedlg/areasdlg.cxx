@@ -117,17 +117,17 @@ ScPrintAreasDlg::ScPrintAreasDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* 
         //
         aLbPrintArea    ( this, ScResId( LB_PRINTAREA ) ),
         aFlPrintArea    ( this, ScResId( FL_PRINTAREA ) ),
-        aEdPrintArea    ( this, ScResId( ED_PRINTAREA ) ),
+        aEdPrintArea    ( this, this, ScResId( ED_PRINTAREA ) ),
         aRbPrintArea    ( this, ScResId( RB_PRINTAREA ), &aEdPrintArea, this ),
         //
         aLbRepeatRow    ( this, ScResId( LB_REPEATROW ) ),
         aFlRepeatRow    ( this, ScResId( FL_REPEATROW ) ),
-        aEdRepeatRow    ( this, ScResId( ED_REPEATROW ) ),
+        aEdRepeatRow    ( this, this, ScResId( ED_REPEATROW ) ),
         aRbRepeatRow    ( this, ScResId( RB_REPEATROW ), &aEdRepeatRow, this ),
         //
         aLbRepeatCol    ( this, ScResId( LB_REPEATCOL ) ),
         aFlRepeatCol    ( this, ScResId( FL_REPEATCOL ) ),
-        aEdRepeatCol    ( this, ScResId( ED_REPEATCOL ) ),
+        aEdRepeatCol    ( this, this, ScResId( ED_REPEATCOL ) ),
         aRbRepeatCol    ( this, ScResId( RB_REPEATCOL ), &aEdRepeatCol, this ),
         //
         aBtnOk          ( this, ScResId( BTN_OK ) ),

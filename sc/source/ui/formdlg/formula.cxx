@@ -470,7 +470,7 @@ void ScFormulaDlg::SetReference( const ScRange& rRef, ScDocument* pRefDoc )
 BOOL ScFormulaDlg::IsRefInputMode() const
 {
     const IFunctionDescription* pDesc = getCurrentFunctionDescription();
-    BOOL bRef = (!pDesc || (pDesc->getSuppressedArgumentCount() > 0)) && (pDoc!=NULL);
+    BOOL bRef = (pDesc && (pDesc->getSuppressedArgumentCount() > 0)) && (pDoc!=NULL);
     return bRef;
 }
 

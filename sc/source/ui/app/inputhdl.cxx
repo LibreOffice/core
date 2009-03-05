@@ -975,6 +975,7 @@ void ScInputHandler::UseFormulaData()
                 nNextFStart = aHelper.GetFunctionStart( aFormula, nLeftParentPos, TRUE);
                 if( aHelper.GetNextFunc( aFormula, FALSE, nNextFStart, &nNextFEnd, &ppFDesc, &aArgs ) )
                 {
+                    if( ppFDesc->getFunctionName().getLength() )
                     {
                         nArgPos = aHelper.GetArgStart( aFormula, nNextFStart, 0 );
                         nArgs = static_cast<USHORT>(ppFDesc->getParameterCount());

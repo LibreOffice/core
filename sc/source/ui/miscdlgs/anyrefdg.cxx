@@ -85,6 +85,15 @@ ScFormulaReferenceHelper::~ScFormulaReferenceHelper()
 {
     if (bAccInserted)
         Application::RemoveAccel( pAccel.get() );
+
+    // common cleanup for ScAnyRefDlg and ScFormulaDlg is done here
+
+    HideReference();
+    enableInput( TRUE );
+
+    ScInputHandler* pInputHdl = SC_MOD()->GetInputHdl();
+    if ( pInputHdl )
+        pInputHdl->ResetDelayTimer();   // stop the timer for disabling the input line
 }
 // -----------------------------------------------------------------------------
 void ScFormulaReferenceHelper::enableInput( BOOL bEnable )
@@ -737,21 +746,14 @@ ScAnyRefDlg::ScAnyRefDlg( SfxBindings* pB, SfxChildWindow* pCW,
 
 ScAnyRefDlg::~ScAnyRefDlg()
 {
-    HideReference();
     lcl_HideAllReferences();
 
-    m_aHelper.enableInput( TRUE );
     SetModalInputMode(FALSE);
     SetDispatcherLock( FALSE );         //! here and in DoClose ?
 
     ScTabViewShell* pScViewShell = ScTabViewShell::GetActiveViewShell();
     if( pScViewShell )
         pScViewShell->UpdateInputHandler(TRUE);
-
-    ScInputHandler* pInputHdl = SC_MOD()->GetInputHdl();
-
-    if ( pInputHdl )                    //@BugID 54702 Da der Timer fuers Disablen
-        pInputHdl->ResetDelayTimer();   // noch laufen koennte, Reset ausloesen.
 
     //SFX_APPWINDOW->Enable(TRUE,TRUE);
     lcl_InvalidateWindows();
