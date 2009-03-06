@@ -3188,11 +3188,16 @@ const Content::ResourceType & Content::getResourceType(
                 }
                 eResourceType = DAV;
             }
-            catch ( DAVException const& )
+            catch ( DAVException const& e)
             {
-                //Fallback
                 rResAccess->resetUri();
-                eResourceType = NON_DAV;
+
+                if (e.getStatus() == SC_METHOD_NOT_ALLOWED)
+                {
+                    // Status SC_METHOD_NOT_ALLOWED is a safe indicator that the
+                    // resource is NON_DAV
+                    eResourceType = NON_DAV;
+                }
             }
         }
         m_eResourceType = eResourceType;
