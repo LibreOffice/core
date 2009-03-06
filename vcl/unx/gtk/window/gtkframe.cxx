@@ -84,20 +84,10 @@ static USHORT GetKeyModCode( guint state )
     USHORT nCode = 0;
     if( (state & GDK_SHIFT_MASK) )
         nCode |= KEY_SHIFT;
-    if( (state & GDK_CONTROL_MASK)
-#ifdef MACOSX
-     || (state & GDK_MOD2_MASK) // map Meta (aka Command key) to Ctrl
-#endif
-    )
+    if( (state & GDK_CONTROL_MASK) )
         nCode |= KEY_MOD1;
     if( (state & GDK_MOD1_MASK) )
-    {
         nCode |= KEY_MOD2;
-#ifdef MACOSX
-        if( ! (nCode & KEY_MOD1) )
-            nCode |= KEY_MOD3;
-#endif
-    }
     return nCode;
 }
 
@@ -2951,35 +2941,21 @@ gboolean GtkSalFrame::signalKey( GtkWidget*, GdkEventKey* pEvent, gpointer frame
         // The modifier mode therefore has to be adapted manually.
         switch( pEvent->keyval )
         {
-#ifdef MACOSX
-            case GDK_Meta_L:   // map Meta (aka Command key) to Ctrl
-#endif
             case GDK_Control_L:
                 nExtModMask = MODKEY_LMOD1;
                 nModMask = KEY_MOD1;
                 break;
-#ifdef MACOSX
-            case GDK_Meta_R:   // map Meta (aka Command key) to Ctrl
-#endif
             case GDK_Control_R:
                 nExtModMask = MODKEY_RMOD1;
                 nModMask = KEY_MOD1;
                 break;
             case GDK_Alt_L:
                 nExtModMask = MODKEY_LMOD2;
-#ifdef MACOSX
-                nModMask = KEY_MOD3;
-#else
                 nModMask = KEY_MOD2;
-#endif
                 break;
             case GDK_Alt_R:
                 nExtModMask = MODKEY_RMOD2;
-#ifdef MACOSX
-                nModMask = KEY_MOD2 | (pEvent->type == GDK_KEY_RELEASE ? KEY_MOD3 : 0);
-#else
                 nModMask = KEY_MOD2;
-#endif
                 break;
             case GDK_Shift_L:
                 nExtModMask = MODKEY_LSHIFT;

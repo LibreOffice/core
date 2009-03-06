@@ -31,21 +31,18 @@
 #ifndef _PAD_FONTENTRY_HXX_
 #define _PAD_FONTENTRY_HXX_
 
-#include <vcl/timer.hxx>
-#include <vcl/dialog.hxx>
-#ifndef _SV_BUTTON_HXX
-#include <vcl/button.hxx>
-#endif
-#include <vcl/combobox.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/group.hxx>
-#include <tools/urlobj.hxx>
-#include <psprint/fontmanager.hxx>
-#ifndef _PAD_PRGRESS_HXX
-#include <progress.hxx>
-#endif
-#include <psprint/fontmanager.hxx>
-#include <helper.hxx>
+#include "progress.hxx"
+#include "helper.hxx"
+
+#include "vcl/timer.hxx"
+#include "vcl/dialog.hxx"
+#include "vcl/button.hxx"
+#include "vcl/combobox.hxx"
+#include "vcl/lstbox.hxx"
+#include "vcl/group.hxx"
+#include "vcl/fontmanager.hxx"
+
+#include "tools/urlobj.hxx"
 
 namespace padmin {
 

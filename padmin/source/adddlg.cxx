@@ -29,15 +29,17 @@
  ************************************************************************/
 
 #include <unistd.h>
-#include <vcl/msgbox.hxx>
-#include <adddlg.hxx>
-#include <newppdlg.hxx>
-#include <cmddlg.hxx>
-#ifndef _PAD_PADIALOG_HRC_
-#include <padialog.hrc>
-#endif
-#include <psprint/strhelper.hxx>
-#include <osl/thread.h>
+
+#include "adddlg.hxx"
+#include "newppdlg.hxx"
+#include "cmddlg.hxx"
+#include "padialog.hrc"
+
+#include "vcl/msgbox.hxx"
+#include "vcl/strhelper.hxx"
+
+#include "osl/thread.h"
+
 #include <hash_set>
 
 

@@ -145,17 +145,18 @@ SHL18FILE=  $(MISC)$/salgdi.slo
 .ENDIF
 
 LIB1TARGET= $(SLB)$/$(TARGET).lib
-LIB1FILES=  $(SLB)$/app.lib     \
-            $(SLB)$/gdi.lib     \
-            $(SLB)$/win.lib     \
-            $(SLB)$/ctrl.lib    \
-            $(SLB)$/helper.lib	\
+LIB1FILES=  $(SLB)$/app.lib         \
+            $(SLB)$/gdi.lib         \
+            $(SLB)$/win.lib         \
+            $(SLB)$/ctrl.lib        \
+            $(SLB)$/helper.lib	    \
+            $(SLB)$/fontsubset.lib  \
             $(SLB)$/components.lib
 
 .IF "$(GUI)" == "UNX" && "$(GUIBASE)"!="aqua"
-LIB1FILES+=$(SLB)$/salplug.lib
-SHL1STDLIBS+=\
-             $(PSPLIB)
+LIB1FILES+= $(SLB)$/salplug.lib  \
+            $(SLB)$/fontman.lib  \
+            $(SLB)$/printer.lib
 .ELSE
 LIB1FILES+= \
             $(SLB)$/salwin.lib  \
@@ -197,7 +198,7 @@ LIB1FILES+= \
 
 .IF "$(USE_BUILTIN_RASTERIZER)"!=""
     LIB1FILES +=    $(SLB)$/glyphs.lib
-    SHL1STDLIBS+=   $(FREETYPELIB)  $(PSPLIB)
+    SHL1STDLIBS+=   $(FREETYPELIB)
 .ENDIF # USE_BUILTIN_RASTERIZER
 
 SHL1LIBS=   $(LIB1TARGET)
@@ -223,10 +224,6 @@ DEFLIB1NAME =vcl
 
 .IF "$(GUI)" == "WNT"
 
-.IF "$(COM)" == "GCC"
-SHL1STDLIBS += $(PSPLIB)
-.ENDIF
-
 SHL1STDLIBS += $(UWINAPILIB)      \
                $(GDI32LIB)        \
                $(GDIPLUSLIB)	  \
@@ -236,12 +233,7 @@ SHL1STDLIBS += $(UWINAPILIB)      \
                $(SHELL32LIB)      \
                $(ADVAPI32LIB)
 
-.IF "$(COM)" == "GCC"
 SHL1STDLIBS += $(IMM32LIB)
-.ELSE
-SHL1STDLIBS += $(PSPLIB)         \
-               $(IMM32LIB)
-.ENDIF
 
 .IF "$(GUI)$(COM)$(CPU)" == "WNTMSCI"
 LINKFLAGSSHL += /ENTRY:LibMain@12
@@ -251,12 +243,10 @@ LINKFLAGSSHL += /ENTRY:LibMain@12
 # --- OS2 ----------------------------------------------------------------
 
 .IF "$(GUI)" == "OS2"
-STDSHL1 += ft2lib.lib apsp.lib
+STDSHL1 += ft2lib.lib
 .ENDIF
 
 # --- UNX ----------------------------------------------------------------
-
-SHL1STDLIBS += $(PSPLIB)
 
 # UNX sal plugins
 .IF "$(GUI)" == "UNX" && "$(GUIBASE)" != "aqua"
@@ -264,6 +254,7 @@ SHL1STDLIBS += $(PSPLIB)
 # basic pure X11 plugin
 LIB2TARGET=$(SLB)$/ipure_x
 LIB2FILES= \
+            $(SLB)$/printergfx.lib  \
             $(SLB)$/salwin.lib  \
             $(SLB)$/salgdi.lib  \
             $(SLB)$/salapp.lib
@@ -275,7 +266,6 @@ SHL2DEPN=$(SHL1IMPLIBN) $(SHL1TARGETN)
 # libs for generic plugin
 SHL2STDLIBS=\
             $(VCLLIB)\
-             $(PSPLIB)\
             $(SOTLIB)           \
             $(UNOTOOLSLIB)      \
             $(TOOLSLIB)         \
@@ -356,7 +346,6 @@ SHL4NOCHECK=TRUE
 SHL4STDLIBS+=-l$(SHL2TARGET)
 SHL4STDLIBS+=\
             $(VCLLIB)		\
-            $(PSPLIB)		\
             $(SOTLIB)           \
             $(UNOTOOLSLIB)      \
             $(TOOLSLIB)         \
@@ -391,7 +380,6 @@ SHL5STDLIBS=$(KDE_LIBS)
 SHL5STDLIBS+=-l$(SHL2TARGET)
 SHL5STDLIBS+=\
         $(VCLLIB)       \
-        $(PSPLIB)	\
         $(TOOLSLIB)     \
         $(VOSLIB)       \
         $(SALLIB)

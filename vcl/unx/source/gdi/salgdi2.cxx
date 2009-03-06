@@ -32,22 +32,20 @@
 #include "precompiled_vcl.hxx"
 
 #include <stdio.h>
-
-#include <salunx.h>
 #include <poll.h>
-#include <saldata.hxx>
-#include <saldisp.hxx>
-#include <salbmp.h>
-#include <vcl/salbtype.hxx>
-#include <salgdi.h>
-#include <salframe.h>
-#include <salvd.h>
-#include <xrender_peer.hxx>
 
-#ifndef _USE_PRINT_EXTENSION_
-#include <psprint/printergfx.hxx>
-#include <vcl/bmpacc.hxx>
-#endif
+#include "salunx.h"
+#include "saldata.hxx"
+#include "saldisp.hxx"
+#include "salbmp.h"
+#include "salgdi.h"
+#include "salframe.h"
+#include "salvd.h"
+#include "xrender_peer.hxx"
+
+#include "vcl/salbtype.hxx"
+#include "vcl/printergfx.hxx"
+#include "vcl/bmpacc.hxx"
 
 #undef SALGDI2_TESTTRANS
 

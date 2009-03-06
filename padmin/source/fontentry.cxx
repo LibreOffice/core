@@ -28,25 +28,17 @@
  *
  ************************************************************************/
 
-#include <vcl/msgbox.hxx>
-#include <osl/thread.h>
-#include <psprint/fontmanager.hxx>
+#include "fontentry.hxx"
+#include "helper.hxx"
+#include "padialog.hrc"
+#include "vcl/strhelper.hxx"
 
-#ifndef _PAD_PADIALOG_HRC_
-#include <padialog.hrc>
-#endif
-#include <fontentry.hxx>
-#include <helper.hxx>
-#ifndef _CONFIG_HXX_
-#include <tools/config.hxx>
-#endif
-#include <psprint/strhelper.hxx>
+#include "vcl/msgbox.hxx"
+#include "vcl/fontmanager.hxx"
 
-#if 0
-#include <convafm.hxx>
-#include <progress.hxx>
-#include <osl/file.hxx>
-#endif
+#include "osl/thread.h"
+
+#include "tools/config.hxx"
 
 using namespace padmin;
 using namespace osl;

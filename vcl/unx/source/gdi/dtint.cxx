@@ -44,9 +44,6 @@
 #include <cdeint.hxx>
 #endif
 #include <dtint.hxx>
-#ifdef MACOSX
-#include <macosxint.hxx>
-#endif
 #include <saldisp.hxx>
 #include <saldata.hxx>
 #include <wmadaptor.hxx>
@@ -98,9 +95,6 @@ DtIntegrator::~DtIntegrator()
 
 DtIntegrator* DtIntegrator::CreateDtIntegrator()
 {
-#ifdef MACOSX
-    return new MACOSXIntegrator();
-#endif
     /*
      *  #i22061# override desktop detection
      *  if environment variable OOO_FORCE_DESKTOP is set

@@ -36,20 +36,20 @@
 #undef CreateFont
 #endif
 
-#include <gcach_ftyp.hxx>
+#include "gcach_ftyp.hxx"
 
-#include <vcl/svapp.hxx>
-#include <vcl/outfont.hxx>
-#include <vcl/impfont.hxx>
-#include <vcl/bitmap.hxx>
-#include <vcl/bmpacc.hxx>
+#include "vcl/svapp.hxx"
+#include "vcl/outfont.hxx"
+#include "vcl/impfont.hxx"
+#include "vcl/bitmap.hxx"
+#include "vcl/bmpacc.hxx"
 
-#include <tools/poly.hxx>
-#include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/polygon/b2dpolypolygon.hxx>
+#include "tools/poly.hxx"
+#include "basegfx/matrix/b2dhommatrix.hxx"
+#include "basegfx/polygon/b2dpolypolygon.hxx"
 
-#include <osl/file.hxx>
-#include <osl/thread.hxx>
+#include "osl/file.hxx"
+#include "osl/thread.hxx"
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
@@ -62,7 +62,7 @@
 #ifndef FT_RENDER_MODE_MONO  // happens in the MACOSX build
     #define FT_RENDER_MODE_MONO ft_render_mode_mono
 #endif
-#include <rtl/instance.hxx>
+#include "rtl/instance.hxx"
 
 #ifndef FREETYPE_PATCH
     // VERSION_MINOR in freetype.h is too coarse
@@ -89,15 +89,15 @@ typedef FT_Vector* FT_Vector_CPtr;
     #include <fcntl.h>
     #include <sys/stat.h>
     #include <sys/mman.h>
-    #include <psprint/fontmanager.hxx>
+    #include "vcl/fontmanager.hxx"
 #elif defined(WNT)
     #include <io.h>
     #define strncasecmp strnicmp
 #endif
 
-#include <vcl/svapp.hxx>
-#include <vcl/settings.hxx>
-#include <i18npool/lang.h>
+#include "vcl/svapp.hxx"
+#include "vcl/settings.hxx"
+#include "i18npool/lang.h"
 
 typedef const unsigned char* CPU8;
 inline sal_uInt16 NEXT_U16( CPU8& p ) { p+=2; return (p[-2]<<8)|p[-1]; }

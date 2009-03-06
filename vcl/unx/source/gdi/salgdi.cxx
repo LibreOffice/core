@@ -33,31 +33,28 @@
 
 #include "Xproto.h"
 
-#include <salunx.h>
-#include <saldata.hxx>
-#include <saldisp.hxx>
-#ifndef _SV_SALGDI_HXX
-#include <salgdi.h>
-#endif
-#include <salframe.h>
-#include <salvd.h>
-#include <tools/debug.hxx>
-
-#ifndef _USE_PRINT_EXTENSION_
-#include <psprint/printergfx.hxx>
-#include <psprint/jobdata.hxx>
-#endif
-
-#include <basegfx/polygon/b2dpolygon.hxx>
-#include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <basegfx/polygon/b2dpolygontools.hxx>
-#include <basegfx/polygon/b2dpolygonclipper.hxx>
-#include <basegfx/polygon/b2dlinegeometry.hxx>
-#include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/polygon/b2dpolypolygoncutter.hxx>
-
+#include "salunx.h"
+#include "saldata.hxx"
+#include "saldisp.hxx"
+#include "salgdi.h"
+#include "salframe.h"
+#include "salvd.h"
 #include "xrender_peer.hxx"
+
+#include "vcl/printergfx.hxx"
+#include "vcl/jobdata.hxx"
+
+#include "tools/debug.hxx"
+
+#include "basegfx/polygon/b2dpolygon.hxx"
+#include "basegfx/polygon/b2dpolypolygon.hxx"
+#include "basegfx/polygon/b2dpolypolygontools.hxx"
+#include "basegfx/polygon/b2dpolygontools.hxx"
+#include "basegfx/polygon/b2dpolygonclipper.hxx"
+#include "basegfx/polygon/b2dlinegeometry.hxx"
+#include "basegfx/matrix/b2dhommatrix.hxx"
+#include "basegfx/polygon/b2dpolypolygoncutter.hxx"
+
 #include <vector>
 #include <queue>
 #include <set>

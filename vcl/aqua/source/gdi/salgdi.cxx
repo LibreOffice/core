@@ -36,20 +36,22 @@
 #include "salbmp.h"
 #include "salframe.h"
 #include "salcolorutils.hxx"
+#include "list.h"
+#include "sft.h"
+#include "salatsuifontutils.hxx"
+
 #include "vcl/impfont.hxx"
-#include "psprint/list.h"
-#include "psprint/sft.h"
+#include "vcl/sysdata.hxx"
+#include "vcl/sallayout.hxx"
+#include "vcl/svapp.hxx"
+
 #include "osl/file.hxx"
-#include "vos/mutex.hxx"
 #include "osl/process.h"
+
+#include "vos/mutex.hxx"
+
 #include "rtl/bootstrap.h"
 #include "rtl/strbuf.hxx"
-
-#include "vcl/sysdata.hxx"
-
-#include "vcl/sallayout.hxx"
-#include "salatsuifontutils.hxx"
-#include "vcl/svapp.hxx"
 
 #include "basegfx/range/b2drectangle.hxx"
 #include "basegfx/polygon/b2dpolygon.hxx"

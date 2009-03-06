@@ -405,12 +405,6 @@ WMAdaptor::WMAdaptor( SalDisplay* pDisplay ) :
             XFree( pProperty );
         }
     }
-
-#ifdef MACOSX
-        /* Apple's X11 needs NW gravity with OOo 1.1 */
-        m_nWinGravity = NorthWestGravity;
-        m_nInitWinGravity = NorthWestGravity;
-#endif
 }
 
 /*

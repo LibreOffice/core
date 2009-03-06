@@ -29,21 +29,23 @@
  ************************************************************************/
 
 #include "svppspgraphics.hxx"
-#include <psprint/jobdata.hxx>
-#include <psprint/printergfx.hxx>
-#include <psprint/printerinfomanager.hxx>
-#include <vcl/bmpacc.hxx>
-#include <vcl/salbmp.hxx>
-#include <vcl/glyphcache.hxx>
-#include <vcl/impfont.hxx>
-#include <vcl/outfont.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/salprn.hxx>
-#include <vcl/sysdata.hxx>
-#include <basegfx/vector/b2ivector.hxx>
-#include <basegfx/point/b2ipoint.hxx>
-#include <basebmp/color.hxx>
 #include "svpbmp.hxx"
+
+#include "vcl/jobdata.hxx"
+#include "vcl/printergfx.hxx"
+#include "vcl/printerinfomanager.hxx"
+#include "vcl/bmpacc.hxx"
+#include "vcl/salbmp.hxx"
+#include "vcl/glyphcache.hxx"
+#include "vcl/impfont.hxx"
+#include "vcl/outfont.hxx"
+#include "vcl/svapp.hxx"
+#include "vcl/salprn.hxx"
+#include "vcl/sysdata.hxx"
+
+#include "basegfx/vector/b2ivector.hxx"
+#include "basegfx/point/b2ipoint.hxx"
+#include "basebmp/color.hxx"
 
 #include <stdlib.h>
 #include <unistd.h>

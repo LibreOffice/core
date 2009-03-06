@@ -65,7 +65,7 @@
 
 #ifdef USE_XINERAMA
 #ifdef USE_XINERAMA_XORG
-#if defined(X86) || defined(X86_64) || defined(MACOSX)
+#if defined(X86) || defined(X86_64)
 #include <X11/extensions/Xinerama.h>
 #endif
 #elif defined USE_XINERAMA_XSUN
@@ -893,7 +893,7 @@ void SalDisplay::Init()
         sscanf( pProperties, "%li", &nProperties_ );
     else
     {
-#if defined DBG_UTIL || defined SUN || defined LINUX || defined FREEBSD || defined IRIX || defined MACOSX
+#if defined DBG_UTIL || defined SUN || defined LINUX || defined FREEBSD || defined IRIX
         nProperties_ |= PROPERTY_FEATURE_Maximize;
 #endif
         // Server Bugs & Properties
@@ -919,7 +919,7 @@ void SalDisplay::Init()
         if( GetServerVendor() == vendor_xfree )
         {
             nProperties_ |= PROPERTY_BUG_XCopyArea_GXxor;
-#if defined LINUX || defined FREEBSD || defined MACOSX
+#if defined LINUX || defined FREEBSD
             // otherwm and olwm are a kind of default, which are not detected
             // carefully. if we are running linux (i.e. not netbsd) on an xfree
             // display, fvwm is most probable the wm to choose, confusing with mwm
@@ -1085,9 +1085,6 @@ void SalDisplay::ModifierMapping()
     nShiftKeySym_   = sal_XModifier2Keysym( pDisp_, pXModMap, ShiftMapIndex );
     nCtrlKeySym_    = sal_XModifier2Keysym( pDisp_, pXModMap, ControlMapIndex );
     nMod1KeySym_    = sal_XModifier2Keysym( pDisp_, pXModMap, Mod1MapIndex );
-#ifdef MACOSX
-    nMod2KeySym_    = sal_XModifier2Keysym( pDisp_, pXModMap, Mod2MapIndex );
-#endif
     // Auf Sun-Servern und SCO-Severn beruecksichtigt XLookupString
     // nicht den NumLock Modifier.
     if(     (GetServerVendor() == vendor_sun)
@@ -1116,25 +1113,12 @@ XubString SalDisplay::GetKeyName( USHORT nKeyCode ) const
     String aStrMap;
 
     if( nKeyCode & KEY_MOD1 )
+        aStrMap += GetKeyNameFromKeySym( nCtrlKeySym_ );
+
+    if( nKeyCode & KEY_MOD2 )
     {
         if( aStrMap.Len() )
             aStrMap += '+';
-        aStrMap += GetKeyNameFromKeySym( nCtrlKeySym_ );
-    }
-
-#ifdef MACOSX
-    if( nKeyCode & KEY_MOD3 )
-    {
-    aStrMap += GetKeyNameFromKeySym( nMod2KeySym_ );
-    }
-    if( nKeyCode & KEY_MOD2 )
-    {
-    if ( aStrMap.Len() )
-        aStrMap += '+' ;
-#else
-    if( nKeyCode & KEY_MOD2 )
-    {
-#endif
         aStrMap += GetKeyNameFromKeySym( nMod1KeySym_ );
     }
 
@@ -2646,7 +2630,7 @@ void SalDisplay::InitXinerama()
         }
     }
 #elif defined(USE_XINERAMA_XORG)
-#if defined( X86 ) || defined( X86_64 ) || defined( MACOSX )
+#if defined( X86 ) || defined( X86_64 )
 if( XineramaIsActive( pDisp_ ) )
 {
     int nFramebuffers = 1;

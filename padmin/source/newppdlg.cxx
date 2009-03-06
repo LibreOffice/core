@@ -30,22 +30,23 @@
 
 #include <stdio.h>
 #include <unistd.h>
-#include <psprint/ppdparser.hxx>
-#include <psprint/helper.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/mnemonic.hxx>
-#include <tools/urlobj.hxx>
-#ifndef __SGI_STL_LIST
+
+#include "helper.hxx"
+#include "padialog.hrc"
+#include "newppdlg.hxx"
+#include "padialog.hxx"
+#include "progress.hxx"
+
+#include "vcl/ppdparser.hxx"
+#include "vcl/helper.hxx"
+#include "vcl/svapp.hxx"
+#include "vcl/mnemonic.hxx"
+
+#include "tools/urlobj.hxx"
+
+#include "osl/file.hxx"
+
 #include <list>
-#endif
-#include <osl/file.hxx>
-#include <helper.hxx>
-#ifndef _PAD_PADIALOG_HRC_
-#include <padialog.hrc>
-#endif
-#include <newppdlg.hxx>
-#include <padialog.hxx>
-#include <progress.hxx>
 
 #define PPDIMPORT_GROUP "PPDImport"
 

@@ -83,7 +83,6 @@ SHL1OBJS=$(SLOFILES)
 SHL1STDLIBS=\
     $(SVTOOLLIB)					\
     $(VCLLIB)						\
-    -lpsp$(DLLPOSTFIX)		\
     $(UNOTOOLSLIB)					\
     $(TOOLSLIB)						\
     $(COMPHELPERLIB)				\

@@ -44,6 +44,7 @@ TARGET=helper
 # --- Files --------------------------------------------------------
 
 SLOFILES=\
+    $(SLO)$/strhelper.obj   	\
     $(SLO)$/evntpost.obj		\
     $(SLO)$/canvasbitmap.obj    \
     $(SLO)$/canvastools.obj		\

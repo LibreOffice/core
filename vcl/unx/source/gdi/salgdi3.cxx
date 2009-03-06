@@ -40,42 +40,44 @@
 #include <sys/mman.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-#include <sal/alloca.h>
 
-#include <gcach_xpeer.hxx>
-#include <xrender_peer.hxx>
-#include <sal/types.h>
-
-#include <salunx.h>
-#include <saldata.hxx>
-#include <saldisp.hxx>
-#include <salgdi.h>
-#include <pspgraphics.h>
-#include <vcl/salframe.hxx>
-#include <salvd.h>
-#include <vcl/outdev.h>
-#include <tools/string.hxx>
-#include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <rtl/tencinfo.h>
-#include <osl/file.hxx>
+#include "gcach_xpeer.hxx"
+#include "xrender_peer.hxx"
+#include "salunx.h"
+#include "saldata.hxx"
+#include "saldisp.hxx"
+#include "salgdi.h"
+#include "pspgraphics.h"
+#include "salvd.h"
 #include "xfont.hxx"
-#include <vcl/impfont.hxx>
-
-
-#include <tools/debug.hxx>
-#include <tools/stream.hxx>
-
-#include <psprint/printergfx.hxx>
-#include <psprint/fontmanager.hxx>
-#include <psprint/jobdata.hxx>
-#include <psprint/printerinfomanager.hxx>
-#include <vcl/svapp.hxx>
 #include "xlfd_attr.hxx"
 #include "xlfd_smpl.hxx"
 #include "xlfd_extd.hxx"
 #include "salcvt.hxx"
 
-#include <i18npool/mslangid.hxx>
+#include "vcl/printergfx.hxx"
+#include "vcl/fontmanager.hxx"
+#include "vcl/jobdata.hxx"
+#include "vcl/printerinfomanager.hxx"
+#include "vcl/svapp.hxx"
+#include "vcl/impfont.hxx"
+#include "vcl/salframe.hxx"
+#include "vcl/outdev.h"
+
+#include "sal/alloca.h"
+#include "sal/types.h"
+
+#include "rtl/tencinfo.h"
+
+#include "osl/file.hxx"
+
+#include "tools/string.hxx"
+#include "tools/debug.hxx"
+#include "tools/stream.hxx"
+
+#include "basegfx/polygon/b2dpolypolygon.hxx"
+
+#include "i18npool/mslangid.hxx"
 
 #include <hash_set>
 
@@ -795,11 +797,7 @@ CairoWrapper::CairoWrapper()
     if( !XQueryExtension( GetX11SalData()->GetDisplay()->GetDisplay(), "RENDER", &nDummy, &nDummy, &nDummy ) )
         return;
 
-#ifdef MACOSX
-    OUString aLibName( RTL_CONSTASCII_USTRINGPARAM( "libcairo.2.dylib" ));
-#else
     OUString aLibName( RTL_CONSTASCII_USTRINGPARAM( "libcairo.so.2" ));
-#endif
     mpCairoLib = osl_loadModule( aLibName.pData, SAL_LOADMODULE_DEFAULT );
     if( !mpCairoLib )
         return;
@@ -1392,10 +1390,8 @@ void X11SalGraphics::DrawServerFontLayout( const ServerFontLayout& rLayout )
         X11GlyphPeer& rGlyphPeer = X11GlyphCache::GetInstance().GetPeer();
         if( rGlyphPeer.GetGlyphSet( rFont, m_nScreen ) )
             DrawServerAAFontString( rLayout );
-#ifndef MACOSX        /* ignore X11 fonts on MACOSX */
         else if( !rGlyphPeer.ForcedAntialiasing( rFont, m_nScreen ) )
             DrawServerSimpleFontString( rLayout );
-#endif // MACOSX
         else
             DrawServerAAForcedString( rLayout );
     }

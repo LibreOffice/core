@@ -30,15 +30,22 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
-#include <tools/svwin.h>
 
-#include <rtl/ustring.hxx>
-#include <osl/module.h>
-#include <osl/file.h>
+#include "tools/svwin.h"
 
-#include <salgdi.h>
-#include <saldata.hxx>
-#include <vcl/sallayout.hxx>
+#include "salgdi.h"
+#include "saldata.hxx"
+// for GetMirroredChar
+#include "sft.h"
+
+#include "vcl/sallayout.hxx"
+#include "vcl/svapp.hxx"
+
+#include "rtl/ustring.hxx"
+
+#include "osl/module.h"
+#include "osl/file.h"
+
 
 #include <cstdio>
 #include <malloc.h>
@@ -50,9 +57,6 @@
     #include <algorithm>
 #endif // GCP_KERN_HACK
 
-#include <psprint/sft.h>
-// for GetMirroredChar
-#include <vcl/svapp.hxx>
 
 #define USE_UNISCRIBE
 #ifdef USE_UNISCRIBE
@@ -62,8 +66,9 @@
 #endif // USE_UNISCRIBE
 
 #include <hash_map>
-typedef std::hash_map<int,int> IntMap;
 #include <set>
+
+typedef std::hash_map<int,int> IntMap;
 typedef std::set<int> IntSet;
 
 #define DROPPED_OUTGLYPH 0xFFFF

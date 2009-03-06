@@ -73,12 +73,6 @@ EXCEPTIONSFILES=\
         $(SLO)$/salgdi3.obj		\
         $(SLO)$/salcvt.obj
 
-
-.IF "$(OS)"=="MACOSX"
-SLOFILES += $(SLO)$/macosxint.obj
-MACOSXRC = $(MISC)$/macosxrc.txt
-.ENDIF # "$(OS)"=="MACOSX"
-
 .IF "$(USE_XPRINT)" == "TRUE"
 CFLAGS+=-D_USE_PRINT_EXTENSION_=1
 SLOFILES+=$(SLO)$/xprintext.obj
@@ -115,5 +109,3 @@ $(INCCOM)$/rtsname.hxx:
 $(SLO)$/salpimpl.obj : $(INCCOM)$/rtsname.hxx
 $(SLO)$/salprnpsp.obj : $(INCCOM)$/rtsname.hxx
 
-$(MISC)$/macosxrc.txt : $$(@:f)
-    $(COPY) $< $@

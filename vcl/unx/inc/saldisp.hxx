@@ -384,9 +384,6 @@ protected:
     KeySym          nShiftKeySym_;      // first shift modifier
     KeySym          nCtrlKeySym_;       // first control modifier
     KeySym          nMod1KeySym_;       // first mod1 modifier
-#ifdef MACOSX
-    KeySym          nMod2KeySym_;       //first mod2 modifier
-#endif
     ByteString      m_aKeyboardName;
 
     vcl_sal::WMAdaptor* m_pWMAdaptor;
