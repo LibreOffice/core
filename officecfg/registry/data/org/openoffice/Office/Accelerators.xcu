@@ -5202,6 +5202,7 @@
      </prop>
     </node>
    </node>
+   <node oor:name="com.sun.star.report.ReportDefinition" oor:op="replace"/>
   </node>
  </node>
  <node oor:name="SecondaryKeys">

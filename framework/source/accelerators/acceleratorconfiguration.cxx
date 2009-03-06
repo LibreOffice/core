@@ -1205,7 +1205,8 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::changesOccurred(const css::util:
         {
             ::rtl::OUString sModule;
             sKey = ::utl::extractFirstFromConfigurationPath(sPath);
-            reloadChanged(sPrimarySecondary, sGlobalModules, sModule, sKey);
+            if ( sKey.getLength() )
+                reloadChanged(sPrimarySecondary, sGlobalModules, sModule, sKey);
         }
         else if ( sGlobalModules.equals(CFG_ENTRY_MODULES) )
         {
@@ -1213,7 +1214,8 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::changesOccurred(const css::util:
             ::rtl::OUString sDropModule = ::rtl::OUString::createFromAscii("Module['") + sModule +  ::rtl::OUString::createFromAscii("']");
             sPath = ::utl::dropPrefixFromConfigurationPath(sPath, sDropModule);
             sKey = ::utl::extractFirstFromConfigurationPath(sPath);
-            reloadChanged(sPrimarySecondary, sGlobalModules, sModule, sKey);
+            if ( sKey.getLength() )
+                reloadChanged(sPrimarySecondary, sGlobalModules, sModule, sKey);
         }
     }
 
