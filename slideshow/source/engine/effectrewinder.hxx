@@ -72,13 +72,13 @@ public:
         that the EffectRewinder can release all references to the owner.
 
     */
-    void Dispose (void);
+    void dispose (void);
 
     /** Store the root node of the animation tree.  It is used in
         CountMainSequenceEffects() to count the number of main sequence
         effects (or effect groups.)
     */
-    void SetRootAnimationNode (
+    void setRootAnimationNode (
         const css::uno::Reference<css::animations::XAnimationNode>& xRootNode);
 
     /** Rewind one effect of the main effect sequence.  When the current
@@ -101,7 +101,7 @@ public:
             This functor is called to switch to the previous slide.  When it
             is called then the other functor is not called.
     */
-    bool Rewind (
+    bool rewind (
         const ::boost::shared_ptr<ScreenUpdater::UpdateLock>& rpPaintLock,
         const ::boost::function<void(void)>& rSlideRewindFunctor,
         const ::boost::function<void(void)>& rPreviousSlideFunctor);
@@ -109,7 +109,7 @@ public:
     /** Call this method after gotoPreviousEffect() triggered a slide change
         to the previous slide.
     */
-    void SkipAllMainSequenceEffects (void);
+    void skipAllMainSequenceEffects (void);
 
 private:
     EventMultiplexer& mrEventMultiplexer;
@@ -133,26 +133,26 @@ private:
     css::uno::Reference<css::animations::XAnimationNode> mxCurrentAnimationRootNode;
     ::boost::shared_ptr<ScreenUpdater::UpdateLock> mpPaintLock;
 
-    void Initialize (void);
+    void initialize (void);
 
-    bool ResetEffectCount (void);
+    bool resetEffectCount (void);
     /** Called by listeners when an animation (not necessarily of a main
         sequence effect) starts.
     */
-    bool NotifyAnimationStart (const AnimationNodeSharedPtr& rpNode);
+    bool notifyAnimationStart (const AnimationNodeSharedPtr& rpNode);
 
     /** Count the number of effects (or effect groups) in the main effect
         sequence.
     */
-    sal_Int32 CountMainSequenceEffects (void);
+    sal_Int32 countMainSequenceEffects (void);
 
     /** Skip the next main sequence effect.
     */
-    void SkipSingleMainSequenceEffects (void);
+    void skipSingleMainSequenceEffects (void);
 
     /** Skip the specified number of main sequence effects.
     */
-    void SkipSomeMainSequenceEffects (const sal_Int32 nSkipCount);
+    void skipSomeMainSequenceEffects (const sal_Int32 nSkipCount);
 
     /** Rewind the last effect of the main effect sequence by replaying all
         previous effects.
@@ -164,7 +164,7 @@ private:
         @param rSlideRewindFunctor
             This functor is used to redisplay the current slide.
     */
-    void AsynchronousRewind (
+    void asynchronousRewind (
         sal_Int32 nEffectCount,
         const bool bRedisplayCurrentSlide,
         const boost::function<void(void)>& rSlideRewindFunctor);
@@ -174,7 +174,7 @@ private:
         @param rPreviousSlideFunctor
             This functor is used to go to the previous slide.
     */
-    void AsynchronousRewindToPreviousSlide (
+    void asynchronousRewindToPreviousSlide (
         const ::boost::function<void(void)>& rPreviousSlideFunctor);
 };
 

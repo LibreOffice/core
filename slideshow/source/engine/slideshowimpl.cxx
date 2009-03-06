@@ -538,7 +538,7 @@ void SlideShowImpl::disposing()
 {
     osl::MutexGuard const guard( m_aMutex );
 
-    maEffectRewinder.Dispose();
+    maEffectRewinder.dispose();
 
     // stop slide transition sound, if any:
     stopSlideTransitionSound();
@@ -948,7 +948,7 @@ void SlideShowImpl::displaySlide(
     if (isDisposed())
         return;
 
-    maEffectRewinder.SetRootAnimationNode(xRootNode);
+    maEffectRewinder.setRootAnimationNode(xRootNode);
 
     // precondition: must only be called from the main thread!
     DBG_TESTSOLARMUTEX();
@@ -1063,7 +1063,7 @@ void SlideShowImpl::displaySlide(
     // slide to this one.  To complete this we have to play back all main
     // sequence effects on this slide.
     if (bSkipAllMainSequenceEffects)
-        maEffectRewinder.SkipAllMainSequenceEffects();
+        maEffectRewinder.skipAllMainSequenceEffects();
 }
 
 void SlideShowImpl::redisplayCurrentSlide (void)
@@ -1076,8 +1076,6 @@ void SlideShowImpl::redisplayCurrentSlide (void)
     // precondition: must only be called from the main thread!
     DBG_TESTSOLARMUTEX();
     stopShow();
-    bool bSkipAllMainSequenceEffects (false);
-    bool bSkipSlideTransition (true);
 
     OSL_ENSURE( !maViewContainer.empty(), "### no views!" );
     if (maViewContainer.empty())
@@ -1128,7 +1126,7 @@ sal_Bool SlideShowImpl::previousEffect() throw (uno::RuntimeException)
         return true;
     else
     {
-        return maEffectRewinder.Rewind(
+        return maEffectRewinder.rewind(
             maScreenUpdater.createLock(false),
             ::boost::bind(&SlideShowImpl::redisplayCurrentSlide, this),
             ::boost::bind(&SlideShowImpl::rewindEffectToPreviousSlide, this));
