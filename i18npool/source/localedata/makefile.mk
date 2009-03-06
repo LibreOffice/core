@@ -74,6 +74,7 @@ APP1OBJS   = $(OBJFILES)
 
 APP1STDLIBS = \
         $(SALLIB) \
+        $(SALHELPERLIB) \
         $(CPPULIB) \
         $(CPPUHELPERLIB)
 
