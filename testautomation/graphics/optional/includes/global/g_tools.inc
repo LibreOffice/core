@@ -122,6 +122,14 @@ testcase tiToolsThesaurus
   sleep 1
 
   hTypeKeys "<Home><SHIFT END>"
+  '------------------------
+ToolsOptions
+Kontext "ExtrasOptionenDlg"
+hToolsOptions("LANGUAGESETTINGS","Languages")
+Westlich.Select 32
+Kontext "ExtrasOptionenDlg"
+ExtrasOptionenDlg.OK
+  '------------------------
   try
      ExtrasThesaurusDraw							'/// Thesaurus with only 1 word ///'
      Kontext "Thesaurus"

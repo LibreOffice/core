@@ -254,7 +254,7 @@ testcase tiFormatText
         next n
         TabLauftext.OK
     Call hCloseDocument
-endcase
+endcase 'tiFormatText
 
 '-------------------------------------------------------------------------------
 testcase tdFormatLayer
@@ -314,7 +314,7 @@ testcase tdFormatLayer
 
     '/// close application ///'
     Call hCloseDocument
-endcase
+endcase 'tdFormatLayer
 
 '-------------------------------------------------------------------------------
 testcase tdFormatConnector
@@ -442,7 +442,7 @@ testcase tdFormatConnector
         next i
     Verbinder.OK
     Call hCloseDocument
-endcase
+endcase 'tdFormatConnector
 
 '-------------------------------------------------------------------------------
 testcase tiFormatPositionAndSize
@@ -453,40 +453,47 @@ testcase tiFormatPositionAndSize
     Dim b      'Variable fuer Breite
     Dim r      'Variable fuer Radius
     Dim w      'Variable fuer Winkel
-
-    Call hNewDocument                  '/// New Impress document ///'
+    
+printlog "New impress doc"
+    Call hNewDocument                  
     WaitSlot (3000)
-    '-----------------------------RECTANGLE-----1/2------------------------------------------------
-    Call hRechteckErstellen (20,20,70,30)          '/// create rectangle ///'
+    printlog "RECTANGLE-----1/2"
+    printlog "create rectangle"
+    Call hRechteckErstellen (20,20,70,30)       
     WaitSlot (1000)
     gMouseClick 50,25
     WaitSlot (1000)
-    ContextPositionAndSize                '/// Format-position and size ///'
+    printlog "Format-position and size"
+    ContextPositionAndSize        
         WaitSlot (1000)
         Kontext
-        Active.SetPage TabPositionAndSize                '/// TabPositionAndSize ///'
+        printlog "TabPositionAndSize"
+        Active.SetPage TabPositionAndSize
         Kontext "TabPositionAndSize"
-        SetClipboard (PositionX.GetText + PositionY.GetText)  '/// put x and y position into clipboard ///'
+        printlog "put x and y position into clipboard"
+        printlog "x = " & PositionX.GetText
+        printlog "y = " & PositionY.GetText
+        SetClipboard (PositionX.GetText + PositionY.GetText)
         TabPositionAndSize.OK
     WaitSlot (1000)
-    '/// move rectangle down and right ///'
-    hTypeKeys "<DOWN>",30         
-    hTypeKeys "<RIGHT>",30
-    '/// open PositionAndSize///'
+    printlog "move rectangle down and right"
+    hTypeKeys "<DOWN>",10         
+    hTypeKeys "<RIGHT>",10
+    printlog "open PositionAndSize"
     ContextPositionAndSize
         WaitSlot (1000)
         Kontext
-        '/// TabPositionAndSize ///'
+        printlog "TabPositionAndSize"
         Active.SetPage TabPositionAndSize                
         Kontext "TabPositionAndSize"
-	 '/// control position changes with clipboard content ///'
+        printlog "control position changes with clipboard content"
         if (PositionX.GetText + PositionY.GetText) = GetClipboardText Then WarnLog "Der Dialog hat die Positionsaenderung nicht registriert"          
-         '/// set position of rectange using the edit fields ///'
+        printlog "set position of rectange using the edit fields"
         PositionX.SetText "2"
         x=PositionX.GetText
         PositionY.SetText "2"
         y=PositionY.GetText
-        '/// check protect ///'
+        printlog "check protect"
         ProtectPosition.Check
         TabPositionAndSize.OK
     WaitSlot (1000)
@@ -495,45 +502,47 @@ testcase tiFormatPositionAndSize
         Kontext
         Active.SetPage TabPositionAndSize
         Kontext "TabPositionAndSize"
-	  '/// check if values are correct ///'
+        printlog "check if values are correct"
         if PositionX.GetText = x And PositionY.GetText = y Then PrintLog " Values could be changed"  
-          '/// check if protect works ///'
+        printlog "check if protect works"
         if PositionX.GetText<> x Then
             WarnLog "Protect does not work"
         else
-            PrintLog "  Protext works, X axis checked"
+            PrintLog "Protext works, X axis checked"
         end if
         if PositionY.GetText<> y Then
             WarnLog "Protect does not work"
         else
             PrintLog "  Protext does work, checked y axis"
         end if
-         '/// uncheck protect ///'
+        printlog "uncheck protect"
         ProtectPosition.UnCheck
         TabPositionAndSize.OK
     WaitSlot (1000)
     ContextPositionAndSize
         WaitSlot (1000)
         Kontext
-        '/// TabPositionAndSize ///'
+        printlog "TabPositionAndSize"
         WaitSlot (1000)
         Active.SetPage TabPositionAndSize
         Kontext "TabPositionAndSize"
-        '/// set width to 10 ///'
+        printlog "set width to 10"
         WaitSlot (1000)
         Width.SetText "10"
-        '/// put value into a variable ///'
+        printlog "put value into a variable"
+        WaitSlot (1000)
         b=Width.GetText
         printlog "Width is " & b
         SetClipboard Width.GetText
         '/// set heigth to 5 ///'
         Height.SetText "5"
-        '/// put value into variable ///'
+        printlog "put value into variable"
+        WaitSlot (1000)
         h=Height.GetText
         printlog "Height is " & h
-        '/// check protect ///'
+        printlog "check protect"
         ProtectPosition.Check
-        '/// close dialog ///'
+        printlog "close dialog"
 	TabPositionAndSize.OK
     WaitSlot (1000)
     ContextPositionAndSize
@@ -542,7 +551,7 @@ testcase tiFormatPositionAndSize
         Active.SetPage TabPositionAndSize
         Kontext "TabPositionAndSize"
         WaitSlot (2000)
-        '/// control size changes ///'
+        printlog "control size changes"
         printlog "Width value is: " & Width.GetText
         printlog "Value from Clipboard is: " & GetClipboardText
         if Width.GetText = GetClipboardText Then
@@ -550,16 +559,16 @@ testcase tiFormatPositionAndSize
         else
             WarnLog "  Controls for height and width do not work"
         end if
-        '/// Uncheck the "Position-Protection", so we can work with this window. ///'
+        printlog "Uncheck the Position-Protection, so we can work with this window."
         if ProtectPosition.isChecked = FALSE then
-            '/// Should be checked since it was checked just 16 rows ago ///'
+            printlog "Should be checked since it was checked just 16 rows ago"
 	    ErrorLog "ProtectPosition was not checked - why?"   
         else
            ProtectPosition.Uncheck
         end if
 
         KeepRatio.Check
-        '/// raise value for width ///'
+        printlog "raise value for width"
         Width.More 5
         if Height.GetText = h Then
         WarnLog "  Keep ratio does not work properly"
@@ -571,26 +580,26 @@ testcase tiFormatPositionAndSize
     WaitSlot (2000)
     gMouseClick 90,90
     WaitSlot (2000)
-    '-----------------------------TEXT-----------------------------------------------------
-    '/// create textbox ///'
+    printlog "Now trying TEXT..."
+    printlog "create textbox"
     Call hTextrahmenErstellen ("Never before have I written such a meaning" ,10,10,60,20) 
     WaitSlot (2000)
-    '/// Format-Postion and Size ///'
+    printlog "Format-Postion and Size"
     FormatPositionAndSize
         WaitSlot (1000)
         Kontext
-        '/// TabPositionAndSize ///'
+        printlog "TabPositionAndSize"
         Active.SetPage TabPositionAndSize
         Kontext "TabPositionAndSize"
         printlog "default value ?: width :-----"+Width.IsEnabled
-        '/// check fit width to text ///'
+        printlog "check fit width to text"
         if Width.IsEnabled then FitWidthText.Check
         if Width.IsEnabled = True Then
             WarnLog "  Fit width does not work"
         else
             PrintLog "  Fit width does work"
         end if
-        '/// fit heigth to text ///'
+        printlog "fit heigth to text"
 	FitHeightText.Check
         if Height.IsEnabled = True Then
             WarnLog "  fit heigth doe not work"
@@ -599,9 +608,9 @@ testcase tiFormatPositionAndSize
         end if
         '   PrintLog "  Fit width to text active:   " + FitWidthText.IsChecked
         '   PrintLog "  Fit heigth to text active:   " + FitHeightText.IsChecked
-        '/// uncheck fit width to text ///'
+        printlog "uncheck fit width to text"
         FitWidthText.UnCheck
-        '/// uncheck fit heigth to text ///'
+        printlog "uncheck fit heigth to text"
 	FitHeightText.Uncheck
         TabPositionAndSize.OK
     WaitSlot (1000)
@@ -613,11 +622,11 @@ testcase tiFormatPositionAndSize
         Kontext
         Active.SetPage TabPositionAndSize
         Kontext "TabPositionAndSize"
-        '/// check x-position of textbox ///'
+        printlog "check x-position of textbox"
         SetClipboard PositionX.GetText
         WaitSlot (1000)
         Kontext
-        '/// set rotation angle to 50 and position x and y to 1 ///'
+        printlog "set rotation angle to 50 and position x and y to 1"
         Active.SetPage TabDrehung
         Kontext "TabDrehung"
         PositionX.SetText "1"
@@ -627,7 +636,7 @@ testcase tiFormatPositionAndSize
         TabDrehung.OK
     WaitSlot (3000)
 
-    '/// check position of manipulated textbox ///'
+    printlog "check position of manipulated textbox"
     ContextPositionAndSize
         WaitSlot (3000)
         Kontext
@@ -638,12 +647,12 @@ testcase tiFormatPositionAndSize
         Active.SetPage TabDrehung
         Kontext "TabDrehung"
         WaitSlot (1000)
-        '/// check rotation angle ///'
+        printlog "check rotation angle"
         if Winkel.GetText = w Then PrintLog "  Object rotated"
         TabDrehung.OK
 
-    '-----------------------------RECTANGLE-----2/2------------------------------------------------
-    '/// create rectangle ///'
+    printlog "RECTANGLE-----2/2"
+    printlog "create rectangle"
     Call hRechteckErstellen (10,60,70,90)
     WaitSlot (2000)
     ContextPositionAndSize
@@ -651,14 +660,14 @@ testcase tiFormatPositionAndSize
         Kontext
         Active.SetPage TabPositionAndSize
         Kontext "TabPositionAndSize"
-        '/// put x-axis postion of rectangle into clipboard///'
+        printlog "put x-axis postion of rectangle into clipboard"
         SetClipboard PositionX.GetText
         Kontext
-        '/// set slant angle to 5 ///'
+        printlog "set slant angle to 5"
         Active.SetPage TabSchraegstellen
         Kontext "TabSchraegstellen"
         WaitSlot (1000)
-        '/// set radius to 5 ///'
+        printlog "set radius to 5"
         Radius.SetText "5"
         r=Radius.GetText
         Winkel.SetText w
@@ -669,17 +678,17 @@ testcase tiFormatPositionAndSize
         Active.SetPage TabPositionAndSize
         Kontext "TabPositionAndSize"
         if PositionX <> GetClipboardText Then PrintLog "  Object changed position due to scaling"
-        '/// Before we change tab, we set the Position-marker back to checked ///'
+        printlog "Before we change tab, we set the Position-marker back to checked "
         ProtectPosition.Check
         Kontext
-        '/// check slant angle and radius ///'
+        printlog "check slant angle and radius"
         Active.SetPage TabSchraegstellen
         Kontext "TabSchraegstellen"
         if Radius.GetText = r Then PrintLog "  Cornwer radius changed"
         if Winkel.GetText =w Then PrintLog "  Object rotated over 45°"
         TabSchraegstellen.OK
     Call hCloseDocument
-endcase
+endcase 'tiFormatPositionAndSize
 
 '-------------------------------------------------------------------------------
 testcase tiFormat3D_Effekte
@@ -991,7 +1000,7 @@ testcase tiFormat3D_Effekte
     '/// close document ///'
     Drei_D_Effekte.Close
     Call hCloseDocument
-endcase
+endcase 'tiFormat3D_Effekte
 
 '------------------------------------------------------------------
 testcase tdFormatTemplates
@@ -1172,7 +1181,7 @@ testcase tdFormatTemplates
     
      Call hCloseDocument                '/// close document ///'
 
-endcase
+endcase 'tdFormatTemplates
 
 '-------------------------------------------------------------------------------
 testcase tiFormatAufzaehlungszeichen
@@ -1241,4 +1250,4 @@ testcase tiFormatAufzaehlungszeichen
     
     Call hCloseDocument
 
-endcase
+endcase 'tiFormatAufzaehlungszeichen

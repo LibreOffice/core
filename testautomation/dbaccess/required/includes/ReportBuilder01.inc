@@ -861,7 +861,7 @@ testcase tFunctionWizard
     printlog "check if the function wizard appear"    
     Kontext "FunctionWizard"
         if(FunctionWizard.exists(5)) then
-            printloig "The function wizard appear -> OK"
+            printlog "The function wizard appear -> OK"
             FunctionWizard.close
         else
             warnlog "The function wizard does not appear -> FAILED"

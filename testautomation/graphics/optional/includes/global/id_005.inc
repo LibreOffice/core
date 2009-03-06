@@ -838,7 +838,13 @@ testcase tiFormatStylesAndFormatting
 
     hTextrahmenErstellen ("I love Wednesdays...",20,20,80,40)
     sleep 1
-    '/// Open Stylist with: Format -> Stylist ///'
+    printlog "Checking if TextObjectBar is up"
+    Kontext "TextObjectbar"
+    if TextObjectbar.Exists Then
+    	printlog "TextObjectbar.Exists = " + TextObjectbar.Exists
+    else
+        ViewToolbarsTextFormatting
+    endif
     FormatStylist
     WaitSlot (1000)
     Kontext "Stylist"

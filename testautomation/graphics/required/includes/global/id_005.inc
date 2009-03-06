@@ -68,7 +68,8 @@ testcase tiFormatDefault
     FormatStandardDraw
     '/// close application ///'
     Call hCloseDocument
-endcase
+endcase 'tiFormatDefault
+'---------------------------------------------------------------------------------------
 
 testcase tiFormatLine
     '/// open application ///'
@@ -178,7 +179,8 @@ testcase tiFormatLine
             TabLinienenden.cancel
     '/// close application ///'
     Call hCloseDocument
-endcase
+endcase 'tiFormatLine
+'---------------------------------------------------------------------------------------
 
 testcase tdFormatArea
     '/// open application ///'
@@ -405,7 +407,8 @@ testcase tdFormatArea
         TabBitmap.Cancel
     '/// close application ///'
     Call hCloseDocument
-endcase
+endcase 'tdFormatArea
+'---------------------------------------------------------------------------------------
 
 testcase tiFormatText
     '/// open application ///'
@@ -426,7 +429,8 @@ testcase tiFormatText
         TabLauftext.Cancel
     '/// close application ///'
     Call hCloseDocument
-endcase
+endcase 'tdFormatArea
+'---------------------------------------------------------------------------------------
 
 testcase tiFormatPositionAndSize
     '/// open application ///'
@@ -460,7 +464,8 @@ testcase tiFormatPositionAndSize
         TabSchraegstellen.cancel
     '/// close application ///'
     Call hCloseDocument
-endcase
+endcase 'tiFormatPositionAndSize
+'---------------------------------------------------------------------------------------
 
 testcase tiFormatCharacter
 '/// open application ///'
@@ -492,8 +497,9 @@ testcase tiFormatCharacter
    TabFontPosition.Cancel
 '/// close application ///'
    Call hCloseDocument
-endcase
+endcase 'tiFormatCharacter
 
+'---------------------------------------------------------------------------------------
 testcase tiFormatControlForm
 
     '/// testcase: check if controls are available
@@ -552,7 +558,8 @@ testcase tiFormatControlForm
     printlog "close application"
     Call hCloseDocument
     
-endcase
+endcase 'tiFormatControlForm
+'---------------------------------------------------------------------------------------
 
 testcase tiFormatDimensions
 '/// open application ///'
@@ -565,8 +572,9 @@ testcase tiFormatDimensions
       Bemassung.Cancel
 '/// close application ///'
    Call hCloseDocument
-endcase
+endcase 'tiFormatDimensions
 
+'---------------------------------------------------------------------------------------
 testcase tiFormatConnector
 '/// open application ///'
    Call  hNewDocument
@@ -578,8 +586,9 @@ testcase tiFormatConnector
       Verbinder.Cancel
 '/// close application ///'
    Call hCloseDocument
-endcase
+endcase 'tiFormatConnector
 
+'---------------------------------------------------------------------------------------
 testcase tiFormat3D_Effects
 '/// open application ///'
    Call  hNewDocument
@@ -607,7 +616,7 @@ testcase tiFormat3D_Effects
      Drei_D_Effekte.Close
      '/// close application ///'
    Call hCloseDocument
-endcase
+endcase 'tiFormat3D_Effects
 
 '---------------------------------------------------------------------------------------
 
@@ -681,7 +690,7 @@ testcase tiFormatNumberingBullets
    sleep 1
    '/// close application ///'
    Call hCloseDocument
-endcase
+endcase 'tiFormatNumberingBullets
 
 '---------------------------------------------------------------------------------------
 
@@ -735,7 +744,7 @@ testcase tiFormatCaseCharacter
     end if
       '/// close application ///'
  Call hCloseDocument
-endcase
+endcase 'tiFormatCaseCharacter
 
 '---------------------------------------------------------------------------------------
 
@@ -821,7 +830,7 @@ testcase tiFormatPage
    endif
    '/// close application ///'
    Call hCloseDocument
-endcase
+endcase 'tiFormatParagraph
 
 '---------------------------------------------------------------------------------------
 
@@ -831,14 +840,22 @@ testcase tiFormatStylesAndFormatting
     dim i as integer
     dim abctemp
 
-    '/// Open Application ///'
+    printlog "Open Application"
     Call  hNewDocument
-    '/// Create a Textframe with content ///'
+    printlog "Create a Textframe with content"
     sleep 5
 
     hTextrahmenErstellen ("I love Wednesdays...",20,20,80,40)
     sleep 1
-    '/// Open Stylist with: Format -> Stylist ///'
+    printlog "Checking if TextObjectBar is up"
+    Kontext "TextObjectbar"
+    if TextObjectbar.Exists Then
+    	printlog "TextObjectbar.Exists = " + TextObjectbar.Exists
+    else
+        ViewToolbarsTextFormatting
+    endif
+    FormatStylist
+    printlog "Open Stylist with: Format -> Stylist"
     FormatStylist
     WaitSlot (1000)
     Kontext "Stylist"
@@ -851,7 +868,7 @@ testcase tiFormatStylesAndFormatting
     Vorlagenliste.TypeKeys "<Up>"
     Vorlagenliste.TypeKeys "<Up>"
     sleep 1
-    '/// open context menu, select first entry from top: 'New' ///'
+    printlog "open context menu, select first entry from top: 'New'"
     Vorlagenliste.OpenContextMenu
     sleep 1
     hMenuSelectNr (1)
@@ -859,7 +876,7 @@ testcase tiFormatStylesAndFormatting
     
     Kontext
     if Messagebox.exists (5) then
-        '/// switch to tabpage Organizer ///'
+        printlog "switch to tabpage Organizer"
         try
             Messagebox.SetPage TabVerwalten
             Kontext "TabVerwalten"
@@ -868,7 +885,7 @@ testcase tiFormatStylesAndFormatting
             sTemp = VorlagenName.getText
             VerknuepftMit.getSelText
             Bereich.getSelText
-            '/// close dialog 'Graphics Styles' ///'
+            printlog "close dialog 'Graphics Styles'"
             TabVerwalten.OK
         catch
             warnlog "Under Gnome we have a focus problem here."
@@ -884,12 +901,12 @@ testcase tiFormatStylesAndFormatting
     sleep 1
     Kontext
     if Messagebox.exists (5) then
-        '/// switch to tabpage Organizer ///'
+        printlog "switch to tabpage Organizer"
         try
             Messagebox.SetPage TabVerwalten
             Kontext "TabVerwalten"
             VorlagenName.setText("2Test")
-            '/// close dialog 'Graphics Styles' ///'
+            printlog "close dialog 'Graphics Styles'"
             TabVerwalten.OK
         catch
             warnlog "Under Gnome we have a focus problem here."
@@ -898,7 +915,7 @@ testcase tiFormatStylesAndFormatting
     
     sleep 3
     Kontext "Stylist"
-    '/// Delete the style we created. ///'
+    printlog " Delete the style we created."
     Vorlagenliste.TypeKeys "<Home>"  'to go to the style we've created ourselves.
     sleep 1
     try
@@ -913,15 +930,15 @@ testcase tiFormatStylesAndFormatting
     if (Stylist.NotExists) then
        ErrorLog "There was no Stylist open, should be."
     else
-       '/// Close Stylist ///'
-       hTypekeys "<F11>"
-       Kontext "Stylist"
-       if (Stylist.Exists) then
-          ErrorLog "The Stylist should be closed now."
-       endif
+        printlog "Close Stylist"
+        hTypekeys "<F11>"
+        Kontext "Stylist"
+        if (Stylist.Exists) then
+            ErrorLog "The Stylist should be closed now."
+        endif
     endif
     Call hCloseDocument
-endcase
+endcase 'tiFormatStylesAndFormatting
 
 '---------------------------------------------------------------------------------------
 
@@ -944,7 +961,7 @@ testcase tiFormatFontwork
    endif
 '/// close application ///'
    Call hCloseDocument
-endcase
+endcase 'tiFormatFontwork
 
 '---------------------------------------------------------------------------------------
 
@@ -972,7 +989,7 @@ testcase tiFormatGroup
     WaitSlot (1000)
 '/// close application ///'
    Call hCloseDocument
-endcase
+endcase 'tiFormatGroup
 
 '---------------------------------------------------------------------------------------
 
@@ -1014,6 +1031,6 @@ testcase tiFormatStylesSlideDesign
     sleep 2
 '/// close application ///'
    Call hCloseDocument
-endcase
+endcase 'tiFormatStylesSlideDesign
 
 '---------------------------------------------------------------------------------------

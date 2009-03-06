@@ -628,6 +628,11 @@ testcase tToolsXMLFilterSettings
     else
         QAErrorLog "#i27370# Normaly there should be a second document but there is none!"
     end if
+    if GetDocumentCount >= 1 then
+        do until GetDocumentCount = 0
+            Call hCloseDocument
+        loop
+    endif
 endcase
 
 '-------------------------------------------------------------------------
