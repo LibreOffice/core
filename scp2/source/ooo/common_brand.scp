@@ -893,28 +893,6 @@ ProfileItem gid_Brand_Profileitem_Soffice_ProgressFrameColor_So
     Value = "${PROGRESSFRAMECOLOR}";
 End
 
-#ifdef MACOSX
-ProfileItem gid_Brand_ProfileItem_Soffice_Macosxrc
-    ProfileID = gid_Brand_Profile_Soffice_Ini;
-    ModuleID = gid_Module_Root_Brand;
-    Section = "Bootstrap";
-    Order = 5;
-    Key = "MacOSXIntegrationUserFile";
-    Value = "${$ORIGIN/bootstraprc:UserInstallation}/user/macosxrc.txt";
-End
-#endif
-
-#ifdef MACOSX
-ProfileItem gid_Brand_ProfileItem_Soffice_Macosxrc2
-    ProfileID = gid_Brand_Profile_Soffice_Ini;
-    ModuleID = gid_Module_Root_Brand;
-    Section = "Bootstrap";
-    Order = 6;
-    Key = "MacOSXIntegrationDefaultFile";
-    Value = "${$ORIGIN/bootstraprc:BaseInstallation}/presets/macosxrc.txt";
-End
-#endif
-
 #ifdef WNT
 ProfileItem gid_Brand_Profileitem_Soffice_Hideeula
     ProfileID = gid_Brand_Profile_Soffice_Ini;

@@ -290,4 +290,3 @@ DLLPOSTFIX=go
 DLLPRE=lib
 DLLPOST=.dll
 
-PSPLIB=apsp.lib

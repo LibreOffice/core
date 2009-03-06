@@ -268,7 +268,6 @@ common
         NO_HIDS
         PAM_LINK
         PAM
-        PSPRINT
         PYTHONHOME
         PYTHONPATH
         SOLAR_PLUGIN

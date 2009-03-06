@@ -260,7 +260,6 @@ STDSLOCUI=
     STDLIBGUIMT=-framework Carbon -framework Cocoa -lpthread CPPRUNTIME -lm
     STDSHLCUIMT=-lpthread CPPRUNTIME -lm
     STDSHLGUIMT=-framework Carbon -framework CoreFoundation -framework Cocoa -lpthread CPPRUNTIME -lm
-    PSPLIB=-lpsp
 .ELSE
     STDLIBCUIMT= CPPRUNTIME -lm
     STDLIBGUIMT=-lX11 -lpthread CPPRUNTIME -lm

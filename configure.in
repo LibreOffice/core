@@ -4274,26 +4274,26 @@ AC_SUBST(SYSTEM_GENCMN)
 dnl ===================================================================
 dnl Checks for libraries.
 dnl ===================================================================
-dnl Check for Mac OS X native GUI, which may be used instead of X11.
-dnl Check for a lack of --with-x option on Darwin.  If it is missing, look to
-dnl see if we have the AppKit framework for building with Quartz graphics.
+dnl Check for Mac OS X native GUI, which may is now required; the X11 build is no longer supported
+dnl See if we have the AppKit framework for building with Quartz graphics.
 
-if test  "$_os" = "Darwin"  -a  "x$with_x" != "xyes"  -a  "x$x_includes" = "xNONE"  -a  "x$x_libraries" = "xNONE"; then
-   dnl System is either Mac OS X or pure Darwin, and --with-x was not specified
-   dnl Default to Aqua graphics if available.
-   AC_MSG_CHECKING([for /System/Library/Frameworks/AppKit.framework])
-   if test -d "/System/Library/Frameworks/AppKit.framework/"; then
-      AC_MSG_RESULT([yes])
-      x_includes="no_x_includes"
-      x_libraries="no_x_libraries"
-      dnl disable some things used on other Unix versions but not on the aqua build
-      enable_gtk=no
-      enable_cups=no
-      ENABLE_CUPS=""
-      AC_SUBST(ENABLE_CUPS)
+if test  "$_os" = "Darwin"; then
+   if test "x$with_x" = "xyes"; then
+      AC_MSG_ERROR([X11 build is no longer supported on MacOSX, please use the native aqua build])
    else
-      AC_MSG_RESULT([no])
-      dnl Probably a pure Darwin system. Check for X11 below.
+      AC_MSG_CHECKING([for /System/Library/Frameworks/AppKit.framework])
+      if test -d "/System/Library/Frameworks/AppKit.framework/"; then
+         AC_MSG_RESULT([yes])
+         x_includes="no_x_includes"
+         x_libraries="no_x_libraries"
+         dnl disable some things used on other Unix versions but not on the aqua build
+         enable_gtk=no
+         enable_cups=no
+         ENABLE_CUPS=""
+         AC_SUBST(ENABLE_CUPS)
+      else
+         AC_MSG_ERROR([No AppKit.framewrok found])
+      fi
    fi
 fi
 
@@ -4301,7 +4301,7 @@ dnl ***************************************
 dnl testing for X libraries and includes...
 dnl ***************************************
 if test "$_os" = "Darwin" -a "x$x_includes" = "xno_x_includes"; then
-   echo "Do Nothing for _os = Darwin and x_includes = no_x_includes"
+   echo "Do Nothing for _os = Darwin"
    dnl Mac OS X using Aqua graphics. Don't check for X11.
    :
 elif test "$_os" = "OS2" ; then

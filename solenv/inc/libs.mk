@@ -151,7 +151,6 @@ AGGLIB=-lagg$(DLLPOSTFIX)
 .ENDIF
 FREETYPE_LIBS*=-lfreetype
 FREETYPELIB=$(FREETYPE_LIBS)
-PSPLIB=-lpsp$(DLLPOSTFIX)
 TKLIB=-ltk$(DLLPOSTFIX)
 LAYOUTLIB=-ltklayout$(DLLPOSTFIX)
 SVTOOLLIB=-lsvt$(DLLPOSTFIX)
@@ -476,7 +475,6 @@ CPPCANVASLIB=icppcanvas.lib
 FORLIB=ifor.lib
 FORUILIB=iforui.lib
 AGGLIB=iagg.lib
-PSPLIB=apsp.lib
 TKLIB=itk.lib
 LAYOUTLIB=itklayout.lib
 SVXLLIB=svxl.lib

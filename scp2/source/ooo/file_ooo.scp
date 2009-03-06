@@ -2753,15 +2753,6 @@ File gid_File_Dat_Root5
 End
 #endif
 
-#if defined MACOSX && !defined QUARTZ
-File gid_File_Bin_Macosxrc
-    TXT_FILE_BODY;
-    Dir = gid_Dir_User;
-    Name = "macosxrc.txt";
-    Styles = (PACKED, WORKSTATION);
-End
-#endif
-
 #ifdef MACOSX 
 File gid_File_App_PkgInfo
     TXT_FILE_BODY;

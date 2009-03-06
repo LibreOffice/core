@@ -18651,26 +18651,33 @@ fi
 
 
 
-if test  "$_os" = "Darwin"  -a  "x$with_x" != "xyes"  -a  "x$x_includes" = "xNONE"  -a  "x$x_libraries" = "xNONE"; then
-         { echo "$as_me:$LINENO: checking for /System/Library/Frameworks/AppKit.framework" >&5
-echo $ECHO_N "checking for /System/Library/Frameworks/AppKit.framework... $ECHO_C" >&6; }
-   if test -d "/System/Library/Frameworks/AppKit.framework/"; then
-      { echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6; }
-      x_includes="no_x_includes"
-      x_libraries="no_x_libraries"
-            enable_gtk=no
-      enable_cups=no
-      ENABLE_CUPS=""
-
+if test  "$_os" = "Darwin"; then
+   if test "x$with_x" = "xyes"; then
+      { { echo "$as_me:$LINENO: error: X11 build is no longer supported on MacOSX, please use the native aqua build" >&5
+echo "$as_me: error: X11 build is no longer supported on MacOSX, please use the native aqua build" >&2;}
+   { (exit 1); exit 1; }; }
    else
-      { echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; }
-         fi
+      { echo "$as_me:$LINENO: checking for /System/Library/Frameworks/AppKit.framework" >&5
+echo $ECHO_N "checking for /System/Library/Frameworks/AppKit.framework... $ECHO_C" >&6; }
+      if test -d "/System/Library/Frameworks/AppKit.framework/"; then
+         { echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6; }
+         x_includes="no_x_includes"
+         x_libraries="no_x_libraries"
+                  enable_gtk=no
+         enable_cups=no
+         ENABLE_CUPS=""
+
+      else
+         { { echo "$as_me:$LINENO: error: No AppKit.framewrok found" >&5
+echo "$as_me: error: No AppKit.framewrok found" >&2;}
+   { (exit 1); exit 1; }; }
+      fi
+   fi
 fi
 
 if test "$_os" = "Darwin" -a "x$x_includes" = "xno_x_includes"; then
-   echo "Do Nothing for _os = Darwin and x_includes = no_x_includes"
+   echo "Do Nothing for _os = Darwin"
       :
 elif test "$_os" = "OS2" ; then
    echo "Do Nothing for _os = OS2. Don't check for X11."

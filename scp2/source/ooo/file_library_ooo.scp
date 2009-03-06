@@ -1081,15 +1081,6 @@ STD_UNO_LIB_FILE( gid_File_Lib_Preload, preload)
 
 SPECIAL_UNO_COMPONENT_LIB_FILE( gid_File_Lib_Productregistration, productregistration.uno )
 
-#if defined(UNX) && !defined(QUARTZ)
-File gid_File_Lib_Psp
-    Name = LIBNAME(psp);
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Program;
-End
-#endif
-
 #if defined(UNX) && ! defined(QUARTZ)
 File gid_File_Lib_Vclplug_Gen
     Name = LIBNAME(vclplug_gen);
