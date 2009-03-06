@@ -30,7 +30,7 @@
 
 #include "precompiled_slideshow.hxx"
 
-#include "EffectRewinder.hxx"
+#include "effectrewinder.hxx"
 #include "eventqueue.hxx"
 #include "usereventqueue.hxx"
 #include "mouseeventhandler.hxx"
