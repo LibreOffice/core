@@ -2141,46 +2141,42 @@ void SwWW8Writer::StartTOX( const SwSection& rSect )
 
                 if( nsSwTOXElement::TOX_OUTLINELEVEL & pTOX->GetCreateType() )
                 {
-                    // Search over all the outline styles used and figure out
-                    // what is the minimum outline level we need to display
-                    // (ignoring headline styles 1-9)
-                    //BYTE nLvl = 0, nMinLvl = 0;   //#outline level, removed by zhaojianwei
-                    int nLvl = 0, nMinLvl = 0;      //<-end,add by zhaojianwei
-                    const SwTxtFmtColls& rColls = *pDoc->GetTxtFmtColls();
-                    const SwTxtFmtColl* pColl;
-                    for( n = rColls.Count(); n; )
-                    {
-                        pColl = rColls[ --n ];
-                        //nLvl = pColl->GetOutlineLevel();  //#outline level,zhaojianwei
-                        //USHORT nPoolId = pColl->GetPoolFmtId();
-                        //if( MAXLEVEL > nLvl && nMinLvl < nLvl &&      //<-end, ->add by zhaojianwei
-                        USHORT nPoolId = pColl->GetPoolFmtId();
-                        if( pColl->IsAssignedToListLevelOfOutlineStyle() &&
-                            nMinLvl < (nLvl = pColl->GetAssignedOutlineStyleLevel()) && //<-end,zhaojianwei
-                            ( RES_POOLCOLL_HEADLINE1 > nPoolId ||
-                              RES_POOLCOLL_HEADLINE9 < nPoolId ))
-                        {
-                            // If we are using the default heading styles then use nTOXLvl
-                            if(!nMinLvl)
-                                nLvl = nTOXLvl;
-                            else
-                                nLvl = nMinLvl < nTOXLvl ? nMinLvl : (BYTE)nTOXLvl;
-                            nMinLvl = nLvl;
-                        }
-                    }
+                    // --> OD 2009-02-27 #i99641#
+                    // The following code does not determine the minimum outline
+                    // level for the TOC
+//                    // Search over all the outline styles used and figure out
+//                    // what is the minimum outline level we need to display
+//                    // (ignoring headline styles 1-9)
+//                    //BYTE nLvl = 0, nMinLvl = 0; //#outline level, removed by zhaojianwei
+//                    int nLvl = 0, nMinLvl = 0;      //<-end,add by zhaojianwei
+//                    const SwTxtFmtColls& rColls = *pDoc->GetTxtFmtColls();
+//                    const SwTxtFmtColl* pColl;
+//                    for( n = rColls.Count(); n; )
+//                    {
+//                        pColl = rColls[ --n ];
+//                        //nLvl = pColl->GetOutlineLevel();    //#outline level,zhaojianwei
+//                        //USHORT nPoolId = pColl->GetPoolFmtId();
+//                        //if( MAXLEVEL > nLvl && nMinLvl < nLvl &&        //<-end, ->add by zhaojianwei
+//                        USHORT nPoolId = pColl->GetPoolFmtId();
+//                        if( pColl->IsAssignedToListLevelOfOutlineStyle() &&
+//                          nMinLvl < (nLvl = pColl->GetAssignedOutlineStyleLevel()) && //<-end,zhaojianwei
+//                            ( RES_POOLCOLL_HEADLINE1 > nPoolId ||
+//                              RES_POOLCOLL_HEADLINE9 < nPoolId ))
+//                        {
+//                            // If we are using the default heading styles then use nTOXLvl
+//                            if(!nMinLvl)
+//                                nLvl = nTOXLvl;
+//                            else
+//                                nLvl = nMinLvl < nTOXLvl ? nMinLvl : (BYTE)nTOXLvl;
+//                            nMinLvl = nLvl;
+//                        }
+//                    }
+                    const int nMinLvl = nTOXLvl;
 
-                    // --> OD 2008-12-19 #i70748#
-                    // Correction: in the above loop the <nMinLvl> is set != 0,
-                    // if a to outline style assigned paragraph style exists,
-                    // which does not belong to the default ones.
-                    // It has to be considered that the last checked
-                    // to outline style assigned paragraph style could have
-                    // assigned outline style level == 0.
-                    // Thus, check on and export of <nMinLvl> instead of <nLvl>.
 //                    if( nLvl )
                     if ( nMinLvl > 0 )
                     {
-                        int nTmpLvl = nMinLvl + 1;
+                        int nTmpLvl = nMinLvl;
                         if (nTmpLvl > WW8ListManager::nMaxLevel)
                             nTmpLvl = WW8ListManager::nMaxLevel;
 
@@ -2191,33 +2187,39 @@ void SwWW8Writer::StartTOX( const SwSection& rSect )
                     }
                     // <--
 
-                    // --> OD 2008-12-19 #i70748#
-                    // See above, checking <nLvl != nMinLvl> does not make sense.
-//                    if( nLvl != nMinLvl )
-                    if( nMinLvl > 0 )
-                    // <--
-                    {
-                        // collect this templates into the \t otion
-                        for( n = rColls.Count(); n;)
-                        {
-                            pColl = rColls[--n];
-                            //nLvl =  pColl->GetOutlineLevel();         //#outline level, removed by zhaojianwei
-                            //if (MAXLEVEL > nLvl && nMinLvl <= nLvl)
-                            //{                                         //<-end, ->add by zhaojianwei
-                            if( pColl->IsAssignedToListLevelOfOutlineStyle() &&
-                                nMinLvl <= ( nLvl = pColl->GetAssignedOutlineStyleLevel()))
-                            {                                           //<-end,zhaojianwei
-                                if( sTOption.Len() )
-                                    sTOption += ';';
-                                (( sTOption += pColl->GetName() ) += ';' )
-                                        += String::CreateFromInt32( nLvl + 1 );
-                            }
-                        }
-                    }
+                    // --> OD 2009-02-27 #i99641#
+                    // not needed to additional export paragraph style with
+                    // an outline level to the /t option
+//                    if( nMinLvl > 0 )
+//                    // <--
+//                    {
+//                        // collect this templates into the \t otion
+//                        const SwTxtFmtColls& rColls = *pDoc->GetTxtFmtColls();
+//                        const SwTxtFmtColl* pColl;
+//                        int nLvl = 0;
+//                        for( n = rColls.Count(); n;)
+//                        {
+//                            pColl = rColls[--n];
+//                            //nLvl =  pColl->GetOutlineLevel();         //#outline level, removed by zhaojianwei
+//                            //if (MAXLEVEL > nLvl && nMinLvl <= nLvl)
+//                            //{                                         //<-end, ->add by zhaojianwei
+//                            if( pColl->IsAssignedToListLevelOfOutlineStyle() &&
+//                                nMinLvl <= ( nLvl = pColl->GetAssignedOutlineStyleLevel()))
+//                            {                                           //<-end,zhaojianwei
+//                                if( sTOption.Len() )
+//                                    sTOption += ';';
+//                                (( sTOption += pColl->GetName() ) += ';' )
+//                                        += String::CreateFromInt32( nLvl + 1 );
+//                            }
+//                        }
+//                    }
                 }
 
                 if( nsSwTOXElement::TOX_TEMPLATE & pTOX->GetCreateType() )
-                    for( n = 0; n < nTOXLvl; ++n )
+                    // --> OD 2009-02-27 #i99641#
+                    // Consider additional styles regardless of TOX-outlinelevel
+                    for( n = 0; n < MAXLEVEL; ++n )
+                    // <--
                     {
                         const String& rStyles = pTOX->GetStyleNames( n );
                         if( rStyles.Len() )
