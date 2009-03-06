@@ -180,12 +180,6 @@ GENERATEDFILES= \
     $(TOKENXMLTMP) \
     $(TOKENXML)
 
-.IF "$(SYSTEM_LIBXSLT)"=="NO"
-XSLTPROC=$(SOLARVER)$/$(INPATH)$/bin$(UPDMINOREXT)$/xsltproc
-.ELSE
-XSLTPROC=xsltproc
-.ENDIF
-
 $(TOKENXMLTMP): $(SOLARVER)$/$(INPATH)$/inc$(UPDMINOREXT)$/oox$/token.txt
     $(TYPE) $(SOLARVER)$/$(INPATH)$/inc$(UPDMINOREXT)$/oox$/token.txt | $(SED) "s#\(.*\)#<fasttoken>\1</fasttoken>#" > $@
 
