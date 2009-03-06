@@ -116,7 +116,7 @@ CONFIGURE_FLAGS=
 # note the position of the single quotes.
 
 BUILD_DIR=$(CONFIGURE_DIR)
-BUILD_ACTION=$(GNUMAKE)
+BUILD_ACTION=$(AUGMENT_LIBRARY_PATH) $(GNUMAKE)
 OUT2LIB= \
     $(BUILD_DIR)$/lib$/libicudata$(DLLPOST).$(ICU_MAJOR)$(ICU_MINOR).$(ICU_MICRO) \
     $(BUILD_DIR)$/lib$/libicudata$(DLLPOST).$(ICU_MAJOR)$(ICU_MINOR) \
