@@ -97,7 +97,8 @@ EffectRewinder::EffectRewinder (
       mpAnimationStartHandler(),
       mnMainSequenceEffectCount(0),
       mpAsynchronousRewindEvent(),
-      mxCurrentAnimationRootNode()
+      mxCurrentAnimationRootNode(),
+      mbNonUserTriggeredMainSequenceEffectSeen(false)
 {
     initialize();
 }
@@ -341,14 +342,30 @@ bool EffectRewinder::notifyAnimationStart (const AnimationNodeSharedPtr& rpNode)
     // This notification is only relevant for us when the rpNode belongs to
     // the main sequence.
     BaseNodeSharedPtr pBaseNode (::boost::dynamic_pointer_cast<BaseNode>(rpNode));
-    if (pBaseNode)
+    if ( ! pBaseNode)
+        return false;
+
+    BaseContainerNodeSharedPtr pParent (pBaseNode->getParentNode());
+    if ( ! (pParent && pParent->isMainSequenceRootNode()))
+        return false;
+
+    // This notification is only relevant for us when the effect is user
+    // triggered.
+    bool bIsUserTriggered (false);
+
+    Reference<animations::XAnimationNode> xNode (rpNode->getXAnimationNode());
+    if (xNode.is())
     {
-        BaseContainerNodeSharedPtr pParent (pBaseNode->getParentNode());
-        if (pParent && pParent->isMainSequenceRootNode())
-        {
-            ++mnMainSequenceEffectCount;
-        }
+        animations::Event aEvent;
+        if ((xNode->getBegin() >>= aEvent))
+            bIsUserTriggered = (aEvent.Trigger == animations::EventTrigger::ON_NEXT);
     }
+
+    if (bIsUserTriggered)
+        ++mnMainSequenceEffectCount;
+    else
+        mbNonUserTriggeredMainSequenceEffectSeen = true;
+
     return false;
 }
 
@@ -379,7 +396,16 @@ void EffectRewinder::asynchronousRewind (
     }
     else
     {
+        // Process initial events and skip any animations that are started
+        // when the slide is shown.
+        mbNonUserTriggeredMainSequenceEffectSeen = false;
         mrEventQueue.forceEmpty();
+        if (mbNonUserTriggeredMainSequenceEffectSeen)
+        {
+            mrUserEventQueue.callSkipEffectEventHandler();
+            mrEventQueue.forceEmpty();
+        }
+
         while (--nEffectCount >= 0)
             skipSingleMainSequenceEffects();
 
@@ -399,6 +425,8 @@ void EffectRewinder::asynchronousRewindToPreviousSlide (
     mpAsynchronousRewindEvent.reset();
     rSlideRewindFunctor();
 }
+
+
 
 
 } } // end of namespace ::slideshow::internal

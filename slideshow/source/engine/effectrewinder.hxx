@@ -133,6 +133,8 @@ private:
     css::uno::Reference<css::animations::XAnimationNode> mxCurrentAnimationRootNode;
     ::boost::shared_ptr<ScreenUpdater::UpdateLock> mpPaintLock;
 
+    bool mbNonUserTriggeredMainSequenceEffectSeen;
+
     void initialize (void);
 
     bool resetEffectCount (void);
