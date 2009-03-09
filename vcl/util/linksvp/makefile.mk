@@ -46,7 +46,8 @@ LINKFLAGSRUNPATH_OOO := -R/usr/sfw/lib $(LINKFLAGSRUNPATH_OOO)
 .IF "$(GUIBASE)" == "unx"
 # headless plugin
 LIB1TARGET=$(SLB)$/isvpplug
-LIB1FILES= $(SLB)$/svpplug.lib
+LIB1FILES= $(SLB)$/svpplug.lib \
+           $(SLB)$/printergfx.lib
 SHL1TARGET=vclplug_svp$(DLLPOSTFIX)
 SHL1IMPLIB=isvpplug
 SHL1LIBS=$(LIB1TARGET)
