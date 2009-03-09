@@ -45,7 +45,7 @@ TARFILE_ROOTDIR=hunspell-1.2.8
 
 #ADDITIONAL_FILES += src/hunspell/makefile.mk
 
-PATCH_FILE_NAME=hunspell-1.2.8.patch
+PATCH_FILES=hunspell-1.2.8.patch
 
 .IF "$(GUI)"=="UNX"
 #CONFIGURE_DIR=$(BUILD_DIR)
