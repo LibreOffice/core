@@ -84,6 +84,7 @@ APP1TARGET=  transex3
 APP1OBJS=   $(OBJ)$/src_yy_wrapper.obj
 
 APP1STDLIBS+= \
+            $(BASEGFXLIB) $(UCBHELPERLIB) $(CPPULIB) $(COMPHELPERLIB) $(CPPUHELPERLIB) $(SALHELPERLIB) $(I18NISOLANGLIB)\
             $(TOOLSLIB) \
             $(VOSLIB) \
             $(SALLIB)
@@ -102,8 +103,8 @@ APP2RPATH= NONE
 .IF "$(OS)"!="MACOSX"
 .ENDIF
 
-APP2STDLIBS+=$(SALLIB) $(EXPATASCII3RDLIB) $(TOOLSLIB) $(VOSLIB)
-
+APP2STDLIBS+=$(SALLIB) $(EXPATASCII3RDLIB) $(TOOLSLIB) $(VOSLIB) \
+            $(BASEGFXLIB) $(UCBHELPERLIB) $(CPPULIB) $(COMPHELPERLIB) $(CPPUHELPERLIB) $(SALHELPERLIB) $(I18NISOLANGLIB)
 .IF "$(OS)"=="MACOSX"
 # static libs at end for OS X
 .ENDIF
@@ -118,6 +119,7 @@ APP3RPATH=  NONE
 .ENDIF
 APP3STDLIBS+= \
             $(TOOLSLIB) \
+            $(BASEGFXLIB) $(UCBHELPERLIB) $(CPPULIB) $(COMPHELPERLIB) $(CPPUHELPERLIB) $(SALHELPERLIB) $(I18NISOLANGLIB) \
             $(VOSLIB) \
             $(SALLIB)
 .IF "$(OS)"=="MACOSX"
@@ -129,6 +131,7 @@ APP4TARGET= gsiconv
 APP4OBJS=   $(OBJ)$/utf8conv.obj $(OBJ)$/gsiconv.obj
 APP4STDLIBS+= \
             $(TOOLSLIB) \
+            $(BASEGFXLIB) $(UCBHELPERLIB) $(CPPULIB) $(COMPHELPERLIB) $(CPPUHELPERLIB) $(SALHELPERLIB) $(I18NISOLANGLIB) \
             $(VOSLIB) \
             $(SALLIB)
 
@@ -137,6 +140,7 @@ APP5TARGET= gsicheck
 APP5OBJS=   $(OBJ)$/gsicheck.obj $(OBJ)$/tagtest.obj
 APP5STDLIBS+= \
             $(TOOLSLIB) \
+            $(BASEGFXLIB) $(UCBHELPERLIB) $(CPPULIB) $(COMPHELPERLIB) $(CPPUHELPERLIB) $(SALHELPERLIB) $(I18NISOLANGLIB) \
             $(VOSLIB) \
             $(SALLIB)
 
@@ -150,6 +154,7 @@ APP6OBJS=   $(OBJ)$/cfgmerge.obj $(OBJ)$/cfg_yy_wrapper.obj $(OBJ)$/hw2fw.obj $(
 
 APP6STDLIBS+= \
             $(TOOLSLIB) \
+            $(BASEGFXLIB) $(UCBHELPERLIB) $(CPPULIB) $(COMPHELPERLIB) $(CPPUHELPERLIB) $(SALHELPERLIB) $(I18NISOLANGLIB) \
             $(VOSLIB) \
             $(SALLIB)
 
@@ -167,6 +172,7 @@ APP7RPATH=  NONE
 
 APP7STDLIBS+= \
             $(TOOLSLIB) \
+            $(BASEGFXLIB) $(UCBHELPERLIB) $(CPPULIB) $(COMPHELPERLIB) $(CPPUHELPERLIB) $(SALHELPERLIB) $(I18NISOLANGLIB) \
             $(VOSLIB) \
             $(SALLIB)
 
@@ -178,7 +184,8 @@ APP7STDLIBS+= \
 APP8TARGET= txtconv
 #APP8STACK=  16000
 APP8OBJS=   $(OBJ)$/utf8conv.obj $(OBJ)$/txtconv.obj $(OBJ)$/hw2fw.obj
-APP8STDLIBS=$(TOOLSLIB) $(SALLIB)
+APP8STDLIBS=$(TOOLSLIB) $(SALLIB) $(VOSLIB) \
+            $(BASEGFXLIB) $(UCBHELPERLIB) $(CPPULIB) $(COMPHELPERLIB) $(CPPUHELPERLIB) $(SALHELPERLIB) $(I18NISOLANGLIB)
 
 # localizer for l10n framework
 APP9TARGET= localize_sl
@@ -187,6 +194,7 @@ EXCEPTIONSFILES=                            \
 APP9OBJS=   $(OBJ)$/localize.obj $(OBJ)$/utf8conv.obj $(OBJ)$/srciter.obj $(OBJ)$/export2.obj $(OBJ)$/file.obj $(OBJ)$/directory.obj
 
 APP9STDLIBS+= \
+            $(BASEGFXLIB) $(UCBHELPERLIB) $(CPPULIB) $(COMPHELPERLIB) $(CPPUHELPERLIB) $(SALHELPERLIB) $(I18NISOLANGLIB) \
             $(TOOLSLIB) \
             $(VOSLIB) \
             $(SALLIB)
