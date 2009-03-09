@@ -45,7 +45,7 @@ VERSION=-1.3.0
 
 TARFILE_NAME=$(TARGET)
 TARFILE_ROOTDIR=$(TARGET)
-# PATCH_FILE_NAME=$(PRJ)$/patches$/$(TARGET).patch
+# PATCH_FILES=$(PRJ)$/patches$/$(TARGET).patch
 # CONVERTFILES=build.xml		 
 
 

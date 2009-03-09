@@ -45,7 +45,7 @@ VERSION=-1.0.0
 TARFILE_NAME=$(TARGET)
 TARFILE_ROOTDIR=$(TARGET)
 
-# PATCH_FILE_NAME=$(PRJ)$/patches$/libbase.patch
+# PATCH_FILES=$(PRJ)$/patches$/libbase.patch
 # CONVERTFILES=build.xml
 
 .IF "$(JAVACISGCJ)"=="yes"
