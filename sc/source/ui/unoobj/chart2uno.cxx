@@ -2803,7 +2803,9 @@ void ScChart2DataSequence::BuildDataCache()
                                     rItem.mbIsValue = true;
                             }
                             break;
+#if DBG_UTIL
                             case CELLTYPE_DESTROYED:
+#endif
                             case CELLTYPE_EDIT:
                             case CELLTYPE_NONE:
                             case CELLTYPE_NOTE:
