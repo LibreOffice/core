@@ -46,7 +46,7 @@ FunctionManager::FunctionManager(const uno::Reference< report::meta::XFunctionMa
 FunctionManager::~FunctionManager()
 {
 }
-const sal_Unicode FunctionManager::getSingleToken(const formula::IFunctionManager::EToken _eToken) const
+sal_Unicode FunctionManager::getSingleToken(const formula::IFunctionManager::EToken _eToken) const
 {
     switch(_eToken)
     {
