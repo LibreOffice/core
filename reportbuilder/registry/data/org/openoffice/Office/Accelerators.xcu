@@ -28,11 +28,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************ -->
-<oor:component-data
-    xmlns:oor="http://openoffice.org/2001/registry"
-    xmlns:xs="http://www.w3.org/2001/XMLSchema"
-    oor:package="org.openoffice.Office"
-    oor:name="Accelerators">
+<oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" oor:package="org.openoffice.Office" oor:name="Accelerators">
 
   <node oor:name="PrimaryKeys">
     <node oor:name="Modules">
