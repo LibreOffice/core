@@ -51,7 +51,7 @@ PATCH_FILE_NAME=hunspell-1.2.8.patch
 #CONFIGURE_DIR=$(BUILD_DIR)
 
 #relative to CONFIGURE_DIR
-CONFIGURE_ACTION=configure
+CONFIGURE_ACTION=$(AUGMENT_LIBRARY_PATH) configure
 CONFIGURE_FLAGS= --disable-shared --with-pic
 .IF "$(COMNAME)"=="sunpro5"
 CONFIGURE_FLAGS+= CFLAGS=-xc99=none
