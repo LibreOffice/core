@@ -711,6 +711,7 @@ sal_uInt16 XclImpChSourceLink::GetCellCount() const
                               static_cast<sal_uInt32>(nTab+1);
             }
             break;
+            default: ;
         }
     }
     return limit_cast<sal_uInt16>(nCellCount);
