@@ -2656,7 +2656,7 @@ static ::rtl::OUString lcl_convertIntoHalfWidth( const ::rtl::OUString & rStr )
         bFirstASCCall = false;
     }
 
-    return aTrans.transliterate( rStr, 0, rStr.getLength(), NULL );
+    return aTrans.transliterate( rStr, 0, USHORT( rStr.getLength() ), NULL );
 }
 
 
@@ -2671,7 +2671,7 @@ static ::rtl::OUString lcl_convertIntoFullWidth( const ::rtl::OUString & rStr )
         bFirstJISCall = false;
     }
 
-    return aTrans.transliterate( rStr, 0, rStr.getLength(), NULL );
+    return aTrans.transliterate( rStr, 0, USHORT( rStr.getLength() ), NULL );
 }
 
 
