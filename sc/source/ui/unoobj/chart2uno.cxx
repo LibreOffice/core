@@ -1890,6 +1890,8 @@ bool ScChart2DataProvider::addUpperLeftCornerIfMissing(vector<ScSharedTokenRef>&
                     bDiagonal = true;
             }
             break;
+            default:
+                ;
         }
     }
 
