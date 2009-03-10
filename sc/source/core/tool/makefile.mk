@@ -118,6 +118,7 @@ EXCEPTIONSFILES= \
         $(SLO)$/addincol.obj \
         $(SLO)$/cellkeytranslator.obj \
         $(SLO)$/chartarr.obj \
+        $(SLO)$/chartlis.obj \
         $(SLO)$/chartlock.obj \
         $(SLO)$/chgtrack.obj \
         $(SLO)$/compiler.obj \

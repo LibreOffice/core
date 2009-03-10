@@ -115,7 +115,6 @@ bool ScRefTokenHelper::getRangeFromToken(ScRange& rRange, const ScSharedTokenRef
             rRange.aEnd = rRange.aStart;
             return true;
         }
-        break;
         case svDoubleRef:
         case svExternalDoubleRef:
         {
@@ -132,7 +131,6 @@ bool ScRefTokenHelper::getRangeFromToken(ScRange& rRange, const ScSharedTokenRef
             rRange.aEnd.SetTab(rRefData.Ref2.nTab);
             return true;
         }
-        break;
         default:
             ; // do nothing
     }
