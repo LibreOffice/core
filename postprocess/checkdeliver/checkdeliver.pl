@@ -181,8 +181,9 @@ sub check
     open( DELIVERLOG, "< $listname" ) or die( "Error: cannot open file \'$listname\'\n$!");
     foreach ( <DELIVERLOG> ) {
         next if ( /^LINK / );
-        # For now we concentrate on binaries, located in 'bin' or 'lib'.
-        next if ( ! / $module\/$platform\/[bl]i[nb]\// );
+        # For now we concentrate on binaries, located in 'bin' or 'lib' and 'misc/build/<...>/[bin|lib]'.
+        next if ( (! / $module\/$platform\/[bl]i[nb]\//) && (! / $module\/$platform\/misc\/build\//));
+        next if (! /[bl]i[nb]/);
         next if ( /\.html$/ );
         chomp;
         if ( /^\w+? (\S+) (\S+)\s*$/o ) {
@@ -287,3 +288,4 @@ sub usage
 
     exit $retval;
 }
+
