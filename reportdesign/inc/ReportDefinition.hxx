@@ -31,6 +31,7 @@
 #ifndef REPORTDESIGN_API_REPORTDEFINITION_HXX
 #define REPORTDESIGN_API_REPORTDEFINITION_HXX
 
+#include "dllapi.h"
 #include <com/sun/star/report/XReportDefinition.hpp>
 #include <cppuhelper/compbase11.hxx>
 #include <cppuhelper/basemutex.hxx>
@@ -49,7 +50,7 @@
 #include <com/sun/star/frame/XModule.hpp>
 #include "ReportHelperDefines.hxx"
 #include <boost/shared_ptr.hpp>
-#include "dllapi.h"
+
 
 namespace rptui
 {

@@ -34,6 +34,8 @@ PRJINC=$(PRJ)$/source
 PRJNAME=reportdesign
 TARGET=ui_inspection
 ENABLE_EXCEPTIONS=TRUE
+VISIBILITY_HIDDEN=TRUE
+
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk

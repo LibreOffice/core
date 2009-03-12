@@ -34,9 +34,12 @@ PRJINC=$(PRJ)$/source
 PRJNAME=reportdesign
 TARGET=uimisc
 
+VISIBILITY_HIDDEN=TRUE
+
 # --- Settings ----------------------------------
 
 .INCLUDE : settings.mk
+# .INCLUDE : $(PRJ)$/util$/dll.pmk
 
 # --- Files -------------------------------------
 

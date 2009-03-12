@@ -31,12 +31,13 @@
 #ifndef _REPORT_RPTUIDEF_HXX
 #define _REPORT_RPTUIDEF_HXX
 
+#include "dllapi.h"
 #include <tools/solar.h>
 #include <svx/svdobj.hxx>
 #include <comphelper/stl_types.hxx>
 #include <comphelper/uno3.hxx>
 #include <svx/fmglob.hxx>
-#include "dllapi.h"
+
 
 FORWARD_DECLARE_INTERFACE(report,XReportComponent)
 FORWARD_DECLARE_INTERFACE(report,XReportDefinition)

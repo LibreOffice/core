@@ -30,10 +30,10 @@
 #ifndef _REPORT_RPTUIPAGE_HXX
 #define _REPORT_RPTUIPAGE_HXX
 
+#include "dllapi.h"
 #include "svx/svdpage.hxx"
 #include <com/sun/star/report/XReportComponent.hpp>
 #include <com/sun/star/report/XSection.hpp>
-#include "dllapi.h"
 
 namespace rptui
 {

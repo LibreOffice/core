@@ -35,10 +35,13 @@ PRJNAME=reportdesign
 TARGET=report
 
 ENABLE_EXCEPTIONS=TRUE
+VISIBILITY_HIDDEN=TRUE
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+# .INCLUDE : $(PRJ)$/util$/dll.pmk
+
 IMGLST_SRS=$(SRS)$/$(TARGET).srs
 # --- Files --------------------------------------------------------
 

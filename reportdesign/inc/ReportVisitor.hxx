@@ -30,8 +30,9 @@
 #ifndef INCLUDED_REPORT_VISTITOR_HXX
 #define INCLUDED_REPORT_VISTITOR_HXX
 
-#include <com/sun/star/report/XReportDefinition.hpp>
 #include "dllapi.h"
+#include <com/sun/star/report/XReportDefinition.hpp>
+
 
 namespace reportdesign
 {

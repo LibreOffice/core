@@ -31,9 +31,10 @@
 #ifndef _RPTUI_MODULE_HELPER_RPT_HXX_
 #define _RPTUI_MODULE_HELPER_RPT_HXX_
 
+#include "dllapi.h"
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <tools/resmgr.hxx>
-#include "dllapi.h"
+
 //.........................................................................
 namespace rptui
 {
@@ -79,8 +80,8 @@ namespace rptui
     class REPORTDESIGN_DLLPUBLIC OModuleClient
     {
     public:
-        OModuleClient()     { OModule::registerClient(); }
-        ~OModuleClient()    { OModule::revokeClient(); }
+        inline OModuleClient()      { OModule::registerClient(); }
+        inline ~OModuleClient() { OModule::revokeClient(); }
     };
 
     //=========================================================================
@@ -91,7 +92,7 @@ namespace rptui
     class REPORTDESIGN_DLLPUBLIC ModuleRes : public ::ResId
     {
     public:
-        ModuleRes(USHORT _nId) : ResId(_nId, *OModule::getResManager()) { }
+        inline ModuleRes(USHORT _nId) : ResId(_nId, *OModule::getResManager()) { }
     };
 //.........................................................................
 }   // namespace rptui

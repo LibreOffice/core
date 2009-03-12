@@ -30,13 +30,14 @@
 #ifndef RPTUI_PROPERTYSETFORWARD_HXX
 #define RPTUI_PROPERTYSETFORWARD_HXX
 
+#include "dllapi.h"
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <cppuhelper/compbase1.hxx>
 #include "cppuhelper/basemutex.hxx"
 #include "RptDef.hxx"
-#include "dllapi.h"
+
 
 //........................................................................
 namespace rptui

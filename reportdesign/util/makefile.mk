@@ -69,6 +69,7 @@ SHL1STDLIBS= \
         $(TKLIB)				\
         $(VOSLIB)				\
         $(SALLIB)
+
 .IF "$(GUI)"!="WNT" || "$(COM)"=="GCC"
 SHL1STDLIBS+= \
         -ldbu$(DLLPOSTFIX)

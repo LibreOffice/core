@@ -29,9 +29,11 @@
  ************************************************************************/
 #ifndef REPORT_RPTMODEL_HXX
 #define REPORT_RPTMODEL_HXX
+
+#include "dllapi.h"
 #include <svx/svdmodel.hxx>
 #include <com/sun/star/report/XReportDefinition.hpp>
-#include "dllapi.h"
+
 
 class Window;
 namespace dbaui
