@@ -117,6 +117,8 @@ OUT2BIN+=xsltproc$/.libs$/xsltproc
 OUT2BIN+=xslt-config
 .ELIF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"
+OUT2LIB+=libxslt$/.libs$/*.a
+OUT2LIB+=libexslt$/.libs$/*.a
 OUT2BIN+=libxslt$/.libs$/*.dll
 OUT2BIN+=libexslt$/.libs$/*.dll
 OUT2BIN+=xsltproc$/.libs$/*.exe*
