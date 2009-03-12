@@ -40,7 +40,6 @@
 #include <comphelper/sequenceasvector.hxx>
 #include <osl/file.hxx>
 #include <osl/mutex.hxx>
-#include <Guiddef.h>
 
  inline bool is_current_process_window(HWND hwnd)
 {
