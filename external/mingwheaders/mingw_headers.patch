@@ -296,7 +296,7 @@
  }
  #endif
 --- include/objidl.h.orig	2006-11-19 08:08:34.000000000 +0900
-+++ include/objidl.h	2007-01-20 11:56:53.875000000 +0900
++++ include/objidl.h	2008-11-30 11:56:53.875000000 +0900
 @@ -1,3 +1,4 @@
 +#include <ole2.h>
  #ifndef _OBJIDL_H
@@ -345,6 +345,17 @@
  DECLARE_ENUMERATOR(STATSTG);
  DECLARE_ENUMERATOR_(IEnumString,LPOLESTR);
  DECLARE_ENUMERATOR_(IEnumMoniker,_COM_interface IMoniker*);
+@@ -880,8 +887,8 @@
+ 	STDMETHOD(QueryInterface)(THIS_ REFIID,PVOID*) PURE;
+ 	STDMETHOD_(ULONG,AddRef)(THIS) PURE;
+ 	STDMETHOD_(ULONG,Release)(THIS) PURE;
+-	STDMETHOD(AddConnection)(THIS_ DWORD,DWORD) PURE;
+-	STDMETHOD(ReleaseConnection)(THIS_ DWORD,DWORD,BOOL) PURE;
++	STDMETHOD_(DWORD,AddConnection)(THIS_ DWORD,DWORD) PURE;
++	STDMETHOD_(DWORD,ReleaseConnection)(THIS_ DWORD,DWORD,BOOL) PURE;
+ };
+ #undef INTERFACE
+ 
 @@ -927,6 +934,7 @@
  };
  #undef INTERFACE

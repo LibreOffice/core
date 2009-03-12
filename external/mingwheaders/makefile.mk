@@ -39,7 +39,7 @@ TARGET=mingwheaders
 
 # Cygwin and MinGW use different directories for the W32API headers
 .IF "$(USE_MINGW)" == "cygwin"
-MINGW_INCLUDE_DIR=$/usr$/include/mingw/include/
+MINGW_INCLUDE_DIR=$/usr$/include/mingw/
 MINGW_W32API_INCLUDE_DIR=$/usr$/include/w32api/
 MINGW_W32API_LIB_DIR=$/usr$/include/w32api/
 .ELSE

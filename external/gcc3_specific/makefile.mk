@@ -8,6 +8,20 @@ TARGET=gcc3_specific
 
 
 .IF "$(BUILD_SPECIAL)"==""
+
+.IF "$(GUI)" == "WNT"
+
+.IF "$(COM)" == "GCC"
+
+all : $(BIN)$/mingwm10.dll
+
+$(BIN)$/mingwm10.dll :
+    $(COPY) -p $(COMPATH)$/bin$/mingwm10.dll $(BIN)$/
+
+.ENDIF
+
+.ELSE
+
 .IF "$(SYSTEM_STDLIBS)" != "YES" && "$(COMID)"=="gcc3"
 
 .IF "$(OS)"!="MACOSX"
@@ -28,6 +42,8 @@ $(LB)$/libgcc_s.so.1 :
 .ENDIF
 .ENDIF 
 .ENDIF 
+
+.ENDIF
 
 .ENDIF
 .ENDIF			# "$(BUILD_SPECIAL)"==""

@@ -153,6 +153,7 @@ OUTDIR2INC=include$/xmlsec
 
 .IF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"
+OUT2LIB+=src$/.libs$/libxmlsec1.dll.a src$/nss$/.libs$/libxmlsec1-nss.dll.a src$/mscrypto$/.libs$/libxmlsec1-mscrypto.dll.a
 OUT2BIN+=src$/.libs$/libxmlsec1-1.dll src$/nss$/.libs$/libxmlsec1-nss-1.dll src$/mscrypto$/.libs$/libxmlsec1-mscrypto-1.dll
 .ELSE
 OUT2LIB+=win32$/binaries$/*.lib

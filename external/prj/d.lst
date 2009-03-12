@@ -57,7 +57,7 @@ mkdir: %_DEST%\inc%_EXT%\external\mingw\include\sys
 ..\msi\instmsia.exe %_DEST%\bin%_EXT%\instmsia.exe
 ..\msi\instmsiw.exe %_DEST%\bin%_EXT%\instmsiw.exe
 
-..\mingwm10\mingwm10.dll %_DEST%\bin%_EXT%\mingwm10.dll
+..\%__SRC%\bin\mingwm10.dll %_DEST%\bin%_EXT%\mingwm10.dll
 ..\%__SRC%\lib\libmsvcrt*.* %_DEST%\lib%_EXT%\lib*.*
 
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
