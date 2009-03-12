@@ -6416,7 +6416,7 @@ fi
 
 
 if test "$_os" = "WINNT"; then
-if test "$COMEX" -ge "10"; then
+if test "$WITH_MINGWIN" = "yes" || test "$COMEX" -ge "10"; then
 		# Extract the first word of "midl.exe", so it can be a program name with args.
 set dummy midl.exe; ac_word=$2
 { echo "$as_me:$LINENO: checking for $ac_word" >&5
@@ -23964,7 +23964,7 @@ may have to search Microsoft's website.) Last time it was seen at:
    fi
 fi
 
-if test "$_os" = "WINNT"; then
+if test "$_os" = "WINNT" -a "$WITH_MINGWIN" != "yes"; then
        if ./oowintool --msvc-copy-dlls ./external/msvcp ; then
           :
        else
@@ -23998,7 +23998,7 @@ if test "$_os" = "WINNT"; then
 fi
 
 if test "$_os" = "WINNT"; then
-   if test "$COMEX" -ge "10"; then
+   if test  "$WITH_MINGWIN" = "yes" || test "$COMEX" -ge "10"; then
    { echo "$as_me:$LINENO: checking for instmsia.exe/instmsiw.exe" >&5
 echo $ECHO_N "checking for instmsia.exe/instmsiw.exe... $ECHO_C" >&6; }
    if test -x ./external/msi/instmsia.exe -a -x ./external/msi/instmsiw.exe; then

@@ -1477,8 +1477,7 @@ elsif ($platform =~ m/cygwin/)
    elsif ( $COM eq "GCC" )
    {  $SOLARINC       .= $I.'$SOLARVER'.$ds.'$INPATH'.$INC.$ds."external".$ds."mingw".$ds."include";
      if ( $USE_MINGW eq "cygwin" )
-     {  $SOLARINC    .= $I.PathFormat($USR.$ds."include".$ds."mingw".$ds."include").
-                        $I.PathFormat($USR.$ds."include".$ds."mingw").
+     {  $SOLARINC    .= $I.PathFormat($USR.$ds."include".$ds."mingw").
                         $I.PathFormat($USR.$ds."include".$ds."w32api").
                         $I.PathFormat($USR.$ds."include"); }
      else

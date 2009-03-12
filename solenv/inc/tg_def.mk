@@ -57,19 +57,16 @@ $(DEF$(TNR)EXPORTFILE) : $(SHL$(TNR)OBJS) $(SHL$(TNR)LIBS)
 $(DEF$(TNR)EXPORTFILE) : $(SHL$(TNR)VERSIONMAP)
     $(TYPE) $< | $(AWK) -f $(SOLARENV)$/bin$/getcsym.awk > $@
 .IF "$(COM)"=="GCC"
-    -grep -v "\*\|?" $@ > $@.exported-symbols
-    -grep "\*\|?" $@ > $@.symbols-regexp
+    -$(GREP) -v "\*\|?" $@ | $(SED) -e 's@#.*@@' > $@.exported-symbols
+    -$(GREP) "\*\|?" $@ > $@.symbols-regexp
 # Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
 # Extract RTTI symbols from all the objects that will be used to build a shared library
-.IF "$(SHL$(TNR)OBJS)"!=""
-    -echo $(foreach,i,$(SHL$(TNR)OBJS) $i) | xargs -n1 nm -gP | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
-.ENDIF
-.IF "$(SHL$(TNR)LIBS)"!=""
-    -$(TYPE) $(foreach,j,$(SHL$(TNR)LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gP | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
-.ENDIF
+    nm -gP $(SHL$(TNR)OBJS) \
+        `$(TYPE) /dev/null $(foreach,j,$(SHL$(TNR)LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
+        | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp @.symbols-regexp.tmp >> $@.exported-symbols
 # overwrite the map file generate into the local output tree with the generated
 # exported symbols list
-    cp $@.exported-symbols $@
+    $(RENAME) $@.exported-symbols $@
 .ENDIF # .IF "$(COM)"=="GCC"
 
 .ENDIF			# "$(GUI)"=="WNT"
@@ -108,8 +105,10 @@ $(DEF$(TNR)TARGETN) .PHONY :
     @echo HEAPSIZE	  0 											>>$@.tmpfile
 .ENDIF
     @echo EXPORTS													>>$@.tmpfile
+.IF "$(VERSIONOBJ)"!=""
 #	getversioninfo fuer alle!!
     @echo GetVersionInfo		>>$@.tmpfile
+.ENDIF
 .IF "$(DEFLIB$(TNR)NAME)"!=""
 .IF "$(COM)"=="GCC"
     @-$(RM) $(MISC)$/$(SHL$(TNR)TARGET).exp
@@ -223,8 +222,10 @@ $(DEF$(TNR)TARGETN) .PHONY :
     @echo DATA MULTIPLE	 >>$@.tmpfile
     @echo DESCRIPTION	'StarView 3.00 $(DEF$(TNR)DES) $(UPD) $(UPDMINOR)' >>$@.tmpfile
     @echo EXPORTS													>>$@.tmpfile
+.IF "$(VERSIONOBJ)"!=""
 #	getversioninfo fuer alle!!
     @echo _GetVersionInfo		>$@.tmp_ord
+.ENDIF
 
 .IF "$(DEFLIB$(TNR)NAME)"!=""
     @+echo $(SLB)$/$(DEFLIB$(TNR)NAME).lib

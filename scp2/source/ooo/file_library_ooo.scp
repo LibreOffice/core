@@ -602,7 +602,11 @@ File gid_File_Lib_Cairo
        Name = STRING(CONCAT3(libcairo,UNXSUFFIX,.2));
     #endif
   #elif defined(WNT)
-    Name = "cairo.dll";
+    #ifdef _gcc3
+       Name = "libcairo-2.dll";
+    #else
+       Name = "cairo.dll";
+    #endif
   #endif
 End
 

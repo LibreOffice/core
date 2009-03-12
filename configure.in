@@ -1758,7 +1758,7 @@ dnl ===================================================================
 dnl  .NET needs special treatment
 dnl ===================================================================
 if test "$_os" = "WINNT"; then
-if test "$COMEX" -ge "10"; then
+if test "$WITH_MINGWIN" = "yes" || test "$COMEX" -ge "10"; then
 	dnl Check midl.exe
 	AC_PATH_PROG(MIDL_PATH, midl.exe)
 	if test -n "$MIDL_PATH";then
@@ -5067,7 +5067,7 @@ fi
 dnl ===================================================================
 dnl Windows builds - use oowintool to copy CRT dlls and manifest
 dnl ===================================================================
-if test "$_os" = "WINNT"; then
+if test "$_os" = "WINNT" -a "$WITH_MINGWIN" != "yes"; then
        if ./oowintool --msvc-copy-dlls ./external/msvcp ; then
           :
        else
@@ -5101,7 +5101,7 @@ dnl ===================================================================
 dnl Windows builds with VS 2003/2005/2008 need instmsia.exe and instmsiw.exe in external/msi
 dnl ===================================================================
 if test "$_os" = "WINNT"; then
-   if test "$COMEX" -ge "10"; then
+   if test  "$WITH_MINGWIN" = "yes" || test "$COMEX" -ge "10"; then
    AC_MSG_CHECKING([for instmsia.exe/instmsiw.exe])
    if test -x ./external/msi/instmsia.exe -a -x ./external/msi/instmsiw.exe; then
       AC_MSG_RESULT([found])
