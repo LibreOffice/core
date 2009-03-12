@@ -858,20 +858,24 @@ sub set_patch_state
     {
         $infoline = "\nPatch state: This is a patched version of epm!\n\n";
         push( @installer::globals::logfileinfo, $infoline);
-        $installer::globals::postprocess_specialepm = 1;
-        $installer::globals::postprocess_standardepm = 0;
     }
     else
     {
         $infoline = "\nPatch state: This is an unpatched version of epm!\n\n";
         push( @installer::globals::logfileinfo, $infoline);
-        $installer::globals::postprocess_specialepm = 0;
-        if (($installer::globals::islinuxrpmbuild) || ($installer::globals::issolarispkgbuild) || ($installer::globals::debian))
-        {
-            $installer::globals::postprocess_standardepm = 1;
-        }
     }
 
+    if ( ( $installer::globals::is_special_epm ) && (($installer::globals::islinuxrpmbuild) || ($installer::globals::issolarispkgbuild)) )
+    {
+        # Special postprocess handling only for Linux RPM and Solaris packages
+        $installer::globals::postprocess_specialepm = 1;
+        $installer::globals::postprocess_standardepm = 0;
+    }
+    else
+    {
+        $installer::globals::postprocess_specialepm = 0;
+        $installer::globals::postprocess_standardepm = 1;
+    }
 }
 
 #################################################
