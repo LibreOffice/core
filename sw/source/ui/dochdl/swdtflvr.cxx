@@ -183,8 +183,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::datatransfer;
 using namespace nsTransferBufferType;
 
-#ifdef DDE_AVAILABLE
-
 #define DDE_TXT_ENCODING    gsl_getSystemTextEncoding()
 
 //---------------------------------------------
@@ -233,8 +231,6 @@ public:
 
     void Disconnect( BOOL bRemoveDataAdvise );
 };
-
-#endif
 
 // helper class for Action and Undo enclosing
 class SwTrnsfrActionAndUndo
@@ -298,14 +294,12 @@ SwTransferable::~SwTransferable()
 {
     Application::GetSolarMutex().acquire();
 
-#ifdef DDE_AVAILABLE
     // der DDELink braucht noch die WrtShell!
     if( refDdeLink.Is() )
     {
         ((SwTrnsfrDdeLink*)&refDdeLink)->Disconnect( TRUE );
         refDdeLink.Clear();
     }
-#endif
 
     pWrtShell = 0;
 
@@ -545,13 +539,12 @@ sal_Bool SwTransferable::GetData( const DATA_FLAVOR& rFlavor )
     {
         switch( nFormat )
         {
-#ifdef DDE_AVAILABLE
         case SOT_FORMATSTR_ID_LINK:
             if( refDdeLink.Is() )
                 bOK = SetObject( &refDdeLink,
                                     SWTRANSFER_OBJECTTYPE_DDE, rFlavor );
             break;
-#endif
+
         case SOT_FORMATSTR_ID_OBJECTDESCRIPTOR:
         case SOT_FORMATSTR_ID_LINKSRCDESCRIPTOR:
             bOK = SetTransferableObjectDescriptor( aObjDesc, rFlavor );
@@ -734,7 +727,6 @@ sal_Bool SwTransferable::WriteObject( SotStorageStreamRef& xStream,
 
 
     case SWTRANSFER_OBJECTTYPE_DDE:
-#ifdef DDE_AVAILABLE
         {
             xStream->SetBufferSize( 1024 );
             SwTrnsfrDdeLink* pDdeLnk = (SwTrnsfrDdeLink*)pObject;
@@ -744,7 +736,6 @@ sal_Bool SwTransferable::WriteObject( SotStorageStreamRef& xStream,
                 bRet = ERRCODE_NONE == xStream->GetError();
             }
         }
-#endif
         break;
 
     case SWTRANSFER_OBJECTTYPE_HTML:
@@ -891,7 +882,6 @@ int SwTransferable::PrepareForCopy( BOOL bIsCut )
         pTmpDoc->LockExpFlds();     // nie die Felder updaten - Text so belassen
         pWrtShell->Copy( pTmpDoc );
 
-#ifdef DDE_AVAILABLE
         {
             // remove all DDE-Bookmarks, they are invalid inside the clipdoc!
             const SwBookmarks& rBkmk = pTmpDoc->getBookmarks();
@@ -899,7 +889,6 @@ int SwTransferable::PrepareForCopy( BOOL bIsCut )
                 if( IDocumentBookmarkAccess::DDE_BOOKMARK == rBkmk[ --n ]->GetType() )
                     pTmpDoc->deleteBookmark( n );
         }
-#endif
 
         // es wurde in der CORE eine neu angelegt (OLE-Objekte kopiert!)
         if( aDocShellRef.Is() )
@@ -967,7 +956,6 @@ int SwTransferable::PrepareForCopy( BOOL bIsCut )
             }
         }
 
-#ifdef DDE_AVAILABLE
         // beim Cut hat DDE-Link keinen Sinn!!
         SwDocShell* pDShell;
         if( !bIsCut && bDDELink &&
@@ -977,7 +965,7 @@ int SwTransferable::PrepareForCopy( BOOL bIsCut )
             AddFormat( SOT_FORMATSTR_ID_LINK );
             refDdeLink = new SwTrnsfrDdeLink( *this, *pWrtShell );
         }
-#endif
+
         //ObjectDescriptor wurde bereits aus der alten DocShell gefuellt.
         //Jetzt noch anpassen. Dadurch kann im GetData die erste Anfrage
         //auch noch mit delayed rendering beantwortet werden.
@@ -1455,12 +1443,10 @@ ASSERT( pPt, "EXCHG_OUT_ACTION_MOVE_PRIVATE: was soll hier passieren?" );
             break;
 
         case EXCHG_OUT_ACTION_INSERT_DDE:
-#ifdef DDE_AVAILABLE
             {
                 BOOL bReRead = 0 != CNT_HasGrf( rSh.GetCntType() );
                 nRet = SwTransferable::_PasteDDE( rData, rSh, bReRead, bMsg );
             }
-#endif
             break;
 
         case EXCHG_OUT_ACTION_INSERT_HYPERLINK:
@@ -2106,7 +2092,6 @@ int SwTransferable::_PasteDDE( TransferableDataHelper& rData,
                                 SwWrtShell& rWrtShell, BOOL bReReadGrf,
                                 BOOL bMsg )
 {
-#ifdef DDE_AVAILABLE
     // Daten aus dem Clipboardformat
     String aApp, aTopic, aItem;
 
@@ -2265,9 +2250,6 @@ int SwTransferable::_PasteDDE( TransferableDataHelper& rData,
     }
 
     return 1;
-#else
-    return 0;
-#endif
 }
 
 // -----------------------------------------------------------------------
@@ -2953,12 +2935,8 @@ int SwTransferable::PasteSpecial( SwWrtShell& rSh, TransferableDataHelper& rData
             pDlg->Insert( SOT_FORMATSTR_ID_LINK_SOURCE, aEmptyStr );
     }
 
-#ifdef DDE_AVAILABLE
-
     if( SwTransferable::_TestAllowedFormat( rData, SOT_FORMATSTR_ID_LINK, nDest ))
         pDlg->Insert( SOT_FORMATSTR_ID_LINK, SW_RES(STR_DDEFORMAT) );
-
-#endif
 
     for( USHORT* pIds = aPasteSpecialIds; *pIds; ++pIds )
         if( SwTransferable::_TestAllowedFormat( rData, *pIds, nDest ))
@@ -3021,12 +2999,8 @@ void SwTransferable::FillClipFmtItem( const SwWrtShell& rSh,
         }
     }
 
-#ifdef DDE_AVAILABLE
-
     if( SwTransferable::_TestAllowedFormat( rData, SOT_FORMATSTR_ID_LINK, nDest ))
         rToFill.AddClipbrdFormat( SOT_FORMATSTR_ID_LINK, SW_RES(STR_DDEFORMAT) );
-
-#endif
 
     for( USHORT* pIds = aPasteSpecialIds; *pIds; ++pIds )
         if( SwTransferable::_TestAllowedFormat( rData, *pIds, nDest ))
@@ -3644,8 +3618,6 @@ sal_Int64 SwTransferable::getSomething( const Sequence< sal_Int8 >& rId ) throw(
 
 /*  */
 
-#ifdef DDE_AVAILABLE
-
 // -----------------------------------------------------------------------
 
 SwTrnsfrDdeLink::SwTrnsfrDdeLink( SwTransferable& rTrans, SwWrtShell& rSh )
@@ -3855,8 +3827,3 @@ void SwTrnsfrDdeLink::Closed()
         refObj.Clear();
     }
 }
-
-#endif
-
-
-

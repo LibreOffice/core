@@ -187,9 +187,6 @@ extern ResMgr* pSwResMgr;           // steht in swapp0.cxx
 #define SW_RES(i)       ResId(i,*pSwResMgr)
 #define SW_RESSTR(i)    UniString(ResId(i,*pSwResMgr))
 
-#define DDE_AVAILABLE
-
-
 ::com::sun::star::uno::Reference<
     ::com::sun::star::linguistic2::XSpellChecker1 > GetSpellChecker();
 ::com::sun::star::uno::Reference<

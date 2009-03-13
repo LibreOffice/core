@@ -172,13 +172,9 @@ class SwEditRegionDlg : public SfxModalDialog
 
     FixedLine       aLinkFL;
     TriStateBox     aFileCB;
-#ifdef DDE_AVAILABLE
     CheckBox        aDDECB;
-#endif
     FixedText       aFileNameFT;
-#ifdef DDE_AVAILABLE
     FixedText       aDDECommandFT;
-#endif
     Edit            aFileNameED;
     PushButton      aFilePB;
     FixedText       aSubRegionFT;
@@ -241,9 +237,7 @@ class SwEditRegionDlg : public SfxModalDialog
     DECL_LINK( FileSearchHdl, PushButton* );
     DECL_LINK( OptionsHdl, PushButton* );
     DECL_LINK( FileNameHdl, Edit* );
-#ifdef DDE_AVAILABLE
     DECL_LINK( DDEHdl, CheckBox* );
-#endif
     DECL_LINK( DlgClosedHdl, sfx2::FileDialogHelper* );
 
     BOOL CheckPasswd(CheckBox* pBox = 0);
@@ -269,10 +263,8 @@ class SwInsertSectionTabPage : public SfxTabPage
 
     FixedLine       aLinkFL;
     CheckBox        aFileCB;
-#ifdef DDE_AVAILABLE
     CheckBox        aDDECB;
     FixedText       aDDECommandFT;
-#endif
     FixedText       aFileNameFT;
     Edit            aFileNameED;
     PushButton      aFilePB;
@@ -313,9 +305,7 @@ class SwInsertSectionTabPage : public SfxTabPage
     DECL_LINK( NameEditHdl, Edit * );
     DECL_LINK( UseFileHdl, CheckBox* );
     DECL_LINK( FileSearchHdl, PushButton* );
-#ifdef DDE_AVAILABLE
     DECL_LINK( DDEHdl, CheckBox* );
-#endif
     DECL_LINK( DlgClosedHdl, sfx2::FileDialogHelper* );
 
     void            FillList(  const SwSectionFmt* pFmt = 0 );
