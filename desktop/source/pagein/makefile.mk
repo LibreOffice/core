@@ -43,6 +43,8 @@ LIBSALCPPRT=$(0)
 
 .INCLUDE :  settings.mk
 
+.INCLUDE .IGNORE : icuversion.mk
+
 # --- Files --------------------------------------------------------
 
 OBJFILES= \
@@ -70,10 +72,12 @@ ALL: \
 
 .INCLUDE :  target.mk
 
-ICUDLLPOST=$(DLLPOST).26
+ICUDLLPOST=$(DLLPOST).$(ICU_MAJOR)$(ICU_MINOR)
 UDKDLLPOST=$(DLLPOST).$(UDK_MAJOR)
 UNODLLPOST=.uno$(DLLPOST)
 DFTDLLPOST=$(DLLPOSTFIX)$(DLLPOST) # Default 
+
+URELIBPATH=..$/ure-link$/lib
 
 $(MISC)$/$(TARGET)-calc : makefile.mk
     @echo Making: $@
@@ -95,39 +99,63 @@ $(MISC)$/$(TARGET)-writer : makefile.mk
     @-echo $(DLLPRE)sw$(DFTDLLPOST)  >  $@
     @-echo $(DLLPRE)svx$(DFTDLLPOST) >> $@
 
-# sorted in reverse load order (ld.so.1)
+# sorted in approx. reverse load order (ld.so.1)
 $(MISC)$/$(TARGET)-common : makefile.mk
     @echo Making: $@
-    @-echo $(DLLPRE)icui18n$(ICUDLLPOST)  >  $@
-    @-echo i18npool$(UNODLLPOST)       >> $@
+    @-echo i18npool$(UNODLLPOST)         >  $@
+.IF "$(SYSTEM_ICU)" != "YES"
+    @-echo $(DLLPRE)icui18n$(ICUDLLPOST) >> $@
+    @-echo $(DLLPRE)icule$(ICUDLLPOST)   >> $@
+    @-echo $(DLLPRE)icuuc$(ICUDLLPOST)   >> $@
+    @-echo $(DLLPRE)icudata$(ICUDLLPOST) >> $@
+.ENDIF # SYSTEM_ICU
 #
-    @-echo $(DLLPRE)xcr$(DFTDLLPOST)   >> $@
+    @-echo $(DLLPRE)lng$(DFTDLLPOST)   >> $@
     @-echo $(DLLPRE)xo$(DFTDLLPOST)    >> $@
-    @-echo $(DLLPRE)go$(DFTDLLPOST)    >> $@
-    @-echo $(DLLPRE)sb$(DFTDLLPOST)    >> $@
-    @-echo $(DLLPRE)sfx$(DFTDLLPOST)   >> $@
 #
+
     @-echo $(DLLPRE)fwe$(DFTDLLPOST)   >> $@
     @-echo $(DLLPRE)fwk$(DFTDLLPOST)   >> $@
-    @-echo $(DLLPRE)ucpfile1$(DLLPOST) >> $@
     @-echo $(DLLPRE)fwi$(DFTDLLPOST)   >> $@
     @-echo $(DLLPRE)fwl$(DFTDLLPOST)   >> $@
+    @-echo $(DLLPRE)package2$(DLLPOST) >> $@
+    @-echo $(DLLPRE)ucpfile1$(DLLPOST) >> $@
+    @-echo $(DLLPRE)ucb1$(DLLPOST)     >> $@
     @-echo configmgr2$(UNODLLPOST)     >> $@
 #
-    @-echo $(DLLPRE)icuuc$(ICUDLLPOST) >> $@
-    @-echo $(DLLPRE)sot$(DFTDLLPOST)   >> $@
-    @-echo $(DLLPRE)psp$(DFTDLLPOST)   >> $@
+    @-echo $(DLLPRE)dtransX11$(DFTDLLPOST)   >> $@
+    @-echo $(DLLPRE)vclplug_gen$(DFTDLLPOST) >> $@
+.IF "$(ENABLE_GTK)" != ""
+    @-echo $(DLLPRE)vclplug_gtk$(DFTDLLPOST) >> $@
+.ENDIF # ENABLE_GTK
+.IF "$(ENABLE_KDE)" != ""
+    @-echo $(DLLPRE)vclplug_kde$(DFTDLLPOST) >> $@
+.ENDIF # ENABLE_KDE
+#
+    @-echo $(DLLPRE)psp$(DFTDLLPOST)     >> $@
+    @-echo $(DLLPRE)basegfx$(DFTDLLPOST) >> $@
+    @-echo $(DLLPRE)sot$(DFTDLLPOST)     >> $@
+    @-echo $(DLLPRE)xcr$(DFTDLLPOST)     >> $@
+    @-echo $(DLLPRE)sb$(DFTDLLPOST)      >> $@
+#
+# uno runtime environment
+#
+    @-echo $(URELIBPATH)$/stocservices$(UNODLLPOST)         >> $@
+    @-echo $(URELIBPATH)$/bootstrap$(UNODLLPOST)            >> $@
+    @-echo $(URELIBPATH)$/$(DLLPRE)reg$(UDKDLLPOST)         >> $@
+    @-echo $(URELIBPATH)$/$(DLLPRE)store$(UDKDLLPOST)       >> $@
 .IF "$(USE_SYSTEM_STL)"!="YES"
 .IF "$(COMNAME)" == "gcc2" || "$(COMNAME)" == "gcc3"
-    @-echo $(DLLPRE)stlport_gcc$(DLLPOST)    >> $@
+    @-echo $(URELIBPATH)$/$(DLLPRE)stlport_gcc$(DLLPOST)    >> $@
 .ENDIF # gcc
 .IF "$(COMNAME)" == "sunpro5"
-    @-echo $(DLLPRE)stlport_sunpro$(DLLPOST) >> $@
+    @-echo $(URELIBPATH)$/$(DLLPRE)stlport_sunpro$(DLLPOST) >> $@
 .ENDIF # sunpro5
-.ENDIF
-    @-echo $(DLLPRE)uno_sal$(UDKDLLPOST)   >>  $@
-    @-echo $(DLLPRE)uno_cppu$(UDKDLLPOST)  >> $@
-    @-echo $(DLLPRE)uno_cppuhelper$(COMID)$(UDKDLLPOST)           >> $@
+.ENDIF # SYSTEM_STL
+    @-echo $(URELIBPATH)$/$(DLLPRE)uno_cppuhelper$(COMID)$(UDKDLLPOST) >> $@
+    @-echo $(URELIBPATH)$/$(DLLPRE)uno_cppu$(UDKDLLPOST)               >> $@
+    @-echo $(URELIBPATH)$/$(DLLPRE)uno_sal$(UDKDLLPOST)                >> $@
+#
     @-echo $(DLLPRE)ucbhelper$(UCBHELPER_MAJOR)$(COMID)$(DLLPOST) >> $@
     @-echo $(DLLPRE)comphelp$(COMPHLP_MAJOR)$(COMID)$(DLLPOST)    >> $@
     @-echo $(DLLPRE)tl$(DFTDLLPOST)    >> $@
@@ -136,4 +164,5 @@ $(MISC)$/$(TARGET)-common : makefile.mk
     @-echo $(DLLPRE)vcl$(DFTDLLPOST)   >> $@
     @-echo $(DLLPRE)tk$(DFTDLLPOST)    >> $@
     @-echo $(DLLPRE)svt$(DFTDLLPOST)   >> $@
-    @-echo soffice.bin                 >> $@
+    @-echo $(DLLPRE)sfx$(DFTDLLPOST)   >> $@
+    @-echo $(DLLPRE)sofficeapp$(DLLPOST) >> $@
