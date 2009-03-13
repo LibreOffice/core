@@ -106,9 +106,11 @@ LOCALIZEDFILES= \
     DataAccess.xcu \
     TableWizard.xcu \
     UI.xcu \
+    Embedding.xcu \
     WebWizard.xcu \
     FormWizard.xcu \
     Writer.xcu
+
 
 .INCLUDE :  target.mk
 
