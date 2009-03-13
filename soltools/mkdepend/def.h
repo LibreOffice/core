@@ -154,7 +154,7 @@ char            *realloc();
 
 char            *copy();
 char            *base_name();
-char            *getline();
+char            *get_line();
 char            *isdefined();
 struct filepointer  *getfile();
 struct inclist      *newinclude();
