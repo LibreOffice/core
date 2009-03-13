@@ -72,9 +72,6 @@ ALWAYSDBGTARGET=do_it_alwaysdebug
 .ENDIF
 
 SLOFILES=   \
-    $(SLO)$/alloc_global.obj     \
-    $(SLO)$/alloc_cache.obj      \
-    $(SLO)$/alloc_arena.obj      \
             $(SLO)$/memory.obj      \
             $(SLO)$/cipher.obj      \
             $(SLO)$/crc.obj         \
@@ -96,8 +93,11 @@ SLOFILES=   \
             $(SLO)$/unload.obj		\
             $(SLO)$/logfile.obj     \
             $(SLO)$/tres.obj        \
-            $(SLO)$/debugprint.obj        \
-            $(SLO)$/math.obj
+            $(SLO)$/debugprint.obj  \
+            $(SLO)$/math.obj        \
+            $(SLO)$/alloc_global.obj\
+            $(SLO)$/alloc_cache.obj \
+            $(SLO)$/alloc_arena.obj
 
 .IF "$(OS)"=="MACOSX"
 SLOFILES+=$(SLO)$/memory_fini.obj
@@ -106,9 +106,6 @@ SLOFILES+=$(SLO)$/memory_fini.obj
 
 #.IF "$(UPDATER)"=="YES"
 OBJFILES=   \
-    $(OBJ)$/alloc_global.obj     \
-    $(OBJ)$/alloc_cache.obj      \
-    $(OBJ)$/alloc_arena.obj      \
             $(OBJ)$/memory.obj      \
             $(OBJ)$/cipher.obj      \
             $(OBJ)$/crc.obj         \
@@ -130,7 +127,10 @@ OBJFILES=   \
             $(OBJ)$/unload.obj		\
             $(OBJ)$/logfile.obj     \
             $(OBJ)$/tres.obj        \
-            $(OBJ)$/math.obj
+            $(OBJ)$/math.obj \
+            $(OBJ)$/alloc_global.obj\
+            $(OBJ)$/alloc_cache.obj \
+            $(OBJ)$/alloc_arena.obj
 
 .IF "$(OS)"=="MACOSX"
 OBJFILES+=$(OBJ)$/memory_fini.obj

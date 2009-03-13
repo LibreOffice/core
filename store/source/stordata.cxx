@@ -31,63 +31,36 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_store.hxx"
 
-#define _STORE_STORDATA_CXX_ "$Revision: 1.6 $"
-#include <sal/types.h>
-#include <osl/diagnose.h>
-#include <osl/endian.h>
-#include <osl/mutex.hxx>
-#include <store/types.h>
-#include <storbase.hxx>
-#include <stordata.hxx>
+#include "stordata.hxx"
+
+#include "sal/types.h"
+#include "osl/diagnose.h"
+
+#include "store/types.h"
+#include "storbase.hxx"
+#include "storbios.hxx"
 
 using namespace store;
 
 /*========================================================================
  *
- * OStoreIndirectionPageData implementation.
+ * OStoreDataPageObject implementation.
  *
  *======================================================================*/
 /*
- * OStoreIndirectionPageData.
+ * guard.
  */
-OStoreIndirectionPageData::OStoreIndirectionPageData (sal_uInt16 nPageSize)
-    : OStorePageData (nPageSize)
+storeError OStoreDataPageObject::guard (sal_uInt32 nAddr)
 {
-    initialize();
+    return PageHolderObject< page >::guard (m_xPage, nAddr);
 }
 
 /*
- * initialize.
+ * verify.
  */
-void OStoreIndirectionPageData::initialize (void)
+storeError OStoreDataPageObject::verify (sal_uInt32 nAddr) const
 {
-    base::m_aGuard.m_nMagic = STORE_MAGIC_INDIRECTPAGE;
-    base::m_aDescr.m_nUsed = sal::static_int_cast< sal_uInt16 >(
-        base::m_aDescr.m_nUsed + self::size());
-    self::m_aGuard.m_nMagic = 0;
-
-    sal_uInt16 i, n = capacityCount();
-    for (i = 0; i < n; i++)
-        m_pData[i] = STORE_PAGE_NULL;
-}
-
-/*
- * swap.
- */
-void OStoreIndirectionPageData::swap (
-    const D&
-#ifdef OSL_BIGENDIAN
-        rDescr
-#endif /* OSL_BIGENDIAN */
-)
-{
-#ifdef OSL_BIGENDIAN
-    m_aGuard.swap();
-
-    sal_uInt16 i, n = capacityCount (rDescr);
-    for (i = 0; i < n; i++)
-        m_pData[i] = OSL_SWAPDWORD(m_pData[i]);
-#endif /* OSL_BIGENDIAN */
+    return PageHolderObject< page >::verify (m_xPage, nAddr);
 }
 
 /*========================================================================
@@ -96,534 +69,401 @@ void OStoreIndirectionPageData::swap (
  *
  *======================================================================*/
 /*
- * swap.
- */
-void OStoreIndirectionPageObject::swap (
-    const D&
-#ifdef OSL_BIGENDIAN
-        rDescr
-#endif /* OSL_BIGENDIAN */
-)
+  * store_truncate_Impl (single indirect page).
+  */
+static storeError store_truncate_Impl (
+    sal_uInt32      nAddr,
+    sal_uInt16      nSingle,
+    OStorePageBIOS &rBIOS)
 {
-#ifdef OSL_BIGENDIAN
-    base::swap (rDescr);
-    m_rPage.swap (rDescr);
-#endif /* OSL_BIGENDIAN */
+    if (nAddr != STORE_PAGE_NULL)
+    {
+        // Load single indirect page.
+        OStoreIndirectionPageObject aSingle;
+        storeError eErrCode = rBIOS.loadObjectAt (aSingle, nAddr);
+        if (eErrCode == store_E_None)
+        {
+            // Truncate to 'nSingle' direct pages.
+            eErrCode = aSingle.truncate (nSingle, rBIOS);
+            if (eErrCode != store_E_None)
+                return eErrCode;
+        }
+        else
+        {
+            if (eErrCode != store_E_InvalidChecksum)
+                return eErrCode;
+        }
+
+        // Check for complete truncation.
+        if (nSingle == 0)
+        {
+            // Free single indirect page.
+            OStorePageData aPageHead;
+            eErrCode = rBIOS.free (aPageHead, nAddr);
+            if (eErrCode != store_E_None)
+                return eErrCode;
+        }
+    }
+    return store_E_None;
+}
+
+/*
+ * store_truncate_Impl (double indirect page).
+ */
+static storeError store_truncate_Impl (
+    sal_uInt32       nAddr,
+    sal_uInt16       nDouble,
+    sal_uInt16       nSingle,
+    OStorePageBIOS  &rBIOS)
+{
+    if (nAddr != STORE_PAGE_NULL)
+    {
+        // Load double indirect page.
+        OStoreIndirectionPageObject aDouble;
+        storeError eErrCode = rBIOS.loadObjectAt (aDouble, nAddr);
+        if (eErrCode == store_E_None)
+        {
+            // Truncate to 'nDouble', 'nSingle' pages.
+            eErrCode = aDouble.truncate (nDouble, nSingle, rBIOS);
+            if (eErrCode != store_E_None)
+                return eErrCode;
+        }
+        else
+        {
+            if (eErrCode != store_E_InvalidChecksum)
+                return eErrCode;
+        }
+
+        // Check for complete truncation.
+        if ((nDouble + nSingle) == 0)
+        {
+            // Free double indirect page.
+            OStorePageData aPageHead;
+            eErrCode = rBIOS.free (aPageHead, nAddr);
+            if (eErrCode != store_E_None)
+                return eErrCode;
+        }
+    }
+    return store_E_None;
+}
+
+/*
+ * store_truncate_Impl (triple indirect page).
+ */
+static storeError store_truncate_Impl (
+    sal_uInt32       nAddr,
+    sal_uInt16       nTriple,
+    sal_uInt16       nDouble,
+    sal_uInt16       nSingle,
+    OStorePageBIOS  &rBIOS)
+{
+    if (nAddr != STORE_PAGE_NULL)
+    {
+        // Load triple indirect page.
+        OStoreIndirectionPageObject aTriple;
+        storeError eErrCode = rBIOS.loadObjectAt (aTriple, nAddr);
+        if (eErrCode != store_E_None)
+            return eErrCode;
+
+        // Truncate to 'nTriple', 'nDouble', 'nSingle' pages.
+        eErrCode = aTriple.truncate (nTriple, nDouble, nSingle, rBIOS);
+        if (eErrCode != store_E_None)
+            return eErrCode;
+
+        // Check for complete truncation.
+        if ((nTriple + nDouble + nSingle) == 0)
+        {
+            // Free triple indirect page.
+            OStorePageData aPageHead;
+            eErrCode = rBIOS.free (aPageHead, nAddr);
+            if (eErrCode != store_E_None)
+                return eErrCode;
+        }
+    }
+    return store_E_None;
+}
+
+/*
+ * loadOrCreate.
+ */
+storeError OStoreIndirectionPageObject::loadOrCreate (
+    sal_uInt32       nAddr,
+    OStorePageBIOS & rBIOS)
+{
+    if (nAddr == STORE_PAGE_NULL)
+    {
+        storeError eErrCode = construct<page>(rBIOS.allocator());
+        if (eErrCode != store_E_None)
+            return eErrCode;
+
+        eErrCode = rBIOS.allocate (*this);
+        if (eErrCode != store_E_None)
+            return eErrCode;
+
+        // Save location pending at caller.
+        return store_E_Pending;
+    }
+    return rBIOS.loadObjectAt (*this, nAddr);
 }
 
 /*
  * guard.
  */
-void OStoreIndirectionPageObject::guard (const D& rDescr)
+storeError OStoreIndirectionPageObject::guard (sal_uInt32 nAddr)
 {
-    base::guard (rDescr);
-    m_rPage.guard (rDescr);
+    return PageHolderObject< page >::guard (m_xPage, nAddr);
 }
 
 /*
  * verify.
  */
-storeError OStoreIndirectionPageObject::verify (const D& rDescr)
+storeError OStoreIndirectionPageObject::verify (sal_uInt32 nAddr) const
 {
-    storeError eErrCode = base::verify (rDescr);
-    if (eErrCode != store_E_None)
-        return eErrCode;
-    else
-        return m_rPage.verify (rDescr);
+    return PageHolderObject< page >::verify (m_xPage, nAddr);
 }
 
 /*
- * get (single indirect).
+ * read (single indirect).
  */
-storeError OStoreIndirectionPageObject::get (
+storeError OStoreIndirectionPageObject::read (
     sal_uInt16             nSingle,
     OStoreDataPageObject  &rData,
-    OStorePageBIOS        &rBIOS,
-    osl::Mutex            *pMutex)
+    OStorePageBIOS        &rBIOS)
 {
-    // Enter.
-    STORE_METHOD_ENTER(pMutex);
+    PageHolderObject< page > xImpl (m_xPage);
+    page const & rPage = (*xImpl);
 
     // Check arguments.
-    if (!(nSingle < m_rPage.capacityCount()))
-        STORE_METHOD_LEAVE(pMutex, store_E_InvalidAccess);
+    sal_uInt16 const nLimit = rPage.capacityCount();
+    if (!(nSingle < nLimit))
+        return store_E_InvalidAccess;
 
     // Obtain data page location.
-    sal_uInt32 nAddr = m_rPage.m_pData[nSingle];
+    sal_uInt32 const nAddr = store::ntohl(rPage.m_pData[nSingle]);
     if (nAddr == STORE_PAGE_NULL)
-        STORE_METHOD_LEAVE(pMutex, store_E_NotExists);
+        return store_E_NotExists;
 
-    // Load data page.
-    rData.location (nAddr);
-    storeError eErrCode = rBIOS.load (rData);
-
-    // Leave.
-    STORE_METHOD_LEAVE(pMutex, eErrCode);
+    // Load data page and leave.
+    return rBIOS.loadObjectAt (rData, nAddr);
 }
 
 /*
- * get (double indirect).
+ * read (double indirect).
  */
-storeError OStoreIndirectionPageObject::get (
+storeError OStoreIndirectionPageObject::read (
     sal_uInt16             nDouble,
     sal_uInt16             nSingle,
-    page                 *&rpSingle,
     OStoreDataPageObject  &rData,
-    OStorePageBIOS        &rBIOS,
-    osl::Mutex            *pMutex)
+    OStorePageBIOS        &rBIOS)
 {
-    // Enter.
-    STORE_METHOD_ENTER(pMutex);
+    PageHolderObject< page > xImpl (m_xPage);
+    page const & rPage = (*xImpl);
 
     // Check arguments.
-    if (!((nDouble < m_rPage.capacityCount()) &&
-          (nSingle < m_rPage.capacityCount())    ))
-        STORE_METHOD_LEAVE(pMutex, store_E_InvalidAccess);
+    sal_uInt16 const nLimit = rPage.capacityCount();
+    if (!((nDouble < nLimit) && (nSingle < nLimit)))
+        return store_E_InvalidAccess;
 
     // Check single indirect page location.
-    if (m_rPage.m_pData[nDouble] == STORE_PAGE_NULL)
-        STORE_METHOD_LEAVE(pMutex, store_E_NotExists);
-
-    // Check single indirect page buffer.
-    if (rpSingle == NULL)
-    {
-        sal_uInt16 nPageSize = m_rPage.m_aDescr.m_nSize;
-        rpSingle = new(nPageSize) page(nPageSize);
-    }
+    sal_uInt32 const nAddr = store::ntohl(rPage.m_pData[nDouble]);
+    if (nAddr == STORE_PAGE_NULL)
+        return store_E_NotExists;
 
     // Load single indirect page.
-    OStoreIndirectionPageObject aSingle (*rpSingle);
-    aSingle.location (m_rPage.m_pData[nDouble]);
-
-    storeError eErrCode = rBIOS.load (aSingle);
+    OStoreIndirectionPageObject aSingle;
+    storeError eErrCode = rBIOS.loadObjectAt (aSingle, nAddr);
     if (eErrCode != store_E_None)
-        STORE_METHOD_LEAVE(pMutex, eErrCode);
+        return eErrCode;
 
-    // Get single indirect.
-    eErrCode = aSingle.get (nSingle, rData, rBIOS, NULL);
-
-    // Leave.
-    STORE_METHOD_LEAVE(pMutex, eErrCode);
+    // Read single indirect and leave.
+    return aSingle.read (nSingle, rData, rBIOS);
 }
 
 /*
- * get (triple indirect).
+ * read (triple indirect).
  */
-storeError OStoreIndirectionPageObject::get (
+storeError OStoreIndirectionPageObject::read (
     sal_uInt16             nTriple,
     sal_uInt16             nDouble,
     sal_uInt16             nSingle,
-    page                 *&rpDouble,
-    page                 *&rpSingle,
     OStoreDataPageObject  &rData,
-    OStorePageBIOS        &rBIOS,
-    osl::Mutex            *pMutex)
+    OStorePageBIOS        &rBIOS)
 {
-    // Enter.
-    STORE_METHOD_ENTER(pMutex);
+    PageHolderObject< page > xImpl (m_xPage);
+    page const & rPage = (*xImpl);
 
     // Check arguments.
-    if (!((nTriple < m_rPage.capacityCount()) &&
-          (nDouble < m_rPage.capacityCount()) &&
-          (nSingle < m_rPage.capacityCount())    ))
-        STORE_METHOD_LEAVE(pMutex, store_E_InvalidAccess);
+    sal_uInt16 const nLimit = rPage.capacityCount();
+    if (!((nTriple < nLimit) && (nDouble < nLimit) && (nSingle < nLimit)))
+        return store_E_InvalidAccess;
 
     // Check double indirect page location.
-    if (m_rPage.m_pData[nTriple] == STORE_PAGE_NULL)
-        STORE_METHOD_LEAVE(pMutex, store_E_NotExists);
-
-    // Check double indirect page buffer.
-    if (rpDouble == NULL)
-    {
-        sal_uInt16 nPageSize = m_rPage.m_aDescr.m_nSize;
-        rpDouble = new(nPageSize) page(nPageSize);
-    }
+    sal_uInt32 const nAddr = store::ntohl(rPage.m_pData[nTriple]);
+    if (nAddr == STORE_PAGE_NULL)
+        return store_E_NotExists;
 
     // Load double indirect page.
-    OStoreIndirectionPageObject aDouble (*rpDouble);
-    aDouble.location (m_rPage.m_pData[nTriple]);
-
-    storeError eErrCode = rBIOS.load (aDouble);
+    OStoreIndirectionPageObject aDouble;
+    storeError eErrCode = rBIOS.loadObjectAt (aDouble, nAddr);
     if (eErrCode != store_E_None)
-        STORE_METHOD_LEAVE(pMutex, eErrCode);
+        return eErrCode;
 
-    // Get double indirect.
-    eErrCode = aDouble.get (nDouble, nSingle, rpSingle, rData, rBIOS, NULL);
-
-    // Leave.
-    STORE_METHOD_LEAVE(pMutex, eErrCode);
+    // Read double indirect and leave.
+    return aDouble.read (nDouble, nSingle, rData, rBIOS);
 }
 
 /*
- * put (single indirect).
+ * write (single indirect).
  */
-storeError OStoreIndirectionPageObject::put (
+storeError OStoreIndirectionPageObject::write (
     sal_uInt16             nSingle,
     OStoreDataPageObject  &rData,
-    OStorePageBIOS        &rBIOS,
-    osl::Mutex            *pMutex)
+    OStorePageBIOS        &rBIOS)
 {
-    // Enter.
-    STORE_METHOD_ENTER(pMutex);
+    PageHolderObject< page > xImpl (m_xPage);
+    page & rPage = (*xImpl);
 
     // Check arguments.
-    storeError eErrCode = store_E_InvalidAccess;
-    if (!(nSingle < m_rPage.capacityCount()))
-        STORE_METHOD_LEAVE(pMutex, eErrCode);
+    sal_uInt16 const nLimit = rPage.capacityCount();
+    if (!(nSingle < nLimit))
+        return store_E_InvalidAccess;
 
     // Obtain data page location.
-    rData.location (m_rPage.m_pData[nSingle]);
-    if (rData.location() == STORE_PAGE_NULL)
+    sal_uInt32 const nAddr = store::ntohl(rPage.m_pData[nSingle]);
+    if (nAddr == STORE_PAGE_NULL)
     {
         // Allocate data page.
-        eErrCode = rBIOS.allocate (rData);
+        storeError eErrCode = rBIOS.allocate (rData);
         if (eErrCode != store_E_None)
-            STORE_METHOD_LEAVE(pMutex, eErrCode);
+            return eErrCode;
 
-        // Save data page location.
-        m_rPage.m_pData[nSingle] = rData.location();
-        touch();
+        // Store data page location.
+        rPage.m_pData[nSingle] = store::htonl(rData.location());
 
         // Save this page.
-        eErrCode = rBIOS.save (*this);
-        if (eErrCode != store_E_None)
-            STORE_METHOD_LEAVE(pMutex, eErrCode);
+        return rBIOS.saveObjectAt (*this, location());
     }
     else
     {
         // Save data page.
-        eErrCode = rBIOS.save (rData);
+        return rBIOS.saveObjectAt (rData, nAddr);
     }
-
-    // Leave.
-    STORE_METHOD_LEAVE(pMutex, eErrCode);
 }
 
 /*
- * put (double indirect).
+ * write (double indirect).
  */
-storeError OStoreIndirectionPageObject::put (
+storeError OStoreIndirectionPageObject::write (
     sal_uInt16             nDouble,
     sal_uInt16             nSingle,
-    page                 *&rpSingle,
     OStoreDataPageObject  &rData,
-    OStorePageBIOS        &rBIOS,
-    osl::Mutex            *pMutex)
+    OStorePageBIOS        &rBIOS)
 {
-    // Enter.
-    STORE_METHOD_ENTER(pMutex);
+    PageHolderObject< page > xImpl (m_xPage);
+    page & rPage = (*xImpl);
 
     // Check arguments.
-    storeError eErrCode = store_E_InvalidAccess;
-    if (!((nDouble < m_rPage.capacityCount()) &&
-          (nSingle < m_rPage.capacityCount())    ))
-        STORE_METHOD_LEAVE(pMutex, eErrCode);
+    sal_uInt16 const nLimit = rPage.capacityCount();
+    if (!((nDouble < nLimit) && (nSingle < nLimit)))
+        return store_E_InvalidAccess;
 
-    // Check single indirect page buffer.
-    if (rpSingle == NULL)
+    // Load or create single indirect page.
+    OStoreIndirectionPageObject aSingle;
+    storeError eErrCode = aSingle.loadOrCreate (store::ntohl(rPage.m_pData[nDouble]), rBIOS);
+    if (eErrCode != store_E_None)
     {
-        sal_uInt16 nPageSize = m_rPage.m_aDescr.m_nSize;
-        rpSingle = new(nPageSize) page(nPageSize);
+        if (eErrCode != store_E_Pending)
+            return eErrCode;
+        rPage.m_pData[nDouble] = store::htonl(aSingle.location());
+
+        eErrCode = rBIOS.saveObjectAt (*this, location());
+        if (eErrCode != store_E_None)
+            return eErrCode;
     }
 
-    // Obtain single indirect page location.
-    OStoreIndirectionPageObject aSingle (*rpSingle);
-    aSingle.location (m_rPage.m_pData[nDouble]);
-    if (aSingle.location() == STORE_PAGE_NULL)
-    {
-        // Initialize single indirect page buffer.
-        rpSingle->initialize();
-
-        // Allocate single indirect page.
-        eErrCode = rBIOS.allocate (aSingle);
-        if (eErrCode != store_E_None)
-            STORE_METHOD_LEAVE(pMutex, eErrCode);
-
-        // Save single indirect page location.
-        m_rPage.m_pData[nDouble] = aSingle.location();
-        touch();
-
-        // Save this page.
-        eErrCode = rBIOS.save (*this);
-        if (eErrCode != store_E_None)
-            STORE_METHOD_LEAVE(pMutex, eErrCode);
-    }
-    else
-    {
-        // Load single indirect page.
-        eErrCode = rBIOS.load (aSingle);
-        if (eErrCode != store_E_None)
-            STORE_METHOD_LEAVE(pMutex, eErrCode);
-    }
-
-    // Put single indirect.
-    eErrCode = aSingle.put (nSingle, rData, rBIOS, NULL);
-
-    // Leave.
-    STORE_METHOD_LEAVE(pMutex, eErrCode);
+    // Write single indirect and leave.
+    return aSingle.write (nSingle, rData, rBIOS);
 }
 
 /*
- * put (triple indirect).
+ * write (triple indirect).
  */
-storeError OStoreIndirectionPageObject::put (
+storeError OStoreIndirectionPageObject::write (
     sal_uInt16             nTriple,
     sal_uInt16             nDouble,
     sal_uInt16             nSingle,
-    page                 *&rpDouble,
-    page                 *&rpSingle,
     OStoreDataPageObject  &rData,
-    OStorePageBIOS        &rBIOS,
-    osl::Mutex            *pMutex)
+    OStorePageBIOS        &rBIOS)
 {
-    // Enter.
-    STORE_METHOD_ENTER(pMutex);
+    PageHolderObject< page > xImpl (m_xPage);
+    page & rPage = (*xImpl);
 
     // Check arguments.
-    storeError eErrCode = store_E_InvalidAccess;
-    if (!((nTriple < m_rPage.capacityCount()) &&
-          (nDouble < m_rPage.capacityCount()) &&
-          (nSingle < m_rPage.capacityCount())    ))
-        STORE_METHOD_LEAVE(pMutex, eErrCode);
+    sal_uInt16 const nLimit = rPage.capacityCount();
+    if (!((nTriple < nLimit) && (nDouble < nLimit) && (nSingle < nLimit)))
+        return store_E_InvalidAccess;
 
-    // Check double indirect page buffer.
-    if (rpDouble == NULL)
+    // Load or create double indirect page.
+    OStoreIndirectionPageObject aDouble;
+    storeError eErrCode = aDouble.loadOrCreate (store::ntohl(rPage.m_pData[nTriple]), rBIOS);
+    if (eErrCode != store_E_None)
     {
-        sal_uInt16 nPageSize = m_rPage.m_aDescr.m_nSize;
-        rpDouble = new(nPageSize) page(nPageSize);
+        if (eErrCode != store_E_Pending)
+            return eErrCode;
+        rPage.m_pData[nTriple] = store::htonl(aDouble.location());
+
+        eErrCode = rBIOS.saveObjectAt (*this, location());
+        if (eErrCode != store_E_None)
+            return eErrCode;
     }
 
-    // Obtain double indirect page location.
-    OStoreIndirectionPageObject aDouble (*rpDouble);
-    aDouble.location (m_rPage.m_pData[nTriple]);
-    if (aDouble.location() == STORE_PAGE_NULL)
-    {
-        // Initialize double indirect page buffer.
-        rpDouble->initialize();
-
-        // Allocate double indirect page.
-        eErrCode = rBIOS.allocate (aDouble);
-        if (eErrCode != store_E_None)
-            STORE_METHOD_LEAVE(pMutex, eErrCode);
-
-        // Save double indirect page location.
-        m_rPage.m_pData[nTriple] = aDouble.location();
-        touch();
-
-        // Save this page.
-        eErrCode = rBIOS.save (*this);
-        if (eErrCode != store_E_None)
-            STORE_METHOD_LEAVE(pMutex, eErrCode);
-    }
-    else
-    {
-        // Load double indirect page.
-        eErrCode = rBIOS.load (aDouble);
-        if (eErrCode != store_E_None)
-            STORE_METHOD_LEAVE(pMutex, eErrCode);
-    }
-
-    // Put double indirect.
-    eErrCode = aDouble.put (nDouble, nSingle, rpSingle, rData, rBIOS, NULL);
-
-    // Leave.
-    STORE_METHOD_LEAVE(pMutex, eErrCode);
+    // Write double indirect and leave.
+    return aDouble.write (nDouble, nSingle, rData, rBIOS);
 }
 
 /*
  * truncate (single indirect).
  */
 storeError OStoreIndirectionPageObject::truncate (
-    sal_uInt16             nSingle,
-    OStoreDataPageObject  &rData,
-    OStorePageBIOS        &rBIOS,
-    osl::Mutex            *pMutex)
+    sal_uInt16       nSingle,
+    OStorePageBIOS & rBIOS)
 {
-    // Enter.
-    STORE_METHOD_ENTER(pMutex);
+    PageHolderObject< page > xImpl (m_xPage);
+    page & rPage = (*xImpl);
 
     // Check arguments.
-    sal_uInt16 i, n = m_rPage.capacityCount();
-    if (!(nSingle < n))
-        STORE_METHOD_LEAVE(pMutex, store_E_InvalidAccess);
+    sal_uInt16 const nLimit = rPage.capacityCount();
+    if (!(nSingle < nLimit))
+        return store_E_InvalidAccess;
 
     // Save PageDescriptor.
-    D aDescr (m_rPage.m_aDescr);
+    OStorePageDescriptor aDescr (rPage.m_aDescr);
+    aDescr.m_nAddr = store::ntohl(aDescr.m_nAddr);
+    aDescr.m_nSize = store::ntohs(aDescr.m_nSize);
 
     // Acquire Lock.
     storeError eErrCode = rBIOS.acquireLock (aDescr.m_nAddr, aDescr.m_nSize);
     if (eErrCode != store_E_None)
-        STORE_METHOD_LEAVE(pMutex, eErrCode);
+        return eErrCode;
 
     // Truncate.
-    for (i = n; i > nSingle; i--)
+    for (sal_uInt16 i = nLimit; i > nSingle; i--)
     {
         // Obtain data page location.
-        sal_uInt32 nAddr = m_rPage.m_pData[i - 1];
-        if (nAddr == STORE_PAGE_NULL) continue;
-
-        // Free data page.
-        rData.location (nAddr);
-        eErrCode = rBIOS.free (rData);
-        if (eErrCode != store_E_None)
+        sal_uInt32 const nAddr = store::ntohl(rPage.m_pData[i - 1]);
+        if (nAddr != STORE_PAGE_NULL)
         {
-            rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
-            STORE_METHOD_LEAVE(pMutex, eErrCode);
-        }
-
-        // Clear pointer to data page.
-        m_rPage.m_pData[i - 1] = STORE_PAGE_NULL;
-        touch();
-    }
-
-    // Check for modified page.
-    if (dirty())
-    {
-        // Save this page.
-        eErrCode = rBIOS.save (*this);
-        if (eErrCode != store_E_None)
-        {
-            // Must not happen.
-            OSL_TRACE("OStoreIndirectionPageObject::truncate(): save failed");
-
-            // Release Lock and Leave.
-            rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
-            STORE_METHOD_LEAVE(pMutex, eErrCode);
-        }
-    }
-
-    // Release Lock and Leave.
-    eErrCode = rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
-    STORE_METHOD_LEAVE(pMutex, eErrCode);
-}
-
-/*
- * truncate (double indirect).
- */
-storeError OStoreIndirectionPageObject::truncate (
-    sal_uInt16             nDouble,
-    sal_uInt16             nSingle,
-    page                 *&rpSingle,
-    OStoreDataPageObject  &rData,
-    OStorePageBIOS        &rBIOS,
-    osl::Mutex            *pMutex)
-{
-    // Acquire Mutex.
-    STORE_METHOD_ENTER(pMutex);
-
-    // Check arguments.
-    if (!((nDouble < m_rPage.capacityCount()) &&
-          (nSingle < m_rPage.capacityCount())    ))
-        STORE_METHOD_LEAVE(pMutex, store_E_InvalidAccess);
-
-    // Save PageDescriptor.
-    D aDescr (m_rPage.m_aDescr);
-
-    // Acquire Lock.
-    storeError eErrCode = rBIOS.acquireLock (aDescr.m_nAddr, aDescr.m_nSize);
-    if (eErrCode != store_E_None)
-        STORE_METHOD_LEAVE(pMutex, eErrCode);
-
-    // Truncate.
-    sal_uInt16 i, n = m_rPage.capacityCount();
-    for (i = n; i > nDouble + 1; i--)
-    {
-        // Obtain single indirect page location.
-        sal_uInt32 nAddr = m_rPage.m_pData[i - 1];
-        if (nAddr == STORE_PAGE_NULL) continue;
-
-        // Check single indirect page buffer.
-        if (rpSingle == NULL)
-        {
-            sal_uInt16 nPageSize = m_rPage.m_aDescr.m_nSize;
-            rpSingle = new(nPageSize) page(nPageSize);
-        }
-
-        // Load single indirect page.
-        OStoreIndirectionPageObject aSingle (*rpSingle);
-        aSingle.location (nAddr);
-
-        eErrCode = rBIOS.load (aSingle);
-        if (eErrCode == store_E_None)
-        {
-            // Truncate to zero direct pages.
-            eErrCode = aSingle.truncate (0, rData, rBIOS, NULL);
+            // Free data page.
+            OStorePageData aPageHead;
+            eErrCode = rBIOS.free (aPageHead, nAddr);
             if (eErrCode != store_E_None)
             {
                 rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
-                STORE_METHOD_LEAVE(pMutex, eErrCode);
+                return eErrCode;
             }
 
-            // Free single indirect page.
-            eErrCode = rBIOS.free (aSingle);
-            if (eErrCode != store_E_None)
-            {
-                rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
-                STORE_METHOD_LEAVE(pMutex, eErrCode);
-            }
-        }
-        else
-        {
-            if (eErrCode != store_E_InvalidChecksum)
-            {
-                rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
-                STORE_METHOD_LEAVE(pMutex, eErrCode);
-            }
-        }
-
-        // Clear pointer to single indirect page.
-        m_rPage.m_pData[i - 1] = STORE_PAGE_NULL;
-        touch();
-    }
-
-    // Obtain last single indirect page location.
-    sal_uInt32 nAddr = m_rPage.m_pData[nDouble];
-    if (nAddr != STORE_PAGE_NULL)
-    {
-        // Check single indirect page buffer.
-        if (rpSingle == NULL)
-        {
-            sal_uInt16 nPageSize = m_rPage.m_aDescr.m_nSize;
-            rpSingle = new(nPageSize) page(nPageSize);
-        }
-
-        // Load last single indirect page.
-        OStoreIndirectionPageObject aSingle (*rpSingle);
-        aSingle.location (nAddr);
-
-        eErrCode = rBIOS.load (aSingle);
-        if (eErrCode == store_E_None)
-        {
-            // Truncate to 'nSingle' direct pages.
-            eErrCode = aSingle.truncate (nSingle, rData, rBIOS, NULL);
-            if (eErrCode != store_E_None)
-            {
-                rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
-                STORE_METHOD_LEAVE(pMutex, eErrCode);
-            }
-        }
-        else
-        {
-            if (eErrCode != store_E_InvalidChecksum)
-            {
-                rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
-                STORE_METHOD_LEAVE(pMutex, eErrCode);
-            }
-        }
-
-        // Check for complete truncation.
-        if (nSingle == 0)
-        {
-            // Free last single indirect page.
-            eErrCode = rBIOS.free (aSingle);
-            if (eErrCode != store_E_None)
-            {
-                rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
-                STORE_METHOD_LEAVE(pMutex, eErrCode);
-            }
-
-            // Clear pointer to last single indirect page.
-            m_rPage.m_pData[nDouble] = STORE_PAGE_NULL;
+            // Clear pointer to data page.
+            rPage.m_pData[i - 1] = STORE_PAGE_NULL;
             touch();
         }
     }
@@ -632,7 +472,7 @@ storeError OStoreIndirectionPageObject::truncate (
     if (dirty())
     {
         // Save this page.
-        eErrCode = rBIOS.save (*this);
+        eErrCode = rBIOS.saveObjectAt (*this, location());
         if (eErrCode != store_E_None)
         {
             // Must not happen.
@@ -640,13 +480,90 @@ storeError OStoreIndirectionPageObject::truncate (
 
             // Release Lock and Leave.
             rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
-            STORE_METHOD_LEAVE(pMutex, eErrCode);
+            return eErrCode;
         }
     }
 
     // Release Lock and Leave.
-    eErrCode = rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
-    STORE_METHOD_LEAVE(pMutex, eErrCode);
+    return rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
+}
+
+/*
+ * truncate (double indirect).
+ */
+storeError OStoreIndirectionPageObject::truncate (
+    sal_uInt16             nDouble,
+    sal_uInt16             nSingle,
+    OStorePageBIOS        &rBIOS)
+{
+    PageHolderObject< page > xImpl (m_xPage);
+    page & rPage = (*xImpl);
+
+    // Check arguments.
+    sal_uInt16 const nLimit = rPage.capacityCount();
+    if (!((nDouble < nLimit) && (nSingle < nLimit)))
+        return store_E_InvalidAccess;
+
+    // Save PageDescriptor.
+    OStorePageDescriptor aDescr (rPage.m_aDescr);
+    aDescr.m_nAddr = store::ntohl(aDescr.m_nAddr);
+    aDescr.m_nSize = store::ntohs(aDescr.m_nSize);
+
+    // Acquire Lock.
+    storeError eErrCode = rBIOS.acquireLock (aDescr.m_nAddr, aDescr.m_nSize);
+    if (eErrCode != store_E_None)
+        return eErrCode;
+
+    // Truncate.
+    for (sal_uInt16 i = nLimit; i > nDouble + 1; i--)
+    {
+        // Truncate single indirect page to zero direct pages.
+        eErrCode = store_truncate_Impl (store::ntohl(rPage.m_pData[i - 1]), 0, rBIOS);
+        if (eErrCode != store_E_None)
+        {
+            rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
+            return eErrCode;
+        }
+
+        // Clear pointer to single indirect page.
+        rPage.m_pData[i - 1] = STORE_PAGE_NULL;
+        touch();
+    }
+
+    // Truncate last single indirect page to 'nSingle' direct pages.
+    eErrCode = store_truncate_Impl (store::ntohl(rPage.m_pData[nDouble]), nSingle, rBIOS);
+    if (eErrCode != store_E_None)
+    {
+        rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
+        return eErrCode;
+    }
+
+    // Check for complete truncation.
+    if (nSingle == 0)
+    {
+        // Clear pointer to last single indirect page.
+        rPage.m_pData[nDouble] = STORE_PAGE_NULL;
+        touch();
+    }
+
+    // Check for modified page.
+    if (dirty())
+    {
+        // Save this page.
+        eErrCode = rBIOS.saveObjectAt (*this, location());
+        if (eErrCode != store_E_None)
+        {
+            // Must not happen.
+            OSL_TRACE("OStoreIndirectionPageObject::truncate(): save failed");
+
+            // Release Lock and Leave.
+            rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
+            return eErrCode;
+        }
+    }
+
+    // Release Lock and Leave.
+    return rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
 }
 
 /*
@@ -656,140 +573,63 @@ storeError OStoreIndirectionPageObject::truncate (
     sal_uInt16             nTriple,
     sal_uInt16             nDouble,
     sal_uInt16             nSingle,
-    page                 *&rpDouble,
-    page                 *&rpSingle,
-    OStoreDataPageObject  &rData,
-    OStorePageBIOS        &rBIOS,
-    osl::Mutex            *pMutex)
+    OStorePageBIOS        &rBIOS)
 {
-    // Enter.
-    STORE_METHOD_ENTER(pMutex);
+    PageHolderObject< page > xImpl (m_xPage);
+    page & rPage = (*xImpl);
 
     // Check arguments.
-    if (!((nTriple < m_rPage.capacityCount()) &&
-          (nDouble < m_rPage.capacityCount()) &&
-          (nSingle < m_rPage.capacityCount())    ))
-        STORE_METHOD_LEAVE(pMutex, store_E_InvalidAccess);
+    sal_uInt16 const nLimit = rPage.capacityCount();
+    if (!((nTriple < nLimit) && (nDouble < nLimit) && (nSingle < nLimit)))
+        return store_E_InvalidAccess;
 
     // Save PageDescriptor.
-    D aDescr (m_rPage.m_aDescr);
+    OStorePageDescriptor aDescr (rPage.m_aDescr);
+    aDescr.m_nAddr = store::ntohl(aDescr.m_nAddr);
+    aDescr.m_nSize = store::ntohs(aDescr.m_nSize);
 
     // Acquire Lock.
     storeError eErrCode = rBIOS.acquireLock (aDescr.m_nAddr, aDescr.m_nSize);
     if (eErrCode != store_E_None)
-        STORE_METHOD_LEAVE(pMutex, eErrCode);
+        return eErrCode;
 
     // Truncate.
-    sal_uInt16 i, n = m_rPage.capacityCount();
-    for (i = n; i > nTriple + 1; i--)
+    for (sal_uInt16 i = nLimit; i > nTriple + 1; i--)
     {
-        // Obtain double indirect page location.
-        sal_uInt32 nAddr = m_rPage.m_pData[i - 1];
-        if (nAddr == STORE_PAGE_NULL) continue;
-
-        // Check double indirect page buffer.
-        if (rpDouble == NULL)
+        // Truncate double indirect page to zero single indirect pages.
+        eErrCode = store_truncate_Impl (store::ntohl(rPage.m_pData[i - 1]), 0, 0, rBIOS);
+        if (eErrCode != store_E_None)
         {
-            sal_uInt16 nPageSize = m_rPage.m_aDescr.m_nSize;
-            rpDouble = new(nPageSize) page(nPageSize);
-        }
-
-        // Load double indirect page.
-        OStoreIndirectionPageObject aDouble (*rpDouble);
-        aDouble.location (nAddr);
-
-        eErrCode = rBIOS.load (aDouble);
-        if (eErrCode == store_E_None)
-        {
-            // Truncate to zero single indirect pages.
-            eErrCode = aDouble.truncate (
-                0, 0, rpSingle, rData, rBIOS, NULL);
-            if (eErrCode != store_E_None)
-            {
-                rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
-                STORE_METHOD_LEAVE(pMutex, eErrCode);
-            }
-
-            // Free double indirect page.
-            eErrCode = rBIOS.free (aDouble);
-            if (eErrCode != store_E_None)
-            {
-                rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
-                STORE_METHOD_LEAVE(pMutex, eErrCode);
-            }
-        }
-        else
-        {
-            if (eErrCode != store_E_InvalidChecksum)
-            {
-                rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
-                STORE_METHOD_LEAVE(pMutex, eErrCode);
-            }
+            rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
+            return eErrCode;
         }
 
         // Clear pointer to double indirect page.
-        m_rPage.m_pData[i - 1] = STORE_PAGE_NULL;
+        rPage.m_pData[i - 1] = STORE_PAGE_NULL;
         touch();
     }
 
-    // Obtain last double indirect page location.
-    sal_uInt32 nAddr = m_rPage.m_pData[nTriple];
-    if (nAddr != STORE_PAGE_NULL)
+    // Truncate last double indirect page to 'nDouble', 'nSingle' pages.
+    eErrCode = store_truncate_Impl (store::ntohl(rPage.m_pData[nTriple]), nDouble, nSingle, rBIOS);
+    if (eErrCode != store_E_None)
     {
-        // Check double indirect page buffer.
-        if (rpDouble == NULL)
-        {
-            sal_uInt16 nPageSize = m_rPage.m_aDescr.m_nSize;
-            rpDouble = new(nPageSize) page(nPageSize);
-        }
+        rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
+        return eErrCode;
+    }
 
-        // Load last double indirect page.
-        OStoreIndirectionPageObject aDouble (*rpDouble);
-        aDouble.location (nAddr);
-
-        eErrCode = rBIOS.load (aDouble);
-        if (eErrCode == store_E_None)
-        {
-            // Truncate to 'nDouble', 'nSingle' pages.
-            eErrCode = aDouble.truncate (
-                nDouble, nSingle, rpSingle, rData, rBIOS, NULL);
-            if (eErrCode != store_E_None)
-            {
-                rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
-                STORE_METHOD_LEAVE(pMutex, eErrCode);
-            }
-        }
-        else
-        {
-            if (eErrCode != store_E_InvalidChecksum)
-            {
-                rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
-                STORE_METHOD_LEAVE(pMutex, eErrCode);
-            }
-        }
-
-        // Check for complete truncation.
-        if ((nDouble + nSingle) == 0)
-        {
-            // Free last double indirect page.
-            eErrCode = rBIOS.free (aDouble);
-            if (eErrCode != store_E_None)
-            {
-                rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
-                STORE_METHOD_LEAVE(pMutex, eErrCode);
-            }
-
-            // Clear pointer to last double indirect page.
-            m_rPage.m_pData[nTriple] = STORE_PAGE_NULL;
-            touch();
-        }
+    // Check for complete truncation.
+    if ((nDouble + nSingle) == 0)
+    {
+        // Clear pointer to last double indirect page.
+        rPage.m_pData[nTriple] = STORE_PAGE_NULL;
+        touch();
     }
 
     // Check for modified page.
     if (dirty())
     {
         // Save this page.
-        eErrCode = rBIOS.save (*this);
+        eErrCode = rBIOS.saveObjectAt (*this, location());
         if (eErrCode != store_E_None)
         {
             // Must not happen.
@@ -797,60 +637,12 @@ storeError OStoreIndirectionPageObject::truncate (
 
             // Release Lock and Leave.
             rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
-            STORE_METHOD_LEAVE(pMutex, eErrCode);
+            return eErrCode;
         }
     }
 
     // Release Lock and Leave.
-    eErrCode = rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
-    STORE_METHOD_LEAVE(pMutex, eErrCode);
-}
-
-/*========================================================================
- *
- * OStoreDirectoryDataBlock::LinkTable implementation.
- *
- *======================================================================*/
-/*
- * LinkTable::LinkTable.
- */
-OStoreDirectoryDataBlock::LinkTable::LinkTable (void)
-{
-    initialize();
-}
-
-/*
- * LinkTable::initialize.
- */
-void OStoreDirectoryDataBlock::LinkTable::initialize (void)
-{
-    sal_Int32 i;
-    for (i = 0; i < STORE_LIMIT_DATAPAGE_DIRECT; i++)
-        m_pDirect[i] = STORE_PAGE_NULL;
-    for (i = 0; i < STORE_LIMIT_DATAPAGE_SINGLE; i++)
-        m_pSingle[i] = STORE_PAGE_NULL;
-    for (i = 0; i < STORE_LIMIT_DATAPAGE_DOUBLE; i++)
-        m_pDouble[i] = STORE_PAGE_NULL;
-    for (i = 0; i < STORE_LIMIT_DATAPAGE_TRIPLE; i++)
-        m_pTriple[i] = STORE_PAGE_NULL;
-}
-
-/*
- * LinkTable::swap.
- */
-void OStoreDirectoryDataBlock::LinkTable::swap (void)
-{
-#ifdef OSL_BIGENDIAN
-    sal_Int32 i;
-    for (i = 0; i < STORE_LIMIT_DATAPAGE_DIRECT; i++)
-        m_pDirect[i] = OSL_SWAPDWORD(m_pDirect[i]);
-    for (i = 0; i < STORE_LIMIT_DATAPAGE_SINGLE; i++)
-        m_pSingle[i] = OSL_SWAPDWORD(m_pSingle[i]);
-    for (i = 0; i < STORE_LIMIT_DATAPAGE_DOUBLE; i++)
-        m_pDouble[i] = OSL_SWAPDWORD(m_pDouble[i]);
-    for (i = 0; i < STORE_LIMIT_DATAPAGE_TRIPLE; i++)
-        m_pTriple[i] = OSL_SWAPDWORD(m_pTriple[i]);
-#endif /* OSL_BIGENDIAN */
+    return rBIOS.releaseLock (aDescr.m_nAddr, aDescr.m_nSize);
 }
 
 /*========================================================================
@@ -859,55 +651,37 @@ void OStoreDirectoryDataBlock::LinkTable::swap (void)
  *
  *======================================================================*/
 /*
- * swap.
- */
-void OStoreDirectoryPageObject::swap (
-    const D&
-#ifdef OSL_BIGENDIAN
-        rDescr
-#endif /* OSL_BIGENDIAN */
-)
-{
-#ifdef OSL_BIGENDIAN
-    base::swap (rDescr);
-    m_rPage.swap ();
-#endif /* OSL_BIGENDIAN */
-}
-
-/*
  * guard.
  */
-void OStoreDirectoryPageObject::guard (const D& rDescr)
+storeError OStoreDirectoryPageObject::guard (sal_uInt32 nAddr)
 {
-    base::guard (rDescr);
-    m_rPage.guard ();
+    return PageHolderObject< page >::guard (m_xPage, nAddr);
 }
 
 /*
  * verify.
  */
-storeError OStoreDirectoryPageObject::verify (const D& rDescr)
+storeError OStoreDirectoryPageObject::verify (sal_uInt32 nAddr) const
 {
-    storeError eErrCode = base::verify (rDescr);
-    if (eErrCode != store_E_None)
-        return eErrCode;
-    else
-        return m_rPage.verify ();
+    return PageHolderObject< page >::verify (m_xPage, nAddr);
+    // OLD: m_rPage.verifyVersion (STORE_MAGIC_DIRECTORYPAGE);
 }
 
 /*
- * scope (external data page).
+ * scope (external data page; private).
  */
 OStoreDirectoryPageData::ChunkScope
 OStoreDirectoryPageObject::scope (
     sal_uInt32                       nPage,
     page::DataBlock::LinkDescriptor &rDescr) const
 {
-    typedef OStoreIndirectionPageData indrct;
+    page const & rPage = PAGE();
+    OStoreDirectoryDataBlock const & rDataBlock = rPage.m_aDataBlock;
+
     sal_uInt32 index0, index1, index2, index3;
 
     // direct.
-    sal_uInt32 nCount = m_rPage.m_aDataBlock.directCount();
+    sal_uInt32 nCount = rDataBlock.directCount();
     sal_uInt32 nLimit = nCount;
     if (nPage < nLimit)
     {
@@ -923,8 +697,8 @@ OStoreDirectoryPageObject::scope (
     nPage -= nLimit;
 
     // single indirect.
-    sal_uInt32 nCapacity = indrct::capacityCount(m_rPage.m_aDescr);
-    nCount = m_rPage.m_aDataBlock.singleCount();
+    sal_uInt32 const nCapacity = indirect::capacityCount(rPage.m_aDescr);
+    nCount = rDataBlock.singleCount();
     nLimit = nCount * nCapacity;
     if (nPage < nLimit)
     {
@@ -951,7 +725,7 @@ OStoreDirectoryPageObject::scope (
     nPage -= nLimit;
 
     // double indirect.
-    nCount = m_rPage.m_aDataBlock.doubleCount();
+    nCount = rDataBlock.doubleCount();
     nLimit = nCount * nCapacity * nCapacity;
     if (nPage < nLimit)
     {
@@ -984,7 +758,7 @@ OStoreDirectoryPageObject::scope (
     nPage -= nLimit;
 
     // triple indirect.
-    nCount = m_rPage.m_aDataBlock.tripleCount();
+    nCount = rDataBlock.tripleCount();
     nLimit = nCount * nCapacity * nCapacity * nCapacity;
     if (nPage < nLimit)
     {
@@ -1025,21 +799,39 @@ OStoreDirectoryPageObject::scope (
     return page::SCOPE_UNREACHABLE;
 }
 
+#if 0  /* NYI */
 /*
- * get (external data page).
+ * chunk (external data page).
  */
-storeError OStoreDirectoryPageObject::get (
-    sal_uInt32             nPage,
-    indirect             *&rpSingle,
-    indirect             *&rpDouble,
-    indirect             *&rpTriple,
-    OStoreDataPageObject  &rData,
-    OStorePageBIOS        &rBIOS,
-    osl::Mutex            *pMutex)
+inode::ChunkDescriptor OStoreDirectoryPageObject::chunk (sal_uInt32 nOffset)
 {
-    // Enter.
-    STORE_METHOD_ENTER(pMutex);
+    // @@@ INSUFFICIENT: NEED SCOPE AS WELL @@@
+    sal_uInt32 nCapacity = m_rPage.capacity();
+    if (nOffset < nCapacity)
+        // Internal scope (inode page).
+        return inode::ChunkDescriptor (nOffset, nCapacity);
+    else
+        // External scope (data page).
+        return inode::ChunkDescriptor (nOffset - nCapacity, data::capacity(m_rPage.m_aDescr));
 
+    inode::ChunkScope eScope = m_rPage.scope(nOffset);
+    if (eScope == inode::SCOPE_INTERNAL)
+        // Inode page (internal scope).
+        return inode::ChunkDescriptor (nOffset, m_rPage.capacity());
+    else
+        // Data page (external scope).
+        return inode::ChunkDescriptor (nOffset - m_rPage.capacity(), data::capacity(m_rPage.m_aDescr));
+}
+#endif /* NYI */
+
+/*
+ * read (external data page).
+ */
+storeError OStoreDirectoryPageObject::read (
+    sal_uInt32             nPage,
+    OStoreDataPageObject  &rData,
+    OStorePageBIOS        &rBIOS)
+{
     // Determine scope and link indices.
     page::DataBlock::LinkDescriptor aLink;
     page::ChunkScope eScope = scope (nPage, aLink);
@@ -1047,87 +839,50 @@ storeError OStoreDirectoryPageObject::get (
     storeError eErrCode = store_E_None;
     if (eScope == page::SCOPE_DIRECT)
     {
-        sal_uInt32 nAddr = directLink (aLink.m_nIndex0);
+        sal_uInt32 const nAddr = directLink (aLink.m_nIndex0);
         if (nAddr == STORE_PAGE_NULL)
-            STORE_METHOD_LEAVE(pMutex, store_E_NotExists);
+            return store_E_NotExists;
 
-        rData.location (nAddr);
-        eErrCode = rBIOS.load (rData);
+        eErrCode = rBIOS.loadObjectAt (rData, nAddr);
     }
     else if (eScope == page::SCOPE_SINGLE)
     {
-        sal_uInt32 nAddr = singleLink (aLink.m_nIndex1);
+        sal_uInt32 const nAddr = singleLink (aLink.m_nIndex1);
         if (nAddr == STORE_PAGE_NULL)
-            STORE_METHOD_LEAVE(pMutex, store_E_NotExists);
+            return store_E_NotExists;
 
-        if (rpSingle == NULL)
-        {
-            sal_uInt16 nPageSize = m_rPage.m_aDescr.m_nSize;
-            rpSingle = new(nPageSize) indirect(nPageSize);
-        }
-
-        OStoreIndirectionPageObject aSingle (*rpSingle);
-        aSingle.location (nAddr);
-
-        eErrCode = rBIOS.load (aSingle);
+        OStoreIndirectionPageObject aSingle;
+        eErrCode = rBIOS.loadObjectAt (aSingle, nAddr);
         if (eErrCode != store_E_None)
-            STORE_METHOD_LEAVE(pMutex, eErrCode);
+            return eErrCode;
 
-        eErrCode = aSingle.get (
-            aLink.m_nIndex0,
-            rData, rBIOS, NULL);
+        eErrCode = aSingle.read (aLink.m_nIndex0, rData, rBIOS);
     }
     else if (eScope == page::SCOPE_DOUBLE)
     {
-        sal_uInt32 nAddr = doubleLink (aLink.m_nIndex2);
+        sal_uInt32 const nAddr = doubleLink (aLink.m_nIndex2);
         if (nAddr == STORE_PAGE_NULL)
-            STORE_METHOD_LEAVE(pMutex, store_E_NotExists);
+            return store_E_NotExists;
 
-        if (rpDouble == NULL)
-        {
-            sal_uInt16 nPageSize = m_rPage.m_aDescr.m_nSize;
-            rpDouble = new(nPageSize) indirect(nPageSize);
-        }
-
-        OStoreIndirectionPageObject aDouble (*rpDouble);
-        aDouble.location (nAddr);
-
-        eErrCode = rBIOS.load (aDouble);
+        OStoreIndirectionPageObject aDouble;
+        eErrCode = rBIOS.loadObjectAt (aDouble, nAddr);
         if (eErrCode != store_E_None)
-            STORE_METHOD_LEAVE(pMutex, eErrCode);
+            return eErrCode;
 
-        eErrCode = aDouble.get (
-            aLink.m_nIndex1,
-            aLink.m_nIndex0,
-            rpSingle,
-            rData, rBIOS, NULL);
+        eErrCode = aDouble.read (aLink.m_nIndex1, aLink.m_nIndex0, rData, rBIOS);
     }
     else if (eScope == page::SCOPE_TRIPLE)
     {
-        sal_uInt32 nAddr = tripleLink (aLink.m_nIndex3);
+        sal_uInt32 const nAddr = tripleLink (aLink.m_nIndex3);
         if (nAddr == STORE_PAGE_NULL)
-            STORE_METHOD_LEAVE(pMutex, store_E_NotExists);
+            return store_E_NotExists;
 
-        if (rpTriple == NULL)
-        {
-            sal_uInt16 nPageSize = m_rPage.m_aDescr.m_nSize;
-            rpTriple = new(nPageSize) indirect(nPageSize);
-        }
-
-        OStoreIndirectionPageObject aTriple (*rpTriple);
-        aTriple.location (nAddr);
-
-        eErrCode = rBIOS.load (aTriple);
+        OStoreIndirectionPageObject aTriple;
+        eErrCode = rBIOS.loadObjectAt (aTriple, nAddr);
         if (eErrCode != store_E_None)
-            STORE_METHOD_LEAVE(pMutex, eErrCode);
+            return eErrCode;
 
-        eErrCode = aTriple.get (
-            aLink.m_nIndex2,
-            aLink.m_nIndex1,
-            aLink.m_nIndex0,
-            rpDouble,
-            rpSingle,
-            rData, rBIOS, NULL);
+        eErrCode = aTriple.read (aLink.m_nIndex2, aLink.m_nIndex1, aLink.m_nIndex0, rData, rBIOS);
     }
     else if (eScope == page::SCOPE_UNREACHABLE)
     {
@@ -1142,24 +897,17 @@ storeError OStoreDirectoryPageObject::get (
     }
 
     // Leave.
-    STORE_METHOD_LEAVE(pMutex, eErrCode);
+    return eErrCode;
 }
 
 /*
- * put (external data page).
+ * write (external data page).
  */
-storeError OStoreDirectoryPageObject::put (
+storeError OStoreDirectoryPageObject::write (
     sal_uInt32             nPage,
-    indirect             *&rpSingle,
-    indirect             *&rpDouble,
-    indirect             *&rpTriple,
     OStoreDataPageObject  &rData,
-    OStorePageBIOS        &rBIOS,
-    osl::Mutex            *pMutex)
+    OStorePageBIOS        &rBIOS)
 {
-    // Enter.
-    STORE_METHOD_ENTER(pMutex);
-
     // Determine scope and link indices.
     page::DataBlock::LinkDescriptor aLink;
     page::ChunkScope eScope = scope (nPage, aLink);
@@ -1167,118 +915,61 @@ storeError OStoreDirectoryPageObject::put (
     storeError eErrCode = store_E_None;
     if (eScope == page::SCOPE_DIRECT)
     {
-        rData.location (directLink (aLink.m_nIndex0));
-        if (rData.location() == STORE_PAGE_NULL)
+        sal_uInt32 const nAddr = directLink (aLink.m_nIndex0);
+        if (nAddr == STORE_PAGE_NULL)
         {
+            // Allocate data page.
             eErrCode = rBIOS.allocate (rData);
             if (eErrCode != store_E_None)
-                STORE_METHOD_LEAVE(pMutex, eErrCode);
+                return eErrCode;
 
+            // Store data page location.
             directLink (aLink.m_nIndex0, rData.location());
         }
         else
         {
-            eErrCode = rBIOS.save (rData);
+            // Save data page.
+            eErrCode = rBIOS.saveObjectAt (rData, nAddr);
         }
     }
     else if (eScope == page::SCOPE_SINGLE)
     {
-        if (rpSingle == NULL)
+        OStoreIndirectionPageObject aSingle;
+        eErrCode = aSingle.loadOrCreate (singleLink (aLink.m_nIndex1), rBIOS);
+        if (eErrCode != store_E_None)
         {
-            sal_uInt16 nPageSize = m_rPage.m_aDescr.m_nSize;
-            rpSingle = new(nPageSize) indirect(nPageSize);
-        }
-
-        OStoreIndirectionPageObject aSingle (*rpSingle);
-        aSingle.location (singleLink (aLink.m_nIndex1));
-        if (aSingle.location() == STORE_PAGE_NULL)
-        {
-            rpSingle->initialize();
-
-            eErrCode = rBIOS.allocate (aSingle);
-            if (eErrCode != store_E_None)
-                STORE_METHOD_LEAVE(pMutex, eErrCode);
-
+            if (eErrCode != store_E_Pending)
+                return eErrCode;
             singleLink (aLink.m_nIndex1, aSingle.location());
         }
-        else
-        {
-            eErrCode = rBIOS.load (aSingle);
-            if (eErrCode != store_E_None)
-                STORE_METHOD_LEAVE(pMutex, eErrCode);
-        }
 
-        eErrCode = aSingle.put (
-            aLink.m_nIndex0,
-            rData, rBIOS, NULL);
+        eErrCode = aSingle.write (aLink.m_nIndex0, rData, rBIOS);
     }
     else if (eScope == page::SCOPE_DOUBLE)
     {
-        if (rpDouble == NULL)
+        OStoreIndirectionPageObject aDouble;
+        eErrCode = aDouble.loadOrCreate (doubleLink (aLink.m_nIndex2), rBIOS);
+        if (eErrCode != store_E_None)
         {
-            sal_uInt16 nPageSize = m_rPage.m_aDescr.m_nSize;
-            rpDouble = new(nPageSize) indirect(nPageSize);
-        }
-
-        OStoreIndirectionPageObject aDouble (*rpDouble);
-        aDouble.location (doubleLink (aLink.m_nIndex2));
-        if (aDouble.location() == STORE_PAGE_NULL)
-        {
-            rpDouble->initialize();
-
-            eErrCode = rBIOS.allocate (aDouble);
-            if (eErrCode != store_E_None)
-                STORE_METHOD_LEAVE(pMutex, eErrCode);
-
+            if (eErrCode != store_E_Pending)
+                return eErrCode;
             doubleLink (aLink.m_nIndex2, aDouble.location());
         }
-        else
-        {
-            eErrCode = rBIOS.load (aDouble);
-            if (eErrCode != store_E_None)
-                STORE_METHOD_LEAVE(pMutex, eErrCode);
-        }
 
-        eErrCode = aDouble.put (
-            aLink.m_nIndex1,
-            aLink.m_nIndex0,
-            rpSingle,
-            rData, rBIOS, NULL);
+        eErrCode = aDouble.write (aLink.m_nIndex1, aLink.m_nIndex0, rData, rBIOS);
     }
     else if (eScope == page::SCOPE_TRIPLE)
     {
-        if (rpTriple == NULL)
+        OStoreIndirectionPageObject aTriple;
+        eErrCode = aTriple.loadOrCreate (tripleLink (aLink.m_nIndex3), rBIOS);
+        if (eErrCode != store_E_None)
         {
-            sal_uInt16 nPageSize = m_rPage.m_aDescr.m_nSize;
-            rpTriple = new(nPageSize) indirect(nPageSize);
-        }
-
-        OStoreIndirectionPageObject aTriple (*rpTriple);
-        aTriple.location (tripleLink (aLink.m_nIndex3));
-        if (aTriple.location() == STORE_PAGE_NULL)
-        {
-            rpTriple->initialize();
-
-            eErrCode = rBIOS.allocate (aTriple);
-            if (eErrCode != store_E_None)
-                STORE_METHOD_LEAVE(pMutex, eErrCode);
-
+            if (eErrCode != store_E_Pending)
+                return eErrCode;
             tripleLink (aLink.m_nIndex3, aTriple.location());
         }
-        else
-        {
-            eErrCode = rBIOS.load (aTriple);
-            if (eErrCode != store_E_None)
-                STORE_METHOD_LEAVE(pMutex, eErrCode);
-        }
 
-        eErrCode = aTriple.put (
-            aLink.m_nIndex2,
-            aLink.m_nIndex1,
-            aLink.m_nIndex0,
-            rpDouble,
-            rpSingle,
-            rData, rBIOS, NULL);
+        eErrCode = aTriple.write (aLink.m_nIndex2, aLink.m_nIndex1, aLink.m_nIndex0, rData, rBIOS);
     }
     else if (eScope == page::SCOPE_UNREACHABLE)
     {
@@ -1293,7 +984,7 @@ storeError OStoreDirectoryPageObject::put (
     }
 
     // Leave.
-    STORE_METHOD_LEAVE(pMutex, eErrCode);
+    return eErrCode;
 }
 
 /*
@@ -1301,16 +992,8 @@ storeError OStoreDirectoryPageObject::put (
  */
 storeError OStoreDirectoryPageObject::truncate (
     sal_uInt32             nPage,
-    indirect             *&rpSingle,
-    indirect             *&rpDouble,
-    indirect             *&rpTriple,
-    OStoreDataPageObject  &rData,
-    OStorePageBIOS        &rBIOS,
-    osl::Mutex            *pMutex)
+    OStorePageBIOS        &rBIOS)
 {
-    // Enter.
-    STORE_METHOD_ENTER(pMutex);
-
     // Determine scope and link indices.
     page::DataBlock::LinkDescriptor aLink;
     page::ChunkScope eScope = scope (nPage, aLink);
@@ -1319,209 +1002,95 @@ storeError OStoreDirectoryPageObject::truncate (
     if (eScope == page::SCOPE_DIRECT)
     {
         // Truncate all triple indirect pages.
-        eErrCode = truncate (
-            page::SCOPE_TRIPLE, 0,
-            rpSingle, rpDouble, rpTriple,
-            rData, rBIOS, NULL);
+        eErrCode = truncate (page::SCOPE_TRIPLE, 0, rBIOS);
         if (eErrCode != store_E_None)
-            STORE_METHOD_LEAVE(pMutex, eErrCode);
+            return eErrCode;
 
         // Truncate all double indirect pages.
-        eErrCode = truncate (
-            page::SCOPE_DOUBLE, 0,
-            rpSingle, rpDouble, rpTriple,
-            rData, rBIOS, NULL);
+        eErrCode = truncate (page::SCOPE_DOUBLE, 0, rBIOS);
         if (eErrCode != store_E_None)
-            STORE_METHOD_LEAVE(pMutex, eErrCode);
+            return eErrCode;
 
         // Truncate all single indirect pages.
-        eErrCode = truncate (
-            page::SCOPE_SINGLE, 0,
-            rpSingle, rpDouble, rpTriple,
-            rData, rBIOS, NULL);
+        eErrCode = truncate (page::SCOPE_SINGLE, 0, rBIOS);
         if (eErrCode != store_E_None)
-            STORE_METHOD_LEAVE(pMutex, eErrCode);
+            return eErrCode;
 
         // Truncate direct pages, including 'aLink.m_nIndex0'.
-        eErrCode = truncate (
-            eScope, aLink.m_nIndex0,
-            rpSingle, rpDouble, rpTriple,
-            rData, rBIOS, NULL);
+        eErrCode = truncate (eScope, aLink.m_nIndex0, rBIOS);
     }
     else if (eScope == page::SCOPE_SINGLE)
     {
         // Truncate all triple indirect pages.
-        eErrCode = truncate (
-            page::SCOPE_TRIPLE, 0,
-            rpSingle, rpDouble, rpTriple,
-            rData, rBIOS, NULL);
+        eErrCode = truncate (page::SCOPE_TRIPLE, 0, rBIOS);
         if (eErrCode != store_E_None)
-            STORE_METHOD_LEAVE(pMutex, eErrCode);
+            return eErrCode;
 
         // Truncate all double indirect pages.
-        eErrCode = truncate (
-            page::SCOPE_DOUBLE, 0,
-            rpSingle, rpDouble, rpTriple,
-            rData, rBIOS, NULL);
+        eErrCode = truncate (page::SCOPE_DOUBLE, 0, rBIOS);
         if (eErrCode != store_E_None)
-            STORE_METHOD_LEAVE(pMutex, eErrCode);
+            return eErrCode;
 
         // Truncate single indirect pages, downto 'aLink.m_nIndex1'.
-        eErrCode = truncate (
-            eScope, aLink.m_nIndex1 + 1,
-            rpSingle, rpDouble, rpTriple,
-            rData, rBIOS, NULL);
+        eErrCode = truncate (eScope, aLink.m_nIndex1 + 1, rBIOS);
         if (eErrCode != store_E_None)
-            STORE_METHOD_LEAVE(pMutex, eErrCode);
+            return eErrCode;
 
-        // Obtain last single indirect page location.
-        sal_uInt32 nAddr = singleLink (aLink.m_nIndex1);
-        if (nAddr != STORE_PAGE_NULL)
+        // Truncate last single indirect page to ... pages.
+        eErrCode = store_truncate_Impl (singleLink (aLink.m_nIndex1), aLink.m_nIndex0, rBIOS);
+        if (eErrCode != store_E_None)
+            return eErrCode;
+
+        // Check for complete truncation.
+        if (aLink.m_nIndex0 == 0)
         {
-            // Check single indirect page buffer.
-            if (rpSingle == NULL)
-            {
-                sal_uInt16 nPageSize = m_rPage.m_aDescr.m_nSize;
-                rpSingle = new(nPageSize) indirect(nPageSize);
-            }
-
-            // Load last single indirect page.
-            OStoreIndirectionPageObject aSingle (*rpSingle);
-            aSingle.location (nAddr);
-
-            eErrCode = rBIOS.load (aSingle);
-            if (eErrCode != store_E_None)
-                STORE_METHOD_LEAVE(pMutex, eErrCode);
-
-            // Truncate to ... pages.
-            eErrCode = aSingle.truncate (
-                aLink.m_nIndex0,
-                rData, rBIOS, NULL);
-            if (eErrCode != store_E_None)
-                STORE_METHOD_LEAVE(pMutex, eErrCode);
-
-            // Check for complete truncation.
-            if (aLink.m_nIndex0 == 0)
-            {
-                // Free last single indirect page.
-                eErrCode = rBIOS.free (aSingle);
-                if (eErrCode != store_E_None)
-                    STORE_METHOD_LEAVE(pMutex, eErrCode);
-
-                // Clear pointer to last single indirect page.
-                singleLink (aLink.m_nIndex1, STORE_PAGE_NULL);
-            }
+            // Clear pointer to last single indirect page.
+            singleLink (aLink.m_nIndex1, STORE_PAGE_NULL);
         }
     }
     else if (eScope == page::SCOPE_DOUBLE)
     {
         // Truncate all triple indirect pages.
-        eErrCode = truncate (
-            page::SCOPE_TRIPLE, 0,
-            rpSingle, rpDouble, rpTriple,
-            rData, rBIOS, NULL);
+        eErrCode = truncate (page::SCOPE_TRIPLE, 0, rBIOS);
         if (eErrCode != store_E_None)
-            STORE_METHOD_LEAVE(pMutex, eErrCode);
+            return eErrCode;
 
         // Truncate double indirect pages, downto 'aLink.m_nIndex2'.
-        eErrCode = truncate (
-            eScope, aLink.m_nIndex2 + 1,
-            rpSingle, rpDouble, rpTriple,
-            rData, rBIOS, NULL);
+        eErrCode = truncate (eScope, aLink.m_nIndex2 + 1, rBIOS);
         if (eErrCode != store_E_None)
-            STORE_METHOD_LEAVE(pMutex, eErrCode);
+            return eErrCode;
 
-        // Obtain last double indirect page location.
-        sal_uInt32 nAddr = doubleLink (aLink.m_nIndex2);
-        if (nAddr != STORE_PAGE_NULL)
+        // Truncate last double indirect page to ... pages.
+        eErrCode = store_truncate_Impl (
+            doubleLink (aLink.m_nIndex2), aLink.m_nIndex1, aLink.m_nIndex0, rBIOS);
+        if (eErrCode != store_E_None)
+            return eErrCode;
+
+        // Check for complete truncation.
+        if ((aLink.m_nIndex1 + aLink.m_nIndex0) == 0)
         {
-            // Check double indirect page buffer.
-            if (rpDouble == NULL)
-            {
-                sal_uInt16 nPageSize = m_rPage.m_aDescr.m_nSize;
-                rpDouble = new(nPageSize) indirect(nPageSize);
-            }
-
-            // Load last double indirect page.
-            OStoreIndirectionPageObject aDouble (*rpDouble);
-            aDouble.location (nAddr);
-
-            eErrCode = rBIOS.load (aDouble);
-            if (eErrCode != store_E_None)
-                STORE_METHOD_LEAVE(pMutex, eErrCode);
-
-            // Truncate to ... pages.
-            eErrCode = aDouble.truncate (
-                aLink.m_nIndex1,
-                aLink.m_nIndex0,
-                rpSingle,
-                rData, rBIOS, NULL);
-            if (eErrCode != store_E_None)
-                STORE_METHOD_LEAVE(pMutex, eErrCode);
-
-            // Check for complete truncation.
-            if ((aLink.m_nIndex1 + aLink.m_nIndex0) == 0)
-            {
-                // Free last double indirect page.
-                eErrCode = rBIOS.free (aDouble);
-                if (eErrCode != store_E_None)
-                    STORE_METHOD_LEAVE(pMutex, eErrCode);
-
-                // Clear pointer to last double indirect page.
-                doubleLink (aLink.m_nIndex2, STORE_PAGE_NULL);
-            }
+            // Clear pointer to last double indirect page.
+            doubleLink (aLink.m_nIndex2, STORE_PAGE_NULL);
         }
     }
     else if (eScope == page::SCOPE_TRIPLE)
     {
         // Truncate triple indirect pages, downto 'aLink.m_nIndex3'.
-        eErrCode = truncate (
-            eScope, aLink.m_nIndex3 + 1,
-            rpSingle, rpDouble, rpTriple,
-            rData, rBIOS, NULL);
+        eErrCode = truncate (eScope, aLink.m_nIndex3 + 1, rBIOS);
         if (eErrCode != store_E_None)
-            STORE_METHOD_LEAVE(pMutex, eErrCode);
+            return eErrCode;
 
-        // Obtain last triple indirect page location.
-        sal_uInt32 nAddr = tripleLink (aLink.m_nIndex3);
-        if (nAddr != STORE_PAGE_NULL)
+        // Truncate last triple indirect page to ... pages.
+        eErrCode = store_truncate_Impl (
+            tripleLink (aLink.m_nIndex3), aLink.m_nIndex2, aLink.m_nIndex1, aLink.m_nIndex0, rBIOS);
+        if (eErrCode != store_E_None)
+            return eErrCode;
+
+        // Check for complete truncation.
+        if ((aLink.m_nIndex2 + aLink.m_nIndex1 + aLink.m_nIndex0) == 0)
         {
-            // Check triple indirect page buffer.
-            if (rpTriple == NULL)
-            {
-                sal_uInt16 nPageSize = m_rPage.m_aDescr.m_nSize;
-                rpTriple = new(nPageSize) indirect(nPageSize);
-            }
-
-            // Load last triple indirect page.
-            OStoreIndirectionPageObject aTriple (*rpTriple);
-            aTriple.location (nAddr);
-
-            eErrCode = rBIOS.load (aTriple);
-            if (eErrCode != store_E_None)
-                STORE_METHOD_LEAVE(pMutex, eErrCode);
-
-            // Truncate to ... pages.
-            eErrCode = aTriple.truncate (
-                aLink.m_nIndex2,
-                aLink.m_nIndex1,
-                aLink.m_nIndex0,
-                rpDouble, rpSingle,
-                rData, rBIOS, NULL);
-            if (eErrCode != store_E_None)
-                STORE_METHOD_LEAVE(pMutex, eErrCode);
-
-            // Check for complete truncation.
-            if ((aLink.m_nIndex2 + aLink.m_nIndex1 + aLink.m_nIndex0) == 0)
-            {
-                // Free last triple indirect page.
-                eErrCode = rBIOS.free (aTriple);
-                if (eErrCode != store_E_None)
-                    STORE_METHOD_LEAVE(pMutex, eErrCode);
-
-                // Clear pointer to last triple indirect page.
-                tripleLink (aLink.m_nIndex3, STORE_PAGE_NULL);
-            }
+            // Clear pointer to last triple indirect page.
+            tripleLink (aLink.m_nIndex3, STORE_PAGE_NULL);
         }
     }
     else if (eScope == page::SCOPE_UNREACHABLE)
@@ -1537,7 +1106,7 @@ storeError OStoreDirectoryPageObject::truncate (
     }
 
     // Leave.
-    STORE_METHOD_LEAVE(pMutex, eErrCode);
+    return eErrCode;
 }
 
 /*
@@ -1546,21 +1115,16 @@ storeError OStoreDirectoryPageObject::truncate (
 storeError OStoreDirectoryPageObject::truncate (
     page::ChunkScope       eScope,
     sal_uInt16             nRemain,
-    indirect             *&rpSingle,
-    indirect             *&rpDouble,
-    indirect             *&rpTriple,
-    OStoreDataPageObject  &rData,
-    OStorePageBIOS        &rBIOS,
-    osl::Mutex            *pMutex)
+    OStorePageBIOS        &rBIOS)
 {
-    // Enter.
-    STORE_METHOD_ENTER(pMutex);
+    OStoreDirectoryDataBlock const & rDataBlock = PAGE().m_aDataBlock;
 
+    // Enter.
     storeError eErrCode = store_E_None;
     if (eScope == page::SCOPE_DIRECT)
     {
         // Truncate direct data pages.
-        sal_uInt16 i, n = m_rPage.m_aDataBlock.directCount();
+        sal_uInt16 i, n = rDataBlock.directCount();
         for (i = n; i > nRemain; i--)
         {
             // Obtain data page location.
@@ -1568,8 +1132,8 @@ storeError OStoreDirectoryPageObject::truncate (
             if (nAddr == STORE_PAGE_NULL) continue;
 
             // Free data page.
-            rData.location (nAddr);
-            eErrCode = rBIOS.free (rData);
+            OStoreDataPageData aData;
+            eErrCode = rBIOS.free (aData, nAddr);
             if (eErrCode != store_E_None)
                 break;
 
@@ -1578,42 +1142,17 @@ storeError OStoreDirectoryPageObject::truncate (
         }
 
         // Done.
-        STORE_METHOD_LEAVE(pMutex, eErrCode);
+        return eErrCode;
     }
 
     if (eScope == page::SCOPE_SINGLE)
     {
         // Truncate single indirect pages.
-        sal_uInt16 i, n = m_rPage.m_aDataBlock.singleCount();
+        sal_uInt16 i, n = rDataBlock.singleCount();
         for (i = n; i > nRemain; i--)
         {
-            // Obtain single indirect page location.
-            sal_uInt32 nAddr = singleLink (i - 1);
-            if (nAddr == STORE_PAGE_NULL) continue;
-
-            // Check single indirect page buffer.
-            if (rpSingle == NULL)
-            {
-                sal_uInt16 nPageSize = m_rPage.m_aDescr.m_nSize;
-                rpSingle = new(nPageSize) indirect(nPageSize);
-            }
-
-            OStoreIndirectionPageObject aSingle (*rpSingle);
-            aSingle.location (nAddr);
-
-            // Load single indirect page.
-            eErrCode = rBIOS.load (aSingle);
-            if (eErrCode != store_E_None)
-                break;
-
-            // Truncate to zero data pages.
-            eErrCode = aSingle.truncate (
-                0, rData, rBIOS, NULL);
-            if (eErrCode != store_E_None)
-                break;
-
-            // Free single indirect page.
-            eErrCode = rBIOS.free (aSingle);
+            // Truncate single indirect page to zero data pages.
+            eErrCode = store_truncate_Impl (singleLink (i - 1), 0, rBIOS);
             if (eErrCode != store_E_None)
                 break;
 
@@ -1622,42 +1161,17 @@ storeError OStoreDirectoryPageObject::truncate (
         }
 
         // Done.
-        STORE_METHOD_LEAVE(pMutex, eErrCode);
+        return eErrCode;
     }
 
     if (eScope == page::SCOPE_DOUBLE)
     {
         // Truncate double indirect pages.
-        sal_uInt16 i, n = m_rPage.m_aDataBlock.doubleCount();
+        sal_uInt16 i, n = rDataBlock.doubleCount();
         for (i = n; i > nRemain; i--)
         {
-            // Obtain double indirect page location.
-            sal_uInt32 nAddr = doubleLink (i - 1);
-            if (nAddr == STORE_PAGE_NULL) continue;
-
-            // Check double indirect page buffer.
-            if (rpDouble == NULL)
-            {
-                sal_uInt16 nPageSize = m_rPage.m_aDescr.m_nSize;
-                rpDouble = new(nPageSize) indirect(nPageSize);
-            }
-
-            OStoreIndirectionPageObject aDouble (*rpDouble);
-            aDouble.location (nAddr);
-
-            // Load double indirect page.
-            eErrCode = rBIOS.load (aDouble);
-            if (eErrCode != store_E_None)
-                break;
-
-            // Truncate to zero single indirect pages.
-            eErrCode = aDouble.truncate (
-                0, 0, rpSingle, rData, rBIOS, NULL);
-            if (eErrCode != store_E_None)
-                break;
-
-            // Free double indirect page.
-            eErrCode = rBIOS.free (aDouble);
+            // Truncate double indirect page to zero single indirect pages.
+            eErrCode = store_truncate_Impl (doubleLink (i - 1), 0, 0, rBIOS);
             if (eErrCode != store_E_None)
                 break;
 
@@ -1666,42 +1180,17 @@ storeError OStoreDirectoryPageObject::truncate (
         }
 
         // Done.
-        STORE_METHOD_LEAVE(pMutex, eErrCode);
+        return eErrCode;
     }
 
     if (eScope == page::SCOPE_TRIPLE)
     {
         // Truncate triple indirect pages.
-        sal_uInt16 i, n = m_rPage.m_aDataBlock.tripleCount();
+        sal_uInt16 i, n = rDataBlock.tripleCount();
         for (i = n; i > nRemain; i--)
         {
-            // Obtain triple indirect page location.
-            sal_uInt32 nAddr = tripleLink (i - 1);
-            if (nAddr == STORE_PAGE_NULL) continue;
-
-            // Check triple indirect page buffer.
-            if (rpTriple == NULL)
-            {
-                sal_uInt16 nPageSize = m_rPage.m_aDescr.m_nSize;
-                rpTriple = new(nPageSize) indirect(nPageSize);
-            }
-
-            OStoreIndirectionPageObject aTriple (*rpTriple);
-            aTriple.location (nAddr);
-
-            // Load triple indirect page.
-            eErrCode = rBIOS.load (aTriple);
-            if (eErrCode != store_E_None)
-                break;
-
             // Truncate to zero double indirect pages.
-            eErrCode = aTriple.truncate (
-                0, 0, 0, rpDouble, rpSingle, rData, rBIOS, NULL);
-            if (eErrCode != store_E_None)
-                break;
-
-            // Free triple indirect page.
-            eErrCode = rBIOS.free (aTriple);
+            eErrCode = store_truncate_Impl (tripleLink (i - 1), 0, 0, 0, rBIOS);
             if (eErrCode != store_E_None)
                 break;
 
@@ -1710,10 +1199,9 @@ storeError OStoreDirectoryPageObject::truncate (
         }
 
         // Done.
-        STORE_METHOD_LEAVE(pMutex, eErrCode);
+        return eErrCode;
     }
 
     // Invalid scope.
-    STORE_METHOD_LEAVE(pMutex, store_E_InvalidAccess);
+    return store_E_InvalidAccess;
 }
-

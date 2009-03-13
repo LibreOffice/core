@@ -55,12 +55,19 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <tchar.h>
+
 #ifdef __MINGW32__
 #include <wchar.h>
 #include <ctype.h>
 #endif
+
 #include <malloc.h>
 #include <algorithm>
+#include <limits>
+
+#ifdef max /* conflict w/ std::numeric_limits<T>::max() */
+#undef max
+#endif
 
 //#####################################################
 // BEGIN global
@@ -2588,16 +2595,13 @@ oslFileError SAL_CALL osl_isEndOfFile(oslFileHandle Handle, sal_Bool *pIsEOF)
 //#############################################
 oslFileError SAL_CALL osl_setFilePos(oslFileHandle Handle, sal_uInt32 uHow, sal_Int64 uPos)
 {
-    oslFileError    error;
-    HANDLE          hFile = (HANDLE)Handle;
+    HANDLE hFile = (HANDLE)Handle;
+    if (!IsValidHandle(hFile))
+        return osl_File_E_INVAL;
 
-    if ( IsValidHandle(hFile) )
+    DWORD dwMoveMethod = 0;
+    switch ( uHow )
     {
-        DWORD   dwMoveMethod;
-        LONG    lDistanceToMove, lDistanceToMoveHigh;
-
-        switch ( uHow )
-        {
         case osl_Pos_Current:
             dwMoveMethod = FILE_CURRENT;
             break;
@@ -2608,21 +2612,20 @@ oslFileError SAL_CALL osl_setFilePos(oslFileHandle Handle, sal_uInt32 uHow, sal_
         default:
             dwMoveMethod = FILE_BEGIN;
             break;
-        }
-
-        lDistanceToMove = (LONG)(uPos & 0xFFFFFFFF);
-        lDistanceToMoveHigh = (LONG)(uPos >> 32);
-
-
-        SetLastError(0);
-        SetFilePointer( hFile, lDistanceToMove, &lDistanceToMoveHigh, dwMoveMethod );
-
-        error = MapError( GetLastError() );
     }
-    else
-        error = osl_File_E_INVAL;
 
-    return error;
+    LONG nOffsetLo = sal::static_int_cast<LONG>(uPos & 0xFFFFFFFF);
+    LONG nOffsetHi = sal::static_int_cast<LONG>(uPos >> 32);
+
+    SetLastError(0);
+    DWORD dwPosLo = SetFilePointer( hFile, nOffsetLo, &nOffsetHi, dwMoveMethod );
+    if (INVALID_SET_FILE_POINTER == dwPosLo)
+    {
+        DWORD dwError = GetLastError();
+        if (NO_ERROR != dwError)
+            return MapError( dwError );
+    }
+    return osl_File_E_None;
 }
 
 //#############################################
@@ -2686,6 +2689,99 @@ oslFileError SAL_CALL osl_setFileSize(oslFileHandle Handle, sal_uInt64 uSize)
 }
 
 //#############################################
+oslFileError SAL_CALL osl_mapFile(
+    oslFileHandle Handle,
+    void**        ppAddr,
+    sal_uInt64    uLength,
+    sal_uInt64    uOffset,
+    sal_uInt32    uFlags)
+{
+    struct FileMapping
+    {
+        HANDLE m_handle;
+
+        explicit FileMapping (HANDLE hMap)
+            : m_handle (hMap)
+        {}
+
+        ~FileMapping()
+        {
+            (void)::CloseHandle(m_handle);
+        }
+    };
+
+    HANDLE hFile = (HANDLE)(Handle);
+    if (!IsValidHandle(hFile) || (0 == ppAddr))
+        return osl_File_E_INVAL;
+    *ppAddr = 0;
+
+    static SIZE_T const nLimit = std::numeric_limits< SIZE_T >::max();
+    if (uLength > nLimit)
+        return osl_File_E_OVERFLOW;
+    SIZE_T const nLength = sal::static_int_cast< SIZE_T >(uLength);
+
+    OSVERSIONINFO osinfo;
+    osinfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
+    (void)::GetVersionEx(&osinfo);
+
+    if (VER_PLATFORM_WIN32_NT != osinfo.dwPlatformId)
+        return osl_File_E_NOSYS; // Unsupported
+
+    FileMapping aMap( ::CreateFileMapping (hFile, NULL, SEC_COMMIT | PAGE_READONLY, 0, 0, NULL) );
+    if (!IsValidHandle(aMap.m_handle))
+        return MapError( GetLastError() );
+
+    DWORD const dwOffsetHi = sal::static_int_cast<DWORD>(uOffset >> 32);
+    DWORD const dwOffsetLo = sal::static_int_cast<DWORD>(uOffset & 0xFFFFFFFF);
+
+    *ppAddr = ::MapViewOfFile( aMap.m_handle, FILE_MAP_READ, dwOffsetHi, dwOffsetLo, nLength );
+    if (0 == *ppAddr)
+        return MapError( GetLastError() );
+
+    if (uFlags & osl_File_MapFlag_RandomAccess)
+    {
+        // Determine memory pagesize.
+        SYSTEM_INFO info;
+        ::GetSystemInfo( &info );
+        DWORD const dwPageSize = info.dwPageSize;
+
+        /*
+         * Pagein, touching first byte of each memory page.
+         * Note: volatile disables optimizing the loop away.
+         */
+        BYTE * pData (reinterpret_cast<BYTE*>(*ppAddr));
+        SIZE_T nSize (nLength);
+
+        volatile BYTE c = 0;
+        while (nSize > dwPageSize)
+        {
+            c ^= pData[0];
+            pData += dwPageSize;
+            nSize -= dwPageSize;
+        }
+        if (nSize > 0)
+        {
+            c ^= pData[0];
+            pData += nSize;
+            nSize -= nSize;
+        }
+    }
+    return osl_File_E_None;
+}
+
+//#############################################
+oslFileError SAL_CALL osl_unmapFile(void* pAddr, sal_uInt64 /* uLength */)
+{
+    if (0 == pAddr)
+        return osl_File_E_INVAL;
+
+    if (!::UnmapViewOfFile (pAddr))
+        return MapError( GetLastError() );
+
+    return osl_File_E_None;
+}
+
+//#############################################
 oslFileError SAL_CALL osl_readFile(
     oslFileHandle Handle,
     void *pBuffer,
@@ -2741,6 +2837,72 @@ oslFileError SAL_CALL osl_writeFile(
         error = osl_File_E_INVAL;
 
     return error;
+}
+
+//#############################################
+oslFileError SAL_CALL osl_readFileAt(
+    oslFileHandle Handle,
+    sal_uInt64    uOffset,
+    void*         pBuffer,
+    sal_uInt64    uBytesRequested,
+    sal_uInt64*   pBytesRead)
+{
+    HANDLE hFile = (HANDLE)(Handle);
+    if (!IsValidHandle(hFile) || (0 == pBuffer))
+        return osl_File_E_INVAL;
+
+    static sal_uInt64 const g_limit_dword = std::numeric_limits< DWORD >::max();
+    if (g_limit_dword < uBytesRequested)
+        return osl_File_E_OVERFLOW;
+    DWORD const dwBytes = sal::static_int_cast< DWORD >(uBytesRequested);
+
+    if (0 == pBytesRead)
+        return osl_File_E_INVAL;
+    *pBytesRead = 0;
+
+    oslFileError error = osl_setFilePos(Handle, osl_Pos_Absolut, uOffset);
+    if (osl_File_E_None != error)
+        return error;
+
+    DWORD dwDone = 0;
+    if (!::ReadFile(hFile, pBuffer, dwBytes, &dwDone, NULL))
+        return MapError( GetLastError() );
+
+    *pBytesRead = dwDone;
+    return osl_File_E_None;
+}
+
+//#############################################
+oslFileError SAL_CALL osl_writeFileAt(
+    oslFileHandle Handle,
+    sal_uInt64    uOffset,
+    const void*   pBuffer,
+    sal_uInt64    uBytesToWrite,
+    sal_uInt64*   pBytesWritten)
+{
+    HANDLE hFile = (HANDLE)(Handle);
+    if (!IsValidHandle(hFile) || (0 == pBuffer))
+        return osl_File_E_INVAL;
+
+    static sal_uInt64 const g_limit_dword = std::numeric_limits< DWORD >::max();
+    if (g_limit_dword < uBytesToWrite)
+        return osl_File_E_OVERFLOW;
+    DWORD const dwBytes = sal::static_int_cast< DWORD >(uBytesToWrite);
+
+    if (0 == pBytesWritten)
+        return osl_File_E_INVAL;
+    *pBytesWritten = 0;
+
+    oslFileError error = osl_setFilePos(Handle, osl_Pos_Absolut, uOffset);
+    if (osl_File_E_None != error)
+        return error;
+
+    DWORD dwDone = 0;
+    if (!::WriteFile(hFile, pBuffer, dwBytes, &dwDone, NULL))
+        return MapError( GetLastError() );
+
+    *pBytesWritten = dwDone;
+    return osl_File_E_None;
 }
 
 //#############################################

@@ -86,7 +86,7 @@ struct rtl_cache_slab_st
 /** rtl_cache_magazine_type
  *  @internal
  */
-#define RTL_CACHE_MAGAZINE_SIZE 64
+#define RTL_CACHE_MAGAZINE_SIZE 61
 
 typedef struct rtl_cache_magazine_st rtl_cache_magazine_type;
 struct rtl_cache_magazine_st

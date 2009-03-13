@@ -28,10 +28,12 @@
  *
  ************************************************************************/
 
-#include <osl/interlck.h>
-#include <rtl/locale.h>
-#include <rtl/memory.h>
-#include <rtl/alloc.h>
+#include "rtl/locale.h"
+
+#include "osl/diagnose.h"
+#include "rtl/alloc.h"
+
+#include "internal/once.h"
 
 static sal_Int32 RTL_HASHTABLE_SIZE[] =
 {
@@ -54,11 +56,14 @@ typedef struct rtl_hashtable
     RTL_HASHENTRY** Table;
 } RTL_HASHTABLE;
 
-static RTL_HASHTABLE* pLocaleTable = NULL;
+static RTL_HASHTABLE* g_pLocaleTable = NULL;
 
-static rtl_Locale* pDefaultLocale = NULL;
+static rtl_Locale* g_pDefaultLocale = NULL;
 
+static int rtl_locale_init (void);
 
+/*************************************************************************
+ */
 void rtl_hashentry_destroy(RTL_HASHENTRY* entry)
 {
     rtl_uString_release(entry->Entry->Language);
@@ -68,6 +73,7 @@ void rtl_hashentry_destroy(RTL_HASHENTRY* entry)
         rtl_hashentry_destroy(entry->Next);
 
     rtl_freeMemory(entry->Entry);
+    rtl_freeMemory(entry);
 }
 
 void rtl_hashtable_destroy(RTL_HASHTABLE* table)
@@ -199,14 +205,14 @@ sal_Bool rtl_hashtable_grow(RTL_HASHTABLE** table)
     return sal_True;
 }
 
-sal_Bool rtl_hashtable_find(sal_Int32 key, sal_Int32 hashCode, rtl_Locale** pValue)
+sal_Bool rtl_hashtable_find(RTL_HASHTABLE * table, sal_Int32 key, sal_Int32 hashCode, rtl_Locale** pValue)
 {
-    if (!pLocaleTable)
+    if (!table)
         return sal_False;
 
-    if (pLocaleTable->Table[key])
+    if (table->Table[key])
     {
-        RTL_HASHENTRY *pEntry = pLocaleTable->Table[key];
+        RTL_HASHENTRY *pEntry = table->Table[key];
 
         while (pEntry && hashCode != pEntry->Entry->HashCode)
             pEntry = pEntry->Next;
@@ -219,6 +225,41 @@ sal_Bool rtl_hashtable_find(sal_Int32 key, sal_Int32 hashCode, rtl_Locale** pVal
         return sal_False;
 
     return sal_True;
+}
+
+/*************************************************************************
+ *  rtl_locale_init
+ */
+static void rtl_locale_once_init (void)
+{
+  OSL_ASSERT(g_pLocaleTable == 0);
+  rtl_hashtable_init(&g_pLocaleTable, 1);
+}
+
+static int rtl_locale_init (void)
+{
+  static sal_once_type g_once = SAL_ONCE_INIT;
+  SAL_ONCE(&g_once, rtl_locale_once_init);
+  return (g_pLocaleTable != 0);
+}
+
+/*************************************************************************
+ *  rtl_locale_fini
+ */
+#if defined(__GNUC__)
+static void rtl_locale_fini (void) __attribute__((destructor));
+#elif defined(__SUNPRO_C) || defined(__SUNPRO_CC)
+#pragma fini(rtl_locale_fini)
+static void rtl_locale_fini (void);
+#endif /* __GNUC__ || __SUNPRO_C */
+
+void rtl_locale_fini (void)
+{
+  if (g_pLocaleTable != 0)
+  {
+    rtl_hashtable_destroy (g_pLocaleTable);
+    g_pLocaleTable = 0;
+  }
 }
 
 /*************************************************************************
@@ -239,13 +280,13 @@ rtl_Locale * SAL_CALL rtl_locale_register( const sal_Unicode * language, const s
     if ( !variant )
         variant = &c;
 
-    if (!pLocaleTable)
-        rtl_hashtable_init(&pLocaleTable, 1);
+    if (!rtl_locale_init())
+      return NULL;
 
     hashCode = rtl_ustr_hashCode(language) ^ rtl_ustr_hashCode(country) ^ rtl_ustr_hashCode(variant);
-    key = rtl_hashfunc(pLocaleTable, hashCode);
+    key = rtl_hashfunc(g_pLocaleTable, hashCode);
 
-    if (rtl_hashtable_find(key, hashCode, &newLocale))
+    if (rtl_hashtable_find(g_pLocaleTable, key, hashCode, &newLocale))
         return newLocale;
 
     rtl_uString_newFromStr(&sLanguage, language);
@@ -259,7 +300,7 @@ rtl_Locale * SAL_CALL rtl_locale_register( const sal_Unicode * language, const s
     newLocale->Variant = sVariant;
     newLocale->HashCode = hashCode;
 
-    rtl_hashtable_add(&pLocaleTable, newLocale);
+    rtl_hashtable_add(&g_pLocaleTable, newLocale);
 
     return newLocale;
 }
@@ -269,7 +310,7 @@ rtl_Locale * SAL_CALL rtl_locale_register( const sal_Unicode * language, const s
  */
 rtl_Locale * SAL_CALL rtl_locale_getDefault()
 {
-    return pDefaultLocale;
+    return g_pDefaultLocale;
 }
 
 /*************************************************************************
@@ -277,7 +318,7 @@ rtl_Locale * SAL_CALL rtl_locale_getDefault()
  */
 void SAL_CALL rtl_locale_setDefault( const sal_Unicode * language, const sal_Unicode * country, const sal_Unicode * variant )
 {
-    pDefaultLocale = rtl_locale_register(language, country, variant);
+    g_pDefaultLocale = rtl_locale_register(language, country, variant);
 }
 
 /*************************************************************************
@@ -322,4 +363,3 @@ sal_Int32 SAL_CALL rtl_locale_equals( rtl_Locale * This, rtl_Locale * obj  )
 {
     return This == obj;
 }
-

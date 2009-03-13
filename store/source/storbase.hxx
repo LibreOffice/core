@@ -29,26 +29,27 @@
  ************************************************************************/
 
 #ifndef _STORE_STORBASE_HXX_
-#define _STORE_STORBASE_HXX_ "$Revision: 1.10 $"
+#define _STORE_STORBASE_HXX_ "$Revision: 1.10.8.4 $"
 
-#include <sal/types.h>
-#include <rtl/alloc.h>
-#include <rtl/string.h>
-#include <rtl/ref.hxx>
-#include <osl/endian.h>
-#include <osl/mutex.hxx>
-#include <store/types.h>
-#include <store/object.hxx>
-#include <store/lockbyte.hxx>
+#include "sal/types.h"
 
-#ifndef INCLUDED_CSTDDEF
-#include <cstddef>
-#define INCLUDED_CSTDDEF
+#include "rtl/alloc.h"
+#include "rtl/crc.h"
+#include "rtl/ref.hxx"
+
+#include "osl/diagnose.h"
+#include "osl/endian.h"
+
+#include "store/types.h"
+
+#ifndef INCLUDED_STDDEF_H
+#include <stddef.h>
+#define INCLUDED_STDDEF_H
 #endif
 
-#ifndef INCLUDED_CSTRING
-#include <cstring>
-#define INCLUDED_CSTRING
+#ifndef INCLUDED_STRING_H
+#include <string.h>
+#define INCLUDED_STRING_H
 #endif
 
 /*========================================================================
@@ -56,43 +57,139 @@
  * store common internals.
  *
  *======================================================================*/
-/* MSVC 6.0 still has std functions in global namespace */
-#if defined(_MSC_VER) && (_MSC_VER <= 1310)
-#define __STORE_CSTD
-#else
-#define __STORE_CSTD std
-#endif /* _MSC_VER */
 
-#ifndef __STORE_DELETEZ
-#define __STORE_DELETEZ(p) (delete p, p = 0)
+#ifndef STORE_IMPL_ISP2
+#define STORE_IMPL_ISP2(value) (((value) & ((value) - 1)) == 0)
 #endif
 
-/*
- * __store_memcpy.
- */
-inline void __store_memcpy (void * dst, const void * src, sal_Size n)
-{
-    __STORE_CSTD::memcpy (dst, src, n);
-}
+#ifndef STORE_IMPL_CONCAT
+#define STORE_IMPL_CONCAT(x, y) STORE_IMPL_CONCAT2(x,y)
+#define STORE_IMPL_CONCAT2(x, y) x##y
+#endif
 
-/*
- * __store_memmove.
- */
-inline void __store_memmove (void * dst, const void * src, sal_Size n)
+#ifndef STORE_STATIC_ASSERT /* Compile time assertion */
+namespace store
 {
-    __STORE_CSTD::memmove (dst, src, n);
-}
+    template< bool x > struct STATIC_ASSERTION_FAILURE;
+    template<> struct STATIC_ASSERTION_FAILURE< true > { enum { value = 1 }; };
 
-/*
- * __store_memset.
- */
-inline void __store_memset (void * dst, int val, sal_Size n)
-{
-    __STORE_CSTD::memset (dst, val, n);
-}
+    template< int x > struct static_assert_test{};
+} // namespace store
+
+#define STORE_STATIC_ASSERT(pred) \
+typedef \
+store::static_assert_test< sizeof( store::STATIC_ASSERTION_FAILURE< (bool)(pred) > ) > \
+STORE_IMPL_CONCAT(static_assert_typedef_, __LINE__)
+
+#endif  /* !STORE_STATIC_ASSERT */
 
 namespace store
 {
+
+#ifdef htons
+#undef htons
+#endif
+#ifdef ntohs
+#undef ntohs
+#endif
+
+#ifdef htonl
+#undef htonl
+#endif
+#ifdef ntohl
+#undef ntohl
+#endif
+
+#ifdef OSL_BIGENDIAN
+inline sal_uInt16 htons (sal_uInt16 h) { return OSL_SWAPWORD(h); }
+inline sal_uInt16 ntohs (sal_uInt16 n) { return OSL_SWAPWORD(n); }
+
+inline sal_uInt32 htonl (sal_uInt32 h) { return OSL_SWAPDWORD(h); }
+inline sal_uInt32 ntohl (sal_uInt32 n) { return OSL_SWAPDWORD(n); }
+#else
+inline sal_uInt16 htons (sal_uInt16 h) { return (h); }
+inline sal_uInt16 ntohs (sal_uInt16 n) { return (n); }
+
+inline sal_uInt32 htonl (sal_uInt32 h) { return (h); }
+inline sal_uInt32 ntohl (sal_uInt32 n) { return (n); }
+#endif /* OSL_BIGENDIAN */
+
+/** swap.
+ */
+template< typename T > void swap (T & lhs, T & rhs)
+{
+    T tmp = lhs; lhs = rhs; rhs = tmp;
+}
+
+/*========================================================================
+ *
+ * SharedCount.
+ *
+ *======================================================================*/
+class SharedCount
+{
+    long * m_pCount;
+
+    class Allocator
+    {
+        rtl_cache_type * m_cache;
+
+    public:
+        static Allocator & get();
+
+        long * alloc()
+        {
+            return static_cast<long*>(rtl_cache_alloc (m_cache));
+        }
+        void free (long * pCount)
+        {
+            rtl_cache_free (m_cache, pCount);
+        }
+
+    protected:
+        Allocator();
+        ~Allocator();
+    };
+
+public:
+    SharedCount()
+        : m_pCount(Allocator::get().alloc())
+    {
+        if (m_pCount != 0) (*m_pCount) = 1;
+    }
+
+    ~SharedCount()
+    {
+        if (m_pCount != 0)
+        {
+            long new_count = --(*m_pCount);
+            if (new_count == 0)
+                Allocator::get().free(m_pCount);
+        }
+    }
+
+    void swap (SharedCount & rhs) // nothrow
+    {
+        store::swap(m_pCount, rhs.m_pCount);
+    }
+
+    SharedCount (SharedCount const & rhs) // nothrow
+        : m_pCount (rhs.m_pCount)
+    {
+        if (m_pCount != 0) ++(*m_pCount);
+    }
+    SharedCount & operator= (SharedCount const & rhs) // nothrow
+    {
+        SharedCount tmp(rhs);
+        swap(tmp);
+        return *this;
+    }
+
+    bool operator== (long count) const
+    {
+        return (m_pCount != 0) ? *m_pCount == count : false;
+    }
+};
 
 /*========================================================================
  *
@@ -108,52 +205,36 @@ struct OStorePageGuard
 
     /** Construction.
      */
-    OStorePageGuard (sal_uInt32 nMagic = 0, sal_uInt32 nCRC32 = 0)
-        : m_nMagic (nMagic),
-          m_nCRC32 (nCRC32)
+    explicit OStorePageGuard (sal_uInt32 nMagic = 0, sal_uInt32 nCRC32 = 0)
+        : m_nMagic (store::htonl(nMagic)),
+          m_nCRC32 (store::htonl(nCRC32))
     {}
 
-    OStorePageGuard (const OStorePageGuard& rOther)
-        : m_nMagic (rOther.m_nMagic),
-          m_nCRC32 (rOther.m_nCRC32)
-    {}
-
-    OStorePageGuard& operator= (const OStorePageGuard& rOther)
+    void swap (OStorePageGuard & rhs)
     {
-        m_nMagic = rOther.m_nMagic;
-        m_nCRC32 = rOther.m_nCRC32;
+        store::swap(m_nMagic, rhs.m_nMagic);
+        store::swap(m_nCRC32, rhs.m_nCRC32);
+    }
+
+    OStorePageGuard (OStorePageGuard const & rhs)
+        : m_nMagic (rhs.m_nMagic),
+          m_nCRC32 (rhs.m_nCRC32)
+    {}
+
+    OStorePageGuard& operator= (const OStorePageGuard& rhs)
+    {
+        m_nMagic = rhs.m_nMagic;
+        m_nCRC32 = rhs.m_nCRC32;
         return *this;
     }
 
     /** Comparison.
      */
-    sal_Bool operator== (const OStorePageGuard& rOther) const
+    bool operator== (const OStorePageGuard& rhs) const
     {
-        return ((m_nMagic == rOther.m_nMagic) &&
-                (m_nCRC32 == rOther.m_nCRC32)    );
+        return ((m_nMagic == rhs.m_nMagic) &&
+                (m_nCRC32 == rhs.m_nCRC32)    );
     }
-
-    /** swap (internal and external representation).
-     */
-    void swap (void)
-    {
-#ifdef OSL_BIGENDIAN
-        m_nMagic = OSL_SWAPDWORD(m_nMagic);
-        m_nCRC32 = OSL_SWAPDWORD(m_nCRC32);
-#endif /* OSL_BIGENDIAN */
-    }
-
-    /** CRC polynomial 0xEDB88320.
-     */
-    static const sal_uInt32 m_pTable[256];
-
-    static sal_uInt32 updcrc32 (sal_uInt32 crc, sal_uInt8 octet)
-    {
-        return m_pTable[((crc) ^ (octet)) & 0xff] ^ ((crc) >> 8);
-    }
-
-    static sal_uInt32 crc32 (
-        sal_uInt32 nCRC32, const void *pData, sal_Size nSize);
 };
 
 /*========================================================================
@@ -173,60 +254,56 @@ struct OStorePageDescriptor
 
     /** Construction.
      */
-    OStorePageDescriptor (
+    explicit OStorePageDescriptor (
         sal_uInt32 nAddr = STORE_PAGE_NULL,
         sal_uInt16 nSize = 0,
         sal_uInt16 nUsed = 0)
-        : m_nAddr (nAddr),
-          m_nSize (nSize),
-          m_nUsed (nUsed)
+        : m_nAddr (store::htonl(nAddr)),
+          m_nSize (store::htons(nSize)),
+          m_nUsed (store::htons(nUsed))
     {}
 
-    OStorePageDescriptor (const OStorePageDescriptor& rOther)
-        : m_nAddr (rOther.m_nAddr),
-          m_nSize (rOther.m_nSize),
-          m_nUsed (rOther.m_nUsed)
-    {}
-
-    OStorePageDescriptor& operator= (const OStorePageDescriptor& rOther)
+    void swap (OStorePageDescriptor & rhs)
     {
-        m_nAddr = rOther.m_nAddr;
-        m_nSize = rOther.m_nSize;
-        m_nUsed = rOther.m_nUsed;
+        store::swap(m_nAddr, rhs.m_nAddr);
+        store::swap(m_nSize, rhs.m_nSize);
+        store::swap(m_nUsed, rhs.m_nUsed);
+    }
+
+    OStorePageDescriptor (const OStorePageDescriptor & rhs)
+        : m_nAddr (rhs.m_nAddr),
+          m_nSize (rhs.m_nSize),
+          m_nUsed (rhs.m_nUsed)
+    {}
+
+    OStorePageDescriptor & operator= (const OStorePageDescriptor & rhs)
+    {
+        m_nAddr = rhs.m_nAddr;
+        m_nSize = rhs.m_nSize;
+        m_nUsed = rhs.m_nUsed;
         return *this;
     }
 
     /** Comparison.
      */
-    sal_Bool operator== (const OStorePageDescriptor& rOther) const
+    bool operator== (const OStorePageDescriptor & rhs) const
     {
-        return ((m_nAddr == rOther.m_nAddr) &&
-                (m_nSize == rOther.m_nSize)    );
+        return ((m_nAddr == rhs.m_nAddr) &&
+                (m_nSize == rhs.m_nSize)    );
     }
 
-    sal_Bool operator<= (const OStorePageDescriptor& rOther) const
+    bool operator<= (const OStorePageDescriptor & rhs) const
     {
-        return ((m_nAddr == rOther.m_nAddr) &&
-                (m_nSize <= rOther.m_nSize)    );
+        return ((m_nAddr               == rhs.m_nAddr              ) &&
+                (store::ntohs(m_nSize) <= store::ntohs(rhs.m_nSize))    );
     }
 
-    sal_Bool operator< (const OStorePageDescriptor& rOther) const
+    bool operator< (const OStorePageDescriptor & rhs) const
     {
-        if (m_nAddr == rOther.m_nAddr)
-            return (m_nSize < rOther.m_nSize);
+        if (m_nAddr == rhs.m_nAddr)
+            return (store::ntohs(m_nSize) < store::ntohs(rhs.m_nSize));
         else
-            return (m_nAddr < rOther.m_nAddr);
-    }
-
-    /** swap (internal and external representation).
-     */
-    void swap (void)
-    {
-#ifdef OSL_BIGENDIAN
-        m_nAddr = OSL_SWAPDWORD(m_nAddr);
-        m_nSize = OSL_SWAPWORD(m_nSize);
-        m_nUsed = OSL_SWAPWORD(m_nUsed);
-#endif /* OSL_BIGENDIAN */
+            return (store::ntohl(m_nAddr) < store::ntohl(rhs.m_nAddr));
     }
 };
 
@@ -244,45 +321,42 @@ struct OStorePageKey
 
     /** Construction.
      */
-    OStorePageKey (sal_uInt32 nLow = 0, sal_uInt32 nHigh = 0)
-        : m_nLow (nLow), m_nHigh (nHigh)
+    explicit OStorePageKey (sal_uInt32 nLow = 0, sal_uInt32 nHigh = 0)
+        : m_nLow  (store::htonl(nLow)),
+          m_nHigh (store::htonl(nHigh))
     {}
 
-    OStorePageKey (const OStorePageKey& rOther)
-        : m_nLow (rOther.m_nLow), m_nHigh (rOther.m_nHigh)
-    {}
-
-    OStorePageKey& operator= (const OStorePageKey& rOther)
+    void swap (OStorePageKey & rhs)
     {
-        m_nLow  = rOther.m_nLow;
-        m_nHigh = rOther.m_nHigh;
+        store::swap(m_nLow,  rhs.m_nLow);
+        store::swap(m_nHigh, rhs.m_nHigh);
+    }
+
+    OStorePageKey (const OStorePageKey & rhs)
+        : m_nLow (rhs.m_nLow), m_nHigh (rhs.m_nHigh)
+    {}
+
+    OStorePageKey & operator= (const OStorePageKey & rhs)
+    {
+        m_nLow  = rhs.m_nLow;
+        m_nHigh = rhs.m_nHigh;
         return *this;
     }
 
     /** Comparison.
      */
-    sal_Bool operator== (const OStorePageKey& rOther) const
+    bool operator== (const OStorePageKey & rhs) const
     {
-        return ((m_nLow  == rOther.m_nLow ) &&
-                (m_nHigh == rOther.m_nHigh)    );
+        return ((m_nLow  == rhs.m_nLow ) &&
+                (m_nHigh == rhs.m_nHigh)    );
     }
 
-    sal_Bool operator< (const OStorePageKey& rOther) const
+    bool operator< (const OStorePageKey & rhs) const
     {
-        if (m_nHigh == rOther.m_nHigh)
-            return (m_nLow < rOther.m_nLow);
+        if (m_nHigh == rhs.m_nHigh)
+            return (store::ntohl(m_nLow) < store::ntohl(rhs.m_nLow));
         else
-            return (m_nHigh < rOther.m_nHigh);
-    }
-
-    /** swap (internal and external representation).
-     */
-    void swap (void)
-    {
-#ifdef OSL_BIGENDIAN
-        m_nLow  = OSL_SWAPDWORD(m_nLow);
-        m_nHigh = OSL_SWAPDWORD(m_nHigh);
-#endif /* OSL_BIGENDIAN */
+            return (store::ntohl(m_nHigh) < store::ntohl(rhs.m_nHigh));
     }
 };
 
@@ -299,36 +373,53 @@ struct OStorePageLink
 
     /** Construction.
      */
-    OStorePageLink (sal_uInt32 nAddr = STORE_PAGE_NULL)
-        : m_nAddr (nAddr)
+    explicit OStorePageLink (sal_uInt32 nAddr = STORE_PAGE_NULL)
+        : m_nAddr (store::htonl(nAddr))
     {}
 
-    OStorePageLink (const OStorePageLink& rOther)
-        : m_nAddr (rOther.m_nAddr)
-    {}
-
-    OStorePageLink& operator= (const OStorePageLink& rOther)
+    void swap (OStorePageLink & rhs)
     {
-        m_nAddr = rOther.m_nAddr;
+        store::swap(m_nAddr, rhs.m_nAddr);
+    }
+
+    OStorePageLink (const OStorePageLink & rhs)
+        : m_nAddr (rhs.m_nAddr)
+    {}
+
+    OStorePageLink & operator= (const OStorePageLink & rhs)
+    {
+        m_nAddr = rhs.m_nAddr;
+        return *this;
+    }
+
+    OStorePageLink & operator= (sal_uInt32 nAddr)
+    {
+        m_nAddr = store::htonl(nAddr);
         return *this;
     }
 
     /** Comparison.
      */
-    sal_Bool operator== (const OStorePageLink& rOther) const
+    bool operator== (const OStorePageLink & rhs) const
     {
-        return (m_nAddr == rOther.m_nAddr);
+        return (m_nAddr == rhs.m_nAddr);
     }
 
-    sal_Bool operator< (const OStorePageLink& rOther) const
+    bool operator< (const OStorePageLink& rhs) const
     {
-        return (m_nAddr < rOther.m_nAddr);
+        return (store::ntohl(m_nAddr) < store::ntohl(rhs.m_nAddr));
     }
 
     /** Operation.
      */
-    void link (OStorePageLink& rPred)
+    sal_uInt32 location() const
     {
+        return store::ntohl(m_nAddr);
+    }
+
+    void link (OStorePageLink & rPred)
+    {
+        // @@@ swap (rPred); @@@
         OStorePageLink tmp (rPred);
         rPred = *this;
         *this = tmp;
@@ -339,135 +430,15 @@ struct OStorePageLink
         rPred = *this;
         *this = OStorePageLink();
     }
-
-    /** swap (internal and external representation).
-     */
-    void swap (void)
-    {
-#ifdef OSL_BIGENDIAN
-        m_nAddr = OSL_SWAPDWORD(m_nAddr);
-#endif /* OSL_BIGENDIAN */
-    }
 };
 
 /*========================================================================
  *
- * OStorePageNameBlock.
+ * PageData.
  *
  *======================================================================*/
-struct OStorePageNameBlock
-{
-    typedef OStorePageGuard G;
-    typedef OStorePageKey   K;
-
-    /** Representation.
-    */
-    G          m_aGuard;
-    K          m_aKey;
-    sal_uInt32 m_nAttrib;
-    sal_Char   m_pData[STORE_MAXIMUM_NAMESIZE];
-
-    /** size.
-    */
-    static sal_uInt16 size (void)
-    {
-        return sal_uInt16(sizeof(G) + sizeof(K) + sizeof(sal_uInt32) +
-                          sizeof(sal_Char[STORE_MAXIMUM_NAMESIZE]));
-    }
-
-    /** initialize.
-    */
-    void initialize (void)
-    {
-        m_aGuard  = G();
-        m_aKey    = K();
-        m_nAttrib = 0;
-        __store_memset (m_pData, 0, sizeof(m_pData));
-    }
-
-    /** Construction.
-    */
-    OStorePageNameBlock (void)
-        : m_nAttrib (0)
-    {
-        __store_memset (m_pData, 0, sizeof(m_pData));
-    }
-
-    /** Comparison.
-    */
-    sal_Bool operator== (const OStorePageNameBlock& rOther) const
-    {
-        return (m_aGuard == rOther.m_aGuard);
-    }
-
-    /** swap (internal and external representation).
-    */
-    void swap (void)
-    {
-#ifdef OSL_BIGENDIAN
-        m_aGuard.swap();
-        m_aKey.swap();
-        m_nAttrib = OSL_SWAPDWORD(m_nAttrib);
-#endif /* OSL_BIGENDIAN */
-    }
-
-    /** guard (external representation).
-    */
-    void guard (void)
-    {
-        sal_uInt32 nCRC32 = 0;
-        nCRC32 = G::crc32 (nCRC32, &m_aGuard.m_nMagic, sizeof(sal_uInt32));
-        nCRC32 = G::crc32 (nCRC32, &m_aKey, size() - sizeof(G));
-#ifdef OSL_BIGENDIAN
-        nCRC32 = OSL_SWAPDWORD(nCRC32);
-#endif /* OSL_BIGENDIAN */
-        m_aGuard.m_nCRC32 = nCRC32;
-    }
-
-    /** verify (external representation).
-    */
-    storeError verify (void)
-    {
-        sal_uInt32 nCRC32 = 0;
-        nCRC32 = G::crc32 (nCRC32, &m_aGuard.m_nMagic, sizeof(sal_uInt32));
-        nCRC32 = G::crc32 (nCRC32, &m_aKey, size() - sizeof(G));
-#ifdef OSL_BIGENDIAN
-        nCRC32 = OSL_SWAPDWORD(nCRC32);
-#endif /* OSL_BIGENDIAN */
-        if (m_aGuard.m_nCRC32 != nCRC32)
-            return store_E_InvalidChecksum;
-        else
-            return store_E_None;
-    }
-
-    /** namei.
-    */
-    static storeError namei (
-        const rtl_String *pPath, const rtl_String *pName, K &rKey)
-    {
-        // Check parameter.
-        if (!(pPath && pName))
-            return store_E_InvalidParameter;
-
-        // Check name length.
-        if (!(pName->length < STORE_MAXIMUM_NAMESIZE))
-            return store_E_NameTooLong;
-
-        // Transform pathname into key.
-        rKey.m_nLow  = G::crc32 (0, pName->buffer, pName->length);
-        rKey.m_nHigh = G::crc32 (0, pPath->buffer, pPath->length);
-
-        // Done.
-        return store_E_None;
-    }
-};
-
-/*========================================================================
- *
- * OStorePageData.
- *
- *======================================================================*/
-struct OStorePageData
+typedef struct PageData OStorePageData; // backward compat.
+struct PageData
 {
     typedef OStorePageGuard      G;
     typedef OStorePageDescriptor D;
@@ -480,111 +451,155 @@ struct OStorePageData
     L m_aMarked;
     L m_aUnused;
 
-    /** size.
+    /** theSize.
      */
-    static sal_uInt16 size (void)
-    {
-        return sal_uInt16(sizeof(G) + sizeof(D) + 2 * sizeof(L));
-    }
+    static const size_t     theSize     = sizeof(G) + sizeof(D) + 2 * sizeof(L);
+    static const sal_uInt16 thePageSize = theSize;
+    STORE_STATIC_ASSERT(STORE_MINIMUM_PAGESIZE >= thePageSize);
 
     /** location.
      */
-    sal_uInt32 location (void) const
+    sal_uInt32 location() const
     {
-        return m_aDescr.m_nAddr;
+        return store::ntohl(m_aDescr.m_nAddr);
     }
-
     void location (sal_uInt32 nAddr)
     {
-        m_aDescr.m_nAddr = nAddr;
+        m_aDescr.m_nAddr = store::htonl(nAddr);
+    }
+
+    /** size.
+     */
+    sal_uInt16 size() const
+    {
+        return store::ntohs(m_aDescr.m_nSize);
+    }
+
+    /** type.
+     */
+    sal_uInt32 type() const
+    {
+        return store::ntohl(m_aGuard.m_nMagic);
     }
 
     /** Allocation.
      */
-    static void* operator new (size_t n)
+    class Allocator_Impl;
+    class Allocator : public rtl::IReference
     {
-        return rtl_allocateMemory (n);
-    }
+    public:
+        template< class T > T * construct()
+        {
+            void * page = 0; sal_uInt16 size = 0;
+            if (allocate (&page, &size))
+            {
+                return new(page) T(size);
+            }
+            return 0;
+        }
 
-    static void* operator new (size_t, sal_uInt16 nPageSize)
-    {
-        return rtl_allocateMemory (nPageSize);
-    }
+        bool allocate (void ** ppPage, sal_uInt16 * pnSize)
+        {
+            allocate_Impl (ppPage, pnSize);
+            return ((*ppPage != 0) && (*pnSize != 0));
+        }
 
-    static void operator delete (void *p)
-    {
-        rtl_freeMemory (p);
-    }
+        void deallocate (void * pPage)
+        {
+            if (pPage != 0)
+                deallocate_Impl (pPage);
+        }
 
-    static void operator delete (void *p, sal_uInt16)
-    {
-        rtl_freeMemory (p);
-    }
+        static storeError createInstance (
+            rtl::Reference< PageData::Allocator > & rxAllocator, sal_uInt16 nPageSize);
+
+    private:
+        /** Implementation (abstract).
+         */
+        virtual void allocate_Impl (void ** ppPage, sal_uInt16 * pnSize) = 0;
+        virtual void deallocate_Impl (void * pPage) = 0;
+    };
+
+    static void* operator new (size_t, void * p) { return p; }
+    static void  operator delete (void * , void *) {}
 
     /** Construction.
      */
-    OStorePageData (sal_uInt16 nPageSize)
+    explicit PageData (sal_uInt16 nPageSize = thePageSize)
+        : m_aGuard(),
+          m_aDescr(STORE_PAGE_NULL, nPageSize, thePageSize),
+          m_aMarked(),
+          m_aUnused()
+    {}
+
+    void swap (PageData & rhs) // nothrow
     {
-        m_aDescr.m_nSize = nPageSize;
-        m_aDescr.m_nUsed = size();
+        m_aGuard.swap(rhs.m_aGuard);
+        m_aDescr.swap(rhs.m_aDescr);
+        m_aMarked.swap(rhs.m_aMarked);
+        m_aUnused.swap(rhs.m_aUnused);
     }
 
-    OStorePageData& operator= (const OStorePageData& rOther)
+    PageData (PageData const & rhs) // nothrow
+        : m_aGuard (rhs.m_aGuard),
+          m_aDescr (rhs.m_aDescr),
+          m_aMarked(rhs.m_aMarked),
+          m_aUnused(rhs.m_aUnused)
+    {}
+
+    PageData & operator= (PageData const & rhs) // nothrow
     {
-        m_aGuard  = rOther.m_aGuard;
-        m_aDescr  = rOther.m_aDescr;
-        m_aMarked = rOther.m_aMarked;
-        m_aUnused = rOther.m_aUnused;
+        PageData tmp (rhs);
+        swap (tmp);
         return *this;
-    }
-
-    /** Comparison.
-     */
-    sal_Bool operator== (const OStorePageData& rOther) const
-    {
-        return ((m_aGuard  == rOther.m_aGuard ) &&
-                (m_aDescr  == rOther.m_aDescr ) &&
-                (m_aMarked == rOther.m_aMarked) &&
-                (m_aUnused == rOther.m_aUnused)    );
-    }
-
-    /** swap (internal and external representation).
-     */
-    void swap ()
-    {
-#ifdef OSL_BIGENDIAN
-        m_aGuard.swap();
-        m_aDescr.swap();
-        m_aMarked.swap();
-        m_aUnused.swap();
-#endif /* OSL_BIGENDIAN */
     }
 
     /** guard (external representation).
      */
-    void guard ()
+    void guard()
     {
         sal_uInt32 nCRC32 = 0;
-        nCRC32 = G::crc32 (nCRC32, &m_aGuard.m_nMagic, sizeof(sal_uInt32));
-        nCRC32 = G::crc32 (nCRC32, &m_aDescr, size() - sizeof(G));
-#ifdef OSL_BIGENDIAN
-        nCRC32 = OSL_SWAPDWORD(nCRC32);
-#endif /* OSL_BIGENDIAN */
-        m_aGuard.m_nCRC32 = nCRC32;
+        nCRC32 = rtl_crc32 (nCRC32, &m_aGuard.m_nMagic, sizeof(sal_uInt32));
+        nCRC32 = rtl_crc32 (nCRC32, &m_aDescr, theSize - sizeof(G));
+        m_aGuard.m_nCRC32 = store::htonl(nCRC32);
+    }
+    void guard (sal_uInt32 nAddr)
+    {
+        sal_uInt32 nCRC32 = 0;
+        nCRC32 = rtl_crc32 (nCRC32, &m_aGuard.m_nMagic, sizeof(sal_uInt32));
+        m_aDescr.m_nAddr = store::htonl(nAddr);
+        nCRC32 = rtl_crc32 (nCRC32, &m_aDescr, theSize - sizeof(G));
+        m_aGuard.m_nCRC32 = store::htonl(nCRC32);
     }
 
     /** verify (external representation).
      */
-    storeError verify ()
+    storeError verify() const
     {
         sal_uInt32 nCRC32 = 0;
-        nCRC32 = G::crc32 (nCRC32, &m_aGuard.m_nMagic, sizeof(sal_uInt32));
-        nCRC32 = G::crc32 (nCRC32, &m_aDescr, size() - sizeof(G));
-#ifdef OSL_BIGENDIAN
-        nCRC32 = OSL_SWAPDWORD(nCRC32);
-#endif /* OSL_BIGENDIAN */
-        if (m_aGuard.m_nCRC32 != nCRC32)
+        nCRC32 = rtl_crc32 (nCRC32, &m_aGuard.m_nMagic, sizeof(sal_uInt32));
+        nCRC32 = rtl_crc32 (nCRC32, &m_aDescr, theSize - sizeof(G));
+        if (m_aGuard.m_nCRC32 != store::htonl(nCRC32))
             return store_E_InvalidChecksum;
+        else
+            return store_E_None;
+    }
+    storeError verify (sal_uInt32 nAddr) const
+    {
+        sal_uInt32 nCRC32 = 0;
+        nCRC32 = rtl_crc32 (nCRC32, &m_aGuard.m_nMagic, sizeof(sal_uInt32));
+        nCRC32 = rtl_crc32 (nCRC32, &m_aDescr, theSize - sizeof(G));
+        if (m_aGuard.m_nCRC32 != store::htonl(nCRC32))
+            return store_E_InvalidChecksum;
+        if (m_aDescr.m_nAddr != store::htonl(nAddr))
+            return store_E_InvalidAccess;
+        return store_E_None;
+    }
+
+    storeError verifyVersion (sal_uInt32 nMagic) const
+    {
+        if (m_aGuard.m_nMagic != store::htonl(nMagic))
+            return store_E_WrongVersion;
         else
             return store_E_None;
     }
@@ -592,315 +607,360 @@ struct OStorePageData
 
 /*========================================================================
  *
- * OStorePageObject.
+ * PageHolder.
  *
  *======================================================================*/
+class PageHolder
+{
+    SharedCount m_refcount;
+    PageData  * m_pagedata;
+
+    typedef rtl::Reference< PageData::Allocator > allocator_type;
+    allocator_type m_allocator;
+
+public:
+    explicit PageHolder (PageData * pagedata = 0, allocator_type const & allocator = allocator_type())
+        : m_refcount (),
+          m_pagedata (pagedata),
+          m_allocator(allocator)
+    {
+        OSL_ENSURE((m_pagedata == 0) || m_allocator.is(), "store::PageHolder::ctor(): pagedata w/o allocator.");
+    }
+
+    ~PageHolder()
+    {
+        if ((m_refcount == 1) && (m_pagedata != 0))
+        {
+            // free pagedata.
+            OSL_ENSURE(m_allocator.is(), "store::PageHolder::dtor(): pagedata w/o allocator.");
+            m_allocator->deallocate (m_pagedata);
+        }
+    }
+
+    void swap (PageHolder & rhs) // nothrow
+    {
+        m_refcount.swap(rhs.m_refcount);
+        store::swap(m_pagedata,  rhs.m_pagedata);
+        store::swap(m_allocator, rhs.m_allocator);
+    }
+
+    PageHolder (PageHolder const & rhs) // nothrow
+        : m_refcount (rhs.m_refcount),
+          m_pagedata (rhs.m_pagedata),
+          m_allocator(rhs.m_allocator)
+    {}
+
+    PageHolder & operator= (PageHolder const & rhs) // nothrow
+    {
+        PageHolder tmp (rhs);
+        swap(tmp);
+        return *this;
+    }
+
+    PageData * get() { return m_pagedata; }
+    PageData const * get() const { return m_pagedata; }
+
+    PageData * operator->()
+    {
+        OSL_PRECOND(m_pagedata != 0, "store::PageHolder::operator->(): Null pointer");
+        return m_pagedata;
+    }
+    PageData const * operator->() const
+    {
+        OSL_PRECOND(m_pagedata != 0, "store::PageHolder::operator->(): Null pointer");
+        return m_pagedata;
+    }
+
+    PageData & operator*()
+    {
+        OSL_PRECOND(m_pagedata != 0, "store::PageHolder::operator*(): Null pointer");
+        return *m_pagedata;
+    }
+    PageData const & operator*() const
+    {
+        OSL_PRECOND(m_pagedata != 0, "store::PageHolder::operator*(): Null pointer");
+        return *m_pagedata;
+    }
+};
+
+/*========================================================================
+ *
+ * PageHolderObject.
+ *
+ *======================================================================*/
+template< class T >
+class PageHolderObject
+{
+    /** Representation.
+     */
+    PageHolder m_xPage;
+
+    /** Checked cast.
+     */
+    template< class U >
+    static bool isA (PageData const * p)
+    {
+        return ((p != 0) && (p->type() == U::theTypeId));
+    }
+
+    template< class U >
+    static U * dynamic_page_cast (PageData * p)
+    {
+        return isA<U>(p) ? static_cast<U*>(p) : 0;
+    }
+
+    template< class U >
+    static U const * dynamic_page_cast (PageData const * p)
+    {
+        return isA<U>(p) ? static_cast<U const *>(p) : 0;
+    }
+
+public:
+    bool construct (rtl::Reference< PageData::Allocator > const & rxAllocator)
+    {
+        if ((m_xPage.get() == 0) && rxAllocator.is())
+        {
+            PageHolder tmp (rxAllocator->construct<T>(), rxAllocator);
+            m_xPage.swap (tmp);
+        }
+        return (m_xPage.get() != 0);
+    }
+
+    static PageHolderObject<T> createInstance (rtl::Reference< PageData::Allocator > const & rxAllocator)
+    {
+        PageHolderObject<T> tmp;
+        (void) tmp.construct (rxAllocator);
+        return tmp;
+    }
+
+    explicit PageHolderObject (PageHolder const & rxPage = PageHolder())
+        : m_xPage (rxPage)
+    {}
+
+    void swap (PageHolderObject<T> & rhs)
+    {
+        m_xPage.swap (rhs.m_xPage);
+    }
+
+    PageHolderObject (PageHolderObject<T> const & rhs)
+        : m_xPage (rhs.m_xPage)
+    {}
+
+    PageHolderObject<T> & operator= (PageHolderObject<T> const & rhs)
+    {
+        PageHolderObject<T> tmp (rhs);
+        this->swap (tmp);
+        return *this;
+    }
+
+    bool is() const
+    {
+        return (m_xPage.get() != 0);
+    }
+
+#if 1  /* EXP */
+    PageHolder & get() { return m_xPage; }
+    PageHolder const & get() const { return m_xPage; }
+#endif /* EXP */
+
+    T * operator->()
+    {
+        T * pImpl = dynamic_page_cast<T>(m_xPage.get());
+        OSL_PRECOND(pImpl != 0, "store::PageHolder<T>::operator*(): Null pointer");
+        return pImpl;
+    }
+    T const * operator->() const
+    {
+        T const * pImpl = dynamic_page_cast<T>(m_xPage.get());
+        OSL_PRECOND(pImpl != 0, "store::PageHolder<T>::operator*(): Null pointer");
+        return pImpl;
+    }
+
+    T & operator*()
+    {
+        T * pImpl = dynamic_page_cast<T>(m_xPage.get());
+        OSL_PRECOND(pImpl != 0, "store::PageHolder<T>::operator*(): Null pointer");
+        return (*pImpl);
+    }
+    T const & operator*() const
+    {
+        T const * pImpl = dynamic_page_cast<T>(m_xPage.get());
+        OSL_PRECOND(pImpl != 0, "store::PageHolder<T>::operator*(): Null pointer");
+        return (*pImpl);
+    }
+
+    static storeError guard (PageHolder & rxPage, sal_uInt32 nAddr)
+    {
+        PageData * pHead = rxPage.get();
+        if (!pHead)
+            return store_E_InvalidAccess;
+        pHead->guard(nAddr);
+
+        T * pImpl = dynamic_page_cast<T>(pHead);
+        OSL_PRECOND(pImpl != 0, "store::PageHolder<T>::guard(): Null pointer");
+        pImpl->guard();
+
+        return store_E_None;
+    }
+    static storeError verify (PageHolder const & rxPage, sal_uInt32 nAddr)
+    {
+        PageData const * pHead = rxPage.get();
+        if (!pHead)
+            return store_E_InvalidAccess;
+
+        storeError eErrCode = pHead->verify(nAddr);
+        if (eErrCode != store_E_None)
+            return eErrCode;
+
+        T const * pImpl = dynamic_page_cast<T>(pHead);
+        if (!pImpl)
+            return store_E_WrongVersion;
+
+        return pImpl->verify();
+    }
+};
+
+/*========================================================================
+ *
+ * PageObject.
+ *
+ *======================================================================*/
+#if 1  /* EXP */
+class PageObject
+{
+public:
+    explicit PageObject (PageHolder const & rxPage = PageHolder())
+        : m_xPage (rxPage), m_bDirty (false)
+    {}
+
+    virtual ~PageObject()
+    {}
+
+    PageHolder & get() { return m_xPage; }
+    PageHolder const & get() const { return m_xPage; }
+
+    void clean() { m_bDirty = false; }
+    void touch() { m_bDirty = true; }
+
+    sal_uInt32 location() const
+    {
+        PageData const * pagedata = m_xPage.get();
+        return (pagedata != 0) ? pagedata->location() : STORE_PAGE_NULL;
+    }
+    void location (sal_uInt32 nAddr)
+    {
+        PageData * pagedata = m_xPage.get();
+        if (pagedata != 0)
+            pagedata->location (nAddr);
+    }
+
+protected:
+    PageHolder m_xPage;
+    bool       m_bDirty;
+
+    virtual storeError guard  (sal_uInt32 nAddr) = 0;
+    virtual storeError verify (sal_uInt32 nAddr) const = 0;
+};
+#endif /* EXP */
+
+class OStorePageBIOS;
+
 class OStorePageObject
 {
     typedef OStorePageData       page;
-    typedef OStorePageDescriptor D;
 
 public:
     /** Allocation.
      */
-    static void * operator new (std::size_t n) SAL_THROW(())
+    static void * operator new (size_t n) SAL_THROW(())
     {
         return rtl_allocateMemory (sal_uInt32(n));
     }
-    static void operator delete (void * p, std::size_t) SAL_THROW(())
+    static void operator delete (void * p, size_t) SAL_THROW(())
     {
         rtl_freeMemory (p);
     }
 
-    /** Construction.
-     */
-    inline OStorePageObject (page& rPage);
-
-    /** Destruction.
-     */
-    virtual ~OStorePageObject (void);
-
-    /** External representation.
-     */
-    virtual void       swap   (const D& rDescr);
-    virtual void       guard  (const D& rDescr);
-    virtual storeError verify (const D& rDescr);
-
-    /** Data.
-     */
-    inline OStorePageData& getData (void);
-
     /** State.
      */
-    inline sal_Bool dirty (void) const;
-    inline void     clean (void);
-    inline void     touch (void);
+    inline bool dirty (void) const;
+    inline void clean (void);
+    inline void touch (void);
 
     /** Location.
      */
     inline sal_uInt32 location (void) const;
     inline void       location (sal_uInt32 nAddr);
 
-private:
+protected:
     /** Representation.
      */
-    page     &m_rPage;
-    sal_Bool  m_bDirty;
+    PageHolder m_xPage;
+    bool       m_bDirty;
+
+    /** Construction.
+     */
+    explicit OStorePageObject (PageHolder const & rxPage = PageHolder())
+        : m_xPage (rxPage), m_bDirty (false)
+    {}
+
+    /** Destruction.
+     */
+    virtual ~OStorePageObject (void);
+
+public:
+    template< class U >
+    PageHolderObject<U> get() const
+    {
+        return PageHolderObject<U>(m_xPage);
+    }
+
+    template< class U >
+    storeError construct (rtl::Reference< PageData::Allocator > const & rxAllocator)
+    {
+        if (!rxAllocator.is())
+            return store_E_InvalidAccess;
+
+        PageHolder tmp (rxAllocator->construct<U>(), rxAllocator);
+        if (!tmp.get())
+            return store_E_OutOfMemory;
+
+        m_xPage.swap (tmp);
+        return store_E_None;
+    }
+
+
+    PageHolder & get() { return m_xPage; }
+    PageHolder const & get() const { return m_xPage; }
+
+    virtual storeError guard  (sal_uInt32 nAddr) = 0;
+    virtual storeError verify (sal_uInt32 nAddr) const = 0;
 };
 
-inline OStorePageObject::OStorePageObject (page& rPage)
-    : m_rPage (rPage), m_bDirty (sal_False)
-{
-}
-
-inline OStorePageData& OStorePageObject::getData (void)
-{
-    return m_rPage;
-}
-
-inline sal_Bool OStorePageObject::dirty (void) const
+inline bool OStorePageObject::dirty (void) const
 {
     return m_bDirty;
 }
 
 inline void OStorePageObject::clean (void)
 {
-    m_bDirty = sal_False;
+    m_bDirty = false;
 }
 
 inline void OStorePageObject::touch (void)
 {
-    m_bDirty = sal_True;
+    m_bDirty = true;
 }
 
 inline sal_uInt32 OStorePageObject::location (void) const
 {
-    return m_rPage.location();
+    return m_xPage->location();
 }
 
 inline void OStorePageObject::location (sal_uInt32 nAddr)
 {
-    m_rPage.location (nAddr);
+    m_xPage->location(nAddr);
     touch();
-}
-
-#define STORE_METHOD_ENTER(pMutex) \
-    if ((pMutex)) (pMutex)->acquire()
-
-#define STORE_METHOD_LEAVE(pMutex, eErrCode) \
-{ \
-    if ((pMutex)) (pMutex)->release(); \
-    return (eErrCode); \
-}
-
-/*========================================================================
- *
- * OStorePageBIOS.
- *
- *======================================================================*/
-struct OStoreSuperBlockPage;
-struct OStorePageACL;
-
-class OStorePageBIOS : public store::OStoreObject
-{
-public:
-    /** Construction.
-     */
-    OStorePageBIOS (void);
-
-    /** Conversion into Mutex&
-     */
-    inline operator osl::Mutex& (void) const;
-
-    /** Initialization.
-     *  @param  pLockBytes [in]
-     *  @param  eAccessMode [in]
-     *  @return store_E_None upon success
-     */
-    virtual storeError initialize (
-        ILockBytes      *pLockBytes,
-        storeAccessMode  eAccessMode);
-
-    /** getPageSize.
-     */
-    storeError getPageSize (sal_uInt16 &rnPageSize);
-
-    /** acquireLock.
-     */
-    storeError acquireLock (
-        sal_uInt32 nAddr, sal_uInt32 nSize);
-
-    /** releaseLock.
-     */
-    storeError releaseLock (
-        sal_uInt32 nAddr, sal_uInt32 nSize);
-
-    /** read.
-     */
-    storeError read (
-        sal_uInt32 nAddr, void *pData, sal_uInt32 nSize);
-
-    /** write.
-     */
-    storeError write (
-        sal_uInt32 nAddr, const void *pData, sal_uInt32 nSize);
-
-    /** isModified.
-     */
-    inline sal_Bool isModified (void) const;
-
-    /** isWriteable.
-     */
-    inline sal_Bool isWriteable (void) const;
-
-    /** isValid.
-     */
-    inline sal_Bool isValid (void) const;
-
-    /** Page Access.
-     */
-    storeError acquirePage (
-        const OStorePageDescriptor& rDescr, storeAccessMode eMode);
-
-    storeError releasePage (const OStorePageDescriptor& rDescr);
-
-    sal_uInt32 getRefererCount (void);
-
-    /** Page Allocation.
-     */
-    enum Allocation
-    {
-        ALLOCATE_FIRST = 0,
-        ALLOCATE_BEST  = 1,
-        ALLOCATE_EOF   = 2
-    };
-
-    storeError allocate (
-        OStorePageObject& rPage, Allocation eAllocation = ALLOCATE_FIRST);
-
-    virtual storeError free (
-        OStorePageObject& rPage);
-
-    /** Page I/O.
-     */
-    virtual storeError load (
-        OStorePageObject& rPage);
-
-    virtual storeError save (
-        OStorePageObject& rPage);
-
-    /** close.
-     *  @return store_E_None upon success.
-     */
-    virtual storeError close (void);
-
-    /** flush.
-     *  @return store_E_None upon success.
-     */
-    virtual storeError flush (void);
-
-    /** size.
-     */
-    storeError size (sal_uInt32 &rnSize);
-
-    /** ScanContext.
-     */
-    struct ScanContext
-    {
-        /** Representation.
-         */
-        OStorePageDescriptor m_aDescr;
-        sal_uInt32           m_nSize;
-        sal_uInt32           m_nMagic;
-
-        /** Construction.
-         */
-        inline ScanContext (void);
-
-        /** isValid.
-         */
-        inline sal_Bool isValid (void) const;
-    };
-
-    /** scanBegin.
-     */
-    storeError scanBegin (
-        ScanContext &rCtx,
-        sal_uInt32   nMagic = 0);
-
-    /** scanNext.
-     */
-    storeError scanNext (
-        ScanContext      &rCtx,
-        OStorePageObject &rPage);
-
-protected:
-    /** Destruction (OReference).
-     */
-    virtual ~OStorePageBIOS (void);
-
-    /** create (SuperBlock).
-     */
-    storeError create (
-        sal_uInt16 nPageSize = STORE_DEFAULT_PAGESIZE);
-
-    /** Page Maintenance.
-     */
-    storeError peek (
-        OStorePageData &rData);
-    storeError poke (
-        OStorePageData &rData);
-    storeError poke (
-        OStorePageObject &rPage);
-
-private:
-    /** Representation.
-     */
-    rtl::Reference<ILockBytes>    m_xLockBytes;
-    osl::Mutex                    m_aMutex;
-    OStorePageACL                *m_pAcl;
-
-    typedef OStoreSuperBlockPage  SuperPage;
-    SuperPage                    *m_pSuper;
-
-    sal_Bool                      m_bModified  : 1;
-    sal_Bool                      m_bWriteable : 1;
-
-    /** SuperBlock verification and repair.
-     */
-    storeError verify (SuperPage *&rpSuper);
-    storeError repair (SuperPage *&rpSuper);
-
-    /** Not implemented.
-     */
-    OStorePageBIOS (const OStorePageBIOS&);
-    OStorePageBIOS& operator= (const OStorePageBIOS&);
-};
-
-inline OStorePageBIOS::operator osl::Mutex& (void) const
-{
-    return (osl::Mutex&)m_aMutex;
-}
-inline sal_Bool OStorePageBIOS::isModified (void) const
-{
-    return m_bModified;
-}
-inline sal_Bool OStorePageBIOS::isWriteable (void) const
-{
-    return m_bWriteable;
-}
-inline sal_Bool OStorePageBIOS::isValid (void) const
-{
-    return m_xLockBytes.is();
-}
-
-inline OStorePageBIOS::ScanContext::ScanContext (void)
-    : m_aDescr (0, 0, 0), m_nSize (0), m_nMagic (0)
-{
-}
-inline sal_Bool OStorePageBIOS::ScanContext::isValid (void) const
-{
-    return (m_aDescr.m_nAddr < m_nSize);
 }
 
 /*========================================================================
@@ -912,4 +972,3 @@ inline sal_Bool OStorePageBIOS::ScanContext::isValid (void) const
 } // namespace store
 
 #endif /* !_STORE_STORBASE_HXX_ */
-

@@ -29,158 +29,79 @@
  ************************************************************************/
 
 #ifndef _STORE_STORCACH_HXX
-#define _STORE_STORCACH_HXX "$Revision: 1.6 $"
+#define _STORE_STORCACH_HXX "$Revision: 1.6.8.2 $"
 
-#include <sal/types.h>
-#include <osl/mutex.hxx>
-#include <store/types.h>
+#include "sal/types.h"
+#include "rtl/ref.hxx"
 
-#ifndef INCLUDED_CSTDDEF
-#include <cstddef>
-#define INCLUDED_CSTDDEF
-#endif
+#include "store/types.h"
+#include "storbase.hxx"
 
 namespace store
 {
 
-struct OStorePageDescriptor;
-struct OStorePageData;
-class  OStorePageBIOS;
+/*========================================================================
+ *
+ * PageCache interface.
+ *
+ *======================================================================*/
+
+class PageCache : public rtl::IReference
+{
+public:
+    /** load.
+     */
+    storeError lookupPageAt (
+        PageHolder & rxPage,
+        sal_uInt32   nOffset);
+
+    /** insert.
+     */
+    storeError insertPageAt (
+        PageHolder const & rxPage,
+        sal_uInt32         nOffset);
+
+    /** update, or insert.
+     */
+    storeError updatePageAt (
+        PageHolder const & rxPage,
+        sal_uInt32         nOffset);
+
+    /** remove (invalidate).
+     */
+    storeError removePageAt (
+        sal_uInt32 nOffset);
+
+private:
+    /** Implementation (abstract).
+     */
+    virtual storeError lookupPageAt_Impl (
+        PageHolder & rxPage,
+        sal_uInt32   nOffset) = 0;
+
+    virtual storeError insertPageAt_Impl (
+        PageHolder const & rxPage,
+        sal_uInt32         nOffset) = 0;
+
+    virtual storeError updatePageAt_Impl (
+        PageHolder const & rxPage,
+        sal_uInt32         nOffset) = 0;
+
+    virtual storeError removePageAt_Impl (
+        sal_uInt32 nOffset) = 0;
+};
 
 /*========================================================================
  *
- * OStorePageCache interface.
- * (OStorePageData in external representation)
+ * PageCache factory.
  *
  *======================================================================*/
-#define STORE_LIMIT_CACHEPAGES   256
-#define STORE_DEFAULT_CACHEPAGES STORE_LIMIT_CACHEPAGES
 
-struct OStorePageCacheEntry;
-
-class OStorePageCache
-{
-    typedef OStorePageCacheEntry entry;
-
-public:
-    /** Allocation.
-     */
-    static void * operator new (std::size_t n) SAL_THROW(());
-    static void   operator delete (void * p, std::size_t) SAL_THROW(());
-
-    /** Construction.
-    */
-    OStorePageCache (
-        sal_uInt16 nPages = STORE_DEFAULT_CACHEPAGES);
-
-    /** Destruction.
-    */
-    ~OStorePageCache (void);
-
-    /** load.
-    */
-    storeError load (
-        const OStorePageDescriptor &rDescr,
-        OStorePageData             &rData,
-        OStorePageBIOS             &rBIOS,
-        osl::Mutex                 *pMutex = NULL);
-
-    /** update.
-    */
-    enum UpdateMode
-    {
-        UPDATE_WRITE_THROUGH = 0,
-        UPDATE_WRITE_DELAYED = 1
-    };
-
-    storeError update (
-        const OStorePageDescriptor &rDescr,
-        const OStorePageData       &rData,
-        OStorePageBIOS             &rBIOS,
-        osl::Mutex                 *pMutex = NULL,
-        UpdateMode                  eMode  = UPDATE_WRITE_THROUGH);
-
-    /** invalidate.
-    */
-    storeError invalidate (
-        const OStorePageDescriptor &rDescr,
-        osl::Mutex                 *pMutex = NULL);
-
-    /** flush.
-    */
-    storeError flush (
-        OStorePageBIOS &rBIOS,
-        osl::Mutex     *pMutex = NULL);
-
-    /** hitRatio [nHit / (nHit + nMissed)].
-     */
-    inline double hitRatio (void) const;
-
-    /** usageRatio [nUsed / nSize].
-    */
-    inline double usageRatio (void) const;
-
-private:
-    /** Representation.
-    */
-    sal_uInt16  m_nSize;
-    sal_uInt16  m_nUsed;
-    entry      *m_pData[STORE_LIMIT_CACHEPAGES];
-    entry      *m_pHead;
-
-    sal_uInt32  m_nHit;
-    sal_uInt32  m_nMissed;
-    sal_uInt32  m_nUpdHit;
-    sal_uInt32  m_nUpdLRU;
-    sal_uInt32  m_nWrtBack;
-
-    /** Implementation.
-    */
-    sal_uInt16 find (const OStorePageDescriptor &rDescr) const;
-    void       move (sal_uInt16 nSI, sal_uInt16 nDI);
-
-    /** insert.
-    */
-    enum InsertMode
-    {
-        INSERT_CLEAN = 0,
-        INSERT_DIRTY = 1
-    };
-
-    storeError insert (
-        sal_uInt16                  nIndex,
-        const OStorePageDescriptor &rDescr,
-        const OStorePageData       &rData,
-        OStorePageBIOS             &rBIOS,
-        InsertMode                  eMode = INSERT_CLEAN);
-
-    /** Not implemented.
-    */
-    OStorePageCache (const OStorePageCache& rOther);
-    OStorePageCache& operator= (const OStorePageCache& rOther);
-};
-
-/*
- * hitRatio [nHit / (nHit + nMissed)].
- */
-inline double OStorePageCache::hitRatio (void) const
-{
-    if (m_nHit || m_nMissed)
-        return ((double)m_nHit / (double)(m_nHit + m_nMissed));
-    else
-        return 1.0;
-}
-
-/*
- * usageRatio [nUsed / nSize].
- */
-inline double OStorePageCache::usageRatio (void) const
-{
-    if (m_nUsed < m_nSize)
-        return ((double)m_nUsed / (double)m_nSize);
-    else
-        return 1.0;
-}
+storeError
+PageCache_createInstance (
+    rtl::Reference< store::PageCache > & rxCache,
+    sal_uInt16                           nPageSize
+);
 
 /*========================================================================
  *

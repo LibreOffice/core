@@ -696,7 +696,10 @@ oslFileError osl_openFile( rtl_uString* ustrFileURL, oslFileHandle* pHandle, sal
                     flags = fcntl(fd, F_GETFL, NULL);
                     flags &= ~O_NONBLOCK;
                     if( 0 > fcntl(fd, F_GETFL, flags) )
+                   {
+                        close(fd);
                         return oslTranslateFileError(OSL_FET_ERROR, errno);
+                   }
 #endif
                     if( NULL == pFileLockEnvVar )
                         aflock.l_type = 0;
@@ -1164,6 +1167,93 @@ oslFileError osl_setFileTime( rtl_uString* ustrFileURL, const TimeValue* pCreati
  *
  *****************************************************************************/
 
+/*******************************************
+    osl_mapFile
+********************************************/
+oslFileError
+SAL_CALL osl_mapFile (
+    oslFileHandle Handle,
+    void**        ppAddr,
+    sal_uInt64    uLength,
+    sal_uInt64    uOffset,
+    sal_uInt32    uFlags
+)
+{
+    oslFileHandleImpl* pHandleImpl = (oslFileHandleImpl*)Handle;
+
+    if ((0 == pHandleImpl) || (-1 == pHandleImpl->fd) || (0 == ppAddr))
+        return osl_File_E_INVAL;
+    *ppAddr = 0;
+
+    static sal_uInt64 const g_limit_size_t = std::numeric_limits< size_t >::max();
+    if (g_limit_size_t < uLength)
+        return osl_File_E_OVERFLOW;
+    size_t const nLength = sal::static_int_cast< size_t >(uLength);
+
+    static sal_uInt64 const g_limit_off_t = std::numeric_limits< off_t >::max();
+    if (g_limit_off_t < uOffset)
+        return osl_File_E_OVERFLOW;
+    off_t const nOffset = sal::static_int_cast< off_t >(uOffset);
+
+    void* p = mmap(NULL, nLength, PROT_READ, MAP_SHARED, pHandleImpl->fd, nOffset);
+    if (MAP_FAILED == p)
+        return oslTranslateFileError(OSL_FET_ERROR, errno);
+    *ppAddr = p;
+
+    if (uFlags & osl_File_MapFlag_RandomAccess)
+    {
+        // Determine memory pagesize.
+#if defined(FREEBSD) || defined(NETBSD) || defined(MACOSX)
+        size_t const nPageSize = getpagesize();
+#else  /* POSIX */
+        size_t const nPageSize = sysconf(_SC_PAGESIZE);
+#endif /* xBSD || POSIX */
+        if (size_t(-1) != nPageSize)
+        {
+            /*
+             * Pagein, touching first byte of every memory page.
+             * Note: volatile disables optimizing the loop away.
+             */
+            sal_uInt8 * pData (reinterpret_cast<sal_uInt8*>(*ppAddr));
+            size_t      nSize (nLength);
+
+            volatile sal_uInt8 c = 0;
+            while (nSize > nPageSize)
+            {
+                c ^= pData[0];
+                pData += nPageSize;
+                nSize -= nPageSize;
+            }
+            if (nSize > 0)
+            {
+                c^= pData[0];
+                pData += nSize;
+                nSize -= nSize;
+            }
+        }
+    }
+    return osl_File_E_None;
+}
+
+/*******************************************
+    osl_unmapFile
+********************************************/
+oslFileError
+SAL_CALL osl_unmapFile (void* pAddr, sal_uInt64 uLength)
+{
+    if (0 == pAddr)
+        return osl_File_E_INVAL;
+
+    static sal_uInt64 const g_limit_size_t = std::numeric_limits< size_t >::max();
+    if (g_limit_size_t < uLength)
+        return osl_File_E_OVERFLOW;
+    size_t const nLength = sal::static_int_cast< size_t >(uLength);
+
+    if (-1 == munmap(static_cast<char*>(pAddr), nLength))
+        return oslTranslateFileError(OSL_FET_ERROR, errno);
+
+    return osl_File_E_None;
+}
 
 /*******************************************
     osl_readFile
@@ -1227,7 +1317,110 @@ oslFileError osl_writeFile(oslFileHandle Handle, const void* pBuffer, sal_uInt64
 }
 
 /*******************************************
-    osl_writeFile
+    osl_readFileAt
+********************************************/
+oslFileError
+SAL_CALL osl_readFileAt (
+    oslFileHandle Handle,
+    sal_uInt64    uOffset,
+    void*         pBuffer,
+    sal_uInt64    uBytesRequested,
+    sal_uInt64*   pBytesRead)
+{
+    oslFileHandleImpl* pHandleImpl = (oslFileHandleImpl*)Handle;
+
+    if ((0 == pHandleImpl) || (pHandleImpl->fd < 0) || (0 == pBuffer) || (0 == pBytesRead))
+        return osl_File_E_INVAL;
+
+    static sal_uInt64 const g_limit_off_t = std::numeric_limits< off_t >::max();
+    if (g_limit_off_t < uOffset)
+        return osl_File_E_OVERFLOW;
+    off_t const nOffset = sal::static_int_cast< off_t >(uOffset);
+
+    static sal_uInt64 const g_limit_ssize_t = std::numeric_limits< ssize_t >::max();
+    if (g_limit_ssize_t < uBytesRequested)
+        return osl_File_E_OVERFLOW;
+    size_t const nBytesRequested = sal::static_int_cast< size_t >(uBytesRequested);
+
+#if defined(LINUX) || defined(SOLARIS)
+
+    ssize_t nBytes = ::pread(pHandleImpl->fd, pBuffer, nBytesRequested, nOffset);
+    if ((-1 == nBytes) && (EOVERFLOW == errno))
+    {
+        /*
+         * Workaround for 'pread()' failure at end-of-file:
+         *
+         * Some 'pread()'s fail with EOVERFLOW when reading at (or past)
+         * end-of-file, different from 'lseek() + read()' behaviour.
+         * Returning '0 bytes read' and 'osl_File_E_None' instead.
+         */
+        nBytes = 0;
+    }
+
+#else /* LINUX || SOLARIS */
+
+    if (-1 == ::lseek (pHandleImpl->fd, nOffset, SEEK_SET))
+        return oslTranslateFileError(OSL_FET_ERROR, errno);
+
+    ssize_t nBytes = ::read(pHandleImpl->fd, pBuffer, nBytesRequested);
+
+#endif /* LINUX || SOLARIS */
+
+    if (-1 == nBytes)
+        return oslTranslateFileError(OSL_FET_ERROR, errno);
+
+    *pBytesRead = nBytes;
+    return osl_File_E_None;
+}
+
+/*******************************************
+    osl_writeFileAt
+********************************************/
+oslFileError
+SAL_CALL osl_writeFileAt (
+    oslFileHandle Handle,
+    sal_uInt64    uOffset,
+    const void*   pBuffer,
+    sal_uInt64    uBytesToWrite,
+    sal_uInt64*   pBytesWritten)
+{
+    oslFileHandleImpl* pHandleImpl = (oslFileHandleImpl*)Handle;
+
+    if ((0 == pHandleImpl) || (pHandleImpl->fd < 0) || (0 == pBuffer) || (0 == pBytesWritten))
+        return osl_File_E_INVAL;
+
+    static sal_uInt64 const g_limit_off_t = std::numeric_limits< off_t >::max();
+    if (g_limit_off_t < uOffset)
+        return osl_File_E_OVERFLOW;
+    off_t const nOffset = sal::static_int_cast< off_t >(uOffset);
+
+    static sal_uInt64 const g_limit_ssize_t = std::numeric_limits< ssize_t >::max();
+    if (g_limit_ssize_t < uBytesToWrite)
+        return osl_File_E_OVERFLOW;
+    size_t const nBytesToWrite = sal::static_int_cast< size_t >(uBytesToWrite);
+
+#if defined(LINUX) || defined(SOLARIS)
+
+    ssize_t nBytes = ::pwrite(pHandleImpl->fd, pBuffer, nBytesToWrite, nOffset);
+
+#else /* LINUX || SOLARIS */
+
+    if (-1 == ::lseek(pHandleImpl->fd, nOffset, SEEK_SET))
+        return oslTranslateFileError(OSL_FET_ERROR, errno);
+
+    ssize_t nBytes = ::write(pHandleImpl->fd, pBuffer, nBytesToWrite);
+
+#endif /* LINUX || SOLARIS */
+
+    if (-1 == nBytes)
+        return oslTranslateFileError(OSL_FET_ERROR, errno);
+
+    *pBytesWritten = nBytes;
+    return osl_File_E_None;
+}
+
+/*******************************************
+    osl_setFilePos
 ********************************************/
 
 oslFileError osl_setFilePos( oslFileHandle Handle, sal_uInt32 uHow, sal_Int64 uPos )

@@ -47,7 +47,9 @@ typedef pthread_once_t sal_once_type;
 #elif defined(SAL_W32)
 
 #define WIN32_LEAN_AND_MEAN
+#pragma warning(push,1) /* disable warnings within system headers */
 #include <windows.h>
+#pragma warning(pop)
 
 typedef struct sal_once_st sal_once_type;
 struct sal_once_st
