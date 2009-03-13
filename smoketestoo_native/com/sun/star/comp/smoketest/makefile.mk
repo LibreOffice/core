@@ -2,13 +2,11 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2009 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
 # $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.4 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -29,7 +27,7 @@
 #
 #*************************************************************************
 
-PRJ		= ..$/..$/..$/..$/..
+PRJ     = ..$/..$/..$/..$/..
 PRJNAME = smoke_test
 PACKAGE = com$/sun$/star$/comp$/smoketest
 TARGET  = com_sun_star_comp_smoketest
@@ -43,8 +41,8 @@ no_common_build_zip:=TRUE
 JARFILES = ridl.jar jurt.jar unoil.jar juh.jar
 
 
-JARTARGET		= TestExtension.jar
-JARCOMPRESS 	= TRUE
+JARTARGET          = TestExtension.jar
+JARCOMPRESS        = TRUE
 CUSTOMMANIFESTFILE = MANIFEST.MF
 
 ZIP1TARGET=TestExtension
@@ -55,34 +53,29 @@ ZIP1EXT=.oxt
 
 # --- Files --------------------------------------------------------
 
-COPY_OXT_MANIFEST:= $(MISC)$/$(TARGET)$/META-INF$/manifest.xml
+#COPY_OXT_MANIFEST:= $(MISC)$/$(TARGET)$/META-INF$/manifest.xml
 JAVAFILES = TestExtension.java
 
 # --- Targets ------------------------------------------------------
 
+ZIP1DEPS=$(MISC)$/$(TARGET)$/$(JARTARGET)\
+         $(MISC)$/$(TARGET)$/TestExtension.rdb\
+         $(MISC)$/$(TARGET)$/META-INF$/manifest.xml
+
 .INCLUDE :  target.mk
 
-$(JARTARGETN) : $(MISC)$/$(TARGET).javamaker.done
-
-$(JAVACLASSFILES) : $(MISC)$/$(TARGET).javamaker.done
-
-$(MISC)$/$(TARGET).javamaker.done: $(BIN)$/TestExtension.rdb
-    $(JAVAMAKER) -O$(CLASSDIR) -BUCR -nD -X$(SOLARBINDIR)/types.rdb $<
-    $(TOUCH) $@
-
-$(BIN)$/TestExtension.rdb: TestExtension.idl
+$(MISC)$/TestExtension.urd: TestExtension.idl
     $(IDLC) -O$(MISC) -I$(SOLARIDLDIR) -cid -we $<
-    -$(RM) $@
-    $(REGMERGE) $@ /UCR $(MISC)$/TestExtension.urd
 
-$(MISC)$/$(ZIP1TARGET).createdir :
-    $(MKDIRHIER) $(MISC)$/$(TARGET)$/META-INF >& $(NULLDEV) && $(TOUCH) $@
+$(MISC)$/$(TARGET)$/META-INF$/manifest.xml: manifest.xml
+    @-$(MKDIRHIER) $(@:d)
+    $(COPY) $< $@
 
-$(MISC)$/$(TARGET)_resort : manifest.xml $(JARTARGETN) $(MISC)$/$(ZIP1TARGET).createdir $(BIN)$/TestExtension.rdb
-    $(GNUCOPY) -u manifest.xml $(MISC)$/$(TARGET)$/META-INF$/manifest.xml
-    $(GNUCOPY) -u $(JARTARGETN) $(MISC)$/$(TARGET)$/$(JARTARGET)
-    $(GNUCOPY) -u $(BIN)$/TestExtension.rdb $(MISC)$/$(TARGET)$/TestExtension.rdb
-    $(TOUCH) $@
+$(MISC)$/$(TARGET)$/TestExtension.rdb: $(MISC)$/TestExtension.urd
+    $(REGMERGE) $@ /UCR $<
 
-$(ZIP1TARGETN) : $(MISC)$/$(TARGET)_resort $(MISC)$/$(ZIP1TARGET).createdir
+$(JAVACLASSFILES) .UPDATEALL: $(MISC)$/$(TARGET)$/TestExtension.rdb
+    $(JAVAMAKER) -O$(CLASSDIR) -BUCR -nD -X$(SOLARBINDIR)/types.rdb $<
 
+$(MISC)$/$(TARGET)$/$(JARTARGET) : $(JARTARGETN)
+    $(COPY) $< $@
