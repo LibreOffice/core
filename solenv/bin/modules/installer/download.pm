@@ -1034,6 +1034,7 @@ sub nsis_language_converter
     elsif ( $language eq "pt" ) { $nsislanguage = "Portuguese"; }
     elsif ( $language eq "ro" ) { $nsislanguage = "Romanian"; }
     elsif ( $language eq "ru" ) { $nsislanguage = "Russian"; }
+    elsif ( $language eq "sh" ) { $nsislanguage = "SerbianLatin"; }
     elsif ( $language eq "sr" ) { $nsislanguage = "Serbian"; }
     elsif ( $language eq "sr-SP" ) { $nsislanguage = "Serbian"; }
     elsif ( $language eq "uk" ) { $nsislanguage = "Ukrainian"; }
