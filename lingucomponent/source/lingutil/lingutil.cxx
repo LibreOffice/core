@@ -65,6 +65,7 @@
 using ::com::sun::star::lang::Locale;
 using namespace ::com::sun::star;
 
+#if 0
 //////////////////////////////////////////////////////////////////////
 
 String GetDirectoryPathFromFileURL( const String &rFileURL )
@@ -78,14 +79,12 @@ String GetDirectoryPathFromFileURL( const String &rFileURL )
     String aRes = aURLObj.GetMainURL( INetURLObject::DECODE_TO_IURI );
     return aRes;
 }
-
-
-rtl::OString Win_GetShortPathName( const rtl::OUString &rLongPathName )
-{
-    (void) rLongPathName;
-    rtl::OString aRes;
+#endif
 
 #if defined(WNT)
+rtl::OString Win_GetShortPathName( const rtl::OUString &rLongPathName )
+{
+    rtl::OString aRes;
 
     sal_Unicode aShortBuffer[1024] = {0};
     sal_Int32   nShortBufSize = sizeof( aShortBuffer ) / sizeof( aShortBuffer[0] );
@@ -100,12 +99,10 @@ rtl::OString Win_GetShortPathName( const rtl::OUString &rLongPathName )
         aRes = rtl::OString( OU2ENC( rtl::OUString( aShortBuffer, nShortLen ), osl_getThreadTextEncoding()) );
     else
         DBG_ERROR( "Win_GetShortPathName: buffer to short" );
-#else
-    DBG_ERROR( "Win_GetShortPathName: functions should nor be called in non-Windows builds" );
-#endif //defined(WNT)
 
     return aRes;
 }
+#endif //defined(WNT)
 
 //////////////////////////////////////////////////////////////////////
 
