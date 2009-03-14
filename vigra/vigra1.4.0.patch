@@ -1699,3 +1699,15 @@ diff -uprN misc/vigra1.4.0/include/vigra/transformimage.hxx misc/build/vigra1.4.
          return result_type(0.5 * diff_ * (contrasted + one_) + min_);
      }
  
+diff -uprN misc/vigra1.4.0/include/vigra/diff2d.hxx misc/build/vigra1.4.0/include/vigra/diff2d.hxx
+--- misc/vigra1.4.0/include/vigra/diff2d.hxx	2009-03-02 09:27:34.000000000 +0000
++++ misc/build/vigra1.4.0/include/vigra/diff2d.hxx	2009-03-02 09:27:57.000000000 +0000
+@@ -1117,7 +1117,7 @@
+     bool contains(Rect2D const &r) const
+     {
+         return r.isEmpty() ||
+-            contains(r.upperLeft()) && contains(r.lowerRight()-Diff2D(1,1));
++            (contains(r.upperLeft()) && contains(r.lowerRight()-Diff2D(1,1)));
+     }
+ 
+         /** Return whether this rectangle overlaps with the given
