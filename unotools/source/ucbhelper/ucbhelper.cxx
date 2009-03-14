@@ -709,7 +709,7 @@ sal_Bool UCBContentHelper::Find( const String& rFolder, const String& rName, Str
         INetURLObject aFileObject( pFiles[i] );
         String aFile = aFileObject.getName(
             INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET ).toAsciiLowerCase();
-        if ( bWild && WildCard( rName ).Matches( aFile ) || aFile == rName )
+        if ( (bWild && WildCard( rName ).Matches( aFile )) || aFile == rName )
         {
             // names match
             rFile = aFileObject.GetMainURL( INetURLObject::NO_DECODE );
