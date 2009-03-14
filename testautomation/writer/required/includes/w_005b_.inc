@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -37,8 +37,7 @@
 '*
 '\***********************************************************************
 
-sub w_005b_
-    printLog Chr(13) + "--------- Menu Format / 2 (w_005b_.inc) ----------"
+sub w_005bprintLog Chr(13) + "--------- Menu Format / 2 (w_005b_.inc) ----------"
     gApplication = "WRITER"
 
     Call tFormatAlignment
@@ -506,7 +505,7 @@ testcase tFormatLine
     printlog " Open new document"
     Call hNewDocument
     printlog " Insert a rectangle"
-	Call wRectangleToClipboard
+    Call wRectangleToClipboard
     printlog " Edit / Paste"
     EditPaste
     Sleep (1)
@@ -572,7 +571,7 @@ endcase
 '-----------------------------------------------------------
 
 testcase tFormatArea
-    Dim i as integer    
+    Dim i as integer
     PrintLog "- Format / Area in drawing object"
     if gApplication = "HTMLDOKUMENT" then
         printlog "Not in WriterWeb!"
@@ -603,7 +602,7 @@ testcase tFormatArea
     Kontext "TabArea"
     For i = 1 to 5
         FillOptions.Select i
-        Call DialogTest2 ( TabArea, i )
+        Call DialogTest ( TabArea, i )
     next i
     Kontext
     active.SetPage TabSchatten
@@ -939,7 +938,7 @@ testcase tFormatGroup
     Dim y%
     Dim x1%
     Dim y1%
-    
+
     PrintLog "- Format / Group drawing objects"
     if gApplication = "HTMLDOKUMENT" then
         printlog "Not in WriterWeb!"
@@ -1016,7 +1015,7 @@ testcase tFormatGroup
         Warnlog "Unable to execute Format / Group / Ungroup. Maybe objects not selected!"
         Call hCloseDocument
         printlog " Close active document"
-         goto endsub
+        goto endsub
     endcatch
     Sleep 2
 
@@ -1120,15 +1119,15 @@ testcase tFormatStyleEdit
 
     Kontext "DrawBar"
     if Not DrawBar.Exists then Call hToolbarSelect("Drawing", true)
-    
+
     if Drawbar.Exists then
         Textobjekt.Click
         printlog " Insert a textobject from toolbar"
         Sleep 2
-    
+
         Call gMouseMove(50, 20, 70, 40)
         Sleep 1
-    
+
         FormatStyleBold
         printlog " Format / Style / Bold"
         Call wTypeKeys ("a")

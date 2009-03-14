@@ -1,6 +1,6 @@
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -36,8 +36,7 @@
 '*
 '\***********************************************************************
 
-sub w_001a_
-    printLog Chr(13) + "--------- File Menu (w_001a_.inc) ----------"
+sub w_001aprintLog Chr(13) + "--------- File Menu (w_001a_.inc) ----------"
     gApplication = "WRITER"
 
     Call tFileProperties
@@ -88,21 +87,22 @@ testcase tFileProperties
     Kontext "TabDokumentinfo"
     Call DialogTest (TabDokumentinfo)
 
-    QAErrorLog "#i95523# - FileProperties - Tabpage 'User Defined' has changed. - Adaption of testcases needed."
-'    printlog " Switch to Tabpage 'User defined'"
-'    Kontext
-'    active.SetPage TabBenutzer
-'    Kontext "TabBenutzer"
-'    Call DialogTest ( TabBenutzer )
 
-'    Wait 500
+    WarnLog "#i95523# - FileProperties - Tabpage 'User Defined' has changed. - Adaption of testcases needed."
+    '    printlog " Switch to Tabpage 'User defined'"
+    '    Kontext
+    '    active.SetPage TabBenutzer
+    '    Kontext "TabBenutzer"
+    '    Call DialogTest ( TabBenutzer )
 
-'    Infofelder.Click
-'    printlog " Click 'Infofields'"
-'    Kontext "InfonamenBearbeiten"
-'    printlog " Close upcoming dialog with 'Cancel'"
-'    Call DialogTest (InfonamenBearbeiten)
-'    InfonamenBearbeiten.Cancel
+    '    Wait 500
+
+    '    Infofelder.Click
+    '    printlog " Click 'Infofields'"
+    '    Kontext "InfonamenBearbeiten"
+    '    printlog " Close upcoming dialog with 'Cancel'"
+    '    Call DialogTest (InfonamenBearbeiten)
+    '    InfonamenBearbeiten.Cancel
 
     printlog " Switch to Tabpage 'Internet'"
     Kontext
@@ -154,7 +154,7 @@ testcase tFileTemplatesOrganize
     PrintLog " Select 'Commands -> Import Template'"
     Call hMenuSelectNr(3)
     Wait 500
-    PrintLog " Close Filedialog." 
+    PrintLog " Close Filedialog."
     if gUseSysDlg = False then
         Kontext "OeffnenDlg"
         if OeffnenDlg.Exists then
@@ -281,7 +281,7 @@ testcase tFileTemplatesSave
     DokumentVorlagen.Cancel
     printlog " Close 'Templates' dialog"
 
-    printlog " Close active document" 
+    printlog " Close active document"
     Call hCloseDocument
     gApplication = "WRITER"
 endcase
@@ -314,15 +314,15 @@ testcase tFilePagePreview
     gehtnicht = FALSE
     printlog " Open new document"
     Select Case gApplication
-        Case "WRITER"
-            Call hNewDocument
+    Case "WRITER"
+        Call hNewDocument
 
-        Case "MASTERDOC"
-            Call hNewDocument
+    Case "MASTERDOC"
+        Call hNewDocument
 
-        Case "HTMLDOKUMENT"
-            printlog "Not in Writer/Web!"
-            goto endsub
+    Case "HTMLDOKUMENT"
+        printlog "Not in Writer/Web!"
+        goto endsub
     end select
 
     printlog " Enter some text in document"
@@ -365,7 +365,7 @@ testcase tFilePagePreview
                 Kontext "DruckenDlg"
                 DruckenDlg.Cancel
             end if
-            
+
             printlog " Click 'Print options page preview' in toolbar"
             Kontext "PreviewObjectbar"
             Skalierung.Click
@@ -397,17 +397,17 @@ testcase tFilePrint
     Kontext "Active"
     WaitSlot(1000)
     if Active.Exists then
-        if Active.GetRT = 304 then  
+        if Active.GetRT = 304 then
             QAErrorlog "No Default Printer!"
-			Active.Ok
-			Kontext "DruckenDlg"
-			if DruckenDlg.Exists then DruckenDlg.Cancel
-			Call hCloseDocument
-			goto endsub
-		end if
+            Active.Ok
+            Kontext "DruckenDlg"
+            if DruckenDlg.Exists then DruckenDlg.Cancel
+            Call hCloseDocument
+            goto endsub
+        end if
     end if
-	Kontext "DruckenDlg"
-	if DruckenDlg.Exists then
+    Kontext "DruckenDlg"
+    if DruckenDlg.Exists then
         PrintLog " In printer dialog click 'Options'"
         Zusaetze.Click
         Sleep 1
@@ -415,9 +415,9 @@ testcase tFilePrint
         Kontext "DruckerZusaetzeWriter"
         PrintLog " Close 'Print options' with 'Cancel'"
         DruckerZusaetzeWriter.Cancel
-		Kontext "DruckenDlg"
-        
-		if gPlatGroup = "unx" then
+        Kontext "DruckenDlg"
+
+        if gPlatGroup = "unx" then
             if NOT Eigenschaften.IsEnabled AND gPlatform = "osx" then
                 warnlog "#i81545#-macport File -> Print|Printer Settings: Properties button disabled"
                 Kontext "DruckenDlg"
@@ -449,28 +449,28 @@ testcase tFilePrint
                     TabSPADevice.Cancel
                 end if
             else
-                    Kontext
-                    Active.Setpage TabSPAPaper
-                    Kontext "TabSPAPaper"
-                    Call DialogTest ( TabSPAPaper )
+                Kontext
+                Active.Setpage TabSPAPaper
+                Kontext "TabSPAPaper"
+                Call DialogTest ( TabSPAPaper )
 
-                    printlog( "ALLES WIRD GUT!" )
-                    Kontext
-                    Active.Setpage TabSPADevice
-                    Kontext "TabSPADevice"
-                    Call DialogTest ( TabSPADevice )
+                printlog( "ALLES WIRD GUT!" )
+                Kontext
+                Active.Setpage TabSPADevice
+                Kontext "TabSPADevice"
+                Call DialogTest ( TabSPADevice )
 
-                    PrintLog " Cancel Printer Properties' (only unix)"
-                    TabSPADevice.Cancel
+                PrintLog " Cancel Printer Properties' (only unix)"
+                TabSPADevice.Cancel
             end if
-		end if
-		Kontext "DruckenDlg"
-		Call DialogTest ( DruckenDlg )
+        end if
+        Kontext "DruckenDlg"
+        Call DialogTest ( DruckenDlg )
         PrintLog " Close 'Print' dialog"
-		DruckenDlg.Cancel
-	else
-		Warnlog "Print dialog is not up !"
-	end if
+        DruckenDlg.Cancel
+    else
+        Warnlog "Print dialog is not up !"
+    end if
 
     PrintLog " Close active document"
     Call hCloseDocument
@@ -489,14 +489,14 @@ testcase tFilePrinterSetup
     if Active.Exists then
         if Active.GetRT = 304 then
             QAErrorLog "No Default Printer!"
-			Active.Ok
-			Sleep 2
-			Kontext "DruckerEinrichten"
-			if DruckerEinrichten.Exists then
-				Call DialogTest ( DruckerEinrichten )
-				DruckerEinrichten.Cancel
-			end if
-		end if
+            Active.Ok
+            Sleep 2
+            Kontext "DruckerEinrichten"
+            if DruckerEinrichten.Exists then
+                Call DialogTest ( DruckerEinrichten )
+                DruckerEinrichten.Cancel
+            end if
+        end if
     else
         Kontext "DruckerEinrichten"
         Call DialogTest ( DruckerEinrichten )
@@ -578,5 +578,3 @@ testcase tMasterDocFilePagePreview
     Call hCloseDocument
     gApplication = "WRITER"
 endcase
-
-'-----------------------------------------------------------

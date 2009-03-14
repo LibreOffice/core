@@ -426,15 +426,6 @@ end sub
 
 '*******************************************************************************
 
-sub DialogTest2( Window, i% )
-
-    'deprecated TBO:2006/03/16
-    DialogTest( Window, i% )
-    
-end sub
-
-'*******************************************************************************
-
 function hFindeImDokument ( Passage$ , Optional A, optional bRegEx ) as boolean
 
     ' Author: Joerg Sievers (13.11.2001)
@@ -1193,4 +1184,99 @@ sub raiseApplication
         
     end if
 end sub
+
+'*******************************************************************************
+
+function hUseAsyncSlot( cSlot as string ) as integer
+
+    dim iWait as integer
+    dim iTime as integer : iTime = 0
+    const MAX_WAIT = 50
+    const CFN = "global::tools::includes::required::hUseAsyncSlot():"
+
+    if ( VERBOSE ) then printlog( CFN & "Using slot: " & cSlot )    
+    WaitSlot()
+    for iWait = 1 to MAX_WAIT
+        try
+            select case ( lcase( cSlot ) )
+            case "fileclose"            : FileClose
+            case "filesaveas"           : FileSaveAs
+            case "filesaveall"          : FileSaveAll
+            case "fileexport"           : FileExport
+            
+            case "editcopy"             : EditCopy
+            case "editpaste"            : EditPaste
+            case "editcut"              : EditCut
+            case "editselectall"        : EditSelectAll
+            case "editselectallmath"    : EditSelectAllMath
+            case "editdeletecontents"   : EditDeleteContents
+            case "editundo"             : EditUndo
+            case "editredo"             : EditRedo
+            case "editrepeat"           : EditRepeat
+            case "editpastespecial"     : EditPasteSpecial
+            case "editsearchandreplace" : EditSearchAndReplace
+            case "editduplicate"        : EditDuplicate
+            case "editgluepoints"       : EditGluePoints
+            case "editdeleteslide"      : EditDeleteSlide
+            case "editobjectproperties" : EditObjectProperties
+            case "editobjectedit"       : EditObjectEdit
+            case "editobjectsavecopyas" : EditObjectSaveCopyAs
+            
+            case "formatcontrol"        : FormatControl
+            case "formateditpoints"     : FormatEditPoints
+            
+            case else : warnlog( "Unknown slot called: " & cSlot )
+            end select
+            
+            exit for
+        catch
+            wait( 100 )
+            iTime = iWait * 100
+        endcatch
+    next iWait
+    
+    ' Timeout is -1
+    if ( iTime = 5000 ) then
+        iTime = -1 
+    endif
+    if ( VERBOSE ) then printlog( CFN & "Exit with rc=" & iTime )
+    hUseAsyncSlot() = iTime
+    
+    
+end function
+
+'*******************************************************************************
+
+function hClickButton( oButton as object ) as integer
+
+    dim iWait as integer
+    dim iTime as integer : iTime = 0
+    const MAX_WAIT = 50
+    const CFN = "global::tools::includes::required::hClickButton():"
+
+    if ( VERBOSE ) then printlog( CFN & "Click button: " & oButton.name() )    
+    WaitSlot()
+    for iWait = 1 to MAX_WAIT
+        try
+            if ( oButton.exists() ) then
+                if ( VERBOSE ) then printlog( CFN & "Button exists" )
+                if ( oButton.isEnabled() ) then
+                    if ( VERBOSE ) then printlog( "Button is enabled" )
+                    oButton.click()
+                endif
+            endif
+            exit for
+        catch
+            wait( 100 )
+            iTime = iWait * 100
+        endcatch
+    next iWait
+    if ( iTime = 5000 ) then
+        iTime = -1 
+    endif
+    if ( VERBOSE ) then printlog( CFN & "Exit with rc=" & iTime )
+    hClickButton() = iTime
+    
+end function
+
 

@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -37,8 +37,7 @@
 '*
 '\***********************************************************************
 
-sub w_001_
-    printLog Chr(13) + "--------- File Menu (w_001_.inc) ----------"
+sub w_001printLog Chr(13) + "--------- File Menu (w_001_.inc) ----------"
     gApplication = "WRITER"
 
     Call tFileNewLabels
@@ -104,60 +103,60 @@ testcase tFileNewLabels
     PrintLog "Check number of brands and types (see #i44801# for details)"
     For i = 1 to 2
         Select Case i
-            Case 1
-                Endlos.Check
-                printlog "Continous is checked"
-            Case 2
-                Bogen.Check
-                printlog "Sheet is checked"
-        end select    
+        Case 1
+            Endlos.Check
+            printlog "Continous is checked"
+        Case 2
+            Bogen.Check
+            printlog "Sheet is checked"
+        end select
         PrintLog "There should be 10 brands in list"
-        For x = 1 to Marke.GetItemCount 
+        For x = 1 to Marke.GetItemCount
             Marke.Select x
             printlog "- Brand: " & Marke.GetSelText
             sTypes = Typ.GetItemCount
             Select Case x
-                Case 1:
-                    PrintLog "Avery/A4 should have 295 types in list if 'Sheet' is checked"
-                    PrintLog "Avery/A4 should have 1 type in list if 'Continous' is checked"
-                    if i = 1 then vTypes = 1 else vTypes = 295
-                Case 2:
-                    PrintLog "Avery A4/Asia should have 88 types in list if 'Sheet' is checked"
-                    PrintLog "Avery A4/Asia should have 1 type in list if 'Continous' is checked"
-                    if i = 1 then vTypes = 1 else vTypes = 88
-                Case 3:
-                    PrintLog "Avery Lettersize should have 251 types in list if 'Sheet' is checked"
-                    PrintLog "Avery Lettersize should have 45 types in list if 'Continous' is checked"
-                    if i = 1 then vTypes = 45 else vTypes = 251
-                Case 4:
-                    PrintLog "Avery Zweckform should have 333 types in list if 'Sheet' is checked"
-                    PrintLog "Avery Zweckform should have 67 types in list if 'Continous' is checked"
-                    if i = 1 then vTypes = 67 else vTypes = 333
-                Case 5:
-                    PrintLog "Herlitz should have 26 types in list if 'Sheet' is checked"
-                    PrintLog "Herlitz should have 6 types in list if 'Continous' is checked"
-                    if i = 1 then vTypes = 6 else vTypes = 26
-                Case 6:
-                    PrintLog "Herma A4 should have 491 types in list if 'Sheet' is checked"
-                    PrintLog "Herma A4 should have 1 type in list if 'Continous' is checked"
-                    if i = 1 then vTypes = 1 else vTypes = 491
-                Case 7:
-                    PrintLog "Herma A5 should have 18 types in list if 'Sheet' is checked"
-                    PrintLog "Herma A5 should have 1 type in list if 'Continous' is checked"
-                    if i = 1 then vTypes = 1 else vTypes = 18
-                Case 8:
-                    PrintLog "Herma endlos should have 1 type in list if 'Sheet' is checked"
-                    PrintLog "Herma endlos should have 119 types in list if 'Continous' is checked"
-                    if i = 1 then vTypes = 119 else vTypes = 1
-                Case 9:
-                    PrintLog "Leitz should have 13 types in list if 'Sheet' is checked"
-                    PrintLog "Leitz should have 1 type in list if 'Continous' is checked"
-                    if i = 1 then vTypes = 1 else vTypes = 13
-                Case 10:
-                    PrintLog "Sigel should have 20 types in list if 'Sheet' is checked"
-                    PrintLog "Sigel should have 1 type in list if 'Continous' is checked"
-                    if i = 1 then vTypes = 1 else vTypes = 20
-                Case else: Warnlog "- There are more than 10 brands in list"
+            Case 1:
+                PrintLog "Avery/A4 should have 295 types in list if 'Sheet' is checked"
+                PrintLog "Avery/A4 should have 1 type in list if 'Continous' is checked"
+                if i = 1 then vTypes = 1 else vTypes = 295
+            Case 2:
+                PrintLog "Avery A4/Asia should have 88 types in list if 'Sheet' is checked"
+                PrintLog "Avery A4/Asia should have 1 type in list if 'Continous' is checked"
+                if i = 1 then vTypes = 1 else vTypes = 88
+            Case 3:
+                PrintLog "Avery Lettersize should have 251 types in list if 'Sheet' is checked"
+                PrintLog "Avery Lettersize should have 45 types in list if 'Continous' is checked"
+                if i = 1 then vTypes = 45 else vTypes = 251
+            Case 4:
+                PrintLog "Avery Zweckform should have 333 types in list if 'Sheet' is checked"
+                PrintLog "Avery Zweckform should have 67 types in list if 'Continous' is checked"
+                if i = 1 then vTypes = 67 else vTypes = 333
+            Case 5:
+                PrintLog "Herlitz should have 26 types in list if 'Sheet' is checked"
+                PrintLog "Herlitz should have 6 types in list if 'Continous' is checked"
+                if i = 1 then vTypes = 6 else vTypes = 26
+            Case 6:
+                PrintLog "Herma A4 should have 491 types in list if 'Sheet' is checked"
+                PrintLog "Herma A4 should have 1 type in list if 'Continous' is checked"
+                if i = 1 then vTypes = 1 else vTypes = 491
+            Case 7:
+                PrintLog "Herma A5 should have 18 types in list if 'Sheet' is checked"
+                PrintLog "Herma A5 should have 1 type in list if 'Continous' is checked"
+                if i = 1 then vTypes = 1 else vTypes = 18
+            Case 8:
+                PrintLog "Herma endlos should have 1 type in list if 'Sheet' is checked"
+                PrintLog "Herma endlos should have 119 types in list if 'Continous' is checked"
+                if i = 1 then vTypes = 119 else vTypes = 1
+            Case 9:
+                PrintLog "Leitz should have 13 types in list if 'Sheet' is checked"
+                PrintLog "Leitz should have 1 type in list if 'Continous' is checked"
+                if i = 1 then vTypes = 1 else vTypes = 13
+            Case 10:
+                PrintLog "Sigel should have 20 types in list if 'Sheet' is checked"
+                PrintLog "Sigel should have 1 type in list if 'Continous' is checked"
+                if i = 1 then vTypes = 1 else vTypes = 20
+            Case else: Warnlog "- There are more than 10 brands in list"
             end select
             if sTypes <> vTypes then Warnlog "-  Not " & sTypes & " types in list but " & vTypes
             For y = 1 to Typ.GetItemCount
@@ -197,7 +196,7 @@ testcase tFileNewLabels
     PrintLog "Click pushbutton 'Setup'"
     if gPlatgroup = "w95" or gPlatgroup = "wnt" then
         Einrichten.Click
-    
+
         PrintLog "Close printer-setup dialog"
         Kontext "DruckerEinrichten"
         if DruckerEinrichten.Exists( 2 ) then
@@ -207,7 +206,7 @@ testcase tFileNewLabels
         end if
         Kontext "TabDruckerEtiketten"
     end if
-    
+
     Sleep()
     PrintLog "Check checkbox 'Synchronize contents'"
     InhaltSynchronisieren.Check
@@ -215,7 +214,7 @@ testcase tFileNewLabels
     PrintLog "Click 'New document'"
     NeuesDok.Click
     Sleep()
-    
+
     Kontext "Active"
     if Active.Exists then
         try
@@ -260,67 +259,67 @@ testcase tFileNewBusinessCards
     if hCreateBusinessCards = False then goto endsub
     PrintLog "Switch to Tabpage 'Medium'"
     Kontext
-	Active.Setpage TabEtikettenMedium
-	Kontext "TabEtikettenMedium"
-	Call DialogTest (TabEtikettenMedium)
+    Active.Setpage TabEtikettenMedium
+    Kontext "TabEtikettenMedium"
+    Call DialogTest (TabEtikettenMedium)
     Sleep()
     PrintLog "Check number of brands and types (see #i44801# for details)"
     For i = 1 to 2
         Select Case i
-            Case 1
-                Endlos.Check
-                printlog "Continous is checked"
-            Case 2
-                Bogen.Check
-                printlog "Sheet is checked"
-        end select    
+        Case 1
+            Endlos.Check
+            printlog "Continous is checked"
+        Case 2
+            Bogen.Check
+            printlog "Sheet is checked"
+        end select
         PrintLog "There should be 10 brands in list"
-        For x = 1 to Marke.GetItemCount 
+        For x = 1 to Marke.GetItemCount
             Marke.Select x
             printlog "- Brand: " & Marke.GetSelText
             sTypes = Typ.GetItemCount
             Select Case x
-                Case 1:
-                    PrintLog "Avery/A4 should have 295 types in list if 'Sheet' is checked"
-                    PrintLog "Avery/A4 should have 1 type in list if 'Continous' is checked"
-                    if i = 1 then vTypes = 1 else vTypes = 295
-                Case 2:
-                    PrintLog "Avery A4/Asia should have 88 types in list if 'Sheet' is checked"
-                    PrintLog "Avery A4/Asia should have 1 type in list if 'Continous' is checked"
-                    if i = 1 then vTypes = 1 else vTypes = 88
-                Case 3:
-                    PrintLog "Avery Lettersize should have 251 types in list if 'Sheet' is checked"
-                    PrintLog "Avery Lettersize should have 45 types in list if 'Continous' is checked"
-                    if i = 1 then vTypes = 45 else vTypes = 251
-                Case 4:
-                    PrintLog "Avery Zweckform should have 333 types in list if 'Sheet' is checked"
-                    PrintLog "Avery Zweckform should have 67 types in list if 'Continous' is checked"
-                    if i = 1 then vTypes = 67 else vTypes = 333
-                Case 5:
-                    PrintLog "Herlitz should have 26 types in list if 'Sheet' is checked"
-                    PrintLog "Herlitz should have 6 types in list if 'Continous' is checked"
-                    if i = 1 then vTypes = 6 else vTypes = 26
-                Case 6:
-                    PrintLog "Herma A4 should have 491 types in list if 'Sheet' is checked"
-                    PrintLog "Herma A4 should have 1 type in list if 'Continous' is checked"
-                    if i = 1 then vTypes = 1 else vTypes = 491
-                Case 7:
-                    PrintLog "Herma A5 should have 18 types in list if 'Sheet' is checked"
-                    PrintLog "Herma A5 should have 1 type in list if 'Continous' is checked"
-                    if i = 1 then vTypes = 1 else vTypes = 18
-                Case 8:
-                    PrintLog "Herma endlos should have 1 type in list if 'Sheet' is checked"
-                    PrintLog "Herma endlos should have 119 types in list if 'Continous' is checked"
-                    if i = 1 then vTypes = 119 else vTypes = 1
-                Case 9:
-                    PrintLog "Leitz should have 13 types in list if 'Sheet' is checked"
-                    PrintLog "Leitz should have 1 type in list if 'Continous' is checked"
-                    if i = 1 then vTypes = 1 else vTypes = 13
-                Case 10:
-                    PrintLog "Sigel should have 20 types in list if 'Sheet' is checked"
-                    PrintLog "Sigel should have 1 type in list if 'Continous' is checked"
-                    if i = 1 then vTypes = 1 else vTypes = 20
-                Case else: Warnlog "- There are more than 10 brands in list"
+            Case 1:
+                PrintLog "Avery/A4 should have 295 types in list if 'Sheet' is checked"
+                PrintLog "Avery/A4 should have 1 type in list if 'Continous' is checked"
+                if i = 1 then vTypes = 1 else vTypes = 295
+            Case 2:
+                PrintLog "Avery A4/Asia should have 88 types in list if 'Sheet' is checked"
+                PrintLog "Avery A4/Asia should have 1 type in list if 'Continous' is checked"
+                if i = 1 then vTypes = 1 else vTypes = 88
+            Case 3:
+                PrintLog "Avery Lettersize should have 251 types in list if 'Sheet' is checked"
+                PrintLog "Avery Lettersize should have 45 types in list if 'Continous' is checked"
+                if i = 1 then vTypes = 45 else vTypes = 251
+            Case 4:
+                PrintLog "Avery Zweckform should have 333 types in list if 'Sheet' is checked"
+                PrintLog "Avery Zweckform should have 67 types in list if 'Continous' is checked"
+                if i = 1 then vTypes = 67 else vTypes = 333
+            Case 5:
+                PrintLog "Herlitz should have 26 types in list if 'Sheet' is checked"
+                PrintLog "Herlitz should have 6 types in list if 'Continous' is checked"
+                if i = 1 then vTypes = 6 else vTypes = 26
+            Case 6:
+                PrintLog "Herma A4 should have 491 types in list if 'Sheet' is checked"
+                PrintLog "Herma A4 should have 1 type in list if 'Continous' is checked"
+                if i = 1 then vTypes = 1 else vTypes = 491
+            Case 7:
+                PrintLog "Herma A5 should have 18 types in list if 'Sheet' is checked"
+                PrintLog "Herma A5 should have 1 type in list if 'Continous' is checked"
+                if i = 1 then vTypes = 1 else vTypes = 18
+            Case 8:
+                PrintLog "Herma endlos should have 1 type in list if 'Sheet' is checked"
+                PrintLog "Herma endlos should have 119 types in list if 'Continous' is checked"
+                if i = 1 then vTypes = 119 else vTypes = 1
+            Case 9:
+                PrintLog "Leitz should have 13 types in list if 'Sheet' is checked"
+                PrintLog "Leitz should have 1 type in list if 'Continous' is checked"
+                if i = 1 then vTypes = 1 else vTypes = 13
+            Case 10:
+                PrintLog "Sigel should have 20 types in list if 'Sheet' is checked"
+                PrintLog "Sigel should have 1 type in list if 'Continous' is checked"
+                if i = 1 then vTypes = 1 else vTypes = 20
+            Case else: Warnlog "- There are more than 10 brands in list"
             end select
             if sTypes <> vTypes then Warnlog "-  Not " & sTypes & " types in list but " & vTypes
             For y = 1 to Typ.GetItemCount
@@ -331,25 +330,25 @@ testcase tFileNewBusinessCards
     next i
     Sleep()
     PrintLog "Switch to Tabpage 'Business Cards'"
-	Kontext
-	Active.Setpage TabVisitenkarten
-	Sleep()
+    Kontext
+    Active.Setpage TabVisitenkarten
+    Sleep()
 
-	Kontext "Active"
-	if Active.GetRT = 304 then
-		Warnlog Active.Gettext
-		Active.Ok
-	end if
+    Kontext "Active"
+    if Active.GetRT = 304 then
+        Warnlog Active.Gettext
+        Active.Ok
+    end if
 
-	Kontext "TabVisitenkarten"
-	for i = 1 to 20
-		if Inhalt.IsVisible then
-			Call DialogTest (TabVisitenkarten)
-			i = 21
-		else
-			Sleep 1
-		end if
-	next i
+    Kontext "TabVisitenkarten"
+    for i = 1 to 20
+        if Inhalt.IsVisible then
+            Call DialogTest (TabVisitenkarten)
+            i = 21
+        else
+            Sleep 1
+        end if
+    next i
 
     PrintLog "Switch to Tabpage 'Private'"
     Kontext
@@ -439,8 +438,8 @@ testcase tFileOpen
     FileOpen
     WaitSlot(2000)
     if gUseSysDlg = False then
-    Kontext "OeffnenDlg"
-    Call DialogTest ( OeffnenDlg )
+        Kontext "OeffnenDlg"
+        Call DialogTest ( OeffnenDlg )
         UebergeordneterOrdner.Click
         PrintLog "Click 'Up one level'"
         Sleep 1
@@ -660,8 +659,8 @@ endcase
 '-----------------------------------------------------------
 
 testcase tFileSaveAsExport
-QaErrorLog "#i93340# - Testcase outcommented due to bug with filter."
-goto endsub
+    QaErrorLog "#i93340# - Testcase outcommented due to bug with filter."
+    goto endsub
 
     Dim xExport as string
     Dim xExportFile as string
@@ -669,10 +668,10 @@ goto endsub
     PrintLog "- File / Save As / Export with MS-filter"
 
     Select Case gApplication
-        Case "WRITER"
-            xExport = Convertpath( gTesttoolpath + "writer\required\input\st1_1.sxw" )
-        Case else
-            goto endsub
+    Case "WRITER"
+        xExport = Convertpath( gTesttoolpath + "writer\required\input\st1_1.sxw" )
+    Case else
+        goto endsub
     end select
     PrintLog "Open new document"
     Call hNewDocument
@@ -710,15 +709,15 @@ testcase tFileSaveWithPassword
 
     Printlog "- File / Save with Password"
     Select Case gApplication
-        Case "WRITER"
-            sFile$ = "password.odt"
-            sFile2$ = "password2.odt"
-        Case "MASTERDOC"
-            sFile$ = "password.odm"
-            sFile2$ = "password2.odm"
-        Case "HTMLDOKUMENT"
-            printlog "Not in Writer/Web!"
-            goto endsub
+    Case "WRITER"
+        sFile$ = "password.odt"
+        sFile2$ = "password2.odt"
+    Case "MASTERDOC"
+        sFile$ = "password.odm"
+        sFile2$ = "password2.odm"
+    Case "HTMLDOKUMENT"
+        printlog "Not in Writer/Web!"
+        goto endsub
     end select
 
     PrintLog "Open new document"
@@ -737,11 +736,11 @@ testcase tFileSaveWithPassword
     if Passwort.IsEnabled then
         Passwort.Check
     else
-      Warnlog "- Not able to save with Password -> Checkbox is disabled! Maybe default-filter wrong!?"
-      SpeichernDlg.Cancel
-      PrintLog "if Checkbox is disabled the test stops here!"
-      Call hCloseDocument
-      goto endsub
+        Warnlog "- Not able to save with Password -> Checkbox is disabled! Maybe default-filter wrong!?"
+        SpeichernDlg.Cancel
+        PrintLog "if Checkbox is disabled the test stops here!"
+        Call hCloseDocument
+        goto endsub
     end if
 
     PrintLog "Save the document"
@@ -814,7 +813,7 @@ testcase tFileSaveWithPassword
     if PasswordFileOpen.Exists then
         PasswordFileOpen.Cancel
     end if
-    
+
     Sleep 1
     PrintLog "File / Open again your previous saved document"
     Call hFileOpen(Datei$)
@@ -880,21 +879,21 @@ testcase tFileReload
     Dim DokumentPfad$
     Dim Datei$
     Dim sFile$
-	Dim WriterFilterExtension(10) as string
+    Dim WriterFilterExtension(10) as string
     Dim MasterDocFilterExtension(10) as string
 
-	WriterFilterExtension() = hGetFilternameExtension ( "writer8" )
-	MasterDocFilterExtension() = hGetFilternameExtension ( "writerglobal8" )
+    WriterFilterExtension() = hGetFilternameExtension ( "writer8" )
+    MasterDocFilterExtension() = hGetFilternameExtension ( "writerglobal8" )
 
     PrintLog "- File / Reload"
     Select Case gApplication
-        Case "WRITER"
-            sFile$ = "reload." & WriterFilterExtension(0)
-        Case "MASTERDOC"
-            sFile$ = "reload." & MasterDocFilterExtension(0)
-        Case "HTMLDOKUMENT"
-            printlog "Not in Writer/Web!"
-            goto endsub
+    Case "WRITER"
+        sFile$ = "reload." & WriterFilterExtension(0)
+    Case "MASTERDOC"
+        sFile$ = "reload." & MasterDocFilterExtension(0)
+    Case "HTMLDOKUMENT"
+        printlog "Not in Writer/Web!"
+        goto endsub
     end select
 
     PrintLog "Open new document"
@@ -941,18 +940,18 @@ testcase tFileVersions
     Dim WriterFilterExtension(10) as string
     Dim MasterDocFilterExtension(10) as string
 
-	WriterFilterExtension() = hGetFilternameExtension ( "writer8" )
-	MasterDocFilterExtension() = hGetFilternameExtension ( "writerglobal8" )
+    WriterFilterExtension() = hGetFilternameExtension ( "writer8" )
+    MasterDocFilterExtension() = hGetFilternameExtension ( "writerglobal8" )
 
     PrintLog "- File / Versions"
     Select Case gApplication
-        Case "WRITER"
-            sFile$ = "kann_weg." & WriterFilterExtension(0)
-        Case "MASTERDOC"
-            sFile$ = "kann_weg." & MasterDocFilterExtension(0)
-        Case "HTMLDOKUMENT"
-            printlog "Not in Writer/Web!"
-            goto endsub
+    Case "WRITER"
+        sFile$ = "kann_weg." & WriterFilterExtension(0)
+    Case "MASTERDOC"
+        sFile$ = "kann_weg." & MasterDocFilterExtension(0)
+    Case "HTMLDOKUMENT"
+        printlog "Not in Writer/Web!"
+        goto endsub
     end select
 
     PrintLog "Open new document"
@@ -1019,13 +1018,13 @@ testcase tFileSendCreateHTMLDocument
     PrintLog "- File / Send / Create HTML-Dokument"
     PrintLog "Open new document"
     Select Case gApplication
-        Case "WRITER"
-            Call hNewDocument
-        Case "MASTERDOC"
-            Call hNewDocument
-        Case "HTMLDOKUMENT"
-            printlog "Not in WriterWeb!"
-            goto endsub
+    Case "WRITER"
+        Call hNewDocument
+    Case "MASTERDOC"
+        Call hNewDocument
+    Case "HTMLDOKUMENT"
+        printlog "Not in WriterWeb!"
+        goto endsub
     end select
     PrintLog "Choose File / Send / Create HTML-Document"
     FileSendCreateHTMLDocument
@@ -1048,13 +1047,13 @@ testcase tFileSendOutlineToPresentation
     Dim sFile$
     PrintLog "- File / Send / Outline to Presentation"
     Select Case gApplication
-        Case "WRITER"
-            sFile$ = "htmltest.sxw"
-        Case "MASTERDOC"
-            sFile$ = "htmltest.sxg"
-        Case "HTMLDOKUMENT"
-            printlog "Not in Writer/Web!"
-            goto endsub
+    Case "WRITER"
+        sFile$ = "htmltest.sxw"
+    Case "MASTERDOC"
+        sFile$ = "htmltest.sxg"
+    Case "HTMLDOKUMENT"
+        printlog "Not in Writer/Web!"
+        goto endsub
     end select
     PrintLog "Open file ( gTesttoolPath + writer\required\input\ + htmltest.sxw )"
     Call hFileOpen ( gTesttoolPath + "writer\required\input\" + sFile$ )
@@ -1101,15 +1100,15 @@ testcase tFileSendOutlineToClipboard
     Dim sFile$
     PrintLog "- File / Send / Outline to Clipboard"
     Select Case gApplication
-        Case "WRITER"
-            sFile$ = "htmltest.sxw"
-        Case "MASTERDOC"
-            sFile$ = "htmltest.sxg"
-        Case "HTMLDOKUMENT"
-            printlog "Not in Writer/Web!"
-            goto endsub
+    Case "WRITER"
+        sFile$ = "htmltest.sxw"
+    Case "MASTERDOC"
+        sFile$ = "htmltest.sxg"
+    Case "HTMLDOKUMENT"
+        printlog "Not in Writer/Web!"
+        goto endsub
     end select
-    
+
     PrintLog "Open file ( gTesttoolPath + writer\required\input\ + htmltest.sxw )"
     Call hFileOpen ( gTesttoolPath + "writer\required\input\" + sFile$ )
     Sleep 1
@@ -1121,7 +1120,7 @@ testcase tFileSendOutlineToClipboard
         Call hCloseDocument
         goto endsub
     endcatch
-    
+
     Sleep 1
     PrintLog "Close active document"
     Call hCloseDocument
@@ -1148,13 +1147,13 @@ testcase tFileSendCreateAutoabstract
     Dim sFile$
     PrintLog "- File / Send / Create Autoabstract"
     Select Case gApplication
-        Case "WRITER"
-            sFile$ = "htmltest.sxw"
-        Case "MASTERDOC"
-            sFile$ = "htmltest.sxg"
-        Case "HTMLDOKUMENT"
-            printlog "Not in Writer/Web!"
-            goto endsub
+    Case "WRITER"
+        sFile$ = "htmltest.sxw"
+    Case "MASTERDOC"
+        sFile$ = "htmltest.sxg"
+    Case "HTMLDOKUMENT"
+        printlog "Not in Writer/Web!"
+        goto endsub
     end select
 
     PrintLog "Open file ( gTesttoolPath + writer\required\input\ + htmltest.sxw )"
@@ -1190,7 +1189,7 @@ testcase tFileSendCreateAutoabstract
     Kontext "Navigator"
     if Navigator.Exists then Navigator.Close
     Sleep 1
-    
+
     PrintLog "Close active documents"
     Do Until GetDocumentCount = 0
         Call hCloseDocument
@@ -1203,13 +1202,13 @@ testcase tFileSendAutoabstractToPresentation
     Dim sFile$
     PrintLog "- File / Send / Autoabstract to Presentation"
     Select Case gApplication
-        Case "WRITER"
-            sFile$ = "htmltest.sxw"
-        Case "MASTERDOC"
-            sFile$ = "htmltest.sxg"
-        Case "HTMLDOKUMENT"
-            printlog "Not in Writer/Web!"
-            goto endsub
+    Case "WRITER"
+        sFile$ = "htmltest.sxw"
+    Case "MASTERDOC"
+        sFile$ = "htmltest.sxg"
+    Case "HTMLDOKUMENT"
+        printlog "Not in Writer/Web!"
+        goto endsub
     end select
 
     PrintLog "Open file ( gTesttoolPath + writer\required\input\ + htmltest.sxw )"
@@ -1226,7 +1225,7 @@ testcase tFileSendAutoabstractToPresentation
         Call hCloseDocument
         goto endsub
     endcatch
-        
+
     Sleep 1
     Kontext "AutoAbstractErzeugen"
     PrintLog "Close upcoming dialog with 'Ok'"
@@ -1364,7 +1363,7 @@ testcase tMasterDocFileSaveWithPassword
     if PasswordFileOpen.Exists then
         PasswordFileOpen.Cancel
     end if
-    
+
     Sleep 1
     PrintLog "File / Open again your previous saved document"
     Call hFileOpen(Datei$)
@@ -1426,15 +1425,15 @@ endcase
 
 '-----------------------------------------------------------
 
-    testcase tMasterDocFileReload
+testcase tMasterDocFileReload
     Dim DokumentPfad$
     Dim Datei$
     Dim sFile$
-	Dim WriterFilterExtension(10) as string
+    Dim WriterFilterExtension(10) as string
     Dim MasterDocFilterExtension(10) as string
 
-	WriterFilterExtension() = hGetFilternameExtension ( "writer8" )
-	MasterDocFilterExtension() = hGetFilternameExtension ( "writerglobal8" )
+    WriterFilterExtension() = hGetFilternameExtension ( "writer8" )
+    MasterDocFilterExtension() = hGetFilternameExtension ( "writerglobal8" )
 
     PrintLog "- File / Reload"
     sFile$ = "reload." & MasterDocFilterExtension(0)
@@ -1484,8 +1483,8 @@ testcase tMasterDocFileVersions
     Dim WriterFilterExtension(10) as string
     Dim MasterDocFilterExtension(10) as string
 
-	WriterFilterExtension() = hGetFilternameExtension ( "writer8" )
-	MasterDocFilterExtension() = hGetFilternameExtension ( "writerglobal8" )
+    WriterFilterExtension() = hGetFilternameExtension ( "writer8" )
+    MasterDocFilterExtension() = hGetFilternameExtension ( "writerglobal8" )
 
     gApplication = "MASTERDOC"
     PrintLog "- File / Versions"
@@ -1607,7 +1606,7 @@ testcase tMasterDocFileSendOutlineToClipboard
         Call hCloseDocument
         goto endsub
     endcatch
-    
+
     Sleep 1
     PrintLog "Close active document"
     Call hCloseDocument

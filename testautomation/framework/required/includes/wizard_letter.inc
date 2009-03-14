@@ -66,7 +66,7 @@ testcase tUpdtWizardLetter
         endif
           
         printlog( " * Page: Page Design" )
-        call dialogtest2( AutopilotLetter, 1 )
+        call DialogTest( AutopilotLetter, 1 )
 
         printlog( "   * select a business letter" )
         Business.check()
@@ -96,7 +96,7 @@ testcase tUpdtWizardLetter
         hClickNextButton()
 
         kontext "AutopilotLetter"
-        call dialogtest2( AutopilotLetter, 2 )
+        call DialogTest( AutopilotLetter, 2 )
         
         printlog( "   * check to add logo" )
         Logo.check()
@@ -130,7 +130,7 @@ testcase tUpdtWizardLetter
         hClickNextButton()
 
         kontext "AutopilotLetter"
-        call dialogtest2( AutopilotLetter, 3 )    
+        call DialogTest( AutopilotLetter, 3 )    
         
         printlog( "   * change letterformat to the second entry" )
         LetterPageNorm.select( 2 )
@@ -143,11 +143,11 @@ testcase tUpdtWizardLetter
         hClickNextButton()
 
         kontext "AutopilotLetter"
-        call dialogtest2( AutopilotLetter, 4 )
+        call DialogTest( AutopilotLetter, 4 )
         hClickNextButton()
 
         kontext "AutopilotLetter"
-        call dialogtest2( AutopilotLetter, 5 )    
+        call DialogTest( AutopilotLetter, 5 )    
         
         printlog( "   * enter some text as footer" )
         TextFooter.settext( "Some non-offending text" )
@@ -157,7 +157,7 @@ testcase tUpdtWizardLetter
         hClickNextButton()
 
         kontext "AutopilotLetter"
-        call dialogtest2( AutopilotLetter, 6 )   
+        call DialogTest( AutopilotLetter, 6 )   
         
         printlog( "   * name the template for further usage" )
         TemplateName.setText( cTemplateName )

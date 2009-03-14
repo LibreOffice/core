@@ -951,22 +951,22 @@ sub hWalkTheStyles (optional a as integer,optional b as integer)
     '/// switch to tabpage 'Area' ///'
     Messagebox.SetPage TabArea
       kontext "TabArea"
-      Call DialogTest2 ( TabArea )
+      Call DialogTest ( TabArea )
     '/// select radio button 'none' ///'
       NoFill.Check
-      Call DialogTest2 ( TabArea, 1 )
+      Call DialogTest ( TabArea, 1 )
     '/// select radio button 'color' ///'
       Color.Check
-      Call DialogTest2 ( TabArea, 2 )
+      Call DialogTest ( TabArea, 2 )
     '/// select radio button 'gradient' ///'
       Gradient.Check
-      Call DialogTest2 ( TabArea, 3 )
+      Call DialogTest ( TabArea, 3 )
     '/// select radio button 'hatching' ///'
       Hatching.Check
-      Call DialogTest2 ( TabArea, 4 )
+      Call DialogTest ( TabArea, 4 )
     '/// select radio button 'bitmap' ///'
       Bitmap.Check
-      Call DialogTest2 ( TabArea, 5 )
+      Call DialogTest ( TabArea, 5 )
     Kontext
     '/// switch to tabpage 'shadowing' ///'
     Messagebox.SetPage TabSchatten

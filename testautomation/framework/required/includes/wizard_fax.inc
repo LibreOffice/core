@@ -56,23 +56,23 @@ testcase tUpdtWizardFax
     if ( AutopilotFax.exists( 2 ) ) then
     
         kontext "AutopilotFax"    
-        call dialogtest2( AutopilotFax, 1 )
+        call DialogTest( AutopilotFax, 1 )
         hClickNextButton()
 
         kontext "AutopilotFax"    
-        call dialogtest2( AutopilotFax, 2 )
+        call DialogTest( AutopilotFax, 2 )
         hClickNextButton()
 
         kontext "AutopilotFax"    
-        call dialogtest2( AutopilotFax, 3 )
+        call DialogTest( AutopilotFax, 3 )
         hClickNextButton()
 
         kontext "AutopilotFax"    
-        call dialogtest2( AutopilotFax, 4 )
+        call DialogTest( AutopilotFax, 4 )
         hClickNextButton()
         
         kontext "AutopilotFax"
-        call dialogtest2( AutopilotFax, 5 )
+        call DialogTest( AutopilotFax, 5 )
         
         printlog( "Name the template for further usage" )
         TemplateName.setText( cTemplateName )

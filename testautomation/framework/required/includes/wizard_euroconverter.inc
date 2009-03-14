@@ -65,7 +65,7 @@ testcase tUpdtWizardEuroconverter
     endif
     
     kontext "AutopilotEuroKonverter"
-    call dialogtest2( AutopilotEuroKonverter , 1 )
+    call DialogTest( AutopilotEuroKonverter , 1 )
     
     Kontext "AutopilotEuroKonverter"
     iKnownCurrencies = Waehrungen.getItemCount()
