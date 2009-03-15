@@ -419,7 +419,7 @@ testcase tFilePrint
 
         if gPlatGroup = "unx" then
             if NOT Eigenschaften.IsEnabled AND gPlatform = "osx" then
-                warnlog "#i81545#-macport File -> Print|Printer Settings: Properties button disabled"
+                QAErrorlog "#i81545#-macport File -> Print|Printer Settings: Properties button disabled"
                 Kontext "DruckenDlg"
                 DruckenDlg.Cancel
                 Call hCloseDocument
