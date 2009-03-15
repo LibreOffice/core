@@ -435,6 +435,17 @@ namespace
 
                         if(!basegfx::fTools::equal(fStart, fEnd))
                         {
+                            if(rInfo.IsRTL())
+                            {
+                                // #i98523#
+                                // When the portion is RTL, mirror the redlining using the
+                                // full portion width
+                                const double fTextWidth(aDXArray[aDXArray.size() - 1]);
+
+                                fStart = fTextWidth - fStart;
+                                fEnd = fTextWidth - fEnd;
+                            }
+
                             maTextPortionPrimitives.push_back(new drawinglayer::primitive2d::WrongSpellPrimitive2D(
                                 aNewTransform,
                                 fStart,
