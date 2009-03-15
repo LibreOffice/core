@@ -4,25 +4,24 @@ Globals
 	{
 		variables
 		{
-			OOOBASEVERSION 3.1
-			OOOPACKAGEVERSION 3.1.0
-			UREPACKAGEVERSION 1.5.0
+			OOOBASEVERSION 3.2
+			OOOPACKAGEVERSION 3.2.0
+			UREPACKAGEVERSION 1.6.0
 			URELAYERVERSION 1
 			BASISROOTNAME OpenOffice.org
 			UNIXBASISROOTNAME openoffice.org
-			SERVICETAG_PRODUCTNAME OpenOffice.org 3.1 
-			SERVICETAG_PRODUCTVERSION 3.1
-			SERVICETAG_PARENTNAME OpenOffice.org 3.1 
+			SERVICETAG_PRODUCTNAME OpenOffice.org 3.2 
+			SERVICETAG_PRODUCTVERSION 3.2
+			SERVICETAG_PARENTNAME OpenOffice.org 3.2 
 			SERVICETAG_SOURCE {buildsource}{minor}(Build:{buildid})
-			SERVICETAG_URN urn:uuid:67d59a0f-7902-11dd-938b-080020a9ed93
+			SERVICETAG_URN urn:uuid:cd39f1d0-f2fc-11dd-8c47-080020a9ed93
 			HIDELICENSEDIALOG 1
 			PACKAGEPREFIX 
 			BASISPACKAGEPREFIX ooobasis
 			UREPACKAGEPREFIX openoffice.org
 			SOLSUREPACKAGEPREFIX openofficeorg
 			USE_FILEVERSION 1
-                        POOLPRODUCT 1
-			LIBRARYVERSION 9.1.0
+            POOLPRODUCT 1
             REGISTRATION_HOST https://registration2.services.openoffice.org/RegistrationWeb
 			REGISTRATIONURL http://survey.services.openoffice.org/user/index.php
 			PROGRESSBARCOLOR 4,68,155
@@ -35,7 +34,7 @@ Globals
             CREATE_MSP_INSTALLSET 0
             UPDATE_DATABASE_LISTNAME finals_instsetoo.txt
  			PACKAGEMAP package_names.txt,package_names_ext.txt
-			WINDOWSPATCHLEVEL 2
+			WINDOWSPATCHLEVEL 4
 		}
 	}
 }
@@ -47,7 +46,7 @@ OpenOffice
 		variables
 		{
 			PRODUCTNAME OpenOffice.org
-			PRODUCTVERSION 3.1
+			PRODUCTVERSION 3.2
 			PRODUCTEXTENSION 
 			LONG_PRODUCTEXTENSION 
 			SHORT_PRODUCTEXTENSION 
@@ -55,10 +54,10 @@ OpenOffice
             POSTVERSIONEXTENSIONUNIX
 			BRANDPACKAGEVERSION 3
 			USERDIRPRODUCTVERSION 3
-			ABOUTBOXPRODUCTVERSION 3.1.0
-			BASEPRODUCTVERSION 3.1
+			ABOUTBOXPRODUCTVERSION 3.2.0
+			BASEPRODUCTVERSION 3.2
             PCPFILENAME openoffice.pcp
-			UPDATEURL http://update32.services.openoffice.org/ProductUpdateService/check.Update
+			UPDATEURL http://update34.services.openoffice.org/ProductUpdateService/check.Update
             ODFNOTIFYURL http://odfnotify.services.openoffice.org/OOo3.0/notification.jsp?version=ODF
 			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,userland.txt
 			REMOVE_UPGRADE_CODE_FILE upgradecode_remove_ooo.txt
@@ -67,7 +66,7 @@ OpenOffice
 			FILEFORMATNAME OpenOffice.org
 			FILEFORMATVERSION 1.0
 			WRITERCOMPATIBILITYVERSIONOOO11 OpenOffice.org 1.1
-			PACKAGEVERSION 3.1.0
+			PACKAGEVERSION 3.2.0
 			PACKAGEREVISION {milestone}
 			LICENSENAME LGPL
 			SERVICESPROJEKT 1
@@ -83,7 +82,7 @@ OpenOffice
 			STUBUPGRADECODE {0E7B27B8-D658-4BF9-98D6-EC361582EB4A}
 			CHANGETARGETDIR 1
 			USE_FILEVERSION 1
-			LIBRARYVERSION 9.1.0
+			LIBRARYVERSION 9.2.0
 			PATCHCODEFILE ooo_patchcodes.txt
 			DOWNLOADBANNER	ooobanner.bmp
 			DOWNLOADBITMAP	ooobitmap.bmp
@@ -111,7 +110,7 @@ OpenOffice_wJRE
 		variables
 		{
 			PRODUCTNAME OpenOffice.org
-			PRODUCTVERSION 3.1
+			PRODUCTVERSION 3.2
 			PRODUCTEXTENSION 
 			LONG_PRODUCTEXTENSION 
 			SHORT_PRODUCTEXTENSION 
@@ -119,9 +118,9 @@ OpenOffice_wJRE
             POSTVERSIONEXTENSIONUNIX
 			BRANDPACKAGEVERSION 3
 			USERDIRPRODUCTVERSION 3
-			ABOUTBOXPRODUCTVERSION 3.1.0
-			BASEPRODUCTVERSION 3.1
-			UPDATEURL http://update32.services.openoffice.org/ProductUpdateService/check.Update
+			ABOUTBOXPRODUCTVERSION 3.2.0
+			BASEPRODUCTVERSION 3.2
+			UPDATEURL http://update34.services.openoffice.org/ProductUpdateService/check.Update
             ODFNOTIFYURL http://odfnotify.services.openoffice.org/OOo3.0/notification.jsp?version=ODF
 			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion.dat,userland.txt
 			REMOVE_UPGRADE_CODE_FILE upgradecode_remove_ooo.txt
@@ -130,7 +129,7 @@ OpenOffice_wJRE
 			FILEFORMATNAME OpenOffice.org
 			FILEFORMATVERSION 1.0
 			WRITERCOMPATIBILITYVERSIONOOO11 OpenOffice.org 1.1
-			PACKAGEVERSION 3.1.0
+			PACKAGEVERSION 3.2.0
 			PACKAGEREVISION {milestone}
 			LICENSENAME LGPL
 			SERVICESPROJEKT 1
@@ -146,7 +145,7 @@ OpenOffice_wJRE
 			STUBUPGRADECODE {0E7B27B8-D658-4BF9-98D6-EC361582EB4A}
 			CHANGETARGETDIR 1
 			USE_FILEVERSION 1
-			LIBRARYVERSION 9.1.0
+			LIBRARYVERSION 9.2.0
 			PATCHCODEFILE ooo_patchcodes.txt
 			JAVAPRODUCT 1
 			DOWNLOADBANNER	ooobanner.bmp
@@ -174,7 +173,7 @@ OpenOffice_Dev
 		variables
 		{
 			PRODUCTNAME OOo-dev
-			PRODUCTVERSION 3.1
+			PRODUCTVERSION 3.2
 			PRODUCTEXTENSION 
 			LONG_PRODUCTEXTENSION 
 			SHORT_PRODUCTEXTENSION 
@@ -184,22 +183,22 @@ OpenOffice_Dev
             POSTVERSIONEXTENSIONUNIX
 			BRANDPACKAGEVERSION 3
 			USERDIRPRODUCTVERSION 3
-			ABOUTBOXPRODUCTVERSION 3.1.0
-			BASEPRODUCTVERSION 3.1
+			ABOUTBOXPRODUCTVERSION 3.2.0
+			BASEPRODUCTVERSION 3.2
 			DEVELOPMENTPRODUCT 1
 			BASISPACKAGEPREFIX ooobasis-dev
 			UREPACKAGEPREFIX ooodev
 			SOLSUREPACKAGEPREFIX ooodev
 			REGISTRYLAYERNAME LayerDev
-			SERVICETAG_URN urn:uuid:07a3230b-7902-11dd-938b-080020a9ed93
-			UPDATEURL http://update32.services.openoffice.org/ProductUpdateService/check.Update
+			SERVICETAG_URN urn:uuid:156a7974-f2fd-11dd-8c47-080020a9ed93
+			UPDATEURL http://update34.services.openoffice.org/ProductUpdateService/check.Update
             ODFNOTIFYURL http://odfnotify.services.openoffice.org/OOo3.0/notification.jsp?version=ODF
 			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion.dat,userland.txt
 			EVAL
 			FILEFORMATNAME OpenOffice.org
 			FILEFORMATVERSION 1.0
 			WRITERCOMPATIBILITYVERSIONOOO11 OpenOffice.org 1.1
-			PACKAGEVERSION 3.1.0
+			PACKAGEVERSION 3.2.0
 			PACKAGEREVISION {milestone}
 			LICENSENAME LGPL
 			SERVICESPROJEKT 1
@@ -216,7 +215,7 @@ OpenOffice_Dev
 			CHANGETARGETDIR 1
 			USE_FILEVERSION 1
 			JAVAPRODUCT 1
-			LIBRARYVERSION 9.1.0
+			LIBRARYVERSION 9.2.0
 			PATCHCODEFILE ooodev_patchcodes.txt
 			CODEFILENAME codes_ooodev.txt
 			DOWNLOADBANNER	ooobanner.bmp
@@ -247,8 +246,8 @@ URE
         variables
         {
             PRODUCTNAME URE
-            PRODUCTVERSION 1.5
-            PACKAGEVERSION 1.5
+            PRODUCTVERSION 1.6
+            PACKAGEVERSION 1.6
             PACKAGEREVISION 1
             PRODUCTEXTENSION
             LONG_PRODUCTEXTENSION
@@ -288,19 +287,19 @@ OpenOffice_SDK
         variables
         {
             PRODUCTNAME OpenOffice.org
-            PRODUCTVERSION 3.1
+            PRODUCTVERSION 3.2
             PRODUCTEXTENSION
             LONG_PRODUCTEXTENSION
             SHORT_PRODUCTEXTENSION
             POSTVERSIONEXTENSION SDK
             POSTVERSIONEXTENSIONUNIX sdk
             BRANDPACKAGEVERSION 3
-            PACKAGEVERSION 3.1.0
+            PACKAGEVERSION 3.2.0
             PACKAGEREVISION {milestone}
             PACK_INSTALLED 1
             POOLPRODUCT 0
             DMG_VOLUMEEXTENSION SDK
-            DATABASENAME openofficeorg31sdk
+            DATABASENAME openofficeorg32sdk
             NO_README_IN_ROOTDIR 1
             LICENSENAME LGPL
             IGNOREDIRECTORYLAYER 1
@@ -330,7 +329,7 @@ BrOffice
 		variables
 		{
 			PRODUCTNAME BrOffice.org
-			PRODUCTVERSION 3.1
+			PRODUCTVERSION 3.2
 			PRODUCTEXTENSION 
 			LONG_PRODUCTEXTENSION 
 			SHORT_PRODUCTEXTENSION 
@@ -338,12 +337,12 @@ BrOffice
             POSTVERSIONEXTENSIONUNIX
 			BRANDPACKAGEVERSION 3
 			USERDIRPRODUCTVERSION 3
-			ABOUTBOXPRODUCTVERSION 3.1.0
+			ABOUTBOXPRODUCTVERSION 3.2.0
 			PROGRESSBARCOLOR 
 			PROGRESSSIZE 
 			PROGRESSPOSITION 
 			PROGRESSFRAMECOLOR 
-			UPDATEURL http://update32.services.openoffice.org/ProductUpdateService/check.Update
+			UPDATEURL http://update34.services.openoffice.org/ProductUpdateService/check.Update
             ODFNOTIFYURL http://odfnotify.services.openoffice.org/OOo3.0/notification.jsp?version=ODF
 			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,userland.txt
 			REMOVE_UPGRADE_CODE_FILE upgradecode_remove_ooo.txt
@@ -352,7 +351,7 @@ BrOffice
 			FILEFORMATNAME OpenOffice.org
 			FILEFORMATVERSION 1.0
 			WRITERCOMPATIBILITYVERSIONOOO11 OpenOffice.org 1.1
-			PACKAGEVERSION 3.1.0
+			PACKAGEVERSION 3.2.0
 			PACKAGEREVISION {milestone}
 			LICENSENAME LGPL
 			SERVICESPROJEKT 1
@@ -368,7 +367,7 @@ BrOffice
 			STUBUPGRADECODE {0E7B27B8-D658-4BF9-98D6-EC361582EB4A}
 			CHANGETARGETDIR 1
 			USE_FILEVERSION 1
-			LIBRARYVERSION 9.1.0
+			LIBRARYVERSION 9.2.0
 			CODEFILENAME codes_broo.txt
 			PATCHCODEFILE ooo_patchcodes.txt
 			DOWNLOADBANNER	brobanner.bmp
@@ -397,7 +396,7 @@ BrOffice_wJRE
 		variables
 		{
 			PRODUCTNAME BrOffice.org
-			PRODUCTVERSION 3.1
+			PRODUCTVERSION 3.2
 			PRODUCTEXTENSION 
 			LONG_PRODUCTEXTENSION 
 			SHORT_PRODUCTEXTENSION 
@@ -405,12 +404,12 @@ BrOffice_wJRE
             POSTVERSIONEXTENSIONUNIX
 			BRANDPACKAGEVERSION 3
 			USERDIRPRODUCTVERSION 3
-			ABOUTBOXPRODUCTVERSION 3.1.0
+			ABOUTBOXPRODUCTVERSION 3.2.0
 			PROGRESSBARCOLOR 
 			PROGRESSSIZE 
 			PROGRESSPOSITION 
 			PROGRESSFRAMECOLOR 
-			UPDATEURL http://update32.services.openoffice.org/ProductUpdateService/check.Update
+			UPDATEURL http://update34.services.openoffice.org/ProductUpdateService/check.Update
             ODFNOTIFYURL http://odfnotify.services.openoffice.org/OOo3.0/notification.jsp?version=ODF
 			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion.dat,userland.txt
 			REMOVE_UPGRADE_CODE_FILE upgradecode_remove_ooo.txt
@@ -419,7 +418,7 @@ BrOffice_wJRE
 			FILEFORMATNAME OpenOffice.org
 			FILEFORMATVERSION 1.0
 			WRITERCOMPATIBILITYVERSIONOOO11 OpenOffice.org 1.1
-			PACKAGEVERSION 3.1.0
+			PACKAGEVERSION 3.2.0
 			PACKAGEREVISION {milestone}
 			LICENSENAME LGPL
 			SERVICESPROJEKT 1
@@ -435,7 +434,7 @@ BrOffice_wJRE
 			STUBUPGRADECODE {0E7B27B8-D658-4BF9-98D6-EC361582EB4A}
 			CHANGETARGETDIR 1
 			USE_FILEVERSION 1
-			LIBRARYVERSION 9.1.0
+			LIBRARYVERSION 9.2.0
 			CODEFILENAME codes_broo.txt
 			PATCHCODEFILE ooo_patchcodes.txt
 			JAVAPRODUCT 1
@@ -464,7 +463,7 @@ BrOffice_Dev
 		variables
 		{
 			PRODUCTNAME BrOo-dev
-			PRODUCTVERSION 3.1
+			PRODUCTVERSION 3.2
 			PRODUCTEXTENSION 
 			LONG_PRODUCTEXTENSION 
 			SHORT_PRODUCTEXTENSION 
@@ -474,7 +473,7 @@ BrOffice_Dev
             POSTVERSIONEXTENSIONUNIX
 			BRANDPACKAGEVERSION 3
 			USERDIRPRODUCTVERSION 3
-			ABOUTBOXPRODUCTVERSION 3.1.0
+			ABOUTBOXPRODUCTVERSION 3.2.0
 			DEVELOPMENTPRODUCT 1
 			PROGRESSBARCOLOR 
 			PROGRESSSIZE 
@@ -484,15 +483,15 @@ BrOffice_Dev
 			UREPACKAGEPREFIX ooodev
 			SOLSUREPACKAGEPREFIX ooodev
 			REGISTRYLAYERNAME LayerDevBroffice
-			SERVICETAG_URN urn:uuid:07a3230b-7902-11dd-938b-080020a9ed93
-			UPDATEURL http://update32.services.openoffice.org/ProductUpdateService/check.Update
+			SERVICETAG_URN urn:uuid:156a7974-f2fd-11dd-8c47-080020a9ed93
+			UPDATEURL http://update34.services.openoffice.org/ProductUpdateService/check.Update
             ODFNOTIFYURL http://odfnotify.services.openoffice.org/OOo3.0/notification.jsp?version=ODF
 			ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,javaversion.dat,userland.txt
 			EVAL
 			FILEFORMATNAME OpenOffice.org
 			FILEFORMATVERSION 1.0
 			WRITERCOMPATIBILITYVERSIONOOO11 OpenOffice.org 1.1
-			PACKAGEVERSION 3.1.0
+			PACKAGEVERSION 3.2.0
 			PACKAGEREVISION {milestone}
 			LICENSENAME LGPL
 			SERVICESPROJEKT 1
@@ -509,7 +508,7 @@ BrOffice_Dev
 			CHANGETARGETDIR 1
 			USE_FILEVERSION 1
 			JAVAPRODUCT 1
-			LIBRARYVERSION 9.1.0
+			LIBRARYVERSION 9.2.0
 			PATCHCODEFILE ooo_patchcodes.txt
 			CODEFILENAME codes_broodev.txt
 			DOWNLOADBANNER	brobanner.bmp
