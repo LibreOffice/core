@@ -889,13 +889,26 @@ void ScRangeStringConverter::GetStringFromXMLRangeString( OUString& rString, con
                 // both cell addresses must exist for this to work.
                 continue;
 
-            if (aEndCell.getStr()[0] == '.')
+            sal_Int32 nEndCellDotPos = aEndCell.indexOf('.');
+            if (nEndCellDotPos <= 0)
             {
-                // workaround for old syntax (probably pre-chart2 age?)
-                // e.g. Sheet1.A1:.B2
+                // initialize buffer with table name...
                 sal_Int32 nDotPos = IndexOf(aBeginCell, sal_Unicode('.'), 0, cQuote);
-                OUString aTabName = aBeginCell.copy(0, nDotPos);
-                aEndCell = aTabName + aEndCell;
+                OUStringBuffer aBuf = aBeginCell.copy(0, nDotPos);
+
+                if (nEndCellDotPos == 0)
+                {
+                    // workaround for old syntax (probably pre-chart2 age?)
+                    // e.g. Sheet1.A1:.B2
+                    aBuf.append(aEndCell);
+                }
+                else if (nEndCellDotPos < 0)
+                {
+                    // sheet name in the end cell is omitted (e.g. Sheet2.A1:B2).
+                    aBuf.append(sal_Unicode('.'));
+                    aBuf.append(aEndCell);
+                }
+                aEndCell = aBuf.makeStringAndClear();
             }
 
             ScAddress::ExternalInfo aExtInfo1, aExtInfo2;

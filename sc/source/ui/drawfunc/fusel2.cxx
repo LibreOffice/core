@@ -155,17 +155,15 @@ bool FuSelection::IsNoteCaptionClicked( const Point& rPos ) const
         {
             if( pObj->GetLogicRect().IsInside( rPos ) )
             {
-                // skip caption objects of notes in protected cells
-                bool bSkip = false;
                 if( const ScDrawObjData* pCaptData = ScDrawLayer::GetNoteCaptionData( pObj, nTab ) )
                 {
                     const ScAddress& rNotePos = pCaptData->maStart;
+                    // skip caption objects of notes in protected cells
                     const ScProtectionAttr* pProtAttr =  static_cast< const ScProtectionAttr* >( rDoc.GetAttr( rNotePos.Col(), rNotePos.Row(), nTab, ATTR_PROTECTION ) );
                     bool bProtectAttr = pProtAttr->GetProtection() || pProtAttr->GetHideCell();
-                    bSkip = bProtectAttr && bProtectDoc;
+                    if( !bProtectAttr || !bProtectDoc )
+                        return true;
                 }
-                if( !bSkip )
-                    return true;
             }
         }
     }

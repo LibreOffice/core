@@ -912,6 +912,10 @@ private:
         // In saving to XML, we don't prepend address with '$'.
         setRelative(aData.Ref1);
         setRelative(aData.Ref2);
+
+        // In XML, the end range must explicitly specify sheet name.
+        aData.Ref2.SetFlag3D(true);
+
         if (bExternal)
             rStart.reset(new ScExternalSingleRefToken(nFileId, aTabName, aData.Ref1));
         else
