@@ -347,8 +347,10 @@ void PrintDialog::setupOptionalUI()
                     pVal->Value >>= bVal;
                 pNewBox->Check( bVal );
                 pNewBox->Enable( maPListener->isUIOptionEnabled( aPropertyName ) && pVal != NULL );
+                pNewBox->SetToggleHdl( LINK( this, PrintDialog, UIOption_CheckHdl ) );
 
                 maPropertyToWindowMap.insert( std::pair< rtl::OUString, Window* >( aPropertyName, pNewBox ) );
+                maControlToPropertyMap[pNewBox] = aPropertyName;
             }
             else if( aCtrlType.equalsAscii( "Radio" ) && pCurParent )
             {
@@ -386,8 +388,11 @@ void PrintDialog::setupOptionalUI()
                     pBtn->SetPosSizePixel( pBtn->LogicToPixel( Point( 15, nCurY ), aFontMapMode ),
                                            aPixelSize );
                     pBtn->Enable( maPListener->isUIOptionEnabled( aPropertyName ) );
+                    pBtn->SetToggleHdl( LINK( this, PrintDialog, UIOption_RadioHdl ) );
                     pBtn->Show();
                     maPropertyToWindowMap.insert( std::pair< rtl::OUString, Window* >( aPropertyName, pBtn ) );
+                    maControlToPropertyMap[pBtn] = aPropertyName;
+
                     nCurY += 12;
                 }
             }
@@ -444,9 +449,11 @@ void PrintDialog::setupOptionalUI()
 
                 pList->SetPosSizePixel( aListPos, aPixelSize );
                 pList->Enable( maPListener->isUIOptionEnabled( aPropertyName ) );
+                pList->SetSelectHdl( LINK( this, PrintDialog, UIOption_SelectHdl ) );
                 pList->Show();
 
                 maPropertyToWindowMap.insert( std::pair< rtl::OUString, Window* >( aPropertyName, pList ) );
+                maControlToPropertyMap[pList] = aPropertyName;
                 nCurY += 16;
 
                 if( bDoAlign )
