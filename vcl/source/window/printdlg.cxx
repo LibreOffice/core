@@ -426,7 +426,7 @@ void PrintDialog::setupOptionalUI()
                 PropertyValue* pVal = maPListener->getValue( aPropertyName );
                 if( pVal && pVal->Value.hasValue() )
                     pVal->Value >>= nSelectVal;
-                pList->SelectEntryPos( nSelectVal );
+                pList->SelectEntryPos( static_cast<USHORT>(nSelectVal) );
 
                 aPixelSize = Size( pList->LogicToPixel( Size( 25, 12 ), aFontMapMode ) );
                 aPixelSize.Width() = nMaxTextWidth;
