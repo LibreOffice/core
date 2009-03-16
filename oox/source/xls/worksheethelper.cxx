@@ -775,7 +775,7 @@ void WorksheetData::setDimension( const CellRangeAddress& rRange )
 
 void WorksheetData::setCellFormat( const OoxCellData& rCellData )
 {
-    if( rCellData.mxCell.is() && (rCellData.mnXfId >= 0) || (rCellData.mnNumFmtId >= 0) )
+    if( rCellData.mxCell.is() && ((rCellData.mnXfId >= 0) || (rCellData.mnNumFmtId >= 0)) )
     {
         // try to merge existing ranges and to write some formatting properties
         if( !maXfIdRanges.empty() )
