@@ -35,9 +35,6 @@ import java.io.InputStream;
 import java.io.ByteArrayOutputStream;
 
 import java.io.OutputStream;
-import java.io.Reader;
-import java.io.BufferedReader;
-import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 
 import org.openoffice.xmerge.Document;

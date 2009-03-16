@@ -31,10 +31,7 @@
 package org.openoffice.xmerge.merger.merge;
 
 import org.w3c.dom.Element;
-import org.w3c.dom.Document;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.NamedNodeMap;
 
 import org.openoffice.xmerge.ConverterCapabilities;
 import org.openoffice.xmerge.MergeException;

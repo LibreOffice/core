@@ -31,7 +31,6 @@
 package org.openoffice.xmerge.converter.xml.sxw.aportisdoc;
 
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 
 import org.openoffice.xmerge.DocumentMerger;
 import org.openoffice.xmerge.MergeException;
@@ -41,7 +40,6 @@ import org.openoffice.xmerge.merger.DiffAlgorithm;
 import org.openoffice.xmerge.merger.Difference;
 import org.openoffice.xmerge.merger.NodeMergeAlgorithm;
 import org.openoffice.xmerge.merger.Iterator;
-import org.openoffice.xmerge.merger.DiffAlgorithm;
 import org.openoffice.xmerge.merger.diff.ParaNodeIterator;
 import org.openoffice.xmerge.merger.diff.IteratorLCSAlgorithm;
 import org.openoffice.xmerge.merger.merge.DocumentMerge;

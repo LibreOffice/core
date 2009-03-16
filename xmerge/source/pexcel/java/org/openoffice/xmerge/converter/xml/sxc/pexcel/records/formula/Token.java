@@ -31,8 +31,6 @@
 package org.openoffice.xmerge.converter.xml.sxc.pexcel.records.formula;
 
 
-import java.io.*;
-
 /**
  * A Token is the basic building block of any formula.
  * A Token can be of four types (Operator, Operand, Function with fixed

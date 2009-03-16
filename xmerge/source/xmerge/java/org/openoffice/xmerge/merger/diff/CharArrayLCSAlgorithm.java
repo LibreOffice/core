@@ -31,7 +31,6 @@
 package org.openoffice.xmerge.merger.diff;
 
 import java.util.Vector;
-import org.openoffice.xmerge.merger.DiffAlgorithm;
 import org.openoffice.xmerge.merger.Difference;
 
 /**

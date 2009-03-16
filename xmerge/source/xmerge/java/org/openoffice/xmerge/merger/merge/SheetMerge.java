@@ -35,7 +35,6 @@ import org.w3c.dom.NodeList;
 
 import org.openoffice.xmerge.ConverterCapabilities;
 import org.openoffice.xmerge.merger.NodeMergeAlgorithm;
-import org.openoffice.xmerge.util.Debug;
 
 /**
  *  This class extends the <code>DocumentMerge</code> class.
@@ -80,8 +79,6 @@ public final class SheetMerge extends DocumentMerge {
     private void clearRow(Node node) {
         NodeList children = node.getChildNodes();
         int numOfChildren = children.getLength();
-
-        Node child;
 
         // clear all the cells under the row node but maintain any unsupported
         // features

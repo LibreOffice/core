@@ -30,7 +30,6 @@
 
 package org.openoffice.xmerge.converter.xml.sxw;
 
-import org.w3c.dom.Document;
 import org.openoffice.xmerge.converter.xml.OfficeDocument;
 import org.openoffice.xmerge.converter.xml.OfficeConstants;
 

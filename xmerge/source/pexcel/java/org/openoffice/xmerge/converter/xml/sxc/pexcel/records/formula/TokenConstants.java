@@ -30,8 +30,6 @@
 
 package org.openoffice.xmerge.converter.xml.sxc.pexcel.records.formula;
 
-import java.io.*;
-
 public interface TokenConstants {
 
     // Unary Operator Tokens

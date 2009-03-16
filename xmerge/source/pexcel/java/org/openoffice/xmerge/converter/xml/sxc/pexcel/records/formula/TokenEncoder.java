@@ -37,7 +37,6 @@ import java.util.Enumeration;
 import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.util.EndianConverter;
 import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.Workbook;
-import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.BoundSheet;
 import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.DefinedName;
 
 /**

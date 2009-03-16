@@ -33,7 +33,6 @@ package org.openoffice.xmerge.converter.xml;
 import org.w3c.dom.Document;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 
 
 /**

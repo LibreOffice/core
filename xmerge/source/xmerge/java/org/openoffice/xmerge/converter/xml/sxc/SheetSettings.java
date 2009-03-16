@@ -37,7 +37,6 @@ import org.w3c.dom.Element;
 import java.awt.Point;
 
 import org.openoffice.xmerge.converter.xml.OfficeConstants;
-import org.openoffice.xmerge.util.Debug;
 
 /**
  * This is a class representing the different attributes for a worksheet

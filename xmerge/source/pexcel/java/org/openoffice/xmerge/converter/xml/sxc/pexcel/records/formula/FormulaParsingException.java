@@ -36,10 +36,6 @@ package org.openoffice.xmerge.converter.xml.sxc.pexcel.records.formula;
  * Martin Maher
  */
 
-import java.io.*;
-
-import org.openoffice.xmerge.util.Debug;
-
 public class FormulaParsingException extends Exception {
 
      public FormulaParsingException(String message) {

@@ -42,8 +42,6 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.Calendar;
 import java.util.Properties;
-import org.w3c.dom.Node;
-
 
 /**
  *  This class is used for logging debug messages.

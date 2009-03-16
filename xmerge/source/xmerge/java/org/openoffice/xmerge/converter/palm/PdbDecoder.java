@@ -35,8 +35,6 @@ import java.io.IOException;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 
-import org.openoffice.xmerge.converter.palm.*;
-
 /**
  *  <p>Provides functionality to decode a PDB formatted file into
  *  a <code>PalmDB</code> object given an <code>InputStream</code>.

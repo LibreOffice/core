@@ -34,12 +34,9 @@ import org.openoffice.xmerge.Document;
 import org.openoffice.xmerge.converter.xml.ParaStyle;
 import org.openoffice.xmerge.converter.xml.TextStyle;
 
-import java.awt.Font;
-
 import java.io.InputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 

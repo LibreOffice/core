@@ -30,16 +30,8 @@
 
 package org.openoffice.xmerge.converter.xml;
 
-import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
 import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Element;
-
-import org.openoffice.xmerge.Document;
-import org.openoffice.xmerge.ConverterCapabilities;
-import org.openoffice.xmerge.converter.xml.OfficeDocument;
-import java.io.IOException;
-import org.openoffice.xmerge.converter.xml.sxw.SxwDocument;
 
 /**
  *  An object of class <code>Style</code> represents a <i>style</i>

@@ -30,10 +30,6 @@
 
 package org.openoffice.xmerge.converter.xml.xslt;
 
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Node;
-import org.w3c.dom.Element;
-
 import java.io.InputStream;
 import java.io.IOException;
 import java.util.Enumeration;

@@ -32,8 +32,6 @@ package org.openoffice.xmerge.converter.xml.sxc;
 
 import java.awt.Color;
 
-import org.openoffice.xmerge.util.Debug;
-
 /**
  *  This class specifies the format for a given spreadsheet cell.
  *

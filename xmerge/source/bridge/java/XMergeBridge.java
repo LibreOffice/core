@@ -71,10 +71,8 @@ import org.openoffice.xmerge.ConvertData;
 import org.openoffice.xmerge.converter.xml.OfficeDocument;
 /*Java Classes*/
 import java.util.Enumeration;
-import java.util.Vector;
 import java.io.*;
 import javax.xml.parsers.*;
-import  org.xml.sax.SAXException;
 import java.net.URI;
 
 

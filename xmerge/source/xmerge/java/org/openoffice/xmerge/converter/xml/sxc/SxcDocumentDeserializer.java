@@ -34,7 +34,6 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
 import org.w3c.dom.Element;
 
-import java.awt.Point;
 import java.io.IOException;
 import java.util.Enumeration;
 
@@ -45,7 +44,6 @@ import org.openoffice.xmerge.DocumentDeserializer;
 import org.openoffice.xmerge.converter.xml.OfficeConstants;
 import org.openoffice.xmerge.converter.xml.sxc.SxcDocument;
 import org.openoffice.xmerge.converter.xml.sxc.BookSettings;
-import org.openoffice.xmerge.converter.xml.sxc.SheetSettings;
 import org.openoffice.xmerge.converter.xml.sxc.NameDefinition;
 import org.openoffice.xmerge.converter.xml.sxc.CellStyle;
 import org.openoffice.xmerge.converter.xml.Style;

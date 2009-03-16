@@ -35,15 +35,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Element;
 import org.openoffice.xmerge.util.*;
-import org.openoffice.xmerge.Document;
-import org.openoffice.xmerge.ConverterCapabilities;
-import org.openoffice.xmerge.converter.xml.OfficeDocument;
-import java.io.IOException;
-import org.openoffice.xmerge.converter.xml.sxw.SxwDocument;
 import java.util.Vector;
 import java.lang.reflect.Constructor;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 
 
 /**

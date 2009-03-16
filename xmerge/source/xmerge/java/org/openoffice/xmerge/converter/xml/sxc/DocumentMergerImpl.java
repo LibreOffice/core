@@ -42,7 +42,6 @@ import org.openoffice.xmerge.converter.xml.OfficeConstants;
 import org.openoffice.xmerge.merger.DiffAlgorithm;
 import org.openoffice.xmerge.merger.Difference;
 import org.openoffice.xmerge.merger.Iterator;
-import org.openoffice.xmerge.merger.DiffAlgorithm;
 import org.openoffice.xmerge.merger.NodeMergeAlgorithm;
 import org.openoffice.xmerge.merger.diff.IteratorRowCompare;
 import org.openoffice.xmerge.merger.diff.RowIterator;
