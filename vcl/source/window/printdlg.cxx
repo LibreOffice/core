@@ -266,6 +266,7 @@ void PrintDialog::setupOptionalUI()
         rtl::OUString aText;
         rtl::OUString aPropertyName;
         Sequence< rtl::OUString > aChoices;
+        sal_Int64 nMinValue = 0, nMaxValue = 0;
         bool bDependency = false;
 
         for( int n = 0; n < aOptProp.getLength(); n++ )
@@ -299,12 +300,21 @@ void PrintDialog::setupOptionalUI()
             {
                 bDependency = true;
             }
+            else if( rEntry.Name.equalsAscii( "MinValue" ) )
+            {
+                rEntry.Value >>= nMinValue;
+            }
+            else if( rEntry.Name.equalsAscii( "MaxValue" ) )
+            {
+                rEntry.Value >>= nMaxValue;
+            }
         }
 
         if( aCtrlType.equalsAscii( "Group" ) ||
             aCtrlType.equalsAscii( "Subgroup" ) ||
             aCtrlType.equalsAscii( "Radio" ) ||
             aCtrlType.equalsAscii( "List" )  ||
+            aCtrlType.equalsAscii( "Range" )  ||
             aCtrlType.equalsAscii( "Bool" ) )
         {
             if( aCtrlType.equalsAscii( "Group" ) || ! pCurParent )
@@ -479,6 +489,74 @@ void PrintDialog::setupOptionalUI()
                     Point aPos = pHeading->GetPosPixel();
                     Size aSize = pHeading->GetSizePixel();
                     aPos.Y() += (pList->GetSizePixel().Height() - aSize.Height())/2;
+                    pHeading->SetPosSizePixel( aPos, aSize );
+                }
+
+                if( bDependency )
+                    nXPos -= 5;
+            }
+            else if( aCtrlType.equalsAscii( "Range" ) && pCurParent )
+            {
+                if( bDependency )
+                    nXPos += 5;
+
+                // add a FixedText:
+                FixedText* pHeading = new FixedText( pCurParent );
+                maControls.push_front( pHeading );
+                pHeading->SetText( aText );
+                Size aPixelSize( pHeading->LogicToPixel( Size( 10, 10 ), aFontMapMode ) );
+                aPixelSize.Width() += pHeading->GetTextWidth( aText );
+                pHeading->SetPosSizePixel( pHeading->LogicToPixel( Point( nXPos, nCurY ), aFontMapMode ),
+                                           aPixelSize );
+                pHeading->Show();
+
+                NumericField* pField = new NumericField( pCurParent, WB_BORDER | WB_SPIN );
+                maControls.push_front( pField );
+
+                // set min/max and current value
+                if( nMinValue != nMaxValue )
+                {
+                    pField->SetMin( nMinValue );
+                    pField->SetMax( nMaxValue );
+                }
+                sal_Int64 nCurVal = 0;
+                PropertyValue* pVal = maPListener->getValue( aPropertyName );
+                if( pVal && pVal->Value.hasValue() )
+                    pVal->Value >>= nCurVal;
+                pField->SetValue( nCurVal );
+
+                aPixelSize = Size( pField->LogicToPixel( Size( 80, 12 ), aFontMapMode ) );
+
+                Point aFieldPos;
+                bool bDoAlign = false;
+                if( aPixelSize.Width() < aTabSize.Width() - 10 )
+                {
+                    aFieldPos      = pHeading->GetPosPixel();
+                    aFieldPos.X() += pHeading->GetSizePixel().Width() + 5;
+
+                    // align heading and list box
+                    bDoAlign = true;
+                }
+                else
+                {
+                    nCurY += 12;
+                    aFieldPos = pCurParent->LogicToPixel( Point( 15, nCurY ), aFontMapMode );
+                }
+
+                pField->SetPosSizePixel( aFieldPos, aPixelSize );
+                pField->Enable( maPListener->isUIOptionEnabled( aPropertyName ) );
+                pField->SetModifyHdl( LINK( this, PrintDialog, UIOption_ModifyHdl ) );
+                pField->Show();
+
+                maPropertyToWindowMap.insert( std::pair< rtl::OUString, Window* >( aPropertyName, pField ) );
+                maControlToPropertyMap[pField] = aPropertyName;
+                nCurY += 16;
+
+                if( bDoAlign )
+                {
+                    Point aPos = pHeading->GetPosPixel();
+                    Size aSize = pHeading->GetSizePixel();
+                    aPos.Y() += (pField->GetSizePixel().Height() - aSize.Height())/2;
                     pHeading->SetPosSizePixel( aPos, aSize );
                 }
 
@@ -754,6 +832,37 @@ IMPL_LINK( PrintDialog, UIOption_SelectHdl, ListBox*, i_pBox )
     {
         sal_Int32 nVal( i_pBox->GetSelectEntryPos() );
         pVal->Value <<= nVal;
+
+        checkOptionalControlDependencies();
+
+        // update preview and page settings
+        preparePreview();
+    }
+    return 0;
+}
+
+IMPL_LINK( PrintDialog, UIOption_ModifyHdl, Edit*, i_pBox )
+{
+    PropertyValue* pVal = getValueForWindow( i_pBox );
+    if( pVal )
+    {
+        NumericField* pNum = dynamic_cast<NumericField*>(i_pBox);
+        MetricField* pMetric = dynamic_cast<MetricField*>(i_pBox);
+        if( pNum )
+        {
+            sal_Int64 nVal = pNum->GetValue();
+            pVal->Value <<= nVal;
+        }
+        else if( pMetric )
+        {
+            sal_Int64 nVal = pMetric->GetValue();
+            pVal->Value <<= nVal;
+        }
+        else
+        {
+            rtl::OUString aVal( i_pBox->GetText() );
+            pVal->Value <<= aVal;
+        }
 
         checkOptionalControlDependencies();
 

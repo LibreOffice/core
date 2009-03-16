@@ -152,6 +152,7 @@ namespace vcl
         DECL_LINK( UIOption_CheckHdl, CheckBox* );
         DECL_LINK( UIOption_RadioHdl, RadioButton* );
         DECL_LINK( UIOption_SelectHdl, ListBox* );
+        DECL_LINK( UIOption_ModifyHdl, Edit* );
 
     public:
         PrintDialog( Window*, const boost::shared_ptr< PrinterListener >& );
