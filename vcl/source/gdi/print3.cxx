@@ -60,14 +60,25 @@ using namespace vcl;
 class vcl::ImplPrinterListenerData
 {
 public:
+    struct ControlDependency
+    {
+        rtl::OUString       maDependsOnName;
+        sal_Int32           mnDependsOnEntry;
+
+        ControlDependency() : mnDependsOnEntry( -1 ) {}
+    };
+
+    typedef std::hash_map< rtl::OUString, size_t, rtl::OUStringHash > PropertyToIndexMap;
+    typedef std::hash_map< rtl::OUString, ControlDependency, rtl::OUStringHash > ControlDependencyMap;
 
     boost::shared_ptr<Printer>                                  mpPrinter;
     MultiSelection                                              maSelection;
     Sequence< PropertyValue >                                   maUIOptions;
     std::vector< PropertyValue >                                maUIProperties;
     std::vector< bool >                                         maUIPropertyEnabled;
-    std::hash_map< rtl::OUString, size_t, rtl::OUStringHash >   maPropertyToIndex;
+    PropertyToIndexMap                                          maPropertyToIndex;
     Link                                                        maOptionChangeHdl;
+    ControlDependencyMap                                        maControlDependencies;
 };
 
 PrinterListener::PrinterListener()
@@ -448,6 +459,13 @@ com::sun::star::beans::PropertyValue* PrinterListener::getValue( const rtl::OUSt
     return it != mpImplData->maPropertyToIndex.end() ? &mpImplData->maUIProperties[it->second] : NULL;
 }
 
+const com::sun::star::beans::PropertyValue* PrinterListener::getValue( const rtl::OUString& i_rProperty ) const
+{
+    std::hash_map< rtl::OUString, size_t, rtl::OUStringHash >::const_iterator it =
+        mpImplData->maPropertyToIndex.find( i_rProperty );
+    return it != mpImplData->maPropertyToIndex.end() ? &mpImplData->maUIProperties[it->second] : NULL;
+}
+
 void PrinterListener::setUIOptions( const Sequence< beans::PropertyValue >& i_rOptions )
 {
     DBG_ASSERT( mpImplData->maUIOptions.getLength() == 0, "setUIOptions called twice !" );
@@ -463,6 +481,7 @@ void PrinterListener::setUIOptions( const Sequence< beans::PropertyValue >& i_rO
         i_rOptions[i].Value >>= aOptProp;
         bool bIsEnabled = true;
         bool bHaveProperty = false;
+        vcl::ImplPrinterListenerData::ControlDependency aDep;
         for( int n = 0; n < aOptProp.getLength(); n++ )
         {
             const beans::PropertyValue& rEntry( aOptProp[ n ] );
@@ -482,9 +501,21 @@ void PrinterListener::setUIOptions( const Sequence< beans::PropertyValue >& i_rO
                 rEntry.Value >>= bValue;
                 bIsEnabled = bValue;
             }
+            else if( rEntry.Name.equalsAscii( "DependsOnName" ) )
+            {
+                rEntry.Value >>= aDep.maDependsOnName;
+            }
+            else if( rEntry.Name.equalsAscii( "DependsOnEntry" ) )
+            {
+                rEntry.Value >>= aDep.mnDependsOnEntry;
+            }
         }
         if( bHaveProperty )
+        {
             mpImplData->maUIPropertyEnabled.push_back( bIsEnabled );
+            if( aDep.maDependsOnName.getLength() > 0 )
+                mpImplData->maControlDependencies[ mpImplData->maUIProperties.back().Name ] = aDep;
+        }
     }
 }
 
@@ -507,9 +538,56 @@ void PrinterListener::enableUIOption( const rtl::OUString& i_rProperty, bool i_b
 
 bool PrinterListener::isUIOptionEnabled( const rtl::OUString& i_rProperty ) const
 {
+    bool bEnabled = false;
     std::hash_map< rtl::OUString, size_t, rtl::OUStringHash >::const_iterator it =
         mpImplData->maPropertyToIndex.find( i_rProperty );
-    return ((it != mpImplData->maPropertyToIndex.end()) ? mpImplData->maUIPropertyEnabled[it->second] : false);
+    if( it != mpImplData->maPropertyToIndex.end() )
+    {
+        bEnabled = mpImplData->maUIPropertyEnabled[it->second];
+
+        if( bEnabled )
+        {
+            // check control dependencies
+            vcl::ImplPrinterListenerData::ControlDependencyMap::const_iterator it =
+                mpImplData->maControlDependencies.find( i_rProperty );
+            if( it != mpImplData->maControlDependencies.end() )
+            {
+                // check if the dependency is enabled
+                // if the dependency is disabled, we are too
+                bEnabled = isUIOptionEnabled( it->second.maDependsOnName );
+
+                if( bEnabled )
+                {
+                    // does the dependency have the correct value ?
+                    const com::sun::star::beans::PropertyValue* pVal = getValue( it->second.maDependsOnName );
+                    OSL_ENSURE( pVal, "unknown property in dependency" );
+                    if( pVal )
+                    {
+                        sal_Int32 nDepVal;
+                        sal_Bool bDepVal;
+                        if( pVal->Value >>= nDepVal )
+                        {
+                            bEnabled = (nDepVal == it->second.mnDependsOnEntry);
+                        }
+                        else if( pVal->Value >>= bDepVal )
+                        {
+                            // could be a dependency on a checked boolean
+                            // in this case the dependency is on a non zero for checked value
+                            bEnabled = (   bDepVal && it->second.mnDependsOnEntry != 0) ||
+                                       ( ! bDepVal && it->second.mnDependsOnEntry == 0);
+                        }
+                        else
+                        {
+                            // if the type does not match something is awry
+                            OSL_ENSURE( 0, "strange type in control dependency" );
+                            bEnabled = false;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return bEnabled;
 }
 
 void PrinterListener::setOptionChangeHdl( const Link& i_rHdl )

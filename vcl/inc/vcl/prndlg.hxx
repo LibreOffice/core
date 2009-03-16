@@ -138,6 +138,7 @@ namespace vcl
         void setPreviewText( sal_Int32 );
         void updatePrinterText();
         void checkControlDependencies();
+        void checkOptionalControlDependencies();
         void setupOptionalUI();
         com::sun::star::beans::PropertyValue* getValueForWindow( Window* ) const;
 

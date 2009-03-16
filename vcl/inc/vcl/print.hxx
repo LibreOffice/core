@@ -456,6 +456,7 @@ public:
     /* get the PorpertyValue of a Property
     */
     com::sun::star::beans::PropertyValue* getValue( const rtl::OUString& rPropertyName );
+    const com::sun::star::beans::PropertyValue* getValue( const rtl::OUString& rPropertyName ) const;
 
     /* return the currently active UI options. These are the same passed to setUIOptions.
     */

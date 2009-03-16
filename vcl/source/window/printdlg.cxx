@@ -249,7 +249,7 @@ MultiSelection PrintDialog::getPageSelection()
 void PrintDialog::setupOptionalUI()
 {
     Window* pCurParent = 0;
-    long nCurY = 0;
+    long nCurY = 0, nXPos = 5;
     USHORT nOptPageId = 9;
     MapMode aFontMapMode( MAP_APPFONT );
 
@@ -266,6 +266,7 @@ void PrintDialog::setupOptionalUI()
         rtl::OUString aText;
         rtl::OUString aPropertyName;
         Sequence< rtl::OUString > aChoices;
+        bool bDependency = false;
 
         for( int n = 0; n < aOptProp.getLength(); n++ )
         {
@@ -294,6 +295,10 @@ void PrintDialog::setupOptionalUI()
                 rEntry.Value >>= bValue;
                 bEnabled = bValue;
             }
+            else if( rEntry.Name.equalsAscii( "DependsOnName" ) )
+            {
+                bDependency = true;
+            }
         }
 
         if( aCtrlType.equalsAscii( "Group" ) ||
@@ -309,6 +314,7 @@ void PrintDialog::setupOptionalUI()
                 maControls.push_front( pNewGroup );
                 pCurParent = pNewGroup;
                 nCurY = 5;
+                nXPos = 5;
                 pNewGroup->SetText( aText );
                 maTabCtrl.InsertPage( ++nOptPageId, aText );
                 maTabCtrl.SetTabPage( nOptPageId, pNewGroup );
@@ -316,6 +322,7 @@ void PrintDialog::setupOptionalUI()
 
             if( aCtrlType.equalsAscii( "Subgroup" ) && pCurParent )
             {
+                nXPos = 5;
                 FixedLine* pNewSub = new FixedLine( pCurParent );
                 maControls.push_front( pNewSub );
                 pNewSub->SetText( aText );
@@ -323,20 +330,24 @@ void PrintDialog::setupOptionalUI()
                 Size aPixelSize( aTabSize );
                 aPixelSize.Width() /= 2;
                 aPixelSize.Height() = pCurParent->GetTextHeight() + 4;
-                pNewSub->SetPosSizePixel( pNewSub->LogicToPixel( Point( 5, nCurY ), aFontMapMode ),
+                pNewSub->SetPosSizePixel( pNewSub->LogicToPixel( Point( nXPos, nCurY ), aFontMapMode ),
                                           aPixelSize );
                 pNewSub->Show();
                 nCurY += 12;
+                nXPos += 5;
             }
             else if( aCtrlType.equalsAscii( "Bool" ) && pCurParent )
             {
+                if( bDependency )
+                    nXPos += 5;
+
                 // add a check box
                 CheckBox* pNewBox = new CheckBox( pCurParent );
                 maControls.push_front( pNewBox );
                 pNewBox->SetText( aText );
 
                 // FIXME: measure text
-                pNewBox->SetPosSizePixel( pNewBox->LogicToPixel( Point( 5, nCurY ), aFontMapMode ),
+                pNewBox->SetPosSizePixel( pNewBox->LogicToPixel( Point( nXPos, nCurY ), aFontMapMode ),
                                           pNewBox->LogicToPixel( Size( 100, 10 ), aFontMapMode ) );
                 nCurY += 12;
 
@@ -351,11 +362,13 @@ void PrintDialog::setupOptionalUI()
 
                 maPropertyToWindowMap.insert( std::pair< rtl::OUString, Window* >( aPropertyName, pNewBox ) );
                 maControlToPropertyMap[pNewBox] = aPropertyName;
+
+                if( bDependency )
+                    nXPos -= 5;
             }
             else if( aCtrlType.equalsAscii( "Radio" ) && pCurParent )
             {
-                long nXPos = 5;
-
+                long nOldXPos = nXPos;
                 if( aText.getLength() )
                 {
                     // add a FixedText:
@@ -368,7 +381,7 @@ void PrintDialog::setupOptionalUI()
                                                aPixelSize );
                     pHeading->Show();
 
-                    nXPos = 15;
+                    nXPos += 10;
                     nCurY += 12;
                 }
 
@@ -396,16 +409,20 @@ void PrintDialog::setupOptionalUI()
 
                     nCurY += 12;
                 }
+                nXPos = nOldXPos;
             }
             else if( aCtrlType.equalsAscii( "List" ) && pCurParent )
             {
+                if( bDependency )
+                    nXPos += 5;
+
                 // add a FixedText:
                 FixedText* pHeading = new FixedText( pCurParent );
                 maControls.push_front( pHeading );
                 pHeading->SetText( aText );
                 Size aPixelSize( pHeading->LogicToPixel( Size( 10, 10 ), aFontMapMode ) );
                 aPixelSize.Width() += pHeading->GetTextWidth( aText );
-                pHeading->SetPosSizePixel( pHeading->LogicToPixel( Point( 5, nCurY ), aFontMapMode ),
+                pHeading->SetPosSizePixel( pHeading->LogicToPixel( Point( nXPos, nCurY ), aFontMapMode ),
                                            aPixelSize );
                 pHeading->Show();
 
@@ -464,6 +481,9 @@ void PrintDialog::setupOptionalUI()
                     aPos.Y() += (pList->GetSizePixel().Height() - aSize.Height())/2;
                     pHeading->SetPosSizePixel( aPos, aSize );
                 }
+
+                if( bDependency )
+                    nXPos -= 5;
             }
         }
         else
@@ -495,6 +515,19 @@ void PrintDialog::checkControlDependencies()
 
     // enable setup button only for printers that can be setup
     maPrinterPage.maSetupButton.Enable( maPListener->getPrinter()->HasSupport( SUPPORT_SETUPDIALOG ) );
+}
+
+void PrintDialog::checkOptionalControlDependencies()
+{
+    for( std::map< Window*, rtl::OUString >::iterator it = maControlToPropertyMap.begin();
+         it != maControlToPropertyMap.end(); ++it )
+    {
+        bool bShouldbeEnabled = maPListener->isUIOptionEnabled( it->second );
+        bool bIsEnabled = it->first->IsEnabled();
+        // Enable does not do a change check first, so can be less cheap than expected
+        if( bShouldbeEnabled != bIsEnabled )
+            it->first->Enable( bShouldbeEnabled );
+    }
 }
 
 void PrintDialog::updatePrinterText()
@@ -654,18 +687,7 @@ IMPL_LINK( PrintDialog, ModifyHdl, Edit*, EMPTYARG )
 
 IMPL_LINK( PrintDialog, UIOptionsChanged, void*, i_pOption )
 {
-    PropertyValue* pVal = maPListener->getValue( *reinterpret_cast< rtl::OUString* >(i_pOption) );
-    if( pVal )
-    {
-        std::pair< std::multimap< rtl::OUString, Window* >::iterator,
-                   std::multimap< rtl::OUString, Window* >::iterator > aWindows =
-            maPropertyToWindowMap.equal_range( pVal->Name );
-        for( std::multimap< rtl::OUString, Window* >::const_iterator it =
-             aWindows.first; it != aWindows.second; ++it )
-        {
-            it->second->Enable( maPListener->isUIOptionEnabled( pVal->Name ) );
-        }
-    }
+    checkOptionalControlDependencies();
     return 0;
 }
 
@@ -693,6 +715,8 @@ IMPL_LINK( PrintDialog, UIOption_CheckHdl, CheckBox*, i_pBox )
         sal_Bool bVal = i_pBox->IsChecked();
         pVal->Value <<= bVal;
 
+        checkOptionalControlDependencies();
+
         // update preview and page settings
         preparePreview();
     }
@@ -709,6 +733,8 @@ IMPL_LINK( PrintDialog, UIOption_RadioHdl, RadioButton*, i_pBtn )
         sal_Int32 nVal = it->second;
         pVal->Value <<= nVal;
 
+        checkOptionalControlDependencies();
+
         // update preview and page settings
         preparePreview();
     }
@@ -722,6 +748,8 @@ IMPL_LINK( PrintDialog, UIOption_SelectHdl, ListBox*, i_pBox )
     {
         sal_Int32 nVal( i_pBox->GetSelectEntryPos() );
         pVal->Value <<= nVal;
+
+        checkOptionalControlDependencies();
 
         // update preview and page settings
         preparePreview();
