@@ -205,6 +205,8 @@ public:
     virtual const String&           GetString() const;
     virtual const ScSingleRefData&  GetSingleRef() const;
     virtual ScSingleRefData&          GetSingleRef();
+    virtual void                CalcAbsIfRel( const ScAddress& );
+    virtual void                CalcRelFromAbs( const ScAddress& );
     virtual BOOL                operator==( const formula::FormulaToken& rToken ) const;
     virtual FormulaToken*       Clone() const { return new ScExternalSingleRefToken(*this); }
 };
@@ -231,6 +233,8 @@ public:
     virtual ScSingleRefData&       GetSingleRef2();
     virtual const ScComplexRefData&    GetDoubleRef() const;
     virtual ScComplexRefData&      GetDoubleRef();
+    virtual void                CalcAbsIfRel( const ScAddress& );
+    virtual void                CalcRelFromAbs( const ScAddress& );
     virtual BOOL                operator==( const formula::FormulaToken& rToken ) const;
     virtual FormulaToken*       Clone() const { return new ScExternalDoubleRefToken(*this); }
 };

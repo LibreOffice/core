@@ -883,6 +883,16 @@ ScSingleRefData& ScExternalSingleRefToken::GetSingleRef()
     return maSingleRef;
 }
 
+void ScExternalSingleRefToken::CalcAbsIfRel( const ScAddress& rPos )
+{
+    maSingleRef.CalcAbsIfRel( rPos );
+}
+
+void ScExternalSingleRefToken::CalcRelFromAbs( const ScAddress& rPos )
+{
+    maSingleRef.CalcRelFromAbs( rPos );
+}
+
 BOOL ScExternalSingleRefToken::operator ==( const FormulaToken& r ) const
 {
     if (!FormulaToken::operator==(r))
@@ -957,6 +967,16 @@ const ScComplexRefData& ScExternalDoubleRefToken::GetDoubleRef() const
 ScComplexRefData& ScExternalDoubleRefToken::GetDoubleRef()
 {
     return maDoubleRef;
+}
+
+void ScExternalDoubleRefToken::CalcAbsIfRel( const ScAddress& rPos )
+{
+    maDoubleRef.CalcAbsIfRel( rPos );
+}
+
+void ScExternalDoubleRefToken::CalcRelFromAbs( const ScAddress& rPos )
+{
+    maDoubleRef.CalcRelFromAbs( rPos );
 }
 
 BOOL ScExternalDoubleRefToken::operator ==( const FormulaToken& r ) const

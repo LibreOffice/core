@@ -1414,41 +1414,48 @@ void XclImpTextObj::DoProcessSdrObj( SdrObject& rSdrObj ) const
                 // plain text
                 pTextObj->NbcSetText( maTextData.mxString->GetText() );
             }
-        }
 
-        // horizontal text alignment
-        SvxAdjust eHorAlign = SVX_ADJUST_LEFT;
-        switch( maTextData.maData.GetHorAlign() )
-        {
-            case EXC_OBJ_HOR_LEFT:      eHorAlign = SVX_ADJUST_LEFT;    break;
-            case EXC_OBJ_HOR_CENTER:    eHorAlign = SVX_ADJUST_CENTER;  break;
-            case EXC_OBJ_HOR_RIGHT:     eHorAlign = SVX_ADJUST_RIGHT;   break;
-            case EXC_OBJ_HOR_JUSTIFY:   eHorAlign = SVX_ADJUST_BLOCK;   break;
-        }
-        rSdrObj.SetMergedItem( SvxAdjustItem( eHorAlign, EE_PARA_JUST ) );
+            /*  #i96858# Do not apply any formatting if there is no text.
+                SdrObjCustomShape::SetVerticalWriting (initiated from
+                SetMergedItem) calls SdrTextObj::ForceOutlinerParaObject which
+                ensures that we can erroneously write a ClientTextbox record
+                (with no content) while exporting to XLS, which can cause a
+                corrupted exported document. */
 
-        // vertical text alignment
-        SdrTextVertAdjust eVerAlign = SDRTEXTVERTADJUST_TOP;
-        switch( maTextData.maData.GetVerAlign() )
-        {
-            case EXC_OBJ_VER_TOP:       eVerAlign = SDRTEXTVERTADJUST_TOP;      break;
-            case EXC_OBJ_VER_CENTER:    eVerAlign = SDRTEXTVERTADJUST_CENTER;   break;
-            case EXC_OBJ_VER_BOTTOM:    eVerAlign = SDRTEXTVERTADJUST_BOTTOM;   break;
-            case EXC_OBJ_VER_JUSTIFY:   eVerAlign = SDRTEXTVERTADJUST_BLOCK;    break;
-        }
-        rSdrObj.SetMergedItem( SdrTextVertAdjustItem( eVerAlign ) );
+            // horizontal text alignment
+            SvxAdjust eHorAlign = SVX_ADJUST_LEFT;
+            switch( maTextData.maData.GetHorAlign() )
+            {
+                case EXC_OBJ_HOR_LEFT:      eHorAlign = SVX_ADJUST_LEFT;    break;
+                case EXC_OBJ_HOR_CENTER:    eHorAlign = SVX_ADJUST_CENTER;  break;
+                case EXC_OBJ_HOR_RIGHT:     eHorAlign = SVX_ADJUST_RIGHT;   break;
+                case EXC_OBJ_HOR_JUSTIFY:   eHorAlign = SVX_ADJUST_BLOCK;   break;
+            }
+            rSdrObj.SetMergedItem( SvxAdjustItem( eHorAlign, EE_PARA_JUST ) );
 
-        // orientation (this is only a fake, drawing does not support real text orientation)
-        namespace csst = ::com::sun::star::text;
-        csst::WritingMode eWriteMode = csst::WritingMode_LR_TB;
-        switch( maTextData.maData.mnOrient )
-        {
-            case EXC_OBJ_ORIENT_NONE:       eWriteMode = csst::WritingMode_LR_TB;   break;
-            case EXC_OBJ_ORIENT_STACKED:    eWriteMode = csst::WritingMode_TB_RL;   break;
-            case EXC_OBJ_ORIENT_90CCW:      eWriteMode = csst::WritingMode_TB_RL;   break;
-            case EXC_OBJ_ORIENT_90CW:       eWriteMode = csst::WritingMode_TB_RL;   break;
+            // vertical text alignment
+            SdrTextVertAdjust eVerAlign = SDRTEXTVERTADJUST_TOP;
+            switch( maTextData.maData.GetVerAlign() )
+            {
+                case EXC_OBJ_VER_TOP:       eVerAlign = SDRTEXTVERTADJUST_TOP;      break;
+                case EXC_OBJ_VER_CENTER:    eVerAlign = SDRTEXTVERTADJUST_CENTER;   break;
+                case EXC_OBJ_VER_BOTTOM:    eVerAlign = SDRTEXTVERTADJUST_BOTTOM;   break;
+                case EXC_OBJ_VER_JUSTIFY:   eVerAlign = SDRTEXTVERTADJUST_BLOCK;    break;
+            }
+            rSdrObj.SetMergedItem( SdrTextVertAdjustItem( eVerAlign ) );
+
+            // orientation (this is only a fake, drawing does not support real text orientation)
+            namespace csst = ::com::sun::star::text;
+            csst::WritingMode eWriteMode = csst::WritingMode_LR_TB;
+            switch( maTextData.maData.mnOrient )
+            {
+                case EXC_OBJ_ORIENT_NONE:       eWriteMode = csst::WritingMode_LR_TB;   break;
+                case EXC_OBJ_ORIENT_STACKED:    eWriteMode = csst::WritingMode_TB_RL;   break;
+                case EXC_OBJ_ORIENT_90CCW:      eWriteMode = csst::WritingMode_TB_RL;   break;
+                case EXC_OBJ_ORIENT_90CW:       eWriteMode = csst::WritingMode_TB_RL;   break;
+            }
+            rSdrObj.SetMergedItem( SvxWritingModeItem( eWriteMode, SDRATTR_TEXTDIRECTION ) );
         }
-        rSdrObj.SetMergedItem( SvxWritingModeItem( eWriteMode, SDRATTR_TEXTDIRECTION ) );
     }
     // base class processing
     XclImpRectObj::DoProcessSdrObj( rSdrObj );
