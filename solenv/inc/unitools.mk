@@ -109,6 +109,7 @@ MKDEPFLAGS=-n
 AWK*=awk
 SORT*=sort
 SED*=sed
+GNUPATCH*=patch
 .IF "$(USE_SHELL)"!="4nt"
 # change drive and directory
 CDD=cd
