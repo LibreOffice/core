@@ -80,7 +80,6 @@ namespace vcl
             FixedText                               maLocText;
             FixedText                               maComment;
             FixedText                               maCommentText;
-            CheckBox                                maToFileBox;
 
             PrinterTabPage( Window*, const ResId& );
             virtual ~PrinterTabPage();
@@ -89,6 +88,8 @@ namespace vcl
         class JobTabPage : public TabPage
         {
         public:
+            ListBox                                 maPrinters;
+            CheckBox                                maToFileBox;
             FixedLine                               maPrintRange;
             RadioButton                             maAllButton;
             RadioButton                             maPagesButton;

@@ -89,7 +89,6 @@ PrintDialog::PrinterTabPage::PrinterTabPage( Window* i_pParent, const ResId& rRe
     , maLocText( this, VclResId( SV_PRINT_PRT_LOCATION_TXT ) )
     , maComment( this, VclResId( SV_PRINT_PRT_COMMENT ) )
     , maCommentText( this, VclResId( SV_PRINT_PRT_COMMENT_TXT ) )
-    , maToFileBox( this, VclResId( SV_PRINT_PRT_TOFILE ) )
 {
     FreeResource();
 }
@@ -100,6 +99,8 @@ PrintDialog::PrinterTabPage::~PrinterTabPage()
 
 PrintDialog::JobTabPage::JobTabPage( Window* i_pParent, const ResId& rResId )
     : TabPage( i_pParent, rResId )
+    , maPrinters( this, VclResId( SV_PRINT_PRINTERS) )
+    , maToFileBox( this, VclResId( SV_PRINT_PRT_TOFILE ) )
     , maPrintRange( this, VclResId( SV_PRINT_RANGE ) )
     , maAllButton( this, VclResId( SV_PRINT_ALL ) )
     , maPagesButton( this, VclResId( SV_PRINT_PAGERANGE ) )
@@ -140,10 +141,10 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterList
     FreeResource();
 
     // insert the tab pages
-    maTabCtrl.InsertPage( SV_PRINT_PAGE_PREVIEW, maPrinterPage.GetText() );
-    maTabCtrl.SetTabPage( SV_PRINT_PAGE_PREVIEW, &maPrinterPage );
     maTabCtrl.InsertPage( SV_PRINT_TAB_JOB, maJobPage.GetText() );
     maTabCtrl.SetTabPage( SV_PRINT_TAB_JOB, &maJobPage );
+    maTabCtrl.InsertPage( SV_PRINT_PAGE_PREVIEW, maPrinterPage.GetText() );
+    maTabCtrl.SetTabPage( SV_PRINT_PAGE_PREVIEW, &maPrinterPage );
 
     maPageStr = maPageText.GetText();
     // save space for the preview window
@@ -162,14 +163,19 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterList
          it != rQueues.end(); ++it )
     {
         maPrinterPage.maPrinters.InsertEntry( *it );
+        maJobPage.maPrinters.InsertEntry( *it );
     }
     // select current printer
     if( maPrinterPage.maPrinters.GetEntryPos( maPListener->getPrinter()->GetName() ) != LISTBOX_ENTRY_NOTFOUND )
+    {
         maPrinterPage.maPrinters.SelectEntry( maPListener->getPrinter()->GetName() );
+        maJobPage.maPrinters.SelectEntry( maPListener->getPrinter()->GetName() );
+    }
     else
     {
         // fall back to default printer
         maPrinterPage.maPrinters.SelectEntry( Printer::GetDefaultPrinterName() );
+        maJobPage.maPrinters.SelectEntry( Printer::GetDefaultPrinterName() );
         maPListener->setPrinter( boost::shared_ptr<Printer>( new Printer( Printer::GetDefaultPrinterName() ) ) );
     }
     // update the text fields for the printer
@@ -177,6 +183,7 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterList
 
     // set a select handler
     maPrinterPage.maPrinters.SetSelectHdl( LINK( this, PrintDialog, SelectHdl ) );
+    maJobPage.maPrinters.SetSelectHdl( LINK( this, PrintDialog, SelectHdl ) );
 
     // setup page range edit
     rtl::OUStringBuffer aBuf( 16 );
@@ -219,7 +226,7 @@ PrintDialog::~PrintDialog()
 
 bool PrintDialog::isPrintToFile()
 {
-    return maPrinterPage.maToFileBox.IsChecked();
+    return maJobPage.maToFileBox.IsChecked();
 }
 
 int PrintDialog::getCopyCount()
@@ -737,10 +744,13 @@ IMPL_LINK( PrintDialog, ScrollEndHdl, ScrollBar*, pScrBar )
 
 IMPL_LINK( PrintDialog, SelectHdl, ListBox*, pBox )
 {
-    if( pBox == &maPrinterPage.maPrinters )
+    if( pBox == &maPrinterPage.maPrinters || pBox == &maJobPage.maPrinters )
     {
+        String aNewPrinter( pBox->GetSelectEntry() );
+        maJobPage.maPrinters.SelectEntry( aNewPrinter );
+        maPrinterPage.maPrinters.SelectEntry( aNewPrinter );
         // set new printer
-        maPListener->setPrinter( boost::shared_ptr<Printer>( new Printer( maPrinterPage.maPrinters.GetSelectEntry() ) ) );
+        maPListener->setPrinter( boost::shared_ptr<Printer>( new Printer( aNewPrinter ) ) );
         // update text fields
         updatePrinterText();
     }
