@@ -466,7 +466,8 @@ void ScColumn::DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex, USHORT nDelFla
                 {
                     // do not rescue note if it has to be deleted according to passed flags
                     ScPostIt* pNote = bDeleteNote ? 0 : pOldCell->ReleaseNote();
-                    SvtBroadcaster* pBC = pOldCell->ReleaseBroadcaster();
+                    // #i99844# do not release broadcaster from old cell, it still has to notify deleted content
+                    SvtBroadcaster* pBC = pOldCell->GetBroadcaster();
                     if( pNote || pBC )
                         pNoteCell = new ScNoteCell( pNote, pBC );
                 }
@@ -498,6 +499,8 @@ void ScColumn::DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex, USHORT nDelFla
                     aHint.GetAddress().SetRow( nOldRow );
                     aHint.SetCell( pOldCell );
                     pDocument->Broadcast( aHint );
+                    // #i99844# after broadcasting, old cell has to forget the broadcaster (owned by pNoteCell)
+                    pOldCell->ReleaseBroadcaster();
                     pOldCell->Delete();
                 }
             }
@@ -524,6 +527,8 @@ void ScColumn::DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex, USHORT nDelFla
         aHint.SetAddress( (*aIt)->aPos );
         aHint.SetCell( *aIt );
         pDocument->Broadcast( aHint );
+        // #i99844# after broadcasting, old cell has to forget the broadcaster (owned by replacement note cell)
+        (*aIt)->ReleaseBroadcaster();
         (*aIt)->Delete();
     }
 }
