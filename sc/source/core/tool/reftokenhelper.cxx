@@ -288,7 +288,7 @@ private:
     {
         bool bDisjoint1 = (nMin1 > nMax2) && (nMin1 - nMax2 > 1);
         bool bDisjoint2  = (nMin2 > nMax1) && (nMin2 - nMax1 > 1);
-        if (bDisjoint1 && bDisjoint2)
+        if (bDisjoint1 || bDisjoint2)
             // These two ranges cannot be joined.  Move on.
             return false;
 
