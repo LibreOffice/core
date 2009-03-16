@@ -90,6 +90,8 @@ public:
 
     String      GetDate( const Date& rDate ) const;
     String      GetNum( long nNumber, USHORT nDecimals, BOOL bUseThousandSep = TRUE, BOOL bTrailingZeros = TRUE ) const;
+
+    static String filterFormattingChars( const String& );
 };
 
 }   // namespace vcl

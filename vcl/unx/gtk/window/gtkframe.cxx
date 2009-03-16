@@ -832,7 +832,11 @@ void GtkSalFrame::Init( SalFrame* pParent, ULONG nStyle )
     {
         guint32 nUserTime = 0;
         if( (nStyle & (SAL_FRAME_STYLE_OWNERDRAWDECORATION|SAL_FRAME_STYLE_TOOLWINDOW)) == 0 )
-            nUserTime = gdk_x11_get_server_time(GTK_WIDGET (m_pWindow)->window);
+        {
+            /* #i99360# ugly workaround an X11 library bug */
+            nUserTime= getDisplay()->GetLastUserEventTime( true );
+            // nUserTime = gdk_x11_get_server_time(GTK_WIDGET (m_pWindow)->window);
+        }
         lcl_set_user_time(GTK_WIDGET(m_pWindow)->window, nUserTime);
     }
 
@@ -1297,7 +1301,9 @@ void GtkSalFrame::Show( BOOL bVisible, BOOL bNoActivate )
 
             guint32 nUserTime = 0;
             if( ! bNoActivate && (m_nStyle & (SAL_FRAME_STYLE_OWNERDRAWDECORATION|SAL_FRAME_STYLE_TOOLWINDOW)) == 0 )
-                nUserTime = gdk_x11_get_server_time(GTK_WIDGET (m_pWindow)->window);
+                /* #i99360# ugly workaround an X11 library bug */
+                nUserTime= getDisplay()->GetLastUserEventTime( true );
+                //nUserTime = gdk_x11_get_server_time(GTK_WIDGET (m_pWindow)->window);
 
             //For these floating windows we don't want the main window to lose focus, and metacity has...
             // metacity-2.24.0/src/core/window.c
@@ -1327,7 +1333,9 @@ void GtkSalFrame::Show( BOOL bVisible, BOOL bNoActivate )
                )
               )
             {
-                nUserTime = gdk_x11_get_server_time(GTK_WIDGET (m_pWindow)->window);
+                /* #i99360# ugly workaround an X11 library bug */
+                nUserTime= getDisplay()->GetLastUserEventTime( true );
+                //nUserTime = gdk_x11_get_server_time(GTK_WIDGET (m_pWindow)->window);
             }
 
             lcl_set_user_time( GTK_WIDGET(m_pWindow)->window, nUserTime );
@@ -2023,7 +2031,12 @@ void GtkSalFrame::ToTop( USHORT nFlags )
             if( ! (nFlags & SAL_FRAME_TOTOP_GRABFOCUS_ONLY) )
                 gtk_window_present( GTK_WINDOW(m_pWindow) );
             else
-                gdk_window_focus( m_pWindow->window, gdk_x11_get_server_time(GTK_WIDGET (m_pWindow)->window) );
+            {
+                // gdk_window_focus( m_pWindow->window, gdk_x11_get_server_time(GTK_WIDGET (m_pWindow)->window) );
+                /* #i99360# ugly workaround an X11 library bug */
+                guint32 nUserTime= getDisplay()->GetLastUserEventTime( true );
+                gdk_window_focus( m_pWindow->window, nUserTime );
+            }
             /*  need to do an XSetInputFocus here because
              *  gdk_window_focus will ask a EWMH compliant WM to put the focus
              *  to our window - which it of course won't since our input hint

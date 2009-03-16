@@ -131,9 +131,13 @@ is_ja_voice_sound_mark(sal_Unicode& current, sal_Unicode next)
 
 sal_Unicode casefolding::getNextChar(const sal_Unicode *str, sal_Int32& idx, sal_Int32 len, MappingElement& e, Locale& aLocale, sal_uInt8 nMappingType, TransliterationModules moduleLoaded) throw (RuntimeException)
 {
+        if( idx >= len )
+            return 0;
+
         sal_Unicode c;
+
         if (moduleLoaded & TransliterationModules_IGNORE_CASE) {
-            if (e.current >= e.element.nmap && idx < len ) {
+            if( e.current >= e.element.nmap ) {
                 e.element = getValue(str, idx++, len, aLocale, nMappingType);
                 e.current = 0;
             }
@@ -141,6 +145,7 @@ sal_Unicode casefolding::getNextChar(const sal_Unicode *str, sal_Int32& idx, sal
         } else {
             c = *(str + idx++);
         }
+
         if (moduleLoaded & TransliterationModules_IGNORE_KANA) {
             if (0x3040 <= c && c <= 0x3094 || 0x309d <= c && c <= 0x309f)
                 c += 0x60;
@@ -154,7 +159,9 @@ sal_Unicode casefolding::getNextChar(const sal_Unicode *str, sal_Int32& idx, sal
                     is_ja_voice_sound_mark(c, half2fullTable[*(str + idx)]))
                 idx++;
         }
+
         return c;
 }
 
 } } } }
+

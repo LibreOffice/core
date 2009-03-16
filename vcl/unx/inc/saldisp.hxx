@@ -283,6 +283,7 @@ DECLARE_LIST( SalFontCache, ExtendedFontStruct* )
 extern "C" {
     struct SnDisplay;
     struct SnLauncheeContext;
+    typedef Bool(*X_if_predicate)(Display*,XEvent*,XPointer);
 }
 
 class VCL_DLLPUBLIC SalDisplay
@@ -494,7 +495,9 @@ public:
     bool            GetExactResolution() const { return mbExactResolution; }
     ULONG           GetProperties() const { return nProperties_; }
     ULONG           GetMaxRequestSize() const { return nMaxRequestSize_; }
-    XLIB_Time       GetLastUserEventTime() const;
+    XLIB_Time       GetLastUserEventTime( bool bAlwaysReget = false ) const;
+
+    bool            XIfEventWithTimeout( XEvent*, XPointer, X_if_predicate, long i_nTimeout = 1000 ) const;
 
     BOOL            MouseCaptured( const SalFrame *pFrameData ) const
     { return m_pCapture == pFrameData; }

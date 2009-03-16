@@ -275,7 +275,8 @@ USHORT ImplEntryList::FindEntry( const XubString& rString, BOOL bSearchMRUArea )
     for ( USHORT n = bSearchMRUArea ? 0 : GetMRUCount(); n < nEntries; n++ )
     {
         ImplEntryType* pImplEntry = GetEntry( n );
-        if ( pImplEntry->maStr == rString )
+        String aComp( vcl::I18nHelper::filterFormattingChars( pImplEntry->maStr ) );
+        if ( aComp == rString )
             return n;
     }
     return LISTBOX_ENTRY_NOTFOUND;

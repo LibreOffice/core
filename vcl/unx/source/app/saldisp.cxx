@@ -104,6 +104,7 @@ Status XineramaGetInfo(Display*, int, XRectangle*, unsigned char*, int*);
 #include <dtint.hxx>
 
 #include <osl/socket.h>
+#include <poll.h>
 
 using namespace rtl;
 using namespace vcl_sal;
@@ -520,7 +521,7 @@ SalDisplay::SalDisplay( Display *display ) :
         m_pWMAdaptor( NULL ),
         m_pDtIntegrator( NULL ),
         m_bUseRandRWrapper( true ),
-        m_nLastUserEventTime( 0 )
+        m_nLastUserEventTime( CurrentTime )
 {
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "SalDisplay::SalDisplay()\n" );
@@ -2726,9 +2727,9 @@ extern "C"
     }
 }
 
-XLIB_Time SalDisplay::GetLastUserEventTime() const
+XLIB_Time SalDisplay::GetLastUserEventTime( bool i_bAlwaysReget ) const
 {
-    if( m_nLastUserEventTime == 0 )
+    if( m_nLastUserEventTime == CurrentTime || i_bAlwaysReget )
     {
         // get current server time
         unsigned char c = 0;
@@ -2736,10 +2737,46 @@ XLIB_Time SalDisplay::GetLastUserEventTime() const
         Atom nAtom = getWMAdaptor()->getAtom( WMAdaptor::SAL_GETTIMEEVENT );
         XChangeProperty( GetDisplay(), GetDrawable( GetDefaultScreenNumber() ),
                          nAtom, nAtom, 8, PropModeReplace, &c, 1 );
-        XIfEvent( GetDisplay(), &aEvent, timestamp_predicate, (XPointer)this );
+        XFlush( GetDisplay() );
+
+        if( ! XIfEventWithTimeout( &aEvent, (XPointer)this, timestamp_predicate ) )
+        {
+            // this should not happen at all; still sometimes it happens
+            aEvent.xproperty.time = CurrentTime;
+        }
+
         m_nLastUserEventTime = aEvent.xproperty.time;
     }
     return m_nLastUserEventTime;
+}
+
+bool SalDisplay::XIfEventWithTimeout( XEvent* o_pEvent, XPointer i_pPredicateData,
+                                      X_if_predicate i_pPredicate, long i_nTimeout ) const
+{
+    /* #i99360# ugly workaround an X11 library bug
+       this replaces the following call:
+       XIfEvent( GetDisplay(), o_pEvent, i_pPredicate, i_pPredicateData );
+    */
+    bool bRet = true;
+
+    if( ! XCheckIfEvent( GetDisplay(), o_pEvent, i_pPredicate, i_pPredicateData ) )
+    {
+        // wait for some event to arrive
+        struct pollfd aFD;
+        aFD.fd = ConnectionNumber(GetDisplay());
+        aFD.events = POLLIN;
+        aFD.revents = 0;
+        poll( &aFD, 1, i_nTimeout );
+        if( ! XCheckIfEvent( GetDisplay(), o_pEvent, i_pPredicate, i_pPredicateData ) )
+        {
+            poll( &aFD, 1, i_nTimeout ); // try once more for a packet of events from the Xserver
+            if( ! XCheckIfEvent( GetDisplay(), o_pEvent, i_pPredicate, i_pPredicateData ) )
+            {
+                bRet = false;
+            }
+        }
+    }
+    return bRet;
 }
 
 // -=-= SalVisual -=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
