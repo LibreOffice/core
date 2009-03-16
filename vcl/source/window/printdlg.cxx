@@ -725,18 +725,24 @@ IMPL_LINK( PrintDialog, UIOption_CheckHdl, CheckBox*, i_pBox )
 
 IMPL_LINK( PrintDialog, UIOption_RadioHdl, RadioButton*, i_pBtn )
 {
-    PropertyValue* pVal = getValueForWindow( i_pBtn );
-    std::map< Window*, sal_Int32 >::const_iterator it = maControlToNumValMap.find( i_pBtn );
-    if( pVal && it != maControlToNumValMap.end() )
+    // this handler gets called for all radiobuttons that get unchecked, too
+    // however we only want one notificaction for the new value (that is for
+    // the button that gets checked)
+    if( i_pBtn->IsChecked() )
     {
+        PropertyValue* pVal = getValueForWindow( i_pBtn );
+        std::map< Window*, sal_Int32 >::const_iterator it = maControlToNumValMap.find( i_pBtn );
+        if( pVal && it != maControlToNumValMap.end() )
+        {
 
-        sal_Int32 nVal = it->second;
-        pVal->Value <<= nVal;
+            sal_Int32 nVal = it->second;
+            pVal->Value <<= nVal;
 
-        checkOptionalControlDependencies();
+            checkOptionalControlDependencies();
 
-        // update preview and page settings
-        preparePreview();
+            // update preview and page settings
+            preparePreview();
+        }
     }
     return 0;
 }
