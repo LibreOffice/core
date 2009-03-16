@@ -373,16 +373,16 @@ void PrintDialog::setupOptionalUI()
                 }
 
                 // iterate options
-                rtl::OUString aSelectVal;
+                sal_Int32 nSelectVal = 0;
                 PropertyValue* pVal = maPListener->getValue( aPropertyName );
                 if( pVal && pVal->Value.hasValue() )
-                    pVal->Value >>= aSelectVal;
+                    pVal->Value >>= nSelectVal;
                 for( sal_Int32 m = 0; m < aChoices.getLength(); m++ )
                 {
                     RadioButton* pBtn = new RadioButton( pCurParent, m == 0 ? WB_GROUP : 0 );
                     maControls.push_front( pBtn );
                     pBtn->SetText( aChoices[m] );
-                    pBtn->Check( aChoices[m] == aSelectVal );
+                    pBtn->Check( m == nSelectVal );
                     Size aPixelSize( pBtn->LogicToPixel( Size( 10 + nXPos, 12 ), aFontMapMode ) );
                     aPixelSize.Width() = aTabSize.Width() - aPixelSize.Width();
                     pBtn->SetPosSizePixel( pBtn->LogicToPixel( Point( 15, nCurY ), aFontMapMode ),
@@ -392,6 +392,7 @@ void PrintDialog::setupOptionalUI()
                     pBtn->Show();
                     maPropertyToWindowMap.insert( std::pair< rtl::OUString, Window* >( aPropertyName, pBtn ) );
                     maControlToPropertyMap[pBtn] = aPropertyName;
+                    maControlToNumValMap[pBtn] = m;
 
                     nCurY += 12;
                 }
@@ -421,11 +422,11 @@ void PrintDialog::setupOptionalUI()
                         nMaxTextWidth = nEntryWidth;
                 }
                 nMaxTextWidth += 30;
-                rtl::OUString aSelectVal;
+                sal_Int32 nSelectVal = 0;
                 PropertyValue* pVal = maPListener->getValue( aPropertyName );
                 if( pVal && pVal->Value.hasValue() )
-                    pVal->Value >>= aSelectVal;
-                pList->SelectEntry( aSelectVal );
+                    pVal->Value >>= nSelectVal;
+                pList->SelectEntryPos( nSelectVal );
 
                 aPixelSize = Size( pList->LogicToPixel( Size( 25, 12 ), aFontMapMode ) );
                 aPixelSize.Width() = nMaxTextWidth;
@@ -701,10 +702,12 @@ IMPL_LINK( PrintDialog, UIOption_CheckHdl, CheckBox*, i_pBox )
 IMPL_LINK( PrintDialog, UIOption_RadioHdl, RadioButton*, i_pBtn )
 {
     PropertyValue* pVal = getValueForWindow( i_pBtn );
-    if( pVal )
+    std::map< Window*, sal_Int32 >::const_iterator it = maControlToNumValMap.find( i_pBtn );
+    if( pVal && it != maControlToNumValMap.end() )
     {
-        rtl::OUString aVal( i_pBtn->GetText() );;
-        pVal->Value <<= aVal;
+
+        sal_Int32 nVal = it->second;
+        pVal->Value <<= nVal;
 
         // update preview and page settings
         preparePreview();
@@ -717,8 +720,8 @@ IMPL_LINK( PrintDialog, UIOption_SelectHdl, ListBox*, i_pBox )
     PropertyValue* pVal = getValueForWindow( i_pBox );
     if( pVal )
     {
-        rtl::OUString aVal( i_pBox->GetSelectEntry() );;
-        pVal->Value <<= aVal;
+        sal_Int32 nVal( i_pBox->GetSelectEntryPos() );
+        pVal->Value <<= nVal;
 
         // update preview and page settings
         preparePreview();

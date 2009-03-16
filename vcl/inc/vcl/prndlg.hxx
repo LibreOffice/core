@@ -132,6 +132,7 @@ namespace vcl
         std::list< Window* >                    maControls;
         std::map< Window*, rtl::OUString >      maControlToPropertyMap;
         std::multimap< rtl::OUString, Window* > maPropertyToWindowMap;
+        std::map< Window*, sal_Int32 >          maControlToNumValMap;
 
         void preparePreview();
         void setPreviewText( sal_Int32 );
