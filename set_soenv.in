@@ -548,12 +548,11 @@ elsif ( $platform =~ m/linux/ )
       else {
         if ('@WORDS_BIGENDIAN@' ne 'yes') {
           $EPM_FLAGS = "-a mipsel";
-          if ( $JDK eq "gcj" ) {
-	    $ARCH = "mipsel";
-          }
-          else {
-	    $ARCH = "mips32";
-          }
+	  if ( $JDK =~ m/sun/ && -d "@JAVA_HOME@".$ds."jre".$ds."lib".$ds."mips32" ) {
+	   $ARCH = "mips32"; # Lemote
+	  } else {
+	   $ARCH = "mipsel";
+ 	  }
         }
         else {
           $ARCH = "mips";
@@ -561,7 +560,11 @@ elsif ( $platform =~ m/linux/ )
       }
 
       $JRELIBDIR      = '$JAVA_HOME'.$ds."lib".$ds.$ARCH;
-      $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."lib".$ds.$ARCH.$ds."client";
+      if ( $JDK =~ m/sun/ && -d "@JAVA_HOME@".$ds."jre".$ds."lib".$ds."mips32" ) {
+      	$JRETOOLKITDIR  = '$JAVA_HOME'.$ds."lib".$ds.$ARCH.$ds."client"; # Lemote
+      } else {
+      	$JRETOOLKITDIR  = '$JAVA_HOME'.$ds."lib".$ds.$ARCH.$ds."server";
+      }  
       $JRETHREADDIR   = '$JAVA_HOME'.$ds."lib".$ds.$ARCH.$ds."native_threads";
    }
 

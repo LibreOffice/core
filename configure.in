@@ -460,7 +460,7 @@ AC_ARG_WITH(libfonts-jar,
 [ LIBFONTS_JAR="$withval"
 ])
 AC_ARG_WITH(libserializer-jar,
-[  --libserializer-jar=JARFILE   Specify path to jarfile manually ],
+[  --with-libserializer-jar=JARFILE   Specify path to jarfile manually ],
 [ LIBSERIALIZER_JAR="$withval"
 ])
 AC_ARG_WITH(libbase-jar,
@@ -3627,7 +3627,7 @@ if test -n "$with_system_db" -o -n "$with_system_libs" && \
         ], []
     )
     AC_MSG_CHECKING([whether db is at least 4.1])
-    for v in 1 2 3 4 5 6; do
+    for v in `seq 1 7`; do
        AC_TRY_RUN([
 #include <db.h>
 
@@ -3641,7 +3641,7 @@ int main(int argc, char **argv) {
        AC_MSG_RESULT([OK])
        DB_VERSION=4.$DB_VERSION_MINOR
     else
-       AC_MSG_RESULT([no. you need at least db 4.1])
+       AC_MSG_ERROR([no. you need at least db 4.1])
     fi
     # does not work :/
     #AC_CHECK_LIB(db, db_create, [],
@@ -4252,14 +4252,12 @@ if test -n "$with_system_icu" -o -n "$with_system_libs" && \
 #include <unicode/uversion.h>
 
 int main(int argc, char **argv) {
-      if(U_ICU_VERSION_MAJOR_NUM < 3)
-        return 1;
-      else if(U_ICU_VERSION_MAJOR_NUM == 3 && U_ICU_VERSION_MINOR_NUM < 6)
+      if(U_ICU_VERSION_MAJOR_NUM < 4)
         return 1;
       else
         return 0;
 }
-      ], [AC_MSG_RESULT(OK)], [AC_MSG_ERROR([not suitable, only >= 3.6 supported currently])])
+      ], [AC_MSG_RESULT(OK)], [AC_MSG_ERROR([not suitable, only >= 4.0 supported currently])])
       AC_LANG_POP([C++])
 else
     AC_MSG_RESULT([internal])
