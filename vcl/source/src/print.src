@@ -34,7 +34,7 @@ ModalDialog SV_DLG_PRINT
 {
     Text [en-US] = "Printing";
     Closeable = TRUE;
-    Sizeable = FALSE;
+    Sizeable = TRUE;
     Moveable = TRUE;
     SVLook = TRUE;
 

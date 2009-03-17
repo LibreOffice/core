@@ -211,6 +211,9 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterList
     // set change handler for UI options
     maPListener->setOptionChangeHdl( LINK( this, PrintDialog, UIOptionsChanged ) );
 
+    // set min size pixel to current size
+    SetMinOutputSizePixel( GetOutputSizePixel() );
+
     // setup dependencies
     checkControlDependencies();
 }
@@ -882,3 +885,55 @@ IMPL_LINK( PrintDialog, UIOption_ModifyHdl, Edit*, i_pBox )
     return 0;
 }
 
+void PrintDialog::Resize()
+{
+    Size aPixDiff( LogicToPixel( Size( 5, 5 ), MapMode( MAP_APPFONT ) ) );
+    Size aWindowSize( GetOutputSizePixel() );
+
+    // position buttons from lower end, right to left
+    Size aBtnSize( maCancelButton.GetSizePixel() );
+    Rectangle aBtnRect( Point( aWindowSize.Width() - aPixDiff.Width() - aBtnSize.Width(),
+                               aWindowSize.Height() - aPixDiff.Height() - aBtnSize.Height() ),
+                        aBtnSize );
+    maCancelButton.SetPosSizePixel( aBtnRect.TopLeft(), aBtnRect.GetSize() );
+    aBtnSize = maOKButton.GetSizePixel();
+    aBtnRect = Rectangle( Point( aBtnRect.Left() - aPixDiff.Width() - aBtnSize.Width(),
+                                 aWindowSize.Height() - aPixDiff.Height() - aBtnSize.Height() ),
+                          aBtnSize );
+    maOKButton.SetPosSizePixel( aBtnRect.TopLeft(), aBtnRect.GetSize() );
+    aBtnSize = maButtonLine.GetSizePixel();
+
+    // position fixed line above buttons
+    aBtnRect = Rectangle( Point( 0, aBtnRect.Top() - aPixDiff.Width() - aBtnSize.Height()/2 ),
+                          Size( aWindowSize.Width(), aBtnSize.Height() ) );
+    maButtonLine.SetPosSizePixel( aBtnRect.TopLeft(), aBtnRect.GetSize() );
+
+    // position tab control on upper right
+    aBtnSize = maTabCtrl.GetSizePixel();
+    aBtnRect = Rectangle( Point( aWindowSize.Width() - aPixDiff.Width() - aBtnSize.Width(),
+                                aPixDiff.Height() ),
+                          Size( aBtnSize.Width(), maButtonLine.GetPosPixel().Y() - 2*aPixDiff.Height() ) );
+    maTabCtrl.SetPosSizePixel( aBtnRect.TopLeft(), aBtnRect.GetSize() );
+
+    // set size for preview
+    long nMaxX = maTabCtrl.GetPosPixel().X() - 2*aPixDiff.Width();
+    long nMaxY = maButtonLine.GetPosPixel().Y()
+                 - 2 * aPixDiff.Height()
+                 - maPageText.GetSizePixel().Height()
+                 - maPageScrollbar.GetSizePixel().Height();
+    long nPreviewLength = std::min( nMaxX, nMaxY );
+    maPreviewSpace = Rectangle( Point( aPixDiff.Width(), aPixDiff.Height() ),
+                                Size( nPreviewLength, nPreviewLength ) );
+
+    // position text and scrollbar below preview
+    aBtnRect = Rectangle( Point( aPixDiff.Width(), 2*aPixDiff.Height() + nPreviewLength ),
+                          Size( nPreviewLength, maPageScrollbar.GetSizePixel().Height() ) );
+    maPageScrollbar.SetPosSizePixel( aBtnRect.TopLeft(), aBtnRect.GetSize() );
+
+    aBtnRect.Top() = aBtnRect.Bottom() + aPixDiff.Height()/2;
+    aBtnRect.Bottom() = aBtnRect.Top() + maPageText.GetSizePixel().Height() - 1;
+    maPageText.SetPosSizePixel( aBtnRect.TopLeft(), aBtnRect.GetSize() );
+
+    // and do the preview
+    preparePreview();
+}

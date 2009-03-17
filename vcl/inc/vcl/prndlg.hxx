@@ -143,6 +143,8 @@ namespace vcl
         void setupOptionalUI();
         com::sun::star::beans::PropertyValue* getValueForWindow( Window* ) const;
 
+        virtual void Resize();
+
         DECL_LINK( ScrollHdl, ScrollBar* );
         DECL_LINK( ScrollEndHdl, ScrollBar* );
         DECL_LINK( SelectHdl, ListBox* );
