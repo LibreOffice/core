@@ -228,7 +228,11 @@ void OutlinerEditEng::SetParaAttribs( USHORT nPara, const SfxItemSet& rSet )
         EditEngine::SetParaAttribs( (USHORT)nPara, rSet );
 
         pOwner->ImplCheckNumBulletItem( (USHORT)nPara );
-        pOwner->ImplCheckParagraphs( (USHORT)nPara, (USHORT) (pOwner->pParaList->GetParagraphCount()-1) );
+        // --> OD 2009-03-10 #i100014#
+        // It is not a good idea to substract 1 from a count and cast the result
+        // to USHORT without check, if the count is 0.
+        pOwner->ImplCheckParagraphs( (USHORT)nPara, (USHORT) (pOwner->pParaList->GetParagraphCount()) );
+        // <--
 
         if ( !IsInUndo() && IsUndoEnabled() )
             pOwner->UndoActionEnd( OLUNDO_ATTR );
