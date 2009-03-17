@@ -921,7 +921,7 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
     // get the path from the dialog
     INetURLObject aURL( pFileDlg->GetPath() );
     // the path should be provided outside since it might be used for further calls to the dialog
-    aSuggestedName = aURL.GetMainURL( INetURLObject::NO_DECODE );
+    aSuggestedName = aURL.GetName( INetURLObject::DECODE_WITH_CHARSET );
 
     // old filter options should be cleared in case different filter is used
 
@@ -1081,8 +1081,8 @@ sal_Bool ModelData_Impl::ShowDocumentInfoDialog()
     else
     {
         // pb: set graphic path if context == SD_EXPORT or SI_EXPORT else work path
-        aReccomendedDir = ( aCtxt != sfx2::FileDialogHelper::UNKNOWN_CONTEXT )
-            ? SvtPathOptions().GetGraphicPath() : SvtPathOptions().GetWorkPath();
+        ::rtl::OUString aConfigSuggestion( ( aCtxt != sfx2::FileDialogHelper::UNKNOWN_CONTEXT ) ? SvtPathOptions().GetGraphicPath() : SvtPathOptions().GetWorkPath() );
+        aReccomendedDir = INetURLObject( aConfigSuggestion ).GetMainURL( INetURLObject::NO_DECODE );
     }
 
     return aReccomendedDir;
@@ -1098,7 +1098,7 @@ sal_Bool ModelData_Impl::ShowDocumentInfoDialog()
         aReccomendedName = aSuggestedName;
     else
     {
-        aReccomendedName = INetURLObject( GetStorable()->getLocation() ).GetName();
+        aReccomendedName = INetURLObject( GetStorable()->getLocation() ).GetName( INetURLObject::DECODE_WITH_CHARSET );
         if ( !aReccomendedName.getLength() )
         {
             try {
@@ -1128,7 +1128,7 @@ sal_Bool ModelData_Impl::ShowDocumentInfoDialog()
                         aObj.SetExtension( aExtensions[0] );
                 }
 
-                aReccomendedName = aObj.GetName();
+                aReccomendedName = aObj.GetName( INetURLObject::DECODE_WITH_CHARSET );
             }
         }
     }
