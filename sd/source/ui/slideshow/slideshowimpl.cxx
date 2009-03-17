@@ -133,6 +133,7 @@ static USHORT __READONLY_DATA pAllowed[] =
     SID_JUMPTOMARK                          , //     5598
 //  SID_SHOWPOPUPS                          , //     5929
 //    SID_GALLERY                             , //     5960
+    SID_OPENHYPERLINK                       , //     6676
 //    SID_GALLERY_FORMATS                     , //    10280
     SID_NAVIGATOR                           , //    10366
 //  SID_FM_DESIGN_MODE                      , //    10629
