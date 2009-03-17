@@ -1504,7 +1504,10 @@ SwNumRule* WW8ListManager::GetNumRuleForActivation(sal_uInt16 nLFOPosition,
         return 0;
 
     // #i25545#
-    SwNumFmt pFmt(*(pLFOInfo->pNumRule->GetNumFmt(nLevel)));
+    // --> OD 2009-03-12 #i100132# - a number format does not have to exist on given list level
+//    SwNumFmt pFmt(*(pLFOInfo->pNumRule->GetNumFmt(nLevel)));
+    SwNumFmt pFmt(pLFOInfo->pNumRule->Get(nLevel));
+    // <--
     if (rReader.IsRightToLeft() && nLastLFOPosition != nLFOPosition) {
         if ( pFmt.GetNumAdjust() == SVX_ADJUST_RIGHT)
             pFmt.SetNumAdjust(SVX_ADJUST_LEFT);

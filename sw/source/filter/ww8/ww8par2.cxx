@@ -3532,8 +3532,11 @@ void SwWW8ImplReader::TabCellEnd()
     {
         pTableDesc->TableCellEnd();
 
-        if (bReadTable &&  pWFlyPara == NULL && mpTableEndPaM.get() != NULL &&
-            ! SwPaM::Overlap(*pPaM, *mpTableEndPaM))
+        if (bReadTable
+            && pWFlyPara == NULL
+            && mpTableEndPaM.get() != NULL
+            && (! SwPaM::Overlap(*pPaM, *mpTableEndPaM))
+            && SwPaM::LessThan(*mpTableEndPaM, *pPaM))
         {
             if (mpTableEndPaM->GetPoint()->nNode.GetNode().IsTxtNode())
             {
