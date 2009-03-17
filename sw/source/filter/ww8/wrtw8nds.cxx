@@ -1889,20 +1889,29 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
                             aLR.SetTxtFirstLineOfstValue(pFmt->GetAbsLSpace() - pFmt->GetFirstLineOffset());
                     else
                             aLR.SetTxtFirstLineOfst(GetWordFirstLineOffset(*pFmt));
-
-                    // --> OD 2009-01-12 #i94187#
-                    // set list style directly only in position and space mode LABEL_WIDTH_AND_POSITION
-                    if (SFX_ITEM_SET !=
-                        pTmpSet->GetItemState(RES_PARATR_NUMRULE, false) )
-                    {
-                        //If the numbering is not outline, and theres no numrule
-                        //name in the itemset, put one in there
-
-                        // NumRule from a template - then put it into the itemset
-                        pTmpSet->Put( SwNumRuleItem( pRule->GetName() ));
-                    }
                 }
                 // <--
+
+                // --> OD 2009-03-09 #100020#
+                // correct fix for issue i94187
+                if (SFX_ITEM_SET !=
+                    pTmpSet->GetItemState(RES_PARATR_NUMRULE, false) )
+                {
+                    // List style set via paragraph style - then put it into the itemset.
+                    // This is needed to get list level and list id exported for
+                    // the paragraph.
+                    pTmpSet->Put( SwNumRuleItem( pRule->GetName() ));
+
+                    // Put indent values into the itemset in case that the list
+                    // style is applied via paragraph style and the list level
+                    // indent values are not applicable.
+                    if ( pFmt->GetPositionAndSpaceMode() ==
+                                            SvxNumberFormat::LABEL_ALIGNMENT &&
+                         !pNd->AreListLevelIndentsApplicable() )
+                    {
+                        pTmpSet->Put( aLR );
+                    }
+                }
             }
             else
                 pTmpSet->ClearItem(RES_PARATR_NUMRULE);

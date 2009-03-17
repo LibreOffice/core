@@ -1842,43 +1842,61 @@ void SwWW8ImplReader::RegisterNumFmtOnTxtNode(sal_uInt16 nActLFO,
             }
             // <--
 
-            SfxItemSet aListIndent(rDoc.GetAttrPool(), RES_LR_SPACE,
-                    RES_LR_SPACE);
-            const SvxLRSpaceItem *pItem = (const SvxLRSpaceItem*)(
-                GetFmtAttr(RES_LR_SPACE));
-            ASSERT(pItem, "impossible");
-            if (pItem)
-                aListIndent.Put(*pItem);
-
-            /*
-             Take the original paragraph sprms attached to this list level
-             formatting and apply them to the paragraph. I'm convinced that
-             this is exactly what word does.
-            */
-            if (short nLen = static_cast< short >(aParaSprms.size()))
+            // --> OD 2009-03-04 #i99822#
+            // Direct application of the list level formatting no longer
+            // needed for list levels of mode LABEL_ALIGNMENT
+            bool bApplyListLevelIndentDirectlyAtPara( true );
+            if ( pTxtNd->GetNumRule() && nActLevel < MAXLEVEL )
             {
-                SfxItemSet* pOldAktItemSet = pAktItemSet;
-                SetAktItemSet(&aListIndent);
-
-                sal_uInt8* pSprms1  = &aParaSprms[0];
-                while (0 < nLen)
+                const SwNumFmt& rFmt = pTxtNd->GetNumRule()->Get( nActLevel );
+                if ( rFmt.GetPositionAndSpaceMode() ==
+                                            SvxNumberFormat::LABEL_ALIGNMENT )
                 {
-                    sal_uInt16 nL1 = ImportSprm(pSprms1);
-                    nLen = nLen - nL1;
-                    pSprms1 += nL1;
+                    bApplyListLevelIndentDirectlyAtPara = false;
+                }
+            }
+
+            if ( bApplyListLevelIndentDirectlyAtPara )
+            {
+                SfxItemSet aListIndent(rDoc.GetAttrPool(), RES_LR_SPACE,
+                        RES_LR_SPACE);
+                const SvxLRSpaceItem *pItem = (const SvxLRSpaceItem*)(
+                    GetFmtAttr(RES_LR_SPACE));
+                ASSERT(pItem, "impossible");
+                if (pItem)
+                    aListIndent.Put(*pItem);
+
+                /*
+                 Take the original paragraph sprms attached to this list level
+                 formatting and apply them to the paragraph. I'm convinced that
+                 this is exactly what word does.
+                */
+                if (short nLen = static_cast< short >(aParaSprms.size()))
+                {
+                    SfxItemSet* pOldAktItemSet = pAktItemSet;
+                    SetAktItemSet(&aListIndent);
+
+                    sal_uInt8* pSprms1  = &aParaSprms[0];
+                    while (0 < nLen)
+                    {
+                        sal_uInt16 nL1 = ImportSprm(pSprms1);
+                        nLen = nLen - nL1;
+                        pSprms1 += nL1;
+                    }
+
+                    SetAktItemSet(pOldAktItemSet);
                 }
 
-                SetAktItemSet(pOldAktItemSet);
+                const SvxLRSpaceItem *pLR =
+                    HasItem<SvxLRSpaceItem>(aListIndent, RES_LR_SPACE);
+                ASSERT(pLR, "Impossible");
+                if (pLR)
+                {
+                    pCtrlStck->NewAttr(*pPaM->GetPoint(), *pLR);
+                    pCtrlStck->SetAttr(*pPaM->GetPoint(), RES_LR_SPACE);
+                }
             }
-
-            const SvxLRSpaceItem *pLR =
-                HasItem<SvxLRSpaceItem>(aListIndent, RES_LR_SPACE);
-            ASSERT(pLR, "Impossible");
-            if (pLR)
-            {
-                pCtrlStck->NewAttr(*pPaM->GetPoint(), *pLR);
-                pCtrlStck->SetAttr(*pPaM->GetPoint(), RES_LR_SPACE);
-            }
+            // <--
         }
     }
 }

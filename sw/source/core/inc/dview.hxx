@@ -119,6 +119,10 @@ public:
     //JP 06.10.98: 2. Versuch
     inline void ValidateMarkList() { FlushComeBackTimer(); }
 
+    // --> OD 2009-03-05 #i99665#
+    sal_Bool IsAntiAliasing() const;
+    // <--
+
     // OD 18.06.2003 #108784# - method to replace marked/selected <SwDrawVirtObj>
     // by its reference object for delete of selection and group selection
     static void ReplaceMarkedDrawVirtObjs( SdrMarkView& _rMarkView );

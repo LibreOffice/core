@@ -1851,7 +1851,12 @@ static sal_uInt16 lcl_TCFlags(const SwTableBox * pBox)
 {
     sal_uInt16 nFlags = 0;
 
-    //long nRowSpan = pBox->getRowSpan();
+    long nRowSpan = pBox->getRowSpan();
+
+    if (nRowSpan > 1)
+        nFlags |= (3 << 5);
+    else if (nRowSpan < 0)
+        nFlags |= (1 << 5);
 
     const SwFrmFmt * pFmt = pBox->GetFrmFmt();
     switch (pFmt->GetVertOrient().GetVertOrient())
