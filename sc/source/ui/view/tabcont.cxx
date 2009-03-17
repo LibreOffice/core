@@ -324,6 +324,8 @@ void ScTabControl::UpdateStatus()
             if ( rMark.GetTableSelect(i) != IsPageSelected(static_cast<sal_uInt16>(i)+1) )
                 bModified = TRUE;
 
+        // #i99576# the following loop is mis-optimized on unxsoli4 and the reason
+        // why this file is in NOOPTFILES.
         if ( bModified )
             for (i=0; i<nCount; i++)
                 SelectPage( static_cast<sal_uInt16>(i)+1, rMark.GetTableSelect(i) );
