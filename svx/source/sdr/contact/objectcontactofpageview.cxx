@@ -190,11 +190,12 @@ namespace sdr
             // create ViewRange
             if(isOutputToRecordingMetaFile())
             {
-                if(isOutputToPDFFile())
+                if(isOutputToPDFFile() || isOutputToPrinter())
                 {
                     // #i98402# if it's a PDF export, set the ClipRegion as ViewRange. This is
                     // mainly because SW does not use DrawingLayer Page-Oriented and if not doing this,
                     // all existing objects will be collected as primitives and processed.
+                    // OD 2009-03-05 #i99876# perform the same also for SW on printing.
                     const Rectangle aLogicClipRectangle(rDisplayInfo.GetRedrawArea().GetBoundRect());
 
                     aViewRange = basegfx::B2DRange(
