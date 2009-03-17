@@ -644,7 +644,12 @@ void ScXMLTableRowCellContext::SetAnnotation(const table::CellAddress& aCellAddr
                 if( SdrCaptionObj* pCaption = pNote->GetCaption() )
                 {
                     if( pMyAnnotation->pOPO )
+                    {
+                        // transfer outliner object to caption
                         pCaption->SetOutlinerParaObject( pMyAnnotation->pOPO );
+                        // do not delete the object in ScMyImportAnnotation d'tor
+                        pMyAnnotation->pOPO = 0;
+                    }
                     else
                         pCaption->SetText( pMyAnnotation->sText );
                     // copy all items and reset shadow items

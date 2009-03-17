@@ -216,8 +216,8 @@ void ScXMLAnnotationContext::EndElement()
                     pMyAnnotation->pRect = new Rectangle(aRect);
                 }
 
-                if((pSdrObj->GetOutlinerParaObject()))
-                    pMyAnnotation->pOPO = new OutlinerParaObject( *(pSdrObj->GetOutlinerParaObject()) );
+                if( OutlinerParaObject* pOPO = pSdrObj->GetOutlinerParaObject() )
+                    pMyAnnotation->pOPO = new OutlinerParaObject( *pOPO );
 
                 xShapes->remove(xShape);
             }

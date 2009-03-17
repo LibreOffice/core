@@ -504,7 +504,7 @@ void ScPostIt::CreateCaption( const ScAddress& rPos, const SdrCaptionObj* pCapti
             {
                 // copy edit text object (object must be inserted into page already)
                 if( OutlinerParaObject* pOPO = pCaption->GetOutlinerParaObject() )
-                    maNoteData.mpCaption->SetOutlinerParaObject( pOPO );
+                    maNoteData.mpCaption->SetOutlinerParaObject( new OutlinerParaObject( *pOPO ) );
                 // copy formatting items (after text has been copied to apply font formatting)
                 maNoteData.mpCaption->SetMergedItemSetAndBroadcast( pCaption->GetMergedItemSet() );
                 // move textbox position relative to new cell, copy textbox size
