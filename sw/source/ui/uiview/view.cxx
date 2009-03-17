@@ -1146,6 +1146,9 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
 SwView::~SwView()
 {
     delete mpPostItMgr;
+    // --> OD 2009-03-10 #i100035#
+    mpPostItMgr = 0;
+    // <--
 
     bInDtor = TRUE;
     pEditWin->Hide(); // damit kein Paint Aerger machen kann!
