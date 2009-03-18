@@ -1705,10 +1705,6 @@ End
 
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Oooimprovecore , oooimprovecore)
 
-#if defined(BUILD_SPECIAL)
-STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Oooimprovement , oooimprovement)
-#endif
-
 #if defined WNT && \
     (defined M1310 || \
      ((defined M1400 || defined M1500) && \

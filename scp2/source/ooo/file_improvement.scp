@@ -31,10 +31,23 @@
 #include "macros.inc"
 
 #if defined(BUILD_SPECIAL)
-File gid_Brand_File_Share_Registry_Modules_Oo_Office_Jobs_Improvement
+File gid_File_Share_Registry_Modules_Oo_Office_Logging_Improvement
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Brand_Dir_Share_Registry_Modules_Oo_Office_Jobs;
+    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Logging;
+    Name = "/registry/spool/org/openoffice/Office/Logging/Logging-oooimprovement.xcu";
+End
+#endif
+
+#if defined(BUILD_SPECIAL)
+File gid_File_Share_Registry_Modules_Oo_Office_Jobs_Improvement
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Jobs;
     Name = "/registry/spool/org/openoffice/Office/Jobs/Jobs-oooimprovement.xcu";
 End
+#endif
+
+#if defined(BUILD_SPECIAL)
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Oooimprovement , oooimprovement)
 #endif

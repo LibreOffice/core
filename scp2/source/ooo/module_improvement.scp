@@ -40,6 +40,6 @@ Module gid_Module_Oooimprovement
     ParentID = gid_Module_Root;
     Default = YES;
     Styles = (HIDDEN_ROOT);
-    Files = (gid_Brand_File_Share_Registry_Modules_Oo_Office_Jobs_Improvement, gid_File_Lib_Oooimprovement);
+    Files = (gid_File_Share_Registry_Modules_Oo_Office_Jobs_Improvement, gid_File_Share_Registry_Modules_Oo_Office_Logging_Improvement, gid_File_Lib_Oooimprovement);
 End
 #endif
