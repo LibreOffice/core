@@ -552,11 +552,11 @@ void PrinterListener::enableUIOption( const rtl::OUString& i_rProperty, bool i_b
 bool PrinterListener::isUIOptionEnabled( const rtl::OUString& i_rProperty ) const
 {
     bool bEnabled = false;
-    std::hash_map< rtl::OUString, size_t, rtl::OUStringHash >::const_iterator it =
+    std::hash_map< rtl::OUString, size_t, rtl::OUStringHash >::const_iterator prop_it =
         mpImplData->maPropertyToIndex.find( i_rProperty );
-    if( it != mpImplData->maPropertyToIndex.end() )
+    if( prop_it != mpImplData->maPropertyToIndex.end() )
     {
-        bEnabled = mpImplData->maUIPropertyEnabled[it->second];
+        bEnabled = mpImplData->maUIPropertyEnabled[prop_it->second];
 
         if( bEnabled )
         {

@@ -777,7 +777,7 @@ IMPL_LINK( PrintDialog, ModifyHdl, Edit*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( PrintDialog, UIOptionsChanged, void*, i_pOption )
+IMPL_LINK( PrintDialog, UIOptionsChanged, void*, EMPTYARG )
 {
     checkOptionalControlDependencies();
     return 0;
@@ -1010,7 +1010,7 @@ void PrintProgressDialog::tick()
         setProgress( ++mnCur );
 }
 
-void PrintProgressDialog::Paint( const Rectangle& i_rRect )
+void PrintProgressDialog::Paint( const Rectangle& )
 {
     DrawProgress( this, maProgressRect.TopLeft(),
                         0,
