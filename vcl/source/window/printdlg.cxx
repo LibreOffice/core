@@ -1026,7 +1026,7 @@ void PrintProgressDialog::Paint( const Rectangle& )
     SetLineColor();
     SetFillColor( aPrgsColor );
 
-    const int nOffset = 3;
+    const long nOffset = 3;
     const long nWidth = 3*mnProgressHeight/2;
     const long nFullWidth = nWidth + nOffset;
     const long nMaxCount = maProgressRect.GetWidth() / nFullWidth;
