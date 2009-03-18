@@ -76,7 +76,14 @@ BEGIN
         "ga",
         "uk",
         "gd",
-        "my"
+        "my",
+        "mai",
+        "brx",
+        "dgo",
+        "kok",
+        "mni",
+        "sat"
+
     );
     @items_at_modules = ("Files", "Dirs", "Unixlinks");
     @asianlanguages = ("ja", "ko", "zh-CN", "zh-TW");
