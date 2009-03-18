@@ -161,10 +161,6 @@ sub GetUseFiles
 	    end if
 	end if
     end if
-
-    ' Force usage of classic sleep method
-    GLOBAL_USE_NEW_SLEEP = FALSE
-
 end sub
 
 '-------------------------------------------------------------------------
@@ -713,8 +709,6 @@ sub mMakeGeneralOptionsAPI
     Dim sTempList
     Dim bError as boolean
 
-    Dim oOOoImprovementController as object  ' Check presence of the OOo Improvement Program
-   
     const sFileFunction = "global::system::inc::master.inc::hMakeGeneralOptionsAPI:: "
 
     ' Open OOo UNO-Port for communication
@@ -833,25 +827,23 @@ sub mMakeGeneralOptionsAPI
             qaErrorLog( sFileFunction & "This build does not support online update." )
         endcatch
 
-        '///+ OOo Improvement Extension
-        ' Note: Logging is disabled the hard way. The UI will not notice the change so even if logging is disabled
-        '       the UI will claim that it is. You can verify the status manually though by performing some action
-        '       in the application and looking for the log file in user/temp/Feedback.
-        oOOoImprovementController = oUnoOfficeConnection.createInstance( "com.sun.star.oooimprovement.CoreController" )
-        if ( isNull( oOOoImprovementController ) ) then
-            gOOoImprovementIsInstalled = FALSE 
-        else
-            gOOoImprovementIsInstalled = TRUE
-            aPropertyValue(0).Value="/org.openoffice.Office.Logging/OOoImprovement"
+        '///+ OOo Improvement
+	    try
+            aPropertyValue(0).Value="/org.openoffice.Office.OOoImprovement.Settings/Participation"
             xViewRoot=oUnoConfigurationAccess.createInstanceWithArguments("com.sun.star.configuration.ConfigurationUpdateAccess",aPropertyValue())
-            xViewRoot.replaceByName("EnablingAllowed", false)
+            xViewRoot.replaceByName( "ShowedInvitation", true )
+            xViewRoot.replaceByName( "InvitationAccepted", false )
             xViewRoot.commitChanges()
             if xViewRoot.hasPendingChanges() then
-                qaErrorLog("Configuration not flushed: OOoImprovementProgram/InvitationAccepted: FALSE")
-            end if
+	            qaErrorLog("Configuration not flushed: OOoImprovementProgram/InvitationAccepted: FALSE")
+            endif
             xViewRoot.dispose()
-        endif
-
+	        gOOoImprovementIsEnabled = TRUE
+	    catch
+	        QAErrorLog( "Failed to disable usage tracking feature. This might cause errors and warnings during test execution." )
+	        gOOoImprovementIsEnabled = FALSE
+	    endcatch
+	    
         '///+<li>Setting the <i>work</i> directory in Tools / Options,
         sTempPath = ConvertPath (gOfficePath + "user\work")
         '///+<li>If the temp-path does not exist it will be created. 
@@ -899,7 +891,7 @@ sub mMakeGeneralOptionsAPI
 
     catch
         ExceptLog
-        MsgBox (sFileFunction + "The test did not start correctly or the application has been crashed." & Chr(13) & _
+        MsgBox (sFileFunction + "The test did not start correctly or the application crashed." & Chr(13) & _
             "Please correct the problem to make the general settings otherwise the test won't start!", 16, "Error at startup")
             'The test stops here if mMakeGeneralOptionsAPI has been run into problems (GPF, failure, ..)
         end

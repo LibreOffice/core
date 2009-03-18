@@ -54,21 +54,17 @@ testcase tQuickInsertGraphNotAsLink
     Call hNewDocument
     
     for iCurrentFile = 1 to 25
+
         ' MODIFY and ENABLE this SAMPLE snippet to exclude one fileformat from testing
         '         if ( iCurrentFile = 7 ) AND (gtPlatform="x86") then
         '             qaErrorLog("#<issue-id># crash on <platform> on loading <image-file>")
         '             goto skipformat
         '         endif
         ' Note: Can be locale dependent!
-        if (iCurrentFile = 5) then
-            qaerrorlog("#158701# crash on loading airshw.met going to next format")
-            goto skipformat
-        endif
         if (iCurrentFile = 4) AND (gPlatform="osx") then
             qaerrorlog("#158701# crash on MacOS X on loading ball.eps")
             goto skipformat
         endif
-
 
         Kontext "GrafikEinfuegenDlg"
         if ( not GrafikEinfuegenDlg.exists() ) then

@@ -502,3 +502,112 @@ function hSetMacroSecurityAPI( iSecLevel as integer ) as integer
     hSetMacroSecurityAPI() = iLevel
 
 end function
+
+'*******************************************************************************
+
+function hIsOOoImprovementTabVisible() as boolean
+
+    ' This function tries to find out whether the OOo Improvement Program 
+    ' Tabpage in Tools/Options is visible or not. 
+
+    dim oUnoConnect as object
+    dim oOOoImprovementController as object
+    dim bExists as boolean
+    const CFN = "hIsOOoImprovementTabVisible()::"
+    
+    oUnoConnect = hGetUnoService( TRUE )
+    if ( isNull( oUnoConnect ) ) then
+        warnlog( CFN & "Failed to establish UNO connection, hGetUnoService failed" )
+        hIsOOoImprovementTabVisible() = FALSE
+        exit function
+    else
+        try
+            oOOoImprovementController = oUnoConnect.createInstance( "com.sun.star.oooimprovement.CoreController" )
+            bExists = oOOoImprovementController.showBuiltinOptionsPage( 1 ) 
+            if ( bExists ) then
+                'printlog( CFN & "The OOo Improvement Program Tabpage is visible" )
+                hIsOOoImprovementTabVisible() = TRUE
+            else
+                printlog( CFN & "The OOo Improvement Program Tabpage is not visible" )
+                hIsOOoImprovementTabVisible() = FALSE
+            endif
+        catch
+            warnlog( CFN & "Method com.sun.star.oooimprovement.CoreController.showBuiltinOptionsPage() not available." )
+            printlog( CFN & "This indicates that the OOo Improvement Program feature is not included in this build." )
+            hIsOOoImprovementTabVisible() = FALSE
+        endcatch
+    endif
+    
+end function
+
+'*******************************************************************************
+
+function hEnableOOoImprovementProgramUNO() as boolean
+
+    ' This function tries to enable the OOo Improvement Program (switch it on)
+    dim oUnoOfficeConnection as object
+    dim oUnoConfigurationAccess as object
+    dim aPropertyValue(1) As new com.sun.star.beans.PropertyValue ' Array of pairs: Property with Value
+    dim xViewRoot
+    
+    const CFN = "hEnableOOoImprovementProgramUNO()::"
+    
+    aPropertyValue(0).Name = "nodepath"
+    aPropertyValue(0).Value = "/org.openoffice.Office.OOoImprovement.Settings/Participation"
+    aPropertyValue(1).Name = "lazywrite"
+    aPropertyValue(1).Value = False
+
+    oUnoOfficeConnection = hGetUnoService( TRUE )
+    if ( isNull( oUnoOfficeConnection )) then
+        warnlog( CFN & "Failed to establish UNO connection, hGetUnoService failed" )
+        hEnableOOoImprovementProgramUNO() = FALSE
+    else
+        oUnoConfigurationAccess = oUnoOfficeConnection.createInstance("com.sun.star.configuration.ConfigurationProvider")
+	    xViewRoot = oUnoConfigurationAccess.createInstanceWithArguments("com.sun.star.configuration.ConfigurationUpdateAccess",aPropertyValue())
+	    xViewRoot.replaceByName( "ShowedInvitation", TRUE )
+	    xViewRoot.replaceByName( "InvitationAccepted", TRUE )
+	    xViewRoot.commitChanges()
+	    hEnableOOoImprovementProgramUNO() = TRUE
+	    if ( xViewRoot.hasPendingChanges() ) then 
+	        hEnableOOoImprovementProgramUNO() = FALSE
+	    endif
+	    xViewRoot.dispose()
+    endif
+    
+end function
+
+'*******************************************************************************
+
+function hDisableOOoImprovementProgramUNO() as boolean
+
+    ' This function tries to enable the OOo Improvement Program (switch it on)
+    dim oUnoOfficeConnection as object
+    dim oUnoConfigurationAccess as object
+    dim aPropertyValue(1) As new com.sun.star.beans.PropertyValue ' Array of pairs: Property with Value
+    dim xViewRoot
+    
+    const CFN = "hDisableOOoImprovementProgramUNO()::"
+    
+    aPropertyValue(0).Name = "nodepath"
+    aPropertyValue(0).Value = "/org.openoffice.Office.OOoImprovement.Settings/Participation"
+    aPropertyValue(1).Name = "lazywrite"
+    aPropertyValue(1).Value = False
+
+    oUnoOfficeConnection = hGetUnoService( TRUE )
+    if ( isNull( oUnoOfficeConnection )) then
+        warnlog( CFN & "Failed to establish UNO connection, hGetUnoService failed" )
+        hDisableOOoImprovementProgramUNO() = FALSE
+    else
+        oUnoConfigurationAccess = oUnoOfficeConnection.createInstance("com.sun.star.configuration.ConfigurationProvider")
+	    xViewRoot = oUnoConfigurationAccess.createInstanceWithArguments("com.sun.star.configuration.ConfigurationUpdateAccess",aPropertyValue())
+	    xViewRoot.replaceByName( "ShowedInvitation", TRUE )
+	    xViewRoot.replaceByName( "InvitationAccepted", FALSE )
+	    xViewRoot.commitChanges()
+	    hDisableOOoImprovementProgramUNO() = TRUE
+	    if ( xViewRoot.hasPendingChanges() ) then 
+	        hDisableOOoImprovementProgramUNO() = FALSE
+	    endif
+	    xViewRoot.dispose()
+    endif
+    
+end function
