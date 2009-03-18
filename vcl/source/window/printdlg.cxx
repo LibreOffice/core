@@ -38,6 +38,7 @@
 #include "vcl/svids.hrc"
 #include "vcl/wall.hxx"
 #include "vcl/jobset.h"
+#include "vcl/status.hxx"
 
 #include "rtl/ustrbuf.hxx"
 
@@ -936,4 +937,89 @@ void PrintDialog::Resize()
 
     // and do the preview
     preparePreview();
+}
+
+// -----------------------------------------------------------------------------
+//
+// PrintProgressDialog
+//
+// -----------------------------------------------------------------------------
+
+PrintProgressDialog::PrintProgressDialog( Window* i_pParent, int i_nMax ) :
+    ModelessDialog( i_pParent, VclResId( SV_DLG_PRINT_PROGRESS ) ),
+    maText( this, VclResId( SV_PRINT_PROGRESS_TEXT ) ),
+    maButton( this, VclResId( SV_PRINT_PROGRESS_CANCEL ) ),
+    mbCanceled( false ),
+    mnCur( 0 ),
+    mnMax( i_nMax )
+{
+    maStr = maText.GetText();
+
+    maButton.SetClickHdl( LINK( this, PrintProgressDialog, ClickHdl ) );
+
+}
+
+PrintProgressDialog::~PrintProgressDialog()
+{
+}
+
+IMPL_LINK( PrintProgressDialog, ClickHdl, Button*, pButton )
+{
+    if( pButton == &maButton )
+        mbCanceled = true;
+
+    return 0;
+}
+
+void PrintProgressDialog::implCalcProgressRect()
+{
+    long nProgressHeight = 15;
+    if( IsNativeControlSupported( CTRL_PROGRESS, PART_ENTIRE_CONTROL ) )
+    {
+        ImplControlValue aValue;
+        Region aControlRegion( Rectangle( Point(), Size( 100, nProgressHeight ) ) );
+        Region aNativeControlRegion, aNativeContentRegion;
+        if( GetNativeControlRegion( CTRL_PROGRESS, PART_ENTIRE_CONTROL, aControlRegion,
+                                    CTRL_STATE_ENABLED, aValue, rtl::OUString(),
+                                    aNativeControlRegion, aNativeContentRegion ) )
+        {
+            nProgressHeight = aNativeControlRegion.GetBoundRect().GetHeight();
+        }
+    }
+    maProgressRect = Rectangle( Point( 10, maText.GetPosPixel().Y() + maText.GetSizePixel().Height() + 8 ),
+                                Size( GetSizePixel().Width() - 20, nProgressHeight ) );
+}
+
+void PrintProgressDialog::setProgress( int i_nCurrent, int i_nMax )
+{
+    mnCur = i_nCurrent;
+    if( i_nMax != -1 )
+        mnMax = i_nMax;
+
+    rtl::OUString aNewText( searchAndReplace( maStr, "%p", 2, mnCur+1 ) );
+    aNewText = searchAndReplace( aNewText, "%n", 2, mnMax );
+    maText.SetText( aNewText );
+
+    // update progress
+    Invalidate();
+}
+
+void PrintProgressDialog::tick()
+{
+    if( mnCur < mnMax )
+        setProgress( ++mnCur );
+}
+
+void PrintProgressDialog::Paint( const Rectangle& i_rRect )
+{
+    DrawProgress( this, maProgressRect.TopLeft(),
+                        0,
+                        maProgressRect.GetWidth(),
+                        maProgressRect.GetHeight(),
+                        static_cast<USHORT>(0),
+                        static_cast<USHORT>(mnCur),
+                        static_cast<USHORT>(mnMax),
+                        maProgressRect
+                        );
+
 }

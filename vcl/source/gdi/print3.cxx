@@ -79,6 +79,11 @@ public:
     PropertyToIndexMap                                          maPropertyToIndex;
     Link                                                        maOptionChangeHdl;
     ControlDependencyMap                                        maControlDependencies;
+
+    vcl::PrintProgressDialog*                                   mpProgress;
+
+    ImplPrinterListenerData() : mpProgress( NULL ) {}
+    ~ImplPrinterListenerData() { delete mpProgress; }
 };
 
 PrinterListener::PrinterListener()
@@ -315,6 +320,7 @@ bool Printer::StartJob( const XubString& i_rJobName, boost::shared_ptr<vcl::Prin
         {
             mbJobActive             = TRUE;
             MultiSelection aSel( i_pListener->getPageSelection() );
+            i_pListener->createProgressDialog();
             for( long nPage = aSel.FirstSelected(); nPage != long(SFX_ENDOFSELECTION); nPage = aSel.NextSelected() )
             {
                 // remember MultiSelection is 1 based (due to user input)
@@ -386,6 +392,13 @@ static void modifyJobSetup( Printer* pPrinter, const Sequence< PropertyValue >& 
 
 void PrinterListener::printFilteredPage( int i_nPage )
 {
+    // update progress if necessary
+    if( mpImplData->mpProgress )
+    {
+        mpImplData->mpProgress->tick();
+        Application::Reschedule( true );
+    }
+
     // get page parameters
     Sequence< PropertyValue > aPageParm( getPageParameters( i_nPage ) );
     const MapMode aMapMode( MAP_100TH_MM );
@@ -595,3 +608,11 @@ void PrinterListener::setOptionChangeHdl( const Link& i_rHdl )
     mpImplData->maOptionChangeHdl = i_rHdl;
 }
 
+void PrinterListener::createProgressDialog()
+{
+    if( ! mpImplData->mpProgress )
+    {
+        mpImplData->mpProgress = new PrintProgressDialog( NULL, mpImplData->maSelection.GetSelectCount() );
+        mpImplData->mpProgress->Show();
+    }
+}

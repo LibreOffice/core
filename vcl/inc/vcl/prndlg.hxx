@@ -166,6 +166,31 @@ namespace vcl
         int getCopyCount();
         bool isCollate();
     };
+
+    class PrintProgressDialog : public ModelessDialog
+    {
+        String              maStr;
+        FixedText           maText;
+        CancelButton        maButton;
+
+        bool                mbCanceled;
+        int                 mnCur;
+        int                 mnMax;
+        Rectangle           maProgressRect;
+
+        DECL_LINK( ClickHdl, Button* );
+
+        void implCalcProgressRect();
+    public:
+        PrintProgressDialog( Window* i_pParent, int i_nMax );
+        ~PrintProgressDialog();
+
+        void isCanceled();
+        void setProgress( int i_nCurrent, int i_nMax = -1 );
+        void tick();
+
+        virtual void Paint( const Rectangle& );
+    };
 }
 
 

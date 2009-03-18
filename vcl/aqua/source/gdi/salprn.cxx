@@ -511,7 +511,7 @@ BOOL AquaSalInfoPrinter::StartJob( const String* i_pFileName,
         NSObject* pReleaseAfterUse = nil;
         bool bShowPanel = (! bIsQuickJob && getUseNativeDialog() );
         [pPrintOperation setShowsPrintPanel: bShowPanel ? YES : NO ];
-        [pPrintOperation setShowsProgressPanel: bShowPanel ? YES : NO];
+        [pPrintOperation setShowsProgressPanel: YES];
         if( bShowPanel )
             pReleaseAfterUse = [AquaPrintAccessoryView setupPrinterPanel: pPrintOperation withListener: &i_rListener];
 

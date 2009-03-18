@@ -95,6 +95,10 @@
 #define SV_PRINT_PRT_TOFILE                 10
 #define SV_PRINT_PRT_SETUP                  11
 
+#define SV_DLG_PRINT_PROGRESS             2048
+#define SV_PRINT_PROGRESS_CANCEL            1
+#define SV_PRINT_PROGRESS_TEXT              2
+
 #define SV_PRINT_TAB_JOB                    2
 #define SV_PRINT_RANGE                      1
 #define SV_PRINT_ALL                        2

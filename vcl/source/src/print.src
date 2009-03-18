@@ -251,3 +251,27 @@ ModalDialog SV_DLG_PRINT
         };
     };
 };
+
+ModelessDialog SV_DLG_PRINT_PROGRESS
+{
+    Text [en-US] = "Printing";
+    Closeable = FALSE;
+    Sizeable = FALSE;
+    Moveable = TRUE;
+    SVLook = TRUE;
+
+    Size = MAP_APPFONT( 150, 100 );
+
+    CancelButton SV_PRINT_PROGRESS_CANCEL
+    {
+        Pos = MAP_APPFONT( 50, 80 );
+        Size = MAP_APPFONT( 50, 15 );
+    };
+    FixedText SV_PRINT_PAGE_TXT
+    {
+        Pos = MAP_APPFONT( 5,10 );
+        Size = MAP_APPFONT( 140, 10 );
+        Text [ en-US ] = "Page %p of %n";
+        Center = TRUE;
+    };
+};

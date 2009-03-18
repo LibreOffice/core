@@ -483,12 +483,12 @@ public:
     virtual void printPage( int i_nPage ) const = 0; // must be overloaded by the app
     virtual void jobFinished();   // optionally release resources bound to the job
 
-    void printFilteredPage( int i_nPage );
-
-    // implementation details, not usable outsid vcl
+    // implementation details, not usable outside vcl
+    void SAL_DLLPRIVATE printFilteredPage( int i_nPage );
     void SAL_DLLPRIVATE setPrinter( const boost::shared_ptr<Printer>& );
     void SAL_DLLPRIVATE setPageSelection( const MultiSelection& );
     void SAL_DLLPRIVATE setOptionChangeHdl( const Link& );
+    void SAL_DLLPRIVATE createProgressDialog();
 };
 
 }
