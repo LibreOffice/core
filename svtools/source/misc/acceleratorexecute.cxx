@@ -79,6 +79,7 @@
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <vos/mutex.hxx>
+#include <comphelper/uieventslogger.hxx>
 
 //===============================================
 // namespace
@@ -256,6 +257,22 @@ sal_Bool AcceleratorExecute::execute(const css::awt::KeyEvent& aAWTKey)
     sal_Bool bRet = xDispatch.is();
     if ( bRet )
     {
+        if(::comphelper::UiEventsLogger::isEnabled() && m_xSMGR.is() && m_xDispatcher.is()) //#i88653#
+        {
+            try
+            {
+                css::uno::Reference< css::frame::XModuleManager > xModuleDetection(
+                    m_xSMGR->createInstance(::rtl::OUString::createFromAscii("com.sun.star.frame.ModuleManager")),
+                    css::uno::UNO_QUERY_THROW);
+
+                const ::rtl::OUString sModule = xModuleDetection->identify(m_xDispatcher);
+                css::uno::Sequence<css::beans::PropertyValue> source;
+                ::comphelper::UiEventsLogger::appendDispatchOrigin(source, sModule, ::rtl::OUString::createFromAscii("AcceleratorExecute"));
+                ::comphelper::UiEventsLogger::logDispatch(aURL, source);
+            }
+            catch(const css::uno::Exception&)
+                { }
+        }
         // Note: Such instance can be used one times only and destroy itself afterwards .-)
         AsyncAccelExec* pExec = AsyncAccelExec::createOnShotInstance(xDispatch, aURL);
         pExec->execAsync();

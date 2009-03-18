@@ -97,6 +97,7 @@ namespace
         abbrs[OUString::createFromAscii("ToolbarsMenuController")] = OUString::createFromAscii("15");
         abbrs[OUString::createFromAscii("SfxToolBoxControl")] = OUString::createFromAscii("16");
         abbrs[OUString::createFromAscii("SfxAsyncExec")] = OUString::createFromAscii("17");
+        abbrs[OUString::createFromAscii("AcceleratorExecute")] = OUString::createFromAscii("18");
     };
 }
 
