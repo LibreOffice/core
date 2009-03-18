@@ -1007,7 +1007,7 @@ void PrintProgressDialog::setProgress( int i_nCurrent, int i_nMax )
     maText.SetText( aNewText );
 
     // update progress
-    Invalidate( INVALIDATE_UPDATE | INVALIDATE_CHILDREN );
+    Invalidate( maProgressRect, INVALIDATE_UPDATE );
 }
 
 void PrintProgressDialog::tick()
