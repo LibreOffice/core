@@ -903,7 +903,7 @@ copyright = "2002-2009 by Henrik Just"
 vendor = "Henrik Just"
 description = "Writer2LaTeX"
 destpath = "/opt"
-packageversion = "0.5.2"
+packageversion = "%PACKAGEVERSION"
 End
 
 Start
