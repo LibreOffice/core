@@ -187,7 +187,7 @@ namespace vcl
         PrintProgressDialog( Window* i_pParent, int i_nMax );
         ~PrintProgressDialog();
 
-        void isCanceled();
+        bool isCanceled() const { return mbCanceled; }
         void setProgress( int i_nCurrent, int i_nMax = -1 );
         void tick();
 

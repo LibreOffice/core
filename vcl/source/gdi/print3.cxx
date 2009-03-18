@@ -395,6 +395,9 @@ void PrinterListener::printFilteredPage( int i_nPage )
     // update progress if necessary
     if( mpImplData->mpProgress )
     {
+        // do nothing if printing is canceled
+        if( mpImplData->mpProgress->isCanceled() )
+           return;
         mpImplData->mpProgress->tick();
         Application::Reschedule( true );
     }
@@ -411,16 +414,65 @@ void PrinterListener::printFilteredPage( int i_nPage )
 
     mpImplData->mpPrinter->EnableOutput( FALSE );
 
-    GDIMetaFile aMtf;
-    aMtf.Record( mpImplData->mpPrinter.get() );
+    GDIMetaFile aPageFile;
+    aPageFile.Record( mpImplData->mpPrinter.get() );
 
     printPage( i_nPage );
 
-    aMtf.Stop();
-    aMtf.WindStart();
+    aPageFile.Stop();
+    aPageFile.WindStart();
     mpImplData->mpPrinter->Pop();
 
-    // FIXME: do transparency filtering here when vcl92 is integrated
+    ULONG nRestoreDrawMode = mpImplData->mpPrinter->GetDrawMode();
+    sal_Int32 nMaxBmpDPIX = mpImplData->mpPrinter->ImplGetDPIX();
+    sal_Int32 nMaxBmpDPIY = mpImplData->mpPrinter->ImplGetDPIY();
+
+    const PrinterOptions&   rPrinterOptions = mpImplData->mpPrinter->GetPrinterOptions();
+
+    static const sal_Int32 OPTIMAL_BMP_RESOLUTION = 300;
+    static const sal_Int32 NORMAL_BMP_RESOLUTION  = 200;
+
+
+    if( rPrinterOptions.IsReduceBitmaps() )
+    {
+        // calculate maximum resolution for bitmap graphics
+        if( PRINTER_BITMAP_OPTIMAL == rPrinterOptions.GetReducedBitmapMode() )
+        {
+            nMaxBmpDPIX = std::min( sal_Int32(OPTIMAL_BMP_RESOLUTION), nMaxBmpDPIX );
+            nMaxBmpDPIY = std::min( sal_Int32(OPTIMAL_BMP_RESOLUTION), nMaxBmpDPIY );
+        }
+        else if( PRINTER_BITMAP_NORMAL == rPrinterOptions.GetReducedBitmapMode() )
+        {
+            nMaxBmpDPIX = std::min( sal_Int32(NORMAL_BMP_RESOLUTION), nMaxBmpDPIX );
+            nMaxBmpDPIY = std::min( sal_Int32(NORMAL_BMP_RESOLUTION), nMaxBmpDPIY );
+        }
+        else
+        {
+            nMaxBmpDPIX = std::min( sal_Int32(rPrinterOptions.GetReducedBitmapResolution()), nMaxBmpDPIX );
+            nMaxBmpDPIY = std::min( sal_Int32(rPrinterOptions.GetReducedBitmapResolution()), nMaxBmpDPIY );
+        }
+    }
+
+    // convert to greysacles
+    if( rPrinterOptions.IsConvertToGreyscales() )
+    {
+        mpImplData->mpPrinter->SetDrawMode( mpImplData->mpPrinter->GetDrawMode() |
+                                            ( DRAWMODE_GRAYLINE | DRAWMODE_GRAYFILL | DRAWMODE_GRAYTEXT |
+                                              DRAWMODE_GRAYBITMAP | DRAWMODE_GRAYGRADIENT ) );
+    }
+
+    // disable transparency output
+    if( rPrinterOptions.IsReduceTransparency() && ( PRINTER_TRANSPARENCY_NONE == rPrinterOptions.GetReducedTransparencyMode() ) )
+    {
+        mpImplData->mpPrinter->SetDrawMode( mpImplData->mpPrinter->GetDrawMode() | DRAWMODE_NOTRANSPARENCY );
+    }
+
+    GDIMetaFile aCleanedFile;
+    mpImplData->mpPrinter->RemoveTransparenciesFromMetaFile( aPageFile, aCleanedFile, nMaxBmpDPIX, nMaxBmpDPIY,
+                                                             rPrinterOptions.IsReduceTransparency(),
+                                                             rPrinterOptions.GetReducedTransparencyMode() == PRINTER_TRANSPARENCY_AUTO,
+                                                             rPrinterOptions.IsReduceBitmaps() && rPrinterOptions.IsReducedBitmapIncludesTransparency()
+                                                             );
 
     mpImplData->mpPrinter->EnableOutput( TRUE );
 
@@ -429,11 +481,13 @@ void PrinterListener::printFilteredPage( int i_nPage )
 
     mpImplData->mpPrinter->Push();
     mpImplData->mpPrinter->SetMapMode( MAP_100TH_MM );
-    aMtf.WindStart();
-    aMtf.Play( mpImplData->mpPrinter.get() );
+    aCleanedFile.WindStart();
+    aCleanedFile.Play( mpImplData->mpPrinter.get() );
     mpImplData->mpPrinter->Pop();
 
     mpImplData->mpPrinter->EndPage();
+
+    mpImplData->mpPrinter->SetDrawMode( nRestoreDrawMode );
 }
 
 void PrinterListener::jobFinished()
