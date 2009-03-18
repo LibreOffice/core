@@ -176,7 +176,9 @@ namespace vcl
         bool                mbCanceled;
         int                 mnCur;
         int                 mnMax;
+        long                mnProgressHeight;
         Rectangle           maProgressRect;
+        bool                mbNativeProgress;
 
         DECL_LINK( ClickHdl, Button* );
 
