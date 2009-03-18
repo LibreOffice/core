@@ -45,10 +45,11 @@ namespace
 {
     using namespace oooimprovement;
 
-    static const OUString CFG_FAILEDATTEMPTS = OUString::createFromAscii("FailedAttempts");
     static const OUString CFG_COUNTERS = OUString::createFromAscii("Counters");
+    static const OUString CFG_ENABLINGALLOWED = OUString::createFromAscii("EnablingAllowed");
     static const OUString CFG_EVENTSCOUNT = OUString::createFromAscii("LoggedEvents");
     static const OUString CFG_EXTENSION = OUString::createFromAscii("ooSetupExtension");
+    static const OUString CFG_FAILEDATTEMPTS = OUString::createFromAscii("FailedAttempts");
     static const OUString CFG_INVACCEPT = OUString::createFromAscii("InvitationAccepted");
     static const OUString CFG_L10N = OUString::createFromAscii("L10N");
     static const OUString CFG_LOCALE = OUString::createFromAscii("ooLocale");
@@ -60,9 +61,9 @@ namespace
     static const OUString CFG_OOOIMPROVEMENTPACK = OUString::createFromAscii("/org.openoffice.Office.OOoImprovement.Settings");
     static const OUString CFG_PARTICIPATION = OUString::createFromAscii("Participation");
     static const OUString CFG_PRODUCT = OUString::createFromAscii("Product");
-    static const OUString CFG_SETUP = OUString::createFromAscii("/org.openoffice.Setup");
     static const OUString CFG_REPORTCOUNT = OUString::createFromAscii("UploadedReports");
     static const OUString CFG_REPORTEREMAIL = OUString::createFromAscii("ReporterEmail");
+    static const OUString CFG_SETUP = OUString::createFromAscii("/org.openoffice.Setup");
     static const OUString CFG_SHOWEDINV = OUString::createFromAscii("ShowedInvitation");
     static const OUString CFG_SOAPIDADD = OUString::createFromAscii("SoapIdAdditions");
     static const OUString CFG_SOAPURL = OUString::createFromAscii("SoapUrl");
@@ -144,6 +145,16 @@ namespace oooimprovement
         return result;
     }
 
+    bool Config::getEnablingAllowed()
+    {
+        bool result = false;
+        MyConfigurationHelper::readDirectKey(
+            m_ServiceFactory,
+            CFG_LOGGING, CFG_OOOIMPROVEMENT, CFG_ENABLINGALLOWED,
+            MyConfigurationHelper::E_READONLY) >>= result;
+        return result;
+    }
+
     bool Config::getInvitationAccepted()
     {
        bool result = false;
@@ -174,12 +185,14 @@ namespace oooimprovement
             MyConfigurationHelper::E_READONLY) >>= value;
         result.append(value);
 
+        value = OUString::createFromAscii("");
         MyConfigurationHelper::readDirectKey(
             m_ServiceFactory,
             CFG_SETUP, CFG_PRODUCT, CFG_VERSION,
             MyConfigurationHelper::E_READONLY) >>= value;
         if(value.getLength()) result.appendAscii(" ").append(value);
 
+        value = OUString::createFromAscii("");
         MyConfigurationHelper::readDirectKey(
             m_ServiceFactory,
             CFG_SETUP, CFG_PRODUCT, CFG_EXTENSION,

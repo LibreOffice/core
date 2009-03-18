@@ -79,10 +79,13 @@ PACKAGEDIR=$(subst,.,$/ $(PACKAGE))
 SPOOLDIR=$(MISC)$/registry$/spool
 
 XCUFILES= \
-    Jobs.xcu
+    Jobs.xcu \
+    Logging.xcu
 
 MYXCUFILES= \
-    $(SPOOLDIR)$/$(PACKAGEDIR)$/Jobs$/Jobs-oooimprovement.xcu
+    $(SPOOLDIR)$/$(PACKAGEDIR)$/Jobs$/Jobs-oooimprovement.xcu \
+    $(SPOOLDIR)$/$(PACKAGEDIR)$/Logging$/Logging-oooimprovement.xcu
+
 
 # --- Targets ---
 
@@ -96,3 +99,6 @@ $(SPOOLDIR)$/$(PACKAGEDIR)$/Jobs$/Jobs-oooimprovement.xcu : $(XCU_SOURCEDIR)$/Jo
     @-$(MKDIRHIER) $(@:d)
     @$(COPY) $< $@
 
+$(SPOOLDIR)$/$(PACKAGEDIR)$/Logging$/Logging-oooimprovement.xcu : $(XCU_SOURCEDIR)$/Logging.xcu
+    @-$(MKDIRHIER) $(@:d)
+    @$(COPY) $< $@

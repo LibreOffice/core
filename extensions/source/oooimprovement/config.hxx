@@ -43,6 +43,7 @@ namespace oooimprovement
     {
         public:
             Config(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& sf);
+            bool getEnablingAllowed();
             bool getInvitationAccepted();
             bool getShowedInvitation();
             const ::rtl::OUString getCompleteProductname();

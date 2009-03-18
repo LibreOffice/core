@@ -127,9 +127,9 @@ namespace {
         ZeroMemory(&info, sizeof(OSVERSIONINFO));
         info.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
         GetVersionEx(&info);
-        OStringBuffer result =
+        OStringBuffer result = OString(
             "<systeminfo:systeminfo xmlns:systeminfo=\"http://openoffice.org/2002/systeminfo\">\n"
-            "<systeminfo:System name=\"";
+            "<systeminfo:System name=\"");
         if(VER_PLATFORM_WIN32_NT == info.dwPlatformId)
             result.append(OString("Windows NT"));
         else

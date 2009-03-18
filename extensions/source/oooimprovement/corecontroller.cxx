@@ -59,7 +59,7 @@ namespace oooimprovement
     sal_Bool SAL_CALL CoreController::enablingUiEventsLoggerAllowed(sal_Int16 version) throw(RuntimeException)
     {
         Config config(m_ServiceFactory);
-        if(version==1 && config.getShowedInvitation() && config.getInvitationAccepted())
+        if(version==1 && config.getEnablingAllowed() && config.getShowedInvitation() && config.getInvitationAccepted())
             return true;
         return false;
     }
@@ -67,7 +67,7 @@ namespace oooimprovement
     sal_Bool SAL_CALL CoreController::showBuiltinOptionsPage(sal_Int16 version) throw(RuntimeException)
     {
         Config config(m_ServiceFactory);
-        if(version==1 && config.getShowedInvitation())
+        if(version==1 && config.getEnablingAllowed())
             return true;
         return false;
     }
