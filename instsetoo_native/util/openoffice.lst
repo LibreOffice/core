@@ -21,6 +21,7 @@ Globals
 			UREPACKAGEPREFIX openoffice.org
 			SOLSUREPACKAGEPREFIX openofficeorg
 			USE_FILEVERSION 1
+			LIBRARYVERSION 9.2.0
             POOLPRODUCT 1
             REGISTRATION_HOST https://registration2.services.openoffice.org/RegistrationWeb
 			REGISTRATIONURL http://survey.services.openoffice.org/user/index.php
