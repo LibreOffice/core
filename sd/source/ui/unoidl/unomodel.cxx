@@ -110,9 +110,6 @@
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 
-#include "unomodel.hrc"
-#include "tools/resary.hxx"
-
 using ::rtl::OUString;
 
 #include <drawinglayer/primitive2d/structuretagprimitive2d.hxx>
@@ -123,108 +120,6 @@ using namespace ::cppu;
 using namespace ::com::sun::star;
 
 extern uno::Reference< uno::XInterface > SdUnoCreatePool( SdDrawDocument* pDrawModel );
-
-///////////////////////////////////////////////////////////////////////
-
-struct PrintOptControl
-{
-    sal_Int32       nResId;
-    const char*     pType;
-    const char*     pProperty;
-    sal_Int32       nChoiceResId;
-    const char*     pHelpId;
-    int             nInitVal; // for bool values: 0, 1; for choices list entry number
-
-};
-
-static struct PrintOptControl aImpressCtrls[] =
-{
-    { STR_IMPRESS_PRINT_UI_PRINT_CONTENT, "Group", NULL, 0, NULL, 0 },
-    { STR_IMPRESS_PRINT_UI_CONTENT, "List", "PageContentType", STR_IMPRESS_PRINT_UI_CONTENT_CHOICES, NULL, 0 },
-    { STR_IMPRESS_PRINT_UI_SLIDESPERPAGE, "List", "SlidesPerPage", STR_IMPRESS_PRINT_UI_SLIDESPERPAGE_CHOICES, NULL, 4 },
-    { STR_IMPRESS_PRINT_UI_ORDER, "Radio", "SlidesPerPageOrder", STR_IMPRESS_PRINT_UI_ORDER_CHOICES, NULL, 0 },
-    { STR_IMPRESS_PRINT_UI_INCLUDE_CONTENT, "Subgroup", NULL, 0, NULL, 0 },
-    { STR_IMPRESS_PRINT_UI_DRAWING, "Bool", "PrintDrawing", 0, NULL, 1 },
-    { STR_IMPRESS_PRINT_UI_NOTES, "Bool", "PrintNotes", 0, NULL, 0 },
-    { STR_IMPRESS_PRINT_UI_HANDOUTS, "Bool", "PrintHandouts", 0, NULL, 0 },
-    { STR_IMPRESS_PRINT_UI_OUTLINE, "Bool", "PrintOutline", 0, NULL, 0 }
-};
-
-class PrintOptionsResource : public Resource
-{
-    uno::Sequence< beans::PropertyValue > maProps;
-public:
-    PrintOptionsResource( const ResId& i_rResId, const PrintOptControl* i_pControls, int i_nControls );
-    ~PrintOptionsResource() {}
-
-    const uno::Sequence< beans::PropertyValue >& getUIProps() const
-    { return maProps; }
-};
-
-PrintOptionsResource::PrintOptionsResource( const ResId& i_rResId, const PrintOptControl* i_pControls, int i_nControls )
-: Resource( i_rResId ),
-  maProps( i_nControls )
-{
-    for( int n = 0; n < i_nControls; n++ )
-    {
-        uno::Sequence< beans::PropertyValue > aCtrl( 5 );
-        int nUsed = 0;
-        beans::PropertyValue aVal;
-
-        aCtrl[ nUsed ].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Text" ) );
-        String aText( SdResId( i_pControls[ n ].nResId ) );
-        aCtrl[ nUsed ].Value = uno::makeAny( rtl::OUString( aText ) );
-        nUsed++;
-        aCtrl[ nUsed ].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ControlType" ) );
-        aCtrl[ nUsed ].Value = uno::makeAny( rtl::OUString::createFromAscii( i_pControls[n].pType ) );
-        nUsed++;
-        if( i_pControls[n].nChoiceResId )
-        {
-            ResStringArray aChoiceStrings( SdResId( i_pControls[n].nChoiceResId ) );
-            uno::Sequence< rtl::OUString > aChoices( aChoiceStrings.Count() );
-            for( sal_uInt32 m = 0; m < aChoiceStrings.Count(); m++ )
-                aChoices[ m ] = aChoiceStrings.GetString( m );
-            aCtrl[ nUsed ].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Choices" ) );
-            aCtrl[ nUsed ].Value = uno::makeAny( aChoices );
-
-            // set value of our property
-            aVal.Value = uno::makeAny( rtl::OUString( aChoiceStrings.GetString( i_pControls[n].nInitVal ) ) );
-            nUsed++;
-        }
-        else
-            aVal.Value = uno::makeAny( static_cast<sal_Bool>(i_pControls[n].nInitVal) );
-        if( i_pControls[n].pProperty )
-        {
-            aCtrl[ nUsed ].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Property" ) );
-            aVal.Name = rtl::OUString::createFromAscii( i_pControls[n].pProperty );
-            aCtrl[ nUsed ].Value = uno::makeAny( aVal );
-            nUsed++;
-        }
-        if( i_pControls[n].pHelpId )
-        {
-            aCtrl[ nUsed ].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HelpId" ) );
-            aCtrl[ nUsed ].Value = uno::makeAny( rtl::OUString::createFromAscii( i_pControls[n].pHelpId ) );
-            nUsed++;
-        }
-        aCtrl.realloc( nUsed );
-        maProps[ n ].Value = uno::makeAny( aCtrl );
-    }
-
-    FreeResource();
-}
-
-static void appendPrintUIOptions( uno::Sequence< beans::PropertyValue >& rOpt )
-{
-    PrintOptionsResource aImpressRes( SdResId( STR_IMPRESS_PRINT_UI_OPTIONS ),
-                                      aImpressCtrls, sizeof( aImpressCtrls )/sizeof( aImpressCtrls[0] ) );
-    // append to sequence
-    sal_Int32 nPos = rOpt.getLength();
-    rOpt.realloc( nPos + 1 );
-    rOpt[ nPos ].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ExtraPrintUIOptions" ) );
-    rOpt[ nPos ].Value = uno::makeAny( aImpressRes.getUIProps() );
-}
-
-///////////////////////////////////////////////////////////////////////
 
 class SdUnoForbiddenCharsTable : public SvxUnoForbiddenCharsTable,
                                  public SfxListener
@@ -1612,13 +1507,10 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SdXImpressDocument::getRenderer( 
         throw lang::DisposedException();
 
     sal_Bool bExportNotesPages = sal_False;
-    sal_Bool bGetPrintUIOptions = sal_False;
     for( sal_Int32 nProperty = 0, nPropertyCount = rxOptions.getLength(); nProperty < nPropertyCount; ++nProperty )
     {
         if( rxOptions[ nProperty ].Name.equalsAscii( "ExportNotesPages" ) )
             rxOptions[ nProperty].Value >>= bExportNotesPages;
-        else if( rxOptions[ nProperty ].Name.equalsAscii( "ExtraPrintUIOptions" ) )
-            bGetPrintUIOptions = sal_True;
     }
     uno::Sequence< beans::PropertyValue > aRenderer;
     if( mpDocShell && mpDoc )
@@ -1638,9 +1530,6 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SdXImpressDocument::getRenderer( 
 
         aRenderer[ 0 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) );
         aRenderer[ 0 ].Value <<= aPageSize;
-
-        if( bGetPrintUIOptions )
-            appendPrintUIOptions( aRenderer );
     }
     return aRenderer;
 }

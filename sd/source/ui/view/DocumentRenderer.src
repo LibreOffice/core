@@ -29,19 +29,19 @@
  ************************************************************************/
 
 #include "app.hrc"
-#include "unomodel.hrc"
+#include "DocumentRenderer.hrc"
 
-Resource STR_IMPRESS_PRINT_UI_OPTIONS
+Resource _STR_IMPRESS_PRINT_UI_OPTIONS
 {
-    String STR_IMPRESS_PRINT_UI_PRINT_CONTENT
+    String _STR_IMPRESS_PRINT_UI_PRINT_CONTENT
     {
         Text [ en-US ] = "Print Content";
     };
-    String STR_IMPRESS_PRINT_UI_CONTENT
+    String _STR_IMPRESS_PRINT_UI_CONTENT
     {
         Text [ en-US ] = "Content";
     };
-    StringArray STR_IMPRESS_PRINT_UI_CONTENT_CHOICES
+    StringArray _STR_IMPRESS_PRINT_UI_CONTENT_CHOICES
     {
         ItemList [ en-US ] =
         {
@@ -51,11 +51,11 @@ Resource STR_IMPRESS_PRINT_UI_OPTIONS
             < "Outline" ; > ;
         };
     };
-    String STR_IMPRESS_PRINT_UI_SLIDESPERPAGE
+    String _STR_IMPRESS_PRINT_UI_SLIDESPERPAGE
     {
         Text [ en-US ] = "Slides per page" ;
     };
-    StringArray STR_IMPRESS_PRINT_UI_SLIDESPERPAGE_CHOICES
+    StringArray _STR_IMPRESS_PRINT_UI_SLIDESPERPAGE_CHOICES
     {
         ItemList [ en-US ] =
         {
@@ -67,11 +67,11 @@ Resource STR_IMPRESS_PRINT_UI_OPTIONS
             < "9" ; > ;
         };
     };
-    String STR_IMPRESS_PRINT_UI_ORDER
+    String _STR_IMPRESS_PRINT_UI_ORDER
     {
         Text [ en-US ] = "Order" ;
     };
-    StringArray STR_IMPRESS_PRINT_UI_ORDER_CHOICES
+    StringArray _STR_IMPRESS_PRINT_UI_ORDER_CHOICES
     {
         ItemList [ en-US ] =
         {
@@ -79,24 +79,70 @@ Resource STR_IMPRESS_PRINT_UI_OPTIONS
             < "Vertical" ; > ;
         };
     };
-    String STR_IMPRESS_PRINT_UI_INCLUDE_CONTENT
+    String _STR_IMPRESS_PRINT_UI_INCLUDE_CONTENT
     {
         Text [ en-US ] = "Include content";
     };
-    String STR_IMPRESS_PRINT_UI_DRAWING
+    String _STR_IMPRESS_PRINT_UI_IS_PRINT_NAME
     {
-        Text [ en-US ] = "Drawing";
+        Text [ en-US ] = "Page name";
     };
-    String STR_IMPRESS_PRINT_UI_NOTES
+    String _STR_IMPRESS_PRINT_UI_IS_PRINT_DATE
     {
-        Text [ en-US ] = "Notes";
+        Text [ en-US ] = "Date";
     };
-    String STR_IMPRESS_PRINT_UI_HANDOUTS
+    String _STR_IMPRESS_PRINT_UI_IS_PRINT_TIME
     {
-        Text [ en-US ] = "Handouts";
+        Text [ en-US ] = "Time";
     };
-    String STR_IMPRESS_PRINT_UI_OUTLINE
+    String _STR_IMPRESS_PRINT_UI_IS_PRINT_HIDDEN
     {
-        Text [ en-US ] = "Outline";
+        Text [ en-US ] = "Hidden Pages";
+    };
+
+    String _STR_IMPRESS_PRINT_UI_OUTPUT_OPTIONS_GROUP
+    {
+        Text [ en-US ] = "Output Options";
+    };
+    String _STR_IMPRESS_PRINT_UI_QUALITY
+    {
+        Text [ en-US ] = "Quality";
+    };
+    StringArray _STR_IMPRESS_PRINT_UI_QUALITY_CHOICES
+    {
+        ItemList [ en-US ] =
+        {
+            < "Default" ; > ;
+            < "Grayscale" ; > ;
+            < "Black & White" ; > ;
+        };
+    };
+
+    String _STR_IMPRESS_PRINT_UI_PAGE_OPTIONS
+    {
+        Text [ en-US ] = "Page Options";
+    };
+    StringArray _STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES
+    {
+        ItemList [ en-US ] =
+        {
+            < "Default" ; > ;
+            < "Fit to page" ; > ;
+            < "Tile pages" ; > ;
+            < "Brochure" ; > ;
+        };
+    };
+    String _STR_IMPRESS_PRINT_UI_BROCHURE_FRONT
+    {
+        Text [ en-US ] = "Front";
+    };
+    String _STR_IMPRESS_PRINT_UI_BROCHURE_BACK
+    {
+        Text [ en-US ] = "Back";
+    };
+
+    String _STR_IMPRESS_PRINT_UI_PAPER_TRAY
+    {
+        Text [ en-US ] = "Paper tray from printer settings";
     };
 };

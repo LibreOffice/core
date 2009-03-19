@@ -47,9 +47,6 @@ PRJINC=..$/slidesorter
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
-SRS1NAME=$(TARGET)
-SRC1FILES =\
-    unomodel.src
 
 .IF "$(COM)"=="GCC"
 NOOPTFILES= $(SLO)$/unowcntr.obj
