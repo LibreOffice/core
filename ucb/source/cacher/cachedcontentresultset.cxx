@@ -808,11 +808,12 @@ sal_Bool SAL_CALL CachedContentResultSet
                 aGuard.reacquire();
                 m_nLastAppliedPos += nM;
                 m_bAfterLastApplied = nRow != m_nLastAppliedPos;
-                return nRow == m_nLastAppliedPos;
             }
             else
                 throw rEx;
         }
+
+        return nRow == m_nLastAppliedPos;
     }
     else
         return sal_True;
