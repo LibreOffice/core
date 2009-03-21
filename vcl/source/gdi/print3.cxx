@@ -630,8 +630,8 @@ bool PrinterListener::isUIOptionEnabled( const rtl::OUString& i_rProperty ) cons
                     OSL_ENSURE( pVal, "unknown property in dependency" );
                     if( pVal )
                     {
-                        sal_Int32 nDepVal;
-                        sal_Bool bDepVal;
+                        sal_Int32 nDepVal = 0;
+                        sal_Bool bDepVal = sal_False;
                         if( pVal->Value >>= nDepVal )
                         {
                             bEnabled = (nDepVal == it->second.mnDependsOnEntry);
