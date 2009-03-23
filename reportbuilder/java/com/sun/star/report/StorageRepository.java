@@ -70,6 +70,7 @@ public class StorageRepository implements InputRepository, OutputRepository
     {
         this.input = input;
         this.output = output;
+
     }
 
     public StorageRepository(final XStorage storage, final boolean isOutput)
@@ -118,7 +119,7 @@ public class StorageRepository implements InputRepository, OutputRepository
         }
         try
         {
-            final XStream stream = (XStream) UnoRuntime.queryInterface(XStream.class, output.openStreamElement(name, ElementModes.WRITE | ElementModes.TRUNCATE));
+            final XStream stream = output.openStreamElement(name, ElementModes.WRITE | ElementModes.TRUNCATE);
             stream.getInputStream().closeInput();
             if (mimeType != null)
             {
