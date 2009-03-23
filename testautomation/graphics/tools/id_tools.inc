@@ -979,6 +979,7 @@ function fGetSlideNumber (optional sCompare as integer) as integer
         printlog "If Navigator is not open, opening it now."
         ViewNavigator
     endif
+    WaitSlot (2000)
     printlog "Getting current slide number from navigator."
     fGetSlideNumber = val (right (Liste.GetSelText, 1))
     printlog "fGetSlideNumber has the value " & fGetSlideNumber

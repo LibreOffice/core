@@ -333,6 +333,8 @@ testcase tContextSaveAsPicture
              endif
              hTypeKeys "<DELETE>"
             '/// Open the next file via Insert->Graphics From File ///'
+            call hCloseDocument
+            call hNewDocument
              InsertGraphicsFromFile
              Kontext "GrafikEinfuegenDlg"
              if GrafikEinfuegenDlg.exists(5) then
@@ -622,7 +624,7 @@ testcase tContextSavePictureLinkAsPicture
                                     else
                                        warnlog "Ras should not have been selected when we opened a '" + Filetype + "'-file."
                                     endif
-                       case "wmf" : if (Filetype = "wmf") then
+                       case "wmf" : if (Filetype = "wmf") or (Filetype = "emf") then
                                        printlog "   " + Filetype + " will be saved as Wmf, correct."
                                        SavedFileType = "wmf"
                                        if Filetype = "wmf" then Testsize = true
@@ -780,6 +782,8 @@ testcase tContextSavePictureLinkAsPicture
                 Kontext "DocumentDraw"
              endif
              hTypeKeys "<DELETE>"
+            call hCloseDocument
+            call hNewDocument
             '/// Open the next file via Insert->Graphics From File ///'
              InsertGraphicsFromFile
              Kontext "GrafikEinfuegenDlg"

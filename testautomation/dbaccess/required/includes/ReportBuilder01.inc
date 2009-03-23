@@ -78,12 +78,13 @@ testcase tMainMenuBar
     '/// open the report designer
     call fOpenNewReportDesign
     
-    sleep(10)
+    
         
     '/// check the menu for the right entries
 
  'file menu    
     Kontext "ReportDesign"
+    if ( ReportDesign.exists( 20 ) ) then
         ReportDesign.UseMenu            
         '/// check if there are 10 items in the file menu.
         printlog "check if there are 10 items in the file menu."                
@@ -239,8 +240,12 @@ testcase tMainMenuBar
         call hMenuClose()
         
         
-    '/// close the report designer
-    call fCloseReportDesign
+        '/// close the report designer
+        call fCloseReportDesign
+     
+    else
+        warnlog "The Report Designer did not open within expected timeframe"
+    endif
     '/// close the database
     call fCloseDatabase
     
