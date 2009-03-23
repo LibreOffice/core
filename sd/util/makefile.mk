@@ -55,6 +55,7 @@ RESLIB1SRSFILES=\
     $(SRS)$/animui.srs			\
     $(SRS)$/slideshow.srs		\
     $(SRS)$/uitable.srs			\
+    $(SRS)$/view.srs			\
     $(SOLARCOMMONRESDIR)$/sfx.srs
 
 # --- StarDraw DLL
