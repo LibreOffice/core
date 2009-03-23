@@ -1470,14 +1470,22 @@ function getIdForDatabaseType(sType as String ) as Integer
 
     if (sType = "AdabasD") then        
         ii = 4        
-    elseif (sType = "dBase") then    
-        ii = 6
+    elseif (sType = "dBase") then
+        if gPlatform = "osx" then        
+         ii = 5
+        else    
+         ii = 6
+        endif
     elseif (sType = "Access") then    
         ii = 0
     elseif (sType = "Evolution") then        
         ii = 13
-    elseif (sType = "JDBC") then        
-        ii = 8
+    elseif (sType = "JDBC") then
+        if gPlatform = "osx" then        
+         ii = 7
+        else
+         ii = 8
+        endif
     elseif (sType = "LDAP") then             
         if gPlatGroup = "w95" then        
          ii = 12        
@@ -1496,14 +1504,26 @@ function getIdForDatabaseType(sType as String ) as Integer
         ii = 2
     elseif (sType = "MySQLODBC") then
         ii = 1                    
-    elseif (sType = "ODBC") then        
-        ii = 9
+    elseif (sType = "ODBC") then
+        if gPlatform = "osx" then        
+         ii = 8
+        else
+         ii = 9
+        endif
     elseif (sType = "OracleJDBC") then        
         ii = 3                    
-    elseif (sType = "Spreadsheet") then        
-        ii = 5
+    elseif (sType = "Spreadsheet") then
+        if gPlatform = "osx" then        
+         ii = 4
+        else
+         ii = 5
+        endif
     elseif (sType = "Text") then
-        ii = 7
+        if gPlatform = "osx" then        
+         ii = 6
+        else
+         ii = 7
+        endif 
     elseif (sType = "ADO") then
         ii = 9 ' only 9 because on windows +1 is added at the end
     elseif (sType = "Windows") then ' windows addressbook
