@@ -842,7 +842,7 @@ void ODatabaseDocument::impl_storeToStorage_throw( const Reference< XStorage >& 
         writeStorage( _rxTargetStorage, aWriteArgs );
 
         // commit target storage
-        OSL_VERIFY( m_pImpl->commitStorageIfWriteable_ignoreErrors( _rxTargetStorage ) );
+        OSL_VERIFY( m_pImpl->commitStorageIfWriteable( _rxTargetStorage ) );
     }
     catch( const IOException& ) { throw; }
     catch( const RuntimeException& ) { throw; }

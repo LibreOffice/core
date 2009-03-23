@@ -110,6 +110,10 @@ namespace dbmm
                         const ::rtl::OUString& _rOriginalLibName
                     ) const;
 
+        /** determines whether for the given document, any library needed to be (and was) moved
+        */
+        bool    movedAnyLibrary( const DocumentID );
+
         /** provides a human-readable version of the log, explaining a user what happened during
             the migration.
         */

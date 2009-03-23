@@ -301,7 +301,7 @@ void SAL_CALL ExportDocumentHandler::initialize( const uno::Sequence< uno::Any >
         throw uno::Exception();
 
     m_xDatabaseDataProvider.set(m_xModel->getDataProvider(),uno::UNO_QUERY);
-    if ( !m_xDatabaseDataProvider.is() )
+    if ( !m_xDatabaseDataProvider.is() || !m_xDatabaseDataProvider->getActiveConnection().is() )
         throw uno::Exception();
 
     uno::Reference< reflection::XProxyFactory > xProxyFactory( m_xContext->getServiceManager()->createInstanceWithContext(

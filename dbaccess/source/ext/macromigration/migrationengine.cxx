@@ -1171,10 +1171,13 @@ namespace dbmm
         // -----------------
         // clean up
         // store the sub document, including removal of the (now obsolete) "Scripts" sub folder
-        bSuccess =  bSuccess
-                &&  ScriptsStorage::removeFromDocument( aSubDocument.xDocument, m_rLogger )
-                &&  lcl_commitDocumentStorage_nothrow( aSubDocument.xDocument, m_rLogger )
-                &&  lcl_storeEmbeddedDocument_nothrow( aSubDocument );
+        if ( m_rLogger.movedAnyLibrary( m_nCurrentDocumentID ) )
+        {
+            bSuccess =  bSuccess
+                    &&  ScriptsStorage::removeFromDocument( aSubDocument.xDocument, m_rLogger )
+                    &&  lcl_commitDocumentStorage_nothrow( aSubDocument.xDocument, m_rLogger )
+                    &&  lcl_storeEmbeddedDocument_nothrow( aSubDocument );
+        }
 
         // unload in any case, even if we were not successful
         bSuccess =  lcl_unloadSubDocument_nothrow( aSubDocument, m_rLogger )
