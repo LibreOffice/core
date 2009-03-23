@@ -30,6 +30,7 @@
 
 package org.openoffice.setup.Util;
 
+import org.openoffice.setup.InstallData;
 import org.openoffice.setup.SetupData.PackageDescription;
 import java.util.Enumeration;
 import java.util.Vector;
@@ -81,6 +82,62 @@ public class PackageCollector {
             collectUninstallPackages(child, allPackages);
         }
     }
+
+    // Special handling for packages, that change their name, and therefore need to be uninstalled
+
+    // static public void findOldPackages( InstallData installData ) {
+    //
+    //    String basis = "ooobasis3";
+    //    if ( installData.getOSType().equalsIgnoreCase("Linux") ) { basis = basis + "."; }
+    //    String search = basis + installData.getProductMinor();
+
+    //    Vector allPackages = installData.getInstallPackages();
+    //    Vector oldPackages = new Vector();
+
+    //    for (int i = 0; i < allPackages.size(); i++) {
+    //        PackageDescription packageData = (PackageDescription) allPackages.get(i);
+    //        int pos = packageData.getPackageName().indexOf(search);
+
+    //        if ( pos > -1 ) {
+    //            String substring = packageData.getPackageName().substring(pos, pos + 1);
+    //            for (int j = 0; j < installData.getProductMinor(); j++) {
+    //                String replace = basis + j;
+    //                // Creating new package for removal, very simple PackageDescription
+    //                PackageDescription localPackage = new PackageDescription();
+    //                localPackage.setUninstallCanFail(true);
+    //                localPackage.setIsRelocatable(packageData.isRelocatable());
+    //                String localName = packageData.getPackageName();
+    //                localName = localName.replace(search, replace);
+    //                localPackage.setPackageName(localName);
+
+    //                if ( ( packageData.getPkgRealName() != null ) && ( ! packageData.getPkgRealName().equals("") )) {
+    //                    localName = packageData.getPkgRealName();
+    //                    localName = localName.replace(search, replace);
+    //                    localPackage.setPkgRealName(localName);
+    //                }
+
+    //                if (( packageData.getName() != null ) && ( ! packageData.getName().equals("") )) {
+    //                    localName = packageData.getName();
+    //                    localName = localName.replace(search, replace);
+    //                    localPackage.setName(localName);
+    //                }
+
+    //                oldPackages.add(localPackage);
+    //            }
+    //        }
+    //    }
+
+    //    // reverse order for uninstallation
+    //    int number = oldPackages.size();
+    //    for (int i = 0; i < number; i++) {
+    //        if ( i > 0 ) {
+    //            PackageDescription oldPackageData = (PackageDescription) oldPackages.remove(i);
+    //            oldPackages.add(0,oldPackageData);
+    //        }
+    //    }
+
+    //    installData.setOldPackages(oldPackages);
+    // }
 
     static public void sortPackages(Vector allPackages, Vector sortedPackages, String mode) {
         for (int i = 0; i < allPackages.size(); i++) {

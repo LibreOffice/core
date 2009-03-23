@@ -71,11 +71,13 @@ public class InstallData
     static private boolean olderVersionExists = false;
     static private boolean sameVersionExists = false;
     static private boolean newerVersionExists = false;
+    static private boolean majorUpgrade = false;
     static private boolean isMultiLingual = false;
     static private boolean dontUpdate = false;
     static private boolean hideEula = false;
     static private boolean databaseQueried = false;
     static private boolean useRtl = false;
+    static private boolean installedProductMinorSet = false;
     static private String installType;            /* custom or typical installation */
     static private String osType;                 /* Linux, SunOS, ...              */
     static private String installDir = null;
@@ -87,7 +89,9 @@ public class InstallData
     static private String packagePath = null;
     static private String packageSubdir = "packages";
     static private String adminFileNameReloc = null;
+    static private String adminFileNameRelocNoDepends = null;
     static private String adminFileNameNoReloc = null;
+    static private String adminFileNameNoRelocNoDepends = null;
     static private String databasePath = null;
     static private String getUidPath = null;
     static private String installationPrivileges = null;
@@ -97,6 +101,8 @@ public class InstallData
     static private String uninstallDirName = "uninstalldata";
     static private int availableDiscSpace = 0;
     static private int preselectedLanguages = 0;
+    static private int productMinor = 0;
+    static private int installedProductMinor = 0;
     static private File jarFilePath = null;
     static private File resourceRoot;
     static private File infoRoot;
@@ -105,6 +111,7 @@ public class InstallData
     static private PackageDescription updatePackage = null;
     static private Vector removeFiles = new Vector();  /* Files to remove, if installation is aborted */
     static private Vector installPackages = new Vector();
+    static private Vector oldPackages = new Vector();
     static private Vector systemLanguages = new Vector();
 
     public static InstallData getInstance()
@@ -290,6 +297,22 @@ public class InstallData
         productDir = dir;
     }
 
+    public int getProductMinor() {
+        return productMinor;
+    }
+
+    public void setProductMinor(int minor) {
+        productMinor = minor;
+    }
+
+    public int getInstalledProductMinor() {
+        return installedProductMinor;
+    }
+
+    public void setInstalledProductMinor(int minor) {
+        installedProductMinor = minor;
+    }
+
     public String getInstallDirName() {
         return installDirName;
     }
@@ -389,12 +412,28 @@ public class InstallData
         adminFileNameReloc = fileName;
     }
 
+    public String getAdminFileNameRelocNoDepends() {
+        return adminFileNameRelocNoDepends;
+    }
+
+    public void setAdminFileNameRelocNoDepends(String fileName) {
+        adminFileNameRelocNoDepends = fileName;
+    }
+
     public String getAdminFileNameNoReloc() {
         return adminFileNameNoReloc;
     }
 
     public void setAdminFileNameNoReloc(String fileName) {
         adminFileNameNoReloc = fileName;
+    }
+
+    public String getAdminFileNameNoRelocNoDepends() {
+        return adminFileNameNoRelocNoDepends;
+    }
+
+    public void setAdminFileNameNoRelocNoDepends(String fileName) {
+        adminFileNameNoRelocNoDepends = fileName;
     }
 
     public String getGetUidPath() {
@@ -565,6 +604,14 @@ public class InstallData
         olderVersionExists = exists;
     }
 
+    public boolean isMajorUpgrade() {
+        return majorUpgrade;
+    }
+
+    public void setMajorUpgrade(boolean upgrade) {
+        majorUpgrade = upgrade;
+    }
+
     public boolean sameVersionExists() {
         return sameVersionExists;
     }
@@ -595,6 +642,14 @@ public class InstallData
 
     public void setHideEula(boolean value) {
         hideEula = value;
+    }
+
+    public boolean installedProductMinorSet() {
+        return installedProductMinorSet;
+    }
+
+    public void setInstalledProductMinorSet(boolean value) {
+        installedProductMinorSet = value;
     }
 
     public boolean databaseQueried() {
@@ -635,6 +690,14 @@ public class InstallData
 
     public void setInstallPackages(Vector packages) {
         installPackages = packages;
+    }
+
+    public Vector getOldPackages() {
+        return oldPackages;
+    }
+
+    public void setOldPackages(Vector packages) {
+        oldPackages = packages;
     }
 
     public Vector getSystemLanguages() {

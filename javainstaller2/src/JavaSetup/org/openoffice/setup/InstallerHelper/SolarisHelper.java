@@ -108,7 +108,7 @@ public class SolarisHelper {
         }
     }
 
-    private Vector getAdminFileContent(boolean relocatable) {
+    private Vector getAdminFileContent(boolean relocatable, boolean rdepends) {
 
         Vector adminFile = new Vector();
         InstallData data = InstallData.getInstance();
@@ -151,6 +151,7 @@ public class SolarisHelper {
 
         // String rdependLine = "rdepend=nocheck";
         String rdependLine = "rdepend=quit";
+        if ( ! rdepends ) { rdependLine = "rdepend=nocheck"; }
         if ( data.isUserInstallation() ) { rdependLine = "rdepend=nocheck"; }
         adminFile.add(rdependLine);
 
@@ -268,25 +269,41 @@ public class SolarisHelper {
         return databasePath;
     }
 
-    public void createAdminFile(boolean relocatable) {
+    public void createAdminFile(boolean relocatable, boolean rdepends) {
         InstallData data = InstallData.getInstance();
         Vector removeFiles = data.getRemoveFiles();
         String adminFileName = "";
 
         if ( relocatable ) {
-            adminFileName = "adminFileReloc";
+            if ( rdepends ) {
+                adminFileName = "adminFileReloc";
+            } else {
+                adminFileName = "adminFileRelocNoDepends";
+            }
         } else {
-            adminFileName = "adminFileNoReloc";
+            if ( rdepends ) {
+                adminFileName = "adminFileNoReloc";
+            } else {
+                adminFileName = "adminFileNoRelocNoDepends";
+            }
         }
 
-        Vector fileContent = getAdminFileContent(relocatable);
+        Vector fileContent = getAdminFileContent(relocatable, rdepends);
         File adminFile = new File(data.getInstallDir(), adminFileName);
         String completeAdminFileName = adminFile.getPath();
 
         if ( relocatable ) {
-            data.setAdminFileNameReloc(completeAdminFileName);
+            if ( rdepends ) {
+                data.setAdminFileNameReloc(completeAdminFileName);
+            } else {
+                data.setAdminFileNameRelocNoDepends(completeAdminFileName);
+            }
         } else {
-            data.setAdminFileNameNoReloc(completeAdminFileName);
+            if ( rdepends ) {
+                data.setAdminFileNameNoReloc(completeAdminFileName);
+            } else {
+                data.setAdminFileNameNoRelocNoDepends(completeAdminFileName);
+            }
         }
 
         if ( ! adminFile.exists() ) {
@@ -329,6 +346,24 @@ public class SolarisHelper {
         }
 
         return versionString;
+    }
+
+    public int getInstalledMinor(String version) {
+
+        int minor = 0;
+
+        int pos = version.indexOf(".");
+        if ( pos > -1 ) {
+            String reduced = version.substring(pos + 1, version.length());
+
+            pos = reduced.indexOf(".");
+            if ( pos > -1 ) {
+                reduced = reduced.substring(0, pos);
+                minor = Integer.parseInt(reduced);
+            }
+        }
+
+        return minor;
     }
 
     public boolean comparePackageVersions(String firstPackageVersion, String secondPackageVersion) {

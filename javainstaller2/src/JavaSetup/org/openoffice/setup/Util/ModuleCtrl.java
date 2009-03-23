@@ -180,10 +180,16 @@ public class ModuleCtrl {
                 // System.err.println("Setting allChildrenHidden for module " + packageData.getName() );
             }
 
-            // System.err.println("Setting " + packageData.getName() + " to " + packageData.getSelectionState() );
-            packageData.setSelectionState(state);
+            // If older version exist, only modules without packages shall be updated,
+            // because all packages are already determined by querying the database.
+            if ( installdata.olderVersionExists() ) {
+                if ( packageData.getPackageName().equals("") ) {
+                    packageData.setSelectionState(state);
+                }
+            } else {
+                packageData.setSelectionState(state);
+            }
         }
-
     }
 
     static public void setHiddenModuleSettingsInstall(PackageDescription packageData) {
@@ -406,6 +412,18 @@ public class ModuleCtrl {
         for (Enumeration e = packageData.children(); e.hasMoreElements(); ) {
             PackageDescription child = (PackageDescription) e.nextElement();
             setShowInUserInstallFlags(child);
+        }
+    }
+
+    static public void setForcedUpdateProductSettings(PackageDescription packageData) {
+
+        if ( packageData.forceIntoUpdate() ) {
+            packageData.setSelectionState(PackageDescription.INSTALL);
+        }
+
+        for (Enumeration e = packageData.children(); e.hasMoreElements(); ) {
+            PackageDescription child = (PackageDescription) e.nextElement();
+            setForcedUpdateProductSettings(child);
         }
     }
 
@@ -721,6 +739,50 @@ public class ModuleCtrl {
                 }
             } else {
                 packageData.setSelectionState(PackageDescription.DONT_INSTALL);
+                // Special handling for Major Upgrade
+                if ( data.isMajorUpgrade() ) {
+                    String basis = "ooobasis3";
+                    if ( data.getOSType().equalsIgnoreCase("Linux") ) { basis = basis + "."; }
+                    String search = basis + data.getProductMinor();
+                    String replacestring = basis + data.getInstalledProductMinor();
+                    int pos = packageData.getPackageName().indexOf(search);
+                    if ( pos > -1  ) {
+                        // Check if this package is installed with a lower product minor
+                        // Creating new package for removal, very simple PackageDescription
+                        PackageDescription localPackage = new PackageDescription();
+                        localPackage.setUninstallCanFail(true);
+                        localPackage.setIsRelocatable(packageData.isRelocatable());
+                        String localName = packageData.getPackageName();
+                        localName = localName.replace(search, replacestring);
+                        localPackage.setPackageName(localName);
+
+                        if ( ( packageData.getPkgRealName() != null ) && ( ! packageData.getPkgRealName().equals("") )) {
+                            localName = packageData.getPkgRealName();
+                            localName = localName.replace(search, replacestring);
+                            localPackage.setPkgRealName(localName);
+                        }
+
+                        if (( packageData.getName() != null ) && ( ! packageData.getName().equals("") )) {
+                            localName = packageData.getName();
+                            localName = localName.replace(search, replacestring);
+                            localPackage.setName(localName);
+                        }
+
+                        // saving also the order, needed for order of uninstallation
+                        localPackage.setOrder(packageData.getOrder());
+
+                        // If the old package is installed, the new package can be installed, too,
+                        // and the old package can be marked for removal (with dependency check).
+                        if ( installer.isPackageInstalled(localPackage, data) ) {
+                            packageData.setSelectionState(PackageDescription.INSTALL);
+
+                            // Collecting all installed older packages for uninstallation
+                            Vector oldPackages = data.getOldPackages();
+                            oldPackages.add(localPackage);
+                            data.setOldPackages(oldPackages);
+                        }
+                    }
+                }
             }
         }
 
@@ -841,6 +903,13 @@ public class ModuleCtrl {
                 Dumper.logModuleStates(packageData, "ChooseDirectory: After setUpdateOlderProductSettings");
             }
 
+            // Setting packages that are forced into update, because they did not exist in older version.
+            ModuleCtrl.setForcedUpdateProductSettings(packageData);
+
+            if ( data.logModuleStates() ) {
+                Dumper.logModuleStates(packageData, "ChooseDirectory: After setForcedUpdateProductSettings");
+            }
+
             // Setting required root module packages (that are new in the update product).
             ModuleCtrl.setRequiredNewCoreModules(packageData, data);
 
@@ -869,6 +938,13 @@ public class ModuleCtrl {
                 if ( data.logModuleStates() ) {
                     Dumper.logModuleStates(packageData, "ChooseDirectory: After setShowInUserInstallOnlyFlags");
                 }
+            }
+
+            // Setting parent module settings. Only required for displaying correct module settings before starting installation.
+            ModuleCtrl.setParentDefaultModuleSettings(packageData);
+
+            if ( data.logModuleStates() ) {
+                Dumper.logModuleStates(packageData, "ChooseDirectory: After setParentDefaultModuleSettings");
             }
 
             // Collecting packages to install
@@ -903,7 +979,7 @@ public class ModuleCtrl {
                 Dumper.logModuleStates(packageData, "ChooseDirectory: After disableNonExistingPackages");
             }
 
-           // disable packages, that are not valid in user installation
+            // disable packages, that are not valid in user installation
             if ( data.isUserInstallation() ) {
                 ModuleCtrl.setShowInUserInstallFlags(packageData);
 
