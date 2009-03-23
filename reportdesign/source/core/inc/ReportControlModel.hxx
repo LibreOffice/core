@@ -115,7 +115,7 @@ namespace reportdesign
             ,bPrintWhenGroupChange(sal_False)
         {}
 
-        void dispose(oslInterlockedCount& _rRefCount);
+        void dispose();
 
         // XContainer
         void addContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);

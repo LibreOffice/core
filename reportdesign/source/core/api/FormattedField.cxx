@@ -116,12 +116,8 @@ void SAL_CALL OFormattedField::dispose() throw(uno::RuntimeException)
 {
     FormattedFieldPropertySet::dispose();
     cppu::WeakComponentImplHelperBase::dispose();
-    uno::Reference< report::XFormattedField> xHoldAlive = this;
-    {
-        m_xFormatsSupplier.clear();
-        m_xFunction.clear();
-        m_aProps.dispose(m_refCount);
-    }
+    m_xFormatsSupplier.clear();
+    m_xFunction.clear();
 }
 // -----------------------------------------------------------------------------
 ::rtl::OUString OFormattedField::getImplementationName_Static(  ) throw(uno::RuntimeException)

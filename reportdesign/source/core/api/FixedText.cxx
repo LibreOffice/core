@@ -110,9 +110,6 @@ void SAL_CALL OFixedText::dispose() throw(uno::RuntimeException)
     FixedTextPropertySet::dispose();
     cppu::WeakComponentImplHelperBase::dispose();
     uno::Reference< report::XFixedText> xHoldAlive = this;
-    {
-        m_aProps.dispose(m_refCount);
-    }
 }
 // -----------------------------------------------------------------------------
 ::rtl::OUString OFixedText::getImplementationName_Static(  ) throw(uno::RuntimeException)

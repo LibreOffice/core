@@ -85,8 +85,6 @@ namespace reportdesign
         void setShape(::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& _xShape
                     ,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>& _xTunnel
                     ,oslInterlockedCount& _rRefCount);
-
-        void dispose(oslInterlockedCount& _rRefCount);
     };
 }
 #endif // RPT_REPORTCOMPONENT_HXX

@@ -48,10 +48,15 @@
 #include "rptui_slotid.hrc"
 #include "RptDef.hxx"
 #include "corestrings.hrc"
+#include "FixedLine.hxx"
+#include "FormattedField.hxx"
+#include "FixedText.hxx"
+#include "ImageControl.hxx"
+#include "Shape.hxx"
 
 namespace rptui
 {
-
+using namespace reportdesign;
 using namespace com::sun::star;
 DBG_NAME( rpt_OReportModel )
 TYPEINIT1(OReportModel,SdrModel);
@@ -178,6 +183,53 @@ uno::Reference< report::XReportDefinition > OReportModel::getReportDefinition() 
 uno::Reference< uno::XInterface > OReportModel::createUnoModel()
 {
     return uno::Reference< uno::XInterface >(getReportDefinition(),uno::UNO_QUERY);
+}
+// -----------------------------------------------------------------------------
+uno::Reference< uno::XInterface > OReportModel::createShape(const ::rtl::OUString& aServiceSpecifier,uno::Reference< drawing::XShape >& _rShape,sal_Int32 nOrientation)
+{
+    uno::Reference< uno::XInterface > xRet;
+    if ( _rShape.is() )
+    {
+        if ( aServiceSpecifier == SERVICE_FORMATTEDFIELD )
+        {
+            uno::Reference<report::XFormattedField> xProp = new OFormattedField(m_pReportDefinition->getContext(),m_pReportDefinition,_rShape);
+            xRet = xProp;
+            if ( _rShape.is() )
+                throw uno::Exception();
+            xProp->setPropertyValue( PROPERTY_FORMATSSUPPLIER, uno::makeAny(uno::Reference< util::XNumberFormatsSupplier >(*m_pReportDefinition,uno::UNO_QUERY)) );
+        }
+        else if ( aServiceSpecifier == SERVICE_FIXEDTEXT)
+        {
+            xRet = static_cast<cppu::OWeakObject*>(new OFixedText(m_pReportDefinition->getContext(),m_pReportDefinition,_rShape));
+            if ( _rShape.is() )
+                throw uno::Exception();
+        }
+        else if ( aServiceSpecifier == SERVICE_FIXEDLINE)
+        {
+            xRet = static_cast<cppu::OWeakObject*>(new OFixedLine(m_pReportDefinition->getContext(),m_pReportDefinition,_rShape,nOrientation));
+            if ( _rShape.is() )
+                throw uno::Exception();
+        }
+        else if ( aServiceSpecifier == SERVICE_IMAGECONTROL )
+        {
+            xRet = static_cast<cppu::OWeakObject*>(new OImageControl(m_pReportDefinition->getContext(),m_pReportDefinition,_rShape));
+            if ( _rShape.is() )
+                throw uno::Exception();
+        }
+        else if ( aServiceSpecifier == SERVICE_REPORTDEFINITION )
+        {
+            xRet = static_cast<cppu::OWeakObject*>(new OReportDefinition(m_pReportDefinition->getContext(),m_pReportDefinition,_rShape));
+            if ( _rShape.is() )
+                throw uno::Exception();
+        }
+        else if ( _rShape.is() )
+        {
+            xRet = static_cast<cppu::OWeakObject*>(new OShape(m_pReportDefinition->getContext(),m_pReportDefinition,_rShape,aServiceSpecifier));
+            if ( _rShape.is() )
+                throw uno::Exception();
+        }
+    }
+    return xRet;
 }
 //==================================================================
 }   //rptui

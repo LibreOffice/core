@@ -365,6 +365,8 @@ namespace reportdesign
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler > getInteractionHandler() const;
         virtual bool isEnableSetModified() const;
 
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > getContext() const;
+
     private:
         /** loads the report definition from the given storage
 

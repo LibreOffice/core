@@ -152,13 +152,12 @@ void OReportControlModel::checkIndex(sal_Int32 _nIndex)
         throw lang::IndexOutOfBoundsException();
 }
 // -----------------------------------------------------------------------------
-void OReportControlModel::dispose(oslInterlockedCount& _rRefCount)
+void OReportControlModel::dispose()
 {
     m_aFormatConditions.clear();
     lang::EventObject aDisposeEvent( m_pOwner );
     aContainerListeners.disposeAndClear( aDisposeEvent );
     m_aFormatConditions.clear();
-    aComponent.dispose(_rRefCount);
 }
 // -----------------------------------------------------------------------------
 bool OReportControlModel::isInterfaceForbidden(const uno::Type& _rType)

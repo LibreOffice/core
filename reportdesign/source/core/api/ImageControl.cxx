@@ -182,10 +182,6 @@ void SAL_CALL OImageControl::dispose() throw(uno::RuntimeException)
 {
     ImageControlPropertySet::dispose();
     cppu::WeakComponentImplHelperBase::dispose();
-    uno::Reference< report::XImageControl> xHoldAlive = this;
-    {
-        m_aProps.dispose(m_refCount);
-    }
 }
 // -----------------------------------------------------------------------------
 ::rtl::OUString OImageControl::getImplementationName_Static(  ) throw(uno::RuntimeException)
