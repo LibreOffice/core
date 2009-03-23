@@ -28,6 +28,8 @@
  *
  ************************************************************************/
 
+#include "precompiled_sd.hxx"
+
 #include "DocumentRenderer.hxx"
 #include "DocumentRenderer.hrc"
 
@@ -37,7 +39,7 @@
 #include "strings.hrc"
 #include "sdattr.hxx"
 #include "Window.hxx"
-#include "DrawView.hxx"
+#include "drawview.hxx"
 #include "DrawViewShell.hxx"
 #include "FrameView.hxx"
 #include "Outliner.hxx"
@@ -1209,7 +1211,6 @@ public:
 
 
         // Set page orientation.
-        const Orientation eOrientation (pPage->GetOrientation());
         if ( ! rPrinter.SetOrientation(pPage->GetOrientation()))
         {
             if ( ! mbHasOrientationWarningBeenShown
@@ -1217,7 +1218,6 @@ public:
             {
                 mbHasOrientationWarningBeenShown = true;
                 // Show warning that the orientation could not be set.
-                ::boost::shared_ptr<ViewShell> pViewShell (mrBase.GetMainViewShell());
                 if (pViewShell)
                 {
                     WarningBox aWarnBox(
@@ -1484,7 +1484,7 @@ private:
     */
     bool ContainsTransparency (void) const
     {
-        const bool bPrintExcluded (mpOptions->IsPrintExcluded());
+        // const bool bPrintExcluded (mpOptions->IsPrintExcluded());
         bool bContainsTransparency = false;
 
         for (USHORT
@@ -1820,7 +1820,6 @@ private:
         PrintInfo& rInfo)
     {
         ::boost::shared_ptr<ViewShell> pViewShell (mrBase.GetMainViewShell());
-        SdDrawDocument* pDocument = pViewShell->GetDoc();
         pViewShell->WriteFrameViewData();
         Point aPtZero;
 
