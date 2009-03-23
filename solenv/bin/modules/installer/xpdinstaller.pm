@@ -431,6 +431,24 @@ sub get_installcanfail_value
 }
 
 ###################################################
+# Asking module, if installation can fail
+# scp style: INSTALLCANFAIL
+###################################################
+
+sub get_forceintoupdate_value
+{
+    my ( $module ) = @_;
+
+    my $value = "false";
+
+    my $styles = "";
+    if ( $module->{'Styles'} ) { $styles = $module->{'Styles'}; }
+    if ( $styles =~ /\bFORCEINTOUPDATE\b/ ) { $value = "true"; }
+
+    return $value;
+}
+
+###################################################
 # Substituting all occurences of "\uUXYZ" by
 # "&#xUXYZ;", because the use xml saxparser does
 # not know anything about this encoding. Therfore
@@ -879,6 +897,25 @@ sub set_macro_tag
 }
 
 ###################################################
+# Setting the minor of the product version
+# Required to check for Major Upgrades.
+###################################################
+
+sub set_minor_tag
+{
+    my ($allvariables, $indent) = @_;
+
+    my $productminor = 0;
+    if ( $allvariables->{"PACKAGEVERSION"} )
+    {
+        if ( $allvariables->{"PACKAGEVERSION"} =~ /^\s*\d+\.(\d+)/ ) { $productminor = $1; }
+    }
+    my $tag = $indent . "<productminor>" . $productminor . "</productminor>" . "\n";
+
+    return $tag;
+}
+
+###################################################
 # Setting the update behaviour
 ###################################################
 
@@ -1073,6 +1110,9 @@ sub get_setup_file_content
     $tag = set_productdir_tag($allvariables, $singleindent);
     push(@xpdfile, $tag);
 
+    $tag = set_minor_tag($allvariables, $singleindent);
+    push(@xpdfile, $tag);
+
     $tag = set_update_tag($allvariables, $singleindent);
     push(@xpdfile, $tag);
 
@@ -1165,6 +1205,10 @@ sub get_file_content
 
     $value = get_installcanfail_value($module);
     $line = get_tag_line($doubleindent, "installcanfail", $value);
+    push(@xpdfile, $line);
+
+    $value = get_forceintoupdate_value($module);
+    $line = get_tag_line($doubleindent, "forceintoupdate", $value);
     push(@xpdfile, $line);
 
     $value = get_useforce_value($module);
