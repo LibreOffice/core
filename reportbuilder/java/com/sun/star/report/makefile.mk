@@ -39,10 +39,10 @@ PACKAGE = com$/sun$/star$/report
 #----- compile .java files -----------------------------------------
 
 JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar
-.IF "$(SYSTEM_JFREEREPORT)" == "YES"
-XCLASSPATH!:==$(XCLASSPATH)$(PATH_SEPERATOR)$(JCOMMON_JAR)$(PATH_SEPERATOR)$(COMMONS_LOGGING_JAR)
+.IF "$(SYSTEM_APACHE_COMMONS)" == "YES"
+XCLASSPATH!:==$(XCLASSPATH)$(PATH_SEPERATOR)$(COMMONS_LOGGING_JAR)
 .ELSE
-JARFILES += jcommon-1.0.10.jar commons-logging-1.1.1.jar
+JARFILES += commons-logging-1.1.1.jar
 .ENDIF
 
 JAVAFILES       :=	DataRow.java\
