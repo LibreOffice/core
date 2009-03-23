@@ -230,7 +230,7 @@ namespace {
             const sal_Char* pName,
             const bool bDefaultValue = false) const
         {
-            bool bValue;
+            sal_Bool bValue = sal_False;
             const Any aValue (GetPropertyValue(pName));
             if ( ! aValue.hasValue())
                 return bDefaultValue;
@@ -270,7 +270,7 @@ namespace {
             const sal_Int32 nTriggerValue,
             const bool bDefaultValue) const
         {
-            sal_Int32 nValue;
+            sal_Int32 nValue = 0;
             const Any aValue (GetPropertyValue(pName));
             if ( ! aValue.hasValue())
                 return bDefaultValue;
