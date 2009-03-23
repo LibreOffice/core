@@ -180,6 +180,9 @@ BEGIN
     $globalblock = "Globals";
     $rootmodulegid = "";
     %alllangmodules = ();
+    $englishlicenseset = 0;
+    $englishlicense = "";
+    $englishsolarislicensename = "LICENSE_en-US";
     $patharray = "";
 
     $is_special_epm = 0;
