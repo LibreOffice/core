@@ -496,8 +496,7 @@ BOOL AquaSalInfoPrinter::StartJob( const String* i_pFileName,
         [pPath release];
     }
 
-    // FIXME copies
-    // [pPrintDict setObject: [[NSNumber numberWithInt: (int)pQPrinter->GetCopyCount()] autorelease] forKey: NSPrintCopies];
+    [pPrintDict setObject: [[NSNumber numberWithInt: (int)i_rListener.getPrinter()->GetCopyCount()] autorelease] forKey: NSPrintCopies];
     [pPrintDict setObject: [[NSNumber numberWithBool: YES] autorelease] forKey: NSPrintDetailedErrorReporting];
     [pPrintDict setObject: [[NSNumber numberWithInt: 1] autorelease] forKey: NSPrintFirstPage];
     [pPrintDict setObject: [[NSNumber numberWithInt: mnCurPageRangeCount] autorelease] forKey: NSPrintLastPage];

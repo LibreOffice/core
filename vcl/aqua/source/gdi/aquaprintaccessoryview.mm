@@ -118,7 +118,8 @@ class ListenerProperties
 {
     vcl::PrinterListener*               mpListener;
     std::map< int, rtl::OUString >      maTagToPropertyName;
-    std::map< int, rtl::OUString >      maTagToValueName;
+    std::map< int, sal_Int32 >          maTagToValueInt;
+    std::vector< NSObject* >            maViews;
     int                                 mnNextTag;
     public:
     ListenerProperties( vcl::PrinterListener* i_pListener )
@@ -128,6 +129,9 @@ class ListenerProperties
     void updatePrintJob()
     {
         // TODO: refresh page count etc from mpListener 
+
+        // page range may have changed depending on options
+        /*sal_Int32 nPages = */mpListener->getPageCount();
     }
     
     int addNameTag( const rtl::OUString& i_rPropertyName )
@@ -137,19 +141,24 @@ class ListenerProperties
         return nNewTag;
     }
 
-    int addNameAndValueTag( const rtl::OUString& i_rPropertyName, const rtl::OUString& i_rValue )
+    int addNameAndValueTag( const rtl::OUString& i_rPropertyName, sal_Int32 i_nValue )
     {
         int nNewTag = mnNextTag++;
         maTagToPropertyName[ nNewTag ] = i_rPropertyName;
-        maTagToValueName[ nNewTag ] = i_rValue;
+        maTagToValueInt[ nNewTag ] = i_nValue;
         return nNewTag;
     }
     
-    void changePropertyWithNamedValue( int i_nTag )
+    void addObservedControl( NSObject* i_pView )
+    {
+        maViews.push_back( i_pView );
+    }
+    
+    void changePropertyWithIntValue( int i_nTag )
     {
         std::map< int, rtl::OUString >::const_iterator name_it = maTagToPropertyName.find( i_nTag );
-        std::map< int, rtl::OUString >::const_iterator value_it = maTagToValueName.find( i_nTag );
-        if( name_it != maTagToPropertyName.end() && value_it != maTagToValueName.end() )
+        std::map< int, sal_Int32 >::const_iterator value_it = maTagToValueInt.find( i_nTag );
+        if( name_it != maTagToPropertyName.end() && value_it != maTagToValueInt.end() )
         {
             PropertyValue* pVal = mpListener->getValue( name_it->second );
             if( pVal )
@@ -163,13 +172,41 @@ class ListenerProperties
     void changePropertyWithBoolValue( int i_nTag, sal_Bool i_bValue )
     {
         std::map< int, rtl::OUString >::const_iterator name_it = maTagToPropertyName.find( i_nTag );
-        if( name_it != maTagToPropertyName.end()  )
+        if( name_it != maTagToPropertyName.end() )
         {
             PropertyValue* pVal = mpListener->getValue( name_it->second );
             if( pVal )
             {
                 pVal->Value <<= i_bValue;
                 updatePrintJob(); 
+            }
+        }
+    }
+    
+    void updateEnableState()
+    {
+        for( std::vector< NSObject* >::iterator it = maViews.begin(); it != maViews.end(); ++it )
+        {
+            NSObject* pObj = *it;
+            NSControl* pCtrl = nil;
+            NSCell* pCell = nil;
+            if( [pObj isKindOfClass: [NSControl class]] )
+                pCtrl = (NSControl*)pObj;
+            else if( [pObj isKindOfClass: [NSCell class]] )
+                pCell = (NSCell*)pObj;
+            
+            int nTag = pCtrl ? [pCtrl tag] :
+                       pCell ? [pCell tag] :
+                       -1;
+            
+            std::map< int, rtl::OUString >::const_iterator name_it = maTagToPropertyName.find( nTag );
+            if( name_it != maTagToPropertyName.end() )
+            {
+                MacOSBOOL bEnabled = mpListener->isUIOptionEnabled( name_it->second ) ? YES : NO;
+                if( pCtrl )
+                    [pCtrl setEnabled: bEnabled];
+                else if( pCell )
+                    [pCell setEnabled: bEnabled];
             }
         }
     }
@@ -202,7 +239,7 @@ class ListenerProperties
         if( pSelected )
         {
             int nTag = [pSelected tag];
-            mpListener->changePropertyWithNamedValue( nTag );
+            mpListener->changePropertyWithIntValue( nTag );
         }
     }
     else if( [pSender isMemberOfClass: [NSButton class]] )
@@ -218,13 +255,14 @@ class ListenerProperties
         {
             NSButtonCell* pCell = (NSButtonCell*)pObj;
             int nTag = [pCell tag];
-            mpListener->changePropertyWithNamedValue( nTag );
+            mpListener->changePropertyWithIntValue( nTag );
         }
     }
     else
     {
         DBG_ERROR( "unsupported class" );
     }
+    mpListener->updateEnableState();
 }
 -(void)dealloc
 {
@@ -396,6 +434,7 @@ static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize )
                 [pBtn setTarget: pCtrlTarget];
                 [pBtn setAction: @selector(triggered:)];
                 int nTag = pListenerProperties->addNameTag( aPropertyName );
+                pListenerProperties->addObservedControl( pBtn );
                 [pBtn setTag: nTag];
 
                 aCheckRect = [pBtn frame];
@@ -462,7 +501,8 @@ static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize )
                     // connect target and action
                     [pCell setTarget: pCtrlTarget];
                     [pCell setAction: @selector(triggered:)];
-                    int nTag = pListenerProperties->addNameAndValueTag( aPropertyName, aChoices[ m ] );
+                    int nTag = pListenerProperties->addNameAndValueTag( aPropertyName, m );
+                    pListenerProperties->addObservedControl( pCell );
                     [pCell setTag: nTag];
                     [pTitle release];
                     // set current selection
@@ -517,25 +557,29 @@ static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize )
 
                 NSRect aBtnRect = { { nCurX + aTextRect.size.width, 0 }, { 0, 15 } };
                 NSPopUpButton* pBtn = [[NSPopUpButton alloc] initWithFrame: aBtnRect pullsDown: NO];
+
                 // iterate options
                 for( sal_Int32 m = 0; m < aChoices.getLength(); m++ )
                 {
                     NSString* pItemText = CreateNSString( aChoices[m] );
                     [pBtn addItemWithTitle: pItemText];
                     NSMenuItem* pItem = [pBtn itemWithTitle: pItemText];
-                    int nTag = pListenerProperties->addNameAndValueTag( aPropertyName, aChoices[m] );
+                    int nTag = pListenerProperties->addNameAndValueTag( aPropertyName, m );
                     [pItem setTag: nTag];
                     [pItemText release];
                 }
 
                 PropertyValue* pVal = pListener->getValue( aPropertyName );
-                rtl::OUString aSelectVal;
+                sal_Int32 aSelectVal = 0;
                 if( pVal && pVal->Value.hasValue() )
                     pVal->Value >>= aSelectVal;
-                NSString* pSelectText = CreateNSString( aSelectVal );
-                [pBtn setTitle: pSelectText];
-                [pSelectText release];
+                [pBtn selectItemAtIndex: aSelectVal];
                 [pBtn setEnabled: (pListener->isUIOptionEnabled( aPropertyName ) && pVal != NULL) ? YES : NO];
+                
+                // add the button to observed controls for enabled state changes
+                // also add a tag just for this purpose
+                pListenerProperties->addObservedControl( pBtn );
+                [pBtn setTag: pListenerProperties->addNameTag( aPropertyName )];
 
                 [pBtn sizeToFit];
                 [pCurParent addSubview: pBtn];
