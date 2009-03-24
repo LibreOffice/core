@@ -2001,10 +2001,14 @@ UNOUCRDEPxxx : $(UNOUCRDEP);
 $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/hid.lst .PHONY :
     @echo Making $@ :
     @echo ---------------
-    @$(IFEXIST) $@ $(THEN) $(RM:s/+//) $@ $(FI)
     @echo $(WORK_STAMP).$(LAST_MINOR) 010101010101010 > $@.$(ROUT).tmp
-    $(TYPE) $(SOLARCOMMONBINDIR)$/hid$/*.hid | $(SORT) -u >> $@.$(ROUT).tmp 
-    @$(RENAME) $@.$(ROUT).tmp $@
+    $(TYPE) $(SOLARCOMMONBINDIR)$/hid$/*.hid | tr -d "\015" | $(SORT) -u >> $@.$(ROUT).tmp 
+    @$(IFEXIST) $@ $(THEN) $(RM:s/+//) $@ $(FI)
+    @-$(RENAME) $@.$(ROUT).tmp $@
+    @-mkdir $(@:d)hid
+    $(PERL) $(SOLARENV)$/bin$/gen_userfeedback_VCL_names.pl $@ $(SOLARCOMMONBINDIR)$/win $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/hid$/userfeedback_VCL_names.csv.$(ROUT).tmp
+    @$(IFEXIST) $@ $(THEN) $(RM:s/+//) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/hid$/userfeedback_VCL_names.csv $(FI)
+    @-$(RENAME) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/hid$/userfeedback_VCL_names.csv.$(ROUT).tmp $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/hid$/userfeedback_VCL_names.csv
 
 
 .IF "$(SOLAR_JAVA)"!=""
