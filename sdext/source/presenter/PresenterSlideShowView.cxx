@@ -162,7 +162,17 @@ void PresenterSlideShowView::LateInit (void)
     // Add the new slide show view to the slide show.
     if (mxSlideShow.is() && ! mbIsViewAdded)
     {
-        mxSlideShow->addView(this);
+        Reference<presentation::XSlideShowView> xView (this);
+        mxSlideShow->addView(xView);
+        // Prevent embeded sounds being played twice at the same time by
+        // disabling sound for the new slide show view.
+        beans::PropertyValue aProperty;
+        aProperty.Name = A2S("IsSoundEnabled");
+        Sequence<Any> aValues (2);
+        aValues[0] <<= xView;
+        aValues[1] <<= sal_False;
+        aProperty.Value <<= aValues;
+        mxSlideShow->setProperty(aProperty);
         mbIsViewAdded = true;
     }
 
