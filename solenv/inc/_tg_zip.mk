@@ -82,7 +82,7 @@ $(ZIP1DEPFILE) :
     -$(ZIPDEP) $(ZIP1FLAGS) $(subst,$/misc$/,$/bin$/ $(@:s/.dpzz/$(ZIP1EXT)/)) $(foreach,j,$(ZIP1LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)$/$(ZIP1TARGET)_, $(subst,$/misc$/,$/bin$/ $(@:db)))} $j )}") $(avoid_cvs_dir) >> $(MISC)$/$(@:f)
 .ENDIF			# "$(ZIP1DIR)" != ""
 .ENDIF			# "$(common_build_zip)"!=""
-    @echo $@ : makefile.mk >> $(MISC)$/$(@:f)
+    @echo $(@:n:s#\#/#) : makefile.mk >> $(MISC)$/$(@:f)
 
 
 $(ZIP1TARGETN) : delzip $(ZIP1DEPS)
@@ -222,7 +222,7 @@ $(ZIP2DEPFILE) :
     -$(ZIPDEP) $(ZIP2FLAGS) $(subst,$/misc$/,$/bin$/ $(@:s/.dpzz/$(ZIP2EXT)/)) $(foreach,j,$(ZIP2LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)$/$(ZIP2TARGET)_, $(subst,$/misc$/,$/bin$/ $(@:db)))} $j )}") $(avoid_cvs_dir) >> $(MISC)$/$(@:f)
 .ENDIF			# "$(ZIP2DIR)" != ""
 .ENDIF			# "$(common_build_zip)"!=""
-    @echo $@ : makefile.mk >> $(MISC)$/$(@:f)
+    @echo $(@:n:s#\#/#) : makefile.mk >> $(MISC)$/$(@:f)
 
 
 $(ZIP2TARGETN) : delzip $(ZIP2DEPS)
@@ -362,7 +362,7 @@ $(ZIP3DEPFILE) :
     -$(ZIPDEP) $(ZIP3FLAGS) $(subst,$/misc$/,$/bin$/ $(@:s/.dpzz/$(ZIP3EXT)/)) $(foreach,j,$(ZIP3LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)$/$(ZIP3TARGET)_, $(subst,$/misc$/,$/bin$/ $(@:db)))} $j )}") $(avoid_cvs_dir) >> $(MISC)$/$(@:f)
 .ENDIF			# "$(ZIP3DIR)" != ""
 .ENDIF			# "$(common_build_zip)"!=""
-    @echo $@ : makefile.mk >> $(MISC)$/$(@:f)
+    @echo $(@:n:s#\#/#) : makefile.mk >> $(MISC)$/$(@:f)
 
 
 $(ZIP3TARGETN) : delzip $(ZIP3DEPS)
@@ -502,7 +502,7 @@ $(ZIP4DEPFILE) :
     -$(ZIPDEP) $(ZIP4FLAGS) $(subst,$/misc$/,$/bin$/ $(@:s/.dpzz/$(ZIP4EXT)/)) $(foreach,j,$(ZIP4LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)$/$(ZIP4TARGET)_, $(subst,$/misc$/,$/bin$/ $(@:db)))} $j )}") $(avoid_cvs_dir) >> $(MISC)$/$(@:f)
 .ENDIF			# "$(ZIP4DIR)" != ""
 .ENDIF			# "$(common_build_zip)"!=""
-    @echo $@ : makefile.mk >> $(MISC)$/$(@:f)
+    @echo $(@:n:s#\#/#) : makefile.mk >> $(MISC)$/$(@:f)
 
 
 $(ZIP4TARGETN) : delzip $(ZIP4DEPS)
@@ -642,7 +642,7 @@ $(ZIP5DEPFILE) :
     -$(ZIPDEP) $(ZIP5FLAGS) $(subst,$/misc$/,$/bin$/ $(@:s/.dpzz/$(ZIP5EXT)/)) $(foreach,j,$(ZIP5LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)$/$(ZIP5TARGET)_, $(subst,$/misc$/,$/bin$/ $(@:db)))} $j )}") $(avoid_cvs_dir) >> $(MISC)$/$(@:f)
 .ENDIF			# "$(ZIP5DIR)" != ""
 .ENDIF			# "$(common_build_zip)"!=""
-    @echo $@ : makefile.mk >> $(MISC)$/$(@:f)
+    @echo $(@:n:s#\#/#) : makefile.mk >> $(MISC)$/$(@:f)
 
 
 $(ZIP5TARGETN) : delzip $(ZIP5DEPS)
@@ -782,7 +782,7 @@ $(ZIP6DEPFILE) :
     -$(ZIPDEP) $(ZIP6FLAGS) $(subst,$/misc$/,$/bin$/ $(@:s/.dpzz/$(ZIP6EXT)/)) $(foreach,j,$(ZIP6LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)$/$(ZIP6TARGET)_, $(subst,$/misc$/,$/bin$/ $(@:db)))} $j )}") $(avoid_cvs_dir) >> $(MISC)$/$(@:f)
 .ENDIF			# "$(ZIP6DIR)" != ""
 .ENDIF			# "$(common_build_zip)"!=""
-    @echo $@ : makefile.mk >> $(MISC)$/$(@:f)
+    @echo $(@:n:s#\#/#) : makefile.mk >> $(MISC)$/$(@:f)
 
 
 $(ZIP6TARGETN) : delzip $(ZIP6DEPS)
@@ -922,7 +922,7 @@ $(ZIP7DEPFILE) :
     -$(ZIPDEP) $(ZIP7FLAGS) $(subst,$/misc$/,$/bin$/ $(@:s/.dpzz/$(ZIP7EXT)/)) $(foreach,j,$(ZIP7LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)$/$(ZIP7TARGET)_, $(subst,$/misc$/,$/bin$/ $(@:db)))} $j )}") $(avoid_cvs_dir) >> $(MISC)$/$(@:f)
 .ENDIF			# "$(ZIP7DIR)" != ""
 .ENDIF			# "$(common_build_zip)"!=""
-    @echo $@ : makefile.mk >> $(MISC)$/$(@:f)
+    @echo $(@:n:s#\#/#) : makefile.mk >> $(MISC)$/$(@:f)
 
 
 $(ZIP7TARGETN) : delzip $(ZIP7DEPS)
@@ -1062,7 +1062,7 @@ $(ZIP8DEPFILE) :
     -$(ZIPDEP) $(ZIP8FLAGS) $(subst,$/misc$/,$/bin$/ $(@:s/.dpzz/$(ZIP8EXT)/)) $(foreach,j,$(ZIP8LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)$/$(ZIP8TARGET)_, $(subst,$/misc$/,$/bin$/ $(@:db)))} $j )}") $(avoid_cvs_dir) >> $(MISC)$/$(@:f)
 .ENDIF			# "$(ZIP8DIR)" != ""
 .ENDIF			# "$(common_build_zip)"!=""
-    @echo $@ : makefile.mk >> $(MISC)$/$(@:f)
+    @echo $(@:n:s#\#/#) : makefile.mk >> $(MISC)$/$(@:f)
 
 
 $(ZIP8TARGETN) : delzip $(ZIP8DEPS)
@@ -1202,7 +1202,7 @@ $(ZIP9DEPFILE) :
     -$(ZIPDEP) $(ZIP9FLAGS) $(subst,$/misc$/,$/bin$/ $(@:s/.dpzz/$(ZIP9EXT)/)) $(foreach,j,$(ZIP9LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)$/$(ZIP9TARGET)_, $(subst,$/misc$/,$/bin$/ $(@:db)))} $j )}") $(avoid_cvs_dir) >> $(MISC)$/$(@:f)
 .ENDIF			# "$(ZIP9DIR)" != ""
 .ENDIF			# "$(common_build_zip)"!=""
-    @echo $@ : makefile.mk >> $(MISC)$/$(@:f)
+    @echo $(@:n:s#\#/#) : makefile.mk >> $(MISC)$/$(@:f)
 
 
 $(ZIP9TARGETN) : delzip $(ZIP9DEPS)
@@ -1342,7 +1342,7 @@ $(ZIP10DEPFILE) :
     -$(ZIPDEP) $(ZIP10FLAGS) $(subst,$/misc$/,$/bin$/ $(@:s/.dpzz/$(ZIP10EXT)/)) $(foreach,j,$(ZIP10LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)$/$(ZIP10TARGET)_, $(subst,$/misc$/,$/bin$/ $(@:db)))} $j )}") $(avoid_cvs_dir) >> $(MISC)$/$(@:f)
 .ENDIF			# "$(ZIP10DIR)" != ""
 .ENDIF			# "$(common_build_zip)"!=""
-    @echo $@ : makefile.mk >> $(MISC)$/$(@:f)
+    @echo $(@:n:s#\#/#) : makefile.mk >> $(MISC)$/$(@:f)
 
 
 $(ZIP10TARGETN) : delzip $(ZIP10DEPS)

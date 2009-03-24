@@ -1676,8 +1676,9 @@ $(COMMONPRJHIDOTHERTARGET) : $(PRJHIDOTHERTARGET)
 .IF "$(ZIP1TARGET)" != "" || "$(ZIP2TARGET)" != "" || "$(ZIP3TARGET)" != ""
 .IF "$(nodep)"==""
 .INCLUDE : $(MISC)$/$(TARGET).dpz
-missing_zipdep_langs=$(alllangiso)
-some_dummy_var:=$(foreach,i,$(zipdep_langs) $(assign missing_zipdep_langs:=$(strip $(subst,$i, $(missing_zipdep_langs)))))
+# introduce separation char
+missing_zipdep_langs=$(alllangiso:^"+":+"+")
+some_dummy_var:=$(foreach,i,$(zipdep_langs) $(assign missing_zipdep_langs:=$(strip $(subst,+$(i)+, $(missing_zipdep_langs)))))
 .IF "$(missing_zipdep_langs)"!=""
 ZIPDEPPHONY=.PHONY
 .ENDIF			# "$(missing_zipdep_langs)"!=""

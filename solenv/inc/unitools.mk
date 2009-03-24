@@ -100,7 +100,7 @@ CHECKZIPRESULT:=^ iff errorlevel == 12 .and. errorlevel == 12 then ( echo Nothin
 CHECKCOPYURESULT:=^ iff errorlevel == 2 then ( echo Nothing to update for copy ^ set somedummyvar=%somedummyvar)
 
 # tell makedepend to write windows native format
-MKDEPFLAGS=-n
+#MKDEPFLAGS=-n
 
 .ENDIF # "$(USE_SHELL)"!="4nt"
 
@@ -120,6 +120,7 @@ COPYUPDATE=-u
 ECHON=echo -n
 ECHONL=echo
 FIND*=find
+FLIPCMD*=slfl.pl
 GNUCOPY*=cp
 GNUMAKE*=make
 GREP*=grep
@@ -145,6 +146,7 @@ GNUCOPY*=$(BUILD_TOOLS)$/cp.exe
 GNUMAKE*=$(BUILD_TOOLS)$/gnumake.exe
 GREP*=$(BUILD_TOOLS)$/grep.exe
 LS*=$(BUILD_TOOLS)$/ls.exe
+MKDIRHIER=+mkdir /sn
 #wraper for solenv\bin\mkdir.pl to fix mkdir /p problem
 PERL*:=+call perl5.btm
 .EXPORT : PERL

@@ -53,6 +53,9 @@ STARDEP=javadep
 JAVAC=javac
 JAVA=java
 JAVAI!:=java
+PATH_SEPERATOR*=:
+.ELSE # "$(USE_SHELL)"!="4nt"
+PATH_SEPERATOR*=;
 .ENDIF # "$(USE_SHELL)"!="4nt"
 
 # --- general WNT settings ---
@@ -60,7 +63,6 @@ CLIMAKER*=climaker
 
 HC=hc
 HCFLAGS=
-PATH_SEPERATOR*=;
 DLLPRE=
 DLLPOST=.dll
 EXECPOST=.exe
