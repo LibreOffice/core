@@ -1031,6 +1031,7 @@ void Printer::ImplFindPaperFormatForUserSize( JobSetup& aJobSetup )
         {
             pSetupData->mePaperFormat = ImplGetPaperFormat( rPaperInfo.m_nPaperWidth*100,
                                                             rPaperInfo.m_nPaperHeight*100 );
+            pSetupData->meOrientation = ORIENTATION_PORTRAIT;
             break;
         }
     }
@@ -1053,6 +1054,7 @@ void Printer::ImplFindPaperFormatForUserSize( JobSetup& aJobSetup )
             {
                 pSetupData->mePaperFormat = ImplGetPaperFormat( rPaperInfo.m_nPaperWidth*100,
                                                                 rPaperInfo.m_nPaperHeight*100 );
+                pSetupData->meOrientation = ORIENTATION_LANDSCAPE;
                 break;
             }
         }

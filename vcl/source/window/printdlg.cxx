@@ -956,6 +956,8 @@ PrintProgressDialog::PrintProgressDialog( Window* i_pParent, int i_nMax ) :
     mnProgressHeight( 15 ),
     mbNativeProgress( false )
 {
+    FreeResource();
+
     maStr = maText.GetText();
 
     maButton.SetClickHdl( LINK( this, PrintProgressDialog, ClickHdl ) );
