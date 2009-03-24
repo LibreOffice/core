@@ -1451,6 +1451,34 @@ sal_Bool SlideShowImpl::setProperty( beans::PropertyValue const& rProperty )
         return (rProperty.Value >>= mbNoSlideTransitions);
     }
 
+    if (rProperty.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("IsSoundEnabled")))
+    {
+        uno::Sequence<uno::Any> aValues;
+        uno::Reference<presentation::XSlideShowView> xView;
+        sal_Bool bValue;
+        if ((rProperty.Value >>= aValues)
+            && aValues.getLength()==2
+            && (aValues[0] >>= xView)
+            && (aValues[1] >>= bValue))
+        {
+            // Look up the view.
+            for (UnoViewVector::const_iterator
+                     iView (maViewContainer.begin()),
+                     iEnd (maViewContainer.end());
+                 iView!=iEnd;
+                 ++iView)
+            {
+                if (*iView && (*iView)->getUnoView()==xView)
+                {
+                    // Store the flag at the view so that media shapes have
+                    // access to it.
+                    (*iView)->setIsSoundEnabled(bValue);
+                    return true;
+                }
+            }
+        }
+    }
+
     return false;
 }
 

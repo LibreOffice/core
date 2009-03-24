@@ -715,6 +715,8 @@ private:
     // UnoView:
     virtual void _dispose();
     virtual uno::Reference<presentation::XSlideShowView> getUnoView()const;
+    virtual void setIsSoundEnabled (const bool bValue);
+    virtual bool isSoundEnabled (void) const;
 
     // XEventListener:
     virtual void SAL_CALL disposing( lang::EventObject const& evt )
@@ -755,6 +757,7 @@ private:
 
     basegfx::B2DHomMatrix                                     maViewTransform;
     basegfx::B2DSize                                          maUserSize;
+    bool mbIsSoundEnabled;
 };
 
 
@@ -770,7 +773,8 @@ SlideView::SlideView( const uno::Reference<presentation::XSlideShowView>& xView,
     maViewLayers(),
     maClip(),
     maViewTransform(),
-    maUserSize( 1.0, 1.0 ) // default size: one-by-one rectangle
+    maUserSize( 1.0, 1.0 ), // default size: one-by-one rectangle
+    mbIsSoundEnabled(true)
 {
     // take care not constructing any UNO references to this _inside_
     // ctor, shift that code to createSlideView()!
@@ -999,6 +1003,16 @@ uno::Reference<presentation::XSlideShowView> SlideView::getUnoView() const
 {
     osl::MutexGuard aGuard( m_aMutex );
     return mxView;
+}
+
+void SlideView::setIsSoundEnabled (const bool bValue)
+{
+    mbIsSoundEnabled = bValue;
+}
+
+bool SlideView::isSoundEnabled (void) const
+{
+    return mbIsSoundEnabled;
 }
 
 void SlideView::_dispose()
