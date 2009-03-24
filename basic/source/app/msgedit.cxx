@@ -37,6 +37,7 @@ Version 2           changed order of entries(New Entries at the end)
 Version 3           Changed Charset from CHARSET_IBMPC to RTL_TEXTENCODING_UTF8
 
 *************************************************************************/
+#include <cstdio>
 #include <tools/time.hxx>
 #include <tools/stream.hxx>
 #ifndef _MSGBOX_HXX //autogen
@@ -61,6 +62,8 @@ Version 3           Changed Charset from CHARSET_IBMPC to RTL_TEXTENCODING_UTF8
 
 USHORT MsgEdit::nMaxLogLen = 0;
 BOOL MsgEdit::bLimitLogLen = FALSE;
+BOOL MsgEdit::bPrintLogToStdout = FALSE;
+BOOL MsgEdit::bPrintLogToStdoutSet = FALSE;
 
 #define WARNING_PREFIX String( SttResId( S_WARNING_PREFIX ) )
 #define VERSION_STRING CUniString("File Format Version: ")
@@ -85,6 +88,20 @@ MsgEdit::MsgEdit( AppError* pParent, BasicFrame *pBF, const WinBits& aBits )
     aEditTree.SetSelectionMode( MULTIPLE_SELECTION );
     if ( aEditTree.GetModel()->GetSortMode() != SortNone )
         aEditTree.GetModel()->SetSortMode( SortNone );
+
+    if ( !bPrintLogToStdoutSet )
+    {
+        bPrintLogToStdoutSet = TRUE;
+        for ( USHORT i = 0 ; i < Application::GetCommandLineParamCount() ; i++ )
+        {
+            if ( Application::GetCommandLineParam( i ).Copy(0,9).CompareIgnoreCaseToAscii("-printlog") == COMPARE_EQUAL
+    #ifndef UNX
+              || Application::GetCommandLineParam( i ).Copy(0,9).CompareIgnoreCaseToAscii("/printlog") == COMPARE_EQUAL
+    #endif
+              )
+                bPrintLogToStdout = TRUE;
+        }
+    }
 }
 
 MsgEdit::~MsgEdit()
@@ -177,6 +194,7 @@ void MsgEdit::AddAnyMsg( TTLogMsg *LogMsg )
             }
 
             String aLogMsg = Impl_MakeSaveText( LogMsg->aDebugData ).AppendAscii("\n");
+
             if( aStrm.IsOpen() )
             {
                 aLogMsg.ConvertLineEnd(LINEEND_CRLF);
@@ -186,8 +204,27 @@ void MsgEdit::AddAnyMsg( TTLogMsg *LogMsg )
             }
             if ( !bFileWasChanged )
                 pAppError->UpdateFileInfo( HAS_BEEN_LOADED );
+
+
+            // now write to stdout
+            if ( bPrintLogToStdout )
+            {
+                String aPrintMsg, aOriginalMsg;
+
+                aOriginalMsg = LogMsg->aDebugData.aMsg;
+                // converting to human readable string for adding errors to list in testobject
+                LogMsg->aDebugData.aMsg = pBasicFrame->GenRealString( LogMsg->aDebugData.aMsg );
+
+                aPrintMsg = Impl_MakeSaveText( LogMsg->aDebugData ).AppendAscii("\n");
+
+                // restore Original Msg
+                LogMsg->aDebugData.aMsg = aOriginalMsg;
+
+                printf( ByteString( aPrintMsg, RTL_TEXTENCODING_UTF8 ).GetBuffer() );
+            }
         }
     }
+    // converting to human readable string for adding errors to list in testobject
     LogMsg->aDebugData.aMsg = pBasicFrame->GenRealString( LogMsg->aDebugData.aMsg );
 }
 
