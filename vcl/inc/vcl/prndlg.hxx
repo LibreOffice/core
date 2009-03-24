@@ -46,8 +46,6 @@
 #include "vcl/tabctrl.hxx"
 #include "vcl/tabpage.hxx"
 
-#include "tools/multisel.hxx"
-
 #include <boost/shared_ptr.hpp>
 #include <map>
 
@@ -162,7 +160,6 @@ namespace vcl
         virtual ~PrintDialog();
 
         bool isPrintToFile();
-        MultiSelection getPageSelection();
         int getCopyCount();
         bool isCollate();
     };

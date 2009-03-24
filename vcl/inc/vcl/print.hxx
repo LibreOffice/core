@@ -445,8 +445,6 @@ public:
     virtual ~PrinterListener();
 
     const boost::shared_ptr<Printer>& getPrinter() const;
-    const MultiSelection& getPageSelection() const;
-
     /* for implementations: get current job properties as changed by e.g. print dialog
        this gets the current set of properties initially told to Printer::PrintJob
 
@@ -489,9 +487,9 @@ public:
     // implementation details, not usable outside vcl
     void SAL_DLLPRIVATE printFilteredPage( int i_nPage );
     void SAL_DLLPRIVATE setPrinter( const boost::shared_ptr<Printer>& );
-    void SAL_DLLPRIVATE setPageSelection( const MultiSelection& );
     void SAL_DLLPRIVATE setOptionChangeHdl( const Link& );
     void SAL_DLLPRIVATE createProgressDialog();
+    void SAL_DLLPRIVATE setPrintSelection( const rtl::OUString& );
 };
 
 }

@@ -39,7 +39,6 @@
 #include "vcl/svids.hrc"
 
 #include "tools/urlobj.hxx"
-#include "tools/multisel.hxx"
 
 #include "com/sun/star/ui/dialogs/XFilePicker.hpp"
 #include "com/sun/star/ui/dialogs/XFilterManager.hpp"
@@ -72,17 +71,20 @@ public:
     typedef std::hash_map< rtl::OUString, ControlDependency, rtl::OUStringHash > ControlDependencyMap;
 
     boost::shared_ptr<Printer>                                  mpPrinter;
-    MultiSelection                                              maSelection;
     Sequence< PropertyValue >                                   maUIOptions;
     std::vector< PropertyValue >                                maUIProperties;
     std::vector< bool >                                         maUIPropertyEnabled;
     PropertyToIndexMap                                          maPropertyToIndex;
     Link                                                        maOptionChangeHdl;
     ControlDependencyMap                                        maControlDependencies;
+    rtl::OUString                                               maSelectionString;
 
     vcl::PrintProgressDialog*                                   mpProgress;
 
-    ImplPrinterListenerData() : mpProgress( NULL ) {}
+    ImplPrinterListenerData() :
+        maSelectionString( RTL_CONSTASCII_USTRINGPARAM( "all" ) ),
+        mpProgress( NULL )
+    {}
     ~ImplPrinterListenerData() { delete mpProgress; }
 };
 
@@ -189,12 +191,6 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterListener>& i_pListene
     boost::shared_ptr<Printer> pPrinter( new Printer( i_rInitSetup.GetPrinterName() ) );
     pListener->setPrinter( pPrinter );
 
-    // setup page range selection
-    MultiSelection aSel;
-    int nPages = i_pListener->getPageCount();
-    aSel.SetTotalRange( Range( 1, nPages ) );
-    aSel.SelectAll();
-
     // check if the printer brings up its own dialog
     // in that case leave the work to that dialog
     if( ! pListener->getPrinter()->GetCapabilities( PRINTER_CAPABILITIES_EXTERNALDIALOG ) )
@@ -212,7 +208,6 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterListener>& i_pListene
                 pListener->getPrinter()->EnablePrintFile( TRUE );
                 pListener->getPrinter()->SetPrintFile( aFile );
             }
-            aSel = aDlg.getPageSelection();
             pListener->getPrinter()->SetCopyCount( static_cast<USHORT>(aDlg.getCopyCount()), aDlg.isCollate() );
         }
         catch( std::bad_alloc& )
@@ -220,7 +215,6 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterListener>& i_pListene
         }
     }
 
-    pListener->setPageSelection( aSel );
     pListener->getPrinter()->StartJob( String( RTL_CONSTASCII_USTRINGPARAM( "FIXME: no job name" ) ),
                                        pListener );
 
@@ -319,12 +313,12 @@ bool Printer::StartJob( const XubString& i_rJobName, boost::shared_ptr<vcl::Prin
                                  maJobSetup.ImplGetConstData() ) )
         {
             mbJobActive             = TRUE;
-            MultiSelection aSel( i_pListener->getPageSelection() );
             i_pListener->createProgressDialog();
-            for( long nPage = aSel.FirstSelected(); nPage != long(SFX_ENDOFSELECTION); nPage = aSel.NextSelected() )
+            int nPages = i_pListener->getPageCount();
+            for( int nPage = 0; nPage < nPages; nPage++ )
             {
                 // remember MultiSelection is 1 based (due to user input)
-                i_pListener->printFilteredPage( static_cast<int>(nPage-1) );
+                i_pListener->printFilteredPage( nPage );
             }
             EndJob();
         }
@@ -356,19 +350,14 @@ const boost::shared_ptr<Printer>& PrinterListener::getPrinter() const
     return mpImplData->mpPrinter;
 }
 
-const MultiSelection& PrinterListener::getPageSelection() const
-{
-    return mpImplData->maSelection;
-}
-
 void PrinterListener::setPrinter( const boost::shared_ptr<Printer>& i_rPrinter )
 {
     mpImplData->mpPrinter = i_rPrinter;
 }
 
-void PrinterListener::setPageSelection( const MultiSelection& i_rSel )
+void PrinterListener::setPrintSelection( const rtl::OUString& i_rSel )
 {
-    mpImplData->maSelection = i_rSel;
+    mpImplData->maSelectionString = i_rSel;
 }
 
 static void modifyJobSetup( Printer* pPrinter, const Sequence< PropertyValue >& i_rProps )
@@ -497,7 +486,7 @@ void PrinterListener::jobFinished()
 Sequence< PropertyValue > PrinterListener::getJobProperties( const Sequence< PropertyValue >& i_rMergeList ) const
 {
     std::hash_set< rtl::OUString, rtl::OUStringHash > aMergeSet;
-    size_t nResultLen = size_t(i_rMergeList.getLength()) + mpImplData->maUIProperties.size();
+    size_t nResultLen = size_t(i_rMergeList.getLength()) + mpImplData->maUIProperties.size() + 1;
     for( int i = 0; i < i_rMergeList.getLength(); i++ )
         aMergeSet.insert( i_rMergeList[i].Name );
 
@@ -509,6 +498,14 @@ Sequence< PropertyValue > PrinterListener::getJobProperties( const Sequence< Pro
     {
         if( aMergeSet.find( mpImplData->maUIProperties[i].Name ) == aMergeSet.end() )
             aResult[nCur++] = mpImplData->maUIProperties[i];
+    }
+    // append page selection
+    if( aMergeSet.find( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintSelection" ) ) ) == aMergeSet.end() )
+    {
+        PropertyValue aVal;
+        aVal.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintSelection" ) );
+        aVal.Value <<= mpImplData->maSelectionString;
+        aResult[nCur++] = aVal;
     }
     aResult.realloc( nCur );
     return aResult;
@@ -666,7 +663,7 @@ void PrinterListener::createProgressDialog()
 {
     if( ! mpImplData->mpProgress )
     {
-        mpImplData->mpProgress = new PrintProgressDialog( NULL, mpImplData->maSelection.GetSelectCount() );
+        mpImplData->mpProgress = new PrintProgressDialog( NULL, getPageCount() );
         mpImplData->mpProgress->Show();
     }
 }

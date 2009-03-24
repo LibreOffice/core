@@ -244,20 +244,6 @@ bool PrintDialog::isCollate()
     return maJobPage.maCopyCountField.GetValue() > 1 ? maJobPage.maCollateBox.IsChecked() : FALSE;
 }
 
-MultiSelection PrintDialog::getPageSelection()
-{
-    if( maJobPage.maPagesButton.IsChecked() )
-        return MultiSelection( maJobPage.maPagesEdit.GetText() );
-    else if( maJobPage.maAllButton.IsChecked() )
-    {
-        MultiSelection aSel( Range( 1, maPListener->getPageCount() ) );
-        aSel.SelectAll();
-        return aSel;
-    }
-    DBG_ERROR( "NYI: Selection" );
-    return MultiSelection();
-}
-
 void PrintDialog::setupOptionalUI()
 {
     Window* pCurParent = 0;
@@ -769,6 +755,20 @@ IMPL_LINK( PrintDialog, ClickHdl, Button*, pButton )
         maPListener->getPrinter()->Setup( this );
     }
     checkControlDependencies();
+    if( ( pButton == &maJobPage.maAllButton        ||
+          pButton == &maJobPage.maPagesButton      ||
+          pButton == &maJobPage.maSelectionButton )
+       && ((CheckBox*)pButton)->IsChecked() )
+    {
+        if( pButton == &maJobPage.maAllButton )
+            maPListener->setPrintSelection( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "all" ) ) );
+        else if( pButton == &maJobPage.maPagesButton )
+            maPListener->setPrintSelection( maJobPage.maPagesEdit.GetText() );
+        else
+            maPListener->setPrintSelection( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "selection" ) ) );
+
+        preparePreview();
+    }
     return 0;
 }
 
