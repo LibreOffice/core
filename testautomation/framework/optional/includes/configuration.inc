@@ -44,7 +44,7 @@ sub sToolsCustomizeKeyboardFunction
     dim sTemp as string
     
     ' go through all applications:
-    aApplication()=array("WRITER","MASTERDOC","HTMLDOKUMENT","CALC","IMPRESS","DRAW","MATH","INSIGHT")
+    aApplication()=array("WRITER","MASTERDOCUMENT","HTML","CALC","IMPRESS","DRAW","MATH","DATABASE")
     a=uBound(aApplication())
     sTemp = gApplication
     for i = 0 to a

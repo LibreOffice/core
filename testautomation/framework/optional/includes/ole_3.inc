@@ -145,7 +145,7 @@ sub hInsertOLEObject( bRemoveFocus as boolean, cOLEObject as string, cOleType as
         goto testend
     endif
     
-    if ( gApplication = "MASTERDOC" and cOleType = "WRITER" ) then
+    if ( gApplication = "MASTERDOCUMENT" and cOleType = "WRITER" ) then
         printlog( "Skipping " & cOleType & " as OLE object" )
         goto testend
     endif

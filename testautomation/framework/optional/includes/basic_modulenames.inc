@@ -48,7 +48,7 @@ testcase tBasicIdeModuleNames
     const CMODULE = "TModuleNames"
     dim cTabName as string
 
-    gApplication = "Writer"
+    gApplication = "WRITER"
     hCreateDocument()
 
     ' ------ prerequisites ---------
@@ -287,7 +287,7 @@ function hBasicModuleCreateNew() as boolean
     const CFN = "hBasicModuleCreateNew::"
 
     '///+<li>Open a new writer document</li>
-    gApplication = "Writer"
+    gApplication = "WRITER"
     brc = hCreateDocument()
     
     '///+<li>Open the BASIC Macro Organizer</li>

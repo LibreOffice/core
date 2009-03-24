@@ -37,7 +37,9 @@
 '*
 '\******************************************************************
 
-sub w_010printLog Chr(13) + "--------- Objectbars (w_010_.inc) ----------"
+sub w_010_
+
+    printLog Chr(13) + "--------- Objectbars (w_010_.inc) ----------"
     gApplication = "WRITER"
 
     '   ** Objectbar
@@ -67,9 +69,9 @@ sub w_010printLog Chr(13) + "--------- Objectbars (w_010_.inc) ----------"
     Call tUpNumberingEnumerating
 
     'Writer Web
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     Call tHtmlDocFormatting
-    gApplication = "MASTERDOC"
+    gApplication = "MASTERDOCUMENT"
     Call tMasterDocFormatting
     gApplication = "WRITER"
 
@@ -135,7 +137,7 @@ testcase tFormatting
     printlog " Select 'Centered' in object bar"
     Zentriert.Click
     Sleep 1
-    if gApplication <> "HTMLDOKUMENT" then
+    if gApplication <> "HTML" then
         printlog "  - Justify"
         printlog " Select 'Justify' in object bar (not in HTML)"
         Blocksatz.Click
@@ -1075,7 +1077,7 @@ endcase
 
 testcase tHtmlDocFormatting
     printlog "- Objectbar ( normal ) : Formatting"
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
 
     printlog " Open new document"
     Call hNewDocument
@@ -1150,7 +1152,7 @@ endcase
 
 testcase tMasterDocFormatting
     printlog "- Objectbar ( normal ) : Formatting"
-    gApplication = "MASTERDOC"
+    gApplication = "MASTERDOCUMENT"
 
     printlog " Open new document"
     Call hNewDocument

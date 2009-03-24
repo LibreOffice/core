@@ -35,32 +35,6 @@
 '*
 '* short description : Global Tools II
 '*
-'***************************************************************************************
-'*
-' #1 GetOLEDefaultNames             'Get the correct language depending names for OLE objects
-' #1 hSetLocaleStrings              'Set a string array with language dependant strings
-' #1 GetHTMLCharSet                 'Get the character set for HTML export
-' #1 SetHTMLCharSet                 'Set the character set for HTML export
-' #1 SetHTMLCharSetToUTF8           'Set the character set for HTML export to UTF8
-' #1 dec                            'Decrease variable
-' #1 inc                            'Increase variable
-' #1 ActivateAutoPilot              'Routine to activate (WebPage Autopilot, Form Autopilot, Documentconverter, Euroconveter and Addressdatasource)
-' #1 SetURL                         'Open a special URL with 'file open'-dialog
-' #1 fGetFileText                   'This function is for getting  the first or last n characters of a file
-' #1 fSetMeasurementToCM            'Sets the measurement unit to cm and returns the unit
-' #1 fRemoveDoubleSpace             'Removes every space after a space
-' #1 writeCrashRepFile              'Creates a file (gOfficePath)/user/work/crashrep.txt with testcase- and .bas-name
-' #1 GetBuildNumHidLst              'Get the BuildId out of the hid.lst
-' #1 fGetProductName                'Reads the ProductKey from bootstrap file and cuts of version number
-' #1 fopenConfig                    'Open a configuration package from the Office installation via UNO API.
-' #1 hGetUNOService                 'Function enables the UNO communication inside the TestTool to the office application.
-' #0 hSetBuildVersionInformation    'set global version information variables: gMajor, gMinor, gBuild
-' #1 FindBuildID                    'Scans in iso*.res for the BuildID.
-' #1 fRelativeToAbsolutePath        'removes ".." from a path with logic
-' #1 sCheckValgrindStatus           'recognizes file $HOME/tcs.txt for valgrind tools
-' #1 fgetDocumentLanguages          'gets the Default language for documents
-' #1 fRemoveDoubleCharacter         'Removes double characters from a string
-'*
 '\*************************************************************************************
 
 sub GetOLEDefaultNames
@@ -267,25 +241,25 @@ function ActivateAutoPilot ( sWhichOne as String ) as Boolean
    LoadTime = 0
 
    select case gApplication
-      case "WRITER", "TEXTDOKUMENT"
+      case "WRITER"
                        Kontext "DocumentWriter"
                        DocumentWriter.UseMenu
-      case "HTML", "HTMLDOKUMENT"
+      case "HTML"
                        Kontext "DocumentWriterWeb"
                        DocumentWriterWeb.UseMenu
-      case "MASTERDOC", "GLOBALDOKUMENT", "GLOBALDOC"
+      case "MASTERDOCUMENT"
                        Kontext "DocumentMasterDoc"
                        DocumentMasterDoc.UseMenu
-      case "CALC", "TABELLENDOKUMENT"
+      case "CALC"
                        Kontext "DocumentCalc"
                        DocumentCalc.UseMenu
-      case "IMPRESS", "PRAESENTATION"
+      case "IMPRESS"
                        Kontext "DocumentImpress"
                        DocumentImpress.UseMenu
-      case "DRAW", "ZEICHNUNG"
+      case "DRAW"
                        Kontext "DocumentDraw"
                        DocumentDraw.UseMenu
-      case "MATH", "FORMEL"
+      case "MATH"
                        Kontext "DocumentMath"
                        DocumentMath.UseMenu
       case else
@@ -488,46 +462,52 @@ function fSetMeasurementToCM() as string
     Call hNewDocument
     ToolsOptions
         select case UCase(gApplication)
-            case "WRITER",  "TEXTDOKUMENT"    : Call hToolsOptions("TEXTDOCUMENT","GENERAL")
+            case "WRITER"
+            Call hToolsOptions("WRITER","GENERAL")
                                                 Masseinheit.Select(2)
                                                 if iSprache = 81 then
                                                     fSetMeasurementToCM = Right$( Tabulatorenabstand.Gettext, 3 )        
                                                 else
                                                     fSetMeasurementToCM = Right$( Tabulatorenabstand.Gettext, 2 )        
                                                 endif            
-            case "CALC", "TABELLENDOKUMENT"   : Call hToolsOptions("SPREADSHEET","GENERAL")
+            case "CALC"
+            Call hToolsOptions("CALC","GENERAL")
                                                 Masseinheit.Select(2)
                                                 if iSprache = 81 then
                                                     fSetMeasurementToCM = Right$( Tabulator.Gettext , 3 )        
                                                 else
                                                     fSetMeasurementToCM = Right$( Tabulator.Gettext , 2 )        
                                                 endif
-            case "IMPRESS", "PRAESENTATION"   : Call hToolsOptions("PRESENTATION","GENERAL")
+            case "IMPRESS"
+            Call hToolsOptions("IMPRESS","GENERAL")
                                                 Masseinheit.Select(2)
                                                 if iSprache = 81 then
                                                     fSetMeasurementToCM = Right$( Tabulatorabstand.Gettext, 3 )        
                                                 else
                                                     fSetMeasurementToCM = Right$( Tabulatorabstand.Gettext, 2 )        
                                                 endif            
-            case "DRAW", "ZEICHNUNG"          : Call hToolsOptions("DRAWING","GENERAL")
+            case "DRAW"
+            Call hToolsOptions("DRAW","GENERAL")
                                                 Masseinheit.Select(2)
                                                 if iSprache = 81 then
                                                     fSetMeasurementToCM = Right$( Tabulatorabstand.Gettext, 3 )        
                                                 else
                                                     fSetMeasurementToCM = Right$( Tabulatorabstand.Gettext, 2 )        
                                                 endif                        
-            case "GLOBALDOC", "GLOBALDOKUMENT": Call hToolsOptions("TEXTDOCUMENT","GENERAL")
+            case "MASTERDOCUMENT"
+            Call hToolsOptions("WRITER","GENERAL")
                                                 Masseinheit.Select(2)
                                                 if iSprache = 81 then
                                                     fSetMeasurementToCM = Right$( Tabulatorenabstand.Gettext, 3 )        
                                                 else
                                                     fSetMeasurementToCM = Right$( Tabulatorenabstand.Gettext, 2 )        
                                                 endif                        
-            case "HTML", "HTMLDOKUMENT"       : Call hToolsOptions("HTMLDOCUMENT","VIEW")
+            case "HTML"
+            Call hToolsOptions("HTML","VIEW")
                                                 Masseinheit.Select(2)
                                                 'in Writer/Web also the Writer has to be set to cm 
                                                 'because .sdw, .sxw etc. export to HTML depends on it.
-                                                Call hToolsOptions("TEXTDOCUMENT","GENERAL")
+                                                Call hToolsOptions("WRITER","GENERAL")
                                                 Masseinheit.Select(2)
                                                 if iSprache = 81 then
                                                     fSetMeasurementToCM = Right$( Tabulatorenabstand.Gettext, 3 )        

@@ -79,8 +79,8 @@ testcase tMySQLODBCProperties
 
     ViewForms
     
-    Kontext "Insight"    
-        Insight.UseMenu    
+    Kontext "DATABASE"    
+        Database.UseMenu    
         hMenuSelectNr(2)
         hMenuSelectNr(15)
         hMenuSelectNr(2)
@@ -117,8 +117,8 @@ testcase tMySQLJDBCProperties
 
     ViewForms    
     
-    Kontext "Insight"    
-        Insight.UseMenu    
+    Kontext "DATABASE"    
+        Database.UseMenu    
         hMenuSelectNr(2)
         hMenuSelectNr(15)
         hMenuSelectNr(2)
@@ -165,8 +165,8 @@ testcase tAdabasProperties
 
     ViewForms    
             
-    Kontext "Insight"    
-        Insight.UseMenu    
+    Kontext "DATABASE"    
+        Database.UseMenu    
         hMenuSelectNr(2)
         hMenuSelectNr(15)
         hMenuSelectNr(2)
@@ -205,8 +205,8 @@ testcase tOracleJDBCProperties
 
     ViewForms    
             
-    Kontext "Insight"    
-        Insight.UseMenu    
+    Kontext "DATABASE"    
+        Database.UseMenu    
         hMenuSelectNr(2)
         hMenuSelectNr(15)
         hMenuSelectNr(2)
@@ -241,8 +241,8 @@ testcase tJDBCProperties
 
     ViewForms    
             
-    Kontext "Insight"    
-        Insight.UseMenu    
+    Kontext "DATABASE"    
+        Database.UseMenu    
         hMenuSelectNr(2)
         hMenuSelectNr(15)
         hMenuSelectNr(2)
@@ -274,8 +274,8 @@ testcase tLDAPProperties
 
     ViewForms    
             
-    Kontext "Insight"    
-        Insight.UseMenu    
+    Kontext "DATABASE"    
+        Database.UseMenu    
         hMenuSelectNr(2)
         hMenuSelectNr(15)
         hMenuSelectNr(2)
@@ -315,8 +315,8 @@ testcase tEvolutionProperties
 
     ViewForms    
             
-    Kontext "Insight"    
-        Insight.UseMenu    
+    Kontext "DATABASE"    
+        Database.UseMenu    
         hMenuSelectNr(2)
         hMenuSelectNr(15)
         hMenuSelectNr(2)
@@ -357,8 +357,8 @@ testcase tMozillaProperties
 
     ViewForms    
             
-    Kontext "Insight"    
-        Insight.UseMenu    
+    Kontext "DATABASE"    
+        Database.UseMenu    
         hMenuSelectNr(2)
         hMenuSelectNr(15)
         hMenuSelectNr(2)
@@ -388,25 +388,25 @@ testcase tSpreadsheetProperties
 
     ViewForms    
             
-    Kontext "Insight"    
-        Insight.UseMenu    
+    Kontext "DATABASE"    
+        Database.UseMenu    
         hMenuSelectNr(2)
         hMenuSelectNr(15)
         hMenuSelectNr(2)
     
     Kontext "TabGeneral"    
         call DialogTest(TabGeneral)
-        DataBaseType.select(getIdForDatabaseType("Spreadsheet"))    
+        DataBaseType.select(getIdForDatabaseType("CALC"))    
         
     Kontext "ConnectionType"        
         NextBtn.Click
         sleep(1)        
-        call fCheckConnectionTabPage("Spreadsheet")
+        call fCheckConnectionTabPage("CALC")
     
     Kontext "ConnectionType"        
         ConnectionType.Cancel
         
-    'call fCheckAdvancedDialog("Spreadsheet")
+    'call fCheckAdvancedDialog("CALC")
         
     call fCloseDatabase()  
     
@@ -418,8 +418,8 @@ testcase tTextProperties
 
     ViewForms    
             
-    Kontext "Insight"    
-        Insight.UseMenu    
+    Kontext "DATABASE"    
+        Database.UseMenu    
         hMenuSelectNr(2)
         hMenuSelectNr(15)
         hMenuSelectNr(2)
@@ -456,8 +456,8 @@ testcase tdBaseProperties
 
     ViewForms    
             
-    Kontext "Insight"    
-        Insight.UseMenu    
+    Kontext "DATABASE"    
+        Database.UseMenu    
         hMenuSelectNr(2)
         hMenuSelectNr(15)
         hMenuSelectNr(2)
@@ -494,8 +494,8 @@ testcase tODBCProperties
 
     ViewForms    
             
-    Kontext "Insight"    
-        Insight.UseMenu    
+    Kontext "DATABASE"    
+        Database.UseMenu    
         hMenuSelectNr(2)
         hMenuSelectNr(15)
         hMenuSelectNr(2)
@@ -549,8 +549,8 @@ function fCheckAdvancedDialog(sType as string)
     
     printlog "+Check the Advanced Settings for the datasource type " + sType
     
-    Kontext "Insight"    
-        Insight.UseMenu    
+    Kontext "DATABASE"    
+        Database.UseMenu    
         hMenuSelectNr(2)
         hMenuSelectNr(15)
         hMenuSelectNr(3)    
@@ -590,7 +590,7 @@ function fCheckAdvancedDialog(sType as string)
             'call fcheckControl(BooleanComparison)
             'call fcheckControl(AppendAlias)
         
-        elseif sType = "Spreadsheet" OR sType = "Mozilla" OR sType = "Evolution" OR sType = "LDAP" then            
+        elseif sType = "CALC" OR sType = "Mozilla" OR sType = "Evolution" OR sType = "LDAP" then            
            ' call fcheckControl(BooleanComparison)
            ' call fcheckControl(AppendAlias)    
         
@@ -672,7 +672,7 @@ function fCheckConnectionTabPage(sType as string)
         call fcheckControl(SelectPath)
         call fcheckControl(TestConnection)
     
-    elseif sType = "Spreadsheet" then        
+    elseif sType = "CALC" then        
         call fcheckControl(SpreadsheetPath)
         call fcheckControl(SelectPath)
         call fcheckControl(TestConnection)

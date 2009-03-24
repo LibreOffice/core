@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '*******************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -44,34 +44,34 @@ function hGrafikEinfuegen  ( Grafik$ ) as Boolean
     '/// A graphic will be inserted (not linked).
     '/// <u>Input</u>: Filename with complete path
     '/// <u>Return</u>: TRUE or FALSE if the graphic could be inserted or not.
-    
+
     Dim DieDatei as String
     Dim IsActive as Boolean
-    
+
     DieDatei = ConvertPath ( Grafik$ )
-    
+
     InsertGraphicsFromFile
     WaitSlot()
-    
+
     Kontext
     If Active.Exists(1) then
         warnlog "  Hinweis: " & Active.GetText
         Active.Ok
     End If
-    
-    
+
+
     Kontext "GrafikEinfuegenDlg"
     if ( GrafikEinfuegenDlg.exists( 2 ) ) then
-    
+
         Vorschau.Uncheck
-        if gApplication <> "HTMLDOKUMENT" AND gApplication <> "HTML" then
+        if gApplication <> "HTML" AND gApplication <> "HTML" then
             Verknuepfen.UnCheck
         end if
-        
+
         Dateiname.SetText DieDatei
         DateiTyp.Select 1                               ' set the filter to 'all formats'
         Oeffnen.Click
-        
+
         Kontext "Active"
         if Active.Exists(2) then
             Warnlog "  Hinweis: " & Active.GetText
@@ -92,7 +92,7 @@ function hGrafikEinfuegen  ( Grafik$ ) as Boolean
             hGrafikEinfuegen = IsImageLoaded
         end if
     else
-    'GrafikEinfuegeDlg not open
+        'GrafikEinfuegeDlg not open
     endif
 end function
 '
@@ -105,12 +105,12 @@ function hGrafikVerknuepftEinfuegen  ( Grafik$ ) as Boolean
     '/// <u>Return</u>: TRUE or FALSE if the graphic could be inserted or not.
     Dim DieDatei as String
     Dim IsActive as Boolean
-    
+
     DieDatei = ConvertPath ( Grafik$ )
-    
+
     InsertGraphicsFromFile
     WaitSlot()
-    
+
     Kontext
     If Active.Exists(1) then
         warnlog "  Hinweis: " & Active.GetText
@@ -118,16 +118,16 @@ function hGrafikVerknuepftEinfuegen  ( Grafik$ ) as Boolean
     End If
     Kontext "GrafikEinfuegenDlg"
     if ( GrafikEinfuegenDlg.exists( 1 ) ) then
-        
+
         Vorschau.UnCheck
-        if gApplication <> "HTMLDOKUMENT" AND gApplication <> "HTML" then
+        if gApplication <> "HTML" AND gApplication <> "HTML" then
             Verknuepfen.Check
         end if
-        
+
         Dateiname.SetText DieDatei
         DateiTyp.Select 1                               ' set the filter to 'all formats'
         Oeffnen.Click
-        
+
         Kontext "Active"
         if Active.Exists(2) then
             Warnlog "  Hinweis: " + Active.GetText
@@ -154,7 +154,7 @@ function IsItSaved as boolean
     '/// IsItSaved
     '/// Wait until document is saved.
     Dim iLoop as integer
-    
+
     IsItSaved = FALSE
     sleep(3)
     for iLoop =1 to 20
@@ -164,7 +164,7 @@ function IsItSaved as boolean
         catch
             IsItSaved = FALSE
         endcatch
-        
+
         if IsItSaved = TRUE then
             exit for
         end if
@@ -179,7 +179,7 @@ function IsItLoaded as boolean
     '/// IsItLoaded
     '/// Wait until document is loaded
     Dim iLoop as integer
-    
+
     IsItLoaded = FALSE
     sleep(3)
     for iLoop =1 to 20
@@ -189,7 +189,7 @@ function IsItLoaded as boolean
         catch
             IsItLoaded = FALSE
         endcatch
-        
+
         if IsItLoaded = TRUE then
             exit for
         end if
@@ -207,11 +207,11 @@ function hIsNamedDocLoaded (ShouldFile as String, optional bSilent as boolean) a
     '/// Input: name of loaded file; Output: True/False ///'
     '///+' if a doc got loaded, the filename in a 'SaveAs' Dlg is different from "" ///
     '///+' usually the file name of the loaded document with an changed extension chosen from SO ///
-    
+
     if (isMissing(bSilent)) then
         bSilent = False
     endif
-    
+
     hIsNamedDocLoaded  = FALSE      ' Let's  start WorstCase :-(
     FileSaveAs
     Kontext "SpeichernDlg"
@@ -236,7 +236,7 @@ function IsImageLoaded
     '/// IsImageLoaded
     '/// Wait until images in document are loaded
     Dim i% : Dim Herbert as Boolean
-    
+
     Sleep 3
     for i%=1 to 20
         try
@@ -380,11 +380,11 @@ function hExportAsPDFmulti (iTypeOfCall as integer, bExecute as boolean, sFileNa
     dim iTemp as integer
     dim sTFileName as string
     dim iCount as integer
-    
+
     sPDF = "PDF - Portable Document Format (.pdf)"
     hExportAsPDFmulti = TRUE ' optimistic
     iTemp = 0
-    
+
     select case (iTypeOfCall)
     case 1 : '/// click the button 'Export Directly as PDF' on the Functionbar ///'
         kontext "Standardbar"
@@ -412,7 +412,7 @@ function hExportAsPDFmulti (iTypeOfCall as integer, bExecute as boolean, sFileNa
             exit function
         endcatch
     end select
-    
+
     ' only if the type is 1 OR 3 then the File Save dialog appear
     ' just kept here for compatibility reasons - has to get removed around july 2007
     if (iTypeOfCall = 1 OR iTypeOfCall = 3) then
@@ -426,19 +426,19 @@ function hExportAsPDFmulti (iTypeOfCall as integer, bExecute as boolean, sFileNa
                 hExportAsPDFmulti = FALSE
                 exit function
             endcatch
-            
+
             sTemp = Dateityp.GetSelText
             if (sTemp <> sPDF) then
                 Warnlog "filter for PDF export is missing :-( '" + sPDF + "'"
             end if
             '/// set Textbox 'File name' ///'
             Dateiname.SetText sFileName
-                'if the file has no pdf extension then add the extension
-                if (lCase(right(sFileName, 4))=".pdf") then
-                    sTFileName = sFileName
-                else
-                    sTFileName = sFileName + ".pdf"
-                endif
+            'if the file has no pdf extension then add the extension
+            if (lCase(right(sFileName, 4))=".pdf") then
+                sTFileName = sFileName
+            else
+                sTFileName = sFileName + ".pdf"
+            endif
             '/// click on the button 'Export...' ///'
             if (bExecute) then
                 Export.Click
@@ -460,7 +460,7 @@ function hExportAsPDFmulti (iTypeOfCall as integer, bExecute as boolean, sFileNa
         else
             'ExportAsPDFDlg.Cancel
         end if
-        
+
         ' if file exists, there is a message...
         kontext "PDFOptions"
         if NOT PDFOptions.exists then
@@ -477,8 +477,8 @@ function hExportAsPDFmulti (iTypeOfCall as integer, bExecute as boolean, sFileNa
             end if
         end if
     end if
-    
-    
+
+
     ' only if the type is 2 OR 3 then the PDF option dialog appear
     if (iTypeOfCall = 2 OR iTypeOfCall = 3) then
         kontext "PDFOptions"
@@ -522,7 +522,7 @@ function hExportAsPDFmulti (iTypeOfCall as integer, bExecute as boolean, sFileNa
                 exit function
             endcatch
         end select
-        
+
         select case (iConpression)
         case 1 : '/// JpegCompression check and ReduceImageResolution check///'
             try
@@ -577,19 +577,19 @@ function hExportAsPDFmulti (iTypeOfCall as integer, bExecute as boolean, sFileNa
                 hExportAsPDFmulti = FALSE
                 exit function
             endcatch
-            
+
             sTemp = Dateityp.GetSelText
             if (sTemp <> sPDF) then
                 Warnlog "filter for PDF export is missing :-( '" + sPDF + "'"
             end if
             '/// set Textbox 'File name' ///'
             Dateiname.SetText sFileName
-                'if the file has no pdf extension then add the extension
-                if (lCase(right(sFileName, 4))=".pdf") then
-                    sTFileName = sFileName
-                else
-                    sTFileName = sFileName + ".pdf"
-                endif
+            'if the file has no pdf extension then add the extension
+            if (lCase(right(sFileName, 4))=".pdf") then
+                sTFileName = sFileName
+            else
+                sTFileName = sFileName + ".pdf"
+            endif
             '/// click on the button 'Export...' ///'
             if (bExecute) then
                 Speichern.Click
@@ -611,7 +611,7 @@ function hExportAsPDFmulti (iTypeOfCall as integer, bExecute as boolean, sFileNa
         else
             ExportierenDLG.Cancel
         end if
-        
+
         ' if file exists, there is a message...
         kontext "PDFOptions"
         if NOT PDFOptions.exists then
@@ -637,10 +637,10 @@ function hDeleteFile( cFileOrig as string ) as boolean
 
     const CFN = "global::tools::includes::required::t_files.inc::hDeleteFile():"
     dim cHome as string
-        cHome = gOfficePath & "user"
-        cHome = convertpath( cHome )
+    cHome = gOfficePath & "user"
+    cHome = convertpath( cHome )
     dim cFile as string
-        cFile = convertpath( cFileOrig )
+    cFile = convertpath( cFileOrig )
 
     '///<h3>Delete a file</h3>
     '///<i>In many cases it is a good idea to use this function outside the testcase.<br>
@@ -671,7 +671,7 @@ function hDeleteFile( cFileOrig as string ) as boolean
     ' i introduced this function due to a number of cases where deleting files
     ' actually failed because of weird code or situations where the user lacks
     ' accessrights to files are not handled at all.
-    
+
     '///+<li>We may never delete a file outside gOfficePath/user/work</li>
     if ( instr( cFile , cHome ) = 0 ) then
         qaerrorlog( CFN & "Trying to delete file outside (default)homedir -> forbidden" )
@@ -680,7 +680,7 @@ function hDeleteFile( cFileOrig as string ) as boolean
         hDeleteFile() = false
         exit function
     endif
-    
+
     cFile = convertpath( cFile )
 
     '///+<li>Check that the file exists</li>
@@ -715,7 +715,7 @@ function hDeleteFile( cFileOrig as string ) as boolean
         hDeleteFile() = true
 
     endif
-    
+
     '///</ul>
 
 end function
@@ -730,7 +730,7 @@ function hFileOpen( cFile as string ) as boolean
     if ( C_INFO ) then printlog( CFN & "Load: " & sFile )
     FileOpen( "URL", sFile, "FrameName", "_default" )
     if ( hFileWait( FALSE ) >= 0 ) then hFileOpen() = TRUE
-    
+
 end function
 '
 '-------------------------------------------------------------------------------
@@ -741,14 +741,14 @@ function hFileOpenSpecial( cFile as string, cFlag as string ) as boolean
     ' cFlag = "ReadOnly" opens file read-onlx
     ' cFlag = "AsTemplate" opens file as templat
     ' cFlag = <Any other string> treats string as password
-    
+
     dim sFile as string : sFile = convertToURL( convertpath( cFile ) )
     const CFN = "global::tools::inc::t_files.inc::hFileOpenSpecial():"
     hFileOpenSpecial() = FALSE
     if ( C_INFO ) then printlog( "Load (Flag): " & sFile & " (" & cFlag & ")" )
-    
+
     select case( lcase( cFlag ) )
-    case "readonly" 
+    case "readonly"
         printlog( CFN & "Load file read-only: " & sFile )
         FileOpen( "URL", sFile, "FrameName", "_default", "ReadOnly", TRUE)
     case "astemplate"
@@ -758,11 +758,11 @@ function hFileOpenSpecial( cFile as string, cFlag as string ) as boolean
         printlog( CFN & "Load file with password: " & sFile )
         FileOpen( "URL", sFile, "FrameName", "_default", "Password" , cFlag )
     end select
-    
+
     if ( hFileWait( FALSE ) >= 0 ) then hFileOpenSpecial() = TRUE
-    
+
     '///</ul>
-    
+
 end function
 '
 '-------------------------------------------------------------------------------
@@ -787,7 +787,7 @@ function hFileSave() as boolean
     if ( C_INFO ) then printlog( CFN & "Save file." )
     FileSave
     if ( hFileWait( TRUE ) >= 0 ) then hFileSave() = TRUE
-    
+
 end function
 '
 '-------------------------------------------------------------------------------
@@ -800,7 +800,7 @@ function hFileSaveAs( cFile as string ) as boolean
     if ( C_INFO ) then printlog( CFN & "Save: " & sFile )
     FileSaveAs( "URL", sFile, "Overwrite", FALSE )
     if ( hFileWait( TRUE ) >= 0 ) then hFileSaveAs() = TRUE
-    
+
 end function
 '
 '-------------------------------------------------------------------------------
@@ -813,7 +813,7 @@ function hFileSaveAsKill( cFile as string ) as boolean
     if ( C_INFO ) then printlog( CFN & "Save, replacing: " & sFile )
     FileSaveAs( "URL", sFile, "Overwrite", TRUE )
     if ( hFileWait( TRUE ) >= 0 ) then hFileSaveAsKill() = TRUE
-    
+
 end function
 '
 '-------------------------------------------------------------------------------
@@ -826,7 +826,7 @@ function hFileSaveAsKillWithPassword( cFile as string, cPassword as string ) as 
     if ( C_INFO ) then printlog( CFN & "Save with password, replacing: " & sFile & "::" & cPassword )
     FileSaveAs( "URL", sFile, "Overwrite", TRUE, "Password", cPassword )
     if ( hFileWait( TRUE ) >= 0 ) then hFileSaveAsKillWithPassword() = TRUE
-    
+
 end function
 '
 '-------------------------------------------------------------------------------
@@ -839,7 +839,7 @@ function hFileSaveAsWithFilter( cFile as string, cFilter as string ) as boolean
     if ( C_INFO ) then printlog( CFN & "Save with filter: " & sFile & "::" & cFilter )
     FileSaveAs( "URL", sFile, "FilterName", cFilter, "Overwrite", FALSE )
     if ( hFileWait( TRUE ) >= 0 ) then hFileSaveAsWithFilter() = TRUE
-    
+
 end function
 '
 '-------------------------------------------------------------------------------
@@ -852,7 +852,7 @@ function hFileSaveAsWithFilterKill( cFile as string, cFilter as string ) as bool
     if ( C_INFO ) then printlog( CFN & "Save with filter, replacing: " & sFile & "::" & cFilter )
     FileSaveAs( "URL", sFile, "FilterName", cFilter, "Overwrite", TRUE )
     if ( hFileWait( TRUE ) >= 0 ) then hFileSaveAsWithFilterKill() = TRUE
-    
+
 end function
 '
 '-------------------------------------------------------------------------------
@@ -867,85 +867,85 @@ function hFileWait( optional bWarn as boolean ) as integer
     const MAX_WAIT = 10
     dim iWait as integer : iWait = 0
     dim bWarnlog as boolean
-    
+
     if ( IsMissing( bWarn ) ) then
         bWarnlog = TRUE
     else
         bWarnlog = bWarn
     endif
-    
+
     do while( WaitSlot() <> WSFinished )
-    
+
         iWait = iWait + 1
-        
+
         ' This is the timeout
         if ( iWait = MAX_WAIT ) then
             iWait = -1
             exit do
         endif
-        
+
         ' LOAD: Security warning prevents slot from finishing
         kontext "SecurityWarning"
         if ( SecurityWarning.exists() ) then
             iWait = -2
             exit do
         endif
-        
+
         ' LOAD: Password dialog
         kontext "PasswordFileOpen"
         if ( PasswordFileOpen.exists() ) then
             iWait = -3
             exit do
         endif
-        
+
         ' SAVE: Password dialog
         kontext "PasswordDlg"
         if ( PasswordDlg.exists() ) then
             iWait = -4
             exit do
         endif
-        
+
         ' LOAD: Filter selection dialog
         Kontext "Filterauswahl"
         if ( FilterAuswahl.exists() ) then
             iWait = -5
             exit do
         endif
-        
+
         ' LOAD: ASCII Filter Options dialog
         kontext "ASCIIFilterOptionen"
         if AsciiFilterOptionen.Exists() then
             iWait = -6
             exit do
         end if
-        
+
         ' LOAD/SAVE: Some other dialogs that may interrupt file I/O
         kontext "Active"
         if ( Active.exists() ) then
             printlog( Active.getText() )
-            
+
             ' This is most likely a warning
             if ( Active.getButtonCount() = 1 ) then
                 iWait = -7
                 exit do
             endif
-            
+
             ' This is probably the update links dialog
             if ( Active.getButtonCount() = 2 ) then
                 iWait = -8
                 exit do
             endif
-            
+
             ' This is probably the styles not matching dialog
             if ( Active.getButtonCount() = 3 ) then
                 iWait = -9
                 exit do
             endif
-            
+
         endif
-        
+
     loop
-    
+
     if ( C_INFO ) then
         select case iWait
         case -1   : printlog( CFN & "Timeout reached, rc = " & iWait )
@@ -960,12 +960,12 @@ function hFileWait( optional bWarn as boolean ) as integer
         case else : printlog( CFN & "File I/O completed in " & iWait & " seconds" )
         end select
     endif
-    
+
     if ( bWarnlog and ( iWait < 0 ) ) then
         warnlog( CFN & "The messagebox was not expected at this point" )
     endif
-    
+
     hFileWait() = iWait
-    
+
 end function
 

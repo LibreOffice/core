@@ -66,7 +66,7 @@ testcase tStandardBar_3
     '///<ul>
 
     printlog "Save File"
-    gApplication = "Calc"
+    gApplication = "CALC"
 
     '///+<li>New Spreadsheet document, ensure that the navigator is closed</li>
     printlog( "New Spreadsheet document" )

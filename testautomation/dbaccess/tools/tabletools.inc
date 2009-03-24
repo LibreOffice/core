@@ -579,18 +579,18 @@ function fOpenRelationDesign()
     '/// open a new relation design
     '/// <u>parameter:</u>    
     
-    Kontext "Insight"    
-	    if ( Insight.NotExists(3) ) then
+    Kontext "DATABASE"    
+	    if ( Database.NotExists(3) ) then
 	        fOpenRelationDesign = false
 	        exit function
 	    end if
 
-        Insight.MouseDown(50,50)
-        Insight.MouseUp(50,50)
+        Database.MouseDown(50,50)
+        Database.MouseUp(50,50)
     
     sleep(1)
     
-    Insight.UseMenu
+    Database.UseMenu
     hMenuSelectNr(5)
     hMenuSelectNr(1)
     
@@ -631,15 +631,15 @@ end function
 function fOpenNewTableDesign
     printlog "fOpenNewTableDesign called"
 
-    printlog "check if Insight exists"
+    printlog "check if Database exists"
     
-    Kontext "Insight"    
-        Insight.MouseDown(50,50)
-        Insight.MouseUp(50,50)
+    Kontext "DATABASE"    
+        Database.MouseDown(50,50)
+        Database.MouseUp(50,50)
     
-    if ( Insight.NotExists(3) ) then
+    if ( Database.NotExists(3) ) then
         fOpenNewTableDesign = false
-        warnlog "The Insight windows doesn't exists"
+        warnlog "The Database windows doesn't exists"
         exit function
     end if
     
@@ -658,15 +658,15 @@ end function
 function fOpenTableInDesign(sTableName as String)
     printlog "fOpenTableInDesign called"
 
-    printlog "check if Insight exists"
+    printlog "check if Database exists"
     
-    Kontext "Insight"    
-        Insight.MouseDown(50,50)
-        Insight.MouseUp(50,50)
+    Kontext "DATABASE"    
+        Database.MouseDown(50,50)
+        Database.MouseUp(50,50)
     
-    if ( Insight.NotExists(3) ) then
+    if ( Database.NotExists(3) ) then
         fOpenTableInDesign = false
-        warnlog "The Insight windows doesn't exists"
+        warnlog "The Database windows doesn't exists"
         exit function
     end if
     
@@ -756,14 +756,14 @@ function fStartTableWizard()
     '/// start the table wizard 
     '/// <u>parameter:</u>    
 
-    Kontext "Insight"    
-	    if ( Insight.NotExists(3) ) then
+    Kontext "DATABASE"    
+	    if ( Database.NotExists(3) ) then
 	        fStartTableWizard = false
 	        exit function
 	    end if
 
-        Insight.MouseDown(50,50)
-        Insight.MouseUp(50,50)
+        Database.MouseDown(50,50)
+        Database.MouseUp(50,50)
     
     sleep(1)
     

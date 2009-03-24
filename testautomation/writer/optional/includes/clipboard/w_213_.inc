@@ -274,7 +274,7 @@ testcase WriterToDrawDrawingObject
     printlog " + Jump to beginning of document "
     printlog " + Select 'Drawing Object' "
     printlog " + Copy selected Drawing Object "
-    if wSetClipboardtestDefaults("draw") = True then
+    if wSetClipboardtestDefaults("DRAW") = True then
         gApplication = "DRAW"
         printlog " + Open new document "
         Call hNewDocument
@@ -293,7 +293,7 @@ testcase WriterToDrawDrawingObject
         printlog "  Paste 'Table' in all available clipboard formats "
         Kontext "InhaltEinfuegen"
         if InhaltEinfuegen.Exists then
-            Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"draw")
+            Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"DRAW")
             printlog " + Write Clipboard format under pasted content "
             Call hFileSaveAsWithFilterKill (gOfficepath + "user\work\writer_to_draw_draw.odg", "draw8")
             printlog " + Save document as ..\user\work\writer_to_draw_draw.odg"

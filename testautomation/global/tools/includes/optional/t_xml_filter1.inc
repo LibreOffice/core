@@ -60,7 +60,7 @@ testcase tToolsXMLFilterSettings
     Dim bJavaBroken as boolean
 
     'Not being used for Writer/WEB 
-    if lcase(gApplication) = "htmldokument" then
+    if gApplication = "HTML" then
         goto endsub
     endif
     
@@ -739,9 +739,9 @@ sub sRemoveXSLTFilter
     Dim ia as integer
     Dim sTempReadFilterName as string
     Kontext "XMLFilterSettings"
-    select case lcase(gApplication)
-        case "calc"         : sXMLFilterType = "excel"
-        case "writer"       : sXMLFilterType = "word"
+    select case gApplication
+        case "CALC"         : sXMLFilterType = "excel"
+        case "WRITER"       : sXMLFilterType = "word"
         case else           : sXMLFilterType = "docbook"
     end select
     iCountOfDefaultXSLTStyles = FilterList.GetItemCount

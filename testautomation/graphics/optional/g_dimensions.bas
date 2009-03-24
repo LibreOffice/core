@@ -46,7 +46,7 @@ sub main
     PrintLog "-------------------------" + gApplication + "-------------------"
         Call testFormatDimensioning
 
-    gApplication = "Draw"
+    gApplication = "DRAW"
     PrintLog "-------------------------" + gApplication + "-------------------"
         Call testFormatDimensioning
 
@@ -56,6 +56,6 @@ end sub
 sub LoadIncludeFiles
     use "global\system\includes\master.inc"
     use "global\system\includes\gvariabl.inc"
-    gApplication = "Impress"
+    gApplication = "IMPRESS"
     Call GetUseFiles
 end sub

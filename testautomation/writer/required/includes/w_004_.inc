@@ -36,7 +36,9 @@
 '*
 '\***********************************************************************
 
-sub w_004printLog Chr(13) + "---------  Insert Menu ( w_004_ ) ----------"
+sub w_004_
+
+    printLog Chr(13) + "---------  Insert Menu ( w_004_ ) ----------"
     gApplication = "WRITER"
 
     Call tInsertManualBreak
@@ -75,7 +77,7 @@ sub w_004printLog Chr(13) + "---------  Insert Menu ( w_004_ ) ----------"
     Call tInsertFile
 
     'Writer Web
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     Call tHtmlDocInsertFields
     Call tHtmlDocInsertFieldsOther
     Call tHtmlDocInsertSection
@@ -160,7 +162,7 @@ testcase tInsertFields
         Warnlog "Unable to execute: Insert / Fields / Author"
     endcatch
     printlog " Insert / Fields / Author"
-    if gApplication <> "HTMLDOKUMENT" then
+    if gApplication <> "HTML" then
         try
             printlog "Insert / Fields / Subject"
             InsertFieldsSubject
@@ -205,7 +207,7 @@ testcase tInsertFieldsOther
     Kontext "TabVariablen"
     Call Dialogtest ( TabVariablen )
 
-    if gApplication <> "HTMLDOKUMENT" then
+    if gApplication <> "HTML" then
         Kontext
         Active.SetPage TabReferenzen
         Kontext "TabReferenzen"
@@ -313,7 +315,7 @@ testcase tInsertSection
     Kontext "TabHintergrund"
     Call DialogTest (TabHintergrund)
 
-    if gApplication <> "HTMLDOKUMENT" then
+    if gApplication <> "HTML" then
         printlog "Tabpage Indents"
         Kontext
         Active.Setpage TabSectionIndent
@@ -500,7 +502,7 @@ testcase tInsertCrossReference
     Dim i as integer
     Dim j as integer
     printlog "- Insert / Reference Field"
-    if gApplication = "HTMLDOKUMENT" then
+    if gApplication = "HTML" then
         printlog "Not in WriterWeb!"
         goto endsub
     end if
@@ -594,7 +596,7 @@ testcase tInsertIndexesEntry
     goto endsub
 
     PrintLog "- Insert / Indexes / Entry"
-    if gApplication = "HTMLDOKUMENT" then
+    if gApplication = "HTML" then
         printlog "Not in WriterWeb!"
         goto endsub
     end if
@@ -624,7 +626,7 @@ endcase
 testcase tInsertIndexesIndex
     Dim i as integer
     Printlog "- Insert / Indexes / Index"
-    if gApplication = "HTMLDOKUMENT" then
+    if gApplication = "HTML" then
         printlog "Not in WriterWeb!"
         goto endsub
     end if
@@ -757,7 +759,7 @@ endcase
 
 testcase tInsertIndexesBibliographyEntry
     Printlog "- Insert / Indexes / Bibliography Entry"
-    if gApplication = "HTMLDOKUMENT" then
+    if gApplication = "HTML" then
         printlog "Not in WriterWeb!"
         goto endsub
     end if
@@ -801,7 +803,7 @@ endcase
 
 testcase tInsertEnvelope
     PrintLog "- Insert / Envelope"
-    if gApplication = "HTMLDOKUMENT" then
+    if gApplication = "HTML" then
         printlog "Not in WriterWeb!"
         goto endsub
     end if
@@ -940,7 +942,7 @@ testcase tInsertFrame
         Warnlog "Maybe missing combobox! (#i29517)"
     endcatch
 
-    if gApplication <> "HTMLDOKUMENT" then
+    if gApplication <> "HTML" then
         Kontext
         active.SetPage TabHyperlinkRahmen
         Kontext "TabHyperlinkRahmen"
@@ -1122,7 +1124,7 @@ testcase tInsertGraphicsFromFile
         Kontext "TabMakro"
         Call DialogTest ( TabMakro )
 
-        if gApplication <> "HTMLDOKUMENT" then
+        if gApplication <> "HTML" then
             Kontext
             active.SetPage TabZuschneiden
             wait 500
@@ -1376,7 +1378,7 @@ endcase
 testcase tHtmlDocInsertFields
     PrintLog "- Insert / Fields"
 
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     printlog " Open new document"
     Call hNewDocument
 
@@ -1427,7 +1429,7 @@ testcase tHtmlDocInsertFields
         Warnlog "Unable to execute: Insert / Fields / Author"
     endcatch
     printlog " Insert / Fields / Author"
-    if gApplication <> "HTMLDOKUMENT" then
+    if gApplication <> "HTML" then
         try
             printlog "Insert / Fields / Subject"
             InsertFieldsSubject
@@ -1451,7 +1453,7 @@ testcase tHtmlDocInsertFieldsOther
     Dim j as integer
     printlog "- Insert / Fields / Other"
 
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     printlog " Open new document"
     Call hNewDocument
 
@@ -1474,7 +1476,7 @@ testcase tHtmlDocInsertFieldsOther
     Kontext "TabVariablen"
     Call Dialogtest ( TabVariablen )
 
-    if gApplication <> "HTMLDOKUMENT" then
+    if gApplication <> "HTML" then
         Kontext
         Active.SetPage TabReferenzen
         Kontext "TabReferenzen"
@@ -1533,7 +1535,7 @@ endcase
 testcase tHtmlDocInsertSection
     PrintLog "- Insert / Section"
 
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     printlog " Open new document"
     Call hNewDocument
 
@@ -1565,7 +1567,7 @@ testcase tHtmlDocInsertSection
     Kontext "TabHintergrund"
     Call DialogTest (TabHintergrund)
 
-    if gApplication <> "HTMLDOKUMENT" then
+    if gApplication <> "HTML" then
         printlog "Tabpage Indents"
         Kontext
         Active.Setpage TabSectionIndent
@@ -1591,7 +1593,7 @@ endcase
 testcase tHtmlDocInsertFrame
     PrintLog "- Insert / Frame"
 
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     printlog " Open new document"
     Call hNewDocument
 
@@ -1637,7 +1639,7 @@ testcase tHtmlDocInsertFrame
         Warnlog "Maybe missing combobox! (#i29517)"
     endcatch
 
-    if gApplication <> "HTMLDOKUMENT" then
+    if gApplication <> "HTML" then
         Kontext
         active.SetPage TabHyperlinkRahmen
         Kontext "TabHyperlinkRahmen"
@@ -1671,7 +1673,7 @@ testcase tHtmlDocInsertGraphicsFromFile
     PrintLog "- Insert / Graphics / From File"
     Dim j as integer
 
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     printlog " Open new document"
     Call hNewDocument
 
@@ -1755,7 +1757,7 @@ testcase tHtmlDocInsertGraphicsFromFile
         Kontext "TabMakro"
         Call DialogTest ( TabMakro )
 
-        if gApplication <> "HTMLDOKUMENT" then
+        if gApplication <> "HTML" then
             Kontext
             active.SetPage TabZuschneiden
             wait 500

@@ -859,7 +859,7 @@ function fCreateSpreadsheetDatasource(sFileName,sURL, optional sRegister) as boo
     Kontext "DatabaseWizard"    
         ConnectToDatabase.Check
         sleep(1)        
-        DatabaseType.Select (getIdForDatabaseType("Spreadsheet", DatabaseType) - 1) ' -1 because in the wizard there is on datasource less because of mysql
+        DatabaseType.Select (getIdForDatabaseType("CALC", DatabaseType) - 1) ' -1 because in the wizard there is on datasource less because of mysql
         sleep(1)
         NextBtn.Click
         sleep(1)
@@ -1512,7 +1512,7 @@ function getIdForDatabaseType(sType as String ) as Integer
         endif
     elseif (sType = "OracleJDBC") then        
         ii = 3                    
-    elseif (sType = "Spreadsheet") then
+    elseif (sType = "CALC") then        
         if gPlatform = "osx" then        
          ii = 4
         else

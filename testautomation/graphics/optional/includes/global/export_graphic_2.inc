@@ -536,7 +536,7 @@ testcase tPDF_Creator
     End If
 
     sApp = gApplication
-    gApplication = "writer"
+    gApplication = "WRITER"
     sleep 5 ' wait for document to be loaded
     ' /Creator
     bTemp = hFindeImDokument ("<</Creator<",true)
@@ -653,7 +653,7 @@ testcase tSVG
                 endif
                 '-------------------------------/
                 sTemp = gApplication
-                gApplication = "writer"
+                gApplication = "WRITER"
                 sleep 5 ' wait for document to be loaded
                 bTemp = hFindeImDokument ("<!DOCTYPE svg PUBLIC "+chr(34)+ "-//W3C//DTD SVG 1.1//EN"+chr(34)+" "+chr(34)+"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"+chr(34)+">",true)
                 '-------------------------------\

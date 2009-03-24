@@ -55,7 +55,7 @@ sub main
         Call tiFormatAufzaehlungszeichen
         Call tdFormatTemplates
 
-    gApplication = "Draw"
+    gApplication = "DRAW"
     PrintLog "-------------------------" + gApplication + "-------------------"
         Call tiFormatText
         Call tdFormatLayer
@@ -72,5 +72,5 @@ sub LoadIncludeFiles
     use "global\system\includes\master.inc"
     use "global\system\includes\gvariabl.inc"
     Call GetUseFiles
-    gApplication = "Impress"
+    gApplication = "IMPRESS"
 end sub

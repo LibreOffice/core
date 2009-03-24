@@ -48,7 +48,7 @@ sub main
     Call tFormatPaintbrush
     Call tCustomshapes
 
-    gApplication = "Draw"
+    gApplication = "DRAW"
     PrintLog "--------------------- " + gApplication + " -------------------"
         Call tFormatPaintbrush
         Call tCustomshapes
@@ -59,6 +59,6 @@ end sub
 sub LoadIncludeFiles
     use "global\system\includes\master.inc"
     use "global\system\includes\gvariabl.inc"
-    gApplication = "Impress"
+    gApplication = "IMPRESS"
     Call GetUseFiles
 end sub

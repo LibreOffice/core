@@ -37,7 +37,9 @@
 '*                                                                **
 '\******************************************************************
 
-sub w_002printLog Chr(13) + "--------- Edit Menu ( w_002_.inc ) ----------"
+sub w_002_
+
+    printLog Chr(13) + "--------- Edit Menu ( w_002_.inc ) ----------"
     gApplication = "WRITER"
 
     Call tEditUndoRedo
@@ -65,12 +67,12 @@ sub w_002printLog Chr(13) + "--------- Edit Menu ( w_002_.inc ) ----------"
     Call tEditObjectEdit
 
     'Writer Web
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     Call tHtmlDocEditFields
     gApplication = "WRITER"
 
     'Writer Master Document
-    gApplication = "MASTERDOC"
+    gApplication = "MASTERDOCUMENT"
     Call tMasterDocEditNavigator
     gApplication = "WRITER"
 
@@ -277,7 +279,7 @@ endcase 'tEditSelectionMode
 
 testcase tEditChanges
     PrintLog "- Edit/Changes"
-    if gApplication = "HTMLDOKUMENT" then
+    if gApplication = "HTML" then
         printlog "Not in WriterWeb!"
         goto endsub
     end if
@@ -374,10 +376,10 @@ testcase tEditCompareDocument
         PrintLog "Open new document"
         EditCompareDocumentCalc
         PrintLog "Edit / Compare document"
-    Case "MASTERDOC"
+    Case "MASTERDOCUMENT"
         printlog "Comparing documents not in Masterdocument!"
         goto endsub
-    Case "HTMLDOKUMENT"
+    Case "HTML"
         printlog "Comparing documents not in WriterWeb!"
         goto endsub
     end select
@@ -507,7 +509,7 @@ testcase tViewNavigator
     Call hNewDocument
     PrintLog "Open new document"
 
-    if gApplication = "MASTERDOC" then
+    if gApplication = "MASTERDOCUMENT" then
         Kontext "NavigatorGlobalDoc"
         if Not NavigatorGlobalDoc.Exists then ViewNavigator
         Kontext "NavigatorGlobalDoc"
@@ -993,7 +995,7 @@ testcase tEditFields
     Sleep 1
     PrintLog "Insert Field 'Sender -> Company'"
     Select Case gApplication
-    Case "HTMLDOKUMENT"
+    Case "HTML"
         Select case iSprache
         case 01 : Feldtyp.Select 5  'Sender
             Auswahl.Select 1  'Company
@@ -1120,7 +1122,7 @@ endcase
 
 testcase tEditFieldsInputList
     PrintLog "- Edit / Fields / Functions"
-    If gApplication = "HTMLDOKUMENT" then goto endsub
+    If gApplication = "HTML" then goto endsub
 
     PrintLog "Open new document"
     Call hNewDocument
@@ -1205,7 +1207,7 @@ testcase tEditIndexEntry
     goto endsub
 
     PrintLog "- Edit/Index Entry"
-    if gApplication = "HTMLDOKUMENT" then
+    if gApplication = "HTML" then
         printlog "Not in WriterWeb!"
         goto endsub
     end if
@@ -1247,7 +1249,7 @@ endcase
 
 testcase tEditLinks
     PrintLog "- Edit/Links"
-    if gApplication = "HTMLDOKUMENT" then
+    if gApplication = "HTML" then
         printlog "Not in WriterWeb!"
         goto endsub
     end if
@@ -1371,7 +1373,7 @@ endcase
 testcase tHtmlDocEditFields
     PrintLog "- Edit/Fields"
 
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     PrintLog "Open new document"
     Call hNewDocument
 
@@ -1465,7 +1467,7 @@ testcase tMasterDocEditNavigator
     printlog "- View/Navigator"
     Dim ToolboxOk as boolean
 
-    gApplication = "MASTERDOC"
+    gApplication = "MASTERDOCUMENT"
     Call hNewDocument
     PrintLog "Open new document"
 

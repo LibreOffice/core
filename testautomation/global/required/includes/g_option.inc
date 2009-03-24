@@ -57,7 +57,7 @@ sub tToolsOptionsTest
     ' The test will exist with warnlog, if iSectionNumber is 0
     sErrMes = ""
         select case uCase(gApplication)
-            case "WRITER","MASTERDOC","HTMLDOKUMENT": iSectionNumber = 8
+            case "WRITER","MASTERDOCUMENT","HTML": iSectionNumber = 8
             case "IMPRESS","DRAW","MATH","CALC"     : iSectionNumber = 7
         end select
     ' common testcases are placed in this library
@@ -75,7 +75,7 @@ sub tToolsOptionsTest
     iSectionNumber = 8
     Call tToolsOptionsTextdocument
     
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     Call tToolsOptionsHTMLDocument
     
     gApplication = "CALC"
@@ -108,7 +108,7 @@ testcase tToolsOptionsStarOffice
         warnlog "You can't run this testcase seperated! Ending now! Please run it via: tToolsOptionsTest"
         goto endsub
     endif
-    if gApplication <> "DESKTOP" then Call hNewDocument
+    if gApplication <> "BACKGROUND" then Call hNewDocument
     ToolsOptions
     ToPosInOptionlist ( 1 )
     Kontext "ExtrasOptionenDlg"
@@ -238,8 +238,8 @@ testcase tToolsOptionsStarOffice
                        PasswordDLG.cancel()
                    else
                        select case uCase(gApplication)
-                           case "WRITER","MASTERDOC"                          :WarnLog "Protect-Button is disabled."
-                           case "MATH","IMPRESS","DRAW","HTMLDOKUMENT","CALC" :PrintLog "Protect-Button is disabled."
+                           case "WRITER","MASTERDOCUMENT"                          :WarnLog "Protect-Button is disabled."
+                           case "MATH","IMPRESS","DRAW","HTML","CALC" :PrintLog "Protect-Button is disabled."
                        end select
                    endif
                    sleep(1)
@@ -318,7 +318,7 @@ testcase tToolsOptionsStarOffice
    Kontext "OptionenDlg"
    OptionenDlg.Cancel
 '/// Close the document 
-   if gApplication <> "DESKTOP" then 
+   if gApplication <> "BACKGROUND" then 
     Call hCloseDocument
    end if
 endcase
@@ -333,7 +333,7 @@ testcase tToolsOptionsLoadSave
         warnlog "You can't run this testcase seperated! Ending now! Please run it via: tToolsOptionsTest"
         goto endsub
     endif
-   if gApplication <> "DESKTOP" then Call hNewDocument
+   if gApplication <> "BACKGROUND" then Call hNewDocument
 '/// <i>Tools</i> / <i>Options</i> / <i>Load/Save</i>
    ToolsOptions
    ToPosInOptionlist (2)
@@ -386,7 +386,7 @@ testcase tToolsOptionsLoadSave
    Kontext "OptionenDlg"
    OptionenDlg.Cancel
 '/// Close the document
-   if gApplication <> "DESKTOP" then 
+   if gApplication <> "BACKGROUND" then 
     Call hCloseDocument
    end if
 endcase
@@ -403,7 +403,7 @@ testcase tToolsOptionsLanguageSettings
         warnlog "You can't run this testcase seperated! Ending now! Please run it via: tToolsOptionsTest"
         goto endsub
     endif
-   if gApplication <> "DESKTOP" then Call hNewDocument
+   if gApplication <> "BACKGROUND" then Call hNewDocument
  '/// <i>Tools</i> / <i>Options</i> / <i>Language settings</i>
    ToolsOptions
     ToPosInOptionlist ( 3 )
@@ -549,7 +549,7 @@ testcase tToolsOptionsLanguageSettings
    Kontext "OptionenDlg"
    OptionenDlg.Cancel
 '/// Close the document   
-   if gApplication <> "DESKTOP" then 
+   if gApplication <> "BACKGROUND" then 
     Call hCloseDocument
    end if
 endcase
@@ -565,7 +565,7 @@ testcase tToolsOptionsInternet
         warnlog "You can't run this testcase seperated! Ending now! Please run it via: tToolsOptionsTest"
         goto endsub
     endif
-   if gApplication <> "DESKTOP" then Call hNewDocument
+   if gApplication <> "BACKGROUND" then Call hNewDocument
  '/// <i>Tools</i> / <i>Options</i> / <i>Internet</i>
    ToolsOptions
    '/// (The last section in Tools / Options is <i>Internet</i>)
@@ -666,7 +666,7 @@ testcase tToolsOptionsInternet
    Kontext "OptionenDlg"
    OptionenDlg.Cancel
 '/// Close document
-   if gApplication <> "DESKTOP" then 
+   if gApplication <> "BACKGROUND" then 
     Call hCloseDocument
    end if
 endcase

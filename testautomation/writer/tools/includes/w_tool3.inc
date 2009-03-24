@@ -686,7 +686,7 @@ sub wOpenContextMenu ( optional FocusParam as boolean)
 				Kontext "DocumentWriter"
 				Call DocumentWriter.TypeKeys "<SHIFT F10>"  'OpenContextMenu
 
-			Case "MASTERDOC"
+			Case "MASTERDOCUMENT"
 				Kontext "DocumentMasterDoc"
 				Call DocumentMasterDoc.TypeKeys "<SHIFT F10>"  'OpenContextMenu
 
@@ -698,7 +698,7 @@ sub wOpenContextMenu ( optional FocusParam as boolean)
 					Kontext "DocumentWriter"
 					Call DocumentWriter.OpenContextMenu true
 
-				Case "MASTERDOC"
+				Case "MASTERDOCUMENT"
 					Kontext "DocumentMasterDoc"
 					Call DocumentMasterDoc.OpenContextMenu true
 
@@ -709,7 +709,7 @@ sub wOpenContextMenu ( optional FocusParam as boolean)
 					Kontext "DocumentWriter"
 					Call DocumentWriter.OpenContextMenu
 
-				Case "MASTERDOC"
+				Case "MASTERDOCUMENT"
 					Kontext "DocumentMasterDoc"
 					Call DocumentMasterDoc.OpenContextMenu
 			end select

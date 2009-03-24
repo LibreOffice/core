@@ -52,7 +52,7 @@ testcase tAllNew
     '///+<li>Close the document window without saving it</li></ul>
     printlog ""
     try
-        gApplication = "Writer"
+        gApplication = "WRITER"
         printlog "  - " +  gApplication
         
         Call hNewDocument (TRUE)
@@ -76,7 +76,7 @@ testcase tAllNew
     '///+<li>Check the default filter name (fDocumentCheck)</li>
     '///+<li>Close the document window without saving it</li></ul>
     try
-        gApplication = "Calc"
+        gApplication = "CALC"
         printlog "  - " +  gApplication
         
         Call hNewDocument (TRUE)
@@ -100,7 +100,7 @@ testcase tAllNew
     '///+<li>Check the default filter name (fDocumentCheck)</li>
     '///+<li>Close the document window without saving it</li></ul>
     try
-        gApplication = "Impress"
+        gApplication = "IMPRESS"
         printlog "  - " +  gApplication
         
         Call hNewDocument (TRUE)
@@ -124,7 +124,7 @@ testcase tAllNew
     '///+<li>Check the default filter name (fDocumentCheck)</li>
     '///+<li>Close the document window without saving it</li></ul>
     try
-        gApplication = "Draw"
+        gApplication = "DRAW"
         printlog "  - " +  gApplication
         Call hNewDocument (TRUE)
         InsertSlide
@@ -164,7 +164,7 @@ testcase tAllNew
     '///+<li>Check the default filter name (fDocumentCheck)</li>
     '///+<li>Close the document window without saving it</li></ul>
     try
-        gApplication = "Math"
+        gApplication = "MATH"
         printlog "  - " +  gApplication
         Call hNewDocument (TRUE)
         Call SchreibenInMathDok("a over b")
@@ -185,7 +185,7 @@ testcase tAllNew
     '///+<li>Close the document window without saving it</li></ul>
     
     try
-        gApplication = "GlobalDokument"
+        gApplication = "MASTERDOCUMENT"
         printlog "  - " +  gApplication
         Call hNewDocument (TRUE)
         Kontext "DocumentWriter"
@@ -285,15 +285,15 @@ endcase
 '-------------------------------------------------------------------------
 
 testcase tDatabaseCheck
-    '/// Open bibliography database.
+    '/// Open bibliography Database.
     printlog ""
     try
-        gApplication = "Writer"
+        gApplication = "WRITER"
         hFileOpen( ConvertPath(gOfficePath & "user\database\biblio.odb" )
         '/// Check if database is open
         printlog "check if database is open"
-        Kontext "Insight"
-        if (Insight.exists()) then
+        Kontext "DATABASE"
+        if (Database.exists()) then
             printlog "Database open"
             '/// Click on the table icon and check if tables are displayed
             printlog "click on the table icon and check if tables are displayed"
@@ -310,7 +310,7 @@ testcase tDatabaseCheck
         end if
         Call hCloseDocument
     catch
-        warnlog "error while open database."
+        warnlog "error while open Database."
     endcatch
 endcase
 

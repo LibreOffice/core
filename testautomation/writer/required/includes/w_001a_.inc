@@ -36,7 +36,9 @@
 '*
 '\***********************************************************************
 
-sub w_001aprintLog Chr(13) + "--------- File Menu (w_001a_.inc) ----------"
+sub w_001a_
+
+    printLog Chr(13) + "--------- File Menu (w_001a_.inc) ----------"
     gApplication = "WRITER"
 
     Call tFileProperties
@@ -51,7 +53,7 @@ sub w_001aprintLog Chr(13) + "--------- File Menu (w_001a_.inc) ----------"
     Call tFilePrinterSetup
 
     'Writer Master Document
-    gApplication = "MASTERDOC"
+    gApplication = "MASTERDOCUMENT"
     Call tMasterDocFilePagePreview
     gApplication = "WRITER"
 
@@ -258,7 +260,7 @@ endcase
 '-----------------------------------------------------------
 
 testcase tFileTemplatesSave
-    if gApplication = "MASTERDOC" then
+    if gApplication = "MASTERDOCUMENT" then
         qaErrorLog "    tFileTemplatesSave has been disabled in Masterdocument."
         goto endsub
     end if
@@ -317,10 +319,10 @@ testcase tFilePagePreview
     Case "WRITER"
         Call hNewDocument
 
-    Case "MASTERDOC"
+    Case "MASTERDOCUMENT"
         Call hNewDocument
 
-    Case "HTMLDOKUMENT"
+    Case "HTML"
         printlog "Not in Writer/Web!"
         goto endsub
     end select
@@ -513,7 +515,7 @@ testcase tMasterDocFilePagePreview
     PrintLog "- File / Page Preview"
     Dim gehtnicht as boolean
     gehtnicht = FALSE
-    gApplication   = "MASTERDOC"
+    gApplication   = "MASTERDOCUMENT"
     printlog " Open new document"
     Call hNewDocument
 

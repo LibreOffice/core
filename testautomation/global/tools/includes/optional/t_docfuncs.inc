@@ -54,7 +54,7 @@ function hUseImpressAutopilot( bEnable as boolean ) as boolean
 
     '///+<li>Open Tools/Options, go to Presentataion/General page</li>
     ToolsOptions
-    hToolsOptions( "Presentation" , "General" )
+    hToolsOptions( "IMPRESS" , "General" )
 
     '///+<li>Check or uncheck to start with autopilot</li>
     Kontext "TabSonstigesDraw"
@@ -191,7 +191,7 @@ function hChangeDoc() as string
     select case gApplication
    
       '///+<li>WRITER: Type some text</li>
-      case "WRITER", "HTML", "MASTERDOC"
+      case "WRITER", "HTML", "MASTERDOCUMENT"
                       Kontext "DocumentWriter"
                       DocumentWriter.TypeKeys "<Return>This doc is changed!"
                       hChangeDoc() = "Changed WRITER/HTML/MASTERDOC" 
@@ -404,7 +404,7 @@ function hDocumentTypeKeys( cString as string ) as boolean
                         DocumentDraw.typeKeys( cString )
     case "MATH"     :   kontext "DocumentMath"
                         DocumentMath.typeKeys( cString )
-    case "MASTERDOC":   kontext "DocumentWriter"
+    case "MASTERDOCUMENT":   kontext "DocumentWriter"
                         DocumentWriter.typeKeys( cString )
     case "HTML"     :   kontext "DocumentWriter"
                         DocumentWriter.typeKeys( cString )

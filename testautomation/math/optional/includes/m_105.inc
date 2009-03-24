@@ -65,7 +65,7 @@ testcase tToolsOptions
   printlog ("'/// - save states ///")
    ToolsOptions
    sleep 1
-   hToolsOptions ("FORMULA", "SETTINGS")
+   hToolsOptions ("MATH", "SETTINGS")
 
       irgendwas(1) = DruckeTitelzeile.IsChecked
       irgendwas(2) = DruckeFormeltext.IsChecked
@@ -96,7 +96,7 @@ TBOrestart
 
   printlog ("'/// - checking states ///")
    ToolsOptions
-   hToolsOptions ("FORMULA", "SETTINGS")
+   hToolsOptions ("MATH", "SETTINGS")
 
       If ( irgendwas(1) = DruckeTitelzeile.IsChecked ) Then WarnLog "DruckeTitelzeile state changed"
       If ( irgendwas(2) = DruckeFormeltext.IsChecked ) Then WarnLog "DruckeFormeltext state changed"
@@ -118,7 +118,7 @@ TBOrestart
 
   printlog ("'/// - check if all UnChecked ///")
    ToolsOptions
-   hToolsOptions ("FORMULA", "SETTINGS")
+   hToolsOptions ("MATH", "SETTINGS")
 
       If DruckeTitelzeile.IsChecked Then WarnLog "DruckeTitelzeil  x"
       If DruckeFormeltext.IsChecked Then WarnLog "DruckeFormeltext x"
@@ -146,7 +146,7 @@ TBOrestart
       DocumentMath.mouseUp 10,10
       '-----------------------------------------------
    ToolsOptions
-   hToolsOptions ("FORMULA", "SETTINGS")
+   hToolsOptions ("MATH", "SETTINGS")
 
       try
           If True <> DruckeTitelzeile.IsChecked Then WarnLog "DruckeTitelzeil  o"
@@ -317,11 +317,11 @@ testcase tToolsCatalog
     dim sNotAllowed() as string
     
    '/// open Writer application ///'
-    gApplication = "Writer"
+    gApplication = "WRITER"
     Call hNewDocument
     '/// Insert->Object->Formula ///'
     InsertObjectFormulaWriter
-    Kontext "Math"
+    Kontext "MATH"
     '/// Tools->Catalog ///'
     try
         ToolsSymbolsCatalog
@@ -494,7 +494,7 @@ goto endsub
     
     Call hNewDocument
 '1
-    Kontext "Math"
+    Kontext "MATH"
     '/// Tools->Catalog ///'
     try
         ToolsSymbolsCatalog
@@ -549,7 +549,7 @@ goto endsub
     exitRestartTheOffice
 '2    
     Call hNewDocument
-    Kontext "Math"
+    Kontext "MATH"
     '/// Tools->Catalog ///'
     try
         ToolsSymbolsCatalog
@@ -598,7 +598,7 @@ goto endsub
     exitRestartTheOffice
 '3
     Call hNewDocument
-    Kontext "Math"
+    Kontext "MATH"
     '/// Tools->Catalog ///'
     try
         ToolsSymbolsCatalog

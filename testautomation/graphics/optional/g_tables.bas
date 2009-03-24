@@ -49,7 +49,7 @@ sub main
     call tiInsertTableUsingButton 
     call tiInsertTableUsingToolbarbutton
     call tiTableObjectBar 
-    gApplication = "Draw"
+    gApplication = "DRAW"
     
     PrintLog "-------------------------" + gApplication + "-------------------"
     
@@ -65,7 +65,7 @@ end sub
 sub LoadIncludeFiles
     use "global\system\includes\master.inc"
     use "global\system\includes\gvariabl.inc"
-    gApplication = "Impress"
+    gApplication = "IMPRESS"
     Call getUseFiles
 end sub
 

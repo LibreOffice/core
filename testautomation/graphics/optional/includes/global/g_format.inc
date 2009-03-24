@@ -325,7 +325,7 @@ testcase tdFormatConnector
     dim sTemp as string
     dim cDecSep as string
 
-    if (lCase(gApplication) = "impress") then 
+    if (gApplication = "IMPRESS") then 
         ExtensionString = "odp"
     else
         ExtensionString = "odg"
@@ -786,8 +786,8 @@ testcase tiFormat3D_Effekte
     'y = hMenuItemGetCount
     'MenuSelect (0)
     'gMouseClick 90,90
-    'select case lcase(gApplication)
-    '    case "draw" :  if y = 13 then
+    'select case gApplication
+    '    case "DRAW" :  if y = 13 then
 	'                                Printlog "- 3D object created" 
     '                            else 
     '                                Warnlog " Context-menu-entry-number was wrong. Expected 13, but was " + y + "."

@@ -116,11 +116,13 @@ function hDoubleClickInList ( window, Selektion as String, optional bFocus as bo
                 window.MouseDown 5, i +1
                 window.MouseUp 5, i +1
                 
-                if Window.GetText = Selektion then     ' catch if <down> had any effects
+                ' catch if <down> had any effects
+                if Window.GetText = Selektion then     
                 
                     window.MouseDoubleClick 5, i +1
                     
-                    if (isMissing (bFocus) = FALSE) then ' if optional parameter provided
+                    ' if optional parameter provided
+                    if (isMissing (bFocus) = FALSE) then 
                         window.MouseDown 5, i +1
                         window.MouseUp 5, i +1
                     endif
@@ -203,10 +205,11 @@ function wielange (StrtTime, optional iFormat as integer) as String
     Zeitspannesek = Zeitspannesek - Zeitspannemin * 60
     Zeitspannesek = Fix(Zeitspannesek)
     select case iFormat
-    case 0: 
+    case 0 
         sTemp = "" & Zeitspanneh & "h " & Zeitspannemin & "m " & Zeitspannesek & "s"
-    case 1: 
-        if Zeitspanneh < 10 then         ' mysql format for status.inc
+    case 1 
+    ' mysql format for status.inc
+        if Zeitspanneh < 10 then         
             sTemp = "0" & Zeitspanneh & ":"
         else
             sTemp = "" & Zeitspanneh & ":"
@@ -929,20 +932,27 @@ function GetDecimalSeperator ( optional sDummy$ ) as String
         '/// Tools / Options / (Modul: gApplication) / General tabpage.
         ToolsOptions
         '///+ <ol><li>Reading the string of the tabulator numeric field</li>
-        select case UCase(gApplication)
-        case "WRITER",  "TEXTDOKUMENT"    : Call hToolsOptions("TEXTDOCUMENT","GENERAL")
+        select case gApplication
+        case "WRITER" 
+            Call hToolsOptions("WRITER","GENERAL")
             sCheckForSeparator = Tabulatorenabstand.GetText
-        case "CALC", "TABELLENDOKUMENT"   : Call hToolsOptions("SPREADSHEET","GENERAL")
+        case "CALC" 
+            Call hToolsOptions("CALC","GENERAL")
             sCheckForSeparator = Tabulator.GetText
-        case "IMPRESS", "PRAESENTATION"   : Call hToolsOptions("PRESENTATION","GENERAL")
+        case "IMPRESS" 
+            Call hToolsOptions("IMPRESS","GENERAL")
             sCheckForSeparator = Tabulatorenabstand.GetText
-        case "DRAW", "ZEICHNUNG"          : Call hToolsOptions("DRAWING","GENERAL")
+        case "DRAW" 
+            Call hToolsOptions("DRAW","GENERAL")
             sCheckForSeparator = Tabulatorenabstand.GetText
-        case "GLOBALDOC", "GLOBALDOKUMENT": Call hToolsOptions("TEXTDOCUMENT","GENERAL")
+        case "MASTERDOCUMENT"
+            Call hToolsOptions("WRITER","GENERAL")
             sCheckForSeparator = Tabulatorenabstand.GetText
-        case "HTML", "HTMLDOKUMENT"       : Call hToolsOptions("TEXTDOCUMENT","GENERAL")
+        case "HTML"
+            Call hToolsOptions("WRITER","GENERAL")
             sCheckForSeparator = Tabulatorenabstand.GetText
-        case else                         : warnlog cWhereIsThisFunction & "For this module ("& gApplication &") no decimal seperator setting exists."
+        case else
+            warnlog cWhereIsThisFunction & "For this module ("& gApplication &") no decimal seperator setting exists."
         end select
         Kontext "ExtrasOptionenDlg"
         ExtrasOptionenDlg.OK

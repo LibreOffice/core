@@ -59,7 +59,7 @@ sub main
     Call NewSortingForJapanese_4      'Check the number of key type in data/sort
 
     printLog Chr(13) + "-New Sorting Algorithm For Japanese test -- Calc"
-    gApplication   = "Calc"       
+    gApplication   = "CALC"       
     Call NewSortingForJapanese_5      'Check the number of key type in data/sort -- Calc
 
     Call hStatusOut
@@ -79,7 +79,7 @@ sub LoadIncludeFiles
    
    use "framework\tools\includes\CJK_tools.inc"
    
-   gApplication   = "Writer"
+   gApplication   = "WRITER"
    Call GetUseFiles
 end sub
 

@@ -99,7 +99,7 @@ testcase tFromText
     for i = 1 to 3
     '/// paste control from clipboard and open control property browser
         if i = 1 then 
-            gApplication = "Calc"
+            gApplication = "CALC"
                 printlog "-- Text to Calc Clipboard Test --"
                 printlog "open a new Calc document"
                 call hNewDocument
@@ -112,7 +112,7 @@ testcase tFromText
                 call hMenuSelectNr(4)
             endif
         if i = 2 then 
-            gApplication = "Draw"
+            gApplication = "DRAW"
                 printlog "-- Text to Draw Clipboard Test --"
                 printlog "open a new Draw document"
                 call hNewDocument
@@ -125,7 +125,7 @@ testcase tFromText
                 call hMenuSelectNr(2)
             endif
         if i = 3 then 
-            gApplication = "Impress"
+            gApplication = "IMPRESS"
                 printlog "-- Text to Impress Clipboard Test --"
                 printlog "open a new Impress document"
                 call hNewDocument
@@ -168,7 +168,7 @@ testcase tFromCalc
 
     '/// Open a new document and empty clipboard
         printlog "Open a new document and empty clipboard"
-        gApplication = "Calc"
+        gApplication = "CALC"
 	call hNewDocument
     Kontext "DocumentCalc"    
 	    DocumentCalc.TypeKeys "tt_doc" , true
@@ -215,7 +215,7 @@ testcase tFromCalc
     for i = 1 to 3
     '/// paste control from clipboard and open control property browser
         if i = 1 then 
-            gApplication = "Writer"
+            gApplication = "WRITER"
                 printlog "-- Calc to Text Clipboard Test --"
                 printlog "open a new Text document"
                 call hNewDocument
@@ -228,7 +228,7 @@ testcase tFromCalc
                 call hMenuSelectNr(4)
             endif
         if i = 2 then 
-            gApplication = "Draw"
+            gApplication = "DRAW"
                 printlog "-- Calc to Draw Clipboard Test --"
                 printlog "open a new Draw document"
                 call hNewDocument
@@ -241,7 +241,7 @@ testcase tFromCalc
                 call hMenuSelectNr(2)
             endif
         if i = 3 then 
-            gApplication = "Impress"
+            gApplication = "IMPRESS"
                 printlog "-- Calc to Impress Clipboard Test --"
                 printlog "open a new Impress document"
                 call hNewDocument
@@ -285,7 +285,7 @@ testcase tFromDraw
 
     '/// Open a new document and empty clipboard
         printlog "Open a new document and empty clipboard"
-        gApplication = "Draw"
+        gApplication = "DRAW"
 	call hNewDocument
     Kontext "DocumentDraw"    
 	    DocumentDraw.TypeKeys "tt_doc" , true
@@ -332,7 +332,7 @@ testcase tFromDraw
     for i = 1 to 3
     '/// paste control from clipboard and open control property browser
         if i = 1 then 
-            gApplication = "Writer"
+            gApplication = "WRITER"
                 printlog "-- Draw to Text Clipboard Test --"
                 printlog "open a new Text document"
                 call hNewDocument
@@ -345,7 +345,7 @@ testcase tFromDraw
                 call hMenuSelectNr(4)
             endif
         if i = 2 then 
-            gApplication = "Calc"
+            gApplication = "CALC"
                 printlog "-- Draw to Calc Clipboard Test --"
                 printlog "open a new Calc document"
                 call hNewDocument
@@ -358,7 +358,7 @@ testcase tFromDraw
                 call hMenuSelectNr(4)
             endif
         if i = 3 then 
-            gApplication = "Impress"
+            gApplication = "IMPRESS"
                 printlog "-- Draw to Impress Clipboard Test --"
                 printlog "open a new Impress document"
                 call hNewDocument
@@ -401,7 +401,7 @@ testcase tFromImpress
 
     '/// Open a new document and empty clipboard
         printlog "Open a new document and empty clipboard"
-        gApplication = "Impress"
+        gApplication = "IMPRESS"
 	call hNewDocument
     Kontext "DocumentImpress"    
 	    DocumentImpress.TypeKeys "tt_doc" , true
@@ -448,7 +448,7 @@ testcase tFromImpress
     for i = 1 to 3
     '/// paste control from clipboard and open control property browser
         if i = 1 then 
-            gApplication = "Writer"
+            gApplication = "WRITER"
                 printlog "-- Impress to Text Clipboard Test --"
                 printlog "open a new Text document"
                 call hNewDocument
@@ -461,7 +461,7 @@ testcase tFromImpress
                 call hMenuSelectNr(4)
             endif
         if i = 2 then 
-            gApplication = "Calc"
+            gApplication = "CALC"
                 printlog "-- Impress to Calc Clipboard Test --"
                 printlog "open a new Calc document"
                 call hNewDocument
@@ -474,7 +474,7 @@ testcase tFromImpress
                 call hMenuSelectNr(4)
             endif
         if i = 3 then 
-            gApplication = "Draw"
+            gApplication = "DRAW"
                 printlog "-- Impress to Draw Clipboard Test --"
                 printlog "open a new Draw document"
                 call hNewDocument

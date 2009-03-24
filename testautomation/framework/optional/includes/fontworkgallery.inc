@@ -41,7 +41,7 @@ sub sFontworkGalleryUpdate
     dim sApplication
     dim i,a as integer
 
-    sApplication = array("WRITER","MASTERDOC","CALC","IMPRESS","DRAW")
+    sApplication = array("WRITER","MASTERDOCUMENT","CALC","IMPRESS","DRAW")
 
     ' for every application
     a = uBound(sApplication())

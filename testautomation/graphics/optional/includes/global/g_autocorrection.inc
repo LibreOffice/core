@@ -145,7 +145,7 @@ testcase tToolsAutocorrectCustomQuotes(bSimple as boolean)
     dim sTemp as string
     dim sFileName as string
 
-    if (lCase(gApplication) = "impress") then 
+    if (gApplication = "IMPRESS") then 
         ExtensionString = "odp"
     else
         ExtensionString = "odg"

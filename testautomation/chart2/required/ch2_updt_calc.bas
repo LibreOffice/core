@@ -152,6 +152,6 @@ sub LoadIncludeFiles
     use "global\system\includes\gvariabl.inc"
     use "global\tools\includes\optional\t_set_standard_controls.inc"
     Call GetUseFiles 
-    gApplication = "Calc"
+    gApplication = "CALC"
 end sub
 

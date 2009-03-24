@@ -36,7 +36,9 @@
 '*
 '\******************************************************************
 
-sub w_011printLog Chr(13) + "---------   Toolbar ( w_011_.inc )   ----------"
+sub w_011_
+
+    printLog Chr(13) + "---------   Toolbar ( w_011_.inc )   ----------"
     gApplication = "WRITER"
     'Objektleiste Grafik
     Call tGraphicFilters
@@ -55,7 +57,7 @@ end sub
 
 testcase tGraphicFilters
     printlog "- Objectbar Graphic (Filters)"
-    if gApplication = "HTMLDOKUMENT" then
+    if gApplication = "HTML" then
         printlog "This test applies not to HTML-Document"
         Printlog "Not in WriterWeb!"
         goto endsub
@@ -317,7 +319,7 @@ endcase
 
 testcase tZOEditPoints
     printlog "- Draw Functions-Objectbar: Edit Points"
-    if gApplication = "HTMLDOKUMENT" then
+    if gApplication = "HTML" then
         Printlog "This test does not apply to HTML documents"
         Printlog "Not in WriterWeb!"
         goto endsub
@@ -353,7 +355,7 @@ endcase
 
 testcase tZOLine
     printlog "- Draw Functions-Objectbar: all within Line"
-    if gApplication = "HTMLDOKUMENT" then
+    if gApplication = "HTML" then
         Printlog "This test does not apply to HTML documents"
         Printlog "Not in WriterWeb!"
         goto endsub
@@ -405,7 +407,7 @@ endcase
 
 testcase tZOArea
     printlog "- Draw Functions-Objectbar: all within rectangle"
-    if gApplication = "HTMLDOKUMENT" then
+    if gApplication = "HTML" then
         printlog "This test applies not to HTML document"
         Printlog "Not in WriterWeb!"
         goto endsub
@@ -445,7 +447,7 @@ endcase
 
 testcase tZORest
     printlog "- Draw Functions-Objectbar: Rest"
-    if gApplication = "HTMLDOKUMENT" then
+    if gApplication = "HTML" then
         printlog "This test does not apply to HTML documents"
         Printlog "Not in WriterWeb!"
         goto endsub
@@ -515,7 +517,7 @@ endcase
 
 testcase tZOText
     printlog "- Draw Functions-Objectbar: Text"
-    if gApplication = "HTMLDOKUMENT" then
+    if gApplication = "HTML" then
         printlog "This test does not apply to HTML documents"
         Printlog "Not in WriterWeb!"
         goto endsub
@@ -651,7 +653,7 @@ endcase
 testcase tZOVerticalText
     printlog "- Draw Functions-Objectbar: Vertical Text"
     if gAsianSup = False then goto endsub
-    if gApplication = "HTMLDOKUMENT" then
+    if gApplication = "HTML" then
         printlog "This test applies not to HTML document and only if Asian Support is enabled"
         Printlog "Not in WriterWeb!"
         goto endsub

@@ -36,7 +36,9 @@
 '*
 '\******************************************************************
 
-sub w_008printLog Chr(13) + "--------- Window Menu (w_008_.inc) ----------"
+sub w_008_
+
+    printLog Chr(13) + "--------- Window Menu (w_008_.inc) ----------"
     gApplication = "WRITER"
 
     Call tWindowNewWindow
@@ -47,7 +49,7 @@ end sub
 
 testcase tWindowNewWindow
     PrintLog "- Window / New Window"
-    if gApplication = "HTMLDOKUMENT" then
+    if gApplication = "HTML" then
         printlog "Not in WriterWeb !"
         goto endsub
     end if

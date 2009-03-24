@@ -37,7 +37,9 @@
 '*
 '\******************************************************************
 
-sub w_003printLog Chr(13) + "--------- View Menu (w_003_.inc) ----------"
+sub w_003_
+
+    printLog Chr(13) + "--------- View Menu (w_003_.inc) ----------"
     gApplication = "WRITER"
 
     Call tViewPrintLayout
@@ -62,7 +64,7 @@ sub w_003printLog Chr(13) + "--------- View Menu (w_003_.inc) ----------"
     Call tViewZoom
 
     'Writer Web
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     Call tHtmlDocViewZoom
     Call tHtmlDocViewHTMLSource
     gApplication = "WRITER"
@@ -82,7 +84,7 @@ testcase tViewZoom
     Kontext "Massstab"
     DialogTest ( Massstab )
     select case uCASE(gApplication)
-    case "HTMLDOKUMENT" :
+    case "HTML" :
         printlog " check checkbox '100%'"
         Vergroesserung100.check
         printlog " check checkbox 'Variable'"
@@ -335,7 +337,7 @@ testcase tViewToolbars
 
     printlog "- Toolbar 'Formula'"
     printlog "-  open"
-    Call hToolbarSelect("Formula", true)
+    Call hToolbarSelect("MATH", true)
     OL_SW_Rechenleiste.TypeKeys "<Enter>"
 
     printlog " Close active document"
@@ -524,7 +526,7 @@ endcase
 
 testcase tViewHTMLSource
     PrintLog "- View / HTML Source (only in HTML-Document)"
-    if gApplication <> "HTMLDOKUMENT" then goto endsub
+    if gApplication <> "HTML" then goto endsub
     printlog "Open new document"
     Call hNewDocument
     printlog "View / HTML-Source"
@@ -560,7 +562,7 @@ endcase
 '-----------------------------------------------------------
 
 testcase tHtmlDocViewZoom
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     printlog " open application"
     Call hNewDocument
     printlog " type something into the document"
@@ -585,7 +587,7 @@ endcase
 
 testcase tHtmlDocViewHTMLSource
     PrintLog "- View / HTML Source (only in HTML-Document)"
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     printlog "Open new document"
     Call hNewDocument
     printlog "View / HTML-Source"

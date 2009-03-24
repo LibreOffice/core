@@ -56,7 +56,7 @@ testcase tSettingsToCM
     WaitSlot (10000)
     Call hNewDocument
     ToolsOptions
-    hToolsOptions ( "Textdocument", "General" )
+    hToolsOptions ( "WRITER", "General" )
     iSaveSetting = Masseinheit.GetSelIndex
     Masseinheit.Select 2
     Kontext "ExtrasOptionenDlg"
@@ -286,7 +286,7 @@ testcase tResetSettings
     printlog "+Tools / options / text documents / general"
     call hNewDocument
     ToolsOptions
-    hToolsOptions ( "Textdocument", "General" )
+    hToolsOptions ( "WRITER", "General" )
     Masseinheit.Select iSaveSetting
     Kontext "ExtrasOptionenDlg"
         ExtrasOptionenDlg.OK

@@ -37,7 +37,9 @@
 '*
 '\***********************************************************************
 
-sub w_007printLog Chr(13) + "--------- Tools Menu (w_007_.inc) ----------"
+sub w_007_
+
+    printLog Chr(13) + "--------- Tools Menu (w_007_.inc) ----------"
     gApplication = "WRITER"
 
     Call tToolsSpellcheck
@@ -59,11 +61,11 @@ sub w_007printLog Chr(13) + "--------- Tools Menu (w_007_.inc) ----------"
     Call tToolsChineseTranslation
 
     'Writer Web
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     Call tHtmlDocToolsHangulHanjaConversion
 
     'Writer Master Document
-    gApplication = "MASTERDOC"
+    gApplication = "MASTERDOCUMENT"
     Call tMasterDocToolsHyphenation
     gApplication = "WRITER"
 
@@ -345,7 +347,7 @@ testcase tToolsHyphenation
     Case "WRITER"
         Call hFileOpen ( DieDatei )
 
-    Case "MASTERDOC"
+    Case "MASTERDOCUMENT"
         if wInsertDocumentinMasterDoc(DieDatei) = False then
             Warnlog "Loading document did not work!"
             goto endsub
@@ -355,7 +357,7 @@ testcase tToolsHyphenation
             EditPaste
         end if
 
-    Case "HTMLDOKUMENT"
+    Case "HTML"
         printlog "- No Hyphenation in WriterWeb!"
         goto endsub
     end select
@@ -405,7 +407,7 @@ testcase tToolsHyphenation
 
     Call hCloseDocument
     printlog " Close active document"
-    if gApplication = "MASTERDOC" then Call hCloseDocument
+    if gApplication = "MASTERDOCUMENT" then Call hCloseDocument
 endcase
 
 ' -------------------------------------------
@@ -672,7 +674,7 @@ testcase tToolsMailMergeWizard
     Dim i as integer
 
     PrintLog "- Tools / Mail Merge"
-    if gApplication = "HTMLDOKUMENT" then goto endsub
+    if gApplication = "HTML" then goto endsub
 
     Call hNewDocument
     printlog " Open new document"
@@ -884,7 +886,7 @@ endcase
 
 testcase tToolsUpdate
     PrintLog "- Tools / Update"
-    if gApplication = "HTMLDOKUMENT" then
+    if gApplication = "HTML" then
         printlog "Not in WriterWeb !"
         goto endsub
     end if
@@ -960,10 +962,10 @@ testcase tToolsHangulHanjaConversion
     Dim bAsianLanguage as Boolean
     Dim sTestFile as String
 
-    if gApplication = "HTMLDOKUMENT" then
+    if gApplication = "HTML" then
         sTestFile = Convertpath (gTesttoolpath + "writer\required\input\hangul.html")
     else
-        if Ucase(gApplication) = "MASTERDOC" then
+        if Ucase(gApplication) = "MASTERDOCUMENT" then
             goto endsub
         else
             sTestFile = Convertpath (gTesttoolpath + "writer\required\input\hangul.sxw")
@@ -1110,7 +1112,7 @@ testcase tHtmlDocToolsHangulHanjaConversion
     Dim bAsianLanguage as Boolean
     Dim sTestFile as String
 
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     PrintLog "- Tools / HangulHanjaConversion"
     sTestFile = Convertpath (gTesttoolpath + "writer\required\input\hangul.html")
 
@@ -1181,7 +1183,7 @@ testcase tMasterDocToolsHyphenation
     Dim DieDatei as string
     Dim LingFile as string
 
-    gApplication = "MASTERDOC"
+    gApplication = "MASTERDOCUMENT"
     PrintLog "- Tools / Hyphenation"
     ' As long as OOo has no modules for that, disabled
     if gOOO = True then

@@ -56,14 +56,14 @@ function fOpenNewReportDesign()
     '/// open a a new report design from an open database
     '/// <u>parameter:</u>
           
-    Kontext "Insight"    
-	    if ( Insight.NotExists(3) ) then
+    Kontext "DATABASE"    
+	    if ( Database.NotExists(3) ) then
 	        fOpenNewReportDesign = false
 	        exit function
 	    end if
 
-        Insight.MouseDown(50,50)
-        Insight.MouseUp(50,50)
+        Database.MouseDown(50,50)
+        Database.MouseUp(50,50)
     
     sleep(1)
     
@@ -209,38 +209,38 @@ function fFindReport(sReportName as string)
     Dim iNumbersOfReports as integer
 	Dim i as integer
 	
-    Kontext "Insight"
+    Kontext "DATABASE"
     
         ViewReports        
     
         fFindReport = false
     
-        if ( Not InsightReportsView.exists(1) ) then
+        if ( Not DatabaseReportsView.exists(1) ) then
             warnlog "The Report tree doesn't exists"            
             exit function
         end if
         
-        iNumbersOfReports = InsightReportsView.getItemCount()
+        iNumbersOfReports = DatabaseReportsView.getItemCount()
 
         ' this select the first entry
-        InsightReportsView.TypeKeys "<HOME>"
-        InsightReportsView.TypeKeys "<UP>"
+        DatabaseReportsView.TypeKeys "<HOME>"
+        DatabaseReportsView.TypeKeys "<UP>"
         
         
         for i = 1 to iNumbersOfReports
             
-            InsightReportsView.TypeKeys "<ADD>"
+            DatabaseReportsView.TypeKeys "<ADD>"
             'printlog "i = " + i
             'printlog "ReportName.getItemCount = " + ReportTree.getItemCount 
-            if InsightReportsView.getItemCount >  iNumbersOfReports then
-                iNumbersOfReports = InsightReportsView.getItemCount()                    
+            if DatabaseReportsView.getItemCount >  iNumbersOfReports then
+                iNumbersOfReports = DatabaseReportsView.getItemCount()                    
             endif
             'printlog "ReportName.getSeltext = " + ReportTree.getSeltext
-            if InsightReportsView.getSeltext = sReportName then
+            if DatabaseReportsView.getSeltext = sReportName then
                 fFindReport = true    
                 exit for
             endif
-            InsightReportsView.TypeKeys "<DOWN>"
+            DatabaseReportsView.TypeKeys "<DOWN>"
         next
         sleep(1)        
     

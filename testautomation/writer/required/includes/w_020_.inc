@@ -37,7 +37,9 @@
 '*
 '\******************************************************************
 
-sub w_020printLog Chr(13) + "--------- Toolbars (w_020_.inc) ----------"
+sub w_020_
+
+    printLog Chr(13) + "--------- Toolbars (w_020_.inc) ----------"
 
     'Toolbar
     Call t_TB_Insert
@@ -51,7 +53,7 @@ sub w_020printLog Chr(13) + "--------- Toolbars (w_020_.inc) ----------"
     Call t_TB_Rest
 
     'Writer Web
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     Call tHtmlDoc_TB_Insert
     Call tHtmlDoc_TB_InsertFields
     Call tHtmlDoc_TB_Form
@@ -74,7 +76,7 @@ testcase t_TB_Insert
     Kontext "Insertbar"
     if Not Insertbar.Exists then Call hToolbarSelect("Insert", true)
 
-    if gApplication <> "HTMLDOKUMENT" then
+    if gApplication <> "HTML" then
         Kontext "Insertbar"
         printlog "  - Frame"
         printlog " Click 'Frame' and Insert a Frame"
@@ -134,7 +136,7 @@ testcase t_TB_Insert
     Kontext "Insertbar"
     if Not Insertbar.Exists then Call hToolbarSelect("Insert", true)
 
-    if gApplication <> "HTMLDOKUMENT" then
+    if gApplication <> "HTML" then
         printlog "  - Footnote"
         printlog " Click 'Insert Footnote Directly' in Toolbox"
         Kontext "Insertbar"
@@ -245,7 +247,7 @@ testcase t_TB_InsertFields
     Sleep 1
     Feldbefehle.OpenMenu
     wait 500
-    if gApplication = "HTMLDOKUMENT" then
+    if gApplication = "HTML" then
         Call hMenuSelectNr(6)
     else
         Call hMenuSelectNr(8)
@@ -267,7 +269,7 @@ endcase
 
 testcase t_TB_ShowDrawFunctions
     printlog "- Toolbox ( normal ) : Draw Functions"
-    if gApplication = "HTMLDOKUMENT" then
+    if gApplication = "HTML" then
         printlog "Not in WriterWeb!"
         goto endsub
     end if
@@ -404,7 +406,7 @@ testcase t_TB_Form
         Call sMenufunktionen("-Checkbox-")
 
         Kontext "FormControls"
-        if Ucase(gApplication) <> "HTMLDOKUMENT" then
+        if Ucase(gApplication) <> "HTML" then
             wait 500
             Label.Click
             printlog " Insert a textbox from toolbox"
@@ -433,7 +435,7 @@ testcase t_TB_Form
         Call sMenufunktionen("-Listbox-")
 
         Kontext "FormControls"
-        if Ucase(gApplication) <> "HTMLDOKUMENT" then
+        if Ucase(gApplication) <> "HTML" then
             Combobox.Click
             printlog " Insert a Combobox from toolbox"
             Wait 500
@@ -446,7 +448,7 @@ testcase t_TB_Form
 
         printlog " Insert a Formatted Field from toolbox"
         Kontext "FormControls"
-        if Ucase(gApplication) <> "HTMLDOKUMENT" then
+        if Ucase(gApplication) <> "HTML" then
             FormattedField.Click
             Wait 500
             Call hMalZeichnenMitSelektion ( 45, 50, 55, 55 )
@@ -551,7 +553,7 @@ endcase
 
 testcase t_TB_DirektCursor
     printlog "- Toolbox ( normal ) : Direct Cursor"
-    if gApplication = "HTMLDOKUMENT" then
+    if gApplication = "HTML" then
         printlog "Not in WriterWeb!"
         goto endsub
     end if
@@ -601,7 +603,7 @@ testcase t_TB_Rest
     endcatch
 
     printlog "  - OnlineLayout"
-    if gApplication <> "HTMLDOKUMENT" then
+    if gApplication <> "HTML" then
         Kontext "Toolbar"
         if Not Toolbar.Exists then Call hToolbarSelect("Tools", true)
         try
@@ -651,7 +653,7 @@ testcase tHtmlDoc_TB_Insert
     goto endsub
 
     printlog "- Toolbox ( normal ) : All within Insert"
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
 
     printlog " Open new document"
     Call hNewDocument
@@ -767,7 +769,7 @@ testcase tHtmlDoc_TB_InsertFields
     Dim Ende as Integer
     Dim i as Integer
     printlog "- Toolbox ( normal ) : Fields"
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
 
     if gPlatgroup = "unx" then
         QAErrorlog "Doesn't run on unix"
@@ -803,7 +805,7 @@ endcase
 '-----------------------------------------------------------
 testcase tHtmlDoc_TB_Form
     printlog "- Toolbox ( normal ) : Formular"
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
 
     printlog " Open new document"
     Call hNewDocument

@@ -152,7 +152,7 @@ testcase tContextSaveAsPicture
              Oeffnen.Click
 
             '/// Select all ///'
-             if (lcase(gApplication) = "impress") then
+             if (gApplication = "IMPRESS") then
                 Kontext "DocumentImpress"
              else
                 Kontext "DocumentDraw"
@@ -163,7 +163,7 @@ testcase tContextSaveAsPicture
             '/// The context menu must contain the "save as picture..." entry at 4th position from bottom. (Check it) ///'
             '/// Use the Context-Menu 'Save As Picture' ///'
              hOpenContextMenu
-             if (lcase(gApplication) = "impress") then
+             if (gApplication = "IMPRESS") then
                 Kontext "DocumentImpress"
                 DocumentImpress.OpenContextMenu true
                 WaitSlot(1000)
@@ -326,7 +326,7 @@ testcase tContextSaveAsPicture
                 endif
             endif
             '/// Remove all in the Document. (Impress/Draw) ///'
-             if (lcase(gApplication) = "impress") then
+             if (gApplication = "IMPRESS") then
                 Kontext "DocumentImpress"
              else
                 Kontext "DocumentDraw"
@@ -478,7 +478,7 @@ testcase tContextSavePictureLinkAsPicture
              Oeffnen.Click
 
             '/// Select all ///'
-             if (lcase(gApplication) = "impress") then
+             if (gApplication = "IMPRESS") then
                 Kontext "DocumentImpress"
              else
                 Kontext "DocumentDraw"
@@ -489,7 +489,7 @@ testcase tContextSavePictureLinkAsPicture
             '/// The context menu must contain the "save as picture..." entry at 4th position from bottom. (Check it) ///'
             '/// Use the Context-Menu 'Save As Picture' ///'
              hOpenContextMenu
-             if (lcase(gApplication) = "impress") then
+             if (gApplication = "IMPRESS") then
                 Kontext "DocumentImpress"
                 DocumentImpress.OpenContextMenu true
                 if hMenuFindSelect(27353, true, (MenuGetItemCount - 4), true) = false then
@@ -776,7 +776,7 @@ testcase tContextSavePictureLinkAsPicture
              endif
 
              '/// Remove all in the Document. (Impress/Draw) ///'
-             if (lcase(gApplication) = "impress") then
+             if (gApplication = "IMPRESS") then
                 Kontext "DocumentImpress"
              else
                 Kontext "DocumentDraw"

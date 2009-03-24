@@ -490,10 +490,10 @@ sub TBOhTabelleEinfuegen (optional tName as string, optional tHeader as boolean,
         Case "WRITER"
             Kontext "DocumentWriter"
 
-        Case "GLOBALDOKUMENT"
+        Case "MASTERDOCUMENT"
             Kontext "DocumentMasterDoc"
 
-        Case "HTMLDOKUMENT"
+        Case "HTML"
             Kontext "DocumentWriterWeb"
 
     end select

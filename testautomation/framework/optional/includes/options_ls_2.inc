@@ -47,7 +47,7 @@ testcase func_LoadSaveGeneral_1
   Dim sFilename, sFilebak as String
   Dim i as Integer
 
-   gApplication = "Writer"
+   gApplication = "WRITER"
 
 '///load&save/general : functionality test of all settings in 'Save'-group
 

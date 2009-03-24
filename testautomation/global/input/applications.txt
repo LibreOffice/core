@@ -8,7 +8,7 @@
 3=IMPRESS
 4=DRAW
 5=MATH
-6=MASTERDOC
+6=MASTERDOCUMENT
 7=HTML
 8=INSIGHT
 
@@ -20,7 +20,7 @@ CALC=Spreadsheet document
 IMPRESS=Presentation document
 DRAW=Drawing document
 MATH=Formula document
-MASTERDOC=Master document
+MASTERDOCUMENT=Master document
 HTML=HTML document
 INSIGHT=Database
 
@@ -32,7 +32,7 @@ CALC=DocumentCalc
 IMPRESS=DocumentImpress
 DRAW=DocumentDraw
 MATH=DocumentMath
-MASTERDOC=DocumentWriter
+MASTERDOCUMENT=DocumentWriter
 HTML=DocumentWriter
 INSIGHT=
 

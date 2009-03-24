@@ -37,7 +37,9 @@
 '*
 '\***********************************************************************
 
-sub w_001printLog Chr(13) + "--------- File Menu (w_001_.inc) ----------"
+sub w_001_
+
+    printLog Chr(13) + "--------- File Menu (w_001_.inc) ----------"
     gApplication = "WRITER"
 
     Call tFileNewLabels
@@ -53,7 +55,7 @@ sub w_001printLog Chr(13) + "--------- File Menu (w_001_.inc) ----------"
     Call tFileReload
     Call tFileVersions
 
-    if gApplication <> "HTMLDOKUMENT" then
+    if gApplication <> "HTML" then
         Call tToolsXMLFilterSettings
     end if
     Call tFileExportAsPDF
@@ -66,7 +68,7 @@ sub w_001printLog Chr(13) + "--------- File Menu (w_001_.inc) ----------"
     Call tFileSendAutoabstractToPresentation
 
     'Writer Master Document
-    gApplication = "MASTERDOC"
+    gApplication = "MASTERDOCUMENT"
     Call tMasterDocFileSaveWithPassword
     Call tMasterDocFileReload
     Call tMasterDocFileVersions
@@ -712,10 +714,10 @@ testcase tFileSaveWithPassword
     Case "WRITER"
         sFile$ = "password.odt"
         sFile2$ = "password2.odt"
-    Case "MASTERDOC"
+    Case "MASTERDOCUMENT"
         sFile$ = "password.odm"
         sFile2$ = "password2.odm"
-    Case "HTMLDOKUMENT"
+    Case "HTML"
         printlog "Not in Writer/Web!"
         goto endsub
     end select
@@ -889,9 +891,9 @@ testcase tFileReload
     Select Case gApplication
     Case "WRITER"
         sFile$ = "reload." & WriterFilterExtension(0)
-    Case "MASTERDOC"
+    Case "MASTERDOCUMENT"
         sFile$ = "reload." & MasterDocFilterExtension(0)
-    Case "HTMLDOKUMENT"
+    Case "HTML"
         printlog "Not in Writer/Web!"
         goto endsub
     end select
@@ -947,9 +949,9 @@ testcase tFileVersions
     Select Case gApplication
     Case "WRITER"
         sFile$ = "kann_weg." & WriterFilterExtension(0)
-    Case "MASTERDOC"
+    Case "MASTERDOCUMENT"
         sFile$ = "kann_weg." & MasterDocFilterExtension(0)
-    Case "HTMLDOKUMENT"
+    Case "HTML"
         printlog "Not in Writer/Web!"
         goto endsub
     end select
@@ -1020,9 +1022,9 @@ testcase tFileSendCreateHTMLDocument
     Select Case gApplication
     Case "WRITER"
         Call hNewDocument
-    Case "MASTERDOC"
+    Case "MASTERDOCUMENT"
         Call hNewDocument
-    Case "HTMLDOKUMENT"
+    Case "HTML"
         printlog "Not in WriterWeb!"
         goto endsub
     end select
@@ -1049,9 +1051,9 @@ testcase tFileSendOutlineToPresentation
     Select Case gApplication
     Case "WRITER"
         sFile$ = "htmltest.sxw"
-    Case "MASTERDOC"
+    Case "MASTERDOCUMENT"
         sFile$ = "htmltest.sxg"
-    Case "HTMLDOKUMENT"
+    Case "HTML"
         printlog "Not in Writer/Web!"
         goto endsub
     end select
@@ -1102,9 +1104,9 @@ testcase tFileSendOutlineToClipboard
     Select Case gApplication
     Case "WRITER"
         sFile$ = "htmltest.sxw"
-    Case "MASTERDOC"
+    Case "MASTERDOCUMENT"
         sFile$ = "htmltest.sxg"
-    Case "HTMLDOKUMENT"
+    Case "HTML"
         printlog "Not in Writer/Web!"
         goto endsub
     end select
@@ -1149,9 +1151,9 @@ testcase tFileSendCreateAutoabstract
     Select Case gApplication
     Case "WRITER"
         sFile$ = "htmltest.sxw"
-    Case "MASTERDOC"
+    Case "MASTERDOCUMENT"
         sFile$ = "htmltest.sxg"
-    Case "HTMLDOKUMENT"
+    Case "HTML"
         printlog "Not in Writer/Web!"
         goto endsub
     end select
@@ -1204,9 +1206,9 @@ testcase tFileSendAutoabstractToPresentation
     Select Case gApplication
     Case "WRITER"
         sFile$ = "htmltest.sxw"
-    Case "MASTERDOC"
+    Case "MASTERDOCUMENT"
         sFile$ = "htmltest.sxg"
-    Case "HTMLDOKUMENT"
+    Case "HTML"
         printlog "Not in Writer/Web!"
         goto endsub
     end select
@@ -1269,7 +1271,7 @@ testcase tMasterDocFileSaveWithPassword
     sFile$ = "password.odm"
     sFile2$ = "password2.odm"
 
-    gApplication = "MASTERDOC"
+    gApplication = "MASTERDOCUMENT"
     PrintLog "Open new document"
     Call hNewDocument
     PrintLog "Enter some text into document"
@@ -1438,7 +1440,7 @@ testcase tMasterDocFileReload
     PrintLog "- File / Reload"
     sFile$ = "reload." & MasterDocFilterExtension(0)
 
-    gApplication = "MASTERDOC"
+    gApplication = "MASTERDOCUMENT"
     PrintLog "Open new document"
     Call hNewDocument
 
@@ -1486,7 +1488,7 @@ testcase tMasterDocFileVersions
     WriterFilterExtension() = hGetFilternameExtension ( "writer8" )
     MasterDocFilterExtension() = hGetFilternameExtension ( "writerglobal8" )
 
-    gApplication = "MASTERDOC"
+    gApplication = "MASTERDOCUMENT"
     PrintLog "- File / Versions"
     sFile$ = "kann_weg." & MasterDocFilterExtension(0)
 
@@ -1524,7 +1526,7 @@ endcase
 
 testcase tMasterDocFileSendCreateHTMLDocument
     PrintLog "- File / Send / Create HTML-Dokument"
-    gApplication = "MASTERDOC"
+    gApplication = "MASTERDOCUMENT"
     PrintLog "Open new document"
     Call hNewDocument
 
@@ -1545,7 +1547,7 @@ endcase
 testcase tMasterDocFileSendOutlineToPresentation
     Dim sFile$
     PrintLog "- File / Send / Outline to Presentation"
-    gApplication = "MASTERDOC"
+    gApplication = "MASTERDOCUMENT"
     sFile$ = "htmltest.sxg"
 
     PrintLog "Open file ( gTesttoolPath + writer\required\input\ + htmltest.sxw )"
@@ -1590,7 +1592,7 @@ endcase
 '-----------------------------------------------------------
 
 testcase tMasterDocFileSendOutlineToClipboard
-    gApplication = "MASTERDOC"
+    gApplication = "MASTERDOCUMENT"
     Dim sFile$
     PrintLog "- File / Send / Outline to Clipboard"
     sFile$ = "htmltest.sxg"
@@ -1629,7 +1631,7 @@ endcase
 '-----------------------------------------------------------
 
 testcase tMasterDocFileSendCreateAutoabstract
-    gApplication = "MASTERDOC"
+    gApplication = "MASTERDOCUMENT"
     Dim sFile$
     PrintLog "- File / Send / Create Autoabstract"
     sFile$ = "htmltest.sxg"
@@ -1678,7 +1680,7 @@ endcase
 '-----------------------------------------------------------
 
 testcase tMasterDocFileSendAutoabstractToPresentation
-    gApplication = "MASTERDOC"
+    gApplication = "MASTERDOCUMENT"
     Dim sFile$
     PrintLog "- File / Send / Autoabstract to Presentation"
     sFile$ = "htmltest.sxg"

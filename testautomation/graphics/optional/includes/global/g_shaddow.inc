@@ -61,7 +61,7 @@ testcase tiShaddow
    dim cornerstyletype as string
 
     '/// Set the file-extension we'll be using when opening the saved file ///'
-    if (lCase(gApplication) = "impress") then
+    if (gApplication = "IMPRESS") then
         ExtensionString = "odp"
     else
         ExtensionString = "odg"
@@ -326,7 +326,7 @@ testcase tiShaddow
       TabLinie.ok
 
    '/// If Impress: Save as Powerpoint-file. If Draw: Save as usual Draw-file. ///'
-    if (lCase(gApplication) = "impress") then
+    if (gApplication = "IMPRESS") then
         ExtensionString = "ppt"
     else
         ExtensionString = "odg"
@@ -337,7 +337,7 @@ testcase tiShaddow
    FileSaveAs
       Kontext "SpeichernDlg"
       Dateiname.SetText sFileName
-      if (lCase(gApplication) = "impress") then
+      if (gApplication = "IMPRESS") then
          Dateityp.Select 5  ' Powerpoint
          printlog "Trying to save with filter: " + Dateityp.GetSelText + sFilter(5)
       else
@@ -386,21 +386,21 @@ testcase tiShaddow
       Kontext
       Messagebox.SetPage TabTransparenz
          kontext "TabTransparenz"
-         if (lCase(gApplication) = "DRAW") then
+         if (gApplication = "DRAW") then
             if LineareTransparenz.Ischecked = FALSE then
                warnlog "Transparency should have been checked!"
                if MFLinTransparenz.GetText <> shadowtransparencyvalue then warnlog "Transparency-value should NOT have changed"
                KeineTransparenz.Check
             end if
          endif
-         if (lCase(gApplication) = "DRAW") then
+         if (gApplication = "DRAW") then
             if LineareTransparenz.Ischecked = FALSE then
                warnlog "Transparency should have been checked!"
                if MFLinTransparenz.GetText <> shadowtransparencyvalue then warnlog "Transparency-value should NOT have changed"
                KeineTransparenz.Check
             end if
          endif
-         if (lCase(gApplication) = "IMPRESS") then
+         if (gApplication = "IMPRESS") then
             if LineareTransparenz.Ischecked <> FALSE then
                warnlog "Transparency should NOT have been checked!"
                if MFLinTransparenz.GetText <> shadowtransparencyvalue then warnlog "Transparency-value should NOT have changed"
@@ -437,7 +437,7 @@ testcase tiShaddow
      TabSchatten.Ok
 
    '/// If Impress: Save as Powerpoint-file. If Draw: Save as usual Draw-file. ///'
-    if (lCase(gApplication) = "impress") then
+    if (gApplication = "IMPRESS") then
         ExtensionString = "ppt"
     else
         ExtensionString = "odg"
@@ -447,7 +447,7 @@ testcase tiShaddow
    FileSaveAs
       Kontext "SpeichernDlg"
       Dateiname.SetText sFileName
-      if (lCase(gApplication) = "impress") then
+      if (gApplication = "IMPRESS") then
          Dateityp.Select 5  ' Powerpoint
          printlog "Trying to save with filter: " + Dateityp.GetSelText + sFilter(5)
       else

@@ -53,7 +53,7 @@ testcase tBasic_IDE_Toolbar_Module
 
     '///+<li>Open a new writer-doc</li>
     printlog "open a new writer-doc"
-    gApplication = "Writer"
+    gApplication = "WRITER"
     hCreateDocument()
 
     '///+<li>Create a new module for the new document (named TTModule)</li>

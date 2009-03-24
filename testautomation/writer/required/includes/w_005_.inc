@@ -36,7 +36,9 @@
 '*
 '\******************************************************************
 
-sub w_005printLog Chr(13) + "--------- Menu Format (w_005_.inc) ----------"
+sub w_005_
+
+    printLog Chr(13) + "--------- Menu Format (w_005_.inc) ----------"
     gApplication = "WRITER"
 
     Call tFormatDefault
@@ -60,7 +62,7 @@ sub w_005printLog Chr(13) + "--------- Menu Format (w_005_.inc) ----------"
     Call tFormatWrapArea
 
     'Writer Web
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     Call tHtmlDocFormatParagraph
     Call tHtmlDocFormatPage
     Call tHtmlDocFormatStylist
@@ -278,7 +280,7 @@ endcase
 testcase tFormatRuby
     printlog "- Format / Ruby"
     if gAsianSup = True then
-        if gApplication = "HTMLDOKUMENT" then
+        if gApplication = "HTML" then
             printlog "Not in WriterWeb!"
             goto endsub
         end if
@@ -349,7 +351,7 @@ testcase tFormatParagraph
     kontext "TabUmrandung"
     Call DialogTest ( TabUmrandung )
 
-    if gApplication <> "HTMLDOKUMENT" then
+    if gApplication <> "HTML" then
         Kontext
         active.SetPage TabTextfluss
         kontext "TabTextfluss"
@@ -442,7 +444,7 @@ testcase tFormatPage
     active.SetPage TabKopfzeile
     kontext "TabKopfzeile"
     Call DialogTest ( TabKopfzeile )
-    if gApplication <> "HTMLDOKUMENT" then
+    if gApplication <> "HTML" then
         KopfzeileMitAbstand.Check
         Zusaetze.Click
 
@@ -462,7 +464,7 @@ testcase tFormatPage
     active.SetPage TabFusszeile
     kontext "TabFusszeile"
     Call DialogTest ( TabFusszeile )
-    if gApplication <> "HTMLDOKUMENT" then
+    if gApplication <> "HTML" then
         FusszeileMitAbstand.Check
         Zusaetze.Click
 
@@ -619,7 +621,7 @@ testcase tFormatStylist
     Call DialogTest ( Gestalter )
     Zeichenvorlagen.Click
     printlog " Click all Styles-buttons in Stylist"
-    if gApplication <> "HTMLDOKUMENT" then
+    if gApplication <> "HTML" then
         Sleep 1
         Rahmenvorlagen.Click
         Sleep 1
@@ -785,7 +787,7 @@ endcase
 
 testcase tFormatWrap
     PrintLog "- Format / Wrap"
-    if gApplication = "HTMLDOKUMENT" then
+    if gApplication = "HTML" then
         printlog "Not in Writer/Web!"
         goto endsub
     end if
@@ -873,7 +875,7 @@ endcase
 
 testcase tFormatAnchorArea
     PrintLog "- Format / Anchor drawing objects"
-    if gApplication = "HTMLDOKUMENT" then
+    if gApplication = "HTML" then
         printlog "Not in WriterWeb!"
         goto endsub
     end if
@@ -914,7 +916,7 @@ endcase
 
 testcase tFormatWrapArea
     PrintLog "- Format / Wrap drawing objects"
-    if gApplication = "HTMLDOKUMENT" then
+    if gApplication = "HTML" then
         printlog "Not in WriterWeb!"
         goto endsub
     end if
@@ -1007,7 +1009,7 @@ endcase
 
 testcase tHtmlDocFormatParagraph
     PrintLog "- Format / Paragraph"
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     printlog " Open new document"
     Call hNewDocument
     printlog " Format / Paragraph"
@@ -1045,7 +1047,7 @@ endcase
 
 testcase tHtmlDocFormatPage
     PrintLog "- Format / Page"
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     printlog " Open new document"
     Call hNewDocument
 
@@ -1099,7 +1101,7 @@ endcase
 
 testcase tHtmlDocFormatStylist
     PrintLog "- Format / Stylist"
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     if gPlatgroup = "unx" then
         QAErrorlog "Doesn't run on unix"
         goto endsub

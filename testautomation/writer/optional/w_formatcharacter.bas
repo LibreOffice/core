@@ -71,5 +71,5 @@ sub LoadIncludeFiles
     use "global\tools\includes\optional\t_extension_manager_tools.inc"
     use "global\tools\includes\optional\t_ui_filters.inc"
     Call GetUseFiles
-    gApplication = "Writer"
+    gApplication = "WRITER"
 end sub

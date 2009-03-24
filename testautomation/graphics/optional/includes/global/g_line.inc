@@ -303,7 +303,7 @@ testcase tiFormatLine
     'kontext "Toolbar"
     'Kurven.Click
     'sleep 1
-    'if (lcase(gApplication) = "draw") then
+    'if (gApplication = "DRAW") then
     '    Kontext "DocumentDraw"
     '    gMouseMove (30,50, 40,60)
     '    sleep 1
@@ -361,7 +361,7 @@ testcase tLineConnect
     kontext "Toolbar"
     Kurven.Click
     sleep 1
-    if (lcase(gApplication) = "draw") then
+    if (gApplication = "DRAW") then
      Kontext "DocumentDraw"
      gMouseMove (30,50, 40,60)
      sleep 1
@@ -379,14 +379,14 @@ testcase tLineConnect
      gMouseMove (70,50, 60,60)
     endif
     
-    printlog "'" + (lcase(gApplication)) +"'"
+    printlog "'" + (gApplication) +"'"
     
     '/// Check the amount of objects ///'
     gMouseClick (10, 10)
     sleep 1
     EditSelectAll
     sleep 1
-    if (lcase(gApplication) = "impress") then
+    if (gApplication = "IMPRESS") then
         StatusBarText = DocumentImpress.StatusGetText(DocumentImpress.StatusGetItemID(1))
     else
         kontext "DocumentDraw"
@@ -415,7 +415,7 @@ testcase tLineConnect
     sleep 1
     EditSelectAll
     sleep 1
-    if (lcase(gApplication) = "impress") then
+    if (gApplication = "IMPRESS") then
      StatusBarText = DocumentImpress.StatusGetText(DocumentImpress.StatusGetItemID(1))
     else
      kontext "DocumentDraw"
@@ -448,7 +448,7 @@ testcase tLineConnect
     EditSelectAll
     sleep 1
     '/// Check the amount of objects ///'
-    if (lcase(gApplication) = "impress") then
+    if (gApplication = "IMPRESS") then
      StatusBarText = DocumentImpress.StatusGetText(DocumentImpress.StatusGetItemID(1))
     else
      kontext "DocumentDraw"
@@ -499,7 +499,7 @@ testcase tLineConnect
     '/// And a nice finish to make life a bit happier for anyone who looks at the test ///'
     kontext "Toolbar"
     Ellipsen.Click
-    if (lcase(gApplication) = "draw") then
+    if (gApplication = "DRAW") then
     Kontext "DocumentDraw"
     gMouseMove (40,40, 50,30)
     sleep 1

@@ -268,7 +268,7 @@ function setStartCurrentPage(optional bState as boolean) as boolean
     '/// tools->options ///'
     ToolsOptions
     '///+ select in section 'Presentation' tabpage 'general' ///'
-    hToolsOptions ("Presentation","General")
+    hToolsOptions ("IMPRESS","General")
         '///+ check the checkbox 'Always with current page' ///'
         setStartCurrentPage = MitAktuellerSeite.isChecked
         if bState then

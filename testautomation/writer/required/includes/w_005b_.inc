@@ -37,7 +37,9 @@
 '*
 '\***********************************************************************
 
-sub w_005bprintLog Chr(13) + "--------- Menu Format / 2 (w_005b_.inc) ----------"
+sub w_005b_
+
+    printLog Chr(13) + "--------- Menu Format / 2 (w_005b_.inc) ----------"
     gApplication = "WRITER"
 
     Call tFormatAlignment
@@ -74,7 +76,7 @@ sub w_005bprintLog Chr(13) + "--------- Menu Format / 2 (w_005b_.inc) ----------
     Call tFormatParagraphEdit
 
     'Writer Web
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     Call tHtmlDocFormatGraphics
     Call tHtmlDocFormatAlignment
     Call tHtmlDocFormatObject
@@ -128,7 +130,7 @@ testcase tFormatGraphics
     Kontext "TabGrafik"
     Call DialogTest ( TabGrafik )
 
-    if gApplication <> "HTMLDOKUMENT" then
+    if gApplication <> "HTML" then
         Kontext
         active.SetPage TabZuschneiden
         Kontext "TabZuschneiden"
@@ -224,7 +226,7 @@ testcase tFormatAlignment
     Call hNewDocument
     printlog " Insert a graphic from file '..\writer\required\input\graphics\jolink.jpg'"
     Call hGrafikEinfuegen ( gTesttoolPath + "writer\required\input\graphics\jolink.jpg" )
-    if gApplication = "HTMLDOKUMENT" then
+    if gApplication = "HTML" then
         wait 500
         printlog " Format / Anchor / to Page"
         FormatAnchorToPage
@@ -315,7 +317,7 @@ testcase tFormatObject
     Kontext "TabHintergrund"
     Call DialogTest ( TabHintergrund )
 
-    if gApplication <> "HTMLDOKUMENT" then
+    if gApplication <> "HTML" then
         Kontext
         active.SetPage TabHyperlinkRahmen
         Kontext "TabHyperlinkRahmen"
@@ -380,7 +382,7 @@ endcase
 
 testcase tFormatAlignmentObject
     PrintLog "- Format / Alignment Frame"
-    if gApplication = "HTMLDOKUMENT" then
+    if gApplication = "HTML" then
         printlog "Not in WriterWeb!"
         goto endsub
     end if
@@ -439,7 +441,7 @@ endcase
 
 testcase tFormatWrapObject
     PrintLog "- Format / Wrap (Frame)"
-    if gApplication = "HTMLDOKUMENT" then
+    if gApplication = "HTML" then
         printlog "Not in WriterWeb!"
         goto endsub
     end if
@@ -496,7 +498,7 @@ endcase
 
 testcase tFormatLine
     PrintLog "- Format / Line in drawing object"
-    if gApplication = "HTMLDOKUMENT" then
+    if gApplication = "HTML" then
         printlog "Not in WriterWeb!"
         goto endsub
     end if
@@ -573,7 +575,7 @@ endcase
 testcase tFormatArea
     Dim i as integer
     PrintLog "- Format / Area in drawing object"
-    if gApplication = "HTMLDOKUMENT" then
+    if gApplication = "HTML" then
         printlog "Not in WriterWeb!"
         goto endsub
     end if
@@ -685,7 +687,7 @@ endcase
 
 testcase tFormatText
     PrintLog "- Format / Text in drawing object"
-    if gApplication = "HTMLDOKUMENT" then
+    if gApplication = "HTML" then
         printlog "Not in WriterWeb!"
         goto endsub
     end if
@@ -730,7 +732,7 @@ endcase
 
 testcase tFormatPositionAndSize
     PrintLog "- Format / Position and Size in drawing object"
-    if gApplication = "HTMLDOKUMENT" then
+    if gApplication = "HTML" then
         printlog "Not in WriterWeb!"
         goto endsub
     end if
@@ -780,7 +782,7 @@ endcase
 
 testcase tFormatFlip
     PrintLog "- Format / Flip drawing objects"
-    if gApplication = "HTMLDOKUMENT" then
+    if gApplication = "HTML" then
         printlog "Not in WriterWeb!"
         goto endsub
     end if
@@ -814,7 +816,7 @@ endcase
 
 testcase tFormatArrangeArea
     PrintLog "- Format / Arrange drawing objects"
-    if gApplication = "HTMLDOKUMENT" then
+    if gApplication = "HTML" then
         printlog "Not in WriterWeb!"
         goto endsub
     end if
@@ -856,7 +858,7 @@ endcase
 
 testcase tFormatAlignmentArea
     PrintLog "- Format / Alignment drawing objects"
-    if gApplication = "HTMLDOKUMENT" then
+    if gApplication = "HTML" then
         printlog "Not in WriterWeb!"
         goto endsub
     end if
@@ -940,7 +942,7 @@ testcase tFormatGroup
     Dim y1%
 
     PrintLog "- Format / Group drawing objects"
-    if gApplication = "HTMLDOKUMENT" then
+    if gApplication = "HTML" then
         printlog "Not in WriterWeb!"
         goto endsub
     end if
@@ -1027,7 +1029,7 @@ endcase
 
 testcase tFormatFontwork
     PrintLog "- Format / Fontwork drawing objects"
-    if gApplication = "HTMLDOKUMENT" then
+    if gApplication = "HTML" then
         printlog "Not in WriterWeb!"
         goto endsub
     end if
@@ -1067,7 +1069,7 @@ endcase
 
 testcase tFormatPositionAndSizeLegend
     PrintLog "- Format / Position and Size in Legend"
-    if gApplication = "HTMLDOKUMENT" then
+    if gApplication = "HTML" then
         printlog "Not in WriterWeb!"
         goto endsub
     end if
@@ -1110,7 +1112,7 @@ endcase
 
 testcase tFormatStyleEdit
     PrintLog "- Format / Style Text objects"
-    if gApplication = "HTMLDOKUMENT" then
+    if gApplication = "HTML" then
         printlog "Not in WriterWeb !"
         goto endsub
     end if
@@ -1183,7 +1185,7 @@ endcase
 
 testcase tFormatAlignmentEdit
     PrintLog "- Format / Alignment text objects"
-    if gApplication = "HTMLDOKUMENT" then
+    if gApplication = "HTML" then
         printlog "Not in WriterWeb!"
         goto endsub
     end if
@@ -1223,7 +1225,7 @@ endcase
 
 testcase tFormatLineSpacing
     PrintLog "- Format / Line Spacing text objects"
-    if gApplication = "HTMLDOKUMENT" then
+    if gApplication = "HTML" then
         printlog "Not in WriterWeb!"
         goto endsub
     end if
@@ -1264,7 +1266,7 @@ endcase
 
 testcase tFormatParagraphEdit
     PrintLog "- Format / Paragraph text objects"
-    if gApplication = "HTMLDOKUMENT" then
+    if gApplication = "HTML" then
         printlog "Not in WriterWeb!"
         goto endsub
     end if
@@ -1313,7 +1315,7 @@ testcase tHtmlDocFormatGraphics
     PrintLog "- Format / Graphics"
     Dim j as integer
 
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     printlog " Open new document"
     Call hNewDocument
 
@@ -1390,7 +1392,7 @@ endcase
 '-----------------------------------------------------------
 
 testcase tHtmlDocFormatAlignment
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     PrintLog "- Format / Alignment"
 
     printlog " Open new document"
@@ -1452,7 +1454,7 @@ testcase tHtmlDocFormatObject
     PrintLog "- Format / Object"
     Dim j as integer
 
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     printlog " Open new document"
     Call hNewDocument
 

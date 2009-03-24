@@ -100,11 +100,11 @@ function fOpenNewQueryDesign() as boolean
     '/// open a new query design 
     '/// <u>parameter:</u>    
     
-    Kontext "Insight"    
-        Insight.MouseDown(50,50)
-        Insight.MouseUp(50,50)
+    Kontext "DATABASE"    
+        Database.MouseDown(50,50)
+        Database.MouseUp(50,50)
     
-    if ( Insight.NotExists(3) ) then
+    if ( Database.NotExists(3) ) then
         fOpenNewQueryDesign = false
         warnlog "The database windows doesn't exists"
         exit function
@@ -124,11 +124,11 @@ function fOpenNewSQLQueryDesign() as boolean
     '/// open a new query design in SQL mode 
     '/// <u>parameter:</u>    
     
-    Kontext "Insight"    
-        Insight.MouseDown(50,50)
-        Insight.MouseUp(50,50)
+    Kontext "DATABASE"    
+        Database.MouseDown(50,50)
+        Database.MouseUp(50,50)
     
-    if ( Insight.NotExists(3) ) then
+    if ( Database.NotExists(3) ) then
         fOpenNewSQLQueryDesign = false
         warnlog "The database windows doesn't exists"
         exit function
@@ -148,14 +148,14 @@ function fStartQueryWizard()
     '/// start the query wizard 
     '/// <u>parameter:</u>    
 
-    Kontext "Insight"    
-	    if ( Insight.NotExists(3) ) then
+    Kontext "DATABASE"    
+	    if ( Database.NotExists(3) ) then
 	        fStartQueryWizard = false
 	        exit function
 	    end if
 
-        Insight.MouseDown(50,50)
-        Insight.MouseUp(50,50)
+        Database.MouseDown(50,50)
+        Database.MouseUp(50,50)
     
     sleep(1)
     
@@ -209,8 +209,8 @@ function fOpenQueryInSQLDesign(sQueryName as String)
     if ( fFindQuery(sQueryName) = true ) then
         printlog "Query " + sQueryName + " found -> open in sql design"    
         
-        Kontext "Insight"
-        Insight.UseMenu        
+        Kontext "DATABASE"
+        Database.UseMenu        
         
         hMenuSelectNr(2)
         hMenuSelectNr(9)

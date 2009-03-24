@@ -166,8 +166,8 @@ sub wToolsSpellcheckCheckWriter
     '/// This function opens the spellcheck-dialog in all applications
     Select Case Ucase(gApplication)
         Case "WRITER"		: ToolsSpellcheckWriter
-        Case "MASTERDOC"	: ToolsSpellcheckWriter
-        Case "HTMLDOKUMENT" : ToolsSpellcheckWriter
+        Case "MASTERDOCUMENT"	: ToolsSpellcheckWriter
+        Case "HTML" : ToolsSpellcheckWriter
         case "DRAW"         : ToolsSpellcheck
         case "IMPRESS"     	: ToolsSpellcheck
     end select
