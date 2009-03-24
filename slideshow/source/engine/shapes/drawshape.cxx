@@ -262,7 +262,8 @@ namespace slideshow
 
         void DrawShape::updateStateIds() const
         {
-            // update the states, we've just redrawn
+            // Update the states, we've just redrawn or created a new
+            // attribute layer.
             if( mpAttributeLayer )
             {
                 mnAttributeTransformationState = mpAttributeLayer->getTransformationState();
@@ -1257,6 +1258,9 @@ namespace slideshow
         {
             // create new layer, with last as its new child
             mpAttributeLayer.reset( new ShapeAttributeLayer( mpAttributeLayer ) );
+
+            // Update the local state ids to reflect those of the new layer.
+            updateStateIds();
 
             return mpAttributeLayer;
         }
