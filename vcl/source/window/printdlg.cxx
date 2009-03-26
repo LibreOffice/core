@@ -267,7 +267,7 @@ void PrintDialog::setupOptionalUI()
         rtl::OUString aPropertyName;
         Sequence< rtl::OUString > aChoices;
         sal_Int64 nMinValue = 0, nMaxValue = 0;
-        bool bDependency = false;
+        long nDependencyIndent = 0;
 
         for( int n = 0; n < aOptProp.getLength(); n++ )
         {
@@ -298,7 +298,28 @@ void PrintDialog::setupOptionalUI()
             }
             else if( rEntry.Name.equalsAscii( "DependsOnName" ) )
             {
-                bDependency = true;
+                rtl::OUString aDepName;
+                rEntry.Value >>= aDepName;
+                std::map< rtl::OUString, Window* >::iterator it( maPropertyToWindowMap.find( aDepName ) );
+                if( it != maPropertyToWindowMap.end() )
+                {
+                    Window* pWin = it->second;
+                    // still on the same page ?
+                    if( pWin->GetParent() == pCurParent )
+                    {
+                        // is it a labeled window ?
+                        if( dynamic_cast< ListBox* >(pWin) ||
+                            dynamic_cast< NumericField* >(pWin) )
+                        {
+                            Window* pLabelWin = pWin->GetLabeledBy();
+                            if( dynamic_cast<FixedText*>(pLabelWin) ) // sanity check
+                                pWin = pLabelWin;
+                        }
+                        long nDependencyXPos = PixelToLogic( pWin->GetPosPixel(), aFontMapMode ).X();
+                        if( (nDependencyXPos + 5)  > nXPos )
+                            nDependencyIndent = nDependencyXPos + 5 - nXPos;
+                    }
+                }
             }
             else if( rEntry.Name.equalsAscii( "MinValue" ) )
             {
@@ -351,16 +372,13 @@ void PrintDialog::setupOptionalUI()
             }
             else if( aCtrlType.equalsAscii( "Bool" ) && pCurParent )
             {
-                if( bDependency )
-                    nXPos += 5;
-
                 // add a check box
                 CheckBox* pNewBox = new CheckBox( pCurParent );
                 maControls.push_front( pNewBox );
                 pNewBox->SetText( aText );
 
                 // FIXME: measure text
-                pNewBox->SetPosSizePixel( pNewBox->LogicToPixel( Point( nXPos, nCurY ), aFontMapMode ),
+                pNewBox->SetPosSizePixel( pNewBox->LogicToPixel( Point( nXPos + nDependencyIndent, nCurY ), aFontMapMode ),
                                           pNewBox->LogicToPixel( Size( 100, 10 ), aFontMapMode ) );
                 nCurY += 12;
 
@@ -376,8 +394,6 @@ void PrintDialog::setupOptionalUI()
                 maPropertyToWindowMap.insert( std::pair< rtl::OUString, Window* >( aPropertyName, pNewBox ) );
                 maControlToPropertyMap[pNewBox] = aPropertyName;
 
-                if( bDependency )
-                    nXPos -= 5;
             }
             else if( aCtrlType.equalsAscii( "Radio" ) && pCurParent )
             {
@@ -390,7 +406,7 @@ void PrintDialog::setupOptionalUI()
                     pHeading->SetText( aText );
                     Size aPixelSize( pHeading->LogicToPixel( Size( 10, 10 ), aFontMapMode ) );
                     aPixelSize.Width() = aTabSize.Width() - aPixelSize.Width();
-                    pHeading->SetPosSizePixel( pHeading->LogicToPixel( Point( nXPos, nCurY ), aFontMapMode ),
+                    pHeading->SetPosSizePixel( pHeading->LogicToPixel( Point( nXPos + nDependencyIndent, nCurY ), aFontMapMode ),
                                                aPixelSize );
                     pHeading->Show();
 
@@ -409,7 +425,7 @@ void PrintDialog::setupOptionalUI()
                     maControls.push_front( pBtn );
                     pBtn->SetText( aChoices[m] );
                     pBtn->Check( m == nSelectVal );
-                    Size aPixelSize( pBtn->LogicToPixel( Size( 10 + nXPos, 12 ), aFontMapMode ) );
+                    Size aPixelSize( pBtn->LogicToPixel( Size( 10 + nXPos + nDependencyIndent, 12 ), aFontMapMode ) );
                     aPixelSize.Width() = aTabSize.Width() - aPixelSize.Width();
                     pBtn->SetPosSizePixel( pBtn->LogicToPixel( Point( 15, nCurY ), aFontMapMode ),
                                            aPixelSize );
@@ -426,16 +442,13 @@ void PrintDialog::setupOptionalUI()
             }
             else if( aCtrlType.equalsAscii( "List" ) && pCurParent )
             {
-                if( bDependency )
-                    nXPos += 5;
-
                 // add a FixedText:
                 FixedText* pHeading = new FixedText( pCurParent );
                 maControls.push_front( pHeading );
                 pHeading->SetText( aText );
                 Size aPixelSize( pHeading->LogicToPixel( Size( 10, 10 ), aFontMapMode ) );
                 aPixelSize.Width() += pHeading->GetTextWidth( aText );
-                pHeading->SetPosSizePixel( pHeading->LogicToPixel( Point( nXPos, nCurY ), aFontMapMode ),
+                pHeading->SetPosSizePixel( pHeading->LogicToPixel( Point( nXPos + nDependencyIndent, nCurY ), aFontMapMode ),
                                            aPixelSize );
                 pHeading->Show();
 
@@ -475,7 +488,7 @@ void PrintDialog::setupOptionalUI()
                 else
                 {
                     nCurY += 12;
-                    aListPos = pCurParent->LogicToPixel( Point( 15, nCurY ), aFontMapMode );
+                    aListPos = pCurParent->LogicToPixel( Point( 15 + nDependencyIndent, nCurY ), aFontMapMode );
                 }
 
                 pList->SetPosSizePixel( aListPos, aPixelSize );
@@ -494,22 +507,16 @@ void PrintDialog::setupOptionalUI()
                     aPos.Y() += (pList->GetSizePixel().Height() - aSize.Height())/2;
                     pHeading->SetPosSizePixel( aPos, aSize );
                 }
-
-                if( bDependency )
-                    nXPos -= 5;
             }
             else if( aCtrlType.equalsAscii( "Range" ) && pCurParent )
             {
-                if( bDependency )
-                    nXPos += 5;
-
                 // add a FixedText:
                 FixedText* pHeading = new FixedText( pCurParent );
                 maControls.push_front( pHeading );
                 pHeading->SetText( aText );
                 Size aPixelSize( pHeading->LogicToPixel( Size( 10, 10 ), aFontMapMode ) );
                 aPixelSize.Width() += pHeading->GetTextWidth( aText );
-                pHeading->SetPosSizePixel( pHeading->LogicToPixel( Point( nXPos, nCurY ), aFontMapMode ),
+                pHeading->SetPosSizePixel( pHeading->LogicToPixel( Point( nXPos + nDependencyIndent, nCurY ), aFontMapMode ),
                                            aPixelSize );
                 pHeading->Show();
 
@@ -543,7 +550,7 @@ void PrintDialog::setupOptionalUI()
                 else
                 {
                     nCurY += 12;
-                    aFieldPos = pCurParent->LogicToPixel( Point( 15, nCurY ), aFontMapMode );
+                    aFieldPos = pCurParent->LogicToPixel( Point( 15 + nDependencyIndent, nCurY ), aFontMapMode );
                 }
 
                 pField->SetPosSizePixel( aFieldPos, aPixelSize );
@@ -562,9 +569,6 @@ void PrintDialog::setupOptionalUI()
                     aPos.Y() += (pField->GetSizePixel().Height() - aSize.Height())/2;
                     pHeading->SetPosSizePixel( aPos, aSize );
                 }
-
-                if( bDependency )
-                    nXPos -= 5;
             }
         }
         else
