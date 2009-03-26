@@ -83,6 +83,10 @@ ModalDialog SV_DLG_PRINT
         Pos = MAP_APPFONT( 0, 165 );
         Size = MAP_APPFONT( 350, 8 );
     };
+    String SV_PRINT_NOPAGES
+    {
+        Text [en-US] = "No pages";
+    };
 
     TabPage SV_PRINT_TAB_PRINTER
     {

@@ -137,6 +137,7 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterList
     , maJobPage( &maTabCtrl, VclResId( SV_PRINT_TAB_JOB ) )
     , maButtonLine( this, VclResId( SV_PRINT_BUTTONLINE ) )
     , maPListener( i_rListener )
+    , maNoPageStr( String( VclResId( SV_PRINT_NOPAGES ) ) )
     , mnCurPage( 0 )
     , mnCachedPages( 0 )
 {
@@ -206,6 +207,7 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterList
 
     // setup modify hdl
     maJobPage.maCopyCountField.SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
+    maJobPage.maPagesEdit.SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
 
     // setup optional UI options set by application
     setupOptionalUI();
@@ -636,9 +638,14 @@ static rtl::OUString searchAndReplace( const rtl::OUString& i_rOrig, const char*
 
 void PrintDialog::setPreviewText( sal_Int32 nSetPage )
 {
-    rtl::OUString aNewText( searchAndReplace( maPageStr, "%p", 2, nSetPage+1 ) );
-    aNewText = searchAndReplace( aNewText, "%n", 2, mnCachedPages );
-    maPageText.SetText( aNewText );
+    if( mnCachedPages != 0 )
+    {
+        rtl::OUString aNewText( searchAndReplace( maPageStr, "%p", 2, nSetPage+1 ) );
+        aNewText = searchAndReplace( aNewText, "%n", 2, mnCachedPages );
+        maPageText.SetText( aNewText );
+    }
+    else
+        maPageText.SetText( maNoPageStr );
 }
 
 void PrintDialog::preparePreview()
@@ -649,11 +656,14 @@ void PrintDialog::preparePreview()
 
     if( mnCurPage >= nPages )
         mnCurPage = nPages-1;
+    if( mnCurPage < 0 )
+        mnCurPage = 0;
 
     setPreviewText( mnCurPage );
 
-    maPageScrollbar.SetRange( Range( 0, nPages-1 ) );
+    maPageScrollbar.SetRange( Range( 0, nPages ) );
     maPageScrollbar.SetThumbPos( mnCurPage );
+    maPageScrollbar.SetVisibleSize( 1 );
 
     boost::shared_ptr<Printer> aPrt( maPListener->getPrinter() );
 
@@ -772,9 +782,14 @@ IMPL_LINK( PrintDialog, ClickHdl, Button*, pButton )
     return 0;
 }
 
-IMPL_LINK( PrintDialog, ModifyHdl, Edit*, EMPTYARG )
+IMPL_LINK( PrintDialog, ModifyHdl, Edit*, pEdit )
 {
     checkControlDependencies();
+    if( pEdit == &maJobPage.maPagesEdit && maJobPage.maPagesButton.IsChecked() )
+    {
+        maPListener->setPrintSelection( maJobPage.maPagesEdit.GetText() );
+        preparePreview();
+    }
     return 0;
 }
 

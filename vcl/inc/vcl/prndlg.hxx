@@ -124,6 +124,7 @@ namespace vcl
         boost::shared_ptr< PrinterListener >    maPListener;
 
         rtl::OUString                           maPageStr;
+        rtl::OUString                           maNoPageStr;
         sal_Int32                               mnCurPage;
         sal_Int32                               mnCachedPages;
         Rectangle                               maPreviewSpace;

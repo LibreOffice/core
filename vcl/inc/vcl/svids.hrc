@@ -115,6 +115,7 @@
 #define SV_PRINT_NOCOLLATE_IMG              13
 #define SV_PRINT_COLLATE_HC_IMG             14
 #define SV_PRINT_NOCOLLATE_HC_IMG           15
+#define SV_PRINT_NOPAGES                    16
 
 #define SV_HELPTEXT_CLOSE                   10000
 #define SV_HELPTEXT_MINIMIZE                10001
