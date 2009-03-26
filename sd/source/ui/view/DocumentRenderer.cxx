@@ -291,7 +291,7 @@ namespace {
 
 
     /** This class is like MultiSelection but understands two special values.
-        "all" indicates that all pages are selected.  "shapes" indicates that no
+        "all" indicates that all pages are selected.  "selection" indicates that no
         pages but a set of shapes is selected.
     */
     class Selection
@@ -299,7 +299,7 @@ namespace {
     public:
         Selection (const OUString& rsSelection)
             : mbAreAllPagesSelected(rsSelection.equalsAscii("all")),
-              mbIsShapeSelection(rsSelection.equalsAscii("shapes")),
+              mbIsShapeSelection(rsSelection.equalsAscii("selection")),
               mpSelectedPages()
         {
             if ( ! mbAreAllPagesSelected)
