@@ -249,11 +249,11 @@ bool PrintDialog::isCollate()
 void PrintDialog::setupOptionalUI()
 {
     Window* pCurParent = 0;
-    long nCurY = 0, nXPos = 5;
+    long nCurY = 0, nXPos = 5, nMaxY = 0;
     USHORT nOptPageId = 9;
     MapMode aFontMapMode( MAP_APPFONT );
 
-    Size aTabSize = maTabCtrl.GetSizePixel();
+    Size aTabSize = maTabCtrl.GetTabPageSizePixel();
     const Sequence< PropertyValue >& rOptions( maPListener->getUIOptions() );
     for( int i = 0; i < rOptions.getLength(); i++ )
     {
@@ -319,6 +319,9 @@ void PrintDialog::setupOptionalUI()
         {
             if( aCtrlType.equalsAscii( "Group" ) || ! pCurParent )
             {
+                if( nCurY > nMaxY )
+                    nMaxY = nCurY;
+
                 // add new tab page
                 TabPage* pNewGroup = new TabPage( &maTabCtrl );
                 maControls.push_front( pNewGroup );
@@ -448,7 +451,7 @@ void PrintDialog::setupOptionalUI()
                     if( nEntryWidth > nMaxTextWidth )
                         nMaxTextWidth = nEntryWidth;
                 }
-                nMaxTextWidth += 30;
+                nMaxTextWidth += 50;
                 sal_Int32 nSelectVal = 0;
                 PropertyValue* pVal = maPListener->getValue( aPropertyName );
                 if( pVal && pVal->Value.hasValue() )
@@ -568,6 +571,18 @@ void PrintDialog::setupOptionalUI()
         {
             DBG_ERROR( "Unsupported UI option" );
         }
+    }
+
+    if( nCurY > nMaxY )
+        nMaxY = nCurY;
+
+    // resize dialog if necessary
+    Size aMaxSize( LogicToPixel( Size( nMaxY, nMaxY ), aFontMapMode ) );
+    if( aMaxSize.Height() > aTabSize.Height() )
+    {
+        Size aCurSize( GetSizePixel() );
+        aCurSize.Height() += aMaxSize.Height() - aTabSize.Height();
+        SetSizePixel( aCurSize );
     }
 }
 
