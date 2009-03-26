@@ -201,6 +201,13 @@ namespace {
             return GetBoolValue("PaperTray", false);
         }
 
+        OUString GetPrinterSelection (void) const
+        {
+            OUString sValue (A2S("all"));
+            GetPropertyValue("PrinterSelection") >>= sValue;
+            return sValue;
+        }
+
     private:
         const ::std::map<OUString,Any>* mpProperties;
         const ::std::vector<sal_Int32> maSlidesPerPage;
@@ -283,6 +290,46 @@ namespace {
 
 
 
+    /** This class is like MultiSelection but understands two special values.
+        "all" indicates that all pages are selected.  "shapes" indicates that no
+        pages but a set of shapes is selected.
+    */
+    class Selection
+    {
+    public:
+        Selection (const OUString& rsSelection)
+            : mbAreAllPagesSelected(rsSelection.equalsAscii("all")),
+              mbIsShapeSelection(rsSelection.equalsAscii("shapes")),
+              mpSelectedPages()
+        {
+            if ( ! mbAreAllPagesSelected)
+                mpSelectedPages.reset(new MultiSelection(rsSelection));
+        }
+
+        /** Call with a 0 based page index.
+        */
+        bool IsSelected (const sal_Int32 nIndex) const
+        {
+            if (mbAreAllPagesSelected)
+                return true;
+            else if (mpSelectedPages)
+                return mpSelectedPages->IsSelected(nIndex+1);
+            else
+                return false;
+        }
+
+    private:
+        const bool mbAreAllPagesSelected;
+        const bool mbIsShapeSelection;
+        ::boost::scoped_ptr<MultiSelection> mpSelectedPages;
+
+        Selection (void)
+            : mbAreAllPagesSelected(true),
+              mbIsShapeSelection(false),
+              mpSelectedPages()
+        {}
+    };
+
     /** A collection of values that helps to reduce the number of arguments
         given to some functions.  Note that not all values are set at the
         same time.
@@ -290,8 +337,10 @@ namespace {
     class PrintInfo
     {
     public:
-        PrintInfo (void)
-            : mpPrinter(NULL),
+        PrintInfo (
+            const Printer* pPrinter,
+            const OUString& rsPrinterSelection)
+            : mpPrinter(pPrinter),
               mnDrawMode(DRAWMODE_DEFAULT),
               msTimeDate(),
               msPageString(),
@@ -299,7 +348,8 @@ namespace {
               maPageSize(0,0),
               meOrientation(ORIENTATION_PORTRAIT),
               mbPrintMarkedOnly(false),
-              maMap()
+              maMap(),
+              maSelection(rsPrinterSelection)
         {}
 
         const Printer* mpPrinter;
@@ -311,6 +361,7 @@ namespace {
         Orientation meOrientation;
         bool mbPrintMarkedOnly;
         MapMode maMap;
+        const Selection maSelection;
     };
 
 
@@ -1295,7 +1346,7 @@ private:
         if (rInfo.meOrientation == ORIENTATION_LANDSCAPE)
         {
             maPrintSize = awt::Size(maPrintSize.Height, maPrintSize.Width);
-            rInfo.maPrintSize = Size(rInfo.maPrintSize.Height(), rInfo.maPrintSize.Width());
+            //            rInfo.maPrintSize = Size(rInfo.maPrintSize.Height(), rInfo.maPrintSize.Width());
         }
 
         return true;
@@ -1318,13 +1369,11 @@ private:
 
         ViewShell* pShell = mrBase.GetMainViewShell().get();
 
-        PrintInfo aInfo;
-        aInfo.mpPrinter = mpPrinter;
+        PrintInfo aInfo (mpPrinter, mpOptions->GetPrinterSelection());
+
         if (aInfo.mpPrinter!=NULL && pShell!=NULL)
         {
 
-            const PrinterOptions aSavedinterOptions (
-                aInfo.mpPrinter->GetPrinterOptions());
             MapMode aMap (aInfo.mpPrinter->GetMapMode());
             aMap.SetMapUnit(MAP_100TH_MM);
             aInfo.maMap = aMap;
@@ -1482,7 +1531,7 @@ private:
     /** Detect whether any of the slides that are to be printed contains
         partially transparent or translucent shapes.
     */
-    bool ContainsTransparency (void) const
+    bool ContainsTransparency (const PrintInfo& rInfo) const
     {
         // const bool bPrintExcluded (mpOptions->IsPrintExcluded());
         bool bContainsTransparency = false;
@@ -1493,7 +1542,7 @@ private:
              nIndex < nCount && !bContainsTransparency;
              ++nIndex)
         {
-            SdPage* pPage = GetFilteredPage(nIndex, PK_STANDARD);
+            SdPage* pPage = GetFilteredPage(nIndex, PK_STANDARD, rInfo);
             if (pPage == NULL)
                 continue;
 
@@ -1513,11 +1562,15 @@ private:
             When the slide is not to be printed then <NULL/> is returned.
             Otherwise a pointer to the slide is returned.
     */
-    SdPage* GetFilteredPage (const sal_Int32 nPageIndex, const PageKind ePageKind) const
+    SdPage* GetFilteredPage (
+        const sal_Int32 nPageIndex,
+        const PageKind ePageKind,
+        const PrintInfo& rInfo) const
     {
-        //        if (rInfo.mrSelPages.IsSelected(nPage+1) )
         OSL_ASSERT(mrBase.GetDocument() != NULL);
         OSL_ASSERT(nPageIndex>=0);
+        if ( ! rInfo.maSelection.IsSelected(nPageIndex+1))
+            return NULL;
         SdPage* pPage = mrBase.GetDocument()->GetSdPage(
             sal::static_int_cast<USHORT>(nPageIndex),
             ePageKind);
@@ -1574,7 +1627,7 @@ private:
             sal_Int32 nH (0);
             while (nH < nPageH && nIndex<nCount)
             {
-                SdPage* pPage = GetFilteredPage(nIndex, PK_STANDARD);
+                SdPage* pPage = GetFilteredPage(nIndex, PK_STANDARD, rInfo);
                 ++nIndex;
                 if (pPage == NULL)
                     continue;
@@ -1752,7 +1805,7 @@ private:
         {
             if (nIndex < nCount)
             {
-                if (GetFilteredPage(nIndex, PK_STANDARD) == NULL)
+                if (GetFilteredPage(nIndex, PK_STANDARD, rInfo) == NULL)
                     continue;
                 aPageIndices.push_back(nIndex);
             }
@@ -1829,7 +1882,7 @@ private:
              nIndex < nCount;
              ++nIndex)
         {
-            SdPage* pPage = GetFilteredPage(nIndex, ePageKind);
+            SdPage* pPage = GetFilteredPage(nIndex, ePageKind, rInfo);
             if (pPage == NULL)
                 continue;
 
@@ -1956,7 +2009,7 @@ private:
              nIndex < nCount;
              ++nIndex)
         {
-            SdPage* pPage = GetFilteredPage(nIndex, ePageKind);
+            SdPage* pPage = GetFilteredPage(nIndex, ePageKind, rInfo);
             if (pPage != NULL)
                 aPageVector.push_back(nIndex);
         }
