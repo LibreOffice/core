@@ -47,11 +47,13 @@
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
 #include "com/sun/star/container/XNameAccess.hpp"
 #include "com/sun/star/beans/PropertyValue.hpp"
+#include "com/sun/star/awt/Size.hpp"
 
 #include <algorithm>
 
 using namespace rtl;
 using namespace vcl;
+using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
@@ -459,6 +461,24 @@ void AquaSalInfoPrinter::GetPageInfo( const ImplJobSetup*,
     }
 }
 
+static Size getPageSize( vcl::PrinterListener& i_rListener, sal_Int32 i_nPage )
+{
+    Size aPageSize;
+    Sequence< PropertyValue > aPageParms( i_rListener.getPageParameters( i_nPage ) );
+    for( sal_Int32 nProperty = 0, nPropertyCount = aPageParms.getLength(); nProperty < nPropertyCount; ++nProperty )
+    {
+        if( aPageParms[ nProperty ].Name.equalsAscii( "PageSize" ) )
+        {
+            awt::Size aSize;
+            aPageParms[ nProperty].Value >>= aSize;
+            aPageSize.Width() = aSize.Width;
+            aPageSize.Height() = aSize.Height;
+            break;
+        }
+    }
+    return aPageSize;
+}
+
 BOOL AquaSalInfoPrinter::StartJob( const String* i_pFileName,
                                    const String& i_rAppName,
                                    ImplJobSetup* i_pSetupData,
@@ -469,59 +489,104 @@ BOOL AquaSalInfoPrinter::StartJob( const String* i_pFileName,
         return FALSE;
 
     BOOL bSuccess = FALSE;
-
-    // FIXME: make paper ranges work again
-    mnCurPageRangeStart = 1;
-    mnCurPageRangeCount = i_rListener.getPageCount();
-
     AquaSalInstance* pInst = GetSalData()->mpFirstInstance;
-
-    mnStartPageOffsetX = mnStartPageOffsetY = 0;
+    bool bNeedRestart = true;
+    sal_Int32 nAllPages = 1;
 
     // update job data
     if( i_pSetupData )
         SetData( ~0, i_pSetupData );
 
-    // create view
-    NSView* pPrintView = [[AquaPrintView alloc] initWithListener: &i_rListener withInfoPrinter: this];
-
-    NSMutableDictionary* pPrintDict = [mpPrintInfo dictionary];
-
-    // set filename
-    if( i_pFileName )
+    do
     {
-        [mpPrintInfo setJobDisposition: NSPrintSaveJob];
-        NSString* pPath = CreateNSString( *i_pFileName );
-        [pPrintDict setObject: pPath forKey: NSPrintSavePath];
-        [pPath release];
-    }
+        if( bNeedRestart )
+        {
+            mnCurPageRangeStart = 1;
+            mnCurPageRangeCount = 1;
+            nAllPages = i_rListener.getPageCount();
+        }
 
-    [pPrintDict setObject: [[NSNumber numberWithInt: (int)i_rListener.getPrinter()->GetCopyCount()] autorelease] forKey: NSPrintCopies];
-    [pPrintDict setObject: [[NSNumber numberWithBool: YES] autorelease] forKey: NSPrintDetailedErrorReporting];
-    [pPrintDict setObject: [[NSNumber numberWithInt: 1] autorelease] forKey: NSPrintFirstPage];
-    [pPrintDict setObject: [[NSNumber numberWithInt: mnCurPageRangeCount] autorelease] forKey: NSPrintLastPage];
+        bNeedRestart = false;
+        mnCurPageRangeCount = 1;
+        Size aCurSize( getPageSize( i_rListener, mnCurPageRangeStart ) );
+        Size aNextSize( aCurSize );
+
+        // print pages up to a different size
+        while( mnCurPageRangeCount + mnCurPageRangeStart < nAllPages )
+        {
+            aNextSize = getPageSize( i_rListener, mnCurPageRangeStart + mnCurPageRangeCount );
+            if( aCurSize == aNextSize // same page size
+                ||
+                (aCurSize.Width() == aNextSize.Height() && aCurSize.Height() == aNextSize.Width()) // same size, but different orientation
+                )
+            {
+                mnCurPageRangeCount++;
+            }
+            else
+                break;
+        }
+
+        // now for the current run
+        mnStartPageOffsetX = mnStartPageOffsetY = 0;
+        // setup the paper size and orientation
+        if( aCurSize.Width() > aCurSize.Height() )
+        {
+            mePageOrientation = ORIENTATION_LANDSCAPE;
+            long nTmp = aCurSize.Width();
+            aCurSize.Width() = aCurSize.Height();
+            aCurSize.Height() = nTmp;
+        }
+        else
+            mePageOrientation = ORIENTATION_PORTRAIT;
+
+        NSSize aPaperSize = { TenMuToPt(aCurSize.Width()), TenMuToPt(aCurSize.Height()) };
+        [mpPrintInfo setPaperSize: aPaperSize];
+
+        // create view
+        NSView* pPrintView = [[AquaPrintView alloc] initWithListener: &i_rListener withInfoPrinter: this];
+
+        NSMutableDictionary* pPrintDict = [mpPrintInfo dictionary];
+
+        // set filename
+        if( i_pFileName )
+        {
+            [mpPrintInfo setJobDisposition: NSPrintSaveJob];
+            NSString* pPath = CreateNSString( *i_pFileName );
+            [pPrintDict setObject: pPath forKey: NSPrintSavePath];
+            [pPath release];
+        }
+
+        [pPrintDict setObject: [[NSNumber numberWithInt: (int)i_rListener.getPrinter()->GetCopyCount()] autorelease] forKey: NSPrintCopies];
+        [pPrintDict setObject: [[NSNumber numberWithBool: YES] autorelease] forKey: NSPrintDetailedErrorReporting];
+        [pPrintDict setObject: [[NSNumber numberWithInt: 1] autorelease] forKey: NSPrintFirstPage];
+        [pPrintDict setObject: [[NSNumber numberWithInt: mnCurPageRangeCount] autorelease] forKey: NSPrintLastPage];
 
 
-    // create print operation
-    NSPrintOperation* pPrintOperation = [NSPrintOperation printOperationWithView: pPrintView printInfo: mpPrintInfo];
+        // create print operation
+        NSPrintOperation* pPrintOperation = [NSPrintOperation printOperationWithView: pPrintView printInfo: mpPrintInfo];
 
-    if( pPrintOperation )
-    {
-        NSObject* pReleaseAfterUse = nil;
-        bool bShowPanel = (! bIsQuickJob && getUseNativeDialog() );
-        [pPrintOperation setShowsPrintPanel: bShowPanel ? YES : NO ];
-        [pPrintOperation setShowsProgressPanel: YES];
-        if( bShowPanel )
-            pReleaseAfterUse = [AquaPrintAccessoryView setupPrinterPanel: pPrintOperation withListener: &i_rListener];
+        if( pPrintOperation )
+        {
+            NSObject* pReleaseAfterUse = nil;
+            bool bShowPanel = (! bIsQuickJob && getUseNativeDialog() );
+            [pPrintOperation setShowsPrintPanel: bShowPanel ? YES : NO ];
+            [pPrintOperation setShowsProgressPanel: YES];
+            if( bShowPanel && mnCurPageRangeStart == 1 ) // only the first range of pages gets the accesory view
+                pReleaseAfterUse = [AquaPrintAccessoryView setupPrinterPanel: pPrintOperation withListener: &i_rListener withRestartCondition: &bNeedRestart];
 
-        bSuccess = TRUE;
-        mbJob = true;
-        pInst->startedPrintJob();
-        [pPrintOperation runOperation];
-        pInst->endedPrintJob();
-        mbJob = false;
-        [pReleaseAfterUse release];
-    }
+            bSuccess = TRUE;
+            mbJob = true;
+            pInst->startedPrintJob();
+            [pPrintOperation runOperation];
+            pInst->endedPrintJob();
+            mbJob = false;
+            if( pReleaseAfterUse )
+                [pReleaseAfterUse release];
+        }
+
+        mnCurPageRangeStart += mnCurPageRangeCount;
+        mnCurPageRangeCount = 1;
+    } while( bNeedRestart && mnCurPageRangeCount < nAllPages );
 
     mnCurPageRangeStart = mnCurPageRangeCount = 0;
 

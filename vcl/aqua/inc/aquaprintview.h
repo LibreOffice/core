@@ -55,7 +55,7 @@ namespace vcl { class PrinterListener; }
 @interface AquaPrintAccessoryView : NSObject
 {
 }
-+(NSObject*)setupPrinterPanel: (NSPrintOperation*)pOp withListener: (vcl::PrinterListener*)pListener;
++(NSObject*)setupPrinterPanel: (NSPrintOperation*)pOp withListener: (vcl::PrinterListener*)pListener withRestartCondition: (bool*)pbRestart;
 @end
 
 

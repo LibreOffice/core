@@ -42,77 +42,11 @@ using namespace com::sun::star;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::uno;
 
-#if 0
-/* below is some dark magic to inherit an NSViewController if running
-   on MacOS 10.5. However this is futile since as long as our base line is 10.4
-   can use the deprecated method NSPrintOperation:setAccessoryView anyway.
-   The problem here is that as long as we're linked for 10.4, the print panel
-   will never show a preview and our accessory view at the same time. This is awful,
-   but since it was dictated by Apple that IT MUST BE SO it cannot be bad
-   
-   Anyway the code below (the load method) is really ugly, so perhaps it's better this way.
+/* Note: the accesory view as implemented here is already deprecated in Leopard. Unfortunately
+   as long as our baseline is Tiger we cannot gain the advantages over multiple accessory views
+   as well havs haing accessory views AND a preview (as long as you are linked vs. 10.4 libraries
+   the preview insists on not being present. This is unfortunate.
 */
-
-#import <objc/objc-class.h>
-
-APPKIT_EXTERN NSString *NSPrintPanelAccessorySummaryItemNameKey;
-APPKIT_EXTERN NSString *NSPrintPanelAccessorySummaryItemDescriptionKey;
-
-#include "osl/module.h"
-
-@interface AquaPrintViewController : NSObject
-{
-    NSArray* pAry;
-}
-+(void)load;
--(id)init;
--(void)dealloc;
--(NSArray *)localizedSummaryItems;
--(NSSet*)keyPathsForValuesAffectingPreview;
-@end
-
-@implementation AquaPrintViewController
-+(void)load
-{
-    struct objc_class *pClass = (struct objc_class *)[self class];
-    Class superclass = NSClassFromString(@"NSViewController");
-    
-    if(superclass != NULL)
-    {
-        pClass->super_class = superclass;
-        pClass->instance_size += superclass->instance_size;
-    }
-}
-
--(id)init
-{
-    if( (self = [super performSelector: @selector(initWithNibName:bundle:) withObject: nil withObject: nil]) )
-    {
-        NSObject* pKeys[] = { NSPrintPanelAccessorySummaryItemNameKey, NSPrintPanelAccessorySummaryItemDescriptionKey };
-        NSObject* pVals[] = { @"the Name", @"the summary value" };
-        NSDictionary* pDict = [NSDictionary dictionaryWithObjects: pVals forKeys: pKeys count: 2];
-        pAry = [NSArray arrayWithObject: pDict];
-    }
-    return self;
-}
-
--(void)dealloc
-{
-    [pAry release];
-    [super dealloc];
-}
-
--(NSArray *)localizedSummaryItems
-{
-    return pAry;
-}
--(NSSet*)keyPathsForValuesAffectingPreview
-{
-    return [NSSet set];
-}
-@end
-
-#endif
 
 class ListenerProperties
 {
@@ -121,17 +55,55 @@ class ListenerProperties
     std::map< int, sal_Int32 >          maTagToValueInt;
     std::vector< NSObject* >            maViews;
     int                                 mnNextTag;
+    sal_Int32                           mnLastPageCount;
+    bool*                               mpNeedRestart;
+    NSPrintOperation*                   mpOp;
+    
     public:
-    ListenerProperties( vcl::PrinterListener* i_pListener )
-    : mpListener( i_pListener ), mnNextTag( 0 )
-    {}
+    ListenerProperties( vcl::PrinterListener* i_pListener, NSPrintOperation* i_pOp, bool* i_pNeedRestart )
+    : mpListener( i_pListener ),
+      mnNextTag( 0 ),
+      mnLastPageCount( i_pListener->getPageCount() ),
+      mpNeedRestart( i_pNeedRestart ),
+      mpOp( i_pOp )
+    {
+        *mpNeedRestart = false;
+    }
     
     void updatePrintJob()
     {
         // TODO: refresh page count etc from mpListener 
 
         // page range may have changed depending on options
-        /*sal_Int32 nPages = */mpListener->getPageCount();
+        sal_Int32 nPages = mpListener->getPageCount();
+        #if OSL_DEBUG_LEVEL > 1
+        if( nPages != mnLastPageCount )
+            fprintf( stderr, "trouble: number of pages changed from %ld to %ld !\n", mnLastPageCount, nPages );
+        #endif
+        *mpNeedRestart = (nPages != mnLastPageCount);
+        mnLastPageCount = nPages;
+        if( *mpNeedRestart )
+        {
+            // Warning: bad hack ahead
+            // Apple does not give as a chance of changing the page count,
+            // and they don't let us cancel the dialog either
+            // hack: send a cancel message to the window displaying our views.
+            // this is ugly.
+            for( std::vector< NSObject* >::iterator it = maViews.begin(); it != maViews.end(); ++it )
+            {
+                if( [*it isKindOfClass: [NSView class]] )
+                {
+                    NSView* pView = (NSView*)*it;
+                    NSWindow* pWindow = [pView window];
+                    if( pWindow )
+                    {
+                        [pWindow cancelOperation: nil];
+                        break;
+                    }
+                }
+            }
+            [[mpOp printInfo] setJobDisposition: NSPrintCancelJob];
+        }
     }
     
     int addNameTag( const rtl::OUString& i_rPropertyName )
@@ -305,9 +277,13 @@ static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize )
 }
 
 @implementation AquaPrintAccessoryView
-+(NSObject*)setupPrinterPanel: (NSPrintOperation*)pOp withListener: (vcl::PrinterListener*)pListener;
++(NSObject*)setupPrinterPanel: (NSPrintOperation*)pOp withListener: (vcl::PrinterListener*)pListener  withRestartCondition: (bool*)pbRestart;
 {
-    ListenerProperties* pListenerProperties = new ListenerProperties( pListener  );
+    const Sequence< PropertyValue >& rOptions( pListener->getUIOptions() );
+    if( rOptions.getLength() == 0 )
+        return nil;
+
+    ListenerProperties* pListenerProperties = new ListenerProperties( pListener, pOp, pbRestart );
     ControlTarget* pCtrlTarget = [[ControlTarget alloc] initWithListenerMap: pListenerProperties];
 
     NSView* pCurParent = 0;
@@ -317,7 +293,6 @@ static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize )
     NSSize aMaxTabSize = { 0, 0 };
     NSTabView* pTabView = [[NSTabView alloc] initWithFrame: aViewFrame];
     
-    const Sequence< PropertyValue >& rOptions( pListener->getUIOptions() );
     for( int i = 0; i < rOptions.getLength(); i++ )
     {
         Sequence< beans::PropertyValue > aOptProp;
@@ -619,20 +594,7 @@ static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize )
     [pTabView setFrameSize: aTabCtrlSize];
 
     // set the accessory view
-    #if 0
-    NSPrintPanel* pPanel = [pOp printPanel];
-    if( [pPanel respondsToSelector: @selector(addAccessoryController:)] )
-    {
-        // 10.5 and upward case
-        AquaPrintViewController* pCtrl = [[AquaPrintViewController alloc] init];
-        [pCtrl performSelector: @selector(setView:) withObject: pTabView];
-        [pCtrl performSelector: @selector(setTitle:) withObject: @"Test OOOOO"];
-        [pPanel performSelector: @selector(addAccessoryController:) withObject: pCtrl];
-        [pPanel performSelector: @selector(setOptions:) withObject: (id)(0x20001)];
-    }
-    else
-    #endif
-        [pOp setAccessoryView: pTabView];
+    [pOp setAccessoryView: pTabView];
         
     return pCtrlTarget;
 }

@@ -73,8 +73,8 @@ class AquaSalInfoPrinter : public SalInfoPrinter
 
     int                       mnStartPageOffsetX;
     int                       mnStartPageOffsetY;
-    ULONG                     mnCurPageRangeStart;
-    ULONG                     mnCurPageRangeCount;
+    sal_Int32                 mnCurPageRangeStart;
+    sal_Int32                 mnCurPageRangeCount;
 
     public:
     AquaSalInfoPrinter( const SalPrinterQueueInfo& pInfo );
@@ -117,8 +117,8 @@ class AquaSalInfoPrinter : public SalInfoPrinter
 
     NSPrintInfo* getPrintInfo() const { return mpPrintInfo; }
     void setStartPageOffset( int nOffsetX, int nOffsetY ) { mnStartPageOffsetX = nOffsetX; mnStartPageOffsetY = nOffsetY; }
-    ULONG getCurPageRangeStart() const { return mnCurPageRangeStart; }
-    ULONG getCurPageRangeCount() const { return mnCurPageRangeCount; }
+    sal_Int32 getCurPageRangeStart() const { return mnCurPageRangeStart; }
+    sal_Int32 getCurPageRangeCount() const { return mnCurPageRangeCount; }
 
     private:
     AquaSalInfoPrinter( const AquaSalInfoPrinter& );
