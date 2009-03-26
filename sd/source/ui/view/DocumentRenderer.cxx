@@ -204,7 +204,7 @@ namespace {
         OUString GetPrinterSelection (void) const
         {
             OUString sValue (A2S("all"));
-            GetPropertyValue("PrinterSelection") >>= sValue;
+            GetPropertyValue("PrintSelection") >>= sValue;
             return sValue;
         }
 
