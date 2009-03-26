@@ -758,7 +758,7 @@ IMPL_LINK( PrintDialog, ClickHdl, Button*, pButton )
     if( ( pButton == &maJobPage.maAllButton        ||
           pButton == &maJobPage.maPagesButton      ||
           pButton == &maJobPage.maSelectionButton )
-       && ((CheckBox*)pButton)->IsChecked() )
+       && ((RadioButton*)pButton)->IsChecked() )
     {
         if( pButton == &maJobPage.maAllButton )
             maPListener->setPrintSelection( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "all" ) ) );
