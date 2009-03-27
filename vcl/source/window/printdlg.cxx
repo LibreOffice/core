@@ -688,34 +688,8 @@ void PrintDialog::preparePreview()
 
 
     const MapMode aMapMode( MAP_100TH_MM );
-    aPrt->Push();
-    aPrt->SetMapMode( aMapMode );
-
-    Size aPageSize( aPrt->GetPaperSize() );
-    Sequence< PropertyValue > aPageParms( maPListener->getPageParameters( mnCurPage ) );
-    for( sal_Int32 nProperty = 0, nPropertyCount = aPageParms.getLength(); nProperty < nPropertyCount; ++nProperty )
-    {
-        if( aPageParms[ nProperty ].Name.equalsIgnoreAsciiCaseAscii( "PageSize" ) )
-        {
-            awt::Size aSize;
-            aPageParms[ nProperty ].Value >>= aSize;
-            aPageSize.Width() = aSize.Width;
-            aPageSize.Height() = aSize.Height;
-        }
-    }
-
-    aPrt->EnableOutput( FALSE );
-
     GDIMetaFile aMtf;
-    aMtf.SetPrefSize( aPageSize );
-    aMtf.SetPrefMapMode( aMapMode );
-    aMtf.Record( &(*aPrt) );
-
-    maPListener->printPage( mnCurPage );
-
-    aMtf.Stop();
-    aMtf.WindStart();
-    aPrt->Pop();
+    Size aPageSize = maPListener->getPageFile( mnCurPage, aMtf );
 
     Size aPreviewSize;
     Point aPreviewPos = maPreviewSpace.TopLeft();

@@ -485,6 +485,9 @@ public:
     virtual void jobFinished();   // optionally release resources bound to the job
 
     // implementation details, not usable outside vcl
+    int  SAL_DLLPRIVATE getFilteredPageCount();
+    Size SAL_DLLPRIVATE getPageFile( int i_inUnfilteredPage, GDIMetaFile& rMtf );
+    Size SAL_DLLPRIVATE getFilteredPageFile( int i_nFilteredPage, GDIMetaFile& o_rMtf );
     void SAL_DLLPRIVATE printFilteredPage( int i_nPage );
     void SAL_DLLPRIVATE setPrinter( const boost::shared_ptr<Printer>& );
     void SAL_DLLPRIVATE setOptionChangeHdl( const Link& );

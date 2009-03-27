@@ -79,10 +79,16 @@ public:
     ControlDependencyMap                                        maControlDependencies;
     rtl::OUString                                               maSelectionString;
 
+    int                                                         mnMultiPageRows;
+    int                                                         mnMultiPageColumns;
+    Size                                                        maMultiPageSize;
+
     vcl::PrintProgressDialog*                                   mpProgress;
 
     ImplPrinterListenerData() :
         maSelectionString( RTL_CONSTASCII_USTRINGPARAM( "all" ) ),
+        mnMultiPageRows( 1 ),
+        mnMultiPageColumns( 1 ),
         mpProgress( NULL )
     {}
     ~ImplPrinterListenerData() { delete mpProgress; }
@@ -353,6 +359,8 @@ const boost::shared_ptr<Printer>& PrinterListener::getPrinter() const
 void PrinterListener::setPrinter( const boost::shared_ptr<Printer>& i_rPrinter )
 {
     mpImplData->mpPrinter = i_rPrinter;
+    Size aPaperSize( i_rPrinter->PixelToLogic( i_rPrinter->GetPaperSizePixel(), MapMode( MAP_100TH_MM ) ) );
+    mpImplData->maMultiPageSize = aPaperSize;
 }
 
 void PrinterListener::setPrintSelection( const rtl::OUString& i_rSel )
@@ -360,13 +368,13 @@ void PrinterListener::setPrintSelection( const rtl::OUString& i_rSel )
     mpImplData->maSelectionString = i_rSel;
 }
 
-static void modifyJobSetup( Printer* pPrinter, const Sequence< PropertyValue >& i_rProps )
+static Size modifyJobSetup( Printer* pPrinter, const Sequence< PropertyValue >& i_rProps )
 {
+    Size aPageSize = pPrinter->GetPaperSize();
     for( sal_Int32 nProperty = 0, nPropertyCount = i_rProps.getLength(); nProperty < nPropertyCount; ++nProperty )
     {
         if( i_rProps[ nProperty ].Name.equalsAscii( "PageSize" ) )
         {
-            Size aPageSize;
             awt::Size aSize;
             i_rProps[ nProperty].Value >>= aSize;
             aPageSize.Width() = aSize.Width;
@@ -377,6 +385,80 @@ static void modifyJobSetup( Printer* pPrinter, const Sequence< PropertyValue >& 
                 pPrinter->SetPaperSizeUser( aPageSize );
         }
     }
+    return aPageSize;
+}
+
+Size PrinterListener::getPageFile( int i_nUnfilteredPage, GDIMetaFile& o_rMtf )
+{
+    o_rMtf.Clear();
+
+    // get page parameters
+    Sequence< PropertyValue > aPageParm( getPageParameters( i_nUnfilteredPage ) );
+    const MapMode aMapMode( MAP_100TH_MM );
+
+    mpImplData->mpPrinter->Push();
+    mpImplData->mpPrinter->SetMapMode( aMapMode );
+
+    // modify job setup if necessary
+    Size aPageSize = modifyJobSetup( mpImplData->mpPrinter.get(), aPageParm );
+
+    o_rMtf.SetPrefSize( aPageSize );
+    o_rMtf.SetPrefMapMode( aMapMode );
+
+    mpImplData->mpPrinter->EnableOutput( FALSE );
+
+    o_rMtf.Record( mpImplData->mpPrinter.get() );
+
+    printPage( i_nUnfilteredPage );
+
+    o_rMtf.Stop();
+    o_rMtf.WindStart();
+    mpImplData->mpPrinter->Pop();
+
+    return aPageSize;
+}
+
+Size PrinterListener::getFilteredPageFile( int i_nFilteredPage, GDIMetaFile& o_rMtf )
+{
+    // FIXME: work in progress
+    int nSubPages = mpImplData->mnMultiPageRows * mpImplData->mnMultiPageColumns;
+    if( nSubPages < 1 )
+        nSubPages = 1;
+
+    if( nSubPages == 1 )
+        return getPageFile( i_nFilteredPage, o_rMtf );
+
+    Size aPaperSize( mpImplData->maMultiPageSize );
+    long nAdvX = aPaperSize.Width() / mpImplData->mnMultiPageColumns;
+    long nAdvY = aPaperSize.Height() / mpImplData->mnMultiPageRows;
+    Size aSubPageSize( nAdvX, nAdvY );
+
+    GDIMetaFile aPageFile;
+    aPageFile.SetPrefSize( aPaperSize );
+    aPageFile.SetPrefMapMode( MapMode( MAP_100TH_MM ) );
+
+    int nDocPages = getPageCount();
+    for( int nPage = i_nFilteredPage * nSubPages;
+         nPage < (i_nFilteredPage+1)*nSubPages && nPage < nDocPages;
+         nPage++ )
+    {
+        GDIMetaFile aSubPageFile;
+        Size aPageSize = getPageFile( nPage, aSubPageFile );
+        // scale the metafile down to a sub page size and move it
+        double fScaleX = double(aSubPageSize.Width())/double(aPageSize.Width());
+        double fScaleY = double(aSubPageSize.Height())/double(aPageSize.Height());
+        aSubPageFile.Scale( fScaleX, fScaleY );
+        //aSubPageFile.Move( nAdvX * (nPage % mpImplData->mn
+    }
+    return aPaperSize;
+}
+
+int PrinterListener::getFilteredPageCount()
+{
+    int nDiv = mpImplData->mnMultiPageRows * mpImplData->mnMultiPageColumns;
+    if( nDiv < 1 )
+        nDiv = 1;
+    return (getPageCount() + (nDiv-1)) / nDiv;
 }
 
 void PrinterListener::printFilteredPage( int i_nPage )
@@ -391,26 +473,8 @@ void PrinterListener::printFilteredPage( int i_nPage )
         Application::Reschedule( true );
     }
 
-    // get page parameters
-    Sequence< PropertyValue > aPageParm( getPageParameters( i_nPage ) );
-    const MapMode aMapMode( MAP_100TH_MM );
-
-    mpImplData->mpPrinter->Push();
-    mpImplData->mpPrinter->SetMapMode( aMapMode );
-
-    // modify job setup if necessary
-    modifyJobSetup( mpImplData->mpPrinter.get(), aPageParm );
-
-    mpImplData->mpPrinter->EnableOutput( FALSE );
-
     GDIMetaFile aPageFile;
-    aPageFile.Record( mpImplData->mpPrinter.get() );
-
-    printPage( i_nPage );
-
-    aPageFile.Stop();
-    aPageFile.WindStart();
-    mpImplData->mpPrinter->Pop();
+    getPageFile( i_nPage, aPageFile );
 
     ULONG nRestoreDrawMode = mpImplData->mpPrinter->GetDrawMode();
     sal_Int32 nMaxBmpDPIX = mpImplData->mpPrinter->ImplGetDPIX();
