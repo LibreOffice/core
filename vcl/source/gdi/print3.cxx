@@ -37,6 +37,7 @@
 #include "vcl/salinst.hxx"
 #include "vcl/salprn.hxx"
 #include "vcl/svids.hrc"
+#include "vcl/metaact.hxx"
 
 #include "tools/urlobj.hxx"
 
@@ -288,7 +289,7 @@ bool Printer::StartJob( const XubString& i_rJobName, boost::shared_ptr<vcl::Prin
     if( ImplGetSVData()->maGDIData.mbPrinterPullModel )
     {
         mbJobActive             = TRUE;
-        // sallayer does all necesseary page printing
+        // sallayer does all necessary page printing
         if( mpPrinter->StartJob( pPrintFile,
                                  Application::GetDisplayName(),
                                  maJobSetup.ImplGetConstData(),
@@ -320,7 +321,7 @@ bool Printer::StartJob( const XubString& i_rJobName, boost::shared_ptr<vcl::Prin
         {
             mbJobActive             = TRUE;
             i_pListener->createProgressDialog();
-            int nPages = i_pListener->getPageCount();
+            int nPages = i_pListener->getFilteredPageCount();
             for( int nPage = 0; nPage < nPages; nPage++ )
             {
                 // remember MultiSelection is 1 based (due to user input)
@@ -390,6 +391,16 @@ static Size modifyJobSetup( Printer* pPrinter, const Sequence< PropertyValue >& 
 
 Size PrinterListener::getPageFile( int i_nUnfilteredPage, GDIMetaFile& o_rMtf )
 {
+    // update progress if necessary
+    if( mpImplData->mpProgress )
+    {
+        // do nothing if printing is canceled
+        if( mpImplData->mpProgress->isCanceled() )
+           return Size();
+        mpImplData->mpProgress->tick();
+        Application::Reschedule( true );
+    }
+
     o_rMtf.Clear();
 
     // get page parameters
@@ -418,9 +429,29 @@ Size PrinterListener::getPageFile( int i_nUnfilteredPage, GDIMetaFile& o_rMtf )
     return aPageSize;
 }
 
+static void appendSubPage( GDIMetaFile& o_rMtf, const Rectangle& i_rRect, GDIMetaFile& i_rSubPage )
+{
+    // save gstate
+    o_rMtf.AddAction( new MetaPushAction( PUSH_LINECOLOR | PUSH_FILLCOLOR | PUSH_CLIPREGION ) );
+
+    // draw a border
+    o_rMtf.AddAction( new MetaLineColorAction( Color( COL_BLACK ), TRUE ) );
+    o_rMtf.AddAction( new MetaFillColorAction( Color( COL_TRANSPARENT ), FALSE ) );
+    o_rMtf.AddAction( new MetaRectAction( i_rRect ) );
+
+    // clip to page rect
+    o_rMtf.AddAction( new MetaISectRectClipRegionAction( i_rRect ) );
+
+    // append the subpage
+    i_rSubPage.WindStart();
+    i_rSubPage.Play( o_rMtf );
+
+    // restore gstate
+    o_rMtf.AddAction( new MetaPopAction() );
+}
+
 Size PrinterListener::getFilteredPageFile( int i_nFilteredPage, GDIMetaFile& o_rMtf )
 {
-    // FIXME: work in progress
     int nSubPages = mpImplData->mnMultiPageRows * mpImplData->mnMultiPageColumns;
     if( nSubPages < 1 )
         nSubPages = 1;
@@ -429,27 +460,52 @@ Size PrinterListener::getFilteredPageFile( int i_nFilteredPage, GDIMetaFile& o_r
         return getPageFile( i_nFilteredPage, o_rMtf );
 
     Size aPaperSize( mpImplData->maMultiPageSize );
+
+    // determine offsets
     long nAdvX = aPaperSize.Width() / mpImplData->mnMultiPageColumns;
     long nAdvY = aPaperSize.Height() / mpImplData->mnMultiPageRows;
-    Size aSubPageSize( nAdvX, nAdvY );
 
-    GDIMetaFile aPageFile;
-    aPageFile.SetPrefSize( aPaperSize );
-    aPageFile.SetPrefMapMode( MapMode( MAP_100TH_MM ) );
+    // determine size of a "cell" subpage, leave a little space around pages
+    Size aSubPageSize( nAdvX - 300, nAdvY - 300 );
+
+    o_rMtf.Clear();
+    o_rMtf.SetPrefSize( aPaperSize );
+    o_rMtf.SetPrefMapMode( MapMode( MAP_100TH_MM ) );
 
     int nDocPages = getPageCount();
-    for( int nPage = i_nFilteredPage * nSubPages;
+    for( int nPage = i_nFilteredPage * nSubPages, nSubP = 0;
          nPage < (i_nFilteredPage+1)*nSubPages && nPage < nDocPages;
-         nPage++ )
+         nPage++, nSubP++ )
     {
-        GDIMetaFile aSubPageFile;
-        Size aPageSize = getPageFile( nPage, aSubPageFile );
-        // scale the metafile down to a sub page size and move it
-        double fScaleX = double(aSubPageSize.Width())/double(aPageSize.Width());
-        double fScaleY = double(aSubPageSize.Height())/double(aPageSize.Height());
-        aSubPageFile.Scale( fScaleX, fScaleY );
-        //aSubPageFile.Move( nAdvX * (nPage % mpImplData->mn
+        GDIMetaFile aPageFile;
+        Size aPageSize = getPageFile( nPage, aPageFile );
+        if( aPageSize.Width() && aPageSize.Height() )
+        {
+            // scale the metafile down to a sub page size
+            double fScaleX = double(aSubPageSize.Width())/double(aPageSize.Width());
+            double fScaleY = double(aSubPageSize.Height())/double(aPageSize.Height());
+            double fScale  = std::min( fScaleX, fScaleY );
+            aPageFile.Scale( fScale, fScale );
+            aPageFile.WindStart();
+
+            // move the subpage so it is centered in its "cell"
+            long nOffX = (nAdvX - long(double(aPageSize.Width()) * fScale)) / 2;
+            long nOffY = (nAdvY - long(double(aPageSize.Height()) * fScale)) / 2;
+            long nX = nOffX + nAdvX * (nSubP % mpImplData->mnMultiPageColumns);
+            long nY = nOffY + nAdvY * (nSubP / mpImplData->mnMultiPageColumns);
+            aPageFile.Move( nX, nY );
+            aPageFile.WindStart();
+            // calculate border rectangle
+            Rectangle aSubPageRect( Point( nX - 50, nY - 50 ),
+                                    Size( long(double(aPageSize.Width())*fScale) + 100,
+                                        long(double(aPageSize.Height())*fScale) + 100 ) );
+
+            // append subpage to page
+            appendSubPage( o_rMtf, aSubPageRect, aPageFile );
+        }
     }
+    o_rMtf.WindStart();
+
     return aPaperSize;
 }
 
@@ -463,18 +519,15 @@ int PrinterListener::getFilteredPageCount()
 
 void PrinterListener::printFilteredPage( int i_nPage )
 {
-    // update progress if necessary
+    GDIMetaFile aPageFile;
+    getFilteredPageFile( i_nPage, aPageFile );
+
     if( mpImplData->mpProgress )
     {
         // do nothing if printing is canceled
         if( mpImplData->mpProgress->isCanceled() )
            return;
-        mpImplData->mpProgress->tick();
-        Application::Reschedule( true );
     }
-
-    GDIMetaFile aPageFile;
-    getPageFile( i_nPage, aPageFile );
 
     ULONG nRestoreDrawMode = mpImplData->mpPrinter->GetDrawMode();
     sal_Int32 nMaxBmpDPIX = mpImplData->mpPrinter->ImplGetDPIX();

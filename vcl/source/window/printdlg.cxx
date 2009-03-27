@@ -670,7 +670,7 @@ void PrintDialog::setPreviewText( sal_Int32 nSetPage )
 void PrintDialog::preparePreview()
 {
     // page range may have changed depending on options
-    sal_Int32 nPages = maPListener->getPageCount();
+    sal_Int32 nPages = maPListener->getFilteredPageCount();
     mnCachedPages = nPages;
 
     if( mnCurPage >= nPages )
@@ -689,7 +689,7 @@ void PrintDialog::preparePreview()
 
     const MapMode aMapMode( MAP_100TH_MM );
     GDIMetaFile aMtf;
-    Size aPageSize = maPListener->getPageFile( mnCurPage, aMtf );
+    Size aPageSize = maPListener->getFilteredPageFile( mnCurPage, aMtf );
 
     Size aPreviewSize;
     Point aPreviewPos = maPreviewSpace.TopLeft();
