@@ -94,6 +94,13 @@
 #define SV_PRINT_PRT_COMMENT_TXT            9
 #define SV_PRINT_PRT_TOFILE                 10
 #define SV_PRINT_PRT_SETUP                  11
+#define SV_PRINT_PRT_NUP                    12
+#define SV_PRINT_PRT_NUP_ROWS_TXT           13
+#define SV_PRINT_PRT_NUP_ROWS_EDT           14
+#define SV_PRINT_PRT_NUP_COLUMNS_TXT        15
+#define SV_PRINT_PRT_NUP_COLUMNS_EDT        16
+#define SV_PRINT_PRT_NUP_PORTRAIT           17
+#define SV_PRINT_PRT_NUP_LANDSCAPE          18
 
 #define SV_DLG_PRINT_PROGRESS             2048
 #define SV_PRINT_PROGRESS_CANCEL            1

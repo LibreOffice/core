@@ -493,6 +493,7 @@ public:
     void SAL_DLLPRIVATE setOptionChangeHdl( const Link& );
     void SAL_DLLPRIVATE createProgressDialog();
     void SAL_DLLPRIVATE setPrintSelection( const rtl::OUString& );
+    void SAL_DLLPRIVATE setMultipage( int nRows, int nColumns, const Size& rPaperSize );
 };
 
 }

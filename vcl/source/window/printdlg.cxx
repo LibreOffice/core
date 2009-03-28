@@ -91,6 +91,13 @@ PrintDialog::PrinterTabPage::PrinterTabPage( Window* i_pParent, const ResId& rRe
     , maLocText( this, VclResId( SV_PRINT_PRT_LOCATION_TXT ) )
     , maComment( this, VclResId( SV_PRINT_PRT_COMMENT ) )
     , maCommentText( this, VclResId( SV_PRINT_PRT_COMMENT_TXT ) )
+    , maNupLine( this, VclResId( SV_PRINT_PRT_NUP ) )
+    , maNupRowsTxt( this, VclResId( SV_PRINT_PRT_NUP_ROWS_TXT ) )
+    , maNupRowsEdt( this, VclResId( SV_PRINT_PRT_NUP_ROWS_EDT ) )
+    , maNupColTxt( this, VclResId( SV_PRINT_PRT_NUP_COLUMNS_TXT ) )
+    , maNupColEdt( this, VclResId( SV_PRINT_PRT_NUP_COLUMNS_EDT ) )
+    , maNupPortrait( this, VclResId( SV_PRINT_PRT_NUP_PORTRAIT ) )
+    , maNupLandscape( this, VclResId( SV_PRINT_PRT_NUP_LANDSCAPE ) )
 {
     FreeResource();
 }
@@ -198,16 +205,36 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterList
     }
     maJobPage.maPagesEdit.SetText( aBuf.makeStringAndClear() );
 
+    // setup sizes for N-Up
+    Size aNupSize( maPListener->getPrinter()->PixelToLogic(
+                         maPListener->getPrinter()->GetPaperSizePixel(), MapMode( MAP_100TH_MM ) ) );
+    if( maPListener->getPrinter()->GetOrientation() == ORIENTATION_LANDSCAPE )
+    {
+        maNupLandscapeSize = aNupSize;
+        maNupPortraitSize = Size( aNupSize.Height(), aNupSize.Width() );
+        maPrinterPage.maNupLandscape.Check();
+    }
+    else
+    {
+        maNupPortraitSize = aNupSize;
+        maNupLandscapeSize = Size( aNupSize.Height(), aNupSize.Width() );
+        maPrinterPage.maNupPortrait.Check();
+    }
+
     // setup click handler on the various buttons
     maJobPage.maCollateBox.SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
     maJobPage.maAllButton.SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
     maJobPage.maSelectionButton.SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
     maJobPage.maPagesButton.SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
     maPrinterPage.maSetupButton.SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
+    maPrinterPage.maNupPortrait.SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
+    maPrinterPage.maNupLandscape.SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
 
     // setup modify hdl
     maJobPage.maCopyCountField.SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
     maJobPage.maPagesEdit.SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
+    maPrinterPage.maNupRowsEdt.SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
+    maPrinterPage.maNupColEdt.SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
 
     // setup optional UI options set by application
     setupOptionalUI();
@@ -712,6 +739,18 @@ void PrintDialog::preparePreview()
     maPreviewWindow.setPreview( aMtf );
 }
 
+void PrintDialog::updateNup()
+{
+    int nRows = maPrinterPage.maNupRowsEdt.GetValue();
+    int nCols = maPrinterPage.maNupColEdt.GetValue();
+
+    maPListener->setMultipage( nRows, nCols,
+                               maPrinterPage.maNupPortrait.IsChecked()
+                               ? maNupPortraitSize : maNupLandscapeSize );
+
+    preparePreview();
+}
+
 IMPL_LINK( PrintDialog, ScrollHdl, ScrollBar*, pScrBar )
 {
     if( pScrBar == &maPageScrollbar )
@@ -772,6 +811,8 @@ IMPL_LINK( PrintDialog, ClickHdl, Button*, pButton )
 
         preparePreview();
     }
+    if( pButton == &maPrinterPage.maNupPortrait || pButton == &maPrinterPage.maNupLandscape )
+        updateNup();
     return 0;
 }
 
@@ -782,6 +823,10 @@ IMPL_LINK( PrintDialog, ModifyHdl, Edit*, pEdit )
     {
         maPListener->setPrintSelection( maJobPage.maPagesEdit.GetText() );
         preparePreview();
+    }
+    else if( pEdit == &maPrinterPage.maNupRowsEdt || pEdit == &maPrinterPage.maNupColEdt )
+    {
+        updateNup();
     }
     return 0;
 }

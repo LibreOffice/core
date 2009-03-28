@@ -78,6 +78,13 @@ namespace vcl
             FixedText                               maLocText;
             FixedText                               maComment;
             FixedText                               maCommentText;
+            FixedLine                               maNupLine;
+            FixedText                               maNupRowsTxt;
+            NumericField                            maNupRowsEdt;
+            FixedText                               maNupColTxt;
+            NumericField                            maNupColEdt;
+            RadioButton                             maNupPortrait;
+            RadioButton                             maNupLandscape;
 
             PrinterTabPage( Window*, const ResId& );
             virtual ~PrinterTabPage();
@@ -134,6 +141,10 @@ namespace vcl
         std::multimap< rtl::OUString, Window* > maPropertyToWindowMap;
         std::map< Window*, sal_Int32 >          maControlToNumValMap;
 
+        Size                                    maNupPortraitSize;
+        Size                                    maNupLandscapeSize;
+
+        void updateNup();
         void preparePreview();
         void setPreviewText( sal_Int32 );
         void updatePrinterText();

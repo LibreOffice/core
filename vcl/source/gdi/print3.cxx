@@ -324,7 +324,6 @@ bool Printer::StartJob( const XubString& i_rJobName, boost::shared_ptr<vcl::Prin
             int nPages = i_pListener->getFilteredPageCount();
             for( int nPage = 0; nPage < nPages; nPage++ )
             {
-                // remember MultiSelection is 1 based (due to user input)
                 i_pListener->printFilteredPage( nPage );
             }
             EndJob();
@@ -440,6 +439,7 @@ static void appendSubPage( GDIMetaFile& o_rMtf, const Rectangle& i_rRect, GDIMet
     o_rMtf.AddAction( new MetaRectAction( i_rRect ) );
 
     // clip to page rect
+    // FIXME: clipping does not seem to work reliably with this
     o_rMtf.AddAction( new MetaISectRectClipRegionAction( i_rRect ) );
 
     // append the subpage
@@ -581,6 +581,11 @@ void PrinterListener::printFilteredPage( int i_nPage )
                                                              );
 
     mpImplData->mpPrinter->EnableOutput( TRUE );
+
+    // in N-Up printing set the correct page size
+    // FIXME: setting paper landscape/portrait does not work here reliably ?
+    if( mpImplData->mnMultiPageRows != 1 || mpImplData->mnMultiPageColumns != 1 )
+        mpImplData->mpPrinter->SetPaperSizeUser( mpImplData->maMultiPageSize );
 
     // actually print the page
     mpImplData->mpPrinter->StartPage();
@@ -783,4 +788,11 @@ void PrinterListener::createProgressDialog()
         mpImplData->mpProgress = new PrintProgressDialog( NULL, getPageCount() );
         mpImplData->mpProgress->Show();
     }
+}
+
+void PrinterListener::setMultipage( int i_nRows, int i_nColumns, const Size& rPaperSize )
+{
+    mpImplData->mnMultiPageRows = i_nRows;
+    mpImplData->mnMultiPageColumns = i_nColumns;
+    mpImplData->maMultiPageSize = rPaperSize;
 }
