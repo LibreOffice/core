@@ -1879,7 +1879,7 @@ void SplitWindow::ImplDrawButtonRect( const Rectangle& rRect, long nSize )
                 DrawPixel( Point( i+1, nCenter-2+1 ), rStyleSettings.GetShadowColor() );
             }
             i++;
-            if ( (i < nEx1) || (i > nEx2 ) && (i < nRight-3) )
+            if ( (i < nEx1) || ((i > nEx2 ) && (i < nRight-3)) )
             {
                 DrawPixel( Point( i, nCenter+2 ), rStyleSettings.GetLightColor() );
                 DrawPixel( Point( i+1, nCenter+2+1 ), rStyleSettings.GetShadowColor() );
@@ -1909,7 +1909,7 @@ void SplitWindow::ImplDrawButtonRect( const Rectangle& rRect, long nSize )
                 DrawPixel( Point( nCenter-2+1, i+1 ), rStyleSettings.GetShadowColor() );
             }
             i++;
-            if ( (i < nEx1) || (i > nEx2 ) && (i < nBottom-3) )
+            if ( (i < nEx1) || ((i > nEx2 ) && (i < nBottom-3)) )
             {
                 DrawPixel( Point( nCenter+2, i ), rStyleSettings.GetLightColor() );
                 DrawPixel( Point( nCenter+2+1, i+1 ), rStyleSettings.GetShadowColor() );
