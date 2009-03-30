@@ -297,13 +297,19 @@ namespace {
     class Selection
     {
     public:
-        Selection (const OUString& rsSelection)
+        Selection (const OUString& rsSelection, const SdPage* pCurrentPage)
             : mbAreAllPagesSelected(rsSelection.equalsAscii("all")),
               mbIsShapeSelection(rsSelection.equalsAscii("selection")),
+              mnCurrentPageIndex(pCurrentPage!=NULL ? (pCurrentPage->GetPageNum()-1)/2 : -1),
               mpSelectedPages()
         {
-            if ( ! mbAreAllPagesSelected)
+            if ( ! (mbAreAllPagesSelected || mbIsShapeSelection))
                 mpSelectedPages.reset(new MultiSelection(rsSelection));
+        }
+
+        bool IsMarkedOnly (void) const
+        {
+            return mbIsShapeSelection;
         }
 
         /** Call with a 0 based page index.
@@ -314,6 +320,8 @@ namespace {
                 return true;
             else if (mpSelectedPages)
                 return mpSelectedPages->IsSelected(nIndex+1);
+            else if (mbIsShapeSelection && nIndex==mnCurrentPageIndex)
+                return true;
             else
                 return false;
         }
@@ -321,13 +329,8 @@ namespace {
     private:
         const bool mbAreAllPagesSelected;
         const bool mbIsShapeSelection;
+        const sal_Int32 mnCurrentPageIndex;
         ::boost::scoped_ptr<MultiSelection> mpSelectedPages;
-
-        Selection (void)
-            : mbAreAllPagesSelected(true),
-              mbIsShapeSelection(false),
-              mpSelectedPages()
-        {}
     };
 
     /** A collection of values that helps to reduce the number of arguments
@@ -339,7 +342,8 @@ namespace {
     public:
         PrintInfo (
             const Printer* pPrinter,
-            const OUString& rsPrinterSelection)
+            const OUString& rsPrinterSelection,
+            const ::boost::shared_ptr<ViewShell> pView)
             : mpPrinter(pPrinter),
               mnDrawMode(DRAWMODE_DEFAULT),
               msTimeDate(),
@@ -347,9 +351,9 @@ namespace {
               maPrintSize(0,0),
               maPageSize(0,0),
               meOrientation(ORIENTATION_PORTRAIT),
-              mbPrintMarkedOnly(false),
               maMap(),
-              maSelection(rsPrinterSelection)
+              maSelection(rsPrinterSelection, pView ? pView->getCurrentPage() : NULL),
+              mbPrintMarkedOnly(maSelection.IsMarkedOnly())
         {}
 
         const Printer* mpPrinter;
@@ -359,9 +363,9 @@ namespace {
         Size maPrintSize;
         Size maPageSize;
         Orientation meOrientation;
-        bool mbPrintMarkedOnly;
         MapMode maMap;
         const Selection maSelection;
+        bool mbPrintMarkedOnly;
     };
 
 
@@ -1343,10 +1347,16 @@ private:
         else if (rInfo.maPageSize.Width() < rInfo.maPageSize.Height())
             rInfo.meOrientation = ORIENTATION_LANDSCAPE;
 
-        if (rInfo.meOrientation == ORIENTATION_LANDSCAPE)
+        const Size aPaperSize (rInfo.mpPrinter->GetPaperSize());
+        if (rInfo.meOrientation == ORIENTATION_LANDSCAPE &&
+            (aPaperSize.Width() < aPaperSize.Height()))
         {
-            maPrintSize = awt::Size(maPrintSize.Height, maPrintSize.Width);
+            maPrintSize = awt::Size(aPaperSize.Height(), aPaperSize.Width());
             //            rInfo.maPrintSize = Size(rInfo.maPrintSize.Height(), rInfo.maPrintSize.Width());
+        }
+        else
+        {
+            maPrintSize = awt::Size(aPaperSize.Width(), aPaperSize.Height());
         }
 
         return true;
@@ -1369,7 +1379,7 @@ private:
 
         ViewShell* pShell = mrBase.GetMainViewShell().get();
 
-        PrintInfo aInfo (mpPrinter, mpOptions->GetPrinterSelection());
+        PrintInfo aInfo (mpPrinter, mpOptions->GetPrinterSelection(), mrBase.GetMainViewShell());
 
         if (aInfo.mpPrinter!=NULL && pShell!=NULL)
         {
@@ -1569,7 +1579,7 @@ private:
     {
         OSL_ASSERT(mrBase.GetDocument() != NULL);
         OSL_ASSERT(nPageIndex>=0);
-        if ( ! rInfo.maSelection.IsSelected(nPageIndex+1))
+        if ( ! rInfo.maSelection.IsSelected(nPageIndex))
             return NULL;
         SdPage* pPage = mrBase.GetDocument()->GetSdPage(
             sal::static_int_cast<USHORT>(nPageIndex),
