@@ -944,8 +944,8 @@ static void ImplDrawFrame( OutputDevice* pDev, Rectangle& rRect,
             Color aColor = bRound ? rStyleSettings.GetShadowColor()
                                   : pDev->GetSettings().GetStyleSettings().GetMonoColor();
             // when the MonoColor wasn't set, check face color
-            if ( ( ( bRound && aColor.IsDark() ) || ( aColor == Color( COL_BLACK ) ) &&
-                 ( pDev->GetSettings().GetStyleSettings().GetFaceColor().IsDark() ) ) )
+            if ( ( ( bRound && aColor.IsDark() ) || ( aColor == Color( COL_BLACK ) &&
+                 ( pDev->GetSettings().GetStyleSettings().GetFaceColor().IsDark() ) ) ) )
                 aColor = Color( COL_WHITE );
             ImplDrawDPILineRect( pDev, rRect, &aColor, bRound );
         }
@@ -1183,7 +1183,7 @@ static void ImplDrawButton( OutputDevice* pDev, Rectangle& rRect,
                                            aFillRect.Right(), aFillRect.Top() ) );
                 aFillRect.Top()++;
             }
-            if ( ((nStyle & BUTTON_DRAW_NOBOTTOMSHADOWBORDER | BUTTON_DRAW_FLAT) == (BUTTON_DRAW_NOBOTTOMSHADOWBORDER | BUTTON_DRAW_FLAT)) &&
+            if ( ((nStyle & (BUTTON_DRAW_NOBOTTOMSHADOWBORDER | BUTTON_DRAW_FLAT)) == (BUTTON_DRAW_NOBOTTOMSHADOWBORDER | BUTTON_DRAW_FLAT)) &&
                  !(nStyle & (BUTTON_DRAW_PRESSED | BUTTON_DRAW_CHECKED | BUTTON_DRAW_HIGHLIGHT)) )
             {
                 pDev->SetFillColor( rStyleSettings.GetDarkShadowColor() );

@@ -1622,7 +1622,7 @@ void ImplHandleResize( Window* pWindow, long nNewWidth, long nNewHeight )
             ImplDestroyHelpWindow( true );
     }
 
-    if ( (nNewWidth > 0) && (nNewHeight > 0) ||
+    if ( ((nNewWidth > 0) && (nNewHeight > 0)) ||
          pWindow->ImplGetWindow()->ImplGetWindowImpl()->mbAllResize )
     {
         if ( (nNewWidth != pWindow->GetOutputWidthPixel()) || (nNewHeight != pWindow->GetOutputHeightPixel()) )

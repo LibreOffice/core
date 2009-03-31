@@ -1292,10 +1292,10 @@ void GenericSalLayout::ApplyAsianKerning( const sal_Unicode* pStr, int nLength )
         {
             // ignore code ranges that are not affected by asian punctuation compression
             const sal_Unicode cHere = pStr[n];
-            if( (0x3000 != (cHere & 0xFF00)) && (0x2010 != (cHere & 0xFFF0)) || (0xFF00 != (cHere & 0xFF00)) )
+            if( ((0x3000 != (cHere & 0xFF00)) && (0x2010 != (cHere & 0xFFF0))) || (0xFF00 != (cHere & 0xFF00)) )
                 continue;
             const sal_Unicode cNext = pStr[n+1];
-            if( (0x3000 != (cNext & 0xFF00)) && (0x2010 != (cNext & 0xFFF0)) || (0xFF00 != (cNext & 0xFF00)) )
+            if( ((0x3000 != (cNext & 0xFF00)) && (0x2010 != (cNext & 0xFFF0))) || (0xFF00 != (cNext & 0xFF00)) )
                 continue;
 
             // calculate compression values
