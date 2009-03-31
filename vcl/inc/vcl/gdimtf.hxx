@@ -164,6 +164,7 @@ public:
     void            Scale( double fScaleX, double fScaleY );
     void            Scale( const Fraction& rScaleX, const Fraction& rScaleY );
     void            Rotate( long nAngle10 );
+    void            Clip( const Rectangle& );
 
     void            Adjust( short nLuminancePercent = 0, short nContrastPercent = 0,
                             short nChannelRPercent = 0, short nChannelGPercent = 0,

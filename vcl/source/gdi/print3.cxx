@@ -428,23 +428,31 @@ Size PrinterListener::getPageFile( int i_nUnfilteredPage, GDIMetaFile& o_rMtf )
     return aPageSize;
 }
 
-static void appendSubPage( GDIMetaFile& o_rMtf, const Rectangle& i_rRect, GDIMetaFile& i_rSubPage )
+static void appendSubPage( GDIMetaFile& o_rMtf, const Rectangle& i_rClipRect, GDIMetaFile& io_rSubPage )
 {
+    // intersect all clipregion actions with our clip rect
+    io_rSubPage.WindStart();
+    io_rSubPage.Clip( i_rClipRect );
+
     // save gstate
     o_rMtf.AddAction( new MetaPushAction( PUSH_LINECOLOR | PUSH_FILLCOLOR | PUSH_CLIPREGION ) );
 
     // draw a border
+    Rectangle aBorderRect( i_rClipRect );
+    aBorderRect.Left()   -= 100;
+    aBorderRect.Top()    -= 100;
+    aBorderRect.Right()  += 100;
+    aBorderRect.Bottom() += 100;
     o_rMtf.AddAction( new MetaLineColorAction( Color( COL_BLACK ), TRUE ) );
     o_rMtf.AddAction( new MetaFillColorAction( Color( COL_TRANSPARENT ), FALSE ) );
-    o_rMtf.AddAction( new MetaRectAction( i_rRect ) );
+    o_rMtf.AddAction( new MetaRectAction( aBorderRect ) );
 
     // clip to page rect
-    // FIXME: clipping does not seem to work reliably with this
-    o_rMtf.AddAction( new MetaISectRectClipRegionAction( i_rRect ) );
+    o_rMtf.AddAction( new MetaClipRegionAction( Region( i_rClipRect ), TRUE ) );
 
     // append the subpage
-    i_rSubPage.WindStart();
-    i_rSubPage.Play( o_rMtf );
+    io_rSubPage.WindStart();
+    io_rSubPage.Play( o_rMtf );
 
     // restore gstate
     o_rMtf.AddAction( new MetaPopAction() );
@@ -466,7 +474,7 @@ Size PrinterListener::getFilteredPageFile( int i_nFilteredPage, GDIMetaFile& o_r
     long nAdvY = aPaperSize.Height() / mpImplData->mnMultiPageRows;
 
     // determine size of a "cell" subpage, leave a little space around pages
-    Size aSubPageSize( nAdvX - 300, nAdvY - 300 );
+    Size aSubPageSize( nAdvX - 500, nAdvY - 500 );
 
     o_rMtf.Clear();
     o_rMtf.SetPrefSize( aPaperSize );
@@ -496,9 +504,9 @@ Size PrinterListener::getFilteredPageFile( int i_nFilteredPage, GDIMetaFile& o_r
             aPageFile.Move( nX, nY );
             aPageFile.WindStart();
             // calculate border rectangle
-            Rectangle aSubPageRect( Point( nX - 50, nY - 50 ),
-                                    Size( long(double(aPageSize.Width())*fScale) + 100,
-                                        long(double(aPageSize.Height())*fScale) + 100 ) );
+            Rectangle aSubPageRect( Point( nX, nY ),
+                                    Size( long(double(aPageSize.Width())*fScale),
+                                          long(double(aPageSize.Height())*fScale) ) );
 
             // append subpage to page
             appendSubPage( o_rMtf, aSubPageRect, aPageFile );
@@ -529,6 +537,7 @@ void PrinterListener::printFilteredPage( int i_nPage )
            return;
     }
 
+    bool bMultiPageOutput = mpImplData->mnMultiPageRows != 1 || mpImplData->mnMultiPageColumns != 1;
     ULONG nRestoreDrawMode = mpImplData->mpPrinter->GetDrawMode();
     sal_Int32 nMaxBmpDPIX = mpImplData->mpPrinter->ImplGetDPIX();
     sal_Int32 nMaxBmpDPIY = mpImplData->mpPrinter->ImplGetDPIY();
@@ -583,8 +592,7 @@ void PrinterListener::printFilteredPage( int i_nPage )
     mpImplData->mpPrinter->EnableOutput( TRUE );
 
     // in N-Up printing set the correct page size
-    // FIXME: setting paper landscape/portrait does not work here reliably ?
-    if( mpImplData->mnMultiPageRows != 1 || mpImplData->mnMultiPageColumns != 1 )
+    if( bMultiPageOutput )
         mpImplData->mpPrinter->SetPaperSizeUser( mpImplData->maMultiPageSize );
 
     // actually print the page
