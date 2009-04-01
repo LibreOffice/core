@@ -289,6 +289,8 @@ MixedPropertySetInfo::~MixedPropertySetInfo()
     for (sal_Int32 i = 0; i < udProps.getLength(); ++i) {
         if (std::find(_pUserKeys, _pUserKeys+FOUR, udProps[i].Name)
             == _pUserKeys+FOUR) {
+                // #i100027#: handles from udProps are not valid here
+                udProps[i].Handle = -1;
                 lProps.push_back(udProps[i]);
         }
     }

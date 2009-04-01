@@ -31,6 +31,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
+#ifdef SVX_DLLIMPLEMENTATION
+#undef SVX_DLLIMPLEMENTATION
+#endif
 // include ---------------------------------------------------------------
 
 #define _SVX_OPTIMPROVE_CXX

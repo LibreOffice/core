@@ -1919,8 +1919,29 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
             // Disable OOoImprovement page if not enabled
             if( RID_SVXPAGE_IMPROVEMENT == nPageId )
             {
+                continue;
+            }
+            if ( nPageId != RID_SVXPAGE_SSO || isSSOEnabled )
+            {
+                AddTabPage( nPageId, sNewTitle, nGroup );
+            }
+        }
+        // private iteration hack for Improvement Program
+        // hack for OOo 3.1
+        // should not be in found in any later release
+        for(bool bOnce = false; bOnce==false; bOnce=true)
+        {
+            String sNewTitle = C2U("Improvement Program");
+            {
+                SvxImprovementPage aTempTabPage(this);
+                sNewTitle = aTempTabPage.GetTitleText();
+            }
+            nPageId = RID_SVXPAGE_IMPROVEMENT;
+            if ( lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
+                continue;
+            // Disable OOoImprovement page if not enabled
+            {
                 const ::rtl::OUString sService = C2U("com.sun.star.oooimprovement.CoreController");
-
                 try
                 {
                     Reference < XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
@@ -1935,26 +1956,6 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
                 {
                     continue;
                 }
-
-                SvxEmptyPage* pTempPage = new SvxEmptyPage( this );
-                sPageTitle = pTempPage->GetText();
-                delete pTempPage;
-                xub_StrLen nPos = sPageTitle.Search( rGeneralArray.GetString(0) );
-                if ( nPos != STRING_NOTFOUND )
-                {
-                    xub_StrLen nLen = rGeneralArray.GetString(0).Len();
-                    if ( sPageTitle.GetChar( nPos + nLen ) == ' ' )
-                        nLen++;
-                    else if ( nPos + nLen == sPageTitle.Len() &&
-                                sPageTitle.GetChar( nPos + nLen ) == ' ' )
-                    {
-                        nPos++;
-                        nLen++;
-                    }
-                    sPageTitle.Erase( nPos, nLen );
-                }
-                if(sPageTitle.Len() > 0)
-                    sNewTitle = sPageTitle;
             }
             if ( nPageId != RID_SVXPAGE_SSO || isSSOEnabled )
             {
