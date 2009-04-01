@@ -1464,7 +1464,7 @@ sal_Bool SlideShowImpl::setProperty( beans::PropertyValue const& rProperty )
     {
         uno::Sequence<uno::Any> aValues;
         uno::Reference<presentation::XSlideShowView> xView;
-        sal_Bool bValue;
+        sal_Bool bValue (false);
         if ((rProperty.Value >>= aValues)
             && aValues.getLength()==2
             && (aValues[0] >>= xView)

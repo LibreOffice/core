@@ -307,7 +307,7 @@ namespace slideshow
             OSL_ASSERT( !maLayers.empty() ); // always at least background layer
             ENSURE_OR_THROW( rShape, "LayerManager::implAddShape(): invalid Shape" );
 
-            LayerShapeMap::value_type aValue (rShape, LayerShapeMap::data_type());
+            LayerShapeMap::value_type aValue (rShape, LayerWeakPtr());
 
             OSL_ASSERT( maAllShapes.find(rShape) == maAllShapes.end() ); // shape must not be added already
             mbLayerAssociationDirty = true;
