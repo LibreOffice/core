@@ -121,6 +121,7 @@ XPlugin_Impl::XPlugin_Impl( const uno::Reference< com::sun::star::lang::XMultiSe
 {
     memset( &m_aInstance, 0, sizeof( m_aInstance ) );
     memset( &m_aNPWindow, 0, sizeof( m_aNPWindow ) );
+    memset( &m_aSysPlugData, 0, sizeof( m_aSysPlugData ) );
 
     m_xModel = new PluginModel();
     uno::Reference< com::sun::star::beans::XPropertySet >  xPS( m_xModel, UNO_QUERY );
@@ -139,8 +140,7 @@ void XPlugin_Impl::destroyInstance()
     destroyStreams();
     if( getPluginComm() )
     {
-        getPluginComm()->NPP_Destroy( getNPPInstance(),
-                                      &pSavedData );
+        getPluginComm()->NPP_Destroy( this, &pSavedData );
         getPluginComm()->decRef();
         m_pPluginComm = NULL;
     }
@@ -218,8 +218,7 @@ IMPL_LINK( XPlugin_Impl, secondLevelDispose, XPlugin_Impl*, /*pThis*/ )
     m_aNPWindow.window = NULL;
 #ifndef UNX
     // acrobat does an unconditional XtParent on the windows widget
-    getPluginComm()->
-        NPP_SetWindow( getNPPInstance(), &m_aNPWindow );
+    getPluginComm()->NPP_SetWindow( this );
 #endif
     destroyInstance();
     PluginControl_Impl::dispose();
@@ -520,26 +519,21 @@ void XPlugin_Impl::loadPlugin()
     {
         if( m_aDescription.PluginName.getLength() )
         {
-#ifdef UNX
+#if defined QUARTZ
+            PluginComm* pComm = new MacPluginComm( m_aDescription.Mimetype,
+                                                   m_aDescription.PluginName,
+                                                   pEnvData->pView );
+#elif defined UNX
             // need a new PluginComm
             PluginComm* pComm = NULL;
             int sv[2];
             if( !socketpair( AF_UNIX, SOCK_STREAM, 0, sv ) )
-#ifdef QUARTZ
-                pComm = new MacPluginComm( m_aDescription.Mimetype,
-                                           m_aDescription.PluginName,
-                                           pEnvData->pView,
-                                           sv[0],
-                                           sv[1]
-                                           );
-#else
                 pComm = new UnxPluginComm( m_aDescription.Mimetype,
                                            m_aDescription.PluginName,
                                            (XLIB_Window)pEnvData->aWindow,
                                            sv[0],
                                            sv[1]
                                            );
-#endif //QUARTZ
 #elif (defined WNT || defined OS2)
             PluginComm* pComm = new PluginComm_Impl( m_aDescription.Mimetype,
                                                      m_aDescription.PluginName,
@@ -560,19 +554,13 @@ void XPlugin_Impl::loadPlugin()
                  (char**)(m_nArgs ? m_pArgn : NULL),
                  (char**)(m_nArgs ? m_pArgv : NULL),
                  NULL );
-
-#if defined( UNX ) && !defined(QUARTZ)
+#ifdef QUARTZ
+    // m_aNPWindow is set up in the MacPluginComm from the view
+    m_aSysPlugData.m_pParentView = pEnvData->pView;
+#elif defined( UNX )
     XSync( (Display*)pEnvData->pDisplay, False );
-#endif
-#ifdef UNX
-#if !defined(QUARTZ)
     m_aNPWindow.window      = (void*)pEnvData->aWindow;
     m_aNPWindow.ws_info     = NULL;
-#else
-    // FIXME: this is untested and possiblz wrong
-    m_aNPWindow.window      = (void*)pEnvData->pView;
-    m_aNPWindow.type        = NPWindowTypeWindow;
-#endif //QUARTZ
 #else
     m_aNPWindow.window = (void*)pEnvData->hWnd;
 #endif
@@ -604,8 +592,7 @@ void XPlugin_Impl::loadPlugin()
     m_aNPWindow.width   = aPosSize.Width ? aPosSize.Width : 600;
     m_aNPWindow.height  = aPosSize.Height ? aPosSize.Height : 600;
 
-    aError = getPluginComm()->
-        NPP_SetWindow( getNPPInstance(), &m_aNPWindow );
+    aError = getPluginComm()->NPP_SetWindow( this );
 }
 
 void XPlugin_Impl::destroyStreams()
@@ -768,7 +755,7 @@ sal_Bool XPlugin_Impl::provideNewStream(const OUString& mimetype,
     fprintf( stderr,
              "new stream \"%s\" of MIMEType \"%s\"\n"
              "for plugin \"%s\"\n"
-             "seekable = %s, length = %d\n",
+             "seekable = %s, length = %"SAL_PRIdINT32"\n",
              aURL.getStr(), aMIME.getStr(), getPluginComm()->getLibName().getStr(),
              isfile ? "true" : "false", length );
 
@@ -879,7 +866,7 @@ void XPlugin_Impl::setPosSize( sal_Int32 nX_, sal_Int32 nY_, sal_Int32 nWidth_, 
     Guard< Mutex > aGuard( m_aMutex );
 
 #if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "XPlugin_Impl::setPosSize( %d, %d, %d, %d, %d )\n",
+    fprintf( stderr, "XPlugin_Impl::setPosSize( %"SAL_PRIdINT32", %"SAL_PRIdINT32", %"SAL_PRIdINT32", %"SAL_PRIdINT32", %d )\n",
              nX_, nY_, nWidth_, nHeight_, nFlags );
 #endif
 
@@ -894,8 +881,8 @@ void XPlugin_Impl::setPosSize( sal_Int32 nX_, sal_Int32 nY_, sal_Int32 nWidth_, 
     m_aNPWindow.clipRect.right      = ::sal::static_int_cast< uint16, sal_Int32 >( nWidth_ );
     m_aNPWindow.clipRect.bottom     = ::sal::static_int_cast< uint16, sal_Int32 >( nHeight_ );
 
-    if(getPluginComm())
-        getPluginComm()->NPP_SetWindow( getNPPInstance(), &m_aNPWindow );
+    if( getPluginComm() )
+        getPluginComm()->NPP_SetWindow( this );
 }
 
 PluginDescription XPlugin_Impl::fitDescription( const OUString& rURL )
@@ -959,8 +946,7 @@ PluginStream::~PluginStream()
         m_pPlugin->getPluginComm()->NPP_DestroyStream( m_pPlugin->getNPPInstance(),
                                                        &m_aNPStream, NPRES_DONE );
         m_pPlugin->checkListeners( m_aNPStream.url );
-        m_pPlugin->getPluginComm()->NPP_SetWindow( m_pPlugin->getNPPInstance(),
-                                                   m_pPlugin->getNPWindow());
+        m_pPlugin->getPluginComm()->NPP_SetWindow( m_pPlugin );
     }
     ::free( (void*)m_aNPStream.url );
 }
@@ -1018,8 +1004,7 @@ PluginInputStream::~PluginInputStream()
                                       &m_aNPStream,
                                       aFileName.GetBuffer() );
             }
-            m_pPlugin->getPluginComm()->NPP_SetWindow( m_pPlugin->getNPPInstance(),
-                                                       m_pPlugin->getNPWindow());
+            m_pPlugin->getPluginComm()->NPP_SetWindow( m_pPlugin );
             m_pPlugin->getInputStreams().remove( this );
         }
         else

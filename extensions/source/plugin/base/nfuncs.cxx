@@ -51,7 +51,7 @@ void TRACE( char const * s )
     if (s_file)
     {
         oslThreadIdentifier t = osl_getThreadIdentifier(0);
-        fprintf( s_file, "log [t_id=%d]: %s\n", t, s );
+        fprintf( s_file, "log [t_id=%"SAL_PRIuUINT32"]: %s\n", t, s );
         fflush( s_file );
     }
 }
@@ -62,7 +62,7 @@ void TRACEN( char const * s, long n )
     if (s_file)
     {
         oslThreadIdentifier t = osl_getThreadIdentifier(0);
-        fprintf( s_file, "log [t_id=%d]: %s%d\n", t, s, n );
+        fprintf( s_file, "log [t_id=%"SAL_PRIuUINT32"]: %s%ld\n", t, s, n );
         fflush( s_file );
     }
 }
@@ -73,7 +73,7 @@ void TRACES( char const* s, char const* s2 )
     if (s_file)
     {
         oslThreadIdentifier t = osl_getThreadIdentifier(0);
-        fprintf( s_file, "log [t_id=%d]: %s %s\n", t, s, s2 );
+        fprintf( s_file, "log [t_id=%"SAL_PRIuUINT32"]: %s %s\n", t, s, s2 );
         fflush( s_file );
     }
 }
@@ -477,30 +477,29 @@ extern "C" {
 
     const char* SAL_CALL NP_LOADDS  NPN_UserAgent( NPP instance )
     {
-        TRACE( "NPN_UserAgent" );
-        static char* pAgent = strdup( "Mozilla" );
+        static char* pAgent = strdup( "Mozilla 3.0" );
 
         XPlugin_Impl* pImpl = XPluginManager_Impl::getXPluginFromNPP( instance );
-        if( ! pImpl )
-            return pAgent;
-
-        ::rtl::OUString UserAgent;
-        try
+        if( pImpl )
         {
-            pImpl->enterPluginCallback();
-            UserAgent = pImpl->getPluginContext()->
-                getUserAgent( pImpl );
-            pImpl->leavePluginCallback();
-        }
-        catch( ::com::sun::star::plugin::PluginException& )
-        {
-            pImpl->leavePluginCallback();
-            return pAgent;
+            rtl::OUString UserAgent;
+            try
+            {
+                pImpl->enterPluginCallback();
+                UserAgent = pImpl->getPluginContext()->
+                    getUserAgent( pImpl );
+                pImpl->leavePluginCallback();
+                if( pAgent )
+                    free( pAgent );
+                pAgent = strdup( ::rtl::OUStringToOString( UserAgent, pImpl->getTextEncoding() ).getStr() );
+            }
+            catch( ::com::sun::star::plugin::PluginException& )
+            {
+                pImpl->leavePluginCallback();
+            }
         }
 
-        if( pAgent )
-            free( pAgent );
-        pAgent = strdup( ::rtl::OUStringToOString( UserAgent, pImpl->getTextEncoding() ).getStr() );
+        TRACES( "NPN_UserAgent: returning", pAgent );
 
         return pAgent;
     }
@@ -537,7 +536,7 @@ int32 SAL_CALL NP_LOADDS  NPN_Write( NPP instance, NPStream* stream, int32 len,
 
 NPError SAL_CALL NP_LOADDS  NPN_GetValue( NPP instance, NPNVariable variable, void* value )
 {
-    TRACE( "NPN_GetValue" );
+    TRACEN( "NPN_GetValue: ", variable );
     XPlugin_Impl* pImpl = XPluginManager_Impl::getXPluginFromNPP( instance );
 
     if( ! pImpl )
@@ -554,6 +553,14 @@ NPError SAL_CALL NP_LOADDS  NPN_GetValue( NPP instance, NPNVariable variable, vo
          default:
             aResult = NPERR_INVALID_PARAM;
             break;
+        #ifdef QUARTZ
+        case 2000: // NPNVsupportsQuickDrawBool
+            *(NPBool*)value = false;
+            break;
+        case 2001: // NPNVsupportsCoreGraphicsBool
+            *(NPBool*)value = true;
+            break;
+        #endif
         case NPNVjavascriptEnabledBool:
             // no javascript
             *(NPBool*)value = false;
@@ -594,26 +601,75 @@ void SAL_CALL NP_LOADDS  NPN_ReloadPlugins(NPBool /*reloadPages*/)
 }
 
 
-NPError SAL_CALL NP_LOADDS  NPN_SetValue(NPP /*instance*/, NPPVariable /*variable*/,
-                         void* /*value*/)
+NPError SAL_CALL NP_LOADDS  NPN_SetValue( NPP instance,
+                                          NPPVariable variable,
+                                          void* value )
 {
-    TRACE( "NPN_SetValue" );
-    return 0;
+    NPError nError = NPERR_NO_ERROR;
+    TRACEN( "NPN_SetValue ", variable );
+    switch( variable )
+    {
+    #ifdef QUARTZ
+    case (NPPVariable)1000: // NPNVpluginDrawingModel
+    {
+        int nDrawingModel = (int)value; // ugly, but that's the way we need to do it
+
+        TRACEN( "drawing model: ", nDrawingModel );
+
+        XPlugin_Impl* pImpl = XPluginManager_Impl::getXPluginFromNPP( instance );
+        if( pImpl )
+            pImpl->getSysPlugData().m_nDrawingModel = nDrawingModel;
+    }
+    break;
+    #endif
+    case NPPVpluginNameString: // make the windows compiler happy, it needs at least one case statement
+        break;
+    default:
+        break;
+    }
+    #ifndef QUARTZ
+    (void)instance;
+    (void)value;
+    #endif
+    return nError;
 }
 
-void SAL_CALL NP_LOADDS  NPN_InvalidateRect(NPP /*instance*/, NPRect* /*invalidRect*/)
+void SAL_CALL NP_LOADDS  NPN_InvalidateRect(NPP instance, NPRect* /*invalidRect*/)
 {
     TRACE( "NPN_InvalidateRect" );
+
+    #ifdef QUARTZ
+    NPN_ForceRedraw( instance );
+    #else
+    (void)instance;
+    #endif
 }
 
-void SAL_CALL NP_LOADDS  NPN_InvalidateRegion(NPP /*instance*/, NPRegion /*invalidRegion*/)
+void SAL_CALL NP_LOADDS  NPN_InvalidateRegion(NPP instance, NPRegion /*invalidRegion*/)
 {
     TRACE( "NPN_InvalidateRegion" );
+
+    #ifdef QUARTZ
+    NPN_ForceRedraw( instance );
+    #else
+    (void)instance;
+    #endif
 }
 
-void SAL_CALL NP_LOADDS  NPN_ForceRedraw(NPP /*instance*/)
+void SAL_CALL NP_LOADDS  NPN_ForceRedraw(NPP instance)
 {
     TRACE( "NPN_ForceRedraw" );
+    #ifdef QUARTZ
+    XPlugin_Impl* pImpl = XPluginManager_Impl::getXPluginFromNPP( instance );
+    if( pImpl )
+    {
+        SysPlugData& rPlugData( pImpl->getSysPlugData() );
+        if( rPlugData.m_pPlugView )
+            [rPlugData.m_pPlugView setNeedsDisplay: YES];
+    }
+    #else
+    (void)instance;
+    #endif
 }
 
 }
