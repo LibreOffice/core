@@ -583,7 +583,7 @@ function GetBuildNumHidLst as String
       Open (gtHidLstPath + "hid.lst") For Input As #FileNum
       do until EOF(#FileNum) = True
          line input #FileNum, xmlZeile
-         iIndex = inStr (1, xmlZeile, "_HID_Eigen", 1)
+         iIndex = inStr (1, xmlZeile, "010101010101010", 1)
          sTemp = Left (xmlZeile, abs(iIndex - 1))
          ' usually only the first line is read
          if (sTemp <> "") then exit do

@@ -117,17 +117,6 @@ sub checkPage( sFile as string , bDisabled as boolean, optional iMiddleMouseButt
    checkCheckBox( sFile , "*" , VorschauInSchriftlisten )
    checkCheckBox( sFile , "*" , SchriftenHistorie )
    
-   if ( bDisabled ) then
-      checkCheckBox( sFile , "*" , OptimierteAusgabe )
-      checkCheckBox( sFile , "*" , OpenGL )
-   else
-      checkCheckBox( sFile , "*" , OpenGL )
-      'checkCheckBox( sFile , "state_optimierteausgabe" , OptimierteAusgabe )
-   endif
-   
-   
-   checkCheckBox( sFile , "*" , Dithering )
-   checkCheckBox( sFile , "*" , Volldarstellung )
    checkListBox( sFile , "*" , MousePositioning)
     ' needs to get handled differently on platforms!
     iMiddleMouseButton = MausAktion.getSelIndex
@@ -191,16 +180,6 @@ sub changePage( sFile as string , bInverted as boolean, optional iMiddleMouseBut
    setCheckBox( sFile , "*" , VorschauInSchriftlisten )
    setCheckBox( sFile , "*" , SchriftenHistorie )
    
-   if ( bInverted ) then
-      setCheckBox( sFile , "*" , OpenGL )
-      setCheckBox( sFile , "*" , OptimierteAusgabe )
-   else
-      setCheckBox( sFile , "*" , OptimierteAusgabe )
-      setCheckBox( sFile , "*" , OpenGL )
-   endif
-   
-   setCheckBox( sFile , "*" , Dithering )
-   setCheckBox( sFile , "*" , Volldarstellung )
    setListBox( sFile , "*" , MousePositioning )
     ' needs to get handled differently on platforms!
     if iMiddleMouseButtonExtern = 1 then

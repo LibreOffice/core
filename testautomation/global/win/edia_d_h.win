@@ -124,7 +124,7 @@ Value3 dbaccess:Edit:DLG_FILTERCRIT:ET_WHEREVALUE3
 
 *FilterNavigator HID_FILTER_NAVIGATOR
 
-*FilterWarning TZ_Filter_Warning
+*FilterWarning HID_SVXDLG_FILTER_WARNING
 
 *FindEntry HID_MM_FIND_ENTRY
 FindString sw:Edit:DLG_MM_FIND_ENTRY:ED_FIND
