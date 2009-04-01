@@ -37,20 +37,20 @@
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-#define MappingTypeLowerToUpper     1 << 0  // Upper to Lower mapping
-#define MappingTypeUpperToLower     1 << 1  // Lower to Upper mapping
-#define MappingTypeToUpper          1 << 2  // to Upper mapping
-#define MappingTypeToLower          1 << 3  // to Lower mapping
-#define MappingTypeToTitle          1 << 4  // to Title mapping
-#define MappingTypeSimpleFolding    1 << 5  // Simple Case Folding
-#define MappingTypeFullFolding      1 << 6  // Full Case Folding
-#define MappingTypeMask MappingTypeLowerToUpper|MappingTypeUpperToLower|\
+#define MappingTypeLowerToUpper     (1 << 0)  // Upper to Lower mapping
+#define MappingTypeUpperToLower     (1 << 1)  // Lower to Upper mapping
+#define MappingTypeToUpper          (1 << 2)  // to Upper mapping
+#define MappingTypeToLower          (1 << 3)  // to Lower mapping
+#define MappingTypeToTitle          (1 << 4)  // to Title mapping
+#define MappingTypeSimpleFolding    (1 << 5)  // Simple Case Folding
+#define MappingTypeFullFolding      (1 << 6)  // Full Case Folding
+#define MappingTypeMask (MappingTypeLowerToUpper|MappingTypeUpperToLower|\
             MappingTypeToUpper|MappingTypeToLower|MappingTypeToTitle|\
-            MappingTypeSimpleFolding|MappingTypeFullFolding
+            MappingTypeSimpleFolding|MappingTypeFullFolding)
 
-#define ValueTypeNotValue       1 << 7 // Value field is an address
+#define ValueTypeNotValue           (1 << 7)  // Value field is an address
 
-#define CasedLetter     MappingTypeMask  // for final sigmar
+#define CasedLetter     (MappingTypeMask)  // for final sigmar
 
 struct Value
 {
@@ -68,7 +68,7 @@ struct Mapping
 
 struct MappingElement
 {
-    MappingElement() {element.nmap = current = 0;};
+    MappingElement() {element.nmap = current = 0;}
     Mapping element;
     sal_Int8 current;
 };

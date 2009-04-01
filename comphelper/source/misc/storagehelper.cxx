@@ -427,7 +427,7 @@ sal_Bool OStorageHelper::IsValidZipEntryFileName(
                     return sal_False;
                 break;
             default:
-                if ( pChar[i] < 32  || pChar[i] >= 0xD800 && pChar[i] <= 0xDFFF )
+                if ( pChar[i] < 32  || (pChar[i] >= 0xD800 && pChar[i] <= 0xDFFF) )
                     return sal_False;
         }
     }
