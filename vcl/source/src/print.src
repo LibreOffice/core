@@ -190,13 +190,13 @@ ModalDialog SV_DLG_PRINT
         };
         RadioButton SV_PRINT_PRT_NUP_PORTRAIT
         {
-            Pos = MAP_APPFONT( 10, 125 );
+            Pos = MAP_APPFONT( 110, 95 );
             Size = MAP_APPFONT( 90, 10 );
             Text [en-US] = "Po~rtrait";
         };
         RadioButton SV_PRINT_PRT_NUP_LANDSCAPE
         {
-            Pos = MAP_APPFONT( 10, 135 );
+            Pos = MAP_APPFONT( 110, 105 );
             Size = MAP_APPFONT( 90, 10 );
             Text [en-US] = "~Landscape";
         };
