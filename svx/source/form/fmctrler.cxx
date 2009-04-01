@@ -1912,7 +1912,7 @@ void FmXFormController::setControlLock(const Reference< XControl > & xControl)
     // a.) wenn der ganze Datensatz gesperrt ist
     // b.) wenn das zugehoerige Feld gespeert ist
     Reference< XBoundControl >  xBound(xControl, UNO_QUERY);
-    if (xBound.is() && ((bLocked && bLocked != xBound->getLock() ||
+    if (xBound.is() && (( (bLocked && bLocked != xBound->getLock()) ||
                          !bLocked)))    // beim entlocken immer einzelne Felder ueberprüfen
     {
         // gibt es eine Datenquelle
