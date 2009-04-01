@@ -1242,6 +1242,10 @@ void XCUBasedAcceleratorConfiguration::impl_ts_load( sal_Bool bPreferred, const 
         xModules->getByName(m_sModuleCFG) >>= xAccess;
     }
 
+    static KeyMapping aKeyMapping;
+    const ::rtl::OUString sIsoLang       = impl_ts_getLocale().toISO();
+    const ::rtl::OUString sDefaultLocale = ::rtl::OUString::createFromAscii("en-US");
+
     css::uno::Reference< css::container::XNameAccess > xKey;
     css::uno::Reference< css::container::XNameAccess > xCommand;
     if (xAccess.is())
@@ -1263,13 +1267,12 @@ void XCUBasedAcceleratorConfiguration::impl_ts_load( sal_Bool bPreferred, const 
             ::std::vector< ::rtl::OUString >::const_iterator pFound;
             for ( pFound = aLocales.begin(); pFound != aLocales.end(); ++pFound )
             {
-                if ( *pFound == impl_ts_getLocale().toISO() )
+                if ( *pFound == sIsoLang )
                     break;
             }
 
             if ( pFound == aLocales.end() )
             {
-                ::rtl::OUString sDefaultLocale = ::rtl::OUString::createFromAscii("en-US");
                 for ( pFound = aLocales.begin(); pFound != aLocales.end(); ++pFound )
                 {
                     if ( *pFound == sDefaultLocale )
@@ -1286,7 +1289,6 @@ void XCUBasedAcceleratorConfiguration::impl_ts_load( sal_Bool bPreferred, const 
             if (sCommand.getLength()<1)
                 continue;
 
-            KeyMapping aKeyMapping;
             css::awt::KeyEvent aKeyEvent;
 
             sal_Int32 nIndex = 0;
