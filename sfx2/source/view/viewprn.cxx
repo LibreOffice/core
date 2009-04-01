@@ -82,9 +82,15 @@ class SfxPrinterListener : public vcl::PrinterListener
 {
     Reference< frame::XModel >              mxModel;
     Reference< view::XRenderable >          mxRenderable;
+    sal_Bool                                mbApi;
+    sal_Bool                                mbDirect;
 
+    Sequence< beans::PropertyValue > getMergedOptions() const;
 public:
-    SfxPrinterListener( const Reference< frame::XModel>& i_xModel, const Reference< view::XRenderable >& i_xRender );
+    SfxPrinterListener( const Reference< frame::XModel>& i_xModel,
+                        const Reference< view::XRenderable >& i_xRender,
+                        sal_Bool i_bApi, sal_Bool i_bDirect
+                      );
 
     virtual ~SfxPrinterListener();
 
@@ -94,8 +100,14 @@ public:
     virtual void jobFinished();   // optional
 };
 
-SfxPrinterListener::SfxPrinterListener( const Reference< frame::XModel>& i_xModel, const Reference< view::XRenderable >& i_xRender )
-    : mxModel( i_xModel ), mxRenderable( i_xRender )
+SfxPrinterListener::SfxPrinterListener( const Reference< frame::XModel>& i_xModel,
+                                        const Reference< view::XRenderable >& i_xRender,
+                                        sal_Bool i_bApi, sal_Bool i_bDirect
+                                       )
+    : mxModel( i_xModel )
+    , mxRenderable( i_xRender )
+    , mbApi( i_bApi )
+    , mbDirect( i_bDirect )
 {
     // initialize extra ui options
     if( mxRenderable.is() )
@@ -121,20 +133,32 @@ SfxPrinterListener::~SfxPrinterListener()
 {
 }
 
+Sequence< beans::PropertyValue > SfxPrinterListener::getMergedOptions() const
+{
+    VCLXDevice* pXDevice = new VCLXDevice();
+    boost::shared_ptr<Printer> pPrinter( getPrinter() );
+    pXDevice->SetOutputDevice( &(*pPrinter) );
+
+    Sequence< beans::PropertyValue > aRenderOptions( 3 );
+    aRenderOptions[ 0 ].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RenderDevice" ) );
+    aRenderOptions[ 0 ].Value <<= Reference< awt::XDevice >( pXDevice );
+    aRenderOptions[ 1 ].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsApi" ) );
+    aRenderOptions[ 1 ].Value <<= mbApi;
+    aRenderOptions[ 2 ].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsDirect" ) );
+    aRenderOptions[ 2 ].Value <<= mbDirect;
+
+    aRenderOptions = getJobProperties( aRenderOptions );
+    return aRenderOptions;
+}
+
 int SfxPrinterListener::getPageCount() const
 {
     int nPages = 0;
     boost::shared_ptr<Printer> pPrinter( getPrinter() );
     if( mxRenderable.is() && pPrinter )
     {
-        VCLXDevice* pXDevice = new VCLXDevice();
-        pXDevice->SetOutputDevice( &(*pPrinter) );
-
-        Sequence< beans::PropertyValue > aRenderOptions( 1 );
-        aRenderOptions[ 0 ].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RenderDevice" ) );
-        aRenderOptions[ 0 ].Value <<= Reference< awt::XDevice >( pXDevice );
-
-        nPages = mxRenderable->getRendererCount( makeAny( mxModel ), getJobProperties( aRenderOptions ) );
+        Sequence< beans::PropertyValue > aJobOptions( getMergedOptions() );
+        nPages = mxRenderable->getRendererCount( makeAny( mxModel ), aJobOptions );
     }
     return nPages;
 }
@@ -146,14 +170,7 @@ Sequence< beans::PropertyValue > SfxPrinterListener::getPageParameters( int i_nP
 
     if( mxRenderable.is() && pPrinter )
     {
-        VCLXDevice* pXDevice = new VCLXDevice();
-        pXDevice->SetOutputDevice( &(*pPrinter) );
-
-        Sequence< beans::PropertyValue > aRenderOptions( 1 );
-        aRenderOptions[ 0 ].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RenderDevice" ) );
-        aRenderOptions[ 0 ].Value <<= Reference< awt::XDevice >( pXDevice );
-
-        Sequence< beans::PropertyValue > aJobOptions( getJobProperties( aRenderOptions ) );
+        Sequence< beans::PropertyValue > aJobOptions( getMergedOptions() );
         aResult = mxRenderable->getRenderer( i_nPage, makeAny( mxModel ), aJobOptions );
     }
     return aResult;
@@ -164,14 +181,7 @@ void SfxPrinterListener::printPage( int i_nPage ) const
     boost::shared_ptr<Printer> pPrinter( getPrinter() );
     if( mxRenderable.is() && pPrinter )
     {
-        VCLXDevice* pXDevice = new VCLXDevice();
-        pXDevice->SetOutputDevice( &(*pPrinter) );
-
-        Sequence< beans::PropertyValue > aRenderOptions( 1 );
-        aRenderOptions[ 0 ].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RenderDevice" ) );
-        aRenderOptions[ 0 ].Value <<= Reference< awt::XDevice >( pXDevice );
-
-        Sequence< beans::PropertyValue > aJobOptions( getJobProperties( aRenderOptions ) );
+        Sequence< beans::PropertyValue > aJobOptions( getMergedOptions() );
         mxRenderable->render( i_nPage, makeAny( mxModel ), aJobOptions );
     }
 }
@@ -931,9 +941,18 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
         case SID_PRINTDOC:
         case SID_PRINTDOCDIRECT:
         {
-            boost::shared_ptr<vcl::PrinterListener> pListener( new SfxPrinterListener( GetObjectShell()->GetModel(), GetRenderable() ) );
+            boost::shared_ptr<vcl::PrinterListener> pListener( new SfxPrinterListener( GetObjectShell()->GetModel(),
+                                                                                      GetRenderable(),
+                                                                                      bIsAPI,
+                                                                                      nId == SID_PRINTDOCDIRECT
+                                                                                      ) );
             // FIXME: job setup
-            Printer::PrintJob( pListener, JobSetup() );
+            JobSetup aJobSetup;
+            if( nId == SID_PRINTDOCDIRECT )
+                aJobSetup.SetValue( String( RTL_CONSTASCII_USTRINGPARAM( "IsQuickJob" ) ),
+                                    String( RTL_CONSTASCII_USTRINGPARAM( "true" ) ) );
+
+            Printer::PrintJob( pListener, aJobSetup );
         }
         break;
     }
