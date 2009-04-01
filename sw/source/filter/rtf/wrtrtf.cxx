@@ -1683,8 +1683,8 @@ void SwRTFWriter::CheckEndNodeForSection( const SwNode& rNd )
         // wer bestimmt den nachsten??
         SwNodeIndex aIdx( rNd, 1 );
         pSectNd = aIdx.GetNode().GetSectionNode();
-        if( !( ( pSectNd || aIdx.GetNode().IsEndNode() &&
-            0 != ( pSectNd = aIdx.GetNode().StartOfSectionNode()->GetSectionNode() ))
+        if( !( ( pSectNd || (aIdx.GetNode().IsEndNode() &&
+            0 != ( pSectNd = aIdx.GetNode().StartOfSectionNode()->GetSectionNode() )) )
             /*&& CONTENT_SECTION == pSectNd->GetSection().GetType()*/ ))
         {
             // wer bestimmt denn nun den neuen Abschnitt?

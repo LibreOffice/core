@@ -676,8 +676,8 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
             const SwAttrSet& aSet = static_cast<const SwTxtFrm*>(pFrm)->GetTxtNode()->GetSwAttrSet();
             const SvxAdjust nAdjust = aSet.GetAdjust().GetAdjust();
             if ( SVX_ADJUST_BLOCK == nAdjust || SVX_ADJUST_CENTER == nAdjust ||
-                 (  pFrm->IsRightToLeft() && SVX_ADJUST_LEFT == nAdjust ||
-                   !pFrm->IsRightToLeft() && SVX_ADJUST_RIGHT == nAdjust ) )
+                 (  (pFrm->IsRightToLeft() && SVX_ADJUST_LEFT == nAdjust) ||
+                   (!pFrm->IsRightToLeft() && SVX_ADJUST_RIGHT == nAdjust) ) )
             {
                 eVal = SVX_ADJUST_BLOCK == nAdjust ?
                        vcl::PDFWriter::Justify :
