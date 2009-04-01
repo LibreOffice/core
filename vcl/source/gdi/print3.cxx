@@ -437,7 +437,7 @@ static void appendSubPage( GDIMetaFile& o_rMtf, const Rectangle& i_rClipRect, GD
     io_rSubPage.Clip( i_rClipRect );
 
     // save gstate
-    o_rMtf.AddAction( new MetaPushAction( PUSH_LINECOLOR | PUSH_FILLCOLOR | PUSH_CLIPREGION ) );
+    o_rMtf.AddAction( new MetaPushAction( PUSH_LINECOLOR | PUSH_FILLCOLOR | PUSH_CLIPREGION | PUSH_MAPMODE ) );
 
     // draw a border
     Rectangle aBorderRect( i_rClipRect );
@@ -481,6 +481,7 @@ Size PrinterListener::getFilteredPageFile( int i_nFilteredPage, GDIMetaFile& o_r
     o_rMtf.Clear();
     o_rMtf.SetPrefSize( aPaperSize );
     o_rMtf.SetPrefMapMode( MapMode( MAP_100TH_MM ) );
+    o_rMtf.AddAction( new MetaMapModeAction( MapMode( MAP_100TH_MM ) ) );
 
     int nDocPages = getPageCount();
     for( int nPage = i_nFilteredPage * nSubPages, nSubP = 0;
@@ -530,7 +531,7 @@ int PrinterListener::getFilteredPageCount()
 void PrinterListener::printFilteredPage( int i_nPage )
 {
     GDIMetaFile aPageFile;
-    getFilteredPageFile( i_nPage, aPageFile );
+    Size aPageSize = getFilteredPageFile( i_nPage, aPageFile );
 
     if( mpImplData->mpProgress )
     {
@@ -594,14 +595,14 @@ void PrinterListener::printFilteredPage( int i_nPage )
     mpImplData->mpPrinter->EnableOutput( TRUE );
 
     // in N-Up printing set the correct page size
+    mpImplData->mpPrinter->SetMapMode( MAP_100TH_MM );
     if( bMultiPageOutput )
-        mpImplData->mpPrinter->SetPaperSizeUser( mpImplData->maMultiPageSize );
+        mpImplData->mpPrinter->SetPaperSizeUser( aPageSize = mpImplData->maMultiPageSize );
 
     // actually print the page
     mpImplData->mpPrinter->StartPage();
 
     mpImplData->mpPrinter->Push();
-    mpImplData->mpPrinter->SetMapMode( MAP_100TH_MM );
     aCleanedFile.WindStart();
     aCleanedFile.Play( mpImplData->mpPrinter.get() );
     mpImplData->mpPrinter->Pop();
