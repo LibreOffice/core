@@ -922,7 +922,7 @@ private:
                 // applications and vcl's edit fields ignore key events with ALT
                 // however we're at a place where we know text should be inserted
                 // so it seems we need to strip the Alt modifier here
-                if( (nLastModifiers & (NSShiftKeyMask | NSControlKeyMask | NSAlternateKeyMask | NSCommandKeyMask))
+                if( (nLastModifiers & (NSControlKeyMask | NSAlternateKeyMask | NSCommandKeyMask))
                     == NSAlternateKeyMask )
                 {
                     nLastModifiers = 0;
