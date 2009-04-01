@@ -62,87 +62,88 @@ sub main
 
     Call hStatusIn("Chart2", "ch2_updt_calc.bas")
 
-        printlog "----------------------------------------"
-        printlog "C h a r t 2   i n  S p r e a d s h e e t"
-        printlog "           U p d a t e t e s t"
-        printlog "----------------------------------------"
-        printLog Chr(13) + "-----------  Chart2 Wizard  ------------"
-        Call tCreateNewChart
-        printLog Chr(13) + "-----------  Chart2 Menu  ------------"
-        call tMainMenu        
-        printLog Chr(13) + "----------  Chart2 File Menu  ----------"
-        call tFileClose
-        call tFileSaveAsOTS
-        call tFileSaveAsSXC
-        call tFileSaveAsSTC
-        call tFileSaveAsXLS
-        call tFileSaveAsXLT
-        call tFileSaveAsSDC
-        call tFileSaveAsVOR
-        call tFileReload                
-        printLog Chr(13) + "----------  Chart2 View Menu -----------"
-        Call tViewToolbars
-        Call tViewToolbarsCustomize
-        Call tViewFullScreen              
-        printLog Chr(13) + "--------  Chart2 Insert Menu  ----------"
-        call tInsertTitle
-        call tInsertAxes
-        call tInsertGrids
-        call tInsertLegend
-        call tInsertDataLabels
-        call tInsertTrendLines
-        call tInsertMeanValueLines
-        call tInsertYErrorBars
-        call tInsertSpecialCharacter
-        printLog Chr(13) + "-------- Chart2 CTL Features  ----------"
-        call tTitleTextDirection
-        call tLegendTextDirection
-        call tXAxisTextDirection
-        call tDataSeriesTextDirection
-        call tEquationTextDirection
-        call tDataPointTextDirection
-        printlog Chr(13) + "---------  Chart2 Format Menu  ---------"
-        call tFormatObjectProperties
-        call tFormatObjectPropertiesPieChart
-        call tFormatPositonAndSize
-        call tFormatArrangement
-        Call tFormatTitleMaintitle
-        Call tFormatTitleSubtitle
-        Call tFormatTitleXAxistitle
-        Call tFormatTitleYAxistitle
-        Call tFormatTitleZAxistitle
-        Call tFormatTitleAllTitles
-        Call tFormatAxisXAxis
-        Call tFormatAxisYAxis
-        Call tFormatAxisZAxis
-        Call tFormatAxisSecondaryXAxis
-        Call tFormatAxisSecondaryYAxis
-        Call tFormatAxisAllAxes
-        Call tFormatXAxisMainGrid
-        Call tFormatYAxisMainGrid
-        Call tFormatZAxisMainGrid
-        call tFormatXAxisMinorGrid
-        Call tFormatYAxisMinorGrid
-        Call tFormatAllAxesGrids
-        Call tFormatLegend
-        Call tFormatChartWall
-        Call tFormatChartFloor
-        Call tFormatChartArea
-        Call tFormatChartType
-        call tFormatDataRanges
-        Call tFormat3DView                
-        printlog Chr(13) + "---------  Chart2 Window Menu  ---------"
-        Call tWindowNewWindowAndClose
-        printLog Chr(13) + "----------  Chart2 Toolbars  -----------"      
-        Call tdummyToolbar
-        printLog Chr(13) + "--------- Chart2 as OLE object ---------"
-        Call tChartOLE("WRITER")
-        Call tChartOLE("CALC")
-        Call tChartOLE("IMPRESS")
-        Call tChartOLE("DRAW")
-        Call tChartOLE("HTMLDOKUMENT")
-        Call tChartOLE("MASTERDOC")       
-   Call hStatusOut  
+    printlog "----------------------------------------"
+    printlog "C h a r t 2   i n  S p r e a d s h e e t"
+    printlog "           U p d a t e t e s t"
+    printlog "----------------------------------------"
+    printLog Chr(13) + "-----------  Chart2 Wizard  ------------"
+    Call tCreateNewChart
+    printLog Chr(13) + "-----------  Chart2 Menu  ------------"
+    call tMainMenu        
+    printLog Chr(13) + "----------  Chart2 File Menu  ----------"
+    call tFileClose
+    call tFileSaveAsOTS
+    call tFileSaveAsSXC
+    call tFileSaveAsSTC
+    call tFileSaveAsXLS
+    call tFileSaveAsXLT
+    call tFileSaveAsSDC
+    call tFileSaveAsVOR
+    call tFileReload                
+    printLog Chr(13) + "----------  Chart2 View Menu -----------"
+    Call tViewToolbars
+    Call tViewToolbarsCustomize
+    Call tViewFullScreen              
+    printLog Chr(13) + "--------  Chart2 Insert Menu  ----------"
+    call tInsertTitle
+    call tInsertAxes
+    call tInsertGrids
+    call tInsertLegend
+    call tInsertDataLabels
+    call tInsertTrendLines
+    call tInsertMeanValueLines
+    call tInsertYErrorBars
+    call tInsertSpecialCharacter
+    printLog Chr(13) + "-------- Chart2 CTL Features  ----------"
+    call tTitleTextDirection
+    call tLegendTextDirection
+    call tXAxisTextDirection
+    call tDataSeriesTextDirection
+    call tEquationTextDirection
+    call tDataPointTextDirection
+    printlog Chr(13) + "---------  Chart2 Format Menu  ---------"
+    call tFormatObjectProperties
+    call tFormatObjectPropertiesPieChart
+    call tFormatPositonAndSize
+    call tFormatArrangement
+    Call tFormatTitleMaintitle
+    Call tFormatTitleSubtitle
+    Call tFormatTitleXAxistitle
+    Call tFormatTitleYAxistitle
+    Call tFormatTitleZAxistitle
+    Call tFormatTitleAllTitles
+    Call tFormatAxisXAxis
+    Call tFormatAxisYAxis
+    Call tFormatAxisZAxis
+    Call tFormatAxisSecondaryXAxis
+    Call tFormatAxisSecondaryYAxis
+    Call tFormatAxisAllAxes
+    Call tFormatXAxisMainGrid
+    Call tFormatYAxisMainGrid
+    Call tFormatZAxisMainGrid
+    call tFormatXAxisMinorGrid
+    Call tFormatYAxisMinorGrid
+    Call tFormatAllAxesGrids
+    Call tFormatLegend
+    Call tFormatChartWall
+    Call tFormatChartFloor
+    Call tFormatChartArea
+    Call tFormatChartType
+    call tFormatDataRanges
+    Call tFormat3DView                
+    printlog Chr(13) + "---------  Chart2 Window Menu  ---------"
+    Call tWindowNewWindowAndClose
+    printLog Chr(13) + "----------  Chart2 Toolbars  -----------"      
+    Call tdummyToolbar
+    printLog Chr(13) + "--------- Chart2 as OLE object ---------"
+    Call tChartOLE("WRITER")
+    Call tChartOLE("CALC")
+    Call tChartOLE("IMPRESS")
+    Call tChartOLE("DRAW")
+    Call tChartOLE("HTML")
+    Call tChartOLE("MASTERDOCUMENT")       
+    Call hStatusOut
+    
 end sub
 '
 '-------------------------------------------------------------------------------

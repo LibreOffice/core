@@ -679,11 +679,13 @@ testcase tToolsMailMergeWizard
     Call hNewDocument
     printlog " Open new document"
     ToolsMailMergeWizard
-    WaitSlot (5000)
+    
     printlog " Tools / Mail Merge Wizard"
     Kontext "MailMergeWizard"
-    if Not MailMergeWizard.Exists then
-        Warnlog "MailMerge Wizard is not up! Test ends here!"
+    if ( MailMergeWizard.Exists( 5 ) ) then
+        printlog( "Dialog <MailmergeWizard> is available" )
+    else
+        Warnlog( "FATAL: Dialog <MailmergeWizard> not available" )
         Call hCloseDocument
         goto endsub
     end if
@@ -694,21 +696,25 @@ testcase tToolsMailMergeWizard
     Wait 500
     printlog " Click document 'Browse' button"
     BrowseDocument.Click
-    wait 500
+    
     Kontext "OeffnenDlg"
-    if Not OeffnenDlg.Exists then
-        Warnlog "Filedialog not up on document 'Browse' button"
-    else
+    if ( OeffnenDlg.Exists( 1 ) ) then
         OeffnenDlg.Cancel
+    else
+        Warnlog "Filedialog not up on document 'Browse' button"
     end if
 
     Kontext "TabMailMergeSourceDocument"
     printlog " Click template 'Browse' button"
     BrowseTemplate.Click
-    wait 500
+    
     Kontext "Neu"
-    Call DialogTest ( Neu )
-    Neu.Cancel
+    if ( Neu.exists( 1 ) ) then
+        Call DialogTest ( Neu )
+        Neu.Cancel
+    else
+        warnlog( "Dialog <Neu> is not available" )
+    endif
 
     Kontext "TabMailMergeSourceDocument"
     printlog " Check 'Use the current document' radio button"
@@ -730,18 +736,19 @@ testcase tToolsMailMergeWizard
     wait 500
     printlog " Click 'Select Address List'"
     SelectAddressListButton.Click
-    Wait 500
+    
     Kontext "Active"
-    if Active.Exists then
+    if ( Active.Exists( 1 ) ) then
         if Active.GetRT = 304 then
             Warnlog Active.Gettext
             Active.Ok
         end if
     end if
-    Sleep 1
+   
     Kontext "SelectAddressList"
-    Call DialogTest ( SelectAddressList )
-    if Not SelectAddressList.Exists then
+    if ( SelectAddressList.exists( 2 ) ) then
+        Call DialogTest ( SelectAddressList )
+    else
         Warnlog "Problems selecting addresses"
         Kontext "MailMergeWizard"
         MailMergeWizard.Cancel
@@ -751,27 +758,33 @@ testcase tToolsMailMergeWizard
 
     printlog " In 'Select address list' dialog click 'Add'"
     Add.Click
-    wait 500
+
     Kontext "OeffnenDlg"
-    if Not OeffnenDlg.Exists then
-        Warnlog "Filedialog not up on template 'Browse' button"
-    else
+    if ( OeffnenDlg.Exists( 1 ) ) then
         OeffnenDlg.Cancel
-    end if
+    else
+        Warnlog "Filedialog not up on template 'Browse' button"
+    endif
 
     Kontext "SelectAddressList"
-    printlog " In 'Select address list' dialog click 'Create'"
-    Create.Click
-    wait 500
+    if ( SelectAddressList.exists( 1 ) ) then
+        printlog " In 'Select address list' dialog click 'Create'"
+        Create.Click
+    else
+        warnlog( "Dialog <SelectAddressList> is not available" )
+    endif
 
     Kontext "NewAddressList"
-    Call DialogTest ( NewAddressList )
-    printlog " In 'New address' dialog click 'Find' button"
-    Find.Click
-    wait 500
+    if ( NewAddressList.exists( 1 ) ) then
+        Call DialogTest ( NewAddressList )
+        printlog " In 'New address' dialog click 'Find' button"
+        Find.Click
+    else
+        warnlog( "Dialog <NewAddressList> is not available" )
+    endif
 
     Kontext "FindEntry"
-    if FindEntry.Exists then
+    if ( FindEntry.Exists( 1 ) ) then
         Call DialogTest ( FindEntry )
         FindEntry.Cancel
     else
@@ -781,10 +794,9 @@ testcase tToolsMailMergeWizard
     printlog " In 'New address' dialog click 'Customize' button"
     Kontext "NewAddressList"
     Customize.Click
-    wait 500
 
     Kontext "CustomizeAddressList"
-    if CustomizeAddressList.Exists then
+    if ( CustomizeAddressList.Exists( 1 ) ) then
         Call DialogTest ( CustomizeAddressList )
         printlog " In 'Customize Addresss List' dialog select first entry in list"
         AddressListElements.Select 1
@@ -806,16 +818,29 @@ testcase tToolsMailMergeWizard
     else
         Warnlog "Dialog 'Customize Address List' is not up"
     end if
+    
     printlog " Close all open dialogs"
-    wait 500
+    
     Kontext "NewAddressList"
-    NewAddressList.Cancel
-    wait 500
+    if ( NewAddressList.exists( 1 ) ) then
+        NewAddressList.Cancel
+    else
+        warnlog( "Dialog <NewAddressList> is not available" )
+    endif
+    
     Kontext "SelectAddressList"
-    SelectAddressList.Cancel
+    if ( SelectAddressList.exists( 1 ) ) then
+        SelectAddressList.Cancel
+    else
+        warnlog( "Dialog <SelectAddressList> is not available" )
+    endif
 
     Kontext "MailMergeWizard"
-    MailMergeWizard.Cancel
+    if ( MailMergeWizard.exists( 1 ) ) then
+        MailMergeWizard.Cancel
+    else
+        warnlog( "Dialog <MailMergeWizard> is not available" )
+    endif
 
     printlog " Close active document"
     Call hCloseDocument
@@ -898,15 +923,15 @@ testcase tToolsUpdate
     Call wTypeKeys ("Dieser Text ist zur Aktualisierung")
     printlog " Insert / Indexes"
     InsertIndexes
-    WaitSlot (2000)
+ 
     Kontext "Active"
-    if Active.Exists then
+    if ( Active.Exists( 2 ) ) then
         if active.GetRT = 304 then
             Warnlog Active.Gettext
             Active.Ok
         end if
     end if
-    Sleep 2
+    
     Kontext
     Active.Setpage TabVerzeichnisseVerzeichnis
     printlog " Close upcoming Index dialog"
@@ -956,21 +981,18 @@ endcase
 
 testcase tToolsHangulHanjaConversion
 
-    WarnLog "#i96838# - tToolsHangulHanjaConversion outcommented due to unreability."
-    goto endsub
-
     Dim bAsianLanguage as Boolean
     Dim sTestFile as String
+    
+    if ( gApplication = "MASTERDOCUMENT" ) then
+        goto endsub
+    endif
 
-    if gApplication = "HTML" then
-        sTestFile = Convertpath (gTesttoolpath + "writer\required\input\hangul.html")
-    else
-        if Ucase(gApplication) = "MASTERDOCUMENT" then
-            goto endsub
-        else
-            sTestFile = Convertpath (gTesttoolpath + "writer\required\input\hangul.sxw")
-        end if
-    end if
+    select case gApplication
+    case "HTML"   : sTestFile = gTesttoolpath & "writer\required\input\hangul.html"
+    case "WRITER" : sTestFile = gTesttoolpath & "writer\required\input\hangul.sxw"
+    case default  : goto endsub
+    end select
 
     PrintLog "- Tools / HangulHanjaConversion"
 
@@ -978,7 +1000,7 @@ testcase tToolsHangulHanjaConversion
     bAsianLanguage = ActiveDeactivateAsianSupport(TRUE)
 
     printlog " Open the test file"
-    Call hFileOpen (sTestFile)
+    hFileOpen (sTestFile)
     Call sMakeReadOnlyDocumentEditable
     Call wTypeKeys("<MOD1 Home>")
 
@@ -1106,8 +1128,6 @@ endcase
 ' -------------------------------------------
 
 testcase tHtmlDocToolsHangulHanjaConversion
-    WarnLog "#96838# - tToolsHangulHanjaConversion outcommented due to unreability."
-    goto endsub
 
     Dim bAsianLanguage as Boolean
     Dim sTestFile as String
@@ -1180,52 +1200,58 @@ endcase
 ' -------------------------------------------
 
 testcase tMasterDocToolsHyphenation
-    Dim DieDatei as string
+
+    Dim sTestFile as string
     Dim LingFile as string
 
     gApplication = "MASTERDOCUMENT"
     PrintLog "- Tools / Hyphenation"
     ' As long as OOo has no modules for that, disabled
-    if gOOO = True then
+    if ( gOOO ) then
         printlog "No hyphenation in OOo"
         goto endsub
     end if
 
-    if gBuild < 9239 then
-        QAErrorlog "Hyphenation dialog freezes office!"
-        goto endsub
-    end if
-
     select case iSprache
-    case 1,01 : LingFile = "01-44-hyph.dat"
-        DieDatei = ConvertPath( gTesttoolpath + "writer\required\input\linguistik\001.odt" )
-    case 7,07 :  DieDatei = ConvertPath( gTesttoolpath + "writer\required\input\linguistik\007.odt" )
-    case 3,03 :  DieDatei = ConvertPath( gTesttoolpath + "writer\required\input\linguistik\003.odt" )
-    case 81 : Printlog "- No Hyphenation in Japanese!"
+    case 1,01
+        LingFile = "01-44-hyph.dat"
+        sTestFile = gTesttoolpath + "writer\required\input\linguistik\001.odt"
+    case 7,07
+        sTestFile = gTesttoolpath + "writer\required\input\linguistik\007.odt"
+    case 3,03
+        sTestFile = gTesttoolpath + "writer\required\input\linguistik\003.odt"
+    case 81
+        Printlog "- No Hyphenation in Japanese!"
         goto endsub
-    case 82 : Printlog "- No Hyphenation in Korean!"
+    case 82
+        Printlog "- No Hyphenation in Korean!"
         goto endsub
-    case 86 : Printlog "- No Hyphenation in Chinese (simplified)!"
+    case 86
+        Printlog "- No Hyphenation in Chinese (simplified)!"
         goto endsub
-    case 88 : Printlog "- No Hyphenation in Chinese (traditional)!"
+    case 88
+        Printlog "- No Hyphenation in Chinese (traditional)!"
         goto endsub
-    case else : DieDatei = ConvertPath( gTesttoolpath + "writer\required\input\linguistik\0" + trim$(str$(iSprache)) + ".odt" )
+    case else
+        sTestFile = gTesttoolpath + "writer\required\input\linguistik\0" + trim$(str$(iSprache)) + ".odt"
         LingFile = str$(iSprache) + "-hyph.dat"
     end select
+    
+    sTestFile = convertpath( sTestFile )
 
-    if hFileExists(DieDatei) = False then
+    if ( not hFileExists( sTestFile ) )then
         Warnlog "No defined Errortext for language: " + isprache + "! Exit!"
         goto endsub
     end if
 
-    if wInsertDocumentinMasterDoc(DieDatei) = False then
+    if ( not wInsertDocumentinMasterDoc( sTestFile ) ) then
         Warnlog "Loading document did not work!"
         goto endsub
     else
         Call hNewDocument
         printlog " Open new document"
-        EditPaste
-    end if
+        hUseAsyncSlot( "EditPaste" )
+    endif
 
     Call sMakeReadOnlyDocumentEditable
     printlog " Insert file 'writer\required\input\linguistik\0 + [OfficeLanguage] + '.odt'"
@@ -1234,35 +1260,48 @@ testcase tMasterDocToolsHyphenation
 
     ToolsLanguageHyphenate
     printlog " Tools / Hyphenate"
+    
+    ' This is probably a workaround to make the hyphenation dialog work in any case.
     Kontext "Active"
-    try
-        Active.Yes
-    catch
-    endcatch
-    if Active.Exists then
-        if Active.GetRT = 304 then
-            Active.Ok
-            ' Force pagesize change to bringup Hyphenation-dialog
-            FormatPageWriter
-            Kontext
-            active.SetPage TabSeite
-            Kontext "TabSeite"
-            Breite.Settext "15"
-            TabSeite.Ok
-            Sleep 1
-            ToolsLanguageHyphenate
+    if ( Active.exists( 1 ) ) then
+    
+        ' JSK: These messagboxes were originally handled silently.
+        '      So i have no idea which of those is expected and which is not...
+        printlog( "Messagebox: " & Active.getText() )
+        try
+            printlog( "Trying to close messageboy with <YES>" )
+            Active.Yes
+        catch
+            printlog( "<YES> failed... (Whatever that means)" )
+        endcatch
+        
+        
+        if ( Active.Exists() ) then
+            printlog( "Messagebx: " & Active.getText() )
+            if ( Active.GetRT() = 304 ) then
+                Active.Ok
+                ' Force pagesize change to bringup Hyphenation-dialog
+                FormatPageWriter
+                Kontext
+                active.SetPage TabSeite
+                Kontext "TabSeite"
+                Breite.Settext "15"
+                TabSeite.Ok
+                WaitSlot()
+                ToolsLanguageHyphenate
+            end if
         end if
-    end if
+    endif
 
     Kontext "Silbentrennung"
     printlog " Close upcoming 'Hyphenation' dialog"
-    if Silbentrennung.Exists then
+    if ( Silbentrennung.Exists( 2 ) ) then
         Call DialogTest ( Silbentrennung )
         Silbentrennung.Cancel
     else
         Warnlog "Dialog 'Hyphenation' not up!"
         Kontext "Active"
-        if Active.Exists then
+        if ( Active.Exists() ) then
             try
                 Active.Ok
             catch
@@ -1271,8 +1310,7 @@ testcase tMasterDocToolsHyphenation
     end if
 
     printlog " Close active documents"
-    Do Until GetDocumentCount = 0
-        Call hCloseDocument
-    Loop
+    hFileCloseAll()
+    
     gApplication = "WRITER"
 endcase

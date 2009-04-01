@@ -136,7 +136,7 @@ testcase tGraphicFilters
     end if
     sleep (1)
 
-    if CheckForFilters=False then
+    if ( CheckForFilters=False ) then
         printlog "Close active document"
         Call hCloseDocument
         goto endsub

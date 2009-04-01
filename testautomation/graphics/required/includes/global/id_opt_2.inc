@@ -97,8 +97,9 @@ testcase tToolsOptionsMeasurementUnit (sApplication as string)
         Dateiname.SetText "adagio"
         Dateityp.Select "BMP - Windows Bitmap (.bmp)"
         if AutomatischeDateinamenserweiterung.Exists then
-            QAErrorLog "OBSOLETE: Automatic file extension check-box in file dialog will be removed soon!"                         
             AutomatischeDateinamenserweiterung.Check
+        else
+            warnlog( "Automatic Filename Extension checkbox is mising" )
         endif
         Speichern.Click
         kontext "AlienWarning"

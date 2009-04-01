@@ -1,5 +1,5 @@
 'encoding UTF-8  Do not remove or change this line!
-'**************************************************************************
+'*******************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 '* 
 '* Copyright 2008 by Sun Microsystems, Inc.
@@ -29,21 +29,16 @@
 '* <http://www.openoffice.org/license.html>
 '* for a copy of the LGPLv3 License.
 '*
-'/************************************************************************
+'/******************************************************************************
 '*
 '* owner : helge.delfs@sun.com
 '*
 '* short description : Tools / XML Filter Settings Resource Test
 '*
-'************************************************************************
-'*
-' #1 tToolsXMLFilterSettings   'Resource test for 'Tools' / 'XML Filter Settings'
-' #1 fInitialXMLSetting        'Checks the availibility of the Excel XML import filter
-' #0 sRemoveXSLTFilter
-'*
-'\***********************************************************************
+'\******************************************************************************
 
 testcase tToolsXMLFilterSettings
+
     Dim iCountOfXSLTStylesAtBeginning as integer
     Dim iCountOfXSLTStylesAfterInstallCheck as integer
     Dim iApplicationEntries as integer
@@ -153,16 +148,21 @@ testcase tToolsXMLFilterSettings
     FilterList.TypeKeys "<HOME>"
     for ic = 1 to iCountOfXSLTStylesAfterInstallCheck
         Kontext "XMLFilterSettings"        
-        sleep(1)
-        'read the filter names from the dialog.
-        sTempReadFilterName = FilterList.GetItemText(ic)
-        'lower case comparison!
-        sTempReadFilterName = lcase(sTempReadFilterName)
-        if InStr(sTempReadFilterName , sWhichFilterToUse) <> 0 then
-            FilterList.TypeKeys "<DOWN> " , ic-1           	
-            ' printlog "DEBUG: Filtername: " & FilterList.GetItemText(ic)
-            sleep(1)
-        end if
+        if ( XMLFilterSettings.exists( 2 ) ) then
+        
+            'read the filter names from the dialog.
+            sTempReadFilterName = FilterList.GetItemText(ic)
+            
+            'lower case comparison!
+            sTempReadFilterName = lcase(sTempReadFilterName)
+            if InStr(sTempReadFilterName , sWhichFilterToUse) <> 0 then
+                FilterList.TypeKeys "<DOWN> " , ic-1           	
+                ' printlog "DEBUG: Filtername: " & FilterList.GetItemText(ic)
+                WaitSlot() ' Sort of NOOP
+            endif
+        else
+            warnlog( "XML Filter Settings dialog too slow/not displayed" )
+        endif
     next ic    
     for ia = 1 to 2
         Kontext "XMLFilterSettings"   
@@ -214,22 +214,26 @@ testcase tToolsXMLFilterSettings
                     case 4 :    printlog "    +- Browse button 'Template for import'"
                                 BrowseTemplateForImport.Click
                 end select
-                sleep(2)
+
                 Kontext "OeffnenDlg"
-                if OeffnenDlg.Exists(1) then
+                if OeffnenDlg.Exists(3) then
                     '/// After every click on &quot;Browse&quot;-button an &quot;FileOpen&quot;-dialog shoud be visible. Cancel that dialog.
                     printlog "  +- After every click on 'Browse'-button an 'FileOpen'-dialog shoud be visible. Cancel that dialog."
                     call Dialogtest (OeffnenDlg)
                     OeffnenDlg.Cancel
-                    sleep(3)
+                    
                 else
                     warnlog sErrorPointerTextForResultfile & "File Open dialog did not appeared."
                 end if
             next ib
             '/// [Loop end]
             Kontext "XMLFilter"
-            printlog "  +- Closing 'XML Filter: New Filter'-dialog."
-            XMLFilter.Cancel
+            if ( XMLFilter.exists( 3 ) ) then
+                printlog "  +- Closing 'XML Filter: New Filter'-dialog."
+                XMLFilter.Cancel
+            else
+                warnlog( "XML Filter Dialog not available" )
+            endif
             '/// Closing &quot;XML Filter: New Filter&quot;-dialog
         else
             warnlog "XML Filter dialog did not appeared!"
@@ -239,12 +243,13 @@ testcase tToolsXMLFilterSettings
     '/// Clicking &quot;Test XLSTs&quot;-button.
     printlog "+- Clicking 'Test XLSTs'-button."
     TestXSLTs.Click
-    sleep(1)
+
     'If it's an Import filter it makes no sense to test the export.
     if sWhichFilterToUse = "docbook" then
+
     	printlog "+- E X P O R T (Writer, Impress)"
         Kontext "TestXMLFilter"        
-        if TestXMLFilter.Exists(1) then
+        if TestXMLFilter.Exists( 3 ) then
             call Dialogtest(TestXMLFilter)
         else
             warnlog sErrorPointerTextForResultfile & "Testing of the XML filter not possible. Exiting."
@@ -270,89 +275,99 @@ testcase tToolsXMLFilterSettings
         ExportBrowseBtn.Click
         '/// Press first &quot;Browse&quot;-button on the &quot;Test XML Filter&quot;-dialog.
         printlog " +-Press first 'Browse'-button on the 'Test XML Filter'-dialog."
-        sleep(2)
+
         Kontext "OeffnenDlg"
-        if OeffnenDlg.Exists(1) then
+        if OeffnenDlg.Exists( 3 ) then
             call Dialogtest (OeffnenDlg)
             OeffnenDlg.Cancel
             '/// Closing 'FileOpen'-Dialog.
             printlog "  +- Closing 'FileOpen'-Dialog."
-            sleep(3)
         else
             warnlog sErrorPointerTextForResultfile & "File Open dialog did not occoured?!"
         end if
+        
         Kontext "TestXMLFilter"
-        '/// If the application is Writer (because the default XSLT stylesheets are only Writer filter).
-        '///+<ul><li>Clicking on &quot;Current Document&quot;-button.</li></ul>
-        if gApplication = "WRITER" then
-            printlog " +- Clicking on 'Current Document'-button."
-            CurrentDocument.Click
-            sleep(3)
-            '/// If Java is not [correctly] installed a messagebox will be shown and the test of the filter will be canceled!
-            Kontext "Messagebox"
-            if MessageBox.Exists(2) then
-                warnlog Messagebox.GetText
-                try
-                    Messagebox.Cancel
-                catch
-                    Messagebox.OK
-                endcatch
-            else
-                try
-                    Kontext "XMLFilterOutput"
-                    if XMLFilterOutput.Exists(1) then
-                        '/// &quot;XML Filter Output&quot;-dialog should be visible.
-                        printlog "  +- 'XML Filter Output'-dialog should be visible."
-                        call Dialogtest(XMLFilterOutput)
-                        '/// Clicking &quot;Validate&quot;-button.
-                        printlog "   +- Clicking 'Validate'-button."
-                        Validate.Click
-                        sleep(2)
-                        '/// Checking that the validate output control is visible inside the window.
-                        printlog "  +- Checking that the validate output control is visible inside the window."
-                        if NOT ValidateOutput.isVisible then
-                            warnlog "   +- Validate output is not visible!"
+        if ( TestXMLFilter.exists( 2 ) ) then
+            '/// If the application is Writer (because the default XSLT stylesheets are only Writer filter).
+            '///+<ul><li>Clicking on &quot;Current Document&quot;-button.</li></ul>
+            if gApplication = "WRITER" then
+                printlog " +- Clicking on 'Current Document'-button."
+                CurrentDocument.Click
+
+                '/// If Java is not [correctly] installed a messagebox will be shown and the test of the filter will be canceled!
+                Kontext "Messagebox"
+                if MessageBox.Exists( 5 ) then
+                    warnlog Messagebox.GetText
+                    try
+                        Messagebox.Cancel
+                    catch
+                        Messagebox.OK
+                    endcatch
+                else
+                    try
+                        Kontext "XMLFilterOutput"
+                        if XMLFilterOutput.Exists(1) then
+                            '/// &quot;XML Filter Output&quot;-dialog should be visible.
+                            printlog "  +- 'XML Filter Output'-dialog should be visible."
+                            call Dialogtest(XMLFilterOutput)
+                            '/// Clicking &quot;Validate&quot;-button.
+                            printlog "   +- Clicking 'Validate'-button."
+                            Validate.Click
+                            WaitSlot( 2000 )
+                            '/// Checking that the validate output control is visible inside the window.
+                            printlog "  +- Checking that the validate output control is visible inside the window."
+                            if NOT ValidateOutput.isVisible then
+                                warnlog "   +- Validate output is not visible!"
+                            end if
+                            '/// Closing &quot;XML Filter Output&quot;-dialog.
+                            printlog "   +- Closing 'XML Filter Output'-dialog."
+                            XMLFilterOutput.Close
+
+                        else
+                            warnlog sErrorPointerTextForResultfile & "XML Filter Ouput dialog did not occoured."
                         end if
-                        '/// Closing &quot;XML Filter Output&quot;-dialog.
-                        printlog "   +- Closing 'XML Filter Output'-dialog."
-                        XMLFilterOutput.Close
-                        sleep(2)
-                    else
-                        warnlog sErrorPointerTextForResultfile & "XML Filter Ouput dialog did not occoured."
-                    end if
-                catch
-                    warnlog "Testing of XSLTs does not work."
-                endcatch
+                    catch
+                        warnlog "Testing of XSLTs does not work."
+                    endcatch
+                end if
+            else
+                Kontext "TestXMLFilter"
+                printlog " +- 'Current Document'-button should not be enabled if no !"
+                if CurrentDocument.IsEnabled then
+                    Kontext "DocumentWriter"
+                    try
+                        DocumentWriter.TypeKeys "A writer document exists!"
+                    catch
+                        QAErrorLog "'Current Document'-button is enabled but a 'Writer' XML filter has been selected! If there's no Writer document (may be in the background) also opened it would be a bug!"
+                    endcatch
+                end if
             end if
         else
-            Kontext "TestXMLFilter"
-            printlog " +- 'Current Document'-button should not be enabled if no !"
-            if CurrentDocument.IsEnabled then
-                Kontext "DocumentWriter"
-                try
-                    DocumentWriter.TypeKeys "A writer document exists!"
-                catch
-                    QAErrorLog "'Current Document'-button is enabled but a 'Writer' XML filter has been selected! If there's no Writer document (may be in the background) also opened it would be a bug!"
-                endcatch
-            end if
+            warnlog( "FATAL: TestXMLFilter not available" )
         end if
-    end if
-    printlog "+- I M P O R T"
+        printlog "+- I M P O R T"
+    endif
+    
+    
     Kontext "TestXMLFilter"
-    '/// Clicking &quot;Browse&quot;-button (Import).
-    printlog "  +- Clicking 'Browse'-button (Import)."
-    ImportBrowseBtn.Click
-    sleep(2)
-    Kontext "OeffnenDlg"
-    if OeffnenDlg.Exists(1) then
-        call Dialogtest (OeffnenDlg)
-        '/// Closing &quot;FileOpen&quot;-dialog.
-        printlog "   +- Closing 'FileOpen'-dialog."
-        OeffnenDlg.Cancel
-        sleep(3)
+    if ( TestXMLFilter.exists( 2 ) ) then
+        '/// Clicking &quot;Browse&quot;-button (Import).
+        printlog "  +- Clicking 'Browse'-button (Import)."
+        ImportBrowseBtn.Click
+
+        Kontext "OeffnenDlg"
+        if OeffnenDlg.Exists( 2 ) then
+            call Dialogtest (OeffnenDlg)
+            '/// Closing &quot;FileOpen&quot;-dialog.
+            printlog "   +- Closing 'FileOpen'-dialog."
+            OeffnenDlg.Cancel
+        else
+            warnlog sErrorPointerTextForResultfile & "File Open dialog did not occoured?!"
+        end if
     else
-        warnlog sErrorPointerTextForResultfile & "File Open dialog did not occoured?!"
-    end if
+        warnlog( "FATAL: Dialog <TestXMLFilter> is not available" )
+    endif
+    
     Kontext "TestXMLFilter"
     '/// Checking if 'Display Source'-checkbox is checked (should not be!).
     printlog "  +- Checking if 'Display Source'-checkbox is checked (should not be!)."
@@ -397,14 +412,12 @@ testcase tToolsXMLFilterSettings
     '/// Clicking &quot;Browse&quot;-button (Import) again to test it with the XML file.
     printlog "  +- Clicking 'Browse'-button (Import) again to test it the XML file."
     ImportBrowseBtn.Click
-    sleep(2)
+
     Kontext "OeffnenDlg"
-    if OeffnenDlg.Exists(1) then
+    if OeffnenDlg.Exists( 3 ) then
         call Dialogtest (OeffnenDlg)
         Dateiname.SetText sDocXMLTestFile
-        sleep(3)
         Oeffnen.Click
-        sleep(3)
         try
             ' If Java is not [correctly] installed a messagebox will be shown and the test of the filter will be canceled!
             Kontext "Messagebox"
@@ -436,9 +449,9 @@ testcase tToolsXMLFilterSettings
                 '/// Clicking &quot;Validate&quot;-button.
                 printlog "   +- Clicking 'Validate'-button."
                 Validate.Click                
-                sleep(2)
+
                 Kontext "Messagebox"
-                if Messagebox.Exists(2) then
+                if Messagebox.Exists( 2 ) then
                     if bJavaBroken then
                         Messagebox.OK
                     else
@@ -456,7 +469,6 @@ testcase tToolsXMLFilterSettings
                 printlog "   +- Closing 'XML Filter Output'-dialog."
                 Kontext "XMLFilterOutput"
                 XMLFilterOutput.Close
-                sleep(1)
             else
                 warnlog sErrorPointerTextForResultfile & "No output window was visible! Exiting routine!"
                 Kontext "TestXMLFilter"
@@ -485,7 +497,7 @@ testcase tToolsXMLFilterSettings
         catch
             '/// If Java is not [correctly] installed a messagebox will be shown and the test of the filter will be canceled!
             Kontext "Messagebox"
-            if MessageBox.Exists(2) then
+            if MessageBox.Exists( 2 ) then
                 warnlog Messagebox.GetText
                 Messagebox.OK                
                 warnlog sErrorPointerTextForResultfile & "Java is not usable! Exiting routine!"
@@ -544,95 +556,126 @@ testcase tToolsXMLFilterSettings
     else
         QAErrorLog "#i27370# Normaly there should be a second document but there is none!"
     end if
-    sleep(1)
+
     Kontext "TestXMLFilter"    
-    if bJavaBroken = FALSE then        
-        '/// Clicking on &quot;Recent File&quot;-Button.
-        printlog "  +- Clicking on 'Recent File'-Button."
-        RecentFile.Click
-        Kontext "XMLFilterOutput"
-        '/// &quot;XML Filter Output&quot;-dialog should be visible.
-        printlog "   +- 'XML Filter Output'-dialog should be visible."
-        Kontext "XMLFilterOutput"
-        '/// Closing &quot;XML Filter Output&quot;-dialog.
-        printlog "  +- Closing 'XML Filter Output'-dialog."
-        XMLFilterOutput.Close
-        sleep(1)
-        '/// Closing the tested XML document
-        printlog "   +- Closing the tested XML document"
-        '/// ...if there is more than 1 document opened.
-        if GetDocumentCount > 1 then
-            call hCloseDocument
-        else
-            QAErrorLog "#i27370# Normaly there should be a second document but there is none!"
-        end if
-        sleep(1)
-        Kontext "TestXMLFilter"
-        '/// Closing the &quot;Test XML Filter&quot;-dialog.
-        printlog "  +- Closing the 'Test XML Filter'-dialog"        
+    if ( TestXMLFilter.exists( 1 ) ) then
+        if bJavaBroken = FALSE then        
+            '/// Clicking on &quot;Recent File&quot;-Button.
+            printlog "  +- Clicking on 'Recent File'-Button."
+            RecentFile.Click
+
+            Kontext "XMLFilterOutput"
+            '/// &quot;XML Filter Output&quot;-dialog should be visible.
+            printlog "   +- 'XML Filter Output'-dialog should be visible."
+
+            Kontext "XMLFilterOutput"
+            '/// Closing &quot;XML Filter Output&quot;-dialog.
+            printlog "  +- Closing 'XML Filter Output'-dialog."
+            XMLFilterOutput.Close
+
+            '/// Closing the tested XML document
+            printlog "   +- Closing the tested XML document"
+            '/// ...if there is more than 1 document opened.
+            if GetDocumentCount > 1 then
+                call hCloseDocument
+            else
+                QAErrorLog "#i27370# Normaly there should be a second document but there is none!"
+            end if
+
+            Kontext "TestXMLFilter"
+            '/// Closing the &quot;Test XML Filter&quot;-dialog.
+            printlog "  +- Closing the 'Test XML Filter'-dialog"        
+        endif
+    else
+        warnlog( "Dialog <TestXMLFilter> is not available" )
     endif
+    
     CloseBtn.Click
+
     Kontext "XMLFilterSettings"
-    '/// Clicking &quot;Delete&quot;-button.
-    printlog " +- Clicking 'Delete'-button"
-    DeleteBtn.Click
-    Kontext
-    if Active.Exists(1) then
-        if Active.GetRT = 304 then
-            Active.No
+    if ( XMLFilterSettings.exists( 1 ) ) then
+        '/// Clicking &quot;Delete&quot;-button.
+        printlog " +- Clicking 'Delete'-button"
+        DeleteBtn.Click
+        Kontext
+        if Active.Exists(1) then
+            if Active.GetRT = 304 then
+                Active.No
+            end if
         end if
-    end if
-    Kontext "XMLFilterSettings"
+    else
+        warnlog( "Dialog <XMLFilterSettings> is not available" )
+    endif
+    
     '/// Clicking 'Save to Package'-button.
-    printlog " +- Clicking 'Save to Package'-button."
-    SaveToPackage.Click
-    sleep(2)
-    Kontext "SpeichernDlg"
-    if SpeichernDlg.Exists(1) then
-        call Dialogtest(SpeichernDlg)
-        SpeichernDlg.Cancel
-        '/// Closing 'File Save As'-Dialog.
-        printlog "  +- Closing 'File Save As'-Dialog."
-    else
-        warnlog sErrorPointerTextForResultfile & "Save As dialog missing!"
-    end if
     Kontext "XMLFilterSettings"
+    if ( XMLFilterSettings.exists( 1 ) ) then
+
+        printlog " +- Clicking 'Save to Package'-button."
+        SaveToPackage.Click
+
+        Kontext "SpeichernDlg"
+        if SpeichernDlg.Exists( 3 ) then
+            call Dialogtest(SpeichernDlg)
+            SpeichernDlg.Cancel
+            '/// Closing 'File Save As'-Dialog.
+            printlog "  +- Closing 'File Save As'-Dialog."
+        else
+            warnlog sErrorPointerTextForResultfile & "Save As dialog missing!"
+        end if
+    else
+        warnlog( "Dialog <XMLFilterSettings> is not available" )
+    endif
+        
+        
     '/// Clicking 'Open Package'-button.
-    printlog " +- Clicking 'Open Package'-button."
-    OpenPackage.Click
-    sleep(2)
-    Kontext "OeffnenDlg"
-    if OeffnenDlg.Exists(1) then
-        call Dialogtest(OeffnenDlg)
-        OeffnenDlg.Cancel
-        '/// Closing 'FileOpen'-Dialog.
-        printlog "  +- Closing 'FileOpen'-Dialog."
-    else
-        warnlog sErrorPointerTextForResultfile & "File open dialog missing!"
-    end if    
     Kontext "XMLFilterSettings"
+    if ( XMLFilterSettings.exists( 1 ) ) then
+        printlog " +- Clicking 'Open Package'-button."
+        OpenPackage.Click
+
+        Kontext "OeffnenDlg"
+        if OeffnenDlg.Exists( 3 ) then
+            call Dialogtest(OeffnenDlg)
+            OeffnenDlg.Cancel
+            '/// Closing 'FileOpen'-Dialog.
+            printlog "  +- Closing 'FileOpen'-Dialog."
+        else
+            warnlog sErrorPointerTextForResultfile & "File open dialog missing!"
+        end if 
+    else
+        warnlog( "Dialog <XMLFilterSettings> is not available" )
+    endif
+
+
     '/// Closing the &quot;XML Filter Settings&quot;-dialog.
-    printlog "+- Closing the 'XML Filter Settings'-dialog."
-    'Deinstall the XSLT stylesheet if this routine has
-    'added one at the beginning.
-    if bREMOVEXSLT = TRUE then
-        call sRemoveXSLTFilter
-    end if
+    Kontext "XMLFilterSettings"
+    if ( XMLFilterSettings.exists( 1 ) ) then
+        printlog "+- Closing the 'XML Filter Settings'-dialog."
+        'Deinstall the XSLT stylesheet if this routine has
+        'added one at the beginning.
+        if bREMOVEXSLT = TRUE then
+            call sRemoveXSLTFilter
+        end if
+    else
+        warnlog( "Dialog <XMLFilterSettings> is not available" )
+    endif
+
+
     Kontext "XMLFilterSettings"    
-    CloseBtn.Click    
-    '/// Closing the opened application document.
+    if ( XMLFilterSettings.exists( 1 ) ) then
+        CloseBtn.Click    
+        '/// Closing the opened application document.
+    else
+        warnlog( "Dialog <XMLFilterSettings> is not available" )
+    endif
+        
     printlog "- Closing the opened application document."    
     '/// ...if there is more than 1 document opened.
-    if GetDocumentCount > 1 then
-        call hCloseDocument
-    else
+    if ( hFileCloseAll() <> 2 ) then
         QAErrorLog "#i27370# Normaly there should be a second document but there is none!"
     end if
-    if GetDocumentCount >= 1 then
-        do until GetDocumentCount = 0
-            Call hCloseDocument
-        loop
-    endif
+    
 endcase
 
 '-------------------------------------------------------------------------
@@ -698,34 +741,43 @@ sub fInitialXMLSetting( sXMLFilterType as string ) as boolean
         case "xhtml"     : sFilterPackagePath = ConvertPath(gTestToolPath & "global\input\xslt_stylesheets\xhtml.jar")                    
     end select
     OpenPackage.Click
+
     Kontext "OeffnenDlg"
-    call Dialogtest (OeffnenDlg)
-    Dateiname.SetText sFilterPackagePath
-    sleep(3)
-    Oeffnen.Click
-    sleep(3)
-    Kontext
-    if Active.Exists(3) then
-        if Active.GetRT = 304 then
-            printlog "global::tools::inc::t_xml_filter1,inc::fInitialXMLSetting: " & Active.GetText
-            Active.OK
-            Kontext "XMLFilterSettings"
-            iSecondCountOfDefaultXSLTStyles = FilterList.GetItemCount
-            printlog "global::tools::inc::t_xml_filter1,inc::fInitialXMLSetting: Checking again the count of installed XSLT stylesheets."
-            if iSecondCountOfDefaultXSLTStyles <> (iCountOfDefaultXSLTStyles+1) then
-                warnlog "global::tools::inc::t_xml_filter1,inc::fInitialXMLSetting: It was not possible to add " & sXMLFilterType & "-XML filter!"
-                warnlog "global::tools::inc::t_xml_filter1,inc::fInitialXMLSetting: Test aborted!"
-                exit sub
-            else
-                printlog "global::tools::inc::t_xml_filter1,inc::fInitialXMLSetting: XML filter has been installed!"
-                fInitialXMLSetting = TRUE
+    if ( OeffnenDlg.exists( 2 ) ) then
+        call Dialogtest (OeffnenDlg)
+        Dateiname.SetText sFilterPackagePath
+        Oeffnen.Click
+    
+        Kontext
+        if Active.Exists(3) then
+            if Active.GetRT = 304 then
+                printlog "global::tools::inc::t_xml_filter1,inc::fInitialXMLSetting: " & Active.GetText
+                Active.OK
+                Kontext "XMLFilterSettings"
+                iSecondCountOfDefaultXSLTStyles = FilterList.GetItemCount
+                printlog "global::tools::inc::t_xml_filter1,inc::fInitialXMLSetting: Checking again the count of installed XSLT stylesheets."
+                if iSecondCountOfDefaultXSLTStyles <> (iCountOfDefaultXSLTStyles+1) then
+                    warnlog "global::tools::inc::t_xml_filter1,inc::fInitialXMLSetting: It was not possible to add " & sXMLFilterType & "-XML filter!"
+                    warnlog "global::tools::inc::t_xml_filter1,inc::fInitialXMLSetting: Test aborted!"
+                    exit sub
+                else
+                    printlog "global::tools::inc::t_xml_filter1,inc::fInitialXMLSetting: XML filter has been installed!"
+                    fInitialXMLSetting = TRUE
+                end if
             end if
         end if
-    end if
+    else
+        warnlog( "Dialog <OeffnenDlg> is not available" )
+    endif
+    
     Kontext "XMLFilterSettings"
-    '/// Closing the XML Filter Settings-dialog.
-    printlog "global::tools::inc::t_xml_filter1,inc::fInitialXMLSetting: Closing the 'XML Filter Settings'-dialog."
-    CloseBtn.Click
+    if ( XMLFilterSettings.exists( 1 ) ) then
+        '/// Closing the XML Filter Settings-dialog.
+        printlog "global::tools::inc::t_xml_filter1,inc::fInitialXMLSetting: Closing the 'XML Filter Settings'-dialog."
+        CloseBtn.Click
+    else
+        warnlog( "Dialog <XMLFilterSettings> is not available" )
+    endif
     '/// Closing the opened application document.
     printlog "global::tools::inc::t_xml_filter1,inc::fInitialXMLSetting: Closing the opened application document."
     call hCloseDocument
@@ -756,9 +808,9 @@ sub sRemoveXSLTFilter
             if InStr(sTempReadFilterName , sXMLFilterType) <> 0 then
                 '/// If the filter has been found delete it.
                 FilterList.TypeKeys "<HOME>"
-                sleep(1)
+                wait( 100 )
                 FilterList.TypeKeys "<DOWN>" , (ia-1)
-                sleep(1)
+                wait( 100 )
                 DeleteBtn.Click
                 Kontext
                 if Active.Exists(1) then

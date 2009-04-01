@@ -886,7 +886,7 @@ sub mMakeGeneralOptionsAPI
             printlog    "**  'Temporary files'-path        : " & sTempPath             
         end if
         '///Check which 'Macro Security Level' is set and put it into <i>gMacroSecurityLevel</i> variable. 
-        gMacroSecurityLevel = fGetSetMacroSecurityUNO()
+        gMacroSecurityLevel = hSetMacroSecurityAPI( 2 )
 
 
     catch

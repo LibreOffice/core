@@ -74,7 +74,7 @@ sub w_010_
     gApplication = "MASTERDOCUMENT"
     Call tMasterDocFormatting
     gApplication = "WRITER"
-
+    
 end sub
 
 '-----------------------------------------------------------
@@ -381,10 +381,13 @@ testcase tNumSubpointsUpDown
     printlog " Click 'Numbering' in Object bar"
     Call wTypeKeys ("Numbering <Return><Tab>", 2)
     Call wTypeKeys ("<Tab>Numbering<Up><Up><Up>")
-    Sleep 1
 
     Kontext "NumObjectbar"
-    if Not NumObjectbar.Exists then Call hToolbarSelect("BULLETSANDNUMBERING", true)
+    if ( NumObjectbar.Exists( 1 ) ) then 
+        ' all good
+    else
+        Call hToolbarSelect("BULLETSANDNUMBERING", true)
+    endif
 
     printlog "   - 6 times subpoints down"
     printlog " click 6 times subpoints down in object bar"

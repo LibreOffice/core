@@ -37,6 +37,8 @@
 '*
 '\***********************************************************************
 
+private const VERBOSE = TRUE
+
 sub hTabelleEinfuegen
     '/// <b>WRITER only </b>///'
     '///  hTabelleEinfuegen hInsertTable ///'
@@ -119,35 +121,53 @@ end sub
 '
 '-------------------------------------------------------------------------------
 '
-sub sMakeReadOnlyDocumentEditable
-    If IsItLoaded() then
-        Kontext "Standardbar"
-        if Bearbeiten.IsEnabled then
-            'Check if the button is enabled.
-            if Bearbeiten.getState(2) = 0 then
-                'Check if the document has been loaded read-only and if yes
-                'click on the 'Edit'-button
-                Bearbeiten.Click()
-                sleep (2)
-                Kontext
-                if Active.Exists(5) then
-                    'If there is a messagebox coming up, click on Yes/OK
-                    printlog "Document was read-only. A copy will be used."
-                    Active.Yes
-                end if
-                Kontext
-                if Active.Exists(2) then
-                    ' Sometimes an messagebox will be opened that the file does
-                    ' not exists.
-                    QAErrorLog Active.GetText
-                    Active.OK
-                end if
-            end if
-        end if
+function sMakeReadOnlyDocumentEditable() as boolean
+
+    ' Function returns TRUE if document has been made editable and FALSE if
+    ' no action was required (that is: Document was not read-only)
+
+    dim iTry as integer
+    const CFN = "sMakeReadOnlyDocumentEditable::"
+    
+    if ( VERBOSE ) then printlog( CFN & "Making document editable (create a copy) if it is readonly" )
+    
+    Kontext "Standardbar"
+    if ( Bearbeiten.IsEnabled() ) then
+        
+        if ( Bearbeiten.getState( 2 ) = 0 ) then
+            
+            Bearbeiten.Click()
+
+            for iTry = 1 to 2
+            
+                Kontext "Active"
+                if ( Active.exists( 5 ) ) then
+                
+                    printlog( CFN & "Messagebox: " & Active.getText() )
+                    
+                    try
+                        if ( VERBOSE ) then printlog( CFN & "Document was read-only. A copy will be used." )
+                        Active.Yes()
+                        if ( VERBOSE ) then printlog( CFN & "Closed 'use copy' message" )
+                    catch
+                        if ( VERBOSE ) then printlog( CFN & "Probing for unexpected messagebox..." )
+                        active.ok()
+                        warnlog( "#i100701 - Object not found message" )
+                    endcatch
+                else
+                    printlog( CFN & "No messagebox informing about a copy being used" )
+                endif
+                sMakeReadOnlyDocumentEditable() = TRUE
+            next iTry
+        else
+            if ( VERBOSE ) then printlog( CFN & "Button <Bearbeiten> is pressed, document is editable" )
+            sMakeReadOnlyDocumentEditable() = FALSE
+        endif
     else
-        warnlog "The document has not been loaded correctly."
-    end if
-end sub
+        if ( VERBOSE ) then printlog( CFN & "Control <Bearbeiten> is not enabled" )
+    endif
+    
+end function
 '
 '-------------------------------------------------------------------------------
 '

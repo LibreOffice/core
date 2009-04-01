@@ -73,7 +73,7 @@ testcase tToolsOptionsHTMLInsert
 
     printlog ("'/// - save states ///")
     ToolsOptions
-    hToolsOptions ("HtmlDocument","Table")
+    hToolsOptions ("HTML","Table")
 
     irgendwas(2) = Ueberschrift.IsChecked
     irgendwas(3) = Wiederholen.IsChecked
@@ -104,7 +104,7 @@ testcase tToolsOptionsHTMLInsert
 
     printlog ("'/// - checking states ///")
     ToolsOptions
-    hToolsOptions ( "HtmlDocument" , "Table" )
+    hToolsOptions ( "HTML" , "Table" )
 
 '      If ( irgendwas(2) = Ueberschrift.IsChecked                ) Then WarnLog "Ueberschrift state changed"
       If ( Ueberschrift.IsChecked                = False ) Then WarnLog "Ueberschrift state changed"
@@ -121,7 +121,7 @@ testcase tToolsOptionsHTMLInsert
 
     printlog ("'/// - all UnCheck -> o ///")
     ToolsOptions
-    hToolsOptions ( "HtmlDocument" , "Table" )
+    hToolsOptions ( "HTML" , "Table" )
 
     Ueberschrift.UnCheck
 '      Wiederholen.UnCheck
@@ -184,7 +184,7 @@ testcase tToolsOptionsHTMLInsert
   DocumentWriter.typekeys ("a")
 
     ToolsOptions
-   hToolsOptions ( "HtmlDocument" , "Table" )
+   hToolsOptions ( "HTML" , "Table" )
 
       If Ueberschrift.IsChecked                Then WarnLog "Ueberschrift x"
 '      If Wiederholen.IsChecked                 Then WarnLog "Wiederholen x"
@@ -245,7 +245,7 @@ testcase tToolsOptionsHTMLInsert
   DocumentWriter.typekeys ("a")
   
     ToolsOptions
-    hToolsOptions ( "HtmlDocument" , "Table" )
+    hToolsOptions ( "HTML" , "Table" )
 
       If ( Ueberschrift.IsChecked                = FALSE ) Then WarnLog "Ueberschrift o"
       If ( Wiederholen.IsChecked                 = FALSE ) Then WarnLog "Wiederholen o"
@@ -297,7 +297,7 @@ testcase tToolsOptionsHTMLCursor
 
   printlog ("'/// - save states ///")
     ToolsOptions
-    hToolsOptions ("HtmlDocument","FORMATTINGAIDS")
+    hToolsOptions ("HTML","FORMATTINGAIDS")
 
       irgendwas(10) = Absatzenden.IsChecked
       irgendwas(11) = WeicheTrenner.IsChecked
@@ -322,7 +322,7 @@ testcase tToolsOptionsHTMLCursor
 
     printlog ("'/// - checking states ///")
     ToolsOptions
-    hToolsOptions ( "HtmlDocument" , "FORMATTINGAIDS" )
+    hToolsOptions ( "HTML" , "FORMATTINGAIDS" )
 
       If ( irgendwas(10) = Absatzenden.IsChecked  ) Then  WarnLog "Absatzenden state changed"
       If ( irgendwas(11) = WeicheTrenner.IsChecked  ) Then  WarnLog "WeicheTrenner state changed"
@@ -335,7 +335,7 @@ testcase tToolsOptionsHTMLCursor
 
     printlog ("'/// - all UnCheck -> o ///")
     ToolsOptions
-    hToolsOptions ( "HtmlDocument" , "FORMATTINGAIDS" )
+    hToolsOptions ( "HTML" , "FORMATTINGAIDS" )
 
       Absatzenden.UnCheck
       WeicheTrenner.UnCheck
@@ -348,7 +348,7 @@ testcase tToolsOptionsHTMLCursor
 
   printlog ("'/// - check if all UnChecked ///")
     ToolsOptions
-    hToolsOptions ( "HtmlDocument" , "FORMATTINGAIDS" )
+    hToolsOptions ( "HTML" , "FORMATTINGAIDS" )
 
       If Absatzenden.IsChecked Then  WarnLog "Absatzenden x"
       If WeicheTrenner.IsChecked Then  WarnLog "WeicheTrenner x"
@@ -369,7 +369,7 @@ testcase tToolsOptionsHTMLCursor
 
   printlog ("'/// - check if all Checked ///")
     ToolsOptions
-    hToolsOptions ( "HtmlDocument" , "FORMATTINGAIDS" )
+    hToolsOptions ( "HTML" , "FORMATTINGAIDS" )
 
       If True <> Absatzenden.IsChecked Then  WarnLog "Absatzenden o BugID: 82942 OS"
       If True <> WeicheTrenner.IsChecked Then  WarnLog "WeicheTrenner o"

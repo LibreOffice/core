@@ -965,7 +965,7 @@ testcase tToolsOptionsWriterTable1
     Call hNewDocument
     printlog ("'///- Tools/Options/HTML: Table ///")
     ToolsOptions
-    Call hToolsOptions ("HTMLDOCUMENT","Table")
+    Call hToolsOptions ("HTML","Table")
     '/// Check fixed and choose 'OK' ///
     VerhaltenFix.Check
 
@@ -975,7 +975,7 @@ testcase tToolsOptionsWriterTable1
 
     '/// ///
     ToolsOptions
-    Call hToolsOptions ("HTMLDOCUMENT","Table")
+    Call hToolsOptions ("HTML","Table")
     '/// Reset radiobutton to 'Variable' in Options ///
     Variabel.Check
 

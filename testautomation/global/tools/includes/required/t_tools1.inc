@@ -41,7 +41,7 @@ private SLEEP_TIME_REQUESTED as integer
 private SLEEP_CALLS_SUM as integer
 private SLEEP_TIME_USED as integer
 
-private const VERBOSE = false
+private const VERBOSE = true
 
 function GetClipboardText as string
 
@@ -1209,31 +1209,53 @@ function hUseAsyncSlot( cSlot as string ) as integer
     for iWait = 1 to MAX_WAIT
         try
             select case ( lcase( cSlot ) )
-            case "fileclose"            : FileClose
-            case "filesaveas"           : FileSaveAs
-            case "filesaveall"          : FileSaveAll
-            case "fileexport"           : FileExport
+            case "fileclose"                      : FileClose
+            case "filesaveas"                     : FileSaveAs
+            case "filesaveall"                    : FileSaveAll
+            case "fileexport"                     : FileExport
+            case "filereload"                     : FileReload
             
-            case "editcopy"             : EditCopy
-            case "editpaste"            : EditPaste
-            case "editcut"              : EditCut
-            case "editselectall"        : EditSelectAll
-            case "editselectallmath"    : EditSelectAllMath
-            case "editdeletecontents"   : EditDeleteContents
-            case "editundo"             : EditUndo
-            case "editredo"             : EditRedo
-            case "editrepeat"           : EditRepeat
-            case "editpastespecial"     : EditPasteSpecial
-            case "editsearchandreplace" : EditSearchAndReplace
-            case "editduplicate"        : EditDuplicate
-            case "editgluepoints"       : EditGluePoints
-            case "editdeleteslide"      : EditDeleteSlide
-            case "editobjectproperties" : EditObjectProperties
-            case "editobjectedit"       : EditObjectEdit
-            case "editobjectsavecopyas" : EditObjectSaveCopyAs
+            case "editcopy"                       : EditCopy
+            case "editchangesrecord"              : EditChangesRecord
+            case "editchangesshow"                : EditChangesShow
+            case "editchangesprotecttrace"        : EditChangesProtectTrace
+            case "editchangescomment"             : EditChangesComment
+
+            case "editpaste"                      : EditPaste
+            case "editcut"                        : EditCut
+            case "editselectall"                  : EditSelectAll
+            case "editselectallmath"              : EditSelectAllMath
+            case "editselectionmodeblock"         : EditSelectionModeBlock
+            case "editselectionmodestandard"      : EditSelectionModeStandard
+            case "editdeletecontents"             : EditDeleteContents
+            case "editundo"                       : EditUndo
+            case "editredo"                       : EditRedo
+            case "editrepeat"                     : EditRepeat
+            case "editpastespecial"               : EditPasteSpecial
+            case "editpastespecialwriter"         : EditPasteSpecialWriter
+            case "editsearchandreplace"           : EditSearchAndReplace
+            case "editduplicate"                  : EditDuplicate
+            case "editgluepoints"                 : EditGluePoints
+            case "editdeleteslide"                : EditDeleteSlide
+            case "editobjectproperties"           : EditObjectProperties
+            case "editobjectedit"                 : EditObjectEdit
+            case "editobjectsavecopyas"           : EditObjectSaveCopyAs
             
-            case "formatcontrol"        : FormatControl
-            case "formateditpoints"     : FormatEditPoints
+            case "formatcontrol"                  : FormatControl
+            case "formateditpoints"               : FormatEditPoints
+            case "formatsections"                 : FormatSections
+            case "formatchangecaseupper"          : FormatChangeCaseUpper
+            case "formatchangecaselower"          : FormatChangeCaseLower
+            case "formatarea"                     : FormatArea
+            case "formatarrangebringtofrontcalc"  : FormatArrangeBringToFrontCalc
+            case "formatflipvertically"           : FormatFlipVertically
+            case "formatfliphorizontally"         : FormatFlipHorizontally
+            case "formatline"                     : FormatLine
+            case "formatpositionandsize"          : FormatPositionAndSize
+            
+            case "insertindexesbibliographyentry" : InsertIndexesBibliographyEntry
+            
+            case "contextpositionandsize"         : ContextPositionAndSize
             
             case else : warnlog( "Unknown slot called: " & cSlot )
             end select
