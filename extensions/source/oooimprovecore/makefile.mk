@@ -58,10 +58,12 @@ SHL1STDLIBS= \
         $(CPPUHELPERLIB) \
         $(CPPULIB) \
         $(SALLIB) \
-        $(SVXLIB) \
         $(VCLLIB) \
+        $(SVLLIB) \
+        $(SVTOOLLIB) \
         $(SFXLIB) \
-        $(TOOLSLIB) \
+        $(SVXLIB) \
+        $(TOOLSLIB)
 
 
 SHL1LIBS=$(LIB1TARGET)
