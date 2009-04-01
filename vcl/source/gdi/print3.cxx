@@ -200,7 +200,9 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterListener>& i_pListene
 
     // check if the printer brings up its own dialog
     // in that case leave the work to that dialog
-    if( ! pListener->getPrinter()->GetCapabilities( PRINTER_CAPABILITIES_EXTERNALDIALOG ) )
+    const String& rQuick( i_rInitSetup.GetValue( String( RTL_CONSTASCII_USTRINGPARAM( "IsQuickJob" ) ) ) );
+    bool bIsQuick = rQuick.Len() && rQuick.EqualsIgnoreCaseAscii( "true" );
+    if( ! pListener->getPrinter()->GetCapabilities( PRINTER_CAPABILITIES_EXTERNALDIALOG ) && ! bIsQuick )
     {
         try
         {
