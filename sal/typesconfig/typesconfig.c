@@ -163,20 +163,37 @@ int check( TestFunc func, Type eT, void* p )
 |*  Letzte Aenderung
 |*
 *************************************************************************/
+#if defined(IA64) || defined(ARM32)
+
+int forceerror()
+{
+#if defined(ARM32)
+// workaround for qemu-user
+    hit = 1;
+#else
+    raise (SIGBUS);
+#endif
+    return 1;
+}
+
+int GetAtAddress( Type eT, void* p )
+{
+  switch ( eT )
+  {
+  case t_char:      return *((char*)p);
+  case t_short:     if ((long)p % sizeof(short)) return forceerror(); else return *((short*)p);
+  case t_int:       if ((long)p % sizeof(int)) return forceerror(); else return *((int*)p);
+  case t_long:      if ((long)p % sizeof(long)) return forceerror(); else return *((long*)p);
+  case t_double:    if ((long)p % sizeof(double)) return forceerror(); else return *((double*)p);
+  }
+  abort();
+}
+
+#else
 static int dummy(void* unused);
 
 int GetAtAddress( Type eT, void* p )
 {
-#if defined(IA64) || defined(ARM32)
-  switch ( eT )
-  {
-  case t_char:      return *((char*)p);
-  case t_short:     if ((long)p % sizeof(short)) abort(); else return *((short*)p);
-  case t_int:       if ((long)p % sizeof(int)) abort(); else return *((int*)p);
-  case t_long:      if ((long)p % sizeof(long)) abort(); else return *((long*)p);
-  case t_double:    if ((long)p % sizeof(double)) abort(); else return *((double*)p);
-  }
-#else
   switch ( eT )
   {
   case t_char: { char x = *(char*)p; return dummy(&x); }
@@ -185,7 +202,6 @@ int GetAtAddress( Type eT, void* p )
   case t_long: { long x = *(long*)p; return dummy(&x); }
   case t_double: { double x = *(double*)p; return dummy(&x); }
   }
-#endif
   abort();
 }
 
@@ -195,6 +211,7 @@ int dummy(void* unused)
     return 0;
 }
 
+#endif
 /*************************************************************************
 |*
 |*  SetAtAddress()

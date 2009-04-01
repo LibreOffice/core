@@ -127,6 +127,7 @@ void OStoreBTreeNodeData::remove (sal_uInt16 i)
     }
 }
 
+#if 0  /* NYI */
 /*
  * merge (with right page).
  */
@@ -140,6 +141,7 @@ void OStoreBTreeNodeData::merge (const self& rPageR)
         usageCount (n + m);
     }
 }
+#endif
 
 /*
  * split (left half copied from right half of left page).
