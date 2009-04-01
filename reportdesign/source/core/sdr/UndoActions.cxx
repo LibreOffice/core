@@ -911,10 +911,12 @@ void OXUndoEnvironment::switchListening( const Reference< XIndexAccess >& _rxCon
         Reference< XContainer > xSimpleContainer( _rxContainer, UNO_QUERY );
         // OSL_ENSURE( xSimpleContainer.is(), "OXUndoEnvironment::switchListening: how are we expected to be notified of changes in the container?" );
         if ( xSimpleContainer.is() )
+        {
             if ( _bStartListening )
                 xSimpleContainer->addContainerListener( this );
             else
                 xSimpleContainer->removeContainerListener( this );
+        }
     }
     catch( const Exception& )
     {
@@ -933,18 +935,22 @@ void OXUndoEnvironment::switchListening( const Reference< XInterface >& _rxObjec
         {
             Reference< XPropertySet > xProps( _rxObject, UNO_QUERY );
             if ( xProps.is() )
+            {
                 if ( _bStartListening )
                     xProps->addPropertyChangeListener( ::rtl::OUString(), this );
                 else
                     xProps->removePropertyChangeListener( ::rtl::OUString(), this );
+            }
         }
 
         Reference< XModifyBroadcaster > xBroadcaster( _rxObject, UNO_QUERY );
         if ( xBroadcaster.is() )
+        {
             if ( _bStartListening )
                 xBroadcaster->addModifyListener( this );
             else
                 xBroadcaster->removeModifyListener( this );
+        }
     }
     catch( const Exception& )
     {
