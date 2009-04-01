@@ -673,16 +673,6 @@ namespace drawinglayer
                 (sal_Int32)ceil(aOutlineRange.getMinX()), (sal_Int32)ceil(aOutlineRange.getMinY()),
                 (sal_Int32)floor(aOutlineRange.getMaxX()), (sal_Int32)floor(aOutlineRange.getMaxY()));
 
-            if(aDestRectView.Right() > aDestRectView.Left())
-            {
-                aDestRectView.Right()--;
-            }
-
-            if(aDestRectView.Bottom() > aDestRectView.Top())
-            {
-                aDestRectView.Bottom()--;
-            }
-
             // get metafile (copy it)
             GDIMetaFile aMetaFile;
 
@@ -704,9 +694,30 @@ namespace drawinglayer
                 aMetaFile.Rotate((sal_uInt16)(fRotation));
             }
 
-            // paint it
-            aMetaFile.WindStart();
-            aMetaFile.Play(mpOutputDevice, aDestRectView.TopLeft(), aDestRectView.GetSize());
+            // Prepare target output size
+            Size aDestSize(aDestRectView.GetSize());
+
+            if(aDestSize.getWidth() && aDestSize.getHeight())
+            {
+                // Get preferred Metafile output size. When it's very equal to the output size, it's probably
+                // a rounding error somewhere, so correct it to get a 1:1 output without single pixel scalings
+                // of the Metafile (esp. for contaned Bitmaps, e.g 3D charts)
+                const Size aPrefSize(mpOutputDevice->LogicToPixel(aMetaFile.GetPrefSize(), aMetaFile.GetPrefMapMode()));
+
+                if(aPrefSize.getWidth() && (aPrefSize.getWidth() - 1 == aDestSize.getWidth() || aPrefSize.getWidth() + 1 == aDestSize.getWidth()))
+                {
+                    aDestSize.setWidth(aPrefSize.getWidth());
+                }
+
+                if(aPrefSize.getHeight() && (aPrefSize.getHeight() - 1 == aDestSize.getHeight() || aPrefSize.getHeight() + 1 == aDestSize.getHeight()))
+                {
+                    aDestSize.setHeight(aPrefSize.getHeight());
+                }
+
+                // paint it
+                aMetaFile.WindStart();
+                aMetaFile.Play(mpOutputDevice, aDestRectView.TopLeft(), aDestSize);
+            }
         }
 
         // mask group. Force output to VDev and create mask from given mask

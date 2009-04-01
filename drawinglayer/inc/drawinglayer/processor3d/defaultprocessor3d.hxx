@@ -40,6 +40,7 @@
 #include <basegfx/matrix/b3dhommatrix.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/color/bcolormodifier.hxx>
+#include <svtools/optionsdrawinglayer.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // predefines
@@ -94,6 +95,9 @@ namespace drawinglayer
             // the current active transparence texture
             texture::GeoTexSvx*                                 mpTransparenceGeoTexSvx;
 
+            // SvtOptionsDrawinglayer incarnation to react on diverse settings
+            const SvtOptionsDrawinglayer                        maDrawinglayerOpt;
+
             // bitfield
             unsigned                                            mbModulate : 1;
             unsigned                                            mbFilter : 1;
@@ -136,6 +140,9 @@ namespace drawinglayer
             bool getModulate() const { return mbModulate; }
             bool getFilter() const { return mbFilter; }
             bool getSimpleTextureActive() const { return mbSimpleTextureActive; }
+
+            // access to Drawinglayer configuration options
+            const SvtOptionsDrawinglayer& getOptionsDrawinglayer() const { return maDrawinglayerOpt; }
         };
     } // end of namespace processor3d
 } // end of namespace drawinglayer
