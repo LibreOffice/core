@@ -344,7 +344,19 @@ IMPL_LINK( ImpEditEngine, OnlineSpellHdl, Timer *, EMPTYARG )
 IMPL_LINK_INLINE_START( ImpEditEngine, IdleFormatHdl, Timer *, EMPTYARG )
 {
     aIdleFormatter.ResetRestarts();
-    FormatAndUpdate( aIdleFormatter.GetView() );
+
+    // #i97146# check if that view is still available
+    // else probably the idle format timer fired while we're already
+    // downing
+    EditView* pView = aIdleFormatter.GetView();
+    for( sal_uInt16 nView = 0; nView < aEditViews.Count(); nView++ )
+    {
+        if( aEditViews[nView] == pView )
+        {
+            FormatAndUpdate( pView );
+            break;
+        }
+    }
     return 0;
 }
 IMPL_LINK_INLINE_END( ImpEditEngine, IdleFormatHdl, Timer *, EMPTYARG )

@@ -83,12 +83,13 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
 
+    QTMovie* getMovie() { return mpMovie; }
+
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxMgr;
 
     ::rtl::OUString         maURL;
 
-    QTMovieView             *mpMovieView;  // the view containing the movie object, output target and controller
     QTMovie                 *mpMovie;      // the Movie object
   /* GST
     sal_Bool                mbFakeVideo;
