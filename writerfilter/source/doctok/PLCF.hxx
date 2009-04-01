@@ -128,7 +128,7 @@ public:
      */
     T * getEntryByFc(sal_uInt32 nFc) const;
 
-    virtual void dump(OutputWithDepth<string> & output) const;
+    virtual void dump(OutputWithDepth<string> & out) const;
 };
 
 template <class T>
