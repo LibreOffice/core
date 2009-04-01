@@ -2191,7 +2191,10 @@ void SwEnhancedPDFExportHelper::MakeHeaderFooterLinks( vcl::PDFExtOutDevData& rP
             SwRect aHFLinkRect( rLinkRect );
             aHFLinkRect.Pos() = pPageFrm->Frm().Pos() + aOffset;
 
-            if ( aHFLinkRect != rLinkRect )
+            // #i97135# the gcc_x64 optimizer gets aHFLinkRect != rLinkRect wrong
+            // fool it by comparing the position only (the width and height are the
+            // same anyway)
+            if ( aHFLinkRect.Pos() != rLinkRect.Pos() )
             {
                 // Link PageNum
                 const sal_Int32 nHFLinkPageNum = CalcOutputPageNum( aHFLinkRect );
