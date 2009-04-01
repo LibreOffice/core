@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: ttcr.c,v $
- * $Revision: 1.11 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -28,8 +25,6 @@
  *
  ************************************************************************/
 
-/* $Id: ttcr.c,v 1.11 2008-04-11 10:16:51 rt Exp $ */
-
 /*
  * TrueTypeCreator method implementation
  *
@@ -48,7 +43,22 @@
 #endif
 #include <assert.h>
 
-#include "ttcr.h"
+#include "ttcr.hxx"
+#include "list.h"
+
+
+
+namespace vcl
+{
+
+/*
+ * Private Data Types
+ */
+
+    struct _TrueTypeCreator {
+        sal_uInt32 tag;                         /**< TrueType file tag */
+        list   tables;                      /**< List of table tags and pointers */
+    };
 
 /* These must be #defined so that they can be used in initializers */
 #define T_maxp  0x6D617870
@@ -159,7 +169,6 @@ _inline void PutInt16(sal_Int16 val, sal_uInt8 *ptr, sal_uInt32 offset, int bige
         ptr[offset+1] = (sal_uInt8)((val >> 8) & 0xFF);
         ptr[offset] = (sal_uInt8)(val & 0xFF);
     }
-
 }
 
 _inline void PutUInt16(sal_uInt16 val, sal_uInt8 *ptr, sal_uInt32 offset, int bigendian)
@@ -173,9 +182,7 @@ _inline void PutUInt16(sal_uInt16 val, sal_uInt8 *ptr, sal_uInt32 offset, int bi
         ptr[offset+1] = (sal_uInt8)((val >> 8) & 0xFF);
         ptr[offset] = (sal_uInt8)(val & 0xFF);
     }
-
 }
-
 
 _inline void PutUInt32(sal_uInt32 val, sal_uInt8 *ptr, sal_uInt32 offset, int bigendian)
 {
@@ -267,20 +274,14 @@ _inline void *scalloc(sal_uInt32 n, sal_uInt32 size)
 
 void TrueTypeCreatorNewEmpty(sal_uInt32 tag, TrueTypeCreator **_this)
 {
-    TrueTypeCreator *ptr = smalloc(sizeof(TrueTypeCreator));
+    TrueTypeCreator* ptr = (TrueTypeCreator*)smalloc(sizeof(TrueTypeCreator));
 
     ptr->tables = listNewEmpty();
-    listSetElementDtor(ptr->tables, (void(*)(void*))TrueTypeTableDispose);
+    listSetElementDtor(ptr->tables, (list_destructor)TrueTypeTableDispose);
 
     ptr->tag = tag;
 
     *_this = ptr;
-}
-
-void TrueTypeCreatorDispose(TrueTypeCreator *_this)
-{
-    listDispose(_this->tables);
-    free(_this);
 }
 
 int AddTable(TrueTypeCreator *_this, TrueTypeTable *table)
@@ -316,9 +317,7 @@ int StreamToMemory(TrueTypeCreator *_this, sal_uInt8 **ptr, sal_uInt32 *length)
     sal_uInt16 numTables, searchRange=1, entrySelector=0, rangeShift;
     sal_uInt32 s, offset, checkSumAdjustment = 0;
     sal_uInt32 *p;
-    sal_uInt8 *ttf;
     int i=0, n;
-    TableEntry *te;
     sal_uInt8 *head = NULL;     /* saved pointer to the head table data for checkSumAdjustment calculation */
 
     if ((n = listCount(_this->tables)) == 0) return SF_TTFORMAT;
@@ -331,7 +330,7 @@ int StreamToMemory(TrueTypeCreator *_this, sal_uInt8 **ptr, sal_uInt32 *length)
     numTables = (sal_uInt16) n;
 
 
-    te = scalloc(n, sizeof(TableEntry));
+    TableEntry* te = (TableEntry*)scalloc(n, sizeof(TableEntry));
 
     listToFirst(_this->tables);
     for (i = 0; i < n; i++) {
@@ -357,7 +356,7 @@ int StreamToMemory(TrueTypeCreator *_this, sal_uInt8 **ptr, sal_uInt32 *length)
         /* if ((te[i].length & 3) != 0) s += (4 - (te[i].length & 3)) & 3; */
     }
 
-    ttf = smalloc(s);
+    sal_uInt8* ttf = (sal_uInt8*)smalloc(s);
 
     /* Offset Table */
     PutUInt32(_this->tag, ttf, 0, 1);
@@ -486,10 +485,9 @@ typedef struct {
 static sal_uInt8 *ttmalloc(sal_uInt32 nbytes)
 {
     sal_uInt32 n;
-    sal_uInt8 *res;
 
     n = (nbytes + 3) & (sal_uInt32) ~3;
-    res = malloc(n);
+    sal_uInt8* res = (sal_uInt8*)malloc(n);
     assert(res != 0);
     memset(res, 0, n);
 
@@ -722,7 +720,7 @@ static int GetRawData_glyf(TrueTypeTable *_this, sal_uInt8 **ptr, sal_uInt32 *le
 /* cmap packers */
 static sal_uInt8 *PackCmapType0(CmapSubTable *s, sal_uInt32 *length)
 {
-    sal_uInt8 *ptr = smalloc(262);
+    sal_uInt8* ptr = (sal_uInt8*)smalloc(262);
     sal_uInt8 *p = ptr + 6;
     sal_uInt32 i, j;
     sal_uInt16 g;
@@ -746,7 +744,7 @@ static sal_uInt8 *PackCmapType0(CmapSubTable *s, sal_uInt32 *length)
 
 static sal_uInt8 *PackCmapType6(CmapSubTable *s, sal_uInt32 *length)
 {
-    sal_uInt8 *ptr = smalloc(s->n*2 + 10);
+    sal_uInt8* ptr = (sal_uInt8*)smalloc(s->n*2 + 10);
     sal_uInt8 *p = ptr + 10;
     sal_uInt32 i, j;
     sal_uInt16 g;
@@ -784,8 +782,6 @@ static sal_uInt8 *PackCmap(CmapSubTable *s, sal_uInt32 *length)
 static int GetRawData_cmap(TrueTypeTable *_this, sal_uInt8 **ptr, sal_uInt32 *len, sal_uInt32 *tag)
 {
     table_cmap *t;
-    sal_uInt8 **subtables;
-    sal_uInt32 *sizes;            /* of subtables */
     sal_uInt32 i;
     sal_uInt32 tlen = 0;
     sal_uInt32 l;
@@ -798,8 +794,8 @@ static int GetRawData_cmap(TrueTypeTable *_this, sal_uInt8 **ptr, sal_uInt32 *le
     assert(t != 0);
     assert(t->n != 0);
 
-    subtables = scalloc(t->n, sizeof(sal_uInt8 *));
-    sizes = scalloc(t->n, sizeof(sal_uInt32));
+    sal_uInt8** subtables = (sal_uInt8**)scalloc(t->n, sizeof(sal_uInt8 *));
+    sal_uInt32* sizes = (sal_uInt32*)scalloc(t->n, sizeof(sal_uInt32));
 
     for (i = 0; i < t->n; i++) {
         subtables[i] = PackCmap(t->s+i, &l);
@@ -837,10 +833,7 @@ static int GetRawData_cmap(TrueTypeTable *_this, sal_uInt8 **ptr, sal_uInt32 *le
 static int GetRawData_name(TrueTypeTable *_this, sal_uInt8 **ptr, sal_uInt32 *len, sal_uInt32 *tag)
 {
     list l;
-    NameRecord *nr;
     sal_Int16 i=0, n;                          /* number of Name Records */
-    sal_uInt8 *name;
-    sal_uInt16 nameLen;
     int stringLen = 0;
     sal_uInt8 *p1, *p2;
 
@@ -854,7 +847,7 @@ static int GetRawData_name(TrueTypeTable *_this, sal_uInt8 **ptr, sal_uInt32 *le
 
     if ((n = (sal_Int16)listCount(l)) == 0) return TTCR_NONAMES;
 
-    nr = scalloc(n, sizeof(NameRecord));
+    NameRecord* nr = (NameRecord*)scalloc(n, sizeof(NameRecord));
 
     listToFirst(l);
 
@@ -871,8 +864,8 @@ static int GetRawData_name(TrueTypeTable *_this, sal_uInt8 **ptr, sal_uInt32 *le
 
     qsort(nr, n, sizeof(NameRecord), NameRecordCompareF);
 
-    nameLen = (sal_uInt16)(stringLen + 12 * n + 6);
-    name = ttmalloc(nameLen);
+    int nameLen = stringLen + 12 * n + 6;
+    sal_uInt8* name = (sal_uInt8*)ttmalloc(nameLen);
 
     PutUInt16(0, name, 0, 1);
     PutUInt16(n, name, 2, 1);
@@ -898,7 +891,7 @@ static int GetRawData_name(TrueTypeTable *_this, sal_uInt8 **ptr, sal_uInt32 *le
     _this->rawdata = name;
 
     *ptr = name;
-    *len = nameLen;
+    *len = (sal_uInt16)nameLen;
     *tag = T_name;
 
     /*{int j; for(j=0; j<nameLen; j++) printf("%c", name[j]); }; */
@@ -977,11 +970,8 @@ TrueTypeTable *TrueTypeTableNew(sal_uInt32 tag,
                                 sal_uInt32 nbytes,
                                 sal_uInt8 *ptr)
 {
-    TrueTypeTable *table;
-    tdata_generic *pdata;
-
-    table = smalloc(sizeof(TrueTypeTable));
-    pdata = (tdata_generic *) smalloc(sizeof(tdata_generic));
+    TrueTypeTable* table = (TrueTypeTable*)smalloc(sizeof(TrueTypeTable));
+    tdata_generic* pdata = (tdata_generic*)smalloc(sizeof(tdata_generic));
     pdata->nbytes = nbytes;
     pdata->tag = tag;
     if (nbytes) {
@@ -1006,13 +996,10 @@ TrueTypeTable *TrueTypeTableNew_head(sal_uInt32 fontRevision,
                                      sal_uInt16 lowestRecPPEM,
                                      sal_Int16  fontDirectionHint)
 {
-    TrueTypeTable *table;
-    sal_uInt8 *ptr;
-
     assert(created != 0);
 
-    table  = smalloc(sizeof(TrueTypeTable));
-    ptr  = ttmalloc(TABLESIZE_head);
+    TrueTypeTable* table  = (TrueTypeTable*)smalloc(sizeof(TrueTypeTable));
+    sal_uInt8* ptr = (sal_uInt8*)ttmalloc(TABLESIZE_head);
 
 
     PutUInt32(0x00010000, ptr, 0, 1);             /* version */
@@ -1040,11 +1027,8 @@ TrueTypeTable *TrueTypeTableNew_hhea(sal_Int16  ascender,
                                      sal_Int16  caretSlopeRise,
                                      sal_Int16  caretSlopeRun)
 {
-    TrueTypeTable *table;
-    sal_uInt8 *ptr;
-
-    table  = smalloc(sizeof(TrueTypeTable));
-    ptr  = ttmalloc(TABLESIZE_hhea);
+    TrueTypeTable* table = (TrueTypeTable*)smalloc(sizeof(TrueTypeTable));
+    sal_uInt8* ptr = (sal_uInt8*)ttmalloc(TABLESIZE_hhea);
 
     PutUInt32(0x00010000, ptr, 0, 1);             /* version */
     PutUInt16(ascender, ptr, 4, 1);
@@ -1068,7 +1052,7 @@ TrueTypeTable *TrueTypeTableNew_hhea(sal_Int16  ascender,
 
 TrueTypeTable *TrueTypeTableNew_loca(void)
 {
-    TrueTypeTable *table = smalloc(sizeof(TrueTypeTable));
+    TrueTypeTable* table = (TrueTypeTable*)smalloc(sizeof(TrueTypeTable));
     table->data = smalloc(sizeof(tdata_loca));
 
     ((tdata_loca *)table->data)->nbytes = 0;
@@ -1082,7 +1066,7 @@ TrueTypeTable *TrueTypeTableNew_loca(void)
 
 TrueTypeTable *TrueTypeTableNew_maxp(sal_uInt8 *maxp, int size)
 {
-    TrueTypeTable *table = smalloc(sizeof(TrueTypeTable));
+    TrueTypeTable* table = (TrueTypeTable*)smalloc(sizeof(TrueTypeTable));
     table->data = ttmalloc(TABLESIZE_maxp);
 
     if (maxp && size == TABLESIZE_maxp) {
@@ -1097,12 +1081,12 @@ TrueTypeTable *TrueTypeTableNew_maxp(sal_uInt8 *maxp, int size)
 
 TrueTypeTable *TrueTypeTableNew_glyf(void)
 {
-    TrueTypeTable *table = smalloc(sizeof(TrueTypeTable));
+    TrueTypeTable* table = (TrueTypeTable*)smalloc(sizeof(TrueTypeTable));
     list l = listNewEmpty();
 
     assert(l != 0);
 
-    listSetElementDtor(l, FreeGlyphData);
+    listSetElementDtor(l, (list_destructor)FreeGlyphData);
 
     table->data = l;
     table->rawdata = 0;
@@ -1113,8 +1097,8 @@ TrueTypeTable *TrueTypeTableNew_glyf(void)
 
 TrueTypeTable *TrueTypeTableNew_cmap(void)
 {
-    TrueTypeTable *table = smalloc(sizeof(TrueTypeTable));
-    table_cmap *cmap = smalloc(sizeof(table_cmap));
+    TrueTypeTable* table = (TrueTypeTable*)smalloc(sizeof(TrueTypeTable));
+    table_cmap* cmap = (table_cmap*)smalloc(sizeof(table_cmap));
 
     cmap->n = 0;
     cmap->m = CMAP_SUBTABLE_INIT;
@@ -1140,12 +1124,12 @@ static void DisposeNameRecord(void *ptr)
 
 static NameRecord* NameRecordNewCopy(NameRecord *nr)
 {
-    NameRecord *p = smalloc(sizeof(NameRecord));
+    NameRecord* p = (NameRecord*)smalloc(sizeof(NameRecord));
 
     memcpy(p, nr, sizeof(NameRecord));
 
     if (p->slen) {
-        p->sptr = smalloc(p->slen);
+        p->sptr = (sal_uInt8*)smalloc(p->slen);
         memcpy(p->sptr, nr->sptr, p->slen);
     }
 
@@ -1154,12 +1138,12 @@ static NameRecord* NameRecordNewCopy(NameRecord *nr)
 
 TrueTypeTable *TrueTypeTableNew_name(int n, NameRecord *nr)
 {
-    TrueTypeTable *table = smalloc(sizeof(TrueTypeTable));
+    TrueTypeTable* table = (TrueTypeTable*)smalloc(sizeof(TrueTypeTable));
     list l = listNewEmpty();
 
     assert(l != 0);
 
-    listSetElementDtor(l, DisposeNameRecord);
+    listSetElementDtor(l, (list_destructor)DisposeNameRecord);
 
     if (n != 0) {
         int i;
@@ -1181,12 +1165,9 @@ TrueTypeTable *TrueTypeTableNew_post(sal_uInt32 format,
                                      sal_Int16 underlineThickness,
                                      sal_uInt32 isFixedPitch)
 {
-    TrueTypeTable *table;
-    tdata_post *post;
-
     assert(format == 0x00030000);                 /* Only format 3.0 is supported at this time */
-    table = smalloc(sizeof(TrueTypeTable));
-    post = smalloc(sizeof(tdata_post));
+    TrueTypeTable* table = (TrueTypeTable*)smalloc(sizeof(TrueTypeTable));
+    tdata_post* post = (tdata_post*)smalloc(sizeof(tdata_post));
 
     post->format = format;
     post->italicAngle = italicAngle;
@@ -1200,26 +1181,6 @@ TrueTypeTable *TrueTypeTableNew_post(sal_uInt32 format,
     table->tag = T_post;
 
     return table;
-}
-
-
-
-void TrueTypeTableDispose(TrueTypeTable *_this)
-{
-    /* XXX do a binary search */
-    unsigned int i;
-
-    assert(_this != 0);
-
-    if (_this->rawdata) free(_this->rawdata);
-
-    for(i=0; i < sizeof(vtable1)/sizeof(*vtable1); i++) {
-        if (_this->tag == vtable1[i].tag) {
-            vtable1[i].f(_this);
-            return;
-        }
-    }
-    assert(!"Unknown TrueType table.\n");
 }
 
 int GetRawData(TrueTypeTable *_this, sal_uInt8 **ptr, sal_uInt32 *len, sal_uInt32 *tag)
@@ -1271,8 +1232,7 @@ void cmapAdd(TrueTypeTable *table, sal_uInt32 id, sal_uInt32 c, sal_uInt32 g)
 
     if (!found) {
         if (t->n == t->m) {
-            CmapSubTable *tmp;
-            tmp = scalloc(t->m + CMAP_SUBTABLE_INCR, sizeof(CmapSubTable));
+            CmapSubTable* tmp = (CmapSubTable*)scalloc(t->m + CMAP_SUBTABLE_INCR, sizeof(CmapSubTable));
             memset(tmp, 0, t->m + CMAP_SUBTABLE_INCR * sizeof(CmapSubTable));
             memcpy(tmp, s, sizeof(CmapSubTable) * t->m);
             t->m += CMAP_SUBTABLE_INCR;
@@ -1294,13 +1254,13 @@ void cmapAdd(TrueTypeTable *table, sal_uInt32 id, sal_uInt32 c, sal_uInt32 g)
         s[i].id = id;
         s[i].n = 0;
         s[i].m = CMAP_PAIR_INIT;
-        s[i].xc = scalloc(CMAP_PAIR_INIT, sizeof(sal_uInt32));
-        s[i].xg = scalloc(CMAP_PAIR_INIT, sizeof(sal_uInt32));
+        s[i].xc = (sal_uInt32*)scalloc(CMAP_PAIR_INIT, sizeof(sal_uInt32));
+        s[i].xg = (sal_uInt32*)scalloc(CMAP_PAIR_INIT, sizeof(sal_uInt32));
     }
 
     if (s[i].n == s[i].m) {
-        sal_uInt32 *tmp1 = scalloc(s[i].m + CMAP_PAIR_INCR, sizeof(sal_uInt32));
-        sal_uInt32 *tmp2 = scalloc(s[i].m + CMAP_PAIR_INCR, sizeof(sal_uInt32));
+        sal_uInt32* tmp1 = (sal_uInt32*)scalloc(s[i].m + CMAP_PAIR_INCR, sizeof(sal_uInt32));
+        sal_uInt32* tmp2 = (sal_uInt32*)scalloc(s[i].m + CMAP_PAIR_INCR, sizeof(sal_uInt32));
         assert(tmp1 != 0);
         assert(tmp2 != 0);
         memcpy(tmp1, s[i].xc, sizeof(sal_uInt32) * s[i].m);
@@ -1322,7 +1282,6 @@ sal_uInt32 glyfAdd(TrueTypeTable *table, GlyphData *glyphdata, TrueTypeFont *fnt
     list l;
     sal_uInt32 currentID;
     int ret, n, ncomponents;
-    list glyphlist;
     GlyphData *gd;
 
     assert(table != 0);
@@ -1330,7 +1289,7 @@ sal_uInt32 glyfAdd(TrueTypeTable *table, GlyphData *glyphdata, TrueTypeFont *fnt
 
     if (!glyphdata) return (sal_uInt32)~0;
 
-    glyphlist = listNewEmpty();
+    std::vector< sal_uInt32 > glyphlist;
 
     ncomponents = GetTTGlyphComponents(fnt, glyphdata->glyphID, glyphlist);
 
@@ -1344,11 +1303,15 @@ sal_uInt32 glyfAdd(TrueTypeTable *table, GlyphData *glyphdata, TrueTypeFont *fnt
     glyphdata->newID = n++;
     listAppend(l, glyphdata);
 
-    if (ncomponents > 1) {
-        listPositionAt(glyphlist, 1);       /* glyphData->glyphID is always the first glyph on the list */
-        do {
+    if (ncomponents > 1 && glyphlist.size() > 1 )
+    {
+        std::vector< sal_uInt32 >::const_iterator it = glyphlist.begin();
+        ++it;
+        /* glyphData->glyphID is always the first glyph on the list */
+        do
+        {
             int found = 0;
-            currentID = (sal_uIntPtr) listCurrent(glyphlist);
+            currentID = *it;
             /* XXX expensive! should be rewritten with sorted arrays! */
             listToFirst(l);
             do {
@@ -1363,10 +1326,9 @@ sal_uInt32 glyfAdd(TrueTypeTable *table, GlyphData *glyphdata, TrueTypeFont *fnt
                 gd->newID = n++;
                 listAppend(l, gd);
             }
-        } while (listNext(glyphlist));
+        } while( ++it !=  glyphlist.end() );
     }
 
-    listDispose(glyphlist);
     return ret;
 }
 
@@ -1398,7 +1360,7 @@ static TrueTypeTable *FindTable(TrueTypeCreator *tt, sal_uInt32 tag)
 
     do {
         if (((TrueTypeTable *) listCurrent(tt->tables))->tag == tag) {
-            return listCurrent(tt->tables);
+            return (TrueTypeTable*)listCurrent(tt->tables);
         }
     } while (listNext(tt->tables));
 
@@ -1428,11 +1390,10 @@ static void ProcessTables(TrueTypeCreator *tt)
     sal_Int16 xMin = 0, yMin = 0, xMax = 0, yMax = 0;
     sal_uInt32 i = 0;
     sal_Int16 indexToLocFormat;
-    sal_uInt8 *glyfPtr, *locaPtr, *hmtxPtr, *hheaPtr;
+    sal_uInt8 *hmtxPtr, *hheaPtr;
     sal_uInt32 hmtxSize;
     sal_uInt8 *p1, *p2;
     sal_uInt16 maxPoints = 0, maxContours = 0, maxCompositePoints = 0, maxCompositeContours = 0;
-    TTSimpleGlyphMetrics *met;
     int nlsb = 0;
     sal_uInt32 *gid;                        /* array of old glyphIDs */
 
@@ -1440,7 +1401,7 @@ static void ProcessTables(TrueTypeCreator *tt)
     glyphlist = (list) glyf->data;
     nGlyphs = listCount(glyphlist);
     assert(nGlyphs != 0);
-    gid = scalloc(nGlyphs, sizeof(sal_uInt32));
+    gid = (sal_uInt32*)scalloc(nGlyphs, sizeof(sal_uInt32));
 
     RemoveTable(tt, T_loca);
     RemoveTable(tt, T_hmtx);
@@ -1488,9 +1449,9 @@ static void ProcessTables(TrueTypeCreator *tt)
     indexToLocFormat = (glyfLen / 2 > 0xFFFF) ? 1 : 0;
     locaLen = indexToLocFormat ?  (nGlyphs + 1) << 2 : (nGlyphs + 1) << 1;
 
-    glyfPtr = ttmalloc(glyfLen);
-    locaPtr = ttmalloc(locaLen);
-    met = scalloc(nGlyphs, sizeof(TTSimpleGlyphMetrics));
+    sal_uInt8* glyfPtr = ttmalloc(glyfLen);
+    sal_uInt8* locaPtr = ttmalloc(locaLen);
+    TTSimpleGlyphMetrics* met = (TTSimpleGlyphMetrics*)scalloc(nGlyphs, sizeof(TTSimpleGlyphMetrics));
     i = 0;
 
     listToFirst(glyphlist);
@@ -1569,19 +1530,21 @@ static void ProcessTables(TrueTypeCreator *tt)
     AddTable(tt, loca);
 
     head = FindTable(tt, T_head);
-    PutInt16(xMin, head->data, 36, 1);
-    PutInt16(yMin, head->data, 38, 1);
-    PutInt16(xMax, head->data, 40, 1);
-    PutInt16(yMax, head->data, 42, 1);
-    PutInt16(indexToLocFormat, head->data,  50, 1);
+    sal_uInt8* const pHeadData = (sal_uInt8*)head->data;
+    PutInt16(xMin, pHeadData, 36, 1);
+    PutInt16(yMin, pHeadData, 38, 1);
+    PutInt16(xMax, pHeadData, 40, 1);
+    PutInt16(yMax, pHeadData, 42, 1);
+    PutInt16(indexToLocFormat, pHeadData,  50, 1);
 
     maxp = FindTable(tt, T_maxp);
 
-    PutUInt16((sal_uInt16)nGlyphs, maxp->data, 4, 1);
-    PutUInt16(maxPoints, maxp->data, 6, 1);
-    PutUInt16(maxContours, maxp->data, 8, 1);
-    PutUInt16(maxCompositePoints, maxp->data, 10, 1);
-    PutUInt16(maxCompositeContours, maxp->data, 12, 1);
+    sal_uInt8* const pMaxpData = (sal_uInt8*)maxp->data;
+    PutUInt16((sal_uInt16)nGlyphs, pMaxpData, 4, 1);
+    PutUInt16(maxPoints, pMaxpData, 6, 1);
+    PutUInt16(maxContours, pMaxpData, 8, 1);
+    PutUInt16(maxCompositePoints, pMaxpData, 10, 1);
+    PutUInt16(maxCompositeContours, pMaxpData, 12, 1);
 
 #if 0
     /* XXX do not overwrite the existing data. Fix: re-calculate these numbers here */
@@ -1627,6 +1590,43 @@ static void ProcessTables(TrueTypeCreator *tt)
     free(hmtxPtr);
     free(met);
 }
+
+} // namespace vcl
+
+extern "C"
+{
+    /**
+     * TrueTypeCreator destructor. It calls destructors for all TrueTypeTables added to it.
+     */
+     void TrueTypeCreatorDispose(vcl::TrueTypeCreator *_this)
+    {
+        listDispose(_this->tables);
+        free(_this);
+    }
+
+
+    /**
+     * Destructor for the TrueTypeTable object.
+     */
+     void TrueTypeTableDispose(vcl::TrueTypeTable *_this)
+    {
+        /* XXX do a binary search */
+        unsigned int i;
+
+        assert(_this != 0);
+
+        if (_this->rawdata) free(_this->rawdata);
+
+        for(i=0; i < sizeof(vcl::vtable1)/sizeof(*vcl::vtable1); i++) {
+            if (_this->tag == vcl::vtable1[i].tag) {
+                vcl::vtable1[i].f(_this);
+                return;
+            }
+        }
+        assert(!"Unknown TrueType table.\n");
+    }
+}
+
 
 #ifdef TEST_TTCR
 int main(void)

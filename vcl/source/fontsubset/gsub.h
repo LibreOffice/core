@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: gsub.h,v $
- * $Revision: 1.6.18.1 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -31,20 +28,17 @@
 #ifndef _PSP_GSUB_H
 #define _PSP_GSUB_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+namespace vcl
+{
 
-int HasVerticalGSUB( struct _TrueTypeFont* pTTFile );
+int HasVerticalGSUB( struct vcl::_TrueTypeFont* pTTFile );
 
-int UseGSUB( struct _TrueTypeFont* pTTFile, int nGlyph, int wmode );
+int UseGSUB( struct vcl::_TrueTypeFont* pTTFile, int nGlyph, int wmode );
 
-int ReadGSUB( struct _TrueTypeFont* pTTFile, int nRequestedScript, int nRequestedLangsys );
+int ReadGSUB( struct vcl::_TrueTypeFont* pTTFile, int nRequestedScript, int nRequestedLangsys );
 
-void ReleaseGSUB( struct _TrueTypeFont* pTTFile );
+void ReleaseGSUB( struct vcl::_TrueTypeFont* pTTFile );
 
-#ifdef __cplusplus
 }
-#endif
 
 #endif /* _PSP_GSUB_H */

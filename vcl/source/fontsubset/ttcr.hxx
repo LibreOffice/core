@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: ttcr.h,v $
- * $Revision: 1.4 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -28,8 +25,6 @@
  *
  ************************************************************************/
 
-/* $Id: ttcr.h,v 1.4 2008-04-11 10:17:09 rt Exp $ */
-
 /**
  *
  * @file ttcr.h
@@ -40,14 +35,10 @@
 #ifndef __TTCR_H
 #define __TTCR_H
 
-#include "sft.h"
-#include "list.h"
+#include "sft.hxx"
 
-#ifdef __cplusplus
-extern "C"
+namespace vcl
 {
-#endif
-
     typedef struct _TrueTypeCreator TrueTypeCreator;
 
 /* TrueType data types */
@@ -57,11 +48,11 @@ extern "C"
     } longHorMetrics;
 
 /* A generic base class for all TrueType tables */
-    typedef struct {
+    struct TrueTypeTable {
         sal_uInt32  tag;                         /* table tag                                                */
         sal_uInt8   *rawdata;                    /* raw data allocated by GetRawData_*()                     */
         void        *data;                       /* table specific data                                      */
-    } TrueTypeTable;
+    };
 
 /** Error codes for most functions */
     enum TTCRErrCodes {
@@ -85,11 +76,6 @@ extern "C"
  * Allocates all internal structures.
  */
     void TrueTypeCreatorNewEmpty(sal_uInt32 tag, TrueTypeCreator **_this);
-
-/**
- * TrueTypeCreator destructor. It calls destructors for all TrueTypeTables added to it.
- */
-    void TrueTypeCreatorDispose(TrueTypeCreator *_this);
 
 /**
  * Adds a TrueType table to the TrueType creator.
@@ -130,10 +116,6 @@ extern "C"
  *
  * ============================================================================ */
 
-/**
- * Destructor for the TrueTypeTable object.
- */
-    void TrueTypeTableDispose(TrueTypeTable *);
 
 /**
  * This function converts the data of a TrueType table to a raw array of bytes.
@@ -260,21 +242,20 @@ extern "C"
  */
     void nameAdd(TrueTypeTable *, NameRecord *nr);
 
+} // namespace
 
 
-/*
- * Private Data Types
+extern "C"
+{
+/**
+ * Destructor for the TrueTypeTable object.
  */
+ void TrueTypeTableDispose(vcl::TrueTypeTable *);
 
-    struct _TrueTypeCreator {
-        sal_uInt32 tag;                         /**< TrueType file tag */
-        list   tables;                      /**< List of table tags and pointers */
-    };
-
-
-
-#ifdef __cplusplus
+/**
+ * TrueTypeCreator destructor. It calls destructors for all TrueTypeTables added to it.
+ */
+ void TrueTypeCreatorDispose(vcl::TrueTypeCreator *_this);
 }
-#endif
 
 #endif /* __TTCR_H */

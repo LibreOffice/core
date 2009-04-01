@@ -36,8 +36,7 @@
 #include "salbmp.h"
 #include "salframe.h"
 #include "salcolorutils.hxx"
-#include "list.h"
-#include "sft.h"
+#include "sft.hxx"
 #include "salatsuifontutils.hxx"
 
 #include "vcl/impfont.hxx"
@@ -57,6 +56,8 @@
 #include "basegfx/polygon/b2dpolygon.hxx"
 #include "basegfx/polygon/b2dpolygontools.hxx"
 #include "basegfx/matrix/b2dhommatrix.hxx"
+
+using namespace vcl;
 
 typedef unsigned char Boolean; // copied from MacTypes.h, should be properly included
 typedef std::vector<unsigned char> ByteVector;
@@ -400,19 +401,8 @@ void AquaSalGraphics::initResolution( NSWindow* pWin )
         DBG_ERROR( "no screen found" );
     }
 
-    // equalize x- and y-resolution if they are close enough to prevent unneeded font stretching
-    if( (mnRealDPIX != mnRealDPIY)
-    &&  (10*mnRealDPIX < 13*mnRealDPIY) && (13*mnRealDPIX > 10*mnRealDPIY) )
-    {
-        mnRealDPIX = mnRealDPIY = (mnRealDPIX + mnRealDPIY + 1) / 2;
-    }
-    else // #i89650# workaround bogus device resolutions
-    {
-        if( mnRealDPIY < 72 )
-            mnRealDPIY = 72;
-        if( mnRealDPIX < mnRealDPIY ) // e.g. for TripleHead2Go only mnRealDPIX is off
-            mnRealDPIX = mnRealDPIY;
-    }
+    // for OSX any anisotropy reported for the display resolution is best ignored (e.g. TripleHead2Go)
+    mnRealDPIX = mnRealDPIY = (mnRealDPIX + mnRealDPIY + 1) / 2;
 
     mfFakeDPIScale = 1.0;
 }

@@ -190,8 +190,6 @@ SHL1STDLIBS+= \
     $(BASEBMPLIB) \
     -lAppleRemote$(DLLPOSTFIX)
 
-SHL1STDLIBS+= \
-             -framework QTKit
 LIB1FILES+= \
             $(SLB)$/sala11y.lib
 .ENDIF

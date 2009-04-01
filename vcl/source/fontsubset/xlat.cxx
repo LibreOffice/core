@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: xlat.c,v $
- * $Revision: 1.4 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -28,7 +25,7 @@
  *
  ************************************************************************/
 
-/* $Id: xlat.c,v 1.4 2008-04-11 10:19:41 rt Exp $
+/*
  *
  * Data translation from Unicode to MS encodings
  * If the host system provides this functionality
@@ -39,8 +36,12 @@
  *
   */
 
-#include "xlat.h"
+#include "xlat.hxx"
 
+namespace vcl
+{
+
+// TODO: use generic encoding converters and get rid of the include files below
 #include "u2big5.inc"
 #include "u2johab.inc"
 #include "u2prc.inc"
@@ -183,5 +184,5 @@ void TranslateString16(sal_uInt16 *src, sal_uInt16 *dst, sal_uInt32 n)
     }
 }
 
-
+} // namespace vcl
 

@@ -46,7 +46,6 @@
  *        If NO_TYPE3 is defined CreateT3FromTTGlyphs() does not get compiled in.
  *        If NO_TYPE42 is defined Type42-related code is excluded
  *        If NO_TTCR is defined TrueType creation related code is excluded\
- *        If NO_LIST is defined list.h and piblic functions that use it don't get compiled
  */
 
 /*
@@ -76,20 +75,10 @@
 
 #include <sal/types.h>
 
-#ifndef NO_LIST
-#include "list.h"
-#endif
+#include <vector>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-/*@{*/
-#ifndef __cplusplus
-#define false 0               /**< standard false value */
-#define true  1               /**< standard true value */
-#endif
-/*@}*/
+namespace vcl
+{
 
 /*@{*/
     typedef sal_Int16       F2Dot14;            /**< fixed: 2.14 */
@@ -349,7 +338,6 @@ extern "C" {
  */
     GlyphData *GetTTRawGlyphData(TrueTypeFont *ttf, sal_uInt32 glyphID);
 
-#ifndef NO_LIST
 /**
  * For a specified glyph adds all component glyphs IDs to the list and
  * return their number. If the glyph is a single glyph it has one component
@@ -365,8 +353,7 @@ extern "C" {
  * @ingroup sft
  *
  */
-    int GetTTGlyphComponents(TrueTypeFont *ttf, sal_uInt32 glyphID, list glyphlist);
-#endif
+    int GetTTGlyphComponents(TrueTypeFont *ttf, sal_uInt32 glyphID, std::vector< sal_uInt32 >& glyphlist);
 
 /**
  * Extracts all Name Records from the font and stores them in an allocated
@@ -606,17 +593,13 @@ extern "C" {
         sal_uInt8   *cmap;
         int         cmapType;
         sal_uInt32 (*mapper)(const sal_uInt8 *, sal_uInt32); /* character to glyphID translation function                          */
-        void        **tables;                              /* array of pointers to tables                                        */
+        sal_uInt8   **tables;                              /* array of pointers to raw subtables in SFNT file                    */
         sal_uInt32  *tlens;                                /* array of table lengths                                             */
         int         kerntype;                              /* Defined in the KernType enum                                       */
         sal_uInt32  nkern;                                 /* number of kern subtables                                           */
         sal_uInt8   **kerntables;                          /* array of pointers to kern subtables                                */
         void        *pGSubstitution;                       /* info provided by GSUB for UseGSUB()                                */
     };
-
-#ifdef __cplusplus
-}
-#endif
 
 /* indexes into _TrueTypeFont::tables[] and _TrueTypeFont::tlens[] */
 #define O_maxp 0     /* 'maxp' */
@@ -637,5 +620,7 @@ extern "C" {
 #define O_fpgm 15    /* 'fpgm' - only used in TT->TT generation */
 #define O_gsub 16    /* 'GSUB' */
 #define NUM_TAGS 17
+
+} // namespace vcl
 
 #endif /* __SUBFONT_H */

@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: gsub.cxx,v $
- * $Revision: 1.12.18.1 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -31,15 +28,16 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include "sft.h"
-#undef true
-#undef false
+#include "sft.hxx"
 
 #include "gsub.h"
 
 #include <vector>
 #include <map>
 #include <algorithm>
+
+namespace vcl
+{
 
 typedef sal_uInt32 ULONG;
 typedef sal_uInt16 USHORT;
@@ -354,4 +352,6 @@ int HasVerticalGSUB( struct _TrueTypeFont* pTTFile )
 {
     GlyphSubstitution* pGlyphSubstitution = (GlyphSubstitution*)pTTFile->pGSubstitution;
     return pGlyphSubstitution ? +1 : 0;
+}
+
 }

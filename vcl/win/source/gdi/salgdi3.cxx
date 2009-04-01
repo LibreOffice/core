@@ -64,8 +64,7 @@
 #include "basegfx/polygon/b2dpolypolygon.hxx"
 #include "basegfx/matrix/b2dhommatrix.hxx"
 
-#include <list.h>
-#include <sft.h>
+#include "sft.hxx"
 
 #ifdef GCP_KERN_HACK
 #include <algorithm>
@@ -75,6 +74,8 @@
 #include <set>
 #include <map>
 
+
+using namespace vcl;
 
 static const int MAXFONTHEIGHT = 2048;
 

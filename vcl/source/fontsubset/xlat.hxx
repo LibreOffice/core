@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: xlat.h,v $
- * $Revision: 1.4 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -28,25 +25,17 @@
  *
  ************************************************************************/
 
-/* $Id: xlat.h,v 1.4 2008-04-11 10:19:58 rt Exp $ */
-
-/*[]---------------------------------------------------[]*/
-/*|                                                     |*/
-/*|     xlat.h                                          |*/
-/*|                                                     |*/
 /*|     Author: Alexander Gelfenbain                    |*/
-/*[]---------------------------------------------------[]*/
 
 
 #ifndef __XLAT_H
 #define __XLAT_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+#include "sft.hxx"
 
-
-#include "sft.h"
+namespace vcl
+{
+// TODO: sal_UCS4
 
     sal_uInt16 TranslateChar12(sal_uInt16);
     sal_uInt16 TranslateChar13(sal_uInt16);
@@ -59,10 +48,7 @@ extern "C" {
     void TranslateString14(sal_uInt16 *, sal_uInt16 *, sal_uInt32);
     void TranslateString15(sal_uInt16 *, sal_uInt16 *, sal_uInt32);
     void TranslateString16(sal_uInt16 *, sal_uInt16 *, sal_uInt32);
-
-#ifdef __cplusplus
 }
-#endif
-
 
 #endif /* __XLAT_H */
+
