@@ -829,11 +829,11 @@ void SAL_CALL ScModelObj::render( sal_Int32 nRenderer, const uno::Any& aSelectio
     long nDisplayStart = pPrintFuncCache->GetDisplayStart( nTab );
     long nTabStart = pPrintFuncCache->GetTabStart( nTab );
 
+    vcl::PDFExtOutDevData* pPDFData = PTR_CAST( vcl::PDFExtOutDevData, pDev->GetExtOutDevData() );
     if ( nRenderer == nTabStart )
     {
         // first page of a sheet: add outline item for the sheet name
 
-        vcl::PDFExtOutDevData* pPDFData = PTR_CAST( vcl::PDFExtOutDevData, pDev->GetExtOutDevData() );
         if ( pPDFData && pPDFData->GetIsExportBookmarks() )
         {
             // the sheet starts at the top of the page
@@ -846,7 +846,7 @@ void SAL_CALL ScModelObj::render( sal_Int32 nRenderer, const uno::Any& aSelectio
         }
         //--->i56629
         // add the named destination stuff
-        if( pPDFData->GetIsExportNamedDestinations() )
+        if( pPDFData && pPDFData->GetIsExportNamedDestinations() )
         {
             Rectangle aArea( pDev->PixelToLogic( Rectangle( 0,0,0,0 ) ) );
             String aTabName;
@@ -861,7 +861,6 @@ void SAL_CALL ScModelObj::render( sal_Int32 nRenderer, const uno::Any& aSelectio
 
     //  resolve the hyperlinks for PDF export
 
-    vcl::PDFExtOutDevData* pPDFData = PTR_CAST( vcl::PDFExtOutDevData, pDev->GetExtOutDevData() );
     if ( pPDFData )
     {
         //  iterate over the hyperlinks that were output for this page
