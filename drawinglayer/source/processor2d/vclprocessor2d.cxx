@@ -169,30 +169,24 @@ namespace drawinglayer
 
                     if(!basegfx::fTools::equal(aScale.getX(), aScale.getY()))
                     {
-                        // #i96581# font stretching is needed; examine how big the difference between X and Y scaling is
-                        const double fPercent(fabs(1.0 - (aScale.getX() / aScale.getY())));
-                        static double fMaximumAcceptedPercent(0.05);
-                        static bool bForceAdaption(false);
+                        // #100424# We have a hint on FontScaling here. To decide a look
+                        // at the pure font's scale is needed, since e.g. SC uses unequally scaled
+                        // MapModes (was: #i96581#, but use available full precision from primitive
+                        // now). aTranslate and fShearX can be reused since no longer needed.
+                        basegfx::B2DVector aFontScale;
+                        double fFontRotate;
+                        rTextCandidate.getTextTransform().decompose(aFontScale, aTranslate, fFontRotate, fShearX);
 
-                        if(bForceAdaption || fPercent > fMaximumAcceptedPercent)
+                        if(!basegfx::fTools::equal(aFontScale.getX(), aFontScale.getY()))
                         {
-                            // #i96581# Need to adapt to a FontStretching bigger than acceptable maximum.
-                            // Get font's real width using FontMetric and adapt font to stretched
-                            // font
-                            const FontMetric aFontMetric(mpOutputDevice->GetFontMetric(aFont));
-                            const double fRealFontWidth(aFontMetric.GetWidth());
-
+                            // indeed a FontScaling. Set at Font. Use the combined scale
+                            // and rotate here
                             aFont = primitive2d::getVclFontFromFontAttributes(
                                 rTextCandidate.getFontAttributes(),
-                                fRealFontWidth,
+                                aScale.getX(),
                                 aScale.getY(),
                                 fRotate,
                                 *mpOutputDevice);
-                        }
-                        else
-                        {
-                            // #i96581# less than allowed maximum (probably SC's generated MapModes). React
-                            // pragmatically by ignoring the stretching up to this point
                         }
                     }
 
