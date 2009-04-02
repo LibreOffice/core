@@ -1385,6 +1385,7 @@ bool X11SalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly
     rRenderPeer.FillRectangle( PictOpSrc, rEntry.m_aPicture, &aRenderColor, 0, 0, 1, 1 );
 
     // notify xrender of target drawable
+    // TODO: cache the matching xrender picture in the X11SalGraphics
     Picture aDst = rRenderPeer.CreatePicture( hDrawable_, pVisualFormat, 0, NULL );
 
     // set clipping
@@ -1395,6 +1396,10 @@ bool X11SalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly
     const XRenderPictFormat* pMaskFormat = rRenderPeer.GetStandardFormatA8();
     rRenderPeer.CompositeTrapezoids( PictOpOver,
         rEntry.m_aPicture, aDst, pMaskFormat, 0, 0, &aTrapVector[0], aTrapVector.size() );
+
+    // release xrender-counterpart of target drawable
+    // TODO: use scoped xrender picture
+    rRenderPeer.FreePicture( aDst );
 
     return TRUE;
 }

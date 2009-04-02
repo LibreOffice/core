@@ -6680,6 +6680,7 @@ void PDFWriterImpl::drawHorizontalGlyphs(
             appendHex( rGlyphs[nPos].m_nMappedGlyphId, aUnkernedLine );
             // check for adjustment
             double fTheoreticalGlyphWidth = rGlyphs[nPos].m_aPos.X() - rGlyphs[nPos-1].m_aPos.X();
+            fTheoreticalGlyphWidth = fabs( fTheoreticalGlyphWidth ); // #i100522# workaround until #i87686# gets fixed
             fTheoreticalGlyphWidth = 1000.0 * fTheoreticalGlyphWidth / fXScale / double(nPixelFontHeight);
             sal_Int32 nAdjustment = rGlyphs[nPos-1].m_nNativeWidth - sal_Int32(fTheoreticalGlyphWidth+0.5);
             if( nAdjustment != 0 )
