@@ -1,7 +1,7 @@
 # TODO: move to solenv/inc
 # copies: sw/uiconfig/layout svx/uiconfig/layout
 
-TRALAY=$(AUGMENT_LIBRARY_PATH) tralay
+TRALAY=tralay
 XML_DEST=$(DLLDEST)
 XML_LANGS=$(alllangiso)
 
