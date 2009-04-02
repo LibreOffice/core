@@ -2155,7 +2155,7 @@ void SwWW8Writer::OutWW8TableDefinition
         }
     }
 
-    SwTwips nSz = nTblOffset;
+    SwTwips nSz = 0;
     sal_uInt32 n = 0;
     InsUInt16(nTblOffset);
 
@@ -2167,6 +2167,8 @@ void SwWW8Writer::OutWW8TableDefinition
         SwTwips nCalc = nSz;
         if (bRelBoxSize)
             nCalc = (nCalc * nPageSize) / nTblSz;
+
+        nCalc += nTblOffset;
 
         InsUInt16(static_cast<USHORT>(nCalc));
     }
