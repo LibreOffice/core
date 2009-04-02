@@ -93,6 +93,7 @@ class InprocEmbedDocument_Impl : public InprocCountedObject_Impl
     ComSmart< IStorage > m_pStorage;
 
     ComSmart< IOleClientSite > m_pClientSite;
+    ComSmart< IOleContainer >  m_pOleContainer;
 
     ULONG m_nCallsOnStack;
 
@@ -148,7 +149,7 @@ public:
     {}
 
     HRESULT Init();
-    void SetFileName( LPCOLESTR pszFileName );
+    void SetName( LPCOLESTR pszNameFromOutside, wchar_t*& pOwnName );
 
     BOOL CheckDefHandler();
     ComSmart< IUnknown >& GetDefHandler() { return m_pDefHandler; }
