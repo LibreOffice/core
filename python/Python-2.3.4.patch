@@ -106,8 +106,17 @@
  INSTALL=/usr/bin/install -c
  INSTALL_SYMLINK=ln -fsn
  INSTALL_PROGRAM=${INSTALL}
---- misc/Python-2.3.4/Makefile.pre.in	Tue Nov 18 20:54:00 2003
-+++ misc/build/Python-2.3.4/Makefile.pre.in	Mon Apr 14 11:55:56 2008
+--- misc/Python-2.3.4/Makefile.pre.in	2003-11-18 20:54:00.000000000 +0100
++++ misc/build/Python-2.3.4/Makefile.pre.in	2009-03-24 10:57:35.000000000 +0100
+@@ -56,7 +56,7 @@
+ OPT=		@OPT@
+ BASECFLAGS=	@BASECFLAGS@
+ CFLAGS=		$(BASECFLAGS) $(OPT)
+-CPPFLAGS=	-I. -I$(srcdir)/Include
++CPPFLAGS=	-D_FORTIFY_SOURCE=0 -I. -I$(srcdir)/Include
+ LDFLAGS=	@LDFLAGS@
+ LDLAST=		@LDLAST@
+ SGI_ABI=	@SGI_ABI@
 @@ -97,6 +97,7 @@
  LDSHARED=	@LDSHARED@
  BLDSHARED=	@BLDSHARED@
@@ -374,6 +383,17 @@
  
  	/* This lives in gcmodule.c */
  	{"gc", initgc},
+--- misc/Python-2.3.4/Modules/expat/Makefile.in	2002-02-12 00:13:05.000000000 +0100
++++ misc/build/Python-2.3.4/Modules/expat/Makefile.in	2009-03-24 11:01:46.000000000 +0100
+@@ -78,7 +78,7 @@
+ INCLUDES = -I$(srcdir) -I. -I..
+ DEFS = @DEFS@ -DPACKAGE='"$(PACKAGE)"' -DVERSION='"$(PACKAGE)_$(VERSION)"'
+ 
+-CPPFLAGS = @CPPFLAGS@
++CPPFLAGS = -D_FORTIFY_SOURCE=0 @CPPFLAGS@
+ LDFLAGS = @LDFLAGS@
+ LIBS = @LIBS@
+ CFLAGS = @CFLAGS@
 --- misc/Python-2.3.4/Modules/mmapmodule.c	Tue Jul 15 14:37:46 2003
 +++ misc/build/Python-2.3.4/Modules/mmapmodule.c	Mon Apr 14 11:55:56 2008
 @@ -20,11 +20,11 @@
@@ -627,8 +647,8 @@
  	if (n == SOCKET_ERROR) {
  		PyErr_SetExcFromWindowsErr(SelectError, WSAGetLastError());
  	}
---- misc/Python-2.3.4/Modules/socketmodule.c	Sun Apr 11 14:10:03 2004
-+++ misc/build/Python-2.3.4/Modules/socketmodule.c	Mon Apr 14 11:55:56 2008
+--- misc/Python-2.3.4/Modules/socketmodule.c	2004-04-11 14:10:03.000000000 +0200
++++ misc/build/Python-2.3.4/Modules/socketmodule.c	2009-03-14 18:16:34.000000000 +0100
 @@ -136,7 +136,7 @@
  #endif
  
@@ -647,7 +667,7 @@
  
  /* Non-MS WINDOWS includes */
  # include <netdb.h>
-@@ -296,7 +296,7 @@
+@@ -296,14 +296,14 @@
  #include "getnameinfo.c"
  #endif
  
@@ -656,7 +676,6 @@
  /* BeOS suffers from the same socket dichotomy as Win32... - [cjh] */
  /* seem to be a few differences in the API */
  #define SOCKETCLOSE closesocket
-@@ -303,7 +303,7 @@
  #define NO_DUP /* Actually it exists on NT 3.5, but what the heck... */
  #endif
  
@@ -923,9 +942,9 @@
  	if (zip_path[0]) {
  		strcpy(buf, zip_path);
  		buf = strchr(buf, '\0');
---- misc/Python-2.3.4/PCbuild/_bsddb.dep	Mon Apr 14 12:02:00 2008
-+++ misc/build/Python-2.3.4/PCbuild/_bsddb.dep	Mon Apr 14 11:55:56 2008
-@@ -1,1 +1,48 @@
+--- misc/Python-2.3.4/PCbuild/_bsddb.dep	2009-03-24 11:08:01.000000000 +0100
++++ misc/build/Python-2.3.4/PCbuild/_bsddb.dep	2009-03-14 18:16:34.000000000 +0100
+@@ -1 +1,48 @@
 -dummy
 +# Microsoft Developer Studio erstellte Abhngigkeitsdatei, einbezogen von _bsddb.mak
 +
@@ -975,9 +994,9 @@
 +	"..\PC\pyconfig.h"\
 +	{$(INCLUDE)}"basetsd.h"\
 +	
---- misc/Python-2.3.4/PCbuild/_bsddb.mak	Mon Apr 14 12:02:00 2008
-+++ misc/build/Python-2.3.4/PCbuild/_bsddb.mak	Mon Apr 14 11:55:56 2008
-@@ -1,1 +1,238 @@
+--- misc/Python-2.3.4/PCbuild/_bsddb.mak	2009-03-24 11:08:01.000000000 +0100
++++ misc/build/Python-2.3.4/PCbuild/_bsddb.mak	2009-03-14 18:16:34.000000000 +0100
+@@ -1 +1,238 @@
 -dummy
 +!IF "$(CFG)" == ""
 +CFG=_bsddb - Win32 Release
@@ -1217,9 +1236,9 @@
 +
 +!ENDIF 
 +
---- misc/Python-2.3.4/PCbuild/_csv.dep	Mon Apr 14 12:02:00 2008
-+++ misc/build/Python-2.3.4/PCbuild/_csv.dep	Mon Apr 14 11:55:56 2008
-@@ -1,1 +1,49 @@
+--- misc/Python-2.3.4/PCbuild/_csv.dep	2009-03-24 11:08:01.000000000 +0100
++++ misc/build/Python-2.3.4/PCbuild/_csv.dep	2009-03-14 18:16:34.000000000 +0100
+@@ -1 +1,49 @@
 -dummy
 +# Microsoft Developer Studio erstellte Abhngigkeitsdatei, einbezogen von _csv.mak
 +
@@ -1270,9 +1289,9 @@
 +	"..\PC\pyconfig.h"\
 +	{$(INCLUDE)}"basetsd.h"\
 +	
---- misc/Python-2.3.4/PCbuild/_csv.mak	Mon Apr 14 12:02:00 2008
-+++ misc/build/Python-2.3.4/PCbuild/_csv.mak	Mon Apr 14 11:55:56 2008
-@@ -1,1 +1,237 @@
+--- misc/Python-2.3.4/PCbuild/_csv.mak	2009-03-24 11:08:01.000000000 +0100
++++ misc/build/Python-2.3.4/PCbuild/_csv.mak	2009-03-14 18:16:34.000000000 +0100
+@@ -1 +1,237 @@
 -dummy
 +!IF "$(CFG)" == ""
 +CFG=_csv - Win32 Release
@@ -1511,9 +1530,9 @@
 +
 +
 +!ENDIF
---- misc/Python-2.3.4/PCbuild/_socket.dep	Mon Apr 14 12:02:00 2008
-+++ misc/build/Python-2.3.4/PCbuild/_socket.dep	Mon Apr 14 11:55:56 2008
-@@ -1,1 +1,53 @@
+--- misc/Python-2.3.4/PCbuild/_socket.dep	2009-03-24 11:08:01.000000000 +0100
++++ misc/build/Python-2.3.4/PCbuild/_socket.dep	2009-03-14 18:16:34.000000000 +0100
+@@ -1 +1,53 @@
 -dummy
 +# Microsoft Developer Studio erstellte Abhngigkeitsdatei, einbezogen von _socket.mak
 +
@@ -1568,9 +1587,9 @@
 +	"..\PC\pyconfig.h"\
 +	{$(INCLUDE)}"basetsd.h"\
 +	
---- misc/Python-2.3.4/PCbuild/_socket.mak	Mon Apr 14 12:01:59 2008
-+++ misc/build/Python-2.3.4/PCbuild/_socket.mak	Mon Apr 14 11:55:56 2008
-@@ -1,1 +1,237 @@
+--- misc/Python-2.3.4/PCbuild/_socket.mak	2009-03-24 11:08:01.000000000 +0100
++++ misc/build/Python-2.3.4/PCbuild/_socket.mak	2009-03-14 18:16:34.000000000 +0100
+@@ -1 +1,237 @@
 -dummy
 +!IF "$(CFG)" == ""
 +CFG=_socket - Win32 Release
@@ -1809,9 +1828,9 @@
 +
 +
 +!ENDIF
---- misc/Python-2.3.4/PCbuild/_sre.dep	Mon Apr 14 12:02:00 2008
-+++ misc/build/Python-2.3.4/PCbuild/_sre.dep	Mon Apr 14 11:55:56 2008
-@@ -1,1 +1,51 @@
+--- misc/Python-2.3.4/PCbuild/_sre.dep	2009-03-24 11:08:01.000000000 +0100
++++ misc/build/Python-2.3.4/PCbuild/_sre.dep	2009-03-14 18:16:34.000000000 +0100
+@@ -1 +1,51 @@
 -dummy
 +# Microsoft Developer Studio erstellte Abhngigkeitsdatei, einbezogen von _sre.mak
 +
@@ -1864,9 +1883,9 @@
 +	"..\PC\pyconfig.h"\
 +	{$(INCLUDE)}"basetsd.h"\
 +	
---- misc/Python-2.3.4/PCbuild/_sre.mak	Mon Apr 14 12:02:00 2008
-+++ misc/build/Python-2.3.4/PCbuild/_sre.mak	Mon Apr 14 11:55:56 2008
-@@ -1,1 +1,237 @@
+--- misc/Python-2.3.4/PCbuild/_sre.mak	2009-03-24 11:08:01.000000000 +0100
++++ misc/build/Python-2.3.4/PCbuild/_sre.mak	2009-03-14 18:16:34.000000000 +0100
+@@ -1 +1,237 @@
 -dummy
 +!IF "$(CFG)" == ""
 +CFG=_sre - Win32 Release
@@ -2105,9 +2124,9 @@
 +
 +
 +!ENDIF
---- misc/Python-2.3.4/PCbuild/_symtable.dep	Mon Apr 14 12:02:00 2008
-+++ misc/build/Python-2.3.4/PCbuild/_symtable.dep	Mon Apr 14 11:55:56 2008
-@@ -1,1 +1,50 @@
+--- misc/Python-2.3.4/PCbuild/_symtable.dep	2009-03-24 11:08:01.000000000 +0100
++++ misc/build/Python-2.3.4/PCbuild/_symtable.dep	2009-03-14 18:16:34.000000000 +0100
+@@ -1 +1,50 @@
 -dummy
 +# Microsoft Developer Studio erstellte Abhngigkeitsdatei, einbezogen von _symtable.mak
 +
@@ -2159,9 +2178,9 @@
 +	"..\PC\pyconfig.h"\
 +	{$(INCLUDE)}"basetsd.h"\
 +	
---- misc/Python-2.3.4/PCbuild/_symtable.mak	Mon Apr 14 12:02:00 2008
-+++ misc/build/Python-2.3.4/PCbuild/_symtable.mak	Mon Apr 14 11:55:56 2008
-@@ -1,1 +1,236 @@
+--- misc/Python-2.3.4/PCbuild/_symtable.mak	2009-03-24 11:08:01.000000000 +0100
++++ misc/build/Python-2.3.4/PCbuild/_symtable.mak	2009-03-14 18:16:34.000000000 +0100
+@@ -1 +1,236 @@
 -dummy
 +!IF "$(CFG)" == ""
 +CFG=_symtable - Win32 Release
@@ -2399,9 +2418,9 @@
 +
 +!ENDIF 
 +
---- misc/Python-2.3.4/PCbuild/_testcapi.dep	Mon Apr 14 12:02:00 2008
-+++ misc/build/Python-2.3.4/PCbuild/_testcapi.dep	Mon Apr 14 11:55:56 2008
-@@ -1,1 +1,50 @@
+--- misc/Python-2.3.4/PCbuild/_testcapi.dep	2009-03-24 11:08:01.000000000 +0100
++++ misc/build/Python-2.3.4/PCbuild/_testcapi.dep	2009-03-14 18:16:34.000000000 +0100
+@@ -1 +1,50 @@
 -dummy
 +# Microsoft Developer Studio erstellte Abhngigkeitsdatei, einbezogen von _testcapi.mak
 +
@@ -2453,9 +2472,9 @@
 +	"..\PC\pyconfig.h"\
 +	{$(INCLUDE)}"basetsd.h"\
 +	
---- misc/Python-2.3.4/PCbuild/_testcapi.mak	Mon Apr 14 12:02:00 2008
-+++ misc/build/Python-2.3.4/PCbuild/_testcapi.mak	Mon Apr 14 11:55:56 2008
-@@ -1,1 +1,235 @@
+--- misc/Python-2.3.4/PCbuild/_testcapi.mak	2009-03-24 11:08:01.000000000 +0100
++++ misc/build/Python-2.3.4/PCbuild/_testcapi.mak	2009-03-14 18:16:34.000000000 +0100
+@@ -1 +1,235 @@
 -dummy
 +!IF "$(CFG)" == ""
 +CFG=_testcapi - Win32 Debug
@@ -2692,9 +2711,9 @@
 +
 +
 +!ENDIF
---- misc/Python-2.3.4/PCbuild/_tkinter.dep	Mon Apr 14 12:02:00 2008
-+++ misc/build/Python-2.3.4/PCbuild/_tkinter.dep	Mon Apr 14 11:55:56 2008
-@@ -1,1 +1,49 @@
+--- misc/Python-2.3.4/PCbuild/_tkinter.dep	2009-03-24 11:08:01.000000000 +0100
++++ misc/build/Python-2.3.4/PCbuild/_tkinter.dep	2009-03-14 18:16:34.000000000 +0100
+@@ -1 +1,49 @@
 -dummy
 +# Microsoft Developer Studio erstellte Abhngigkeitsdatei, einbezogen von _tkinter.mak
 +
@@ -2745,9 +2764,9 @@
 +	"..\PC\pyconfig.h"\
 +	{$(INCLUDE)}"basetsd.h"\
 +	
---- misc/Python-2.3.4/PCbuild/_tkinter.mak	Mon Apr 14 12:02:00 2008
-+++ misc/build/Python-2.3.4/PCbuild/_tkinter.mak	Mon Apr 14 11:55:56 2008
-@@ -1,1 +1,247 @@
+--- misc/Python-2.3.4/PCbuild/_tkinter.mak	2009-03-24 11:08:01.000000000 +0100
++++ misc/build/Python-2.3.4/PCbuild/_tkinter.mak	2009-03-14 18:16:34.000000000 +0100
+@@ -1 +1,247 @@
 -dummy
 +!IF "$(CFG)" == ""
 +CFG=_tkinter - Win32 Release
@@ -2996,9 +3015,9 @@
 +
 +
 +!ENDIF
---- misc/Python-2.3.4/PCbuild/bz2.dep	Mon Apr 14 12:02:00 2008
-+++ misc/build/Python-2.3.4/PCbuild/bz2.dep	Mon Apr 14 11:55:56 2008
-@@ -1,1 +1,50 @@
+--- misc/Python-2.3.4/PCbuild/bz2.dep	2009-03-24 11:08:01.000000000 +0100
++++ misc/build/Python-2.3.4/PCbuild/bz2.dep	2009-03-14 18:16:34.000000000 +0100
+@@ -1 +1,50 @@
 -dummy
 +# Microsoft Developer Studio erstellte Abhngigkeitsdatei, einbezogen von bz2.mak
 +
@@ -3050,9 +3069,9 @@
 +	"..\PC\pyconfig.h"\
 +	{$(INCLUDE)}"basetsd.h"\
 +	
---- misc/Python-2.3.4/PCbuild/bz2.mak	Mon Apr 14 12:02:00 2008
-+++ misc/build/Python-2.3.4/PCbuild/bz2.mak	Mon Apr 14 11:55:56 2008
-@@ -1,1 +1,187 @@
+--- misc/Python-2.3.4/PCbuild/bz2.mak	2009-03-24 11:08:01.000000000 +0100
++++ misc/build/Python-2.3.4/PCbuild/bz2.mak	2009-03-14 18:16:34.000000000 +0100
+@@ -1 +1,187 @@
 -dummy
 +!IF "$(CFG)" == ""
 +CFG=bz2 - Win32 Release
@@ -3241,9 +3260,9 @@
 +
 +!ENDIF
 +
---- misc/Python-2.3.4/PCbuild/datetime.dep	Mon Apr 14 12:01:58 2008
-+++ misc/build/Python-2.3.4/PCbuild/datetime.dep	Mon Apr 14 11:55:56 2008
-@@ -1,1 +1,50 @@
+--- misc/Python-2.3.4/PCbuild/datetime.dep	2009-03-24 11:08:00.000000000 +0100
++++ misc/build/Python-2.3.4/PCbuild/datetime.dep	2009-03-14 18:16:34.000000000 +0100
+@@ -1 +1,50 @@
 -dummy
 +# Microsoft Developer Studio erstellte Abhngigkeitsdatei, einbezogen von datetime.mak
 +
@@ -3295,9 +3314,9 @@
 +	"..\PC\pyconfig.h"\
 +	{$(INCLUDE)}"basetsd.h"\
 +	
---- misc/Python-2.3.4/PCbuild/datetime.mak	Mon Apr 14 12:01:58 2008
-+++ misc/build/Python-2.3.4/PCbuild/datetime.mak	Mon Apr 14 11:55:56 2008
-@@ -1,1 +1,239 @@
+--- misc/Python-2.3.4/PCbuild/datetime.mak	2009-03-24 11:08:00.000000000 +0100
++++ misc/build/Python-2.3.4/PCbuild/datetime.mak	2009-03-14 18:16:34.000000000 +0100
+@@ -1 +1,239 @@
 -dummy
 +!IF "$(CFG)" == ""
 +CFG=datetime - Win32 Release
@@ -3538,18 +3557,18 @@
 +
 +
 +!ENDIF
---- misc/Python-2.3.4/PCbuild/make_versioninfo.dep	Mon Apr 14 12:02:00 2008
-+++ misc/build/Python-2.3.4/PCbuild/make_versioninfo.dep	Mon Apr 14 11:55:56 2008
-@@ -1,1 +1,5 @@
+--- misc/Python-2.3.4/PCbuild/make_versioninfo.dep	2009-03-24 11:08:01.000000000 +0100
++++ misc/build/Python-2.3.4/PCbuild/make_versioninfo.dep	2009-03-14 18:16:34.000000000 +0100
+@@ -1 +1,5 @@
 -dummy
 +# Microsoft Developer Studio erstellte Abhngigkeitsdatei, einbezogen von make_versioninfo.mak
 +
 +..\PC\make_versioninfo.c : \
 +	"..\Include\patchlevel.h"\
 +	
---- misc/Python-2.3.4/PCbuild/make_versioninfo.mak	Mon Apr 14 12:02:00 2008
-+++ misc/build/Python-2.3.4/PCbuild/make_versioninfo.mak	Mon Apr 14 11:55:56 2008
-@@ -1,1 +1,220 @@
+--- misc/Python-2.3.4/PCbuild/make_versioninfo.mak	2009-03-24 11:08:01.000000000 +0100
++++ misc/build/Python-2.3.4/PCbuild/make_versioninfo.mak	2009-03-14 18:16:34.000000000 +0100
+@@ -1 +1,220 @@
 -dummy
 +!IF "$(CFG)" == ""
 +CFG=make_versioninfo - Win32 Release
@@ -3771,9 +3790,9 @@
 +
 +!ENDIF
 +
---- misc/Python-2.3.4/PCbuild/mmap.dep	Mon Apr 14 12:01:58 2008
-+++ misc/build/Python-2.3.4/PCbuild/mmap.dep	Mon Apr 14 11:55:56 2008
-@@ -1,1 +1,48 @@
+--- misc/Python-2.3.4/PCbuild/mmap.dep	2009-03-24 11:08:00.000000000 +0100
++++ misc/build/Python-2.3.4/PCbuild/mmap.dep	2009-03-14 18:16:34.000000000 +0100
+@@ -1 +1,48 @@
 -dummy
 +# Microsoft Developer Studio erstellte Abhngigkeitsdatei, einbezogen von mmap.mak
 +
@@ -3823,9 +3842,9 @@
 +	"..\PC\pyconfig.h"\
 +	{$(INCLUDE)}"basetsd.h"\
 +	
---- misc/Python-2.3.4/PCbuild/mmap.mak	Mon Apr 14 12:01:58 2008
-+++ misc/build/Python-2.3.4/PCbuild/mmap.mak	Mon Apr 14 11:55:57 2008
-@@ -1,1 +1,235 @@
+--- misc/Python-2.3.4/PCbuild/mmap.mak	2009-03-24 11:08:00.000000000 +0100
++++ misc/build/Python-2.3.4/PCbuild/mmap.mak	2009-03-14 18:16:34.000000000 +0100
+@@ -1 +1,235 @@
 -dummy
 +!IF "$(CFG)" == ""
 +CFG=mmap - Win32 Release
@@ -4062,9 +4081,9 @@
 +
 +
 +!ENDIF
---- misc/Python-2.3.4/PCbuild/parser.dep	Mon Apr 14 12:01:58 2008
-+++ misc/build/Python-2.3.4/PCbuild/parser.dep	Mon Apr 14 11:55:57 2008
-@@ -1,1 +1,53 @@
+--- misc/Python-2.3.4/PCbuild/parser.dep	2009-03-24 11:08:00.000000000 +0100
++++ misc/build/Python-2.3.4/PCbuild/parser.dep	2009-03-14 18:16:34.000000000 +0100
+@@ -1 +1,53 @@
 -dummy
 +# Microsoft Developer Studio erstellte Abhngigkeitsdatei, einbezogen von parser.mak
 +
@@ -4119,9 +4138,9 @@
 +	"..\PC\pyconfig.h"\
 +	{$(INCLUDE)}"basetsd.h"\
 +	
---- misc/Python-2.3.4/PCbuild/parser.mak	Mon Apr 14 12:01:58 2008
-+++ misc/build/Python-2.3.4/PCbuild/parser.mak	Mon Apr 14 11:55:57 2008
-@@ -1,1 +1,237 @@
+--- misc/Python-2.3.4/PCbuild/parser.mak	2009-03-24 11:08:00.000000000 +0100
++++ misc/build/Python-2.3.4/PCbuild/parser.mak	2009-03-14 18:16:34.000000000 +0100
+@@ -1 +1,237 @@
 -dummy
 +!IF "$(CFG)" == ""
 +CFG=parser - Win32 Release
@@ -4360,9 +4379,9 @@
 +
 +
 +!ENDIF
---- misc/Python-2.3.4/PCbuild/pyexpat.dep	Mon Apr 14 12:01:59 2008
-+++ misc/build/Python-2.3.4/PCbuild/pyexpat.dep	Mon Apr 14 11:55:57 2008
-@@ -1,1 +1,85 @@
+--- misc/Python-2.3.4/PCbuild/pyexpat.dep	2009-03-24 11:08:00.000000000 +0100
++++ misc/build/Python-2.3.4/PCbuild/pyexpat.dep	2009-03-14 18:16:34.000000000 +0100
+@@ -1 +1,85 @@
 -dummy
 +# Microsoft Developer Studio erstellte Abhngigkeitsdatei, einbezogen von pyexpat.mak
 +
@@ -4449,9 +4468,9 @@
 +	"..\Modules\expat\xmltok_impl.h"\
 +	"..\Modules\expat\xmltok_ns.c"\
 +	
---- misc/Python-2.3.4/PCbuild/pyexpat.mak	Mon Apr 14 12:01:59 2008
-+++ misc/build/Python-2.3.4/PCbuild/pyexpat.mak	Mon Apr 14 11:55:57 2008
-@@ -1,1 +1,268 @@
+--- misc/Python-2.3.4/PCbuild/pyexpat.mak	2009-03-24 11:08:00.000000000 +0100
++++ misc/build/Python-2.3.4/PCbuild/pyexpat.mak	2009-03-14 18:16:34.000000000 +0100
+@@ -1 +1,268 @@
 -dummy
 +!IF "$(CFG)" == ""
 +CFG=pyexpat - Win32 Release
@@ -4721,9 +4740,9 @@
 +
 +!ENDIF
 +
---- misc/Python-2.3.4/PCbuild/python.dep	Mon Apr 14 12:01:59 2008
-+++ misc/build/Python-2.3.4/PCbuild/python.dep	Mon Apr 14 11:55:57 2008
-@@ -1,1 +1,52 @@
+--- misc/Python-2.3.4/PCbuild/python.dep	2009-03-24 11:08:00.000000000 +0100
++++ misc/build/Python-2.3.4/PCbuild/python.dep	2009-03-14 18:16:34.000000000 +0100
+@@ -1 +1,52 @@
 -dummy
 +# Microsoft Developer Studio erstellte Abhngigkeitsdatei, einbezogen von python.mak
 +
@@ -4777,9 +4796,9 @@
 +..\PC\python_exe.rc : \
 +	"..\PC\pycon.ico"\
 +	
---- misc/Python-2.3.4/PCbuild/python.mak	Mon Apr 14 12:01:59 2008
-+++ misc/build/Python-2.3.4/PCbuild/python.mak	Mon Apr 14 11:55:57 2008
-@@ -1,1 +1,271 @@
+--- misc/Python-2.3.4/PCbuild/python.mak	2009-03-24 11:08:00.000000000 +0100
++++ misc/build/Python-2.3.4/PCbuild/python.mak	2009-03-14 18:16:34.000000000 +0100
+@@ -1 +1,271 @@
 -dummy
 +!IF "$(CFG)" == ""
 +CFG=python - Win32 Release
@@ -5052,9 +5071,9 @@
 +
 +
 +!ENDIF
---- misc/Python-2.3.4/PCbuild/pythoncore.dep	Mon Apr 14 12:02:01 2008
-+++ misc/build/Python-2.3.4/PCbuild/pythoncore.dep	Mon Apr 14 11:55:57 2008
-@@ -1,1 +1,5452 @@
+--- misc/Python-2.3.4/PCbuild/pythoncore.dep	2009-03-24 11:08:01.000000000 +0100
++++ misc/build/Python-2.3.4/PCbuild/pythoncore.dep	2009-03-14 18:16:34.000000000 +0100
+@@ -1 +1,5452 @@
 -dummy
 +# Microsoft Developer Studio erstellte Abhngigkeitsdatei, einbezogen von pythoncore.mak
 +
@@ -10508,9 +10527,9 @@
 +	"..\PC\pyconfig.h"\
 +	{$(INCLUDE)}"basetsd.h"\
 +	
---- misc/Python-2.3.4/PCbuild/pythoncore.mak	Mon Apr 14 12:02:01 2008
-+++ misc/build/Python-2.3.4/PCbuild/pythoncore.mak	Mon Apr 14 11:55:57 2008
-@@ -1,1 +1,1435 @@
+--- misc/Python-2.3.4/PCbuild/pythoncore.mak	2009-03-24 11:08:01.000000000 +0100
++++ misc/build/Python-2.3.4/PCbuild/pythoncore.mak	2009-03-14 18:16:34.000000000 +0100
+@@ -1 +1,1435 @@
 -dummy
 +!IF "$(CFG)" == ""
 +CFG=pythoncore - Win32 Release
@@ -11947,9 +11966,9 @@
 +
 +
 +!ENDIF
---- misc/Python-2.3.4/PCbuild/pythonw.dep	Mon Apr 14 12:01:59 2008
-+++ misc/build/Python-2.3.4/PCbuild/pythonw.dep	Mon Apr 14 11:55:57 2008
-@@ -1,1 +1,52 @@
+--- misc/Python-2.3.4/PCbuild/pythonw.dep	2009-03-24 11:08:00.000000000 +0100
++++ misc/build/Python-2.3.4/PCbuild/pythonw.dep	2009-03-14 18:16:34.000000000 +0100
+@@ -1 +1,52 @@
 -dummy
 +# Microsoft Developer Studio erstellte Abhngigkeitsdatei, einbezogen von pythonw.mak
 +
@@ -12003,9 +12022,9 @@
 +	"..\PC\pyconfig.h"\
 +	{$(INCLUDE)}"basetsd.h"\
 +	
---- misc/Python-2.3.4/PCbuild/pythonw.mak	Mon Apr 14 12:01:59 2008
-+++ misc/build/Python-2.3.4/PCbuild/pythonw.mak	Mon Apr 14 11:55:57 2008
-@@ -1,1 +1,255 @@
+--- misc/Python-2.3.4/PCbuild/pythonw.mak	2009-03-24 11:08:00.000000000 +0100
++++ misc/build/Python-2.3.4/PCbuild/pythonw.mak	2009-03-14 18:16:34.000000000 +0100
+@@ -1 +1,255 @@
 -dummy
 +!IF "$(CFG)" == ""
 +CFG=pythonw - Win32 Release
@@ -12262,9 +12281,9 @@
 +
 +
 +!ENDIF
---- misc/Python-2.3.4/PCbuild/select.dep	Mon Apr 14 12:01:59 2008
-+++ misc/build/Python-2.3.4/PCbuild/select.dep	Mon Apr 14 11:55:57 2008
-@@ -1,1 +1,48 @@
+--- misc/Python-2.3.4/PCbuild/select.dep	2009-03-24 11:08:00.000000000 +0100
++++ misc/build/Python-2.3.4/PCbuild/select.dep	2009-03-14 18:16:34.000000000 +0100
+@@ -1 +1,48 @@
 -dummy
 +# Microsoft Developer Studio erstellte Abhngigkeitsdatei, einbezogen von select.mak
 +
@@ -12314,9 +12333,9 @@
 +	"..\PC\pyconfig.h"\
 +	{$(INCLUDE)}"basetsd.h"\
 +	
---- misc/Python-2.3.4/PCbuild/select.mak	Mon Apr 14 12:01:59 2008
-+++ misc/build/Python-2.3.4/PCbuild/select.mak	Mon Apr 14 11:55:57 2008
-@@ -1,1 +1,238 @@
+--- misc/Python-2.3.4/PCbuild/select.mak	2009-03-24 11:08:00.000000000 +0100
++++ misc/build/Python-2.3.4/PCbuild/select.mak	2009-03-14 18:16:34.000000000 +0100
+@@ -1 +1,238 @@
 -dummy
 +!IF "$(CFG)" == ""
 +CFG=select - Win32 Release
@@ -12556,9 +12575,9 @@
 +
 +!ENDIF
 +
---- misc/Python-2.3.4/PCbuild/unicodedata.dep	Mon Apr 14 12:01:59 2008
-+++ misc/build/Python-2.3.4/PCbuild/unicodedata.dep	Mon Apr 14 11:55:57 2008
-@@ -1,1 +1,51 @@
+--- misc/Python-2.3.4/PCbuild/unicodedata.dep	2009-03-24 11:08:00.000000000 +0100
++++ misc/build/Python-2.3.4/PCbuild/unicodedata.dep	2009-03-14 18:16:34.000000000 +0100
+@@ -1 +1,51 @@
 -dummy
 +# Microsoft Developer Studio erstellte Abhngigkeitsdatei, einbezogen von unicodedata.mak
 +
@@ -12611,9 +12630,9 @@
 +	"..\PC\pyconfig.h"\
 +	{$(INCLUDE)}"basetsd.h"\
 +	
---- misc/Python-2.3.4/PCbuild/unicodedata.mak	Mon Apr 14 12:01:59 2008
-+++ misc/build/Python-2.3.4/PCbuild/unicodedata.mak	Mon Apr 14 11:55:57 2008
-@@ -1,1 +1,235 @@
+--- misc/Python-2.3.4/PCbuild/unicodedata.mak	2009-03-24 11:08:00.000000000 +0100
++++ misc/build/Python-2.3.4/PCbuild/unicodedata.mak	2009-03-14 18:16:34.000000000 +0100
+@@ -1 +1,235 @@
 -dummy
 +!IF "$(CFG)" == ""
 +CFG=unicodedata - Win32 Release
@@ -12850,15 +12869,15 @@
 +
 +
 +!ENDIF
---- misc/Python-2.3.4/PCbuild/w9xpopen.dep	Mon Apr 14 12:01:59 2008
-+++ misc/build/Python-2.3.4/PCbuild/w9xpopen.dep	Mon Apr 14 11:55:57 2008
-@@ -1,1 +1,2 @@
+--- misc/Python-2.3.4/PCbuild/w9xpopen.dep	2009-03-24 11:08:00.000000000 +0100
++++ misc/build/Python-2.3.4/PCbuild/w9xpopen.dep	2009-03-14 18:16:34.000000000 +0100
+@@ -1 +1,2 @@
 -dummy
 +# Microsoft Developer Studio erstellte Abhngigkeitsdatei, einbezogen von w9xpopen.mak
 +
---- misc/Python-2.3.4/PCbuild/w9xpopen.mak	Mon Apr 14 12:01:59 2008
-+++ misc/build/Python-2.3.4/PCbuild/w9xpopen.mak	Mon Apr 14 11:55:57 2008
-@@ -1,1 +1,178 @@
+--- misc/Python-2.3.4/PCbuild/w9xpopen.mak	2009-03-24 11:08:00.000000000 +0100
++++ misc/build/Python-2.3.4/PCbuild/w9xpopen.mak	2009-03-14 18:16:34.000000000 +0100
+@@ -1 +1,178 @@
 -dummy
 +!IF "$(CFG)" == ""
 +CFG=w9xpopen - Win32 Release
@@ -13038,9 +13057,9 @@
 +
 +
 +!ENDIF
---- misc/Python-2.3.4/PCbuild/winreg.dep	Mon Apr 14 12:01:59 2008
-+++ misc/build/Python-2.3.4/PCbuild/winreg.dep	Mon Apr 14 11:55:57 2008
-@@ -1,1 +1,49 @@
+--- misc/Python-2.3.4/PCbuild/winreg.dep	2009-03-24 11:08:01.000000000 +0100
++++ misc/build/Python-2.3.4/PCbuild/winreg.dep	2009-03-14 18:16:34.000000000 +0100
+@@ -1 +1,49 @@
 -dummy
 +# Microsoft Developer Studio erstellte Abhngigkeitsdatei, einbezogen von winreg.mak
 +
@@ -13091,9 +13110,9 @@
 +	"..\PC\pyconfig.h"\
 +	{$(INCLUDE)}"basetsd.h"\
 +	
---- misc/Python-2.3.4/PCbuild/winreg.mak	Mon Apr 14 12:01:59 2008
-+++ misc/build/Python-2.3.4/PCbuild/winreg.mak	Mon Apr 14 11:55:57 2008
-@@ -1,1 +1,253 @@
+--- misc/Python-2.3.4/PCbuild/winreg.mak	2009-03-24 11:08:00.000000000 +0100
++++ misc/build/Python-2.3.4/PCbuild/winreg.mak	2009-03-14 18:16:34.000000000 +0100
+@@ -1 +1,253 @@
 -dummy
 +!IF "$(CFG)" == ""
 +CFG=winreg - Win32 Release
@@ -13348,9 +13367,9 @@
 +
 +
 +!ENDIF
---- misc/Python-2.3.4/PCbuild/winsound.dep	Mon Apr 14 12:01:59 2008
-+++ misc/build/Python-2.3.4/PCbuild/winsound.dep	Mon Apr 14 11:55:57 2008
-@@ -1,1 +1,48 @@
+--- misc/Python-2.3.4/PCbuild/winsound.dep	2009-03-24 11:08:01.000000000 +0100
++++ misc/build/Python-2.3.4/PCbuild/winsound.dep	2009-03-14 18:16:34.000000000 +0100
+@@ -1 +1,48 @@
 -dummy
 +# Microsoft Developer Studio erstellte Abhngigkeitsdatei, einbezogen von winsound.mak
 +
@@ -13400,9 +13419,9 @@
 +	"..\PC\pyconfig.h"\
 +	{$(INCLUDE)}"basetsd.h"\
 +	
---- misc/Python-2.3.4/PCbuild/winsound.mak	Mon Apr 14 12:01:59 2008
-+++ misc/build/Python-2.3.4/PCbuild/winsound.mak	Mon Apr 14 11:55:57 2008
-@@ -1,1 +1,235 @@
+--- misc/Python-2.3.4/PCbuild/winsound.mak	2009-03-24 11:08:01.000000000 +0100
++++ misc/build/Python-2.3.4/PCbuild/winsound.mak	2009-03-14 18:16:34.000000000 +0100
+@@ -1 +1,235 @@
 -dummy
 +!IF "$(CFG)" == ""
 +CFG=winsound - Win32 Release
@@ -13639,9 +13658,9 @@
 +
 +
 +!ENDIF
---- misc/Python-2.3.4/PCbuild/zlib.dep	Mon Apr 14 12:02:00 2008
-+++ misc/build/Python-2.3.4/PCbuild/zlib.dep	Mon Apr 14 11:55:57 2008
-@@ -1,1 +1,49 @@
+--- misc/Python-2.3.4/PCbuild/zlib.dep	2009-03-24 11:08:01.000000000 +0100
++++ misc/build/Python-2.3.4/PCbuild/zlib.dep	2009-03-14 18:16:34.000000000 +0100
+@@ -1 +1,49 @@
 -dummy
 +# Microsoft Developer Studio erstellte Abhngigkeitsdatei, einbezogen von zlib.mak
 +
@@ -13692,9 +13711,9 @@
 +	"..\PC\pyconfig.h"\
 +	{$(INCLUDE)}"basetsd.h"\
 +	
---- misc/Python-2.3.4/PCbuild/zlib.mak	Mon Apr 14 12:02:00 2008
-+++ misc/build/Python-2.3.4/PCbuild/zlib.mak	Mon Apr 14 11:55:57 2008
-@@ -1,1 +1,245 @@
+--- misc/Python-2.3.4/PCbuild/zlib.mak	2009-03-24 11:08:01.000000000 +0100
++++ misc/build/Python-2.3.4/PCbuild/zlib.mak	2009-03-14 18:16:34.000000000 +0100
+@@ -1 +1,245 @@
 -dummy
 +!IF "$(CFG)" == ""
 +CFG=zlib - Win32 Release
@@ -13979,8 +13998,8 @@
  	handler = signal(sig, SIG_IGN);
  	signal(sig, handler);
  	return handler;
---- misc/Python-2.3.4/configure	Fri May  7 21:13:40 2004
-+++ misc/build/Python-2.3.4/configure	Mon Apr 14 12:00:51 2008
+--- misc/Python-2.3.4/configure	2004-05-07 21:13:40.000000000 +0200
++++ misc/build/Python-2.3.4/configure	2009-03-14 18:16:34.000000000 +0100
 @@ -309,7 +309,7 @@
  # include <unistd.h>
  #endif"
@@ -14002,10 +14021,10 @@
 +		define_xopen_source_extended=yes
 +		;;
 +esac
- 
++
 +if test $define_xopen_source_extended = yes
 +then
-+
+ 
  cat >>confdefs.h <<\_ACEOF
  #define _XOPEN_SOURCE_EXTENDED 1
  _ACEOF
@@ -14060,7 +14079,7 @@
  echo "$as_me:$LINENO: checking whether to enable large file support" >&5
  echo $ECHO_N "checking whether to enable large file support... $ECHO_C" >&6
  if test "$have_long_long" = yes -a \
-@@ -10021,7 +10041,13 @@
+@@ -10021,6 +10041,12 @@
  
  
  
@@ -14069,11 +14088,10 @@
 +CYGWIN*)
 +	DESTSHAREDFORRULES='$(shell cygpath -u $(DESTSHARED))';;
 +esac
- 
 +
+ 
  # SO is the extension of shared libraries `(including the dot!)
  # -- usually .so, .sl on HP-UX, .dll on Cygwin
- echo "$as_me:$LINENO: checking SO" >&5
 @@ -10069,8 +10095,8 @@
  	SunOS/4*) LDSHARED="ld";;
  	SunOS/5*)
@@ -14356,7 +14374,7 @@
   getpriority getpwent getwd \
   kill killpg lchown lstat mkfifo mknod mktime \
   mremap nice pathconf pause plock poll pthread_init \
-@@ -13191,7 +13387,145 @@
+@@ -13191,6 +13387,144 @@
  fi
  done
  
@@ -14392,7 +14410,7 @@
 +  ac_status=$?
 +  echo "$as_me:$LINENO: \$? = $ac_status" >&5
 +  (exit $ac_status); }; }; then
- 
++
 +cat >>confdefs.h <<\_ACEOF
 +#define HAVE_GETPEERNAME 1
 +_ACEOF
@@ -14498,10 +14516,9 @@
 +
 +    ;;
 +esac
-+
+ 
  # For some functions, having a definition is not sufficient, since
  # we want to take their address.
- echo "$as_me:$LINENO: checking for chroot" >&5
 @@ -17800,6 +18134,7 @@
  
  
@@ -14611,8 +14628,8 @@
  fi
  
  #
---- misc/Python-2.3.4/pyconfig.h.in	Mon Mar 22 21:20:32 2004
-+++ misc/build/Python-2.3.4/pyconfig.h.in	Mon Apr 14 11:55:57 2008
+--- misc/Python-2.3.4/pyconfig.h.in	2004-03-22 21:20:32.000000000 +0100
++++ misc/build/Python-2.3.4/pyconfig.h.in	2009-03-14 18:16:34.000000000 +0100
 @@ -841,6 +841,9 @@
  /* Define _OSF_SOURCE to get the makedev macro. */
  #undef _OSF_SOURCE
@@ -14623,7 +14640,7 @@
  /* Define to 2 if the system does not provide POSIX.1 features except with
     this defined. */
  #undef _POSIX_1_SOURCE
-@@ -854,9 +857,14 @@
+@@ -854,15 +857,22 @@
  /* Define if you have POSIX threads, and your system does not define that. */
  #undef _POSIX_THREADS
  
@@ -14638,7 +14655,6 @@
  /* Define to the level of X/Open that your system supports */
  #undef _XOPEN_SOURCE
  
-@@ -863,6 +871,8 @@
  /* Define to activate Unix95-and-earlier features */
  #undef _XOPEN_SOURCE_EXTENDED
  
