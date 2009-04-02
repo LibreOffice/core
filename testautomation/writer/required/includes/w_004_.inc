@@ -1,3 +1,4 @@
+'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 '*
@@ -1181,6 +1182,10 @@ testcase tInsertAllGraphicsFromFile
 
     GetFileList(quellpfad, "*.*" , Ziel())
     for i=1 to ListCount(Ziel())
+        if (gPlatform = "osx") AND (right(ziel(i),3) = "eps") then
+            qaerrorlog "#i100253# skipping eps"
+            i=i+1
+        endif
         printlog "- Graphic: " + Right(Ziel(i),3) + "-Format"
         Call hGrafikEinfuegen ( Ziel(i) )
         Sleep 5
