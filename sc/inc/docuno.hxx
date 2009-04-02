@@ -109,6 +109,7 @@ private:
     ::cppu::OInterfaceContainerHelper maChangesListeners;
 
     BOOL                    FillRenderMarkData( const com::sun::star::uno::Any& aSelection,
+                                                const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rOptions,
                                                 ScMarkData& rMark, ScPrintSelectionStatus& rStatus ) const;
 
     rtl::OUString           maBuildId;

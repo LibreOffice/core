@@ -579,7 +579,71 @@ bool lcl_ParseTarget( const String& rTarget, ScRange& rTargetRange, Rectangle& r
     return bRangeValid;
 }
 
-BOOL ScModelObj::FillRenderMarkData( const uno::Any& aSelection, ScMarkData& rMark,
+void lcl_addPrintUIOptions( uno::Sequence< beans::PropertyValue >& io_rProps,
+                            sal_Bool i_bEmptyPages,
+                            sal_Bool i_bSelectedOnly
+                            )
+{
+    // FIXME: the "Text" strings need to be localized
+
+    // create sequence of print UI options
+    uno::Sequence< beans::PropertyValue > aUIOptions( 5 );
+
+    // create Section for spreadsheet (results in an extra tab page in dialog)
+    uno::Sequence< beans::PropertyValue > aGroupOpt( 2 );
+    aGroupOpt[0].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Text" ) );
+    aGroupOpt[0].Value = uno::makeAny( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Spreadsheet" ) ) );
+    aGroupOpt[1].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ControlType" ) );
+    aGroupOpt[1].Value = uno::makeAny( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Group" ) ) );
+    aUIOptions[0].Value = uno::makeAny( aGroupOpt );
+
+    // create subgroup for pages
+    aGroupOpt[0].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Text" ) );
+    aGroupOpt[0].Value = uno::makeAny( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Pages" ) ) );
+    aGroupOpt[1].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ControlType" ) );
+    aGroupOpt[1].Value = uno::makeAny( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Subgroup" ) ) );
+    aUIOptions[1].Value = uno::makeAny( aGroupOpt );
+
+    // create a bool option for empty pages
+    uno::Sequence< beans::PropertyValue > aBoolOpt( 3 );
+    beans::PropertyValue aVal;
+    aBoolOpt[0].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Text" ) );
+    aBoolOpt[0].Value = uno::makeAny( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "~Suppress output of empty pages" ) ) );
+    aBoolOpt[1].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ControlType" ) );
+    aBoolOpt[1].Value = uno::makeAny( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Bool" ) ) );
+    aBoolOpt[2].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Property" ) );
+    aVal.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsSkipEmptyPages" ) );
+    aVal.Value = uno::makeAny( i_bEmptyPages );
+    aBoolOpt[2].Value = uno::makeAny( aVal );
+    aUIOptions[2].Value = uno::makeAny( aBoolOpt );
+
+    // create subgroup for sheets
+    aGroupOpt[0].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Text" ) );
+    aGroupOpt[0].Value = uno::makeAny( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Sheets" ) ) );
+    aGroupOpt[1].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ControlType" ) );
+    aGroupOpt[1].Value = uno::makeAny( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Subgroup" ) ) );
+    aUIOptions[3].Value = uno::makeAny( aGroupOpt );
+
+    // create a bool option for selected pages only
+    aBoolOpt[0].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Text" ) );
+    aBoolOpt[0].Value = uno::makeAny( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Print ~only selected sheets" ) ) );
+    aBoolOpt[1].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ControlType" ) );
+    aBoolOpt[1].Value = uno::makeAny( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Bool" ) ) );
+    aBoolOpt[2].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Property" ) );
+    aVal.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsOnlySelectedSheets" ) );
+    aVal.Value = uno::makeAny( i_bSelectedOnly );
+    aBoolOpt[2].Value = uno::makeAny( aVal );
+    aUIOptions[4].Value = uno::makeAny( aBoolOpt );
+
+    sal_Int32 nLen = io_rProps.getLength();
+    io_rProps.realloc( nLen+1 );
+    io_rProps[nLen].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ExtraPrintUIOptions" ) );
+    io_rProps[nLen].Value = uno::makeAny( aUIOptions );
+}
+
+BOOL ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
+                                     const uno::Sequence< beans::PropertyValue >& rOptions,
+                                     ScMarkData& rMark,
                                      ScPrintSelectionStatus& rStatus ) const
 {
     DBG_ASSERT( !rMark.IsMarked() && !rMark.IsMultiMarked(), "FillRenderMarkData: MarkData must be empty" );
@@ -587,13 +651,63 @@ BOOL ScModelObj::FillRenderMarkData( const uno::Any& aSelection, ScMarkData& rMa
 
     BOOL bDone = FALSE;
 
+    bool bHaveOptions = false;
+    sal_Bool bSelectedSheetsOnly = sal_True;
+    sal_Bool bSuppressEmptyPages = sal_True;
+    rtl::OUString aSelectionString( RTL_CONSTASCII_USTRINGPARAM( "all" ) );
+    for( sal_Int32 i = 0, nLen = rOptions.getLength(); i < nLen; i++ )
+    {
+        if( rOptions[i].Name.equalsAscii( "IsOnlySelectedSheets" ) )
+        {
+            bHaveOptions = true;
+            rOptions[i].Value >>= bSelectedSheetsOnly;
+        }
+        else if( rOptions[i].Name.equalsAscii( "IsSkipEmptyPages" ) )
+        {
+            bHaveOptions = true;
+            rOptions[i].Value >>= bSuppressEmptyPages;
+        }
+        else if( rOptions[i].Name.equalsAscii( "PrintSelection" ) )
+        {
+            bHaveOptions = true;
+            rOptions[i].Value >>= aSelectionString;
+        }
+    }
+
     uno::Reference<uno::XInterface> xInterface(aSelection, uno::UNO_QUERY);
     if ( xInterface.is() )
     {
         ScCellRangesBase* pSelObj = ScCellRangesBase::getImplementation( xInterface );
         uno::Reference< drawing::XShapes > xShapes( xInterface, uno::UNO_QUERY );
 
-        if ( pSelObj && pSelObj->GetDocShell() == pDocShell )
+        if( bHaveOptions )
+        {
+            // FIXME: handle bSelectedSheetsOnly
+            // FIXME: handle bSuppressEmptyPages
+            // FIMXE: handle print range "selection"
+            // FIXME: handle print range other than "all"
+
+            if( aSelectionString.equalsAscii( "selection" ) )
+            {
+            }
+            // whole document: aSelectionString = "all" or a range of tables
+            else if ( ScModelObj::getImplementation( xInterface ) == this )
+            {
+                MultiSelection aSel( aSelectionString );
+                SCTAB nTabCount = pDocShell->GetDocument()->GetTableCount();
+                aSel.SetTotalRange( Range( 1, nTabCount ) );
+                if( aSelectionString.equalsAscii( "all" ) )
+                    aSel.SelectAll();
+                for (SCTAB nTab = 0; nTab < nTabCount; nTab++)
+                {
+                    if( aSel.IsSelected( nTab+1 ) )
+                        rMark.SelectTable( nTab, TRUE );
+                }
+                rStatus.SetMode( aSel.IsAllSelected() ? SC_PRINTSEL_DOCUMENT : SC_PRINTSEL_RANGE );
+                bDone = TRUE;
+            }
+        }
+        else if ( pSelObj && pSelObj->GetDocShell() == pDocShell )
         {
             BOOL bSheet = ( ScTableSheetObj::getImplementation( xInterface ) != NULL );
             BOOL bCursor = pSelObj->IsCursorOnly();
@@ -670,7 +784,7 @@ BOOL ScModelObj::FillRenderMarkData( const uno::Any& aSelection, ScMarkData& rMa
 
 
 sal_Int32 SAL_CALL ScModelObj::getRendererCount( const uno::Any& aSelection,
-                                    const uno::Sequence<beans::PropertyValue>& /* xOptions */ )
+                                    const uno::Sequence<beans::PropertyValue>& rOptions )
                                 throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
@@ -679,7 +793,7 @@ sal_Int32 SAL_CALL ScModelObj::getRendererCount( const uno::Any& aSelection,
 
     ScMarkData aMark;
     ScPrintSelectionStatus aStatus;
-    if ( !FillRenderMarkData( aSelection, aMark, aStatus ) )
+    if ( !FillRenderMarkData( aSelection, rOptions, aMark, aStatus ) )
         return 0;
 
     //  The same ScPrintFuncCache object in pPrintFuncCache is used as long as
@@ -695,7 +809,7 @@ sal_Int32 SAL_CALL ScModelObj::getRendererCount( const uno::Any& aSelection,
 }
 
 uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 nRenderer,
-                                    const uno::Any& aSelection, const uno::Sequence<beans::PropertyValue>& /* xOptions */ )
+                                    const uno::Any& aSelection, const uno::Sequence<beans::PropertyValue>& rOptions  )
                                 throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
@@ -704,7 +818,7 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
 
     ScMarkData aMark;
     ScPrintSelectionStatus aStatus;
-    if ( !FillRenderMarkData( aSelection, aMark, aStatus ) )
+    if ( !FillRenderMarkData( aSelection, rOptions, aMark, aStatus ) )
         throw lang::IllegalArgumentException();
 
     if ( !pPrintFuncCache || !pPrintFuncCache->IsSameSelection( aStatus ) )
@@ -759,6 +873,8 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
         pArray[1].Name = rtl::OUString::createFromAscii( SC_UNONAME_SOURCERANGE );
         pArray[1].Value <<= aRangeAddress;
     }
+    // FIXME: initial values for IsSuppressEmptyPages and IsOnlySelectedSheets
+    lcl_addPrintUIOptions( aSequence, sal_True, sal_True );
     return aSequence;
 }
 
@@ -772,7 +888,7 @@ void SAL_CALL ScModelObj::render( sal_Int32 nRenderer, const uno::Any& aSelectio
 
     ScMarkData aMark;
     ScPrintSelectionStatus aStatus;
-    if ( !FillRenderMarkData( aSelection, aMark, aStatus ) )
+    if ( !FillRenderMarkData( aSelection, rOptions, aMark, aStatus ) )
         throw lang::IllegalArgumentException();
 
     if ( !pPrintFuncCache || !pPrintFuncCache->IsSameSelection( aStatus ) )
