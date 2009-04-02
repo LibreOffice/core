@@ -815,6 +815,27 @@ javaFrameworkError SAL_CALL jfw_setJRELocations(
 javaFrameworkError SAL_CALL jfw_getJRELocations(
     rtl_uString *** parLocations, sal_Int32 * pSize);
 
+
+/** checks if the installation of the jre still exists.
+
+    This function checks if the JRE described by pInfo still
+    exists. The check must be very quick because it is called by javaldx
+    (Linux, Solaris) at start up.
+
+    @param pInfo
+        [in]  the JavaInfo object with information about the JRE.
+    @param pp_exist
+        [out] the parameter is set to either sal_True or sal_False. The value is
+        only valid if the function returns JFW_E_NONE.
+
+   @return
+    JFW_E_NONE the function ran successfully.</br>
+    JFW_E_ERROR an error occurred during execution.</br>
+    JFW_E_INVALID_ARG pInfo contains invalid data</br>
+ */
+javaFrameworkError SAL_CALL jfw_existJRE(const JavaInfo *pInfo, sal_Bool *exist);
+
+
 /** locks this API so that it cannot be used by other threads.
 
     <p>If a different thread called this function before then the

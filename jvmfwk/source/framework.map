@@ -24,3 +24,8 @@ UDK_3_0_0 {
     local:
         *;
 };
+
+UDK_3.1 { # OOo 3.1.0
+    global:
+    jfw_existJRE;
+} UDK_3_0_0;
