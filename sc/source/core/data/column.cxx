@@ -2096,6 +2096,22 @@ void ScColumn::CalcAfterLoad()
 }
 
 
+bool ScColumn::MarkUsedExternalReferences()
+{
+    bool bAllMarked = false;
+    if (pItems)
+    {
+        for (SCSIZE i = 0; i < nCount && !bAllMarked; ++i)
+        {
+            ScBaseCell* pCell = pItems[i].pCell;
+            if ( pCell->GetCellType() == CELLTYPE_FORMULA )
+                bAllMarked = ((ScFormulaCell*)pCell)->MarkUsedExternalReferences();
+        }
+    }
+    return bAllMarked;
+}
+
+
 void ScColumn::ResetChanged( SCROW nStartRow, SCROW nEndRow )
 {
     if (pItems)

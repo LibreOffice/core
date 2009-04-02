@@ -217,7 +217,7 @@ void ScHTMLImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor )
 
 String ScFormatFilterPluginImpl::GetHTMLRangeNameList( ScDocument* pDoc, const String& rOrigName )
 {
-    return GetHTMLRangeNameList( pDoc, rOrigName );
+    return ScHTMLImport::GetHTMLRangeNameList( pDoc, rOrigName );
 }
 
 String ScHTMLImport::GetHTMLRangeNameList( ScDocument* pDoc, const String& rOrigName )

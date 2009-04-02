@@ -548,7 +548,7 @@ sal_uInt16 XclImpSupbook::GetTabCount() const
 
 void XclImpSupbook::LoadCachedValues()
 {
-    if (meType != EXC_SBTYPE_EXTERN || GetExtDocOptions().GetDocSettings().mnLinkCnt > 0)
+    if (meType != EXC_SBTYPE_EXTERN || GetExtDocOptions().GetDocSettings().mnLinkCnt > 0 || !GetDocShell())
         return;
 
     String aAbsUrl( ScGlobal::GetAbsDocName(maXclUrl, GetDocShell()) );

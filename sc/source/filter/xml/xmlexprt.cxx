@@ -3325,7 +3325,7 @@ void ScXMLExport::WriteExternalRefCaches()
               itr != itrEnd; ++itr)
         {
             ScExternalRefCache::TableTypeRef pTable = pRefMgr->getCacheTable(nFileId, *itr, false);
-            if (!pTable.get())
+            if (!pTable.get() || !pTable->isReferenced())
                 continue;
 
             OUStringBuffer aBuf;
@@ -3368,10 +3368,9 @@ void ScXMLExport::WriteExternalRefCaches()
                 SCROW nRow = *itrRow;
                 vector<SCCOL> aCols;
                 pTable->getAllCols(nRow, aCols);
-                for (vector<SCCOL>::const_iterator itrCol = aCols.begin(), itrColEnd = aCols.end();
-                      itrCol != itrColEnd; ++itrCol)
+                if (!aCols.empty())
                 {
-                    SCCOL nCol = *itrCol;
+                    SCCOL nCol = aCols.back();
                     if (nMaxColsUsed <= nCol)
                         nMaxColsUsed = nCol + 1;
                 }

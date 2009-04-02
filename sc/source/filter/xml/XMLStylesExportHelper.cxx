@@ -194,6 +194,10 @@ sal_Bool ScMyValidationsContainer::AddValidation(const uno::Any& aTempAny,
 
 rtl::OUString ScMyValidationsContainer::GetCondition(ScXMLExport& rExport, const ScMyValidation& aValidation)
 {
+    /* ATTENTION! Should the condition to not write sheet::ValidationType_ANY
+     * ever be changed, adapt the conditional call of
+     * MarkUsedExternalReferences() in
+     * ScTableValidationObj::ScTableValidationObj() accordingly! */
     rtl::OUString sCondition;
     if (aValidation.aValidationType != sheet::ValidationType_ANY)
     {

@@ -1265,22 +1265,51 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
 }
 
 
+ScDocShell::PrepareSaveGuard::PrepareSaveGuard( ScDocShell& rDocShell )
+    : mrDocShell( rDocShell)
+{
+    // DoEnterHandler not here (because of AutoSave), is in ExecuteSave.
+
+    ScChartListenerCollection* pCharts = mrDocShell.aDocument.GetChartListenerCollection();
+    if (pCharts)
+        pCharts->UpdateDirtyCharts();                           // Charts to be updated.
+    mrDocShell.aDocument.StopTemporaryChartLock();
+    if (mrDocShell.pAutoStyleList)
+        mrDocShell.pAutoStyleList->ExecuteAllNow();             // Execute template timeouts now.
+    if (mrDocShell.aDocument.HasExternalRefManager())
+    {
+        ScExternalRefManager* pRefMgr = mrDocShell.aDocument.GetExternalRefManager();
+        if (pRefMgr && pRefMgr->hasExternalData())
+        {
+            pRefMgr->setAllCacheTableReferencedStati( false);
+            mrDocShell.aDocument.MarkUsedExternalReferences();  // Mark tables of external references to be written.
+        }
+    }
+    if (mrDocShell.GetCreateMode()== SFX_CREATE_MODE_STANDARD)
+        mrDocShell.SfxObjectShell::SetVisArea( Rectangle() );   // "Normally" worked on => no VisArea.
+}
+
+ScDocShell::PrepareSaveGuard::~PrepareSaveGuard()
+{
+    if (mrDocShell.aDocument.HasExternalRefManager())
+    {
+        ScExternalRefManager* pRefMgr = mrDocShell.aDocument.GetExternalRefManager();
+        if (pRefMgr && pRefMgr->hasExternalData())
+        {
+            // Prevent accidental data loss due to lack of knowledge.
+            pRefMgr->setAllCacheTableReferencedStati( true);
+        }
+    }
+}
+
+
 BOOL __EXPORT ScDocShell::Save()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::Save" );
 
     ScRefreshTimerProtector( aDocument.GetRefreshTimerControlAddress() );
 
-    //  DoEnterHandler hier nicht (wegen AutoSave), ist im ExecuteSave
-
-    ScChartListenerCollection* pCharts = aDocument.GetChartListenerCollection();
-    if (pCharts)
-        pCharts->UpdateDirtyCharts();                   // Charts, die noch upgedated werden muessen
-    aDocument.StopTemporaryChartLock();
-    if (pAutoStyleList)
-        pAutoStyleList->ExecuteAllNow();                // Vorlagen-Timeouts jetzt ausfuehren
-    if (GetCreateMode()== SFX_CREATE_MODE_STANDARD)
-        SfxObjectShell::SetVisArea( Rectangle() );     // normal bearbeitet -> keine VisArea
+    PrepareSaveGuard aPrepareGuard( *this);
 
     //  wait cursor is handled with progress bar
     BOOL bRet = SfxObjectShell::Save();
@@ -1296,16 +1325,7 @@ BOOL __EXPORT ScDocShell::SaveAs( SfxMedium& rMedium )
 
     ScRefreshTimerProtector( aDocument.GetRefreshTimerControlAddress() );
 
-    //  DoEnterHandler hier nicht (wegen AutoSave), ist im ExecuteSave
-
-    ScChartListenerCollection* pCharts = aDocument.GetChartListenerCollection();
-    if (pCharts)
-        pCharts->UpdateDirtyCharts();                   // Charts, die noch upgedated werden muessen
-    aDocument.StopTemporaryChartLock();
-    if (pAutoStyleList)
-        pAutoStyleList->ExecuteAllNow();                // Vorlagen-Timeouts jetzt ausfuehren
-    if (GetCreateMode()== SFX_CREATE_MODE_STANDARD)
-        SfxObjectShell::SetVisArea( Rectangle() );     // normal bearbeitet -> keine VisArea
+    PrepareSaveGuard aPrepareGuard( *this);
 
     //  wait cursor is handled with progress bar
     BOOL bRet = SfxObjectShell::SaveAs( rMedium );

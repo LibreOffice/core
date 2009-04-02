@@ -1111,6 +1111,18 @@ void ScConditionEntry::DataChanged( const ScRange* /* pModified */ ) const
     // nix
 }
 
+bool ScConditionEntry::MarkUsedExternalReferences() const
+{
+    bool bAllMarked = false;
+    for (USHORT nPass = 0; !bAllMarked && nPass < 2; nPass++)
+    {
+        ScTokenArray* pFormula = nPass ? pFormula2 : pFormula1;
+        if (pFormula)
+            bAllMarked = pDoc->MarkUsedExternalReferences( *pFormula);
+    }
+    return bAllMarked;
+}
+
 //------------------------------------------------------------------------
 
 ScCondFormatEntry::ScCondFormatEntry( ScConditionMode eOper,
@@ -1458,6 +1470,14 @@ void ScConditionalFormat::SourceChanged( const ScAddress& rAddr )
         ppEntries[i]->SourceChanged( rAddr );
 }
 
+bool ScConditionalFormat::MarkUsedExternalReferences() const
+{
+    bool bAllMarked = false;
+    for (USHORT i=0; !bAllMarked && i<nEntryCount; i++)
+        bAllMarked = ppEntries[i]->MarkUsedExternalReferences();
+    return bAllMarked;
+}
+
 //------------------------------------------------------------------------
 
 ScConditionalFormatList::ScConditionalFormatList(const ScConditionalFormatList& rList) :
@@ -1555,5 +1575,11 @@ void ScConditionalFormatList::SourceChanged( const ScAddress& rAddr )
         (*this)[i]->SourceChanged( rAddr );
 }
 
-
-
+bool ScConditionalFormatList::MarkUsedExternalReferences() const
+{
+    bool bAllMarked = false;
+    USHORT nCount = Count();
+    for (USHORT i=0; !bAllMarked && i<nCount; i++)
+        bAllMarked = (*this)[i]->MarkUsedExternalReferences();
+    return bAllMarked;
+}

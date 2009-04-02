@@ -38,6 +38,7 @@
 #include <svtools/intitem.hxx>
 #include <svtools/zforlist.hxx>
 #include <vcl/sound.hxx>
+#include <formula/token.hxx>
 
 #include "document.hxx"
 #include "table.hxx"
@@ -56,6 +57,9 @@
 #include "progress.hxx"
 #include "paramisc.hxx"
 #include "compiler.hxx"
+#include "externalrefmgr.hxx"
+
+using namespace formula;
 
 // -----------------------------------------------------------------------
 
@@ -288,6 +292,40 @@ void ScDocument::InsertTableOp(const ScTabOpParam& rParam,      // Mehrfachopera
             for (i = 0; i <= MAXTAB; i++)
                 if( pTab[i] && rMark.GetTableSelect(i) )
                     pTab[i]->PutCell( j, k, aRefCell.CloneWithoutNote( *this, ScAddress( j, k, i ), SC_CLONECELL_STARTLISTENING ) );
+}
+
+bool ScDocument::MarkUsedExternalReferences( ScTokenArray & rArr )
+{
+    bool bAllMarked = false;
+    if (rArr.GetLen())
+    {
+        ScExternalRefManager* pRefMgr = NULL;
+        rArr.Reset();
+        ScToken* t;
+        while (!bAllMarked && (t = static_cast<ScToken*>(rArr.GetNextReferenceOrName())) != NULL)
+        {
+            if (t->GetOpCode() == ocExternalRef)
+            {
+                if (!pRefMgr)
+                    pRefMgr = GetExternalRefManager();
+                switch (t->GetType())
+                {
+                    case svExternalSingleRef:
+                    case svExternalDoubleRef:
+                        bAllMarked = pRefMgr->setCacheTableReferenced(
+                                t->GetIndex(), t->GetString());
+                        break;
+                    case svExternalName:
+                        /* TODO: external names aren't supported yet, but would
+                         * have to be marked as well, if so. Mechanism would be
+                         * different. */
+                        DBG_ERRORFILE("ScDocument::MarkUsedExternalReferences: implement the svExternalName case!");
+                        break;
+                }
+            }
+        }
+    }
+    return bAllMarked;
 }
 
 BOOL ScDocument::GetNextSpellingCell(SCCOL& nCol, SCROW& nRow, SCTAB nTab,
