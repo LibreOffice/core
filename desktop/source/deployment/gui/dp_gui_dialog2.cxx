@@ -55,6 +55,7 @@
 
 #include "comphelper/anytostring.hxx"
 #include "cppuhelper/exc_hlp.hxx"
+#include "cppuhelper/implbase1.hxx"
 
 #include "comphelper/processfactory.hxx"
 #include "ucbhelper/content.hxx"
@@ -229,7 +230,8 @@ enum MENU_COMMAND
     CMD_UPDATE
 };
 
-class ExtensionBox_Impl : public ::svt::IExtensionListBox
+class ExtensionBox_Impl : public ::svt::IExtensionListBox,
+                          public ::cppu::WeakImplHelper1< ::com::sun::star::lang::XEventListener >
 {
     bool            m_bHasScrollBar;
     bool            m_bHasActive;
@@ -317,7 +319,6 @@ public:
     void            enableButtons( bool bEnable );
 
     void            updateEntry( const uno::Reference< deployment::XPackage > &xPackage );
-    void            removeEntry( const uno::Reference< deployment::XPackage > &xPackage );
 
     void            prepareChecking( const uno::Reference< deployment::XPackageManager > &xPackageMgr );
     void            checkEntries();
@@ -373,7 +374,11 @@ public:
             2. one extension can be installed as user and shared extension.
     */
     virtual void select( const OUString & sName );
+
     //===================================================================================
+    // XEventListener
+    virtual void SAL_CALL disposing( ::com::sun::star::lang::EventObject const & evt )
+        throw (::com::sun::star::uno::RuntimeException);
 };
 
 //------------------------------------------------------------------------------
@@ -461,6 +466,13 @@ ExtensionBox_Impl::ExtensionBox_Impl( ExtMgrDialog* pParent, TheExtensionManager
 //------------------------------------------------------------------------------
 ExtensionBox_Impl::~ExtensionBox_Impl()
 {
+    typedef std::vector< TEntry_Impl >::iterator ITER;
+
+//    for ( ITER iIndex = m_vEntries.begin(); iIndex < m_vEntries.end(); ++iIndex )
+//        (*iIndex)->m_xPackage->removeEventListener( this );
+
+    m_vEntries.clear();
+
     delete m_pOptionsBtn;
     delete m_pEnableBtn;
     delete m_pRemoveBtn;
@@ -1250,41 +1262,6 @@ bool ExtensionBox_Impl::FindEntryPos( const TEntry_Impl pEntry, const long nStar
 }
 
 //------------------------------------------------------------------------------
-void ExtensionBox_Impl::removeEntry( const uno::Reference< deployment::XPackage > &xPackage )
-{
-    ::osl::ClearableMutexGuard aGuard( m_entriesMutex );
-    typedef std::vector< TEntry_Impl >::iterator ITER;
-
-    for ( ITER iIndex = m_vEntries.begin(); iIndex < m_vEntries.end(); ++iIndex )
-    {
-        if ( (*iIndex)->m_xPackage == xPackage )
-        {
-            long nPos = iIndex - m_vEntries.begin();
-
-            m_vEntries.erase( iIndex );
-
-            if ( IsReallyVisible() )
-                Invalidate();
-
-            if ( m_bHasActive )
-            {
-                if ( nPos < m_nActive )
-                    m_nActive -= 1;
-                else if ( ( nPos == m_nActive ) &&
-                          ( nPos == (long) m_vEntries.size() ) )
-                    m_nActive -= 1;
-
-                m_bHasActive = false;
-                //clear before calling out of this method
-                aGuard.clear();
-                selectEntry( m_nActive );
-            }
-            break;
-        }
-    }
-}
-
-//------------------------------------------------------------------------------
 long ExtensionBox_Impl::addEntry( const uno::Reference< deployment::XPackage > &xPackage,
                                   const uno::Reference< deployment::XPackageManager > &xPackageManager )
 {
@@ -1292,6 +1269,7 @@ long ExtensionBox_Impl::addEntry( const uno::Reference< deployment::XPackage > &
     PackageState eState = m_pManager->getPackageState( xPackage );
 
     TEntry_Impl pEntry( new Entry_Impl( xPackage, xPackageManager, eState ) );
+    xPackage->addEventListener( this );
 
     ::osl::ClearableMutexGuard guard(m_entriesMutex);
     if ( m_vEntries.empty() )
@@ -1377,14 +1355,12 @@ void ExtensionBox_Impl::checkEntries()
     long nNewPos = -1;
     long nPos = 0;
     bool bNeedsUpdate = false;
-    bool bReselectActive = false;
 
     ::osl::ClearableMutexGuard guard(m_entriesMutex);
     typedef std::vector< TEntry_Impl >::iterator ITER;
     ITER iIndex = m_vEntries.begin();
     while ( iIndex < m_vEntries.end() )
     {
-        BOOL bNext = true;
         if ( (*iIndex)->m_bChecked == false )
         {
             bNeedsUpdate = true;
@@ -1396,26 +1372,8 @@ void ExtensionBox_Impl::checkEntries()
                 if ( nPos <= m_nActive )
                     m_nActive += 1;
             }
-            else
-            {
-                //We reach this point when we updated an extension.
-                iIndex = m_vEntries.erase( iIndex );
-                bNext = false;
-
-                if ( m_bHasActive )
-                {
-                    if ( nPos < m_nActive )
-                        m_nActive -= 1;
-                    else if ( nPos == m_nActive )
-                    {
-                        m_bHasActive = false;
-                        bReselectActive = true;
-                    }
-                }
-            }
         }
-        if ( bNext )
-            iIndex++;
+        iIndex++;
     }
     guard.clear();
 
@@ -1423,15 +1381,6 @@ void ExtensionBox_Impl::checkEntries()
 
     if ( nNewPos != - 1)
         selectEntry( nNewPos );
-    else if ( bReselectActive )
-    {
-        {
-            ::osl::MutexGuard guard2(m_entriesMutex);
-            if ( m_nActive >= (long) m_vEntries.size() )
-                m_nActive = (long) m_vEntries.size() - 1;
-        }
-        selectEntry( m_nActive );
-    }
 
     if ( bNeedsUpdate )
     {
@@ -1447,30 +1396,6 @@ bool ExtensionBox_Impl::isHCMode()
 }
 
 //------------------------------------------------------------------------------
-/*void ExtensionBox_Impl::DataChanged( DataChangedEvent const & evt )
-{
-    SvTreeListBox::DataChanged( evt );
-    if (evt.GetType() == DATACHANGED_SETTINGS &&
-        (evt.GetFlags() & SETTINGS_STYLE) != 0 &&
-        m_hiContrastMode != (bool)GetDisplayBackground().GetColor().IsDark())
-    {
-        m_hiContrastMode = ! m_hiContrastMode;
-
-        // Update all images as we changed from/to high contrast mode:
-        for ( SvLBoxEntry * entry = First(); entry != 0; entry = Next(entry) )
-        {
-            NodeImpl * node = NodeImpl::get(entry);
-            Image img( node->getIcon() );
-            SetExpandedEntryBmp( entry, img );
-            SetCollapsedEntryBmp( entry, img );
-        }
-
-        // force redraw:
-        Invalidate();
-    }
-}
-*/
-//------------------------------------------------------------------------------
 void ExtensionBox_Impl::enableButtons( bool bEnable )
 {
     m_bInterfaceLocked = ! bEnable;
@@ -1485,6 +1410,48 @@ void ExtensionBox_Impl::enableButtons( bool bEnable )
         m_pOptionsBtn->Enable( false );
         m_pRemoveBtn->Enable( false );
         m_pEnableBtn->Enable( false );
+    }
+}
+
+//------------------------------------------------------------------------------
+// XEventListener
+void ExtensionBox_Impl::disposing( lang::EventObject const & rEvt )
+    throw ( uno::RuntimeException )
+{
+    uno::Reference< deployment::XPackage > xPackage( rEvt.Source, uno::UNO_QUERY );
+
+    if ( xPackage.is() )
+    {
+        ::osl::ClearableMutexGuard aGuard( m_entriesMutex );
+        typedef std::vector< TEntry_Impl >::iterator ITER;
+
+        for ( ITER iIndex = m_vEntries.begin(); iIndex < m_vEntries.end(); ++iIndex )
+        {
+            if ( (*iIndex)->m_xPackage == xPackage )
+            {
+                long nPos = iIndex - m_vEntries.begin();
+
+                m_vEntries.erase( iIndex );
+
+                if ( IsReallyVisible() )
+                    Invalidate();
+
+                if ( m_bHasActive )
+                {
+                    if ( nPos < m_nActive )
+                        m_nActive -= 1;
+                    else if ( ( nPos == m_nActive ) &&
+                              ( nPos == (long) m_vEntries.size() ) )
+                        m_nActive -= 1;
+
+                    m_bHasActive = false;
+                    //clear before calling out of this method
+                    aGuard.clear();
+                    selectEntry( m_nActive );
+                }
+                break;
+            }
+        }
     }
 }
 
@@ -1794,6 +1761,19 @@ bool ExtMgrDialog::installExtensionWarn( const OUString &rExtensionName ) const
 }
 
 //------------------------------------------------------------------------------
+bool ExtMgrDialog::removeExtensionWarn( const OUString &rExtensionName ) const
+{
+    const ::vos::OGuard guard( Application::GetSolarMutex() );
+    WarningBox aInfo( const_cast< ExtMgrDialog* >(this), getResId( RID_WARNINGBOX_REMOVE_EXTENSION ) );
+
+    String sText( aInfo.GetMessText() );
+    sText.SearchAndReplaceAllAscii( "%NAME", rExtensionName );
+    aInfo.SetMessText( sText );
+
+    return ( RET_OK == aInfo.Execute() );
+}
+
+//------------------------------------------------------------------------------
 bool ExtMgrDialog::enablePackage( const uno::Reference< deployment::XPackageManager > &xPackageManager,
                                   const uno::Reference< deployment::XPackage > &xPackage,
                                   bool bEnable )
@@ -1823,6 +1803,12 @@ bool ExtMgrDialog::removePackage( const uno::Reference< deployment::XPackageMana
 {
     if ( !xPackageManager.is() || !xPackage.is() )
         return false;
+
+    if ( !IsSharedPkgMgr( xPackageManager ) || m_bDeleteWarning )
+    {
+        if ( ! removeExtensionWarn( xPackage->getDisplayName() ) )
+            return false;
+    }
 
     if ( ! continueOnSharedExtension( xPackageManager, RID_WARNINGBOX_REMOVE_SHARED_EXTENSION, m_bDeleteWarning ) )
         return false;
@@ -2012,13 +1998,6 @@ void ExtMgrDialog::updateProgress( const OUString &rText,
 void ExtMgrDialog::updatePackageInfo( const uno::Reference< deployment::XPackage > &xPackage )
 {
     m_pExtensionBox->updateEntry( xPackage );
-}
-
-//------------------------------------------------------------------------------
-void ExtMgrDialog::removeEntry( const uno::Reference< deployment::XPackage > &xPackage )
-{
-    const vos::OGuard aGuard( Application::GetSolarMutex() );
-    m_pExtensionBox->removeEntry( xPackage );
 }
 
 // -----------------------------------------------------------------------

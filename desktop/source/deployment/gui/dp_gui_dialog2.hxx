@@ -91,6 +91,7 @@ class ExtMgrDialog : public ModelessDialog
     bool continueOnSharedExtension( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager > &,
                                     const USHORT nResID,
                                     bool &bHadWarning ) const;
+    bool removeExtensionWarn( const ::rtl::OUString &rExtensionTitle ) const;
 
     DECL_DLLPRIVATE_LINK( HandleAddBtn, void * );
     DECL_DLLPRIVATE_LINK( HandleUpdateBtn, void * );
@@ -126,7 +127,6 @@ public:
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::task::XAbortChannel > &xAbortChannel);
     void            updateProgress( const long nProgress );
     void            updatePackageInfo( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage );
-    void            removeEntry( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage );
 
     void            prepareChecking( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager > &xPackageManager );
     void            checkEntries();
