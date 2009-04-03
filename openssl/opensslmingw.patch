@@ -1,117 +1,78 @@
-*** misc/openssl-0.9.8g/Makefile.shared	Sun Sep 16 23:11:51 2007
---- misc/build/openssl-0.9.8g/Makefile.shared	Sat Feb  9 09:46:23 2008
-***************
-*** 254,266 ****
-  	base=-Wl,--enable-auto-image-base; \
-  	if expr $(PLATFORM) : 'mingw' > /dev/null; then \
-  		SHLIB=$(LIBNAME)eay32; \
-! 		base=;  [ $(LIBNAME) = "crypto" ] && base=-Wl,--image-base,0x63000000; \
-  	fi; \
-  	SHLIB_SUFFIX=.dll; \
-! 	SHLIB_SOVER=-$(LIBVERSION); \
-  	ALLSYMSFLAGS='-Wl,--whole-archive'; \
-  	NOALLSYMSFLAGS='-Wl,--no-whole-archive'; \
-! 	SHAREDFLAGS="$(CFLAGS) $(SHARED_LDFLAGS) -shared $$base -Wl,-Bsymbolic -Wl,--out-implib,lib$(LIBNAME).dll.a"; \
-  	[ -f apps/$$SHLIB$$SHLIB_SUFFIX ] && rm apps/$$SHLIB$$SHLIB_SUFFIX; \
-  	[ -f test/$$SHLIB$$SHLIB_SUFFIX ] && rm test/$$SHLIB$$SHLIB_SUFFIX; \
-  	$(LINK_SO_A) || exit 1; \
---- 254,270 ----
-  	base=-Wl,--enable-auto-image-base; \
-  	if expr $(PLATFORM) : 'mingw' > /dev/null; then \
-  		SHLIB=$(LIBNAME)eay32; \
-! 		base=;  \
-!                 if test $(LIBNAME) = "crypto"; then \
-!                         SHLIB=libeay32; \
-!                         base=-Wl,--image-base,0x63000000; \
-!                 fi; \
-  	fi; \
-  	SHLIB_SUFFIX=.dll; \
-! 	SHLIB_SOVER=; \
-  	ALLSYMSFLAGS='-Wl,--whole-archive'; \
-  	NOALLSYMSFLAGS='-Wl,--no-whole-archive'; \
-! 	SHAREDFLAGS="$(CFLAGS) $(SHARED_LDFLAGS) -shared $$base -Wl,-Bsymbolic -Wl,--export-all-symbols -Wl,--out-implib,lib$(LIBNAME).dll.a"; \
-  	[ -f apps/$$SHLIB$$SHLIB_SUFFIX ] && rm apps/$$SHLIB$$SHLIB_SUFFIX; \
-  	[ -f test/$$SHLIB$$SHLIB_SUFFIX ] && rm test/$$SHLIB$$SHLIB_SUFFIX; \
-  	$(LINK_SO_A) || exit 1; \
-*** misc/openssl-0.9.8g/ms/mingw32.bat	Fri May  5 22:19:33 2006
---- misc/build/openssl-0.9.8g/ms/mingw32.bat	Mon Feb  4 20:11:50 2008
-***************
-*** 79,91 ****
-  rem copy ms\tlhelp32.h outinc
-  
-  echo Building the libraries
-! mingw32-make -f ms/mingw32a.mak
-  if errorlevel 1 goto end
-  
-  echo Generating the DLLs and input libraries
-! dllwrap --dllname libeay32.dll --output-lib out/libeay32.a --def ms/libeay32.def out/libcrypto.a -lwsock32 -lgdi32
-  if errorlevel 1 goto end
-! dllwrap --dllname libssl32.dll --output-lib out/libssl32.a --def ms/ssleay32.def out/libssl.a out/libeay32.a
-  if errorlevel 1 goto end
-  
-  echo Done compiling OpenSSL
---- 79,97 ----
-  rem copy ms\tlhelp32.h outinc
-  
-  echo Building the libraries
-! make -f ms/mingw32a.mak
-  if errorlevel 1 goto end
-  
-  echo Generating the DLLs and input libraries
-! mv out/libcrypto.a out/libcrypto_static.a
-! mv out/libssl.a out/libssl_static.a
-! dlltool --dllname libeay32.dll --output-lib out/libcrypto.a --input-def ms/libeay32.def
-  if errorlevel 1 goto end
-! gcc --shared --enable-pseudo-reloc -Wl,-Map,out/libeay32.map ms/libeay32.def -o out/libeay32.dll out/libcrypto_static.a -lwsock32 -lgdi32 
-! if errorlevel 1 goto end
-! dlltool --dllname ssleay32.dll --output-lib out/libssl.a --input-def ms/ssleay32.def
-! if errorlevel 1 goto end
-! gcc --shared --enable-pseudo-reloc -Wl,-Map,out/ssleay32.map -Lout ms/ssleay32.def -o out/ssleay32.dll out/libssl_static.a -lcrypto 
-  if errorlevel 1 goto end
-  
-  echo Done compiling OpenSSL
-*** misc/openssl-0.9.8g/util/pl/Mingw32.pl	Fri May  5 22:19:35 2006
---- misc/build/openssl-0.9.8g/util/pl/Mingw32.pl	Mon Feb  4 21:11:50 2008
-***************
-*** 6,16 ****
-  $o='/';
-  $cp='cp';
-  $rm='rm -f';
-! $mkdir='gmkdir';
-  
-! $o='\\';
-! $cp='copy';
-! $rm='del';
-  $mkdir='mkdir';
-  
-  # C compiler stuff
---- 6,16 ----
-  $o='/';
-  $cp='cp';
-  $rm='rm -f';
-! #$mkdir='gmkdir';
-  
-! #$o='\\';
-! #$cp='copy';
-! #$rm='del';
-  $mkdir='mkdir';
-  
-  # C compiler stuff
-***************
-*** 87,93 ****
-  	($Name=$name) =~ tr/a-z/A-Z/;
-  
-  	$ret.="$target: \$(${Name}OBJ)\n";
-! 	$ret.="\tif exist $target \$(RM) $target\n";
-  	$ret.="\t\$(MKLIB) $target \$(${Name}OBJ)\n";
-  	$ret.="\t\$(RANLIB) $target\n\n";
-  	}
---- 87,94 ----
-  	($Name=$name) =~ tr/a-z/A-Z/;
-  
-  	$ret.="$target: \$(${Name}OBJ)\n";
-! 	$ret.="\t\$(RM) $target\n";
-! #	$ret.="\tif exist $target \$(RM) $target\n";
-  	$ret.="\t\$(MKLIB) $target \$(${Name}OBJ)\n";
-  	$ret.="\t\$(RANLIB) $target\n\n";
-  	}
+--- misc/openssl-0.9.8k/Makefile.shared	2008-09-17 17:56:40.000000000 +0200
++++ misc/build/openssl-0.9.8k/Makefile.shared	2009-03-30 11:52:53.684538000 +0200
+@@ -238,14 +238,19 @@
+ 	SHLIB=cyg$(LIBNAME); \
+ 	base=-Wl,--enable-auto-image-base; \
+ 	if expr $(PLATFORM) : 'mingw' > /dev/null; then \
+-		SHLIB=$(LIBNAME)eay32; base=; \
++		SHLIB=$(LIBNAME)eay32; \
++		base=;  \
++        if test $(LIBNAME) = "crypto"; then \
++           SHLIB=libeay32; \
++           base=-Wl,--image-base,0x63000000; \
++        fi; \
+ 	fi; \
+ 	SHLIB_SUFFIX=.dll; \
+ 	LIBVERSION="$(LIBVERSION)"; \
+-	SHLIB_SOVER=${LIBVERSION:+"-$(LIBVERSION)"}; \
++	SHLIB_SOVER=\
+ 	ALLSYMSFLAGS='-Wl,--whole-archive'; \
+ 	NOALLSYMSFLAGS='-Wl,--no-whole-archive'; \
+-	SHAREDFLAGS="$(CFLAGS) $(SHARED_LDFLAGS) -shared $$base -Wl,-Bsymbolic -Wl,--out-implib,lib$(LIBNAME).dll.a"; \
++	SHAREDFLAGS="$(CFLAGS) $(SHARED_LDFLAGS) -shared $$base -Wl,-Bsymbolic -Wl,--export-all-symbols -Wl,--out-implib,lib$(LIBNAME).dll.a"; \
+ 	$(LINK_SO_O)
+ link_a.cygwin:
+ 	@ $(CALC_VERSIONS); \
+--- misc/openssl-0.9.8k/ms/mingw32.bat	2006-05-05 15:19:32.000000000 +0200
++++ misc/build/openssl-0.9.8k/ms/mingw32.bat	2009-03-30 11:54:10.000000000 +0200
+@@ -79,13 +79,19 @@
+ rem copy ms\tlhelp32.h outinc
+ 
+ echo Building the libraries
+-mingw32-make -f ms/mingw32a.mak
++make -f ms/mingw32a.mak
+ if errorlevel 1 goto end
+ 
+ echo Generating the DLLs and input libraries
+-dllwrap --dllname libeay32.dll --output-lib out/libeay32.a --def ms/libeay32.def out/libcrypto.a -lwsock32 -lgdi32
++mv out/libcrypto.a out/libcrypto_static.a
++mv out/libssl.a out/libssl_static.a
++dlltool --dllname libeay32.dll --output-lib out/libcrypto.a --input-def ms/libeay32.def
+ if errorlevel 1 goto end
+-dllwrap --dllname libssl32.dll --output-lib out/libssl32.a --def ms/ssleay32.def out/libssl.a out/libeay32.a
++gcc --shared --enable-pseudo-reloc -Wl,-Map,out/libeay32.map ms/libeay32.def -o out/libeay32.dll out/libcrypto_static.a -lwsock32 -lgdi32
++if errorlevel 1 goto end
++dlltool --dllname ssleay32.dll --output-lib out/libssl.a --input-def ms/ssleay32.def
++if errorlevel 1 goto end
++gcc --shared --enable-pseudo-reloc -Wl,-Map,out/ssleay32.map -Lout ms/ssleay32.def -o out/ssleay32.dll out/libssl_static.a -lcrypto
+ if errorlevel 1 goto end
+ 
+ echo Done compiling OpenSSL
+--- misc/openssl-0.9.8k/util/pl/Mingw32.pl	2006-05-05 15:19:34.000000000 +0200
++++ misc/build/openssl-0.9.8k/util/pl/Mingw32.pl	2009-03-30 11:55:04.000000000 +0200
+@@ -6,11 +6,11 @@
+ $o='/';
+ $cp='cp';
+ $rm='rm -f';
+-$mkdir='gmkdir';
++#$mkdir='gmkdir';
+ 
+-$o='\\';
+-$cp='copy';
+-$rm='del';
++#$o='\\';
++#$cp='copy';
++#$rm='del';
+ $mkdir='mkdir';
+ 
+ # C compiler stuff
+@@ -87,7 +87,8 @@
+ 	($Name=$name) =~ tr/a-z/A-Z/;
+ 
+ 	$ret.="$target: \$(${Name}OBJ)\n";
+-	$ret.="\tif exist $target \$(RM) $target\n";
++    $ret.="\t\$(RM) $target\n";
++#	$ret.="\tif exist $target \$(RM) $target\n";
+ 	$ret.="\t\$(MKLIB) $target \$(${Name}OBJ)\n";
+ 	$ret.="\t\$(RANLIB) $target\n\n";
+ 	}

@@ -1,43 +1,44 @@
---- misc/openssl-0.9.8g/Configure	Sun Sep 16 14:24:17 2007
-+++ misc/build/openssl-0.9.8g/Configure	Tue Jan 27 19:51:36 2009
-@@ -194,8 +194,8 @@
+--- misc/openssl-0.9.8k/Configure	Mon Feb 16 09:44:22 2009
++++ misc/build/openssl-0.9.8k/Configure	Mon Mar 30 08:17:56 2009
+@@ -206,8 +206,8 @@
  "solaris64-x86_64-gcc","gcc:-m64 -O3 -Wall -DL_ENDIAN -DMD32_REG_T=int::-D_REENTRANT::-lsocket -lnsl -ldl:SIXTY_FOUR_BIT_LONG RC4_CHUNK BF_PTR2 DES_INT DES_UNROLL:${x86_64_asm}:dlfcn:solaris-shared:-fPIC:-m64 -shared -static-libgcc:.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR)",
-  
+
  #### Solaris x86 with Sun C setups
 -"solaris-x86-cc","cc:-fast -O -Xa::-D_REENTRANT::-lsocket -lnsl -ldl:BN_LLONG RC4_CHAR RC4_CHUNK DES_PTR DES_UNROLL BF_PTR:${no_asm}:dlfcn:solaris-shared:-KPIC:-G -dy -z text:.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR)",
 -"solaris64-x86_64-cc","cc:-fast -xarch=amd64 -xstrconst -Xa -DL_ENDIAN::-D_REENTRANT::-lsocket -lnsl -ldl:SIXTY_FOUR_BIT_LONG RC4_CHUNK BF_PTR2 DES_INT DES_UNROLL:${x86_64_asm}:dlfcn:solaris-shared:-KPIC:-xarch=amd64 -G -dy -z text:.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR)",
 +"solaris-x86-cc","cc:-O -Xa::-D_REENTRANT::-lsocket -lnsl -ldl:BN_LLONG RC4_CHAR RC4_CHUNK DES_PTR DES_UNROLL BF_PTR:${no_asm}:dlfcn:solaris-shared:-KPIC:-G -dy -z text:.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR)",
 +"solaris64-x86_64-cc","cc:-xarch=amd64 -xstrconst -Xa -DL_ENDIAN::-D_REENTRANT::-lsocket -lnsl -ldl:SIXTY_FOUR_BIT_LONG RC4_CHUNK BF_PTR2 DES_INT DES_UNROLL:${x86_64_asm}:dlfcn:solaris-shared:-KPIC:-xarch=amd64 -G -dy -z text:.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR)",
- 
+
  #### SPARC Solaris with GNU C setups
  "solaris-sparcv7-gcc","gcc:-O3 -fomit-frame-pointer -Wall -DB_ENDIAN -DBN_DIV2W::-D_REENTRANT::-lsocket -lnsl -ldl:BN_LLONG RC4_CHAR RC4_CHUNK DES_UNROLL BF_PTR:${no_asm}:dlfcn:solaris-shared:-fPIC:-shared:.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR)",
---- misc/openssl-0.9.8g/Makefile.shared	Sun Sep 16 16:11:51 2007
-+++ misc/build/openssl-0.9.8g/Makefile.shared	Tue Jan 27 19:51:03 2009
-@@ -93,7 +93,6 @@
+---- misc/openssl-0.9.8k/Makefile.shared	Wed Sep 17 17:56:40 2008
++++ misc/build/openssl-0.9.8k/Makefile.shared	Mon Mar 30 08:19:42 2009
+@@ -93,7 +93,7 @@
      LDCMD="$${LDCMD:-$(CC)}"; LDFLAGS="$${LDFLAGS:-$(CFLAGS)}"; \
      LIBPATH=`for x in $$LIBDEPS; do if echo $$x | grep '^ *-L' > /dev/null 2>&1; then echo $$x | sed -e 's/^ *-L//'; fi; done | uniq`; \
      LIBPATH=`echo $$LIBPATH | sed -e 's/ /:/g'`; \
 -    LD_LIBRARY_PATH=$$LIBPATH:$$LD_LIBRARY_PATH \
++    LD_LIBRARY_PATH=$$LD_LIBRARY_PATH \
      $${LDCMD} $${LDFLAGS} -o $${APPNAME:=$(APPNAME)} $(OBJECTS) $${LIBDEPS} )
- 
+
  LINK_SO=	\
-@@ -104,7 +104,6 @@
-     nm -Pg $$SHOBJECTS | grep ' [BDT] ' | cut -f1 -d' ' > lib$(LIBNAME).exp; \
+@@ -103,7 +103,7 @@
+     SHAREDFLAGS="$${SHAREDFLAGS:-$(CFLAGS) $(SHARED_LDFLAGS)}"; \
      LIBPATH=`for x in $$LIBDEPS; do if echo $$x | grep '^ *-L' > /dev/null 2>&1; then echo $$x | sed -e 's/^ *-L//'; fi; done | uniq`; \
      LIBPATH=`echo $$LIBPATH | sed -e 's/ /:/g'`; \
 -    LD_LIBRARY_PATH=$$LIBPATH:$$LD_LIBRARY_PATH \
++    LD_LIBRARY_PATH=$$LD_LIBRARY_PATH \
      $${SHAREDCMD} $${SHAREDFLAGS} \
  	-o $$SHLIB$$SHLIB_SOVER$$SHLIB_SUFFIX \
  	$$ALLSYMSFLAGS $$SHOBJECTS $$NOALLSYMSFLAGS $$LIBDEPS \
---- misc/openssl-0.9.8g/config	Wed Aug  1 13:21:35 2007
-+++ misc/build/openssl-0.9.8g/config	Tue Jan 27 19:51:03 2009
-@@ -401,19 +401,23 @@
- 
- # figure out if gcc is available and if so we use it otherwise
- # we fallback to whatever cc does on the system
+---- misc/openssl-0.9.8k/config	Mon Feb 16 09:43:41 2009
++++ misc/build/openssl-0.9.8k/config	Mon Mar 30 08:22:05 2009
+@@ -399,28 +399,25 @@
+ # this is where the translation occurs into SSLeay terms
+ # ---------------------------------------------------------------------------
+
 -GCCVER=`(gcc -dumpversion) 2>/dev/null`
 -if [ "$GCCVER" != "" ]; then
--  CC=gcc
 -  # then strip off whatever prefix egcs prepends the number with...
 -  # Hopefully, this will work for any future prefixes as well.
 -  GCCVER=`echo $GCCVER | LC_ALL=C sed 's/^[a-zA-Z]*\-//'`
@@ -46,10 +47,16 @@
 -  # major and minor version numbers.
 -  # peak single digit before and after first dot, e.g. 2.95.1 gives 29
 -  GCCVER=`echo $GCCVER | sed 's/\([0-9]\)\.\([0-9]\).*/\1\2/'`
+-fi
+-
+-# Only set CC if not supplied already
+-if [ -z "$CC" ]; then
+-# figure out if gcc is available and if so we use it otherwise
+-# we fallback to whatever cc does on the system
 +if [ -z "$CC" ];then
 +  GCCVER=`(gcc -dumpversion) 2>/dev/null`
-+  if [ "$GCCVER" != "" ]; then
-+    CC=gcc
+   if [ "$GCCVER" != "" ]; then
+     CC=gcc
 +    # then strip off whatever prefix egcs prepends the number with...
 +    # Hopefully, this will work for any future prefixes as well.
 +    GCCVER=`echo $GCCVER | LC_ALL=C sed 's/^[a-zA-Z]*\-//'`
@@ -58,26 +65,18 @@
 +    # major and minor version numbers.
 +    # peak single digit before and after first dot, e.g. 2.95.1 gives 29
 +    GCCVER=`echo $GCCVER | sed 's/\([0-9]\)\.\([0-9]\).*/\1\2/'`
-+  else
-+    CC=cc
-+  fi
- else
--  CC=cc
-+  CC=`echo $CC | sed 's/^[^ ]*\/\(..\).*/\1/'`
+   else
+     CC=cc
+   fi
++else
++    CC=`echo $CC | sed 's/^[^ ]*\/\(..\).*/\1/'`
  fi
++
  GCCVER=${GCCVER:-0}
  if [ "$SYSTEM" = "HP-UX" ];then
-@@ -643,7 +647,7 @@
-   sun4d-*-solaris2)	OUT="solaris-sparcv8-$CC" ;;
-   sun4*-*-solaris2)	OUT="solaris-sparcv7-$CC" ;;
-   *86*-*-solaris2)
--	ISA64=`(isalist) 2>/dev/null | grep amd64`
-+#	ISA64=`(isalist) 2>/dev/null | grep amd64`
- 	if [ "$ISA64" != "" ]; then
- 	    OUT="solaris64-x86_64-$CC"
- 	else
---- misc/openssl-0.9.8g/libcrypto_OOo_0_9_8e.map	Tue Jan 27 19:52:14 2009
-+++ misc/build/openssl-0.9.8g/libcrypto_OOo_0_9_8e.map	Tue Jan 27 19:51:04 2009
+   # By default gcc is a ILP32 compiler (with long long == 64). 
+--- misc/openssl-0.9.8k/libcrypto_OOo_0_9_8k.map	Tue Jan 27 19:52:14 2009
++++ misc/build/openssl-0.9.8k/libcrypto_OOo_0_9_8k.map	Tue Jan 27 19:51:04 2009
 @@ -1,1 +1,3295 @@
 -dummy
 +LIBCRYPTO_OOO_0_9_8e {
@@ -3375,8 +3374,8 @@
 +	local:
 +		*;
 +};
---- misc/openssl-0.9.8g/libssl_OOo_0_9_8e.map	Tue Jan 27 19:52:14 2009
-+++ misc/build/openssl-0.9.8g/libssl_OOo_0_9_8e.map	Tue Jan 27 19:51:04 2009
+--- misc/openssl-0.9.8k/libssl_OOo_0_9_8k.map	Tue Jan 27 19:52:14 2009
++++ misc/build/openssl-0.9.8k/libssl_OOo_0_9_8k.map	Tue Jan 27 19:51:04 2009
 @@ -1,1 +1,445 @@
 -dummy
 +LIBSSL_OOO_0_9_8e {

@@ -50,7 +50,7 @@ TARGET=openssl
     @echo "openssl disabled...."
 .ENDIF
 
-OPENSSL_NAME=openssl-0.9.8g
+OPENSSL_NAME=openssl-0.9.8k
 
 TARFILE_NAME=$(OPENSSL_NAME)
 
@@ -68,8 +68,8 @@ OUT2INC += include/openssl/*
 .IF "$(OS)" == "LINUX"
     PATCH_FILES=openssllnx.patch
     ADDITIONAL_FILES:= \
-        libcrypto_OOo_0_9_8e.map \
-        libssl_OOo_0_9_8e.map
+        libcrypto_OOo_0_9_8k.map \
+        libssl_OOo_0_9_8k.map
     # if you build openssl as shared library you have to patch the Makefile.Shared "LD_LIBRARY_PATH=$$LD_LIBRARY_PATH \"
     #BUILD_ACTION=make 'SHARED_LDFLAGS=-Wl,--version-script=./lib$$(SHLIBDIRS)_OOo_0_9_8e.map'
 .ENDIF
@@ -77,8 +77,8 @@ OUT2INC += include/openssl/*
 .IF "$(OS)" == "SOLARIS"
     PATCH_FILES=opensslsol.patch
     ADDITIONAL_FILES:= \
-        libcrypto_OOo_0_9_8e.map \
-        libssl_OOo_0_9_8e.map
+        libcrypto_OOo_0_9_8k.map \
+        libssl_OOo_0_9_8k.map
     #BUILD_ACTION=make 'SHARED_LDFLAGS=-G -dy -z text -M./lib$$$$$$$$(SHLIBDIRS)_OOo_0_9_8e.map'
 
     # We need a 64 BIT switch (currently I disable 64 Bit by default). 
