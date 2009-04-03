@@ -103,6 +103,7 @@ class PrintUIOptions
                          const rtl::OUString& i_rType,
                          const rtl::OUString& i_rProperty,
                          const Sequence< rtl::OUString >& i_rChoices,
+                         sal_Int32 i_nValue,
                          const rtl::OUString* i_pDependsOnName = NULL,
                          sal_Int32 i_nDependsOnEntry = -1
                          );
@@ -174,12 +175,13 @@ Any PrintUIOptions::getUIControlOpt( const rtl::OUString& i_rTitle,
                                      const rtl::OUString& i_rType,
                                      const rtl::OUString& i_rProperty,
                                      const Sequence< rtl::OUString >& i_rChoices,
+                                     sal_Int32 i_nValue,
                                      const rtl::OUString* i_pDependsOnName,
                                      sal_Int32 i_nDependsOnEntry )
 {
     PropertyValue aVal;
     aVal.Name = i_rProperty;
-    aVal.Value = makeAny( i_rChoices );
+    aVal.Value = makeAny( i_nValue );
     return getUIControlOpt( i_rTitle, i_rType, &aVal, &i_rChoices, i_pDependsOnName, i_nDependsOnEntry );
 }
 
@@ -226,7 +228,7 @@ void PrintUIOptions::addPrintUIOptions( uno::Sequence< beans::PropertyValue >& i
     aUIOptions[6].Value = getUIControlOpt( rtl::OUString(),
                                            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Radio" ) ),
                                            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintFormat" ) ),
-                                           aChoices
+                                           aChoices, 0
                                            );
 
     // create a numeric box for scale dependent on PrintFormat = "Scaling"
