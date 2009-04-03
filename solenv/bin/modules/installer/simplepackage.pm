@@ -138,13 +138,14 @@ sub register_extensions
             while (<UNOPKG>) {push(@unopkgoutput, $_); }
             close (UNOPKG);
 
+            for ( my $j = 0; $j <= $#unopkgoutput; $j++ ) { push( @installer::globals::logfileinfo, "$unopkgoutput[$j]"); }
+
             my $returnvalue = $?;   # $? contains the return value of the systemcall
 
             if ($returnvalue)
             {
                 $infoline = "ERROR: Could not execute \"$systemcall\"!\nExitcode: '$returnvalue'\n";
                 push( @installer::globals::logfileinfo, $infoline);
-                for ( my $j = 0; $j <= $#unopkgoutput; $j++ ) { push( @installer::globals::logfileinfo, "$unopkgoutput[$j]"); }
                 installer::exiter::exit_program("ERROR: $systemcall failed!", "register_extensions");
             }
             else
