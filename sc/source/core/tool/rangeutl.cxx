@@ -46,6 +46,7 @@
 #include "globstr.hrc"
 #include "convuno.hxx"
 #include "externalrefmgr.hxx"
+#include "compiler.hxx"
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -439,14 +440,12 @@ void ScRangeStringConverter::GetTokenByOffset(
     }
 }
 
-void ScRangeStringConverter::AppendTableName(OUStringBuffer& rBuf, const OUString& rTabName, sal_Unicode cQuote)
+void ScRangeStringConverter::AppendTableName(OUStringBuffer& rBuf, const OUString& rTabName, sal_Unicode /* cQuote */)
 {
-    bool bQuoted = rTabName.indexOf(sal_Unicode(' '), 0) >= 0;
-    if (bQuoted)
-        rBuf.append(cQuote);
-    rBuf.append(rTabName);
-    if (bQuoted)
-        rBuf.append(cQuote);
+    // quote character is always "'"
+    String aQuotedTab(rTabName);
+    ScCompiler::CheckTabQuotes(aQuotedTab, ::formula::FormulaGrammar::CONV_OOO);
+    rBuf.append(aQuotedTab);
 }
 
 sal_Int32 ScRangeStringConverter::GetTokenCount( const OUString& rString, sal_Unicode cSeperator, sal_Unicode cQuote )
@@ -832,7 +831,7 @@ static void lcl_appendCellRangeAddress(
         rBuf.append(cQuote);
         rBuf.append(sal_Unicode('#'));
         rBuf.append(sal_Unicode('$'));
-        rBuf.append(rExtInfo1.maTabName);
+        ScRangeStringConverter::AppendTableName(rBuf, rExtInfo1.maTabName);
         rBuf.append(sal_Unicode('.'));
 
         String aAddr;
@@ -844,7 +843,7 @@ static void lcl_appendCellRangeAddress(
         if (rExtInfo1.maTabName != rExtInfo2.maTabName)
         {
             rBuf.append(sal_Unicode('$'));
-            rBuf.append(rExtInfo2.maTabName);
+            ScRangeStringConverter::AppendTableName(rBuf, rExtInfo2.maTabName);
             rBuf.append(sal_Unicode('.'));
         }
 
