@@ -80,7 +80,7 @@ using namespace ::com::sun::star::script;
 
 #define C2U(cChar)  rtl::OUString::createFromAscii(cChar)
 
-class PrintUIOptions
+class SmPrintUIOptions
 {
     ResStringArray      m_aLocalizedStrings;
 
@@ -108,22 +108,22 @@ class PrintUIOptions
                          sal_Int32 i_nDependsOnEntry = -1
                          );
 public:
-    PrintUIOptions();
+    SmPrintUIOptions();
 
     void addPrintUIOptions( uno::Sequence< beans::PropertyValue >& io_rProps );
 };
 
-PrintUIOptions::PrintUIOptions()
+SmPrintUIOptions::SmPrintUIOptions()
 : m_aLocalizedStrings( SmResId( RID_PRINTUIOPTIONS ) )
 {
 }
 
-Any PrintUIOptions::getUIControlOpt( const rtl::OUString& i_rTitle,
-                                     const rtl::OUString& i_rType,
-                                     const PropertyValue* i_pVal,
-                                     const Sequence< rtl::OUString >* i_pChoices,
-                                     const rtl::OUString* i_pDependsOnName,
-                                     sal_Int32 i_nDependsOnEntry
+Any SmPrintUIOptions::getUIControlOpt( const rtl::OUString& i_rTitle,
+                                       const rtl::OUString& i_rType,
+                                       const PropertyValue* i_pVal,
+                                       const Sequence< rtl::OUString >* i_pChoices,
+                                       const rtl::OUString* i_pDependsOnName,
+                                       sal_Int32 i_nDependsOnEntry
                                      )
 {
     Sequence< PropertyValue > aCtrl(6);
@@ -159,11 +159,11 @@ Any PrintUIOptions::getUIControlOpt( const rtl::OUString& i_rTitle,
     return makeAny( aCtrl );
 }
 
-Any PrintUIOptions::getUIControlOpt( const rtl::OUString& i_rTitle,
-                                     const rtl::OUString& i_rProperty,
-                                     sal_Bool i_bValue,
-                                     const rtl::OUString* i_pDependsOnName,
-                                     sal_Int32 i_nDependsOnEntry )
+Any SmPrintUIOptions::getUIControlOpt( const rtl::OUString& i_rTitle,
+                                       const rtl::OUString& i_rProperty,
+                                       sal_Bool i_bValue,
+                                       const rtl::OUString* i_pDependsOnName,
+                                       sal_Int32 i_nDependsOnEntry )
 {
     PropertyValue aVal;
     aVal.Name = i_rProperty;
@@ -171,13 +171,13 @@ Any PrintUIOptions::getUIControlOpt( const rtl::OUString& i_rTitle,
     return getUIControlOpt( i_rTitle, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Bool" ) ), &aVal, NULL, i_pDependsOnName, i_nDependsOnEntry );
 }
 
-Any PrintUIOptions::getUIControlOpt( const rtl::OUString& i_rTitle,
-                                     const rtl::OUString& i_rType,
-                                     const rtl::OUString& i_rProperty,
-                                     const Sequence< rtl::OUString >& i_rChoices,
-                                     sal_Int32 i_nValue,
-                                     const rtl::OUString* i_pDependsOnName,
-                                     sal_Int32 i_nDependsOnEntry )
+Any SmPrintUIOptions::getUIControlOpt( const rtl::OUString& i_rTitle,
+                                       const rtl::OUString& i_rType,
+                                       const rtl::OUString& i_rProperty,
+                                       const Sequence< rtl::OUString >& i_rChoices,
+                                       sal_Int32 i_nValue,
+                                       const rtl::OUString* i_pDependsOnName,
+                                       sal_Int32 i_nDependsOnEntry )
 {
     PropertyValue aVal;
     aVal.Name = i_rProperty;
@@ -185,7 +185,7 @@ Any PrintUIOptions::getUIControlOpt( const rtl::OUString& i_rTitle,
     return getUIControlOpt( i_rTitle, i_rType, &aVal, &i_rChoices, i_pDependsOnName, i_nDependsOnEntry );
 }
 
-void PrintUIOptions::addPrintUIOptions( uno::Sequence< beans::PropertyValue >& io_rProps )
+void SmPrintUIOptions::addPrintUIOptions( uno::Sequence< beans::PropertyValue >& io_rProps )
 {
     // create sequence of print UI options
     uno::Sequence< beans::PropertyValue > aUIOptions( 10 );
@@ -1044,7 +1044,7 @@ sal_Int32 SAL_CALL SmModel::getRendererCount(
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
     if( ! m_pPrintUIOptions )
-        m_pPrintUIOptions = new PrintUIOptions();
+        m_pPrintUIOptions = new SmPrintUIOptions();
 
     return 1;
 }
@@ -1081,7 +1081,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SmModel::getRenderer(
     ::vos::OGuard aGuard(Application::GetSolarMutex());
 
     if( ! m_pPrintUIOptions )
-        m_pPrintUIOptions = new PrintUIOptions();
+        m_pPrintUIOptions = new SmPrintUIOptions();
 
     if (0 != nRenderer)
         throw IllegalArgumentException();
@@ -1120,7 +1120,7 @@ void SAL_CALL SmModel::render(
     ::vos::OGuard aGuard(Application::GetSolarMutex());
 
     if( ! m_pPrintUIOptions )
-        m_pPrintUIOptions = new PrintUIOptions();
+        m_pPrintUIOptions = new SmPrintUIOptions();
 
     if (0 != nRenderer)
         throw IllegalArgumentException();
