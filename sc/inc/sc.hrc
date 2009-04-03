@@ -1379,6 +1379,8 @@
 
 #define SCSTR_RENAMEOBJECT          (STR_START + 215)
 
+#define SCSTR_PRINT_OPTIONS     (STR_START+216)
+
 // Navigator - in der Reihenfolge wie SC_CONTENT_...
 #define SCSTR_CONTENT_ROOT      (STR_START + 250)
 #define SCSTR_CONTENT_TABLE     (STR_START + 251)

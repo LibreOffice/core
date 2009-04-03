@@ -728,3 +728,13 @@ String RID_SCSTR_ONCLICK
     Text [ en-US ] = "Mouse button pressed";
 };
 
+StringArray SCSTR_PRINT_OPTIONS
+{
+    ItemList [en-US] =
+    {
+        < "Pages"; >;
+        < "~Suppress output of empty pages"; >;
+        < "Sheets"; >;
+        < "Print ~only selected sheets"; >;
+    };
+};

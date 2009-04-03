@@ -49,6 +49,7 @@
 #include <vcl/waitobj.hxx>
 #include <unotools/charclass.hxx>
 #include <tools/multisel.hxx>
+#include <tools/resary.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
 #include <ctype.h>
 #include <float.h>  // DBL_MAX
@@ -92,6 +93,8 @@
 #include "scmod.hxx"
 #include "rangeutl.hxx"
 #include "ViewSettingsSequenceDefines.hxx"
+#include "sc.hrc"
+#include "scresid.hxx"
 
 #ifndef _SVX_UNOSHAPE_HXX
 #include <svx/unoshape.hxx>
@@ -584,22 +587,25 @@ void lcl_addPrintUIOptions( uno::Sequence< beans::PropertyValue >& io_rProps,
                             sal_Bool i_bSelectedOnly
                             )
 {
-    // FIXME: the "Text" strings need to be localized
-
     // create sequence of print UI options
     uno::Sequence< beans::PropertyValue > aUIOptions( 5 );
+
+    ResStringArray aStrings( ScResId( SCSTR_PRINT_OPTIONS ) );
+    DBG_ASSERT( aStrings.Count() >= 4, "resource incomplete" );
+    if( aStrings.Count() < 4 ) // bad resource ?
+        return;
 
     // create Section for spreadsheet (results in an extra tab page in dialog)
     uno::Sequence< beans::PropertyValue > aGroupOpt( 2 );
     aGroupOpt[0].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Text" ) );
-    aGroupOpt[0].Value = uno::makeAny( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Spreadsheet" ) ) );
+    aGroupOpt[0].Value = uno::makeAny( rtl::OUString( String( ScResId( SCSTR_HUMAN_SCDOC_NAME ) ) ) );
     aGroupOpt[1].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ControlType" ) );
     aGroupOpt[1].Value = uno::makeAny( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Group" ) ) );
     aUIOptions[0].Value = uno::makeAny( aGroupOpt );
 
     // create subgroup for pages
     aGroupOpt[0].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Text" ) );
-    aGroupOpt[0].Value = uno::makeAny( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Pages" ) ) );
+    aGroupOpt[0].Value = uno::makeAny( rtl::OUString( aStrings.GetString( 0 ) ) );
     aGroupOpt[1].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ControlType" ) );
     aGroupOpt[1].Value = uno::makeAny( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Subgroup" ) ) );
     aUIOptions[1].Value = uno::makeAny( aGroupOpt );
@@ -608,7 +614,7 @@ void lcl_addPrintUIOptions( uno::Sequence< beans::PropertyValue >& io_rProps,
     uno::Sequence< beans::PropertyValue > aBoolOpt( 3 );
     beans::PropertyValue aVal;
     aBoolOpt[0].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Text" ) );
-    aBoolOpt[0].Value = uno::makeAny( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "~Suppress output of empty pages" ) ) );
+    aBoolOpt[0].Value = uno::makeAny( rtl::OUString( aStrings.GetString( 1 ) ) );
     aBoolOpt[1].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ControlType" ) );
     aBoolOpt[1].Value = uno::makeAny( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Bool" ) ) );
     aBoolOpt[2].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Property" ) );
@@ -619,14 +625,14 @@ void lcl_addPrintUIOptions( uno::Sequence< beans::PropertyValue >& io_rProps,
 
     // create subgroup for sheets
     aGroupOpt[0].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Text" ) );
-    aGroupOpt[0].Value = uno::makeAny( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Sheets" ) ) );
+    aGroupOpt[0].Value = uno::makeAny( rtl::OUString( aStrings.GetString( 2 ) ) );
     aGroupOpt[1].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ControlType" ) );
     aGroupOpt[1].Value = uno::makeAny( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Subgroup" ) ) );
     aUIOptions[3].Value = uno::makeAny( aGroupOpt );
 
     // create a bool option for selected pages only
     aBoolOpt[0].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Text" ) );
-    aBoolOpt[0].Value = uno::makeAny( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Print ~only selected sheets" ) ) );
+    aBoolOpt[0].Value = uno::makeAny( rtl::OUString( aStrings.GetString( 3 ) ) );
     aBoolOpt[1].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ControlType" ) );
     aBoolOpt[1].Value = uno::makeAny( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Bool" ) ) );
     aBoolOpt[2].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Property" ) );
