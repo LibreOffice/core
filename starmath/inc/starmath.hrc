@@ -103,6 +103,8 @@
 #define RID_SYMBOLDIALOG            (RID_APP_START + 8)
 #define RID_SYMDEFINEDIALOG         (RID_APP_START + 9)
 #define RID_EXTRAOPTIONPAGE         (RID_APP_START + 10)
+#define RID_PRINTUIOPTIONS          (RID_APP_START + 11)
+
 #define RID_MATH_TOOLBOX            (RID_APP_START + 50)
 // wegen #58705# entfernt
 //#define RID_DRAW_OBJECTBAR            (RID_APP_START + 51)

@@ -80,6 +80,184 @@ using namespace ::com::sun::star::script;
 
 #define C2U(cChar)  rtl::OUString::createFromAscii(cChar)
 
+class PrintUIOptions
+{
+    ResStringArray      m_aLocalizedStrings;
+
+    Any getUIControlOpt( const rtl::OUString& i_rTitle,
+                         const rtl::OUString& i_rType,
+                         const PropertyValue* i_pVal = NULL,
+                         const Sequence< rtl::OUString >* i_pChoices = NULL,
+                         const rtl::OUString* i_pDependsOnName = NULL,
+                         sal_Int32 i_nDependsOnEntry = -1
+                         );
+
+    Any getUIControlOpt( const rtl::OUString& i_rTitle,
+                         const rtl::OUString& i_rProperty,
+                         sal_Bool i_bValue,
+                         const rtl::OUString* i_pDependsOnName = NULL,
+                         sal_Int32 i_nDependsOnEntry = -1
+                         );
+
+    Any getUIControlOpt( const rtl::OUString& i_rTitle,
+                         const rtl::OUString& i_rType,
+                         const rtl::OUString& i_rProperty,
+                         const Sequence< rtl::OUString >& i_rChoices,
+                         const rtl::OUString* i_pDependsOnName = NULL,
+                         sal_Int32 i_nDependsOnEntry = -1
+                         );
+public:
+    PrintUIOptions();
+
+    void addPrintUIOptions( uno::Sequence< beans::PropertyValue >& io_rProps );
+};
+
+PrintUIOptions::PrintUIOptions()
+: m_aLocalizedStrings( SmResId( RID_PRINTUIOPTIONS ) )
+{
+}
+
+Any PrintUIOptions::getUIControlOpt( const rtl::OUString& i_rTitle,
+                                     const rtl::OUString& i_rType,
+                                     const PropertyValue* i_pVal,
+                                     const Sequence< rtl::OUString >* i_pChoices,
+                                     const rtl::OUString* i_pDependsOnName,
+                                     sal_Int32 i_nDependsOnEntry
+                                     )
+{
+    Sequence< PropertyValue > aCtrl(6);
+    sal_Int32 nUsed = 0;
+    if( i_rTitle.getLength() )
+    {
+        aCtrl[nUsed  ].Name  = OUString( RTL_CONSTASCII_USTRINGPARAM( "Text" ) );
+        aCtrl[nUsed++].Value = makeAny( i_rTitle );
+    }
+    aCtrl[nUsed  ].Name  = OUString( RTL_CONSTASCII_USTRINGPARAM( "ControlType" ) );
+    aCtrl[nUsed++].Value = makeAny( i_rType );
+    if( i_pVal )
+    {
+        aCtrl[nUsed  ].Name  = OUString( RTL_CONSTASCII_USTRINGPARAM( "Property" ) );
+        aCtrl[nUsed++].Value = makeAny( *i_pVal );
+    }
+    if( i_pChoices )
+    {
+        aCtrl[nUsed  ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Choices" ) );
+        aCtrl[nUsed++].Value = makeAny( *i_pChoices );
+    }
+    if( i_pDependsOnName )
+    {
+        aCtrl[nUsed  ].Name  = OUString( RTL_CONSTASCII_USTRINGPARAM( "DependsOnName" ) );
+        aCtrl[nUsed++].Value = makeAny( *i_pDependsOnName );
+        if( i_nDependsOnEntry != -1 )
+        {
+            aCtrl[nUsed  ].Name  = OUString( RTL_CONSTASCII_USTRINGPARAM( "DependsOnEntry" ) );
+            aCtrl[nUsed++].Value = makeAny( i_nDependsOnEntry );
+        }
+    }
+    aCtrl.realloc( nUsed );
+    return makeAny( aCtrl );
+}
+
+Any PrintUIOptions::getUIControlOpt( const rtl::OUString& i_rTitle,
+                                     const rtl::OUString& i_rProperty,
+                                     sal_Bool i_bValue,
+                                     const rtl::OUString* i_pDependsOnName,
+                                     sal_Int32 i_nDependsOnEntry )
+{
+    PropertyValue aVal;
+    aVal.Name = i_rProperty;
+    aVal.Value = makeAny( i_bValue );
+    return getUIControlOpt( i_rTitle, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Bool" ) ), &aVal, NULL, i_pDependsOnName, i_nDependsOnEntry );
+}
+
+Any PrintUIOptions::getUIControlOpt( const rtl::OUString& i_rTitle,
+                                     const rtl::OUString& i_rType,
+                                     const rtl::OUString& i_rProperty,
+                                     const Sequence< rtl::OUString >& i_rChoices,
+                                     const rtl::OUString* i_pDependsOnName,
+                                     sal_Int32 i_nDependsOnEntry )
+{
+    PropertyValue aVal;
+    aVal.Name = i_rProperty;
+    aVal.Value = makeAny( i_rChoices );
+    return getUIControlOpt( i_rTitle, i_rType, &aVal, &i_rChoices, i_pDependsOnName, i_nDependsOnEntry );
+}
+
+void PrintUIOptions::addPrintUIOptions( uno::Sequence< beans::PropertyValue >& io_rProps )
+{
+    // create sequence of print UI options
+    uno::Sequence< beans::PropertyValue > aUIOptions( 10 );
+
+    DBG_ASSERT( m_aLocalizedStrings.Count() >= 10, "resource incomplete" );
+    if( m_aLocalizedStrings.Count() < 10 ) // bad resource ?
+        return;
+
+    // create Section for formula (results in an extra tab page in dialog)
+    aUIOptions[0].Value = getUIControlOpt( m_aLocalizedStrings.GetString( 0 ),
+                                           rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Group" ) ) );
+
+    // create subgroup for print options
+    aUIOptions[1].Value = getUIControlOpt( m_aLocalizedStrings.GetString( 1 ),
+                                           rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Subgroup" ) ) );
+
+    // create a bool option for title row
+    aUIOptions[2].Value = getUIControlOpt( m_aLocalizedStrings.GetString( 2 ),
+                                           rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TitleRow" ) ),
+                                           sal_True );
+    // create a bool option for formula text
+    aUIOptions[3].Value = getUIControlOpt( m_aLocalizedStrings.GetString( 3 ),
+                                           rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FormulaText" ) ),
+                                           sal_True );
+    // create a bool option for border
+    aUIOptions[4].Value = getUIControlOpt( m_aLocalizedStrings.GetString( 4 ),
+                                           rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Border" ) ),
+                                           sal_True );
+
+    // create subgroup for print format
+    aUIOptions[5].Value = getUIControlOpt( m_aLocalizedStrings.GetString( 5 ),
+                                           rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Subgroup" ) ) );
+
+    // create a radio button group for print format
+    Sequence< rtl::OUString > aChoices( 3 );
+    aChoices[0] = m_aLocalizedStrings.GetString( 6 );
+    aChoices[1] = m_aLocalizedStrings.GetString( 7 );
+    aChoices[2] = m_aLocalizedStrings.GetString( 8 );
+    OUString aPrintFormatProp( RTL_CONSTASCII_USTRINGPARAM( "PrintFormat" ) );
+    aUIOptions[6].Value = getUIControlOpt( rtl::OUString(),
+                                           rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Radio" ) ),
+                                           rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintFormat" ) ),
+                                           aChoices
+                                           );
+
+    // create a numeric box for scale dependent on PrintFormat = "Scaling"
+    PropertyValue aVal;
+    aVal.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintScale" ) );
+    aVal.Value = makeAny( sal_Int32( 100 ) );
+    aUIOptions[ 7 ].Value = getUIControlOpt( rtl::OUString(),
+                                             rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Range" ) ),
+                                             &aVal,
+                                             NULL,
+                                             &aPrintFormatProp,
+                                             2 );
+
+    // create subgroup for misc options
+    aUIOptions[8].Value = getUIControlOpt( m_aLocalizedStrings.GetString( 9 ),
+                                           rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Subgroup" ) ) );
+
+    // create a bool option for ignore spacing
+    aUIOptions[9].Value = getUIControlOpt( m_aLocalizedStrings.GetString( 10 ),
+                                           rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Border" ) ),
+                                           sal_True );
+
+    sal_Int32 nLen = io_rProps.getLength();
+    io_rProps.realloc( nLen+1 );
+    io_rProps[nLen].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ExtraPrintUIOptions" ) );
+    io_rProps[nLen].Value = uno::makeAny( aUIOptions );
+}
+
+
+
+
 ////////////////////////////////////////
 //
 // class SmModel
@@ -230,11 +408,14 @@ PropertySetInfo * lcl_createModelPropertyInfo ()
 SmModel::SmModel( SfxObjectShell *pObjSh )
 : SfxBaseModel(pObjSh)
 , PropertySetHelper ( lcl_createModelPropertyInfo () )
+, m_pPrintUIOptions( NULL )
+
 {
 }
 //-----------------------------------------------------------------------
 SmModel::~SmModel() throw ()
 {
+    delete m_pPrintUIOptions;
 }
 /*-- 28.03.00 14:18:17---------------------------------------------------
 
@@ -860,6 +1041,9 @@ sal_Int32 SAL_CALL SmModel::getRendererCount(
     throw (IllegalArgumentException, RuntimeException)
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
+    if( ! m_pPrintUIOptions )
+        m_pPrintUIOptions = new PrintUIOptions();
+
     return 1;
 }
 
@@ -886,7 +1070,6 @@ static Size lcl_GuessPaperSize()
     return aRes;
 }
 
-
 uno::Sequence< beans::PropertyValue > SAL_CALL SmModel::getRenderer(
         sal_Int32 nRenderer,
         const uno::Any& /*rSelection*/,
@@ -894,6 +1077,9 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SmModel::getRenderer(
     throw (IllegalArgumentException, RuntimeException)
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
+
+    if( ! m_pPrintUIOptions )
+        m_pPrintUIOptions = new PrintUIOptions();
 
     if (0 != nRenderer)
         throw IllegalArgumentException();
@@ -918,6 +1104,8 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SmModel::getRenderer(
     rValue.Name  = OUString( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) );
     rValue.Value <<= aPageSize;
 
+    m_pPrintUIOptions->addPrintUIOptions( aRenderer );
+
     return aRenderer;
 }
 
@@ -928,6 +1116,9 @@ void SAL_CALL SmModel::render(
     throw (IllegalArgumentException, RuntimeException)
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
+
+    if( ! m_pPrintUIOptions )
+        m_pPrintUIOptions = new PrintUIOptions();
 
     if (0 != nRenderer)
         throw IllegalArgumentException();

@@ -39,6 +39,7 @@
 #include <comphelper/propertysethelper.hxx>
 
 class SmFormat;
+class PrintUIOptions;
 
 //-----------------------------------------------------------------------------
 class SmModel : public SfxBaseModel,
@@ -46,6 +47,7 @@ class SmModel : public SfxBaseModel,
                 public com::sun::star::lang::XServiceInfo,
                 public com::sun::star::view::XRenderable
 {
+    PrintUIOptions* m_pPrintUIOptions;
 protected:
     virtual void _setPropertyValues( const comphelper::PropertyMapEntry** ppEntries, const ::com::sun::star::uno::Any* pValues )
         throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException );
