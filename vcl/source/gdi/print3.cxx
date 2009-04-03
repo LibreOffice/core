@@ -195,8 +195,12 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterListener>& i_pListene
 {
     // setup printer
     boost::shared_ptr<PrinterListener> pListener( i_pListener );
-    boost::shared_ptr<Printer> pPrinter( new Printer( i_rInitSetup.GetPrinterName() ) );
-    pListener->setPrinter( pPrinter );
+    // if no specific printer is already set, create one
+    if( ! pListener->getPrinter() )
+    {
+        boost::shared_ptr<Printer> pPrinter( new Printer( i_rInitSetup.GetPrinterName() ) );
+        pListener->setPrinter( pPrinter );
+    }
 
     // check if the printer brings up its own dialog
     // in that case leave the work to that dialog
