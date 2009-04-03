@@ -162,7 +162,31 @@ namespace drawinglayer
                     // #i96581# Get the font forced without FontStretching (use FontHeight as FontWidth)
                     Font aFont(primitive2d::getVclFontFromFontAttributes(
                         rTextCandidate.getFontAttributes(),
-                        aScale.getY(),
+
+                        // #i100373# FontScaling
+                        //
+                        // There are two different definitions for unscaled fonts, (1) 0==width and
+                        // (2) height==width where (2) is the more modern one supported on all non-WIN32
+                        // systems and (1) is the old one coming from WIN16-VCL definitions where
+                        // that ominous FontWidth (available over FontMetric) is involved. While
+                        // WIN32 only supports (1), all other systems support (2). When on WIN32, the
+                        // support for (1) is ensured inside getVclFontFromFontAttributes.
+                        //
+                        // The former usage of (2) leads to problems when it is used on non-WIN32 systems
+                        // and exported to MetaFile FontActions where the scale is taken over unseen. When
+                        // such a MetaFile is imported on a WIN32-System supporting (1), all fonts are
+                        // seen as scaled an look wrong.
+                        //
+                        // The simplest and fastest solution is to fallback to (1) independent from the
+                        // system we are running on.
+                        //
+                        // The best solution would be a system-independent Y-value just expressing the
+                        // font scaling, e.g. when (2) is used and width == height, use 1.0 as Y-Value,
+                        // which would also solve the involved ominous FontWidth value for WIN32-systems.
+                        // This is a region which needs redesign urgently.
+                        //
+                        0, // aScale.getY(),
+
                         aScale.getY(),
                         fRotate,
                         *mpOutputDevice));
