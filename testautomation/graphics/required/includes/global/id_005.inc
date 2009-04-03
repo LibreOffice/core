@@ -841,6 +841,9 @@ testcase tiFormatStylesAndFormatting
     dim abctemp
 
     printlog "Open Application"
+    
+    WaitSlot (10000)
+    printlog "Open new document"
     Call  hNewDocument
     printlog "Create a Textframe with content"
     sleep 5
