@@ -935,3 +935,34 @@ TabPage TP_OPTSHDWCRSR
     };
 };
 
+
+StringArray STR_PRINTOPTUI
+{
+    ItemList [en-US] =
+    {
+        < "Contents"; >;
+        < "~Graphics"; >;
+        < "~Tables"; >;
+        < "Dra~wings"; >;
+        < "Control~s"; >;
+        < "Ba~ckground"; >;
+        < "Print blac~k"; >;
+        < "Hidden te~xt"; >;
+        < "Text ~placeholder"; >;
+        < "~Notes"; >;
+        < "None"; >;
+        < "Notes only"; >;
+        < " at end of document"; >;
+        < " at end of page"; >;
+        < "Page settings"; >;
+        < "~Left pages"; >;
+        < "~Right pages"; >;
+        < "Re~versed"; >;
+        < "Broch~ure"; >;
+        < "Right to Left"; >;
+        < "Other"; >;
+        < "Print ~automatically inserted blank pages"; >;
+        < "~Paper tray from printer settings"; >;
+    };
+};
+

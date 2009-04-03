@@ -123,6 +123,7 @@ class SwXDrawPage;
 class SwUnoCrsr;
 class SwXDocumentPropertyHelper;
 class SfxViewFrame;
+class SwPrintUIOptions;
 
 typedef UnoActionContext* UnoActionContextPtr;
 SV_DECL_PTRARR(ActionContextArr, UnoActionContextPtr, 4, 4)
@@ -215,6 +216,8 @@ class SwXTextDocument : public SwXTextDocumentBaseClass,
     SfxViewFrame*                                                                       m_pHiddenViewFrame;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>                    xPropertyHelper;
     SwXDocumentPropertyHelper*                                                              pPropertyHelper;
+
+    SwPrintUIOptions*                                                                   m_pPrintUIOptions;
 
     void                    GetBodyText();
     void                    GetNumberFormatter();
