@@ -1851,11 +1851,15 @@ static void ImplHandleGetFocus( Window* pWindow )
     // nicht alles flackert, wenn diese den Focus bekommen
     if ( !pWindow->ImplGetWindowImpl()->mpFrameData->mnFocusId )
     {
+        bool bCallDirect = ImplGetSVData()->mbIsTestTool;
         pWindow->ImplGetWindowImpl()->mpFrameData->mbStartFocusState = !pWindow->ImplGetWindowImpl()->mpFrameData->mbHasFocus;
-        Application::PostUserEvent( pWindow->ImplGetWindowImpl()->mpFrameData->mnFocusId, LINK( pWindow, Window, ImplAsyncFocusHdl ) );
+        if( ! bCallDirect )
+            Application::PostUserEvent( pWindow->ImplGetWindowImpl()->mpFrameData->mnFocusId, LINK( pWindow, Window, ImplAsyncFocusHdl ) );
         Window* pFocusWin = pWindow->ImplGetWindowImpl()->mpFrameData->mpFocusWin;
         if ( pFocusWin && pFocusWin->ImplGetWindowImpl()->mpCursor )
             pFocusWin->ImplGetWindowImpl()->mpCursor->ImplShow();
+        if( bCallDirect )
+            pWindow->ImplAsyncFocusHdl( NULL );
     }
 }
 
@@ -1889,15 +1893,19 @@ static void ImplHandleLoseFocus( Window* pWindow )
 
     // Focus-Events zeitverzoegert ausfuehren, damit bei SystemChildFenstern
     // nicht alles flackert, wenn diese den Focus bekommen
+    bool bCallDirect = ImplGetSVData()->mbIsTestTool;
     if ( !pWindow->ImplGetWindowImpl()->mpFrameData->mnFocusId )
     {
         pWindow->ImplGetWindowImpl()->mpFrameData->mbStartFocusState = !pWindow->ImplGetWindowImpl()->mpFrameData->mbHasFocus;
-        Application::PostUserEvent( pWindow->ImplGetWindowImpl()->mpFrameData->mnFocusId, LINK( pWindow, Window, ImplAsyncFocusHdl ) );
+        if( ! bCallDirect )
+            Application::PostUserEvent( pWindow->ImplGetWindowImpl()->mpFrameData->mnFocusId, LINK( pWindow, Window, ImplAsyncFocusHdl ) );
     }
 
     Window* pFocusWin = pWindow->ImplGetWindowImpl()->mpFrameData->mpFocusWin;
     if ( pFocusWin && pFocusWin->ImplGetWindowImpl()->mpCursor )
         pFocusWin->ImplGetWindowImpl()->mpCursor->ImplHide();
+    if( bCallDirect )
+        pWindow->ImplAsyncFocusHdl( NULL );
 }
 
 // -----------------------------------------------------------------------

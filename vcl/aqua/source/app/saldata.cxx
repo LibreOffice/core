@@ -61,7 +61,6 @@ SalData::SalData()
     mbIsScrollbarDoubleMax( false ),
     mnSystemVersion( VER_TIGER ),
     mpMainController( NULL ),
-    mbIsTestTool( false ),
     mpDockIconClickHandler( nil )
 {
     if( s_aAutoReleaseKey == 0 )

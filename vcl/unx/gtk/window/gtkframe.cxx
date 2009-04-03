@@ -2800,7 +2800,7 @@ gboolean GtkSalFrame::signalMap( GtkWidget*, GdkEvent*, gpointer frame )
 
     GTK_YIELD_GRAB();
 
-    if( GetX11SalData()->isTestTool() )
+    if( ImplGetSVData()->mbIsTestTool )
     {
         /* #i76541# testtool needs the focus to be in a new document
         *  however e.g. metacity does not necessarily put the focus into

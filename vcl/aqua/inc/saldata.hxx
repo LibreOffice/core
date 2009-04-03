@@ -107,7 +107,6 @@ struct SalData
     bool                                          mbIsScrollbarDoubleMax;   // TODO: support DoubleMin and DoubleBoth too
     SInt32                                        mnSystemVersion;          // Store System Version
     MainController*                               mpMainController;         // Apple Remote
-    bool                                          mbIsTestTool;
 
     NSObject*                                     mpDockIconClickHandler;
 
