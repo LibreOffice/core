@@ -109,6 +109,8 @@ struct SalData
     MainController*                               mpMainController;         // Apple Remote
 
     NSObject*                                     mpDockIconClickHandler;
+    long                                          mnDPIX;           // #i100617# read DPI only once per office life
+    long                                          mnDPIY;           // #i100617# read DPI only once per office life
 
     SalData();
     ~SalData();
