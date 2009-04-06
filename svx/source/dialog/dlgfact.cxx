@@ -41,7 +41,8 @@
 #include <tools/rc.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/app.hxx>
-
+#include <sfx2/request.hxx>
+#include <svx/optimprove.hxx>
 #include "splitcelldlg.hxx"
 #include <svx/dialogs.hrc>
 #include "fmresids.hrc"
@@ -2081,6 +2082,14 @@ AbstractSfxSingleTabDialog* AbstractDialogFactory_Impl::CreateSfxSingleTabDialog
         case RID_SFXPAGE_DBREGISTER :
             pDlg = new DatabaseRegistrationDialog( pParent, rAttr );
             break;
+        case RID_SVXPAGE_IMPROVEMENT :
+        {
+            String help_url;
+            SFX_ITEMSET_ARG( &rAttr, pItem, SfxStringItem, SID_CURRENT_URL, sal_False );
+            if ( pItem )
+                help_url = pItem->GetValue();
+            pDlg = new SvxImprovementDialog( pParent, help_url);
+        }
         default:
             break;
     }
