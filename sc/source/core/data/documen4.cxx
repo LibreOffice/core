@@ -321,6 +321,7 @@ bool ScDocument::MarkUsedExternalReferences( ScTokenArray & rArr )
                          * different. */
                         DBG_ERRORFILE("ScDocument::MarkUsedExternalReferences: implement the svExternalName case!");
                         break;
+                    default: break;
                 }
             }
         }
