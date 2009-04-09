@@ -658,7 +658,7 @@ static int GetCompoundTTOutline(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPo
             fprintf(stderr, "%d -> ", index);
             fprintf(stderr," [");
             for( std::vector< sal_uInt32 >::const_iterator it = glyphlist.begin();
-                 it != glpyhlist.end(); ++it )
+                 it != glyphlist.end(); ++it )
             {
                 fprintf( stderr,"%d ", (int) *it );
             }
@@ -685,12 +685,12 @@ static int GetCompoundTTOutline(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPo
 #ifdef DEBUG2
         fprintf(stderr,"%d [", (int)glyphlist.size() );
         for( std::vector< sal_uInt32 >::const_iterator it = glyphlist.begin();
-            it != glpyhlist.end(); ++it )
+            it != glyphlist.end(); ++it )
         {
             fprintf( stderr,"%d ", (int) *it );
         }
         fprintf(stderr, "]\n");
-        if( ! glpyhlist.empty() )
+        if( ! glyphlist.empty() )
             fprintf(stderr, "glyphlist: -= %d\n", (int) glyphlist.back());
 
 #endif
