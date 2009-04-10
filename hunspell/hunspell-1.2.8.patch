@@ -475,7 +475,17 @@
  #ifndef HUNSPELL_EXTRA
  #define suggest_auto suggest
  #endif
-@@ -98,8 +108,10 @@
+@@ -28,7 +38,9 @@
+ 
+ #ifdef WIN32
+ 
++#ifndef __MINGW32__
+ #define gettext
++#endif
+ #define LIBDIR "C:\\Hunspell\\"
+ #define USEROOODIR "Application Data\\OpenOffice.org 2\\user\\wordbook"
+ #define OOODIR \
+@@ -98,8 +110,10 @@
  #if ENABLE_NLS
  #ifdef HAVE_LOCALE_H
  #include <locale.h>
@@ -486,7 +496,7 @@
  
  #ifdef HAVE_LIBINTL_H
  #include <libintl.h>
-@@ -1385,9 +1397,11 @@
+@@ -1385,9 +1399,11 @@
  #ifdef HAVE_LOCALE_H
  	ui_lang = setlocale(LC_ALL, "");
  	textdomain("hunspell");

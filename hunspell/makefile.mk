@@ -71,7 +71,14 @@ OUT2LIB=$(BUILD_DIR)$/src$/hunspell$/.libs$/libhunspell-1.2.a
 
 
 .IF "$(GUI)"=="WNT"
+.IF "$(COM)"=="GCC"
+CONFIGURE_ACTION=configure
+CONFIGURE_FLAGS= --disable-shared --with-pic
+BUILD_ACTION=make
+OUT2LIB=$(BUILD_DIR)$/src$/hunspell$/.libs$/libhunspell-1.2.a
+.ELSE
 BUILD_ACTION=cd src/hunspell && dmake
+.ENDIF
 .ENDIF # "$(GUI)"=="WNT"
 
 .IF "$(GUI)"=="OS2"
