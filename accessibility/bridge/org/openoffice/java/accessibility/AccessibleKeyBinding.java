@@ -57,6 +57,11 @@ public class AccessibleKeyBinding extends Object implements javax.accessibility.
         if ((s & com.sun.star.awt.KeyModifier.MOD2) != 0) {
             modifiers = modifiers | java.awt.event.KeyEvent.ALT_DOWN_MASK;
         }
+
+        if ((s & com.sun.star.awt.KeyModifier.MOD3) != 0) {
+            modifiers = modifiers | java.awt.event.KeyEvent.META_DOWN_MASK;
+        }
+
         return modifiers;
     }
 

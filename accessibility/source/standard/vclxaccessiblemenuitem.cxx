@@ -531,6 +531,8 @@ Reference< XAccessibleKeyBinding > VCLXAccessibleMenuItem::getAccessibleActionKe
                 aSeq3[0].Modifiers |= awt::KeyModifier::MOD1;
             if ( aAccelKeyCode.IsMod2() )
                 aSeq3[0].Modifiers |= awt::KeyModifier::MOD2;
+            if ( aAccelKeyCode.IsMod3() )
+                aSeq3[0].Modifiers |= awt::KeyModifier::MOD3;
             aSeq3[0].KeyCode = aAccelKeyCode.GetCode();
             aSeq3[0].KeyFunc = static_cast< sal_Int16 >( aAccelKeyCode.GetFunction() );
             pKeyBindingHelper->AddKeyBinding( aSeq3 );
