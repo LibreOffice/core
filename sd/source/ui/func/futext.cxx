@@ -982,7 +982,7 @@ BOOL FuText::KeyInput(const KeyEvent& rKEvt)
     }
 
     USHORT nKey = nCode.GetCode();
-    KeyCode aKeyCode (nKey, bShift, nCode.IsMod1(), nCode.IsMod2() );
+    KeyCode aKeyCode (nKey, bShift, nCode.IsMod1(), nCode.IsMod2(), nCode.IsMod3() );
     KeyEvent aKEvt(rKEvt.GetCharCode(), aKeyCode);
 
     BOOL bOK = TRUE;
