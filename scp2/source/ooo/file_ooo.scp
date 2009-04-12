@@ -2220,6 +2220,17 @@ File gid_File_Registry_Spool_Langpack_Lang
     FILE_ALL_LANG_LETTER(/registry/spool/Langpack-,xcu);
 End
 
+File gid_File_Registry_Spool_Oo_Accelerators_System_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Accelerators;
+#ifdef QUARTZ 
+    Name = "/registry/spool/org/openoffice/Office/Accelerators-macosx.xcu";
+#else
+    Name = "/registry/spool/org/openoffice/Office/Accelerators-unxwnt.xcu";
+#endif
+End
+
 File gid_File_Registry_Spool_Oo_Common_System_Xcu
     TXT_FILE_BODY;
     Styles = (PACKED);

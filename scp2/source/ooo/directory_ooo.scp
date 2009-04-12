@@ -887,6 +887,11 @@ Directory gid_Dir_Share_Registry_Modules_Oo_Inet
     HostName = "Inet";
 End
 
+Directory gid_Dir_Share_Registry_Modules_Oo_Office_Accelerators
+    ParentID = gid_Dir_Share_Registry_Modules_Oo_Office;
+    HostName = "Accelerators";
+End
+
 Directory gid_Dir_Share_Registry_Modules_Oo_Office_Common
     ParentID = gid_Dir_Share_Registry_Modules_Oo_Office;
     HostName = "Common";
