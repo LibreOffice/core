@@ -2799,6 +2799,11 @@ static USHORT sal_GetCode( int state )
     if( state & Mod1Mask )
         nCode |= KEY_MOD2;
 
+        // Map Meta/Super modifier to MOD3 on all Unix systems
+        // except Mac OS X
+        if( (state & Mod3Mask) )
+            nCode |= KEY_MOD3;
+
     return nCode;
 }
 
@@ -3167,7 +3172,8 @@ long X11SalFrame::HandleKeyEvent( XKeyEvent *pEvent )
     if(     nKeySym == XK_Shift_L   || nKeySym == XK_Shift_R
         ||  nKeySym == XK_Control_L || nKeySym == XK_Control_R
         ||  nKeySym == XK_Alt_L     || nKeySym == XK_Alt_R
-        ||  nKeySym == XK_Meta_L    || nKeySym == XK_Meta_R )
+        ||  nKeySym == XK_Meta_L    || nKeySym == XK_Meta_R
+                ||      nKeySym == XK_Super_L   || nKeySym == XK_Super_R )
     {
         SalKeyModEvent aModEvt;
         aModEvt.mnModKeyCode = 0;
@@ -3210,6 +3216,18 @@ long X11SalFrame::HandleKeyEvent( XKeyEvent *pEvent )
             case XK_Shift_R:
                 nExtModMask = MODKEY_RSHIFT;
                 nModMask = KEY_SHIFT;
+                break;
+            // Map Meta/Super keys to MOD3 modifier on all Unix systems
+            // except Mac OS X
+            case XK_Meta_L:
+            case XK_Super_L:
+                nExtModMask = MODKEY_LMOD3;
+                nModMask = KEY_MOD3;
+                break;
+            case XK_Meta_R:
+            case XK_Super_R:
+                nExtModMask = MODKEY_RMOD3;
+                nModMask = KEY_MOD3;
                 break;
         }
         if( pEvent->type == KeyRelease )

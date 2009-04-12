@@ -75,6 +75,13 @@
 #define GSS_DBUS_INTERFACE      "org.gnome.ScreenSaver"
 #endif
 
+// make compile on gtk older than 2.10
+#if GTK_MINOR_VERSION < 10
+#define GDK_SUPER_MASK      (1 << 26)
+#define GDK_HYPER_MASK      (1 << 27)
+#define GDK_META_MASK       (1 << 28)
+#endif
+
 using namespace com::sun::star;
 
 int GtkSalFrame::m_nFloats = 0;
@@ -88,6 +95,11 @@ static USHORT GetKeyModCode( guint state )
         nCode |= KEY_MOD1;
     if( (state & GDK_MOD1_MASK) )
         nCode |= KEY_MOD2;
+
+    // Map Meta/Super keys to MOD3 modifier on all Unix systems
+    // except Mac OS X
+    if ( (state & GDK_META_MASK ) || ( state & GDK_SUPER_MASK ) )
+        nCode |= KEY_MOD3;
     return nCode;
 }
 
@@ -2938,7 +2950,8 @@ gboolean GtkSalFrame::signalKey( GtkWidget*, GdkEventKey* pEvent, gpointer frame
     if( pEvent->keyval == GDK_Shift_L || pEvent->keyval == GDK_Shift_R ||
         pEvent->keyval == GDK_Control_L || pEvent->keyval == GDK_Control_R ||
         pEvent->keyval == GDK_Alt_L || pEvent->keyval == GDK_Alt_R ||
-        pEvent->keyval == GDK_Meta_L || pEvent->keyval == GDK_Meta_R )
+        pEvent->keyval == GDK_Meta_L || pEvent->keyval == GDK_Meta_R ||
+        pEvent->keyval == GDK_Super_L || pEvent->keyval == GDK_Super_R )
     {
         SalKeyModEvent aModEvt;
 
@@ -2986,6 +2999,18 @@ gboolean GtkSalFrame::signalKey( GtkWidget*, GdkEventKey* pEvent, gpointer frame
             case GDK_Shift_R:
                 nExtModMask = MODKEY_RSHIFT;
                 nModMask = KEY_SHIFT;
+                break;
+            // Map Meta/Super to MOD3 modifier on all Unix systems
+            // except Mac OS X
+            case GDK_Meta_L:
+            case GDK_Super_L:
+                nExtModMask = MODKEY_LMOD3;
+                nModMask = KEY_MOD3;
+                break;
+            case GDK_Meta_R:
+            case GDK_Super_R:
+                nExtModMask = MODKEY_RMOD3;
+                nModMask = KEY_MOD3;
                 break;
         }
         if( pEvent->type == GDK_KEY_RELEASE )

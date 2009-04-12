@@ -74,13 +74,14 @@ static USHORT aImplKeyFuncTab[(KEYFUNC_FRONT+1)*3] =
 
 // -----------------------------------------------------------------------
 
-void ImplGetKeyCode( KeyFuncType eFunc, USHORT& rCode1, USHORT& rCode2, USHORT& rCode3 )
+void ImplGetKeyCode( KeyFuncType eFunc, USHORT& rCode1, USHORT& rCode2, USHORT& rCode3, USHORT& rCode4 )
 {
     USHORT nIndex = (USHORT)eFunc;
-    nIndex *= 3;
+    nIndex *= 4;
     rCode1 = aImplKeyFuncTab[nIndex];
     rCode2 = aImplKeyFuncTab[nIndex+1];
     rCode3 = aImplKeyFuncTab[nIndex+2];
+        rCode4 = aImplKeyFuncTab[nIndex+3];
 }
 
 // =======================================================================
@@ -88,7 +89,7 @@ void ImplGetKeyCode( KeyFuncType eFunc, USHORT& rCode1, USHORT& rCode2, USHORT& 
 KeyCode::KeyCode( KeyFuncType eFunction )
 {
     USHORT nDummy;
-    ImplGetKeyCode( eFunction, nCode, nDummy, nDummy );
+    ImplGetKeyCode( eFunction, nCode, nDummy, nDummy, nDummy );
     eFunc = eFunction;
 }
 
@@ -111,7 +112,7 @@ KeyCode::KeyCode( const ResId& rResId )
         if ( eFunc != KEYFUNC_DONTKNOW )
         {
             USHORT nDummy;
-            ImplGetKeyCode( eFunc, nCode, nDummy, nDummy );
+            ImplGetKeyCode( eFunc, nCode, nDummy, nDummy, nDummy );
         }
         else
             nCode = sal::static_int_cast<USHORT>(nKeyCode | nModifier);
@@ -151,8 +152,9 @@ KeyFuncType KeyCode::GetFunction() const
             USHORT nKeyCode1;
             USHORT nKeyCode2;
             USHORT nKeyCode3;
-            ImplGetKeyCode( (KeyFuncType)i, nKeyCode1, nKeyCode2, nKeyCode3 );
-            if ( (nCompCode == nKeyCode1) || (nCompCode == nKeyCode2) || (nCompCode == nKeyCode3) )
+                        USHORT nKeyCode4;
+            ImplGetKeyCode( (KeyFuncType)i, nKeyCode1, nKeyCode2, nKeyCode3, nKeyCode4 );
+            if ( (nCompCode == nKeyCode1) || (nCompCode == nKeyCode2) || (nCompCode == nKeyCode3) || (nCompCode == nKeyCode4) )
                 return (KeyFuncType)i;
         }
     }

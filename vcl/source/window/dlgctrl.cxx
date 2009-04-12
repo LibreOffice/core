@@ -1166,7 +1166,7 @@ KeyEvent Window::GetActivationKey() const
             nCode = KEY_A + (nAccel-'A');
         else if( nAccel >= '0' && nAccel <= '9' )
             nCode = KEY_0 + (nAccel-'0');
-        KeyCode aKeyCode( nCode, FALSE, FALSE, TRUE );
+        KeyCode aKeyCode( nCode, FALSE, FALSE, TRUE, FALSE );
         aKeyEvent = KeyEvent( nAccel, aKeyCode );
     }
     return aKeyEvent;

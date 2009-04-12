@@ -2903,8 +2903,8 @@ PopupMenu* Edit::CreatePopupMenu()
     pPopup->SetAccelKey( SV_MENU_EDIT_COPY, KeyCode( KEYFUNC_COPY ) );
     pPopup->SetAccelKey( SV_MENU_EDIT_PASTE, KeyCode( KEYFUNC_PASTE ) );
     pPopup->SetAccelKey( SV_MENU_EDIT_DELETE, KeyCode( KEYFUNC_DELETE ) );
-    pPopup->SetAccelKey( SV_MENU_EDIT_SELECTALL, KeyCode( KEY_A, FALSE, TRUE, FALSE ) );
-    pPopup->SetAccelKey( SV_MENU_EDIT_INSERTSYMBOL, KeyCode( KEY_S, TRUE, TRUE, FALSE ) );
+    pPopup->SetAccelKey( SV_MENU_EDIT_SELECTALL, KeyCode( KEY_A, FALSE, TRUE, FALSE, FALSE ) );
+    pPopup->SetAccelKey( SV_MENU_EDIT_INSERTSYMBOL, KeyCode( KEY_S, TRUE, TRUE, FALSE, FALSE ) );
     return pPopup;
 }
 

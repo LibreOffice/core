@@ -231,7 +231,8 @@ void Accelerator::ImplInsertAccel( USHORT nItemId, const KeyCode& rKeyCode,
         USHORT nCode1;
         USHORT nCode2;
         USHORT nCode3;
-        ImplGetKeyCode( rKeyCode.GetFunction(), nCode1, nCode2, nCode3 );
+                USHORT nCode4;
+        ImplGetKeyCode( rKeyCode.GetFunction(), nCode1, nCode2, nCode3, nCode4 );
         if ( nCode1 )
             ImplInsertAccel( nItemId, KeyCode( nCode1, nCode1 ), bEnable, pAutoAccel );
         if ( nCode2 )

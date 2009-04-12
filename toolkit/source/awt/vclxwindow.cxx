@@ -548,6 +548,8 @@ void ImplInitKeyEvent( ::com::sun::star::awt::KeyEvent& rEvent, const KeyEvent& 
         rEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::MOD1;
     if ( rEvt.GetKeyCode().IsMod2() )
         rEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::MOD2;
+        if ( rEvt.GetKeyCode().IsMod3() )
+                rEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::MOD3;
 
     rEvent.KeyCode = rEvt.GetKeyCode().GetCode();
     rEvent.KeyChar = rEvt.GetCharCode();

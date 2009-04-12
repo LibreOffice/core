@@ -1608,7 +1608,9 @@ long VCLXToolkit::callKeyHandlers(::VclSimpleEvent const * pEvent,
             | (pKeyEvent->GetKeyCode().IsMod1()
                ? ::css::awt::KeyModifier::MOD1 : 0)
             | (pKeyEvent->GetKeyCode().IsMod2()
-               ? ::css::awt::KeyModifier::MOD2 : 0),
+               ? ::css::awt::KeyModifier::MOD2 : 0)
+            | (pKeyEvent->GetKeyCode().IsMod3()
+               ? ::css::awt::KeyModifier::MOD3 : 0),
             pKeyEvent->GetKeyCode().GetCode(), pKeyEvent->GetCharCode(),
             sal::static_int_cast< sal_Int16 >(
                 pKeyEvent->GetKeyCode().GetFunction()));
