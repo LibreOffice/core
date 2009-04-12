@@ -2332,6 +2332,8 @@ void lcl_InitMouseEvent( ::com::sun::star::awt::MouseEvent& rEvent, const MouseE
     rEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::MOD1;
     if ( rEvt.IsMod2() )
         rEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::MOD2;
+        if ( rEvt.IsMod3() )
+                rEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::MOD3;
 
     rEvent.Buttons = 0;
     if ( rEvt.IsLeft() )
