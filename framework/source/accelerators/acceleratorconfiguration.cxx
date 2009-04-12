@@ -1319,6 +1319,8 @@ void XCUBasedAcceleratorConfiguration::impl_ts_load( sal_Bool bPreferred, const 
                     aKeyEvent.Modifiers |= css::awt::KeyModifier::MOD1;
                 else if (sToken[k].equalsAscii("MOD2"))
                     aKeyEvent.Modifiers |= css::awt::KeyModifier::MOD2;
+        else if (sToken[k].equalsAscii("MOD3"))
+            aKeyEvent.Modifiers |= css::awt::KeyModifier::MOD3;
                 else
                 {
                     bValid = sal_False;
@@ -1468,7 +1470,8 @@ void XCUBasedAcceleratorConfiguration::insertKeyToConfiguration( const css::awt:
         sKey += ::rtl::OUString::createFromAscii("_MOD1");
     if ( (aKeyEvent.Modifiers & css::awt::KeyModifier::MOD2 ) == css::awt::KeyModifier::MOD2  )
         sKey += ::rtl::OUString::createFromAscii("_MOD2");
-
+        if ( (aKeyEvent.Modifiers & css::awt::KeyModifier::MOD3 ) == css::awt::KeyModifier::MOD3  )
+                sKey += ::rtl::OUString::createFromAscii("_MOD3");
     css::uno::Reference< css::container::XNameAccess > xKey;
     css::uno::Reference< css::container::XNameContainer > xCommand;
     if ( !xContainer->hasByName(sKey) )
@@ -1519,6 +1522,8 @@ void XCUBasedAcceleratorConfiguration::removeKeyFromConfiguration( const css::aw
         sKey += ::rtl::OUString::createFromAscii("_MOD1");
     if ( (aKeyEvent.Modifiers & css::awt::KeyModifier::MOD2 ) == css::awt::KeyModifier::MOD2  )
         sKey += ::rtl::OUString::createFromAscii("_MOD2");
+        if ( (aKeyEvent.Modifiers & css::awt::KeyModifier::MOD3 ) == css::awt::KeyModifier::MOD3  )
+                sKey += ::rtl::OUString::createFromAscii("_MOD3");
 
     xContainer->removeByName(sKey);
 }
@@ -1563,6 +1568,8 @@ void XCUBasedAcceleratorConfiguration::reloadChanged( const ::rtl::OUString& sPr
             aKeyEvent.Modifiers |= css::awt::KeyModifier::MOD1;
         else if (sToken[i].equalsAscii("MOD2"))
             aKeyEvent.Modifiers |= css::awt::KeyModifier::MOD2;
+                else if (sToken[i].equalsAscii("MOD3"))
+                        aKeyEvent.Modifiers |= css::awt::KeyModifier::MOD3;
     }
 
     css::uno::Reference< css::container::XNameAccess > xKey;
@@ -1666,3 +1673,4 @@ AcceleratorCache& XCUBasedAcceleratorConfiguration::impl_getCFG(sal_Bool bPrefer
 }
 
 } // namespace framework
+
