@@ -1,19 +1,18 @@
-fontscale=110%
+fontscale=80%
 iconscale=3
+iconstyle=3
 fontantialiasing=unchecked
 aapixel=5
 state_aapixel=disabled
-iconsinmenueanzeigen=unchecked
+iconsinmenueanzeigen=2
 inaktivemenueeintraege=unchecked
 vorschauinschriftlisten=unchecked
 schriftenhistorie=unchecked
 dokumentansicht=unchecked
 geoeffnetedokumente=checked
 opengl=checked
-optimierteausgabe=checked
-state_optimierteausgabe=disabled
-dithering=unchecked
-volldarstellung=checked
+UseHardwareAcceleration=checked
+useantialiasing=unchecked
 mousepositioning=2
 mausaktion=1
 
