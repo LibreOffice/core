@@ -678,7 +678,8 @@ OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet ) :
     aAAPointLimitUnits  ( this, SVX_RES( FT_POINTLIMIT_UNIT )),
 #endif
     aMenuFL             ( this, SVX_RES( FL_MENU ) ),
-    aMenuIconsCB        ( this, SVX_RES( CB_MENU_ICONS )),
+    aMenuIconsFT        ( this, SVX_RES( FT_MENU_ICONS )),
+    aMenuIconsLB        ( this, SVX_RES( LB_MENU_ICONS )),
     aFontListsFL        ( this, SVX_RES( FL_FONTLISTS) ),
     aFontShowCB         ( this, SVX_RES( CB_FONT_SHOW ) ),
     aFontHistoryCB      ( this, SVX_RES( CB_FONT_HISTORY ) ),
@@ -733,8 +734,8 @@ OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet ) :
     // (in the resource, the coordinates are calculated for the AA options beeing present)
     Control* pMiscOptions[] =
     {
-        &aMenuFL, &aFontShowCB,
-        &aFontListsFL, &aFontHistoryCB, &aMenuIconsCB
+        &aMenuFL, &aMenuIconsFT, &aMenuIconsLB,
+        &aFontListsFL, &aFontShowCB, &aFontHistoryCB
     };
 
     // temporaryly create the checkbox for the anti aliasing (we need to to determine it's pos)
@@ -915,23 +916,18 @@ BOOL OfaViewTabPage::FillItemSet( SfxItemSet& )
     }
 #endif
 
-    if ( bAppearanceChanged )
-    {
-        pAppearanceCfg->Commit();
-        pAppearanceCfg->SetApplicationDefaults ( GetpApp() );
-    }
-
     if ( aFontShowCB.IsChecked() != aFontShowCB.GetSavedValue() )
     {
         aFontOpt.EnableFontWYSIWYG( aFontShowCB.IsChecked() );
         bModified = TRUE;
     }
 
-    if(aMenuIconsCB.IsChecked() != aMenuIconsCB.GetSavedValue())
+    if(aMenuIconsLB.GetSelectEntryPos() != aMenuIconsLB.GetSavedValue())
     {
-        aMenuOpt.SetMenuIconsState( aMenuIconsCB.IsChecked() );
+        aMenuOpt.SetMenuIconsState( aMenuIconsLB.GetSelectEntryPos() == 0 ? 2 : aMenuIconsLB.GetSelectEntryPos() - 1);
         bModified = TRUE;
         bMenuOptModified = TRUE;
+        bAppearanceChanged = TRUE;
     }
 
     if ( aFontHistoryCB.IsChecked() != aFontHistoryCB.GetSavedValue() )
@@ -984,12 +980,17 @@ BOOL OfaViewTabPage::FillItemSet( SfxItemSet& )
         // Set changed settings to the application instance
         AllSettings aAllSettings = Application::GetSettings();
         StyleSettings aStyleSettings = aAllSettings.GetStyleSettings();
-        aStyleSettings.SetUseImagesInMenus( aMenuIconsCB.IsChecked() );
         if( m_aSystemFont.IsEnabled() )
             aStyleSettings.SetUseSystemUIFonts( m_aSystemFont.IsChecked() );
         aAllSettings.SetStyleSettings(aStyleSettings);
         Application::MergeSystemSettings( aAllSettings );
         Application::SetSettings(aAllSettings);
+    }
+
+    if ( bAppearanceChanged )
+    {
+        pAppearanceCfg->Commit();
+        pAppearanceCfg->SetApplicationDefaults ( GetpApp() );
     }
 
     return bModified;
@@ -1049,8 +1050,8 @@ void OfaViewTabPage::Reset( const SfxItemSet& )
     SvtFontOptions aFontOpt;
     aFontShowCB.Check( aFontOpt.IsFontWYSIWYGEnabled() );
     SvtMenuOptions aMenuOpt;
-    aMenuIconsCB.Check(aMenuOpt.IsMenuIconsEnabled());
-    aMenuIconsCB.SaveValue();
+    aMenuIconsLB.SelectEntryPos(aMenuOpt.GetMenuIconsState() == 2 ? 0 : aMenuOpt.GetMenuIconsState() + 1);
+    aMenuIconsLB.SaveValue();
     aFontHistoryCB.Check( aFontOpt.IsFontHistoryEnabled() );
 
     { // #i95644# HW accel (unified to disable mechanism)

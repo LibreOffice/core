@@ -103,11 +103,6 @@
           <value xml:lang="zh-TW">13</value>
     </prop>
     </node>
-    <node oor:name="Menu">
-      <prop oor:name="ShowIconsInMenues" install:module="macosx">
-        <value>false</value>
-      </prop>
-    </node>
   </node>
   <node oor:name="Help">
     <node oor:name="StartCenter">

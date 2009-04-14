@@ -298,12 +298,25 @@ TabPage OFA_TP_VIEW
         Size = MAP_APPFONT ( 120 , 8 ) ;
         Text [ en-US ] = "Menu" ;
     };
-    CheckBox CB_MENU_ICONS
+    FixedText FT_MENU_ICONS
     {
+        Pos = MAP_APPFONT ( 12 , ROW_FT_MENU_ICONS ) ;
+        Size = MAP_APPFONT ( 114 , 8 ) ;
+        Text [ en-US ] = "Icons in menus" ;
+    };
+    ListBox LB_MENU_ICONS
+    {
+        Pos = MAP_APPFONT ( 12 , ROW_LB_MENU_ICONS ) ;
+        Size = MAP_APPFONT ( 114 , 60 ) ;
+        DropDown = TRUE ;
+        Border = TRUE ;
         TabStop = TRUE ;
-        Pos = MAP_APPFONT ( 12 , ROW_CB_MENU_ICONS ) ;
-        Size = MAP_APPFONT ( 118 , RSC_CD_CHECKBOX_HEIGHT ) ;
-        Text [ en-US ] = "Show icons in menus";
+        StringList [ en-US ] =
+        {
+            < "Automatic" ; > ;
+            < "Hide" ; > ;
+            < "Show" ; > ;
+        };
     };
     FixedLine FL_FONTLISTS
     {

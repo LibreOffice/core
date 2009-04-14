@@ -1060,7 +1060,8 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu )
     {
         // set/unset hiding disabled menu entries
         sal_Bool bDontHide           = SvtMenuOptions().IsEntryHidingEnabled();
-        sal_Bool bShowMenuImages     = SvtMenuOptions().IsMenuIconsEnabled();
+        const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
+        sal_Bool bShowMenuImages     = rSettings.GetUseImagesInMenus();
         sal_Bool bHasDisabledEntries = SvtCommandOptions().HasEntries( SvtCommandOptions::CMDOPTION_DISABLED );
 
         ResetableGuard aGuard( m_aLock );
@@ -1084,7 +1085,6 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu )
             UpdateSpecialWindowMenu( pMenu );
 
         // Check if some modes have changed so we have to update our menu images
-        const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
         sal_Bool bIsHiContrast = rSettings.GetMenuColor().IsDark();
         sal_Int16 nSymbolsStyle = SvtMiscOptions().GetCurrentSymbolsStyle();
 
@@ -1592,7 +1592,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
 
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
     m_bWasHiContrast    = rSettings.GetMenuColor().IsDark();
-    m_bShowMenuImages   = SvtMenuOptions().IsMenuIconsEnabled();
+    m_bShowMenuImages   = rSettings.GetUseImagesInMenus();
     m_bRetrieveImages   = sal_False;
 
     sal_Int32 nAddonsURLPrefixLength = ADDONSPOPUPMENU_URL_PREFIX.getLength();

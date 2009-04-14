@@ -112,7 +112,8 @@ private:
 #endif
 
     FixedLine       aMenuFL;
-    CheckBox        aMenuIconsCB;
+    FixedText       aMenuIconsFT;
+    ListBox         aMenuIconsLB;
 
     FixedLine       aFontListsFL;
     CheckBox        aFontShowCB;

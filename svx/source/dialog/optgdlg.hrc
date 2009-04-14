@@ -72,8 +72,10 @@
 #define ROW_NF_AA_POINTLIMIT    (ROW_CB_FONTANTIALIASING+RSC_CD_FIXEDLINE_HEIGHT+ROWSPACE)
 
 #define ROW_FL_MENU             (ROW_NF_AA_POINTLIMIT+RSC_CD_DROPDOWN_HEIGHT+RSC_SP_FLGR_SPACE_X)
-#define ROW_CB_MENU_ICONS       (ROW_FL_MENU + RSC_CD_FIXEDLINE_HEIGHT + ROWSPACE)
-#define ROW_FL_FONTLISTS        (ROW_CB_MENU_ICONS + RSC_CD_CHECKBOX_HEIGHT + RSC_SP_FLGR_SPACE_X)
+#define ROW_FT_MENU_ICONS       (ROW_FL_MENU + RSC_CD_FIXEDLINE_HEIGHT + ROWSPACE)
+#define ROW_LB_MENU_ICONS       (ROW_FT_MENU_ICONS + RSC_CD_FIXEDLINE_HEIGHT + ROWSPACE)
+
+#define ROW_FL_FONTLISTS        (ROW_LB_MENU_ICONS + RSC_CD_CHECKBOX_HEIGHT + RSC_SP_FLGR_SPACE_X)
 #define ROW_CB_FONT_SHOW        (ROW_FL_FONTLISTS + RSC_CD_FIXEDLINE_HEIGHT + ROWSPACE)
 #define ROW_CB_FONT_HISTORY     (ROW_CB_FONT_SHOW + RSC_CD_CHECKBOX_HEIGHT + ROWSPACE)
 
@@ -125,15 +127,16 @@
 #define FT_MOUSEMIDDLE              33
 #define LB_MOUSEMIDDLE              34
 
-#define CB_MENU_ICONS               40
-#define FL_MENU                     41
-#define FL_FONTLISTS                42
+#define FT_MENU_ICONS               40
+#define LB_MENU_ICONS               41
+#define FL_MENU                     42
+#define FL_FONTLISTS                43
 
-#define LB_ICONSIZE                 53
-#define FT_ICONSIZESTYLE            54
-#define LB_ICONSTYLE                55
-#define CB_SYSTEM_FONT              56
-#define STR_ICONSIZE                        57
+#define LB_ICONSIZE                 54
+#define FT_ICONSIZESTYLE            55
+#define LB_ICONSTYLE                56
+#define CB_SYSTEM_FONT              57
+#define STR_ICONSIZE                58
 
 #define CB_FONT_SHOW                60
 #define CB_FONT_HISTORY             62
