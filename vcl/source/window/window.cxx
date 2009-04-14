@@ -497,24 +497,6 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, BOOL bCallHdl )
         }
     }
 
-    // Detect if images in menus are allowed or not
-    {
-        sal_Bool bTmp = sal_False, bUseImagesInMenus = sal_True;
-        utl::OConfigurationNode aNode = utl::OConfigurationTreeRoot::tryCreateWithServiceFactory(
-            vcl::unohelper::GetMultiServiceFactory(),
-            OUString::createFromAscii( "org.openoffice.Office.Common/View/Menu" ) );    // note: case sensisitive !
-        if ( aNode.isValid() )
-        {
-            ::com::sun::star::uno::Any aValue = aNode.getNodeValue( OUString::createFromAscii( "ShowIconsInMenues" ) );
-            if( aValue >>= bTmp )
-                bUseImagesInMenus = bTmp;
-        }
-
-        aStyleSettings = rSettings.GetStyleSettings();
-        aStyleSettings.SetUseImagesInMenus( bUseImagesInMenus );
-        rSettings.SetStyleSettings( aStyleSettings );
-    }
-
 #ifdef DBG_UTIL
     // Evt. AppFont auf Fett schalten, damit man feststellen kann,
     // ob fuer die Texte auf anderen Systemen genuegend Platz
