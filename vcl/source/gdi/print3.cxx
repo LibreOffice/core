@@ -811,3 +811,206 @@ void PrinterListener::setMultipage( int i_nRows, int i_nColumns, const Size& rPa
     mpImplData->mnMultiPageColumns = i_nColumns;
     mpImplData->maMultiPageSize = rPaperSize;
 }
+
+/*
+ * PrinterOptionsHelper
+**/
+Any PrinterOptionsHelper::getValue( const rtl::OUString& i_rPropertyName ) const
+{
+    Any aRet;
+    std::hash_map< rtl::OUString, Any, rtl::OUStringHash >::const_iterator it =
+        m_aPropertyMap.find( i_rPropertyName );
+    if( it != m_aPropertyMap.end() )
+        aRet = it->second;
+    return aRet;
+}
+
+sal_Bool PrinterOptionsHelper::getBoolValue( const rtl::OUString& i_rPropertyName, sal_Bool i_bDefault ) const
+{
+    sal_Bool bRet = sal_False;
+    Any aVal( getValue( i_rPropertyName ) );
+    return (aVal >>= bRet) ? bRet : i_bDefault;
+}
+
+sal_Int32 PrinterOptionsHelper::getIntValue( const rtl::OUString& i_rPropertyName, sal_Int32 i_nDefault ) const
+{
+    sal_Int32 nRet = 0;
+    Any aVal( getValue( i_rPropertyName ) );
+    return (aVal >>= nRet) ? nRet : i_nDefault;
+}
+
+rtl::OUString PrinterOptionsHelper::getStringValue( const rtl::OUString& i_rPropertyName, const rtl::OUString& i_rDefault ) const
+{
+    rtl::OUString aRet;
+    Any aVal( getValue( i_rPropertyName ) );
+    return (aVal >>= aRet) ? aRet : i_rDefault;
+}
+
+bool PrinterOptionsHelper::processProperties( const Sequence< PropertyValue >& i_rNewProp,
+                                              std::set< rtl::OUString >* o_pChangeProp )
+{
+    bool bChanged = false;
+
+    // clear the changed set
+    if( o_pChangeProp )
+        o_pChangeProp->clear();
+
+    sal_Int32 nElements = i_rNewProp.getLength();
+    const PropertyValue* pVals = i_rNewProp.getConstArray();
+    for( sal_Int32 i = 0; i < nElements; i++ )
+    {
+        bool bElementChanged = false;
+        std::hash_map< rtl::OUString, Any, rtl::OUStringHash >::iterator it =
+            m_aPropertyMap.find( pVals[ i ].Name );
+        if( it != m_aPropertyMap.end() )
+        {
+            if( it->second != pVals[ i ].Value )
+                bElementChanged = true;
+        }
+        else
+            bElementChanged = true;
+
+        if( bElementChanged )
+        {
+            if( o_pChangeProp )
+                o_pChangeProp->insert( pVals[ i ].Name );
+            m_aPropertyMap[ pVals[i].Name ] = pVals[i].Value;
+            bChanged = true;
+        }
+    }
+    return bChanged;
+}
+
+void PrinterOptionsHelper::appendPrintUIOptions( uno::Sequence< beans::PropertyValue >& io_rProps ) const
+{
+    if( m_aUIProperties.getLength() > 0 )
+    {
+        sal_Int32 nIndex = io_rProps.getLength();
+        io_rProps.realloc( nIndex+1 );
+        PropertyValue aVal;
+        aVal.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ExtraPrintUIOptions" ) );
+        aVal.Value = makeAny( m_aUIProperties );
+        io_rProps[ nIndex ] = aVal;
+    }
+}
+
+Any PrinterOptionsHelper::getUIControlOpt( const rtl::OUString& i_rTitle,
+                                           const rtl::OUString& i_rType,
+                                           const PropertyValue* i_pVal,
+                                           const Sequence< rtl::OUString >* i_pChoices,
+                                           const rtl::OUString* i_pDependsOnName,
+                                           sal_Int32 i_nDependsOnEntry,
+                                           sal_Int32 i_nMinValue,
+                                           sal_Int32 i_nMaxValue
+                                           )
+{
+    sal_Int32 nElements =
+        1                                                               // ControlType
+        + (i_rTitle.getLength() ? 1 : 0)                                // Text
+        + (i_pVal ? 1 : 0)                                              // Property
+        + (i_pChoices ? 1 : 0)                                          // Choices
+        + (i_pDependsOnName ? (i_nDependsOnEntry != -1 ? 2 : 1) : 0)    // dependencies
+        + (i_nMaxValue >= i_nMinValue ? 2 : 0)                          // min/max
+        ;
+
+    Sequence< PropertyValue > aCtrl( nElements );
+    sal_Int32 nUsed = 0;
+    if( i_rTitle.getLength() )
+    {
+        aCtrl[nUsed  ].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Text" ) );
+        aCtrl[nUsed++].Value = makeAny( i_rTitle );
+    }
+    aCtrl[nUsed  ].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ControlType" ) );
+    aCtrl[nUsed++].Value = makeAny( i_rType );
+    if( i_pVal )
+    {
+        aCtrl[nUsed  ].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Property" ) );
+        aCtrl[nUsed++].Value = makeAny( *i_pVal );
+    }
+    if( i_pChoices )
+    {
+        aCtrl[nUsed  ].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Choices" ) );
+        aCtrl[nUsed++].Value = makeAny( *i_pChoices );
+    }
+    if( i_pDependsOnName )
+    {
+        aCtrl[nUsed  ].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DependsOnName" ) );
+        aCtrl[nUsed++].Value = makeAny( *i_pDependsOnName );
+        if( i_nDependsOnEntry != -1 )
+        {
+            aCtrl[nUsed  ].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DependsOnEntry" ) );
+            aCtrl[nUsed++].Value = makeAny( i_nDependsOnEntry );
+        }
+    }
+    if( i_nMaxValue >= i_nMinValue )
+    {
+        aCtrl[nUsed  ].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MinValue" ) );
+        aCtrl[nUsed++].Value = makeAny( i_nMinValue );
+        aCtrl[nUsed  ].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MaxValue" ) );
+        aCtrl[nUsed++].Value = makeAny( i_nMaxValue );
+    }
+
+    DBG_ASSERT( nUsed == nElements, "nUsed != nElements, probable heap corruption" );
+
+    return makeAny( aCtrl );
+}
+
+Any PrinterOptionsHelper::getGroupControlOpt( const rtl::OUString& i_rTitle )
+{
+    return getUIControlOpt( i_rTitle, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Group" ) ) );
+}
+
+Any PrinterOptionsHelper::getSubgroupControlOpt( const rtl::OUString& i_rTitle )
+{
+    return getUIControlOpt( i_rTitle, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Subgroup" ) ) );
+}
+
+Any PrinterOptionsHelper::getBoolControlOpt( const rtl::OUString& i_rTitle,
+                                             const rtl::OUString& i_rProperty,
+                                             sal_Bool i_bValue,
+                                             const rtl::OUString* i_pDependsOnName,
+                                             sal_Int32 i_nDependsOnEntry
+                                             )
+{
+    PropertyValue aVal;
+    aVal.Name = i_rProperty;
+    aVal.Value = makeAny( i_bValue );
+    return getUIControlOpt( i_rTitle, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Bool" ) ), &aVal, NULL, i_pDependsOnName, i_nDependsOnEntry );
+}
+
+Any PrinterOptionsHelper::getChoiceControlOpt( const rtl::OUString& i_rTitle,
+                                               const rtl::OUString& i_rProperty,
+                                               const Sequence< rtl::OUString >& i_rChoices,
+                                               sal_Int32 i_nValue,
+                                               const rtl::OUString& i_rType,
+                                               const rtl::OUString* i_pDependsOnName,
+                                               sal_Int32 i_nDependsOnEntry
+                                               )
+{
+    PropertyValue aVal;
+    aVal.Name = i_rProperty;
+    aVal.Value = makeAny( i_nValue );
+    return getUIControlOpt( i_rTitle, i_rType, &aVal, &i_rChoices, i_pDependsOnName, i_nDependsOnEntry );
+}
+
+Any PrinterOptionsHelper::getRangeControlOpt( const rtl::OUString& i_rTitle,
+                                              const rtl::OUString& i_rProperty,
+                                              sal_Int32 i_nValue,
+                                              sal_Int32 i_nMinValue,
+                                              sal_Int32 i_nMaxValue,
+                                              const rtl::OUString* i_pDependsOnName,
+                                              sal_Int32 i_nDependsOnEntry
+                                            )
+{
+    PropertyValue aVal;
+    aVal.Name = i_rProperty;
+    aVal.Value = makeAny( i_nValue );
+    return getUIControlOpt( i_rTitle,
+                            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Range" ) ),
+                            &aVal,
+                            NULL,
+                            i_pDependsOnName,
+                            i_nDependsOnEntry,
+                            i_nMinValue,
+                            i_nMaxValue );
+}

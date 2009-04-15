@@ -44,6 +44,8 @@
 #include "com/sun/star/beans/PropertyValue.hpp"
 
 #include <boost/shared_ptr.hpp>
+#include <hash_map>
+#include <set>
 
 struct SalPrinterInfoQueue;
 class SalInfoPrinter;
@@ -454,7 +456,7 @@ public:
     com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >
         getJobProperties( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& i_rMergeList ) const;
 
-    /* get the PorpertyValue of a Property
+    /* get the PropertyValue of a Property
     */
     com::sun::star::beans::PropertyValue* getValue( const rtl::OUString& rPropertyName );
     const com::sun::star::beans::PropertyValue* getValue( const rtl::OUString& rPropertyName ) const;
@@ -494,6 +496,99 @@ public:
     void SAL_DLLPRIVATE createProgressDialog();
     void SAL_DLLPRIVATE setPrintSelection( const rtl::OUString& );
     void SAL_DLLPRIVATE setMultipage( int nRows, int nColumns, const Size& rPaperSize );
+};
+
+class VCL_DLLPUBLIC PrinterOptionsHelper
+{
+    protected:
+    std::hash_map< rtl::OUString, com::sun::star::uno::Any, rtl::OUStringHash >        m_aPropertyMap;
+    com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >              m_aUIProperties;
+
+    public:
+    PrinterOptionsHelper() {} // create without ui properties
+    PrinterOptionsHelper( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& i_rUIProperties )
+    : m_aUIProperties( i_rUIProperties )
+    {}
+    ~PrinterOptionsHelper()
+    {}
+
+    /* process a new set of properties
+     * merges changed properties and returns "true" if any occured
+     * if the optional output set is not NULL then the names of the changed properties are returned
+    **/
+    bool processProperties( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& i_rNewProp,
+                            std::set< rtl::OUString >* o_pChangeProp = NULL );
+    /* append  to a sequence of property values the ui property sequence passed at creation
+     * as the "ExtraPrintUIOptions" property. if that sequence was empty, no "ExtraPrintUIOptions" property
+     * will be appended.
+    **/
+    void appendPrintUIOptions( com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& io_rProps ) const;
+
+    // returns an empty Any for not existing properties
+    com::sun::star::uno::Any getValue( const rtl::OUString& i_rPropertyName ) const;
+
+    sal_Bool getBoolValue( const rtl::OUString& i_rPropertyName, sal_Bool i_bDefault = sal_False ) const;
+    // convenience for fixed strings
+    sal_Bool getBoolValue( const char* i_pPropName, sal_Bool i_bDefault = sal_False ) const
+    { return getBoolValue( rtl::OUString::createFromAscii( i_pPropName ), i_bDefault ); }
+
+    sal_Int32 getIntValue( const rtl::OUString& i_rPropertyName, sal_Int32 i_nDefault = 0 ) const;
+    // convenience for fixed strings
+    sal_Int32 getIntValue( const char* i_pPropName, sal_Int32 i_nDefault = 0 ) const
+    { return getIntValue( rtl::OUString::createFromAscii( i_pPropName ), i_nDefault ); }
+
+    rtl::OUString getStringValue( const rtl::OUString& i_rPropertyName, const rtl::OUString& i_rDefault = rtl::OUString() ) const;
+    // convenience for fixed strings
+    rtl::OUString getStringValue( const char* i_pPropName, const rtl::OUString& i_rDefault = rtl::OUString() ) const
+    { return getStringValue( rtl::OUString::createFromAscii( i_pPropName ), i_rDefault ); }
+
+    // helper functions for user to create a single control
+
+    // general control
+    static com::sun::star::uno::Any getUIControlOpt( const rtl::OUString& i_rTitle,
+                                                     const rtl::OUString& i_rType,
+                                                     const com::sun::star::beans::PropertyValue* i_pVal = NULL,
+                                                     const com::sun::star::uno::Sequence< rtl::OUString >* i_pChoices = NULL,
+                                                     const rtl::OUString* i_pDependsOnName = NULL,
+                                                     sal_Int32 i_nDependsOnEntry = -1,
+                                                     sal_Int32 i_nMinValue = -1, sal_Int32 i_nMaxValue = -2
+                                                     );
+    // create a group (e.g. a TabPage); following controls will be grouped in it until the next
+    // group begins
+    static com::sun::star::uno::Any getGroupControlOpt( const rtl::OUString& i_rTitle );
+
+    // create a subgroup (e.g. a FixedLine); following controls will be grouped in it until the next
+    // subgroup or group begins
+    static com::sun::star::uno::Any getSubgroupControlOpt( const rtl::OUString& i_rTitle );
+
+    // create a bool option (usually a checkbox)
+    static com::sun::star::uno::Any getBoolControlOpt( const rtl::OUString& i_rTitle,
+                                                       const rtl::OUString& i_rProperty,
+                                                       sal_Bool i_bValue,
+                                                       const rtl::OUString* i_pDependsOnName = NULL,
+                                                       sal_Int32 i_nDependsOnEntry = -1
+                                                       );
+
+    // create a set of choices (either a radio button group or a list box)
+    static com::sun::star::uno::Any getChoiceControlOpt( const rtl::OUString& i_rTitle,
+                                                         const rtl::OUString& i_rProperty,
+                                                         const com::sun::star::uno::Sequence< rtl::OUString >& i_rChoices,
+                                                         sal_Int32 i_nValue,
+                                                         const rtl::OUString& i_rType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Radio" ) ),
+                                                         const rtl::OUString* i_pDependsOnName = NULL,
+                                                         sal_Int32 i_nDependsOnEntry = -1
+                                                         );
+
+    // create an integer range (e.g. a spin field)
+    // note: max value < min value means do not apply min/max values
+    static com::sun::star::uno::Any getRangeControlOpt( const rtl::OUString& i_rTitle,
+                                                        const rtl::OUString& i_rProperty,
+                                                        sal_Int32 i_nValue,
+                                                        sal_Int32 i_nMinValue = -1,
+                                                        sal_Int32 i_nMaxValue = -2,
+                                                        const rtl::OUString* i_pDependsOnName = NULL,
+                                                        sal_Int32 i_nDependsOnEntry = -1
+                                                        );
 };
 
 }
