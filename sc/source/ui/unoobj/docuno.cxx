@@ -209,6 +209,43 @@ SC_SIMPLE_SERVICE_INFO( ScTableSheetsObj, "ScTableSheetsObj", "com.sun.star.shee
 
 //------------------------------------------------------------------------
 
+class ScPrintUIOptions : public vcl::PrinterOptionsHelper
+{
+public:
+    ScPrintUIOptions( sal_Bool i_bEmptyPages, sal_Bool i_bSelectedOnly );
+};
+
+ScPrintUIOptions::ScPrintUIOptions( sal_Bool i_bEmptyPages, sal_Bool i_bSelectedOnly )
+{
+    ResStringArray aStrings( ScResId( SCSTR_PRINT_OPTIONS ) );
+    DBG_ASSERT( aStrings.Count() >= 4, "resource incomplete" );
+    if( aStrings.Count() < 4 ) // bad resource ?
+        return;
+
+    m_aUIProperties.realloc( 5 );
+
+    // create Section for spreadsheet (results in an extra tab page in dialog)
+    m_aUIProperties[0].Value = getGroupControlOpt( rtl::OUString( String( ScResId( SCSTR_HUMAN_SCDOC_NAME ) ) ) );
+
+    // create subgroup for pages
+    m_aUIProperties[1].Value = getSubgroupControlOpt( rtl::OUString( aStrings.GetString( 0 ) ) );
+
+    // create a bool option for empty pages
+    m_aUIProperties[2].Value = getBoolControlOpt( rtl::OUString( aStrings.GetString( 1 ) ),
+                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsSkipEmptyPages" ) ),
+                                                  i_bEmptyPages
+                                                  );
+
+    // create subgroup for sheets
+    m_aUIProperties[3].Value = getSubgroupControlOpt( rtl::OUString( aStrings.GetString( 2 ) ) );
+
+    // create a bool option for selected pages only
+    m_aUIProperties[4].Value = getBoolControlOpt( rtl::OUString( aStrings.GetString( 3 ) ),
+                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsOnlySelectedSheets" ) ),
+                                                  i_bSelectedOnly
+                                                  );
+}
+
 // static
 void ScModelObj::CreateAndSet(ScDocShell* pDocSh)
 {
@@ -221,6 +258,7 @@ ScModelObj::ScModelObj( ScDocShell* pDocSh ) :
     aPropSet( lcl_GetDocOptPropertyMap() ),
     pDocShell( pDocSh ),
     pPrintFuncCache( NULL ),
+    pPrinterOptions( NULL ),
     maChangesListeners( m_aMutex )
 {
     // pDocShell may be NULL if this is the base of a ScDocOptionsObj
@@ -260,6 +298,7 @@ ScModelObj::~ScModelObj()
         xNumberAgg->setDelegator(uno::Reference<uno::XInterface>());
 
     delete pPrintFuncCache;
+    delete pPrinterOptions;
 }
 
 ScDocument* ScModelObj::GetDocument() const
@@ -582,71 +621,6 @@ bool lcl_ParseTarget( const String& rTarget, ScRange& rTargetRange, Rectangle& r
     return bRangeValid;
 }
 
-void lcl_addPrintUIOptions( uno::Sequence< beans::PropertyValue >& io_rProps,
-                            sal_Bool i_bEmptyPages,
-                            sal_Bool i_bSelectedOnly
-                            )
-{
-    // create sequence of print UI options
-    uno::Sequence< beans::PropertyValue > aUIOptions( 5 );
-
-    ResStringArray aStrings( ScResId( SCSTR_PRINT_OPTIONS ) );
-    DBG_ASSERT( aStrings.Count() >= 4, "resource incomplete" );
-    if( aStrings.Count() < 4 ) // bad resource ?
-        return;
-
-    // create Section for spreadsheet (results in an extra tab page in dialog)
-    uno::Sequence< beans::PropertyValue > aGroupOpt( 2 );
-    aGroupOpt[0].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Text" ) );
-    aGroupOpt[0].Value = uno::makeAny( rtl::OUString( String( ScResId( SCSTR_HUMAN_SCDOC_NAME ) ) ) );
-    aGroupOpt[1].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ControlType" ) );
-    aGroupOpt[1].Value = uno::makeAny( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Group" ) ) );
-    aUIOptions[0].Value = uno::makeAny( aGroupOpt );
-
-    // create subgroup for pages
-    aGroupOpt[0].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Text" ) );
-    aGroupOpt[0].Value = uno::makeAny( rtl::OUString( aStrings.GetString( 0 ) ) );
-    aGroupOpt[1].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ControlType" ) );
-    aGroupOpt[1].Value = uno::makeAny( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Subgroup" ) ) );
-    aUIOptions[1].Value = uno::makeAny( aGroupOpt );
-
-    // create a bool option for empty pages
-    uno::Sequence< beans::PropertyValue > aBoolOpt( 3 );
-    beans::PropertyValue aVal;
-    aBoolOpt[0].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Text" ) );
-    aBoolOpt[0].Value = uno::makeAny( rtl::OUString( aStrings.GetString( 1 ) ) );
-    aBoolOpt[1].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ControlType" ) );
-    aBoolOpt[1].Value = uno::makeAny( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Bool" ) ) );
-    aBoolOpt[2].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Property" ) );
-    aVal.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsSkipEmptyPages" ) );
-    aVal.Value = uno::makeAny( i_bEmptyPages );
-    aBoolOpt[2].Value = uno::makeAny( aVal );
-    aUIOptions[2].Value = uno::makeAny( aBoolOpt );
-
-    // create subgroup for sheets
-    aGroupOpt[0].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Text" ) );
-    aGroupOpt[0].Value = uno::makeAny( rtl::OUString( aStrings.GetString( 2 ) ) );
-    aGroupOpt[1].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ControlType" ) );
-    aGroupOpt[1].Value = uno::makeAny( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Subgroup" ) ) );
-    aUIOptions[3].Value = uno::makeAny( aGroupOpt );
-
-    // create a bool option for selected pages only
-    aBoolOpt[0].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Text" ) );
-    aBoolOpt[0].Value = uno::makeAny( rtl::OUString( aStrings.GetString( 3 ) ) );
-    aBoolOpt[1].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ControlType" ) );
-    aBoolOpt[1].Value = uno::makeAny( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Bool" ) ) );
-    aBoolOpt[2].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Property" ) );
-    aVal.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsOnlySelectedSheets" ) );
-    aVal.Value = uno::makeAny( i_bSelectedOnly );
-    aBoolOpt[2].Value = uno::makeAny( aVal );
-    aUIOptions[4].Value = uno::makeAny( aBoolOpt );
-
-    sal_Int32 nLen = io_rProps.getLength();
-    io_rProps.realloc( nLen+1 );
-    io_rProps[nLen].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ExtraPrintUIOptions" ) );
-    io_rProps[nLen].Value = uno::makeAny( aUIOptions );
-}
-
 BOOL ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
                                      const uno::Sequence< beans::PropertyValue >& rOptions,
                                      ScMarkData& rMark,
@@ -690,7 +664,7 @@ BOOL ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
         {
             // FIXME: handle bSelectedSheetsOnly
             // FIXME: handle bSuppressEmptyPages
-            // FIMXE: handle print range "selection"
+            // FIXME: handle print range "selection"
             // FIXME: handle print range other than "all"
 
             if( aSelectionString.equalsAscii( "selection" ) )
@@ -880,7 +854,9 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
         pArray[1].Value <<= aRangeAddress;
     }
     // FIXME: initial values for IsSuppressEmptyPages and IsOnlySelectedSheets
-    lcl_addPrintUIOptions( aSequence, sal_True, sal_True );
+    if( ! pPrinterOptions )
+        pPrinterOptions = new ScPrintUIOptions( sal_True, sal_True );
+    pPrinterOptions->appendPrintUIOptions( aSequence );
     return aSequence;
 }
 

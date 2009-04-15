@@ -75,6 +75,7 @@ class ScTableSheetObj;
 class SvxFmDrawPage;
 class SvxDrawPage;
 class ScRangeList;
+class ScPrintUIOptions;
 
 class SC_DLLPUBLIC ScModelObj : public SfxBaseModel,
                     public com::sun::star::sheet::XSpreadsheetDocument,
@@ -97,6 +98,7 @@ private:
     SfxItemPropertySet      aPropSet;
     ScDocShell*             pDocShell;
     ScPrintFuncCache*       pPrintFuncCache;
+    ScPrintUIOptions*       pPrinterOptions;
     com::sun::star::uno::Reference<com::sun::star::uno::XAggregation> xNumberAgg;
     com::sun::star::uno::Reference<com::sun::star::uno::XInterface> xDrawGradTab;
     com::sun::star::uno::Reference<com::sun::star::uno::XInterface> xDrawHatchTab;
