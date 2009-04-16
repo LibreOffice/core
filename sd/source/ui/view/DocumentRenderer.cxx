@@ -85,9 +85,9 @@ namespace {
     {
     public:
         PrintOptions (
-            const ::std::map<OUString, Any>& rProperties,
+            const vcl::PrinterOptionsHelper& rHelper,
             const ::std::vector<sal_Int32>& rSlidesPerPage)
-            : mpProperties(&rProperties),
+            : mrProperties(rHelper),
               maSlidesPerPage(rSlidesPerPage)
         {
         }
@@ -124,8 +124,7 @@ namespace {
 
         sal_Int32 GetHandoutPageCount (void) const
         {
-            sal_uInt32 nIndex (4);
-            GetPropertyValue("SlidesPerPage") >>= nIndex;
+            sal_uInt32 nIndex = mrProperties.getIntValue("SlidesPerPage", 4);
             if (nIndex<maSlidesPerPage.size())
                 return maSlidesPerPage[nIndex];
             else if ( ! maSlidesPerPage.empty())
@@ -136,49 +135,48 @@ namespace {
 
         bool IsDraw (void) const
         {
-            return GetBoolValue("PageContentType", sal_Int32(0), true);
+            return GetBoolValue("PageContentType", 0);
         }
 
         bool IsHandout (void) const
         {
-            return GetBoolValue("PageContentType", 1, false);
+            return GetBoolValue("PageContentType", 1);
         }
 
         bool IsNotes (void) const
         {
-            return GetBoolValue("PageContentType", 2, false);
+            return GetBoolValue("PageContentType", 2);
         }
 
         bool IsOutline (void) const
         {
-            return GetBoolValue("PageContentType", 3, false);
+            return GetBoolValue("PageContentType", 3);
         }
 
         ULONG GetOutputQuality (void) const
         {
-            sal_Int32 nQuality (0);
-            GetPropertyValue("Quality") >>= nQuality;
+            sal_Int32 nQuality = mrProperties.getIntValue( "Quality", 0 );
             return nQuality;
         }
 
         bool IsPageSize (void) const
         {
-            return GetBoolValue("PageOptions", 1, true);
+            return GetBoolValue("PageOptions", 1);
         }
 
         bool IsTilePage (void) const
         {
-            return GetBoolValue("PageOptions", 2, false);
+            return GetBoolValue("PageOptions", 2);
         }
 
         bool IsCutPage (void) const
         {
-            return GetBoolValue("PageOptions", sal_Int32(0), false);
+            return GetBoolValue("PageOptions", 0);
         }
 
         bool IsBooklet (void) const
         {
-            return GetBoolValue("PageOptions", 3, false);
+            return GetBoolValue("PageOptions", 3);
         }
 
         bool IsPrintExcluded (void) const
@@ -203,31 +201,13 @@ namespace {
 
         OUString GetPrinterSelection (void) const
         {
-            OUString sValue (A2S("all"));
-            GetPropertyValue("PrintSelection") >>= sValue;
+            OUString sValue ( mrProperties.getStringValue( "PrintSelection", A2S("all") ) );
             return sValue;
         }
 
     private:
-        const ::std::map<OUString,Any>* mpProperties;
+        const vcl::PrinterOptionsHelper& mrProperties;
         const ::std::vector<sal_Int32> maSlidesPerPage;
-
-        /** Return the value of the property with name pName.  When the
-            property is unknown then an empty Any is returned.
-        */
-        Any GetPropertyValue (const char* pName) const
-        {
-            Any aValue;
-            if (mpProperties != NULL)
-            {
-                const ::std::map<OUString,Any>::const_iterator iProperty (
-                    mpProperties->find(A2S(pName)));
-                if (iProperty != mpProperties->end())
-                    aValue = iProperty->second;
-            }
-
-            return aValue;
-        }
 
         /** When the value of the property with name pName is a boolean then
             return its value. When the property is unknown then
@@ -237,14 +217,8 @@ namespace {
             const sal_Char* pName,
             const bool bDefaultValue = false) const
         {
-            sal_Bool bValue = sal_False;
-            const Any aValue (GetPropertyValue(pName));
-            if ( ! aValue.hasValue())
-                return bDefaultValue;
-            else if (aValue >>= bValue)
-                return bValue;
-            else
-                return false;
+            sal_Bool bValue = mrProperties.getBoolValue( pName, bDefaultValue );
+            return bValue;
         }
 
         /** Return <TRUE/> when the value of the property with name pName is
@@ -257,34 +231,23 @@ namespace {
             const sal_Char* pValue,
             const bool bDefaultValue = false) const
         {
-            OUString sValue;
-            const Any aValue (GetPropertyValue(pName));
-            if ( ! aValue.hasValue())
-                return bDefaultValue;
-            else if (aValue >>= sValue)
+            OUString sValue( mrProperties.getStringValue( pName ) );
+            if (sValue.getLength())
                 return sValue.equalsAscii(pValue);
             else
-                return false;
+                return bDefaultValue;
         }
 
         /** Return <TRUE/> when the value of the property with name pName is
-            an integer and its value is nTriggerValue. When the property is
-            unknown then bDefaultValue is returned.  Otherwise <FALSE/> is
+            an integer and its value is nTriggerValue. Otherwise <FALSE/> is
             returned.
         */
         bool GetBoolValue (
             const sal_Char* pName,
-            const sal_Int32 nTriggerValue,
-            const bool bDefaultValue) const
+            const sal_Int32 nTriggerValue) const
         {
-            sal_Int32 nValue = 0;
-            const Any aValue (GetPropertyValue(pName));
-            if ( ! aValue.hasValue())
-                return bDefaultValue;
-            else if (aValue >>= nValue)
-                return nValue == nTriggerValue;
-            else
-                return false;
+            sal_Int32 nValue = mrProperties.getIntValue( pName );
+            return nValue == nTriggerValue;
         }
     };
 
@@ -434,16 +397,15 @@ namespace {
             ProcessResource();
         }
 
-        Any GetDialogControls (void) const
+        Sequence< beans::PropertyValue > GetDialogControls(void) const
         {
             if (maProperties.empty())
-                return Any();
+                return Sequence< beans::PropertyValue >();
             else
             {
-                return Any(
-                    Sequence<beans::PropertyValue>(
+                return Sequence<beans::PropertyValue>(
                         &maProperties.front(),
-                        maProperties.size()));
+                        maProperties.size());
             }
         }
 
@@ -459,119 +421,123 @@ namespace {
 
         void ProcessResource (void)
         {
-            AddDialogControl("Group", NULL, _STR_IMPRESS_PRINT_UI_PRINT_CONTENT);
-            AddDialogControl("List", "PageContentType", _STR_IMPRESS_PRINT_UI_CONTENT,
-                0, CreateChoice(_STR_IMPRESS_PRINT_UI_CONTENT_CHOICES));
-            AddDialogControl("List", "SlidesPerPage", _STR_IMPRESS_PRINT_UI_SLIDESPERPAGE,
-                4, GetSlidesPerPageSequence(),
-                "PageContentType", 1);
-            AddDialogControl("Radio", "SlidesPerPageOrder",_STR_IMPRESS_PRINT_UI_ORDER,
-                0, CreateChoice(_STR_IMPRESS_PRINT_UI_ORDER_CHOICES),
-                "PageContentType", 1);
+            AddDialogControl( vcl::PrinterOptionsHelper::getGroupControlOpt(
+                                 String( SdResId(_STR_IMPRESS_PRINT_UI_PRINT_CONTENT) ) ) );
 
-            AddDialogControl("Subgroup", NULL, _STR_IMPRESS_PRINT_UI_INCLUDE_CONTENT);
-            AddDialogControl("Bool", "IsPrintName", _STR_IMPRESS_PRINT_UI_IS_PRINT_NAME);
-            AddDialogControl("Bool", "IsPrintDate", _STR_IMPRESS_PRINT_UI_IS_PRINT_DATE);
-            AddDialogControl("Bool", "IsPrintTime", _STR_IMPRESS_PRINT_UI_IS_PRINT_TIME);
-            AddDialogControl("Bool", "IsPrintHidden", _STR_IMPRESS_PRINT_UI_IS_PRINT_HIDDEN);
+            AddDialogControl( vcl::PrinterOptionsHelper::getChoiceControlOpt(
+                                String( SdResId( _STR_IMPRESS_PRINT_UI_CONTENT ) ),
+                                OUString( RTL_CONSTASCII_USTRINGPARAM( "PageContentType" ) ),
+                                CreateChoice(_STR_IMPRESS_PRINT_UI_CONTENT_CHOICES),
+                                0,
+                                OUString( RTL_CONSTASCII_USTRINGPARAM( "List" ) )
+                                )
+                            );
 
-            AddDialogControl("Group", NULL, _STR_IMPRESS_PRINT_UI_OUTPUT_OPTIONS_GROUP);
-            AddDialogControl("Radio", "Quality", _STR_IMPRESS_PRINT_UI_QUALITY,
-                0, CreateChoice(_STR_IMPRESS_PRINT_UI_QUALITY_CHOICES));
-            AddDialogControl("Radio", "PageOptions", _STR_IMPRESS_PRINT_UI_PAGE_OPTIONS,
-                0, CreateChoice(_STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES),
-                "PageContentType", 0);
+            OUString aDep( RTL_CONSTASCII_USTRINGPARAM( "PageContentType" ) );
+            AddDialogControl( vcl::PrinterOptionsHelper::getChoiceControlOpt(
+                                String( SdResId( _STR_IMPRESS_PRINT_UI_SLIDESPERPAGE ) ),
+                                OUString( RTL_CONSTASCII_USTRINGPARAM( "SlidesPerPage" ) ),
+                                GetSlidesPerPageSequence(),
+                                4,
+                                OUString( RTL_CONSTASCII_USTRINGPARAM( "List" ) ),
+                                &aDep, 1
+                                )
+                            );
 
-            AddDialogControl("Bool", "Front", _STR_IMPRESS_PRINT_UI_BROCHURE_FRONT,
-                1, Sequence<rtl::OUString>(),
-                "PageOptions", 3);
-            AddDialogControl("Bool", "Back", _STR_IMPRESS_PRINT_UI_BROCHURE_BACK,
-                1, Sequence<rtl::OUString>(),
-                "PageOptions", 3);
+            AddDialogControl( vcl::PrinterOptionsHelper::getChoiceControlOpt(
+                                String( SdResId( _STR_IMPRESS_PRINT_UI_ORDER ) ),
+                                OUString( RTL_CONSTASCII_USTRINGPARAM( "SlidesPerPageOrder" ) ),
+                                CreateChoice(_STR_IMPRESS_PRINT_UI_ORDER_CHOICES),
+                                0,
+                                OUString( RTL_CONSTASCII_USTRINGPARAM( "Radio" ) ),
+                                &aDep, 1 )
+                            );
 
-            AddDialogControl("Bool", "PaperTray", _STR_IMPRESS_PRINT_UI_PAPER_TRAY,
-                0, Sequence<rtl::OUString>());
+            AddDialogControl( vcl::PrinterOptionsHelper::getSubgroupControlOpt(
+                                String( SdResId(_STR_IMPRESS_PRINT_UI_INCLUDE_CONTENT) ) ) );
+
+
+            AddDialogControl( vcl::PrinterOptionsHelper::getBoolControlOpt(
+                                String( SdResId(_STR_IMPRESS_PRINT_UI_IS_PRINT_NAME) ),
+                                OUString( RTL_CONSTASCII_USTRINGPARAM( "IsPrintName" ) ),
+                                sal_False
+                                )
+                            );
+
+            AddDialogControl( vcl::PrinterOptionsHelper::getBoolControlOpt(
+                                String( SdResId(_STR_IMPRESS_PRINT_UI_IS_PRINT_DATE) ),
+                                OUString( RTL_CONSTASCII_USTRINGPARAM( "IsPrintDate" ) ),
+                                sal_False
+                                )
+                            );
+
+            AddDialogControl( vcl::PrinterOptionsHelper::getBoolControlOpt(
+                                String( SdResId(_STR_IMPRESS_PRINT_UI_IS_PRINT_TIME) ),
+                                OUString( RTL_CONSTASCII_USTRINGPARAM( "IsPrintTime" ) ),
+                                sal_False
+                                )
+                            );
+
+            AddDialogControl( vcl::PrinterOptionsHelper::getBoolControlOpt(
+                                String( SdResId(_STR_IMPRESS_PRINT_UI_IS_PRINT_HIDDEN) ),
+                                OUString( RTL_CONSTASCII_USTRINGPARAM( "IsPrintHidden" ) ),
+                                sal_False
+                                )
+                            );
+
+            AddDialogControl( vcl::PrinterOptionsHelper::getGroupControlOpt(
+                                String( SdResId(_STR_IMPRESS_PRINT_UI_OUTPUT_OPTIONS_GROUP) ) ) );
+
+            AddDialogControl( vcl::PrinterOptionsHelper::getChoiceControlOpt(
+                                String( SdResId( _STR_IMPRESS_PRINT_UI_QUALITY ) ),
+                                OUString( RTL_CONSTASCII_USTRINGPARAM( "Quality" ) ),
+                                CreateChoice(_STR_IMPRESS_PRINT_UI_QUALITY_CHOICES),
+                                0
+                                )
+                            );
+
+            AddDialogControl( vcl::PrinterOptionsHelper::getChoiceControlOpt(
+                                String( SdResId( _STR_IMPRESS_PRINT_UI_PAGE_OPTIONS ) ),
+                                OUString( RTL_CONSTASCII_USTRINGPARAM( "PageOptions" ) ),
+                                CreateChoice(_STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES),
+                                0,
+                                OUString( RTL_CONSTASCII_USTRINGPARAM( "Radio" ) ),
+                                &aDep, 0
+                                )
+                            );
+
+            aDep = OUString( RTL_CONSTASCII_USTRINGPARAM( "PageOptions" ) );
+            AddDialogControl( vcl::PrinterOptionsHelper::getBoolControlOpt(
+                                String( SdResId(_STR_IMPRESS_PRINT_UI_BROCHURE_FRONT) ),
+                                OUString( RTL_CONSTASCII_USTRINGPARAM( "Front" ) ),
+                                sal_True,
+                                &aDep, 3
+                                )
+                            );
+
+            AddDialogControl( vcl::PrinterOptionsHelper::getBoolControlOpt(
+                                String( SdResId(_STR_IMPRESS_PRINT_UI_BROCHURE_BACK) ),
+                                OUString( RTL_CONSTASCII_USTRINGPARAM( "Back" ) ),
+                                sal_True,
+                                &aDep, 3
+                                )
+                            );
+
+            AddDialogControl( vcl::PrinterOptionsHelper::getBoolControlOpt(
+                                String( SdResId(_STR_IMPRESS_PRINT_UI_PAPER_TRAY) ),
+                                OUString( RTL_CONSTASCII_USTRINGPARAM( "PaperTray" ) ),
+                                sal_False
+                                )
+                            );
 
             FreeResource();
         }
 
-
-
-
-        void AddDialogControl (const char* pType, const char* pName, const USHORT nId)
+        void AddDialogControl( const Any& i_rCtrl )
         {
-            AddDialogControl(pType, pName, nId, 0, Sequence<rtl::OUString>(), NULL, 0);
-        }
-
-        void AddDialogControl (const char* pType, const char* pName, const USHORT nId,
-            const sal_Int32 nDefault, const Sequence<rtl::OUString>& rChoice)
-        {
-            AddDialogControl(pType, pName, nId, nDefault, rChoice, NULL, 0);
-        }
-
-        void AddDialogControl (const char* pType, const char* pName, const USHORT nId,
-            const char* pDependsOnName, const sal_Int32 nDependsOnEntry)
-        {
-            AddDialogControl(pType, pName, nId, 0, Sequence<rtl::OUString>(),
-                pDependsOnName, nDependsOnEntry);
-        }
-
-        void AddDialogControl (
-            const char* pType,
-            const char* pPropertyName,
-            const USHORT nResourceId,
-            const sal_Int32 nDefault,
-            const Sequence<rtl::OUString>& rChoice,
-            const char* pDependsOnName,
-            const sal_Int32 nDependsOnEntry)
-        {
-            Sequence<beans::PropertyValue> aProperties (6);
-            int nUsed (0);
-
-            aProperties[nUsed].Name = A2S("Text");
-            aProperties[nUsed].Value = Any(OUString(String(SdResId(nResourceId))));
-            ++nUsed;
-
-            aProperties[nUsed].Name = A2S("ControlType");
-            aProperties[nUsed].Value = Any(A2S(pType));
-            ++nUsed;
-
-            if (rChoice.getLength() > 0)
-            {
-                aProperties[nUsed].Name = A2S("Choices");
-                aProperties[nUsed].Value = Any(rChoice);
-                OSL_ASSERT(nDefault>=0 && nDefault<rChoice.getLength());
-                ++nUsed;
-            }
-
-            if (pPropertyName != NULL)
-            {
-                aProperties[nUsed].Name = A2S("Property");
-                beans::PropertyValue aDefault;
-                aDefault.Name = A2S(pPropertyName);
-                if (rChoice.getLength() > 0)
-                    aDefault.Value = Any(nDefault);
-                else
-                    aDefault.Value = Any(nDefault!=0);
-                aProperties[nUsed].Value = Any(aDefault);
-                ++nUsed;
-            }
-
-            if (pDependsOnName != NULL)
-            {
-                aProperties[nUsed].Name = A2S("DependsOnName");
-                aProperties[nUsed].Value = Any(A2S(pDependsOnName));
-                ++nUsed;
-                aProperties[nUsed].Name = A2S("DependsOnEntry");
-                aProperties[nUsed].Value = Any(nDependsOnEntry);
-                ++nUsed;
-            }
-
-            aProperties.realloc(nUsed);
-
-            beans::PropertyValue aValue;
-            aValue.Value = Any(aProperties);
-            maProperties.push_back(aValue);
+            beans::PropertyValue aVal;
+            aVal.Value = i_rCtrl;
+            maProperties.push_back( aVal );
         }
 
         Sequence<rtl::OUString> CreateChoice (const USHORT nResourceId) const
@@ -1089,7 +1055,8 @@ namespace {
 //===== DocumentRenderer::Implementation ======================================
 
 class DocumentRenderer::Implementation
-    : public SfxListener
+    : public SfxListener,
+      public vcl::PrinterOptionsHelper
 {
 public:
     Implementation (ViewShellBase& rBase)
@@ -1099,11 +1066,10 @@ public:
           mpOptions(),
           maPrinterPages(),
           mpPrintView(),
-          mbHasOrientationWarningBeenShown(false),
-          maDialogProperties()
+          mbHasOrientationWarningBeenShown(false)
     {
         DialogCreator aCreator;
-        maDialogControls = aCreator.GetDialogControls();
+        m_aUIProperties = aCreator.GetDialogControls();
         maSlidesPerPage = aCreator.GetSlidesPerPage();
 
         StartListening(mrBase);
@@ -1142,51 +1108,24 @@ public:
         if (mbIsDisposed)
             return;
 
-        bool bIsValueChanged (false);
+        bool bIsValueChanged = processProperties( rOptions );
 
-        for (sal_Int32 nProperty=0, nPropertyCount=rOptions.getLength();
-             nProperty < nPropertyCount;
-             ++nProperty)
+        // The RenderDevice property is handled specially: its value is
+        // stored in mpPrinter instead of being retrieved on demand.
+        Any aDev( getValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "RenderDevice" ) ) ) );
+        Reference<awt::XDevice> xRenderDevice;
+
+        if (aDev >>= xRenderDevice)
         {
-            const OUString& rsName (rOptions[nProperty].Name);
-            OUString sValue;
-            rOptions[nProperty].Value >>= sValue;
-            PropertyMap::const_iterator iProperty (maDialogProperties.find(rsName));
-            if (iProperty != maDialogProperties.end())
-            {
-                const Any aOldValue (iProperty->second);
-                const Any aNewValue (rOptions[nProperty].Value);
-                OUString sOldValue;
-                OUString sNewValue;
-                aOldValue >>= sOldValue;
-                aNewValue >>= sNewValue;
-                if (aOldValue == aNewValue)
-                    continue;
-            }
-
-            bIsValueChanged = true;
-
-            maDialogProperties[rsName] = rOptions[nProperty].Value;
-
-            // The RenderDevice property is handled specially: its value is
-            // stored in mpPrinter instead of being retrieved on demand.
-            if (rsName.equalsAscii("RenderDevice"))
-            {
-                Reference<awt::XDevice> xRenderDevice;
-
-                if (rOptions[nProperty].Value >>= xRenderDevice)
-                {
-                    VCLXDevice* pDevice = VCLXDevice::GetImplementation(xRenderDevice);
-                    OutputDevice* pOut = pDevice ? pDevice->GetOutputDevice() : NULL;
-                    mpPrinter = dynamic_cast<Printer*>(pOut);
-                }
-            }
+            VCLXDevice* pDevice = VCLXDevice::GetImplementation(xRenderDevice);
+            OutputDevice* pOut = pDevice ? pDevice->GetOutputDevice() : NULL;
+            mpPrinter = dynamic_cast<Printer*>(pOut);
         }
 
         if (bIsValueChanged)
         {
-            if ( ! mpOptions)
-                mpOptions.reset(new PrintOptions(maDialogProperties, maSlidesPerPage));
+            if ( ! mpOptions )
+                mpOptions.reset(new PrintOptions(*this, maSlidesPerPage));
             PreparePages();
         }
     }
@@ -1217,7 +1156,7 @@ public:
         css::uno::Sequence<css::beans::PropertyValue> aProperties (2);
 
         aProperties[0].Name = A2S("ExtraPrintUIOptions");
-        aProperties[0].Value = maDialogControls;
+        aProperties[0].Value <<= m_aUIProperties;
 
         aProperties[1].Name = A2S("PageSize");
         aProperties[1].Value <<= maPrintSize;
@@ -1318,11 +1257,8 @@ private:
     ::std::vector< ::boost::shared_ptr< ::sd::PrinterPage> > maPrinterPages;
     ::boost::scoped_ptr<DrawView> mpPrintView;
     bool mbHasOrientationWarningBeenShown;
-    Any maDialogControls;
     ::std::vector<sal_Int32> maSlidesPerPage;
     awt::Size maPrintSize;
-    typedef ::std::map<OUString, Any> PropertyMap;
-    PropertyMap maDialogProperties;
 
     void Dispose (void)
     {
