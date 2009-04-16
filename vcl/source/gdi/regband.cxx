@@ -110,7 +110,7 @@ ImplRegionBand::ImplRegionBand(
     if ( ! bIgnorePoints)
     {
         // Copy points.
-        ImplRegionBandPoint* pPoint = mpFirstBandPoint;
+        ImplRegionBandPoint* pPoint = rRegionBand.mpFirstBandPoint;
         ImplRegionBandPoint* pPrevPointCopy = NULL;
         while (pPoint != NULL)
         {
