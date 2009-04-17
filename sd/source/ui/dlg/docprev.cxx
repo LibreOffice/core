@@ -67,7 +67,11 @@ void SdDocPreviewWin::SetObjectShell( SfxObjectShell* pObj, sal_uInt16 nShowPage
 {
     mpObj = pObj;
     mnShowPage = nShowPage;
-    mxSlideShow.clear();
+    if (mxSlideShow.is())
+    {
+        mxSlideShow->end();
+        mxSlideShow.clear();
+    }
     updateViewSettings();
 }
 
