@@ -448,7 +448,15 @@ void EventMultiplexerImpl::forEachView( XSlideShowViewFunc pViewMethod )
         for( UnoViewVector::const_iterator aIter( mrViewContainer.begin() ),
                  aEnd( mrViewContainer.end() ); aIter != aEnd; ++aIter )
         {
-            ((*aIter)->getUnoView().get()->*pViewMethod)( mxListener.get() );
+            uno::Reference<presentation::XSlideShowView> xView ((*aIter)->getUnoView());
+            if (xView.is())
+            {
+                (xView.get()->*pViewMethod)( mxListener.get() );
+            }
+            else
+            {
+                OSL_ASSERT(xView.is());
+            }
         }
     }
 }
