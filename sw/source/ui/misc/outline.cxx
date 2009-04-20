@@ -532,34 +532,6 @@ short SwOutlineTabDialog::Ok()
         }
     }
 
-    //#outline level,add by zhaojianwei
-    /* When a paragraph style is assigned to a list level of the outline style,
-       the outline level attribute and the list style attribute of its existing
-       child paragraph styles have to be set to 0 respectively "".*/
-    nCount = rWrtSh.GetTxtFmtCollCount();
-    for( i = 0; i < nCount; ++i )
-    {
-        SwTxtFmtColl &rTxtColl = rWrtSh.GetTxtFmtColl(i);
-        if( !rTxtColl.IsDefault() )
-        {
-            SwTxtFmtColl *pDerFrom = ( SwTxtFmtColl* )rTxtColl.DerivedFrom();
-            if( pDerFrom->IsAssignedToListLevelOfOutlineStyle())
-            {
-                if(rTxtColl.GetItemState( RES_PARATR_NUMRULE, FALSE ) == SFX_ITEM_DEFAULT )
-                {
-                    SwNumRuleItem aItem(aEmptyStr);
-                    rTxtColl.SetFmtAttr( aItem );
-                }
-                if(rTxtColl.GetItemState( RES_PARATR_OUTLINELEVEL, FALSE ) == SFX_ITEM_DEFAULT )
-                {
-                    int nOutlineLevel = 0;;
-                    rTxtColl.SetAttrOutlineLevel( nOutlineLevel );
-                }
-            }
-        }
-    }
-    //<-end,zhaojianwei
-
     rWrtSh.SetOutlineNumRule( *pNumRule);
 
     // --> OD 2006-12-11 #130443#
