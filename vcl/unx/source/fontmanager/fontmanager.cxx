@@ -63,9 +63,7 @@
 
 
 #include "parseAFM.hxx"
-#define NO_LIST
-#include "sft.h"
-#undef NO_LIST
+#include "sft.hxx"
 
 #if OSL_DEBUG_LEVEL > 1
 #include <sys/times.h>
@@ -90,6 +88,7 @@
 
 #define PRINTER_METRICDIR "fontmetric"
 
+using namespace vcl;
 using namespace utl;
 using namespace psp;
 using namespace osl;

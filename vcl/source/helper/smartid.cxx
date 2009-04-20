@@ -262,6 +262,6 @@ BOOL SmartId::operator <  ( const SmartId& rRight ) const
         if ( HasString() )
             return rRight.HasString() && rRight.HasNumeric();
         else
-            return rRight.HasString() || !HasNumeric() && rRight.HasNumeric();
+            return rRight.HasString() || (!HasNumeric() && rRight.HasNumeric());
     }
 }

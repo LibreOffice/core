@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: list.c,v $
- * $Revision: 1.8 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -27,8 +24,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-/* $Id: list.c,v 1.8 2008-06-25 14:19:44 kz Exp $ */
 
 /*[]---------------------------------------------------[]*/
 /*|                                                     |*/
@@ -67,7 +62,7 @@ typedef struct _lnode {
 struct _list {
     lnode *head, *tail, *cptr;
     size_t aCount;
-    void (*eDtor)(void *);
+    list_destructor eDtor;
 };
 
 /*- private methods */
@@ -177,7 +172,7 @@ void listDispose(list this)                       /*- dtor */
     free(this);
 }
 
-void listSetElementDtor(list this, void (*f)(void *))
+void listSetElementDtor(list this, list_destructor f)
 {
     assert(this != 0);
     this->eDtor = f;

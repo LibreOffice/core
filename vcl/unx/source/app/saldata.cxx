@@ -277,21 +277,8 @@ X11SalData::X11SalData()
     m_pSalDisplay   = NULL;
     m_pInstance     = NULL;
     m_pPlugin       = NULL;
-    m_bIsTesttool   = false;
 
     hMainThread_    = pthread_self();
-
-    sal_uInt32 nArgs = osl_getCommandArgCount();
-    for( sal_uInt32 i = 0; i < nArgs; i++ )
-    {
-        rtl::OUString aArg;
-        osl_getCommandArg( i, &aArg.pData );
-        if( aArg.equalsAscii( "-enableautomation" ) )
-        {
-            m_bIsTesttool = true;
-            break;
-        }
-    }
 }
 
 X11SalData::~X11SalData()

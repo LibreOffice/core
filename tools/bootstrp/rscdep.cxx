@@ -96,7 +96,9 @@ main( int argc, char **argv )
     String aSrsBaseName;
     BOOL bSource = FALSE;
     ByteString aRespArg;
-    String aDelim = String(DirEntry::GetAccessDelimiter());
+//  who needs anything but '/' ?
+//  String aDelim = String(DirEntry::GetAccessDelimiter());
+    String aDelim = '/';
 
     RscHrcDep *pDep = new RscHrcDep;
 
@@ -256,6 +258,7 @@ main( int argc, char **argv )
         printf("further arguments : ");
 #endif
         aString = ByteString( pSrsFileName );
+        aString.SearchAndReplaceAll('\\', ByteString( aDelim,  RTL_TEXTENCODING_ASCII_US ));
         aString += ByteString(" : " );
 
         while ( optind < argc )
@@ -289,12 +292,7 @@ main( int argc, char **argv )
     for ( ULONG j=0; j<nCount; j++ )
     {
         ByteString *pStr = pLst->GetObject(j);
-#ifdef UNX
         pStr->SearchAndReplaceAll('\\', ByteString( aDelim,  RTL_TEXTENCODING_ASCII_US ));
-#endif
-#ifdef WNT
-        pStr->SearchAndReplaceAll('/', ByteString( aDelim,  RTL_TEXTENCODING_ASCII_US ));
-#endif
         if ( j != (nCount-1) )
             *pStr += ByteString( "\\" );
         aOutStream.WriteLine( *pStr );

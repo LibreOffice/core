@@ -711,6 +711,31 @@ int ATSLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) cons
     if( !maATSULayout )
         return STRING_LEN;
 
+    // the semantics of the legacy use case (nCharExtra!=0) cannot be mapped to ATSUBreakLine()
+    if( nCharExtra != 0 )
+    {
+        // prepare the measurement by layouting and measuring the un-expanded/un-condensed text
+        if( !InitGIA() )
+            return STRING_LEN;
+
+        // TODO: use a better way than by testing each the char position
+        ATSUTextMeasurement nATSUSumWidth = 0;
+        const ATSUTextMeasurement nATSUMaxWidth = Vcl2Fixed( nMaxWidth / nFactor );
+        const ATSUTextMeasurement nATSUExtraWidth = Vcl2Fixed( nCharExtra ) / nFactor;
+        for( int i = 0; i < mnCharCount; ++i )
+        {
+            nATSUSumWidth += mpCharWidths[i];
+            if( nATSUSumWidth >= nATSUMaxWidth )
+                return (mnMinCharPos + i);
+            nATSUSumWidth += nATSUExtraWidth;
+            if( nATSUSumWidth >= nATSUMaxWidth )
+                if( i+1 < mnCharCount )
+                    return (mnMinCharPos + i);
+        }
+
+        return STRING_LEN;
+    }
+
     // get a quick overview on what could fit
     const long nPixelWidth = (nMaxWidth - (nCharExtra * mnCharCount)) / nFactor;
 
@@ -720,10 +745,10 @@ int ATSLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) cons
     // initial measurement of text break position
     UniCharArrayOffset nBreakPos = mnMinCharPos;
     const ATSUTextMeasurement nATSUMaxWidth = Vcl2Fixed( nPixelWidth );
-    OSStatus nStatus = ATSUBreakLine( maATSULayout, mnMinCharPos,
+    OSStatus eStatus = ATSUBreakLine( maATSULayout, mnMinCharPos,
         nATSUMaxWidth, false, &nBreakPos );
 
-    if( (nStatus != noErr) && (nStatus != kATSULineBreakInWord) )
+    if( (eStatus != noErr) && (eStatus != kATSULineBreakInWord) )
         return STRING_LEN;
 
     // the result from ATSUBreakLine() doesn't match the semantics expected by its
@@ -734,26 +759,6 @@ int ATSLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) cons
     if( nBreakPos >= static_cast<UniCharArrayOffset>(mnEndCharPos) )
         return STRING_LEN;
 
-    // for the nCharExtra!=0 case the resulting nBreakPos needs be involved
-    if( nCharExtra != 0 )
-    {
-        // age-old nCharExtra!=0 semantic is quite incompatible with ATSUBreakLine()
-        // TODO: use a better way than by testing each the char position
-        InitGIA();
-        ATSUTextMeasurement nATSUSumWidth = 0;
-        const ATSUTextMeasurement nATSUMaxWidth = Vcl2Fixed( nMaxWidth / nFactor );
-        const ATSUTextMeasurement nATSUExtraWidth = Vcl2Fixed( nCharExtra ) / nFactor;
-        for( int i = 0; i < mnCharCount; ++i)
-        {
-            nATSUSumWidth += mpCharWidths[i];
-            if( nATSUSumWidth >= nATSUMaxWidth )
-                return (mnMinCharPos + i);
-            nATSUSumWidth += nATSUExtraWidth;
-        }
-
-        return STRING_LEN;
-    }
-
     // GetTextBreak()'s callers expect it to return the "stupid visual line break".
     // Returning anything else result.s in subtle problems in the application layers.
     static const bool bInWord = true; // TODO: add as argument to GetTextBreak() method
@@ -762,15 +767,15 @@ int ATSLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) cons
 
     // emulate stupid visual line breaking by line breaking for the remaining width
     ATSUTextMeasurement nLeft, nRight, nDummy;
-    nStatus = ATSUGetUnjustifiedBounds( maATSULayout, mnMinCharPos, nBreakPos-mnMinCharPos,
+    eStatus = ATSUGetUnjustifiedBounds( maATSULayout, mnMinCharPos, nBreakPos-mnMinCharPos,
         &nLeft, &nRight, &nDummy, &nDummy );
-    if( nStatus != noErr )
+    if( eStatus != noErr )
         return nBreakPos;
     const ATSUTextMeasurement nATSURemWidth = nATSUMaxWidth - (nRight - nLeft);
     if( nATSURemWidth <= 0 )
         return nBreakPos;
     UniCharArrayOffset nBreakPosInWord = nBreakPos;
-    nStatus = ATSUBreakLine( maATSULayout, nBreakPos, nATSURemWidth, false, &nBreakPosInWord );
+    eStatus = ATSUBreakLine( maATSULayout, nBreakPos, nATSURemWidth, false, &nBreakPosInWord );
     return nBreakPosInWord;
 }
 

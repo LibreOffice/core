@@ -783,6 +783,11 @@ void GtkSalFrame::Init( SalFrame* pParent, ULONG nStyle )
         ( ! (nStyle & SAL_FRAME_STYLE_FLOAT) ||
           (nStyle & SAL_FRAME_STYLE_OWNERDRAWDECORATION) );
 
+    /* #i100116# metacity has a peculiar behavior regarding WM_HINT accept focus and _NET_WM_USER_TIME
+        at some point that may be fixed in metacity and we will have to revisit this
+    */
+    bool bMetaCityToolWindowHack = getDisplay()->getWMAdaptor()->getWindowManagerName().EqualsAscii("Metacity") &&
+                                   (nStyle & SAL_FRAME_STYLE_TOOLWINDOW );
     if( bDecoHandling )
     {
         bool bNoDecor = ! (nStyle & (SAL_FRAME_STYLE_MOVEABLE | SAL_FRAME_STYLE_SIZEABLE | SAL_FRAME_STYLE_CLOSEABLE ) );
@@ -798,7 +803,8 @@ void GtkSalFrame::Init( SalFrame* pParent, ULONG nStyle )
         {
             eType = GDK_WINDOW_TYPE_HINT_UTILITY;
             gtk_window_set_skip_taskbar_hint( GTK_WINDOW(m_pWindow), true );
-            lcl_set_accept_focus( GTK_WINDOW(m_pWindow), FALSE, true );
+            if( bMetaCityToolWindowHack )
+                lcl_set_accept_focus( GTK_WINDOW(m_pWindow), FALSE, true );
         }
         else if( (nStyle & SAL_FRAME_STYLE_OWNERDRAWDECORATION) )
         {
@@ -843,7 +849,7 @@ void GtkSalFrame::Init( SalFrame* pParent, ULONG nStyle )
     if( bDecoHandling )
     {
         gtk_window_set_resizable( GTK_WINDOW(m_pWindow), (nStyle & SAL_FRAME_STYLE_SIZEABLE) ? TRUE : FALSE );
-        if( ( (nStyle & SAL_FRAME_STYLE_OWNERDRAWDECORATION) ) || ( (nStyle & SAL_FRAME_STYLE_TOOLWINDOW ) ) )
+        if( ( (nStyle & SAL_FRAME_STYLE_OWNERDRAWDECORATION) ) || bMetaCityToolWindowHack )
             lcl_set_accept_focus( GTK_WINDOW(m_pWindow), FALSE, false );
     }
 
@@ -1329,7 +1335,10 @@ void GtkSalFrame::Show( BOOL bVisible, BOOL bNoActivate )
             if( nUserTime == 0 &&
                (
                  getDisplay()->getWMAdaptor()->getWindowManagerName().EqualsAscii("Metacity") ||
-                 getDisplay()->getWMAdaptor()->getWindowManagerName().EqualsAscii("compiz")
+                 (
+                    getDisplay()->getWMAdaptor()->getWindowManagerName().EqualsAscii("compiz") &&
+                    (m_nStyle & (SAL_FRAME_STYLE_OWNERDRAWDECORATION))
+                 )
                )
               )
             {
@@ -2791,7 +2800,7 @@ gboolean GtkSalFrame::signalMap( GtkWidget*, GdkEvent*, gpointer frame )
 
     GTK_YIELD_GRAB();
 
-    if( GetX11SalData()->isTestTool() )
+    if( ImplGetSVData()->mbIsTestTool )
     {
         /* #i76541# testtool needs the focus to be in a new document
         *  however e.g. metacity does not necessarily put the focus into

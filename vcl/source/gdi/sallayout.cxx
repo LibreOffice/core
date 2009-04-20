@@ -1773,7 +1773,7 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     int nStartNew[ MAX_FALLBACK ];
     int nCharPos[ MAX_FALLBACK ];
     sal_Int32 nGlyphAdv[ MAX_FALLBACK ];
-    int nValid[ MAX_FALLBACK ];
+    int nValid[ MAX_FALLBACK ] = {0};
 
     sal_GlyphId nDummy;
     Point aPos;

@@ -51,13 +51,13 @@ static Mapping mapping_0130[] = {{0, 1, {0x0069, 0, 0}},{0, 1, {0x0130, 0, 0}}};
 #define langIs(lang) (aLocale.Language.compareToAscii(lang) == 0)
 
 // only check simple case, there is more complicated case need to be checked.
-#define type_i(ch) (ch == 0x0069 || ch == 0x006a)
+#define type_i(ch) ((ch) == 0x0069 || (ch) == 0x006a)
 
-#define cased_letter(ch) (CaseMappingIndex[ch>>8] >= 0 && (CaseMappingValue[(CaseMappingIndex[ch>>8] << 8) + (ch&0xff)].type & CasedLetter))
+#define cased_letter(ch) (CaseMappingIndex[(ch)>>8] >= 0 && (CaseMappingValue[(CaseMappingIndex[(ch)>>8] << 8) + ((ch)&0xff)].type & CasedLetter))
 
 // for Lithuanian, condition to make explicit dot above when lowercasing capital I's and J's
 // whenever there are more accents above.
-#define accent_above(ch) (ch >= 0x0300 && ch <= 0x0314 || ch >= 0x033D && ch <= 0x0344 || ch == 0x0346 || ch >= 0x034A && ch <= 0x034C)
+#define accent_above(ch) (((ch) >= 0x0300 && (ch) <= 0x0314) || ((ch) >= 0x033D && (ch) <= 0x0344) || (ch) == 0x0346 || ((ch) >= 0x034A && (ch) <= 0x034C))
 
 Mapping& casefolding::getConditionalValue(const sal_Unicode* str, sal_Int32 pos, sal_Int32 len, Locale& aLocale, sal_uInt8 nMappingType) throw (RuntimeException)
 {
@@ -68,8 +68,8 @@ Mapping& casefolding::getConditionalValue(const sal_Unicode* str, sal_Int32 pos,
             return !(pos < len && cased_letter(str[pos+1])) && (pos > 0 && cased_letter(str[pos-1])) ?
                 mapping_03a3[0] : mapping_03a3[1];
         case 0x0307:
-            return ((nMappingType == MappingTypeLowerToUpper && langIs("lt") ||
-                nMappingType == MappingTypeUpperToLower && (langIs("tr") || langIs("az"))) &&
+            return (((nMappingType == MappingTypeLowerToUpper && langIs("lt")) ||
+                (nMappingType == MappingTypeUpperToLower && (langIs("tr") || langIs("az")))) &&
                 (pos > 0 && type_i(str[pos-1]))) ?      // after_i
                     mapping_0307[0] : mapping_0307[1];
         case 0x0130:
@@ -147,7 +147,7 @@ sal_Unicode casefolding::getNextChar(const sal_Unicode *str, sal_Int32& idx, sal
         }
 
         if (moduleLoaded & TransliterationModules_IGNORE_KANA) {
-            if (0x3040 <= c && c <= 0x3094 || 0x309d <= c && c <= 0x309f)
+            if ((0x3040 <= c && c <= 0x3094) || (0x309d <= c && c <= 0x309f))
                 c += 0x60;
         }
 

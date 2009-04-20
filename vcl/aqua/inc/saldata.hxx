@@ -107,9 +107,10 @@ struct SalData
     bool                                          mbIsScrollbarDoubleMax;   // TODO: support DoubleMin and DoubleBoth too
     SInt32                                        mnSystemVersion;          // Store System Version
     MainController*                               mpMainController;         // Apple Remote
-    bool                                          mbIsTestTool;
 
     NSObject*                                     mpDockIconClickHandler;
+    long                                          mnDPIX;           // #i100617# read DPI only once per office life
+    long                                          mnDPIY;           // #i100617# read DPI only once per office life
 
     SalData();
     ~SalData();

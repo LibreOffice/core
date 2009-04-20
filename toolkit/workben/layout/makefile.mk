@@ -89,7 +89,7 @@ XML_FILES=\
     wordcount.xml\
     zoom.xml\
 
-TRALAY=tralay
+TRALAY=$(AUGMENT_LIBRARY_PATH) tralay
 XML_LANGS=$(alllangiso)
 
 #ALL_XMLS=$(foreach,i,$(XML_LANGS) $(foreach,j,$(XML_FILES) $i/$j))

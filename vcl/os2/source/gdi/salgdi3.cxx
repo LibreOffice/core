@@ -74,14 +74,13 @@
 #include <ft2lib.h>
 #endif
 
-#ifndef __SUBFONT_H
-#include <list.h>
-#include <sft.h>
-#endif
+#include "sft.hxx"
 
 #ifdef GCP_KERN_HACK
 #include <algorithm>
 #endif
+
+using namespace vcl;
 
 // -----------
 // - Inlines -
