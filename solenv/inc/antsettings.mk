@@ -39,7 +39,15 @@ ANT_HOME*:=$(COMMON_BUILD_TOOLS)$/apache-ant-1.7.0
 ANT_LIB*:=$(ANT_HOME)$/lib
 
 ANT_CLASSPATH:=$(ANT_LIB)$/xercesImpl.jar$(PATH_SEPERATOR)$(ANT_LIB)$/xml-apis.jar$(PATH_SEPERATOR)$(ANT_LIB)$/ant.jar
-PATH!:=$(ANT_HOME)$/bin$(PATH_SEPERATOR)$(PATH)
+
+# PATH_SEPERATOR won't work here as it is defined
+# as ; for wondows (all shells)
+#PATH!:=$(ANT_HOME)$/bin$(PATH_SEPERATOR)$(PATH)
+.IF "$(USE_SHELL)"=="4nt"
+PATH!:=$(ANT_HOME)$/bin;$(PATH)
+.ELSE			# "$(USE_SHELL)"=="4nt"
+PATH!:=$(ANT_HOME)$/bin:$(PATH)
+.ENDIF			# "$(USE_SHELL)"=="4nt"
 
 ANT*:=$(ANT_HOME)$/bin$/ant
 ANT_BUILDFILE*=build.xml

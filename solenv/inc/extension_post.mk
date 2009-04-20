@@ -29,7 +29,7 @@
 #
 #*************************************************************************
 
-.SOURCE.xcu : $(MISC)$/$(EXTNAME)$/merge $(MISC)$/$(EXTNAME)$/registry$/data $(COMPONENT_CONFIGDIR) .
+.SOURCE.xcu : $(MISC)$/$(EXTNAME)$/merge $(MISC)$/$(EXTNAME)$/registry$/data $(MISC)$/$(COMPONENT_SHARED_CONFIG)_in$/merge $(MISC)$/$(COMPONENT_SHARED_CONFIG)_in$/registry$/data $(COMPONENT_CONFIGDIR) .
 .SOURCE.xcs : $(MISC)$/$(EXTNAME)$/registry $(MISC)$/$(EXTNAME)$/registry$/schema .
 
 fixme=$(MISC)$/$(EXTNAME)$/merge$/$(MISC)
@@ -52,9 +52,10 @@ $(EXTENSIONDIR)$/%.jar : $(SOLARBINDIR)$/%.jar
     $(GNUCOPY) $< $@
 
 .IF "$(COMPONENT_FILES)"!=""
+COMPONENT_FILES_SRC*=.$/
 # ugly hacking to workaround prepended first source path - also hits
 # here in case of "just copied" .xcu files
-$(COMPONENT_FILES) : $$(@:s|$(fixme2)|$(MISC)|:s|$(EXTENSIONDIR)$/|.$/|)
+$(COMPONENT_FILES) : $$(@:s|$(fixme2)|$(MISC)|:s|$(EXTENSIONDIR)$/|$(COMPONENT_FILES_SRC)|)
     @@-$(MKDIRHIER) $(@:s|$(fixme2)|$(MISC)|:d)
     $(COPY) $< $(@:s|$(fixme2)|$(MISC)|)
 .ENDIF			# "$(COMPONENT_FILES)"!=""

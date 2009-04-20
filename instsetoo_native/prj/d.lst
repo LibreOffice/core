@@ -1,2 +1,4 @@
 mkdir: %COMMON_DEST%\pus%_EXT%
+..\%COMMON_OUTDIR%\bin\hid.lst %COMMON_DEST%\bin%_EXT%\hid.lst
+..\%COMMON_OUTDIR%\bin\hid\userfeedback_VCL_names.csv %COMMON_DEST%\bin%_EXT%\userfeedback_VCL_names.csv
 ..\%__SRC%\misc\*.update.xml %COMMON_DEST%\pus%_EXT%\*.update.xml

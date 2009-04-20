@@ -276,7 +276,7 @@ URE
         active 1
         compression 5
         script ure
-	include {solarenvpath}/{os}/loader2,{solarpath}/bin.{minor}/ure,{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarenvpath}/{os}/MS
+        include {solarenvpath}/{os}/loader2,{solarpath}/bin.{minor}/ure,{solarpath}/bin.{minor},{solarpath}/bin.{minor}/osl,{solarpath}/lib.{minor},{solarenvpath}/{os}/MS
     }
 }
 

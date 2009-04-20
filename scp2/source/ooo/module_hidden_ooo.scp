@@ -930,7 +930,7 @@ Module gid_Module_Root_Userland
 	Name = "gid_Module_Root_Userland";
 	Description = "gid_Module_Root_Userland";
 	Subdir = "userland";
-    Styles = (HIDDEN_ROOT,USERLANDMODULE,USERINSTALLONLY,NOTRELOCATABLE,XPD_ONLY);
+    Styles = (HIDDEN_ROOT,USERLANDMODULE,USERINSTALLONLY,NOTRELOCATABLE,XPD_ONLY,INSTALLCANFAIL);
     PackageName = "${USERLANDPACKAGENAME}";
 End
 #endif

@@ -114,7 +114,7 @@ $(ZIP$(TNR)DEPFILE) :
     -$(ZIPDEP) $(ZIP$(TNR)FLAGS) $(subst,$/misc$/,$/bin$/ $(@:s/.dpzz/$(ZIP$(TNR)EXT)/)) $(foreach,j,$(ZIP$(TNR)LIST) "{$(subst,LANGDIR,{$(subst,$(BIN)$/$(ZIP$(TNR)TARGET)_, $(subst,$/misc$/,$/bin$/ $(@:db)))} $j )}") $(avoid_cvs_dir) >> $(MISC)$/$(@:f)
 .ENDIF			# "$(ZIP$(TNR)DIR)" != ""
 .ENDIF			# "$(common_build_zip)"!=""
-    @echo $@ : makefile.mk >> $(MISC)$/$(@:f)
+    @echo $(@:n:s#\#/#) : makefile.mk >> $(MISC)$/$(@:f)
 
 
 $(ZIP$(TNR)TARGETN) : delzip $(ZIP$(TNR)DEPS)

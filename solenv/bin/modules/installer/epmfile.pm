@@ -453,6 +453,30 @@ sub create_epm_header
 
         if ( $$fileref eq "" ) { installer::exiter::exit_program("ERROR: Could not find license file $licensefilename!", "create_epm_header"); }
 
+        # Special handling to add the content of the file "license_en-US" to the solaris copyrightfile
+        if ( $installer::globals::issolarispkgbuild )
+        {
+            if ( ! $installer::globals::englishlicenseset ) { installer::worker::set_english_license() }
+
+            # The location for the new file
+            my $languagestring = "";
+            for ( my $i = 0; $i <= $#{$languagesref}; $i++ ) { $languagestring = $languagestring . "_" . ${$languagesref}[$i]; }
+            $languagestring =~ s/^\s*_//;
+
+            my $copyrightdir = installer::systemactions::create_directories("copyright", \$languagestring);
+
+            my $copyrightfile = installer::files::read_file($$fileref);
+
+            # Adding license content to copyright file
+            push(@{$copyrightfile}, "\n");
+            for ( my $i = 0; $i <= $#{$installer::globals::englishlicense}; $i++ ) { push(@{$copyrightfile}, ${$installer::globals::englishlicense}[$i]); }
+
+            # New destination for $$fileref
+            $$fileref = $copyrightdir . $installer::globals::separator . "solariscopyrightfile_" . $onepackage->{'module'};
+            if ( -f $$fileref ) { unlink $$fileref; }
+            installer::files::save_file($$fileref, $copyrightfile);
+        }
+
         $infoline = "Using license file: \"$$fileref\"!\n";
         push(@installer::globals::logfileinfo, $infoline);
 
@@ -3007,6 +3031,9 @@ sub put_systemintegration_into_installset
         # special handling, if new content is a directory
         my $subdir = "";
         if ( ! $installer::globals::issolarispkgbuild ) { ($newcontent, $subdir) = control_subdirectories($newcontent); }
+
+        # Adding license content into Solaris packages
+        if (( $installer::globals::issolarispkgbuild ) && ( $installer::globals::englishlicenseset )) { installer::worker::add_license_into_systemintegrationpackages($destdir, $newcontent); }
 
         if (( $installer::globals::isxpdplatform ) && ( $allvariables->{'XPDINSTALLER'} ))
         {

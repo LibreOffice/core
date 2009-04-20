@@ -117,6 +117,7 @@ Module gid_Module_Optional_Writer2latex
     Default = YES;
     InstallOrder = "1980";
     PackageInfo = "packinfo_office.txt";
+    Styles = (FORCEINTOUPDATE);
     Files = (gid_File_Oxt_Writer2latex);
 End
 

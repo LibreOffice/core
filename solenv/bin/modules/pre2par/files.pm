@@ -51,8 +51,10 @@ sub read_file
 {
     my ($localfile) = @_;
 
+    my @localfile = ();
+
     open( IN, "<$localfile" ) || pre2par::exiter::exit_program("ERROR: Cannot open file: $localfile", "read_file");
-    my @localfile = <IN>;
+    while ( <IN> ) { push(@localfile, $_); }
     close( IN );
 
     return \@localfile;

@@ -1676,8 +1676,9 @@ $(COMMONPRJHIDOTHERTARGET) : $(PRJHIDOTHERTARGET)
 .IF "$(ZIP1TARGET)" != "" || "$(ZIP2TARGET)" != "" || "$(ZIP3TARGET)" != ""
 .IF "$(nodep)"==""
 .INCLUDE : $(MISC)$/$(TARGET).dpz
-missing_zipdep_langs=$(alllangiso)
-some_dummy_var:=$(foreach,i,$(zipdep_langs) $(assign missing_zipdep_langs:=$(strip $(subst,$i, $(missing_zipdep_langs)))))
+# introduce separation char
+missing_zipdep_langs=$(alllangiso:^"+":+"+")
+some_dummy_var:=$(foreach,i,$(zipdep_langs) $(assign missing_zipdep_langs:=$(strip $(subst,+$(i)+, $(missing_zipdep_langs)))))
 .IF "$(missing_zipdep_langs)"!=""
 ZIPDEPPHONY=.PHONY
 .ENDIF			# "$(missing_zipdep_langs)"!=""
@@ -2000,10 +2001,14 @@ UNOUCRDEPxxx : $(UNOUCRDEP);
 $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/hid.lst .PHONY :
     @echo Making $@ :
     @echo ---------------
-    @$(IFEXIST) $@ $(THEN) $(RM:s/+//) $@ $(FI)
     @echo $(WORK_STAMP).$(LAST_MINOR) 010101010101010 > $@.$(ROUT).tmp
-    $(TYPE) $(SOLARCOMMONBINDIR)$/hid$/*.hid | $(SORT) -u >> $@.$(ROUT).tmp 
-    @$(RENAME) $@.$(ROUT).tmp $@
+    $(TYPE) $(SOLARCOMMONBINDIR)$/hid$/*.hid | tr -d "\015" | $(SORT) -u >> $@.$(ROUT).tmp 
+    @$(IFEXIST) $@ $(THEN) $(RM:s/+//) $@ $(FI)
+    @-$(RENAME) $@.$(ROUT).tmp $@
+    @-mkdir $(@:d)hid
+    $(PERL) $(SOLARENV)$/bin$/gen_userfeedback_VCL_names.pl $@ $(SOLARCOMMONBINDIR)$/win $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/hid$/userfeedback_VCL_names.csv.$(ROUT).tmp
+    @$(IFEXIST) $@ $(THEN) $(RM:s/+//) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/hid$/userfeedback_VCL_names.csv $(FI)
+    @-$(RENAME) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/hid$/userfeedback_VCL_names.csv.$(ROUT).tmp $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/hid$/userfeedback_VCL_names.csv
 
 
 .IF "$(SOLAR_JAVA)"!=""

@@ -66,7 +66,7 @@ $(INCCOM)$/stlport$/vector: systemstl$/$$(@:f)
 .EXPORT : CC CXX
 .IF "$(COMID)"=="gcc3"
     TARFILE_NAME=STLport-4.5
-    PATCH_FILES=STLport-4.5.patch
+    PATCH_FILES=STLport-4.5.patch STLport-4.5-gcc43_warnings.patch
 .ELIF "$(GUI)"=="WNT"
     .IF "$(CCNUMVER)"<="001300000000"
         TARFILE_NAME=STLport-4.0
