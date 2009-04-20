@@ -705,7 +705,6 @@ void SAL_CALL OReportDefinition::dispose() throw(uno::RuntimeException)
 {
     ReportDefinitionPropertySet::dispose();
     cppu::WeakComponentImplHelperBase::dispose();
-    m_aProps->dispose(m_refCount);
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL OReportDefinition::disposing()
@@ -2069,68 +2068,19 @@ uno::Reference< uno::XInterface > SAL_CALL OReportDefinition::createInstanceWith
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
 
-
-    uno::Reference< drawing::XShape > xShape;
-    uno::Reference< embed::XStorage > xStorage;
-    sal_Int32 nOrientation = 1;
-    const uno::Any* pIter = _aArgs.getConstArray();
-    const uno::Any* pEnd  = pIter + _aArgs.getLength();
-    for(;pIter != pEnd ;++pIter)
-    {
-        beans::NamedValue aValue;
-        *pIter >>= aValue;
-        if ( aValue.Name == PROPERTY_SHAPE )
-            xShape.set(aValue.Value,uno::UNO_QUERY);
-        else if ( aValue.Name == PROPERTY_ORIENTATION )
-            aValue.Value >>= nOrientation;
-        else if( aValue.Name.equalsAscii( "Storage" ) )
-            aValue.Value >>= xStorage;
-    }
-
     uno::Reference< uno::XInterface > xRet;
-    if ( xShape.is() )
+    if ( aServiceSpecifier.indexOf( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.ImportEmbeddedObjectResolver"))) == 0 )
     {
-        if ( aServiceSpecifier == SERVICE_FORMATTEDFIELD )
+        uno::Reference< embed::XStorage > xStorage;
+        const uno::Any* pIter = _aArgs.getConstArray();
+        const uno::Any* pEnd  = pIter + _aArgs.getLength();
+        for(;pIter != pEnd ;++pIter)
         {
-            uno::Reference<report::XFormattedField> xProp = new OFormattedField(m_aProps->m_xContext,this,xShape);
-            xRet = xProp;
-            if ( xShape.is() )
-                throw uno::Exception();
-            xProp->setPropertyValue( PROPERTY_FORMATSSUPPLIER, uno::makeAny(uno::Reference< util::XNumberFormatsSupplier >(*this,uno::UNO_QUERY)) );
-        }
-        else if ( aServiceSpecifier == SERVICE_FIXEDTEXT)
-        {
-            xRet = static_cast<cppu::OWeakObject*>(new OFixedText(m_aProps->m_xContext,this,xShape));
-            if ( xShape.is() )
-                throw uno::Exception();
-        }
-        else if ( aServiceSpecifier == SERVICE_FIXEDLINE)
-        {
-            xRet = static_cast<cppu::OWeakObject*>(new OFixedLine(m_aProps->m_xContext,this,xShape,nOrientation));
-            if ( xShape.is() )
-                throw uno::Exception();
-        }
-        else if ( aServiceSpecifier == SERVICE_IMAGECONTROL )
-        {
-            xRet = static_cast<cppu::OWeakObject*>(new OImageControl(m_aProps->m_xContext,this,xShape));
-            if ( xShape.is() )
-                throw uno::Exception();
-        }
-        else if ( aServiceSpecifier == SERVICE_REPORTDEFINITION )
-        {
-            xRet = static_cast<cppu::OWeakObject*>(new OReportDefinition(m_aProps->m_xContext,this,xShape));
-            if ( xShape.is() )
-                throw uno::Exception();
-        }
-        else if ( xShape.is() )
-        {
-            xRet = static_cast<cppu::OWeakObject*>(new OShape(m_aProps->m_xContext,this,xShape,aServiceSpecifier));
-            if ( xShape.is() )
-                throw uno::Exception();
-        }
-    }
-    else if ( aServiceSpecifier.indexOf( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.ImportEmbeddedObjectResolver"))) == 0 )
-    {
+            beans::NamedValue aValue;
+            *pIter >>= aValue;
+            if( aValue.Name.equalsAscii( "Storage" ) )
+                aValue.Value >>= xStorage;
+        } // for(;pIter != pEnd ;++pIter)
         m_pImpl->m_pObjectContainer->SwitchPersistence(xStorage);
         xRet = static_cast< ::cppu::OWeakObject* >(SvXMLEmbeddedObjectHelper::Create( xStorage,*this, EMBEDDEDOBJECTHELPER_MODE_READ ));
     }
@@ -2256,19 +2206,7 @@ uno::Reference< uno::XInterface > SAL_CALL OReportDefinition::createInstance( co
     else
         xShape.set(SvxUnoDrawMSFactory::createInstance( aServiceSpecifier ),uno::UNO_QUERY_THROW);
 
-
-    uno::Reference< uno::XInterface > xReturn;
-    {
-        uno::Sequence< uno::Any > aArgs(1);
-        {
-            beans::NamedValue aValue;
-            aValue.Name = PROPERTY_SHAPE;
-            aValue.Value <<= xShape; xShape.clear();    // keep exactly *one* reference!
-            aArgs[0] <<= aValue;
-        }
-        xReturn = createInstanceWithArguments(aServiceSpecifier,aArgs);
-    }
-    return xReturn;
+    return m_pImpl->m_pReportModel->createShape(aServiceSpecifier,xShape);
 }
 //-----------------------------------------------------------------------------
 uno::Sequence< ::rtl::OUString > SAL_CALL OReportDefinition::getAvailableServiceNames(void) throw( uno::RuntimeException )
@@ -2769,6 +2707,11 @@ uno::Reference< document::XDocumentProperties > SAL_CALL OReportDefinition::getD
         m_pImpl->m_xDocumentProperties.set(xDocProps, uno::UNO_QUERY_THROW);
     }
     return m_pImpl->m_xDocumentProperties;
+}
+// -----------------------------------------------------------------------------
+uno::Reference< uno::XComponentContext > OReportDefinition::getContext() const
+{
+    return m_aProps->m_xContext;
 }
 // =============================================================================
 }// namespace reportdesign

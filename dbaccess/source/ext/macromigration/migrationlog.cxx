@@ -423,6 +423,18 @@ namespace dbmm
     }
 
     //--------------------------------------------------------------------
+    bool MigrationLog::movedAnyLibrary( const DocumentID _nDocID )
+    {
+        DocumentLogs::const_iterator docPos = m_pData->aDocumentLogs.find( _nDocID );
+        if ( docPos == m_pData->aDocumentLogs.end() )
+        {
+            OSL_ENSURE( false, "MigrationLog::movedAnyLibrary: document is not known!" );
+            return false;
+        }
+        return !docPos->second.aMovedLibraries.empty();
+    }
+
+    //--------------------------------------------------------------------
     ::rtl::OUString MigrationLog::getCompleteLog() const
     {
         ::rtl::OUStringBuffer aBuffer;

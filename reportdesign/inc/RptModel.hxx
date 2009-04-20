@@ -98,6 +98,8 @@ public:
     /// returns the XReportDefinition which the OReportModel belongs to
     ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition >
                 getReportDefinition() const;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createShape(const ::rtl::OUString& aServiceSpecifier,::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& _rShape,sal_Int32 nOrientation = -1);
 };
 }
 #endif

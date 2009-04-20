@@ -126,10 +126,6 @@ void SAL_CALL OShape::dispose() throw(uno::RuntimeException)
 {
     ShapePropertySet::dispose();
     cppu::WeakComponentImplHelperBase::dispose();
-    uno::Reference< report::XShape> xHoldAlive = this;
-    {
-        m_aProps.dispose(m_refCount);
-    }
 }
 // -----------------------------------------------------------------------------
 ::rtl::OUString OShape::getImplementationName_Static(  ) throw(uno::RuntimeException)

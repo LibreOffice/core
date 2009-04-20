@@ -41,7 +41,7 @@
 #include "ReportControlModel.hxx"
 #include <com/sun/star/reflection/XProxyFactory.hpp>
 #include <com/sun/star/text/ParagraphVertAlign.hpp>
-#include <svx/unoshape.hxx>
+// #include <svx/unoshape.hxx>
 #include <svx/unolingu.hxx>
 #include <svtools/syslocale.hxx>
 #include <svtools/lingucfg.hxx>
@@ -122,10 +122,6 @@ void OReportComponentProperties::setShape(uno::Reference< drawing::XShape >& _xS
 {
     osl_incrementInterlockedCount( &_rRefCount );
     {
-        // decrement the count from ReportDrawPage.cxx aArgs[0] <<= SvxDrawPage::_CreateShape( pObj );
-        SvxShape* pShape = SvxShape::getImplementation( _xShape );
-        if ( pShape )
-            pShape->release();
         m_xProxy.set(_xShape,uno::UNO_QUERY);
         ::comphelper::query_aggregation(m_xProxy,m_xShape);
         ::comphelper::query_aggregation(m_xProxy,m_xProperty);
@@ -138,21 +134,7 @@ void OReportComponentProperties::setShape(uno::Reference< drawing::XShape >& _xS
         if ( m_xProxy.is() )
             m_xProxy->setDelegator( _xTunnel );
     }
-    // do not decrement the refcount again, this will be done from the any ReportDrawPage.cxx aArgs[0] <<= SvxDrawPage::_CreateShape( pObj ); , otherwise it will delete the object
-    //osl_decrementInterlockedCount( &_rRefCount );
-}
-// -----------------------------------------------------------------------------
-void OReportComponentProperties::dispose(oslInterlockedCount& _rRefCount)
-{
-    if ( m_xProxy.is() )
-        osl_decrementInterlockedCount( &_rRefCount );
-    //m_xShape.clear();
-    //m_xTypeProvider.clear();
-    //m_xUnoTunnel.clear();
-    //m_xServiceInfo.clear();
-    //m_xProperty.clear();
-    m_xContext.clear();
-    m_xFactory.clear();
+    osl_decrementInterlockedCount( &_rRefCount );
 }
 // -----------------------------------------------------------------------------
 OReportComponentProperties::~OReportComponentProperties()

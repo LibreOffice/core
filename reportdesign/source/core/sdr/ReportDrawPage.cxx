@@ -30,6 +30,7 @@
 
 #include "ReportDrawPage.hxx"
 #include "RptObject.hxx"
+#include "RptModel.hxx"
 #include "RptDef.hxx"
 #include "corestrings.hrc"
 #include <comphelper/mimeconfighelper.hxx>
@@ -143,20 +144,8 @@ uno::Reference< drawing::XShape >  OReportDrawPage::_CreateShape( SdrObject *pOb
 
         try
         {
-            uno::Sequence< uno::Any > aArgs(bChangeOrientation ? 2 : 1);
-            {
-                beans::NamedValue aValue;
-                aValue.Name = PROPERTY_SHAPE;
-                aValue.Value <<= xShape; xShape.clear();    // keep exactly *one* reference!
-                aArgs[0] <<= aValue;
-                if ( bChangeOrientation )
-                {
-                    aValue.Name = PROPERTY_ORIENTATION;
-                    aValue.Value <<= sal_Int32(0);
-                    aArgs[1] <<= aValue;
-                }
-            }
-            xRet.set( xFactory->createInstanceWithArguments( sServiceName, aArgs ), uno::UNO_QUERY_THROW );
+            OReportModel* pRptModel = static_cast<OReportModel*>(pObj->GetModel());
+            xRet.set( pRptModel->createShape(sServiceName,xShape,bChangeOrientation ? 0 : -1), uno::UNO_QUERY_THROW );
         }
         catch( const uno::Exception& )
         {
