@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -65,7 +65,7 @@ icu_CFLAGS+=-I$(SYSBASE)$/usr$/include
 .IF "$(COMNAME)"=="sunpro5"
 icu_CFLAGS+=$(C_RESTRICTIONFLAGS)
 .ENDIF			# "$(COMNAME)"=="sunpro5"
-# add SYSBASE libraries and make certain that they are found *after* the 
+# add SYSBASE libraries and make certain that they are found *after* the
 # icu build internal libraries - in case that icu is available in SYSBASE
 # as well
 icu_LDFLAGS+= -L../../lib -L../../stubdata  -L$(SYSBASE)$/usr$/lib
@@ -209,12 +209,12 @@ ICU_BUILD_VERSION=Release
 ICU_BUILD_LIBPOST=
 .ENDIF
 
-CONFIGURE_ACTION+= $(COPY:s/+//) ..$/..$/..$/..$/..$/makefiles.zip . $(BUILD_ACTION_SEP) unzip makefiles.zip
+CONFIGURE_ACTION+= $(PERL) ..$/..$/..$/..$/..$/createmak.pl ..$/..$/..$/..$/..$/createmak.cfg .
 
 .IF "$(CCNUMVER)"<="001400000000"
-BUILD_ACTION=cd allinone && nmake /f all.mak CFG="all - Win32 Release" EXFLAGS="-EHsc" && cd ..$/..
+BUILD_ACTION=cd allinone && nmake /f all.mak EXFLAGS="-EHsc" && cd ..$/..
 .ELSE
-BUILD_ACTION=cd allinone && nmake /f all.mak CFG="all - Win32 Release" EXFLAGS="-EHa -Zc:wchar_t-" && cd ..$/..
+BUILD_ACTION=cd allinone && nmake /f all.mak EXFLAGS="-EHa -Zc:wchar_t-" && cd ..$/..
 .ENDIF
 
 OUT2LIB= \
