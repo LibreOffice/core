@@ -37,7 +37,9 @@
 '*
 '\***********************************************************************
 
-sub w_006printLog Chr(13) + "--------- Table Menu (w_006_.inc) ----------"
+sub w_006_
+
+    printLog Chr(13) + "--------- Table Menu (w_006_.inc) ----------"
     gApplication = "WRITER"
 
     Call tFormatTable

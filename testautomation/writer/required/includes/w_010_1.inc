@@ -38,6 +38,7 @@
 '\******************************************************************
 
 sub w_010_1
+
     printLog Chr(13) + "--------- Objectbars . Part two. (w_010_1.inc) ----------"
     gApplication = "WRITER"
 
@@ -64,7 +65,7 @@ sub w_010_1
     Call tFormulaApply
 
     'Writer Web
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     Call tHtmlDocGraphicWrap
     Call tHtmlDocGraphicAlign
     Call tHtmlDocGraphicProperties
@@ -296,7 +297,7 @@ testcase tGraphicWrap
         Warnlog "'Wrap Off' in Objectbar couldn't be checked"
     endcatch
 
-    if gApplication <> "HTMLDOKUMENT" then
+    if gApplication <> "HTML" then
         try
             printlog " Check 'Wrap through' in object bar"
             Durchlauf.Click
@@ -362,7 +363,7 @@ testcase tGraphicAlign
     endcatch
 
     ' Only Left and Right in WriterWeb
-    if gApplication = "HTMLDOKUMENT" then
+    if gApplication = "HTML" then
         printlog " Close active document"
         Call hCloseDocument
         goto endsub
@@ -408,7 +409,7 @@ endcase
 
 testcase tGraphicFlip
     printlog "- Graphic-(Frame)-Objectbar: Flip"
-    if gApplication = "HTMLDOKUMENT" then
+    if gApplication = "HTML" then
         Printlog "Not in WriterWeb!"
         goto endsub
     end if
@@ -606,7 +607,7 @@ testcase tGraphicProperties
     Call DialogTest ( TabMakro )
 
     printlog " Close 'Graphic' dialog"
-    if gApplication <> "HTMLDOKUMENT" then
+    if gApplication <> "HTML" then
         Kontext
         active.SetPage TabHintergrund
         Kontext "TabHintergrund"
@@ -726,7 +727,7 @@ endcase
 
 testcase tHtmlDocGraphicWrap
     printlog "- Grafik-(Rahmen)-Objectbar: Wrap"
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
 
     printlog " Open new document"
     Call hNewDocument
@@ -768,7 +769,7 @@ endcase
 
 testcase tHtmlDocGraphicAlign
     printlog "- Graphic-(Frame)-Objectbar: Align"
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
 
     printlog " Open new document"
     Call hNewDocument
@@ -804,7 +805,7 @@ testcase tHtmlDocGraphicProperties
     printlog "- Graphic-(Frame)-Objectbar: Properties"
     Dim j as integer
 
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     printlog " Open new document"
     Call hNewDocument
 

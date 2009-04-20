@@ -245,7 +245,7 @@ testcase tFormatStylistTemplatesUse
     endif
     printlog "   - Presentation-templates"
     '/// if application is impress: click on button 'Presentation Styles' ///'
-    if (Lcase (gApplication) = "impress") then
+    if (Lcase (gApplication) = "IMPRESS") then
         TBGestalter.Click Praesentationsvorlagen
     endif
     '/// select every item from the list 'Styles' ///'

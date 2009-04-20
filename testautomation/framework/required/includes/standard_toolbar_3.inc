@@ -66,7 +66,7 @@ testcase tStandardBar_3
     '///<ul>
 
     printlog "Save File"
-    gApplication = "Calc"
+    gApplication = "CALC"
 
     '///+<li>New Spreadsheet document, ensure that the navigator is closed</li>
     printlog( "New Spreadsheet document" )
@@ -184,7 +184,7 @@ testcase tStandardBar_3
     '///+<li>Click on Paste</li>
     printlog( "Paste" )
     Kontext "Standardbar"
-    hWaitForObject( Einfuegen , 8000 )
+    sleep( 3 ) ' No better solution found yet.
     Einfuegen.Click()
 
     Kontext "DocumentCalc"

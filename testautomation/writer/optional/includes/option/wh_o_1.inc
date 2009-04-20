@@ -61,7 +61,7 @@ testcase tToolsOptionsHTMLContent
     
     printlog ("'/// - save states ///")
     ToolsOptions
-    Call hToolsOptions ("HTMLDocument","View")
+    Call hToolsOptions ("HTML","View")
     
     irgendwas(1) = GrafikenUndObjekte.IsChecked
     irgendwas(2) = Tabellen.IsChecked
@@ -90,7 +90,7 @@ testcase tToolsOptionsHTMLContent
     
     printlog ("'/// - checking states ///")
     ToolsOptions
-    Call hToolsOptions ( "HTMLDocument","View" )
+    Call hToolsOptions ( "HTML","View" )
     
     if ( irgendwas(1) = GrafikenUndObjekte.IsChecked ) Then WarnLog "GrafikenUndObjekte state changed"
     if ( irgendwas(2) = Tabellen.IsChecked  ) Then WarnLog "Tabellen state changed"
@@ -113,7 +113,7 @@ testcase tToolsOptionsHTMLContent
     
     printlog ("'/// - check if all UnChecked ///")
     ToolsOptions
-    hToolsOptions ( "HTMLDocument","View" )
+    hToolsOptions ( "HTML","View" )
     
     if GrafikenUndObjekte.IsChecked Then WarnLog "GrafikenUndObjekte x"
     if Tabellen.IsChecked Then WarnLog "Tabellen x"
@@ -133,7 +133,7 @@ testcase tToolsOptionsHTMLContent
     
     printlog ("'/// - check if all Checked ///")
     ToolsOptions
-    Call hToolsOptions ( "HTMLDocument","View" )
+    Call hToolsOptions ( "HTML","View" )
     
     if true <> GrafikenUndObjekte.IsChecked Then WarnLog "GrafikenUndObjekte o"
     if True <> Tabellen.IsChecked Then WarnLog "Tabellen o"
@@ -167,7 +167,7 @@ testcase tToolsOptionsHTMLLayout
     
     printlog "'///- Tools/Options/Writer: View ///"
     ToolsOptions
-    Call hToolsOptions ( "HTMLDocument" , "VIEW" ) '*TabLayoutHTML/ (1)
+    Call hToolsOptions ( "HTML" , "VIEW" ) '*TabLayoutHTML/ (1)
     
     irgendwas(1) = Hilfslinien.IsChecked
     irgendwas(2) = FarbigeHandles.IsChecked
@@ -220,7 +220,7 @@ testcase tToolsOptionsHTMLLayout
     
     printlog ("'/// - checking states ///" )
     ToolsOptions
-    Call hToolsOptions ( "HTMLDocument" , "VIEW" ) '*TabLayoutHTML/ (1)
+    Call hToolsOptions ( "HTML" , "VIEW" ) '*TabLayoutHTML/ (1)
     
     if ( irgendwas(1) = Hilfslinien.IsChecked               ) Then WarnLog "Hilfslinien state changed"
     if ( irgendwas(2) = FarbigeHandles.IsChecked            ) Then WarnLog "FarbigeHandles state changed"
@@ -271,7 +271,7 @@ testcase tToolsOptionsHTMLLayout
    
     printlog ("'/// - check if all UnChecked ///")
     ToolsOptions
-    Call hToolsOptions ( "HTMLDocument" , "VIEW" ) '*TabLayoutHTML/ (1)
+    Call hToolsOptions ( "HTML" , "VIEW" ) '*TabLayoutHTML/ (1)
     if Hilfslinien.IsChecked               Then WarnLog "Hilfslinien x"
     if FarbigeHandles.IsChecked            Then WarnLog "FarbigeHandles x"
     if GrosseHandles.IsChecked             Then WarnLog "GrosseHandles x"
@@ -316,7 +316,7 @@ testcase tToolsOptionsHTMLLayout
     
     printlog ("'/// - check if all Checked ///")
     ToolsOptions
-    Call hToolsOptions ( "HTMLDocument" , "VIEW" ) '*TabLayoutHTML/ (1)
+    Call hToolsOptions ( "HTML" , "VIEW" ) '*TabLayoutHTML/ (1)
     if True <> Hilfslinien.IsChecked               Then WarnLog "Hilfslinien o"
     if True <> FarbigeHandles.IsChecked            Then WarnLog "FarbigeHandles o"
     if True <> GrosseHandles.IsChecked             Then WarnLog "GrosseHandles o"
@@ -361,7 +361,7 @@ testcase tToolsOptionsHTMLLayout
     
     ' see everything
     ToolsOptions
-    Call hToolsOptions ( "HTMLDocument" , "VIEW" )
+    Call hToolsOptions ( "HTML" , "VIEW" )
     
     '///' Hilfslinien.Check only, when graphic's in motion! ///'
     FarbigeHandles.Check
@@ -370,7 +370,7 @@ testcase tToolsOptionsHTMLLayout
     ExtrasOptionenDlg.Ok
     
     ToolsOptions
-    Call hToolsOptions ( "HTMLDocument" , "VIEW" )
+    Call hToolsOptions ( "HTML" , "VIEW" )
     FarbigeHandles.UnCheck
     GrosseHandles.UnCheck
     Kontext "ExtrasOptionenDlg"
@@ -379,7 +379,7 @@ testcase tToolsOptionsHTMLLayout
     Call hCloseDocument
     
     ToolsOptions
-    Call hToolsOptions ( "HTMLDocument" , "VIEW" )
+    Call hToolsOptions ( "HTML" , "VIEW" )
     
     if ( irgendwas(1) =  TRUE ) Then  Hilfslinien.Check               Else Hilfslinien.UnCheck
     if ( irgendwas(2) =  TRUE ) Then  FarbigeHandles.Check            Else FarbigeHandles.UnCheck
@@ -418,7 +418,7 @@ testcase tToolsOptionsHTMLGrid
     printlog ("'/// - save states ///")
     
     ToolsOptions
-    Call hToolsOptions ( "HTMLDocument","Grid" )
+    Call hToolsOptions ( "HTML","Grid" )
     
     printlog ("'///TabRaster all UnCheck ! ///")
     
@@ -465,7 +465,7 @@ testcase tToolsOptionsHTMLGrid
     
     printlog ("'/// - checking states ///")
     ToolsOptions
-    Call hToolsOptions ( "HTMLDocument","Grid" )
+    Call hToolsOptions ( "HTML","Grid" )
     
     if (irgendwas(1) = FangrasterBenutzen.IsChecked    ) Then WarnLog "FangrasterBenutzen state changed BugID: 82944 "
     if (irgendwas(2) = RasterSichtbar.IsChecked        ) Then WarnLog "RasterSichtbar state changed"
@@ -480,7 +480,7 @@ testcase tToolsOptionsHTMLGrid
     
     printlog ("'/// - all UnCheck -> o ///")
     ToolsOptions
-    Call hToolsOptions ( "HTMLDocument","Grid" )
+    Call hToolsOptions ( "HTML","Grid" )
     
     FangrasterBenutzen.UnCheck
     RasterSichtbar.UnCheck
@@ -512,7 +512,7 @@ testcase tToolsOptionsHTMLGrid
     
     printlog ("'/// - check if all UnChecked ///")       
     ToolsOptions
-    Call hToolsOptions ( "HTMLDocument","Grid" )
+    Call hToolsOptions ( "HTML","Grid" )
     
     if FangrasterBenutzen.IsChecked     Then WarnLog "FangrasterBenutzen x"
     if RasterSichtbar.IsChecked         Then WarnLog "RasterSichtbar x"
@@ -546,7 +546,7 @@ testcase tToolsOptionsHTMLGrid
     
     printlog ("'/// - check if all Checked ///")
     ToolsOptions
-    Call hToolsOptions ( "HTMLDocument","Grid" )
+    Call hToolsOptions ( "HTML","Grid" )
     
     if True <> FangrasterBenutzen.IsChecked     Then WarnLog "FangrasterBenutzen o"
     if True <> RasterSichtbar.IsChecked         Then WarnLog "RasterSichtbar o"
@@ -594,7 +594,7 @@ testcase tToolsOptionsHTMLGrid
     
     ' change Grid Resolution
     ToolsOptions
-    Call hToolsOptions ( "HTMLDocument","Grid" )
+    Call hToolsOptions ( "HTML","Grid" )
     RasterAufloesungXAchse.SetText("2")
     RasterAufloesungYAchse.SetText("3")
     RasterUnterteilungXAchse.SetText("2")
@@ -634,7 +634,7 @@ testcase tToolsOptionsHTMLGrid
     
     printlog ("'/// - restore states ///")
     ToolsOptions
-    Call hToolsOptions ( "HTMLDocument","Grid" )
+    Call hToolsOptions ( "HTML","Grid" )
     
     if ( irgendwas(1) =  TRUE ) Then FangrasterBenutzen.Check    Else FangrasterBenutzen.UnCheck
     if ( irgendwas(2) =  TRUE ) Then RasterSichtbar.Check        Else RasterSichtbar.UnCheck

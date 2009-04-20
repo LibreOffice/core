@@ -929,16 +929,23 @@ testcase tDataDataPilot
     '/// Close 'Data Field' dialog with 'Cancel'
     printlog " Close 'Data Field' dialog with 'Cancel'"
     Datenfeld.Cancel
-    sleep 1
+    sleep 2
     Kontext "Datenpilot"
-    '/// Select first item (Sum – 2000) in 'Data Fields' by 3 <TAB>
-    printlog " Select first item (Sum – 2000) in 'Data Fields' by 3 <TAB>"
-    Datenpilot.TypeKeys "<TAB><TAB><TAB>",TRUE
-    Sleep 1
+    '/// Select second item (Sum – 2001) in 'Data Fields' by 4 <TAB>
+    printlog " Select second item (Sum – 2001) in 'Data Fields' by 4 <TAB>"
+    Datenpilot.TypeKeys "<TAB><TAB><TAB><TAB>",TRUE
+    Sleep 3
     '/// Click on 'Options' button to open 'Data Filed' dialog
     printlog " Click on 'Options' button to open 'Data Filed' dialog"
-    Optionen.Click
-    sleep 1
+    If Optionen.IsEnabled Then
+        Optionen.Click
+    else
+        warnlog "Option button is not enabled. Aborting"
+        Datenpilot.Cancel
+        Call hCloseDocument
+        goto endsub
+    end if
+	sleep 3
     Kontext "DataFieldsFunctionDlg"
     '/// Click on 'More' button
     printlog " Click on 'More' button"

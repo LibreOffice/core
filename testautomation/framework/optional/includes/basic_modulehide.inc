@@ -48,7 +48,7 @@ testcase tBasicIdeModuleHide
     dim brc as boolean
     dim cDefaultTabName as string
 
-    gApplication = "Writer"
+    gApplication = "WRITER"
     call hNewDocument()
     
     '///<li>Create a new BASIC module for the current (writer) document</li>

@@ -37,7 +37,9 @@
 '*                                                                **
 '\******************************************************************
 
-sub w_002printLog Chr(13) + "--------- Edit Menu ( w_002_.inc ) ----------"
+sub w_002_
+
+    printLog Chr(13) + "--------- Edit Menu ( w_002_.inc ) ----------"
     gApplication = "WRITER"
 
     Call tEditUndoRedo
@@ -65,12 +67,12 @@ sub w_002printLog Chr(13) + "--------- Edit Menu ( w_002_.inc ) ----------"
     Call tEditObjectEdit
 
     'Writer Web
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     Call tHtmlDocEditFields
     gApplication = "WRITER"
 
     'Writer Master Document
-    gApplication = "MASTERDOC"
+    gApplication = "MASTERDOCUMENT"
     Call tMasterDocEditNavigator
     gApplication = "WRITER"
 
@@ -87,16 +89,16 @@ testcase tEditUndoRedo
     PrintLog "Insert table"
     Call hTabelleEinfuegen
     PrintLog "Edit / Undo"
-    EditUndo
-    WaitSlot (1000)
+    hUseAsyncSlot( "EditUndo" )
+    
     PrintLog "Undo / Redo"
-    EditRedo
-    WaitSlot (1000)
+    hUseAsyncSlot( "EditRedo" )
+    
     PrintLog "Edit / Undo"
-    EditUndo
-    WaitSlot (1000)
+    hUseAsyncSlot( "EditUndo" )
+    
     PrintLog "File / Close"
-    FileClose
+    hUseAsyncSlot( "FileClose" )
     Kontext
     if ( Active.Exists ) then
         if Active.GetRT = 304 then
@@ -121,7 +123,7 @@ testcase tEditRepeat
     Call wTypeKeys("<Down><Down>")
 
     PrintLog "Edit / Repeat"
-    EditRepeat
+    hUseAsyncSlot( "EditRepeat" )
 
     PrintLog "Close active document"
     Call hCloseDocument
@@ -139,23 +141,32 @@ testcase tEditPaste
     Call wTypeKeys("What a beatiful day !")
 
     PrintLog "Edit / Select All"
-    EditSelectAll
+    hUseAsyncSlot( "EditSelectAll" )
+    
     PrintLog "Edit / Cut"
-    EditCut
+    hUseAsyncSlot( "EditCut" )
+    
     PrintLog "Edit / Paste"
-    EditPaste
+    hUseAsyncSlot( "EditPaste" )
+    
     PrintLog "Type <Shift Home >"
     Call wTypeKeys("<Shift Home>")
+    
     PrintLog "Edit / Copy"
-    EditCopy
+    hUseAsyncSlot( "EditCopy" )
+    
     PrintLog "Enter 2 Line breaks"
     Call wTypeKeys("<Return>", 2)
+    
     PrintLog "Edit / Paste"
-    EditPaste
+    hUseAsyncSlot( "EditPaste" )
+    
     PrintLog "Edit / Select All"
-    EditSelectAll
+    hUseAsyncSlot( "EditSelectAll" )
+    
     PrintLog "Edit / Cut"
-    EditCut
+    hUseAsyncSlot( "EditCut" )
+    
     PrintLog "Close active document"
     Call hCloseDocument
 endcase
@@ -173,12 +184,12 @@ testcase tEditPasteSpecial
         SetClipboard "Text from external clipboard!"
 
         PrintLog "Paste from external clipboard with Edit / Paste in Office"
-        EditPaste
-        WaitSlot(1000)
+        hUseAsyncSlot( "EditPaste" )
+
         Call wTypeKeys("<Mod1 A>")
         Wait(200)
-        EditCopy
-        WaitSlot(1000)
+        hUseAsyncSlot( "EditCopy" )
+
         if GetClipboardText <> "Text from external clipboard!" then
             Warnlog "External Clipboard not available!"
             Warnlog "Is: " & GetClipboardText
@@ -188,7 +199,7 @@ testcase tEditPasteSpecial
         SetClipboard "2nd Text from external clipboard!"
         try
             PrintLog "Edit / Paste / Special"
-            EditPasteSpecialWriter
+            hUseAsyncSlot( "EditPasteSpecialWriter" )
             Kontext "InhaltEinfuegen"
             if InhaltEinfuegen.Exists then
                 try
@@ -214,7 +225,7 @@ testcase tEditPasteSpecial
                     end if
                 else
                     Call wTypeKeys("<Home><Shift End>")
-                    EditCopy
+                    hUseAsyncSlot( "EditCopy" )
                     if GetClipboardText <> "2nd Text from external clipboard!" then Warnlog "Wrong Text inserted! Is: " & GetClipboardText
                 end if
             else
@@ -228,9 +239,10 @@ testcase tEditPasteSpecial
     PrintLog "  - Internal Clipboard with StarOffice Writer-Text"
     PrintLog "Enter some text in writer and copy it"
     Call wTypeKeys("<Return>Text from internal clipboard<Shift Home>")
-    EditCopy
+    hUseAsyncSlot( "EditCopy" )
     Call wTypeKeys("<End><Return>")
-    EditPasteSpecialWriter
+    hUseAsyncSlot( "EditPasteSpecialWriter" )
+    
     PrintLog "Edit / Paste / Special"
     Kontext "InhaltEinfuegen"
     if InhaltEinfuegen.Exists then
@@ -238,35 +250,33 @@ testcase tEditPasteSpecial
         Auswahl.Select 1
         InhaltEinfuegen.OK
         Call wTypeKeys "<Home><Shift End>"
-        EditCopy
+        hUseAsyncSlot( "EditCopy" )
         if GetClipboardText <> "Text from internal clipboard" then Warnlog "Wrong Text inserted! Is: " & GetClipboardText
     else
         Warnlog "Dialog 'Paste Special' is not up!"
     end if
     Call hCloseDocument
     PrintLog "Close active document"
+    
 endcase
 
 '----------------------------------------------------
 
 testcase tEditSelectionMode
+
     PrintLog "    - Edit - Selection Mode"
     PrintLog "    Open new writer document"
     Call hNewDocument
 
     PrintLog "    Try to switch to / activate the Block-selectionmode."
-    try
-        EditSelectionModeBlock
-    catch
+    if ( hUseAsyncSlot( "EditSelectionModeBlock" ) = -1 ) then
         warnlog "    Could not activate Blockmode via Edit-menu."
-    endcatch
+    endif
 
     PrintLog "    Try to switch to / activate the Standard-selectionmode."
-    try
-        EditSelectionModeStandard
-    catch
+    if ( hUseAsyncSlot( "EditSelectionModeStandard" ) = -1 ) then
         warnlog "    Could not activate Blockmode via Edit-menu."
-    endcatch
+    endif
 
     PrintLog "    Close active document."
     Call hCloseDocument
@@ -276,52 +286,49 @@ endcase 'tEditSelectionMode
 '----------------------------------------------------
 
 testcase tEditChanges
+
     PrintLog "- Edit/Changes"
-    if gApplication = "HTMLDOKUMENT" then
+    if gApplication = "HTML" then
         printlog "Not in WriterWeb!"
         goto endsub
     end if
-    Call hNewDocument
+    
     PrintLog "Open new document"
+    Call hNewDocument
 
-    Call wTypeKeys("Hallo<Return><Return>")
     PrintLog "Enter some text in document"
-    Wait(200)
-    UseBindings
+    Call wTypeKeys("Hallo<Return><Return>")
+
     PrintLog "Select Edit / Changes / Record"
-    EditChangesRecord
-    WaitSlot(1000)
+    hUseAsyncSlot( "EditChangesRecord" )
+
     PrintLog "Enter some more text in document"
     Call wTypeKeys("Aenderung 1<Return><Up><Up><End>")
     Call wTypeKeys("<Backspace>", 4)
-    Wait(200)
-    UseBindings
+
     PrintLog "Select Edit / Changes / Record"
-    EditChangesRecord
-    WaitSlot(2000)
-    UseBindings
-    EditChangesShow
+    hUseAsyncSlot( "EditChangesRecord" )
+
     PrintLog "Select Edit / Changes / Show"
-    WaitSlot(1000)
-    UseBindings
+    hUseAsyncSlot( "EditChangesShow" )
+
     PrintLog "Select Edit / Changes / Show"
-    EditChangesShow
-    WaitSlot(1000)
-    UseBindings
+    hUseAsyncSlot( "EditChangesShow" )
+
     PrintLog "Select Edit / Changes / Protect Trace"
-    EditChangesProtectTrace
-    WaitSlot(1000)
+    hUseAsyncSlot( "EditChangesProtectTrace" )
+
     PrintLog "Passwort-dialog has to come up, cancel it"
     Kontext "Passwort"
-    if Passwort.Exists then
+    if ( Passwort.Exists( 1 ) ) then
         Passwort.Close
     else
         Warnlog "Password-dialog is not up!"
     end if
 
-    UseBindings
     PrintLog "Edit / Changes / Accept or Reject"
     EditChangesAcceptOrReject
+
     PrintLog "Dialog 'Accept or reject changes' has to come up"
     Kontext "Redlining"
     if Redlining.Exists then
@@ -337,31 +344,29 @@ testcase tEditChanges
     end if
 
     Call wTypeKeys("<Down><Right>")
-    UseBindings
-    try
-        PrintLog "Point cursor into a changed text in document"
-        EditChangesComment
-        PrintLog "Edit / Changes / Comment"
-    catch
+
+    PrintLog "Point cursor into a changed text in document"
+    PrintLog "Edit / Changes / Comment"
+    if ( hUseAsyncSlot( "EditChangesComment" ) = -1 ) then
         Call wTypeKeys("<Up>")
-        try
-            EditChangesComment
-        catch
+        if ( hUseAsyncSlot( "EditChangesComment" ) = -1 ) then
             Warnlog "Unable to execute 'Edit / Changes / Comment!"
-        endcatch
-    endcatch
+        endif
+    endif
+    
     Kontext "Kommentar"
-    WaitSlot(5000)
     PrintLog "Dialog to comment a change has to come up"
-    if Kommentar.Exists then
+    if ( Kommentar.Exists( 5 ) ) then
         Call DialogTest ( Kommentar )
         Kommentar.Cancel
     else
         Warnlog "Dialog 'Comment' not opened!"
         PrintLog "Close dialog 'Comment'"
     end if
-    Call hCloseDocument
+    
     PrintLog "Close active document"
+    Call hCloseDocument
+
 endcase
 
 '----------------------------------------------------
@@ -374,10 +379,10 @@ testcase tEditCompareDocument
         PrintLog "Open new document"
         EditCompareDocumentCalc
         PrintLog "Edit / Compare document"
-    Case "MASTERDOC"
+    Case "MASTERDOCUMENT"
         printlog "Comparing documents not in Masterdocument!"
         goto endsub
-    Case "HTMLDOKUMENT"
+    Case "HTML"
         printlog "Comparing documents not in WriterWeb!"
         goto endsub
     end select
@@ -507,7 +512,7 @@ testcase tViewNavigator
     Call hNewDocument
     PrintLog "Open new document"
 
-    if gApplication = "MASTERDOC" then
+    if gApplication = "MASTERDOCUMENT" then
         Kontext "NavigatorGlobalDoc"
         if Not NavigatorGlobalDoc.Exists then ViewNavigator
         Kontext "NavigatorGlobalDoc"
@@ -882,8 +887,8 @@ testcase tEditAutotext
         if GetDocumentCount = 1 then
             Warnlog "The autotext has been edited in current document!"
         else
-            FileClose
-            WaitSlot (1000)
+            hUseAsyncSlot( "FileClose" )
+            
             Kontext "Active"
             PrintLog "A message that module has been changed should come up"
             if Active.Exists then
@@ -949,7 +954,7 @@ testcase tEditHyperlink
     Call wDocSetContext
     try
         PrintLog "Check if correct URL has been set to document"
-        EditCopy
+        hUseAsyncSlot( "EditCopy" )
         if GetClipBoardtext = "" then
             Warnlog "No Hyperlink or wrong hyperlink in document!" & GetClipBoardtext
         end if
@@ -993,7 +998,7 @@ testcase tEditFields
     Sleep 1
     PrintLog "Insert Field 'Sender -> Company'"
     Select Case gApplication
-    Case "HTMLDOKUMENT"
+    Case "HTML"
         Select case iSprache
         case 01 : Feldtyp.Select 5  'Sender
             Auswahl.Select 1  'Company
@@ -1120,7 +1125,7 @@ endcase
 
 testcase tEditFieldsInputList
     PrintLog "- Edit / Fields / Functions"
-    If gApplication = "HTMLDOKUMENT" then goto endsub
+    If gApplication = "HTML" then goto endsub
 
     PrintLog "Open new document"
     Call hNewDocument
@@ -1205,7 +1210,7 @@ testcase tEditIndexEntry
     goto endsub
 
     PrintLog "- Edit/Index Entry"
-    if gApplication = "HTMLDOKUMENT" then
+    if gApplication = "HTML" then
         printlog "Not in WriterWeb!"
         goto endsub
     end if
@@ -1247,7 +1252,7 @@ endcase
 
 testcase tEditLinks
     PrintLog "- Edit/Links"
-    if gApplication = "HTMLDOKUMENT" then
+    if gApplication = "HTML" then
         printlog "Not in WriterWeb!"
         goto endsub
     end if
@@ -1371,7 +1376,7 @@ endcase
 testcase tHtmlDocEditFields
     PrintLog "- Edit/Fields"
 
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     PrintLog "Open new document"
     Call hNewDocument
 
@@ -1465,7 +1470,7 @@ testcase tMasterDocEditNavigator
     printlog "- View/Navigator"
     Dim ToolboxOk as boolean
 
-    gApplication = "MASTERDOC"
+    gApplication = "MASTERDOCUMENT"
     Call hNewDocument
     PrintLog "Open new document"
 

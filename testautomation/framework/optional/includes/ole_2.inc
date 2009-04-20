@@ -57,7 +57,7 @@ testcase tCheckTheOLEObjectDialog
          case 2 : gApplication = "CALC"
          case 3 : gApplication = "IMPRESS"
          case 4 : gApplication = "DRAW"
-         case 5 : gApplication = "GLOBALDOC"
+         case 5 : gApplication = "MASTERDOCUMENT"
       end select
       
       lListe ( 0 ) = 0 : lListSoll ( 0 ) = 0
@@ -108,7 +108,7 @@ testcase tCheckTheOLEObjectDialog
                             ListAppend ( lListSoll (), gOLEWriter ) 
                             ListAppend ( lListSoll (), gOLEChart )
                             ListAppend ( lListSoll (), gOLEMath )
-         case "GLOBALDOC" : ListAppend ( lListSoll (), gOLECalc ) 
+         case "MASTERDOCUMENT" : ListAppend ( lListSoll (), gOLECalc ) 
                             ListAppend ( lListSoll (), gOLEImpress )
                             ListAppend ( lListSoll (), gOLEDraw ) 
                             ListAppend ( lListSoll (), gOLEChart )

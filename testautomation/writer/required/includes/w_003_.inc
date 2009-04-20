@@ -37,7 +37,9 @@
 '*
 '\******************************************************************
 
-sub w_003printLog Chr(13) + "--------- View Menu (w_003_.inc) ----------"
+sub w_003_
+
+    printLog Chr(13) + "--------- View Menu (w_003_.inc) ----------"
     gApplication = "WRITER"
 
     Call tViewPrintLayout
@@ -62,7 +64,7 @@ sub w_003printLog Chr(13) + "--------- View Menu (w_003_.inc) ----------"
     Call tViewZoom
 
     'Writer Web
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     Call tHtmlDocViewZoom
     Call tHtmlDocViewHTMLSource
     gApplication = "WRITER"
@@ -80,41 +82,45 @@ testcase tViewZoom
     printlog " View -> Zoom"
     ViewZoom
     Kontext "Massstab"
-    DialogTest ( Massstab )
-    select case uCASE(gApplication)
-    case "HTMLDOKUMENT" :
-        printlog " check checkbox '100%'"
-        Vergroesserung100.check
-        printlog " check checkbox 'Variable'"
-        VergroesserungStufenlos.check
-    case else :
-        printlog " check checkbox 'Optimal'"
-        Optimal.check
-        printlog " check checkbox 'Fit height and width'"
-        GanzeSeite.check
-        printlog " check checkbox 'Fit Width'"
-        Seitenbreite.check
-        printlog " check checkbox '100%'"
-        Vergroesserung100.check
-        printlog " check checkbox 'Variable'"
-        VergroesserungStufenlos.check
-        printlog " click button MORE on 'Variable'"
-        Stufenlos.more
-        printlog " click button 'Automatic'"
-        Automatic.check
-        printlog " click button 'Single Page'"
-        Singlepage.check
-        printlog " click button 'Columns'"
-        Columns.check
-        printlog " click button MORE on 'Columns'"
-        Columnsfield.more
-        printlog " click button LESS on 'Columns'"
-        Columnsfield.less
-        printlog " Check checkbox 'Book mode'"
-        Bookmode.check
-        printlog " cancel dialog 'Zoom'"
-    end select
-    Massstab.Cancel
+    if ( Massstab.exists( 1 ) ) then
+        DialogTest ( Massstab )
+        select case uCASE(gApplication)
+        case "HTML" :
+            printlog " check checkbox '100%'"
+            Vergroesserung100.check
+            printlog " check checkbox 'Variable'"
+            VergroesserungStufenlos.check
+        case else :
+            printlog " check checkbox 'Optimal'"
+            Optimal.check
+            printlog " check checkbox 'Fit height and width'"
+            GanzeSeite.check
+            printlog " check checkbox 'Fit Width'"
+            Seitenbreite.check
+            printlog " check checkbox '100%'"
+            Vergroesserung100.check
+            printlog " check checkbox 'Variable'"
+            VergroesserungStufenlos.check
+            printlog " click button MORE on 'Variable'"
+            Stufenlos.more
+            printlog " click button 'Automatic'"
+            Automatic.check
+            printlog " click button 'Single Page'"
+            Singlepage.check
+            printlog " click button 'Columns'"
+            Columns.check
+            printlog " click button MORE on 'Columns'"
+            Columnsfield.more
+            printlog " click button LESS on 'Columns'"
+            Columnsfield.less
+            printlog " Check checkbox 'Book mode'"
+            Bookmode.check
+            printlog " cancel dialog 'Zoom'"
+        end select
+        Massstab.Cancel
+    else
+        warnlog( "Dialog <Massstab> is not available" )
+    endif
     printlog " close application"
     Call  hCloseDocument
 endcase
@@ -127,22 +133,28 @@ testcase tViewDataSources
     Call hNewDocument
     printlog " View / Data Sources"
     ViewCurrentDatabaseWriter
-    WaitSlot (5000)
+
     Kontext "DatabaseBeamer"
-    if Not DatabaseBeamer.Exists then
-        Warnlog "Database Beamer has not been opened!"
-    else
+    if ( DatabaseBeamer.Exists( 5 ) ) then
         printlog " Close database beamer with : View Data Sources"
         ViewCurrentDatabaseWriter
+        
         Kontext "DatabaseBeamer"
-        if DatabaseBeamer.Exists then
+        if ( DatabaseBeamer.Exists() ) then
             Warnlog "Could not close Databasebeamer with same slot!"
             ViewBeamer
+            
             Kontext "DatabaseBeamer"
-            if DatabaseBeamer.Exists then Warnlog "Could not close Databasebeamer with Slot->View Beamer!"
-        end if
-    end if
-    WaitSlot(1000)
+            if DatabaseBeamer.Exists then 
+                Warnlog "Could not close Databasebeamer with Slot->View Beamer!"
+            endif
+        else
+            printlog( "Closed Database Beamer dialog" )
+        endif
+    else
+        Warnlog "Database Beamer has not been opened!"
+    endif
+
     printlog " Close active document"
     Call hCloseDocument
 endcase
@@ -335,7 +347,7 @@ testcase tViewToolbars
 
     printlog "- Toolbar 'Formula'"
     printlog "-  open"
-    Call hToolbarSelect("Formula", true)
+    Call hToolbarSelect("MATH", true)
     OL_SW_Rechenleiste.TypeKeys "<Enter>"
 
     printlog " Close active document"
@@ -501,7 +513,10 @@ endcase
 
 testcase tViewInputMethodStatus
     PrintLog "- View / Input Method Status (only Solaris)"
-    if Ucase(gPlatform) <> "SOLARIS" then goto endsub
+    if ( Ucase(gPlatform) <> "SOLARIS" ) then 
+        printlog( "No testing for IME status for OS <> Solaris" )
+        goto endsub
+    endif
 
     PrintLog " Open new document"
     Call hNewDocument
@@ -524,29 +539,36 @@ endcase
 
 testcase tViewHTMLSource
     PrintLog "- View / HTML Source (only in HTML-Document)"
-    if gApplication <> "HTMLDOKUMENT" then goto endsub
+    if ( gApplication <> "HTML" ) then
+        goto endsub
+    endif
+    
     printlog "Open new document"
     Call hNewDocument
     printlog "View / HTML-Source"
     AnsichtHTMLQuelltext
-    WaitSlot (1000)
+
     printlog "Save-As dialog has to come up"
     Kontext "SpeichernDlg"
-    Dateiname.Settext Convertpath(gofficepath + "user\work\sourcecode.html")
-    printlog "Save sourcecode"
-    Speichern.Click
-    Kontext "Active"
-    If Active.Exists then
-        if Active.GetRT = 304 then
-            try
-                Active.Yes
-            catch
-                Warnlog Active.Gettext
-                Active.Ok
-            endcatch
+    if ( SpeichernDlg.exists( 1 ) ) then
+        Dateiname.Settext Convertpath(gofficepath + "user\work\sourcecode.html")
+        printlog "Save sourcecode"
+        Speichern.Click()
+        Kontext "Active"
+        If Active.Exists then
+            if Active.GetRT = 304 then
+                try
+                    Active.Yes
+                catch
+                    Warnlog Active.Gettext
+                    Active.Ok
+                endcatch
+            end if
         end if
-    end if
-    wait 500
+    else
+        warnlog( "Dialog <SpeichernDlg> is not available" )
+    endif
+
     Kontext "DocumentHTMLSourceView"
     DocumentHTMLSourceView.TypeKeys "Check for bug: #116402"
     wait 500
@@ -560,22 +582,25 @@ endcase
 '-----------------------------------------------------------
 
 testcase tHtmlDocViewZoom
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     printlog " open application"
     Call hNewDocument
     printlog " type something into the document"
     hTypekeys "<RETURN>", 3
-    UseBindings
+
     printlog " View -> Zoom"
     ViewZoom
     Kontext "Massstab"
-    DialogTest ( Massstab )
-    printlog " check checkbox '100%'"
-    Vergroesserung100.check
-    printlog " check checkbox 'Variable'"
-    VergroesserungStufenlos.check
-    Massstab.Cancel
-
+    if ( Massstab.exists( 1 ) ) then
+        DialogTest ( Massstab )
+        printlog " check checkbox '100%'"
+        Vergroesserung100.check
+        printlog " check checkbox 'Variable'"
+        VergroesserungStufenlos.check
+        Massstab.Cancel
+    else
+        warnlog( "Dialog <Massstab> is not available" )
+    endif
     printlog " close application"
     Call  hCloseDocument
     gApplication = "WRITER"
@@ -585,7 +610,7 @@ endcase
 
 testcase tHtmlDocViewHTMLSource
     PrintLog "- View / HTML Source (only in HTML-Document)"
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     printlog "Open new document"
     Call hNewDocument
     printlog "View / HTML-Source"

@@ -70,7 +70,7 @@ sub main
     Call tCTLDependency_4
     Call tCTLKashidaCheck
     
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     Call tCTLDependency_5
     Call tCTLDependency_6
     Call tCTLDependency_7

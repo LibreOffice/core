@@ -76,7 +76,7 @@ testcase tTableOption
     '/// two boxes below are checked but disabled ///"
     
     ToolsOptions
-    Call hToolsOptions ("TextDocument","Table")
+    Call hToolsOptions ("WRITER","Table")
     if AutomatischeZahlenerkennung.IsChecked then 
         warnlog "The default for 'Number recognition' should be OFF => 114166 "
         AutomatischeZahlenerkennung.UnCheck
@@ -128,7 +128,7 @@ testcase tTableInsert1
     Printlog "'///+ ... play with number recognition in TOOLS->OPTIONS->TextDoc->Table ///"
     Printlog "'///+     ... Number recognition OFF ///"
     ToolsOptions
-    Call hToolsOptions ("TextDocument","Table")
+    Call hToolsOptions ("WRITER","Table")
     AutomatischeZahlenerkennung.UnCheck
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
@@ -158,7 +158,7 @@ testcase tTableInsert1
 
     Printlog "'///+       ... Number recognition ON -                           ///"
     ToolsOptions
-    Call hToolsOptions ("TextDocument","Table")
+    Call hToolsOptions ("WRITER","Table")
     AutomatischeZahlenerkennung.Check ' even with that, everything is a TEXT :-(????
     Zahlenformaterkennung.UnCheck ' much better with that! everything with numbers&decimalsep is number with 2 decimal places displayed, but all kept!!!
     AutomatischeAusrichtung.UnCheck ' just the allignment does change too!
@@ -187,7 +187,7 @@ testcase tTableInsert1
 
     Printlog "'///+       ... Number recognition ON - Number format recognition ///"
     ToolsOptions
-    Call hToolsOptions ("TextDocument","Table")
+    Call hToolsOptions ("WRITER","Table")
     AutomatischeZahlenerkennung.Check ' even with that, everything is a TEXT :-(????
     Zahlenformaterkennung.Check ' much better with that! everything with numbers&decimalsep is number with 2 decimal places displayed, but all kept!!!
     AutomatischeAusrichtung.UnCheck ' just the allignment does change too!
@@ -217,7 +217,7 @@ testcase tTableInsert1
 
     Printlog "'///+       ... Number recognition ON - Number format recognition - Alignment ///"
     ToolsOptions
-    Call hToolsOptions ("TextDocument","Table")
+    Call hToolsOptions ("WRITER","Table")
     AutomatischeZahlenerkennung.Check ' even with that, everything is a TEXT :-(????
     Zahlenformaterkennung.Check ' much better with that! everything with numbers&decimalsep is number with 2 decimal places displayed, but all kept!!!
     AutomatischeAusrichtung.Check ' just the allignment does change too!
@@ -488,7 +488,7 @@ testcase tTableNumberFormat
     Call wTypeKeys "six<down>"
 
     ToolsOptions           ' set options for this test
-    Call hToolsOptions ("TextDocument","Table")
+    Call hToolsOptions ("WRITER","Table")
     AutomatischeZahlenerkennung.Check
     Zahlenformaterkennung.Check
     AutomatischeAusrichtung.Check

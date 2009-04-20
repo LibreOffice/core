@@ -69,10 +69,10 @@ testcase tTableFilters
     
     hFileOpen( gOfficePath & "user/database/biblio.odb" )
         
-    Kontext "Insight"
+    Kontext "DATABASE"
     
-    Insight.MouseDown(50,50)
-    Insight.MouseUp(50,50)
+    Database.MouseDown(50,50)
+    Database.MouseUp(50,50)
     sleep(1)
     TableFilters
     sleep(1)
@@ -90,12 +90,12 @@ testcase tTableView
    
     hFileOpen( gOfficePath & "user/database/biblio.odb" )
         
-    Kontext "Insight"
+    Kontext "DATABASE"
 
-    Insight.MouseDown(50,50)
-    Insight.MouseUp(50,50)
+    Database.MouseDown(50,50)
+    Database.MouseUp(50,50)
         
-    if not InsightSwapIconView.exists(1) then        
+    if not DatabaseSwapIconView.exists(1) then        
         warnlog "InsightSwapIconView doesn't exists"
         goto endsub
     end if
@@ -124,20 +124,20 @@ testcase tMainApp
     
     hFileOpen( gOfficePath & "user/database/biblio.odb" )
 
-    Kontext "Insight"
+    Kontext "DATABASE"
     
-    Insight.MouseDown(50,50)
-    Insight.MouseUp(50,50)
+    Database.MouseDown(50,50)
+    Database.MouseUp(50,50)
     
-    Kontext "Insight"
-    if Insight.exists() then
+    Kontext "DATABASE"
+    if Database.exists() then
         printlog "Insight appear"
     else
         warnlog "Insight doesn't appear"
         goto endsub
     end if
     
-    if InsightSwapView.exists() then
+    if DatabaseSwapView.exists() then
         printlog "InsightSwapView appear"        
     else
         warnlog "InsightSwapView doesn't appear"
@@ -147,7 +147,7 @@ testcase tMainApp
     '/// display Tables View
     printlog "display Tables View"
     ViewTables    
-    if InsightTablesView.exists(1) then
+    if DatabaseTablesView.exists(1) then
         printlog "InsightTablesView appear"        
     else
         warnlog "InsightTablesView doesn't appear"
@@ -164,7 +164,7 @@ testcase tMainApp
     '/// display Queries View
     printlog "display Queries View"
     ViewQueries    
-    if InsightQueriesView.exists(1) then
+    if DatabaseQueriesView.exists(1) then
         printlog "InsightQueriesView appear"        
     else
         warnlog "InsightQueriesView doesn't appear"
@@ -188,7 +188,7 @@ testcase tMainApp
         warnlog "InsightFormsView doesn't appear"
         goto endsub
     end if
-    Kontext "Insight"
+    Kontext "DATABASE"
     '/// count the items in the CreationList
     printlog "count the items in the CreationList"
     iCount = CreationList.getItemCount() 
@@ -199,7 +199,7 @@ testcase tMainApp
     '/// display Reports View
     printlog "display Reports View"
     ViewReports    
-    if InsightReportsView.exists(1) then
+    if DatabaseReportsView.exists(1) then
         printlog "InsightReportsView appear"        
     else
         warnlog "InsightReportsView doesn't appear"
@@ -227,10 +227,10 @@ testcase tPreview
 
     hFileOpen( gOfficePath & "user/database/biblio.odb" )
 
-    Kontext "Insight"
+    Kontext "DATABASE"
     
-    Insight.MouseDown(50,50)
-    Insight.MouseUp(50,50)    
+    Database.MouseDown(50,50)
+    Database.MouseUp(50,50)    
     
     ViewTables
     
@@ -239,8 +239,8 @@ testcase tPreview
     Kontext "ContainerView"        
         TableTree.select 1
     
-    Kontext "Insight"
-        Insight.UseMenu
+    Kontext "DATABASE"
+        Database.UseMenu
         hMenuSelectNr(3)
         hMenuSelectNr(4)
         hMenuSelectNr(3)
@@ -255,8 +255,8 @@ testcase tPreview
             printlog "preview displayed"
         endif    
         
-    Kontext "Insight"
-        Insight.UseMenu
+    Kontext "DATABASE"
+        Database.UseMenu
         hMenuSelectNr(3)
         hMenuSelectNr(4)
         hMenuSelectNr(1)
@@ -282,8 +282,8 @@ testcase tMainMenuBar
     
     hFileOpen( gOfficePath & "user/database/biblio.odb" )
     
-    Kontext "Insight"
-        Insight.UseMenu        
+    Kontext "DATABASE"
+        Database.UseMenu        
         '/// check if there are 11 items in the file menu.
         printlog "check if there are 11 items in the file menu."
         '/// + there different count related to the file pick list.                
@@ -311,7 +311,7 @@ testcase tMainMenuBar
         
         '/// check the FILE/AUTOPILOTS
         printlog "check the FILE/AUTOPILOTS"
-        Insight.UseMenu        
+        Database.UseMenu        
         hMenuSelectNr(1) ' the file menu
         hMenuSelectNr(4) ' the autopilots menu        
         iCount = hMenuItemGetCount()
@@ -322,7 +322,7 @@ testcase tMainMenuBar
         
         '/// check if there are 15 items in the edit menu.
         printlog "check if there are 15 items in the edit menu."
-        Insight.UseMenu 
+        Database.UseMenu 
         hMenuSelectNr(2)        
         iCount = hMenuItemGetCount()
         if (iCount <> 15) then
@@ -332,7 +332,7 @@ testcase tMainMenuBar
 
         '/// check if there are 6 items in the view menu.
         printlog "check if there are 6 items in the view menu."
-        Insight.UseMenu 
+        Database.UseMenu 
         hMenuSelectNr(3)        
         iCount = hMenuItemGetCount()
         if (iCount <> 6) then
@@ -342,7 +342,7 @@ testcase tMainMenuBar
 
         '/// check the VIEW/DATABASE OBJECTS
         printlog "check the VIEW/DATABASE OBJECTS"
-        Insight.UseMenu
+        Database.UseMenu
         hMenuSelectNr(3)
         hMenuSelectNr(1)                
         iCount = hMenuItemGetCount()        
@@ -353,7 +353,7 @@ testcase tMainMenuBar
 
         '/// check the VIEW/SORT OBJECTS
         printlog "check the VIEW/SORT OBJECTS"
-        Insight.UseMenu
+        Database.UseMenu
         hMenuSelectNr(3)
         hMenuSelectNr(5)                
         iCount = hMenuItemGetCount()        
@@ -364,7 +364,7 @@ testcase tMainMenuBar
 
         '/// check the VIEW/PREVIEW
         printlog "check the VIEW/PREVIEW"
-        Insight.UseMenu
+        Database.UseMenu
         hMenuSelectNr(3)
         hMenuSelectNr(4 )                
         iCount = hMenuItemGetCount()        
@@ -375,7 +375,7 @@ testcase tMainMenuBar
         
         '/// check if there are 8 items in the insert menu.
         printlog "check if there are 8 items in the insert menu."
-        Insight.UseMenu 
+        Database.UseMenu 
         hMenuSelectNr(4)       
         iCount = hMenuItemGetCount()
         if (iCount <> 8) then
@@ -385,7 +385,7 @@ testcase tMainMenuBar
 
         '/// check if there are 10 items in the tools menu.
         printlog "check if there are 10 items in the tools menu."        
-        Insight.UseMenu 
+        Database.UseMenu 
         hMenuSelectNr(5)        
         iCount = hMenuItemGetCount()
         if ( lcase( gPlatform ) = "osx" ) then
@@ -401,7 +401,7 @@ testcase tMainMenuBar
         
         '/// check if there are 4 items in the TOOLS/MACRO menu.
         printlog "check if there are 4 items in the TOOLS/MACRO menu."        
-        Insight.UseMenu 
+        Database.UseMenu 
         hMenuSelectNr(5)
         hMenuSelectNr(6)        
         iCount = hMenuItemGetCount()
@@ -420,12 +420,12 @@ testcase tDatabaseProperties
     
     hFileOpen( gOfficePath & "user/database/biblio.odb" )
     
-    Kontext "Insight"        
-        Insight.MouseDown(50,50)
-        Insight.MouseUp(50,50)
+    Kontext "DATABASE"        
+        Database.MouseDown(50,50)
+        Database.MouseUp(50,50)
     
-    Kontext "Insight"    
-        Insight.UseMenu    
+    Kontext "DATABASE"    
+        Database.UseMenu    
         hMenuSelectNr(2)
         hMenuSelectNr(15)
         hMenuSelectNr(1)
@@ -525,7 +525,7 @@ testcase tRegisterDatabaseDialog
     Kontext "TabRegisteredDatabase"
         call DialogTest( TabRegisteredDatabase )    
         if (RegisteredDatabases.getItemCount() = 0 ) then
-            warnlog "there are no registered databases. There should be at least a  registered 'Bibliography' database."
+            warnlog "there are no registered databases. There should be at least a  registered 'Bibliography' Database."
             Kontext "OptionenDlg"
                 OptionenDlg.Cancel
             call hCloseDocument
@@ -596,8 +596,8 @@ testcase tDatabaseBeamer
     hMenuSelectNr(1)
     WaitSlot(1)
     
-    Kontext "Insight"
-    If Insight.exists(10) then
+    Kontext "DATABASE"
+    If Database.exists(10) then
         printlog "database open -> OK"
         printlog "close the open database"
         call fCloseDatabase

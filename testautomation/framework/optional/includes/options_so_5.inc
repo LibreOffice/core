@@ -452,7 +452,7 @@ testcase func_StarOfficeView_6
 
 '///open a new writer-document
  printlog "open a new writer-document"
-   gApplication = "Writer"
+   gApplication = "WRITER"
    hNewDocument
 
  printlog " - view"

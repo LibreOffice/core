@@ -58,6 +58,7 @@ sub GetUseFiles()
    Use "global\system\includes\iniinfo.inc"
 
 '   Use "global\tools\includes\optional\t_xml1.inc"
+   Use "global\tools\includes\required\t_tools1.inc"
    Use "global\tools\includes\required\t_tools2.inc"
    Use "global\tools\includes\required\t_lists.inc"
 

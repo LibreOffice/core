@@ -73,7 +73,7 @@ sub hStatusIn ( sTestAppArea as String, sTestname as String, optional sName as S
     gWarningSum = getWarningCount()
     gQaErrorSum = getQaErrorCount()
     
-    ' make sure we have everything to update the status-database.
+    ' make sure we have everything to update the status-Database.
     gDatabasePath = getDatabasePath(privateDatabasePath)
     if ("" = gDatabasePath) then
         'Disable statusfeature, because the public filespace is not available.

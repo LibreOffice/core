@@ -1,3 +1,14 @@
+*Database UID_APP_VIEW
+'UID_APP_VIEW_BORDER_WIN
+DatabaseSplitter UID_APP_VIEW_VERT_SPLIT
+DatabaseDetailView UID_APP_DETAIL_VIEW
+CreationList HID_APP_CREATION_LIST
+DatabaseSwapView UID_APP_SWAP_VIEW
+DatabaseSwapIconView HID_APP_SWAP_ICONCONTROL
+DatabaseQueriesView HID_APP_QUERY_TREE
+DatabaseReportsView HID_APP_REPORT_TREE
+DatabaseTablesView HID_APP_TABLE_TREE
+
 *DatabaseBeamer UID_CTL_CONTENT
 
 *DatabaseProperties HID_DSADMIN_DIALOG
@@ -113,7 +124,7 @@ Value3 dbaccess:Edit:DLG_FILTERCRIT:ET_WHEREVALUE3
 
 *FilterNavigator HID_FILTER_NAVIGATOR
 
-*FilterWarning TZ_Filter_Warning
+*FilterWarning HID_SVXDLG_FILTER_WARNING
 
 *FindEntry HID_MM_FIND_ENTRY
 FindString sw:Edit:DLG_MM_FIND_ENTRY:ED_FIND

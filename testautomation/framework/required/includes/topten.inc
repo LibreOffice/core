@@ -56,7 +56,7 @@ sub topten
     gApplication = "HTML"
     printlog( "** " + gApplication )
     call Top_ten_test
-    gApplication = "MASTERDOC"
+    gApplication = "MASTERDOCUMENT"
     printlog( "** " + gApplication )
     call Top_ten_test
 
@@ -107,7 +107,7 @@ testcase Top_ten_test
     case "DRAW"       : sFilter1 = "draw8"
     case "IMPRESS"    : sFilter1 = "impress8"
     case "MATH"       : sFilter1 = "math8"
-    case "MASTERDOC"  : sFilter1 = "writerglobal8"
+    case "MASTERDOCUMENT"  : sFilter1 = "writerglobal8"
     case "HTML"       : sFilter1 = "HTML" : bExport = FALSE
     case else         : warnlog "Invalid gApplication: " & gApplication 
     end select
@@ -129,7 +129,7 @@ testcase Top_ten_test
         case "DRAW"       : sFilter2 = "StarDraw 5.0"
         case "IMPRESS"    : sFilter2 = "StarImpress 5.0"
         case "MATH"       : sFilter2 = "StarMath 5.0"
-        case "MASTERDOC"  : sFilter2 = "StarWriter 5.0/GlobalDocument"
+        case "MASTERDOCUMENT"  : sFilter2 = "StarWriter 5.0/GlobalDocument"
         case else         : warnlog "Invalid gApplication: " & gApplication 
         end select
         
@@ -243,7 +243,7 @@ sub CutCopyPaste
     endif
 
     select case gApplication
-        case "WRITER", "HTMLDOKUMENT", "MASTERDOC"
+        case "WRITER", "HTML", "MASTERDOCUMENT"
             kontext "documentwriter"
             DocumentWriter.TypeKeys "This is a test.<Return>"
             printlog( "   cut" )

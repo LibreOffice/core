@@ -58,7 +58,7 @@ sub main
         Call t114174  ' only in impress
         Call t111862
 
-    gApplication = "Draw"
+    gApplication = "DRAW"
     PrintLog "-------------------------" + gApplication + "-------------------"
         Call tInsertSlide
         Call tInsertDuplicateSlide
@@ -70,6 +70,6 @@ end sub
 sub LoadIncludeFiles
    use "global\system\includes\master.inc"
    use "global\system\includes\gvariabl.inc"
-   gApplication = "Impress"
+   gApplication = "IMPRESS"
    Call GetUseFiles
 end sub

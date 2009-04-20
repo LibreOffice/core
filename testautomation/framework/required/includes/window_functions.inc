@@ -226,36 +226,36 @@ sub sAllWindowTitle
 
     '///+<li>writer</li>
     gApplication = "WRITER"
-    call tCheckWindowTitle("swriter","Writer")
+    call tCheckWindowTitle("swriter","WRITER")
 
     '///+<li>MasterDoc</li>
-    gApplication = "MASTERDOC"
-    call tCheckWindowTitle("sglobal","Writer")
+    gApplication = "MASTERDOCUMENT"
+    call tCheckWindowTitle("sglobal","WRITER")
 
     '///+<li>HTML document</li>
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     call tCheckWindowTitle("sweb","Writer/Web")
 
     '///+<li>Calc</li>
     gApplication = "CALC"
-    call tCheckWindowTitle("scalc","Calc")
+    call tCheckWindowTitle("scalc","CALC")
 
     '///+<li>Impress</li>
     gApplication = "IMPRESS"
-    call tCheckWindowTitle("simpress","Impress")
+    call tCheckWindowTitle("simpress","IMPRESS")
 
     '///+<li>Draw</li>
     gApplication = "DRAW"
-    call tCheckWindowTitle("sdraw","Draw")
+    call tCheckWindowTitle("sdraw","DRAW")
 
     '///+<li>Math</li>
     gApplication = "MATH"
-    call tCheckWindowTitle("smath","Math")
+    call tCheckWindowTitle("smath","MATH")
 
     qaerrorlog( "Excluded BASE and BACKINGWINDOW" )
 
-    'gApplication = "INSIGHT"
-    'call tCheckWindowTitle("insight","Base")
+    'gApplication = "DATABASE"
+    'call tCheckWindowTitle("DATABASE","Base")
 
     'fileclose
     'call tCheckWindowTitle("soffice","")
@@ -365,7 +365,7 @@ testcase tCheckWindowTitle(sApplication as string, sReference as string)
             endif
 
         case"chart":
-        case"insight":
+        case"DATABASE":
         case"soffice":
             brc = hDestroyDocument()
     end select
@@ -404,7 +404,7 @@ testcase tCheckWindowTitle(sApplication as string, sReference as string)
         case"basic":
             brc = hDestroyDocument()
         case"chart":
-        case"insight":
+        case"DATABASE":
         case"soffice":
             hCreateDocument()
             hCreateDocument()

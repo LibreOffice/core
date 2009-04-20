@@ -119,7 +119,7 @@ testcase tiToolsThesaurus
         '/// call subroutine 'hSetSpellHypLanguage' for setting the default language in the options, to enable it for languages, which don't provide a dictionary (usually asian ones) ///'
         call hSetSpellHypLanguage
         '/// open application-specific document which contains an American-formatted textframe with text. And select the text ///'
-        if (lCase(gApplication) = "impress") then
+        if (gApplication = "IMPRESS") then
             sFileName = (ConvertPath (gTesttoolPath + "graphics\required\input\engtext.odp"))
         else
             sFileName = (ConvertPath (gTesttoolPath + "graphics\required\input\engtext.odg"))

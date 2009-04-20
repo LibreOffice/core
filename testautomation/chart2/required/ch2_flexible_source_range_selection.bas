@@ -47,13 +47,13 @@ sub main
         printlog "Updatetest for Flexible Source Range Selection"        
         printlog "----------------------------------------------"            
         printlog "------------ Chart in Spreadsheet ------------"            
-        gApplication = "Calc"    
+        gApplication = "CALC"    
             Call tDataRangeWizardCalc
             Call tDataSeriesWizardCalc
             Call tDataRangeDialogCalc
             Call tDataSeriesDialogCalc    
         printlog "-------------- Chart in Writer ---------------"            
-        gApplication = "Writer"    
+        gApplication = "WRITER"    
             Call tDataRangeWizardWriter
             Call tDataSeriesWizardWriter
             Call tDataRangeDialogWriter
@@ -67,5 +67,5 @@ sub LoadIncludeFiles
     use "global\system\includes\master.inc"
     use "global\system\includes\gvariabl.inc"          
     Call GetUseFiles
-    gApplication = "Calc"    
+    gApplication = "CALC"    
 end sub

@@ -404,13 +404,13 @@ sub Check_Text_Formatting
     sleep (3)
 
     '/// Select the text and bring up the attributes for it. ///'
-    select case (lCase(gApplication))
-           case "draw"    : hTypeKeys "<RETURN>"
+    select case (gApplication)
+           case "DRAW"    : hTypeKeys "<RETURN>"
                             hTypeKeys "<SHIFT HOME>" 'Mark the whole text'
-	   case "impress" : hTypeKeys "<RETURN>"
+	   case "IMPRESS" : hTypeKeys "<RETURN>"
                             hTypeKeys "<SHIFT HOME>" 'Mark the whole text'
-	   case "writer"  : EditSelectAll  'Since there is currently only (should only be) one object (the text) in the document.
-	   case "calc"    : hTypeKeys "<MOD1 HOME>"
+	   case "WRITER"  : EditSelectAll  'Since there is currently only (should only be) one object (the text) in the document.
+	   case "CALC"    : hTypeKeys "<MOD1 HOME>"
 '                           hTypeKeys "<SHIFT HOME>" 'Mark the whole text'  
            case else      : warnlog "   the test has not been configured for this application ( '" + gApplication + "' ). Please notify testwriter."
     end select
@@ -444,7 +444,7 @@ sub Check_Text_Formatting
    if Unterstrichen.GetState(2) <> Text6 then warnlog "   Underline should be: " + Text6 + " but was: " + Unterstrichen.GetState(2)
 
    Kontext "TextObjectbar"
-   if (lCase(gApplication)) = "calc" then
+   if (gApplication) = "CALC" then
       kontext "FormatObjectBar"
       Printlog "   - Check if the Font-attribute is set to Justified"
       '/// check state for button 'Justified' ///'

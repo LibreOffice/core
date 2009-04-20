@@ -36,7 +36,9 @@
 '*
 '\******************************************************************
 
-sub w_005printLog Chr(13) + "--------- Menu Format (w_005_.inc) ----------"
+sub w_005_
+
+    printLog Chr(13) + "--------- Menu Format (w_005_.inc) ----------"
     gApplication = "WRITER"
 
     Call tFormatDefault
@@ -60,7 +62,7 @@ sub w_005printLog Chr(13) + "--------- Menu Format (w_005_.inc) ----------"
     Call tFormatWrapArea
 
     'Writer Web
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     Call tHtmlDocFormatParagraph
     Call tHtmlDocFormatPage
     Call tHtmlDocFormatStylist
@@ -99,8 +101,8 @@ testcase tFormatSections
     Kontext "TabBereiche"
     Bereichsliste.SetText "Mein Bereich"
     TabBereiche.OK
-    sleep(5)
-    FormatSections
+    
+    hUseAsyncSlot( "FormatSections" )
     Kontext "BereicheBearbeiten"
     Call Dialogtest(BereicheBearbeiten)
     Optionen.Click
@@ -124,15 +126,24 @@ testcase tFormatSections
             Active.Ok
         end if
     end If
-    Sleep 1
+    
     Kontext "GrafikEinfuegenDlg"
-    GrafikEinfuegenDlg.Cancel
-    Sleep 1
+    if ( GrafikEinfuegenDlg.exists( 1 ) ) then
+        GrafikEinfuegenDlg.Cancel
+        WaitSlot ' NOOP
+    else
+        warnlog( "Dialog <GrafikEinfuegenDlg> is not available" )
+    endif
+    
     Kontext "TabHintergrund"
     TabHintergrund.Cancel
-    sleep(1)
+    
     Kontext "BereicheBearbeiten"
-    BereicheBearbeiten.Cancel
+    if ( BereicheBearbeiten.exists( 1 ) ) then
+        BereicheBearbeiten.Cancel
+    else
+        warnlog( "Dialog <BereicheBearbeiten> is not available" )
+    endif
     printlog " Close active document"
     Call hCloseDocument
 endcase
@@ -181,14 +192,12 @@ testcase tFormatCharacter
     Kontext "TabHyperlinkZeichen"
     Call DialogTest ( TabHyperlinkZeichen )
 
-    if gUSeSysDlg = False then
-        Durchsuchen.Click
-        Kontext "OeffnenDlg"
-        if OeffnenDlg.Exists then
-            OeffnenDlg.Cancel
-        else
-            Warnlog "File-Open dialog is not up!"
-        end if
+    Durchsuchen.Click
+    Kontext "OeffnenDlg"
+    if OeffnenDlg.Exists( 1 ) then
+        OeffnenDlg.Cancel
+    else
+        Warnlog "File-Open dialog is not up!"
     end if
 
     Kontext "TabHyperlinkZeichen"
@@ -232,35 +241,37 @@ testcase tFormatChangeCase
     Call wTypeKeys ("Hello World!")
     Call wTypeKeys ("<Shift Home>")
 
-    Wait 500
     printlog " Format / Case Characters / Upper"
-    FormatChangeCaseUpper
-    WaitSlot(500)
+    hUseAsyncSlot( "FormatChangeCaseUpper" )
+
     printlog " Format / Case Characters / Lower"
-    FormatChangeCaseLower
-    WaitSlot(500)
-    if gAsianSup = True then
+    hUseAsyncSlot( "FormatChangeCaseLower" )
+
+    if ( gAsianSup ) then
         try
             FormatChangeCaseHalfWidth
             printlog " Format / Case Characters / Half Width"
         catch
             Warnlog "Format / Change Case / Half Width does not work. Maybe no Asian support!"
         endcatch
-        WaitSlot(500)
+        WaitSlot()
+        
         try
             printlog " Format / Case Characters / Full Width"
             FormatChangeCaseFullWidth
         catch
             Warnlog "Format / Change Case / Full Width does not work. Maybe no Asian support!"
         endcatch
-        WaitSlot(500)
+        WaitSlot()
+        
         try
             printlog " Format / Case Characters / Hiragana"
             FormatChangeCaseHiragana
         catch
             Warnlog "Format / Change Case / Hiragana does not work. Maybe no Asian support!"
         endcatch
-        WaitSlot(500)
+        WaitSlot()
+        
         try
             printlog " Format / Case Characters / Katagana"
             FormatChangeCaseKatagana
@@ -278,7 +289,7 @@ endcase
 testcase tFormatRuby
     printlog "- Format / Ruby"
     if gAsianSup = True then
-        if gApplication = "HTMLDOKUMENT" then
+        if gApplication = "HTML" then
             printlog "Not in WriterWeb!"
             goto endsub
         end if
@@ -301,9 +312,9 @@ testcase tFormatRuby
 
         printlog " Open Stylist"
         CallStylist.Click
-        wait 500
+
         Kontext "Stylist"
-        if Stylist.Exists then
+        if Stylist.Exists( 1 ) then
             Stylist.close
         else
             Warnlog "Stylist has not been opened!"
@@ -349,13 +360,13 @@ testcase tFormatParagraph
     kontext "TabUmrandung"
     Call DialogTest ( TabUmrandung )
 
-    if gApplication <> "HTMLDOKUMENT" then
+    if gApplication <> "HTML" then
         Kontext
         active.SetPage TabTextfluss
         kontext "TabTextfluss"
         Call DialogTest ( TabTextfluss )
 
-        if gAsianSup = True then
+        if ( gAsianSup ) then
             try
                 Kontext
                 Active.SetPage TabAsianTypography
@@ -434,15 +445,19 @@ testcase tFormatPage
     Als.Select 2
     Call DialogTest ( TabHintergrund, 2 )
     Durchsuchen.Click
-    Sleep 1
+    
     Kontext "GrafikEinfuegenDlg"
-    GrafikEinfuegenDlg.Cancel
+    if ( GrafikEinfuegenDlg.exists( 1 ) ) then
+        GrafikEinfuegenDlg.Cancel
+    else
+        warnlog( "Dialog <GrafikEinfuegenDlg> is not available" )
+    endif
 
     Kontext
     active.SetPage TabKopfzeile
     kontext "TabKopfzeile"
     Call DialogTest ( TabKopfzeile )
-    if gApplication <> "HTMLDOKUMENT" then
+    if gApplication <> "HTML" then
         KopfzeileMitAbstand.Check
         Zusaetze.Click
 
@@ -462,7 +477,7 @@ testcase tFormatPage
     active.SetPage TabFusszeile
     kontext "TabFusszeile"
     Call DialogTest ( TabFusszeile )
-    if gApplication <> "HTMLDOKUMENT" then
+    if gApplication <> "HTML" then
         FusszeileMitAbstand.Check
         Zusaetze.Click
 
@@ -554,21 +569,21 @@ testcase tFormatNumberingBullets
     Kontext "TabOptionenNumerierung"
     Call DialogTest ( TabOptionenNumerierung )
     Numerierung.Select 9
-    if gUseSysDlg = False then
-        try
-            Auswahl.Click
-        catch
-            QAErrorlog "Numbering option 'Linked graphics' is missing"
-            TabOptionenNumerierung.Cancel
-            Call hCloseDocument
-            goto endsub
-        endcatch
-        Sleep 2
-        Call hMenuSelectNr (1)
-        Sleep 2
-        Kontext "OeffnenDlg"
-        OeffnenDlg.Cancel
-    end if
+
+    try
+        Auswahl.Click
+    catch
+        QAErrorlog "Numbering option 'Linked graphics' is missing"
+        TabOptionenNumerierung.Cancel
+        Call hCloseDocument
+        goto endsub
+    endcatch
+    Sleep 2
+    Call hMenuSelectNr (1)
+    Sleep 2
+    Kontext "OeffnenDlg"
+    OeffnenDlg.Cancel
+
     Kontext "TabOptionenNumerierung"
 
     Sleep 1
@@ -619,29 +634,32 @@ testcase tFormatStylist
     Call DialogTest ( Gestalter )
     Zeichenvorlagen.Click
     printlog " Click all Styles-buttons in Stylist"
-    if gApplication <> "HTMLDOKUMENT" then
-        Sleep 1
+    if gApplication <> "HTML" then
+        WaitSlot()
         Rahmenvorlagen.Click
-        Sleep 1
+        WaitSlot()
         Seitenvorlagen.Click
     end if
-    Sleep 1
+    WaitSlot()
     Numerierungsvorlagen.Click
-    Sleep 1
+    WaitSlot()
     Absatzvorlagen.Click
-    Sleep 1
+    WaitSlot()
 
     TBGestalterRight.Click Giesskanne
-    Sleep 1
+    WaitSlot()
 
     AusSelektion.OpenMenu
     Sleep 1
     hMenuSelectNr(1)
-    Sleep 1
+    
     Kontext "VorlageErzeugen"
-    DialogTest ( VorlageErzeugen )
-    VorlageErzeugen.Cancel
-    Sleep 1
+    if ( VorlageErzeugen.exists( 1 ) ) then
+        DialogTest ( VorlageErzeugen )
+        VorlageErzeugen.Cancel
+    else
+        warnlog( "Dialog <VorlageErzeugen> is not available" )
+    endif
 
     Kontext "Gestalter"
     AusSelektion.OpenMenu
@@ -651,10 +669,14 @@ testcase tFormatStylist
     AusSelektion.OpenMenu
     Sleep 1
     hMenuSelectNr(3)
-    Sleep 10
+    
     Kontext "Neu"
-    DialogTest ( Neu )
-    Neu.Cancel
+    if ( Neu.exists( 10 ) ) then
+        DialogTest ( Neu )
+        Neu.Cancel
+    else
+        warnlog( "Dialog <Neu> is not available" )
+    endif
 
     printlog " Close Stylist"
     Kontext "Gestalter"
@@ -785,7 +807,7 @@ endcase
 
 testcase tFormatWrap
     PrintLog "- Format / Wrap"
-    if gApplication = "HTMLDOKUMENT" then
+    if gApplication = "HTML" then
         printlog "Not in Writer/Web!"
         goto endsub
     end if
@@ -873,7 +895,7 @@ endcase
 
 testcase tFormatAnchorArea
     PrintLog "- Format / Anchor drawing objects"
-    if gApplication = "HTMLDOKUMENT" then
+    if gApplication = "HTML" then
         printlog "Not in WriterWeb!"
         goto endsub
     end if
@@ -883,10 +905,8 @@ testcase tFormatAnchorArea
     Call hNewDocument
     printlog " Paste a rectangle from draw via clipboard"
     Call wRectangleToClipboard
-    WaitSlot (2000)
 
-    EditPaste
-    WaitSlot (2000)
+    hUseAsyncSlot( "EditPaste" )
 
     try
         printlog " Format / Anchor / To page"
@@ -914,7 +934,7 @@ endcase
 
 testcase tFormatWrapArea
     PrintLog "- Format / Wrap drawing objects"
-    if gApplication = "HTMLDOKUMENT" then
+    if gApplication = "HTML" then
         printlog "Not in WriterWeb!"
         goto endsub
     end if
@@ -925,8 +945,7 @@ testcase tFormatWrapArea
     printlog " Paste a rectangle from draw via clipboard"
     Call wRectangleToClipboard
 
-    EditPaste
-    WaitSlot (2000)
+    hUseAsyncSlot( "EditPaste" )
 
     try
         printlog " Format / Wrap / No wrap"
@@ -1007,7 +1026,7 @@ endcase
 
 testcase tHtmlDocFormatParagraph
     PrintLog "- Format / Paragraph"
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     printlog " Open new document"
     Call hNewDocument
     printlog " Format / Paragraph"
@@ -1045,7 +1064,7 @@ endcase
 
 testcase tHtmlDocFormatPage
     PrintLog "- Format / Page"
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     printlog " Open new document"
     Call hNewDocument
 
@@ -1075,9 +1094,13 @@ testcase tHtmlDocFormatPage
     Als.Select 2
     Call DialogTest ( TabHintergrund, 2 )
     Durchsuchen.Click
-    Sleep 1
+
     Kontext "GrafikEinfuegenDlg"
-    GrafikEinfuegenDlg.Cancel
+    if ( GrafikEinfuegenDlg.exists( 1 ) ) then
+        GrafikEinfuegenDlg.Cancel
+    else
+        warnlog( "Dialog <GrafikEinfuegenDlg> is not available" )
+    endif
 
     Kontext
     active.SetPage TabKopfzeile
@@ -1099,7 +1122,7 @@ endcase
 
 testcase tHtmlDocFormatStylist
     PrintLog "- Format / Stylist"
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     if gPlatgroup = "unx" then
         QAErrorlog "Doesn't run on unix"
         goto endsub
@@ -1113,40 +1136,54 @@ testcase tHtmlDocFormatStylist
     Call DialogTest ( Gestalter )
     Zeichenvorlagen.Click
     printlog " Click all Styles-buttons in Stylist"
-    Sleep 1
+    WaitSlot()
+    
     Numerierungsvorlagen.Click
-    Sleep 1
+    WaitSlot()
+    
     Absatzvorlagen.Click
-    Sleep 1
+    WaitSlot()
 
     TBGestalterRight.Click Giesskanne
-    Sleep 1
+    WaitSlot()
 
     AusSelektion.OpenMenu
-    Sleep 1
-    hMenuSelectNr(1)
-    Sleep 1
+    wait( 500 )
+    hMenuSelectNr( 1 )
+
     Kontext "VorlageErzeugen"
-    DialogTest ( VorlageErzeugen )
-    VorlageErzeugen.Cancel
-    Sleep 1
+    if ( VorlageErzeugen.exists( 1 ) ) then
+        DialogTest ( VorlageErzeugen )
+        VorlageErzeugen.Cancel
+    else
+        warnlog( "Dialog <VorlageErzeugen> is not available" )
+    endif
+    
 
     Kontext "Gestalter"
-    AusSelektion.OpenMenu
-    Sleep 1
-    hMenuSelectNr(2)
+    if ( Gestalter.exists( 1 ) ) then
+        AusSelektion.OpenMenu
+        wait( 500 )
+        hMenuSelectNr(2)
 
-    AusSelektion.OpenMenu
-    Sleep 1
-    hMenuSelectNr(3)
-    Sleep 10
-    Kontext "Neu"
-    DialogTest ( Neu )
-    Neu.Cancel
+        AusSelektion.OpenMenu
+        wait( 500 )
+        hMenuSelectNr(3)
+        
+        Kontext "Neu"
+        if ( Neu.exists( 10 ) ) then
+            DialogTest ( Neu )
+            Neu.Cancel
+        else
+            warnlog( "Dialog <Neu> is not available" )
+        endif
 
-    printlog " Close Stylist"
-    Kontext "Gestalter"
-    Gestalter.Close
+        printlog " Close Stylist"
+        Kontext "Gestalter"
+        Gestalter.Close
+    else
+        warnlog( "Dialog <Gestalter> is not available" )
+    endif
 
     printlog " Close active document"
     Call hCloseDocument

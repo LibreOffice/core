@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -42,7 +42,7 @@ sub w_get_locale_strings
     Call wAllFieldNames
     Call wUsedInTableTest
     Call wUsedInLoadSaveTests
-    
+
 end sub
 
 '------------------------------------------------------------------------------------------------
@@ -53,42 +53,42 @@ testcase wAllFieldNames
 
     printlog " get all field descriptions (used in w_tools.inc)"
     Call hNewDocument
-    
+
     InsertFieldsOther
     for i = 1 to 5
-        Kontext    
+        Kontext
         Select Case i
-            Case 1
-                printlog "Tabpage Document"
-                Active.Setpage TabDokumentFeldbefehle
-                Kontext "TabDokumentFeldbefehle"
-            Case 2
-                printlog "Tabpage References" 
-                Active.Setpage TabReferenzen
-                Kontext "TabReferenzen"
-            Case 3
-                printlog "Tabpage Functions"
-                Active.Setpage TabFunktionen
-                Kontext "TabFunktionen"
-            Case 4
-                printlog "Tabpage DocInformation" 
-                Active.Setpage TabDokumentInfoFeldbefehle
-                Kontext "TabDokumentInfoFeldbefehle"
-            Case 5
-                printlog "Tabpage Variables"
-                Active.Setpage TabVariablen
-                Kontext "TabVariablen"
+        Case 1
+            printlog "Tabpage Document"
+            Active.Setpage TabDokumentFeldbefehle
+            Kontext "TabDokumentFeldbefehle"
+        Case 2
+            printlog "Tabpage References"
+            Active.Setpage TabReferenzen
+            Kontext "TabReferenzen"
+        Case 3
+            printlog "Tabpage Functions"
+            Active.Setpage TabFunktionen
+            Kontext "TabFunktionen"
+        Case 4
+            printlog "Tabpage DocInformation"
+            Active.Setpage TabDokumentInfoFeldbefehle
+            Kontext "TabDokumentInfoFeldbefehle"
+        Case 5
+            printlog "Tabpage Variables"
+            Active.Setpage TabVariablen
+            Kontext "TabVariablen"
         end select
 
-        if i = 4 then     
+        if i = 4 then
             for j = 1 to Feldtyp.GetItemCount
                 Feldtyp.Select j
                 Feldtyp.TypeKeys "+"
             next j
-        end if        
-        
+        end if
+
         for j = 1 to Feldtyp.GetItemCount
-            Feldtyp.Select j            
+            Feldtyp.Select j
             printlog "- " & Feldtyp.GetSelText
         next j
     next i
@@ -99,13 +99,13 @@ endcase
 
 testcase wUsedInTableTest
 
-    Dim pos as integer 
+    Dim pos as integer
     Dim wTableName as string
 
     printlog " gets all strings which are used in '.\\optional\\w_table.bas'"
     printlog " add these entries into file : .\\optional\input\\table\\locale.txt"
     Call hNewDocument
-    
+
     InsertTableWriter
     Kontext "TabelleEinfuegenWriter"
     TabelleEinfuegenWriter.Ok
@@ -146,8 +146,8 @@ testcase wUsedInTableTest
     wTableName = TabellenName.Gettext
     pos = Instr(wTableName, "2")
     if pos > 0 then
-	    wTableName = Left$(wTableName, pos -1)
-	end if	
+        wTableName = Left$(wTableName, pos -1)
+    end if
     printlog "Table: " & wTableName
     TabelleEinfuegenWriter.Cancel
 
@@ -161,24 +161,24 @@ testcase wUsedInLoadSaveTests
 
     Call hNewDocument
     printlog "- All filters from open dialog:"
-	FileOpen
-	Kontext "OeffnenDlg"
-	For i = 1 to Dateityp.GetItemCount
-		Dateityp.Select i
-		printlog " - " & Dateityp.GetSelText
-	next i
+    FileOpen
+    Kontext "OeffnenDlg"
+    For i = 1 to Dateityp.GetItemCount
+        Dateityp.Select i
+        printlog " - " & Dateityp.GetSelText
+    next i
 
-	OeffnenDlg.Cancel
+    OeffnenDlg.Cancel
 
     printlog "- All filters from save dialog:"
-	FileSaveAs
-	Kontext "SpeichernDlg"
-	For i = 1 to Dateityp.GetItemCount
-		Dateityp.Select i
-		printlog " - " & Dateityp.GetSelText
-	next i
+    FileSaveAs
+    Kontext "SpeichernDlg"
+    For i = 1 to Dateityp.GetItemCount
+        Dateityp.Select i
+        printlog " - " & Dateityp.GetSelText
+    next i
 
-	SpeichernDlg.Cancel
+    SpeichernDlg.Cancel
 
     Call hCloseDocument
 endcase

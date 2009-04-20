@@ -50,13 +50,9 @@ sub main
     use "graphics\tools\id_tools_2.inc"
     use "graphics\optional\includes\global\g_arrangealign.inc"
 
+    gApplication = "IMPRESS"
     PrintLog "-------------------------" + gApplication + "-------------------"
-        if (Lcase(gApplication) = "impress") then
-            Datei = ConvertPath (gOfficePath + "user\work\" + "anord.odp")
-        else
-            Datei = ConvertPath (gOfficePath + "user\work\" + "anord.odg")
-        end if
-
+        Datei = ConvertPath (gOfficePath + "user\work\" + "anord.odp")
         Call tiDatei_Fuer_Anordnen_Erstellen ' is needed for the following test :-( ueber vars are set here
         Call tdContextSendBackward
         Call tdContextBringForward
@@ -66,14 +62,9 @@ sub main
         Call tdContextBehindObject
         Call tdContextReverse
 
-    gApplication = "Draw"
+    gApplication = "DRAW"
     PrintLog "-------------------------" + gApplication + "-------------------"
-        if (Lcase(gApplication) = "impress") then
-            Datei = ConvertPath (gOfficePath + "user\work\" + "anord.odp")
-        else
-            Datei = ConvertPath (gOfficePath + "user\work\" + "anord.odg")
-        end if
-
+        Datei = ConvertPath (gOfficePath + "user\work\" + "anord.odg")
         Call tiDatei_Fuer_Anordnen_Erstellen ' is needed for the following test :-( ueber vars are set here
         Call tdContextSendBackward
         Call tdContextBringForward
@@ -89,6 +80,6 @@ end sub
 sub LoadIncludeFiles
     use "global\system\includes\master.inc"
     use "global\system\includes\gvariabl.inc"
-    gApplication = "Impress"
+    gApplication = "IMPRESS"
     Call GetUseFiles
 end sub

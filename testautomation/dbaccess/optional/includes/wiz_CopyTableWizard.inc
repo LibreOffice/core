@@ -79,10 +79,10 @@ testcase tCopy_Table_Dialog_Definition_and_data
 
     '/// press CTRL + C to copy the table and CTRL + V to paste the table again
     printlog "press CTRL + C to copy the table and CTRL + V to paste the table again"
-    Kontext "Insight"
-        Insight.typeKeys("<MOD1 C>",true)
+    Kontext "DATABASE"
+        Database.typeKeys("<MOD1 C>",true)
         sleep(1)
-        Insight.typeKeys("<MOD1 V>",true)
+        Database.typeKeys("<MOD1 V>",true)
         sleep(1)
 
     '/// the copy table dialog appear
@@ -185,10 +185,10 @@ testcase tCopy_Table_Dialog_Definition
     
     '/// press CTRL + C to copy the table and CTRL + V to paste the table again
     printlog "press CTRL + C to copy the table and CTRL + V to paste the table again"
-    Kontext "Insight"
-        Insight.typeKeys("<MOD1 C>",true)
+    Kontext "DATABASE"
+        Database.typeKeys("<MOD1 C>",true)
         sleep(1)
-        Insight.typeKeys("<MOD1 V>",true)
+        Database.typeKeys("<MOD1 V>",true)
         sleep(1)
 
 
@@ -257,10 +257,10 @@ testcase tCopy_Table_Dialog_Attach_data
     
     '/// press CTRL + C to copy the table and CTRL + V to paste the table again
     printlog "press CTRL + C to copy the table and CTRL + V to paste the table again"
-    Kontext "Insight"
-        Insight.typeKeys("<MOD1 C>",true)
+    Kontext "DATABASE"
+        Database.typeKeys("<MOD1 C>",true)
         sleep(1)
-        Insight.typeKeys("<MOD1 V>",true)
+        Database.typeKeys("<MOD1 V>",true)
         sleep(1)
 
     '/// the copy table dialog appear
@@ -311,10 +311,10 @@ testcase tCopy_Table_Dialog_Attach_data
 
     '/// press CTRL + C to copy the table and CTRL + V to paste the table again
     printlog "press CTRL + C to copy the table and CTRL + V to paste the table again"
-    Kontext "Insight"
-        Insight.typeKeys("<MOD1 C>",true)
+    Kontext "DATABASE"
+        Database.typeKeys("<MOD1 C>",true)
         sleep(1)
-        Insight.typeKeys("<MOD1 V>",true)
+        Database.typeKeys("<MOD1 V>",true)
         sleep(1)
 
     '/// the copy table dialog appear
@@ -397,8 +397,8 @@ testcase tCopy_Table_from_Text_Document
     call fFindtable("biblio")
 
     '/// press CTRL + V to paste the table
-    Kontext "Insight"
-        Insight.typeKeys("<MOD1 V>",true)
+    Kontext "DATABASE"
+        Database.typeKeys("<MOD1 V>",true)
         sleep(1)
 
     '/// the copy table dialog appear
@@ -460,7 +460,7 @@ testcase tCopy_Table_from_Calc_Document
 
     '/// open a new calc document
     printlog "open a calc new document"
-	gApplication = "Calc"
+	gApplication = "CALC"
     call hNewDocument    
 
     '/// insert some data
@@ -503,8 +503,8 @@ testcase tCopy_Table_from_Calc_Document
     call fFindtable("biblio2")
 
     '/// press CTRL + V to paste the table again
-    Kontext "Insight"
-        Insight.typeKeys("<MOD1 V>",true)
+    Kontext "DATABASE"
+        Database.typeKeys("<MOD1 V>",true)
         sleep(1)
 
     '/// the copy table dialog appear
@@ -618,7 +618,7 @@ testcase tCopy_Table_from_Calc_Document
     printlog "close the spreadsheet document"    
     call hCloseDocument
 
-    gApplication = "Writer"
+    gApplication = "WRITER"
 
 endcase
 '--------------------------------------------------------------------
@@ -639,8 +639,8 @@ testcase tCopy_Table_from_hsql_to_dBase
 
     '/// press CTRL + C to copy the table
     printlog "press CTRL + C to copy the table"
-    Kontext "Insight"
-        Insight.typeKeys("<MOD1 C>",true)
+    Kontext "DATABASE"
+        Database.typeKeys("<MOD1 C>",true)
 
     '/// open the bibliography database
     printlog "open the bibliography database"
@@ -653,8 +653,8 @@ testcase tCopy_Table_from_hsql_to_dBase
     call fFindTable("biblio")
     
     '/// press CTRL + V to paste the table
-    Kontext "Insight"
-        Insight.typeKeys("<MOD1 V>",true)
+    Kontext "DATABASE"
+        Database.typeKeys("<MOD1 V>",true)
 
     '/// the copy table dialog appear
     printlog "the copy table dialog appear"	
@@ -744,10 +744,10 @@ testcase tCopy_Table_Paste_Special
 
     '/// press CTRL + C to copy the table and CTRL + V to paste the table again
     printlog "press CTRL + C to copy the table and CTRL + V to paste the table again"
-    Kontext "Insight"
-        Insight.typeKeys("<MOD1 C>",true)
+    Kontext "DATABASE"
+        Database.typeKeys("<MOD1 C>",true)
         sleep(1) 
-        Insight.UseMenu
+        Database.UseMenu
         hMenuSelectNr(2)
         hMenuSelectNr(5)                
         sleep(1)

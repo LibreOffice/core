@@ -202,7 +202,7 @@ function hStandardbarItemGetCount() as integer
     
     const CFN = "hStandardbarItemGetCount::"
 
-    gApplication = "Writer"
+    gApplication = "WRITER"
     printlog( CFN & "Enter" )
     
     '///+<li>Look for additional icons on the standardbar (through extensions)</li>

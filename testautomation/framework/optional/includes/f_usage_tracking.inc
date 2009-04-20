@@ -54,7 +54,7 @@ testcase tUsageTracking1
 
     printlog( "Test case 1: Presence of the Usage Tracking featureset (API)" )
     
-    if ( not gOOoImprovementIsInstalled ) then
+    if ( not gOOoImprovementIsEnabled ) then
         warnlog( "Could not access API for usage tracking program" )
     endif
     

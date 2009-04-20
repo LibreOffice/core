@@ -36,7 +36,9 @@
 '*
 '\******************************************************************
 
-sub w_009printLog Chr(13) + "--------- Menu Help (w_009_.inc) ----------"
+sub w_009_
+
+    printLog Chr(13) + "--------- Menu Help (w_009_.inc) ----------"
     gApplication = "WRITER"
 
     Call tHelpTip

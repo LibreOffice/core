@@ -55,13 +55,13 @@ sub main
 
     printLog Chr(13) + "------------    Options   - Tools Draw -    ------------"
 
-    Call tToolsOptionsDrawGeneral ("Drawing")
-    Call tToolsOptionsDrawView    ("Drawing")
-    Call tToolsOptionsDrawGrid    ("Drawing")
-    Call tToolsOptionsDrawPrint   ("Drawing")
+    Call tToolsOptionsDrawGeneral ("DRAW")
+    Call tToolsOptionsDrawView    ("DRAW")
+    Call tToolsOptionsDrawGrid    ("DRAW")
+    Call tToolsOptionsDrawPrint   ("DRAW")
 
     ' Special Tests
-    Call tToolsOptionsMeasurementUnit ("Drawing")
+    Call tToolsOptionsMeasurementUnit ("DRAW")
 
     Call hStatusOut
 end sub
@@ -71,7 +71,7 @@ end sub
 sub LoadIncludeFiles
     use "global\system\includes\master.inc"
     use "global\system\includes\gvariabl.inc"
-    gApplication = "Draw"
+    gApplication = "DRAW"
     Call GetUseFiles
 end sub
 

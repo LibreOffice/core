@@ -80,7 +80,7 @@ goto endsub
     Call hNewDocument
     ' Remember the init-font directly after installation
     ToolsOptions
-    Call hToolsOptions ("TextDocument",WestOrEast)
+    Call hToolsOptions ("WRITER",WestOrEast)
     Standard.Click
     sInitFont(1) = StandardSchrift.GetSelText
     sInitFont(2) = Ueberschrift.GetSelText
@@ -114,7 +114,7 @@ goto endsub
 
     printlog ("/// - save states ///")
     ToolsOptions
-    Call hToolsOptions ("TextDocument",WestOrEast)
+    Call hToolsOptions ("WRITER",WestOrEast)
 
     bCheckboxes(1) = AktuellesDokument.IsChecked
     iListBox(1) = StandardSchrift.GetSelIndex
@@ -223,7 +223,7 @@ goto endsub
 
     printlog ("'/// - checking states ///")
     ToolsOptions
-    Call hToolsOptions ( "TextDocument" , WestOrEast )
+    Call hToolsOptions ( "WRITER" , WestOrEast )
 
     if ( AktuellesDokument.IsChecked = TRUE ) then WarnLog "Current document only state changed"
     if ( StandardSchrift.GetSelIndex <> iTempListBox(1) ) then WarnLog "Default font state changed"
@@ -285,7 +285,7 @@ goto endsub
 
     printlog ("'/// - all UnCheck -> o ///")
     ToolsOptions
-    Call hToolsOptions ( "TextDocument" , WestOrEast )
+    Call hToolsOptions ( "WRITER" , WestOrEast )
 
     if AktuellesDokument.IsEnabled = true then
         AktuellesDokument.Check
@@ -295,7 +295,7 @@ goto endsub
         ExtrasOptionenDlg.Cancel
         sleep 2
         ToolsOptions
-        Call hToolsOptions ( "TextDocument" , WestOrEast )
+        Call hToolsOptions ( "WRITER" , WestOrEast )
         AktuellesDokument.Check
     end if
         
@@ -317,7 +317,7 @@ goto endsub
 	
     printlog ("'/// - check if all UnChecked ///")
     ToolsOptions
-    Call hToolsOptions ( "TextDocument" , WestOrEast )
+    Call hToolsOptions ( "WRITER" , WestOrEast )
 
     if ( AktuellesDokument.IsChecked <> True ) then WarnLog "Current document only is not checked anymore"
     if ( StandardSchrift.GetSelIndex <> 1 ) then WarnLog "Default font is not item 1"
@@ -355,7 +355,7 @@ goto endsub
 	
     printlog ("'/// - check if all Checked ///")
     ToolsOptions
-    Call hToolsOptions ( "TextDocument" , WestOrEast )
+    Call hToolsOptions ( "WRITER" , WestOrEast )
 
     if not AktuellesDokument.IsChecked then WarnLog "AktuellesDokument o"
     if ( StandardSchrift.GetSelIndex <> StandardSchrift.GetItemCount ) then WarnLog "Default font is not item (GetItemCount):"+StandardSchrift.GetSelIndex
@@ -391,7 +391,7 @@ goto endsub
     '/// Open a new docuent and check fonts for default
     Call hNewDocument
     ToolsOptions
-    Call hToolsOptions ( "TextDocument" , WestOrEast )
+    Call hToolsOptions ( "WRITER" , WestOrEast )
 
     if ( StandardSchrift.GetSelText <> sInitFont(1) ) then warnlog "Default not init font!"
     if ( Ueberschrift.GetSelText    <> sInitFont(2) ) then warnlog "Heading    not init font! BUGID: 89816"
@@ -410,7 +410,7 @@ goto endsub
 
     printlog ("'/// - restore states ///")
     ToolsOptions
-    Call hToolsOptions ( "TextDocument" , WestOrEast )
+    Call hToolsOptions ( "WRITER" , WestOrEast )
 
     if ( bCheckboxes(1) = TRUE ) then  AktuellesDokument.Check else AktuellesDokument.UnCheck
     StandardSchrift.SetText (sListBox(1))
@@ -474,7 +474,7 @@ testcase tToolsOptionsWriterPrint1
 
     printlog ("'/// - save states ///")
     ToolsOptions
-    Call hToolsOptions ("TextDocument","PRINT")
+    Call hToolsOptions ("WRITER","PRINT")
 
     bCheckboxes(1) = Grafiken.IsChecked
     bCheckboxes(2) = Tabellen.IsChecked
@@ -569,7 +569,7 @@ testcase tToolsOptionsWriterPrint1
 
     printlog ("'/// - checking states ///")
     ToolsOptions
-    Call hToolsOptions ( "TextDocument" , "PRINT" )
+    Call hToolsOptions ( "WRITER" , "PRINT" )
 
     if ( bCheckboxes(1) = Grafiken.IsChecked               ) then WarnLog "Grafiken state changed"
     if ( bCheckboxes(2) = Tabellen.IsChecked               ) then WarnLog "Tabellen state changed"
@@ -600,7 +600,7 @@ testcase tToolsOptionsWriterPrint1
 	' Notify is saved with document
     Call hFileOpen(gOfficepath + "user\work\printtest." & WriterFilterExtension(0) )
     ToolsOptions
-    Call hToolsOptions ( "TextDocument" , "PRINT" )
+    Call hToolsOptions ( "WRITER" , "PRINT" )
 
     if ( bTempRadioBut(1) <> Keine.IsChecked       ) then WarnLog "Keine state changed (Not saved with document)"
     if ( bTempRadioBut(2) <> NurNotizen.IsChecked  ) then WarnLog "NurNotizen state changed (Not saved with document)"
@@ -639,7 +639,7 @@ testcase tToolsOptionsWriterPrint1
 	
     printlog ("'/// - check if all UnChecked ///")
     ToolsOptions
-    Call hToolsOptions ( "TextDocument" , "PRINT" )
+    Call hToolsOptions ( "WRITER" , "PRINT" )
 
     if Grafiken.IsChecked       then WarnLog "Grafiken x"
     if Tabellen.IsChecked       then WarnLog "Tabellen x"
@@ -695,7 +695,7 @@ testcase tToolsOptionsWriterPrint1
 	
     printlog ("'/// - check if all Checked ///")
     ToolsOptions
-    Call hToolsOptions ( "TextDocument" , "PRINT" )
+    Call hToolsOptions ( "WRITER" , "PRINT" )
 
     if not Grafiken.IsChecked                then WarnLog "Grafiken o"
     if not Tabellen.IsChecked                then WarnLog "Tabellen o"
@@ -725,7 +725,7 @@ testcase tToolsOptionsWriterPrint1
 
     printlog ("'/// - restore states ///")
     ToolsOptions
-    Call hToolsOptions ( "TextDocument" , "PRINT" )
+    Call hToolsOptions ( "WRITER" , "PRINT" )
 
     if ( bCheckboxes(1) =  TRUE ) then  Grafiken.Check                else Grafiken.UnCheck
     if ( bCheckboxes(2) =  TRUE ) then  Tabellen.Check                else Tabellen.UnCheck
@@ -787,7 +787,7 @@ testcase tToolsOptionsWriterTable
 
     printlog ("'/// - save states ///")
     ToolsOptions
-    Call hToolsOptions ("TextDocument","Table")
+    Call hToolsOptions ("WRITER","Table")
 
     sMetricField(1) = VerschiebenZeile.GetText
     sMetricField(2) = VerschiebenSpalte.GetText
@@ -829,7 +829,7 @@ testcase tToolsOptionsWriterTable
 
     printlog ("'/// - checking states ///")
     ToolsOptions
-    Call hToolsOptions ( "TextDocument" , "Table" )
+    Call hToolsOptions ( "WRITER" , "Table" )
 
     if ( VerschiebenZeile.GetText  <> sTempMetricField(1) ) then WarnLog "VerschiebenZeile state changed BugID: 82990 "
     if ( VerschiebenSpalte.GetText <> sTempMetricField(2) ) then WarnLog "VerschiebenSpalte state changed"
@@ -846,7 +846,7 @@ testcase tToolsOptionsWriterTable
 	
     printlog ("'/// - all UnCheck -> o ///")
     ToolsOptions
-    Call hToolsOptions ( "TextDocument" , "Table" )
+    Call hToolsOptions ( "WRITER" , "Table" )
 
     VerschiebenZeile.ToMin
     VerschiebenSpalte.ToMin
@@ -883,7 +883,7 @@ testcase tToolsOptionsWriterTable
 	
     printlog ("'/// - check if all UnChecked ///")
     ToolsOptions
-    Call hToolsOptions ( "TextDocument" , "Table" )
+    Call hToolsOptions ( "WRITER" , "Table" )
 
     if ( VerschiebenZeile.GetText  <> sTempMetricField(1) ) then WarnLog "VerschiebenZeile is not min."
     if ( VerschiebenSpalte.GetText <> sTempMetricField(2) ) then WarnLog "VerschiebenSpalte is not min."
@@ -929,7 +929,7 @@ testcase tToolsOptionsWriterTable
 	
     printlog ("'/// - check if all Checked ///")
     ToolsOptions
-    Call hToolsOptions ( "TextDocument" , "Table" )
+    Call hToolsOptions ( "WRITER" , "Table" )
 
     if ( VerschiebenZeile.GetText  <> sTempMetricField(1) ) then WarnLog "VerschiebenZeile is not max."
     if ( VerschiebenSpalte.GetText <> sTempMetricField(2) ) then WarnLog "VerschiebenSpalte is not max."
@@ -965,7 +965,7 @@ testcase tToolsOptionsWriterTable1
     Call hNewDocument
     printlog ("'///- Tools/Options/HTML: Table ///")
     ToolsOptions
-    Call hToolsOptions ("HTMLDOCUMENT","Table")
+    Call hToolsOptions ("HTML","Table")
     '/// Check fixed and choose 'OK' ///
     VerhaltenFix.Check
 
@@ -975,7 +975,7 @@ testcase tToolsOptionsWriterTable1
 
     '/// ///
     ToolsOptions
-    Call hToolsOptions ("HTMLDOCUMENT","Table")
+    Call hToolsOptions ("HTML","Table")
     '/// Reset radiobutton to 'Variable' in Options ///
     Variabel.Check
 

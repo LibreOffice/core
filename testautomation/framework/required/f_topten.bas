@@ -67,7 +67,7 @@ sub LoadIncludeFiles
     
     use "global\tools\includes\optional\t_docfuncs.inc"
    
-    gApplication = "DESKTOP"
+    gApplication = "BACKGROUND"
     Call GetUseFiles
     
 end sub

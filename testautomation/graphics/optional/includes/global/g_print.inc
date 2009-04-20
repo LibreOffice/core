@@ -64,7 +64,7 @@ testcase tFilePrint
    ' Not yet active since this feature is not build into the master: i85355
    '/// Checking Options for impress, PrintContentBox
 '   printlog "Checking options for impress..."
-'    if (lCase(gApplication) = "impress") then
+'    if (gApplication = "IMPRESS") then
 '        if PrintContent.GetSelIndex <> 1 then
 '            warnlog "Not first entry selected!"
 '       else

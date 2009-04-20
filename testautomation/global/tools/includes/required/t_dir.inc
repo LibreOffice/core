@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -35,79 +35,62 @@
 '*
 '* short description : functions for directories and files; execution happens in the office
 '*
-'******************************************************************
-' #1 hFileExists
-' #1 hDirectoryExists
-' #1 hKillFile
-' #1 DirNameList
-' #1 GetFileNameList
-' #1 GetFileList
-' #1 GetDirList
-' #1 GetAllDirList
-' #1 GetAllFileList
-' #1 KillFileList
-' #1 KillDirList
-' #1 PfadExtract
-' #1 hPfadname
-' #1 DateiExtract
-' #1 DateiOhneExt
-' #1 GetExtention
 '\************************************************************************
 
 function hFileExists ( Dat as String ) as Boolean
-'/// Checks if a file exists
-'/// <u>Input</u>: Filename with complete path
-'/// <u>Return</u>: TRUE or FALSE if the file exists.
+    '/// Checks if a file exists
+    '/// <u>Input</u>: Filename with complete path
+    '/// <u>Return</u>: TRUE or FALSE if the file exists.
     if app.Dir ( Dat ) = "" then
-       hFileExists = FALSE
+        hFileExists = FALSE
     else
-       hFileExists = TRUE
+        hFileExists = TRUE
     end if
 end function
 '
 '-------------------------------------------------------------------------------
 '
 function hDirectoryExists ( Verz as String ) as Boolean
-'/// Checks if a directory exists
-'/// <u>Input</u>: Directory with complete path
-'/// <u>Return</u>: TRUE or FALSE if the directory exists.
-   ' at the end of the string has to be teh path seperator, else the dir-command doesn't work
-   if right ( Verz, 1 ) <> gPathSigne then Verz = Verz + gPathsigne
-   if app.Dir ( Verz, 16 ) = "" then
-      hDirectoryExists = FALSE
-   else
-      hDirectoryExists = TRUE
-   end if
+    '/// Checks if a directory exists
+    '/// <u>Input</u>: Directory with complete path
+    '/// <u>Return</u>: TRUE or FALSE if the directory exists.
+    ' at the end of the string has to be teh path seperator, else the dir-command doesn't work
+    if right ( Verz, 1 ) <> gPathSigne then Verz = Verz + gPathsigne
+    if app.Dir ( Verz, 16 ) = "" then
+        hDirectoryExists = FALSE
+    else
+        hDirectoryExists = TRUE
+    end if
 end function
 '
 '-------------------------------------------------------------------------------
 '
 function hKillFile ( Dat as String ) as Boolean
-'/// Delete a file
-'/// <u>Input</u>: File with complete path
-'/// <u>Return</u>: TRUE or FALSE success on deleting?
+    '/// Delete a file
+    '/// <u>Input</u>: File with complete path
+    '/// <u>Return</u>: TRUE or FALSE success on deleting?
     if app.Dir ( Dat ) <> "" then
-       try
-          app.kill ( Dat )
-       catch
-       endcatch
-       if app.Dir ( Dat ) <> "" then
-          hKillFile = FALSE
-       else
-          hKillFile = TRUE
-       end if
+        try
+            app.kill ( Dat )
+        catch
+        endcatch
+        if app.Dir ( Dat ) <> "" then
+            hKillFile = FALSE
+        else
+            hKillFile = TRUE
+        end if
     else
-       hKillFile = TRUE
+        hKillFile = TRUE
     end if
 end function
 '
 '-------------------------------------------------------------------------------
 '
 function DirNameList (ByVal sPfad$ , lsDirName() as String ) as Integer
-'/// seperate a path in its parts
-'/// <u>Input</u>: Path to seperate; Empty list, because it get's reset in this function!;
-'/// <u>Return</u>: Number on entries in the list; list with entries
-  Dim i% : Dim Pos%
+    '/// seperate a path in its parts
+    '/// <u>Input</u>: Path to seperate; Empty list, because it get's reset in this function!;
+    '/// <u>Return</u>: Number on entries in the list; list with entries
+    Dim i% : Dim Pos%
     lsDirName(0) = 0
     do
         Pos% = InStr(1, sPfad$, gPathsigne )  ' got a part of teh path
@@ -123,21 +106,21 @@ end function
 '-------------------------------------------------------------------------------
 '
 function GetFileNameList ( sPath$, sMatch$ ,lsFile() as String  ) as integer
-'/// Get files from a directory that match the pattern and append them to a list (without path)
-'/// <u>Input</u>: Directory with complete path; Search Pattern, e.g *.*; List
-'/// <u>Return</u>: count of appended entries; updated list
-  Dim Count% : Dim Datname as String
-  Dim i  as Integer
+    '/// Get files from a directory that match the pattern and append them to a list (without path)
+    '/// <u>Input</u>: Directory with complete path; Search Pattern, e.g *.*; List
+    '/// <u>Return</u>: count of appended entries; updated list
+    Dim Count% : Dim Datname as String
+    Dim i  as Integer
     Count% = 0
-   ' at the end of the string has to be teh path seperator, else the dir-command doesn't work
+    ' at the end of the string has to be teh path seperator, else the dir-command doesn't work
     if right ( sPath$, 1 ) <> gPathSigne then sPath$ = sPath$ + gPathSigne
     Datname = app.Dir( sPath$ + sMatch$ , 0) ' 0: normal files
     for i=1 to 5
-       if Right ( Datname, 1 ) = "." then
-          Datname = app.Dir
-       else
-          i=10
-       end if
+        if Right ( Datname, 1 ) = "." then
+            Datname = app.Dir
+        else
+            i=10
+        end if
     next i
 
     do until Len(Datname) = 0
@@ -153,39 +136,39 @@ end function
 '-------------------------------------------------------------------------------
 '
 function GetFileList ( sPath$, sMatch$ ,lsFile() as String  ) as integer
-'/// Get files from a directory that match the pattern and append them to a list (<b>with</b> path)
-'/// <u>Input</u>: Directory with complete path; Search Pattern, e.g *.*; List
-'/// <u>Return</u>: count of appended entries; updated list
-  Dim Count% : Dim Datname as String
-  Dim i as Integer
+    '/// Get files from a directory that match the pattern and append them to a list (<b>with</b> path)
+    '/// <u>Input</u>: Directory with complete path; Search Pattern, e.g *.*; List
+    '/// <u>Return</u>: count of appended entries; updated list
+    Dim Count% : Dim Datname as String
+    Dim i as Integer
     Count% = 0
-   ' at the end of the string has to be teh path seperator, else the dir-command doesn't work
+    ' at the end of the string has to be teh path seperator, else the dir-command doesn't work
     if right ( sPath$, 1 ) <> gPathSigne then sPath$ = sPath$ + gPathSigne
     Datname = app.Dir( sPath$ + sMatch$ , 0)
     for i=1 to 5
-       if Right ( Datname, 1 ) = "." then
-          Datname = app.Dir
-       else
-          i=10
-       end if
+        if Right ( Datname, 1 ) = "." then
+            Datname = app.Dir
+        else
+            i=10
+        end if
     next i
 
     do until Len(Datname) = 0
         lsFile(0) = Val(lsFile(0)) + 1
         lsFile( lsFile(0) ) =sPath$ + Datname
         Count% = Count% + 1
-        
+
         ' if the number of files in the directory exceeds the arraysize do not
         ' crash but try to handle the situation gracefully. Of course this
         ' makes the testresults worthless...
         if ( Count% = ubound( lsFile() ) ) then
-           warnlog ( "List of files exceeds bounds of array." )
-           printlog( "Processing of this directory will be discontinued." )
-           printlog( "Last processed file was: " & Datname )
-           printlog( "Arraysize is: " & ubound( lsFile() ) )
-           Datname = ""
+            warnlog ( "List of files exceeds bounds of array." )
+            printlog( "Processing of this directory will be discontinued." )
+            printlog( "Last processed file was: " & Datname )
+            printlog( "Arraysize is: " & ubound( lsFile() ) )
+            Datname = ""
         else
-           Datname = app.Dir
+            Datname = app.Dir
         endif
     loop
     GetFileList = Count%
@@ -194,35 +177,35 @@ end function
 '-------------------------------------------------------------------------------
 '
 function GetDirList ( sPath$, sMatch$ ,lsFile() as String ) as integer
-'/// Get Subdirectories from a directory and append them to a list (<b>with</b> path)
-'/// <u>Input</u>: Directory with complete path; Search Pattern, e.g *; List
-'/// <u>Return</u>: count of appended entries; updated list
-  Dim Count%
-  Dim i as Integer
-  Dim Verzeichnis as String
-   ' at the end of the string has to be teh path seperator, else the dir-command doesn't work
-   if right ( sPath$, 1 ) <> gPathSigne then sPath$ = sPath$ + gPathSigne
-   Verzeichnis = app.Dir( sPath$ + sMatch$ , 16)
-   Count% = 0
-   
-   do until Len(Verzeichnis) = 0
-      if Verzeichnis <> "." AND Verzeichnis <> ".." AND Lcase(Verzeichnis) <> ".svn" then
-         lsFile(0) = Val(lsFile(0)) + 1
-         lsFile( lsFile(0) ) = sPath$  + Verzeichnis + gPathSigne
-         Count% = Count% + 1
-      end if
-      Verzeichnis = app.Dir
-   loop
-   GetDirList = Count%
+    '/// Get Subdirectories from a directory and append them to a list (<b>with</b> path)
+    '/// <u>Input</u>: Directory with complete path; Search Pattern, e.g *; List
+    '/// <u>Return</u>: count of appended entries; updated list
+    Dim Count%
+    Dim i as Integer
+    Dim Verzeichnis as String
+    ' at the end of the string has to be teh path seperator, else the dir-command doesn't work
+    if right ( sPath$, 1 ) <> gPathSigne then sPath$ = sPath$ + gPathSigne
+    Verzeichnis = app.Dir( sPath$ + sMatch$ , 16)
+    Count% = 0
+
+    do until Len(Verzeichnis) = 0
+        if Verzeichnis <> "." AND Verzeichnis <> ".." AND Lcase(Verzeichnis) <> ".svn" then
+            lsFile(0) = Val(lsFile(0)) + 1
+            lsFile( lsFile(0) ) = sPath$  + Verzeichnis + gPathSigne
+            Count% = Count% + 1
+        end if
+        Verzeichnis = app.Dir
+    loop
+    GetDirList = Count%
 end function
 '
 '-------------------------------------------------------------------------------
 '
 function GetAllDirList ( byVal sPath$, byVal sMatch$ ,lsFile() as String ) as integer
-'/// Get all directorys recursiv that match the pattern and append them to a list
-'/// <u>Input</u>: Directory with complete path; Search Pattern, e.g *; Empty list, because it get's reset in this function!;
-'/// <u>Return</u>: Count of appended entries (1. entry is the whole path); updated list
-  Dim Count% : Dim DirCount%
+    '/// Get all directorys recursiv that match the pattern and append them to a list
+    '/// <u>Input</u>: Directory with complete path; Search Pattern, e.g *; Empty list, because it get's reset in this function!;
+    '/// <u>Return</u>: Count of appended entries (1. entry is the whole path); updated list
+    Dim Count% : Dim DirCount%
 
     DirCount% = 1   ' dummy
     Count% = 1
@@ -240,10 +223,10 @@ end function
 '-------------------------------------------------------------------------------
 '
 function GetAllFileList ( byVal sPath$, byVal sMatch$ ,lsFile() as String ) as integer
-'/// Get all Files recursiv (including in subdirectories) that match the pattern and append them to a list
-'/// <u>Input</u>: Directory with complete path; Search Pattern, e.g *.*; Empty list, because it get's reset in this function!;
-'/// <u>Return</u>: Count of appended entries (1. entry is the whole path); updated list
-  Dim DirCount% : Dim FileCount% : Dim Count%
+    '/// Get all Files recursiv (including in subdirectories) that match the pattern and append them to a list
+    '/// <u>Input</u>: Directory with complete path; Search Pattern, e.g *.*; Empty list, because it get's reset in this function!;
+    '/// <u>Return</u>: Count of appended entries (1. entry is the whole path); updated list
+    Dim DirCount% : Dim FileCount% : Dim Count%
     Dim lsDir(1000) as String
 
     DirCount% = GetAllDirList( sPath$, "*", lsDir() ) ' erstmal _alle_ Verzeichnisse
@@ -261,63 +244,63 @@ end function
 '-------------------------------------------------------------------------------
 '
 function KillFileList ( lsList() as String ) as Boolean
-'/// Delete all files in the list
-'/// <u>Input</u>: List with files
-'/// <u>Return</u>: TRUE or FALSE if files are killed; modified list with not deleted files.
-  Dim i as Integer
-  Dim FehlerListe ( 1000 ) as String
+    '/// Delete all files in the list
+    '/// <u>Input</u>: List with files
+    '/// <u>Return</u>: TRUE or FALSE if files are killed; modified list with not deleted files.
+    Dim i as Integer
+    Dim FehlerListe ( 1000 ) as String
 
-   FehlerListe ( 0 ) = 0
-   for i=1 to ListCount ( lsList() )
-      try
-          app.kill ( lsList(i) )
-      catch
-          ListAppend ( FehlerListe (), lsList(i) )
-      endcatch
-   next i
+    FehlerListe ( 0 ) = 0
+    for i=1 to ListCount ( lsList() )
+        try
+            app.kill ( lsList(i) )
+        catch
+            ListAppend ( FehlerListe (), lsList(i) )
+        endcatch
+    next i
 
-   lsList(0) = 0               ' delete old list
-   KillFileList = TRUE
-   for i=1 to ListCount ( FehlerListe () )
-      KillFileList = FALSE
-      ListAppend (  lsList(), FehlerListe (i) )
-   next i
+    lsList(0) = 0               ' delete old list
+    KillFileList = TRUE
+    for i=1 to ListCount ( FehlerListe () )
+        KillFileList = FALSE
+        ListAppend (  lsList(), FehlerListe (i) )
+    next i
 end function
 '
 '-------------------------------------------------------------------------------
 '
 function KillDirList ( lsList() as String ) as Boolean
-'/// Delete all directories in the list
-'/// <u>Input</u>: List with directories
-'/// <u>Return</u>: TRUE or FALSE if directories are killed; modified list with not deleted directories.
-  Dim i as Integer
-  Dim FehlerListe ( 1000 ) as String
+    '/// Delete all directories in the list
+    '/// <u>Input</u>: List with directories
+    '/// <u>Return</u>: TRUE or FALSE if directories are killed; modified list with not deleted directories.
+    Dim i as Integer
+    Dim FehlerListe ( 1000 ) as String
 
-   FehlerListe ( 0 ) = 0
-   for i=1 to ListCount ( lsList() )
-      try
-          app.rmDir ( lsList(i) )
-      catch
-          ListAppend ( FehlerListe (), lsList(i) )
-      endcatch
-   next i
+    FehlerListe ( 0 ) = 0
+    for i=1 to ListCount ( lsList() )
+        try
+            app.rmDir ( lsList(i) )
+        catch
+            ListAppend ( FehlerListe (), lsList(i) )
+        endcatch
+    next i
 
-   lsList(0) = 0               ' delete old list
-   KillDirList = TRUE
-   for i=1 to ListCount ( FehlerListe () )
-      KillDirList = FALSE
-      ListAppend (  lsList(), FehlerListe (i) )
-   next i
+    lsList(0) = 0               ' delete old list
+    KillDirList = TRUE
+    for i=1 to ListCount ( FehlerListe () )
+        KillDirList = FALSE
+        ListAppend (  lsList(), FehlerListe (i) )
+    next i
 end function
 '
 '-------------------------------------------------------------------------------
 '
 function PfadExtract ( sFiledat$ ) as string
-'/// Get the path from a file
-'/// <u>Input</u>: file with path
-'/// <u>Return</u>: path without the filename
-   Dim s$ : Dim i% : Dim k%
-   dim ls(25) as String
+    '/// Get the path from a file
+    '/// <u>Input</u>: file with path
+    '/// <u>Return</u>: path without the filename
+    Dim s$ : Dim i% : Dim k%
+    dim ls(25) as String
 
     s$ = ""
     i% = DirNameList( sFileDat$, ls() )
@@ -332,65 +315,65 @@ end function
 '-------------------------------------------------------------------------------
 '
 function hPfadname (Dateipfad$) as string
-'/// Get the path from a file
-'/// <u>Input</u>: file with path
-'/// <u>Return</u>: path without the filename
-   dim wh as integer
+    '/// Get the path from a file
+    '/// <u>Input</u>: file with path
+    '/// <u>Return</u>: path without the filename
+    dim wh as integer
 
-   for wh = len(Dateipfad$) to 1 step -1
-      if mid(Dateipfad$,wh,1) = gPathSigne then
-         hpfadname = left(Dateipfad$,wh)
-         exit for
-      else
-         hpfadname = Dateipfad$
-      end if
-   next wh
+    for wh = len(Dateipfad$) to 1 step -1
+        if mid(Dateipfad$,wh,1) = gPathSigne then
+            hpfadname = left(Dateipfad$,wh)
+            exit for
+        else
+            hpfadname = Dateipfad$
+        end if
+    next wh
 end function
 '
 '-------------------------------------------------------------------------------
 '
 function DateiExtract ( sFileDat$ )
-'/// Get the filename from a path
-'/// <u>Input</u>: path with file
-'/// <u>Return</u>: filename without the path
-   Dim i%
-   dim ls(20) as String
+    '/// Get the filename from a path
+    '/// <u>Input</u>: path with file
+    '/// <u>Return</u>: filename without the path
+    Dim i%
+    dim ls(20) as String
 
-   i% = DirNameList( sFileDat$, ls() )
-   DateiExtract = ls(i%)
+    i% = DirNameList( sFileDat$, ls() )
+    DateiExtract = ls(i%)
 end function
 '
 '-------------------------------------------------------------------------------
 '
 function DateiOhneExt (Datei$) as String
-'/// Get the filename without the extension
-'/// <u>Input</u>: filename
-'/// <u>Return</u>: filename without the extension
-   Dim wh as Integer
-   Dim dummy as String
+    '/// Get the filename without the extension
+    '/// <u>Input</u>: filename
+    '/// <u>Return</u>: filename without the extension
+    Dim wh as Integer
+    Dim dummy as String
 
-   dummy = Datei$
-   for wh = 1 to len(dummy)
-      if mid(dummy,wh,1) = "." then
-         dummy = left(dummy,wh - 1)
-         wh = len(dummy) + 1
-      else
-         dummy = dummy
-      end if
-   next wh
-   DateiOhneExt = dummy
+    dummy = Datei$
+    for wh = 1 to len(dummy)
+        if mid(dummy,wh,1) = "." then
+            dummy = left(dummy,wh - 1)
+            wh = len(dummy) + 1
+        else
+            dummy = dummy
+        end if
+    next wh
+    DateiOhneExt = dummy
 end function
 '
 '-------------------------------------------------------------------------------
 '
 function GetExtention ( Datei as String ) as string
-'/// Get the extension from a file
-'/// <u>Input</u>: filename
-'/// <u>Return</u>: extension of the file
-  Dim i%
-   for i% = 1 to len ( Datei )
-      if mid(Datei,i%,1) = "." then Datei = right( Datei, len(Datei)-i%)
-   next i%
-   GetExtention = Datei
+    '/// Get the extension from a file
+    '/// <u>Input</u>: filename
+    '/// <u>Return</u>: extension of the file
+    Dim i%
+    for i% = 1 to len ( Datei )
+        if mid(Datei,i%,1) = "." then Datei = right( Datei, len(Datei)-i%)
+    next i%
+    GetExtention = Datei
 end function
 

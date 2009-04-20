@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -35,22 +35,6 @@
 '*
 '*  short description : Retrieve and set filternames and suffixes
 '*
-'*******************************************************************************
-'**
-' #1 hGetSuffix               ' get the suffix for a specified build-id
-' #1 hGetFilter               ' get the filtername for a specified build-id
-' #0 hSelectUIFilter          ' Select a filter in the UI by API filter name
-' #0 hFindFilterPosition      ' Find the index of the filter in the file open dialog
-' #1 CreateFilterNamesList    ' write the default filternames to the reference list
-' #1 hGetValueForKeyAsString  ' find key in list, return value as string
-' #1 hGetValueForPairAsString ' find value in list, return key and value as string
-' #1 hGetKeyForPairAsString   ' get key from a key=value string as string
-' #1 hGetDataFileSection      ' read a section from a datafile into a list
-' #1 hGetFileData             ' return value for key from file directly (ignores sections)
-' #1 hGetStartOfSection       ' identify beginning of new section in datafile
-' #1 hGetEndOfSection         ' identify end of section in datafile
-' #1 hGetSection              ' retrieve list of strings from section
-'**
 '\******************************************************************************
 
 private const LENGTH_OF_FILTERFILE = 100
@@ -60,7 +44,7 @@ function hGetSuffix( optional cBuildId as string ) as string
 
     ' This function retrieves the suffix depending on the build id (e.g. 680)
     ' for a known gApplication from the program configuration.
-    
+
     ' Currently known Build-IDs are:
     ' No parameter = current
     ' "" (empty string) = current
@@ -74,14 +58,14 @@ function hGetSuffix( optional cBuildId as string ) as string
     dim sFilterArray( 100 ) as string
     dim sFilterConfigName as string
     dim sSuffix( 10 ) as string
-    
+
     if ( IsMissing( cBuildId ) ) then cBuildId = "current"
     if ( cBuildId = "" ) then cBuildId = "current"
 
     sMatchingFile = gTesttoolPath & "global\input\filters\"
     sMatchingFile = sMatchingFile & "build_to_suffix.txt"
     sMatchingFile = convertpath( sMatchingFile )
-    
+
     'printlog( "DEBUG: SUFFIX: Build-ID: " & cBuildId )
     hGetDataFileSection( sMatchingFile, sFilterArray(), cBuildId, "", "" )
     sFilterConfigName = hGetValueForKeyAsString( sFilterArray(), gApplication )
@@ -108,19 +92,19 @@ function hGetFilter( optional cBuildId as string ) as string
     ' 569 = StarOffice 5 (Binary format)
 
     dim clTemp( LENGTH_OF_FILTERFILE ) as string ' cFilterFile is stored here
-    
+
     dim sMatchingFile as string
     dim sFilterArray( 100 ) as string
     dim sFilterConfigName as string
     dim sFilter as string
-    
+
     if ( IsMissing( cBuildId ) ) then cBuildId = "current"
     if ( cBuildId = "" ) then cBuildId = "current"
-    
+
     sMatchingFile = gTesttoolPath & "global\input\filters\"
     sMatchingFile = sMatchingFile & "build_to_filter.txt"
     sMatchingFile = convertpath( sMatchingFile )
-    
+
     'printlog( "DEBUG: FILTER: Filter-ID: " & cBuildId )
     hGetDataFileSection( sMatchingFile, sFilterArray(), cBuildId, "", "" )
     sFilterConfigName = hGetValueForKeyAsString( sFilterArray(), gApplication )
@@ -128,7 +112,7 @@ function hGetFilter( optional cBuildId as string ) as string
     sFilter = hGetUIFilterName( sFilterConfigName )
     'printlog( "DEBUG: FILTER: " & sFilter )
     hGetFilter() = sFilter
-    
+
 end function
 
 '*******************************************************************************
@@ -136,8 +120,8 @@ end function
 function hSelectUIfilter( cAPIFilter as string ) as boolean
 
     ' Wrapper for hFindFilterPosition() which also selects the filter
-    dim irc as integer    
-    
+    dim irc as integer
+
     irc = hFindFilterPosition( cAPIFilter )
     if ( irc > 0 ) then
         DateiTyp.select( irc )
@@ -145,7 +129,7 @@ function hSelectUIfilter( cAPIFilter as string ) as boolean
     else
         hSelectUIfilter() = false
     endif
-    
+
 end function
 
 '*******************************************************************************
@@ -157,40 +141,40 @@ function hFindFilterPosition( cFilter as string ) as integer
     ' The file types have a suffix appended like " (.odt)" which is not present
     ' in the API's filter name so it is not possible to select the file
     ' type directly and we do not have an exact match either.
-    ' To ensure that we not accidentially select the template a bracket is 
+    ' To ensure that we not accidentially select the template a bracket is
     ' appended to the string.
 
     dim iCurrentFilter as integer
     dim cCurrentFilter as string
     dim cUniqueFilter as string
-        cUniqueFilter = cFilter & " ("
-        
+    cUniqueFilter = cFilter & " ("
+
     const CFN = "global::tools::inc::hFindFilterPosition::"
-    
+
     for iCurrentFilter = 1 to DateiTyp.getItemCount()
-    
+
         cCurrentFilter = DateiTyp.getItemText( iCurrentFilter )
-        
+
         if ( cFilter = cCurrentFilter ) then
             'printlog( CFN & "Exact match - this is a UI filter name, not API" )
             'printlog( CFN & "The filter is at pos. " & iCurrentFilter )
             hFindFilterPosition() = iCurrentFilter
             exit function
         endif
-        
+
         if ( instr( cCurrentFilter, cUniqueFilter ) > 0 ) then
             'printlog( CFN & "Filter found at pos. " & iCurrentFilter )
             hFindFilterPosition() = iCurrentFilter
             exit function
         endif
-        
+
     next iCurrentFilter
-    
+
     warnlog( CFN & "Filter not found: " & cFilter )
     warnlog( CFN & "Refer to global::input:.filters::api_filters.txt for a complete list of available filters" )
-    
+
     hFindFilterPosition() = 0
-    
+
 end function
 
 '*******************************************************************************
@@ -201,19 +185,19 @@ function hGetUIFiltername( vFiltername as string ) as string
     '///+ <b>INPUT</b>: 'internal', language independent filter name from FilterFactory.
     '///+ <u>Examples</u>:<ul><li>hGetUIFiltername(&quot;StarOffice XML (Draw)&quot;) - Draw OOo 1.x/SO6.0/SO7 UI Filtername</li>
     '///+ <li>sUIFiltername = hGetUIFiltername(&quot;StarOffice XML (Impress)&quot;) - Impress OOo 1.x/SO6.0/SO7 UI Filtername</li></ul>
-    '/// The 'internal' name can be found in the *.xcu in 
+    '/// The 'internal' name can be found in the *.xcu in
     '///+ ..../share/registry/res/en-US/org/openoffice/TypeDetection/Filter.xcu.
     '/// See also: hGetFilternameExtension
-    
-    Dim iCurrentFilter as integer 
+
+    Dim iCurrentFilter as integer
     Dim oOpenUNOService as object
     Dim oFilterName as object
     Dim oUno as object
-    
+
     const CFN = "global::tools:includes:required::t_filters.inc::hGetUIFiltername(): "
 
     oUno = hGetUNOService( TRUE )
-    
+
     oOpenUNOService = oUno.createInstance( "com.sun.star.document.FilterFactory" )
     try
         oFilterName = oOpenUNOService.getByName( vFiltername )
@@ -221,23 +205,23 @@ function hGetUIFiltername( vFiltername as string ) as string
         for iCurrentFilter = 0 to ubound( oFilterName )
             if ( oFilterName( iCurrentFilter ).Name = "UIName" ) then
                 hGetUIFiltername = oFilterName( iCurrentFilter ).Value
-            end if       
+            end if
         next iCurrentFilter
     catch
         warnlog ( CFN & vFiltername & "'): Filtername is not available." )
         hGetUIFiltername() = ""
     endcatch
-      
+
 end function
 
 '*******************************************************************************
 
 function hGetFilternameExtension ( vFilterName as string)
 
-    '/// Returns the in the UI used filter name extension(s) <u>as an <b>array</b></u>. 
+    '/// Returns the in the UI used filter name extension(s) <u>as an <b>array</b></u>.
     '///+ <b>Important</b>: Also returns it <u>as an array</u> if there comes a string from the UNO API call.
     '/// <u>Input</u>: 'internal', language independent name
-    '/// The 'internal' name can be found in the *.xcu in 
+    '/// The 'internal' name can be found in the *.xcu in
     '///+ ../share/registry/modules/org/openoffice/TypeDetection/Types/fcfg_[Application_name]_types.xcu file(s).
     '/// List of some 'internal' filter names for OOo 2.0/SO8:
     '///+<TABLE BORDER=1><TR><TH>Filter</TH><TH><i>internal</i> name</TH><TH>Note</TH></TR>
@@ -253,55 +237,55 @@ function hGetFilternameExtension ( vFilterName as string)
     '///+<TR><TD>StarCalc 5.0</TD><TD>calc_StarCalc_50</TD><TD>-</TD></TR>
     '///+</TABLE><br>
     ' (rewritten, compatible routine; July 2004)
-    
-    Dim iCurrentExtension as integer 
+
+    Dim iCurrentExtension as integer
     Dim oOpenUNOService as object
     Dim oFilterNameExtension as object
-    Dim oUno as object    
+    Dim oUno as object
     dim aExtensionsSize as integer
     Dim aExtensions() as string
-    
+
     const CFN = "global::tools:includes:required::t_filters.inc::hGetFilternameExtension(): "
- 
+
     'Initializize UNO comminication
     oUno = hGetUNOService( TRUE )
-    
+
     'Using the TypeDetection service
     oOpenUNOService = oUno.createInstance("com.sun.star.document.TypeDetection")
-    
-    'Getting the Extension by given (internal; language- and product 
+
+    'Getting the Extension by given (internal; language- and product
     'independent) filter name
     oFilterNameExtension = oOpenUNOService.getByName(vFiltername)
 
     'using ubound to count the nodes
     for iCurrentExtension = 0 to ubound( oFilterNameExtension )
-      
+
         'if the node name is 'Extensions'...
         if ( oFilterNameExtension( iCurrentExtension ).Name = "Extensions" ) then
-        
+
             '...if it's an array...
             if ( IsArray( oFilterNameExtension( iCurrentExtension ).Value) ) then
-            
-                'set the size of the aExtensions() array 
+
+                'set the size of the aExtensions() array
                 aExtensionsSize = 10
-                
-                're-dimension the array with the integer a                
+
+                're-dimension the array with the integer a
                 Redim aExtensions( aExtensionsSize ) as string
-                
+
                 'return the array into an array
-                aExtensions() = oFilterNameExtension( iCurrentExtension ).Value()                
-            else            
+                aExtensions() = oFilterNameExtension( iCurrentExtension ).Value()
+            else
                 '...otherwise 'build' an array with only
                 'one entry in (0)
-                Redim aExtensions( 0 ) as string                
-                aExtensions( 0 ) = oFilterNameExtension( iCurrentExtension ).Value                
+                Redim aExtensions( 0 ) as string
+                aExtensions( 0 ) = oFilterNameExtension( iCurrentExtension ).Value
             endif
         endif
     next iCurrentExtension
-      
+
     'put the results into the return value of this function into an array.
     hGetFilternameExtension = aExtensions()
-    
+
 end function
 
 '*******************************************************************************
@@ -336,7 +320,7 @@ function hGetValueForKeyAsString( lsList() as string, sKey as string ) as string
     next iItem
 
 end function
-            
+
 '*******************************************************************************
 
 function hGetValueForPairAsString( cLine as string ) as string
@@ -398,7 +382,7 @@ function hGetDataFileSection( cFile as string, lsList() as string, cSection as s
     ' verify that the sourcefile exists, otherwise warn and abort
     if ( dir( cFile ) = "" ) then
         warnlog( CFN & "File not found: " & cFile )
-        hGetDataFileSection() = 0 
+        hGetDataFileSection() = 0
         exit function
     end if
 
@@ -468,7 +452,7 @@ function hGetStartOfSection( lsList() as string , _section as string ) as intege
     iListSize = listcount( lsList() )
 
     do while ( iThisString <= iListSize )
-    
+
         iThisString = iThisString + 1
         cThisString = lcase( lsList( iThisString ) )
 

@@ -52,7 +52,7 @@ sub l1_lasp
    Call tFileLoadSave
    gApplication = "HTML"
    Call tFileLoadSave
-   gApplication = "MASTERDOC"
+   gApplication = "MASTERDOCUMENT"
    Call tFileLoadSave
 
 end sub
@@ -91,7 +91,7 @@ testcase tFileLoadSave
    Call hNewDocument
 
 '///+ insert a short text in Writer/MasterDoc/WriterWeb document
-   if gApplication = "WRITER" OR gApplication = "HTML" OR gApplication = "MASTERDOC" then
+   if gApplication = "WRITER" OR gApplication = "HTML" OR gApplication = "MASTERDOCUMENT" then
       Kontext "DocumentWriter"
       DocumentWriter.TypeKeys gApplication + "   =>   Load - Save - Load - Save<Return>"
       DocumentWriter.TypeKeys "- first saving / loading<Return>"
@@ -130,7 +130,7 @@ testcase tFileLoadSave
 '///change the file and save if again ( edit/save )
    PrintLog "- change and save"
 '///+ insert a short text in Writer/MasterDoc/WriterWeb document
-   if gApplication = "WRITER" OR gApplication = "HTML" OR gApplication = "MASTERDOC" then
+   if gApplication = "WRITER" OR gApplication = "HTML" OR gApplication = "MASTERDOCUMENT" then
       Kontext "DocumentWriter"
       DocumentWriter.TypeKeys "- file/save<Return>"
    end if
@@ -166,7 +166,7 @@ testcase tFileLoadSave
    sleep( 2 )
 
 '///+ insert a short text in Writer/MasterDoc/WriterWeb document
-   if gApplication = "WRITER" OR gApplication = "HTML" OR gApplication = "MASTERDOC" then
+   if gApplication = "WRITER" OR gApplication = "HTML" OR gApplication = "MASTERDOCUMENT" then
       Kontext "DocumentWriter"
       gMouseClick ( 50, 50 )
       Kontext "DocumentWriter"

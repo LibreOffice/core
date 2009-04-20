@@ -55,7 +55,7 @@ testcase HTMLToHTMLText
 '        QAErrorlog "#125780#Stacktrace ID: 251397"
 '        goto endsub
 '    end if    
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     printlog "  Open File '..\\writer\\optional\\input\\clipboard\\html.html' "
     printlog "  Jump to beginning of document "
     printlog "  Select first paragraph "
@@ -67,7 +67,7 @@ testcase HTMLToHTMLText
     Call wTypeKeys "<Shift Down><Shift End>"
     EditCopy
     
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     printlog "  Open new document "
     Call hNewDocument
     printlog "  Edit / Paste Special "
@@ -111,7 +111,7 @@ endcase
 ' ----------------------------------------------------------------------------------------------
 
 testcase HTMLToHTMLField
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     printlog "  Open File '..\\writer\\optional\\input\\clipboard\\html.html' "
     printlog "  Jump to beginning of document "
     printlog "  Select paragraph with 'Date Field' "
@@ -124,7 +124,7 @@ testcase HTMLToHTMLField
     Call wTypeKeys "<Home><Shift End>"
     EditCopy
     
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     printlog "  Open new document "
     Call hNewDocument
     printlog "  Edit / Paste Special "
@@ -168,7 +168,7 @@ endcase
 ' ----------------------------------------------------------------------------------------------
 
 testcase HTMLToHTMLTable
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     printlog "  Open File '..\\writer\\optional\\input\\clipboard\\html.html' "
     printlog "  Jump to beginning of document "
     printlog "  Select 'Table' "
@@ -181,7 +181,7 @@ testcase HTMLToHTMLTable
     Call wTypeKeys "<Mod1 A>",2
     EditCopy
     
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     printlog "  Open new document "
     Call hNewDocument
     printlog "  Edit / Paste Special "
@@ -225,7 +225,7 @@ endcase
 ' ----------------------------------------------------------------------------------------------
 
 testcase HTMLToHTMLGraphicLinked
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     printlog "  Open File '..\\writer\\optional\\input\\clipboard\\html.html' "
     printlog "  Jump to beginning of document "
     printlog "  Select 'Linked Graphic' "
@@ -237,7 +237,7 @@ testcase HTMLToHTMLGraphicLinked
     Call wTypeKeys ( "<Shift F4>" )
     EditCopy
 
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     printlog "  Open new document "
     Call hNewDocument
     printlog "  Edit / Paste Special "
@@ -281,7 +281,7 @@ endcase
 ' ----------------------------------------------------------------------------------------------
 
 testcase HTMLToHTMLControl
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     printlog "  Open File '..\\writer\\optional\\input\\clipboard\\html.html' "
     printlog "  Jump to beginning of document "
     printlog "  Select 'Control' "
@@ -294,7 +294,7 @@ testcase HTMLToHTMLControl
     Call wTypeKeys "<Tab>"
     EditCopy
 
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     printlog "  Open new document "
     Call hNewDocument
     printlog "  Edit / Paste Special "
@@ -338,7 +338,7 @@ endcase
 ' ----------------------------------------------------------------------------------------------
 
 testcase HTMLToHTMLFloatingFrame
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     printlog "  Open File '..\\writer\\optional\\input\\clipboard\\html.html' "
     printlog "  Jump to beginning of document "
     printlog "  Select 'Floating Frame' "
@@ -356,7 +356,7 @@ testcase HTMLToHTMLFloatingFrame
         Call hCloseDocument
         goto endsub
     endcatch
-    gApplication = "HTMLDOKUMENT"
+    gApplication = "HTML"
     printlog "  Open new document "
     Call hNewDocument
     printlog "  Edit / Paste Special "

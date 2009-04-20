@@ -54,11 +54,11 @@ function hUseImpressAutopilot( bEnable as boolean ) as boolean
 
     '///+<li>Open Tools/Options, go to Presentataion/General page</li>
     ToolsOptions
-    hToolsOptions( "Presentation" , "General" )
+    hToolsOptions( gApplication , "General" )
 
     '///+<li>Check or uncheck to start with autopilot</li>
     Kontext "TabSonstigesDraw"
-    if ( mitAutopilotStarten.exists() ) then
+    if ( mitAutopilotStarten.exists( 2 ) ) then
 
         if ( bEnable ) then
             mitAutopilotStarten.check()
@@ -68,14 +68,14 @@ function hUseImpressAutopilot( bEnable as boolean ) as boolean
             printlog( CFN & "Disable Impress Autopilot" )
         endif
 
+        '///+<li>Return Status of Checkbox (checked=TRUE)</li>
+        hUseImpressAutopilot() = mitAutopilotStarten.isChecked()
+
     else
 
         warnlog( CFN & "Cannot find Autopilot Checkbox" )
 
     endif
-   
-    '///+<li>Return Status of Checkbox (checked=TRUE)</li>
-    hUseImpressAutopilot() = mitAutopilotStarten.isChecked()
 
     '///+<li>Close Tools/Options</li>
     Kontext "OptionenDlg"
@@ -191,7 +191,7 @@ function hChangeDoc() as string
     select case gApplication
    
       '///+<li>WRITER: Type some text</li>
-      case "WRITER", "HTML", "MASTERDOC"
+      case "WRITER", "HTML", "MASTERDOCUMENT"
                       Kontext "DocumentWriter"
                       DocumentWriter.TypeKeys "<Return>This doc is changed!"
                       hChangeDoc() = "Changed WRITER/HTML/MASTERDOC" 
@@ -404,7 +404,7 @@ function hDocumentTypeKeys( cString as string ) as boolean
                         DocumentDraw.typeKeys( cString )
     case "MATH"     :   kontext "DocumentMath"
                         DocumentMath.typeKeys( cString )
-    case "MASTERDOC":   kontext "DocumentWriter"
+    case "MASTERDOCUMENT":   kontext "DocumentWriter"
                         DocumentWriter.typeKeys( cString )
     case "HTML"     :   kontext "DocumentWriter"
                         DocumentWriter.typeKeys( cString )

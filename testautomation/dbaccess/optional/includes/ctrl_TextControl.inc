@@ -194,7 +194,7 @@ testcase tRichTextControlDraw
     
     '/// Open a new document,
     printlog "Open a new document,"
-	gApplication = "Draw"
+	gApplication = "DRAW"
     call hNewDocument
     Kontext "DocumentDraw"       
 	DocumentDraw.TypeKeys "tt_doc" , true

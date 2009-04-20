@@ -91,9 +91,6 @@ BearbeitenRahmendokument SID_EDIT_FRAMESET
 BearbeitenFrameSet SID_EDIT_FRAMESET
 BearbeitenPlugIn SID_PLUGINS_ACTIVE
 BearbeitenImageMap SID_IMAP
-BearbeitenObjektBearbeiten SID_VERB_START
-BearbeitenObjektEdit SID_VERB_START
-BearbeitenObjektOeffnen SID_VERB_OPEN
 BearbeitenLiteraturdatenbank SID_COMP_BIBLIOGRAPHY
 
 ' **** Writer

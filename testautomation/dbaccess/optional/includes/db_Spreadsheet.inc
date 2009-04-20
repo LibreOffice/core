@@ -52,7 +52,7 @@ testcase db_Spreadsheet
     dbok = fCreateSpreadsheetDatasource(sFileName, gOfficePath + ConvertPath(sDBURL),"tt_spreadsheet")
     if dbok = true then
             
-        call db_Query(sFileName, "spreadsheet")
+        call db_Query(sFileName, "CALC")
         
         'outcomment because of several bugs inside forms
         'use "dbaccess/optional/includes/b_lvl1_Forms.inc"

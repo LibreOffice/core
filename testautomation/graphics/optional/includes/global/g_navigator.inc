@@ -183,7 +183,7 @@ testcase tViewNavigatorZOrder
 
     '/// Open the Navigator ///'
     Kontext "NavigatorDraw"
-        if (lcase(gApplication) = "impress") then
+        if (gApplication = "IMPRESS") then
             try
                 NavigatorDraw.Close                '/// test if the Navigator is visible. It should not be. ///'
                 warnlog "- the Navigator was open, check earlier ran tests for inconsistency."

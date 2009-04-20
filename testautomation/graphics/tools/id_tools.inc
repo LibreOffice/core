@@ -268,7 +268,7 @@ function setStartCurrentPage(optional bState as boolean) as boolean
     '/// tools->options ///'
     ToolsOptions
     '///+ select in section 'Presentation' tabpage 'general' ///'
-    hToolsOptions ("Presentation","General")
+    hToolsOptions ("IMPRESS","General")
         '///+ check the checkbox 'Always with current page' ///'
         setStartCurrentPage = MitAktuellerSeite.isChecked
         if bState then
@@ -979,6 +979,7 @@ function fGetSlideNumber (optional sCompare as integer) as integer
         printlog "If Navigator is not open, opening it now."
         ViewNavigator
     endif
+    WaitSlot (2000)
     printlog "Getting current slide number from navigator."
     fGetSlideNumber = val (right (Liste.GetSelText, 1))
     printlog "fGetSlideNumber has the value " & fGetSlideNumber

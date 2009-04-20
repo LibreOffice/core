@@ -82,7 +82,7 @@ testcase tToolsOptionsHTMLPrint
 
     printlog ("'/// - save states ///")
     ToolsOptions
-    Call hToolsOptions ("HtmlDocument","PRINT")
+    Call hToolsOptions ("HTML","PRINT")
 
     irgendwas(1) = Grafiken.IsChecked
     irgendwas(2) = Tabellen.IsChecked
@@ -139,7 +139,7 @@ testcase tToolsOptionsHTMLPrint
 
     printlog ("'/// - checking states ///")
     ToolsOptions
-    Call hToolsOptions ( "HtmlDocument" , "PRINT" )
+    Call hToolsOptions ( "HTML" , "PRINT" )
 
     if ( irgendwas(1) = Grafiken.IsChecked               ) Then WarnLog "'Graphics' state changed"
     if ( irgendwas(2) = Tabellen.IsChecked               ) Then WarnLog "'Tables' state changed"
@@ -188,7 +188,7 @@ testcase tToolsOptionsHTMLPrint
 
     printlog ("'/// - check if all UnChecked ///")
     ToolsOptions
-    Call hToolsOptions ( "HtmlDocument" , "PRINT" )
+    Call hToolsOptions ( "HTML" , "PRINT" )
 
     if Grafiken.IsChecked       Then WarnLog "'Graphics' x"
     if Tabellen.IsChecked       Then WarnLog "'Tables' x"
@@ -207,7 +207,7 @@ testcase tToolsOptionsHTMLPrint
     ExtrasOptionenDlg.OK
     Call hFileOpen(gOfficepath + "user\work\printtest.html")
     ToolsOptions
-    Call hToolsOptions ( "HtmlDocument" , "PRINT" )
+    Call hToolsOptions ( "HTML" , "PRINT" )
 
     if ( bTempRadioBut(1) <> Keine.IsChecked       ) Then WarnLog "'None' state changed"
     if ( bTempRadioBut(2) <> NurNotizen.IsChecked  ) Then WarnLog "'Notes only' state changed"
@@ -244,7 +244,7 @@ testcase tToolsOptionsHTMLPrint
 
     printlog ("'/// - check if all Checked ///")
     ToolsOptions
-    Call hToolsOptions ( "HtmlDocument" , "PRINT" )
+    Call hToolsOptions ( "HTML" , "PRINT" )
 
     if not Grafiken.IsChecked                Then WarnLog "'Graphics' o"
     if not Tabellen.IsChecked                Then WarnLog "'Tables' o"
@@ -270,7 +270,7 @@ testcase tToolsOptionsHTMLPrint
 
     printlog ("'/// - restore states ///")
     ToolsOptions
-    Call hToolsOptions ( "HtmlDocument" , "PRINT" )
+    Call hToolsOptions ( "HTML" , "PRINT" )
 
     if ( irgendwas(1) =  TRUE ) Then  Grafiken.Check                Else Grafiken.UnCheck
     if ( irgendwas(2) =  TRUE ) Then  Tabellen.Check                Else Tabellen.UnCheck
@@ -335,7 +335,7 @@ testcase tToolsOptionsHTMLTable
 
     printlog ("'/// - save states ///")
     ToolsOptions
-    Call hToolsOptions ("HtmlDocument","Table")
+    Call hToolsOptions ("HTML","Table")
 
     sMetricField(1) = VerschiebenZeile.GetText
     sMetricField(2) = VerschiebenSpalte.GetText
@@ -378,7 +378,7 @@ testcase tToolsOptionsHTMLTable
 
     printlog ("'/// - checking states ///")
     ToolsOptions
-    Call hToolsOptions ( "HtmlDocument" , "Table" )
+    Call hToolsOptions ( "HTML" , "Table" )
 
     if ( VerschiebenZeile.GetText  <> sTempMetricField(1) ) Then WarnLog "Move cells:  'Rows' state changed BugID: 82990 "
     if ( VerschiebenSpalte.GetText <> sTempMetricField(2) ) Then WarnLog "Move cells:  'Column' state changed"
@@ -394,7 +394,7 @@ testcase tToolsOptionsHTMLTable
 
     printlog ("'/// - all UnCheck -> o ///")
     ToolsOptions
-    Call hToolsOptions ( "HtmlDocument" , "Table" )
+    Call hToolsOptions ( "HTML" , "Table" )
 
     VerschiebenZeile.ToMin
     VerschiebenSpalte.ToMin
@@ -429,7 +429,7 @@ testcase tToolsOptionsHTMLTable
 
     printlog ("'/// - check if all UnChecked ///")
     ToolsOptions
-    Call hToolsOptions ( "HtmlDocument" , "Table" )
+    Call hToolsOptions ( "HTML" , "Table" )
 
     if ( VerschiebenZeile.GetText  <> sTempMetricField(1) ) Then WarnLog "Move Cells : 'Row' is not min."
     if ( VerschiebenSpalte.GetText <> sTempMetricField(2) ) Then WarnLog "Move Cells : 'Column' is not min."
@@ -475,7 +475,7 @@ testcase tToolsOptionsHTMLTable
 
     printlog ("'/// - check if all Checked ///")
     ToolsOptions
-    Call hToolsOptions ( "HtmlDocument" , "Table" )
+    Call hToolsOptions ( "HTML" , "Table" )
 
     if ( VerschiebenZeile.GetText  <> sTempMetricField(1) ) Then WarnLog "Move Cells : 'Row' is not max."
     if ( VerschiebenSpalte.GetText <> sTempMetricField(2) ) Then WarnLog "Move Cells : 'Column' is not min."
@@ -512,7 +512,7 @@ testcase tToolsOptionsHTMLTable1
     printlog ("'///- Tools/Options/Text document: Table ///")
 
     ToolsOptions
-    Call hToolsOptions ("Textdocument","Table")
+    Call hToolsOptions ("WRITER","Table")
     VerhaltenFix.Check
 
     Kontext "ExtrasOptionenDlg"
