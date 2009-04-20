@@ -147,6 +147,10 @@ ScTableConditionalFormat::ScTableConditionalFormat(ScDocument* pDoc, ULONG nKey,
             const ScConditionalFormat* pFormat = pList->GetFormat( nKey );
             if (pFormat)
             {
+                // During save to XML.
+                if (pDoc->IsInExternalReferenceMarking())
+                    pFormat->MarkUsedExternalReferences();
+
                 USHORT nEntryCount = pFormat->Count();
                 for (USHORT i=0; i<nEntryCount; i++)
                 {
@@ -623,6 +627,13 @@ ScTableValidationObj::ScTableValidationObj(ScDocument* pDoc, ULONG nKey,
             ScValidErrorStyle eStyle;
             bShowError = pData->GetErrMsg( aErrorTitle, aErrorMessage, eStyle );
             nErrorStyle = sal::static_int_cast<USHORT>( eStyle );
+
+            // During save to XML, sheet::ValidationType_ANY formulas are not
+            // saved, even if in the list, see
+            // ScMyValidationsContainer::GetCondition(), so shall not mark
+            // anything in use.
+            if (nValMode != SC_VALID_ANY && pDoc->IsInExternalReferenceMarking())
+                pData->MarkUsedExternalReferences();
 
             bFound = TRUE;
         }

@@ -1125,24 +1125,25 @@ struct ConventionOOO_A1 : public Convention_A1
 
             rBuffer.append(sal_Unicode(':'));
 
-            // Get the name of the last table.
-            vector<String> aTabNames;
-            pRefMgr->getAllCachedTableNames(nFileId, aTabNames);
-            if (aTabNames.empty())
-            {
-                DBG_ERROR1( "ConventionOOO_A1::makeExternalRefStrImpl: no sheet names for document ID %s", nFileId);
-                break;
-            }
-
             String aLastTabName;
-            if (!lcl_getLastTabName(aLastTabName, rTabName, aTabNames, aRef))
-            {
-                rBuffer.append(aLastTabName);
-                DBG_ERROR( "ConventionOOO_A1::makeExternalRefStrImpl: sheet name not found");
-                break;
-            }
             bool bDisplayTabName = (aRef.Ref1.nTab != aRef.Ref2.nTab);
-            if (bODF && !bDisplayTabName)
+            if (bDisplayTabName)
+            {
+                // Get the name of the last table.
+                vector<String> aTabNames;
+                pRefMgr->getAllCachedTableNames(nFileId, aTabNames);
+                if (aTabNames.empty())
+                {
+                    DBG_ERROR1( "ConventionOOO_A1::makeExternalRefStrImpl: no sheet names for document ID %s", nFileId);
+                }
+
+                if (!lcl_getLastTabName(aLastTabName, rTabName, aTabNames, aRef))
+                {
+                    DBG_ERROR( "ConventionOOO_A1::makeExternalRefStrImpl: sheet name not found");
+                    // aLastTabName contains #REF!, proceed.
+                }
+            }
+            else if (bODF)
                 rBuffer.append( sal_Unicode('.'));      // need at least the sheet separator in ODF
             makeExternalSingleRefStr( rBuffer, nFileId, aLastTabName,
                     aRef.Ref2, pRefMgr, bDisplayTabName);

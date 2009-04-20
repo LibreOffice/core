@@ -381,6 +381,7 @@ public:
     void            CompileTokenArray( BOOL bNoListening = FALSE );
     void            CompileXML( ScProgress& rProgress );        // compile temporary string tokens
     void            CalcAfterLoad();
+    bool            MarkUsedExternalReferences();
     void            Interpret();
     inline BOOL     IsIterCell() const { return bIsIterCell; }
     inline USHORT   GetSeenInIteration() const { return nSeenInIteration; }

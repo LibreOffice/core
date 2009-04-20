@@ -606,7 +606,11 @@ public:
                                     const String& aFileName,
                                     const String& aTabName );
 
+    bool            HasExternalRefManager() { return pExternalRefMgr.get(); }
     SC_DLLPUBLIC ScExternalRefManager* GetExternalRefManager();
+    bool            IsInExternalReferenceMarking() const;
+    void            MarkUsedExternalReferences();
+    bool            MarkUsedExternalReferences( ScTokenArray & rArr );
 
     BOOL            HasDdeLinks() const;
     BOOL            HasAreaLinks() const;

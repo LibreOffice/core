@@ -53,6 +53,7 @@
 #include "editutil.hxx"
 #include "recursionhelper.hxx"
 #include "postit.hxx"
+#include "externalrefmgr.hxx"
 #include <svx/editobj.hxx>
 #include <svtools/intitem.hxx>
 #include <svx/flditem.hxx>
@@ -1117,6 +1118,12 @@ void ScFormulaCell::CalcAfterLoad()
     }
     // Noch kein SetDirty weil noch nicht alle Listener bekannt, erst in
     // SetDirtyAfterLoad.
+}
+
+
+bool ScFormulaCell::MarkUsedExternalReferences()
+{
+    return pCode && pDocument->MarkUsedExternalReferences( *pCode);
 }
 
 

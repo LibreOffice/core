@@ -143,11 +143,22 @@ private:
 // ============================================================================
 
 ScExternalRefCache::Table::Table()
+    : mbReferenced( true)   // Prevent accidental data loss due to lack of knowledge.
 {
 }
 
 ScExternalRefCache::Table::~Table()
 {
+}
+
+void ScExternalRefCache::Table::setReferenced( bool bReferenced )
+{
+    mbReferenced = bReferenced;
+}
+
+bool ScExternalRefCache::Table::isReferenced() const
+{
+    return mbReferenced;
 }
 
 void ScExternalRefCache::Table::setCell(SCCOL nCol, SCROW nRow, TokenRef pToken, sal_uInt32 nFmtIndex)
@@ -702,6 +713,168 @@ size_t ScExternalRefCache::getCacheTableCount(sal_uInt16 nFileId) const
     return pDoc ? pDoc->maTables.size() : 0;
 }
 
+bool ScExternalRefCache::setCacheDocReferenced( sal_uInt16 nFileId )
+{
+    DocItem* pDocItem = getDocItem(nFileId);
+    if (!pDocItem)
+        return areAllCacheTablesReferenced();
+
+    for (::std::vector<TableTypeRef>::iterator itrTab = pDocItem->maTables.begin();
+            itrTab != pDocItem->maTables.end(); ++itrTab)
+    {
+        if ((*itrTab).get())
+            (*itrTab)->setReferenced( true);
+    }
+    addCacheDocToReferenced( nFileId);
+    return areAllCacheTablesReferenced();
+}
+
+bool ScExternalRefCache::setCacheTableReferenced( sal_uInt16 nFileId, const String& rTabName )
+{
+    size_t nIndex = 0;
+    TableTypeRef pTab = getCacheTable( nFileId, rTabName, false, &nIndex);
+    if (pTab.get())
+    {
+        if (!pTab->isReferenced())
+        {
+            pTab->setReferenced( true);
+            addCacheTableToReferenced( nFileId, nIndex);
+        }
+    }
+    return areAllCacheTablesReferenced();
+}
+
+void ScExternalRefCache::setAllCacheTableReferencedStati( bool bReferenced )
+{
+    if (bReferenced)
+    {
+        maReferenced.reset(0);
+        for (DocDataType::iterator itrDoc = maDocs.begin(); itrDoc != maDocs.end(); ++itrDoc)
+        {
+            ScExternalRefCache::DocItem& rDocItem = (*itrDoc).second;
+            for (::std::vector<TableTypeRef>::iterator itrTab = rDocItem.maTables.begin();
+                    itrTab != rDocItem.maTables.end(); ++itrTab)
+            {
+                if ((*itrTab).get())
+                    (*itrTab)->setReferenced( true);
+            }
+        }
+    }
+    else
+    {
+        size_t nDocs = 0;
+        for (DocDataType::const_iterator itrDoc = maDocs.begin(); itrDoc != maDocs.end(); ++itrDoc)
+        {
+            if (nDocs <= (*itrDoc).first)
+                nDocs  = (*itrDoc).first + 1;
+        }
+        maReferenced.reset( nDocs);
+
+        for (DocDataType::iterator itrDoc = maDocs.begin(); itrDoc != maDocs.end(); ++itrDoc)
+        {
+            ScExternalRefCache::DocItem& rDocItem = (*itrDoc).second;
+            sal_uInt16 nFileId = (*itrDoc).first;
+            size_t nTables = rDocItem.maTables.size();
+            ReferencedStatus::DocReferenced & rDocReferenced = maReferenced.maDocs[nFileId];
+            // All referenced => non-existing tables evaluate as completed.
+            rDocReferenced.maTables.resize( nTables, true);
+            for (size_t i=0; i < nTables; ++i)
+            {
+                TableTypeRef & xTab = rDocItem.maTables[i];
+                if (xTab.get())
+                {
+                    xTab->setReferenced( false);
+                    rDocReferenced.maTables[i] = false;
+                    rDocReferenced.mbAllTablesReferenced = false;
+                }
+            }
+        }
+    }
+}
+
+void ScExternalRefCache::addCacheTableToReferenced( sal_uInt16 nFileId, size_t nIndex )
+{
+    if (nFileId >= maReferenced.maDocs.size())
+        return;
+
+    ::std::vector<bool> & rTables = maReferenced.maDocs[nFileId].maTables;
+    size_t nTables = rTables.size();
+    if (nIndex >= nTables)
+        return;
+
+    if (!rTables[nIndex])
+    {
+        rTables[nIndex] = true;
+        size_t i = 0;
+        while (i < nTables && rTables[i])
+            ++i;
+        if (i == nTables)
+        {
+            maReferenced.maDocs[nFileId].mbAllTablesReferenced = true;
+            maReferenced.checkAllDocs();
+        }
+    }
+}
+
+void ScExternalRefCache::addCacheDocToReferenced( sal_uInt16 nFileId )
+{
+    if (nFileId >= maReferenced.maDocs.size())
+        return;
+
+    if (!maReferenced.maDocs[nFileId].mbAllTablesReferenced)
+    {
+        ::std::vector<bool> & rTables = maReferenced.maDocs[nFileId].maTables;
+        size_t nSize = rTables.size();
+        for (size_t i=0; i < nSize; ++i)
+            rTables[i] = true;
+        maReferenced.maDocs[nFileId].mbAllTablesReferenced = true;
+        maReferenced.checkAllDocs();
+    }
+}
+
+bool ScExternalRefCache::areAllCacheTablesReferenced() const
+{
+    return maReferenced.mbAllReferenced;
+}
+
+ScExternalRefCache::ReferencedStatus::ReferencedStatus() :
+    mbAllReferenced(false)
+{
+    reset(0);
+}
+
+ScExternalRefCache::ReferencedStatus::ReferencedStatus( size_t nDocs ) :
+    mbAllReferenced(false)
+{
+    reset( nDocs);
+}
+
+void ScExternalRefCache::ReferencedStatus::reset( size_t nDocs )
+{
+    if (nDocs)
+    {
+        mbAllReferenced = false;
+        DocReferencedVec aRefs( nDocs);
+        maDocs.swap( aRefs);
+    }
+    else
+    {
+        mbAllReferenced = true;
+        DocReferencedVec aRefs;
+        maDocs.swap( aRefs);
+    }
+}
+
+void ScExternalRefCache::ReferencedStatus::checkAllDocs()
+{
+    for (DocReferencedVec::const_iterator itr = maDocs.begin(); itr != maDocs.end(); ++itr)
+    {
+        if (!(*itr).mbAllTablesReferenced)
+            return;
+    }
+    mbAllReferenced = true;
+}
+
 ScExternalRefCache::TableTypeRef ScExternalRefCache::getCacheTable(sal_uInt16 nFileId, size_t nTabIndex) const
 {
     DocItem* pDoc = getDocItem(nFileId);
@@ -987,7 +1160,8 @@ static ScTokenArray* lcl_convertToTokenArray(ScDocument* pSrcDoc, const ScRange&
 }
 
 ScExternalRefManager::ScExternalRefManager(ScDocument* pDoc) :
-    mpDoc(pDoc)
+    mpDoc(pDoc),
+    bInReferenceMarking(false)
 {
     maSrcDocTimer.SetTimeoutHdl( LINK(this, ScExternalRefManager, TimeOutHdl) );
     maSrcDocTimer.SetTimeout(SRCDOC_SCAN_INTERVAL);
@@ -1276,6 +1450,37 @@ size_t ScExternalRefManager::getCacheTableCount(sal_uInt16 nFileId) const
 sal_uInt16 ScExternalRefManager::getExternalFileCount() const
 {
     return static_cast< sal_uInt16 >( maSrcFiles.size() );
+}
+
+bool ScExternalRefManager::markUsedByLinkListeners()
+{
+    bool bAllMarked = false;
+    for (LinkListenerMap::const_iterator itr = maLinkListeners.begin();
+            itr != maLinkListeners.end() && !bAllMarked; ++itr)
+    {
+        if (!(*itr).second.empty())
+            bAllMarked = maRefCache.setCacheDocReferenced( (*itr).first);
+        /* TODO: LinkListeners should remember the table they're listening to.
+         * As is, listening to one table will mark all tables of the document
+         * being referenced. */
+    }
+    return bAllMarked;
+}
+
+bool ScExternalRefManager::setCacheDocReferenced( sal_uInt16 nFileId )
+{
+    return maRefCache.setCacheDocReferenced( nFileId);
+}
+
+bool ScExternalRefManager::setCacheTableReferenced( sal_uInt16 nFileId, const String& rTabName )
+{
+    return maRefCache.setCacheTableReferenced( nFileId, rTabName);
+}
+
+void ScExternalRefManager::setAllCacheTableReferencedStati( bool bReferenced )
+{
+    bInReferenceMarking = !bReferenced;
+    maRefCache.setAllCacheTableReferencedStati( bReferenced );
 }
 
 void ScExternalRefManager::storeRangeNameTokens(sal_uInt16 nFileId, const String& rName, const ScTokenArray& rArray)

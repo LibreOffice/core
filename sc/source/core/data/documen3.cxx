@@ -484,6 +484,29 @@ ScExternalRefManager* ScDocument::GetExternalRefManager()
     return pExternalRefMgr.get();
 }
 
+bool ScDocument::IsInExternalReferenceMarking() const
+{
+    return pExternalRefMgr.get() && pExternalRefMgr->isInReferenceMarking();
+}
+
+void ScDocument::MarkUsedExternalReferences()
+{
+    if (!pExternalRefMgr.get())
+        return;
+    if (!pExternalRefMgr->hasExternalData())
+        return;
+    // Charts.
+    bool bAllMarked = pExternalRefMgr->markUsedByLinkListeners();
+    // Formula cells.
+    for (SCTAB nTab = 0; !bAllMarked && nTab < nMaxTableNumber; ++nTab)
+    {
+        if (pTab[nTab])
+            bAllMarked = pTab[nTab]->MarkUsedExternalReferences();
+    }
+    /* NOTE: Conditional formats and validation objects are marked when
+     * collecting them during export. */
+}
+
 ScOutlineTable* ScDocument::GetOutlineTable( SCTAB nTab, BOOL bCreate )
 {
     ScOutlineTable* pVal = NULL;

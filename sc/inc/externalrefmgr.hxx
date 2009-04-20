@@ -138,12 +138,18 @@ public:
         SC_DLLPUBLIC void setCell(SCCOL nCol, SCROW nRow, TokenRef pToken, sal_uInt32 nFmtIndex = 0);
         TokenRef getCell(SCCOL nCol, SCROW nRow, sal_uInt32* pnFmtIndex = NULL) const;
         bool hasRow( SCROW nRow ) const;
+        /// A temporary state used only during store to file.
+        bool isReferenced() const;
+        void setReferenced( bool bReferenced );
+        /// Obtain a sorted vector of rows.
         void getAllRows(::std::vector<SCROW>& rRows) const;
+        /// Obtain a sorted vector of columns.
         void getAllCols(SCROW nRow, ::std::vector<SCCOL>& rCols) const;
         void getAllNumberFormats(::std::vector<sal_uInt32>& rNumFmts) const;
 
     private:
         RowsDataType maRows;
+        bool         mbReferenced;
     };
 
     typedef ::boost::shared_ptr<Table>      TableTypeRef;
@@ -201,6 +207,45 @@ public:
     void getAllNumberFormats(::std::vector<sal_uInt32>& rNumFmts) const;
     bool hasCacheTable(sal_uInt16 nFileId, const String& rTabName) const;
     size_t getCacheTableCount(sal_uInt16 nFileId) const;
+
+    /**
+     * Set all tables of a document as referenced, used only during
+     * store-to-file.
+     * @returns <TRUE/> if ALL tables of ALL documents are marked.
+     */
+    bool setCacheDocReferenced( sal_uInt16 nFileId );
+
+    /**
+     * Set a table as referenced, used only during store-to-file.
+     * @returns <TRUE/> if ALL tables of ALL documents are marked.
+     */
+    bool setCacheTableReferenced( sal_uInt16 nFileId, const String& rTabName );
+    void setAllCacheTableReferencedStati( bool bReferenced );
+    bool areAllCacheTablesReferenced() const;
+private:
+    struct ReferencedStatus
+    {
+        struct DocReferenced
+        {
+            ::std::vector<bool> maTables;
+            bool                mbAllTablesReferenced;
+            // Initially, documents have no tables but all referenced.
+            DocReferenced() : mbAllTablesReferenced(true) {}
+        };
+        typedef ::std::vector<DocReferenced> DocReferencedVec;
+
+        DocReferencedVec maDocs;
+        bool             mbAllReferenced;
+
+                    ReferencedStatus();
+        explicit    ReferencedStatus( size_t nDocs );
+        void        reset( size_t nDocs );
+        void        checkAllDocs();
+
+    } maReferenced;
+    void addCacheTableToReferenced( sal_uInt16 nFileId, size_t nIndex );
+    void addCacheDocToReferenced( sal_uInt16 nFileId );
+public:
 
     ScExternalRefCache::TableTypeRef getCacheTable(sal_uInt16 nFileId, size_t nTabIndex) const;
     ScExternalRefCache::TableTypeRef getCacheTable(sal_uInt16 nFileId, const String& rTabName, bool bCreateNew, size_t* pnIndex);
@@ -434,6 +479,33 @@ public:
     size_t getCacheTableCount(sal_uInt16 nFileId) const;
     sal_uInt16 getExternalFileCount() const;
 
+    /**
+     * Mark all tables as referenced that are used by any LinkListener, used
+     * only during store-to-file.
+     * @returns <TRUE/> if ALL tables of ALL external documents are marked.
+     */
+    bool markUsedByLinkListeners();
+
+    /**
+     * Set all tables of a document as referenced, used only during
+     * store-to-file.
+     * @returns <TRUE/> if ALL tables of ALL external documents are marked.
+     */
+    bool setCacheDocReferenced( sal_uInt16 nFileId );
+
+    /**
+     * Set a table as referenced, used only during store-to-file.
+     * @returns <TRUE/> if ALL tables of ALL external documents are marked.
+     */
+    bool setCacheTableReferenced( sal_uInt16 nFileId, const String& rTabName );
+    void setAllCacheTableReferencedStati( bool bReferenced );
+
+    /**
+     * @returns <TRUE/> if setAllCacheTableReferencedStati(false) was called,
+     * <FALSE/> if setAllCacheTableReferencedStati(true) was called.
+     */
+    bool isInReferenceMarking() const   { return bInReferenceMarking; }
+
     void storeRangeNameTokens(sal_uInt16 nFileId, const String& rName, const ScTokenArray& rArray);
 
     ScExternalRefCache::TokenRef getSingleRefToken(
@@ -617,6 +689,9 @@ private:
 
     /** original source file index. */
     ::std::vector<SrcFileData> maSrcFiles;
+
+    /** Status whether in reference marking state. See isInReferenceMarking(). */
+    bool bInReferenceMarking;
 
     AutoTimer maSrcDocTimer;
     DECL_LINK(TimeOutHdl, AutoTimer*);

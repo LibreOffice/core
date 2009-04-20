@@ -111,7 +111,7 @@ public:
     // sc::IAnyRefDialog
     virtual void ShowReference(const String& _sRef);
     virtual void HideReference( BOOL bDoneRefMode = TRUE );
-    virtual void SetReference( const ScRange& rRef, ScDocument* pDoc );
+    virtual void SetReference( const ScRange& rRef, ScDocument* pD );
 
     virtual void ReleaseFocus( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL );
     virtual void ToggleCollapsed( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL );

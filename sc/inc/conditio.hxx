@@ -149,6 +149,8 @@ public:
 
     void            SourceChanged( const ScAddress& rChanged );
 
+    bool            MarkUsedExternalReferences() const;
+
 protected:
     virtual void    DataChanged( const ScRange* pModified ) const;
     ScDocument*     GetDocument() const     { return pDoc; }
@@ -240,6 +242,8 @@ public:
     void            SetUsed(BOOL bSet)      { bIsUsed = bSet; }
     BOOL            IsUsed() const          { return bIsUsed; }
 
+    bool            MarkUsedExternalReferences() const;
+
     //  sortiert (per PTRARR) nach Index
     //  operator== nur fuer die Sortierung
     BOOL operator ==( const ScConditionalFormat& r ) const  { return nKey == r.nKey; }
@@ -277,6 +281,10 @@ public:
     void    UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos );
 
     void    SourceChanged( const ScAddress& rAddr );
+
+    /** Temporarily during save, returns RefManager's decision whether ALL
+     *  references are marked now. */
+    bool    MarkUsedExternalReferences() const;
 
     BOOL    operator==( const ScConditionalFormatList& r ) const;       // fuer Ref-Undo
 };
