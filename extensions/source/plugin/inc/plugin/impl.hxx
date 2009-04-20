@@ -34,64 +34,73 @@
 #include <limits>
 #endif
 
-#include <cppuhelper/weak.hxx>
-#include <com/sun/star/awt/Key.hpp>
-#include <com/sun/star/awt/KeyFunction.hpp>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/plugin/PluginMode.hpp>
-#include <com/sun/star/plugin/PluginDescription.hpp>
-#include <com/sun/star/plugin/PluginException.hpp>
-#include <com/sun/star/plugin/PluginVariable.hpp>
-#include <com/sun/star/plugin/XPlugin.hpp>
-#include <com/sun/star/plugin/XPluginManager.hpp>
-#include <com/sun/star/plugin/XPluginContext.hpp>
-#include <com/sun/star/io/XConnectable.hpp>
-#include <com/sun/star/io/XOutputStream.hpp>
-#include <com/sun/star/io/XDataOutputStream.hpp>
-#include <com/sun/star/io/XActiveDataControl.hpp>
-#include <com/sun/star/io/XDataInputStream.hpp>
-#include <com/sun/star/io/XMarkableStream.hpp>
-#include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/io/XStreamListener.hpp>
-#include <com/sun/star/io/XActiveDataSink.hpp>
-#include <com/sun/star/io/XActiveDataSource.hpp>
-#include <com/sun/star/lang/XServiceName.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/awt/GradientStyle.hpp>
-#include <com/sun/star/awt/RasterOperation.hpp>
-#include <com/sun/star/awt/Gradient.hpp>
-#include <com/sun/star/awt/XGraphics.hpp>
+#include "cppuhelper/weak.hxx"
 
-#include <cppuhelper/implbase3.hxx>
-#include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include "com/sun/star/awt/Key.hpp"
+#include "com/sun/star/awt/KeyFunction.hpp"
+#include "com/sun/star/beans/PropertyAttribute.hpp"
+#include "com/sun/star/plugin/PluginMode.hpp"
+#include "com/sun/star/plugin/PluginDescription.hpp"
+#include "com/sun/star/plugin/PluginException.hpp"
+#include "com/sun/star/plugin/PluginVariable.hpp"
+#include "com/sun/star/plugin/XPlugin.hpp"
+#include "com/sun/star/plugin/XPluginManager.hpp"
+#include "com/sun/star/plugin/XPluginContext.hpp"
+#include "com/sun/star/io/XConnectable.hpp"
+#include "com/sun/star/io/XOutputStream.hpp"
+#include "com/sun/star/io/XDataOutputStream.hpp"
+#include "com/sun/star/io/XActiveDataControl.hpp"
+#include "com/sun/star/io/XDataInputStream.hpp"
+#include "com/sun/star/io/XMarkableStream.hpp"
+#include "com/sun/star/io/XInputStream.hpp"
+#include "com/sun/star/io/XStreamListener.hpp"
+#include "com/sun/star/io/XActiveDataSink.hpp"
+#include "com/sun/star/io/XActiveDataSource.hpp"
+#include "com/sun/star/lang/XServiceName.hpp"
+#include "com/sun/star/lang/XServiceInfo.hpp"
+#include "com/sun/star/lang/XMultiServiceFactory.hpp"
+#include "com/sun/star/lang/XSingleServiceFactory.hpp"
+#include "com/sun/star/awt/GradientStyle.hpp"
+#include "com/sun/star/awt/RasterOperation.hpp"
+#include "com/sun/star/awt/Gradient.hpp"
+#include "com/sun/star/awt/XGraphics.hpp"
+
+#include "cppuhelper/implbase3.hxx"
+#include "cppuhelper/implbase2.hxx"
+#include "cppuhelper/implbase1.hxx"
+
+#include <list>
 
 #ifdef WNT
-#include <plugin/win/sysplug.hxx>
-#else
-#include <list>
+#include "plugin/win/sysplug.hxx"
 #endif
 
 #ifdef OS2
-#include <plugin/os2/sysplug.hxx>
+#include "plugin/os2/sysplug.hxx"
 #endif
 
 #if defined(UNX)
 #if defined(QUARTZ)
-#include <plugin/aqua/sysplug.hxx>
+#include "plugin/aqua/sysplug.hxx"
 #else
-#include <plugin/unx/sysplug.hxx>
+#include "plugin/unx/sysplug.hxx"
 #endif
 #endif
 
-#include <vcl/sysdata.hxx>
-#include <vcl/syschild.hxx>
-#include <plugin/plctrl.hxx>
-#include <plugin/model.hxx>
-#include <tools/link.hxx>
-#include <tools/stream.hxx>
+#if ! defined (QUARTZ)
+// the QUARTZ implementation needs special instance data
+typedef int SysPlugData;
+#endif
+
+#include "plugin/plctrl.hxx"
+#include "plugin/model.hxx"
+
+#include "vcl/sysdata.hxx"
+#include "vcl/syschild.hxx"
+
+#include "tools/link.hxx"
+#include "tools/stream.hxx"
+
 
 using namespace com::sun::star::uno;
 
@@ -120,6 +129,7 @@ private:
     PluginComm*                 m_pPluginComm;
     NPP_t                       m_aInstance;
     NPWindow                    m_aNPWindow;
+    SysPlugData                 m_aSysPlugData;
     rtl_TextEncoding            m_aEncoding;
 
     const char**                m_pArgv;
@@ -182,6 +192,7 @@ public:
     rtl_TextEncoding getTextEncoding() { return m_aEncoding; }
     NPP             getNPPInstance() { return &m_aInstance; }
     NPWindow*       getNPWindow() { return &m_aNPWindow; }
+    SysPlugData&    getSysPlugData() { return m_aSysPlugData; }
 
     void            enterPluginCallback() { m_nCalledFromPlugin++; }
     void            leavePluginCallback() { m_nCalledFromPlugin--; }

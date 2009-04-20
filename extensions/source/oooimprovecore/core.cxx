@@ -43,9 +43,14 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/uieventslogger.hxx>
 #include <cppuhelper/implbase3.hxx>
-#include <svx/optimprove.hxx>
+#include <svx/svxdlg.hxx>
 #include <vcl/svapp.hxx>
 #include <vos/mutex.hxx>
+#include <svtools/itemset.hxx>
+#include <svtools/stritem.hxx>
+#include <sfx2/app.hxx>
+#include <svx/dialogs.hrc>
+#include <sfx2/sfxsids.hrc>
 
 using namespace ::com::sun::star::oooimprovement;
 using ::com::sun::star::frame::XTerminateListener;
@@ -129,11 +134,17 @@ namespace oooimprovecore
                 ::comphelper::ConfigurationHelper::E_READONLY) >>= help_url;
         else
             help_url = OUString::createFromAscii("http://www.openoffice.org");
-
         {
             ::vos::OGuard aGuard( Application::GetSolarMutex() );
-            SvxImprovementDialog dlg(NULL, help_url);
-            dlg.Execute();
+            SfxAllItemSet aSet( SFX_APP()->GetPool() );
+            aSet.Put( SfxStringItem( SID_CURRENT_URL, help_url ) );
+            SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+            if ( pFact )
+            {
+                AbstractSfxSingleTabDialog *pDlg = pFact->CreateSfxSingleTabDialog( NULL, aSet, 0, RID_SVXPAGE_IMPROVEMENT );
+                pDlg->Execute();
+                delete pDlg;
+            }
         }
     }
 

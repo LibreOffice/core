@@ -2249,52 +2249,57 @@ void SAL_CALL OWriteStream::dispose()
         throw ( uno::RuntimeException )
 {
     // should be an internal method since it can be called only from parent storage
-
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
-
-    if ( !m_pImpl )
-        throw lang::DisposedException();
-
-    if ( m_xOutStream.is() )
-        CloseOutput_Impl();
-
-    if ( m_xInStream.is() )
     {
-        m_xInStream->closeInput();
-        m_xInStream = uno::Reference< io::XInputStream >();
+        ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+
+        if ( !m_pImpl )
+            throw lang::DisposedException();
+
+        if ( m_xOutStream.is() )
+            CloseOutput_Impl();
+
+        if ( m_xInStream.is() )
+        {
+            m_xInStream->closeInput();
+            m_xInStream = uno::Reference< io::XInputStream >();
+        }
+
+        m_pImpl->m_pAntiImpl = NULL;
+
+        if ( !m_bInitOnDemand )
+        {
+            try
+            {
+                if ( !m_bTransacted )
+                {
+                    m_pImpl->Commit();
+                }
+                else
+                {
+                    // throw away all the changes
+                    m_pImpl->Revert();
+                }
+            }
+            catch( uno::Exception& )
+            {
+                uno::Any aCaught( ::cppu::getCaughtException() );
+                throw lang::WrappedTargetRuntimeException(
+                                                ::rtl::OUString::createFromAscii( "Can not commit/revert the storage!\n" ),
+                                                uno::Reference< uno::XInterface >(  static_cast< OWeakObject* >( this ),
+                                                                                    uno::UNO_QUERY ),
+                                                aCaught );
+            }
+        }
+
+        m_pImpl = NULL;
     }
+
+    // the listener might try to get rid of parent storage, and the storage would delete this object;
+    // for now the listener is just notified at the end of the method to workaround the problem
+    // in future a more elegant way should be found
 
        lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >(this) );
     m_pData->m_aListenersContainer.disposeAndClear( aSource );
-
-    m_pImpl->m_pAntiImpl = NULL;
-
-    if ( !m_bInitOnDemand )
-    {
-        try
-        {
-            if ( !m_bTransacted )
-            {
-                m_pImpl->Commit();
-            }
-            else
-            {
-                // throw away all the changes
-                m_pImpl->Revert();
-            }
-        }
-        catch( uno::Exception& )
-        {
-               uno::Any aCaught( ::cppu::getCaughtException() );
-            throw lang::WrappedTargetRuntimeException(
-                                            ::rtl::OUString::createFromAscii( "Can not commit/revert the storage!\n" ),
-                                            uno::Reference< uno::XInterface >(  static_cast< OWeakObject* >( this ),
-                                                                                uno::UNO_QUERY ),
-                                            aCaught );
-        }
-    }
-
-    m_pImpl = NULL;
 }
 
 //-----------------------------------------------

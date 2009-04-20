@@ -81,8 +81,11 @@ public class SolarisInstaller extends Installer {
 
         if ( data.isInstallationMode()) {
             boolean makeRelocatableAdminFile = true;
-            helper.createAdminFile(makeRelocatableAdminFile);
-            helper.createAdminFile(! makeRelocatableAdminFile);
+            boolean removeDepends = true;
+            helper.createAdminFile(makeRelocatableAdminFile, removeDepends);
+            helper.createAdminFile(makeRelocatableAdminFile, ! removeDepends);
+            helper.createAdminFile(! makeRelocatableAdminFile, removeDepends);
+            helper.createAdminFile(! makeRelocatableAdminFile, ! removeDepends);
         }
 
         if ( data.isUserInstallation() ) {
@@ -259,9 +262,17 @@ public class SolarisInstaller extends Installer {
 
         // is package relocatable or not?
         if ( packageData.isRelocatable() ) {
-            adminFileName = data.getAdminFileNameReloc();
+            if ( packageData.ignoreDependsForUninstall() ) {    // Force removal of older packages during installation
+                adminFileName = data.getAdminFileNameRelocNoDepends();
+            } else {
+                adminFileName = data.getAdminFileNameReloc();
+            }
         } else {
-            adminFileName = data.getAdminFileNameNoReloc();
+            if ( packageData.ignoreDependsForUninstall() ) {    // Force removal of older packages during installation
+                adminFileName = data.getAdminFileNameNoRelocNoDepends();
+            } else {
+                adminFileName = data.getAdminFileNameNoReloc();
+            }
         }
 
         String pkgCommand = "";
@@ -300,16 +311,20 @@ public class SolarisInstaller extends Installer {
             log = pkgCommand + "<br><b>Returns: " + returnValue + " Successful uninstallation</b><br>";
             LogManager.addCommandsLogfileComment(log);
         } else {    // an error occured during installation
-            log = pkgCommand + "<br><b>Returns: " + returnValue + " Error during uninstallation</b><br>";
-            LogManager.addCommandsLogfileComment(log);
-            System.err.println("Error during uninstallation:");
-            for (int i = 0; i < returnErrorVector.size(); i++) {
-                LogManager.addCommandsLogfileComment((String)returnErrorVector.get(i));
-                System.err.println(returnErrorVector.get(i));
+            if ( packageData.uninstallCanFail() ) {
+                log = pkgCommand + "<br><b>Returns: " + returnValue + " Problem during uninstallation. Can be ignored.</b><br>";
+                LogManager.addCommandsLogfileComment(log);
+            } else {
+                log = pkgCommand + "<br><b>Returns: " + returnValue + " Error during uninstallation</b><br>";
+                LogManager.addCommandsLogfileComment(log);
+                System.err.println("Error during uninstallation:");
+                for (int i = 0; i < returnErrorVector.size(); i++) {
+                    LogManager.addCommandsLogfileComment((String)returnErrorVector.get(i));
+                    System.err.println(returnErrorVector.get(i));
+                }
+                data.setIsErrorInstallation(true);
             }
-            data.setIsErrorInstallation(true);
         }
-
     }
 
     public boolean isPackageNameInstalledClassic(String packageName, InstallData installData) {
@@ -402,7 +417,8 @@ public class SolarisInstaller extends Installer {
             for (int i = 0; i < returnVector.size(); i++) {
                 String onePackage = (String)returnVector.get(i);
                 int pos1 = onePackage.indexOf(" ");
-                map.put(onePackage.substring(0, pos1), value);
+                String key = onePackage.substring(0, pos1);
+                map.put(key, value);
             }
         }
 
@@ -521,6 +537,12 @@ public class SolarisInstaller extends Installer {
 
             String installedPackageVersion = helper.getVersionString(returnVector);
             String newPackageVersion = packageData.getPkgVersion();
+
+            if ( ! installData.installedProductMinorSet() ) {
+                int productMinor = helper.getInstalledMinor(installedPackageVersion);
+                installData.setInstalledProductMinor(productMinor);
+                installData.setInstalledProductMinorSet(true);
+            }
 
             if (( installedPackageVersion != null ) && ( newPackageVersion != null )) {
                 if ( checkIfInstalledIsOlder ) {

@@ -95,7 +95,9 @@ public class UninstallationPrologueCtrl extends PanelController {
         // adding information to installData
         data.setPackagePath((String)map.get("PackagePath"));
         data.setAdminFileNameReloc((String)map.get("AdminFileReloc"));
+        data.setAdminFileNameRelocNoDepends((String)map.get("AdminFileRelocNoDepends"));
         data.setAdminFileNameNoReloc((String)map.get("AdminFileNoReloc"));
+        data.setAdminFileNameNoRelocNoDepends((String)map.get("AdminFileNoRelocNoDepends"));
         data.setDatabasePath((String)map.get("DatabasePath"));
         data.setInstallDir((String)map.get("InstallationDir"));
         data.setStoredInstallationPrivileges((String)map.get("InstallationPrivileges"));

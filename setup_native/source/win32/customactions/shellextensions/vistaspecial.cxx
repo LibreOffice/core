@@ -189,7 +189,7 @@ extern "C" UINT __stdcall RenamePrgFolder( MSIHANDLE handle )
     std::_tstring sOfficeInstallPath = GetMsiProperty(handle, TEXT("OFFICEINSTALLLOCATION"));
 
     std::_tstring sRenameSrc = sOfficeInstallPath + TEXT("program");
-    std::_tstring sRenameDst = sOfficeInstallPath + TEXT("program_1");
+    std::_tstring sRenameDst = sOfficeInstallPath + TEXT("program_old");
 
 //    MessageBox(NULL, sRenameSrc.c_str(), "OFFICEINSTALLLOCATION", MB_OK);
 
@@ -208,7 +208,7 @@ extern "C" UINT __stdcall RenamePrgFolder( MSIHANDLE handle )
 extern "C" UINT __stdcall RemovePrgFolder( MSIHANDLE handle )
 {
     std::_tstring sOfficeInstallPath = GetMsiProperty(handle, TEXT("OFFICEINSTALLLOCATION"));
-    std::_tstring sRemoveDir = sOfficeInstallPath + TEXT("program_1");
+    std::_tstring sRemoveDir = sOfficeInstallPath + TEXT("program_old");
 
 //    MessageBox(NULL, sRemoveDir.c_str(), "REMOVING OLD DIR", MB_OK);
 

@@ -239,7 +239,17 @@ public class ProductDescription {
                 installData.setDontUpdate(dontupdate);
             }
 
-           section = data.getElement("hideeula");
+            /* check for the Product Minor of this installation set */
+            section = data.getElement("productminor");
+            if (section != null) {
+                String value = section.getValue();
+                if (value != null) {
+                    int intValue = Integer.parseInt(value);
+                    installData.setProductMinor(intValue);
+                }
+            }
+
+            section = data.getElement("hideeula");
             if (section != null) {
                 String value = section.getValue();
                 if ((value != null) && (! value.equals(""))) {

@@ -98,6 +98,13 @@ public class InstallChangeCtrl {
                     data.setOlderVersionExists(true);
                     // All installed packages will be updated -> determining which packages are installed
                     System.err.println("An older product is installed");
+                    // But if this is a kind of Major Upgrade with different Minor and therefore different package names,
+                    // it is necessary to remove the old product.
+                    if ( data.getProductMinor() > data.getInstalledProductMinor() )
+                    {
+                        data.setMajorUpgrade(true);
+                        System.err.println("Major Upgrade");
+                    }
                 } else if ( installer.isInstallSetPackageOlder(data.getUpdatePackage(), data) ) {
                     data.setNewerVersionExists(true);
                     System.err.println("A newer product is installed");
