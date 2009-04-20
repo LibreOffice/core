@@ -224,9 +224,11 @@ struct OStoreBTreeNodeData : public store::OStorePageData
     void       insert (sal_uInt16 i, const T& t);
     void       remove (sal_uInt16 i);
 
+#if 0  /* NYI */
     /** merge (with right page).
      */
     void merge (const self& rPageR);
+#endif
 
     /** split (left half copied from right half of left page).
     */

@@ -17,7 +17,7 @@
  *
  *======================================================================*/
 
-template< class T > inline void swap (T & lhs, T & rhs)
+template< class T > void swap (T & lhs, T & rhs)
 {
   T tmp = rhs; rhs = lhs; lhs = tmp;
 }
@@ -694,7 +694,7 @@ public:
     {
         TestObject aObj;
 
-        rBIOS.loadPageAt(aObj.get(), &aObj.verify);
+        rBIOS.loadPageAt(aObj.get(), aObj.verify);
         rBIOS.loadPageAt(aObj.get(), TestObject::verify);
         rBIOS.loadPageAt(aObj.get(), PageHolderObject<TestData>::verify);
 

@@ -127,6 +127,7 @@ void OStoreBTreeNodeData::remove (sal_uInt16 i)
     }
 }
 
+#if 0  /* NYI */
 /*
  * merge (with right page).
  */
@@ -140,6 +141,7 @@ void OStoreBTreeNodeData::merge (const self& rPageR)
         usageCount (n + m);
     }
 }
+#endif
 
 /*
  * split (left half copied from right half of left page).
@@ -538,7 +540,7 @@ storeError OStoreBTreeRootObject::find_lookup (
 
     // Check current page.
     PageHolderObject< page > xPage (rNode.get());
-    for (; xPage->depth() > 0; xPage = rNode.get< page >())
+    for (; xPage->depth() > 0; xPage = rNode.makeHolder< page >())
     {
         // Find next page.
         page const & rPage = (*xPage);
@@ -621,7 +623,7 @@ storeError OStoreBTreeRootObject::find_insert (
 
     // Check current Page.
     PageHolderObject< page > xPage (rNode.get());
-    for (; xPage->depth() > 0; xPage = rNode.get< page >())
+    for (; xPage->depth() > 0; xPage = rNode.makeHolder< page >())
     {
         // Find next page.
         page const & rPage = (*xPage);

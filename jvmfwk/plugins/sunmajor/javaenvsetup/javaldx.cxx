@@ -46,6 +46,7 @@ using namespace rtl;
 
 static sal_Bool hasOption(char const * szOption, int argc, char** argv);
 static rtl::OString getLD_LIBRARY_PATH(const rtl::ByteSequence & vendorData);
+static bool findAndSelect(JavaInfo**);
 //static sal_Bool printPaths(const OUString& sPathFile);
 
 #define HELP_TEXT    \
@@ -95,15 +96,22 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
     if (pInfo == NULL)
     {
-        errcode = jfw_findAndSelectJRE( & pInfo);
-        if (errcode == JFW_E_NO_JAVA_FOUND)
+        if (false == findAndSelect(&pInfo))
+            return -1;
+    }
+    else
+    {
+        //check if the JRE was not uninstalled
+        sal_Bool bExist = sal_False;
+        errcode = jfw_existJRE(pInfo, &bExist);
+        if (errcode == JFW_E_NONE)
         {
-            fprintf(stderr,"javaldx: Could not find a Java Runtime Environment! \n");
-            return 0;
+            if (false == findAndSelect(&pInfo))
+                return -1;
         }
-        else if (errcode != JFW_E_NONE && errcode != JFW_E_DIRECT_MODE)
+        else
         {
-            fprintf(stderr,"javaldx failed!\n");
+            fprintf(stderr, "javaldx: Could not determine if JRE still exist\n");
             return -1;
         }
     }
@@ -162,7 +170,21 @@ static sal_Bool hasOption(char const * szOption, int argc, char** argv)
     return retVal;
 }
 
-
+static bool findAndSelect(JavaInfo ** ppInfo)
+{
+    javaFrameworkError errcode = jfw_findAndSelectJRE(ppInfo);
+    if (errcode == JFW_E_NO_JAVA_FOUND)
+    {
+        fprintf(stderr,"javaldx: Could not find a Java Runtime Environment! \n");
+        return false;
+    }
+    else if (errcode != JFW_E_NONE && errcode != JFW_E_DIRECT_MODE)
+    {
+        fprintf(stderr,"javaldx failed!\n");
+        return false;
+    }
+    return true;
+}
 
 
 

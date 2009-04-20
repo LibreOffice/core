@@ -881,11 +881,34 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
         }
         case JFW_E_VM_CREATION_FAILED:
         {
-            //Error:
-            //%PRODUCTNAME requires a Java runtime environment (JRE) to perform
-            //this task. The selected JRE is defective. Please select another
-            //version or install a new JRE and select  it under Tools - Options -
-            //%PRODUCTNAME - Java.
+            //If the creation failed because the JRE has been uninstalled then
+            //we search another one. As long as there is a javaldx, we should
+            //never come into this situation. javaldx checks alway if the JRE
+            //still exist.
+            JavaInfo * pJavaInfo = NULL;
+            if (JFW_E_NONE == jfw_getSelectedJRE(&pJavaInfo))
+            {
+                sal_Bool bExist = sal_False;
+                if (JFW_E_NONE == jfw_existJRE(pJavaInfo, &bExist))
+                {
+                    if (bExist == sal_False
+                        && ! (pJavaInfo->nRequirements & JFW_REQUIRE_NEEDRESTART))
+                    {
+                        javaFrameworkError errFind = jfw_findAndSelectJRE( NULL );
+                        if (errFind == JFW_E_NONE)
+                        {
+                            continue;
+                        }
+                    }
+                }
+            }
+
+            jfw_freeJavaInfo(pJavaInfo);
+            //
+            //Error: %PRODUCTNAME requires a Java
+            //runtime environment (JRE) to perform this task. The selected JRE
+            //is defective. Please select another version or install a new JRE
+            //and select it under Tools - Options - %PRODUCTNAME - Java.
             css::java::JavaVMCreationFailureException exc(
                 rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM(
