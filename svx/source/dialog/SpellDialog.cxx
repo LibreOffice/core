@@ -1488,8 +1488,8 @@ long SentenceEditWindow_Impl::PreNotify( NotifyEvent& rNEvt )
                 }
             }
             //Here we have to determine if the error found is the one currently active
-            bool bIsErrorActive = pErrorAttr && pErrorAttr->GetStart() == m_nErrorStart ||
-                    pErrorAttrLeft && pErrorAttrLeft->GetStart() == m_nErrorStart;
+            bool bIsErrorActive = (pErrorAttr && pErrorAttr->GetStart() == m_nErrorStart) ||
+                    (pErrorAttrLeft && pErrorAttrLeft->GetStart() == m_nErrorStart);
 
             DBG_ASSERT(nSelectionType != INVALID, "selection type not set!");
 

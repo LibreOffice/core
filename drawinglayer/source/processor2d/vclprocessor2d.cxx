@@ -162,37 +162,55 @@ namespace drawinglayer
                     // #i96581# Get the font forced without FontStretching (use FontHeight as FontWidth)
                     Font aFont(primitive2d::getVclFontFromFontAttributes(
                         rTextCandidate.getFontAttributes(),
-                        aScale.getY(),
+
+                        // #i100373# FontScaling
+                        //
+                        // There are two different definitions for unscaled fonts, (1) 0==width and
+                        // (2) height==width where (2) is the more modern one supported on all non-WIN32
+                        // systems and (1) is the old one coming from WIN16-VCL definitions where
+                        // that ominous FontWidth (available over FontMetric) is involved. While
+                        // WIN32 only supports (1), all other systems support (2). When on WIN32, the
+                        // support for (1) is ensured inside getVclFontFromFontAttributes.
+                        //
+                        // The former usage of (2) leads to problems when it is used on non-WIN32 systems
+                        // and exported to MetaFile FontActions where the scale is taken over unseen. When
+                        // such a MetaFile is imported on a WIN32-System supporting (1), all fonts are
+                        // seen as scaled an look wrong.
+                        //
+                        // The simplest and fastest solution is to fallback to (1) independent from the
+                        // system we are running on.
+                        //
+                        // The best solution would be a system-independent Y-value just expressing the
+                        // font scaling, e.g. when (2) is used and width == height, use 1.0 as Y-Value,
+                        // which would also solve the involved ominous FontWidth value for WIN32-systems.
+                        // This is a region which needs redesign urgently.
+                        //
+                        0, // aScale.getY(),
+
                         aScale.getY(),
                         fRotate,
                         *mpOutputDevice));
 
                     if(!basegfx::fTools::equal(aScale.getX(), aScale.getY()))
                     {
-                        // #i96581# font stretching is needed; examine how big the difference between X and Y scaling is
-                        const double fPercent(fabs(1.0 - (aScale.getX() / aScale.getY())));
-                        static double fMaximumAcceptedPercent(0.05);
-                        static bool bForceAdaption(false);
+                        // #100424# We have a hint on FontScaling here. To decide a look
+                        // at the pure font's scale is needed, since e.g. SC uses unequally scaled
+                        // MapModes (was: #i96581#, but use available full precision from primitive
+                        // now). aTranslate and fShearX can be reused since no longer needed.
+                        basegfx::B2DVector aFontScale;
+                        double fFontRotate;
+                        rTextCandidate.getTextTransform().decompose(aFontScale, aTranslate, fFontRotate, fShearX);
 
-                        if(bForceAdaption || fPercent > fMaximumAcceptedPercent)
+                        if(!basegfx::fTools::equal(aFontScale.getX(), aFontScale.getY()))
                         {
-                            // #i96581# Need to adapt to a FontStretching bigger than acceptable maximum.
-                            // Get font's real width using FontMetric and adapt font to stretched
-                            // font
-                            const FontMetric aFontMetric(mpOutputDevice->GetFontMetric(aFont));
-                            const double fRealFontWidth(aFontMetric.GetWidth());
-
+                            // indeed a FontScaling. Set at Font. Use the combined scale
+                            // and rotate here
                             aFont = primitive2d::getVclFontFromFontAttributes(
                                 rTextCandidate.getFontAttributes(),
-                                fRealFontWidth,
+                                aScale.getX(),
                                 aScale.getY(),
                                 fRotate,
                                 *mpOutputDevice);
-                        }
-                        else
-                        {
-                            // #i96581# less than allowed maximum (probably SC's generated MapModes). React
-                            // pragmatically by ignoring the stretching up to this point
                         }
                     }
 
@@ -673,16 +691,6 @@ namespace drawinglayer
                 (sal_Int32)ceil(aOutlineRange.getMinX()), (sal_Int32)ceil(aOutlineRange.getMinY()),
                 (sal_Int32)floor(aOutlineRange.getMaxX()), (sal_Int32)floor(aOutlineRange.getMaxY()));
 
-            if(aDestRectView.Right() > aDestRectView.Left())
-            {
-                aDestRectView.Right()--;
-            }
-
-            if(aDestRectView.Bottom() > aDestRectView.Top())
-            {
-                aDestRectView.Bottom()--;
-            }
-
             // get metafile (copy it)
             GDIMetaFile aMetaFile;
 
@@ -704,9 +712,30 @@ namespace drawinglayer
                 aMetaFile.Rotate((sal_uInt16)(fRotation));
             }
 
-            // paint it
-            aMetaFile.WindStart();
-            aMetaFile.Play(mpOutputDevice, aDestRectView.TopLeft(), aDestRectView.GetSize());
+            // Prepare target output size
+            Size aDestSize(aDestRectView.GetSize());
+
+            if(aDestSize.getWidth() && aDestSize.getHeight())
+            {
+                // Get preferred Metafile output size. When it's very equal to the output size, it's probably
+                // a rounding error somewhere, so correct it to get a 1:1 output without single pixel scalings
+                // of the Metafile (esp. for contaned Bitmaps, e.g 3D charts)
+                const Size aPrefSize(mpOutputDevice->LogicToPixel(aMetaFile.GetPrefSize(), aMetaFile.GetPrefMapMode()));
+
+                if(aPrefSize.getWidth() && (aPrefSize.getWidth() - 1 == aDestSize.getWidth() || aPrefSize.getWidth() + 1 == aDestSize.getWidth()))
+                {
+                    aDestSize.setWidth(aPrefSize.getWidth());
+                }
+
+                if(aPrefSize.getHeight() && (aPrefSize.getHeight() - 1 == aDestSize.getHeight() || aPrefSize.getHeight() + 1 == aDestSize.getHeight()))
+                {
+                    aDestSize.setHeight(aPrefSize.getHeight());
+                }
+
+                // paint it
+                aMetaFile.WindStart();
+                aMetaFile.Play(mpOutputDevice, aDestRectView.TopLeft(), aDestSize);
+            }
         }
 
         // mask group. Force output to VDev and create mask from given mask

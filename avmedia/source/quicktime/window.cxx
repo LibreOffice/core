@@ -28,7 +28,8 @@
  *
  ************************************************************************/
 
-#include <com/sun/star/awt/SystemPointer.hdl>
+#include <com/sun/star/awt/SystemPointer.hpp>
+#include <com/sun/star/awt/PosSize.hpp>
 
 #include "window.hxx"
 #include "player.hxx"
@@ -65,15 +66,32 @@ static ::osl::Mutex& ImplGetOwnStaticMutex()
 
 // ------------------------------------------------------------------------------
 
-Window::Window( const uno::Reference< lang::XMultiServiceFactory >& rxMgr, Player& rPlayer ) :
-    mxMgr( rxMgr ),
+Window::Window( const uno::Reference< lang::XMultiServiceFactory >& i_rxMgr, Player& i_rPlayer, NSView* i_pParentView ) :
+    mxMgr( i_rxMgr ),
     maListeners( maMutex ),
     meZoomLevel( media::ZoomLevel_NOT_AVAILABLE ),
-    mrPlayer( rPlayer ),
-    mnPointerType( awt::SystemPointer::ARROW )
+    mrPlayer( i_rPlayer ),
+    mnPointerType( awt::SystemPointer::ARROW ),
+    mpParentView( i_pParentView ),
+    mpMovieView( nil )
 {
 
     ::osl::MutexGuard aGuard( ImplGetOwnStaticMutex() );
+
+
+    if( mpParentView ) // sanity check
+    {
+
+        NSRect aViewRect = [mpParentView frame];
+        aViewRect.origin.x = aViewRect.origin.y = 0;
+        mpMovieView = [[QTMovieView alloc] initWithFrame: aViewRect];
+        [mpMovieView setMovie: mrPlayer.getMovie() ];
+        [mpMovieView setControllerVisible: NO];
+        [mpMovieView setPreservesAspectRatio: YES];
+        [mpMovieView setAutoresizingMask: NSViewWidthSizable | NSViewHeightSizable];
+        [mpParentView addSubview: mpMovieView];
+        [mpParentView setAutoresizesSubviews: YES];
+    }
 
     OSL_TRACE ("Window::Window");
 }
@@ -82,6 +100,13 @@ Window::Window( const uno::Reference< lang::XMultiServiceFactory >& rxMgr, Playe
 
 Window::~Window()
 {
+    if( mpMovieView )
+    {
+        [mpMovieView removeFromSuperview];
+        [mpMovieView setMovie:nil];
+        [mpMovieView release];
+        mpMovieView = nil;
+    }
 }
 
 bool Window::create( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
@@ -128,7 +153,14 @@ void SAL_CALL Window::setPointerType( sal_Int32 nPointerType )
 void SAL_CALL Window::setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, sal_Int16 Flags )
     throw (uno::RuntimeException)
 {
-    ;
+    if( mpParentView && mpMovieView )
+    {
+        NSRect aRect = [mpMovieView frame];
+        if( (Flags & awt::PosSize::WIDTH) )
+            aRect.size.width = Width;
+        if( (Flags & awt::PosSize::HEIGHT) )
+            aRect.size.height = Height;
+    }
 }
 
 // ------------------------------------------------------------------------------
@@ -138,9 +170,10 @@ awt::Rectangle SAL_CALL Window::getPosSize()
 {
     awt::Rectangle aRet;
 
+    NSRect aRect = [mpMovieView frame];
     aRet.X = aRet.Y = 0;
-    aRet.Width = 200;
-    aRet.Height = 100;
+    aRet.Width = aRect.size.width;
+    aRet.Height = aRect.size.height;
 
     return aRet;
 }

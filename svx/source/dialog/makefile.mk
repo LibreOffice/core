@@ -365,7 +365,6 @@ LIB1OBJFILES= \
         $(SLO)$/framelink.obj\
         $(SLO)$/framelinkarray.obj \
         $(SLO)$/databaseregistrationui.obj \
-        $(SLO)$/optimprove.obj \
         $(SLO)$/radiobtnbox.obj
 
 .IF "$(GUI)"=="UNX"
@@ -444,6 +443,7 @@ LIB2OBJFILES= \
         $(SLO)$/optctl.obj \
         $(SLO)$/optjava.obj \
         $(SLO)$/optupdt.obj \
+        $(SLO)$/optimprove.obj \
         $(SLO)$/optimprove2.obj \
         $(SLO)$/optgenrl.obj \
         $(SLO)$/connect.obj \

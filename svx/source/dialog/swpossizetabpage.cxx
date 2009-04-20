@@ -751,9 +751,11 @@ BOOL SvxSwPosSizeTabPage::FillItemSet( SfxItemSet& rSet)
                 short nRel = GetRelation(m_pHMap, m_aHoriToLB);
                 const long nHoriByPos =
                             static_cast<long>(m_aHoriByMF.Denormalize(m_aHoriByMF.GetValue(FUNIT_TWIP)));
-                if(nAlign != rHoriOrient.GetValue()||
-                    nRel != rHoriRelation.GetValue()||
-                        m_aHoriByMF.IsEnabled() && nHoriByPos != rHoriPosition.GetValue())
+                if (
+                    nAlign != rHoriOrient.GetValue() ||
+                    nRel != rHoriRelation.GetValue() ||
+                    (m_aHoriByMF.IsEnabled() && nHoriByPos != rHoriPosition.GetValue())
+                   )
                 {
                     rSet.Put(SfxInt16Item(SID_ATTR_TRANSFORM_HORI_ORIENT, nAlign));
                     rSet.Put(SfxInt16Item(SID_ATTR_TRANSFORM_HORI_RELATION, nRel));

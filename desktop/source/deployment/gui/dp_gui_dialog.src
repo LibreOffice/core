@@ -486,14 +486,12 @@ WarningBox RID_WARNINGBOX_INSTALL_EXTENSION {
     "Click \'Cancel\' to stop the installation.";
 };
 
-WARNINGBOX RID_WARNINGBOX_ADD_SHARED_EXTENSION
-{
+WarningBox RID_WARNINGBOX_REMOVE_EXTENSION {
     Buttons = WB_OK_CANCEL;
     DefButton = WB_DEF_CANCEL;
-    Message[en-US] = "Make sure that no further users are working with the same "
-    "%PRODUCTNAME, when changing shared extensions in a multi user environment.\n"
-    "Click \'OK\' to install the extension.\n"
-    "Click \'Cancel\' to stop the installation.";
+    Message[en-US] = "You are about to remove the extension \'%NAME\'.\n"
+    "Click \'OK\' to remove the extension.\n"
+    "Click \'Cancel\' to stop removing the extension.";
 };
 
 WARNINGBOX RID_WARNINGBOX_REMOVE_SHARED_EXTENSION

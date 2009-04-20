@@ -117,6 +117,7 @@ private:
 
     void            ClearEntryList();
     TabEntry*       FindEntry( sal_Int32 nIndex ) const;
+    bool            RemoveEntry( sal_Int32 nIndex );
 
     DECL_DLLPRIVATE_LINK( ActivatePageHdl, TabControl * );
     DECL_DLLPRIVATE_LINK( DeactivatePageHdl, TabControl * );

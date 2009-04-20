@@ -724,8 +724,8 @@ IMPL_LINK( ArgInput, EdModifyHdl,ArgEdit*, pEd )
 EditBox::EditBox(   Window* pParent,WinBits nWinStyle)
         :Control(pParent,nWinStyle|WB_DIALOGCONTROL)
 {
-    pMEdit=new MultiLineEdit(this,WB_LEFT | WB_VSCROLL | nWinStyle & WB_TABSTOP|
-                    WB_NOBORDER | WB_NOHIDESELECTION |WB_IGNORETAB);
+    pMEdit=new MultiLineEdit(this,WB_LEFT | WB_VSCROLL | (nWinStyle & WB_TABSTOP) |
+                    WB_NOBORDER | WB_NOHIDESELECTION | WB_IGNORETAB);
 
     pMEdit->Show();
     aOldSel=pMEdit->GetSelection();
@@ -751,7 +751,7 @@ EditBox::EditBox( Window* pParent, const ResId& rResId )
     WinBits nStyle=GetStyle();
     SetStyle( nStyle| WB_DIALOGCONTROL);
 
-    pMEdit=new MultiLineEdit(this,WB_LEFT | WB_VSCROLL | nStyle & WB_TABSTOP|
+    pMEdit=new MultiLineEdit(this,WB_LEFT | WB_VSCROLL | (nStyle & WB_TABSTOP) |
                     WB_NOBORDER | WB_NOHIDESELECTION | WB_IGNORETAB);
     pMEdit->Show();
     aOldSel=pMEdit->GetSelection();
@@ -861,7 +861,7 @@ long EditBox::PreNotify( NotifyEvent& rNEvt )
     {
         const KeyCode& aKeyCode=rNEvt.GetKeyEvent()->GetKeyCode();
         USHORT nKey=aKeyCode.GetCode();
-        if(nKey==KEY_RETURN && !aKeyCode.IsShift() || nKey==KEY_TAB)
+        if( (nKey==KEY_RETURN && !aKeyCode.IsShift()) || nKey==KEY_TAB )
         {
             nResult=GetParent()->Notify(rNEvt);
         }

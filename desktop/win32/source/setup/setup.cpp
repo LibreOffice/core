@@ -44,7 +44,8 @@
 #include <time.h>
 #include <mbctype.h>
 #include <locale.h>
-
+#include <Msiquery.h>
+#include <MsiDefs.h>
 #include "strsafe.h"
 
 #include "setup.hxx"
@@ -147,6 +148,7 @@ SetupAppX::SetupAppX()
     m_bRegNoMsoTypes  = false;
     m_bRegAllMsoTypes = false;
     m_bIsMinorUpgrade = false;
+    m_bSupportsPatch  = false;
 
     m_bIgnoreAlreadyRunning = false;
 }
@@ -447,6 +449,21 @@ boolean SetupAppX::ReadProfile()
 }
 
 //--------------------------------------------------------------------------
+void SetupAppX::AddFileToPatchList( TCHAR* pPath, TCHAR* pFile )
+{
+    if ( m_pPatchFiles == NULL )
+    {
+        m_pPatchFiles = new TCHAR[ MAX_STR_LENGTH ];
+        StringCchCopy( m_pPatchFiles, MAX_STR_LENGTH, TEXT("\"") );
+    }
+    else
+        StringCchCat( m_pPatchFiles, MAX_STR_LENGTH, TEXT(";") );
+
+    StringCchCat( m_pPatchFiles, MAX_STR_LENGTH, pPath );
+    StringCchCat( m_pPatchFiles, MAX_STR_LENGTH, pFile );
+}
+
+//--------------------------------------------------------------------------
 boolean SetupAppX::GetPatches()
 {
     boolean bRet = true;
@@ -475,19 +492,18 @@ boolean SetupAppX::GetPatches()
 
         if ( hFindPatches != INVALID_HANDLE_VALUE )
         {
-            bool fNextFile = false;
-            m_pPatchFiles = new TCHAR[ MAX_STR_LENGTH ];
-            StringCchCopy( m_pPatchFiles, MAX_STR_LENGTH, TEXT("\"") );
-            StringCchCat( m_pPatchFiles, MAX_STR_LENGTH, pBaseDir );
-            StringCchCat( m_pPatchFiles, MAX_STR_LENGTH, aFindFileData.cFileName );
+            if ( ! IsPatchInstalled( pBaseDir, aFindFileData.cFileName ) )
+                AddFileToPatchList( pBaseDir, aFindFileData.cFileName );
 
             while ( FindNextFile( hFindPatches, &aFindFileData ) )
             {
-                StringCchCat( m_pPatchFiles, MAX_STR_LENGTH, TEXT(";") );
-                StringCchCat( m_pPatchFiles, MAX_STR_LENGTH, pBaseDir );
-                StringCchCat( m_pPatchFiles, MAX_STR_LENGTH, aFindFileData.cFileName );
+                if ( ! IsPatchInstalled( pBaseDir, aFindFileData.cFileName ) )
+                    AddFileToPatchList( pBaseDir, aFindFileData.cFileName );
             }
-            StringCchCat( m_pPatchFiles, MAX_STR_LENGTH, TEXT("\"") );
+
+            if ( m_pPatchFiles != NULL )
+                StringCchCat( m_pPatchFiles, MAX_STR_LENGTH, TEXT("\"") );
+
             FindClose( hFindPatches );
         }
     }
@@ -1175,6 +1191,10 @@ boolean SetupAppX::CheckVersion()
                     Log( TEXT( " Found MSI version <%s>, no update needed\r\n" ), pMsiVersion );
                     bNeedUpdate = false;
                 }
+                if ( aInfo.dwMajorVersion >= 3 )
+                    m_bSupportsPatch = true;
+                else
+                    Log( TEXT("Warning: Patching not supported! MSI-Version <%s>\r\n"), pMsiVersion );
             }
         }
 
@@ -1492,9 +1512,15 @@ void SetupAppX::Log( LPCTSTR pMessage, LPCTSTR pText ) const
                                    _tsetlocale( LC_ALL, NULL ), _getmbcp() );
         }
         if ( pText )
+        {
             _ftprintf( m_pLogFile, pMessage, pText );
+            OutputDebugStringFormat( pMessage, pText );
+        }
         else
+        {
             _ftprintf( m_pLogFile, pMessage );
+            OutputDebugStringFormat( pMessage );
+        }
 
         fflush( m_pLogFile );
     }
@@ -1922,6 +1948,66 @@ LPTSTR SetupAppX::SetProdToAppTitle( LPCTSTR pProdName )
     delete [] pAppProdTitle;
 
     return m_pAppTitle;
+}
+
+
+//--------------------------------------------------------------------------
+boolean SetupAppX::IsPatchInstalled( TCHAR* pBaseDir, TCHAR* pFileName )
+{
+    if ( !m_bSupportsPatch )
+        return false;
+
+    PMSIHANDLE hSummaryInfo;
+    int nLen = lstrlen( pBaseDir ) + lstrlen( pFileName ) + 1;
+    TCHAR *szDatabasePath = new TCHAR [ nLen ];
+    TCHAR sBuf[80];
+
+    StringCchCopy( szDatabasePath, nLen, pBaseDir );
+    StringCchCat( szDatabasePath, nLen, pFileName );
+
+    UINT nRet = MsiGetSummaryInformation( NULL, szDatabasePath, 0, &hSummaryInfo );
+
+    if ( nRet != ERROR_SUCCESS )
+    {
+        StringCchPrintf( sBuf, 80, TEXT("ERROR: IsPatchInstalled: MsiGetSummaryInformation returned %u.\r\n"), nRet );
+        Log( sBuf );
+        return false;
+    }
+
+    UINT    uiDataType;
+    LPTSTR  szPatchID = new TCHAR[ 64 ];
+    DWORD   cchValueBuf = 64;
+    nRet = MsiSummaryInfoGetProperty( hSummaryInfo, PID_REVNUMBER, &uiDataType, NULL, NULL, szPatchID, &cchValueBuf );
+
+    if ( nRet != ERROR_SUCCESS )
+    {
+        StringCchPrintf( sBuf, 80, TEXT("ERROR: IsPatchInstalled: MsiSummaryInfoGetProperty returned %u.\r\n"), nRet );
+        Log( sBuf );
+        return false;
+    }
+
+    nRet = MsiGetPatchInfo( szPatchID, INSTALLPROPERTY_LOCALPACKAGE, NULL, NULL );
+
+    StringCchPrintf( sBuf, 80, TEXT("  GetPatchInfo for (%s) returned (%u)\r\n"), szPatchID, nRet );
+    Log( sBuf );
+
+    delete []szPatchID;
+
+    if ( nRet == ERROR_BAD_CONFIGURATION )
+        return false;
+    else if ( nRet == ERROR_INVALID_PARAMETER )
+        return false;
+    else if ( nRet == ERROR_MORE_DATA )
+        return true;
+    else if ( nRet == ERROR_SUCCESS )
+        return true;
+    else if ( nRet == ERROR_UNKNOWN_PRODUCT )
+        return false;
+    else if ( nRet == ERROR_UNKNOWN_PROPERTY )
+        return false;
+    else return false;
+
+    return false;
 }
 
 //--------------------------------------------------------------------------
