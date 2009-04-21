@@ -150,7 +150,7 @@ BOOL SwEditWin::RulerMarginDrag( const MouseEvent& rMEvt,
 }
 // <--
 
-Dialog* GetSearchDialog()
+LAYOUT_NS Dialog* GetSearchDialog()
 {
     return SwView::GetSearchDialog();
 }

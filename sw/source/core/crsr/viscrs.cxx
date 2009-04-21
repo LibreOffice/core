@@ -996,7 +996,7 @@ SwCursor* SwShellCrsr::Create( SwPaM* pRing ) const
 short SwShellCrsr::MaxReplaceArived()
 {
     short nRet = RET_YES;
-    Window* pDlg = ::GetSearchDialog();
+    Window* pDlg = LAYOUT_THIS_WINDOW (::GetSearchDialog());
     if( pDlg )
     {
         // alte Actions beenden; die Tabellen-Frames werden angelegt und

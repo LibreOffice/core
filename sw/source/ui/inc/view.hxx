@@ -41,6 +41,7 @@
 #include "swdllapi.h"
 #include <swtypes.hxx>
 #include <shellid.hxx>
+#include <layout/layout.hxx>
 
 class SwBaseShell;
 class Button;
@@ -490,7 +491,7 @@ public:
             void    SetVisArea( const Point&, BOOL bUpdateScrollbar = TRUE);
             void    CheckVisArea();
 
-    static Dialog*  GetSearchDialog();
+    static LAYOUT_NS Dialog* GetSearchDialog();
 
     static USHORT   GetMoveType();
     static void     SetMoveType(USHORT nSet);
