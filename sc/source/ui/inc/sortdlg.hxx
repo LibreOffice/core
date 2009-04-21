@@ -33,10 +33,14 @@
 
 #include <sfx2/tabdlg.hxx>
 
-#ifndef _SFX_HXX
-#endif
+#ifndef LAYOUT_SFX_TABDIALOG_BROKEN
+#define LAYOUT_SFX_TABDIALOG_BROKEN 1
+#endif /* !LAYOUT_SFX_TABDIALOG_BROKEN */
 
-//==================================================================
+#if !LAYOUT_SFX_TABDIALOG_BROKEN
+#include <sfx2/layout.hxx>
+#include <layout/layout-pre.hxx>
+#endif
 
 class ScSortDlg : public SfxTabDialog
 {
@@ -61,7 +65,8 @@ inline void ScSortDlg::SetByRows ( BOOL bByRows  )  { bIsByRows = bByRows; }
 inline BOOL ScSortDlg::GetHeaders() const           { return bIsHeaders; }
 inline BOOL ScSortDlg::GetByRows () const           { return bIsByRows; }
 
+#if !LAYOUT_SFX_TABDIALOG_BROKEN
+#include <layout/layout-post.hxx>
+#endif
 
 #endif // SC_SORTDLG_HXX
-
-

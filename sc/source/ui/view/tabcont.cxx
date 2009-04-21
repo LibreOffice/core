@@ -61,8 +61,8 @@ ScTabControl::ScTabControl( Window* pParent, ScViewData* pData ) :
             DropTargetHelper( this ),
             DragSourceHelper( this ),
             pViewData( pData ),
-            nMouseClickPageId( TAB_PAGE_NOTFOUND ),
-            nSelPageIdByMouse( TAB_PAGE_NOTFOUND ),
+            nMouseClickPageId( TABBAR_PAGE_NOTFOUND ),
+            nSelPageIdByMouse( TABBAR_PAGE_NOTFOUND ),
             bErrorShown( FALSE )
 {
     ScDocument* pDoc = pViewData->GetDocument();
@@ -159,7 +159,7 @@ void ScTabControl::MouseButtonDown( const MouseEvent& rMEvt )
     if( rMEvt.IsLeft() && (rMEvt.GetModifier() == 0) )
         nMouseClickPageId = GetPageId( rMEvt.GetPosPixel() );
     else
-        nMouseClickPageId = TAB_PAGE_NOTFOUND;
+        nMouseClickPageId = TABBAR_PAGE_NOTFOUND;
 
     TabBar::MouseButtonDown( rMEvt );
 }
@@ -170,7 +170,7 @@ void ScTabControl::MouseButtonUp( const MouseEvent& rMEvt )
 
     // mouse button down and up on same page?
     if( nMouseClickPageId != GetPageId( aPos ) )
-        nMouseClickPageId = TAB_PAGE_NOTFOUND;
+        nMouseClickPageId = TABBAR_PAGE_NOTFOUND;
     else if ( rMEvt.GetClicks() == 2 && rMEvt.IsLeft() )
     {
         SfxDispatcher* pDispatcher = pViewData->GetViewShell()->GetViewFrame()->GetDispatcher();
@@ -183,7 +183,7 @@ void ScTabControl::MouseButtonUp( const MouseEvent& rMEvt )
         SfxDispatcher* pDispatcher = pViewData->GetViewShell()->GetViewFrame()->GetDispatcher();
         pDispatcher->Execute( FID_INS_TABLE, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD );
         // forget page ID, to be really sure that the dialog is not called twice
-        nMouseClickPageId = TAB_PAGE_NOTFOUND;
+        nMouseClickPageId = TABBAR_PAGE_NOTFOUND;
     }
 
     TabBar::MouseButtonUp( rMEvt );
@@ -195,7 +195,7 @@ void ScTabControl::Select()
     nSelPageIdByMouse = nMouseClickPageId;
     /*  Reset nMouseClickPageId, so that next Select() call may invalidate
         nSelPageIdByMouse (i.e. if called from keyboard). */
-    nMouseClickPageId = TAB_PAGE_NOTFOUND;
+    nMouseClickPageId = TABBAR_PAGE_NOTFOUND;
 
     ScModule* pScMod = SC_MOD();
     ScDocument* pDoc = pViewData->GetDocument();
@@ -368,7 +368,7 @@ void ScTabControl::ActivateView(BOOL bActivate)
 void ScTabControl::SetSheetLayoutRTL( BOOL bSheetRTL )
 {
     SetEffectiveRTL( bSheetRTL );
-    nSelPageIdByMouse = TAB_PAGE_NOTFOUND;
+    nSelPageIdByMouse = TABBAR_PAGE_NOTFOUND;
 }
 
 
@@ -550,9 +550,9 @@ sal_Int8 ScTabControl::AcceptDrop( const AcceptDropEvent& rEvt )
 long ScTabControl::StartRenaming()
 {
     if ( pViewData->GetDocument()->IsDocEditable() )
-        return TAB_RENAMING_YES;
+        return TABBAR_RENAMING_YES;
     else
-        return TAB_RENAMING_NO;
+        return TABBAR_RENAMING_NO;
 }
 
 long ScTabControl::AllowRenaming()
@@ -560,7 +560,7 @@ long ScTabControl::AllowRenaming()
     ScTabViewShell* pViewSh = pViewData->GetViewShell();
     DBG_ASSERT( pViewSh, "pViewData->GetViewShell()" );
 
-    long nRet = TAB_RENAMING_CANCEL;
+    long nRet = TABBAR_RENAMING_CANCEL;
     USHORT nId = GetEditPageId();
     if ( nId )
     {
@@ -568,27 +568,27 @@ long ScTabControl::AllowRenaming()
         String aNewName = GetEditText();
         BOOL bDone = pViewSh->RenameTable( aNewName, nTab );
         if ( bDone )
-            nRet = TAB_RENAMING_YES;
+            nRet = TABBAR_RENAMING_YES;
         else if ( bErrorShown )
         {
             //  if the error message from this TabControl is currently visible,
             //  don't end edit mode now, to avoid problems when returning to
             //  the other call (showing the error) - this should not happen
             DBG_ERROR("ScTabControl::AllowRenaming: nested calls");
-            nRet = TAB_RENAMING_NO;
+            nRet = TABBAR_RENAMING_NO;
         }
         else if ( Application::IsInModalMode() )
         {
             //  #73472# don't show error message above any modal dialog
             //  instead cancel renaming without error message
-            nRet = TAB_RENAMING_CANCEL;
+            nRet = TABBAR_RENAMING_CANCEL;
         }
         else
         {
             bErrorShown = TRUE;
             pViewSh->ErrorMessage( STR_INVALIDTABNAME );
             bErrorShown = FALSE;
-            nRet = TAB_RENAMING_NO;
+            nRet = TABBAR_RENAMING_NO;
         }
     }
     return nRet;
@@ -603,12 +603,12 @@ void ScTabControl::EndRenaming()
 void ScTabControl::Mirror()
 {
     TabBar::Mirror();
-    if( nSelPageIdByMouse != TAB_PAGE_NOTFOUND )
+    if( nSelPageIdByMouse != TABBAR_PAGE_NOTFOUND )
     {
         Rectangle aRect( GetPageRect( GetCurPageId() ) );
         if( !aRect.IsEmpty() )
             SetPointerPosPixel( aRect.Center() );
-        nSelPageIdByMouse = TAB_PAGE_NOTFOUND;  // only once after a Select()
+        nSelPageIdByMouse = TABBAR_PAGE_NOTFOUND;  // only once after a Select()
     }
 }
 

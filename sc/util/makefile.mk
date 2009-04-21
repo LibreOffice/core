@@ -232,6 +232,10 @@ SHL8STDLIBS= \
             $(CPPULIB) \
             $(SALLIB)
 
+.IF "$(ENABLE_LAYOUT)" == "TRUE"
+SHL8STDLIBS+=$(TKLIB)
+.ENDIF # ENABLE_LAYOUT == TRUE
+
 SHL8LIBS=   $(SLB)$/scui.lib
 LIB8TARGET = $(SLB)$/scui.lib
 
