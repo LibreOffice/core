@@ -797,7 +797,7 @@ sub install_simple ($$$$$$)
 
         push @lines, "$destination\n";
         # printf "cp $sourcepath $destdir$destination\n";
-        copy ("$sourcepath", "$destdir$destination") || die "Can't copy file: $!";
+        copy ("$sourcepath", "$destdir$destination") || die "Can't copy file: $sourcepath -> $destdir$destination $!";
         my $sourcestat = stat($sourcepath);
         utime ($sourcestat->atime, $sourcestat->mtime, "$destdir$destination");
         chmod (oct($unixrights), "$destdir$destination") || die "Can't change permissions: $!";

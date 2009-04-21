@@ -33,7 +33,7 @@ MKFILENAME:=RULES.MK
 
 $(OBJ)$/%.obj : %.cxx
     @echo ------------------------------
-    @echo Making: $@
+    @echo Compiling: $(PRJNAME)/$(PATH_IN_MODULE)/$<
 .IF "$(GUI)"=="UNX"
     @$(RM) $@ $(@:s/.obj/.o/)
     $(CXX) $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(CFLAGSCXXOBJ) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(OBJ)$/$*.o $(CFLAGSINCXX)$(PWD)$/$*.cxx
@@ -58,7 +58,7 @@ $(OBJ)$/%.obj : %.cxx
 
 $(OBJ)$/%.obj : %.cpp
     @echo ------------------------------
-    @echo Making: $@
+    @echo Compiling: $(PRJNAME)/$(PATH_IN_MODULE)/$<
 .IF "$(GUI)"=="UNX"
     @$(RM) $@ $(@:s/.obj/.o/)
     $(CXX) $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(CFLAGSCXXOBJ) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(OBJ)$/$*.o $(CFLAGSINCXX)$(PWD)$/$*.cpp
@@ -81,7 +81,7 @@ $(OBJ)$/%.obj : %.cpp
 
 $(OBJ)$/%.obj : %.cc
     @echo ------------------------------
-    @echo Making: $@
+    @echo Compiling: $(PRJNAME)/$(PATH_IN_MODULE)/$<
 .IF "$(GUI)"=="UNX"
     @$(RM) $@ $(@:s/.obj/.o/)
     $(CXX) $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(CFLAGSCXXOBJ) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(OBJ)$/$*.o $(CFLAGSINCXX)$(PWD)$/$*.cc
@@ -163,7 +163,7 @@ $(SLO)$/precompiled_ex.% .PHONY:
 
 $(SLO)$/%.obj : %.cxx
     @echo ------------------------------
-    @echo Making: $@
+    @echo Compiling: $(PRJNAME)/$(PATH_IN_MODULE)/$<
 .IF "$(ENABLE_PCH)"!="" && ( "$(PRJNAME)"!="sw" || "$(BUILD_SPECIAL)"!="TRUE" )
 # just a helper var	
     @noop $(assign used_exc_switches=$(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)))
