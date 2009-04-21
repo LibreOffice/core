@@ -124,7 +124,7 @@ namespace {
 
         sal_Int32 GetHandoutPageCount (void) const
         {
-            sal_uInt32 nIndex = mrProperties.getIntValue("SlidesPerPage", 4);
+            sal_uInt32 nIndex = mrProperties.getIntValue("SlidesPerPage", sal_Int32(4));
             if (nIndex<maSlidesPerPage.size())
                 return maSlidesPerPage[nIndex];
             else if ( ! maSlidesPerPage.empty())
@@ -135,48 +135,48 @@ namespace {
 
         bool IsDraw (void) const
         {
-            return GetBoolValue("PageContentType", 0);
+            return GetBoolValue("PageContentType", sal_Int32(0));
         }
 
         bool IsHandout (void) const
         {
-            return GetBoolValue("PageContentType", 1);
+            return GetBoolValue("PageContentType", sal_Int32(1));
         }
 
         bool IsNotes (void) const
         {
-            return GetBoolValue("PageContentType", 2);
+            return GetBoolValue("PageContentType", sal_Int32(2));
         }
 
         bool IsOutline (void) const
         {
-            return GetBoolValue("PageContentType", 3);
+            return GetBoolValue("PageContentType", sal_Int32(3));
         }
 
         ULONG GetOutputQuality (void) const
         {
-            sal_Int32 nQuality = mrProperties.getIntValue( "Quality", 0 );
+            sal_Int32 nQuality = mrProperties.getIntValue( "Quality", sal_Int32(0) );
             return nQuality;
         }
 
         bool IsPageSize (void) const
         {
-            return GetBoolValue("PageOptions", 1);
+            return GetBoolValue("PageOptions", sal_Int32(1));
         }
 
         bool IsTilePage (void) const
         {
-            return GetBoolValue("PageOptions", 2);
+            return GetBoolValue("PageOptions", sal_Int32(2));
         }
 
         bool IsCutPage (void) const
         {
-            return GetBoolValue("PageOptions", 0);
+            return GetBoolValue("PageOptions", sal_Int32(0));
         }
 
         bool IsBooklet (void) const
         {
-            return GetBoolValue("PageOptions", 3);
+            return GetBoolValue("PageOptions", sal_Int32(3));
         }
 
         bool IsPrintExcluded (void) const
