@@ -28,6 +28,10 @@
  *
  ************************************************************************/
 
+#if !ENABLE_LAYOUT_EXPERIMENTAL
+//#undef ENABLE_LAYOUT
+#endif
+
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
@@ -52,7 +56,6 @@
 
 #include <svx/dialogs.hrc>
 #include "numfmt.hrc"
-
 
 #include <svx/numinf.hxx>
 
@@ -235,20 +238,19 @@ void SvxNumberPreviewImpl::DataChanged( const DataChangedEvent& rDCEvt )
 
 #define HDL(hdl) LINK( this, SvxNumberFormatTabPage, hdl )
 
+#include <layout/layout-pre.hxx>
 
-/*************************************************************************
-#*  Methode:        SvxNumberFormatTabPage                  Datum:02.10.97
-#*------------------------------------------------------------------------
-#*
-#*  Klasse:     SvxNumberFormatTabPage
-#*
-#*  Funktion:   Konstruktor der Klasse SvxNumberFormatTabPage
-#*
-#*  Input:      Fenster, SfxItemSet
-#*
-#*  Output:     ---
-#*
-#************************************************************************/
+#if ENABLE_LAYOUT
+#undef SVX_RES
+#define SVX_RES(x) #x
+#define SVX_RES_PLAIN(x) ResId (x, DIALOG_MGR ())
+#define THIS_SVX_RES(x) this, #x
+#undef SfxTabPage
+#define SfxTabPage( parent, id, args ) SfxTabPage( parent, "number-format.xml", id, &args )
+#else /* !ENABLE_LAYOUT */
+#define SVX_RES_PLAIN SVX_RES
+#define THIS_SVX_RES SVX_RES
+#endif /* !ENABLE_LAYOUT */
 
 SvxNumberFormatTabPage::SvxNumberFormatTabPage( Window*             pParent,
                                                 const SfxItemSet&   rCoreAttrs )
@@ -279,39 +281,28 @@ SvxNumberFormatTabPage::SvxNumberFormatTabPage( Window*             pParent,
         aFtComment      ( this, SVX_RES( FT_COMMENT ) ),
         aEdComment      ( this, SVX_RES( ED_COMMENT ) ),
 
-        aWndPreview     ( this, SVX_RES( WND_NUMBER_PREVIEW ) ),
+#if ENABLE_LAYOUT
+        aWndPreview     ( LAYOUT_THIS_WINDOW(this), SVX_RES_PLAIN( WND_NUMBER_PREVIEW ) ),
+#else
+        aWndPreview     ( this, SVX_RES_PLAIN( WND_NUMBER_PREVIEW ) ),
+#endif
         pNumItem        ( NULL ),
         pNumFmtShell    ( NULL ),
         nInitFormat     ( ULONG_MAX ),
 
-        aStrEurope      ( SVX_RES( STR_EUROPE) ),
-        sAutomaticEntry ( SVX_RES( STR_AUTO_ENTRY)),
-//      aIconList       ( SVX_RES( IL_ICON ) ), -> done Init_Impl
+        aStrEurope      ( THIS_SVX_RES( STR_EUROPE) ),
+        sAutomaticEntry ( THIS_SVX_RES( STR_AUTO_ENTRY)),
         pLastActivWindow( NULL )
 {
+#if ENABLE_LAYOUT
+    aLbFormat.Clear ();
+#endif /* ENABLE_LAYOUT */
+
     Init_Impl();
     SetExchangeSupport(); // diese Page braucht ExchangeSupport
     FreeResource();
     nFixedCategory=-1;
 }
-
-// -----------------------------------------------------------------------
-
-
-/*************************************************************************
-#*  Methode:        ~SvxNumberFormatTabPage                 Datum:02.10.97
-#*------------------------------------------------------------------------
-#*
-#*  Klasse:     SvxNumberFormatTabPage
-#*
-#*  Funktion:   Destruktor der Klasse gibt den Speicher der
-#*              fuer die Kopien von num. Shell und Item frei.
-#*
-#*  Input:      ---
-#*
-#*  Output:     ---
-#*
-#************************************************************************/
 
 SvxNumberFormatTabPage::~SvxNumberFormatTabPage()
 {
@@ -319,24 +310,10 @@ SvxNumberFormatTabPage::~SvxNumberFormatTabPage()
     delete pNumItem;
 }
 
-/*************************************************************************
-#*  Methode:        Init_Impl                               Datum:02.10.97
-#*------------------------------------------------------------------------
-#*
-#*  Klasse:     SvxNumberFormatTabPage
-#*
-#*  Funktion:   Initialisierung der Klassen- Member und Handler
-#*
-#*  Input:      ---
-#*
-#*  Output:     ---
-#*
-#************************************************************************/
-
 void SvxNumberFormatTabPage::Init_Impl()
 {
-    ImageList               aIconList( SVX_RES( IL_ICON ) );
-    ImageList               aIconListHC( SVX_RES( IL_ICON_HC ) );
+    ImageList               aIconList( SVX_RES_PLAIN ( IL_ICON ) );
+    ImageList               aIconListHC( SVX_RES_PLAIN ( IL_ICON_HC ) );
 
     bNumItemFlag=TRUE;
     bOneAreaFlag=FALSE;
@@ -886,7 +863,7 @@ BOOL SvxNumberFormatTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
             BOOL bOld = (pBoolItem ? pBoolItem->GetValue() : FALSE);
             rCoreAttrs.Put( SfxBoolItem( _nWhich, aCbSourceFormat.IsChecked() ) );
             if ( !bDataChanged )
-                bDataChanged = (bOld != aCbSourceFormat.IsChecked() ||
+                bDataChanged = (bOld != (BOOL) aCbSourceFormat.IsChecked() ||
                     _eItemState != SFX_ITEM_SET);
         }
 
@@ -1195,14 +1172,22 @@ void SvxNumberFormatTabPage::UpdateFormatListBox_Impl
             aPos.Y()=nStdFormatY;
             aSize.Height()=nStdFormatHeight;
             aLbFormat.SetPosSizePixel(aPos,aSize);
+#if ENABLE_LAYOUT
+            aLbCurrency.Disable();
+#else /* !ENABLE_LAYOUT */
             aLbCurrency.Hide();
+#endif /* !ENABLE_LAYOUT */
         }
         else
         {
             aPos.Y()=nCurFormatY;
             aSize.Height()=nCurFormatHeight;
             aLbFormat.SetPosSizePixel(aPos,aSize);
+#if ENABLE_LAYOUT
+            aLbCurrency.Enable();
+#else /* !ENABLE_LAYOUT */
             aLbCurrency.Show();
+#endif /* !ENABLE_LAYOUT */
         }
 
         pNumFmtShell->CategoryChanged( nTmpCatPos,nFmtLbSelPos, aEntryList );
@@ -1326,11 +1311,15 @@ IMPL_LINK( SvxNumberFormatTabPage, SelFormatHdl_Impl, void *, pLb )
 
         // Reinit options enable/disable for current selection.
 
+#if ENABLE_LAYOUT
+        if (aLbFormat.GetSelectEntryPos () == LISTBOX_ENTRY_NOTFOUND)
+#else /* !ENABLE_LAYOUT */
         // Current category may be UserDefined with no format entries defined.
         // And yes, aLbFormat is a SvxFontListBox with ULONG list positions,
         // implementation returns a LIST_APPEND if empty, comparison with
         // USHORT LISTBOX_ENTRY_NOTFOUND wouldn't match.
         if ( aLbFormat.GetSelectEntryPos() == LIST_APPEND )
+#endif /* !ENABLE_LAYOUT */
             pLb = &aLbCategory; // continue with the current category selected
         else
             pLb = &aLbFormat;   // continue with the current format selected

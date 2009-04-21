@@ -61,6 +61,10 @@ LIB1FILES=  $(SLB)$/appl.lib		\
             $(SLB)$/bastyp.lib		\
             $(SLB)$/config.lib
 
+.IF "$(ENABLE_LAYOUT)" == "TRUE"
+LIB1FILES += $(SLB)$/layout.lib
+.ENDIF # ENABLE_LAYOUT == TRUE
+
 HELPIDFILES=\
             ..\inc\sfx2\sfxsids.hrc	\
             ..\source\inc\helpid.hrc

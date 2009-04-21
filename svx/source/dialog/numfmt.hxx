@@ -95,24 +95,18 @@ public:
 
 // -----------------------------------------------------------------------
 
+#include <sfx2/layout.hxx>
+#include <layout/layout-pre.hxx>
+
 class SvxNumberFormatTabPage : public SfxTabPage
-
-/*  {k:\svx\prototyp\dialog\numfmt.bmp}
-
-    [Beschreibung]
-    Mit dieser TabPage koennen Zahlenformate eingestellt und benutzerdefinierte
-    Formate verwaltet werden.
-
-    [Items]
-    <SfxUInt32Item>:        <SID_ATTR_NUMBERFORMAT_VALUE>
-    <SvxNumberInfoItem>:    <SID_ATTR_NUMBERFORMAT_INFO>
-*/
-
 {
-    using TabPage::DeactivatePage;
+    using SfxTabPage::DeactivatePage;
+
 public:
     ~SvxNumberFormatTabPage();
 
+#undef SfxTabPage
+#define SfxTabPage ::SfxTabPage
     static SfxTabPage*      Create( Window* pParent,
                                     const SfxItemSet& rAttrSet );
     static USHORT*          GetRanges();
@@ -154,7 +148,6 @@ private:
     ImageButton             aIbAdd;
     ImageButton             aIbInfo;
     ImageButton             aIbRemove;
-    ImageList               aIconListDepricated;
 
     FixedText               aFtComment;
     Edit                    aEdComment;
@@ -177,8 +170,8 @@ private:
     long                    nCurFormatHeight;
     long                    nStdFormatY;
     long                    nStdFormatHeight;
-    String                  aStrEurope;
-    String                  sAutomaticEntry;
+    LocalizedString aStrEurope;
+    LocalizedString sAutomaticEntry;
 
     Window*                 pLastActivWindow;
 
@@ -208,6 +201,7 @@ private:
 #endif
 };
 
+#include <layout/layout-post.hxx>
 
 #endif
 

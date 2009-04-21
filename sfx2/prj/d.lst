@@ -126,3 +126,7 @@ mkdir: %_DEST%\inc%_EXT%\sfx2
 ..\inc\QuerySaveDocument.hxx %_DEST%\inc%_EXT%\sfx2\QuerySaveDocument.hxx
 ..\inc\mailmodelapi.hxx %_DEST%\inc%_EXT%\sfx2\mailmodelapi.hxx
 ..\inc\docinsert.hxx %_DEST%\inc%_EXT%\sfx2\docinsert.hxx
+..\inc\sfx2\layout.hxx %_DEST%\inc%_EXT%\sfx2\layout.hxx
+..\inc\sfx2\layout-tabdlg.hxx %_DEST%\inc%_EXT%\sfx2\layout-tabdlg.hxx
+..\inc\sfx2\layout-post.hxx %_DEST%\inc%_EXT%\sfx2\layout-post.hxx
+..\inc\sfx2\layout-pre.hxx %_DEST%\inc%_EXT%\sfx2\layout-pre.hxx

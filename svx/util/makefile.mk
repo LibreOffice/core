@@ -182,6 +182,10 @@ SHL2STDLIBS= \
             $(JVMFWKLIB) \
             $(ICUUCLIB)
 
+.IF "$(debug)$(dbgutil)"!=""
+SHL2STDLIBS += $(CPPUHELPERLIB)
+.ENDIF # "$(debug)$(dbgutil)"!=""
+
 .IF "$(GUI)"=="WNT"
 SHL2STDLIBS+= \
              $(SHLWAPILIB) \

@@ -1,14 +1,14 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
-# $RCSfile: makefile.pmk,v $
+# $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.6 $
+# $Revision: 1.7 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -29,11 +29,32 @@
 #
 #*************************************************************************
 
-# define SVX_DLLIMPLEMENTATION (see @ svxdllapi.h)
-CDEFS += -DSVX_DLLIMPLEMENTATION
+PRJ=..$/..
 
-.IF "$(ENABLE_GTK)" != ""
-CFLAGS+=-DENABLE_GTK
-.ENDIF
+PRJNAME=sfx2
+TARGET=layout
+ENABLE_EXCEPTIONS=true
 
-VISIBILITY_HIDDEN=TRUE
+# --- Settings -----------------------------------------------------
+
+.INCLUDE :  settings.mk
+.INCLUDE :  $(PRJ)$/util$/makefile.pmk
+
+# --- Files --------------------------------------------------------
+
+.IF "$(ENABLE_LAYOUT)" == "TRUE"
+
+SLOFILES = \
+        $(SLO)$/sfxdialog.obj
+#
+
+SLOFILES += $(SLO)$/sfxtabdialog.obj \
+    $(SLO)$/factory.obj \
+        $(SLO)$/sfxtabpage.obj
+
+.ENDIF # ENABLE_LAYOUT == TRUE
+
+# --- Tagets -------------------------------------------------------
+
+.INCLUDE :  target.mk
+

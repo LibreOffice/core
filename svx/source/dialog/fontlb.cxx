@@ -160,6 +160,33 @@ void SvxFontListBox::InitEntry(
                                   eButtonKind );
 }
 
+#if ENABLE_LAYOUT
+
+namespace layout
+{
+
+SvxFontListBox::~SvxFontListBox ()
+{
+}
+
+sal_uInt16 SvxFontListBox::InsertFontEntry (String const& entry, Font const&, Color const*)
+{
+    return InsertEntry (entry);
+}
+
+SvxFontListBox::SvxFontListBox( Context* pParent, const char* pFile)
+: ListBox( pParent, pFile )
+{
+}
+
+/*IMPL_IMPL (SvxFontListBox, ListBox);
+IMPL_CONSTRUCTORS (SvxFontListBox, ListBox, "svxfontlistbox");
+IMPL_GET_IMPL (SvxFontListBox);
+IMPL_GET_WINDOW (SvxFontListBox);*/
+
+};
+
+#endif
 
 // ============================================================================
 

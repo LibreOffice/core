@@ -55,8 +55,9 @@ class SvObjectServerList;
 class TransferableDataHelper;
 struct TransferableObjectDescriptor;
 
-typedef SfxTabPage* (*CreateTabPage)(Window *pParent, const SfxItemSet &rAttrSet);
-typedef USHORT*     (*GetTabPageRanges)();
+#include <sfx2/tabdlg.hxx>
+//typedef SfxTabPage* (*CreateTabPage)(Window *pParent, const SfxItemSet &rAttrSet);
+//typedef USHORT*       (*GetTabPageRanges)();
 
 namespace sfx2
 {

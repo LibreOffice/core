@@ -529,6 +529,9 @@ const Reference< XMultiServiceFactory >& xServiceManager )
 extern "C"
 {
 
+#undef css
+#define css ::com::sun::star
+
     void SAL_CALL component_getImplementationEnvironment(
         const sal_Char** ppEnvironmentTypeName, uno_Environment** ppEnvironment )
     {

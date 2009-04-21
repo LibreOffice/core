@@ -35,6 +35,8 @@
 #undef SVX_DLLIMPLEMENTATION
 #endif
 
+#include "numfmt.hxx" //add for SvxNumberFormatTabPage
+
 #include "dlgfact.hxx"
 
 // class ResId
@@ -100,7 +102,6 @@
 #include "backgrnd.hxx" //add for SvxBackgroundTabPage
 #include "border.hxx" //add for SvxBorderTabPage
 #include "chardlg.hxx" //add for SvxCharNamePage,SvxCharEffectsPage,SvxCharPositionPage,SvxCharTwoLinesPage
-#include "numfmt.hxx" //add for SvxNumberFormatTabPage
 #include "page.hxx" //add for SvxPageDescPage
 #include "postdlg.hxx" //add for SvxPostItDialog
 #include "grfpage.hxx" //add for SvxGrfCropPage
@@ -124,7 +125,17 @@ IMPL_ABSTDLG_BASE(AbstractTabDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSvxDistributeDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractHangulHanjaConversionDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractFmShowColsDialog_Impl);
-IMPL_ABSTDLG_BASE(AbstractSvxZoomDialog_Impl);
+
+AbstractSvxZoomDialog_Impl::~AbstractSvxZoomDialog_Impl()                                       \
+{
+    delete pDlg;
+}
+short AbstractSvxZoomDialog_Impl::Execute()
+{
+    return pDlg->Execute();
+}
+
+//IMPL_ABSTDLG_BASE(AbstractSvxZoomDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSearchProgress_Impl);
 IMPL_ABSTDLG_BASE(AbstractTakeProgress_Impl);
 IMPL_ABSTDLG_BASE(AbstractTitleDialog_Impl);

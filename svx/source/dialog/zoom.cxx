@@ -36,6 +36,7 @@
 #endif
 
 // include ---------------------------------------------------------------
+
 #include <tools/shl.hxx>
 #include <svtools/itemset.hxx>
 #include <svtools/itempool.hxx>
@@ -45,9 +46,7 @@
 #define _SVX_ZOOM_CXX
 
 #include <svx/dialogs.hrc>
-#if !ENABLE_LAYOUT
 #include "zoom.hrc"
-#endif /* !ENABLE_LAYOUT */
 
 #include "zoom.hxx"
 #include <svx/zoomitem.hxx>
@@ -56,6 +55,13 @@
 #include "zoom_def.hxx"
 
 #include <layout/layout-pre.hxx>
+
+#if ENABLE_LAYOUT
+#undef SVX_RES
+#define SVX_RES(x) #x
+#undef SfxModalDialog
+#define SfxModalDialog( parent, id ) Dialog( parent, "zoom.xml", id )
+#endif /* ENABLE_LAYOUT */
 
 // static ----------------------------------------------------------------
 
@@ -218,6 +224,9 @@ SvxZoomDialog::SvxZoomDialog( Window* pParent, const SfxItemSet& rCoreSet ) :
     bModified   ( FALSE )
 
 {
+#if ENABLE_LAYOUT
+    SetHelpId (SID_ATTR_ZOOM);
+#endif /* ENABLE_LAYOUT */
     Link aLink = LINK( this, SvxZoomDialog, UserHdl );
     a100Btn.SetClickHdl( aLink );
     aOptimalBtn.SetClickHdl( aLink );

@@ -431,3 +431,52 @@ BOOL SvxLanguageBox::IsLanguageSelected( const LanguageType eLangType ) const
         return FALSE;
 }
 
+#if ENABLE_LAYOUT
+
+namespace layout
+{
+
+SvxLanguageBox::~SvxLanguageBox ()
+{
+}
+
+SvxLanguageBox::SvxLanguageBox( Context* pParent, const char* pFile, BOOL bCheck )
+: ListBox ( pParent, pFile, bCheck )
+{
+}
+
+void SvxLanguageBox::SetLanguageList( sal_Int16/*list*/, bool/*hasLangNone*/, bool /*langNoneIsLangAll*/, bool /*checkSpellAvail*/)
+{
+}
+
+sal_uInt16 SvxLanguageBox::InsertLanguage( const LanguageType/*type*/, sal_uInt16/*pos*/)
+{
+    return 0;
+}
+sal_uInt16 SvxLanguageBox::InsertLanguage( const LanguageType/*type*/, bool/*checkEntry*/, sal_uInt16 /*pos*/)
+{
+    return 0;
+}
+void SvxLanguageBox::RemoveLanguage( const LanguageType/*type*/)
+{
+}
+void SvxLanguageBox::SelectLanguage( const LanguageType/*type*/, bool/*select*/)
+{
+}
+LanguageType SvxLanguageBox::GetSelectLanguage() const
+{
+    return 0;
+}
+bool SvxLanguageBox::IsLanguageSelected( const LanguageType/*type*/) const
+{
+    return true;
+}
+
+/*IMPL_IMPL (SvxLanguageBox, ListBox);
+IMPL_CONSTRUCTORS ( SvxLanguageBox, ListBox, "svxlanguagebox" );
+IMPL_GET_IMPL( SvxLanguageBox );
+IMPL_GET_WINDOW (SvxLanguageBox);*/
+};
+
+#endif
+

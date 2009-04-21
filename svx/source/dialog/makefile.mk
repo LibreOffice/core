@@ -39,10 +39,6 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  settings.mk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
-.IF "$(ENABLE_LAYOUT)" == "TRUE"
-CFLAGS+= -DENABLE_LAYOUT=1 -I../$(PRJ)/layout/inc -I../$(PRJ)/layout/$(INPATH)/inc
-.ENDIF # ENABLE_LAYOUT == TRUE
-
 # --- Files --------------------------------------------------------
 
 SRS1NAME=dialogs

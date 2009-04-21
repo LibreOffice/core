@@ -426,7 +426,7 @@ namespace svxform
                 else
                 {
                     // and also the new font
-                    setUnderline( xPeer, UnderlineDescriptor( FontUnderline::WAVE, m_nInvalidColor ) );
+                    setUnderline( xPeer, UnderlineDescriptor( com::sun::star::awt::FontUnderline::WAVE, m_nInvalidColor ) );
                 }
             }
 
