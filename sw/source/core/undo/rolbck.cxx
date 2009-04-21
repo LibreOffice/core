@@ -60,7 +60,7 @@
 #include <rolbck.hxx>
 #include <ndgrf.hxx>            // SwGrfNode
 #include <undobj.hxx>           // fuer UndoDelete
-#include <bookmrk.hxx>          // fuer SwBookmark
+#include <IMark.hxx>            // fuer SwBookmark
 #include <charfmt.hxx> // #i27615#
 #ifndef _COMCORE_HRC
 #include <comcore.hrc>
@@ -70,6 +70,7 @@
 #include <undo.hrc>
 #endif
 #include <svx/brkitem.hxx>
+#include <bookmrk.hxx>
 
 SV_IMPL_PTRARR( SwpHstry, SwHstryHintPtr)
 
@@ -550,166 +551,114 @@ void SwHstryTxtFlyCnt::SetInDoc( SwDoc* pDoc, BOOL )
 
 
 
-// JP 21.03.94: jetzt auch die Bookmarks in die History aufnehmen
-SwHstryBookmark::SwHstryBookmark( const SwBookmark& rBkmk, BYTE nType )
-    : SwHstryHint( HSTRY_BOOKMARK ),
-      nNode1( 0 ),
-      nNode2( rBkmk.GetOtherBookmarkPos() ? 0 : ULONG_MAX ),
-      nCntnt1( 0 ),
-      nCntnt2( 0 ),
-      nTyp( nType ),
-      // --> OD 2007-10-17 #i81002#
-      eBkmkType( rBkmk.GetType() )
-      // <--
+SwHstryBookmark::SwHstryBookmark(
+    const ::sw::mark::IMark& rBkmk,
+    bool bSavePos,
+    bool bSaveOtherPos)
+    : SwHstryHint(HSTRY_BOOKMARK)
+    , m_aName(rBkmk.GetName())
+    , m_aShortName()
+    , m_aKeycode()
+    , m_nNode(bSavePos ?
+        rBkmk.GetMarkPos().nNode.GetIndex() : 0)
+    , m_nOtherNode(bSaveOtherPos ?
+        rBkmk.GetOtherMarkPos().nNode.GetIndex() : 0)
+    , m_nCntnt(bSavePos ?
+        rBkmk.GetMarkPos().nContent.GetIndex() : 0)
+    , m_nOtherCntnt(bSaveOtherPos ?
+        rBkmk.GetOtherMarkPos().nContent.GetIndex() :0)
+    , m_bSavePos(bSavePos)
+    , m_bSaveOtherPos(bSaveOtherPos)
+    , m_bHadOtherPos(rBkmk.IsExpanded())
+    , m_eBkmkType(IDocumentMarkAccess::GetType(rBkmk))
 {
-    aName = rBkmk.GetName();
-    aShortName = rBkmk.GetShortName();
-    nKeyCode = rBkmk.GetKeyCode().GetCode() | rBkmk.GetKeyCode().GetModifier();
-
-    if( BKMK_POS & nTyp )
+    const ::sw::mark::IBookmark* const pBookmark = dynamic_cast< const ::sw::mark::IBookmark* >(&rBkmk);
+    if(pBookmark)
     {
-        nNode1 = rBkmk.GetBookmarkPos().nNode.GetIndex();
-        nCntnt1 = rBkmk.GetBookmarkPos().nContent.GetIndex();
-    }
-    if( BKMK_OTHERPOS & nTyp )
-    {
-        nNode2 = rBkmk.GetOtherBookmarkPos()->nNode.GetIndex();
-        nCntnt2 = rBkmk.GetOtherBookmarkPos()->nContent.GetIndex();
+        m_aKeycode = pBookmark->GetKeyCode();
+        m_aShortName = pBookmark->GetShortName();
     }
 }
 
 
-void SwHstryBookmark::SetInDoc( SwDoc* pDoc, BOOL )
+void SwHstryBookmark::SetInDoc(SwDoc* pDoc, BOOL)
 {
-    BOOL bDoesUndo = pDoc->DoesUndo();
-    pDoc->DoUndo( FALSE );
+    bool bDoesUndo = pDoc->DoesUndo();
+    pDoc->DoUndo(false);
 
     SwNodes& rNds = pDoc->GetNodes();
+    IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
+    ::std::auto_ptr<SwPaM> pPam;
+    ::sw::mark::IMark* pMark = NULL;
 
-    if( ( BKMK_POS == nTyp && ULONG_MAX == nNode2 ) ||
-        ( BKMK_POS | BKMK_OTHERPOS ) == nTyp )
+    if(m_bSavePos)
     {
-        // voellig neu setzen
-        SwCntntNode * pCntntNd = rNds[ nNode1 ]->GetCntntNode();
-        ASSERT( pCntntNd, "Falscher Node fuer den Bookmark" );
+        SwCntntNode* const pCntntNd = rNds[m_nNode]->GetCntntNode();
+        OSL_ENSURE(pCntntNd,
+            "<SwHstryBookmark::SetInDoc(..)>"
+            " - wrong node for a mark");
 
         // #111660# don't crash when nNode1 doesn't point to content node.
-        if( pCntntNd != NULL )
-        {
-            SwPaM aPam( *pCntntNd, nCntnt1 );
-            if( ULONG_MAX != nNode2 )
-            {
-                aPam.SetMark();
-                aPam.GetMark()->nNode = nNode2;
-                pCntntNd = rNds[ aPam.GetMark()->nNode ]->GetCntntNode();
-                ASSERT( pCntntNd, "Falscher Node fuer den Bookmark" );
-                aPam.GetMark()->nContent.Assign( pCntntNd, nCntnt2 );
-            }
-            // --> OD 2007-10-17 #i81002#
-            pDoc->makeBookmark( aPam, KeyCode( nKeyCode ), aName, aShortName, eBkmkType );
-            // <--
-        }
+        if(pCntntNd)
+            pPam = ::std::auto_ptr<SwPaM>(new SwPaM(*pCntntNd, m_nCntnt));
     }
     else
     {
-        // dann muss das noch vorhandene manipuliert werden
-        SwBookmark* const* ppBkmks = pDoc->getBookmarks().GetData();
-        for( USHORT n = pDoc->getBookmarks().Count(); n; --n, ++ppBkmks )
-            if( (*ppBkmks)->GetName() == aName )
-            {
-                ULONG nNd;
-                USHORT nCnt;
-                if( BKMK_POS == nTyp )
-                {
-                    if( !nNode2 && !(*ppBkmks)->GetOtherBookmarkPos() )
-                    {
-                        // dann muss der neu angelegt werden.
-                        SwPaM aPam( (*ppBkmks)->GetBookmarkPos() );
-                        aPam.SetMark();
-                        aPam.GetPoint()->nNode = nNode1;
-                        aPam.GetPoint()->nContent.Assign(
-                                rNds[ nNode1 ]->GetCntntNode(), nCntnt1 );
-
-                        pDoc->deleteBookmark( pDoc->getBookmarks().Count() - n );
-                        // --> OD 2007-10-17 #i81002#
-                        pDoc->makeBookmark( aPam, KeyCode( nKeyCode ),
-                                            aName, aShortName,
-                                            eBkmkType );
-                        // <--
-                        break;
-
-                    }
-                    nNd = nNode1;
-                    nCnt = nCntnt1;
-                    // --> OD 2007-09-27 #i81002# - refactoring
-                    // Do not directly manipulate member of <SwBookmark>
-//                    pPos = (SwPosition*)&(*ppBkmks)->GetBookmarkPos();
-                    SwPosition aNewPos( (*ppBkmks)->GetBookmarkPos() );
-                    aNewPos.nNode = nNd;
-                    aNewPos.nContent.Assign( rNds[ aNewPos.nNode ]->GetCntntNode(),
-                                             nCnt );
-                    (*ppBkmks)->SetBookmarkPos( &aNewPos );
-                    // <--
-                }
-                else
-                {
-                    if( !(*ppBkmks)->GetOtherBookmarkPos() )
-                    {
-                        // dann muss der neu angelegt werden.
-                        SwPaM aPam( (*ppBkmks)->GetBookmarkPos() );
-                        aPam.SetMark();
-                        aPam.GetMark()->nNode = nNode2;
-                        aPam.GetMark()->nContent.Assign(
-                                rNds[ nNode2 ]->GetCntntNode(), nCntnt2 );
-
-                        pDoc->deleteBookmark( pDoc->getBookmarks().Count() - n );
-                        // --> OD 2007-10-17 #i81002#
-                        pDoc->makeBookmark( aPam, KeyCode( nKeyCode ),
-                                            aName, aShortName, eBkmkType );
-                        // <--
-                        break;
-                    }
-                    nNd = nNode2;
-                    nCnt = nCntnt2;
-                    // --> OD 2007-09-27 #i81002# - refactoring
-                    // Do not directly manipulate member of <SwBookmark>
-//                    pPos = (SwPosition*)(*ppBkmks)->GetOtherBookmarkPos();
-                    SwPosition aNewPos( *((*ppBkmks)->GetOtherBookmarkPos()) );
-                    aNewPos.nNode = nNd;
-                    aNewPos.nContent.Assign( rNds[ aNewPos.nNode ]->GetCntntNode(),
-                                             nCnt );
-                    (*ppBkmks)->SetOtherBookmarkPos( &aNewPos );
-                    // <--
-                }
-
-                // --> OD 2007-10-10 #i81002# - refactoring
-                // Do not directly manipulate member of <SwBookmark>
-//                pPos->nNode = nNd;
-//                pPos->nContent.Assign( rNds[ pPos->nNode ]->GetCntntNode(),
-//                                        nCnt );
-                // <--
-                break;
-            }
+        pMark = pMarkAccess->findMark(m_aName)->get();
+        pPam = ::std::auto_ptr<SwPaM>(new SwPaM(pMark->GetMarkPos()));
     }
 
-    pDoc->DoUndo( bDoesUndo );
+    if(m_bSaveOtherPos)
+    {
+        SwCntntNode* const pCntntNd = rNds[m_nOtherNode]->GetCntntNode();
+        OSL_ENSURE(pCntntNd,
+            "<SwHstryBookmark::SetInDoc(..)>"
+            " - wrong node for a mark");
+
+        if(pPam.get() != NULL && pCntntNd)
+        {
+            pPam->SetMark();
+            pPam->GetMark()->nNode = m_nOtherNode;
+            pPam->GetMark()->nContent.Assign(pCntntNd, m_nOtherCntnt);
+        }
+    }
+    else if(m_bHadOtherPos)
+    {
+        if(!pMark)
+            pMark = pMarkAccess->findMark(m_aName)->get();
+        OSL_ENSURE(pMark->IsExpanded(),
+            "<SwHstryBookmark::SetInDoc(..)>"
+            " - missing pos on old mark");
+        pPam->SetMark();
+        *pPam->GetMark() = pMark->GetOtherMarkPos();
+    }
+
+    if(pPam.get())
+    {
+        if(pMark)
+            pMarkAccess->deleteMark(pMark);
+        ::sw::mark::IBookmark* const pBookmark = dynamic_cast< ::sw::mark::IBookmark* >(
+            pMarkAccess->makeMark(*pPam, m_aName, m_eBkmkType));
+        if(pBookmark)
+        {
+            pBookmark->SetKeyCode(m_aKeycode);
+            pBookmark->SetShortName(m_aShortName);
+        }
+    }
+    pDoc->DoUndo(bDoesUndo);
 }
 
 
-BOOL SwHstryBookmark::IsEqualBookmark( const SwBookmark& rBkmk )
+BOOL SwHstryBookmark::IsEqualBookmark(const ::sw::mark::IMark& rBkmk)
 {
-    return nNode1 == rBkmk.GetBookmarkPos().nNode.GetIndex() &&
-           nCntnt1 == rBkmk.GetBookmarkPos().nContent.GetIndex() &&
-            aName == rBkmk.GetName() &&
-            aShortName == rBkmk.GetShortName() &&
-            nKeyCode == (rBkmk.GetKeyCode().GetCode() |
-                        rBkmk.GetKeyCode().GetModifier())
-            ? TRUE : FALSE;
+    return m_nNode == rBkmk.GetMarkPos().nNode.GetIndex()
+        && m_nCntnt == rBkmk.GetMarkPos().nContent.GetIndex()
+        && m_aName == rBkmk.GetName();
 }
 
-const String & SwHstryBookmark::GetName() const
+const ::rtl::OUString& SwHstryBookmark::GetName() const
 {
-    return aName;
+    return m_aName;
 }
 
 /*************************************************************************/
@@ -1064,12 +1013,11 @@ void SwHistory::Add( const SwFmtColl* pColl, ULONG nNodeIdx, BYTE nWhichNd )
 }
 
 
-// JP 21.03.94: Bookmarks jetzt auch in die History mitaufnehmen
-void SwHistory::Add( const SwBookmark& rBkmk, BYTE nTyp )
+void SwHistory::Add(const ::sw::mark::IMark& rBkmk, bool bSavePos, bool bSaveOtherPos)
 {
-    ASSERT( !nEndDiff, "nach REDO wurde die History noch nicht geloescht" );
-    SwHstryHint * pHt = new SwHstryBookmark( rBkmk, nTyp );
-    Insert( pHt, Count() );
+    ASSERT(!nEndDiff, "nach REDO wurde die History noch nicht geloescht");
+    SwHstryHint * pHt = new SwHstryBookmark(rBkmk, bSavePos, bSaveOtherPos);
+    Insert(pHt, Count());
 }
 
 

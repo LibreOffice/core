@@ -47,53 +47,47 @@
 #include <fmtcntnt.hxx>
 #include <doc.hxx>
 #include <swserv.hxx>           // fuer Server-Funktionalitaet
-#include <bookmrk.hxx>          // fuer die Bookmarks
+#include <IMark.hxx>
+#include <bookmrk.hxx>
 #include <section.hxx>          // fuer SwSectionFmt
 #include <swtable.hxx>          // fuer SwTable
 #include <node.hxx>
 #include <ndtxt.hxx>
 #include <pam.hxx>
 #include <docary.hxx>
+#include <MarkManager.hxx>
 
 using namespace ::com::sun::star;
+
+namespace
+{
+
+    static ::sw::mark::DdeBookmark* const lcl_FindDdeBookmark(const IDocumentMarkAccess& rMarkAccess, const String& rName)
+    {
+        //Iterating over all bookmarks, checking DdeBookmarks
+        const String sNameLc = GetAppCharClass().lower(rName);
+        for(IDocumentMarkAccess::const_iterator_t ppMark = rMarkAccess.getMarksBegin();
+            ppMark != rMarkAccess.getMarksEnd();
+            ppMark++)
+        {
+            ::sw::mark::DdeBookmark* const pBkmk = dynamic_cast< ::sw::mark::DdeBookmark*>(ppMark->get());
+            if(pBkmk && GetAppCharClass().lower(pBkmk->GetName()) == sNameLc)
+                return pBkmk;
+        }
+        return NULL;
+    }
+}
 
 struct _FindItem
 {
     const String& rItem;
-    SwBookmark* pBkmk;
     SwTableNode* pTblNd;
     SwSectionNode* pSectNd;
 
-    _FindItem( const String& rS )
-        : rItem( rS ), pBkmk( 0 ), pTblNd( 0 ), pSectNd( 0 )
+    _FindItem(const String& rS)
+        : rItem(rS), pTblNd(0), pSectNd(0)
     {}
-
-    void ClearObj()
-    {
-        if( pBkmk )
-            pBkmk->SetRefObject( 0 );
-        else if( pSectNd )
-            pSectNd->GetSection().SetRefObject( 0 );
-        else if( pTblNd )
-            pTblNd->GetTable().SetRefObject( 0 );
-    }
 };
-
-
-BOOL lcl_FindBookmark( const SwBookmarkPtr& rpBkmk, void* pArgs )
-{
-    BOOL bRet = TRUE;
-    String sNm( GetAppCharClass().lower( rpBkmk->GetName() ));
-    if( sNm.Equals( ((_FindItem*)pArgs)->rItem ) )
-    {
-        ((_FindItem*)pArgs)->pBkmk = rpBkmk;
-        bRet = FALSE;
-    }
-
-    return bRet;
-}
-
-
 
 BOOL lcl_FindSection( const SwSectionFmtPtr& rpSectFmt, void* pArgs )
 {
@@ -149,17 +143,12 @@ BOOL lcl_FindTable( const SwFrmFmtPtr& rpTableFmt, void* pArgs )
 bool SwDoc::GetData( const String& rItem, const String& rMimeType,
                      uno::Any & rValue ) const
 {
-    // haben wir ueberhaupt das Item vorraetig?
-    String sItem( GetAppCharClass().lower( rItem ));
-    _FindItem aPara( sItem );
-    ((SwBookmarks&)*pBookmarkTbl).ForEach( 0, pBookmarkTbl->Count(),
-                                            lcl_FindBookmark, &aPara );
-    if( aPara.pBkmk )
-    {
-        // gefunden, als erfrage die Daten
-        return SwServerObject( *aPara.pBkmk ).GetData( rValue, rMimeType );
-    }
+    ::sw::mark::DdeBookmark* const pBkmk = lcl_FindDdeBookmark(*pMarkManager, rItem);
+    if(pBkmk) return SwServerObject(*pBkmk).GetData(rValue, rMimeType);
 
+    // haben wir ueberhaupt das Item vorraetig?
+    String sItem(GetAppCharClass().lower(rItem));
+    _FindItem aPara( sItem );
     ((SwSectionFmts&)*pSectionFmtTbl).ForEach( 0, pSectionFmtTbl->Count(),
                                                 lcl_FindSection, &aPara );
     if( aPara.pSectNd )
@@ -183,16 +172,12 @@ bool SwDoc::GetData( const String& rItem, const String& rMimeType,
 bool SwDoc::SetData( const String& rItem, const String& rMimeType,
                      const uno::Any & rValue )
 {
-    // haben wir ueberhaupt das Item vorraetig?
-    String sItem( GetAppCharClass().lower( rItem ));
-    _FindItem aPara( sItem );
-    pBookmarkTbl->ForEach( 0, pBookmarkTbl->Count(), lcl_FindBookmark, &aPara );
-    if( aPara.pBkmk )
-    {
-        // gefunden, als erfrage die Daten
-        return SwServerObject( *aPara.pBkmk ).SetData( rMimeType, rValue );
-    }
+    ::sw::mark::DdeBookmark* const pBkmk = lcl_FindDdeBookmark(*pMarkManager, rItem);
+    if(pBkmk) return SwServerObject(*pBkmk).SetData(rMimeType, rValue);
 
+    // haben wir ueberhaupt das Item vorraetig?
+    String sItem(GetAppCharClass().lower(rItem));
+    _FindItem aPara( sItem );
     pSectionFmtTbl->ForEach( 0, pSectionFmtTbl->Count(), lcl_FindSection, &aPara );
     if( aPara.pSectNd )
     {
@@ -211,72 +196,47 @@ bool SwDoc::SetData( const String& rItem, const String& rMimeType,
 
 
 
-::sfx2::SvLinkSource* SwDoc::CreateLinkSource( const String& rItem )
+::sfx2::SvLinkSource* SwDoc::CreateLinkSource(const String& rItem)
 {
-    // haben wir ueberhaupt das Item vorraetig?
-    String sItem( GetAppCharClass().lower( rItem ));
-    _FindItem aPara( sItem );
+    SwServerObject* pObj = NULL;
 
-    SwServerObject* pObj;
+    // bookmarks
+    ::sw::mark::DdeBookmark* const pBkmk = lcl_FindDdeBookmark(*pMarkManager, rItem);
+    if(pBkmk && pBkmk->IsExpanded()
+        && (0 == (pObj = pBkmk->GetRefObject())))
+    {
+        // mark found, but no link yet -> create hotlink
+        pObj = new SwServerObject(*pBkmk);
+        pBkmk->SetRefObject(pObj);
+        GetLinkManager().InsertServer(pObj);
+    }
+    if(pObj) return pObj;
 
-    do {    // middle check Loop
-        ((SwBookmarks&)*pBookmarkTbl).ForEach( 0, pBookmarkTbl->Count(),
-                                                lcl_FindBookmark, &aPara );
-        if( aPara.pBkmk && aPara.pBkmk->GetOtherBookmarkPos() )
-        {
-            // gefunden, also Hotlink einrichten
-            // sollten wir schon einer sein?
-            if( 0 == (pObj = aPara.pBkmk->GetObject()) )
-            {
-                pObj = new SwServerObject( *aPara.pBkmk );
-                aPara.pBkmk->SetRefObject( pObj );
-            }
-            else if( pObj->HasDataLinks() )
-                return pObj;
-            break;
-        }
+    _FindItem aPara(GetAppCharClass().lower(rItem));
+    // sections
+    ((SwSectionFmts&)*pSectionFmtTbl).ForEach(0, pSectionFmtTbl->Count(), lcl_FindSection, &aPara);
+    if(aPara.pSectNd
+        && (0 == (pObj = aPara.pSectNd->GetSection().GetObject())))
+    {
+        // section found, but no link yet -> create hotlink
+        pObj = new SwServerObject( *aPara.pSectNd );
+        aPara.pSectNd->GetSection().SetRefObject( pObj );
+        GetLinkManager().InsertServer(pObj);
+    }
+    if(pObj) return pObj;
 
-        ((SwSectionFmts&)*pSectionFmtTbl).ForEach( 0, pSectionFmtTbl->Count(),
-                                                    lcl_FindSection, &aPara );
-        if( aPara.pSectNd )
-        {
-            // gefunden, also Hotlink einrichten
-            // sollten wir schon einer sein?
-            if( 0 == (pObj = aPara.pSectNd->GetSection().GetObject()) )
-            {
-                pObj = new SwServerObject( *aPara.pSectNd );
-                aPara.pSectNd->GetSection().SetRefObject( pObj );
-            }
-            else if( pObj->HasDataLinks() )
-                return pObj;
-            break;
-        }
-
-        ((SwFrmFmts*)pTblFrmFmtTbl)->ForEach( 0, pTblFrmFmtTbl->Count(),
-                                                lcl_FindTable, &aPara );
-        if( aPara.pTblNd )
-        {
-            // gefunden, also Hotlink einrichten
-            // sollten wir schon einer sein?
-            if( 0 == (pObj = aPara.pTblNd->GetTable().GetObject()) )
-            {
-                pObj = new SwServerObject( *aPara.pTblNd );
-                aPara.pTblNd->GetTable().SetRefObject( pObj );
-            }
-            else if( pObj->HasDataLinks() )
-                return pObj;
-            break;
-        }
-        // bis hierhin, also nicht vorhanden
-        return 0;
-    } while( FALSE );
-
-    // neu angelegt also ab in die Verwaltung
-    GetLinkManager().InsertServer( pObj );
+    // tables
+    ((SwFrmFmts*)pTblFrmFmtTbl)->ForEach(0, pTblFrmFmtTbl->Count(), lcl_FindTable, &aPara);
+    if(aPara.pTblNd
+        && (0 == (pObj = aPara.pTblNd->GetTable().GetObject())))
+    {
+        // table found, but no link yet -> create hotlink
+        pObj = new SwServerObject(*aPara.pTblNd);
+        aPara.pTblNd->GetTable().SetRefObject(pObj);
+        GetLinkManager().InsertServer(pObj);
+    }
     return pObj;
 }
-
-
 
 BOOL SwDoc::SelectServerObj( const String& rStr, SwPaM*& rpPam,
                             SwNodeRange*& rpRange ) const
@@ -369,23 +329,19 @@ BOOL SwDoc::SelectServerObj( const String& rStr, SwPaM*& rpPam,
             return FALSE;
     }
 
+    ::sw::mark::DdeBookmark* const pBkmk = lcl_FindDdeBookmark(*pMarkManager, sItem);
+    if(pBkmk)
+    {
+        if(pBkmk->IsExpanded())
+            rpPam = new SwPaM(
+                pBkmk->GetMarkPos(),
+                pBkmk->GetOtherMarkPos());
+        return static_cast<bool>(rpPam);
+    }
+
     // alte "Mechanik"
     rCC.toLower( sItem );
     _FindItem aPara( sItem );
-    if( pBookmarkTbl->Count() )
-    {
-        ((SwBookmarks&)*pBookmarkTbl).ForEach( 0, pBookmarkTbl->Count(),
-                                            lcl_FindBookmark, &aPara );
-        if( aPara.pBkmk )
-        {
-            // gefunden, also erzeuge einen Bereich
-            if( aPara.pBkmk->GetOtherBookmarkPos() )
-                // ein aufgespannter Bereich
-                rpPam = new SwPaM( aPara.pBkmk->GetBookmarkPos(),
-                                    *aPara.pBkmk->GetOtherBookmarkPos() );
-            return 0 != rpPam;
-        }
-    }
 
     if( pSectionFmtTbl->Count() )
     {

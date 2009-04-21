@@ -56,12 +56,13 @@
 #include <swevent.hxx>
 #include <doc.hxx>
 #include <unocrsr.hxx>
-#include <bookmrk.hxx>
+#include <IMark.hxx>
 #include <unoprnms.hxx>
 #include <docsh.hxx>
 #include <swunodef.hxx>
 #include <swmodule.hxx>
 #include <svtools/smplhint.hxx>
+#include <svtools/macitem.hxx>
 
 #include <svx/acorrcfg.hxx>
 
@@ -398,10 +399,8 @@ void SwXAutoTextGroup::renameByName(const OUString& aElementName,
     else
         throw uno::RuntimeException();
 }
-/* -----------------04.05.99 11:57-------------------
- *
- * --------------------------------------------------*/
-sal_Bool lcl_CopySelToDoc( SwDoc* pInsDoc, OTextCursorHelper* pxCursor, SwXTextRange* pxRange )
+
+sal_Bool lcl_CopySelToDoc( SwDoc* pInsDoc, OTextCursorHelper* pxCursor, SwXTextRange* pxRange)
 {
     ASSERT( pInsDoc, "kein Ins.Dokument"  );
 
@@ -421,10 +420,10 @@ sal_Bool lcl_CopySelToDoc( SwDoc* pInsDoc, OTextCursorHelper* pxCursor, SwXTextR
         }
         else
         {
-            SwBookmark* pBkm = pxRange->GetBookmark();
-            if(pBkm && pBkm->GetOtherBookmarkPos())
+            const ::sw::mark::IMark* const pBkmk = pxRange->GetBookmark();
+            if(pBkmk && pBkmk->IsExpanded())
             {
-                SwPaM aTmp(*pBkm->GetOtherBookmarkPos(), pBkm->GetBookmarkPos());
+                SwPaM aTmp(pBkmk->GetOtherMarkPos(), pBkmk->GetMarkPos());
                 bRet |= (true == pxRange->GetDoc()->Copy(aTmp, aPos));
             }
         }
@@ -1134,11 +1133,11 @@ void SwXAutoTextEntry::applyTo(const uno::Reference< text::XTextRange > & xTextR
     SwPaM* pInsertPaM = 0;
     if(pRange)
     {
-        SwBookmark* pBkm = pRange->GetBookmark();
-        if(pBkm->GetOtherBookmarkPos())
-            pInsertPaM = new SwPaM(*pBkm->GetOtherBookmarkPos(), pBkm->GetBookmarkPos());
+        const ::sw::mark::IMark* const pBkmk = pRange->GetBookmark();
+        if(pBkmk->IsExpanded())
+            pInsertPaM = new SwPaM(pBkmk->GetOtherMarkPos(), pBkmk->GetMarkPos());
         else
-            pInsertPaM = new SwPaM(pBkm->GetBookmarkPos());
+            pInsertPaM = new SwPaM(pBkmk->GetMarkPos());
     }
     else
     {

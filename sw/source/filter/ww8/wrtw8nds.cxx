@@ -104,7 +104,7 @@
 #include <numrule.hxx>
 #include "wrtww8.hxx"
 #include "ww8par.hxx"
-#include <bookmrk.hxx>
+#include <IMark.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n;
@@ -1542,44 +1542,44 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
         {
             sal_Unicode ch=aStr.GetChar(nAktPos);
             int ofs=(ch==CH_TXT_ATR_FIELDSTART || ch==CH_TXT_ATR_FIELDEND || ch==CH_TXT_ATR_FORMELEMENT?1:0);
-
-            if (ch==CH_TXT_ATR_FIELDSTART) {
-                SwPosition aPosition( *pNd, SwIndex( (SwTxtNode*)pNd, nAktPos+1 ) );
-                SwFieldBookmark* pFieldmark=(SwFieldBookmark*)rWW8Wrt.pDoc->getFieldBookmarkFor( aPosition );
-                ASSERT(pFieldmark!=NULL, "Looks like this doc is broken...; where is the Fieldmark for the FIELDSTART??");
-
-                if (pFieldmark!=NULL) {
-                    rWW8Wrt.AppendBookmark( pFieldmark->GetName(), 1);
-                }
+            IDocumentMarkAccess* const pMarkAccess = rWW8Wrt.pDoc->getIDocumentMarkAccess();
+            if(ch==CH_TXT_ATR_FIELDSTART)
+            {
+                SwPosition aPosition(*pNd, SwIndex((SwTxtNode*)pNd, nAktPos+1));
+                ::sw::mark::IFieldmark const * const pFieldmark=pMarkAccess->getFieldmarkFor(aPosition);
+                OSL_ENSURE(pFieldmark,
+                    "Looks like this doc is broken...; where is the Fieldmark for the FIELDSTART??");
+                if(pFieldmark)
+                    rWW8Wrt.AppendBookmark(pFieldmark->GetName(), 1);
                 rWW8Wrt.OutField(NULL, ww::eFORMTEXT, String::CreateFromAscii(" FORMTEXT "), WRITEFIELD_START | WRITEFIELD_CMD_START);
-                if (pFieldmark!=NULL) {
-                    rWW8Wrt.WriteFormData( *pFieldmark );
-                }
+                if(pFieldmark)
+                    rWW8Wrt.WriteFormData(*pFieldmark);
                 rWW8Wrt.OutField(NULL, ww::eFORMTEXT, String(), WRITEFIELD_CMD_END);
-            } else if (ch==CH_TXT_ATR_FIELDEND) {
-                SwPosition aPosition( *pNd, SwIndex( (SwTxtNode*)pNd, nAktPos ) );
-                SwFieldBookmark* pFieldmark=(SwFieldBookmark*)rWW8Wrt.pDoc->getFieldBookmarkFor( aPosition );
-                ASSERT(pFieldmark!=NULL, "Looks like this doc is broken...; where is the Fieldmark for the FIELDSTART??");
+            }
+            else if (ch==CH_TXT_ATR_FIELDEND)
+            {
+                SwPosition aPosition(*pNd, SwIndex((SwTxtNode*)pNd, nAktPos));
+                ::sw::mark::IFieldmark const * const pFieldmark=pMarkAccess->getFieldmarkFor(aPosition);
+                OSL_ENSURE(pFieldmark,
+                    "Looks like this doc is broken...; where is the Fieldmark for the FIELDSTART??");
                 rWW8Wrt.OutField(NULL, ww::eFORMTEXT, String(), WRITEFIELD_CLOSE);
-                if (pFieldmark!=NULL) {
-                    rWW8Wrt.AppendBookmark( pFieldmark->GetName(), 0);
-                }
-            } else if (ch==CH_TXT_ATR_FORMELEMENT) {
-                SwPosition aPosition( *pNd, SwIndex( (SwTxtNode*)pNd, nAktPos ) );
-                SwFieldBookmark* pFieldmark=rWW8Wrt.pDoc->getFormFieldBookmarkFor( aPosition );
-                ASSERT(pFieldmark!=NULL, "Looks like this doc is broken...; where is the Fieldmark for the FIELDSTART??");
-                if (pFieldmark!=NULL) {
-                    rWW8Wrt.AppendBookmark( pFieldmark->GetName(), 1);
-                }
+                if (pFieldmark)
+                    rWW8Wrt.AppendBookmark(pFieldmark->GetName(), 0);
+            }
+            else if (ch==CH_TXT_ATR_FORMELEMENT)
+            {
+                SwPosition aPosition(*pNd, SwIndex((SwTxtNode*)pNd, nAktPos));
+                ::sw::mark::IFieldmark const * const pFieldmark=pMarkAccess->getFieldmarkFor(aPosition);
+                OSL_ENSURE(pFieldmark,
+                    "Looks like this doc is broken...; where is the Fieldmark for the FIELDSTART??");
+                if(pFieldmark)
+                    rWW8Wrt.AppendBookmark(pFieldmark->GetName(), 1);
                 rWW8Wrt.OutField(NULL, ww::eFORMCHECKBOX, String::CreateFromAscii(" FORMCHECKBOX "), WRITEFIELD_START | WRITEFIELD_CMD_START);
-                if (pFieldmark!=NULL) {
-
-                    rWW8Wrt.WriteFormData( *pFieldmark );
-                }
+                if(pFieldmark)
+                    rWW8Wrt.WriteFormData(*pFieldmark);
                 rWW8Wrt.OutField(NULL, ww::eFORMCHECKBOX, String(), WRITEFIELD_CMD_END | WRITEFIELD_CLOSE);
-                if (pFieldmark!=NULL) {
-                    rWW8Wrt.AppendBookmark( pFieldmark->GetName(), 0);
-                }
+                if(pFieldmark)
+                    rWW8Wrt.AppendBookmark(pFieldmark->GetName(), 0);
             }
             nLen-=static_cast<USHORT>(ofs);
             String aSnippet(aAttrIter.GetSnippet(aStr, nAktPos+static_cast<USHORT>(ofs), nLen));
@@ -1592,7 +1592,7 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
                     aSnippet.Insert(0x09,0);
                 }
             }
-            rWW8Wrt.OutSwString(aSnippet, 0, nLen, bUnicode, eChrSet );
+            rWW8Wrt.OutSwString(aSnippet, 0, nLen, bUnicode, eChrSet);
         }
 
         if (aAttrIter.IsDropCap(nNextAttr))

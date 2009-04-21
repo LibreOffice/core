@@ -58,7 +58,7 @@
 #include <uitool.hxx>
 #include <edtwin.hxx>
 #include <pagedesc.hxx>
-#include <bookmrk.hxx>
+#include <IMark.hxx>
 #include <fldbas.hxx>
 #include <workctrl.hxx>
 #include <usrpref.hxx>
@@ -88,7 +88,8 @@
 #include <postit.hxx>
 
 USHORT  SwView::nMoveType = NID_PGE;
-USHORT  SwView::nActMark = 0;
+sal_Int32 SwView::nActMark = 0;
+
 
 #define VIEW_IMAGECOLOR COL_LIGHTBLUE
 
@@ -455,37 +456,37 @@ IMPL_STATIC_LINK( SwView, MoveNavigationHdl, bool *, pbNext )
         break;
         case NID_MARK:
         {
-            // Selektionen aufheben
+            // unselect
             rSh.MoveCrsr();
             rSh.EnterStdMode();
-            const USHORT nBookCnt = rSh.GetBookmarkCnt();
-            USHORT nMarkCount = 0;
-            USHORT nRealIdx[MAX_MARKS];
-            for( USHORT nCount = 0; nCount < nBookCnt; ++nCount )
+
+            // collect navigator reminders
+            IDocumentMarkAccess* const pMarkAccess = rSh.getIDocumentMarkAccess();
+            ::std::vector< const ::sw::mark::IMark* > vNavMarks;
+            for( IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getMarksBegin();
+                ppMark != pMarkAccess->getMarksEnd();
+                ppMark++)
             {
-                if( rSh.GetBookmark( nCount ).IsMark() )
-                {
-                    nRealIdx[nMarkCount] = nCount;
-                    ++nMarkCount;
-                }
+                if( IDocumentMarkAccess::GetType(**ppMark) == IDocumentMarkAccess::NAVIGATOR_REMINDER )
+                    vNavMarks.push_back(ppMark->get());
             }
-            if (nMarkCount)
+
+            // move
+            if(vNavMarks.size())
             {
-                if(!bNext)
+                if(bNext)
                 {
-                    if (nActMark > 1)
-                        --nActMark;
-                    else
-                        nActMark = nMarkCount;
+                    nActMark++;
+                    if (nActMark >= MAX_MARKS || nActMark >= static_cast<sal_Int32>(vNavMarks.size()))
+                        nActMark = 0;
                 }
                 else
                 {
-                    ++nActMark;
-                    if (nActMark > MAX_MARKS || nActMark > nMarkCount)
-                        nActMark = 1;
+                    nActMark--;
+                    if (nActMark < 0 || nActMark >= static_cast<sal_Int32>(vNavMarks.size()))
+                        nActMark = vNavMarks.size()-1;
                 }
-
-                rSh.GotoBookmark( nRealIdx[nActMark - 1] );
+                rSh.GotoMark(vNavMarks[nActMark]);
             }
         }
         break;
@@ -701,7 +702,7 @@ void SwView::SetMoveType(USHORT nSet)
 /*-----------------20.06.97 11:18-------------------
 
 --------------------------------------------------*/
-void SwView::SetActMark(BYTE nSet)
+void SwView::SetActMark(sal_Int32 nSet)
 {
     nActMark = nSet;
 }

@@ -48,7 +48,7 @@
 #include <tools/urlobj.hxx>
 #include "wrtsh.hxx"
 #include "view.hxx"
-#include "bookmrk.hxx"
+#include "IMark.hxx"
 #include "doc.hxx"
 #include "wrtsh.hrc"
 
@@ -60,8 +60,7 @@ using ::rtl::OUString;
 
 extern sal_Bool bNoInterrupt;       // in mainwn.cxx
 
-BOOL SwWrtShell::MoveBookMark(  BookMarkMove eFuncId,
-                                    sal_uInt16 nPos )
+BOOL SwWrtShell::MoveBookMark( BookMarkMove eFuncId, const ::sw::mark::IMark* const pMark)
 {
 //JP 08.03.96: die Wizards brauchen die Selektion !!
 //  EndSelect();
@@ -70,7 +69,7 @@ BOOL SwWrtShell::MoveBookMark(  BookMarkMove eFuncId,
     BOOL bRet = sal_True;
     switch(eFuncId)
     {
-        case BOOKMARK_INDEX:bRet = SwCrsrShell::GotoBookmark( nPos );break;
+        case BOOKMARK_INDEX:bRet = SwCrsrShell::GotoMark( pMark );break;
         case BOOKMARK_NEXT: bRet = SwCrsrShell::GoNextBookmark();break;
         case BOOKMARK_PREV: bRet = SwCrsrShell::GoPrevBookmark();break;
         default:;//prevent warning
@@ -109,11 +108,10 @@ BOOL SwWrtShell::GotoField( const SwFmtFld& rFld )
     return bRet;
 }
 
-bool SwWrtShell::GotoFieldBookmark(SwBookmark *pBkmk)
+bool SwWrtShell::GotoFieldmark(::sw::mark::IFieldmark const * const pMark)
 {
-   (this->*fnKillSel)( 0, sal_False );
-
-    bool bRet = SwCrsrShell::GotoFieldBookmark(pBkmk);
+    (this->*fnKillSel)( 0, sal_False );
+    bool bRet = SwCrsrShell::GotoFieldmark(pMark);
     if( bRet && IsSelFrmMode() )
     {
         UnSelectFrm();
@@ -148,19 +146,17 @@ void SwWrtShell::DrawSelChanged( )
     bNoInterrupt = bOldVal;
 }
 
-BOOL SwWrtShell::GotoBookmark( const String& rName )
+BOOL SwWrtShell::GotoMark( const ::rtl::OUString& rName )
 {
-    sal_uInt16 nPos = FindBookmark( rName );
-    if( USHRT_MAX == nPos )
-        return sal_False;
-
-    return MoveBookMark( BOOKMARK_INDEX, nPos );
+    IDocumentMarkAccess::const_iterator_t ppMark = getIDocumentMarkAccess()->findMark( rName );
+    if(ppMark == getIDocumentMarkAccess()->getMarksEnd()) return false;
+    return MoveBookMark( BOOKMARK_INDEX, ppMark->get() );
 }
 
 
-BOOL SwWrtShell::GotoBookmark( sal_uInt16 nPos )
+BOOL SwWrtShell::GotoMark( const ::sw::mark::IMark* const pMark )
 {
-    return MoveBookMark( BOOKMARK_INDEX, nPos );
+    return MoveBookMark( BOOKMARK_INDEX, pMark );
 }
 
 

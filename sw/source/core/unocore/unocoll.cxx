@@ -48,7 +48,7 @@
 #include <fmtanchr.hxx>
 #include <ndtxt.hxx>
 #include <section.hxx>
-#include <bookmrk.hxx>
+#include <IMark.hxx>
 #include <ftnidx.hxx>
 #include <fmtftn.hxx>
 #include <txtftn.hxx>
@@ -71,6 +71,7 @@
 #include <authfld.hxx>
 #include <SwXTextDefaults.hxx>
 #include <unochart.hxx>
+#include <bookmrk.hxx>
 
 #include "docsh.hxx"
 
@@ -200,9 +201,9 @@ const ProvNamesId_Type __FAR_DATA aProvNamesId[] =
     { "com.sun.star.image.ImageMapCircleObject",              SW_SERVICE_IMAP_CIRCLE },
     { "com.sun.star.image.ImageMapPolygonObject",             SW_SERVICE_IMAP_POLYGON },
     { "com.sun.star.text.TextGraphicObject",                  SW_SERVICE_TYPE_TEXT_GRAPHIC },
+    { "com.sun.star.chart2.data.DataProvider",                SW_SERVICE_CHART2_DATA_PROVIDER },
     { "com.sun.star.text.Fieldmark",                          SW_SERVICE_TYPE_FIELDMARK },
     { "com.sun.star.text.FormFieldmark",                      SW_SERVICE_TYPE_FORMFIELDMARK },
-    { "com.sun.star.chart2.data.DataProvider",                SW_SERVICE_CHART2_DATA_PROVIDER },
 
     // case-correct versions of the service names (see #i67811)
     { CSS_TEXT_TEXTFIELD_DATE_TIME,                   SW_SERVICE_FIELDTYPE_DATETIME },
@@ -1410,190 +1411,138 @@ uno::Reference< XTextSection >  SwXTextSections::GetObject( SwSectionFmt& rFmt )
         xRet = SwXTextSectionClient::CreateXTextSection(&rFmt);
     return xRet;
 }
-/******************************************************************
- *
- ******************************************************************/
-/* -----------------------------06.04.00 12:44--------------------------------
 
- ---------------------------------------------------------------------------*/
 OUString SwXBookmarks::getImplementationName(void) throw( RuntimeException )
 {
-    return C2U("SwXBookmarks");
+    return OUString::createFromAscii("SwXBookmarks");
 }
-/* -----------------------------06.04.00 12:44--------------------------------
 
- ---------------------------------------------------------------------------*/
 BOOL SwXBookmarks::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return C2U("com.sun.star.text.Bookmarks") == rServiceName;
+    return OUString::createFromAscii("com.sun.star.text.Bookmarks") == rServiceName;
 }
-/* -----------------------------06.04.00 12:44--------------------------------
 
- ---------------------------------------------------------------------------*/
 Sequence< OUString > SwXBookmarks::getSupportedServiceNames(void) throw( RuntimeException )
 {
     Sequence< OUString > aRet(1);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = C2U("com.sun.star.text.Bookmarks");
+    aRet[0] = OUString::createFromAscii("com.sun.star.text.Bookmarks");
     return aRet;
 }
-/*-- 14.01.99 09:05:48---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwXBookmarks::SwXBookmarks(SwDoc* _pDoc) :
     SwUnoCollection(_pDoc)
-{
-}
-/*-- 14.01.99 09:05:48---------------------------------------------------
+{ }
 
-  -----------------------------------------------------------------------*/
 SwXBookmarks::~SwXBookmarks()
-{
-}
-/*-- 14.01.99 09:05:49---------------------------------------------------
+{ }
 
-  -----------------------------------------------------------------------*/
-sal_Int32 SwXBookmarks::getCount(void) throw( uno::RuntimeException )
+sal_Int32 SwXBookmarks::getCount(void)
+    throw( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     if(!IsValid())
         throw uno::RuntimeException();
-    return GetDoc()->getBookmarkCount(sal_True);
+    return GetDoc()->getIDocumentMarkAccess()->getBookmarksCount();
 }
-/*-- 14.01.99 09:05:49---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Any SwXBookmarks::getByIndex(sal_Int32 nIndex)
     throw( IndexOutOfBoundsException, WrappedTargetException, uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    uno::Any aRet;
-    if(IsValid())
-    {
-        if(0 <= nIndex && GetDoc()->getBookmarkCount(true) > nIndex)
-        {
-            SwBookmark& rBkm = GetDoc()->getBookmark((sal_uInt16) nIndex, true);
-            uno::Reference< XTextContent >  xRef = GetObject(rBkm, GetDoc());
-            aRet.setValue(&xRef, ::getCppuType((uno::Reference<XTextContent>*)0));
-        }
-        else
-            throw IndexOutOfBoundsException();
-    }
-    else
+    if(!IsValid())
         throw uno::RuntimeException();
+    IDocumentMarkAccess* const pMarkAccess = GetDoc()->getIDocumentMarkAccess();
+    if(nIndex < 0 || nIndex >= pMarkAccess->getBookmarksCount())
+        throw IndexOutOfBoundsException();
+
+    uno::Any aRet;
+    ::sw::mark::IMark* pBkmk = pMarkAccess->getBookmarksBegin()[nIndex].get();
+    uno::Reference< XTextContent > xRef = GetObject(*pBkmk, GetDoc());
+    aRet.setValue(&xRef, ::getCppuType((uno::Reference<XTextContent>*)0));
     return aRet;
 }
-/*-- 14.01.99 09:05:49---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Any SwXBookmarks::getByName(const rtl::OUString& rName)
     throw( NoSuchElementException, WrappedTargetException, uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    uno::Any aRet;
-    if(IsValid())
-    {
-        String aName(rName);
-        sal_uInt16 nCount = GetDoc()->getBookmarkCount(true);
-        uno::Reference< XTextContent >  xRef;
-        for( sal_uInt16 i = 0; i < nCount; i++)
-        {
-            SwBookmark& rBkMk = GetDoc()->getBookmark( i, true );
-            if(rBkMk.GetName() == aName)
-            {
-                xRef = SwXBookmarks::GetObject(rBkMk, GetDoc());
-                aRet.setValue(&xRef, ::getCppuType((uno::Reference<XTextContent>*)0));
-                break;
-            }
-        }
-        if(!xRef.is())
-            throw NoSuchElementException();
-    }
-    else
+    if(!IsValid())
         throw uno::RuntimeException();
+
+    IDocumentMarkAccess* const pMarkAccess = GetDoc()->getIDocumentMarkAccess();
+    IDocumentMarkAccess::const_iterator_t ppBkmk = pMarkAccess->findBookmark(rName);
+    if(ppBkmk == pMarkAccess->getBookmarksEnd())
+        throw NoSuchElementException();
+
+    uno::Any aRet;
+    uno::Reference< XTextContent > xRef = SwXBookmarks::GetObject(*(ppBkmk->get()), GetDoc());
+    aRet.setValue(&xRef, ::getCppuType((uno::Reference<XTextContent>*)0));
     return aRet;
 }
-/*-- 14.01.99 09:05:49---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
-uno::Sequence< OUString > SwXBookmarks::getElementNames(void) throw( uno::RuntimeException )
+uno::Sequence< OUString > SwXBookmarks::getElementNames(void)
+    throw( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     if(!IsValid())
         throw uno::RuntimeException();
-    sal_uInt16 nCount = GetDoc()->getBookmarkCount(true);
-    uno::Sequence<OUString> aSeq(nCount);
-    if(nCount)
-    {
-        OUString* pArray = aSeq.getArray();
-        for( sal_uInt16 i = 0; i < nCount; i++)
-        {
-            SwBookmark& rBkMk = GetDoc()->getBookmark( i, true );
-            pArray[i] = rBkMk.GetName();
-        }
-    }
+
+    IDocumentMarkAccess* const pMarkAccess = GetDoc()->getIDocumentMarkAccess();
+    uno::Sequence<OUString> aSeq(pMarkAccess->getBookmarksCount());
+    sal_Int32 nCnt = 0;
+    for(IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getBookmarksBegin();
+        ppMark != pMarkAccess->getBookmarksEnd();)
+        aSeq[nCnt++] = (*ppMark++)->GetName();
     return aSeq;
 }
-/*-- 14.01.99 09:05:49---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
-sal_Bool SwXBookmarks::hasByName(const OUString& rName) throw( uno::RuntimeException )
+sal_Bool SwXBookmarks::hasByName(const OUString& rName)
+    throw( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    sal_Bool bRet = sal_False;
-    if(IsValid())
-    {
-        String aName(rName);
-        sal_uInt16 nCount = GetDoc()->getBookmarkCount(true);
-        for( sal_uInt16 i = 0; i < nCount; i++)
-        {
-            SwBookmark& rBkMk = GetDoc()->getBookmark( i,true);
-            if(rBkMk.GetName() == aName)
-            {
-                bRet = sal_True;
-                break;
-            }
-        }
-    }
-    else
+    if(!IsValid())
         throw uno::RuntimeException();
-    return bRet;
-}
-/*-- 14.01.99 09:05:50---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
-uno::Type SAL_CALL SwXBookmarks::getElementType() throw(uno::RuntimeException)
+    IDocumentMarkAccess* const pMarkAccess = GetDoc()->getIDocumentMarkAccess();
+    return pMarkAccess->findBookmark(rName) != pMarkAccess->getBookmarksEnd();
+}
+
+uno::Type SAL_CALL SwXBookmarks::getElementType()
+    throw(uno::RuntimeException)
 {
     return ::getCppuType((uno::Reference<XTextContent>*)0);
 }
-/*-- 14.01.99 09:05:50---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
-sal_Bool SwXBookmarks::hasElements(void) throw( uno::RuntimeException )
+sal_Bool SwXBookmarks::hasElements(void)
+    throw( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     if(!IsValid())
         throw uno::RuntimeException();
-    return GetDoc()->getBookmarkCount(true) != 0;
+    return GetDoc()->getIDocumentMarkAccess()->getBookmarksCount() != 0;
 }
-/*-- 14.01.99 09:05:50---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
-SwXBookmark*    SwXBookmarks::GetObject( SwBookmark& rBkm, SwDoc* pDoc )
+SwXBookmark* SwXBookmarks::GetObject( ::sw::mark::IMark& rBkmk, SwDoc* pDoc)
 {
-    SwXBookmark* pBkm = (SwXBookmark*)SwClientIter( rBkm ).
-                                    First( TYPE( SwXBookmark ));
-    if( !pBkm )
+    SwModify* const pModify = static_cast<SwModify*>(&rBkmk);
+    SwXBookmark* pXBkmk = (SwXBookmark*)SwClientIter(*pModify).First(TYPE(SwXBookmark));
+    if(!pXBkmk)
     {
-        if (IDocumentBookmarkAccess::FORM_FIELDMARK_TEXT==rBkm.GetType())
-            pBkm = new SwXFieldmark(false, &rBkm, pDoc);
-        else if (IDocumentBookmarkAccess::FORM_FIELDMARK_NO_TEXT==rBkm.GetType())
-            pBkm = new SwXFieldmark(true, &rBkm, pDoc);
-        else
-            pBkm = new SwXBookmark(&rBkm, pDoc);
+        // FIXME: These belong in XTextFieldsSupplier
+        //if (dynamic_cast< ::sw::mark::TextFieldmark* >(&rBkmk))
+        //    pXBkmk = new SwXFieldmark(false, &rBkmk, pDoc);
+        //else if (dynamic_cast< ::sw::mark::CheckboxFieldmark* >(&rBkmk))
+        //    pXBkmk = new SwXFieldmark(true, &rBkmk, pDoc);
+        //else
+        OSL_ENSURE(
+            dynamic_cast< ::sw::mark::IBookmark* >(&rBkmk),
+            "<SwXBookmark::GetObject(..)>"
+            "SwXBookmark requested for non-bookmark mark.");
+        pXBkmk = new SwXBookmark(&rBkmk, pDoc);
     }
-    return pBkm;
+    return pXBkmk;
 }
+
 /******************************************************************
  *
  ******************************************************************/

@@ -75,12 +75,13 @@
 #include <ndtxt.hxx>
 #include <shellio.hxx>
 #include <poolfmt.hxx>
-#include <bookmrk.hxx>
+#include <IMark.hxx>
 #include <ndgrf.hxx>
 #include <htmlnum.hxx>
 #include <swcss1.hxx>
 #include <swhtml.hxx>
 #include <numrule.hxx>
+#include <boost/shared_ptr.hpp>
 
 using namespace ::com::sun::star;
 
@@ -1285,9 +1286,9 @@ BOOL SwHTMLParser::HasCurrentParaBookmarks( BOOL bIgnoreStack ) const
     BOOL bHasMarks = FALSE;
     ULONG nNodeIdx = pPam->GetPoint()->nNode.GetIndex();
 
-    // 1. Schritt: befinden sich noch Bookmarks m Attribut-Stack?
-    // Bookmarks werden hinten in den Stack geschrieben. Wir muessen
-    // also nur die letzte Bookmark betrachten
+    // first step: are there still bookmark in the attribute-stack?
+    // bookmarks are added to the end of the stack - thus we only have
+    // to check the last bookmark
     if( !bIgnoreStack )
     {
         _HTMLAttr* pAttr;
@@ -1305,13 +1306,15 @@ BOOL SwHTMLParser::HasCurrentParaBookmarks( BOOL bIgnoreStack ) const
 
     if( !bHasMarks )
     {
-        // 2. Schritt: Wenn wir keine Bookmark gefunden haben, schauen wir,
-        // ob schon eine gesetzt ist
-        const SwBookmarks& rBookmarks = pDoc->getBookmarks();
-        for( USHORT i=0; i<rBookmarks.Count(); i++ )
+        // second step: when we didnt find a bookmark, check if there is one
+        // set already
+        IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
+        for(IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getMarksBegin();
+            ppMark != pMarkAccess->getMarksEnd();
+            ppMark++)
         {
-            const SwBookmark* pBookmark = rBookmarks[i];
-            ULONG nBookNdIdx = pBookmark->GetBookmarkPos().nNode.GetIndex();
+            const ::sw::mark::IMark* pBookmark = ppMark->get();
+            ULONG nBookNdIdx = pBookmark->GetMarkPos().nNode.GetIndex();
             if( nBookNdIdx==nNodeIdx )
             {
                 bHasMarks = TRUE;
@@ -1377,33 +1380,30 @@ void SwHTMLParser::StripTrailingPara()
 
             // jetz muessen wir noch eventuell vorhandene Bookmarks
             // verschieben
-            const SwBookmarks& rBookmarks = pDoc->getBookmarks();
-            for( i=0; i<rBookmarks.Count(); i++ )
+            IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
+            for(IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getMarksBegin();
+                ppMark != pMarkAccess->getMarksEnd();
+                ppMark++)
             {
-                SwBookmark* pBookmark = rBookmarks[i];
-                ULONG nBookNdIdx = pBookmark->GetBookmarkPos().nNode.GetIndex();
-                if( nBookNdIdx==nNodeIdx )
+                ::sw::mark::IMark* pMark = ppMark->get();
+                ULONG nBookNdIdx = pMark->GetMarkPos().nNode.GetIndex();
+                if(nBookNdIdx==nNodeIdx)
                 {
-                    // --> OD 2007-09-27 #i81002# - refactoring
-                    // Do not directly manipulate member of <SwBookmark>
-//                    SwPosition &rBookmkPos =
-//                        (SwPosition&)pBookmark->GetBookmarkPos();
-                    // <--
-
-                    SwNodeIndex nNewNdIdx( pPam->GetPoint()->nNode );
-                    SwCntntNode* pNd = pDoc->GetNodes().GoPrevious( &nNewNdIdx );
-                    if( !pNd )
+                    SwNodeIndex nNewNdIdx(pPam->GetPoint()->nNode);
+                    SwCntntNode* pNd = pDoc->GetNodes().GoPrevious(&nNewNdIdx);
+                    if(!pNd)
                     {
-                        ASSERT( !this, "Hoppla, wo ist mein Vorgaenger-Node" );
+                        ASSERT(!this, "Hoppla, wo ist mein Vorgaenger-Node");
                         return;
                     }
-
                     // --> OD 2007-09-27 #i81002# - refactoring
                     // Do not directly manipulate member of <SwBookmark>
-                    SwPosition aNewPos ( pBookmark->GetBookmarkPos() );
-                    aNewPos.nNode = nNewNdIdx;
-                    aNewPos.nContent.Assign( pNd, pNd->Len() );
-                    pBookmark->SetBookmarkPos( &aNewPos );
+                    {
+                        SwPosition aNewPos(*pNd);
+                        aNewPos.nContent.Assign(pNd, pNd->Len());
+                        const SwPaM aPaM(aNewPos);
+                        pMarkAccess->repositionMark(ppMark->get(), aPaM);
+                    }
                     // <--
                 }
                 else if( nBookNdIdx > nNodeIdx )

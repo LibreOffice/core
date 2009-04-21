@@ -37,6 +37,7 @@
 #include <rootfrm.hxx>
 #include <editsh.hxx>
 #include <viscrs.hxx>
+#include <IMark.hxx>
 #include <bookmrk.hxx>
 #include <redline.hxx>
 #include <mvsave.hxx>
@@ -73,17 +74,77 @@
         } while( (_pCurrCrsr=(SwPaM *)_pCurrCrsr->GetNext()) != _pStartCrsr ); \
     }
 
-/*  */
+namespace
+{
+    // find the relevant section in which the SwUnoCrsr may wander. returns NULL if
+    // no restrictions apply
+    const SwStartNode* lcl_FindUnoCrsrSection( const SwNode& rNode )
+    {
+        const SwStartNode* pStartNode = rNode.StartOfSectionNode();
+        while( ( pStartNode != NULL ) &&
+               ( pStartNode->StartOfSectionNode() != pStartNode ) &&
+               ( pStartNode->GetStartNodeType() == SwNormalStartNode ) )
+            pStartNode = pStartNode->StartOfSectionNode();
 
-#define _PaMCorrAbs1( pPam ) \
-    for( int nb = 0; nb < 2; ++nb ) \
-        if( &((pPam)->GetBound( BOOL(nb) ).nNode.GetNode()) == pOldNode )   \
-        { \
-            (pPam)->GetBound( BOOL(nb) ) = aNewPos; \
-            (pPam)->GetBound( BOOL(nb) ).nContent += nOffset; \
-        }
+        return pStartNode;
+    }
 
+    static inline void lcl_PaMCorrAbs1(SwPaM * pPam,
+        SwNode const * const pOldNode,
+        const SwPosition& rNewPos,
+        const xub_StrLen nOffset)
+    {
+        for(int nb = 0; nb < 2; ++nb)
+            if(&((pPam)->GetBound(BOOL(nb)).nNode.GetNode()) == pOldNode)
+            {
+                (pPam)->GetBound(BOOL(nb)) = rNewPos;
+                (pPam)->GetBound(BOOL(nb)).nContent += nOffset;
+            }
+    };
 
+    static inline bool lcl_PaMCorrAbs2(SwPaM* pPam,
+        const SwPosition& rNewPos,
+        ULONG nSttNode,
+        ULONG nEndNode)
+    {
+        bool bRet = false;
+
+        for(int nb = 0; nb < 2; ++nb)
+            if((pPam)->GetBound(BOOL(nb)).nNode >= nSttNode &&
+                (pPam)->GetBound(BOOL(nb)).nNode <= nEndNode)
+            {
+                (pPam)->GetBound(BOOL(nb)) = rNewPos;
+                bRet = true;
+            }
+        return bRet;
+    };
+
+    static inline void lcl_PaMCorrAbs3(SwPaM * pPam,
+        const SwPosition& rStart,
+        const SwPosition& rEnd,
+        const SwPosition& rNewPos)
+    {
+        for(int nb = 0; nb < 2; ++nb)
+            if(rStart <= (pPam)->GetBound(BOOL(nb)) &&
+                (pPam)->GetBound(BOOL(nb)) <= rEnd )
+                (pPam)->GetBound(BOOL(nb)) = rNewPos;
+    };
+
+    static inline void lcl_PaMCorrRel1(SwPaM * pPam,
+        SwNode const * const pOldNode,
+        const SwPosition& rNewPos,
+        const xub_StrLen nCntIdx)
+    {
+        for(int nb = 0; nb < 2; ++nb)
+            if(&((pPam)->GetBound(BOOL(nb)).nNode.GetNode()) == pOldNode)
+            {
+                (pPam)->GetBound(BOOL(nb)).nNode = rNewPos.nNode;
+                (pPam)->GetBound(BOOL(nb)).nContent.Assign(
+                    const_cast<SwIndexReg*>(rNewPos.nContent.GetIdxReg()),
+                    nCntIdx + (pPam)->GetBound(BOOL(nb)).nContent.GetIndex());
+            }
+    }
+}
 
 void PaMCorrAbs( const SwNodeIndex &rOldNode,
                 const SwPosition &rNewPos,
@@ -98,20 +159,18 @@ void PaMCorrAbs( const SwNodeIndex &rOldNode,
     {
         FOREACHSHELL_START( pShell )
             SwPaM *_pStkCrsr = PCURSH->GetStkCrsr();
-    // Alle ueberfluessigen Crsr sind vom Stack, oder ??
-    //      ASSERT( !_pStkCrsr, "Es stehen noch Crsr auf dem CrsrStack" );
             if( _pStkCrsr )
             do {
-                _PaMCorrAbs1( _pStkCrsr )
+                lcl_PaMCorrAbs1( _pStkCrsr, pOldNode, aNewPos, nOffset );
             } while ( (_pStkCrsr != 0 ) &&
                 ((_pStkCrsr=(SwPaM *)_pStkCrsr->GetNext()) != PCURSH->GetStkCrsr()) );
 
             FOREACHPAM_START( PCURSH->_GetCrsr() )
-                _PaMCorrAbs1( PCURCRSR )
+                lcl_PaMCorrAbs1( PCURCRSR, pOldNode, aNewPos, nOffset );
             FOREACHPAM_END()
 
             if( PCURSH->IsTableMode() )
-                _PaMCorrAbs1( PCURSH->GetTblCrs() )
+                lcl_PaMCorrAbs1( PCURSH->GetTblCrs(), pOldNode, aNewPos, nOffset );
 
         FOREACHSHELL_END( pShell )
     }
@@ -121,127 +180,20 @@ void PaMCorrAbs( const SwNodeIndex &rOldNode,
         for( USHORT n = 0; n < rTbl.Count(); ++n )
         {
             FOREACHPAM_START( rTbl[ n ] )
-                _PaMCorrAbs1( PCURCRSR )
+                lcl_PaMCorrAbs1( PCURCRSR, pOldNode, aNewPos, nOffset );
             FOREACHPAM_END()
 
             SwUnoTableCrsr* pUnoTblCrsr = (SwUnoTableCrsr*)*rTbl[ n ];
             if( pUnoTblCrsr )
             {
                 FOREACHPAM_START( &pUnoTblCrsr->GetSelRing() )
-                    _PaMCorrAbs1( PCURCRSR )
+                    lcl_PaMCorrAbs1( PCURCRSR, pOldNode, aNewPos, nOffset );
                 FOREACHPAM_END()
             }
         }
     }
 }
 
-
-void SwDoc::CorrAbs( const SwNodeIndex& rOldNode,
-                     const SwPosition& rNewPos,
-                     const xub_StrLen nOffset,
-                     BOOL bMoveCrsr )
-{
-    const SwNode* pOldNode = &rOldNode.GetNode();
-    SwPosition aNewPos( rNewPos );
-
-    { // erstmal die Bookmark korrigieren
-        SwBookmarks& rBkmks = *pBookmarkTbl;
-        SwBookmark* pBkmk;
-        for( USHORT n = 0; n < rBkmks.Count(); ++n )
-        {
-            // liegt auf der Position ??
-            int bChgd = 0;
-            if( &( pBkmk = (SwBookmark*)rBkmks[ n ])->GetBookmarkPos().nNode.GetNode() == pOldNode )
-            {
-                // --> OD 2007-09-26 #i81002# - refactoring
-//                *pBkmk->pPos1 = aNewPos;
-//                pBkmk->pPos1->nContent += nOffset;
-                SwPosition aNewPos1( aNewPos );
-                aNewPos1.nContent += nOffset;
-                pBkmk->SetBookmarkPos( &aNewPos1 );
-                // <--
-                bChgd = 1;
-            }
-            if ( pBkmk->GetOtherBookmarkPos() &&
-                 &pBkmk->GetOtherBookmarkPos()->nNode.GetNode() == pOldNode )
-            {
-                // --> OD 2007-09-26 #i81002# - refactoring
-//                *pBkmk->pPos2 = aNewPos;
-//                pBkmk->pPos2->nContent += nOffset;
-                SwPosition aNewPos2( aNewPos );
-                aNewPos2.nContent += nOffset;
-                pBkmk->SetOtherBookmarkPos( &aNewPos );
-                // <--
-                bChgd = 2;
-            }
-            // ungueltige Selektion? Dann die Klammerung aufheben
-            if( bChgd && pBkmk->GetOtherBookmarkPos() &&
-                pBkmk->GetOtherBookmarkPos()->nNode.GetNode().FindTableBoxStartNode() !=
-                pBkmk->GetBookmarkPos().nNode.GetNode().FindTableBoxStartNode() )
-            {
-                if( 1 == bChgd )
-                {
-                    // --> OD 2007-09-26 #i81002# - refactoring
-//                    *pBkmk->pPos1 = *pBkmk->pPos2;
-                    pBkmk->SetBookmarkPos( pBkmk->GetOtherBookmarkPos() );
-                    // <--
-                }
-                // --> OD 2007-09-26 #i81002# - refactoring
-//                delete pBkmk->pPos2, pBkmk->pPos2 = 0;
-                pBkmk->SetOtherBookmarkPos( 0 );
-                // <--
-                if( pBkmk->IsServer() )
-                    pBkmk->SetRefObject( 0 );
-                // die Sortierung muss aufrecht erhalten bleiben!
-                rBkmks.Remove( n-- );
-                rBkmks.Insert( pBkmk );
-            }
-        }
-    }
-    { // dann die Redlines korrigieren
-        SwRedlineTbl& rTbl = *pRedlineTbl;
-        for( USHORT n = 0; n < rTbl.Count(); ++n )
-        {
-            // liegt auf der Position ??
-            _PaMCorrAbs1( rTbl[ n ] )
-        }
-    }
-
-    if( bMoveCrsr )
-        ::PaMCorrAbs( rOldNode, rNewPos, nOffset );
-}
-
-/*  */
-
-bool _PaMCorrAbs2( SwPaM* pPam,
-                   const SwPosition& rNewPos,
-                   ULONG nSttNode, ULONG nEndNode )
-{
-    bool bRet = false;
-
-    for( int nb = 0; nb < 2; ++nb ) \
-        if( (pPam)->GetBound( BOOL(nb) ).nNode >= nSttNode &&
-            (pPam)->GetBound( BOOL(nb) ).nNode <= nEndNode )
-        {
-            (pPam)->GetBound( BOOL(nb) ) = rNewPos;
-            bRet = true;
-        }
-
-    return bRet;
-}
-
-// find the relevant section in which the SwUnoCrsr may wander. returns NULL if
-// no restrictions apply
-const SwStartNode* lcl_FindUnoCrsrSection( const SwNode& rNode )
-{
-    const SwStartNode* pStartNode = rNode.StartOfSectionNode();
-    while( ( pStartNode != NULL ) &&
-           ( pStartNode->StartOfSectionNode() != pStartNode ) &&
-           ( pStartNode->GetStartNodeType() == SwNormalStartNode ) )
-        pStartNode = pStartNode->StartOfSectionNode();
-
-    return pStartNode;
-}
 
 void PaMCorrAbs( const SwNodeIndex &rStartNode,
                  const SwNodeIndex &rEndNode,
@@ -257,20 +209,18 @@ void PaMCorrAbs( const SwNodeIndex &rStartNode,
     {
         FOREACHSHELL_START( pShell )
             SwPaM *_pStkCrsr = PCURSH->GetStkCrsr();
-    // Alle ueberfluessigen Crsr sind vom Stack, oder ??
-    //      ASSERT( !_pStkCrsr, "Es stehen noch Crsr auf dem CrsrStack" );
             if( _pStkCrsr )
             do {
-                _PaMCorrAbs2( _pStkCrsr, aNewPos, nSttNode, nEndNode );
+                lcl_PaMCorrAbs2( _pStkCrsr, aNewPos, nSttNode, nEndNode );
             } while ( (_pStkCrsr != 0 ) &&
                 ((_pStkCrsr=(SwPaM *)_pStkCrsr->GetNext()) != PCURSH->GetStkCrsr()) );
 
             FOREACHPAM_START( PCURSH->_GetCrsr() )
-                _PaMCorrAbs2( PCURCRSR, aNewPos, nSttNode, nEndNode );
+                lcl_PaMCorrAbs2( PCURCRSR, aNewPos, nSttNode, nEndNode );
             FOREACHPAM_END()
 
             if( PCURSH->IsTableMode() )
-                _PaMCorrAbs2( PCURSH->GetTblCrs(), aNewPos, nSttNode, nEndNode );
+                lcl_PaMCorrAbs2( PCURSH->GetTblCrs(), aNewPos, nSttNode, nEndNode );
 
         FOREACHSHELL_END( pShell )
     }
@@ -292,7 +242,7 @@ void PaMCorrAbs( const SwNodeIndex &rStartNode,
                       pUnoCursor->GetPoint()->nNode.GetNode() ) );
 
             FOREACHPAM_START( pUnoCursor )
-                bChange |= _PaMCorrAbs2(PCURCRSR, aNewPos, nSttNode, nEndNode);
+                bChange |= lcl_PaMCorrAbs2(PCURCRSR, aNewPos, nSttNode, nEndNode);
             FOREACHPAM_END()
 
             SwUnoTableCrsr* pUnoTblCrsr = (SwUnoTableCrsr*)*pUnoCursor;
@@ -300,7 +250,7 @@ void PaMCorrAbs( const SwNodeIndex &rStartNode,
             {
                 FOREACHPAM_START( &pUnoTblCrsr->GetSelRing() )
                     bChange |=
-                        _PaMCorrAbs2( PCURCRSR, aNewPos, nSttNode, nEndNode );
+                        lcl_PaMCorrAbs2( PCURCRSR, aNewPos, nSttNode, nEndNode );
                 FOREACHPAM_END()
             }
 
@@ -317,30 +267,6 @@ void PaMCorrAbs( const SwNodeIndex &rStartNode,
 }
 
 
-void SwDoc::CorrAbs( const SwNodeIndex& rStartNode,
-                     const SwNodeIndex& rEndNode,
-                     const SwPosition& rNewPos,
-                     BOOL bMoveCrsr )
-{
-    SwPosition aNewPos( rNewPos );
-
-//  if( !DoesUndo() )
-        // erstmal die Bookmarks/Redlines korrigieren
-        _DelBookmarks( rStartNode, rEndNode );
-
-    if( bMoveCrsr )
-        ::PaMCorrAbs( rStartNode, rEndNode, rNewPos );
-}
-
-
-/*  */
-
-#define _PaMCorrAbs3( pPam ) \
-    for( int nb = 0; nb < 2; ++nb ) \
-        if( aStart <= (pPam)->GetBound( BOOL(nb) ) && \
-            (pPam)->GetBound( BOOL(nb) ) <= aEnd ) \
-            (pPam)->GetBound( BOOL(nb) ) = aNewPos;
-
 void PaMCorrAbs( const SwPaM& rRange,
                 const SwPosition& rNewPos )
 {
@@ -354,20 +280,18 @@ void PaMCorrAbs( const SwPaM& rRange,
     {
         FOREACHSHELL_START( pShell )
             SwPaM *_pStkCrsr = PCURSH->GetStkCrsr();
-    // Alle ueberfluessigen Crsr sind vom Stack, oder ??
-    //      ASSERT( !_pStkCrsr, "Es stehen noch Crsr auf dem CrsrStack" );
             if( _pStkCrsr )
             do {
-                _PaMCorrAbs3( _pStkCrsr )
+                lcl_PaMCorrAbs3( _pStkCrsr, aStart, aEnd, aNewPos );
             } while ( (_pStkCrsr != 0 ) &&
                 ((_pStkCrsr=(SwPaM *)_pStkCrsr->GetNext()) != PCURSH->GetStkCrsr()) );
 
             FOREACHPAM_START( PCURSH->_GetCrsr() )
-                _PaMCorrAbs3( PCURCRSR )
+                lcl_PaMCorrAbs3( PCURCRSR, aStart, aEnd, aNewPos );
             FOREACHPAM_END()
 
             if( PCURSH->IsTableMode() )
-                _PaMCorrAbs3( PCURSH->GetTblCrs() )
+                lcl_PaMCorrAbs3( PCURSH->GetTblCrs(), aStart, aEnd, aNewPos );
 
         FOREACHSHELL_END( pShell )
     }
@@ -376,50 +300,67 @@ void PaMCorrAbs( const SwPaM& rRange,
         for( USHORT n = 0; n < rTbl.Count(); ++n )
         {
             FOREACHPAM_START( rTbl[ n ] )
-                _PaMCorrAbs3( PCURCRSR )
+                lcl_PaMCorrAbs3( PCURCRSR, aStart, aEnd, aNewPos );
             FOREACHPAM_END()
 
             SwUnoTableCrsr* pUnoTblCrsr = (SwUnoTableCrsr*)*rTbl[ n ];
             if( pUnoTblCrsr )
             {
                 FOREACHPAM_START( &pUnoTblCrsr->GetSelRing() )
-                    _PaMCorrAbs3( PCURCRSR )
+                    lcl_PaMCorrAbs3( PCURCRSR, aStart, aEnd, aNewPos );
                 FOREACHPAM_END()
             }
         }
     }
 }
 
-
-void SwDoc::CorrAbs( const SwPaM& rRange,
-                    const SwPosition& rNewPos,
-                    BOOL bMoveCrsr )
+void SwDoc::CorrAbs(const SwNodeIndex& rOldNode,
+    const SwPosition& rNewPos,
+    const xub_StrLen nOffset,
+    BOOL bMoveCrsr)
 {
-    SwPosition aStart( *rRange.Start() );
-    SwPosition aEnd( *rRange.End() );
-    SwPosition aNewPos( rNewPos );
+    getIDocumentMarkAccess()->correctMarksAbsolute(rOldNode, rNewPos, nOffset);
+    { // fix readlines
+        SwRedlineTbl& rTbl = *pRedlineTbl;
+        for( USHORT n = 0; n < rTbl.Count(); ++n )
+        {
+            // is on position ??
+            lcl_PaMCorrAbs1( rTbl[ n ], &rOldNode.GetNode(), SwPosition(rNewPos), nOffset );
+        }
+    }
 
-//  if( !DoesUndo() )
-        // erstmal die Bookmarks/Redlines korrigieren
-        _DelBookmarks( aStart.nNode, aEnd.nNode, 0,
-                           &aStart.nContent, &aEnd.nContent );
-    if( bMoveCrsr )
-        ::PaMCorrAbs( rRange, rNewPos );
+    if(bMoveCrsr)
+        ::PaMCorrAbs(rOldNode, rNewPos, nOffset);
+}
+
+void SwDoc::CorrAbs(const SwPaM& rRange,
+    const SwPosition& rNewPos,
+    BOOL bMoveCrsr)
+{
+    SwPosition aStart(*rRange.Start());
+    SwPosition aEnd(*rRange.End());
+    SwPosition aNewPos(rNewPos);
+
+    _DelBookmarks(aStart.nNode, aEnd.nNode, NULL,
+        &aStart.nContent, &aEnd.nContent);
+    if(bMoveCrsr)
+        ::PaMCorrAbs(rRange, rNewPos);
+}
+
+void SwDoc::CorrAbs(const SwNodeIndex& rStartNode,
+     const SwNodeIndex& rEndNode,
+     const SwPosition& rNewPos,
+     BOOL bMoveCrsr)
+{
+    SwPosition aNewPos(rNewPos);
+
+    _DelBookmarks(rStartNode, rEndNode);
+
+    if(bMoveCrsr)
+        ::PaMCorrAbs(rStartNode, rEndNode, rNewPos);
 }
 
 
-/*  */
-
-#define _PaMCorrRel1( pPam ) \
-    for( int nb = 0; nb < 2; ++nb ) \
-        if( &((pPam)->GetBound( BOOL(nb) ).nNode.GetNode()) == pOldNode ) \
-        { \
-            (pPam)->GetBound( BOOL(nb) ).nNode = aNewPos.nNode; \
-            (pPam)->GetBound( BOOL(nb) ).nContent.Assign( (SwIndexReg*) \
-                            aNewPos.nContent.GetIdxReg(), \
-                            nCntIdx + (pPam)->GetBound( BOOL(nb) ).nContent. \
-                                GetIndex() ); \
-        }
 
 
 
@@ -438,20 +379,18 @@ void PaMCorrRel( const SwNodeIndex &rOldNode,
     {
         FOREACHSHELL_START( pShell )
             SwPaM *_pStkCrsr = PCURSH->GetStkCrsr();
-    // Alle ueberfluessigen Crsr sind vom Stack, oder ??
-    //      ASSERT( !_pStkCrsr, "Es stehen noch Crsr auf dem CrsrStack" );
             if( _pStkCrsr )
             do {
-                _PaMCorrRel1( _pStkCrsr )
+                lcl_PaMCorrRel1( _pStkCrsr, pOldNode, aNewPos, nCntIdx );
             } while ( (_pStkCrsr != 0 ) &&
                 ((_pStkCrsr=(SwPaM *)_pStkCrsr->GetNext()) != PCURSH->GetStkCrsr()) );
 
             FOREACHPAM_START( PCURSH->_GetCrsr() )
-                _PaMCorrRel1( PCURCRSR )
+                lcl_PaMCorrRel1( PCURCRSR, pOldNode, aNewPos, nCntIdx);
             FOREACHPAM_END()
 
             if( PCURSH->IsTableMode() )
-                _PaMCorrRel1( PCURSH->GetTblCrs() )
+                lcl_PaMCorrRel1( PCURSH->GetTblCrs(), pOldNode, aNewPos, nCntIdx );
 
         FOREACHSHELL_END( pShell )
     }
@@ -460,108 +399,41 @@ void PaMCorrRel( const SwNodeIndex &rOldNode,
         for( USHORT n = 0; n < rTbl.Count(); ++n )
         {
             FOREACHPAM_START( rTbl[ n ] )
-                _PaMCorrRel1( PCURCRSR )
+                lcl_PaMCorrRel1( PCURCRSR, pOldNode, aNewPos, nCntIdx );
             FOREACHPAM_END()
 
             SwUnoTableCrsr* pUnoTblCrsr = (SwUnoTableCrsr*)*rTbl[ n ];
             if( pUnoTblCrsr )
             {
                 FOREACHPAM_START( &pUnoTblCrsr->GetSelRing() )
-                    _PaMCorrRel1( PCURCRSR )
+                    lcl_PaMCorrRel1( PCURCRSR, pOldNode, aNewPos, nCntIdx );
                 FOREACHPAM_END()
             }
         }
     }
 }
 
-void SwDoc::CorrRel( const SwNodeIndex& rOldNode,
-                     const SwPosition& rNewPos,
-                     const xub_StrLen nOffset,
-                     BOOL bMoveCrsr )
+void SwDoc::CorrRel(const SwNodeIndex& rOldNode,
+    const SwPosition& rNewPos,
+    const xub_StrLen nOffset,
+    BOOL bMoveCrsr)
 {
-    const SwNode* pOldNode = &rOldNode.GetNode();
-    SwPosition aNewPos( rNewPos );
-    xub_StrLen nCntIdx = aNewPos.nContent.GetIndex() + nOffset;
+    getIDocumentMarkAccess()->correctMarksRelative(rOldNode, rNewPos, nOffset);
 
-    { // erstmal die Bookmark korrigieren
-        SwBookmarks& rBkmks = *pBookmarkTbl;
-        SwBookmark* pBkmk;
-        for( USHORT n = 0; n < rBkmks.Count(); ++n )
-        {
-            // liegt auf der Position ??
-            int bChgd = FALSE;
-            if( &( pBkmk = (SwBookmark*)rBkmks[ n ])->GetBookmarkPos().nNode.GetNode()
-                == pOldNode )
-            {
-                // --> OD 2007-09-26 #i81002# - refactoring
-//                pBkmk->pPos1->nNode = aNewPos.nNode;
-//                pBkmk->pPos1->nContent.Assign( (SwIndexReg*)
-//                            aNewPos.nContent.GetIdxReg(),
-//                            nCntIdx + pBkmk->pPos1->nContent.GetIndex() );
-                SwPosition aNewPos1( pBkmk->GetBookmarkPos() );
-                aNewPos1.nNode = aNewPos.nNode;
-                aNewPos1.nContent.Assign( (SwIndexReg*)aNewPos.nContent.GetIdxReg(),
-                                          nCntIdx + pBkmk->GetBookmarkPos().nContent.GetIndex() );
-                pBkmk->SetBookmarkPos( &aNewPos1 );
-                // <--
-                bChgd = 1;
-            }
-            if ( pBkmk->GetOtherBookmarkPos() &&
-                 &pBkmk->GetOtherBookmarkPos()->nNode.GetNode() == pOldNode )
-            {
-                // --> OD 2007-09-26 #i81002# - refactoring
-//                pBkmk->pPos2->nNode = aNewPos.nNode;
-//                pBkmk->pPos2->nContent.Assign( (SwIndexReg*)
-//                            aNewPos.nContent.GetIdxReg(),
-//                            nCntIdx + pBkmk->pPos2->nContent.GetIndex() );
-                SwPosition aNewPos2( *(pBkmk->GetOtherBookmarkPos()) );
-                aNewPos2.nNode = aNewPos.nNode;
-                aNewPos2.nContent.Assign( (SwIndexReg*)aNewPos.nContent.GetIdxReg(),
-                                          nCntIdx + pBkmk->GetOtherBookmarkPos()->nContent.GetIndex() );
-                pBkmk->SetOtherBookmarkPos( &aNewPos2 );
-                // <--
-                bChgd = 2;
-            }
-            // ungueltige Selektion? Dann die Klammerung aufheben
-            if( bChgd && pBkmk->GetOtherBookmarkPos() &&
-                pBkmk->GetOtherBookmarkPos()->nNode.GetNode().FindTableBoxStartNode() !=
-                pBkmk->GetBookmarkPos().nNode.GetNode().FindTableBoxStartNode() )
-            {
-                if( 1 == bChgd )
-                {
-                    // --> OD 2007-09-26 #i81002# - refactoring
-//                    *pBkmk->pPos1 = *pBkmk->pPos2;
-                    pBkmk->SetBookmarkPos( pBkmk->GetOtherBookmarkPos() );
-                    // <--
-                }
-                // --> OD 2007-09-26 #i81002# - refactoring
-//                delete pBkmk->pPos2, pBkmk->pPos2 = 0;
-                pBkmk->SetOtherBookmarkPos( 0 );
-                // <--
-                if( pBkmk->IsServer() )
-                    pBkmk->SetRefObject( 0 );
-
-                // die Sortierung muss aufrecht erhalten bleiben!
-                rBkmks.Remove( n-- );
-                rBkmks.Insert( pBkmk );
-            }
-        }
-    }
     { // dann die Redlines korrigieren
         SwRedlineTbl& rTbl = *pRedlineTbl;
+        SwPosition aNewPos(rNewPos);
         for( USHORT n = 0; n < rTbl.Count(); ++n )
         {
             // liegt auf der Position ??
-            _PaMCorrRel1( rTbl[ n ] )
+            lcl_PaMCorrRel1( rTbl[ n ], &rOldNode.GetNode(), aNewPos, aNewPos.nContent.GetIndex() + nOffset );
         }
     }
 
-    if( bMoveCrsr )
-        ::PaMCorrRel( rOldNode, rNewPos, nOffset );
+    if(bMoveCrsr)
+        ::PaMCorrRel(rOldNode, rNewPos, nOffset);
 }
 
-
-/*  */
 
 SwEditShell* SwDoc::GetEditShell( ViewShell** ppSh ) const
 {

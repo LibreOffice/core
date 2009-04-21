@@ -67,7 +67,7 @@
 #include <ndtxt.hxx>
 #include <wrtrtf.hxx>
 #include <flypos.hxx>
-#include <bookmrk.hxx>      // fuer SwBookmark ...
+#include <IMark.hxx>
 #include <pagedesc.hxx>     // fuer SwPageDesc...
 #include <ftninfo.hxx>
 #include <charfmt.hxx>
@@ -133,7 +133,7 @@ ULONG SwRTFWriter::WriteStream()
 
 
     pCurEndPosLst = 0;
-    nBkmkTabPos = USHRT_MAX;
+    nBkmkTabPos = -1;
     pAktPageDesc = 0;
     pAttrSet = 0;
     pFlyFmt = 0;        // kein FlyFrmFormat gesetzt
@@ -262,7 +262,7 @@ void SwRTFWriter::Out_SwDoc( SwPaM* pPam )
 {
     BOOL bSaveWriteAll = bWriteAll;     // sichern
     // suche die naechste Bookmark-Position aus der Bookmark-Tabelle
-    nBkmkTabPos = bWriteAll ? FindPos_Bkmk( *pCurPam->GetPoint() ) : USHRT_MAX;
+    nBkmkTabPos = bWriteAll ? FindPos_Bkmk( *pCurPam->GetPoint() ) : -1;
 
     // gebe alle Bereiche des Pams in das RTF-File aus.
     do {
@@ -1237,31 +1237,18 @@ void SwRTFWriter::OutRedline( xub_StrLen nCntntPos )
         }
 }
 
-void SwRTFWriter::OutBookmarks( xub_StrLen nCntntPos )
+void SwRTFWriter::OutBookmarks( xub_StrLen nCntntPos)
 {
-    if (USHRT_MAX == nBkmkTabPos)
+    IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
+    if (-1 == nBkmkTabPos)
         return;
 
-    const SwBookmark* pBookmark = pDoc->getBookmarks()[nBkmkTabPos];
-    if (!pBookmark)
+    const ::sw::mark::IMark* pBookmark = (pMarkAccess->getMarksBegin() + nBkmkTabPos)->get();
+    if(!pBookmark)
         return;
 
-    // hole das aktuelle Bookmark
-    const SwPosition* pStartPos = 0;
-    const SwPosition* pEndPos = 0;
-
-    if (pBookmark->GetOtherBookmarkPos())   // this bookmark spans text
-    {
-        // the start and endpoints are different
-        SwPaM mPam(pBookmark->GetBookmarkPos(), *pBookmark->GetOtherBookmarkPos());
-        pStartPos = mPam.Start();
-        pEndPos = mPam.End();
-    }
-    else                            // this bookmark is a point
-    {
-        // so the start and endpoints are the same
-        pStartPos = pEndPos = &pBookmark->GetBookmarkPos();
-    }
+    const SwPosition* pStartPos = &pBookmark->GetMarkStart();
+    const SwPosition* pEndPos = &pBookmark->GetMarkEnd();
 
     ASSERT(pStartPos && pEndPos, "Impossible");
     if (!(pStartPos && pEndPos))
@@ -1274,20 +1261,18 @@ void SwRTFWriter::OutBookmarks( xub_StrLen nCntntPos )
         // es hier vollstaendig ausgegeben werden.
 
         // erst die SWG spezifischen Daten:
-        if (
-             pBookmark->GetShortName().Len() ||
-             pBookmark->GetKeyCode().GetCode()
-           )
+        const ::sw::mark::IBookmark* const pAsBookmark = dynamic_cast< const ::sw::mark::IBookmark* >(pBookmark);
+        if(pAsBookmark && (pAsBookmark->GetShortName().getLength() || pAsBookmark->GetKeyCode().GetCode()))
         {
             OutComment( *this, sRTF_BKMKKEY );
-            OutULong( ( pBookmark->GetKeyCode().GetCode() |
-                     pBookmark->GetKeyCode().GetModifier() ));
-            if( !pBookmark->GetShortName().Len() )
+            OutULong( ( pAsBookmark->GetKeyCode().GetCode() |
+                     pAsBookmark->GetKeyCode().GetModifier() ));
+            if( !pAsBookmark->GetShortName().getLength() )
                 Strm() << "  " ;
             else
             {
                 Strm() << ' ';
-                OutRTF_AsByteString( *this, pBookmark->GetShortName(), eDefaultEncoding );
+                OutRTF_AsByteString( *this, pAsBookmark->GetShortName(), eDefaultEncoding );
             }
             Strm() << '}';
         }
@@ -1303,31 +1288,29 @@ void SwRTFWriter::OutBookmarks( xub_StrLen nCntntPos )
         // es hier vollstaendig ausgegeben werden.
 
         // erst die SWG spezifischen Daten:
-        if (
-             pBookmark->GetShortName().Len() ||
-             pBookmark->GetKeyCode().GetCode()
-           )
+        const ::sw::mark::IBookmark* const pAsBookmark = dynamic_cast< const ::sw::mark::IBookmark* >(pBookmark);
+        if(pAsBookmark && (pAsBookmark->GetShortName().getLength() || pAsBookmark->GetKeyCode().GetCode()))
         {
             OutComment( *this, sRTF_BKMKKEY );
-            OutULong( ( pBookmark->GetKeyCode().GetCode() |
-                     pBookmark->GetKeyCode().GetModifier() ));
-            if( !pBookmark->GetShortName().Len() )
+            OutULong( ( pAsBookmark->GetKeyCode().GetCode() |
+                     pAsBookmark->GetKeyCode().GetModifier() ));
+            if( !pAsBookmark->GetShortName().getLength() )
                 Strm() << "  " ;
             else
             {
                 Strm() << ' ';
-                OutRTF_AsByteString( *this, pBookmark->GetShortName(), eDefaultEncoding );
+                OutRTF_AsByteString( *this, pAsBookmark->GetShortName(), eDefaultEncoding );
             }
             Strm() << '}';
         }
         OutComment( *this, sRTF_BKMKEND ) << ' ';
-        RTFOutFuncs::Out_String( Strm(), pBookmark->GetName(),
+        RTFOutFuncs::Out_String( Strm(), pAsBookmark->GetName(),
                                 eDefaultEncoding, bWriteHelpFmt ) << '}';
 
-        if( ++nBkmkTabPos >= pDoc->getBookmarks().Count() )
-            nBkmkTabPos = USHRT_MAX;
+        if(++nBkmkTabPos >= pMarkAccess->getMarksCount())
+            nBkmkTabPos = -1;
         else
-            pBookmark = pDoc->getBookmarks()[ nBkmkTabPos ];
+            pBookmark = (pMarkAccess->getMarksBegin() + nBkmkTabPos)->get();
     }
 }
 

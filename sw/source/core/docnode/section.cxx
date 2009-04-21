@@ -62,7 +62,6 @@
 #include <swserv.hxx>
 #include <shellio.hxx>
 #include <poolfmt.hxx>
-#include <bookmrk.hxx>
 #include <expfld.hxx>
 #include <swbaslnk.hxx>
 #include <mvsave.hxx>
@@ -1322,7 +1321,7 @@ void SwIntrnlSectRefLink::DataChanged( const String& rMimeType,
         //und alles dahinter liegende loeschen
         aIdx--;
         DelFlyInRange( aIdx, aEndIdx );
-        _DelBookmarks( aIdx, aEndIdx );
+        _DelBookmarks(aIdx, aEndIdx);
         aIdx++;
 
         pDoc->GetNodes().Delete( aIdx, aEndIdx.GetIndex() - aIdx.GetIndex() );

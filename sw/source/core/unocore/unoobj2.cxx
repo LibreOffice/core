@@ -37,6 +37,7 @@
 #include <hintids.hxx>
 #include <cmdid.h>
 #include <hints.hxx>
+#include <IMark.hxx>
 #include <bookmrk.hxx>
 #include <frmfmt.hxx>
 #include <doc.hxx>
@@ -1119,18 +1120,13 @@ void SwXParagraphEnumeration::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
  ******************************************************************/
 TYPEINIT1(SwXTextRange, SwClient);
 
-/* -----------------------------10.03.00 18:02--------------------------------
-
- ---------------------------------------------------------------------------*/
 const uno::Sequence< sal_Int8 > & SwXTextRange::getUnoTunnelId()
 {
     static uno::Sequence< sal_Int8 > aSeq = ::CreateUnoTunnelId();
     return aSeq;
 }
-/* -----------------------------10.03.00 18:02--------------------------------
 
- ---------------------------------------------------------------------------*/
-    //XUnoTunnel
+//XUnoTunnel
 sal_Int64 SAL_CALL SwXTextRange::getSomething(
     const uno::Sequence< sal_Int8 >& rId )
         throw(uno::RuntimeException)
@@ -1143,47 +1139,37 @@ sal_Int64 SAL_CALL SwXTextRange::getSomething(
         }
     return 0;
 }
-/* -----------------------------06.04.00 16:34--------------------------------
 
- ---------------------------------------------------------------------------*/
 OUString SwXTextRange::getImplementationName(void) throw( RuntimeException )
 {
-    return C2U("SwXTextRange");
+    return OUString::createFromAscii("SwXTextRange");
 }
-/* -----------------------------06.04.00 16:34--------------------------------
 
- ---------------------------------------------------------------------------*/
 BOOL SwXTextRange::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
     String sServiceName(rServiceName);
     return sServiceName.EqualsAscii("com.sun.star.text.TextRange") ||
-         sServiceName.EqualsAscii("com.sun.star.style.CharacterProperties")||
+        sServiceName.EqualsAscii("com.sun.star.style.CharacterProperties")||
         sServiceName.EqualsAscii("com.sun.star.style.CharacterPropertiesAsian")||
         sServiceName.EqualsAscii("com.sun.star.style.CharacterPropertiesComplex")||
         sServiceName.EqualsAscii("com.sun.star.style.ParagraphProperties") ||
         sServiceName.EqualsAscii("com.sun.star.style.ParagraphPropertiesAsian") ||
         sServiceName.EqualsAscii("com.sun.star.style.ParagraphPropertiesComplex");
 }
-/* -----------------------------06.04.00 16:34--------------------------------
 
- ---------------------------------------------------------------------------*/
 Sequence< OUString > SwXTextRange::getSupportedServiceNames(void) throw( RuntimeException )
 {
     Sequence< OUString > aRet(7);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = C2U("com.sun.star.text.TextRange");
-     pArray[1] = C2U("com.sun.star.style.CharacterProperties");
-    pArray[2] = C2U("com.sun.star.style.CharacterPropertiesAsian");
-    pArray[3] = C2U("com.sun.star.style.CharacterPropertiesComplex");
-    pArray[4] = C2U("com.sun.star.style.ParagraphProperties");
-    pArray[5] = C2U("com.sun.star.style.ParagraphPropertiesAsian");
-    pArray[6] = C2U("com.sun.star.style.ParagraphPropertiesComplex");
+    aRet[0] = OUString::createFromAscii("com.sun.star.text.TextRange");
+    aRet[1] = OUString::createFromAscii("com.sun.star.style.CharacterProperties");
+    aRet[2] = OUString::createFromAscii("com.sun.star.style.CharacterPropertiesAsian");
+    aRet[3] = OUString::createFromAscii("com.sun.star.style.CharacterPropertiesComplex");
+    aRet[4] = OUString::createFromAscii("com.sun.star.style.ParagraphProperties");
+    aRet[5] = OUString::createFromAscii("com.sun.star.style.ParagraphPropertiesAsian");
+    aRet[6] = OUString::createFromAscii("com.sun.star.style.ParagraphPropertiesComplex");
     return aRet;
 }
 
-/*-- 10.12.98 12:54:43---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 SwXTextRange::SwXTextRange(SwPaM& rPam, const uno::Reference< XText > & rxParent) :
     eRangePosition(RANGE_IN_TEXT),
     pDoc(rPam.GetDoc()),
@@ -1191,145 +1177,103 @@ SwXTextRange::SwXTextRange(SwPaM& rPam, const uno::Reference< XText > & rxParent
     pBoxStartNode(0),
     aObjectDepend(this, 0),
     aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_CURSOR)),
-    xParentText(rxParent)
+    xParentText(rxParent),
+    pMark(NULL)
 {
     //Bookmark an der anlegen
     _CreateNewBookmark(rPam);
 }
-/*-- 10.12.98 12:54:43---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwXTextRange::SwXTextRange(SwFrmFmt& rFmt, SwPaM& rPam) :
     eRangePosition(RANGE_IN_FRAME),
     pDoc(rPam.GetDoc()),
     pBox(0),
     pBoxStartNode(0),
     aObjectDepend(this, &rFmt),
-    aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_CURSOR))
+    aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_CURSOR)),
+    pMark(NULL)
 {
     //Bookmark an der anlegen
     _CreateNewBookmark(rPam);
 }
-/*-- 10.12.98 12:54:44---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwXTextRange::SwXTextRange(SwFrmFmt& rTblFmt, SwTableBox& rTblBox, SwPaM& rPam) :
     eRangePosition(RANGE_IN_CELL),
     pDoc(rPam.GetDoc()),
     pBox(&rTblBox),
     pBoxStartNode(0),
     aObjectDepend(this, &rTblFmt),
-    aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_CURSOR))
+    aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_CURSOR)),
+    pMark(NULL)
 {
     //Bookmark an der anlegen
     _CreateNewBookmark(rPam);
 }
-/* -----------------------------09.08.00 16:07--------------------------------
 
- ---------------------------------------------------------------------------*/
 SwXTextRange::SwXTextRange(SwFrmFmt& rTblFmt, const SwStartNode& rStartNode, SwPaM& rPam) :
     eRangePosition(RANGE_IN_CELL),
     pDoc(rPam.GetDoc()),
     pBox(0),
     pBoxStartNode(&rStartNode),
     aObjectDepend(this, &rTblFmt),
-    aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_CURSOR))
+    aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_CURSOR)),
+    pMark(NULL)
 {
     //Bookmark an der anlegen
     _CreateNewBookmark(rPam);
 }
-/* -----------------19.02.99 11:39-------------------
- *
- * --------------------------------------------------*/
+
 SwXTextRange::SwXTextRange(SwFrmFmt& rTblFmt) :
     eRangePosition(RANGE_IS_TABLE),
     pDoc(rTblFmt.GetDoc()),
     pBox(0),
     pBoxStartNode(0),
     aObjectDepend(this, &rTblFmt),
-    aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_CURSOR))
-{
-}
+    aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_CURSOR)),
+    pMark(NULL)
+{ }
 
-/*-- 10.12.98 12:54:44---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 SwXTextRange::~SwXTextRange()
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    if(GetBookmark())
-        pDoc->deleteBookmark( GetBookmark()->GetName() );
+    ::sw::mark::IMark const * const pBkmk = GetBookmark();
+    if(pBkmk)
+        pDoc->getIDocumentMarkAccess()->deleteMark(pBkmk);
 }
-/*-- 10.12.98 12:54:44---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
-void    SwXTextRange::_CreateNewBookmark(SwPaM& rPam)
+void SwXTextRange::_CreateNewBookmark(SwPaM& rPam)
 {
-    static sal_Int32 nBookmark = 0;
-    String sBookmarkName;
+    IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
 
-    SwBookmark* pBkm = GetBookmark();
-    if(pBkm)
-    {
-        // If a bookmark exists already its name can be resused
-        sBookmarkName = pBkm->GetName();
-        pDoc->deleteBookmark( sBookmarkName );
-    }
-    else
-    {
-        // Otherwise we have to create a new name. This is not done
-        // using SwDoc::MakeUniqueBookmarkName, because this method
-        // starts counting bookmarks beginning with 1. That's required
-        // for real bookmarks, but very slow in thsi case there lots
-        // of bookmarks requiere any unique name only.
-        String sPrefix(C2S("SwXTextPosition"));
-        const SwBookmarks& rBookmarks = pDoc->getBookmarks();
-        sal_uInt16 nBookmarks = rBookmarks.Count(), i;
-        do
-        {
-            nBookmark++;
-            if( nBookmark < 1 ) // on overwflow restart with 1
-                nBookmark = 1;
-
-            sBookmarkName = sPrefix;
-            sBookmarkName += String::CreateFromInt32( nBookmark );
-            for( i = 0; i < nBookmarks; i++ )
-                if( rBookmarks[i]->GetName().Equals( sBookmarkName ) )
-                    break;
-        }
-        while( i < nBookmarks );
-    }
-
-    KeyCode aCode;
-    String sShortName;
-    SwBookmark* pMark = pDoc->makeBookmark(rPam, aCode, sBookmarkName, sShortName, IDocumentBookmarkAccess::UNO_BOOKMARK);
+    ::sw::mark::IMark const * const pBkmk = GetBookmark();
+    if(pBkmk)
+        pMarkAccess->deleteMark(pBkmk);
+    pMark = pMarkAccess->makeMark(rPam, ::rtl::OUString(), IDocumentMarkAccess::UNO_BOOKMARK);
     pMark->Add(this);
 }
-/*-- 10.12.98 12:54:45---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
-void    SwXTextRange::DeleteAndInsert(const String& rText) throw( uno::RuntimeException )
+void SwXTextRange::DeleteAndInsert(const String& rText)
+    throw(uno::RuntimeException)
 {
-    SwBookmark* pBkm = GetBookmark();
-    if(pBkm )
+    ::sw::mark::IMark const * const pBkmk = GetBookmark();
+    if(pBkmk)
     {
-        const SwPosition& rPoint = *pBkm->BookmarkStart();
-        const SwPosition* pMark = pBkm->BookmarkEnd();
-        SwCursor aNewCrsr( rPoint, 0, false );
-        if(pMark)
+        const SwPosition& rPoint = pBkmk->GetMarkStart();
+        SwCursor aNewCrsr(rPoint, 0, false);
+        if(pBkmk->IsExpanded())
         {
             aNewCrsr.SetMark();
-            *aNewCrsr.GetMark() = *pMark;
+            const SwPosition& rMark = pBkmk->GetMarkEnd();
+            *aNewCrsr.GetMark() = rMark;
         }
-
-        UnoActionContext aAction( pDoc );
+        UnoActionContext aAction(pDoc);
         pDoc->StartUndo(UNDO_INSERT, NULL);
         if(aNewCrsr.HasMark())
             pDoc->DeleteAndJoin(aNewCrsr);
 
         if(rText.Len())
         {
-            SwUnoCursorHelper::DocInsertStringSplitCR( *pDoc, aNewCrsr, rText );
+            SwUnoCursorHelper::DocInsertStringSplitCR(*pDoc, aNewCrsr, rText);
 
             SwXTextCursor::SelectPam(aNewCrsr, sal_True);
             aNewCrsr.Left(rText.Len(), CRSR_SKIP_CHARS, FALSE, FALSE);
@@ -1337,12 +1281,8 @@ void    SwXTextRange::DeleteAndInsert(const String& rText) throw( uno::RuntimeEx
         _CreateNewBookmark(aNewCrsr);
         pDoc->EndUndo(UNDO_INSERT, NULL);
     }
-
 }
 
-/*-- 10.12.98 12:54:46---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 uno::Reference< XText >  SwXTextRange::getText(void) throw( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
@@ -1394,91 +1334,69 @@ uno::Reference< XText >  SwXTextRange::getText(void) throw( uno::RuntimeExceptio
     }
     return xParentText;
 }
-/*-- 10.12.98 12:54:47---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Reference< XTextRange >  SwXTextRange::getStart(void) throw( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     uno::Reference< XTextRange >  xRet;
-    SwBookmark* pBkm = GetBookmark();
+
+    ::sw::mark::IMark const * const pBkmk = GetBookmark();
     if(!xParentText.is())
         getText();
-    if(pBkm)
+    if(pBkmk)
     {
-        SwPaM aPam(*pBkm->BookmarkStart());
+        SwPaM aPam(pBkmk->GetMarkStart());
         xRet = new SwXTextRange(aPam, xParentText);
     }
     else if(eRangePosition == RANGE_IS_TABLE)
     {
-        //start und ende sind mit this identisch, wenn es eine Tabelle ist
+        //start and end are this, if its a table
         xRet = this;
     }
     else
         throw uno::RuntimeException();
     return xRet;
 }
-/*-- 10.12.98 12:54:47---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Reference< XTextRange >  SwXTextRange::getEnd(void) throw( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     uno::Reference< XTextRange >  xRet;
-    SwBookmark* pBkm = GetBookmark();
+    ::sw::mark::IMark const * const pBkmk = GetBookmark();
     if(!xParentText.is())
         getText();
-    if(pBkm)
+    if(pBkmk)
     {
-//      SwPaM aPam(pBkm->GetOtherPos()? *pBkm->GetOtherPos() : pBkm->GetPos());
-        SwPaM aPam(*pBkm->BookmarkEnd());
+        SwPaM aPam(pBkmk->GetMarkEnd());
         xRet = new SwXTextRange(aPam, xParentText);
     }
     else if(eRangePosition == RANGE_IS_TABLE)
     {
-        //start und ende sind mit this identisch, wenn es eine Tabelle ist
+        //start and end are this, if its a table
         xRet = this;
     }
     else
         throw uno::RuntimeException();
     return xRet;
 }
-/*-- 10.12.98 12:54:47---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 OUString SwXTextRange::getString(void) throw( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    SwBookmark* pBkm = GetBookmark();
     OUString sRet;
-    //fuer Tabellen gibt es keine Bookmark, also auch keinen Text
-    //evtl. koennte man hier die Tabelle als ASCII exportieren?
-    if(pBkm && pBkm->GetOtherBookmarkPos())
+    ::sw::mark::IMark const * const pBkmk = GetBookmark();
+    // for tables there is no bookmark, thus also no text
+    // one could export the table as ASCII here maybe?
+    if(pBkmk && pBkmk->IsExpanded())
     {
-        const SwPosition& rPoint = pBkm->GetBookmarkPos();
-        const SwPosition* pMark = pBkm->GetOtherBookmarkPos();
-        SwPaM aCrsr(*pMark, rPoint);
-/*      if( rPoint.nNode.GetIndex() ==
-            pMark->nNode.GetIndex() )
-        {
-            SwTxtNode* pTxtNd = aCrsr.GetNode()->GetTxtNode();
-            if( pTxtNd )
-            {
-                sal_uInt16 nStt = aCrsr.Start()->nContent.GetIndex();
-                sRet = pTxtNd->GetExpandTxt( nStt,
-                        aCrsr.End()->nContent.GetIndex() - nStt );
-            }
-        }
-        else
-*/      {
-            SwXTextCursor::getTextFromPam(aCrsr, sRet);
-        }
+        const SwPosition& rPoint = pBkmk->GetMarkPos();
+        const SwPosition& rMark = pBkmk->GetOtherMarkPos();
+        SwPaM aCrsr(rMark, rPoint);
+        SwXTextCursor::getTextFromPam(aCrsr, sRet);
     }
     return sRet;
 }
-/*-- 10.12.98 12:54:48---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwXTextRange::setString(const OUString& aString)
     throw( uno::RuntimeException )
 {
@@ -1491,9 +1409,7 @@ void SwXTextRange::setString(const OUString& aString)
     else
         DeleteAndInsert(aString);
 }
-/*-- 10.12.98 12:54:48---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwXTextRange::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
 {
     sal_Bool bAlreadyRegisterred = 0 != GetRegisteredIn();
@@ -1510,21 +1426,21 @@ void SwXTextRange::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
                 aObjectDepend.GetRegisteredIn())
             ((SwModify*)aObjectDepend.GetRegisteredIn())->Remove(&aObjectDepend);
     }
+    if(!GetRegisteredIn())
+        pMark = NULL;
 }
-/*-- 10.12.98 12:54:49---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
-sal_Bool    SwXTextRange::GetPositions(SwPaM& rToFill) const
+sal_Bool SwXTextRange::GetPositions(SwPaM& rToFill) const
 {
     sal_Bool bRet = sal_False;
-    SwBookmark* pBkm = GetBookmark();
-    if(pBkm)
+    ::sw::mark::IMark const * const pBkmk = GetBookmark();
+    if(pBkmk)
     {
-        *rToFill.GetPoint() = pBkm->GetBookmarkPos();
-        if(pBkm->GetOtherBookmarkPos())
+        *rToFill.GetPoint() = pBkmk->GetMarkPos();
+        if(pBkmk->IsExpanded())
         {
             rToFill.SetMark();
-            *rToFill.GetMark() = *pBkm->GetOtherBookmarkPos();
+            *rToFill.GetMark() = pBkmk->GetOtherMarkPos();
         }
         else
             rToFill.DeleteMark();
@@ -1532,10 +1448,8 @@ sal_Bool    SwXTextRange::GetPositions(SwPaM& rToFill) const
     }
     return bRet;
 }
-/*-- 10.12.98 12:54:49---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
-sal_Bool        SwXTextRange::XTextRangeToSwPaM( SwUnoInternalPaM& rToFill,
+sal_Bool SwXTextRange::XTextRangeToSwPaM( SwUnoInternalPaM& rToFill,
                             const uno::Reference< XTextRange > & xTextRange)
 {
     sal_Bool bRet = sal_False;
@@ -1614,9 +1528,7 @@ sal_Bool        SwXTextRange::XTextRangeToSwPaM( SwUnoInternalPaM& rToFill,
     }
     return bRet;
 }
-/* -----------------24.02.99 14:18-------------------
- * Der StartNode muss in einem existierenden Header/Footen liegen
- * --------------------------------------------------*/
+
 sal_Bool lcl_IsStartNodeInFormat(sal_Bool bHeader, SwStartNode* pSttNode,
     const SwFrmFmt* pFrmFmt, SwFrmFmt*& rpFormat)
 {
@@ -1641,10 +1553,8 @@ sal_Bool lcl_IsStartNodeInFormat(sal_Bool bHeader, SwStartNode* pSttNode,
     }
     return bRet;
 }
-/* -----------------03.11.98 15:58-------------------
- *
- * --------------------------------------------------*/
-uno::Reference< XTextRange >  SwXTextRange::CreateTextRangeFromPosition(SwDoc* pDoc,
+
+uno::Reference< XTextRange > SwXTextRange::CreateTextRangeFromPosition(SwDoc* pDoc,
                         const SwPosition& rPos, const SwPosition* pMark)
 {
     uno::Reference< XTextRange >  aRet;
@@ -1755,44 +1665,37 @@ uno::Reference< XTextRange >  SwXTextRange::CreateTextRangeFromPosition(SwDoc* p
     delete pNewCrsr;
     return aRet;
 }
-/* -----------------------------03.04.00 09:11--------------------------------
 
- ---------------------------------------------------------------------------*/
 uno::Reference< XEnumeration >  SAL_CALL SwXTextRange::createContentEnumeration(
-        const OUString& rServiceName)
-                throw( RuntimeException )
+    const OUString& rServiceName)
+        throw(RuntimeException)
 {
-    SwBookmark* pBkm = GetBookmark();
-    if( !pBkm || COMPARE_EQUAL != rServiceName.compareToAscii("com.sun.star.text.TextContent") )
+    ::sw::mark::IMark const * const pBkmk = GetBookmark();
+    if( !pBkmk || COMPARE_EQUAL != rServiceName.compareToAscii("com.sun.star.text.TextContent") )
         throw RuntimeException();
 
-    const SwPosition& rPoint = pBkm->GetBookmarkPos();
-    const SwPosition* pMark = pBkm->GetOtherBookmarkPos();
+    const SwPosition& rPoint = pBkmk->GetMarkPos();
     SwUnoCrsr* pNewCrsr = pDoc->CreateUnoCrsr(rPoint, FALSE);
-    if(pMark && *pMark != rPoint)
+    if(pBkmk->IsExpanded() && pBkmk->GetOtherMarkPos() != rPoint)
     {
         pNewCrsr->SetMark();
-        *pNewCrsr->GetMark() = *pMark;
+        *pNewCrsr->GetMark() = pBkmk->GetOtherMarkPos();
     }
     uno::Reference< XEnumeration > xRet = new SwXParaFrameEnumeration(*pNewCrsr, PARAFRAME_PORTION_TEXTRANGE);
     delete pNewCrsr;
     return xRet;
 }
-/* -----------------------------07.03.01 14:55--------------------------------
 
- ---------------------------------------------------------------------------*/
-uno::Reference< XEnumeration >  SwXTextRange::createEnumeration(void) throw( RuntimeException )
+uno::Reference< XEnumeration > SwXTextRange::createEnumeration(void) throw( RuntimeException )
 {
-    SwBookmark* pBkm = GetBookmark();
-    if( !pBkm  )
-        throw RuntimeException();
-    const SwPosition& rPoint = pBkm->GetBookmarkPos();
-    const SwPosition* pMark = pBkm->GetOtherBookmarkPos();
+    ::sw::mark::IMark const * const pBkmk = GetBookmark();
+    if(!pBkmk) throw RuntimeException();
+    const SwPosition& rPoint = pBkmk->GetMarkPos();
     SwUnoCrsr* pNewCrsr = pDoc->CreateUnoCrsr(rPoint, FALSE);
-    if(pMark && *pMark != rPoint)
+    if(pBkmk->IsExpanded() && pBkmk->GetOtherMarkPos() != rPoint)
     {
         pNewCrsr->SetMark();
-        *pNewCrsr->GetMark() = *pMark;
+        *pNewCrsr->GetMark() = pBkmk->GetOtherMarkPos();
     }
     uno::Reference<XUnoTunnel> xTunnel(xParentText, UNO_QUERY);
     SwXText* pParentText = 0;
@@ -1806,23 +1709,17 @@ uno::Reference< XEnumeration >  SwXTextRange::createEnumeration(void) throw( Run
     uno::Reference< XEnumeration > xRet = new SwXParagraphEnumeration(pParentText, *pNewCrsr, eSetType);
     return xRet;
 }
-/* -----------------------------07.03.01 15:43--------------------------------
 
- ---------------------------------------------------------------------------*/
 uno::Type  SwXTextRange::getElementType(void) throw( RuntimeException )
 {
     return ::getCppuType((uno::Reference<XTextRange>*)0);
 }
-/* -----------------------------07.03.01 15:43--------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_Bool SwXTextRange::hasElements(void) throw( RuntimeException )
 {
     return sal_True;
 }
-/* -----------------------------03.04.00 09:11--------------------------------
 
- ---------------------------------------------------------------------------*/
 Sequence< OUString > SAL_CALL SwXTextRange::getAvailableServiceNames(void) throw( RuntimeException )
 {
     Sequence< OUString > aRet(1);
@@ -1830,9 +1727,7 @@ Sequence< OUString > SAL_CALL SwXTextRange::getAvailableServiceNames(void) throw
     pArray[0] = OUString::createFromAscii("com.sun.star.text.TextContent");
     return aRet;
 }
-/*-- 03.05.00 12:41:46---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Reference< XPropertySetInfo > SAL_CALL SwXTextRange::getPropertySetInfo(  ) throw(RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
@@ -1840,9 +1735,7 @@ uno::Reference< XPropertySetInfo > SAL_CALL SwXTextRange::getPropertySetInfo(  )
         aPropSet.getPropertySetInfo();
     return xRef;
 }
-/*-- 03.05.00 12:41:47---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SAL_CALL SwXTextRange::setPropertyValue(
     const OUString& rPropertyName, const Any& rValue )
     throw(UnknownPropertyException, PropertyVetoException,
@@ -1855,9 +1748,7 @@ void SAL_CALL SwXTextRange::setPropertyValue(
     SwXTextRange::GetPositions(aPaM);
     SwXTextCursor::SetPropertyValue(aPaM, aPropSet, rPropertyName, rValue);
 }
-/*-- 03.05.00 12:41:47---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 Any SAL_CALL SwXTextRange::getPropertyValue( const OUString& rPropertyName )
     throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
@@ -1868,45 +1759,35 @@ Any SAL_CALL SwXTextRange::getPropertyValue( const OUString& rPropertyName )
     SwXTextRange::GetPositions(aPaM);
     return SwXTextCursor::GetPropertyValue(aPaM, aPropSet, rPropertyName);
 }
-/*-- 03.05.00 12:41:47---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SAL_CALL SwXTextRange::addPropertyChangeListener(
     const OUString& /*PropertyName*/, const uno::Reference< beans::XPropertyChangeListener >& /*aListener*/ )
     throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     DBG_WARNING("not implemented");
 }
-/*-- 03.05.00 12:41:48---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SAL_CALL SwXTextRange::removePropertyChangeListener(
     const OUString& /*PropertyName*/, const uno::Reference< beans::XPropertyChangeListener >& /*aListener*/ )
         throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     DBG_WARNING("not implemented");
 }
-/*-- 03.05.00 12:41:48---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SAL_CALL SwXTextRange::addVetoableChangeListener(
     const OUString& /*PropertyName*/, const uno::Reference< XVetoableChangeListener >& /*aListener*/ )
     throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     DBG_WARNING("not implemented");
 }
-/*-- 03.05.00 12:41:48---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SAL_CALL SwXTextRange::removeVetoableChangeListener(
     const OUString& /*PropertyName*/, const uno::Reference< beans::XVetoableChangeListener >& /*aListener*/ )
         throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     DBG_WARNING("not implemented");
 }
-/*-- 03.05.00 12:41:48---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 PropertyState SAL_CALL SwXTextRange::getPropertyState( const OUString& rPropertyName )
     throw(UnknownPropertyException, RuntimeException)
 {
@@ -1917,9 +1798,7 @@ PropertyState SAL_CALL SwXTextRange::getPropertyState( const OUString& rProperty
     SwXTextRange::GetPositions(aPaM);
     return SwXTextCursor::GetPropertyState(aPaM, aPropSet, rPropertyName);
 }
-/*-- 03.05.00 12:41:49---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 Sequence< PropertyState > SAL_CALL SwXTextRange::getPropertyStates(
     const Sequence< OUString >& rPropertyName ) throw(UnknownPropertyException, RuntimeException)
 {
@@ -1930,9 +1809,7 @@ Sequence< PropertyState > SAL_CALL SwXTextRange::getPropertyStates(
     SwXTextRange::GetPositions(aPaM);
     return SwXTextCursor::GetPropertyStates(aPaM, aPropSet, rPropertyName);
 }
-/*-- 03.05.00 12:41:49---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SAL_CALL SwXTextRange::setPropertyToDefault( const OUString& rPropertyName )
     throw(UnknownPropertyException, RuntimeException)
 {
@@ -1943,9 +1820,7 @@ void SAL_CALL SwXTextRange::setPropertyToDefault( const OUString& rPropertyName 
     SwXTextRange::GetPositions(aPaM);
     SwXTextCursor::SetPropertyToDefault(aPaM, aPropSet, rPropertyName);
 }
-/*-- 03.05.00 12:41:50---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 Any SAL_CALL SwXTextRange::getPropertyDefault( const OUString& rPropertyName )
     throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
@@ -1956,9 +1831,7 @@ Any SAL_CALL SwXTextRange::getPropertyDefault( const OUString& rPropertyName )
     SwXTextRange::GetPositions(aPaM);
     return SwXTextCursor::GetPropertyDefault(aPaM, aPropSet, rPropertyName);
 }
-/*-- 10.03.2008 09:58:47---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwXTextRange::makeRedline(
     const ::rtl::OUString& rRedlineType,
     const uno::Sequence< beans::PropertyValue >& rRedlineProperties )

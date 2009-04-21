@@ -44,7 +44,6 @@ class SwDoc;
 class SwFmt;
 class SwFmtColl;
 class SwHstryHint;
-class SwBookmark;
 class SwTxtAttr;
 class SfxPoolItem;
 class SwTxtNode;
@@ -70,7 +69,7 @@ class SwCharFmt;
 
 #include <SwNumberTreeTypes.hxx>
 // --> OD 2007-10-17 #i81002#
-#include <IDocumentBookmarkAccess.hxx>
+#include <IDocumentMarkAccess.hxx>
 // <--
 
 #ifndef PRODUCT
@@ -256,22 +255,25 @@ public:
 
 class SwHstryBookmark : public SwHstryHint
 {
-    String aName, aShortName;
-    ULONG nNode1, nNode2;
-    xub_StrLen nCntnt1, nCntnt2;
-    USHORT nKeyCode;
-    BYTE nTyp;
-    // --> OD 2007-10-17 #i81002#
-    const IDocumentBookmarkAccess::BookmarkType eBkmkType;
-    // <--
-public:
-    enum { BKMK_POS = 1, BKMK_OTHERPOS = 2 };
-    SwHstryBookmark( const SwBookmark&, BYTE nTyp );
-    virtual void SetInDoc( SwDoc* pDoc, BOOL bTmpSet );
-    OUT_HSTR_HINT(Bookmark)
+    public:
+        SwHstryBookmark(const ::sw::mark::IMark& rBkmk, bool bSavePos, bool bSaveOtherPos);
+        virtual void SetInDoc(SwDoc * pDoc, BOOL);
+        OUT_HSTR_HINT(Bookmark)
 
-    BOOL IsEqualBookmark( const SwBookmark& );
-    const String & GetName() const;
+        BOOL IsEqualBookmark(const ::sw::mark::IMark& rBkmk);
+        const ::rtl::OUString& GetName() const;
+    private:
+        const ::rtl::OUString m_aName;
+        ::rtl::OUString m_aShortName;
+        KeyCode m_aKeycode;
+        const ULONG m_nNode;
+        const ULONG m_nOtherNode;
+        const xub_StrLen m_nCntnt;
+        const xub_StrLen m_nOtherCntnt;
+        const bool m_bSavePos;
+        const bool m_bSaveOtherPos;
+        const bool m_bHadOtherPos;
+        const IDocumentMarkAccess::MarkType m_eBkmkType;
 };
 
 class SwHstrySetAttrSet : public SwHstryHint
@@ -371,7 +373,7 @@ public:
     void Add( const SwTxtAttr* pTxtHt, ULONG nNodeIdx,
                 BOOL bNewAttr = TRUE );
     void Add( const SwFmtColl*, ULONG nNodeIdx, BYTE nWhichNd );
-    void Add( const SwBookmark&, BYTE );
+    void Add( const ::sw::mark::IMark&, bool bSavePos, bool bSaveOtherPos );
     void Add( const SwFrmFmt& rFmt );
     void Add( const SwFlyFrmFmt&, USHORT& rSetPos );
     void Add( const SwTxtFtn& );

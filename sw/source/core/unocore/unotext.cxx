@@ -59,7 +59,7 @@
 #include <redline.hxx>
 #include <swundo.hxx>
 #include <section.hxx>
-#include <bookmrk.hxx>
+#include <IMark.hxx>
 #include <fmthbsh.hxx>
 #include <fmtanchr.hxx>
 #include <crsskip.hxx>
@@ -235,12 +235,11 @@ uno::Sequence< uno::Type > SAL_CALL SwXText::getTypes() throw(uno::RuntimeExcept
     return aRet;
 }
 
-/*-- 09.12.98 12:43:14---------------------------------------------------
-    Gehoert der Range in den Text ? - dann einfuegen
-  -----------------------------------------------------------------------*/
-void SwXText::insertString(const uno::Reference< text::XTextRange > & xTextRange,
-                                const OUString& aString, sal_Bool bAbsorb)
-                                throw( uno::RuntimeException )
+// belongs the range in the text ? insert it then.
+void SwXText::insertString(const uno::Reference< text::XTextRange >& xTextRange,
+    const OUString& aString,
+    sal_Bool bAbsorb)
+        throw( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     if(GetDoc() && xTextRange.is())
@@ -274,16 +273,12 @@ void SwXText::insertString(const uno::Reference< text::XTextRange > & xTextRange
             }
             else //dann pRange
             {
-                SwBookmark* pBkm = pRange->GetBookmark();
-                const SwStartNode* pTmp = pBkm->GetBookmarkPos().nNode.GetNode().StartOfSectionNode();
-                while( pTmp && pTmp->IsSectionNode())
-                {
+                ::sw::mark::IMark const * const pBkmk = pRange->GetBookmark();
+                const SwStartNode* pTmp = pBkmk->GetMarkPos().nNode.GetNode().StartOfSectionNode();
+                while(pTmp && pTmp->IsSectionNode())
                     pTmp = pTmp->StartOfSectionNode();
-                }
-                if( !pOwnStartNode || pOwnStartNode != pTmp)
-                {
+                if(!pOwnStartNode || pOwnStartNode != pTmp)
                     throw uno::RuntimeException();
-                }
             }
             if(bAbsorb)
             {
@@ -298,27 +293,23 @@ void SwXText::insertString(const uno::Reference< text::XTextRange > & xTextRange
                 //Text davor eingefuegt wird
                 UnoActionContext aContext(GetDoc());
                 const SwPosition* pPos = pCursor
-                                         ? pCursor->GetPaM()->Start()
-                                         : pRange->GetBookmark()->BookmarkStart();
+                    ? pCursor->GetPaM()->Start()
+                    : &pRange->GetBookmark()->GetMarkStart();
                 SwPaM aInsertPam(*pPos);
                 sal_Bool bGroupUndo = GetDoc()->DoesGroupUndo();
                 GetDoc()->DoGroupUndo(sal_False);
 
-                SwUnoCursorHelper::DocInsertStringSplitCR( *GetDoc(), aInsertPam, aString );
-
+                SwUnoCursorHelper::DocInsertStringSplitCR(*GetDoc(), aInsertPam, aString);
                 GetDoc()->DoGroupUndo(bGroupUndo);
             }
         }
         else
-        {
             throw uno::RuntimeException();
-        }
     }
     else
-    {
         throw uno::RuntimeException();
-    }
 }
+
 /*-- 09.12.98 12:43:16---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -484,8 +475,8 @@ void SwXText::insertTextContent(const uno::Reference< text::XTextRange > & xRang
             }
             else if (pRange && pRange->GetBookmark())
             {
-                SwBookmark* pBkm = pRange->GetBookmark();
-                pSrcNode = &pBkm->GetBookmarkPos().nNode.GetNode();
+                ::sw::mark::IMark const * const pBkmk = pRange->GetBookmark();
+                pSrcNode = &pBkmk->GetMarkPos().nNode.GetNode();
             }
             else if (pPortion && pPortion->GetCrsr())
             {
@@ -1002,11 +993,10 @@ void SwXText::setString(const OUString& aString) throw( uno::RuntimeException )
     xRet->setString(aString);
     GetDoc()->EndUndo(UNDO_END, NULL);
 }
-/* -----------------------------28.03.00 11:12--------------------------------
-    Description: Checks if pRange/pCursor are member of the same text interface.
-                Only one of the pointers has to be set!
- ---------------------------------------------------------------------------*/
-sal_Bool    SwXText::CheckForOwnMember(
+
+//  Description: Checks if pRange/pCursor are member of the same text interface.
+//              Only one of the pointers has to be set!
+sal_Bool SwXText::CheckForOwnMember(
     const SwXTextRange* pRange,
     const OTextCursorHelper* pCursor)
         throw(lang::IllegalArgumentException, uno::RuntimeException)
@@ -1039,37 +1029,30 @@ sal_Bool    SwXText::CheckForOwnMember(
 
     const SwNode* pSrcNode;
     if(pCursor)
-    {
         pSrcNode = pCursor->GetPaM()->GetNode();
-    }
     else //dann pRange
     {
-        SwBookmark* pBkm = pRange->GetBookmark();
-        pSrcNode = &pBkm->GetBookmarkPos().nNode.GetNode();
+        ::sw::mark::IMark const * const pBkmk = pRange->GetBookmark();
+        pSrcNode = &pBkmk->GetMarkPos().nNode.GetNode();
     }
     const SwStartNode* pTmp = pSrcNode->FindSttNodeByType(eSearchNodeType);
 
     //SectionNodes ueberspringen
     while(pTmp && pTmp->IsSectionNode())
-    {
         pTmp = pTmp->StartOfSectionNode();
-    }
+
     //if the document starts with a section
     while(pOwnStartNode->IsSectionNode())
-    {
         pOwnStartNode = pOwnStartNode->StartOfSectionNode();
-    }
+
     //this checks if (this) and xRange are in the same text::XText interface
     return(pOwnStartNode == pTmp);
 }
 
-/* -----------------------------28.03.00 11:07--------------------------------
-
- ---------------------------------------------------------------------------*/
 sal_Int16 SwXText::ComparePositions(
     const uno::Reference<text::XTextRange>& xPos1,
     const uno::Reference<text::XTextRange>& xPos2)
-            throw(lang::IllegalArgumentException, uno::RuntimeException)
+        throw(lang::IllegalArgumentException, uno::RuntimeException)
 {
     sal_Int16 nCompare = 0;
     SwUnoInternalPaM aPam1(*GetDoc());
@@ -1109,12 +1092,12 @@ sal_Int16 SwXText::ComparePositions(
                 const SwPosition *pStart2 = 0;
 
                 if(pRange1)
-                    pStart1 = pRange1->GetBookmark() ? pRange1->GetBookmark()->BookmarkStart() : 0;
+                    pStart1 = pRange1->GetBookmark() ? &(pRange1->GetBookmark()->GetMarkStart()) : 0;
                 else
                     pStart1 = pCursor1->GetPaM() ? pCursor1->GetPaM()->Start() : 0;
 
                 if(pRange2)
-                    pStart2 = pRange2->GetBookmark() ? pRange2->GetBookmark()->BookmarkStart() : 0;
+                    pStart2 = pRange2->GetBookmark() ? &(pRange2->GetBookmark()->GetMarkStart()) : 0;
                 else
                     pStart2 = pCursor2->GetPaM() ? pCursor2->GetPaM()->Start() : 0;
 
@@ -1598,10 +1581,9 @@ uno::Reference< text::XTextRange > SwXText::appendTextContent(
     }
     return xRet;
 }
-/*-- 11.05.2006 15:46:26---------------------------------------------------
-    move previously appended paragraphs into a text frames
-    to support import filters
-  -----------------------------------------------------------------------*/
+
+// move previously appended paragraphs into a text frames
+// to support import filters
 uno::Reference< text::XTextContent > SwXText::convertToTextFrame(
     const uno::Reference< text::XTextRange >& xStart,
     const uno::Reference< text::XTextRange >& xEnd,
@@ -1623,18 +1605,18 @@ uno::Reference< text::XTextContent > SwXText::convertToTextFrame(
         uno::Reference<lang::XUnoTunnel> xEndRangeTunnel( xEnd, uno::UNO_QUERY);
         SwXTextRange* pEndRange  = reinterpret_cast< SwXTextRange * >(
                    sal::static_int_cast< sal_IntPtr >( xEndRangeTunnel->getSomething( SwXTextRange::getUnoTunnelId()) ));
-        //bokmarks have to be removed before the referenced text node is deleted in DelFullPara
-        if( pStartRange )
+        //bookmarks have to be removed before the referenced text node is deleted in DelFullPara
+        if(pStartRange)
         {
-            SwBookmark* pStartBookmark = pStartRange->GetBookmark();
-            if( pStartBookmark )
-                pDoc->deleteBookmark( pStartBookmark->GetName() );
+            ::sw::mark::IMark const * const pStartBookmark = pStartRange->GetBookmark();
+            if(pStartBookmark)
+                pDoc->getIDocumentMarkAccess()->deleteMark(pStartBookmark);
         }
-        if( pEndRange )
+        if(pEndRange)
         {
-            SwBookmark* pEndBookmark = pEndRange->GetBookmark();
-            if( pEndBookmark )
-                pDoc->deleteBookmark( pEndBookmark->GetName() );
+            ::sw::mark::IMark const * const pEndBookmark = pEndRange->GetBookmark();
+            if(pEndBookmark)
+                pDoc->getIDocumentMarkAccess()->deleteMark(pEndBookmark);
         }
 
         pDoc->StartUndo( UNDO_START, NULL );

@@ -98,7 +98,7 @@
 #include <expfld.hxx>
 #include <poolfmt.hxx>
 #include <pagedesc.hxx>
-#include <bookmrk.hxx>      // fuer SwBookmark ...
+#include <IMark.hxx>        // fuer SwBookmark ...
 #ifndef _DOCSH_HXX
 #include <docsh.hxx>
 #endif
@@ -2760,26 +2760,22 @@ void SwHTMLParser::_SetAttr( BOOL bChkEnd, BOOL bBeforeTable,
 
                 switch( nWhich )
                 {
-                case RES_FLTR_BOOKMARK:     // dann also ein Bookmark einfuegen
+                case RES_FLTR_BOOKMARK: // insert bookmark
                     {
-                        String aName( ((SfxStringItem*)pAttr->pItem)->GetValue() );
-                        USHORT nBookPos = pDoc->findBookmark( aName );
-                        if( nBookPos != USHRT_MAX )
-                        {
-                            const SwBookmark *pBkMk =
-                                pDoc->getBookmarks()[nBookPos];
-                            if( pBkMk->GetBookmarkPos() != *pAttrPam->GetPoint() )
-                                pDoc->makeUniqueBookmarkName( aName );
-                            else
-                                break; // keine doppelte Bookmark an dieser Pos
-                        }
+                        const String sName( ((SfxStringItem*)pAttr->pItem)->GetValue() );
+                        IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
+                        IDocumentMarkAccess::const_iterator_t ppBkmk = pMarkAccess->findMark( sName );
+                        if( ppBkmk != pMarkAccess->getMarksEnd() &&
+                            ppBkmk->get()->GetMarkStart() == *pAttrPam->GetPoint() )
+                            break; // do not generate duplicates on this position
                         pAttrPam->DeleteMark();
-                        pDoc->makeBookmark( *pAttrPam, KeyCode(),
-                                            aName, aEmptyStr, IDocumentBookmarkAccess::BOOKMARK );
+                        const ::sw::mark::IMark* const pNewMark = pMarkAccess->makeMark(
+                            *pAttrPam,
+                            sName,
+                            IDocumentMarkAccess::BOOKMARK );
 
-                        // ggfs. ein Bookmark anspringen
-                        if( JUMPTO_MARK == eJumpTo &&
-                            aName == sJmpMark )
+                        // jump to bookmark
+                        if( JUMPTO_MARK == eJumpTo && pNewMark->GetName() == ::rtl::OUString(sJmpMark) )
                         {
                             bChkJumpMark = TRUE;
                             eJumpTo = JUMPTO_NONE;

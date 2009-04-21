@@ -119,7 +119,7 @@
 #include <pagedesc.hxx>
 #include <section.hxx>
 #include <usrpref.hxx>
-#include <bookmrk.hxx>
+#include <IMark.hxx>
 #include <navipi.hxx>
 #include <tox.hxx>
 #include <workctrl.hxx>
@@ -1566,10 +1566,18 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
         {
             if (SFX_ITEM_SET == pArgs->GetItemState( nWhich, TRUE, &pItem))
             {
-                USHORT nDest;
-                nDest = ((const SfxUInt16Item *)pItem)->GetValue();
-                rSh.EnterStdMode();
-                rSh.GotoBookmark( nDest );
+                const IDocumentMarkAccess* pMarkAccess = rSh.getIDocumentMarkAccess();
+                const sal_Int32 nIdx = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
+                if(nIdx < pMarkAccess->getBookmarksCount())
+                {
+                    const IDocumentMarkAccess::const_iterator_t ppBookmark = rSh.getIDocumentMarkAccess()->getBookmarksBegin() + nIdx;
+                    rSh.EnterStdMode();
+                    rSh.GotoMark( ppBookmark->get() );
+                }
+                else
+                    OSL_ENSURE(false,
+                        "SwView::ExecuteStatusLine(..)"
+                        " - Ignoring out of range bookmark index");
             }
         }
         break;
@@ -1871,6 +1879,8 @@ BOOL SwView::JumpToSwMark( const String& rMark )
                 sMark.Search( cMarkSeperator, nPos + 1 )) )
                 nPos = nLastPos;
 
+        IDocumentMarkAccess::const_iterator_t ppMark;
+        IDocumentMarkAccess* const pMarkAccess = pWrtShell->getIDocumentMarkAccess();
         if( STRING_NOTFOUND != nPos &&
             ( sCmp = sMark.Copy( nPos + 1 ) ).EraseAllChars().Len() )
         {
@@ -1919,8 +1929,8 @@ BOOL SwView::JumpToSwMark( const String& rMark )
                     bRet = TRUE;
                 }
             }
-            else if( USHRT_MAX != ( nPos = pWrtShell->FindBookmark( sMark ) ))
-                pWrtShell->GotoBookmark( nPos, FALSE, TRUE ), bRet = TRUE;
+            else if( pMarkAccess->getMarksEnd() != (ppMark = pMarkAccess->findMark(sMark)) )
+                pWrtShell->GotoMark( ppMark->get(), FALSE, TRUE ), bRet = TRUE;
             else if( 0 != ( pINet = pWrtShell->FindINetAttr( sMark ) ))
                 bRet = pWrtShell->GotoINetAttr( *pINet->GetTxtINetFmt() );
 
@@ -1941,8 +1951,8 @@ BOOL SwView::JumpToSwMark( const String& rMark )
                 }
             }
         }
-        else if( USHRT_MAX != ( nPos = pWrtShell->FindBookmark( sMark ) ))
-            pWrtShell->GotoBookmark( nPos, FALSE, TRUE ), bRet = TRUE;
+        else if( pMarkAccess->getMarksEnd() != (ppMark = pMarkAccess->findMark(sMark)))
+            pWrtShell->GotoMark( ppMark->get(), FALSE, TRUE ), bRet = TRUE;
         else if( 0 != ( pINet = pWrtShell->FindINetAttr( sMark ) ))
             bRet = pWrtShell->GotoINetAttr( *pINet->GetTxtINetFmt() );
 

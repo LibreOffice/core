@@ -105,6 +105,7 @@
 #include <istyleaccess.hxx>
 #include <swstylemanager.hxx>
 #include <IGrammarContact.hxx>
+#include <MarkManager.hxx>
 
 #include <unochart.hxx>
 
@@ -218,6 +219,7 @@ SwDoc::SwDoc() :
     aNodes( this ),
     aUndoNodes( this ),
     mpAttrPool(new SwAttrPool(this)),
+    pMarkManager(new ::sw::mark::MarkManager(*this)),
     pDfltFrmFmt( new SwFrmFmt( GetAttrPool(), sFrmFmtStr, 0 ) ),
     pEmptyPageFmt( new SwFrmFmt( GetAttrPool(), sEmptyPageStr, pDfltFrmFmt ) ),
     pColumnContFmt( new SwFrmFmt( GetAttrPool(), sColumnCntStr, pDfltFrmFmt ) ),
@@ -231,7 +233,6 @@ SwDoc::SwDoc() :
     pTblFrmFmtTbl( new SwFrmFmts() ),
     pTxtFmtCollTbl( new SwTxtFmtColls() ),
     pGrfFmtCollTbl( new SwGrfFmtColls() ),
-    pBookmarkTbl( new SwBookmarks( 0, 16 ) ),
     pTOXTypes( new SwTOXTypes() ),
     pDefTOXBases( new SwDefTOXBase_Impl() ),
     pLayout( 0 ),                   // Rootframe des spezifischen Layouts.
@@ -570,7 +571,7 @@ SwDoc::~SwDoc()
 
     // in den BookMarks sind Indizies auf den Content. Diese muessen vorm
     // loesche der Nodes geloescht werden.
-    pBookmarkTbl->DeleteAndDestroy( 0, pBookmarkTbl->Count() );
+    pMarkManager->clearAllMarks();
     DELETEZ( pMacroTable );
 
     if( pExtInputRing )
@@ -695,7 +696,6 @@ SwDoc::~SwDoc()
     // <--
 
     delete pPrtData;
-    delete pBookmarkTbl;
     delete pNumberFormatter;
     delete pFtnInfo;
     delete pEndNoteInfo;
@@ -830,7 +830,7 @@ void SwDoc::ClearDoc()
 
     // in den BookMarks sind Indizies auf den Content. Diese muessen vorm
     // loesche der Nodes geloescht werden.
-    pBookmarkTbl->DeleteAndDestroy( 0, pBookmarkTbl->Count() );
+    pMarkManager->clearAllMarks();
     pTOXTypes->DeleteAndDestroy( 0, pTOXTypes->Count() );
 
     // create a dummy pagedesc for the layout

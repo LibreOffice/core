@@ -102,7 +102,6 @@
 #endif
 #include <viewopt.hxx>
 #include <fontcfg.hxx>
-#include <bookmrk.hxx>
 #include <docstat.hxx>
 #include <usrfld.hxx>
 #include <expfld.hxx>

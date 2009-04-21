@@ -86,94 +86,94 @@ MapMode* SwSelPaintRects::pMapMode = 0;
 
 
 #ifdef SHOW_BOOKMARKS
-#include <bookmrk.hxx>
-
-class SwBookmarkRects : public SwSelPaintRects
-{
-    virtual void Paint( const Rectangle& rRect );
-    virtual void FillRects();
-
-public:
-    SwBookmarkRects( const SwCrsrShell& rSh ) : SwSelPaintRects( rSh ) {}
-};
-
-void SwBookmarkRects::Paint( const Rectangle& rRect )
-{
-    Window* pWin = GetShell()->GetWin();
-
-    RasterOp eOld( pWin->GetRasterOp() );
-    BOOL bLCol = pWin->IsLineColor();
-    Color aLCol( pWin->GetLineColor() );
-    BOOL bFCol = pWin->IsFillColor();
-    Color aFCol( pWin->GetFillColor() );
-
-    pWin->SetRasterOp( ROP_XOR );
-    Color aCol( RGB_COLORDATA( 0xF0, 0xC8, 0xF0 ) ^ COL_WHITE );
-    pWin->SetFillColor( aCol );
-    pWin->SetLineColor( aCol );
-
-    pWin->DrawRect( rRect );
-
-    if( bLCol ) pWin->SetLineColor( aLCol ); else pWin->SetLineColor();
-    if( bFCol ) pWin->SetFillColor( aFCol ); else pWin->SetFillColor();
-    pWin->SetRasterOp( eOld );
-}
-
-void SwBookmarkRects::FillRects()
-{
-    SwRegionRects aReg( GetShell()->VisArea() );
-
-    const SwBookmarks& rBkmkTbl = GetShell()->getIDocumentBookmarkAccess()->getBookmarks();
-    SwShellCrsr* pCrsr = 0;
-    for( USHORT n = 0; n < rBkmkTbl.Count(); ++n )
-    {
-        const SwBookmark& rBkmk = *rBkmkTbl[ n ];
-        if( rBkmk.IsBookMark() && rBkmk.GetOtherPos() )
-        {
-            if( !pCrsr )
-            {
-                pCrsr = new SwShellCrsr( *GetShell(), rBkmk.GetPos() );
-                pCrsr->SetMark();
-            }
-            else
-                *pCrsr->GetPoint() = rBkmk.GetPos();
-            *pCrsr->GetMark() = *rBkmk.GetOtherPos();
-            pCrsr->FillRects();
-            for( USHORT i = 0; i < pCrsr->Count(); ++i )
-                aReg -= (*pCrsr)[ i ];
-
-            pCrsr->Remove( 0, i );
-        }
-    }
-    if( pCrsr ) delete pCrsr;
-
-    aReg.Invert();
-    SwRects::Insert( &aReg, 0 );
-}
-
-SwBookmarkRects* pBookMarkRects = 0;
-
-void ShowBookmarks( const SwCrsrShell* pSh, int nAction, const SwRect* pRect = 0 )
-{
-    if( !pBookMarkRects && pSh->getIDocumentBookmarkAccess()->getBookmarks().Count() )
-        pBookMarkRects = new SwBookmarkRects( *pSh );
-
-    if( pBookMarkRects )
-    {
-        switch( nAction )
-        {
-        case 1: pBookMarkRects->Show(); break;
-        case 2: pBookMarkRects->Hide(); break;
-        case 3: pBookMarkRects->Invalidate( *pRect ); break;
-        }
-
-        if( !pBookMarkRects->Count() )
-            delete pBookMarkRects, pBookMarkRects = 0;
-    }
-}
-
-#define SHOWBOOKMARKS1( nAct )          ShowBookmarks( GetShell(),nAct );
-#define SHOWBOOKMARKS2( nAct, pRect )   ShowBookmarks( GetShell(),nAct, pRect );
+// #include <IMark.hxx>
+//
+// class SwBookmarkRects : public SwSelPaintRects
+// {
+//  virtual void Paint( const Rectangle& rRect );
+//  virtual void FillRects();
+//
+// public:
+//  SwBookmarkRects( const SwCrsrShell& rSh ) : SwSelPaintRects( rSh ) {}
+// };
+//
+// void SwBookmarkRects::Paint( const Rectangle& rRect )
+// {
+//  Window* pWin = GetShell()->GetWin();
+//
+//  RasterOp eOld( pWin->GetRasterOp() );
+//  BOOL bLCol = pWin->IsLineColor();
+//  Color aLCol( pWin->GetLineColor() );
+//  BOOL bFCol = pWin->IsFillColor();
+//  Color aFCol( pWin->GetFillColor() );
+//
+//  pWin->SetRasterOp( ROP_XOR );
+//  Color aCol( RGB_COLORDATA( 0xF0, 0xC8, 0xF0 ) ^ COL_WHITE );
+//  pWin->SetFillColor( aCol );
+//  pWin->SetLineColor( aCol );
+//
+//  pWin->DrawRect( rRect );
+//
+//  if( bLCol ) pWin->SetLineColor( aLCol ); else pWin->SetLineColor();
+//  if( bFCol ) pWin->SetFillColor( aFCol ); else pWin->SetFillColor();
+//  pWin->SetRasterOp( eOld );
+// }
+//
+// void SwBookmarkRects::FillRects()
+// {
+//  SwRegionRects aReg( GetShell()->VisArea() );
+//
+//     const SwBookmarks& rBkmkTbl = GetShell()->getIDocumentMarkAccess()->getBookmarks();
+//  SwShellCrsr* pCrsr = 0;
+//  for( USHORT n = 0; n < rBkmkTbl.Count(); ++n )
+//  {
+//      const SwBookmark& rBkmk = *rBkmkTbl[ n ];
+//      if( rBkmk.IsBookMark() && rBkmk.GetOtherPos() )
+//      {
+//          if( !pCrsr )
+//          {
+//              pCrsr = new SwShellCrsr( *GetShell(), rBkmk.GetPos() );
+//              pCrsr->SetMark();
+//          }
+//          else
+//              *pCrsr->GetPoint() = rBkmk.GetPos();
+//          *pCrsr->GetMark() = *rBkmk.GetOtherPos();
+//          pCrsr->FillRects();
+//          for( USHORT i = 0; i < pCrsr->Count(); ++i )
+//              aReg -= (*pCrsr)[ i ];
+//
+//          pCrsr->Remove( 0, i );
+//      }
+//  }
+//  if( pCrsr ) delete pCrsr;
+//
+//  aReg.Invert();
+//  SwRects::Insert( &aReg, 0 );
+// }
+//
+// SwBookmarkRects* pBookMarkRects = 0;
+//
+// void ShowBookmarks( const SwCrsrShell* pSh, int nAction, const SwRect* pRect = 0 )
+// {
+//     if( !pBookMarkRects && pSh->getIDocumentMarkAccess()->getBookmarks().Count() )
+//      pBookMarkRects = new SwBookmarkRects( *pSh );
+//
+//  if( pBookMarkRects )
+//  {
+//      switch( nAction )
+//      {
+//      case 1: pBookMarkRects->Show(); break;
+//      case 2: pBookMarkRects->Hide(); break;
+//      case 3: pBookMarkRects->Invalidate( *pRect ); break;
+//      }
+//
+//      if( !pBookMarkRects->Count() )
+//          delete pBookMarkRects, pBookMarkRects = 0;
+//  }
+// }
+//
+// #define SHOWBOOKMARKS1( nAct )           ShowBookmarks( GetShell(),nAct );
+// #define SHOWBOOKMARKS2( nAct, pRect )    ShowBookmarks( GetShell(),nAct, pRect );
 
 #else
 

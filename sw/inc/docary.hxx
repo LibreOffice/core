@@ -35,7 +35,6 @@
 class SwFieldType;
 class SwFrmFmt;
 class SwCharFmt;
-class SwBookmark;
 class SwTOXType;
 class SwUndo;
 class SwSectionFmt;
@@ -71,10 +70,6 @@ typedef SwCharFmt* SwCharFmtPtr;
 SV_DECL_PTRARR_DEL(SwCharFmts,SwCharFmtPtr,4,4)
 
 SV_DECL_PTRARR_DEL( SwFldTypes, SwFldTypePtr, INIT_FLDTYPES, GROW_FLDTYPES )
-
-//Bookmarks (nach Dokumentpositionen sortiertes Array)
-typedef SwBookmark* SwBookmarkPtr;
-SV_DECL_PTRARR_SORT(SwBookmarks, SwBookmarkPtr,0,1)
 
 typedef SwTOXType* SwTOXTypePtr;
 SV_DECL_PTRARR_DEL( SwTOXTypes, SwTOXTypePtr, 0, 1 )

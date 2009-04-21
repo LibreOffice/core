@@ -61,7 +61,7 @@
 #include <frmfmt.hxx>
 #include <fldbas.hxx>
 #include <txtatr.hxx>
-#include <bookmrk.hxx>
+#include <IMark.hxx>
 #include <section.hxx>
 #include <tox.hxx>
 #define NAVIPI_CXX
@@ -122,6 +122,7 @@
 #define CTYPE_CNT   0
 #define CTYPE_CTT   1
 
+using namespace ::std;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
@@ -141,37 +142,40 @@ SV_IMPL_OP_PTRARR_SORT(SwContentArr, SwContentPtr)
 sal_Bool SwContentTree::bIsInDrag = sal_False;
 
 
-/***************************************************************************
-    Beschreibung: Hilfsmethoden
-***************************************************************************/
-
-
-sal_Bool lcl_IsContent(SvLBoxEntry* pEntry)
+namespace
 {
-    return ((SwTypeNumber*)pEntry->GetUserData())->GetTypeId() == CTYPE_CNT;
-}
-
-
-sal_Bool lcl_IsContentType(SvLBoxEntry* pEntry)
-{
-    return ((SwTypeNumber*)pEntry->GetUserData())->GetTypeId() == CTYPE_CTT;
-}
-
-
-sal_Bool lcl_FindShell(SwWrtShell* pShell)
-{
-    sal_Bool bFound = sal_False;
-    SwView *pView = SwModule::GetFirstView();
-    while (pView)
+    static sal_Bool lcl_IsContent(SvLBoxEntry* pEntry)
     {
-        if(pShell == &pView->GetWrtShell())
-        {
-            bFound = sal_True;
-            break;
-        }
-        pView = SwModule::GetNextView(pView);
+        return ((SwTypeNumber*)pEntry->GetUserData())->GetTypeId() == CTYPE_CNT;
     }
-    return bFound;
+
+
+    static sal_Bool lcl_IsContentType(SvLBoxEntry* pEntry)
+    {
+        return ((SwTypeNumber*)pEntry->GetUserData())->GetTypeId() == CTYPE_CTT;
+    }
+
+
+    static sal_Bool lcl_FindShell(SwWrtShell* pShell)
+    {
+        sal_Bool bFound = sal_False;
+        SwView *pView = SwModule::GetFirstView();
+        while (pView)
+        {
+            if(pShell == &pView->GetWrtShell())
+            {
+                bFound = sal_True;
+                break;
+            }
+            pView = SwModule::GetNextView(pView);
+        }
+        return bFound;
+    }
+
+    static bool lcl_IsUiVisibleBookmark(const IDocumentMarkAccess::pMark_t& rpMark)
+    {
+        return IDocumentMarkAccess::GetType(*rpMark) == IDocumentMarkAccess::BOOKMARK;
+    }
 }
 
 /***************************************************************************
@@ -300,9 +304,13 @@ void SwContentType::Init(sal_Bool* pbInvalidateWindow)
             bEdit = sal_True;
         }
         break;
-        case CONTENT_TYPE_BOOKMARK  :
+        case CONTENT_TYPE_BOOKMARK:
         {
-            nMemberCount = pWrtShell->GetBookmarkCnt(sal_True);
+            IDocumentMarkAccess* const pMarkAccess = pWrtShell->getIDocumentMarkAccess();
+            nMemberCount = static_cast<USHORT>(count_if(
+                pMarkAccess->getBookmarksBegin(),
+                pMarkAccess->getBookmarksEnd(),
+                &lcl_IsUiVisibleBookmark));
             sTypeToken = aEmptyStr;
             bEdit = sal_True;
         }
@@ -663,16 +671,20 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibiblityChanged)
             }
         }
         break;
-        case CONTENT_TYPE_BOOKMARK  :
+        case CONTENT_TYPE_BOOKMARK:
         {
-            nMemberCount = pWrtShell->GetBookmarkCnt(sal_True);
-            for(sal_uInt16 i = 0; i < nMemberCount; i++)
+            IDocumentMarkAccess* const pMarkAccess = pWrtShell->getIDocumentMarkAccess();
+            for(IDocumentMarkAccess::const_iterator_t ppBookmark = pMarkAccess->getBookmarksBegin();
+                ppBookmark != pMarkAccess->getBookmarksEnd();
+                ppBookmark++)
             {
-                SwBookmark& rBkmk = pWrtShell->GetBookmark( i, sal_True );
-                    const String& rBkmName = rBkmk.GetName();
+                if(lcl_IsUiVisibleBookmark(*ppBookmark))
+                {
+                    const String& rBkmName = ppBookmark->get()->GetName();
                     //nYPos von 0 -> text::Bookmarks werden nach Alphabet sortiert
                     SwContent* pCnt = new SwContent(this, rBkmName, 0);
                     pMember->Insert(pCnt);//, pMember->Count());
+                }
             }
         }
         break;
@@ -2885,7 +2897,8 @@ void SwContentTree::EditEntry(SvLBoxEntry* pEntry, sal_uInt8 nMode)
         case CONTENT_TYPE_BOOKMARK  :
             if(nMode == EDIT_MODE_DELETE)
             {
-                pActiveShell->DelBookmark( pCnt->GetName() );
+                IDocumentMarkAccess* const pMarkAccess = pActiveShell->getIDocumentMarkAccess();
+                pMarkAccess->deleteMark( pMarkAccess->findMark(pCnt->GetName()) );
             }
             else if(nMode == EDIT_MODE_RENAME)
             {
@@ -3051,9 +3064,9 @@ void SwContentTree::GotoContent(SwContent* pCnt)
                 bSel = sal_True;
         }
         break;
-        case CONTENT_TYPE_BOOKMARK  :
+        case CONTENT_TYPE_BOOKMARK:
         {
-            pActiveShell->GotoBookmark(pCnt->GetName());
+            pActiveShell->GotoMark(pCnt->GetName());
         }
         break;
         case CONTENT_TYPE_REGION    :

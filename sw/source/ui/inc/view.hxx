@@ -186,7 +186,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     static USHORT           nInsertObjectCtrlState;
     static USHORT           nInsertFieldCtrlState;
     static USHORT           nMoveType; // fuer Buttons unter dem Scrollbar (viewmdi)
-    static USHORT           nActMark; // aktuelle Sprungmarke fuer unbenannte Merker
+    static sal_Int32        nActMark; // aktuelle Sprungmarke fuer unbenannte Merker
 
     static BOOL             bExtra;
     static BOOL             bFound;
@@ -495,7 +495,7 @@ public:
     static USHORT   GetMoveType();
     static void     SetMoveType(USHORT nSet);
     DECL_STATIC_LINK( SwView, MoveNavigationHdl, bool* ); // #i75416#
-    static void     SetActMark(BYTE nSet);
+    static void     SetActMark(sal_Int32 nSet);
 
     BOOL            HandleWheelCommands( const CommandEvent& );
 

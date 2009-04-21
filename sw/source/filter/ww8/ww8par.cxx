@@ -74,7 +74,7 @@
 #include <fmtfld.hxx>
 #include <fmturl.hxx>
 #include <fmtinfmt.hxx>
-#include <bookmrk.hxx>
+#include <IMark.hxx>
 #include <reffld.hxx>
 #include <fmthdft.hxx>
 #include <fmtcntnt.hxx>
@@ -1056,13 +1056,21 @@ bool SwWW8FltRefStack::IsFtnEdnBkmField(const SwFmtFld& rFmtFld, USHORT& rBkmNo)
 {
     const SwField* pFld = rFmtFld.GetFld();
     USHORT nSubType;
-    return (pFld && (RES_GETREFFLD == pFld->Which())
-            && ((REF_FOOTNOTE == (nSubType = pFld->GetSubType())) ||
-                (REF_ENDNOTE  == nSubType))
-            && ((SwGetRefField*)pFld)->GetSetRefName().Len()
-                // find Sequence No of corresponding Foot-/Endnote
-            && (USHRT_MAX != (rBkmNo = pDoc->findBookmark(
-                ((SwGetRefField*)pFld)->GetSetRefName() ))));
+    if(pFld && (RES_GETREFFLD == pFld->Which())
+        && ((REF_FOOTNOTE == (nSubType = pFld->GetSubType())) || (REF_ENDNOTE  == nSubType))
+        && ((SwGetRefField*)pFld)->GetSetRefName().Len())
+    {
+        const IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
+        IDocumentMarkAccess::const_iterator_t ppBkmk = pMarkAccess->findMark(
+            ((SwGetRefField*)pFld)->GetSetRefName());
+        if(ppBkmk != pMarkAccess->getMarksEnd())
+        {
+            // find Sequence No of corresponding Foot-/Endnote
+            rBkmNo = ppBkmk - pMarkAccess->getMarksBegin();
+            return true;
+        }
+    }
+    return false;
 }
 
 void SwWW8FltRefStack::SetAttrInDoc(const SwPosition& rTmpPos,
@@ -1089,9 +1097,9 @@ void SwWW8FltRefStack::SetAttrInDoc(const SwPosition& rTmpPos,
                 USHORT nBkmNo;
                 if( IsFtnEdnBkmField(rFmtFld, nBkmNo) )
                 {
-                    SwBookmark& rBkMrk = pDoc->getBookmark( nBkmNo, false );
+                    ::sw::mark::IMark const * const pMark = (pDoc->getIDocumentMarkAccess()->getMarksBegin() + nBkmNo)->get();
 
-                    const SwPosition& rBkMrkPos = rBkMrk.GetBookmarkPos();
+                    const SwPosition& rBkMrkPos = pMark->GetMarkPos();
 
                     SwTxtNode* pTxt = rBkMrkPos.nNode.GetNode().GetTxtNode();
                     if( pTxt && rBkMrkPos.nContent.GetIndex() )
@@ -2590,20 +2598,27 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
         case 0x15:
             if( !bSpec )        // Juristenparagraph
                 cInsert = '\xa7';
-            else { //0x15 is special --> so it's our field end mark...; hmmm what about field marks not handled by us??, maybe a problem with nested fields; probably an area of bugs... [well release quick and release often....]
-                if (!maNewFieldCtxStack.empty() && pPaM!=NULL && pPaM->GetPoint()!=NULL) {
-                    WW8NewFieldCtx *pFieldCtx=maNewFieldCtxStack.back();
+            else
+            {
+                // 0x15 is special --> so it's our field end mark...;
+                // hmmm what about field marks not handled by us??, maybe a problem with nested fields;
+                // probably an area of bugs... [well release quick and release often....]
+                if (!maNewFieldCtxStack.empty() && pPaM!=NULL && pPaM->GetPoint()!=NULL)
+                {
+                    ::boost::scoped_ptr<WW8NewFieldCtx> pFieldCtx(maNewFieldCtxStack.back());
                     maNewFieldCtxStack.pop_back();
                     SwPosition aEndPos = *pPaM->GetPoint();
-                    SwPaM aFldPam( pFieldCtx->GetPtNode(), pFieldCtx->GetPtCntnt(), aEndPos.nNode, aEndPos.nContent.GetIndex());
-                    SwFieldBookmark *pFieldmark=(SwFieldBookmark*)rDoc.makeBookmark(aFldPam, KeyCode(), pFieldCtx->GetBookmarkName(), String(), IDocumentBookmarkAccess::FORM_FIELDMARK_TEXT);
-                    ASSERT(pFieldmark!=NULL, "hmmm; why was the bookmark not created?");
-                    if (pFieldmark!=NULL) {
-                        pFieldmark->SetFieldType(0); // 0==Text
-                        // set field data here...
-                        pFieldCtx->SetCurrentFieldParamsTo(*pFieldmark);
-                    }
-                    delete pFieldCtx;
+                    SwPaM aFldPam(pFieldCtx->GetPtNode(), pFieldCtx->GetPtCntnt(), aEndPos.nNode, aEndPos.nContent.GetIndex());
+                    IDocumentMarkAccess* const pMarkAccess = rDoc.getIDocumentMarkAccess();
+                    ::sw::mark::IFieldmark* pFieldmark =
+                        dynamic_cast< ::sw::mark::IFieldmark*>(pMarkAccess->makeMark(
+                            aFldPam,
+                            pFieldCtx->GetBookmarkName(),
+                            IDocumentMarkAccess::TEXT_FIELDMARK));
+                    OSL_ENSURE(pFieldmark!=NULL,
+                        "hmmm; why was the bookmark not created?");
+                    if (pFieldmark)
+                        pFieldCtx->SetCurrentFieldParamsTo(pFieldmark);
                 }
             }
             break;

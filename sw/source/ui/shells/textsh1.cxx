@@ -78,7 +78,7 @@
 #include <fmthdft.hxx>
 #include <pagedesc.hxx>
 #include <textsh.hxx>
-#include <bookmrk.hxx>
+#include <IMark.hxx>
 #include <swdtflvr.hxx>
 #include <docstat.hxx>
 #include <outline.hxx>
@@ -567,8 +567,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         {
             if ( pItem )
             {
-                String sName = ((SfxStringItem*)pItem)->GetValue();
-                rWrtSh.MakeUniqueBookmarkName(sName);
+                ::rtl::OUString sName = ((SfxStringItem*)pItem)->GetValue();
                 rWrtSh.SetBookmark( KeyCode(), sName, aEmptyStr );
             }
             else
@@ -587,7 +586,10 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case FN_DELETE_BOOKMARK:
         {
             if ( pItem )
-                rWrtSh.DelBookmark( ((SfxStringItem*)pItem)->GetValue() );
+            {
+                IDocumentMarkAccess* const pMarkAccess = rWrtSh.getIDocumentMarkAccess();
+                pMarkAccess->deleteMark( pMarkAccess->findMark(((SfxStringItem*)pItem)->GetValue()) );
+            }
             break;
         }
         case FN_AUTOFORMAT_REDLINE_APPLY:

@@ -81,7 +81,6 @@
 #include <ndole.hxx>
 #include <ndgrf.hxx>
 #include <rolbck.hxx>           // Undo-Attr
-#include <bookmrk.hxx>          // fuer die Bookmarks
 #include <doctxm.hxx>           // fuer die Verzeichnisse
 #include <grfatr.hxx>
 #include <poolfmt.hxx>          // PoolVorlagen-Id's

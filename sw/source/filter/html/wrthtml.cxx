@@ -76,7 +76,7 @@
 #include <mdiexp.hxx>       // ...Percent()
 #include <fltini.hxx>
 #include <viewopt.hxx>
-#include <bookmrk.hxx>      // fuer SwBookmark ...
+#include <IMark.hxx>        // fuer SwBookmark ...
 #include <poolfmt.hxx>
 #include <pagedesc.hxx>
 #include <section.hxx>
@@ -111,7 +111,7 @@ SwHTMLWriter::SwHTMLWriter( const String& rBaseURL )
 {
     SetBaseURL( rBaseURL );
     bFirstLine = sal_True;
-    nBkmkTabPos = USHRT_MAX;
+    nBkmkTabPos = -1;
     pDfltColor = 0;
     nImgMapCnt = 1;
     pStartNdIdx = 0;
@@ -744,7 +744,7 @@ void SwHTMLWriter::Out_SwDoc( SwPaM* pPam )
     sal_Bool bSaveWriteAll = bWriteAll;     // sichern
 
     // suche die naechste text::Bookmark-Position aus der text::Bookmark-Tabelle
-    nBkmkTabPos = bWriteAll ? FindPos_Bkmk( *pCurPam->GetPoint() ) : USHRT_MAX;
+    nBkmkTabPos = bWriteAll ? FindPos_Bkmk( *pCurPam->GetPoint() ) : -1;
 
     // gebe alle Bereiche des Pams in das HTML-File aus.
     do {
@@ -774,12 +774,12 @@ void SwHTMLWriter::Out_SwDoc( SwPaM* pPam )
             else if( pNd->IsTableNode() )
             {
                 OutHTML_SwTblNode( *this, *pNd->GetTableNode(), 0 );
-                nBkmkTabPos = bWriteAll ? FindPos_Bkmk( *pCurPam->GetPoint() ) : USHRT_MAX;
+                nBkmkTabPos = bWriteAll ? FindPos_Bkmk( *pCurPam->GetPoint() ) : -1;
             }
             else if( pNd->IsSectionNode() )
             {
                 OutHTML_Section( *this, *pNd->GetSectionNode() );
-                nBkmkTabPos = bWriteAll ? FindPos_Bkmk( *pCurPam->GetPoint() ) : USHRT_MAX;
+                nBkmkTabPos = bWriteAll ? FindPos_Bkmk( *pCurPam->GetPoint() ) : -1;
             }
             else if( pNd == &pDoc->GetNodes().GetEndOfContent() )
                 break;
@@ -1064,25 +1064,27 @@ void SwHTMLWriter::OutAnchor( const String& rName )
 void SwHTMLWriter::OutBookmarks()
 {
     // hole das aktuelle Bookmark
-    const SwBookmark* pBookmark = USHRT_MAX != nBkmkTabPos ?
-                            pDoc->getBookmarks()[ nBkmkTabPos ] : 0;
+    const ::sw::mark::IMark* pBookmark = NULL;
+    IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
+    if(nBkmkTabPos != -1)
+        pBookmark = (pMarkAccess->getMarksBegin() + nBkmkTabPos)->get();
     // Ausgabe aller Bookmarks in diesem Absatz. Die Content-Position
     // wird vorerst nicht beruecksichtigt!
     sal_uInt32 nNode = pCurPam->GetPoint()->nNode.GetIndex();
-    while( USHRT_MAX != nBkmkTabPos &&
-        pBookmark->GetBookmarkPos().nNode.GetIndex() == nNode )
+    while( nBkmkTabPos != -1 &&
+        pBookmark->GetMarkPos().nNode.GetIndex() == nNode )
     {
         // Der Bereich derBookmark wird erstam ignoriert, da er von uns
         // auch nicht eingelesen wird.
 
         // erst die SWG spezifischen Daten:
-        if( pBookmark->IsBookMark() && pBookmark->GetName().Len() )
+        if(dynamic_cast< const ::sw::mark::IBookmark* >(pBookmark) && pBookmark->GetName().getLength() )
             OutAnchor( pBookmark->GetName() );
 
-        if( ++nBkmkTabPos >= pDoc->getBookmarks().Count() )
-            nBkmkTabPos = USHRT_MAX;
+        if( ++nBkmkTabPos >= pMarkAccess->getMarksCount() )
+            nBkmkTabPos = -1;
         else
-            pBookmark = pDoc->getBookmarks()[ nBkmkTabPos ];
+            pBookmark = (pMarkAccess->getMarksBegin() + nBkmkTabPos)->get();
     }
 
     sal_uInt16 nPos;
@@ -1407,7 +1409,7 @@ HTMLSaveData::~HTMLSaveData()
     rWrt.pCurPam = pOldPam;
     rWrt.SetEndPaM( pOldEnd );
     rWrt.bWriteAll = bOldWriteAll;
-    rWrt.nBkmkTabPos = bOldWriteAll ? rWrt.FindPos_Bkmk( *pOldPam->GetPoint() ) : USHRT_MAX;
+    rWrt.nBkmkTabPos = bOldWriteAll ? rWrt.FindPos_Bkmk( *pOldPam->GetPoint() ) : -1;
     rWrt.nLastParaToken = 0;
     rWrt.nDefListLvl = nOldDefListLvl;
     rWrt.nDirection = nOldDirection;

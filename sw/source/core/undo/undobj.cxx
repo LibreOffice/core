@@ -44,9 +44,10 @@
 #include <undobj.hxx>
 #include <rolbck.hxx>
 #include <ndnotxt.hxx>
-#include <bookmrk.hxx>
+#include <IMark.hxx>
 #include <mvsave.hxx>
 #include <redline.hxx>
+#include <crossrefbookmark.hxx>
 #ifndef _UNDO_HRC
 #include <undo.hrc>
 #endif
@@ -711,48 +712,46 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
     // 3. Bookmarks
     if( nsDelCntntType::DELCNT_BKM & nDelCntntType )
     {
-        const SwBookmarks& rBkmkTbl = pDoc->getBookmarks();
-        if( rBkmkTbl.Count() )
+        IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
+        if( pMarkAccess->getMarksCount() )
         {
-            const SwBookmark* pBkmk( 0 );
 
-            for( USHORT n = 0; n < rBkmkTbl.Count(); ++n )
+            for( USHORT n = 0; n < pMarkAccess->getMarksCount(); ++n )
             {
-                BYTE nTyp = 0;
                 // --> OD 2007-10-17 #i81002#
-                pBkmk = rBkmkTbl[ n ];
-                const SwPosition& rBkmkPos( pBkmk->GetBookmarkPos() );
-                const SwPosition* pOtherBkmkPos( pBkmk->GetOtherBookmarkPos() );
+                bool bSavePos = false;
+                bool bSaveOtherPos = false;
+                const ::sw::mark::IMark* pBkmk = (pMarkAccess->getMarksBegin() + n)->get();
                 if( nsDelCntntType::DELCNT_CHKNOCNTNT & nDelCntntType )
                 {
-                    if( pStt->nNode <= pBkmk->GetBookmarkPos().nNode &&
-                        pBkmk->GetBookmarkPos().nNode < pEnd->nNode )
-                        nTyp = SwHstryBookmark::BKMK_POS;
-                    if( pBkmk->GetOtherBookmarkPos() &&
-                        pStt->nNode <= pBkmk->GetOtherBookmarkPos()->nNode &&
-                        pBkmk->GetOtherBookmarkPos()->nNode < pEnd->nNode )
-                    nTyp |= SwHstryBookmark::BKMK_OTHERPOS;
+                    if( pStt->nNode <= pBkmk->GetMarkPos().nNode &&
+                        pBkmk->GetMarkPos().nNode < pEnd->nNode )
+                        bSavePos = true;
+                    if( pBkmk->IsExpanded() &&
+                        pStt->nNode <= pBkmk->GetOtherMarkPos().nNode &&
+                        pBkmk->GetOtherMarkPos().nNode < pEnd->nNode )
+                        bSaveOtherPos = true;
                 }
                 else
                 {
-                    bool bMayBe = false;
-                    if( *pStt <= pBkmk->GetBookmarkPos() && pBkmk->GetBookmarkPos() <= *pEnd )
+                    bool bMaybe = false;
+                    if( *pStt <= pBkmk->GetMarkPos() && pBkmk->GetMarkPos() <= *pEnd )
                     {
-                        if( pBkmk->GetBookmarkPos() == *pEnd ||
-                            ( *pStt == pBkmk->GetBookmarkPos() && pBkmk->GetOtherBookmarkPos() ) )
-                            bMayBe = true;
+                        if( pBkmk->GetMarkPos() == *pEnd ||
+                            ( *pStt == pBkmk->GetMarkPos() && pBkmk->IsExpanded() ) )
+                            bMaybe = true;
                         else
-                            nTyp = SwHstryBookmark::BKMK_POS;
+                            bSavePos = true;
                     }
-                    if( pBkmk->GetOtherBookmarkPos() &&
-                        *pStt <= *pBkmk->GetOtherBookmarkPos() && *pBkmk->GetOtherBookmarkPos() <= *pEnd )
+                    if( pBkmk->IsExpanded() &&
+                        *pStt <= pBkmk->GetOtherMarkPos() && pBkmk->GetOtherMarkPos() <= *pEnd )
                     {
-                        if( nTyp || ( *pBkmk->GetOtherBookmarkPos() < *pEnd &&
-                            *pBkmk->GetOtherBookmarkPos() > *pStt ) )
+                        if( bSavePos || bSaveOtherPos ||
+                            ( pBkmk->GetOtherMarkPos() < *pEnd && pBkmk->GetOtherMarkPos() > *pStt ) )
                         {
-                            if( bMayBe )
-                                nTyp = SwHstryBookmark::BKMK_POS;
-                            nTyp |= SwHstryBookmark::BKMK_OTHERPOS;
+                            if( bMaybe )
+                                bSavePos = true;
+                            bSaveOtherPos = true;
                         }
                     }
                     // delete cross-reference bookmark at <pStt>, if only part of
@@ -763,35 +762,37 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
                                         rMark.nNode.GetNode().GetTxtNode() &&
                                         rPoint.nNode.GetNode().GetTxtNode() );
                     // <--
-                    if( !nTyp && bDifferentTxtNodesAtMarkAndPoint && pBkmk->IsCrossRefMark() )
+                    if( !bSavePos && !bSaveOtherPos && bDifferentTxtNodesAtMarkAndPoint &&
+                        dynamic_cast< const ::sw::mark::CrossRefBookmark* >(pBkmk))
                     {
-                        if( pStt->nNode == rBkmkPos.nNode &&
+                        if( pStt->nNode == pBkmk->GetMarkPos().nNode &&
                             pEnd->nContent.GetIndex() !=
                                 pEnd->nNode.GetNode().GetTxtNode()->Len() )
                         {
-                            nTyp = SwHstryBookmark::BKMK_POS;
+                            bSavePos = true;
+                            bSaveOtherPos = false;
                         }
                         // delete cross-reference bookmark at <pEnd>, if only part of
                         // <pStt> text node content is deleted.
-                        else if( pEnd->nNode == rBkmkPos.nNode &&
+                        else if( pEnd->nNode == pBkmk->GetMarkPos().nNode &&
                             pStt->nContent.GetIndex() != 0 )
                         {
-                            nTyp = SwHstryBookmark::BKMK_POS;
+                            bSavePos = true;
+                            bSaveOtherPos = false;
                         }
                     }
                 }
-                if( nTyp )
+                if( bSavePos || bSaveOtherPos )
                 {
                     if( !pHistory )
                         pHistory = new SwHistory;
 
-                    pHistory->Add( *pBkmk, nTyp );
-                    if ( ( SwHstryBookmark::BKMK_OTHERPOS |
-                           SwHstryBookmark::BKMK_POS ) == nTyp ||
-                         ( SwHstryBookmark::BKMK_POS == nTyp
-                           && !pOtherBkmkPos ) )
+                    pHistory->Add( *pBkmk, bSavePos, bSaveOtherPos );
+                    if(bSavePos &&
+                        (bSaveOtherPos || !pBkmk->IsExpanded()))
                     {
-                        pDoc->deleteBookmark( n-- );
+                        pMarkAccess->deleteMark(pMarkAccess->getMarksBegin()+n);
+                        n--;
                     }
                 }
             }

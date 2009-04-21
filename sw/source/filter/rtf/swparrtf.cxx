@@ -1785,7 +1785,7 @@ void SwRTFParser::NextToken( int nToken )
                                         aBookmarkEnd.maMkNode, aBookmarkEnd.mnMkCntnt);
                 if (*mpBookmarkStart == aBookmarkEnd)
                     aBookmarkRegion.DeleteMark();
-                pDoc->makeBookmark(aBookmarkRegion, aEmptyKeyCode, sBookmark, aEmptyStr, IDocumentBookmarkAccess::BOOKMARK);
+                pDoc->getIDocumentMarkAccess()->makeMark(aBookmarkRegion, sBookmark, IDocumentMarkAccess::BOOKMARK);
             }
             delete mpBookmarkStart, mpBookmarkStart = 0;
         }

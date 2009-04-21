@@ -53,8 +53,9 @@
 #include "errhdl.hxx"
 #include "swmodule.hxx"
 #include "wrtsh.hxx"
-#include "bookmrk.hxx"
+#include "IMark.hxx"
 #include "bookctrl.hxx"
+#include <map>
 
 SFX_IMPL_STATUSBAR_CONTROL( SwBookmarkControl, SfxStringItem );
 
@@ -134,25 +135,29 @@ void SwBookmarkControl::Command( const CommandEvent& rCEvt )
         CaptureMouse();
         BookmarkPopup_Impl aPop;
         SwWrtShell* pWrtShell = ::GetActiveWrtShell();
-        USHORT nBookCnt;
-        if( pWrtShell && 0 != ( nBookCnt = pWrtShell->GetBookmarkCnt() ) )
+        if( pWrtShell && pWrtShell->getIDocumentMarkAccess()->getMarksCount() > 0 )
         {
-            SvUShorts aBookArr;
-            for( USHORT nCount = 0; nCount < nBookCnt; ++nCount )
+            IDocumentMarkAccess* const pMarkAccess = pWrtShell->getIDocumentMarkAccess();
+            IDocumentMarkAccess::const_iterator_t ppBookmarkStart = pMarkAccess->getBookmarksBegin();
+            USHORT nPopupId = 1;
+            ::std::map<sal_Int32, USHORT> aBookmarkIdx;
+            for(IDocumentMarkAccess::const_iterator_t ppBookmark = ppBookmarkStart;
+                ppBookmark != pMarkAccess->getBookmarksEnd();
+                ppBookmark++)
             {
-                SwBookmark& rBkmk = pWrtShell->GetBookmark( nCount );
-                if( rBkmk.IsBookMark() )
+                if(IDocumentMarkAccess::BOOKMARK == IDocumentMarkAccess::GetType(**ppBookmark))
                 {
-                    aBookArr.Insert( nCount, aBookArr.Count() );
-                    aPop.InsertItem( aBookArr.Count(), rBkmk.GetName() );
+                    aPop.InsertItem( nPopupId, ppBookmark->get()->GetName() );
+                    aBookmarkIdx[nPopupId] = static_cast<USHORT>(ppBookmark - ppBookmarkStart);
+                    nPopupId++;
                 }
             }
             aPop.Execute( &GetStatusBar(), rCEvt.GetMousePosPixel());
             USHORT nCurrId = aPop.GetCurId();
             if( nCurrId != USHRT_MAX)
             {
-                SfxUInt16Item aBookmark( FN_STAT_BOOKMARK, aBookArr[nCurrId-1] );
-                SfxViewFrame::Current()->GetDispatcher()->Execute(  FN_STAT_BOOKMARK,
+                SfxUInt16Item aBookmark( FN_STAT_BOOKMARK, aBookmarkIdx[nCurrId] );
+                SfxViewFrame::Current()->GetDispatcher()->Execute( FN_STAT_BOOKMARK,
                     SFX_CALLMODE_ASYNCHRON|SFX_CALLMODE_RECORD,
                                         &aBookmark, 0L );
             }
@@ -160,5 +165,3 @@ void SwBookmarkControl::Command( const CommandEvent& rCEvt )
         ReleaseMouse();
     }
 }
-
-

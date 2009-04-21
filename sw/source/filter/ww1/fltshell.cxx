@@ -510,7 +510,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEntry*
                 ( !IsFlagSet(HYPO) || IsFlagSet(BOOK_AND_REF) ) && !pEntry->bConsumedByField)
             {
                 MakeBookRegionOrPoint(pEntry, pDoc, aRegion, TRUE);
-                pDoc->makeBookmark( aRegion, aEmptyKeyCode, rName, aEmptyStr, IDocumentBookmarkAccess::BOOKMARK);
+                pDoc->getIDocumentMarkAccess()->makeMark( aRegion, rName, IDocumentMarkAccess::BOOKMARK);
             }
         }
         break;
