@@ -1669,19 +1669,17 @@ sal_Bool SlideShowImpl::update( double & nNextTimeout )
         // TODO(F2): re-evaluate whether that timer lagging makes
         // sense.
 
-        // hold timer, while processing the queues (ensures
-        // same time for all activities and events)
+        // hold timer, while processing the queues:
+        // 1. when there is more than one active activity this ensures the
+        //    same time for all activities and events
+        // 2. processing of events may lead to creation of further events
+        //    that have zero delay.  While the timer is stopped these events
+        //    are processed in the same run.
         {
             comphelper::ScopeGuard scopeGuard(
                 boost::bind( &canvas::tools::ElapsedTime::releaseTimer,
                              boost::cref(mpPresTimer) ) );
-
-            // no need to hold timer for only one active animation -
-            // it's only meant to keep multiple ones in sync
-            if( maActivitiesQueue.size() > 1 )
-                mpPresTimer->holdTimer();
-            else
-                scopeGuard.dismiss(); // we're not holding the timer
+            mpPresTimer->holdTimer();
 
             // process queues
             maEventQueue.process();
