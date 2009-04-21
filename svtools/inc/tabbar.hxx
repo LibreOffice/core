@@ -323,12 +323,12 @@ typedef USHORT TabBarPageBits;
 // - TabBar-Types -
 // ----------------
 
-#define TAB_APPEND          ((USHORT)0xFFFF)
-#define TAB_PAGE_NOTFOUND   ((USHORT)0xFFFF)
+#define TABBAR_APPEND          ((USHORT)0xFFFF)
+#define TABBAR_PAGE_NOTFOUND   ((USHORT)0xFFFF)
 
-#define TAB_RENAMING_YES    ((long)TRUE)
-#define TAB_RENAMING_NO     ((long)FALSE)
-#define TAB_RENAMING_CANCEL ((long)2)
+#define TABBAR_RENAMING_YES    ((long)TRUE)
+#define TABBAR_RENAMING_NO     ((long)FALSE)
+#define TABBAR_RENAMING_CANCEL ((long)2)
 
 // ----------
 // - TabBar -
@@ -427,7 +427,7 @@ public:
 
     void            InsertPage( USHORT nPageId, const XubString& rText,
                                 TabBarPageBits nBits = 0,
-                                USHORT nPos = TAB_APPEND );
+                                USHORT nPos = TABBAR_APPEND );
     void            RemovePage( USHORT nPageId );
     void            MovePage( USHORT nPageId, USHORT nNewPos );
     void            Clear();
@@ -456,7 +456,7 @@ public:
     void            SelectPage( USHORT nPageId, BOOL bSelect = TRUE );
     void            SelectPageRange( BOOL bSelect = FALSE,
                                      USHORT nStartPos = 0,
-                                     USHORT nEndPos = TAB_APPEND );
+                                     USHORT nEndPos = TABBAR_APPEND );
     USHORT          GetSelectPage( USHORT nSelIndex = 0 ) const;
     USHORT          GetSelectPageCount() const;
     BOOL            IsPageSelected( USHORT nPageId ) const;

@@ -35,7 +35,7 @@
 #include <com/sun/star/awt/MaxChildrenException.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <comphelper/uno3.hxx>
-#include <layout/box-base.hxx>
+#include <layout/core/box-base.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 
 class Splitter;

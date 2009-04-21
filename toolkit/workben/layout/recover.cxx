@@ -55,6 +55,13 @@ using namespace com::sun::star;
 
 #include <layout/layout-pre.hxx>
 
+#if ENABLE_LAYOUT
+#undef SVX_RES
+#define SVX_RES(x) #x
+#undef SfxModalDialog
+#define SfxModalDialog( parent, id ) Dialog( parent, "recover.xml", id )
+#endif /* ENABLE_LAYOUT */
+
 #if TEST_LAYOUT
 SvxRecoverDialog::SvxRecoverDialog( Window* pParent )
 #else /* !TEST_LAYOUT */

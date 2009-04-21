@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This is a template.  i18n translation is not performed in-place;
+     i18n translated xml files are generated from this template by
+     transex3/layout/tralay.  !-->
+
+<dialog xmlns="http://openoffice.org/2007/layout"
+        xmlns:cnt="http://openoffice.org/2007/layout/container"
+        title="Empty Test" optimumsize="true" has_border="true" sizeable="true" moveable="true">
+  <vbox spacing="1" border="10">
+    <min-size min-width="200"/>
+    <fixedline height="1"/>
+    <vbox spacing="10">
+      <vbox show="false"/>
+      <vbox show="false"/>
+      <vbox show="false"/>
+      <vbox show="false"/>
+      <vbox show="false"/>
+      <vbox show="false"/>
+      <vbox show="false"/>
+      <vbox show="false"/>
+      <vbox show="false"/>
+      <vbox show="false"/>
+    </vbox>
+    <fixedline height="1"/>
+  </vbox>
+</dialog>

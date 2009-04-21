@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This is a template.  i18n translation is not performed in-place;
+     i18n translated XML files are generated from this template by
+     transex3/layout/tralay.  !-->
+
+<tabpage help-id="HID_SCPAGE_SORT_FIELDS" hide="true" id="RID_SCPAGE_SORT_FIELDS" sv-look="true" xmlns="http://openoffice.org/2007/layout" xmlns:cnt="http://openoffice.org/2007/layout/container">
+    <vbox>
+        <fixedline id="FL_SORT1" text="Sort ~by"/>
+        <radiobutton id="BTN_UP1" tabstop="true" label="~Ascending"/>
+        <listbox has_border="true" dropdown="true" id="LB_SORT1" tabstop="true"/>
+        <radiobutton id="BTN_DOWN1" tabstop="true" label="~Descending"/>
+        <fixedline id="FL_SORT2" text="Then b~y"/>
+        <radiobutton id="BTN_UP2" tabstop="true" label="A~scending"/>
+        <listbox has_border="true" dropdown="true" id="LB_SORT2" tabstop="true"/>
+        <radiobutton id="BTN_DOWN2" tabstop="true" label="D~escending"/>
+        <fixedline id="FL_SORT3" text="T~hen by"/>
+        <radiobutton id="BTN_UP3" tabstop="true" label="As~cending"/>
+        <listbox has_border="true" dropdown="true" id="LB_SORT3" tabstop="true"/>
+        <radiobutton id="BTN_DOWN3" tabstop="true" label="Desce~nding"/>
+    </vbox>
+</tabpage>
+<tabpage help-id="HID_SCPAGE_SORT_OPTIONS" hide="true" id="RID_SCPAGE_SORT_OPTIONS" sv-look="true" xmlns="http://openoffice.org/2007/layout" xmlns:cnt="http://openoffice.org/2007/layout/container">
+    <string id="STR_COL_LABEL" text="Range contains column la~bels"/>
+    <string id="STR_ROW_LABEL" text="Range contains ~row labels"/>
+    <vbox>
+        <checkbox id="BTN_CASESENSITIVE" tabstop="true" label="Case ~sensitive"/>
+        <checkbox id="BTN_LABEL" tabstop="true"/>
+        <checkbox id="BTN_FORMATS" tabstop="true" label="Include ~formats"/>
+        <checkbox id="BTN_NATURALSORT" tabstop="true" label=" "/>
+        <checkbox id="BTN_COPYRESULT" tabstop="true" label="~Copy sort results to:"/>
+        <hbox>
+            <listbox has_border="true" dropdown="true" id="LB_OUTAREA" tabstop="true"/>
+            <edit has_border="true" disable="true" id="ED_OUTAREA" tabstop="true"/>
+        </hbox>
+        <checkbox id="BTN_SORT_USER" tabstop="true" label="Custom sort ~order"/>
+        <listbox has_border="true" disable="true" dropdown="true" id="LB_SORT_USER" tabstop="true"/>
+        <hbox>
+            <fixedtext id="FT_LANGUAGE" label="~Language"/>
+            <fixedtext id="FT_ALGORITHM" label="O~ptions"/>
+        </hbox>
+        <hbox>
+            <listbox has_border="true" dropdown="true" id="LB_LANGUAGE" sort="true" tabstop="true"/>
+            <listbox has_border="true" dropdown="true" id="LB_ALGORITHM" tabstop="true"/>
+        </hbox>
+        <fixedline id="FL_DIRECTION" text="Direction"/>
+        <radiobutton id="BTN_TOP_DOWN" tabstop="true" label="~Top to bottom (sort rows)"/>
+        <radiobutton id="BTN_LEFT_RIGHT" tabstop="true" label="L~eft to right (sort columns)"/>
+    </vbox>
+</tabpage>
+<tabdialog closeable="false" moveable="true" output-size="true" id="RID_SCDLG_SORT" sv-look="true" text="Sort" xmlns="http://openoffice.org/2007/layout" xmlns:cnt="http://openoffice.org/2007/layout/container">
+    <vbox>
+        <tabcontrol output-size="true" id="1">
+            <pagelist>
+                <pageitem identifier="TP_FIELDS" page-res-id="TP_FIELDS" text="Sort Criteria"/>
+                <pageitem identifier="TP_OPTIONS" page-res-id="TP_OPTIONS" text="Options"/>
+            </pagelist>
+        </tabcontrol>
+        <hbox>
+            <okbutton defbutton="true" id="1" tabstop="true"/>
+            <cancelbutton id="1" tabstop="true"/>
+            <helpbutton id="1" tabstop="true"/>
+            <pushbutton id="1" tabstop="true"/>
+        </hbox>
+    </vbox>
+</tabdialog>

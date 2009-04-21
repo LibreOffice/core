@@ -417,6 +417,13 @@ VCLXButton::VCLXButton()
 {
 }
 
+VCLXButton::~VCLXButton()
+{
+#ifndef __SUNPRO_CC
+    OSL_TRACE ("%s", __FUNCTION__);
+#endif
+}
+
 ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > VCLXButton::CreateAccessibleContext()
 {
     return getAccessibleFactory().createAccessibleContext( this );
@@ -1361,6 +1368,13 @@ void VCLXRadioButton::ImplClickedOrToggled( BOOL bToggled )
     }
 }
 
+::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > VCLXRadioButton::getFirstActionListener ()
+{
+    if (!maItemListeners.getLength ())
+        return ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > ();
+    return maActionListeners.getElements()[0];
+}
+
 //  ----------------------------------------------------
 //  class VCLXSpinField
 //  ----------------------------------------------------
@@ -2175,6 +2189,9 @@ VCLXDialog::VCLXDialog()
 
 VCLXDialog::~VCLXDialog()
 {
+#ifndef __SUNPRO_CC
+    OSL_TRACE ("%s", __FUNCTION__);
+#endif
 }
 
 // ::com::sun::star::uno::XInterface
@@ -3741,6 +3758,13 @@ void VCLXComboBox::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 VCLXComboBox::VCLXComboBox()
     : maActionListeners( *this ), maItemListeners( *this )
 {
+}
+
+VCLXComboBox::~VCLXComboBox()
+{
+#ifndef __SUNPRO_CC
+    OSL_TRACE ("%s", __FUNCTION__);
+#endif
 }
 
 // ::com::sun::star::uno::XInterface

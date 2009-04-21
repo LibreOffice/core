@@ -54,8 +54,8 @@ LIB1FILES=	$(SLB)$/awt.lib \
             $(SLB)$/tree.lib \
             $(SLB)$/controls.lib \
             $(SLB)$/helper.lib\
-            $(SLB)$/layoutcore.lib \
-            $(SLB)$/vclcompat.lib
+            $(SLB)$/layout-core.lib \
+            $(SLB)$/layout-vcl.lib
 
 SHL1TARGET= tk$(DLLPOSTFIX)
 SHL1IMPLIB= itk

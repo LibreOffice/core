@@ -211,6 +211,15 @@ void VCLXDialog::setTitle( const ::rtl::OUString& Title ) throw(::com::sun::star
         pWindow->SetText( Title );
 }
 
+void VCLXDialog::setHelpId( sal_Int32 id ) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    Window* pWindow = GetWindow();
+    if ( pWindow )
+        pWindow->SetHelpId( id );
+}
+
 ::rtl::OUString VCLXDialog::getTitle() throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );

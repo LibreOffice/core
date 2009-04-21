@@ -45,8 +45,10 @@ class PushButton;
 // - TabControl-Types -
 // --------------------
 
+#ifndef TAB_APPEND
 #define TAB_APPEND          ((USHORT)0xFFFF)
 #define TAB_PAGE_NOTFOUND   ((USHORT)0xFFFF)
+#endif /* !TAB_APPEND */
 
 // --------------
 // - TabControl -

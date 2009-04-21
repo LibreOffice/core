@@ -36,7 +36,7 @@
 #include <com/sun/star/awt/XSystemDependentWindowPeer.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <comphelper/uno3.hxx>
-#include <layout/bin.hxx>
+#include <layout/core/bin.hxx>
 #include <toolkit/awt/vclxtopwindow.hxx>
 
 namespace layoutimpl
@@ -44,10 +44,10 @@ namespace layoutimpl
 
 typedef ::cppu::ImplHelper1 < ::com::sun::star::awt::XDialog2 > VCLXDialog_Base;
 
-class VCLXDialog :public VCLXWindow
-                 ,public VCLXTopWindow_Base
-                 ,public VCLXDialog_Base
-                 ,public Bin
+class TOOLKIT_DLLPUBLIC VCLXDialog : public VCLXWindow
+                                   , public VCLXTopWindow_Base
+                                   , public VCLXDialog_Base
+                                   , public Bin
 {
 private:
     bool bRealized, bResizeSafeguard;
@@ -102,6 +102,7 @@ public:
 
     // ::com::sun::star::awt::XDialog2
     void SAL_CALL endDialog( sal_Int32 nResult ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL setHelpId( sal_Int32 id ) throw(::com::sun::star::uno::RuntimeException);
 
 };
 
