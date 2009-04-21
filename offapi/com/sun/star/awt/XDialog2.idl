@@ -12,7 +12,7 @@ module com {  module sun {  module star {  module awt {
 
 //=============================================================================
 
-/** Makes it possible to end a dialog.
+/** Makes it possible to end a dialog and set a help id.
 
     @since OOo 3.0
  */
@@ -22,6 +22,10 @@ interface XDialog2: com::sun::star::awt::XDialog
         to return with the given result value.
      */
     void endDialog ( [in] long Result );
+    /** sets the help id so that the standard help button action will
+        show the appropriate help page.
+    */
+    void setHelpId ( [in] long Id );
 };
 
 //=============================================================================
