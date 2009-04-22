@@ -34,8 +34,8 @@
 #ifndef __com_sun_star_container_XNamed_idl__
 #include <com/sun/star/container/XNamed.idl>
 #endif
-#ifndef __com_sun_star_container_XNameAccess_idl__
-#include <com/sun/star/container/XNameAccess.idl>
+#ifndef __com_sun_star_container_XNameContainer_idl__
+#include <com/sun/star/container/XNameContainer.idl>
 #endif
 #ifndef __com_sun_star_container_XEnumerationAccess_idl__
 #include <com/sun/star/container/XEnumerationAccess.idl>
@@ -52,19 +52,28 @@ module com {  module sun {  module star {  module sheet {
 
 /** represents a collection of members in a data pilot field group.
 
-    @see com::sun::star::sheet::DataPilotFieldGroupMember
+    <p>The members (also called items) of this collection are instances of
+    <type>DataPilotFieldGroupItem</type>.</p>
+
+    @see DataPilotField
+    @see DataPilotFieldGroups
+    @see DataPilotFieldGroupItem
  */
 published service DataPilotFieldGroup
 {
     //-------------------------------------------------------------------------
 
     /** provides access to the name of the data pilot field group.
+
+        <p>It is possible to change the name of this field group as long as
+        the new name is not used in the collection of groups in the field.</p>
      */
     interface com::sun::star::container::XNamed;
 
     //-------------------------------------------------------------------------
 
-    /** provides access to the data pilot field group members in the collection via index.
+    /** provides access to the data pilot field group members in the
+        collection via index.
      */
     interface com::sun::star::container::XIndexAccess;
 
@@ -72,15 +81,50 @@ published service DataPilotFieldGroup
 
     /** creates an enumeration of all data pilot field group members.
 
-        @see com::sun::star::sheet::DataPilotItemsEnumeration
+        @see DataPilotFieldGroupEnumeration
      */
     interface com::sun::star::container::XEnumerationAccess;
 
     //-------------------------------------------------------------------------
 
-    /** provides access to the data pilot field group members in the collection via name.
+    /** provides access to the data pilot field group members in the
+        collection via name.
      */
     interface com::sun::star::container::XNameAccess;
+
+    //-------------------------------------------------------------------------
+
+    /** provides read/write access to the data pilot field group members in
+        the collection via name.
+
+        <p>The <type scope="com::sun::star::container">XNameContainer</type>
+        and <type scope="com::sun::star::container">XNameReplace</type>
+        interfaces can be used to manage the members that this group contains.
+        It is possible to insert, remove, and replace members.</p>
+
+        <p>The method <member scope="com::sun::star::container">
+        XNameReplace::replaceByName</member> can be used to rename the
+        specified member. To do so, the new name has to be passed as second
+        argument. An implementation should support the following data types:
+
+        <ul>
+        <li>a non-empty <atom>string</atom> specifying the new name of the
+        group member.</li>
+        <li>an object supporting the <type scope="com::sun::star::container">
+        XNamed</type> interface, for example an instance of
+        <type>DataPilotFieldGroupItem</type> received from another group.</li>
+        </ul></p>
+
+        <p>The method <member scope="com::sun::star::container">
+        XNameContainer::insertByName</member> can be used to insert a new
+        member into this field group. An implementation should ignore the
+        second argument and insert the specified member name.</p>
+
+        <p>The method <member scope="com::sun::star::container">
+        XNameContainer::removeByName</member> can be used to remove an
+        existing member name.</p>
+     */
+    [optional] interface com::sun::star::container::XNameContainer;
 
 };
 

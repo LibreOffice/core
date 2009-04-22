@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: ExternalLinkInfo.idl,v $
- * $Revision: 1.1.2.2 $
+ * $RCSfile: DataPilotItemsEnumeration.idl,v $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,11 +27,12 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_sheet_ExternalLinkInfo_idl__
-#define __com_sun_star_sheet_ExternalLinkInfo_idl__
 
-#ifndef __com_sun_star_sheet_ExternalLinkType_idl__
-#include <com/sun/star/sheet/ExternalLinkType.idl>
+#ifndef __com_sun_star_sheet_DataPilotFieldGroupsEnumeration_idl__
+#define __com_sun_star_sheet_DataPilotFieldGroupsEnumeration_idl__
+
+#ifndef __com_sun_star_container_XEnumeration_idl__
+#include <com/sun/star/container/XEnumeration.idl>
 #endif
 
 //=============================================================================
@@ -39,37 +40,22 @@
 module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
-/** describes an external link in a formula.
 
-    @since OOo3.1
+/** represents an enumeration of member groups in a DataPilot field.
+
+    @see DataPilotFieldGroup
+    @see DataPilotFieldGroups
  */
-struct ExternalLinkInfo
+service DataPilotFieldGroupsEnumeration
 {
     //-------------------------------------------------------------------------
-    /** Link type, one of <type>ExternalLinkType</type> constants.
+
+    /** provides methods to access the field groups in the enumeration.
+
+        <p>The elements of the enumeration are instances of
+        <type>DataPilotFieldGroup</type>.</p>
      */
-    long Type;
-
-    //-------------------------------------------------------------------------
-    /** Location of this link type.
-
-        <p>Modes used:
-
-        <ol>
-        <li>If <member>Type</member> is <const>ExternalLinkType::EXTERNAL
-        </const>, this member shall contain a <atom>string</atom> with the
-        <em>URI</em> of a document. The formula that would need this
-        information for example would contain <code>=[1]Sheet1!A1</code> or
-        <code>='[1]Sheet name'!A1</code> where <em>[1]</em> does resolve to
-        the URI contained in the member <member>Data</member>. Note that the
-        quotes cover both, the document name and the sheet name.</li>
-
-        <li>If <member>Type</member> is <const>ExternalLinkType::DDE</const>,
-        this member shall contain a <type>DDELinkInfo</type> describing
-        service name, topic, and all known items of a DDE link.</li>
-        </ol></p>
-     */
-    any Data;
+    interface com::sun::star::container::XEnumeration;
 
 };
 
@@ -78,3 +64,4 @@ struct ExternalLinkInfo
 }; }; }; };
 
 #endif
+

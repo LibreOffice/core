@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: ExternalLinkInfo.idl,v $
- * $Revision: 1.1.2.2 $
+ * $RCSfile: XDataPilotDataLayoutFieldSupplier.idl,v $
+ * $Revision: 1.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,11 +27,12 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_sheet_ExternalLinkInfo_idl__
-#define __com_sun_star_sheet_ExternalLinkInfo_idl__
 
-#ifndef __com_sun_star_sheet_ExternalLinkType_idl__
-#include <com/sun/star/sheet/ExternalLinkType.idl>
+#ifndef __com_sun_star_sheet_XDataPilotDataLayoutFieldSupplier_idl__
+#define __com_sun_star_sheet_XDataPilotDataLayoutFieldSupplier_idl__
+
+#ifndef __com_sun_star_sheet_XDataPilotField_idl__
+#include <com/sun/star/sheet/XDataPilotField.idl>
 #endif
 
 //=============================================================================
@@ -39,37 +40,32 @@
 module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
-/** describes an external link in a formula.
 
-    @since OOo3.1
+/** Provides access to the <type>DataPilotField</type> used to layout
+    multiple data fields.
+
+    <p>This data field can be inserted into the rows dimension or columns
+    dimension by changing its <member scope="DataPilotField">Orientation</member>
+    property. This interface can be used to access the data layout field
+    before multiple data fields are inserted into the DataPilot table. It
+    remains invisible as long as the DataPilot table contains at most one data
+    field.</p>
+
+    @see com::sun::star::sheet::DataPilotDescriptor
+    @see com::sun::star::sheet::DataPilotTable
  */
-struct ExternalLinkInfo
+published interface XDataPilotDataLayoutFieldSupplier
 {
     //-------------------------------------------------------------------------
-    /** Link type, one of <type>ExternalLinkType</type> constants.
+
+    /** Returns the <type>DataPilotField</type> used to layout multiple data
+        fields.
+
+        <p>If the field does not exist yet, it will be created. It is possible
+        to insert this field into the rows or columns dimension by changing
+        its <member scope="DataPilotField">Orientation</member> property.</p>
      */
-    long Type;
-
-    //-------------------------------------------------------------------------
-    /** Location of this link type.
-
-        <p>Modes used:
-
-        <ol>
-        <li>If <member>Type</member> is <const>ExternalLinkType::EXTERNAL
-        </const>, this member shall contain a <atom>string</atom> with the
-        <em>URI</em> of a document. The formula that would need this
-        information for example would contain <code>=[1]Sheet1!A1</code> or
-        <code>='[1]Sheet name'!A1</code> where <em>[1]</em> does resolve to
-        the URI contained in the member <member>Data</member>. Note that the
-        quotes cover both, the document name and the sheet name.</li>
-
-        <li>If <member>Type</member> is <const>ExternalLinkType::DDE</const>,
-        this member shall contain a <type>DDELinkInfo</type> describing
-        service name, topic, and all known items of a DDE link.</li>
-        </ol></p>
-     */
-    any Data;
+    XDataPilotField getDataLayoutField();
 
 };
 
@@ -78,3 +74,4 @@ struct ExternalLinkInfo
 }; }; }; };
 
 #endif
+

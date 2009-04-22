@@ -47,7 +47,9 @@ module com {  module sun {  module star {  module sheet {
 
 //=============================================================================
 
-/** represents a collection of Items in a data pilot field.
+/** represents a collection of items in a data pilot field.
+
+    @see DataPilotItem
  */
 service DataPilotItems
 {
