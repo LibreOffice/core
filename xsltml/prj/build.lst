@@ -1,0 +1,3 @@
+xm  xsltml :	solenv external NULL
+xm	xsltml		usr1	-	all	xm_mkout    NULL
+xm	xsltml		nmake	-	all	xm_xsltml   NULL
