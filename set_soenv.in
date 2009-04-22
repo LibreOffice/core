@@ -90,7 +90,7 @@ my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $JDK, $JAVAFLAGS, $SHELL,
      $COMMON_BUILD_TOOLS, $WIN_GREP, $WIN_FIND, $WIN_LS,
      $WIN_GNUCOPY, $WIN_TOUCH, $STLPORT4, $MOZILLA_VERSION, $MOZILLA_TOOLKIT, $PREBUILD_MOZAB,
 	 $PROEXT,
-     $SYSTEM_PYTHON, $PYTHONPATH, $PYTHONHOME, $SYSTEM_MOZILLA, $EPM_FLAGS);
+     $SYSTEM_PYTHON, $PYTHONPATH, $SYSTEM_MOZILLA, $EPM_FLAGS);
 #
 #-------------------------------------------
 # IId. Declaring the aliases.
@@ -1516,11 +1516,9 @@ else
 
 if ($SYSTEM_PYTHON eq "NO") {
     $PYTHONPATH           = '.'.$wps.$SOLARVER.$ds.$INPATH.$ds.'lib'.$wps.$SOLARVER.$ds.$INPATH.$ds.'lib'.$ds.'python'.$wps.$SOLARVER.$ds.$INPATH.$ds.'lib'.$ds.'python'.$ds.'lib-dynload'.$wps.$SOLARVER.$ds.$INPATH.$ds.'lib'.$ds.'pyuno'.$wps.$SOLARVER.$ds.$INPATH.$ds.'bin'.$ds.'pyuno';
-    $PYTHONHOME           = $SOLARVER.$ds.$INPATH;
     if ($GUIBASE eq "WIN") {
-        # PYTHONPATH and PYTHONHOME need to use '\' directory seperators;
+        # PYTHONPATH need to use '\' directory seperators;
         $PYTHONPATH = WinPath( $PYTHONPATH, ";" );
-        $PYTHONHOME = WinPath( $PYTHONHOME, ";" );
     }
 }
 
@@ -1990,7 +1988,6 @@ ToFile( "ZIPDEP",        $perlpre."zipdep.pl",      "e" );
 ToFile( "USE_SHELL",             '@USE_SHELL@',     "e" );
 if ($SYSTEM_PYTHON eq "NO") {
     ToFile( "PYTHONPATH",        $PYTHONPATH,        "e" );
-    ToFile( "PYTHONHOME",        $PYTHONHOME,        "e" );
 }
 
 #
