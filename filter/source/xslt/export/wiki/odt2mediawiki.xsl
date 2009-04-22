@@ -51,12 +51,16 @@
 	<param name="NL" select="'&#10;'"/>
 
 	<!-- String that a tabulator is expanded with in preformatted paragraphs. -->
-	<param name="CODE_TAB_REPLACEMENT">
-		<variable name="document-value"
+
+		<variable name="codetabdocument-value"
 			select="/office:document/office:meta/meta:user-defined[@meta:name='CODE_TAB_REPLACEMENT']"/>
+
+	<param name="CODE_TAB_REPLACEMENT">
+
 		<choose>
-			<when test="boolean($document-value)">
-				<value-of select="$document-value"/>
+
+			<when test="boolean($codetabdocument-value)">
+				<value-of select="$codetabdocument-value"/>
 			</when>
 			
 			<otherwise>
@@ -71,9 +75,11 @@
 	<param name="CODE_JOIN_PARAGRAPHS" 
 		select="boolean(string(/office:document/office:meta/meta:user-defined[@meta:name='CODE_JOIN_PARAGRAPHS']) != 'false')"/>
 	
-	<param name="CODE_STYLES">
 		<variable name="document-value"
 			select="/office:document/office:meta/meta:user-defined[@meta:name='CODE_STYLES']"/>
+
+	<param name="CODE_STYLES">
+
 		<choose>
 			<when test="boolean($document-value)">
 				<value-of select="$document-value"/>
@@ -84,6 +90,24 @@
 			</otherwise>
 		</choose>
 	</param>
+
+		<variable name="table-class"
+			select="/office:document/office:meta/meta:user-defined[@meta:name='TABLE_CLASS']"/>
+
+	<param name="TABLE_CLASS">
+		<choose>
+			<when test="boolean($table-class)">
+				<value-of select="$table-class"/>
+			</when>
+			
+			<otherwise>
+				<value-of select="''"/>
+			</otherwise>
+		</choose>
+	</param>
+	
+	<variable name="USE_DEFAULT_TABLE_CLASS" select="string-length($TABLE_CLASS) &gt; 0"/>
+
 
 	<!-- 
 		== Wiki style constants == 
@@ -320,7 +344,21 @@
 
 	<template match="table:table">
 		<text>&#10;</text>
-		<text>{| class="prettytable"</text>
+		<text>{|</text>
+		
+		<choose>
+			<when test="$USE_DEFAULT_TABLE_CLASS">
+				<text> class="</text>
+				<value-of select="$TABLE_CLASS"/>
+				<text>"</text>
+			</when>
+			
+			<otherwise>
+				<!-- Default setting to translate detailed office table cell styles correctly. -->
+				<text> style="border-spacing:0;"</text>
+			</otherwise>
+		</choose>
+		
 		<text>&#10;</text>
 		<apply-templates/>
 		<text>&#10;</text>
@@ -355,16 +393,86 @@
 	</template>
 
 	<template match="table:table-cell">
-		<text>| </text>
+		<text>|</text>
 		<if test="@table:number-columns-spanned">
-			<text>colspan="</text>
+			<text> colspan="</text>
 			<value-of select="@table:number-columns-spanned"/>
-			<text>" | </text>
+			<text>" </text>
 		</if>
+		<if test="not($USE_DEFAULT_TABLE_CLASS) and boolean(@table:style-name)">
+	 		<variable name="style-element" select="key('style-ref', @table:style-name)"/>
+			
+			<variable name="style">
+				<call-template name="translate-style-property">
+					<with-param name="style-name" select="'background-color'"/>
+					<with-param name="style-property" select="$style-element/style:table-cell-properties/@fo:background-color"/>
+				</call-template>
+				
+				<call-template name="translate-style-property">
+					<with-param name="style-name" select="'border'"/>
+					<with-param name="style-property" select="$style-element/style:table-cell-properties/@fo:border"/>
+				</call-template>
+				<call-template name="translate-style-property">
+					<with-param name="style-name" select="'border-top'"/>
+					<with-param name="style-property" select="$style-element/style:table-cell-properties/@fo:border-top"/>
+				</call-template>
+				<call-template name="translate-style-property">
+					<with-param name="style-name" select="'border-bottom'"/>
+					<with-param name="style-property" select="$style-element/style:table-cell-properties/@fo:border-bottom"/>
+				</call-template>
+				<call-template name="translate-style-property">
+					<with-param name="style-name" select="'border-left'"/>
+					<with-param name="style-property" select="$style-element/style:table-cell-properties/@fo:border-left"/>
+				</call-template>
+				<call-template name="translate-style-property">
+					<with-param name="style-name" select="'border-right'"/>
+					<with-param name="style-property" select="$style-element/style:table-cell-properties/@fo:border-right"/>
+				</call-template>
+				
+				<call-template name="translate-style-property">
+					<with-param name="style-name" select="'padding'"/>
+					<with-param name="style-property" select="$style-element/style:table-cell-properties/@fo:padding"/>
+				</call-template>
+				<call-template name="translate-style-property">
+					<with-param name="style-name" select="'padding-top'"/>
+					<with-param name="style-property" select="$style-element/style:table-cell-properties/@fo:padding-top"/>
+				</call-template>
+				<call-template name="translate-style-property">
+					<with-param name="style-name" select="'padding-bottom'"/>
+					<with-param name="style-property" select="$style-element/style:table-cell-properties/@fo:padding-bottom"/>
+				</call-template>
+				<call-template name="translate-style-property">
+					<with-param name="style-name" select="'padding-left'"/>
+					<with-param name="style-property" select="$style-element/style:table-cell-properties/@fo:padding-left"/>
+				</call-template>
+				<call-template name="translate-style-property">
+					<with-param name="style-name" select="'padding-right'"/>
+					<with-param name="style-property" select="$style-element/style:table-cell-properties/@fo:padding-right"/>
+				</call-template>
+			</variable>
+			
+			<if test="string-length($style) &gt; 0">
+				<text> style="</text>
+				<value-of select="$style"/>
+				<text>"</text>
+			</if>
+		</if>
+		<text>| </text>
 		<apply-templates/>
 		<value-of select="$NL"/>
 	</template>
 
+	<template name="translate-style-property">
+		<param name="style-name"/>
+		<param name="style-property"/>
+		
+		<if test="boolean($style-property)">
+			<value-of select="$style-name"/>
+			<text>:</text>
+			<value-of select="string($style-property)"/>
+			<text>;</text>
+		</if>
+	</template>
 
 	<!-- 
 		== WikiMath == 
@@ -670,7 +778,36 @@
  		</choose>
  	</template>
  	
+  	<!-- Frames -->
  	
+ 	<template match="draw:frame">
+ 		<choose>
+ 			<when test="draw:object/math:math">
+ 				<apply-templates select="draw:object/math:math[1]"/>
+ 			</when>
+
+ 			<when test="draw:image">
+ 				<apply-templates select="draw:image[1]"/>
+ 			</when>
+ 			
+ 			<otherwise>
+ 				<apply-templates select="./*[1]"/>
+ 			</otherwise>
+ 		</choose>
+ 	
+ 	</template>
+ 	
+ 	<!-- Formulas (Objects) -->
+ 	
+	<include href="math/mmltex.xsl"/>
+	
+	<template match="math:math" priority="1">
+		<text>&lt;math&gt;</text>
+		<apply-templates/>
+		<text>&lt;/math&gt;</text>
+	</template>
+	
+	
  	<!-- 
  		References
  	 -->
@@ -1414,7 +1551,7 @@
 		<!-- Ignore change history. -->
 	</template>
 
-	<template match="office:* | text:* | draw:frame | draw:text-box | draw:frame | draw:a">
+	<template match="office:* | text:* | draw:text-box | draw:a">
 		<apply-templates/>
 	</template>
 
