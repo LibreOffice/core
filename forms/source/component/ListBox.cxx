@@ -124,7 +124,7 @@ namespace frm
     OListBoxModel::OListBoxModel(const Reference<XMultiServiceFactory>& _rxFactory)
         :OBoundControlModel( _rxFactory, VCL_CONTROLMODEL_LISTBOX, FRM_SUN_CONTROL_LISTBOX, sal_True, sal_True, sal_True )
         // use the old control name for compytibility reasons
-        ,OEntryListHelper( m_aMutex )
+        ,OEntryListHelper( (OControlModel&)*this )
         ,OErrorBroadcaster( OComponentHelper::rBHelper )
         ,m_aListRowSet( getContext() )
         ,m_nNULLPos(-1)
@@ -141,7 +141,7 @@ namespace frm
     //------------------------------------------------------------------
     OListBoxModel::OListBoxModel( const OListBoxModel* _pOriginal, const Reference<XMultiServiceFactory>& _rxFactory )
         :OBoundControlModel( _pOriginal, _rxFactory )
-        ,OEntryListHelper( *_pOriginal, m_aMutex )
+        ,OEntryListHelper( *_pOriginal, (OControlModel&)*this )
         ,OErrorBroadcaster( OComponentHelper::rBHelper )
         ,m_aListRowSet( getContext() )
         ,m_eListSourceType( _pOriginal->m_eListSourceType )
@@ -297,8 +297,8 @@ namespace frm
 
         case PROPERTY_ID_STRINGITEMLIST:
         {
-            ::osl::ResettableMutexGuard aGuard( m_aMutex );
-            setNewStringItemList( _rValue, aGuard );
+            ControlModelLock aLock( *this );
+            setNewStringItemList( _rValue, aLock );
                 // TODO: this is bogus. setNewStringItemList expects a guard which has the *only*
                 // lock to the mutex, but setFastPropertyValue_NoBroadcast is already called with
                 // a lock - so we effectively has two locks here, of which setNewStringItemList can
@@ -459,7 +459,7 @@ namespace frm
         // Deshalb muessen sie explizit ueber setPropertyValue() gesetzt werden.
 
         OBoundControlModel::read(_rxInStream);
-        ::osl::ResettableMutexGuard aGuard(m_aMutex);
+        ControlModelLock aLock( *this );
 
         // since we are "overwriting" the StringItemList of our aggregate (means we have
         // an own place to store the value, instead of relying on our aggregate storing it),
@@ -467,7 +467,7 @@ namespace frm
         try
         {
             if ( m_xAggregateSet.is() )
-                setNewStringItemList( m_xAggregateSet->getPropertyValue( PROPERTY_STRINGITEMLIST ), aGuard );
+                setNewStringItemList( m_xAggregateSet->getPropertyValue( PROPERTY_STRINGITEMLIST ), aLock );
         }
         catch( const Exception& )
         {
@@ -1329,7 +1329,7 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    void OListBoxModel::stringItemListChanged( ::osl::ResettableMutexGuard& _rInstanceLock )
+    void OListBoxModel::stringItemListChanged( ControlModelLock& _rInstanceLock )
     {
         if ( !m_xAggregateSet.is() )
             return;

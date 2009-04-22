@@ -53,10 +53,11 @@
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/form/XFormComponent.hpp>
+#include <com/sun/star/util/XCloneable.hpp>
 #include <osl/mutex.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/component.hxx>
-#include <cppuhelper/implbase7.hxx>
+#include <cppuhelper/implbase8.hxx>
 
 using namespace comphelper;
 
@@ -91,13 +92,15 @@ typedef ::std::hash_multimap< ::rtl::OUString, InterfaceRef, ::comphelper::UStri
 // OInterfaceContainer
 // implements a container for form components
 //==================================================================
-typedef ::cppu::ImplHelper7<    ::com::sun::star::container::XNameContainer,
-                                ::com::sun::star::container::XIndexContainer,
-                                ::com::sun::star::container::XContainer,
-                                ::com::sun::star::container::XEnumerationAccess,
-                                ::com::sun::star::script::XEventAttacherManager,
-                                ::com::sun::star::beans::XPropertyChangeListener,
-                                ::com::sun::star::io::XPersistObject > OInterfaceContainer_BASE;
+typedef ::cppu::ImplHelper8 <   ::com::sun::star::container::XNameContainer
+                            ,   ::com::sun::star::container::XIndexContainer
+                            ,   ::com::sun::star::container::XContainer
+                            ,   ::com::sun::star::container::XEnumerationAccess
+                            ,   ::com::sun::star::script::XEventAttacherManager
+                            ,   ::com::sun::star::beans::XPropertyChangeListener
+                            ,   ::com::sun::star::io::XPersistObject
+                            ,   ::com::sun::star::util::XCloneable
+                            > OInterfaceContainer_BASE;
 
 class OInterfaceContainer : public OInterfaceContainer_BASE
 {
@@ -108,7 +111,7 @@ protected:
     OInterfaceMap                           m_aMap;
     ::cppu::OInterfaceContainerHelper       m_aContainerListeners;
 
-    ::com::sun::star::uno::Type             m_aElementType;
+    const ::com::sun::star::uno::Type       m_aElementType;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>     m_xServiceFactory;
 
@@ -122,6 +125,12 @@ public:
         ::osl::Mutex& _rMutex,
         const ::com::sun::star::uno::Type& _rElementType);
 
+    OInterfaceContainer( ::osl::Mutex& _rMutex, const OInterfaceContainer& _cloneSource );
+
+    // late constructor for cloning
+    void clonedFrom( const OInterfaceContainer& _cloneSource );
+
+protected:
     virtual ~OInterfaceContainer();
 
 public:
@@ -221,11 +230,17 @@ protected:
             ) throw(::com::sun::star::lang::IllegalArgumentException);
 
     // called after the object is inserted, but before the "real listeners" are notified
-    virtual void implInserted( const ElementDescription* /*_pElement*/ ) { }
+    virtual void implInserted( const ElementDescription* _pElement );
     // called after the object is removed, but before the "real listeners" are notified
-    virtual void implRemoved(const InterfaceRef& /*_rxObject*/) { }
-    // called after an object was replaced, but before the "real listeners" are notified
-    virtual void implReplaced( const InterfaceRef& /*_rxReplacedObject*/, const ElementDescription* /*_pElement*/ ) { }
+    virtual void implRemoved(const InterfaceRef& _rxObject);
+
+    /** called after an object was replaced. The default implementation notifies our listeners, after releasing
+        the instance lock.
+    */
+    virtual void impl_replacedElement(
+                    const ::com::sun::star::container::ContainerEvent& _rEvent,
+                    ::osl::ClearableMutexGuard& _rInstanceLock
+                );
 
     void SAL_CALL writeEvents(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOutStream);
     void SAL_CALL readEvents(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxInStream);
@@ -267,6 +282,8 @@ private:
         efVersionSO6x
     };
     void    transformEvents( const EventFormat _eTargetFormat );
+
+    void    impl_createEventAttacher_nothrow();
 };
 
 //==================================================================
@@ -275,9 +292,9 @@ private:
 typedef ::cppu::ImplHelper1< ::com::sun::star::form::XFormComponent> OFormComponents_BASE;
 typedef ::cppu::OComponentHelper FormComponentsBase;
     // else MSVC kills itself on some statements
-class OFormComponents   : public FormComponentsBase,
-                          public OInterfaceContainer,
-                          public OFormComponents_BASE
+class OFormComponents   :public FormComponentsBase
+                        ,public OInterfaceContainer
+                        ,public OFormComponents_BASE
 {
 protected:
     ::osl::Mutex                m_aMutex;
@@ -285,6 +302,7 @@ protected:
 
 public:
     OFormComponents(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
+    OFormComponents( const OFormComponents& _cloneSource );
     virtual ~OFormComponents();
 
     DECLARE_UNO3_AGG_DEFAULTS(OFormComponents, FormComponentsBase);

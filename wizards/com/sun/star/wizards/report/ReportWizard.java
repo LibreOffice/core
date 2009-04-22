@@ -473,15 +473,18 @@ public class ReportWizard extends WizardDialog implements XTextListener, XComple
         // CurReportDocument.getDoc().xProgressBar.setValue(30);
         CurDBCommandFieldSelection = new CommandFieldSelection(this, CurReportDocument.getRecordParser(), 100, slblFields, slblSelFields, slblTables, true, 34330);
         CurDBCommandFieldSelection.addFieldSelectionListener(new FieldSelectionListener());
-        insertLabel("lblBinaryFields",
-                new String[]
-                {
-                    "Height", "Label", "PositionX", "PositionY", "Step", "Width"
-                },
-                new Object[]
-                {
-                    new Integer(16), sShowBinaryFields, new Integer(95), new Integer(162), new Integer(1), new Integer(210)
-                });
+        if ( !isReportBuilderInstalled() )
+        {
+            insertLabel("lblBinaryFields",
+                    new String[]
+                    {
+                        "Height", "Label", "PositionX", "PositionY", "Step", "Width"
+                    },
+                    new Object[]
+                    {
+                        new Integer(16), sShowBinaryFields, new Integer(95), new Integer(162), new Integer(1), new Integer(210)
+                    });
+        }
         // CurReportDocument.getDoc().xProgressBar.setValue(40);
         CurTitlesComponent = new TitlesComponent(this, SOTITLEPAGE, 97, 37, 210, 7, slblColumnNames, slblColumnTitles, 34381);
         CurTitlesComponent.addTextListener(this);

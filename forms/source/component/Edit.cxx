@@ -519,7 +519,8 @@ void OEditModel::writeAggregate( const Reference< XObjectOutputStream >& _rxOutS
     // but for compatibility, we need to use an "old" aggregate for writing and reading
 
     Reference< XPropertySet > xFakedAggregate(
-        getORB()->createInstance( VCL_CONTROLMODEL_EDIT ), UNO_QUERY
+        getContext().createComponent( (rtl::OUString)VCL_CONTROLMODEL_EDIT ),
+        UNO_QUERY
     );
     OSL_ENSURE( xFakedAggregate.is(), "OEditModel::writeAggregate: could not create an old EditControlModel!" );
     if ( !xFakedAggregate.is() )
@@ -540,7 +541,8 @@ void OEditModel::readAggregate( const Reference< XObjectInputStream >& _rxInStre
     // but for compatibility, we need to use an "old" aggregate for writing and reading
 
     Reference< XPropertySet > xFakedAggregate(
-        getORB()->createInstance( VCL_CONTROLMODEL_EDIT ), UNO_QUERY
+        getContext().createComponent( (rtl::OUString)VCL_CONTROLMODEL_EDIT ),
+        UNO_QUERY
     );
     Reference< XPersistObject > xFakedPersist( xFakedAggregate, UNO_QUERY );
     OSL_ENSURE( xFakedPersist.is(), "OEditModel::readAggregate: no XPersistObject, or no faked aggregate at all!" );

@@ -30,34 +30,34 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_forms.hxx"
-#include "InterfaceContainer.hxx"
-#include <cppuhelper/queryinterface.hxx>
-#include <comphelper/eventattachermgr.hxx>
-#include <comphelper/types.hxx>
-#include <comphelper/enumhelper.hxx>
-#include <comphelper/property.hxx>
-#include <comphelper/container.hxx>
-#include <comphelper/sequence.hxx>
 
-#ifndef _FRM_PROPERTY_HRC_
-#include "property.hrc"
-#endif
-#include "services.hxx"
-#ifndef _FRM_RESOURCE_HRC_
 #include "frm_resource.hrc"
-#endif
 #include "frm_resource.hxx"
+#include "InterfaceContainer.hxx"
+#include "property.hrc"
+#include "services.hxx"
+
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/io/XMarkableStream.hpp>
-#include <com/sun/star/io/WrongFormatException.hpp>
 #include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/io/WrongFormatException.hpp>
+#include <com/sun/star/io/XMarkableStream.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/util/XCloneable.hpp>
+
+#include <comphelper/container.hxx>
+#include <comphelper/enumhelper.hxx>
+#include <comphelper/eventattachermgr.hxx>
+#include <comphelper/property.hxx>
+#include <comphelper/sequence.hxx>
+#include <comphelper/types.hxx>
+#include <cppuhelper/exc_hlp.hxx>
+#include <cppuhelper/queryinterface.hxx>
+#include <rtl/logfile.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <algorithm>
 #include <memory>
-#include <rtl/logfile.hxx>
 
 //.........................................................................
 namespace frm
@@ -71,6 +71,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::form;
+using namespace ::com::sun::star::util;
 
 namespace
 {
@@ -102,15 +103,56 @@ OInterfaceContainer::OInterfaceContainer(
                 const Reference<XMultiServiceFactory>& _rxFactory,
                 ::osl::Mutex& _rMutex,
                 const Type& _rElementType)
-        :m_rMutex(_rMutex)
-        ,m_aContainerListeners(_rMutex)
-        ,m_aElementType(_rElementType)
-        ,m_xServiceFactory(_rxFactory)
+    :OInterfaceContainer_BASE()
+    ,m_rMutex(_rMutex)
+    ,m_aContainerListeners(_rMutex)
+    ,m_aElementType(_rElementType)
+    ,m_xServiceFactory(_rxFactory)
+{
+    impl_createEventAttacher_nothrow();
+}
+
+//------------------------------------------------------------------------------
+OInterfaceContainer::OInterfaceContainer( ::osl::Mutex& _rMutex, const OInterfaceContainer& _cloneSource )
+    :OInterfaceContainer_BASE()
+    ,m_rMutex( _rMutex )
+    ,m_aContainerListeners( _rMutex )
+    ,m_aElementType( _cloneSource.m_aElementType )
+    ,m_xServiceFactory( _cloneSource.m_xServiceFactory )
+{
+    impl_createEventAttacher_nothrow();
+}
+
+//------------------------------------------------------------------------------
+void OInterfaceContainer::clonedFrom( const OInterfaceContainer& _cloneSource )
 {
     try
     {
-        m_xEventAttacher = ::comphelper::createEventAttacherManager(m_xServiceFactory);
-        OSL_ENSURE( m_xEventAttacher.is(), "OInterfaceContainer::OInterfaceContainer: no event attacher manager!" );
+        const Reference< XIndexAccess > xSourceHierarchy( const_cast< OInterfaceContainer* >( &_cloneSource ) );
+        const sal_Int32 nCount = xSourceHierarchy->getCount();
+        for ( sal_Int32 i=0; i<nCount; ++i )
+        {
+            Reference< XCloneable > xCloneable( xSourceHierarchy->getByIndex( i ), UNO_QUERY_THROW );
+            Reference< XInterface > xClone( xCloneable->createClone() );
+            insertByIndex( i, makeAny( xClone ) );
+        }
+    }
+    catch( const Exception& )
+    {
+        throw WrappedTargetException(
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Could not clone the given interface hierarchy." ) ),
+            static_cast< XIndexContainer* >( const_cast< OInterfaceContainer* >( &_cloneSource ) ),
+            ::cppu::getCaughtException()
+        );
+    }
+}
+
+//------------------------------------------------------------------------------
+void OInterfaceContainer::impl_createEventAttacher_nothrow()
+{
+    try
+    {
+        m_xEventAttacher.set( ::comphelper::createEventAttacherManager( m_xServiceFactory ), UNO_SET_THROW );
     }
     catch( const Exception& )
     {
@@ -118,7 +160,10 @@ OInterfaceContainer::OInterfaceContainer(
     }
 }
 
-OInterfaceContainer::~OInterfaceContainer() {}
+//------------------------------------------------------------------------------
+OInterfaceContainer::~OInterfaceContainer()
+{
+}
 
 //------------------------------------------------------------------------------
 void OInterfaceContainer::disposing()
@@ -783,6 +828,25 @@ void OInterfaceContainer::removeElementsNoEvents(sal_Int32 nIndex)
         xChild->setParent(InterfaceRef ());
 }
 
+//------------------------------------------------------------------------------
+void OInterfaceContainer::implInserted( const ElementDescription* /*_pElement*/ )
+{
+    // not inrerested in
+}
+
+//------------------------------------------------------------------------------
+void OInterfaceContainer::implRemoved( const InterfaceRef& /*_rxObject*/ )
+{
+    // not inrerested in
+}
+
+//------------------------------------------------------------------------------
+void OInterfaceContainer::impl_replacedElement( const ContainerEvent& _rEvent, ::osl::ClearableMutexGuard& _rInstanceLock )
+{
+    _rInstanceLock.clear();
+    m_aContainerListeners.notifyEach( &XContainerListener::elementReplaced, _rEvent );
+}
+
 // XIndexContainer
 //------------------------------------------------------------------------------
 void SAL_CALL OInterfaceContainer::insertByIndex( sal_Int32 _nIndex, const Any& _rElement ) throw(IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException)
@@ -856,17 +920,13 @@ void OInterfaceContainer::implReplaceByIndex( const sal_Int32 _nIndex, const Any
         m_xEventAttacher->attach( _nIndex, aElementMetaData.get()->xInterface, makeAny( aElementMetaData.get()->xPropertySet ) );
     }
 
-    implReplaced( xOldElement, aElementMetaData.get() );
+    ContainerEvent aReplaceEvent;
+    aReplaceEvent.Source   = static_cast< XContainer* >( this );
+    aReplaceEvent.Accessor <<= _nIndex;
+    aReplaceEvent.Element  = aElementMetaData.get()->xInterface->queryInterface( m_aElementType );
+    aReplaceEvent.ReplacedElement = xOldElement->queryInterface( m_aElementType );
 
-    // benachrichtigen
-    ContainerEvent aEvt;
-    aEvt.Source   = static_cast<XContainer*>(this);
-    aEvt.Accessor <<= _nIndex;
-    aEvt.Element  = aElementMetaData.get()->aElementTypeInterface;
-    aEvt.ReplacedElement = xOldElement->queryInterface( m_aElementType );
-
-    _rClearBeforeNotify.clear();
-    m_aContainerListeners.notifyEach( &XContainerListener::elementReplaced, aEvt );
+    impl_replacedElement( aReplaceEvent, _rClearBeforeNotify );
 }
 
 //------------------------------------------------------------------------------
@@ -1124,8 +1184,17 @@ Sequence<Type> SAL_CALL OFormComponents::getTypes() throw(RuntimeException)
 
 //------------------------------------------------------------------------------
 OFormComponents::OFormComponents(const Reference<XMultiServiceFactory>& _rxFactory)
-                  :FormComponentsBase(m_aMutex)
-                  ,OInterfaceContainer(_rxFactory, m_aMutex, ::getCppuType(static_cast<Reference<XFormComponent>*>(NULL)))
+    :FormComponentsBase( m_aMutex )
+    ,OInterfaceContainer( _rxFactory, m_aMutex, XFormComponent::static_type() )
+    ,OFormComponents_BASE()
+{
+}
+
+//------------------------------------------------------------------------------
+OFormComponents::OFormComponents( const OFormComponents& _cloneSource )
+    :FormComponentsBase( m_aMutex )
+    ,OInterfaceContainer( m_aMutex, _cloneSource )
+    ,OFormComponents_BASE()
 {
 }
 

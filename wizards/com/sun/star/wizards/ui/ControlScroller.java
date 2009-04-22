@@ -120,7 +120,7 @@ public abstract class ControlScroller
         iStartPosY = iCompPosY + SORELFIRSTPOSY;
         int ScrollHeight = iCompHeight - 2;
         nlineincrement = 1;
-        sIncSuffix = com.sun.star.wizards.common.Desktop.getIncrementSuffix(CurUnoDialog.xDlgNameAccess, "imgBackground");
+        sIncSuffix = com.sun.star.wizards.common.Desktop.getIncrementSuffix(CurUnoDialog.getDlgNameAccess(), "imgBackground");
         oImgControl = CurUnoDialog.insertControlModel("com.sun.star.awt.UnoControlImageControlModel", "imgBackground" + sIncSuffix,
                 new String[]
                 {
@@ -236,7 +236,7 @@ public abstract class ControlScroller
         PropertyValue[] valueProps = (PropertyValue[]) scrollfields.get(guiRow + nscrollvalue);
         for (int n = 0; n < nameProps.length; n++)
         {
-            if (CurUnoDialog.xDlgNameAccess.hasByName(nameProps[n].Name))
+            if (CurUnoDialog.getDlgNameAccess().hasByName(nameProps[n].Name))
             {
                 setControlData(nameProps[n].Name, valueProps[n].Value);
             }
@@ -418,7 +418,7 @@ public abstract class ControlScroller
 
     protected PropertyValue fieldInfo(PropertyValue valueProp, PropertyValue nameProp)
     {
-        if (CurUnoDialog.xDlgNameAccess.hasByName(nameProp.Name))
+        if (CurUnoDialog.getDlgNameAccess().hasByName(nameProp.Name))
         {
             valueProp.Value = getControlData(nameProp.Name);
         }

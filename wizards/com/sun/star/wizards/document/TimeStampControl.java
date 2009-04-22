@@ -69,7 +69,7 @@ public class TimeStampControl extends DatabaseControl
         oResource = _oResource;
 //      xGroupShape = xShape;
         oDateControl = new DatabaseControl(oFormHandler, _xFormName, _curFieldName, DataType.DATE, aPoint);
-        int nDBHeight = oDateControl.getDBHeight();
+        int nDBHeight = oDateControl.getControlHeight();
         nDateWidth = oDateControl.getPreferredWidth();
         oDateControl.setSize(new Size(nDateWidth, nDBHeight));
         Point aTimePoint = new Point(aPoint.X + 10 + nDateWidth, aPoint.Y);

@@ -31,15 +31,16 @@ package com.sun.star.wizards.form;
 
 import com.sun.star.awt.Point;
 import com.sun.star.awt.Size;
-import com.sun.star.beans.UnknownPropertyException;
+// import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.container.XNameContainer;
-import com.sun.star.lang.IllegalArgumentException;
-import com.sun.star.lang.WrappedTargetException;
+// import com.sun.star.lang.IllegalArgumentException;
+// import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdbc.DataType;
 import com.sun.star.task.XStatusIndicator;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Exception;
+import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.Resource;
 import com.sun.star.wizards.db.*;
 import com.sun.star.wizards.document.Control;
@@ -54,11 +55,11 @@ public class FormControlArranger
     XNameContainer xFormName;
     XMultiServiceFactory xMSF;
     public DatabaseControl[] DBControlList = null;
-    public Control[] LabelControlList = null;
+    private Control[] LabelControlList = null;
     private XStatusIndicator xProgressBar;
     private FieldColumn[] FieldColumns;
     DatabaseControl curDBControl;
-    Control curLabelControl;
+    // Control curLabelControl;
     int icurArrangement;
     boolean bIsFirstRun;
     boolean bIsVeryFirstRun;
@@ -122,13 +123,18 @@ public class FormControlArranger
         NBorderType = new Short(_nBorderType);
     }
 
+    public Control[] getLabelControlList()
+    {
+        return LabelControlList;
+    }
+
     private int getCheckBoxDiffHeight(int LastIndex)
     {
         if ((LastIndex < DBControlList.length))
         {
             if (DBControlList[LastIndex].getControlType() == FormHandler.SOCHECKBOX)
             {
-                return (int) ((oFormHandler.getDBRefHeight() - DBControlList[LastIndex].getDBHeight()) / 2);
+                return (int) ((oFormHandler.getControlReferenceHeight() - DBControlList[LastIndex].getControlHeight()) / 2);
             }
         }
         return 0;
@@ -277,7 +283,7 @@ public class FormControlArranger
         {
             int nControlBaseWidth = 0;
             curDBControl = this.DBControlList[i];
-            curLabelControl = this.LabelControlList[i];
+            Control curLabelControl = this.LabelControlList[i];
             if (i != StartIndex)
             {
                 curLabelControl.setPosition(new Point(iLocTCPosX, curLabelControl.getPosition().Y));
@@ -380,12 +386,19 @@ public class FormControlArranger
             xProgressBar.start("", FieldColumns.length);
             for (int i = 0; i < FieldColumns.length; i++)
             {
-                insertLabel(i, _iAlign);
-                insertDBControl(i);
-                bIsVeryFirstRun = false;
-                DBControlList[i].setPropertyValue("LabelControl", curLabelControl.xPropertySet);
-                resetPosSizes(i);
-                xProgressBar.setValue(i + 1);
+                try
+                {
+                    insertLabel(i, _iAlign);
+                    insertDBControl(i);
+                    bIsVeryFirstRun = false;
+                    DBControlList[i].setPropertyValue("LabelControl", LabelControlList[i].xPropertySet);
+                    resetPosSizes(i);
+                    xProgressBar.setValue(i + 1);
+                }
+                catch (RuntimeException e)
+                {
+                    int dummy = 0;
+                }
             }
             xProgressBar.end();
             bControlsareCreated = true;
@@ -523,7 +536,7 @@ public class FormControlArranger
         nXTCPos = cXOffset;
         nTCWidth = 2000;
         nDBWidth = 2000;
-        nDBHeight = oFormHandler.getDBRefHeight();
+        nDBHeight = oFormHandler.getControlReferenceHeight();
         nTCHeight = oFormHandler.getLabelHeight();
         iReduceWidth = 0;
         if (icurArrangement == FormWizard.SOCOLUMNARLEFT)
@@ -560,7 +573,8 @@ public class FormControlArranger
             {
                 Point aPoint = new Point(nXTCPos, nYTCPos);
                 Size aSize = new Size(nTCWidth, nTCHeight);
-                this.LabelControlList[i] = new Control(oFormHandler, xFormName, FormHandler.SOLABEL, FieldColumns[i].m_sFieldName, aPoint, aSize);
+                final String sFieldName = FieldColumns[i].m_sFieldName;
+                this.LabelControlList[i] = new Control(oFormHandler, xFormName, FormHandler.SOLABEL, sFieldName, aPoint, aSize);
                 if (bIsVeryFirstRun)
                 {
                     if (icurArrangement == FormWizard.SOCOLUMNARTOP)
@@ -568,9 +582,10 @@ public class FormControlArranger
                         nYDBPos = nYTCPos + nTCHeight;
                     }
                 }
-                nTCWidth = LabelControlList[i].getPreferredWidth(FieldColumns[i].getFieldTitle());
+                String sTitle = FieldColumns[i].getFieldTitle();
+                nTCWidth = LabelControlList[i].getPreferredWidth(sTitle);
             }
-            curLabelControl = LabelControlList[i];
+            Control curLabelControl = LabelControlList[i];
             if (icurArrangement == FormWizard.SOCOLUMNARLEFT)
             {
                 // Note This If Sequence must be called before retrieving the outer Points
@@ -613,6 +628,9 @@ public class FormControlArranger
     {
         try
         {
+            String sFieldName = FieldColumns[i].m_sFieldName;
+            int nFieldType = FieldColumns[i].FieldType;
+
             Point aPoint = new Point(nXDBPos, nYDBPos);
             if (bControlsareCreated)
             {
@@ -620,34 +638,40 @@ public class FormControlArranger
             }
             else
             {
-                if (FieldColumns[i].FieldType == DataType.TIMESTAMP)
+                if (nFieldType == DataType.TIMESTAMP)
                 {
-                    DBControlList[i] = new TimeStampControl(new Resource(xMSF, "FormWizard", "dbw"), oFormHandler, xFormName, FieldColumns[i].m_sFieldName, aPoint);
+                    DBControlList[i] = new TimeStampControl(new Resource(xMSF, "FormWizard", "dbw"), oFormHandler, xFormName, sFieldName, aPoint);
                 }
                 else
                 {
-                    DBControlList[i] = new DatabaseControl(oFormHandler, xFormName, FieldColumns[i].m_sFieldName, FieldColumns[i].FieldType, aPoint);
+                    DBControlList[i] = new DatabaseControl(oFormHandler, xFormName, sFieldName, nFieldType, aPoint);
                     if (DBControlList[i].getControlType() == FormHandler.SOCHECKBOX)
                     {
+                        // Checkboxes have no Label near by
                         DBControlList[i].setPropertyValue("Label", "");
                     }
                 }
             }
-            this.curDBControl = DBControlList[i];
-            nDBHeight = curDBControl.getDBHeight();
-            nDBWidth = curDBControl.getDBWidth();
-            if (FieldColumns[i].FieldType != DataType.TIMESTAMP)
+            DatabaseControl aDBControl = DBControlList[i];
+            nDBHeight = aDBControl.getControlHeight();
+            nDBWidth = aDBControl.getControlWidth();
+            if (nFieldType != DataType.TIMESTAMP)
             {
-                curDBControl.setSize(new Size(nDBWidth, nDBHeight));
+                aDBControl.setSize(new Size(nDBWidth, nDBHeight));
             }
-            if (curDBControl.getControlType() == FormHandler.SOCHECKBOX)
+            if (aDBControl.getControlType() == FormHandler.SOCHECKBOX)
             {
-                nYDBPos = nYDBPos + /*(int)*/ ((oFormHandler.getDBRefHeight() - nDBHeight) / 2);
+                nYDBPos = nYDBPos + /*(int)*/ ((oFormHandler.getControlReferenceHeight() - nDBHeight) / 2);
                 aPoint = new Point(nXDBPos, nYDBPos);
-                curDBControl.setPosition(aPoint);
+                aDBControl.setPosition(aPoint);
+            }
+            if (nFieldType == DataType.LONGVARCHAR) /* memo */
+            {
+                LabelControlList[i].setPropertyValue("MultiLine", Boolean.TRUE);
+                // Helper.setUnoPropertyValue(LabelControlList[i], "MultiLine", Boolean.TRUE);
             }
             checkOuterPoints(nXDBPos, nDBWidth, nYDBPos, nDBHeight, true);
-            curDBControl.setPropertyValue("Border", NBorderType);
+            aDBControl.setPropertyValue("Border", NBorderType);
         }
         catch (Exception e)
         {

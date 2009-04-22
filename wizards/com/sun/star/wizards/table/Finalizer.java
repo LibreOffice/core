@@ -148,7 +148,7 @@ public class Finalizer
                                     },
                                     new Object[]
                                     {
-                                        Boolean.TRUE, new Integer(12), "HID:41244", new Short("7"), new Integer(nListBoxPosX), new Integer(62), IFINALSTEP, sCatalogNames, new Short(curtabindex++), new Integer(80)
+                                        Boolean.TRUE, new Integer(12), "HID:41244", new Short(UnoDialog.getListBoxLineCount()), new Integer(nListBoxPosX), new Integer(62), IFINALSTEP, sCatalogNames, new Short(curtabindex++), new Integer(80)
                                     });
                             int isel = JavaTools.FieldInList(sCatalogNames, sCatalog);
                             if (isel < 0)
@@ -203,7 +203,7 @@ public class Finalizer
                                     },
                                     new Object[]
                                     {
-                                        Boolean.TRUE, new Integer(12), "HID:41245", new Short("7"), new Integer(nListBoxPosX), new Integer(62), IFINALSTEP, sSchemaNames, new Short(curtabindex++), new Integer(80)
+                                        Boolean.TRUE, new Integer(12), "HID:41245", new Short(UnoDialog.getListBoxLineCount()), new Integer(nListBoxPosX), new Integer(62), IFINALSTEP, sSchemaNames, new Short(curtabindex++), new Integer(80)
                                     });
                             int isel = JavaTools.FieldInList(sSchemaNames, sSchema);
                             if (isel < 0)
@@ -321,7 +321,7 @@ public class Finalizer
     {
         if (txtTableName.getText().equals(""))
         {
-            String ssuffix = Desktop.getIncrementSuffix(curtabledescriptor.xTableNames, getComposedTableName(_tablename));
+            String ssuffix = Desktop.getIncrementSuffix(curtabledescriptor.getTableNamesAsNameAccess(), getComposedTableName(_tablename));
             txtTableName.setText(_tablename + ssuffix);
             setCompletionFlag();
         }

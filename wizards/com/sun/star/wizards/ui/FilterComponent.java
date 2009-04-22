@@ -56,12 +56,13 @@ public class FilterComponent
 {
 
     private Integer IStep;
-    private int iStartPosX;
-    private int iStartPosY;
+    // private int iStartPosX;
+    // private int iStartPosY;
     // int Count;
     private int RowCount;
     // private int FilterCount;
     private static String[] sLogicOperators;
+    private static String[] sBooleanValues;
     // private /* public */ String[] FieldNames;
     private XRadioButton optMatchAll;
     private XRadioButton optMatchAny;
@@ -77,9 +78,6 @@ public class FilterComponent
     private ControlRow[] oControlRows;
     // private Vector FilterNames;
     private String sDuplicateCondition;
-    final int SOLSTFIELDNAME = 3;
-    final int SOLSTOPERATOR = 4;
-    final int SOTXTVALUE = 5;
     final int SOOPTORMODE = 100;
     final int SOOPTANDMODE = 101;
     QueryMetaData oQueryMetaData;
@@ -113,6 +111,14 @@ public class FilterComponent
     {
         SO_FIRSTTEXTFIELD, SO_SECONDTEXTFIELD, SO_THIRDTEXTFIELD, SO_FOURTHTEXTFIELD
     };
+    final int SO_FIRSTBOOLFIELDNAME = 256 + 1;
+    final int SO_SECONDBOOLFIELDNAME = 256 + 2;
+    final int SO_THIRDBOOLFIELDNAME = 256 + 3;
+    final int SO_FOURTHBOOLFIELDNAME = 256 + 4;
+    int SO_BOOLEANLIST[] = {
+        SO_FIRSTBOOLFIELDNAME, SO_SECONDBOOLFIELDNAME, SO_THIRDBOOLFIELDNAME, SO_FOURTHBOOLFIELDNAME
+    };
+
     final int SO_OPTQUERYMODE = 5;
     int SOI_MATCHALL = 0;
     int SOI_MATCHANY = 1;
@@ -127,7 +133,7 @@ public class FilterComponent
             try
             {
                 int iKey = CurUnoDialog.getControlKey(EventObject.Source, CurUnoDialog.ControlList);
-                String scontrolname = "";
+                String sControlName = "";
                 switch (iKey)
                 {
                     //              case SOOPTQUERYMODE:
@@ -136,31 +142,55 @@ public class FilterComponent
                     case SO_SECONDFIELDNAME:
                     case SO_THIRDFIELDNAME:
                     case SO_FOURTHFIELDNAME:
-                        scontrolname = getControlName(EventObject.Source);
-                        String scontrolnameSuffix = sIncSuffix + "_" + scontrolname.substring(scontrolname.length() - 1, scontrolname.length());
-                        XListBox xCurFieldListBox = (XListBox) UnoRuntime.queryInterface(XListBox.class, CurUnoDialog.xDlgContainer.getControl(scontrolname));
+                        sControlName = getControlName(EventObject.Source);
+                        String sControlNameSuffix = sIncSuffix + "_" + getIndexNumber(sControlName);
+                        XListBox xCurFieldListBox = (XListBox) UnoRuntime.queryInterface(XListBox.class, CurUnoDialog.xDlgContainer.getControl(sControlName));
                         String CurDisplayFieldName = xCurFieldListBox.getSelectedItem();
                         FieldColumn CurFieldColumn = new FieldColumn(oQueryMetaData, CurDisplayFieldName);
-                        XControl xValueControl = CurUnoDialog.xDlgContainer.getControl("txtValue" + scontrolnameSuffix);
-                        XInterface xValueModel = (XInterface) UnoDialog.getModel(xValueControl);
-                        Helper.setUnoPropertyValue(xValueModel, "TreatAsNumber", new Boolean(CurFieldColumn.bIsNumberFormat));
-                        final NumberFormatter aNumberFormatter = oQueryMetaData.getNumberFormatter();
-                        aNumberFormatter.setNumberFormat(xValueModel, CurFieldColumn.DBFormatKey, aNumberFormatter);
+
+                        String sControlNameTextValue = "txtValue" + sControlNameSuffix;
+//                        String sControlNameBooleanList = "lstBoolean" + sControlNameSuffix;
+//                        if (aFieldColumn.FieldType == DataType.BOOLEAN)
+//                        {
+//                            // scheint aufgrund eines Fehlers in Toolkit nicht zu funktionieren
+//                            CurUnoDialog.setControlVisible(sControlNameTextValue, false);
+//                            CurUnoDialog.setControlVisible(sControlNameBooleanList, true);
+//                        }
+//                        else
+//                        {
+//                            CurUnoDialog.setControlVisible(sControlNameTextValue, true);
+//                            CurUnoDialog.setControlVisible(sControlNameBooleanList, false);
+
+                            XControl xValueControl = CurUnoDialog.xDlgContainer.getControl(sControlNameTextValue);
+                            XInterface xValueModel = (XInterface) UnoDialog.getModel(xValueControl);
+                            Helper.setUnoPropertyValue(xValueModel, "TreatAsNumber", new Boolean(CurFieldColumn.bIsNumberFormat));
+                            final NumberFormatter aNumberFormatter = oQueryMetaData.getNumberFormatter();
+                            aNumberFormatter.setNumberFormat(xValueModel, CurFieldColumn.DBFormatKey, aNumberFormatter);
+//                         }
+
                         break;
                     case SO_FIRSTCONDITION:
                     case SO_SECONDCONDITION:
                     case SO_THIRDCONDITION:
                     case SO_FOURTHCONDITION:
-                        scontrolname = getControlName(EventObject.Source);
+                        sControlName = getControlName(EventObject.Source);
                         break;
                     case SOOPTORMODE:
                     case SOOPTANDMODE:
                         // getfilterstate();
                         return;
+
+                case SO_FIRSTBOOLFIELDNAME:
+                case SO_SECONDBOOLFIELDNAME:
+                case SO_THIRDBOOLFIELDNAME:
+                case SO_FOURTHBOOLFIELDNAME:
+                        sControlName = getControlName(EventObject.Source);
+                    break;
+
                     default:
                         break;
                 }
-                togglefollowingControlRow(scontrolname);
+                togglefollowingControlRow(sControlName);
             }
             catch (Exception exception)
             {
@@ -217,13 +247,25 @@ public class FilterComponent
         }
     }
 
+    public static String getIndexNumber(String _sStr)
+        {
+            String sLastNumber = _sStr.substring(_sStr.length() - 1, _sStr.length());
+            return sLastNumber;
+        }
+
+    /**
+     * Enable the next ControlRow if the Condition is complete in the current line
+     *
+     * @param _scurName every control name ends with something like _1, _2, _3 this is the index number
+     *        we try to interpret to check which line we currently use. (number - 1)
+     */
     private void togglefollowingControlRow(String _scurName)
     {
         // String sNameSuffix = sIncSuffix + "_" + _scurName.substring(_scurName.length() - 1, _scurName.length());
-        int Index = Integer.valueOf(_scurName.substring(_scurName.length() - 1, _scurName.length())).intValue();
+        int Index = Integer.valueOf(getIndexNumber(_scurName)).intValue();
         if (Index < oControlRows.length)
         {
-            boolean bValue = oControlRows[Index - 1].isComplete();
+            boolean bValue = oControlRows[Index - 1].isConditionComplete();
             oControlRows[Index].setEnabled(bValue);
         }
     }
@@ -246,80 +288,84 @@ public class FilterComponent
 
     public PropertyValue[][] getFilterConditions()
     {
-        ControlRow CurControlRow;
-        Object curValue;
+        // ControlRow CurControlRow;
         // getfilterstate();
-        int filtercount = getFilterCount();
-        if (filtercount > 0)
+        int nFilterCount = getFilterCount();
+        if (nFilterCount > 0)
         {
             if (this.getfilterstate() == this.SOI_MATCHALL)
             {
-                filterconditions = new PropertyValue[1][filtercount];
+                filterconditions = new PropertyValue[1][nFilterCount];
             }
             else
             {
-                filterconditions = new PropertyValue[filtercount][1];
+                filterconditions = new PropertyValue[nFilterCount][1];
             }
             int a = 0;
             for (int i = 0; i < RowCount; i++)
             {
-                CurControlRow = oControlRows[i];
+                ControlRow CurControlRow = oControlRows[i];
                 if (CurControlRow.isEnabled())
                 {
-                    if (CurControlRow.isComplete())
+                    if (CurControlRow.isConditionComplete())
                     {
-                        String curFieldName = CurControlRow.getSelectedFieldName();
-                        int curOperator = (int) CurControlRow.getSelectedOperator() + 1;
-                        FieldColumn CurFieldColumn = oQueryMetaData.getFieldColumnByDisplayName(curFieldName);
-                        if (CurFieldColumn.StandardFormatKey == oQueryMetaData.getNumberFormatter().getTextFormatKey())
+                        Object aValue;
+                        String sFieldName = CurControlRow.getSelectedFieldName();
+                        int nOperator = (int) CurControlRow.getSelectedOperator();
+                        FieldColumn aFieldColumn = oQueryMetaData.getFieldColumnByDisplayName(sFieldName);
+                        if (aFieldColumn.StandardFormatKey == oQueryMetaData.getNumberFormatter().getTextFormatKey())
                         {
-                            curValue = "'" + CurControlRow.getValue() + "'";
+                            aValue = "'" + CurControlRow.getValue() + "'";
                         }
 //// TODO the following code is bound to be deprecated as soon as the query composer is able to handle date/time values as numbers
-                        else if ((CurFieldColumn.StandardFormatKey == oQueryMetaData.getNumberFormatter().getDateFormatKey()) ||
-                                (CurFieldColumn.StandardFormatKey == oQueryMetaData.getNumberFormatter().getDateTimeFormatKey()))
+                        else if ((aFieldColumn.StandardFormatKey == oQueryMetaData.getNumberFormatter().getDateFormatKey()) ||
+                                (aFieldColumn.StandardFormatKey == oQueryMetaData.getNumberFormatter().getDateTimeFormatKey()))
                         {
                             String sDate = CurControlRow.getDateTimeString(true);
-                            curValue = "{D '" + sDate + "' }";  // FormatsSupplier
+                            aValue = "{D '" + sDate + "' }";  // FormatsSupplier
                         }
-                        else if (CurFieldColumn.StandardFormatKey == oQueryMetaData.getNumberFormatter().getTimeFormatKey())
+                        else if (aFieldColumn.StandardFormatKey == oQueryMetaData.getNumberFormatter().getTimeFormatKey())
                         {
                             String sTime = CurControlRow.getDateTimeString(true);
-                            curValue = "'{T '" + sTime + "' }";
+                            aValue = "'{T '" + sTime + "' }";
                         }
                         else
                         {
-                            curValue = CurControlRow.getValue();
-                            switch (CurFieldColumn.FieldType)
+                            aValue = CurControlRow.getValue();
+                            // if void
+                            if (! AnyConverter.isVoid(aValue))
                             {
-                                case DataType.TINYINT:
-                                case DataType.BIGINT:
-                                case DataType.INTEGER:
-                                case DataType.SMALLINT:
-                                    curValue = String.valueOf(((Double) curValue).intValue());
-                                    break;
-                                case DataType.BIT:
-                                case DataType.BOOLEAN:
-                                    // curValue = CurControlRow.getText(); // wrong! (creates something like 'WAHR'/'FALSCH' if german locale is used.
+                                switch (aFieldColumn.FieldType)
+                                {
+                                    case DataType.TINYINT:
+                                    case DataType.BIGINT:
+                                    case DataType.INTEGER:
+                                    case DataType.SMALLINT:
+                                        aValue = String.valueOf(((Double) aValue).intValue());
+                                        break;
+                                    case DataType.BIT:
+                                    case DataType.BOOLEAN:
+                                        // curValue = CurControlRow.getText(); // wrong! (creates something like 'WAHR'/'FALSCH' if german locale is used.
 
-                                    // double dblvalue = ((Double) curValue).doubleValue();
-                                    //curValue = new Boolean(dblvalue == 1.0); // wrong! we need a string, not a boolean value
+                                        // double dblvalue = ((Double) curValue).doubleValue();
+                                        //curValue = new Boolean(dblvalue == 1.0); // wrong! we need a string, not a boolean value
 
-                                    // converts the '1.0'/'0.0' (EffectiveValue) to a 'boolean' String like 'true'/'false'
-                                    curValue = String.valueOf(((Double) curValue).intValue() == 1);
-                                    break;
-                                default:
-                                    curValue = String.valueOf(curValue);
-                                    break;
+                                        // converts the '1.0'/'0.0' (EffectiveValue) to a 'boolean' String like 'true'/'false'
+                                        aValue = String.valueOf(((Double) aValue).intValue() == 1);
+                                        break;
+                                    default:
+                                        aValue = String.valueOf(aValue);
+                                        break;
+                                }
                             }
                         }
 
-                        PropertyValue oPropertyValue = Properties.createProperty(curFieldName, curValue, curOperator);
+                        PropertyValue oPropertyValue = Properties.createProperty(sFieldName, aValue, nOperator);
                         if (getfilterstate()/*this.ifilterstate*/ == this.SOI_MATCHALL)
                         {
                             if (i == 0)
                             {
-                                filterconditions[0] = new PropertyValue[filtercount];
+                                filterconditions[0] = new PropertyValue[nFilterCount];
                             }
                             filterconditions[0][a] = oPropertyValue;
                         }
@@ -422,7 +468,7 @@ public class FilterComponent
         int a = 0;
         for (int i = 0; i < RowCount; i++)
         {
-            if (oControlRows[i].isEnabled() && oControlRows[i].isComplete())
+            if (oControlRows[i].isEnabled() && oControlRows[i].isConditionComplete())
             {
                 a++;
             }
@@ -456,44 +502,79 @@ public class FilterComponent
             this.RowCount = FilterCount;
             this.oQueryMetaData = _oQueryMetaData;
             boolean bEnabled;
-            sIncSuffix = com.sun.star.wizards.common.Desktop.getIncrementSuffix(CurUnoDialog.xDlgNameAccess, "optMatchAll");
-            iStartPosX = iPosX;
-            iStartPosY = iPosY;
+            sIncSuffix = com.sun.star.wizards.common.Desktop.getIncrementSuffix(CurUnoDialog.getDlgNameAccess(), "optMatchAll");
+            // iStartPosX = iPosX;
+            // iStartPosY = iPosY;
 
             String soptMatchAll = CurUnoDialog.m_oResource.getResText(BaseID + 9);
             String soptMatchAny = CurUnoDialog.m_oResource.getResText(BaseID + 10);
             slblFieldNames = CurUnoDialog.m_oResource.getResText(BaseID + 17);
             slblOperators = CurUnoDialog.m_oResource.getResText(BaseID + 24);
             slblValue = CurUnoDialog.m_oResource.getResText(BaseID + 25);
-            sLogicOperators = CurUnoDialog.m_oResource.getResArray(BaseID + 26, 7);
+            sLogicOperators = CurUnoDialog.m_oResource.getResArray(BaseID + 26, 10 /* 7 */); // =, <>, <, >, <=, >=, like, !like, is null, !is null
+            sBooleanValues = CurUnoDialog.m_oResource.getResArray(BaseID + 36, 2); // true, false
 
             sDuplicateCondition = CurUnoDialog.m_oResource.getResText(BaseID + 89);
 
+            // create Radiobuttons
+            // * match all
+            // * match one
             optMatchAll = CurUnoDialog.insertRadioButton("optMatchAll" + sIncSuffix, SOOPTANDMODE, new ItemListenerImpl(),
                     new String[]
                     {
-                        "Height", "HelpURL", "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"
+                        "Height",
+                        "HelpURL",
+                        "Label",
+                        "PositionX",
+                        "PositionY",
+                        "State",
+                        "Step",
+                        "TabIndex",
+                        "Width"
                     },
                     new Object[]
                     {
-                        new Integer(9), "HID:" + curHelpID++, soptMatchAll, new Integer(iPosX), new Integer(iStartPosY), new Short((short) 1), IStep, new Short(curtabindex++), new Integer(203)
+                        new Integer(9),
+                        "HID:" + curHelpID++,
+                        soptMatchAll,
+                        new Integer(iPosX),
+                        new Integer(iPosY),
+                        new Short((short) 1),
+                        IStep,
+                        new Short(curtabindex++),
+                        new Integer(203)
                     });
             optMatchAny = CurUnoDialog.insertRadioButton("optMatchAny" + sIncSuffix, SOOPTORMODE, new ItemListenerImpl(),
                     new String[]
                     {
-                        "Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                        "Height",
+                        "HelpURL",
+                        "Label",
+                        "PositionX",
+                        "PositionY",
+                        "Step",
+                        "TabIndex",
+                        "Width"
                     },
                     new Object[]
                     {
-                        new Integer(9), "HID:" + curHelpID++, soptMatchAny, new Integer(iPosX), new Integer(iStartPosY + 12), IStep, new Short(curtabindex++), new Integer(203)
+                        new Integer(9),
+                        "HID:" + curHelpID++,
+                        soptMatchAny,
+                        new Integer(iPosX),
+                        new Integer(iPosY + 12),
+                        IStep,
+                        new Short(curtabindex++),
+                        new Integer(203)
                     });
             getfilterstate();
+
             oControlRows = new ControlRow[FilterCount];
             for (int i = 0; i < FilterCount; i++)
             {
                 bEnabled = (i == 0);
-                oControlRows[i] = new ControlRow(iStartPosY + 20, i, bEnabled, (this.curHelpID + (i * 3)));
-                iStartPosY += 43;
+                oControlRows[i] = new ControlRow(iPosX, iPosY + 20, i, bEnabled, (this.curHelpID + (i * 3)));
+                iPosY += 43;
             }
         }
         catch (Exception exception)
@@ -504,42 +585,51 @@ public class FilterComponent
 
     public void initialize(PropertyValue[][] _filterconditions, String[] _fieldnames)
     {
-        for (int i = 0; i < RowCount; i++)
+        // String aFieldNamesWithAdditionalEmpty[] = new String[_fieldnames.length + 1];
+        // for (int i = 0; i < _fieldnames.length; i++)
+        // {
+        //     aFieldNamesWithAdditionalEmpty[i] = _fieldnames[i];
+        // }
+        // aFieldNamesWithAdditionalEmpty[_fieldnames.length] = "";
+
+        int i;
+        for (i = 0; i < RowCount; i++)
         {
             oControlRows[i].setFieldNames(_fieldnames);
+            // oControlRows[i].setFieldNames(aFieldNamesWithAdditionalEmpty);
         }
         this.filterconditions = _filterconditions;
         PropertyValue[] curfilterconditions;
-        int a;
+        // int a;
         if (_filterconditions.length == 1)
         {
             curfilterconditions = filterconditions[0];
-            for (a = 0; a < curfilterconditions.length; a++)
+            for (i = 0; i < curfilterconditions.length; i++)
             {
-                oControlRows[a].setCondition(filterconditions[0][a]);
+                oControlRows[i].setCondition(filterconditions[0][i]);
             }
         }
         else
         {
-            for (a = 0; a < filterconditions.length; a++)
+            for (i = 0; i < filterconditions.length; i++)
             {
-                oControlRows[a].setCondition(filterconditions[a][0]);
+                oControlRows[i].setCondition(filterconditions[i][0]);
             }
         }
-        while (a < oControlRows.length)
+        while (i < oControlRows.length)
         {
-            oControlRows[a].settovoid();
+            oControlRows[i].settovoid();
             boolean bdoenable;
-            if (a > 0)
+            if (i > 0)
             {
-                bdoenable = oControlRows[a - 1].isComplete();
+                bdoenable = oControlRows[i - 1].isConditionComplete();
             }
             else
             {
                 bdoenable = true;
             }
-            oControlRows[a].setEnabled(bdoenable);
-            a++;
+            oControlRows[i].setEnabled(bdoenable);
+            i++;
         }
     }
 
@@ -557,73 +647,216 @@ public class FilterComponent
         }
     }
 
+    // -------------------------------------------------------------------------
+    //
+    //
+    // -------------------------------------------------------------------------
+
     class ControlRow
     {
+        private final static int SOLSTFIELDNAME = 3;
+        private final static int SOLSTOPERATOR = 4;
+        private final static int SOTXTVALUE = 5;
 
         protected XInterface[] ControlElements = new XInterface[6];
-        private boolean bEnabled;
+        private boolean m_bEnabled;
         String[] FieldNames;
 
-        protected ControlRow(int iCompPosY, int Index, boolean _bEnabled, int _firstRowHelpID)
+        protected ControlRow(int iCompPosX, int iCompPosY, int Index, boolean _bEnabled, int _firstRowHelpID)
         {
+            int nFieldWidth = 71;
+            int nOperatorWidth = 70;
+            int nValueWidth = 44;
+
+            int nPosX1 = iCompPosX + 10;
+            int nPosX2 = iCompPosX + 10 + nFieldWidth + 6; // 87
+            int nPosX3 = iCompPosX + 10 + nFieldWidth + 6 + nOperatorWidth + 6;
+
+
             try
             {
                 String sCompSuffix = sIncSuffix + "_" + String.valueOf(Index + 1);
-                this.bEnabled = _bEnabled;
+                m_bEnabled = _bEnabled;
+
+                // Label Field
                 ControlElements[0] = (XInterface) CurUnoDialog.insertLabel("lblFieldNames" + sCompSuffix,
                         new String[]
                         {
-                            "Enabled", "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                            "Enabled",
+                            "Height",
+                            "Label",
+                            "PositionX",
+                            "PositionY",
+                            "Step",
+                            "TabIndex",
+                            "Width"
                         },
                         new Object[]
                         {
-                            new Boolean(bEnabled), new Integer(9), slblFieldNames, new Integer(iStartPosX + 10), new Integer(iCompPosY + 13), IStep, new Short(curtabindex++), new Integer(55)
+                            new Boolean(isEnabled()),
+                            new Integer(9),
+                            slblFieldNames,
+                            new Integer(nPosX1),
+                            new Integer(iCompPosY + 13),
+                            IStep,
+                            new Short(curtabindex++),
+                            new Integer(nFieldWidth)
                         });
+
+                // Label Operator
                 ControlElements[1] = (XInterface) CurUnoDialog.insertLabel("lblOperators" + sCompSuffix,
                         new String[]
                         {
-                            "Enabled", "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                            "Enabled",
+                            "Height",
+                            "Label",
+                            "PositionX",
+                            "PositionY",
+                            "Step",
+                            "TabIndex",
+                            "Width"
                         },
                         new Object[]
                         {
-                            new Boolean(bEnabled), new Integer(9), slblOperators, new Integer(iStartPosX + 87), new Integer(iCompPosY + 13), IStep, new Short(curtabindex++), new Integer(52)
+                            new Boolean(isEnabled()),
+                            new Integer(9),
+                            slblOperators,
+                            new Integer(nPosX2),
+                            new Integer(iCompPosY + 13),
+                            IStep,
+                            new Short(curtabindex++),
+                            new Integer(nOperatorWidth)
                         });
+
+                // Label Value
                 ControlElements[2] = (XInterface) CurUnoDialog.insertLabel("lblValue" + sCompSuffix,
                         new String[]
                         {
-                            "Enabled", "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                            "Enabled",
+                            "Height",
+                            "Label",
+                            "PositionX",
+                            "PositionY",
+                            "Step",
+                            "TabIndex",
+                            "Width"
                         },
                         new Object[]
                         {
-                            new Boolean(bEnabled), new Integer(9), slblValue, new Integer(iStartPosX + 162), new Integer(iCompPosY + 13), IStep, new Short(curtabindex++), new Integer(44)
+                            new Boolean(isEnabled()),
+                            new Integer(9),
+                            slblValue,
+                            new Integer(nPosX3),
+                            new Integer(iCompPosY + 13),
+                            IStep,
+                            new Short(curtabindex++),
+                            new Integer(nValueWidth)
                         });
-                ControlElements[3] = (XInterface) CurUnoDialog.insertListBox("lstFieldName" + sCompSuffix, SO_FIELDNAMELIST[Index], null, new ItemListenerImpl(),
+
+                // Listbox Fields
+                ControlElements[SOLSTFIELDNAME] = (XInterface) CurUnoDialog.insertListBox("lstFieldName" + sCompSuffix, SO_FIELDNAMELIST[Index], null, new ItemListenerImpl(),
                         new String[]
                         {
-                            "Enabled", "Dropdown", "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                            "Enabled",
+                            "Dropdown",
+                            "Height",
+                            "HelpURL",
+                            "PositionX",
+                            "PositionY",
+                            "Step",
+                            "TabIndex",
+                            "Width"
                         },
                         new Object[]
                         {
-                            new Boolean(bEnabled), Boolean.TRUE, new Integer(13), "HID:" + _firstRowHelpID++, new Integer(iStartPosX + 10), new Integer(iCompPosY + 23), IStep, new Short(curtabindex++), new Integer(71)
+                            new Boolean(isEnabled()),
+                            Boolean.TRUE,
+                            new Integer(13),
+                            "HID:" + _firstRowHelpID++,
+                            new Integer(nPosX1),
+                            new Integer(iCompPosY + 23),
+                            IStep,
+                            new Short(curtabindex++),
+                            new Integer(nFieldWidth)
                         });
-                ControlElements[4] = (XInterface) CurUnoDialog.insertListBox("lstOperator" + sCompSuffix, SO_CONDITIONLIST[Index], null, new ItemListenerImpl(),
+
+                // Listbox Operators
+                ControlElements[SOLSTOPERATOR] = (XInterface) CurUnoDialog.insertListBox("lstOperator" + sCompSuffix, SO_CONDITIONLIST[Index], null, new ItemListenerImpl(),
                         new String[]
                         {
-                            "Enabled", "Dropdown", "Height", "HelpURL", "LineCount", "PositionX", "PositionY", "Step", "StringItemList", "TabIndex", "Width"
+                            "Enabled",
+                            "Dropdown",
+                            "Height",
+                            "HelpURL",
+                            "LineCount",
+                            "PositionX",
+                            "PositionY",
+                            "Step",
+                            "StringItemList",
+                            "TabIndex",
+                            "Width"
                         },
                         new Object[]
                         {
-                            new Boolean(bEnabled), Boolean.TRUE, new Integer(13), "HID:" + _firstRowHelpID++, new Short((short) 7), new Integer(iStartPosX + 87), new Integer(iCompPosY + 23), IStep, sLogicOperators, new Short(curtabindex++), new Integer(70)
+                            new Boolean(isEnabled()),
+                            Boolean.TRUE,
+                            new Integer(13),
+                            "HID:" + _firstRowHelpID++,
+                            new Short((short) sLogicOperators.length /* 7 */ ),
+                            new Integer(nPosX2),
+                            new Integer(iCompPosY + 23),
+                            IStep,
+                            sLogicOperators,
+                            new Short(curtabindex++),
+                            new Integer(nOperatorWidth)
                         });
-                ControlElements[5] = (XInterface) CurUnoDialog.insertFormattedField("txtValue" + sCompSuffix, SO_TEXTFIELDLIST[Index], new TextListenerImpl(),
+                ControlElements[SOTXTVALUE] = (XInterface) CurUnoDialog.insertFormattedField("txtValue" + sCompSuffix, SO_TEXTFIELDLIST[Index], new TextListenerImpl(),
                         new String[]
                         {
-                            "Enabled", "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                            "Enabled",
+                            "Height",
+                            "HelpURL",
+                            "PositionX",
+                            "PositionY",
+                            "Step",
+                            "TabIndex",
+                            "Width"
                         },
                         new Object[]
                         {
-                            new Boolean(bEnabled), new Integer(13), "HID:" + _firstRowHelpID++, new Integer(iStartPosX + 162), new Integer(iCompPosY + 23), IStep, new Short(curtabindex++), new Integer(44)
+                            new Boolean(isEnabled()),
+                            new Integer(13),
+                            "HID:" + _firstRowHelpID++,
+                            new Integer(nPosX3),
+                            new Integer(iCompPosY + 23),
+                            IStep,
+                            new Short(curtabindex++),
+                            new Integer(nValueWidth)
                         });
+
+//                ControlElements[6] = CurUnoDialog.insertListBox((new StringBuilder()).append("lstBoolean").append(sCompSuffix).toString(), SO_BOOLEANLIST[Index], null, new ItemListenerImpl(), new String[] {
+//                    "Enabled",
+//                    "Dropdown",
+//                    "Height",
+//                    "HelpURL",
+//                    "LineCount",
+//                    "PositionX", "PositionY",
+//                    "Step",
+//                    "StringItemList",
+//                    "TabIndex",
+//                    "Width"
+//                }, new Object[] {
+//                    new Boolean(bEnabled),
+//                    Boolean.TRUE,
+//                    new Integer(13),
+//                    "HID:" + _firstRowHelpID++,
+//                    new Short((short) 2),
+//                    new Integer(nPosX3 + 44), new Integer(iCompPosY + 23),
+//                    IStep,
+//                    FilterComponent.sBooleanValues,
+//                    new Short(curtabindex++),
+//                    new Integer(nValueWidth)
+//                });
             }
             catch (Exception exception)
             {
@@ -631,15 +864,35 @@ public class FilterComponent
             }
         }
 
-        boolean isComplete()
+        /**
+         * @returns true if the current condition is complete, all needed fields are filled with values.
+         * So we can enable the next.
+         */
+        boolean isConditionComplete()
         {
             try
             {
                 short[] SelFields = (short[]) AnyConverter.toArray(Helper.getUnoPropertyValue(UnoDialog.getModel(ControlElements[SOLSTFIELDNAME]), "SelectedItems"));
                 if (SelFields.length > 0)
                 {
-                    short[] SelOperator = (short[]) AnyConverter.toArray(Helper.getUnoPropertyValue(UnoDialog.getModel(ControlElements[SOLSTOPERATOR]), "SelectedItems"));
-                    if (SelOperator.length > 0)
+                    int nSelOperator = getSelectedOperator();
+                    // short[] SelOperator = (short[]) AnyConverter.toArray(Helper.getUnoPropertyValue(UnoDialog.getModel(ControlElements[SOLSTOPERATOR]), "SelectedItems"));
+                    if (nSelOperator == com.sun.star.sdb.SQLFilterOperator.SQLNULL ||   /* is null */
+                        nSelOperator == com.sun.star.sdb.SQLFilterOperator.NOT_SQLNULL) /* is not null */
+                    {
+                        // disable value field
+                        Helper.setUnoPropertyValue(UnoDialog.getModel(ControlElements[2]), "Enabled", Boolean.FALSE);
+                        Helper.setUnoPropertyValue(UnoDialog.getModel(ControlElements[SOTXTVALUE]), "Enabled", Boolean.FALSE);
+
+                        return true;
+                    }
+                    else
+                    {
+                        // enable value field
+                        Helper.setUnoPropertyValue(UnoDialog.getModel(ControlElements[2]), "Enabled", Boolean.TRUE);
+                        Helper.setUnoPropertyValue(UnoDialog.getModel(ControlElements[SOTXTVALUE]), "Enabled", Boolean.TRUE);
+                    }
+                    if (nSelOperator != -1)
                     {
                         Object oValue = Helper.getUnoPropertyValue(UnoDialog.getModel(ControlElements[SOTXTVALUE]), "EffectiveValue");
                         if (!AnyConverter.isVoid(oValue))
@@ -647,6 +900,13 @@ public class FilterComponent
                             String sValue = (String.valueOf(oValue));
                             return (!sValue.equals(""));
                         }
+//                        String sBoolValue="";
+//                        short aSelectedBoolValue[] = (short[])Helper.getUnoPropertyValue(UnoDialog.getModel(ControlElements[6]), "SelectedItems");
+//                        if (aSelectedBoolValue.length > 0)
+//                        {
+//                            sBoolValue = String.valueOf(aSelectedBoolValue[0] == 1);
+//                            return !sBoolValue.equals("");
+//                        }
                     }
                 }
                 return false;
@@ -658,7 +918,7 @@ public class FilterComponent
             }
         }
 
-        public void fieldnamechanged(ItemEvent EventObject)
+        private void fieldnamechanged(ItemEvent EventObject)
         {
             int i = 0;
         }
@@ -718,28 +978,27 @@ public class FilterComponent
 
         protected boolean isEnabled()
         {
-            return bEnabled;
+            return m_bEnabled;
         }
 
-        protected void settovoid()
+        private void settovoid()
         {
             CurUnoDialog.deselectListBox(ControlElements[SOLSTFIELDNAME]);
             CurUnoDialog.deselectListBox(ControlElements[SOLSTOPERATOR]);
             Helper.setUnoPropertyValue(UnoDialog.getModel(ControlElements[SOTXTVALUE]), "EffectiveValue", com.sun.star.uno.Any.VOID);
         }
 
-        protected void setEnabled(boolean _bEnabled)
+        private void setEnabled(boolean _bEnabled)
         {
+            // enable all Controls Fieldname, operator, value
             for (int i = 0; i < ControlElements.length; i++)
             {
                 Helper.setUnoPropertyValue(UnoDialog.getModel(ControlElements[i]), "Enabled", new Boolean(_bEnabled));
             }
-            bEnabled = _bEnabled;
-            if (bEnabled)
+            m_bEnabled = _bEnabled;
+            if (isEnabled())
             {
-                short[] iselected = new short[]
-                {
-                };
+                short[] iselected = new short[] {};
                 try
                 {
                     iselected = (short[]) AnyConverter.toArray(Helper.getUnoPropertyValue(UnoDialog.getModel(ControlElements[SOLSTOPERATOR]), "SelectedItems"));
@@ -750,13 +1009,10 @@ public class FilterComponent
                 }
                 if ((iselected.length) == 0)
                 {
-                    Helper.setUnoPropertyValue(UnoDialog.getModel(ControlElements[SOLSTOPERATOR]), "SelectedItems", new short[]
-                            {
-                                0
-                            });
+                    Helper.setUnoPropertyValue(UnoDialog.getModel(ControlElements[SOLSTOPERATOR]), "SelectedItems", new short[] { 0 });
                 }
             }
-            else if (!isComplete())
+            else if (!isConditionComplete())
             {
                 CurUnoDialog.deselectListBox(ControlElements[SOLSTOPERATOR]);
             }
@@ -777,12 +1033,37 @@ public class FilterComponent
         }
 
         // TODO: check if it is really useful to match the indices of the listbox the API constants
+        // =, <>, <, >, <=, >=, like, !like, is null, !is null
         protected short getSelectedOperator()
         {
             try
             {
                 short[] SelFields = (short[]) AnyConverter.toArray(Helper.getUnoPropertyValue(UnoDialog.getModel(ControlElements[SOLSTOPERATOR]), "SelectedItems"));
-                return SelFields[0];
+                switch (SelFields[0])
+                {
+                case 0:
+                    return com.sun.star.sdb.SQLFilterOperator.EQUAL;
+                case 1:
+                    return com.sun.star.sdb.SQLFilterOperator.NOT_EQUAL;
+                case 2:
+                    return com.sun.star.sdb.SQLFilterOperator.LESS;
+                case 3:
+                    return com.sun.star.sdb.SQLFilterOperator.GREATER;
+                case 4:
+                    return com.sun.star.sdb.SQLFilterOperator.LESS_EQUAL;
+                case 5:
+                    return com.sun.star.sdb.SQLFilterOperator.GREATER_EQUAL;
+                case 6:
+                    return com.sun.star.sdb.SQLFilterOperator.LIKE;
+                case 7:
+                    return com.sun.star.sdb.SQLFilterOperator.NOT_LIKE;
+                case 8:
+                    return com.sun.star.sdb.SQLFilterOperator.SQLNULL;
+                case 9:
+                    return com.sun.star.sdb.SQLFilterOperator.NOT_SQLNULL;
+                default:
+                    return -1;
+                }
             }
             catch (Exception exception)
             {
@@ -833,7 +1114,8 @@ public class FilterComponent
             }
         }
     }
-}//  com.sun.star.sdb.SQLFilterOperator.EQUAL
+}
+//  com.sun.star.sdb.SQLFilterOperator.EQUAL
 //  com.sun.star.sdb.SQLFilterOperator.NOT_EQUAL
 //  com.sun.star.sdb.SQLFilterOperator.LESS
 //  com.sun.star.sdb.SQLFilterOperator.GREATER

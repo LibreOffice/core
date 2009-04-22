@@ -555,7 +555,7 @@ sal_Int32 OButtonControl::getModelUrlFeatureId( ) const
         // is it a feature URL?
         if ( isFormControllerURL( sUrl ) )
         {
-            OFormNavigationMapper aMapper( getORB() );
+            OFormNavigationMapper aMapper( m_aContext.getLegacyServiceFactory() );
             nFeatureId = aMapper.getFeatureId( sUrl );
         }
     }

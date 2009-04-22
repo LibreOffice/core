@@ -90,7 +90,7 @@ import com.sun.star.sdbcx.XTablesSupplier;
 public class DBMetaData
 {
 
-    public XNameAccess xTableNames;
+    private XNameAccess m_xTableNames;
     public XNameAccess xQueryNames;
     private XInteractionHandler oInteractionHandler;
     private XNameAccess xNameAccess;
@@ -104,16 +104,16 @@ public class DBMetaData
     private XWindowPeer xWindowPeer;
     public String[] DataSourceNames;
     public String[] CommandNames;
-    public String[] TableNames = new String[]
+    private String[] TableNames = new String[]
     {
     };
-    public String[] QueryNames = new String[]
+    private String[] QueryNames = new String[]
     {
     };
     public java.util.Vector CommandObjects = new Vector(1);
-    public int[][] WidthList;
-    public int[] NumericTypes;
-    public int[] BinaryTypes;
+    protected int[][] WidthList;
+    protected int[] NumericTypes;
+    protected int[] BinaryTypes;
     public Locale aLocale;
     public int[] CommandTypes;
     public String DataSourceName;
@@ -231,8 +231,8 @@ public class DBMetaData
 
     public boolean hasTableByName(String _stablename)
     {
-        getTableNames();
-        return xTableNames.hasByName(_stablename);
+        // getTableNames();
+        return getTableNamesAsNameAccess().hasByName(_stablename);
     }
 
     public void setTableByName(String _tableName)
@@ -291,17 +291,17 @@ public class DBMetaData
                 Object oCommand;
                 this.Name = _CommandName;
                 this.CommandType = _CommandType;
-                if (xTableNames == null)
-                {
-                    setCommandNames();
-                }
+                // if (getTableNamesAsNameAccess() == null)
+                // {
+                //     initCommandNames();
+                // }
                 if (CommandType == com.sun.star.sdb.CommandType.TABLE)
                 {
-                    oCommand = xTableNames.getByName(Name);
+                    oCommand = getTableNamesAsNameAccess().getByName(Name);
                 }
                 else
                 {
-                    oCommand = xQueryNames.getByName(Name);
+                    oCommand = getQueryNamesAsNameAccess().getByName(Name);
                 }
                 XColumnsSupplier xCommandCols = (XColumnsSupplier) UnoRuntime.queryInterface(XColumnsSupplier.class, oCommand);
                 xPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, oCommand);
@@ -331,13 +331,36 @@ public class DBMetaData
         return bHasEscapeProcessing;
     }
 
-    public void setCommandNames()
+    // public void initCommandNames()
+    // {
+        // getTableNames();
+    // }
+
+    public XNameAccess getQueryNamesAsNameAccess()
     {
-        getTableNames();
         XQueriesSupplier xDBQueries = (XQueriesSupplier) UnoRuntime.queryInterface(XQueriesSupplier.class, DBConnection);
         xQueryNames = (XNameAccess) xDBQueries.getQueries();
-        QueryNames = xQueryNames.getElementNames();
+        return xQueryNames;
+    }
 
+    public XNameAccess getTableNamesAsNameAccess()
+    {
+        XTablesSupplier xDBTables = (XTablesSupplier) UnoRuntime.queryInterface(XTablesSupplier.class, DBConnection);
+        XNameAccess xTableNames = xDBTables.getTables();
+        return xTableNames;
+    }
+
+    public String[] getQueryNames()
+    {
+        if (QueryNames != null)
+        {
+            if (QueryNames.length > 0)
+            {
+                return QueryNames;
+            }
+        }
+        QueryNames = getQueryNamesAsNameAccess().getElementNames();
+        return QueryNames;
     }
 
     public String[] getTableNames()
@@ -349,9 +372,7 @@ public class DBMetaData
                 return TableNames;
             }
         }
-        XTablesSupplier xDBTables = (XTablesSupplier) UnoRuntime.queryInterface(XTablesSupplier.class, DBConnection);
-        xTableNames = (XNameAccess) xDBTables.getTables();
-        TableNames = (String[]) xTableNames.getElementNames();
+        TableNames = (String[]) getTableNamesAsNameAccess().getElementNames();
         return TableNames;
     }
 
@@ -1078,7 +1099,6 @@ public class DBMetaData
 
     public void finish()
     {
-        xTableNames = null;
         xQueryNames = null;
         oInteractionHandler = null;
         xNameAccess = null;

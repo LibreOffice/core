@@ -378,7 +378,7 @@ sal_Bool OImageControlModel::impl_updateStreamForURL_lck( const ::rtl::OUString&
 
     if ( ::svt::GraphicAccess::isSupportedURL( _rURL ) )
     {
-        xImageStream = ::svt::GraphicAccess::getImageXStream( getORB(), _rURL );
+        xImageStream = ::svt::GraphicAccess::getImageXStream( getContext().getLegacyServiceFactory(), _rURL );
     }
     else
     {
@@ -591,7 +591,7 @@ void OImageControlModel::doSetControlValue( const Any& _rValue )
 
 // OComponentHelper
 //------------------------------------------------------------------
-void OImageControlModel::disposing()
+void SAL_CALL OImageControlModel::disposing()
 {
     OBoundControlModel::disposing();
 
@@ -646,25 +646,16 @@ InterfaceRef SAL_CALL OImageControlControl_CreateInstance(const Reference<XMulti
 //------------------------------------------------------------------------------
 Sequence<Type> OImageControlControl::_getTypes()
 {
-    static Sequence<Type> aTypes;
-    if (!aTypes.getLength())
-    {
-        // my base class
-        Sequence<Type> aBaseClassTypes = OBoundControl::_getTypes();
-
-        Sequence<Type> aOwnTypes(1);
-        Type* pOwnTypes = aOwnTypes.getArray();
-        pOwnTypes[0] = getCppuType((Reference<XMouseListener>*)NULL);
-
-        aTypes = concatSequences(aBaseClassTypes, aOwnTypes);
-    }
-    return aTypes;
+    return concatSequences(
+        OBoundControl::_getTypes(),
+        OImageControlControl_Base::getTypes()
+    );
 }
 
 //------------------------------------------------------------------------------
 OImageControlControl::OImageControlControl(const Reference<XMultiServiceFactory>& _rxFactory)
     :OBoundControl(_rxFactory, VCL_CONTROL_IMAGECONTROL)
-    ,m_pImageIndicator( new OImageIndicator )
+    ,m_aModifyListeners( m_aMutex )
 {
     increment(m_refCount);
     {
@@ -677,14 +668,15 @@ OImageControlControl::OImageControlControl(const Reference<XMultiServiceFactory>
     decrement(m_refCount);
 }
 
-// UNO Anbindung
 //------------------------------------------------------------------------------
 Any SAL_CALL OImageControlControl::queryAggregation(const Type& _rType) throw (RuntimeException)
 {
-    Any aReturn = OBoundControl::queryAggregation(_rType);
-    if (!aReturn.hasValue())
-        aReturn = ::cppu::queryInterface(_rType
-            ,static_cast<XMouseListener*>(this)
+    Any aReturn = OBoundControl::queryAggregation( _rType );
+    if ( !aReturn.hasValue() )
+        aReturn = ::cppu::queryInterface(
+            _rType,
+            static_cast< XMouseListener* >( this ),
+            static_cast< XModifyBroadcaster* >( this )
         );
 
     return aReturn;
@@ -701,23 +693,31 @@ StringSequence  OImageControlControl::getSupportedServiceNames() throw()
     return aSupported;
 }
 
-//--------------------------------------------------------------------
-sal_Bool SAL_CALL OImageControlControl::setModel(const Reference<starawt::XControlModel>& _rxModel ) throw (RuntimeException)
+//------------------------------------------------------------------------------
+void SAL_CALL OImageControlControl::addModifyListener( const Reference< XModifyListener >& _Listener ) throw (RuntimeException)
 {
-    Reference< XImageProducer > xProducer( getModel(), UNO_QUERY );
-    if ( xProducer.is() )
-        xProducer->removeConsumer( m_pImageIndicator.getRef() );
+    m_aModifyListeners.addInterface( _Listener );
+}
 
-    sal_Bool bReturn = OBoundControl::setModel( _rxModel );
+//------------------------------------------------------------------------------
+void SAL_CALL OImageControlControl::removeModifyListener( const Reference< XModifyListener >& _Listener ) throw (RuntimeException)
+{
+    m_aModifyListeners.removeInterface( _Listener );
+}
 
-    xProducer = xProducer.query( getModel() );
-    if ( xProducer.is() )
-    {
-        m_pImageIndicator->reset();
-        xProducer->addConsumer( m_pImageIndicator.getRef() );
-    }
+//------------------------------------------------------------------------------
+void SAL_CALL OImageControlControl::disposing()
+{
+    EventObject aEvent( *this );
+    m_aModifyListeners.disposeAndClear( aEvent );
 
-    return bReturn;
+    OBoundControl::disposing();
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL OImageControlControl::disposing( const EventObject& _Event ) throw(RuntimeException)
+{
+    OBoundControl::disposing( _Event );
 }
 
 //------------------------------------------------------------------------------
@@ -744,11 +744,11 @@ void OImageControlControl::implClearGraphics( sal_Bool _bForce )
 }
 
 //------------------------------------------------------------------------------
-void OImageControlControl::implInsertGraphics()
+bool OImageControlControl::implInsertGraphics()
 {
     Reference< XPropertySet > xSet( getModel(), UNO_QUERY );
     if ( !xSet.is() )
-        return;
+        return false;
 
     ::rtl::OUString sTitle = FRM_RES_STRING(RID_STR_IMPORT_GRAPHIC);
     // build some arguments for the upcoming dialog
@@ -757,30 +757,26 @@ void OImageControlControl::implInsertGraphics()
         ::sfx2::FileDialogHelper aDialog( TemplateDescription::FILEOPEN_LINK_PREVIEW, SFXWB_GRAPHIC );
         aDialog.SetTitle( sTitle );
 
-        Reference< XFilePickerControlAccess > xController(aDialog.GetFilePicker(), UNO_QUERY);
-        DBG_ASSERT( xController.is(), "OImageControlControl::implInsertGraphics: invalid file picker!" );
-        if ( xController.is() )
+        Reference< XFilePickerControlAccess > xController( aDialog.GetFilePicker(), UNO_QUERY_THROW );
+        xController->setValue(ExtendedFilePickerElementIds::CHECKBOX_PREVIEW, 0, ::cppu::bool2any(sal_True));
+
+        Reference<XPropertySet> xBoundField;
+        if ( hasProperty( PROPERTY_BOUNDFIELD, xSet ) )
+            xSet->getPropertyValue( PROPERTY_BOUNDFIELD ) >>= xBoundField;
+        sal_Bool bHasField = xBoundField.is();
+
+        // if the control is bound to a DB field, then it's not possible to decide whether or not to link
+        xController->enableControl(ExtendedFilePickerElementIds::CHECKBOX_LINK, !bHasField );
+
+        // if the control is bound to a DB field, then linking of the image depends on the type of the field
+        sal_Bool bImageIsLinked = sal_True;
+        if ( bHasField )
         {
-            xController->setValue(ExtendedFilePickerElementIds::CHECKBOX_PREVIEW, 0, ::cppu::bool2any(sal_True));
-
-            Reference<XPropertySet> xBoundField;
-            if ( hasProperty( PROPERTY_BOUNDFIELD, xSet ) )
-                xSet->getPropertyValue( PROPERTY_BOUNDFIELD ) >>= xBoundField;
-            sal_Bool bHasField = xBoundField.is();
-
-            // if the control is bound to a DB field, then it's not possible to decide whether or not to link
-            xController->enableControl(ExtendedFilePickerElementIds::CHECKBOX_LINK, !bHasField );
-
-            // if the control is bound to a DB field, then linking of the image depends on the type of the field
-            sal_Bool bImageIsLinked = sal_True;
-            if ( bHasField )
-            {
-                sal_Int32 nFieldType = DataType::OTHER;
-                OSL_VERIFY( xBoundField->getPropertyValue( PROPERTY_FIELDTYPE ) >>= nFieldType );
-                bImageIsLinked = ( lcl_getImageStoreType( nFieldType ) == ImageStoreLink );
-            }
-            xController->setValue(ExtendedFilePickerElementIds::CHECKBOX_LINK, 0, makeAny( bImageIsLinked ) );
+            sal_Int32 nFieldType = DataType::OTHER;
+            OSL_VERIFY( xBoundField->getPropertyValue( PROPERTY_FIELDTYPE ) >>= nFieldType );
+            bImageIsLinked = ( lcl_getImageStoreType( nFieldType ) == ImageStoreLink );
         }
+        xController->setValue(ExtendedFilePickerElementIds::CHECKBOX_LINK, 0, makeAny( bImageIsLinked ) );
 
         if ( ERRCODE_NONE == aDialog.Execute() )
         {
@@ -802,12 +798,15 @@ void OImageControlControl::implInsertGraphics()
             }
             else
                 xSet->setPropertyValue( PROPERTY_IMAGE_URL, makeAny( ::rtl::OUString( aDialog.GetPath() ) ) );
+
+            return true;
         }
     }
     catch(Exception&)
     {
         DBG_ERROR("OImageControlControl::implInsertGraphics: caught an exception while attempting to execute the FilePicker!");
     }
+    return false;
 }
 
 //------------------------------------------------------------------------------
@@ -839,10 +838,11 @@ void OImageControlControl::mousePressed(const ::com::sun::star::awt::MouseEvent&
     if (e.Buttons != MouseButton::LEFT)
         return;
 
+    bool bModified = false;
     // is this a request for a context menu?
     if ( e.PopupTrigger )
     {
-        Reference< XPopupMenu > xMenu( m_xServiceFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.awt.PopupMenu" ) ), UNO_QUERY );
+        Reference< XPopupMenu > xMenu( m_aContext.createComponent( "com.sun.star.awt.PopupMenu" ), UNO_QUERY );
         DBG_ASSERT( xMenu.is(), "OImageControlControl::mousePressed: could not create a popup menu!" );
 
         Reference< XWindowPeer > xWindowPeer = getPeer();
@@ -878,10 +878,12 @@ void OImageControlControl::mousePressed(const ::com::sun::star::awt::MouseEvent&
             {
             case ID_OPEN_GRAPHICS:
                 implInsertGraphics();
+                bModified = true;
                 break;
 
             case ID_CLEAR_GRAPHICS:
                 implClearGraphics( sal_True );
+                bModified = true;
                 break;
             }
         }
@@ -916,8 +918,15 @@ void OImageControlControl::mousePressed(const ::com::sun::star::awt::MouseEvent&
             if (bReadOnly)
                 return;
 
-            implInsertGraphics();
+            if ( implInsertGraphics() )
+                bModified = true;
         }
+    }
+
+    if ( bModified )
+    {
+        EventObject aEvent( *this );
+        m_aModifyListeners.notifyEach( &XModifyListener::modified, aEvent );
     }
 }
 
@@ -934,62 +943,6 @@ void SAL_CALL OImageControlControl::mouseEntered(const awt::MouseEvent& /*e*/) t
 //------------------------------------------------------------------------------
 void SAL_CALL OImageControlControl::mouseExited(const awt::MouseEvent& /*e*/) throw ( RuntimeException )
 {
-}
-
-
-//==============================================================================
-//= OImageIndicator
-//==============================================================================
-DBG_NAME( OImageIndicator )
-//------------------------------------------------------------------------------
-OImageIndicator::OImageIndicator( )
-    :m_bIsProducing( sal_False )
-    ,m_bIsEmptyImage( sal_True )
-{
-    DBG_CTOR( OImageIndicator, NULL );
-}
-
-//------------------------------------------------------------------------------
-OImageIndicator::~OImageIndicator( )
-{
-    DBG_DTOR( OImageIndicator, NULL );
-}
-
-//--------------------------------------------------------------------
-void OImageIndicator::reset()
-{
-    OSL_ENSURE( !m_bIsProducing, "OImageIndicator::reset: sure you know what you're doing? The producer is currently producing!" );
-    m_bIsProducing = sal_True;
-}
-
-//--------------------------------------------------------------------
-void SAL_CALL OImageIndicator::init( sal_Int32 /*Width*/, sal_Int32 /*Height*/ ) throw (RuntimeException)
-{
-    m_bIsProducing = sal_True;
-    m_bIsEmptyImage = sal_True;
-}
-
-//--------------------------------------------------------------------
-void SAL_CALL OImageIndicator::setColorModel( sal_Int16 /*BitCount*/, const Sequence< sal_Int32 >& /*RGBAPal*/, sal_Int32 /*RedMask*/, sal_Int32 /*GreenMask*/, sal_Int32 /*BlueMask*/, sal_Int32 /*AlphaMask*/ ) throw (RuntimeException)
-{
-}
-
-//--------------------------------------------------------------------
-void SAL_CALL OImageIndicator::setPixelsByBytes( sal_Int32 /*nX*/, sal_Int32 /*nY*/, sal_Int32 /*nWidth*/, sal_Int32 /*nHeight*/, const Sequence< sal_Int8 >& /*aProducerData*/, sal_Int32 /*nOffset*/, sal_Int32 /*nScanSize*/ ) throw (RuntimeException)
-{
-    m_bIsEmptyImage = sal_False;
-}
-
-//--------------------------------------------------------------------
-void SAL_CALL OImageIndicator::setPixelsByLongs( sal_Int32 /*nX*/, sal_Int32 /*nY*/, sal_Int32 /*nWidth*/, sal_Int32 /*nHeight*/, const Sequence< sal_Int32 >& /*aProducerData*/, sal_Int32 /*nOffset*/, sal_Int32 /*nScanSize*/ ) throw (RuntimeException)
-{
-    m_bIsEmptyImage = sal_False;
-}
-
-//--------------------------------------------------------------------
-void SAL_CALL OImageIndicator::complete( sal_Int32 /*Status*/, const Reference< XImageProducer >& /*xProducer*/ ) throw (RuntimeException)
-{
-    m_bIsProducing = sal_False;
 }
 
 //.........................................................................

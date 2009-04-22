@@ -54,8 +54,8 @@ public class QuerySummary extends QueryMetaData
         super(_xMSF);
         this.oResource = _oResource;
         // this.xMSF = _xMSF;
-        sAnd = oResource.getResText(RID_QUERY + 33);
-        sOr = oResource.getResText(RID_QUERY + 34);
+        sAnd = oResource.getResText(RID_QUERY + 38);
+        sOr = oResource.getResText(RID_QUERY + 39);
         sSeparator = oResource.getResText(RID_QUERY + 91);
         sReturnChar = String.valueOf((char) 13) + String.valueOf((char) 13);
     }

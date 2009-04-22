@@ -290,7 +290,7 @@ public abstract class WebWizardDialog extends WizardDialog implements WebWizardC
                 },
                 new Object[]
                 {
-                    Boolean.TRUE, INTEGER_12, "HID:" + HID1_LST_SESSIONS, new Short((short) 7), "lstLoadSettings", new Integer(97), new Integer(165), INTEGERS[1], new Short(tabIndex++), new Integer(173)
+                    Boolean.TRUE, INTEGER_12, "HID:" + HID1_LST_SESSIONS, new Short((short) 14), "lstLoadSettings", new Integer(97), new Integer(165), INTEGERS[1], new Short(tabIndex++), new Integer(173)
                 });
         btnDelSession = insertButton("btnDelSession", BTNDELSESSION_ACTION_PERFORMED,
                 new String[]
@@ -372,7 +372,7 @@ public abstract class WebWizardDialog extends WizardDialog implements WebWizardC
                 },
                 new Object[]
                 {
-                    Boolean.TRUE, INTEGER_12, "HID:" + HID2_LST_DOC_EXPORT, new Short((short) 7), "lstDocTargetType", new Integer(235), new Integer(38), INTEGERS[2], new Short(tabIndex++), new Integer(89)
+                    Boolean.TRUE, INTEGER_12, "HID:" + HID2_LST_DOC_EXPORT, new Short((short) 14), "lstDocTargetType", new Integer(235), new Integer(38), INTEGERS[2], new Short(tabIndex++), new Integer(89)
                 });
 
 
@@ -561,7 +561,7 @@ public abstract class WebWizardDialog extends WizardDialog implements WebWizardC
                 },
                 new Object[]
                 {
-                    Boolean.TRUE, INTEGER_12, "HID:" + HID5_LST_STYLES, new Short((short) 7), "lstStyles", new Integer(179), new Integer(26), INTEGERS[5], new Short((short) 52), new Integer(145)
+                    Boolean.TRUE, INTEGER_12, "HID:" + HID5_LST_STYLES, new Short((short) 14), "lstStyles", new Integer(179), new Integer(26), INTEGERS[5], new Short((short) 52), new Integer(145)
                 });
 
         insertLabel("lblBackground", PROPNAMES_LBL,
@@ -876,7 +876,7 @@ public abstract class WebWizardDialog extends WizardDialog implements WebWizardC
                 },
                 new Object[]
                 {
-                    Boolean.TRUE, Boolean.TRUE, INTEGER_12, "HID:" + HID7_TXT_SAVE, new Short((short) 7), "txtSaveSettings", new Integer(179), new Integer(167), INTEGERS[7], new Short(tabIndex++), new Integer(145)
+                    Boolean.TRUE, Boolean.TRUE, INTEGER_12, "HID:" + HID7_TXT_SAVE, new Short((short) 14), "txtSaveSettings", new Integer(179), new Integer(167), INTEGERS[7], new Short(tabIndex++), new Integer(145)
                 });
 
     }

@@ -917,6 +917,7 @@ namespace pcr
         :OComboboxControl_Base( PropertyControlType::ComboBox, pParent, nWinStyle )
     {
         getTypedControlWindow()->SetDropDownLineCount( LB_DEFAULT_COUNT );
+        getTypedControlWindow()->SetSelectHdl( LINK( this, OComboboxControl, OnEntrySelected ) );
     }
 
     //------------------------------------------------------------------
@@ -966,6 +967,15 @@ namespace pcr
             *pIter = getTypedControlWindow()->GetEntry(i);
 
         return aRet;
+    }
+
+    //------------------------------------------------------------------
+    IMPL_LINK( OComboboxControl, OnEntrySelected, void*, /*_pNothing*/ )
+    {
+        if ( !getTypedControlWindow()->IsTravelSelect() )
+            // fire a commit
+            m_aImplControl.notifyModifiedValue();
+        return 0L;
     }
 
     //==================================================================

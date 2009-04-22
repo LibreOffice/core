@@ -54,7 +54,7 @@ public class CommandFieldSelection extends FieldSelection implements Comparator
     String sTableLabelName;
     String sQueryPrefix;
     String sTablePrefix;
-    short iSelPos = -1;
+    private short m_iSelPos = -1;
     short iOldSelPos = -1;
     boolean bpreselectCommand = true;
     boolean bgetQueries;
@@ -70,9 +70,9 @@ public class CommandFieldSelection extends FieldSelection implements Comparator
             short[] SelItems = (short[]) CurUnoDialog.getControlProperty(sTableListBoxName, "SelectedItems");
             if (SelItems.length > 0)
             {
-                iOldSelPos = iSelPos;
-                iSelPos = SelItems[0];
-                if ((iSelPos > -1) && (iSelPos != iOldSelPos))
+                iOldSelPos = m_iSelPos;
+                m_iSelPos = SelItems[0];
+                if ((m_iSelPos > -1) && (m_iSelPos != iOldSelPos))
                 {
                     if (!AppendMode)
                     {
@@ -154,9 +154,9 @@ public class CommandFieldSelection extends FieldSelection implements Comparator
                     },
                     new Object[]
                     {
-                        Boolean.TRUE, Boolean.FALSE, new Integer(12), "HID:" + (super.FirstHelpIndex - 1), new Short("7"), new Integer(95), new Integer(37), IStep, new Short((short) 4), getListboxWidth()
+                        Boolean.TRUE, Boolean.FALSE, new Integer(12), "HID:" + (super.FirstHelpIndex - 1), new Short(UnoDialog.getListBoxLineCount()), new Integer(95), new Integer(37), IStep, new Short((short) 4), getListboxWidth()
                     });
-            XWindow xTableListBoxWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, xTableListBox);
+            // XWindow xTableListBoxWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, xTableListBox);
             fillupCommandListBox();
         }
         catch (Exception exception)
@@ -261,11 +261,11 @@ public class CommandFieldSelection extends FieldSelection implements Comparator
             if (binitialize)
             {
                 CurDBMetaData.setCommandName(curCommandName);
-                if (CurDBMetaData.AllFieldNames != null)
+                if (CurDBMetaData.m_aAllFieldNames != null)
                 {
-                    if (CurDBMetaData.AllFieldNames.length > 0)
+                    if (CurDBMetaData.m_aAllFieldNames.length > 0)
                     {
-                        initialize(CurDBMetaData.AllFieldNames, AppendMode, CurDBMetaData.getMaxColumnsInSelect());
+                        initialize(CurDBMetaData.m_aAllFieldNames, AppendMode, CurDBMetaData.getMaxColumnsInSelect());
                         return;
                     }
                 }
@@ -288,21 +288,21 @@ public class CommandFieldSelection extends FieldSelection implements Comparator
         short[] iSelArray = new short[0];
         boolean bgetFields = false;
         String[] ContentList = new String[0];
-        CurDBMetaData.setCommandNames();
+        // CurDBMetaData.initCommandNames();
         if (bgetQueries)
         {
-            ContentList = new String[CurDBMetaData.TableNames.length + CurDBMetaData.QueryNames.length];
-            System.arraycopy(CurDBMetaData.QueryNames, 0, ContentList, CurDBMetaData.TableNames.length, CurDBMetaData.QueryNames.length);
-            ContentList = setPrefixinArray(ContentList, sQueryPrefix, CurDBMetaData.TableNames.length, CurDBMetaData.QueryNames.length);
+            ContentList = new String[CurDBMetaData.getTableNames().length + CurDBMetaData.getQueryNames().length];
+            System.arraycopy(CurDBMetaData.getQueryNames(), 0, ContentList, CurDBMetaData.getTableNames().length, CurDBMetaData.getQueryNames().length);
+            ContentList = setPrefixinArray(ContentList, sQueryPrefix, CurDBMetaData.getTableNames().length, CurDBMetaData.getQueryNames().length);
         }
         else
         {
-            ContentList = new String[CurDBMetaData.TableNames.length];
+            ContentList = new String[CurDBMetaData.getTableNames().length];
         }
-        System.arraycopy(CurDBMetaData.TableNames, 0, ContentList, 0, CurDBMetaData.TableNames.length);
+        System.arraycopy(CurDBMetaData.getTableNames(), 0, ContentList, 0, CurDBMetaData.getTableNames().length);
         if (bgetQueries)
         {
-            ContentList = setPrefixinArray(ContentList, sTablePrefix, 0, CurDBMetaData.TableNames.length);
+            ContentList = setPrefixinArray(ContentList, sTablePrefix, 0, CurDBMetaData.getTableNames().length);
         }
         java.util.Arrays.sort(ContentList, this);
         Helper.setUnoPropertyValue(UnoDialog.getModel(xTableListBox), "StringItemList", ContentList);
@@ -321,10 +321,7 @@ public class CommandFieldSelection extends FieldSelection implements Comparator
         else
         {
             emptyFieldsListBoxes();
-            iSelArray = new short[]
-                    {
-                        (short) iSelPos
-                    };
+            iSelArray = new short[] { (short) iSelPos };
         }
         Helper.setUnoPropertyValue(UnoDialog.getModel(xTableListBox), "SelectedItems", iSelArray);
         toggleCommandListBox(true);

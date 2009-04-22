@@ -348,7 +348,7 @@ public class FormWizard extends WizardDialog
         return ret;
     }
 
-    public boolean getFormResources()
+    private boolean getFormResources()
     {
         sMsgWizardName = super.m_oResource.getResText(UIConsts.RID_FORM);
         sShowBinaryFields = m_oResource.getResText(UIConsts.RID_FORM + 2);

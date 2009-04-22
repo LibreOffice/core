@@ -57,7 +57,7 @@ public class UnoDialog implements EventNames
     public XMultiServiceFactory MSFDialogModel;
     public XNameContainer xDlgNames;
     public XControlContainer xDlgContainer;
-    public XNameAccess xDlgNameAccess;
+    private XNameAccess m_xDlgNameAccess;
     public XControl xControl;
     public XDialog xDialog;
     public XReschedule xReschedule;
@@ -95,7 +95,7 @@ public class UnoDialog implements EventNames
             xPSetDlg = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xDialogModel);
             xDlgContainer = (XControlContainer) UnoRuntime.queryInterface(XControlContainer.class, xUnoDialog);
             xDlgNames = (XNameContainer) UnoRuntime.queryInterface(XNameContainer.class, xDialogModel);
-            xDlgNameAccess = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, xDialogModel);
+            // xDlgNameAccess = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, xDialogModel);
             xComponent = (XComponent) UnoRuntime.queryInterface(XComponent.class, xUnoDialog);
             xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, xUnoDialog);
 
@@ -141,17 +141,25 @@ public class UnoDialog implements EventNames
         return m_oPeerConfig;
     }
 
+    XNameAccess getDlgNameAccess()
+    {
+        if (m_xDlgNameAccess == null)
+        {
+            m_xDlgNameAccess = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, xDialogModel);
+        }
+        return m_xDlgNameAccess;
+    }
     public void setControlProperty(String ControlName, String PropertyName, Object PropertyValue)
     {
         try
         {
             if (PropertyValue != null)
             {
-                if (xDlgNameAccess.hasByName(ControlName) == false)
+                if (getDlgNameAccess().hasByName(ControlName) == false)
                 {
                     return;
                 }
-                Object xControlModel = xDlgNameAccess.getByName(ControlName);
+                Object xControlModel = getDlgNameAccess().getByName(ControlName);
                 XPropertySet xPSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xControlModel);
                 if (AnyConverter.isArray(PropertyValue))
                 {
@@ -182,11 +190,11 @@ public class UnoDialog implements EventNames
         {
             if (PropertyValues != null)
             {
-                if (xDlgNameAccess.hasByName(ControlName) == false)
+                if (getDlgNameAccess().hasByName(ControlName) == false)
                 {
                     return;
                 }
-                Object xControlModel = xDlgNameAccess.getByName(ControlName);
+                Object xControlModel = getDlgNameAccess().getByName(ControlName);
                 XMultiPropertySet xMultiPSet = (XMultiPropertySet) UnoRuntime.queryInterface(XMultiPropertySet.class, xControlModel);
                 xMultiPSet.setPropertyValues(PropertyNames, PropertyValues);
             }
@@ -201,7 +209,7 @@ public class UnoDialog implements EventNames
     {
         try
         {
-            Object xControlModel = xDlgNameAccess.getByName(ControlName);
+            Object xControlModel = getDlgNameAccess().getByName(ControlName);
             XPropertySet xPSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xControlModel);
             Object oPropValue = xPSet.getPropertyValue(PropertyName);
             //      if (AnyConverter.isArray(oPropValue))
@@ -220,7 +228,7 @@ public class UnoDialog implements EventNames
     {
         try
         {
-            Object xControlModel = xDlgNameAccess.getByName(ControlName);
+            Object xControlModel = getDlgNameAccess().getByName(ControlName);
             XPropertySet xPSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xControlModel);
             Property[] allProps = xPSet.getPropertySetInfo().getProperties();
             for (int i = 0; i < allProps.length; i++)
@@ -685,7 +693,7 @@ public class UnoDialog implements EventNames
      *
      * @param _xBasisListBox
      */
-    public void deselectListBox(XInterface _xBasisListBox)
+    public static void deselectListBox(XInterface _xBasisListBox)
     {
         Object oListBoxModel = getModel(_xBasisListBox);
         Object sList = Helper.getUnoPropertyValue(oListBoxModel, "StringItemList");
@@ -1127,5 +1135,10 @@ public class UnoDialog implements EventNames
         {
             return _surl;
         }
+    }
+
+    public static short getListBoxLineCount()
+    {
+        return (short)20;
     }
 }

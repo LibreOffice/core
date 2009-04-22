@@ -59,8 +59,7 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.XURLTransformer;
 import com.sun.star.wizards.common.Resource;
 import com.sun.star.wizards.db.FieldColumn;
-// import java.io.File;
-import java.io.File;
+//import java.io.File;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -182,6 +181,7 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
         aConnection.Value = _xConnection;
         args[1] = aConnection;
 
+
         XReportDefinition xReportDefinition = null;
         final XMultiServiceFactory xMSF = (XMultiServiceFactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, /* getRecordParser().getReportDocuments() */ _aDoc);
         try
@@ -195,7 +195,20 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
             aCommand.Name = "openDesign";
             final com.sun.star.ucb.OpenCommandArgument2 aOpenCommand = new com.sun.star.ucb.OpenCommandArgument2();
             aOpenCommand.Mode = com.sun.star.ucb.OpenMode.DOCUMENT;
-            aCommand.Argument = aOpenCommand;
+
+            PropertyValue args2[] = new PropertyValue[2];
+
+            PropertyValue aPropOpenCommand = new PropertyValue();
+            aPropOpenCommand.Name = "";
+            aPropOpenCommand.Value = aOpenCommand;
+            args2[0] = aPropOpenCommand;
+
+            PropertyValue aAddField = new PropertyValue();
+            aAddField.Name = "Mode";
+            aAddField.Value = "remote";
+            args2[1] = aAddField;
+
+            aCommand.Argument = args2;
             // com.sun.star.usb.XCommandEnvironment xEnv = new com.sun.star.ucb.XCommandEnvironment();
             final Object aObj2 = xProcessor.execute(aCommand, xProcessor.createCommandIdentifier(), null);
             xReportDefinition = (XReportDefinition) UnoRuntime.queryInterface(XReportDefinition.class, aObj2);

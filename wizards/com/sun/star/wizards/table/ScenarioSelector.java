@@ -29,24 +29,24 @@
  ************************************************************************/
 package com.sun.star.wizards.table;
 
-import java.util.Hashtable;
+// import java.util.Hashtable;
 import java.util.Vector;
 
 import com.sun.star.awt.ItemEvent;
-import com.sun.star.awt.XButton;
+// import com.sun.star.awt.XButton;
 import com.sun.star.awt.XFixedText;
 import com.sun.star.awt.XItemListener;
 import com.sun.star.awt.XListBox;
 import com.sun.star.awt.XRadioButton;
 import com.sun.star.beans.PropertyValue;
-import com.sun.star.beans.XPropertySet;
+// import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.lang.EventObject;
 import com.sun.star.lang.Locale;
 import com.sun.star.lang.XMultiServiceFactory;
 //import com.sun.star.uno.Exception;
-import com.sun.star.sdbc.SQLException;
-import com.sun.star.uno.UnoRuntime;
+// import com.sun.star.sdbc.SQLException;
+// import com.sun.star.uno.UnoRuntime;
 import com.sun.star.wizards.common.Configuration;
 import com.sun.star.wizards.common.Desktop;
 import com.sun.star.wizards.common.Helper;
@@ -55,7 +55,7 @@ import com.sun.star.wizards.db.TableDescriptor;
 import com.sun.star.wizards.ui.FieldSelection;
 import com.sun.star.wizards.ui.UIConsts;
 import com.sun.star.wizards.ui.UnoDialog;
-import com.sun.star.wizards.ui.WizardDialog;
+// import com.sun.star.wizards.ui.WizardDialog;
 import com.sun.star.wizards.ui.XFieldSelectionListener;
 
 /**
@@ -80,7 +80,6 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
     private int curcategory;
     public boolean bcolumnnameislimited;
     private int imaxcolumnchars;
-    private String[] fieldnames;
     String smytable;
     Locale aLocale;
     XMultiServiceFactory xMSF;
@@ -164,7 +163,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
                     },
                     new Object[]
                     {
-                        Boolean.TRUE, new Integer(12), "HID:41208", new Short("7"), new Integer(91), new Integer(92), IMAINSTEP, new Short(pretabindex++), getListboxWidth()
+                        Boolean.TRUE, new Integer(12), "HID:41208", new Short(UnoDialog.getListBoxLineCount()), new Integer(91), new Integer(92), IMAINSTEP, new Short(pretabindex++), getListboxWidth()
                     });
         }
         catch (Exception e)
@@ -245,7 +244,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
                 e.printStackTrace(System.out);
             }
         }
-        fieldnames = new String[a];
+        String[] fieldnames = new String[a];
         afieldnameVector.toArray(fieldnames);
         return fieldnames;
     }
@@ -349,7 +348,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
             for (int i = 0; i < SelItems.length; i++)
             {
                 int selindex = JavaTools.FieldInList(NewItems, SelItems[i]);
-                super.xSelFieldsListBox.removeItems((short) selindex, (short) 1);
+                super.xSelectedFieldsListBox.removeItems((short) selindex, (short) 1);
                 /**TODO In this context the items should be better placed at their original position.
                  * but how is this position retrieved?
                  */

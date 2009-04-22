@@ -31,17 +31,17 @@
 package com.sun.star.wizards.document;
 
 import com.sun.star.awt.Point;
-import com.sun.star.awt.Size;
+// import com.sun.star.awt.Size;
 import com.sun.star.beans.XPropertySet;
-import com.sun.star.container.ElementExistException;
-import com.sun.star.container.XNameAccess;
+//import com.sun.star.container.ElementExistException;
+//import com.sun.star.container.XNameAccess;
 import com.sun.star.container.XNameContainer;
 import com.sun.star.drawing.XShapes;
-import com.sun.star.lang.IllegalArgumentException;
-import com.sun.star.lang.WrappedTargetException;
+//import com.sun.star.lang.IllegalArgumentException;
+//import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.sdbc.DataType;
-import com.sun.star.uno.AnyConverter;
-import com.sun.star.uno.UnoRuntime;
+//import com.sun.star.uno.AnyConverter;
+//import com.sun.star.uno.UnoRuntime;
 import com.sun.star.wizards.common.Desktop;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.db.FieldColumn;
@@ -55,15 +55,15 @@ import com.sun.star.wizards.db.FieldColumn;
 public class DatabaseControl extends Control
 {
 
-    protected int ifieldtype;
-    private int iMemofieldwidth = IIMGFIELDWIDTH;
-    private int iMemofieldheight = -1;
-    private FieldColumn m_FieldColumn;
+    private int m_nFieldType;
+    // private int iMemofieldwidth = IIMGFIELDWIDTH;
+    // private int iMemofieldheight = -1;
+    // private FieldColumn m_FieldColumn;
 
     public DatabaseControl(GridControl _oGridControl, FieldColumn _curfieldcolumn)
     {
         super();
-        m_FieldColumn = _curfieldcolumn;
+        // m_FieldColumn = _curfieldcolumn;
         if (_curfieldcolumn.FieldType != DataType.TIMESTAMP)
         {
             createGridColumn(_oGridControl, _curfieldcolumn, _curfieldcolumn.FieldType, _curfieldcolumn.getFieldTitle());
@@ -73,24 +73,37 @@ public class DatabaseControl extends Control
     public DatabaseControl(GridControl _oGridControl, FieldColumn _curfieldcolumn, int _fieldtype, String _columntitle)
     {
         super();
-        m_FieldColumn = _curfieldcolumn;
+        // m_FieldColumn = _curfieldcolumn;
         createGridColumn(_oGridControl, _curfieldcolumn, _fieldtype, _columntitle);
+    }
+
+    protected int getFieldType()
+    {
+        return m_nFieldType;
     }
 
     private void createGridColumn(GridControl _oGridControl, FieldColumn _curfieldcolumn, int _fieldtype, String _columntitle)
     {
         try
         {
-            ifieldtype = _fieldtype;
-            String suniqueName = Desktop.getUniqueName(_oGridControl.xNameAccess, _curfieldcolumn.m_sFieldName);
-            XPropertySet xPropColumn = _oGridControl.xGridColumnFactory.createColumn(getGridColumnName());
-            xPropColumn.setPropertyValue("Name", suniqueName);
-            xPropColumn.setPropertyValue("Hidden", new Boolean(_fieldtype == DataType.LONGVARBINARY)); //TODO CONTROLType abfragen!!!!!!
-            xPropColumn.setPropertyValue("DataField", _curfieldcolumn.m_sFieldName);
+            m_nFieldType = _fieldtype;
+            String sFieldName = _curfieldcolumn.m_sFieldName;
+            String sUniqueName = Desktop.getUniqueName(_oGridControl.xNameAccess, sFieldName);
+
+            String sGridColumnName = getGridColumnName();
+            XPropertySet xPropColumn = _oGridControl.xGridColumnFactory.createColumn(sGridColumnName);
+            xPropColumn.setPropertyValue("Name", sUniqueName);
+            boolean bHidden = false;
+            if (_fieldtype == DataType.LONGVARBINARY)  //TODO CONTROLType abfragen!!!!!!
+            {
+                bHidden = true;
+            }
+            xPropColumn.setPropertyValue("Hidden", new Boolean(bHidden));
+            xPropColumn.setPropertyValue("DataField", sFieldName);
             xPropColumn.setPropertyValue("Label", _columntitle);
             xPropColumn.setPropertyValue("Width", new Integer(0));  // Width of column is adjusted to Columname
-            setNumerics();
-            _oGridControl.xNameContainer.insertByName(_curfieldcolumn.m_sFieldName, xPropColumn);
+            setNumericLimits();
+            _oGridControl.xNameContainer.insertByName(sFieldName, xPropColumn);
         }
         catch (Exception e)
         {
@@ -108,9 +121,9 @@ public class DatabaseControl extends Control
         super(_oFormHandler, _xFormName, _oFormHandler.getControlType(_fieldtype), _curFieldName, _aPoint, null);
         try
         {
-            this.ifieldtype = _fieldtype;
+            m_nFieldType = _fieldtype;
             Helper.setUnoPropertyValue(xControlModel, "DataField", _curFieldName);
-            setNumerics();
+            setNumericLimits();
         }
         catch (Exception e)
         {
@@ -123,9 +136,9 @@ public class DatabaseControl extends Control
         super(_oFormHandler, _xGroupShapes, _xFormName, _oFormHandler.getControlType(_fieldtype), _aPoint, null);
         try
         {
-            this.ifieldtype = _fieldtype;
+            m_nFieldType = _fieldtype;
             Helper.setUnoPropertyValue(xControlModel, "DataField", _curFieldName);
-            setNumerics();
+            setNumericLimits();
         }
         catch (Exception e)
         {
@@ -137,7 +150,7 @@ public class DatabaseControl extends Control
     {
         for (int i = 0; i < FormHandler.oControlData.length; i++)
         {
-            if (FormHandler.oControlData[i].DataType == this.ifieldtype)
+            if (FormHandler.oControlData[i].DataType == getFieldType())
             {
                 return FormHandler.oControlData[i].GridColumnName;
             }
@@ -145,39 +158,39 @@ public class DatabaseControl extends Control
         return "";
     }
 
-    public int getDBHeight()
+    public int getControlHeight()
     {
-        if (this.icontroltype == FormHandler.SOIMAGECONTROL)
+        if (getControlType() == FormHandler.SOIMAGECONTROL)
         {
-            return oFormHandler.getImageControlHeight();
+            // return oFormHandler.getImageControlHeight();
+            final int nMemofieldheight = oFormHandler.getControlReferenceHeight() * 4;
+            return nMemofieldheight;
         }
         else
         {
-            if (this.ifieldtype == DataType.LONGVARCHAR)
+            if (getFieldType() == DataType.LONGVARCHAR)
             {
-                if (iMemofieldheight == -1)
-                {
-                    Helper.setUnoPropertyValue(xControlModel, "MultiLine", Boolean.TRUE);
-                    iMemofieldheight = oFormHandler.getDBRefHeight() * 4;
-                }
-                return iMemofieldheight;
+                // Helper.setUnoPropertyValue(xControlModel, "MultiLine", Boolean.TRUE);
+                final int nMemofieldheight = oFormHandler.getControlReferenceHeight() * 4;
+                return nMemofieldheight;
             }
-            else if (this.icontroltype == FormHandler.SOCHECKBOX)
+            else if (getControlType() == FormHandler.SOCHECKBOX)
             {
                 return super.getPreferredHeight();
             }
-            else
-            {
-                return oFormHandler.getDBRefHeight();
-            }
         }
+        return oFormHandler.getControlReferenceHeight();
     }
 
-    public int getDBWidth()
+    public int getControlWidth()
     {
-        if (this.ifieldtype == DataType.LONGVARCHAR)
+        if (getControlType() == FormHandler.SOIMAGECONTROL)
         {
-            return 2 * getDBHeight();
+            return 2 * getControlHeight();
+        }
+        if (getFieldType() == DataType.LONGVARCHAR)
+        {
+            return 2 * getControlHeight();
         }
         else
         {
@@ -185,26 +198,49 @@ public class DatabaseControl extends Control
         }
     }
 
-    public void setNumerics()
+    private static long m_nLongMax = 0;
+    public static long getLongMax()
+    {
+        if (m_nLongMax == 0)
+        {
+        }
+        return m_nLongMax;
+    }
+    public void setNumericLimits()
     {
         try
         {
-            if (this.icontroltype == FormHandler.SONUMERICCONTROL)
+            if (getControlType() == FormHandler.SONUMERICCONTROL)
             {
                 xPropertySet.setPropertyValue("TreatAsNumber", Boolean.TRUE);
-                switch (ifieldtype)
+                // Math.
+                // 2^63 - 1 = 9223372036854775807
+                // int nIntMax = 0x7fffffff;
+                // int nIntMin = -0x80000000;
+                // long nLongMax = nIntMax;
+                // nLongMax <<= (4*4);
+                // nLongMax |= 0xffff;
+                // nLongMax <<= (4*4);
+                // nLongMax |= 0xffff;
+
+                // long nLongMin = nIntMin;
+                // nLongMin <<= (8*4);
+
+                // long nLong2 = (long)9223372036854775807;
+
+                switch (getFieldType())
                 {
                     case DataType.BIGINT:
-                        xPropertySet.setPropertyValue("EffectiveMax", new Double(2147483647 * 2147483647));
-                        xPropertySet.setPropertyValue("EffectiveMin", new Double(-(-2147483648 * -2147483648)));
+                        xPropertySet.setPropertyValue("EffectiveMax", new Double(Long.MAX_VALUE));
+                        xPropertySet.setPropertyValue("EffectiveMin", new Double(Long.MIN_VALUE));
                         break;
                     case DataType.INTEGER:
-                        xPropertySet.setPropertyValue("EffectiveMax", new Double(2147483647));
-                        xPropertySet.setPropertyValue("EffectiveMin", new Double(-2147483648));
+                        xPropertySet.setPropertyValue("EffectiveMax", new Double(Integer.MAX_VALUE));
+                        xPropertySet.setPropertyValue("EffectiveMin", new Double(Integer.MIN_VALUE));
                         break;
                     case DataType.SMALLINT:
-                        xPropertySet.setPropertyValue("EffectiveMax", new Double(32767));
-                        xPropertySet.setPropertyValue("EffectiveMin", new Double(-32768));
+                        xPropertySet.setPropertyValue("EffectiveMax", new Double(Short.MAX_VALUE));
+                        xPropertySet.setPropertyValue("EffectiveMin", new Double(Short.MIN_VALUE));
                         break;
                     case DataType.TINYINT:
                         xPropertySet.setPropertyValue("EffectiveMax", new Double(127));
@@ -218,11 +254,12 @@ public class DatabaseControl extends Control
                         break;
                 }
             }
-            else if (icontroltype == FormHandler.SOTEXTBOX)
-            {     // com.sun.star.sdbc.DataType.CHAR, com.sun.star.sdbc.DataType.VARCHAR, com.sun.star.sdbc.DataType.LONGVARCHAR
-            }
-            else if (icontroltype == FormHandler.SOCHECKBOX)
+            // else if (getControlType() == FormHandler.SOTEXTBOX)
+            // {     // com.sun.star.sdbc.DataType.CHAR, com.sun.star.sdbc.DataType.VARCHAR, com.sun.star.sdbc.DataType.LONGVARCHAR
+            // }
+            else if (getControlType() == FormHandler.SOIMAGECONTROL)
             {
+                xPropertySet.setPropertyValue("ScaleMode", com.sun.star.awt.ImageScaleMode.Isotropic);
             }
         }
         catch (Exception e)

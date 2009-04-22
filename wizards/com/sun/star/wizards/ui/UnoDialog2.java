@@ -190,7 +190,7 @@ public class UnoDialog2 extends UnoDialog implements EventNames
 
     public XControl insertInfoImage(int _posx, int _posy, int _iStep)
     {
-        XControl xImgControl = insertImage(Desktop.getUniqueName(xDlgNameAccess, "imgHint"),
+        XControl xImgControl = insertImage(Desktop.getUniqueName(getDlgNameAccess(), "imgHint"),
                 new String[]
                 {
                     "Border", "Height", "ImageURL", "PositionX", "PositionY", "ScaleImage", "Step", "Width"
