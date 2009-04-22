@@ -55,7 +55,7 @@ TARFILE_ROOTDIR=hsqldb
 CONVERTFILES=build$/build.xml \
             src$/org$/hsqldb$/persist$/HsqlDatabaseProperties.java
 
-# PATCH_FILES=patches$/accumulated_patches.patch
+PATCH_FILES=patches$/accumulated_patches.patch
 
 # ADDITIONAL_FILES=   src$/org$/hsqldb$/Collation.java \
 #                     src$/org$/hsqldb$/TxManager.java \
@@ -68,7 +68,11 @@ JAVA_HOME=
 .EXPORT : JAVA_HOME
 BUILD_ACTION=$(ANT) -Dbuild.label="build-$(RSCREVISION)" -Dbuild.compiler=gcj -f $(ANT_BUILDFILE) jar
 .ELSE
+.IF "$(debug)"!=""
+BUILD_ACTION=$(ANT) -Dbuild.label="build-$(RSCREVISION)" -Dbuild.debug="on" -f $(ANT_BUILDFILE) jar
+.ELSE
 BUILD_ACTION=$(ANT) -Dbuild.label="build-$(RSCREVISION)" -f $(ANT_BUILDFILE) jar
+.ENDIF
 .ENDIF
 
 .ENDIF # $(SOLAR_JAVA)!= ""
