@@ -43,6 +43,8 @@
 //=============================================================================
 
 /** uses a row set as datasource.
+
+    @see XRowSetChangeBroadcaster
  */
 published interface XRowSetSupplier: com::sun::star::uno::XInterface
 {
