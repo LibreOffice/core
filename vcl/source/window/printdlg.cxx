@@ -741,8 +741,8 @@ void PrintDialog::preparePreview()
 
 void PrintDialog::updateNup()
 {
-    int nRows = maPrinterPage.maNupRowsEdt.GetValue();
-    int nCols = maPrinterPage.maNupColEdt.GetValue();
+    int nRows = int(maPrinterPage.maNupRowsEdt.GetValue());
+    int nCols = int(maPrinterPage.maNupColEdt.GetValue());
 
     maPListener->setMultipage( nRows, nCols,
                                maPrinterPage.maNupPortrait.IsChecked()
