@@ -53,6 +53,7 @@
 #include <com/sun/star/chart2/TickmarkStyle.hpp>
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
+#include <com/sun/star/chart/MissingValueTreatment.hpp>
 
 #include <vcl/outdev.hxx>
 #include <svx/escherex.hxx>
@@ -2741,7 +2742,7 @@ XclExpChChart::XclExpChChart( const XclExpRoot& rRoot,
 
     // global chart properties
     ::set_flag( maProps.mnFlags, EXC_CHPROPS_MANSERIES );
-    ::set_flag( maProps.mnFlags, EXC_CHPROPS_SHOWVISCELLS, false );
+    ::set_flag( maProps.mnFlags, EXC_CHPROPS_SHOWVISIBLEONLY, false );
     maProps.mnEmptyMode = EXC_CHPROPS_EMPTY_SKIP;
 
     // always create both axes set objects
@@ -2766,6 +2767,20 @@ XclExpChChart::XclExpChChart( const XclExpRoot& rRoot,
         sal_uInt16 nFreeGroupIdx = mxPrimAxesSet->Convert( xDiagram, 0 );
         if( !mxPrimAxesSet->Is3dChart() )
             mxSecnAxesSet->Convert( xDiagram, nFreeGroupIdx );
+
+        // treatment of missing values
+        ScfPropertySet aDiaProp( xDiagram );
+        sal_Int32 nMissingValues = 0;
+        if( aDiaProp.GetProperty( nMissingValues, EXC_CHPROP_MISSINGVALUETREATMENT ) )
+        {
+            using namespace ::com::sun::star::chart::MissingValueTreatment;
+            switch( nMissingValues )
+            {
+                case LEAVE_GAP: maProps.mnEmptyMode = EXC_CHPROPS_EMPTY_SKIP;           break;
+                case USE_ZERO:  maProps.mnEmptyMode = EXC_CHPROPS_EMPTY_ZERO;           break;
+                case CONTINUE:  maProps.mnEmptyMode = EXC_CHPROPS_EMPTY_INTERPOLATE;    break;
+            }
+        }
 
         // finish API conversion
         FinishConversion();

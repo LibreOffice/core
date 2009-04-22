@@ -1316,7 +1316,8 @@ typedef ScfRef< XclImpChAxesSet > XclImpChAxesSetRef;
 class XclImpChChart : public XclImpChGroupBase, protected XclImpChRoot
 {
 public:
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument > XChartDocRef;
+    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >    XChartDocRef;
+    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >          XDiagramRef;
 
 public:
     explicit            XclImpChChart( const XclImpRoot& rRoot );
@@ -1351,6 +1352,8 @@ private:
     void                ReadChAxesSet( XclImpStream& rStrm );
     /** Reads a CHTEXT group (chart title and series/point captions). */
     void                ReadChText( XclImpStream& rStrm );
+    /** Reads a CHPROPERTIES record (global chart properties). */
+    void                ReadChProperties( XclImpStream& rStrm );
 
     /** Final processing after reading the entire chart data. */
     void                Finalize();
@@ -1360,6 +1363,9 @@ private:
     void                FinalizeDataFormats();
     /** Finalizes chart title, tries to detect title auto-generated from series name. */
     void                FinalizeTitle();
+
+    /** Creates and returns a new diagram object and converts global chart settings. */
+    XDiagramRef         CreateDiagram() const;
 
 private:
     typedef ::std::vector< XclImpChSeriesRef >                  XclImpChSeriesVec;

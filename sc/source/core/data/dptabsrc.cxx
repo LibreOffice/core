@@ -288,6 +288,10 @@ void ScDPSource::SetOrientation(long nColumn, USHORT nNew)
         case sheet::DataPilotFieldOrientation_PAGE:
             nPageDims[nPageDimCount++] = nColumn;
             break;
+        case sheet::DataPilotFieldOrientation_HIDDEN:
+            /*  Do not assert HIDDEN as it occurs e.g. while using the
+                csss.XDataPilotTables.createDataPilotDescriptor() function. */
+            break;
         default:
             DBG_ERROR( "ScDPSource::SetOrientation: unexpected orientation" );
             break;
@@ -1974,13 +1978,16 @@ public:
 
 BOOL ScDPGlobalMembersOrder::operator()( sal_Int32 nIndex1, sal_Int32 nIndex2 ) const
 {
-    ScDPMembers* pMembers = rLevel.GetMembersObject();
-    ScDPMember* pMember1 = pMembers->getByIndex(nIndex1);
-    ScDPMember* pMember2 = pMembers->getByIndex(nIndex2);
-
-    sal_Int32 nCompare = pMember1->Compare( *pMember2 );
-
-    return bAscending ? ( nCompare < 0 ) : ( nCompare > 0 );
+    sal_Int32 nCompare = 0;
+    // seems that some ::std::sort() implementations pass the same index twice
+    if( nIndex1 != nIndex2 )
+    {
+        ScDPMembers* pMembers = rLevel.GetMembersObject();
+        ScDPMember* pMember1 = pMembers->getByIndex(nIndex1);
+        ScDPMember* pMember2 = pMembers->getByIndex(nIndex2);
+        nCompare = pMember1->Compare( *pMember2 );
+    }
+    return bAscending ? (nCompare < 0) : (nCompare > 0);
 }
 
 // -----------------------------------------------------------------------
@@ -2037,7 +2044,7 @@ void ScDPLevel::EvaluateSortOrder()
                 ScDPMembers* pLocalMembers = GetMembersObject();
                 long nCount = pLocalMembers->getCount();
 
-                DBG_ASSERT( aGlobalOrder.empty(), "sort twice?" );
+//                DBG_ASSERT( aGlobalOrder.empty(), "sort twice?" );
                 aGlobalOrder.resize( nCount );
                 for (long nPos=0; nPos<nCount; nPos++)
                     aGlobalOrder[nPos] = nPos;

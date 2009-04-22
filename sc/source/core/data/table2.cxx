@@ -1971,7 +1971,7 @@ BOOL ScTable::SetRowHeightRange( SCROW nStartRow, SCROW nEndRow, USHORT nNewHeig
 
         long nNewPix = (long) ( nNewHeight * nPPTY );
 
-        BOOL bSingle = FALSE;
+        BOOL bSingle = FALSE;   // TRUE = process every row for its own
         ScDrawLayer* pDrawLayer = pDocument->GetDrawLayer();
         if (pDrawLayer)
             if (pDrawLayer->HasObjectsInRows( nTab, nStartRow, nEndRow ))
@@ -1997,7 +1997,23 @@ BOOL ScTable::SetRowHeightRange( SCROW nStartRow, SCROW nEndRow, USHORT nNewHeig
                     if (*aIter != nNewHeight)
                         bChanged = (nNewPix != (long) (*aIter * nPPTY));
                 } while (!bChanged && aIter.NextRange());
-                pRowHeight->SetValue( nStartRow, nEndRow, nNewHeight);
+
+                /*  #i94028# #i94991# If drawing objects are involved, each row
+                    has to be changed for its own, because each call to
+                    ScDrawLayer::HeightChanged expects correct row heights
+                    above passed row in the document. Cannot use array iterator
+                    because array changes in every cycle. */
+                if( pDrawLayer )
+                {
+                    for( SCROW nRow = nStartRow; nRow <= nEndRow ; ++nRow )
+                    {
+                        pDrawLayer->HeightChanged( nTab, nRow,
+                            ((long) nNewHeight) - ((long) pRowHeight->GetValue( nRow )));
+                        pRowHeight->SetValue( nRow, nNewHeight );
+                    }
+                }
+                else
+                    pRowHeight->SetValue( nStartRow, nEndRow, nNewHeight);
             }
             else
             {

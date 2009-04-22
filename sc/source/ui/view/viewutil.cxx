@@ -37,6 +37,8 @@
 #include <tools/list.hxx>
 #include "scitems.hxx"
 #include <sfx2/bindings.hxx>
+#include <sfx2/viewsh.hxx>
+#include <sfx2/dispatch.hxx>
 #include <svx/charmap.hxx>
 #include <svx/fontitem.hxx>
 #include <svx/langitem.hxx>
@@ -391,6 +393,26 @@ BOOL ScViewUtil::ExecuteCharMap( const SvxFontItem& rOldFont,
         delete pDlg;
     }
     return bRet;
+}
+
+bool ScViewUtil::IsFullScreen( SfxViewShell& rViewShell )
+{
+    SfxBindings&    rBindings       = rViewShell.GetViewFrame()->GetBindings();
+    SfxPoolItem*    pItem           = 0;
+    bool            bIsFullScreen   = false;
+
+    if (rBindings.QueryState( SID_WIN_FULLSCREEN, pItem ) >= SFX_ITEM_DEFAULT)
+        bIsFullScreen = static_cast< SfxBoolItem* >( pItem )->GetValue();
+    return bIsFullScreen;
+}
+
+void ScViewUtil::SetFullScreen( SfxViewShell& rViewShell, bool bSet )
+{
+    if( IsFullScreen( rViewShell ) != bSet )
+    {
+        SfxBoolItem aItem( SID_WIN_FULLSCREEN, bSet );
+        rViewShell.GetDispatcher()->Execute( SID_WIN_FULLSCREEN, SFX_CALLMODE_RECORD, &aItem, 0L );
+    }
 }
 
 //------------------------------------------------------------------

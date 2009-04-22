@@ -1402,14 +1402,13 @@ void SAL_CALL ScModelObj::setPropertyValue(
         }
         else if ( aString.EqualsAscii( SC_UNO_ISADJUSTHEIGHTENABLED ) )
         {
+            bool bOldAdjustHeightEnabled = pDoc->IsAdjustHeightEnabled();
             bool bAdjustHeightEnabled = ScUnoHelpFunctions::GetBoolFromAny( aValue );
-            pDoc->EnableAdjustHeight( bAdjustHeightEnabled );
-            if ( bAdjustHeightEnabled )
+            if( bOldAdjustHeightEnabled != bAdjustHeightEnabled )
             {
-                for ( SCTAB nTab = 0; nTab < pDoc->GetTableCount(); ++nTab )
-                {
-                    pDocShell->AdjustRowHeight( 0, MAXROW, nTab );
-                }
+                pDoc->EnableAdjustHeight( bAdjustHeightEnabled );
+                if( bAdjustHeightEnabled )
+                    pDocShell->UpdateAllRowHeights();
             }
         }
         else if ( aString.EqualsAscii( SC_UNO_ISEXECUTELINKENABLED ) )

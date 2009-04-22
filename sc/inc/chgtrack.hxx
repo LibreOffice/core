@@ -1399,8 +1399,6 @@ public:
             void                NotifyModified( ScChangeTrackMsgType eMsgType,
                                     ULONG nStartAction, ULONG nEndAction );
 
-    SC_DLLPUBLIC        BOOL                Load( SvStream& rStrm, USHORT nVer );
-    SC_DLLPUBLIC        BOOL                Store( SvStream& rStrm );
             USHORT              GetLoadedFileFormatVersion() const
                                     { return nLoadedFileFormatVersion; }
 
@@ -1426,7 +1424,7 @@ public:
                                     { return bTime100thSeconds; }
 
             void                AppendCloned( ScChangeAction* pAppend );
-            ScChangeTrack*      Clone( ScDocument* pDocument ) const;
+    SC_DLLPUBLIC ScChangeTrack* Clone( ScDocument* pDocument ) const;
             void                MergeActionState( ScChangeAction* pAct, const ScChangeAction* pOtherAct );
 #if DEBUG_CHANGETRACK
             String              ToString() const;

@@ -102,6 +102,7 @@ namespace com { namespace sun { namespace star {
 #define EXC_CHPROP_LABELPLACEMENT           CREATE_OUSTRING( "LabelPlacement" )
 #define EXC_CHPROP_MAJORTICKS               CREATE_OUSTRING( "MajorTickmarks" )
 #define EXC_CHPROP_MINORTICKS               CREATE_OUSTRING( "MinorTickmarks" )
+#define EXC_CHPROP_MISSINGVALUETREATMENT    CREATE_OUSTRING( "MissingValueTreatment" )
 #define EXC_CHPROP_NEGATIVEERROR            CREATE_OUSTRING( "NegativeError" )
 #define EXC_CHPROP_NUMBERFORMAT             CREATE_OUSTRING( "NumberFormat" )
 #define EXC_CHPROP_OFFSET                   CREATE_OUSTRING( "Offset" )
@@ -545,7 +546,7 @@ const sal_uInt16 EXC_CHAXESSET_NONE             = 0xFFFF;   /// For internal use
 const sal_uInt16 EXC_ID_CHPROPERTIES            = 0x1044;
 
 const sal_uInt16 EXC_CHPROPS_MANSERIES          = 0x0001;   /// Manual series allocation.
-const sal_uInt16 EXC_CHPROPS_SHOWVISCELLS       = 0x0002;   /// Show visible cells only.
+const sal_uInt16 EXC_CHPROPS_SHOWVISIBLEONLY    = 0x0002;   /// Show visible cells only.
 const sal_uInt16 EXC_CHPROPS_NORESIZE           = 0x0004;   /// Do not resize chart with window.
 const sal_uInt16 EXC_CHPROPS_MANPLOTAREA        = 0x0008;   /// Plot area with CHFRAMEPOS records.
 

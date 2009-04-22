@@ -33,6 +33,7 @@
 
 #include <sfx2/viewsh.hxx>
 #include <sfx2/viewfac.hxx>
+#include <svx/svxenum.hxx>
 #include "scdllapi.h"
 #include "dbfunc.hxx"           // -> tabview
 #include "target.hxx"
@@ -257,6 +258,7 @@ public:
 
     ScInputHandler* GetInputHandler() const;
     void            UpdateInputHandler( BOOL bForce = FALSE, BOOL bStopEditing = TRUE );
+    void            UpdateInputHandlerCellAdjust( SvxCellHorJustify eJust );
     BOOL            TabKeyInput(const KeyEvent& rKEvt);
     BOOL            SfxKeyInput(const KeyEvent& rKEvt);
 

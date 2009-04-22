@@ -58,6 +58,7 @@
 #include <com/sun/star/chart2/TickmarkStyle.hpp>
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
+#include <com/sun/star/chart/MissingValueTreatment.hpp>
 
 #include <sfx2/objsh.hxx>
 
@@ -2136,7 +2137,9 @@ void XclImpChChart3d::Convert( ScfPropertySet& rPropSet, bool b3dWallChart ) con
         nPerspective = limit_cast< sal_Int32, sal_Int32 >( maData.mnEyeDist, 0, 100 );
         // right-angled axes
         bRightAngled = !::get_flag( maData.mnFlags, EXC_CHCHART3D_REAL3D );
-        eProjMode = bRightAngled ? cssd::ProjectionMode_PARALLEL : cssd::ProjectionMode_PERSPECTIVE;
+        // projection mode (parallel axes, if right-angled, #i90360# or if perspective is at 0%)
+        bool bParallel = bRightAngled || (nPerspective == 0);
+        eProjMode = bParallel ? cssd::ProjectionMode_PARALLEL : cssd::ProjectionMode_PERSPECTIVE;
         // ambient color (Gray 20%)
         aAmbientColor.SetColor( RGB_COLORDATA( 204, 204, 204 ) );
         // light color (Gray 60%)
@@ -2598,7 +2601,8 @@ void XclImpChLabelRange::Convert( ScfPropertySet& rPropSet, ScaleData& rScaleDat
 
     // origin (max-cross not supported, fall back to auto-cross)
     bool bMaxCross = ::get_flag( maData.mnFlags, EXC_CHLABELRANGE_MAXCROSS );
-    lclSetValueOrClearAny( rScaleData.Origin, static_cast< double >( maData.mnCross ), bMaxCross );
+    sal_uInt16 nCross = ::std::max< sal_uInt16 >( maData.mnCross, 1 );
+    lclSetValueOrClearAny( rScaleData.Origin, static_cast< double >( nCross ), bMaxCross );
 
     // reverse order
     bool bReverse = ::get_flag( maData.mnFlags, EXC_CHLABELRANGE_REVERSE ) != bMirrorOrient;
@@ -3307,7 +3311,7 @@ void XclImpChChart::ReadSubRecord( XclImpStream& rStrm )
             ReadChSeries( rStrm );
         break;
         case EXC_ID_CHPROPERTIES:
-            rStrm >> maProps.mnFlags >> maProps.mnEmptyMode;
+            ReadChProperties( rStrm );
         break;
         case EXC_ID_CHDEFAULTTEXT:
             ReadChDefaultText( rStrm );
@@ -3400,7 +3404,7 @@ void XclImpChChart::Convert( Reference< XChartDocument > xChartDoc, ScfProgressB
 
     /*  Create the diagram object and attach it to the chart document. Currently,
         one diagram is used to carry all coordinate systems and data series. */
-    Reference< XDiagram > xDiagram( ScfApiHelper::CreateInstance( SERVICE_CHART2_DIAGRAM ), UNO_QUERY );
+    Reference< XDiagram > xDiagram = CreateDiagram();
     xChartDoc->setFirstDiagram( xDiagram );
 
     // coordinate systems and chart types, convert axis settings
@@ -3451,6 +3455,11 @@ void XclImpChChart::ReadChText( XclImpStream& rStrm )
         }
         break;
     }
+}
+
+void XclImpChChart::ReadChProperties( XclImpStream& rStrm )
+{
+    rStrm >> maProps.mnFlags >> maProps.mnEmptyMode;
 }
 
 void XclImpChChart::Finalize()
@@ -3537,6 +3546,28 @@ void XclImpChChart::FinalizeTitle()
 
     // will reset mxTitle, if it does not contain a string
     lclFinalizeTitle( mxTitle, GetDefaultText( EXC_CHTEXTTYPE_TITLE ) );
+}
+
+Reference< XDiagram > XclImpChChart::CreateDiagram() const
+{
+    // create a diagram object
+    Reference< XDiagram > xDiagram( ScfApiHelper::CreateInstance( SERVICE_CHART2_DIAGRAM ), UNO_QUERY );
+
+    // convert global chart settings
+    ScfPropertySet aDiaProp( xDiagram );
+
+    // treatment of missing values
+    using namespace ::com::sun::star::chart::MissingValueTreatment;
+    sal_Int32 nMissingValues = LEAVE_GAP;
+    switch( maProps.mnEmptyMode )
+    {
+        case EXC_CHPROPS_EMPTY_SKIP:        nMissingValues = LEAVE_GAP; break;
+        case EXC_CHPROPS_EMPTY_ZERO:        nMissingValues = USE_ZERO;  break;
+        case EXC_CHPROPS_EMPTY_INTERPOLATE: nMissingValues = CONTINUE;  break;
+    }
+    aDiaProp.SetProperty( EXC_CHPROP_MISSINGVALUETREATMENT, nMissingValues );
+
+    return xDiagram;
 }
 
 // ----------------------------------------------------------------------------

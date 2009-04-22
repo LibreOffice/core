@@ -239,6 +239,7 @@
 
 //  data pilot field
 #define SC_UNONAME_FUNCTION         "Function"
+#define SC_UNONAME_SUBTOTALS        "Subtotals"
 #define SC_UNONAME_SELPAGE          "SelectedPage"
 #define SC_UNONAME_USESELPAGE       "UseSelectedPage"
 #define SC_UNONAME_HASREFERENCE     "HasReference"
@@ -569,7 +570,6 @@
 #define SC_UNO_RPTEMPTY             "RepeatIfEmpty"
 #define SC_UNO_DRILLDOWN            "DrillDownOnDoubleClick"
 #define SC_UNO_SHOWFILT             "ShowFilterButton"
-
 
 //  range selection
 #define SC_UNONAME_INITVAL          "InitialValue"
