@@ -884,6 +884,8 @@ testcase tActivationOrder
         endif      
         DocumentWriter.TypeKeys "<TAB>" , true
         sleep(1)
+        DocumentWriter.TypeKeys "<MOD1 SHIFT END>" , true
+        sleep(1)
         DocumentWriter.TypeKeys "<MOD1 C>" , true
         sleep(1)        
         if GetClipboard = "tt_doc" then
@@ -893,6 +895,8 @@ testcase tActivationOrder
         endif
         
         DocumentWriter.TypeKeys "<TAB>" , true
+        sleep(1)
+        DocumentWriter.TypeKeys "<MOD1 SHIFT END>" , true
         sleep(1)
         DocumentWriter.TypeKeys "<MOD1 C>" , true
         sleep(1)        
