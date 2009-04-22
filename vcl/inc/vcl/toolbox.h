@@ -37,6 +37,7 @@
 #include <vcl/image.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/controllayout.hxx>
+#include <vcl/ImageListProvider.hxx>
 
 #include <vector>
 
@@ -127,7 +128,9 @@ struct ToolBoxLayoutData : public ControlLayoutData
     std::vector< USHORT >               m_aLineItemPositions;
 };
 
-}
+
+} /* namespace vcl */
+
 
 struct ImplToolBoxPrivateData
 {
@@ -159,6 +162,10 @@ struct ImplToolBoxPrivateData
     long           mnMenuButtonWidth;
 
     Wallpaper   maDisplayBackground;
+
+    // support for highcontrast
+    vcl::IImageListProvider* mpImageListProvider;
+    vcl::ImageListType       meImageListType;
 
     BOOL    mbIsLocked:1,           // keeps last lock state from ImplDockingWindowWrapper
             mbAssumeDocked:1,       // only used during calculations to override current floating/popup mode

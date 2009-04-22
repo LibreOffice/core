@@ -119,7 +119,7 @@ public:
         if ( aFind != m_aConfigValues.end() )
         {
             TConfigValues::iterator aFind2 = aFind->second.first.find(_sName);
-            if ( aFind != m_aConfigValues.end() )
+            if ( aFind2 != aFind->second.first.end() )
                 return aFind2->second;
         }
         OSL_ENSURE(0,"Could find the required config!");

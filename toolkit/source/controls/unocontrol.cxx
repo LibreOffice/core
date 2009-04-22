@@ -148,9 +148,10 @@ private:
     VclListenerLock& operator=( const VclListenerLock& );   // never implemented
 };
 
+typedef ::std::map< ::rtl::OUString, sal_Int32 >    MapString2Int;
 struct UnoControl_Data
 {
-    ::std::set< ::rtl::OUString >   aPropertyNotificationFilter;
+    MapString2Int   aSuspendedPropertyNotifications;
 };
 
 //  ----------------------------------------------------
@@ -455,13 +456,13 @@ void UnoControl::propertiesChange( const Sequence< PropertyChangeEvent >& rEvent
     {
         ::osl::MutexGuard aGuard( GetMutex() );
 
-        if ( !mpData->aPropertyNotificationFilter.empty() )
+        if ( !mpData->aSuspendedPropertyNotifications.empty() )
         {
             // strip the property which we are currently updating (somewhere up the stack)
             PropertyChangeEvent* pEvents = aEvents.getArray();
             PropertyChangeEvent* pEventsEnd = pEvents + aEvents.getLength();
             for ( ; pEvents < pEventsEnd; )
-                if ( mpData->aPropertyNotificationFilter.find( pEvents->PropertyName ) != mpData->aPropertyNotificationFilter.end() )
+                if ( mpData->aSuspendedPropertyNotifications.find( pEvents->PropertyName ) != mpData->aSuspendedPropertyNotifications.end() )
                 {
                     if ( pEvents != pEventsEnd )
                         ::std::copy( pEvents + 1, pEventsEnd, pEvents );
@@ -481,17 +482,22 @@ void UnoControl::propertiesChange( const Sequence< PropertyChangeEvent >& rEvent
 
 void UnoControl::ImplLockPropertyChangeNotification( const ::rtl::OUString& rPropertyName, bool bLock )
 {
+    MapString2Int::iterator pos = mpData->aSuspendedPropertyNotifications.find( rPropertyName );
     if ( bLock )
     {
-        OSL_PRECOND( mpData->aPropertyNotificationFilter.find( rPropertyName ) == mpData->aPropertyNotificationFilter.end(),
-            "UnoControl::ImplLockPropertyChangeNotification: already locked!" );
-        mpData->aPropertyNotificationFilter.insert( rPropertyName );
+        if ( pos == mpData->aSuspendedPropertyNotifications.end() )
+            pos = mpData->aSuspendedPropertyNotifications.insert( MapString2Int::value_type( rPropertyName, 0 ) ).first;
+        ++pos->second;
     }
     else
     {
-        OSL_PRECOND( mpData->aPropertyNotificationFilter.find( rPropertyName ) != mpData->aPropertyNotificationFilter.end(),
-            "UnoControl::ImplLockPropertyChangeNotification: not locked!" );
-        mpData->aPropertyNotificationFilter.erase( rPropertyName );
+        OSL_ENSURE( pos != mpData->aSuspendedPropertyNotifications.end(), "UnoControl::ImplLockPropertyChangeNotification: property not locked!" );
+        if ( pos != mpData->aSuspendedPropertyNotifications.end() )
+        {
+            OSL_ENSURE( pos->second > 0, "UnoControl::ImplLockPropertyChangeNotification: invalid suspension counter!" );
+            if ( 0 == --pos->second )
+                mpData->aSuspendedPropertyNotifications.erase( pos );
+        }
     }
 }
 

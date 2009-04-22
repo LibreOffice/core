@@ -49,6 +49,9 @@
 #include <vcl/unohelp.hxx>
 #include <unotools/confignode.hxx>
 
+#include <vcl/ImageListProvider.hxx>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+
 using namespace vcl;
 using namespace rtl;
 
@@ -58,7 +61,10 @@ using namespace rtl;
 
 // -----------------------------------------------------------------------
 
-ImplToolBoxPrivateData::ImplToolBoxPrivateData() : m_pLayoutData( NULL )
+ImplToolBoxPrivateData::ImplToolBoxPrivateData() :
+        m_pLayoutData( NULL ),
+        mpImageListProvider( NULL ),
+        meImageListType( vcl::IMAGELISTTYPE_UNKNOWN )
 {
     meButtonSize = TOOLBOX_BUTTONSIZE_DONTCARE;
     mpMenu = new PopupMenu();
@@ -68,6 +74,7 @@ ImplToolBoxPrivateData::ImplToolBoxPrivateData() : m_pLayoutData( NULL )
     maMenubuttonItem.maItemSize = Size( TB_MENUBUTTON_SIZE+TB_MENUBUTTON_OFFSET, TB_MENUBUTTON_SIZE+TB_MENUBUTTON_OFFSET );
     maMenubuttonItem.meState = STATE_NOCHECK;
     mnMenuButtonWidth = TB_MENUBUTTON_SIZE;
+
 
     mbIsLocked = FALSE;
     mbNativeButtons = FALSE;
@@ -2402,4 +2409,29 @@ void ToolBox::WillUsePopupMode( BOOL b )
     mpData->mbWillUsePopupMode = b;
 }
 
+void ToolBox::ImplUpdateImageList()
+{
+    if (mpData->mpImageListProvider != NULL)
+    {
+        BOOL bIsDark = GetSettings().GetStyleSettings().GetFaceColor().IsDark();
+        try
+        {
+            ImageListType eType = bIsDark ? vcl::HIGHCONTRAST_YES : vcl::HIGHCONTRAST_NO;
+
+            if (eType != mpData->meImageListType)
+            {
+                vcl::IImageListProvider* pImageListProvider = mpData->mpImageListProvider;
+                SetImageList( pImageListProvider->getImageList(eType) );
+                mpData->meImageListType = eType;
+            }
+        }
+        catch (com::sun::star::lang::IllegalArgumentException &) {}
+    }
+}
+
+void ToolBox::SetImageListProvider(vcl::IImageListProvider* _pProvider)
+{
+    mpData->mpImageListProvider = _pProvider;
+    ImplUpdateImageList();
+}
 // -----------------------------------------------------------------------
