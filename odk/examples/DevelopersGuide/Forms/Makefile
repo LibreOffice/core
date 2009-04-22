@@ -96,11 +96,8 @@ COMMON_JAVAFILES  = \
 
 COMMON_CLASSFILES = $(patsubst %.java,$(COMMON_CLASS_OUT)/%.class,$(COMMON_JAVAFILES))
 
-SDK_CLASSPATH = $(subst $(EMPTYSTRING) $(PATH_SEPARATOR),$(PATH_SEPARATOR),$(OFFICE_CLASSES_DIR)/jurt.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/unoil.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/ridl.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/sandbox.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/juh.jar\
+SDK_CLASSPATH = $(subst $(EMPTYSTRING) $(PATH_SEPARATOR),$(PATH_SEPARATOR),$(CLASSPATH)\
+		$(PATH_SEPARATOR)$(SAMPLE_CLASS_OUT)\
 		$(PATH_SEPARATOR)$(COMMON_CLASS_OUT))
 
 
@@ -113,7 +110,7 @@ include $(SETTINGS)/stdtarget.mk
 
 $(COMMON_CLASSFILES) : $(COMMON_JAVAFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	javac $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(COMMON_CLASS_OUT) $^
+	$(SDK_JAVAC) $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(COMMON_CLASS_OUT) $^
 
 # rule for client/example application manifest file
 $(SAMPLE_GEN_OUT)/%.mf :
@@ -125,19 +122,19 @@ $(SAMPLE_GEN_OUT)/%.mf :
 
 $(APP1_CLASS_OUT)/$(APP1_NAME).class : $(APP1_NAME).java $(COMMON_CLASSFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	javac $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(APP1_CLASS_OUT) $<
+	$(SDK_JAVAC) $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(APP1_CLASS_OUT) $<
 
 $(APP2_CLASS_OUT)/$(APP2_NAME).class : $(APP2_NAME).java $(COMMON_CLASSFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	javac $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(APP2_CLASS_OUT) $<
+	$(SDK_JAVAC) $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(APP2_CLASS_OUT) $<
 
 $(APP3_CLASS_OUT)/$(APP3_NAME).class : $(APP3_NAME).java $(COMMON_CLASSFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	javac $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(APP3_CLASS_OUT) $<
+	$(SDK_JAVAC) $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(APP3_CLASS_OUT) $<
 
 $(APP4_CLASS_OUT)/$(APP4_NAME).class : $(APP4_NAME).java $(COMMON_CLASSFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	javac $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(APP4_CLASS_OUT) $<
+	$(SDK_JAVAC) $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(APP4_CLASS_OUT) $<
 
 $(APP1_JAR) : $(SAMPLE_GEN_OUT)/$(APP1_NAME).mf $(APP1_CLASS_OUT)/$(APP1_NAME).class $(COMMON_CLASSFILES)
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
@@ -194,7 +191,7 @@ FormsExample : $(APP1_JAR)  $(APP2_JAR)  $(APP3_JAR)  $(APP4_JAR)
 ProgrammaticScriptAssignment.odt.load : $(COMP_REGISTERFLAG)
 	"$(OFFICE_PROGRAM_PATH)$(PS)soffice" $(basename $@)
 
-DataAwareness.run: $(SAMPLE_CALSS_OUT)/DataAwareness.jar
+DataAwareness.run: $(SAMPLE_CLASS_OUT)/DataAwareness.jar
 	$(SDK_JAVA) -Dcom.sun.star.lib.loader.unopath="$(OFFICE_PROGRAM_PATH)" -jar $< -d OO_SDK_Demo_DB -t bugs
 
 %.run: $(SAMPLE_CLASS_OUT)/%.jar

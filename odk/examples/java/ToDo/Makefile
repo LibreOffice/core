@@ -93,7 +93,8 @@ include $(SETTINGS)/stdtarget.mk
 
 $(COMP_CLASS_OUT)/%.Manifest :
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	@echo RegistrationClassName: $(basename $(basename $(@F)))> $@
+	@echo UNO-Type-Path: $(basename $*).uno.jar> $@
+	@echo RegistrationClassName: $(basename $(basename $(@F)))>> $@
 
 $(COMP_GEN_OUT)/%.urd : %.idl
 	-$(MKDIR) $(subst /,$(PS),$(@D))

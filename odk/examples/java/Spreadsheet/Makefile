@@ -104,7 +104,8 @@ include $(SETTINGS)/stdtarget.mk
 # rule for a component manifest file
 $(OUT_COMP_CLASS)/%.Manifest :
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	@echo RegistrationClassName: $(basename $*)> $@
+	@echo UNO-Type-Path: $(basename $*).uno.jar> $@
+	@echo RegistrationClassName: $(basename $*)>> $@
 
 $(OUT_COMP_GEN)/%.urd : %.idl
 	-$(MKDIR) $(subst /,$(PS),$(@D))

@@ -65,7 +65,8 @@ include $(SETTINGS)/stdtarget.mk
 
 $(OUT_COMP_CLASS)/%.Manifest :
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	@echo RegistrationClassName: $(subst /,.,$(PACKAGE)).$(basename $(basename $(@F)))> $@
+	@echo UNO-Type-Path: $(basename $(notdir $*)).uno.jar> $@
+	@echo RegistrationClassName: $(subst /,.,$(PACKAGE)).$(basename $(basename $(@F)))>> $@
 
 $(OUT_COMP_CLASS)/$(PACKAGE)/%.class : %.java
 	-$(MKDIR) $(subst /,$(PS),$(@D))

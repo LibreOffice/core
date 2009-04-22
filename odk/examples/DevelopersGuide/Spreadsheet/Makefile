@@ -140,7 +140,8 @@ include $(SETTINGS)/stdtarget.mk
 
 $(SAMPLE_GEN_OUT)/%.Manifest :
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	@echo RegistrationClassName: $(basename $(basename $(@F)))> $@
+	@echo UNO-Type-Path: $(basename $(notdir $*)).uno.jar> $@
+	@echo RegistrationClassName: $(basename $(basename $(@F)))>> $@
 
 # IDLs only for component 1 relevant
 $(COMP1_GEN_OUT)/%.urd : %.idl

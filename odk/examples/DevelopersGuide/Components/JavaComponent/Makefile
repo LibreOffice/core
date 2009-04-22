@@ -103,7 +103,8 @@ include $(SETTINGS)/stdtarget.mk
 
 $(OUT_COMP_CLASS)/%.Manifest :
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	@echo RegistrationClassName: TestServiceProvider> $@
+	@echo UNO-Type-Path: $(basename $(notdir $*)).uno.jar> $@
+	@echo RegistrationClassName: TestServiceProvider>> $@
 
 $(OUT_COMP_GEN)/%.urd : %.idl
 	-$(MKDIR) $(subst /,$(PS),$(@D))
