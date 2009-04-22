@@ -49,6 +49,7 @@
 #include "cppuhelper/basemutex.hxx"
 #include <dbaccess/ToolBoxHelper.hxx>
 #include <vcl/toolbox.hxx>
+#include <vcl/fixed.hxx>
 
 #include <rtl/ref.hxx>
 
@@ -71,6 +72,8 @@ class  OAddFieldWindow  :public FloatingWindow
     ToolBox                                                                     m_aActions;
 
     ::std::auto_ptr<OAddFieldWindowListBox>                                     m_pListBox;
+    FixedLine                                                                   m_aFixedLine;
+    FixedText                                                                   m_aHelpText;
 
     PushButton                                                                  m_aInsertButton;
     Link                                                                        m_aCreateLink;

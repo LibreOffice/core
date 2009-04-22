@@ -214,8 +214,9 @@ OTableStylesContext::OTableStylesContext( SvXMLImport& rImport,
         const Reference< XAttributeList > & xAttrList,
         const sal_Bool bTempAutoStyles ) :
     SvXMLStylesContext( rImport, nPrfx, rLName, xAttrList ),
-    sColumnStyleServiceName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME ))),
     sTableStyleServiceName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_TABLE_TABLE_STYLES_NAME ))),
+    sColumnStyleServiceName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME ))),
+    sCellStyleServiceName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME ))),
     m_nNumberFormatIndex(-1),
     bAutoStyles(bTempAutoStyles)
 {
@@ -251,6 +252,13 @@ UniReference < SvXMLImportPropertyMapper >
     {
         switch( nFamily )
         {
+            case XML_STYLE_FAMILY_TABLE_TABLE:
+            {
+                if ( !m_xTableImpPropMapper.is() )
+                    m_xTableImpPropMapper = new SvXMLImportPropertyMapper( const_cast<OTableStylesContext*>(this)->GetOwnImport().GetTableStylesPropertySetMapper(), const_cast<SvXMLImport&>(GetImport()) );
+                xMapper = m_xTableImpPropMapper;
+            }
+             break;
             case XML_STYLE_FAMILY_TABLE_COLUMN:
             {
                 if ( !m_xColumnImpPropMapper.is() )
@@ -258,11 +266,11 @@ UniReference < SvXMLImportPropertyMapper >
                 xMapper = m_xColumnImpPropMapper;
             }
              break;
-            case XML_STYLE_FAMILY_TABLE_TABLE:
+            case XML_STYLE_FAMILY_TABLE_CELL:
             {
-                if ( !m_xTableImpPropMapper.is() )
-                    m_xTableImpPropMapper = new SvXMLImportPropertyMapper( const_cast<OTableStylesContext*>(this)->GetOwnImport().GetTableStylesPropertySetMapper(), const_cast<SvXMLImport&>(GetImport()) );
-                xMapper = m_xTableImpPropMapper;
+                if ( !m_xCellImpPropMapper.is() )
+                    m_xCellImpPropMapper = new SvXMLImportPropertyMapper( const_cast<OTableStylesContext*>(this)->GetOwnImport().GetCellStylesPropertySetMapper(), const_cast<SvXMLImport&>(GetImport()) );
+                xMapper = m_xCellImpPropMapper;
             }
              break;
         }
@@ -282,8 +290,9 @@ SvXMLStyleContext *OTableStylesContext::CreateStyleStyleChildContext(
     {
         switch( nFamily )
         {
-        case XML_STYLE_FAMILY_TABLE_COLUMN:
         case XML_STYLE_FAMILY_TABLE_TABLE:
+        case XML_STYLE_FAMILY_TABLE_COLUMN:
+        case XML_STYLE_FAMILY_TABLE_CELL:
             pStyle = new OTableStyleContext( GetOwnImport(), nPrefix, rLocalName,
                                                xAttrList, *this, nFamily );
             break;
@@ -308,12 +317,16 @@ Reference < XNameContainer >
     {
         switch( nFamily )
         {
-        case XML_STYLE_FAMILY_TABLE_COLUMN:
-            sServiceName = sColumnStyleServiceName;
-            break;
         case XML_STYLE_FAMILY_TABLE_TABLE:
             sServiceName = sTableStyleServiceName;
             break;
+        case XML_STYLE_FAMILY_TABLE_COLUMN:
+            sServiceName = sColumnStyleServiceName;
+            break;
+        case XML_STYLE_FAMILY_TABLE_CELL:
+            sServiceName = sCellStyleServiceName;
+            break;
+
         }
     }
     return sServiceName;

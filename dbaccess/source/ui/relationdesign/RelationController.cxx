@@ -255,9 +255,7 @@ void ORelationController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue
                 if(!::dbaui::checkDataSourceAvailable(::comphelper::getString(getDataSource()->getPropertyValue(PROPERTY_NAME)),getORB()))
                 {
                     String aMessage(ModuleRes(STR_DATASOURCE_DELETED));
-                    String sTitle(ModuleRes(STR_STAT_WARNING));
-                    OSQLMessageBox aMsg(getView(),sTitle,aMessage);
-                    aMsg.Execute();
+                    OSQLWarningBox( getView(), aMessage ).Execute();
                 }
                 else
                 {

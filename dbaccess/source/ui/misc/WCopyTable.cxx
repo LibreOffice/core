@@ -1598,12 +1598,9 @@ TOTypeInfoSP OCopyTableWizard::convertType(const TOTypeInfoSP& _pType,sal_Bool& 
 // -----------------------------------------------------------------------------
 void OCopyTableWizard::showColumnTypeNotSupported(const ::rtl::OUString& _rColumnName)
 {
-    UniString sTitle(ModuleRes(STR_STAT_WARNING));
-    UniString sMessage(ModuleRes(STR_UNKNOWN_TYPE_FOUND));
-
+    String sMessage( ModuleRes( STR_UNKNOWN_TYPE_FOUND ) );
     sMessage.SearchAndReplaceAscii("#1",_rColumnName);
 
-    OSQLMessageBox aMsg(this,sTitle,sMessage);
-    aMsg.Execute();
+    OSQLWarningBox( this, sMessage ).Execute();
 }
 //-------------------------------------------------------------------------------

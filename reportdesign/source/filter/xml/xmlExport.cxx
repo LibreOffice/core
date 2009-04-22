@@ -323,6 +323,7 @@ ORptExport::ORptExport(const Reference< XMultiServiceFactory >& _rxMSF,sal_uInt1
 
     UniReference < XMLPropertySetMapper > xPropMapper(new XMLTextPropertySetMapper( TEXT_PROP_MAP_PARA ));
     m_xParaPropMapper = new OSpecialHanldeXMLExportPropertyMapper( xPropMapper);
+    //m_xParaPropMapper->ChainExportMapper(XMLTextParagraphExport::CreateParaExtPropMapper(*this));
 
     ::rtl::OUString sFamily( GetXMLToken(XML_PARAGRAPH) );
     ::rtl::OUString aPrefix( String( 'P' ) );
@@ -947,8 +948,6 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
                                     AddAttribute(XML_NAMESPACE_FORM, XML_IMAGE_DATA,sTargetLocation);
                                 }
                                 bExportData = sal_True;
-                                if ( xImage->getScaleImage() )
-                                    AddAttribute(XML_NAMESPACE_REPORT, XML_SCALE, XML_TRUE );
                             }
                             else if ( xReportDefinition.is() )
                             {

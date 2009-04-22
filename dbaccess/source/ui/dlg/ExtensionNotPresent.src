@@ -1,4 +1,4 @@
-﻿/*************************************************************************
+/*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -89,3 +89,4 @@ ModalDialog RID_EXTENSION_NOT_PRESENT_DLG
         TabStop = TRUE ;
     };
 };
+

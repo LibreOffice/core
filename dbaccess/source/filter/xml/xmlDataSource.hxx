@@ -43,15 +43,19 @@ namespace dbaxml
     class ODBFilter;
     class OXMLDataSource : public SvXMLImportContext
     {
-        bool        m_bAsDataSource;
-
         ODBFilter& GetOwnImport();
     public:
+        enum UsedFor
+        {
+            eDataSource,
+            eDriverSettings,
+            eAppSettings
+        };
 
         OXMLDataSource( ODBFilter& rImport, sal_uInt16 nPrfx,
                     const ::rtl::OUString& rLName,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
-                    bool _bAsDataSource = true);
+                    const UsedFor _eUsedFor = eDataSource );
         virtual ~OXMLDataSource();
 
         virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,

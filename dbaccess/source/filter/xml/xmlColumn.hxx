@@ -30,13 +30,9 @@
 #ifndef DBA_XMLCOLUMN_HXX
 #define DBA_XMLCOLUMN_HXX
 
-#ifndef _XMLOFF_XMLICTXT_HXX
 #include <xmloff/xmlictxt.hxx>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
-#endif
-
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 namespace dbaxml
 {
@@ -44,8 +40,11 @@ namespace dbaxml
     class OXMLColumn : public SvXMLImportContext
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > m_xParentContainer;
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >    m_xTable;
+
         ::rtl::OUString m_sName;
         ::rtl::OUString m_sStyleName;
+        ::rtl::OUString m_sCellStyleName;
         ::rtl::OUString m_sHelpMessage;
         ::com::sun::star::uno::Any m_aDefaultValue;
         sal_Bool        m_bHidden;
@@ -58,6 +57,7 @@ namespace dbaxml
                     ,const ::rtl::OUString& rLName
                     ,const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList
                     ,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _xParentContainer
+                    ,const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >&    _xTable
                     );
         virtual ~OXMLColumn();
         virtual void EndElement();

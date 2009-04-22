@@ -71,15 +71,12 @@
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/task/ErrorCodeIOException.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#ifndef REPORTDESIGN_SHARED_CORESTRINGS_HRC
 #include "corestrings.hrc"
-#endif
 #include "Groups.hxx"
+#include "RptDef.hxx"
 #include "Section.hxx"
 #include "FixedLine.hxx"
-#ifndef REPORTDESIGN_CORE_RESOURCE_HRC_
 #include "core_resource.hrc"
-#endif
 #include "core_resource.hxx"
 #include "Tools.hxx"
 #include <tools/debug.hxx>
@@ -679,8 +676,10 @@ void OReportDefinition::init()
         m_pImpl->m_pReportModel->GetItemPool().FreezeIdRanges();
         m_pImpl->m_pReportModel->SetScaleUnit( MAP_100TH_MM );
         SdrLayerAdmin& rAdmin = m_pImpl->m_pReportModel->GetLayerAdmin();
-        rAdmin.NewStandardLayer();
-        rAdmin.NewLayer( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "HiddenLayer" ) ) );
+        rAdmin.NewStandardLayer(RPT_LAYER_FRONT);
+        rAdmin.NewLayer(UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "back" ) ), RPT_LAYER_BACK );
+        rAdmin.NewLayer( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "HiddenLayer" ) ), RPT_LAYER_HIDDEN );
+
         m_pImpl->m_xFunctions = new OFunctions(this,m_aProps->m_xContext);
         if ( !m_pImpl->m_xStorage.is() )
             m_pImpl->m_xStorage = ::comphelper::OStorageHelper::GetTemporaryStorage();
@@ -1396,14 +1395,25 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
     /** property map for export info set */
     comphelper::PropertyMapEntry aExportInfoMap[] =
     {
-        { MAP_LEN( "UsePrettyPrinting" ), 0, &::getCppuType((sal_Bool*)0), beans::PropertyAttribute::MAYBEVOID, 0},
-        { MAP_LEN( "StreamName"), 0,&::getCppuType( (::rtl::OUString *)0 ),beans::PropertyAttribute::MAYBEVOID, 0 },
+        { MAP_LEN( "UsePrettyPrinting" ), 0, &::getCppuType((sal_Bool*)0),          beans::PropertyAttribute::MAYBEVOID, 0 },
+        { MAP_LEN( "StreamName")        , 0,&::getCppuType( (::rtl::OUString *)0 ), beans::PropertyAttribute::MAYBEVOID, 0 },
+        { MAP_LEN( "StreamRelPath")     , 0,&::getCppuType( (::rtl::OUString *)0 ), beans::PropertyAttribute::MAYBEVOID, 0 },
+        { MAP_LEN( "BaseURI")           , 0,&::getCppuType( (::rtl::OUString *)0 ), beans::PropertyAttribute::MAYBEVOID, 0 },
         { NULL, 0, 0, NULL, 0, 0 }
     };
     uno::Reference< beans::XPropertySet > xInfoSet( comphelper::GenericPropertySet_CreateInstance( new comphelper::PropertySetInfo( aExportInfoMap ) ) );
 
     SvtSaveOptions aSaveOpt;
     xInfoSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UsePrettyPrinting")), uno::makeAny(aSaveOpt.IsPrettyPrinting()));
+    if ( aSaveOpt.IsSaveRelFSys() )
+    {
+        const ::rtl::OUString sVal( aDescriptor.getUnpackedValueOrDefault(aDescriptor.PROP_DOCUMENTBASEURL(),::rtl::OUString()) );
+        xInfoSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BaseURI")), uno::makeAny(sVal));
+    } // if ( aSaveOpt.IsSaveRelFSys() )
+    const ::rtl::OUString sHierarchicalDocumentName( aDescriptor.getUnpackedValueOrDefault(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HierarchicalDocumentName")),::rtl::OUString()) );
+    xInfoSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StreamRelPath")), uno::makeAny(sHierarchicalDocumentName));
+
+
     sal_Int32 nArgsLen = aDelegatorArguments.getLength();
     aDelegatorArguments.realloc(nArgsLen+1);
     aDelegatorArguments[nArgsLen++] <<= xInfoSet;

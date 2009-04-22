@@ -87,6 +87,7 @@ namespace rptxml
 
         static SvXMLTokenMap* GetReportElemTokenMap();
         static SvXMLTokenMap* GetSubDocumentElemTokenMap();
+
     };
 // -----------------------------------------------------------------------------
 } // rptxml

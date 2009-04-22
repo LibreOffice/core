@@ -7,3 +7,4 @@
 -o complex.dbaccess.DataSource
 -o complex.dbaccess.Parser
 -o complex.dbaccess.ApplicationController
+-o complex.dbaccess.UISettings

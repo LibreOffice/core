@@ -1263,9 +1263,7 @@ sal_Bool appendToFilter(const Reference<XConnection>& _xConnection,
                 if(! ::dbaui::checkDataSourceAvailable(::comphelper::getString(xProp->getPropertyValue(PROPERTY_NAME)),_xFactory))
                 {
                     String aMessage(ModuleRes(STR_TABLEDESIGN_DATASOURCE_DELETED));
-                    String sTitle(ModuleRes(STR_STAT_WARNING));
-                    OSQLMessageBox aMsg(_pParent,sTitle,aMessage);
-                    aMsg.Execute();
+                    OSQLWarningBox( _pParent, aMessage ).Execute();
                     bRet = sal_False;
                 }
                 else

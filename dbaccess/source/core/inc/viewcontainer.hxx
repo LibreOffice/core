@@ -108,6 +108,10 @@ namespace dbaccess
 
         virtual ~OViewContainer();
 
+    protected:
+        // OFilteredContainer overridables
+        virtual ::rtl::OUString getTableTypeRestriction() const;
+
     private:
         inline virtual void SAL_CALL acquire() throw(){ OFilteredContainer::acquire();}
         inline virtual void SAL_CALL release() throw(){ OFilteredContainer::release();}
@@ -121,7 +125,6 @@ namespace dbaccess
         virtual void SAL_CALL elementRemoved( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL elementReplaced( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
 
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > getTableTypeFilter(const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rTableTypeFilter) const;
         // ::connectivity::sdbcx::OCollection
         virtual ::connectivity::sdbcx::ObjectType       createObject(const ::rtl::OUString& _rName);
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   createDescriptor();

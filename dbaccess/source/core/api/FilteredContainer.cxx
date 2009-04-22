@@ -29,22 +29,21 @@
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
+
 #include "precompiled_dbaccess.hxx"
-#ifndef DBACCESS_CORE_FILTERED_CONTAINER_HXX
+
+#include "dbastrings.hrc"
 #include "FilteredContainer.hxx"
-#endif
-#ifndef DBA_CORE_REFRESHLISTENER_HXX
 #include "RefreshListener.hxx"
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
+#include "sdbcoretools.hxx"
+
 #include <com/sun/star/sdbc/XRow.hpp>
-#endif
-#ifndef _CONNECTIVITY_DBTOOLS_HXX_
-#include "connectivity/dbtools.hxx"
-#endif
-#ifndef _WLDCRD_HXX
+
+#include <connectivity/dbtools.hxx>
 #include <tools/wldcrd.hxx>
-#endif
+#include <tools/diagnose_ex.h>
+
+#include <boost/optional.hpp>
 
 namespace dbaccess
 {
@@ -92,6 +91,171 @@ namespace dbaccess
         return nShiftPos;
     }
 
+    // -------------------------------------------------------------------------
+    bool lcl_isElementAllowed(  const ::rtl::OUString& _rName,
+                                const Sequence< ::rtl::OUString >& _rTableFilter,
+                                const ::std::vector< WildCard >& _rWCSearch )
+    {
+        sal_Int32 nTableFilterLen = _rTableFilter.getLength();
+
+        const ::rtl::OUString* tableFilter = _rTableFilter.getConstArray();
+        const ::rtl::OUString* tableFilterEnd = _rTableFilter.getConstArray() + nTableFilterLen;
+        bool bFilterMatch = ::std::find( tableFilter, tableFilterEnd, _rName ) != tableFilterEnd;
+        // the table is allowed to "pass" if we had no filters at all or any of the non-wildcard filters matches
+        if (!bFilterMatch && !_rWCSearch.empty())
+        {   // or if one of the wildcrad expression matches
+            for (   ::std::vector< WildCard >::const_iterator aLoop = _rWCSearch.begin();
+                    aLoop != _rWCSearch.end() && !bFilterMatch;
+                    ++aLoop
+                )
+                bFilterMatch = aLoop->Matches( _rName );
+        }
+
+        return bFilterMatch;
+    }
+
+    //--------------------------------------------------------------------------
+    typedef ::boost::optional< ::rtl::OUString >    OptionalString;
+    struct TableInfo
+    {
+        OptionalString  sComposedName;
+        OptionalString  sType;
+        OptionalString  sCatalog;
+        OptionalString  sSchema;
+        OptionalString  sName;
+
+        TableInfo( const ::rtl::OUString& _composedName )
+            :sComposedName( _composedName )
+        {
+        }
+
+        TableInfo( const ::rtl::OUString& _catalog, const ::rtl::OUString& _schema, const ::rtl::OUString& _name,
+            const ::rtl::OUString& _type )
+            :sComposedName()
+            ,sType( _type )
+            ,sCatalog( _catalog )
+            ,sSchema( _schema )
+            ,sName( _name )
+        {
+        }
+    };
+    typedef ::std::vector< TableInfo >    TableInfos;
+
+    //--------------------------------------------------------------------------
+    void lcl_ensureComposedName( TableInfo& _io_tableInfo, const Reference< XDatabaseMetaData >& _metaData )
+    {
+        if ( !_metaData.is() )
+            throw RuntimeException();
+
+        if ( !_io_tableInfo.sComposedName )
+        {
+            OSL_ENSURE( !!_io_tableInfo.sCatalog && !!_io_tableInfo.sSchema && !!_io_tableInfo.sName, "lcl_ensureComposedName: How should I composed the name from nothing!?" );
+
+            _io_tableInfo.sComposedName = OptionalString(
+                composeTableName( _metaData, *_io_tableInfo.sCatalog, *_io_tableInfo.sSchema, *_io_tableInfo.sName,
+                sal_False, ::dbtools::eInDataManipulation )
+            );
+        }
+    }
+
+    //--------------------------------------------------------------------------
+    void lcl_ensureType( TableInfo& _io_tableInfo, const Reference< XDatabaseMetaData >& _metaData, const Reference< XNameAccess >& _masterContainer )
+    {
+        if ( !!_io_tableInfo.sType )
+            return;
+
+        lcl_ensureComposedName( _io_tableInfo, _metaData );
+
+        if ( !_masterContainer.is() )
+            throw RuntimeException();
+
+        ::rtl::OUString sTypeName;
+        try
+        {
+            Reference< XPropertySet > xTable( _masterContainer->getByName( *_io_tableInfo.sComposedName ), UNO_QUERY_THROW );
+            OSL_VERIFY( xTable->getPropertyValue( PROPERTY_TYPE ) >>= sTypeName );
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+        _io_tableInfo.sType = OptionalString( sTypeName );
+    }
+
+    //--------------------------------------------------------------------------
+    connectivity::TStringVector lcl_filter( const TableInfos& _unfilteredTables,
+        const Sequence< ::rtl::OUString >& _tableFilter, const Sequence< ::rtl::OUString >& _tableTypeFilter,
+        const Reference< XDatabaseMetaData >& _metaData, const Reference< XNameAccess >& _masterContainer )
+    {
+        TableInfos aFilteredTables;
+
+        // first, filter for the table names
+        sal_Int32 nTableFilterCount = _tableFilter.getLength();
+        sal_Bool dontFilterTableNames = ( ( nTableFilterCount == 1 ) && _tableFilter[0].equalsAsciiL( "%", 1 ) );
+        if( dontFilterTableNames )
+        {
+            aFilteredTables = _unfilteredTables;
+        }
+        else
+        {
+            // for wildcard search : remove all table filters which are a wildcard expression and build a WilCard
+            // for them
+            ::std::vector< WildCard > aWildCardTableFilter;
+            Sequence< ::rtl::OUString > aNonWildCardTableFilter = _tableFilter;
+            nTableFilterCount = createWildCardVector( aNonWildCardTableFilter, aWildCardTableFilter );
+
+            TableInfos aUnfilteredTables( _unfilteredTables );
+            aUnfilteredTables.reserve( nTableFilterCount + ( aWildCardTableFilter.size() * 10 ) );
+
+            for (   TableInfos::iterator table = aUnfilteredTables.begin();
+                    table != aUnfilteredTables.end();
+                    ++table
+                )
+            {
+                lcl_ensureComposedName( *table, _metaData );
+
+                if ( lcl_isElementAllowed( *table->sComposedName, aNonWildCardTableFilter, aWildCardTableFilter ) )
+                    aFilteredTables.push_back( *table );
+            }
+        }
+
+        // second, filter for the table types
+        sal_Int32 nTableTypeFilterCount = _tableTypeFilter.getLength();
+        sal_Bool dontFilterTableTypes = ( ( nTableTypeFilterCount == 1 ) && _tableTypeFilter[0].equalsAsciiL( "%", 1 ) );
+        dontFilterTableTypes = dontFilterTableTypes || ( nTableTypeFilterCount == 0 );
+            // (for TableTypeFilter, unlike TableFilter, "empty" means "do not filter at all")
+        if ( !dontFilterTableTypes )
+        {
+            TableInfos aUnfilteredTables;
+            aUnfilteredTables.swap( aFilteredTables );
+
+            const ::rtl::OUString* pTableTypeFilterBegin = _tableTypeFilter.getConstArray();
+            const ::rtl::OUString* pTableTypeFilterEnd = pTableTypeFilterBegin + _tableTypeFilter.getLength();
+
+            for (   TableInfos::iterator table = aUnfilteredTables.begin();
+                    table != aUnfilteredTables.end();
+                    ++table
+                )
+            {
+                // ensure that we know the table type
+                lcl_ensureType( *table, _metaData, _masterContainer );
+
+                if ( ::std::find( pTableTypeFilterBegin, pTableTypeFilterEnd, *table->sType ) != pTableTypeFilterEnd )
+                    aFilteredTables.push_back( *table );
+            }
+        }
+
+        connectivity::TStringVector aReturn;
+        for (   TableInfos::iterator table = aFilteredTables.begin();
+                table != aFilteredTables.end();
+                ++table
+            )
+        {
+            lcl_ensureComposedName( *table, _metaData );
+            aReturn.push_back( *table->sComposedName );
+        }
+        return aReturn;
+    }
 
     //==========================================================================
     //= OViewContainer
@@ -104,14 +268,15 @@ namespace dbaccess
                                  IWarningsContainer* _pWarningsContainer
                                  ,oslInterlockedCount& _nInAppend)
         :OCollection(_rParent,_bCase,_rMutex,::std::vector< ::rtl::OUString>())
+        ,m_bConstructed(sal_False)
         ,m_pWarningsContainer(_pWarningsContainer)
         ,m_pRefreshListener(_pRefreshListener)
         ,m_nInAppend(_nInAppend)
         ,m_xConnection(_xCon)
-        ,m_bConstructed(sal_False)
     {
 
     }
+
     // -------------------------------------------------------------------------
     void OFilteredContainer::construct(const Reference< XNameAccess >& _rxMasterContainer,
                                     const Sequence< ::rtl::OUString >& _rTableFilter,
@@ -125,80 +290,39 @@ namespace dbaccess
         }
         catch(SQLException&)
         {
+            DBG_UNHANDLED_EXCEPTION();
         }
 
         m_xMasterContainer = _rxMasterContainer;
 
-        if(m_xMasterContainer.is())
+        if ( m_xMasterContainer.is() )
         {
             addMasterContainerListener();
-            sal_Int32   nTableFilterLen = _rTableFilter.getLength();
 
-            connectivity::TStringVector aTableNames;
-            sal_Bool bNoTableFilters = ((nTableFilterLen == 1) && _rTableFilter[0].equalsAsciiL("%", 1));
-            if(!bNoTableFilters)
-            {
-                Sequence< ::rtl::OUString > aTableFilter        = _rTableFilter;
-                Sequence< ::rtl::OUString > aTableTypeFilter    = _rTableTypeFilter;
+            TableInfos aUnfilteredTables;
 
-                // build sorted versions of the filter sequences, so the visibility decision is faster
-                ::std::sort( aTableFilter.getArray(), aTableFilter.getArray() + nTableFilterLen );
+            Sequence< ::rtl::OUString > aNames = m_xMasterContainer->getElementNames();
+            const ::rtl::OUString*  name = aNames.getConstArray();
+            const ::rtl::OUString*  nameEnd = name + aNames.getLength();
+            for ( ; name != nameEnd; ++name )
+                aUnfilteredTables.push_back( TableInfo( *name ) );
 
-                // as we want to modify nTableFilterLen, remember this
+            reFill( lcl_filter( aUnfilteredTables,
+                _rTableFilter, _rTableTypeFilter, m_xMetaData, m_xMasterContainer ) );
 
-                // for wildcard search : remove all table filters which are a wildcard expression and build a WilCard
-                // for them
-                ::std::vector< WildCard > aWCSearch; // contains the wildcards for the table filter
-                nTableFilterLen = createWildCardVector(aTableFilter,aWCSearch);
-
-                aTableNames.reserve(nTableFilterLen + (aWCSearch.size() * 10));
-
-                Sequence< ::rtl::OUString> aNames = m_xMasterContainer->getElementNames();
-                const ::rtl::OUString* pBegin   = aNames.getConstArray();
-                const ::rtl::OUString* pEnd     = pBegin + aNames.getLength();
-                for(;pBegin != pEnd;++pBegin)
-                {
-                    if(isNameValid(*pBegin,aTableFilter,aTableTypeFilter,aWCSearch))
-                        aTableNames.push_back(*pBegin);
-                }
-            }
-            else
-            {
-                // no filter so insert all names
-                Sequence< ::rtl::OUString> aNames = m_xMasterContainer->getElementNames();
-                const ::rtl::OUString* pBegin   = aNames.getConstArray();
-                const ::rtl::OUString* pEnd     = pBegin + aNames.getLength();
-                aTableNames = connectivity::TStringVector(pBegin,pEnd);
-            }
-            reFill(aTableNames);
             m_bConstructed = sal_True;
         }
         else
         {
-            construct(_rTableFilter,_rTableTypeFilter);
+            construct( _rTableFilter, _rTableTypeFilter );
         }
     }
     //------------------------------------------------------------------------------
     void OFilteredContainer::construct(const Sequence< ::rtl::OUString >& _rTableFilter, const Sequence< ::rtl::OUString >& _rTableTypeFilter)
     {
-        try
-        {
-            Reference<XConnection> xCon = m_xConnection;
-            if ( xCon.is() )
-                m_xMetaData = xCon->getMetaData();
-        }
-        catch(SQLException&)
-        {
-        }
         // build sorted versions of the filter sequences, so the visibility decision is faster
         Sequence< ::rtl::OUString > aTableFilter(_rTableFilter);
         sal_Int32   nTableFilterLen = aTableFilter.getLength();
-
-        if (nTableFilterLen)
-            ::std::sort( aTableFilter.getArray(), aTableFilter.getArray() + nTableFilterLen );
-
-        sal_Bool bNoTableFilters = ((nTableFilterLen == 1) && _rTableFilter[0].equalsAsciiL("%", 1));
-            // as we want to modify nTableFilterLen, remember this
 
         // for wildcard search : remove all table filters which are a wildcard expression and build a WilCard
         // for them
@@ -207,90 +331,87 @@ namespace dbaccess
 
         try
         {
-            if (m_xMetaData.is())
+            Reference< XConnection > xCon( m_xConnection, UNO_SET_THROW );
+            m_xMetaData.set( xCon->getMetaData(), UNO_SET_THROW );
+
+            // create a table table filter suitable for the XDatabaseMetaData::getTables call,
+            // taking into account both the externally-provided table type filter, and any
+            // table type restriction which is inherent to the container
+            Sequence< ::rtl::OUString > aTableTypeFilter;
+            ::rtl::OUString sInherentTableTypeRestriction( getTableTypeRestriction() );
+            if ( sInherentTableTypeRestriction.getLength() )
             {
-                static const ::rtl::OUString sAll = ::rtl::OUString::createFromAscii("%");
-                Sequence< ::rtl::OUString > sTableTypes = getTableTypeFilter(_rTableTypeFilter);
-                if ( m_bConstructed && sTableTypes.getLength() == 0 )
-                    return;
-
-                Reference< XResultSet > xTables = m_xMetaData->getTables(Any(), sAll, sAll, sTableTypes);
-                Reference< XRow > xCurrentRow(xTables, UNO_QUERY);
-                if (xCurrentRow.is())
+                if ( _rTableTypeFilter.getLength() != 0 )
                 {
-
-                        // after creation the set is positioned before the first record, per definitionem
-
-                    ::rtl::OUString sCatalog, sSchema, sName, sType;
-                    ::rtl::OUString sComposedName;
-
-                    // we first collect the names and construct the OTable objects later, as the ctor of the table may need
-                    // another result set from the connection, and some drivers support only one statement per connection
-
-                    sal_Bool bFilterMatch;
-                    while (xTables->next())
+                    const ::rtl::OUString* tableType    = _rTableTypeFilter.getConstArray();
+                    const ::rtl::OUString* tableTypeEnd = tableType + _rTableTypeFilter.getLength();
+                    for ( ; tableType != tableTypeEnd; ++tableType )
                     {
-                        sCatalog    = xCurrentRow->getString(1);
-                        sSchema     = xCurrentRow->getString(2);
-                        sName       = xCurrentRow->getString(3);
-#if OSL_DEBUG_LEVEL > 0
-                        ::rtl::OUString sTableType = xCurrentRow->getString(4);
-#endif
-                        // we're not interested in the "wasNull", as the getStrings would return an empty string in
-                        // that case, which is sufficient here
-
-                        sComposedName = composeTableName( m_xMetaData, sCatalog, sSchema, sName, sal_False, ::dbtools::eInDataManipulation );
-
-                        const ::rtl::OUString* tableFilter = aTableFilter.getConstArray();
-                        const ::rtl::OUString* tableFilterEnd = aTableFilter.getConstArray() + nTableFilterLen;
-                        bool composedNameInFilter = ::std::find( tableFilter, tableFilterEnd, sComposedName ) != tableFilterEnd;
-
-                        bFilterMatch =  bNoTableFilters
-                                    ||  (   ( nTableFilterLen != 0 )
-                                        &&  composedNameInFilter
-                                        );
-
-                        // the table is allowed to "pass" if we had no filters at all or any of the non-wildcard filters matches
-
-                        if (!bFilterMatch && aWCSearch.size())
-                        {   // or if one of the wildcrad expression matches
-                            for (   ::std::vector< WildCard >::const_iterator aLoop = aWCSearch.begin();
-                                    aLoop != aWCSearch.end() && !bFilterMatch;
-                                    ++aLoop
-                                )
-                                bFilterMatch = aLoop->Matches(sComposedName);
-                        }
-
-                        if (bFilterMatch)
-                        {   // the table name is allowed (not filtered out)
-                            insertElement(sComposedName,NULL);
-                        }
+                        if ( *tableType == sInherentTableTypeRestriction )
+                            break;
                     }
-
-                    // dispose the tables result set, in case the connection can handle only one concurrent statement
-                    // (the table object creation will need it's own statements)
-                    disposeComponent(xTables);
+                    if ( tableType == tableTypeEnd )
+                    {   // the only table type which can be part of this container is not allowed
+                        // by the externally provided table type filter.
+                        m_bConstructed = sal_True;
+                        return;
+                    }
                 }
-                else
-                    OSL_ENSURE(0,"OFilteredContainer::construct : did not get a XRow from the tables result set !");
+                aTableTypeFilter.realloc( 1 );
+                aTableTypeFilter[0] = sInherentTableTypeRestriction;
             }
             else
-                OSL_ENSURE(0,"OFilteredContainer::construct : no connection meta data !");
+            {
+                // no container-inherent restriction for the table types
+                if ( _rTableTypeFilter.getLength() == 0 )
+                {   // no externally-provided table type filter => use the default filter
+                    getAllTableTypeFilter( aTableTypeFilter );
+                }
+                else
+                {
+                    aTableTypeFilter = _rTableTypeFilter;
+                }
+            }
+
+            static const ::rtl::OUString sAll = ::rtl::OUString::createFromAscii("%");
+            Reference< XResultSet > xTables = m_xMetaData->getTables( Any(), sAll, sAll, aTableTypeFilter );
+            Reference< XRow > xCurrentRow( xTables, UNO_QUERY_THROW );
+
+            TableInfos aUnfilteredTables;
+
+            ::rtl::OUString sCatalog, sSchema, sName, sType;
+            while ( xTables->next() )
+            {
+                sCatalog    = xCurrentRow->getString(1);
+                sSchema     = xCurrentRow->getString(2);
+                sName       = xCurrentRow->getString(3);
+                sType       = xCurrentRow->getString(4);
+
+                aUnfilteredTables.push_back( TableInfo( sCatalog, sSchema, sName, sType ) );
+            }
+
+            reFill( lcl_filter( aUnfilteredTables,
+                _rTableFilter, aTableTypeFilter, m_xMetaData, NULL ) );
+
+            disposeComponent( xTables );
         }
-        catch (SQLException&)
+        catch (const Exception&)
         {
-            OSL_ENSURE(0,"OFilteredContainer::construct: caught an SQL-Exception !");
+            DBG_UNHANDLED_EXCEPTION();
             disposing();
             return;
         }
 
         m_bConstructed = sal_True;
     }
+
     //------------------------------------------------------------------------------
     void OFilteredContainer::disposing()
     {
         OCollection::disposing();
-        removeMasterContainerListener();
+
+        if ( m_xMasterContainer.is() )
+            removeMasterContainerListener();
 
         m_xMasterContainer  = NULL;
         m_xMetaData         = NULL;
@@ -310,36 +431,70 @@ namespace dbaccess
             m_pRefreshListener->refresh(this);
         }
     }
-    // -------------------------------------------------------------------------
-    sal_Bool OFilteredContainer::isNameValid(   const ::rtl::OUString& _rName,
-                                            const Sequence< ::rtl::OUString >& _rTableFilter,
-                                            const Sequence< ::rtl::OUString >& /*_rTableTypeFilter*/,
-                                            const ::std::vector< WildCard >& _rWCSearch) const
-    {
-        sal_Int32 nTableFilterLen = _rTableFilter.getLength();
 
-        const ::rtl::OUString* tableFilter = _rTableFilter.getConstArray();
-        const ::rtl::OUString* tableFilterEnd = _rTableFilter.getConstArray() + nTableFilterLen;
-        bool bFilterMatch = ::std::find( tableFilter, tableFilterEnd, _rName ) != tableFilterEnd;
-        // the table is allowed to "pass" if we had no filters at all or any of the non-wildcard filters matches
-        if (!bFilterMatch && !_rWCSearch.empty())
-        {   // or if one of the wildcrad expression matches
-            String sWCCompare = (const sal_Unicode*)_rName;
-            for (   ::std::vector< WildCard >::const_iterator aLoop = _rWCSearch.begin();
-                    aLoop != _rWCSearch.end() && !bFilterMatch;
-                    ++aLoop
-                )
-                bFilterMatch = aLoop->Matches(sWCCompare);
-        }
-
-        return bFilterMatch;
-    }
     // -----------------------------------------------------------------------------
     ::rtl::OUString OFilteredContainer::getNameForObject(const ObjectType& _xObject)
     {
-        OSL_ENSURE(_xObject.is(),"OTables::getNameForObject: Object is NULL!");
+        OSL_ENSURE( _xObject.is(), "OFilteredContainer::getNameForObject: Object is NULL!" );
         return ::dbtools::composeTableName( m_xMetaData, _xObject, ::dbtools::eInDataManipulation, false, false, false );
     }
+
+    // -----------------------------------------------------------------------------
+    // multiple to obtain all tables from XDatabaseMetaData::getTables, via passing a particular
+    // table type filter:
+    // adhere to the standard, which requests to pass a NULL table type filter, if
+    // you want to retrieve all tables
+    #define FILTER_MODE_STANDARD 0
+    // only pass %, which is not allowed by the standard, but understood by some drivers
+    #define FILTER_MODE_WILDCARD 1
+    // only pass TABLE and VIEW
+    #define FILTER_MODE_FIXED    2
+    // do the thing which showed to be the safest way, understood by nearly all
+    // drivers, even the ones which do not understand the standard
+    #define FILTER_MODE_MIX_ALL  3
+
+    void OFilteredContainer::getAllTableTypeFilter( Sequence< ::rtl::OUString >& /* [out] */ _rFilter ) const
+    {
+        sal_Int32 nFilterMode = FILTER_MODE_MIX_ALL;
+            // for compatibility reasons, this is the default: we used this way before we
+            // introduced the TableTypeFilterMode setting
+
+        // obtain the data source we belong to, and the TableTypeFilterMode setting
+        Any aFilterModeSetting;
+        if ( getDataSourceSetting( getDataSource( (Reference< XInterface >)m_rParent ), "TableTypeFilterMode", aFilterModeSetting ) )
+        {
+            OSL_VERIFY( aFilterModeSetting >>= nFilterMode );
+        }
+
+        const ::rtl::OUString sAll( RTL_CONSTASCII_USTRINGPARAM( "%" ) );
+        const ::rtl::OUString sView( RTL_CONSTASCII_USTRINGPARAM( "VIEW" ) );
+        const ::rtl::OUString sTable( RTL_CONSTASCII_USTRINGPARAM( "TABLE" ) );
+
+        switch ( nFilterMode )
+        {
+        default:
+            OSL_ENSURE( sal_False, "OTableContainer::getAllTableTypeFilter: unknown TableTypeFilterMode!" );
+        case FILTER_MODE_MIX_ALL:
+            _rFilter.realloc( 3 );
+            _rFilter[0] = sView;
+            _rFilter[1] = sTable;
+            _rFilter[2] = sAll;
+            break;
+        case FILTER_MODE_FIXED:
+            _rFilter.realloc( 2 );
+            _rFilter[0] = sView;
+            _rFilter[1] = sTable;
+            break;
+        case FILTER_MODE_WILDCARD:
+            _rFilter.realloc( 1 );
+            _rFilter[0] = sAll;
+            break;
+        case FILTER_MODE_STANDARD:
+            _rFilter.realloc( 0 );
+            break;
+        }
+    }
+
 // ..............................................................................
 } // namespace
 // ..............................................................................

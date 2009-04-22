@@ -189,6 +189,7 @@ namespace rptui
 
         // IMarkedSection
         ::boost::shared_ptr<OSectionWindow> getMarkedSection(NearSectionAccess nsa = CURRENT) const;
+        ::boost::shared_ptr<OSectionWindow> getSectionWindow(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection) const;
         virtual void markSection(const sal_uInt16 _nPos);
 
 

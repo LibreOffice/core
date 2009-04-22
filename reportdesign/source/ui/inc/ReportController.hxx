@@ -65,7 +65,7 @@
 #include <functional>
 #include <boost/shared_ptr.hpp>
 #include <com/sun/star/util/XModeSelector.hpp>
-
+#include "ReportControllerObserver.hxx"
 
 class TransferableHelper;
 class TransferableClipboardListener;
@@ -78,6 +78,7 @@ namespace rptui
     class OReportModel;
     class OSectionView;
     class OAddFieldWindow;
+    class OSectionWindow;
 
     typedef ::dbaui::OSingleDocumentController  OReportController_BASE;
     typedef ::cppu::ImplHelper4 <   ::com::sun::star::container::XContainerListener
@@ -103,6 +104,9 @@ namespace rptui
         TransferableClipboardListener*
                                 m_pClipbordNotifier;    /// notifier for changes in the clipboard
         OGroupsSortingDialog*   m_pGroupsFloater;
+
+        OXReportControllerObserver* m_pReportControllerObserver;
+
         ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition>          m_xReportDefinition;
         ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportEngine>              m_xReportEngine;
         ::com::sun::star::uno::Reference < ::com::sun::star::frame::XComponentLoader>           m_xFrameLoader;
@@ -206,6 +210,16 @@ namespace rptui
 
         void executeMethodWithUndo(USHORT _nUndoStrId,const ::std::mem_fun_t<void,ODesignView>& _pMemfun);
         void alignControlsWithUndo(USHORT _nUndoStrId,sal_Int32 _nControlModification,bool _bAlignAtSection = false);
+        /** shrink a section
+        @param _nUndoStrId the string id of the string which is shown in undo menu
+        @param _nShrinkId  ID of what you would like to shrink.
+        */
+    protected:
+        void shrinkSectionBottom(::com::sun::star::uno::Reference< ::com::sun::star::report::XSection > _xSection);
+        void shrinkSectionTop(::com::sun::star::uno::Reference< ::com::sun::star::report::XSection > _xSection);
+    public:
+
+        void shrinkSection(USHORT _nUndoStrId, ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection > _xSection, sal_Int32 _nShrinkId);
 
         /** opens the file open dialog to allow the user to select a image which will be
         * bound to a newly created image button.
@@ -267,9 +281,10 @@ namespace rptui
         */
         void impl_zoom_nothrow();
 
+    private:
         OReportController(OReportController const&);
         OReportController& operator =(OReportController const&);
-
+    public:
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > getXFrame();
 
         // open the help agent of report designer at start time
@@ -439,6 +454,8 @@ namespace rptui
 
     // cppu::OPropertySetHelper
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
+
+        ::boost::shared_ptr<OSectionWindow> getSectionWindow(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection) const;
 
     private:
         virtual void onLoadedMenu( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager >& _xLayoutManager );

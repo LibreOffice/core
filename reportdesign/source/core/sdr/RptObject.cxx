@@ -67,9 +67,11 @@
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
 #include <com/sun/star/chart2/data/DatabaseDataProvider.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
+#include <com/sun/star/report/XFormattedField.hpp>
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/property.hxx>
+#include <tools/diagnose_ex.h>
 #include "PropertyForward.hxx"
 #include <connectivity/dbtools.hxx>
 #include "UndoActions.hxx"
@@ -86,6 +88,7 @@ using namespace beans;
 using namespace reportdesign;
 using namespace container;
 using namespace script;
+using namespace report;
 //----------------------------------------------------------------------------
 sal_uInt16 OObjectBase::getObjectType(const uno::Reference< report::XReportComponent>& _xComponent)
 {
@@ -151,6 +154,16 @@ SdrObject* OObjectBase::createObject(const uno::Reference< report::XReportCompon
             break;
         case OBJ_CUSTOMSHAPE:
             pNewObj = OCustomShape::Create( _xComponent );
+            try
+            {
+                sal_Bool bOpaque = sal_False;
+                _xComponent->getPropertyValue(PROPERTY_OPAQUE) >>= bOpaque;
+                pNewObj->SetLayer(bOpaque ? RPT_LAYER_FRONT : RPT_LAYER_BACK);
+            }
+            catch(const uno::Exception&)
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
             break;
         case OBJ_DLG_SUBREPORT:
         case OBJ_OLE2:
@@ -563,6 +576,8 @@ OUnoObject::OUnoObject(const ::rtl::OUString& _sComponentName
           ,m_nObjectType(_nObjectType)
 {
     DBG_CTOR( rpt_OUnoObject, NULL);
+    if ( rModelName.getLength() )
+        impl_initializeModel_nothrow();
 }
 //----------------------------------------------------------------------------
 OUnoObject::OUnoObject(const uno::Reference< report::XReportComponent>& _xComponent
@@ -574,12 +589,49 @@ OUnoObject::OUnoObject(const uno::Reference< report::XReportComponent>& _xCompon
 {
     DBG_CTOR( rpt_OUnoObject, NULL);
     mxUnoShape = uno::Reference< uno::XInterface >(_xComponent,uno::UNO_QUERY);
+
+    if ( rModelName.getLength() )
+        impl_initializeModel_nothrow();
 }
 //----------------------------------------------------------------------------
 OUnoObject::~OUnoObject()
 {
     DBG_DTOR( rpt_OUnoObject, NULL);
     //mxUnoShape = uno::WeakReference< uno::XInterface >();
+}
+// -----------------------------------------------------------------------------
+void OUnoObject::impl_initializeModel_nothrow()
+{
+    try
+    {
+        Reference< XFormattedField > xFormatted( m_xReportComponent, UNO_QUERY );
+        if ( xFormatted.is() )
+        {
+            const Reference< XPropertySet > xModelProps( GetUnoControlModel(), UNO_QUERY_THROW );
+            const ::rtl::OUString sTreatAsNumberProperty = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TreatAsNumber" ) );
+            xModelProps->setPropertyValue( sTreatAsNumberProperty, makeAny( sal_False ) );
+        }
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+}
+// -----------------------------------------------------------------------------
+void OUnoObject::impl_setReportComponent_nothrow()
+{
+    if ( m_xReportComponent.is() )
+        return;
+
+    OReportModel* pReportModel = static_cast<OReportModel*>(GetModel());
+    OSL_ENSURE( pReportModel, "OUnoObject::impl_setReportComponent_nothrow: no report model!" );
+    if ( !pReportModel )
+        return;
+
+    OXUndoEnvironment::OUndoEnvLock aLock( pReportModel->GetUndoEnv() );
+    m_xReportComponent.set(getUnoShape(),uno::UNO_QUERY);
+
+    impl_initializeModel_nothrow();
 }
 // -----------------------------------------------------------------------------
 UINT16 OUnoObject::GetObjIdentifier() const
@@ -623,14 +675,47 @@ void OUnoObject::NbcMove( const Size& rSize )
         // stop listening
         OObjectBase::EndListening(sal_False);
 
+        bool bPositionFixed = false;
+        Size aUndoSize(0,0);
+        bool bUndoMode = false;
         if ( m_xReportComponent.is() )
         {
             OReportModel* pRptModel = static_cast<OReportModel*>(GetModel());
+            if (pRptModel->GetUndoEnv().IsUndoMode())
+            {
+                // if we are locked from outside, then we must not handle wrong moves, we are in UNDO mode
+                bUndoMode = true;
+            }
             OXUndoEnvironment::OUndoEnvLock aLock(pRptModel->GetUndoEnv());
-            m_xReportComponent->setPositionX(m_xReportComponent->getPositionX() + rSize.A());
-            m_xReportComponent->setPositionY(m_xReportComponent->getPositionY() + rSize.B());
-        }
 
+            // LLA: why there exists getPositionX and getPositionY and NOT getPosition() which return a Point?
+            int nNewX = m_xReportComponent->getPositionX() + rSize.A();
+            // can this hinder us to set components outside the area?
+            // if (nNewX < 0)
+            // {
+            //     nNewX = 0;
+            // }
+            m_xReportComponent->setPositionX(nNewX);
+            int nNewY = m_xReportComponent->getPositionY() + rSize.B();
+            if (nNewY < 0 && !bUndoMode)
+            {
+                aUndoSize.B() = abs(nNewY);
+                bPositionFixed = true;
+                nNewY = 0;
+            }
+            m_xReportComponent->setPositionY(nNewY);
+        }
+        if (bPositionFixed)
+        {
+            // OReportModel* pRptModel = static_cast<OReportModel*>(GetModel());
+            // if ( pRptModel )
+            // {
+            //    if (! pRptModel->GetUndoEnv().IsLocked())
+            //    {
+                    GetModel()->AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoMoveObject(*this, aUndoSize));
+            //    }
+            // }
+        }
         // set geometry properties
         SetPropsFromRect(GetLogicRect());
 
@@ -678,27 +763,23 @@ FASTBOOL OUnoObject::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
     FASTBOOL bResult = SdrUnoObj::EndCreate(rStat, eCmd);
     if ( bResult )
     {
-        OReportModel* pRptModel = static_cast<OReportModel*>(GetModel());
-        if ( pRptModel )
+        impl_setReportComponent_nothrow();
+        // set labels
+        if ( m_xReportComponent.is() )
         {
-            OXUndoEnvironment::OUndoEnvLock aLock(pRptModel->GetUndoEnv());
-            if ( !m_xReportComponent.is() )
-                m_xReportComponent.set(getUnoShape(),uno::UNO_QUERY);
-            // set labels
-            if ( m_xReportComponent.is() )
+            try
             {
-                try
+                if ( supportsService( SERVICE_FIXEDTEXT ) )
                 {
-                    if ( supportsService( SERVICE_FIXEDTEXT ) )
-                    {
-                        m_xReportComponent->setPropertyValue( PROPERTY_LABEL, uno::makeAny(GetDefaultName(this)) );
-                    }
-                }
-                catch(const uno::Exception&)
-                {
-                    OSL_ENSURE(0,"OUnoObject::EndCreate: Exception caught!");
+                    m_xReportComponent->setPropertyValue( PROPERTY_LABEL, uno::makeAny(GetDefaultName(this)) );
                 }
             }
+            catch(const uno::Exception&)
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
+
+            impl_initializeModel_nothrow();
         }
         // set geometry properties
         SetPropsFromRect(GetLogicRect());
@@ -804,8 +885,7 @@ void OUnoObject::CreateMediator(sal_Bool _bReverse)
 {
     if ( !m_xMediator.is() )
     {
-        if ( !m_xReportComponent.is() )
-            m_xReportComponent.set(getUnoShape(),uno::UNO_QUERY);
+        impl_setReportComponent_nothrow();
 
         Reference<XPropertySet> xControlModel(GetUnoControlModel(),uno::UNO_QUERY);
         if ( !m_xMediator.is() && m_xReportComponent.is() && xControlModel.is() )

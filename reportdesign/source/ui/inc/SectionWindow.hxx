@@ -115,6 +115,7 @@ namespace rptui
         inline OStartMarker&    getStartMarker()    { return m_aStartMarker;     }
         inline OReportSection&  getReportSection()  { return m_aReportSection;   }
         inline OEndMarker&      getEndMarker()      { return m_aEndMarker;       }
+        inline OViewsWindow*    getViewsWindow()    { return m_pParent;          }
 
         void    setCollapsed(sal_Bool _bCollapsed);
 

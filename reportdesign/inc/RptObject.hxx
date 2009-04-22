@@ -280,6 +280,10 @@ public:
     virtual UINT16 GetObjIdentifier() const;
     virtual UINT32 GetObjInventor() const;
     virtual SdrObject* Clone() const;
+
+private:
+    void    impl_setReportComponent_nothrow();
+    void    impl_initializeModel_nothrow();
 };
 
 //============================================================================

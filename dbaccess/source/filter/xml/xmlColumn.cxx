@@ -66,6 +66,7 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
 #endif
+#include <com/sun/star/container/XChild.hpp>
 #ifndef DBA_XMLSTYLEIMPORT_HXX
 #include "xmlStyleImport.hxx"
 #endif
@@ -87,9 +88,11 @@ OXMLColumn::OXMLColumn( ODBFilter& rImport
                 ,const ::rtl::OUString& _sLocalName
                 ,const Reference< XAttributeList > & _xAttrList
                 ,const Reference< XNameAccess >& _xParentContainer
+                ,const Reference< XPropertySet >& _xTable
                 ) :
     SvXMLImportContext( rImport, nPrfx, _sLocalName )
     ,m_xParentContainer(_xParentContainer)
+    ,m_xTable(_xTable)
     ,m_bHidden(sal_False)
 {
     DBG_CTOR(OXMLColumn,NULL);
@@ -132,9 +135,11 @@ OXMLColumn::OXMLColumn( ODBFilter& rImport
             case XML_TOK_COLUMN_VISIBLE:
                 m_bHidden = sValue.equalsAscii("false");
                 break;
+            case XML_TOK_DEFAULT_CELL_STYLE_NAME:
+                m_sCellStyleName = sValue;
+                break;
         }
     }
-    OSL_ENSURE(m_sName.getLength(),"Invalid column name of length: ZERO");
 }
 // -----------------------------------------------------------------------------
 
@@ -160,6 +165,11 @@ void OXMLColumn::EndElement()
             if ( m_aDefaultValue.hasValue() )
                 xProp->setPropertyValue(PROPERTY_CONTROLDEFAULT,m_aDefaultValue);
 
+            Reference<XAppend> xAppend(m_xParentContainer,UNO_QUERY);
+            if ( xAppend.is() )
+                xAppend->appendByDescriptor(xProp);
+            m_xParentContainer->getByName(m_sName) >>= xProp;
+
             if ( m_sStyleName.getLength() )
             {
                 const SvXMLStylesContext* pAutoStyles = GetOwnImport().GetAutoStyles();
@@ -171,10 +181,35 @@ void OXMLColumn::EndElement()
                         pAutoStyle->FillPropertySet(xProp);
                     }
                 }
+            } // if ( m_sStyleName.getLength() )
+            if ( m_sCellStyleName.getLength() )
+            {
+                const SvXMLStylesContext* pAutoStyles = GetOwnImport().GetAutoStyles();
+                if ( pAutoStyles )
+                {
+                    OTableStyleContext* pAutoStyle = PTR_CAST(OTableStyleContext,pAutoStyles->FindStyleChildContext(XML_STYLE_FAMILY_TABLE_CELL,m_sCellStyleName));
+                    if ( pAutoStyle )
+                    {
+                        pAutoStyle->FillPropertySet(xProp);
+                        // we also have to do this on the table to import text-properties
+                        pAutoStyle->FillPropertySet(m_xTable);
+                    }
+                }
             }
-            Reference<XAppend> xAppend(m_xParentContainer,UNO_QUERY);
-            if ( xAppend.is() )
-                xAppend->appendByDescriptor(xProp);
+
+        }
+    } // if ( xFac.is() && m_sName.getLength() )
+    else if ( m_sCellStyleName.getLength() )
+    {
+        const SvXMLStylesContext* pAutoStyles = GetOwnImport().GetAutoStyles();
+        if ( pAutoStyles )
+        {
+            OTableStyleContext* pAutoStyle = PTR_CAST(OTableStyleContext,pAutoStyles->FindStyleChildContext(XML_STYLE_FAMILY_TABLE_CELL,m_sCellStyleName));
+            if ( pAutoStyle )
+            {
+                // we also have to do this on the table to import text-properties
+                pAutoStyle->FillPropertySet(m_xTable);
+            }
         }
     }
 }

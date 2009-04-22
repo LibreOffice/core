@@ -311,6 +311,11 @@ void OScrollWindowHelper::setMarked(const uno::Sequence< uno::Reference< report:
     return m_aReportWindow.getMarkedSection(nsa);
 }
 // -------------------------------------------------------------------------
+::boost::shared_ptr<OSectionWindow> OScrollWindowHelper::getSectionWindow(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection) const
+{
+    return  m_aReportWindow.getSectionWindow(_xSection);
+}
+// -------------------------------------------------------------------------
 void OScrollWindowHelper::markSection(const sal_uInt16 _nPos)
 {
     m_aReportWindow.markSection(_nPos);

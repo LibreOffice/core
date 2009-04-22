@@ -876,7 +876,6 @@ void OApplicationController::getSupportedFormats(ElementType _eType,::std::vecto
             _rFormatIds.push_back(SOT_FORMATSTR_ID_DBACCESS_TABLE);
             _rFormatIds.push_back(SOT_FORMAT_RTF);
             _rFormatIds.push_back(SOT_FORMATSTR_ID_HTML);
-            _rFormatIds.push_back(SOT_FORMATSTR_ID_HTML_SIMPLE);
             // run through
         case E_QUERY:
             _rFormatIds.push_back(SOT_FORMATSTR_ID_DBACCESS_QUERY);

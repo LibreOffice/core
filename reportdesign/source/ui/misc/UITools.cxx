@@ -951,7 +951,7 @@ void notifySystemWindow(Window* _pWindow,Window* _pToRegister, ::comphelper::mem
     }
 }
 // -----------------------------------------------------------------------------
-SdrObject* isOver(const Rectangle& _rRect,SdrPage& _rPage,SdrView& _rView,bool _bAllObjects,SdrObject* _pIgnore)
+SdrObject* isOver(const Rectangle& _rRect, SdrPage& _rPage, SdrView& _rView, bool _bAllObjects, SdrObject* _pIgnore, sal_Int16 _nIgnoreType)
 {
     SdrObject* pOverlappedObj = NULL;
     SdrObjListIter aIter(_rPage,IM_DEEPNOGROUPS);
@@ -963,10 +963,20 @@ SdrObject* isOver(const Rectangle& _rRect,SdrPage& _rPage,SdrView& _rView,bool _
             && (_bAllObjects || !_rView.IsObjMarked(pObjIter))
             && dynamic_cast<OUnoObject*>(pObjIter) != NULL )
         {
+            if (_nIgnoreType == ISOVER_IGNORE_CUSTOMSHAPES && pObjIter->GetObjIdentifier() == OBJ_CUSTOMSHAPE)
+            {
+                continue;
+            }
+
+            OUnoObject* pObj = dynamic_cast<OUnoObject*>(pObjIter);
+            if (pObj != NULL)
+        {
+
             Rectangle aRect = _rRect.GetIntersection(pObjIter->GetLastBoundRect());
             if ( !aRect.IsEmpty() && (aRect.Left() != aRect.Right() && aRect.Top() != aRect.Bottom() ) )
                 pOverlappedObj = pObjIter;
         }
+    }
     }
     return pOverlappedObj;
 }

@@ -33,10 +33,13 @@ import com.sun.star.beans.XPropertySet;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
+import helper.FileTools;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 public abstract class TestCase extends complexlib.ComplexTestCase
 {
@@ -84,6 +87,24 @@ public abstract class TestCase extends complexlib.ComplexTestCase
         File documentFile = java.io.File.createTempFile( getTestObjectName(), ".odb" );
         documentFile.deleteOnExit();
         return documentFile.getAbsoluteFile().toURL().toString();
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+    /**
+     * copies the file given by URL to a temporary file
+     * @return
+     *  the URL of the new file
+     */
+    protected final String copyToTempFile( String _sourceURL ) throws IOException
+    {
+        String targetURL = createTempFileURL();
+        try
+        {
+            FileTools.copyFile( new File( new URI( _sourceURL ) ), new File( new URI( targetURL ) ) );
+        }
+        catch ( URISyntaxException e ) { }
+
+        return FileHelper.getOOoCompatibleFileURL( targetURL );
     }
 
     // --------------------------------------------------------------------------------------------------------

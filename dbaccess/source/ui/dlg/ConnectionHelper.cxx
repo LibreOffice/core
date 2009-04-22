@@ -952,7 +952,7 @@ DBG_NAME(OConnectionHelper)
                     {
                         String sFile = String( ModuleRes( STR_FILE_DOES_NOT_EXIST ) );
                         sFile.SearchAndReplaceAscii("$file$", aTransformer.get(OFileNotation::N_SYSTEM));
-                        OSQLMessageBox(this,String(ModuleRes(STR_STAT_WARNING)),sFile).Execute();
+                        OSQLWarningBox( this, sFile ).Execute();
                         setURLNoPrefix(sOldPath);
                         SetRoadmapStateValue(sal_False);
                         callModifiedHdl();

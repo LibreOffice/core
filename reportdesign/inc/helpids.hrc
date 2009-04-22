@@ -120,6 +120,9 @@
 #define UID_RPT_PROP_DLG_LINKFIELDS             (HID_RPT_START + 81)
 #define UID_RPT_PROP_FORMULA                    (HID_RPT_START + 82)
 
+#define HID_RPT_GROUPSORT_MOVE_UP               (HID_RPT_START + 82)
+#define HID_RPT_GROUPSORT_MOVE_DOWN                 (HID_RPT_START + 83)
+#define HID_RPT_GROUPSORT_DELETE                (HID_RPT_START + 84)
 
 #if UID_RPT_PROP_FORMULA > HID_RPT_END
 #error Help-Id Ueberlauf in #file, #line

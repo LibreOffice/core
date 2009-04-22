@@ -162,8 +162,6 @@ TabPage TP_SAVE_DBDOC_AS
 
         Border = TRUE;
         DropDown = TRUE ;
-
-        Text = "/home/user/databases/database.backup.odb";
     };
 
     PushButton PB_BROWSE_SAVE_AS_LOCATION

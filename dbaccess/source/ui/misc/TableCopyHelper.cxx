@@ -299,12 +299,12 @@ void OTableCopyHelper::pasteTable( SotFormatStringId _nFormatId
         {
             DropDescriptor aTrans;
             if ( _nFormatId != SOT_FORMAT_RTF )
-                const_cast<TransferableDataHelper&>(_rTransData).GetSotStorageStream(_rTransData.HasFormat(SOT_FORMATSTR_ID_HTML) ? SOT_FORMATSTR_ID_HTML : SOT_FORMATSTR_ID_HTML_SIMPLE,aTrans.aHtmlRtfStorage);
+                const_cast<TransferableDataHelper&>(_rTransData).GetSotStorageStream(SOT_FORMATSTR_ID_HTML ,aTrans.aHtmlRtfStorage);
             else
                 const_cast<TransferableDataHelper&>(_rTransData).GetSotStorageStream(SOT_FORMAT_RTF,aTrans.aHtmlRtfStorage);
 
             aTrans.nType            = E_TABLE;
-            aTrans.bHtml            = SOT_FORMATSTR_ID_HTML == _nFormatId || SOT_FORMATSTR_ID_HTML_SIMPLE == _nFormatId;
+            aTrans.bHtml            = SOT_FORMATSTR_ID_HTML == _nFormatId;
             aTrans.sDefaultTableName = GetTableNameForAppend();
             if ( !copyTagTable(aTrans,sal_False,_xConnection) )
                 m_pController->showError(SQLException(String(ModuleRes(STR_NO_TABLE_FORMAT_INSIDE)),*m_pController,::rtl::OUString::createFromAscii("S1000") ,0,Any()));
@@ -331,8 +331,6 @@ void OTableCopyHelper::pasteTable( const TransferableDataHelper& _rTransData
         pasteTable( SOT_FORMATSTR_ID_DBACCESS_TABLE,_rTransData,_sDestDataSourceName,_xConnection);
     else if ( _rTransData.HasFormat(SOT_FORMATSTR_ID_HTML) )
         pasteTable( SOT_FORMATSTR_ID_HTML,_rTransData,_sDestDataSourceName,_xConnection);
-    else if ( _rTransData.HasFormat(SOT_FORMATSTR_ID_HTML_SIMPLE) )
-        pasteTable( SOT_FORMATSTR_ID_HTML_SIMPLE,_rTransData,_sDestDataSourceName,_xConnection);
     else if ( _rTransData.HasFormat(SOT_FORMAT_RTF) )
         pasteTable( SOT_FORMAT_RTF,_rTransData,_sDestDataSourceName,_xConnection);
 }
@@ -365,8 +363,7 @@ sal_Bool OTableCopyHelper::isTableFormat(const TransferableDataHelper& _rClipboa
     sal_Bool bTableFormat   =   _rClipboard.HasFormat(SOT_FORMATSTR_ID_DBACCESS_TABLE)
                 ||  _rClipboard.HasFormat(SOT_FORMATSTR_ID_DBACCESS_QUERY)
                 ||  _rClipboard.HasFormat(SOT_FORMAT_RTF)
-                ||  _rClipboard.HasFormat(SOT_FORMATSTR_ID_HTML)
-                ||  _rClipboard.HasFormat(SOT_FORMATSTR_ID_HTML_SIMPLE);
+                ||  _rClipboard.HasFormat(SOT_FORMATSTR_ID_HTML);
 
     return bTableFormat;
 }
@@ -376,11 +373,11 @@ sal_Bool OTableCopyHelper::copyTagTable(const TransferableDataHelper& _aDroppedD
                                         ,const SharedConnection& _xConnection)
 {
     sal_Bool bRet = sal_False;
-    sal_Bool bHtml = _aDroppedData.HasFormat(SOT_FORMATSTR_ID_HTML) || _aDroppedData.HasFormat(SOT_FORMATSTR_ID_HTML_SIMPLE);
+    sal_Bool bHtml = _aDroppedData.HasFormat(SOT_FORMATSTR_ID_HTML);
     if ( bHtml || _aDroppedData.HasFormat(SOT_FORMAT_RTF) )
     {
         if ( bHtml )
-            const_cast<TransferableDataHelper&>(_aDroppedData).GetSotStorageStream(_aDroppedData.HasFormat(SOT_FORMATSTR_ID_HTML) ? SOT_FORMATSTR_ID_HTML : SOT_FORMATSTR_ID_HTML_SIMPLE,_rAsyncDrop.aHtmlRtfStorage);
+            const_cast<TransferableDataHelper&>(_aDroppedData).GetSotStorageStream(SOT_FORMATSTR_ID_HTML ,_rAsyncDrop.aHtmlRtfStorage);
         else
             const_cast<TransferableDataHelper&>(_aDroppedData).GetSotStorageStream(SOT_FORMAT_RTF,_rAsyncDrop.aHtmlRtfStorage);
 

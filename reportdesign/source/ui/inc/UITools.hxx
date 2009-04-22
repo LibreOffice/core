@@ -138,6 +138,9 @@ namespace rptui
     */
     void notifySystemWindow(Window* _pWindow,Window* _pToRegister, ::comphelper::mem_fun1_t<TaskPaneList,Window*> _rMemFunc);
 
+
+    const sal_Int16 ISOVER_IGNORE_CUSTOMSHAPES = 1;
+
     /** checks whether the given rectangle overlapps another OUnoObject object in that view.
     *
     * \param _rRect
@@ -145,7 +148,7 @@ namespace rptui
     * \param _bAllObjects  if <TRUE/> all objects are taken into account, otherwise only not marked ones
     * \return the object which is overlapped, otherwise <NULL/>
     */
-    SdrObject* isOver(const Rectangle& _rRect,SdrPage& _rPage,SdrView& _rView,bool _bAllObjects = false,SdrObject* _pIgnore = NULL);
+    SdrObject* isOver(const Rectangle& _rRect,SdrPage& _rPage,SdrView& _rView,bool _bAllObjects = false,SdrObject* _pIgnore = NULL, sal_Int16 _nIgnoreType=0);
 
     SdrObject* isOver(const Rectangle& _rRect,SdrPage& _rPage,SdrView& _rView,bool _bAllObjects, SdrUnoObj* _pIgnoreList[], int _nIgnoreListLength);
 

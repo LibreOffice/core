@@ -1337,9 +1337,7 @@ bool OQueryController::doSaveAsDoc(sal_Bool _bSaveAs)
     if ( !editingCommand() && !haveDataSource() )
     {
         String aMessage(ModuleRes(STR_DATASOURCE_DELETED));
-        String sTitle(ModuleRes(STR_STAT_WARNING));
-        OSQLMessageBox aMsg(getView(),sTitle,aMessage);
-        aMsg.Execute();
+        OSQLWarningBox( getView(), aMessage ).Execute();
         return false;
     }
 

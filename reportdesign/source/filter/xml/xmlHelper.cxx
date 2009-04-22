@@ -32,6 +32,7 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/families.hxx>
+#include <xmloff/controlpropertyhdl.hxx>
 #include <connectivity/dbtools.hxx>
 #include <comphelper/propertysethelper.hxx>
 #include <comphelper/mediadescriptor.hxx>
@@ -101,6 +102,8 @@ const XMLPropertyHandler* OPropertyHandlerFactory::GetPropertyHandler(sal_Int32 
                 pHandler = new XMLEnumPropertyHdl( pXML_VerticalAlign_Enum, ::getCppuType((const com::sun::star::drawing::TextVerticalAdjust*)0) );
             }
             break;
+        case (XML_SD_TYPES_START+34):
+            pHandler = new xmloff::ImageScaleModeHandler();
         default:
             ;
     }
@@ -137,6 +140,7 @@ UniReference < XMLPropertySetMapper > OXMLHelper::GetCellStylePropertyMap(bool _
                                                 FO,   BACKGROUND_COLOR,     XML_TYPE_COLORTRANSPARENT|MID_FLAG_MULTI_PROPERTY, 0 ),
             MAP_CONST_P(      PROPERTY_CONTROLBACKGROUNDTRANSPARENT,
                                                 FO,   BACKGROUND_COLOR,     XML_TYPE_ISTRANSPARENT|MID_FLAG_MERGE_ATTRIBUTE, 0 ),
+            GMAP(             PROPERTY_SCALEMODE,STYLE,REPEAT,       (XML_SD_TYPES_START+34)|MID_FLAG_MULTI_PROPERTY, 0 ),
             MAP_CONST_C_ASCII(      "BorderLeft",       FO,     BORDER_LEFT,           XML_TYPE_BORDER, 0 ),
             MAP_CONST_C_ASCII(      "BorderRight",      FO,     BORDER_RIGHT,          XML_TYPE_BORDER, 0 ),
             MAP_CONST_C_ASCII(      "BorderTop",        FO,     BORDER_TOP,            XML_TYPE_BORDER, 0 ),
@@ -155,6 +159,7 @@ UniReference < XMLPropertySetMapper > OXMLHelper::GetCellStylePropertyMap(bool _
                                                 FO,   BACKGROUND_COLOR,     XML_TYPE_COLORTRANSPARENT|MID_FLAG_MULTI_PROPERTY, 0 ),
             MAP_CONST_C(      PROPERTY_CONTROLBACKGROUNDTRANSPARENT,
                                                 FO,   BACKGROUND_COLOR,     XML_TYPE_ISTRANSPARENT|MID_FLAG_MERGE_ATTRIBUTE, 0 ),
+            GMAP(             PROPERTY_SCALEMODE,STYLE,REPEAT,       (XML_SD_TYPES_START+34)|MID_FLAG_MULTI_PROPERTY, 0 ),
             MAP_CONST_C_ASCII(      "BorderLeft",       FO,     BORDER_LEFT,           XML_TYPE_BORDER, 0 ),
             MAP_CONST_C_ASCII(      "BorderRight",      FO,     BORDER_RIGHT,          XML_TYPE_BORDER, 0 ),
             MAP_CONST_C_ASCII(      "BorderTop",        FO,     BORDER_TOP,            XML_TYPE_BORDER, 0 ),
@@ -305,7 +310,7 @@ void OXMLHelper::copyStyleElements(const bool _bOld,const ::rtl::OUString& _sSty
             {PROPERTY_FONTPITCH,        static_cast<sal_uInt16>(PROPERTY_FONTPITCH.length),         PROPERTY_ID_FONTPITCH,          &::getCppuType(&aFont.Pitch)        ,PropertyAttribute::BOUND,0},
             {PROPERTY_FONTCHARWIDTH,    static_cast<sal_uInt16>(PROPERTY_FONTCHARWIDTH.length),     PROPERTY_ID_FONTCHARWIDTH,      &::getCppuType(&aFont.CharacterWidth),PropertyAttribute::BOUND,0},
             {PROPERTY_FONTWEIGHT,       static_cast<sal_uInt16>(PROPERTY_FONTWEIGHT.length),        PROPERTY_ID_FONTWEIGHT,         &::getCppuType(&aFont.Weight)       ,PropertyAttribute::BOUND,0},
-            {PROPERTY_FONTSLANT,        static_cast<sal_uInt16>(PROPERTY_FONTSLANT.length),         PROPERTY_ID_FONTSLANT,          &::getCppuType(&aFont.Slant)        ,PropertyAttribute::BOUND,0},
+            {PROPERTY_CHARPOSTURE,      static_cast<sal_uInt16>(PROPERTY_CHARPOSTURE.length),       PROPERTY_ID_FONTSLANT,          &::getCppuType(&aFont.Slant)        ,PropertyAttribute::BOUND,0},
             {PROPERTY_FONTUNDERLINE,    static_cast<sal_uInt16>(PROPERTY_FONTUNDERLINE.length),     PROPERTY_ID_FONTUNDERLINE,      &::getCppuType(&aFont.Underline)    ,PropertyAttribute::BOUND,0},
             {PROPERTY_CHARSTRIKEOUT,    static_cast<sal_uInt16>(PROPERTY_CHARSTRIKEOUT.length),     PROPERTY_ID_FONTSTRIKEOUT,      &::getCppuType(&aFont.Strikeout)    ,PropertyAttribute::BOUND,0},
             {PROPERTY_FONTORIENTATION,  static_cast<sal_uInt16>(PROPERTY_FONTORIENTATION.length),   PROPERTY_ID_FONTORIENTATION,    &::getCppuType(&aFont.Orientation)  ,PropertyAttribute::BOUND,0},
@@ -338,7 +343,7 @@ void OXMLHelper::copyStyleElements(const bool _bOld,const ::rtl::OUString& _sSty
             xProp->getPropertyValue(PROPERTY_FONTPITCH) >>=             aFont.Pitch;
             xProp->getPropertyValue(PROPERTY_FONTCHARWIDTH) >>=         aFont.CharacterWidth;
             xProp->getPropertyValue(PROPERTY_FONTWEIGHT) >>=        aFont.Weight;
-            xProp->getPropertyValue(PROPERTY_FONTSLANT) >>=             aFont.Slant;
+            xProp->getPropertyValue(PROPERTY_CHARPOSTURE) >>=           aFont.Slant;
             xProp->getPropertyValue(PROPERTY_FONTUNDERLINE) >>=         aFont.Underline;
             xProp->getPropertyValue(PROPERTY_CHARSTRIKEOUT) >>=         aFont.Strikeout;
             xProp->getPropertyValue(PROPERTY_FONTORIENTATION) >>=   aFont.Orientation;
@@ -436,8 +441,6 @@ SvXMLTokenMap* OXMLHelper::GetSubDocumentElemTokenMap()
     };
     return new SvXMLTokenMap( aElemTokenMap );
 }
-
-
 // -----------------------------------------------------------------------------
 } // rptxml
 // -----------------------------------------------------------------------------

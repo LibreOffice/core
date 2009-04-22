@@ -29,21 +29,22 @@
  ************************************************************************/
 #include "precompiled_reportdesign.hxx"
 #include "SectionView.hxx"
-#ifndef RPT_DESIGNVIEW_HXX
 #include "DesignView.hxx"
-#endif
 #include <RptPage.hxx>
 #include <RptObject.hxx>
-#ifndef _SVXIDS_HRC
+#include <RptDef.hxx>
 #include <svx/svxids.hrc>
-#endif
+#include <svx/svddrgmt.hxx>
 #include <vcl/scrbar.hxx>
 #include "ReportSection.hxx"
 #include "ReportWindow.hxx"
-
+#include "uistrings.hrc"
+#include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
 
 namespace rptui
 {
+    using namespace ::com::sun::star;
 TYPEINIT1( OSectionView, SdrView );
 
 //----------------------------------------------------------------------------
@@ -178,7 +179,99 @@ void OSectionView::ObjectRemovedInAliveMode( const SdrObject* _pObject )
         }
     }
 }
+
 // -----------------------------------------------------------------------------
+void OSectionView::SetMarkedToLayer( SdrLayerID _nLayerNo )
+{
+    if (AreObjectsMarked())
+    {
+        //  #i11702# use SdrUndoObjectLayerChange for undo
+        //  STR_UNDO_SELATTR is "Attributes" - should use a different text later
+        BegUndo( );
+
+        const SdrMarkList& rMark = GetMarkedObjectList();
+        ULONG nCount = rMark.GetMarkCount();
+        for (ULONG i=0; i<nCount; i++)
+        {
+            SdrObject* pObj = rMark.GetMark(i)->GetMarkedSdrObj();
+            if ( pObj->ISA(OCustomShape) )
+            {
+                AddUndo( new SdrUndoObjectLayerChange( *pObj, pObj->GetLayer(), _nLayerNo) );
+                pObj->SetLayer( _nLayerNo );
+                OObjectBase* pBaseObj = dynamic_cast<OObjectBase*>(pObj);
+                try
+                {
+                    pBaseObj->getReportComponent()->setPropertyValue(PROPERTY_OPAQUE,uno::makeAny(_nLayerNo == RPT_LAYER_FRONT));
+                }
+                catch(const uno::Exception&)
+                {
+                    DBG_UNHANDLED_EXCEPTION();
+                }
+            }
+        }
+
+        EndUndo();
+
+        //  #84073# check mark list now instead of later in a timer
+        CheckMarked();
+        MarkListHasChanged();
+    }
+}
+// -----------------------------------------------------------------------------
+bool OSectionView::OnlyShapesMarked() const
+{
+    const SdrMarkList& rMark = GetMarkedObjectList();
+    const ULONG nCount = rMark.GetMarkCount();
+    if ( !nCount )
+        return false;
+    ULONG i=0;
+    for (; i<nCount; i++)
+    {
+        SdrObject* pObj = rMark.GetMark(i)->GetMarkedSdrObj();
+        if ( !pObj->ISA(OCustomShape) )
+        {
+            break;
+        }
+    } // for (ULONG i=0; i<nCount; i++)
+    return i == nCount;
+}
+
+bool OSectionView::IsDragResize() const
+{
+    const SdrDragMethod* pDragMethod = GetDragMethod();
+    if (pDragMethod)
+    {
+        bool bMoveOnly = pDragMethod->getMoveOnly();
+        if (bMoveOnly == false)
+        {
+            // current marked components will be resized
+            return true;
+        }
+    }
+    return false;
+}
+
+// -----------------------------------------------------------------------------
+short OSectionView::GetLayerIdOfMarkedObjects() const
+{
+    short nRet = SHRT_MAX;
+    const SdrMarkList &rMrkList = GetMarkedObjectList();
+    for ( USHORT i = 0; i < rMrkList.GetMarkCount(); ++i )
+    {
+        const SdrObject *pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
+        if ( nRet == SHRT_MAX )
+            nRet = pObj->GetLayer();
+        else if ( nRet != pObj->GetLayer() )
+        {
+            nRet = -1;
+            break;
+        }
+    }
+    if ( nRet == SHRT_MAX )
+        nRet = -1;
+    return nRet;
+}
+
 //============================================================================
 } // rptui
 //============================================================================

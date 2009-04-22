@@ -27,6 +27,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+#include "precompiled_reportdesign.hxx"
 
 #include "formatnormalizer.hxx"
 #include "RptModel.hxx"
@@ -63,6 +64,7 @@ namespace rptui
     using ::com::sun::star::sdbc::SQLException;
     using ::com::sun::star::util::XNumberFormatsSupplier;
     using ::com::sun::star::util::XNumberFormatTypes;
+    using ::com::sun::star::uno::makeAny;
     /** === end UNO using === **/
 
     //====================================================================

@@ -142,6 +142,7 @@ struct PropertyCompare : public ::std::binary_function< beans::Property, ::rtl::
         return x.equals(y.Name);// ? true : false;
     }
 };
+
 // -----------------------------------------------------------------------------
 ::rtl::OUString lcl_getQuotedFunctionName(const ::rtl::OUString& _sFunction)
 {
@@ -1468,7 +1469,8 @@ void SAL_CALL GeometryHandler::actuatingPropertyChanged(const ::rtl::OUString & 
                 {
                     _rxInspectorUI->rebuildPropertyUI(PROPERTY_DATAFIELD);
                     _rxInspectorUI->rebuildPropertyUI(PROPERTY_FORMULALIST);
-                }
+                } // if ( bEnable )
+                m_xFormComponentHandler->actuatingPropertyChanged(ActuatingPropertyName, NewValue, OldValue, _rxInspectorUI, _bFirstTimeInit);
             }
             break;
         case PROPERTY_ID_FORMULALIST:
@@ -1855,7 +1857,7 @@ void GeometryHandler::loadDefaultFunctions()
     {
         m_aCounterFunction.m_bPreEvaluated = sal_False;
         m_aCounterFunction.m_bDeepTraversing = sal_False;
-        m_aCounterFunction.m_sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Counter"));
+        m_aCounterFunction.m_sName = String(ModuleRes(RID_STR_F_COUNTER));
         m_aCounterFunction.m_sFormula = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:[%FunctionName] + 1"));
         m_aCounterFunction.m_sSearchString = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:\\[[:alpha:]+([:space:]*[:alnum:]*)*\\][:space:]*\\+[:space:]*[:digit:]*"));
         m_aCounterFunction.m_sInitialFormula.IsPresent = sal_True;
@@ -1873,21 +1875,21 @@ void GeometryHandler::loadDefaultFunctions()
 
         aDefault.m_bPreEvaluated = sal_True;
 
-        aDefault.m_sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Accumulation"));
+        aDefault.m_sName = String(ModuleRes(RID_STR_F_ACCUMULATION));
         aDefault.m_sFormula = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:[%Column] + [%FunctionName]"));
         aDefault.m_sSearchString = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:\\[[:alpha:]+([:space:]*[:alnum:]*)*\\][:space:]*\\+[:space:]*\\[[:alpha:]+([:space:]*[:alnum:]*)*\\]"));
         aDefault.m_sInitialFormula.IsPresent = sal_True;
         aDefault.m_sInitialFormula.Value = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:[%Column]"));
         m_aDefaultFunctions.push_back(aDefault);
 
-        aDefault.m_sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Minimum"));
+        aDefault.m_sName = String(ModuleRes(RID_STR_F_MINIMUM));
         aDefault.m_sFormula = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:IF([%Column] < [%FunctionName];[%Column];[%FunctionName])"));
         aDefault.m_sSearchString = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:IF\\((\\[[:alpha:]+([:space:]*[:alnum:]*)*\\])[:space:]*<[:space:]*(\\[[:alpha:]+([:space:]*[:alnum:]*)*\\]);[:space:]*\\1[:space:]*;[:space:]*\\3[:space:]*\\)"));
         aDefault.m_sInitialFormula.IsPresent = sal_True;
         aDefault.m_sInitialFormula.Value = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:[%Column]"));
         m_aDefaultFunctions.push_back(aDefault);
 
-        aDefault.m_sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Maximum"));
+        aDefault.m_sName = String(ModuleRes(RID_STR_F_MAXIMUM));
         aDefault.m_sFormula = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:IF([%Column] > [%FunctionName];[%Column];[%FunctionName])"));
         aDefault.m_sSearchString = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:IF\\((\\[[:alpha:]+([:space:]*[:alnum:]*)*\\])[:space:]*>[:space:]*(\\[[:alpha:]+([:space:]*[:alnum:]*)*\\]);[:space:]*\\1[:space:]*;[:space:]*\\3[:space:]*\\)"));
         aDefault.m_sInitialFormula.IsPresent = sal_True;

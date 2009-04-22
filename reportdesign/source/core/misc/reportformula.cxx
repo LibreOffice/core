@@ -177,6 +177,15 @@ namespace rptui
         m_sUndecoratedContent   = _rHd.m_sUndecoratedContent;
         return *this;
     }
+    //--------------------------------------------------------------------
+    ::rtl::OUString ReportFormula::getEqualUndecoratedContent() const
+    {
+        ::rtl::OUStringBuffer aBuffer;
+        aBuffer.appendAscii( "=" );
+        aBuffer.append( getUndecoratedContent() );
+        return aBuffer.makeStringAndClear();
+    }
+
 //........................................................................
 } // namespace rptui
 //........................................................................

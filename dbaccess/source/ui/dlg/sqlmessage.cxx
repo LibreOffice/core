@@ -768,6 +768,15 @@ IMPL_LINK( OSQLMessageBox, ButtonClickHdl, Button *, /*pButton*/ )
     return 0;
 }
 
+//==================================================================
+// OSQLWarningBox
+//==================================================================
+OSQLWarningBox::OSQLWarningBox( Window* _pParent, const UniString& _rMessage, WinBits _nStyle,
+    const ::dbtools::SQLExceptionInfo* _pAdditionalErrorInfo )
+    :OSQLMessageBox( _pParent, String( ModuleRes( STR_STAT_WARNING ) ), _rMessage, _nStyle, OSQLMessageBox::Warning, _pAdditionalErrorInfo )
+{
+}
+
 //.........................................................................
 }   // namespace dbaui
 //.........................................................................

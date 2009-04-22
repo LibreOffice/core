@@ -70,6 +70,7 @@ OShape::OShape(uno::Reference< uno::XComponentContext > const & _xContext)
 ,ShapePropertySet(_xContext,static_cast< Implements >(IMPLEMENTS_PROPERTY_SET),lcl_getShapeOptionals())
 ,m_aProps(m_aMutex,static_cast< container::XContainer*>( this ),_xContext)
 ,m_nZOrder(0)
+,m_bOpaque(sal_False)
 {
     DBG_CTOR( rpt_OShape,NULL);
     m_aProps.aComponent.m_sName  = RPT_RESSTRING(RID_STR_SHAPE,m_aProps.aComponent.m_xContext->getServiceManager());
@@ -83,6 +84,7 @@ OShape::OShape(uno::Reference< uno::XComponentContext > const & _xContext
 ,ShapePropertySet(_xContext,static_cast< Implements >(IMPLEMENTS_PROPERTY_SET),lcl_getShapeOptionals())
 ,m_aProps(m_aMutex,static_cast< container::XContainer*>( this ),_xContext)
 ,m_nZOrder(0)
+,m_bOpaque(sal_False)
 ,m_sServiceName(_sServiceName)
 {
     DBG_CTOR( rpt_OShape,NULL);
@@ -93,7 +95,7 @@ OShape::OShape(uno::Reference< uno::XComponentContext > const & _xContext
         uno::Reference<beans::XPropertySet> xProp(_xShape,uno::UNO_QUERY);
         if ( xProp.is() )
         {
-            xProp->getPropertyValue(PROPERTY_ZORDER) >>= m_nZOrder;
+            xProp->getPropertyValue(PROPERTY_ZORDER)  >>= m_nZOrder;
             xProp.clear();
         }
         m_aProps.aComponent.setShape(_xShape,this,m_refCount);
@@ -449,6 +451,18 @@ void SAL_CALL OShape::setZOrder( ::sal_Int32 _zorder ) throw (uno::RuntimeExcept
     ::osl::MutexGuard aGuard(m_aMutex);
     m_aProps.aComponent.m_xProperty->setPropertyValue(PROPERTY_ZORDER,uno::makeAny(_zorder));
     set(PROPERTY_ZORDER,_zorder,m_nZOrder);
+}
+// -----------------------------------------------------------------------------
+::sal_Bool SAL_CALL OShape::getOpaque() throw (::com::sun::star::uno::RuntimeException)
+{
+    ::osl::MutexGuard aGuard(m_aMutex);
+    return m_bOpaque;
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OShape::setOpaque( ::sal_Bool _opaque ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::osl::MutexGuard aGuard(m_aMutex);
+    set(PROPERTY_OPAQUE,_opaque,m_bOpaque);
 }
 // -----------------------------------------------------------------------------
 drawing::HomogenMatrix3 SAL_CALL OShape::getTransformation() throw (uno::RuntimeException)

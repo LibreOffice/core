@@ -417,20 +417,35 @@ void ODatabaseModelImpl::impl_construct_nothrow()
 
         // insert the default settings
         Reference< XPropertyContainer > xContainer( m_xSettings, UNO_QUERY_THROW );
+        Reference< XSet > xSettingsSet( m_xSettings, UNO_QUERY_THROW );
         const AsciiPropertyValue* pSettings = getDefaultDataSourceSettings();
         for ( ; pSettings->AsciiName; ++pSettings )
         {
-            xContainer->addProperty(
-                ::rtl::OUString::createFromAscii( pSettings->AsciiName ),
-                PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT,
-                pSettings->DefaultValue
-            );
+            if ( !pSettings->DefaultValue.hasValue() )
+            {
+                Property aProperty(
+                    ::rtl::OUString::createFromAscii( pSettings->AsciiName ),
+                    -1,
+                    ::getCppuType( static_cast< ::rtl::OUString* >( NULL ) ),
+                    PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT | PropertyAttribute::MAYBEVOID
+                );
+                xSettingsSet->insert( makeAny( aProperty ) );
+            }
+            else
+            {
+                xContainer->addProperty(
+                    ::rtl::OUString::createFromAscii( pSettings->AsciiName ),
+                    PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT,
+                    pSettings->DefaultValue
+                );
+            }
         }
     }
     catch( const Exception& )
     {
         DBG_UNHANDLED_EXCEPTION();
     }
+    m_pDBContext->appendAtTerminateListener(*this);
 }
 
 // -----------------------------------------------------------------------------
@@ -1031,6 +1046,7 @@ oslInterlockedCount SAL_CALL ODatabaseModelImpl::release()
     if ( osl_decrementInterlockedCount(&m_refCount) == 0 )
     {
         acquire();  // prevent multiple releases
+        m_pDBContext->removeFromTerminateListener(*this);
         dispose();
         m_pDBContext->storeTransientProperties(*this);
         revokeDataSource();
@@ -1063,6 +1079,7 @@ const AsciiPropertyValue* ODatabaseModelImpl::getDefaultDataSourceSettings()
     {
         // known JDBC settings
         AsciiPropertyValue( "JavaDriverClass",            makeAny( ::rtl::OUString() ) ),
+        AsciiPropertyValue( "IgnoreCurrency",             makeAny( (sal_Bool)sal_False ) ),
         // known settings for file-based drivers
         AsciiPropertyValue( "Extension",                  makeAny( ::rtl::OUString() ) ),
         AsciiPropertyValue( "CharSet",                    makeAny( ::rtl::OUString() ) ),
@@ -1075,6 +1092,7 @@ const AsciiPropertyValue* ODatabaseModelImpl::getDefaultDataSourceSettings()
         // known ODBC settings
         AsciiPropertyValue( "SystemDriverSettings",       makeAny( ::rtl::OUString() ) ),
         AsciiPropertyValue( "UseCatalog",                 makeAny( (sal_Bool)sal_False ) ),
+        AsciiPropertyValue( "TypeInfoSettings",           makeAny( Sequence< Any >()) ),
         // settings related to auto increment handling
         AsciiPropertyValue( "AutoIncrementCreation",      makeAny( ::rtl::OUString() ) ),
         AsciiPropertyValue( "AutoRetrievingStatement",    makeAny( ::rtl::OUString() ) ),
@@ -1090,11 +1108,15 @@ const AsciiPropertyValue* ODatabaseModelImpl::getDefaultDataSourceSettings()
         AsciiPropertyValue( "PortNumber",                 makeAny( (sal_Int32)389 ) ),
         AsciiPropertyValue( "BaseDN",                     makeAny( ::rtl::OUString() ) ),
         AsciiPropertyValue( "MaxRowCount",                makeAny( (sal_Int32)100 ) ),
+        // known MySQLNative driver settings
+        AsciiPropertyValue( "LocalSocket",                makeAny( ::rtl::OUString() ) ),
         // misc known driver settings
         AsciiPropertyValue( "ParameterNameSubstitution",  makeAny( (sal_Bool)sal_False ) ),
         AsciiPropertyValue( "AddIndexAppendix",           makeAny( (sal_Bool)sal_True ) ),
-        // known SDB level settings
         AsciiPropertyValue( "IgnoreDriverPrivileges",     makeAny( (sal_Bool)sal_True ) ),
+        AsciiPropertyValue( "ImplicitCatalogRestriction", Any( ) ),
+        AsciiPropertyValue( "ImplicitSchemaRestriction",  Any( ) ),
+        // known SDB level settings
         AsciiPropertyValue( "NoNameLengthLimit",          makeAny( (sal_Bool)sal_False ) ),
         AsciiPropertyValue( "AppendTableAliasName",       makeAny( (sal_Bool)sal_False ) ),
         AsciiPropertyValue( "GenerateASBeforeCorrelationName",  makeAny( (sal_Bool)sal_True ) ),
@@ -1109,9 +1131,6 @@ const AsciiPropertyValue* ODatabaseModelImpl::getDefaultDataSourceSettings()
         AsciiPropertyValue( "PreferDosLikeLineEnds",      makeAny( (sal_Bool)sal_False ) ),
         AsciiPropertyValue( "FormsCheckRequiredFields",   makeAny( (sal_Bool)sal_True ) ),
         AsciiPropertyValue( "EscapeDateTime",             makeAny( (sal_Bool)sal_True ) ),
-        AsciiPropertyValue( "IgnoreCurrency",             makeAny( (sal_Bool)sal_False ) ),
-        AsciiPropertyValue( "TypeInfoSettings",           makeAny( Sequence< Any >()) ),
-        AsciiPropertyValue( "LocalSocket",                makeAny( ::rtl::OUString() ) ),
 
         AsciiPropertyValue( NULL, Any() )
     };

@@ -2000,11 +2000,11 @@ Reference< XComponent > OApplicationController::openElementWithArguments( const 
                 if ( !aArguments.has( (::rtl::OUString)PROPERTY_SHOWMENU ) )
                     aArguments.put( (::rtl::OUString)PROPERTY_SHOWMENU, makeAny( (sal_Bool)sal_True ) );
 
-                    aDataSource <<= getDatabaseName();
+                aDataSource <<= getDatabaseName();
             }
 
-            Reference< XComponent > xComponent( pDesigner->openExisting( aDataSource, _sName, aArguments.getPropertyValues() ), UNO_QUERY );
-            onDocumentOpened( _sName, _eType, _eOpenMode, xComponent, NULL );
+            xRet.set( pDesigner->openExisting( aDataSource, _sName, aArguments.getPropertyValues() ) );
+            onDocumentOpened( _sName, _eType, _eOpenMode, xRet, NULL );
         }
     }
     break;

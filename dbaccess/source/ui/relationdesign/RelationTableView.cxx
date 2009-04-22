@@ -375,7 +375,7 @@ void ORelationTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const 
 // -----------------------------------------------------------------------------
 void ORelationTableView::RemoveTabWin( OTableWindow* pTabWin )
 {
-    OSQLMessageBox aDlg(this,ModuleRes(STR_QUERY_REL_DELETE_WINDOW),String(),WB_YES_NO|WB_DEF_YES,OSQLMessageBox::Warning);
+    OSQLWarningBox aDlg( this, ModuleRes( STR_QUERY_REL_DELETE_WINDOW ), WB_YES_NO | WB_DEF_YES );
     if ( m_bInRemove || aDlg.Execute() == RET_YES )
     {
         m_pView->getController().getUndoMgr()->Clear();

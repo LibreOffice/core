@@ -34,8 +34,8 @@
 #ifndef _CPPUHELPER_PROPSHLP_HXX
 #include <cppuhelper/propshlp.hxx>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE2_HXX_
-#include <cppuhelper/implbase2.hxx>
+#ifndef _CPPUHELPER_IMPLBASE3_HXX_
+#include <cppuhelper/implbase3.hxx>
 #endif
 #ifndef DBA_CONTENTHELPER_HXX
 #include "ContentHelper.hxx"
@@ -65,6 +65,7 @@
 #include <com/sun/star/embed/XStateChangeListener.hpp>
 #endif
 #include <com/sun/star/sdb/XSubDocument.hpp>
+#include <com/sun/star/util/XCloseListener.hpp>
 
 //........................................................................
 namespace dbaccess
@@ -78,8 +79,9 @@ namespace dbaccess
 //=                   document
 //==========================================================================
 
-typedef ::cppu::ImplHelper2 <   ::com::sun::star::embed::XComponentSupplier
+typedef ::cppu::ImplHelper3 <   ::com::sun::star::embed::XComponentSupplier
                             ,   ::com::sun::star::sdb::XSubDocument
+                            ,   ::com::sun::star::util::XCloseListener
                             >   ODocumentDefinition_Base;
 
 class ODocumentDefinition
@@ -97,6 +99,7 @@ class ODocumentDefinition
     sal_Bool                                                                            m_bForm; // <TRUE/> if it is a form
     sal_Bool                                                                            m_bOpenInDesign;
     sal_Bool                                                                            m_bInExecute;
+    sal_Bool                                                                            m_bRemoveListener;
     OEmbeddedClientHelper*                                                              m_pClientHelper;
 
 protected:
@@ -142,6 +145,13 @@ public:
 
     // XRename
     virtual void SAL_CALL rename( const ::rtl::OUString& newName ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException);
+
+    // XCloseListener
+    virtual void SAL_CALL queryClosing( const ::com::sun::star::lang::EventObject& Source, ::sal_Bool GetsOwnership ) throw (::com::sun::star::util::CloseVetoException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL notifyClosing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
+
+    // XEventListener
+    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
 
     /** returns the forms/reports container storage, depending on m_bForm. Our own storage
         inside this container storage is the one with the name as indicated by m_pImpl->m_aProps.sPersistentName.

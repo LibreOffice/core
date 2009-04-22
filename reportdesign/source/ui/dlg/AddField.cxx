@@ -56,7 +56,7 @@
 namespace rptui
 {
 const long STD_WIN_SIZE_X = 180;
-const long STD_WIN_SIZE_Y = 220;
+const long STD_WIN_SIZE_Y = 320;
 
 const long LISTBOX_BORDER = 2;
 
@@ -171,6 +171,8 @@ OAddFieldWindow::OAddFieldWindow(Window* pParent
             ,m_xRowSet(_xRowSet)
             ,m_aActions(this,ModuleRes(RID_TB_SORTING))
             ,m_pListBox(new OAddFieldWindowListBox( this ))
+            ,m_aFixedLine(this, ModuleRes(ADDFIELD_FL_HELP_SEPARATOR) )
+            ,m_aHelpText(this, ModuleRes(ADDFIELD_HELP_FIELD) )
             ,m_aInsertButton(this, WB_TABSTOP|WB_CENTER)
             ,m_nCommandType(0)
             ,m_bEscapeProcessing(sal_False)
@@ -199,6 +201,9 @@ OAddFieldWindow::OAddFieldWindow(Window* pParent
     m_aInsertButton.SetText(sTitle);
     m_aInsertButton.SetClickHdl(LINK( this, OAddFieldWindow, OnDoubleClickHdl ) );
     m_aInsertButton.Show();
+
+    m_aFixedLine.SetControlBackground( GetSettings().GetStyleSettings().GetFaceColor() );
+    m_aHelpText.SetControlBackground( GetSettings().GetStyleSettings().GetFaceColor() );
 
     SetSizePixel(Size(STD_WIN_SIZE_X,STD_WIN_SIZE_Y));
     //Show();
@@ -362,20 +367,41 @@ void OAddFieldWindow::Resize()
 {
     FloatingWindow::Resize();
 
-    const Size aSize( GetOutputSizePixel() );
+    const Size aWindowSize( GetOutputSizePixel() );
 
-    //////////////////////////////////////////////////////////////////////
-    Size aToolbarSize( m_aActions.GetSizePixel() );
 
     const Size aRelated(LogicToPixel( Size( RELATED_CONTROLS, RELATED_CONTROLS ), MAP_APPFONT ));
-    Point aPos( aRelated.Width(), aToolbarSize.Height() + 2*aRelated.Height());
-    Point aToolbarPos( aPos.X(),aRelated.Height());
-    Size aLBSize( aSize );
-    aLBSize.Width() -= (2*aRelated.Width());
-    aLBSize.Height() -= (aRelated.Height() + aPos.Y() );
+    const Size aFixedTextSize(LogicToPixel( Size( FIXEDTEXT_WIDTH, FIXEDTEXT_HEIGHT ), MAP_APPFONT ));
 
-    m_aActions.SetPosPixel(Point(aPos.X(),aToolbarPos.Y()));
-    m_pListBox->SetPosSizePixel( aPos, aLBSize );
+    // ToolBar
+    Size aToolbarSize( m_aActions.GetSizePixel() );
+    Point aToolbarPos( aRelated.Width(), aRelated.Height());
+    m_aActions.SetPosPixel(Point(aToolbarPos.X(), aToolbarPos.Y()));
+
+    Size aLBSize( aWindowSize );
+    aLBSize.Width()  -= ( 2 * aRelated.Width() );
+
+    // help text
+    const Size aHelpTextSize = m_aHelpText.CalcMinimumSize(aLBSize.Width());
+
+    // ListBox
+    Point aLBPos( aRelated.Width(), aRelated.Height() + aToolbarSize.Height() + aRelated.Height() );
+
+    aLBSize.Height() -= aToolbarSize.Height();   //         Toolbar
+    aLBSize.Height() -= (6*aRelated.Height());   //         6 * gap
+    aLBSize.Height() -= aFixedTextSize.Height(); //         fixed line
+    aLBSize.Height() -= aHelpTextSize.Height();  //         help text
+    m_pListBox->SetPosSizePixel( aLBPos, aLBSize );
+
+    // FixedLine
+    Size aFLSize( aLBSize.Width(),aFixedTextSize.Height() );
+    Point aFLPos( aRelated.Width(), aLBPos.Y() + aLBSize.Height() + aRelated.Height());
+    m_aFixedLine.SetPosSizePixel( aFLPos, aFLSize );
+
+    // Help text
+    Point aFTPos( aRelated.Width(), aFLPos.Y() + aFLSize.Height() + aRelated.Height() );
+    m_aHelpText.SetPosSizePixel( aFTPos, aHelpTextSize );
+
 }
 // -----------------------------------------------------------------------------
 uno::Reference< sdbc::XConnection> OAddFieldWindow::getConnection() const

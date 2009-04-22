@@ -62,6 +62,19 @@ public:
     virtual void MakeVisible( const Rectangle& rRect, Window& rWin );
 
     inline OReportSection*  getReportSection() const { return m_pSectionWindow; }
+
+    // switch the marked objects to the given layer.
+    void SetMarkedToLayer( SdrLayerID nLayerNo );
+
+    // return true when only shapes are marked, otherwise false.
+    bool OnlyShapesMarked() const;
+
+    /* returns the common layer id of the marked objects, otherwise -1 will be returned.
+    */
+    short GetLayerIdOfMarkedObjects() const;
+
+    // returns true if objects at Drag & Drop is resize not move
+    bool IsDragResize() const;
 };
 }
 #endif //_REPORT_SECTIONVIEW_HXX

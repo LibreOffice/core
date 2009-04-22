@@ -44,16 +44,20 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/document/MacroExecMode.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XImporter.hpp>
+#include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/frame/XModel2.hpp>
+#include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/registry/InvalidRegistryException.hpp>
 #include <com/sun/star/sdbc/XDataSource.hpp>
 #include <com/sun/star/task/InteractionClassification.hpp>
 #include <com/sun/star/ucb/InteractiveIOException.hpp>
 #include <com/sun/star/ucb/IOErrorCode.hpp>
-#include <com/sun/star/document/MacroExecMode.hpp>
+#include <com/sun/star/util/XCloseable.hpp>
 /** === end UNO includes === **/
 
 #include <basic/basmgr.hxx>
@@ -74,6 +78,8 @@
 #include <ucbhelper/content.hxx>
 #include <unotools/confignode.hxx>
 #include <unotools/sharedunocomponent.hxx>
+#include <list>
+#include <boost/bind.hpp>
 
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdb;
@@ -85,6 +91,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::registry;
+using namespace ::com::sun::star;
 using namespace ::cppu;
 using namespace ::osl;
 using namespace ::utl;
@@ -129,7 +136,83 @@ namespace dbaccess
             static ::rtl::OUString s_sNodeName = ::rtl::OUString::createFromAscii("Location");
             return s_sNodeName;
         }
+        // -----------------------------------------------------------------------------
     }
+    // .............................................................................
+        typedef ::cppu::WeakImplHelper1 <   XTerminateListener
+                                        >   DatabaseDocumentLoader_Base;
+        class DatabaseDocumentLoader : public DatabaseDocumentLoader_Base
+        {
+        private:
+            Reference< XDesktop >               m_xDesktop;
+            ::std::list< const ODatabaseModelImpl* >  m_aDatabaseDocuments;
+
+        public:
+            DatabaseDocumentLoader( const comphelper::ComponentContext& _aContext);
+
+            inline void append(const ODatabaseModelImpl& _rModelImpl )
+            {
+                m_aDatabaseDocuments.push_back(&_rModelImpl);
+            }
+            inline void remove(const ODatabaseModelImpl& _rModelImpl) { m_aDatabaseDocuments.remove(&_rModelImpl); }
+
+        private:
+            // XTerminateListener
+            virtual void SAL_CALL queryTermination( const lang::EventObject& Event ) throw (TerminationVetoException, RuntimeException);
+            virtual void SAL_CALL notifyTermination( const lang::EventObject& Event ) throw (RuntimeException);
+            // XEventListener
+            virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
+        };
+
+        // .............................................................................
+        DatabaseDocumentLoader::DatabaseDocumentLoader( const comphelper::ComponentContext& _aContext )
+        {
+            acquire();
+            try
+            {
+                m_xDesktop.set( _aContext.createComponent( (rtl::OUString)SERVICE_FRAME_DESKTOP ), UNO_QUERY_THROW );
+                m_xDesktop->addTerminateListener( this );
+            }
+            catch( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
+        }
+
+        struct TerminateFunctor : ::std::unary_function<ODatabaseModelImpl* , void>
+        {
+            void operator()( const ODatabaseModelImpl* _pModelImpl ) const
+            {
+                try
+                {
+                    const Reference< XModel2> xModel( _pModelImpl ->getModel_noCreate(),UNO_QUERY_THROW );
+                    if ( !xModel->getControllers()->hasMoreElements() )
+                    {
+                        Reference<util::XCloseable> xCloseable(xModel,UNO_QUERY_THROW);
+                        xCloseable->close(sal_False);
+                    } // if ( !xModel->getControllers()->hasMoreElements() )
+                }
+                catch(const CloseVetoException&)
+                {
+                    throw TerminationVetoException();
+                }
+            }
+        };
+        // .............................................................................
+        void SAL_CALL DatabaseDocumentLoader::queryTermination( const lang::EventObject& /*Event*/ ) throw (TerminationVetoException, RuntimeException)
+        {
+            ::std::list< const ODatabaseModelImpl* > aCopy(m_aDatabaseDocuments);
+            ::std::for_each(aCopy.begin(),aCopy.end(),TerminateFunctor());
+        }
+
+        // .............................................................................
+        void SAL_CALL DatabaseDocumentLoader::notifyTermination( const lang::EventObject& /*Event*/ ) throw (RuntimeException)
+        {
+        }
+        // .............................................................................
+        void SAL_CALL DatabaseDocumentLoader::disposing( const lang::EventObject& /*Source*/ ) throw (RuntimeException)
+        {
+        }
 
 //= ODatabaseContext
 //==========================================================================
@@ -139,6 +222,7 @@ ODatabaseContext::ODatabaseContext( const Reference< XComponentContext >& _rxCon
     ,m_aContext( _rxContext )
     ,m_aContainerListeners(m_aMutex)
 {
+    m_pDatabaseDocumentLoader = new DatabaseDocumentLoader( m_aContext );
     ::basic::BasicManagerRepository::registerCreationListener( *this );
 }
 
@@ -146,6 +230,8 @@ ODatabaseContext::ODatabaseContext( const Reference< XComponentContext >& _rxCon
 ODatabaseContext::~ODatabaseContext()
 {
     ::basic::BasicManagerRepository::revokeCreationListener( *this );
+    if ( m_pDatabaseDocumentLoader )
+        m_pDatabaseDocumentLoader->release();
 }
 
 // Helper
@@ -348,11 +434,21 @@ Reference< XInterface > ODatabaseContext::loadObjectFromURL(const ::rtl::OUStrin
         xModel->attachResource( _sURL, aResource );
 
         ::utl::CloseableComponent aEnsureClose( xModel );
-    }
+    } // if ( !pExistent.get() )
 
     setTransientProperties( _sURL, *pExistent );
 
     return pExistent->getOrCreateDataSource().get();
+}
+// -----------------------------------------------------------------------------
+void ODatabaseContext::appendAtTerminateListener(const ODatabaseModelImpl& _rDataSourceModel)
+{
+    m_pDatabaseDocumentLoader->append(_rDataSourceModel);
+}
+// -----------------------------------------------------------------------------
+void ODatabaseContext::removeFromTerminateListener(const ODatabaseModelImpl& _rDataSourceModel)
+{
+    m_pDatabaseDocumentLoader->remove(_rDataSourceModel);
 }
 // -----------------------------------------------------------------------------
 void ODatabaseContext::setTransientProperties(const ::rtl::OUString& _sURL, ODatabaseModelImpl& _rDataSourceModel )

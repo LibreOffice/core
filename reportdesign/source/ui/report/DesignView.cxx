@@ -644,6 +644,11 @@ uno::Reference< report::XReportComponent > ODesignView::getCurrentControlModel()
 {
     return  m_aScrollWindow.getMarkedSection(nsa);
 }
+//-----------------------------------------------------------------------------
+::boost::shared_ptr<OSectionWindow> ODesignView::getSectionWindow(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection) const
+{
+    return  m_aScrollWindow.getSectionWindow(_xSection);
+}
 // -------------------------------------------------------------------------
 void ODesignView::markSection(const sal_uInt16 _nPos)
 {

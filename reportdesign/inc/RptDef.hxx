@@ -46,6 +46,11 @@ FORWARD_DECLARE_INTERFACE(beans,XPropertySet)
 
 namespace rptui
 {
+// not all used at the moment
+#define RPT_LAYER_FRONT         0
+#define RPT_LAYER_BACK          1
+#define RPT_LAYER_HIDDEN        2
+
 
 const UINT32 ReportInventor = UINT32('R')*0x00000001+
                            UINT32('P')*0x00000100+

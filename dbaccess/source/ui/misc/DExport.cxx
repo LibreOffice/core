@@ -857,8 +857,7 @@ void ODatabaseExport::showErrorDialog(const ::com::sun::star::sdbc::SQLException
         String aMsg(e.Message);
         aMsg += '\n';
         aMsg += String( ModuleRes( STR_QRY_CONTINUE ) );
-        OSQLMessageBox aBox(NULL, String(ModuleRes(STR_STAT_WARNING)),
-            aMsg, WB_YES_NO | WB_DEF_NO, OSQLMessageBox::Warning);
+        OSQLWarningBox aBox( NULL, aMsg, WB_YES_NO | WB_DEF_NO );
 
         if (aBox.Execute() == RET_YES)
             m_bDontAskAgain = TRUE;

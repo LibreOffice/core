@@ -135,6 +135,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdb;
+using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::awt;
@@ -163,6 +164,7 @@ ODatabaseImportExport::ODatabaseImportExport(const ::svx::ODataAccessDescriptor&
                                              :m_xFormatter(_rxNumberF)
     ,m_xFactory(_rM)
     ,m_nCommandType(CommandType::TABLE)
+    ,m_bNeedToReInitialize(sal_False)
     ,m_pReader(NULL)
     ,m_pRowMarker(NULL)
     ,m_bInInitialize(sal_False)
@@ -192,6 +194,7 @@ ODatabaseImportExport::ODatabaseImportExport( const ::dbtools::SharedConnection&
     ,m_xFormatter(_rxNumberF)
     ,m_xFactory(_rM)
     ,m_nCommandType(::com::sun::star::sdb::CommandType::TABLE)
+    ,m_bNeedToReInitialize(sal_False)
     ,m_pReader(NULL)
     ,m_pRowMarker(NULL)
     ,m_bInInitialize(sal_False)
@@ -214,14 +217,14 @@ ODatabaseImportExport::~ODatabaseImportExport()
     DBG_DTOR(ODatabaseImportExport,NULL);
     acquire();
 
-    disposing();
+    dispose();
 
     if(m_pReader)
         m_pReader->release();
     delete m_pRowMarker;
 }
 // -----------------------------------------------------------------------------
-void ODatabaseImportExport::disposing()
+void ODatabaseImportExport::dispose()
 {
     DBG_CHKTHIS(ODatabaseImportExport,NULL);
     // remove me as listener
@@ -240,8 +243,6 @@ void ODatabaseImportExport::disposing()
     m_xResultSet.clear();
     m_xRow.clear();
     m_xFormatter.clear();
-
-    m_aKeepModelAlive.clear();
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL ODatabaseImportExport::disposing( const EventObject& Source ) throw(::com::sun::star::uno::RuntimeException)
@@ -251,9 +252,10 @@ void SAL_CALL ODatabaseImportExport::disposing( const EventObject& Source ) thro
     if(m_xConnection.is() && m_xConnection == xCon)
     {
         m_xConnection.clear();
-        disposing();
-        if(!m_bInInitialize)
-            initialize();
+        dispose();
+        m_bNeedToReInitialize = true;
+        //if(!m_bInInitialize)
+        //  initialize();
     }
 }
 // -----------------------------------------------------------------------------
@@ -266,30 +268,36 @@ void ODatabaseImportExport::initialize( const ODataAccessDescriptor& _aDataDescr
 void ODatabaseImportExport::impl_initFromDescriptor( const ODataAccessDescriptor& _aDataDescriptor, bool _bPlusDefaultInit)
 {
     DBG_CHKTHIS(ODatabaseImportExport,NULL);
-    m_sDataSourceName = _aDataDescriptor.getDataSource();
-    _aDataDescriptor[daCommandType] >>= m_nCommandType;
-    _aDataDescriptor[daCommand]     >>= m_sName;
-    // some additonal information
-    if(_aDataDescriptor.has(daConnection))
+    if ( !_bPlusDefaultInit )
     {
-        Reference< XConnection > xPureConn( _aDataDescriptor[daConnection], UNO_QUERY );
-        m_xConnection.reset( xPureConn, SharedConnection::NoTakeOwnership );
-    }
-    if(_aDataDescriptor.has(daSelection))
-        _aDataDescriptor[daSelection]   >>= m_aSelection;
+        m_sDataSourceName = _aDataDescriptor.getDataSource();
+        _aDataDescriptor[daCommandType] >>= m_nCommandType;
+        _aDataDescriptor[daCommand]     >>= m_sName;
+        // some additonal information
+        if(_aDataDescriptor.has(daConnection))
+        {
+            Reference< XConnection > xPureConn( _aDataDescriptor[daConnection], UNO_QUERY );
+            m_xConnection.reset( xPureConn, SharedConnection::NoTakeOwnership );
+            Reference< XEventListener> xEvt((::cppu::OWeakObject*)this,UNO_QUERY);
+            Reference< XComponent >  xComponent(m_xConnection, UNO_QUERY);
+            if (xComponent.is() && xEvt.is())
+                xComponent->addEventListener(xEvt);
+        }
+        if(_aDataDescriptor.has(daSelection))
+            _aDataDescriptor[daSelection]   >>= m_aSelection;
 
-    sal_Bool bBookmarkSelection = sal_True; // the default if not present
-    if ( _aDataDescriptor.has( daBookmarkSelection ) )
-    {
-        _aDataDescriptor[ daBookmarkSelection ] >>= bBookmarkSelection;
-        DBG_ASSERT( !bBookmarkSelection, "ODatabaseImportExport::ODatabaseImportExport: bookmarked selection not yet supported!" );
-    }
+        sal_Bool bBookmarkSelection = sal_True; // the default if not present
+        if ( _aDataDescriptor.has( daBookmarkSelection ) )
+        {
+            _aDataDescriptor[ daBookmarkSelection ] >>= bBookmarkSelection;
+            DBG_ASSERT( !bBookmarkSelection, "ODatabaseImportExport::ODatabaseImportExport: bookmarked selection not yet supported!" );
+        }
 
 
-    if(_aDataDescriptor.has(daCursor))
-        _aDataDescriptor[daCursor]  >>= m_xResultSet;
-
-    if ( _bPlusDefaultInit )
+        if(_aDataDescriptor.has(daCursor))
+            _aDataDescriptor[daCursor]  >>= m_xResultSet;
+    } // if ( !_bPlusDefaultInit )
+    else
         initialize();
 
     try
@@ -306,23 +314,12 @@ void ODatabaseImportExport::initialize()
 {
     DBG_CHKTHIS(ODatabaseImportExport,NULL);
     m_bInInitialize = sal_True;
+    m_bNeedToReInitialize = false;
 
     if ( !m_xConnection.is() )
     {   // we need a connection
         OSL_ENSURE(m_sDataSourceName.getLength(),"There must be a datsource name!");
         Reference<XNameAccess> xDatabaseContext = Reference< XNameAccess >(m_xFactory->createInstance(SERVICE_SDB_DATABASECONTEXT), UNO_QUERY);
-
-        try
-        {
-            Reference< XDataSource > xDataSource( xDatabaseContext->getByName( m_sDataSourceName ), UNO_QUERY_THROW );
-            Reference< XModel > xDocument( getDataSourceOrModel( xDataSource ), UNO_QUERY_THROW );
-            m_aKeepModelAlive = SharedModel( xDocument );
-        }
-        catch( const Exception& )
-        {
-            OSL_ENSURE( sal_False, "ODatabaseImportExport::initialize: could not obtaine the document model!" );
-        }
-
         Reference< XEventListener> xEvt((::cppu::OWeakObject*)this,UNO_QUERY);
 
         Reference< XConnection > xConnection;
@@ -331,13 +328,6 @@ void ODatabaseImportExport::initialize()
 
         if(aInfo.isValid() && aInfo.getType() == SQLExceptionInfo::SQL_EXCEPTION)
             throw *static_cast<const SQLException*>(aInfo);
-    }
-    else
-    {
-        Reference< XEventListener> xEvt((::cppu::OWeakObject*)this,UNO_QUERY);
-        Reference< XComponent >  xComponent(m_xConnection, UNO_QUERY);
-        if (xComponent.is() && xEvt.is())
-            xComponent->addEventListener(xEvt);
     }
 
     Reference<XNameAccess> xNameAccess;
@@ -411,6 +401,26 @@ void ODatabaseImportExport::initialize()
     m_bInInitialize = sal_False;
 }
 // -----------------------------------------------------------------------------
+BOOL ODatabaseImportExport::Write()
+{
+    if ( m_bNeedToReInitialize )
+    {
+        if ( !m_bInInitialize )
+            initialize();
+    } // if ( m_bNeedToReInitialize )
+    return TRUE;
+}
+// -----------------------------------------------------------------------------
+BOOL ODatabaseImportExport::Read()
+{
+    if ( m_bNeedToReInitialize )
+    {
+        if ( !m_bInInitialize )
+            initialize();
+    } // if ( m_bNeedToReInitialize )
+    return TRUE;
+}
+// -----------------------------------------------------------------------------
 void ODatabaseImportExport::impl_initializeRowMember_throw()
 {
     if ( !m_xRow.is() && m_xResultSet.is() )
@@ -424,6 +434,7 @@ void ODatabaseImportExport::impl_initializeRowMember_throw()
 //======================================================================
 BOOL ORTFImportExport::Write()
 {
+    ODatabaseImportExport::Write();
     (*m_pStream) << '{'     << sRTF_RTF;
     (*m_pStream) << sRTF_ANSI   << ODatabaseImportExport::sNewLine;
     rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252;
@@ -680,6 +691,7 @@ BOOL ORTFImportExport::Write()
 //-------------------------------------------------------------------
 BOOL ORTFImportExport::Read()
 {
+    ODatabaseImportExport::Read();
     SvParserState eState = SVPAR_ERROR;
     if ( m_pStream )
     {
@@ -742,6 +754,7 @@ OHTMLImportExport::OHTMLImportExport(const ::svx::ODataAccessDescriptor& _aDataD
 //-------------------------------------------------------------------
 BOOL OHTMLImportExport::Write()
 {
+    ODatabaseImportExport::Write();
     if(m_xObject.is())
     {
         (*m_pStream) << '<' << sHTML_doctype << ' ' << sHTML_doctype32 << '>' << ODatabaseImportExport::sNewLine << ODatabaseImportExport::sNewLine;
@@ -759,6 +772,7 @@ BOOL OHTMLImportExport::Write()
 //-------------------------------------------------------------------
 BOOL OHTMLImportExport::Read()
 {
+    ODatabaseImportExport::Read();
     SvParserState eState = SVPAR_ERROR;
     if ( m_pStream )
     {
@@ -1132,4 +1146,3 @@ void OHTMLImportExport::IncIndent( sal_Int16 nVal )
     sIndent[m_nIndent] = 0;
 }
 // -----------------------------------------------------------------------------
-

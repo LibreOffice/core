@@ -379,16 +379,11 @@ DBG_NAME(OTableSubscriptionPage)
                     Reference<XModifiable> xModi(getDataSourceOrModel(xProp),UNO_QUERY);
                     sal_Bool bModified = ( xModi.is() && xModi->isModified() );
 
-                    Sequence< ::rtl::OUString> aNewTableFilter(1),aEmpty(3);
+                    Sequence< ::rtl::OUString > aNewTableFilter(1);
                     aNewTableFilter[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%"));
                     xProp->setPropertyValue(PROPERTY_TABLEFILTER,makeAny(aNewTableFilter));
 
-                    static const ::rtl::OUString s_sTableTypeView(RTL_CONSTASCII_USTRINGPARAM("VIEW"));
-                    static const ::rtl::OUString s_sTableTypeTable(RTL_CONSTASCII_USTRINGPARAM("TABLE"));
-                    aEmpty[0] = s_sTableTypeView;
-                    aEmpty[1] = s_sTableTypeTable;
-                    aEmpty[2] = aNewTableFilter[0];
-                    xProp->setPropertyValue(PROPERTY_TABLETYPEFILTER,makeAny(aEmpty));
+                    xProp->setPropertyValue( PROPERTY_TABLETYPEFILTER, makeAny( Sequence< ::rtl::OUString >() ) );
                     Reference< ::com::sun::star::lang::XEventListener> xEvt;
                     aErrorInfo = ::dbaui::createConnection(xProp,m_xORB,xEvt,m_xCurrentConnection);
 

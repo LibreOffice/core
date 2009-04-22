@@ -42,9 +42,6 @@ namespace rptxml
     {
         OXMLImage(const OXMLImage&);
         void operator =(const OXMLImage&);
-
-        ::rtl::OUString lcl_doStringsubstitution_nothrow( ::rtl::OUString const& _inout_rURL );
-
     public:
 
         OXMLImage( ORptFilter& rImport, sal_uInt16 nPrfx,

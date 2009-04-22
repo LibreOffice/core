@@ -63,6 +63,7 @@
 #define CB_AS_BEFORE_CORR_NAME  12
 #define CB_CHECK_REQUIRED       13
 #define CB_IGNORECURRENCY       14
+#define CB_ESCAPE_DATETIME      15
 
 #define ET_AUTOINCREMENTVALUE   1
 #define ET_RETRIEVE_AUTO        2

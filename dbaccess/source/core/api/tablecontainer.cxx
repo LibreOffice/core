@@ -124,6 +124,9 @@
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
 #endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
+#endif
 
 using namespace dbaccess;
 using namespace dbtools;
@@ -162,12 +165,6 @@ namespace
                     OSL_ENSURE( 0, "lcl_isPropertySetDefaulted: Exception caught!" );
                 }
             }
-            // the code below doesn't function -> I don't kow why
-//          Sequence<PropertyState> aStates = xState->getPropertyStates(_aNames);
-//          const PropertyState* pIter = aStates.getConstArray();
-//          const PropertyState* pEnd  = pIter + aStates.getLength();
-//          for( ; pIter != pEnd && *pIter == PropertyState_DEFAULT_VALUE; ++pIter)
-//              ;
             return ( pIter == pEnd );
         }
         return sal_False;
@@ -204,45 +201,29 @@ OTableContainer::~OTableContainer()
 // -----------------------------------------------------------------------------
 void OTableContainer::removeMasterContainerListener()
 {
-    Reference<XContainer> xCont(m_xMasterContainer,UNO_QUERY);
-    if(xCont.is())
-        xCont->removeContainerListener(this);
+    try
+    {
+        Reference<XContainer> xCont( m_xMasterContainer, UNO_QUERY_THROW );
+        xCont->removeContainerListener( this );
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
 }
+
+// -----------------------------------------------------------------------------
+::rtl::OUString OTableContainer::getTableTypeRestriction() const
+{
+    // no restriction at all (other than the ones provided externally)
+    return ::rtl::OUString();
+}
+
 // -----------------------------------------------------------------------------
 // XServiceInfo
 //------------------------------------------------------------------------------
 IMPLEMENT_SERVICE_INFO2(OTableContainer, "com.sun.star.sdb.dbaccess.OTableContainer", SERVICE_SDBCX_CONTAINER, SERVICE_SDBCX_TABLES)
-// -------------------------------------------------------------------------
-sal_Bool OTableContainer::isNameValid(  const ::rtl::OUString& _rName,
-                                        const Sequence< ::rtl::OUString >& _rTableFilter,
-                                        const Sequence< ::rtl::OUString >& _rTableTypeFilter,
-                                        const ::std::vector< WildCard >& _rWCSearch) const
-{
-    if ( OFilteredContainer::isNameValid(_rName,_rTableFilter,_rTableTypeFilter,_rWCSearch) )
-    {// the table name is allowed (not filtered out)
-        // no type filter
 
-        sal_Int32   nTableTypeFilterLen = _rTableTypeFilter.getLength();
-        sal_Bool bNoTableFilters = ((nTableTypeFilterLen == 1) && _rTableTypeFilter[0].equalsAsciiL("%", 1));
-
-        if ( bNoTableFilters || !nTableTypeFilterLen )
-            return sal_True;
-
-        // this is expensive but there is no other way to get the type of the table
-        Reference<XPropertySet> xTable;
-        ::cppu::extractInterface(xTable,m_xMasterContainer->getByName(_rName));
-        ::rtl::OUString aTypeName;
-        xTable->getPropertyValue(PROPERTY_TYPE) >>= aTypeName;
-        const ::rtl::OUString* pTypeBegin   = _rTableTypeFilter.getConstArray();
-        const ::rtl::OUString* pTypeEnd     = pTypeBegin + _rTableTypeFilter.getLength();
-        for(;pTypeBegin != pTypeEnd;++pTypeBegin)
-        {
-            if(*pTypeBegin == aTypeName)
-                return sal_True; // same as break and then checking
-        }
-    }
-    return sal_False;
-}
 // -----------------------------------------------------------------------------
 namespace
 {
@@ -572,84 +553,18 @@ void SAL_CALL OTableContainer::disposing()
 void SAL_CALL OTableContainer::disposing( const ::com::sun::star::lang::EventObject& /*Source*/ ) throw (::com::sun::star::uno::RuntimeException)
 {
 }
-// -----------------------------------------------------------------------------
 
-Sequence< ::rtl::OUString > OTableContainer::getTableTypeFilter(const Sequence< ::rtl::OUString >& _rTableTypeFilter) const
-{
-    Sequence< ::rtl::OUString > sTableTypes;
-    if ( _rTableTypeFilter.getLength() == 0 )
-    {
-        getAllTableTypeFilter( sTableTypes );
-    }
-    else
-    {
-        sTableTypes = _rTableTypeFilter;
-    }
-    return sTableTypes;
-}
 // -----------------------------------------------------------------------------
 void OTableContainer::addMasterContainerListener()
 {
-    // we have to listen at the mastertables because it could happen that another inserts new tables
-    Reference<XContainer> xCont(m_xMasterContainer,UNO_QUERY);
-    if(xCont.is())
-        xCont->addContainerListener(this);
-}
-// -----------------------------------------------------------------------------
-// two ways to obtain all tables from XDatabaseMetaData::getTables, via passing a particular
-// table type filter:
-// adhere to the standard, which requests to pass a NULL table type filter, if
-// you want to retrieve all tables
-#define FILTER_MODE_STANDARD 0
-// only pass %, which is not allowed by the standard, but understood by some drivers
-#define FILTER_MODE_WILDCARD 1
-// only pass TABLE and VIEW
-#define FILTER_MODE_FIXED    2
-// do the thing which showed to be the safest way, understood by nearly all
-// drivers, even the ones which do not understand the standard
-#define FILTER_MODE_MIX_ALL  3
-
-void OTableContainer::getAllTableTypeFilter( Sequence< ::rtl::OUString >& /* [out] */ _rFilter ) const
-{
-    sal_Int32 nFilterMode = FILTER_MODE_MIX_ALL;
-        // for compatibility reasons, this is the default: we used this way before we
-        // introduced the TableTypeFilterMode setting
-
-    // obtain the data source we belong to, and the TableTypeFilterMode setting
-    Any aFilterModeSetting;
-    if ( getDataSourceSetting( getDataSource( (Reference< XInterface >)m_rParent ), "TableTypeFilterMode", aFilterModeSetting ) )
+    try
     {
-        OSL_VERIFY( aFilterModeSetting >>= nFilterMode );
+        Reference< XContainer > xCont( m_xMasterContainer, UNO_QUERY_THROW );
+        xCont->addContainerListener( this );
     }
-
-    const ::rtl::OUString sAll( RTL_CONSTASCII_USTRINGPARAM( "%" ) );
-    const ::rtl::OUString sView( RTL_CONSTASCII_USTRINGPARAM( "VIEW" ) );
-    const ::rtl::OUString sTable( RTL_CONSTASCII_USTRINGPARAM( "TABLE" ) );
-
-    switch ( nFilterMode )
+    catch( const Exception& )
     {
-    default:
-        OSL_ENSURE( sal_False, "OTableContainer::getAllTableTypeFilter: unknown TableTypeFilterMode!" );
-    case FILTER_MODE_MIX_ALL:
-        _rFilter.realloc( 3 );
-        _rFilter[0] = sView;
-        _rFilter[1] = sTable;
-        _rFilter[2] = sAll;
-        break;
-    case FILTER_MODE_FIXED:
-        _rFilter.realloc( 2 );
-        _rFilter[0] = sView;
-        _rFilter[1] = sTable;
-        break;
-    case FILTER_MODE_WILDCARD:
-        _rFilter.realloc( 1 );
-        _rFilter[0] = sAll;
-        break;
-    case FILTER_MODE_STANDARD:
-        _rFilter.realloc( 0 );
-        break;
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
-
-// -----------------------------------------------------------------------------
 

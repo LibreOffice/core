@@ -264,8 +264,7 @@ sal_Bool ORowSetImportExport::insertNewRow()
         if(!m_bAlreadyAsked)
         {
             String sAskIfContinue = String(ModuleRes(STR_ERROR_OCCURED_WHILE_COPYING));
-            String sTitle = String(ModuleRes(STR_STAT_WARNING));
-            OSQLMessageBox aDlg(m_pParent,sTitle,sAskIfContinue,WB_YES_NO|WB_DEF_YES,OSQLMessageBox::Warning);
+            OSQLWarningBox aDlg( m_pParent, sAskIfContinue, WB_YES_NO | WB_DEF_YES );
             if(aDlg.Execute() == RET_YES)
                 m_bAlreadyAsked = sal_True;
             else

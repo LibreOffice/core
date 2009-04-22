@@ -146,9 +146,11 @@ OXMLHierarchyCollection::OXMLHierarchyCollection( ODBFilter& rImport
                 ,sal_uInt16 nPrfx
                 ,const ::rtl::OUString& _sLocalName
                 ,const Reference< XNameAccess >& _xContainer
+                ,const Reference< XPropertySet >& _xTable
             ) :
     SvXMLImportContext( rImport, nPrfx, _sLocalName )
     ,m_xContainer(_xContainer)
+    ,m_xTable(_xTable)
 {
     DBG_CTOR(OXMLHierarchyCollection,NULL);
 }
@@ -179,7 +181,7 @@ SvXMLImportContext* OXMLHierarchyCollection::CreateChildContext(
             break;
         case XML_TOK_COLUMN:
             GetOwnImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-            pContext = new OXMLColumn( GetOwnImport(), nPrefix, rLocalName,xAttrList,m_xContainer);
+            pContext = new OXMLColumn( GetOwnImport(), nPrefix, rLocalName,xAttrList,m_xContainer,m_xTable);
             break;
         //  case XML_TOK_QUERY_COLLECTION:
         case XML_TOK_COMPONENT_COLLECTION:

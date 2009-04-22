@@ -158,6 +158,8 @@
 #include <unotools/confignode.hxx>
 #include <helpids.hrc>
 
+#include <ReportControllerObserver.hxx>
+
 using namespace ::com::sun::star;
 using namespace uno;
 using namespace io;
@@ -305,9 +307,14 @@ OReportController::OReportController(Reference< XComponentContext > const & xCon
 ,m_bChartEnabled(false)
 ,m_bChartEnabledAsked(false)
 {
+    // new Observer
+    m_pReportControllerObserver = new OXReportControllerObserver(*this);
+    m_pReportControllerObserver->acquire();
+
     m_sMode =  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("normal"));
     DBG_CTOR( rpt_OReportController,NULL);
     registerProperty(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ZoomValue")),PROPERTY_ID_ZOOMVALUE,beans::PropertyAttribute::BOUND| beans::PropertyAttribute::TRANSIENT,&m_nZoomValue,::getCppuType(reinterpret_cast< sal_Int16*>(NULL)));
+
 }
 // -----------------------------------------------------------------------------
 OReportController::~OReportController()
@@ -320,6 +327,7 @@ IMPLEMENT_FORWARD_XINTERFACE2(OReportController,OReportController_BASE,OReportCo
 // -----------------------------------------------------------------------------
 void OReportController::disposing()
 {
+
     if ( getView() && m_pClipbordNotifier )
     {
         m_pClipbordNotifier->ClearCallbackLink();
@@ -354,6 +362,8 @@ void OReportController::disposing()
                 pSectionWindow->getReportSection().deactivateOle();
             getUndoMgr()->Clear();      // clear all undo redo things
             listen(false);
+            m_pReportControllerObserver->Clear();
+            m_pReportControllerObserver->release();
         }
         catch(uno::Exception&)
         {
@@ -456,11 +466,9 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
                 aReturn.bEnabled = pSectionView && pSectionView->GetMarkedObjectCount() > 2;
             }
             break;
+        case SID_ARRANGEMENU:
         case SID_FRAME_DOWN:
         case SID_FRAME_UP:
-            aReturn.bEnabled = sal_False;
-            break;
-        case SID_ARRANGEMENU:
         case SID_FRAME_TO_TOP:
         case SID_FRAME_TO_BOTTOM:
         case SID_OBJECT_HEAVEN:
@@ -468,29 +476,31 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
             aReturn.bEnabled = isEditable() && m_pMyOwnView->HasSelection();
             if ( aReturn.bEnabled )
             {
-                uno::Reference< report::XShape> xShape(m_pMyOwnView->getCurrentControlModel(),uno::UNO_QUERY);
-                aReturn.bEnabled = xShape.is();
+                OSectionView* pSectionView = getCurrentSectionView();
+                aReturn.bEnabled = pSectionView && pSectionView->OnlyShapesMarked();
                 if ( aReturn.bEnabled )
                 {
-                    OSectionView* pSectionView = getCurrentSectionView();
-                    if ( pSectionView )
-                    {
-                        switch(_nId)
-                        {
-                            case SID_OBJECT_HEAVEN:
-                                aReturn.bEnabled = pSectionView->IsToTopPossible();
-                                break;
-                            case SID_OBJECT_HELL:
-                                aReturn.bEnabled = pSectionView->IsToBtmPossible();
-                                break;
-                            default:
-                                break;
-                        }
-                    }
+                    if ( SID_OBJECT_HEAVEN == _nId )
+                        aReturn.bEnabled = pSectionView->GetLayerIdOfMarkedObjects() != RPT_LAYER_FRONT;
+                    else if ( SID_OBJECT_HELL == _nId )
+                        aReturn.bEnabled = pSectionView->GetLayerIdOfMarkedObjects() != RPT_LAYER_BACK;
                 }
             }
             break;
 
+        case SID_SECTION_SHRINK:
+        case SID_SECTION_SHRINK_TOP:
+        case SID_SECTION_SHRINK_BOTTOM:
+            {
+                sal_Int32 nCount = 0;
+                uno::Reference<report::XSection> xSection = m_pMyOwnView->getCurrentSection();
+                if ( xSection.is() )
+                {
+                    nCount = xSection->getCount();
+                }
+                aReturn.bEnabled = isEditable() && nCount > 0;
+            }
+            break;
         case SID_OBJECT_ALIGN:
         case SID_OBJECT_ALIGN_LEFT:
         case SID_OBJECT_ALIGN_CENTER:
@@ -1025,7 +1035,9 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
         case SID_REDO:
         case SID_UNDO:
         {
-            const OXUndoEnvironment::OUndoEnvLock aLock( m_aReportModel->GetUndoEnv() );
+            // const OXUndoEnvironment::OUndoEnvLock aLock( m_aReportModel->GetUndoEnv() );
+            // We would like to know if we are in undo mode
+            const OXUndoEnvironment::OUndoMode aLock( m_aReportModel->GetUndoEnv() );
             OReportController_BASE::Execute( _nId, aArgs );
             InvalidateAll();
             updateFloater();
@@ -1092,6 +1104,16 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
         case SID_OBJECT_ALIGN_DOWN:
             alignControlsWithUndo(RID_STR_UNDO_ALIGNMENT,ControlModification::BOTTOM,SID_SECTION_ALIGN_DOWN == _nId);
             break;
+
+        case SID_SECTION_SHRINK_BOTTOM:
+        case SID_SECTION_SHRINK_TOP:
+        case SID_SECTION_SHRINK:
+            {
+                uno::Reference<report::XSection> xSection = m_pMyOwnView->getCurrentSection();
+                shrinkSection(RID_STR_UNDO_SHRINK, xSection, _nId);
+            }
+            break;
+
         case SID_SELECTALL:
             m_pMyOwnView->SelectAll(OBJ_NONE);
             break;
@@ -1656,6 +1678,9 @@ void OReportController::impl_initialize( )
             if ( !m_aReportModel )
                 throw Exception();
 
+            ::comphelper::NamedValueCollection aArgs(getModel()->getArgs());
+            setMode(aArgs.getOrDefault("Mode", rtl::OUString::createFromAscii("normal")));
+
             listen(true);
             setEditable( !m_aReportModel->IsReadOnly() );
             m_xFormatter.set(getORB()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.NumberFormatter"))), UNO_QUERY);
@@ -1867,6 +1892,9 @@ void OReportController::describeSupportedFeatures()
     implDescribeSupportedFeature( ".uno:SectionAlignTop",           SID_SECTION_ALIGN_UP,           CommandGroup::FORMAT );
     implDescribeSupportedFeature( ".uno:SectionAlignMiddle",        SID_SECTION_ALIGN_MIDDLE,       CommandGroup::FORMAT );
     implDescribeSupportedFeature( ".uno:SectionAlignBottom",        SID_SECTION_ALIGN_DOWN,         CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:SectionShrink",             SID_SECTION_SHRINK,             CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:SectionShrinkTop",          SID_SECTION_SHRINK_TOP,         CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:SectionShrinkBottom",       SID_SECTION_SHRINK_BOTTOM,      CommandGroup::FORMAT );
 
     implDescribeSupportedFeature( ".uno:ObjectResize",              SID_OBJECT_RESIZING,            CommandGroup::FORMAT );
     implDescribeSupportedFeature( ".uno:SmallestWidth",             SID_OBJECT_SMALLESTWIDTH,       CommandGroup::FORMAT );
@@ -2091,6 +2119,7 @@ void OReportController::onLoadedMenu(const Reference< frame::XLayoutManager >& _
             ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:resource/toolbar/alignmentbar"))
             ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:resource/toolbar/sectionalignmentbar"))
             ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:resource/toolbar/resizebar"))
+            ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:resource/toolbar/sectionshrinkbar"))
         };
         for (size_t i = 0; i< sizeof(s_sMenu)/sizeof(s_sMenu[0]); ++i)
         {
@@ -2124,10 +2153,26 @@ void OReportController::notifyGroupSections(const ContainerEvent& _rEvent,bool _
         if ( xGroup->getHeaderOn() )
         {
             groupChange(xGroup,PROPERTY_HEADERON,nGroupPos,_bShow);
+            if (_bShow)
+            {
+                m_pReportControllerObserver->AddSection(xGroup->getHeader());
+            }
+            else
+            {
+                m_pReportControllerObserver->RemoveSection(xGroup->getHeader());
+            }
         }
         if ( xGroup->getFooterOn() )
         {
             groupChange(xGroup,PROPERTY_FOOTERON,nGroupPos,_bShow);
+            if (_bShow)
+            {
+                m_pReportControllerObserver->AddSection(xGroup->getFooter());
+            }
+            else
+            {
+                m_pReportControllerObserver->RemoveSection(xGroup->getFooter());
+            }
         }
     }
 }
@@ -2164,9 +2209,14 @@ void SAL_CALL OReportController::propertyChange( const beans::PropertyChangeEven
             {
                 const USHORT nPosition = m_xReportDefinition->getPageHeaderOn() ? 1 : 0;
                 if ( bShow )
+                {
                     m_pMyOwnView->addSection(m_xReportDefinition->getReportHeader(),DBREPORTHEADER,nPosition);
+                    m_pReportControllerObserver->AddSection(m_xReportDefinition->getReportHeader());
+                }
                 else
+                {
                     m_pMyOwnView->removeSection(nPosition);
+                }
             }
             else if ( evt.PropertyName.equals( PROPERTY_REPORTFOOTERON ) )
             {
@@ -2174,23 +2224,38 @@ void SAL_CALL OReportController::propertyChange( const beans::PropertyChangeEven
                 if ( m_xReportDefinition->getPageFooterOn() )
                     --nPosition;
                 if ( bShow )
+                {
                     m_pMyOwnView->addSection(m_xReportDefinition->getReportFooter(),DBREPORTFOOTER,nPosition);
+                    m_pReportControllerObserver->AddSection(m_xReportDefinition->getReportFooter());
+                }
                 else
+                {
                     m_pMyOwnView->removeSection(nPosition - 1);
+                }
             }
             else if ( evt.PropertyName.equals( PROPERTY_PAGEHEADERON ) )
             {
                 if ( bShow )
+                {
                     m_pMyOwnView->addSection(m_xReportDefinition->getPageHeader(),DBPAGEHEADER,0);
+                    m_pReportControllerObserver->AddSection(m_xReportDefinition->getPageHeader());
+                }
                 else
+                {
                     m_pMyOwnView->removeSection(USHORT(0));
+                }
             }
             else if ( evt.PropertyName.equals( PROPERTY_PAGEFOOTERON ) )
             {
                 if ( bShow )
+                {
                     m_pMyOwnView->addSection(m_xReportDefinition->getPageFooter(),DBPAGEFOOTER);
+                    m_pReportControllerObserver->AddSection(m_xReportDefinition->getPageFooter());
+                }
                 else
+                {
                     m_pMyOwnView->removeSection(m_pMyOwnView->getSectionCount() - 1);
+                }
             }
             else if (   evt.PropertyName.equals( PROPERTY_COMMAND )
                     ||  evt.PropertyName.equals( PROPERTY_COMMANDTYPE )
@@ -2286,7 +2351,9 @@ void OReportController::groupChange( const uno::Reference< report::XGroup>& _xGr
             m_pMyOwnView->addSection(pMemFunSection(&aGroupHelper),sColor,nPosition);
         }
         else
+        {
             m_pMyOwnView->removeSection(nPosition);
+        }
     }
 }
 //------------------------------------------------------------------------------
@@ -2493,10 +2560,10 @@ IMPL_LINK( OReportController, EventLstHdl, VclWindowEvent*, _pEvent )
     return 1L;
 }
 // -----------------------------------------------------------------------------
-void OReportController::Notify(SfxBroadcaster & /*rBc*/, SfxHint const & rHint)
+void OReportController::Notify(SfxBroadcaster & /* _rBc */, SfxHint const & _rHint)
 {
-    if (rHint.ISA(DlgEdHint)
-        && (static_cast< DlgEdHint const & >(rHint).GetKind()
+    if (_rHint.ISA(DlgEdHint)
+        && (static_cast< DlgEdHint const & >(_rHint).GetKind()
             == RPTUI_HINT_SELECTIONCHANGED))
     {
         const sal_Int32 nSelectionCount = m_pMyOwnView->getMarkedObjectCount();
@@ -2510,6 +2577,16 @@ void OReportController::Notify(SfxBroadcaster & /*rBc*/, SfxHint const & rHint)
             ::boost::bind(&view::XSelectionChangeListener::selectionChanged,_1,boost::cref(aEvent)));
 
     }
+    // if (_rHint.ISA(SfxSimpleHint)
+    //     && (static_cast< SfxSimpleHint const & >(_rHint).GetId()
+    //         == SFX_HINT_COLORS_CHANGED))
+    // {
+    //     int dummy = 0;
+    // }
+    // if (m_pReportControllerObserver)
+    // {
+    //     m_pReportControllerObserver->Notify(_rBc, _rHint);
+    // }
 }
 // -----------------------------------------------------------------------------
 void OReportController::executeMethodWithUndo(USHORT _nUndoStrId,const ::std::mem_fun_t<void,ODesignView>& _pMemfun)
@@ -2529,6 +2606,107 @@ void OReportController::alignControlsWithUndo(USHORT _nUndoStrId,sal_Int32 _nCon
     InvalidateFeature( SID_SAVEDOC );
     InvalidateFeature( SID_UNDO );
 }
+// -----------------------------------------------------------------------------
+void OReportController::shrinkSectionBottom(uno::Reference<report::XSection> _xSection)
+{
+    const sal_Int32 nElements = _xSection->getCount();
+    if (nElements == 0)
+    {
+        // there are no elements
+        return;
+    }
+    const sal_Int32 nSectionHeight = _xSection->getHeight();
+    // sal_Int32 nMinPositionY = nSectionHeight;
+    sal_Int32 nMaxPositionY = 0;
+    uno::Reference< report::XReportComponent> xReportComponent;
+
+    // for every component get it's Y-position and compare it to the current Y-position
+    for (int i=0;i<nElements;i++)
+    {
+        xReportComponent.set(_xSection->getByIndex(i), uno::UNO_QUERY);
+        const sal_Int32 nReportComponentPositionY = xReportComponent->getPositionY();
+        const sal_Int32 nReportComponentHeight = xReportComponent->getHeight();
+        const sal_Int32 nReportComponentPositionYAndHeight = nReportComponentPositionY + nReportComponentHeight;
+        // nMinPositionY = std::min(nReportComponentPositionY, nMinPositionY);
+        nMaxPositionY = std::max(nReportComponentPositionYAndHeight, nMaxPositionY);
+    }
+    // now we know the minimal Y-Position and maximal Y-Position
+
+    if (nMaxPositionY > (nSectionHeight - 7) ) // Magic Number, we use a little bit less heights for right positioning
+    {
+        // the lowest position is already 0
+        return;
+    }
+    _xSection->setHeight(nMaxPositionY);
+}
+
+void OReportController::shrinkSectionTop(uno::Reference<report::XSection> _xSection)
+{
+    const sal_Int32 nElements = _xSection->getCount();
+    if (nElements == 0)
+    {
+        // there are no elements
+        return;
+    }
+
+    const sal_Int32 nSectionHeight = _xSection->getHeight();
+    sal_Int32 nMinPositionY = nSectionHeight;
+    // sal_Int32 nMaxPositionY = 0;
+    uno::Reference< report::XReportComponent> xReportComponent;
+
+    // for every component get it's Y-position and compare it to the current Y-position
+    for (int i=0;i<nElements;i++)
+    {
+        xReportComponent.set(_xSection->getByIndex(i), uno::UNO_QUERY);
+        const sal_Int32 nReportComponentPositionY = xReportComponent->getPositionY();
+        // const sal_Int32 nReportComponentHeight = xReportComponent->getHeight();
+        // const sal_Int32 nReportComponentPositionYAndHeight = nReportComponentPositionY + nReportComponentHeight;
+        nMinPositionY = std::min(nReportComponentPositionY, nMinPositionY);
+        // nMaxPositionY = std::max(nReportComponentPositionYAndHeight, nMaxPositionY);
+    }
+    // now we know the minimal Y-Position and maximal Y-Position
+    if (nMinPositionY == 0)
+    {
+        // the lowest position is already 0
+        return;
+    }
+    for (int i=0;i<nElements;i++)
+    {
+        xReportComponent.set(_xSection->getByIndex(i), uno::UNO_QUERY);
+        const sal_Int32 nReportComponentPositionY = xReportComponent->getPositionY();
+        const sal_Int32 nNewPositionY = nReportComponentPositionY - nMinPositionY;
+        xReportComponent->setPositionY(nNewPositionY);
+    }
+    const sal_Int32 nNewSectionHeight = nSectionHeight - nMinPositionY;
+    _xSection->setHeight(nNewSectionHeight);
+}
+
+void OReportController::shrinkSection(USHORT _nUndoStrId, uno::Reference<report::XSection> _xSection, sal_Int32 _nSid)
+{
+    if ( _xSection.is() )
+    {
+        const String sUndoAction = String((ModuleRes(_nUndoStrId)));
+        UndoManagerListAction aListAction(m_aUndoManager,sUndoAction);
+
+        if (_nSid == SID_SECTION_SHRINK)
+        {
+            shrinkSectionTop(_xSection);
+            shrinkSectionBottom(_xSection);
+        }
+        else if (_nSid == SID_SECTION_SHRINK_TOP)
+        {
+            shrinkSectionTop(_xSection);
+        }
+        else if (_nSid == SID_SECTION_SHRINK_BOTTOM)
+        {
+            shrinkSectionBottom(_xSection);
+        }
+    }
+
+    InvalidateFeature( SID_SAVEDOC );
+    InvalidateFeature( SID_UNDO );
+}
+
 // -----------------------------------------------------------------------------
 uno::Any SAL_CALL OReportController::getViewData(void) throw( uno::RuntimeException )
 {
@@ -2964,7 +3142,11 @@ void OReportController::createControl(const Sequence< PropertyValue >& _aArgs,co
     {
         pNewControl = SdrObjFactory::MakeNewObject( ReportInventor, _nObjectId, pSectionWindow->getReportSection().getPage(),m_aReportModel.get() );
         xShapeProp.set(pNewControl->getUnoShape(),uno::UNO_QUERY);
-        pSectionWindow->getReportSection().createDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("diamond")),pNewControl); // TODO: use real custom shape type
+        ::rtl::OUString sCustomShapeType = m_pMyOwnView->GetInsertObjString();
+        if ( !sCustomShapeType.getLength() )
+            sCustomShapeType = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("diamond"));
+        pSectionWindow->getReportSection().createDefault(sCustomShapeType,pNewControl);
+        pNewControl->SetLogicRect(Rectangle(3000,500,6000,3500)); // switch height and width
     } // if ( _nObjectId == OBJ_CUSTOMSHAPE )
     else if ( _nObjectId == OBJ_OLE2 || OBJ_DLG_SUBREPORT == _nObjectId  )
     {
@@ -3451,21 +3633,24 @@ void OReportController::changeZOrder(sal_Int32 _nId)
     {
         switch(_nId)
         {
-            case SID_FRAME_TO_TOP:
-                pSectionView->MovMarkedToTop();
-                break;
-            case SID_FRAME_DOWN:
-                break;
-            case SID_FRAME_UP:
-                break;
             case SID_FRAME_TO_BOTTOM:
-                pSectionView->MovMarkedToBtm();
+                pSectionView->PutMarkedToBtm();
                 break;
-            case SID_OBJECT_HEAVEN:
+            case SID_FRAME_TO_TOP:
                 pSectionView->PutMarkedToTop();
                 break;
+            case SID_FRAME_DOWN:
+                pSectionView->MovMarkedToBtm();
+                break;
+            case SID_FRAME_UP:
+                pSectionView->MovMarkedToTop();
+                break;
+
+            case SID_OBJECT_HEAVEN:
+                pSectionView->SetMarkedToLayer( RPT_LAYER_FRONT );
+                break;
             case SID_OBJECT_HELL:
-                pSectionView->PutMarkedToBtm();
+                pSectionView->SetMarkedToLayer( RPT_LAYER_BACK );
                 break;
         }
     }
@@ -3497,20 +3682,36 @@ void OReportController::listen(const bool _bAdd)
             (m_xReportDefinition.get()->*pPropertyListenerAction)( pIter->Name, xUndo );
     }
 
+    // Add Listeners to UndoEnvironment
     void (OXUndoEnvironment::*pElementUndoFunction)( const uno::Reference< uno::XInterface >& ) =
         _bAdd ? &OXUndoEnvironment::AddElement : &OXUndoEnvironment::RemoveElement;
 
     (rUndoEnv.*pElementUndoFunction)( m_xReportDefinition->getStyleFamilies() );
     (rUndoEnv.*pElementUndoFunction)( m_xReportDefinition->getFunctions() );
 
+    // Add Listeners to ReportControllerObserver
+    OXReportControllerObserver& rObserver = *m_pReportControllerObserver;
+    // void (OXReportControllerObserver::*pObserverFunction)( const uno::Reference< uno::XInterface >& ) =
+    //     _bAdd ? &OXReportControllerObserver::AddElement : &OXReportControllerObserver::RemoveElement;
+
+    // (rObserver.*pObserverFunction)( m_xReportDefinition->getStyleFamilies() );
+    // (rObserver.*pObserverFunction)( m_xReportDefinition->getFunctions() );
+
     if ( m_xReportDefinition->getPageHeaderOn() && _bAdd )
+    {
         m_pMyOwnView->addSection(m_xReportDefinition->getPageHeader(),DBPAGEHEADER);
+        rObserver.AddSection(m_xReportDefinition->getPageHeader());
+    }
     if ( m_xReportDefinition->getReportHeaderOn() && _bAdd )
+    {
         m_pMyOwnView->addSection(m_xReportDefinition->getReportHeader(),DBREPORTHEADER);
+        rObserver.AddSection(m_xReportDefinition->getReportHeader());
+    }
 
     uno::Reference< report::XGroups > xGroups = m_xReportDefinition->getGroups();
     const sal_Int32 nCount = xGroups->getCount();
     _bAdd ? xGroups->addContainerListener(&rUndoEnv) : xGroups->removeContainerListener(&rUndoEnv);
+    _bAdd ? xGroups->addContainerListener(&rObserver) : xGroups->removeContainerListener(&rObserver);
 
     for (sal_Int32 i=0;i<nCount ; ++i)
     {
@@ -3521,34 +3722,47 @@ void OReportController::listen(const bool _bAdd)
         (rUndoEnv.*pElementUndoFunction)( xGroup );
         (rUndoEnv.*pElementUndoFunction)( xGroup->getFunctions() );
         if ( xGroup->getHeaderOn() && _bAdd )
+        {
             m_pMyOwnView->addSection(xGroup->getHeader(),DBGROUPHEADER);
+            rObserver.AddSection(xGroup->getHeader());
+        }
     } // for (sal_Int32 i=0;i<nCount ; ++i)
 
     if ( _bAdd )
     {
         m_pMyOwnView->addSection(m_xReportDefinition->getDetail(),DBDETAIL);
+        rObserver.AddSection(m_xReportDefinition->getDetail());
 
         for (sal_Int32 i=nCount;i > 0 ; --i)
         {
             uno::Reference< report::XGroup > xGroup(xGroups->getByIndex(i-1),uno::UNO_QUERY);
             if ( xGroup->getFooterOn() )
+            {
                 m_pMyOwnView->addSection(xGroup->getFooter(),DBGROUPFOOTER);
+                rObserver.AddSection(xGroup->getFooter());
+            }
         }
         if ( m_xReportDefinition->getReportFooterOn() )
+        {
             m_pMyOwnView->addSection(m_xReportDefinition->getReportFooter(),DBREPORTFOOTER);
+            rObserver.AddSection(m_xReportDefinition->getReportFooter());
+        }
         if ( m_xReportDefinition->getPageFooterOn())
+        {
             m_pMyOwnView->addSection(m_xReportDefinition->getPageFooter(),DBPAGEFOOTER);
+            rObserver.AddSection(m_xReportDefinition->getPageFooter());
+        }
+
+        xGroups->addContainerListener(static_cast<XContainerListener*>(this));
+        m_xReportDefinition->addModifyListener(static_cast<XModifyListener*>(this));
     }
-
-
-
-    _bAdd ? xGroups->addContainerListener(static_cast<XContainerListener*>(this))
-        : xGroups->removeContainerListener(static_cast<XContainerListener*>(this));
-    _bAdd ? m_xReportDefinition->addModifyListener(static_cast<XModifyListener*>(this))
-        : m_xReportDefinition->removeModifyListener(static_cast<XModifyListener*>(this));
-
-    if ( !_bAdd )
+    else /* ! _bAdd */
+    {
+        rObserver.RemoveSection(m_xReportDefinition->getDetail());
+        xGroups->removeContainerListener(static_cast<XContainerListener*>(this));
+        m_xReportDefinition->removeModifyListener(static_cast<XModifyListener*>(this));
         m_aReportModel->detachController();
+    }
 }
 // -----------------------------------------------------------------------------
 void OReportController::switchReportSection(const sal_Int16 _nId)
@@ -3744,14 +3958,17 @@ void OReportController::markSection(const bool _bNext)
 void OReportController::createDefaultControl(const uno::Sequence< beans::PropertyValue>& _aArgs)
 {
     uno::Reference< report::XSection > xSection = m_pMyOwnView->getCurrentSection();
+    if ( !xSection.is() )
+        xSection = m_xReportDefinition->getDetail();
+
     if ( xSection.is() )
     {
         const ::rtl::OUString sKeyModifier(RTL_CONSTASCII_USTRINGPARAM("KeyModifier"));
         const beans::PropertyValue* pIter = _aArgs.getConstArray();
         const beans::PropertyValue* pEnd  = pIter + _aArgs.getLength();
-        const beans::PropertyValue* pFind = ::std::find_if(pIter,pEnd,::std::bind2nd(PropertyValueCompare(),boost::cref(sKeyModifier)));
+        const beans::PropertyValue* pKeyModifier = ::std::find_if(pIter,pEnd,::std::bind2nd(PropertyValueCompare(),boost::cref(sKeyModifier)));
         sal_Int16 nKeyModifier = 0;
-        if ( pFind != pEnd && (pFind->Value >>= nKeyModifier) && nKeyModifier == KEY_MOD1 )
+        if ( pKeyModifier == pEnd || (pKeyModifier->Value >>= nKeyModifier) && nKeyModifier == KEY_MOD1 )
         {
             Sequence< PropertyValue > aCreateArgs;
             m_pMyOwnView->unmarkAllObjects(NULL);
@@ -3970,6 +4187,21 @@ void OReportController::impl_fillCustomShapeState_nothrow(const char* _pCustomSh
     _rState.bEnabled = isEditable();
     _rState.bChecked = m_pMyOwnView->GetInsertObj() == OBJ_CUSTOMSHAPE && m_pMyOwnView->GetInsertObjString().compareToAscii(_pCustomShapeType) == 0;
 }
+
+// -----------------------------------------------------------------------------
+::boost::shared_ptr<OSectionWindow> OReportController::getSectionWindow(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection) const
+{
+    if (m_pMyOwnView)
+    {
+        return  m_pMyOwnView->getSectionWindow(_xSection);
+    }
+
+    // throw NullPointerException?
+    ::boost::shared_ptr<OSectionWindow> pEmpty;
+    return pEmpty;
+}
+
+
 // -----------------------------------------------------------------------------
 void OReportController::openZoomDialog()
 {

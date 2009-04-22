@@ -97,6 +97,7 @@ namespace dbaui
         ,m_pDosLineEnds( NULL )
         ,m_pCheckRequiredFields( NULL )
         ,m_pIgnoreCurrency(NULL)
+        ,m_pEscapeDateTime(NULL)
         ,m_pBooleanComparisonModeLabel( NULL )
         ,m_pBooleanComparisonMode( NULL )
         ,m_aControlDependencies()
@@ -112,9 +113,11 @@ namespace dbaui
                 ++setting
              )
         {
-            if ( aDSUI.hasSetting( setting->nItemId ) )
+            USHORT nItemId = setting->nItemId;
+            if ( aDSUI.hasSetting( nItemId ) )
             {
-                (*setting->ppControl) = new CheckBox( this, ModuleRes( setting->nControlResId ) );
+                USHORT nID = setting->nControlResId;
+                (*setting->ppControl) = new CheckBox( this, ModuleRes( nID ) );
                 (*setting->ppControl)->SetClickHdl( getControlModifiedLink() );
             }
         }
@@ -181,6 +184,7 @@ namespace dbaui
         DELETEZ( m_pDosLineEnds );
         DELETEZ( m_pCheckRequiredFields );
         DELETEZ( m_pIgnoreCurrency );
+        DELETEZ( m_pEscapeDateTime );
         DELETEZ( m_pBooleanComparisonModeLabel );
         DELETEZ( m_pBooleanComparisonMode );
     }
@@ -205,11 +209,16 @@ namespace dbaui
             { &m_pDosLineEnds,              CB_DOSLINEENDS,         DSID_DOSLINEENDS,           false },
             { &m_pCheckRequiredFields,      CB_CHECK_REQUIRED,      DSID_CHECK_REQUIRED_FIELDS, false },
             { &m_pIgnoreCurrency,           CB_IGNORECURRENCY,      DSID_IGNORECURRENCY,        false },
+            { &m_pEscapeDateTime,           CB_ESCAPE_DATETIME,     DSID_ESCAPE_DATETIME,       false },
             { NULL,                         0,                      0,                          false }
         };
 
         for ( const BooleanSettingDesc* pCopy = aSettings; pCopy->nItemId != 0; ++pCopy )
+        {
+            USHORT nID = pCopy->nItemId;
+            (void) nID;
             m_aBooleanSettings.push_back( *pCopy );
+        }
     }
 
     // -----------------------------------------------------------------------

@@ -47,7 +47,7 @@ namespace dbaui
     {
         // strange ctor, but makes instantiating this class more readable (see below)
         InitAdvanced( short _Generated, short _SQL, short _Append, short _As, short _Outer, short _Priv, short _Param,
-                      short _Version, short _Catalog, short _Schema, short _Index, short _DOS, short _Required, short _Bool,short _IgnoreCur,short _AutoPKey )
+                      short _Version, short _Catalog, short _Schema, short _Index, short _DOS, short _Required, short _Bool,short _IgnoreCur,short _AutoPKey, short _EscapeDT )
             :AdvancedSettingsSupport()
         {
             bGeneratedValues               = ( _Generated != 0 );
@@ -66,6 +66,7 @@ namespace dbaui
             bFormsCheckRequiredFields      = ( _Required  != 0 );
             bIgnoreCurrency                = ( _IgnoreCur != 0 );
             bAutoIncrementIsPrimaryKey     = ( _AutoPKey  != 0 );
+            bEscapeDateTime                = ( _EscapeDT  != 0 );
         }
 
         enum Special { All, AllButIgnoreCurrency, None };
@@ -89,6 +90,7 @@ namespace dbaui
             bFormsCheckRequiredFields      = ( _eType == All ) || ( _eType == AllButIgnoreCurrency );
             bIgnoreCurrency                = ( _eType == All );
             bAutoIncrementIsPrimaryKey     = false; // hsqldb special
+            bEscapeDateTime                = ( _eType == All ) || ( _eType == AllButIgnoreCurrency );
         }
     };
 
@@ -119,18 +121,18 @@ namespace dbaui
         static AdvancedSupport s_aSupport;
         if ( s_aSupport.empty() )
         {
-            s_aSupport[  ::dbaccess::DST_MSACCESS            ] = InitAdvanced( 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0 );
-            s_aSupport[  ::dbaccess::DST_MYSQL_ODBC          ] = InitAdvanced( 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0 );
-            s_aSupport[  ::dbaccess::DST_MYSQL_JDBC          ] = InitAdvanced( 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0 );
-            s_aSupport[  ::dbaccess::DST_MYSQL_NATIVE        ] = InitAdvanced( 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 0 );
+            s_aSupport[  ::dbaccess::DST_MSACCESS            ] = InitAdvanced( 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0 );
+            s_aSupport[  ::dbaccess::DST_MYSQL_ODBC          ] = InitAdvanced( 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0 );
+            s_aSupport[  ::dbaccess::DST_MYSQL_JDBC          ] = InitAdvanced( 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 1 );
+            s_aSupport[  ::dbaccess::DST_MYSQL_NATIVE        ] = InitAdvanced( 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0 );
             s_aSupport[  ::dbaccess::DST_ORACLE_JDBC         ] = InitAdvanced( InitAdvanced::All );
-            s_aSupport[  ::dbaccess::DST_ADABAS              ] = InitAdvanced( 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 0 );
+            s_aSupport[  ::dbaccess::DST_ADABAS              ] = InitAdvanced( 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0 );
             s_aSupport[  ::dbaccess::DST_CALC                ] = InitAdvanced( InitAdvanced::None );
-            s_aSupport[  ::dbaccess::DST_DBASE               ] = InitAdvanced( 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0 );
-            s_aSupport[  ::dbaccess::DST_FLAT                ] = InitAdvanced( 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
+            s_aSupport[  ::dbaccess::DST_DBASE               ] = InitAdvanced( 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0 );
+            s_aSupport[  ::dbaccess::DST_FLAT                ] = InitAdvanced( 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
             s_aSupport[  ::dbaccess::DST_JDBC                ] = InitAdvanced( InitAdvanced::AllButIgnoreCurrency );
             s_aSupport[  ::dbaccess::DST_ODBC                ] = InitAdvanced( InitAdvanced::AllButIgnoreCurrency );
-            s_aSupport[  ::dbaccess::DST_ADO                 ] = InitAdvanced( 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0 );
+            s_aSupport[  ::dbaccess::DST_ADO                 ] = InitAdvanced( 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0 );
             s_aSupport[  ::dbaccess::DST_MOZILLA             ] = InitAdvanced( InitAdvanced::None );
             s_aSupport[  ::dbaccess::DST_THUNDERBIRD         ] = InitAdvanced( InitAdvanced::None );
             s_aSupport[  ::dbaccess::DST_LDAP                ] = InitAdvanced( InitAdvanced::None );
@@ -141,8 +143,8 @@ namespace dbaui
             s_aSupport[  ::dbaccess::DST_EVOLUTION_LDAP      ] = InitAdvanced( InitAdvanced::None );
             s_aSupport[  ::dbaccess::DST_KAB                 ] = InitAdvanced( InitAdvanced::None );
             s_aSupport[  ::dbaccess::DST_MACAB               ] = InitAdvanced( InitAdvanced::None );
-            s_aSupport[  ::dbaccess::DST_MSACCESS_2007       ] = InitAdvanced( 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0 );
-            s_aSupport[  ::dbaccess::DST_EMBEDDED_HSQLDB     ] = InitAdvanced( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1 );
+            s_aSupport[  ::dbaccess::DST_MSACCESS_2007       ] = InitAdvanced( 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0 );
+            s_aSupport[  ::dbaccess::DST_EMBEDDED_HSQLDB     ] = InitAdvanced( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0 );
             s_aSupport[  ::dbaccess::DST_USERDEFINE1         ] = InitAdvanced( InitAdvanced::AllButIgnoreCurrency );
             s_aSupport[  ::dbaccess::DST_USERDEFINE2         ] = InitAdvanced( InitAdvanced::AllButIgnoreCurrency );
             s_aSupport[  ::dbaccess::DST_USERDEFINE3         ] = InitAdvanced( InitAdvanced::AllButIgnoreCurrency );

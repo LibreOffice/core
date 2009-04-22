@@ -434,8 +434,9 @@ OConnection::OConnection(ODatabaseSource& _rDB
             impl_checkTableQueryNames_nothrow();
         }
     }
-    catch(Exception&)
+    catch(const Exception& )
     {
+        DBG_UNHANDLED_EXCEPTION();
     }
     osl_decrementInterlockedCount( &m_refCount );
 }
@@ -621,6 +622,7 @@ void OConnection::refresh(const Reference< XNameAccess >& _rToBeRefreshed)
     {
         if (!m_pTables->isInitialized())
         {
+            // check if our "master connection" can supply tables
             getMasterTables();
 
             if (m_xMasterTables.is() && m_xMasterTables->getTables().is())

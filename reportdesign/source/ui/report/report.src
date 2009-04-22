@@ -441,6 +441,7 @@ Menu RID_MENU_REPORT
         {
             Separator = TRUE;
         };
+
         MenuItem
         {
             Identifier = SID_OBJECT_RESIZING ;
@@ -486,6 +487,49 @@ Menu RID_MENU_REPORT
                         Command = ".uno:GreatestHeight" ;
                         HelpID = SID_OBJECT_GREATESTHEIGHT ;
                         Text [ en-US ] = "~Fit to greatest height" ;
+                        Text [ x-comment ] = " ";
+                    };
+                };
+            };
+        };
+
+        MenuItem
+        {
+            Separator = TRUE;
+        };
+        MenuItem
+        {
+            Identifier = SID_SECTION_SHRINK_MENU ;
+            Command = ".uno:SectionShrinkMenu" ;
+            HelpID = SID_SECTION_SHRINK_MENU ;
+            Text [ en-US ] = "Section" ;
+            Text [ x-comment ] = " ";
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                    MenuItem
+                    {
+                        Identifier = SID_SECTION_SHRINK ;
+                        Command = ".uno:SectionShrink" ;
+                        HelpID = SID_SECTION_SHRINK ;
+                        Text [ en-US ] = "Shrink" ;
+                        Text [ x-comment ] = " ";
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_SECTION_SHRINK_TOP ;
+                        Command = ".uno:SectionShrinkTop" ;
+                        HelpID = SID_SECTION_SHRINK_TOP ;
+                        Text [ en-US ] = "Shrink from top" ;
+                        Text [ x-comment ] = " ";
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_SECTION_SHRINK_BOTTOM ;
+                        Command = ".uno:SectionShrinkBottom" ;
+                        HelpID = SID_SECTION_SHRINK_BOTTOM ;
+                        Text [ en-US ] = "Shrink from bottom" ;
                         Text [ x-comment ] = " ";
                     };
                 };
@@ -629,6 +673,10 @@ String RID_ERR_NO_OBJECTS
 {
     Text [ en-US ] = "The report can not be executed unless at least one object has been inserted.";
 };
+String RID_STR_UNDO_SHRINK
+{
+    Text [ en-US ] = "Shrink Section";
+};
 String RID_STR_DETAIL
 {
     Text [ en-US ] = "Detail";
@@ -653,4 +701,3 @@ String RID_STR_INSERT
 {
     Text [ en-US ] = "Insert";
 };
-

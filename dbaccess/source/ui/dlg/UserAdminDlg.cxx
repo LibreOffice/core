@@ -31,60 +31,27 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
-#ifndef DBAUI_USERADMINDLG_HXX
-#include "UserAdminDlg.hxx"
-#endif
-#ifndef DBAUI_USERADMINDLG_HRC
-#include "UserAdminDlg.hrc"
-#endif
-#ifndef _DBU_DLG_HRC_
-#include "dbu_dlg.hrc"
-#endif
-#ifndef _DBAUI_DATASOURCEITEMS_HXX_
-#include "dsitems.hxx"
-#endif
-#ifndef _SFXSTRITEM_HXX
-#include <svtools/stritem.hxx>
-#endif
-#ifndef _SFXENUMITEM_HXX
-#include <svtools/eitem.hxx>
-#endif
-#ifndef _SFXINTITEM_HXX
-#include <svtools/intitem.hxx>
-#endif
-#ifndef _VCL_STDTEXT_HXX
-#include <vcl/stdtext.hxx>
-#endif
-#ifndef _SV_MSGBOX_HXX
-#include <vcl/msgbox.hxx>
-#endif
-#ifndef _DBAUI_DATASOURCEITEMS_HXX_
-#include "dsitems.hxx"
-#endif
-#ifndef DBAUI_DRIVERSETTINGS_HXX
-#include "DriverSettings.hxx"
-#endif
-#ifndef _DBAUI_DBADMINIMPL_HXX_
-#include "DbAdminImpl.hxx"
-#endif
-#ifndef _DBAUI_PROPERTYSETITEM_HXX_
-#include "propertysetitem.hxx"
-#endif
-#ifndef _DBAUI_ADMINPAGES_HXX_
 #include "adminpages.hxx"
-#endif
-#ifndef DBAUI_USERADMIN_HXX
-#include "UserAdmin.hxx"
-#endif
-#ifndef DBAUI_TOOLS_HXX
+#include "DbAdminImpl.hxx"
+#include "dbu_dlg.hrc"
+#include "DriverSettings.hxx"
+#include "dsitems.hxx"
+#include "propertysetitem.hxx"
 #include "UITools.hxx"
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XDATADEFINITIONSUPPLIER_HPP_
-#include <com/sun/star/sdbcx/XDataDefinitionSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XUSERSSUPPLIER_HPP_
-#include <com/sun/star/sdbcx/XUsersSupplier.hpp>
-#endif
+#include "UserAdmin.hxx"
+#include "UserAdminDlg.hrc"
+#include "UserAdminDlg.hxx"
+
+#include <comphelper/componentcontext.hxx>
+#include <connectivity/dbmetadata.hxx>
+#include <cppuhelper/exc_hlp.hxx>
+#include <svtools/eitem.hxx>
+#include <svtools/intitem.hxx>
+#include <svtools/stritem.hxx>
+#include <tools/diagnose_ex.h>
+#include <vcl/msgbox.hxx>
+#include <vcl/stdtext.hxx>
+
 //.........................................................................
 namespace dbaui
 {
@@ -147,36 +114,21 @@ DBG_NAME(OUserAdminDlg)
     {
         try
         {
-            Reference<XUsersSupplier> xUsersSup(m_xConnection,UNO_QUERY);
-            sal_Bool bError = sal_False;
-            if ( !xUsersSup.is() )
-            {
-                Reference< XDataDefinitionSupplier > xDriver(getDriver(),UNO_QUERY);
-                bError = !xDriver.is();
-                if ( !bError )
-                {
-                    m_xConnection = createConnection().first;
-                    bError = !m_xConnection.is();
-
-                    if ( !bError )
-                    {
-                        // now set the tables supplier at the table control
-                        xUsersSup.set(xDriver->getDataDefinitionByConnection(m_xConnection),UNO_QUERY);
-                    }
-                }
-            }
-            bError = ! ( xUsersSup.is() && xUsersSup->getUsers().is());
-
-            if ( bError )
+            ::dbtools::DatabaseMetaData aMetaData( createConnection().first );
+            if ( !aMetaData.supportsUserAdministration( ::comphelper::ComponentContext( getORB() ) ) )
             {
                 String sError(ModuleRes(STR_USERADMIN_NOT_AVAILABLE));
                 throw SQLException(sError,NULL,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000")) ,0,Any());
             }
         }
-        catch(SQLException& e)
+        catch(const SQLException& e)
         {
-            ::dbaui::showError(::dbtools::SQLExceptionInfo(e),GetParent(),getORB());
+            ::dbaui::showError( ::dbtools::SQLExceptionInfo( ::cppu::getCaughtException() ), GetParent(), getORB() );
             return RET_CANCEL;
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
         }
         short nRet = SfxTabDialog::Execute();
         if ( nRet == RET_OK )

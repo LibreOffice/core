@@ -336,3 +336,19 @@ String RID_STR_MIMETYPE
 {
     Text [ en-US ] = "Report Output Format" ;
 };
+String RID_STR_F_COUNTER
+{
+    Text [ en-US ] = "Counter" ;
+};
+String RID_STR_F_ACCUMULATION
+{
+    Text [ en-US ] = "Accumulation" ;
+};
+String RID_STR_F_MINIMUM
+{
+    Text [ en-US ] = "Minimum" ;
+};
+String RID_STR_F_MAXIMUM
+{
+    Text [ en-US ] = "Maximum" ;
+};

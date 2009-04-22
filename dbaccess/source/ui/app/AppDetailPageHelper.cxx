@@ -181,6 +181,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star;
+using ::com::sun::star::awt::XTabController;
 
 namespace dbaui
 {
@@ -1299,18 +1300,18 @@ void OAppDetailPageHelper::showPreview( const ::rtl::OUString& _sDataSourceName,
         aArgs[3].Name = PROPERTY_SHOWMENU;
         aArgs[3].Value <<= sal_False;
 
-        Reference<XFrame> xFrame( pDispatcher->openExisting( makeAny( _sDataSourceName ), _sName, aArgs ), UNO_QUERY );
-        sal_Bool bClearPreview = !xFrame.is();
+        Reference< XController > xPreview( pDispatcher->openExisting( makeAny( _sDataSourceName ), _sName, aArgs ), UNO_QUERY );
+        sal_Bool bClearPreview = !xPreview.is();
 
         // clear the preview when the query or table could not be loaded
         if ( !bClearPreview )
         {
-            Reference<awt::XTabController> xController(xFrame->getController(),UNO_QUERY);
-            bClearPreview = !xController.is();
+            Reference< XTabController > xTabController( xPreview, UNO_QUERY );
+            bClearPreview = !xTabController.is();
             if ( !bClearPreview )
             {
-                Reference<XLoadable> xLoadable(xController->getModel(),UNO_QUERY);
-                bClearPreview = !(xLoadable.is() && xLoadable->isLoaded());
+                Reference< XLoadable > xLoadable( xTabController->getModel(), UNO_QUERY );
+                bClearPreview = !( xLoadable.is() && xLoadable->isLoaded() );
             }
         }
         if ( bClearPreview )

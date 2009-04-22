@@ -30,7 +30,6 @@
 package complex.dbaccess;
 
 import com.sun.star.awt.XTopWindow;
-import com.sun.star.awt.XTopWindow;
 import com.sun.star.beans.PropertyState;
 import com.sun.star.document.DocumentEvent;
 import com.sun.star.lang.XEventListener;
@@ -81,11 +80,7 @@ import com.sun.star.util.XCloseable;
 import com.sun.star.util.XModifiable;
 import com.sun.star.util.XURLTransformer;
 import connectivity.tools.*;
-import helper.FileTools;
-import java.io.File;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Iterator;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -350,32 +345,6 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
     }
 
     // --------------------------------------------------------------------------------------------------------
-    private String impl_correctFileURL( String _URL )
-    {
-        String returnURL = _URL;
-        if ( ( returnURL.indexOf( "file:/" ) == 0 ) && ( returnURL.indexOf( "file:///" ) == -1 ) )
-        {
-            // for some reason, the URLs here in Java start with "file:/" only, instead of "file:///"
-            // Some of the office code doesn't like this ...
-            returnURL = "file:///" + returnURL.substring( 6 );
-        }
-        return returnURL;
-    }
-
-    // --------------------------------------------------------------------------------------------------------
-    private String impl_copyTempFile( String _sourceURL ) throws IOException
-    {
-        String targetURL = createTempFileURL();
-        try
-        {
-            FileTools.copyFile( new File( new URI( _sourceURL ) ), new File( new URI( targetURL ) ) );
-        }
-        catch ( URISyntaxException e ) { }
-
-        return impl_correctFileURL( targetURL );
-    }
-
-    // --------------------------------------------------------------------------------------------------------
     private XModel impl_createDocument( ) throws Exception
     {
         XModel databaseDoc = (XModel)UnoRuntime.queryInterface( XModel.class,
@@ -450,7 +419,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
         // 2. XLoadable::load
         databaseDoc = (XModel)UnoRuntime.queryInterface( XModel.class,
             getORB().createInstance( "com.sun.star.sdb.OfficeDatabaseDocument" ) );
-        documentURL = impl_copyTempFile( documentURL );
+        documentURL = copyToTempFile( documentURL );
         // load the doc, and verify it's initialized then, and has the proper URL
         XLoadable loadDoc = (XLoadable)UnoRuntime.queryInterface( XLoadable.class, databaseDoc );
         loadDoc.load( new PropertyValue[] { new PropertyValue( "URL", 0, documentURL, PropertyState.DIRECT_VALUE ) } );
@@ -560,7 +529,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
 
         // store the document, and close it
         String documentURL = databaseDoc.getURL();
-        documentURL = impl_correctFileURL( documentURL );
+        documentURL = FileHelper.getOOoCompatibleFileURL( documentURL );
         XStorable storeDoc = (XStorable) UnoRuntime.queryInterface( XStorable.class,
             databaseDoc );
         storeDoc.store();
@@ -647,7 +616,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
         impl_stopObservingEvents( m_globalEvents, new String[] { "OnSave", "OnSaveDone", "OnModifyChanged" }, context );
 
         // XComponentLoader.loadComponentFromURL
-        newURL = impl_copyTempFile( databaseDoc.getURL() );
+        newURL = copyToTempFile( databaseDoc.getURL() );
         XComponentLoader loader = (XComponentLoader)UnoRuntime.queryInterface( XComponentLoader.class,
             getORB().createInstance( "com.sun.star.frame.Desktop" ) );
         context = "loadComponentFromURL";
@@ -704,7 +673,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
             loader.loadComponentFromURL( newURL, "_blank", 0, impl_getDefaultLoadArgs() ) );
         int previousOnLoadEventPos = impl_waitForEvent( m_globalEvents, "OnLoad", 5000 );
         // ... and another document ...
-        String otherURL = impl_copyTempFile( databaseDoc.getURL() );
+        String otherURL = copyToTempFile( databaseDoc.getURL() );
         XModel otherDoc = (XModel)UnoRuntime.queryInterface( XModel.class,
             loader.loadComponentFromURL( otherURL, "_blank", 0, impl_getDefaultLoadArgs() ) );
         impl_waitForEvent( m_globalEvents, "OnLoad", 5000, previousOnLoadEventPos + 1 );

@@ -106,7 +106,7 @@ SvXMLImportContext* OXMLDatabase::CreateChildContext(
     {
         case XML_TOK_DATASOURCE:
             GetOwnImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-            pContext = new OXMLDataSource( GetOwnImport(), nPrefix, rLocalName,xAttrList );
+            pContext = new OXMLDataSource( GetOwnImport(), nPrefix, rLocalName, xAttrList, OXMLDataSource::eDataSource );
             break;
         case XML_TOK_FORMS:
             {

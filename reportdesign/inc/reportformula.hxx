@@ -99,6 +99,11 @@ namespace rptui
         /// convenience alias for <code>getUndecoratedContent</code>, which asserts (in a non-product build) when used on an expression
         inline ::rtl::OUString  getFieldName() const;
 
+        /**
+            @returns "=" + getFieldName()
+        */
+        ::rtl::OUString getEqualUndecoratedContent() const;
+
         /// convenience alias for <code>getUndecoratedContent</code>, which asserts (in a non-product build) when used on a field
         inline ::rtl::OUString  getExpression() const;
 

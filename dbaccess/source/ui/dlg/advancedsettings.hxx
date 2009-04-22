@@ -73,6 +73,7 @@ namespace dbaui
         CheckBox*           m_pDosLineEnds;
         CheckBox*           m_pCheckRequiredFields;
         CheckBox*           m_pIgnoreCurrency;
+        CheckBox*           m_pEscapeDateTime;
 
         FixedText*          m_pBooleanComparisonModeLabel;
         ListBox*            m_pBooleanComparisonMode;
