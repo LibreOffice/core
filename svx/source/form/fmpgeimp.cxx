@@ -32,31 +32,25 @@
 #include "precompiled_svx.hxx"
 #include "svxerr.hxx"
 #include "fmpgeimp.hxx"
-#include <com/sun/star/sdb/CommandType.hpp>
-#include <com/sun/star/io/XObjectInputStream.hpp>
-#include <com/sun/star/io/XPersistObject.hpp>
-#include <com/sun/star/io/XObjectOutputStream.hpp>
-#include <com/sun/star/io/XActiveDataSink.hpp>
-#include <com/sun/star/io/XActiveDataSource.hpp>
-#include <com/sun/star/io/XMarkableStream.hpp>
-#include <sfx2/objsh.hxx>
 #include "fmundo.hxx"
 #include "fmtools.hxx"
-#ifndef _SVX_FMPROP_HRC
 #include "fmprop.hrc"
-#endif
-#include <svx/fmglob.hxx>
 #include "fmservs.hxx"
-
-//  #include "fmstream.hxx"
 #include "fmobj.hxx"
+#include "svditer.hxx"
+#include "fmresids.hrc"
+#include "dbtoolsclient.hxx"
+#include "treevisitor.hxx"
+
+#include <com/sun/star/sdb/CommandType.hpp>
+#include <com/sun/star/util/XCloneable.hpp>
+
+#include <sfx2/objsh.hxx>
+#include <svx/fmglob.hxx>
 #include <svx/fmpage.hxx>
 #include <svx/fmmodel.hxx>
 #include <tools/resid.hxx>
 #include <tools/diagnose_ex.h>
-#include "svditer.hxx"
-
-#include "fmresids.hrc"
 #include <tools/shl.hxx>
 #include <vcl/stdtext.hxx>
 #include <svx/dialmgr.hxx>
@@ -64,7 +58,6 @@
 #include <comphelper/uno3.hxx>
 #include <comphelper/types.hxx>
 #include <unotools/streamwrap.hxx>
-#include "dbtoolsclient.hxx"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -73,6 +66,8 @@ using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::form;
+using ::com::sun::star::util::XCloneable;
+using ::com::sun::star::awt::XControlModel;
 using namespace ::svxform;
 
 DBG_NAME(FmFormPageImpl)
@@ -86,54 +81,159 @@ FmFormPageImpl::FmFormPageImpl(FmFormPage* _pPage)
 }
 
 //------------------------------------------------------------------------------
+namespace
+{
+    typedef Reference< XInterface > FormComponent;
+
+    class FormComponentInfo
+    {
+    public:
+        size_t childCount( const FormComponent& _component ) const
+        {
+            Reference< XIndexAccess > xContainer( _component, UNO_QUERY );
+            if ( xContainer.is() )
+                return xContainer->getCount();
+            return 0;
+        }
+
+        FormComponent getChild( const FormComponent& _component, size_t _index ) const
+        {
+            Reference< XIndexAccess > xContainer( _component, UNO_QUERY_THROW );
+            return FormComponent( xContainer->getByIndex( _index ), UNO_QUERY );
+        }
+    };
+
+    typedef ::std::pair< FormComponent, FormComponent > FormComponentPair;
+
+    class FormHierarchyComparator
+    {
+    public:
+        FormHierarchyComparator()
+        {
+        }
+
+        size_t childCount( const FormComponentPair& _components ) const
+        {
+            size_t lhsCount = m_aComponentInfo.childCount( _components.first );
+            size_t rhsCount = m_aComponentInfo.childCount( _components.second );
+            if  ( lhsCount != rhsCount )
+                throw RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Found inconsistent form component hierarchies (1)!" ) ), NULL );
+            return lhsCount;
+        }
+
+        FormComponentPair getChild( const FormComponentPair& _components, size_t _index ) const
+        {
+            return FormComponentPair(
+                m_aComponentInfo.getChild( _components.first, _index ),
+                m_aComponentInfo.getChild( _components.second, _index )
+            );
+        }
+    private:
+        FormComponentInfo   m_aComponentInfo;
+    };
+
+    typedef ::std::map< Reference< XControlModel >, Reference< XControlModel >, ::comphelper::OInterfaceCompare< XControlModel > > MapControlModels;
+
+    class FormComponentAssignment
+    {
+    public:
+        FormComponentAssignment( MapControlModels& _out_controlModelMap )
+            :m_rControlModelMap( _out_controlModelMap )
+        {
+        }
+
+        void    process( const FormComponentPair& _component )
+        {
+            Reference< XControlModel > lhsControlModel( _component.first, UNO_QUERY );
+            Reference< XControlModel > rhsControlModel( _component.second, UNO_QUERY );
+            if ( lhsControlModel.is() != rhsControlModel.is() )
+                throw RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Found inconsistent form component hierarchies (2)!" ) ), NULL );
+
+            if ( lhsControlModel.is() )
+                m_rControlModelMap[ lhsControlModel ] = rhsControlModel;
+        }
+
+    private:
+        MapControlModels&   m_rControlModelMap;
+    };
+}
+
+//------------------------------------------------------------------------------
 FmFormPageImpl::FmFormPageImpl(FmFormPage* _pPage, const FmFormPageImpl& rImpl)
-               :pPage(_pPage)
-               ,m_bFirstActivation( sal_True )
-               ,m_bAttemptedFormCreation( false )
+    :pPage(_pPage)
+    ,m_bFirstActivation( sal_True )
+    ,m_bAttemptedFormCreation( false )
 {
     DBG_CTOR(FmFormPageImpl,NULL);
 
-    OSL_ENSURE( false, "FmFormPageImpl::FmFormPageImpl: I'm pretty sure the below code isn't valid anymore ..." );
-    // streaming of form/controls is not a supported operation anymore, in that it is not guaranteed
-    // that really everything is copied. XCloneable should be used instead.
-
-    // copy it by streaming
-    // creating a pipe
-    Reference< ::com::sun::star::io::XOutputStream >  xOutPipe(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.Pipe")), UNO_QUERY);
-    Reference< ::com::sun::star::io::XInputStream >  xInPipe(xOutPipe, UNO_QUERY);
-
-    // creating the mark streams
-    Reference< ::com::sun::star::io::XInputStream >  xMarkIn(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.MarkableInputStream")), UNO_QUERY);
-    Reference< ::com::sun::star::io::XActiveDataSink >  xMarkSink(xMarkIn, UNO_QUERY);
-
-    Reference< ::com::sun::star::io::XOutputStream >  xMarkOut(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.MarkableOutputStream")), UNO_QUERY);
-    Reference< ::com::sun::star::io::XActiveDataSource >  xMarkSource(xMarkOut, UNO_QUERY);
-
-    // connect pipe and sink
-    Reference< ::com::sun::star::io::XActiveDataSink >  xSink(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.ObjectInputStream")), UNO_QUERY);
-
-    // connect pipe and source
-    Reference< ::com::sun::star::io::XActiveDataSource >  xSource(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.ObjectOutputStream")), UNO_QUERY);
-
-    Reference< ::com::sun::star::io::XObjectOutputStream >  xOutStrm(xSource, UNO_QUERY);
-    Reference< ::com::sun::star::io::XObjectInputStream >  xInStrm(xSink, UNO_QUERY);
-
-    if (xMarkSink.is() && xMarkSource.is() && xSink.is() && xSource.is() && xOutStrm.is() && xInStrm.is())
+    // clone the Forms collection
+    Reference< XCloneable > xCloneable( const_cast< FmFormPageImpl& >( rImpl ).getForms( false ), UNO_QUERY );
+    if ( !xCloneable.is() )
     {
-        xMarkSink->setInputStream(xInPipe);
-        xMarkSource->setOutputStream(xOutPipe);
-        xSink->setInputStream(xMarkIn);
-        xSource->setOutputStream(xMarkOut);
-
-        // write the objects to source
-        rImpl.write(xOutStrm);
-        xOutStrm->closeOutput();
-
-        // read them
-        read(xInStrm);
-        xInStrm->closeInput();
+        // great, nothing to do
+        OSL_ENSURE( !const_cast< FmFormPageImpl& >( rImpl ).getForms( false ).is(), "FmFormPageImpl::FmFormPageImpl: a non-cloneable forms container!?" );
+        return;
     }
-    //  what to do else ?
+    try
+    {
+        m_xForms.set( xCloneable->createClone(), UNO_QUERY_THROW );
+
+        // create a mapping between the original control models and their clones
+        MapControlModels aModelAssignment;
+
+        typedef TreeVisitor< FormComponentPair, FormHierarchyComparator, FormComponentAssignment >   FormComponentVisitor;
+        FormComponentVisitor aVisitor = FormComponentVisitor( FormHierarchyComparator() );
+
+        FormComponentAssignment aAssignmentProcessor( aModelAssignment );
+        aVisitor.process( FormComponentPair( xCloneable, m_xForms ), aAssignmentProcessor );
+
+        // assign the cloned models to their SdrObjects
+        SdrObjListIter aForeignIter( *rImpl.pPage );
+        SdrObjListIter aOwnIter( *pPage );
+
+        OSL_ENSURE( aForeignIter.IsMore() == aOwnIter.IsMore(), "FmFormPageImpl::FmFormPageImpl: inconsistent number of objects (1)!" );
+        while ( aForeignIter.IsMore() && aOwnIter.IsMore() )
+        {
+            FmFormObj* pForeignObj = dynamic_cast< FmFormObj* >( aForeignIter.Next() );
+            FmFormObj* pOwnObj = dynamic_cast< FmFormObj* >( aOwnIter.Next() );
+
+            bool bForeignIsForm = pForeignObj && ( pForeignObj->GetObjInventor() == FmFormInventor );
+            bool bOwnIsForm = pOwnObj && ( pOwnObj->GetObjInventor() == FmFormInventor );
+
+            if ( bForeignIsForm != bOwnIsForm )
+            {
+                OSL_ENSURE( false, "FmFormPageImpl::FmFormPageImpl: inconsistent ordering of objects!" );
+                // don't attempt to do further assignments, something's completely messed up
+                break;
+            }
+            if ( !bForeignIsForm )
+                // no form control -> next round
+                continue;
+
+            Reference< XControlModel > xForeignModel( pForeignObj->GetUnoControlModel() );
+            OSL_ENSURE( xForeignModel.is(), "FmFormPageImpl::FmFormPageImpl: control shape without control!" );
+            if ( !xForeignModel.is() )
+                // the SdrObject does not have a UNO Control Model. This is pathological, but well ... So the cloned
+                // SdrObject will also not have a UNO Control Model.
+                continue;
+
+            OSL_ENSURE( !pOwnObj->GetUnoControlModel().is(), "FmFormPageImpl::FmFormPageImpl: there already is a control model for the target object!" );
+
+            MapControlModels::const_iterator assignment = aModelAssignment.find( xForeignModel );
+            OSL_ENSURE( assignment != aModelAssignment.end(), "FmFormPageImpl::FmFormPageImpl: no clone found for this model!" );
+            if ( assignment == aModelAssignment.end() )
+                // the source SdrObject has a model, but it is not part of the model hierarchy in rImpl.getForms().
+                // Pathological, too ...
+                continue;
+
+            pOwnObj->SetUnoControlModel( assignment->second );
+        }
+        OSL_ENSURE( aForeignIter.IsMore() == aOwnIter.IsMore(), "FmFormPageImpl::FmFormPageImpl: inconsistent number of objects (2)!" );
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -458,6 +558,17 @@ Reference< XForm >  FmFormPageImpl::findFormForDataSource(
 //------------------------------------------------------------------------------
 ::rtl::OUString FmFormPageImpl::setUniqueName(const Reference< XFormComponent > & xFormComponent, const Reference< XForm > & xControls)
 {
+#if OSL_DEBUG_LEVEL > 0
+    try
+    {
+        Reference< XChild > xChild( xFormComponent, UNO_QUERY_THROW );
+        OSL_ENSURE( !xChild->getParent().is(), "FmFormPageImpl::setUniqueName: to be called before insertion!" );
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+#endif
     ::rtl::OUString sName;
     Reference< ::com::sun::star::beans::XPropertySet >  xSet(xFormComponent, UNO_QUERY);
     if (xSet.is())
@@ -553,90 +664,4 @@ UniString FmFormPageImpl::getDefaultName( sal_Int16 _nClassId, const Reference< 
 
     return sName;
 }
-
-//------------------------------------------------------------------------------
-void FmFormPageImpl::write(const Reference< ::com::sun::star::io::XObjectOutputStream > & xOutStrm) const
-{
-    Reference< ::com::sun::star::io::XMarkableStream >  xMarkStrm(xOutStrm, UNO_QUERY);
-    if (!xMarkStrm.is())
-        return; // exception
-
-    //  sortieren der objectlist nach der Reihenfolge
-    FmObjectList aList;
-    fillList(aList, *pPage, sal_True);
-
-    // schreiben aller forms
-    Reference< ::com::sun::star::io::XPersistObject >  xAsPersist( const_cast< FmFormPageImpl* >( this )->getForms(), UNO_QUERY);
-    if (xAsPersist.is())
-        xAsPersist->write(xOutStrm);
-        // don't use the writeObject of the stream, as this wouldn't be compatible with older documents
-
-    // objectliste einfuegen
-    sal_Int32 nLength = aList.Count();
-
-    // schreiben der laenge
-    xOutStrm->writeLong(nLength);
-
-    for (sal_Int32 i = 0; i < nLength; i++)
-    {
-        // schreiben des Objects mit Marke
-        // Marke um an den Anfang zu springen
-        Reference< ::com::sun::star::io::XPersistObject >  xObj(aList.GetObject(i)->GetUnoControlModel(), UNO_QUERY);
-        if (xObj.is())
-        {
-            xOutStrm->writeObject(xObj);
-        }
-        else
-        {
-            ;// exception
-        }
-    }
-}
-
-//------------------------------------------------------------------------------
-void FmFormPageImpl::read(const Reference< ::com::sun::star::io::XObjectInputStream > & xInStrm)
-{
-    Reference< ::com::sun::star::io::XMarkableStream >  xMarkStrm(xInStrm, UNO_QUERY);
-    if (!xMarkStrm.is())
-        return; // exception
-
-    //  sortieren der objectlist nach der Reihenfolge
-    FmObjectList aList;
-    fillList(aList, *pPage, sal_False);
-
-    // lesen aller forms
-    Reference< ::com::sun::star::io::XPersistObject >  xAsPersist( getForms(), UNO_QUERY );
-    if (xAsPersist.is())
-        xAsPersist->read(xInStrm);
-        // don't use the readObject of the stream, as this wouldn't be compatible with older documents
-
-    // Zuordnung der Formobjekte zu den FormComponents
-    sal_Int32 nLength = xInStrm->readLong();
-    DBG_ASSERT(nLength == (sal_Int32) aList.Count(), "Fehler beim Lesen der UnoModels");
-    for (sal_Int32 i = 0; i < nLength; i++)
-    {
-        Reference< ::com::sun::star::awt::XControlModel >  xRef(xInStrm->readObject(), UNO_QUERY);
-        if (i < (sal_Int32)aList.Count())
-            aList.GetObject(i)->SetUnoControlModel(xRef);
-    }
-}
-
-//------------------------------------------------------------------------------
-void FmFormPageImpl::fillList(FmObjectList& rList, const SdrObjList& rObjList, sal_Bool bConnected) const
-{
-    SdrObjListIter aIter(rObjList);
-    while (aIter.IsMore())
-    {
-        SdrObject* pObj = aIter.Next();
-        if (pObj && pObj->GetObjInventor() == FmFormInventor)
-        {
-            FmFormObj* pFormObj = PTR_CAST(FmFormObj, pObj);
-            DBG_ASSERT(!bConnected || pFormObj->GetUnoControlModel().is(), "Controlshape ohne Control");
-            if (!bConnected || pFormObj->GetUnoControlModel().is())
-                rList.Insert(pFormObj, LIST_APPEND);
-
-        }
-    }
-}
-
 

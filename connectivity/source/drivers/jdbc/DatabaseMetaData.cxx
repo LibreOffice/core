@@ -131,9 +131,10 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getColumns(
     static jmethodID mID = NULL;
     return impl_callResultSetMethodWithStrings( "getColumns", mID, catalog, schemaPattern, tableNamePattern, &columnNamePattern );
 }
+
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTables(
-        const Any& catalog, const ::rtl::OUString& schemaPattern, const ::rtl::OUString& tableNamePattern, const Sequence< ::rtl::OUString >& types ) throw(SQLException, RuntimeException)
+        const Any& catalog, const ::rtl::OUString& schemaPattern, const ::rtl::OUString& tableNamePattern, const Sequence< ::rtl::OUString >& _types ) throw(SQLException, RuntimeException)
 {
     static const char * cSignature = "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;[Ljava/lang/String;)Ljava/sql/ResultSet;";
     static const char * cMethodName = "getTables";
@@ -147,64 +148,95 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTables(
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
-            mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
-        OSL_VERIFY_RES( !isExceptionOccured(t.pEnv,sal_True),"Exception occured!");
+        {
+            mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+            OSL_VERIFY_RES( !isExceptionOccured( t.pEnv, sal_True ), "Exception occured!" );
+        }
+        OSL_ENSURE( mID, "Unknown method id!" );
         if( mID )
         {
             jvalue args[4];
-            sal_Int32 len = types.getLength();
-            if(len)
+
+            args[3].l = 0;
+            sal_Int32 typeFilterCount = _types.getLength();
+            if ( typeFilterCount )
             {
-                jobjectArray pObjArray = static_cast<jobjectArray>(t.pEnv->NewObjectArray((jsize) len, java_lang_String::getMyClass(), 0));
-                OSL_VERIFY_RES( !isExceptionOccured(t.pEnv,sal_True),"Exception occured!");
+                jobjectArray pObjArray = static_cast< jobjectArray >( t.pEnv->NewObjectArray( (jsize)typeFilterCount, java_lang_String::getMyClass(), 0 ) );
+                OSL_VERIFY_RES( !isExceptionOccured( t.pEnv, sal_True ), "Exception occured!" );
 
-                const ::rtl::OUString* pBegin = types.getConstArray();
-                for(sal_Int32 i=0;i<len;i++,++pBegin)
+                const ::rtl::OUString* typeFilter = _types.getConstArray();
+                bool bIncludeAllTypes = false;
+                for ( sal_Int32 i=0; i<typeFilterCount; ++i, ++typeFilter )
                 {
-                    jstring aT = convertwchar_tToJavaString(t.pEnv,*pBegin);
-                    //jstring aT = t.pEnv->NewStringUTF(_par3.GetToken(i));
-                    t.pEnv->SetObjectArrayElement(pObjArray,(jsize)i,aT);
-                    OSL_VERIFY_RES( !isExceptionOccured(t.pEnv,sal_True),"Exception occured!");
-
+                    if ( typeFilter->equalsAsciiL( "%", 1 ) )
+                    {
+                        bIncludeAllTypes = true;
+                        break;
+                    }
+                    jstring aT = convertwchar_tToJavaString( t.pEnv, *typeFilter );
+                    t.pEnv->SetObjectArrayElement( pObjArray, (jsize)i, aT );
+                    OSL_VERIFY_RES( !isExceptionOccured( t.pEnv, sal_True ), "Exception occured!" );
                 }
-                args[3].l = pObjArray;
-            }else
-                args[3].l = 0;
-            // temporaere Variable initialisieren
-            args[0].l = catalog.hasValue() ? convertwchar_tToJavaString(t.pEnv,comphelper::getString(catalog)) : 0;
-            args[1].l = schemaPattern.toChar() == '%' ? NULL : convertwchar_tToJavaString(t.pEnv,schemaPattern);
+
+                if ( bIncludeAllTypes )
+                {
+                    // the SDBC API allows to pass "%" as table type filter, but in JDBC, "all table types"
+                    // is represented by the table type being <null/>
+                    t.pEnv->DeleteLocalRef( pObjArray );
+                    OSL_VERIFY_RES( !isExceptionOccured( t.pEnv, sal_True ), "Exception occured!" );
+                }
+                else
+                {
+                    args[3].l = pObjArray;
+                }
+            }
+
+            // if we are to display "all catalogs", then respect m_aCatalogRestriction
+            Any aCatalogFilter( catalog );
+            if ( !aCatalogFilter.hasValue() )
+                aCatalogFilter = m_pConnection->getCatalogRestriction();
+            // similar for schema
+            Any aSchemaFilter;
+            if ( schemaPattern.equalsAsciiL( "%", 1 ) )
+                aSchemaFilter = m_pConnection->getSchemaRestriction();
+            else
+                aSchemaFilter <<= schemaPattern;
+
+            args[0].l = aCatalogFilter.hasValue() ? convertwchar_tToJavaString( t.pEnv, ::comphelper::getString( aCatalogFilter ) ) : NULL;
+            args[1].l = aSchemaFilter.hasValue() ? convertwchar_tToJavaString( t.pEnv, ::comphelper::getString( aSchemaFilter ) ) : NULL;
             args[2].l = convertwchar_tToJavaString(t.pEnv,tableNamePattern);
             out = t.pEnv->CallObjectMethod( object, mID, args[0].l, args[1].l,args[2].l,args[3].l);
             jthrowable jThrow = t.pEnv->ExceptionOccurred();
             if ( jThrow )
-                t.pEnv->ExceptionClear();// we have to clear the exception here because we want to handle it itself
+                t.pEnv->ExceptionClear();// we have to clear the exception here because we want to handle it below
 
-            sal_Bool bExcepOccured;
-
-            if(catalog.hasValue())
+            if ( aCatalogFilter.hasValue() )
             {
                 t.pEnv->DeleteLocalRef((jstring)args[0].l);
-                bExcepOccured = isExceptionOccured(t.pEnv,sal_True); OSL_ENSURE(!bExcepOccured,"Exception occured!");
+                OSL_VERIFY_RES( !isExceptionOccured( t.pEnv, sal_True ), "Exception occured!" );
             }
             if(args[1].l)
             {
                 t.pEnv->DeleteLocalRef((jstring)args[1].l);
-                bExcepOccured = isExceptionOccured(t.pEnv,sal_True); OSL_ENSURE(!bExcepOccured,"Exception occured!");
+                OSL_VERIFY_RES( !isExceptionOccured( t.pEnv, sal_True ), "Exception occured!" );
             }
             if(tableNamePattern.getLength())
             {
                 t.pEnv->DeleteLocalRef((jstring)args[2].l);
-                bExcepOccured = isExceptionOccured(t.pEnv,sal_True); OSL_ENSURE(!bExcepOccured,"Exception occured!");
+                OSL_VERIFY_RES( !isExceptionOccured( t.pEnv, sal_True ), "Exception occured!" );
             }
             //for(INT16 i=0;i<len;i++)
-            t.pEnv->DeleteLocalRef((jobjectArray)args[3].l);
-            bExcepOccured = isExceptionOccured(t.pEnv,sal_True); OSL_ENSURE(!bExcepOccured,"Exception occured!");
+            if ( args[3].l )
+            {
+                t.pEnv->DeleteLocalRef( (jobjectArray)args[3].l );
+                OSL_VERIFY_RES( !isExceptionOccured( t.pEnv, sal_True ), "Exception occured!" );
+            }
 
             if ( jThrow )
             {
-                if(t.pEnv->IsInstanceOf(jThrow,java_sql_SQLException_BASE::getMyClass()))
+                if ( t.pEnv->IsInstanceOf( jThrow,java_sql_SQLException_BASE::getMyClass() ) )
                 {
-                    java_sql_SQLException_BASE* pException = new java_sql_SQLException_BASE(t.pEnv,jThrow);
+                    java_sql_SQLException_BASE* pException = new java_sql_SQLException_BASE( t.pEnv, jThrow );
                     SQLException e( pException->getMessage(),
                                         *this,
                                         pException->getSQLState(),
@@ -215,7 +247,6 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTables(
                     throw  e;
                 }
             }
-
         }
     }
 

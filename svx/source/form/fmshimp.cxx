@@ -1970,7 +1970,8 @@ bool FmXFormShell::setCurrentSelection( const InterfaceBag& _rSelection )
         }
     }
 
-    impl_updateCurrentForm( xNewCurrentForm );
+    if ( !m_aCurrentSelection.empty() )
+        impl_updateCurrentForm( xNewCurrentForm );
 
     // ensure some slots are updated
     for ( size_t i = 0; i < sizeof( SelObjectSlotMap ) / sizeof( SelObjectSlotMap[0] ); ++i )
@@ -2561,6 +2562,10 @@ void FmXFormShell::RemoveElement(const Reference< XInterface>& Element)
             RemoveElement(xElement);
         }
     }
+
+    InterfaceBag::iterator wasSelectedPos = m_aCurrentSelection.find( Element );
+    if ( wasSelectedPos != m_aCurrentSelection.end() )
+        m_aCurrentSelection.erase( wasSelectedPos );
 }
 
 //------------------------------------------------------------------------------

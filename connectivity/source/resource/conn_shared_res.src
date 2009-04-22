@@ -399,6 +399,10 @@ String STR_COULD_NOT_CREATE_INDEX_NAME
 {
     Text [ en-US ] = "The index could not be created. The file '$filename$' is used by an other index.";
 };
+String STR_COULD_NOT_CREATE_INDEX_KEYSIZE
+{
+    Text [ en-US ] = "The index could not be created. The size of the choosen column is to big.";
+};
 
 String STR_SQL_NAME_ERROR
 {

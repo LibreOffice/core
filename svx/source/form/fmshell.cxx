@@ -317,36 +317,36 @@ sal_uInt16 FmFormShell::PrepareClose(sal_Bool bUI, sal_Bool bForBrowsing)
             {
                 const ::svx::ControllerFeatures& rController = GetImpl()->getActiveControllerFeatures();
                 if ( rController->commitCurrentControl() )
-            {
+                {
                     sal_Bool bModified = rController->isModifiedRow();
 
-                if ( bModified && bUI )
-                {
-                    QueryBox aQry(NULL, SVX_RES(RID_QRY_SAVEMODIFIED));
-                    if (bForBrowsing)
-                        aQry.AddButton(SVX_RES(RID_STR_NEW_TASK), RET_NEWTASK,
-                            BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_FOCUSBUTTON);
-
-                    switch (aQry.Execute())
+                    if ( bModified && bUI )
                     {
-                        case RET_NO:
-                            bModified = sal_False;
-                            GetImpl()->didPrepareClose( sal_True );
-                            break;
+                        QueryBox aQry(NULL, SVX_RES(RID_QRY_SAVEMODIFIED));
+                        if (bForBrowsing)
+                            aQry.AddButton(SVX_RES(RID_STR_NEW_TASK), RET_NEWTASK,
+                                BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_FOCUSBUTTON);
 
-                        case RET_CANCEL:
-                            return sal_False;
+                        switch (aQry.Execute())
+                        {
+                            case RET_NO:
+                                bModified = sal_False;
+                                GetImpl()->didPrepareClose( sal_True );
+                                break;
 
-                        case RET_NEWTASK:
-                            return RET_NEWTASK;
+                            case RET_CANCEL:
+                                return sal_False;
+
+                            case RET_NEWTASK:
+                                return RET_NEWTASK;
+                        }
+
+                            if ( bModified )
+                                bResult = rController->commitCurrentRecord( );
                     }
-
-                        if ( bModified )
-                            bResult = rController->commitCurrentRecord( );
                 }
             }
         }
-    }
     }
     return bResult;
 }

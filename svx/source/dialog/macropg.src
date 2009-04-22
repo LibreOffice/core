@@ -246,7 +246,7 @@ String RID_SVXSTR_EVENT_APPROVEPARAMETER
 };
 String RID_SVXSTR_EVENT_ACTIONPERFORMED
 {
-    Text [ en-US ] = "When initiating" ;
+    Text [ en-US ] = "Execute action" ;
 };
 String RID_SVXSTR_EVENT_AFTERUPDATE
 {
@@ -350,7 +350,7 @@ String RID_SVXSTR_EVENT_APPROVERESETTED
 };
 String RID_SVXSTR_EVENT_APPROVEACTIONPERFORMED
 {
-    Text [ en-US ] = "Before commencing" ;
+    Text [ en-US ] = "Approve action" ;
 };
 String RID_SVXSTR_EVENT_SUBMITTED
 {

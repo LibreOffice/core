@@ -1084,10 +1084,10 @@ namespace
             rPage.GetImpl()->findPlaceInFormComponentHierarchy( xFormComponent, _rxDataSource, _rDataSourceName, _rCommand, _nCommandType ),
             UNO_SET_THROW );
 
+        rPage.GetImpl()->setUniqueName( xFormComponent, xTargetForm );
+
         Reference< XIndexContainer > xFormAsContainer( xTargetForm, UNO_QUERY_THROW );
         xFormAsContainer->insertByIndex( xFormAsContainer->getCount(), makeAny( xFormComponent ) );
-
-        rPage.GetImpl()->setUniqueName( xFormComponent, xTargetForm );
     }
 }
 
@@ -1287,12 +1287,16 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
         }
 
         //////////////////////////////////////////////////////////////////////
-        // Objekte gruppieren
+        // group objects
+        bool bCheckbox = ( OBJ_FM_CHECKBOX == nOBJID );
+        OSL_ENSURE( !bCheckbox || !pLabel, "FmXFormView::implCreateFieldControl: why was there a label created for a check box?" );
+        if ( bCheckbox )
+            return pControl;
+
         SdrObjGroup* pGroup  = new SdrObjGroup();
         SdrObjList* pObjList = pGroup->GetSubList();
-        pObjList->InsertObject(pLabel);
-        pObjList->InsertObject(pControl);
-
+        pObjList->InsertObject( pLabel );
+        pObjList->InsertObject( pControl );
 
         if ( bDateNTimeField )
         {   // so far we created a date field only, but we also need a time field
@@ -1311,7 +1315,7 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
     }
     catch(const Exception&)
     {
-        DBG_ERROR("FmXFormView::implCreateFieldControl: caught an exception while creating the control !");
+        DBG_UNHANDLED_EXCEPTION();
     }
 
 
@@ -1331,7 +1335,6 @@ SdrObject* FmXFormView::implCreateXFormsControl( const ::svx::OXFormsDescriptor 
     try
     {
         // determine the table/query field which we should create a control for
-        Reference< XPropertySet >   xField;
         Reference< XNumberFormats > xNumberFormats;
         ::rtl::OUString sLabelPostfix = _rDesc.szName;
 
@@ -1382,7 +1385,7 @@ SdrObject* FmXFormView::implCreateXFormsControl( const ::svx::OXFormsDescriptor 
         {
             SdrUnoObj* pLabel( NULL );
             SdrUnoObj* pControl( NULL );
-            if  (   !createControlLabelPair( *pOutDev, 0, 0, xField, xNumberFormats, nOBJID, sLabelPostfix,
+            if  (   !createControlLabelPair( *pOutDev, 0, 0, NULL, xNumberFormats, nOBJID, sLabelPostfix,
                         pLabel, pControl )
                 )
             {
@@ -1397,6 +1400,11 @@ SdrObject* FmXFormView::implCreateXFormsControl( const ::svx::OXFormsDescriptor 
             DBG_ASSERT( xBindableValue.is(), "FmXFormView::implCreateXFormsControl: control's not bindable!" );
             if ( xBindableValue.is() )
                 xBindableValue->setValueBinding(xValueBinding);
+
+            bool bCheckbox = ( OBJ_FM_CHECKBOX == nOBJID );
+            OSL_ENSURE( !bCheckbox || !pLabel, "FmXFormView::implCreateXFormsControl: why was there a label created for a check box?" );
+            if ( bCheckbox )
+                return pControl;
 
             //////////////////////////////////////////////////////////////////////
             // group objects
@@ -1459,12 +1467,14 @@ bool FmXFormView::createControlLabelPair( OutputDevice& _rOutDev, sal_Int32 _nXO
         return false;
 
     // insert the control model(s) into the form component hierachy
-    lcl_insertIntoFormComponentHierarchy_throw( *m_pView, *_rpLabel, _rxDataSource, _rDataSourceName, _rCommand, _nCommandType );
+    if ( _rpLabel )
+        lcl_insertIntoFormComponentHierarchy_throw( *m_pView, *_rpLabel, _rxDataSource, _rDataSourceName, _rCommand, _nCommandType );
     lcl_insertIntoFormComponentHierarchy_throw( *m_pView, *_rpControl, _rxDataSource, _rDataSourceName, _rCommand, _nCommandType );
 
     // some context-dependent initializations
     FormControlFactory aControlFactory( m_aContext );
-    aControlFactory.initializeControlModel( impl_getDocumentType(), *_rpLabel );
+    if ( _rpLabel )
+        aControlFactory.initializeControlModel( impl_getDocumentType(), *_rpLabel );
     aControlFactory.initializeControlModel( impl_getDocumentType(), *_rpControl );
 
     return true;
@@ -1487,17 +1497,7 @@ bool FmXFormView::createControlLabelPair( const ::comphelper::ComponentContext& 
         aFieldName >>= sFieldName;
     }
 
-    // the label
-    ::std::auto_ptr< SdrUnoObj > pLabel( dynamic_cast< SdrUnoObj* >(
-        SdrObjFactory::MakeNewObject( _nInventor, _nLabelObjectID, _pLabelPage, _pModel ) ) );
-    OSL_ENSURE( pLabel.get(), "FmXFormView::createControlLabelPair: could not create the label!" );
-    if ( !pLabel.get() )
-        return false;
-
-    Reference< XPropertySet > xLabelSet( pLabel->GetUnoControlModel(), UNO_QUERY );
-    xLabelSet->setPropertyValue( FM_PROP_LABEL, makeAny( sFieldName + _rFieldPostfix ) );
-
-    // positionieren unter Beachtung der Einstellungen des Ziel-Output-Devices
+    // calculate the positions, respecting the settings of the target device
     ::Size aTextSize( _rOutDev.GetTextWidth(sFieldName + _rFieldPostfix), _rOutDev.GetTextHeight() );
 
     MapMode   eTargetMode( _rOutDev.GetMapMode() ),
@@ -1513,13 +1513,38 @@ bool FmXFormView::createControlLabelPair( const ::comphelper::ComponentContext& 
     aRealSize.Width() = std::max(aRealSize.Width(), aDefTxtSize.Width());
     aRealSize.Height()= aDefSize.Height();
 
-    // je nach Skalierung des Zieldevices muss die Groesse noch normiert werden (#53523#)
+    // adjust to scaling of the target device (#53523#)
     aRealSize.Width() = long(Fraction(aRealSize.Width(), 1) * eTargetMode.GetScaleX());
     aRealSize.Height() = long(Fraction(aRealSize.Height(), 1) * eTargetMode.GetScaleY());
-    pLabel->SetLogicRect( ::Rectangle(
-        _rOutDev.LogicToLogic( ::Point( _nXOffsetMM, _nYOffsetMM ), eSourceMode, eTargetMode ),
-        _rOutDev.LogicToLogic( aRealSize, eSourceMode, eTargetMode )
-    ) );
+
+    // for boolean fields, we do not create a label, but just a checkbox
+    bool bNeedLabel = ( _nControlObjectID != OBJ_FM_CHECKBOX );
+
+    // the label
+    ::std::auto_ptr< SdrUnoObj > pLabel;
+    Reference< XPropertySet > xLabelModel;
+    if ( bNeedLabel )
+    {
+        pLabel.reset( dynamic_cast< SdrUnoObj* >(
+            SdrObjFactory::MakeNewObject( _nInventor, _nLabelObjectID, _pLabelPage, _pModel ) ) );
+        OSL_ENSURE( pLabel.get(), "FmXFormView::createControlLabelPair: could not create the label!" );
+        if ( !pLabel.get() )
+            return false;
+
+        xLabelModel.set( pLabel->GetUnoControlModel(), UNO_QUERY );
+        if ( xLabelModel.is() )
+        {
+            xLabelModel->setPropertyValue( FM_PROP_LABEL, makeAny( sFieldName + _rFieldPostfix ) );
+            String sObjectLabel( SVX_RES( RID_STR_OBJECT_LABEL ) );
+            sObjectLabel.SearchAndReplaceAllAscii( "#object#", sFieldName );
+            xLabelModel->setPropertyValue( FM_PROP_NAME, makeAny( ::rtl::OUString( sObjectLabel ) ) );
+        }
+
+        pLabel->SetLogicRect( ::Rectangle(
+            _rOutDev.LogicToLogic( ::Point( _nXOffsetMM, _nYOffsetMM ), eSourceMode, eTargetMode ),
+            _rOutDev.LogicToLogic( aRealSize, eSourceMode, eTargetMode )
+        ) );
+    }
 
     // the control
     ::std::auto_ptr< SdrUnoObj > pControl( dynamic_cast< SdrUnoObj* >(
@@ -1532,21 +1557,29 @@ bool FmXFormView::createControlLabelPair( const ::comphelper::ComponentContext& 
     if ( !xControlSet.is() )
         return false;
 
-    // position
-    ::Size szControlSize;
-    if (DataType::BIT == nDataType || nDataType == DataType::BOOLEAN )
-        szControlSize = aDefSize;
-    else if (OBJ_FM_IMAGECONTROL == _nControlObjectID || DataType::LONGVARCHAR == nDataType || DataType::LONGVARBINARY == nDataType )
-        szControlSize = aDefImageSize;
-    else
-        szControlSize = aDefSize;
+    // size of the control
+    ::Size aControlSize( aDefSize );
+    switch ( nDataType )
+    {
+    case DataType::BIT:
+    case DataType::BOOLEAN:
+        aControlSize = aDefSize;
+        break;
+    case DataType::LONGVARCHAR:
+    case DataType::LONGVARBINARY:
+        aControlSize = aDefImageSize;
+        break;
+    }
 
-    // normieren wie oben
-    szControlSize.Width() = long(Fraction(szControlSize.Width(), 1) * eTargetMode.GetScaleX());
-    szControlSize.Height() = long(Fraction(szControlSize.Height(), 1) * eTargetMode.GetScaleY());
+    if ( OBJ_FM_IMAGECONTROL == _nControlObjectID )
+        aControlSize = aDefImageSize;
+
+    aControlSize.Width() = long(Fraction(aControlSize.Width(), 1) * eTargetMode.GetScaleX());
+    aControlSize.Height() = long(Fraction(aControlSize.Height(), 1) * eTargetMode.GetScaleY());
+
     pControl->SetLogicRect( ::Rectangle(
         _rOutDev.LogicToLogic( ::Point( aRealSize.Width() + _nXOffsetMM, _nYOffsetMM ), eSourceMode, eTargetMode ),
-        _rOutDev.LogicToLogic( szControlSize, eSourceMode, eTargetMode )
+        _rOutDev.LogicToLogic( aControlSize, eSourceMode, eTargetMode )
     ) );
 
     // some initializations
@@ -1554,8 +1587,16 @@ bool FmXFormView::createControlLabelPair( const ::comphelper::ComponentContext& 
 
     if ( aFieldName.hasValue() )
     {
-        xControlSet->setPropertyValue(FM_PROP_CONTROLSOURCE, aFieldName);
-        xControlSet->setPropertyValue(FM_PROP_NAME, aFieldName);
+        xControlSet->setPropertyValue( FM_PROP_CONTROLSOURCE, aFieldName );
+        xControlSet->setPropertyValue( FM_PROP_NAME, aFieldName );
+        if ( !bNeedLabel )
+        {
+            // no dedicated label control => use the label property
+            if ( xControlPropInfo->hasPropertyByName( FM_PROP_LABEL ) )
+                xControlSet->setPropertyValue( FM_PROP_LABEL, makeAny( sFieldName + _rFieldPostfix ) );
+            else
+                OSL_ENSURE( false, "FmXFormView::createControlLabelPair: can't set a label for the control!" );
+        }
     }
 
     if ( nDataType == DataType::LONGVARCHAR && xControlPropInfo->hasPropertyByName( FM_PROP_MULTILINE ) )
@@ -1564,13 +1605,11 @@ bool FmXFormView::createControlLabelPair( const ::comphelper::ComponentContext& 
     }
 
     // announce the label to the control
-    if (xControlPropInfo->hasPropertyByName(FM_PROP_CONTROLLABEL))
+    if ( xControlPropInfo->hasPropertyByName( FM_PROP_CONTROLLABEL ) && xLabelModel.is() )
     {
-        // (try-catch as the control may refuse a model without the right service name - which we don't know
-        // usually a fixed text we use as label should be accepted, but to be sure ....)
         try
         {
-            xControlSet->setPropertyValue(FM_PROP_CONTROLLABEL, makeAny(xLabelSet));
+            xControlSet->setPropertyValue( FM_PROP_CONTROLLABEL, makeAny( xLabelModel ) );
         }
         catch( const Exception& )
         {
@@ -1578,8 +1617,11 @@ bool FmXFormView::createControlLabelPair( const ::comphelper::ComponentContext& 
         }
     }
 
-    FormControlFactory aControlFactory( _rContext );
-    aControlFactory.initializeFieldDependentProperties( _rxField, xControlSet, _rxNumberFormats );
+    if ( _rxField.is() )
+    {
+        FormControlFactory aControlFactory( _rContext );
+        aControlFactory.initializeFieldDependentProperties( _rxField, xControlSet, _rxNumberFormats );
+    }
 
     _rpLabel = pLabel.release();
     _rpControl = pControl.release();

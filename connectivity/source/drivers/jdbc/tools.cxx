@@ -142,28 +142,33 @@ java_util_Properties* connectivity::createStringPropertyArray(const Sequence< Pr
     for(;pBegin != pEnd;++pBegin)
     {
         // this is a special property to find the jdbc driver
-        if( pBegin->Name.compareToAscii("JavaDriverClass") &&
-            pBegin->Name.compareToAscii("JavaDriverClassPath") &&
-            pBegin->Name.compareToAscii("SystemProperties") &&
-            pBegin->Name.compareToAscii("CharSet") &&
-            pBegin->Name.compareToAscii("AppendTableAlias") &&
-            pBegin->Name.compareToAscii("GenerateASBeforeCorrelationName") &&
-            pBegin->Name.compareToAscii("EscapeDateTime") &&
-            pBegin->Name.compareToAscii("ParameterNameSubstitution") &&
-            pBegin->Name.compareToAscii("IsPasswordRequired") &&
-            pBegin->Name.compareToAscii("IsAutoRetrievingEnabled") &&
-            pBegin->Name.compareToAscii("AutoRetrievingStatement") &&
-            pBegin->Name.compareToAscii("UseCatalogInSelect") &&
-            pBegin->Name.compareToAscii("UseSchemaInSelect") &&
-            pBegin->Name.compareToAscii("AutoIncrementCreation") &&
-            pBegin->Name.compareToAscii("Extension") &&
-            pBegin->Name.compareToAscii("NoNameLengthLimit") &&
-            pBegin->Name.compareToAscii("EnableSQL92Check") &&
-            pBegin->Name.compareToAscii("EnableOuterJoinEscape") &&
-            pBegin->Name.compareToAscii("BooleanComparisonMode") &&
-            pBegin->Name.compareToAscii("IgnoreCurrency") &&
-            pBegin->Name.compareToAscii("TypeInfoSettings") &&
-            pBegin->Name.compareToAscii("IgnoreDriverPrivileges"))
+        if  (   pBegin->Name.compareToAscii( "JavaDriverClass" )
+            &&  pBegin->Name.compareToAscii( "JavaDriverClassPath" )
+            &&  pBegin->Name.compareToAscii( "SystemProperties" )
+            &&  pBegin->Name.compareToAscii( "CharSet" )
+            &&  pBegin->Name.compareToAscii( "AppendTableAliasName" )
+            &&  pBegin->Name.compareToAscii( "AddIndexAppendix" )
+            &&  pBegin->Name.compareToAscii( "FormsCheckRequiredFields" )
+            &&  pBegin->Name.compareToAscii( "GenerateASBeforeCorrelationName" )
+            &&  pBegin->Name.compareToAscii( "EscapeDateTime" )
+            &&  pBegin->Name.compareToAscii( "ParameterNameSubstitution" )
+            &&  pBegin->Name.compareToAscii( "IsPasswordRequired" )
+            &&  pBegin->Name.compareToAscii( "IsAutoRetrievingEnabled" )
+            &&  pBegin->Name.compareToAscii( "AutoRetrievingStatement" )
+            &&  pBegin->Name.compareToAscii( "UseCatalogInSelect" )
+            &&  pBegin->Name.compareToAscii( "UseSchemaInSelect" )
+            &&  pBegin->Name.compareToAscii( "AutoIncrementCreation" )
+            &&  pBegin->Name.compareToAscii( "Extension" )
+            &&  pBegin->Name.compareToAscii( "NoNameLengthLimit" )
+            &&  pBegin->Name.compareToAscii( "EnableSQL92Check" )
+            &&  pBegin->Name.compareToAscii( "EnableOuterJoinEscape" )
+            &&  pBegin->Name.compareToAscii( "BooleanComparisonMode" )
+            &&  pBegin->Name.compareToAscii( "IgnoreCurrency" )
+            &&  pBegin->Name.compareToAscii( "TypeInfoSettings" )
+            &&  pBegin->Name.compareToAscii( "IgnoreDriverPrivileges" )
+            &&  pBegin->Name.compareToAscii( "ImplicitCatalogRestriction" )
+            &&  pBegin->Name.compareToAscii( "ImplicitSchemaRestriction" )
+            )
         {
             ::rtl::OUString aStr;
             OSL_VERIFY( pBegin->Value >>= aStr );

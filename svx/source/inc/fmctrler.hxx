@@ -555,7 +555,7 @@ protected:
 
     bool    impl_isDisposed_nofail() const { return FmXFormController_BASE::rBHelper.bDisposed; }
 
-    void onModify( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxControl );
+    void    impl_onModify();
 
     sal_Bool isLocked() const {return m_bLocked;}
     sal_Bool determineLockState() const;

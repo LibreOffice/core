@@ -65,6 +65,8 @@ namespace connectivity
         sal_Bool                m_bParameterSubstitution;
         sal_Bool                m_bIgnoreDriverPrivileges;
         sal_Bool                m_bIgnoreCurrency;
+        ::com::sun::star::uno::Any  m_aCatalogRestriction;
+        ::com::sun::star::uno::Any  m_aSchemaRestriction;
 
         /** transform named parameter into unnamed one.
             @param  _sSQL
@@ -101,6 +103,8 @@ namespace connectivity
 
         inline  sal_Bool isIgnoreDriverPrivilegesEnabled() const { return   m_bIgnoreDriverPrivileges;}
         inline  sal_Bool isIgnoreCurrencyEnabled() const { return   m_bIgnoreCurrency; }
+        inline const ::com::sun::star::uno::Any& getCatalogRestriction() const { return m_aCatalogRestriction; }
+        inline const ::com::sun::star::uno::Any& getSchemaRestriction() const { return m_aSchemaRestriction; }
 
         /** returns the instance used for logging events related to this connection
         */

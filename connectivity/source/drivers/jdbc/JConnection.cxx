@@ -1069,6 +1069,8 @@ sal_Bool java_sql_Connection::construct(const ::rtl::OUString& url,
     m_bIgnoreDriverPrivileges = aSettings.getOrDefault( "IgnoreDriverPrivileges", m_bIgnoreDriverPrivileges );
     m_bIgnoreCurrency = aSettings.getOrDefault( "IgnoreCurrency", m_bIgnoreCurrency );
     aSystemProperties = aSettings.getOrDefault( "SystemProperties", aSystemProperties );
+    m_aCatalogRestriction = aSettings.getOrDefault( "ImplicitCatalogRestriction", Any() );
+    m_aSchemaRestriction = aSettings.getOrDefault( "ImplicitSchemaRestriction", Any() );
 
     loadDriverFromProperties( sDriverClass, sDriverClassPath, aSystemProperties );
 

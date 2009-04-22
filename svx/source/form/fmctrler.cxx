@@ -1292,17 +1292,16 @@ void SAL_CALL FmXFormController::textChanged(const TextEvent& e) throw( RuntimeE
             }
         }
     }
-    else if (!m_bModified)
-        onModify( e.Source );
+    else
+        impl_onModify();
 }
 
 // XItemListener
 //------------------------------------------------------------------------------
-void SAL_CALL FmXFormController::itemStateChanged(const ItemEvent& rEvent) throw( RuntimeException )
+void SAL_CALL FmXFormController::itemStateChanged(const ItemEvent& /*rEvent*/) throw( RuntimeException )
 {
     OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
-    if (!m_bModified)
-        onModify( rEvent.Source );
+    impl_onModify();
 }
 
 // XModificationBroadcaster
@@ -1322,33 +1321,41 @@ void FmXFormController::removeModifyListener(const Reference< XModifyListener > 
 
 // XModificationListener
 //------------------------------------------------------------------------------
-void FmXFormController::modified(const EventObject& rEvent) throw( RuntimeException )
+void FmXFormController::modified( const EventObject& _rEvent ) throw( RuntimeException )
 {
     OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
-    if (!m_bModified)
-        onModify( rEvent.Source );
+
+    try
+    {
+        if ( _rEvent.Source != m_xActiveControl )
+        {   // let this control grab the focus
+            // (this case may happen if somebody moves the scroll wheel of the mouse over a control
+            // which does not have the focus)
+            // 85511 - 29.05.2001 - frank.schoenheit@germany.sun.com
+            //
+            // also, it happens when an image control gets a new image by double-clicking it
+            // #i88458# / 2009-01-12 / frank.schoenheit@sun.com
+            Reference< XWindow > xControlWindow( _rEvent.Source, UNO_QUERY_THROW );
+            xControlWindow->setFocus();
+        }
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+
+    impl_onModify();
 }
 
 //------------------------------------------------------------------------------
-void FmXFormController::onModify( const Reference< XInterface >& _rxControl )
+void FmXFormController::impl_onModify()
 {
     OSL_ENSURE( !impl_isDisposed_nofail(), "FmXFormController: already disposed!" );
-    if (!m_bModified)
+
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        m_bModified = sal_True;
-
-    }
-
-    Reference< XControl > xSourceControl(_rxControl, UNO_QUERY);
-    if  (xSourceControl.get() != m_xCurrentControl.get())
-    {   // let this control grab the focus
-        // (this case may happen if somebody moves the scroll wheel of the mouse over a control
-        // which does not have the focus)
-        // 85511 - 29.05.2001 - frank.schoenheit@germany.sun.com
-        Reference< XWindow > xControlWindow(_rxControl, UNO_QUERY);
-        if (xControlWindow.is())
-            xControlWindow->setFocus();
+        if ( !m_bModified )
+            m_bModified = sal_True;
     }
 
     EventObject aEvt(static_cast<cppu::OWeakObject*>(this));
@@ -1980,9 +1987,7 @@ namespace
         }
         else if ( _rxControl.is() )
         {
-            xBound = Reference< XBoundComponent >( _rxControl->getModel(), UNO_QUERY );
-
-            Reference< XPropertySet > xModelProps( xBound, UNO_QUERY );
+            Reference< XPropertySet > xModelProps( _rxControl->getModel(), UNO_QUERY );
             if ( xModelProps.is() && ::comphelper::hasProperty( FM_PROP_BOUNDFIELD, xModelProps ) )
             {
                 Reference< XPropertySet > xField;

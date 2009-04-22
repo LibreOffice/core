@@ -153,84 +153,91 @@ Sequence< DriverPropertyInfo > SAL_CALL java_sql_Driver::getPropertyInfo( const 
                 ,sal_True
                 ,::rtl::OUString()
                 ,Sequence< ::rtl::OUString >())
-                );
-
+        );
         aDriverInfo.push_back(DriverPropertyInfo(
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JavaDriverClassPath"))
                 ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("The class path where to look for the JDBC driver."))
                 ,sal_True
                 ,::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "" ) )
                 ,Sequence< ::rtl::OUString >())
-                );
-
+        );
         aDriverInfo.push_back(DriverPropertyInfo(
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SystemProperties"))
                 ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Additional properties to set at java.lang.System before loading the driver."))
                 ,sal_True
                 ,::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "" ) )
                 ,Sequence< ::rtl::OUString >())
-                );
-
+        );
         aDriverInfo.push_back(DriverPropertyInfo(
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParameterNameSubstitution"))
                 ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Change named parameters with '?'."))
                 ,sal_False
                 ,::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "false" ) )
                 ,aBooleanValues)
-                );
-
+        );
         aDriverInfo.push_back(DriverPropertyInfo(
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IgnoreDriverPrivileges"))
                 ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Ignore the privileges from the database driver."))
                 ,sal_False
                 ,::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "false" ) )
                 ,aBooleanValues)
-                );
-
+        );
         aDriverInfo.push_back(DriverPropertyInfo(
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsAutoRetrievingEnabled"))
                 ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Retrieve generated values."))
                 ,sal_False
                 ,::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "false" ) )
                 ,aBooleanValues)
-                );
-
+        );
         aDriverInfo.push_back(DriverPropertyInfo(
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AutoRetrievingStatement"))
                 ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Auto-increment statement."))
                 ,sal_False
                 ,::rtl::OUString()
                 ,Sequence< ::rtl::OUString >())
-                );
-
+        );
         aDriverInfo.push_back(DriverPropertyInfo(
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GenerateASBeforeCorrelationName"))
                 ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Generate AS before table correlation names."))
                 ,sal_False
                 ,::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "true" ) )
                 ,aBooleanValues)
-                );
+        );
         aDriverInfo.push_back(DriverPropertyInfo(
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IgnoreCurrency"))
                 ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Ignore the currency field from the ResultsetMetaData."))
                 ,sal_False
                 ,::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "false" ) )
                 ,aBooleanValues)
-                );
+        );
         aDriverInfo.push_back(DriverPropertyInfo(
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EscapeDateTime"))
                 ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Escape date time format."))
                 ,sal_False
                 ,::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "true" ) )
                 ,aBooleanValues)
-                );
+        );
         aDriverInfo.push_back(DriverPropertyInfo(
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TypeInfoSettings"))
                 ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Defines how the type info of the database metadata should be manipulated."))
                 ,sal_False
                 ,::rtl::OUString( )
                 ,Sequence< ::rtl::OUString > ())
-                );
+        );
+        aDriverInfo.push_back(DriverPropertyInfo(
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ImplicitCatalogRestriction"))
+                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("The catalog which should be used in getTables calls, when the caller passed NULL."))
+                ,sal_False
+                ,::rtl::OUString( )
+                ,Sequence< ::rtl::OUString > ())
+        );
+        aDriverInfo.push_back(DriverPropertyInfo(
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ImplicitSchemaRestriction"))
+                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("The schema which should be used in getTables calls, when the caller passed NULL."))
+                ,sal_False
+                ,::rtl::OUString( )
+                ,Sequence< ::rtl::OUString > ())
+        );
         return Sequence< DriverPropertyInfo >(&aDriverInfo[0],aDriverInfo.size());
     }
     ::connectivity::SharedResources aResources;

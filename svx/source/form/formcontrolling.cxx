@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -41,9 +41,11 @@
 #include <com/sun/star/form/runtime/FormOperations.hpp>
 #include <com/sun/star/form/runtime/FormFeature.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/sdb/XSQLErrorBroadcaster.hpp>
 /** === end UNO includes === **/
 
 #include <tools/diagnose_ex.h>
+#include <comphelper/anytostring.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <osl/diagnose.h>
 
@@ -72,6 +74,9 @@ namespace svx
     using ::com::sun::star::beans::XPropertySet;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::sdbc::SQLException;
+    using ::com::sun::star::sdb::XSQLErrorBroadcaster;
+    using ::com::sun::star::sdb::SQLErrorEvent;
+    using ::com::sun::star::lang::EventObject;
     /** === end UNO using === **/
     namespace FormFeature = ::com::sun::star::form::runtime::FormFeature;
 
@@ -296,6 +301,12 @@ namespace svx
             m_xFormOperations = FormOperations::createWithFormController( m_aContext.getUNOContext(), _rxController );
             if ( m_xFormOperations.is() )
                 m_xFormOperations->setFeatureInvalidation( this );
+
+            // to prevent the controller from displaying any error messages which happen while we operate on it,
+            // we add ourself as XSQLErrorListener. By contract, a FormController displays errors if and only if
+            // no SQLErrorListeners are registered.
+            Reference< XSQLErrorBroadcaster > xErrorBroadcast( _rxController, UNO_QUERY_THROW );
+            xErrorBroadcast->addSQLErrorListener( this );
         }
         catch( const Exception& )
         {
@@ -373,109 +384,103 @@ namespace svx
     //--------------------------------------------------------------------
     sal_Bool FormControllerHelper::commitCurrentControl( ) const
     {
-        sal_Bool bSuccess = sal_False;
-        if ( m_xFormOperations.is() )
-            bSuccess = m_xFormOperations->commitCurrentControl();
-        return bSuccess;
+        return impl_operateForm_nothrow( COMMIT_CONTROL );
     }
 
     //--------------------------------------------------------------------
     sal_Bool FormControllerHelper::commitCurrentRecord() const
     {
-        sal_Bool bSuccess = sal_False;
-        try
-        {
-            if ( m_xFormOperations.is() )
-            {
-                sal_Bool bDummy( sal_False );
-                bSuccess = m_xFormOperations->commitCurrentRecord( bDummy );
-            }
-        }
-        catch( const Exception& )
-        {
-            bSuccess = sal_False;
-        }
-        return bSuccess;
+        return impl_operateForm_nothrow( COMMIT_RECORD );
     }
 
     //--------------------------------------------------------------------
     bool FormControllerHelper::moveRight( ) const
     {
-        try
-        {
-            if ( m_xFormOperations.is() )
-            {
-                m_xFormOperations->execute( FormFeature::MoveToNext );
-                return true;
-            }
-        }
-        catch( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION();
-        }
-        return false;
+        return impl_operateForm_nothrow( FormFeature::MoveToNext );
     }
 
     //--------------------------------------------------------------------
     bool FormControllerHelper::moveLeft( ) const
     {
-        try
-        {
-            if ( m_xFormOperations.is() )
-            {
-                m_xFormOperations->execute( FormFeature::MoveToPrevious );
-                return true;
-            }
-        }
-        catch( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION();
-        }
-        return false;
+        return impl_operateForm_nothrow( FormFeature::MoveToPrevious );
     }
 
     //--------------------------------------------------------------------
     void FormControllerHelper::execute( sal_Int32 _nSlotId, const ::rtl::OUString& _rParamName, const Any& _rParamValue ) const
     {
-        if ( !m_xFormOperations.is() )
-            return;
-
         Sequence< NamedValue > aArguments(1);
         aArguments[0].Name = _rParamName;
         aArguments[0].Value = _rParamValue;
 
+        impl_operateForm_nothrow( EXECUTE_ARGS, FeatureSlotTranslation::getFormFeatureForSlotId( _nSlotId ), aArguments );
+    }
+
+    //--------------------------------------------------------------------
+    bool FormControllerHelper::impl_operateForm_nothrow( const FormOperation _eWhat, const sal_Int16 _nFeature,
+            const Sequence< NamedValue >& _rArguments ) const
+    {
+        if ( !m_xFormOperations.is() )
+            return false;
+
         Any aError;
+        bool bSuccess = false;
+        const_cast< FormControllerHelper* >( this )->m_aOperationError.clear();
         try
         {
-            m_xFormOperations->executeWithArguments( FeatureSlotTranslation::getFormFeatureForSlotId( _nSlotId ), aArguments );
+            switch ( _eWhat )
+            {
+            case COMMIT_CONTROL:
+                bSuccess = m_xFormOperations->commitCurrentControl();
+                break;
+
+            case COMMIT_RECORD:
+            {
+                sal_Bool bDummy( sal_False );
+                bSuccess = m_xFormOperations->commitCurrentRecord( bDummy );
+            }
+            break;
+
+            case EXECUTE:
+                m_xFormOperations->execute( _nFeature );
+                bSuccess = true;
+                break;
+
+            case EXECUTE_ARGS:
+                m_xFormOperations->executeWithArguments( _nFeature, _rArguments );
+                bSuccess = true;
+                break;
+            }
         }
-        catch ( const SQLException& ) { aError = ::cppu::getCaughtException(); }
+        catch ( const SQLException& )
+        {
+            aError = ::cppu::getCaughtException();
+        }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION();
+            SQLException aFallbackError;
+            aFallbackError.Message = ::comphelper::anyToString( ::cppu::getCaughtException() );
+            aError <<= aFallbackError;
         }
-        if ( aError.hasValue() )
+
+        if ( bSuccess )
+            return true;
+
+        // display the error. Prefer the one reported in errorOccured over the one caught.
+        if ( m_aOperationError.hasValue() )
+            displayException( m_aOperationError );
+        else if ( aError.hasValue() )
             displayException( aError );
+        else
+            OSL_ENSURE( false, "FormControllerHelper::impl_operateForm_nothrow: no success, but no error?" );
+
+        return false;
     }
 
     //--------------------------------------------------------------------
     void FormControllerHelper::execute( sal_Int32 _nSlotId ) const
     {
-        if ( !m_xFormOperations.is() )
-            return;
-
-        Any aError;
-        try
-        {
-            m_xFormOperations->execute( FeatureSlotTranslation::getFormFeatureForSlotId( _nSlotId ) );
-        }
-        catch ( const SQLException& ) { aError = ::cppu::getCaughtException(); }
-        catch( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION();
-        }
-        if ( aError.hasValue() )
-            displayException( aError );
+        impl_operateForm_nothrow( EXECUTE, FeatureSlotTranslation::getFormFeatureForSlotId( _nSlotId ),
+            Sequence< NamedValue >() );
     }
 
     //--------------------------------------------------------------------
@@ -537,6 +542,19 @@ namespace svx
         ::std::copy( pSupportedFeatures, pSupportedFeatures + nFeatureCount, aSupportedFeatures.begin() );
 
         m_pInvalidationCallback->invalidateFeatures( aSupportedFeatures );
+    }
+
+    //--------------------------------------------------------------------
+    void SAL_CALL FormControllerHelper::errorOccured( const SQLErrorEvent& _Event ) throw (RuntimeException)
+    {
+        OSL_ENSURE( !m_aOperationError.hasValue(), "FormControllerHelper::errorOccured: two errors during one operation?" );
+        m_aOperationError = _Event.Reason;
+    }
+
+    //--------------------------------------------------------------------
+    void SAL_CALL FormControllerHelper::disposing( const EventObject& /*_Source*/ ) throw (RuntimeException)
+    {
+        // not interested in
     }
 
     //--------------------------------------------------------------------

@@ -83,6 +83,27 @@ using namespace ::com::sun::star::lang;
 
 // stored as the Field Descriptor terminator
 #define FIELD_DESCRIPTOR_TERMINATOR 0x0D
+#define DBF_EOL                     0x1A
+
+//==================================================================
+namespace
+{
+//==================================================================
+sal_Int32 lcl_getFileSize(SvStream& _rStream)
+{
+    sal_Int32 nFileSize = 0;
+    _rStream.Seek(STREAM_SEEK_TO_END);
+    _rStream.SeekRel(-1);
+    char cEOL;
+    _rStream >> cEOL;
+    nFileSize = _rStream.Tell();
+    if ( cEOL == DBF_EOL )
+        nFileSize -= 1;
+    return nFileSize;
+}
+//==================================================================
+}
+//==================================================================
 
 // -------------------------------------------------------------------------
 void ODbaseTable::readHeader()
@@ -373,8 +394,7 @@ void ODbaseTable::construct()
         //  if(!m_pColumns && (!m_aColumns.isValid() || !m_aColumns->size()))
         fillColumns();
 
-        m_pFileStream->Seek(STREAM_SEEK_TO_END);
-        UINT32 nFileSize = m_pFileStream->Tell();
+        UINT32 nFileSize = lcl_getFileSize(*m_pFileStream);
         m_pFileStream->Seek(STREAM_SEEK_TO_BEGIN);
         if ( m_aHeader.db_anz == 0 && ((nFileSize-m_aHeader.db_kopf)/m_aHeader.db_slng) > 0) // seems to be empty or someone wrote bullshit into the dbase file
             m_aHeader.db_anz = ((nFileSize-m_aHeader.db_kopf)/m_aHeader.db_slng);
@@ -1077,7 +1097,8 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
             m_pFileStream->Write(aBuffer, 14);
         }
 
-        (*m_pFileStream) << (BYTE)0x0d;                                     // kopf ende
+        (*m_pFileStream) << (BYTE)FIELD_DESCRIPTOR_TERMINATOR;              // kopf ende
+        (*m_pFileStream) << (char)DBF_EOL;
         m_pFileStream->Seek(10L);
         (*m_pFileStream) << nRecLength;                                     // Satzlaenge nachtraeglich eintragen
 
@@ -1201,6 +1222,7 @@ BOOL ODbaseTable::DropImpl()
     }
     return bDropped;
 }
+
 //------------------------------------------------------------------
 BOOL ODbaseTable::InsertRow(OValueRefVector& rRow, BOOL bFlush,const Reference<XIndexAccess>& _xCols)
 {
@@ -1218,8 +1240,7 @@ BOOL ODbaseTable::InsertRow(OValueRefVector& rRow, BOOL bFlush,const Reference<X
     BOOL bInsertRow = UpdateBuffer( rRow, NULL, _xCols );
     if ( bInsertRow )
     {
-        m_pFileStream->Seek(STREAM_SEEK_TO_END);
-        nFileSize = m_pFileStream->Tell();
+        nFileSize = lcl_getFileSize(*m_pFileStream);
 
         if (HasMemoFields() && m_pMemoStream)
         {
@@ -1237,6 +1258,7 @@ BOOL ODbaseTable::InsertRow(OValueRefVector& rRow, BOOL bFlush,const Reference<X
         }
         else
         {
+            (*m_pFileStream) << (char)DBF_EOL; // write EOL
             // Anzahl Datensaetze im Header erhoehen:
             m_pFileStream->Seek( 4L );
             (*m_pFileStream) << (m_aHeader.db_anz + 1);
@@ -1726,7 +1748,7 @@ BOOL ODbaseTable::WriteMemo(ORowSetValue& aVariable, ULONG& rBlockNr)
     {
         case MemodBaseIII: // dBase III-Memofeld, endet mit Ctrl-Z
         {
-            const char cEOF = (char) 0x1a;
+            const char cEOF = (char) DBF_EOL;
             nSize++;
 
 //          if (pData)
@@ -2322,7 +2344,7 @@ BOOL ODbaseTable::ReadMemo(ULONG nBlockNo, ORowSetValue& aVariable)
     {
         case MemodBaseIII: // dBase III-Memofeld, endet mit Ctrl-Z
         {
-            const char cEOF = (char) 0x1a;
+            const char cEOF = (char) DBF_EOL;
             ByteString aBStr;
             static char aBuf[514];
             aBuf[512] = 0;          // sonst kann der Zufall uebel mitspielen

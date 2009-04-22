@@ -110,12 +110,6 @@ public:
     const Link& GetFormsCreationHdl() const { return m_aFormsCreationHdl; }
 
 protected:
-    // lesen und schreiben der Objecte
-    void write(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& OutStream) const;
-    void read(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& InStream);
-
-    void fillList(FmObjectList& rList, const SdrObjList& rObjList, sal_Bool bConnected) const;
-
     /** finds a form with a given data source signature
         @param rForm
             the form to start the search with. This form, including all possible sub forms,
