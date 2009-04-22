@@ -92,11 +92,11 @@ sa-IN    0  1103   # Sanskrit
 sat      0  1606   # Santali
 sb       0  1070   # Sorbian
 sd       0  1113   # Sindhi
-sh       0  2074   # Serbian Latin
+sh    1250  2074   # Serbian Latin
 sk    1250  1051   # Slovak
 sl    1250  1060   # Slovenian
 sq    1250  1052   # Albanian
-sr       0  3098   # Serbian Cyrillic
+sr    1251  3098   # Serbian Cyrillic
 sr-SP 1251  3098   # Serbian Cyrillic
 ss       0  1579   # Swazi
 st       0  1072   # Southern Sotho, Sutu
