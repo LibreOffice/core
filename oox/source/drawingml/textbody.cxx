@@ -63,19 +63,6 @@ void TextBody::insertAt(
         const TextCharacterProperties& rTextStyleProperties,
         const TextListStylePtr& pMasterTextListStylePtr ) const
 {
-#ifdef DEBUG
-    if ( false )
-    {
-        const TextParagraphPropertiesVector& rListStyle( pMasterTextListStylePtr->getListStyle() );
-        TextParagraphPropertiesVector::const_iterator aIter( rListStyle.begin() );
-        while( aIter != rListStyle.end() )
-        {
-            (*aIter)->getTextParagraphPropertyMap().dump_debug("TextParagraph paragraph props");
-            aIter++;
-        }
-    }
-#endif
-
     TextListStyle aCombinedTextStyle;
     aCombinedTextStyle.apply( *pMasterTextListStylePtr );
     aCombinedTextStyle.apply( maTextListStyle );

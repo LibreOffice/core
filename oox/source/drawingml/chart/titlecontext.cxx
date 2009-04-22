@@ -37,7 +37,7 @@
 
 using ::rtl::OUString;
 using ::oox::core::ContextHandler2Helper;
-using ::oox::core::ContextWrapper;
+using ::oox::core::ContextHandlerRef;
 
 namespace oox {
 namespace drawingml {
@@ -54,47 +54,52 @@ LayoutContext::~LayoutContext()
 {
 }
 
-ContextWrapper LayoutContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+ContextHandlerRef LayoutContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
     switch( getCurrentElement() )
     {
         case C_TOKEN( layout ):
-            return  (nElement == C_TOKEN( manualLayout ));
+            switch( nElement )
+            {
+                case C_TOKEN( manualLayout ):
+                    return this;
+            }
+        break;
 
         case C_TOKEN( manualLayout ):
             switch( nElement )
             {
                 case C_TOKEN( x ):
                     mrModel.mfX = rAttribs.getDouble( XML_val, 0.0 );
-                    return false;
+                    return 0;
                 case C_TOKEN( y ):
                     mrModel.mfY = rAttribs.getDouble( XML_val, 0.0 );
-                    return false;
+                    return 0;
                 case C_TOKEN( w ):
                     mrModel.mfW = rAttribs.getDouble( XML_val, 0.0 );
-                    return false;
+                    return 0;
                 case C_TOKEN( h ):
                     mrModel.mfH = rAttribs.getDouble( XML_val, 0.0 );
-                    return false;
+                    return 0;
                 case C_TOKEN( xMode ):
                     mrModel.mnXMode = rAttribs.getToken( XML_val, XML_factor );
-                    return false;
+                    return 0;
                 case C_TOKEN( yMode ):
                     mrModel.mnYMode = rAttribs.getToken( XML_val, XML_factor );
-                    return false;
+                    return 0;
                 case C_TOKEN( wMode ):
                     mrModel.mnWMode = rAttribs.getToken( XML_val, XML_factor );
-                    return false;
+                    return 0;
                 case C_TOKEN( hMode ):
                     mrModel.mnHMode = rAttribs.getToken( XML_val, XML_factor );
-                    return false;
+                    return 0;
                 case C_TOKEN( layoutTarget ):
                     mrModel.mnTarget = rAttribs.getToken( XML_val, XML_outer );
-                    return false;
+                    return 0;
             }
         break;
     }
-    return false;
+    return 0;
 }
 
 // ============================================================================
@@ -108,7 +113,7 @@ TextContext::~TextContext()
 {
 }
 
-ContextWrapper TextContext::onCreateContext( sal_Int32 nElement, const AttributeList& )
+ContextHandlerRef TextContext::onCreateContext( sal_Int32 nElement, const AttributeList& )
 {
     switch( getCurrentElement() )
     {
@@ -122,7 +127,7 @@ ContextWrapper TextContext::onCreateContext( sal_Int32 nElement, const Attribute
                     return new StringSequenceContext( *this, mrModel.mxDataSeq.create() );
                 case C_TOKEN( v ):
                     OSL_ENSURE( !mrModel.mxDataSeq, "TextContext::onCreateContext - multiple data sequences" );
-                    return true;
+                    return this;    // collect value in onEndElement()
             }
         break;
     }
@@ -151,7 +156,7 @@ TitleContext::~TitleContext()
 {
 }
 
-ContextWrapper TitleContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+ContextHandlerRef TitleContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
     switch( getCurrentElement() )
     {
@@ -163,7 +168,7 @@ ContextWrapper TitleContext::onCreateContext( sal_Int32 nElement, const Attribut
                 case C_TOKEN( overlay ):
                     // default is 'false', not 'true' as specified
                     mrModel.mbOverlay = rAttribs.getBool( XML_val, false );
-                    return false;
+                    return 0;
                 case C_TOKEN( spPr ):
                     return new ShapePropertiesContext( *this, mrModel.mxShapeProp.create() );
                 case C_TOKEN( tx ):
@@ -173,7 +178,7 @@ ContextWrapper TitleContext::onCreateContext( sal_Int32 nElement, const Attribut
             }
         break;
     }
-    return false;
+    return 0;
 }
 
 // ============================================================================
@@ -187,7 +192,7 @@ LegendContext::~LegendContext()
 {
 }
 
-ContextWrapper LegendContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+ContextHandlerRef LegendContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
     switch( getCurrentElement() )
     {
@@ -198,11 +203,11 @@ ContextWrapper LegendContext::onCreateContext( sal_Int32 nElement, const Attribu
                     return new LayoutContext( *this, mrModel.mxLayout.create() );
                 case C_TOKEN( legendPos ):
                     mrModel.mnPosition = rAttribs.getToken( XML_val, XML_r );
-                    return false;
+                    return 0;
                 case C_TOKEN( overlay ):
                     // default is 'false', not 'true' as specified
                     mrModel.mbOverlay = rAttribs.getBool( XML_val, false );
-                    return false;
+                    return 0;
                 case C_TOKEN( spPr ):
                     return new ShapePropertiesContext( *this, mrModel.mxShapeProp.create() );
                 case C_TOKEN( txPr ):
@@ -210,7 +215,7 @@ ContextWrapper LegendContext::onCreateContext( sal_Int32 nElement, const Attribu
             }
         break;
     }
-    return false;
+    return 0;
 }
 
 // ============================================================================

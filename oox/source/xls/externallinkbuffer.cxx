@@ -93,7 +93,7 @@ const sal_uInt16 BIFF_EXTNAME_ICONIFIED     = 0x8000;
 
 // ============================================================================
 
-OoxExternalNameData::OoxExternalNameData() :
+ExternalNameModel::ExternalNameModel() :
     mbBuiltIn( false ),
     mbNotify( false ),
     mbPreferPic( false ),
@@ -115,20 +115,20 @@ ExternalName::ExternalName( const ExternalLink& rParentLink, sal_Int32 nLocalShe
 
 void ExternalName::importDefinedName( const AttributeList& rAttribs )
 {
-    maOoxData.maName = rAttribs.getString( XML_name, OUString() );
-    OSL_ENSURE( maOoxData.maName.getLength() > 0, "ExternalName::importDefinedName - empty name" );
+    maModel.maName = rAttribs.getString( XML_name, OUString() );
+    OSL_ENSURE( maModel.maName.getLength() > 0, "ExternalName::importDefinedName - empty name" );
     // zero-based index into sheet list of externalBook
-    maOoxData.mnSheet = rAttribs.getInteger( XML_sheetId, -1 );
+    maModel.mnSheet = rAttribs.getInteger( XML_sheetId, -1 );
 }
 
 void ExternalName::importDdeItem( const AttributeList& rAttribs )
 {
-    maOoxData.maName = rAttribs.getString( XML_name, OUString() );
-    OSL_ENSURE( maOoxData.maName.getLength() > 0, "ExternalName::importDdeItem - empty name" );
-    maOoxExtNameData.mbOleObj     = false;
-    maOoxExtNameData.mbStdDocName = rAttribs.getBool( XML_ole, false );
-    maOoxExtNameData.mbNotify     = rAttribs.getBool( XML_advise, false );
-    maOoxExtNameData.mbPreferPic  = rAttribs.getBool( XML_preferPic, false );
+    maModel.maName = rAttribs.getString( XML_name, OUString() );
+    OSL_ENSURE( maModel.maName.getLength() > 0, "ExternalName::importDdeItem - empty name" );
+    maExtNameModel.mbOleObj     = false;
+    maExtNameModel.mbStdDocName = rAttribs.getBool( XML_ole, false );
+    maExtNameModel.mbNotify     = rAttribs.getBool( XML_advise, false );
+    maExtNameModel.mbPreferPic  = rAttribs.getBool( XML_preferPic, false );
 }
 
 void ExternalName::importValues( const AttributeList& rAttribs )
@@ -138,18 +138,18 @@ void ExternalName::importValues( const AttributeList& rAttribs )
 
 void ExternalName::importOleItem( const AttributeList& rAttribs )
 {
-    maOoxData.maName = rAttribs.getString( XML_name, OUString() );
-    OSL_ENSURE( maOoxData.maName.getLength() > 0, "ExternalName::importOleItem - empty name" );
-    maOoxExtNameData.mbOleObj    = true;
-    maOoxExtNameData.mbNotify    = rAttribs.getBool( XML_advise, false );
-    maOoxExtNameData.mbPreferPic = rAttribs.getBool( XML_preferPic, false );
-    maOoxExtNameData.mbIconified = rAttribs.getBool( XML_icon, false );
+    maModel.maName = rAttribs.getString( XML_name, OUString() );
+    OSL_ENSURE( maModel.maName.getLength() > 0, "ExternalName::importOleItem - empty name" );
+    maExtNameModel.mbOleObj    = true;
+    maExtNameModel.mbNotify    = rAttribs.getBool( XML_advise, false );
+    maExtNameModel.mbPreferPic = rAttribs.getBool( XML_preferPic, false );
+    maExtNameModel.mbIconified = rAttribs.getBool( XML_icon, false );
 }
 
 void ExternalName::importExternalName( RecordInputStream& rStrm )
 {
-    rStrm >> maOoxData.maName;
-    OSL_ENSURE( maOoxData.maName.getLength() > 0, "ExternalName::importExternalName - empty name" );
+    rStrm >> maModel.maName;
+    OSL_ENSURE( maModel.maName.getLength() > 0, "ExternalName::importExternalName - empty name" );
 }
 
 void ExternalName::importExternalNameFlags( RecordInputStream& rStrm )
@@ -158,14 +158,14 @@ void ExternalName::importExternalNameFlags( RecordInputStream& rStrm )
     sal_Int32 nSheetId;
     rStrm >> nFlags >> nSheetId;
     // index into sheet list of EXTSHEETNAMES (one-based in OOBIN)
-    maOoxData.mnSheet = nSheetId - 1;
+    maModel.mnSheet = nSheetId - 1;
     // no flag for built-in names, as in OOX...
-    maOoxExtNameData.mbNotify     = getFlag( nFlags, OOBIN_EXTNAME_AUTOMATIC );
-    maOoxExtNameData.mbPreferPic  = getFlag( nFlags, OOBIN_EXTNAME_PREFERPIC );
-    maOoxExtNameData.mbStdDocName = getFlag( nFlags, OOBIN_EXTNAME_STDDOCNAME );
-    maOoxExtNameData.mbOleObj     = getFlag( nFlags, OOBIN_EXTNAME_OLEOBJECT );
-    maOoxExtNameData.mbIconified  = getFlag( nFlags, OOBIN_EXTNAME_ICONIFIED );
-    OSL_ENSURE( (mrParentLink.getLinkType() == LINKTYPE_OLE) == maOoxExtNameData.mbOleObj,
+    maExtNameModel.mbNotify     = getFlag( nFlags, OOBIN_EXTNAME_AUTOMATIC );
+    maExtNameModel.mbPreferPic  = getFlag( nFlags, OOBIN_EXTNAME_PREFERPIC );
+    maExtNameModel.mbStdDocName = getFlag( nFlags, OOBIN_EXTNAME_STDDOCNAME );
+    maExtNameModel.mbOleObj     = getFlag( nFlags, OOBIN_EXTNAME_OLEOBJECT );
+    maExtNameModel.mbIconified  = getFlag( nFlags, OOBIN_EXTNAME_ICONIFIED );
+    OSL_ENSURE( (mrParentLink.getLinkType() == LINKTYPE_OLE) == maExtNameModel.mbOleObj,
         "ExternalName::importExternalNameFlags - wrong OLE flag in external name" );
 }
 
@@ -202,18 +202,18 @@ void ExternalName::importExternalName( BiffInputStream& rStrm )
     if( getBiff() >= BIFF3 )
     {
         rStrm >> nFlags;
-        maOoxExtNameData.mbBuiltIn    = getFlag( nFlags, BIFF_EXTNAME_BUILTIN );
-        maOoxExtNameData.mbNotify     = getFlag( nFlags, BIFF_EXTNAME_AUTOMATIC );
-        maOoxExtNameData.mbPreferPic  = getFlag( nFlags, BIFF_EXTNAME_PREFERPIC );
+        maExtNameModel.mbBuiltIn    = getFlag( nFlags, BIFF_EXTNAME_BUILTIN );
+        maExtNameModel.mbNotify     = getFlag( nFlags, BIFF_EXTNAME_AUTOMATIC );
+        maExtNameModel.mbPreferPic  = getFlag( nFlags, BIFF_EXTNAME_PREFERPIC );
 
         // BIFF5-BIFF8: sheet index for sheet-local names, OLE settings
         if( getBiff() >= BIFF5 )
         {
-            maOoxExtNameData.mbStdDocName = getFlag( nFlags, BIFF_EXTNAME_STDDOCNAME );
-            maOoxExtNameData.mbOleObj     = getFlag( nFlags, BIFF_EXTNAME_OLEOBJECT );
-            maOoxExtNameData.mbIconified  = getFlag( nFlags, BIFF_EXTNAME_ICONIFIED );
+            maExtNameModel.mbStdDocName = getFlag( nFlags, BIFF_EXTNAME_STDDOCNAME );
+            maExtNameModel.mbOleObj     = getFlag( nFlags, BIFF_EXTNAME_OLEOBJECT );
+            maExtNameModel.mbIconified  = getFlag( nFlags, BIFF_EXTNAME_ICONIFIED );
 
-            if( maOoxExtNameData.mbOleObj )
+            if( maExtNameModel.mbOleObj )
             {
                 rStrm >> mnStorageId;
             }
@@ -229,22 +229,22 @@ void ExternalName::importExternalName( BiffInputStream& rStrm )
                     The value zero means this external name is a global name.
                  */
                 rStrm.skip( 2 );
-                maOoxData.mnSheet = rStrm.readuInt16();
+                maModel.mnSheet = rStrm.readuInt16();
             }
         }
     }
 
-    maOoxData.maName = (getBiff() == BIFF8) ?
+    maModel.maName = (getBiff() == BIFF8) ?
         rStrm.readUniString( rStrm.readuInt8() ) :
         rStrm.readByteString( false, getTextEncoding() );
-    OSL_ENSURE( maOoxData.maName.getLength() > 0, "ExternalName::importExternalName - empty name" );
+    OSL_ENSURE( maModel.maName.getLength() > 0, "ExternalName::importExternalName - empty name" );
 
     switch( mrParentLink.getLinkType() )
     {
         case LINKTYPE_INTERNAL:
         case LINKTYPE_EXTERNAL:
             // cell references that are stored in hidden external names (seen in BIFF3-BIFF4)
-            if( (getBiff() <= BIFF4) && (maOoxData.maName.getLength() > 0) && (maOoxData.maName[ 0 ] == '\x01') && (rStrm.getRemaining() > 2) )
+            if( (getBiff() <= BIFF4) && (maModel.maName.getLength() > 0) && (maModel.maName[ 0 ] == '\x01') && (rStrm.getRemaining() > 2) )
             {
                 TokensFormulaContext aContext( true, true );
                 importBiffFormula( aContext, rStrm );
@@ -308,8 +308,8 @@ sal_Int32 ExternalName::getSheetCacheIndex() const
     {
         case FILTER_OOX:
             // OOXML/OOBIN: zero-based index into sheet list, -1 means global name
-            if( maOoxData.mnSheet >= 0 )
-                nCacheIdx = mrParentLink.getSheetIndex( maOoxData.mnSheet );
+            if( maModel.mnSheet >= 0 )
+                nCacheIdx = mrParentLink.getSheetIndex( maModel.mnSheet );
         break;
         case FILTER_BIFF:
             switch( getBiff() )
@@ -319,14 +319,14 @@ sal_Int32 ExternalName::getSheetCacheIndex() const
                 case BIFF4:
                 break;
                 case BIFF5:
-                    if( maOoxData.mnSheet > 0 )
-                        if( const ExternalLink* pExtLink = getExternalLinks().getExternalLink( maOoxData.mnSheet ).get() )
+                    if( maModel.mnSheet > 0 )
+                        if( const ExternalLink* pExtLink = getExternalLinks().getExternalLink( maModel.mnSheet ).get() )
                             if( pExtLink->getLinkType() == LINKTYPE_EXTERNAL )
                                 nCacheIdx = pExtLink->getSheetIndex();
                 break;
                 case BIFF8:
-                    if( maOoxData.mnSheet > 0 )
-                        nCacheIdx = mrParentLink.getSheetIndex( maOoxData.mnSheet - 1 );
+                    if( maModel.mnSheet > 0 )
+                        nCacheIdx = mrParentLink.getSheetIndex( maModel.mnSheet - 1 );
                 break;
                 case BIFF_UNKNOWN:
                 break;
@@ -340,9 +340,9 @@ sal_Int32 ExternalName::getSheetCacheIndex() const
 
 bool ExternalName::getDdeItemInfo( DDEItemInfo& orItemInfo ) const
 {
-    if( (mrParentLink.getLinkType() == LINKTYPE_DDE) && (maOoxData.maName.getLength() > 0) )
+    if( (mrParentLink.getLinkType() == LINKTYPE_DDE) && (maModel.maName.getLength() > 0) )
     {
-        orItemInfo.Item = maOoxData.maName;
+        orItemInfo.Item = maModel.maName;
         orItemInfo.Results = ContainerHelper::matrixToSequenceSequence( maResults );
         return true;
     }
@@ -351,13 +351,13 @@ bool ExternalName::getDdeItemInfo( DDEItemInfo& orItemInfo ) const
 
 bool ExternalName::getDdeLinkData( OUString& orDdeServer, OUString& orDdeTopic, OUString& orDdeItem )
 {
-    if( (mrParentLink.getLinkType() == LINKTYPE_DDE) && (maOoxData.maName.getLength() > 0) )
+    if( (mrParentLink.getLinkType() == LINKTYPE_DDE) && (maModel.maName.getLength() > 0) )
     {
         // try to create a DDE link and to set the imported link results
         if( !mbDdeLinkCreated ) try
         {
             Reference< XDDELinks > xDdeLinks( getDdeLinks(), UNO_QUERY_THROW );
-            mxDdeLink = xDdeLinks->addDDELink( mrParentLink.getClassName(), mrParentLink.getTargetUrl(), maOoxData.maName, ::com::sun::star::sheet::DDELinkMode_DEFAULT );
+            mxDdeLink = xDdeLinks->addDDELink( mrParentLink.getClassName(), mrParentLink.getTargetUrl(), maModel.maName, ::com::sun::star::sheet::DDELinkMode_DEFAULT );
             if( !maResults.empty() )
             {
                 Reference< XDDELinkResults > xResults( mxDdeLink, UNO_QUERY_THROW );
@@ -566,7 +566,7 @@ void ExternalLink::importExternSheet( BiffInputStream& rStrm )
     switch( meLinkType )
     {
         case LINKTYPE_INTERNAL:
-            maIndexes.push_back( getWorksheets().getFinalSheetIndex( aSheetName ) );
+            maIndexes.push_back( getWorksheets().getCalcSheetIndex( aSheetName ) );
         break;
         case LINKTYPE_EXTERNAL:
             insertExternalSheet( aSheetName );
@@ -667,8 +667,7 @@ sal_Int32 ExternalLink::getSheetIndex( sal_Int32 nTabId ) const
 {
     OSL_ENSURE( (nTabId == 0) || (getFilterType() == FILTER_OOX) || (getBiff() == BIFF8),
         "ExternalLink::getSheetIndex - invalid sheet index" );
-    return ((0 <= nTabId) && (static_cast< size_t >( nTabId ) < maIndexes.size())) ?
-        maIndexes[ static_cast< size_t >( nTabId ) ] : -1;
+    return ContainerHelper::getVectorElement< sal_Int32 >( maIndexes, nTabId, -1 );
 }
 
 void ExternalLink::getSheetRange( LinkSheetRange& orSheetRange, sal_Int32 nTabId1, sal_Int32 nTabId2 ) const
@@ -727,11 +726,11 @@ void ExternalLink::getSheetRange( LinkSheetRange& orSheetRange, sal_Int32 nTabId
 
 Reference< XExternalSheetCache > ExternalLink::getExternalSheetCache( sal_Int32 nTabId )
 {
-    if( mxDocLink.is() && (0 <= nTabId) && (static_cast< size_t >( nTabId ) < maIndexes.size()) ) try
+    const sal_Int32* pnCacheId = ContainerHelper::getVectorElement( maIndexes, nTabId );
+    if( mxDocLink.is() && pnCacheId ) try
     {
-        sal_Int32 nCacheId = maIndexes[ static_cast< size_t >( nTabId ) ];
         // existing mxDocLink implies that this is an external link
-        Reference< XExternalSheetCache > xSheetCache( mxDocLink->getByIndex( nCacheId ), UNO_QUERY_THROW );
+        Reference< XExternalSheetCache > xSheetCache( mxDocLink->getByIndex( *pnCacheId ), UNO_QUERY_THROW );
         return xSheetCache;
     }
     catch( Exception& )
@@ -853,19 +852,19 @@ ExternalNameRef ExternalLink::createExternalName()
 
 // ============================================================================
 
-OoxRefSheets::OoxRefSheets() :
+RefSheetsModel::RefSheetsModel() :
     mnExtRefId( -1 ),
     mnTabId1( -1 ),
     mnTabId2( -1 )
 {
 }
 
-void OoxRefSheets::readOobData( RecordInputStream& rStrm )
+void RefSheetsModel::readOobData( RecordInputStream& rStrm )
 {
     rStrm >> mnExtRefId >> mnTabId1 >> mnTabId2;
 }
 
-void OoxRefSheets::readBiff8Data( BiffInputStream& rStrm )
+void RefSheetsModel::readBiff8Data( BiffInputStream& rStrm )
 {
     mnExtRefId = rStrm.readuInt16();
     mnTabId1 = rStrm.readInt16();
@@ -927,7 +926,7 @@ void ExternalLinkBuffer::importExternalSheets( RecordInputStream& rStrm )
     maRefSheets.reserve( nMaxCount );
     for( size_t nRefId = 0; !rStrm.isEof() && (nRefId < nMaxCount); ++nRefId )
     {
-        OoxRefSheets aRefSheets;
+        RefSheetsModel aRefSheets;
         aRefSheets.readOobData( rStrm );
         maRefSheets.push_back( aRefSheets );
     }
@@ -964,7 +963,7 @@ void ExternalLinkBuffer::importExternSheet8( BiffInputStream& rStrm )
     maRefSheets.reserve( nRefCount );
     for( sal_uInt16 nRefId = 0; !rStrm.isEof() && (nRefId < nRefCount); ++nRefId )
     {
-        OoxRefSheets aRefSheets;
+        RefSheetsModel aRefSheets;
         aRefSheets.readBiff8Data( rStrm );
         maRefSheets.push_back( aRefSheets );
     }
@@ -990,7 +989,7 @@ ExternalLinkRef ExternalLinkBuffer::getExternalLink( sal_Int32 nRefId ) const
             if( !mbUseRefSheets )
                 xExtLink = maLinks.get( nRefId - 1 );
             // OOBIN: zero-based index into ref-sheets list
-            else if( const OoxRefSheets* pRefSheets = getRefSheets( nRefId ) )
+            else if( const RefSheetsModel* pRefSheets = getRefSheets( nRefId ) )
                 xExtLink = maLinks.get( pRefSheets->mnExtRefId );
         break;
         case FILTER_BIFF:
@@ -1018,7 +1017,7 @@ ExternalLinkRef ExternalLinkBuffer::getExternalLink( sal_Int32 nRefId ) const
                 break;
                 case BIFF8:
                     // zero-based index into REF list in EXTERNSHEET record
-                    if( const OoxRefSheets* pRefSheets = getRefSheets( nRefId ) )
+                    if( const RefSheetsModel* pRefSheets = getRefSheets( nRefId ) )
                         xExtLink = maLinks.get( pRefSheets->mnExtRefId );
                 break;
                 case BIFF_UNKNOWN: break;
@@ -1043,7 +1042,7 @@ LinkSheetRange ExternalLinkBuffer::getSheetRange( sal_Int32 nRefId ) const
     OSL_ENSURE( ((getFilterType() == FILTER_OOX) && mbUseRefSheets) || (getBiff() == BIFF8), "ExternalLinkBuffer::getSheetRange - wrong BIFF version" );
     LinkSheetRange aSheetRange;
     if( const ExternalLink* pExtLink = getExternalLink( nRefId ).get() )
-        if( const OoxRefSheets* pRefSheets = getRefSheets( nRefId ) )
+        if( const RefSheetsModel* pRefSheets = getRefSheets( nRefId ) )
             pExtLink->getSheetRange( aSheetRange, pRefSheets->mnTabId1, pRefSheets->mnTabId2 );
     return aSheetRange;
 }
@@ -1057,7 +1056,7 @@ ExternalLinkRef ExternalLinkBuffer::createExternalLink()
     return xExtLink;
 }
 
-const OoxRefSheets* ExternalLinkBuffer::getRefSheets( sal_Int32 nRefId ) const
+const RefSheetsModel* ExternalLinkBuffer::getRefSheets( sal_Int32 nRefId ) const
 {
     return ((0 <= nRefId) && (static_cast< size_t >( nRefId ) < maRefSheets.size())) ?
         &maRefSheets[ static_cast< size_t >( nRefId ) ] : 0;

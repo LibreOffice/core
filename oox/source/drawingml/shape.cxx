@@ -37,6 +37,7 @@
 #include "oox/core/namespaces.hxx"
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/helper/propertyset.hxx"
+#include "properties.hxx"
 #include "tokens.hxx"
 
 #include <tools/solar.h>        // for the F_PI180 define
@@ -99,20 +100,13 @@ table::TablePropertiesPtr Shape::getTableProperties()
 
 void Shape::setDefaults()
 {
-    const OUString sTextAutoGrowHeight( RTL_CONSTASCII_USTRINGPARAM( "TextAutoGrowHeight" ) );
-    const OUString sTextWordWrap( RTL_CONSTASCII_USTRINGPARAM( "TextWordWrap" ) );
-    const OUString sTextLeftDistance( RTL_CONSTASCII_USTRINGPARAM( "TextLeftDistance" ) );
-    const OUString sTextUpperDistance( RTL_CONSTASCII_USTRINGPARAM( "TextUpperDistance" ) );
-    const OUString sTextRightDistance( RTL_CONSTASCII_USTRINGPARAM( "TextRightDistance" ) );
-    const OUString sTextLowerDistance( RTL_CONSTASCII_USTRINGPARAM( "TextLowerDistance" ) );
-    const OUString sCharHeight( RTL_CONSTASCII_USTRINGPARAM( "CharHeight" ) );
-    maShapeProperties[ sTextAutoGrowHeight ] <<= false;
-    maShapeProperties[ sTextWordWrap ] <<= true;
-    maShapeProperties[ sTextLeftDistance ]  <<= static_cast< sal_Int32 >( 250 );
-    maShapeProperties[ sTextUpperDistance ] <<= static_cast< sal_Int32 >( 125 );
-    maShapeProperties[ sTextRightDistance ] <<= static_cast< sal_Int32 >( 250 );
-    maShapeProperties[ sTextLowerDistance ] <<= static_cast< sal_Int32 >( 125 );
-    maShapeProperties[ sCharHeight ] <<= static_cast< float >( 18.0 );
+    maShapeProperties[ PROP_TextAutoGrowHeight ] <<= false;
+    maShapeProperties[ PROP_TextWordWrap ] <<= true;
+    maShapeProperties[ PROP_TextLeftDistance ]  <<= static_cast< sal_Int32 >( 250 );
+    maShapeProperties[ PROP_TextUpperDistance ] <<= static_cast< sal_Int32 >( 125 );
+    maShapeProperties[ PROP_TextRightDistance ] <<= static_cast< sal_Int32 >( 250 );
+    maShapeProperties[ PROP_TextLowerDistance ] <<= static_cast< sal_Int32 >( 125 );
+    maShapeProperties[ PROP_CharHeight ] <<= static_cast< float >( 18.0 );
 }
 
 void Shape::setServiceName( const sal_Char* pServiceName )
@@ -304,8 +298,7 @@ Reference< XShape > Shape::createAndInsert(
         uno::Sequence< uno::Sequence< awt::Point > > aPolyPolySequence( 1 );
         aPolyPolySequence.getArray()[ 0 ] = aPointSequence;
 
-        static const OUString sPolyPolygon(RTL_CONSTASCII_USTRINGPARAM("PolyPolygon"));
-        maShapeProperties[ sPolyPolygon ] <<= aPolyPolySequence;
+        maShapeProperties[ PROP_PolyPolygon ] <<= aPolyPolySequence;
     }
     else if ( rServiceName == OUString::createFromAscii( "com.sun.star.drawing.ConnectorShape" ) )
     {
@@ -319,10 +312,8 @@ Reference< XShape > Shape::createAndInsert(
         awt::Point aAWTStartPosition( static_cast< sal_Int32 >( aStartPosition.getX() ), static_cast< sal_Int32 >( aStartPosition.getY() ) );
         awt::Point aAWTEndPosition( static_cast< sal_Int32 >( aEndPosition.getX() ), static_cast< sal_Int32 >( aEndPosition.getY() ) );
 
-        static const OUString sStartPosition(RTL_CONSTASCII_USTRINGPARAM("StartPosition"));
-        maShapeProperties[ sStartPosition ] <<= aAWTStartPosition;
-        static const OUString sEndPosition(RTL_CONSTASCII_USTRINGPARAM("EndPosition"));
-        maShapeProperties[ sEndPosition ] <<= aAWTEndPosition;
+        maShapeProperties[ PROP_StartPosition ] <<= aAWTStartPosition;
+        maShapeProperties[ PROP_EndPosition ] <<= aAWTEndPosition;
     }
     else
     {
@@ -341,8 +332,7 @@ Reference< XShape > Shape::createAndInsert(
         aMatrix.Line3.Column2 = aTransformation.get(2,1);
         aMatrix.Line3.Column3 = aTransformation.get(2,2);
 
-        static const OUString sTransformation(RTL_CONSTASCII_USTRINGPARAM("Transformation"));
-        maShapeProperties[ sTransformation ] <<= aMatrix;
+        maShapeProperties[ PROP_Transformation ] <<= aMatrix;
     }
     Reference< lang::XMultiServiceFactory > xServiceFact( rFilterBase.getModel(), UNO_QUERY_THROW );
     if ( !mxShape.is() )
@@ -401,23 +391,20 @@ Reference< XShape > Shape::createAndInsert(
         // applying properties
         PropertySet aPropSet( xSet );
         if ( rServiceName == OUString::createFromAscii( "com.sun.star.drawing.GraphicObjectShape" ) )
-            mpGraphicPropertiesPtr->pushToPropSet( aPropSet, FillProperties::DEFAULTPICNAMES, rFilterBase, rFilterBase.getModelObjectContainer(), 0, -1 );
+            mpGraphicPropertiesPtr->pushToPropSet( aPropSet, FillProperties::DEFAULT_PICIDS, rFilterBase, rFilterBase.getModelObjectContainer(), 0, -1 );
         if ( mpTablePropertiesPtr.get() && ( rServiceName == OUString::createFromAscii( "com.sun.star.drawing.TableShape" ) ) )
             mpTablePropertiesPtr->pushToPropSet( rFilterBase, xSet, mpMasterTextListStyle );
-        aFillProperties.pushToPropSet( aPropSet, FillProperties::DEFAULTNAMES, rFilterBase, rFilterBase.getModelObjectContainer(), mnRotation, nFillPhClr );
-        aLineProperties.pushToPropSet( aPropSet, LineProperties::DEFAULTNAMES, rFilterBase, rFilterBase.getModelObjectContainer(), nLinePhClr );
+        aFillProperties.pushToPropSet( aPropSet, FillProperties::DEFAULT_IDS, rFilterBase, rFilterBase.getModelObjectContainer(), mnRotation, nFillPhClr );
+        aLineProperties.pushToPropSet( aPropSet, LineProperties::DEFAULT_IDS, rFilterBase, rFilterBase.getModelObjectContainer(), nLinePhClr );
 
         // applying autogrowheight property before setting shape size, because
         // the shape size might be changed if currently autogrowheight is true
         // we must also check that the PropertySet supports the property.
         Reference< XPropertySetInfo > xSetInfo( xSet->getPropertySetInfo() );
-        static const rtl::OUString sTextAutoGrowHeight( RTL_CONSTASCII_USTRINGPARAM( "TextAutoGrowHeight" ) );
-        if( xSetInfo->hasPropertyByName( sTextAutoGrowHeight ) )
-        {
-            const Any* pAutoGrowHeight = aShapeProperties.getPropertyValue( sTextAutoGrowHeight );
-            if ( pAutoGrowHeight )
-                xSet->setPropertyValue( sTextAutoGrowHeight, Any( false ) );
-        }
+        const OUString& rPropName = PropertyMap::getPropertyName( PROP_TextAutoGrowHeight );
+        if( xSetInfo.is() && xSetInfo->hasPropertyByName( rPropName ) )
+            if( /*const Any* pAutoGrowHeight =*/ aShapeProperties.getProperty( PROP_TextAutoGrowHeight ) )
+                xSet->setPropertyValue( rPropName, Any( false ) );
 
         aPropSet.setProperties( aShapeProperties );
 

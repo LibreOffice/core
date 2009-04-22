@@ -45,8 +45,8 @@ namespace xls {
 
 // ============================================================================
 
-/** Cointains OOX data for a single rule in a conditional formatting. */
-struct OoxCondFormatRuleData
+/** Model for a single rule in a conditional formatting. */
+struct CondFormatRuleModel
 {
     typedef ::std::vector< TokensFormulaContext > ContextVector;
 
@@ -65,7 +65,7 @@ struct OoxCondFormatRuleData
     bool                mbAboveAverage;     /// In average rules: True = above average, false = below.
     bool                mbEqualAverage;     /// In average rules: True = include average, false = exclude.
 
-    explicit            OoxCondFormatRuleData();
+    explicit            CondFormatRuleModel();
 
     /** Sets the passed OOBIN or BIFF operator for condition type cellIs. */
     void                setBinOperator( sal_Int32 nOperator );
@@ -100,24 +100,24 @@ public:
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSheetConditionalEntries >& rxEntries );
 
     /** Returns the priority of this rule. */
-    inline sal_Int32    getPriority() const { return maOoxData.mnPriority; }
+    inline sal_Int32    getPriority() const { return maModel.mnPriority; }
 
 private:
     const CondFormat&   mrCondFormat;
-    OoxCondFormatRuleData maOoxData;
+    CondFormatRuleModel maModel;
 };
 
 typedef ::boost::shared_ptr< CondFormatRule > CondFormatRuleRef;
 
 // ============================================================================
 
-/** Cointains OOX data for a conditional formatting. */
-struct OoxCondFormatData
+/** Model for a conditional formatting object. */
+struct CondFormatModel
 {
     ApiCellRangeList    maRanges;           /// Cell ranges for this conditional format.
     bool                mbPivot;            /// Conditional formatting belongs to pivot table.
 
-    explicit            OoxCondFormatData();
+    explicit            CondFormatModel();
 };
 
 // ============================================================================
@@ -145,7 +145,7 @@ public:
     void                finalizeImport();
 
     /** Returns the cell ranges this conditional formatting belongs to. */
-    inline const ApiCellRangeList& getRanges() const { return maOoxData.maRanges; }
+    inline const ApiCellRangeList& getRanges() const { return maModel.maRanges; }
 
 private:
     CondFormatRuleRef   createRule();
@@ -154,7 +154,7 @@ private:
 private:
     typedef RefMap< sal_Int32, CondFormatRule > CondFormatRuleMap;
 
-    OoxCondFormatData   maOoxData;          /// Data of this conditional formatting.
+    CondFormatModel     maModel;            /// Model of this conditional formatting.
     CondFormatRuleMap   maRules;            /// Maps formatting rules by priority.
 };
 

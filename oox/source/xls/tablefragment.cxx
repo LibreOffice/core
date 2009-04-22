@@ -31,6 +31,7 @@
 #include "oox/xls/tablefragment.hxx"
 
 using ::rtl::OUString;
+using ::oox::core::ContextHandlerRef;
 using ::oox::core::RecordInfo;
 
 namespace oox {
@@ -45,40 +46,28 @@ OoxTableFragment::OoxTableFragment( const WorksheetHelper& rHelper, const OUStri
 
 // oox.core.ContextHandler2Helper interface -----------------------------------
 
-ContextWrapper OoxTableFragment::onCreateContext( sal_Int32 nElement, const AttributeList& )
+ContextHandlerRef OoxTableFragment::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
     switch( getCurrentElement() )
     {
         case XML_ROOT_CONTEXT:
-            return  (nElement == XLS_TOKEN( table ));
+            if( nElement == XLS_TOKEN( table ) )
+                mxTable = getTables().importTable( rAttribs, getSheetIndex() );
+        break;
     }
-    return false;
+    return 0;
 }
 
-void OoxTableFragment::onStartElement( const AttributeList& rAttribs )
-{
-    switch( getCurrentElement() )
-    {
-        case XLS_TOKEN( table ):    mxTable = getTables().importTable( rAttribs, getSheetIndex() ); break;
-    }
-}
-
-ContextWrapper OoxTableFragment::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& )
+ContextHandlerRef OoxTableFragment::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm )
 {
     switch( getCurrentElement() )
     {
         case XML_ROOT_CONTEXT:
-            return  (nRecId == OOBIN_ID_TABLE);
+            if( nRecId == OOBIN_ID_TABLE )
+                mxTable = getTables().importTable( rStrm, getSheetIndex() );
+        break;
     }
-    return false;
-}
-
-void OoxTableFragment::onStartRecord( RecordInputStream& rStrm )
-{
-    switch( getCurrentElement() )
-    {
-        case OOBIN_ID_TABLE:    mxTable = getTables().importTable( rStrm, getSheetIndex() );    break;
-    }
+    return 0;
 }
 
 // oox.core.FragmentHandler2 interface ----------------------------------------

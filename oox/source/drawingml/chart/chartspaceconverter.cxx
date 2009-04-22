@@ -33,11 +33,13 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XTitled.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
+#include <com/sun/star/chart/MissingValueTreatment.hpp>
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/drawingml/chart/chartconverter.hxx"
 #include "oox/drawingml/chart/chartspacemodel.hxx"
 #include "oox/drawingml/chart/plotareaconverter.hxx"
 #include "oox/drawingml/chart/titleconverter.hxx"
+#include "properties.hxx"
 
 using ::rtl::OUString;
 using ::com::sun::star::uno::Reference;
@@ -125,6 +127,21 @@ void ChartSpaceConverter::convertFromModel()
     {
         LegendConverter aLegendConv( *this, *mrModel.mxLegend );
         aLegendConv.convertFromModel( getChartDocument()->getFirstDiagram() );
+    }
+
+    // treatment of missing values
+    if( xDiagram.is() )
+    {
+        using namespace ::com::sun::star::chart::MissingValueTreatment;
+        sal_Int32 nMissingValues = LEAVE_GAP;
+        switch( mrModel.mnDispBlanksAs )
+        {
+            case XML_gap:   nMissingValues = LEAVE_GAP; break;
+            case XML_zero:  nMissingValues = USE_ZERO;  break;
+            case XML_span:  nMissingValues = CONTINUE;  break;
+        }
+        PropertySet aDiaProp( xDiagram );
+        aDiaProp.setProperty( PROP_MissingValueTreatment, nMissingValues );
     }
 }
 

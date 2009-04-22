@@ -40,6 +40,7 @@
 #include "oox/helper/propertymap.hxx"
 #include "oox/core/namespaces.hxx"
 #include "pptfilterhelpers.hxx"
+#include "properties.hxx"
 #include "tokens.hxx"
 
 using rtl::OUString;
@@ -85,11 +86,11 @@ namespace oox { namespace ppt {
     {
         try
         {
-            aProps[ CREATE_OUSTRING( "TransitionType" ) ] = Any( mnTransitionType );
-            aProps[ CREATE_OUSTRING( "TransitionSubtype" ) ] = Any( mnTransitionSubType );
-            aProps[ CREATE_OUSTRING( "TransitionDirection" ) ] = Any( mbTransitionDirectionNormal );
-            aProps[ CREATE_OUSTRING( "Speed" ) ] = Any( mnAnimationSpeed );
-            aProps[ CREATE_OUSTRING( "TransitionFadeColor" ) ] = Any( mnFadeColor );
+            aProps[ PROP_TransitionType ] <<= mnTransitionType;
+            aProps[ PROP_TransitionSubtype ] <<= mnTransitionSubType;
+            aProps[ PROP_TransitionDirection ] <<= mbTransitionDirectionNormal;
+            aProps[ PROP_Speed ] <<= mnAnimationSpeed;
+            aProps[ PROP_TransitionFadeColor ] <<= mnFadeColor;
         }
         catch( Exception& )
         {

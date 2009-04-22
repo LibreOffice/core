@@ -38,6 +38,7 @@
 #include "oox/xls/worksheetsettings.hxx"
 
 using ::rtl::OUString;
+using ::oox::core::ContextHandlerRef;
 using ::oox::core::RecordInfo;
 
 namespace oox {
@@ -53,47 +54,46 @@ OoxChartsheetFragment::OoxChartsheetFragment( const WorkbookHelper& rHelper,
 
 // oox.core.ContextHandler2Helper interface -----------------------------------
 
-ContextWrapper OoxChartsheetFragment::onCreateContext( sal_Int32 nElement, const AttributeList& )
+ContextHandlerRef OoxChartsheetFragment::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
     switch( getCurrentElement() )
     {
         case XML_ROOT_CONTEXT:
-            return  (nElement == XLS_TOKEN( chartsheet ));
-        case XLS_TOKEN( chartsheet ):
-            return  (nElement == XLS_TOKEN( sheetPr )) ||
-                    (nElement == XLS_TOKEN( sheetProtection )) ||
-                    (nElement == XLS_TOKEN( sheetViews )) ||
-                    (nElement == XLS_TOKEN( pageMargins )) ||
-                    (nElement == XLS_TOKEN( pageSetup )) ||
-                    (nElement == XLS_TOKEN( headerFooter )) ||
-                    (nElement == XLS_TOKEN( picture )) ||
-                    (nElement == XLS_TOKEN( drawing ));
-        case XLS_TOKEN( sheetViews ):
-            return  (nElement == XLS_TOKEN( sheetView ));
-        case XLS_TOKEN( headerFooter ):
-            return  (nElement == XLS_TOKEN( firstHeader )) ||
-                    (nElement == XLS_TOKEN( firstFooter )) ||
-                    (nElement == XLS_TOKEN( oddHeader )) ||
-                    (nElement == XLS_TOKEN( oddFooter )) ||
-                    (nElement == XLS_TOKEN( evenHeader )) ||
-                    (nElement == XLS_TOKEN( evenFooter ));
-    }
-    return false;
-}
+            if( nElement == XLS_TOKEN( chartsheet ) ) return this;
+        break;
 
-void OoxChartsheetFragment::onStartElement( const AttributeList& rAttribs )
-{
-    switch( getCurrentElement() )
-    {
-        case XLS_TOKEN( sheetPr ):          getWorksheetSettings().importChartSheetPr( rAttribs );              break;
-        case XLS_TOKEN( sheetProtection ):  getWorksheetSettings().importChartProtection( rAttribs );           break;
-        case XLS_TOKEN( sheetView ):        getSheetViewSettings().importChartSheetView( rAttribs );            break;
-        case XLS_TOKEN( pageMargins ):      getPageSettings().importPageMargins( rAttribs );                    break;
-        case XLS_TOKEN( pageSetup ):        getPageSettings().importChartPageSetup( getRelations(), rAttribs ); break;
-        case XLS_TOKEN( headerFooter ):     getPageSettings().importHeaderFooter( rAttribs );                   break;
-        case XLS_TOKEN( picture ):          getPageSettings().importPicture( getRelations(), rAttribs );        break;
-        case XLS_TOKEN( drawing ):          importDrawing( rAttribs );                                          break;
+        case XLS_TOKEN( chartsheet ):
+            switch( nElement )
+            {
+                case XLS_TOKEN( sheetViews ):       return this;
+
+                case XLS_TOKEN( sheetPr ):          getWorksheetSettings().importChartSheetPr( rAttribs );              break;
+                case XLS_TOKEN( sheetProtection ):  getWorksheetSettings().importChartProtection( rAttribs );           break;
+                case XLS_TOKEN( pageMargins ):      getPageSettings().importPageMargins( rAttribs );                    break;
+                case XLS_TOKEN( pageSetup ):        getPageSettings().importChartPageSetup( getRelations(), rAttribs ); break;
+                case XLS_TOKEN( headerFooter ):     getPageSettings().importHeaderFooter( rAttribs );                   return this;
+                case XLS_TOKEN( picture ):          getPageSettings().importPicture( getRelations(), rAttribs );        break;
+                case XLS_TOKEN( drawing ):          importDrawing( rAttribs );                                          break;
+            }
+        break;
+
+        case XLS_TOKEN( sheetViews ):
+            if( nElement == XLS_TOKEN( sheetView ) ) getSheetViewSettings().importChartSheetView( rAttribs );
+        break;
+
+        case XLS_TOKEN( headerFooter ):
+            switch( nElement )
+            {
+                case XLS_TOKEN( firstHeader ):
+                case XLS_TOKEN( firstFooter ):
+                case XLS_TOKEN( oddHeader ):
+                case XLS_TOKEN( oddFooter ):
+                case XLS_TOKEN( evenHeader ):
+                case XLS_TOKEN( evenFooter ):       return this;    // collect contents in onEndElement()
+            }
+        break;
     }
+    return 0;
 }
 
 void OoxChartsheetFragment::onEndElement( const OUString& rChars )
@@ -111,40 +111,34 @@ void OoxChartsheetFragment::onEndElement( const OUString& rChars )
     }
 }
 
-ContextWrapper OoxChartsheetFragment::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& )
+ContextHandlerRef OoxChartsheetFragment::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm )
 {
     switch( getCurrentElement() )
     {
         case XML_ROOT_CONTEXT:
-            return  (nRecId == OOBIN_ID_WORKSHEET);
-        case OOBIN_ID_WORKSHEET:
-            return  (nRecId == OOBIN_ID_CHARTSHEETPR) ||
-                    (nRecId == OOBIN_ID_CHARTPROTECTION) ||
-                    (nRecId == OOBIN_ID_CHARTSHEETVIEWS) ||
-                    (nRecId == OOBIN_ID_PAGEMARGINS) ||
-                    (nRecId == OOBIN_ID_CHARTPAGESETUP) ||
-                    (nRecId == OOBIN_ID_HEADERFOOTER) ||
-                    (nRecId == OOBIN_ID_PICTURE) ||
-                    (nRecId == OOBIN_ID_DRAWING);
-        case OOBIN_ID_CHARTSHEETVIEWS:
-            return  (nRecId == OOBIN_ID_CHARTSHEETVIEW);
-    }
-    return false;
-}
+            if( nRecId == OOBIN_ID_WORKSHEET ) return this;
+        break;
 
-void OoxChartsheetFragment::onStartRecord( RecordInputStream& rStrm )
-{
-    switch( getCurrentElement() )
-    {
-        case OOBIN_ID_CHARTSHEETPR:     getWorksheetSettings().importChartSheetPr( rStrm );                 break;
-        case OOBIN_ID_CHARTPROTECTION:  getWorksheetSettings().importChartProtection( rStrm );              break;
-        case OOBIN_ID_CHARTSHEETVIEW:   getSheetViewSettings().importChartSheetView( rStrm );               break;
-        case OOBIN_ID_PAGEMARGINS:      getPageSettings().importPageMargins( rStrm );                       break;
-        case OOBIN_ID_CHARTPAGESETUP:   getPageSettings().importChartPageSetup( getRelations(), rStrm );    break;
-        case OOBIN_ID_HEADERFOOTER:     getPageSettings().importHeaderFooter( rStrm );                      break;
-        case OOBIN_ID_PICTURE:          getPageSettings().importPicture( getRelations(), rStrm );           break;
-        case OOBIN_ID_DRAWING:          importDrawing( rStrm );                                             break;
+        case OOBIN_ID_WORKSHEET:
+            switch( nRecId )
+            {
+                case OOBIN_ID_CHARTSHEETVIEWS:  return this;
+
+                case OOBIN_ID_CHARTSHEETPR:     getWorksheetSettings().importChartSheetPr( rStrm );                 break;
+                case OOBIN_ID_CHARTPROTECTION:  getWorksheetSettings().importChartProtection( rStrm );              break;
+                case OOBIN_ID_PAGEMARGINS:      getPageSettings().importPageMargins( rStrm );                       break;
+                case OOBIN_ID_CHARTPAGESETUP:   getPageSettings().importChartPageSetup( getRelations(), rStrm );    break;
+                case OOBIN_ID_HEADERFOOTER:     getPageSettings().importHeaderFooter( rStrm );                      break;
+                case OOBIN_ID_PICTURE:          getPageSettings().importPicture( getRelations(), rStrm );           break;
+                case OOBIN_ID_DRAWING:          importDrawing( rStrm );                                             break;
+            }
+        break;
+
+        case OOBIN_ID_CHARTSHEETVIEWS:
+            if( nRecId == OOBIN_ID_CHARTSHEETVIEW ) getSheetViewSettings().importChartSheetView( rStrm );
+        break;
     }
+    return 0;
 }
 
 // oox.core.FragmentHandler2 interface ----------------------------------------

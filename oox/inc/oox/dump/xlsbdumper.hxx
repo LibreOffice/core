@@ -37,8 +37,8 @@
 #if OOX_INCLUDE_DUMPER
 
 namespace oox { namespace xls {
-    class BinFontPortionList;
-    class BinPhoneticPortionList;
+    class FontPortionModelList;
+    class PhoneticPortionModelList;
     struct FunctionInfo;
     class FunctionProvider;
 } }
@@ -74,8 +74,8 @@ protected:
     void                writeBooleanItem( const String& rName, sal_uInt8 nBool );
     void                writeErrorCodeItem( const String& rName, sal_uInt8 nErrCode );
 
-    void                writeFontPortions( const ::oox::xls::BinFontPortionList& rPortions );
-    void                writePhoneticPortions( const ::oox::xls::BinPhoneticPortionList& rPhonetics );
+    void                writeFontPortions( const ::oox::xls::FontPortionModelList& rPortions );
+    void                writePhoneticPortions( const ::oox::xls::PhoneticPortionModelList& rPhonetics );
 
     // ------------------------------------------------------------------------
 
@@ -83,6 +83,7 @@ protected:
     sal_uInt8           dumpErrorCode( const String& rName = EMPTY_STRING );
     ::rtl::OUString     dumpString( const String& rName = EMPTY_STRING, bool bRich = false, bool b32BitLen = true );
     void                dumpColor( const String& rName = EMPTY_STRING );
+    ::com::sun::star::util::DateTime dumpPivotDateTime( const String& rName = EMPTY_STRING );
 
     sal_Int32           dumpColIndex( const String& rName = EMPTY_STRING );
     sal_Int32           dumpRowIndex( const String& rName = EMPTY_STRING );

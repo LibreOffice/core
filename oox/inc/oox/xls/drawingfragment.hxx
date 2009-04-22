@@ -41,88 +41,105 @@ namespace xls {
 
 // ============================================================================
 
-struct OoxAnchorPosition
+/** Absolute position in spreadsheet (in EMUs) independent from cells. */
+struct AnchorPosModel
 {
-    sal_Int64           mnX;
-    sal_Int64           mnY;
+    sal_Int64           mnX;                /// Absolute X coordinate (EMUs).
+    sal_Int64           mnY;                /// Absolute Y coordinate (EMUs).
 
-    explicit            OoxAnchorPosition();
+    explicit            AnchorPosModel();
     inline bool         isValid() const { return (mnX >= 0) && (mnY >= 0); }
 };
 
 // ----------------------------------------------------------------------------
 
-struct OoxAnchorSize
+/** Absolute size in spreadsheet (in EMUs). */
+struct AnchorSizeModel
 {
-    sal_Int64           mnWidth;
-    sal_Int64           mnHeight;
+    sal_Int64           mnWidth;            /// Total width (EMUs).
+    sal_Int64           mnHeight;           /// Total height (EMUs).
 
-    explicit            OoxAnchorSize();
+    explicit            AnchorSizeModel();
     inline bool         isValid() const { return (mnWidth >= 0) && (mnHeight >= 0); }
 };
 
 // ----------------------------------------------------------------------------
 
-struct OoxAnchorCell
+/** Position in spreadsheet (cell position and offset inside cell in EMUs). */
+struct AnchorCellModel
 {
-    sal_Int32           mnCol;
-    sal_Int32           mnRow;
-    sal_Int64           mnColOffset;
-    sal_Int64           mnRowOffset;
+    sal_Int32           mnCol;              /// Column index.
+    sal_Int32           mnRow;              /// Row index.
+    sal_Int64           mnColOffset;        /// X offset in column mnCol (EMUs).
+    sal_Int64           mnRowOffset;        /// Y offset in row mnRow (EMUs).
 
-    explicit            OoxAnchorCell();
+    explicit            AnchorCellModel();
     inline bool         isValid() const { return (mnCol >= 0) && (mnRow >= 0); }
 };
 
 // ----------------------------------------------------------------------------
 
-struct OoxAnchorClientData
+/** Application-specific client data of a shape. */
+struct AnchorClientDataModel
 {
     bool                mbLocksWithSheet;
     bool                mbPrintsWithSheet;
 
-    explicit            OoxAnchorClientData();
+    explicit            AnchorClientDataModel();
 };
 
 // ============================================================================
 
+/** Contains the position of a shape in the spreadsheet. Supports different
+    shape anchor modes (absolute, one-cell, two-cell). */
 class ShapeAnchor : public WorksheetHelper
 {
 public:
     explicit            ShapeAnchor( const WorksheetHelper& rHelper );
 
-    void                importAbsoluteAnchor( const AttributeList& rAttribs );
-    void                importOneCellAnchor( const AttributeList& rAttribs );
-    void                importTwoCellAnchor( const AttributeList& rAttribs );
+    /** Imports the shape anchor (one of the elements xdr:absoluteAnchor, xdr:oneCellAnchor, xdr:twoCellAnchor). */
+    void                importAnchor( sal_Int32 nElement, const AttributeList& rAttribs );
+    /** Imports the absolute anchor position from the xdr:pos element. */
     void                importPos( const AttributeList& rAttribs );
+    /** Imports the absolute anchor size from the xdr:ext element. */
     void                importExt( const AttributeList& rAttribs );
+    /** Imports the shape client data from the xdr:clientData element. */
     void                importClientData( const AttributeList& rAttribs );
+    /** Sets an attribute of the cell-dependent anchor position from xdr:from and xdr:to elements. */
     void                setCellPos( sal_Int32 nElement, sal_Int32 nParentContext, const ::rtl::OUString& rValue );
 
+    /** Returns true, if the anchor contains valid position and size settings. */
+    bool                isValidAnchor() const;
+
+#if 0 // unused code
+    /** Calculates the resulting shape anchor in 1/100 mm. */
     ::com::sun::star::awt::Rectangle
                         calcApiLocation(
                             const ::com::sun::star::awt::Size& rApiSheetSize,
-                            const OoxAnchorSize& rEmuSheetSize ) const;
+                            const AnchorSizeModel& rEmuSheetSize ) const;
+#endif
 
+    /** Calculates the resulting shape anchor in EMUs. */
     ::com::sun::star::awt::Rectangle
-                        calcEmuLocation( const OoxAnchorSize& rEmuSheetSize ) const;
+                        calcEmuLocation( const AnchorSizeModel& rEmuSheetSize ) const;
 
 private:
     enum AnchorType { ANCHOR_ABSOLUTE, ANCHOR_ONECELL, ANCHOR_TWOCELL, ANCHOR_INVALID };
 
-    AnchorType          meType;
-    OoxAnchorPosition   maPos;
-    OoxAnchorSize       maSize;
-    OoxAnchorCell       maFrom;
-    OoxAnchorCell       maTo;
-    OoxAnchorClientData maClientData;
-    sal_Int32           mnEditAs;
+    AnchorType          meType;             /// Type of this shape anchor.
+    AnchorPosModel      maPos;              /// Top-left position, if anchor is of type absolute.
+    AnchorSizeModel     maSize;             /// Anchor size, if anchor is not of type two-cell.
+    AnchorCellModel     maFrom;             /// Top-left position, if anchor is not of type absolute.
+    AnchorCellModel     maTo;               /// Bottom-right position, if anchor is of type two-cell.
+    AnchorClientDataModel maClientData;     /// Shape client data.
+    sal_Int32           mnEditAs;           /// Anchor mode as shown in the UI.
 };
 
 typedef ::boost::shared_ptr< ShapeAnchor > ShapeAnchorRef;
 
 // ============================================================================
 
+/** Fragment handler for a complete sheet drawing. */
 class OoxDrawingFragment : public OoxWorksheetFragmentBase
 {
 public:
@@ -133,15 +150,14 @@ public:
 protected:
     // oox.core.ContextHandler2Helper interface -------------------------------
 
-    virtual ContextWrapper onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
-    virtual void        onStartElement( const AttributeList& rAttribs );
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
     virtual void        onEndElement( const ::rtl::OUString& rChars );
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >
                         mxDrawPage;             /// Drawing page of this sheet.
     ::com::sun::star::awt::Size maApiSheetSize; /// Sheet size in 1/100 mm.
-    OoxAnchorSize       maEmuSheetSize;         /// Sheet size in EMU.
+    AnchorSizeModel     maEmuSheetSize;         /// Sheet size in EMU.
     ::oox::drawingml::ShapePtr mxShape;         /// Current top-level shape.
     ShapeAnchorRef      mxAnchor;               /// Current anchor of top-level shape.
 };

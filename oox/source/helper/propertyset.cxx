@@ -55,30 +55,16 @@ void PropertySet::set( const Reference< XPropertySet >& rxPropSet )
 
 // Get properties -------------------------------------------------------------
 
-bool PropertySet::getAnyProperty( Any& orValue, const OUString& rPropName ) const
+bool PropertySet::getAnyProperty( Any& orValue, sal_Int32 nPropId ) const
 {
-    bool bHasValue = false;
-    try
-    {
-        if( mxPropSet.is() )
-        {
-            orValue = mxPropSet->getPropertyValue( rPropName );
-            bHasValue = true;
-        }
-    }
-    catch( Exception& )
-    {
-        OSL_ENSURE( false, OStringBuffer( "PropertySet::getAnyProperty - cannot get property \"" ).
-            append( OUStringToOString( rPropName, RTL_TEXTENCODING_ASCII_US ) ).append( '"' ).getStr() );
-    }
-    return bHasValue;
+    return getAnyProperty( orValue, PropertyMap::getPropertyName( nPropId ) );
 }
 
-bool PropertySet::getBoolProperty( const OUString& rPropName ) const
+bool PropertySet::getBoolProperty( sal_Int32 nPropId ) const
 {
     Any aAny;
     bool bValue = false;
-    return getAnyProperty( aAny, rPropName ) && (aAny >>= bValue) && bValue;
+    return getAnyProperty( aAny, nPropId ) && (aAny >>= bValue) && bValue;
 }
 
 void PropertySet::getProperties( Sequence< Any >& orValues, const Sequence< OUString >& rPropNames ) const
@@ -108,18 +94,9 @@ void PropertySet::getProperties( Sequence< Any >& orValues, const Sequence< OUSt
 
 // Set properties -------------------------------------------------------------
 
-void PropertySet::setAnyProperty( const OUString& rPropName, const Any& rValue )
+void PropertySet::setAnyProperty( sal_Int32 nPropId, const Any& rValue )
 {
-    try
-    {
-        if( mxPropSet.is() )
-            mxPropSet->setPropertyValue( rPropName, rValue );
-    }
-    catch( Exception& )
-    {
-        OSL_ENSURE( false, OStringBuffer( "PropertySet::setAnyProperty - cannot set property \"" ).
-            append( OUStringToOString( rPropName, RTL_TEXTENCODING_ASCII_US ) ).append( '"' ).getStr() );
-    }
+    setAnyProperty( PropertyMap::getPropertyName( nPropId ), rValue );
 }
 
 void PropertySet::setProperties( const Sequence< OUString >& rPropNames, const Sequence< Any >& rValues )
@@ -154,8 +131,43 @@ void PropertySet::setProperties( const PropertyMap& rPropertyMap )
     {
         Sequence< OUString > aPropNames;
         Sequence< Any > aValues;
-        rPropertyMap.makeSequence( aPropNames, aValues );
+        rPropertyMap.fillSequences( aPropNames, aValues );
         setProperties( aPropNames, aValues );
+    }
+}
+
+// private --------------------------------------------------------------------
+
+bool PropertySet::getAnyProperty( Any& orValue, const OUString& rPropName ) const
+{
+    bool bHasValue = false;
+    try
+    {
+        if( mxPropSet.is() )
+        {
+            orValue = mxPropSet->getPropertyValue( rPropName );
+            bHasValue = true;
+        }
+    }
+    catch( Exception& )
+    {
+        OSL_ENSURE( false, OStringBuffer( "PropertySet::getAnyProperty - cannot get property \"" ).
+            append( OUStringToOString( rPropName, RTL_TEXTENCODING_ASCII_US ) ).append( '"' ).getStr() );
+    }
+    return bHasValue;
+}
+
+void PropertySet::setAnyProperty( const OUString& rPropName, const Any& rValue )
+{
+    try
+    {
+        if( mxPropSet.is() )
+            mxPropSet->setPropertyValue( rPropName, rValue );
+    }
+    catch( Exception& )
+    {
+        OSL_ENSURE( false, OStringBuffer( "PropertySet::setAnyProperty - cannot set property \"" ).
+            append( OUStringToOString( rPropName, RTL_TEXTENCODING_ASCII_US ) ).append( '"' ).getStr() );
     }
 }
 

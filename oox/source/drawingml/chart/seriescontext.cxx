@@ -38,7 +38,7 @@
 using ::rtl::OUString;
 using ::oox::core::ContextHandler2;
 using ::oox::core::ContextHandler2Helper;
-using ::oox::core::ContextWrapper;
+using ::oox::core::ContextHandlerRef;
 
 namespace oox {
 namespace drawingml {
@@ -48,7 +48,7 @@ namespace chart {
 
 namespace {
 
-ContextWrapper lclDataLabelSharedCreateContext(
+ContextHandlerRef lclDataLabelSharedCreateContext(
         ContextHandler2& rContext, sal_Int32 nElement, const AttributeList& rAttribs, DataLabelModelBase& orModel )
 {
     if( rContext.isRootElement() ) switch( nElement )
@@ -56,40 +56,40 @@ ContextWrapper lclDataLabelSharedCreateContext(
         case C_TOKEN( delete ):
             // default is 'false', not 'true' as specified
             orModel.mbDeleted = rAttribs.getBool( XML_val, false );
-            return false;
+            return 0;
         case C_TOKEN( dLblPos ):
             orModel.monLabelPos = rAttribs.getToken( XML_val, XML_TOKEN_INVALID );
-            return false;
+            return 0;
         case C_TOKEN( numFmt ):
             orModel.maNumberFormat.setAttributes( rAttribs );
-            return false;
+            return 0;
         case C_TOKEN( showBubbleSize ):
             orModel.mobShowBubbleSize = rAttribs.getBool( XML_val );
-            return false;
+            return 0;
         case C_TOKEN( showCatName ):
             orModel.mobShowCatName = rAttribs.getBool( XML_val );
-            return false;
+            return 0;
         case C_TOKEN( showLegendKey ):
             orModel.mobShowLegendKey = rAttribs.getBool( XML_val );
-            return false;
+            return 0;
         case C_TOKEN( showPercent ):
             orModel.mobShowPercent = rAttribs.getBool( XML_val );
-            return false;
+            return 0;
         case C_TOKEN( showSerName ):
             orModel.mobShowSerName = rAttribs.getBool( XML_val );
-            return false;
+            return 0;
         case C_TOKEN( showVal ):
             orModel.mobShowVal = rAttribs.getBool( XML_val );
-            return false;
+            return 0;
         case C_TOKEN( separator ):
             // collect separator text in onEndElement()
-            return true;
+            return &rContext;
         case C_TOKEN( spPr ):
             return new ShapePropertiesContext( rContext, orModel.mxShapeProp.create() );
         case C_TOKEN( txPr ):
             return new TextBodyContext( rContext, orModel.mxTextProp.create() );
     }
-    return false;
+    return 0;
 }
 
 void lclDataLabelSharedEndElement( ContextHandler2& rContext, const OUString& rChars, DataLabelModelBase& orModel )
@@ -115,13 +115,13 @@ DataLabelContext::~DataLabelContext()
 {
 }
 
-ContextWrapper DataLabelContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+ContextHandlerRef DataLabelContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
     if( isRootElement() ) switch( nElement )
     {
         case C_TOKEN( idx ):
             mrModel.mnIndex = rAttribs.getInteger( XML_val, -1 );
-            return false;
+            return 0;
         case C_TOKEN( layout ):
             return new LayoutContext( *this, mrModel.mxLayout.create() );
         case C_TOKEN( tx ):
@@ -146,7 +146,7 @@ DataLabelsContext::~DataLabelsContext()
 {
 }
 
-ContextWrapper DataLabelsContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+ContextHandlerRef DataLabelsContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
     if( isRootElement() ) switch( nElement )
     {
@@ -157,7 +157,7 @@ ContextWrapper DataLabelsContext::onCreateContext( sal_Int32 nElement, const Att
         case C_TOKEN( showLeaderLines ):
             // default is 'false', not 'true' as specified
             mrModel.mbShowLeaderLines = rAttribs.getBool( XML_val, false );
-            return false;
+            return 0;
     }
     return lclDataLabelSharedCreateContext( *this, nElement, rAttribs, mrModel );
 }
@@ -178,34 +178,34 @@ ErrorBarContext::~ErrorBarContext()
 {
 }
 
-ContextWrapper ErrorBarContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+ContextHandlerRef ErrorBarContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
     if( isRootElement() ) switch( nElement )
     {
         case C_TOKEN( errBarType ):
             mrModel.mnTypeId = rAttribs.getToken( XML_val, XML_both );
-            return false;
+            return 0;
         case C_TOKEN( errDir ):
             mrModel.mnDirection = rAttribs.getToken( XML_val, XML_TOKEN_INVALID );
-            return false;
+            return 0;
         case C_TOKEN( errValType ):
             mrModel.mnValueType = rAttribs.getToken( XML_val, XML_fixedVal );
-            return false;
+            return 0;
         case C_TOKEN( minus ):
             return new DataSourceContext( *this, mrModel.maSources.create( ErrorBarModel::MINUS ) );
         case C_TOKEN( noEndCap ):
             // default is 'false', not 'true' as specified
             mrModel.mbNoEndCap = rAttribs.getBool( XML_val, false );
-            return false;
+            return 0;
         case C_TOKEN( plus ):
             return new DataSourceContext( *this, mrModel.maSources.create( ErrorBarModel::PLUS ) );
         case C_TOKEN( spPr ):
             return new ShapePropertiesContext( *this, mrModel.mxShapeProp.create() );
         case C_TOKEN( val ):
             mrModel.mfValue = rAttribs.getDouble( XML_val, 0.0 );
-            return false;
+            return 0;
     }
-    return false;
+    return 0;
 }
 
 // ============================================================================
@@ -219,7 +219,7 @@ TrendlineLabelContext::~TrendlineLabelContext()
 {
 }
 
-ContextWrapper TrendlineLabelContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+ContextHandlerRef TrendlineLabelContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
     if( isRootElement() ) switch( nElement )
     {
@@ -227,7 +227,7 @@ ContextWrapper TrendlineLabelContext::onCreateContext( sal_Int32 nElement, const
             return new LayoutContext( *this, mrModel.mxLayout.create() );
         case C_TOKEN( numFmt ):
             mrModel.maNumberFormat.setAttributes( rAttribs );
-            return false;
+            return 0;
         case C_TOKEN( spPr ):
             return new ShapePropertiesContext( *this, mrModel.mxShapeProp.create() );
         case C_TOKEN( tx ):
@@ -235,7 +235,7 @@ ContextWrapper TrendlineLabelContext::onCreateContext( sal_Int32 nElement, const
         case C_TOKEN( txPr ):
             return new TextBodyContext( *this, mrModel.mxTextProp.create() );
     }
-    return false;
+    return 0;
 }
 
 // ============================================================================
@@ -249,44 +249,44 @@ TrendlineContext::~TrendlineContext()
 {
 }
 
-ContextWrapper TrendlineContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+ContextHandlerRef TrendlineContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
     if( isRootElement() ) switch( nElement )
     {
         case C_TOKEN( backward ):
             mrModel.mfBackward = rAttribs.getDouble( XML_val, 0.0 );
-            return false;
+            return 0;
         case C_TOKEN( dispEq ):
             // default is 'false', not 'true' as specified
             mrModel.mbDispEquation = rAttribs.getBool( XML_val, false );
-            return false;
+            return 0;
         case C_TOKEN( dispRSqr ):
             // default is 'false', not 'true' as specified
             mrModel.mbDispRSquared = rAttribs.getBool( XML_val, false );
-            return false;
+            return 0;
         case C_TOKEN( forward ):
             mrModel.mfForward = rAttribs.getDouble( XML_val, 0.0 );
-            return false;
+            return 0;
         case C_TOKEN( intercept ):
             mrModel.mfIntercept = rAttribs.getDouble( XML_val, 0.0 );
-            return false;
+            return 0;
         case C_TOKEN( name ):
-            return true;
+            return this;    // collect name in onEndElement()
         case C_TOKEN( order ):
             mrModel.mnOrder = rAttribs.getInteger( XML_val, 2 );
-            return false;
+            return 0;
         case C_TOKEN( period ):
             mrModel.mnPeriod = rAttribs.getInteger( XML_val, 2 );
-            return false;
+            return 0;
         case C_TOKEN( spPr ):
             return new ShapePropertiesContext( *this, mrModel.mxShapeProp.create() );
         case C_TOKEN( trendlineLbl ):
             return new TrendlineLabelContext( *this, mrModel.mxLabel.create() );
         case C_TOKEN( trendlineType ):
             mrModel.mnTypeId = rAttribs.getToken( XML_val, XML_linear );
-            return false;
+            return 0;
     }
-    return false;
+    return 0;
 }
 
 void TrendlineContext::onEndElement( const ::rtl::OUString& rChars )
@@ -310,7 +310,7 @@ DataPointContext::~DataPointContext()
 {
 }
 
-ContextWrapper DataPointContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+ContextHandlerRef DataPointContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
     switch( getCurrentElement() )
     {
@@ -319,20 +319,20 @@ ContextWrapper DataPointContext::onCreateContext( sal_Int32 nElement, const Attr
             {
                 case C_TOKEN( bubble3D ):
                     mrModel.mobBubble3d = rAttribs.getBool( XML_val );
-                    return false;
+                    return 0;
                 case C_TOKEN( explosion ):
                     // if the 'val' attribute is missing, series explosion remains unchanged
                     mrModel.monExplosion = rAttribs.getInteger( XML_val );
-                    return false;
+                    return 0;
                 case C_TOKEN( idx ):
                     mrModel.mnIndex = rAttribs.getInteger( XML_val, -1 );
-                    return false;
+                    return 0;
                 case C_TOKEN( invertIfNegative ):
                     // default is 'false', not 'true' as specified (value not derived from series!)
                     mrModel.mbInvertNeg = rAttribs.getBool( XML_val, false );
-                    return false;
+                    return 0;
                 case C_TOKEN( marker ):
-                    return true;
+                    return this;
                 case C_TOKEN( spPr ):
                     return new ShapePropertiesContext( *this, mrModel.mxShapeProp.create() );
             }
@@ -343,16 +343,16 @@ ContextWrapper DataPointContext::onCreateContext( sal_Int32 nElement, const Attr
             {
                 case C_TOKEN( size ):
                     mrModel.monMarkerSize = rAttribs.getInteger( XML_val, 5 );
-                    return false;
+                    return 0;
                 case C_TOKEN( spPr ):
                     return new ShapePropertiesContext( *this, mrModel.mxMarkerProp.create() );
                 case C_TOKEN( symbol ):
                     mrModel.monMarkerSymbol = rAttribs.getToken( XML_val, XML_none );
-                    return false;
+                    return 0;
             }
         break;
     }
-    return false;
+    return 0;
 }
 
 // ============================================================================
@@ -366,7 +366,7 @@ SeriesContextBase::~SeriesContextBase()
 {
 }
 
-ContextWrapper SeriesContextBase::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+ContextHandlerRef SeriesContextBase::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
     switch( getCurrentElement() )
     {
@@ -375,10 +375,10 @@ ContextWrapper SeriesContextBase::onCreateContext( sal_Int32 nElement, const Att
             {
                 case C_TOKEN( idx ):
                     mrModel.mnIndex = rAttribs.getInteger( XML_val, -1 );
-                    return false;
+                    return 0;
                 case C_TOKEN( order ):
                     mrModel.mnOrder = rAttribs.getInteger( XML_val, -1 );
-                    return false;
+                    return 0;
                 case C_TOKEN( spPr ):
                     return new ShapePropertiesContext( *this, mrModel.mxShapeProp.create() );
                 case C_TOKEN( tx ):
@@ -391,16 +391,16 @@ ContextWrapper SeriesContextBase::onCreateContext( sal_Int32 nElement, const Att
             {
                 case C_TOKEN( size ):
                     mrModel.mnMarkerSize = rAttribs.getInteger( XML_val, 5 );
-                    return false;
+                    return 0;
                 case C_TOKEN( spPr ):
                     return new ShapePropertiesContext( *this, mrModel.mxMarkerProp.create() );
                 case C_TOKEN( symbol ):
                     mrModel.mnMarkerSymbol = rAttribs.getToken( XML_val, XML_none );
-                    return false;
+                    return 0;
             }
         break;
     }
-    return false;
+    return 0;
 }
 
 // ============================================================================
@@ -414,7 +414,7 @@ AreaSeriesContext::~AreaSeriesContext()
 {
 }
 
-ContextWrapper AreaSeriesContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+ContextHandlerRef AreaSeriesContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
     switch( getCurrentElement() )
     {
@@ -450,7 +450,7 @@ BarSeriesContext::~BarSeriesContext()
 {
 }
 
-ContextWrapper BarSeriesContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+ContextHandlerRef BarSeriesContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
     switch( getCurrentElement() )
     {
@@ -468,11 +468,11 @@ ContextWrapper BarSeriesContext::onCreateContext( sal_Int32 nElement, const Attr
                 case C_TOKEN( invertIfNegative ):
                     // default is 'false', not 'true' as specified
                     mrModel.mbInvertNeg = rAttribs.getBool( XML_val, false );
-                    return false;
+                    return 0;
                 case C_TOKEN( shape ):
                     // missing attribute does not change shape type to 'box' as specified
                     mrModel.monShape = rAttribs.getToken( XML_val );
-                    return false;
+                    return 0;
                 case C_TOKEN( trendline ):
                     return new TrendlineContext( *this, mrModel.maTrendlines.create() );
                 case C_TOKEN( val ):
@@ -494,7 +494,7 @@ BubbleSeriesContext::~BubbleSeriesContext()
 {
 }
 
-ContextWrapper BubbleSeriesContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+ContextHandlerRef BubbleSeriesContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
     switch( getCurrentElement() )
     {
@@ -504,7 +504,7 @@ ContextWrapper BubbleSeriesContext::onCreateContext( sal_Int32 nElement, const A
                 case C_TOKEN( bubble3D ):
                     // default is 'false', not 'true' as specified
                     mrModel.mbBubble3d = rAttribs.getBool( XML_val, false );
-                    return false;
+                    return 0;
                 case C_TOKEN( bubbleSize ):
                     return new DataSourceContext( *this, mrModel.maSources.create( SeriesModel::POINTS ) );
                 case C_TOKEN( dLbls ):
@@ -516,7 +516,7 @@ ContextWrapper BubbleSeriesContext::onCreateContext( sal_Int32 nElement, const A
                 case C_TOKEN( invertIfNegative ):
                     // default is 'false', not 'true' as specified
                     mrModel.mbInvertNeg = rAttribs.getBool( XML_val, false );
-                    return false;
+                    return 0;
                 case C_TOKEN( trendline ):
                     return new TrendlineContext( *this, mrModel.maTrendlines.create() );
                 case C_TOKEN( xVal ):
@@ -540,7 +540,7 @@ LineSeriesContext::~LineSeriesContext()
 {
 }
 
-ContextWrapper LineSeriesContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+ContextHandlerRef LineSeriesContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
     switch( getCurrentElement() )
     {
@@ -556,11 +556,11 @@ ContextWrapper LineSeriesContext::onCreateContext( sal_Int32 nElement, const Att
                 case C_TOKEN( errBars ):
                     return new ErrorBarContext( *this, mrModel.maErrorBars.create() );
                 case C_TOKEN( marker ):
-                    return true;
+                    return this;
                 case C_TOKEN( smooth ):
                     // default is 'false', not 'true' as specified
                     mrModel.mbSmooth = rAttribs.getBool( XML_val, false );
-                    return false;
+                    return 0;
                 case C_TOKEN( trendline ):
                     return new TrendlineContext( *this, mrModel.maTrendlines.create() );
                 case C_TOKEN( val ):
@@ -582,7 +582,7 @@ PieSeriesContext::~PieSeriesContext()
 {
 }
 
-ContextWrapper PieSeriesContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+ContextHandlerRef PieSeriesContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
     switch( getCurrentElement() )
     {
@@ -597,7 +597,7 @@ ContextWrapper PieSeriesContext::onCreateContext( sal_Int32 nElement, const Attr
                     return new DataPointContext( *this, mrModel.maPoints.create() );
                 case C_TOKEN( explosion ):
                     mrModel.mnExplosion = rAttribs.getInteger( XML_val, 0 );
-                    return false;
+                    return 0;
                 case C_TOKEN( val ):
                     return new DataSourceContext( *this, mrModel.maSources.create( SeriesModel::VALUES ) );
             }
@@ -617,7 +617,7 @@ RadarSeriesContext::~RadarSeriesContext()
 {
 }
 
-ContextWrapper RadarSeriesContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+ContextHandlerRef RadarSeriesContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
     switch( getCurrentElement() )
     {
@@ -631,11 +631,11 @@ ContextWrapper RadarSeriesContext::onCreateContext( sal_Int32 nElement, const At
                 case C_TOKEN( dPt ):
                     return new DataPointContext( *this, mrModel.maPoints.create() );
                 case C_TOKEN( marker ):
-                    return true;
+                    return this;
                 case C_TOKEN( smooth ):
                     // default is 'false', not 'true' as specified
                     mrModel.mbSmooth = rAttribs.getBool( XML_val, false );
-                    return false;
+                    return 0;
                 case C_TOKEN( val ):
                     return new DataSourceContext( *this, mrModel.maSources.create( SeriesModel::VALUES ) );
             }
@@ -655,7 +655,7 @@ ScatterSeriesContext::~ScatterSeriesContext()
 {
 }
 
-ContextWrapper ScatterSeriesContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+ContextHandlerRef ScatterSeriesContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
     switch( getCurrentElement() )
     {
@@ -669,11 +669,11 @@ ContextWrapper ScatterSeriesContext::onCreateContext( sal_Int32 nElement, const 
                 case C_TOKEN( errBars ):
                     return new ErrorBarContext( *this, mrModel.maErrorBars.create() );
                 case C_TOKEN( marker ):
-                    return true;
+                    return this;
                 case C_TOKEN( smooth ):
                     // default is 'false', not 'true' as specified
                     mrModel.mbSmooth = rAttribs.getBool( XML_val, false );
-                    return false;
+                    return 0;
                 case C_TOKEN( trendline ):
                     return new TrendlineContext( *this, mrModel.maTrendlines.create() );
                 case C_TOKEN( xVal ):
@@ -697,7 +697,7 @@ SurfaceSeriesContext::~SurfaceSeriesContext()
 {
 }
 
-ContextWrapper SurfaceSeriesContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+ContextHandlerRef SurfaceSeriesContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
     switch( getCurrentElement() )
     {

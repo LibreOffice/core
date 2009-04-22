@@ -112,9 +112,9 @@ void FragmentHandler2::endRecord( sal_Int32 nRecId )
 
 // oox.core.ContextHandler2Helper interface -----------------------------------
 
-ContextWrapper FragmentHandler2::onCreateContext( sal_Int32, const AttributeList& )
+ContextHandlerRef FragmentHandler2::onCreateContext( sal_Int32, const AttributeList& )
 {
-    return false;
+    return 0;
 }
 
 void FragmentHandler2::onStartElement( const AttributeList& )
@@ -125,9 +125,9 @@ void FragmentHandler2::onEndElement( const OUString& )
 {
 }
 
-ContextWrapper FragmentHandler2::onCreateRecordContext( sal_Int32, RecordInputStream& )
+ContextHandlerRef FragmentHandler2::onCreateRecordContext( sal_Int32, RecordInputStream& )
 {
-    return false;
+    return 0;
 }
 
 void FragmentHandler2::onStartRecord( RecordInputStream& )

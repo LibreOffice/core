@@ -32,7 +32,7 @@
 #include "oox/xls/webquerybuffer.hxx"
 
 using ::rtl::OUString;
-using ::com::sun::star::uno::Reference;
+using ::oox::core::ContextHandlerRef;
 
 namespace oox {
 namespace xls {
@@ -43,29 +43,15 @@ OoxQueryTableFragment::OoxQueryTableFragment(
 {
 }
 
-ContextWrapper OoxQueryTableFragment::onCreateContext( sal_Int32 nElement, const AttributeList& )
+ContextHandlerRef OoxQueryTableFragment::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
     switch( getCurrentElement() )
     {
         case XML_ROOT_CONTEXT:
-            return  (nElement == XLS_TOKEN( queryTable ));
-    }
-    return false;
-}
-
-void OoxQueryTableFragment::onStartElement( const AttributeList& rAttribs )
-{
-    switch ( getCurrentElement() )
-    {
-        case XLS_TOKEN( queryTable ):
-            importQueryTable( rAttribs );
+            if( nElement == XLS_TOKEN( queryTable ) ) getWebQueries().importQueryTable( rAttribs );
         break;
     }
-}
-
-void OoxQueryTableFragment::importQueryTable( const AttributeList& rAttribs )
-{
-    getWebQueries().importQueryTable( rAttribs );
+    return 0;
 }
 
 } // namespace xls

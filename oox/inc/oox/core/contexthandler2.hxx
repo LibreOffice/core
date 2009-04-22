@@ -44,36 +44,6 @@ namespace core {
 
 // ============================================================================
 
-class ContextHandler2Helper;
-
-/** Wrapper for a context handler object.
-
-    This wrapper is used by the ContextHandler2 class to simplify returning
-    either the own context handler instance, a new context handler, or null to
-    indicate an unsupported context. The implicit constructors allow to return
-    either a C++ bool value (true = own context instance, false = null) or a
-    new context handler (any class derived from ContextHandler, can be null
-    too) in the implementation of the virtual
-    ContextHandler2::onCreateContext() or
-    ContextHandler2::onCreateRecordContext() functions. This wrapper takes
-    ownership of the passed context handler internally, thus it is possible to
-    simply pass a new heap-allocated object.
- */
-class ContextWrapper
-{
-public:
-    inline /*implicit*/ ContextWrapper( bool bThis ) : mbThis( bThis ) {}
-    inline /*implicit*/ ContextWrapper( ContextHandler* pContext ) : mxContext( pContext ), mbThis( false ) {}
-
-    ContextHandler*     getContextHandler( ContextHandler2Helper& rThis ) const;
-
-private:
-    ContextHandlerRef   mxContext;
-    bool                mbThis;
-};
-
-// ============================================================================
-
 struct ContextInfo;
 
 /** Helper class that provides a context identifier stack.
@@ -116,7 +86,7 @@ public:
         Usually 'true' should be returned to improve performance by reusing the
         same instance to process several elements. Used by OOXML import only.
      */
-    virtual ContextWrapper onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) = 0;
+    virtual ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) = 0;
 
     /** Will be called if a new context element has been started.
 
@@ -139,7 +109,7 @@ public:
         Usually 'true' should be returned to improve performance by reusing the
         same instance to process several elements. Used by OOBIN import only.
      */
-    virtual ContextWrapper onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm ) = 0;
+    virtual ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm ) = 0;
 
     /** Will be called if a new record in a binary stream has been started.
 
@@ -268,11 +238,11 @@ public:
 
     // oox.core.ContextHandler2Helper interface -------------------------------
 
-    virtual ContextWrapper onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+    virtual ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
     virtual void        onStartElement( const AttributeList& rAttribs );
     virtual void        onEndElement( const ::rtl::OUString& rChars );
 
-    virtual ContextWrapper onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm );
+    virtual ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm );
     virtual void        onStartRecord( RecordInputStream& rStrm );
     virtual void        onEndRecord();
 };

@@ -33,24 +33,36 @@
 
 #include <com/sun/star/lang/Locale.hpp>
 #include "oox/helper/containerhelper.hxx"
-#include "oox/xls/stylespropertyhelper.hxx"
+#include "oox/xls/workbookhelper.hxx"
 
 namespace com { namespace sun { namespace star {
     namespace util { class XNumberFormats; }
 } } }
+
+namespace oox { class PropertyMap; }
 
 namespace oox {
 namespace xls {
 
 // ============================================================================
 
-struct OoxNumFmtData
+struct NumFmtModel
 {
     ::com::sun::star::lang::Locale maLocale;
     ::rtl::OUString     maFmtCode;
     sal_Int16           mnPredefId;
 
-    explicit            OoxNumFmtData();
+    explicit            NumFmtModel();
+};
+
+// ----------------------------------------------------------------------------
+
+/** Contains all API number format attributes. */
+struct ApiNumFmtData
+{
+    sal_Int32           mnIndex;            /// API number format index.
+
+    explicit            ApiNumFmtData();
 };
 
 // ----------------------------------------------------------------------------
@@ -77,11 +89,11 @@ public:
                             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats >& rxNumFmts,
                             const ::com::sun::star::lang::Locale& rFromLocale );
 
-    /** Writes the number format to the passed property set. */
-    void                writeToPropertySet( PropertySet& rPropSet ) const;
+    /** Writes the number format to the passed property map. */
+    void                writeToPropertyMap( PropertyMap& rPropMap ) const;
 
 private:
-    OoxNumFmtData       maOoxData;
+    NumFmtModel         maModel;
     ApiNumFmtData       maApiData;
 };
 
@@ -107,8 +119,8 @@ public:
     /** Final processing after import of all style settings. */
     void                finalizeImport();
 
-    /** Writes the specified number format to the passed property set. */
-    void                writeToPropertySet( PropertySet& rPropSet, sal_Int32 nNumFmtId ) const;
+    /** Writes the specified number format to the passed property map. */
+    void                writeToPropertyMap( PropertyMap& rPropMap, sal_Int32 nNumFmtId ) const;
 
 private:
     /** Inserts built-in number formats for the current system language. */

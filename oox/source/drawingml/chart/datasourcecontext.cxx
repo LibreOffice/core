@@ -34,7 +34,7 @@
 
 using ::rtl::OUString;
 using ::oox::core::ContextHandler2Helper;
-using ::oox::core::ContextWrapper;
+using ::oox::core::ContextHandlerRef;
 
 namespace oox {
 namespace drawingml {
@@ -52,33 +52,43 @@ DoubleSequenceContext::~DoubleSequenceContext()
 {
 }
 
-ContextWrapper DoubleSequenceContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+ContextHandlerRef DoubleSequenceContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
     switch( getCurrentElement() )
     {
         case C_TOKEN( numRef ):
-            return  (nElement == C_TOKEN( f )) ||
-                    (nElement == C_TOKEN( numCache ));
+            switch( nElement )
+            {
+                case C_TOKEN( f ):
+                case C_TOKEN( numCache ):
+                    return this;
+            }
+        break;
 
         case C_TOKEN( numCache ):
         case C_TOKEN( numLit ):
             switch( nElement )
             {
                 case C_TOKEN( formatCode ):
-                    return true;
+                    return this;
                 case C_TOKEN( ptCount ):
                     mrModel.mnPointCount = rAttribs.getInteger( XML_val, -1 );
-                    return false;
+                    return 0;
                 case C_TOKEN( pt ):
                     mnPtIndex = rAttribs.getInteger( XML_idx, -1 );
-                    return true;
+                    return this;
             }
         break;
 
         case C_TOKEN( pt ):
-            return  (nElement == C_TOKEN( v ));
+            switch( nElement )
+            {
+                case C_TOKEN( v ):
+                    return this;
+            }
+        break;
     }
-    return false;
+    return 0;
 }
 
 void DoubleSequenceContext::onEndElement( const OUString& rChars )
@@ -109,16 +119,26 @@ StringSequenceContext::~StringSequenceContext()
 {
 }
 
-ContextWrapper StringSequenceContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+ContextHandlerRef StringSequenceContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
     switch( getCurrentElement() )
     {
         case C_TOKEN( multiLvlStrRef ):
-            return  (nElement == C_TOKEN( f ));
+            switch( nElement )
+            {
+                case C_TOKEN( f ):
+                    return this;
+            }
+        break;
 
         case C_TOKEN( strRef ):
-            return  (nElement == C_TOKEN( f )) ||
-                    (nElement == C_TOKEN( strCache ));
+            switch( nElement )
+            {
+                case C_TOKEN( f ):
+                case C_TOKEN( strCache ):
+                    return this;
+            }
+        break;
 
         case C_TOKEN( strCache ):
         case C_TOKEN( strLit ):
@@ -126,17 +146,22 @@ ContextWrapper StringSequenceContext::onCreateContext( sal_Int32 nElement, const
             {
                 case C_TOKEN( ptCount ):
                     mrModel.mnPointCount = rAttribs.getInteger( XML_val, -1 );
-                    return false;
+                    return 0;
                 case C_TOKEN( pt ):
                     mnPtIndex = rAttribs.getInteger( XML_idx, -1 );
-                    return true;
+                    return this;
             }
         break;
 
         case C_TOKEN( pt ):
-            return  (nElement == C_TOKEN( v ));
+            switch( nElement )
+            {
+                case C_TOKEN( v ):
+                    return this;
+            }
+        break;
     }
-    return false;
+    return 0;
 }
 
 void StringSequenceContext::onEndElement( const OUString& rChars )
@@ -164,7 +189,7 @@ DataSourceContext::~DataSourceContext()
 {
 }
 
-ContextWrapper DataSourceContext::onCreateContext( sal_Int32 nElement, const AttributeList& )
+ContextHandlerRef DataSourceContext::onCreateContext( sal_Int32 nElement, const AttributeList& )
 {
     switch( getCurrentElement() )
     {
@@ -199,7 +224,7 @@ ContextWrapper DataSourceContext::onCreateContext( sal_Int32 nElement, const Att
             }
         break;
     }
-    return false;
+    return 0;
 }
 
 // ============================================================================

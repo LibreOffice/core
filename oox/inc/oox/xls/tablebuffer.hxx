@@ -40,10 +40,10 @@ namespace xls {
 
 // ============================================================================
 
-struct OoxTableData
+struct TableModel
 {
     ::com::sun::star::table::CellRangeAddress
-                        maRange;            /// Range of the table in the worksheet.
+                        maRange;            /// Original (unchecked) range of the table.
     ::rtl::OUString     maProgName;         /// Programmatical name.
     ::rtl::OUString     maDisplayName;      /// Display name.
     sal_Int32           mnId;               /// Unique table identifier.
@@ -51,7 +51,7 @@ struct OoxTableData
     sal_Int32           mnHeaderRows;       /// Number of header rows.
     sal_Int32           mnTotalsRows;       /// Number of totals rows.
 
-    explicit            OoxTableData();
+    explicit            TableModel();
 };
 
 // ----------------------------------------------------------------------------
@@ -70,23 +70,29 @@ public:
     void                finalizeImport();
 
     /** Returns the table identifier. */
-    inline sal_Int32    getTableId() const { return maOoxData.mnId; }
+    inline sal_Int32    getTableId() const { return maModel.mnId; }
     /** Returns the token index used in API token arrays (com.sun.star.sheet.FormulaToken). */
     inline sal_Int32    getTokenIndex() const { return mnTokenIndex; }
+    /** Returns the display name of the table. */
+    inline const ::rtl::OUString& getDisplayName() const { return maModel.maDisplayName; }
 
+    /** Returns the original (unchecked) total range of the table. */
+    inline const ::com::sun::star::table::CellRangeAddress& getOriginalRange() const { return maModel.maRange; }
     /** Returns the cell range of this table. */
-    inline const ::com::sun::star::table::CellRangeAddress& getRange() const { return maOoxData.maRange; }
+    inline const ::com::sun::star::table::CellRangeAddress& getRange() const { return maDestRange; }
     /** Returns the number of columns of this table. */
-    inline sal_Int32    getWidth() const { return maOoxData.maRange.EndColumn - maOoxData.maRange.StartColumn + 1; }
+    inline sal_Int32    getWidth() const { return maDestRange.EndColumn - maDestRange.StartColumn + 1; }
     /** Returns the number of rows of this table. */
-    inline sal_Int32    getHeight() const { return maOoxData.maRange.EndRow - maOoxData.maRange.StartRow + 1; }
+    inline sal_Int32    getHeight() const { return maDestRange.EndRow - maDestRange.StartRow + 1; }
     /** Returns the number of header rows in the table range. */
-    inline sal_Int32    getHeaderRows() const { return maOoxData.mnHeaderRows; }
+    inline sal_Int32    getHeaderRows() const { return maModel.mnHeaderRows; }
     /** Returns the number of totals rows in the table range. */
-    inline sal_Int32    getTotalsRows() const { return maOoxData.mnTotalsRows; }
+    inline sal_Int32    getTotalsRows() const { return maModel.mnTotalsRows; }
 
 private:
-    OoxTableData        maOoxData;
+    TableModel          maModel;
+    ::com::sun::star::table::CellRangeAddress
+                        maDestRange;        /// Validated range of the table in the worksheet.
     sal_Int32           mnTokenIndex;       /// Token index used in API token array.
 };
 
@@ -109,13 +115,18 @@ public:
 
     /** Returns a table by its identifier. */
     TableRef            getTable( sal_Int32 nTableId ) const;
+    /** Returns a table by its display name. */
+    TableRef            getTable( const ::rtl::OUString& rDispName ) const;
 
 private:
     void                insertTable( TableRef xTable );
 
 private:
-    typedef RefMap< sal_Int32, Table > TableMap;
-    TableMap            maTables;
+    typedef RefMap< sal_Int32, Table >          TableIdMap;
+    typedef RefMap< ::rtl::OUString, Table >    TableNameMap;
+
+    TableIdMap          maIdTables;
+    TableNameMap        maNameTables;
 };
 
 // ============================================================================

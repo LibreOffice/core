@@ -40,7 +40,7 @@ namespace xls {
 // ============================================================================
 
 /** Sheet and outline settings. */
-struct OoxSheetPrData
+struct SheetSettingsModel
 {
     ::rtl::OUString     maCodeName;             /// VBA module codename.
     Color               maTabColor;             /// Sheet tab color.
@@ -49,13 +49,13 @@ struct OoxSheetPrData
     bool                mbSummaryBelow;         /// True = row outline symbols below group.
     bool                mbSummaryRight;         /// True = column outline symbols right of group.
 
-    explicit            OoxSheetPrData();
+    explicit            SheetSettingsModel();
 };
 
 // ============================================================================
 
 /** Sheet protection settings. */
-struct OoxSheetProtectionData
+struct SheetProtectionModel
 {
     sal_uInt16          mnPasswordHash;         /// Hash value from sheet protection password.
     bool                mbSheet;                /// True = sheet protection enabled, locked cells are protcted.
@@ -75,7 +75,7 @@ struct OoxSheetProtectionData
     bool                mbPivotTables;          /// True = pivot tables locked.
     bool                mbSelectUnlocked;       /// True = select unlocked cells locked.
 
-    explicit            OoxSheetProtectionData();
+    explicit            SheetProtectionModel();
 };
 
 // ============================================================================
@@ -131,8 +131,8 @@ public:
 
 private:
     PhoneticSettings    maPhoneticSett;
-    OoxSheetPrData      maOoxSheetData;
-    OoxSheetProtectionData maOoxProtData;
+    SheetSettingsModel  maSheetSettings;
+    SheetProtectionModel maSheetProt;
 };
 
 // ============================================================================

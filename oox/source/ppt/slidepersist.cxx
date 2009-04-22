@@ -180,7 +180,7 @@ void SlidePersist::createBackground( const XmlFilterBase& rFilterBase )
             uno::Reference< beans::XPropertySet > xPropertySet( aPropMap.makePropertySet() );
             PropertySet aPropSet( xPropertySet );
             mpBackgroundPropertiesPtr->pushToPropSet(
-                aPropSet, ::oox::drawingml::FillProperties::DEFAULTNAMES,
+                aPropSet, ::oox::drawingml::FillProperties::DEFAULT_IDS,
                 rFilterBase, rFilterBase.getModelObjectContainer(), 0, -1 );
             xPagePropSet->setPropertyValue( sBackground, Any( xPropertySet ) );
         }
@@ -201,10 +201,6 @@ void setTextStyle( Reference< beans::XPropertySet >& rxPropSet, const XmlFilterB
     }
 
     PropertyMap& rTextParagraphPropertyMap( pTextParagraphPropertiesPtr->getTextParagraphPropertyMap() );
-#ifdef DEBUG
-    if ( false )
-        rTextParagraphPropertyMap.dump_debug("TextParagraph paragraph props");
-#endif
 
     PropertySet aPropSet( rxPropSet );
     aPropSet.setProperties( rTextParagraphPropertyMap );

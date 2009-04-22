@@ -62,7 +62,7 @@ private:
     virtual ::rtl::OUString implGetImplementationName() const;
 
 private:
-    WorkbookHelper*     mpHelper;
+    WorkbookHelper*     mpHelper;       /// Nonowning pointer to helper base.
 };
 
 // ============================================================================

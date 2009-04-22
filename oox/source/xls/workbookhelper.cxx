@@ -30,7 +30,6 @@
 
 #include "oox/xls/workbookhelper.hxx"
 #include <osl/thread.h>
-#include <osl/time.h>
 #include <rtl/strbuf.hxx>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -45,21 +44,23 @@
 #include <com/sun/star/sheet/XExternalDocLinks.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
+#include "properties.hxx"
 #include "oox/helper/progressbar.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/core/binaryfilterbase.hxx"
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/drawingml/theme.hxx"
 #include "oox/xls/addressconverter.hxx"
+#include "oox/xls/biffcodec.hxx"
 #include "oox/xls/defnamesbuffer.hxx"
 #include "oox/xls/excelchartconverter.hxx"
 #include "oox/xls/externallinkbuffer.hxx"
 #include "oox/xls/formulaparser.hxx"
 #include "oox/xls/pagesettings.hxx"
+#include "oox/xls/pivotcachebuffer.hxx"
 #include "oox/xls/pivottablebuffer.hxx"
 #include "oox/xls/sharedstringsbuffer.hxx"
 #include "oox/xls/stylesbuffer.hxx"
-#include "oox/xls/stylespropertyhelper.hxx"
 #include "oox/xls/tablebuffer.hxx"
 #include "oox/xls/themebuffer.hxx"
 #include "oox/xls/unitconverter.hxx"
@@ -75,6 +76,7 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
+using ::com::sun::star::uno::UNO_SET_THROW;
 using ::com::sun::star::container::XIndexAccess;
 using ::com::sun::star::container::XNameAccess;
 using ::com::sun::star::container::XNameContainer;
@@ -82,6 +84,9 @@ using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::awt::XDevice;
 using ::com::sun::star::document::XActionLockable;
 using ::com::sun::star::table::CellAddress;
+using ::com::sun::star::table::CellRangeAddress;
+using ::com::sun::star::table::XCell;
+using ::com::sun::star::table::XCellRange;
 using ::com::sun::star::sheet::XSpreadsheetDocument;
 using ::com::sun::star::sheet::XSpreadsheet;
 using ::com::sun::star::sheet::XNamedRange;
@@ -96,54 +101,156 @@ using ::oox::core::FragmentHandler;
 using ::oox::core::XmlFilterBase;
 using ::oox::drawingml::Theme;
 
-// Set this define to 1 to show the load/save time of a document in an assertion.
-#define OOX_SHOW_LOADSAVE_TIME 0
-
 namespace oox {
 namespace xls {
 
-// ============================================================================
+// DEBUG ======================================================================
 
 #if OSL_DEBUG_LEVEL > 0
+namespace dbg {
 
-struct WorkbookDataDebug
+// ----------------------------------------------------------------------------
+
+#if OOX_SHOW_LOADSAVE_TIME > 0
+
+struct TimeCount
 {
-#if OOX_SHOW_LOADSAVE_TIME
-    TimeValue           maStartTime;
-#endif
-    sal_Int32           mnDebugCount;
-
-    explicit            WorkbookDataDebug();
-                        ~WorkbookDataDebug();
+    sal_Int64           mnTime;
+    sal_Int32           mnCount;
+    inline explicit     TimeCount() : mnTime( 0 ), mnCount( 0 ) {}
 };
 
-WorkbookDataDebug::WorkbookDataDebug() :
-    mnDebugCount( 0 )
+Timer::Timer( TimeCount& rTimeCount ) :
+    mrTimeCount( rTimeCount )
 {
-#if OOX_SHOW_LOADSAVE_TIME
+    ++mrTimeCount.mnCount;
     osl_getSystemTime( &maStartTime );
-#endif
 }
 
-WorkbookDataDebug::~WorkbookDataDebug()
+Timer::~Timer()
 {
-#if OOX_SHOW_LOADSAVE_TIME
     TimeValue aEndTime;
     osl_getSystemTime( &aEndTime );
-    sal_Int32 nMillis = (aEndTime.Seconds - maStartTime.Seconds) * 1000 + static_cast< sal_Int32 >( aEndTime.Nanosec - maStartTime.Nanosec ) / 1000000;
-    OSL_ENSURE( false, OStringBuffer( "load/save time = " ).append( nMillis / 1000.0 ).append( " seconds" ).getStr() );
-#endif
-    OSL_ENSURE( mnDebugCount == 0,
-        OStringBuffer( "WorkbookDataDebug::~WorkbookDataDebug - failed to delete " ).append( mnDebugCount ).append( " objects" ).getStr() );
+    mrTimeCount.mnTime += (SAL_CONST_INT64( 1000000000 ) * (aEndTime.Seconds - maStartTime.Seconds) + aEndTime.Nanosec - maStartTime.Nanosec);
 }
 
+#endif
+
+// ----------------------------------------------------------------------------
+
+struct WorkbookData
+{
+#if OOX_SHOW_LOADSAVE_TIME > 0
+    typedef ::std::vector< TimeCount >      TimeCountVector;
+    typedef ::boost::shared_ptr< Timer >    TimerRef;
+    TimeCountVector     maTimeCounts;
+    TimerRef            mxTotal;
+#endif
+    sal_Int32           mnObjCount;
+
+    explicit            WorkbookData();
+                        ~WorkbookData();
+#if OOX_SHOW_LOADSAVE_TIME > 0
+    TimeCount&          getTimeCount( TimerType eType );
+#endif
+};
+
+WorkbookData::WorkbookData() :
+#if OOX_SHOW_LOADSAVE_TIME > 0
+    maTimeCounts( static_cast< size_t >( TIMER_TOTAL + 1 ) ),
+    mxTotal( new Timer( getTimeCount( TIMER_TOTAL ) ) ),
+#endif
+    mnObjCount( 0 )
+{
+}
+
+WorkbookData::~WorkbookData()
+{
+#if OOX_SHOW_LOADSAVE_TIME > 0
+    mxTotal.reset();
+    static const sal_Char* sppcNames[] =
+    {
+        "importFormula\t",
+        "importSheetFragment",
+        "  onCreateSheetContext",
+        "    importRow\t",
+        "      convertRowFormat",
+        "      convertColumnFormat",
+        "    importCell\t",
+        "  onEndSheetElement",
+        "    setCell\t\t",
+        "    setCellFormat\t",
+        "      mergeCellFormats",
+        "      writeCellProperties",
+        "  finalizeSheetData",
+        "    finalizeDrawing",
+        "finalizeBookData",
+        "total\t\t"
+    };
+    OStringBuffer aBuffer( "Call counts and load/save times:\n" );
+    sal_Int32 nIdx = 0;
+    for( TimeCountVector::iterator aIt = maTimeCounts.begin(), aEnd = maTimeCounts.end(); aIt != aEnd; ++aIt, ++nIdx )
+    {
+        if( aIt->mnCount > 0 )
+        {
+            aBuffer.append( nIdx ).append( ":\t" ).append( sppcNames[ nIdx ] ).
+                append( "\tn=" ).append( aIt->mnCount ).append( ',' ).
+                append( "\tt=" ).append( (aIt->mnTime / 100000000) / 10.0 ).append( 's' ).
+                append( "\t(" ).append( static_cast< sal_Int32 >( ((aIt->mnTime * 1000) / maTimeCounts.back().mnTime) / 10 ) ).append( "%)" );
+            if( aIt->mnCount > 1 )
+                aBuffer.append( "\tt/n=" ).append( static_cast< sal_Int32 >( aIt->mnTime / aIt->mnCount / 1000 ) ).append( "mys" );
+            aBuffer.append( '\n' );
+        }
+    }
+    OSL_ENSURE( false, aBuffer.getStr() );
+#endif
+    OSL_ENSURE( mnObjCount == 0,
+        OStringBuffer( "WorkbookData::~WorkbookData - failed to delete " ).append( mnObjCount ).append( " objects" ).getStr() );
+}
+
+#if OOX_SHOW_LOADSAVE_TIME > 0
+TimeCount& WorkbookData::getTimeCount( TimerType eType )
+{
+    return maTimeCounts[ static_cast< size_t >( eType ) ];
+}
+#endif
+
+// ----------------------------------------------------------------------------
+
+WorkbookHelper::WorkbookHelper( WorkbookData& rBookData ) :
+    mrDbgBookData( rBookData )
+{
+    ++mrDbgBookData.mnObjCount;
+}
+
+WorkbookHelper::WorkbookHelper( const WorkbookHelper& rCopy ) :
+    mrDbgBookData( rCopy.mrDbgBookData )
+{
+    ++mrDbgBookData.mnObjCount;
+}
+
+WorkbookHelper::~WorkbookHelper()
+{
+    --mrDbgBookData.mnObjCount;
+}
+
+#if OOX_SHOW_LOADSAVE_TIME > 0
+TimeCount& WorkbookHelper::getTimeCount( TimerType eType ) const
+{
+    return mrDbgBookData.getTimeCount( eType );
+}
+#endif
+
+// ----------------------------------------------------------------------------
+
+} // namespace dbg
 #endif
 
 // ============================================================================
 
 class WorkbookData
 #if OSL_DEBUG_LEVEL > 0
-    : public WorkbookDataDebug
+    : public dbg::WorkbookData
 #endif
 {
 public:
@@ -173,8 +280,6 @@ public:
 
     /** Returns a reference to the source/target spreadsheet document model. */
     inline Reference< XSpreadsheetDocument > getDocument() const { return mxDoc; }
-    /** Returns a reference to the specified spreadsheet in the document model. */
-    Reference< XSpreadsheet > getSheet( sal_Int32 nSheet ) const;
     /** Returns the reference device of the document. */
     Reference< XDevice > getReferenceDevice() const;
     /** Returns the container for defined names from the Calc document. */
@@ -218,8 +323,10 @@ public:
     inline TableBuffer& getTables() const { return *mxTables; }
     /** Returns the web queries. */
     inline WebQueryBuffer& getWebQueries() const { return *mxWebQueries; }
-    /** Returns the pivot tables. */
-    inline PivotTableBuffer& getPivotTables() const { return *mxPivotTables; }
+    /** Returns the collection of pivot caches. */
+    inline PivotCacheBuffer& getPivotCaches() const { return *mxPivotCaches; }
+    /** Returns the collection of pivot tables. */
+    inline PivotTableBuffer& getPivotTables() { return *mxPivotTables; }
 
     // converters -------------------------------------------------------------
 
@@ -231,13 +338,8 @@ public:
     inline AddressConverter& getAddressConverter() const { return *mxAddrConverter; }
     /** Returns the chart object converter. */
     inline ExcelChartConverter& getChartConverter() const { return *mxChartConverter; }
-
-    // property helpers -------------------------------------------------------
-
-    /** Returns the converter for properties related to cell styles. */
-    inline StylesPropertyHelper& getStylesPropertyHelper() const { return *mxStylesPropHlp; }
-    /** Returns the converter for properties related to page/print settings. */
-    inline PageSettingsPropertyHelper& getPageSettingsPropertyHelper() const { return *mxPageSettPropHlp; }
+    /** Returns the page/print settings converter. */
+    inline PageSettingsConverter& getPageSettingsConverter() const { return *mxPageSettConverter; }
 
     // OOX specific -----------------------------------------------------------
 
@@ -262,8 +364,8 @@ public:
     void                setIsWorkbookFile();
     /** Recreates global buffers that are used per sheet in specific BIFF versions. */
     void                createBuffersPerSheet();
-    /** Looks for a password provided via API, or queries it via GUI. */
-    OUString            queryPassword();
+    /** Returns the codec helper that stores the encoder/decoder object. */
+    inline BiffCodecHelper& getCodecHelper() { return *mxCodecHelper; }
 
 private:
     /** Initializes some basic members and sets needed document properties. */
@@ -272,32 +374,28 @@ private:
     void                finalize();
 
 private:
-    typedef ::std::auto_ptr< SegmentProgressBar >           ProgressBarPtr;
-    typedef ::std::auto_ptr< WorkbookSettings >             WorkbookSettPtr;
-    typedef ::std::auto_ptr< ViewSettings >                 ViewSettingsPtr;
-    typedef ::std::auto_ptr< WorksheetBuffer >              WorksheetBfrPtr;
-    typedef ::boost::shared_ptr< ThemeBuffer >              ThemeBfrRef;
-    typedef ::std::auto_ptr< StylesBuffer >                 StylesBfrPtr;
-    typedef ::std::auto_ptr< SharedStringsBuffer >          SharedStrBfrPtr;
-    typedef ::std::auto_ptr< ExternalLinkBuffer >           ExtLinkBfrPtr;
-    typedef ::std::auto_ptr< DefinedNamesBuffer >           DefNamesBfrPtr;
-    typedef ::std::auto_ptr< TableBuffer >                  TableBfrPtr;
-    typedef ::std::auto_ptr< WebQueryBuffer >               WebQueryBfrPtr;
-    typedef ::std::auto_ptr< PivotTableBuffer >             PivotTableBfrPtr;
-    typedef ::std::auto_ptr< UnitConverter >                UnitConvPtr;
-    typedef ::std::auto_ptr< AddressConverter >             AddressConvPtr;
-    typedef ::std::auto_ptr< ExcelChartConverter >          ExcelChartConvPtr;
-    typedef ::std::auto_ptr< StylesPropertyHelper >         StylesPropHlpPtr;
-    typedef ::std::auto_ptr< PageSettingsPropertyHelper >   PageSettPropHlpPtr;
-    typedef ::std::auto_ptr< FormulaParser >                FormulaParserPtr;
+    typedef ::std::auto_ptr< SegmentProgressBar >       ProgressBarPtr;
+    typedef ::std::auto_ptr< WorkbookSettings >         WorkbookSettPtr;
+    typedef ::std::auto_ptr< ViewSettings >             ViewSettingsPtr;
+    typedef ::std::auto_ptr< WorksheetBuffer >          WorksheetBfrPtr;
+    typedef ::boost::shared_ptr< ThemeBuffer >          ThemeBfrRef;
+    typedef ::std::auto_ptr< StylesBuffer >             StylesBfrPtr;
+    typedef ::std::auto_ptr< SharedStringsBuffer >      SharedStrBfrPtr;
+    typedef ::std::auto_ptr< ExternalLinkBuffer >       ExtLinkBfrPtr;
+    typedef ::std::auto_ptr< DefinedNamesBuffer >       DefNamesBfrPtr;
+    typedef ::std::auto_ptr< TableBuffer >              TableBfrPtr;
+    typedef ::std::auto_ptr< WebQueryBuffer >           WebQueryBfrPtr;
+    typedef ::std::auto_ptr< PivotCacheBuffer >         PivotCacheBfrPtr;
+    typedef ::std::auto_ptr< PivotTableBuffer >         PivotTableBfrPtr;
+    typedef ::std::auto_ptr< UnitConverter >            UnitConvPtr;
+    typedef ::std::auto_ptr< AddressConverter >         AddressConvPtr;
+    typedef ::std::auto_ptr< ExcelChartConverter >      ExcelChartConvPtr;
+    typedef ::std::auto_ptr< PageSettingsConverter >    PageSettConvPtr;
+    typedef ::std::auto_ptr< FormulaParser >            FormulaParserPtr;
+    typedef ::std::auto_ptr< BiffCodecHelper >          BiffCodecHelperPtr;
 
-    OUString            maRefDeviceProp;        /// Property name for reference device.
-    OUString            maNamedRangesProp;      /// Property name for defined names.
-    OUString            maDatabaseRangesProp;   /// Property name for database ranges.
-    OUString            maExtDocLinksProp;      /// Property name for external links.
-    OUString            maDdeLinksProp;         /// Property name for DDE links.
-    OUString            maCellStylesProp;       /// Property name for cell styles.
-    OUString            maPageStylesProp;       /// Property name for page styles.
+    OUString            maCellStyles;           /// Style family name for cell styles.
+    OUString            maPageStyles;           /// Style family name for page styles.
     OUString            maCellStyleServ;        /// Service name for a cell style.
     OUString            maPageStyleServ;        /// Service name for a page style.
     Reference< XSpreadsheetDocument > mxDoc;    /// Document model.
@@ -318,28 +416,25 @@ private:
     DefNamesBfrPtr      mxDefNames;             /// All defined names.
     TableBfrPtr         mxTables;               /// All tables (database ranges).
     WebQueryBfrPtr      mxWebQueries;           /// Web queries buffer.
-    PivotTableBfrPtr    mxPivotTables;          /// Pivot tables buffer.
+    PivotCacheBfrPtr    mxPivotCaches;          /// All pivot caches in the document.
+    PivotTableBfrPtr    mxPivotTables;          /// All pivot tables in the document.
 
     // converters
     FormulaParserPtr    mxFmlaParser;           /// Import formula parser.
     UnitConvPtr         mxUnitConverter;        /// General unit converter.
     AddressConvPtr      mxAddrConverter;        /// Cell address and cell range address converter.
     ExcelChartConvPtr   mxChartConverter;       /// Chart object converter.
-
-    // property helpers
-    StylesPropHlpPtr    mxStylesPropHlp;        /// Helper for all styles properties.
-    PageSettPropHlpPtr  mxPageSettPropHlp;      /// Helper for page/print properties.
+    PageSettConvPtr     mxPageSettConverter;    /// Page/print settings converter.
 
     // OOX specific
     XmlFilterBase*      mpOoxFilter;            /// Base OOX filter object.
 
     // BIFF specific
     BinaryFilterBase*   mpBiffFilter;           /// Base BIFF filter object.
-    ::rtl::OUString     maPassword;             /// Password for stream encoder/decoder.
+    BiffCodecHelperPtr  mxCodecHelper;          /// Encoder/decoder helper.
     BiffType            meBiff;                 /// BIFF version for BIFF import/export.
     rtl_TextEncoding    meTextEnc;              /// BIFF byte string text encoding.
     bool                mbHasCodePage;          /// True = CODEPAGE record exists in imported stream.
-    bool                mbHasPassword;          /// True = password already querried.
 };
 
 // ----------------------------------------------------------------------------
@@ -373,7 +468,7 @@ Reference< XDevice > WorkbookData::getReferenceDevice() const
 {
     PropertySet aPropSet( mxDoc );
     Reference< XDevice > xDevice;
-    aPropSet.getProperty( xDevice, maRefDeviceProp );
+    aPropSet.getProperty( xDevice, PROP_ReferenceDevice );
     return xDevice;
 }
 
@@ -381,7 +476,7 @@ Reference< XNamedRanges > WorkbookData::getNamedRanges() const
 {
     PropertySet aPropSet( mxDoc );
     Reference< XNamedRanges > xNamedRanges;
-    aPropSet.getProperty( xNamedRanges, maNamedRangesProp );
+    aPropSet.getProperty( xNamedRanges, PROP_NamedRanges );
     return xNamedRanges;
 }
 
@@ -389,7 +484,7 @@ Reference< XDatabaseRanges > WorkbookData::getDatabaseRanges() const
 {
     PropertySet aPropSet( mxDoc );
     Reference< XDatabaseRanges > xDatabaseRanges;
-    aPropSet.getProperty( xDatabaseRanges, maDatabaseRangesProp );
+    aPropSet.getProperty( xDatabaseRanges, PROP_DatabaseRanges );
     return xDatabaseRanges;
 }
 
@@ -397,7 +492,7 @@ Reference< XExternalDocLinks > WorkbookData::getExternalDocLinks() const
 {
     PropertySet aPropSet( mxDoc );
     Reference< XExternalDocLinks > xDocLinks;
-    aPropSet.getProperty( xDocLinks, maExtDocLinksProp );
+    aPropSet.getProperty( xDocLinks, PROP_ExternalDocLinks );
     return xDocLinks;
 }
 
@@ -405,7 +500,7 @@ Reference< XNameAccess > WorkbookData::getDdeLinks() const
 {
     PropertySet aPropSet( mxDoc );
     Reference< XNameAccess > xDdeLinks;
-    aPropSet.getProperty( xDdeLinks, maDdeLinksProp );
+    aPropSet.getProperty( xDdeLinks, PROP_DDELinks );
     return xDdeLinks;
 }
 
@@ -416,7 +511,7 @@ Reference< XNameContainer > WorkbookData::getStyleFamily( bool bPageStyles ) con
     {
         Reference< XStyleFamiliesSupplier > xFamiliesSup( mxDoc, UNO_QUERY_THROW );
         Reference< XNameAccess > xFamiliesNA( xFamiliesSup->getStyleFamilies(), UNO_QUERY_THROW );
-        xStylesNC.set( xFamiliesNA->getByName( bPageStyles ? maPageStylesProp : maCellStylesProp ), UNO_QUERY_THROW );
+        xStylesNC.set( xFamiliesNA->getByName( bPageStyles ? maPageStyles : maCellStyles ), UNO_QUERY );
     }
     catch( Exception& )
     {
@@ -428,10 +523,10 @@ Reference< XNameContainer > WorkbookData::getStyleFamily( bool bPageStyles ) con
 Reference< XStyle > WorkbookData::getStyleObject( const OUString& rStyleName, bool bPageStyle ) const
 {
     Reference< XStyle > xStyle;
-    Reference< XNameContainer > xStylesNC = getStyleFamily( bPageStyle );
-    if( xStylesNC.is() ) try
+    try
     {
-        xStyle.set( xStylesNC->getByName( rStyleName ), UNO_QUERY_THROW );
+        Reference< XNameContainer > xStylesNC( getStyleFamily( bPageStyle ), UNO_SET_THROW );
+        xStyle.set( xStylesNC->getByName( rStyleName ), UNO_QUERY );
     }
     catch( Exception& )
     {
@@ -465,9 +560,9 @@ Reference< XNamedRange > WorkbookData::createNamedRangeObject( OUString& orName,
 Reference< XStyle > WorkbookData::createStyleObject( OUString& orStyleName, bool bPageStyle, bool bRenameOldExisting ) const
 {
     Reference< XStyle > xStyle;
-    Reference< XNameContainer > xStylesNC = getStyleFamily( bPageStyle );
-    if( xStylesNC.is() ) try
+    try
     {
+        Reference< XNameContainer > xStylesNC( getStyleFamily( bPageStyle ), UNO_SET_THROW );
         Reference< XMultiServiceFactory > xFactory( mxDoc, UNO_QUERY_THROW );
         xStyle.set( xFactory->createInstance( bPageStyle ? maPageStyleServ : maCellStyleServ ), UNO_QUERY_THROW );
         orStyleName = ContainerHelper::insertByUnusedName( xStylesNC, orStyleName, ' ', Any( xStyle ), bRenameOldExisting );
@@ -536,36 +631,18 @@ void WorkbookData::createBuffersPerSheet()
     }
 }
 
-OUString WorkbookData::queryPassword()
-{
-    if( !mbHasPassword )
-    {
-        //! TODO
-        maPassword = OUString();
-        // set to true, even if dialog has been cancelled (never ask twice)
-        mbHasPassword = true;
-    }
-    return maPassword;
-}
-
 // private --------------------------------------------------------------------
 
 void WorkbookData::initialize( bool bWorkbookFile )
 {
-    maRefDeviceProp = CREATE_OUSTRING( "ReferenceDevice" );
-    maNamedRangesProp = CREATE_OUSTRING( "NamedRanges" );
-    maDatabaseRangesProp = CREATE_OUSTRING( "DatabaseRanges" );
-    maExtDocLinksProp = CREATE_OUSTRING( "ExternalDocLinks" );
-    maDdeLinksProp = CREATE_OUSTRING( "DDELinks" );
-    maCellStylesProp = CREATE_OUSTRING( "CellStyles" );
-    maPageStylesProp = CREATE_OUSTRING( "PageStyles" );
+    maCellStyles = CREATE_OUSTRING( "CellStyles" );
+    maPageStyles = CREATE_OUSTRING( "PageStyles" );
     maCellStyleServ = CREATE_OUSTRING( "com.sun.star.style.CellStyle" );
     maPageStyleServ = CREATE_OUSTRING( "com.sun.star.style.PageStyle" );
     mnCurrSheet = -1;
     mbWorkbook = bWorkbookFile;
     meTextEnc = osl_getThreadTextEncoding();
     mbHasCodePage = false;
-    mbHasPassword = false;
 
     // the spreadsheet document
     mxDoc.set( mrBaseFilter.getModel(), UNO_QUERY );
@@ -581,27 +658,27 @@ void WorkbookData::initialize( bool bWorkbookFile )
     mxDefNames.reset( new DefinedNamesBuffer( *this ) );
     mxTables.reset( new TableBuffer( *this ) );
     mxWebQueries.reset( new WebQueryBuffer( *this ) );
+    mxPivotCaches.reset( new PivotCacheBuffer( *this ) );
     mxPivotTables.reset( new PivotTableBuffer( *this ) );
 
     mxUnitConverter.reset( new UnitConverter( *this ) );
     mxAddrConverter.reset( new AddressConverter( *this ) );
     mxChartConverter.reset( new ExcelChartConverter( *this ) );
 
-    mxStylesPropHlp.reset( new StylesPropertyHelper( *this ) );
-    mxPageSettPropHlp.reset( new PageSettingsPropertyHelper( *this ) );
+    mxPageSettConverter.reset( new PageSettingsConverter( *this ) );
 
     // set some document properties needed during import
     if( mrBaseFilter.isImportFilter() )
     {
         PropertySet aPropSet( mxDoc );
         // enable editing read-only documents (e.g. from read-only files)
-        aPropSet.setProperty( CREATE_OUSTRING( "IsChangeReadOnlyEnabled" ), true );
+        aPropSet.setProperty( PROP_IsChangeReadOnlyEnabled, true );
         // #i76026# disable Undo while loading the document
-        aPropSet.setProperty( CREATE_OUSTRING( "IsUndoEnabled" ), false );
+        aPropSet.setProperty( PROP_IsUndoEnabled, false );
         // #i79826# disable calculating automatic row height while loading the document
-        aPropSet.setProperty( CREATE_OUSTRING( "IsAdjustHeightEnabled" ), false );
+        aPropSet.setProperty( PROP_IsAdjustHeightEnabled, false );
         // disable automatic update of linked sheets and DDE links
-        aPropSet.setProperty( CREATE_OUSTRING( "IsExecuteLinkEnabled" ), false );
+        aPropSet.setProperty( PROP_IsExecuteLinkEnabled, false );
         // #i79890# disable automatic update of defined names
         Reference< XActionLockable > xLockable( getNamedRanges(), UNO_QUERY );
         if( xLockable.is() )
@@ -616,28 +693,43 @@ void WorkbookData::initialize( bool bWorkbookFile )
         //! TODO: localize progress bar text
         mxProgressBar.reset( new SegmentProgressBar( mrBaseFilter.getStatusIndicator(), CREATE_OUSTRING( "Saving..." ) ) );
     }
+
+    // filter specific
+    switch( getFilterType() )
+    {
+        case FILTER_BIFF:
+            mxCodecHelper.reset( new BiffCodecHelper( * this ) );
+        break;
+
+        case FILTER_OOX:
+        break;
+
+        case FILTER_UNKNOWN:
+        break;
+    }
 }
 
 void WorkbookData::finalize()
 {
+    OOX_LOADSAVE_TIMER( FINALIZEBOOKDATA );
     // set some document properties needed after import
     if( mrBaseFilter.isImportFilter() )
     {
         PropertySet aPropSet( mxDoc );
         // #i74668# do not insert default sheets
-        aPropSet.setProperty( CREATE_OUSTRING( "IsLoaded" ), true );
+        aPropSet.setProperty( PROP_IsLoaded, true );
         // #i79890# enable automatic update of defined names (before IsAdjustHeightEnabled!)
         Reference< XActionLockable > xLockable( getNamedRanges(), UNO_QUERY );
         if( xLockable.is() )
             xLockable->removeActionLock();
         // enable automatic update of linked sheets and DDE links
-        aPropSet.setProperty( CREATE_OUSTRING( "IsExecuteLinkEnabled" ), true );
+        aPropSet.setProperty( PROP_IsExecuteLinkEnabled, true );
         // #i79826# enable updating automatic row height after loading the document
-        aPropSet.setProperty( CREATE_OUSTRING( "IsAdjustHeightEnabled" ), true );
+        aPropSet.setProperty( PROP_IsAdjustHeightEnabled, true );
         // #i76026# enable Undo after loading the document
-        aPropSet.setProperty( CREATE_OUSTRING( "IsUndoEnabled" ), true );
+        aPropSet.setProperty( PROP_IsUndoEnabled, true );
         // disable editing read-only documents (e.g. from read-only files)
-        aPropSet.setProperty( CREATE_OUSTRING( "IsChangeReadOnlyEnabled" ), false );
+        aPropSet.setProperty( PROP_IsChangeReadOnlyEnabled, false );
     }
 }
 
@@ -645,7 +737,7 @@ void WorkbookData::finalize()
 
 WorkbookHelper::WorkbookHelper( WorkbookData& rBookData ) :
 #if OSL_DEBUG_LEVEL > 0
-    WorkbookHelperDebug( rBookData.mnDebugCount ),
+    dbg::WorkbookHelper( rBookData ),
 #endif
     mrBookData( rBookData )
 {
@@ -693,12 +785,16 @@ void WorkbookHelper::finalizeWorkbookImport()
     mrBookData.getWorkbookSettings().finalizeImport();
     mrBookData.getViewSettings().finalizeImport();
 
+    /*  Insert all pivot tables. Must be done after loading all sheets, because
+        data pilots expect existing source data on creation. */
+    mrBookData.getPivotTables().finalizeImport();
+
     /*  Set 'Default' page style to automatic page numbering (default is manual
         number 1). Otherwise hidden tables (e.g. for scenarios) which have
         'Default' page style will break automatic page numbering for following
         sheets. Automatic numbering is set by passing the value 0. */
     PropertySet aDefPageStyle( getStyleObject( CREATE_OUSTRING( "Default" ), true ) );
-    aDefPageStyle.setProperty< sal_Int16 >( CREATE_OUSTRING( "FirstPageNumber" ), 0 );
+    aDefPageStyle.setProperty< sal_Int16 >( PROP_FirstPageNumber, 0 );
 }
 
 // document model -------------------------------------------------------------
@@ -706,20 +802,6 @@ void WorkbookHelper::finalizeWorkbookImport()
 Reference< XSpreadsheetDocument > WorkbookHelper::getDocument() const
 {
     return mrBookData.getDocument();
-}
-
-Reference< XSpreadsheet > WorkbookHelper::getSheet( sal_Int32 nSheet ) const
-{
-    Reference< XSpreadsheet > xSheet;
-    try
-    {
-        Reference< XIndexAccess > xSheetsIA( getDocument()->getSheets(), UNO_QUERY_THROW );
-        xSheet.set( xSheetsIA->getByIndex( nSheet ), UNO_QUERY_THROW );
-    }
-    catch( Exception& )
-    {
-    }
-    return xSheet;
 }
 
 Reference< XDevice > WorkbookHelper::getReferenceDevice() const
@@ -745,6 +827,48 @@ Reference< XExternalDocLinks > WorkbookHelper::getExternalDocLinks() const
 Reference< XNameAccess > WorkbookHelper::getDdeLinks() const
 {
     return mrBookData.getDdeLinks();
+}
+
+Reference< XSpreadsheet > WorkbookHelper::getSheetFromDoc( sal_Int32 nSheet ) const
+{
+    Reference< XSpreadsheet > xSheet;
+    try
+    {
+        Reference< XIndexAccess > xSheetsIA( getDocument()->getSheets(), UNO_QUERY_THROW );
+        xSheet.set( xSheetsIA->getByIndex( nSheet ), UNO_QUERY_THROW );
+    }
+    catch( Exception& )
+    {
+    }
+    return xSheet;
+}
+
+Reference< XCell > WorkbookHelper::getCellFromDoc( const CellAddress& rAddress ) const
+{
+    Reference< XCell > xCell;
+    try
+    {
+        Reference< XSpreadsheet > xSheet( getSheetFromDoc( rAddress.Sheet ), UNO_SET_THROW );
+        xCell = xSheet->getCellByPosition( rAddress.Column, rAddress.Row );
+    }
+    catch( Exception& )
+    {
+    }
+    return xCell;
+}
+
+Reference< XCellRange > WorkbookHelper::getCellRangeFromDoc( const CellRangeAddress& rRange ) const
+{
+    Reference< XCellRange > xRange;
+    try
+    {
+        Reference< XSpreadsheet > xSheet( getSheetFromDoc( rRange.Sheet ), UNO_SET_THROW );
+        xRange = xSheet->getCellRangeByPosition( rRange.StartColumn, rRange.StartRow, rRange.EndColumn, rRange.EndRow );
+    }
+    catch( Exception& )
+    {
+    }
+    return xRange;
 }
 
 Reference< XNameContainer > WorkbookHelper::getStyleFamily( bool bPageStyles ) const
@@ -824,6 +948,11 @@ WebQueryBuffer& WorkbookHelper::getWebQueries() const
     return mrBookData.getWebQueries();
 }
 
+PivotCacheBuffer& WorkbookHelper::getPivotCaches() const
+{
+    return mrBookData.getPivotCaches();
+}
+
 PivotTableBuffer& WorkbookHelper::getPivotTables() const
 {
     return mrBookData.getPivotTables();
@@ -853,14 +982,9 @@ ExcelChartConverter& WorkbookHelper::getChartConverter() const
 
 // property helpers -----------------------------------------------------------
 
-StylesPropertyHelper& WorkbookHelper::getStylesPropertyHelper() const
+PageSettingsConverter& WorkbookHelper::getPageSettingsConverter() const
 {
-    return mrBookData.getStylesPropertyHelper();
-}
-
-PageSettingsPropertyHelper& WorkbookHelper::getPageSettingsPropertyHelper() const
-{
-    return mrBookData.getPageSettingsPropertyHelper();
+    return mrBookData.getPageSettingsConverter();
 }
 
 // OOX specific ---------------------------------------------------------------
@@ -919,9 +1043,9 @@ void WorkbookHelper::createBuffersPerSheet()
     mrBookData.createBuffersPerSheet();
 }
 
-OUString WorkbookHelper::queryPassword() const
+BiffCodecHelper& WorkbookHelper::getCodecHelper() const
 {
-    return mrBookData.queryPassword();
+    return mrBookData.getCodecHelper();
 }
 
 // ============================================================================

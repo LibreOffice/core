@@ -53,7 +53,6 @@ SLOFILES =	\
         $(SLO)$/olestorage.obj				\
         $(SLO)$/progressbar.obj				\
         $(SLO)$/propertymap.obj				\
-        $(SLO)$/propertysequence.obj		\
         $(SLO)$/propertyset.obj				\
         $(SLO)$/recordinputstream.obj		\
         $(SLO)$/storagebase.obj				\

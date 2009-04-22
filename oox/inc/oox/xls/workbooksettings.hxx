@@ -33,13 +33,15 @@
 
 #include "oox/xls/workbookhelper.hxx"
 
+namespace com { namespace sun { namespace star { namespace util { struct Date; } } } }
+
 namespace oox {
 namespace xls {
 
 // ============================================================================
 
 /** Global workbook settings. */
-struct OoxWorkbookPrData
+struct WorkbookSettingsModel
 {
     ::rtl::OUString     maCodeName;             /// VBA codename for the workbook.
     sal_Int32           mnShowObjectMode;       /// Specifies how objects are shown.
@@ -48,7 +50,7 @@ struct OoxWorkbookPrData
     bool                mbDateMode1904;         /// True = null date is 1904-01-01.
     bool                mbSaveExtLinkValues;    /// True = save cached cell values for external links.
 
-    explicit            OoxWorkbookPrData();
+    explicit            WorkbookSettingsModel();
 
     /** Sets OOBIN or BIFF object visibility mode. */
     void                setBinObjectMode( sal_uInt16 nObjMode );
@@ -57,7 +59,7 @@ struct OoxWorkbookPrData
 // ============================================================================
 
 /** Workbook calculation settings. */
-struct OoxCalcPrData
+struct CalcSettingsModel
 {
     double              mfIterateDelta;         /// Minimum change in circular references.
     sal_Int32           mnCalcId;               /// Calculation engine identifier.
@@ -72,7 +74,7 @@ struct OoxCalcPrData
     bool                mbConcurrent;           /// True = concurrent calculation enabled.
     bool                mbUseNlr;               /// True = use natural language references in formulas.
 
-    explicit            OoxCalcPrData();
+    explicit            CalcSettingsModel();
 };
 
 // ============================================================================
@@ -126,10 +128,16 @@ public:
 
     /** Returns the show objects mode (considered a view setting in Calc). */
     sal_Int16           getApiShowObjectMode() const;
+    /** Returns the nulldate of this workbook. */
+    ::com::sun::star::util::Date getNullDate() const;
 
 private:
-    OoxWorkbookPrData   maOoxBookData;
-    OoxCalcPrData       maOoxCalcData;
+    /** Updates date mode and unit converter nulldate. */
+    void                setDateMode( bool bDateMode1904 );
+
+private:
+    WorkbookSettingsModel maBookSettings;
+    CalcSettingsModel   maCalcSettings;
 };
 
 // ============================================================================

@@ -31,6 +31,7 @@
 #ifndef OOX_HELPER_ATTRIBUTELIST_HXX
 #define OOX_HELPER_ATTRIBUTELIST_HXX
 
+#include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/xml/sax/XFastAttributeList.hpp>
 #include "oox/helper/helper.hxx"
 #include "tokens.hxx"
@@ -84,6 +85,9 @@ public:
     /** Returns the boolean value of the specified attribute. */
     OptValue< bool >    getBool( sal_Int32 nElement ) const;
 
+    /** Returns the date/time value of the specified attribute. */
+    OptValue< ::com::sun::star::util::DateTime > getDateTime( sal_Int32 nElement ) const;
+
     // defaulted return values ------------------------------------------------
 
     /** Returns the token identifier of the value of the specified attribute,
@@ -117,6 +121,10 @@ public:
     /** Returns the boolean value of the specified attribute, or the passed
         default value if the attribute is missing or not convertible to bool. */
     bool                getBool( sal_Int32 nElement, bool bDefault ) const;
+
+    /** Returns the date/time value of the specified attribute, or the default
+        value if the attribute is missing or not convertible to a date/time value. */
+    ::com::sun::star::util::DateTime getDateTime( sal_Int32 nElement, const ::com::sun::star::util::DateTime& rDefault ) const;
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >

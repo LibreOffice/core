@@ -40,6 +40,7 @@
 #include "oox/drawingml/chart/axismodel.hxx"
 #include "oox/drawingml/chart/titleconverter.hxx"
 #include "oox/drawingml/chart/typegroupconverter.hxx"
+#include "properties.hxx"
 
 using ::rtl::OUString;
 using ::com::sun::star::uno::Any;
@@ -105,11 +106,14 @@ AxisConverter::~AxisConverter()
 }
 
 void AxisConverter::convertFromModel( const Reference< XCoordinateSystem >& rxCoordSystem,
-        TypeGroupConverter& rTypeGroup, sal_Int32 nAxesSetIdx, sal_Int32 nAxisIdx )
+        TypeGroupConverter& rTypeGroup, const AxisModel* pCrossingAxis, sal_Int32 nAxesSetIdx, sal_Int32 nAxisIdx )
 {
     Reference< XAxis > xAxis;
     try
     {
+        namespace cssc = ::com::sun::star::chart;
+        namespace cssc2 = ::com::sun::star::chart2;
+
         const TypeGroupInfo& rTypeInfo = rTypeGroup.getTypeInfo();
         ObjectFormatter& rFormatter = getFormatter();
 
@@ -117,12 +121,12 @@ void AxisConverter::convertFromModel( const Reference< XCoordinateSystem >& rxCo
         xAxis.set( createInstance( CREATE_OUSTRING( "com.sun.star.chart2.Axis" ) ), UNO_QUERY_THROW );
         PropertySet aAxisProp( xAxis );
         // #i58688# axis enabled
-        aAxisProp.setProperty( CREATE_OUSTRING( "Show" ), !mrModel.mbDeleted );
+        aAxisProp.setProperty( PROP_Show, !mrModel.mbDeleted );
 
         // axis line, tick, and gridline properties ---------------------------
 
         // show axis labels
-        aAxisProp.setProperty( CREATE_OUSTRING( "DisplayLabels" ), mrModel.mnTickLabelPos != XML_none );
+        aAxisProp.setProperty( PROP_DisplayLabels, mrModel.mnTickLabelPos != XML_none );
         // no X axis line in radar charts
         if( (nAxisIdx == API_X_AXIS) && (rTypeInfo.meTypeCategory == TYPECATEGORY_RADAR) )
             mrModel.mxShapeProp.getOrCreate().getLineProperties().maLineFill.moFillType = XML_noFill;
@@ -132,12 +136,12 @@ void AxisConverter::convertFromModel( const Reference< XCoordinateSystem >& rxCo
         rFormatter.convertTextRotation( aAxisProp, mrModel.mxTextProp );
 
         // tick mark style
-        aAxisProp.setProperty( CREATE_OUSTRING( "MajorTickmarks" ), lclGetTickMark( mrModel.mnMajorTickMark ) );
-        aAxisProp.setProperty( CREATE_OUSTRING( "MinorTickmarks" ), lclGetTickMark( mrModel.mnMinorTickMark ) );
+        aAxisProp.setProperty( PROP_MajorTickmarks, lclGetTickMark( mrModel.mnMajorTickMark ) );
+        aAxisProp.setProperty( PROP_MinorTickmarks, lclGetTickMark( mrModel.mnMinorTickMark ) );
 
         // main grid
         PropertySet aGridProp( xAxis->getGridProperties() );
-        aGridProp.setProperty( CREATE_OUSTRING( "Show" ), mrModel.mxMajorGridLines.is() );
+        aGridProp.setProperty( PROP_Show, mrModel.mxMajorGridLines.is() );
         if( mrModel.mxMajorGridLines.is() )
             rFormatter.convertFrameFormatting( aGridProp, mrModel.mxMajorGridLines, OBJECTTYPE_MAJORGRIDLINE );
 
@@ -146,7 +150,7 @@ void AxisConverter::convertFromModel( const Reference< XCoordinateSystem >& rxCo
         if( aSubGridPropSeq.hasElements() )
         {
             PropertySet aSubGridProp( aSubGridPropSeq[ 0 ] );
-            aSubGridProp.setProperty( CREATE_OUSTRING( "Show" ), mrModel.mxMinorGridLines.is() );
+            aSubGridProp.setProperty( PROP_Show, mrModel.mxMinorGridLines.is() );
             if( mrModel.mxMinorGridLines.is() )
                 rFormatter.convertFrameFormatting( aSubGridProp, mrModel.mxMinorGridLines, OBJECTTYPE_MINORGRIDLINE );
         }
@@ -191,11 +195,12 @@ void AxisConverter::convertFromModel( const Reference< XCoordinateSystem >& rxCo
             case ApiAxisType::SERIES:
             {
                 // do not overlap text
-                aAxisProp.setProperty( CREATE_OUSTRING( "TextOverlap" ), false );
+                aAxisProp.setProperty( PROP_TextOverlap, false );
                 // do not break text into several lines
-                aAxisProp.setProperty( CREATE_OUSTRING( "TextBreak" ), false );
+                aAxisProp.setProperty( PROP_TextBreak, false );
                 // origin (min-cross or max-cross not supported, fall back to auto-cross)
-                lclSetValueOrClearAny( aScaleData.Origin, mrModel.mofCrossesAt );
+                if( pCrossingAxis && (mrModel.mnCrossAxisId == pCrossingAxis->mnAxisId) )
+                    lclSetValueOrClearAny( aScaleData.Origin, pCrossingAxis->mofCrossesAt );
                 //! TODO #i58731# show n-th category
             }
             break;
@@ -219,7 +224,8 @@ void AxisConverter::convertFromModel( const Reference< XCoordinateSystem >& rxCo
                 lclSetScaledValueOrClearAny( aScaleData.Minimum, mrModel.mofMin, xLogScaling );
                 lclSetScaledValueOrClearAny( aScaleData.Maximum, mrModel.mofMax, xLogScaling );
                 // origin (min-cross or max-cross not supported, fall back to auto-cross)
-                lclSetScaledValueOrClearAny( aScaleData.Origin, mrModel.mofCrossesAt, xLogScaling );
+                if( pCrossingAxis && (mrModel.mnCrossAxisId == pCrossingAxis->mnAxisId) )
+                    lclSetScaledValueOrClearAny( aScaleData.Origin, pCrossingAxis->mofCrossesAt, xLogScaling );
                 // major increment
                 IncrementData& rIncrementData = aScaleData.IncrementData;
                 lclSetValueOrClearAny( rIncrementData.Distance, mrModel.mofMajorUnit );
@@ -248,8 +254,7 @@ void AxisConverter::convertFromModel( const Reference< XCoordinateSystem >& rxCo
             ((nAxisIdx == API_Y_AXIS) && (rTypeInfo.meTypeCategory == TYPECATEGORY_PIE)) ||
             ((nAxisIdx == API_X_AXIS) && (rTypeInfo.meTypeCategory == TYPECATEGORY_RADAR));
         bool bReverse = (mrModel.mnOrientation == XML_maxMin) != bMirrorDirection;
-        namespace cssc = ::com::sun::star::chart2;
-        aScaleData.Orientation = bReverse ? cssc::AxisOrientation_REVERSE : cssc::AxisOrientation_MATHEMATICAL;
+        aScaleData.Orientation = bReverse ? cssc2::AxisOrientation_REVERSE : cssc2::AxisOrientation_MATHEMATICAL;
 
         // write back scaling data
         xAxis->setScaleData( aScaleData );
@@ -261,7 +266,8 @@ void AxisConverter::convertFromModel( const Reference< XCoordinateSystem >& rxCo
 
         // axis position ------------------------------------------------------
 
-        aAxisProp.setProperty( CREATE_OUSTRING( "CrossoverPosition" ), (nAxesSetIdx == API_PRIM_AXESSET) ? ::com::sun::star::chart::ChartAxisPosition_START : ::com::sun::star::chart::ChartAxisPosition_END );
+        cssc::ChartAxisPosition ePosition = (nAxesSetIdx == API_PRIM_AXESSET) ? cssc::ChartAxisPosition_START : cssc::ChartAxisPosition_END;
+        aAxisProp.setProperty( PROP_CrossoverPosition, ePosition );
 
         // axis title ---------------------------------------------------------
 

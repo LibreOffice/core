@@ -31,6 +31,7 @@
 #include "oox/xls/condformatcontext.hxx"
 
 using ::rtl::OUString;
+using ::oox::core::ContextHandlerRef;
 
 namespace oox {
 namespace xls {
@@ -44,16 +45,16 @@ OoxCondFormatContext::OoxCondFormatContext( OoxWorksheetFragmentBase& rFragment 
 
 // oox.core.ContextHandler2Helper interface -----------------------------------
 
-ContextWrapper OoxCondFormatContext::onCreateContext( sal_Int32 nElement, const AttributeList& )
+ContextHandlerRef OoxCondFormatContext::onCreateContext( sal_Int32 nElement, const AttributeList& )
 {
     switch( getCurrentElement() )
     {
         case XLS_TOKEN( conditionalFormatting ):
-            return  (nElement == XLS_TOKEN( cfRule ));
+            return (nElement == XLS_TOKEN( cfRule )) ? this : 0;
         case XLS_TOKEN( cfRule ):
-            return  (nElement == XLS_TOKEN( formula ));
+            return (nElement == XLS_TOKEN( formula )) ? this : 0;
     }
-    return false;
+    return 0;
 }
 
 void OoxCondFormatContext::onStartElement( const AttributeList& rAttribs )
@@ -79,14 +80,14 @@ void OoxCondFormatContext::onEndElement( const OUString& rChars )
     }
 }
 
-ContextWrapper OoxCondFormatContext::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& )
+ContextHandlerRef OoxCondFormatContext::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& )
 {
     switch( getCurrentElement() )
     {
         case OOBIN_ID_CONDFORMATTING:
-            return  (nRecId == OOBIN_ID_CFRULE);
+            return (nRecId == OOBIN_ID_CFRULE) ? this : 0;
     }
-    return false;
+    return 0;
 }
 
 void OoxCondFormatContext::onStartRecord( RecordInputStream& rStrm )

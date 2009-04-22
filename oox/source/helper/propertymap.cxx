@@ -29,163 +29,55 @@
  ************************************************************************/
 
 #include "oox/helper/propertymap.hxx"
-
-#include <string>
-#include <stdio.h>
 #include <osl/mutex.hxx>
 #include <cppuhelper/implbase2.hxx>
+#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/XPropertySetInfo.hpp>
+#include "properties.hxx"
 
 using ::rtl::OUString;
-using ::osl::MutexGuard;
-using ::osl::Mutex;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::lang;
+using ::com::sun::star::uno::Any;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::RuntimeException;
+using ::com::sun::star::uno::Sequence;
+using ::com::sun::star::lang::IllegalArgumentException;
+using ::com::sun::star::lang::WrappedTargetException;
+using ::com::sun::star::beans::Property;
+using ::com::sun::star::beans::PropertyValue;
+using ::com::sun::star::beans::PropertyVetoException;
+using ::com::sun::star::beans::UnknownPropertyException;
+using ::com::sun::star::beans::XPropertyChangeListener;
+using ::com::sun::star::beans::XPropertySet;
+using ::com::sun::star::beans::XPropertySetInfo;
+using ::com::sun::star::beans::XVetoableChangeListener;
 
 namespace oox {
 
-bool PropertyMap::hasProperty( const ::rtl::OUString& rName ) const
-{
-    return find( rName ) != end();
-}
+// ============================================================================
 
-const Any* PropertyMap::getPropertyValue( const ::rtl::OUString& rName ) const
-{
-    PropertyMapBase::const_iterator aIter( find( rName ) );
-    return aIter != end() ? &((*aIter).second) : NULL;
-}
+namespace {
 
-void PropertyMap::makeSequence( Sequence< NamedValue >& rSequence ) const
-{
-    rSequence.realloc( size() );
-    NamedValue* pValues = rSequence.getArray();
-    const_iterator aIter( begin() );
-    const_iterator aEnd( end() );
+/** Thread-save singleton of a vector of all supported property names. */
+struct PropertyNamesPool : public ::rtl::Static< PropertyNamesList, PropertyNamesPool > {};
 
-    for( ; aIter != aEnd; aIter++, pValues++ )
-    {
-        pValues->Name = (*aIter).first;
-        pValues->Value = (*aIter).second;
-    }
-}
+// ----------------------------------------------------------------------------
 
+typedef ::cppu::WeakImplHelper2< XPropertySet, XPropertySetInfo > GenericPropertySetImplBase;
 
-void PropertyMap::makeSequence( Sequence< PropertyValue >& rSequence ) const
-{
-    rSequence.realloc( size() );
-    PropertyValue* pValues = rSequence.getArray();
-    const_iterator aIter( begin() );
-    const_iterator aEnd( end() );
+/** This class implements a generic XPropertySet.
 
-    for( ; aIter != aEnd; aIter++, pValues++ )
-    {
-        pValues->Name = (*aIter).first;
-        pValues->Value = (*aIter).second;
-        pValues->State = PropertyState_DIRECT_VALUE;
-    }
-}
-
-void PropertyMap::makeSequence( Sequence< OUString >& rNames, Sequence< Any >& rValues ) const
-{
-    rNames.realloc( size() );
-    rValues.realloc( size() );
-    OUString* pNames = rNames.getArray();
-    Any* pValues = rValues.getArray();
-    const_iterator aIter( begin() );
-    const_iterator aEnd( end() );
-
-    for( ; aIter != aEnd; aIter++, pNames++, pValues++ )
-    {
-        *pNames = (*aIter).first;
-        *pValues = (*aIter).second;
-    }
-}
-
-
-void PropertyMap::dump_debug(const char *pMessage)
-{
-    const_iterator aIter( begin() );
-    const_iterator aEnd( end() );
-
-    if( pMessage != NULL)
-    {
-        OSL_TRACE("OOX: %s", pMessage);
-    }
-
-    if(aIter == aEnd)
-    {
-        OSL_TRACE("OOX: Properties empty");
-        return;
-    }
-
-    OSL_TRACE("OOX: Properties");
-
-    for( ; aIter != aEnd; aIter++ )
-    {
-        std::string value;
-        const Any & any = (*aIter).second;
-        try {
-            char buffer[256];
-            if(!any.hasValue() )
-            {
-                value = "*empty*";
-            }
-            else if(any.has<OUString>() )
-            {
-                OUString aStr;
-                any >>= aStr;
-                value = OUStringToOString( aStr, RTL_TEXTENCODING_ASCII_US ).getStr();
-            }
-            else if(any.has<sal_Int16>())
-            {
-                sal_Int16 v = 0;
-                any >>= v;
-                sprintf(buffer, "%d", (int)v);
-                value = buffer;
-            }
-            else if(any.has<sal_Int32>())
-            {
-                sal_Int32 v = 0;
-                any >>= v;
-                sprintf(buffer, "%d", (int)v);
-                value = buffer;
-            }
-            else if(any.has<sal_Bool>())
-            {
-                sal_Bool v = sal_False;
-                any >>= v;
-                sprintf(buffer, "%d", (int)v);
-                value = buffer;
-            }
-            else
-            {
-                value = "contains a: ";
-                value += OUStringToOString(any.getValueTypeName(), RTL_TEXTENCODING_ASCII_US ).getStr();
-            }
-        }
-        catch( ... )
-        {
-            value = "unable to convert from ";
-            value += OUStringToOString(any.getValueTypeName(), RTL_TEXTENCODING_ASCII_US ).getStr();
-        }
-        OSL_TRACE("OOX: -> %s = %s", OUStringToOString( (*aIter).first, RTL_TEXTENCODING_ASCII_US ).getStr(),
-                            value.c_str());
-    }
-}
-
-/** this class implements a generic XPropertySet
-    Properties of all names and types can be set and later retrieved
-    TODO: move this to comphelper or better find an existing implementation */
-class GenericPropertySet : public ::cppu::WeakImplHelper2< XPropertySet, XPropertySetInfo >,
-                           private PropertyMapBase,
-                           private Mutex
+    Properties of all names and types can be set and later retrieved.
+    TODO: move this to comphelper or better find an existing implementation
+ */
+class GenericPropertySet : public GenericPropertySetImplBase, private ::osl::Mutex
 {
 public:
-    GenericPropertySet();
-    GenericPropertySet( const PropertyMapBase& rProperties );
+    explicit            GenericPropertySet();
+    explicit            GenericPropertySet( const PropertyMap& rPropMap );
 
     // XPropertySet
-    virtual Reference< XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw (RuntimeException);
+    virtual Reference< XPropertySetInfo > SAL_CALL getPropertySetInfo() throw (RuntimeException);
     virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const Any& aValue ) throw (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException);
     virtual Any SAL_CALL getPropertyValue( const OUString& PropertyName ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException);
     virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const Reference< XPropertyChangeListener >& xListener ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException);
@@ -194,18 +86,26 @@ public:
     virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const Reference< XVetoableChangeListener >& aListener ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException);
 
     // XPropertySetInfo
-    virtual Sequence< Property > SAL_CALL getProperties(  ) throw (RuntimeException);
+    virtual Sequence< Property > SAL_CALL getProperties() throw (RuntimeException);
     virtual Property SAL_CALL getPropertyByName( const OUString& aName ) throw (UnknownPropertyException, RuntimeException);
-    virtual ::sal_Bool SAL_CALL hasPropertyByName( const OUString& Name ) throw (RuntimeException);
+    virtual sal_Bool SAL_CALL hasPropertyByName( const OUString& Name ) throw (RuntimeException);
+
+private:
+    typedef ::std::map< OUString, Any > PropertyNameMap;
+    PropertyNameMap     maPropMap;
 };
+
+// ----------------------------------------------------------------------------
 
 GenericPropertySet::GenericPropertySet()
 {
 }
 
-GenericPropertySet::GenericPropertySet( const PropertyMapBase& rProperties )
-: PropertyMapBase( rProperties )
+GenericPropertySet::GenericPropertySet( const PropertyMap& rPropMap )
 {
+    const PropertyNamesList& rPropNames = PropertyNamesPool::get();
+    for( PropertyMap::const_iterator aIt = rPropMap.begin(), aEnd = rPropMap.end(); aIt != aEnd; ++aIt )
+        maPropMap[ rPropNames[ aIt->first ] ] = aIt->second;
 }
 
 Reference< XPropertySetInfo > SAL_CALL GenericPropertySet::getPropertySetInfo() throw (RuntimeException)
@@ -213,69 +113,117 @@ Reference< XPropertySetInfo > SAL_CALL GenericPropertySet::getPropertySetInfo() 
     return this;
 }
 
-void SAL_CALL GenericPropertySet::setPropertyValue( const OUString& aPropertyName, const Any& aValue ) throw (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
+void SAL_CALL GenericPropertySet::setPropertyValue( const OUString& rPropertyName, const Any& rValue ) throw (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
-    MutexGuard aGuard( *this );
-    (*this)[ aPropertyName ] = aValue;
+    ::osl::MutexGuard aGuard( *this );
+    maPropMap[ rPropertyName ] = rValue;
 }
 
-Any SAL_CALL GenericPropertySet::getPropertyValue( const OUString& PropertyName ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
+Any SAL_CALL GenericPropertySet::getPropertyValue( const OUString& rPropertyName ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
-    iterator aIter( find( PropertyName ) );
-    if( aIter == end() )
+    PropertyNameMap::iterator aIt = maPropMap.find( rPropertyName );
+    if( aIt == maPropMap.end() )
         throw UnknownPropertyException();
-
-    return (*aIter).second;
+    return aIt->second;
 }
 
-void SAL_CALL GenericPropertySet::addPropertyChangeListener( const OUString& , const Reference< XPropertyChangeListener >&  ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException) {}
+// listeners are not supported by this implementation
+void SAL_CALL GenericPropertySet::addPropertyChangeListener( const OUString& , const Reference< XPropertyChangeListener >& ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException) {}
 void SAL_CALL GenericPropertySet::removePropertyChangeListener( const OUString& , const Reference< XPropertyChangeListener >&  ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException) {}
 void SAL_CALL GenericPropertySet::addVetoableChangeListener( const OUString& , const Reference< XVetoableChangeListener >&  ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException) {}
 void SAL_CALL GenericPropertySet::removeVetoableChangeListener( const OUString& , const Reference< XVetoableChangeListener >&  ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException) {}
 
 // XPropertySetInfo
-Sequence< Property > SAL_CALL GenericPropertySet::getProperties(  ) throw (RuntimeException)
+Sequence< Property > SAL_CALL GenericPropertySet::getProperties() throw (RuntimeException)
 {
-    Sequence< Property > aRet( size() );
-    Property* pProperty = aRet.getArray();
-
-    for( iterator aIter = begin(); aIter != end(); aIter++, pProperty++ )
+    Sequence< Property > aSeq( static_cast< sal_Int32 >( maPropMap.size() ) );
+    Property* pProperty = aSeq.getArray();
+    for( PropertyNameMap::iterator aIt = maPropMap.begin(), aEnd = maPropMap.end(); aIt != aEnd; ++aIt, ++pProperty )
     {
-        pProperty->Name = (*aIter).first;
+        pProperty->Name = aIt->first;
         pProperty->Handle = 0;
-        pProperty->Type = (*aIter).second.getValueType();
+        pProperty->Type = aIt->second.getValueType();
         pProperty->Attributes = 0;
     }
-
-    return aRet;
+    return aSeq;
 }
 
-Property SAL_CALL GenericPropertySet::getPropertyByName( const OUString& aName ) throw (UnknownPropertyException, RuntimeException)
+Property SAL_CALL GenericPropertySet::getPropertyByName( const OUString& rPropertyName ) throw (UnknownPropertyException, RuntimeException)
 {
-    iterator aIter( find( aName ) );
-    if( aIter == end() )
+    PropertyNameMap::iterator aIt = maPropMap.find( rPropertyName );
+    if( aIt == maPropMap.end() )
         throw UnknownPropertyException();
-
     Property aProperty;
-    aProperty.Name = (*aIter).first;
+    aProperty.Name = aIt->first;
     aProperty.Handle = 0;
-    aProperty.Type = (*aIter).second.getValueType();
+    aProperty.Type = aIt->second.getValueType();
     aProperty.Attributes = 0;
-
     return aProperty;
 }
 
-::sal_Bool SAL_CALL GenericPropertySet::hasPropertyByName( const OUString& Name ) throw (RuntimeException)
+sal_Bool SAL_CALL GenericPropertySet::hasPropertyByName( const OUString& rPropertyName ) throw (RuntimeException)
 {
-    return find( Name ) != end();
+    return maPropMap.find( rPropertyName ) != maPropMap.end();
 }
 
+} // namespace
+
+// ============================================================================
+
+const OUString& PropertyMap::getPropertyName( sal_Int32 nPropId )
+{
+    OSL_ENSURE( (0 <= nPropId) && (nPropId < PROP_COUNT), "PropertyMap::getPropertyName - invalid property identifier" );
+    return PropertyNamesPool::get()[ nPropId ];
+}
+
+const Any* PropertyMap::getProperty( sal_Int32 nPropId ) const
+{
+    const_iterator aIt = find( nPropId );
+    return (aIt == end()) ? 0 : &aIt->second;
+}
+
+Sequence< PropertyValue > PropertyMap::makePropertyValueSequence() const
+{
+    Sequence< PropertyValue > aSeq( static_cast< sal_Int32 >( size() ) );
+    if( !empty() )
+    {
+        const PropertyNamesList& rPropNames = PropertyNamesPool::get();
+        PropertyValue* pValues = aSeq.getArray();
+        for( const_iterator aIt = begin(), aEnd = end(); aIt != aEnd; ++aIt, ++pValues )
+        {
+            OSL_ENSURE( (0 <= aIt->first) && (aIt->first < PROP_COUNT), "PropertyMap::makePropertyValueSequence - invalid property identifier" );
+            pValues->Name = rPropNames[ aIt->first ];
+            pValues->Value = aIt->second;
+            pValues->State = ::com::sun::star::beans::PropertyState_DIRECT_VALUE;
+        }
+    }
+    return aSeq;
+}
+
+void PropertyMap::fillSequences( Sequence< OUString >& rNames, Sequence< Any >& rValues ) const
+{
+    rNames.realloc( static_cast< sal_Int32 >( size() ) );
+    rValues.realloc( static_cast< sal_Int32 >( size() ) );
+    if( !empty() )
+    {
+        const PropertyNamesList& rPropNames = PropertyNamesPool::get();
+        OUString* pNames = rNames.getArray();
+        Any* pValues = rValues.getArray();
+        for( const_iterator aIt = begin(), aEnd = end(); aIt != aEnd; ++aIt, ++pNames, ++pValues )
+        {
+            OSL_ENSURE( (0 <= aIt->first) && (aIt->first < PROP_COUNT), "PropertyMap::fillSequences - invalid property identifier" );
+            *pNames = rPropNames[ aIt->first ];
+            *pValues = aIt->second;
+        }
+    }
+}
 
 Reference< XPropertySet > PropertyMap::makePropertySet() const
 {
-    Reference< XPropertySet > xSet( new GenericPropertySet(*this) );
-    return xSet;
+    return new GenericPropertySet( *this );
 }
 
-}
+// ============================================================================
+
+} // namespace oox
 

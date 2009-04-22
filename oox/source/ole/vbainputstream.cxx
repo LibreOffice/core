@@ -114,14 +114,14 @@ bool VbaInputStream::updateChunk()
     if( mbEof ) return false;
 
     // check header signature
-    OSL_ENSURE( (nHeader & VBACHUNK_SIGMASK) == VBACHUNK_SIG, "VbaInputStream::readChunk - invalid chunk signature" );
+    OSL_ENSURE( (nHeader & VBACHUNK_SIGMASK) == VBACHUNK_SIG, "VbaInputStream::updateChunk - invalid chunk signature" );
     mbEof = (nHeader & VBACHUNK_SIGMASK) != VBACHUNK_SIG;
     if( mbEof ) return false;
 
     // decode length of chunk data and compression flag
     bool bCompressed = getFlag( nHeader, VBACHUNK_COMPRESSED );
     sal_uInt16 nChunkLen = (nHeader & VBACHUNK_LENMASK) + 1;
-    OSL_ENSURE( bCompressed || (nChunkLen == 4096), "VbaInputStream::readChunk - invalid uncompressed chunk size" );
+    OSL_ENSURE( bCompressed || (nChunkLen == 4096), "VbaInputStream::updateChunk - invalid uncompressed chunk size" );
     if( bCompressed )
     {
         maChunk.clear();
@@ -144,7 +144,7 @@ bool VbaInputStream::updateChunk()
                     // extract offset from high nBitCount bits, plus 1
                     sal_uInt16 nOffset = extractValue< sal_uInt16 >( nCopyToken, 16 - nBitCount, nBitCount ) + 1;
                     mbEof = (nOffset > maChunk.size()) || (maChunk.size() + nLength > 4096);
-                    OSL_ENSURE( !mbEof, "VbaInputStream::readChunk - invalid offset or size in copy token" );
+                    OSL_ENSURE( !mbEof, "VbaInputStream::updateChunk - invalid offset or size in copy token" );
                     if( !mbEof )
                     {
                         // append data to buffer

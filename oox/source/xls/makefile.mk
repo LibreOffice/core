@@ -53,6 +53,8 @@ SLOFILES =										\
         $(SLO)$/biffinputstream.obj				\
         $(SLO)$/biffoutputstream.obj			\
         $(SLO)$/chartsheetfragment.obj			\
+        $(SLO)$/commentsbuffer.obj				\
+        $(SLO)$/commentsfragment.obj			\
         $(SLO)$/condformatbuffer.obj			\
         $(SLO)$/condformatcontext.obj			\
         $(SLO)$/connectionsfragment.obj			\
@@ -65,9 +67,9 @@ SLOFILES =										\
         $(SLO)$/externallinkfragment.obj		\
         $(SLO)$/formulabase.obj					\
         $(SLO)$/formulaparser.obj				\
-        $(SLO)$/headerfooterparser.obj			\
         $(SLO)$/numberformatsbuffer.obj			\
         $(SLO)$/pagesettings.obj				\
+        $(SLO)$/pivotcachebuffer.obj			\
         $(SLO)$/pivotcachefragment.obj			\
         $(SLO)$/pivottablebuffer.obj			\
         $(SLO)$/pivottablefragment.obj			\
@@ -77,11 +79,9 @@ SLOFILES =										\
         $(SLO)$/sharedformulabuffer.obj			\
         $(SLO)$/sharedstringsbuffer.obj			\
         $(SLO)$/sharedstringsfragment.obj		\
-        $(SLO)$/sheetcellrangemap.obj			\
         $(SLO)$/sheetdatacontext.obj			\
         $(SLO)$/stylesbuffer.obj				\
         $(SLO)$/stylesfragment.obj				\
-        $(SLO)$/stylespropertyhelper.obj		\
         $(SLO)$/tablebuffer.obj					\
         $(SLO)$/tablefragment.obj				\
         $(SLO)$/themebuffer.obj					\

@@ -34,6 +34,7 @@
 using ::rtl::OUString;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Exception;
+using ::com::sun::star::util::DateTime;
 using ::com::sun::star::xml::sax::XFastAttributeList;
 
 namespace oox {
@@ -114,6 +115,24 @@ OptValue< bool > AttributeList::getBool( sal_Int32 nElement ) const
     return OptValue< bool >( onValue.has(), onValue.get() != 0 );
 }
 
+OptValue< DateTime > AttributeList::getDateTime( sal_Int32 nElement ) const
+{
+    OUString aValue = mxAttribs->getOptionalValue( nElement );
+    DateTime aDateTime;
+    bool bValid = (aValue.getLength() == 19) && (aValue[ 4 ] == '-') && (aValue[ 7 ] == '-') &&
+        (aValue[ 10 ] == 'T') && (aValue[ 13 ] == ':') && (aValue[ 16 ] == ':');
+    if( bValid )
+    {
+        aDateTime.Year    = static_cast< sal_uInt16 >( aValue.copy( 0, 4 ).toInt32() );
+        aDateTime.Month   = static_cast< sal_uInt16 >( aValue.copy( 5, 2 ).toInt32() );
+        aDateTime.Day     = static_cast< sal_uInt16 >( aValue.copy( 8, 2 ).toInt32() );
+        aDateTime.Hours   = static_cast< sal_uInt16 >( aValue.copy( 11, 2 ).toInt32() );
+        aDateTime.Minutes = static_cast< sal_uInt16 >( aValue.copy( 14, 2 ).toInt32() );
+        aDateTime.Seconds = static_cast< sal_uInt16 >( aValue.copy( 17, 2 ).toInt32() );
+    }
+    return OptValue< DateTime >( bValid, aDateTime );
+}
+
 // defaulted return values ----------------------------------------------------
 
 sal_Int32 AttributeList::getToken( sal_Int32 nElement, sal_Int32 nDefault ) const
@@ -161,6 +180,11 @@ sal_Int32 AttributeList::getHex( sal_Int32 nElement, sal_Int32 nDefault ) const
 bool AttributeList::getBool( sal_Int32 nElement, bool bDefault ) const
 {
     return getBool( nElement ).get( bDefault );
+}
+
+DateTime AttributeList::getDateTime( sal_Int32 nElement, const DateTime& rDefault ) const
+{
+    return getDateTime( nElement ).get( rDefault );
 }
 
 // ============================================================================

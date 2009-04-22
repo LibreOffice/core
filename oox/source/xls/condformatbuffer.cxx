@@ -43,6 +43,7 @@
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
+#include "properties.hxx"
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/helper/recordinputstream.hxx"
@@ -146,7 +147,7 @@ void lclAppendProperty( ::std::vector< PropertyValue >& orProps, const OUString&
 
 // ============================================================================
 
-OoxCondFormatRuleData::OoxCondFormatRuleData() :
+CondFormatRuleModel::CondFormatRuleModel() :
     mnPriority( -1 ),
     mnType( XML_TOKEN_INVALID ),
     mnOperator( XML_TOKEN_INVALID ),
@@ -162,7 +163,7 @@ OoxCondFormatRuleData::OoxCondFormatRuleData() :
 {
 }
 
-void OoxCondFormatRuleData::setBinOperator( sal_Int32 nOperator )
+void CondFormatRuleModel::setBinOperator( sal_Int32 nOperator )
 {
     static const sal_Int32 spnOperators[] = {
         XML_TOKEN_INVALID, XML_between, XML_notBetween, XML_equal, XML_notEqual,
@@ -170,7 +171,7 @@ void OoxCondFormatRuleData::setBinOperator( sal_Int32 nOperator )
     mnOperator = STATIC_ARRAY_SELECT( spnOperators, nOperator, XML_TOKEN_INVALID );
 }
 
-void OoxCondFormatRuleData::setOobTextType( sal_Int32 nOperator )
+void CondFormatRuleModel::setOobTextType( sal_Int32 nOperator )
 {
     // note: type XML_notContainsText vs. operator XML_notContains
     static const sal_Int32 spnTypes[] = { XML_containsText, XML_notContainsText, XML_beginsWith, XML_endsWith };
@@ -189,19 +190,19 @@ CondFormatRule::CondFormatRule( const CondFormat& rCondFormat ) :
 
 void CondFormatRule::importCfRule( const AttributeList& rAttribs )
 {
-    maOoxData.maText         = rAttribs.getString( XML_text, OUString() );
-    maOoxData.mnPriority     = rAttribs.getInteger( XML_priority, -1 );
-    maOoxData.mnType         = rAttribs.getToken( XML_type, XML_TOKEN_INVALID );
-    maOoxData.mnOperator     = rAttribs.getToken( XML_operator, XML_TOKEN_INVALID );
-    maOoxData.mnTimePeriod   = rAttribs.getToken( XML_timePeriod, XML_TOKEN_INVALID );
-    maOoxData.mnRank         = rAttribs.getInteger( XML_rank, 0 );
-    maOoxData.mnStdDev       = rAttribs.getInteger( XML_stdDev, 0 );
-    maOoxData.mnDxfId        = rAttribs.getInteger( XML_dxfId, -1 );
-    maOoxData.mbStopIfTrue   = rAttribs.getBool( XML_stopIfTrue, false );
-    maOoxData.mbBottom       = rAttribs.getBool( XML_bottom, false );
-    maOoxData.mbPercent      = rAttribs.getBool( XML_percent, false );
-    maOoxData.mbAboveAverage = rAttribs.getBool( XML_aboveAverage, true );
-    maOoxData.mbEqualAverage = rAttribs.getBool( XML_equalAverage, false );
+    maModel.maText         = rAttribs.getString( XML_text, OUString() );
+    maModel.mnPriority     = rAttribs.getInteger( XML_priority, -1 );
+    maModel.mnType         = rAttribs.getToken( XML_type, XML_TOKEN_INVALID );
+    maModel.mnOperator     = rAttribs.getToken( XML_operator, XML_TOKEN_INVALID );
+    maModel.mnTimePeriod   = rAttribs.getToken( XML_timePeriod, XML_TOKEN_INVALID );
+    maModel.mnRank         = rAttribs.getInteger( XML_rank, 0 );
+    maModel.mnStdDev       = rAttribs.getInteger( XML_stdDev, 0 );
+    maModel.mnDxfId        = rAttribs.getInteger( XML_dxfId, -1 );
+    maModel.mbStopIfTrue   = rAttribs.getBool( XML_stopIfTrue, false );
+    maModel.mbBottom       = rAttribs.getBool( XML_bottom, false );
+    maModel.mbPercent      = rAttribs.getBool( XML_percent, false );
+    maModel.mbAboveAverage = rAttribs.getBool( XML_aboveAverage, true );
+    maModel.mbEqualAverage = rAttribs.getBool( XML_equalAverage, false );
 }
 
 void CondFormatRule::appendFormula( const OUString& rFormula )
@@ -209,16 +210,16 @@ void CondFormatRule::appendFormula( const OUString& rFormula )
     TokensFormulaContext aContext( true, false );
     aContext.setBaseAddress( mrCondFormat.getRanges().getBaseAddress() );
     getFormulaParser().importFormula( aContext, rFormula );
-    maOoxData.maFormulas.push_back( aContext );
+    maModel.maFormulas.push_back( aContext );
 }
 
 void CondFormatRule::importCfRule( RecordInputStream& rStrm )
 {
     sal_Int32 nType, nSubType, nOperator, nFmla1Size, nFmla2Size, nFmla3Size;
     sal_uInt16 nFlags;
-    rStrm >> nType >> nSubType >> maOoxData.mnDxfId >> maOoxData.mnPriority >> nOperator;
+    rStrm >> nType >> nSubType >> maModel.mnDxfId >> maModel.mnPriority >> nOperator;
     rStrm.skip( 8 );
-    rStrm >> nFlags >> nFmla1Size >> nFmla2Size >> nFmla3Size >> maOoxData.maText;
+    rStrm >> nFlags >> nFmla1Size >> nFmla2Size >> nFmla3Size >> maModel.maText;
 
     /*  Import the formulas. For no obvious reason, the sizes of the formulas
         are already stored before. Nevertheless the following formulas contain
@@ -232,7 +233,7 @@ void CondFormatRule::importCfRule( RecordInputStream& rStrm )
         TokensFormulaContext aContext( true, false );
         aContext.setBaseAddress( mrCondFormat.getRanges().getBaseAddress() );
         getFormulaParser().importFormula( aContext, rStrm );
-        maOoxData.maFormulas.push_back( aContext );
+        maModel.maFormulas.push_back( aContext );
 
         // second formula
         OSL_ENSURE( (nFmla2Size >= 0) || (nFmla3Size == 0), "CondFormatRule::importCfRule - missing second formula" );
@@ -240,23 +241,23 @@ void CondFormatRule::importCfRule( RecordInputStream& rStrm )
         if( rStrm.getRemaining() >= 8 )
         {
             getFormulaParser().importFormula( aContext, rStrm );
-            maOoxData.maFormulas.push_back( aContext );
+            maModel.maFormulas.push_back( aContext );
 
             // third formula
             OSL_ENSURE( (nFmla3Size > 0) == (rStrm.getRemaining() >= 8), "CondFormatRule::importCfRule - formula size mismatch" );
             if( rStrm.getRemaining() >= 8 )
             {
                 getFormulaParser().importFormula( aContext, rStrm );
-                maOoxData.maFormulas.push_back( aContext );
+                maModel.maFormulas.push_back( aContext );
             }
         }
     }
 
     // flags
-    maOoxData.mbStopIfTrue   = getFlag( nFlags, OOBIN_CFRULE_STOPIFTRUE );
-    maOoxData.mbBottom       = getFlag( nFlags, OOBIN_CFRULE_BOTTOM );
-    maOoxData.mbPercent      = getFlag( nFlags, OOBIN_CFRULE_PERCENT );
-    maOoxData.mbAboveAverage = getFlag( nFlags, OOBIN_CFRULE_ABOVEAVERAGE );
+    maModel.mbStopIfTrue   = getFlag( nFlags, OOBIN_CFRULE_STOPIFTRUE );
+    maModel.mbBottom       = getFlag( nFlags, OOBIN_CFRULE_BOTTOM );
+    maModel.mbPercent      = getFlag( nFlags, OOBIN_CFRULE_PERCENT );
+    maModel.mbAboveAverage = getFlag( nFlags, OOBIN_CFRULE_ABOVEAVERAGE );
     // no flag for equalAverage, must be determined from subtype below...
 
     // Convert the type/operator settings. This is a real mess...
@@ -264,9 +265,9 @@ void CondFormatRule::importCfRule( RecordInputStream& rStrm )
     {
         case OOBIN_CFRULE_TYPE_CELLIS:
             OSL_ENSURE( nSubType == OOBIN_CFRULE_SUB_CELLIS, "CondFormatRule::importCfRule - rule type/subtype mismatch" );
-            maOoxData.mnType = XML_cellIs;
-            maOoxData.setBinOperator( nOperator );
-            OSL_ENSURE( maOoxData.mnOperator != XML_TOKEN_INVALID, "CondFormatRule::importCfRule - unknown operator" );
+            maModel.mnType = XML_cellIs;
+            maModel.setBinOperator( nOperator );
+            OSL_ENSURE( maModel.mnOperator != XML_TOKEN_INVALID, "CondFormatRule::importCfRule - unknown operator" );
         break;
         case OOBIN_CFRULE_TYPE_EXPRESSION:
             // here we have to look at the subtype to find the real type...
@@ -274,135 +275,135 @@ void CondFormatRule::importCfRule( RecordInputStream& rStrm )
             {
                 case OOBIN_CFRULE_SUB_EXPRESSION:
                     OSL_ENSURE( nOperator == 0, "CondFormatRule::importCfRule - unexpected operator value" );
-                    maOoxData.mnType = XML_expression;
+                    maModel.mnType = XML_expression;
                 break;
                 case OOBIN_CFRULE_SUB_UNIQUE:
                     OSL_ENSURE( nOperator == 0, "CondFormatRule::importCfRule - unexpected operator value" );
-                    maOoxData.mnType = XML_uniqueValues;
+                    maModel.mnType = XML_uniqueValues;
                 break;
                 case OOBIN_CFRULE_SUB_TEXT:
-                    maOoxData.setOobTextType( nOperator );
-                    OSL_ENSURE( maOoxData.mnType != XML_TOKEN_INVALID, "CondFormatRule::importCfRule - unexpected operator value" );
+                    maModel.setOobTextType( nOperator );
+                    OSL_ENSURE( maModel.mnType != XML_TOKEN_INVALID, "CondFormatRule::importCfRule - unexpected operator value" );
                 break;
                 case OOBIN_CFRULE_SUB_BLANK:
                     OSL_ENSURE( nOperator == 0, "CondFormatRule::importCfRule - unexpected operator value" );
-                    maOoxData.mnType = XML_containsBlanks;
+                    maModel.mnType = XML_containsBlanks;
                 break;
                 case OOBIN_CFRULE_SUB_NOTBLANK:
                     OSL_ENSURE( nOperator == 0, "CondFormatRule::importCfRule - unexpected operator value" );
-                    maOoxData.mnType = XML_notContainsBlanks;
+                    maModel.mnType = XML_notContainsBlanks;
                 break;
                 case OOBIN_CFRULE_SUB_ERROR:
                     OSL_ENSURE( nOperator == 0, "CondFormatRule::importCfRule - unexpected operator value" );
-                    maOoxData.mnType = XML_containsErrors;
+                    maModel.mnType = XML_containsErrors;
                 break;
                 case OOBIN_CFRULE_SUB_NOTERROR:
                     OSL_ENSURE( nOperator == 0, "CondFormatRule::importCfRule - unexpected operator value" );
-                    maOoxData.mnType = XML_notContainsErrors;
+                    maModel.mnType = XML_notContainsErrors;
                 break;
                 case OOBIN_CFRULE_SUB_TODAY:
                     OSL_ENSURE( nOperator == OOBIN_CFRULE_TIMEOP_TODAY, "CondFormatRule::importCfRule - unexpected time operator value" );
-                    maOoxData.mnType = XML_timePeriod;
-                    maOoxData.mnTimePeriod = XML_today;
+                    maModel.mnType = XML_timePeriod;
+                    maModel.mnTimePeriod = XML_today;
                 break;
                 case OOBIN_CFRULE_SUB_TOMORROW:
                     OSL_ENSURE( nOperator == OOBIN_CFRULE_TIMEOP_TOMORROW, "CondFormatRule::importCfRule - unexpected time operator value" );
-                    maOoxData.mnType = XML_timePeriod;
-                    maOoxData.mnTimePeriod = XML_tomorrow;
+                    maModel.mnType = XML_timePeriod;
+                    maModel.mnTimePeriod = XML_tomorrow;
                 break;
                 case OOBIN_CFRULE_SUB_YESTERDAY:
                     OSL_ENSURE( nOperator == OOBIN_CFRULE_TIMEOP_YESTERDAY, "CondFormatRule::importCfRule - unexpected time operator value" );
-                    maOoxData.mnType = XML_timePeriod;
-                    maOoxData.mnTimePeriod = XML_yesterday;
+                    maModel.mnType = XML_timePeriod;
+                    maModel.mnTimePeriod = XML_yesterday;
                 break;
                 case OOBIN_CFRULE_SUB_LAST7DAYS:
                     OSL_ENSURE( nOperator == OOBIN_CFRULE_TIMEOP_LAST7DAYS, "CondFormatRule::importCfRule - unexpected time operator value" );
-                    maOoxData.mnType = XML_timePeriod;
-                    maOoxData.mnTimePeriod = XML_last7Days;
+                    maModel.mnType = XML_timePeriod;
+                    maModel.mnTimePeriod = XML_last7Days;
                 break;
                 case OOBIN_CFRULE_SUB_LASTMONTH:
                     OSL_ENSURE( nOperator == OOBIN_CFRULE_TIMEOP_LASTMONTH, "CondFormatRule::importCfRule - unexpected time operator value" );
-                    maOoxData.mnType = XML_timePeriod;
-                    maOoxData.mnTimePeriod = XML_lastMonth;
+                    maModel.mnType = XML_timePeriod;
+                    maModel.mnTimePeriod = XML_lastMonth;
                 break;
                 case OOBIN_CFRULE_SUB_NEXTMONTH:
                     OSL_ENSURE( nOperator == OOBIN_CFRULE_TIMEOP_NEXTMONTH, "CondFormatRule::importCfRule - unexpected time operator value" );
-                    maOoxData.mnType = XML_timePeriod;
-                    maOoxData.mnTimePeriod = XML_nextMonth;
+                    maModel.mnType = XML_timePeriod;
+                    maModel.mnTimePeriod = XML_nextMonth;
                 break;
                 case OOBIN_CFRULE_SUB_THISWEEK:
                     OSL_ENSURE( nOperator == OOBIN_CFRULE_TIMEOP_THISWEEK, "CondFormatRule::importCfRule - unexpected time operator value" );
-                    maOoxData.mnType = XML_timePeriod;
-                    maOoxData.mnTimePeriod = XML_thisWeek;
+                    maModel.mnType = XML_timePeriod;
+                    maModel.mnTimePeriod = XML_thisWeek;
                 break;
                 case OOBIN_CFRULE_SUB_NEXTWEEK:
                     OSL_ENSURE( nOperator == OOBIN_CFRULE_TIMEOP_NEXTWEEK, "CondFormatRule::importCfRule - unexpected time operator value" );
-                    maOoxData.mnType = XML_timePeriod;
-                    maOoxData.mnTimePeriod = XML_nextWeek;
+                    maModel.mnType = XML_timePeriod;
+                    maModel.mnTimePeriod = XML_nextWeek;
                 break;
                 case OOBIN_CFRULE_SUB_LASTWEEK:
                     OSL_ENSURE( nOperator == OOBIN_CFRULE_TIMEOP_LASTWEEK, "CondFormatRule::importCfRule - unexpected time operator value" );
-                    maOoxData.mnType = XML_timePeriod;
-                    maOoxData.mnTimePeriod = XML_lastWeek;
+                    maModel.mnType = XML_timePeriod;
+                    maModel.mnTimePeriod = XML_lastWeek;
                 break;
                 case OOBIN_CFRULE_SUB_THISMONTH:
                     OSL_ENSURE( nOperator == OOBIN_CFRULE_TIMEOP_THISMONTH, "CondFormatRule::importCfRule - unexpected time operator value" );
-                    maOoxData.mnType = XML_timePeriod;
-                    maOoxData.mnTimePeriod = XML_thisMonth;
+                    maModel.mnType = XML_timePeriod;
+                    maModel.mnTimePeriod = XML_thisMonth;
                 break;
                 case OOBIN_CFRULE_SUB_ABOVEAVERAGE:
-                    OSL_ENSURE( maOoxData.mbAboveAverage, "CondFormatRule::importCfRule - wrong above-average flag" );
-                    maOoxData.mnType = XML_aboveAverage;
-                    maOoxData.mnStdDev = nOperator;     // operator field used for standard deviation
-                    maOoxData.mbAboveAverage = true;
-                    maOoxData.mbEqualAverage = false;   // does not exist as real flag...
+                    OSL_ENSURE( maModel.mbAboveAverage, "CondFormatRule::importCfRule - wrong above-average flag" );
+                    maModel.mnType = XML_aboveAverage;
+                    maModel.mnStdDev = nOperator;     // operator field used for standard deviation
+                    maModel.mbAboveAverage = true;
+                    maModel.mbEqualAverage = false;   // does not exist as real flag...
                 break;
                 case OOBIN_CFRULE_SUB_BELOWAVERAGE:
-                    OSL_ENSURE( !maOoxData.mbAboveAverage, "CondFormatRule::importCfRule - wrong above-average flag" );
-                    maOoxData.mnType = XML_aboveAverage;
-                    maOoxData.mnStdDev = nOperator;     // operator field used for standard deviation
-                    maOoxData.mbAboveAverage = false;
-                    maOoxData.mbEqualAverage = false;   // does not exist as real flag...
+                    OSL_ENSURE( !maModel.mbAboveAverage, "CondFormatRule::importCfRule - wrong above-average flag" );
+                    maModel.mnType = XML_aboveAverage;
+                    maModel.mnStdDev = nOperator;     // operator field used for standard deviation
+                    maModel.mbAboveAverage = false;
+                    maModel.mbEqualAverage = false;   // does not exist as real flag...
                 break;
                 case OOBIN_CFRULE_SUB_DUPLICATE:
                     OSL_ENSURE( nOperator == 0, "CondFormatRule::importCfRule - unexpected operator value" );
-                    maOoxData.mnType = XML_duplicateValues;
+                    maModel.mnType = XML_duplicateValues;
                 break;
                 case OOBIN_CFRULE_SUB_EQABOVEAVERAGE:
-                    OSL_ENSURE( maOoxData.mbAboveAverage, "CondFormatRule::importCfRule - wrong above-average flag" );
-                    maOoxData.mnType = XML_aboveAverage;
-                    maOoxData.mnStdDev = nOperator;     // operator field used for standard deviation
-                    maOoxData.mbAboveAverage = true;
-                    maOoxData.mbEqualAverage = true;    // does not exist as real flag...
+                    OSL_ENSURE( maModel.mbAboveAverage, "CondFormatRule::importCfRule - wrong above-average flag" );
+                    maModel.mnType = XML_aboveAverage;
+                    maModel.mnStdDev = nOperator;     // operator field used for standard deviation
+                    maModel.mbAboveAverage = true;
+                    maModel.mbEqualAverage = true;    // does not exist as real flag...
                 break;
                 case OOBIN_CFRULE_SUB_EQBELOWAVERAGE:
-                    OSL_ENSURE( !maOoxData.mbAboveAverage, "CondFormatRule::importCfRule - wrong above-average flag" );
-                    maOoxData.mnType = XML_aboveAverage;
-                    maOoxData.mnStdDev = nOperator;     // operator field used for standard deviation
-                    maOoxData.mbAboveAverage = false;
-                    maOoxData.mbEqualAverage = true;    // does not exist as real flag...
+                    OSL_ENSURE( !maModel.mbAboveAverage, "CondFormatRule::importCfRule - wrong above-average flag" );
+                    maModel.mnType = XML_aboveAverage;
+                    maModel.mnStdDev = nOperator;     // operator field used for standard deviation
+                    maModel.mbAboveAverage = false;
+                    maModel.mbEqualAverage = true;    // does not exist as real flag...
                 break;
             }
         break;
         case OOBIN_CFRULE_TYPE_COLORSCALE:
             OSL_ENSURE( nSubType == OOBIN_CFRULE_SUB_COLORSCALE, "CondFormatRule::importCfRule - rule type/subtype mismatch" );
             OSL_ENSURE( nOperator == 0, "CondFormatRule::importCfRule - unexpected operator value" );
-            maOoxData.mnType = XML_colorScale;
+            maModel.mnType = XML_colorScale;
         break;
         case OOBIN_CFRULE_TYPE_DATABAR:
             OSL_ENSURE( nSubType == OOBIN_CFRULE_SUB_DATABAR, "CondFormatRule::importCfRule - rule type/subtype mismatch" );
             OSL_ENSURE( nOperator == 0, "CondFormatRule::importCfRule - unexpected operator value" );
-            maOoxData.mnType = XML_dataBar;
+            maModel.mnType = XML_dataBar;
         break;
         case OOBIN_CFRULE_TYPE_TOPTEN:
             OSL_ENSURE( nSubType == OOBIN_CFRULE_SUB_TOPTEN, "CondFormatRule::importCfRule - rule type/subtype mismatch" );
-            maOoxData.mnType = XML_top10;
-            maOoxData.mnRank = nOperator;   // operator field used for rank value
+            maModel.mnType = XML_top10;
+            maModel.mnRank = nOperator;   // operator field used for rank value
         break;
         case OOBIN_CFRULE_TYPE_ICONSET:
             OSL_ENSURE( nSubType == OOBIN_CFRULE_SUB_ICONSET, "CondFormatRule::importCfRule - rule type/subtype mismatch" );
             OSL_ENSURE( nOperator == 0, "CondFormatRule::importCfRule - unexpected operator value" );
-            maOoxData.mnType = XML_iconSet;
+            maModel.mnType = XML_iconSet;
         break;
         default:
             OSL_ENSURE( false, "CondFormatRule::importCfRule - unknown rule type" );
@@ -418,13 +419,13 @@ void CondFormatRule::importCfRule( BiffInputStream& rStrm, sal_Int32 nPriority )
     rStrm.skip( 2 );
 
     static const sal_Int32 spnTypeIds[] = { XML_TOKEN_INVALID, XML_cellIs, XML_expression };
-    maOoxData.mnType = STATIC_ARRAY_SELECT( spnTypeIds, nType, XML_TOKEN_INVALID );
+    maModel.mnType = STATIC_ARRAY_SELECT( spnTypeIds, nType, XML_TOKEN_INVALID );
 
-    maOoxData.setBinOperator( nOperator );
-    maOoxData.mnPriority = nPriority;
-    maOoxData.mbStopIfTrue = true;
+    maModel.setBinOperator( nOperator );
+    maModel.mnPriority = nPriority;
+    maModel.mbStopIfTrue = true;
 
-    DxfRef xDxf = getStyles().createDxf( &maOoxData.mnDxfId );
+    DxfRef xDxf = getStyles().createDxf( &maModel.mnDxfId );
     xDxf->importCfRule( rStrm, nFlags );
     xDxf->finalizeImport();
 
@@ -435,11 +436,11 @@ void CondFormatRule::importCfRule( BiffInputStream& rStrm, sal_Int32 nPriority )
         TokensFormulaContext aContext( true, false );
         aContext.setBaseAddress( mrCondFormat.getRanges().getBaseAddress() );
         getFormulaParser().importFormula( aContext, rStrm, &nFmla1Size );
-        maOoxData.maFormulas.push_back( aContext );
+        maModel.maFormulas.push_back( aContext );
         if( nFmla2Size > 0 )
         {
             getFormulaParser().importFormula( aContext, rStrm, &nFmla2Size );
-            maOoxData.maFormulas.push_back( aContext );
+            maModel.maFormulas.push_back( aContext );
         }
     }
 }
@@ -451,47 +452,47 @@ void CondFormatRule::finalizeImport( const Reference< XSheetConditionalEntries >
     /*  Replacement formula for unsupported rule types (text comparison rules,
         time period rules, cell type rules). The replacement formulas below may
         contain several placeholders:
-        -   '#B' will be replaced by the current base address (may occur
-            several times).
+        -   '#B' will be replaced by the current relative base address (may
+            occur several times).
         -   '#R' will be replaced by the entire range list of the conditional
             formatting (absolute addresses).
         -   '#T' will be replaced by the quoted comparison text.
         -   '#L' will be replaced by the length of the comparison text (from
             the 'text' attribute) used in text comparison rules.
-        -   '#K' will be replaced by the rank (from the 'rank' attribute) used in
-            top-10 rules.
+        -   '#K' will be replaced by the rank (from the 'rank' attribute) used
+            in top-10 rules.
         -   '#M' will be replaced by the top/bottom flag (from the 'bottom'
             attribute) used in the RANK function in top-10 rules.
      */
     OUString aReplaceFormula;
 
-    switch( maOoxData.mnType )
+    switch( maModel.mnType )
     {
         case XML_cellIs:
-            eOperator = CondFormatBuffer::convertToApiOperator( maOoxData.mnOperator );
+            eOperator = CondFormatBuffer::convertToApiOperator( maModel.mnOperator );
         break;
         case XML_expression:
             eOperator = ::com::sun::star::sheet::ConditionOperator_FORMULA;
         break;
         case XML_containsText:
-            OSL_ENSURE( maOoxData.mnOperator == XML_containsText, "CondFormatRule::finalizeImport - unexpected operator" );
+            OSL_ENSURE( maModel.mnOperator == XML_containsText, "CondFormatRule::finalizeImport - unexpected operator" );
             aReplaceFormula = CREATE_OUSTRING( "NOT(ISERROR(SEARCH(#T,#B)))" );
         break;
         case XML_notContainsText:
             // note: type XML_notContainsText vs. operator XML_notContains
-            OSL_ENSURE( maOoxData.mnOperator == XML_notContains, "CondFormatRule::finalizeImport - unexpected operator" );
+            OSL_ENSURE( maModel.mnOperator == XML_notContains, "CondFormatRule::finalizeImport - unexpected operator" );
             aReplaceFormula = CREATE_OUSTRING( "ISERROR(SEARCH(#T,#B))" );
         break;
         case XML_beginsWith:
-            OSL_ENSURE( maOoxData.mnOperator == XML_beginsWith, "CondFormatRule::finalizeImport - unexpected operator" );
+            OSL_ENSURE( maModel.mnOperator == XML_beginsWith, "CondFormatRule::finalizeImport - unexpected operator" );
             aReplaceFormula = CREATE_OUSTRING( "LEFT(#B,#L)=#T" );
         break;
         case XML_endsWith:
-            OSL_ENSURE( maOoxData.mnOperator == XML_endsWith, "CondFormatRule::finalizeImport - unexpected operator" );
+            OSL_ENSURE( maModel.mnOperator == XML_endsWith, "CondFormatRule::finalizeImport - unexpected operator" );
             aReplaceFormula = CREATE_OUSTRING( "RIGHT(#B,#L)=#T" );
         break;
         case XML_timePeriod:
-            switch( maOoxData.mnTimePeriod )
+            switch( maModel.mnTimePeriod )
             {
                 case XML_yesterday:
                     aReplaceFormula = CREATE_OUSTRING( "FLOOR(#B,1)=TODAY()-1" );
@@ -540,18 +541,18 @@ void CondFormatRule::finalizeImport( const Reference< XSheetConditionalEntries >
             aReplaceFormula = CREATE_OUSTRING( "NOT(ISERROR(#B))" );
         break;
         case XML_top10:
-            if( maOoxData.mbPercent )
+            if( maModel.mbPercent )
                 aReplaceFormula = CREATE_OUSTRING( "RANK(#B,#R,#M)/COUNT(#R)<=#K%" );
             else
                 aReplaceFormula = CREATE_OUSTRING( "RANK(#B,#R,#M)<=#K" );
         break;
         case XML_aboveAverage:
-            if( maOoxData.mnStdDev == 0 )
+            if( maModel.mnStdDev == 0 )
             {
-                if( maOoxData.mbAboveAverage )
-                    aReplaceFormula = maOoxData.mbEqualAverage ? CREATE_OUSTRING( "#B>=AVERAGE(#R)" ) : CREATE_OUSTRING( "#B>AVERAGE(#R)" );
+                if( maModel.mbAboveAverage )
+                    aReplaceFormula = maModel.mbEqualAverage ? CREATE_OUSTRING( "#B>=AVERAGE(#R)" ) : CREATE_OUSTRING( "#B>AVERAGE(#R)" );
                 else
-                    aReplaceFormula = maOoxData.mbEqualAverage ? CREATE_OUSTRING( "#B<=AVERAGE(#R)" ) : CREATE_OUSTRING( "#B<AVERAGE(#R)" );
+                    aReplaceFormula = maModel.mbEqualAverage ? CREATE_OUSTRING( "#B<=AVERAGE(#R)" ) : CREATE_OUSTRING( "#B<AVERAGE(#R)" );
             }
         break;
     }
@@ -577,20 +578,20 @@ void CondFormatRule::finalizeImport( const Reference< XSheetConditionalEntries >
                 case 'T':       // comparison text
                     if( aText.getLength() == 0 )
                         // quote the comparison text, and handle embedded quote characters
-                        aText = FormulaProcessorBase::generateApiString( maOoxData.maText );
+                        aText = FormulaProcessorBase::generateApiString( maModel.maText );
                     aReplaceFormula = aReplaceFormula.replaceAt( nStrPos, 2, aText );
                 break;
                 case 'L':       // length of comparison text
                     aReplaceFormula = aReplaceFormula.replaceAt( nStrPos, 2,
-                        OUString::valueOf( maOoxData.maText.getLength() ) );
+                        OUString::valueOf( maModel.maText.getLength() ) );
                 break;
                 case 'K':       // top-10 rank
                     aReplaceFormula = aReplaceFormula.replaceAt( nStrPos, 2,
-                        OUString::valueOf( maOoxData.mnRank ) );
+                        OUString::valueOf( maModel.mnRank ) );
                 break;
                 case 'M':       // top-10 top/bottom flag
                     aReplaceFormula = aReplaceFormula.replaceAt( nStrPos, 2,
-                        OUString::valueOf( static_cast< sal_Int32 >( maOoxData.mbBottom ? 1 : 0 ) ) );
+                        OUString::valueOf( static_cast< sal_Int32 >( maModel.mbBottom ? 1 : 0 ) ) );
                 break;
                 default:
                     OSL_ENSURE( false, "CondFormatRule::finalizeImport - unknown placeholder" );
@@ -598,22 +599,22 @@ void CondFormatRule::finalizeImport( const Reference< XSheetConditionalEntries >
         }
 
         // set the replacement formula
-        maOoxData.maFormulas.clear();
+        maModel.maFormulas.clear();
         appendFormula( aReplaceFormula );
         eOperator = ::com::sun::star::sheet::ConditionOperator_FORMULA;
     }
 
-    if( rxEntries.is() && (eOperator != ::com::sun::star::sheet::ConditionOperator_NONE) && !maOoxData.maFormulas.empty() )
+    if( rxEntries.is() && (eOperator != ::com::sun::star::sheet::ConditionOperator_NONE) && !maModel.maFormulas.empty() )
     {
         ::std::vector< PropertyValue > aProps;
         // create condition properties
         lclAppendProperty( aProps, CREATE_OUSTRING( "Operator" ), eOperator );
-        lclAppendProperty( aProps, CREATE_OUSTRING( "Formula1" ), maOoxData.maFormulas[ 0 ].getTokens() );
-        if( maOoxData.maFormulas.size() >= 2 )
-            lclAppendProperty( aProps, CREATE_OUSTRING( "Formula2" ), maOoxData.maFormulas[ 1 ].getTokens() );
+        lclAppendProperty( aProps, CREATE_OUSTRING( "Formula1" ), maModel.maFormulas[ 0 ].getTokens() );
+        if( maModel.maFormulas.size() >= 2 )
+            lclAppendProperty( aProps, CREATE_OUSTRING( "Formula2" ), maModel.maFormulas[ 1 ].getTokens() );
 
         // style name for the formatting attributes
-        OUString aStyleName = getStyles().createDxfStyle( maOoxData.mnDxfId );
+        OUString aStyleName = getStyles().createDxfStyle( maModel.mnDxfId );
         if( aStyleName.getLength() > 0 )
             lclAppendProperty( aProps, CREATE_OUSTRING( "StyleName" ), aStyleName );
 
@@ -630,7 +631,7 @@ void CondFormatRule::finalizeImport( const Reference< XSheetConditionalEntries >
 
 // ============================================================================
 
-OoxCondFormatData::OoxCondFormatData() :
+CondFormatModel::CondFormatModel() :
     mbPivot( false )
 {
 }
@@ -644,8 +645,8 @@ CondFormat::CondFormat( const WorksheetHelper& rHelper ) :
 
 void CondFormat::importConditionalFormatting( const AttributeList& rAttribs )
 {
-    getAddressConverter().convertToCellRangeList( maOoxData.maRanges, rAttribs.getString( XML_sqref, OUString() ), getSheetIndex(), true );
-    maOoxData.mbPivot = rAttribs.getBool( XML_pivot, false );
+    getAddressConverter().convertToCellRangeList( maModel.maRanges, rAttribs.getString( XML_sqref, OUString() ), getSheetIndex(), true );
+    maModel.mbPivot = rAttribs.getBool( XML_pivot, false );
 }
 
 CondFormatRuleRef CondFormat::importCfRule( const AttributeList& rAttribs )
@@ -661,7 +662,7 @@ void CondFormat::importCondFormatting( RecordInputStream& rStrm )
     BinRangeList aRanges;
     rStrm.skip( 8 );
     rStrm >> aRanges;
-    getAddressConverter().convertToCellRangeList( maOoxData.maRanges, aRanges, getSheetIndex(), true );
+    getAddressConverter().convertToCellRangeList( maModel.maRanges, aRanges, getSheetIndex(), true );
 }
 
 void CondFormat::importCfRule( RecordInputStream& rStrm )
@@ -679,7 +680,7 @@ void CondFormat::importCfHeader( BiffInputStream& rStrm )
     rStrm >> nRuleCount;
     rStrm.skip( 10 );
     rStrm >> aRanges;
-    getAddressConverter().convertToCellRangeList( maOoxData.maRanges, aRanges, getSheetIndex(), true );
+    getAddressConverter().convertToCellRangeList( maModel.maRanges, aRanges, getSheetIndex(), true );
 
     // import following list of CFRULE records
     for( sal_uInt16 nRule = 0; (nRule < nRuleCount) && (rStrm.getNextRecId() == BIFF_ID_CFRULE) && rStrm.startNextRecord(); ++nRule )
@@ -692,17 +693,17 @@ void CondFormat::importCfHeader( BiffInputStream& rStrm )
 
 void CondFormat::finalizeImport()
 {
-    Reference< XSheetCellRanges > xRanges = getCellRangeList( maOoxData.maRanges );
+    Reference< XSheetCellRanges > xRanges = getCellRangeList( maModel.maRanges );
     if( xRanges.is() )
     {
         PropertySet aPropSet( xRanges );
         Reference< XSheetConditionalEntries > xEntries;
-        aPropSet.getProperty( xEntries, CREATE_OUSTRING( "ConditionalFormat" ) );
+        aPropSet.getProperty( xEntries, PROP_ConditionalFormat );
         if( xEntries.is() )
         {
             // maRules is sorted by rule priority
             maRules.forEachMem( &CondFormatRule::finalizeImport, xEntries );
-            aPropSet.setProperty( CREATE_OUSTRING( "ConditionalFormat" ), xEntries );
+            aPropSet.setProperty( PROP_ConditionalFormat, xEntries );
         }
     }
 }

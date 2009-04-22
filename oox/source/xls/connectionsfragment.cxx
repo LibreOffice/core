@@ -33,13 +33,7 @@
 #include "oox/xls/webquerybuffer.hxx"
 
 using ::rtl::OUString;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::RuntimeException;
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::sheet::XSpreadsheet;
-using ::com::sun::star::xml::sax::SAXException;
+using ::oox::core::ContextHandlerRef;
 
 namespace oox {
 namespace xls {
@@ -49,50 +43,44 @@ OoxConnectionsFragment::OoxConnectionsFragment( const WorkbookHelper& rHelper, c
 {
 }
 
-ContextWrapper OoxConnectionsFragment::onCreateContext( sal_Int32 nElement, const AttributeList& )
+ContextHandlerRef OoxConnectionsFragment::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
     switch( getCurrentElement() )
     {
         case XML_ROOT_CONTEXT:
-            return  (nElement == XLS_TOKEN( connections ));
-        case XLS_TOKEN( connections ):
-            return  (nElement == XLS_TOKEN( connection ));
-        case XLS_TOKEN( connection ):
-            return  (nElement == XLS_TOKEN( webPr )) ||
-                    (nElement == XLS_TOKEN( textPr )) ||
-                    (nElement == XLS_TOKEN( dbPr )) ||
-                    (nElement == XLS_TOKEN( olapPr )) ||
-                    (nElement == XLS_TOKEN( parameters ));
-        case XLS_TOKEN( webPr ):
-            return  (nElement == XLS_TOKEN( tables ));
-        case XLS_TOKEN( tables ):
-            return  (nElement == XLS_TOKEN( m )) ||
-                    (nElement == XLS_TOKEN( s )) ||
-                    (nElement == XLS_TOKEN( x ));
-    }
-    return false;
-}
+            if( nElement == XLS_TOKEN( connections ) ) return this;
+        break;
 
-void OoxConnectionsFragment::onStartElement( const AttributeList& rAttribs )
-{
-    switch ( getCurrentElement() )
-    {
+        case XLS_TOKEN( connections ):
+            switch( nElement )
+            {
+                case XLS_TOKEN( connection ):   importConnection( rAttribs );   return this;
+            }
+        break;
+
         case XLS_TOKEN( connection ):
-            importConnection( rAttribs );
+            switch( nElement )
+            {
+                case XLS_TOKEN( webPr ):        importWebPr( rAttribs );        return this;
+            }
         break;
+
         case XLS_TOKEN( webPr ):
-            importWebPr( rAttribs );
+            switch( nElement )
+            {
+                case XLS_TOKEN( tables ):       importTables( rAttribs );       return this;
+            }
         break;
+
         case XLS_TOKEN( tables ):
-            importTables( rAttribs );
-        break;
-        case XLS_TOKEN( s ):
-            importS( rAttribs );
-        break;
-        case XLS_TOKEN( x ):
-            importX( rAttribs );
+            switch( nElement )
+            {
+                case XLS_TOKEN( s ):            importS( rAttribs );            break;
+                case XLS_TOKEN( x ):            importX( rAttribs );            break;
+            }
         break;
     }
+    return 0;
 }
 
 void OoxConnectionsFragment::importConnection( const AttributeList& rAttribs )

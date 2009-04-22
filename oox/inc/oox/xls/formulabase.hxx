@@ -720,6 +720,21 @@ public:
     ::com::sun::star::uno::Any
                         extractReference( const ApiTokenSequence& rTokens ) const;
 
+    /** Tries to extract an absolute cell range from a formula token sequence.
+
+        @param orRange  (output parameter) The extracted cell range address.
+            Only valid, if the function returns true.
+
+        @param rTokens  The token sequence to be parsed. Should contain exactly
+            one address token or cell range address token. The token sequence
+            may contain whitespace tokens.
+
+        @return  True, if orRange contains the extracted cell range address.
+     */
+    bool                extractAbsoluteRange(
+                            ::com::sun::star::table::CellRangeAddress& orRange,
+                            const ApiTokenSequence& rTokens ) const;
+
     /** Tries to extract a cell range list from a formula token sequence.
 
         @param orRanges  (output parameter) If the token sequence is valid,
@@ -774,9 +789,6 @@ public:
                             ApiTokenSequence& orTokens,
                             sal_Unicode cStringSep,
                             bool bTrimLeadingSpaces ) const;
-
-private:
-    const ::rtl::OUString maAbsNameProp;    /// Property name for absolute name of cells and ranges.
 };
 
 // ============================================================================

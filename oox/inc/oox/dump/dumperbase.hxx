@@ -1820,6 +1820,7 @@ private:
     sal_Int64           mnRecPos;
     sal_Int64           mnRecId;
     sal_Int64           mnRecSize;
+    bool                mbShowRecPos;
 };
 
 // ============================================================================

@@ -38,6 +38,7 @@
 namespace com { namespace sun { namespace star {
     namespace awt { struct Point; }
     namespace awt { struct Size; }
+    namespace util { struct DateTime; }
     namespace table { class XTableColumns; }
     namespace table { class XTableRows; }
     namespace table { class XCell; }
@@ -55,6 +56,7 @@ class BinRangeList;
 class WorksheetSettings;
 class SharedFormulaBuffer;
 class CondFormatBuffer;
+class CommentsBuffer;
 class PageSettings;
 class SheetViewSettings;
 
@@ -75,7 +77,7 @@ enum WorksheetType
 // ============================================================================
 
 /** Stores some data about a cell. */
-struct OoxCellData
+struct CellModel
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::table::XCell > mxCell;
     ::com::sun::star::table::CellAddress maAddress;
@@ -89,13 +91,14 @@ struct OoxCellData
     bool                mbHasValueStr;      /// True = contents of maValueStr are valid.
     bool                mbShowPhonetic;     /// True = show phonetic text.
 
-    inline explicit     OoxCellData() { reset(); }
+    inline explicit     CellModel() { reset(); }
     void                reset();
 };
 
 // ----------------------------------------------------------------------------
 
-struct OoxDataTableData
+/** Stores data about a data table a.k.a. multiple operation range. */
+struct DataTableModel
 {
     ::rtl::OUString     maRef1;             /// String containing first reference cell for data table formulas.
     ::rtl::OUString     maRef2;             /// String containing second reference cell for data table formulas.
@@ -104,13 +107,13 @@ struct OoxDataTableData
     bool                mbRef1Deleted;      /// True = first reference cell deleted.
     bool                mbRef2Deleted;      /// True = second reference cell deleted.
 
-    explicit            OoxDataTableData();
+    explicit            DataTableModel();
 };
 
 // ----------------------------------------------------------------------------
 
 /** Stores formatting data about a range of columns. */
-struct OoxColumnData
+struct ColumnModel
 {
     sal_Int32           mnFirstCol;         /// 1-based (!) index of first column.
     sal_Int32           mnLastCol;          /// 1-based (!) index of last column.
@@ -121,16 +124,16 @@ struct OoxColumnData
     bool                mbHidden;           /// True = column is hidden.
     bool                mbCollapsed;        /// True = column outline is collapsed.
 
-    explicit            OoxColumnData();
+    explicit            ColumnModel();
 
     /** Expands this entry with the passed column range, if column settings are equal. */
-    bool                tryExpand( const OoxColumnData& rNewData );
+    bool                tryExpand( const ColumnModel& rModel );
 };
 
 // ----------------------------------------------------------------------------
 
 /** Stores formatting data about a range of rows. */
-struct OoxRowData
+struct RowModel
 {
     sal_Int32           mnFirstRow;         /// 1-based (!) index of first row.
     sal_Int32           mnLastRow;          /// 1-based (!) index of last row.
@@ -145,29 +148,29 @@ struct OoxRowData
     bool                mbThickTop;         /// True = row has extra space above text.
     bool                mbThickBottom;      /// True = row has extra space below text.
 
-    explicit            OoxRowData();
+    explicit            RowModel();
 
     /** Expands this entry with the passed row range, if row settings are equal. */
-    bool                tryExpand( const OoxRowData& rNewData );
+    bool                tryExpand( const RowModel& rModel );
 };
 
 // ----------------------------------------------------------------------------
 
 /** Stores formatting data about a page break. */
-struct OoxPageBreakData
+struct PageBreakModel
 {
     sal_Int32           mnColRow;           /// 0-based (!) index of column/row.
     sal_Int32           mnMin;              /// Start of limited break.
     sal_Int32           mnMax;              /// End of limited break.
     bool                mbManual;           /// True = manual page break.
 
-    explicit            OoxPageBreakData();
+    explicit            PageBreakModel();
 };
 
 // ----------------------------------------------------------------------------
 
 /** Stores data about a hyperlink range. */
-struct OoxHyperlinkData
+struct HyperlinkModel
 {
     ::com::sun::star::table::CellRangeAddress maRange;
     ::rtl::OUString     maTarget;
@@ -176,13 +179,13 @@ struct OoxHyperlinkData
     ::rtl::OUString     maFrame;
     ::rtl::OUString     maTooltip;
 
-    explicit            OoxHyperlinkData();
+    explicit            HyperlinkModel();
 };
 
 // ----------------------------------------------------------------------------
 
 /** Stores data about ranges with data validation settings. */
-struct OoxValidationData
+struct ValidationModel
 {
     ApiCellRangeList    maRanges;
     ApiTokenSequence    maTokens1;
@@ -199,7 +202,7 @@ struct OoxValidationData
     bool                mbNoDropDown;
     bool                mbAllowBlank;
 
-    explicit            OoxValidationData();
+    explicit            ValidationModel();
 
     /** Sets the passed OOBIN or BIFF validation type. */
     void                setBinType( sal_uInt8 nType );
@@ -212,7 +215,7 @@ struct OoxValidationData
 // ----------------------------------------------------------------------------
 
 /** Stores data about embedded objects. */
-struct OoxOleObjectData
+struct OleObjectModel
 {
     ::rtl::OUString     maProgId;
     ::rtl::OUString     maStoragePath;
@@ -221,19 +224,19 @@ struct OoxOleObjectData
     sal_Int32           mnShapeId;
     bool                mbAutoLoad;
 
-    explicit            OoxOleObjectData();
+    explicit            OleObjectModel();
 };
 
 // ----------------------------------------------------------------------------
 
 /** Stores data about embedded form controls. */
-struct OoxFormControlData
+struct FormControlModel
 {
     ::rtl::OUString     maStoragePath;
     ::rtl::OUString     maName;
     sal_Int32           mnShapeId;
 
-    explicit            OoxFormControlData();
+    explicit            FormControlModel();
 };
 
 // ============================================================================
@@ -252,7 +255,7 @@ public:
     sal_Int16           getSheetIndex() const;
     /** Returns the XSpreadsheet interface of the current sheet. */
     const ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheet >&
-                        getXSpreadsheet() const;
+                        getSheet() const;
 
     /** Returns the XCell interface for the passed cell address. */
     ::com::sun::star::uno::Reference< ::com::sun::star::table::XCell >
@@ -334,6 +337,8 @@ public:
     SharedFormulaBuffer& getSharedFormulas() const;
     /** Returns the conditional formattings in this sheet. */
     CondFormatBuffer&   getCondFormats() const;
+    /** Returns the buffer for all cell comments in this sheet. */
+    CommentsBuffer&     getComments() const;
     /** Returns the page/print settings for this sheet. */
     PageSettings&       getPageSettings() const;
     /** Returns the view settings for this sheet. */
@@ -348,6 +353,10 @@ public:
                             const ::com::sun::star::uno::Reference< ::com::sun::star::table::XCell >& rxCell,
                             sal_Int32 nStringId,
                             sal_Int32 nXfId ) const;
+    /** Sets the passed date/time value to the cell and adjusts number format. */
+    void                setDateTimeCell(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::table::XCell >& rxCell,
+                            const ::com::sun::star::util::DateTime& rDateTime ) const;
     /** Sets the passed boolean value to the cell and adjusts number format. */
     void                setBooleanCell(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::table::XCell >& rxCell,
@@ -360,27 +369,32 @@ public:
     void                setErrorCell(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::table::XCell >& rxCell,
                             sal_uInt8 nErrorCode ) const;
-    /** Sets cell contents to the cell specified in the passed cell data object. */
-    void                setOoxCell( OoxCellData& orCellData ) const;
+    /** Sets cell contents to the cell specified in the passed cell model. */
+    void                setCell( CellModel& orModel ) const;
+
+    /** Sets a standard number format (constant from com.sun.star.util.NumberFormat) to the passed cell. */
+    void                setStandardNumFmt(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::table::XCell >& rxCell,
+                            sal_Int16 nStdNumFmt ) const;
 
     /** Changes the current sheet type. */
     void                setSheetType( WorksheetType eSheetType );
     /** Sets the dimension (used area) of the sheet. */
     void                setDimension( const ::com::sun::star::table::CellRangeAddress& rRange );
     /** Stores the cell formatting data of the current cell. */
-    void                setCellFormat( const OoxCellData& rCellData );
+    void                setCellFormat( const CellModel& rModel );
     /** Merges the cells in the passed cell range. */
     void                setMergedRange( const ::com::sun::star::table::CellRangeAddress& rRange );
     /** Sets a column or row page break described in the passed struct. */
-    void                setPageBreak( const OoxPageBreakData& rData, bool bRowBreak );
+    void                setPageBreak( const PageBreakModel& rModel, bool bRowBreak );
     /** Inserts the hyperlink URL into the spreadsheet. */
-    void                setHyperlink( const OoxHyperlinkData& rHyperlink );
+    void                setHyperlink( const HyperlinkModel& rModel );
     /** Inserts the data validation settings into the spreadsheet. */
-    void                setValidation( const OoxValidationData& rValData );
+    void                setValidation( const ValidationModel& rModel );
     /** Sets a multiple table operation to the passed range. */
     void                setTableOperation(
                             const ::com::sun::star::table::CellRangeAddress& rRange,
-                            const OoxDataTableData& rTableData ) const;
+                            const DataTableModel& rModel ) const;
     /** Sets the passed label ranges to the current sheet. */
     void                setLabelRanges(
                             const ApiCellRangeList& rColRanges,
@@ -390,9 +404,9 @@ public:
     /** Sets the path to the legacy VML drawing fragment of this sheet. */
     void                setVmlDrawingPath( const ::rtl::OUString& rVmlDrawingPath );
     /** Sets additional data for an OLE object. */
-    void                setOleObject( const OoxOleObjectData& rOleObjectData );
+    void                setOleObject( const OleObjectModel& rModel );
     /** Sets additional data for an OCX form control. */
-    void                setFormControl( const OoxFormControlData& rFormControlData );
+    void                setFormControl( const FormControlModel& rModel );
 
     /** Sets base width for all columns (without padding pixels). This value
         is only used, if width has not been set with setDefaultColumnWidth(). */
@@ -400,10 +414,12 @@ public:
     /** Sets default width for all columns. This function overrides the base
         width set with the setBaseColumnWidth() function. */
     void                setDefaultColumnWidth( double fWidth );
+    /** Converts default cell formatting for a range of columns. */
+    void                setDefaultColumnFormat( sal_Int32 nFirstCol, sal_Int32 nLastCol, sal_Int32 nXfId );
     /** Sets column settings for a specific range of columns.
         @descr  Column default formatting is converted directly, other settings
         are cached and converted in the finalizeWorksheetImport() call. */
-    void                setColumnData( const OoxColumnData& rData );
+    void                setColumnModel( const ColumnModel& rModel );
 
     /** Sets default height and hidden state for all unused rows in the sheet. */
     void                setDefaultRowSettings(
@@ -412,12 +428,7 @@ public:
     /** Sets row settings for a specific range of rows.
         @descr  Row default formatting is converted directly, other settings
         are cached and converted in the finalizeWorksheetImport() call. */
-    void                setRowData( const OoxRowData& rData );
-
-    /** Converts column default cell formatting. */
-    void                convertColumnFormat( sal_Int32 nFirstCol, sal_Int32 nLastCol, sal_Int32 nXfId );
-    /** Converts row default cell formatting. */
-    void                convertRowFormat( sal_Int32 nFirstRow, sal_Int32 nLastRow, sal_Int32 nXfId );
+    void                setRowModel( const RowModel& rModel );
 
     /** Initial conversion before importing the worksheet. */
     void                initializeWorksheetImport();

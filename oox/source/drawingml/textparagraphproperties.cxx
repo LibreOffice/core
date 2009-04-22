@@ -36,11 +36,13 @@
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 
 #include "oox/helper/helper.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/core/namespaces.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
+#include "properties.hxx"
 #include "tokens.hxx"
 
 using rtl::OUString;
@@ -282,30 +284,15 @@ void BulletList::apply( const BulletList& rSource )
 void BulletList::pushToPropMap( const ::oox::core::XmlFilterBase& rFilterBase, PropertyMap& rPropMap ) const
 {
     if( msNumberingPrefix.hasValue() )
-    {
-//      OSL_TRACE( "OOX: numb prefix found");
-        const rtl::OUString sPrefix( CREATE_OUSTRING( "Prefix" ) );
-        rPropMap[ sPrefix ] = msNumberingPrefix;
-    }
+        rPropMap[ PROP_Prefix ] = msNumberingPrefix;
     if( msNumberingSuffix.hasValue() )
-    {
-//      OSL_TRACE( "OOX: numb suffix found");
-        const rtl::OUString sSuffix( CREATE_OUSTRING( "Suffix" ) );
-        rPropMap[ sSuffix ] = msNumberingSuffix;
-    }
+        rPropMap[ PROP_Suffix ] = msNumberingSuffix;
     if( mnStartAt.hasValue() )
-    {
-        const rtl::OUString sStartWith( CREATE_OUSTRING( "StartWith" ) );
-        rPropMap[ sStartWith ] = mnStartAt;
-    }
-    const rtl::OUString sAdjust( CREATE_OUSTRING( "Adjust" ) );
-    rPropMap[ sAdjust ] <<= HoriOrientation::LEFT;
+        rPropMap[ PROP_StartWith ] = mnStartAt;
+    rPropMap[ PROP_Adjust ] <<= HoriOrientation::LEFT;
 
     if( mnNumberingType.hasValue() )
-    {
-        const rtl::OUString sNumberingType( CREATE_OUSTRING( "NumberingType" ) );
-        rPropMap[ sNumberingType ] = mnNumberingType;
-    }
+        rPropMap[ PROP_NumberingType ] = mnNumberingType;
 
     OUString aBulletFontName;
     sal_Int16 nBulletFontPitch = 0;
@@ -321,38 +308,23 @@ void BulletList::pushToPropMap( const ::oox::core::XmlFilterBase& rFilterBase, P
         aFontDesc.Name = aBulletFontName;
         aFontDesc.Pitch = nBulletFontPitch;
         aFontDesc.Family = nBulletFontFamily;
-        const rtl::OUString sBulletFont( CREATE_OUSTRING( "BulletFont" ) );
-        rPropMap[ sBulletFont ] <<= aFontDesc;
-        const rtl::OUString sBulletFontName( CREATE_OUSTRING( "BulletFontName" ) );
-        rPropMap[ sBulletFontName ] <<= aBulletFontName;
+        rPropMap[ PROP_BulletFont ] <<= aFontDesc;
+        rPropMap[ PROP_BulletFontName ] <<= aBulletFontName;
     }
     if ( msBulletChar.hasValue() )
-    {
-        const rtl::OUString sBulletChar( CREATE_OUSTRING( "BulletChar" ) );
-        rPropMap[ sBulletChar ] = msBulletChar;
-    }
+        rPropMap[ PROP_BulletChar ] = msBulletChar;
     if ( maGraphic.hasValue() )
     {
-        const rtl::OUString sGraphic( CREATE_OUSTRING( "Graphic" ) );
         Reference< com::sun::star::awt::XBitmap > xBitmap( maGraphic, UNO_QUERY );
         if ( xBitmap.is() )
-            rPropMap[ sGraphic ] <<= xBitmap;
+            rPropMap[ PROP_Graphic ] <<= xBitmap;
     }
     if( mnSize.hasValue() )
-    {
-        const rtl::OUString sBulletRelSize( CREATE_OUSTRING( "BulletRelSize" ) );
-        rPropMap[ sBulletRelSize ] = mnSize;
-    }
+        rPropMap[ PROP_BulletRelSize ] = mnSize;
     if ( maStyleName.hasValue() )
-    {
-        const OUString sCharStyleName( CREATE_OUSTRING( "CharStyleName" ) );
-        rPropMap[ sCharStyleName ] <<= maStyleName;
-    }
+        rPropMap[ PROP_CharStyleName ] <<= maStyleName;
     if ( maBulletColorPtr->isUsed() )
-    {
-        const rtl::OUString sBulletColor( CREATE_OUSTRING( "BulletColor" ) );
-        rPropMap[ sBulletColor ] <<= maBulletColorPtr->getColor( rFilterBase );
-    }
+        rPropMap[ PROP_BulletColor ] <<= maBulletColorPtr->getColor( rFilterBase );
 }
 
 TextParagraphProperties::TextParagraphProperties()
@@ -391,31 +363,21 @@ void TextParagraphProperties::pushToPropSet( const ::oox::core::XmlFilterBase& r
     else if ( pMasterBuList && pMasterBuList->mnNumberingType.hasValue() )
         pMasterBuList->mnNumberingType >>= nNumberingType;
     if ( nNumberingType == NumberingType::NUMBER_NONE )
-    {
-        const OUString sNumberingLevel( CREATE_OUSTRING( "NumberingLevel" ) );
-        aPropSet.setProperty< sal_Int16 >( sNumberingLevel, -1 );
-    }
+        aPropSet.setProperty< sal_Int16 >( PROP_NumberingLevel, -1 );
 
     maBulletList.pushToPropMap( rFilterBase, rioBulletMap );
 
     if ( maParaTopMargin.bHasValue )
-    {
-        const OUString sParaTopMargin( CREATE_OUSTRING( "ParaTopMargin" ) );
-        xPropSet->setPropertyValue( sParaTopMargin, Any( maParaTopMargin.toMargin( getCharHeightPoints( 18.0 ) ) ) );
-    }
+        aPropSet.setProperty( PROP_ParaTopMargin, maParaTopMargin.toMargin( getCharHeightPoints( 18.0 ) ) );
     if ( maParaBottomMargin.bHasValue )
-    {
-        const OUString sParaBottomMargin( CREATE_OUSTRING( "ParaBottomMargin" ) );
-        xPropSet->setPropertyValue( sParaBottomMargin, Any( maParaBottomMargin.toMargin( getCharHeightPoints( 18.0 ) ) ) );
-    }
+        aPropSet.setProperty( PROP_ParaBottomMargin, maParaBottomMargin.toMargin( getCharHeightPoints( 18.0 ) ) );
     if ( nNumberingType == NumberingType::BITMAP )
     {
-        const rtl::OUString sGraphicSize( OUString::intern( RTL_CONSTASCII_USTRINGPARAM( "GraphicSize" ) ) );
         fCharacterSize = getCharHeightPoints( fCharacterSize );
 
         com::sun::star::awt::Size aBulletSize;
         aBulletSize.Width = aBulletSize.Height = static_cast< sal_Int32 >( ( fCharacterSize * ( 2540.0 / 72.0 ) * 0.8 ) );
-        rioBulletMap[ sGraphicSize ] <<= aBulletSize;
+        rioBulletMap[ PROP_GraphicSize ] <<= aBulletSize;
     }
 
     boost::optional< sal_Int32 > noParaLeftMargin( moParaLeftMargin );
@@ -425,47 +387,37 @@ void TextParagraphProperties::pushToPropSet( const ::oox::core::XmlFilterBase& r
     {
         if ( noParaLeftMargin )
         {
-            const rtl::OUString sLeftMargin( OUString::intern( RTL_CONSTASCII_USTRINGPARAM( "LeftMargin" ) ) );
-            rioBulletMap[ sLeftMargin ] <<= static_cast< sal_Int32 >( *noParaLeftMargin );
+            rioBulletMap[ PROP_LeftMargin ] <<= static_cast< sal_Int32 >( *noParaLeftMargin );
             noParaLeftMargin = boost::optional< sal_Int32 >( 0 );
         }
         if ( noFirstLineIndentation )
         {
-            const rtl::OUString sFirstLineOffset( OUString::intern( RTL_CONSTASCII_USTRINGPARAM( "FirstLineOffset" ) ) );
-            rioBulletMap[ sFirstLineOffset ] <<= static_cast< sal_Int32 >( *noFirstLineIndentation );
+            rioBulletMap[ PROP_FirstLineOffset ] <<= static_cast< sal_Int32 >( *noFirstLineIndentation );
             noFirstLineIndentation = boost::optional< sal_Int32 >( 0 );
         }
     }
 
     if ( bApplyBulletMap )
     {
-        Any aValue;
         Reference< XIndexReplace > xNumRule;
-        const rtl::OUString sNumberingRules( OUString::intern( RTL_CONSTASCII_USTRINGPARAM( "NumberingRules" ) ) );
-        aValue = xPropSet->getPropertyValue( sNumberingRules );
-        aValue >>= xNumRule;
-
+        aPropSet.getProperty( xNumRule, PROP_NumberingRules );
         OSL_ENSURE( xNumRule.is(), "can't get Numbering rules");
+
         if( xNumRule.is() )
         {
-            Sequence< PropertyValue > aBulletPropSeq;
-            rioBulletMap.makeSequence( aBulletPropSeq );
-            if( aBulletPropSeq.hasElements() )
+            if( !rioBulletMap.empty() )
+            {
+                Sequence< PropertyValue > aBulletPropSeq = rioBulletMap.makePropertyValueSequence();
                 xNumRule->replaceByIndex( getLevel(), makeAny( aBulletPropSeq ) );
+            }
 
-            xPropSet->setPropertyValue( sNumberingRules, makeAny( xNumRule ) );
+            aPropSet.setProperty( PROP_NumberingRules, xNumRule );
         }
     }
     if ( noParaLeftMargin )
-    {
-        const OUString sParaLeftMargin( CREATE_OUSTRING( "ParaLeftMargin" ) );
-        xPropSet->setPropertyValue( sParaLeftMargin, Any( *noParaLeftMargin ) );
-    }
+        aPropSet.setProperty( PROP_ParaLeftMargin, *noParaLeftMargin );
     if ( noFirstLineIndentation )
-    {
-        const OUString sParaFirstLineIndent( CREATE_OUSTRING( "ParaFirstLineIndent" ) );
-        xPropSet->setPropertyValue( sParaFirstLineIndent, Any( *noFirstLineIndentation ) );
-    }
+        aPropSet.setProperty( PROP_ParaFirstLineIndent, *noFirstLineIndentation );
 }
 
 float TextParagraphProperties::getCharHeightPoints( float fDefault ) const

@@ -49,7 +49,7 @@ public:
                             Theme& rTheme );
     virtual             ~ThemeFragmentHandler();
 
-    virtual ::oox::core::ContextWrapper onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
 
 private:
     Theme&              mrTheme;

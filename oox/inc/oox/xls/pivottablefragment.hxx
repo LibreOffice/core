@@ -32,11 +32,52 @@
 #define OOX_XLS_PIVOTTABLEFRAGMENT_HXX
 
 #include "oox/xls/excelhandlers.hxx"
-#include "oox/xls/pivottablebuffer.hxx"
 #include "oox/xls/worksheethelper.hxx"
 
 namespace oox {
 namespace xls {
+
+class PivotTable;
+class PivotTableField;
+class PivotTableFilter;
+
+// ============================================================================
+
+class OoxPivotTableFieldContext : public OoxWorksheetContextBase
+{
+public:
+    explicit            OoxPivotTableFieldContext(
+                            OoxWorksheetFragmentBase& rFragment,
+                            PivotTableField& rTableField );
+
+protected:
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+    virtual void        onStartElement( const AttributeList& rAttribs );
+    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm );
+    virtual void        onStartRecord( RecordInputStream& rStrm );
+
+private:
+    PivotTableField&    mrTableField;
+};
+
+// ============================================================================
+
+class OoxPivotTableFilterContext : public OoxWorksheetContextBase
+{
+public:
+    explicit            OoxPivotTableFilterContext(
+                            OoxWorksheetFragmentBase& rFragment,
+                            PivotTableFilter& rTableFilter );
+
+protected:
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+    virtual void        onStartElement( const AttributeList& rAttribs );
+    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm );
+    virtual void        onStartRecord( RecordInputStream& rStrm );
+
+private:
+    PivotTableFilter&   mrTableFilter;
+};
 
 // ============================================================================
 
@@ -48,26 +89,27 @@ public:
                             const ::rtl::OUString& rFragmentPath );
 
 protected:
-    // oox.core.ContextHandler2Helper interface -------------------------------
-
-    virtual ContextWrapper onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
-    virtual void        onStartElement( const AttributeList& rAttribs );
-
-    // oox.core.FragmentHandler2 interface ------------------------------------
-
-    virtual void        finalizeImport();
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm );
+    virtual const ::oox::core::RecordInfo* getRecordInfos() const;
 
 private:
-    void                importLocation( const AttributeList& rAttribs );
-    void                importPivotTableDefinition( const AttributeList& rAttribs );
-    void                importPivotFields( const AttributeList& rAttribs );
-    void                importPivotField( const AttributeList& rAttribs );
+    PivotTable&         mrPivotTable;
+};
+
+// ============================================================================
+// ============================================================================
+
+class BiffPivotTableContext : public BiffWorksheetContextBase
+{
+public:
+    explicit            BiffPivotTableContext( const BiffWorksheetFragmentBase& rFragment, PivotTable& rPivotTable );
+
+    /** Imports all records related to the current pivot table. */
+    virtual void        importRecord();
 
 private:
-    ::rtl::OUString maName;
-    PivotTableData  maData;
-
-    bool        mbValidRange;
+    PivotTable&         mrPivotTable;
 };
 
 // ============================================================================

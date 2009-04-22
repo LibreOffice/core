@@ -290,11 +290,16 @@ namespace oox { namespace ppt {
                 xNode->setEndSync(aValue);
             }
 
-            Sequence< NamedValue > aUserDataSeq;
-            maUserData.makeSequence(aUserDataSeq);
-            if( aUserDataSeq.getLength() )
+            if( !maUserData.empty() )
             {
-                maNodeProperties[ NP_USERDATA ] = makeAny(aUserDataSeq);
+                Sequence< NamedValue > aUserDataSeq( static_cast< sal_Int32 >( maUserData.size() ) );
+                NamedValue* pValues = aUserDataSeq.getArray();
+                for( UserDataMap::const_iterator aIt = maUserData.begin(), aEnd = maUserData.end(); aIt != aEnd; ++aIt, ++pValues )
+                {
+                    pValues->Name = aIt->first;
+                    pValues->Value = aIt->second;
+                }
+                maNodeProperties[ NP_USERDATA ] <<= aUserDataSeq;
             }
 
             Reference< XAnimate > xAnimate( xNode, UNO_QUERY );

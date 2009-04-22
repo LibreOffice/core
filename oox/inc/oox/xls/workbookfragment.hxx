@@ -51,12 +51,10 @@ public:
 protected:
     // oox.core.ContextHandler2Helper interface -------------------------------
 
-    virtual ContextWrapper onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
-    virtual void        onStartElement( const AttributeList& rAttribs );
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
     virtual void        onEndElement( const ::rtl::OUString& rChars );
 
-    virtual ContextWrapper onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm );
-    virtual void        onStartRecord( RecordInputStream& rStrm );
+    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm );
 
     // oox.core.FragmentHandler2 interface ------------------------------------
 
@@ -69,8 +67,10 @@ private:
     void                importPivotCache( const AttributeList& rAttribs );
 
     void                importExternalRef( RecordInputStream& rStrm );
+    void                importPivotCache( RecordInputStream& rStrm );
 
     void                importExternalLinkFragment( ExternalLink& rExtLink );
+    void                importPivotCacheDefFragment( const ::rtl::OUString& rRelId, sal_Int32 nCacheId );
 
 private:
     DefinedNameRef      mxCurrName;
@@ -81,7 +81,7 @@ private:
 class BiffWorkbookFragment : public BiffWorkbookFragmentBase
 {
 public:
-    explicit            BiffWorkbookFragment( const WorkbookHelper& rHelper, BiffInputStream& rStrm );
+    explicit            BiffWorkbookFragment( const WorkbookHelper& rHelper, const ::rtl::OUString& rStrmName );
 
     /** Imports the entire workbook stream, including all contained worksheets. */
     virtual bool        importFragment();
@@ -95,9 +95,6 @@ private:
     bool                importSheetFragment(
                             ISegmentProgressBar& rProgressBar,
                             BiffFragmentType eFragment, sal_Int32 nSheet );
-
-    /** Imports the FILEPASS record and sets a decoder at the passed stream. */
-    bool                importFilePass();
 };
 
 // ============================================================================

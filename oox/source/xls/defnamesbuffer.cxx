@@ -36,6 +36,7 @@
 #include <com/sun/star/sheet/SingleReference.hpp>
 #include <com/sun/star/sheet/XFormulaTokens.hpp>
 #include <com/sun/star/sheet/XPrintAreas.hpp>
+#include "properties.hxx"
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/xls/addressconverter.hxx"
@@ -49,6 +50,7 @@ using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::table::CellAddress;
+using ::com::sun::star::table::CellRangeAddress;
 using ::com::sun::star::sheet::ComplexReference;
 using ::com::sun::star::sheet::SingleReference;
 using ::com::sun::star::sheet::XFormulaTokens;
@@ -83,11 +85,90 @@ const sal_uInt8 BIFF2_DEFNAME_FUNC          = 0x02;     /// BIFF2 function/comma
 
 const sal_uInt16 BIFF_DEFNAME_GLOBAL        = 0;        /// 0 = Globally defined name.
 
+// ----------------------------------------------------------------------------
+
+const sal_Char* const spcLegacyPrefix = "Excel_BuiltIn_";
+const sal_Char* const spcOoxPrefix = "_xlnm.";
+
+const sal_Char* const sppcBaseNames[] =
+{
+    "Consolidate_Area", /* OOX */
+    "Auto_Open",
+    "Auto_Close",
+    "Extract",          /* OOX */
+    "Database",         /* OOX */
+    "Criteria",         /* OOX */
+    "Print_Area",       /* OOX */
+    "Print_Titles",     /* OOX */
+    "Recorder",
+    "Data_Form",
+    "Auto_Activate",
+    "Auto_Deactivate",
+    "Sheet_Title",      /* OOX */
+    "_FilterDatabase"   /* OOX */
+};
+
+/** Localized names for _xlnm._FilterDatabase as used in BIFF5. */
+const sal_Char* const sppcFilterDbNames[] =
+{
+    "_FilterDatabase",      // English
+    "_FilterDatenbank"      // German
+};
+
+OUString lclGetBaseName( sal_Unicode cBuiltinId )
+{
+    OSL_ENSURE( cBuiltinId < STATIC_ARRAY_SIZE( sppcBaseNames ), "lclGetBaseName - unknown builtin name" );
+    OUStringBuffer aBuffer;
+    if( cBuiltinId < STATIC_ARRAY_SIZE( sppcBaseNames ) )
+        aBuffer.appendAscii( sppcBaseNames[ cBuiltinId ] );
+    else
+        aBuffer.append( static_cast< sal_Int32 >( cBuiltinId ) );
+    return aBuffer.makeStringAndClear();
+}
+
+OUString lclGetBuiltinName( sal_Unicode cBuiltinId )
+{
+    return OUStringBuffer().appendAscii( spcOoxPrefix ).append( lclGetBaseName( cBuiltinId ) ).makeStringAndClear();
+}
+
+sal_Unicode lclGetBuiltinIdFromOox( const OUString& rOoxName )
+{
+    OUString aPrefix = OUString::createFromAscii( spcOoxPrefix );
+    sal_Int32 nPrefixLen = aPrefix.getLength();
+    if( rOoxName.matchIgnoreAsciiCase( aPrefix ) )
+    {
+        for( sal_Unicode cBuiltinId = 0; cBuiltinId < STATIC_ARRAY_SIZE( sppcBaseNames ); ++cBuiltinId )
+        {
+            OUString aBaseName = lclGetBaseName( cBuiltinId );
+            sal_Int32 nBaseNameLen = aBaseName.getLength();
+            if( (rOoxName.getLength() == nPrefixLen + nBaseNameLen) && rOoxName.matchIgnoreAsciiCase( aBaseName, nPrefixLen ) )
+                return cBuiltinId;
+        }
+    }
+    return OOX_DEFNAME_UNKNOWN;
+}
+
+sal_Unicode lclGetBuiltinIdFromOob( const OUString& rOobName )
+{
+    for( sal_Unicode cBuiltinId = 0; cBuiltinId < STATIC_ARRAY_SIZE( sppcBaseNames ); ++cBuiltinId )
+        if( rOobName.equalsIgnoreAsciiCaseAscii( sppcBaseNames[ cBuiltinId ] ) )
+            return cBuiltinId;
+    return OOX_DEFNAME_UNKNOWN;
+}
+
+bool lclIsFilterDatabaseName( const OUString& rName )
+{
+    for( const sal_Char* const* ppcName = sppcFilterDbNames; ppcName < STATIC_ARRAY_END( sppcFilterDbNames ); ++ppcName )
+        if( rName.equalsIgnoreAsciiCaseAscii( *ppcName ) )
+            return true;
+    return false;
+}
+
 } // namespace
 
 // ============================================================================
 
-OoxDefinedNameData::OoxDefinedNameData() :
+DefinedNameModel::DefinedNameModel() :
     mnSheet( -1 ),
     mnFuncGroupId( -1 ),
     mbMacro( false ),
@@ -139,21 +220,21 @@ void lclConvertSingleRefFlags( SingleReference& orApiRef, const CellAddress& rBa
 DefinedNameBase::DefinedNameBase( const WorkbookHelper& rHelper, sal_Int32 nLocalSheet ) :
     WorkbookHelper( rHelper )
 {
-    maOoxData.mnSheet = nLocalSheet;
+    maModel.mnSheet = nLocalSheet;
 }
 
-const OUString& DefinedNameBase::getUpcaseOoxName() const
+const OUString& DefinedNameBase::getUpcaseModelName() const
 {
-    if( maUpOoxName.getLength() == 0 )
-        maUpOoxName = maOoxData.maName.toAsciiUpperCase();
-    return maUpOoxName;
+    if( maUpModelName.getLength() == 0 )
+        maUpModelName = maModel.maName.toAsciiUpperCase();
+    return maUpModelName;
 }
 
 Any DefinedNameBase::getReference( const CellAddress& rBaseAddress ) const
 {
-    if( maRefAny.hasValue() && (maOoxData.maName.getLength() >= 2) && (maOoxData.maName[ 0 ] == '\x01') )
+    if( maRefAny.hasValue() && (maModel.maName.getLength() >= 2) && (maModel.maName[ 0 ] == '\x01') )
     {
-        sal_Unicode cFlagsChar = getUpcaseOoxName()[ 1 ];
+        sal_Unicode cFlagsChar = getUpcaseModelName()[ 1 ];
         if( ('A' <= cFlagsChar) && (cFlagsChar <= 'P') )
         {
             sal_uInt16 nFlags = static_cast< sal_uInt16 >( cFlagsChar - 'A' );
@@ -179,10 +260,10 @@ Any DefinedNameBase::getReference( const CellAddress& rBaseAddress ) const
 
 void DefinedNameBase::importOoxFormula( FormulaContext& rContext )
 {
-    if( maOoxData.maFormula.getLength() > 0 )
+    if( maModel.maFormula.getLength() > 0 )
     {
-        rContext.setBaseAddress( CellAddress( static_cast< sal_Int16 >( maOoxData.mnSheet ), 0, 0 ) );
-        getFormulaParser().importFormula( rContext, maOoxData.maFormula );
+        rContext.setBaseAddress( CellAddress( static_cast< sal_Int16 >( maModel.mnSheet ), 0, 0 ) );
+        getFormulaParser().importFormula( rContext, maModel.maFormula );
     }
     else
         getFormulaParser().convertErrorToFormula( rContext, BIFF_ERR_NAME );
@@ -190,13 +271,13 @@ void DefinedNameBase::importOoxFormula( FormulaContext& rContext )
 
 void DefinedNameBase::importOobFormula( FormulaContext& rContext, RecordInputStream& rStrm )
 {
-    rContext.setBaseAddress( CellAddress( static_cast< sal_Int16 >( maOoxData.mnSheet ), 0, 0 ) );
+    rContext.setBaseAddress( CellAddress( static_cast< sal_Int16 >( maModel.mnSheet ), 0, 0 ) );
     getFormulaParser().importFormula( rContext, rStrm );
 }
 
 void DefinedNameBase::importBiffFormula( FormulaContext& rContext, BiffInputStream& rStrm, const sal_uInt16* pnFmlaSize )
 {
-    rContext.setBaseAddress( CellAddress( static_cast< sal_Int16 >( maOoxData.mnSheet ), 0, 0 ) );
+    rContext.setBaseAddress( CellAddress( static_cast< sal_Int16 >( maModel.mnSheet ), 0, 0 ) );
     if( !pnFmlaSize || (*pnFmlaSize > 0) )
         getFormulaParser().importFormula( rContext, rStrm, pnFmlaSize );
     else
@@ -210,89 +291,6 @@ void DefinedNameBase::setReference( const ApiTokenSequence& rTokens )
 
 // ============================================================================
 
-namespace {
-
-const sal_Char* const spcLegacyPrefix = "Excel_BuiltIn_";
-const sal_Char* const spcOoxPrefix = "_xlnm.";
-
-const sal_Char* const sppcBaseNames[] =
-{
-    "Consolidate_Area", /* OOX */
-    "Auto_Open",
-    "Auto_Close",
-    "Extract",          /* OOX */
-    "Database",         /* OOX */
-    "Criteria",         /* OOX */
-    "Print_Area",       /* OOX */
-    "Print_Titles",     /* OOX */
-    "Recorder",
-    "Data_Form",
-    "Auto_Activate",
-    "Auto_Deactivate",
-    "Sheet_Title",      /* OOX */
-    "_FilterDatabase"   /* OOX */
-};
-
-/** Localized names for _xlnm._FilterDatabase as used in BIFF5. */
-const sal_Char* const sppcFilterDbNames[] =
-{
-    "_FilterDatabase",      // English
-    "_FilterDatenbank"      // German
-};
-
-OUString lclGetBaseName( sal_Unicode cBuiltinId )
-{
-    OSL_ENSURE( cBuiltinId < STATIC_ARRAY_SIZE( sppcBaseNames ), "lclGetBaseName - unknown builtin name" );
-    OUStringBuffer aBuffer;
-    if( cBuiltinId < STATIC_ARRAY_SIZE( sppcBaseNames ) )
-        aBuffer.appendAscii( sppcBaseNames[ cBuiltinId ] );
-    else
-        aBuffer.append( static_cast< sal_Int32 >( cBuiltinId ) );
-    return aBuffer.makeStringAndClear();
-}
-
-OUString lclGetFinalName( sal_Unicode cBuiltinId )
-{
-    return OUStringBuffer().appendAscii( spcOoxPrefix ).append( lclGetBaseName( cBuiltinId ) ).makeStringAndClear();
-}
-
-sal_Unicode lclGetBuiltinIdFromOox( const OUString& rOoxName )
-{
-    OUString aPrefix = OUString::createFromAscii( spcOoxPrefix );
-    sal_Int32 nPrefixLen = aPrefix.getLength();
-    if( rOoxName.matchIgnoreAsciiCase( aPrefix ) )
-    {
-        for( sal_Unicode cBuiltinId = 0; cBuiltinId < STATIC_ARRAY_SIZE( sppcBaseNames ); ++cBuiltinId )
-        {
-            OUString aBaseName = lclGetBaseName( cBuiltinId );
-            sal_Int32 nBaseNameLen = aBaseName.getLength();
-            if( (rOoxName.getLength() == nPrefixLen + nBaseNameLen) && rOoxName.matchIgnoreAsciiCase( aBaseName, nPrefixLen ) )
-                return cBuiltinId;
-        }
-    }
-    return OOX_DEFNAME_UNKNOWN;
-}
-
-sal_Unicode lclGetBuiltinIdFromOob( const OUString& rOobName )
-{
-    for( sal_Unicode cBuiltinId = 0; cBuiltinId < STATIC_ARRAY_SIZE( sppcBaseNames ); ++cBuiltinId )
-        if( rOobName.equalsIgnoreAsciiCaseAscii( sppcBaseNames[ cBuiltinId ] ) )
-            return cBuiltinId;
-    return OOX_DEFNAME_UNKNOWN;
-}
-
-bool lclIsFilterDatabaseName( const OUString& rName )
-{
-    for( const sal_Char* const* ppcName = sppcFilterDbNames; ppcName < STATIC_ARRAY_END( sppcFilterDbNames ); ++ppcName )
-        if( rName.equalsIgnoreAsciiCaseAscii( *ppcName ) )
-            return true;
-    return false;
-}
-
-} // namespace
-
-// ----------------------------------------------------------------------------
-
 DefinedName::DefinedName( const WorkbookHelper& rHelper, sal_Int32 nLocalSheet ) :
     DefinedNameBase( rHelper, nLocalSheet ),
     mnTokenIndex( -1 ),
@@ -303,19 +301,19 @@ DefinedName::DefinedName( const WorkbookHelper& rHelper, sal_Int32 nLocalSheet )
 
 void DefinedName::importDefinedName( const AttributeList& rAttribs )
 {
-    maOoxData.maName        = rAttribs.getString( XML_name, OUString() );
-    maOoxData.mnSheet       = rAttribs.getInteger( XML_localSheetId, -1 );
-    maOoxData.mnFuncGroupId = rAttribs.getInteger( XML_functionGroupId, -1 );
-    maOoxData.mbMacro       = rAttribs.getBool( XML_xlm, false );
-    maOoxData.mbFunction    = rAttribs.getBool( XML_function, false );
-    maOoxData.mbVBName      = rAttribs.getBool( XML_vbProcedure, false );
-    maOoxData.mbHidden      = rAttribs.getBool( XML_hidden, false );
-    mcBuiltinId = lclGetBuiltinIdFromOox( maOoxData.maName );
+    maModel.maName        = rAttribs.getString( XML_name, OUString() );
+    maModel.mnSheet       = rAttribs.getInteger( XML_localSheetId, -1 );
+    maModel.mnFuncGroupId = rAttribs.getInteger( XML_functionGroupId, -1 );
+    maModel.mbMacro       = rAttribs.getBool( XML_xlm, false );
+    maModel.mbFunction    = rAttribs.getBool( XML_function, false );
+    maModel.mbVBName      = rAttribs.getBool( XML_vbProcedure, false );
+    maModel.mbHidden      = rAttribs.getBool( XML_hidden, false );
+    mcBuiltinId = lclGetBuiltinIdFromOox( maModel.maName );
 }
 
 void DefinedName::setFormula( const OUString& rFormula )
 {
-    maOoxData.maFormula = rFormula;
+    maModel.maFormula = rFormula;
 }
 
 void DefinedName::importDefinedName( RecordInputStream& rStrm )
@@ -323,21 +321,21 @@ void DefinedName::importDefinedName( RecordInputStream& rStrm )
     sal_uInt32 nFlags;
     rStrm >> nFlags;
     rStrm.skip( 1 );    // keyboard shortcut
-    rStrm >> maOoxData.mnSheet >> maOoxData.maName;
+    rStrm >> maModel.mnSheet >> maModel.maName;
 
     // macro function/command, hidden flag
-    maOoxData.mnFuncGroupId = extractValue< sal_Int32 >( nFlags, 6, 9 );
-    maOoxData.mbMacro       = getFlag( nFlags, OOBIN_DEFNAME_MACRO );
-    maOoxData.mbFunction    = getFlag( nFlags, OOBIN_DEFNAME_FUNC );
-    maOoxData.mbVBName      = getFlag( nFlags, OOBIN_DEFNAME_VBNAME );
-    maOoxData.mbHidden      = getFlag( nFlags, OOBIN_DEFNAME_HIDDEN );
+    maModel.mnFuncGroupId = extractValue< sal_Int32 >( nFlags, 6, 9 );
+    maModel.mbMacro       = getFlag( nFlags, OOBIN_DEFNAME_MACRO );
+    maModel.mbFunction    = getFlag( nFlags, OOBIN_DEFNAME_FUNC );
+    maModel.mbVBName      = getFlag( nFlags, OOBIN_DEFNAME_VBNAME );
+    maModel.mbHidden      = getFlag( nFlags, OOBIN_DEFNAME_HIDDEN );
 
     // get builtin name index from name
     if( getFlag( nFlags, OOBIN_DEFNAME_BUILTIN ) )
-        mcBuiltinId = lclGetBuiltinIdFromOob( maOoxData.maName );
+        mcBuiltinId = lclGetBuiltinIdFromOob( maModel.maName );
     // unhide built-in names (_xlnm._FilterDatabase is always hidden)
     if( isBuiltinName() )
-        maOoxData.mbHidden = false;
+        maModel.mbHidden = false;
 
     // store token array data
     sal_Int64 nRecPos = rStrm.tell();
@@ -372,52 +370,52 @@ void DefinedName::importDefinedName( BiffInputStream& rStrm )
             rStrm >> nShortCut >> nNameLen;
             mnFmlaSize = rStrm.readuInt8();
             setFlag( nFlags, BIFF_DEFNAME_FUNC, getFlag( nFlagsBiff2, BIFF2_DEFNAME_FUNC ) );
-            maOoxData.maName = rStrm.readCharArray( nNameLen, getTextEncoding() );
+            maModel.maName = rStrm.readCharArray( nNameLen, getTextEncoding() );
         }
         break;
         case BIFF3:
         case BIFF4:
             rStrm >> nFlags >> nShortCut >> nNameLen >> mnFmlaSize;
-            maOoxData.maName = rStrm.readCharArray( nNameLen, getTextEncoding() );
+            maModel.maName = rStrm.readCharArray( nNameLen, getTextEncoding() );
         break;
         case BIFF5:
             rStrm >> nFlags >> nShortCut >> nNameLen >> mnFmlaSize >> nRefId >> nTabId;
             rStrm.skip( 4 );
-            maOoxData.maName = rStrm.readCharArray( nNameLen, getTextEncoding() );
+            maModel.maName = rStrm.readCharArray( nNameLen, getTextEncoding() );
         break;
         case BIFF8:
             rStrm >> nFlags >> nShortCut >> nNameLen >> mnFmlaSize >> nRefId >> nTabId;
             rStrm.skip( 4 );
-            maOoxData.maName = rStrm.readUniString( nNameLen );
+            maModel.maName = rStrm.readUniString( nNameLen );
         break;
         case BIFF_UNKNOWN: break;
     }
     rStrm.enableNulChars( false );
 
     // macro function/command, hidden flag
-    maOoxData.mnFuncGroupId = extractValue< sal_Int32 >( nFlags, 6, 6 );
-    maOoxData.mbMacro       = getFlag( nFlags, BIFF_DEFNAME_MACRO );
-    maOoxData.mbFunction    = getFlag( nFlags, BIFF_DEFNAME_FUNC );
-    maOoxData.mbVBName      = getFlag( nFlags, BIFF_DEFNAME_VBNAME );
-    maOoxData.mbHidden      = getFlag( nFlags, BIFF_DEFNAME_HIDDEN );
+    maModel.mnFuncGroupId = extractValue< sal_Int32 >( nFlags, 6, 6 );
+    maModel.mbMacro       = getFlag( nFlags, BIFF_DEFNAME_MACRO );
+    maModel.mbFunction    = getFlag( nFlags, BIFF_DEFNAME_FUNC );
+    maModel.mbVBName      = getFlag( nFlags, BIFF_DEFNAME_VBNAME );
+    maModel.mbHidden      = getFlag( nFlags, BIFF_DEFNAME_HIDDEN );
 
     // get builtin name index from name
     if( getFlag( nFlags, BIFF_DEFNAME_BUILTIN ) )
     {
-        OSL_ENSURE( maOoxData.maName.getLength() == 1, "DefinedName::importDefinedName - wrong builtin name" );
-        if( maOoxData.maName.getLength() > 0 )
-            mcBuiltinId = maOoxData.maName[ 0 ];
+        OSL_ENSURE( maModel.maName.getLength() == 1, "DefinedName::importDefinedName - wrong builtin name" );
+        if( maModel.maName.getLength() > 0 )
+            mcBuiltinId = maModel.maName[ 0 ];
     }
     /*  In BIFF5, _xlnm._FilterDatabase appears as hidden user name without
         built-in flag, and even worse, localized. */
-    else if( (eBiff == BIFF5) && lclIsFilterDatabaseName( maOoxData.maName ) )
+    else if( (eBiff == BIFF5) && lclIsFilterDatabaseName( maModel.maName ) )
     {
         mcBuiltinId = OOX_DEFNAME_FILTERDATABASE;
     }
 
     // unhide built-in names (_xlnm._FilterDatabase is always hidden)
     if( isBuiltinName() )
-        maOoxData.mbHidden = false;
+        maModel.mbHidden = false;
 
     // get sheet index for sheet-local names in BIFF5-BIFF8
     switch( getBiff() )
@@ -431,13 +429,13 @@ void DefinedName::importDefinedName( BiffInputStream& rStrm )
             if( nRefId != BIFF_DEFNAME_GLOBAL )
                 if( const ExternalLink* pExtLink = getExternalLinks().getExternalLink( nRefId ).get() )
                     if( pExtLink->getLinkType() == LINKTYPE_INTERNAL )
-                        maOoxData.mnSheet = pExtLink->getSheetIndex();
+                        maModel.mnSheet = pExtLink->getSheetIndex();
         break;
         case BIFF8:
             // convert one-based sheet index to zero-based
             OSL_ENSURE( nTabId >= 0, "DefinedName::importDefinedName - invalid local sheet index" );
             if( nTabId != BIFF_DEFNAME_GLOBAL )
-                maOoxData.mnSheet = nTabId - 1;
+                maModel.mnSheet = nTabId - 1;
         break;
         case BIFF_UNKNOWN:
         break;
@@ -450,20 +448,20 @@ void DefinedName::importDefinedName( BiffInputStream& rStrm )
 void DefinedName::createNameObject()
 {
     // do not create hidden names and names for (macro) functions
-    if( maOoxData.mbHidden || maOoxData.mbFunction )
+    if( maModel.mbHidden || maModel.mbFunction )
         return;
 
     // convert original name to final Calc name
-    if( maOoxData.mbVBName )
-        maFinalName = maOoxData.maName;
+    if( maModel.mbVBName )
+        maCalcName = maModel.maName;
     else if( isBuiltinName() )
-        maFinalName = lclGetFinalName( mcBuiltinId );
+        maCalcName = lclGetBuiltinName( mcBuiltinId );
     else
-        maFinalName = maOoxData.maName;         //! TODO convert to valid name
+        maCalcName = maModel.maName;         //! TODO convert to valid name
 
     // append sheet index for local names in multi-sheet documents
     if( isWorkbookFile() && !isGlobalName() )
-        maFinalName = OUStringBuffer( maFinalName ).append( sal_Unicode( '_' ) ).append( maOoxData.mnSheet + 1 ).makeStringAndClear();
+        maCalcName = OUStringBuffer( maCalcName ).append( sal_Unicode( '_' ) ).append( maModel.mnSheet + 1 ).makeStringAndClear();
 
     // special flags for this name
     sal_Int32 nNameFlags = 0;
@@ -475,11 +473,11 @@ void DefinedName::createNameObject()
         case OOX_DEFNAME_PRINTTITLES:   nNameFlags = COLUMN_HEADER | ROW_HEADER;    break;
     }
 
-    // create the name and insert it into the document, maFinalName will be changed to the resulting name
-    mxNamedRange = createNamedRangeObject( maFinalName, nNameFlags );
+    // create the name and insert it into the document, maCalcName will be changed to the resulting name
+    mxNamedRange = createNamedRangeObject( maCalcName, nNameFlags );
     // index of this defined name used in formula token arrays
     PropertySet aPropSet( mxNamedRange );
-    aPropSet.getProperty( mnTokenIndex, CREATE_OUSTRING( "TokenIndex" ) );
+    aPropSet.getProperty( mnTokenIndex, PROP_TokenIndex );
 }
 
 void DefinedName::convertFormula()
@@ -510,18 +508,18 @@ void DefinedName::convertFormula()
         {
             case OOX_DEFNAME_PRINTAREA:
             {
-                Reference< XPrintAreas > xPrintAreas( getSheet( maOoxData.mnSheet ), UNO_QUERY );
+                Reference< XPrintAreas > xPrintAreas( getSheetFromDoc( maModel.mnSheet ), UNO_QUERY );
                 ApiCellRangeList aPrintRanges;
-                getFormulaParser().extractCellRangeList( aPrintRanges, xTokens->getTokens(), maOoxData.mnSheet );
+                getFormulaParser().extractCellRangeList( aPrintRanges, xTokens->getTokens(), maModel.mnSheet );
                 if( xPrintAreas.is() && !aPrintRanges.empty() )
                     xPrintAreas->setPrintAreas( ContainerHelper::vectorToSequence( aPrintRanges ) );
             }
             break;
             case OOX_DEFNAME_PRINTTITLES:
             {
-                Reference< XPrintAreas > xPrintAreas( getSheet( maOoxData.mnSheet ), UNO_QUERY );
+                Reference< XPrintAreas > xPrintAreas( getSheetFromDoc( maModel.mnSheet ), UNO_QUERY );
                 ApiCellRangeList aTitleRanges;
-                getFormulaParser().extractCellRangeList( aTitleRanges, xTokens->getTokens(), maOoxData.mnSheet );
+                getFormulaParser().extractCellRangeList( aTitleRanges, xTokens->getTokens(), maModel.mnSheet );
                 if( xPrintAreas.is() && !aTitleRanges.empty() )
                 {
                     bool bHasRowTitles = false;
@@ -549,13 +547,21 @@ void DefinedName::convertFormula()
             break;
         }
     }
-    else if( mxBiffStrm.get() && maOoxData.mbHidden && (maOoxData.maName.getLength() > 0) && (maOoxData.maName[ 0 ] == '\x01') )
+    else if( mxBiffStrm.get() && maModel.mbHidden && (maModel.maName.getLength() > 0) && (maModel.maName[ 0 ] == '\x01') )
     {
         // import BIFF2-BIFF4 external references
         TokensFormulaContext aContext( true, true );
         implImportBiffFormula( aContext );
         setReference( aContext.getTokens() );
     }
+}
+
+bool DefinedName::getAbsoluteRange( CellRangeAddress& orRange ) const
+{
+    /*  ScNamedRangeObj::XCellRangeReferrer::getReferredCells is buggy with
+        relative references, so we extract an absolute reference by hand. */
+    Reference< XFormulaTokens > xTokens( mxNamedRange, UNO_QUERY );
+    return xTokens.is() && getFormulaParser().extractAbsoluteRange( orRange, xTokens->getTokens() );
 }
 
 void DefinedName::implImportOoxFormula( FormulaContext& rContext )
@@ -635,14 +641,14 @@ DefinedNameRef DefinedNamesBuffer::getByTokenIndex( sal_Int32 nIndex ) const
     return maDefNameMap.get( nIndex );
 }
 
-DefinedNameRef DefinedNamesBuffer::getByOoxName( const OUString& rOoxName, sal_Int32 nSheet ) const
+DefinedNameRef DefinedNamesBuffer::getByModelName( const OUString& rModelName, sal_Int32 nSheet ) const
 {
     DefinedNameRef xGlobalName;   // a found global name
     DefinedNameRef xLocalName;    // a found local name
     for( DefNameVector::const_iterator aIt = maDefNames.begin(), aEnd = maDefNames.end(); (aIt != aEnd) && !xLocalName; ++aIt )
     {
         DefinedNameRef xCurrName = *aIt;
-        if( xCurrName->getOoxName() == rOoxName )
+        if( xCurrName->getModelName() == rModelName )
         {
             if( xCurrName->getSheetIndex() == nSheet )
                 xLocalName = xCurrName;

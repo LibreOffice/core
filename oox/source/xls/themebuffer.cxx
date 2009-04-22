@@ -30,7 +30,6 @@
 
 #include "oox/xls/themebuffer.hxx"
 #include "oox/xls/stylesbuffer.hxx"
-#include "oox/xls/stylespropertyhelper.hxx"
 
 using ::oox::drawingml::ClrScheme;
 using ::oox::drawingml::Color;
@@ -91,19 +90,19 @@ static const BuiltinThemeFont spBuiltinThemeFonts[] =
 
 ThemeBuffer::ThemeBuffer( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
-    mxDefFontData( new OoxFontData )
+    mxDefFontModel( new FontModel )
 {
     switch( getFilterType() )
     {
         case FILTER_OOX:
             //! TODO: locale dependent font name
-            mxDefFontData->maName = CREATE_OUSTRING( "Cambria" );
-            mxDefFontData->mfHeight = 11.0;
+            mxDefFontModel->maName = CREATE_OUSTRING( "Cambria" );
+            mxDefFontModel->mfHeight = 11.0;
         break;
         case FILTER_BIFF:
             //! TODO: BIFF dependent font name
-            mxDefFontData->maName = CREATE_OUSTRING( "Arial" );
-            mxDefFontData->mfHeight = 10.0;
+            mxDefFontModel->maName = CREATE_OUSTRING( "Arial" );
+            mxDefFontModel->mfHeight = 10.0;
         break;
         case FILTER_UNKNOWN: break;
     }

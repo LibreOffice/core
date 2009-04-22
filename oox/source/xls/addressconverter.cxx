@@ -97,6 +97,9 @@ const sal_Unicode BIFF_URL_LIBRARY  = '\x08';       /// Library directory in app
 const sal_Unicode BIFF4_URL_SHEET   = '\x09';       /// BIFF4 internal sheet.
 const sal_Unicode BIFF_URL_UNC      = '@';          /// UNC path root.
 
+const sal_Unicode BIFF_DCON_ENCODED = '\x01';       /// First character of an encoded path from DCON* records.
+const sal_Unicode BIFF_DCON_INTERN  = '\x02';       /// First character of an encoded sheet name from DCON* records.
+
 
 inline sal_uInt16 lclGetBiffAddressSize( bool bCol16Bit, bool bRow32Bit )
 {
@@ -235,15 +238,11 @@ void BinRangeList::writeSubList( BiffOutputStream& rStrm, size_t nBegin, size_t 
 
 AddressConverter::AddressConverter( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
-    mcUrlThisWorkbook( 0 ),
-    mcUrlExternal( 0 ),
-    mcUrlThisSheet( 0 ),
-    mcUrlInternal( 0 ),
-    mcUrlSameSheet( 0 ),
     mbColOverflow( false ),
     mbRowOverflow( false ),
     mbTabOverflow( false )
 {
+    maDConChars.set( 0xFFFF, '\x01', 0xFFFF, '\x02', 0xFFFF );
     switch( getFilterType() )
     {
         case FILTER_OOX:
@@ -253,23 +252,23 @@ AddressConverter::AddressConverter( const WorkbookHelper& rHelper ) :
         {
             case BIFF2:
                 initializeMaxPos( BIFF2_MAXTAB, BIFF2_MAXCOL, BIFF2_MAXROW );
-                initializeEncodedUrl( 0xFFFF, '\x01', '\x02', 0xFFFF, 0xFFFF );
+                maLinkChars.set( 0xFFFF, '\x01', '\x02', 0xFFFF, 0xFFFF );
             break;
             case BIFF3:
                 initializeMaxPos( BIFF3_MAXTAB, BIFF3_MAXCOL, BIFF3_MAXROW );
-                initializeEncodedUrl( 0xFFFF, '\x01', '\x02', 0xFFFF, 0xFFFF );
+                maLinkChars.set( 0xFFFF, '\x01', '\x02', 0xFFFF, 0xFFFF );
             break;
             case BIFF4:
                 initializeMaxPos( BIFF4_MAXTAB, BIFF4_MAXCOL, BIFF4_MAXROW );
-                initializeEncodedUrl( 0xFFFF, '\x01', '\x02', 0xFFFF, '\x00' );
+                maLinkChars.set( 0xFFFF, '\x01', '\x02', 0xFFFF, '\x00' );
             break;
             case BIFF5:
                 initializeMaxPos( BIFF5_MAXTAB, BIFF5_MAXCOL, BIFF5_MAXROW );
-                initializeEncodedUrl( '\x04', '\x01', '\x02', '\x03', '\x00' );
+                maLinkChars.set( '\x04', '\x01', '\x02', '\x03', '\x00' );
             break;
             case BIFF8:
                 initializeMaxPos( BIFF8_MAXTAB, BIFF8_MAXCOL, BIFF8_MAXROW );
-                initializeEncodedUrl( '\x04', '\x01', 0xFFFF, '\x02', '\x00' );
+                maLinkChars.set( '\x04', '\x01', 0xFFFF, '\x02', '\x00' );
             break;
             case BIFF_UNKNOWN: break;
         }
@@ -386,12 +385,14 @@ bool lclAppendUrlChar( OUStringBuffer& orUrl, sal_Unicode cChar, bool bEncodeSpe
 } // namespace
 
 BiffTargetType AddressConverter::parseBiffTargetUrl(
-        OUString& orClassName, OUString& orTargetUrl, OUString& orSheetName, const OUString& rBiffTargetUrl )
+        OUString& orClassName, OUString& orTargetUrl, OUString& orSheetName,
+        const OUString& rBiffTargetUrl, bool bFromDConRec )
 {
     OUStringBuffer aTargetUrl;
     OUStringBuffer aSheetName;
     // default target type: some URL with/without sheet name, may be overridden below
     BiffTargetType eTargetType = BIFF_TARGETTYPE_URL;
+    const ControlCharacters& rCChars = bFromDConRec ? maDConChars : maLinkChars;
 
     enum
     {
@@ -417,16 +418,16 @@ BiffTargetType AddressConverter::parseBiffTargetUrl(
         switch( eState )
         {
             case STATE_START:
-                if( (cChar == mcUrlThisWorkbook) || (cChar == mcUrlThisSheet) || (cChar == mcUrlSameSheet) )
+                if( (cChar == rCChars.mcThisWorkbook) || (cChar == rCChars.mcThisSheet) || (cChar == rCChars.mcSameSheet) )
                 {
                     if( pcChar + 1 < pcEnd )
                         eState = STATE_ERROR;
-                    if( cChar == mcUrlSameSheet )
+                    if( cChar == rCChars.mcSameSheet )
                         eTargetType = BIFF_TARGETTYPE_SAMESHEET;
                 }
-                else if( cChar == mcUrlExternal )
+                else if( cChar == rCChars.mcExternal )
                     eState = (pcChar + 1 < pcEnd) ? STATE_ENCODED_PATH_START : STATE_ERROR;
-                else if( cChar == mcUrlInternal )
+                else if( cChar == rCChars.mcInternal )
                     eState = (pcChar + 1 < pcEnd) ? STATE_SHEETNAME : STATE_ERROR;
                 else
                     eState = lclAppendUrlChar( aTargetUrl, cChar, true ) ? STATE_UNENCODED : STATE_ERROR;
@@ -500,7 +501,7 @@ BiffTargetType AddressConverter::parseBiffTargetUrl(
                 if( cChar == BIFF_URL_SUBDIR )
                 {
                     orClassName = aTargetUrl.makeStringAndClear();
-                    eState = STATE_DDE_OLE;
+                    eState = bFromDConRec ? STATE_ERROR : STATE_DDE_OLE;
                     eTargetType = BIFF_TARGETTYPE_DDE_OLE;
                 }
                 else if( cChar == '[' )
@@ -535,13 +536,21 @@ BiffTargetType AddressConverter::parseBiffTargetUrl(
         }
     }
 
-    orTargetUrl = aTargetUrl.makeStringAndClear();
-    orSheetName = aSheetName.makeStringAndClear();
-
     OSL_ENSURE( (eState != STATE_ERROR) && (pcChar == pcEnd),
         OStringBuffer( "AddressConverter::parseBiffTargetUrl - parser error in target \"" ).
         append( OUStringToOString( rBiffTargetUrl, RTL_TEXTENCODING_UTF8 ) ).append( '"' ).getStr() );
     bool bParserOk = (eState != STATE_ERROR) && (eState != STATE_UNSUPPORTED) && (pcChar == pcEnd);
+
+    if( bParserOk )
+    {
+        orTargetUrl = aTargetUrl.makeStringAndClear();
+        orSheetName = aSheetName.makeStringAndClear();
+    }
+    else
+    {
+        orClassName = orTargetUrl = orSheetName = OUString();
+    }
+
     return bParserOk ? eTargetType : BIFF_TARGETTYPE_UNKNOWN;
 }
 
@@ -639,23 +648,23 @@ CellAddress AddressConverter::createValidCellAddress(
 
 // ----------------------------------------------------------------------------
 
-bool AddressConverter::checkCellRange( const CellRangeAddress& rRange, bool bTrackOverflow )
+bool AddressConverter::checkCellRange( const CellRangeAddress& rRange, bool bAllowOverflow, bool bTrackOverflow )
 {
-    checkCol( rRange.EndColumn, bTrackOverflow );
-    checkRow( rRange.EndRow, bTrackOverflow );
     return
+        (checkCol( rRange.EndColumn, bTrackOverflow ) || bAllowOverflow) &&     // bAllowOverflow after checkCol to track overflow!
+        (checkRow( rRange.EndRow, bTrackOverflow ) || bAllowOverflow) &&        // bAllowOverflow after checkRow to track overflow!
         checkTab( rRange.Sheet, bTrackOverflow ) &&
         checkCol( rRange.StartColumn, bTrackOverflow ) &&
         checkRow( rRange.StartRow, bTrackOverflow );
 }
 
-bool AddressConverter::validateCellRange( CellRangeAddress& orRange, bool bTrackOverflow )
+bool AddressConverter::validateCellRange( CellRangeAddress& orRange, bool bAllowOverflow, bool bTrackOverflow )
 {
     if( orRange.StartColumn > orRange.EndColumn )
         ::std::swap( orRange.StartColumn, orRange.EndColumn );
     if( orRange.StartRow > orRange.EndRow )
         ::std::swap( orRange.StartRow, orRange.EndRow );
-    if( !checkCellRange( orRange, bTrackOverflow ) )
+    if( !checkCellRange( orRange, bAllowOverflow, bTrackOverflow ) )
         return false;
     if( orRange.EndColumn > maMaxPos.Column )
         orRange.EndColumn = maMaxPos.Column;
@@ -672,11 +681,11 @@ bool AddressConverter::convertToCellRangeUnchecked( CellRangeAddress& orRange,
 }
 
 bool AddressConverter::convertToCellRange( CellRangeAddress& orRange,
-        const OUString& rString, sal_Int16 nSheet, bool bTrackOverflow )
+        const OUString& rString, sal_Int16 nSheet, bool bAllowOverflow, bool bTrackOverflow )
 {
     return
         convertToCellRangeUnchecked( orRange, rString, nSheet ) &&
-        validateCellRange( orRange, bTrackOverflow );
+        validateCellRange( orRange, bAllowOverflow, bTrackOverflow );
 }
 
 void AddressConverter::convertToCellRangeUnchecked( CellRangeAddress& orRange,
@@ -690,18 +699,18 @@ void AddressConverter::convertToCellRangeUnchecked( CellRangeAddress& orRange,
 }
 
 bool AddressConverter::convertToCellRange( CellRangeAddress& orRange,
-        const BinRange& rBinRange, sal_Int16 nSheet, bool bTrackOverflow )
+        const BinRange& rBinRange, sal_Int16 nSheet, bool bAllowOverflow, bool bTrackOverflow )
 {
     convertToCellRangeUnchecked( orRange, rBinRange, nSheet );
-    return validateCellRange( orRange, bTrackOverflow );
+    return validateCellRange( orRange, bAllowOverflow, bTrackOverflow );
 }
 
 // ----------------------------------------------------------------------------
 
-bool AddressConverter::checkCellRangeList( const ApiCellRangeList& rRanges, bool bTrackOverflow )
+bool AddressConverter::checkCellRangeList( const ApiCellRangeList& rRanges, bool bAllowOverflow, bool bTrackOverflow )
 {
     for( ApiCellRangeList::const_iterator aIt = rRanges.begin(), aEnd = rRanges.end(); aIt != aEnd; ++aIt )
-        if( !checkCellRange( *aIt, bTrackOverflow ) )
+        if( !checkCellRange( *aIt, bAllowOverflow, bTrackOverflow ) )
             return false;
     return true;
 }
@@ -709,7 +718,7 @@ bool AddressConverter::checkCellRangeList( const ApiCellRangeList& rRanges, bool
 void AddressConverter::validateCellRangeList( ApiCellRangeList& orRanges, bool bTrackOverflow )
 {
     for( size_t nIndex = orRanges.size(); nIndex > 0; --nIndex )
-        if( !validateCellRange( orRanges[ nIndex - 1 ], bTrackOverflow ) )
+        if( !validateCellRange( orRanges[ nIndex - 1 ], true, bTrackOverflow ) )
             orRanges.erase( orRanges.begin() + nIndex - 1 );
 }
 
@@ -722,7 +731,7 @@ void AddressConverter::convertToCellRangeList( ApiCellRangeList& orRanges,
     while( (0 <= nPos) && (nPos < nLen) )
     {
         OUString aToken = rString.getToken( 0, ' ', nPos );
-        if( (aToken.getLength() > 0) && convertToCellRange( aRange, aToken, nSheet, bTrackOverflow ) )
+        if( (aToken.getLength() > 0) && convertToCellRange( aRange, aToken, nSheet, true, bTrackOverflow ) )
             orRanges.push_back( aRange );
     }
 }
@@ -732,11 +741,22 @@ void AddressConverter::convertToCellRangeList( ApiCellRangeList& orRanges,
 {
     CellRangeAddress aRange;
     for( BinRangeList::const_iterator aIt = rBinRanges.begin(), aEnd = rBinRanges.end(); aIt != aEnd; ++aIt )
-        if( convertToCellRange( aRange, *aIt, nSheet, bTrackOverflow ) )
+        if( convertToCellRange( aRange, *aIt, nSheet, true, bTrackOverflow ) )
             orRanges.push_back( aRange );
 }
 
 // private --------------------------------------------------------------------
+
+void AddressConverter::ControlCharacters::set(
+        sal_Unicode cThisWorkbook, sal_Unicode cExternal,
+        sal_Unicode cThisSheet, sal_Unicode cInternal, sal_Unicode cSameSheet )
+{
+    mcThisWorkbook = cThisWorkbook;
+    mcExternal     = cExternal;
+    mcThisSheet    = cThisSheet;
+    mcInternal     = cInternal;
+    mcSameSheet    = cSameSheet;
+}
 
 void AddressConverter::initializeMaxPos(
         sal_Int16 nMaxXlsTab, sal_Int32 nMaxXlsCol, sal_Int32 nMaxXlsRow )
@@ -758,17 +778,6 @@ void AddressConverter::initializeMaxPos(
     {
         OSL_ENSURE( false, "AddressConverter::AddressConverter - cannot get sheet limits" );
     }
-}
-
-void AddressConverter::initializeEncodedUrl(
-        sal_Unicode cUrlThisWorkbook, sal_Unicode cUrlExternal,
-        sal_Unicode cUrlThisSheet, sal_Unicode cUrlInternal, sal_Unicode cUrlSameSheet )
-{
-    mcUrlThisWorkbook   = cUrlThisWorkbook;
-    mcUrlExternal       = cUrlExternal;
-    mcUrlThisSheet      = cUrlThisSheet;
-    mcUrlInternal       = cUrlInternal;
-    mcUrlSameSheet      = cUrlSameSheet;
 }
 
 // ============================================================================

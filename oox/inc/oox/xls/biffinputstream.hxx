@@ -55,7 +55,7 @@ public:
     inline const BinaryInputStream& getBaseStream() const { return mrInStrm; }
 
     /** Sets a decoder object and decrypts buffered record data. */
-    void                setDecoder( BiffDecoderRef xDecoder );
+    void                setDecoder( const BiffDecoderRef& rxDecoder );
     /** Returns the current decoder object. */
     inline BiffDecoderRef getDecoder() const { return mxDecoder; }
     /** Enables/disables usage of current decoder. */
@@ -146,7 +146,7 @@ private:
     record (not the record header) will be encrypted by Excel if the file has
     been stored with password protection. The functions setDecoder() and
     enableDecoder() control the usage of the decryption algorithms.
-    setDecoder() sets´a new decryption algorithm and initially enables it.
+    setDecoder() sets a new decryption algorithm and initially enables it.
     enableDecoder( false ) may be used to stop the usage of the decryption
     temporarily (sometimes record contents are never encrypted, e.g. all BOF
     records or the stream position in SHEET records). Decryption will be
@@ -220,10 +220,7 @@ public:
 
         Enables decryption of record contents for the rest of the stream.
      */
-    void                setDecoder( BiffDecoderRef xDecoder );
-
-    /** Returns the current decoder object. */
-    BiffDecoderRef      getDecoder() const;
+    void                setDecoder( const BiffDecoderRef& rxDecoder );
 
     /** Enables/disables usage of current decoder.
 

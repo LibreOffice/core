@@ -89,14 +89,6 @@ void TextParagraph::insertAt(
         }
         xAt->gotoEnd( sal_True );
 
-#ifdef DEBUG
-    if ( false )
-    {
-        if ( pTextParagraphStyle.get() )
-            pTextParagraphStyle->getTextParagraphPropertyMap().dump_debug("TextParagraph paragraph props");
-    }
-#endif
-
         PropertyMap aioBulletList;
         Reference< XPropertySet > xProps( xStart, UNO_QUERY);
         float fCharacterSize = 18;
