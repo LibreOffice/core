@@ -430,11 +430,6 @@ Directory gid_Dir_Share_Xslt_Docbook
     DosName = "docbook";
 End
 
-Directory gid_Dir_Share_Xslt_Wiki
-    ParentID = gid_Dir_Share_Xslt;
-    DosName = "wiki";
-End
-
 Directory gid_Dir_Share_Xslt_Common
     ParentID = gid_Dir_Share_Xslt;
     DosName = "common";

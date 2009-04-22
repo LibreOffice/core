@@ -75,9 +75,7 @@ Module gid_Module_Prg_Wrt_Bin
     gid_File_Registry_Spool_Oo_TypeDetection_Writer_Types_Xcu, gid_File_Registry_Spool_Oo_TypeDetection_Writer_Filters_Xcu,
     gid_File_Registry_Spool_Oo_TypeDetection_Web_Types_Xcu, gid_File_Registry_Spool_Oo_TypeDetection_Web_Filters_Xcu,
     gid_File_Registry_Spool_Oo_TypeDetection_Global_Types_Xcu, gid_File_Registry_Spool_Oo_TypeDetection_Global_Filters_Xcu,
-    gid_File_Tmp_Userinstall_Wrt_Inf,
-    gid_File_Stw_MediaWikiTemplate,
-    gid_File_Xsl_MediaWiki);
+    gid_File_Tmp_Userinstall_Wrt_Inf);
 End
 
 // Module gid_Module_Prg_Wrt_Help

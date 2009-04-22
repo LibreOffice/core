@@ -268,17 +268,3 @@ File gid_File_Oo_Office_Ui_Writerwebwindowstate_Xcu
     Name = "/registry/data/org/openoffice/Office/UI/WriterWebWindowState.xcu";
 End
 
-File gid_File_Stw_MediaWikiTemplate
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Xslt_Wiki;
-    Name = "/xslt/export/wiki/oopedia-style.ott";
-End
-
-File gid_File_Xsl_MediaWiki
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Xslt_Wiki;
-    Name = "/xslt/export/wiki/odt2mediawiki.xsl";
-End
-
