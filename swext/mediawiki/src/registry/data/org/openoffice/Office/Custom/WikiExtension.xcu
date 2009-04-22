@@ -70,7 +70,7 @@
             <value xml:lang="en-US">User name or password is incorrect. Please try again, or leave the fields blank for an anonymous connection.</value>
         </prop>
         <prop oor:name="InvalidURL">
-            <value xml:lang="en-US">A connection could not be created, because the URL is invalid.</value>
+            <value xml:lang="en-US">A connection could not be created because the URL is invalid.</value>
         </prop>
         <prop oor:name="NoURL">
             <value xml:lang="en-US">Specify a MediaWiki server by providing a URL.</value>
@@ -150,6 +150,8 @@
         <prop oor:name="Dlg_MediaWiki_Extension_String">
             <value xml:lang="en-US">@WIKIEXTENSIONPRODUCTNAME@</value>
         </prop>
-
+        <prop oor:name="Dlg_WikiPageExists_Label1">
+            <value xml:lang="en-US">A wiki article with the title '$ARG1' already exists.&#13;&#13;Do you want to replace the current article with your article?&#13;&#13;</value>
+        </prop>
     </node>
 </oor:component-data>

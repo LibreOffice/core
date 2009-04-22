@@ -32,18 +32,18 @@
 PRJ=..$/..$/..$/..$/..$/..$/..
 PRJNAME=swext
 CUSTID=mediawiki
-TARGET=mediawiki_registry_data_office
-PACKAGE=org.openoffice.Office
+TARGET=mediawiki_registry_data_typedetection
+PACKAGE=org.openoffice.TypeDetection
 
 .INCLUDE : settings.mk
 .INCLUDE : ${PRJ}$/makefile.pmk
 
 .IF "$(ENABLE_MEDIAWIKI)" == "YES"
-LOCALIZEDFILES= Addons.xcu OptionsDialog.xcu
+LOCALIZEDFILES=
 
 MODULEFILES=
 
-XCUFILES = Addons.xcu OptionsDialog.xcu ProtocolHandler.xcu Paths.xcu
+XCUFILES = Filter.xcu Types.xcu
 .ENDIF
 
 .INCLUDE : target.mk

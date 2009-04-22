@@ -1,9 +1,10 @@
-swext swext :   javaunohelper ridljar unoil jurt APACHE_COMMONS:apache-commons officecfg readlicense_oo NULL
+swext swext :   javaunohelper ridljar unoil jurt APACHE_COMMONS:apache-commons officecfg readlicense_oo xsltml NULL
 swext swext             usr1    -    all    swext_mkout NULL
 swext swext\mediawiki\help                                              nmake   -    all    swext_mwhelp NULL
 swext swext\mediawiki\src\registry\schema\org\openoffice\Office\Custom  nmake   -    all    swext_mwschema NULL
 swext swext\mediawiki\src\registry\data\org\openoffice\Office\Custom    nmake   -    all    swext_mwcustomdata swext_mwschema NULL
 swext swext\mediawiki\src\registry\data\org\openoffice\Office           nmake   -    all    swext_mwofficedata NULL
+swext swext\mediawiki\src\registry\data\org\openoffice\TypeDetection    nmake   -    all    swext_mwtypedetection NULL
 swext swext\mediawiki\src                                               nmake   -    all    swext_mwlicense NULL
-swext swext\mediawiki                                                   nmake   -    all    swext_mw swext_mwhelp swext_mwschema swext_mwcustomdata swext_mwofficedata swext_mwlicense NULL
+swext swext\mediawiki                                                   nmake   -    all    swext_mw swext_mwhelp swext_mwschema swext_mwcustomdata swext_mwofficedata swext_mwlicense swext_mwtypedetection NULL
 

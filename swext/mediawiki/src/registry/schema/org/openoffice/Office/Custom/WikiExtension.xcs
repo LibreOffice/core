@@ -192,6 +192,9 @@
             <prop oor:name="Dlg_MediaWiki_Extension_String" oor:type="xs:string" oor:localized="true">
 				<info><desc>The string containing the name of the extension.</desc></info>
 			</prop>
+            <prop oor:name="Dlg_WikiPageExists_Label1" oor:type="xs:string" oor:localized="true">
+				<info><desc>The text asking whether an existing wiki page should be overwritten.</desc></info>
+			</prop>
         </group>
     </component>
 

@@ -116,11 +116,11 @@ public class Helper
     public final static int DLG_EDITSETTING_ACCOUNTLINE = 27;
     public final static int DLG_EDITSETTING_WIKILINE = 28;
     public final static int DLG_EDITSETTING_SAVEBOX = 29;
-
     public final static int CANCELSENDING_ERROR = 30;
     public final static int DLG_MEDIAWIKIEXTENSION_STRING = 31;
+    public final static int DLG_WIKIPAGEEXISTS_LABEL1 = 32;
 
-    public final static int STRINGS_NUM = 32;
+    public final static int STRINGS_NUM = 33;
 
     private final static String[] m_pEntryNames = { "GeneralSendError",
                                                     "NoWikiFilter",
@@ -153,7 +153,8 @@ public class Helper
                                                     "Dlg_EditSetting_WikiLine",
                                                     "Dlg_EditSetting_SaveBox",
                                                     "CancelSending",
-                                                    "Dlg_MediaWiki_Extension_String" };
+                                                    "Dlg_MediaWiki_Extension_String",
+                                                    "Dlg_WikiPageExists_Label1" };
 
     private static String[] m_pConfigStrings;
 
@@ -309,27 +310,35 @@ public class Helper
 
     protected static String GetMainURL( String sWebPage, String sVURL )
     {
-        //scrape the HTML source and find the EditURL
         String sResultURL = "";
-        int i = sWebPage.indexOf( "action=edit" );
-        if ( i!=-1 )
+        try
         {
-            int t = sWebPage.lastIndexOf( "a href=", i );
-            int z = sWebPage.indexOf( "index.php", t );
-            sResultURL = sWebPage.substring( t+8,z );
-            try
+            StringReader aReader = new StringReader( sWebPage );
+            HTMLEditorKit.Parser aParser = GetHTMLParser();
+            EditPageParser aCallback = new EditPageParser();
+
+            aParser.parse( aReader, aCallback, true );
+            sResultURL = aCallback.m_sMainURL;
+
+            if ( !sResultURL.startsWith( "http" ) )
             {
-                if ( !sResultURL.startsWith( "http" ))
-                {
-                    //if the url is only relative then complete it
-                    URL aURL = new URL( sVURL );
-                    sResultURL = aURL.getProtocol()+"://"+aURL.getHost()+sResultURL;
-                }
+                //if the url is only relative then complete it
+                URL aURL = new URL( sVURL );
+                sResultURL = aURL.getProtocol() + "://" + aURL.getHost() + sResultURL;
             }
-            catch ( MalformedURLException ex )
-            {
-                ex.printStackTrace();
-            }
+        }
+        catch( Exception e )
+        {
+            e.printStackTrace();
+        }
+
+        if ( sResultURL.length() == 0 )
+        {
+            // usually that should not happen
+            // workaround: try to get index.php from the provided URL
+            int nIndex = sVURL.indexOf( "index.php" );
+            if ( nIndex >= 0 )
+                sResultURL = sVURL.substring( 0, nIndex );
         }
 
         return sResultURL;
@@ -338,6 +347,8 @@ public class Helper
     protected static String GetRedirectURL( String sWebPage, String sURL )
     {
         //scrape the HTML source and find the EditURL
+        // TODO/LATER: Use parser in future
+
         String sResultURL = "";
         int nInd = sWebPage.indexOf( "http-equiv=\"refresh\"" );
         if ( nInd != -1 )
@@ -651,7 +662,7 @@ public class Helper
 
             int nProxyType = AnyConverter.toInt( xNameAccess.getByName( "ooInetProxyType" ) );
             if ( nProxyType == 0 )
-                aHostConfig.setProxy( "", 0 );
+                aHostConfig.setProxyHost( null );
             else
             {
                 if ( nProxyType == 1 )
@@ -672,7 +683,11 @@ public class Helper
                     String aNoProxyList = AnyConverter.toString( xNameAccess.getByName( "ooInetNoProxy" ) );
                     String aProxyName = AnyConverter.toString( xNameAccess.getByName( aProxyNameProp ) );
 
-                    int nProxyPort = AnyConverter.toInt( xNameAccess.getByName( aProxyPortProp ) );
+                    int nProxyPort = 80;
+
+                    Object aPortNo = xNameAccess.getByName( aProxyPortProp );
+                    if ( !AnyConverter.isVoid( aPortNo ) )
+                        nProxyPort = AnyConverter.toInt( aPortNo );
 
                     if ( nProxyPort == -1 )
                         nProxyPort = 80;
@@ -808,6 +823,20 @@ public class Helper
                 ExecuteMethod( aPost, aNewHostConfig, aPostURI, xContext, false );
 
                 nResultCode = aPost.getStatusCode();
+
+                while( nResultCode >= 301 && nResultCode <= 303 || nResultCode == 307 )
+                {
+                    String sRedirectURL = aPost.getResponseHeader( "Location" ).getValue();
+                    aPost.releaseConnection();
+
+                    aURI = new URI( sRedirectURL );
+                    aPost = new PostMethod();
+                    aPost.setPath( aURI.getEscapedPathQuery() );
+                    ExecuteMethod( aPost, aNewHostConfig, aURI, xContext, false );
+
+                    nResultCode = aPost.getStatusCode();
+                }
+
                 if ( nResultCode == 200 )
                 {
                     String sResult = aPost.getResponseBodyAsString();

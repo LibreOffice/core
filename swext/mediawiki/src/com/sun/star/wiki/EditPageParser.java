@@ -39,8 +39,12 @@ public class EditPageParser extends HTMLEditorKit.ParserCallback
 
     protected String m_sEditTime = "";
     protected String m_sEditToken = "";
+    protected String m_sMainURL = "";
+
     private int m_nWikiArticleHash = 0;
     private boolean m_bHTMLStartFound = false;
+    private boolean m_bInHead = false;
+
     protected int m_nWikiArticleStart = -1;
     protected int m_nWikiArticleEnd = -1;
     protected int m_nHTMLArticleStart = -1;
@@ -53,88 +57,114 @@ public class EditPageParser extends HTMLEditorKit.ParserCallback
     {
     }
 
-    public void handleComment(char[] data,int pos)
+    public void handleComment( char[] data,int pos )
     {
         // insert code to handle comments
     }
 
-    public void handleEndTag(HTML.Tag t,int pos)
+    public void handleEndTag( HTML.Tag t,int pos )
     {
-        if (t == HTML.Tag.TEXTAREA)
+        if ( t == HTML.Tag.TEXTAREA )
         {
             m_nWikiArticleEnd = pos;
         }
-        if (t == HTML.Tag.DIV)
+        else if ( t == HTML.Tag.DIV )
         {
-            if (m_bHTMLStartFound)
+            if ( m_bHTMLStartFound )
             {
                 m_nHTMLArticleStart = pos+6;
                 m_bHTMLStartFound = false;
             }
         }
+        else if ( t == HTML.Tag.HEAD )
+        {
+            m_bInHead = false;
+        }
     }
 
-    public void handleError(String errorMsg,int pos)
+    public void handleError( String errorMsg,int pos )
     {
-        //System.out.println(errorMsg);
+        //System.out.println( errorMsg );
     }
 
-    public void handleSimpleTag(HTML.Tag t, MutableAttributeSet a,int pos)
+    public void handleSimpleTag( HTML.Tag t, MutableAttributeSet a,int pos )
     {
         // insert code to handle simple tags
 
-        if (t == HTML.Tag.INPUT)
+        if ( t == HTML.Tag.INPUT )
         {
-            String sName = (String) a.getAttribute(HTML.Attribute.NAME);
-            if (sName != null)
+            String sName = ( String ) a.getAttribute( HTML.Attribute.NAME );
+            if ( sName != null )
             {
-                if (sName.equalsIgnoreCase("wpEdittime"))
+                if ( sName.equalsIgnoreCase( "wpEdittime" ) )
                 {
-                    this.m_sEditTime = (String) a.getAttribute(HTML.Attribute.VALUE);
+                    this.m_sEditTime = ( String ) a.getAttribute( HTML.Attribute.VALUE );
                 }
-                if (sName.equalsIgnoreCase("wpEditToken"))
+                else if ( sName.equalsIgnoreCase( "wpEditToken" ) )
                 {
-                    this.m_sEditToken = (String) a.getAttribute(HTML.Attribute.VALUE);
+                    this.m_sEditToken = ( String ) a.getAttribute( HTML.Attribute.VALUE );
                 }
             }
 
         }
+        else if ( t == HTML.Tag.LINK )
+        {
+            if ( m_bInHead )
+            {
+                String sName = ( String ) a.getAttribute( HTML.Attribute.HREF );
+                if ( sName != null )
+                {
+                    int nIndexStart = sName.indexOf( "index.php" );
+                    // get the main URL from the first header-link with index.php
+                    // the link with "action=edit" inside is preferable
+                    if ( nIndexStart>= 0
+                      && ( m_sMainURL.length() == 0 || sName.indexOf( "action=edit" ) >= 0 ) )
+                    {
+                        m_sMainURL = sName.substring( 0, nIndexStart );
+                    }
+                }
+            }
+        }
 
     }
 
-    public void handleStartTag(HTML.Tag t, MutableAttributeSet a,int pos)
+    public void handleStartTag( HTML.Tag t, MutableAttributeSet a,int pos )
     {
         // insert code to handle starting tags
         String sName = "";
         String sId = "";
         String sClass = "";
 
-        if (t == HTML.Tag.TEXTAREA)
+        if ( t == HTML.Tag.HEAD )
         {
-            sName = (String) a.getAttribute(HTML.Attribute.NAME);
-            if (sName != null)
+            m_bInHead = true;
+        }
+        if ( t == HTML.Tag.TEXTAREA )
+        {
+            sName = ( String ) a.getAttribute( HTML.Attribute.NAME );
+            if ( sName != null )
             {
-                if (sName.equalsIgnoreCase("wpTextbox1"))
+                if ( sName.equalsIgnoreCase( "wpTextbox1" ) )
                 {
                     m_nWikiArticleHash = t.hashCode();
                     m_nWikiArticleStart = pos;
                 }
             }
         }
-        else if (t == HTML.Tag.DIV)
+        else if ( t == HTML.Tag.DIV )
         {
-            sId = (String) a.getAttribute(HTML.Attribute.ID);
-            sClass = (String) a.getAttribute(HTML.Attribute.CLASS);
-            if (sId != null)
+            sId = ( String ) a.getAttribute( HTML.Attribute.ID );
+            sClass = ( String ) a.getAttribute( HTML.Attribute.CLASS );
+            if ( sId != null )
             {
-                if (sId.equalsIgnoreCase("contentSub"))
+                if ( sId.equalsIgnoreCase( "contentSub" ) )
                 {
                     m_bHTMLStartFound = true;
                 }
             }
-            if (sClass != null)
+            if ( sClass != null )
             {
-                if (sClass.equalsIgnoreCase("printfooter"))
+                if ( sClass.equalsIgnoreCase( "printfooter" ) )
                 {
                     m_nHTMLArticleEnd = pos;
                 }
@@ -150,7 +180,7 @@ public class EditPageParser extends HTMLEditorKit.ParserCallback
         }
         else if ( t == HTML.Tag.P )
         {
-            sClass = (String) a.getAttribute(HTML.Attribute.CLASS);
+            sClass = ( String ) a.getAttribute( HTML.Attribute.CLASS );
             if ( sClass != null && sClass.equalsIgnoreCase( "error" ) )
             {
                 m_nErrorInd = pos;
