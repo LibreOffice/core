@@ -528,7 +528,7 @@ $(MISC)$/%.dpslo :
     @@$(RM) $@
     @@-$(CDD) $(MISC) && $(!null,$(all_local_slo) $(TYPE:s/+//) echo #) $(foreach,i,$(all_local_slo:b:+".dpcc") s_$(i)) > $(@:f)
     @@-$(CDD) $(MISC) && $(!null,$(all_misc_slo) $(TYPE:s/+//) echo #) $(foreach,i,$(all_misc_slo:b:+".dpcc") s_$(i)) >> $(@:f)
-    @$(TYPE) $(mktmp $(foreach,i,$(all_local_slo:b:+".dpcc") $(@:^"\n") : $(MISC)$/s_$i) $(foreach,i,$(all_misc_slo:b:+".dpcc") $(@:^"\n") : $(MISC)$/s_$i)) >> $@
+    @$(TYPE) $(mktmp $(foreach,i,$(all_local_slo:b:+".dpcc") $(@:s#\#/#:^"\n") : $(MISC:s#\#/#)/s_$i) $(foreach,i,$(all_misc_slo:b:+".dpcc") $(@:s#\#/#:^"\n") : $(MISC:s#\#/#)$/s_$i)) >> $@
     @$(TYPE) $(mktmp $(TARGET)_known_dpcc+=$(all_local_slo:b:+".dpcc":^"s_") $(all_misc_slo:b:+".dpcc":^"s_")) >> $@
 
 $(MISC)$/%.dpobj :
@@ -536,7 +536,7 @@ $(MISC)$/%.dpobj :
     @@$(RM) $@
     @@-$(CDD) $(MISC) && $(!null,$(all_local_obj) $(TYPE:s/+//) echo #) $(foreach,i,$(all_local_obj:b:+".dpcc") o_$(i)) > $(@:f)
     @@-$(CDD) $(MISC) && $(!null,$(all_misc_obj) $(TYPE:s/+//) echo #) $(foreach,i,$(all_misc_obj:b:+".dpcc") o_$(i)) >> $(@:f)
-    @$(TYPE) $(mktmp $(foreach,i,$(all_local_obj:b:+".dpcc") $(@:^"\n") : $(MISC)$/o_$i) $(foreach,i,$(all_misc_obj:b:+".dpcc") $(@:^"\n") : $(MISC)$/o_$i)) >> $@
+    @$(TYPE) $(mktmp $(foreach,i,$(all_local_obj:b:+".dpcc") $(@:s#\#/#:^"\n") : $(MISC:s#\#/#)/o_$i) $(foreach,i,$(all_misc_obj:b:+".dpcc") $(@:s#\#/#:^"\n") : $(MISC:s#\#/#)/o_$i)) >> $@
     @$(TYPE) $(mktmp $(TARGET)_known_dpcc+=$(all_local_obj:b:+".dpcc":^"s_") $(all_misc_obj:b:+".dpcc":^"s_")) >> $@
 
 # see also %.dpslo 
@@ -818,12 +818,12 @@ $(COMMONMISC)$/$(TARGET)$/%.uulf : $$(@:b).ulf
     @$(RENAME) $@.$(INPATH) $@
     @-$(RM) $@.$(INPATH)
 
-$(COMMONMISC)$/$(TARGET)$/%.xrm : %.xrm
-    -$(MKDIR) $(@:d)
-    -$(RM) $@
-    $(XRMEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m localize.sdf -l all
-    $(RENAME) $@.$(INPATH) $@
-    -$(RM) $@.$(INPATH)
+#$(COMMONMISC)$/$(TARGET)$/%.xrm : %.xrm
+#    -$(MKDIR) $(@:d)
+#    -$(RM) $@
+#	$(XRMEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m localize.sdf -l all
+#    $(RENAME) $@.$(INPATH) $@
+#    -$(RM) $@.$(INPATH)
 
 # dirty hack
 # if local *.sdf file is missing

@@ -172,6 +172,7 @@ COPYRECURSE=-r
 AWK*=nawk
 GNUCOPY*=gnucp
 GNUPATCH*=gnupatch
+GNUTAR*=gtar
 .ELSE			# "$(OS)"=="SOLARIS"
 AWK*=awk
 GNUCOPY*=cp
@@ -223,6 +224,8 @@ MKDIR*=mkdir$E
 MKDIRHIER*=mkdir$E -p
 RMDIR*=rmdir
 XARGS*=xargs
+GNUTAR*:=tar
+TAR*:=tar
 
 RM+=$(RMFLAGS)
 ADJUSTVISIBILITY*=$(AUGMENT_LIBRARY_PATH) adjustvisibility

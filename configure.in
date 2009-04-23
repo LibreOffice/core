@@ -876,6 +876,11 @@ case "$build_os" in
         test_randr=yes
 		test_freetype=yes
 		_os=SunOS
+		AC_PATH_PROG( GNUTAR, gtar,,$PATH:/usr/sfw/bin)
+		if test -z "$GNUTAR"; then
+			AC_MSG_ERROR([gtar (gnu tar) not found but needed. Install it (SUN Freeware package).])
+		fi
+		AC_SUBST(GNUTAR)
 
 		dnl ===========================================================
 		dnl check whether we're using solaris 6,7,8 - sparc or intel.
@@ -1500,6 +1505,24 @@ else
    fi
 fi
 AC_SUBST(GNUMAKE)
+
+dnl ===================================================================
+dnl Search all the common names for GNU tar
+dnl ===================================================================
+AC_MSG_CHECKING([for GNU tar])
+for a in $GNUTAR gtar gnutar tar; do
+      $a --version 2> /dev/null | grep GNU  2>&1 > /dev/null
+      if test $? -eq 0;  then
+           GNUTAR=$a
+           break
+      fi
+done
+AC_MSG_RESULT($GNUTAR)
+if test -z "$GNUTAR"; then
+    AC_MSG_ERROR([not found. install GNU tar.])
+fi
+
+AC_SUBST(GNUTAR)
 
 dnl ===================================================================
 dnl  Test the solaris compiler version
