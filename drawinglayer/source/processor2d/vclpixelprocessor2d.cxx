@@ -389,7 +389,7 @@ namespace drawinglayer
                     // polygon stroke primitive
                     static bool bSuppressFatToHairlineCorrection(false);
 
-                    if(getOptionsDrawinglayer().IsAntiAliasing() || bSuppressFatToHairlineCorrection)
+                    if(bSuppressFatToHairlineCorrection)
                     {
                         // remeber that we enter a PolygonStrokePrimitive2D decomposition,
                         // used for AA thick line drawing
