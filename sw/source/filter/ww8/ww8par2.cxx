@@ -2509,7 +2509,9 @@ void WW8TabDesc::CreateSwTable()
             //ability to set the margin.
             SvxLRSpaceItem aL( RES_LR_SPACE );
             // set right to original DxaLeft (i28656)
-            aL.SetLeft( !bIsBiDi ?  GetMinLeft() : pIo->maSectionManager.GetTextAreaWidth() - nPreferredWidth  - nOrgDxaLeft);
+            aL.SetLeft( !bIsBiDi ?
+                static_cast<long>(GetMinLeft()) :
+                static_cast<long>(pIo->maSectionManager.GetTextAreaWidth() - nPreferredWidth  - nOrgDxaLeft) );
             aItemSet.Put(aL);
         }
     }

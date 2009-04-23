@@ -420,7 +420,7 @@ const sal_Int32 coStartFlags =
 
 // Continuing characters may be any alphanumeric or dot.
 const sal_Int32 coContFlags =
-    ( coStartFlags | KParseTokens::ASC_DOT ) & ~KParseTokens::IGNORE_LEADING_WS
+    ((coStartFlags | KParseTokens::ASC_DOT) & ~KParseTokens::IGNORE_LEADING_WS)
     | KParseTokens::TWO_DOUBLE_QUOTES_BREAK_STRING;
 
 // First character for numbers, may be any numeric or dot
@@ -430,7 +430,7 @@ const sal_Int32 coNumStartFlags =
         KParseTokens::IGNORE_LEADING_WS;
 // Continuing characters for numbers, may be any numeric or dot.
 const sal_Int32 coNumContFlags =
-    ( coNumStartFlags | KParseTokens::ASC_DOT ) & ~KParseTokens::IGNORE_LEADING_WS;
+    (coNumStartFlags | KParseTokens::ASC_DOT) & ~KParseTokens::IGNORE_LEADING_WS;
 
 void SmParser::NextToken()
 {
@@ -1364,9 +1364,11 @@ void SmParser::Blank()
     }
 
     // Blanks am Zeilenende ignorieren wenn die entsprechende Option gesetzt ist
-    if (CurToken.eType == TNEWLINE  ||  CurToken.eType == TEND
-        &&  SM_MOD1()->GetConfig()->IsIgnoreSpacesRight())
+    if ( CurToken.eType == TNEWLINE ||
+             (CurToken.eType == TEND && SM_MOD1()->GetConfig()->IsIgnoreSpacesRight()) )
+    {
         pBlankNode->Clear();
+    }
 
     NodeStack.Push(pBlankNode);
 }
