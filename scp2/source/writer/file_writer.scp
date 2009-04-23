@@ -60,17 +60,6 @@ File gid_File_Exe_Sweb
 End
 #endif
 
-#ifdef SOLAR_JAVA
-#ifndef WITHOUT_WRITER2LATEX
-File gid_File_Oxt_Writer2latex
-    TXT_FILE_BODY;
-    Name = "writer2latex.oxt";
-    Dir = gid_Brand_Dir_Share_Extension_Install;
-    Styles = (PACKED);
-End
-#endif
-#endif
-
 File gid_File_Registry_Spool_Oo_Office_Embedding_Writer_Xcu
     TXT_FILE_BODY;
     Styles = (PACKED);

@@ -303,11 +303,6 @@ AC_ARG_WITH(external-hyph-dir,
 AC_ARG_WITH(external-thes-dir,
 [  --with-external-thes-dir Specify external thesaurus dir
 ],,)
-AC_ARG_WITH(writer2latex,
-[  --without-writer2latex Removes writer2latex from openoffice.org installation
-                          set, for people building for specific distributions
-                          where writer2latex is known to be already available
-],,)
 AC_ARG_WITH(system-libs,
 [  --with-system-libs      Use libs already on system -- enables all
                           --with-system-* flags except mozilla and
@@ -5672,8 +5667,8 @@ if test "$ENABLE_MEDIAWIKI" = "YES" -o "$ENABLE_REPORTBUILDER" = "YES"; then
         if test -z "$COMMONS_LOGGING_JAR"; then
                 COMMONS_LOGGING_JAR=/usr/share/java/commons-logging-1.1.1.jar
         fi
-   AC_CHECK_FILE($COMMONS_HTTPCLIENT_JAR, [],
-        [AC_MSG_ERROR(commons-httpclient.jar not found.)], [])
+   AC_CHECK_FILE($COMMONS_LOGGING_JAR, [],
+        [AC_MSG_ERROR(commons-logging.jar not found.)], [])
 
     fi
   else
@@ -5962,21 +5957,6 @@ else
   SCPDEFS="$SCPDEFS -DWITHOUT_AFMS"
 fi
 AC_SUBST(WITHOUT_AFMS)
-
-dnl ===================================================================
-dnl Test whether to include writer2latex
-dnl ===================================================================
-AC_MSG_CHECKING([whether to include writer2latex])
-if test "$with_writer2latex" != "no" ; then
-  AC_MSG_RESULT([yes])
-  WITH_WRITER2LATEX=YES
-  BUILD_TYPE="$BUILD_TYPE WRITER2LATEX"
-else
-  AC_MSG_RESULT([no])
-  WITH_WRITER2LATEX=NO
-  SCPDEFS="$SCPDEFS -DWITHOUT_WRITER2LATEX"
-fi
-AC_SUBST(WITH_WRITER2LATEX)
 
 AC_SUBST(SCPDEFS)
 
