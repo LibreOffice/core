@@ -1807,7 +1807,7 @@ sal_Bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
             aValue >>= aTemplateToRemoveTargetURL;
 
         if ( !aGroupTargetURL.getLength() || !maTemplateDirs.getLength()
-          || aTemplateToRemoveTargetURL.getLength() && !::utl::UCBContentHelper::IsSubPath( maTemplateDirs[ maTemplateDirs.getLength() - 1 ], aTemplateToRemoveTargetURL ) )
+          || (aTemplateToRemoveTargetURL.getLength() && !::utl::UCBContentHelper::IsSubPath( maTemplateDirs[ maTemplateDirs.getLength() - 1 ], aTemplateToRemoveTargetURL )) )
             return sal_False; // it is not allowed to remove the template
     }
 

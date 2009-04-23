@@ -626,7 +626,7 @@ sal_uInt32 SfxFilterMatcher::DetectFilter( SfxMedium& rMedium, const SfxFilter**
 */
     *ppFilter = pFilter;
 
-    if ( bHidden || bAPI && nErr == ERRCODE_SFX_CONSULTUSER )
+    if ( bHidden || (bAPI && nErr == ERRCODE_SFX_CONSULTUSER) )
         nErr = pFilter ? ERRCODE_NONE : ERRCODE_ABORT;
     return nErr;
 }

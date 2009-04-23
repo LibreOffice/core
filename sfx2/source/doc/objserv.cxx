@@ -1373,15 +1373,15 @@ void SfxObjectShell::ImplSign( sal_Bool bScriptingContent )
     bool bNoSig = false;
 
     if ( IsModified() || !GetMedium() || !GetMedium()->GetName().Len()
-      || !aODFVersion.equals( ODFVER_012_TEXT ) && !bHasSign )
+      || (!aODFVersion.equals( ODFVER_012_TEXT ) && !bHasSign) )
     {
         // the document might need saving ( new, modified or in ODF1.1 format without signature )
 
         if ( nVersion == SvtSaveOptions::ODFVER_012 )
         {
 
-            if ( bHasSign && QueryBox( NULL, SfxResId( MSG_XMLSEC_QUERY_SAVESIGNEDBEFORESIGN ) ).Execute() == RET_YES
-              || !bHasSign && QueryBox( NULL, SfxResId( RID_XMLSEC_QUERY_SAVEBEFORESIGN ) ).Execute() == RET_YES )
+            if ( (bHasSign && QueryBox( NULL, SfxResId( MSG_XMLSEC_QUERY_SAVESIGNEDBEFORESIGN ) ).Execute() == RET_YES)
+              || (!bHasSign && QueryBox( NULL, SfxResId( RID_XMLSEC_QUERY_SAVEBEFORESIGN ) ).Execute() == RET_YES) )
             {
                 USHORT nId = SID_SAVEDOC;
                 if ( !GetMedium() || !GetMedium()->GetName().Len() )

@@ -1803,7 +1803,7 @@ void SfxWorkWindow::UpdateStatusBar_Impl()
     // keine Statusleiste, wenn keine Id gew"unscht oder bei FullScreenView
     // oder wenn ausgeschaltet
     if ( aStatBar.nId && IsDockingAllowed() && bInternalDockingAllowed && bShowStatusBar &&
-         ( aStatBar.bOn && !bIsFullScreen || aStatBar.bTemp ) )
+         ( (aStatBar.bOn && !bIsFullScreen) || aStatBar.bTemp ) )
     {
         // Id hat sich ge"andert, also passenden Statusbarmanager erzeugen,
         // dieser "ubernimmt die aktuelle Statusleiste;
@@ -2734,7 +2734,7 @@ void SfxWorkWindow::MakeChildsVisible_Impl( BOOL bVis )
         for ( USHORT n=0; n<aSortedList.Count(); ++n )
         {
             SfxChild_Impl* pCli = (*pChilds)[aSortedList[n]];
-            if ( pCli->eAlign == SFX_ALIGN_NOALIGNMENT || IsDockingAllowed() && bInternalDockingAllowed )
+            if ( (pCli->eAlign == SFX_ALIGN_NOALIGNMENT) || (IsDockingAllowed() && bInternalDockingAllowed) )
                 pCli->nVisible |= CHILD_ACTIVE;
         }
     }
@@ -2800,7 +2800,7 @@ void SfxWorkWindow::ArrangeAutoHideWindows( SfxSplitWindow *pActSplitWin )
         BOOL bDummyWindow = !pSplitWin->IsFadeIn();
         Window *pDummy = pSplitWin->GetSplitWindow();
         Window *pWin = bDummyWindow ? pDummy : pSplitWin;
-        if ( pSplitWin->IsPinned() && !bDummyWindow || !pWin->IsVisible() && pActSplitWin != pSplitWin )
+        if ( (pSplitWin->IsPinned() && !bDummyWindow) || (!pWin->IsVisible() && pActSplitWin != pSplitWin) )
             continue;
 
         // Breite und Position des Dummy-Fensters als Ausgangspunkt
