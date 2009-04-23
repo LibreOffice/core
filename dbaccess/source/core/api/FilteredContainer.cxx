@@ -36,13 +36,11 @@
 #include "FilteredContainer.hxx"
 #include "RefreshListener.hxx"
 #include "sdbcoretools.hxx"
-
 #include <com/sun/star/sdbc/XRow.hpp>
-
 #include <connectivity/dbtools.hxx>
 #include <tools/wldcrd.hxx>
 #include <tools/diagnose_ex.h>
-
+#include <rtl/logfile.hxx>
 #include <boost/optional.hpp>
 
 namespace dbaccess
@@ -61,35 +59,36 @@ namespace dbaccess
     using namespace ::cppu;
     using namespace ::connectivity::sdbcx;
 
-    //------------------------------------------------------------------------------
-    /** creates a vector of WildCards and reduce the _rTableFilter of the length of WildsCards
-    */
-    sal_Int32 createWildCardVector(Sequence< ::rtl::OUString >& _rTableFilter, ::std::vector< WildCard >& _rOut)
+//------------------------------------------------------------------------------
+/** creates a vector of WildCards and reduce the _rTableFilter of the length of WildsCards
+*/
+sal_Int32 createWildCardVector(Sequence< ::rtl::OUString >& _rTableFilter, ::std::vector< WildCard >& _rOut)
+{
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "api", "Ocke.Janssen@sun.com", "OFilteredContainer::createWildCardVector" );
+    // for wildcard search : remove all table filters which are a wildcard expression and build a WilCard
+    // for them
+    ::rtl::OUString* pTableFilters = _rTableFilter.getArray();
+    ::rtl::OUString* pEnd          = pTableFilters + _rTableFilter.getLength();
+    sal_Int32 nShiftPos = 0;
+    for (sal_Int32 i=0; pEnd != pTableFilters; ++pTableFilters,++i)
     {
-        // for wildcard search : remove all table filters which are a wildcard expression and build a WilCard
-        // for them
-        ::rtl::OUString* pTableFilters = _rTableFilter.getArray();
-        ::rtl::OUString* pEnd          = pTableFilters + _rTableFilter.getLength();
-        sal_Int32 nShiftPos = 0;
-        for (sal_Int32 i=0; pEnd != pTableFilters; ++pTableFilters,++i)
+        if (pTableFilters->indexOf('%') != -1)
         {
-            if (pTableFilters->indexOf('%') != -1)
-            {
-                _rOut.push_back(WildCard(pTableFilters->replace('%', '*')));
-            }
-            else
-            {
-                if (nShiftPos != i)
-                {
-                    _rTableFilter.getArray()[nShiftPos] = _rTableFilter.getArray()[i];
-                }
-                ++nShiftPos;
-            }
+            _rOut.push_back(WildCard(pTableFilters->replace('%', '*')));
         }
-        // now aTableFilter contains nShiftPos non-wc-strings and aWCSearch all wc-strings
-        _rTableFilter.realloc(nShiftPos);
-        return nShiftPos;
+        else
+        {
+            if (nShiftPos != i)
+            {
+                _rTableFilter.getArray()[nShiftPos] = _rTableFilter.getArray()[i];
+            }
+            ++nShiftPos;
+        }
     }
+    // now aTableFilter contains nShiftPos non-wc-strings and aWCSearch all wc-strings
+    _rTableFilter.realloc(nShiftPos);
+    return nShiftPos;
+}
 
     // -------------------------------------------------------------------------
     bool lcl_isElementAllowed(  const ::rtl::OUString& _rName,
@@ -274,9 +273,7 @@ namespace dbaccess
         ,m_nInAppend(_nInAppend)
         ,m_xConnection(_xCon)
     {
-
     }
-
     // -------------------------------------------------------------------------
     void OFilteredContainer::construct(const Reference< XNameAccess >& _rxMasterContainer,
                                     const Sequence< ::rtl::OUString >& _rTableFilter,
@@ -419,9 +416,11 @@ namespace dbaccess
         m_pRefreshListener  = NULL;
         m_bConstructed      = sal_False;
     }
+
     // -------------------------------------------------------------------------
     void OFilteredContainer::impl_refresh() throw(RuntimeException)
     {
+        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "api", "Ocke.Janssen@sun.com", "OFilteredContainer::impl_refresh" );
         if ( m_pRefreshListener )
         {
             m_bConstructed = sal_False;
@@ -430,7 +429,6 @@ namespace dbaccess
                 xRefresh->refresh();
             m_pRefreshListener->refresh(this);
         }
-    }
 
     // -----------------------------------------------------------------------------
     ::rtl::OUString OFilteredContainer::getNameForObject(const ObjectType& _xObject)

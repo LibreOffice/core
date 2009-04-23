@@ -34,128 +34,48 @@
 #include "DExport.hxx"
 #include "moduledbu.hxx"
 
-#ifndef _COM_SUN_STAR_SDBCX_XTABLESSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XDATADESCRIPTORFACTORY_HPP_
 #include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XAPPEND_HPP_
 #include <com/sun/star/sdbcx/XAppend.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_KEYTYPE_HPP_
 #include <com/sun/star/sdbcx/KeyType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
 #include <com/sun/star/sdbc/DataType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_COLUMNVALUE_HPP_
 #include <com/sun/star/sdbc/ColumnValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_COMMANDTYPE_HPP_
 #include <com/sun/star/sdb/CommandType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XRESULTSETMETADATASUPPLIER_HPP_
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
 #include <com/sun/star/sdbc/XRow.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_NUMBERFORMAT_HPP_
 #include <com/sun/star/util/NumberFormat.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATTYPES_HPP_
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
-#endif
-#ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
-#endif
-#ifndef _DBU_MISC_HRC_
 #include "dbu_misc.hrc"
-#endif
-#ifndef _DBHELPER_DBCONVERSION_HXX_
 #include <connectivity/dbconversion.hxx>
-#endif
-#ifndef _SFXHTML_HXX
 #include <sfx2/sfxhtml.hxx>
-#endif
-#ifndef _NUMUNO_HXX
 #include <svtools/numuno.hxx>
-#endif
-#ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
-#endif
-#ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
-#endif
-#ifndef DBAUI_TYPEINFO_HXX
 #include "TypeInfo.hxx"
-#endif
-#ifndef DBAUI_FIELDDESCRIPTIONS_HXX
 #include "FieldDescriptions.hxx"
-#endif
-#ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
-#endif
-#ifndef _UTL_CONFIGMGR_HXX_
 #include <unotools/configmgr.hxx>
-#endif
 #include <memory>
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-#ifndef TOOLS_DIAGNOSE_EX_H
 #include <tools/diagnose_ex.h>
-#endif
-#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
 #include <i18npool/mslangid.hxx>
-#endif
-#ifndef _COM_SUN_STAR_AWT_FONTDESCRIPTOR_HPP_
 #include <com/sun/star/awt/FontDescriptor.hpp>
-#endif
-#ifndef DBAUI_WIZ_COPYTABLEDIALOG_HXX
 #include "WCopyTable.hxx"
-#endif
-#ifndef DBAUI_WIZ_EXTENDPAGES_HXX
 #include "WExtendPages.hxx"
-#endif
-#ifndef DBAUI_WIZARD_CPAGE_HXX
 #include "WCPage.hxx"
-#endif
-#ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
 #include <svtools/syslocale.hxx>
-#endif
-#ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>
-#endif
-#ifndef _CONNECTIVITY_FILE_VALUE_HXX_
 #include <connectivity/FValue.hxx>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_SQLWARNING_HPP_
 #include <com/sun/star/sdbc/SQLWarning.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_SQLCONTEXT_HPP_
 #include <com/sun/star/sdb/SQLContext.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_APPLICATION_COPYTABLEOPERATION_HPP_
 #include <com/sun/star/sdb/application/CopyTableOperation.hpp>
-#endif
-#ifndef _DBAUI_SQLMESSAGE_HXX_
 #include "sqlmessage.hxx"
-#endif
-#ifndef DBAUI_UPDATEHELPERIMPL_HXX
 #include "UpdateHelperImpl.hxx"
-#endif
-#ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _CPPUHELPER_EXC_HLP_HXX_
 #include <cppuhelper/exc_hlp.hxx>
-#endif
-
+#include <rtl/logfile.hxx>
 
 using namespace dbaui;
 using namespace utl;
@@ -205,6 +125,7 @@ ODatabaseExport::ODatabaseExport(sal_Int32 nRows,
     ,m_bCheckOnly(sal_False)
     ,m_bAppendFirstLine(false)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ODatabaseExport::ODatabaseExport" );
     DBG_CTOR(ODatabaseExport,NULL);
 
     m_nRows += nRows;
@@ -261,6 +182,7 @@ ODatabaseExport::ODatabaseExport(const SharedConnection& _rxConnection,
     ,m_bCheckOnly(sal_False)
     ,m_bAppendFirstLine(false)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ODatabaseExport::ODatabaseExport" );
     DBG_CTOR(ODatabaseExport,NULL);
     try
     {
@@ -281,8 +203,9 @@ ODatabaseExport::ODatabaseExport(const SharedConnection& _rxConnection,
     {
         ::connectivity::ORowSetValue aValue;
         ::std::vector<sal_Int32> aTypes;
-        Reference<XResultSetMetaData> xResultSetMetaData = Reference<XResultSetMetaDataSupplier>(xSet,UNO_QUERY)->getMetaData();
-        Reference<XRow> xRow(xSet,UNO_QUERY);
+        ::std::vector<sal_Bool> aNullable;
+        Reference<XResultSetMetaData> xResultSetMetaData = Reference<XResultSetMetaDataSupplier>(xSet,UNO_QUERY_THROW)->getMetaData();
+        Reference<XRow> xRow(xSet,UNO_QUERY_THROW);
         while(xSet->next())
         {
             if ( aTypes.empty() )
@@ -291,18 +214,23 @@ ODatabaseExport::ODatabaseExport(const SharedConnection& _rxConnection,
                 if ( nCount < 1 )
                     nCount = 18;
                 aTypes.reserve(nCount+1);
+                aNullable.reserve(nCount+1);
                 aTypes.push_back(-1);
+                aNullable.push_back(sal_False);
                 for (sal_Int32 j = 1; j <= nCount ; ++j)
+                {
+                    aNullable.push_back(xResultSetMetaData->isNullable(j) != ColumnValue::NO_NULLS );
                     aTypes.push_back(xResultSetMetaData->getColumnType(j));
+                }
             }
 
             sal_Int32 nPos = 1;
             OSL_ENSURE((nPos) < static_cast<sal_Int32>(aTypes.size()),"aTypes: Illegal index for vector");
-            aValue.fill(nPos,aTypes[nPos],xRow);
+            aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
             ::rtl::OUString sTypeName = aValue;
             ++nPos;
             OSL_ENSURE((nPos) < static_cast<sal_Int32>(aTypes.size()),"aTypes: Illegal index for vector");
-            aValue.fill(nPos,aTypes[nPos],xRow);
+            aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
             sal_Int32 nType = aValue;
             ++nPos;
 
@@ -314,43 +242,43 @@ ODatabaseExport::ODatabaseExport(const SharedConnection& _rxConnection,
                 m_pTypeInfo->nType          = nType;
 
                 OSL_ENSURE((nPos) < static_cast<sal_Int32>(aTypes.size()),"aTypes: Illegal index for vector");
-                aValue.fill(nPos,aTypes[nPos],xRow);
+                aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
                 m_pTypeInfo->nPrecision     = aValue;
                 ++nPos;
-                aValue.fill(nPos,aTypes[nPos],xRow);
+                aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
                 m_pTypeInfo->aLiteralPrefix = aValue;
                 ++nPos;
-                aValue.fill(nPos,aTypes[nPos],xRow);
+                aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
                 m_pTypeInfo->aLiteralSuffix = aValue;
                 ++nPos;
-                aValue.fill(nPos,aTypes[nPos],xRow);
+                aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
                 m_pTypeInfo->aCreateParams  = aValue;
                 ++nPos;
-                aValue.fill(nPos,aTypes[nPos],xRow);
+                aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
                 m_pTypeInfo->bNullable      = (sal_Int32)aValue == ColumnValue::NULLABLE;
                 ++nPos;
-                aValue.fill(nPos,aTypes[nPos],xRow);
+                aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
                 m_pTypeInfo->bCaseSensitive = (sal_Bool)aValue;
                 ++nPos;
-                aValue.fill(nPos,aTypes[nPos],xRow);
+                aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
                 m_pTypeInfo->nSearchType        = aValue;
                 ++nPos;
-                aValue.fill(nPos,aTypes[nPos],xRow);
+                aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
                 m_pTypeInfo->bUnsigned      = (sal_Bool)aValue;
                 ++nPos;
-                aValue.fill(nPos,aTypes[nPos],xRow);
+                aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
                 m_pTypeInfo->bCurrency      = (sal_Bool)aValue;
                 ++nPos;
-                aValue.fill(nPos,aTypes[nPos],xRow);
+                aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
                 m_pTypeInfo->bAutoIncrement = (sal_Bool)aValue;
                 ++nPos;
-                aValue.fill(nPos,aTypes[nPos],xRow);
+                aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
                 m_pTypeInfo->aLocalTypeName = aValue;
                 ++nPos;
-                aValue.fill(nPos,aTypes[nPos],xRow);
+                aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
                 m_pTypeInfo->nMinimumScale  = aValue;
                 ++nPos;
-                aValue.fill(nPos,aTypes[nPos],xRow);
+                aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
                 m_pTypeInfo->nMaximumScale  = aValue;
 
                 // check if values are less than zero like it happens in a oracle jdbc driver
@@ -382,6 +310,7 @@ ODatabaseExport::~ODatabaseExport()
 // -----------------------------------------------------------------------------
 void ODatabaseExport::insertValueIntoColumn()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ODatabaseExport::insertValueIntoColumn" );
     DBG_CHKTHIS(ODatabaseExport,NULL);
     if(m_nColumnPos < sal_Int32(m_vDestVector.size()))
     {
@@ -399,7 +328,7 @@ void ODatabaseExport::insertValueIntoColumn()
     //                  if(m_nDefToken != LANGUAGE_DONTKNOW) // falls Sprache anders als Systemsprache
     //                      m_pNF->ChangeIntl((LanguageType)m_nDefToken);
 
-                    if(!m_sTextToken.Len() && m_xResultSetMetaData->isNullable(nPos))
+                    if ( !m_sTextToken.Len() && pField->IsNullable() )
                         m_pUpdateHelper->updateNull(nPos,pField->GetType());
                     else
                     {
@@ -408,11 +337,7 @@ void ODatabaseExport::insertValueIntoColumn()
                         OSL_ENSURE((nNewPos) < static_cast<sal_Int32>(m_vColumnTypes.size()),"Illegal index for vector");
                         if (m_vColumnTypes[nNewPos] != DataType::VARCHAR && m_vColumnTypes[nNewPos] != DataType::CHAR && m_vColumnTypes[nNewPos] != DataType::LONGVARCHAR )
                         {
-                            Reference< XNumberFormatsSupplier >  xSupplier = m_xFormatter->getNumberFormatsSupplier();
-                            Reference<XPropertySet> xNumberFormatSettings = xSupplier->getNumberFormatSettings();
-                            com::sun::star::util::Date aNullDate;
-                            xNumberFormatSettings->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NullDate"))) >>= aNullDate;
-
+                            RTL_LOGFILE_CONTEXT_TRACE( aLogger, "ODatabaseExport::insertValueIntoColumn != DataType::VARCHAR" );
                             ensureFormatter();
                             bool bNumberFormatError = false;
                             if ( m_pFormatter && m_sNumToken.Len() )
@@ -424,6 +349,7 @@ void ODatabaseExport::insertValueIntoColumn()
                             }
                             else
                             {
+                                Reference< XNumberFormatsSupplier >  xSupplier = m_xFormatter->getNumberFormatsSupplier();
                                 Reference<XNumberFormatTypes> xNumType(xSupplier->getNumberFormats(),UNO_QUERY);
                                 sal_Int16 nFormats[] = { NumberFormat::DATETIME
                                     ,NumberFormat::DATETIME
@@ -457,6 +383,7 @@ void ODatabaseExport::insertValueIntoColumn()
                             {
                                 try
                                 {
+                                    Reference< XNumberFormatsSupplier >  xSupplier = m_xFormatter->getNumberFormatsSupplier();
                                     Reference< XNumberFormats >         xFormats = xSupplier->getNumberFormats();
                                     Reference<XPropertySet> xProp = xFormats->getByKey(nNumberFormat);
                                     sal_Int16 nType = 0;
@@ -465,7 +392,7 @@ void ODatabaseExport::insertValueIntoColumn()
                                     {
                                         case NumberFormat::DATE:
                                         case NumberFormat::DATETIME:
-                                            fOutNumber = ::dbtools::DBTypeConversion::toStandardDbDate(aNullDate,fOutNumber);
+                                            fOutNumber = ::dbtools::DBTypeConversion::toStandardDbDate(m_aNullDate,fOutNumber);
                                             break;
                                         default:
                                             ;
@@ -491,6 +418,7 @@ void ODatabaseExport::insertValueIntoColumn()
 // -----------------------------------------------------------------------------
 sal_Int16 ODatabaseExport::CheckString(const String& aCheckToken, sal_Int16 _nOldNumberFormat)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ODatabaseExport::CheckString" );
     DBG_CHKTHIS(ODatabaseExport,NULL);
     double fOutNumber = 0.0;
     sal_Int16 nNumberFormat = 0;
@@ -627,6 +555,7 @@ sal_Int16 ODatabaseExport::CheckString(const String& aCheckToken, sal_Int16 _nOl
 // -----------------------------------------------------------------------------
 void ODatabaseExport::SetColumnTypes(const TColumnVector* _pList,const OTypeInfoMap* _pInfoMap)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ODatabaseExport::SetColumnTypes" );
     DBG_CHKTHIS(ODatabaseExport,NULL);
     if(_pList && _pInfoMap)
     {
@@ -700,6 +629,7 @@ void ODatabaseExport::SetColumnTypes(const TColumnVector* _pList,const OTypeInfo
 // -----------------------------------------------------------------------------
 void ODatabaseExport::CreateDefaultColumn(const ::rtl::OUString& _rColumnName)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ODatabaseExport::CreateDefaultColumn" );
     DBG_CHKTHIS(ODatabaseExport,NULL);
     Reference< XDatabaseMetaData>  xDestMetaData(m_xConnection->getMetaData());
     sal_Int32 nMaxNameLen(xDestMetaData->getMaxColumnNameLength());
@@ -752,41 +682,44 @@ void ODatabaseExport::CreateDefaultColumn(const ::rtl::OUString& _rColumnName)
 // -----------------------------------------------------------------------------
 sal_Bool ODatabaseExport::createRowSet()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ODatabaseExport::createRowSet" );
     DBG_CHKTHIS(ODatabaseExport,NULL);
-    Reference<XResultSet> xDestSet(m_xFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.sdb.RowSet")),UNO_QUERY);
-    Reference<XPropertySet > xProp(xDestSet,UNO_QUERY);
-    if(xProp.is())
-    {
-        ::rtl::OUString sDestName = ::dbtools::composeTableName(
-            m_xConnection->getMetaData(), m_xTable, ::dbtools::eInDataManipulation, false, false, false );
+    //Reference<XResultSet> xDestSet(m_xFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.sdb.RowSet")),UNO_QUERY);
+    //Reference<XPropertySet > xProp(xDestSet,UNO_QUERY);
+    //if(xProp.is())
+    //{
+    //  ::rtl::OUString sDestName = ::dbtools::composeTableName(
+ //           m_xConnection->getMetaData(), m_xTable, ::dbtools::eInDataManipulation, false, false, false );
 
-        xProp->setPropertyValue(PROPERTY_ACTIVE_CONNECTION,makeAny(m_xConnection.getTyped()));
-        xProp->setPropertyValue(PROPERTY_COMMAND_TYPE,makeAny(CommandType::TABLE));
-        xProp->setPropertyValue(PROPERTY_COMMAND,makeAny(sDestName));
-        xProp->setPropertyValue(PROPERTY_IGNORERESULT,::cppu::bool2any(sal_True));
-        Reference<XRowSet> xRowSet(xProp,UNO_QUERY);
-        xRowSet->execute();
+    //  xProp->setPropertyValue(PROPERTY_ACTIVE_CONNECTION,makeAny(m_xConnection.getTyped()));
+    //  xProp->setPropertyValue(PROPERTY_COMMAND_TYPE,makeAny(CommandType::TABLE));
+    //  xProp->setPropertyValue(PROPERTY_COMMAND,makeAny(sDestName));
+    //  xProp->setPropertyValue(PROPERTY_IGNORERESULT,::cppu::bool2any(sal_True));
+ //       xProp->setPropertyValue(PROPERTY_FETCHSIZE,sal_Int32(1));
+    //  Reference<XRowSet> xRowSet(xProp,UNO_QUERY);
+    //  xRowSet->execute();
 
-        Reference< XResultSetMetaDataSupplier> xSrcMetaSup(xRowSet,UNO_QUERY_THROW);
-        m_xResultSetMetaData = xSrcMetaSup->getMetaData();
+ //       Reference< XResultSetMetaDataSupplier> xSrcMetaSup(xRowSet,UNO_QUERY_THROW);
+    //  m_xResultSetMetaData = xSrcMetaSup->getMetaData();
 
-        if ( ::dbtools::canInsert(xProp) )
-        {
-            m_pUpdateHelper.reset(new ORowUpdateHelper(xRowSet));
-            OSL_ENSURE(m_xResultSetMetaData.is(),"No ResultSetMetaData!");
-            TPositions::iterator aIter = m_vColumns.begin();
-            for (;aIter != m_vColumns.end() ; ++aIter)
-                aIter->first = aIter->second;
-        }
-        else
+ //       if ( ::dbtools::canInsert(xProp) )
+ //       {
+ //           m_pUpdateHelper.reset(new ORowUpdateHelper(xRowSet));
+    //      OSL_ENSURE(m_xResultSetMetaData.is(),"No ResultSetMetaData!");
+ //           TPositions::iterator aIter = m_vColumns.begin();
+ //           for (;aIter != m_vColumns.end() ; ++aIter)
+ //               aIter->first = aIter->second;
+    //    }
+ //       else
             m_pUpdateHelper.reset(new OParameterUpdateHelper(createPreparedStatment(m_xConnection->getMetaData(),m_xTable,m_vColumns)));
-    }
+    //}
 
     return m_pUpdateHelper.get() != NULL;
 }
 // -----------------------------------------------------------------------------
 sal_Bool ODatabaseExport::executeWizard(const ::rtl::OUString& _rTableName,const Any& _aTextColor,const FontDescriptor& _rFont)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ODatabaseExport::executeWizard" );
     DBG_CHKTHIS(ODatabaseExport,NULL);
 
     bool bHaveDefaultTable = ( m_sDefaultTableName.getLength() != 0 );
@@ -852,6 +785,7 @@ sal_Bool ODatabaseExport::executeWizard(const ::rtl::OUString& _rTableName,const
 //---------------------------------------------------------------------------------
 void ODatabaseExport::showErrorDialog(const ::com::sun::star::sdbc::SQLException& e)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ODatabaseExport::showErrorDialog" );
     if(!m_bDontAskAgain)
     {
         String aMsg(e.Message);
@@ -868,6 +802,7 @@ void ODatabaseExport::showErrorDialog(const ::com::sun::star::sdbc::SQLException
 // -----------------------------------------------------------------------------
 void ODatabaseExport::adjustFormat()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ODatabaseExport::adjustFormat" );
     if ( m_sTextToken.Len() )
     {
         sal_Int32 nNewPos = m_bIsAutoIncrement ? m_nColumnPos+1 : m_nColumnPos;
@@ -890,6 +825,7 @@ void ODatabaseExport::adjustFormat()
 // -----------------------------------------------------------------------------
 void ODatabaseExport::eraseTokens()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ODatabaseExport::eraseTokens" );
     m_sTextToken.Erase();
     m_sNumToken.Erase();
     m_sValToken.Erase();
@@ -897,12 +833,15 @@ void ODatabaseExport::eraseTokens()
 // -----------------------------------------------------------------------------
 void ODatabaseExport::ensureFormatter()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ODatabaseExport::ensureFormatter" );
     if ( !m_pFormatter )
     {
         Reference< XNumberFormatsSupplier >  xSupplier = m_xFormatter->getNumberFormatsSupplier();
         Reference< XUnoTunnel > xTunnel(xSupplier,UNO_QUERY);
         SvNumberFormatsSupplierObj* pSupplierImpl = (SvNumberFormatsSupplierObj*)sal::static_int_cast< sal_IntPtr >(xTunnel->getSomething(SvNumberFormatsSupplierObj::getUnoTunnelId()));
         m_pFormatter = pSupplierImpl ? pSupplierImpl->GetNumberFormatter() : NULL;
+        Reference<XPropertySet> xNumberFormatSettings = xSupplier->getNumberFormatSettings();
+        xNumberFormatSettings->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NullDate"))) >>= m_aNullDate;
     }
 }
 // -----------------------------------------------------------------------------
@@ -910,6 +849,7 @@ Reference< XPreparedStatement > ODatabaseExport::createPreparedStatment( const R
                                                        ,const Reference<XPropertySet>& _xDestTable
                                                        ,const TPositions& _rvColumns)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ODatabaseExport::createPreparedStatment" );
     ::rtl::OUString aSql(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("INSERT INTO ")));
     ::rtl::OUString sComposedTableName = ::dbtools::composeTableName( _xMetaData, _xDestTable, ::dbtools::eInDataManipulation, false, false, true );
 

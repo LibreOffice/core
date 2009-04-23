@@ -98,7 +98,8 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >      m_xGridModel;   // the model of our grid
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >    m_xFormatter;   // a number formatter working with the connection's NumberFormatsSupplier
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >         m_xFormControllerImpl;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer >   m_xParser;      // for sorting 'n filtering
+        mutable ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer >
+                                                                                        m_xParser;      // for sorting 'n filtering
 
         AutoTimer               m_aInvalidateClipboard;             // for testing the state of the CUT/COPY/PASTE-slots
 
@@ -337,6 +338,7 @@ namespace dbaui
         // execute the search slot
         void        ExecuteSearch();
 
+        void        initializeParser() const; // changes the mutable member m_xParser
         void        applyParserFilter(const ::rtl::OUString& _rOldFilter, sal_Bool _bOldFilterApplied,const ::rtl::OUString& _sOldHaving = ::rtl::OUString());
         void        applyParserOrder(const ::rtl::OUString& _rOldOrder);
 

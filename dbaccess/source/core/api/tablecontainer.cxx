@@ -31,99 +31,38 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
-#ifndef _DBA_CORE_TABLECONTAINER_HXX_
 #include "tablecontainer.hxx"
-#endif
-#ifndef DBACCESS_SHARED_DBASTRINGS_HRC
 #include "dbastrings.hrc"
-#endif
-#ifndef _DBA_CORE_TABLE_HXX_
 #include "table.hxx"
-#endif
-#ifndef _COMPHELPER_PROPERTY_HXX_
 #include <comphelper/property.hxx>
-#endif
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
-#endif
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-#ifndef _COMPHELPER_ENUMHELPER_HXX_
 #include <comphelper/enumhelper.hxx>
-#endif
-#ifndef _DBA_CORE_RESOURCE_HXX_
 #include "core_resource.hxx"
-#endif
-#ifndef _DBA_CORE_RESOURCE_HRC_
 #include "core_resource.hrc"
-#endif
-#ifndef _COM_SUN_STAR_SDB_COMMANDTYPE_HPP_
 #include <com/sun/star/sdb/CommandType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYSTATE_HPP_
 #include <com/sun/star/beans/PropertyState.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSTATE_HPP_
 #include <com/sun/star/beans/XPropertyState.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XDATABASEMETADATA_HPP_
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XTABLESSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_KEYRULE_HPP_
 #include <com/sun/star/sdbc/KeyRule.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_KEYTYPE_HPP_
 #include <com/sun/star/sdbcx/KeyType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_COLUMNVALUE_HPP_
 #include <com/sun/star/sdbc/ColumnValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
 #include <com/sun/star/sdbc/XRow.hpp>
-#endif
-#ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
-#endif
-#ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
-#endif
-#ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
-#endif
-#ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>
-#endif
-#ifndef _DBA_CORE_TABLEDECORATOR_HXX_
 #include "TableDeco.hxx"
-#endif
-#ifndef DBACORE_SDBCORETOOLS_HXX
 #include "sdbcoretools.hxx"
-#endif
-#ifndef DBA_CONTAINERMEDIATOR_HXX
 #include "ContainerMediator.hxx"
-#endif
-#ifndef _DBACORE_DEFINITIONCOLUMN_HXX_
 #include "definitioncolumn.hxx"
-#endif
-#ifndef DBACCESS_OBJECTNAMEAPPROVAL_HXX
 #include "objectnameapproval.hxx"
-#endif
-#ifndef _STRING_HXX
 #include <tools/string.hxx>
-#endif
+#include <rtl/logfile.hxx>
 #ifndef TOOLS_DIAGNOSE_EX_H
 #include <tools/diagnose_ex.h>
 #endif
@@ -194,6 +133,7 @@ OTableContainer::OTableContainer(::cppu::OWeakObject& _rParent,
 //------------------------------------------------------------------------------
 OTableContainer::~OTableContainer()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "api", "Ocke.Janssen@sun.com", "OTableContainer::OTableContainer" );
     //  dispose();
     DBG_DTOR(OTableContainer, NULL);
 }
@@ -201,6 +141,7 @@ OTableContainer::~OTableContainer()
 // -----------------------------------------------------------------------------
 void OTableContainer::removeMasterContainerListener()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "api", "Ocke.Janssen@sun.com", "OTableContainer::removeMasterContainerListener" );
     try
     {
         Reference<XContainer> xCont( m_xMasterContainer, UNO_QUERY_THROW );
@@ -223,7 +164,6 @@ void OTableContainer::removeMasterContainerListener()
 // XServiceInfo
 //------------------------------------------------------------------------------
 IMPLEMENT_SERVICE_INFO2(OTableContainer, "com.sun.star.sdb.dbaccess.OTableContainer", SERVICE_SDBCX_CONTAINER, SERVICE_SDBCX_TABLES)
-
 // -----------------------------------------------------------------------------
 namespace
 {
@@ -259,6 +199,7 @@ void lcl_createDefintionObject(const ::rtl::OUString& _rName
 // -------------------------------------------------------------------------
 connectivity::sdbcx::ObjectType OTableContainer::createObject(const ::rtl::OUString& _rName)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "api", "Ocke.Janssen@sun.com", "OTableContainer::createObject" );
     Reference<XColumnsSupplier > xSup;
     if(m_xMasterContainer.is() && m_xMasterContainer->hasByName(_rName))
         xSup.set(m_xMasterContainer->getByName(_rName),UNO_QUERY);
@@ -330,6 +271,7 @@ connectivity::sdbcx::ObjectType OTableContainer::createObject(const ::rtl::OUStr
 // -----------------------------------------------------------------------------
 Reference< XPropertySet > OTableContainer::createDescriptor()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "api", "Ocke.Janssen@sun.com", "OTableContainer::createDescriptor" );
     Reference< XPropertySet > xRet;
 
     // frist we have to look if the master tables does support this
@@ -355,6 +297,7 @@ Reference< XPropertySet > OTableContainer::createDescriptor()
 // XAppend
 ObjectType OTableContainer::appendObject( const ::rtl::OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "api", "Ocke.Janssen@sun.com", "OTableContainer::appendObject" );
     // append the new table with a create stmt
     ::rtl::OUString aName = getString(descriptor->getPropertyValue(PROPERTY_NAME));
     if(m_xMasterContainer.is() && m_xMasterContainer->hasByName(aName))
@@ -446,6 +389,7 @@ ObjectType OTableContainer::appendObject( const ::rtl::OUString& _rForName, cons
 // XDrop
 void OTableContainer::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "api", "Ocke.Janssen@sun.com", "OTableContainer::dropObject" );
     m_bInDrop = sal_True;
     try
     {
@@ -510,6 +454,7 @@ void OTableContainer::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElement
 // -----------------------------------------------------------------------------
 void SAL_CALL OTableContainer::elementInserted( const ContainerEvent& Event ) throw (RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "api", "Ocke.Janssen@sun.com", "OTableContainer::elementInserted" );
     ::osl::MutexGuard aGuard(m_rMutex);
     ::rtl::OUString sName;
     Event.Accessor >>= sName;
@@ -528,10 +473,12 @@ void SAL_CALL OTableContainer::elementInserted( const ContainerEvent& Event ) th
 // -----------------------------------------------------------------------------
 void SAL_CALL OTableContainer::elementRemoved( const ContainerEvent& /*Event*/ ) throw (RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "api", "Ocke.Janssen@sun.com", "OTableContainer::elementRemoved" );
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL OTableContainer::elementReplaced( const ContainerEvent& Event ) throw (RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "api", "Ocke.Janssen@sun.com", "OTableContainer::elementReplaced" );
     // create a new config entry
     {
         ::rtl::OUString sOldComposedName,sNewComposedName;
@@ -544,6 +491,7 @@ void SAL_CALL OTableContainer::elementReplaced( const ContainerEvent& Event ) th
 // -----------------------------------------------------------------------------
 void SAL_CALL OTableContainer::disposing()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "api", "Ocke.Janssen@sun.com", "OTableContainer::disposing" );
     OFilteredContainer::disposing();
     // say our listeners goobye
     m_xTableDefinitions = NULL;
@@ -552,6 +500,7 @@ void SAL_CALL OTableContainer::disposing()
 // -----------------------------------------------------------------------------
 void SAL_CALL OTableContainer::disposing( const ::com::sun::star::lang::EventObject& /*Source*/ ) throw (::com::sun::star::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "api", "Ocke.Janssen@sun.com", "OTableContainer::disposing" );
 }
 
 // -----------------------------------------------------------------------------

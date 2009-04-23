@@ -64,6 +64,7 @@
 #include <comphelper/types.hxx>
 #include <connectivity/dbtools.hxx>
 
+#include <rtl/logfile.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
@@ -585,6 +586,7 @@ OCopyTableWizard::OCopyTableWizard( Window * pParent, const ::rtl::OUString& _rD
     ,m_ePressed( WIZARD_NONE )
     ,m_bCreatePrimaryKeyColumn(sal_False)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::OCopyTableWizard" );
     DBG_CTOR(OCopyTableWizard,NULL);
     construct();
 
@@ -668,6 +670,7 @@ OCopyTableWizard::OCopyTableWizard( Window* pParent, const ::rtl::OUString& _rDe
     ,m_ePressed( WIZARD_NONE )
     ,m_bCreatePrimaryKeyColumn(sal_False)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::OCopyTableWizard" );
     DBG_CTOR(OCopyTableWizard,NULL);
     construct();
     ODatabaseExport::TColumnVector::const_iterator aIter = _rSourceColVec.begin();
@@ -695,6 +698,7 @@ OCopyTableWizard::OCopyTableWizard( Window* pParent, const ::rtl::OUString& _rDe
 // -----------------------------------------------------------------------------
 void OCopyTableWizard::construct()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::construct" );
     AddButton( &m_pbHelp, WIZARDDIALOG_BUTTON_STDOFFSET_X );
     AddButton( &m_pbCancel, WIZARDDIALOG_BUTTON_STDOFFSET_X );
     AddButton( &m_pbPrev );
@@ -790,6 +794,7 @@ IMPL_LINK( OCopyTableWizard, ImplNextHdl, PushButton*, EMPTYARG )
 // -----------------------------------------------------------------------
 sal_Bool OCopyTableWizard::CheckColumns(sal_Int32& _rnBreakPos)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::CheckColumns" );
     sal_Bool bRet = sal_True;
     m_vColumnPos.clear();
     m_vColumnTypes.clear();
@@ -959,12 +964,14 @@ IMPL_LINK( OCopyTableWizard, ImplOKHdl, OKButton*, EMPTYARG )
 //------------------------------------------------------------------------
 sal_Bool OCopyTableWizard::shouldCreatePrimaryKey() const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::shouldCreatePrimaryKey" );
     return m_bCreatePrimaryKeyColumn;
 }
 
 // -----------------------------------------------------------------------
 void OCopyTableWizard::setCreatePrimaryKey( bool _bDoCreate, const ::rtl::OUString& _rSuggestedName )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::setCreatePrimaryKey" );
     m_bCreatePrimaryKeyColumn = _bDoCreate;
     if ( _rSuggestedName.getLength() )
         m_aKeyName = _rSuggestedName;
@@ -996,6 +1003,7 @@ IMPL_LINK( OCopyTableWizard, ImplActivateHdl, WizardDialog*, EMPTYARG )
 // -----------------------------------------------------------------------
 void OCopyTableWizard::CheckButtons()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::CheckButtons" );
     if(GetCurLevel() == 0) // erste Seite hat kein PrevButton
     {
         if(m_nPageCount > 1)
@@ -1019,6 +1027,7 @@ void OCopyTableWizard::CheckButtons()
 // -----------------------------------------------------------------------
 void OCopyTableWizard::EnableButton(Wizard_Button_Style eStyle,sal_Bool bEnable)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::EnableButton" );
 //  CheckButtons();
     Button* pButton;
     if(eStyle == WIZARD_NEXT)
@@ -1033,18 +1042,21 @@ void OCopyTableWizard::EnableButton(Wizard_Button_Style eStyle,sal_Bool bEnable)
 // -----------------------------------------------------------------------
 long OCopyTableWizard::DeactivatePage()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::DeactivatePage" );
     OWizardPage* pPage = (OWizardPage*)GetPage(GetCurLevel());
     return pPage ? pPage->LeavePage() : sal_False;
 }
 // -----------------------------------------------------------------------
 void OCopyTableWizard::AddWizardPage(OWizardPage* pPage)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::AddWizardPage" );
     AddPage(pPage);
     ++m_nPageCount;
 }
 // -----------------------------------------------------------------------------
 void OCopyTableWizard::insertColumn(sal_Int32 _nPos,OFieldDescription* _pField)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::insertColumn" );
     OSL_ENSURE(_pField,"FieldDescrioption is null!");
     if ( _pField )
     {
@@ -1062,6 +1074,7 @@ void OCopyTableWizard::insertColumn(sal_Int32 _nPos,OFieldDescription* _pField)
 // -----------------------------------------------------------------------------
 void OCopyTableWizard::replaceColumn(sal_Int32 _nPos,OFieldDescription* _pField,const ::rtl::OUString& _sOldName)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::replaceColumn" );
     OSL_ENSURE(_pField,"FieldDescrioption is null!");
     if ( _pField )
     {
@@ -1075,12 +1088,14 @@ void OCopyTableWizard::replaceColumn(sal_Int32 _nPos,OFieldDescription* _pField,
 // -----------------------------------------------------------------------------
 void OCopyTableWizard::impl_loadSourceData()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::impl_loadSourceData" );
     loadData( m_rSourceObject, m_vSourceColumns, m_vSourceVec );
 }
 
 // -----------------------------------------------------------------------------
 void OCopyTableWizard::loadData(  const ICopyTableSourceObject& _rSourceObject, ODatabaseExport::TColumns& _rColumns, ODatabaseExport::TColumnVector& _rColVector )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::loadData" );
     for ( ODatabaseExport::TColumns::iterator col = _rColumns.begin(); col != _rColumns.end(); ++col )
         delete col->second;
 
@@ -1141,12 +1156,14 @@ void OCopyTableWizard::loadData(  const ICopyTableSourceObject& _rSourceObject, 
 // -----------------------------------------------------------------------------
 void OCopyTableWizard::clearDestColumns()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::clearDestColumns" );
     clearColumns(m_vDestColumns,m_aDestVec);
 }
 
 // -----------------------------------------------------------------------------
 void OCopyTableWizard::appendColumns( Reference<XColumnsSupplier>& _rxColSup, const ODatabaseExport::TColumnVector* _pVec, sal_Bool _bKeyColumns) const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::appendColumns" );
     // now append the columns
     OSL_ENSURE(_rxColSup.is(),"No columns supplier");
     if(!_rxColSup.is())
@@ -1196,6 +1213,7 @@ void OCopyTableWizard::appendColumns( Reference<XColumnsSupplier>& _rxColSup, co
 // -----------------------------------------------------------------------------
 void OCopyTableWizard::appendKey( Reference<XKeysSupplier>& _rxSup, const ODatabaseExport::TColumnVector* _pVec) const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::appendKey" );
     if(!_rxSup.is())
         return; // the database doesn't support keys
     OSL_ENSURE(_rxSup.is(),"No XKeysSupplier!");
@@ -1223,6 +1241,7 @@ void OCopyTableWizard::appendKey( Reference<XKeysSupplier>& _rxSup, const ODatab
 // -----------------------------------------------------------------------------
 Reference< XPropertySet > OCopyTableWizard::createView() const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::createView" );
     ::rtl::OUString sCommand( m_rSourceObject.getSelectStatement() );
     OSL_ENSURE( sCommand.getLength(), "OCopyTableWizard::createView: no statement in the source object!" );
         // there are legitimate cases in which getSelectStatement does not provide a statement,
@@ -1232,6 +1251,7 @@ Reference< XPropertySet > OCopyTableWizard::createView() const
 // -----------------------------------------------------------------------------
 Reference< XPropertySet > OCopyTableWizard::createTable()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::createTable" );
     Reference< XPropertySet > xTable;
 
     Reference<XTablesSupplier> xSup( m_xDestConnection, UNO_QUERY );
@@ -1356,6 +1376,7 @@ Reference< XPropertySet > OCopyTableWizard::createTable()
 // -----------------------------------------------------------------------------
 bool OCopyTableWizard::supportsPrimaryKey( const Reference< XConnection >& _rxConnection )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::supportsPrimaryKey" );
     OSL_PRECOND( _rxConnection.is(), "OCopyTableWizard::supportsPrimaryKey: invalid connection!" );
 
     bool bSupports( false );
@@ -1377,6 +1398,7 @@ bool OCopyTableWizard::supportsPrimaryKey( const Reference< XConnection >& _rxCo
 // -----------------------------------------------------------------------------
 bool OCopyTableWizard::supportsViews( const Reference< XConnection >& _rxConnection )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::supportsViews" );
     OSL_PRECOND( _rxConnection.is(), "OCopyTableWizard::supportsViews: invalid connection!" );
     if ( !_rxConnection.is() )
         return false;
@@ -1419,6 +1441,7 @@ bool OCopyTableWizard::supportsViews( const Reference< XConnection >& _rxConnect
 // -----------------------------------------------------------------------------
 sal_Int32 OCopyTableWizard::getMaxColumnNameLength() const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::getMaxColumnNameLength" );
     sal_Int32 nLen = 0;
     if ( m_xDestConnection.is() )
     {
@@ -1437,11 +1460,13 @@ sal_Int32 OCopyTableWizard::getMaxColumnNameLength() const
 // -----------------------------------------------------------------------------
 void OCopyTableWizard::setOperation( const sal_Int16 _nOperation )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::setOperation" );
     m_nOperation = _nOperation;
 }
 // -----------------------------------------------------------------------------
 sal_Int16 OCopyTableWizard::getOperation() const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::getOperation" );
     return m_nOperation;
 }
 // -----------------------------------------------------------------------------
@@ -1450,6 +1475,7 @@ sal_Int16 OCopyTableWizard::getOperation() const
                                                     const ::rtl::OUString&  _sExtraChars,
                                                     sal_Int32               _nMaxNameLen)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::convertColumnName" );
     ::rtl::OUString sAlias = _sColumnName;
     if ( isSQL92CheckEnabled( m_xDestConnection ) )
         sAlias = ::dbtools::convertName2SQLName(_sColumnName,_sExtraChars);
@@ -1484,12 +1510,14 @@ sal_Int16 OCopyTableWizard::getOperation() const
 // -----------------------------------------------------------------------------
 void OCopyTableWizard::removeColumnNameFromNameMap(const ::rtl::OUString& _sName)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::removeColumnNameFromNameMap" );
     m_mNameMapping.erase(_sName);
 }
 
 // -----------------------------------------------------------------------------
 sal_Bool OCopyTableWizard::supportsType(sal_Int32 _nDataType,sal_Int32& _rNewDataType)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::supportsType" );
     sal_Bool bRet = m_aDestTypeInfo.find(_nDataType) != m_aDestTypeInfo.end();
     if ( bRet )
         _rNewDataType = _nDataType;
@@ -1499,6 +1527,7 @@ sal_Bool OCopyTableWizard::supportsType(sal_Int32 _nDataType,sal_Int32& _rNewDat
 // -----------------------------------------------------------------------------
 TOTypeInfoSP OCopyTableWizard::convertType(const TOTypeInfoSP& _pType,sal_Bool& _bNotConvert)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::convertType" );
     if ( !m_bInterConnectionCopy )
         // no need to convert if the source and destination connection are the same
         return _pType;
@@ -1577,6 +1606,7 @@ TOTypeInfoSP OCopyTableWizard::convertType(const TOTypeInfoSP& _pType,sal_Bool& 
 // -----------------------------------------------------------------------------
 ::rtl::OUString OCopyTableWizard::createUniqueName(const ::rtl::OUString& _sName)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::createUniqueName" );
     ::rtl::OUString sName = _sName;
     Sequence< ::rtl::OUString > aColumnNames( m_rSourceObject.getColumnNames() );
     if ( aColumnNames.getLength() )
@@ -1598,6 +1628,7 @@ TOTypeInfoSP OCopyTableWizard::convertType(const TOTypeInfoSP& _pType,sal_Bool& 
 // -----------------------------------------------------------------------------
 void OCopyTableWizard::showColumnTypeNotSupported(const ::rtl::OUString& _rColumnName)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::showColumnTypeNotSupported" );
     String sMessage( ModuleRes( STR_UNKNOWN_TYPE_FOUND ) );
     sMessage.SearchAndReplaceAscii("#1",_rColumnName);
 

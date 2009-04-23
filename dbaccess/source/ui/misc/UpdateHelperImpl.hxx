@@ -30,24 +30,14 @@
 #ifndef DBAUI_UPDATEHELPERIMPL_HXX
 #define DBAUI_UPDATEHELPERIMPL_HXX
 
-#ifndef _COM_SUN_STAR_SDBC_XRESULTSETUPDATE_HPP_
 #include <com/sun/star/sdbc/XResultSetUpdate.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XROWUPDATE_HPP_
 #include <com/sun/star/sdbc/XRowUpdate.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XPARAMETERS_HPP_
 #include <com/sun/star/sdbc/XParameters.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XPREPAREDSTATEMENT_HPP_
 #include <com/sun/star/sdbc/XPreparedStatement.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XROWSET_HPP_
 #include <com/sun/star/sdbc/XRowSet.hpp>
-#endif
-#ifndef DBAUI_IUPDATEHELPER_HXX
+#include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 #include "IUpdateHelper.hxx"
-#endif
+#include <rtl/logfile.hxx>
 
 namespace dbaui
 {
@@ -102,18 +92,22 @@ namespace dbaui
         virtual ~OParameterUpdateHelper() {}
         virtual void updateString(sal_Int32 _nPos, const ::rtl::OUString& _sValue)
         {
+            RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OParameterUpdateHelper::updateString" );
             m_xParameters->setString(_nPos, _sValue);
         }
         virtual void updateDouble(sal_Int32 _nPos,const double& _nValue)
         {
+            RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OParameterUpdateHelper::updateDouble" );
             m_xParameters->setDouble(_nPos, _nValue);
         }
         virtual void updateInt(sal_Int32 _nPos,const sal_Int32& _nValue)
         {
+            RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OParameterUpdateHelper::updateInt" );
             m_xParameters->setInt(_nPos, _nValue);
         }
         virtual void updateNull(sal_Int32 _nPos, ::sal_Int32 sqlType)
         {
+            RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OParameterUpdateHelper::updateNull" );
             m_xParameters->setNull(_nPos,sqlType);
         }
         virtual void moveToInsertRow()
@@ -121,6 +115,7 @@ namespace dbaui
         }
         virtual void insertRow()
         {
+            RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OParameterUpdateHelper::insertRow" );
             m_xPrepared->executeUpdate();
         }
     };

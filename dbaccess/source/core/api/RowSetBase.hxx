@@ -226,6 +226,8 @@ namespace dbaccess
 
         // returns a value of a column of the current row
         const connectivity::ORowSetValue& getValue(sal_Int32 columnIndex);
+        // the cache has to be checked before calling this method
+        const connectivity::ORowSetValue& impl_getValue(sal_Int32 columnIndex);
         // sets the current and the bookmark
         void setCurrentRow( sal_Bool _bMoved, sal_Bool _bDoNotify, const ORowSetRow& _rOldValues, ::osl::ResettableMutexGuard& _rGuard);
         void checkPositioningAllowed() throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
@@ -269,6 +271,11 @@ namespace dbaccess
                 Our mutext is locked.
         */
         sal_Int32   impl_getRowCount() const;
+
+        // the checkCache has to be called before calling this methods
+        sal_Bool    impl_wasNull();
+        sal_Int32   impl_getRow();
+        sal_Bool    impl_rowDeleted();
 
     public:
         virtual ~ORowSetBase();

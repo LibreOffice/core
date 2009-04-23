@@ -30,90 +30,34 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
-#ifndef DBAUI_RTFREADER_HXX
 #include "RtfReader.hxx"
-#endif
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XDATADESCRIPTORFACTORY_HPP_
 #include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XAPPEND_HPP_
 #include <com/sun/star/sdbcx/XAppend.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
 #include <com/sun/star/sdbc/DataType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_COLUMNVALUE_HPP_
 #include <com/sun/star/sdbc/ColumnValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_FONTDESCRIPTOR_HPP_
 #include <com/sun/star/awt/FontDescriptor.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_FONTWEIGHT_HPP_
 #include <com/sun/star/awt/FontWeight.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_FONTSTRIKEOUT_HPP_
 #include <com/sun/star/awt/FontStrikeout.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_FONTSLANT_HPP_
 #include <com/sun/star/awt/FontSlant.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_FONTUNDERLINE_HPP_
 #include <com/sun/star/awt/FontUnderline.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_NUMBERFORMAT_HPP_
 #include <com/sun/star/util/NumberFormat.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATTYPES_HPP_
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
-#endif
-#ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
-#endif
-#ifndef _RTFTOKEN_H
 #include <svtools/rtftoken.h>
-#endif
-#ifndef _DBU_MISC_HRC_
 #include "dbu_misc.hrc"
-#endif
-#ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _DBHELPER_DBCONVERSION_HXX_
 #include <connectivity/dbconversion.hxx>
-#endif
-#ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
-#endif
-#ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
-#endif
-#ifndef _TOOLS_COLOR_HXX
 #include <tools/color.hxx>
-#endif
-#ifndef DBAUI_WIZ_EXTENDPAGES_HXX
 #include "WExtendPages.hxx"
-#endif
-#ifndef _DBAUI_MODULE_DBU_HXX_
 #include "moduledbu.hxx"
-#endif
-#ifndef DBAUI_ENUMTYPES_HXX
 #include "QEnumTypes.hxx"
-#endif
-//#ifndef DBAUI_WIZARD_CPAGE_HXX
-//#include "WCPage.hxx"
-//#endif
-#ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
-#endif
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
+#include <rtl/logfile.hxx>
 
 using namespace dbaui;
 using namespace ::com::sun::star::uno;
@@ -136,6 +80,7 @@ ORTFReader::ORTFReader( SvStream& rIn,
     :SvRTFParser(rIn)
     ,ODatabaseExport( _rxConnection, _rxNumberF, _rM, pList, _pInfoMap, rIn )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ORTFReader::ORTFReader" );
     DBG_CTOR(ORTFReader,NULL);
     m_bAppendFirstLine = false;
 }
@@ -151,6 +96,7 @@ ORTFReader::ORTFReader(SvStream& rIn,
    :SvRTFParser(rIn)
    ,ODatabaseExport( nRows, _rColumnPositions, _rxNumberF, _rM, pList, _pInfoMap, _bAutoIncrementEnabled, rIn )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ORTFReader::ORTFReader" );
     DBG_CTOR(ORTFReader,NULL);
     m_bAppendFirstLine = false;
 }
@@ -162,6 +108,7 @@ ORTFReader::~ORTFReader()
 // ---------------------------------------------------------------------------
 SvParserState ORTFReader::CallParser()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ORTFReader::CallParser" );
     DBG_CHKTHIS(ORTFReader,NULL);
     rInput.Seek(STREAM_SEEK_TO_BEGIN);
     rInput.ResetError();
@@ -172,6 +119,7 @@ SvParserState ORTFReader::CallParser()
 // ---------------------------------------------------------------------------
 void ORTFReader::NextToken( int nToken )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ORTFReader::NextToken" );
     DBG_CHKTHIS(ORTFReader,NULL);
     if(m_bError || !m_nRows) // falls Fehler oder keine Rows mehr zur "Uberpr"ufung dann gleich zur"uck
         return;
@@ -326,6 +274,7 @@ void ORTFReader::NextToken( int nToken )
 // ---------------------------------------------------------------------------
 sal_Bool ORTFReader::CreateTable(int nToken)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ORTFReader::CreateTable" );
     DBG_CHKTHIS(ORTFReader,NULL);
     String aTableName(ModuleRes(STR_TBL_TITLE));
     aTableName = aTableName.GetToken(0,' ');
@@ -412,6 +361,7 @@ sal_Bool ORTFReader::CreateTable(int nToken)
 // -----------------------------------------------------------------------------
 void ORTFReader::release()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ORTFReader::release" );
     DBG_CHKTHIS(ORTFReader,NULL);
     ReleaseRef();
 }
@@ -419,6 +369,7 @@ void ORTFReader::release()
 // -----------------------------------------------------------------------------
 TypeSelectionPageFactory ORTFReader::getTypeSelectionPageFactory()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ORTFReader::getTypeSelectionPageFactory" );
     DBG_CHKTHIS(ORTFReader,NULL);
     return &OWizRTFExtend::Create;
 }

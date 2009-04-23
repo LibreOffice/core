@@ -30,49 +30,22 @@
 #ifndef DBAUI_DATABASEEXPORT_HXX
 #define DBAUI_DATABASEEXPORT_HXX
 
-#ifndef _COM_SUN_STAR_SDBC_XRESULTSET_HPP_
 #include <com/sun/star/sdbc/XResultSet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XRESULTSETMETADATA_HPP_
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATTER_HPP_
 #include <com/sun/star/util/XNumberFormatter.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
 #include <com/sun/star/container/XIndexAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
+#include <com/sun/star/util/Date.hpp>
 #include <vector>
-#ifndef _STRING_HXX
 #include <tools/string.hxx>
-#endif
-#ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
-#endif
-#ifndef DBAUI_TYPEINFO_HXX
 #include "TypeInfo.hxx"
-#endif
-#ifndef DBAUI_WIZ_TYPESELECT_HXX
 #include "WTypeSelect.hxx"
-#endif
-#ifndef _DBAUI_COMMON_TYPES_HXX_
 #include "commontypes.hxx"
-#endif
-#ifndef DBAUI_IUPDATEHELPER_HXX
 #include "IUpdateHelper.hxx"
-#endif
 #include "WTypeSelect.hxx"
 
 namespace com { namespace sun { namespace star {
@@ -117,9 +90,9 @@ namespace dbaui
 
         ::boost::shared_ptr<IUpdateHelper>                                              m_pUpdateHelper;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >          m_xResultSet;   //
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData >  m_xResultSetMetaData;   //
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >    m_xFormatter;   // a number formatter working with the connection's NumberFormatsSupplier
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory> m_xFactory;
+        ::com::sun::star::util::Date                                                    m_aNullDate;
 
         SvNumberFormatter*  m_pFormatter;
         SvStream&           m_rInputStream;

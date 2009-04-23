@@ -97,6 +97,7 @@
 #ifndef _COM_SUN_STAR_SDBC_XRESULTSETMETADATA_HPP_
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 #endif
+#include <com/sun/star/sdbc/ColumnValue.hpp>
 #ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #endif
@@ -686,6 +687,7 @@ void fillTypeInfo(  const Reference< ::com::sun::star::sdbc::XConnection>& _rxCo
         Reference<XResultSetMetaData> xResultSetMetaData = Reference<XResultSetMetaDataSupplier>(xRs,UNO_QUERY)->getMetaData();
         ::connectivity::ORowSetValue aValue;
         ::std::vector<sal_Int32> aTypes;
+        ::std::vector<sal_Bool> aNullable;
         // Loop on the result set until we reach end of file
         while (xRs->next())
         {
@@ -699,55 +701,58 @@ void fillTypeInfo(  const Reference< ::com::sun::star::sdbc::XConnection>& _rxCo
                 aTypes.reserve(nCount+1);
                 aTypes.push_back(-1);
                 for (sal_Int32 j = 1; j <= nCount ; ++j)
+                {
                     aTypes.push_back(xResultSetMetaData->getColumnType(j));
+                    aNullable.push_back(xResultSetMetaData->isNullable(j) != ColumnValue::NO_NULLS);
+                }
             }
 
-            aValue.fill(nPos,aTypes[nPos],xRow);
+            aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
             pInfo->aTypeName        = aValue;
             ++nPos;
-            aValue.fill(nPos,aTypes[nPos],xRow);
+            aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
             pInfo->nType            = aValue;
             ++nPos;
-            aValue.fill(nPos,aTypes[nPos],xRow);
+            aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
             pInfo->nPrecision       = aValue;
             ++nPos;
-            aValue.fill(nPos,aTypes[nPos],xRow);
+            aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
             pInfo->aLiteralPrefix   = aValue;
             ++nPos;
-            aValue.fill(nPos,aTypes[nPos],xRow);
+            aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
             pInfo->aLiteralSuffix   = aValue;
             ++nPos;
-            aValue.fill(nPos,aTypes[nPos],xRow);
+            aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
             pInfo->aCreateParams    = aValue;
             ++nPos;
-            aValue.fill(nPos,aTypes[nPos],xRow);
+            aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
             pInfo->bNullable        = (sal_Int32)aValue == ColumnValue::NULLABLE;
             ++nPos;
-            aValue.fill(nPos,aTypes[nPos],xRow);
+            aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
             pInfo->bCaseSensitive   = (sal_Bool)aValue;
             ++nPos;
-            aValue.fill(nPos,aTypes[nPos],xRow);
+            aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
             pInfo->nSearchType      = aValue;
             ++nPos;
-            aValue.fill(nPos,aTypes[nPos],xRow);
+            aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
             pInfo->bUnsigned        = (sal_Bool)aValue;
             ++nPos;
-            aValue.fill(nPos,aTypes[nPos],xRow);
+            aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
             pInfo->bCurrency        = (sal_Bool)aValue;
             ++nPos;
-            aValue.fill(nPos,aTypes[nPos],xRow);
+            aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
             pInfo->bAutoIncrement   = (sal_Bool)aValue;
             ++nPos;
-            aValue.fill(nPos,aTypes[nPos],xRow);
+            aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
             pInfo->aLocalTypeName   = aValue;
             ++nPos;
-            aValue.fill(nPos,aTypes[nPos],xRow);
+            aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
             pInfo->nMinimumScale    = aValue;
             ++nPos;
-            aValue.fill(nPos,aTypes[nPos],xRow);
+            aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
             pInfo->nMaximumScale    = aValue;
             nPos = 18;
-            aValue.fill(nPos,aTypes[nPos],xRow);
+            aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
 
             // check if values are less than zero like it happens in a oracle jdbc driver
             if( pInfo->nPrecision < 0)

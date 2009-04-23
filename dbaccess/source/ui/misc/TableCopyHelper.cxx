@@ -140,6 +140,7 @@
 #ifndef DBAUI_DBEXCHANGE_HXX
 #include "dbexchange.hxx"
 #endif
+#include <rtl/logfile.hxx>
 //........................................................................
 namespace dbaui
 {
@@ -162,6 +163,7 @@ using namespace ::com::sun::star::ucb;
 OTableCopyHelper::OTableCopyHelper(OGenericUnoController* _pControler)
     :m_pController(_pControler)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OTableCopyHelper::OTableCopyHelper" );
 }
 
 // -----------------------------------------------------------------------------
@@ -174,6 +176,7 @@ void OTableCopyHelper::insertTable(sal_Int32 _nCommandType
                                         ,const ::rtl::OUString& _sDestDataSourceName
                                         ,const Reference<XConnection>& _xDestConnection)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OTableCopyHelper::insertTable" );
     if ( CommandType::QUERY != _nCommandType && CommandType::TABLE != _nCommandType )
     {
         DBG_ERROR( "OTableCopyHelper::insertTable: invalid call (no supported format found)!" );
@@ -230,6 +233,7 @@ void OTableCopyHelper::insertTable(sal_Int32 _nCommandType
 void OTableCopyHelper::pasteTable( const ::svx::ODataAccessDescriptor& _rPasteData, const ::rtl::OUString& _sDestDataSourceName,
                                   const SharedConnection& _xDestConnection )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OTableCopyHelper::pasteTable" );
     Reference<XConnection> xSrcConnection;
     ::rtl::OUString sCommand,
         sSrcDataSourceName = _rPasteData.getDataSource();
@@ -285,6 +289,7 @@ void OTableCopyHelper::pasteTable( SotFormatStringId _nFormatId
                                   ,const ::rtl::OUString& _sDestDataSourceName
                                   ,const SharedConnection& _xConnection)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OTableCopyHelper::pasteTable" );
     if ( _nFormatId == SOT_FORMATSTR_ID_DBACCESS_TABLE || _nFormatId == SOT_FORMATSTR_ID_DBACCESS_QUERY )
     {
         if ( ODataAccessObjectTransferable::canExtractObjectDescriptor(_rTransData.GetDataFlavorExVector()) )
@@ -327,6 +332,7 @@ void OTableCopyHelper::pasteTable( const TransferableDataHelper& _rTransData
                                   ,const ::rtl::OUString& _sDestDataSourceName
                                   ,const SharedConnection& _xConnection)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OTableCopyHelper::pasteTable" );
     if ( _rTransData.HasFormat(SOT_FORMATSTR_ID_DBACCESS_TABLE) || _rTransData.HasFormat(SOT_FORMATSTR_ID_DBACCESS_QUERY) )
         pasteTable( SOT_FORMATSTR_ID_DBACCESS_TABLE,_rTransData,_sDestDataSourceName,_xConnection);
     else if ( _rTransData.HasFormat(SOT_FORMATSTR_ID_HTML) )
@@ -338,6 +344,7 @@ void OTableCopyHelper::pasteTable( const TransferableDataHelper& _rTransData
 // -----------------------------------------------------------------------------
 sal_Bool OTableCopyHelper::copyTagTable(OTableCopyHelper::DropDescriptor& _rDesc, sal_Bool _bCheck,const SharedConnection& _xConnection)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OTableCopyHelper::copyTagTable" );
     Reference<XEventListener> xEvt;
     ODatabaseImportExport* pImport = NULL;
     if ( _rDesc.bHtml )
@@ -360,6 +367,7 @@ sal_Bool OTableCopyHelper::copyTagTable(OTableCopyHelper::DropDescriptor& _rDesc
 // -----------------------------------------------------------------------------
 sal_Bool OTableCopyHelper::isTableFormat(const TransferableDataHelper& _rClipboard)  const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OTableCopyHelper::isTableFormat" );
     sal_Bool bTableFormat   =   _rClipboard.HasFormat(SOT_FORMATSTR_ID_DBACCESS_TABLE)
                 ||  _rClipboard.HasFormat(SOT_FORMATSTR_ID_DBACCESS_QUERY)
                 ||  _rClipboard.HasFormat(SOT_FORMAT_RTF)
@@ -372,6 +380,7 @@ sal_Bool OTableCopyHelper::copyTagTable(const TransferableDataHelper& _aDroppedD
                                         ,DropDescriptor& _rAsyncDrop
                                         ,const SharedConnection& _xConnection)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OTableCopyHelper::copyTagTable" );
     sal_Bool bRet = sal_False;
     sal_Bool bHtml = _aDroppedData.HasFormat(SOT_FORMATSTR_ID_HTML);
     if ( bHtml || _aDroppedData.HasFormat(SOT_FORMAT_RTF) )
@@ -407,6 +416,7 @@ void OTableCopyHelper::asyncCopyTagTable(  DropDescriptor& _rDesc
                                 ,const ::rtl::OUString& _sDestDataSourceName
                                 ,const SharedConnection& _xConnection)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OTableCopyHelper::asyncCopyTagTable" );
     if ( _rDesc.aHtmlRtfStorage.Is() )
     {
         copyTagTable(_rDesc,sal_False,_xConnection);
