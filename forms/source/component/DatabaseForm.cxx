@@ -452,14 +452,18 @@ ODatabaseForm::~ODatabaseForm()
 //------------------------------------------------------------------------
 ::rtl::OUString ODatabaseForm::GetDataURLEncoded(const Reference<XControl>& SubmitButton, const ::com::sun::star::awt::MouseEvent& MouseEvt)
 {
-
+    return GetDataEncoded(true,SubmitButton,MouseEvt);
+}
+// -----------------------------------------------------------------------------
+::rtl::OUString ODatabaseForm::GetDataEncoded(bool _bURLEncoded,const Reference<XControl>& SubmitButton, const ::com::sun::star::awt::MouseEvent& MouseEvt)
+{
     // Liste von successful Controls fuellen
     HtmlSuccessfulObjList aSuccObjList;
     FillSuccessfulList( aSuccObjList, SubmitButton, MouseEvt );
 
 
     // Liste zu ::rtl::OUString zusammensetzen
-    ::rtl::OUString aResult;
+    ::rtl::OUStringBuffer aResult;
     ::rtl::OUString aName;
     ::rtl::OUString aValue;
 
@@ -482,17 +486,24 @@ ODatabaseForm::~ODatabaseForm()
         }
         Encode( aName );
         Encode( aValue );
-        aResult += aName;
-        aResult += UniString('=');
-        aResult += aValue;
+
+        aResult.append(aName);
+        aResult.append(sal_Unicode('='));
+        aResult.append(aValue);
+
         if (pSuccObj < aSuccObjList.end() - 1)
-            aResult += UniString('&');
+        {
+            if ( _bURLEncoded )
+                aResult.append(sal_Unicode('&'));
+            else
+                aResult.appendAscii("\r\n");
+        }
     }
 
 
     aSuccObjList.clear();
 
-    return aResult;
+    return aResult.makeStringAndClear();
 }
 
 //==============================================================================
@@ -500,46 +511,7 @@ ODatabaseForm::~ODatabaseForm()
 //------------------------------------------------------------------------
 ::rtl::OUString ODatabaseForm::GetDataTextEncoded(const Reference<XControl>& SubmitButton, const ::com::sun::star::awt::MouseEvent& MouseEvt)
 {
-
-    // Liste von successful Controls fuellen
-    HtmlSuccessfulObjList aSuccObjList;
-    FillSuccessfulList( aSuccObjList, SubmitButton, MouseEvt );
-    // Liste zu ::rtl::OUString zusammensetzen
-    ::rtl::OUString aResult;
-    ::rtl::OUString aName;
-    ::rtl::OUString aValue;
-
-    for (   HtmlSuccessfulObjListIterator pSuccObj = aSuccObjList.begin();
-            pSuccObj < aSuccObjList.end();
-            ++pSuccObj
-        )
-    {
-        aName = pSuccObj->aName;
-        aValue = pSuccObj->aValue;
-        if (pSuccObj->nRepresentation == SUCCESSFUL_REPRESENT_FILE && aValue.getLength())
-        {
-            // Bei File-URLs wird der Dateiname und keine URL uebertragen,
-            // weil Netscape dies so macht.
-            INetURLObject aURL;
-            aURL.SetSmartProtocol(INET_PROT_FILE);
-            aURL.SetSmartURL(aValue);
-            if( INET_PROT_FILE == aURL.GetProtocol() )
-                aValue = INetURLObject::decode(aURL.PathToFileName(), '%', INetURLObject::DECODE_UNAMBIGUOUS);
-        }
-        Encode( aName );
-        Encode( aValue );
-        aResult += pSuccObj->aName;
-        aResult += UniString('=');
-        aResult += pSuccObj->aValue;
-        if (pSuccObj < aSuccObjList.end() - 1)
-            aResult += ::rtl::OUString::createFromAscii("\r\n");
-    }
-
-
-    // Liste loeschen
-    aSuccObjList.clear();
-
-    return aResult;
+    return GetDataEncoded(false,SubmitButton,MouseEvt);
 }
 
 //------------------------------------------------------------------------
@@ -2148,7 +2120,36 @@ void SAL_CALL ODatabaseForm::submit( const Reference<XControl>& Control,
         submit_impl( Control, MouseEvt, true );
     }
 }
+// -----------------------------------------------------------------------------
+void lcl_dispatch(const Reference< XFrame >& xFrame,const Reference<XURLTransformer>& xTransformer,const ::rtl::OUString& aURLStr,const ::rtl::OUString& aReferer,const ::rtl::OUString& aTargetName
+                  ,const ::rtl::OUString& aData,rtl_TextEncoding _eEncoding)
+{
+    URL aURL;
+    aURL.Complete = aURLStr;
+    xTransformer->parseStrict(aURL);
 
+    Reference< XDispatch >  xDisp = Reference< XDispatchProvider > (xFrame,UNO_QUERY)->queryDispatch(aURL, aTargetName,
+        FrameSearchFlag::SELF | FrameSearchFlag::PARENT | FrameSearchFlag::CHILDREN |
+        FrameSearchFlag::SIBLINGS | FrameSearchFlag::CREATE | FrameSearchFlag::TASKS);
+
+    if (xDisp.is())
+    {
+        Sequence<PropertyValue> aArgs(2);
+        aArgs.getArray()[0].Name = ::rtl::OUString::createFromAscii("Referer");
+        aArgs.getArray()[0].Value <<= aReferer;
+
+        // build a sequence from the to-be-submitted string
+        ByteString a8BitData(aData.getStr(), (sal_uInt16)aData.getLength(), _eEncoding);
+            // always ANSI #58641
+        Sequence< sal_Int8 > aPostData((sal_Int8*)a8BitData.GetBuffer(), a8BitData.Len());
+        Reference< XInputStream > xPostData = new SequenceInputStream(aPostData);
+
+        aArgs.getArray()[1].Name = ::rtl::OUString::createFromAscii("PostData");
+        aArgs.getArray()[1].Value <<= xPostData;
+
+        xDisp->dispatch(aURL, aArgs);
+    } // if (xDisp.is())
+}
 //------------------------------------------------------------------------------
 void ODatabaseForm::submit_impl(const Reference<XControl>& Control, const ::com::sun::star::awt::MouseEvent& MouseEvt, bool _bAproveByListeners)
 {
@@ -2196,6 +2197,9 @@ void ODatabaseForm::submit_impl(const Reference<XControl>& Control, const ::com:
 
     if (!xModel.is())
         return;
+    Reference< XFrame >  xFrame = xModel->getCurrentController()->getFrame();
+    if (!xFrame.is())
+        return;
 
     Reference<XURLTransformer>
         xTransformer(m_xServiceFactory->createInstance(
@@ -2210,10 +2214,6 @@ void ODatabaseForm::submit_impl(const Reference<XControl>& Control, const ::com:
             ::vos::OGuard aGuard( Application::GetSolarMutex() );
             aData = GetDataURLEncoded( Control, MouseEvt );
         }
-
-        Reference< XFrame >  xFrame = xModel->getCurrentController()->getFrame();
-        if (!xFrame.is())
-            return;
 
         URL aURL;
         // FormMethod GET
@@ -2240,38 +2240,11 @@ void ODatabaseForm::submit_impl(const Reference<XControl>& Control, const ::com:
         // FormMethod POST
         else if( eSubmitMethod == FormSubmitMethod_POST )
         {
-            aURL.Complete = aURLStr;
-            xTransformer->parseStrict(aURL);
-
-            Reference< XDispatch >  xDisp = Reference< XDispatchProvider > (xFrame,UNO_QUERY)->queryDispatch(aURL, aTargetName,
-                FrameSearchFlag::SELF | FrameSearchFlag::PARENT | FrameSearchFlag::CHILDREN |
-                FrameSearchFlag::SIBLINGS | FrameSearchFlag::CREATE | FrameSearchFlag::TASKS);
-
-            if (xDisp.is())
-            {
-                Sequence<PropertyValue> aArgs(2);
-                aArgs.getArray()[0].Name = ::rtl::OUString::createFromAscii("Referer");
-                aArgs.getArray()[0].Value <<= aReferer;
-
-                // build a sequence from the to-be-submitted string
-                ByteString a8BitData(aData.getStr(), (sal_uInt16)aData.getLength(), RTL_TEXTENCODING_MS_1252);
-                    // always ANSI #58641
-                Sequence< sal_Int8 > aPostData((sal_Int8*)a8BitData.GetBuffer(), a8BitData.Len());
-                Reference< XInputStream > xPostData = new SequenceInputStream(aPostData);
-
-                aArgs.getArray()[1].Name = ::rtl::OUString::createFromAscii("PostData");
-                aArgs.getArray()[1].Value <<= xPostData;
-
-                xDisp->dispatch(aURL, aArgs);
-            }
+            lcl_dispatch(xFrame,xTransformer,aURLStr,aReferer,aTargetName,aData,RTL_TEXTENCODING_MS_1252);
         }
     }
     else if( eSubmitEncoding == FormSubmitEncoding_MULTIPART )
     {
-        Reference< XFrame >  xFrame = xModel->getCurrentController()->getFrame();
-        if (!xFrame.is())
-            return;
-
         URL aURL;
         aURL.Complete = aURLStr;
         xTransformer->parseStrict(aURL);
@@ -2314,35 +2287,7 @@ void ODatabaseForm::submit_impl(const Reference<XControl>& Control, const ::com:
             aData = GetDataTextEncoded( Reference<XControl> (), MouseEvt );
         }
 
-        Reference< XFrame >  xFrame = xModel->getCurrentController()->getFrame();
-        if (!xFrame.is())
-            return;
-
-        URL aURL;
-
-        aURL.Complete = aURLStr;
-        xTransformer->parseStrict(aURL);
-
-        Reference< XDispatch >  xDisp = Reference< XDispatchProvider > (xFrame,UNO_QUERY)->queryDispatch(aURL, aTargetName,
-            FrameSearchFlag::SELF | FrameSearchFlag::PARENT | FrameSearchFlag::CHILDREN |
-            FrameSearchFlag::SIBLINGS | FrameSearchFlag::CREATE | FrameSearchFlag::TASKS);
-
-        if (xDisp.is())
-        {
-            Sequence<PropertyValue> aArgs(2);
-            aArgs.getArray()[0].Name = ::rtl::OUString::createFromAscii("Referer");
-            aArgs.getArray()[0].Value <<= aReferer;
-
-            // build a sequence from the to-be-submitted string
-            ByteString aSystemEncodedData(aData.getStr(), (sal_uInt16)aData.getLength(), osl_getThreadTextEncoding());
-            Sequence< sal_Int8 > aPostData((sal_Int8*)aSystemEncodedData.GetBuffer(), aSystemEncodedData.Len());
-            Reference< XInputStream > xPostData = new SequenceInputStream(aPostData);
-
-            aArgs.getArray()[1].Name = ::rtl::OUString::createFromAscii("PostData");
-            aArgs.getArray()[1].Value <<= xPostData;
-
-            xDisp->dispatch(aURL, aArgs);
-        }
+        lcl_dispatch(xFrame,xTransformer,aURLStr,aReferer,aTargetName,aData,osl_getThreadTextEncoding());
     }
     else {
         DBG_ERROR("ODatabaseForm::submit_Impl : wrong encoding !");

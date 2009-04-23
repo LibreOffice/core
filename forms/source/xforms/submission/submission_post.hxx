@@ -31,14 +31,10 @@
 #ifndef __SUBMISSION_POST_HXX
 #define __SUBMISSION_POST_HXX
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-
 #include "submission.hxx"
 
 class CSubmissionPost : public CSubmission
 {
-private:
-    CSS::uno::Reference< CSS::lang::XMultiServiceFactory > m_aFactory;
 public:
     CSubmissionPost(const rtl::OUString& aURL, const CSS::uno::Reference< CSS::xml::dom::XDocumentFragment >& aFragment);
     virtual SubmissionResult submit(const CSS::uno::Reference< CSS::task::XInteractionHandler >& aInteractionHandler);
