@@ -970,7 +970,7 @@ static Size lcl_GuessPaperSize()
 uno::Sequence< beans::PropertyValue > SAL_CALL SmModel::getRenderer(
         sal_Int32 nRenderer,
         const uno::Any& /*rSelection*/,
-        const uno::Sequence< beans::PropertyValue >& /*xOptions*/ )
+        const uno::Sequence< beans::PropertyValue >& /*rxOptions*/ )
     throw (IllegalArgumentException, RuntimeException)
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
@@ -1108,7 +1108,7 @@ void SAL_CALL SmModel::render(
                     pConfig->Commit();
                 }
 
-                pView->Impl_Print( *pOut, PRINT_SIZE_NORMAL,
+                pView->Impl_Print( *pOut, pConfig->GetPrintSize(),
                      Rectangle( OutputRect ), Point() );
             }
         }
