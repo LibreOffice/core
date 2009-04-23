@@ -415,7 +415,14 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::activatingUI()
                     if ( xObject->getStatus( pObj->GetAspect() ) & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE )
                         xObject->changeState( embed::EmbedStates::INPLACE_ACTIVE );
                     else
-                        xObject->changeState( embed::EmbedStates::RUNNING );
+                    {
+                        // the links should not stay in running state for long time because of locking
+                        uno::Reference< embed::XLinkageSupport > xLink( xObject, uno::UNO_QUERY );
+                        if ( xLink.is() && xLink->isLink() )
+                            xObject->changeState( embed::EmbedStates::LOADED );
+                        else
+                            xObject->changeState( embed::EmbedStates::RUNNING );
+                    }
                 }
                 catch (com::sun::star::uno::Exception& )
                 {}
@@ -650,9 +657,7 @@ void SdrEmbedObjectLink::DataChanged( const String& /*rMimeType*/,
             try
             {
                 sal_Int32 nState = xObject->getCurrentState();
-                if ( nState == embed::EmbedStates::LOADED )
-                    xObject->changeState( embed::EmbedStates::RUNNING );
-                else
+                if ( nState != embed::EmbedStates::LOADED )
                 {
                     // in some cases the linked file probably is not locked so it could be changed
                     xObject->changeState( embed::EmbedStates::LOADED );
