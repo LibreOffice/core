@@ -532,9 +532,9 @@ class VCL_DLLPUBLIC PrinterOptionsHelper
     sal_Bool getBoolValue( const char* i_pPropName, sal_Bool i_bDefault = sal_False ) const
     { return getBoolValue( rtl::OUString::createFromAscii( i_pPropName ), i_bDefault ); }
 
-    sal_Int32 getIntValue( const rtl::OUString& i_rPropertyName, sal_Int32 i_nDefault = 0 ) const;
+    sal_Int64 getIntValue( const rtl::OUString& i_rPropertyName, sal_Int64 i_nDefault = 0 ) const;
     // convenience for fixed strings
-    sal_Int32 getIntValue( const char* i_pPropName, sal_Int32 i_nDefault = 0 ) const
+    sal_Int64 getIntValue( const char* i_pPropName, sal_Int64 i_nDefault = 0 ) const
     { return getIntValue( rtl::OUString::createFromAscii( i_pPropName ), i_nDefault ); }
 
     rtl::OUString getStringValue( const rtl::OUString& i_rPropertyName, const rtl::OUString& i_rDefault = rtl::OUString() ) const;

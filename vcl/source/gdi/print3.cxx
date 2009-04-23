@@ -832,9 +832,9 @@ sal_Bool PrinterOptionsHelper::getBoolValue( const rtl::OUString& i_rPropertyNam
     return (aVal >>= bRet) ? bRet : i_bDefault;
 }
 
-sal_Int32 PrinterOptionsHelper::getIntValue( const rtl::OUString& i_rPropertyName, sal_Int32 i_nDefault ) const
+sal_Int64 PrinterOptionsHelper::getIntValue( const rtl::OUString& i_rPropertyName, sal_Int64 i_nDefault ) const
 {
-    sal_Int32 nRet = 0;
+    sal_Int64 nRet = 0;
     Any aVal( getValue( i_rPropertyName ) );
     return (aVal >>= nRet) ? nRet : i_nDefault;
 }
