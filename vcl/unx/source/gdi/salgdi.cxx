@@ -1072,7 +1072,15 @@ struct HalfTrapCompare
     }
 };
 
-typedef std::priority_queue< HalfTrapezoid, std::vector<HalfTrapezoid>, HalfTrapCompare > HTQueue;
+typedef std::priority_queue< HalfTrapezoid, std::vector<HalfTrapezoid>, HalfTrapCompare > HTQueueBase;
+// we need a priority queue with a reserve() to prevent countless reallocations
+class HTQueue
+:   public HTQueueBase
+{
+public:
+    void    reserve( size_t n ) { c.reserve( n ); }
+    int     capacity() { return c.capacity(); }
+};
 
 typedef std::vector<XTrapezoid> TrapezoidVector;
 
@@ -1137,15 +1145,16 @@ bool X11SalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly
 
     // don't bother with polygons outside of visible area
     const basegfx::B2DRange aViewRange( 0, 0, GetGraphicsWidth(), GetGraphicsHeight() );
-    basegfx::B2DRange aPolyRange = basegfx::tools::getRange( rPolyPoly );
-    aPolyRange.intersect( aViewRange );
-    if( aPolyRange.isEmpty() )
-        return true;
+    const basegfx::B2DRange aPolyRange = basegfx::tools::getRange( rPolyPoly );
+    const bool bNeedViewClip = !aPolyRange.isInside( aViewRange );
+    if( !aPolyRange.overlaps( aViewRange ) )
+        return TRUE;
 
     // convert the polypolygon to trapezoids
 
     // first convert the B2DPolyPolygon to HalfTrapezoids
     HTQueue aHTQueue;
+    aHTQueue.reserve( 16384 ); // TODO: use decomposed number of points
     for( int nOuterPolyIdx = 0; nOuterPolyIdx < nPolygonCount; ++nOuterPolyIdx )
     {
         ::basegfx::B2DPolygon aOuterPolygon = rPolyPoly.getB2DPolygon( nOuterPolyIdx );
@@ -1156,10 +1165,15 @@ bool X11SalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly
 
         // clip polygon against view
         // (the call below for removing self intersections can be made much cheaper by this)
-        // TODO: move clipping before subdivision when clipPolyonRange learns to handle curves
-        const basegfx::B2DPolyPolygon aClippedPolygon = basegfx::tools::clipPolygonOnRange( aOuterPolygon, aViewRange, true, false );
-        if( !aClippedPolygon.count() )
-                return true;
+        basegfx::B2DPolyPolygon aClippedPolygon( aOuterPolygon );
+        if( bNeedViewClip )
+        {
+            // TODO: move clipping before subdivision when clipPolyonRange learns to handle curves
+            aClippedPolygon = basegfx::tools::clipPolygonOnRange( aOuterPolygon, aViewRange, true, false );
+            DBG_ASSERT( aClippedPolygon.count(), "polygon confirmed to overlap with view should not get here" );
+            if( !aClippedPolygon.count() )
+                continue;
+        }
 
         // test and remove self intersections
         // TODO: make code intersection save, then remove this test
@@ -1171,6 +1185,8 @@ bool X11SalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly
             const int nPointCount = aInnerPolygon.count();
             if( !nPointCount )
                 continue;
+
+            aHTQueue.reserve( aHTQueue.size() + 8 * nPointCount );
 
             // convert polygon point pairs to HalfTrapezoids
             // connect the polygon point with the first one if needed
