@@ -271,10 +271,11 @@ BOOL GraphicManager::DrawObj( OutputDevice* pOut, const Point& rPt, const Size& 
 
 // -----------------------------------------------------------------------------
 
-void GraphicManager::ImplRegisterObj( const GraphicObject& rObj, Graphic& rSubstitute, const ByteString* pID )
+void GraphicManager::ImplRegisterObj( const GraphicObject& rObj, Graphic& rSubstitute,
+                                      const ByteString* pID, const GraphicObject* pCopyObj )
 {
     maObjList.Insert( (void*) &rObj, LIST_APPEND );
-    mpCache->AddGraphicObject( rObj, rSubstitute, pID );
+    mpCache->AddGraphicObject( rObj, rSubstitute, pID, pCopyObj );
 }
 
 // -----------------------------------------------------------------------------
