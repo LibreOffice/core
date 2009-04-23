@@ -392,7 +392,7 @@ void EffectRewinder::asynchronousRewind (
                 nEffectCount,
                 false,
                 rSlideRewindFunctor));
-        mrEventQueue.addEventForNextRound(mpAsynchronousRewindEvent);
+        mrEventQueue.addEvent(mpAsynchronousRewindEvent);
     }
     else
     {
