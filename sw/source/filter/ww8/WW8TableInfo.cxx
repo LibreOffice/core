@@ -160,7 +160,8 @@ string WW8TableNodeInfoInner::toString() const
 WW8TableNodeInfo::WW8TableNodeInfo(const SwNode * pNode)
 :
     mnDepth(0),
-    mpNode(pNode)
+    mpNode(pNode),
+    mpNext(NULL)
 {
 }
 
@@ -241,6 +242,11 @@ void WW8TableNodeInfo::setTable(const SwTable * pTable)
     getInnerForDepth(mnDepth)->setTable(pTable);
 }
 
+void WW8TableNodeInfo::setNext(WW8TableNodeInfo * pNext)
+{
+    mpNext = pNext;
+}
+
 void WW8TableNodeInfo::setCell(sal_uInt32 nCell)
 {
     getInnerForDepth(mnDepth)->setCell(nCell);
@@ -272,6 +278,11 @@ const SwTableBox * WW8TableNodeInfo::getTableBox() const
 const SwTable * WW8TableNodeInfo::getTable() const
 {
     return getInnerForDepth(mnDepth)->getTable();
+}
+
+WW8TableNodeInfo * WW8TableNodeInfo::getNext() const
+{
+    return mpNext;
 }
 
 bool WW8TableNodeInfo::isEndOfLine() const
@@ -340,11 +351,13 @@ void WW8TableInfo::processSwTable(const SwTable * pTable)
 
     const SwTableLines & rLines = pTable->GetTabLines();
 
+    WW8TableNodeInfo * pPrev = NULL;
+
     for (USHORT n = 0; n < rLines.Count(); n++)
     {
         const SwTableLine * pLine = rLines[n];
 
-        processTableLine(pTable, pLine, n, 1);
+        pPrev = processTableLine(pTable, pLine, n, 1, pPrev);
     }
 
 #ifdef DEBUG
@@ -352,11 +365,11 @@ void WW8TableInfo::processSwTable(const SwTable * pTable)
 #endif
 }
 
-void
+WW8TableNodeInfo *
 WW8TableInfo::processTableLine(const SwTable * pTable,
                                const SwTableLine * pTableLine,
                                sal_uInt32 nRow,
-                               sal_uInt32 nDepth)
+                               sal_uInt32 nDepth, WW8TableNodeInfo * pPrev)
 {
 #ifdef DEBUG
     ::std::clog << "<processTableLine row=\"" << nRow << "\" depth=\""
@@ -371,12 +384,14 @@ WW8TableInfo::processTableLine(const SwTable * pTable,
     {
         const SwTableBox * pBox = rBoxes[n];
 
-        processTableBox(pTable, pBox, nRow, n, nDepth, n == rBoxes.Count() - 1);
+        pPrev = processTableBox(pTable, pBox, nRow, n, nDepth, n == rBoxes.Count() - 1, pPrev);
     }
 
 #ifdef DEBUG
     ::std::clog << "</processTableLine>" << ::std::endl;
 #endif
+
+    return pPrev;
 }
 
 WW8TableNodeInfo::Pointer_t
@@ -435,13 +450,14 @@ WW8TableInfo::processTableBoxLines(const SwTableBox * pBox,
 }
 
 
-void
+WW8TableNodeInfo *
 WW8TableInfo::processTableBox(const SwTable * pTable,
                               const SwTableBox * pBox,
                               sal_uInt32 nRow,
                               sal_uInt32 nCell,
                               sal_uInt32 nDepth,
-                              bool bEndOfLine)
+                              bool bEndOfLine,
+                              WW8TableNodeInfo * pPrev)
 {
 #ifdef DEBUG
     ::std::clog << "<processTableBox row=\"" << nRow << "\" cell=\"" << nCell
@@ -464,7 +480,7 @@ WW8TableInfo::processTableBox(const SwTable * pTable,
         {
             const SwTableLine * pLine = rLines[n];
 
-            processTableLine(pTable, pLine, n, 1);
+            pPrev = processTableLine(pTable, pLine, n, 1, pPrev);
         }
     }
     else
@@ -487,6 +503,11 @@ WW8TableInfo::processTableBox(const SwTable * pTable,
             }
 
             pNodeInfo = insertTableNodeInfo(&rNode, pTable, pBox, nRow, nCell, nDepth);
+
+            if (pPrev != NULL)
+                pPrev->setNext(pNodeInfo.get());
+
+            pPrev = pNodeInfo.get();
 
             if (nDepthInsideCell == 1 && rNode.IsTxtNode())
                 pEndOfCellInfo = pNodeInfo;
@@ -520,6 +541,8 @@ WW8TableInfo::processTableBox(const SwTable * pTable,
 #ifdef DEBUG
     ::std::clog << "</processTableBox>" << ::std::endl;
 #endif
+
+    return pPrev;
 }
 
 WW8TableNodeInfo::Pointer_t WW8TableInfo::insertTableNodeInfo
@@ -562,6 +585,23 @@ WW8TableNodeInfo::Pointer_t WW8TableInfo::getTableNodeInfo
 
     if (aIt != mMap.end())
         pResult = (*aIt).second;
+
+    return pResult;
+}
+
+const SwNode * WW8TableInfo::getNextNode(const SwNode * pNode)
+{
+    const SwNode * pResult = NULL;
+
+    WW8TableNodeInfo::Pointer_t pNodeInfo = getTableNodeInfo(pNode);
+
+    if (pNodeInfo.get() != NULL)
+    {
+        WW8TableNodeInfo * pNextInfo = pNodeInfo->getNext();
+
+        if (pNextInfo != NULL)
+            pResult = pNextInfo->getNode();
+    }
 
     return pResult;
 }

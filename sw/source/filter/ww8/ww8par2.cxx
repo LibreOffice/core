@@ -3603,7 +3603,13 @@ void SwWW8ImplReader::StopTable()
     }
 
     bReadTable = true;
-    mpTableEndPaM.reset(new SwPaM(*pPaM));
+    // --> OD 2009-04-16 #i101116#
+    // Keep PaM on table end only for nested tables
+    if ( nInTable > 1 )
+    {
+        mpTableEndPaM.reset(new SwPaM(*pPaM));
+    }
+    // <--
 }
 
 // GetTableLeft() wird fuer absatzgebundene Grafikobjekte in Tabellen

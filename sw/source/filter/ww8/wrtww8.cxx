@@ -2383,7 +2383,15 @@ void SwWW8Writer::WriteText()
         if( pNd == &pNd->GetNodes().GetEndOfContent() )
             break;
 
-        ULONG nPos = pCurPam->GetPoint()->nNode++;  // Bewegen
+        SwNode * pCurrentNode = &pCurPam->GetPoint()->nNode.GetNode();
+        const SwNode * pNextNode = mpTableInfo->getNextNode(pCurrentNode);
+
+        if (pNextNode != NULL)
+            pCurPam->GetPoint()->nNode = SwNodeIndex(*pNextNode);
+        else
+            pCurPam->GetPoint()->nNode++;
+
+        ULONG nPos = pCurPam->GetPoint()->nNode.GetIndex();
         ::SetProgressState( nPos, pCurPam->GetDoc()->GetDocShell() );   // Wie weit ?
     }
 
