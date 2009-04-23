@@ -1662,7 +1662,7 @@ void SchXMLExportHelper::exportPlotArea(
                 aPropertyStates.clear();
                 aPropertyStates = mxExpPropMapper->Filter( xStockPropSet );
 
-                if( aPropertyStates.size() > 0 )
+                if( !aPropertyStates.empty() )
                 {
                     if( bExportContent )
                     {
@@ -1684,7 +1684,7 @@ void SchXMLExportHelper::exportPlotArea(
                 aPropertyStates.clear();
                 aPropertyStates = mxExpPropMapper->Filter( xStockPropSet );
 
-                if( aPropertyStates.size() > 0 )
+                if( !aPropertyStates.empty() )
                 {
                     if( bExportContent )
                     {
@@ -1706,7 +1706,7 @@ void SchXMLExportHelper::exportPlotArea(
                 aPropertyStates.clear();
                 aPropertyStates = mxExpPropMapper->Filter( xStockPropSet );
 
-                if( aPropertyStates.size() > 0 )
+                if( !aPropertyStates.empty() )
                 {
                     if( bExportContent )
                     {
@@ -1738,7 +1738,7 @@ void SchXMLExportHelper::exportPlotArea(
         {
             aPropertyStates = mxExpPropMapper->Filter( xWallPropSet );
 
-            if( aPropertyStates.size() > 0 )
+            if( !aPropertyStates.empty() )
             {
                 // write element
                 if( bExportContent )
@@ -1766,7 +1766,7 @@ void SchXMLExportHelper::exportPlotArea(
         {
             aPropertyStates = mxExpPropMapper->Filter( xFloorPropSet );
 
-            if( aPropertyStates.size() > 0 )
+            if( !aPropertyStates.empty() )
             {
                 // write element
                 if( bExportContent )
@@ -2674,7 +2674,7 @@ void SchXMLExportHelper::exportSeries(
                         {
                             aPropertyStates = mxExpPropMapper->Filter( xStatProp );
 
-                            if( aPropertyStates.size() > 0 )
+                            if( !aPropertyStates.empty() )
                             {
                                 // write element
                                 if( bExportContent )
@@ -2735,7 +2735,7 @@ void SchXMLExportHelper::exportSeries(
 
                             aPropertyStates = mxExpPropMapper->Filter( xStatProp );
 
-                            if( aPropertyStates.size() > 0 )
+                            if( !aPropertyStates.empty() )
                             {
                                 // write element
                                 if( bExportContent )
@@ -3090,7 +3090,7 @@ void SchXMLExportHelper::exportDataPoints(
                     }
 
                     aPropertyStates = mxExpPropMapper->Filter( xPropSet );
-                    if( aPropertyStates.size() > 0 )
+                    if( !aPropertyStates.empty() )
                     {
                         if( bExportContent )
                         {
@@ -3154,7 +3154,7 @@ void SchXMLExportHelper::exportDataPoints(
                     }
 
                     aPropertyStates = mxExpPropMapper->Filter( xPropSet );
-                    if( aPropertyStates.size() > 0 )
+                    if( !aPropertyStates.empty() )
                     {
                         if( bExportContent )
                         {
@@ -3324,13 +3324,13 @@ void SchXMLExportHelper::swapDataArray( Sequence< Sequence< double > >& rSequenc
 
 void SchXMLExportHelper::CollectAutoStyle( const std::vector< XMLPropertyState >& aStates )
 {
-    if( aStates.size())
+    if( !aStates.empty() )
         maAutoStyleNameQueue.push( GetAutoStylePoolP().Add( XML_STYLE_FAMILY_SCH_CHART_ID, aStates ));
 }
 
 void SchXMLExportHelper::AddAutoStyleAttribute( const std::vector< XMLPropertyState >& aStates )
 {
-    if( aStates.size())
+    if( !aStates.empty() )
     {
         DBG_ASSERT( ! maAutoStyleNameQueue.empty(), "Autostyle queue empty!" );
 

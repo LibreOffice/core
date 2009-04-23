@@ -48,7 +48,7 @@ namespace connectivity
                 -> 32
 
         */
-        class OOO_DLLPUBLIC_FILE OOp_Abs : public OUnaryOperator
+        class OOp_Abs : public OUnaryOperator
         {
         protected:
             virtual ORowSetValue operate(const ORowSetValue& lhs) const;
@@ -65,7 +65,7 @@ namespace connectivity
                     -> 1
 
         */
-        class OOO_DLLPUBLIC_FILE OOp_Sign : public OUnaryOperator
+        class OOp_Sign : public OUnaryOperator
         {
         protected:
             virtual ORowSetValue operate(const ORowSetValue& lhs) const;
@@ -84,7 +84,7 @@ namespace connectivity
             > SELECT 29 MOD 9;
                     -> 2
         */
-        class OOO_DLLPUBLIC_FILE OOp_Mod : public OBinaryOperator
+        class OOp_Mod : public OBinaryOperator
         {
         protected:
             virtual ORowSetValue operate(const ORowSetValue& lhs,const ORowSetValue& rhs) const;
@@ -99,7 +99,7 @@ namespace connectivity
                 -> -2
 
         */
-        class OOO_DLLPUBLIC_FILE OOp_Floor : public OUnaryOperator
+        class OOp_Floor : public OUnaryOperator
         {
         protected:
             virtual ORowSetValue operate(const ORowSetValue& lhs) const;
@@ -114,7 +114,7 @@ namespace connectivity
                 -> -1
 
         */
-        class OOO_DLLPUBLIC_FILE OOp_Ceiling : public OUnaryOperator
+        class OOp_Ceiling : public OUnaryOperator
         {
         protected:
             virtual ORowSetValue operate(const ORowSetValue& lhs) const;
@@ -137,7 +137,7 @@ namespace connectivity
             > SELECT ROUND(23.298, -1);
                     -> 20
         */
-        class OOO_DLLPUBLIC_FILE OOp_Round : public ONthOperator
+        class OOp_Round : public ONthOperator
         {
         protected:
             virtual ORowSetValue operate(const ::std::vector<ORowSetValue>& lhs) const;
@@ -151,7 +151,7 @@ namespace connectivity
         > SELECT EXP(-2);
                 -> 0.135335
         */
-        class OOO_DLLPUBLIC_FILE OOp_Exp : public OUnaryOperator
+        class OOp_Exp : public OUnaryOperator
         {
         protected:
             virtual ORowSetValue operate(const ORowSetValue& lhs) const;
@@ -166,7 +166,7 @@ namespace connectivity
                 -> NULL
 
         */
-        class OOO_DLLPUBLIC_FILE OOp_Ln : public OUnaryOperator
+        class OOp_Ln : public OUnaryOperator
         {
         protected:
             virtual ORowSetValue operate(const ORowSetValue& lhs) const;
@@ -188,7 +188,7 @@ namespace connectivity
             > SELECT LOG(1,100);
                     -> NULL
         */
-        class OOO_DLLPUBLIC_FILE OOp_Log : public ONthOperator
+        class OOp_Log : public ONthOperator
         {
         protected:
             virtual ORowSetValue operate(const ::std::vector<ORowSetValue>& lhs) const;
@@ -204,7 +204,7 @@ namespace connectivity
         > SELECT LOG10(-100);
                 -> NULL
         */
-        class OOO_DLLPUBLIC_FILE OOp_Log10 : public OUnaryOperator
+        class OOp_Log10 : public OUnaryOperator
         {
         protected:
             virtual ORowSetValue operate(const ORowSetValue& lhs) const;
@@ -218,7 +218,7 @@ namespace connectivity
             > SELECT POW(2,-2);
                     -> 0.250000
         */
-        class OOO_DLLPUBLIC_FILE OOp_Pow : public OBinaryOperator
+        class OOp_Pow : public OBinaryOperator
         {
         protected:
             virtual ORowSetValue operate(const ORowSetValue& lhs,const ORowSetValue& rhs) const;
@@ -232,7 +232,7 @@ namespace connectivity
         > SELECT SQRT(20);
                 -> 4.472136
         */
-        class OOO_DLLPUBLIC_FILE OOp_Sqrt : public OUnaryOperator
+        class OOp_Sqrt : public OUnaryOperator
         {
         protected:
             virtual ORowSetValue operate(const ORowSetValue& lhs) const;
@@ -247,7 +247,7 @@ namespace connectivity
                 -> 3.141592653589793116
 
         */
-        class OOO_DLLPUBLIC_FILE OOp_Pi : public ONthOperator
+        class OOp_Pi : public ONthOperator
         {
         protected:
             virtual ORowSetValue operate(const ::std::vector<ORowSetValue>& lhs) const;
@@ -259,7 +259,7 @@ namespace connectivity
         > SELECT COS(PI());
                 -> -1.000000
         */
-        class OOO_DLLPUBLIC_FILE OOp_Cos : public OUnaryOperator
+        class OOp_Cos : public OUnaryOperator
         {
         protected:
             virtual ORowSetValue operate(const ORowSetValue& lhs = ORowSetValue()) const;
@@ -272,7 +272,7 @@ namespace connectivity
                 -> 0.000000
 
         */
-        class OOO_DLLPUBLIC_FILE OOp_Sin : public OUnaryOperator
+        class OOp_Sin : public OUnaryOperator
         {
         protected:
             virtual ORowSetValue operate(const ORowSetValue& lhs = ORowSetValue()) const;
@@ -283,7 +283,7 @@ namespace connectivity
         > SELECT TAN(PI()+1);
                 -> 1.557408
         */
-        class OOO_DLLPUBLIC_FILE OOp_Tan : public OUnaryOperator
+        class OOp_Tan : public OUnaryOperator
         {
         protected:
             virtual ORowSetValue operate(const ORowSetValue& lhs = ORowSetValue()) const;
@@ -299,7 +299,7 @@ namespace connectivity
         > SELECT ACOS(0);
                 -> 1.570796
         */
-        class OOO_DLLPUBLIC_FILE OOp_ACos : public OUnaryOperator
+        class OOp_ACos : public OUnaryOperator
         {
         protected:
             virtual ORowSetValue operate(const ORowSetValue& lhs = ORowSetValue()) const;
@@ -313,7 +313,7 @@ namespace connectivity
         > SELECT ASIN('foo');
                 -> 0.000000
         */
-        class OOO_DLLPUBLIC_FILE OOp_ASin : public OUnaryOperator
+        class OOp_ASin : public OUnaryOperator
         {
         protected:
             virtual ORowSetValue operate(const ORowSetValue& lhs = ORowSetValue()) const;
@@ -327,7 +327,7 @@ namespace connectivity
         > SELECT ATAN(-2);
                 -> -1.107149
         */
-        class OOO_DLLPUBLIC_FILE OOp_ATan : public OUnaryOperator
+        class OOp_ATan : public OUnaryOperator
         {
         protected:
             virtual ORowSetValue operate(const ORowSetValue& lhs = ORowSetValue()) const;
@@ -342,7 +342,7 @@ namespace connectivity
                 -> 1.570796
 
         */
-        class OOO_DLLPUBLIC_FILE OOp_ATan2 : public OBinaryOperator
+        class OOp_ATan2 : public OBinaryOperator
         {
         protected:
             virtual ORowSetValue operate(const ORowSetValue& lhs,const ORowSetValue& rhs) const;
@@ -354,7 +354,7 @@ namespace connectivity
         > SELECT DEGREES(PI());
                 -> 180.000000
         */
-        class OOO_DLLPUBLIC_FILE OOp_Degrees : public OUnaryOperator
+        class OOp_Degrees : public OUnaryOperator
         {
         protected:
             virtual ORowSetValue operate(const ORowSetValue& lhs = ORowSetValue()) const;
@@ -367,7 +367,7 @@ namespace connectivity
                 -> 1.570796
 
         */
-        class OOO_DLLPUBLIC_FILE OOp_Radians : public OUnaryOperator
+        class OOp_Radians : public OUnaryOperator
         {
         protected:
             virtual ORowSetValue operate(const ORowSetValue& lhs = ORowSetValue()) const;

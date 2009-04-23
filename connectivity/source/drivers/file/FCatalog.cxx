@@ -31,15 +31,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_connectivity.hxx"
 #include "file/FCatalog.hxx"
-#ifndef _CONNECTIVITY_FILE_BCONNECTION_HXX_
 #include "file/FConnection.hxx"
-#endif
 #include "file/FTables.hxx"
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
-//#ifndef _CONNECTIVITY_FILE_OEMPTYCOLLECTION_HXX_
-//#include "file/FEmptyCollection.hxx"
-//#endif
+#include <rtl/logfile.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -53,10 +49,12 @@ using namespace connectivity::file;
 OFileCatalog::OFileCatalog(OConnection* _pCon) : connectivity::sdbcx::OCatalog(_pCon)
                 ,m_pConnection(_pCon)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OFileCatalog::OFileCatalog" );
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OFileCatalog::disposing()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OFileCatalog::disposing" );
     ::osl::MutexGuard aGuard(m_aMutex);
 
     typedef connectivity::sdbcx::OCatalog OFileCatalog_BASE;
@@ -66,11 +64,13 @@ void SAL_CALL OFileCatalog::disposing()
 // -----------------------------------------------------------------------------
 ::rtl::OUString OFileCatalog::buildName(const Reference< XRow >& _xRow)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OFileCatalog::buildName" );
     return _xRow->getString(3);
 }
 // -------------------------------------------------------------------------
 void OFileCatalog::refreshTables()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OFileCatalog::refreshTables" );
     TStringVector aVector;
     Sequence< ::rtl::OUString > aTypes;
     Reference< XResultSet > xResult = m_xMetaData->getTables(Any(),
@@ -86,6 +86,7 @@ void OFileCatalog::refreshTables()
 // -------------------------------------------------------------------------
 Any SAL_CALL OFileCatalog::queryInterface( const Type & rType ) throw(RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OFileCatalog::queryInterface" );
     if( rType == ::getCppuType((const Reference<XGroupsSupplier>*)0) ||
         rType == ::getCppuType((const Reference<XUsersSupplier>*)0) ||
         rType == ::getCppuType((const Reference<XViewsSupplier>*)0))
@@ -98,6 +99,7 @@ Any SAL_CALL OFileCatalog::queryInterface( const Type & rType ) throw(RuntimeExc
 // -----------------------------------------------------------------------------
 Sequence< Type > SAL_CALL OFileCatalog::getTypes(  ) throw(RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OFileCatalog::getTypes" );
     typedef sdbcx::OCatalog OFileCatalog_BASE;
 
     Sequence< Type > aTypes = OFileCatalog_BASE::getTypes();

@@ -38,6 +38,7 @@
 #include "connectivity/dbexception.hxx"
 #include "resource/common_res.hrc"
 #include "resource/sharedresources.hxx"
+#include <rtl/logfile.hxx>
 
 
 using namespace connectivity::file;
@@ -52,10 +53,12 @@ OFileDriver::OFileDriver(const ::com::sun::star::uno::Reference< ::com::sun::sta
     : ODriver_BASE(m_aMutex)
     ,m_xFactory(_rxFactory)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OFileDriver::OFileDriver" );
 }
 // --------------------------------------------------------------------------------
 void OFileDriver::disposing()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OFileDriver::disposing" );
     ::osl::MutexGuard aGuard(m_aMutex);
 
 
@@ -79,7 +82,7 @@ rtl::OUString OFileDriver::getImplementationName_Static(  ) throw(RuntimeExcepti
 //------------------------------------------------------------------------------
 Sequence< ::rtl::OUString > OFileDriver::getSupportedServiceNames_Static(  ) throw (RuntimeException)
 {
-        Sequence< ::rtl::OUString > aSNS( 2 );
+    Sequence< ::rtl::OUString > aSNS( 2 );
     aSNS[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbc.Driver");
     aSNS[1] = ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.Driver");
     return aSNS;
@@ -112,6 +115,7 @@ Sequence< ::rtl::OUString > SAL_CALL OFileDriver::getSupportedServiceNames(  ) t
 // --------------------------------------------------------------------------------
 Reference< XConnection > SAL_CALL OFileDriver::connect( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OFileDriver::connect" );
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(ODriver_BASE::rBHelper.bDisposed);
 
@@ -126,11 +130,13 @@ Reference< XConnection > SAL_CALL OFileDriver::connect( const ::rtl::OUString& u
 sal_Bool SAL_CALL OFileDriver::acceptsURL( const ::rtl::OUString& url )
                 throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OFileDriver::acceptsURL" );
     return (!url.compareTo(::rtl::OUString::createFromAscii("sdbc:file:"),10));
 }
 // --------------------------------------------------------------------------------
 Sequence< DriverPropertyInfo > SAL_CALL OFileDriver::getPropertyInfo( const ::rtl::OUString& url, const Sequence< PropertyValue >& /*info*/ ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OFileDriver::getPropertyInfo" );
     if ( acceptsURL(url) )
     {
         ::std::vector< DriverPropertyInfo > aDriverInfo;
@@ -193,11 +199,13 @@ Sequence< DriverPropertyInfo > SAL_CALL OFileDriver::getPropertyInfo( const ::rt
 // --------------------------------------------------------------------------------
 sal_Int32 SAL_CALL OFileDriver::getMajorVersion(  ) throw(RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OFileDriver::getMajorVersion" );
     return 1;
 }
 // --------------------------------------------------------------------------------
 sal_Int32 SAL_CALL OFileDriver::getMinorVersion(  ) throw(RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OFileDriver::getMinorVersion" );
     return 0;
 }
 // --------------------------------------------------------------------------------
@@ -205,6 +213,7 @@ sal_Int32 SAL_CALL OFileDriver::getMinorVersion(  ) throw(RuntimeException)
 // XDataDefinitionSupplier
 Reference< XTablesSupplier > SAL_CALL OFileDriver::getDataDefinitionByConnection( const Reference< ::com::sun::star::sdbc::XConnection >& connection ) throw(::com::sun::star::sdbc::SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OFileDriver::getDataDefinitionByConnection" );
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(ODriver_BASE::rBHelper.bDisposed);
 
@@ -232,6 +241,7 @@ Reference< XTablesSupplier > SAL_CALL OFileDriver::getDataDefinitionByConnection
 // --------------------------------------------------------------------------------
 Reference< XTablesSupplier > SAL_CALL OFileDriver::getDataDefinitionByURL( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw(::com::sun::star::sdbc::SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OFileDriver::getDataDefinitionByURL" );
     if ( ! acceptsURL(url) )
     {
         ::connectivity::SharedResources aResources;

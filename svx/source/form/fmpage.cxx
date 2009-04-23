@@ -82,6 +82,7 @@
 using namespace ::svxform;
 #endif
 #include <comphelper/property.hxx>
+#include <rtl/logfile.hxx>
 
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::UNO_QUERY;
@@ -100,6 +101,7 @@ FmFormPage::FmFormPage(FmFormModel& rModel, StarBASIC* _pBasic, FASTBOOL bMaster
 #endif
            ,m_pBasic(_pBasic)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPage::FmFormPage" );
 }
 
 //------------------------------------------------------------------
@@ -112,6 +114,7 @@ FmFormPage::FmFormPage(const FmFormPage& rPage)
 #endif
            ,m_pBasic(0)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPage::FmFormPage" );
     m_sPageName = rPage.m_sPageName;
 }
 
@@ -126,6 +129,7 @@ FmFormPage::~FmFormPage()
 //------------------------------------------------------------------
 void FmFormPage::SetModel(SdrModel* pNewModel)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPage::SetModel" );
     /* #35055# */
     // we want to call the super's "SetModel" method even if the model is the
     // same, in case code somewhere in the system depends on it.  But our code
@@ -164,6 +168,7 @@ void FmFormPage::SetModel(SdrModel* pNewModel)
 //------------------------------------------------------------------
 SdrPage* FmFormPage::Clone() const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPage::Clone" );
     return new FmFormPage(*this);
     // hier fehlt noch ein kopieren der Objekte
 }
@@ -172,6 +177,7 @@ SdrPage* FmFormPage::Clone() const
 void FmFormPage::InsertObject(SdrObject* pObj, ULONG nPos,
                               const SdrInsertReason* pReason)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPage::InsertObject" );
     SdrPage::InsertObject( pObj, nPos, pReason );
 #ifndef SVX_LIGHT
     if (GetModel() && (!pReason || pReason->GetReason() != SDRREASON_STREAMING))
@@ -182,6 +188,7 @@ void FmFormPage::InsertObject(SdrObject* pObj, ULONG nPos,
 //------------------------------------------------------------------
 const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > & FmFormPage::GetForms( bool _bForceCreate ) const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPage::GetForms" );
 #ifndef SVX_LIGHT
     const SdrPage& rMasterPage( *this );
     const FmFormPage* pFormPage = dynamic_cast< const FmFormPage* >( &rMasterPage );
@@ -200,6 +207,7 @@ const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContai
 sal_Bool FmFormPage::RequestHelp( Window* pWindow, SdrView* pView,
                               const HelpEvent& rEvt )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPage::RequestHelp" );
 #ifndef SVX_LIGHT
     if( pView->IsAction() )
         return sal_False;
@@ -267,6 +275,7 @@ sal_Bool FmFormPage::RequestHelp( Window* pWindow, SdrView* pView,
 //------------------------------------------------------------------
 SdrObject* FmFormPage::RemoveObject(ULONG nObjNum)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPage::RemoveObject" );
     SdrObject* pObj = SdrPage::RemoveObject(nObjNum);
 #ifndef SVX_LIGHT
     if (pObj && GetModel())

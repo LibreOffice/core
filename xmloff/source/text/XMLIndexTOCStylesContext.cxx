@@ -111,7 +111,7 @@ void XMLIndexTOCStylesContext::EndElement()
     if (nOutlineLevel >= 0)
     {
         // copy vector into sequence
-        sal_Int32 nCount = aStyleNames.size();
+        const sal_Int32 nCount = aStyleNames.size();
         Sequence<OUString> aStyleNamesSequence(nCount);
         for(sal_Int32 i = 0; i < nCount; i++)
         {

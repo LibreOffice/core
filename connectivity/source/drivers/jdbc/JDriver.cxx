@@ -33,7 +33,6 @@
 #include "java/sql/Driver.hxx"
 #include "java/lang/Object.hxx"
 #include "java/lang/Class.hxx"
-#include "java/sql/DriverManager.hxx"
 #include "java/sql/DriverPropertyInfo.hxx"
 #include "java/sql/Connection.hxx"
 #include "java/util/Property.hxx"

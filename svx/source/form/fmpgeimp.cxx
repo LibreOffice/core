@@ -58,6 +58,7 @@
 #include <comphelper/uno3.hxx>
 #include <comphelper/types.hxx>
 #include <unotools/streamwrap.hxx>
+#include <rtl/logfile.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -76,7 +77,9 @@ FmFormPageImpl::FmFormPageImpl(FmFormPage* _pPage)
                :pPage(_pPage)
                ,m_bFirstActivation( sal_True )
                ,m_bAttemptedFormCreation( false )
+               ,m_bInFind( false )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPageImpl::FmFormPageImpl" );
     DBG_CTOR(FmFormPageImpl,NULL);
 }
 
@@ -163,7 +166,9 @@ FmFormPageImpl::FmFormPageImpl(FmFormPage* _pPage, const FmFormPageImpl& rImpl)
     :pPage(_pPage)
     ,m_bFirstActivation( sal_True )
     ,m_bAttemptedFormCreation( false )
+               ,m_bInFind( false )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPageImpl::FmFormPageImpl" );
     DBG_CTOR(FmFormPageImpl,NULL);
 
     // clone the Forms collection
@@ -239,6 +244,7 @@ FmFormPageImpl::FmFormPageImpl(FmFormPage* _pPage, const FmFormPageImpl& rImpl)
 //------------------------------------------------------------------------------
 const Reference< XNameContainer >& FmFormPageImpl::getForms( bool _bForceCreate )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPageImpl::getForms" );
     if ( m_xForms.is() || !_bForceCreate )
         return m_xForms;
 
@@ -288,6 +294,7 @@ FmFormPageImpl::~FmFormPageImpl()
 //------------------------------------------------------------------------------
 bool FmFormPageImpl::validateCurForm()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPageImpl::validateCurForm" );
     if ( !xCurrentForm.is() )
         return false;
 
@@ -302,12 +309,14 @@ bool FmFormPageImpl::validateCurForm()
 //------------------------------------------------------------------------------
 void FmFormPageImpl::setCurForm(Reference< ::com::sun::star::form::XForm >  xForm)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPageImpl::setCurForm" );
     xCurrentForm = xForm;
 }
 
 //------------------------------------------------------------------------------
 Reference< XForm >  FmFormPageImpl::getDefaultForm()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPageImpl::getDefaultForm" );
     Reference< XForm > xForm;
 
     Reference< XNameContainer > xForms( getForms() );
@@ -389,6 +398,7 @@ Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::findPlaceInFormCompo
     const Reference< XFormComponent > & rContent, const Reference< XDataSource > & rDatabase,
     const ::rtl::OUString& rDBTitle, const ::rtl::OUString& rCursorSource, sal_Int32 nCommandType )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPageImpl::findPlaceInFormComponentHierarchy" );
     // if the control already is child of a form, don't do anything
     if (!rContent.is() || rContent->getParent().is())
         return NULL;
@@ -478,6 +488,7 @@ Reference< XForm >  FmFormPageImpl::findFormForDataSource(
         const Reference< XForm > & rForm, const Reference< XDataSource > & _rxDatabase,
         const ::rtl::OUString& _rCursorSource, sal_Int32 nCommandType)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPageImpl::findFormForDataSource" );
     Reference< XForm >          xResultForm;
     Reference< XRowSet >        xDBForm(rForm, UNO_QUERY);
     Reference< XPropertySet >   xFormProps(rForm, UNO_QUERY);
@@ -558,6 +569,7 @@ Reference< XForm >  FmFormPageImpl::findFormForDataSource(
 //------------------------------------------------------------------------------
 ::rtl::OUString FmFormPageImpl::setUniqueName(const Reference< XFormComponent > & xFormComponent, const Reference< XForm > & xControls)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPageImpl::setUniqueName" );
 #if OSL_DEBUG_LEVEL > 0
     try
     {
@@ -599,6 +611,7 @@ Reference< XForm >  FmFormPageImpl::findFormForDataSource(
 
 UniString FmFormPageImpl::getDefaultName( sal_Int16 _nClassId, const Reference< XServiceInfo >& _rxObject )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPageImpl::getDefaultName" );
     sal_uInt16 nResId;
 
     switch (_nClassId)
@@ -641,6 +654,7 @@ UniString FmFormPageImpl::getDefaultName( sal_Int16 _nClassId, const Reference< 
 ::rtl::OUString FmFormPageImpl::getDefaultName(
     sal_Int16 _nClassId, const Reference< XForm >& _rxControls, const Reference< XServiceInfo >& _rxObject ) const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPageImpl::getDefaultName" );
     ::rtl::OUString aClassName=getDefaultName( _nClassId, _rxObject );
 
     Reference< ::com::sun::star::container::XNameAccess >  xNamedSet( _rxControls, UNO_QUERY );
@@ -650,6 +664,7 @@ UniString FmFormPageImpl::getDefaultName( sal_Int16 _nClassId, const Reference< 
 //------------------------------------------------------------------
 ::rtl::OUString FmFormPageImpl::getUniqueName(const ::rtl::OUString& rName, const Reference< ::com::sun::star::container::XNameAccess > & xNamedSet) const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPageImpl::getUniqueName" );
     Reference< ::com::sun::star::container::XIndexAccess >  xIndexSet(xNamedSet, UNO_QUERY);
     ::rtl::OUString sName( rName );
 
@@ -664,4 +679,3 @@ UniString FmFormPageImpl::getDefaultName( sal_Int16 _nClassId, const Reference< 
 
     return sName;
 }
-

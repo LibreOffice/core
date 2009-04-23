@@ -47,7 +47,7 @@ namespace xmloff
 //.........................................................................
 
     class IFormsExportContext;
-    class IFormsImportContext;
+    class OFormLayerXMLImport_Impl;
 
     //=====================================================================
     //= ORotationAngleHandler

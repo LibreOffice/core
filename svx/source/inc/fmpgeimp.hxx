@@ -43,6 +43,7 @@
 #include <comphelper/uno3.hxx>
 
 #include "svx/svxdllapi.h"
+#include <map>
 
 class SvStream;
 class FmFormObj;
@@ -66,6 +67,7 @@ DECLARE_LIST(FmObjectList, FmFormObj*)
 
 class SVX_DLLPRIVATE FmFormPageImpl
 {
+    ::std::map< ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >,SdrObject* > m_aComponentMap;
     ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>                xCurrentForm;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer>  m_xForms;
     FmFormPage*     pPage;
@@ -73,6 +75,7 @@ class SVX_DLLPRIVATE FmFormPageImpl
 
     sal_Bool        m_bFirstActivation;
     bool            m_bAttemptedFormCreation;
+    bool            m_bInFind;
 
 protected:
     void Init();

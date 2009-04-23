@@ -37,6 +37,7 @@
 #include "calc/CTables.hxx"
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
+#include <rtl/logfile.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -49,10 +50,12 @@ using namespace connectivity::calc;
 // -------------------------------------------------------------------------
 OCalcCatalog::OCalcCatalog(OCalcConnection* _pCon) : file::OFileCatalog(_pCon)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "calc", "Ocke.Janssen@sun.com", "OCalcCatalog::OCalcCatalog" );
 }
 // -------------------------------------------------------------------------
 void OCalcCatalog::refreshTables()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "calc", "Ocke.Janssen@sun.com", "OCalcCatalog::refreshTables" );
     TStringVector aVector;
     Sequence< ::rtl::OUString > aTypes;
     OCalcConnection::ODocHolder aDocHodler(((OCalcConnection*)m_pConnection));
@@ -71,8 +74,8 @@ void OCalcCatalog::refreshTables()
         m_pTables = new OCalcTables(m_xMetaData,*this,m_aMutex,aVector);
 
     // this avoids that the document will be loaded a 2nd time when one table will be accessed.
-    if ( m_pTables && m_pTables->hasElements() )
-        m_pTables->getByIndex(0);
+    //if ( m_pTables && m_pTables->hasElements() )
+    //    m_pTables->getByIndex(0);
 }
 // -----------------------------------------------------------------------------
 

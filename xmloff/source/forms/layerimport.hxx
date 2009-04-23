@@ -81,9 +81,7 @@ namespace xmloff
     //= OFormLayerXMLImport_Impl
     //=====================================================================
     class OFormLayerXMLImport_Impl
-                :public IControlIdMap
-                ,public IFormsImportContext
-                ,public ODefaultEventAttacherManager
+                : public ODefaultEventAttacherManager
     {
         friend class OFormLayerXMLImport;
 
@@ -127,54 +125,51 @@ namespace xmloff
 
     public:
         // IControlIdMap
-        virtual void    registerControlId(
+        void    registerControlId(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControl,
             const ::rtl::OUString& _rId);
-        virtual void    registerControlReferences(
+        void    registerControlReferences(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControl,
             const ::rtl::OUString& _rReferringControls);
 
-        // IFormsImportContext
-        virtual IControlIdMap&              getControlIdMap();
-        virtual OAttribute2Property&        getAttributeMap();
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-                                            getServiceFactory();
-        virtual SvXMLImport&                getGlobalContext();
+        // OFormLayerXMLImport_Impl
+        inline OAttribute2Property&         getAttributeMap()   { return m_aAttributeMetaData; }
+        inline SvXMLImport&                 getGlobalContext()  { return m_rImporter; }
         const SvXMLStyleContext*            getStyleElement(const ::rtl::OUString& _rStyleName) const;
-        virtual void                        enterEventContext();
-        virtual void                        leaveEventContext();
+        void                                enterEventContext();
+        void                                leaveEventContext();
         void                                applyControlNumberStyle(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControlModel,
             const ::rtl::OUString& _rControlNumerStyleName
         );
-        virtual void                        registerCellValueBinding(
+        void                        registerCellValueBinding(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControlModel,
             const ::rtl::OUString& _rCellAddress
         );
 
-        virtual void                        registerCellRangeListSource(
+        void                        registerCellRangeListSource(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControlModel,
             const ::rtl::OUString& _rCellRangeAddress
         );
 
-        virtual void                        registerXFormsValueBinding(
+        void                        registerXFormsValueBinding(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControlModel,
             const ::rtl::OUString& _rBindingID
         );
 
-        virtual void                        registerXFormsListBinding(
+        void                        registerXFormsListBinding(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControlModel,
             const ::rtl::OUString& _rBindingID
         );
 
-        virtual void                        registerXFormsSubmission(
+        void                        registerXFormsSubmission(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControlModel,
             const ::rtl::OUString& _rSubmissionID
         );
 
     protected:
         OFormLayerXMLImport_Impl(SvXMLImport& _rImporter);
-        ~OFormLayerXMLImport_Impl();
+        virtual ~OFormLayerXMLImport_Impl();
 
         /** retrieves the property mapper form form related auto styles.
         */

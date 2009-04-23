@@ -52,7 +52,7 @@ void java_util_Properties::setProperty(const ::rtl::OUString key, const ::rtl::O
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     jobject out(0);
-    if( t.pEnv )
+
     {
         jvalue args[2];
         // Parameter konvertieren
@@ -62,14 +62,10 @@ void java_util_Properties::setProperty(const ::rtl::OUString key, const ::rtl::O
         static const char * cSignature = "(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/Object;";
         static const char * cMethodName = "setProperty";
         // Java-Call absetzen
-        static jmethodID mID = NULL;
-        if ( !mID  )
-            mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
-        if( mID )
-        {
-            out = t.pEnv->CallObjectMethod(object, mID, args[0].l,args[1].l);
-            ThrowSQLException(t.pEnv,NULL);
-        }
+        static jmethodID mID(NULL);
+        obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
+        out = t.pEnv->CallObjectMethod(object, mID, args[0].l,args[1].l);
+        ThrowSQLException(t.pEnv,NULL);
         t.pEnv->DeleteLocalRef((jstring)args[1].l);
         t.pEnv->DeleteLocalRef((jstring)args[0].l);
         ThrowSQLException(t.pEnv,0);
@@ -83,27 +79,14 @@ jclass java_util_Properties::theClass = 0;
 java_util_Properties::~java_util_Properties()
 {}
 
-jclass java_util_Properties::getMyClass()
+jclass java_util_Properties::getMyClass() const
 {
     // die Klasse muss nur einmal geholt werden, daher statisch
-    if( !theClass ){
-        SDBThreadAttach t;
-        if( !t.pEnv ) return (jclass)NULL;
-        jclass tempClass = t.pEnv->FindClass( "java/util/Properties" );
-        jclass globClass = (jclass)t.pEnv->NewGlobalRef( tempClass );
-        t.pEnv->DeleteLocalRef( tempClass );
-        saveClassRef( globClass );
-    }
+    if( !theClass )
+        theClass = findMyClass("java/util/Properties");
     return theClass;
 }
 
-void java_util_Properties::saveClassRef( jclass pClass )
-{
-    if( pClass==NULL  )
-        return;
-    // der uebergebe Klassen-Handle ist schon global, daher einfach speichern
-    theClass = pClass;
-}
 //--------------------------------------------------------------------------
 java_util_Properties::java_util_Properties( ): java_lang_Object( NULL, (jobject)NULL )
 {
@@ -114,9 +97,8 @@ java_util_Properties::java_util_Properties( ): java_lang_Object( NULL, (jobject)
     // temporaere Variable initialisieren
     static const char * cSignature = "()V";
     jobject tempObj;
-    static jmethodID mID = NULL;
-    if ( !mID  )
-        mID  = t.pEnv->GetMethodID( getMyClass(), "<init>", cSignature );OSL_ENSURE(mID,"Unknown method id!");
+    static jmethodID mID(NULL);
+    obtainMethodId(t.pEnv, "<init>",cSignature, mID);
     tempObj = t.pEnv->NewObject( getMyClass(), mID);
     saveRef( t.pEnv, tempObj );
     t.pEnv->DeleteLocalRef( tempObj );
@@ -218,7 +200,7 @@ sal_Bool connectivity::isExceptionOccured(JNIEnv *pEnv,sal_Bool _bClear)
         if ( _bClear )
             pEnv->ExceptionClear();
 #if OSL_DEBUG_LEVEL > 1
-        if(pEnv->IsInstanceOf(pThrowable,java_sql_SQLException_BASE::getMyClass()))
+        if(pEnv->IsInstanceOf(pThrowable,java_sql_SQLException_BASE::st_getMyClass()))
         {
 
             java_sql_SQLException_BASE* pException = new java_sql_SQLException_BASE(pEnv,pThrowable);

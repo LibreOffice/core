@@ -52,30 +52,14 @@ jclass java_sql_DriverPropertyInfo::theClass = 0;
 java_sql_DriverPropertyInfo::~java_sql_DriverPropertyInfo()
 {}
 // --------------------------------------------------------------------------------
-jclass java_sql_DriverPropertyInfo::getMyClass()
+jclass java_sql_DriverPropertyInfo::getMyClass() const
 {
     // die Klasse muss nur einmal geholt werden, daher statisch
     if( !theClass )
-    {
-        SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
-        if( !t.pEnv ) return (jclass)0;
-        jclass tempClass = t.pEnv->FindClass("java/sql/DriverPropertyInfo");
-        OSL_ENSURE(tempClass,"Java : FindClass nicht erfolgreich!");
-        jclass globClass = (jclass)t.pEnv->NewGlobalRef( tempClass );
-        t.pEnv->DeleteLocalRef( tempClass );
-        saveClassRef( globClass );
-    }
+        theClass = findMyClass("java/sql/DriverPropertyInfo");
     return theClass;
 }
 
-// --------------------------------------------------------------------------------
-void java_sql_DriverPropertyInfo::saveClassRef( jclass pClass )
-{
-    if( pClass==0  )
-        return;
-    // der uebergebe Klassen-Handle ist schon global, daher einfach speichern
-    theClass = pClass;
-}
 // --------------------------------------------------------------------------------
 java_sql_DriverPropertyInfo::operator starsdbc::DriverPropertyInfo()
 {
@@ -89,64 +73,64 @@ java_sql_DriverPropertyInfo::operator starsdbc::DriverPropertyInfo()
     return aInfo;
 }
 // --------------------------------------------------------------------------------
-::rtl::OUString java_sql_DriverPropertyInfo::name() const
+::rtl::OUString java_sql_DriverPropertyInfo::name()
 {
     ::rtl::OUString aStr;
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
-    if( t.pEnv )
+
     {
-        jfieldID id = t.pEnv->GetFieldID(java_sql_DriverPropertyInfo::getMyClass(),"name","Ljava/lang/String;");
+        jfieldID id = t.pEnv->GetFieldID(getMyClass(),"name","Ljava/lang/String;");
         if(id)
             aStr = JavaString2String(t.pEnv,(jstring)t.pEnv->GetObjectField( object, id));
     } //t.pEnv
     return aStr;
 }
 // --------------------------------------------------------------------------------
-::rtl::OUString java_sql_DriverPropertyInfo::description() const
+::rtl::OUString java_sql_DriverPropertyInfo::description()
 {
     ::rtl::OUString aStr;
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
-    if( t.pEnv )
+
     {
-        jfieldID id = t.pEnv->GetFieldID(java_sql_DriverPropertyInfo::getMyClass(),"description","Ljava/lang/String;");
+        jfieldID id = t.pEnv->GetFieldID(getMyClass(),"description","Ljava/lang/String;");
         if(id)
             aStr = JavaString2String(t.pEnv,(jstring)t.pEnv->GetObjectField( object, id));
     } //t.pEnv
     return aStr;
 }
 // --------------------------------------------------------------------------------
-::rtl::OUString java_sql_DriverPropertyInfo::value() const
+::rtl::OUString java_sql_DriverPropertyInfo::value()
 {
     ::rtl::OUString aStr;
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
-    if( t.pEnv )
+
     {
-        jfieldID id = t.pEnv->GetFieldID(java_sql_DriverPropertyInfo::getMyClass(),"value","Ljava/lang/String;");
+        jfieldID id = t.pEnv->GetFieldID(getMyClass(),"value","Ljava/lang/String;");
         if(id)
             aStr = JavaString2String(t.pEnv,(jstring)t.pEnv->GetObjectField( object, id));
     } //t.pEnv
     return aStr;
 }
 // --------------------------------------------------------------------------------
-sal_Bool java_sql_DriverPropertyInfo::required() const
+sal_Bool java_sql_DriverPropertyInfo::required()
 {
     jboolean out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
-    if( t.pEnv )
+
     {
-        jfieldID id = t.pEnv->GetFieldID(java_sql_DriverPropertyInfo::getMyClass(),"required","Z");
+        jfieldID id = t.pEnv->GetFieldID(getMyClass(),"required","Z");
         if(id)
             out = t.pEnv->GetBooleanField( object, id);
     } //t.pEnv
     return out;
 }
 // --------------------------------------------------------------------------------
-Sequence< ::rtl::OUString> java_sql_DriverPropertyInfo::choices() const
+Sequence< ::rtl::OUString> java_sql_DriverPropertyInfo::choices()
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
-    if( t.pEnv )
+
     {
-        jfieldID id = t.pEnv->GetFieldID(java_sql_DriverPropertyInfo::getMyClass(),"choices","[Ljava/lang/String;");
+        jfieldID id = t.pEnv->GetFieldID(getMyClass(),"choices","[Ljava/lang/String;");
         if(id)
         {
             const java_lang_String * pEmpty = NULL;

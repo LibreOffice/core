@@ -38,6 +38,7 @@
 #endif
 #include "calc/CCatalog.hxx"
 #include <comphelper/types.hxx>
+#include <rtl/logfile.hxx>
 
 using namespace ::comphelper;
 using namespace connectivity;
@@ -53,6 +54,7 @@ namespace starutil      = ::com::sun::star::util;
 
 sdbcx::ObjectType OCalcTables::createObject(const ::rtl::OUString& _rName)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "calc", "Ocke.Janssen@sun.com", "OCalcTables::createObject" );
     OCalcTable* pTable = new OCalcTable(this,(OCalcConnection*)static_cast<OFileCatalog&>(m_rParent).getConnection(),
                                         _rName,::rtl::OUString::createFromAscii("TABLE"));
     sdbcx::ObjectType xRet = pTable;

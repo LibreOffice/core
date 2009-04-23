@@ -533,7 +533,7 @@ void SchXMLSeries2Context::EndElement()
         maSeriesChartTypeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.chart2.ScatterChartType")) )
     {
         bCreateXValues = true;
-        if( maDomainAddresses.size() > 0 )
+        if( !maDomainAddresses.empty() )
         {
             aXValuesRange = maDomainAddresses.front();
             bHasOwnDomains = true;

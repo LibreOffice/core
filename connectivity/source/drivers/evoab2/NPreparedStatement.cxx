@@ -261,9 +261,16 @@ void SAL_CALL OEvoabPreparedStatement::setObjectNull( sal_Int32 /*parameterIndex
 }
 // -------------------------------------------------------------------------
 
-void SAL_CALL OEvoabPreparedStatement::setObject( sal_Int32 /*parameterIndex*/, const Any& /*x*/ ) throw(SQLException, RuntimeException)
+void SAL_CALL OEvoabPreparedStatement::setObject( sal_Int32 parameterIndex, const Any& x ) throw(SQLException, RuntimeException)
 {
-    ::dbtools::throwFunctionNotSupportedException( "XParameters::setObject", *this );
+    if(!::dbtools::implSetObject(this,parameterIndex,x))
+    {
+        const ::rtl::OUString sError( m_pConnection->getResources().getResourceStringWithSubstitution(
+                STR_UNKNOWN_PARA_TYPE,
+                "$position$", ::rtl::OUString::valueOf(parameterIndex)
+             ) );
+        ::dbtools::throwGenericSQLException(sError,*this);
+    }
 }
 // -------------------------------------------------------------------------
 

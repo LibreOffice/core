@@ -57,7 +57,7 @@ java_sql_Date::java_sql_Date( const ::com::sun::star::util::Date& _rOut ) : java
     // temporaere Variable initialisieren
     static const char * cSignature = "(Ljava/lang/String;)Ljava/sql/Date;";
     jobject tempObj;
-    static jmethodID mID = NULL;
+    static jmethodID mID(NULL);
     if ( !mID  )
         mID  = t.pEnv->GetStaticMethodID( getMyClass(), "valueOf", cSignature );OSL_ENSURE(mID,"Unknown method id!");
     tempObj = t.pEnv->CallStaticObjectMethod( getMyClass(), mID, args[0].l );
@@ -69,29 +69,15 @@ java_sql_Date::java_sql_Date( const ::com::sun::star::util::Date& _rOut ) : java
 java_sql_Date::~java_sql_Date()
 {}
 
-jclass java_sql_Date::getMyClass()
+jclass java_sql_Date::getMyClass() const
 {
     // die Klasse muss nur einmal geholt werden, daher statisch
-    if( !theClass ){
-        SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
-        if( !t.pEnv ) return (jclass)0;
-        jclass tempClass = t.pEnv->FindClass("java/sql/Date"); OSL_ENSURE(tempClass,"Java : FindClass nicht erfolgreich!");
-        jclass globClass = (jclass)t.pEnv->NewGlobalRef( tempClass );
-        t.pEnv->DeleteLocalRef( tempClass );
-        saveClassRef( globClass );
-    }
+    if( !theClass )
+        theClass = findMyClass("java/sql/Date");
     return theClass;
 }
 // -----------------------------------------------------------------------------
 
-void java_sql_Date::saveClassRef( jclass pClass )
-{
-    if( pClass==0  )
-        return;
-    // der uebergebe Klassen-Handle ist schon global, daher einfach speichern
-    theClass = pClass;
-}
-// -----------------------------------------------------------------------------
 java_sql_Date::operator ::com::sun::star::util::Date()
 {
     return ::dbtools::DBTypeConversion::toDate(toString());
@@ -106,26 +92,12 @@ jclass java_sql_Time::theClass = 0;
 java_sql_Time::~java_sql_Time()
 {}
 
-jclass java_sql_Time::getMyClass()
+jclass java_sql_Time::getMyClass() const
 {
     // die Klasse muss nur einmal geholt werden, daher statisch
-    if( !theClass ){
-        SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
-        if( !t.pEnv ) return (jclass)0;
-        jclass tempClass = t.pEnv->FindClass("java/sql/Time"); OSL_ENSURE(tempClass,"Java : FindClass nicht erfolgreich!");
-        jclass globClass = (jclass)t.pEnv->NewGlobalRef( tempClass );
-        t.pEnv->DeleteLocalRef( tempClass );
-        saveClassRef( globClass );
-    }
+    if( !theClass )
+        theClass = findMyClass("java/sql/Time");
     return theClass;
-}
-
-void java_sql_Time::saveClassRef( jclass pClass )
-{
-    if( pClass==0  )
-        return;
-    // der uebergebe Klassen-Handle ist schon global, daher einfach speichern
-    theClass = pClass;
 }
 
 java_sql_Time::java_sql_Time( const ::com::sun::star::util::Time& _rOut ): java_util_Date( NULL, (jobject)NULL )
@@ -143,7 +115,7 @@ java_sql_Time::java_sql_Time( const ::com::sun::star::util::Time& _rOut ): java_
     // temporaere Variable initialisieren
     static const char * cSignature = "(Ljava/lang/String;)Ljava/sql/Time;";
     jobject tempObj;
-    static jmethodID mID = NULL;
+    static jmethodID mID(NULL);
     if ( !mID  )
         mID  = t.pEnv->GetStaticMethodID( getMyClass(), "valueOf", cSignature );OSL_ENSURE(mID,"Unknown method id!");
     tempObj = t.pEnv->CallStaticObjectMethod( getMyClass(), mID, args[0].l );
@@ -166,26 +138,12 @@ jclass java_sql_Timestamp::theClass = 0;
 java_sql_Timestamp::~java_sql_Timestamp()
 {}
 
-jclass java_sql_Timestamp::getMyClass()
+jclass java_sql_Timestamp::getMyClass() const
 {
     // die Klasse muss nur einmal geholt werden, daher statisch
-    if( !theClass ){
-        SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
-        if( !t.pEnv ) return (jclass)0;
-        jclass tempClass = t.pEnv->FindClass("java/sql/Timestamp"); OSL_ENSURE(tempClass,"Java : FindClass nicht erfolgreich!");
-        jclass globClass = (jclass)t.pEnv->NewGlobalRef( tempClass );
-        t.pEnv->DeleteLocalRef( tempClass );
-        saveClassRef( globClass );
-    }
+    if( !theClass )
+        theClass = findMyClass("java/sql/Timestamp");
     return theClass;
-}
-
-void java_sql_Timestamp::saveClassRef( jclass pClass )
-{
-    if( pClass==0  )
-        return;
-    // der uebergebe Klassen-Handle ist schon global, daher einfach speichern
-    theClass = pClass;
 }
 
 java_sql_Timestamp::java_sql_Timestamp(const ::com::sun::star::util::DateTime& _rOut)
@@ -205,7 +163,7 @@ java_sql_Timestamp::java_sql_Timestamp(const ::com::sun::star::util::DateTime& _
     // temporaere Variable initialisieren
     static const char * cSignature = "(Ljava/lang/String;)Ljava/sql/Timestamp;";
     jobject tempObj;
-    static jmethodID mID = NULL;
+    static jmethodID mID(NULL);
     if ( !mID  )
         mID  = t.pEnv->GetStaticMethodID( getMyClass(), "valueOf", cSignature );OSL_ENSURE(mID,"Unknown method id!");
     tempObj = t.pEnv->CallStaticObjectMethod( getMyClass(), mID, args[0].l );
@@ -217,40 +175,14 @@ java_sql_Timestamp::java_sql_Timestamp(const ::com::sun::star::util::DateTime& _
 
 sal_Int32 java_sql_Timestamp::getNanos()
 {
-    jint out(0);
-    SDBThreadAttach t;
-    if( t.pEnv ){
-
-        // temporaere Variable initialisieren
-        static const char * cSignature = "()I";
-        static const char * cMethodName = "getNanos";
-        // Java-Call absetzen
-        static jmethodID mID = NULL;
-        if ( !mID  )
-            mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
-        if( mID ){
-            out = t.pEnv->CallIntMethod( object, mID);
-        } //mID
-    } //t.pEnv
-    return (sal_Int32)out;
+    static jmethodID mID(NULL);
+    return callIntMethod("getNanos",mID);
 }
 
 void java_sql_Timestamp::setNanos( sal_Int32 _par0 )
 {
-    SDBThreadAttach t;
-    if( t.pEnv ){
-        // temporaere Variable initialisieren
-        static const char * cSignature = "(I)V";
-        static const char * cMethodName = "setNanos";
-        // Java-Call absetzen
-        static jmethodID mID = NULL;
-        if ( !mID  )
-            mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
-        if( mID ){
-            t.pEnv->CallVoidMethod( object, mID, _par0 );
-            // und aufraeumen
-        } //mID
-    } //t.pEnv
+    static jmethodID mID(NULL);
+    callVoidMethodWithIntArg("setNanos",mID,_par0);
 }
 // -----------------------------------------------------------------------------
 java_sql_Timestamp::operator ::com::sun::star::util::DateTime()

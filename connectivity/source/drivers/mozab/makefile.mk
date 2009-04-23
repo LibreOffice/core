@@ -33,6 +33,7 @@ PRJINC=..$/..
 PRJNAME=connectivity
 TARGET=mozab
 TARGET2=$(TARGET)drv
+VISIBILITY_HIDDEN=TRUE
 
 .IF ( "$(SYSTEM_MOZILLA)" == "YES" && "$(WITH_MOZILLA)" == "YES") || "$(WITH_MOZILLA)" == "NO" || ( "$(OS)" == "MACOSX" )
 all: 

@@ -1046,19 +1046,20 @@ void SvXMLExport::ImplExportStyles( sal_Bool )
     }
 
     // transfer style names (+ families) TO other components (if appropriate)
-    OUString sStyleNames( RTL_CONSTASCII_USTRINGPARAM("StyleNames") );
-    OUString sStyleFamilies( RTL_CONSTASCII_USTRINGPARAM("StyleFamilies") );
-    if( ( ( mnExportFlags & EXPORT_CONTENT ) == 0 )
-        && mxExportInfo.is()
-        && mxExportInfo->getPropertySetInfo()->hasPropertyByName( sStyleNames )
-        && mxExportInfo->getPropertySetInfo()->hasPropertyByName( sStyleFamilies ) )
+    if( ( ( mnExportFlags & EXPORT_CONTENT ) == 0 ) && mxExportInfo.is() )
     {
-        Sequence<sal_Int32> aStyleFamilies;
-        Sequence<OUString> aStyleNames;
-        mxAutoStylePool->GetRegisteredNames( aStyleFamilies, aStyleNames );
-        mxExportInfo->setPropertyValue( sStyleNames, makeAny( aStyleNames ) );
-        mxExportInfo->setPropertyValue( sStyleFamilies,
-                                       makeAny( aStyleFamilies ) );
+        static OUString sStyleNames( RTL_CONSTASCII_USTRINGPARAM("StyleNames") );
+        static OUString sStyleFamilies( RTL_CONSTASCII_USTRINGPARAM("StyleFamilies") );
+        uno::Reference< beans::XPropertySetInfo > xPropertySetInfo = mxExportInfo->getPropertySetInfo();
+        if ( xPropertySetInfo->hasPropertyByName( sStyleNames ) && xPropertySetInfo->hasPropertyByName( sStyleFamilies ) )
+        {
+            Sequence<sal_Int32> aStyleFamilies;
+            Sequence<OUString> aStyleNames;
+            mxAutoStylePool->GetRegisteredNames( aStyleFamilies, aStyleNames );
+            mxExportInfo->setPropertyValue( sStyleNames, makeAny( aStyleNames ) );
+            mxExportInfo->setPropertyValue( sStyleFamilies,
+                                           makeAny( aStyleFamilies ) );
+        }
     }
 }
 
