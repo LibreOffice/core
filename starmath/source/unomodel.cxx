@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -42,6 +42,7 @@
 #include <unotools/processfactory.hxx>
 #include <svx/paperinf.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/print.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -75,10 +76,12 @@ using namespace ::com::sun::star::formula;
 using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::script;
 
+
 #define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
 #define MM100_TO_TWIP(MM100)    ((MM100) >= 0 ? (((MM100)*72L+63L)/127L) : (((MM100)*72L-63L)/127L))
 
-#define C2U(cChar)  rtl::OUString::createFromAscii(cChar)
+#define A2OU(cChar)     rtl::OUString::createFromAscii(cChar)
+
 
 class SmPrintUIOptions : public vcl::PrinterOptionsHelper
 {
@@ -95,8 +98,8 @@ SmPrintUIOptions::SmPrintUIOptions()
 
     // create sequence of print UI options
     m_aUIProperties.realloc( 10 );
-
-
+    
+    
     // create Section for formula (results in an extra tab page in dialog)
     m_aUIProperties[0].Value = getGroupControlOpt( aLocalizedStrings.GetString( 0 ) );
 
@@ -130,7 +133,7 @@ SmPrintUIOptions::SmPrintUIOptions()
                                                     aPrintFormatProp,
                                                     aChoices, 0
                                                     );
-
+    
     // create a numeric box for scale dependent on PrintFormat = "Scaling"
     m_aUIProperties[ 7 ].Value = getRangeControlOpt( rtl::OUString(),
                                                      rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintScale" ) ),
@@ -145,7 +148,7 @@ SmPrintUIOptions::SmPrintUIOptions()
 
     // create a bool option for ignore spacing
     m_aUIProperties[9].Value = getBoolControlOpt( aLocalizedStrings.GetString( 10 ),
-                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Border" ) ),
+                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IgnoreSpaces" ) ),
                                                   sal_True );
 }
 
@@ -434,8 +437,8 @@ OUString SmModel::getImplementationName(void) throw( uno::RuntimeException )
 sal_Bool SmModel::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
     return (
-            rServiceName == C2U("com.sun.star.document.OfficeDocument"  ) ||
-            rServiceName == C2U("com.sun.star.formula.FormulaProperties")
+            rServiceName == A2OU("com.sun.star.document.OfficeDocument"  ) ||
+            rServiceName == A2OU("com.sun.star.formula.FormulaProperties")
            );
 }
 /*-- 20.01.04 11:21:00---------------------------------------------------
@@ -452,8 +455,8 @@ uno::Sequence< OUString > SmModel::getSupportedServiceNames_Static(void)
 
     uno::Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
-    pArray[0] = C2U("com.sun.star.document.OfficeDocument");
-    pArray[1] = C2U("com.sun.star.formula.FormulaProperties");
+    pArray[0] = A2OU("com.sun.star.document.OfficeDocument");
+    pArray[1] = A2OU("com.sun.star.formula.FormulaProperties");
     return aRet;
 }
 
@@ -937,7 +940,7 @@ sal_Int32 SAL_CALL SmModel::getRendererCount(
     ::vos::OGuard aGuard(Application::GetSolarMutex());
     if( ! m_pPrintUIOptions )
         m_pPrintUIOptions = new SmPrintUIOptions();
-
+    
     return 1;
 }
 
@@ -999,7 +1002,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SmModel::getRenderer(
     rValue.Value <<= aPageSize;
 
     m_pPrintUIOptions->appendPrintUIOptions( aRenderer );
-
+    
     return aRenderer;
 }
 
@@ -1010,9 +1013,6 @@ void SAL_CALL SmModel::render(
     throw (IllegalArgumentException, RuntimeException)
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
-
-    if( ! m_pPrintUIOptions )
-        m_pPrintUIOptions = new SmPrintUIOptions();
 
     if (0 != nRenderer)
         throw IllegalArgumentException();
@@ -1088,6 +1088,25 @@ void SAL_CALL SmModel::render(
                 if ((aPrtPaperSize.Width() - (aPrtPageOffset.X() + OutputRect.Right())) < 1500)
                     OutputRect.Right() -= 1500 - (aPrtPaperSize.Width() -
                                                 (aPrtPageOffset.X() + OutputRect.Right()));
+
+                // apply print options to be used in Impl_Print
+                SmModule *pp = SM_MOD1();
+                SmConfig *pConfig = pp->GetConfig();
+                DBG_ASSERT( pConfig, "SmModel::render: configuration not found" );
+                if (pConfig)
+                {
+                    if (!m_pPrintUIOptions)
+                        m_pPrintUIOptions = new SmPrintUIOptions();
+                    m_pPrintUIOptions->processProperties( rxOptions );
+
+                    pConfig->SetPrintTitle( m_pPrintUIOptions->getBoolValue( A2OU("TitleRow"), pConfig->IsPrintTitle() ) );
+                    pConfig->SetPrintFormulaText( m_pPrintUIOptions->getBoolValue( A2OU("FormulaText"), pConfig->IsPrintFormulaText() ) );
+                    pConfig->SetPrintFrame( m_pPrintUIOptions->getBoolValue( A2OU("Border"), pConfig->IsPrintFrame() ) );
+                    pConfig->SetPrintSize( static_cast< SmPrintSize >(m_pPrintUIOptions->getIntValue( A2OU("PrintFormat"), pConfig->GetPrintSize() )) );
+                    pConfig->SetPrintZoomFactor( static_cast< USHORT >(m_pPrintUIOptions->getIntValue( A2OU("PrintScale"), pConfig->GetPrintZoomFactor() )) );
+                    pConfig->SetIgnoreSpacesRight( m_pPrintUIOptions->getBoolValue( A2OU("IgnoreSpaces"), pConfig->IsIgnoreSpacesRight() ) );
+                    pConfig->Commit();
+                }
 
                 pView->Impl_Print( *pOut, PRINT_SIZE_NORMAL,
                      Rectangle( OutputRect ), Point() );
