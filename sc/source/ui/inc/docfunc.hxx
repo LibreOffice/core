@@ -37,7 +37,7 @@
 #include "formula/grammar.hxx"
 
 class ScEditEngineDefaulter;
-class SfxUndoAction;
+class SdrUndoAction;
 class ScAddress;
 class ScDocShell;
 class ScMarkData;
@@ -67,7 +67,7 @@ public:
                     ScDocFunc( ScDocShell& rDocSh ): rDocShell(rDocSh) {}
                     ~ScDocFunc() {}
 
-    DECL_LINK( NotifyDrawUndo, SfxUndoAction* );
+    DECL_LINK( NotifyDrawUndo, SdrUndoAction* );
 
     BOOL            DetectiveAddPred(const ScAddress& rPos);
     BOOL            DetectiveDelPred(const ScAddress& rPos);

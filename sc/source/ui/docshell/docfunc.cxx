@@ -98,9 +98,14 @@ using namespace com::sun::star;
 
 //========================================================================
 
-IMPL_LINK( ScDocFunc, NotifyDrawUndo, SfxUndoAction*, pUndoAction )
+IMPL_LINK( ScDocFunc, NotifyDrawUndo, SdrUndoAction*, pUndoAction )
 {
-    rDocShell.GetUndoManager()->AddUndoAction( new ScUndoDraw( pUndoAction, &rDocShell ) );
+    // #i101118# if drawing layer collects the undo actions, add it there
+    ScDrawLayer* pDrawLayer = rDocShell.GetDocument()->GetDrawLayer();
+    if( pDrawLayer && pDrawLayer->IsRecording() )
+        pDrawLayer->AddCalcUndo( pUndoAction );
+    else
+        rDocShell.GetUndoManager()->AddUndoAction( new ScUndoDraw( pUndoAction, &rDocShell ) );
     rDocShell.SetDrawModified();
     return 0;
 }
