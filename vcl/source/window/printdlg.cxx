@@ -50,6 +50,8 @@ using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 
+#define SMHID( a, b ) SetSmartHelpId( SmartId( String( RTL_CONSTASCII_USTRINGPARAM( ".HelpId:vcl:PrintDialog:"  a ":" b ) ) ) )
+
 PrintDialog::PrintPreviewWindow::PrintPreviewWindow( Window* i_pParent, const ResId& i_rId )
     : Window( i_pParent, i_rId ),
       mfScaleX( 1 ),
@@ -113,6 +115,23 @@ PrintDialog::PrinterTabPage::PrinterTabPage( Window* i_pParent, const ResId& rRe
     , maNupLandscape( this, VclResId( SV_PRINT_PRT_NUP_LANDSCAPE ) )
 {
     FreeResource();
+    maPrinters.SMHID( "PrinterPage", "PrinterList" );
+    maSetupButton.SMHID( "PrinterPage", "Setup" );
+    maType.SMHID( "PrinterPage", "Type" );
+    maTypeText.SMHID( "PrinterPage", "TypeText" );
+    maStatus.SMHID( "PrinterPage", "Status" );
+    maStatusText.SMHID( "PrinterPage", "StatusText" );
+    maLocation.SMHID( "PrinterPage", "Locaction" );
+    maLocText.SMHID( "PrinterPage", "LocactionText" );
+    maComment.SMHID( "PrinterPage", "Comment" );
+    maCommentText.SMHID( "PrinterPage", "CommentText" );
+    maNupLine.SMHID( "PrinterPage", "NUPline" );
+    maNupRowsTxt.SMHID( "PrinterPage", "NUPRowsText" );
+    maNupRowsEdt.SMHID( "PrinterPage", "NUPRows" );
+    maNupColTxt.SMHID( "PrinterPage", "NUPColumnsText" );
+    maNupColEdt.SMHID( "PrinterPage", "NUPColumns" );
+    maNupPortrait.SMHID( "PrinterPage", "NUPPortrait" );
+    maNupLandscape.SMHID( "PrinterPage", "NUPLandscape" );
 }
 
 PrintDialog::PrinterTabPage::~PrinterTabPage()
@@ -139,6 +158,18 @@ PrintDialog::JobTabPage::JobTabPage( Window* i_pParent, const ResId& rResId )
     , maNoCollateHCImg( VclResId( SV_PRINT_NOCOLLATE_HC_IMG ) )
 {
     FreeResource();
+    maPrinters.SMHID( "JobPage", "PrinterList" );
+    maToFileBox.SMHID( "JobPage", "ToFile" );
+    maPrintRange.SMHID( "JobPage", "PrintRange" );
+    maAllButton.SMHID( "JobPage", "AllButton" );
+    maPagesButton.SMHID( "JobPage", "PagesButton" );
+    maSelectionButton.SMHID( "JobPage", "SelectionButton" );
+    maPagesEdit.SMHID( "JobPage", "Pages" );
+    maCopies.SMHID( "JobPage", "CopiesLine" );
+    maCopyCount.SMHID( "JobPage", "CopiesText" );
+    maCopyCountField.SMHID( "JobPage", "Copies" );
+    maCollateBox.SMHID( "JobPage", "Collate" );
+    maCollateImage.SMHID( "JobPage", "CollateImage" );
 }
 
 PrintDialog::JobTabPage::~JobTabPage()
