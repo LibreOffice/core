@@ -90,7 +90,7 @@ BUILD_ACTION=$(ENV_BUILD) $(GNUMAKE) -j$(EXTMAXPROCESS) ; $(GNUMAKE) install ; c
 # WINDOWS
 # ----------------------------------
 .IF "$(COM)"=="GCC"
-PATCH_FILE_NAME=Python-$(PYVERSION)-mingw.patch
+PATCH_FILES=Python-$(PYVERSION)-mingw.patch
 BUILD_DIR=
 MYCWD=$(shell cygpath -m $(shell @pwd))/$(INPATH)/misc/build
 python_CFLAGS=-mno-cygwin -mthreads
