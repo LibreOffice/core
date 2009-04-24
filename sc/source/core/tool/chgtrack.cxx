@@ -4851,8 +4851,13 @@ BOOL ScChangeTrack::RejectAll()
 }
 
 
-BOOL ScChangeTrack::Reject( ScChangeAction* pAct )
+BOOL ScChangeTrack::Reject( ScChangeAction* pAct, bool bShared )
 {
+    // #i100895# When collaboration changes are reversed, it must be possible
+    // to reject a deleted row above another deleted row.
+    if ( bShared && pAct->IsDeletedIn() )
+        pAct->RemoveAllDeletedIn();
+
     if ( !pAct->IsRejectable() )
         return FALSE;
 

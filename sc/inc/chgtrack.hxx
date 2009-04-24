@@ -1373,7 +1373,7 @@ public:
                                     BOOL bAllFlat = FALSE ) const;
 
                                 // Reject visible Action (und abhaengige)
-            BOOL                Reject( ScChangeAction* );
+            BOOL                Reject( ScChangeAction*, bool bShared = false );
 
                                 // Accept visible Action (und abhaengige)
     SC_DLLPUBLIC        BOOL                Accept( ScChangeAction* );
