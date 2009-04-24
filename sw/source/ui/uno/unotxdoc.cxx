@@ -179,11 +179,16 @@ using ::osl::FileBase;
 
 class SwPrintUIOptions : public vcl::PrinterOptionsHelper
 {
+    OutputDevice* mpLast;
 public:
     SwPrintUIOptions();
+
+    bool processPropertiesAndCheckFormat( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& i_rNewProp );
+
 };
 
-SwPrintUIOptions::SwPrintUIOptions()
+SwPrintUIOptions::SwPrintUIOptions() :
+    mpLast( NULL )
 {
     ResStringArray aLocalizedStrings( SW_RES( STR_PRINTOPTUI ) );
 
@@ -295,7 +300,26 @@ SwPrintUIOptions::SwPrintUIOptions()
 
 }
 
+bool SwPrintUIOptions::processPropertiesAndCheckFormat( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& i_rNewProp )
+{
+    bool bChanged = processProperties( i_rNewProp );
 
+    uno::Reference< awt::XDevice >  xRenderDevice;
+    Any aVal( getValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "RenderDevice" ) ) ) );
+    aVal >>= xRenderDevice;
+
+    OutputDevice* pOut = 0;
+    if (xRenderDevice.is())
+    {
+        VCLXDevice*     pDevice = VCLXDevice::GetImplementation( xRenderDevice );
+        pOut = pDevice ? pDevice->GetOutputDevice() : 0;
+    }
+    bChanged = bChanged || (pOut != mpLast);
+    if( pOut )
+        mpLast = pOut;
+
+    return bChanged;
+}
 
 SwTxtFmtColl *lcl_GetParaStyle(const String& rCollName, SwDoc* pDoc)
 {
@@ -2723,7 +2747,7 @@ SwDoc * SwXTextDocument::GetRenderDoc( SfxViewShell *&rpView, const uno::Any& rS
  ---------------------------------------------------------------------------*/
 sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
         const uno::Any& rSelection,
-        const uno::Sequence< beans::PropertyValue >& /*rxOptions*/ )
+        const uno::Sequence< beans::PropertyValue >& rxOptions )
     throw (IllegalArgumentException, RuntimeException)
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
@@ -2732,6 +2756,7 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
 
     if( ! m_pPrintUIOptions )
         m_pPrintUIOptions = new SwPrintUIOptions();
+    bool bFormat = m_pPrintUIOptions->processPropertiesAndCheckFormat( rxOptions );
 
     SfxViewShell *pView = 0;
     SwDoc *pDoc = GetRenderDoc( pView, rSelection );
@@ -2757,12 +2782,15 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
     }
 
     SwViewOptionAdjust_Impl aAdjust(*pWrtShell);
-    pWrtShell->SetPDFExportOption( sal_True );
-    // --> FME 2005-05-23 #122919# Force field update before PDF export:
-    pWrtShell->ViewShell::UpdateFlds(TRUE);
-    // <--
-    pWrtShell->CalcLayout();
-    pWrtShell->SetPDFExportOption( sal_False );
+    if( bFormat )
+    {
+        pWrtShell->SetPDFExportOption( sal_True );
+        // --> FME 2005-05-23 #122919# Force field update before PDF export:
+        pWrtShell->ViewShell::UpdateFlds(TRUE);
+        // <--
+        pWrtShell->CalcLayout();
+        pWrtShell->SetPDFExportOption( sal_False );
+    }
     nRet = pDoc->GetPageCount();
 
     return nRet;
