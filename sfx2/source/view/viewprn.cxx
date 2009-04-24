@@ -84,6 +84,8 @@ class SfxPrinterListener : public vcl::PrinterListener
     Reference< view::XRenderable >          mxRenderable;
     sal_Bool                                mbApi;
     sal_Bool                                mbDirect;
+    mutable Printer*                        mpLastPrinter;
+    mutable Reference<awt::XDevice>         mxDevice;
 
     Sequence< beans::PropertyValue > getMergedOptions() const;
 public:
@@ -108,6 +110,7 @@ SfxPrinterListener::SfxPrinterListener( const Reference< frame::XModel>& i_xMode
     , mxRenderable( i_xRender )
     , mbApi( i_bApi )
     , mbDirect( i_bDirect )
+    , mpLastPrinter( NULL )
 {
     // initialize extra ui options
     if( mxRenderable.is() )
@@ -135,13 +138,18 @@ SfxPrinterListener::~SfxPrinterListener()
 
 Sequence< beans::PropertyValue > SfxPrinterListener::getMergedOptions() const
 {
-    VCLXDevice* pXDevice = new VCLXDevice();
     boost::shared_ptr<Printer> pPrinter( getPrinter() );
-    pXDevice->SetOutputDevice( &(*pPrinter) );
+    if( pPrinter.get() != mpLastPrinter )
+    {
+        mpLastPrinter = pPrinter.get();
+        VCLXDevice* pXDevice = new VCLXDevice();
+        pXDevice->SetOutputDevice( mpLastPrinter );
+        mxDevice = Reference< awt::XDevice >( pXDevice );
+    }
 
     Sequence< beans::PropertyValue > aRenderOptions( 3 );
     aRenderOptions[ 0 ].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RenderDevice" ) );
-    aRenderOptions[ 0 ].Value <<= Reference< awt::XDevice >( pXDevice );
+    aRenderOptions[ 0 ].Value <<= mxDevice;
     aRenderOptions[ 1 ].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsApi" ) );
     aRenderOptions[ 1 ].Value <<= mbApi;
     aRenderOptions[ 2 ].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsDirect" ) );
