@@ -1072,8 +1072,8 @@ void SmViewShell::Impl_Print(
     // output text on bottom
     if (pp->GetConfig()->IsPrintFormulaText())
     {
-//        Font aFont(FAMILY_DONTKNOW, Size(0, 600));
-        Font aFont;
+        Font aFont(FAMILY_DONTKNOW, Size(0, 600));
+        // Font aFont;
 
         aFont.SetAlign(ALIGN_TOP);
         aFont.SetColor( Color(COL_BLACK) );
