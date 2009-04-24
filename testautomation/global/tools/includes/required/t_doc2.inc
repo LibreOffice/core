@@ -140,6 +140,8 @@ function sMakeReadOnlyDocumentEditable() as boolean
 
             for iTry = 1 to 2
             
+                sleep( 2 )
+            
                 Kontext "Active"
                 if ( Active.exists( 5 ) ) then
                 

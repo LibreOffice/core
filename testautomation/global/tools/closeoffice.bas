@@ -41,10 +41,6 @@ sub main
     try
         printlog ResetApplication
         FileExit "SynchronMode", TRUE
-        kontext
-        if active.exists(5) then
-            active.no 'discard changes
-        endif
     catch
     endcatch
     wait (gOOoShutdownTimeOut * 1000)
