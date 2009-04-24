@@ -3000,6 +3000,9 @@ void SAL_CALL SwXTextDocument::render(
             lcl_DisposeView( m_pHiddenViewFrame, pDocShell );
             m_pHiddenViewFrame = 0;
         }
+
+        if( bLastPage )
+            delete m_pPrintUIOptions, m_pPrintUIOptions = NULL;
     }
 }
 /* -----------------------------03.10.04 -------------------------------------
