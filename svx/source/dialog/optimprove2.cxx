@@ -206,6 +206,7 @@ void SvxImprovementOptionsPage::Reset( const SfxItemSet& /*rSet*/ )
 
     try
     {
+        m_aNoRB.Check();
         xConfig = ::comphelper::ConfigurationHelper::openConfig(
             xSMGR, C2S("/org.openoffice.Office.OOoImprovement.Settings"),
             ::comphelper::ConfigurationHelper::E_READONLY );
@@ -224,8 +225,6 @@ void SvxImprovementOptionsPage::Reset( const SfxItemSet& /*rSet*/ )
                     bYesChecked &= bTemp;
                     if ( bYesChecked )
                         m_aYesRB.Check();
-                    else
-                        m_aNoRB.Check();
                 }
             }
 
