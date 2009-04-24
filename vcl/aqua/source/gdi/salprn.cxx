@@ -493,6 +493,9 @@ BOOL AquaSalInfoPrinter::StartJob( const String* i_pFileName,
     bool bNeedRestart = true;
     sal_Int32 nAllPages = 1;
 
+    // reset IsLastPage
+    i_rListener.setLastPage( sal_False );
+
     // update job data
     if( i_pSetupData )
         SetData( ~0, i_pSetupData );
@@ -587,6 +590,13 @@ BOOL AquaSalInfoPrinter::StartJob( const String* i_pFileName,
         mnCurPageRangeStart += mnCurPageRangeCount;
         mnCurPageRangeCount = 1;
     } while( bNeedRestart && mnCurPageRangeCount < nAllPages );
+
+    // inform applictation that it can release its data
+    // this is awkward, but the XRenderable interface has no method for this,
+    // so we need to call XRenderadble::render one last time with IsLastPage = TRUE
+    i_rListener.setLastPage( sal_True );
+    GDIMetaFile aPageFile;
+    Size aPageSize = i_rListener.getFilteredPageFile( 0, aPageFile );
 
     mnCurPageRangeStart = mnCurPageRangeCount = 0;
 

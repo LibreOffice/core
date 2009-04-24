@@ -79,6 +79,7 @@ public:
     Link                                                        maOptionChangeHdl;
     ControlDependencyMap                                        maControlDependencies;
     rtl::OUString                                               maSelectionString;
+    sal_Bool                                                    mbLastPage;
 
     int                                                         mnMultiPageRows;
     int                                                         mnMultiPageColumns;
@@ -88,6 +89,7 @@ public:
 
     ImplPrinterListenerData() :
         maSelectionString( RTL_CONSTASCII_USTRINGPARAM( "all" ) ),
+        mbLastPage( sal_False ),
         mnMultiPageRows( 1 ),
         mnMultiPageColumns( 1 ),
         mpProgress( NULL )
@@ -202,6 +204,9 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterListener>& i_pListene
         pListener->setPrinter( pPrinter );
     }
 
+    // reset last page property
+    i_pListener->setLastPage( sal_False );
+
     // check if the printer brings up its own dialog
     // in that case leave the work to that dialog
     const String& rQuick( i_rInitSetup.GetValue( String( RTL_CONSTASCII_USTRINGPARAM( "IsQuickJob" ) ) ) );
@@ -212,7 +217,12 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterListener>& i_pListene
         {
             PrintDialog aDlg( NULL, i_pListener );
             if( ! aDlg.Execute() )
+            {
+                GDIMetaFile aPageFile;
+                i_pListener->setLastPage( sal_True );
+                Size aPageSize = i_pListener->getFilteredPageFile( 0, aPageFile );
                 return;
+            }
             if( aDlg.isPrintToFile() )
             {
                 rtl::OUString aFile = queryFile( pListener->getPrinter().get() );
@@ -330,6 +340,8 @@ bool Printer::StartJob( const XubString& i_rJobName, boost::shared_ptr<vcl::Prin
             int nPages = i_pListener->getFilteredPageCount();
             for( int nPage = 0; nPage < nPages; nPage++ )
             {
+                if( nPage == nPages-1 )
+                    i_pListener->setLastPage( sal_True );
                 i_pListener->printFilteredPage( nPage );
             }
             EndJob();
@@ -620,10 +632,15 @@ void PrinterListener::jobFinished()
 {
 }
 
+void PrinterListener::setLastPage( sal_Bool i_bLastPage )
+{
+    mpImplData->mbLastPage = i_bLastPage;
+}
+
 Sequence< PropertyValue > PrinterListener::getJobProperties( const Sequence< PropertyValue >& i_rMergeList ) const
 {
     std::hash_set< rtl::OUString, rtl::OUStringHash > aMergeSet;
-    size_t nResultLen = size_t(i_rMergeList.getLength()) + mpImplData->maUIProperties.size() + 1;
+    size_t nResultLen = size_t(i_rMergeList.getLength()) + mpImplData->maUIProperties.size() + 2;
     for( int i = 0; i < i_rMergeList.getLength(); i++ )
         aMergeSet.insert( i_rMergeList[i].Name );
 
@@ -642,6 +659,14 @@ Sequence< PropertyValue > PrinterListener::getJobProperties( const Sequence< Pro
         PropertyValue aVal;
         aVal.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintSelection" ) );
         aVal.Value <<= mpImplData->maSelectionString;
+        aResult[nCur++] = aVal;
+    }
+    // append IsLastPage
+    if( aMergeSet.find( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsLastPage" ) ) ) == aMergeSet.end() )
+    {
+        PropertyValue aVal;
+        aVal.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsLastPage" ) );
+        aVal.Value <<= mpImplData->mbLastPage;
         aResult[nCur++] = aVal;
     }
     aResult.realloc( nCur );

@@ -496,6 +496,7 @@ public:
     void SAL_DLLPRIVATE createProgressDialog();
     void SAL_DLLPRIVATE setPrintSelection( const rtl::OUString& );
     void SAL_DLLPRIVATE setMultipage( int nRows, int nColumns, const Size& rPaperSize );
+    void SAL_DLLPRIVATE setLastPage( sal_Bool i_bLastPage );
 };
 
 class VCL_DLLPUBLIC PrinterOptionsHelper
