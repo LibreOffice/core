@@ -937,7 +937,7 @@ testcase tiFormat3D_Effekte
     next i
         Printlog "- Check 3d shadow and surface angle"
         Drei_DSchatten.Click                              '/// check 3d shadow ///'
-        Papierneigung.SetText "90"
+        Papierneigung.SetText "90 degree(s)"
         vert = Papierneigung.getText
         Zuweisen.Click                                    '/// assign shadow ///'
     gMouseClick 90,90                                     '/// deselect object ///'

@@ -1027,7 +1027,7 @@ testcase tAddFields
         Liste.TypeKeys "<DOWN>" , 4, true   	    
         sControlName2 = Liste.getSelText
         if sControlName1 <> sControlName2 then
-            warnlog "#i98316# The control name is not the same as the fieldname."
+            qaerrorlog "#i98316# The control name is not the same as the fieldname."
         endif
         
     sleep (2)    

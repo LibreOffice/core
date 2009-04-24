@@ -73,7 +73,10 @@ testcase i64991
     end if
     Call sMakeReadOnlyDocumentEditable
     '/// Now Execute Macro 'Main' in Node 'i64991'->'check_page_style'
-    printlog "- execute macro"
+	Kontext "SecurityWarning"
+    if SecurityWarning.Exists(2) then SecurityWarning.OK	
+    
+	printlog "- execute macro"
     ToolsMacrosRunMacro
     ' Sometimes it lasts long until dialog is shown
     For i = 1 to 15

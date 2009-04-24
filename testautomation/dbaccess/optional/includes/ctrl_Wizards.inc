@@ -120,7 +120,7 @@ testcase tGroupBoxWithDatasource
      printlog "set the table TT_Control"    
 	 Content.setText("TT_Control")     
  	 'WORKAROUND: for bug 106538
-     TabDataForm.TypeKeys "<RETURN>" , true       
+     Content.TypeKeys "<RETURN>" , true       
   	Kontext "ControlPropertiesDialog"
    	 ControlPropertiesDialog.Close
    	sleep(3)
@@ -246,7 +246,7 @@ testcase tGroupBoxWithDatasource
      sleep(1)
      HelpURL.setText "HID:123456"
      sleep(1)
-     TabGeneralControl.TypeKeys "<RETURN>"
+     HelpURL.TypeKeys "<RETURN>",true
      sleep(1)
     Kontext "ControlPropertiesDialog" 
      ControlPropertiesDialog.close
@@ -284,7 +284,7 @@ testcase tGroupBoxWithDatasource
      sleep(1)
      HelpURL.setText "HID:1234567"
      sleep(1)
-     TabGeneralControl.TypeKeys "<RETURN>"     
+     HelpURL.TypeKeys "<RETURN>",true     
      sleep(1)
     Kontext "ControlPropertiesDialog" 
      ControlPropertiesDialog.close
@@ -324,7 +324,7 @@ testcase tGroupBoxWithDatasource
      'sleep(1)
      HelpURL.setText "HID:12345678"
      'sleep(1)
-     TabGeneralControl.TypeKeys "<RETURN>"
+     HelpURL.TypeKeys "<RETURN>",true
      sleep(1)
     Kontext "ControlPropertiesDialog" 
      ControlPropertiesDialog.close     
