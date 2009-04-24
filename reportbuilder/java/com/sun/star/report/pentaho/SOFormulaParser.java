@@ -220,7 +220,7 @@ public final class SOFormulaParser extends ComponentBase
                 // error occured so all token must be bad
                 for (int i = 0; i < tokens.size(); i++)
                 {
-                    if ( !found && images.get(i).equals(ex.currentToken.image) )
+                    if ( !found && ex.currentToken != null && images.get(i).equals(ex.currentToken.image) )
                         found = true;
                     if ( found )
                     {
