@@ -2523,12 +2523,15 @@ void Window::ImplInvalidateFrameRegion( const Region* pRegion, USHORT nFlags )
     if ( !ImplIsOverlapWindow() )
     {
         Window* pTempWindow = this;
+        USHORT nTranspPaint = IsPaintTransparent() ? IMPL_PAINT_PAINT : 0;
         do
         {
             pTempWindow = pTempWindow->ImplGetParent();
             if ( pTempWindow->mpWindowImpl->mnPaintFlags & IMPL_PAINT_PAINTCHILDS )
                 break;
-            pTempWindow->mpWindowImpl->mnPaintFlags |= IMPL_PAINT_PAINTCHILDS;
+            pTempWindow->mpWindowImpl->mnPaintFlags |= IMPL_PAINT_PAINTCHILDS | nTranspPaint;
+            if( ! pTempWindow->IsPaintTransparent() )
+                nTranspPaint = 0;
         }
         while ( !pTempWindow->ImplIsOverlapWindow() );
     }
@@ -6508,7 +6511,10 @@ void Window::Show( BOOL bVisible, USHORT nFlags )
 
             if ( !mpWindowImpl->mbFrame )
             {
-                ImplInvalidate( NULL, INVALIDATE_NOTRANSPARENT | INVALIDATE_CHILDREN );
+                USHORT nInvalidateFlags = INVALIDATE_CHILDREN;
+                if( ! IsPaintTransparent() )
+                    nInvalidateFlags |= INVALIDATE_NOTRANSPARENT;
+                ImplInvalidate( NULL, nInvalidateFlags );
                 ImplGenerateMouseMove();
             }
         }

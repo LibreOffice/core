@@ -35,6 +35,8 @@
 #include <tools/date.hxx>
 #include <comphelper/processfactory.hxx>
 #include <osl/mutex.hxx>
+#include <unotools/bootstrap.hxx>
+#include <rtl/ustring.hxx>
 
 //........................................................................
 namespace svt
@@ -172,6 +174,7 @@ namespace svt
         static  ::osl::Mutex&   getStaticMutex();           // get the mutex used to protect the static members of this class
 
         void                    commit( );
+        sal_Int32               getBuildId() const;
 
     private:
         RegOptions::DialogPermission    implGetDialogPermission( ) const;
@@ -282,13 +285,8 @@ namespace svt
         m_aRegistrationNode.getNodeValue( lcl_getReminderDateName() ) >>= sStringValue;
         bool bIsPatchDate = ( sStringValue.equals( lcl_getPatchName() ) != sal_False );
         if ( !bIsPatchDate && sStringValue.getLength() )
-        {
             nIntDate = lcl_convertString2Date( sStringValue );
-            OSL_ENSURE( nIntDate, "RegOptionsImpl::RegOptionsImpl: incorrect value found for the reminder date!" );
-        }
         m_aReminderDate.SetDate( nIntDate );
-        OSL_ENSURE( bIsPatchDate || !sStringValue.getLength() || m_aReminderDate.IsValid(),
-                        "RegOptionsImpl::RegOptionsImpl: inavlid reminder date value!" );
     }
 
     //--------------------------------------------------------------------
@@ -364,10 +362,31 @@ namespace svt
     //--------------------------------------------------------------------
     void RegOptionsImpl::removeReminder()
     {
+        ::rtl::OUString aDefault;
+        ::rtl::OUString aReminderValue( lcl_getPatchName() );
+        aReminderValue += ::rtl::OUString::valueOf(getBuildId());
+
         m_aRegistrationNode.setNodeValue(
             lcl_getReminderDateName(),
-            makeAny( ::rtl::OUString() )
+            Any( aReminderValue )
         );
+    }
+
+    //--------------------------------------------------------------------
+    sal_Int32 RegOptionsImpl::getBuildId() const
+    {
+        sal_Int32 nBuildId( 0 );
+        ::rtl::OUString aDefault;
+        ::rtl::OUString aBuildIdData = utl::Bootstrap::getBuildIdData( aDefault );
+        sal_Int32 nIndex1 = aBuildIdData.indexOf(':');
+        sal_Int32 nIndex2 = aBuildIdData.indexOf(')');
+        if (( nIndex1 > 0 ) && ( nIndex2 > 0 ) && ( nIndex2-1 > nIndex1+1 ))
+        {
+            ::rtl::OUString aBuildId = aBuildIdData.copy( nIndex1+1, nIndex2-nIndex1-1 );
+            nBuildId = aBuildId.toInt32();
+        }
+
+        return nBuildId;
     }
 
     //--------------------------------------------------------------------
@@ -379,8 +398,22 @@ namespace svt
         m_aRegistrationNode.getNodeValue( lcl_getReminderDateName() ) >>= sDate;
         if ( sDate.getLength() )
         {
-            if ( sDate.equals( lcl_getPatchName() ) )
-                bRet = true;
+            if ( sDate.indexOf( lcl_getPatchName() ) == 0)
+            {
+                if (sDate.equals( lcl_getPatchName() ))
+                    bRet = true;
+                else if (sDate.getLength() > lcl_getPatchName().getLength() )
+                {
+                    // Check the build ID to determine if the registration
+                    // dialog needs to be shown.
+                    sal_Int32 nBuildId = getBuildId();
+                    ::rtl::OUString aStoredBuildId( sDate.copy(lcl_getPatchName().getLength()));
+
+                    // remind if the current build ID is not the same as the stored one
+                    if ( nBuildId != aStoredBuildId.toInt32() )
+                        bRet = true;
+                }
+            }
             else
             {
                 nDate = lcl_convertString2Date( sDate );
@@ -392,6 +425,9 @@ namespace svt
                 }
             }
         }
+        else
+            bRet = true;
+
         return bRet;
     }
 
@@ -423,10 +459,7 @@ namespace svt
                 );
 
                 // and clear the reminder date
-                m_aRegistrationNode.setNodeValue(
-                    lcl_getReminderDateName(),
-                    Any()
-                );
+                removeReminder();
             }
         }
     }
