@@ -323,7 +323,7 @@ ODatabaseModelImpl::ODatabaseModelImpl( const Reference< XMultiServiceFactory >&
             ,m_nImposedMacroExecMode( MacroExecMode::NEVER_EXECUTE )
             ,m_pDBContext( &_rDBContext )
             ,m_refCount(0)
-            ,m_bHasAnyObjectWithMacros( false )
+            ,m_aEmbeddedMacros()
             ,m_bModificationLock( false )
             ,m_bDocumentInitialized( false )
             ,m_aContext( _rxFactory )
@@ -362,7 +362,7 @@ ODatabaseModelImpl::ODatabaseModelImpl(
             ,m_nImposedMacroExecMode( MacroExecMode::NEVER_EXECUTE )
             ,m_pDBContext( &_rDBContext )
             ,m_refCount(0)
-            ,m_bHasAnyObjectWithMacros( false )
+            ,m_aEmbeddedMacros()
             ,m_bModificationLock( false )
             ,m_bDocumentInitialized( false )
             ,m_aContext( _rxFactory )
@@ -1405,24 +1405,33 @@ Reference< XStorage > ODatabaseModelImpl::getLastCommitDocumentStorage()
 }
 
 // -----------------------------------------------------------------------------
+ODatabaseModelImpl::EmbeddedMacros ODatabaseModelImpl::determineEmbeddedMacros()
+{
+    if ( !m_aEmbeddedMacros )
+    {
+        if ( ::sfx2::DocumentMacroMode::storageHasMacros( const_cast< ODatabaseModelImpl* >( this )->getOrCreateRootStorage() ) )
+        {
+            m_aEmbeddedMacros.reset( eDocumentWideMacros );
+        }
+        else if (   lcl_hasObjectsWithMacros_nothrow( const_cast< ODatabaseModelImpl& >( *this ), E_FORM )
+                ||  lcl_hasObjectsWithMacros_nothrow( const_cast< ODatabaseModelImpl& >( *this ), E_REPORT )
+                )
+        {
+            m_aEmbeddedMacros.reset( eSubDocumentMacros );
+        }
+        else
+        {
+            m_aEmbeddedMacros.reset( eNoMacros );
+        }
+    }
+    return *m_aEmbeddedMacros;
+}
+
+// -----------------------------------------------------------------------------
 sal_Bool ODatabaseModelImpl::documentStorageHasMacros() const
 {
-    // does our root storage contain macros?
-    if ( ::sfx2::DocumentMacroMode::storageHasMacros( const_cast< ODatabaseModelImpl* >( this )->getOrCreateRootStorage() ) )
-    {
-        return true;
-    }
-
-    // do we have forms or reports with macros?
-    if  (   lcl_hasObjectsWithMacros_nothrow( const_cast< ODatabaseModelImpl& >( *this ), E_FORM )
-        ||  lcl_hasObjectsWithMacros_nothrow( const_cast< ODatabaseModelImpl& >( *this ), E_REPORT )
-        )
-    {
-        const_cast< ODatabaseModelImpl* >( this )->m_bHasAnyObjectWithMacros = true;
-        return true;
-    }
-
-    return false;
+    const_cast< ODatabaseModelImpl* >( this )->determineEmbeddedMacros();
+    return ( *m_aEmbeddedMacros != eNoMacros );
 }
 
 // -----------------------------------------------------------------------------

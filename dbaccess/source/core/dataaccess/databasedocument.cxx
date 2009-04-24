@@ -35,7 +35,6 @@
 #include "databasedocument.hxx"
 #include "dbastrings.hrc"
 #include "module_dba.hxx"
-#include "documentevents.hxx"
 #include "documenteventexecutor.hxx"
 #include "databasecontext.hxx"
 #include "documentcontainer.hxx"
@@ -165,12 +164,13 @@ ODatabaseDocument::ODatabaseDocument(const ::rtl::Reference<ODatabaseModelImpl>&
             ,m_aModifyListeners( getMutex() )
             ,m_aCloseListener( getMutex() )
             ,m_aStorageListeners( getMutex() )
-            ,m_pEventContainer( new DocumentEvents( *this, getMutex() ) )
+            ,m_pEventContainer( new DocumentEvents( *this, getMutex(), _pImpl->getDocumentEvents() ) )
             ,m_pEventExecutor( NULL )   // initialized below, ref-count-protected
             ,m_aEventNotifier( *this, getMutex() )
             ,m_aViewMonitor( m_aEventNotifier )
             ,m_eInitState( NotInitialized )
             ,m_bClosing( false )
+            ,m_bAllowDocumentScripting( false )
 {
     DBG_CTOR(ODatabaseDocument,NULL);
 
@@ -189,7 +189,10 @@ ODatabaseDocument::ODatabaseDocument(const ::rtl::Reference<ODatabaseModelImpl>&
     // then consider ourself initialized, too.
     // #i94840#
     if ( m_pImpl->hadInitializedDocument() )
+    {
         impl_setInitialized();
+        m_bAllowDocumentScripting = ( m_pImpl->determineEmbeddedMacros() != ODatabaseModelImpl::eSubDocumentMacros );
+    }
 }
 
 //--------------------------------------------------------------------------
@@ -210,7 +213,7 @@ Any SAL_CALL ODatabaseDocument::queryInterface( const Type& _rType ) throw (Runt
     // strip XEmbeddedScripts and XScriptInvocationContext if we have any form/report
     // which already contains macros. In this case, the database document itself is not
     // allowed to contain macros, too.
-    if  (   impl_shouldDisallowScripting_nolck_nothrow()
+    if  (   !m_bAllowDocumentScripting
         &&  (   _rType.equals( XEmbeddedScripts::static_type() )
             ||  _rType.equals( XScriptInvocationContext::static_type() )
             )
@@ -244,7 +247,7 @@ Sequence< Type > SAL_CALL ODatabaseDocument::getTypes(  ) throw (RuntimeExceptio
     // strip XEmbeddedScripts and XScriptInvocationContext if we have any form/report
     // which already contains macros. In this case, the database document itself is not
     // allowed to contain macros, too.
-    if ( impl_shouldDisallowScripting_nolck_nothrow() )
+    if ( !m_bAllowDocumentScripting )
     {
         Sequence< Type > aStrippedTypes( aTypes.getLength() );
         Type* pStripTo( aStrippedTypes.getArray() );
@@ -291,34 +294,67 @@ Sequence< sal_Int8 > SAL_CALL ODatabaseDocument::getImplementationId(  ) throw (
 }
 
 // -----------------------------------------------------------------------------
-bool ODatabaseDocument::impl_shouldDisallowScripting_nolck_nothrow() const
-{
-    ::osl::MutexGuard aGuard( getMutex() );
-    if ( m_pImpl.is() && m_pImpl->hasAnyObjectWithMacros() )
-        return true;
-    return false;
-}
-
-// -----------------------------------------------------------------------------
 // local functions
 // -----------------------------------------------------------------------------
 namespace
 {
     // -----------------------------------------------------------------------------
+    Reference< XStatusIndicator > lcl_extractStatusIndicator( const ::comphelper::NamedValueCollection& _rArguments )
+    {
+        Reference< XStatusIndicator > xStatusIndicator;
+        return _rArguments.getOrDefault( "StatusIndicator", xStatusIndicator );
+    }
+
+    // -----------------------------------------------------------------------------
+    static void lcl_triggerStatusIndicator_throw( const ::comphelper::NamedValueCollection& _rArguments, DocumentGuard& _rGuard, const bool _bStart )
+    {
+        Reference< XStatusIndicator > xStatusIndicator( lcl_extractStatusIndicator( _rArguments ) );
+        if ( !xStatusIndicator.is() )
+            return;
+
+        _rGuard.clear();
+        try
+        {
+            if ( _bStart )
+                xStatusIndicator->start( ::rtl::OUString(), (sal_Int32)1000000 );
+            else
+                xStatusIndicator->end();
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+        _rGuard.reset();
+            // note that |reset| can throw a DisposedException
+    }
+
+    // -----------------------------------------------------------------------------
+    static void lcl_extractStatusIndicator( const ::comphelper::NamedValueCollection& _rArguments, Sequence< Any >& _rCallArgs )
+    {
+        Reference< XStatusIndicator > xStatusIndicator( lcl_extractStatusIndicator( _rArguments ) );
+        if ( !xStatusIndicator.is() )
+            return;
+
+        sal_Int32 nLength = _rCallArgs.getLength();
+        _rCallArgs.realloc( nLength + 1 );
+        _rCallArgs[ nLength ] <<= xStatusIndicator;
+    }
+
+    // -----------------------------------------------------------------------------
     static void lcl_extractAndStartStatusIndicator( const ::comphelper::NamedValueCollection& _rArguments, Reference< XStatusIndicator >& _rxStatusIndicator,
         Sequence< Any >& _rCallArgs )
     {
+        _rxStatusIndicator = lcl_extractStatusIndicator( _rArguments );
+        if ( !_rxStatusIndicator.is() )
+            return;
+
         try
         {
-            _rxStatusIndicator = _rArguments.getOrDefault( "StatusIndicator", _rxStatusIndicator );
-            if ( _rxStatusIndicator.is() )
-            {
-                _rxStatusIndicator->start( ::rtl::OUString(), (sal_Int32)1000000 );
+            _rxStatusIndicator->start( ::rtl::OUString(), (sal_Int32)1000000 );
 
-                sal_Int32 nLength = _rCallArgs.getLength();
-                _rCallArgs.realloc( nLength + 1 );
-                _rCallArgs[ nLength ] <<= _rxStatusIndicator;
-            }
+            sal_Int32 nLength = _rCallArgs.getLength();
+            _rCallArgs.realloc( nLength + 1 );
+            _rCallArgs[ nLength ] <<= _rxStatusIndicator;
         }
         catch( const Exception& )
         {
@@ -326,6 +362,7 @@ namespace
         }
     }
 
+    // -----------------------------------------------------------------------------
     static Sequence< PropertyValue > lcl_appendFileNameToDescriptor( const Sequence< PropertyValue >& _rDescriptor, const ::rtl::OUString _rURL )
     {
         ::comphelper::NamedValueCollection aMediaDescriptor( _rDescriptor );
@@ -373,7 +410,8 @@ void ODatabaseDocument::impl_reset_nothrow()
 }
 
 // -----------------------------------------------------------------------------
-void ODatabaseDocument::impl_import_throw( const ::comphelper::NamedValueCollection& _rResource )
+void ODatabaseDocument::impl_import_nolck_throw( const ::comphelper::ComponentContext _rContext, const Reference< XInterface >& _rxTargetComponent,
+                                                 const ::comphelper::NamedValueCollection& _rResource )
 {
     Sequence< Any > aFilterArgs;
     Reference< XStatusIndicator > xStatusIndicator;
@@ -395,10 +433,10 @@ void ODatabaseDocument::impl_import_throw( const ::comphelper::NamedValueCollect
     aFilterArgs[nCount] <<= xInfoSet;
 
     Reference< XImporter > xImporter(
-    m_pImpl->m_aContext.createComponentWithArguments( "com.sun.star.comp.sdb.DBFilter", aFilterArgs ),
-     UNO_QUERY_THROW );
+        _rContext.createComponentWithArguments( "com.sun.star.comp.sdb.DBFilter", aFilterArgs ),
+        UNO_QUERY_THROW );
 
-    Reference< XComponent > xComponent( *this, UNO_QUERY_THROW );
+    Reference< XComponent > xComponent( _rxTargetComponent, UNO_QUERY_THROW );
     xImporter->setTargetDocument( xComponent );
 
     Reference< XFilter > xFilter( xImporter, UNO_QUERY_THROW );
@@ -423,10 +461,13 @@ void SAL_CALL ODatabaseDocument::initNew(  ) throw (DoubleInitializationExceptio
         m_pImpl->m_aContext.getLegacyServiceFactory() ) );
 
     // store therein
-    impl_storeToStorage_throw( xTempStor, Sequence< PropertyValue >() );
+    impl_storeToStorage_throw( xTempStor, Sequence< PropertyValue >(), aGuard );
 
     // let the impl know we're now based on this storage
     m_pImpl->switchToStorage( xTempStor );
+
+    // for the newly created document, allow document-wide scripting
+    m_bAllowDocumentScripting = true;
 
     impl_setInitialized();
 
@@ -466,7 +507,9 @@ void SAL_CALL ODatabaseDocument::load( const Sequence< PropertyValue >& _Argumen
     impl_setInitializing();
     try
     {
-        impl_import_throw( aResource );
+        aGuard.clear();
+        impl_import_nolck_throw( m_pImpl->m_aContext, *this, aResource );
+        aGuard.reset();
     }
     catch( const Exception& )
     {
@@ -474,7 +517,7 @@ void SAL_CALL ODatabaseDocument::load( const Sequence< PropertyValue >& _Argumen
         throw;
     }
     // tell our view monitor that the document has been loaded - this way it will fire the proper
-    // even (OnLoad instead of OnCreate) later on
+    // event (OnLoad instead of OnCreate) later on
     m_aViewMonitor.onLoadedDocument();
 
     // note that we do *not* call impl_setInitialized() here: The initialization is only complete
@@ -507,6 +550,12 @@ sal_Bool SAL_CALL ODatabaseDocument::attachResource( const ::rtl::OUString& _rUR
     {   // this means we've just been loaded, and this is the attachResource call which follows
         // the load call.
         impl_setInitialized();
+
+        // determine whether the document as a whole, or sub documents, have macros. Especially the latter
+        // controls the availability of our XEmbeddedScripts and XScriptInvocationContext interfaces, and we
+        // should know this before anybody actually uses the object.
+        m_bAllowDocumentScripting = ( m_pImpl->determineEmbeddedMacros() != ODatabaseModelImpl::eSubDocumentMacros );
+
         m_aEventNotifier.notifyDocumentEvent( "OnLoadFinished" );
     }
 
@@ -728,7 +777,7 @@ void ODatabaseDocument::impl_storeAs_throw( const ::rtl::OUString& _rURL, const 
         // store to current storage
         Reference< XStorage > xCurrentStorage( m_pImpl->getOrCreateRootStorage(), UNO_QUERY_THROW );
         Sequence< PropertyValue > aMediaDescriptor( lcl_appendFileNameToDescriptor( _rArguments, _rURL ) );
-        impl_storeToStorage_throw( xCurrentStorage, aMediaDescriptor );
+        impl_storeToStorage_throw( xCurrentStorage, aMediaDescriptor, _rGuard );
 
         // success - tell our impl
         m_pImpl->attachResource( _rURL, aMediaDescriptor );
@@ -807,6 +856,10 @@ void SAL_CALL ODatabaseDocument::storeAsURL( const ::rtl::OUString& _rURL, const
         impl_reset_nothrow();
         throw;
     }
+
+    if ( bImplicitInitialization )
+        m_bAllowDocumentScripting = true;
+
     aGuard.clear();
     // <- SYNCHRONIZED
 
@@ -815,7 +868,8 @@ void SAL_CALL ODatabaseDocument::storeAsURL( const ::rtl::OUString& _rURL, const
 }
 
 // -----------------------------------------------------------------------------
-void ODatabaseDocument::impl_storeToStorage_throw( const Reference< XStorage >& _rxTargetStorage, const Sequence< PropertyValue >& _rMediaDescriptor ) const
+void ODatabaseDocument::impl_storeToStorage_throw( const Reference< XStorage >& _rxTargetStorage, const Sequence< PropertyValue >& _rMediaDescriptor,
+                                                   DocumentGuard& _rDocGuard ) const
 {
     if ( !_rxTargetStorage.is() )
         throw IllegalArgumentException( ::rtl::OUString(), *const_cast< ODatabaseDocument* >( this ), 1 );
@@ -839,10 +893,12 @@ void ODatabaseDocument::impl_storeToStorage_throw( const Reference< XStorage >& 
 
         // write into target storage
         ::comphelper::NamedValueCollection aWriteArgs( _rMediaDescriptor );
-        writeStorage( _rxTargetStorage, aWriteArgs );
+        lcl_triggerStatusIndicator_throw( aWriteArgs, _rDocGuard, true );
+        impl_writeStorage_throw( _rxTargetStorage, aWriteArgs );
+        lcl_triggerStatusIndicator_throw( aWriteArgs, _rDocGuard, false );
 
         // commit target storage
-        OSL_VERIFY( m_pImpl->commitStorageIfWriteable( _rxTargetStorage ) );
+        OSL_VERIFY( ODatabaseModelImpl::commitStorageIfWriteable( _rxTargetStorage ) );
     }
     catch( const IOException& ) { throw; }
     catch( const RuntimeException& ) { throw; }
@@ -873,7 +929,7 @@ void SAL_CALL ODatabaseDocument::storeToURL( const ::rtl::OUString& _rURL, const
         Sequence< PropertyValue > aMediaDescriptor( lcl_appendFileNameToDescriptor( _rArguments, _rURL ) );
 
         // store to this storage
-        impl_storeToStorage_throw( xTargetStorage, aMediaDescriptor );
+        impl_storeToStorage_throw( xTargetStorage, aMediaDescriptor, aGuard );
     }
     catch( const Exception& )
     {
@@ -944,28 +1000,24 @@ void ODatabaseDocument::impl_setModified_nothrow( sal_Bool _bModified, DocumentG
 // ::com::sun::star::document::XEventBroadcaster
 void SAL_CALL ODatabaseDocument::addEventListener(const uno::Reference< document::XEventListener >& _Listener ) throw (uno::RuntimeException)
 {
-    DocumentGuard aGuard( *this, DocumentGuard::MethodWithoutInit );
     m_aEventNotifier.addLegacyEventListener( _Listener );
 }
 
 // -----------------------------------------------------------------------------
 void SAL_CALL ODatabaseDocument::removeEventListener( const uno::Reference< document::XEventListener >& _Listener ) throw (uno::RuntimeException)
 {
-    DocumentGuard aGuard( *this, DocumentGuard::MethodWithoutInit );
     m_aEventNotifier.removeLegacyEventListener( _Listener );
 }
 
 // -----------------------------------------------------------------------------
 void SAL_CALL ODatabaseDocument::addDocumentEventListener( const Reference< XDocumentEventListener >& _Listener ) throw (RuntimeException)
 {
-    DocumentGuard aGuard( *this, DocumentGuard::MethodWithoutInit );
     m_aEventNotifier.addDocumentEventListener( _Listener );
 }
 
 // -----------------------------------------------------------------------------
 void SAL_CALL ODatabaseDocument::removeDocumentEventListener( const Reference< XDocumentEventListener >& _Listener ) throw (RuntimeException)
 {
-    DocumentGuard aGuard( *this, DocumentGuard::MethodWithoutInit );
     m_aEventNotifier.removeDocumentEventListener( _Listener );
 }
 
@@ -1232,12 +1284,11 @@ void ODatabaseDocument::WriteThroughComponent( const Reference< XOutputStream >&
 }
 
 // -----------------------------------------------------------------------------
-void ODatabaseDocument::writeStorage( const Reference< XStorage >& _rxTargetStorage, const ::comphelper::NamedValueCollection& _rMediaDescriptor ) const
+void ODatabaseDocument::impl_writeStorage_throw( const Reference< XStorage >& _rxTargetStorage, const ::comphelper::NamedValueCollection& _rMediaDescriptor ) const
 {
     // extract status indicator
     Sequence< Any > aDelegatorArguments;
-    Reference< XStatusIndicator > xStatusIndicator;
-    lcl_extractAndStartStatusIndicator( _rMediaDescriptor, xStatusIndicator, aDelegatorArguments );
+    lcl_extractStatusIndicator( _rMediaDescriptor, aDelegatorArguments );
 
     /** property map for export info set */
     comphelper::PropertyMapEntry aExportInfoMap[] =
@@ -1275,9 +1326,6 @@ void ODatabaseDocument::writeStorage( const Reference< XStorage >& _rxTargetStor
         aDelegatorArguments, aMediaDescriptor, _rxTargetStorage );
 
     m_pImpl->storeLibraryContainersTo( _rxTargetStorage );
-
-    if ( xStatusIndicator.is() )
-        xStatusIndicator->end();
 }
 
 // -----------------------------------------------------------------------------
@@ -1497,8 +1545,7 @@ void SAL_CALL ODatabaseDocument::loadFromStorage( const Reference< XStorage >& /
 void SAL_CALL ODatabaseDocument::storeToStorage( const Reference< XStorage >& _rxStorage, const Sequence< PropertyValue >& _rMediaDescriptor ) throw (IllegalArgumentException, IOException, Exception, RuntimeException)
 {
     DocumentGuard aGuard( *this );
-
-    impl_storeToStorage_throw( _rxStorage, _rMediaDescriptor );
+    impl_storeToStorage_throw( _rxStorage, _rMediaDescriptor, aGuard );
 }
 
 // -----------------------------------------------------------------------------
@@ -1573,7 +1620,7 @@ Reference< provider::XScriptProvider > SAL_CALL ODatabaseDocument::getScriptProv
             m_pImpl->m_aContext.getSingleton( "com.sun.star.script.provider.theMasterScriptProviderFactory" ), UNO_QUERY_THROW );
 
         Any aScriptProviderContext;
-        if ( !impl_shouldDisallowScripting_nolck_nothrow() )
+        if ( m_bAllowDocumentScripting )
             aScriptProviderContext <<= Reference< XModel >( this );
 
         xScriptProvider.set( xFactory->createScriptProvider( aScriptProviderContext ), UNO_SET_THROW );

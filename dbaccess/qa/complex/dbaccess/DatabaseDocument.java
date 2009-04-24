@@ -329,7 +329,6 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
             new UnoMethodDescriptor( XStorable.class, "store" ),
             new UnoMethodDescriptor( XFormDocumentsSupplier.class, "getFormDocuments" ),
             new UnoMethodDescriptor( XReportDocumentsSupplier.class, "getReportDocuments" ),
-            new UnoMethodDescriptor( XScriptInvocationContext.class, "getScriptContainer" ),
             new UnoMethodDescriptor( XScriptProviderSupplier.class, "getScriptProvider" ),
             new UnoMethodDescriptor( XEventsSupplier.class, "getEvents" ),
             new UnoMethodDescriptor( XTitle.class, "getTitle" ),
