@@ -640,7 +640,7 @@ void PrinterListener::setLastPage( sal_Bool i_bLastPage )
 Sequence< PropertyValue > PrinterListener::getJobProperties( const Sequence< PropertyValue >& i_rMergeList ) const
 {
     std::hash_set< rtl::OUString, rtl::OUStringHash > aMergeSet;
-    size_t nResultLen = size_t(i_rMergeList.getLength()) + mpImplData->maUIProperties.size() + 2;
+    size_t nResultLen = size_t(i_rMergeList.getLength()) + mpImplData->maUIProperties.size() + 3;
     for( int i = 0; i < i_rMergeList.getLength(); i++ )
         aMergeSet.insert( i_rMergeList[i].Name );
 
@@ -667,6 +667,14 @@ Sequence< PropertyValue > PrinterListener::getJobProperties( const Sequence< Pro
         PropertyValue aVal;
         aVal.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsLastPage" ) );
         aVal.Value <<= mpImplData->mbLastPage;
+        aResult[nCur++] = aVal;
+    }
+    // append IsPrinter
+    if( aMergeSet.find( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsPrinter" ) ) ) == aMergeSet.end() )
+    {
+        PropertyValue aVal;
+        aVal.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsPrinter" ) );
+        aVal.Value <<= sal_True;
         aResult[nCur++] = aVal;
     }
     aResult.realloc( nCur );
