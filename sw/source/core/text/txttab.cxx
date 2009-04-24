@@ -235,16 +235,18 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
         }
 
         // <--
-        // --> OD 2009-02-23 #i99384#
+        // --> OD 2009-04-03 #i100732#
         // correction of condition, when a tab stop at the left margin can
         // be applied:
         // If the paragraph is not inside a list having a list tab stop following
-        // the list label or no further tab stop found in such a paragraph,
+        // the list label or no further tab stop found in such a paragraph or
+        // the next tab stop position does not equal the list tab stop,
         // a tab stop at the left margin can be applied. If this condition is
         // not hold, it is overruled by compatibility option TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST.
         const bool bTabAtLeftMargin =
             ( !aLineInf.IsListTabStopIncluded() ||
-              !pTabStop ) ||
+              !pTabStop ||
+              nNextPos != aLineInf.GetListTabStopPosition() ) ||
             // compatibility option TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST:
             pFrm->GetTxtNode()->getIDocumentSettingAccess()->
                 get(IDocumentSettingAccess::TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST);
