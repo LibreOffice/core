@@ -51,7 +51,9 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 
 PrintDialog::PrintPreviewWindow::PrintPreviewWindow( Window* i_pParent, const ResId& i_rId )
-    : Window( i_pParent, i_rId )
+    : Window( i_pParent, i_rId ),
+      mfScaleX( 1 ),
+      mfScaleY( 1 )
 {
 }
 
@@ -63,19 +65,30 @@ void PrintDialog::PrintPreviewWindow::Paint( const Rectangle& i_rRect )
 {
     Window::Paint( i_rRect );
 
+    GDIMetaFile aMtf( maMtf );
+
     SetFillColor( Color( COL_WHITE ) );
     SetLineColor();
     DrawRect( Rectangle( Point( 0, 0 ), GetSizePixel() ));
     Push();
     SetMapMode( MAP_100TH_MM );
-    maMtf.WindStart();
-    maMtf.Play( this, Point( 0, 0 ), PixelToLogic( GetSizePixel() ) );
+    aMtf.WindStart();
+    aMtf.Scale( mfScaleX, mfScaleY );
+    aMtf.WindStart();
+    aMtf.Play( this, Point( 0, 0 ), PixelToLogic( GetSizePixel() ) );
     Pop();
 }
 
 void PrintDialog::PrintPreviewWindow::setPreview( const GDIMetaFile& i_rNewPreview )
 {
     maMtf = i_rNewPreview;
+    Invalidate();
+}
+
+void PrintDialog::PrintPreviewWindow::setScale( double fScaleX, double fScaleY )
+{
+    mfScaleX = fScaleX;
+    mfScaleY = fScaleY;
     Invalidate();
 }
 
@@ -694,7 +707,7 @@ void PrintDialog::setPreviewText( sal_Int32 nSetPage )
         maPageText.SetText( maNoPageStr );
 }
 
-void PrintDialog::preparePreview()
+void PrintDialog::preparePreview( bool i_bNewPage )
 {
     // page range may have changed depending on options
     sal_Int32 nPages = maPListener->getFilteredPageCount();
@@ -714,29 +727,34 @@ void PrintDialog::preparePreview()
     boost::shared_ptr<Printer> aPrt( maPListener->getPrinter() );
 
 
-    const MapMode aMapMode( MAP_100TH_MM );
-    GDIMetaFile aMtf;
-    Size aPageSize = maPListener->getFilteredPageFile( mnCurPage, aMtf );
+    if( i_bNewPage )
+    {
+        const MapMode aMapMode( MAP_100TH_MM );
+        GDIMetaFile aMtf;
+        maCurPageSize = maPListener->getFilteredPageFile( mnCurPage, aMtf );
+
+        maPreviewWindow.setPreview( aMtf );
+    }
 
     Size aPreviewSize;
     Point aPreviewPos = maPreviewSpace.TopLeft();
     const long nW = maPreviewSpace.GetSize().Width();
     const long nH = maPreviewSpace.GetSize().Height();
-    if( aPageSize.Width() > aPageSize.Height() )
+    if( maCurPageSize.Width() > maCurPageSize.Height() )
     {
-        aPreviewSize = Size( nW, nW * aPageSize.Height() / aPageSize.Width() );
+        aPreviewSize = Size( nW, nW * maCurPageSize.Height() / maCurPageSize.Width() );
         aPreviewPos.Y() += (maPreviewSpace.GetHeight() - aPreviewSize.Height())/2;
     }
     else
     {
-        aPreviewSize = Size( nH * aPageSize.Width() / aPageSize.Height(), nH );
+        aPreviewSize = Size( nH * maCurPageSize.Width() / maCurPageSize.Height(), nH );
         aPreviewPos.X() += (maPreviewSpace.GetWidth() - aPreviewSize.Width())/2;
     }
+
     maPreviewWindow.SetPosSizePixel( aPreviewPos, aPreviewSize );
     const Size aLogicSize( maPreviewWindow.PixelToLogic( maPreviewWindow.GetSizePixel(), MapMode( MAP_100TH_MM ) ) );
-    aMtf.Scale( double(aLogicSize.Width())/double(aPageSize.Width()),
-                double(aLogicSize.Height())/double(aPageSize.Height()) );
-    maPreviewWindow.setPreview( aMtf );
+    maPreviewWindow.setScale( double(aLogicSize.Width())/double(maCurPageSize.Width()),
+                              double(aLogicSize.Height())/double(maCurPageSize.Height()) );
 }
 
 void PrintDialog::updateNup()
@@ -989,8 +1007,8 @@ void PrintDialog::Resize()
     aBtnRect.Bottom() = aBtnRect.Top() + maPageText.GetSizePixel().Height() - 1;
     maPageText.SetPosSizePixel( aBtnRect.TopLeft(), aBtnRect.GetSize() );
 
-    // and do the preview
-    preparePreview();
+    // and do the preview; however the metafile does not need to be gotten anew
+    preparePreview( false );
 }
 
 // -----------------------------------------------------------------------------

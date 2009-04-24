@@ -56,6 +56,8 @@ namespace vcl
         class PrintPreviewWindow : public Window
         {
             GDIMetaFile         maMtf;
+            double              mfScaleX;
+            double              mfScaleY;
         public:
             PrintPreviewWindow( Window* pParent, const ResId& );
             virtual ~PrintPreviewWindow();
@@ -63,6 +65,7 @@ namespace vcl
             virtual void Paint( const Rectangle& rRect );
 
             void setPreview( const GDIMetaFile& );
+            void setScale( double fScaleX, double fScaleY );
         };
 
         class PrinterTabPage : public TabPage
@@ -135,6 +138,7 @@ namespace vcl
         sal_Int32                               mnCurPage;
         sal_Int32                               mnCachedPages;
         Rectangle                               maPreviewSpace;
+        Size                                    maCurPageSize;
 
         std::list< Window* >                    maControls;
         std::map< Window*, rtl::OUString >      maControlToPropertyMap;
@@ -145,7 +149,7 @@ namespace vcl
         Size                                    maNupLandscapeSize;
 
         void updateNup();
-        void preparePreview();
+        void preparePreview( bool i_bPrintChanged = true );
         void setPreviewText( sal_Int32 );
         void updatePrinterText();
         void checkControlDependencies();
