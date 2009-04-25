@@ -40,7 +40,7 @@ class AppError;
 
 #define SelectChildren SelectChilds     // Sonst wird mir schlecht
 
-typedef USHORT TTFeatures;          // Bitfeld für Features der Entrys
+typedef USHORT TTFeatures;          // Bitfield for features of the entries
 #define HasNothing  TTFeatures(0x00)
 #define HasError    TTFeatures(0x01)
 #define HasWarning  TTFeatures(0x02)
@@ -84,13 +84,13 @@ class MsgEdit : public DataEdit
     SvLBoxEntry *pCurrentError;
     BOOL bModified;
     Link lModify;
-    BOOL bFileLoading;      // TRUE während eine Datei geladen wird.
+    BOOL bFileLoading;      // TRUE while loading a file
     String Impl_MakeText( SvLBoxEntry *pEntry ) const;
     String Impl_MakeSaveText( SvLBoxEntry *pEntry ) const;
     String Impl_MakeSaveText( TTDebugData aData ) const;
-    USHORT nVersion;        // Speichert die Dateiversion
+    USHORT nVersion;        // Stores file version
     AppError* pAppError;
-    String aLogFileName;    // Name der Logdatei
+    String aLogFileName;
 
     static USHORT nMaxLogLen;
     static BOOL bLimitLogLen;

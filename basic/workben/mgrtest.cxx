@@ -44,7 +44,7 @@
 //#include <basic.hxx>
 //#include <sostor.hxx>
 
-// Defines fuer ToolBox-Id's
+// Defines for ToolBox-Id's
 #define TB_NEW              1
 #define TB_OPENSTORAGE      2
 #define TB_SAVESTORAGE      3
@@ -71,7 +71,7 @@ const char* pLib1Str = "Lib1";
 const char* pLib2Str = "Lib2";
 const char* pLib3Str = "Lib3";
 
-// Test-Applikation
+// Test-Application
 class TestApp : public Application
 {
 public:
@@ -79,8 +79,8 @@ public:
     virtual void Main( int, char*[] );
 };
 
-// Test-Fenster mit ToolBox zur Auswahl eines Tests
-// und den typischerweise verwendeten virtuellen Methoden
+// Test-Window with a ToolBox to choose a test from
+// and the typically used virtual methods
 class TestWindow : public WorkWindow
 {
 private:
@@ -224,8 +224,8 @@ void TestWindow::ShowInfo()
 
 void TestWindow::UpdateToolBox()
 {
-    // Darstellung bestimmter Buttons als gecheckt oder disabled,
-    // falls fuer Test gewuenscht
+    // View of some buttons as checked or disabled if
+    // wished by tests
     aToolBox.EnableItem( TB_ORG, (BOOL)(ULONG)pBasMgr );
 
     aToolBox.EnableItem( TB_CREATELIB1, (BOOL)(ULONG)pBasMgr );

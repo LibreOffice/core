@@ -40,10 +40,10 @@ public:
     AppError( BasicFrame*, String );
     ~AppError();
 //  long Command( short nID );
-    virtual long InitMenu( Menu* );         // Initialisierung des Menues
-    virtual long DeInitMenu( Menu* );   // rücksetzen, so daß wieder alle Shortcuts enabled sind
-    USHORT GetLineNr();             // Aktuelle Zeilennummer
-    FileType GetFileType();         // Liefert den Filetype
+    virtual long InitMenu( Menu* );
+    virtual long DeInitMenu( Menu* );
+    USHORT GetLineNr();
+    FileType GetFileType();
     MsgEdit* GetMsgTree()           { return ((MsgEdit*)pDataEdit); }
     virtual BOOL ReloadAllowed(){ return !StarBASIC::IsRunning(); }
     virtual void LoadIniFile();     // (re)load ini file after change

@@ -30,17 +30,16 @@
 #include "basic/ttglobal.hrc"
 
 
-// Hier sind die Messages aus dem Verzeichnis /basic/source/app enhalten
-
+// Here are the messages of /basic/source/app included
 
 ///////////////////////////////
-// Fehlermeldungen, die in das Resultfile gelangen.
+// Error message that go to the Resultfile.
 // *********************
-// ***  !!ACHTUNG!!  ***
+// ***  !!ATTENTION!!    ***
 // *********************
-// Die Nummern dürfen sich NIE! ändern,
-// da sie in den Resultfiles gespeichert sind, und bei erneutem Anzeigen
-// statdessen die entsprechenden neuen oder garkeine Strings angzeigt werden.
+// Theses numbers MUST NOT change ever!
+// Because they are stored in the Resultfiles and if you showed them again
+// the appropriate new or no Strings are viewed.
 ///////////////////////////////
 
 #define S_GPF_ABORT                                 ( SVT_START +   0 )

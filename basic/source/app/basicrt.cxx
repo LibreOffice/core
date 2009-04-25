@@ -38,112 +38,110 @@
 
 const String BasicRuntime::GetSourceRevision()
 {
-    return pRun->GetModule()->GetComment();
+  return pRun->GetModule()->GetComment();
 }
 
 const String BasicRuntime::GetModuleName( SbxNameType nType )
 {
-    return pRun->GetModule()->GetName( nType );
+  return pRun->GetModule()->GetName( nType );
 }
 
 const String BasicRuntime::GetMethodName( SbxNameType nType )
 {
-    return pRun->GetMethod()->GetName( nType );
+  return pRun->GetMethod()->GetName( nType );
 }
 
 xub_StrLen BasicRuntime::GetLine()
 {
-    return pRun->nLine;
+  return pRun->nLine;
 }
 
 xub_StrLen BasicRuntime::GetCol1()
 {
-    return pRun->nCol1;
+  return pRun->nCol1;
 }
 
 xub_StrLen BasicRuntime::GetCol2()
 {
-    return pRun->nCol2;
+  return pRun->nCol2;
 }
 
 BOOL BasicRuntime::IsRun()
 {
-    return pRun->IsRun();
+  return pRun->IsRun();
 }
 
 BasicRuntime BasicRuntime::GetNextRuntime()
 {
-    return BasicRuntime ( pRun->pNext );
+  return BasicRuntime ( pRun->pNext );
 }
-
 
 
 
 const String BasicErrorStackEntry::GetSourceRevision()
 {
-    return pEntry->aMethod->GetModule()->GetComment();
+  return pEntry->aMethod->GetModule()->GetComment();
 }
 
 const String BasicErrorStackEntry::GetModuleName( SbxNameType nType )
 {
-    return pEntry->aMethod->GetModule()->GetName( nType );
+  return pEntry->aMethod->GetModule()->GetName( nType );
 }
 
 const String BasicErrorStackEntry::GetMethodName( SbxNameType nType )
 {
-    return pEntry->aMethod->GetName( nType );
+  return pEntry->aMethod->GetName( nType );
 }
 
 xub_StrLen BasicErrorStackEntry::GetLine()
 {
-    return pEntry->nLine;
+  return pEntry->nLine;
 }
 
 xub_StrLen BasicErrorStackEntry::GetCol1()
 {
-    return pEntry->nCol1;
+  return pEntry->nCol1;
 }
 
 xub_StrLen BasicErrorStackEntry::GetCol2()
 {
-    return pEntry->nCol2;
+  return pEntry->nCol2;
 }
-
 
 
 
 BasicRuntime BasicRuntimeAccess::GetRuntime()
 {
-    return BasicRuntime( pINST->pRun );
+  return BasicRuntime( pINST->pRun );
 }
 
 bool BasicRuntimeAccess::HasRuntime()
 {
-    return pINST && pINST->pRun != NULL;
+  return pINST && pINST->pRun != NULL;
 }
 
 USHORT BasicRuntimeAccess::GetStackEntryCount()
 {
-    return GetSbData()->pErrStack->Count();
+  return GetSbData()->pErrStack->Count();
 }
 
 BasicErrorStackEntry BasicRuntimeAccess::GetStackEntry( USHORT nIndex )
 {
-    return BasicErrorStackEntry( GetSbData()->pErrStack->GetObject( nIndex ) );
+  return BasicErrorStackEntry( GetSbData()->pErrStack->GetObject( nIndex ) );
 }
 
 BOOL BasicRuntimeAccess::HasStack()
 {
-    return GetSbData()->pErrStack != NULL;
+  return GetSbData()->pErrStack != NULL;
 }
 
 void BasicRuntimeAccess::DeleteStack()
 {
-    delete GetSbData()->pErrStack;
-    GetSbData()->pErrStack = NULL;
+  delete GetSbData()->pErrStack;
+  GetSbData()->pErrStack = NULL;
 }
 
 BOOL BasicRuntimeAccess::IsRunInit()
 {
-    return GetSbData()->bRunInit;
+  return GetSbData()->bRunInit;
 }

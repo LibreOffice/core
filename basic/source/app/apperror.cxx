@@ -42,13 +42,13 @@ TYPEINIT1(AppError,AppWin);
 AppError::AppError( BasicFrame* pParent, String aFileName )
 : AppWin( pParent )
 {
-    SetText( aFileName );   // Muß vor new MsgEdit stehen!!
+    SetText( aFileName );   // Call before MsgEdit!!
     pDataEdit = new MsgEdit( this, pParent, WB_HSCROLL | WB_VSCROLL | WB_LEFT );
     LoadIniFile();
     bHasFile = pDataEdit->Load( aFileName );
     DirEntry aEntry( aFileName );
     UpdateFileInfo( HAS_BEEN_LOADED );
-    // Icon definieren:
+    // Define icon
 //  pIcon = new Icon( ResId( RID_WORKICON ) );
 //  if( pIcon ) SetIcon( *pIcon );
 

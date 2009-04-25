@@ -52,11 +52,11 @@ AppEdit::AppEdit( BasicFrame* pParent )
 , nCurTextWidth(5)
 {
     String aEmpty;
-    // evtl. den Untitled-String laden:
+    // perhaps load the Untitled-String:
 
     pDataEdit = new TextEdit( this, WB_LEFT );
     LoadIniFile();
-    // Icon definieren:
+    // define Icon:
 //  pIcon = new Icon( ResId( RID_WORKICON ) );
 //  if( pIcon ) SetIcon( *pIcon );
 
@@ -76,11 +76,11 @@ AppEdit::AppEdit( BasicFrame* pParent )
 
 AppEdit::~AppEdit()
 {
-    DataEdit *pHold = pDataEdit;
-    pDataEdit = NULL;       // Erst abklemmen, dann löschen
-    delete pHold;
-    delete pHScroll;
-    delete pVScroll;
+  DataEdit *pHold = pDataEdit;
+  pDataEdit = NULL;
+  delete pHold;
+  delete pHScroll;
+  delete pVScroll;
 }
 
 void AppEdit::LoadIniFile()
@@ -117,7 +117,7 @@ void AppEdit::LoadIniFile()
         ((TextEdit*)pDataEdit)->GetBreakpointWindow()->Invalidate();
     }
 
-    pTextView->GetTextEngine()->SetModified( bWasModified );    // Eventuell wieder setzen
+    pTextView->GetTextEngine()->SetModified( bWasModified );    // Perhaps reset the flag
 }
 
 void AppEdit::Command( const CommandEvent& rCEvt )
@@ -157,7 +157,7 @@ void AppEdit::InitScrollBars()
         return;
 
     TextView *pTextView = ((TextEdit*)pDataEdit)->aEdit.pTextView;
-// Kopiert und angepasst.
+
     SetScrollBarRanges();
 
     Size aOutSz( pTextView->GetWindow()->GetOutputSizePixel() );
@@ -176,23 +176,25 @@ void AppEdit::InitScrollBars()
 
 void AppEdit::SetScrollBarRanges()
 {
-    // Extra-Methode, nicht InitScrollBars, da auch fuer EditEngine-Events.
+  // Extra-Method, not InitScrollBars, but for EditEngine-Events.
 
-    if ( !pHScroll || !pVScroll )
-        return;
+  if ( !pHScroll || !pVScroll )
+    return;
 
-    pHScroll->SetRange( Range( 0, nCurTextWidth ) );
-
-    pVScroll->SetRange( Range( 0, ((TextEdit*)pDataEdit)->aEdit.pTextEngine->GetTextHeight() ) );
+  pHScroll->SetRange( Range( 0, nCurTextWidth ) );
+  pVScroll->SetRange( Range( 0, ((TextEdit*)pDataEdit)->aEdit.pTextEngine->GetTextHeight() ) );
 }
 
 
 
-USHORT AppEdit::GetLineNr(){ return pDataEdit->GetLineNr(); }
+USHORT AppEdit::GetLineNr()
+{
+  return pDataEdit->GetLineNr();
+}
 
 FileType AppEdit::GetFileType()
 {
-    return FT_BASIC_SOURCE;
+  return FT_BASIC_SOURCE;
 }
 
 // Set up the menu
@@ -221,8 +223,6 @@ long AppEdit::DeInitMenu( Menu* pMenu )
 
     return TRUE;
 }
-
-// Sourcecode-Datei laden
 
 void AppEdit::Resize()
 {
@@ -268,7 +268,6 @@ void AppEdit::Resize()
 
 
     TextView *pTextView = ((TextEdit*)pDataEdit)->aEdit.pTextView;
-// Kopiert und adaptiert
     long nVisY = pTextView->GetStartDocPos().Y();
     pTextView->ShowCursor();
     Size aOutSz( pTextView->GetWindow()->GetOutputSizePixel() );
@@ -292,8 +291,6 @@ void AppEdit::Resize()
 void AppEdit::PostLoad()
 {
 }
-
-// mit neuem Namen speichern
 
 void AppEdit::PostSaveAs()
 {

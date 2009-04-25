@@ -430,14 +430,14 @@ class BasicLibInfo
 private:
     StarBASICRef    xLib;
     String          aLibName;
-    String          aStorageName;   // String reicht, da zur Laufzeit eindeutig.
+    String          aStorageName;   // String is sufficient, unique at runtime
     String          aRelStorageName;
     String          aPassword;
 
     BOOL            bDoLoad;
     BOOL            bReference;
     BOOL            bPasswordVerified;
-    BOOL            bFoundInPath;   // Darf dann nicht neu relativiert werden!
+    BOOL            bFoundInPath;   // Must not relativated again!
 
     // Lib represents library in new UNO library container
     Reference< XLibraryContainer > mxScriptCont;
@@ -471,7 +471,7 @@ public:
     const String&   GetLibName() const                  { return aLibName; }
     void            SetLibName( const String& rName )   { aLibName = rName; }
 
-    // Nur temporaer fuer Laden/Speichern....
+    // Only temporary for Load/Save
     BOOL            DoLoad()                            { return bDoLoad; }
 
     BOOL            HasPassword() const                 { return aPassword.Len() != 0; }
@@ -498,7 +498,7 @@ DECLARE_LIST( BasicLibsBase, BasicLibInfo* )
 class BasicLibs : public BasicLibsBase
 {
 public:
-    String  aBasicLibPath;      // soll eigentlich Member vom Manager werden, aber jetzt nicht inkompatibel!
+    String  aBasicLibPath; // TODO: Should be member of manager, but currently not incompatible
 };
 
 BasicLibInfo::BasicLibInfo()
@@ -536,20 +536,20 @@ void BasicLibInfo::Store( SotStorageStream& rSStream, const String& rBasMgrStora
     String aCurStorageName = INetURLObject(rBasMgrStorageName, INET_PROT_FILE).GetMainURL( INetURLObject::NO_DECODE );
     DBG_ASSERT(aCurStorageName.Len() != 0, "Bad storage name");
 
-    // Falls nicht gesetzt, StorageName initialisieren
+    // If not set initialize StorageName
     if ( aStorageName.Len() == 0 )
         aStorageName = aCurStorageName;
 
-    // Wieder laden?
+    // Load again?
     BOOL bDoLoad_ = xLib.Is();
     if ( bUseOldReloadInfo )
         bDoLoad_ = DoLoad();
     rSStream << bDoLoad_;
 
-    // Den Namen der Lib...
+    // The name of the lib...
     rSStream.WriteByteString(GetLibName());
 
-    // Absoluter Pfad....
+    // Absolute path...
     if ( ! GetStorageName().EqualsAscii(szImbedded) )
     {
         String aSName = INetURLObject( GetStorageName(), INET_PROT_FILE).GetMainURL( INetURLObject::NO_DECODE );
@@ -559,14 +559,14 @@ void BasicLibInfo::Store( SotStorageStream& rSStream, const String& rBasMgrStora
     else
         rSStream.WriteByteString( szImbedded );
 
-    // Relativer Pfad...
+    // Relative path...
     if ( ( aStorageName == aCurStorageName ) || ( aStorageName.EqualsAscii(szImbedded) ) )
         rSStream.WriteByteString( szImbedded );
     else
     {
-        // Nicht den relativen Pfad ermitteln, wenn die Datei nur im Pfad
-        // gefunden wurde: Dann andert sich der relative Pfad und nach einem
-        // verschieben der Libs in einen anderen Pfad werden sie nicht gefunden.
+        // Do not determine the relative path if the file was only found in path:
+        // because the relative path would change and after moving the lib the
+        // the file cannot be found.
         if ( !IsFoundInPath() )
             CalcRelStorageName( aCurStorageName );
         rSStream.WriteByteString(aRelStorageName);
@@ -576,11 +576,11 @@ void BasicLibInfo::Store( SotStorageStream& rSStream, const String& rBasMgrStora
     // Version 2
     // ------------------------------
 
-    // Referenz...
+    // reference...
     rSStream << bReference;
 
     // ------------------------------
-    // Schluss
+    // End
     // ------------------------------
 
     nEndPos = rSStream.Tell();
@@ -604,22 +604,22 @@ BasicLibInfo* BasicLibInfo::Create( SotStorageStream& rSStream )
     DBG_ASSERT( nId == LIBINFO_ID, "Keine BasicLibInfo !?" );
     if( nId == LIBINFO_ID )
     {
-        // Wieder laden?
+        // Reload?
         BOOL bDoLoad;
         rSStream >> bDoLoad;
         pInfo->bDoLoad = bDoLoad;
 
-        // Den Namen der Lib...
+        // The name of the lib...
         String aName;
         rSStream.ReadByteString(aName);
         pInfo->SetLibName( aName );
 
-        // Absoluter Pfad....
+        // Absolute path...
         String aStorageName;
         rSStream.ReadByteString(aStorageName);
         pInfo->SetStorageName( aStorageName );
 
-        // Relativer Pfad...
+        // Relative path...
         String aRelStorageName;
         rSStream.ReadByteString(aRelStorageName);
         pInfo->SetRelStorageName( aRelStorageName );
@@ -667,17 +667,16 @@ BasicManager::BasicManager( SotStorage& rStorage, const String& rBaseURL, StarBA
     // DBG_ASSERT( aStorName.Len(), "No Storage Name!" );
     // DBG_ASSERT(aStorageName.Len() != 0, "Bad storage name");
 
-    // Wenn es den Manager-Stream nicht gibt, sind keine weiteren
-    // Aktionen noetig.
+    // If there is no Manager Stream, no further actions are necessary
     if ( rStorage.IsStream( ManagerStreamName ) )
     {
         LoadBasicManager( rStorage, rBaseURL );
-        // StdLib erhaelt gewuenschten Parent:
+        // StdLib contains Parent:
         StarBASIC* pStdLib = GetStdLib();
-        DBG_ASSERT( pStdLib, "Standard-Lib nicht geladen?" );
+        DBG_ASSERT( pStdLib, "Standard-Lib not loaded?" );
         if ( !pStdLib )
         {
-            // Sollte eigentlich nie passieren, aber dann wenigstens nicht abstuerzen...
+            // Should never happen, but if it happens we wont crash...
             pStdLib = new StarBASIC( NULL, mbDocMgr );
             BasicLibInfo* pStdLibInfo = pLibs->GetObject( 0 );
             if ( !pStdLibInfo )
@@ -692,7 +691,7 @@ BasicManager::BasicManager( SotStorage& rStorage, const String& rBaseURL, StarBA
         else
         {
             pStdLib->SetParent( pParentFromStdLib );
-            // Die anderen erhalten die StdLib als Parent:
+            // The other get StdLib as parent:
             for ( USHORT nBasic = 1; nBasic < GetLibCount(); nBasic++ )
             {
                 StarBASIC* pBasic = GetLib( nBasic );
@@ -703,7 +702,7 @@ BasicManager::BasicManager( SotStorage& rStorage, const String& rBaseURL, StarBA
                     pBasic->SetFlag( SBX_EXTSEARCH );
                 }
             }
-            // Durch das Insert modified:
+            // Modified through insert
             pStdLib->SetModified( FALSE );
         }
 
@@ -863,7 +862,7 @@ BasicManager::BasicManager( StarBASIC* pSLib, String* pLibPath, BOOL bDocMgr ) :
 {
     DBG_CTOR( BasicManager, 0 );
     Init();
-    DBG_ASSERT( pSLib, "BasicManager kann nicht mit einem NULL-Pointer erzeugt werden!" );
+    DBG_ASSERT( pSLib, "BasicManager cannot be created with a NULL-Pointer!" );
 
     if( pLibPath )
         pLibs->aBasicLibPath = *pLibPath;
@@ -875,7 +874,7 @@ BasicManager::BasicManager( StarBASIC* pSLib, String* pLibPath, BOOL bDocMgr ) :
     pStdLibInfo->SetLibName( String::CreateFromAscii(szStdLibName) );
     pSLib->SetFlag( SBX_DONTSTORE | SBX_EXTSEARCH );
 
-    // Speichern lohnt sich nur, wenn sich das Basic aendert.
+    // Save is only necessary if basic has changed
     xStdLib->SetModified( FALSE );
     bBasMgrModified = FALSE;
 }
@@ -883,22 +882,19 @@ BasicManager::BasicManager( StarBASIC* pSLib, String* pLibPath, BOOL bDocMgr ) :
 BasicManager::BasicManager()
 {
     DBG_CTOR( BasicManager, 0 );
-    // Diese CTOR darf nur verwendet werden um bei 'Speichern unter'
-    // die relativen Pfade anzupassen, das gibt kein AppBasic und somit
-    // duerfen auch keine Libs geladen werden...
+    // This ctor may only be used to adapt relative paths for 'Save As'.
+    // There is no AppBasic so libs must not be loaded...
     Init();
 }
 
 void BasicManager::ImpMgrNotLoaded( const String& rStorageName )
 {
-    // pErrInf wird nur zerstoert, wenn der Fehler von einem ErrorHandler
-    // gehandelt wird!
-//  String aErrorText( BasicResId( IDS_SBERR_MGROPEN ) );
-//  aErrorText.SearchAndReplace( "XX", rStorageName );
+    // pErrInf is only destroyed if the error os processed by an
+    // ErrorHandler
     StringErrorInfo* pErrInf = new StringErrorInfo( ERRCODE_BASMGR_MGROPEN, rStorageName, ERRCODE_BUTTON_OK );
     pErrorMgr->InsertError( BasicError( *pErrInf, BASERR_REASON_OPENMGRSTREAM, rStorageName ) );
 
-    // Eine STD-Lib erzeugen, sonst macht es Peng!
+    // Create a stdlib otherwise we crash!
     BasicLibInfo* pStdLibInfo = CreateLibInfo();
     pStdLibInfo->SetLib( new StarBASIC( NULL, mbDocMgr ) );
     StarBASICRef xStdLib = pStdLibInfo->GetLib();
@@ -941,9 +937,9 @@ void BasicManager::LoadBasicManager( SotStorage& rStorage, const String& rBaseUR
     maStorageName = INetURLObject(aStorName, INET_PROT_FILE).GetMainURL( INetURLObject::NO_DECODE );
     // #i13114 removed, DBG_ASSERT(aStorageName.Len() != 0, "Bad storage name");
 
-    String aRealStorageName = maStorageName;  // fuer relative Pfade, kann durch BaseURL umgebogen werden.
+    String aRealStorageName = maStorageName;  // for relative paths, can be modified through BaseURL
 
-    // Wenn aus Vorlagen geladen wird, gilt nur die BaseURL:
+    // If loaded from template, only BaseURL is used:
     //String aBaseURL = INetURLObject::GetBaseURL();
     if ( rBaseURL.Len() )
     {
@@ -963,15 +959,15 @@ void BasicManager::LoadBasicManager( SotStorage& rStorage, const String& rBaseUR
     // Plausi!
     if( nLibs & 0xF000 )
     {
-        DBG_ASSERT( !this, "BasicManager-Stream defekt!" );
+        DBG_ASSERT( !this, "BasicManager-Stream defect!" );
         return;
     }
     for ( USHORT nL = 0; nL < nLibs; nL++ )
     {
         BasicLibInfo* pInfo = BasicLibInfo::Create( *xManagerStream );
 
-        // ggf. absoluten Pfad-Namen korrigieren, wenn rel. existiert
-        // Immer erst den relativen versuchen, falls zwei Staende auf der Platte
+        // Correct absolute pathname if relative is existing.
+        // Always try relative first if there are two stands on disk
         if ( pInfo->GetRelStorageName().Len() && ( ! pInfo->GetRelStorageName().EqualsAscii(szImbedded) ) )
         {
             INetURLObject aObj( aRealStorageName, INET_PROT_FILE );
@@ -986,7 +982,7 @@ void BasicManager::LoadBasicManager( SotStorage& rStorage, const String& rBaseUR
             //*** TODO-End
             if ( pLibs->aBasicLibPath.Len() )
             {
-                // Lib im Pfad suchen...
+                // Search lib in path
                 String aSearchFile = pInfo->GetRelStorageName();
                 SvtPathOptions aPathCFG;
                 if( aPathCFG.SearchFile( aSearchFile, SvtPathOptions::PATH_BASIC ) )
@@ -998,9 +994,8 @@ void BasicManager::LoadBasicManager( SotStorage& rStorage, const String& rBaseUR
         }
 
         pLibs->Insert( pInfo, LIST_APPEND );
-        // Libs aus externen Dateien sollen erst bei Bedarf geladen werden.
-        // Aber Referenzen werden gleich geladen, sonst bekommen die Grosskunden
-        // vielleicht Probleme...
+        // Libs from external files should be loaded only when necessary.
+        // But references are loaded at once, otherwise some big customers get into trouble
         if ( bLoadLibs && pInfo->DoLoad() &&
             ( ( !pInfo->IsExtern() ) || ( pInfo->IsReference() ) ) )
         {
@@ -1048,11 +1043,11 @@ void BasicManager::LoadOldBasicManager( SotStorage& rStorage )
         pErrorMgr->InsertError( BasicError( *pErrInf, BASERR_REASON_OPENMGRSTREAM, aStorName ) );
         // und es geht weiter...
     }
-    xManagerStream->Seek( nBasicEndOff+1 ); // +1: 0x00 als Trenner
+    xManagerStream->Seek( nBasicEndOff+1 ); // +1: 0x00 as separator
     String aLibs;
     xManagerStream->ReadByteString(aLibs);
     xManagerStream->SetBufferSize( 0 );
-    xManagerStream.Clear(); // Sream schliessen
+    xManagerStream.Clear(); // Close stream
 
     if ( aLibs.Len() )
     {
@@ -1062,7 +1057,7 @@ void BasicManager::LoadOldBasicManager( SotStorage& rStorage )
         for ( USHORT nLib = 0; nLib < nLibs; nLib++ )
         {
             String aLibInfo( aLibs.GetToken( nLib, LIB_SEP ) );
-            // == 2 soll irgendwann weg!
+            // TODO: Remove == 2
             DBG_ASSERT( ( aLibInfo.GetTokenCount( LIBINFO_SEP ) == 2 ) || ( aLibInfo.GetTokenCount( LIBINFO_SEP ) == 3 ), "Ungueltige Lib-Info!" );
             String aLibName( aLibInfo.GetToken( 0, LIBINFO_SEP ) );
             String aLibAbsStorageName( aLibInfo.GetToken( 1, LIBINFO_SEP ) );
@@ -1103,12 +1098,11 @@ BasicManager::~BasicManager()
 {
     DBG_DTOR( BasicManager, 0 );
 
-    // Listener benachrichtigen, falls noch etwas zu Speichern...
+    // Notify listener if something needs to be saved
     Broadcast( SfxSimpleHint( SFX_HINT_DYING) );
 
-    // Basic-Infos zerstoeren...
-    // In umgekehrter Reihenfolge, weil die StdLib Referenzen haelt, die
-    // anderen nur die StdLib als Parent haben.
+    // Destroy Basic-Infos...
+    // In reverse order
     BasicLibInfo* pInf = pLibs->Last();
     while ( pInf )
     {
@@ -1157,7 +1151,7 @@ BOOL BasicManager::ImpLoadLibary( BasicLibInfo* pLibInfo, SotStorage* pCurStorag
         aStorageName = GetStorageName();
 
     SotStorageRef xStorage;
-    // Der aktuelle darf nicht nochmal geoffnet werden...
+    // The current must not be opened again...
     if ( pCurStorage )
     {
         String aStorName( pCurStorage->GetName() );
@@ -1186,7 +1180,7 @@ BOOL BasicManager::ImpLoadLibary( BasicLibInfo* pLibInfo, SotStorage* pCurStorag
     }
     else
     {
-        // In dem Basic-Storage liegt jede Lib in einem Stream...
+        // In the Basic-Storage every lib is in a Stream...
         SotStorageStreamRef xBasicStream = xBasicStorage->OpenSotStream( pLibInfo->GetLibName(), eStreamReadMode );
         if ( !xBasicStream.Is() || xBasicStream->GetError() )
         {
@@ -1213,7 +1207,7 @@ BOOL BasicManager::ImpLoadLibary( BasicLibInfo* pLibInfo, SotStorage* pCurStorag
                 }
                 else
                 {
-                    // Das Basic skippen...
+                    // Skip Basic...
                     xBasicStream->Seek( STREAM_SEEK_TO_BEGIN );
                     ImplEncryptStream( *xBasicStream );
                     SbxBase::Skip( *xBasicStream );
@@ -1227,7 +1221,7 @@ BOOL BasicManager::ImpLoadLibary( BasicLibInfo* pLibInfo, SotStorage* pCurStorag
             }
             else
             {
-                // Ggf. stehen weitere Informationen im Stream...
+                // Perhaps there are additional information in the stream...
                 xBasicStream->SetKey( szCryptingKey );
                 xBasicStream->RefreshBuffer();
                 sal_uInt32 nPasswordMarker = 0;
@@ -1241,7 +1235,6 @@ BOOL BasicManager::ImpLoadLibary( BasicLibInfo* pLibInfo, SotStorage* pCurStorag
                 xBasicStream->SetKey( ByteString() );
                 CheckModules( pLibInfo->GetLib(), pLibInfo->IsReference() );
             }
-//          bBasMgrModified = TRUE; // Warum?
             return bLoaded;
         }
     }
@@ -1257,7 +1250,7 @@ BOOL BasicManager::ImplEncryptStream( SvStream& rStrm ) const
     BOOL bProtected = FALSE;
     if ( nCreator != SBXCR_SBX )
     {
-        // sollte nur bei verschluesselten Streams nicht stimmen.
+        // Should only be the case for encrypted Streams
         bProtected = TRUE;
         rStrm.SetKey( szCryptingKey );
         rStrm.RefreshBuffer();
@@ -1265,7 +1258,8 @@ BOOL BasicManager::ImplEncryptStream( SvStream& rStrm ) const
     return bProtected;
 }
 
-// Dieser Code ist notwendig, um das BASIC der Beta 1 laden zu koennen
+// This code is necessary to load the BASIC of Beta 1
+// TODO: Which Beta 1?
 BOOL BasicManager::ImplLoadBasic( SvStream& rStrm, StarBASICRef& rOldBasic ) const
 {
     BOOL bProtected = ImplEncryptStream( rStrm );
@@ -1276,7 +1270,7 @@ BOOL BasicManager::ImplLoadBasic( SvStream& rStrm, StarBASICRef& rOldBasic ) con
         if( xNew->IsA( TYPE(StarBASIC) ) )
         {
             StarBASIC* pNew = (StarBASIC*)(SbxBase*) xNew;
-            // Den Parent des alten BASICs uebernehmen
+            // Use the Parent of the old BASICs
             if( rOldBasic.Is() )
             {
                 pNew->SetParent( rOldBasic->GetParent() );
@@ -1320,8 +1314,8 @@ void BasicManager::CheckModules( StarBASIC* pLib, BOOL bReference ) const
             pLib->Compile( pModule );
     }
 
-    // #67477, AB 8.12.99 On demand Compilieren bei referenzierten
-    // Libraries sollte nicht zu modified fuehren
+    // #67477, AB 8.12.99 On demand compile in referenced libs should not
+    // cause modified
     if( !bModified && bReference )
     {
         DBG_ERROR( "Per Reference eingebundene Basic-Library ist nicht compiliert!" );
@@ -1344,13 +1338,13 @@ StarBASIC* BasicManager::AddLib( SotStorage& rStorage, const String& rLibName, B
         aNewLibName += '_';
 
     BasicLibInfo* pLibInfo = CreateLibInfo();
-    // Erstmal mit dem Original-Namen, da sonst ImpLoadLibary nicht geht...
+    // Use original name otherwise ImpLoadLibary failes...
     pLibInfo->SetLibName( rLibName );
     // Funktioniert so aber nicht, wenn Name doppelt
 //  USHORT nLibId = GetLibId( rLibName );
     USHORT nLibId = (USHORT) pLibs->GetPos( pLibInfo );
 
-    // Vorm Laden StorageNamen setzen, da er mit pCurStorage verglichen wird.
+    // Set StorageName before load because it is compared with pCurStorage
     pLibInfo->SetStorageName( aStorageName );
     BOOL bLoaded = ImpLoadLibary( pLibInfo, &rStorage );
 
@@ -1361,15 +1355,15 @@ StarBASIC* BasicManager::AddLib( SotStorage& rStorage, const String& rLibName, B
 
         if ( bReference )
         {
-            pLibInfo->GetLib()->SetModified( FALSE );   // Dann nicht speichern
+            pLibInfo->GetLib()->SetModified( FALSE );   // Don't save in this case
             pLibInfo->SetRelStorageName( String() );
 //          pLibInfo->CalcRelStorageName( GetStorageName() );
             pLibInfo->IsReference() = TRUE;
         }
         else
         {
-            pLibInfo->GetLib()->SetModified( TRUE );        // Muss nach Add gespeichert werden!
-            pLibInfo->SetStorageName( String::CreateFromAscii(szImbedded) );            // Im BasicManager-Storage speichern
+            pLibInfo->GetLib()->SetModified( TRUE ); // Must be saved after Add!
+            pLibInfo->SetStorageName( String::CreateFromAscii(szImbedded) ); // Save in BasicManager-Storage
         }
         bBasMgrModified = TRUE;
     }
@@ -1399,17 +1393,17 @@ BOOL BasicManager::IsReference( USHORT nLib )
 
 BOOL BasicManager::RemoveLib( USHORT nLib )
 {
-    // Nur physikalisch loeschen, wenn keine Referenz.
+    // Only pyhsical deletion if no reference
     return RemoveLib( nLib, !IsReference( nLib ) );
 }
 
 BOOL BasicManager::RemoveLib( USHORT nLib, BOOL bDelBasicFromStorage )
 {
     DBG_CHKTHIS( BasicManager, 0 );
-    DBG_ASSERT( nLib, "Standard-Lib kann nicht entfernt werden!" );
+    DBG_ASSERT( nLib, "Standard-Lib cannot be removed!" );
 
     BasicLibInfo* pLibInfo = pLibs->GetObject( nLib );
-    DBG_ASSERT( pLibInfo, "Lib nicht gefunden!" );
+    DBG_ASSERT( pLibInfo, "Lib not found!" );
 
     if ( !pLibInfo || !nLib )
     {
@@ -1419,9 +1413,8 @@ BOOL BasicManager::RemoveLib( USHORT nLib, BOOL bDelBasicFromStorage )
         return FALSE;
     }
 
-    // Wenn einer der Streams nicht geoeffnet werden kann, ist es kein
-    // Fehler, es gibt halt noch nichts zum loeschen, weil das Basic noch
-    // nie geschrieben wurde...
+    // If one of the streams cannot be opened, this is not an error,
+    // because BASIC was never written before...
     if ( bDelBasicFromStorage && !pLibInfo->IsReference() &&
             ( !pLibInfo->IsExtern() || SotStorage::IsStorageFile( pLibInfo->GetStorageName() ) ) )
     {
@@ -1447,8 +1440,8 @@ BOOL BasicManager::RemoveLib( USHORT nLib, BOOL bDelBasicFromStorage )
                 xBasicStorage->Remove( pLibInfo->GetLibName() );
                 xBasicStorage->Commit();
 
-                // Wenn kein weiterer Stream vorhanden,
-                // dann auch den SubStorage loeschen.
+                // If no further stream available,
+                // delete the SubStorage.
                 SvStorageInfoList aInfoList( 0, 4 );
                 xBasicStorage->FillInfoList( &aInfoList );
                 if ( !aInfoList.Count() )
@@ -1456,8 +1449,8 @@ BOOL BasicManager::RemoveLib( USHORT nLib, BOOL bDelBasicFromStorage )
                     xBasicStorage.Clear();
                     xStorage->Remove( BasicStreamName );
                     xStorage->Commit();
-                    // Wenn kein weiterer Streams oder SubStorages vorhanden,
-                    // dann auch den Storage loeschen.
+                    // If no further Streams or SubStorages available,
+                    // delete the Storage, too.
                     aInfoList.Clear();
                     xStorage->FillInfoList( &aInfoList );
                     if ( !aInfoList.Count() )
@@ -1476,7 +1469,7 @@ BOOL BasicManager::RemoveLib( USHORT nLib, BOOL bDelBasicFromStorage )
     if ( pLibInfo->GetLib().Is() )
         GetStdLib()->Remove( pLibInfo->GetLib() );
     delete pLibs->Remove( pLibInfo );
-    return TRUE;    // Remove hat geklappt, Del unwichtig.
+    return TRUE;    // Remove was successful, del unimportant
 }
 
 USHORT BasicManager::GetLibCount() const
@@ -1509,7 +1502,7 @@ StarBASIC* BasicManager::GetLib( const String& rName ) const
     BasicLibInfo* pInf = pLibs->First();
     while ( pInf )
     {
-        if ( pInf->GetLibName().CompareIgnoreCaseToAscii( rName ) == COMPARE_EQUAL )        // prueffen, ob vorhanden...
+        if ( pInf->GetLibName().CompareIgnoreCaseToAscii( rName ) == COMPARE_EQUAL )// Check if available...
             return pInf->GetLib();
 
         pInf = pLibs->Next();
@@ -2306,7 +2299,7 @@ Any LibraryContainer_Impl::getByName( const ::rtl::OUString& aName )
 
     ::rtl::OUString aPassword = pLibInfo->GetPassword();
 
-    // TODO Nur extern-Info liefern!
+    // TODO Only provide extern info!
     ::rtl::OUString aExternaleSourceURL;
     ::rtl::OUString aLinkTargetURL;
     if( pLibInfo->IsReference() )

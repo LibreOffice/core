@@ -42,14 +42,14 @@
 #ifndef _SBX_CLASS_TYPE
 #define _SBX_CLASS_TYPE
 
-enum SbxClassType {         // SBX-Klassen-IDs (Reihenfolge ist wichtig)
-    SbxCLASS_DONTCARE = 1,  // egal (bei der Suche, nicht 0 wg. StarBASIC)
-    SbxCLASS_ARRAY,         // Array aus SbxVariablen
-    SbxCLASS_VALUE,         // einfacher Wert
-    SbxCLASS_VARIABLE,      // Variable (ab hier gibts einen Broadcaster)
-    SbxCLASS_METHOD,        // Methode (Function oder Sub)
+enum SbxClassType {         // SBX-class-IDs (order is important!)
+    SbxCLASS_DONTCARE = 1,  // don't care (search, not 0 due to StarBASIC)
+    SbxCLASS_ARRAY,         // Array of SbxVariables
+    SbxCLASS_VALUE,         // simple value
+    SbxCLASS_VARIABLE,      // Variable (from here there is Broadcaster)
+    SbxCLASS_METHOD,        // Method (Function or Sub)
     SbxCLASS_PROPERTY,      // Property
-    SbxCLASS_OBJECT         // Objekt
+    SbxCLASS_OBJECT         // Object
 };
 
 #endif
@@ -114,25 +114,25 @@ enum SbxDataType {
 #define _SBX_OPERATOR
 
 enum SbxOperator {
-                        // Arithmetik:
+                        // Arithmetical:
     SbxEXP,             // this ^ var
     SbxMUL,             // this * var
     SbxDIV,             // this / var
     SbxMOD,             // this MOD var
     SbxPLUS,            // this + var
     SbxMINUS,           // this - var
-    SbxNEG,             // -this (var wird ignoriert)
-    SbxIDIV,            // this / var (beide Operanden sind max. INT32!)
-                        // Boolesche Operatoren (auch max INT32!):
+    SbxNEG,             // -this (var is ignored)
+    SbxIDIV,            // this / var (both operands max. INT32!)
+                        // Boolean operators (max INT32!):
     SbxAND,             // this & var
     SbxOR,              // this | var
     SbxXOR,             // this ^ var
     SbxEQV,             // ~this ^ var
     SbxIMP,             // ~this | var
-    SbxNOT,             // ~this (var wird ignoriert)
-                        // String-Verkettung:
+    SbxNOT,             // ~this (var is ignored)
+                        // String-concat:
     SbxCAT,             // this & var
-                        // Vergleiche:
+                        // Comparisons:
     SbxEQ,              // this = var
     SbxNE,              // this <> var
     SbxLT,              // this < var
@@ -146,8 +146,8 @@ enum SbxOperator {
 #ifndef _SBX_NAME_TYPE
 #define _SBX_NAME_TYPE
 
-enum SbxNameType {              // Art des erfragten Namens einer Variablen
-    SbxNAME_NONE,               // der nackte Name
+enum SbxNameType {              // Type of the questioned name of a variable
+    SbxNAME_NONE,               // plain name
     SbxNAME_SHORT,              // Name(A,B)
     SbxNAME_SHORT_TYPES,        // Name%(A%,B$)
     SbxNAME_LONG_TYPES          // Name(A As Integer, B As String) As Integer
@@ -155,41 +155,41 @@ enum SbxNameType {              // Art des erfragten Namens einer Variablen
 
 #endif
 
-// AB: 20.3.96: Neue Fehler-Meldungen
-typedef ULONG SbxError;         // Alten Typ erhalten
+// AB: 20.3.96: New error messages
+typedef ULONG SbxError;         // Preserve old type
 
 #endif
 // von #ifndef __RSC
 
 
-// Neue Fehler-Codes per define
-#define ERRCODE_SBX_OK                          ERRCODE_NONE                    // durchgefuehrt
+// New error codes per define
+#define ERRCODE_SBX_OK                          ERRCODE_NONE                    // processed
 #define ERRCODE_SBX_SYNTAX                      (1UL | ERRCODE_AREA_SBX | \
-                                                ERRCODE_CLASS_COMPILER)         // Syntaxfehler im Parser
+                                                ERRCODE_CLASS_COMPILER)         // Syntaxerror in parser (where else could syntax errors happen? ;-)
 #define ERRCODE_SBX_NOTIMP                      (2UL | ERRCODE_AREA_SBX | \
-                                                ERRCODE_CLASS_NOTSUPPORTED)     // nicht moeglich
+                                                ERRCODE_CLASS_NOTSUPPORTED)     // not possible
 #define ERRCODE_SBX_OVERFLOW                    (3UL | ERRCODE_AREA_SBX | \
-                                                ERRCODE_CLASS_SBX)              // Ueberlauf
+                                                ERRCODE_CLASS_SBX)              // overflow
 #define ERRCODE_SBX_BOUNDS                      (4UL | ERRCODE_AREA_SBX | \
-                                                ERRCODE_CLASS_SBX)              // Array-Index ungueltig
+                                                ERRCODE_CLASS_SBX)              // Invalid array index
 #define ERRCODE_SBX_ZERODIV                     (5UL | ERRCODE_AREA_SBX | \
-                                                ERRCODE_CLASS_SBX)              // Division durch Null
+                                                ERRCODE_CLASS_SBX)              // Division by zero
 #define ERRCODE_SBX_CONVERSION                  (6UL | ERRCODE_AREA_SBX | \
-                                                ERRCODE_CLASS_SBX)              // falscher Datentyp
+                                                ERRCODE_CLASS_SBX)              // wrong data type
 #define ERRCODE_SBX_BAD_PARAMETER               (7UL | ERRCODE_AREA_SBX | \
-                                                ERRCODE_CLASS_RUNTIME)          // ungueltiger Parameter
+                                                ERRCODE_CLASS_RUNTIME)          // invalid Parameter
 #define ERRCODE_SBX_PROC_UNDEFINED              (8UL | ERRCODE_AREA_SBX | \
-                                                ERRCODE_CLASS_RUNTIME)          // BASIC-Sub oder Function undefiniert
+                                                ERRCODE_CLASS_RUNTIME)          // BASIC-Sub or Function undefined
 #define ERRCODE_SBX_ERROR                       (9UL | ERRCODE_AREA_SBX | \
-                                                ERRCODE_CLASS_UNKNOWN)          // andere Fehler, Objektbezogene Fehler
+                                                ERRCODE_CLASS_UNKNOWN)          // other object-related error
 #define ERRCODE_SBX_NO_OBJECT                   (10UL | ERRCODE_AREA_SBX | \
-                                                ERRCODE_CLASS_RUNTIME)          // Objektvariable nicht belegt
+                                                ERRCODE_CLASS_RUNTIME)          // Object variable unassigned
 #define ERRCODE_SBX_CANNOT_LOAD                 (11UL | ERRCODE_AREA_SBX | \
-                                                ERRCODE_CLASS_CREATE)           // Objekt kann nicht geladen/eingerichtet werden
+                                                ERRCODE_CLASS_CREATE)           // Object cannot be loaded or initialized
 #define ERRCODE_SBX_BAD_INDEX                   (12UL | ERRCODE_AREA_SBX | \
                                                 ERRCODE_CLASS_SBX)              // Invalid object index
 #define ERRCODE_SBX_NO_ACTIVE_OBJECT            (13UL | ERRCODE_AREA_SBX | \
-                                                ERRCODE_CLASS_ACCESS)           // Objekt ist nicht aktiviert
+                                                ERRCODE_CLASS_ACCESS)           // Object ist not activated
 #define ERRCODE_SBX_BAD_PROP_VALUE              (14UL | ERRCODE_AREA_SBX | \
                                                 ERRCODE_CLASS_RUNTIME)          // Bad property value
 #define ERRCODE_SBX_PROP_READONLY               (15UL | ERRCODE_AREA_SBX | \
@@ -201,34 +201,34 @@ typedef ULONG SbxError;         // Alten Typ erhalten
 #define ERRCODE_SBX_NO_METHOD                   (18UL | ERRCODE_AREA_SBX | \
                                                 ERRCODE_CLASS_RUNTIME)          // Property oder Methode unbekannt
 #define ERRCODE_SBX_INVALID_USAGE_OBJECT        (19UL | ERRCODE_AREA_SBX | \
-                                                ERRCODE_CLASS_ACCESS)           // Falsche Verwendung eines Objekts
+                                                ERRCODE_CLASS_ACCESS)           // Invalid object usage
 #define ERRCODE_SBX_NO_OLE                      (20UL | ERRCODE_AREA_SBX | \
-                                                ERRCODE_CLASS_ACCESS)           // Kein OLE-Objekt
+                                                ERRCODE_CLASS_ACCESS)           // No OLE-Object
 #define ERRCODE_SBX_BAD_METHOD                  (21UL | ERRCODE_AREA_SBX | \
-                                                ERRCODE_CLASS_RUNTIME)          // Methode nicht untersttzt
+                                                ERRCODE_CLASS_RUNTIME)          // Method not supported
 #define ERRCODE_SBX_OLE_ERROR                   (22UL | ERRCODE_AREA_SBX | \
-                                                ERRCODE_CLASS_RUNTIME)          // OLE Automation-Fehler
+                                                ERRCODE_CLASS_RUNTIME)          // OLE Automation Error
 #define ERRCODE_SBX_BAD_ACTION                  (23UL | ERRCODE_AREA_SBX | \
-                                                ERRCODE_CLASS_NOTSUPPORTED)     // Aktion nicht untersttzt
+                                                ERRCODE_CLASS_NOTSUPPORTED)     // Action not supported
 #define ERRCODE_SBX_NO_NAMED_ARGS               (24UL | ERRCODE_AREA_SBX | \
-                                                ERRCODE_CLASS_RUNTIME)          // Keine benannten Argumente
+                                                ERRCODE_CLASS_RUNTIME)          // No named arguments
 #define ERRCODE_SBX_BAD_LOCALE                  (25UL | ERRCODE_AREA_SBX | \
-                                                ERRCODE_CLASS_NOTSUPPORTED)     // Laenderspezifische Einstellungen nicht untersttzt
+                                                ERRCODE_CLASS_NOTSUPPORTED)     // Locale settings not supported
 #define ERRCODE_SBX_NAMED_NOT_FOUND             (26UL | ERRCODE_AREA_SBX | \
-                                                ERRCODE_CLASS_RUNTIME)          // Unbekanntes benanntes Argument
+                                                ERRCODE_CLASS_RUNTIME)          // Unknown named argument
 #define ERRCODE_SBX_NOT_OPTIONAL                (27UL | ERRCODE_AREA_SBX | \
-                                                ERRCODE_CLASS_RUNTIME)          // Argument nicht optional
+                                                ERRCODE_CLASS_RUNTIME)          // Argument not optional
 #define ERRCODE_SBX_WRONG_ARGS                  (28UL | ERRCODE_AREA_SBX | \
-                                                ERRCODE_CLASS_SBX)              // Falsche Zahl von Argumenten
+                                                ERRCODE_CLASS_SBX)              // Invalid number of arguments
 #define ERRCODE_SBX_NOT_A_COLL                  (29UL | ERRCODE_AREA_SBX | \
-                                                ERRCODE_CLASS_RUNTIME)          // Objekt enthaelt keine Elemente
+                                                ERRCODE_CLASS_RUNTIME)          // Object contains no elements
 #define LAST_SBX_ERROR_ID                       29UL
 
 
-// Ab hier fuer Ressource wieder unwichtig
+// Less important for resources
 #ifndef __RSC
 
-// Alte Codes auf neue mappen
+// Map old codes to new ones
 #define SbxERR_OK                               ERRCODE_SBX_OK
 #define SbxERR_SYNTAX                           ERRCODE_SBX_SYNTAX
 #define SbxERR_NOTIMP                           ERRCODE_SBX_NOTIMP
@@ -261,7 +261,7 @@ typedef ULONG SbxError;         // Alten Typ erhalten
 #define SbxERR_NOT_A_COLL                       ERRCODE_SBX_NOT_A_COLL
 
 
-/* Alte Codes mit VB-Fehler-Codes
+/* Old codes with VB error codes
 enum SbxError {                 // Ergebnis einer Rechenoperation/Konversion
     SbxERR_OK = 0,              // durchgefuehrt
     SbxERR_SYNTAX = 2,          // Syntaxfehler im Parser
@@ -298,24 +298,24 @@ enum SbxError {                 // Ergebnis einer Rechenoperation/Konversion
 */
 
 // Flag-Bits:
-#define SBX_READ      0x0001    // Leseerlaubnis
-#define SBX_WRITE     0x0002    // Schreiberlaubnis
-#define SBX_READWRITE 0x0003    // beides
-#define SBX_DONTSTORE 0x0004    // Objekt nicht speichern
-#define SBX_MODIFIED  0x0008    // Objekt ist geaendert
-#define SBX_FIXED     0x0010    // fester Datentyp (SbxVariable)
-#define SBX_CONST     0x0020    // Definition eines Const-Wertes
-#define SBX_OPTIONAL  0x0040    // Parameter ist optional
-#define SBX_HIDDEN    0x0080    // Element ist unsichtbar
-#define SBX_INVISIBLE 0x0100    // Element wird mit Find() nicht gefunden
-#define SBX_EXTSEARCH 0x0200    // Objekt wird komplett durchsucht
-#define SBX_EXTFOUND  0x0400    // Variable wurde durch Extended Srch gefunden
-#define SBX_GBLSEARCH 0x0800    // Globale Suche ueber Parents
-#define SBX_RESERVED  0x1000    // reserviert
+#define SBX_READ      0x0001    // Read permission
+#define SBX_WRITE     0x0002    // Write permission
+#define SBX_READWRITE 0x0003    // Read/Write permission
+#define SBX_DONTSTORE 0x0004    // Don't store object
+#define SBX_MODIFIED  0x0008    // Object was changed
+#define SBX_FIXED     0x0010    // Fixed data type (SbxVariable)
+#define SBX_CONST     0x0020    // Definition of const value
+#define SBX_OPTIONAL  0x0040    // Parameter is optional
+#define SBX_HIDDEN    0x0080    // Element is invisible
+#define SBX_INVISIBLE 0x0100    // Element is not found by Find()
+#define SBX_EXTSEARCH 0x0200    // Object is searched completely
+#define SBX_EXTFOUND  0x0400    // Variable was found through extended search
+#define SBX_GBLSEARCH 0x0800    // Global search via Parents
+#define SBX_RESERVED  0x1000    // reserved
 #define SBX_PRIVATE   0x1000    // #110004, #112015, cannot conflict with SBX_RESERVED
-#define SBX_NO_BROADCAST 0x2000 // kein Broadcast bei Get/Put
-#define SBX_REFERENCE 0x4000    // Parameter ist Referenz (DLL-Aufruf)
-#define SBX_NO_MODIFY 0x8000    // SetModified wird unterdrueckt
+#define SBX_NO_BROADCAST 0x2000 // No broadcast on Get/Put
+#define SBX_REFERENCE 0x4000    // Parameter is Reference (DLL-call)
+#define SBX_NO_MODIFY 0x8000    // SetModified is suppressed
 
 // Broadcaster-IDs:
 #define SBX_HINT_DYING          SFX_HINT_DYING
@@ -325,13 +325,12 @@ enum SbxError {                 // Ergebnis einer Rechenoperation/Konversion
 #define SBX_HINT_INFOWANTED     SFX_HINT_USER02
 #define SBX_HINT_OBJECTCHANGED  SFX_HINT_USER03
 
-// Liste aller Creators fuer Load/Store
+// List of all creators for Load/Store
 
 #define SBXCR_SBX           0x20584253      // SBX(blank)
 
-// Liste der vordefinierten SBX-IDs. Eigene SBX-IDs muessen spezifisch
-// so vergeben werden, dass sie innerhalb des Streams und der dazu passenden
-// Factory eindeutig sind.
+// List of predefined SBX-IDs. New SBX-IDs must be precisly defined so that
+// they are unique within the Stream and appropriate Factory.
 
 #define SBXID_VALUE         0x4E4E  // NN: SbxValue
 #define SBXID_VARIABLE      0x4156  // VA: SbxVariable
@@ -343,10 +342,10 @@ enum SbxError {                 // Ergebnis einer Rechenoperation/Konversion
 #define SBXID_METHOD        0x454D  // ME: SbxMethod
 #define SBXID_PROPERTY      0x5250  // PR: SbxProperty
 
-// StarBASIC begrenzt die Basis-Datentypen auf verschiedene
-// Bereiche. Diese Bereiche sind zwecks Portabilitaet fest
-// definiert, unabhaengig von der Implementation. Allein der
-// Datentyp double nimmt auf, was er fassen kann.
+// StarBASIC restricts the base data type to different intervals.
+// These intervals are fixed due to portability and independent
+// of the implementation. Only type double is greedy and takes
+// what it gets.
 
 #define SbxMAXCHAR          ((sal_Unicode)65535)
 #define SbxMINCHAR          (0)
@@ -372,17 +371,13 @@ enum SbxError {                 // Ergebnis einer Rechenoperation/Konversion
 #define SbxMAXCURRLNG       (SbxMAXLNG/CURRENCY_FACTOR)
 #define SbxMINCURRLNG       (SbxMINLNG/CURRENCY_FACTOR)
 
-// Der maximal zulaessige Offset-Index fuer Sbx-Arrays (wg. 64K-Limit)
-
+// Max valid offset index of a Sbx-Array (due to 64K limit)
 #define SBX_MAXINDEX        0x3FF0
 #define SBX_MAXINDEX32      SbxMAXLNG
 
-// Die numerischen Werte fuer TRUE und FALSE sind wie folgt definiert:
-
+// The numeric values of TRUE and FALSE
 enum SbxBOOL { SbxFALSE = 0, SbxTRUE = -1 };
 
-#endif
-// von #ifndef __RSC
-
+#endif // __RSC
 
 #endif

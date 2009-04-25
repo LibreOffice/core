@@ -51,7 +51,7 @@ class SbModuleImpl;
 
 class SbModule : public SbxObject
 {
-    friend class    TestToolObj;    // somit können Module nach laden zur Laufzeit initialisiert werden
+    friend class    TestToolObj;    // allows module initialisation at runtime
     friend class    SbiCodeGen;
     friend class    SbMethod;
     friend class    SbiRuntime;
@@ -61,11 +61,11 @@ class SbModule : public SbxObject
     SbModuleImpl*   mpSbModuleImpl;     // Impl data
 
 protected:
-    ::rtl::OUString aOUSource;
-    String          aComment;
-    SbiImage*       pImage;             // das Image
-    SbiBreakpoints* pBreaks;            // Breakpoints
-    SbClassData*    pClassData;
+    ::rtl::OUString     aOUSource;
+    String              aComment;
+    SbiImage*           pImage;        // the Image
+    SbiBreakpoints*     pBreaks;       // Breakpoints
+    SbClassData*        pClassData;
 
     void            StartDefinitions();
     SbMethod*       GetMethod( const String&, SbxDataType );
@@ -76,7 +76,7 @@ protected:
     USHORT          Run( SbMethod* );
     void            RunInit();
     void            ClearPrivateVars();
-    void            GlobalRunInit( BOOL bBasicStart );  // fuer alle Module
+    void            GlobalRunInit( BOOL bBasicStart );  // for all modules
     void            GlobalRunDeInit( void );
     const BYTE*     FindNextStmnt( const BYTE*, USHORT&, USHORT& ) const;
     const BYTE*     FindNextStmnt( const BYTE*, USHORT&, USHORT&,
@@ -116,7 +116,7 @@ public:
     virtual BOOL    ClearBP( USHORT nLine );
     virtual void    ClearAllBP();
 
-    // Zeilenbereiche von Subs
+    // Lines of Subs
     virtual SbMethod*   GetFunctionForLine( USHORT );
 
     // Store only image, no source (needed for new password protection)
@@ -150,7 +150,7 @@ public:
     SbClassModuleObject( SbModule* pClassModule );
     ~SbClassModuleObject();
 
-    // Find ueberladen, um z.B. NameAccess zu unterstuetzen
+    // Overridden to support NameAccess etc.
     virtual SbxVariable* Find( const String&, SbxClassType );
 
     virtual void SFX_NOTIFY( SfxBroadcaster&, const TypeId&, const SfxHint& rHint, const TypeId& );
