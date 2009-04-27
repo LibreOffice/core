@@ -36,6 +36,7 @@
 #include "StatusBarCommandDispatch.hxx"
 #include "DisposeHelper.hxx"
 #include "macros.hxx"
+#include "DrawCommandDispatch.hxx"
 
 #include <comphelper/InlineContainer.hxx>
 
@@ -51,8 +52,9 @@ namespace chart
 {
 
 CommandDispatchContainer::CommandDispatchContainer(
-    const Reference< uno::XComponentContext > & xContext ) :
-        m_xContext( xContext )
+    const Reference< uno::XComponentContext > & xContext )
+        :m_xContext( xContext )
+        ,m_pDrawCommandDispatch( NULL )
 {
     m_aContainerDocumentCommands =
         ::comphelper::MakeSet< OUString >
@@ -130,6 +132,11 @@ Reference< frame::XDispatch > CommandDispatchContainer::getDispatchForURL(
             // ToDo: can those dispatches be cached?
             m_aCachedDispatches[ rURL.Complete ].set( xResult );
         }
+        else if ( m_pDrawCommandDispatch && m_pDrawCommandDispatch->isFeatureSupported( rURL ) )
+        {
+            xResult.set( m_pDrawCommandDispatch );
+            m_aCachedDispatches[ rURL.Complete ].set( xResult );
+        }
         else if( m_xFallbackDispatcher.is() &&
                  (m_aFallbackCommands.find( rURL.Path ) != m_aFallbackCommands.end()) )
         {
@@ -162,6 +169,7 @@ void CommandDispatchContainer::DisposeAndClear()
     m_aToBeDisposedDispatches.clear();
     m_xFallbackDispatcher.clear();
     m_aFallbackCommands.clear();
+    m_pDrawCommandDispatch = NULL;
 }
 
 Reference< frame::XDispatch > CommandDispatchContainer::getContainerDispatchForURL(
@@ -180,6 +188,12 @@ Reference< frame::XDispatch > CommandDispatchContainer::getContainerDispatchForU
         }
     }
     return xResult;
+}
+
+void CommandDispatchContainer::setDrawCommandDispatch( DrawCommandDispatch* pDispatch )
+{
+    m_pDrawCommandDispatch = pDispatch;
+    m_aToBeDisposedDispatches.push_back( Reference< frame::XDispatch >( pDispatch ) );
 }
 
 } //  namespace chart

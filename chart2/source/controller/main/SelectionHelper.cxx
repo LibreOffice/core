@@ -291,6 +291,12 @@ void Selection::adaptSelectionToNewPos( const Point& rMousePos, DrawViewWrapper*
 
 bool Selection::isResizeableObjectSelected()
 {
+    // #i12587# support for shapes in chart
+    if ( m_xSelectAdditionalShape.is() )
+    {
+        return true;
+    }
+
     ObjectType eObjectType = ObjectIdentifier::getObjectType( m_aSelectedObjectCID );
     switch( eObjectType )
     {

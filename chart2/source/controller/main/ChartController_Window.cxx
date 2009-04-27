@@ -560,6 +560,21 @@ void ChartController::execute_MouseButtonDown( const MouseEvent& rMEvt )
     if( isDoubleClick(rMEvt) ) //do not change selection if double click
         return;//double click is handled further in mousebutton up
 
+    // #i12587# support for shapes in chart
+    if ( m_eDrawMode == CHARTDRAW_INSERT )
+    {
+        if ( m_aSelection.hasSelection() )
+        {
+            m_aSelection.clearSelection();
+        }
+        if ( !pDrawViewWrapper->IsAction() )
+        {
+            pDrawViewWrapper->BegCreateObj( aMPos);
+        }
+        impl_SetMousePointer( rMEvt );
+        return;
+    }
+
     SdrHdl* pHitSelectionHdl = 0;
     //switch from move to resize if handle is hit on a resizeable object
     if( m_aSelection.isResizeableObjectSelected() )
@@ -669,7 +684,33 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
                 return;
         }
 
-        if(pDrawViewWrapper->IsDragObj())
+        // #i12587# support for shapes in chart
+        if ( m_eDrawMode == CHARTDRAW_INSERT )
+        {
+            if ( pDrawViewWrapper->IsCreateObj() )
+            {
+                pDrawViewWrapper->EndCreateObj( SDRCREATE_FORCEEND );
+                if ( pDrawViewWrapper->AreObjectsMarked() )
+                {
+                    if ( pDrawViewWrapper->GetCurrentObjIdentifier() == OBJ_TEXT )
+                    {
+                        executeDispatch_EditText();
+                    }
+                    else
+                    {
+                        m_aSelection.adaptSelectionToNewPos( aMPos, pDrawViewWrapper, rMEvt.IsRight(), m_bWaitingForDoubleClick );
+                        m_aSelection.applySelection( pDrawViewWrapper );
+                    }
+                }
+                else
+                {
+                    m_aSelection.adaptSelectionToNewPos( aMPos, pDrawViewWrapper, rMEvt.IsRight(), m_bWaitingForDoubleClick );
+                    m_aSelection.applySelection( pDrawViewWrapper );
+                    setDrawMode( CHARTDRAW_SELECT );
+                }
+            }
+        }
+        else if ( pDrawViewWrapper->IsDragObj() )
         {
             bool bDraggingDone = false;
             SdrDragMethod* pDragMethod = pDrawViewWrapper->SdrView::GetDragMethod();
@@ -771,11 +812,37 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
 
 void ChartController::execute_DoubleClick()
 {
-    ObjectType eObjectType = ObjectIdentifier::getObjectType( m_aSelection.getSelectedCID() );
-    if( OBJECTTYPE_TITLE==eObjectType )
+    bool bEditText = false;
+    if ( m_aSelection.hasSelection() )
+    {
+        ::rtl::OUString aCID( m_aSelection.getSelectedCID() );
+        if ( aCID.getLength() )
+        {
+            ObjectType eObjectType = ObjectIdentifier::getObjectType( aCID );
+            if ( OBJECTTYPE_TITLE == eObjectType )
+            {
+                bEditText = true;
+            }
+        }
+        else
+        {
+            // #i12587# support for shapes in chart
+            SdrObject* pObj = DrawViewWrapper::getSdrObject( m_aSelection.getSelectedAdditionalShape() );
+            if ( pObj && pObj->ISA( SdrTextObj ) )
+            {
+                bEditText = true;
+            }
+        }
+    }
+
+    if ( bEditText )
+    {
         executeDispatch_EditText();
+    }
     else
+    {
         executeDispatch_ObjectProperties();
+    }
 }
 
 void ChartController::execute_Resize()
@@ -1389,7 +1456,38 @@ void ChartController::impl_SetMousePointer( const MouseEvent & rEvent )
         sal_uInt16 nModifier = rEvent.GetModifier();
         BOOL bLeftDown = rEvent.IsLeft();
 
-        if( m_pDrawViewWrapper->IsTextEdit() )
+        if ( m_eDrawMode == CHARTDRAW_INSERT )
+        {
+            // #i12587# support for shapes in chart
+            PointerStyle ePointerStyle = POINTER_DRAW_RECT;
+            SdrObjKind eKind = static_cast< SdrObjKind >( m_pDrawViewWrapper->GetCurrentObjIdentifier() );
+            switch ( eKind )
+            {
+                case OBJ_LINE:
+                    {
+                        ePointerStyle = POINTER_DRAW_LINE;
+                    }
+                    break;
+                case OBJ_RECT:
+                    {
+                        ePointerStyle = POINTER_DRAW_RECT;
+                    }
+                    break;
+                case OBJ_TEXT:
+                    {
+                        ePointerStyle = POINTER_DRAW_TEXT;
+                    }
+                    break;
+                default:
+                    {
+                        ePointerStyle = POINTER_DRAW_RECT;
+                    }
+                    break;
+            }
+            pWindow->SetPointer( Pointer( ePointerStyle ) );
+            return;
+        }
+        else if ( m_pDrawViewWrapper->IsTextEdit() )
         {
             if( m_pDrawViewWrapper->IsTextEditHit( aMousePos, HITPIX) )
             {

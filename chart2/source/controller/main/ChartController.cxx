@@ -53,6 +53,7 @@
 #include "dlg_CreationWizard.hxx"
 #include "dlg_ChartType.hxx"
 //#include "svx/ActionDescriptionProvider.hxx"
+#include "DrawCommandDispatch.hxx"
 
 #include <comphelper/InlineContainer.hxx>
 
@@ -128,6 +129,7 @@ ChartController::ChartController(uno::Reference<uno::XComponentContext> const & 
     , m_bConnectingToView(false)
     , m_xUndoManager( 0 )
     , m_aDispatchContainer( m_xCC )
+    , m_eDrawMode( CHARTDRAW_SELECT )
 {
     DBG_CTOR(ChartController,NULL);
 //     m_aDispatchContainer.setUndoManager( m_xUndoManager );
@@ -441,6 +443,13 @@ APPHELPER_XSERVICEINFO_IMPL(ChartController,CHART_CONTROLLER_SERVICE_IMPLEMENTAT
                     //@todo: createElement should become unnecessary, remove when #i79198# is fixed
                     xLayoutManager->createElement(  C2U( "private:resource/toolbar/toolbar" ) );
                     xLayoutManager->requestElement( C2U( "private:resource/toolbar/toolbar" ) );
+
+                    // #i12587# support for shapes in chart
+                    xLayoutManager->createElement(  C2U( "private:resource/toolbar/drawbar" ) );
+                    xLayoutManager->requestElement( C2U( "private:resource/toolbar/drawbar" ) );
+                    //xLayoutManager->createElement(  C2U( "private:resource/toolbar/basicshapes" ) );
+                    //xLayoutManager->requestElement( C2U( "private:resource/toolbar/basicshapes" ) );
+
                     xLayoutManager->requestElement( C2U( "private:resource/statusbar/statusbar" ) );
                     xLayoutManager->unlock();
 
@@ -566,6 +575,13 @@ void SAL_CALL ChartController::modeChanged( const util::ModeChangeEvent& rEvent 
     // impl_getAvailableCommands().  That means, for those commands dispatch()
     // is called here at the ChartController.
     m_aDispatchContainer.setFallbackDispatch( pDispatch, impl_getAvailableCommands() );
+
+    DrawCommandDispatch* pDrawDispatch = new DrawCommandDispatch( m_xCC, this );
+    if ( pDrawDispatch )
+    {
+        pDrawDispatch->initialize();
+        m_aDispatchContainer.setDrawCommandDispatch( pDrawDispatch );
+    }
 
 #ifdef TEST_ENABLE_MODIFY_LISTENER
     uno::Reference< util::XModifyBroadcaster > xMBroadcaster( aNewModelRef->getModel(),uno::UNO_QUERY );
@@ -1337,6 +1353,15 @@ DrawModelWrapper* ChartController::GetDrawModelWrapper()
             m_pDrawModelWrapper = pProvider->getDrawModelWrapper();
     }
     return m_pDrawModelWrapper.get();
+}
+
+DrawViewWrapper* ChartController::GetDrawViewWrapper()
+{
+    if ( !m_pDrawViewWrapper )
+    {
+        impl_createDrawViewController();
+    }
+    return m_pDrawViewWrapper;
 }
 
 uno::Reference< accessibility::XAccessible > ChartController::CreateAccessible()

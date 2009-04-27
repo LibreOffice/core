@@ -44,6 +44,8 @@
 namespace chart
 {
 
+class DrawCommandDispatch;
+
 /** @HTML
 
     Helper class for implementing the <code>XDispatchProvider</code> interface
@@ -119,6 +121,8 @@ public:
             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController > & xChartController,
             const ::com::sun::star::util::URL & rURL );
 
+    void setDrawCommandDispatch( DrawCommandDispatch* pDispatch );
+
 private:
     typedef
         ::std::map< ::rtl::OUString,
@@ -140,6 +144,8 @@ private:
     ::std::set< ::rtl::OUString >                                          m_aFallbackCommands;
 
     ::std::set< ::rtl::OUString >                                          m_aContainerDocumentCommands;
+
+    DrawCommandDispatch* m_pDrawCommandDispatch;
 };
 
 } //  namespace chart

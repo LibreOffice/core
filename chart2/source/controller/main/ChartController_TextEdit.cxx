@@ -141,15 +141,20 @@ bool ChartController::EndTextEdit()
         String aString = pOutliner->GetText(
                             pOutliner->GetParagraph( 0 ),
                             pOutliner->GetParagraphCount() );
-        uno::Reference< beans::XPropertySet > xPropSet =
-            ObjectIdentifier::getObjectPropertySet( m_aSelection.getSelectedCID(), getModel() );
 
-        // lock controllers till end of block
-        ControllerLockGuard aCLGuard( m_aModel->getModel());
+        ::rtl::OUString aObjectCID = m_aSelection.getSelectedCID();
+        if ( aObjectCID.getLength() > 0 )
+        {
+            uno::Reference< beans::XPropertySet > xPropSet =
+                ObjectIdentifier::getObjectPropertySet( aObjectCID, getModel() );
 
-        //Paragraph* pPara =
-        TitleHelper::setCompleteString( aString, uno::Reference<
-            ::com::sun::star::chart2::XTitle >::query( xPropSet ), m_xCC );
+            // lock controllers till end of block
+            ControllerLockGuard aCLGuard( m_aModel->getModel());
+
+            TitleHelper::setCompleteString( aString, uno::Reference<
+                ::com::sun::star::chart2::XTitle >::query( xPropSet ), m_xCC );
+        }
+
         try
         {
             m_xUndoManager->postAction( C2U("Edit Text") );

@@ -91,6 +91,8 @@ namespace chart
 {
 //.............................................................................
 
+enum ChartDrawMode { CHARTDRAW_INSERT, CHARTDRAW_SELECT };
+
 class WindowController
 {
 public:
@@ -158,6 +160,8 @@ class ChartController   : public ::cppu::WeakImplHelper12 <
         >
         , public WindowController
 {
+    friend class DrawCommandDispatch;
+
 public:
     //no default constructor
     ChartController(::com::sun::star::uno::Reference<
@@ -466,6 +470,9 @@ public:
 
     static bool isObjectDeleteable( const ::com::sun::star::uno::Any& rSelection );
 
+    void setDrawMode( ChartDrawMode eMode ) { m_eDrawMode = eMode; }
+    ChartDrawMode getDrawMode() const { return m_eDrawMode; }
+
 public:
     //-----------------------------------------------------------------
     //-----------------------------------------------------------------
@@ -480,6 +487,7 @@ public:
 
 private:
     DrawModelWrapper* GetDrawModelWrapper();
+    DrawViewWrapper* GetDrawViewWrapper();
 
 private:
     class TheModelRef;
@@ -579,6 +587,8 @@ private:
     ::com::sun::star::uno::Reference<
             ::com::sun::star::frame::XLayoutManagerEventBroadcaster >
                                                   m_xLayoutManagerEventBroadcaster;
+
+    ChartDrawMode       m_eDrawMode;
 
 private:
     //private methods

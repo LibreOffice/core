@@ -70,7 +70,8 @@ SLOFILES =  \
             $(SLO)$/_serviceregistration_controller.obj \
             $(SLO)$/ChartDropTargetHelper.obj \
             $(SLO)$/StatusBarCommandDispatch.obj \
-            $(SLO)$/ChartTransferable.obj
+            $(SLO)$/ChartTransferable.obj \
+            $(SLO)$/DrawCommandDispatch.obj
 
 #			$(SLO)$/CommonConverters.obj \
 #			$(SLO)$/Scaling.obj	\
