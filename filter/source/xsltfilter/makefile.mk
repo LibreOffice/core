@@ -53,10 +53,7 @@ SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=$(SHL1TARGET)
 
 SHL1STDLIBS= \
-    $(VCLLIB)           \
-    $(UNOTOOLSLIB)      \
     $(TOOLSLIB)         \
-    $(VOSLIB)           \
     $(CPPUHELPERLIB)    \
     $(CPPULIB)          \
     $(XMLOFFLIB) \
