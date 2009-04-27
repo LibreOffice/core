@@ -3412,8 +3412,8 @@ Pixel SalColormap::GetPixel( SalColor nSalColor ) const
 #ifdef DBG_UTIL
                         else
                             fprintf( stderr, "SalColormap::GetPixel() 0x%06lx=%lu 0x%06lx=%lu\n",
-                                     nSalColor, aColor.pixel,
-                                     nInversColor, aInversColor.pixel);
+                                     static_cast< unsigned long >(nSalColor), aColor.pixel,
+                                     static_cast< unsigned long >(nInversColor), aInversColor.pixel);
 #endif
                     }
                 }
@@ -3423,7 +3423,7 @@ Pixel SalColormap::GetPixel( SalColor nSalColor ) const
 
 #ifdef DBG_UTIL
             fprintf( stderr, "SalColormap::GetPixel() !XAllocColor %lx\n",
-                     nSalColor );
+                     static_cast< unsigned long >(nSalColor) );
 #endif
         }
 
@@ -3431,7 +3431,7 @@ Pixel SalColormap::GetPixel( SalColor nSalColor ) const
         {
 #ifdef DBG_UTIL
             fprintf( stderr, "SalColormap::GetPixel() Palette empty %lx\n",
-                     nSalColor);
+                     static_cast< unsigned long >(nSalColor));
 #endif
             return nSalColor;
         }

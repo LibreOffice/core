@@ -51,7 +51,7 @@ SLOFILES =  $(SLO)$/ipcx.obj
 
 SHL1TARGET=     ipx$(DLLPOSTFIX)
 SHL1IMPLIB=     ipcx
-SHL1STDLIBS=    $(VCLLIB) $(TOOLSLIB) $(SALLIB)
+SHL1STDLIBS=    $(VCLLIB) $(TOOLSLIB)
 SHL1LIBS=       $(SLB)$/ipcx.lib
 
 .IF "$(GUI)" != "UNX"

@@ -62,9 +62,7 @@ SHL1IMPLIB= itk
 SHL1USE_EXPORTS=name
 
 SHL1STDLIBS=\
-        $(VOSLIB)           \
         $(VCLLIB)			\
-        $(SOTLIB)			\
         $(UNOTOOLSLIB)		\
         $(TOOLSLIB)			\
         $(COMPHELPERLIB)	\
