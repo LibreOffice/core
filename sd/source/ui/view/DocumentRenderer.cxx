@@ -422,10 +422,11 @@ namespace {
         void ProcessResource (void)
         {
             AddDialogControl( vcl::PrinterOptionsHelper::getGroupControlOpt(
-                                 String( SdResId(_STR_IMPRESS_PRINT_UI_PRINT_CONTENT) ) ) );
+                                String( SdResId(_STR_IMPRESS_PRINT_UI_PRINT_CONTENT) ), rtl::OUString() ) );
 
             AddDialogControl( vcl::PrinterOptionsHelper::getChoiceControlOpt(
                                 String( SdResId( _STR_IMPRESS_PRINT_UI_CONTENT ) ),
+                                CreateChoice(_STR_IMPRESS_PRINT_UI_CONTENT_HELP),
                                 OUString( RTL_CONSTASCII_USTRINGPARAM( "PageContentType" ) ),
                                 CreateChoice(_STR_IMPRESS_PRINT_UI_CONTENT_CHOICES),
                                 0,
@@ -436,6 +437,7 @@ namespace {
             OUString aDep( RTL_CONSTASCII_USTRINGPARAM( "PageContentType" ) );
             AddDialogControl( vcl::PrinterOptionsHelper::getChoiceControlOpt(
                                 String( SdResId( _STR_IMPRESS_PRINT_UI_SLIDESPERPAGE ) ),
+                                CreateChoice(_STR_IMPRESS_PRINT_UI_SLIDESPERPAGE_CHOICES_HELP),
                                 OUString( RTL_CONSTASCII_USTRINGPARAM( "SlidesPerPage" ) ),
                                 GetSlidesPerPageSequence(),
                                 4,
@@ -446,6 +448,7 @@ namespace {
 
             AddDialogControl( vcl::PrinterOptionsHelper::getChoiceControlOpt(
                                 String( SdResId( _STR_IMPRESS_PRINT_UI_ORDER ) ),
+                                CreateChoice(_STR_IMPRESS_PRINT_UI_ORDER_CHOICES_HELP),
                                 OUString( RTL_CONSTASCII_USTRINGPARAM( "SlidesPerPageOrder" ) ),
                                 CreateChoice(_STR_IMPRESS_PRINT_UI_ORDER_CHOICES),
                                 0,
@@ -454,11 +457,12 @@ namespace {
                             );
 
             AddDialogControl( vcl::PrinterOptionsHelper::getSubgroupControlOpt(
-                                String( SdResId(_STR_IMPRESS_PRINT_UI_INCLUDE_CONTENT) ) ) );
+                               String( SdResId(_STR_IMPRESS_PRINT_UI_INCLUDE_CONTENT) ), rtl::OUString() ) );
 
 
             AddDialogControl( vcl::PrinterOptionsHelper::getBoolControlOpt(
                                 String( SdResId(_STR_IMPRESS_PRINT_UI_IS_PRINT_NAME) ),
+                                String( SdResId(_STR_IMPRESS_PRINT_UI_IS_PRINT_NAME_HELP) ),
                                 OUString( RTL_CONSTASCII_USTRINGPARAM( "IsPrintName" ) ),
                                 sal_False
                                 )
@@ -466,6 +470,7 @@ namespace {
 
             AddDialogControl( vcl::PrinterOptionsHelper::getBoolControlOpt(
                                 String( SdResId(_STR_IMPRESS_PRINT_UI_IS_PRINT_DATE) ),
+                                String( SdResId(_STR_IMPRESS_PRINT_UI_IS_PRINT_DATE_HELP) ),
                                 OUString( RTL_CONSTASCII_USTRINGPARAM( "IsPrintDate" ) ),
                                 sal_False
                                 )
@@ -473,6 +478,7 @@ namespace {
 
             AddDialogControl( vcl::PrinterOptionsHelper::getBoolControlOpt(
                                 String( SdResId(_STR_IMPRESS_PRINT_UI_IS_PRINT_TIME) ),
+                                String( SdResId(_STR_IMPRESS_PRINT_UI_IS_PRINT_TIME_HELP) ),
                                 OUString( RTL_CONSTASCII_USTRINGPARAM( "IsPrintTime" ) ),
                                 sal_False
                                 )
@@ -480,16 +486,18 @@ namespace {
 
             AddDialogControl( vcl::PrinterOptionsHelper::getBoolControlOpt(
                                 String( SdResId(_STR_IMPRESS_PRINT_UI_IS_PRINT_HIDDEN) ),
+                                String( SdResId(_STR_IMPRESS_PRINT_UI_IS_PRINT_HIDDEN_HELP) ),
                                 OUString( RTL_CONSTASCII_USTRINGPARAM( "IsPrintHidden" ) ),
                                 sal_False
                                 )
                             );
 
             AddDialogControl( vcl::PrinterOptionsHelper::getGroupControlOpt(
-                                String( SdResId(_STR_IMPRESS_PRINT_UI_OUTPUT_OPTIONS_GROUP) ) ) );
+                                String( SdResId(_STR_IMPRESS_PRINT_UI_OUTPUT_OPTIONS_GROUP) ), rtl::OUString() ) );
 
             AddDialogControl( vcl::PrinterOptionsHelper::getChoiceControlOpt(
                                 String( SdResId( _STR_IMPRESS_PRINT_UI_QUALITY ) ),
+                                CreateChoice(_STR_IMPRESS_PRINT_UI_QUALITY_CHOICES_HELP),
                                 OUString( RTL_CONSTASCII_USTRINGPARAM( "Quality" ) ),
                                 CreateChoice(_STR_IMPRESS_PRINT_UI_QUALITY_CHOICES),
                                 0
@@ -498,6 +506,7 @@ namespace {
 
             AddDialogControl( vcl::PrinterOptionsHelper::getChoiceControlOpt(
                                 String( SdResId( _STR_IMPRESS_PRINT_UI_PAGE_OPTIONS ) ),
+                                CreateChoice(_STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES_HELP),
                                 OUString( RTL_CONSTASCII_USTRINGPARAM( "PageOptions" ) ),
                                 CreateChoice(_STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES),
                                 0,
@@ -509,6 +518,7 @@ namespace {
             aDep = OUString( RTL_CONSTASCII_USTRINGPARAM( "PageOptions" ) );
             AddDialogControl( vcl::PrinterOptionsHelper::getBoolControlOpt(
                                 String( SdResId(_STR_IMPRESS_PRINT_UI_BROCHURE_FRONT) ),
+                                String( SdResId(_STR_IMPRESS_PRINT_UI_BROCHURE_FRONT_HELP) ),
                                 OUString( RTL_CONSTASCII_USTRINGPARAM( "Front" ) ),
                                 sal_True,
                                 &aDep, 3
@@ -517,6 +527,7 @@ namespace {
 
             AddDialogControl( vcl::PrinterOptionsHelper::getBoolControlOpt(
                                 String( SdResId(_STR_IMPRESS_PRINT_UI_BROCHURE_BACK) ),
+                                String( SdResId(_STR_IMPRESS_PRINT_UI_BROCHURE_BACK_HELP) ),
                                 OUString( RTL_CONSTASCII_USTRINGPARAM( "Back" ) ),
                                 sal_True,
                                 &aDep, 3
@@ -525,6 +536,7 @@ namespace {
 
             AddDialogControl( vcl::PrinterOptionsHelper::getBoolControlOpt(
                                 String( SdResId(_STR_IMPRESS_PRINT_UI_PAPER_TRAY) ),
+                                String( SdResId(_STR_IMPRESS_PRINT_UI_PAPER_TRAY_HELP) ),
                                 OUString( RTL_CONSTASCII_USTRINGPARAM( "PaperTray" ) ),
                                 sal_False
                                 )
