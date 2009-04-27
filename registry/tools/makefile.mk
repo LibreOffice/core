@@ -51,9 +51,7 @@ APP1OBJS=   $(OBJ)$/regmerge.obj
 APP1RPATH=  UREBIN
 
 APP1STDLIBS=\
-            $(STORELIB)\
             $(SALLIB) \
-            $(SALHELPERLIB) \
             $(REGLIB)
 
 APP2TARGET= regview
@@ -61,9 +59,7 @@ APP2OBJS=   $(OBJ)$/regview.obj
 APP2RPATH=  UREBIN
 
 APP2STDLIBS=\
-            $(STORELIB)\
             $(SALLIB) \
-            $(SALHELPERLIB) \
             $(REGLIB)
 
 APP3TARGET= regcompare
@@ -71,7 +67,6 @@ APP3OBJS=   $(OBJ)$/regcompare.obj
 APP3RPATH=  SDK
 
 APP3STDLIBS=\
-            $(STORELIB)\
             $(SALLIB) \
             $(SALHELPERLIB) \
             $(REGLIB)
@@ -80,7 +75,6 @@ APP4TARGET= checksingleton
 APP4OBJS=   $(OBJ)$/checksingleton.obj
 
 APP4STDLIBS=\
-            $(STORELIB)\
             $(SALLIB) \
             $(SALHELPERLIB) \
             $(REGLIB)
