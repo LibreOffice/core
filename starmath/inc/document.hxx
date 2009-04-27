@@ -38,11 +38,10 @@
 #include <svtools/lstner.hxx>
 #include <sfx2/docfac.hxx>
 #include <vcl/virdev.hxx>
+
 #include "format.hxx"
 #include "parse.hxx"
-#ifndef SMMOD_HXX
 #include "smmod.hxx"
-#endif
 
 #include <vcl/jobset.hxx>
 
@@ -83,6 +82,8 @@ class Printer;
 
 class SmDocShell;
 class EditEngine;
+
+////////////////////////////////////////////////////////////
 
 class SmPrinterAccess
 {

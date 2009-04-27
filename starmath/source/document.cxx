@@ -116,16 +116,11 @@ using namespace ::com::sun::star::accessibility;
 
 static const char __FAR_DATA pStarMathDoc[] = "StarMathDocument";
 
-
-/**************************************************************************/
-/*
-**
-**  CLASS IMPLEMENTATION
-**
-**/
-
 #define SmDocShell
 #include "smslots.hxx"
+
+////////////////////////////////////////////////////////////
+
 
 TYPEINIT1( SmDocShell, SfxObjectShell );
 

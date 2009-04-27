@@ -47,6 +47,7 @@ class DataChangedEvent;
 class SmClipboardChangeListener;
 class SmDocShell;
 class SmViewShell;
+class SmPrintUIOptions;
 
 /**************************************************************************/
 
@@ -293,8 +294,8 @@ public:
     virtual void Execute( SfxRequest& rReq );
     virtual void GetState(SfxItemSet &);
 
-    void Impl_Print( OutputDevice &rOutDev, const SmPrintSize ePrintSize,
-                     Rectangle aOutRect, Point aZeroPoint );
+    void Impl_Print( OutputDevice &rOutDev, const SmPrintUIOptions &rPrintUIOptions,
+            Rectangle aOutRect, Point aZeroPoint );
 };
 
 #endif

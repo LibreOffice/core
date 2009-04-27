@@ -52,15 +52,13 @@
 #include <xmloff/xmluconv.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/propertysetinfo.hxx>
+
 #include <unomodel.hxx>
 #include <document.hxx>
 #include <view.hxx>
 #include <symbol.hxx>
-#ifndef STARMATH_HRC
 #include <starmath.hrc>
-#endif
 #include <config.hxx>
-
 #include <smdll.hxx>
 
 using namespace ::vos;
@@ -82,12 +80,7 @@ using namespace ::com::sun::star::script;
 
 #define A2OU(cChar)     rtl::OUString::createFromAscii(cChar)
 
-
-class SmPrintUIOptions : public vcl::PrinterOptionsHelper
-{
-public:
-    SmPrintUIOptions();
-};
+////////////////////////////////////////////////////////////
 
 SmPrintUIOptions::SmPrintUIOptions()
 {
@@ -96,9 +89,14 @@ SmPrintUIOptions::SmPrintUIOptions()
     if( aLocalizedStrings.Count() < 10 ) // bad resource ?
         return;
 
+    SmModule *pp = SM_MOD1();
+    SmConfig *pConfig = pp->GetConfig();
+    DBG_ASSERT( pConfig, "SmConfig not found" );
+    if (!pConfig)
+        return;
+    
     // create sequence of print UI options
     m_aUIProperties.realloc( 10 );
-    
     
     // create Section for formula (results in an extra tab page in dialog)
     m_aUIProperties[0].Value = getGroupControlOpt( aLocalizedStrings.GetString( 0 ) );
@@ -106,38 +104,38 @@ SmPrintUIOptions::SmPrintUIOptions()
     // create subgroup for print options
     m_aUIProperties[1].Value = getSubgroupControlOpt( aLocalizedStrings.GetString( 1 ) );
 
-    // create a bool option for title row
+    // create a bool option for title row (matches to SID_PRINTTITLE)
     m_aUIProperties[2].Value = getBoolControlOpt( aLocalizedStrings.GetString( 2 ),
-                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TitleRow" ) ),
-                                                  sal_True );
-    // create a bool option for formula text
+                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( PRTUIOPT_TITLE_ROW ) ),
+                                                  pConfig->IsPrintTitle() );
+    // create a bool option for formula text (matches to SID_PRINTTEXT)
     m_aUIProperties[3].Value = getBoolControlOpt( aLocalizedStrings.GetString( 3 ),
-                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FormulaText" ) ),
-                                                  sal_True );
-    // create a bool option for border
+                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( PRTUIOPT_FORMULA_TEXT ) ),
+                                                  pConfig->IsPrintFormulaText() );
+    // create a bool option for border (matches to SID_PRINTFRAME)
     m_aUIProperties[4].Value = getBoolControlOpt( aLocalizedStrings.GetString( 4 ),
-                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Border" ) ),
-                                                  sal_True );
+                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( PRTUIOPT_BORDER ) ),
+                                                  pConfig->IsPrintFrame() );
 
     // create subgroup for print format
     m_aUIProperties[5].Value = getUIControlOpt( aLocalizedStrings.GetString( 5 ),
                                                 rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Subgroup" ) ) );
 
-    // create a radio button group for print format
+    // create a radio button group for print format (matches to SID_PRINTSIZE)
     Sequence< rtl::OUString > aChoices( 3 );
     aChoices[0] = aLocalizedStrings.GetString( 6 );
     aChoices[1] = aLocalizedStrings.GetString( 7 );
     aChoices[2] = aLocalizedStrings.GetString( 8 );
-    OUString aPrintFormatProp( RTL_CONSTASCII_USTRINGPARAM( "PrintFormat" ) );
+    OUString aPrintFormatProp( RTL_CONSTASCII_USTRINGPARAM( PRTUIOPT_PRINT_FORMAT ) );
     m_aUIProperties[6].Value = getChoiceControlOpt( rtl::OUString(),
                                                     aPrintFormatProp,
-                                                    aChoices, 0
+                                                    aChoices, static_cast< sal_Int32 >(pConfig->GetPrintSize())
                                                     );
     
-    // create a numeric box for scale dependent on PrintFormat = "Scaling"
+    // create a numeric box for scale dependent on PrintFormat = "Scaling" (matches to SID_PRINTZOOM)
     m_aUIProperties[ 7 ].Value = getRangeControlOpt( rtl::OUString(),
-                                                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintScale" ) ),
-                                                     100,    // initial value
+                                                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( PRTUIOPT_PRINT_SCALE ) ),
+                                                     pConfig->GetPrintZoomFactor(),    // initial value
                                                      10,     // min value
                                                      1000,   // max value
                                                      &aPrintFormatProp,
@@ -146,16 +144,14 @@ SmPrintUIOptions::SmPrintUIOptions()
     // create subgroup for misc options
     m_aUIProperties[8].Value = getSubgroupControlOpt( aLocalizedStrings.GetString( 9 ) );
 
-    // create a bool option for ignore spacing
+    // create a bool option for ignore spacing (matches to SID_NO_RIGHT_SPACES)
     m_aUIProperties[9].Value = getBoolControlOpt( aLocalizedStrings.GetString( 10 ),
-                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IgnoreSpaces" ) ),
-                                                  sal_True );
+                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( PRTUIOPT_NO_RIGHT_SPACE ) ),
+                                                  pConfig->IsIgnoreSpacesRight() );
 }
 
 
-
-
-////////////////////////////////////////
+////////////////////////////////////////////////////////////
 //
 // class SmModel
 //
@@ -938,9 +934,6 @@ sal_Int32 SAL_CALL SmModel::getRendererCount(
     throw (IllegalArgumentException, RuntimeException)
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
-    if( ! m_pPrintUIOptions )
-        m_pPrintUIOptions = new SmPrintUIOptions();
-    
     return 1;
 }
 
@@ -975,9 +968,6 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SmModel::getRenderer(
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
 
-    if( ! m_pPrintUIOptions )
-        m_pPrintUIOptions = new SmPrintUIOptions();
-
     if (0 != nRenderer)
         throw IllegalArgumentException();
 
@@ -1001,6 +991,8 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SmModel::getRenderer(
     rValue.Name  = OUString( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) );
     rValue.Value <<= aPageSize;
 
+    if (!m_pPrintUIOptions)
+        m_pPrintUIOptions = new SmPrintUIOptions();
     m_pPrintUIOptions->appendPrintUIOptions( aRenderer );
     
     return aRenderer;
@@ -1089,27 +1081,18 @@ void SAL_CALL SmModel::render(
                     OutputRect.Right() -= 1500 - (aPrtPaperSize.Width() -
                                                 (aPrtPageOffset.X() + OutputRect.Right()));
 
-                // apply print options to be used in Impl_Print
-                SmModule *pp = SM_MOD1();
-                SmConfig *pConfig = pp->GetConfig();
-                DBG_ASSERT( pConfig, "SmModel::render: configuration not found" );
-                if (pConfig)
+                if (!m_pPrintUIOptions)
+                    m_pPrintUIOptions = new SmPrintUIOptions();
+                m_pPrintUIOptions->processProperties( rxOptions );
+
+                pView->Impl_Print( *pOut, *m_pPrintUIOptions, Rectangle( OutputRect ), Point() );
+
+                // release SmPrintUIOptions when everything is done.
+                // That way, when SmPrintUIOptions is needed again it will read the latest configuration settings in its c-tor.
+                if (m_pPrintUIOptions->getBoolValue( A2OU("IsLastPage"), sal_False ))
                 {
-                    if (!m_pPrintUIOptions)
-                        m_pPrintUIOptions = new SmPrintUIOptions();
-                    m_pPrintUIOptions->processProperties( rxOptions );
-
-                    pConfig->SetPrintTitle( m_pPrintUIOptions->getBoolValue( A2OU("TitleRow"), pConfig->IsPrintTitle() ) );
-                    pConfig->SetPrintFormulaText( m_pPrintUIOptions->getBoolValue( A2OU("FormulaText"), pConfig->IsPrintFormulaText() ) );
-                    pConfig->SetPrintFrame( m_pPrintUIOptions->getBoolValue( A2OU("Border"), pConfig->IsPrintFrame() ) );
-                    pConfig->SetPrintSize( static_cast< SmPrintSize >(m_pPrintUIOptions->getIntValue( A2OU("PrintFormat"), pConfig->GetPrintSize() )) );
-                    pConfig->SetPrintZoomFactor( static_cast< USHORT >(m_pPrintUIOptions->getIntValue( A2OU("PrintScale"), pConfig->GetPrintZoomFactor() )) );
-                    pConfig->SetIgnoreSpacesRight( m_pPrintUIOptions->getBoolValue( A2OU("IgnoreSpaces"), pConfig->IsIgnoreSpacesRight() ) );
-                    pConfig->Commit();
+                    delete m_pPrintUIOptions;   m_pPrintUIOptions = 0;
                 }
-
-                pView->Impl_Print( *pOut, pConfig->GetPrintSize(),
-                     Rectangle( OutputRect ), Point() );
             }
         }
     }

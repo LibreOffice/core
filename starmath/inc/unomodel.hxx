@@ -35,13 +35,31 @@
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/view/XRenderable.hpp>
+
 #include <sfx2/sfxbasemodel.hxx>
 #include <comphelper/propertysethelper.hxx>
+#include <vcl/print.hxx>
 
 class SmFormat;
-class SmPrintUIOptions;
 
-//-----------------------------------------------------------------------------
+////////////////////////////////////////////////////////////
+
+#define PRTUIOPT_TITLE_ROW          "TitleRow"
+#define PRTUIOPT_FORMULA_TEXT       "FormulaText"
+#define PRTUIOPT_BORDER             "Border"
+#define PRTUIOPT_PRINT_FORMAT       "PrintFormat"
+#define PRTUIOPT_PRINT_SCALE        "PrintScale"
+#define PRTUIOPT_NO_RIGHT_SPACE     "NoRightSpaces"
+
+class SmPrintUIOptions : public vcl::PrinterOptionsHelper
+{
+public:
+    SmPrintUIOptions();
+};
+
+
+////////////////////////////////////////////////////////////
+
 class SmModel : public SfxBaseModel,
                 public comphelper::PropertySetHelper,
                 public com::sun::star::lang::XServiceInfo,
@@ -90,4 +108,7 @@ public:
     static ::rtl::OUString getImplementationName_Static();
 };
 
+////////////////////////////////////////////////////////////
+
 #endif
+
