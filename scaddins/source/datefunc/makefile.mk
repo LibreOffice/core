@@ -93,11 +93,9 @@ SRC1FILES =\
 SHL1TARGET=$(TARGET)$(DLLPOSTFIX)
 SHL1OBJS=$(SLOFILES)
 SHL1STDLIBS= \
-        $(VCLLIB)			\
         $(TOOLSLIB)			\
         $(CPPUHELPERLIB)	\
         $(CPPULIB)			\
-        $(VOSLIB)			\
         $(SALLIB)
 
 SHL1DEPN=makefile.mk

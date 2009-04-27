@@ -188,23 +188,17 @@ SHL6STDLIBS= \
     $(SVTOOLLIB)	\
     $(SVLLIB)		\
     $(SVXLIB)		\
-    $(GOODIESLIB)	\
     $(BASEGFXLIB) \
     $(VCLLIB)		\
     $(CPPULIB)		\
     $(CPPUHELPERLIB)	\
     $(COMPHELPERLIB)	\
-    $(UCBHELPERLIB)	\
     $(TKLIB)		\
     $(VOSLIB)		\
     $(SALLIB)		\
     $(TOOLSLIB)	\
-    $(I18NISOLANGLIB) \
     $(UNOTOOLSLIB) \
     $(SOTLIB)		\
-    $(XMLOFFLIB)	\
-    $(DBTOOLSLIB)	\
-    $(AVMEDIALIB)   \
     $(OOXLIB)       \
     $(SAXLIB) \
     $(FORLIB)
