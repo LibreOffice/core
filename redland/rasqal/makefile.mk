@@ -48,7 +48,6 @@ all:
 
 .INCLUDE :	../redlandversion.mk
 
-#RASQALVERSION=$(RASQAL_MAJOR).$(RASQAL_MINOR).$(RASQAL_MICRO)
 RASQALVERSION=0.9.15
 
 TARFILE_NAME=rasqal-$(RASQALVERSION)
@@ -121,7 +120,7 @@ BUILD_DIR=$(CONFIGURE_DIR)
 OUT2INC+=src$/rasqal.h
 
 .IF "$(OS)"=="MACOSX"
-OUT2LIB+=src$/.libs$/librasqal*.dylib
+OUT2LIB+=src$/.libs$/librasqal.0.dylib src$/.libs$/librasqal.dylib
 OUT2BIN+=src/rasqal-config
 .ELIF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"
@@ -136,7 +135,7 @@ OUT2BIN+=src/rasqal-config
 # if we use dmake, this is done automagically
 
 .ELSE
-OUT2LIB+=src$/.libs$/librasqal*.so*
+OUT2LIB+=src$/.libs$/librasqal.so.0 src$/.libs$/librasqal.so
 OUT2BIN+=src/rasqal-config
 .ENDIF
 

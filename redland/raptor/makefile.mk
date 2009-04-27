@@ -48,7 +48,6 @@ all:
 
 .INCLUDE :	../redlandversion.mk
 
-#RAPTORVERSION=$(RAPTOR_MAJOR).$(RAPTOR_MINOR).$(RAPTOR_MICRO)
 RAPTORVERSION=$(RAPTOR_MAJOR).4.17
 
 TARFILE_NAME=raptor-$(RAPTORVERSION)
@@ -123,7 +122,7 @@ BUILD_DIR=$(CONFIGURE_DIR)
 OUT2INC+=src$/raptor.h
 
 .IF "$(OS)"=="MACOSX"
-OUT2LIB+=src$/.libs$/libraptor*.dylib
+OUT2LIB+=src$/.libs$/libraptor.1.dylib src$/.libs$/libraptor.dylib
 OUT2BIN+=src/raptor-config
 .ELIF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"
@@ -138,7 +137,7 @@ OUT2BIN+=src/raptor-config
 # if we use dmake, this is done automagically
 
 .ELSE
-OUT2LIB+=src$/.libs$/libraptor*.so*
+OUT2LIB+=src$/.libs$/libraptor.so.1 src$/.libs$/libraptor.so
 OUT2BIN+=src/raptor-config
 .ENDIF
 

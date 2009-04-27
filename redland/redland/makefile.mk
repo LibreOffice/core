@@ -48,7 +48,6 @@ all:
 
 .INCLUDE :	../redlandversion.mk
 
-#REDLANDVERSION=$(REDLAND_MAJOR).$(REDLAND_MINOR).$(REDLAND_MICRO)
 REDLANDVERSION=1.0.7
 
 TARFILE_NAME=redland-$(REDLANDVERSION)
@@ -127,7 +126,7 @@ BUILD_DIR=$(CONFIGURE_DIR)
 OUT2INC+=librdf$/*.h
 
 .IF "$(OS)"=="MACOSX"
-OUT2LIB+=librdf$/.libs$/librdf*.dylib
+OUT2LIB+=librdf$/.libs$/librdf.0.dylib
 .ELIF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"
 OUT2LIB+=librdf$/.libs$/*.a
@@ -140,7 +139,7 @@ OUT2BIN+=librdf$/.libs$/*.dll
 # if we use dmake, this is done automagically
 
 .ELSE
-OUT2LIB+=librdf$/.libs$/librdf*.so*
+OUT2LIB+=librdf$/.libs$/librdf.so.0
 .ENDIF
 
 # --- Targets ------------------------------------------------------
