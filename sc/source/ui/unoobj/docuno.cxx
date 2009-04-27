@@ -218,29 +218,31 @@ public:
 ScPrintUIOptions::ScPrintUIOptions( sal_Bool i_bEmptyPages, sal_Bool i_bSelectedOnly )
 {
     ResStringArray aStrings( ScResId( SCSTR_PRINT_OPTIONS ) );
-    DBG_ASSERT( aStrings.Count() >= 4, "resource incomplete" );
-    if( aStrings.Count() < 4 ) // bad resource ?
+    DBG_ASSERT( aStrings.Count() >= 6, "resource incomplete" );
+    if( aStrings.Count() < 6 ) // bad resource ?
         return;
 
     m_aUIProperties.realloc( 5 );
 
     // create Section for spreadsheet (results in an extra tab page in dialog)
-    m_aUIProperties[0].Value = getGroupControlOpt( rtl::OUString( String( ScResId( SCSTR_HUMAN_SCDOC_NAME ) ) ) );
+    m_aUIProperties[0].Value = getGroupControlOpt( rtl::OUString( String( ScResId( SCSTR_HUMAN_SCDOC_NAME ) ) ), rtl::OUString() );
 
     // create subgroup for pages
-    m_aUIProperties[1].Value = getSubgroupControlOpt( rtl::OUString( aStrings.GetString( 0 ) ) );
+    m_aUIProperties[1].Value = getSubgroupControlOpt( rtl::OUString( aStrings.GetString( 0 ) ), rtl::OUString() );
 
     // create a bool option for empty pages
     m_aUIProperties[2].Value = getBoolControlOpt( rtl::OUString( aStrings.GetString( 1 ) ),
+                                                  rtl::OUString( aStrings.GetString( 2 ) ),
                                                   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsSkipEmptyPages" ) ),
                                                   i_bEmptyPages
                                                   );
 
     // create subgroup for sheets
-    m_aUIProperties[3].Value = getSubgroupControlOpt( rtl::OUString( aStrings.GetString( 2 ) ) );
+    m_aUIProperties[3].Value = getSubgroupControlOpt( rtl::OUString( aStrings.GetString( 3 ) ), rtl::OUString() );
 
     // create a bool option for selected pages only
-    m_aUIProperties[4].Value = getBoolControlOpt( rtl::OUString( aStrings.GetString( 3 ) ),
+    m_aUIProperties[4].Value = getBoolControlOpt( rtl::OUString( aStrings.GetString( 4 ) ),
+                                                  rtl::OUString( aStrings.GetString( 5 ) ),
                                                   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsOnlySelectedSheets" ) ),
                                                   i_bSelectedOnly
                                                   );
