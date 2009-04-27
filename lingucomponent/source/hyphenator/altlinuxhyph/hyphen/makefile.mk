@@ -71,14 +71,10 @@ SHL1TARGET= $(REALNAME)$(DLLPOSTFIX)
 SHL1STDLIBS= \
         $(CPPULIB) 	 \
         $(CPPUHELPERLIB) 	 \
-        $(VOSLIB)		\
         $(I18NISOLANGLIB)   \
         $(TOOLSLIB)		\
-        $(SVTOOLLIB)	\
         $(SVLLIB)		\
-        $(VCLLIB)		\
         $(SALLIB)		\
-        $(UCBHELPERLIB)	\
         $(UNOTOOLSLIB)	\
         $(LNGLIB) \
         $(HNJLIB) \

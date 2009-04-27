@@ -64,7 +64,6 @@ SHL1TARGET= $(TARGET)$(DLLPOSTFIX)
 SHL1VERSIONMAP= $(TARGET).map
 
 SHL1STDLIBS= \
-        $(SVXLIB)	\
         $(SFXLIB)   \
         $(SVTOOLLIB)\
         $(VCLLIB)    \

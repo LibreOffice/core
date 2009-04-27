@@ -111,16 +111,10 @@ SHL3IMPLIB= icommuni
 
 SHL3STDLIBS= \
             $(TOOLSLIB) \
-            $(SVTOOLLIB) \
             $(SVLLIB)       \
             $(VCLLIB) \
-            $(BASICLIB) \
             $(VOSLIB) \
             $(SALLIB) \
-            $(CPPUHELPERLIB) \
-            $(CPPULIB) \
-            $(COMPHELPERLIB) \
-            $(SOTLIB) \
             $(VOSLIB) \
             $(SIMPLECMLIB)
 
@@ -167,12 +161,8 @@ APP1STDLIBS+= \
             $(VOSLIB) \
             $(UCBHELPERLIB) \
             $(COMPHELPERLIB) \
-            $(SOTLIB) \
             $(BASICLIB) \
             $(SIMPLECMLIB) \
-            $(BASEGFXLIB) $(I18NISOLANGLIB) $(TKLIB) $(I18NUTILLIB) \
-            $(ICUUCLIB) $(ICULELIB) $(ICUDATALIB) $(JVMFWKLIB) $(JVMACCESSLIB) \
-            $(SALHELPERLIB) $(XMLSCRIPTLIB) \
             $(COMMUNILIB)
 
 .IF "$(GUI)"=="UNX"
@@ -232,10 +222,6 @@ APP3STDLIBS= \
             $(TOOLSLIB) \
             $(SVTOOLLIB) \
             $(VCLLIB) \
-                        $(BASEGFXLIB) $(I18NISOLANGLIB) $(TKLIB) $(I18NUTILLIB) \
-                        $(ICUUCLIB) $(ICULELIB) $(ICUDATALIB) $(JVMFWKLIB) $(JVMACCESSLIB) \
-                        $(SALHELPERLIB) $(UNOTOOLSLIB) $(SVLLIB) $(BASICLIB) $(SOTLIB) \
-                        $(XMLSCRIPTLIB) \
             $(SJLIB)
 
 .IF "$(GUI)"=="UNX"
