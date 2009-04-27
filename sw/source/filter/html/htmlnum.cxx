@@ -67,9 +67,9 @@ using namespace ::com::sun::star;
 // <UL TYPE=...>
 static HTMLOptionEnum __FAR_DATA aHTMLULTypeTable[] =
 {
-    { sHTML_ULTYPE_disc,    HTML_BULLETCHAR_DISC        },
-    { sHTML_ULTYPE_circle,  HTML_BULLETCHAR_CIRCLE      },
-    { sHTML_ULTYPE_square,  HTML_BULLETCHAR_SQUARE      },
+    { OOO_STRING_SVTOOLS_HTML_ULTYPE_disc,  HTML_BULLETCHAR_DISC        },
+    { OOO_STRING_SVTOOLS_HTML_ULTYPE_circle,    HTML_BULLETCHAR_CIRCLE      },
+    { OOO_STRING_SVTOOLS_HTML_ULTYPE_square,    HTML_BULLETCHAR_SQUARE      },
     { 0,                    0                           }
 };
 
@@ -864,30 +864,30 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
         if( SVX_NUM_CHAR_SPECIAL == eType )
         {
             // Aufzaehlungs-Liste: <OL>
-            sOut += sHTML_unorderlist;
+            sOut += OOO_STRING_SVTOOLS_HTML_unorderlist;
 
             // den Typ ueber das Bullet-Zeichen bestimmen
             const sal_Char *pStr = 0;
             switch( rNumFmt.GetBulletChar() )
             {
             case HTML_BULLETCHAR_DISC:
-                pStr = sHTML_ULTYPE_disc;
+                pStr = OOO_STRING_SVTOOLS_HTML_ULTYPE_disc;
                 break;
             case HTML_BULLETCHAR_CIRCLE:
-                pStr = sHTML_ULTYPE_circle;
+                pStr = OOO_STRING_SVTOOLS_HTML_ULTYPE_circle;
                 break;
             case HTML_BULLETCHAR_SQUARE:
-                pStr = sHTML_ULTYPE_square;
+                pStr = OOO_STRING_SVTOOLS_HTML_ULTYPE_square;
                 break;
             }
 
             if( pStr )
-                (((sOut += ' ') += sHTML_O_type) += '=') += pStr;
+                (((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_type) += '=') += pStr;
         }
         else if( SVX_NUM_BITMAP == eType )
         {
             // Aufzaehlungs-Liste: <OL>
-            sOut += sHTML_unorderlist;
+            sOut += OOO_STRING_SVTOOLS_HTML_unorderlist;
             rWrt.Strm() << sOut.GetBuffer();
             sOut.Erase();
 
@@ -901,7 +901,7 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
         else
         {
             // Numerierungs-Liste: <UL>
-            sOut += sHTML_orderlist;
+            sOut += OOO_STRING_SVTOOLS_HTML_orderlist;
 
             // den Typ ueber das Format bestimmen
             sal_Char cType = 0;
@@ -913,7 +913,7 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
             case SVX_NUM_ROMAN_LOWER:           cType = 'i'; break;
             }
             if( cType )
-                (((sOut += ' ') += sHTML_O_type) += '=') += cType;
+                (((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_type) += '=') += cType;
 
             sal_uInt16 nStartVal = rNumFmt.GetStart();
             if( bStartValue && 1 == nStartVal && i == rInfo.GetDepth()-1 )
@@ -932,7 +932,7 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
             }
             if( nStartVal != 1 )
             {
-                (((sOut += ' ') += sHTML_O_start) += '=')
+                (((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_start) += '=')
                     += ByteString::CreateFromInt32( nStartVal );
             }
         }
@@ -979,9 +979,9 @@ Writer& OutHTML_NumBulListEnd( SwHTMLWriter& rWrt,
         sal_Int16 eType = rInfo.GetNumRule()->Get( i-1 ).GetNumberingType();
         const sal_Char *pStr;
         if( SVX_NUM_CHAR_SPECIAL == eType || SVX_NUM_BITMAP == eType)
-            pStr = sHTML_unorderlist;
+            pStr = OOO_STRING_SVTOOLS_HTML_unorderlist;
         else
-            pStr = sHTML_orderlist;
+            pStr = OOO_STRING_SVTOOLS_HTML_orderlist;
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), pStr, sal_False );
         rWrt.bLFPossible = sal_True;
     }

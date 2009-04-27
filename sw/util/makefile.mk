@@ -152,7 +152,6 @@ SHL2STDLIBS= \
             $(SOTLIB) \
             $(TOOLSLIB) \
         $(UCBHELPERLIB) \
-        $(UNOTOOLSLIB) \
             $(COMPHELPERLIB) \
             $(CPPUHELPERLIB) \
             $(CPPULIB) \
@@ -182,7 +181,6 @@ SHL3STDLIBS= \
         $(ISWLIB) \
             $(SVXLIB) \
             $(SFX2LIB) \
-            $(BASICLIB) \
             $(SVTOOLLIB) \
             $(TKLIB) \
             $(VCLLIB) \

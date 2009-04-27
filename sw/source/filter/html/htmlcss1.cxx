@@ -252,7 +252,7 @@ void SwCSS1Parser::SetLinkCharFmts()
     ASSERT( !bLinkCharFmtsSet, "Aufruf von SetLinkCharFmts unnoetig" );
 
     SvxCSS1MapEntry *pStyleEntry =
-        GetTag( String::CreateFromAscii(sHTML_anchor) );
+        GetTag( String::CreateFromAscii(OOO_STRING_SVTOOLS_HTML_anchor) );
     SwCharFmt *pUnvisited = 0, *pVisited = 0;
     if( pStyleEntry )
     {
@@ -268,7 +268,7 @@ void SwCSS1Parser::SetLinkCharFmts()
         bBodyVLinkSet |= bColorSet;
     }
 
-    String sTmp( String::CreateFromAscii(sHTML_anchor) );
+    String sTmp( String::CreateFromAscii(OOO_STRING_SVTOOLS_HTML_anchor) );
     sTmp.Append( ':' );
     sTmp.AppendAscii( sCSS1_link );
     pStyleEntry = GetTag( sTmp );
@@ -283,7 +283,7 @@ void SwCSS1Parser::SetLinkCharFmts()
         bBodyLinkSet |= bColorSet;
     }
 
-    sTmp.AssignAscii( sHTML_anchor );
+    sTmp.AssignAscii( OOO_STRING_SVTOOLS_HTML_anchor );
     sTmp.Assign( ':' );
     sTmp.AppendAscii( sCSS1_visited );
     pStyleEntry = GetTag( sTmp );
@@ -377,12 +377,12 @@ void SwCSS1Parser::SetTableTxtColl( BOOL bHeader )
     if( bHeader )
     {
         nPoolId = RES_POOLCOLL_TABLE_HDLN;
-        sTag.AssignAscii( sHTML_tableheader );
+        sTag.AssignAscii( OOO_STRING_SVTOOLS_HTML_tableheader );
     }
     else
     {
         nPoolId = RES_POOLCOLL_TABLE;
-        sTag.AssignAscii( sHTML_tabledata );
+        sTag.AssignAscii( OOO_STRING_SVTOOLS_HTML_tabledata );
     }
 
     SwTxtFmtColl *pColl = 0;
@@ -398,7 +398,7 @@ void SwCSS1Parser::SetTableTxtColl( BOOL bHeader )
 
     String sTmp( sTag );
     sTmp.Append( ' ' );
-    sTmp.AppendAscii( sHTML_parabreak );
+    sTmp.AppendAscii( OOO_STRING_SVTOOLS_HTML_parabreak );
     pStyleEntry = GetTag( sTmp );
     if( pStyleEntry )
     {
@@ -893,9 +893,9 @@ BOOL SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
              ('s' == aClass.GetChar(0) || 'S' == aClass.GetChar(0)) )
     {
         USHORT nPoolFmtId = 0;
-        if( aClass.EqualsIgnoreCaseAscii(sHTML_sdendnote_sym) )
+        if( aClass.EqualsIgnoreCaseAscii(OOO_STRING_SVTOOLS_HTML_sdendnote_sym) )
             nPoolFmtId = RES_POOLCHR_ENDNOTE;
-        else if( aClass.EqualsIgnoreCaseAscii(sHTML_sdfootnote_sym) )
+        else if( aClass.EqualsIgnoreCaseAscii(OOO_STRING_SVTOOLS_HTML_sdfootnote_sym) )
             nPoolFmtId = RES_POOLCHR_FOOTNOTE;
         if( nPoolFmtId )
         {
@@ -941,9 +941,9 @@ BOOL SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
         if( aClass.Len() >= 9 &&
             ('s' == aClass.GetChar(0) || 'S' == aClass.GetChar(0)) )
         {
-            if( aClass.EqualsIgnoreCaseAscii(sHTML_sdendnote) )
+            if( aClass.EqualsIgnoreCaseAscii(OOO_STRING_SVTOOLS_HTML_sdendnote) )
                 nPoolCollId = RES_POOLCOLL_ENDNOTE;
-            else if( aClass.EqualsIgnoreCaseAscii(sHTML_sdfootnote) )
+            else if( aClass.EqualsIgnoreCaseAscii(OOO_STRING_SVTOOLS_HTML_sdfootnote) )
                 nPoolCollId = RES_POOLCOLL_FOOTNOTE;
 
             if( nPoolCollId )
@@ -1001,7 +1001,7 @@ BOOL SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
                 {
                     String sTmp( aToken2 );
                     sTmp += ' ';
-                    sTmp.AppendAscii( sHTML_parabreak );
+                    sTmp.AppendAscii( OOO_STRING_SVTOOLS_HTML_parabreak );
 
                     if( CSS1_SCRIPT_ALL == nScript )
                     {
@@ -1207,14 +1207,14 @@ SwCharFmt* SwCSS1Parser::GetChrFmt( USHORT nToken2, const String& rClass ) const
     case HTML_DEFINSTANCE_ON:   nPoolId = RES_POOLCHR_HTML_DEFINSTANCE; break;
     case HTML_TELETYPE_ON:      nPoolId = RES_POOLCHR_HTML_TELETYPE;    break;
 
-    case HTML_SHORTQUOTE_ON:    sName = sHTML_shortquote;   break;
-    case HTML_LANGUAGE_ON:      sName = sHTML_language;     break;
-    case HTML_AUTHOR_ON:        sName = sHTML_author;       break;
-    case HTML_PERSON_ON:        sName = sHTML_person;       break;
-    case HTML_ACRONYM_ON:       sName = sHTML_acronym;      break;
-    case HTML_ABBREVIATION_ON:  sName = sHTML_abbreviation; break;
-    case HTML_INSERTEDTEXT_ON:  sName = sHTML_insertedtext; break;
-    case HTML_DELETEDTEXT_ON:   sName = sHTML_deletedtext;  break;
+    case HTML_SHORTQUOTE_ON:    sName = OOO_STRING_SVTOOLS_HTML_shortquote;     break;
+    case HTML_LANGUAGE_ON:      sName = OOO_STRING_SVTOOLS_HTML_language;   break;
+    case HTML_AUTHOR_ON:        sName = OOO_STRING_SVTOOLS_HTML_author;         break;
+    case HTML_PERSON_ON:        sName = OOO_STRING_SVTOOLS_HTML_person;         break;
+    case HTML_ACRONYM_ON:       sName = OOO_STRING_SVTOOLS_HTML_acronym;        break;
+    case HTML_ABBREVIATION_ON:  sName = OOO_STRING_SVTOOLS_HTML_abbreviation;   break;
+    case HTML_INSERTEDTEXT_ON:  sName = OOO_STRING_SVTOOLS_HTML_insertedtext;   break;
+    case HTML_DELETEDTEXT_ON:   sName = OOO_STRING_SVTOOLS_HTML_deletedtext;    break;
     }
 
     // die Vorlage suchen oder anlegen (geht nur mit Namen)
@@ -1317,12 +1317,12 @@ SwTxtFmtColl *SwCSS1Parser::GetTxtFmtColl( USHORT nTxtColl,
     if( RES_POOLCOLL_TEXT == nTxtColl && aClass.Len() >= 9 &&
         ('s' == aClass.GetChar(0) || 'S' == aClass.GetChar(0) ) )
     {
-        if( aClass.EqualsIgnoreCaseAscii(sHTML_sdendnote) )
+        if( aClass.EqualsIgnoreCaseAscii(OOO_STRING_SVTOOLS_HTML_sdendnote) )
         {
             nTxtColl = RES_POOLCOLL_ENDNOTE;
             aClass = aEmptyStr;
         }
-        else if( aClass.EqualsIgnoreCaseAscii(sHTML_sdfootnote) )
+        else if( aClass.EqualsIgnoreCaseAscii(OOO_STRING_SVTOOLS_HTML_sdfootnote) )
         {
             nTxtColl = RES_POOLCOLL_FOOTNOTE;
             aClass = aEmptyStr;

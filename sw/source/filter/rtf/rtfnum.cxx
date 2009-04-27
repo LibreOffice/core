@@ -1153,14 +1153,14 @@ void SwRTFWriter::OutRTFListTab()
 
         // mit der ersten Rule wird auch die ListTable geschrieben
         if( !sOverrideList.Len() )
-            OutComment( *this, sRTF_LISTTABLE );
+            OutComment( *this, OOO_STRING_SVTOOLS_RTF_LISTTABLE );
 
-        Strm() << '{' << sRTF_LIST << sRTF_LISTTEMPLATEID;
+        Strm() << '{' << OOO_STRING_SVTOOLS_RTF_LIST << OOO_STRING_SVTOOLS_RTF_LISTTEMPLATEID;
         OutULong( nTmplId );
         ByteString sTmp;
 
         if( pRule->IsContinusNum() )
-            Strm() << sRTF_LISTSIMPLE;
+            Strm() << OOO_STRING_SVTOOLS_RTF_LISTSIMPLE;
 
         BYTE nLvl, nEnd;
         lcl_IsExportNumRule( *pRule, &nEnd );
@@ -1170,9 +1170,9 @@ void SwRTFWriter::OutRTFListTab()
             const SwNumFmt& rFmt = pRule->Get( nLvl );
             Strm() << sNewLine;
             if( nLvl > 8 )          // RTF-kennt nur 9 Ebenen
-                OutComment( *this, sRTF_SOUTLVL );
+                OutComment( *this, OOO_STRING_SVTOOLS_RTF_SOUTLVL );
 
-            Strm() << '{' << sRTF_LISTLEVEL << sRTF_LEVELNFC;
+            Strm() << '{' << OOO_STRING_SVTOOLS_RTF_LISTLEVEL << OOO_STRING_SVTOOLS_RTF_LEVELNFC;
 
             USHORT nVal = 0;
             switch( rFmt.GetNumberingType() )
@@ -1187,7 +1187,7 @@ void SwRTFWriter::OutRTFListTab()
             case SVX_NUM_BITMAP:
             case SVX_NUM_CHAR_SPECIAL:          nVal = 23;  break;
             }
-            OutLong( nVal ) << sRTF_LEVELJC;
+            OutLong( nVal ) << OOO_STRING_SVTOOLS_RTF_LEVELJC;
 
             switch( rFmt.GetNumAdjust() )
             {
@@ -1195,9 +1195,9 @@ void SwRTFWriter::OutRTFListTab()
             case SVX_ADJUST_RIGHT:      nVal = 2;   break;
             default:                    nVal = 0;   break;
             }
-            OutLong( nVal ) << sRTF_LEVELSTARTAT;
+            OutLong( nVal ) << OOO_STRING_SVTOOLS_RTF_LEVELSTARTAT;
             OutLong( rFmt.GetStart() )
-                << sRTF_LEVELFOLLOW << "0{" << sRTF_LEVELTEXT << ' ';
+                << OOO_STRING_SVTOOLS_RTF_LEVELFOLLOW << "0{" << OOO_STRING_SVTOOLS_RTF_LEVELTEXT << ' ';
 
             BOOL bWriteBulletFont = FALSE;
             memset( aNumLvlPos, 0, MAXLEVEL );
@@ -1268,7 +1268,7 @@ void SwRTFWriter::OutRTFListTab()
             }
 
             // write the levelnumbers
-            Strm() << ";}{" << sRTF_LEVELNUMBERS;
+            Strm() << ";}{" << OOO_STRING_SVTOOLS_RTF_LEVELNUMBERS;
             for( BYTE i = 0; i <= nLvl && aNumLvlPos[ i ]; ++i )
             {
                 Strm() << "\\'"; OutHex( aNumLvlPos[ i ] );
@@ -1281,7 +1281,7 @@ void SwRTFWriter::OutRTFListTab()
 
             if( bWriteBulletFont )
             {
-                Strm() << sRTF_F;
+                Strm() << OOO_STRING_SVTOOLS_RTF_F;
                 const Font* pFont = rFmt.GetBulletFont();
                 if( !pFont )
                     // --> OD 2006-06-27 #b6440955#
@@ -1290,8 +1290,8 @@ void SwRTFWriter::OutRTFListTab()
                 OutULong( GetId( *pFont ));
             }
 
-            Strm() << sRTF_FI;
-            OutLong( rFmt.GetFirstLineOffset() ) << sRTF_LI;
+            Strm() << OOO_STRING_SVTOOLS_RTF_FI;
+            OutLong( rFmt.GetFirstLineOffset() ) << OOO_STRING_SVTOOLS_RTF_LI;
             OutLong( rFmt.GetAbsLSpace() );
 
             Strm() << '}';
@@ -1302,25 +1302,25 @@ void SwRTFWriter::OutRTFListTab()
 
         if( !pRule->IsAutoRule() )
         {
-            Strm() << '{' << sRTF_LISTNAME << ' ';
+            Strm() << '{' << OOO_STRING_SVTOOLS_RTF_LISTNAME << ' ';
             RTFOutFuncs::Out_String( Strm(), pRule->GetName(), eDefaultEncoding,
                                     bWriteHelpFmt ) << ";}" ;
         }
-        Strm() << sRTF_LISTID;
+        Strm() << OOO_STRING_SVTOOLS_RTF_LISTID;
         OutULong( nId ) << '}' << sNewLine;
 
         sTmp = '{';
-        ((((((( sTmp += sRTF_LISTOVERRIDE ) +=
-                    sRTF_LISTID ) += ByteString::CreateFromInt32( nId )) +=
-                    sRTF_LISTOVERRIDECOUNT ) += '0' ) +=
-                    sRTF_LS ) += ByteString::CreateFromInt32( n )) += '}';
+        ((((((( sTmp += OOO_STRING_SVTOOLS_RTF_LISTOVERRIDE ) +=
+                    OOO_STRING_SVTOOLS_RTF_LISTID ) += ByteString::CreateFromInt32( nId )) +=
+                    OOO_STRING_SVTOOLS_RTF_LISTOVERRIDECOUNT ) += '0' ) +=
+                    OOO_STRING_SVTOOLS_RTF_LS ) += ByteString::CreateFromInt32( n )) += '}';
         sOverrideList += sTmp;
 
         ++nId, ++nTmplId;
     }
 
     if( sOverrideList.Len() )
-        Strm() << "}{" << sRTF_LISTOVERRIDETABLE
+        Strm() << "}{" << OOO_STRING_SVTOOLS_RTF_LISTOVERRIDETABLE
                << sOverrideList.GetBuffer() << '}' << sNewLine;
 }
 
@@ -1408,7 +1408,7 @@ BOOL SwRTFWriter::OutListNum( const SwTxtNode& rNd )
 
         aLR.SetTxtFirstLineOfst( pFmt->GetFirstLineOffset() );
         if ( bExportNumRule )
-            Strm() << '{' << sRTF_LISTTEXT << sRTF_PARD << sRTF_PLAIN << ' ';
+            Strm() << '{' << OOO_STRING_SVTOOLS_RTF_LISTTEXT << OOO_STRING_SVTOOLS_RTF_PARD << OOO_STRING_SVTOOLS_RTF_PLAIN << ' ';
 
         aSet.Put( aLR );
         Out_SfxItemSet( aRTFAttrFnTab, *this, aSet, TRUE );
@@ -1440,11 +1440,11 @@ BOOL SwRTFWriter::OutListNum( const SwTxtNode& rNd )
             {
                 if( OUTLINE_RULE != pRule->GetRuleType() )
                 {
-                    Strm() << sRTF_TAB << '}' << sRTF_ILVL;
+                    Strm() << OOO_STRING_SVTOOLS_RTF_TAB << '}' << OOO_STRING_SVTOOLS_RTF_ILVL;
                     if( nLvl > 8 )          // RTF-kennt nur 9 Ebenen
                     {
                         OutULong( 8 );
-                        OutComment( *this, sRTF_SOUTLVL );
+                        OutComment( *this, OOO_STRING_SVTOOLS_RTF_SOUTLVL );
                         OutULong( nLvl ) << '}';
                     }
                     else
@@ -1452,10 +1452,10 @@ BOOL SwRTFWriter::OutListNum( const SwTxtNode& rNd )
                     Strm()  << ' ';
                 }
                 else
-                    Strm() << sRTF_TAB << '}';
+                    Strm() << OOO_STRING_SVTOOLS_RTF_TAB << '}';
             }
             else if( sTxt.Len() )
-                Strm() << sRTF_TAB;
+                Strm() << OOO_STRING_SVTOOLS_RTF_TAB;
         }
         bOutListNumTxt = FALSE;
     }

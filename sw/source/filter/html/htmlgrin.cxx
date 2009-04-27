@@ -88,22 +88,22 @@ using namespace ::com::sun::star;
 
 HTMLOptionEnum __FAR_DATA aHTMLImgHAlignTable[] =
 {
-    { sHTML_AL_left,    text::HoriOrientation::LEFT       },
-    { sHTML_AL_right,   text::HoriOrientation::RIGHT      },
+    { OOO_STRING_SVTOOLS_HTML_AL_left,    text::HoriOrientation::LEFT       },
+    { OOO_STRING_SVTOOLS_HTML_AL_right,   text::HoriOrientation::RIGHT      },
     { 0,                0               }
 };
 
 
 HTMLOptionEnum __FAR_DATA aHTMLImgVAlignTable[] =
 {
-    { sHTML_VA_top,         text::VertOrientation::LINE_TOP       },
-    { sHTML_VA_texttop,     text::VertOrientation::CHAR_TOP       },
-    { sHTML_VA_middle,      text::VertOrientation::CENTER         },
-    { sHTML_AL_center,      text::VertOrientation::CENTER         },
-    { sHTML_VA_absmiddle,   text::VertOrientation::LINE_CENTER    },
-    { sHTML_VA_bottom,      text::VertOrientation::TOP            },
-    { sHTML_VA_baseline,    text::VertOrientation::TOP            },
-    { sHTML_VA_absbottom,   text::VertOrientation::LINE_BOTTOM    },
+    { OOO_STRING_SVTOOLS_HTML_VA_top,         text::VertOrientation::LINE_TOP       },
+    { OOO_STRING_SVTOOLS_HTML_VA_texttop,     text::VertOrientation::CHAR_TOP       },
+    { OOO_STRING_SVTOOLS_HTML_VA_middle,      text::VertOrientation::CENTER         },
+    { OOO_STRING_SVTOOLS_HTML_AL_center,      text::VertOrientation::CENTER         },
+    { OOO_STRING_SVTOOLS_HTML_VA_absmiddle,   text::VertOrientation::LINE_CENTER    },
+    { OOO_STRING_SVTOOLS_HTML_VA_bottom,      text::VertOrientation::TOP            },
+    { OOO_STRING_SVTOOLS_HTML_VA_baseline,    text::VertOrientation::TOP            },
+    { OOO_STRING_SVTOOLS_HTML_VA_absbottom,   text::VertOrientation::LINE_BOTTOM    },
     { 0,                    0                   }
 };
 
@@ -1187,12 +1187,12 @@ ANCHOR_SETEVENT:
         ('s' == aStrippedClass.GetChar(0) || 'S' == aStrippedClass.GetChar(0)) &&
         ('d' == aStrippedClass.GetChar(1) || 'D' == aStrippedClass.GetChar(1)) )
     {
-        if( aStrippedClass.EqualsIgnoreCaseAscii( sHTML_sdendnote_anc ) )
+        if( aStrippedClass.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_sdendnote_anc ) )
             bEnAnchor = TRUE;
-        else if( aStrippedClass.EqualsIgnoreCaseAscii( sHTML_sdfootnote_anc ) )
+        else if( aStrippedClass.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_sdfootnote_anc ) )
             bFtnAnchor = TRUE;
-        else if( aStrippedClass.EqualsIgnoreCaseAscii( sHTML_sdendnote_sym ) ||
-                 aStrippedClass.EqualsIgnoreCaseAscii( sHTML_sdfootnote_sym ) )
+        else if( aStrippedClass.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_sdendnote_sym ) ||
+                 aStrippedClass.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_sdfootnote_sym ) )
             bFtnEnSymbol = TRUE;
         if( bEnAnchor || bFtnAnchor || bFtnEnSymbol )
         {
