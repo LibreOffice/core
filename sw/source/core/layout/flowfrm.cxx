@@ -450,13 +450,16 @@ SwLayoutFrm *SwFlowFrm::CutTree( SwFrm *pStart )
     }
 
     if ( pLay->IsFtnFrm() )
-    {   if ( !pLay->Lower() && !pLay->IsColLocked() &&
+    {
+        if ( !pLay->Lower() && !pLay->IsColLocked() &&
              !((SwFtnFrm*)pLay)->IsBackMoveLocked() )
-        {   pLay->Cut();
+        {
+            pLay->Cut();
             delete pLay;
         }
         else
-        {   BOOL bUnlock = !((SwFtnFrm*)pLay)->IsBackMoveLocked();
+        {
+            BOOL bUnlock = !((SwFtnFrm*)pLay)->IsBackMoveLocked();
             ((SwFtnFrm*)pLay)->LockBackMove();
             pLay->InvalidateSize();
             pLay->Calc();
@@ -509,7 +512,28 @@ BOOL SwFlowFrm::PasteTree( SwFrm *pStart, SwLayoutFrm *pParent, SwFrm *pSibling,
         if ( 0 == (pStart->pPrev = pParent->Lower()) )
             pParent->pLower = pStart;
         else
-            pParent->Lower()->pNext = pStart;
+        //Modified for #i100782#,04/03/2009
+        //If the pParent has more than 1 child nodes, former design will 
+        //ignore them directly without any collection work. It will make some 
+        //dangling pointers. This lead the crash...
+        //The new design will find the last child of pParent in loop way, and 
+        //add the pStart after the last child.
+        //  pParent->Lower()->pNext = pStart;
+        {
+            SwFrm* pTemp = pParent->pLower;
+            while (pTemp)
+            {
+                if (pTemp->pNext)
+                    pTemp = pTemp->pNext;
+                else
+                {
+                    pStart->pPrev = pTemp;
+                    pTemp->pNext = pStart;
+                    break;
+                }
+            }
+        }
+        //End modification for #i100782#,04/03/2009
 
         // #i27145#
         if ( pParent->IsSctFrm() )
