@@ -104,6 +104,7 @@
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/XTextEmbeddedObjectsSupplier.hpp>
+#include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <svtools/languageoptions.hxx>
 #include <sot/clsids.hxx>
 
@@ -2546,6 +2547,12 @@ void ChartView::impl_updateView()
     if( !m_xChartModel.is() || !m_pDrawModelWrapper )
         return;
 
+    // #i12587# support for shapes in chart
+    if ( m_bSdrViewIsInEditMode )
+    {
+        return;
+    }
+
     if( m_bViewDirty && !m_bInViewUpdate )
     {
         m_bInViewUpdate = true;
@@ -2635,8 +2642,22 @@ void ChartView::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     //#i77362 change notification for changes on additional shapes are missing
     if( m_bInViewUpdate )
         return;
-    if( m_bSdrViewIsInEditMode )
-        return;
+
+    // #i12587# support for shapes in chart
+    if ( m_bSdrViewIsInEditMode && m_xChartModel.is() )
+    {
+        uno::Reference< view::XSelectionSupplier > xSelectionSupplier( m_xChartModel->getCurrentController(), uno::UNO_QUERY );
+        if ( xSelectionSupplier.is() )
+        {
+            ::rtl::OUString aSelObjCID;
+            uno::Any aSelObj( xSelectionSupplier->getSelection() );
+            aSelObj >>= aSelObjCID;
+            if ( aSelObjCID.getLength() > 0 )
+            {
+                return;
+            }
+        }
+    }
 
     const SdrHint* pSdrHint = dynamic_cast< const SdrHint* >(&rHint);
     if( !pSdrHint )
@@ -2655,6 +2676,9 @@ void ChartView::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
             bShapeChanged = true;
             break;
         case HINT_MODELCLEARED:
+            bShapeChanged = true;
+            break;
+        case HINT_ENDEDIT:
             bShapeChanged = true;
             break;
         default:
