@@ -349,6 +349,12 @@ static void setSmartId( Window* i_pWindow, const char* i_pType, sal_Int32 i_nId 
     i_pWindow->SetSmartHelpId( SmartId( aBuf.makeStringAndClear() ) );
 }
 
+static void setHelpText( Window* i_pWindow, const Sequence< rtl::OUString >& i_rHelpTexts, sal_Int32 i_nIndex )
+{
+    if( i_nIndex >= 0 && i_nIndex < i_rHelpTexts.getLength() )
+        i_pWindow->SetHelpText( i_rHelpTexts.getConstArray()[i_nIndex] );
+}
+
 void PrintDialog::setupOptionalUI()
 {
     Window* pCurParent = 0;
@@ -369,8 +375,10 @@ void PrintDialog::setupOptionalUI()
         rtl::OUString aText;
         rtl::OUString aPropertyName;
         Sequence< rtl::OUString > aChoices;
+        Sequence< rtl::OUString > aHelpTexts;
         sal_Int64 nMinValue = 0, nMaxValue = 0;
         long nDependencyIndent = 0;
+        sal_Int32 nCurHelpText = 0;
 
         for( int n = 0; n < aOptProp.getLength(); n++ )
         {
@@ -432,6 +440,18 @@ void PrintDialog::setupOptionalUI()
             {
                 rEntry.Value >>= nMaxValue;
             }
+            else if( rEntry.Name.equalsAscii( "HelpText" ) )
+            {
+                if( ! (rEntry.Value >>= aHelpTexts) )
+                {
+                    rtl::OUString aHelpText;
+                    if( (rEntry.Value >>= aHelpText) )
+                    {
+                        aHelpTexts.realloc( 1 );
+                        *aHelpTexts.getArray() = aHelpText;
+                    }
+                }
+            }
         }
 
         if( aCtrlType.equalsAscii( "Group" ) ||
@@ -458,6 +478,8 @@ void PrintDialog::setupOptionalUI()
 
                 // set help id
                 setSmartId( pNewGroup, "TabPage", nOptPageId );
+                // set help text
+                setHelpText( pNewGroup, aHelpTexts, 0 );
 
                 // reset subgroup counter
                 nCurSubGroup = 0;
@@ -481,6 +503,8 @@ void PrintDialog::setupOptionalUI()
 
                 // set help id
                 setSmartId( pNewSub, "FixedLine", sal_Int32( nCurSubGroup++ ) );
+                // set help text
+                setHelpText( pNewSub, aHelpTexts, 0 );
             }
             else if( aCtrlType.equalsAscii( "Bool" ) && pCurParent )
             {
@@ -508,7 +532,8 @@ void PrintDialog::setupOptionalUI()
 
                 // set help id
                 setSmartId( pNewBox, "CheckBox", -1, aPropertyName );
-
+                // set help text
+                setHelpText( pNewBox, aHelpTexts, 0 );
             }
             else if( aCtrlType.equalsAscii( "Radio" ) && pCurParent )
             {
@@ -530,6 +555,8 @@ void PrintDialog::setupOptionalUI()
 
                     // set help id
                     setSmartId( pHeading, "FixedText", -1, aPropertyName );
+                    // set help text
+                    setHelpText( pHeading, aHelpTexts, nCurHelpText++ );
                 }
 
                 // iterate options
@@ -556,6 +583,8 @@ void PrintDialog::setupOptionalUI()
 
                     // set help id
                     setSmartId( pBtn, "RadioButton", m, aPropertyName );
+                    // set help text
+                    setHelpText( pBtn, aHelpTexts, nCurHelpText++ );
 
                     nCurY += 12;
                 }
@@ -622,6 +651,8 @@ void PrintDialog::setupOptionalUI()
 
                 // set help id
                 setSmartId( pList, "ListBox", -1, aPropertyName );
+                // set help text
+                setHelpText( pList, aHelpTexts, 0 );
 
                 maPropertyToWindowMap.insert( std::pair< rtl::OUString, Window* >( aPropertyName, pList ) );
                 maControlToPropertyMap[pList] = aPropertyName;
@@ -690,6 +721,8 @@ void PrintDialog::setupOptionalUI()
 
                 // set help id
                 setSmartId( pField, "NumericField", -1, aPropertyName );
+                // set help text
+                setHelpText( pField, aHelpTexts, 0 );
 
                 maPropertyToWindowMap.insert( std::pair< rtl::OUString, Window* >( aPropertyName, pField ) );
                 maControlToPropertyMap[pField] = aPropertyName;

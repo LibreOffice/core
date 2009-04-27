@@ -928,6 +928,7 @@ void PrinterOptionsHelper::appendPrintUIOptions( uno::Sequence< beans::PropertyV
 }
 
 Any PrinterOptionsHelper::getUIControlOpt( const rtl::OUString& i_rTitle,
+                                           const Sequence< rtl::OUString >& i_rHelpTexts,
                                            const rtl::OUString& i_rType,
                                            const PropertyValue* i_pVal,
                                            const Sequence< rtl::OUString >* i_pChoices,
@@ -940,6 +941,7 @@ Any PrinterOptionsHelper::getUIControlOpt( const rtl::OUString& i_rTitle,
     sal_Int32 nElements =
         1                                                               // ControlType
         + (i_rTitle.getLength() ? 1 : 0)                                // Text
+        + (i_rHelpTexts.getLength() ? 1 : 0)                            // HelpText
         + (i_pVal ? 1 : 0)                                              // Property
         + (i_pChoices ? 1 : 0)                                          // Choices
         + (i_pDependsOnName ? (i_nDependsOnEntry != -1 ? 2 : 1) : 0)    // dependencies
@@ -952,6 +954,11 @@ Any PrinterOptionsHelper::getUIControlOpt( const rtl::OUString& i_rTitle,
     {
         aCtrl[nUsed  ].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Text" ) );
         aCtrl[nUsed++].Value = makeAny( i_rTitle );
+    }
+    if( i_rHelpTexts.getLength() )
+    {
+        aCtrl[nUsed  ].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HelpText" ) );
+        aCtrl[nUsed++].Value = makeAny( i_rHelpTexts );
     }
     aCtrl[nUsed  ].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ControlType" ) );
     aCtrl[nUsed++].Value = makeAny( i_rType );
@@ -988,30 +995,50 @@ Any PrinterOptionsHelper::getUIControlOpt( const rtl::OUString& i_rTitle,
     return makeAny( aCtrl );
 }
 
-Any PrinterOptionsHelper::getGroupControlOpt( const rtl::OUString& i_rTitle )
+Any PrinterOptionsHelper::getGroupControlOpt( const rtl::OUString& i_rTitle, const rtl::OUString& i_rHelpText )
 {
-    return getUIControlOpt( i_rTitle, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Group" ) ) );
+    Sequence< rtl::OUString > aHelpText;
+    if( i_rHelpText.getLength() > 0 )
+    {
+        aHelpText.realloc( 1 );
+        *aHelpText.getArray() = i_rHelpText;
+    }
+    return getUIControlOpt( i_rTitle, aHelpText, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Group" ) ) );
 }
 
-Any PrinterOptionsHelper::getSubgroupControlOpt( const rtl::OUString& i_rTitle )
+Any PrinterOptionsHelper::getSubgroupControlOpt( const rtl::OUString& i_rTitle, const rtl::OUString& i_rHelpText )
 {
-    return getUIControlOpt( i_rTitle, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Subgroup" ) ) );
+    Sequence< rtl::OUString > aHelpText;
+    if( i_rHelpText.getLength() > 0 )
+    {
+        aHelpText.realloc( 1 );
+        *aHelpText.getArray() = i_rHelpText;
+    }
+    return getUIControlOpt( i_rTitle, aHelpText, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Subgroup" ) ) );
 }
 
 Any PrinterOptionsHelper::getBoolControlOpt( const rtl::OUString& i_rTitle,
+                                             const rtl::OUString& i_rHelpText,
                                              const rtl::OUString& i_rProperty,
                                              sal_Bool i_bValue,
                                              const rtl::OUString* i_pDependsOnName,
                                              sal_Int32 i_nDependsOnEntry
                                              )
 {
+    Sequence< rtl::OUString > aHelpText;
+    if( i_rHelpText.getLength() > 0 )
+    {
+        aHelpText.realloc( 1 );
+        *aHelpText.getArray() = i_rHelpText;
+    }
     PropertyValue aVal;
     aVal.Name = i_rProperty;
     aVal.Value = makeAny( i_bValue );
-    return getUIControlOpt( i_rTitle, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Bool" ) ), &aVal, NULL, i_pDependsOnName, i_nDependsOnEntry );
+    return getUIControlOpt( i_rTitle, aHelpText, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Bool" ) ), &aVal, NULL, i_pDependsOnName, i_nDependsOnEntry );
 }
 
 Any PrinterOptionsHelper::getChoiceControlOpt( const rtl::OUString& i_rTitle,
+                                               const Sequence< rtl::OUString >& i_rHelpText,
                                                const rtl::OUString& i_rProperty,
                                                const Sequence< rtl::OUString >& i_rChoices,
                                                sal_Int32 i_nValue,
@@ -1023,10 +1050,11 @@ Any PrinterOptionsHelper::getChoiceControlOpt( const rtl::OUString& i_rTitle,
     PropertyValue aVal;
     aVal.Name = i_rProperty;
     aVal.Value = makeAny( i_nValue );
-    return getUIControlOpt( i_rTitle, i_rType, &aVal, &i_rChoices, i_pDependsOnName, i_nDependsOnEntry );
+    return getUIControlOpt( i_rTitle, i_rHelpText, i_rType, &aVal, &i_rChoices, i_pDependsOnName, i_nDependsOnEntry );
 }
 
 Any PrinterOptionsHelper::getRangeControlOpt( const rtl::OUString& i_rTitle,
+                                              const rtl::OUString& i_rHelpText,
                                               const rtl::OUString& i_rProperty,
                                               sal_Int32 i_nValue,
                                               sal_Int32 i_nMinValue,
@@ -1035,10 +1063,17 @@ Any PrinterOptionsHelper::getRangeControlOpt( const rtl::OUString& i_rTitle,
                                               sal_Int32 i_nDependsOnEntry
                                             )
 {
+    Sequence< rtl::OUString > aHelpText;
+    if( i_rHelpText.getLength() > 0 )
+    {
+        aHelpText.realloc( 1 );
+        *aHelpText.getArray() = i_rHelpText;
+    }
     PropertyValue aVal;
     aVal.Name = i_rProperty;
     aVal.Value = makeAny( i_nValue );
     return getUIControlOpt( i_rTitle,
+                            aHelpText,
                             rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Range" ) ),
                             &aVal,
                             NULL,

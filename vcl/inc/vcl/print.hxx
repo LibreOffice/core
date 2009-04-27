@@ -547,6 +547,7 @@ class VCL_DLLPUBLIC PrinterOptionsHelper
 
     // general control
     static com::sun::star::uno::Any getUIControlOpt( const rtl::OUString& i_rTitle,
+                                                     const com::sun::star::uno::Sequence< rtl::OUString >& i_rHelpText,
                                                      const rtl::OUString& i_rType,
                                                      const com::sun::star::beans::PropertyValue* i_pVal = NULL,
                                                      const com::sun::star::uno::Sequence< rtl::OUString >* i_pChoices = NULL,
@@ -556,14 +557,15 @@ class VCL_DLLPUBLIC PrinterOptionsHelper
                                                      );
     // create a group (e.g. a TabPage); following controls will be grouped in it until the next
     // group begins
-    static com::sun::star::uno::Any getGroupControlOpt( const rtl::OUString& i_rTitle );
+    static com::sun::star::uno::Any getGroupControlOpt( const rtl::OUString& i_rTitle, const rtl::OUString& i_rHelpText );
 
     // create a subgroup (e.g. a FixedLine); following controls will be grouped in it until the next
     // subgroup or group begins
-    static com::sun::star::uno::Any getSubgroupControlOpt( const rtl::OUString& i_rTitle );
+    static com::sun::star::uno::Any getSubgroupControlOpt( const rtl::OUString& i_rTitle, const rtl::OUString& i_rHelpText );
 
     // create a bool option (usually a checkbox)
     static com::sun::star::uno::Any getBoolControlOpt( const rtl::OUString& i_rTitle,
+                                                       const rtl::OUString& i_rHelpText,
                                                        const rtl::OUString& i_rProperty,
                                                        sal_Bool i_bValue,
                                                        const rtl::OUString* i_pDependsOnName = NULL,
@@ -572,6 +574,7 @@ class VCL_DLLPUBLIC PrinterOptionsHelper
 
     // create a set of choices (either a radio button group or a list box)
     static com::sun::star::uno::Any getChoiceControlOpt( const rtl::OUString& i_rTitle,
+                                                         const com::sun::star::uno::Sequence< rtl::OUString >& i_rHelpText,
                                                          const rtl::OUString& i_rProperty,
                                                          const com::sun::star::uno::Sequence< rtl::OUString >& i_rChoices,
                                                          sal_Int32 i_nValue,
@@ -583,6 +586,7 @@ class VCL_DLLPUBLIC PrinterOptionsHelper
     // create an integer range (e.g. a spin field)
     // note: max value < min value means do not apply min/max values
     static com::sun::star::uno::Any getRangeControlOpt( const rtl::OUString& i_rTitle,
+                                                        const rtl::OUString& i_rHelpText,
                                                         const rtl::OUString& i_rProperty,
                                                         sal_Int32 i_nValue,
                                                         sal_Int32 i_nMinValue = -1,
