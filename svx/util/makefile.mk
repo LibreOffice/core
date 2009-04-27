@@ -169,7 +169,6 @@ SHL2STDLIBS= \
             $(TKLIB) \
             $(VCLLIB) \
             $(SVLLIB) \
-            $(SOTLIB) \
             $(UNOTOOLSLIB) \
             $(TOOLSLIB) \
             $(I18NISOLANGLIB) \
@@ -179,8 +178,7 @@ SHL2STDLIBS= \
             $(CPPULIB) \
             $(VOSLIB) \
             $(SALLIB) \
-            $(JVMFWKLIB) \
-            $(ICUUCLIB)
+            $(JVMFWKLIB)
 
 .IF "$(debug)$(dbgutil)"!=""
 SHL2STDLIBS += $(CPPUHELPERLIB)

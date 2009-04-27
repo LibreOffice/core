@@ -187,7 +187,6 @@ SHL3STDLIBS=    \
                 $(CPPUHELPERLIB)                    \
                 $(COMPHELPERLIB)                    \
                 $(CPPULIB)                          \
-                $(VOSLIB)                           \
                 $(SALLIB)
 
 SHL3DEF=        $(MISC)$/$(SHL3TARGET).def
@@ -347,7 +346,6 @@ SHL4STDLIBS=    \
                 $(COMPHELPERLIB)                    \
                 $(CPPUHELPERLIB)                    \
                 $(CPPULIB)                          \
-                $(VOSLIB)                           \
                 $(SALLIB)                           \
                 $(UCBHELPERLIB)                     \
                 $(I18NISOLANGLIB)

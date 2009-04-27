@@ -99,8 +99,8 @@ long HundMMToTwips( long nIn )
 
 ULONG SdrTableRtfExporter::Write()
 {
-    mrStrm << '{' << sRTF_RTF;
-    mrStrm << sRTF_ANSI << RTFOutFuncs::sNewLine;
+    mrStrm << '{' << OOO_STRING_SVTOOLS_RTF_RTF;
+    mrStrm << OOO_STRING_SVTOOLS_RTF_ANSI << RTFOutFuncs::sNewLine;
 
     Reference< XTableColumns > xColumns( mxTable->getColumns() );
     const sal_Int32 nColCount = xColumns->getCount();
@@ -148,8 +148,8 @@ void SdrTableRtfExporter::WriteRow( const Reference< XPropertySet >& xRowSet, sa
     sal_Int32 nRowHeight = 0;
     xRowSet->getPropertyValue( msSize ) >>= nRowHeight;
 
-    mrStrm << sRTF_TROWD << sRTF_TRGAPH << "30" << sRTF_TRLEFT << "-30";
-    mrStrm << sRTF_TRRH << ByteString::CreateFromInt32( nRowHeight ).GetBuffer();
+    mrStrm << OOO_STRING_SVTOOLS_RTF_TROWD << OOO_STRING_SVTOOLS_RTF_TRGAPH << "30" << OOO_STRING_SVTOOLS_RTF_TRLEFT << "-30";
+    mrStrm << OOO_STRING_SVTOOLS_RTF_TRRH << ByteString::CreateFromInt32( nRowHeight ).GetBuffer();
 
     const sal_Int32 nColCount = mxTable->getColumnCount();
     for( sal_Int32 nCol = 0; nCol < nColCount; nCol++ )
@@ -167,25 +167,25 @@ void SdrTableRtfExporter::WriteRow( const Reference< XPropertySet >& xRowSet, sa
         const sal_Char* pChar;
 
         if( !bIsMerged && ((nRowSpan > 1) || (nColSpan > 1)) )
-            mrStrm << sRTF_CLMGF; // The first cell in a range of table cells to be merged.
+            mrStrm << OOO_STRING_SVTOOLS_RTF_CLMGF; // The first cell in a range of table cells to be merged.
 
         SdrTextVertAdjust eVAdj = xCell->GetTextVerticalAdjust();
         switch( eVAdj )
         {
-            case SVX_VER_JUSTIFY_TOP:       pChar = sRTF_CLVERTALT; break;
-            case SVX_VER_JUSTIFY_CENTER:    pChar = sRTF_CLVERTALC; break;
-            case SVX_VER_JUSTIFY_BOTTOM:    pChar = sRTF_CLVERTALB; break;
-            case SVX_VER_JUSTIFY_STANDARD:  pChar = sRTF_CLVERTALB; break;  //! Bottom
+            case SVX_VER_JUSTIFY_TOP:       pChar = OOO_STRING_SVTOOLS_RTF_CLVERTALT;   break;
+            case SVX_VER_JUSTIFY_CENTER:    pChar = OOO_STRING_SVTOOLS_RTF_CLVERTALC;   break;
+            case SVX_VER_JUSTIFY_BOTTOM:    pChar = OOO_STRING_SVTOOLS_RTF_CLVERTALB;   break;
+            case SVX_VER_JUSTIFY_STANDARD:  pChar = OOO_STRING_SVTOOLS_RTF_CLVERTALB;   break;  //! Bottom
             default:                        pChar = NULL;           break;
         }
         if ( pChar )
             mrStrm << pChar;
 */
-        mrStrm << sRTF_CELLX << ByteString::CreateFromInt32( aColumnStart[nCol] ).GetBuffer();
+        mrStrm << OOO_STRING_SVTOOLS_RTF_CELLX << ByteString::CreateFromInt32( aColumnStart[nCol] ).GetBuffer();
         if ( (nCol & 0x0F) == 0x0F )
             mrStrm << RTFOutFuncs::sNewLine;        // Zeilen nicht zu lang werden lassen
     }
-    mrStrm << sRTF_PARD << sRTF_PLAIN << sRTF_INTBL << RTFOutFuncs::sNewLine;
+    mrStrm << OOO_STRING_SVTOOLS_RTF_PARD << OOO_STRING_SVTOOLS_RTF_PLAIN << OOO_STRING_SVTOOLS_RTF_INTBL << RTFOutFuncs::sNewLine;
 
     ULONG nStrmPos = mrStrm.Tell();
     for( sal_Int32 nCol = 0; nCol < nColCount; nCol++ )
@@ -197,7 +197,7 @@ void SdrTableRtfExporter::WriteRow( const Reference< XPropertySet >& xRowSet, sa
             nStrmPos = mrStrm.Tell();
         }
     }
-    mrStrm << sRTF_ROW << RTFOutFuncs::sNewLine;
+    mrStrm << OOO_STRING_SVTOOLS_RTF_ROW << RTFOutFuncs::sNewLine;
 }
 
 
@@ -207,7 +207,7 @@ void SdrTableRtfExporter::WriteCell( sal_Int32 nCol, sal_Int32 nRow )
 
     if( !xCell.is() || xCell->isMerged() )
     {
-        mrStrm << sRTF_CELL;
+        mrStrm << OOO_STRING_SVTOOLS_RTF_CELL;
         return ;
     }
 
@@ -244,38 +244,38 @@ void SdrTableRtfExporter::WriteCell( sal_Int32 nCol, sal_Int32 nRow )
 
     switch( eHAdj )
     {
-        case SDRTEXTHORZADJUST_CENTER:  pChar = sRTF_QC;    break;
-        case SDRTEXTHORZADJUST_BLOCK:   pChar = sRTF_QJ;    break;
-        case SDRTEXTHORZADJUST_RIGHT:   pChar = sRTF_QR;    break;
+        case SDRTEXTHORZADJUST_CENTER:  pChar = OOO_STRING_SVTOOLS_RTF_QC;  break;
+        case SDRTEXTHORZADJUST_BLOCK:   pChar = OOO_STRING_SVTOOLS_RTF_QJ;  break;
+        case SDRTEXTHORZADJUST_RIGHT:   pChar = OOO_STRING_SVTOOLS_RTF_QR;  break;
         case SDRTEXTHORZADJUST_LEFT:
-        default:                        pChar = sRTF_QL;    break;
+        default:                        pChar = OOO_STRING_SVTOOLS_RTF_QL;  break;
     }
     mrStrm << pChar;
 
     if ( rWeightItem.GetWeight() >= WEIGHT_BOLD )
     {   // bold
         bResetAttr = true;
-        mrStrm << sRTF_B;
+        mrStrm << OOO_STRING_SVTOOLS_RTF_B;
     }
     if ( rPostureItem.GetPosture() != ITALIC_NONE )
     {   // italic
         bResetAttr = true;
-        mrStrm << sRTF_I;
+        mrStrm << OOO_STRING_SVTOOLS_RTF_I;
     }
     if ( rUnderlineItem.GetLineStyle() != UNDERLINE_NONE )
     {   // underline
         bResetAttr = true;
-        mrStrm << sRTF_UL;
+        mrStrm << OOO_STRING_SVTOOLS_RTF_UL;
     }
 
     mrStrm << ' ';
     RTFOutFuncs::Out_String( mrStrm, aContent );
-    mrStrm << sRTF_CELL;
+    mrStrm << OOO_STRING_SVTOOLS_RTF_CELL;
 
     if ( bResetPar )
-        mrStrm << sRTF_PARD << sRTF_INTBL;
+        mrStrm << OOO_STRING_SVTOOLS_RTF_PARD << OOO_STRING_SVTOOLS_RTF_INTBL;
     if ( bResetAttr )
-        mrStrm << sRTF_PLAIN;
+        mrStrm << OOO_STRING_SVTOOLS_RTF_PLAIN;
 }
 
 } }

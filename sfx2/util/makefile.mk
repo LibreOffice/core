@@ -81,7 +81,6 @@ SHL1USE_EXPORTS=name
 SHL1STDLIBS+=\
         $(FWELIB) \
         $(BASICLIB) \
-        $(XMLSCRIPTLIB) \
         $(SVTOOLLIB) \
         $(TKLIB) \
         $(VCLLIB) \

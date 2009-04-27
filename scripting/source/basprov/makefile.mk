@@ -61,7 +61,6 @@ DEF1NAME=$(SHL1TARGET)
 SHL1STDLIBS= \
         $(SFX2LIB) \
         $(BASICLIB) \
-        $(SVTOOLLIB) \
         $(VCLLIB) \
         $(TOOLSLIB) \
         $(UCBHELPERLIB) \

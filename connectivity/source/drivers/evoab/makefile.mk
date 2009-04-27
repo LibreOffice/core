@@ -79,10 +79,7 @@ SHL1STDLIBS=\
     $(CPPULIB)					\
     $(CPPUHELPERLIB)			\
     $(VOSLIB)					\
-    $(SVLLIB)					\
-    $(VCLLIB)					\
     $(TOOLSLIB)					\
-    $(I18NISOLANGLIB)			\
     $(SVTOOLLIB)				\
     $(UNOTOOLSLIB)				\
     $(UCBHELPERLIB)				\
