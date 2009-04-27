@@ -110,6 +110,65 @@ using namespace ::slideshow::internal;
 
 namespace {
 
+/** During animations the update() method tells its caller to call it as
+    soon as possible.  This gives us more time to render the next frame and
+    still maintain a steady frame rate.  This class is responsible for
+    synchronizing the display of new frames and thus keeping the frame rate
+    steady.
+*/
+class FrameSynchronization
+{
+public:
+    /** Create new object with a predefined duration between two frames.
+        @param nFrameDuration
+            The preferred duration between the display of two frames in
+            seconds.
+    */
+    FrameSynchronization (const double nFrameDuration);
+
+    /** Set the current time as the time at which the current frame is
+        displayed.  From this the target time of the next frame is derived.
+    */
+    void MarkCurrentFrame (void);
+
+    /** When there is time left until the next frame is due then wait.
+        Otherwise return without delay.
+    */
+    void Synchronize (void);
+
+    /** Activate frame synchronization when an animation is active and
+        frames are to be displayed in a steady rate.  While active
+        Synchronize() will wait until the frame duration time has passed.
+    */
+    void Activate (void);
+
+    /** Deactivate frame sychronization when no animation is active and the
+        time between frames depends on user actions and other external
+        sources.  While deactivated Synchronize() will return without delay.
+    */
+    void Deactivate (void);
+
+private:
+    /** The timer that is used for synchronization is independent from the
+        one used by SlideShowImpl: it is not paused or modified by
+        animations.
+    */
+    canvas::tools::ElapsedTime maTimer;
+    /** Time between the display of frames.  Enforced only when mbIsActive
+        is <TRUE/>.
+    */
+    const double mnFrameDuration;
+    /** Time (of maTimer) when the next frame shall be displayed.
+        Synchronize() will wait until this time.
+    */
+    double mnNextFrameTargetTime;
+    /** Synchronize() will wait only when this flag is <TRUE/>.  Otherwise
+        it returns immediately.
+    */
+    bool mbIsActive;
+};
+
+
 /******************************************************************************
 
    SlideShowImpl
@@ -407,6 +466,7 @@ private:
     bool                                    mbDisableAnimationZOrder;
 
     EffectRewinder                          maEffectRewinder;
+    FrameSynchronization                    maFrameSynchronization;
 };
 
 
@@ -507,7 +567,9 @@ SlideShowImpl::SlideShowImpl(
       mbShowPaused( false ),
       mbSlideShowIdle( true ),
       mbDisableAnimationZOrder( false ),
-      maEffectRewinder(maEventMultiplexer, maEventQueue, maUserEventQueue)
+      maEffectRewinder(maEventMultiplexer, maEventQueue, maUserEventQueue),
+      maFrameSynchronization(1.0 / FrameRate::PreferredFramesPerSecond)
+
 {
     // keep care not constructing any UNO references to this inside ctor,
     // shift that code to create()!
@@ -1686,6 +1748,7 @@ sal_Bool SlideShowImpl::update( double & nNextTimeout )
             maActivitiesQueue.process();
 
             // commit frame to screen
+            maFrameSynchronization.Synchronize();
             maScreenUpdater.commitUpdates();
 
             // TODO(Q3): remove need to call dequeued() from
@@ -1729,7 +1792,13 @@ sal_Bool SlideShowImpl::update( double & nNextTimeout )
             {
                 // Activity queue is not empty.  Tell caller that we would
                 // like to render another frame.
-                nNextTimeout = 1.0 / FrameRate::PreferredFramesPerSecond;
+
+                // Return a zero time-out to signal our caller to call us
+                // back as soon as possible.  The actual timing, waiting the
+                // appropriate amount of time between frames, is then done
+                // by the maFrameSynchronization object.
+                nNextTimeout = 0;
+                maFrameSynchronization.Activate();
             }
             else
             {
@@ -1743,6 +1812,10 @@ sal_Bool SlideShowImpl::update( double & nNextTimeout )
 
                 // ensure positive value:
                 nNextTimeout = std::max( 0.0, maEventQueue.nextTimeout() );
+
+                // There is no active animation so the frame rate does not
+                // need to be synchronized.
+                maFrameSynchronization.Deactivate();
             }
 
             mbSlideShowIdle = false;
@@ -2037,6 +2110,59 @@ bool SlideShowImpl::handleAnimationEvent( const AnimationNodeSharedPtr& rNode )
 
     return true;
 }
+
+
+//===== FrameSynchronization ==================================================
+
+FrameSynchronization::FrameSynchronization (const double nFrameDuration)
+    : maTimer(),
+      mnFrameDuration(nFrameDuration),
+      mnNextFrameTargetTime(0),
+      mbIsActive(false)
+{
+    MarkCurrentFrame();
+}
+
+
+
+
+void FrameSynchronization::MarkCurrentFrame (void)
+{
+    mnNextFrameTargetTime = maTimer.getElapsedTime() + mnFrameDuration;
+}
+
+
+
+
+void FrameSynchronization::Synchronize (void)
+{
+    if (mbIsActive)
+    {
+        // Do busy waiting for now.
+        while (maTimer.getElapsedTime() < mnNextFrameTargetTime)
+            ;
+    }
+
+    MarkCurrentFrame();
+}
+
+
+
+
+void FrameSynchronization::Activate (void)
+{
+    mbIsActive = true;
+}
+
+
+
+
+void FrameSynchronization::Deactivate (void)
+{
+    mbIsActive = false;
+}
+
+
 
 } // anon namespace
 
