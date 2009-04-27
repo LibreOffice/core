@@ -772,6 +772,9 @@ void SAL_CALL SlideshowImpl::disposing()
 
     setActiveXToolbarsVisible( sal_True );
 
+    Application::EnableNoYieldMode(false);
+    Application::RemovePostYieldListener(LINK(this, SlideshowImpl, PostYieldListener));
+
     mbDisposed = true;
 }
 
@@ -1867,11 +1870,34 @@ IMPL_LINK( SlideshowImpl, updateHdl, Timer*, EMPTYARG )
 {
     mnUpdateEvent = 0;
 
+    return updateSlideShow();
+}
+
+
+
+
+IMPL_LINK( SlideshowImpl, PostYieldListener, void*, EMPTYARG )
+{
+    Application::EnableNoYieldMode(false);
+    Application::RemovePostYieldListener(LINK(this, SlideshowImpl, PostYieldListener));
+    if (mbDisposed)
+        return 0;
+    return updateSlideShow();
+}
+
+
+
+
+sal_Int32 SlideshowImpl::updateSlideShow (void)
+{
     // doing some nMagic
     const rtl::Reference<SlideshowImpl> this_(this);
 
     Reference< XSlideShow > xShow( mxShow );
-    if( xShow.is() ) try
+    if ( ! xShow.is())
+        return 0;
+
+    try
     {
         // TODO(Q3): Evaluate under various systems and setups,
         // whether this is really necessary. Under WinXP and Matrox
@@ -1886,32 +1912,37 @@ IMPL_LINK( SlideshowImpl, updateHdl, Timer*, EMPTYARG )
         if( !xShow->update(fUpdate) )
             fUpdate = -1.0;
 
-        if( mxShow.is() && ( fUpdate >= 0.0 ) )
+        if (mxShow.is() && (fUpdate >= 0.0))
         {
-/*
-            if( fUpdate < 0.25 )
+            if (::basegfx::fTools::equalZero(fUpdate))
             {
-                mnUpdateEvent = Application::PostUserEvent(LINK(this, SlideshowImpl, updateHdl));
+                // Use post yield listener for short update intervalls.
+                Application::EnableNoYieldMode(true);
+                Application::AddPostYieldListener(LINK(this, SlideshowImpl, PostYieldListener));
             }
             else
-*/
             {
                 // Avoid busy loop when the previous call to update()
-                // returns 0.  The minimum value is small enough to allow
-                // high frame rates.  Values larger than 0 are typically
-                // also larger then the small minimum value and thus are
-                // used to determine the frame rate.
-                const float MIN_UPDATE = 0.01f; // 10ms corresponds to 100 frames per second.
-                if( fUpdate < MIN_UPDATE )
-                    fUpdate = MIN_UPDATE;
-                else
-                {
-                    const float MAX_UPDATE = 4.0f; // do not wait longer than 4 seconds for next refresh, because dilbert said so
-                    if( fUpdate > MAX_UPDATE )
-                        fUpdate = MAX_UPDATE;
-                }
-                maUpdateTimer.SetTimeout(
-                    ::std::max( 1UL, static_cast<ULONG>(fUpdate * 1000.0) ) );
+                // returns a small positive number but not 0 (which is
+                // handled above).  Also, make sure that calls to update()
+                // have a minimum frequency.
+                // => Allow up to 60 frames per second.  Call at least once
+                // every 4 seconds.
+                const static sal_Int32 mnMaximumFrameCount (60);
+                const static double mnMinimumTimeout (1.0 / mnMaximumFrameCount);
+                const static double mnMaximumTimeout (4.0);
+                fUpdate = ::basegfx::clamp(fUpdate, mnMinimumTimeout, mnMaximumTimeout);
+
+                // Make sure that the maximum frame count has not been set
+                // too high (only then conversion to milliseconds and long
+                // integer may lead to zero value.)
+                OSL_ASSERT(static_cast<ULONG>(fUpdate * 1000.0) > 0);
+
+                Application::EnableNoYieldMode(false);
+                Application::RemovePostYieldListener(LINK(this, SlideshowImpl, PostYieldListener));
+
+                // Use a timer for the asynchronous callback.
+                maUpdateTimer.SetTimeout(static_cast<ULONG>(fUpdate * 1000.0));
                 maUpdateTimer.Start();
             }
         }
@@ -1920,11 +1951,10 @@ IMPL_LINK( SlideshowImpl, updateHdl, Timer*, EMPTYARG )
     {
         static_cast<void>(e);
         DBG_ERROR(
-            (OString("sd::SlideshowImpl::updateHdl(), "
-                     "exception caught: ") +
-             rtl::OUStringToOString(
-                 comphelper::anyToString( cppu::getCaughtException() ),
-                 RTL_TEXTENCODING_UTF8 )).getStr() );
+            (OString("sd::SlideshowImpl::updateSlideShow(), exception caught: ")
+                + rtl::OUStringToOString(
+                    comphelper::anyToString( cppu::getCaughtException() ),
+                    RTL_TEXTENCODING_UTF8 )).getStr() );
     }
     return 0;
 }

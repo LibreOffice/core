@@ -298,6 +298,7 @@ private:
     void setActiveXToolbarsVisible( sal_Bool bVisible );
 
     DECL_LINK( updateHdl, Timer* );
+    DECL_LINK( PostYieldListener, void* );
     DECL_LINK( ReadyForNextInputHdl, Timer* );
     DECL_LINK( endPresentationHdl, void* );
     DECL_LINK( ContextMenuSelectHdl, Menu * );
@@ -332,6 +333,13 @@ private:
 
     void setAutoSaveState( bool bOn );
     void gotoPreviousSlide (const bool bSkipAllMainSequenceEffects);
+
+    /** Called by PostYieldListener and updateHdl handlers this method is
+        responsible to call the slideshow update() method and, depending on
+        its return value, wait for a certain amount of time before another
+        call to update() is scheduled.
+    */
+    sal_Int32 updateSlideShow (void);
 
     css::uno::Reference< css::presentation::XSlideShow > mxShow;
     comphelper::ImplementationReference< ::sd::SlideShowView, css::presentation::XSlideShowView > mxView;
