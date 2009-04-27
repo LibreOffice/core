@@ -81,17 +81,13 @@ SHL1TARGET=$(TARGET)$(DLLPOSTFIX)
 SHL1STDLIBS=\
     $(XMLOFFLIB)		\
     $(VCLLIB)			\
-    $(UNOTOOLSLIB)		\
     $(TOOLSLIB)			\
     $(TKLIB)			\
     $(COMPHELPERLIB)	\
     $(CPPUHELPERLIB)	\
     $(CPPULIB)			\
-    $(UCBHELPERLIB)		\
     $(SFXLIB)			\
     $(SVLLIB)			\
-    $(SVTOOLLIB)		\
-    $(SOTLIB)			\
     $(SO2LIB)			\
     $(SALLIB)
 

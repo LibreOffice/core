@@ -385,8 +385,8 @@ BOOL ORTFImportExport::Write()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ORTFImportExport::Write" );
     ODatabaseImportExport::Write();
-    (*m_pStream) << '{'     << sRTF_RTF;
-    (*m_pStream) << sRTF_ANSI   << ODatabaseImportExport::sNewLine;
+    (*m_pStream) << '{'     << OOO_STRING_SVTOOLS_RTF_RTF;
+    (*m_pStream) << OOO_STRING_SVTOOLS_RTF_ANSI << ODatabaseImportExport::sNewLine;
     rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252;
 
     /*
@@ -469,11 +469,11 @@ BOOL ORTFImportExport::Write()
     (*m_pStream) << '}' ;
     (*m_pStream) << ODatabaseImportExport::sNewLine;
     // write the rtf color table
-    (*m_pStream) << '{' << sRTF_COLORTBL << sRTF_RED;
+    (*m_pStream) << '{' << OOO_STRING_SVTOOLS_RTF_COLORTBL << OOO_STRING_SVTOOLS_RTF_RED;
     m_pStream->WriteNumber(aColor.GetRed());
-    (*m_pStream) << sRTF_GREEN;
+    (*m_pStream) << OOO_STRING_SVTOOLS_RTF_GREEN;
     m_pStream->WriteNumber(aColor.GetGreen());
-    (*m_pStream) << sRTF_BLUE;
+    (*m_pStream) << OOO_STRING_SVTOOLS_RTF_BLUE;
     m_pStream->WriteNumber(aColor.GetBlue());
 
     (*m_pStream) << ";\\red255\\green255\\blue255;\\red192\\green192\\blue192;}"
@@ -486,7 +486,7 @@ BOOL ORTFImportExport::Write()
     ::rtl::OString aCell1("\\clbrdrl\\brdrs\\brdrcf0\\clbrdrt\\brdrs\\brdrcf0\\clbrdrb\\brdrs\\brdrcf0\\clbrdrr\\brdrs\\brdrcf0\\clshdng10000\\clcfpat2\\cellx");
     ::rtl::OString aCell2("\\clbrdrl\\brdrs\\brdrcf2\\clbrdrt\\brdrs\\brdrcf2\\clbrdrb\\brdrs\\brdrcf2\\clbrdrr\\brdrs\\brdrcf2\\clshdng10000\\clcfpat1\\cellx");
 
-    (*m_pStream) << sRTF_TROWD << sRTF_TRGAPH;
+    (*m_pStream) << OOO_STRING_SVTOOLS_RTF_TROWD << OOO_STRING_SVTOOLS_RTF_TRGAPH;
     m_pStream->WriteNumber(40);
     (*m_pStream) << ODatabaseImportExport::sNewLine;
 
@@ -537,34 +537,34 @@ BOOL ORTFImportExport::Write()
             const char* pChar;
             switch( nAlign )
             {
-                case 1: pChar = sRTF_QC;    break;
-                case 2: pChar = sRTF_QR;    break;
+                case 1: pChar = OOO_STRING_SVTOOLS_RTF_QC;  break;
+                case 2: pChar = OOO_STRING_SVTOOLS_RTF_QR;  break;
                 case 0:
-                default:pChar = sRTF_QL;    break;
+                default:pChar = OOO_STRING_SVTOOLS_RTF_QL;  break;
             }
 
             pHorzChar[i-1] = pChar; // um sp"ater nicht immer im ITEMSET zuw"uhlen
 
             (*m_pStream) << ODatabaseImportExport::sNewLine;
             (*m_pStream) << '{';
-            (*m_pStream) << sRTF_QC;   // column header always centered
+            (*m_pStream) << OOO_STRING_SVTOOLS_RTF_QC;   // column header always centered
 
-            if ( bBold )        (*m_pStream) << sRTF_B;
-            if ( bItalic )      (*m_pStream) << sRTF_I;
-            if ( bUnderline )   (*m_pStream) << sRTF_UL;
-            if ( bStrikeout )   (*m_pStream) << sRTF_STRIKE;
+            if ( bBold )        (*m_pStream) << OOO_STRING_SVTOOLS_RTF_B;
+            if ( bItalic )      (*m_pStream) << OOO_STRING_SVTOOLS_RTF_I;
+            if ( bUnderline )   (*m_pStream) << OOO_STRING_SVTOOLS_RTF_UL;
+            if ( bStrikeout )   (*m_pStream) << OOO_STRING_SVTOOLS_RTF_STRIKE;
 
             (*m_pStream) << aFS;
             (*m_pStream) << ' ';
             RTFOutFuncs::Out_String(*m_pStream,sColumnName,eDestEnc);
 
-            (*m_pStream) << sRTF_CELL;
+            (*m_pStream) << OOO_STRING_SVTOOLS_RTF_CELL;
             (*m_pStream) << '}';
             (*m_pStream) << ODatabaseImportExport::sNewLine;
-            (*m_pStream) << sRTF_PARD   << sRTF_INTBL;
+            (*m_pStream) << OOO_STRING_SVTOOLS_RTF_PARD << OOO_STRING_SVTOOLS_RTF_INTBL;
         }
 
-        (*m_pStream) << sRTF_ROW;
+        (*m_pStream) << OOO_STRING_SVTOOLS_RTF_ROW;
         (*m_pStream) << ODatabaseImportExport::sNewLine << '}';
         (*m_pStream) << ODatabaseImportExport::sNewLine;
 
@@ -578,7 +578,7 @@ BOOL ORTFImportExport::Write()
             if(!m_pRowMarker || m_pRowMarker[kk] == k)
             {
                 ++kk;
-                (*m_pStream) << sRTF_TROWD << sRTF_TRGAPH;
+                (*m_pStream) << OOO_STRING_SVTOOLS_RTF_TROWD << OOO_STRING_SVTOOLS_RTF_TRGAPH;
                 m_pStream->WriteNumber(40);
                 (*m_pStream) << ODatabaseImportExport::sNewLine;
 
@@ -597,10 +597,10 @@ BOOL ORTFImportExport::Write()
                     (*m_pStream) << '{';
                     (*m_pStream) << pHorzChar[i-1];
 
-                    if ( bBold )        (*m_pStream) << sRTF_B;
-                    if ( bItalic )      (*m_pStream) << sRTF_I;
-                    if ( bUnderline )   (*m_pStream) << sRTF_UL;
-                    if ( bStrikeout )   (*m_pStream) << sRTF_STRIKE;
+                    if ( bBold )        (*m_pStream) << OOO_STRING_SVTOOLS_RTF_B;
+                    if ( bItalic )      (*m_pStream) << OOO_STRING_SVTOOLS_RTF_I;
+                    if ( bUnderline )   (*m_pStream) << OOO_STRING_SVTOOLS_RTF_UL;
+                    if ( bStrikeout )   (*m_pStream) << OOO_STRING_SVTOOLS_RTF_STRIKE;
 
                     (*m_pStream) << aFS2;
                     (*m_pStream) << ' ';
@@ -620,12 +620,12 @@ BOOL ORTFImportExport::Write()
                         OSL_ENSURE(0,"RTF WRITE!");
                     }
 
-                    (*m_pStream) << sRTF_CELL;
+                    (*m_pStream) << OOO_STRING_SVTOOLS_RTF_CELL;
                     (*m_pStream) << '}';
                     (*m_pStream) << ODatabaseImportExport::sNewLine;
-                    (*m_pStream) << sRTF_PARD   << sRTF_INTBL;
+                    (*m_pStream) << OOO_STRING_SVTOOLS_RTF_PARD << OOO_STRING_SVTOOLS_RTF_INTBL;
                 }
-                (*m_pStream) << sRTF_ROW << ODatabaseImportExport::sNewLine;
+                (*m_pStream) << OOO_STRING_SVTOOLS_RTF_ROW << ODatabaseImportExport::sNewLine;
                 (*m_pStream) << '}';
             }
             ++k;
@@ -681,7 +681,7 @@ const char __FAR_DATA OHTMLImportExport::sIndentSource[nIndentMax+1] = "\t\t\t\t
 #define lcl_OUT_LF()        (*m_pStream) << ODatabaseImportExport::sNewLine
 #define TAG_ON_LF( tag )    (TAG_ON( tag ) << ODatabaseImportExport::sNewLine << GetIndentStr())
 #define TAG_OFF_LF( tag )   (TAG_OFF( tag ) << ODatabaseImportExport::sNewLine << GetIndentStr())
-#define OUT_HR()            TAG_ON_LF( sHTML_horzrule )
+#define OUT_HR()            TAG_ON_LF( OOO_STRING_SVTOOLS_HTML_horzrule )
 #define OUT_COMMENT( comment )  ((*m_pStream) << sMyBegComment, OUT_STR( comment ) << sMyEndComment << ODatabaseImportExport::sNewLine << GetIndentStr())
 #define lcl_OUT_COMMENT( comment )  ((*m_pStream) << sMyBegComment, OUT_STR( comment ) << sMyEndComment << ODatabaseImportExport::sNewLine)
 
@@ -710,13 +710,13 @@ BOOL OHTMLImportExport::Write()
     ODatabaseImportExport::Write();
     if(m_xObject.is())
     {
-        (*m_pStream) << '<' << sHTML_doctype << ' ' << sHTML_doctype32 << '>' << ODatabaseImportExport::sNewLine << ODatabaseImportExport::sNewLine;
-        TAG_ON_LF( sHTML_html );
+        (*m_pStream) << '<' << OOO_STRING_SVTOOLS_HTML_doctype << ' ' << OOO_STRING_SVTOOLS_HTML_doctype32 << '>' << ODatabaseImportExport::sNewLine << ODatabaseImportExport::sNewLine;
+        TAG_ON_LF( OOO_STRING_SVTOOLS_HTML_html );
         WriteHeader();
         OUT_LF();
         WriteBody();
         OUT_LF();
-        TAG_OFF_LF( sHTML_html );
+        TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_html );
 
         return ((*m_pStream).GetError() == SVSTREAM_OK);
     }
@@ -756,22 +756,22 @@ void OHTMLImportExport::WriteHeader()
         xDocProps->setTitle(m_sName);
     }
 
-    IncIndent(1); TAG_ON_LF( sHTML_head );
+    IncIndent(1); TAG_ON_LF( OOO_STRING_SVTOOLS_HTML_head );
 
     SfxFrameHTMLWriter::Out_DocInfo( (*m_pStream), String(),
         xDocProps, sIndent );
     OUT_LF();
-    IncIndent(-1); OUT_LF(); TAG_OFF_LF( sHTML_head );
+    IncIndent(-1); OUT_LF(); TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_head );
 }
 //-----------------------------------------------------------------------
 void OHTMLImportExport::WriteBody()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OHTMLImportExport::WriteBody" );
 
-    IncIndent(1); TAG_ON_LF( sHTML_style );
+    IncIndent(1); TAG_ON_LF( OOO_STRING_SVTOOLS_HTML_style );
 
     (*m_pStream) << sMyBegComment; OUT_LF();
-    (*m_pStream) << sHTML_body << " { " << sFontFamily << '\"' << ::rtl::OString(m_aFont.Name,m_aFont.Name.getLength(), gsl_getSystemTextEncoding()) << '\"';
+    (*m_pStream) << OOO_STRING_SVTOOLS_HTML_body << " { " << sFontFamily << '\"' << ::rtl::OString(m_aFont.Name,m_aFont.Name.getLength(), gsl_getSystemTextEncoding()) << '\"';
         // TODO : think about the encoding of the font name
     (*m_pStream) << "; " << sFontSize;
     m_pStream->WriteNumber(m_aFont.Height);
@@ -779,11 +779,11 @@ void OHTMLImportExport::WriteBody()
 
     OUT_LF();
     (*m_pStream) << sMyEndComment;
-    IncIndent(-1); OUT_LF(); TAG_OFF_LF( sHTML_style );
+    IncIndent(-1); OUT_LF(); TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_style );
     OUT_LF();
 
     // default Textfarbe schwarz
-    (*m_pStream) << '<' << sHTML_body << ' ' << sHTML_O_text << '=';
+    (*m_pStream) << '<' << OOO_STRING_SVTOOLS_HTML_body << ' ' << OOO_STRING_SVTOOLS_HTML_O_text << '=';
     sal_Int32 nColor = 0;
     if(m_xObject.is())
         m_xObject->getPropertyValue(PROPERTY_TEXTCOLOR) >>= nColor;
@@ -791,7 +791,7 @@ void OHTMLImportExport::WriteBody()
     HTMLOutFuncs::Out_Color( (*m_pStream), aColor );
 
     ::rtl::OString sOut( ' ' );
-    sOut = sOut + sHTML_O_bgcolor;
+    sOut = sOut + OOO_STRING_SVTOOLS_HTML_O_bgcolor;
     sOut = sOut + "=";
     (*m_pStream) << sOut;
     HTMLOutFuncs::Out_Color( (*m_pStream), aColor );
@@ -800,17 +800,21 @@ void OHTMLImportExport::WriteBody()
 
     WriteTables();
 
-    TAG_OFF_LF( sHTML_body );
+    TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_body );
 }
 //-----------------------------------------------------------------------
 void OHTMLImportExport::WriteTables()
 {
+<<<<<<< .working
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OHTMLImportExport::WriteTables" );
     ::rtl::OString aStrOut  = sHTML_table;
+=======
+    ::rtl::OString aStrOut  = OOO_STRING_SVTOOLS_HTML_table;
+>>>>>>> .merge-right.r271174
     aStrOut = aStrOut + " ";
-    aStrOut = aStrOut + sHTML_frame;
+    aStrOut = aStrOut + OOO_STRING_SVTOOLS_HTML_frame;
     aStrOut = aStrOut + "=";
-    aStrOut = aStrOut + sHTML_TF_void;
+    aStrOut = aStrOut + OOO_STRING_SVTOOLS_HTML_TF_void;
 
     Sequence< ::rtl::OUString> aNames;
     Reference<XNameAccess> xColumns;
@@ -831,19 +835,19 @@ void OHTMLImportExport::WriteTables()
     }
 
     aStrOut = aStrOut + " ";
-    aStrOut = aStrOut + sHTML_O_align;
+    aStrOut = aStrOut + OOO_STRING_SVTOOLS_HTML_O_align;
     aStrOut = aStrOut + "=";
-    aStrOut = aStrOut + sHTML_AL_left;
+    aStrOut = aStrOut + OOO_STRING_SVTOOLS_HTML_AL_left;
     aStrOut = aStrOut + " ";
-    aStrOut = aStrOut + sHTML_O_cellspacing;
+    aStrOut = aStrOut + OOO_STRING_SVTOOLS_HTML_O_cellspacing;
     aStrOut = aStrOut + "=";
     aStrOut = aStrOut + ::rtl::OString::valueOf((sal_Int32)nCellSpacing);
     aStrOut = aStrOut + " ";
-    aStrOut = aStrOut + sHTML_O_cols;
+    aStrOut = aStrOut + OOO_STRING_SVTOOLS_HTML_O_cols;
     aStrOut = aStrOut + "=";
     aStrOut = aStrOut + ::rtl::OString::valueOf(aNames.getLength());
     aStrOut = aStrOut + " ";
-    aStrOut = aStrOut + sHTML_O_border;
+    aStrOut = aStrOut + OOO_STRING_SVTOOLS_HTML_O_border;
     aStrOut = aStrOut + "=1";
 
     IncIndent(1);
@@ -851,23 +855,23 @@ void OHTMLImportExport::WriteTables()
 
     FontOn();
 
-    TAG_ON( sHTML_caption );
-    TAG_ON( sHTML_bold );
+    TAG_ON( OOO_STRING_SVTOOLS_HTML_caption );
+    TAG_ON( OOO_STRING_SVTOOLS_HTML_bold );
 
     (*m_pStream)    << ::rtl::OString(m_sName,m_sName.getLength(), gsl_getSystemTextEncoding());
         // TODO : think about the encoding of the name
-    TAG_OFF( sHTML_bold );
-    TAG_OFF( sHTML_caption );
+    TAG_OFF( OOO_STRING_SVTOOLS_HTML_bold );
+    TAG_OFF( OOO_STRING_SVTOOLS_HTML_caption );
 
     FontOff();
     OUT_LF();
     // </FONT>
 
     IncIndent(1);
-    TAG_ON_LF( sHTML_thead );
+    TAG_ON_LF( OOO_STRING_SVTOOLS_HTML_thead );
 
     IncIndent(1);
-    TAG_ON_LF( sHTML_tablerow );
+    TAG_ON_LF( OOO_STRING_SVTOOLS_HTML_tablerow );
 
     if(m_xObject.is())
     {
@@ -900,23 +904,23 @@ void OHTMLImportExport::WriteTables()
 
             switch( nAlign )
             {
-                case 1:     pHorJustify[i] = sHTML_AL_center;   break;
-                case 2:     pHorJustify[i] = sHTML_AL_right;    break;
-                default:    pHorJustify[i] = sHTML_AL_left;     break;
+                case 1:     pHorJustify[i] = OOO_STRING_SVTOOLS_HTML_AL_center; break;
+                case 2:     pHorJustify[i] = OOO_STRING_SVTOOLS_HTML_AL_right;  break;
+                default:    pHorJustify[i] = OOO_STRING_SVTOOLS_HTML_AL_left;       break;
             }
 
             if(i == aNames.getLength()-1)
                 IncIndent(-1);
 
-            WriteCell(pFormat[i],pColWidth[i],nHeight,pHorJustify[i],*pIter,sHTML_tableheader);
+            WriteCell(pFormat[i],pColWidth[i],nHeight,pHorJustify[i],*pIter,OOO_STRING_SVTOOLS_HTML_tableheader);
         }
 
         IncIndent(-1);
-        TAG_OFF_LF( sHTML_tablerow );
-        TAG_OFF_LF( sHTML_thead );
+        TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_tablerow );
+        TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_thead );
 
         IncIndent(1);
-        TAG_ON_LF( sHTML_tbody );
+        TAG_ON_LF( OOO_STRING_SVTOOLS_HTML_tbody );
 
         // 2. und jetzt die Daten
         ::comphelper::ComponentContext aContext(m_xFactory);
@@ -927,7 +931,7 @@ void OHTMLImportExport::WriteTables()
         while(m_xResultSet->next())
         {
             IncIndent(1);
-            TAG_ON_LF( sHTML_tablerow );
+            TAG_ON_LF( OOO_STRING_SVTOOLS_HTML_tablerow );
 
             if(!m_pRowMarker || m_pRowMarker[kk] == j)
             {
@@ -952,11 +956,11 @@ void OHTMLImportExport::WriteTables()
                     {
                         DBG_UNHANDLED_EXCEPTION();
                     }
-                    WriteCell(pFormat[i-1],pColWidth[i-1],nHeight,pHorJustify[i-1],aValue,sHTML_tabledata);
+                    WriteCell(pFormat[i-1],pColWidth[i-1],nHeight,pHorJustify[i-1],aValue,OOO_STRING_SVTOOLS_HTML_tabledata);
                 }
             }
             ++j;
-            TAG_OFF_LF( sHTML_tablerow );
+            TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_tablerow );
         }
 
         delete [] pFormat;
@@ -966,15 +970,15 @@ void OHTMLImportExport::WriteTables()
     else
     {
         IncIndent(-1);
-        TAG_OFF_LF( sHTML_tablerow );
-        TAG_OFF_LF( sHTML_thead );
+        TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_tablerow );
+        TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_thead );
 
         IncIndent(1);
-        TAG_ON_LF( sHTML_tbody );
+        TAG_ON_LF( OOO_STRING_SVTOOLS_HTML_tbody );
     }
 
-    IncIndent(-1); OUT_LF(); TAG_OFF_LF( sHTML_tbody );
-    IncIndent(-1); TAG_OFF_LF( sHTML_table );
+    IncIndent(-1); OUT_LF(); TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_tbody );
+    IncIndent(-1); TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_table );
 }
 //-----------------------------------------------------------------------
 void OHTMLImportExport::WriteCell( sal_Int32 nFormat,sal_Int32 nWidthPixel,sal_Int32 nHeightPixel,const char* pChar,
@@ -990,17 +994,17 @@ void OHTMLImportExport::WriteCell( sal_Int32 nFormat,sal_Int32 nWidthPixel,sal_I
     // da die nicht von Netscape beachtet werden..
     // Spaltenbreite
     aStrTD = aStrTD + " ";
-    aStrTD = aStrTD + sHTML_O_width;
+    aStrTD = aStrTD + OOO_STRING_SVTOOLS_HTML_O_width;
     aStrTD = aStrTD + "=";
     aStrTD = aStrTD + ::rtl::OString::valueOf((sal_Int32)nWidthPixel);
     // Zeilenhoehe
     aStrTD = aStrTD + " ";
-    aStrTD = aStrTD + sHTML_O_height;
+    aStrTD = aStrTD + OOO_STRING_SVTOOLS_HTML_O_height;
     aStrTD = aStrTD + "=";
     aStrTD = aStrTD + ::rtl::OString::valueOf((sal_Int32)nHeightPixel);
 
     aStrTD = aStrTD + " ";
-    aStrTD = aStrTD + sHTML_O_align;
+    aStrTD = aStrTD + OOO_STRING_SVTOOLS_HTML_O_align;
     aStrTD = aStrTD + "=";
     aStrTD = aStrTD + pChar;
 
@@ -1033,21 +1037,21 @@ void OHTMLImportExport::WriteCell( sal_Int32 nFormat,sal_Int32 nWidthPixel,sal_I
     BOOL bUnderline     = ( ::com::sun::star::awt::FontUnderline::NONE  != m_aFont.Underline );
     BOOL bStrikeout     = ( ::com::sun::star::awt::FontStrikeout::NONE  != m_aFont.Strikeout );
 
-    if ( bBold )        TAG_ON( sHTML_bold );
-    if ( bItalic )      TAG_ON( sHTML_italic );
-    if ( bUnderline )   TAG_ON( sHTML_underline );
-    if ( bStrikeout )   TAG_ON( sHTML_strike );
+    if ( bBold )        TAG_ON( OOO_STRING_SVTOOLS_HTML_bold );
+    if ( bItalic )      TAG_ON( OOO_STRING_SVTOOLS_HTML_italic );
+    if ( bUnderline )   TAG_ON( OOO_STRING_SVTOOLS_HTML_underline );
+    if ( bStrikeout )   TAG_ON( OOO_STRING_SVTOOLS_HTML_strike );
 
     if ( !rValue.Len() )
-        TAG_ON( sHTML_linebreak );      // #42573# keine komplett leere Zelle
+        TAG_ON( OOO_STRING_SVTOOLS_HTML_linebreak );        // #42573# keine komplett leere Zelle
     else
         HTMLOutFuncs::Out_String( (*m_pStream), rValue ,m_eDestEnc);
 
 
-    if ( bStrikeout )   TAG_OFF( sHTML_strike );
-    if ( bUnderline )   TAG_OFF( sHTML_underline );
-    if ( bItalic )      TAG_OFF( sHTML_italic );
-    if ( bBold )        TAG_OFF( sHTML_bold );
+    if ( bStrikeout )   TAG_OFF( OOO_STRING_SVTOOLS_HTML_strike );
+    if ( bUnderline )   TAG_OFF( OOO_STRING_SVTOOLS_HTML_underline );
+    if ( bItalic )      TAG_OFF( OOO_STRING_SVTOOLS_HTML_italic );
+    if ( bBold )        TAG_OFF( OOO_STRING_SVTOOLS_HTML_bold );
 
     FontOff();
 
@@ -1063,16 +1067,16 @@ void OHTMLImportExport::FontOn()
 
     // <FONT FACE="xxx">
     ::rtl::OString aStrOut  = "<";
-    aStrOut  = aStrOut + sHTML_font;
+    aStrOut  = aStrOut + OOO_STRING_SVTOOLS_HTML_font;
     aStrOut  = aStrOut + " ";
-    aStrOut  = aStrOut + sHTML_O_face;
+    aStrOut  = aStrOut + OOO_STRING_SVTOOLS_HTML_O_face;
     aStrOut  = aStrOut + "=";
     aStrOut  = aStrOut + "\"";
     aStrOut  = aStrOut + ::rtl::OString(m_aFont.Name,m_aFont.Name.getLength(),gsl_getSystemTextEncoding());
         // TODO : think about the encoding of the font name
     aStrOut  = aStrOut + "\"";
     aStrOut  = aStrOut + " ";
-    aStrOut  = aStrOut + sHTML_O_color;
+    aStrOut  = aStrOut + OOO_STRING_SVTOOLS_HTML_O_color;
     aStrOut  = aStrOut + "=";
     (*m_pStream) << aStrOut;
 
@@ -1089,7 +1093,7 @@ inline void OHTMLImportExport::FontOff()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OHTMLImportExport::FontOff" );
     DBG_ASSERT(m_bCheckFont,"Kein FontOn() gerufen");
-    TAG_OFF( sHTML_font );
+    TAG_OFF( OOO_STRING_SVTOOLS_HTML_font );
 #ifdef DBG_UTIL
     m_bCheckFont = FALSE;
 #endif
