@@ -1450,6 +1450,25 @@ if test \( "$_os" != "WINNT" -o "$WITH_MINGWIN" = "yes" \) -a "$GCC" = "yes"; th
 fi 
 AC_SUBST(GCCVER)
 
+HAVE_LD_BSYMBOLIC_FUNCTIONS=
+if test "$GCC" = "yes"; then
+   AC_MSG_CHECKING( for -Bsymbolic-functions linker support )
+   bsymbolic_functions_ldflags_save=$LDFLAGS
+   LDFLAGS="$LDFLAGS -Wl,-Bsymbolic-functions -Wl,--dynamic-list-cpp-new -Wl,--dynamic-list-cpp-typeinfo"
+   AC_LINK_IFELSE([AC_LANG_PROGRAM([
+   #include <stdio.h>
+   ],[
+    printf ("hello world\n");
+   ])], HAVE_LD_BSYMBOLIC_FUNCTIONS=TRUE, [])
+   if test "z$HAVE_LD_BSYMBOLIC_FUNCTIONS" = "zTRUE"; then
+     AC_MSG_RESULT( found )
+   else
+     AC_MSG_RESULT( not found )
+   fi
+   LDFLAGS=$bsymbolic_functions_ldflags_save
+fi
+AC_SUBST(HAVE_LD_BSYMBOLIC_FUNCTIONS)
+
 dnl ===================================================================
 dnl Set the ENABLE_PCH variable. (Activate --enable-pch)
 dnl ===================================================================

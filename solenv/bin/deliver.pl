@@ -339,6 +339,7 @@ sub do_symlink
 
     $line = expand_macros($line);
     ($from, $to) = split(' ',$line);
+    my $fullfrom = $from;
     if ( dirname($from) eq dirname($to) ) {
         $from = basename($from);
     }
@@ -369,7 +370,7 @@ sub do_symlink
             push_on_ziplist($to) if $opt_zip;
             return;
         }
-
+        return unless -e $fullfrom;
         print "SYMLIB: $from -> $to\n" if $opt_verbose;
         if ( !symlink("$from", "$to") ) {
             print_error("can't symlink $from -> $to: $!",0);

@@ -1799,6 +1799,8 @@ ToFile( "CC",                $CC,                "e" );
 ToFile( "HAVE_GCC_VISIBILITY_FEATURE",
 		"@HAVE_GCC_VISIBILITY_FEATURE@", "e" );
 ToFile( "HAVE_LD_HASH_STYLE","@HAVE_LD_HASH_STYLE@","e" );
+ToFile( "HAVE_LD_BSYMBOLIC_FUNCTIONS",
+		"@HAVE_LD_BSYMBOLIC_FUNCTIONS@","e" );
 ToFile( "CXX",               $CXX,               "e" );
 ToFile( "MINGWCXX",          "@MINGWCXX@",       "e" );
 ToFile( "MINGWSTRIP",        "@MINGWSTRIP@",     "e" );

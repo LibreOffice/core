@@ -77,12 +77,6 @@ CFLAGS+=-Wreturn-type -fmessage-length=0 -c
 CFLAGSENABLESYMBOLS=-g1
 .ELSE
 CFLAGSENABLESYMBOLS=-g # was temporarily commented out, reenabled before Beta
-
-.ENDIF
-.IF "$(HAVE_LD_HASH_STYLE)"  == "TRUE"
-LINKFLAGS += -Wl,--hash-style=both
-.ELSE
-LINKFLAGS += -Wl,-zdynsort
 .ENDIF
 
 # flags for the C++ Compiler
@@ -162,10 +156,21 @@ LINKFLAGSRUNPATH_BRAND=-Wl,-rpath,\''$$ORIGIN:$$ORIGIN/../basis-link/program:$$O
 LINKFLAGSRUNPATH_OXT=
 LINKFLAGSRUNPATH_NONE=
 LINKFLAGS=-Wl,-z,combreloc $(LINKFLAGSDEFS)
+.IF "$(HAVE_LD_BSYMBOLIC_FUNCTIONS)"  == "TRUE"
+LINKFLAGS += -Wl,-Bsymbolic-functions -Wl,--dynamic-list-cpp-new -Wl,--dynamic-list-cpp-typeinfo
+.ENDIF
+
+.IF "$(HAVE_LD_HASH_STYLE)"  == "TRUE"
+LINKFLAGS += -Wl,--hash-style=both
+.ELSE
+LINKFLAGS += -Wl,-zdynsort
+.ENDIF
 
 # linker flags for linking applications
-LINKFLAGSAPPGUI= -Wl,-export-dynamic -Wl,--noinhibit-exec
-LINKFLAGSAPPCUI= -Wl,-export-dynamic -Wl,--noinhibit-exec
+LINKFLAGSAPPGUI= -Wl,-export-dynamic -Wl,--noinhibit-exec \
+    -Wl,-rpath-link,$(LB):$(SOLARLIBDIR)
+LINKFLAGSAPPCUI= -Wl,-export-dynamic -Wl,--noinhibit-exec \
+    -Wl,-rpath-link,$(LB):$(SOLARLIBDIR)
 
 # linker flags for linking shared libraries
 LINKFLAGSSHLGUI= -shared
@@ -195,11 +200,11 @@ STDOBJCUI=
 STDSLOCUI=
 
 # libraries for linking applications
-STDLIBGUIMT+=-lX11 -ldl -lpthread -lm
-STDLIBCUIMT+=-ldl -lpthread -lm
+STDLIBGUIMT+=-Wl,--as-needed -lX11 -ldl -lpthread -lm -Wl,--no-as-needed
+STDLIBCUIMT+=-Wl,--as-needed -ldl -lpthread -lm -Wl,--no-as-needed
 # libraries for linking shared libraries
-STDSHLGUIMT+=-lX11 -lXext -ldl -lpthread -lm
-STDSHLCUIMT+=-ldl -lpthread -lm
+STDSHLGUIMT+=-Wl,--as-needed -lX11 -lXext -ldl -lpthread -lm -Wl,--no-as-needed
+STDSHLCUIMT+=-Wl,--as-needed -ldl -lpthread -lm -Wl,--no-as-needed
 
 LIBSALCPPRT*=-Wl,--whole-archive -lsalcpprt -Wl,--no-whole-archive
 

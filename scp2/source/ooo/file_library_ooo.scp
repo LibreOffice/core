@@ -210,7 +210,7 @@ File gid_File_Lib_Curl
     #ifdef MACOSX
        Name = STRING(CONCAT2(libcurl.3,UNXSUFFIX));
     #else
-       Name = STRING(CONCAT8(libcurl,UNXSUFFIX,.,CURL_MAJOR,.,CURL_MINOR,.,CURL_MICRO));
+       Name = STRING(CONCAT3(libcurl,UNXSUFFIX,.3));
     #endif
   #else
    #ifdef _gcc3
@@ -1534,9 +1534,9 @@ File gid_File_Lib_Xslt
     Dir = gid_Dir_Program;
   #ifdef UNX
     #ifdef MACOSX
-       Name = STRING(CONCAT8(libxslt,.,LIBXSLT_MAJOR,.,LIBXSLT_MINOR,.,LIBXSLT_MICRO,UNXSUFFIX));
+       Name = STRING(CONCAT4(libxslt,.,LIBXSLT_MAJOR,UNXSUFFIX));
     #else
-       Name = STRING(CONCAT8(libxslt,UNXSUFFIX,.,LIBXSLT_MAJOR,.,LIBXSLT_MINOR,.,LIBXSLT_MICRO));
+       Name = STRING(CONCAT4(libxslt,UNXSUFFIX,.,LIBXSLT_MAJOR));
     #endif
   #else
    #ifdef _gcc3
@@ -1730,9 +1730,9 @@ File gid_File_Lib_Raptor
     Dir = gid_Dir_Program;
   #ifdef UNX
     #ifdef MACOSX
-       Name = STRING(CONCAT8(libraptor,.,RAPTOR_MAJOR,.,RAPTOR_MINOR,.,RAPTOR_MICRO,UNXSUFFIX));
+       Name = STRING(CONCAT4(libraptor,.,RAPTOR_MAJOR,UNXSUFFIX));
     #else
-       Name = STRING(CONCAT8(libraptor,UNXSUFFIX,.,RAPTOR_MAJOR,.,RAPTOR_MINOR,.,RAPTOR_MICRO));
+       Name = STRING(CONCAT4(libraptor,UNXSUFFIX,.,RAPTOR_MAJOR));
     #endif
   #else
    #ifdef _gcc3
@@ -1749,9 +1749,9 @@ File gid_File_Lib_Rasqal
     Dir = gid_Dir_Program;
   #ifdef UNX
     #ifdef MACOSX
-       Name = STRING(CONCAT8(librasqal,.,RASQAL_MAJOR,.,RASQAL_MINOR,.,RASQAL_MICRO,UNXSUFFIX));
+       Name = STRING(CONCAT4(librasqal,.,RASQAL_MAJOR,UNXSUFFIX));
     #else
-       Name = STRING(CONCAT8(librasqal,UNXSUFFIX,.,RASQAL_MAJOR,.,RASQAL_MINOR,.,RASQAL_MICRO));
+       Name = STRING(CONCAT4(librasqal,UNXSUFFIX,.,RASQAL_MAJOR));
     #endif
   #else
    #ifdef _gcc3
@@ -1768,9 +1768,9 @@ File gid_File_Lib_Rdf
     Dir = gid_Dir_Program;
   #ifdef UNX
     #ifdef MACOSX
-       Name = STRING(CONCAT8(librdf,.,REDLAND_MAJOR,.,REDLAND_MINOR,.,REDLAND_MICRO,UNXSUFFIX));
+       Name = STRING(CONCAT4(librdf,.,REDLAND_MAJOR,UNXSUFFIX));
     #else
-       Name = STRING(CONCAT8(librdf,UNXSUFFIX,.,REDLAND_MAJOR,.,REDLAND_MINOR,.,REDLAND_MICRO));
+       Name = STRING(CONCAT4(librdf,UNXSUFFIX,.,REDLAND_MAJOR));
     #endif
   #else
    #ifdef _gcc3

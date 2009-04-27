@@ -116,9 +116,6 @@ APP1STDLIBS= \
             $(VOSLIB)			\
             $(SALLIB)           \
                $(CPPULIB)  \
-        $(TKLIB) $(SVLLIB) $(UNOTOOLSLIB) $(I18NISOLANGLIB)\
-        $(I18NUTILLIB) $(UCBHELPERLIB) $(ICUUCLIB) $(ICUDATALIB) $(ICULELIB) \
-        $(JVMFWKLIB) $(SALHELPERLIB) $(BASEGFXLIB) \
                $(PERL_LIB)
 
 APP1LIBS=\
