@@ -31,6 +31,7 @@
 #define INCLUDED_SLIDESHOW_DELAYEVENT_HXX
 
 #include "event.hxx"
+#include "debug.hxx"
 #include <boost/noncopyable.hpp>
 #include <boost/function.hpp>
 #if defined(VERBOSE) && defined(DBG_UTIL)
@@ -48,16 +49,23 @@ public:
     typedef ::boost::function0<void> FunctorT;
 
     template <typename FuncT>
-    Delay( FuncT const& func, double nTimeout )
-        : mnTimeout(nTimeout), maFunc(func), mbWasFired(false) {}
-
-#if defined(VERBOSE) && defined(DBG_UTIL)
-    Delay( const boost::function0<void>& func,
-           double nTimeout,
-           char const* const  ) :
+        Delay( FuncT const& func,
+               double nTimeout
+#if OSL_DEBUG_LEVEL > 1 && defined (SLIDESHOW_ADD_DESCRIPTIONS_TO_EVENTS)
+            ,  const ::rtl::OUString& rsDescription
+            ) : Event(rsDescription),
 #else
+            ) :
+#endif
+            mnTimeout(nTimeout), maFunc(func), mbWasFired(false) {}
+
     Delay( const boost::function0<void>& func,
-           double nTimeout ) :
+           double nTimeout
+#if OSL_DEBUG_LEVEL > 1 && defined (SLIDESHOW_ADD_DESCRIPTIONS_TO_EVENTS)
+        , const ::rtl::OUString& rsDescription
+        ) : Event(rsDescription),
+#else
+        ) :
 #endif
         mnTimeout(nTimeout),
         maFunc(func),
@@ -76,7 +84,7 @@ private:
     bool mbWasFired;
 };
 
-#if OSL_DEBUG_LEVEL < 1
+#if OSL_DEBUG_LEVEL <= 1
 
 /** Generate delay event
 
@@ -89,7 +97,7 @@ private:
     @return generated delay event
 */
 template <typename FuncT>
-inline EventSharedPtr makeDelay( FuncT const& func, double nTimeout )
+inline EventSharedPtr makeDelay_( FuncT const& func, double nTimeout )
 {
     return EventSharedPtr( new Delay( func, nTimeout ) );
 }
@@ -102,10 +110,15 @@ inline EventSharedPtr makeDelay( FuncT const& func, double nTimeout )
     @return generated immediate event.
 */
 template <typename FuncT>
-inline EventSharedPtr makeEvent( FuncT const& func )
+inline EventSharedPtr makeEvent_( FuncT const& func )
 {
     return EventSharedPtr( new Delay( func, 0.0 ) );
 }
+
+
+// Strip away description.
+#define makeDelay(f, t, d) makeDelay_(f, t)
+#define makeEvent(f, d) makeEvent_(f)
 
 #else // OSL_DEBUG_LEVEL > 1
 
@@ -113,8 +126,13 @@ class Delay_ : public Delay {
 public:
     template <typename FuncT>
     Delay_( FuncT const& func, double nTimeout,
-            char const* from_function, char const* from_file, int from_line )
-        : Delay(func, nTimeout),
+        char const* from_function, char const* from_file, int from_line,
+        const ::rtl::OUString& rsDescription )
+        : Delay(func, nTimeout
+#if defined (SLIDESHOW_ADD_DESCRIPTIONS_TO_EVENTS)
+            , rsDescription
+#endif
+            ),
           FROM_FUNCTION(from_function),
           FROM_FILE(from_file), FROM_LINE(from_line) {}
 
@@ -126,16 +144,31 @@ public:
 template <typename FuncT>
 inline EventSharedPtr makeDelay_(
     FuncT const& func, double nTimeout,
-    char const* from_function, char const* from_file, int from_line )
+    char const* from_function, char const* from_file, int from_line,
+        const ::rtl::OUString& rsDescription )
 {
     return EventSharedPtr( new Delay_( func, nTimeout,
-                                       from_function, from_file, from_line ) );
+            from_function, from_file, from_line, rsDescription ) );
 }
 
-#define makeDelay(f, t) makeDelay_(f, t, \
-BOOST_CURRENT_FUNCTION, __FILE__, __LINE__)
-#define makeEvent(f) makeDelay_(f, 0.0, \
-BOOST_CURRENT_FUNCTION, __FILE__, __LINE__)
+#if defined (SLIDESHOW_ADD_DESCRIPTIONS_TO_EVENTS)
+
+#define makeDelay(f, t, d) makeDelay_(f, t,                   \
+        BOOST_CURRENT_FUNCTION, __FILE__, __LINE__,           \
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(d)))
+#define makeEvent(f, d) makeDelay_(f, 0.0,                  \
+        BOOST_CURRENT_FUNCTION, __FILE__, __LINE__,         \
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(d)))
+
+#else
+
+#define makeDelay(f, t, d) makeDelay_(f, t,         \
+        BOOST_CURRENT_FUNCTION, __FILE__, __LINE__)
+#define makeEvent(f, d) makeDelay_(f, 0.0,          \
+        BOOST_CURRENT_FUNCTION, __FILE__, __LINE__)
+
+#endif
+
 
 #endif // OSL_DEBUG_LEVEL < 1
 

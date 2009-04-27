@@ -330,7 +330,8 @@ private:
         // next effect listeners:
         if(fireAllEvents( maEvents, mrEventQueue ))
         {
-            makeEvent(::boost::bind(&EventQueue::forceEmpty, ::boost::ref(mrEventQueue)));
+            makeEvent(::boost::bind(&EventQueue::forceEmpty, ::boost::ref(mrEventQueue)),
+                      "EventQueue::forceEmpty");
             if (mbSkipTriggersNextEffect && bNotifyNextEffect)
             {
                 // then simulate a next effect event: this skip effect
@@ -340,9 +341,9 @@ private:
                 // someone has registerered above for next effects
                 // (multiplexer prio=0) at the user event queue.
                 return mrEventQueue.addEventWhenQueueIsEmpty(
-                    makeEvent( boost::bind(
-                               &EventMultiplexer::notifyNextEffect,
-                               boost::ref(mrEventMultiplexer) ) ) );
+                    makeEvent( boost::bind( &EventMultiplexer::notifyNextEffect,
+                                            boost::ref(mrEventMultiplexer) ),
+                               "EventMultiplexer::notifyNextEffect") );
             }
             else
                 return true;

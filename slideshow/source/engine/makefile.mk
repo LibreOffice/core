@@ -88,7 +88,8 @@ SLOFILES =	$(SLO)$/activitiesqueue.obj \
             $(SLO)$/unoviewcontainer.obj \
             $(SLO)$/usereventqueue.obj \
             $(SLO)$/waitsymbol.obj \
-            $(SLO)$/wakeupevent.obj
+            $(SLO)$/wakeupevent.obj \
+            $(SLO)$/debug.obj
 
 .IF "$(debug)"!="" || "$(DEBUG)"!=""
 SLOFILES +=  $(SLO)$/sp_debug.obj

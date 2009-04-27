@@ -35,6 +35,7 @@
 #include <canvas/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <canvas/verbosetrace.hxx>
+#include "debug.hxx"
 
 #include <comphelper/anytostring.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -104,6 +105,12 @@ namespace slideshow
         {
             ::osl::MutexGuard aGuard( maMutex );
 
+#if OSL_DEBUG_LEVEL > 1 && defined (SLIDESHOW_ADD_DESCRIPTIONS_TO_EVENTS)
+            OSL_TRACE("adding event at %x [%s] with delay %f\r",
+                rEvent.get(),
+                OUStringToOString(rEvent->GetDescription(), RTL_TEXTENCODING_UTF8).getStr(),
+                rEvent->getActivationTime(0.0));
+#endif
             ENSURE_OR_RETURN( rEvent,
                                "EventQueue::addEvent: event ptr NULL" );
 
@@ -125,6 +132,13 @@ namespace slideshow
         {
             ::osl::MutexGuard aGuard( maMutex );
 
+#if OSL_DEBUG_LEVEL > 1 && defined (SLIDESHOW_ADD_DESCRIPTIONS_TO_EVENTS)
+            OSL_TRACE("adding event at %x [%s] for next round with delay %f\r",
+                rEvent.get(),
+                OUStringToOString(rEvent->GetDescription(), RTL_TEXTENCODING_UTF8).getStr(),
+                rEvent->getActivationTime(0.0));
+#endif
+
             ENSURE_OR_RETURN( rEvent.get() != NULL,
                                "EventQueue::addEvent: event ptr NULL" );
             maNextEvents.push_back(
@@ -136,6 +150,13 @@ namespace slideshow
         bool EventQueue::addEventWhenQueueIsEmpty (const EventSharedPtr& rpEvent)
         {
             ::osl::MutexGuard aGuard( maMutex );
+
+#if OSL_DEBUG_LEVEL > 1 && defined (SLIDESHOW_ADD_DESCRIPTIONS_TO_EVENTS)
+            OSL_TRACE("adding event at %x [%s] for execution when queue is empty with delay %f\r",
+                rpEvent.get(),
+                OUStringToOString(rpEvent->GetDescription(), RTL_TEXTENCODING_UTF8).getStr(),
+                rpEvent->getActivationTime(0.0));
+#endif
 
             ENSURE_OR_RETURN(
                 rpEvent.get() != NULL,
@@ -216,6 +237,13 @@ namespace slideshow
                         VERBOSE_TRACE( "Firing event: unknown (0x%X), timeout was: %f",
                                        event.pEvent.get(),
                                        event.pEvent->getActivationTime(0.0) );
+#endif
+#if OSL_DEBUG_LEVEL > 1 && defined (SLIDESHOW_ADD_DESCRIPTIONS_TO_EVENTS)
+                        OSL_TRACE("firing event at %x [%s] with delay %f\r",
+                            event.pEvent.get(),
+                            OUStringToOString(event.pEvent->GetDescription(),
+                                RTL_TEXTENCODING_UTF8).getStr(),
+                            event.pEvent->getActivationTime(0.0));
 #endif
 
                         event.pEvent->fire();

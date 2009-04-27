@@ -504,7 +504,8 @@ struct SlideShowImpl::SeparateListenerImpl : public EventHandler,
         // in recursion.
         mrEventQueue.addEvent(
             makeEvent( boost::bind( &SlideShowImpl::notifySlideAnimationsEnded,
-                                    boost::ref(mrShow) )));
+                                    boost::ref(mrShow) ),
+                       "SlideShowImpl::notifySlideAnimationsEnded"));
         return true;
     }
 
@@ -831,7 +832,8 @@ ActivitySharedPtr SlideShowImpl::createSlideTransition(
                 &::slideshow::internal::Animation::prefetch,
                 pTransition,
                 AnimatableShapeSharedPtr(),
-                ShapeAttributeLayerSharedPtr())));
+                ShapeAttributeLayerSharedPtr()),
+            "Animation::prefetch"));
 
     return ActivitySharedPtr(
         ActivitiesFactory::createSimpleActivity(
@@ -1096,7 +1098,8 @@ void SlideShowImpl::displaySlide(
                         boost::bind(
                             &SlideShowImpl::notifySlideTransitionEnded,
                             this,
-                            false ))));
+                            false ),
+                        "SlideShowImpl::notifySlideTransitionEnded")));
 
             if (bSkipSlideTransition)
             {
@@ -1121,7 +1124,8 @@ void SlideShowImpl::displaySlide(
                         boost::bind(
                             &SlideShowImpl::notifySlideTransitionEnded,
                             this,
-                            true )));
+                            true ),
+                        "SlideShowImpl::notifySlideTransitionEnded"));
             }
         }
     } // finally
@@ -1159,7 +1163,8 @@ void SlideShowImpl::redisplayCurrentSlide (void)
             boost::bind(
                 &SlideShowImpl::notifySlideTransitionEnded,
                 this,
-                true )));
+                true ),
+            "SlideShowImpl::notifySlideTransitionEnded"));
 
     maEventMultiplexer.notifySlideTransitionStarted();
     maListenerContainer.forEach<presentation::XSlideShowListener>(
@@ -1777,6 +1782,7 @@ sal_Bool SlideShowImpl::update( double & nNextTimeout )
             maActivitiesQueue.processDequeued();
 
             // commit frame to screen
+            maFrameSynchronization.Synchronize();
             maScreenUpdater.commitUpdates();
         }
         // Time held until here
@@ -1979,7 +1985,8 @@ void SlideShowImpl::notifySlideAnimationsEnded()
             // timeout involved.
             aNotificationEvents.mpImmediateEvent =
                 makeEvent( boost::bind(
-                    &SlideShowImpl::notifySlideEnded, this, false ) );
+                    &SlideShowImpl::notifySlideEnded, this, false ),
+                    "SlideShowImpl::notifySlideEnded");
         }
     }
 

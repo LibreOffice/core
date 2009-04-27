@@ -213,7 +213,8 @@ bool EffectRewinder::rewind (
             ::boost::bind(
                 &EffectRewinder::asynchronousRewindToPreviousSlide,
                 this,
-                rPreviousSlideFunctor));
+                rPreviousSlideFunctor),
+            "EffectRewinder::asynchronousRewindToPreviousSlide");
     }
     else
     {
@@ -225,7 +226,8 @@ bool EffectRewinder::rewind (
                 this,
                 nSkipCount,
                 true,
-                rSlideRewindFunctor));
+                rSlideRewindFunctor),
+            "EffectRewinder::asynchronousRewind");
     }
 
     if (mpAsynchronousRewindEvent)
@@ -253,7 +255,8 @@ void EffectRewinder::skipAllMainSequenceEffects (void)
             this,
             nTotalMainSequenceEffectCount,
             false,
-            ::boost::function<void(void)>()));
+            ::boost::function<void(void)>()),
+        "EffectRewinder::asynchronousRewind");
     mrEventQueue.addEvent(mpAsynchronousRewindEvent);
 }
 
@@ -391,7 +394,8 @@ void EffectRewinder::asynchronousRewind (
                 this,
                 nEffectCount,
                 false,
-                rSlideRewindFunctor));
+                rSlideRewindFunctor),
+            "EffectRewinder::asynchronousRewind");
         mrEventQueue.addEvent(mpAsynchronousRewindEvent);
     }
     else

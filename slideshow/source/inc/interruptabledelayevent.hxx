@@ -49,6 +49,9 @@ namespace slideshow
         public:
             DelayFacade( const EventSharedPtr&  rEvent,
                          double                 nTimeout    ) :
+#if OSL_DEBUG_LEVEL > 1 && defined (SLIDESHOW_ADD_DESCRIPTIONS_TO_EVENTS)
+                Event(::rtl::OUString::createFromAscii("DelayFacade")),
+#endif
                 mpEvent( rEvent ),
                 mnTimeout( nTimeout )
             {
@@ -138,7 +141,7 @@ namespace slideshow
         {
             InterruptableEventPair aRes;
 
-            aRes.mpImmediateEvent = makeEvent( rFunctor );
+            aRes.mpImmediateEvent = makeEvent( rFunctor, "makeInterruptableDelay");
             aRes.mpTimeoutEvent.reset( new DelayFacade( aRes.mpImmediateEvent,
                                                         nTimeout ) );
 

@@ -31,7 +31,8 @@
 #define INCLUDED_SLIDESHOW_EVENT_HXX
 
 #include "disposable.hxx"
-
+#include "debug.hxx"
+#include <rtl/ustring.hxx>
 #include <boost/shared_ptr.hpp>
 #include <vector>
 
@@ -43,6 +44,10 @@ namespace internal {
 class Event : public Disposable
 {
 public:
+#if OSL_DEBUG_LEVEL > 1 && defined (SLIDESHOW_ADD_DESCRIPTIONS_TO_EVENTS)
+    Event (const ::rtl::OUString& rsDescription) : msDescription(rsDescription) {};
+#endif
+
     /** Execute the event.
 
         @return true, if event was successfully executed.
@@ -72,6 +77,13 @@ public:
         event is to be fired.
     */
     virtual double getActivationTime( double nCurrentTime ) const = 0;
+
+#if OSL_DEBUG_LEVEL > 1 && defined (SLIDESHOW_ADD_DESCRIPTIONS_TO_EVENTS)
+    ::rtl::OUString GetDescription (void) const { return msDescription; }
+
+private:
+    const ::rtl::OUString msDescription;
+#endif
 };
 
 typedef ::boost::shared_ptr< Event > EventSharedPtr;

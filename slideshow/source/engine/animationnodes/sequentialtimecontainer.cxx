@@ -63,7 +63,8 @@ void SequentialTimeContainer::activate_st()
     {
         // deactivate ASAP:
         scheduleDeactivationEvent(
-            makeEvent( boost::bind( &AnimationNode::deactivate, getSelf() ) ) );
+            makeEvent( boost::bind( &AnimationNode::deactivate, getSelf() ),
+                       "SequentialTimeContainer::deactivate") );
     }
     else // use default
         scheduleDeactivationEvent();
@@ -89,7 +90,8 @@ void SequentialTimeContainer::skipEffect(
         // empty all events ignoring timings => until next effect
         getContext().mrEventQueue.forceEmpty();
         getContext().mrEventQueue.addEvent(
-            makeEvent( boost::bind(&AnimationNode::deactivate, pChildNode) ) );
+            makeEvent( boost::bind(&AnimationNode::deactivate, pChildNode),
+                       "SequentialTimeContainer::deactivate, skipEffect with delay") );
     }
     else
         OSL_ENSURE( false, "unknown notifier!" );
@@ -116,12 +118,14 @@ bool SequentialTimeContainer::resolveChild(
         mpCurrentSkipEvent = makeEvent(
             boost::bind( &SequentialTimeContainer::skipEffect,
                          boost::dynamic_pointer_cast<SequentialTimeContainer>( getSelf() ),
-                         pChildNode ) );
+                         pChildNode ),
+            "SequentialTimeContainer::skipEffect, resolveChild");
         // event that will reresolve the resolved/activated child:
         mpCurrentRewindEvent = makeEvent(
             boost::bind( &SequentialTimeContainer::rewindEffect,
                          boost::dynamic_pointer_cast<SequentialTimeContainer>( getSelf() ),
-                         pChildNode ) );
+                         pChildNode ),
+            "SequentialTimeContainer::rewindEffect, resolveChild");
 
         // deactivate child node when skip event occurs:
         getContext().mrUserEventQueue.registerSkipEffectEvent(

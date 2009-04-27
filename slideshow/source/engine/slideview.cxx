@@ -1085,7 +1085,8 @@ void SlideView::modified( const lang::EventObject& /*aEvent*/ )
         makeEvent( boost::bind( (bool (EventMultiplexer::*)(
                                      const uno::Reference<presentation::XSlideShowView>&))
                                 &EventMultiplexer::notifyViewChanged,
-                                boost::ref(mrEventMultiplexer), mxView )));
+                                boost::ref(mrEventMultiplexer), mxView ),
+                   "EventMultiplexer::notifyViewChanged"));
 }
 
 // XPaintListener
@@ -1100,7 +1101,8 @@ void SlideView::windowPaint( const awt::PaintEvent& /*e*/ )
     // this might not be the main thread!
     mrEventQueue.addEvent(
         makeEvent( boost::bind( &EventMultiplexer::notifyViewClobbered,
-                                boost::ref(mrEventMultiplexer), mxView ) ) );
+                                boost::ref(mrEventMultiplexer), mxView ),
+                   "EventMultiplexer::notifyViewClobbered") );
 }
 
 void SlideView::updateCanvas()
