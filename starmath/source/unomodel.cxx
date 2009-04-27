@@ -96,7 +96,8 @@ SmPrintUIOptions::SmPrintUIOptions()
         return;
     
     // create sequence of print UI options
-    m_aUIProperties.realloc( 10 );
+    // (Actually IsIgnoreSpacesRight is a parser option. Without it we need only 8 properties here.)
+    m_aUIProperties.realloc( 8 );
     
     // create Section for formula (results in an extra tab page in dialog)
     m_aUIProperties[0].Value = getGroupControlOpt( aLocalizedStrings.GetString( 0 ) );
@@ -141,13 +142,15 @@ SmPrintUIOptions::SmPrintUIOptions()
                                                      &aPrintFormatProp,
                                                      2 );
 
-    // create subgroup for misc options
-    m_aUIProperties[8].Value = getSubgroupControlOpt( aLocalizedStrings.GetString( 9 ) );
-
-    // create a bool option for ignore spacing (matches to SID_NO_RIGHT_SPACES)
-    m_aUIProperties[9].Value = getBoolControlOpt( aLocalizedStrings.GetString( 10 ),
-                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( PRTUIOPT_NO_RIGHT_SPACE ) ),
-                                                  pConfig->IsIgnoreSpacesRight() );
+// IsIgnoreSpacesRight is a parser option! Thus we don't add it to the printer UI.
+//
+//    // create subgroup for misc options
+//    m_aUIProperties[8].Value = getSubgroupControlOpt( aLocalizedStrings.GetString( 9 ) );
+//
+//    // create a bool option for ignore spacing (matches to SID_NO_RIGHT_SPACES)
+//    m_aUIProperties[9].Value = getBoolControlOpt( aLocalizedStrings.GetString( 10 ),
+//                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( PRTUIOPT_NO_RIGHT_SPACE ) ),
+//                                                  pConfig->IsIgnoreSpacesRight() );
 }
 
 

@@ -49,7 +49,6 @@ class SmFormat;
 #define PRTUIOPT_BORDER             "Border"
 #define PRTUIOPT_PRINT_FORMAT       "PrintFormat"
 #define PRTUIOPT_PRINT_SCALE        "PrintScale"
-#define PRTUIOPT_NO_RIGHT_SPACE     "NoRightSpaces"
 
 class SmPrintUIOptions : public vcl::PrinterOptionsHelper
 {
