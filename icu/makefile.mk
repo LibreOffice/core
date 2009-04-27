@@ -101,9 +101,13 @@ DISABLE_64BIT=--enable-64bit-libs=no
 LDFLAGSADD += -Wl,--hash-style=both
 .ENDIF
 
+.IF "$(HAVE_LD_BSYMBOLIC_FUNCTIONS)"  == "TRUE"
+LDFLAGSADD += -Wl,-Bsymbolic-functions -Wl,--dynamic-list-cpp-new -Wl,--dynamic-list-cpp-typeinfo
+.ENDIF
+
 CONFIGURE_DIR=source
 
-CONFIGURE_ACTION+=sh -c 'CFLAGS="$(icu_CFLAGS)" CXXFLAGS="$(icu_CXXFLAGS)" LDFLAGS="$(icu_LDFLAGS)" ./configure --enable-layout --enable-static --enable-shared=yes $(DISABLE_64BIT)'
+CONFIGURE_ACTION+=sh -c 'CFLAGS="$(icu_CFLAGS)" CXXFLAGS="$(icu_CXXFLAGS)" LDFLAGS="$(icu_LDFLAGS) $(LDFLAGSADD)" ./configure --enable-layout --enable-static --enable-shared=yes $(DISABLE_64BIT)'
 
 #CONFIGURE_FLAGS=--enable-layout --enable-static --enable-shared=yes --enable-64bit-libs=no
 CONFIGURE_FLAGS=

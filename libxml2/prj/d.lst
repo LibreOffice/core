@@ -1,8 +1,7 @@
 mkdir: %_DEST%\inc%_EXT%\external\libxml
 ..\%__SRC%\inc\libxml\*.h %_DEST%\inc%_EXT%\external\libxml\*.h
-..\%__SRC%\lib\lib*.so %_DEST%\lib%_EXT%
-..\%__SRC%\lib\lib*.so.* %_DEST%\lib%_EXT%
-..\%__SRC%\lib\lib*.dylib %_DEST%\lib%_EXT%
+..\%__SRC%\lib\libxml2.so.2 %_DEST%\lib%_EXT%\libxml2.so.2
+symlink: %_DEST%\lib%_EXT%\libxml2.so.2 %_DEST%\lib%_EXT%\libxml2.so
 ..\%__SRC%\lib\*.lib %_DEST%\lib%_EXT%
 ..\%__SRC%\lib\libxml2.dll.a %_DEST%\lib%_EXT%\libxml2.a
 ..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%

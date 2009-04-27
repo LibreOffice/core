@@ -1,260 +1,236 @@
-*** misc/jpeg-6b/jconfig.h	Tue Jan 30 16:14:52 2007
---- misc/build/jpeg-6b/jconfig.h	Tue Jan 30 16:14:09 2007
-***************
-*** 1 ****
-! dummy
---- 1,16 ----
-! #define HAVE_PROTOTYPES
-! #define HAVE_UNSIGNED_CHAR
-! #define HAVE_UNSIGNED_SHORT
-! #undef CHAR_IS_UNSIGNED
-! #define HAVE_STDDEF_H
-! #define HAVE_STDLIB_H
-! #undef NEED_BSD_STRINGS
-! #undef NEED_SYS_TYPES_H
-! #undef NEED_FAR_POINTERS
-! #undef NEED_SHORT_EXTERNAL_NAMES
-! #undef INCOMPLETE_TYPES_BROKEN
-! 
-! #ifdef JPEG_INTERNALS
-! #undef RIGHT_SHIFT_IS_UNSIGNED
-! #define NO_GETENV
-! #endif
-*** misc/jpeg-6b/jdcolor.c	Mon Aug  4 01:39:16 1997
---- misc/build/jpeg-6b/jdcolor.c	Tue Jan 30 16:14:09 2007
-***************
-*** 284,289 ****
---- 284,373 ----
-    }
-  }
-  
-+ METHODDEF(void)
-+ ycck_rgb_convert (j_decompress_ptr cinfo,
-+ 		   JSAMPIMAGE input_buf, JDIMENSION input_row,
-+ 		   JSAMPARRAY output_buf, int num_rows)
-+ {
-+ 	my_cconvert_ptr			cconvert = (my_cconvert_ptr) cinfo->cconvert;
-+ 	JDIMENSION				num_cols = cinfo->output_width;
-+ 	long					cc, cm, cy, ck;
-+ 	long					y, cb, cr;
-+ 	register JSAMPROW		outptr;
-+ 	register JSAMPROW		inptr0, inptr1, inptr2, inptr3;
-+ 	register JDIMENSION		col;
-+ 	register JSAMPLE*		range_limit = cinfo->sample_range_limit;
-+ 	register int*			Crrtab = cconvert->Cr_r_tab;
-+ 	register int*			Cbbtab = cconvert->Cb_b_tab;
-+ 	register INT32*			Crgtab = cconvert->Cr_g_tab;
-+ 	register INT32*			Cbgtab = cconvert->Cb_g_tab;
-+ 	SHIFT_TEMPS
-+ 
-+ 	while( --num_rows >= 0 )
-+ 	{
-+ 		inptr0 = input_buf[0][input_row];
-+ 		inptr1 = input_buf[1][input_row];
-+ 		inptr2 = input_buf[2][input_row];
-+ 		inptr3 = input_buf[3][input_row++];
-+ 
-+ 		for( col = 0, outptr = *output_buf++; col < num_cols; col++ )
-+ 		{
-+ 			y  = GETJSAMPLE(inptr0[col]);
-+ 			cb = GETJSAMPLE(inptr1[col]);
-+ 			cr = GETJSAMPLE(inptr2[col]);
-+ 
-+ 			// YCCK => CMYK
-+ 			cc = 255L - range_limit[MAXJSAMPLE - (y + Crrtab[cr])];
-+ 			cm = 255L - range_limit[MAXJSAMPLE - (y + ((int) RIGHT_SHIFT(Cbgtab[cb] + Crgtab[cr], SCALEBITS)))];
-+ 			cy = 255L - range_limit[MAXJSAMPLE - (y + Cbbtab[cb])];
-+ 			ck = 255L - inptr3[col];
-+ 
-+ 			// CMYK => RGB
-+ 			outptr[ RGB_RED ] = range_limit[ 255L - ( cc + ck ) ];
-+ 			outptr[ RGB_GREEN ] = range_limit[ 255L - ( cm + ck ) ];
-+ 			outptr[ RGB_BLUE ] = range_limit[ 255L - ( cy + ck ) ];
-+ 			outptr += RGB_PIXELSIZE;
-+ 		}
-+ 	}
-+ }
-+ 
-+ METHODDEF(void)
-+ cmyk_rgb_convert (j_decompress_ptr cinfo,
-+ 		   JSAMPIMAGE input_buf, JDIMENSION input_row,
-+ 		   JSAMPARRAY output_buf, int num_rows)
-+ {
-+ 	my_cconvert_ptr			cconvert = (my_cconvert_ptr) cinfo->cconvert;
-+ 	JDIMENSION				num_cols = cinfo->output_width;
-+ 	long					cc, cm, cy, ck;
-+ 	long					y, cb, cr;
-+ 	register JSAMPROW		outptr;
-+ 	register JSAMPROW		inptr0, inptr1, inptr2, inptr3;
-+ 	register JDIMENSION		col;
-+ 	register JSAMPLE*		range_limit = cinfo->sample_range_limit;
-+ 	SHIFT_TEMPS
-+ 
-+ 	while( --num_rows >= 0 )
-+ 	{
-+ 		inptr0 = input_buf[0][input_row];
-+ 		inptr1 = input_buf[1][input_row];
-+ 		inptr2 = input_buf[2][input_row];
-+ 		inptr3 = input_buf[3][input_row++];
-+ 
-+ 		for( col = 0, outptr = *output_buf++; col < num_cols; col++ )
-+ 		{
-+ 			cc  = 255 - GETJSAMPLE(inptr0[col]);
-+ 			cm  = 255 - GETJSAMPLE(inptr1[col]);
-+ 			cy  = 255 - GETJSAMPLE(inptr2[col]);
-+ 			ck  = 255 - GETJSAMPLE(inptr3[col]);
-+ 
-+ 			// CMYK => RGB
-+ 			outptr[ RGB_RED ] = range_limit[ 255L - ( cc + ck ) ];
-+ 			outptr[ RGB_GREEN ] = range_limit[ 255L - ( cm + ck ) ];
-+ 			outptr[ RGB_BLUE ] = range_limit[ 255L - ( cy + ck ) ];
-+ 			outptr += RGB_PIXELSIZE;
-+ 		}
-+ 	}
-+ }
-  
-  /*
-   * Empty method for start_pass.
-***************
-*** 364,369 ****
---- 448,458 ----
-        cconvert->pub.color_convert = gray_rgb_convert;
-      } else if (cinfo->jpeg_color_space == JCS_RGB && RGB_PIXELSIZE == 3) {
-        cconvert->pub.color_convert = null_convert;
-+ 	} else if (cinfo->jpeg_color_space == JCS_YCCK) {
-+ 	  cconvert->pub.color_convert = ycck_rgb_convert;
-+ 	  build_ycc_rgb_table(cinfo);
-+ 	} else if (cinfo->jpeg_color_space == JCS_CMYK) {
-+ 	  cconvert->pub.color_convert = cmyk_rgb_convert;
-      } else
-        ERREXIT(cinfo, JERR_CONVERSION_NOTIMPL);
-      break;
-*** misc/jpeg-6b/jmorecfg.h	Sun Aug 10 01:58:56 1997
---- misc/build/jpeg-6b/jmorecfg.h	Tue Jan 30 16:14:09 2007
-***************
-*** 157,164 ****
-  
-  /* INT32 must hold at least signed 32-bit values. */
-  
-! #ifndef XMD_H			/* X11/xmd.h correctly defines INT32 */
-! typedef long INT32;
-  #endif
-  
-  /* Datatype used for image dimensions.  The JPEG standard only supports
---- 157,164 ----
-  
-  /* INT32 must hold at least signed 32-bit values. */
-  
-! #if !defined XMD_H && !defined _SOLAR_H		/* X11/xmd.h correctly defines INT32 */
-! typedef int INT32;
-  #endif
-  
-  /* Datatype used for image dimensions.  The JPEG standard only supports
-***************
-*** 311,319 ****
-   *    can't use color quantization if you change that value.
-   */
-  
-! #define RGB_RED		0	/* Offset of Red in an RGB scanline element */
-  #define RGB_GREEN	1	/* Offset of Green */
-! #define RGB_BLUE	2	/* Offset of Blue */
-  #define RGB_PIXELSIZE	3	/* JSAMPLEs per RGB scanline element */
-  
-  
---- 311,319 ----
-   *    can't use color quantization if you change that value.
-   */
-  
-! #define RGB_RED		2	/* Offset of Red in an RGB scanline element */
-  #define RGB_GREEN	1	/* Offset of Green */
-! #define RGB_BLUE	0	/* Offset of Blue */
-  #define RGB_PIXELSIZE	3	/* JSAMPLEs per RGB scanline element */
-  
-  
-*** misc/jpeg-6b/makefile.mk	Tue Jan 30 16:14:52 2007
---- misc/build/jpeg-6b/makefile.mk	Tue Jan 30 16:14:40 2007
-***************
-*** 1 ****
-! dummy
---- 1,81 ----
-! #*************************************************************************
-! #
-! #   $RCSfile: makefile.mk,v $
-! #
-! #   $Revision: 1.5 $
-! #
-! #   last change: $Author: thb $ $Date: 2001/08/14 12:53:46 $
-! #
-! #   Copyright according the GNU Public License.
-! #
-! #*************************************************************************
-! 
-! PRJ=..$/..$/..$/..
-! 
-! PRJNAME=jpeg
-! TARGET=jpeglib
-! LIBTARGET=NO
-! EXTERNAL_WARNINGS_NOT_ERRORS=TRUE
-! 
-! # --- Settings -----------------------------------------------------------
-! 
-! .INCLUDE :  settings.mk
-! 
-! 
-! .IF "$(GUI)$(CPU)"=="WNTP"
-! CFLAGS=$(CFLAGS) -Od
-! .ENDIF
-! 
-! # --- Files --------------------------------------------------------
-! 
-! SLOFILES=	$(SLO)$/jcapimin.obj \
-! 			$(SLO)$/jcapistd.obj \
-! 			$(SLO)$/jccoefct.obj \
-! 			$(SLO)$/jccolor.obj  \
-! 			$(SLO)$/jcdctmgr.obj \
-! 			$(SLO)$/jcinit.obj   \
-! 			$(SLO)$/jchuff.obj   \
-! 			$(SLO)$/jcphuff.obj  \
-! 			$(SLO)$/jcmainct.obj \
-! 			$(SLO)$/jcmarker.obj \
-! 			$(SLO)$/jcmaster.obj \
-! 			$(SLO)$/jcomapi.obj  \
-! 			$(SLO)$/jcparam.obj  \
-! 			$(SLO)$/jcprepct.obj \
-! 			$(SLO)$/jcsample.obj \
-! 			$(SLO)$/jdhuff.obj   \
-! 			$(SLO)$/jdinput.obj  \
-! 			$(SLO)$/jdtrans.obj  \
-! 			$(SLO)$/jdapimin.obj \
-! 			$(SLO)$/jdapistd.obj \
-! 			$(SLO)$/jdatadst.obj \
-! 			$(SLO)$/jdatasrc.obj \
-! 			$(SLO)$/jdcoefct.obj \
-! 			$(SLO)$/jdcolor.obj  \
-! 			$(SLO)$/jddctmgr.obj \
-! 			$(SLO)$/jdphuff.obj  \
-! 			$(SLO)$/jdmainct.obj \
-! 			$(SLO)$/jdmarker.obj \
-! 			$(SLO)$/jdmaster.obj \
-! 			$(SLO)$/jdmerge.obj  \
-! 			$(SLO)$/jdpostct.obj \
-! 			$(SLO)$/jdsample.obj \
-! 			$(SLO)$/jerror.obj   \
-! 			$(SLO)$/jfdctflt.obj \
-! 			$(SLO)$/jfdctfst.obj \
-! 			$(SLO)$/jfdctint.obj \
-! 			$(SLO)$/jidctflt.obj \
-! 			$(SLO)$/jidctfst.obj \
-! 			$(SLO)$/jidctint.obj \
-! 			$(SLO)$/jidctred.obj \
-! 			$(SLO)$/jmemmgr.obj  \
-! 			$(SLO)$/jmemnobs.obj \
-! 			$(SLO)$/jquant1.obj  \
-! 			$(SLO)$/jquant2.obj  \
-! 			$(SLO)$/jutils.obj
-! 
-! LIB1TARGET=$(SLB)$/$(TARGET).lib
-! LIB1ARCHIV=$(LB)$/lib$(TARGET).a
-! LIB1OBJFILES=$(SLOFILES)
-! 
-! .INCLUDE :  target.mk
+--- misc/jpeg-6b/jconfig.h	2009-03-19 11:30:46.000000000 +0100
++++ misc/build/jpeg-6b/jconfig.h	2009-03-19 11:30:30.000000000 +0100
+@@ -1 +1,16 @@
+-dummy
++#define HAVE_PROTOTYPES
++#define HAVE_UNSIGNED_CHAR
++#define HAVE_UNSIGNED_SHORT
++#undef CHAR_IS_UNSIGNED
++#define HAVE_STDDEF_H
++#define HAVE_STDLIB_H
++#undef NEED_BSD_STRINGS
++#undef NEED_SYS_TYPES_H
++#undef NEED_FAR_POINTERS
++#undef NEED_SHORT_EXTERNAL_NAMES
++#undef INCOMPLETE_TYPES_BROKEN
++
++#ifdef JPEG_INTERNALS
++#undef RIGHT_SHIFT_IS_UNSIGNED
++#define NO_GETENV
++#endif
+--- misc/jpeg-6b/jdcolor.c	1997-08-04 01:39:16.000000000 +0200
++++ misc/build/jpeg-6b/jdcolor.c	2009-03-19 11:30:30.000000000 +0100
+@@ -284,6 +284,90 @@
+   }
+ }
+ 
++METHODDEF(void)
++ycck_rgb_convert (j_decompress_ptr cinfo,
++		   JSAMPIMAGE input_buf, JDIMENSION input_row,
++		   JSAMPARRAY output_buf, int num_rows)
++{
++	my_cconvert_ptr			cconvert = (my_cconvert_ptr) cinfo->cconvert;
++	JDIMENSION				num_cols = cinfo->output_width;
++	long					cc, cm, cy, ck;
++	long					y, cb, cr;
++	register JSAMPROW		outptr;
++	register JSAMPROW		inptr0, inptr1, inptr2, inptr3;
++	register JDIMENSION		col;
++	register JSAMPLE*		range_limit = cinfo->sample_range_limit;
++	register int*			Crrtab = cconvert->Cr_r_tab;
++	register int*			Cbbtab = cconvert->Cb_b_tab;
++	register INT32*			Crgtab = cconvert->Cr_g_tab;
++	register INT32*			Cbgtab = cconvert->Cb_g_tab;
++	SHIFT_TEMPS
++
++	while( --num_rows >= 0 )
++	{
++		inptr0 = input_buf[0][input_row];
++		inptr1 = input_buf[1][input_row];
++		inptr2 = input_buf[2][input_row];
++		inptr3 = input_buf[3][input_row++];
++
++		for( col = 0, outptr = *output_buf++; col < num_cols; col++ )
++		{
++			y  = GETJSAMPLE(inptr0[col]);
++			cb = GETJSAMPLE(inptr1[col]);
++			cr = GETJSAMPLE(inptr2[col]);
++
++			// YCCK => CMYK
++			cc = 255L - range_limit[MAXJSAMPLE - (y + Crrtab[cr])];
++			cm = 255L - range_limit[MAXJSAMPLE - (y + ((int) RIGHT_SHIFT(Cbgtab[cb] + Crgtab[cr], SCALEBITS)))];
++			cy = 255L - range_limit[MAXJSAMPLE - (y + Cbbtab[cb])];
++			ck = 255L - inptr3[col];
++
++			// CMYK => RGB
++			outptr[ RGB_RED ] = range_limit[ 255L - ( cc + ck ) ];
++			outptr[ RGB_GREEN ] = range_limit[ 255L - ( cm + ck ) ];
++			outptr[ RGB_BLUE ] = range_limit[ 255L - ( cy + ck ) ];
++			outptr += RGB_PIXELSIZE;
++		}
++	}
++}
++
++METHODDEF(void)
++cmyk_rgb_convert (j_decompress_ptr cinfo,
++		   JSAMPIMAGE input_buf, JDIMENSION input_row,
++		   JSAMPARRAY output_buf, int num_rows)
++{
++	my_cconvert_ptr			cconvert = (my_cconvert_ptr) cinfo->cconvert;
++	JDIMENSION				num_cols = cinfo->output_width;
++	long					cc, cm, cy, ck;
++	long					y, cb, cr;
++	register JSAMPROW		outptr;
++	register JSAMPROW		inptr0, inptr1, inptr2, inptr3;
++	register JDIMENSION		col;
++	register JSAMPLE*		range_limit = cinfo->sample_range_limit;
++	SHIFT_TEMPS
++
++	while( --num_rows >= 0 )
++	{
++		inptr0 = input_buf[0][input_row];
++		inptr1 = input_buf[1][input_row];
++		inptr2 = input_buf[2][input_row];
++		inptr3 = input_buf[3][input_row++];
++
++		for( col = 0, outptr = *output_buf++; col < num_cols; col++ )
++		{
++			cc  = 255 - GETJSAMPLE(inptr0[col]);
++			cm  = 255 - GETJSAMPLE(inptr1[col]);
++			cy  = 255 - GETJSAMPLE(inptr2[col]);
++			ck  = 255 - GETJSAMPLE(inptr3[col]);
++
++			// CMYK => RGB
++			outptr[ RGB_RED ] = range_limit[ 255L - ( cc + ck ) ];
++			outptr[ RGB_GREEN ] = range_limit[ 255L - ( cm + ck ) ];
++			outptr[ RGB_BLUE ] = range_limit[ 255L - ( cy + ck ) ];
++			outptr += RGB_PIXELSIZE;
++		}
++	}
++}
+ 
+ /*
+  * Empty method for start_pass.
+@@ -364,6 +448,11 @@
+       cconvert->pub.color_convert = gray_rgb_convert;
+     } else if (cinfo->jpeg_color_space == JCS_RGB && RGB_PIXELSIZE == 3) {
+       cconvert->pub.color_convert = null_convert;
++	} else if (cinfo->jpeg_color_space == JCS_YCCK) {
++	  cconvert->pub.color_convert = ycck_rgb_convert;
++	  build_ycc_rgb_table(cinfo);
++	} else if (cinfo->jpeg_color_space == JCS_CMYK) {
++	  cconvert->pub.color_convert = cmyk_rgb_convert;
+     } else
+       ERREXIT(cinfo, JERR_CONVERSION_NOTIMPL);
+     break;
+--- misc/jpeg-6b/jmorecfg.h	1997-08-10 01:58:56.000000000 +0200
++++ misc/build/jpeg-6b/jmorecfg.h	2009-03-19 11:30:30.000000000 +0100
+@@ -157,8 +157,8 @@
+ 
+ /* INT32 must hold at least signed 32-bit values. */
+ 
+-#ifndef XMD_H			/* X11/xmd.h correctly defines INT32 */
+-typedef long INT32;
++#if !defined XMD_H && !defined _SOLAR_H		/* X11/xmd.h correctly defines INT32 */
++typedef int INT32;
+ #endif
+ 
+ /* Datatype used for image dimensions.  The JPEG standard only supports
+@@ -311,9 +311,9 @@
+  *    can't use color quantization if you change that value.
+  */
+ 
+-#define RGB_RED		0	/* Offset of Red in an RGB scanline element */
++#define RGB_RED		2	/* Offset of Red in an RGB scanline element */
+ #define RGB_GREEN	1	/* Offset of Green */
+-#define RGB_BLUE	2	/* Offset of Blue */
++#define RGB_BLUE	0	/* Offset of Blue */
+ #define RGB_PIXELSIZE	3	/* JSAMPLEs per RGB scanline element */
+ 
+ 
+--- misc/jpeg-6b/makefile.mk	2009-03-19 11:30:46.000000000 +0100
++++ misc/build/jpeg-6b/makefile.mk	2009-03-19 11:30:30.000000000 +0100
+@@ -1 +1,82 @@
+-dummy
++#*************************************************************************
++#
++#   $RCSfile: makefile.mk,v $
++#
++#   $Revision: 1.5 $
++#
++#   last change: $Author: thb $ $Date: 2001/08/14 12:53:46 $
++#
++#   Copyright according the GNU Public License.
++#
++#*************************************************************************
++
++PRJ=..$/..$/..$/..
++
++PRJNAME=jpeg
++TARGET=jpeglib
++LIBTARGET=NO
++EXTERNAL_WARNINGS_NOT_ERRORS=TRUE
++VISIBILITY_HIDDEN=TRUE
++
++# --- Settings -----------------------------------------------------------
++
++.INCLUDE :  settings.mk
++
++
++.IF "$(GUI)$(CPU)"=="WNTP"
++CFLAGS=$(CFLAGS) -Od
++.ENDIF
++
++# --- Files --------------------------------------------------------
++
++SLOFILES=	$(SLO)$/jcapimin.obj \
++			$(SLO)$/jcapistd.obj \
++			$(SLO)$/jccoefct.obj \
++			$(SLO)$/jccolor.obj  \
++			$(SLO)$/jcdctmgr.obj \
++			$(SLO)$/jcinit.obj   \
++			$(SLO)$/jchuff.obj   \
++			$(SLO)$/jcphuff.obj  \
++			$(SLO)$/jcmainct.obj \
++			$(SLO)$/jcmarker.obj \
++			$(SLO)$/jcmaster.obj \
++			$(SLO)$/jcomapi.obj  \
++			$(SLO)$/jcparam.obj  \
++			$(SLO)$/jcprepct.obj \
++			$(SLO)$/jcsample.obj \
++			$(SLO)$/jdhuff.obj   \
++			$(SLO)$/jdinput.obj  \
++			$(SLO)$/jdtrans.obj  \
++			$(SLO)$/jdapimin.obj \
++			$(SLO)$/jdapistd.obj \
++			$(SLO)$/jdatadst.obj \
++			$(SLO)$/jdatasrc.obj \
++			$(SLO)$/jdcoefct.obj \
++			$(SLO)$/jdcolor.obj  \
++			$(SLO)$/jddctmgr.obj \
++			$(SLO)$/jdphuff.obj  \
++			$(SLO)$/jdmainct.obj \
++			$(SLO)$/jdmarker.obj \
++			$(SLO)$/jdmaster.obj \
++			$(SLO)$/jdmerge.obj  \
++			$(SLO)$/jdpostct.obj \
++			$(SLO)$/jdsample.obj \
++			$(SLO)$/jerror.obj   \
++			$(SLO)$/jfdctflt.obj \
++			$(SLO)$/jfdctfst.obj \
++			$(SLO)$/jfdctint.obj \
++			$(SLO)$/jidctflt.obj \
++			$(SLO)$/jidctfst.obj \
++			$(SLO)$/jidctint.obj \
++			$(SLO)$/jidctred.obj \
++			$(SLO)$/jmemmgr.obj  \
++			$(SLO)$/jmemnobs.obj \
++			$(SLO)$/jquant1.obj  \
++			$(SLO)$/jquant2.obj  \
++			$(SLO)$/jutils.obj
++
++LIB1TARGET=$(SLB)$/$(TARGET).lib
++LIB1ARCHIV=$(LB)$/lib$(TARGET).a
++LIB1OBJFILES=$(SLOFILES)
++
++.INCLUDE :  target.mk
