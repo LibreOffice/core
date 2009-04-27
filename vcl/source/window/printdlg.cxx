@@ -50,7 +50,9 @@ using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 
-#define SMHID( a, b ) SetSmartHelpId( SmartId( String( RTL_CONSTASCII_USTRINGPARAM( ".HelpId:vcl:PrintDialog:"  a ":" b ) ) ) )
+#define HELPID_PREFIX ".HelpId:vcl:PrintDialog"
+#define SMHID2( a, b ) SetSmartHelpId( SmartId( String( RTL_CONSTASCII_USTRINGPARAM( HELPID_PREFIX ":" a ":" b ) ) ) )
+#define SMHID1( a ) SetSmartHelpId( SmartId( String( RTL_CONSTASCII_USTRINGPARAM( HELPID_PREFIX  ":" a ) ) ) )
 
 PrintDialog::PrintPreviewWindow::PrintPreviewWindow( Window* i_pParent, const ResId& i_rId )
     : Window( i_pParent, i_rId ),
@@ -115,23 +117,23 @@ PrintDialog::PrinterTabPage::PrinterTabPage( Window* i_pParent, const ResId& rRe
     , maNupLandscape( this, VclResId( SV_PRINT_PRT_NUP_LANDSCAPE ) )
 {
     FreeResource();
-    maPrinters.SMHID( "PrinterPage", "PrinterList" );
-    maSetupButton.SMHID( "PrinterPage", "Setup" );
-    maType.SMHID( "PrinterPage", "Type" );
-    maTypeText.SMHID( "PrinterPage", "TypeText" );
-    maStatus.SMHID( "PrinterPage", "Status" );
-    maStatusText.SMHID( "PrinterPage", "StatusText" );
-    maLocation.SMHID( "PrinterPage", "Locaction" );
-    maLocText.SMHID( "PrinterPage", "LocactionText" );
-    maComment.SMHID( "PrinterPage", "Comment" );
-    maCommentText.SMHID( "PrinterPage", "CommentText" );
-    maNupLine.SMHID( "PrinterPage", "NUPline" );
-    maNupRowsTxt.SMHID( "PrinterPage", "NUPRowsText" );
-    maNupRowsEdt.SMHID( "PrinterPage", "NUPRows" );
-    maNupColTxt.SMHID( "PrinterPage", "NUPColumnsText" );
-    maNupColEdt.SMHID( "PrinterPage", "NUPColumns" );
-    maNupPortrait.SMHID( "PrinterPage", "NUPPortrait" );
-    maNupLandscape.SMHID( "PrinterPage", "NUPLandscape" );
+    maPrinters.SMHID2( "PrinterPage", "PrinterList" );
+    maSetupButton.SMHID2( "PrinterPage", "Setup" );
+    maType.SMHID2( "PrinterPage", "Type" );
+    maTypeText.SMHID2( "PrinterPage", "TypeText" );
+    maStatus.SMHID2( "PrinterPage", "Status" );
+    maStatusText.SMHID2( "PrinterPage", "StatusText" );
+    maLocation.SMHID2( "PrinterPage", "Locaction" );
+    maLocText.SMHID2( "PrinterPage", "LocactionText" );
+    maComment.SMHID2( "PrinterPage", "Comment" );
+    maCommentText.SMHID2( "PrinterPage", "CommentText" );
+    maNupLine.SMHID2( "PrinterPage", "NUPline" );
+    maNupRowsTxt.SMHID2( "PrinterPage", "NUPRowsText" );
+    maNupRowsEdt.SMHID2( "PrinterPage", "NUPRows" );
+    maNupColTxt.SMHID2( "PrinterPage", "NUPColumnsText" );
+    maNupColEdt.SMHID2( "PrinterPage", "NUPColumns" );
+    maNupPortrait.SMHID2( "PrinterPage", "NUPPortrait" );
+    maNupLandscape.SMHID2( "PrinterPage", "NUPLandscape" );
 }
 
 PrintDialog::PrinterTabPage::~PrinterTabPage()
@@ -158,18 +160,18 @@ PrintDialog::JobTabPage::JobTabPage( Window* i_pParent, const ResId& rResId )
     , maNoCollateHCImg( VclResId( SV_PRINT_NOCOLLATE_HC_IMG ) )
 {
     FreeResource();
-    maPrinters.SMHID( "JobPage", "PrinterList" );
-    maToFileBox.SMHID( "JobPage", "ToFile" );
-    maPrintRange.SMHID( "JobPage", "PrintRange" );
-    maAllButton.SMHID( "JobPage", "AllButton" );
-    maPagesButton.SMHID( "JobPage", "PagesButton" );
-    maSelectionButton.SMHID( "JobPage", "SelectionButton" );
-    maPagesEdit.SMHID( "JobPage", "Pages" );
-    maCopies.SMHID( "JobPage", "CopiesLine" );
-    maCopyCount.SMHID( "JobPage", "CopiesText" );
-    maCopyCountField.SMHID( "JobPage", "Copies" );
-    maCollateBox.SMHID( "JobPage", "Collate" );
-    maCollateImage.SMHID( "JobPage", "CollateImage" );
+    maPrinters.SMHID2( "JobPage", "PrinterList" );
+    maToFileBox.SMHID2( "JobPage", "ToFile" );
+    maPrintRange.SMHID2( "JobPage", "PrintRange" );
+    maAllButton.SMHID2( "JobPage", "AllButton" );
+    maPagesButton.SMHID2( "JobPage", "PagesButton" );
+    maSelectionButton.SMHID2( "JobPage", "SelectionButton" );
+    maPagesEdit.SMHID2( "JobPage", "Pages" );
+    maCopies.SMHID2( "JobPage", "CopiesLine" );
+    maCopyCount.SMHID2( "JobPage", "CopiesText" );
+    maCopyCountField.SMHID2( "JobPage", "Copies" );
+    maCollateBox.SMHID2( "JobPage", "Collate" );
+    maCollateImage.SMHID2( "JobPage", "CollateImage" );
 }
 
 PrintDialog::JobTabPage::~JobTabPage()
@@ -291,6 +293,14 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterList
 
     // setup dependencies
     checkControlDependencies();
+
+    // set HelpIDs
+    maOKButton.SMHID1( "OK" );
+    maCancelButton.SMHID1( "Cancel" );
+    maPreviewWindow.SMHID1( "Preview" );
+    maPageText.SMHID1( "PageText" );
+    maPageScrollbar.SMHID1( "PageScrollbar" );
+    maTabCtrl.SMHID1( "TabPages" );
 }
 
 PrintDialog::~PrintDialog()
@@ -317,11 +327,33 @@ bool PrintDialog::isCollate()
     return maJobPage.maCopyCountField.GetValue() > 1 ? maJobPage.maCollateBox.IsChecked() : FALSE;
 }
 
+static void setSmartId( Window* i_pWindow, const char* i_pType, sal_Int32 i_nId = -1, const rtl::OUString& i_rPropName = rtl::OUString() )
+{
+    rtl::OUStringBuffer aBuf( 256 );
+    aBuf.appendAscii( HELPID_PREFIX );
+    if( i_rPropName.getLength() )
+    {
+        aBuf.append( sal_Unicode( ':' ) );
+        aBuf.append( i_rPropName );
+    }
+    if( i_pType )
+    {
+        aBuf.append( sal_Unicode( ':' ) );
+        aBuf.appendAscii( i_pType );
+    }
+    if( i_nId >= 0 )
+    {
+        aBuf.append( sal_Unicode( ':' ) );
+        aBuf.append( i_nId );
+    }
+    i_pWindow->SetSmartHelpId( SmartId( aBuf.makeStringAndClear() ) );
+}
+
 void PrintDialog::setupOptionalUI()
 {
     Window* pCurParent = 0;
     long nCurY = 0, nXPos = 5, nMaxY = 0;
-    USHORT nOptPageId = 9;
+    USHORT nOptPageId = 9, nCurSubGroup = 0;
     MapMode aFontMapMode( MAP_APPFONT );
 
     Size aTabSize = maTabCtrl.GetTabPageSizePixel();
@@ -423,6 +455,12 @@ void PrintDialog::setupOptionalUI()
                 pNewGroup->SetText( aText );
                 maTabCtrl.InsertPage( ++nOptPageId, aText );
                 maTabCtrl.SetTabPage( nOptPageId, pNewGroup );
+
+                // set help id
+                setSmartId( pNewGroup, "TabPage", nOptPageId );
+
+                // reset subgroup counter
+                nCurSubGroup = 0;
             }
 
             if( aCtrlType.equalsAscii( "Subgroup" ) && pCurParent )
@@ -440,6 +478,9 @@ void PrintDialog::setupOptionalUI()
                 pNewSub->Show();
                 nCurY += 12;
                 nXPos += 5;
+
+                // set help id
+                setSmartId( pNewSub, "FixedLine", sal_Int32( nCurSubGroup++ ) );
             }
             else if( aCtrlType.equalsAscii( "Bool" ) && pCurParent )
             {
@@ -465,6 +506,9 @@ void PrintDialog::setupOptionalUI()
                 maPropertyToWindowMap.insert( std::pair< rtl::OUString, Window* >( aPropertyName, pNewBox ) );
                 maControlToPropertyMap[pNewBox] = aPropertyName;
 
+                // set help id
+                setSmartId( pNewBox, "CheckBox", -1, aPropertyName );
+
             }
             else if( aCtrlType.equalsAscii( "Radio" ) && pCurParent )
             {
@@ -483,6 +527,9 @@ void PrintDialog::setupOptionalUI()
 
                     nXPos += 10;
                     nCurY += 12;
+
+                    // set help id
+                    setSmartId( pHeading, "FixedText", -1, aPropertyName );
                 }
 
                 // iterate options
@@ -507,6 +554,9 @@ void PrintDialog::setupOptionalUI()
                     maControlToPropertyMap[pBtn] = aPropertyName;
                     maControlToNumValMap[pBtn] = m;
 
+                    // set help id
+                    setSmartId( pBtn, "RadioButton", m, aPropertyName );
+
                     nCurY += 12;
                 }
                 nXPos = nOldXPos;
@@ -522,6 +572,9 @@ void PrintDialog::setupOptionalUI()
                 pHeading->SetPosSizePixel( pHeading->LogicToPixel( Point( nXPos + nDependencyIndent, nCurY ), aFontMapMode ),
                                            aPixelSize );
                 pHeading->Show();
+
+                // set help id
+                setSmartId( pHeading, "FixedText", -1, aPropertyName );
 
                 ListBox* pList = new ListBox( pCurParent, WB_DROPDOWN | WB_BORDER );
                 maControls.push_front( pList );
@@ -567,6 +620,9 @@ void PrintDialog::setupOptionalUI()
                 pList->SetSelectHdl( LINK( this, PrintDialog, UIOption_SelectHdl ) );
                 pList->Show();
 
+                // set help id
+                setSmartId( pList, "ListBox", -1, aPropertyName );
+
                 maPropertyToWindowMap.insert( std::pair< rtl::OUString, Window* >( aPropertyName, pList ) );
                 maControlToPropertyMap[pList] = aPropertyName;
                 nCurY += 16;
@@ -590,6 +646,9 @@ void PrintDialog::setupOptionalUI()
                 pHeading->SetPosSizePixel( pHeading->LogicToPixel( Point( nXPos + nDependencyIndent, nCurY ), aFontMapMode ),
                                            aPixelSize );
                 pHeading->Show();
+
+                // set help id
+                setSmartId( pHeading, "FixedText", -1, aPropertyName );
 
                 NumericField* pField = new NumericField( pCurParent, WB_BORDER | WB_SPIN );
                 maControls.push_front( pField );
@@ -628,6 +687,9 @@ void PrintDialog::setupOptionalUI()
                 pField->Enable( maPListener->isUIOptionEnabled( aPropertyName ) );
                 pField->SetModifyHdl( LINK( this, PrintDialog, UIOption_ModifyHdl ) );
                 pField->Show();
+
+                // set help id
+                setSmartId( pField, "NumericField", -1, aPropertyName );
 
                 maPropertyToWindowMap.insert( std::pair< rtl::OUString, Window* >( aPropertyName, pField ) );
                 maControlToPropertyMap[pField] = aPropertyName;
