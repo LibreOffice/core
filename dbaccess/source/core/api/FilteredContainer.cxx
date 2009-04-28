@@ -429,6 +429,7 @@ sal_Int32 createWildCardVector(Sequence< ::rtl::OUString >& _rTableFilter, ::std
                 xRefresh->refresh();
             m_pRefreshListener->refresh(this);
         }
+    }
 
     // -----------------------------------------------------------------------------
     ::rtl::OUString OFilteredContainer::getNameForObject(const ObjectType& _xObject)
