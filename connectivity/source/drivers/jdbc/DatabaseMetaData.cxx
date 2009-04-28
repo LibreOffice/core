@@ -141,7 +141,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTables(
         sal_Int32 typeFilterCount = _types.getLength();
         if ( typeFilterCount )
         {
-            jobjectArray pObjArray = static_cast< jobjectArray >( t.pEnv->NewObjectArray( (jsize)typeFilterCount, java_lang_String::getMyClass(), 0 ) );
+            jobjectArray pObjArray = static_cast< jobjectArray >( t.pEnv->NewObjectArray( (jsize)typeFilterCount, java_lang_String::st_getMyClass(), 0 ) );
             OSL_VERIFY_RES( !isExceptionOccured( t.pEnv, sal_True ), "Exception occured!" );
             const ::rtl::OUString* typeFilter = _types.getConstArray();
             bool bIncludeAllTypes = false;
@@ -212,7 +212,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTables(
 
         if ( jThrow )
         {
-            if ( t.pEnv->IsInstanceOf( jThrow,java_sql_SQLException_BASE::getMyClass() ) )
+            if ( t.pEnv->IsInstanceOf( jThrow,java_sql_SQLException_BASE::st_getMyClass() ) )
             {
                 java_sql_SQLException_BASE* pException = new java_sql_SQLException_BASE( t.pEnv, jThrow );
                 SQLException e( pException->getMessage(),
