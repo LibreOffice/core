@@ -1339,18 +1339,6 @@ STD_UNO_LIB_FILE( gid_File_Lib_Spl, spl)
 
 SPECIAL_UNO_LIB_FILE(gid_File_Lib_Srtrs1,srtrs1)
 
-File gid_File_Lib_Stocserv
-    TXT_FILE_BODY;
-    Dir = gid_Dir_Program;
-  #ifdef UNX
-    Name = STRING(CONCAT2(stocservices.uno,UNXSUFFIX));
-  #else
-    Name = "stocservices.uno.dll";
-  #endif
-    Styles = (PACKED,UNO_COMPONENT);
-    RegistryID = gid_Starregistry_Services_Rdb;
-End
-
 STD_LIB_FILE( gid_File_Lib_Sts , sts)
 
 STD_LIB_FILE_PATCH( gid_File_Lib_Svl, svl )
