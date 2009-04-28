@@ -41,6 +41,7 @@
 
 #include <com/sun/star/chart2/XDataSeries.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
+#include <com/sun/star/drawing/XShape.hpp>
 
 #define PREFERED_DEFAULT_COLOR 0x0000ff
 
@@ -105,66 +106,81 @@ void RangeHighlighter::determineRanges()
                 xChartModel.set( xController->getModel());
 
             uno::Any aSelection( m_xSelectionSupplier->getSelection());
-            OUString aCID;
-            if(( aSelection >>= aCID ) &&
-               aCID.getLength() > 0 )
+            const uno::Type& rType = aSelection.getValueType();
+
+            if ( rType == ::getCppuType( static_cast< const OUString* >( 0 ) ) )
             {
                 // @todo??: maybe getSelection() should return a model object rather than a CID
 
-                ObjectType eObjectType = ObjectIdentifier::getObjectType( aCID );
-                sal_Int32 nIndex = ObjectIdentifier::getIndexFromParticleOrCID( aCID );
-                Reference< chart2::XDataSeries > xDataSeries( ObjectIdentifier::getDataSeriesForCID( aCID, xChartModel ) );
-                if( OBJECTTYPE_LEGEND_ENTRY == eObjectType )
+                OUString aCID;
+                aSelection >>= aCID;
+                if ( aCID.getLength() > 0 )
                 {
-                    OUString aParentParticel( ObjectIdentifier::getFullParentParticle( aCID ) );
-                    ObjectType eParentObjectType = ObjectIdentifier::getObjectType( aParentParticel );
-                    eObjectType = eParentObjectType;
-                    if( OBJECTTYPE_DATA_POINT == eObjectType )
-                        nIndex = ObjectIdentifier::getIndexFromParticleOrCID( aParentParticel );
-                }
+                    ObjectType eObjectType = ObjectIdentifier::getObjectType( aCID );
+                    sal_Int32 nIndex = ObjectIdentifier::getIndexFromParticleOrCID( aCID );
+                    Reference< chart2::XDataSeries > xDataSeries( ObjectIdentifier::getDataSeriesForCID( aCID, xChartModel ) );
+                    if( OBJECTTYPE_LEGEND_ENTRY == eObjectType )
+                    {
+                        OUString aParentParticel( ObjectIdentifier::getFullParentParticle( aCID ) );
+                        ObjectType eParentObjectType = ObjectIdentifier::getObjectType( aParentParticel );
+                        eObjectType = eParentObjectType;
+                        if( OBJECTTYPE_DATA_POINT == eObjectType )
+                            nIndex = ObjectIdentifier::getIndexFromParticleOrCID( aParentParticel );
+                    }
 
-                if( OBJECTTYPE_DATA_POINT == eObjectType || OBJECTTYPE_DATA_LABEL == eObjectType )
-                {
-                    // Data Point
-                    fillRangesForDataPoint( xDataSeries, nIndex );
-                    return;
-                }
-                else if( OBJECTTYPE_DATA_ERRORS == eObjectType )
-                {
-                    // select error bar ranges, or data series, if the style is
-                    // not set to FROM_DATA
-                    fillRangesForErrorBars( ObjectIdentifier::getObjectPropertySet( aCID, xChartModel ), xDataSeries );
-                    return;
-                }
-                else if( xDataSeries.is() )
-                {
-                    // Data Series
-                    fillRangesForDataSeries( xDataSeries );
-                    return;
-                }
-                else if( OBJECTTYPE_AXIS == eObjectType )
-                {
-                    // Axis (Categories)
-                    Reference< chart2::XAxis > xAxis( ObjectIdentifier::getObjectPropertySet( aCID, xChartModel ), uno::UNO_QUERY );
-                    if( xAxis.is())
+                    if( OBJECTTYPE_DATA_POINT == eObjectType || OBJECTTYPE_DATA_LABEL == eObjectType )
                     {
-                        fillRangesForCategories( xAxis );
+                        // Data Point
+                        fillRangesForDataPoint( xDataSeries, nIndex );
                         return;
                     }
-                }
-                else if( OBJECTTYPE_PAGE == eObjectType
-                         || OBJECTTYPE_DIAGRAM == eObjectType
-                         || OBJECTTYPE_DIAGRAM_WALL == eObjectType
-                         || OBJECTTYPE_DIAGRAM_FLOOR == eObjectType
-                    )
-                {
-                    // Diagram
-                    Reference< chart2::XDiagram > xDia( ObjectIdentifier::getDiagramForCID( aCID, xChartModel ) );
-                    if( xDia.is())
+                    else if( OBJECTTYPE_DATA_ERRORS == eObjectType )
                     {
-                        fillRangesForDiagram( xDia );
+                        // select error bar ranges, or data series, if the style is
+                        // not set to FROM_DATA
+                        fillRangesForErrorBars( ObjectIdentifier::getObjectPropertySet( aCID, xChartModel ), xDataSeries );
                         return;
                     }
+                    else if( xDataSeries.is() )
+                    {
+                        // Data Series
+                        fillRangesForDataSeries( xDataSeries );
+                        return;
+                    }
+                    else if( OBJECTTYPE_AXIS == eObjectType )
+                    {
+                        // Axis (Categories)
+                        Reference< chart2::XAxis > xAxis( ObjectIdentifier::getObjectPropertySet( aCID, xChartModel ), uno::UNO_QUERY );
+                        if( xAxis.is())
+                        {
+                            fillRangesForCategories( xAxis );
+                            return;
+                        }
+                    }
+                    else if( OBJECTTYPE_PAGE == eObjectType
+                             || OBJECTTYPE_DIAGRAM == eObjectType
+                             || OBJECTTYPE_DIAGRAM_WALL == eObjectType
+                             || OBJECTTYPE_DIAGRAM_FLOOR == eObjectType
+                        )
+                    {
+                        // Diagram
+                        Reference< chart2::XDiagram > xDia( ObjectIdentifier::getDiagramForCID( aCID, xChartModel ) );
+                        if( xDia.is())
+                        {
+                            fillRangesForDiagram( xDia );
+                            return;
+                        }
+                    }
+                }
+            }
+            else if ( rType == ::getCppuType( static_cast< const Reference< drawing::XShape >* >( 0 ) ) )
+            {
+                // #i12587# support for shapes in chart
+                Reference< drawing::XShape > xShape;
+                aSelection >>= xShape;
+                if ( xShape.is() )
+                {
+                    return;
                 }
             }
             else

@@ -1270,7 +1270,21 @@ bool ChartController::requestQuickHelp(
         uno::Any SAL_CALL ChartController
 ::getSelection() throw(uno::RuntimeException)
 {
-    return uno::makeAny(m_aSelection.getSelectedCID());
+    uno::Any aReturn;
+    if ( m_aSelection.hasSelection() )
+    {
+        ::rtl::OUString aCID( m_aSelection.getSelectedCID() );
+        if ( aCID.getLength() )
+        {
+            aReturn = uno::makeAny( aCID );
+        }
+        else
+        {
+            // #i12587# support for shapes in chart
+            aReturn = uno::makeAny( m_aSelection.getSelectedAdditionalShape() );
+        }
+    }
+    return aReturn;
 }
 
         void SAL_CALL ChartController
