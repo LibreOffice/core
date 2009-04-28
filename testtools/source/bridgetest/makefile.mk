@@ -151,16 +151,38 @@ $(DLLDEST)$/uno_types.rdb : $(SOLARBINDIR)$/udkapi.rdb
     $(GNUCOPY) $? $@
     $(REGMERGE) $@ / $(BIN)$/bridgetest.rdb
 
-$(DLLDEST)$/bridgetest_inprocess$(BATCH_SUFFIX) : bridgetest_inprocess
-    $(GNUCOPY) $? $@
+$(DLLDEST)$/bridgetest_inprocess$(BATCH_SUFFIX) .ERRREMOVE: makefile.mk
+.IF "$(USE_SHELL)" == "bash"
+    echo '$(AUGMENT_LIBRARY_PATH)' uno -ro uno_services.rdb -ro uno_types.rdb \
+        -s com.sun.star.test.bridge.BridgeTest -- \
+        com.sun.star.test.bridge.CppTestObject > $@
+.ELSE
+    echo echo ERROR: this script can only be created properly for \
+        USE_SHELL=bash > $@
+.ENDIF
     $(GIVE_EXEC_RIGHTS) $@
 
-$(DLLDEST)$/bridgetest_client$(BATCH_SUFFIX) : bridgetest_client
-    $(GNUCOPY) $? $@
+$(DLLDEST)$/bridgetest_client$(BATCH_SUFFIX) .ERRREMOVE: makefile.mk
+.IF "$(USE_SHELL)" == "bash"
+    echo '$(AUGMENT_LIBRARY_PATH)' uno -ro uno_services.rdb -ro uno_types.rdb \
+        -s com.sun.star.test.bridge.BridgeTest -- \
+        -u \''uno:socket,host=127.0.0.1,port=2002;urp;test'\' > $@
+.ELSE
+    echo echo ERROR: this script can only be created properly for \
+        USE_SHELL=bash > $@
+.ENDIF
     $(GIVE_EXEC_RIGHTS) $@
 
-$(DLLDEST)$/bridgetest_server$(BATCH_SUFFIX) : bridgetest_server
-    $(GNUCOPY) $? $@
+$(DLLDEST)$/bridgetest_server$(BATCH_SUFFIX) .ERRREMOVE: makefile.mk
+.IF "$(USE_SHELL)" == "bash"
+    echo '$(AUGMENT_LIBRARY_PATH)' uno -ro uno_services.rdb -ro uno_types.rdb \
+        -s com.sun.star.test.bridge.CppTestObject \
+        -u \''uno:socket,host=127.0.0.1,port=2002;urp;test'\' --singleaccept \
+        > $@
+.ELSE
+    echo echo ERROR: this script can only be created properly for \
+        USE_SHELL=bash > $@
+.ENDIF
     $(GIVE_EXEC_RIGHTS) $@
 
 
@@ -179,12 +201,16 @@ $(DLLDEST)$/bridgetest_javaserver$(BATCH_SUFFIX) : makefile.mk
         com.sun.star.comp.bridge.TestComponentMain \""uno:socket,host=127.0.0.1,port=2002;urp;test"\" singleaccept > $@
     $(GIVE_EXEC_RIGHTS) $@
 
-$(DLLDEST)$/bridgetest_inprocess_java$(BATCH_SUFFIX) : makefile.mk $(DLLDEST)$/uno_services.rdb
-    -rm -f $@
-    echo uno -ro uno_services.rdb -ro uno_types.rdb \
+$(DLLDEST)$/bridgetest_inprocess_java$(BATCH_SUFFIX) .ERRREMOVE: makefile.mk
+.IF "$(USE_SHELL)" == "bash"
+    echo '$(AUGMENT_LIBRARY_PATH)' uno -ro uno_services.rdb -ro uno_types.rdb \
         -s com.sun.star.test.bridge.BridgeTest \
         -env:URE_INTERNAL_JAVA_DIR=$(MY_URE_INTERNAL_JAVA_DIR) \
         -- com.sun.star.test.bridge.JavaTestObject noCurrentContext > $@
+.ELSE
+    echo echo ERROR: this script can only be created properly for \
+        USE_SHELL=bash > $@
+.ENDIF
     $(GIVE_EXEC_RIGHTS) $@
 .ENDIF
 
@@ -192,15 +218,18 @@ $(DLLDEST)$/uno_services.rdb .ERRREMOVE: $(DLLDEST)$/uno_types.rdb \
         $(DLLDEST)$/bridgetest.uno$(DLLPOST) $(DLLDEST)$/cppobj.uno$(DLLPOST) \
         $(MISC)$/$(TARGET)$/bootstrap.rdb $(SHL3TARGETN)
     - $(MKDIR) $(@:d)
-    cd $(DLLDEST) && $(REGCOMP) -register -br uno_types.rdb -r uno_services.rdb -wop \
+    $(REGCOMP) -register -br $(DLLDEST)$/uno_types.rdb \
+        -r $(DLLDEST)$/uno_services.rdb -wop \
         -c acceptor.uno$(DLLPOST) \
         -c bridgefac.uno$(DLLPOST) \
         -c connector.uno$(DLLPOST) \
         -c remotebridge.uno$(DLLPOST) \
         -c uuresolver.uno$(DLLPOST) \
+        -c stocservices.uno$(DLLPOST)
+    cd $(DLLDEST) && $(REGCOMP) -register -br uno_types.rdb \
+        -r uno_services.rdb -wop=./ \
         -c .$/bridgetest.uno$(DLLPOST) \
         -c .$/cppobj.uno$(DLLPOST) \
-        -c stocservices.uno$(DLLPOST) \
         -c .$/$(SHL3TARGETN:f)
 .IF "$(SOLAR_JAVA)" != ""
     $(REGCOMP) -register -br $(DLLDEST)$/uno_types.rdb -r $@ \
