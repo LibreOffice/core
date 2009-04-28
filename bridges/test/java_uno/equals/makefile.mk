@@ -86,7 +86,7 @@ $(MISC)$/$(TARGET).rdb: types.idl
 $(SLOFILES) $(JAVACLASSFILES): $(MISC)$/$(TARGET).rdb
 
 $(BIN)$/testequals$(SCRIPTEXT): $(BIN)$/testequals_services.rdb
-    echo java -classpath \
+    echo '$(AUGMENT_LIBRARY_PATH)' java -classpath \
         ..$/class$/test$(PATH_SEPERATOR)..$/class$(PATH_SEPERATOR)\
 ..$/class$/java_uno.jar$(PATH_SEPERATOR)$(EXEC_CLASSPATH) \
         test.java_uno.equals.TestEquals $(SOLARBINDIR)$/types.rdb \

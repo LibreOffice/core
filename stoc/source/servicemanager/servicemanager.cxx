@@ -270,29 +270,6 @@ static Sequence< OUString > retrieveAsciiValueList(
     return seq;
 }
 
-
-/*****************************************************************************
-    helper functions
-*****************************************************************************/
-OUString Point2Slash(const OUString& s)
-{
-    OUStringBuffer ret;
-
-    sal_Int32 nIndex = 0;
-    do
-    {
-        OUString token( s.getToken(0, '.', nIndex) );
-
-        if (token.getLength())
-        {
-            ret.append( (sal_Unicode)'/' );
-            ret.append( token );
-        }
-    } while( nIndex != -1 );
-
-    return ret.makeStringAndClear();
-}
-
 /*****************************************************************************
     Enumeration by ServiceName
 *****************************************************************************/

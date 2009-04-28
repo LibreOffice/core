@@ -28,8 +28,8 @@
  *
  ************************************************************************/
 
-//TODO: Do not depend on types for which C++ header files are only generated
-// later in the build process in offuh:
+/*TODO: Do not depend on types for which C++ header files are only generated
+  later in the build process in offuh: */
 #include "com/sun/star/lang/ClassNotFoundException.idl"
 #include "com/sun/star/lang/IllegalAccessException.idl"
 #include "com/sun/star/lang/Locale.idl"

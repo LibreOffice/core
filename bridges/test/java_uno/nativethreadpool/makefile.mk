@@ -101,25 +101,24 @@ $(BIN)$/$(TARGET).rdb .ERRREMOVE: $(MISC)$/$(TARGET)$/types.rdb \
     $(REGCOMP) -register -r $(MISC)$/$(TARGET)$/bootstrap.rdb \
         -c javaloader.uno$(DLLPOST) -c javavm.uno$(DLLPOST) \
         -c stocservices.uno$(DLLPOST)
-.IF "$(GUI)" == "WNT"
+.IF "$(GUI)" == "WNT" || "$(USE_SHELL)" != "bash"
     ERROR -- missing platform
 .ELSE # GUI, WNT
-    + setenv OO_JAVA_PROPERTIES RuntimeLib=$(JVM_LIB_URL) ; \
+    + export OO_JAVA_PROPERTIES='RuntimeLib=$(JVM_LIB_URL)' && \
         $(REGCOMP) -register -r $@ -c file://$(PWD)/$(BIN)$/$(TARGET).uno.jar \
         -br $(MISC)$/$(TARGET)$/bootstrap.rdb -classpath $(EXEC_CLASSPATH) \
         -env:URE_INTERNAL_JAVA_DIR=file://$(SOLARBINDIR)
 .ENDIF # GUI, WNT
 
 test .PHONY: $(SHL1TARGETN) $(BIN)$/$(TARGET).uno.jar $(BIN)$/$(TARGET).rdb
-.IF "$(GUI)" == "WNT"
+.IF "$(GUI)" == "WNT" || "$(USE_SHELL)" != "bash"
     ERROR -- missing platform
 .ELSE # GUI, WNT
-    uno -c test.javauno.nativethreadpool.server -l $(SHL2TARGETN) \
-        -ro $(BIN)$/$(TARGET).rdb \
+    $(AUGMENT_LIBRARY_PATH) uno -c test.javauno.nativethreadpool.server \
+        -l $(SHL2TARGETN) -ro $(BIN)$/$(TARGET).rdb \
         -u 'uno:socket,host=localhost,port=3830;urp;test' --singleaccept &
-    + setenv OO_JAVA_PROPERTIES RuntimeLib=$(JVM_LIB_URL) ; \
-        setenv CLASSPATH \
-        $(EXEC_CLASSPATH)$(PATH_SEPERATOR)$(BIN)$/$(TARGET).uno.jar ; \
+    + $(AUGMENT_LIBRARY_PATH) OO_JAVA_PROPERTIES='RuntimeLib=$(JVM_LIB_URL)' \
+        CLASSPATH=$(EXEC_CLASSPATH)$(PATH_SEPERATOR)$(BIN)$/$(TARGET).uno.jar \
         uno -c test.javauno.nativethreadpool.client -l $(SHL1TARGETN) \
         -ro $(BIN)$/$(TARGET).rdb \
         -env:URE_INTERNAL_JAVA_DIR=file://$(SOLARBINDIR)

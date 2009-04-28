@@ -1144,30 +1144,6 @@ void SAL_CALL typelib_static_enum_type_init(
     sal_Int32 nDefaultValue )
     SAL_THROW_EXTERN_C();
 
-/** Inits incomplete static compound type reference. Thread synchronizes on typelib init mutex.
-    All discriminants are handled as int64 values. The pDiscriminantTypeRef must be of
-    type byte, short, ..., up to hyper.
-
-    @param ppRef pointer to type reference pointer
-    @param pTypeName name of union type
-    @param pDiscriminantType discriminant type
-    @param nDefaultDiscriminant default discriminant
-    @param pDefaultType default value type of union
-    @param nMembers number of union members
-    @param pDiscriminants member discriminants
-    @param pMemberTypes member types
-*/
-void SAL_CALL typelib_static_union_type_init(
-    typelib_TypeDescriptionReference ** ppRef,
-    const sal_Char * pTypeName,
-    typelib_TypeDescriptionReference * pDiscriminantType,
-    sal_Int64 nDefaultDiscriminant,
-    typelib_TypeDescriptionReference * pDefaultType,
-    sal_Int32 nMembers,
-    sal_Int64 * pDiscriminants,
-    typelib_TypeDescriptionReference ** pMemberTypes )
-    SAL_THROW_EXTERN_C();
-
 /** Completes a typedescription to be used for, e.g., marshalling values. COMPOUND, UNION,
     INTERFACE and ENUM type descriptions may be partly initialized (see typelib_static_...(),
     typelib_TypeDescription::bComplete). For interface type descriptions, this will also
