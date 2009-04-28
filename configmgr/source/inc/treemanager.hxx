@@ -132,7 +132,6 @@ namespace configmgr
         void addListener(configuration::AbsolutePath const& aName, const RequestOptions& _aOptions, rtl::Reference<INodeListener> const& pListener);
         void removeListener(const RequestOptions& _aOptions, rtl::Reference<INodeListener> const& pListener);
 
-        void disposing(backend::CacheController & _rProvider)   SAL_THROW(());
         void componentCreated(backend::ComponentRequest const & _aComponent) SAL_THROW(());
         void componentChanged(backend::UpdateRequest  const & _anUpdate)     SAL_THROW(());
 

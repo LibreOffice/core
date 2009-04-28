@@ -81,9 +81,6 @@ namespace configmgr
 
             mutable ApiTreeImpl     m_aTree;
         public:
-            OSetElement(uno::XInterface* pUnoThis, rtl::Reference< configuration::Tree > const& aTree, ApiTreeImpl& rParentTree)
-            : m_aTree(pUnoThis, aTree,rParentTree)
-            {}
             OSetElement(uno::XInterface* pUnoThis, rtl::Reference< configuration::Tree > const& aTree, ApiProvider& rProvider, ApiTreeImpl* pParentTree = 0)
             : m_aTree(pUnoThis, rProvider,aTree,pParentTree)
             {}

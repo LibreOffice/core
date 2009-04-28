@@ -142,27 +142,7 @@ bool NodeChange::getChangeLocation(NodeChangeLocation& rLoc) const
 {
     return m_pImpl && m_pImpl->fillChangeLocation(rLoc);
 }
-//-----------------------------------------------------------------------------
 
-rtl::Reference< Tree > NodeChange::getBaseTree() const
-{
-    return m_pImpl->getTargetTree().get();
-}
-//-----------------------------------------------------------------------------
-
-// retrieve the tree where the change is actually taking place
-NodeRef NodeChange::getBaseNode() const
-{
-    rtl::Reference<Tree> aTree = m_pImpl->getTargetTree();
-    unsigned int nOffset = m_pImpl->getTargetNode();
-
-    OSL_ASSERT(aTree.is() && aTree->isValidNode(nOffset));
-
-    if (aTree.is() && nOffset)
-        return aTree->getNode(nOffset);
-
-    return NodeRef();
-}
 //-----------------------------------------------------------------------------
 
 // retrieve the tree where the change is actually taking place
@@ -189,17 +169,6 @@ NodeRef NodeChange::getAffectedNode() const
             return aTree->getNode(nOffset);
     }
     return NodeRef();
-}
-//-----------------------------------------------------------------------------
-
-NodeID NodeChange::getAffectedNodeID() const
-{
-    rtl::Reference<Tree> aTree = m_pImpl->getTargetTree();
-    unsigned int nOffset = m_pImpl->getTargetNode();
-
-    OSL_ASSERT(aTree.is() ? aTree->isValidNode(nOffset) : 0==nOffset);
-
-    return NodeID(aTree.get(),nOffset);
 }
 //-----------------------------------------------------------------------------
 
@@ -270,28 +239,13 @@ void NodeChanges::implTest() const
     }
 }
 //-----------------------------------------------------------------------------
-void NodeChanges::implApply() const
-{
-    for(std::vector<NodeChange>::const_iterator it = begin(), stop = end(); it != stop; ++it)
-    {
-        it ->apply();
-    }
-}
-//-----------------------------------------------------------------------------
 /** insert a change into this collection
 */
 void NodeChanges::add(NodeChange const& aChange)
 {
     m_aChanges.push_back(aChange);
 }
-//-----------------------------------------------------------------------------
 
-/** insert multiple changes into this collection
-*/
-void NodeChanges::add(NodeChanges const& aChanges)
-{
-    m_aChanges.insert(m_aChanges.end(),aChanges.begin(),aChanges.end());
-}
 //-----------------------------------------------------------------------------
 
 /** removes a change to <var>aNode</var> from this collection (if there is one)
