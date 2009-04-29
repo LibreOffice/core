@@ -30,8 +30,8 @@
 #*************************************************************************
 
 .IF "$(GUI)"=="WNT"
-SOLARINC+=-I$(BUILD_TOOLS)$/..$/perl$/lib$/core
-PERL_LIB=$(BUILD_TOOLS)$/..$/perl$/lib$/core$/perl58.lib
+SOLARINC+=-I$(BUILD_TOOLS)$/perl$/lib$/core
+PERL_LIB=$(BUILD_TOOLS)$/perl$/lib$/core$/perl58.lib
 .ENDIF 
 
 .IF "$(OS)$(CPU)" == "LINUXI"
