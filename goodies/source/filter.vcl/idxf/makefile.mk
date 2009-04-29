@@ -62,7 +62,7 @@ SLOFILES =  $(SLO)$/dxfgrprd.obj \
 
 SHL1TARGET=     idx$(DLLPOSTFIX)
 SHL1IMPLIB=     idxf
-SHL1STDLIBS=    $(VCLLIB) $(TOOLSLIB)
+SHL1STDLIBS=    $(VCLLIB) $(TOOLSLIB) $(SALLIB)
 
 SHL1LIBS=       $(SLB)$/idxf.lib # $(LB)$/rtftoken.lib
 
