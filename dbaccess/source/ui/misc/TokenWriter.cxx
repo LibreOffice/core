@@ -805,12 +805,8 @@ void OHTMLImportExport::WriteBody()
 //-----------------------------------------------------------------------
 void OHTMLImportExport::WriteTables()
 {
-<<<<<<< .working
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OHTMLImportExport::WriteTables" );
-    ::rtl::OString aStrOut  = sHTML_table;
-=======
     ::rtl::OString aStrOut  = OOO_STRING_SVTOOLS_HTML_table;
->>>>>>> .merge-right.r271174
     aStrOut = aStrOut + " ";
     aStrOut = aStrOut + OOO_STRING_SVTOOLS_HTML_frame;
     aStrOut = aStrOut + "=";
