@@ -88,6 +88,8 @@
 #include "unoguard.hxx"
 #include "unonames.hxx"
 #include "shapeuno.hxx"
+#include "viewuno.hxx"
+#include "tabvwsh.hxx"
 #include "printfun.hxx"
 #include "pfuncache.hxx"
 #include "scmod.hxx"
@@ -634,8 +636,12 @@ BOOL ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
     BOOL bDone = FALSE;
 
     bool bHaveOptions = false;
-    sal_Bool bSelectedSheetsOnly = sal_True;
-    sal_Bool bSuppressEmptyPages = sal_True;
+    uno::Reference<frame::XController> xView;
+
+    // defaults when no options are passed: all sheets, include empty pages
+    sal_Bool bSelectedSheetsOnly = sal_False;
+    sal_Bool bSuppressEmptyPages = sal_False;
+
     rtl::OUString aSelectionString( RTL_CONSTASCII_USTRINGPARAM( "all" ) );
     for( sal_Int32 i = 0, nLen = rOptions.getLength(); i < nLen; i++ )
     {
@@ -654,6 +660,10 @@ BOOL ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
             bHaveOptions = true;
             rOptions[i].Value >>= aSelectionString;
         }
+        else if( rOptions[i].Name.equalsAscii( "View" ) )
+        {
+            rOptions[i].Value >>= xView;
+        }
     }
 
     uno::Reference<uno::XInterface> xInterface(aSelection, uno::UNO_QUERY);
@@ -662,6 +672,7 @@ BOOL ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
         ScCellRangesBase* pSelObj = ScCellRangesBase::getImplementation( xInterface );
         uno::Reference< drawing::XShapes > xShapes( xInterface, uno::UNO_QUERY );
 
+#if 0
         if( bHaveOptions )
         {
             // FIXME: handle bSelectedSheetsOnly
@@ -689,7 +700,10 @@ BOOL ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
                 bDone = TRUE;
             }
         }
-        else if ( pSelObj && pSelObj->GetDocShell() == pDocShell )
+        else
+#endif
+
+        if ( pSelObj && pSelObj->GetDocShell() == pDocShell )
         {
             BOOL bSheet = ( ScTableSheetObj::getImplementation( xInterface ) != NULL );
             BOOL bCursor = pSelObj->IsCursorOnly();
@@ -761,6 +775,29 @@ BOOL ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
         // other selection types aren't supported
     }
 
+    // restrict to selected sheets if a view is available
+    if ( bSelectedSheetsOnly && xView.is() )
+    {
+        ScTabViewObj* pViewObj = ScTabViewObj::getImplementation( xView );
+        if (pViewObj)
+        {
+            ScTabViewShell* pViewSh = pViewObj->GetViewShell();
+            if (pViewSh)
+            {
+                const ScMarkData& rViewMark = pViewSh->GetViewData()->GetMarkData();
+                SCTAB nTabCount = pDocShell->GetDocument()->GetTableCount();
+                for (SCTAB nTab = 0; nTab < nTabCount; nTab++)
+                    if (!rViewMark.GetTableSelect(nTab))
+                        rMark.SelectTable( nTab, FALSE );
+            }
+        }
+    }
+
+    ScPrintOptions aNewOptions;
+    aNewOptions.SetSkipEmpty( bSuppressEmptyPages );
+    aNewOptions.SetAllSheets( !bSelectedSheetsOnly );
+    rStatus.SetOptions( aNewOptions );
+
     return bDone;
 }
 
@@ -824,7 +861,7 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
         pSelRange = &aRange;
     }
     ScPrintFunc aFunc( pDocShell, pDocShell->GetPrinter(), nTab,
-                        pPrintFuncCache->GetFirstAttr(nTab), nTotalPages, pSelRange );
+                        pPrintFuncCache->GetFirstAttr(nTab), nTotalPages, pSelRange, &aStatus.GetOptions() );
     aFunc.SetRenderFlag( TRUE );
 
     Range aPageRange( nRenderer+1, nRenderer+1 );
@@ -855,9 +892,10 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
         pArray[1].Name = rtl::OUString::createFromAscii( SC_UNONAME_SOURCERANGE );
         pArray[1].Value <<= aRangeAddress;
     }
-    // FIXME: initial values for IsSuppressEmptyPages and IsOnlySelectedSheets
+
+    const ScPrintOptions& rPrintOpt = SC_MOD()->GetPrintOptions();
     if( ! pPrinterOptions )
-        pPrinterOptions = new ScPrintUIOptions( sal_True, sal_True );
+        pPrinterOptions = new ScPrintUIOptions( rPrintOpt.GetSkipEmpty(), !rPrintOpt.GetAllSheets() );
     pPrinterOptions->appendPrintUIOptions( aSequence );
     return aSequence;
 }
@@ -915,7 +953,7 @@ void SAL_CALL ScModelObj::render( sal_Int32 nRenderer, const uno::Any& aSelectio
     //  to increase performance, ScPrintState might be used here for subsequent
     //  pages of the same sheet
 
-    ScPrintFunc aFunc( pDev, pDocShell, nTab, pPrintFuncCache->GetFirstAttr(nTab), nTotalPages, pSelRange );
+    ScPrintFunc aFunc( pDev, pDocShell, nTab, pPrintFuncCache->GetFirstAttr(nTab), nTotalPages, pSelRange, &aStatus.GetOptions() );
     aFunc.SetDrawView( pDrawView );
     aFunc.SetRenderFlag( TRUE );
     if( aStatus.GetMode() == SC_PRINTSEL_RANGE_EXCLUSIVELY_OLE_AND_DRAW_OBJECTS )
