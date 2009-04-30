@@ -82,6 +82,7 @@ class SfxPrinterListener : public vcl::PrinterListener
 {
     Any                                     maCompleteSelection;
     Any                                     maSelection;
+    Any                                     maViewProperty;
     Reference< view::XRenderable >          mxRenderable;
     sal_Bool                                mbApi;
     sal_Bool                                mbDirect;
@@ -93,6 +94,7 @@ class SfxPrinterListener : public vcl::PrinterListener
 public:
     SfxPrinterListener( const Any& i_rComplete,
                         const Any& i_rSelection,
+                        const Any& i_rViewProp,
                         const Reference< view::XRenderable >& i_xRender,
                         sal_Bool i_bApi, sal_Bool i_bDirect
                       );
@@ -107,11 +109,13 @@ public:
 
 SfxPrinterListener::SfxPrinterListener( const Any& i_rComplete,
                                         const Any& i_rSelection,
+                                        const Any& i_rViewProp,
                                         const Reference< view::XRenderable >& i_xRender,
                                         sal_Bool i_bApi, sal_Bool i_bDirect
                                        )
     : maCompleteSelection( i_rComplete )
     , maSelection( i_rSelection )
+    , maViewProperty( i_rViewProp )
     , mxRenderable( i_xRender )
     , mbApi( i_bApi )
     , mbDirect( i_bDirect )
@@ -157,13 +161,15 @@ Sequence< beans::PropertyValue > SfxPrinterListener::getMergedOptions() const
         mxDevice = Reference< awt::XDevice >( pXDevice );
     }
 
-    Sequence< beans::PropertyValue > aRenderOptions( 3 );
+    Sequence< beans::PropertyValue > aRenderOptions( 4 );
     aRenderOptions[ 0 ].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RenderDevice" ) );
     aRenderOptions[ 0 ].Value <<= mxDevice;
     aRenderOptions[ 1 ].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsApi" ) );
     aRenderOptions[ 1 ].Value <<= mbApi;
     aRenderOptions[ 2 ].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsDirect" ) );
     aRenderOptions[ 2 ].Value <<= mbDirect;
+    aRenderOptions[ 3 ].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "View" ) );
+    aRenderOptions[ 3 ].Value = maViewProperty;
 
     aRenderOptions = getJobProperties( aRenderOptions );
     return aRenderOptions;
@@ -969,9 +975,11 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
             else
                 aSelection <<= GetObjectShell()->GetModel();
             Any aComplete( makeAny( GetObjectShell()->GetModel() ) );
+            Any aViewProp( makeAny( xController ) );
 
             boost::shared_ptr<vcl::PrinterListener> pListener( new SfxPrinterListener( aComplete,
                                                                                        aSelection,
+                                                                                       aViewProp,
                                                                                        GetRenderable(),
                                                                                        bIsAPI,
                                                                                        nId == SID_PRINTDOCDIRECT
