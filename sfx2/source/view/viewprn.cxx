@@ -80,7 +80,8 @@ TYPEINIT1(SfxPrintingHint, SfxHint);
 
 class SfxPrinterListener : public vcl::PrinterListener
 {
-    Reference< frame::XModel >              mxModel;
+    Any                                     maCompleteSelection;
+    Any                                     maSelection;
     Reference< view::XRenderable >          mxRenderable;
     sal_Bool                                mbApi;
     sal_Bool                                mbDirect;
@@ -88,8 +89,10 @@ class SfxPrinterListener : public vcl::PrinterListener
     mutable Reference<awt::XDevice>         mxDevice;
 
     Sequence< beans::PropertyValue > getMergedOptions() const;
+    const Any& getSelectionObject() const;
 public:
-    SfxPrinterListener( const Reference< frame::XModel>& i_xModel,
+    SfxPrinterListener( const Any& i_rComplete,
+                        const Any& i_rSelection,
                         const Reference< view::XRenderable >& i_xRender,
                         sal_Bool i_bApi, sal_Bool i_bDirect
                       );
@@ -102,11 +105,13 @@ public:
     virtual void jobFinished();   // optional
 };
 
-SfxPrinterListener::SfxPrinterListener( const Reference< frame::XModel>& i_xModel,
+SfxPrinterListener::SfxPrinterListener( const Any& i_rComplete,
+                                        const Any& i_rSelection,
                                         const Reference< view::XRenderable >& i_xRender,
                                         sal_Bool i_bApi, sal_Bool i_bDirect
                                        )
-    : mxModel( i_xModel )
+    : maCompleteSelection( i_rComplete )
+    , maSelection( i_rSelection )
     , mxRenderable( i_xRender )
     , mbApi( i_bApi )
     , mbDirect( i_bDirect )
@@ -117,7 +122,7 @@ SfxPrinterListener::SfxPrinterListener( const Reference< frame::XModel>& i_xMode
     {
         Sequence< beans::PropertyValue > aRenderOptions( 1 );
         aRenderOptions[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ExtraPrintUIOptions" ) );
-        Sequence< beans::PropertyValue > aRenderParms( mxRenderable->getRenderer( 0 , makeAny( mxModel ), aRenderOptions ) );
+        Sequence< beans::PropertyValue > aRenderParms( mxRenderable->getRenderer( 0 , getSelectionObject(), aRenderOptions ) );
         int nProps = aRenderParms.getLength();
         for( int i = 0; i < nProps; i++ )
         {
@@ -134,6 +139,11 @@ SfxPrinterListener::SfxPrinterListener( const Reference< frame::XModel>& i_xMode
 
 SfxPrinterListener::~SfxPrinterListener()
 {
+}
+
+const Any& SfxPrinterListener::getSelectionObject() const
+{
+    return getSelectionString().equalsAscii( "selection" ) ? maSelection : maCompleteSelection;
 }
 
 Sequence< beans::PropertyValue > SfxPrinterListener::getMergedOptions() const
@@ -166,7 +176,7 @@ int SfxPrinterListener::getPageCount() const
     if( mxRenderable.is() && pPrinter )
     {
         Sequence< beans::PropertyValue > aJobOptions( getMergedOptions() );
-        nPages = mxRenderable->getRendererCount( makeAny( mxModel ), aJobOptions );
+        nPages = mxRenderable->getRendererCount( getSelectionObject(), aJobOptions );
     }
     return nPages;
 }
@@ -179,7 +189,7 @@ Sequence< beans::PropertyValue > SfxPrinterListener::getPageParameters( int i_nP
     if( mxRenderable.is() && pPrinter )
     {
         Sequence< beans::PropertyValue > aJobOptions( getMergedOptions() );
-        aResult = mxRenderable->getRenderer( i_nPage, makeAny( mxModel ), aJobOptions );
+        aResult = mxRenderable->getRenderer( i_nPage, getSelectionObject(), aJobOptions );
     }
     return aResult;
 }
@@ -190,7 +200,7 @@ void SfxPrinterListener::printPage( int i_nPage ) const
     if( mxRenderable.is() && pPrinter )
     {
         Sequence< beans::PropertyValue > aJobOptions( getMergedOptions() );
-        mxRenderable->render( i_nPage, makeAny( mxModel ), aJobOptions );
+        mxRenderable->render( i_nPage, getSelectionObject(), aJobOptions );
     }
 }
 
@@ -949,11 +959,23 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
         case SID_PRINTDOC:
         case SID_PRINTDOCDIRECT:
         {
-            boost::shared_ptr<vcl::PrinterListener> pListener( new SfxPrinterListener( GetObjectShell()->GetModel(),
-                                                                                      GetRenderable(),
-                                                                                      bIsAPI,
-                                                                                      nId == SID_PRINTDOCDIRECT
-                                                                                      ) );
+            // get the current selection; our controller should know it
+            Reference< frame::XController > xController( GetController() );
+            Reference< view::XSelectionSupplier > xSupplier( xController, UNO_QUERY );
+
+            Any aSelection;
+            if( xSupplier.is() )
+                aSelection = xSupplier->getSelection();
+            else
+                aSelection <<= GetObjectShell()->GetModel();
+            Any aComplete( makeAny( GetObjectShell()->GetModel() ) );
+
+            boost::shared_ptr<vcl::PrinterListener> pListener( new SfxPrinterListener( aComplete,
+                                                                                       aSelection,
+                                                                                       GetRenderable(),
+                                                                                       bIsAPI,
+                                                                                       nId == SID_PRINTDOCDIRECT
+                                                                                       ) );
             // FIXME: job setup
             JobSetup aJobSetup;
             if( nId == SID_PRINTDOCDIRECT )
