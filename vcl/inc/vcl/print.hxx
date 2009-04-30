@@ -456,6 +456,12 @@ public:
     com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >
         getJobProperties( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& i_rMergeList ) const;
 
+    /* get the current selection string; either a UI editable string or "all"
+       a special value "selection" is supported signifying the current selected contents
+       of the printed document is to be printed.
+    */
+    const rtl::OUString& getSelectionString() const;
+
     /* get the PropertyValue of a Property
     */
     com::sun::star::beans::PropertyValue* getValue( const rtl::OUString& rPropertyName );

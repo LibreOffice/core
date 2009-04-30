@@ -681,6 +681,11 @@ Sequence< PropertyValue > PrinterListener::getJobProperties( const Sequence< Pro
     return aResult;
 }
 
+const rtl::OUString& PrinterListener::getSelectionString() const
+{
+    return mpImplData->maSelectionString;
+}
+
 const Sequence< beans::PropertyValue >& PrinterListener::getUIOptions() const
 {
     return mpImplData->maUIOptions;
