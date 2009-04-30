@@ -272,6 +272,9 @@ if ($opt_nr)  {
 if ( $ARGV[0] ) {
     $milestone = $ARGV[0];
 }
+if ( $ARGV[1] ) {
+    $buildid = $ARGV[1];
+}
 
 
 #### script id #####
@@ -480,7 +483,7 @@ sub doTest {
 
     # patch config (error 3)
 
-    $Command = "$PERL config.pl \"$basisdir \" \"$branddir \" \"$userinstallpath \" \"$DATA \"";
+    $Command = "$PERL config.pl \"$basisdir \" \"$branddir \" \"$userinstallpath \" \"$DATA \" \"$buildid\"";
     execute_Command ($Command, $error_patchConfig, $show_Message, $command_normal );
 
     # copy basicscripts (error 9)
