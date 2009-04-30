@@ -95,6 +95,7 @@ SHL2STDLIBS= \
         $(TOOLSLIB)				\
         $(CPPULIB)				\
         $(SO2LIB)				\
+        $(CPPUHELPERLIB)        \
         $(SALLIB)
         
 .IF "$(GUI)"!="WNT" || "$(COM)"=="GCC"
