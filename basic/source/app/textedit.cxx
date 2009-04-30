@@ -255,12 +255,12 @@ void TextEditImp::ImpDoHighlight( const String& rSource, ULONG nLineOff )
         // they are optimized by the EditEngine.
         xub_StrLen nLastEnd = 0;
 #ifdef DBG_UTIL
-        xub_StrLen nLine = aPortionList[0].nLine;
+        xub_StrLen nLine1 = aPortionList[0].nLine;
 #endif
         for ( i = 0; i < nCount; i++ )
         {
             SbTextPortion& r = aPortionList[i];
-            DBG_ASSERT( r.nLine == nLine, "doch mehrere Zeilen ?" );
+            DBG_ASSERT( r.nLine == nLine1, "doch mehrere Zeilen ?" );
             DBG_ASSERT( r.nStart <= r.nEnd, "Highlight: Start > End?" );
             if ( r.nStart > r.nEnd )    // Nur bis Bug von MD behoben
                 continue;
