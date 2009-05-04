@@ -1116,7 +1116,7 @@
  #endif
  
 --- include/atl/atlctl.h.orig	2005-04-14 17:54:32.000000000 +0900
-+++ include/atl/atlctl.h	2007-12-31 08:51:03.204250000 +0900
++++ include/atl/atlctl.h	2009-04-19 13:31:15.146000000 +0900
 @@ -10,6 +10,9 @@
  
  #ifndef __ATLCTL_H__
@@ -1136,16 +1136,18 @@
  
  // Forward declarations
  //
-@@ -142,7 +145,7 @@
+@@ -142,7 +145,9 @@
          CComControlBase(HWND& h) : m_hWndCD(h)
          {
                  memset(this, 0, sizeof(CComControlBase));
 -                m_phWndCD = &h;
++		// previous element of m_hWndCD in this class is m_rcPos
++		*reinterpret_cast<HWND **>(reinterpret_cast<DWORD>(reinterpret_cast<char *>(&m_rcPos)+sizeof(m_rcPos)+(__alignof__(m_hWndCD)-1))&(-(__alignof__(m_hWndCD))))=&h;
 +//                m_phWndCD = &h;
                  m_sizeExtent.cx = 2*2540;
                  m_sizeExtent.cy = 2*2540;
                  m_sizeNatural = m_sizeExtent;
-@@ -530,13 +533,13 @@
+@@ -530,13 +535,13 @@
          SIZE m_sizeNatural; //unscaled size in himetric
          SIZE m_sizeExtent;  //current extents in himetric
          RECT m_rcPos; // position in pixels
@@ -1165,7 +1167,7 @@
          union
          {
                  // m_nFreezeEvents is the only one actually used
-@@ -1362,7 +1365,7 @@
+@@ -1362,7 +1367,7 @@
  class ATL_NO_VTABLE CComControl :  public CComControlBase, public WinBase
  {
  public:
@@ -1174,7 +1176,7 @@
          HRESULT FireOnRequestEdit(DISPID dispID)
          {
                  T* pT = static_cast<T*>(this);
-@@ -1401,6 +1404,8 @@
+@@ -1401,6 +1406,8 @@
  class CComCompositeControl : public CComControl< T, CAxDialogImpl< T > >
  {
  public:
@@ -1183,7 +1185,7 @@
          CComCompositeControl()
          {
                  m_hbrBackground = NULL;
-@@ -1429,7 +1434,7 @@
+@@ -1429,7 +1436,7 @@
                          m_hbrBackground = NULL;
                  }
                  OLE_COLOR clr;
@@ -1192,7 +1194,7 @@
                  if (SUCCEEDED(hr))
                  {
                          COLORREF rgb;
-@@ -1443,7 +1448,7 @@
+@@ -1443,7 +1450,7 @@
          {
                  CAxWindow wnd(hwnd);
                  CComPtr<IAxWinAmbientDispatch> spDispatch;
@@ -1201,7 +1203,7 @@
                  if (spDispatch != NULL)
                          spDispatch->put_BackColor((OLE_COLOR)l);
                  return TRUE;
-@@ -1458,10 +1463,10 @@
+@@ -1458,10 +1465,10 @@
          }
          HWND Create(HWND hWndParent, RECT& /*rcPos*/, LPARAM dwInitParam = NULL)
          {
@@ -1214,7 +1216,7 @@
                  return m_hWnd;
          }
          BOOL CalcExtent(SIZE& size)
-@@ -1488,7 +1493,7 @@
+@@ -1488,7 +1495,7 @@
                          return FALSE;
                  // find a direct child of the dialog from the window that has focus
                  HWND hWndCtl = ::GetFocus();
@@ -1223,7 +1225,7 @@
                  {
                          do
                          {
-@@ -1546,7 +1551,7 @@
+@@ -1546,7 +1553,7 @@
                          break;
                  }
  
@@ -1232,7 +1234,7 @@
          }
          HRESULT IOleInPlaceObject_InPlaceDeactivate(void)
          {
-@@ -1563,7 +1568,7 @@
+@@ -1563,7 +1570,7 @@
          }
          virtual HRESULT OnDraw(ATL_DRAWINFO& di)
          {
@@ -1241,7 +1243,7 @@
                  {
                          HPEN hPen = (HPEN)::GetStockObject(BLACK_PEN);
                          HBRUSH hBrush = (HBRUSH)::GetStockObject(GRAY_BRUSH);
-@@ -1626,7 +1631,7 @@
+@@ -1626,7 +1633,7 @@
          }
          STDMETHOD(OnAmbientPropertyChange)(DISPID dispid)
          {
@@ -1250,7 +1252,7 @@
                  ATLTRACE2(atlTraceControls,2,_T("IOleControlImpl::OnAmbientPropertyChange\n"));
                  ATLTRACE2(atlTraceControls,2,_T(" -- DISPID = %d (%d)\n"), dispid);
                  return S_OK;
-@@ -2905,7 +2910,7 @@
+@@ -2905,7 +2912,7 @@
                  ATLTRACE2(atlTraceControls,2,_T("~CBindStatusCallback\n"));
          }
  
@@ -1259,7 +1261,7 @@
          {
                  ATLTRACE2(atlTraceControls,2,_T("CBindStatusCallback::OnStartBinding\n"));
                  m_spBinding = pBinding;
-@@ -2923,19 +2928,19 @@
+@@ -2923,19 +2930,19 @@
                  return S_OK;
          }
  
@@ -1282,7 +1284,7 @@
          {
                  ATLTRACE2(atlTraceControls,2,_T("CBindStatusCallback::OnStopBinding\n"));
                  (m_pT->*m_pFunc)(this, NULL, 0);
-@@ -2962,7 +2967,7 @@
+@@ -2962,7 +2969,7 @@
                  return S_OK;
          }
  
@@ -1291,7 +1293,7 @@
          {
                  ATLTRACE2(atlTraceControls,2,_T("CBindStatusCallback::OnDataAvailable\n"));
                  HRESULT hr = S_OK;
-@@ -3005,7 +3010,7 @@
+@@ -3005,7 +3012,7 @@
                  return hr;
          }
  
