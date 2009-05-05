@@ -847,7 +847,30 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
     }
     long nTotalPages = pPrintFuncCache->GetPageCount();
     if ( nRenderer >= nTotalPages )
-        throw lang::IllegalArgumentException();
+    {
+        if ( nRenderer == 0 )
+        {
+            // getRenderer(0) is used to query the settings, so it must always return something
+
+            SCTAB nCurTab = 0;      //! use current sheet from view?
+            ScPrintFunc aDefaultFunc( pDocShell, pDocShell->GetPrinter(), nCurTab );
+            Size aTwips = aDefaultFunc.GetPageSize();
+            awt::Size aPageSize( TwipsToHMM( aTwips.Width() ), TwipsToHMM( aTwips.Height() ) );
+
+            uno::Sequence<beans::PropertyValue> aSequence(1);
+            beans::PropertyValue* pArray = aSequence.getArray();
+            pArray[0].Name = rtl::OUString::createFromAscii( SC_UNONAME_PAGESIZE );
+            pArray[0].Value <<= aPageSize;
+
+            const ScPrintOptions& rPrintOpt = SC_MOD()->GetPrintOptions();
+            if( ! pPrinterOptions )
+                pPrinterOptions = new ScPrintUIOptions( rPrintOpt.GetSkipEmpty(), !rPrintOpt.GetAllSheets() );
+            pPrinterOptions->appendPrintUIOptions( aSequence );
+            return aSequence;
+        }
+        else
+            throw lang::IllegalArgumentException();
+    }
 
     //  printer is used as device (just for page layout), draw view is not needed
 
