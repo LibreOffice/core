@@ -235,7 +235,7 @@ ScPrintUIOptions::ScPrintUIOptions( sal_Bool i_bEmptyPages, sal_Bool i_bSelected
     // create a bool option for empty pages
     m_aUIProperties[2].Value = getBoolControlOpt( rtl::OUString( aStrings.GetString( 1 ) ),
                                                   rtl::OUString( aStrings.GetString( 2 ) ),
-                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsSkipEmptyPages" ) ),
+                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsSuppressEmptyPages" ) ),
                                                   i_bEmptyPages
                                                   );
 
@@ -650,7 +650,7 @@ BOOL ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
             bHaveOptions = true;
             rOptions[i].Value >>= bSelectedSheetsOnly;
         }
-        else if( rOptions[i].Name.equalsAscii( "IsSkipEmptyPages" ) )
+        else if( rOptions[i].Name.equalsAscii( "IsSuppressEmptyPages" ) )
         {
             bHaveOptions = true;
             rOptions[i].Value >>= bSuppressEmptyPages;
