@@ -28,8 +28,8 @@
  *
 #*************************************************************************/
 
-#define VERSION			2
-#define SUBVERSION		3
+#define VERSION			3
+#define SUBVERSION		1
 //#define VERVARIANT		0
 // .0 + VER_CONCEPT
 // .100 + VER_ALPHA
@@ -41,8 +41,8 @@
 #define VER_FINAL		0
 
 #define VER_DAY			1
-#define VER_MONTH		9
-#define VER_YEAR		07
+#define VER_MONTH		4
+#define VER_YEAR		09
 
 
 // Header
