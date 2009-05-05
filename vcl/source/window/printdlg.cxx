@@ -857,10 +857,14 @@ void PrintDialog::preparePreview( bool i_bNewPage )
     {
         const MapMode aMapMode( MAP_100TH_MM );
         GDIMetaFile aMtf;
-        maCurPageSize = maPListener->getFilteredPageFile( mnCurPage, aMtf );
+        if( nPages > 0 )
+            maCurPageSize = maPListener->getFilteredPageFile( mnCurPage, aMtf );
 
         maPreviewWindow.setPreview( aMtf );
     }
+    // catch corner case of strange page size
+    if( maCurPageSize.Width() == 0 || maCurPageSize.Height() == 0 )
+        maCurPageSize = aPrt->PixelToLogic( aPrt->GetPaperSizePixel(), MapMode( MAP_100TH_MM ) );
 
     Size aPreviewSize;
     Point aPreviewPos = maPreviewSpace.TopLeft();
@@ -1155,6 +1159,9 @@ PrintProgressDialog::PrintProgressDialog( Window* i_pParent, int i_nMax ) :
 {
     FreeResource();
 
+    if( mnMax < 1 )
+        mnMax = 1;
+
     maStr = maText.GetText();
 
     maButton.SetClickHdl( LINK( this, PrintProgressDialog, ClickHdl ) );
@@ -1201,6 +1208,9 @@ void PrintProgressDialog::setProgress( int i_nCurrent, int i_nMax )
     if( i_nMax != -1 )
         mnMax = i_nMax;
 
+    if( mnMax < 1 )
+        mnMax = 1;
+
     rtl::OUString aNewText( searchAndReplace( maStr, "%p", 2, mnCur ) );
     aNewText = searchAndReplace( aNewText, "%n", 2, mnMax );
     maText.SetText( aNewText );
@@ -1217,6 +1227,9 @@ void PrintProgressDialog::tick()
 
 void PrintProgressDialog::Paint( const Rectangle& )
 {
+    if( maProgressRect.IsEmpty() )
+        implCalcProgressRect();
+
     Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     Color aPrgsColor = rStyleSettings.GetHighlightColor();

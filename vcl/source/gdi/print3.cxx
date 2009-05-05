@@ -220,7 +220,8 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterListener>& i_pListene
             {
                 GDIMetaFile aPageFile;
                 i_pListener->setLastPage( sal_True );
-                Size aPageSize = i_pListener->getFilteredPageFile( 0, aPageFile );
+                if( i_pListener->getPageCount() > 0 )
+                    i_pListener->getFilteredPageFile( 0, aPageFile );
                 return;
             }
             if( aDlg.isPrintToFile() )
