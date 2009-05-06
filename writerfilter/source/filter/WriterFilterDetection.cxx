@@ -121,7 +121,11 @@ OUString WriterFilterDetection::detect( uno::Sequence< beans::PropertyValue >& r
         }
         else
         {
-            uno::Reference< embed::XStorage > xDocStorage = comphelper::OStorageHelper::GetStorageFromURL(
+            uno::Reference< embed::XStorage > xDocStorage;
+            if( sURL.equalsAscii( "private:stream" ) )
+                xDocStorage = comphelper::OStorageHelper::GetStorageFromInputStream( xInputStream );
+            else
+                xDocStorage = comphelper::OStorageHelper::GetStorageFromURL(
                                             sURL, embed::ElementModes::READ );
             if( xDocStorage.is() )
             {
@@ -132,6 +136,9 @@ OUString WriterFilterDetection::detect( uno::Sequence< beans::PropertyValue >& r
                     if(pNames[nName].equalsAsciiL(RTL_CONSTASCII_STRINGPARAM ( "word" )))
                     {
                         bWord = true;
+                        if( !sTypeName.getLength() )
+                            sTypeName = ::rtl::OUString(
+                                    RTL_CONSTASCII_STRINGPARAM( "writer_MS_Word_2007" ), RTL_TEXTENCODING_ASCII_US);
                         break;
                     }
                 }
