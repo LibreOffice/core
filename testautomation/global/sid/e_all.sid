@@ -305,7 +305,7 @@ InsertRLM .uno:InsertLRM
 
 ' **** Writer
 InsertManualBreak FN_INSERT_BREAK_DLG
-InsertSpecialCharacterWriter FN_INSERT_SYMBOL
+InsertSpecialCharacterWriter .uno:InsertSymbol
 InsertObjectFormulaWriter FN_INSERT_SMA
 InsertTableWriter FN_INSERT_TABLE
 InsertFileWriter SID_INSERTDOC
@@ -360,10 +360,10 @@ InsertSheetFromFile FID_INS_TABLE_EXT
 ' **** Draw
 InsertPage .uno:InsertPage
 InsertAVMedia .uno:InsertAVMedia
-InsertBullet .uno:Bullet
+InsertBullet .uno:InsertSymbol
 InsertCapturePoint .uno:CapturePoint
 InsertDuplicatePage .uno:DuplicatePage
-InsertSpecialCharacterDraw SID_BULLET
+InsertSpecialCharacterDraw .uno:InsertSymbol
 InsertGraficsDraw SID_INSERT_IMAGE
 InsertGraphicMenu .uno:GraphicMenu
 InsertObjectFormulaDraw SID_INSERT_MATH
