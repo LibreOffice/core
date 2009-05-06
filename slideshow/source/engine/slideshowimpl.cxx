@@ -148,6 +148,12 @@ public:
     */
     void Deactivate (void);
 
+    /** Return the current time of the timer.  It is not synchronized with
+        any other timer so its absolute values are of no concern.  Typically
+        used during debugging to measure durations.
+    */
+    double GetCurrentTime (void) const;
+
 private:
     /** The timer that is used for synchronization is independent from the
         one used by SlideShowImpl: it is not paused or modified by
@@ -167,6 +173,8 @@ private:
     */
     bool mbIsActive;
 };
+
+
 
 
 /******************************************************************************
@@ -1782,7 +1790,6 @@ sal_Bool SlideShowImpl::update( double & nNextTimeout )
             maActivitiesQueue.processDequeued();
 
             // commit frame to screen
-            maFrameSynchronization.Synchronize();
             maScreenUpdater.commitUpdates();
         }
         // Time held until here
@@ -2169,6 +2176,13 @@ void FrameSynchronization::Deactivate (void)
     mbIsActive = false;
 }
 
+
+
+
+double FrameSynchronization::GetCurrentTime (void) const
+{
+    return maTimer.getElapsedTime();
+}
 
 
 } // anon namespace
