@@ -39,6 +39,7 @@ class SfxItemSet;
 class SfxBindings;
 class SvxFontItem;
 class SfxViewShell;
+class SfxViewFrame;
 
 class ScChangeAction;
 class ScChangeViewSettings;
@@ -55,6 +56,7 @@ class ScViewUtil                                // static Methoden
 {
 public:
     static BOOL ExecuteCharMap( const SvxFontItem&  rOldFont,
+                                SfxViewFrame&       rFrame,
                                 SvxFontItem&        rNewFont,
                                 String&             rString );
 

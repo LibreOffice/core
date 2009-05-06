@@ -39,11 +39,10 @@
 #include "macros.hxx"
 #include "ControllerLockGuard.hxx"
 #include "AccessibleTextHelper.hxx"
+#include "chartview/DrawModelWrapper.hxx"
 
 #include <svx/svdotext.hxx>
 
-// header for class SvxCharacterMap
-#include <svx/charmap.hxx>
 // header for define RET_OK
 #include <vcl/msgbox.hxx>
 // header for class SdrOutliner
@@ -55,6 +54,8 @@
 #include <vcl/svapp.hxx>
 #include <vos/mutex.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <svtools/stritem.hxx>
+#include <svx/fontitem.hxx>
 
 //.............................................................................
 namespace chart
@@ -174,16 +175,26 @@ void SAL_CALL ChartController::executeDispatch_InsertSpecialCharacter()
 
     SvxAbstractDialogFactory * pFact = SvxAbstractDialogFactory::Create();
     DBG_ASSERT( pFact, "No dialog factory" );
-    AbstractSvxCharacterMap * pDlg = pFact->CreateSvxCharacterMap( m_pChartWindow,  RID_SVXDLG_CHARMAP, FALSE );
-    DBG_ASSERT( pDlg, "Couldn't create SvxCharacterMap dialog" );
+
+    SfxAllItemSet aSet( m_pDrawModelWrapper->GetItemPool() );
+    aSet.Put( SfxBoolItem( FN_PARAM_1, FALSE ) );
 
     //set fixed current font
-    pDlg->SetFont( m_pDrawViewWrapper->getOutliner()->GetRefDevice()->GetFont() );
-    pDlg->DisableFontSelection(); //maybe not necessary in future
+    aSet.Put( SfxBoolItem( FN_PARAM_2, TRUE ) ); //maybe not necessary in future
 
+    Font aCurFont = m_pDrawViewWrapper->getOutliner()->GetRefDevice()->GetFont();
+    aSet.Put( SvxFontItem( aCurFont.GetFamily(), aCurFont.GetName(), aCurFont.GetStyleName(), aCurFont.GetPitch(), aCurFont.GetCharSet(), SID_ATTR_CHAR_FONT ) );
+
+    SfxAbstractDialog * pDlg = pFact->CreateSfxDialog( m_pChartWindow, aSet, getFrame(), RID_SVXDLG_CHARMAP );
+    DBG_ASSERT( pDlg, "Couldn't create SvxCharacterMap dialog" );
     if( pDlg->Execute() == RET_OK )
     {
-        String aString( pDlg->GetCharacters() );
+        const SfxItemSet* pSet = pDlg->GetOutputItemSet();
+        const SfxPoolItem* pItem=0;
+        String aString;
+        if ( pSet && pSet->GetItemState( SID_CHARMAP, TRUE, &pItem) == SFX_ITEM_SET &&
+             pItem->ISA(SfxStringItem) )
+                aString = dynamic_cast<const SfxStringItem*>(pItem)->GetValue();
 
         OutlinerView* pOutlinerView = m_pDrawViewWrapper->GetTextEditOutlinerView();
         SdrOutliner*  pOutliner = m_pDrawViewWrapper->getOutliner();

@@ -50,6 +50,10 @@
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/wrkwin.hxx>
+#include <sfx2/request.hxx>
+#include <sfx2/objsh.hxx>
+#include <svtools/stritem.hxx>
+#include <svtools/eitem.hxx>
 
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 
@@ -359,35 +363,26 @@ void ScViewUtil::HideDisabledSlot( SfxItemSet& rSet, SfxBindings& rBindings, USH
 //==================================================================
 
 BOOL ScViewUtil::ExecuteCharMap( const SvxFontItem& rOldFont,
+                                 SfxViewFrame& rFrame,
                                  SvxFontItem&       rNewFont,
                                  String&            rString )
 {
     BOOL bRet = FALSE;
-
-    Font aFont;
-    aFont.SetName    ( rOldFont.GetFamilyName() );
-    aFont.SetStyleName( rOldFont.GetStyleName() );
-    aFont.SetFamily  ( rOldFont.GetFamily() );
-    aFont.SetCharSet  ( rOldFont.GetCharSet() );
-    aFont.SetPitch   ( rOldFont.GetPitch() );
-
-    //CHINA001 SvxCharacterMap* pDlg = new SvxCharacterMap( NULL, FALSE );
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     if(pFact)
     {
-        AbstractSvxCharacterMap* pDlg = pFact->CreateSvxCharacterMap( NULL, RID_SVXDLG_CHARMAP, FALSE );
-        DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
-
-        pDlg->SetCharFont( aFont );
-
+        SfxAllItemSet aSet( rFrame.GetObjectShell()->GetPool() );
+        aSet.Put( SfxBoolItem( FN_PARAM_1, FALSE ) );
+        aSet.Put( SvxFontItem( rOldFont.GetFamily(), rOldFont.GetFamilyName(), rOldFont.GetStyleName(), rOldFont.GetPitch(), rOldFont.GetCharSet(), aSet.GetPool()->GetWhich( SID_ATTR_CHAR_FONT ) ) );
+        SfxAbstractDialog* pDlg = pFact->CreateSfxDialog( &rFrame.GetWindow(), aSet, rFrame.GetFrame()->GetFrameInterface(), RID_SVXDLG_CHARMAP );
         if ( pDlg->Execute() == RET_OK )
         {
-            rString  = pDlg->GetCharacters();
-            aFont    = pDlg->GetCharFont();
-            rNewFont = SvxFontItem( aFont.GetFamily(), aFont.GetName(),
-                                    aFont.GetStyleName(), aFont.GetPitch(),
-                                    aFont.GetCharSet(), ATTR_FONT  );
-
+            SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pItem, SfxStringItem, SID_CHARMAP, FALSE );
+            SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pFontItem, SvxFontItem, SID_ATTR_CHAR_FONT, FALSE );
+            if ( pItem )
+                rString  = pItem->GetValue();
+            if ( pFontItem )
+                rNewFont = SvxFontItem( pFontItem->GetFamily(), pFontItem->GetFamilyName(), pFontItem->GetStyleName(), pFontItem->GetPitch(), pFontItem->GetCharSet(), rNewFont.Which() );
             bRet = TRUE;
         }
         delete pDlg;

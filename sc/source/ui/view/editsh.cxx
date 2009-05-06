@@ -69,6 +69,7 @@
 #include <vcl/sound.hxx>
 #include <sot/formats.hxx>
 #include <svtools/transfer.hxx>
+#include <svtools/stritem.hxx>
 
 #define _EDITSH_CXX
 #include "editsh.hxx"
@@ -332,16 +333,41 @@ void ScEditShell::Execute( SfxRequest& rReq )
                 String aString;
                 SvxFontItem aNewItem( EE_CHAR_FONTINFO );
 
-                BOOL bOk = ScViewUtil::ExecuteCharMap( rItem, aNewItem, aString );
+                const SfxItemSet *pArgs = rReq.GetArgs();
+                const SfxPoolItem* pItem = 0;
+                if( pArgs )
+                    pArgs->GetItemState(GetPool().GetWhich(SID_CHARMAP), FALSE, &pItem);
 
-                // while the dialog was open, edit mode may have been stopped
-                if (!SC_MOD()->IsInputMode())
+                if ( pItem )
                 {
-                    Sound::Beep();
-                    return;
+                    aString = ((const SfxStringItem*)pItem)->GetValue();
+                    const SfxPoolItem* pFtItem = NULL;
+                    pArgs->GetItemState( GetPool().GetWhich(SID_ATTR_SPECIALCHAR), FALSE, &pFtItem);
+                    const SfxStringItem* pFontItem = PTR_CAST( SfxStringItem, pFtItem );
+                    if ( pFontItem )
+                    {
+                        String aFontName(pFontItem->GetValue());
+                        Font aFont(aFontName, Size(1,1)); // Size nur wg. CTOR
+                        aNewItem = SvxFontItem( aFont.GetFamily(), aFont.GetName(),
+                                    aFont.GetStyleName(), aFont.GetPitch(),
+                                    aFont.GetCharSet(), ATTR_FONT  );
+                    }
+                    else
+                        aNewItem = rItem;
+                }
+                else
+                {
+                    ScViewUtil::ExecuteCharMap( rItem, *pViewData->GetViewShell()->GetViewFrame(), aNewItem, aString );
+
+                    // while the dialog was open, edit mode may have been stopped
+                    if (!SC_MOD()->IsInputMode())
+                    {
+                        Sound::Beep();
+                        return;
+                    }
                 }
 
-                if (bOk)
+                if ( aString.Len() )
                 {
                     //  if string contains WEAK characters, set all fonts
                     BYTE nSetScript;
@@ -361,6 +387,14 @@ void ScEditShell::Execute( SfxRequest& rReq )
                     pTableView->InsertText(aString);
                     if (pTopView)
                         pTopView->InsertText(aString);
+
+                    SfxStringItem aStringItem( SID_CHARMAP, aString );
+                    SfxStringItem aFontItem( SID_ATTR_SPECIALCHAR, aNewItem.GetFamilyName() );
+                    rReq.AppendItem( aFontItem );
+                    rReq.AppendItem( aStringItem );
+                    rReq.Done();
+
+
                 }
 
                 if (pTopView)
