@@ -115,9 +115,9 @@ testcase tFileNewLabels
                     PrintLog "Herlitz should have 6 types in list if 'Continous' is checked"
                     if ( iSheetFormat = 1 ) then vTypes = 6 else vTypes = 26
                 Case 6:
-                    PrintLog "Herma A4 should have 491 types in list if 'Sheet' is checked"
+                    PrintLog "Herma A4 should have 492 types in list if 'Sheet' is checked"
                     PrintLog "Herma A4 should have 1 type in list if 'Continous' is checked"
-                    if ( iSheetFormat = 1 ) then vTypes = 1 else vTypes = 491
+                    if ( iSheetFormat = 1 ) then vTypes = 1 else vTypes = 492
                 Case 7:
                     PrintLog "Herma A5 should have 18 types in list if 'Sheet' is checked"
                     PrintLog "Herma A5 should have 1 type in list if 'Continous' is checked"
@@ -245,9 +245,8 @@ testcase tFileNewBusinessCards
     Dim sTypes as integer
     Dim vTypes as integer
 
-    PrintLog "Open Business Cards dialog with File / New / Business Cards"
-    if ( hCreateBusinessCards ) then 
-    
+	PrintLog "Open Business Cards dialog with File / New / Business Cards"
+	if ( hCreateBusinessCards ) then     
         PrintLog "Switch to Tabpage 'Medium'"
         Kontext
         Active.Setpage TabEtikettenMedium
@@ -294,9 +293,9 @@ testcase tFileNewBusinessCards
                         PrintLog "Herlitz should have 6 types in list if 'Continous' is checked"
                         if ( iFormat = 1 ) then vTypes = 6 else vTypes = 26
                     Case 6:
-                        PrintLog "Herma A4 should have 491 types in list if 'Sheet' is checked"
+                        PrintLog "Herma A4 should have 492 types in list if 'Sheet' is checked"
                         PrintLog "Herma A4 should have 1 type in list if 'Continous' is checked"
-                        if ( iFormat = 1 ) then vTypes = 1 else vTypes = 491
+                        if ( iFormat = 1 ) then vTypes = 1 else vTypes = 492
                     Case 7:
                         PrintLog "Herma A5 should have 18 types in list if 'Sheet' is checked"
                         PrintLog "Herma A5 should have 1 type in list if 'Continous' is checked"
