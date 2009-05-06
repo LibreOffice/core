@@ -698,21 +698,23 @@ testcase tiFormat3D_Effekte
     Dim Rund  as string
     Dim Skal  as string
     Dim Tief  as string
-    Dim Winkel  as string                       '/// get value for angle ///'
+    Dim Winkel  as string                       ' get value for angle
     Dim X as string
     Dim y as integer
     Dim i as integer
     Dim Zaehler as integer
     Dim Posi as string
 
-    Call hNewDocument                              '/// new document ///'
+    Call hNewDocument                              
+    printlog "new document"
     '-----------------------------------RECTANGLE------------------------------------------------------
-    Call hRechteckErstellen (20,20,60,70)         '/// create rectangle ///'
+    Call hRechteckErstellen (20,20,60,70)        '/// create rectangle ///'
     WaitSlot (1000)
     ContextPositionAndSize                        '/// get position and size of rectangle ///'
         Kontext
         Active.SetPage TabPositionAndSize
         Kontext "TabPositionAndSize"
+        PositionX.SetText "5"
         X=PositionX.GetText
         printlog "--- created RECTANGLE; xPosition @ "+ x
         TabPositionAndSize.OK
@@ -959,6 +961,7 @@ testcase tiFormat3D_Effekte
         Kontext
         Active.SetPage TabPositionAndSize
         Kontext "TabPositionAndSize"
+        PositionX.SetText "5,00cm"
         Posi=PositionX.GetText
         TabPositionAndSize.OK
     WaitSlot (1000)
@@ -997,7 +1000,7 @@ testcase tiFormat3D_Effekte
         endif
         TabPositionAndSize.OK
     Kontext "Drei_D_Effekte"
-    '/// close document ///'
+    printlog "close document"
     Drei_D_Effekte.Close
     Call hCloseDocument
 endcase 'tiFormat3D_Effekte

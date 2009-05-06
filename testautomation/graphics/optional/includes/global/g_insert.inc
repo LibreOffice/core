@@ -169,94 +169,98 @@ endcase 'tInsertFloatingFrame
 '-------------------------------------------------------------------------------
 testcase tInsertFields
 
-   dim sTemp as string
-   dim sFile as string
-   dim i as integer
-
+    dim sTemp as string
+    dim sFile as string
+    dim i as integer
+    
     if (gApplication = "IMPRESS") then 
         ExtensionString = "odp"
     else
         ExtensionString = "odg"
     end if
+    
+    Call hNewDocument           
+    printlog " new document "
 
-   printlog " open application "
-   Call hNewDocument           
-   printlog " new document "
+    printlog " open 'tools->options' and set first/last name and email adress on the page 'StarOffice->UserData' "
+    ToolsOptions
+    hToolsOptions ("STAROFFICE","USERDATA")
+    VorName.SetText "Garfield"
+    ZuName.SetText  "Peanuts"
+    EMail.SetText   "recumbent@sun.com"
+    Kontext "ExtrasOptionenDlg"
+    ExtrasOptionenDlg.OK
+    
+    printlog " every item from menue 'Insert->Fields' is inserted, and the keys [Strg]+[A], [Delete] are pressed "
+    InsertFieldsDateFix            
+    printlog "  (date fix) "
+    EditSelectAll
+    hTypeKeys "<DELETE>"
+    
+    InsertFieldsDateVariable       
+    printlog "  (date variable) "
+    EditSelectAll
+    hTypeKeys "<DELETE>"
+    
+    InsertFieldsTimeFix            
+    printlog "  (time fix)"
+    EditSelectAll
+    hTypeKeys "<DELETE>"
+    
+    InsertFieldsTimeVariable       
+    printlog "  (time variable) "
+    EditSelectAll
+    hTypeKeys "<DELETE>"
 
-   printlog " open 'tools->options' and set first/last name and email adress on the page 'StarOffice->UserData' "
-   ToolsOptions
-   hToolsOptions ("STAROFFICE","USERDATA")
-   VorName.SetText "Garfield"
-   ZuName.SetText  "Peanuts"
-   EMail.SetText   "recumbent@sun.com"
-   Kontext "ExtrasOptionenDlg"
-   ExtrasOptionenDlg.OK
+    InsertFieldsPageCountDraw
+    printlog "  (page count)"
+    EditSelectAll
+    hTypeKeys "<DELETE>"
 
-   printlog " every item from menue 'Insert->Fields' is inserted, and the keys [Strg]+[A], [Delete] are pressed "
-   InsertFieldsDateFix            
-   printlog "  (date fix) "
-   EditSelectAll
-   hTypeKeys "<DELETE>"
-
-   InsertFieldsDateVariable       
-   printlog "  (date variable) "
-   EditSelectAll
-   hTypeKeys "<DELETE>"
-
-   InsertFieldsTimeFix            
-   printlog "  (time fix)"
-   EditSelectAll
-   hTypeKeys "<DELETE>"
-
-   InsertFieldsTimeVariable       
-   printlog "  (time variable) "
-   EditSelectAll
-   hTypeKeys "<DELETE>"
-
-   InsertFieldsAuthorDraw         
-   printlog "  (author) "
-   printlog "+ additional test for author "
-   printlog "+ it has to tbe 'Garfield Peanuts' "
-   hTypeKeys "<F2>"
-   EditSelectAll
-   EditCopy
-   sTemp = GetClipboard()
-   if (sTemp <> "Garfield Peanuts") then
+    InsertFieldsAuthorDraw         
+    printlog "  (author) "
+    printlog "+ additional test for author "
+    printlog "+ it has to tbe 'Garfield Peanuts' "
+    hTypeKeys "<F2>"
+    EditSelectAll
+    EditCopy
+    sTemp = GetClipboard()
+    if (sTemp <> "Garfield Peanuts") then
       Warnlog "wrong author; expected: 'Garfield Peanuts' is: '" + sTemp + "'"
-   else
+    else
       Printlog "Author is: '" + sTemp + "'"
-   endif
-   hTypeKeys "<Escape><Escape>"
-   EditSelectAll
-   hTypeKeys "<DELETE>"
+    endif
+    hTypeKeys "<Escape><Escape>"
+    printlog "deleting content"
+    EditSelectAll
+    hTypeKeys "<DELETE>"
 
-   for i = 1 to 2
-      InsertFieldsPageNumberDraw        
-      printlog "  (page number) "
-      printlog "+ additional test for pagenumber  "
-      printlog "+ it has to be '1' and should remain the same when we insert a new slide "
-      hTypeKeys "<F2>"
-      EditSelectAll
-      EditCopy
-      sTemp = GetClipboard()
-      if (sTemp <> right(str(i),1) ) then
-         if sTemp = 2 then
-            warnlog "Wrong number; expected it to still be: '1' but was: '" + sTemp + "'"
-         else
+    printlog "+ additional test for pagenumber  "
+    for i = 1 to 2
+        InsertFieldsPageNumberDraw        
+        printlog "Inserting page number. It has to be '1' and should remain the same when we insert a new slide "
+        hTypeKeys "<F2>"
+        EditSelectAll
+        EditCopy
+        sTemp = GetClipboard()
+        if (sTemp <> right(str(i),1) ) then
+            if sTemp = 2 then
+                warnlog "Wrong number; expected it to still be: '1' but was: '" + sTemp + "'"
+            else
+                printlog "Good. Number is: '" + sTemp + "'"
+            endif
+        else
             printlog "Good. Number is: '" + sTemp + "'"
-         endif
-      else
-         printlog "Good. Number is: '" + sTemp + "'"
-      endif
-      hTypeKeys "<Escape><Escape>"
-      EditSelectAll
-      hTypeKeys "<DELETE>"
-      printlog " Insert->Slide "
-      InsertSlide
-      sleep 2
+        endif
+        hTypeKeys "<Escape><Escape>"
+        EditSelectAll
+        hTypeKeys "<DELETE>"
+        printlog " Insert->Slide "
+        InsertSlide
+        sleep 2
    next i
 
-    printlog " and one try when we switch slides manually "
+    printlog "And one try when we switch slides manually, deleting slides to start."
    EditDeleteSlide
    EditDeleteSlide
 
@@ -264,7 +268,7 @@ testcase tInsertFields
       InsertFieldsPageNumberDraw        
       printlog "  (page number) "
       printlog "+ additional test for pagenumber  "
-      printlog "+ it has to chenge when we insert a new slide and press pagedown "
+      printlog "+ it has to change when we insert a new slide and press pagedown "
       hTypeKeys "<F2>"
       EditSelectAll
       EditCopy
@@ -289,13 +293,44 @@ testcase tInsertFields
       InsertSlide
       hTypeKeys "<PAGEDOWN>"
       sleep 2
-   next i
+    next i
+    printlog "Additional test for Page Count:"
+    InsertFieldsPageCountDraw
+    hTypeKeys "<F2>"
+    EditSelectAll
+    EditCopy
+    sTemp = GetClipboard()
+    if sTemp <> "3" then
+        warnlog "Wrong page count detected!"
+    else
+        printlog "Page count " & sTemp & " was expected."
+    endif
+    hTypeKeys "<Escape><Escape>"
 
-   InsertFieldsFileName           
-   printlog "  (file name) "
-   printlog "+ additional test for filename "
-   printlog "+ save file as " + gOfficePath + "user\\work\\fields.od ?"
-   sFile = ConvertPath (gOfficePath + "user\work\fields"
+    printlog "checking of page count changes if slide is inserted"
+    InsertSlide
+    hTypeKeys "<PAGEUP>"
+    EditSelectAll
+    hTypeKeys "<F2>"
+    EditSelectAll
+    EditCopy
+    sTemp = GetClipboard()
+    if sTemp <> "4" then
+        warnlog "Wrong page count detected!"
+    else
+        printlog "Page count " & sTemp & " was expected and updated correctly."
+    endif
+    
+    hTypeKeys "<Escape><Escape>"
+    printlog "deleting all"
+    EditSelectAll
+    hTypeKeys "<DELETE>"
+    
+    InsertFieldsFileName           
+    printlog "  (file name) "
+    printlog "+ additional test for filename "
+    printlog "+ save file as " + gOfficePath + "user\\work\\fields.od ?"
+    sFile = ConvertPath (gOfficePath + "user\work\fields"
     if FileExists(sFile + "." + ExtensionString) then
         kill (sFile + "." + ExtensionString)
     end if

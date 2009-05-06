@@ -61,14 +61,9 @@ testcase tiEditUndo
     
     hFileOpen ConvertPath (sDatei)
     sleep 5
-    ' check if the document is writable
-    if fIsDocumentWritable = false then
-     ' make the document writable and check if it's succesfull
-     if fMakeDocumentWritable = false then
-        warnlog "The document can't be made writeable. Test stopped."
-        goto endsub
-     endif
-    endif
+    printlog "Checking for readonly state. If so, make it editable."
+    sMakeReadOnlyDocumentEditable
+
     hTypeKeys "<TAB><TAB>"
     sleep 3
     ContextPositionAndSize

@@ -383,6 +383,7 @@ InsertFieldsTimeFix SID_INSERT_FLD_TIME_FIX
 InsertFieldsTimeVariable SID_INSERT_FLD_TIME_VAR
 InsertFieldsAuthorDraw SID_INSERT_FLD_AUTHOR
 InsertFieldsPageNumberDraw SID_INSERT_FLD_PAGE
+InsertFieldsPageCountDraw .uno:InsertPagesField
 InsertFieldsFileName SID_INSERT_FLD_FILE
 InsertHyperlinkDialog .uno:HyperlinkDialog
 InsertScanSelectSource SID_TWAIN_SELECT
