@@ -139,6 +139,9 @@ void SwDrawTextShell::Init()
     SwWrtShell &rSh = GetShell();
     pSdrView = rSh.GetDrawView();
     SdrOutliner * pOutliner = pSdrView->GetTextEditOutliner();
+    //#97471# mouse click _and_ key input at the same time
+    if( !pOutliner )
+        return ;
     OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
     ULONG nCtrl = pOutliner->GetControlWord();
     nCtrl |= EE_CNTRL_AUTOCORRECT;

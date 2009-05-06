@@ -312,7 +312,7 @@ BOOL SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
 
     TOXTypes eCurTOXType = rDesc.GetTOXType();
     if(pCurTOX && !ppBase && pSh->HasSelection())
-        pSh->DelRight();
+        pSh->EnterStdMode();
 
     switch(eCurTOXType)
     {

@@ -55,6 +55,8 @@
 #include <svx/langitem.hxx>
 #include <svtools/itemset.hxx>
 #include <svtools/stritem.hxx>
+#include <svtools/ehdl.hxx>
+#include <svtools/sfxecode.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/dinfdlg.hxx>
 #include <sfx2/printer.hxx>
@@ -752,7 +754,24 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
         pValues[0].Value <<= ::rtl::OUString(sFilter);
 
         uno::Reference< frame::XStorable > xStore( pTargetView->GetDocShell()->GetModel(), uno::UNO_QUERY);
-        xStore->storeToURL( sPath, aValues );
+        sal_uInt32 nErrorCode = ERRCODE_NONE;
+        try
+        {
+            xStore->storeToURL( sPath, aValues );
+        }
+        catch( task::ErrorCodeIOException& aErrorEx )
+        {
+            nErrorCode = (sal_uInt32)aErrorEx.ErrCode;
+        }
+        catch( Exception& )
+        {
+            nErrorCode = ERRCODE_IO_GENERAL;
+        }
+        if( nErrorCode != ERRCODE_NONE )
+        {
+            SfxErrorContext aEc(ERRCTX_SFX_SAVEASDOC, pTargetView->GetDocShell()->GetTitle());
+            ErrorHandler::HandleError( nErrorCode );
+        }
     }
     else
     {
@@ -787,7 +806,24 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
         pValues[0].Value <<= ::rtl::OUString(pSfxFlt->GetFilterName());
 
         uno::Reference< frame::XStorable > xStore( pTargetView->GetDocShell()->GetModel(), uno::UNO_QUERY);
-        xStore->storeToURL( sTargetTempURL, aValues   );
+        sal_uInt32 nErrorCode = ERRCODE_NONE;
+        try
+        {
+            xStore->storeToURL( sTargetTempURL, aValues );
+        }
+        catch( task::ErrorCodeIOException& aErrorEx )
+        {
+            nErrorCode = (sal_uInt32)aErrorEx.ErrCode;
+        }
+        catch( Exception& )
+        {
+            nErrorCode = ERRCODE_IO_GENERAL;
+        }
+        if( nErrorCode != ERRCODE_NONE )
+        {
+            SfxErrorContext aEc(ERRCTX_SFX_SAVEASDOC, pTargetView->GetDocShell()->GetTitle());
+            ErrorHandler::HandleError( nErrorCode );
+        }
 
         SwView* pSourceView = rConfigItem.GetSourceView();
         PrintMonitor aSaveMonitor(this, PrintMonitor::MONITOR_TYPE_SAVE);

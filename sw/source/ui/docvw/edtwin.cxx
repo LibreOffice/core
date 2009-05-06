@@ -5076,49 +5076,70 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
         case COMMAND_SELECTIONCHANGE:
         {
             const CommandSelectionChangeData *pData = rCEvt.GetSelectionChangeData();
-            rSh.HideCrsr();
+            rSh.SttCrsrMove();
             rSh.GoStartSentence();
             rSh.GetCrsr()->GetPoint()->nContent += sal::static_int_cast<sal_uInt16, ULONG>(pData->GetStart());
             rSh.SetMark();
-            rSh.GetCrsr()->GetMark()->nContent += sal::static_int_cast<sal_uInt16, ULONG>( pData->GetEnd() - pData->GetStart() );
-            rSh.ShowCrsr();
+            rSh.GetCrsr()->GetMark()->nContent += sal::static_int_cast<sal_uInt16, ULONG>(pData->GetEnd() - pData->GetStart());
+            rSh.EndCrsrMove( TRUE );
         }
         break;
         case COMMAND_PREPARERECONVERSION:
         if( rSh.HasSelection() )
         {
-            if ( rSh.IsMultiSelection() )
+            SwPaM *pCrsr = (SwPaM*)rSh.GetCrsr();
+
+            if( rSh.IsMultiSelection() )
             {
-                // Save the last selected area.
-                SwPaM *pCrsr = (SwPaM*)rSh.GetCrsr()->GetPrev();
-                xub_StrLen nPosIdx = pCrsr->GetPoint()->nContent.GetIndex();
-                ULONG nPosNodeIdx = pCrsr->GetPoint()->nNode.GetIndex();
-                xub_StrLen nMarkIdx = pCrsr->GetMark()->nContent.GetIndex();
-                ULONG nMarkNodeIdx = pCrsr->GetMark()->nNode.GetIndex();
+                if( pCrsr && !pCrsr->HasMark() &&
+                pCrsr->GetPoint() == pCrsr->GetMark() )
+                {
+                rSh.GoPrevCrsr();
+                pCrsr = (SwPaM*)rSh.GetCrsr();
+                }
 
-                // ToDo: Deselect the text behind the first paragraph break,
-                //       if the last selected area ranges from one paragraph
-                //       to another.
-                if( nPosNodeIdx != nMarkNodeIdx )
-                break;
-
-                // Cancel all selection.
-                while( rSh._GetCrsr()->GetNext() != rSh._GetCrsr() )
-                delete rSh._GetCrsr()->GetNext();
-
-                // Restore the last selected area.
-                rSh.GetCrsr()->GetPoint()->nContent = nPosIdx;
-                rSh.GetCrsr()->GetPoint()->nNode = nPosNodeIdx;
-                rSh.SetMark();
-                rSh.GetCrsr()->GetMark()->nContent = nMarkIdx;
-                rSh.GetCrsr()->GetMark()->nNode = nMarkNodeIdx;
-                rSh.ShowCrsr();
+                // Cancel all selections other than the last selected one.
+                while( rSh.GetCrsr()->GetNext() != rSh.GetCrsr() )
+                delete rSh.GetCrsr()->GetNext();
             }
-            else
+
+            if( pCrsr )
             {
-                // Deselect the text behind the first paragraph break.
-                rSh.NormalizePam( FALSE );
-                while( !rSh.IsSelOnePara() && rSh.MovePara( fnParaPrev, fnParaEnd ));
+                ULONG nPosNodeIdx = pCrsr->GetPoint()->nNode.GetIndex();
+                xub_StrLen nPosIdx = pCrsr->GetPoint()->nContent.GetIndex();
+                ULONG nMarkNodeIdx = pCrsr->GetMark()->nNode.GetIndex();
+                xub_StrLen nMarkIdx = pCrsr->GetMark()->nContent.GetIndex();
+
+                if( !rSh.GetCrsr()->HasMark() )
+                rSh.GetCrsr()->SetMark();
+
+                rSh.SttCrsrMove();
+
+                if( nPosNodeIdx < nMarkNodeIdx )
+                {
+                rSh.GetCrsr()->GetPoint()->nNode = nPosNodeIdx;
+                rSh.GetCrsr()->GetPoint()->nContent = nPosIdx;
+                rSh.GetCrsr()->GetMark()->nNode = nPosNodeIdx;
+                rSh.GetCrsr()->GetMark()->nContent =
+                    rSh.GetCrsr()->GetCntntNode( TRUE )->Len();
+                }
+                else if( nPosNodeIdx == nMarkNodeIdx )
+                {
+                rSh.GetCrsr()->GetPoint()->nNode = nPosNodeIdx;
+                rSh.GetCrsr()->GetPoint()->nContent = nPosIdx;
+                rSh.GetCrsr()->GetMark()->nNode = nMarkNodeIdx;
+                rSh.GetCrsr()->GetMark()->nContent = nMarkIdx;
+                }
+                else
+                {
+                rSh.GetCrsr()->GetMark()->nNode = nMarkNodeIdx;
+                rSh.GetCrsr()->GetMark()->nContent = nMarkIdx;
+                rSh.GetCrsr()->GetPoint()->nNode = nMarkNodeIdx;
+                rSh.GetCrsr()->GetPoint()->nContent =
+                    rSh.GetCrsr()->GetCntntNode( FALSE )->Len();
+                }
+
+                rSh.EndCrsrMove( TRUE );
             }
         }
         break;
@@ -5653,7 +5674,7 @@ XubString SwEditWin::GetSurroundingText() const
     String sReturn;
     SwWrtShell& rSh = rView.GetWrtShell();
     if( rSh.HasSelection() && !rSh.IsMultiSelection() && rSh.IsSelOnePara() )
-        rSh.GetSelectedText( sReturn );
+        rSh.GetSelectedText( sReturn, GETSELTXT_PARABRK_TO_ONLYCR  );
     else if( !rSh.HasSelection() )
     {
         SwPosition *pPos = rSh.GetCrsr()->GetPoint();
@@ -5664,7 +5685,7 @@ XubString SwEditWin::GetSurroundingText() const
         rSh.GoStartSentence();
         rSh.SetMark();
         rSh.GoEndSentence();
-        rSh.GetSelectedText( sReturn );
+        rSh.GetSelectedText( sReturn, GETSELTXT_PARABRK_TO_ONLYCR  );
 
         pPos->nContent = nPos;
         rSh.ClearMark();
@@ -5682,7 +5703,7 @@ Selection SwEditWin::GetSurroundingTextSelection() const
     if( rSh.HasSelection() )
     {
         String sReturn;
-        rSh.GetSelectedText( sReturn );
+        rSh.GetSelectedText( sReturn, GETSELTXT_PARABRK_TO_ONLYCR  );
         return Selection( 0, sReturn.Len() );
     }
     else
