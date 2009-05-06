@@ -391,6 +391,11 @@ interface OutlineView
         ExecMethod = FuTemporaryModify ;
         StateMethod = GetMenuState ;
     ]
+    SID_INSERT_FLD_PAGES // ole : no, status : play rec
+    [
+        ExecMethod = FuTemporaryModify ;
+        StateMethod = GetMenuState ;
+    ]
     SID_INSERT_FLD_FILE // ole : no, status : play rec
     [
         ExecMethod = FuTemporaryModify ;

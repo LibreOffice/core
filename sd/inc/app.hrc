@@ -394,6 +394,8 @@
 #define SID_PREVIEW_QUALITY_BLACKWHITE      (SID_SD_START+371)
 #define SID_VECTORIZE                       (SID_SD_START+372)
 
+#define SID_INSERT_FLD_PAGES                (SID_SD_START+373)
+
 #define SID_CONVERT_TO_BITMAP               (SID_SD_START+378)
 #define SID_CONVERT_TO_METAFILE             (SID_SD_START+379)
 

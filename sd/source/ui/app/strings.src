@@ -1166,6 +1166,10 @@ String STR_FIELD_PLACEHOLDER_NUMBER
 {
     Text [ en-US ] = "<number>" ;
 };
+String STR_FIELD_PLACEHOLDER_COUNT
+{
+    Text [ en-US ]="<count>" ;
+};
 
 String STR_PLACEHOLDER_DESCRIPTION_NOTES
 {

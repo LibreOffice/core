@@ -3586,6 +3586,31 @@ SfxVoidItem InsertPageField SID_INSERT_FLD_PAGE
 ]
 
 //--------------------------------------------------------------------------
+SfxVoidItem InsertPagesField SID_INSERT_FLD_PAGES
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_INSERT;
+]
+
+//--------------------------------------------------------------------------
 SfxVoidItem InsertPageQuick SID_INSERTPAGE_QUICK
 ()
 [

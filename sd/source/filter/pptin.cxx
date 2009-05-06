@@ -40,6 +40,7 @@
 #ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
+#include <svtools/urihelper.hxx>
 #include <svx/svdfppt.hxx>
 #include <svx/svditer.hxx>
 #include <sfx2/docfile.hxx>
@@ -2160,17 +2161,28 @@ void ImplSdPPTImport::FillSdAnimationInfo( SdAnimationInfo* pInfo, PptInteractiv
                 switch( pIAtom->nHyperlinkType )
                 {
                     case 9:
-                    case 10:
-                    break;
                     case 8:                                         // hyperlink : URL
                     {
                         if ( pPtr->aTarget.Len() )
                         {
-                            pInfo->maBookmark = String( pPtr->aTarget );
-                            pInfo->meClickAction = ::com::sun::star::presentation::ClickAction_DOCUMENT;
+                            ::sd::DrawDocShell* pDocShell = mpDoc->GetDocSh();
+                            if ( pDocShell )
+                            {
+                                String aBaseURL = pDocShell->GetMedium()->GetBaseURL();
+                                INetURLObject aURL( pPtr->aTarget );
+                                if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
+                                    utl::LocalFileHelper::ConvertSystemPathToURL( pPtr->aTarget, aBaseURL, pInfo->maBookmark );
+                                if( !pInfo->maBookmark.Len() )
+                                    pInfo->maBookmark = URIHelper::SmartRel2Abs( INetURLObject(aBaseURL), pPtr->aTarget, URIHelper::GetMaybeFileHdl(), true );
+                                pInfo->meClickAction = ::com::sun::star::presentation::ClickAction_PROGRAM;
+                            }
                         }
                     }
                     break;
+
+                    case 10:
+                    break;
+
                     case 7:                                         // hyperlink auf eine Seite
                     {
                         if ( pPtr->aConvSubString.Len() )

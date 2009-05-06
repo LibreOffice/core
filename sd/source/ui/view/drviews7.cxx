@@ -1026,6 +1026,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.DisableItem( SID_INSERT_FLD_TIME_VAR );
         rSet.DisableItem( SID_INSERT_FLD_AUTHOR );
         rSet.DisableItem( SID_INSERT_FLD_PAGE );
+        rSet.DisableItem( SID_INSERT_FLD_PAGES );
         rSet.DisableItem( SID_INSERT_FLD_FILE );
 
         rSet.DisableItem( SID_INSERT_GRAPHIC );

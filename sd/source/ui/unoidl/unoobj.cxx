@@ -909,12 +909,22 @@ sal_Bool SdXShape::IsPresObj() const throw()
 sal_Bool SdXShape::IsEmptyPresObj() const throw()
 {
     SdrObject* pObj = mpShape->GetSdrObject();
-    if( pObj == NULL || !pObj->IsEmptyPresObj() )
-        return sal_False;
+    if( (pObj != NULL) && pObj->IsEmptyPresObj() )
+    {
+        // check if the object is in edit, than its temporarely not empty
+        SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( pObj );
+        if( pTextObj == 0 )
+            return sal_True;
 
-    // check if the object is in edit, than its temporarely not empty
-    SdrTextObj* pTextObj = PTR_CAST( SdrTextObj, pObj );
-    return (NULL == pTextObj) || ( NULL == pTextObj->GetEditOutlinerParaObject() );
+        OutlinerParaObject* pParaObj = pTextObj->GetEditOutlinerParaObject();
+        if( pParaObj )
+        {
+            delete pParaObj;
+            return sal_True;
+        }
+    }
+
+    return sal_False;
 }
 
 /** sets/reset the empty status of a presentation object

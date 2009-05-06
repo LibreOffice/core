@@ -301,6 +301,9 @@ public:
     USHORT GetPrintedHandoutPageNum (void) const { return mnPrintedHandoutPageNum; }
     void SetPrintedHandoutPageNum (USHORT nPageNumber) {mnPrintedHandoutPageNum=nPageNumber; }
 
+    USHORT GetPrintedHandoutPageCount(void) const { return mnPrintedHandoutPageCount; }
+    void SetPrintedHandoutPageCount (USHORT nPageCount) {mnPrintedHandoutPageCount=nPageCount; }
+
     virtual USHORT PrepareClose( BOOL bUI = TRUE, BOOL bForBrowsing = FALSE );
 
     void GetMenuState(SfxItemSet& rSet);
@@ -496,6 +499,7 @@ protected:
 
     BOOL        mbStartShowWithDialog;  // Praesentation wurde ueber Dialog gestartet
     USHORT      mnPrintedHandoutPageNum; // Page number of the handout page that is to be printed.
+    USHORT      mnPrintedHandoutPageCount; // Page count of the handout pages that are to be printed.
 
     //af    BOOL        bPrintDirectSelected;       // Print only selected objects in direct print
     //afString      sPageRange;                 // pagerange if selected objects in direct print

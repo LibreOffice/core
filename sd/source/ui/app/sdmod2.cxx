@@ -273,6 +273,50 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo)
 
             pInfo->SetRepresentation( aRepresentation );
         }
+        else if( dynamic_cast< const SvxPagesField*  >(pField) )
+        {
+            String aRepresentation;
+            aRepresentation += sal_Unicode( ' ' );
+
+            ::sd::ViewShell* pViewSh = pDocShell ? pDocShell->GetViewShell() : NULL;
+            if(pViewSh == NULL)
+            {
+                ::sd::ViewShellBase* pBase = PTR_CAST(::sd::ViewShellBase, SfxViewShell::Current());
+                if(pBase)
+                    pViewSh = pBase->GetMainViewShell().get();
+            }
+            if( !pDoc && pViewSh )
+                pDoc = pViewSh->GetDoc();
+
+            bool bMasterView;
+            SdPage* pPage = GetCurrentPage( pViewSh, pInfo, bMasterView );
+
+            USHORT nPageCount = 0;
+
+            if( !bMasterView )
+            {
+                if( pPage && (pPage->GetPageKind() == PK_HANDOUT) && pViewSh )
+                {
+                    nPageCount = pViewSh->GetPrintedHandoutPageCount();
+                }
+                else if( pDoc )
+                {
+                    nPageCount = (USHORT)pDoc->GetSdPageCount(PK_STANDARD);
+                }
+            }
+
+            if( nPageCount > 0 )
+            {
+                aRepresentation = pDoc->CreatePageNumValue(nPageCount);
+            }
+            else
+            {
+                static String aNumberText( SdResId( STR_FIELD_PLACEHOLDER_COUNT ) );
+                aRepresentation = aNumberText;
+            }
+
+            pInfo->SetRepresentation( aRepresentation );
+        }
         else if( (pURLField = dynamic_cast< const SvxURLField* >(pField)) != 0 )
         {
             switch ( pURLField->GetFormat() )
