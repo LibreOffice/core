@@ -51,6 +51,7 @@
 #include "svx/svdotable.hxx"
 #include "svx/svdoutl.hxx"
 #include "svx/editeng.hxx"
+#include "svx/outlobj.hxx"
 
 //#include <tablertfexporter.hxx>
 
@@ -214,6 +215,7 @@ void SdrTableRtfExporter::WriteCell( sal_Int32 nCol, sal_Int32 nRow )
     String aContent;
 
     OutlinerParaObject* pParaObj = xCell->GetEditOutlinerParaObject();
+    bool bOwnParaObj = pParaObj != 0;
 
     if( pParaObj == 0 )
         pParaObj = xCell->GetOutlinerParaObject();
@@ -227,6 +229,9 @@ void SdrTableRtfExporter::WriteCell( sal_Int32 nCol, sal_Int32 nRow )
         aContent = rOutliner.GetEditEngine().GetText( LINEEND_LF );
 
         rOutliner.Clear();
+
+        if( bOwnParaObj )
+            delete pParaObj;
     }
 
     bool bResetPar, bResetAttr;

@@ -45,6 +45,7 @@
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/text/XTextRangeCompare.hpp>
+#include <com/sun/star/beans/XMultiPropertyStates.hpp>
 #include <com/sun/star/text/XTextAppend.hpp>
 #include <com/sun/star/text/XTextCopy.hpp>
 #include <cppuhelper/weak.hxx>
@@ -254,6 +255,7 @@ namespace accessibility
 class SVX_DLLPUBLIC SvxUnoTextRangeBase : public ::com::sun::star::text::XTextRange,
                             public ::com::sun::star::beans::XPropertySet,
                             public ::com::sun::star::beans::XMultiPropertySet,
+                            public ::com::sun::star::beans::XMultiPropertyStates,
                             public ::com::sun::star::beans::XPropertyState,
                             public ::com::sun::star::lang::XServiceInfo,
                             public ::com::sun::star::text::XTextRangeCompare,
@@ -281,7 +283,7 @@ protected:
     virtual sal_Bool _getOnePropertyStates(const SfxItemSet* pSet, const SfxItemPropertyMap* pMap, ::com::sun::star::beans::PropertyState& rState);
 
     virtual void SAL_CALL _setPropertyToDefault( const ::rtl::OUString& PropertyName, sal_Int32 nPara = -1 ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
-
+    virtual void _setPropertyToDefault( SvxTextForwarder* pForwarder, const SfxItemPropertyMap* pMap, sal_Int32 nPara ) throw( ::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException );
     void SetEditSource( SvxEditSource* _pEditSource ) throw();
 
     virtual void getPropertyValue( const SfxItemPropertyMap* pMap, com::sun::star::uno::Any& rAny, const SfxItemSet& rSet ) throw(::com::sun::star::beans::UnknownPropertyException );
@@ -342,6 +344,12 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyState > SAL_CALL getPropertyStates( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setPropertyToDefault( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Any SAL_CALL getPropertyDefault( const ::rtl::OUString& aPropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::beans::XMultiPropertyStates
+    //virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyState > SAL_CALL getPropertyStates( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyName ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setAllPropertiesToDefault(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setPropertiesToDefault( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > SAL_CALL getPropertyDefaults( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
     // XTextRangeCompare
     virtual ::sal_Int16 SAL_CALL compareRegionStarts( const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >& xR1, const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >& xR2 ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);

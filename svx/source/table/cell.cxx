@@ -199,6 +199,8 @@ namespace sdr
             {
                 OutlinerParaObject* pParaObj = mxCell->GetEditOutlinerParaObject();
 
+                bool bOwnParaObj = pParaObj != 0;
+
                 if( pParaObj == 0 )
                     pParaObj = mxCell->GetOutlinerParaObject();
 
@@ -242,6 +244,9 @@ namespace sdr
 
                         mxCell->SetOutlinerParaObject(pTemp);
                     }
+
+                    if( bOwnParaObj )
+                        delete pParaObj;
                 }
             }
 
@@ -446,10 +451,18 @@ void Cell::notifyModified()
 
 bool Cell::IsTextEditActive()
 {
+    bool isActive = false;
     SdrTableObj& rTableObj = dynamic_cast< SdrTableObj& >( GetObject() );
     if(rTableObj.getActiveCell().get() == this )
-        return rTableObj.GetEditOutlinerParaObject() != 0;
-    return false;
+    {
+        OutlinerParaObject* pParaObj = rTableObj.GetEditOutlinerParaObject();
+        if( pParaObj != 0 )
+        {
+            isActive = true;
+            delete pParaObj;
+        }
+    }
+    return isActive;
 }
 
 // -----------------------------------------------------------------------------
@@ -724,9 +737,6 @@ Any SAL_CALL Cell::queryInterface( const Type & rType ) throw(RuntimeException)
     if( rType == XLayoutConstrains::static_type() )
         return Any( Reference< XLayoutConstrains >( this ) );
 
-    if( rType == XMultiPropertyStates::static_type() )
-        return Any( Reference< XMultiPropertyStates >( this ) );
-
     Any aRet( SvxUnoTextBase::queryAggregation( rType ) );
     if( aRet.hasValue() )
         return aRet;
@@ -757,10 +767,9 @@ Sequence< Type > SAL_CALL Cell::getTypes(  ) throw (RuntimeException)
     Sequence< Type > aTypes( SvxUnoTextBase::getTypes() );
 
     sal_Int32 nLen = aTypes.getLength();
-    aTypes.realloc(nLen + 3);
+    aTypes.realloc(nLen + 2);
     aTypes[nLen++] = XMergeableCell::static_type();
     aTypes[nLen++] = XLayoutConstrains::static_type();
-    aTypes[nLen++] = XMultiPropertyStates::static_type();
 
     return aTypes;
 }

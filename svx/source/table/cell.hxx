@@ -61,7 +61,6 @@ class Cell :    public SdrText,
                 public SvxUnoTextBase,
                 public ::com::sun::star::table::XMergeableCell,
                 public ::com::sun::star::awt::XLayoutConstrains,
-                public ::com::sun::star::beans::XMultiPropertyStates,
                 public ::cppu::OWeakObject
 {
     friend class CellUndo;

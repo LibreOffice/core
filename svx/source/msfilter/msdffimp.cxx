@@ -1339,7 +1339,7 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
 static basegfx::B2DPolygon GetLineArrow( const sal_Int32 nLineWidth, const MSO_LineEnd eLineEnd,
     const MSO_LineEndWidth eLineWidth, const MSO_LineEndLength eLineLenght,
     sal_Int32& rnArrowWidth, sal_Bool& rbArrowCenter,
-    String& rsArrowName )
+    String& rsArrowName, sal_Bool bScaleArrow )
 {
     basegfx::B2DPolygon aRetval;
     double      fLineWidth = nLineWidth < 70 ? 70.0 : nLineWidth;
@@ -1359,6 +1359,13 @@ static basegfx::B2DPolygon GetLineArrow( const sal_Int32 nLineWidth, const MSO_L
         case mso_lineNarrowArrow        : fWidthMul = 2.0; break;
         case mso_lineWideArrow          : fWidthMul = 5.0; nLineNumber += 6; break;
     }
+
+    if ( bScaleArrow )  // #i33630 arrows imported from Word are too big
+    {
+        fWidthMul /= 1.75;
+        fLenghtMul/= 1.75;
+    }
+
     rbArrowCenter = sal_False;
     switch ( eLineEnd )
     {
@@ -1550,6 +1557,7 @@ void DffPropertyReader::ApplyLineAttributes( SfxItemSet& rSet, const MSO_SPT eSh
 
         if ( nLineFlags & 0x10 )
         {
+            sal_Bool bScaleArrows = rManager.pSdrModel->GetScaleUnit() == MAP_TWIP;
             ///////////////
             // LineStart //
             ///////////////
@@ -1562,7 +1570,7 @@ void DffPropertyReader::ApplyLineAttributes( SfxItemSet& rSet, const MSO_SPT eSh
                 sal_Int32   nArrowWidth;
                 sal_Bool    bArrowCenter;
                 String      aArrowName;
-                basegfx::B2DPolygon aPoly(GetLineArrow( nLineWidth, eLineEnd, eWidth, eLenght, nArrowWidth, bArrowCenter, aArrowName ));
+                basegfx::B2DPolygon aPoly(GetLineArrow( nLineWidth, eLineEnd, eWidth, eLenght, nArrowWidth, bArrowCenter, aArrowName, bScaleArrows ));
 
                 rSet.Put( XLineStartWidthItem( nArrowWidth ) );
                 rSet.Put( XLineStartItem( aArrowName, basegfx::B2DPolyPolygon(aPoly) ) );
@@ -1580,7 +1588,7 @@ void DffPropertyReader::ApplyLineAttributes( SfxItemSet& rSet, const MSO_SPT eSh
                 sal_Int32   nArrowWidth;
                 sal_Bool    bArrowCenter;
                 String      aArrowName;
-                basegfx::B2DPolygon aPoly(GetLineArrow( nLineWidth, eLineEnd, eWidth, eLenght, nArrowWidth, bArrowCenter, aArrowName ));
+                basegfx::B2DPolygon aPoly(GetLineArrow( nLineWidth, eLineEnd, eWidth, eLenght, nArrowWidth, bArrowCenter, aArrowName, bScaleArrows ));
 
                 rSet.Put( XLineEndWidthItem( nArrowWidth ) );
                 rSet.Put( XLineEndItem( aArrowName, basegfx::B2DPolyPolygon(aPoly) ) );
@@ -1634,9 +1642,9 @@ void DffPropertyReader::ApplyFillAttributes( SvStream& rIn, SfxItemSet& rSet, co
             case mso_fillPicture :          // Center a picture in the shape
                 eXFill = XFILL_BITMAP;
             break;
+            case mso_fillShadeShape :       // Shade from shape outline to end point
             case mso_fillShade :            // Shade from start to end points
             case mso_fillShadeCenter :      // Shade from bounding rectangle to end point
-            case mso_fillShadeShape :       // Shade from shape outline to end point
             case mso_fillShadeScale :       // Similar to mso_fillShade, but the fillAngle
             case mso_fillShadeTitle :       // special type - shade to title ---  for PP
                 eXFill = XFILL_GRADIENT;
@@ -1714,6 +1722,9 @@ void DffPropertyReader::ApplyFillAttributes( SvStream& rIn, SfxItemSet& rSet, co
                 aCol1 = aCol2;
                 aCol2 = aZwi;
             }
+            if ( ( eShapeType == mso_sptEllipse ) && ( eMSO_FillType == mso_fillShadeShape ) )
+                eGrad = XGRAD_ELLIPTICAL;
+
             XGradient aGrad( aCol2, aCol1, eGrad, nAngle, nFocusX, nFocusY );
             aGrad.SetStartIntens( 100 );
             aGrad.SetEndIntens( 100 );
