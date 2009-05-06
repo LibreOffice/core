@@ -32,6 +32,7 @@
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/help.hxx>
+#include <vcl/wall.hxx>
 
 #include <soldep/objwin.hxx>
 #include <soldep/depwin.hxx>
@@ -96,10 +97,15 @@ ObjectWin::ObjectWin( Window* pParent, WinBits nWinStyle )
     LINK( this, ObjectWin, TipHdl ));
 
     SetFont( Font( GetFont() ) );
+    Font aFont( GetFont() );
+    Size aSize = aFont.GetSize();
+    aFont.SetSize( aSize );
+    SetFont( aFont );
+
     EnableClipSiblings();
     SetZOrder( NULL, WINDOW_ZORDER_FIRST );
     mpPopup = new PopupMenu();
-//  mpPopup->InsertItem( OBJWIN_EDIT_TEXT, String::CreateFromAscii( "Details" ));
+    mpPopup->InsertItem( OBJWIN_EDIT_TEXT, String::CreateFromAscii( "Details" ));
     mpPopup->InsertItem( OBJWIN_ADD_CONNECTOR, String::CreateFromAscii( "New connection" ));
     mpPopup->InsertItem( OBJWIN_REMOVE_WIN, String::CreateFromAscii( "Remove object" ));
     mpPopup->InsertItem( OBJWIN_VIEW_CONTENT, String::CreateFromAscii( "View content" ));
@@ -426,6 +432,9 @@ void ObjectWin::MarkNeeded( BOOL bReset )
 void ObjectWin::MarkDepending( BOOL bReset )
 /*****************************************************************************/
 {
+    //if ( !bReset )
+    //  return;
+
     Connector* pCon;
     ObjectWin* pWin;
 
@@ -454,7 +463,6 @@ void ObjectWin::MarkDepending( BOOL bReset )
 void ObjectWin::Paint( const Rectangle& rRect )
 /*****************************************************************************/
 {
-
     Size  aWinSize  = PixelToLogic( GetOutputSizePixel() );
     Size  aTextSize;
     ByteString sbt = msBodyText;                         //debug
@@ -472,6 +480,34 @@ void ObjectWin::Paint( const Rectangle& rRect )
         Invalidate();
     } else
         DrawText( aPos , String( sbt, RTL_TEXTENCODING_UTF8 )); //debug
+}
+
+void ObjectWin::DrawOutput( OutputDevice* pDevice, const Point& rOffset )
+/*****************************************************************************/
+{
+    Size aWinSize  = PixelToLogic( GetSizePixel() );
+    Size aTextSize;
+    ByteString sbt = msBodyText;                      
+    aTextSize.Width() = GetTextWidth( String( msBodyText, RTL_TEXTENCODING_UTF8 ));
+    aTextSize.Height() = GetTextHeight();
+    Point aPos = GetPosPixel();
+    Point aTextPos( aWinSize.Width() / 2  - aTextSize.Width() / 2,
+                aWinSize.Height() / 2 - aTextSize.Height() / 2 );
+    aTextPos += aPos;
+    aPos = pDevice->PixelToLogic( aPos ) - rOffset;
+    aTextPos = pDevice->PixelToLogic( aTextPos ) - rOffset;
+    if ( msBodyText !="null" ) 
+    {
+        pDevice->SetFillColor( GetBackground().GetColor() );
+        pDevice->DrawRect( Rectangle( aPos, pDevice->PixelToLogic( GetSizePixel() ) ) );
+        Font aFont( GetFont() );
+        Size aSize = aFont.GetSize();
+        aSize = pDevice->PixelToLogic( aSize );
+        aFont.SetSize( aSize );
+        pDevice->SetFont( aFont );
+        pDevice->SetTextColor( GetTextColor() );
+        pDevice->DrawText( aTextPos, String( sbt, RTL_TEXTENCODING_UTF8 ) );
+    }
 }
 
 /*****************************************************************************/
@@ -538,7 +574,7 @@ void ObjectWin::MouseButtonUp( const MouseEvent& rMEvt )
 
             for( i = 0; i < mConnections.Count() ; i++ )
             {
-                mpPopup->InsertItem( mnPopupStaticItems + i, String( ((mConnections.GetObject( i ))->GetOtherWin( this ))->GetBodyText(), RTL_TEXTENCODING_UTF8 ));
+                mpPopup->InsertItem( mnPopupStaticItems + i + 1, String( ((mConnections.GetObject( i ))->GetOtherWin( this ))->GetBodyText(), RTL_TEXTENCODING_UTF8 ));
             }
         }
         mbMenuExecute = TRUE;
@@ -644,7 +680,7 @@ IMPL_LINK( ObjectWin, PopupSelected, PopupMenu*, mpPopup_l )
                 break;
         default :
 //          DBG_ASSERT( FALSE, String (nItemId) );
-            Connector* pCon = mConnections.GetObject( nItemId - mnPopupStaticItems );
+            Connector* pCon = mConnections.GetObject( nItemId - mnPopupStaticItems - 1);
             pCon = 0;
 //          delete pCon;
 //          mpDepperDontuseme->RemoveConnector( pCon->GetStartId(), pCon->GetEndId());

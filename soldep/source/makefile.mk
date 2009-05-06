@@ -70,6 +70,7 @@ SHL1STDLIBS     = $(SVTOOLLIB)		\
                 $(CPPUHELPERLIB)	\
                 $(COMPHELPERLIB)	\
                 $(VCLLIB)			\
+                $(UCBHELPERLIB)	\
                 $(SOTLIB)			\
                 $(BTSTRPLIB)		\
                 $(TOOLSLIB) 		\
@@ -109,6 +110,7 @@ APP1STDLIBS= \
             $(SVTOOLLIB)		\
             $(CPPUHELPERLIB)	\
             $(COMPHELPERLIB)	\
+            $(UCBHELPERLIB)	\
             $(VCLLIB)			\
             $(SOTLIB)			\
             $(BTSTRPLIB)		\

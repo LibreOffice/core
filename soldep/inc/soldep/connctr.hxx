@@ -81,6 +81,7 @@ public:
     void    SetVisibility( BOOL visible ) { bVisible = visible; }
     void    UpdateVisibility();
     void    SetHideMode(BOOL bHide) { msbHideMode = bHide; };
+    void    DrawOutput( OutputDevice* pDevice, const Point& rOffset  );
 };
 
 DECLARE_LIST( ConnectorList, Connector* )

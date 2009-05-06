@@ -30,7 +30,8 @@
 
 // -----------------------------------------------------------------------
 #include "depapp.hxx"
-
+#include <ucbhelper/contentbroker.hxx>
+#include <ucbhelper/configurationkeys.hxx>
 
 void MyApp::Main()
 {
@@ -44,12 +45,12 @@ void MyApp::Main()
    // pToolBarFrame = new FloatingWindow( aMainWin, WB_STDWORK );
     //pToolBox = new ToolBox(pToolBarFrame,DtSodResId(TID_SOLDEP_MAIN));
 
-
     pSolDep = new SolDep( &aMainWin );
     pSolDep->Init();
     aMainWin.SetText( String::CreateFromAscii( SOLDEPL_NAME ));
-
-    aMainWin.Show();    Help aHelp;
+    pSolDep->Hide();
+    aMainWin.Show();
+    Help aHelp;
     SetHelp(&aHelp);
     aHelp.EnableContextHelp();
     aHelp.EnableQuickHelp();
@@ -125,15 +126,24 @@ void MyWin::Resize()
 
 SAL_IMPLEMENT_MAIN()
 {
-    Reference< XMultiServiceFactory > xMS;
+    //Reference< XMultiServiceFactory > xMS;
 
     // for this to work make sure an <appname>.ini file is available, you can just copy soffice.ini
     Reference< XComponentContext > xComponentContext = ::cppu::defaultBootstrap_InitialComponentContext();
-    xMS = cppu::createRegistryServiceFactory(
-                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "applicat.rdb" ) ), sal_True );
+
+    //xMS = cppu::createRegistryServiceFactory(
+    //              rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "applicat.rdb" ) ), sal_True );
+
+    Reference< XMultiServiceFactory > xMS( xComponentContext->getServiceManager(), UNO_QUERY);
 
     InitVCL( xMS );
     ::comphelper::setProcessServiceFactory(xMS);
+    com::sun::star::uno::Sequence< com::sun::star::uno::Any > aArgs(2);
+    aArgs[0] <<= rtl::OUString::createFromAscii( UCB_CONFIGURATION_KEY1_LOCAL );
+    aArgs[1] <<= rtl::OUString::createFromAscii( UCB_CONFIGURATION_KEY2_OFFICE );
+
+    ::ucbhelper::ContentBroker::initialize( xMS, aArgs );
+
     aMyApp.Main();
     DeInitVCL();
     return 0;
