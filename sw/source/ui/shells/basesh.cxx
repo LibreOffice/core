@@ -2438,7 +2438,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                                RES_BOX              , RES_SHADOW,
                                SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER,
                                0 );
-            AbstractSfxSingleTabDialog * pDlg = 0;
+            SfxAbstractDialog * pDlg = 0;
             // Tabellenzelle(n) selektiert?
             if ( rSh.IsTableMode() )
             {
@@ -2504,7 +2504,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
             SfxItemSet aSet( rSh.GetAttrPool(),
                              RES_BACKGROUND, RES_BACKGROUND );
 
-            AbstractSfxSingleTabDialog * pDlg = 0;
+            SfxAbstractDialog * pDlg = 0;
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
 
@@ -2515,7 +2515,9 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 //Hintergrundattribute der Tabelle holen und in den Set packen
                 SvxBrushItem aBrush(RES_BACKGROUND);
                 rSh.GetBoxBackground( aBrush );
-                pDlg = pFact->CreateSfxSingleTabDialog( pMDI, aSet, RC_SWDLG_BACKGROUND );
+                pDlg = pFact->CreateSfxDialog( pMDI, aSet,
+                    rView.GetViewFrame()->GetFrame()->GetFrameInterface(),
+                    RC_SWDLG_BACKGROUND );
                 DBG_ASSERT(pDlg, "Dialogdiet fail!");
                 aSet.Put( aBrush );
                 if ( pDlg->Execute() == RET_OK )
@@ -2532,7 +2534,9 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
 
                 rSh.GetFlyFrmAttr( aSet );
 
-                pDlg = pFact->CreateSfxSingleTabDialog( pMDI, aSet, RC_SWDLG_BACKGROUND );
+                pDlg = pFact->CreateSfxDialog( pMDI, aSet,
+                    rView.GetViewFrame()->GetFrame()->GetFrameInterface(),
+                    RC_SWDLG_BACKGROUND );
                 DBG_ASSERT(pDlg, "Dialogdiet fail!");
                 if ( pDlg->Execute() == RET_OK )
                 {
@@ -2545,7 +2549,9 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 // Umrandungsattribute ganz normal ueber Shell setzen
                 rSh.GetCurAttr( aSet );
 
-                pDlg = pFact->CreateSfxSingleTabDialog( pMDI, aSet, RC_SWDLG_BACKGROUND );
+                pDlg = pFact->CreateSfxDialog( pMDI, aSet,
+                    rView.GetViewFrame()->GetFrame()->GetFrameInterface(),
+                    RC_SWDLG_BACKGROUND );
                 DBG_ASSERT(pDlg, "Dialogdiet fail!");
                 if ( pDlg->Execute() == RET_OK )
                 {

@@ -188,7 +188,7 @@ interface _Annotation
         ExecMethod = Exec ;
     ]
 
-    FN_INSERT_SYMBOL // api:
+    SID_CHARMAP // api:
     [
         ExecMethod = Exec ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";

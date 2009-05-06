@@ -399,7 +399,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             break;
         }
 
-        case FN_INSERT_SYMBOL:
+        case SID_CHARMAP:
         {
             InsertSymbol( rReq );
         }
@@ -1378,7 +1378,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                     rSh.IsNumRuleStart()));
         break;
         case FN_EDIT_FORMULA:
-        case FN_INSERT_SYMBOL:
+        case SID_CHARMAP:
             {
                 const int nType = rSh.GetSelectionType();
                 if (!(nType & nsSelectionType::SEL_TXT) &&

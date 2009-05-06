@@ -38,7 +38,6 @@
 #include <svx/langitem.hxx>
 #include <svx/svdview.hxx>
 #include <vcl/msgbox.hxx>
-#include <svx/charmap.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objface.hxx>
 #include <svx/svdotext.hxx>
@@ -526,7 +525,7 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
             rReq.Done();
         }
         break;
-        case FN_INSERT_SYMBOL:
+        case SID_CHARMAP:
     {  // Sonderzeichen einfuegen
             InsertSymbol(rReq);
             break;
@@ -776,7 +775,7 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
     const SfxItemSet *pArgs = rReq.GetArgs();
     const SfxPoolItem* pItem = 0;
     if( pArgs )
-        pArgs->GetItemState(GetPool().GetWhich(FN_INSERT_SYMBOL), FALSE, &pItem);
+        pArgs->GetItemState(GetPool().GetWhich(SID_CHARMAP), FALSE, &pItem);
 
     String sSym;
     String sFontName;
@@ -784,7 +783,7 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
     {
         sSym = ((const SfxStringItem*)pItem)->GetValue();
         const SfxPoolItem* pFtItem = NULL;
-        pArgs->GetItemState( GetPool().GetWhich(FN_PARAM_1), FALSE, &pFtItem);
+        pArgs->GetItemState( GetPool().GetWhich(SID_ATTR_SPECIALCHAR), FALSE, &pFtItem);
         const SfxStringItem* pFontItem = PTR_CAST( SfxStringItem, pFtItem );
         if ( pFontItem )
             sFontName = pFontItem->GetValue();
@@ -803,35 +802,48 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
             aSetDlgFont = (SvxFontItem&)aSet.Get( GetWhichOfScript(
                         SID_ATTR_CHAR_FONT,
                         GetI18NScriptTypeOfLanguage( (USHORT)GetAppLanguage() ) ));
+        if (!sFontName.Len())
+            sFontName = aSetDlgFont.GetFamilyName();
     }
-
 
     Font aFont(sFontName, Size(1,1));
     if(!sSym.Len())
     {
-        SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        DBG_ASSERT(pFact, "Dialogdiet fail!");
-        AbstractSvxCharacterMap* pDlg = pFact->CreateSvxCharacterMap( NULL, RID_SVXDLG_CHARMAP, FALSE );
-        DBG_ASSERT(pDlg, "Dialogdiet fail!");
+        SfxAllItemSet aAllSet( GetPool() );
+        aAllSet.Put( SfxBoolItem( FN_PARAM_1, FALSE ) );
 
-        Font aDlgFont( pDlg->GetCharFont() );
-        SwViewOption aOpt(*GetShell().GetViewOptions());
+        SwViewOption aOpt(*rView.GetWrtShell().GetViewOptions());
         String sSymbolFont = aOpt.GetSymbolFont();
-        if(sSymbolFont.Len())
-            aDlgFont.SetName(sSymbolFont);
+        if( sSymbolFont.Len() )
+            aAllSet.Put( SfxStringItem( SID_FONT_NAME, sSymbolFont ) );
         else
-            aDlgFont.SetName( aSetDlgFont.GetFamilyName() );
+            aAllSet.Put( SfxStringItem( SID_FONT_NAME, aSetDlgFont.GetFamilyName() ) );
 
         // Wenn Zeichen selektiert ist kann es angezeigt werden
-        pDlg->SetFont( aDlgFont );
+        SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+        SfxAbstractDialog* pDlg = pFact->CreateSfxDialog( rView.GetWindow(), aAllSet,
+            rView.GetViewFrame()->GetFrame()->GetFrameInterface(), RID_SVXDLG_CHARMAP );
         USHORT nResult = pDlg->Execute();
         if( nResult == RET_OK )
         {
-            aFont = pDlg->GetCharFont();
-            sSym  = pDlg->GetCharacters();
-            aOpt.SetSymbolFont(aFont.GetName());
-            SW_MOD()->ApplyUsrPref(aOpt, &GetView());
+            SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pCItem, SfxStringItem, SID_CHARMAP, FALSE );
+            SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pFontItem, SvxFontItem, SID_ATTR_CHAR_FONT, FALSE );
+            if ( pFontItem )
+            {
+                aFont.SetName( pFontItem->GetFamilyName() );
+                aFont.SetStyleName( pFontItem->GetStyleName() );
+                aFont.SetCharSet( pFontItem->GetCharSet() );
+                aFont.SetPitch( pFontItem->GetPitch() );
+            }
+
+            if ( pCItem )
+            {
+                sSym  = pCItem->GetValue();
+                aOpt.SetSymbolFont(aFont.GetName());
+                SW_MOD()->ApplyUsrPref(aOpt, &rView);
+            }
         }
+
         delete( pDlg );
     }
 
@@ -881,9 +893,9 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
         pOutliner->SetUpdateMode(TRUE);
         pOLV->ShowCursor();
 
-        rReq.AppendItem( SfxStringItem( GetPool().GetWhich(FN_INSERT_SYMBOL), sSym ) );
+        rReq.AppendItem( SfxStringItem( GetPool().GetWhich(SID_CHARMAP), sSym ) );
         if(aFont.GetName().Len())
-            rReq.AppendItem( SfxStringItem( FN_PARAM_1, aFont.GetName() ) );
+            rReq.AppendItem( SfxStringItem( SID_ATTR_SPECIALCHAR, aFont.GetName() ) );
         rReq.Done();
     }
 }

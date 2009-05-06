@@ -717,7 +717,6 @@
 #include "svx/acorrcfg.hxx"
 #include "svx/anchorid.hxx"
 #include "svx/asiancfg.hxx"
-#include "svx/charmap.hxx"
 #include "svx/checklbx.hxx"
 #include "svx/clipboardctl.hxx"
 #include "svx/clipfmtitem.hxx"

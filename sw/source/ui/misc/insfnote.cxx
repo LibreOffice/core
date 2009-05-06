@@ -35,39 +35,25 @@
 #undef SW_DLLIMPLEMENTATION
 #endif
 
-
 #include <hintids.hxx>
+#include <svtools/eitem.hxx>
 #include <svtools/stritem.hxx>
 #include <sfx2/request.hxx>
-#include <svx/charmap.hxx>
 #include <svx/fontitem.hxx>
 #include <vcl/msgbox.hxx>
-
-
 #include <fmtftn.hxx>
 #include <swundo.hxx>
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
 #include <wrtsh.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
-#ifndef _BASESH_HXX
 #include <basesh.hxx>
-#endif
 #include <insfnote.hxx>
 #include <crsskip.hxx>
-
-#ifndef _MISC_HRC
 #include <misc.hrc>
-#endif
-#ifndef _INSFNOTE_HRC
 #include <insfnote.hrc>
-#endif
-
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
+#include <sfx2/viewfrm.hxx>
 
 static BOOL bFootnote = TRUE;
 
@@ -184,26 +170,35 @@ IMPL_LINK( SwInsFootNoteDlg, NumberExtCharHdl, Button *, EMPTYARG )
     rSh.GetCurAttr( aSet );
     const SvxFontItem &rFont = (SvxFontItem &) aSet.Get( RES_CHRATR_FONT );
 
+    SfxAllItemSet aAllSet( rSh.GetAttrPool() );
+    aAllSet.Put( SfxBoolItem( FN_PARAM_1, FALSE ) );
+    aAllSet.Put( rFont );
+
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "Dialogdiet fail!");
-    AbstractSvxCharacterMap* pDlg = pFact->CreateSvxCharacterMap( this, RID_SVXDLG_CHARMAP, FALSE );
-    DBG_ASSERT(pDlg, "Dialogdiet fail!");
-
-    Font aDlgFont( pDlg->GetCharFont() );
-    aDlgFont.SetName( rFont.GetFamilyName() );
-    aDlgFont.SetCharSet( rFont.GetCharSet() );
-
-    pDlg->SetCharFont( aDlgFont );
+    SfxAbstractDialog* pDlg = pFact->CreateSfxDialog( this, aAllSet,
+        rSh.GetView().GetViewFrame()->GetFrame()->GetFrameInterface(), RID_SVXDLG_CHARMAP );
     if (RET_OK == pDlg->Execute())
     {
-        String sExtChars(pDlg->GetCharacters());
+        SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pItem, SfxStringItem, SID_CHARMAP, FALSE );
+        SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pFontItem, SvxFontItem, SID_ATTR_CHAR_FONT, FALSE );
+        if ( pItem )
+        {
+            String sExtChars(pItem->GetValue());
+            aNumberCharEdit.SetText( sExtChars );
 
-        aFontName = pDlg->GetCharFont().GetName();
-        eCharSet  = pDlg->GetCharFont().GetCharSet();
-        aNumberCharEdit.SetText( sExtChars );
-        aNumberCharEdit.SetFont( pDlg->GetCharFont() );
-        bExtCharAvailable = TRUE;
-        aOkBtn.Enable(0 != aNumberCharEdit.GetText().Len());
+            if ( pFontItem )
+            {
+                aFontName = pFontItem->GetFamilyName();
+                eCharSet  = pFontItem->GetCharSet();
+                Font aFont( aFontName, pFontItem->GetStyleName(), aNumberCharEdit.GetFont().GetSize() );
+                aFont.SetCharSet( pFontItem->GetCharSet() );
+                aFont.SetPitch( pFontItem->GetPitch() );
+                aNumberCharEdit.SetFont( aFont  );
+            }
+
+            bExtCharAvailable = TRUE;
+            aOkBtn.Enable(0 != aNumberCharEdit.GetText().Len());
+        }
     }
     delete pDlg;
 
