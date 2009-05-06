@@ -1870,8 +1870,16 @@ namespace cppcanvas
                                         ::vcl::unotools::xBitmapFromBitmapEx(
                                             rCanvas->getUNOCanvas()->getDevice(),
                                             aBmpEx );
-                                    aTexture.RepeatModeX = rendering::TexturingMode::REPEAT;
-                                    aTexture.RepeatModeY = rendering::TexturingMode::REPEAT;
+                                    if( aFill.isTiling() )
+                                    {
+                                        aTexture.RepeatModeX = rendering::TexturingMode::REPEAT;
+                                        aTexture.RepeatModeY = rendering::TexturingMode::REPEAT;
+                                    }
+                                    else
+                                    {
+                                        aTexture.RepeatModeX = rendering::TexturingMode::CLAMP;
+                                        aTexture.RepeatModeY = rendering::TexturingMode::CLAMP;
+                                    }
 
                                     ::PolyPolygon aPath;
                                     aFill.getPath( aPath );
