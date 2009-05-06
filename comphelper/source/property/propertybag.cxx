@@ -168,11 +168,10 @@ namespace comphelper
             // will throw an UnknownPropertyException if necessary
         if ( ( rProp.Attributes & PropertyAttribute::REMOVEABLE ) == 0 )
             throw NotRemoveableException( ::rtl::OUString(), NULL );
-        const sal_Int32 nHandle = rProp.Handle;
 
-        revokeProperty( nHandle );
+        revokeProperty( rProp.Handle );
 
-        m_pImpl->aDefaults.erase( nHandle );
+        m_pImpl->aDefaults.erase( rProp.Handle );
     }
 
     //--------------------------------------------------------------------

@@ -76,12 +76,12 @@ namespace
     // comparing two property descriptions (by name)
     struct PropertyDescriptionNameMatch : public ::std::unary_function< PropertyDescription, bool >
     {
-        ::rtl::OUString m_rCompare;
+        const ::rtl::OUString& m_rCompare;
         PropertyDescriptionNameMatch( const ::rtl::OUString& _rCompare ) : m_rCompare( _rCompare ) { }
 
         bool operator() (const PropertyDescription& x ) const
         {
-            return x.aProperty.Name.equals(m_rCompare);
+            return x.aProperty.Name == m_rCompare;
         }
     };
 }
