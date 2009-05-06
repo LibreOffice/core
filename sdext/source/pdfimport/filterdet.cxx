@@ -183,7 +183,7 @@ namespace {
             return aMethods;
         }
     };
-
+#if 0 // code currently unused (see below)
     sal_Int32 queryDocumentTypeDialog( const uno::Reference<uno::XComponentContext>& xContext,
                                        const rtl::OUString&                          rFilename )
     {
@@ -208,6 +208,7 @@ namespace {
         else
             return xHandler->getSelectedItem();
     }
+#endif
 }
 
 class FileEmitContext : public pdfparse::EmitContext
