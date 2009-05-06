@@ -51,7 +51,7 @@ public:
     template <typename FuncT>
         Delay( FuncT const& func,
                double nTimeout
-#if OSL_DEBUG_LEVEL > 1 && defined (SLIDESHOW_ADD_DESCRIPTIONS_TO_EVENTS)
+#if OSL_DEBUG_LEVEL > 1
             ,  const ::rtl::OUString& rsDescription
             ) : Event(rsDescription),
 #else
@@ -61,7 +61,7 @@ public:
 
     Delay( const boost::function0<void>& func,
            double nTimeout
-#if OSL_DEBUG_LEVEL > 1 && defined (SLIDESHOW_ADD_DESCRIPTIONS_TO_EVENTS)
+#if OSL_DEBUG_LEVEL > 1
         , const ::rtl::OUString& rsDescription
         ) : Event(rsDescription),
 #else
@@ -127,12 +127,8 @@ public:
     template <typename FuncT>
     Delay_( FuncT const& func, double nTimeout,
         char const* from_function, char const* from_file, int from_line,
-        const ::rtl::OUString& rsDescription )
-        : Delay(func, nTimeout
-#if defined (SLIDESHOW_ADD_DESCRIPTIONS_TO_EVENTS)
-            , rsDescription
-#endif
-            ),
+        const ::rtl::OUString& rsDescription)
+        : Delay(func, nTimeout, rsDescription),
           FROM_FUNCTION(from_function),
           FROM_FILE(from_file), FROM_LINE(from_line) {}
 
@@ -145,13 +141,11 @@ template <typename FuncT>
 inline EventSharedPtr makeDelay_(
     FuncT const& func, double nTimeout,
     char const* from_function, char const* from_file, int from_line,
-        const ::rtl::OUString& rsDescription )
+    const ::rtl::OUString& rsDescription)
 {
     return EventSharedPtr( new Delay_( func, nTimeout,
-            from_function, from_file, from_line, rsDescription ) );
+            from_function, from_file, from_line, rsDescription) );
 }
-
-#if defined (SLIDESHOW_ADD_DESCRIPTIONS_TO_EVENTS)
 
 #define makeDelay(f, t, d) makeDelay_(f, t,                   \
         BOOST_CURRENT_FUNCTION, __FILE__, __LINE__,           \
@@ -160,17 +154,7 @@ inline EventSharedPtr makeDelay_(
         BOOST_CURRENT_FUNCTION, __FILE__, __LINE__,         \
         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(d)))
 
-#else
-
-#define makeDelay(f, t, d) makeDelay_(f, t,         \
-        BOOST_CURRENT_FUNCTION, __FILE__, __LINE__)
-#define makeEvent(f, d) makeDelay_(f, 0.0,          \
-        BOOST_CURRENT_FUNCTION, __FILE__, __LINE__)
-
-#endif
-
-
-#endif // OSL_DEBUG_LEVEL < 1
+#endif // OSL_DEBUG_LEVEL <= 1
 
 } // namespace internal
 } // namespace presentation

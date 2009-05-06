@@ -31,6 +31,9 @@
 #include "precompiled_slideshow.hxx"
 
 #include "debug.hxx"
+
+#if OSL_DEBUG_LEVEL > 1
+
 #include "animationnodes/basecontainernode.hxx"
 #include "animationnodes/paralleltimecontainer.hxx"
 #include "animationnodes/sequentialtimecontainer.hxx"
@@ -52,9 +55,8 @@
 using ::rtl::OUString;
 using namespace ::com::sun::star;
 
-namespace slideshow { namespace internal {
 
-#if OSL_DEBUG_LEVEL > 1
+namespace slideshow { namespace internal {
 
 namespace {
 
@@ -221,14 +223,10 @@ void Debug_ShowNodeTree (const AnimationNodeSharedPtr& rpNode)
     DebugShowState(DebugGetTreeRoot(::boost::dynamic_pointer_cast<BaseNode>(rpNode)));
 }
 
-#endif //  OSL_DEBUG_LEVEL > 1
-
 
 
 
 //----- Tracing ---------------------------------------------------------------
-
-#if OSL_DEBUG_LEVEL > 1
 
 extern "C" {
 
@@ -323,6 +321,7 @@ DebugTraceScope::~DebugTraceScope (void)
     delete [] msMessage;
 }
 
-#endif // OSL_DEBUG_LEVEL > 1
 
 } }
+
+#endif // OSL_DEBUG_LEVEL > 1

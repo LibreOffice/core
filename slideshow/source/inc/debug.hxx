@@ -31,22 +31,16 @@
 #ifndef INCLUDED_SLIDESHOW_DEBUG_HXX
 #define INCLUDED_SLIDESHOW_DEBUG_HXX
 
+#include <osl/diagnose.h>
+
+#if OSL_DEBUG_LEVEL > 1
+
 #include "animationnode.hxx"
+
 
 namespace slideshow { namespace internal {
 
-#if OSL_DEBUG_LEVEL > 1
 void Debug_ShowNodeTree (const AnimationNodeSharedPtr& rpNode);
-#endif
-
-// Uncomment the following line to define
-// SLIDESHOW_ADD_DESCRIPTIONS_TO_EVENTS
-// in order to add descriptions to Event objects that help debugging event
-// base problems.
-#define SLIDESHOW_ADD_DESCRIPTIONS_TO_EVENTS
-
-
-#if OSL_DEBUG_LEVEL > 1
 
 // Change this to a valid filename.  The file is created anew with every
 // office start (and execution of at least one TRACE... command.)
@@ -66,6 +60,9 @@ void SAL_CALL DebugTraceBegin (const sal_Char* sFormat, ...);
 void SAL_CALL DebugTraceEnd (const sal_Char* sFormat, ...);
 void SAL_CALL DebugTraceMessage (const sal_Char* sFormat, ...);
 
+} } // end of namespace ::slideshow::internal
+
+
 #define TRACE_BEGIN DebugTraceBegin
 #define TRACE_END   DebugTraceEnd
 #define TRACE       DebugTraceMessage
@@ -79,9 +76,5 @@ void SAL_CALL DebugTraceMessage (const sal_Char* sFormat, ...);
 #define TRACE_SCOPE
 
 #endif // OSL_DEBUG_LEVEL > 1
-
-
-} }
-
 
 #endif

@@ -44,7 +44,7 @@ namespace internal {
 class Event : public Disposable
 {
 public:
-#if OSL_DEBUG_LEVEL > 1 && defined (SLIDESHOW_ADD_DESCRIPTIONS_TO_EVENTS)
+#if OSL_DEBUG_LEVEL > 1
     Event (const ::rtl::OUString& rsDescription) : msDescription(rsDescription) {};
 #endif
 
@@ -78,7 +78,7 @@ public:
     */
     virtual double getActivationTime( double nCurrentTime ) const = 0;
 
-#if OSL_DEBUG_LEVEL > 1 && defined (SLIDESHOW_ADD_DESCRIPTIONS_TO_EVENTS)
+#if OSL_DEBUG_LEVEL > 1
     ::rtl::OUString GetDescription (void) const { return msDescription; }
 
 private:
