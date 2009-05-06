@@ -64,6 +64,7 @@
 #include <svx/unoapi.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/msdffimp.hxx>
+#include <svx/svdoashp.hxx>
 #include <svx/svxerr.hxx>
 #include <svx/mscodec.hxx>
 #include <svx/svdmodel.hxx>
@@ -275,7 +276,6 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
     {
         SvxMSDffImportData& rImportData = *(SvxMSDffImportData*)pData;
         SvxMSDffImportRec* pImpRec = new SvxMSDffImportRec;
-        SvxMSDffImportRec* pTextImpRec = pImpRec;
 
         // fill Import Record with data
         pImpRec->nShapeId   = rObjData.nShapeId;
@@ -333,8 +333,6 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
         }
 
         //  Textrahmen, auch Title oder Outline
-        SdrObject*  pOrgObj  = pObj;
-        SdrRectObj* pTextObj = 0;
         UINT32 nTextId = GetPropertyValue( DFF_Prop_lTxid, 0 );
         if( nTextId )
         {
@@ -359,12 +357,6 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
                         && ShapeHasText(pImpRec->nShapeId, rObjData.rSpHd.GetRecBegFilePos() )
                     )
                 );
-            }
-
-            if (bIsSimpleDrawingTextBox)
-            {
-                SdrObject::Free( pObj );
-                pObj = pOrgObj = 0;
             }
 
             // Distance of Textbox to it's surrounding Autoshape
@@ -450,8 +442,11 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
                 }
             }
 
-            pTextObj = new SdrRectObj(OBJ_TEXT, rTextRect);
-            pTextImpRec = new SvxMSDffImportRec(*pImpRec);
+            if (bIsSimpleDrawingTextBox)
+            {
+                SdrObject::Free( pObj );
+                pObj = new SdrRectObj(OBJ_TEXT, rTextRect);
+            }
 
             // Die vertikalen Absatzeinrueckungen sind im BoundRect mit drin,
             // hier rausrechnen
@@ -470,12 +465,12 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
                 if( GetShapeInfos()->Seek_Entry( &aTmpRec, &nFound ) )
                 {
                     SvxMSDffShapeInfo& rInfo = *GetShapeInfos()->GetObject(nFound);
-                    pTextImpRec->bReplaceByFly   = rInfo.bReplaceByFly;
-                    pTextImpRec->bLastBoxInChain = rInfo.bLastBoxInChain;
+                    pImpRec->bReplaceByFly   = rInfo.bReplaceByFly;
+                    pImpRec->bLastBoxInChain = rInfo.bLastBoxInChain;
                 }
             }
 
-            if( !pObj )
+            if( bIsSimpleDrawingTextBox )
                 ApplyAttributes( rSt, aSet, rObjData.eShapeType, rObjData.nSpFlags );
 
             bool bFitText = false;
@@ -499,7 +494,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
             {
                 case mso_wrapNone :
                     aSet.Put( SdrTextAutoGrowWidthItem( TRUE ) );
-                    pTextImpRec->bAutoWidth = true;
+                    pImpRec->bAutoWidth = true;
                 break;
                 case mso_wrapByPoints :
                     aSet.Put( SdrTextContourFrameItem( TRUE ) );
@@ -513,138 +508,123 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
             aSet.Put( SdrTextRightDistItem( nTextRight ) );
             aSet.Put( SdrTextUpperDistItem( nTextTop ) );
             aSet.Put( SdrTextLowerDistItem( nTextBottom ) );
-            pTextImpRec->nDxTextLeft    = nTextLeft;
-            pTextImpRec->nDyTextTop     = nTextTop;
-            pTextImpRec->nDxTextRight   = nTextRight;
-            pTextImpRec->nDyTextBottom  = nTextBottom;
+            pImpRec->nDxTextLeft    = nTextLeft;
+            pImpRec->nDyTextTop     = nTextTop;
+            pImpRec->nDxTextRight   = nTextRight;
+            pImpRec->nDyTextBottom  = nTextBottom;
 
-            // Textverankerung lesen
-            if ( IsProperty( DFF_Prop_anchorText ) )
+            // --> SJ 2009-03-06 : taking the correct default (which is mso_anchorTop)
+            MSO_Anchor eTextAnchor =
+                (MSO_Anchor)GetPropertyValue( DFF_Prop_anchorText, mso_anchorTop );
+
+            SdrTextVertAdjust eTVA = bVerticalText
+                                     ? SDRTEXTVERTADJUST_BLOCK
+                                     : SDRTEXTVERTADJUST_CENTER;
+            SdrTextHorzAdjust eTHA = bVerticalText
+                                     ? SDRTEXTHORZADJUST_CENTER
+                                     : SDRTEXTHORZADJUST_BLOCK;
+
+            switch( eTextAnchor )
             {
-                MSO_Anchor eTextAnchor =
-                    (MSO_Anchor)GetPropertyValue( DFF_Prop_anchorText );
-
-                // --> OD 2005-02-17 #i42783#, #b6227886#
-                // consider vertical text and use correct defaults
-                SdrTextVertAdjust eTVA = bVerticalText
-                                         ? SDRTEXTVERTADJUST_BLOCK
-                                         : SDRTEXTVERTADJUST_CENTER;
-                SdrTextHorzAdjust eTHA = bVerticalText
-                                         ? SDRTEXTHORZADJUST_CENTER
-                                         : SDRTEXTHORZADJUST_BLOCK;
-
-                switch( eTextAnchor )
+                case mso_anchorTop:
                 {
-                    case mso_anchorTop:
-                    {
-                        if ( bVerticalText )
-                            eTHA = SDRTEXTHORZADJUST_RIGHT;
-                        else
-                            eTVA = SDRTEXTVERTADJUST_TOP;
-                    }
-                    break;
-                    case mso_anchorTopCentered:
-                    {
-                        if ( bVerticalText )
-                            eTHA = SDRTEXTHORZADJUST_RIGHT;
-                        else
-                            eTVA = SDRTEXTVERTADJUST_TOP;
-                    }
-                    break;
-                    case mso_anchorMiddle:
-                    break;
-                    case mso_anchorMiddleCentered:
-                    break;
-                    case mso_anchorBottom:
-                    {
-                        if ( bVerticalText )
-                            eTHA = SDRTEXTHORZADJUST_LEFT;
-                        else
-                            eTVA = SDRTEXTVERTADJUST_BOTTOM;
-                    }
-                    break;
-                    case mso_anchorBottomCentered:
-                    {
-                        if ( bVerticalText )
-                            eTHA = SDRTEXTHORZADJUST_LEFT;
-                        else
-                            eTVA = SDRTEXTVERTADJUST_BOTTOM;
-                    }
-                    break;
-    /*
-                    case mso_anchorTopBaseline:
-                    case mso_anchorBottomBaseline:
-                    case mso_anchorTopCenteredBaseline:
-                    case mso_anchorBottomCenteredBaseline:
-                    break;
-    */
-                    default:
-                        ;
-                }
-                // <--
-                // Einsetzen
-                aSet.Put( SdrTextVertAdjustItem( eTVA ) );
-                aSet.Put( SdrTextHorzAdjustItem( eTHA ) );
-            }
-            // --> OD 2005-02-17 #i42783#, #b6227886# - apply own default values
-            else
-            {
-                if ( bVerticalText )
-                {
-                    aSet.Put( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_BLOCK ) );
-                    aSet.Put( SdrTextHorzAdjustItem( SDRTEXTHORZADJUST_CENTER ) );
-                }
-                else
-                {
-                    aSet.Put( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_CENTER ) );
-                    aSet.Put( SdrTextHorzAdjustItem( SDRTEXTHORZADJUST_BLOCK ) );
-                }
-            }
-            // <--
-
-            pTextObj->SetMergedItemSet(aSet);
-            pTextObj->SetModel(pSdrModel);
-
-            if (bVerticalText)
-                pTextObj->SetVerticalWriting(sal_True);
-
-            if (nTextRotationAngle)
-            {
-                long nMinWH = rTextRect.GetWidth() < rTextRect.GetHeight() ?
-                    rTextRect.GetWidth() : rTextRect.GetHeight();
-                nMinWH /= 2;
-                Point aPivot(rTextRect.TopLeft());
-                aPivot.X() += nMinWH;
-                aPivot.Y() += nMinWH;
-                double a = nTextRotationAngle * nPi180;
-                pTextObj->NbcRotate(aPivot, nTextRotationAngle, sin(a), cos(a));
-            }
-
-            // rotate text with shape ?
-            if ( mnFix16Angle )
-            {
-                double a = mnFix16Angle * nPi180;
-                pTextObj->NbcRotate( rObjData.rBoundRect.Center(), mnFix16Angle,
-                    sin( a ), cos( a ) );
-            }
-
-            if( !pObj )
-            {
-                pObj = pTextObj;
-            }
-            else
-            {
-                if( pTextObj != pObj )
-                {
-                    SdrObject* pGroup = new SdrObjGroup;
-                    pGroup->GetSubList()->NbcInsertObject( pObj );
-                    pGroup->GetSubList()->NbcInsertObject( pTextObj );
-                    if (pOrgObj == pObj)
-                        pOrgObj = pGroup;
+                    if ( bVerticalText )
+                        eTHA = SDRTEXTHORZADJUST_RIGHT;
                     else
-                        pOrgObj = pObj;
-                    pObj = pGroup;
+                        eTVA = SDRTEXTVERTADJUST_TOP;
                 }
+                break;
+                case mso_anchorTopCentered:
+                {
+                    if ( bVerticalText )
+                        eTHA = SDRTEXTHORZADJUST_RIGHT;
+                    else
+                        eTVA = SDRTEXTVERTADJUST_TOP;
+                }
+                break;
+                case mso_anchorMiddle:
+                break;
+                case mso_anchorMiddleCentered:
+                break;
+                case mso_anchorBottom:
+                {
+                    if ( bVerticalText )
+                        eTHA = SDRTEXTHORZADJUST_LEFT;
+                    else
+                        eTVA = SDRTEXTVERTADJUST_BOTTOM;
+                }
+                break;
+                case mso_anchorBottomCentered:
+                {
+                    if ( bVerticalText )
+                        eTHA = SDRTEXTHORZADJUST_LEFT;
+                    else
+                        eTVA = SDRTEXTVERTADJUST_BOTTOM;
+                }
+                break;
+/*
+                case mso_anchorTopBaseline:
+                case mso_anchorBottomBaseline:
+                case mso_anchorTopCenteredBaseline:
+                case mso_anchorBottomCenteredBaseline:
+                break;
+*/
+                default:
+                    ;
+            }
+
+            aSet.Put( SdrTextVertAdjustItem( eTVA ) );
+            aSet.Put( SdrTextHorzAdjustItem( eTHA ) );
+
+            pObj->SetMergedItemSet(aSet);
+            pObj->SetModel(pSdrModel);
+
+            if (bVerticalText && dynamic_cast< SdrTextObj* >( pObj ) )
+                dynamic_cast< SdrTextObj* >( pObj )->SetVerticalWriting(sal_True);
+
+            if ( bIsSimpleDrawingTextBox )
+            {
+                if ( nTextRotationAngle )
+                {
+                    long nMinWH = rTextRect.GetWidth() < rTextRect.GetHeight() ?
+                        rTextRect.GetWidth() : rTextRect.GetHeight();
+                    nMinWH /= 2;
+                    Point aPivot(rTextRect.TopLeft());
+                    aPivot.X() += nMinWH;
+                    aPivot.Y() += nMinWH;
+                    double a = nTextRotationAngle * nPi180;
+                    pObj->NbcRotate(aPivot, nTextRotationAngle, sin(a), cos(a));
+                }
+            }
+
+            if ( ( mnFix16Angle || nTextRotationAngle ) && dynamic_cast< SdrObjCustomShape* >( pObj ) )
+            {
+                SdrObjCustomShape* pCustomShape = dynamic_cast< SdrObjCustomShape* >( pObj );
+
+                double fExtraTextRotation = 0.0;
+                if ( mnFix16Angle && !( GetPropertyValue( DFF_Prop_FitTextToShape ) & 4 ) )
+                {   // text is already rotated, we have to take back the object rotation if DFF_Prop_RotateText is false
+                    fExtraTextRotation = -mnFix16Angle;
+                }
+                fExtraTextRotation += nTextRotationAngle;
+                if ( !::basegfx::fTools::equalZero( fExtraTextRotation ) )
+                {
+                    fExtraTextRotation /= 100.0;
+                    SdrCustomShapeGeometryItem aGeometryItem( (SdrCustomShapeGeometryItem&)pCustomShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
+                    const rtl::OUString sTextRotateAngle( RTL_CONSTASCII_USTRINGPARAM ( "TextRotateAngle" ) );
+                    com::sun::star::beans::PropertyValue aPropVal;
+                    aPropVal.Name = sTextRotateAngle;
+                    aPropVal.Value <<= fExtraTextRotation;
+                    aGeometryItem.SetPropertyValue( aPropVal );
+                    pCustomShape->SetMergedItem( aGeometryItem );
+                }
+            }
+            else if ( mnFix16Angle )
+            {
+                // rotate text with shape ?
+                double a = mnFix16Angle * nPi180;
+                pObj->NbcRotate( rObjData.rBoundRect.Center(), mnFix16Angle,
+                    sin( a ), cos( a ) );
             }
         }
         else if( !pObj )
@@ -653,7 +633,6 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
             // this is OK for Draw but not for Calc and Writer
             // cause here these objects have a default border
             pObj = new SdrRectObj(rTextRect);
-            pOrgObj = pObj;
             pObj->SetModel( pSdrModel );
             SfxItemSet aSet( pSdrModel->GetItemPool() );
             ApplyAttributes( rSt, aSet, rObjData.eShapeType, rObjData.nSpFlags );
@@ -674,35 +653,32 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
             pImpRec->bDrawHell = FALSE;
         if (GetPropertyValue(DFF_Prop_fPrint) & 0x02)
             pImpRec->bHidden = TRUE;
-        pTextImpRec->bDrawHell  = pImpRec->bDrawHell;
-        pTextImpRec->bHidden = pImpRec->bHidden;
         pImpRec->nNextShapeId   = GetPropertyValue( DFF_Prop_hspNext, 0 );
-        pTextImpRec->nNextShapeId=pImpRec->nNextShapeId;
 
         if ( nTextId )
         {
-            pTextImpRec->aTextId.nTxBxS = (UINT16)( nTextId >> 16 );
-            pTextImpRec->aTextId.nSequence = (UINT16)nTextId;
+            pImpRec->aTextId.nTxBxS = (UINT16)( nTextId >> 16 );
+            pImpRec->aTextId.nSequence = (UINT16)nTextId;
         }
 
-        pTextImpRec->nDxWrapDistLeft = GetPropertyValue(
+        pImpRec->nDxWrapDistLeft = GetPropertyValue(
                                     DFF_Prop_dxWrapDistLeft, 114935L ) / 635L;
-        pTextImpRec->nDyWrapDistTop = GetPropertyValue(
+        pImpRec->nDyWrapDistTop = GetPropertyValue(
                                     DFF_Prop_dyWrapDistTop, 0 ) / 635L;
-        pTextImpRec->nDxWrapDistRight = GetPropertyValue(
+        pImpRec->nDxWrapDistRight = GetPropertyValue(
                                     DFF_Prop_dxWrapDistRight, 114935L ) / 635L;
-        pTextImpRec->nDyWrapDistBottom = GetPropertyValue(
+        pImpRec->nDyWrapDistBottom = GetPropertyValue(
                                     DFF_Prop_dyWrapDistBottom, 0 ) / 635L;
         // 16.16 fraction times total image width or height, as appropriate.
 
         if (SeekToContent(DFF_Prop_pWrapPolygonVertices, rSt))
         {
-            delete pTextImpRec->pWrapPolygon;
+            delete pImpRec->pWrapPolygon;
             sal_uInt16 nNumElemVert, nNumElemMemVert, nElemSizeVert;
             rSt >> nNumElemVert >> nNumElemMemVert >> nElemSizeVert;
             if (nNumElemVert && ((nElemSizeVert == 8) || (nElemSizeVert == 4)))
             {
-                pTextImpRec->pWrapPolygon = new Polygon(nNumElemVert);
+                pImpRec->pWrapPolygon = new Polygon(nNumElemVert);
                 for (sal_uInt16 i = 0; i < nNumElemVert; ++i)
                 {
                     sal_Int32 nX, nY;
@@ -715,8 +691,8 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
                         nX = nSmallX;
                         nY = nSmallY;
                     }
-                    (*(pTextImpRec->pWrapPolygon))[i].X() = nX;
-                    (*(pTextImpRec->pWrapPolygon))[i].Y() = nY;
+                    (*(pImpRec->pWrapPolygon))[i].X() = nX;
+                    (*(pImpRec->pWrapPolygon))[i].Y() = nY;
                 }
             }
         }
@@ -743,26 +719,14 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
                                                     DFF_Prop_lineStyle,
                                                     mso_lineSimple )
                               : (MSO_LineStyle)USHRT_MAX;
-        pTextImpRec->eLineStyle = pImpRec->eLineStyle;
 
         pImpRec->nFlags = rObjData.nSpFlags;
 
         if( pImpRec->nShapeId )
         {
             // Import-Record-Liste ergaenzen
-            if( pOrgObj )
-            {
-                pImpRec->pObj = pOrgObj;
-                rImportData.aRecords.Insert( pImpRec );
-            }
-
-            if( pTextObj && (pOrgObj != pTextObj) )
-            {
-                // Modify ShapeId (must be unique)
-                pImpRec->nShapeId |= 0x8000000;
-                pTextImpRec->pObj = pTextObj;
-                rImportData.aRecords.Insert( pTextImpRec );
-            }
+            pImpRec->pObj = pObj;
+            rImportData.aRecords.Insert( pImpRec );
 
             // Eintrag in Z-Order-Liste um Zeiger auf dieses Objekt ergaenzen
             /*Only store objects which are not deep inside the tree*/
@@ -2442,10 +2406,12 @@ bool SwWW8ImplReader::AddTextToParagraph(const String& rAddString)
     const SwTxtNode* pNd = pPaM->GetCntntNode()->GetTxtNode();
     if (rAddString.Len())
     {
+/*
 #ifdef DEBUG
         ::std::clog << "<addTextToParagraph>" << dbg_out(rAddString)
         << "</addTextToParagraph>" << ::std::endl;
 #endif
+*/
         if ((pNd->GetTxt().Len() + rAddString.Len()) < STRING_MAXLEN -1)
         {
             rDoc.Insert (*pPaM, rAddString, true);
