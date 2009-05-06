@@ -48,9 +48,9 @@
 #include "sdresid.hxx"
 #include <svx/svdoutl.hxx>
 #include <vcl/msgbox.hxx>
-#include <svx/charmap.hxx>
 #include <sfx2/request.hxx>
 #include <svtools/ctloptions.hxx>
+#include <svtools/itempool.hxx>
 
 #ifdef IRIX
 #include <basic/sbx.hxx>
@@ -98,8 +98,8 @@ FunctionReference FuBullet::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd
 
 void FuBullet::DoExecute( SfxRequest& rReq )
 {
-    if( rReq.GetSlot() == SID_BULLET )
-        InsertSpecialCharacter();
+    if( rReq.GetSlot() == SID_CHARMAP )
+        InsertSpecialCharacter(rReq);
     else
     {
         sal_Unicode cMark = 0;
@@ -173,41 +173,78 @@ void FuBullet::InsertFormattingMark( sal_Unicode cMark )
     }
 }
 
-void FuBullet::InsertSpecialCharacter()
+void FuBullet::InsertSpecialCharacter( SfxRequest& rReq )
 {
-    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    AbstractSvxCharacterMap* pDlg = pFact ? pFact->CreateSvxCharacterMap( NULL,  RID_SVXDLG_CHARMAP, FALSE ) : 0;
+    const SfxItemSet *pArgs = rReq.GetArgs();
+    const SfxPoolItem* pItem = 0;
+    if( pArgs )
+        pArgs->GetItemState(mpDoc->GetPool().GetWhich(SID_CHARMAP), FALSE, &pItem);
 
-    if( !pDlg )
-        return;
-
-    SfxItemSet aFontAttr( mpDoc->GetPool() );
-    mpView->GetAttributes( aFontAttr );
-    const SvxFontItem* pFontItem = (const SvxFontItem*)aFontAttr.GetItem( SID_ATTR_CHAR_FONT );
-    if( pFontItem )
-    {
-        Font aCurrentFont( pFontItem->GetFamilyName(), pFontItem->GetStyleName(), Size( 1, 1 ) );
-        pDlg->SetFont( aCurrentFont );
-    }
-
-    // Wenn Zeichen selektiert ist kann es angezeigt werden
-    // pDLg->SetFont( );
-    // pDlg->SetChar( );
-    USHORT nResult = pDlg->Execute();
-
-    //char c;
-    String aString;
-
+    String aChars, aFontName;
     Font aFont;
-
-    if( nResult == RET_OK )
+    if ( pItem )
     {
-        aFont = pDlg->GetCharFont();
-        aString = pDlg->GetCharacters();
+        aChars = ((const SfxStringItem*)pItem)->GetValue();
+        const SfxPoolItem* pFtItem = NULL;
+        pArgs->GetItemState( mpDoc->GetPool().GetWhich(SID_ATTR_SPECIALCHAR), FALSE, &pFtItem);
+        const SfxStringItem* pFontItem = PTR_CAST( SfxStringItem, pFtItem );
+        if ( pFontItem )
+        {
+            aFontName = pFontItem->GetValue();
+            aFont = Font( aFontName, Size(1,1) );
+        }
+        else
+        {
+            SfxItemSet aFontAttr( mpDoc->GetPool() );
+            mpView->GetAttributes( aFontAttr );
+            const SvxFontItem* pFItem = (const SvxFontItem*)aFontAttr.GetItem( SID_ATTR_CHAR_FONT );
+            if( pFItem )
+                aFont = Font( pFItem->GetFamilyName(), pFItem->GetStyleName(), Size( 1, 1 ) );
+        }
     }
-    delete( pDlg );
 
-    if( nResult == RET_OK )
+    if (!aChars.Len() )
+    {
+        SfxAllItemSet aSet( mpDoc->GetPool() );
+        aSet.Put( SfxBoolItem( FN_PARAM_1, FALSE ) );
+
+        SfxItemSet aFontAttr( mpDoc->GetPool() );
+        mpView->GetAttributes( aFontAttr );
+        const SvxFontItem* pFontItem = (const SvxFontItem*)aFontAttr.GetItem( SID_ATTR_CHAR_FONT );
+        if( pFontItem )
+            aSet.Put( *pFontItem );
+
+        SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+        SfxAbstractDialog* pDlg = pFact ? pFact->CreateSfxDialog( &mpView->GetViewShell()->GetViewFrame()->GetWindow(), aSet,
+            mpView->GetViewShell()->GetViewFrame()->GetFrame()->GetFrameInterface(),
+            RID_SVXDLG_CHARMAP ) : 0;
+        if( !pDlg )
+            return;
+
+        // Wenn Zeichen selektiert ist kann es angezeigt werden
+        // pDLg->SetFont( );
+        // pDlg->SetChar( );
+        USHORT nResult = pDlg->Execute();
+        if( nResult == RET_OK )
+        {
+            SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pCItem, SfxStringItem, SID_CHARMAP, FALSE );
+            SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pFItem, SvxFontItem, SID_ATTR_CHAR_FONT, FALSE );
+            if ( pFItem )
+            {
+                aFont.SetName( pFItem->GetFamilyName() );
+                aFont.SetStyleName( pFItem->GetStyleName() );
+                aFont.SetCharSet( pFItem->GetCharSet() );
+                aFont.SetPitch( pFItem->GetPitch() );
+            }
+
+            if ( pCItem )
+                aChars  = pCItem->GetValue();
+        }
+
+        delete( pDlg );
+    }
+
+    if( aChars.Len() )
     {
         OutlinerView* pOV = NULL;
         ::Outliner*   pOL = NULL;
@@ -248,7 +285,7 @@ void FuBullet::InsertSpecialCharacter()
             SfxUndoManager& rUndoMgr =  pOL->GetUndoManager();
             rUndoMgr.EnterListAction(String(SdResId(STR_UNDO_INSERT_SPECCHAR)),
                                      aEmptyStr );
-            pOV->InsertText(aString, TRUE);
+            pOV->InsertText(aChars, TRUE);
 
             // attributieren (Font setzen)
             SfxItemSet aSet(pOL->GetEmptyItemSet());
@@ -280,7 +317,7 @@ void FuBullet::InsertSpecialCharacter()
 
 void FuBullet::GetSlotState( SfxItemSet& rSet, ViewShell* pViewShell, SfxViewFrame* pViewFrame )
 {
-    if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_BULLET ) ||
+    if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_CHARMAP ) ||
         SFX_ITEM_AVAILABLE == rSet.GetItemState( FN_INSERT_SOFT_HYPHEN ) ||
         SFX_ITEM_AVAILABLE == rSet.GetItemState( FN_INSERT_HARDHYPHEN ) ||
         SFX_ITEM_AVAILABLE == rSet.GetItemState( FN_INSERT_HARD_SPACE ) ||
@@ -305,7 +342,7 @@ void FuBullet::GetSlotState( SfxItemSet& rSet, ViewShell* pViewShell, SfxViewFra
         }
 
         if( !bTextEdit && (dynamic_cast<OutlineViewShell*>( pViewShell ) == 0) )
-            rSet.DisableItem(SID_BULLET);
+            rSet.DisableItem(SID_CHARMAP);
 
         if(!bTextEdit || !bCtlEnabled )
         {

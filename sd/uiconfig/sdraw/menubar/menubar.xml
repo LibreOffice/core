@@ -129,7 +129,7 @@
                     <menu:menuitem menu:id=".uno:InsertFileField"/>
                 </menu:menupopup>
             </menu:menu>
-            <menu:menuitem menu:id=".uno:Bullet"/>
+                        <menu:menuitem menu:id=".uno:InsertSymbol"/>
             <menu:menu menu:id=".uno:FormattingMarkMenu">
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:InsertNonBreakingSpace"/>

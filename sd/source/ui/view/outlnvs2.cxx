@@ -378,7 +378,7 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
         case SID_INSERT_LRM :
         case SID_INSERT_ZWNBSP :
         case SID_INSERT_ZWSP:
-        case SID_BULLET:
+        case SID_CHARMAP:
         {
             SetCurrentFunction( FuBullet::Create( this, GetActiveWindow(), pOlView, GetDoc(), rReq ) );
             Cancel();

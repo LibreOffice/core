@@ -474,7 +474,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
             aSet.Put(SfxBoolItem(ATTR_ACTION_PLAYFULL, FALSE));
 
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-        AbstractSfxSingleTabDialog* pDlg = pFact ? pFact->CreatSdActionDialog( NULL, &aSet, mpView ) : 0;
+        SfxAbstractDialog* pDlg = pFact ? pFact->CreatSdActionDialog( NULL, &aSet, mpView ) : 0;
 
         USHORT nResult = pDlg ? pDlg->Execute() : RET_CANCEL;
 

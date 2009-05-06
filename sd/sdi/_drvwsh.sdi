@@ -240,7 +240,7 @@ interface DrawView
         Cachable , HasDialog , Export ,
         MenuConfig , AccelConfig , ToolBoxConfig ;
     ]
-    SID_BULLET // ole : no, status : ?
+    SID_CHARMAP // ole : no, status : ?
     [
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;

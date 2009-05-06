@@ -58,7 +58,7 @@ private:
         SdDrawDocument* pDoc,
         SfxRequest& rReq);
 
-    void InsertSpecialCharacter();
+    void InsertSpecialCharacter( SfxRequest& rReq );
     void InsertFormattingMark( sal_Unicode cMark );
 };
 

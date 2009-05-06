@@ -52,7 +52,6 @@
 #define SID_INSERTSYMBOL                    (SID_SD_START+16)
 #define SID_ZOOM_PANNING                    (SID_SD_START+17)
 #define SID_PRESENTATION_END                (SID_SD_START+18)
-#define SID_BULLET                          (SID_SD_START+19)
 #define SID_TEXTFORMAT                      (SID_SD_START+20)
 #define SID_POSITION                        (SID_SD_START+22)
 #define SID_MIRROR                          (SID_SD_START+23)
