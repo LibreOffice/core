@@ -66,7 +66,6 @@ LIB1FILES+=$(SLB)$/ibrwimp.lib
 
 LIB2TARGET= $(SLB)$/$(TARGET)_2.lib
 LIB2FILES=\
-    $(SLB)$/init.lib \
     $(SLB)$/items.lib     \
     $(SLB)$/svxlink.lib   \
     $(SLB)$/svxrtf.lib    \
@@ -143,7 +142,6 @@ SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=	$(SHL1TARGET)
 DEFLIB1NAME=$(TARGET) $(TARGET)_2 $(TARGET)_3 $(TARGET)_4
 
-
 # cui
 SHL2TARGET= cui$(DLLPOSTFIX)
 SHL2VERSIONMAP= cui.map
@@ -154,9 +152,6 @@ SHL2DEF=	$(MISC)$/$(SHL2TARGET).def
 DEF2NAME=	$(SHL2TARGET)
 
 SHL2LIBS=	$(SLB)$/cui.lib
-SHL2OBJS= \
-        $(SLO)$/cuiexp.obj     \
-        $(SLO)$/dlgfact.obj
 
 SHL2STDLIBS= \
             $(SVXLIB) \
@@ -164,6 +159,7 @@ SHL2STDLIBS= \
             $(SFX2LIB) \
             $(GOODIESLIB) \
             $(BASEGFXLIB) \
+            $(BASICLIB) \
             $(LNGLIB) \
             $(SVTOOLLIB) \
             $(TKLIB) \
@@ -173,8 +169,8 @@ SHL2STDLIBS= \
             $(TOOLSLIB) \
             $(I18NISOLANGLIB) \
             $(COMPHELPERLIB) \
-            $(UCBHELPERLIB)	\
-            $(CPPUHELPERLIB)	\
+            $(UCBHELPERLIB) \
+            $(CPPUHELPERLIB)        \
             $(CPPULIB) \
             $(VOSLIB) \
             $(SALLIB) \
@@ -198,7 +194,9 @@ SRSFILELIST=\
         $(SRS)$/editeng.srs \
         $(SRS)$/outliner.srs \
         $(SRS)$/dialogs.srs \
+        $(SRS)$/cui.srs \
         $(SRS)$/drawdlgs.srs \
+        $(SRS)$/cuidrawdlgs.srs \
         $(SRS)$/mnuctrls.srs \
         $(SRS)$/stbctrls.srs \
         $(SRS)$/tbxctrls.srs \

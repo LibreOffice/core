@@ -31,7 +31,7 @@
 #include "hidother.hrc"
 #include <svx/svxids.hrc>
 #include "../inc/fmhelp.hrc"
-#include "../source/dialog/svuidlg.hrc"
+#include "../source/cui/svuidlg.hrc"
 
 hidspecial SID_GALLERY_IMPORTTHEME          { HelpID = SID_GALLERY_IMPORTTHEME; };
 hidspecial HID_GALLERY_NEW_THEME            { HelpID = HID_GALLERY_NEW_THEME; };
@@ -502,6 +502,8 @@ hidspecial HID_SVX_COMMON_MACRO_ORGANIZER { HelpId = HID_SVX_COMMON_MACRO_ORGANI
 hidspecial HID_HANGULDLG_SUGGESTIONS { HelpId = HID_HANGULDLG_SUGGESTIONS; };
 hidspecial HID_HANGULDLG_SUGGESTIONS_GRID { HelpId = HID_HANGULDLG_SUGGESTIONS_GRID; };
 hidspecial HID_HANGULDLG_SUGGESTIONS_LIST { HelpId = HID_HANGULDLG_SUGGESTIONS_LIST; };
+hidspecial HID_MACROCHECKDIALOG                 { HelpID = HID_MACROCHECKDIALOG; };
+hidspecial HID_MACRO_HEADERTABLISTBOX           { HelpID = HID_MACRO_HEADERTABLISTBOX; };
 
 hidspecial HID_PASTE_DLG        { HelpId = HID_PASTE_DLG; };
 hidspecial HID_LINKDLG_TABLB    { HelpId = HID_LINKDLG_TABLB; };

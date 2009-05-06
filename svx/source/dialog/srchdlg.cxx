@@ -52,6 +52,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>
 #include <comphelper/processfactory.hxx>
+#include <svtools/itempool.hxx>
 
 #include <sfx2/app.hxx>
 #include <toolkit/unohlp.hxx>
@@ -69,12 +70,9 @@
 #include <sfx2/srchitem.hxx>
 #include <svx/pageitem.hxx>
 #include "srchctrl.hxx"
-//CHINA001 #include "srchxtra.hxx"
 #include <svx/dialmgr.hxx>
 #include "dlgutil.hxx"
-#include <optjsearch.hxx>
 #include <svx/brshitem.hxx>
-#include "backgrnd.hxx"
 
 #include <svx/svxdlg.hxx> //CHINA001
 

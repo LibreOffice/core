@@ -81,11 +81,6 @@ String STR_SFX_FILTERNAME_ALL
     Text [ en-US ] = "All files (*.*)" ;
 };
 
-String STR_HUMAN_APPNAME
-{
-    TEXT = "%PRODUCTNAME" ;
-};
-
 String STR_BYTES
 {
     Text [ en-US ] = "Bytes" ;

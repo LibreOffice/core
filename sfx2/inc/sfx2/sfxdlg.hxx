@@ -68,22 +68,20 @@ namespace com { namespace sun { namespace star { namespace frame {
     class XModel;
 } } } }
 
-class SfxAbstractTabDialog : public VclAbstractDialog
+class SfxAbstractDialog : public VclAbstractDialog
 {
 public:
-    virtual void                SetCurPageId( USHORT nId ) = 0;
     virtual const SfxItemSet*   GetOutputItemSet() const = 0;
-    virtual const USHORT*       GetInputRanges( const SfxItemPool& ) = 0;
-    virtual void                SetInputSet( const SfxItemSet* pInSet ) = 0;
     virtual void                SetText( const XubString& rStr ) = 0;
     virtual String              GetText() const = 0;
 };
 
-class AbstractSfxSingleTabDialog : public VclAbstractDialog //add for SvxMeasureDialog & SvxConnectionDialog
+class SfxAbstractTabDialog : public SfxAbstractDialog
 {
 public:
-    virtual const SfxItemSet*   GetOutputItemSet() const = 0;
-
+    virtual void                SetCurPageId( USHORT nId ) = 0;
+    virtual const USHORT*       GetInputRanges( const SfxItemPool& ) = 0;
+    virtual void                SetInputSet( const SfxItemSet* pInSet ) = 0;
 };
 
 class SfxAbstractInsertObjectDialog : public VclAbstractDialog
@@ -155,9 +153,6 @@ public:
 
     virtual VclAbstractDialog* CreateScriptErrorDialog(
         Window* pParent, com::sun::star::uno::Any aException ) = 0;
-
-    static SfxTabPage *CreateSfxAcceleratorConfigPage(
-        Window *pParent, const SfxItemSet& rSet );
 
     virtual VclAbstractDialog*  CreateOptionsDialog(
         Window* pParent, const rtl::OUString& rExtensionId, const rtl::OUString& rApplicationContext ) = 0;

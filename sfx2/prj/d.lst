@@ -24,7 +24,6 @@ mkdir: %_DEST%\inc%_EXT%\sfx2
 ..\%COMMON_OUTDIR%\srs\sfxslots_srs.hid %COMMON_DEST%\res%_EXT%\sfxslots_srs.hid
 ..\util\sfx.xml %_DEST%\xml%_EXT%\sfx.xml
 ..\%__SRC%\misc\sfx2.csv %_DEST%\inc%_EXT%\sfx2.csv
-..\%__SRC%\inc\macropg.hxx %_DEST%\inc%_EXT%\macropg.hxx
 ..\inc\sfx2\dllapi.h %_DEST%\inc%_EXT%\sfx2\dllapi.h
 
 ..\inc\sfx2\app.hxx %_DEST%\inc%_EXT%\sfx2\app.hxx
@@ -58,7 +57,6 @@ mkdir: %_DEST%\inc%_EXT%\sfx2
 ..\inc\sfx2\imgdef.hxx %_DEST%\inc%_EXT%\sfx2\imgdef.hxx
 ..\inc\sfx2\ipclient.hxx %_DEST%\inc%_EXT%\sfx2\ipclient.hxx
 ..\inc\sfx2\macrconf.hxx %_DEST%\inc%_EXT%\sfx2\macrconf.hxx
-..\inc\sfx2\macropg.hxx %_DEST%\inc%_EXT%\sfx2\macropg.hxx
 ..\inc\sfx2\topfrm.hxx %_DEST%\inc%_EXT%\sfx2\topfrm.hxx
 ..\inc\sfx2\mgetempl.hxx %_DEST%\inc%_EXT%\sfx2\mgetempl.hxx
 ..\inc\mieclip.hxx %_DEST%\inc%_EXT%\sfx2\mieclip.hxx
