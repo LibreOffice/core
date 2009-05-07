@@ -46,7 +46,6 @@ import com.sun.star.frame.XModule;
 import com.sun.star.frame.XTerminateListener;
 import com.sun.star.frame.XStorable;
 import com.sun.star.i18n.NumberFormatIndex;
-import com.sun.star.awt.Rectangle;
 import com.sun.star.awt.Size;
 import com.sun.star.awt.XWindow;
 import com.sun.star.awt.XWindowPeer;
@@ -77,7 +76,6 @@ import com.sun.star.wizards.common.Configuration;
 import com.sun.star.wizards.common.Desktop;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.JavaTools;
-import com.sun.star.wizards.common.Properties;
 import com.sun.star.wizards.common.Helper.DateUtils;
 import com.sun.star.wizards.document.OfficeDocument;
 

@@ -31,13 +31,8 @@ package com.sun.star.wizards.db;
 
 import com.sun.star.beans.Property;
 import com.sun.star.beans.PropertyValue;
-import com.sun.star.beans.PropertyVetoException;
-import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.beans.XPropertySet;
-import com.sun.star.lang.IllegalArgumentException;
-import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.sdbc.DataType;
-import com.sun.star.uno.AnyConverter;
 import com.sun.star.wizards.common.Properties;
 import com.sun.star.wizards.db.TypeInspector;
 

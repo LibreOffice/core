@@ -31,7 +31,6 @@ package com.sun.star.wizards.ui;
 
 import com.sun.star.awt.*;
 import com.sun.star.lang.EventObject;
-import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.Renderer;

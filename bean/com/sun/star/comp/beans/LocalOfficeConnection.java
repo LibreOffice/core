@@ -30,36 +30,21 @@
 
 package com.sun.star.comp.beans;
 
-import java.awt.Component;
 import java.awt.Container;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
-import java.util.Properties;
-import java.util.Enumeration;
-
-import com.sun.star.comp.helper.Bootstrap;
 
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XEventListener;
-import com.sun.star.lang.XInitialization;
-import com.sun.star.container.XSet;
 import com.sun.star.connection.XConnection;
 import com.sun.star.connection.XConnector;
-import com.sun.star.connection.ConnectionSetupException;
-import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.bridge.XBridge;
 import com.sun.star.bridge.XBridgeFactory;
-import com.sun.star.comp.loader.JavaLoader;
-import com.sun.star.loader.XImplementationLoader;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.uno.XComponentContext;
-import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.Exception;
 import com.sun.star.lib.uno.helper.UnoUrl;

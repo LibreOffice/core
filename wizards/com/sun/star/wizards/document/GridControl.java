@@ -40,7 +40,6 @@ import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.container.XNameContainer;
-import com.sun.star.container.XNamed;
 import com.sun.star.form.XGridColumnFactory;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;

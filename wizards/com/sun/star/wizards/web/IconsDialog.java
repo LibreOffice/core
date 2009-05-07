@@ -29,7 +29,6 @@
  ************************************************************************/
 package com.sun.star.wizards.web;
 
-import com.sun.star.wizards.ui.UIConsts;
 import javax.swing.ListModel;
 
 import com.sun.star.awt.Size;

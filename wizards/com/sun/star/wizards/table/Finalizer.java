@@ -29,26 +29,12 @@
  ************************************************************************/
 package com.sun.star.wizards.table;
 
-import com.sun.star.awt.FocusEvent;
-import com.sun.star.awt.TextEvent;
-import com.sun.star.awt.VclWindowPeerAttribute;
-import com.sun.star.awt.XFocusListener;
 import com.sun.star.awt.XListBox;
 import com.sun.star.awt.XRadioButton;
 import com.sun.star.awt.XTextComponent;
-import com.sun.star.awt.XTextListener;
-import com.sun.star.awt.XWindow;
-import com.sun.star.beans.UnknownPropertyException;
-import com.sun.star.lang.EventObject;
-import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.sdbc.SQLException;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.wizards.common.Configuration;
 import com.sun.star.wizards.common.Desktop;
-import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.JavaTools;
-import com.sun.star.wizards.common.SystemDialog;
-import com.sun.star.wizards.db.DBMetaData;
 import com.sun.star.wizards.db.TableDescriptor;
 import com.sun.star.wizards.ui.UIConsts;
 import com.sun.star.wizards.ui.*;

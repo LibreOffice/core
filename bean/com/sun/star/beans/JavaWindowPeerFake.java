@@ -30,14 +30,7 @@
 
 package com.sun.star.beans;
 
-import java.awt.*;
-
-import com.sun.star.uno.*;
-import com.sun.star.lang.*;
 import com.sun.star.awt.*;
-import com.sun.star.util.*;
-import com.sun.star.beans.*;
-import com.sun.star.container.*;
 
 /** <p>Class to pass the system window handle to the OpenOffice.org toolkit.</p>
  *  @deprecated

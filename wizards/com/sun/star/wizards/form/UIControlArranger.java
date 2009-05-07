@@ -33,18 +33,15 @@ import com.sun.star.awt.ItemEvent;
 
 import com.sun.star.awt.Size;
 import com.sun.star.awt.XControl;
-import com.sun.star.awt.XItemEventBroadcaster;
 import com.sun.star.awt.XItemListener;
 import com.sun.star.awt.XRadioButton;
 import com.sun.star.lang.EventObject;
-import com.sun.star.wizards.common.FileAccess;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.NoValidPathException;
 import com.sun.star.wizards.document.Control;
 import com.sun.star.wizards.ui.ImageList;
 import com.sun.star.wizards.ui.UIConsts;
 import com.sun.star.wizards.ui.UnoDialog;
-import com.sun.star.wizards.ui.WizardDialog;
 
 import javax.swing.DefaultListModel;
 import javax.swing.ListModel;

@@ -29,20 +29,15 @@
  ************************************************************************/
 package com.sun.star.wizards.table;
 
-import java.util.Hashtable;
 import java.util.Vector;
 
 import com.sun.star.beans.PropertyValue;
-import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.lang.Locale;
-import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.wizards.common.ConfigGroup;
 import com.sun.star.wizards.common.Configuration;
-import com.sun.star.wizards.common.Desktop;
 import com.sun.star.wizards.common.Properties;
 
 public class FieldDescription

@@ -29,20 +29,12 @@
  ************************************************************************/
 package com.sun.star.wizards.form;
 
-import com.sun.star.awt.ItemEvent;
 import com.sun.star.awt.XListBox;
 import com.sun.star.awt.XRadioButton;
-import com.sun.star.beans.Property;
-import com.sun.star.beans.PropertyVetoException;
-import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XNameAccess;
-import com.sun.star.drawing.XControlShape;
-import com.sun.star.drawing.XShapes;
 import com.sun.star.lang.EventObject;
 import com.sun.star.lang.IllegalArgumentException;
-import com.sun.star.lang.IndexOutOfBoundsException;
-import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Exception;
@@ -58,7 +50,6 @@ import com.sun.star.wizards.document.Control;
 import com.sun.star.wizards.document.DatabaseControl;
 import com.sun.star.wizards.document.GridControl;
 import com.sun.star.wizards.document.TimeStampControl;
-import com.sun.star.wizards.text.TextDocument;
 import com.sun.star.wizards.text.TextStyleHandler;
 import com.sun.star.wizards.ui.*;
 import com.sun.star.wizards.ui.UIConsts;

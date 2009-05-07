@@ -35,14 +35,10 @@ import com.sun.star.awt.XControl;
 import com.sun.star.awt.XControlModel;
 import com.sun.star.awt.XLayoutConstrains;
 import com.sun.star.awt.XWindowPeer;
-import com.sun.star.beans.PropertyVetoException;
-import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.beans.XPropertySet;
-import com.sun.star.container.ElementExistException;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.container.XNameContainer;
 import com.sun.star.container.XNamed;
-import com.sun.star.sdbc.DataType;
 import com.sun.star.wizards.common.*;
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
@@ -50,7 +46,6 @@ import com.sun.star.uno.AnyConverter;
 import com.sun.star.drawing.XShape;
 import com.sun.star.drawing.XShapes;
 import com.sun.star.lang.IllegalArgumentException;
-import com.sun.star.lang.WrappedTargetException;
 
 public class Control extends Shape
 {

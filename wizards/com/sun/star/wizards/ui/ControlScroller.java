@@ -29,15 +29,11 @@
  ************************************************************************/
 package com.sun.star.wizards.ui;
 
-import com.sun.star.awt.FocusEvent;
-import com.sun.star.awt.XFocusListener;
 import com.sun.star.awt.XScrollBar;
 import com.sun.star.awt.AdjustmentEvent;
 import com.sun.star.beans.*;
 import com.sun.star.awt.*;
-import com.sun.star.lang.EventObject;
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.uno.Any;
 import com.sun.star.wizards.common.*;
 
 import java.util.*;

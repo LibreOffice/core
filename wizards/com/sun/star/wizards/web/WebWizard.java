@@ -36,9 +36,7 @@
  */
 package com.sun.star.wizards.web;
 
-import com.sun.star.awt.XTopWindow;
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.uno.UnoRuntime;
 import com.sun.star.wizards.common.Desktop;
 
 /**

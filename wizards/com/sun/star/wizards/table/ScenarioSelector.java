@@ -29,24 +29,18 @@
  ************************************************************************/
 package com.sun.star.wizards.table;
 
-// import java.util.Hashtable;
 import java.util.Vector;
 
 import com.sun.star.awt.ItemEvent;
-// import com.sun.star.awt.XButton;
 import com.sun.star.awt.XFixedText;
 import com.sun.star.awt.XItemListener;
 import com.sun.star.awt.XListBox;
 import com.sun.star.awt.XRadioButton;
 import com.sun.star.beans.PropertyValue;
-// import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.lang.EventObject;
 import com.sun.star.lang.Locale;
 import com.sun.star.lang.XMultiServiceFactory;
-//import com.sun.star.uno.Exception;
-// import com.sun.star.sdbc.SQLException;
-// import com.sun.star.uno.UnoRuntime;
 import com.sun.star.wizards.common.Configuration;
 import com.sun.star.wizards.common.Desktop;
 import com.sun.star.wizards.common.Helper;
@@ -55,7 +49,6 @@ import com.sun.star.wizards.db.TableDescriptor;
 import com.sun.star.wizards.ui.FieldSelection;
 import com.sun.star.wizards.ui.UIConsts;
 import com.sun.star.wizards.ui.UnoDialog;
-// import com.sun.star.wizards.ui.WizardDialog;
 import com.sun.star.wizards.ui.XFieldSelectionListener;
 
 /**

@@ -41,7 +41,6 @@ import com.sun.star.awt.*;
 import com.sun.star.beans.PropertyValue;
 import java.text.Collator;
 import java.util.Comparator;
-import java.util.Locale;
 
 public class CommandFieldSelection extends FieldSelection implements Comparator
 {

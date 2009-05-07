@@ -31,17 +31,10 @@
 package com.sun.star.wizards.document;
 
 import com.sun.star.awt.Point;
-// import com.sun.star.awt.Size;
 import com.sun.star.beans.XPropertySet;
-//import com.sun.star.container.ElementExistException;
-//import com.sun.star.container.XNameAccess;
 import com.sun.star.container.XNameContainer;
 import com.sun.star.drawing.XShapes;
-//import com.sun.star.lang.IllegalArgumentException;
-//import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.sdbc.DataType;
-//import com.sun.star.uno.AnyConverter;
-//import com.sun.star.uno.UnoRuntime;
 import com.sun.star.wizards.common.Desktop;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.db.FieldColumn;

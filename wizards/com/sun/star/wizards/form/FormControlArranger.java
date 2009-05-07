@@ -31,10 +31,7 @@ package com.sun.star.wizards.form;
 
 import com.sun.star.awt.Point;
 import com.sun.star.awt.Size;
-// import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.container.XNameContainer;
-// import com.sun.star.lang.IllegalArgumentException;
-// import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdbc.DataType;
 import com.sun.star.task.XStatusIndicator;

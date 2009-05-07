@@ -31,14 +31,7 @@
  ************************************************************************/
 package com.sun.star.wizards.reportbuilder;
 
-// import com.sun.star.deployment.XPackageInformationProvider;
-// import com.sun.star.lang.Locale;
-// import com.sun.star.uno.XComponentContext;
 import com.sun.star.util.XModeSelector;
-// import com.sun.star.wizards.common.PropertySetHelper;
-// import com.sun.star.wizards.report.IReportDefinitionReadAccess;
-// import com.sun.star.wizards.report.IReportBuilderLayouter;
-// import com.sun.star.wizards.report.IReportDocument;
 
 import com.sun.star.wizards.report.*;
 import com.sun.star.awt.XWindowPeer;
@@ -59,16 +52,14 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.XURLTransformer;
 import com.sun.star.wizards.common.Resource;
 import com.sun.star.wizards.db.FieldColumn;
-//import java.io.File;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Set;
 import java.util.Vector;
-// import com.sun.star.wizards.ui.UIConsts;
 import com.sun.star.wizards.common.FileAccess;
-// import com.sun.star.wizards.common.Configuration;
+
 /**
  * This class use the IReportDocument Interface to communicate between the UI
  * and the ReportBuilderLayouter which communicates to the new Sun Report Builder.
