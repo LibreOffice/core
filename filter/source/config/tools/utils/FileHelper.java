@@ -30,12 +30,6 @@
 
 package com.sun.star.filter.config.tools.utils;
 
-// __________ Imports __________
-
-import java.io.*;
-import java.lang.*;
-import java.net.*;
-import java.util.*;
 
 // __________ Implementation __________
 

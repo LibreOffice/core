@@ -30,7 +30,6 @@
 
 
 import com.sun.star.comp.loader.FactoryHelper;
-import com.sun.star.lang.XInitialization;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.lang.XServiceName;
@@ -40,54 +39,18 @@ import com.sun.star.registry.XRegistryKey;
 import com.sun.star.uno.Type;
 import java.util.Enumeration;
 import java.util.Vector;
-import java.io.InputStream;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.ByteArrayOutputStream;
 import com.sun.star.xml.XImportFilter;
 import com.sun.star.xml.XExportFilter;
-import java.io.*;
 
 // Imported TraX classes
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.dom.DOMSource;
-//import javax.xml.transform.dom.DOMResult;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.stream.StreamSource;
-import javax.xml.transform.URIResolver;
-import javax.xml.transform.Source;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
-import org.xml.sax.SAXNotRecognizedException;
-import org.xml.sax.SAXNotSupportedException;
-import org.xml.sax.ErrorHandler;
-import org.xml.sax.helpers.XMLFilterImpl;
 
 import com.sun.star.uno.AnyConverter;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.lang.XServiceInfo;
-import com.sun.star.lang.XTypeProvider;
-import com.sun.star.uno.Type;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.comp.loader.FactoryHelper;
-import com.sun.star.lang.XServiceName;
-import com.sun.star.lang.XSingleServiceFactory;
-import com.sun.star.registry.XRegistryKey;
-import com.sun.star.frame.XConfigManager;
-import com.sun.star.xml.sax.InputSource;
-import com.sun.star.xml.sax.XParser;
-import com.sun.star.io.XInputStream;
-import com.sun.star.io.XOutputStream;
-import com.sun.star.xml.sax.XDocumentHandler;
 
 //Uno to java Adaptor
 import com.sun.star.lib.uno.adapter.*;
