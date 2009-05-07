@@ -136,10 +136,15 @@
             </node>
             <node oor:name="R2" oor:op="replace">
               <prop oor:name="URL">
-                <value>private:resource/taskpanel/CustomAnimations</value>
+                <value>private:resource/taskpanel/TableDesign</value>
               </prop>
             </node>
             <node oor:name="R3" oor:op="replace">
+              <prop oor:name="URL">
+                <value>private:resource/taskpanel/CustomAnimations</value>
+              </prop>
+            </node>
+            <node oor:name="R4" oor:op="replace">
               <prop oor:name="URL">
                 <value>private:resource/taskpanel/SlideTransitions</value>
               </prop>
