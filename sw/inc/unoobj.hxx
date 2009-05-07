@@ -816,7 +816,7 @@ public:
         { return pDoc; }
     SwDoc* GetDoc()
         { return pDoc; }
-    const ::sw::mark::IMark * const GetBookmark() const
+    const ::sw::mark::IMark * GetBookmark() const
         { return pMark; }
 
     static BOOL XTextRangeToSwPaM(SwUnoInternalPaM& rToFill,

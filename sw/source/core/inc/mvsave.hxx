@@ -41,7 +41,6 @@
 
 class SvNumberFormatter;
 class SvULongs;
-class ::sw::mark::IMark;
 class SwDoc;
 class SwFmtAnchor;
 class SwFrmFmt;
@@ -54,6 +53,8 @@ struct SwPosition;
 
 namespace sw { namespace mark
 {
+    class IMark;
+
     class SaveBookmark
     {
         public:
