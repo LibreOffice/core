@@ -28,23 +28,7 @@
  *
  ************************************************************************/
 
-// UNO
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XComponentContext;
-import com.sun.star.uno.AnyConverter;
-import com.sun.star.uno.IQueryInterface;
-import com.sun.star.lang.XInitialization;
-import com.sun.star.lib.uno.helper.WeakBase;
-
-// OOo AWT
-import com.sun.star.awt.*;
-
 // Canvas
-import com.sun.star.rendering.*;
-
-// Java AWT
-import java.awt.*;
-import java.awt.geom.*;
 
 public interface SpriteBase
 {

@@ -28,27 +28,12 @@
  *
  ************************************************************************/
 
-// UNO
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XComponentContext;
-import com.sun.star.uno.AnyConverter;
-import com.sun.star.beans.XPropertySet;
-import com.sun.star.lib.uno.helper.WeakBase;
-
-// OOo AWT
-import com.sun.star.awt.*;
-
 // Canvas
 import com.sun.star.rendering.*;
 import com.sun.star.geometry.*;
 
 // Java AWT
 import java.awt.*;
-import java.awt.geom.*;
-
-// TEMP
-import com.sun.star.uno.Type;
-
 
 public class CanvasGraphicDevice
     extends com.sun.star.lib.uno.helper.ComponentBase

@@ -1,7 +1,6 @@
 package transex3.model;
 
 import java.util.*;
-import java.io.*;
 
 public class ResourceFile {
     Vector      sdfStrings      = new Vector();
