@@ -300,7 +300,7 @@
 #
 sub get_build_list_path {
     my $module = shift;
-    my @possible_dirs = ($module, $module. '.lnk');
+    my @possible_dirs = ($module, $module. '.lnk', $module. '.link');
     return $build_list_paths{$module} if (defined $build_list_paths{$module});
     foreach (@possible_dirs) {
         my $possible_dir_path = $StandDir.$_.'/prj/';
@@ -952,7 +952,7 @@ sub RemoveFromDependencies {
     my ($ExclPrj, $i, $Prj, $Dependencies);
     $ExclPrj = shift;
     my $ExclPrj_orig = '';
-    $ExclPrj_orig = $` if ($ExclPrj =~ /\.lnk$/o);
+    $ExclPrj_orig = $` if (($ExclPrj =~ /\.lnk$/o) || ($ExclPrj =~ /\.link$/o));
     $Dependencies = shift;
     foreach $Prj (keys %$Dependencies) {
         my $prj_deps_hash = $$Dependencies{$Prj};
@@ -1813,12 +1813,12 @@ sub are_all_dependent {
 sub modules_classify {
     my @modules = @_;
     foreach my $module (sort @modules) {
-        if (-d $StandDir.$module) {
-            $modules_types{$module} = 'mod';
+        if ((-e $StandDir.$module.'.lnk') || (-e $StandDir.$module.'.link')) {
+            $modules_types{$module} = 'lnk';
             next;
         };
-        if (-e $StandDir.$module.'.lnk') {
-            $modules_types{$module} = 'lnk';
+        if (-d $StandDir.$module) {
+            $modules_types{$module} = 'mod';
             next;
         };
         $modules_types{$module} = 'img';
@@ -1836,6 +1836,7 @@ sub provide_consistency {
         if ($$var_ref) {
             return if (-d $StandDir.$$var_ref);
             $$var_ref .= '.lnk' and return if (-d $StandDir.$$var_ref.'.lnk');
+            $$var_ref .= '.link' and return if (-d $StandDir.$$var_ref.'.link');
             print_error("Cannot find module '$$var_ref'", 9);
             return;
         };
@@ -1872,21 +1873,15 @@ sub get_workspace_lst
 sub ensure_clear_module {
     my $module = shift;
     my $module_type = $modules_types{$module};
-    my $lnk_name = $module . '.lnk';
     if ($module_type eq 'mod') {
-        if (-e ($StandDir.$lnk_name)) {
-            print "Last checkout for $module seems to have been interrupted...\n";
-            print "Checking it out again...\n";
-            #rmtree("$StandDir$module", 0, 1);
-            $module_type = 'lnk';
-        } else {
-            clear_module($module);
-            return;
-        };
+         clear_module($module);
+         return;
     };
     if ($module_type eq 'lnk') {
-        if(!rename("$StandDir$lnk_name", "$StandDir$module")) {
-            print_error("Cannot rename $StandDir$lnk_name. Please rename it manually");
+        if((!rename("$StandDir$module.lnk", "$StandDir$module")) && (!rename("$StandDir$module.link", "$StandDir$module"))) {
+            print_error("Cannot rename link to $module. Please rename it manually");
+        } else {
+            clear_module($module);
         };
     };
 };
@@ -2000,7 +1995,10 @@ sub prepare_incompatible_build {
     $deps_hash = shift;
     foreach (keys %incompatibles) {
         my $incomp_prj = $_;
-        $incomp_prj .= '.lnk' if (!defined $$deps_hash{$_});
+        if (!defined $$deps_hash{$_}) {
+            $incomp_prj .= '.lnk' if (-e $StandDir.$incomp_prj . '.lnk');
+            $incomp_prj .= '.link' if (-e $StandDir.$incomp_prj . '.link');
+        }
         delete $incompatibles{$_};
         $incompatibles{$incomp_prj} = $$deps_hash{$incomp_prj};
         delete $$deps_hash{$incomp_prj};
@@ -2084,6 +2082,7 @@ sub prepare_build_all_cont {
     while ($prj = PickPrjToBuild($deps_hash)) {
         $orig_prj = '';
         $orig_prj = $` if ($prj =~ /\.lnk$/o);
+        $orig_prj = $` if ($prj =~ /\.link$/o);
         if (($border_prj ne $prj) &&
             ($border_prj ne $orig_prj)) {
             RemoveFromDependencies($prj, $deps_hash);
@@ -2199,7 +2198,7 @@ sub clear_delivered {
 #        my $current_dir = getcwd();
         foreach my $module (sort @modules_built) {
             my $module_path = CorrectPath($StandDir.$module);
-            if (!(chdir($module_path.'.lnk') or chdir($module_path))) {
+            if (!(chdir($module_path.'.lnk') or chdir($module_path.'.link') or chdir($module_path))) {
                 push(@warnings, "Could not remove delivered files from the module $module. Your build can become inconsistent.\n");
             } else {
                 print "Removing delivered from module $module\n";
@@ -2281,11 +2280,12 @@ sub get_solar_vars {
 }
 
 #
-# Procedure renames <module>.lnk into <module>
+# Procedure renames <module>.lnk (.link) into <module>
 #
 sub get_current_module {
     my $module_name = shift;
     my $link_name = $module_name . '.lnk';
+    $link_name .= '.link' if (-e $StandDir.$module_name . '.link');
     chdir $StandDir;
     getcwd();
     print "\nBreaking link to module $module_name";
@@ -2304,8 +2304,8 @@ sub check_dir {
     my $start_dir = getcwd();
     my @dir_entries = split(/[\\\/]/, $start_dir);
     my $current_module = $dir_entries[$#dir_entries];
-    $current_module = $` if ($current_module =~ /(\.lnk)$/);
-    my $link_name = $ENV{SRC_ROOT}.'/'.$current_module.'.lnk';
+    $current_module = $` if (($current_module =~ /(\.lnk)$/) || ($current_module =~ /(\.link)$/));
+    my $link_name = $ENV{SRC_ROOT}.'/'.$current_module.$1;
     if ( $^O eq 'MSWin32' ) {
         $start_dir =~ s/\\/\//go;
         $link_name =~ s/\\/\//go;
