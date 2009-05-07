@@ -1065,10 +1065,14 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::store()
     css::uno::Reference< css::container::XNameAccess > xAccess;
 
     bPreferred = sal_True;
+    // on-demand creation of the primary write cache
+    impl_getCFG(bPreferred, sal_True);
     m_xCfg->getByName(CFG_ENTRY_PRIMARY) >>= xAccess;
     impl_ts_save(bPreferred, xAccess);
 
     bPreferred = sal_False;
+    // on-demand creation of the secondary write cache
+    impl_getCFG(bPreferred, sal_True);
     m_xCfg->getByName(CFG_ENTRY_SECONDARY) >>= xAccess;
     impl_ts_save(bPreferred, xAccess);
 
