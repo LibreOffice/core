@@ -1,6 +1,5 @@
 package helper;
 
-import java.lang.*;
 import com.sun.star.uno.*;
 import com.sun.star.lang.*;
 import com.sun.star.container.*;

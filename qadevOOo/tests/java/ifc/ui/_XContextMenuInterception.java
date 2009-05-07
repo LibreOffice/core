@@ -49,7 +49,6 @@ import com.sun.star.uno.XInterface;
 import helper.ContextMenuInterceptor;
 import java.awt.Robot;
 import java.awt.event.InputEvent;
-import java.io.PrintWriter;
 import lib.MultiMethodTest;
 import lib.Status;
 import lib.StatusException;

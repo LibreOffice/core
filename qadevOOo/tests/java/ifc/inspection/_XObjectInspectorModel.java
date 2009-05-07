@@ -30,7 +30,6 @@
 
 package ifc.inspection;
 
-import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.inspection.PropertyCategoryDescriptor;
 import com.sun.star.inspection.XObjectInspectorModel;
 import lib.MultiMethodTest;

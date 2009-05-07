@@ -48,7 +48,6 @@ import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
 
-import util.DesktopTools;
 import util.SOfficeFactory;
 
 

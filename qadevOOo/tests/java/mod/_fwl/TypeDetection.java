@@ -48,7 +48,6 @@ import com.sun.star.beans.PropertyValue;
 import com.sun.star.frame.XStorable;
 import com.sun.star.text.XTextContent;
 import com.sun.star.text.XTextDocument;
-import com.sun.star.uno.AnyConverter;
 import util.SOfficeFactory;
 
 /**

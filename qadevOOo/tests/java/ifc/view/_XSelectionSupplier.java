@@ -30,21 +30,13 @@
 
 package ifc.view;
 
-import com.sun.star.drawing.XShapeDescriptor;
-import com.sun.star.drawing.XShapes;
 import com.sun.star.lang.EventObject;
-import com.sun.star.sheet.XCellAddressable;
-import com.sun.star.sheet.XCellRangeAddressable;
-import com.sun.star.table.CellAddress;
-import com.sun.star.table.CellRangeAddress;
-import com.sun.star.uno.UnoRuntime;
 import com.sun.star.view.XSelectionChangeListener;
 import com.sun.star.view.XSelectionSupplier;
 import java.util.Comparator;
 import lib.MultiMethodTest;
 import lib.Status;
 import lib.StatusException;
-import util.utils;
 
 
 /**

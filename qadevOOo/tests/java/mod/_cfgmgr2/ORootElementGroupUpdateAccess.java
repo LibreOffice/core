@@ -29,7 +29,6 @@
  ************************************************************************/
 package mod._cfgmgr2;
 
-import com.sun.star.beans.Property;
 import java.io.PrintWriter;
 
 import lib.TestCase;
@@ -46,8 +45,6 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.util.XChangesBatch;
-import java.util.Enumeration;
-import java.util.Properties;
 
 
 public class ORootElementGroupUpdateAccess extends TestCase {

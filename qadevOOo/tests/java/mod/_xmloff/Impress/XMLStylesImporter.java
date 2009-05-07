@@ -39,7 +39,6 @@ import lib.TestParameters;
 import util.SOfficeFactory;
 
 import com.sun.star.container.XNameAccess;
-import com.sun.star.document.XImporter;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.style.XStyleFamiliesSupplier;

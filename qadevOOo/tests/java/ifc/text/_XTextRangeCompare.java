@@ -34,7 +34,6 @@ import lib.MultiMethodTest;
 import lib.Status;
 import lib.StatusException;
 
-import com.sun.star.text.ControlCharacter;
 import com.sun.star.text.XText;
 import com.sun.star.text.XTextCursor;
 import com.sun.star.text.XTextDocument;

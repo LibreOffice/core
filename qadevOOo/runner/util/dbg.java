@@ -41,7 +41,6 @@ import com.sun.star.beans.PropertyValue;
 import com.sun.star.lang.XTypeProvider;
 import com.sun.star.lang.XServiceInfo;
 import java.io.PrintWriter;
-import java.io.OutputStream;
 import java.lang.reflect.Method;
 
 /**

@@ -35,7 +35,6 @@ import java.io.IOException;
 import share.LogWriter;
 
 import java.io.PrintWriter;
-import java.io.OutputStreamWriter;
 import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;

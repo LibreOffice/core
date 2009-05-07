@@ -35,7 +35,6 @@ import java.awt.image.PixelGrabber;
 import java.awt.image.ImageObserver;
 import java.io.File;
 //import javax.imageio.ImageIO;
-import java.io.IOException;
 import java.lang.reflect.Method;
 
 class ImageHelper

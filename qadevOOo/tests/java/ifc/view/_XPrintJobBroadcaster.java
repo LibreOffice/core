@@ -39,7 +39,6 @@ import java.io.File;
 import lib.MultiMethodTest;
 import lib.Status;
 import lib.StatusException;
-import util.utils;
 
 /**
  * Test the XPrintJobBroadcaster interface

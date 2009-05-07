@@ -31,11 +31,9 @@
 package ifc.awt.tree;
 
 import com.sun.star.awt.tree.ExpandVetoException;
-import com.sun.star.awt.tree.TreeDataModelEvent;
 import com.sun.star.awt.tree.TreeExpansionEvent;
 import com.sun.star.awt.tree.XMutableTreeNode;
 import com.sun.star.awt.tree.XTreeControl;
-import com.sun.star.awt.tree.XTreeDataModelListener;
 import com.sun.star.awt.tree.XTreeEditListener;
 import com.sun.star.awt.tree.XTreeExpansionListener;
 import com.sun.star.awt.tree.XTreeNode;

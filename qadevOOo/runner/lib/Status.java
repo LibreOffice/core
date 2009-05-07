@@ -30,8 +30,6 @@
 
 package lib;
 
-import java.io.PrintWriter;
-
 /**
  * Status represents a result of a testing activity performed. The result is
  * described in two ways: state and runtime state. The state describes if the
