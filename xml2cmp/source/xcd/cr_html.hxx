@@ -76,8 +76,6 @@ class HtmlCreator
                             const Simstr &      i_sRole,
                             const Simstr &      i_sTitle );
   private:
-    void                PrintH1(
-                            const char *        i_pText );
     void                StartRow();
     void                FinishRow();
     void                StartCell(

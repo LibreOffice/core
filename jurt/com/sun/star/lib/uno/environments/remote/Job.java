@@ -31,13 +31,11 @@
 package com.sun.star.lib.uno.environments.remote;
 
 
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
 
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
 import com.sun.star.lib.uno.typedesc.MethodDescription;
 import com.sun.star.uno.Any;

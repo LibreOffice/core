@@ -36,8 +36,6 @@ import com.sun.star.uno.XComponentContext;
 import com.sun.star.container.XSet;
 import com.sun.star.container.XContentEnumerationAccess;
 import com.sun.star.container.XEnumeration;
-import com.sun.star.container.XEnumerationAccess;
-import com.sun.star.container.XElementAccess;
 
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XEventListener;
@@ -51,11 +49,7 @@ import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.registry.XRegistryKey;
 import com.sun.star.registry.XSimpleRegistry;
 
-import com.sun.star.loader.CannotActivateFactoryException;
 import com.sun.star.loader.XImplementationLoader;
-
-import com.sun.star.lang.XEventListener;
-//import com.sun.star.lang.EventObject;
 
 import java.lang.reflect.InvocationTargetException;
 

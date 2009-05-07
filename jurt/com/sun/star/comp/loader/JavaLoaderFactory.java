@@ -33,11 +33,7 @@ package com.sun.star.comp.loader;
 import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XServiceInfo;
-import com.sun.star.lang.ServiceNotRegisteredException;
-import com.sun.star.lang.WrappedTargetException;
 
-import com.sun.star.uno.RuntimeException;
-import com.sun.star.uno.Exception;
 
 public class JavaLoaderFactory implements XSingleServiceFactory, XServiceInfo {
 

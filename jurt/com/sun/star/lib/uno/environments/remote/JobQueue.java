@@ -31,12 +31,6 @@
 package com.sun.star.lib.uno.environments.remote;
 
 
-import java.util.Enumeration;
-import java.util.Hashtable;
-import com.sun.star.uno.UnoRuntime;
-
-
-
 /**
  * The <code>JobQueue</code> implements a queue for jobs.
  * For every jobs thread id exists a job queue which is registered

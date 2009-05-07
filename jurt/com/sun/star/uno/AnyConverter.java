@@ -1,5 +1,5 @@
 package com.sun.star.uno;
-import com.sun.star.lang.IllegalArgumentException;
+
 /** This class provides static methods which aim at exploring the contents of an
  * Any and extracting its value. All public methods take an Object argument that
  * either is the immediate object, such as Boolean, Type, interface implementation,

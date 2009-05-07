@@ -31,13 +31,8 @@
 package com.sun.star.comp.urlresolver;
 
 
-import java.util.Enumeration;
-
-
-import com.sun.star.bridge.BridgeExistsException;
 import com.sun.star.bridge.XBridge;
 import com.sun.star.bridge.XBridgeFactory;
-import com.sun.star.bridge.XInstanceProvider;
 import com.sun.star.bridge.XUnoUrlResolver;
 
 import com.sun.star.comp.loader.FactoryHelper;

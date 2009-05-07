@@ -38,8 +38,6 @@ import com.sun.star.connection.XConnection;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.registry.XRegistryKey;
-import java.io.IOException;
-import java.net.InetAddress;
 
 /**
  * A component that implements the <code>XAcceptor</code> interface.

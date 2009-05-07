@@ -30,7 +30,6 @@
 
 package com.sun.star.comp.helper;
 
-import com.sun.star.beans.XPropertySet;
 import com.sun.star.bridge.UnoUrlResolver;
 import com.sun.star.bridge.XUnoUrlResolver;
 import com.sun.star.comp.loader.JavaLoader;
@@ -38,7 +37,6 @@ import com.sun.star.container.XSet;
 import com.sun.star.lang.XInitialization;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XMultiComponentFactory;
-import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.lang.XSingleComponentFactory;
 import com.sun.star.lib.util.NativeLibraryLoader;
 import com.sun.star.loader.XImplementationLoader;

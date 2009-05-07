@@ -29,9 +29,6 @@
  ************************************************************************/
 
 package com.sun.star.lib.uno.helper;
-import java.io.ByteArrayInputStream;
-import java.io.DataInputStream;
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Vector;
