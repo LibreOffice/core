@@ -801,6 +801,8 @@ void FmGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rMe
     }
 }
 
+enum InspectorAction { eOpenInspector, eCloseInspector, eUpdateInspector, eNone };
+
 //------------------------------------------------------------------------------
 void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMenu& rMenu, sal_uInt16 nExecutionResult)
 {
@@ -813,7 +815,6 @@ void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMe
 
     ::rtl::OUString aFieldType;
     sal_Bool    bReplace = sal_False;
-    enum InspectorAction { eOpenInspector, eCloseInspector, eUpdateInspector, eNone };
     InspectorAction eInspectorAction = eNone;
     Reference< XPropertySet > xColumnToInspect;
     switch (nExecutionResult)
