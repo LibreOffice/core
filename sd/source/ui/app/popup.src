@@ -355,6 +355,13 @@ Menu RID_TASKPANE_CURRENT_MASTERPAGESSELECTOR_POPUP
 
         SEPARATOR
 
+        MenuItem
+        {
+            Identifier = SID_TP_EDIT_MASTER;
+            HelpID = SID_TP_EDIT_MASTER;
+            Text[ en-US ] = "~Edit Master...";
+        };
+
         MN_DELETE_MASTER
 
         SEPARATOR

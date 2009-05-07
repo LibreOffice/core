@@ -475,6 +475,24 @@ private:
     */
     void StopSlideShow (bool bCloseFrame);
 
+    /** Show the context menu for snap lines and points.  Because snap lines
+        can not be selected the index of the snap line/point for which the
+        popup menu is opened has to be passed to the processing slot
+        handlers.  This can be done only by manually showing the popup menu.
+        @param rPageView
+            The page view is used to access the help lines.
+        @param nSnapLineIndex
+            Index of the snap line or snap point for which to show the
+            context menu.
+        @param rMouseLocation
+            The mouse location defines the location at which to display the
+            context menu.
+    */
+    void ShowSnapLineContextMenu (
+        SdrPageView& rPageView,
+        const USHORT nSnapLineIndex,
+        const Point& rMouseLocation);
+
     using ViewShell::Notify;
 };
 

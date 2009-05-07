@@ -86,7 +86,8 @@ PreviewRenderer::~PreviewRenderer (void)
 Image PreviewRenderer::RenderPage (
     const SdPage* pPage,
     const sal_Int32 nWidth,
-    const String& rSubstitutionText)
+    const String& rSubstitutionText,
+    const bool bObeyHighContrastMode)
 {
     if (pPage != NULL)
     {
@@ -96,7 +97,7 @@ Image PreviewRenderer::RenderPage (
         const sal_Int32 nFrameWidth (mbHasFrame ? snFrameWidth : 0);
         const sal_Int32 nHeight (sal::static_int_cast<sal_Int32>(
             (nWidth - 2*nFrameWidth) / nAspectRatio + 2*nFrameWidth + 0.5));
-        return RenderPage (pPage, Size(nWidth,nHeight), rSubstitutionText);
+        return RenderPage (pPage, Size(nWidth,nHeight), rSubstitutionText, bObeyHighContrastMode);
     }
     else
         return Image();
@@ -108,7 +109,8 @@ Image PreviewRenderer::RenderPage (
 Image PreviewRenderer::RenderPage (
     const SdPage* pPage,
     Size aPixelSize,
-    const String& rSubstitutionText)
+    const String& rSubstitutionText,
+    const bool bObeyHighContrastMode)
 {
     Image aPreview;
 
@@ -116,7 +118,7 @@ Image PreviewRenderer::RenderPage (
     {
         try
         {
-            if (Initialize (pPage, aPixelSize))
+            if (Initialize (pPage, aPixelSize, bObeyHighContrastMode))
             {
                 PaintPage (pPage);
                 PaintSubstitutionText (rSubstitutionText);
@@ -205,7 +207,8 @@ Image PreviewRenderer::RenderSubstitution (
 
 bool PreviewRenderer::Initialize (
     const SdPage* pPage,
-    const Size& rPixelSize)
+    const Size& rPixelSize,
+    const bool bObeyHighContrastMode)
 {
     bool bSuccess = false;
     do
@@ -229,8 +232,8 @@ bool PreviewRenderer::Initialize (
             break;
 
         // Adjust contrast mode.
-        bool bUseContrast = Application::GetSettings().GetStyleSettings().
-            GetHighContrastMode();
+        bool bUseContrast (bObeyHighContrastMode
+            && Application::GetSettings().GetStyleSettings().GetHighContrastMode());
         mpPreviewDevice->SetDrawMode (bUseContrast
             ? ViewShell::OUTPUT_DRAWMODE_CONTRAST
             : ViewShell::OUTPUT_DRAWMODE_COLOR);

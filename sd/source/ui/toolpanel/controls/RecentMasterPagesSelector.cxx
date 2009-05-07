@@ -39,6 +39,7 @@
 #include "MasterPageObserver.hxx"
 #include "sdpage.hxx"
 #include "drawdoc.hxx"
+#include "app.hrc"
 #include <vcl/bitmap.hxx>
 #include <tools/color.hxx>
 
@@ -144,5 +145,18 @@ void RecentMasterPagesSelector::AssignMasterPageToPageList (
             mpPageSet->SelectItem(mpPageSet->GetItemCount());
     }
 }
+
+
+
+
+void RecentMasterPagesSelector::GetState (SfxItemSet& rItemSet)
+{
+    MasterPagesSelector::GetState (rItemSet);
+    if (rItemSet.GetItemState(SID_TP_EDIT_MASTER) == SFX_ITEM_AVAILABLE)
+        rItemSet.DisableItem (SID_TP_EDIT_MASTER);
+}
+
+
+
 
 } } } // end of namespace ::sd::toolpanel::controls

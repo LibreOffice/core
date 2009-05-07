@@ -68,6 +68,7 @@
 #include "drawdoc.hxx"
 #include "Window.hxx"
 #include "fupoor.hxx"
+#include "fusnapln.hxx"
 #include "app.hxx"
 #include "Ruler.hxx"
 #include "sdresid.hxx"
@@ -558,7 +559,8 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
             if ( mpDrawView->PickHelpLine( aMPos, nHitLog, *GetActiveWindow(), nHelpLine, pPV) )
             {
                 nSdResId = RID_DRAW_SNAPOBJECT_POPUP;
-                mbMousePosFreezed = TRUE;
+                ShowSnapLineContextMenu(*pPV, nHelpLine, rCEvt.GetMousePosPixel());
+                return;
             }
             // Klebepunkt unter dem Mauszeiger markiert?
             else if( mpDrawView->PickGluePoint( aMPos, pObj, nPickId, pPV ) &&
@@ -924,6 +926,70 @@ void DrawViewShell::UnlockInput()
     if ( mnLockCount )
         mnLockCount--;
 }
+
+
+
+
+void DrawViewShell::ShowSnapLineContextMenu (
+    SdrPageView& rPageView,
+    const USHORT nSnapLineIndex,
+    const Point& rMouseLocation)
+{
+    const SdrHelpLine& rHelpLine (rPageView.GetHelpLines()[nSnapLineIndex]);
+    ::boost::scoped_ptr<PopupMenu> pMenu (new PopupMenu ());
+
+    if (rHelpLine.GetKind() == SDRHELPLINE_POINT)
+    {
+        pMenu->InsertItem(
+            SID_SET_SNAPITEM,
+            String(SdResId(STR_POPUP_EDIT_SNAPPOINT)));
+        pMenu->InsertSeparator();
+        pMenu->InsertItem(
+            SID_DELETE_SNAPITEM,
+            String(SdResId(STR_POPUP_DELETE_SNAPPOINT)));
+    }
+    else
+    {
+        pMenu->InsertItem(
+            SID_SET_SNAPITEM,
+            String(SdResId(STR_POPUP_EDIT_SNAPLINE)));
+        pMenu->InsertSeparator();
+        pMenu->InsertItem(
+            SID_DELETE_SNAPITEM,
+            String(SdResId(STR_POPUP_DELETE_SNAPLINE)));
+    }
+
+    pMenu->RemoveDisabledEntries(FALSE, FALSE);
+
+    const USHORT nResult = pMenu->Execute(
+        GetActiveWindow(),
+        Rectangle(rMouseLocation, Size(10,10)),
+        POPUPMENU_EXECUTE_DOWN);
+    switch (nResult)
+    {
+        case SID_SET_SNAPITEM:
+        {
+            SfxUInt32Item aHelpLineItem (ID_VAL_INDEX, nSnapLineIndex);
+            const SfxPoolItem* aArguments[] = {&aHelpLineItem, NULL};
+            GetViewFrame()->GetDispatcher()->Execute(
+                SID_SET_SNAPITEM,
+                SFX_CALLMODE_SLOT,
+                aArguments);
+        }
+        break;
+
+        case SID_DELETE_SNAPITEM:
+        {
+            rPageView.DeleteHelpLine(nSnapLineIndex);
+        }
+        break;
+
+        default:
+            break;
+    }
+}
+
+
 
 
 #ifdef _MSC_VER

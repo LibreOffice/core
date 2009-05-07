@@ -460,6 +460,7 @@
 #define SID_DISPLAY_MASTER_BACKGROUND       (SID_SD_START+436)
 #define SID_DISPLAY_MASTER_OBJECTS          (SID_SD_START+437)
 #define SID_INSERTPAGE_LAYOUT_MENU          (SID_SD_START+438)
+#define SID_TP_EDIT_MASTER                  (SID_SD_START+439)
 
 // Add companion for the SID_HIDE_SLIDE (that is defined in svx)
 #define SID_SHOW_SLIDE                      (SID_SD_START+440)

@@ -132,6 +132,21 @@ public:
     */
     void RemoveSelectionChangeListener (const Link& rListener);
 
+    /** Return the position where to insert pasted slides based on the
+        current selection.  When there is a selection then the insert
+        position is behind the last slide.  When the selection is empty then
+        most of the time the insert position is at the end of the document.
+        There is an exception right after the display of a popup-menu.  The
+        position of the associated insertion marker is stored here and reset
+        the next time the selection changes.
+    */
+    sal_Int32 GetInsertionPosition (void) const;
+
+    /** Store an insertion position temporarily.  It is reset when the
+        selection changes the next time.
+    */
+    void SetInsertionPosition (const sal_Int32 nInsertionPosition);
+
 private:
     SlideSorter& mrSlideSorter;
     SlideSorterController& mrController;
@@ -148,6 +163,12 @@ private:
         is moved into the visible area.
     */
     bool mbIsMakeSelectionVisiblePending;
+
+    /** The insertion position is only temporarily valid.  Negative values
+        indicate that the explicit insertion position is not valid.  In this
+        case GetInsertionPosition() calculates it from the current selection.
+    */
+    sal_Int32 mnInsertionPosition;
 
     /** Delete the given list of normal pages.  This method is a helper
         function for DeleteSelectedPages().
@@ -187,7 +208,6 @@ private:
         const model::SharedPageDescriptor& rpFirst,
         const model::SharedPageDescriptor& rpLast,
         const SelectionHint eSelectionHint);
-
 };
 
 } } } // end of namespace ::sd::slidesorter::controller

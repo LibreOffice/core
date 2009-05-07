@@ -50,6 +50,7 @@
 
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/range/b2drange.hxx>
+#include <basegfx/range/b2irange.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
@@ -267,21 +268,17 @@ void SubstitutionOverlay::Create (
     EnsureRegistration();
 
     maPosition = rPosition;
+    maTranslation = Point(0,0);
 
     maShapes.clear();
     while (rSelection.HasMoreElements())
     {
         const Rectangle aBox (rSelection.GetNextElement()->GetPageObject()->GetCurrentBoundRect());
-        basegfx::B2DRectangle aB2DBox(
-            aBox.Left(),
-            aBox.Top(),
-            aBox.Right(),
-            aBox.Bottom());
-        maShapes.append(basegfx::tools::createPolygonFromRect(aB2DBox), 4);
+        maShapes.push_back(aBox);
+        maBoundingBox.Union(aBox);
     }
-    maBoundingBox = basegfx::tools::getRange(maShapes);
 
-    setVisible(maShapes.count() > 0);
+    setVisible(maShapes.size() > 0);
     // The selection indicator may have been visible already so call
     // objectChange() to enforce an update.
     objectChange();
@@ -293,7 +290,7 @@ void SubstitutionOverlay::Create (
 void SubstitutionOverlay::Clear (void)
 {
     maShapes.clear();
-    maBoundingBox = basegfx::B2DRange();
+    maBoundingBox.SetEmpty();
     setVisible(false);
 }
 
@@ -302,10 +299,8 @@ void SubstitutionOverlay::Clear (void)
 
 void SubstitutionOverlay::Move (const Point& rOffset)
 {
-    basegfx::B2DHomMatrix aTranslation;
-    aTranslation.translate(rOffset.X(), rOffset.Y());
-    maShapes.transform(aTranslation);
-    maBoundingBox.transform(aTranslation);
+    maTranslation += rOffset;
+    maBoundingBox.Move(rOffset.X(), rOffset.Y());
 
     maPosition += rOffset;
 
@@ -327,14 +322,31 @@ void SubstitutionOverlay::drawGeometry (OutputDevice& rOutputDevice)
 {
     if (getOverlayManager() != NULL)
     {
-        const sal_uInt32 nOldStripeLength (getOverlayManager()->getStripeLengthPixel());
-        getOverlayManager()->setStripeLengthPixel(gnSubstitutionStripeLength);
+        const sal_uInt32 nSavedStripeLength (getOverlayManager()->getStripeLengthPixel());
 
-        const sal_uInt32 nCount (maShapes.count());
-        for (sal_uInt32 nIndex=0; nIndex<nCount; ++nIndex)
-            ImpDrawPolygonStriped(rOutputDevice, maShapes.getB2DPolygon(nIndex));
+        for (::std::vector<Rectangle>::const_iterator
+                 iBox (maShapes.begin()),
+                 iEnd (maShapes.end());
+             iBox!=iEnd;
+             ++iBox)
+        {
+            // Reduce width and height by one pixel to make the box the same
+            // size as the frame of the page object.
+            Rectangle aScreenBox (rOutputDevice.LogicToPixel(*iBox));
+            aScreenBox.Right() -= 1;
+            aScreenBox.Bottom() -= 1;
 
-        getOverlayManager()->setStripeLengthPixel(nOldStripeLength);
+            // Add accumulated translation.
+            Rectangle aBox (rOutputDevice.PixelToLogic(aScreenBox));
+            aBox.Move(maTranslation.X(), maTranslation.Y());
+
+            ImpDrawPolygonStriped(rOutputDevice,
+                basegfx::tools::createPolygonFromRect(
+                    basegfx::B2DRange(
+                        basegfx::B2IRange(aBox.Left(), aBox.Top(), aBox.Right(),aBox.Bottom()))));
+        }
+
+        getOverlayManager()->setStripeLengthPixel(nSavedStripeLength);
     }
 }
 
@@ -345,7 +357,12 @@ void SubstitutionOverlay::createBaseRange (OutputDevice& rOutputDevice)
 {
     (void)rOutputDevice;
 
-    maBaseRange = maBoundingBox;
+    maBaseRange = basegfx::B2DRange(
+        basegfx::B2IRange(
+            maBoundingBox.Left(),
+            maBoundingBox.Top(),
+            maBoundingBox.Right(),
+            maBoundingBox.Bottom()));
 }
 
 
@@ -533,7 +550,12 @@ void InsertionIndicatorOverlay::drawGeometry (OutputDevice& rOutputDevice)
         const Color aColor (rOutputDevice.GetSettings().GetStyleSettings().GetFontColor());
         rOutputDevice.SetLineColor(aColor);
         rOutputDevice.SetFillColor(aColor);
-        rOutputDevice.DrawRect (maBoundingBox);
+
+        // Reduce width of indicator by one pixel to be of the same width as
+        // the page objects.
+        Rectangle aBox (rOutputDevice.LogicToPixel(maBoundingBox));
+        aBox.Right() -= 1;
+        rOutputDevice.DrawRect(rOutputDevice.PixelToLogic(aBox));
     }
 
     rOutputDevice.SetFillColor(aFillColor);

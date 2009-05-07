@@ -338,6 +338,10 @@ void SelectionManager::SelectionHasChanged (const bool bMakeSelectionVisible)
         {
             iListener->Call(NULL);
         }
+
+        // Reset the insertion position: until set again it is calculated from
+        // the current selection.
+        mnInsertionPosition = -1;
     }
 }
 
@@ -589,6 +593,49 @@ Rectangle SelectionManager::ResolveLargeSelection (
         pRepresentative,
         view::SlideSorterView::CS_MODEL,
         view::SlideSorterView::BBT_INFO);
+}
+
+
+
+
+sal_Int32 SelectionManager::GetInsertionPosition (void) const
+{
+    sal_Int32 nInsertionPosition (mnInsertionPosition);
+    if (nInsertionPosition < 0)
+    {
+        model::PageEnumeration aSelectedPages
+            (model::PageEnumerationProvider::CreateSelectedPagesEnumeration(
+                mrSlideSorter.GetModel()));
+        // Initialize (for the case of an empty selection) with the position
+        // at the end of the document.
+        nInsertionPosition = mrSlideSorter.GetModel().GetPageCount();
+        while (aSelectedPages.HasMoreElements())
+        {
+            const sal_Int32 nPosition (aSelectedPages.GetNextElement()->GetPage()->GetPageNum());
+            // Convert *2+1 index to straight index (n-1)/2 after the page
+            // (+1).
+            nInsertionPosition = (nPosition-1)/2 + 1;
+        }
+
+    }
+    return nInsertionPosition;
+}
+
+
+
+
+void SelectionManager::SetInsertionPosition (const sal_Int32 nInsertionPosition)
+{
+    if (nInsertionPosition < 0)
+        mnInsertionPosition = -1;
+    else if (nInsertionPosition > mrSlideSorter.GetModel().GetPageCount())
+    {
+        // Assert but then ignore invalid values.
+        OSL_ASSERT(nInsertionPosition<=mrSlideSorter.GetModel().GetPageCount());
+        return;
+    }
+    else
+        mnInsertionPosition = nInsertionPosition;
 }
 
 
