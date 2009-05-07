@@ -3968,7 +3968,7 @@ void OReportController::createDefaultControl(const uno::Sequence< beans::Propert
         const beans::PropertyValue* pEnd  = pIter + _aArgs.getLength();
         const beans::PropertyValue* pKeyModifier = ::std::find_if(pIter,pEnd,::std::bind2nd(PropertyValueCompare(),boost::cref(sKeyModifier)));
         sal_Int16 nKeyModifier = 0;
-        if ( pKeyModifier == pEnd || (pKeyModifier->Value >>= nKeyModifier) && nKeyModifier == KEY_MOD1 )
+        if ( pKeyModifier == pEnd || ((pKeyModifier->Value >>= nKeyModifier) && nKeyModifier == KEY_MOD1) )
         {
             Sequence< PropertyValue > aCreateArgs;
             m_pMyOwnView->unmarkAllObjects(NULL);
