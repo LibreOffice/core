@@ -39,6 +39,9 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include "propertyids.hxx"
 #include <connectivity/dbexception.hxx>
+#include <connectivity/dbtools.hxx>
+
+#include "resource/common_res.hrc"
 
 using namespace connectivity::evoab;
 using namespace com::sun::star::uno;

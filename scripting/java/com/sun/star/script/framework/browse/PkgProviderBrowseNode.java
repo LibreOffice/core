@@ -30,27 +30,16 @@
 
 package com.sun.star.script.framework.browse;
 
-import com.sun.star.beans.PropertyAttribute;
-import com.sun.star.lib.uno.helper.PropertySet;
-import com.sun.star.uno.Any;
-import com.sun.star.uno.AnyConverter;
-import com.sun.star.uno.Type;
 import com.sun.star.uno.XComponentContext;
 
-import com.sun.star.beans.XIntrospectionAccess;
 import com.sun.star.script.XInvocation;
 
 import com.sun.star.script.browse.XBrowseNode;
-import com.sun.star.script.browse.BrowseNodeTypes;
 
 import com.sun.star.script.framework.provider.ScriptProvider;
 import com.sun.star.script.framework.log.*;
 import com.sun.star.script.framework.container.*;
-import com.sun.star.script.framework.browse.DialogFactory;
 
-import java.io.*;
-import java.util.*;
-import javax.swing.JOptionPane;
 
 public class PkgProviderBrowseNode extends ProviderBrowseNode
     implements XBrowseNode, XInvocation

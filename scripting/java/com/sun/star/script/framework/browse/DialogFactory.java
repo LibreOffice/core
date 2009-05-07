@@ -42,7 +42,6 @@ import com.sun.star.container.XNameContainer;
 
 import com.sun.star.awt.*;
 
-import com.sun.star.script.framework.log.LogUtils;
 
 public class DialogFactory
 {

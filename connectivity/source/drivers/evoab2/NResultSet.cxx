@@ -478,7 +478,7 @@ OEvoabResultSet::getValue( sal_Int32 nColumnNum, GType nType, GValue *pStackValu
         {
                 OEvoabResultSetMetaData *pMeta = (OEvoabResultSetMetaData *) m_xMetaData.get();
                 sal_Int32 nFieldNumber = pMeta->fieldAtColumn(nColumnNum);
-        GValue aValue = { 0, 0 };
+        GValue aValue = {0, {{0}}};
         if (getValue (nFieldNumber, G_TYPE_STRING, &aValue))
         {
             const char *pStr = g_value_get_string (&aValue);
@@ -500,7 +500,7 @@ sal_Bool SAL_CALL OEvoabResultSet::getBoolean( sal_Int32 nColumnNum ) throw(SQLE
         {
                 OEvoabResultSetMetaData *pMeta = (OEvoabResultSetMetaData *) m_xMetaData.get();
                 sal_Int32 nFieldNumber = pMeta->fieldAtColumn(nColumnNum);
-        GValue aValue = { 0, 0 };
+        GValue aValue = {0, {{0}}};
         if (getValue (nFieldNumber, G_TYPE_BOOLEAN, &aValue))
         {
             bResult = g_value_get_boolean (&aValue);

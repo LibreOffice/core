@@ -51,7 +51,6 @@ import com.sun.star.beans.XPropertyChangeListener;
 import com.sun.star.beans.XPropertySetInfo;
 import com.sun.star.beans.Property;
 
-import com.sun.star.uno.Type;
 import com.sun.star.beans.XIntrospectionAccess;
 import com.sun.star.script.XInvocation;
 
@@ -90,7 +89,7 @@ import com.sun.star.deployment.XPackage;
 import com.sun.star.document.XScriptInvocationContext;
 import com.sun.star.frame.XTransientDocumentsDocumentContentFactory;
 import com.sun.star.uno.TypeClass;
-import java.util.*;
+
 public abstract class ScriptProvider
     implements XScriptProvider, XBrowseNode, XPropertySet, XInvocation,
                XInitialization, XTypeProvider, XServiceInfo, XNameContainer

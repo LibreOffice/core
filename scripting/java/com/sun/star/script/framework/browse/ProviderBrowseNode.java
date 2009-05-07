@@ -30,7 +30,6 @@
 
 package com.sun.star.script.framework.browse;
 
-import com.sun.star.beans.PropertyAttribute;
 import com.sun.star.lib.uno.helper.PropertySet;
 import com.sun.star.uno.Any;
 import com.sun.star.uno.AnyConverter;
@@ -53,7 +52,6 @@ import com.sun.star.script.framework.log.*;
 import com.sun.star.script.framework.container.*;
 import com.sun.star.script.framework.browse.DialogFactory;
 
-import java.io.*;
 import java.util.*;
 import javax.swing.JOptionPane;
 

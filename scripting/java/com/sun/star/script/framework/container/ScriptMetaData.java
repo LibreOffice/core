@@ -30,20 +30,14 @@
 
 package com.sun.star.script.framework.container;
 
-import java.net.URLEncoder;
-import java.net.URLDecoder;
-import java.net.URLStreamHandler;
 import java.net.URL;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 
 import java.util.Vector;
 import java.util.StringTokenizer;
 
-import java.io.File;
 import java.io.InputStream;
-import java.io.FileOutputStream;
 import java.io.OutputStream;
 
 import com.sun.star.script.framework.log.LogUtils;
@@ -52,21 +46,12 @@ import com.sun.star.script.framework.provider.PathUtils;
 
 import com.sun.star.script.framework.io.XInputStreamImpl;
 
-
 import com.sun.star.script.framework.container.ScriptEntry;
 import com.sun.star.script.framework.container.Parcel;
 
-import com.sun.star.script.framework.io.XOutputStreamWrapper;
 import com.sun.star.script.framework.io.UCBStreamHandler;
-import com.sun.star.script.framework.io.UCBStreamHandler;
-
-import com.sun.star.io.XTruncate;
-import com.sun.star.io.XOutputStream;
 
 import com.sun.star.ucb.XSimpleFileAccess2;
-
-
-import com.sun.star.io.XStream;
 
 import com.sun.star.uno.UnoRuntime;
 

@@ -34,8 +34,6 @@ import com.sun.star.lib.uno.helper.WeakBase;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.script.XInvocation;
 import com.sun.star.beans.XIntrospectionAccess;
-import com.sun.star.uno.Type;
-import com.sun.star.uno.Any;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.XComponentContext;
 
@@ -57,8 +55,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Date;
 
-import javax.swing.*;
-
 public class HelpIndexer extends WeakBase
     implements XServiceInfo, XInvocation
 {
@@ -73,7 +69,7 @@ public class HelpIndexer extends WeakBase
     public HelpIndexer(XComponentContext xCompContext)
     {
     }
-    
+
     /**
      * @param args the command line arguments
      */
@@ -151,7 +147,7 @@ public class HelpIndexer extends WeakBase
         File aIndexDir = new File( aDirToZipStr + File.separator + aIndexDirName );
         File aCaptionFilesDir = new File( aDirToZipStr + File.separator + "caption" );
         File aContentFilesDir = new File( aDirToZipStr + File.separator + "content" );
-        
+
         try
         {
             Date start = new Date();
@@ -341,7 +337,7 @@ public class HelpIndexer extends WeakBase
     public XIntrospectionAccess getIntrospection()
     {
         return  null;
-    }        
+    }
 
     public Object invoke( String aFunctionName, java.lang.Object[] aParams,
         short[][] aOutParamIndex, java.lang.Object[][] aOutParam )
@@ -388,7 +384,7 @@ public class HelpIndexer extends WeakBase
     {
         throw new com.sun.star.beans.UnknownPropertyException();
     }
-    
+
     public boolean hasMethod( String aMethodName )
     {
         boolean bRet = (aMethodName.equals( aCreateIndexMethodName ) );
@@ -433,6 +429,6 @@ public class HelpIndexer extends WeakBase
     public String getImplementationName()
     {
         return  HelpIndexer.class.getName();
-    }        
+    }
 }
 
