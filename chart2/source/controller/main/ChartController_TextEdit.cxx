@@ -66,15 +66,15 @@ using namespace ::com::sun::star;
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
-void SAL_CALL ChartController::executeDispatch_EditText()
+void SAL_CALL ChartController::executeDispatch_EditText( const Point* pMousePixel )
 {
-    this->StartTextEdit();
+    this->StartTextEdit( pMousePixel );
 }
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
-void ChartController::StartTextEdit()
+void ChartController::StartTextEdit( const Point* pMousePixel )
 {
     //the first marked object will be edited
 
@@ -112,6 +112,18 @@ void ChartController::StartTextEdit()
                 SetUndoManager(&pOutliner->GetUndoManager());
         */
         m_pDrawViewWrapper->SetEditMode();
+
+        // #i12587# support for shapes in chart
+        if ( pMousePixel )
+        {
+            OutlinerView* pOutlinerView = m_pDrawViewWrapper->GetTextEditOutlinerView();
+            if ( pOutlinerView )
+            {
+                MouseEvent aEditEvt( *pMousePixel, 1, MOUSE_SYNTHETIC, MOUSE_LEFT, 0 );
+                pOutlinerView->MouseButtonDown( aEditEvt );
+                pOutlinerView->MouseButtonUp( aEditEvt );
+            }
+        }
 
         //we invalidate the outliner region because the outliner has some
         //paint problems (some characters are painted twice a little bit shifted)

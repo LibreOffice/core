@@ -626,11 +626,11 @@ private:
     void SAL_CALL       executeDispatch_DeleteYErrorbar();
 
     void SAL_CALL       executeDispatch_InsertSpecialCharacter();
-    void SAL_CALL       executeDispatch_EditText();
+    void SAL_CALL       executeDispatch_EditText( const Point* pMousePixel = NULL );
     void SAL_CALL       executeDispatch_SourceData();
     void SAL_CALL       executeDispatch_MoveSeries( sal_Bool bForward );
 
-    void                StartTextEdit();
+    void                StartTextEdit( const Point* pMousePixel = NULL );
     bool                EndTextEdit();
 
     void SAL_CALL       executeDispatch_View3D();
@@ -650,7 +650,7 @@ private:
 
     //
     DECL_LINK( DoubleClickWaitingHdl, void* );
-    void execute_DoubleClick();
+    void execute_DoubleClick( const Point* pMousePixel = NULL );
     void startDoubleClickWaiting();
     void stopDoubleClickWaiting();
 

@@ -795,7 +795,11 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
                 m_aSelection.resetPossibleSelectionAfterSingleClickWasEnsured();
         }
         else if( isDoubleClick(rMEvt) )
-            execute_DoubleClick();
+        {
+            // #i12587# support for shapes in chart
+            Point aMousePixel = rMEvt.GetPosPixel();
+            execute_DoubleClick( &aMousePixel );
+        }
 
         //@todo ForcePointer(&rMEvt);
         pWindow->ReleaseMouse();
@@ -810,7 +814,7 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
         impl_notifySelectionChangeListeners();
 }
 
-void ChartController::execute_DoubleClick()
+void ChartController::execute_DoubleClick( const Point* pMousePixel )
 {
     bool bEditText = false;
     if ( m_aSelection.hasSelection() )
@@ -837,7 +841,7 @@ void ChartController::execute_DoubleClick()
 
     if ( bEditText )
     {
-        executeDispatch_EditText();
+        executeDispatch_EditText( pMousePixel );
     }
     else
     {
