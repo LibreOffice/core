@@ -157,8 +157,7 @@ $(DLLDEST)$/bridgetest_inprocess$(BATCH_SUFFIX) .ERRREMOVE: makefile.mk
         -s com.sun.star.test.bridge.BridgeTest -- \
         com.sun.star.test.bridge.CppTestObject > $@
 .ELSE
-    echo echo ERROR: this script can only be created properly for \
-        USE_SHELL=bash > $@
+    echo echo ERROR: this script can only be created properly for USE_SHELL=bash > $@
 .ENDIF
     $(GIVE_EXEC_RIGHTS) $@
 
