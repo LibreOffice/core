@@ -157,7 +157,7 @@ $(DLLDEST)$/bridgetest_inprocess$(BATCH_SUFFIX) .ERRREMOVE: makefile.mk
         -s com.sun.star.test.bridge.BridgeTest -- \
         com.sun.star.test.bridge.CppTestObject > $@
 .ELSE
-    echo echo ERROR: this script can only be created properly for USE_SHELL=bash > $@
+    echo ERROR: this script can only be created properly for USE_SHELL=bash > $@
 .ENDIF
     $(GIVE_EXEC_RIGHTS) $@
 
@@ -167,8 +167,7 @@ $(DLLDEST)$/bridgetest_client$(BATCH_SUFFIX) .ERRREMOVE: makefile.mk
         -s com.sun.star.test.bridge.BridgeTest -- \
         -u \''uno:socket,host=127.0.0.1,port=2002;urp;test'\' > $@
 .ELSE
-    echo echo ERROR: this script can only be created properly for \
-        USE_SHELL=bash > $@
+    echo ERROR: this script can only be created properly for USE_SHELL=bash > $@
 .ENDIF
     $(GIVE_EXEC_RIGHTS) $@
 
@@ -179,8 +178,7 @@ $(DLLDEST)$/bridgetest_server$(BATCH_SUFFIX) .ERRREMOVE: makefile.mk
         -u \''uno:socket,host=127.0.0.1,port=2002;urp;test'\' --singleaccept \
         > $@
 .ELSE
-    echo echo ERROR: this script can only be created properly for \
-        USE_SHELL=bash > $@
+    echo ERROR: this script can only be created properly for USE_SHELL=bash > $@
 .ENDIF
     $(GIVE_EXEC_RIGHTS) $@
 
@@ -207,8 +205,7 @@ $(DLLDEST)$/bridgetest_inprocess_java$(BATCH_SUFFIX) .ERRREMOVE: makefile.mk
         -env:URE_INTERNAL_JAVA_DIR=$(MY_URE_INTERNAL_JAVA_DIR) \
         -- com.sun.star.test.bridge.JavaTestObject noCurrentContext > $@
 .ELSE
-    echo echo ERROR: this script can only be created properly for \
-        USE_SHELL=bash > $@
+    echo ERROR: this script can only be created properly for USE_SHELL=bash > $@
 .ENDIF
     $(GIVE_EXEC_RIGHTS) $@
 .ENDIF
