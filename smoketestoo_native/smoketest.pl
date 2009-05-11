@@ -837,8 +837,13 @@ sub getInstset {
         ($NEWINSTSET, $INSTSET, $sufix) = fileparse ($smoketest_install);
         return ($NEWINSTSET, $INSTSET);
     }
-    if (!isLocalEnv() and !defined($ENV{CWS_WORK_STAMP}) and (-e $SHIP) and ($gui ne $cygwin)) {
+    if (!isLocalEnv() and !defined($ENV{CWS_WORK_STAMP}) and (-e $SHIP)) {
+        my $last_lineend = $/;
+        if ($gui = $cygwin) {
+            &SetCygwinLineends();
+        }
         ($NEWINSTSET, $INSTSET) = getSetFromServer();
+        $/ = $last_lineend;
     }
     else {
         $InstDir="";
@@ -1095,10 +1100,11 @@ sub ConvertCygwinToWin_Shell {
 sub ConvertCygwinToWin {
     my ($cygwinpath) = @_;
     my ($winpath);
+    my ($last_lineends) = $/;
     SetCygwinLineends();
     $winpath=`cygpath --windows $cygwinpath`;
     chomp($winpath);
-    SetWinLineends();
+    $/ = $last_lineends;
     return ($winpath);
 }
 
