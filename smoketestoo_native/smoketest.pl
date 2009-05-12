@@ -839,7 +839,7 @@ sub getInstset {
     }
     if (!isLocalEnv() and !defined($ENV{CWS_WORK_STAMP}) and (-e $SHIP)) {
         my $last_lineend = $/;
-        if ($gui = $cygwin) {
+        if ($gui eq $cygwin) {
             &SetCygwinLineends();
         }
         ($NEWINSTSET, $INSTSET) = getSetFromServer();
