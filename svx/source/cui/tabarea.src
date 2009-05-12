@@ -1,0 +1,1541 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: tabarea.src,v $
+ * $Revision: 1.65 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+ // include ---------------------------------------------------------------
+#include "helpid.hrc"
+#include <svx/dialogs.hrc>
+#include "tabarea.hrc"
+
+#define MASKCOLOR       MaskColor = Color{ Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
+
+
+ // RID_SVXPAGE_AREA ------------------------------------------------------
+#define TRANS_GRAD_OFFSET_X             6
+#define TRANS_GRAD_OFFSET_Y             64
+#define TRANS_GRAD_FIELD_SEPARATION     24
+
+TabPage RID_SVXPAGE_TRANSPARENCE
+{
+    HelpID = HID_AREA_TRANSPARENCE;
+    Hide = TRUE;
+    Size = MAP_APPFONT ( 260 , 185 );
+    FixedLine FL_PROP
+    {
+        Pos = MAP_APPFONT ( 6 , 3  ) ;
+        Size = MAP_APPFONT ( 248, 8 ) ;
+        Text [ en-US ] = "Transparency mode";
+    };
+    RadioButton RBT_TRANS_OFF
+    {
+        Pos = MAP_APPFONT ( 12 , 14  ) ;
+        Size = MAP_APPFONT ( 110 , 10 ) ;
+        Text [ en-US ] = "~No transparency";
+    };
+    RadioButton RBT_TRANS_LINEAR
+    {
+        Pos = MAP_APPFONT ( 12 , 28  ) ;
+        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Text [ en-US ] = "~Transparency";
+    };
+    MetricField MTR_TRANSPARENT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 72 , 26 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 100 ;
+        StrictFormat = TRUE ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = "%" ;
+        Last = 100 ;
+        SpinSize = 5 ;
+    };
+    RadioButton RBT_TRANS_GRADIENT
+    {
+        Pos = MAP_APPFONT ( 12 , 42 ) ;
+        Size = MAP_APPFONT ( 110 , 10 ) ;
+        Text [ en-US ] = "Gradient";
+    };
+    FixedText FT_TRGR_TYPE
+    {
+        Pos = MAP_APPFONT ( 21 , 56 ) ;
+        Size = MAP_APPFONT ( 41 , 8 ) ;
+        Text [ en-US ] = "Ty~pe";
+    };
+    ListBox LB_TRGR_GRADIENT_TYPES
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 72 , 54  ) ;
+        Size = MAP_APPFONT ( 53 , 63 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        StringList [ en-US ] =
+        {
+            < "Linear" ; Default ; > ;
+            < "Axial" ; Default ; > ;
+            < "Radial" ; Default ; > ;
+            < "Ellipsoid" ; Default ; > ;
+            < "Quadratic" ; Default ; > ;
+            < "Square" ; Default ; > ;
+        };
+    };
+    FixedText FT_TRGR_CENTER_X
+    {
+        Pos = MAP_APPFONT ( 21 , 72 ) ;
+        Size = MAP_APPFONT ( 41 , 8 ) ;
+        Text [ en-US ] = "Center ~X";
+    };
+    MetricField MTR_TRGR_CENTER_X
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 72 , 70 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 100 ;
+        StrictFormat = TRUE ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = "%" ;
+        Last = 100 ;
+        SpinSize = 5 ;
+    };
+    FixedText FT_TRGR_CENTER_Y
+    {
+        Pos = MAP_APPFONT ( 21 , 88 ) ;
+        Size = MAP_APPFONT ( 41 , 8 ) ;
+        Text [ en-US ] = "Center ~Y";
+    };
+    MetricField MTR_TRGR_CENTER_Y
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 72 , 86 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 100 ;
+        StrictFormat = TRUE ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = "%" ;
+        Last = 100 ;
+        SpinSize = 5 ;
+    };
+    FixedText FT_TRGR_ANGLE
+    {
+        Pos = MAP_APPFONT ( 21 , 104 ) ;
+        Size = MAP_APPFONT ( 41 , 8 ) ;
+        Text [ en-US ] = "~Angle";
+    };
+    MetricField MTR_TRGR_ANGLE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 72 , 102 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 359 ;
+        Unit = FUNIT_CUSTOM ;
+        Last = 359 ;
+        SpinSize = 15 ;
+        CustomUnitText [ en-US ] = " degrees";
+    };
+    FixedText FT_TRGR_BORDER
+    {
+        Pos = MAP_APPFONT ( 15 + TRANS_GRAD_OFFSET_X, 56 + TRANS_GRAD_OFFSET_Y) ;
+        Size = MAP_APPFONT ( 41, 8 ) ;
+        Text [ en-US ] = "~Border";
+    };
+    MetricField MTR_TRGR_BORDER
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 66 + TRANS_GRAD_OFFSET_X, 54 + TRANS_GRAD_OFFSET_Y) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 100 ;
+        StrictFormat = TRUE ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = "%" ;
+        Last = 100 ;
+        SpinSize = 5 ;
+    };
+    FixedText FT_TRGR_START_VALUE
+    {
+        Pos = MAP_APPFONT ( 21 , 136 ) ;
+        Size = MAP_APPFONT ( 41 , 8 ) ;
+        Text [ en-US ] = "~Start value";
+    };
+    MetricField MTR_TRGR_START_VALUE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 72 , 134 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 100 ;
+        StrictFormat = TRUE ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = "%" ;
+        Last = 100 ;
+        SpinSize = 5 ;
+    };
+    FixedText FT_TRGR_END_VALUE
+    {
+        Pos = MAP_APPFONT ( 21 , 152 ) ;
+        Size = MAP_APPFONT ( 41 , 8 ) ;
+        Text [ en-US ] = "~End value";
+    };
+    MetricField MTR_TRGR_END_VALUE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 72 , 150 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 100 ;
+        StrictFormat = TRUE ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = "%" ;
+        Last = 100 ;
+        SpinSize = 5 ;
+    };
+    Control CTL_BITMAP_PREVIEW
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 138 , 14  ) ;
+        Size = MAP_APPFONT ( 110 , 42 ) ;
+    };
+    Control CTL_TRANS_PREVIEW
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 138 , 14  ) ;
+        Size = MAP_APPFONT ( 110 , 42 ) ;
+    };
+    Text [ en-US ] = "Transparency";
+};
+
+ // RID_SVXPAGE_AREA ------------------------------------------------------
+TabPage RID_SVXPAGE_AREA
+{
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    HelpID = HID_AREA_AREA ;
+    Hide = TRUE ;
+    Text [ en-US ] = "Area" ;
+
+    FixedLine FL_PROP
+    {
+        Pos = MAP_APPFONT ( 6 , 3  ) ;
+        Size = MAP_APPFONT ( 120, 8 ) ;
+        Text [ en-US ] = "Fill";
+    };
+    ListBox LB_AREA_TYPE
+    {
+        Pos = MAP_APPFONT ( 12 , 14  ) ;
+        Size = MAP_APPFONT ( 108 , 60 ) ;
+        DropDown = TRUE;
+        Border = TRUE;
+        StringList [ en-US ] =
+        {
+            < "None" ; Default ; > ;
+            < "Color" ; Default ; > ;
+            < "Gradient" ; Default ; > ;
+            < "Hatching" ; Default ; > ;
+            < "Bitmap" ; Default ; > ;
+        };
+    };
+
+
+    ListBox LB_COLOR
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 30 ) ;
+        Size = MAP_APPFONT ( 108 , 103 ) ;
+        TabStop = TRUE ;
+    };
+    ListBox LB_GRADIENT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 30 ) ;
+        Size = MAP_APPFONT ( 108 , 103 ) ;
+        TabStop = TRUE ;
+    };
+    ListBox LB_HATCHING
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 30 ) ;
+        Size = MAP_APPFONT ( 108 , 103 ) ;
+        TabStop = TRUE ;
+    };
+    ListBox LB_BITMAP
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 30 ) ;
+        Size = MAP_APPFONT ( 108 , 103 ) ;
+        TabStop = TRUE ;
+    };
+
+    // ---------- preview ----------
+
+    Control CTL_COLOR_PREVIEW
+    {
+        Border = TRUE;
+        Pos = MAP_APPFONT ( 12 , 137  ) ;
+        Size = MAP_APPFONT ( 110 , 42 ) ;
+    };
+    Control CTL_BITMAP_PREVIEW
+    {
+        Border = TRUE;
+        Pos = MAP_APPFONT ( 12 , 137  ) ;
+        Size = MAP_APPFONT ( 110 , 42 ) ;
+        Hide = TRUE ;
+    };
+
+    // ---------- for gradients ----------
+
+    FixedLine FL_STEPCOUNT
+    {
+        Pos = MAP_APPFONT ( 132 , 3 ) ;
+        Size = MAP_APPFONT ( 122 , 8 ) ;
+        Text [ en-US ] = "Increments" ;
+    };
+    TriStateBox TSB_STEPCOUNT
+    {
+        Pos = MAP_APPFONT ( 138 , 15 ) ;
+        Size = MAP_APPFONT ( 68 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "A~utomatic" ;
+    };
+    NumericField NUM_FLD_STEPCOUNT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 208 , 14 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 3 ;
+        First = 3 ;
+        Maximum = 256 ;
+        Last = 256 ;
+        StrictFormat = TRUE ;
+    };
+
+    // ---------- for hatches ----------
+
+    CheckBox CB_HATCHBCKGRD
+    {
+        Pos = MAP_APPFONT ( 132 , 3 ) ;
+        Size = MAP_APPFONT ( 122 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Background color" ;
+    };
+    ListBox LB_HATCHBCKGRDCOLOR
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 141 , 16 ) ;
+        Size = MAP_APPFONT ( 70 , 100 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        DDExtraWidth = TRUE ;
+    };
+
+    // ---------- for bitmaps ----------
+
+    FixedLine FL_SIZE
+    {
+        Pos = MAP_APPFONT ( 132 , 3  ) ;
+        Size = MAP_APPFONT ( 122 , 8 ) ;
+        Text [ en-US ] = "Size" ;
+    };
+    TriStateBox TSB_ORIGINAL
+    {
+        Pos = MAP_APPFONT ( 138 , 15 ) ;
+        Size = MAP_APPFONT ( 48 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Original" ;
+    };
+    TriStateBox TSB_SCALE
+    {
+        Pos = MAP_APPFONT ( 138 , 30 ) ;
+        Size = MAP_APPFONT ( 48 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Re~lative" ;
+    };
+    FixedText FT_X_SIZE
+    {
+        Pos = MAP_APPFONT ( 187 , 15 ) ;
+        Size = MAP_APPFONT ( 24 , 8 ) ;
+        Text [ en-US ] = "Wi~dth" ;
+    };
+    MetricField MTR_FLD_X_SIZE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 212 , 14 ) ;
+        Size = MAP_APPFONT ( 36 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        StrictFormat = TRUE ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_MM ;
+        CustomUnitText = "%" ;
+        Minimum = 5 ;
+        Maximum = 100 ;
+        First = 5 ;
+        Last = 100 ;
+        SpinSize = 5 ;
+    };
+    FixedText FT_Y_SIZE
+    {
+        Pos = MAP_APPFONT ( 187 , 31  ) ;
+        Size = MAP_APPFONT ( 24 , 8 ) ;
+        Text [ en-US ] = "H~eight" ;
+    };
+    MetricField MTR_FLD_Y_SIZE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 212 , 29  ) ;
+        Size = MAP_APPFONT ( 36 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        StrictFormat = TRUE ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_MM ;
+        CustomUnitText = "%" ;
+        Minimum = 5 ;
+        Maximum = 100 ;
+        First = 5 ;
+        Last = 100 ;
+        SpinSize = 5 ;
+        SpinSize = 5 ;
+    };
+    FixedLine FL_POSITION
+    {
+        Pos = MAP_APPFONT ( 132 , 47 ) ;
+        Size = MAP_APPFONT ( 122 , 8 ) ;
+        Text [ en-US ] = "Position" ;
+    };
+
+    Control CTL_POSITION
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 138 , 57 ) ;
+        Size = MAP_APPFONT ( 40 , 27 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_X_OFFSET
+    {
+        Pos = MAP_APPFONT ( 138 , 89  ) ;
+        Size = MAP_APPFONT ( 39 , 8 ) ;
+        Text [ en-US ] = "~X Offset" ;
+    };
+    FixedText FT_Y_OFFSET
+    {
+        Pos = MAP_APPFONT ( 139 , 104 ) ;
+        Size = MAP_APPFONT ( 78 , 8 ) ;
+        Text [ en-US ] = "~Y Offset" ;
+    };
+    MetricField MTR_FLD_X_OFFSET
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 219 , 87 ) ;
+        Size = MAP_APPFONT ( 29 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        StrictFormat = TRUE ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = "%" ;
+        Maximum = 100 ;
+        Last = 100 ;
+        SpinSize = 5 ;
+    };
+    MetricField MTR_FLD_Y_OFFSET
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 219 , 102 ) ;
+        Size = MAP_APPFONT ( 29 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 100 ;
+        StrictFormat = TRUE ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = "%" ;
+        Last = 100 ;
+        SpinSize = 5 ;
+    };
+    TriStateBox TSB_TILE
+    {
+        Pos = MAP_APPFONT ( 138 , 117  ) ;
+        Size = MAP_APPFONT ( 54 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Tile" ;
+    };
+    TriStateBox TSB_STRETCH
+    {
+        Pos = MAP_APPFONT ( 194 , 117  ) ;
+        Size = MAP_APPFONT ( 54 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Auto~Fit" ;
+    };
+    FixedLine FL_OFFSET
+    {
+        Pos = MAP_APPFONT ( 132 , 133  ) ;
+        Size = MAP_APPFONT ( 122 , 8 ) ;
+        Text [ en-US ] = "Offset" ;
+    };
+    RadioButton RBT_ROW
+    {
+        Pos = MAP_APPFONT ( 138 , 144  ) ;
+        Size = MAP_APPFONT ( 75 , 10 ) ;
+        Text [ en-US ] = "Ro~w" ;
+    };
+    RadioButton RBT_COLUMN
+    {
+        Pos = MAP_APPFONT ( 138 , 158 ) ;
+        Size = MAP_APPFONT ( 75 , 10 ) ;
+        Text [ en-US ] = "Colu~mn" ;
+    };
+    MetricField MTR_FLD_OFFSET
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 219 , 157 ) ;
+        Size = MAP_APPFONT ( 29 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 100 ;
+        StrictFormat = TRUE ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = "%" ;
+        Last = 100 ;
+        SpinSize = 5 ;
+    };
+};
+ // RID_SVXPAGE_SHADOW ------------------------------------------------------
+TabPage RID_SVXPAGE_SHADOW
+{
+    HelpID = HID_AREA_SHADOW ;
+    Hide = TRUE ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Text [ en-US ] = "Shadow" ;
+    FixedLine FL_PROP
+    {
+        Pos = MAP_APPFONT ( 6 , 3  ) ;
+        Size = MAP_APPFONT ( 248, 8 ) ;
+        Text [ en-US ] = "Properties";
+    };
+    TriStateBox TSB_SHOW_SHADOW
+    {
+        Pos = MAP_APPFONT ( 12 , 14  ) ;
+        Size = MAP_APPFONT ( 110 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Use shadow";
+    };
+    FixedText FT_POSITION
+    {
+        Pos = MAP_APPFONT ( 12 , 33  ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text [ en-US ] = "~Position";
+    };
+    Control CTL_POSITION
+    {
+        HelpId = HID_TPSHADOW_CTRL ;
+        Pos = MAP_APPFONT ( 65 , 31  ) ;
+        Size = MAP_APPFONT ( 57 , 29 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_DISTANCE
+    {
+        Pos = MAP_APPFONT ( 12 , 69  ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Text [ en-US ] = "~Distance";
+    };
+    MetricField MTR_FLD_DISTANCE
+    {
+        Pos = MAP_APPFONT ( 65 , 67  ) ;
+        Size = MAP_APPFONT ( 47 , 12 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 99999 ;
+        Minimum = 0 ; // #i33700#
+        StrictFormat = TRUE ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_MM ;
+        Last = 99999 ;
+        /*SpinSize = 100 ; */
+        SpinSize = 1 ;
+    };
+    ListBox LB_SHADOW_COLOR
+    {
+        Pos = MAP_APPFONT ( 65 , 86  ) ;
+        Size = MAP_APPFONT ( 57 , 100 ) ;
+        DropDown = TRUE ;
+        DDExtraWidth = TRUE ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_SHADOW_COLOR
+    {
+        Pos = MAP_APPFONT ( 12 , 88  ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Text [ en-US ] = "~Color" ;
+    };
+    FixedText FT_TRANSPARENT
+    {
+        Pos = MAP_APPFONT ( 12 , 107  ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Text [ en-US ] = "~Transparency";
+    };
+    MetricField MTR_SHADOW_TRANSPARENT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 65 , 105  ) ;
+        Size = MAP_APPFONT ( 47 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 100 ;
+        StrictFormat = TRUE ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = "%" ;
+        Last = 100 ;
+        SpinSize = 5 ;
+    };
+    Control CTL_COLOR_PREVIEW
+    {
+        Border = TRUE;
+        Pos = MAP_APPFONT ( 138 , 14  ) ;
+        Size = MAP_APPFONT ( 110 , 42 ) ;
+        TabStop = FALSE ;
+    };
+};
+ // RID_SVXPAGE_HATCH --------------------------------------------------------
+TabPage RID_SVXPAGE_HATCH
+{
+    HelpID = HID_AREA_HATCH ;
+    Hide = TRUE ;
+    Text [ en-US ] = "Hatching" ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    FixedLine FL_PROP
+    {
+        Pos = MAP_APPFONT ( 6 , 3  ) ;
+        Size = MAP_APPFONT ( 248, 8 ) ;
+        Text [ en-US ] = "Properties";
+    };
+    FixedText FT_LINE_DISTANCE
+    {
+        Pos = MAP_APPFONT ( 12 , 14  ) ;
+        Size = MAP_APPFONT ( 78 , 8 ) ;
+        Text [ en-US ] = "~Spacing" ;
+    };
+    MetricField MTR_FLD_DISTANCE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 25  ) ;
+        Size = MAP_APPFONT ( 50 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 30 ;
+        Maximum = 9999 ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_MM ;
+        First = 30 ;
+        Last = 9999 ;
+        SpinSize = 100 ;
+    };
+    FixedText FT_LINE_ANGLE
+    {
+        Pos = MAP_APPFONT ( 12 , 41  ) ;
+        Size = MAP_APPFONT ( 78 , 8 ) ;
+        Text [ en-US ] = "A~ngle" ;
+    };
+    MetricField MTR_FLD_ANGLE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 52  ) ;
+        Size = MAP_APPFONT ( 50 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 359 ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText [ en-US ] = " degrees" ;
+        Last = 359 ;
+        SpinSize = 15 ;
+    };
+    Control CTL_ANGLE
+    {
+        HelpId = HID_TPHATCH_CTRL ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 72 ) ;
+        Size = MAP_APPFONT ( 39 , 39 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_LINE_TYPE
+    {
+        Pos = MAP_APPFONT ( 12 , 123 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Text [ en-US ] = "~Line type" ;
+    };
+    ListBox LB_LINE_TYPE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 134 ) ;
+        Size = MAP_APPFONT ( 62 , 62 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        StringList [ en-US ] =
+        {
+            < "Single" ; Default ; > ;
+            < "Crossed" ; Default ; > ;
+            < "Triple" ; Default ; > ;
+        };
+    };
+    FixedText FT_LINE_COLOR
+    {
+        Pos = MAP_APPFONT ( 12 , 150 ) ;
+        Size = MAP_APPFONT ( 49 , 8 ) ;
+        Text [ en-US ] = "Line ~color" ;
+    };
+    ListBox LB_LINE_COLOR
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 161 ) ;
+        Size = MAP_APPFONT ( 62 , 100 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        DDExtraWidth = TRUE ;
+    };
+    ListBox LB_HATCHINGS
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 103 , 14  ) ;
+        Size = MAP_APPFONT ( 88 , 110 ) ;
+        TabStop = TRUE ;
+    };
+    Control CTL_PREVIEW
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 103 , 131  ) ;
+        Size = MAP_APPFONT ( 88 , 42 ) ;
+    };
+    PushButton BTN_ADD
+    {
+        Pos = MAP_APPFONT ( 197 , 14 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "~Add..." ;
+        TabStop = TRUE ;
+    };
+    PushButton BTN_MODIFY
+    {
+        Pos = MAP_APPFONT ( 197 , 32  ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "~Modify..." ;
+        TabStop = TRUE ;
+    };
+    PushButton BTN_DELETE
+    {
+        Pos = MAP_APPFONT ( 197 , 68  ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "~Delete..." ;
+        TabStop = TRUE ;
+    };
+    ImageButton BTN_LOAD
+    {
+        Pos = MAP_APPFONT ( 197 , 104  ) ;
+        Size = MAP_APPFONT ( 16 , 16 ) ;
+        TabStop = TRUE ;
+        QuickHelpText [ en-US ] = "Load Hatches List" ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap
+            {
+                File = "sc05501.bmp" ;
+            };
+            MASKCOLOR
+        };
+    };
+    ImageButton BTN_SAVE
+    {
+        Pos = MAP_APPFONT ( 197 , 124 ) ;
+        Size = MAP_APPFONT ( 16 , 16 ) ;
+        TabStop = TRUE ;
+        QuickHelpText [ en-US ] = "Save Hatches List" ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap
+            {
+                File = "sc05502.bmp" ;
+            };
+            MASKCOLOR
+        };
+    };
+};
+ // RID_SVXPAGE_BITMAP -------------------------------------------------------
+TabPage RID_SVXPAGE_BITMAP
+{
+    HelpID = HID_AREA_BITMAP ;
+    Hide = TRUE ;
+    Text [ en-US ] = "Bitmap Patterns" ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    FixedLine FL_PROP
+    {
+        Pos = MAP_APPFONT ( 6 , 3  ) ;
+        Size = MAP_APPFONT ( 248, 8 ) ;
+        Text [ en-US ] = "Properties";
+    };
+    FixedText FT_PIXEL_EDIT
+    {
+        Pos = MAP_APPFONT ( 12 , 14  ) ;
+        Size = MAP_APPFONT ( 85 , 8 ) ;
+        Text [ en-US ] = "Pattern Editor";
+    };
+    Control CTL_PIXEL
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 25  ) ;
+        Size = MAP_APPFONT ( 72 , 72 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_COLOR
+    {
+        Pos = MAP_APPFONT ( 12 , 104 ) ;
+        Size = MAP_APPFONT ( 85 , 8 ) ;
+        Text [ en-US ] = "~Foreground color";
+    };
+    ListBox LB_COLOR
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 115  ) ;
+        Size = MAP_APPFONT ( 62 , 100 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        DDExtraWidth = TRUE ;
+    };
+    FixedText FT_BACKGROUND_COLOR
+    {
+        Pos = MAP_APPFONT ( 12 , 131 ) ;
+        Size = MAP_APPFONT ( 85 , 8 ) ;
+        Text [ en-US ] = "~Background color";
+    };
+    ListBox LB_BACKGROUND_COLOR
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 142  ) ;
+        Size = MAP_APPFONT ( 62 , 100 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        DDExtraWidth = TRUE ;
+    };
+    FixedText FT_BITMAPS_HIDDEN
+    {
+        // Hidden label that provides the name for the bitmaps list box.
+        Text [ en-US ] = "Bitmap";
+    };
+    ListBox LB_BITMAPS
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 103 , 14  ) ;
+        Size = MAP_APPFONT ( 88 , 110 ) ;
+        TabStop = TRUE ;
+    };
+    Control CTL_PREVIEW
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 103 , 131  ) ;
+        Size = MAP_APPFONT ( 88 , 42 ) ;
+    };
+    PushButton BTN_ADD
+    {
+        Pos = MAP_APPFONT ( 197 , 14 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "~Add..." ;
+        TabStop = TRUE ;
+    };
+    PushButton BTN_MODIFY
+    {
+        Pos = MAP_APPFONT ( 197 , 32  ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "~Modify..." ;
+        TabStop = TRUE ;
+    };
+    PushButton BTN_IMPORT
+    {
+        Pos = MAP_APPFONT ( 197 , 50  ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "~Import..." ;
+        TabStop = TRUE ;
+    };
+    PushButton BTN_DELETE
+    {
+        Pos = MAP_APPFONT ( 197 , 68 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "~Delete..." ;
+        TabStop = TRUE ;
+    };
+    ImageButton BTN_LOAD
+    {
+        Pos = MAP_APPFONT ( 197 , 104  ) ;
+        Size = MAP_APPFONT ( 16 , 16 ) ;
+        TabStop = TRUE ;
+        QuickHelpText [ en-US ] = "Load Bitmap List" ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap
+            {
+                File = "sc05501.bmp" ;
+            };
+            MASKCOLOR
+        };
+    };
+    ImageButton BTN_SAVE
+    {
+        Pos = MAP_APPFONT ( 197 , 124  ) ;
+        Size = MAP_APPFONT ( 16 , 16 ) ;
+        TabStop = TRUE ;
+        QuickHelpText [ en-US ] = "Save Bitmap List" ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap
+            {
+                File = "sc05502.bmp" ;
+            };
+            MASKCOLOR
+        };
+    };
+};
+ // RID_SVXPAGE_GRADIENT -----------------------------------------------------
+TabPage RID_SVXPAGE_GRADIENT
+{
+    HelpID = HID_AREA_GRADIENT ;
+    Hide = TRUE ;
+    Text [ en-US ] = "Gradients" ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    FixedLine FL_PROP
+    {
+        Pos = MAP_APPFONT ( 6 , 3  ) ;
+        Size = MAP_APPFONT ( 248, 8 ) ;
+        Text [ en-US ] = "Properties";
+    };
+    FixedText FT_TYPE
+    {
+        Pos = MAP_APPFONT ( 12 , 16  ) ;
+        Size = MAP_APPFONT ( 26 , 8 ) ;
+        Text [ en-US ] = "Ty~pe" ;
+    };
+    ListBox LB_GRADIENT_TYPES
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 49 , 14  ) ;
+        Size = MAP_APPFONT ( 48, 63 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        StringList [ en-US ] =
+        {
+            < "Linear" ; Default ; > ;
+            < "Axial" ; Default ; > ;
+            < "Radial" ; Default ; > ;
+            < "Ellipsoid" ; Default ; > ;
+            < "Square" ; Default ; > ;
+            < "Rectangular" ; Default ; > ;
+        };
+    };
+    FixedText FT_CENTER_X
+    {
+        Pos = MAP_APPFONT ( 12 , 32 ) ;
+        Size = MAP_APPFONT ( 37 , 8 ) ;
+        Text [ en-US ] = "Center ~X" ;
+    };
+    MetricField MTR_CENTER_X
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 49 , 30  ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 100 ;
+        StrictFormat = TRUE ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = "%" ;
+        Last = 100 ;
+        SpinSize = 5 ;
+    };
+    FixedText FT_CENTER_Y
+    {
+        Pos = MAP_APPFONT ( 12 , 48  ) ;
+        Size = MAP_APPFONT ( 37 , 8 ) ;
+        Text [ en-US ] = "Center ~Y" ;
+    };
+    MetricField MTR_CENTER_Y
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 49 , 46  ) ;
+        Size = MAP_APPFONT ( 40, 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 100 ;
+        StrictFormat = TRUE ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = "%" ;
+        Last = 100 ;
+        SpinSize = 5 ;
+    };
+    FixedText FT_ANGLE
+    {
+        Pos = MAP_APPFONT ( 12 , 64 ) ;
+        Size = MAP_APPFONT ( 37 , 8 ) ;
+        Text [ en-US ] = "A~ngle" ;
+    };
+    MetricField MTR_ANGLE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 49 , 62 ) ;
+        Size = MAP_APPFONT ( 40, 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 359 ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText [ en-US ] = " degrees" ;
+        Last = 359 ;
+        SpinSize = 15 ;
+    };
+    FixedText FT_BORDER
+    {
+        Pos = MAP_APPFONT ( 12 , 80  ) ;
+        Size = MAP_APPFONT ( 32 , 8 ) ;
+        Text [ en-US ] = "~Border" ;
+    };
+    MetricField MTR_BORDER
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 49 , 78  ) ;
+        Size = MAP_APPFONT ( 40, 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 100 ;
+        StrictFormat = TRUE ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = "%" ;
+        Last = 100 ;
+        SpinSize = 5 ;
+    };
+    FixedText FT_COLOR_FROM
+    {
+        Pos = MAP_APPFONT ( 12 , 99 ) ;
+        Size = MAP_APPFONT ( 32 , 8 ) ;
+        Text [ en-US ] = "~From" ;
+    };
+    ListBox LB_COLOR_FROM
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 49 , 97 ) ;
+        Size = MAP_APPFONT ( 48, 100 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        DDExtraWidth = TRUE ;
+    };
+    MetricField MTR_COLOR_FROM
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 49 , 113  ) ;
+        Size = MAP_APPFONT ( 40, 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 100 ;
+        StrictFormat = TRUE ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = "%" ;
+        Last = 100 ;
+        SpinSize = 5 ;
+    };
+    FixedText FT_COLOR_TO
+    {
+        Pos = MAP_APPFONT ( 12 , 133 ) ;
+        Size = MAP_APPFONT ( 32 , 8 ) ;
+        Text [ en-US ] = "~To" ;
+    };
+    ListBox LB_COLOR_TO
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 49 , 131 ) ;
+        Size = MAP_APPFONT ( 48, 100 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        DDExtraWidth = TRUE ;
+    };
+    MetricField MTR_COLOR_TO
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 49 , 147 ) ;
+        Size = MAP_APPFONT ( 40, 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 100 ;
+        StrictFormat = TRUE ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = "%" ;
+        Last = 100 ;
+        SpinSize = 5 ;
+    };
+    ListBox LB_GRADIENTS
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 103 , 14  ) ;
+        Size = MAP_APPFONT ( 88 , 110 ) ;
+        TabStop = TRUE ;
+    };
+    Control CTL_PREVIEW
+    {
+        Border = TRUE;
+        Pos = MAP_APPFONT ( 103 , 131  ) ;
+        Size = MAP_APPFONT ( 88 , 42 ) ;
+    };
+    PushButton BTN_ADD
+    {
+        Pos = MAP_APPFONT ( 197 , 14 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "~Add..." ;
+        TabStop = TRUE ;
+    };
+    PushButton BTN_MODIFY
+    {
+        Pos = MAP_APPFONT ( 197 , 32  ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "~Modify..." ;
+        TabStop = TRUE ;
+    };
+    PushButton BTN_DELETE
+    {
+        Pos = MAP_APPFONT ( 197 , 68 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "~Delete..." ;
+        TabStop = TRUE ;
+    };
+    ImageButton BTN_LOAD
+    {
+        Pos = MAP_APPFONT ( 197 , 104  ) ;
+        Size = MAP_APPFONT ( 16 , 16 ) ;
+        TabStop = TRUE ;
+        QuickHelpText [ en-US ] = "Load Gradients List" ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap
+            {
+                File = "sc05501.bmp" ;
+            };
+            MASKCOLOR
+        };
+    };
+    ImageButton BTN_SAVE
+    {
+        Pos = MAP_APPFONT ( 197 , 124  ) ;
+        Size = MAP_APPFONT ( 16 , 16 ) ;
+        TabStop = TRUE ;
+        QuickHelpText [ en-US ] = "Save Gradients List" ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap
+            {
+                File = "sc05502.bmp" ;
+            };
+            MASKCOLOR
+        };
+    };
+};
+ // RID_SVXPAGE_COLOR --------------------------------------------------------
+TabPage RID_SVXPAGE_COLOR
+{
+    HelpId = HID_OPTIONS_COLOR ;
+    Hide = TRUE ;
+    Text [ en-US ] = "Colors" ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    FixedLine FL_PROP
+    {
+        Pos = MAP_APPFONT ( 6 , 3  ) ;
+        Size = MAP_APPFONT ( 248, 8 ) ;
+        Text [ en-US ] = "Properties";
+    };
+    FixedText FT_NAME
+    {
+        Pos = MAP_APPFONT ( 12 , 16  ) ;
+        Size = MAP_APPFONT ( 28 , 8 ) ;
+        Text [ en-US ] = "~Name" ;
+    };
+    Edit EDT_NAME
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 42 , 14  ) ;
+        Size = MAP_APPFONT ( 76 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_COLOR
+    {
+        Pos = MAP_APPFONT ( 12 , 32 ) ;
+        Size = MAP_APPFONT ( 28 , 8 ) ;
+        Text [ en-US ] = "C~olor" ;
+    };
+    ListBox LB_COLOR
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 42 , 30  ) ;
+        Size = MAP_APPFONT ( 76 , 100 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        DDExtraWidth = TRUE ;
+    };
+
+    FixedText FT_TABLE_NAME
+    {
+        Pos = MAP_APPFONT ( 42 , 48 ) ;
+        Size = MAP_APPFONT ( 94 , 8 ) ;
+        Text [ en-US ] = "Color table" ;
+    };
+    Control CTL_COLORTABLE
+    {
+        Border = TRUE ;
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( 42 , 59 ) ;
+        Size = MAP_APPFONT ( 94 , 117 ) ;
+        TabStop = TRUE ;
+    };
+
+    Control CTL_PREVIEW_OLD
+    {
+        Border = TRUE;
+        Pos = MAP_APPFONT ( 157 , 14  ) ;
+        Size = MAP_APPFONT ( 34 , 25 ) ;
+    };
+    Control CTL_PREVIEW_NEW
+    {
+        Border = TRUE;
+        Pos = MAP_APPFONT ( 157, 39  ) ;
+        Size = MAP_APPFONT ( 34 , 25 ) ;
+    };
+    ListBox LB_COLORMODEL
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 157 , 71 ) ;
+        Size = MAP_APPFONT ( 34 , 12 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        StringList [ en-US ] =
+        {
+            < "RGB" ; Default ; > ;
+            < "CMYK" ; Default ; > ;
+        };
+    };
+    FixedText FT_1
+    {
+        Pos = MAP_APPFONT ( 142 , 89 ) ;
+        Size = MAP_APPFONT ( 15 , 8 ) ;
+        Text = "~C" ;
+    };
+    MetricField MTR_FLD_1
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 157 , 87 ) ;
+        Size = MAP_APPFONT ( 30 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 100 ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = "%" ;
+        Last = 100 ;
+    };
+    FixedText FT_2
+    {
+        Pos = MAP_APPFONT ( 142 , 105  ) ;
+        Size = MAP_APPFONT ( 15 , 8 ) ;
+        Text = "~M" ;
+    };
+    MetricField MTR_FLD_2
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 157 , 103 ) ;
+        Size = MAP_APPFONT ( 30 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 100 ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = "%" ;
+        Last = 100 ;
+    };
+    FixedText FT_3
+    {
+        Pos = MAP_APPFONT ( 142 , 121 ) ;
+        Size = MAP_APPFONT ( 15 , 8 ) ;
+        Text = "~Y" ;
+    };
+    MetricField MTR_FLD_3
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 157 , 119 ) ;
+        Size = MAP_APPFONT ( 30 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 100 ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = "%" ;
+        Last = 100 ;
+    };
+    FixedText FT_4
+    {
+        Pos = MAP_APPFONT ( 142 , 137 ) ;
+        Size = MAP_APPFONT ( 15 , 8 ) ;
+        Text = "~K" ;
+    };
+    MetricField MTR_FLD_4
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 157 , 135 ) ;
+        Size = MAP_APPFONT ( 30 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 100 ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = "%" ;
+        Last = 100 ;
+    };
+    PushButton BTN_ADD
+    {
+        Pos = MAP_APPFONT ( 197 , 14 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "~Add" ;
+        TabStop = TRUE ;
+    };
+    PushButton BTN_WORK_ON
+    {
+        Pos = MAP_APPFONT ( 197 , 50 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "~Edit..." ;
+        TabStop = TRUE ;
+    };
+    PushButton BTN_DELETE
+    {
+        Pos = MAP_APPFONT ( 197 , 68  ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "~Delete..." ;
+        TabStop = TRUE ;
+    };
+    PushButton BTN_MODIFY
+    {
+        Pos = MAP_APPFONT ( 197, 32  ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "~Modify" ;
+        TabStop = TRUE ;
+    };
+    ImageButton BTN_LOAD
+    {
+        Pos = MAP_APPFONT ( 197 , 104  ) ;
+        Size = MAP_APPFONT ( 16 , 16 ) ;
+        TabStop = TRUE ;
+        QuickHelpText [ en-US ] = "Load Color List" ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap
+            {
+                File = "sc05501.bmp" ;
+            };
+            MASKCOLOR
+        };
+    };
+    ImageButton BTN_SAVE
+    {
+        Pos = MAP_APPFONT ( 197 , 124  ) ;
+        Size = MAP_APPFONT ( 16 , 16 ) ;
+        TabStop = TRUE ;
+        QuickHelpText [ en-US ] = "Save Color List" ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap
+            {
+                File = "sc05502.bmp" ;
+            };
+            MASKCOLOR
+        };
+    };
+};
+ // RID_SVXDLG_AREA ----------------------------------------------------------
+TabDialog RID_SVXDLG_AREA
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 289 , 176 ) ;
+    Text [ en-US ] = "Area" ;
+    Moveable = TRUE ;
+    TabControl 1
+    {
+        OutputSize = TRUE ;
+        Pos = MAP_APPFONT ( 3 , 3 ) ;
+        PageList =
+        {
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_AREA ;
+                Text [ en-US ] = "Area" ;
+                PageResID = RID_SVXPAGE_AREA ;
+            };
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_SHADOW ;
+                PageResID = RID_SVXPAGE_SHADOW ;
+                Text [ en-US ] = "Shadow" ;
+            };
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_TRANSPARENCE ;
+                Text [ en-US ] = "Transparency";
+            };
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_COLOR ;
+                Text [ en-US ] = "Colors" ;
+                PageResID = RID_SVXPAGE_COLOR ;
+            };
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_GRADIENT ;
+                Text [ en-US ] = "Gradients" ;
+                PageResID = RID_SVXPAGE_GRADIENT ;
+            };
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_HATCH ;
+                Text [ en-US ] = "Hatching" ;
+                PageResID = RID_SVXPAGE_HATCH ;
+            };
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_BITMAP ;
+                Text [ en-US ] = "Bitmaps" ;
+                PageResID = RID_SVXPAGE_BITMAP ;
+            };
+        };
+    };
+};
+
+Image RID_SVXIMG_LOAD_H
+{
+    ImageBitmap = Bitmap
+    {
+        File = "sch05501.bmp" ;
+    };
+    MASKCOLOR
+};
+
+Image RID_SVXIMG_SAVE_H
+{
+    ImageBitmap = Bitmap
+    {
+        File = "sch05502.bmp" ;
+    };
+    MASKCOLOR
+};
+
+ // ********************************************************************** EOF
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

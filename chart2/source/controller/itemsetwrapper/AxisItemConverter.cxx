@@ -1,0 +1,842 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: AxisItemConverter.cxx,v $
+ * $Revision: 1.14.44.1 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_chart2.hxx"
+#include "AxisItemConverter.hxx"
+#include "ItemPropertyMap.hxx"
+#include "CharacterPropertyItemConverter.hxx"
+#include "GraphicPropertyItemConverter.hxx"
+#include "chartview/ChartSfxItemIds.hxx"
+#include "chartview/ExplicitValueProvider.hxx"
+#include "SchWhichPairs.hxx"
+#include "macros.hxx"
+#include "Scaling.hxx"
+#include "ChartModelHelper.hxx"
+#include "AxisHelper.hxx"
+#include "CommonConverters.hxx"
+
+#include <com/sun/star/chart/ChartAxisLabelPosition.hpp>
+#include <com/sun/star/chart/ChartAxisMarkPosition.hpp>
+#include <com/sun/star/chart/ChartAxisPosition.hpp>
+#include <com/sun/star/chart2/XAxis.hpp>
+#include <com/sun/star/chart2/AxisOrientation.hpp>
+
+// for SfxBoolItem
+#include <svtools/eitem.hxx>
+// for SvxDoubleItem
+#include <svx/chrtitem.hxx>
+// for SfxInt32Item
+#include <svtools/intitem.hxx>
+#include <rtl/math.hxx>
+
+#include <algorithm>
+
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::chart2;
+using ::com::sun::star::uno::Reference;
+
+namespace
+{
+::comphelper::ItemPropertyMapType & lcl_GetAxisPropertyMap()
+{
+    static ::comphelper::ItemPropertyMapType aAxisPropertyMap(
+        ::comphelper::MakeItemPropertyMap
+        IPM_MAP_ENTRY( SCHATTR_AXIS_SHOWDESCR, "DisplayLabels",    0 )
+        IPM_MAP_ENTRY( SCHATTR_AXIS_TICKS,     "MajorTickmarks",   0 )
+        IPM_MAP_ENTRY( SCHATTR_AXIS_HELPTICKS, "MinorTickmarks",   0 )
+        IPM_MAP_ENTRY( SCHATTR_TEXT_ORDER,     "ArrangeOrder",     0 )
+        IPM_MAP_ENTRY( SCHATTR_TEXT_STACKED,   "StackCharacters",  0 )
+        IPM_MAP_ENTRY( SCHATTR_TEXTBREAK,      "TextBreak",        0 )
+        IPM_MAP_ENTRY( SCHATTR_TEXT_OVERLAP,   "TextOverlap",      0 )
+        );
+
+    return aAxisPropertyMap;
+};
+} // anonymous namespace
+
+namespace chart
+{
+namespace wrapper
+{
+
+AxisItemConverter::AxisItemConverter(
+    const Reference< beans::XPropertySet > & rPropertySet,
+    SfxItemPool& rItemPool,
+    SdrModel& rDrawModel,
+    const Reference< chart2::XChartDocument > & xChartDoc,
+    chart2::ExplicitScaleData * pScale /* = NULL */,
+    chart2::ExplicitIncrementData * pIncrement /* = NULL */,
+    ::std::auto_ptr< awt::Size > pRefSize /* = NULL */ ) :
+        ItemConverter( rPropertySet, rItemPool ),
+        m_xChartDoc( xChartDoc ),
+        m_pExplicitScale( NULL ),
+        m_pExplicitIncrement( NULL )
+{
+    Reference< lang::XMultiServiceFactory > xNamedPropertyContainerFactory( xChartDoc, uno::UNO_QUERY );
+
+    if( pScale )
+        m_pExplicitScale = new chart2::ExplicitScaleData( *pScale );
+    if( pIncrement )
+        m_pExplicitIncrement = new chart2::ExplicitIncrementData( *pIncrement );
+
+    m_aConverters.push_back( new GraphicPropertyItemConverter(
+                                 rPropertySet, rItemPool, rDrawModel,
+                                 xNamedPropertyContainerFactory,
+                                 GraphicPropertyItemConverter::LINE_PROPERTIES ));
+    m_aConverters.push_back( new CharacterPropertyItemConverter( rPropertySet, rItemPool, pRefSize,
+                                                                 C2U( "ReferencePageSize" ) ));
+
+    m_xAxis.set( Reference< chart2::XAxis >( rPropertySet, uno::UNO_QUERY ) );
+    OSL_ASSERT( m_xAxis.is());
+}
+
+AxisItemConverter::~AxisItemConverter()
+{
+    delete m_pExplicitScale;
+    delete m_pExplicitIncrement;
+
+    ::std::for_each( m_aConverters.begin(), m_aConverters.end(),
+                     ::comphelper::DeleteItemConverterPtr() );
+}
+
+void AxisItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
+{
+    ::std::for_each( m_aConverters.begin(), m_aConverters.end(),
+                     ::comphelper::FillItemSetFunc( rOutItemSet ));
+
+    // own items
+    ItemConverter::FillItemSet( rOutItemSet );
+}
+
+bool AxisItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
+{
+    bool bResult = false;
+
+    ::std::for_each( m_aConverters.begin(), m_aConverters.end(),
+                     ::comphelper::ApplyItemSetFunc( rItemSet, bResult ));
+
+    // own items
+    return ItemConverter::ApplyItemSet( rItemSet ) || bResult;
+}
+
+const USHORT * AxisItemConverter::GetWhichPairs() const
+{
+    // must span all used items!
+    return nAxisWhichPairs;
+}
+
+bool AxisItemConverter::GetItemProperty( tWhichIdType nWhichId, tPropertyNameWithMemberId & rOutProperty ) const
+{
+    ::comphelper::ItemPropertyMapType & rMap( lcl_GetAxisPropertyMap());
+    ::comphelper::ItemPropertyMapType::const_iterator aIt( rMap.find( nWhichId ));
+
+    if( aIt == rMap.end())
+        return false;
+
+    rOutProperty =(*aIt).second;
+
+    return true;
+}
+
+void AxisItemConverter::FillSpecialItem( USHORT nWhichId, SfxItemSet & rOutItemSet ) const
+    throw( uno::Exception )
+{
+    if( ! m_xAxis.is() )
+        return;
+
+    const chart2::ScaleData     aScale( m_xAxis->getScaleData() );
+    const chart2::IncrementData aInc( aScale.IncrementData );
+    const uno::Sequence< chart2::SubIncrement > aSubIncs( aScale.IncrementData.SubIncrements );
+
+    switch( nWhichId )
+    {
+        case SCHATTR_AXIS_AUTO_MAX:
+            // if the any has no value => auto is on
+            rOutItemSet.Put( SfxBoolItem( nWhichId, ( ! aScale.Maximum.hasValue())));
+            break;
+
+        case SCHATTR_AXIS_MAX:
+            if( aScale.Maximum.hasValue())
+            {
+                OSL_ASSERT( aScale.Maximum.getValueTypeClass() == uno::TypeClass_DOUBLE );
+                rOutItemSet.Put(
+                    SvxDoubleItem(
+                        *reinterpret_cast< const double * >( aScale.Maximum.getValue()), nWhichId ));
+            }
+            else
+            {
+                double fExplicitMax = 10.0;
+                if( m_pExplicitScale )
+                    fExplicitMax = m_pExplicitScale->Maximum;
+
+                rOutItemSet.Put(
+                    SvxDoubleItem( fExplicitMax, nWhichId ));
+            }
+            break;
+
+        case SCHATTR_AXIS_AUTO_MIN:
+            // if the any has no value => auto is on
+            rOutItemSet.Put( SfxBoolItem( nWhichId, ( ! aScale.Minimum.hasValue())));
+            break;
+
+        case SCHATTR_AXIS_MIN:
+            if( aScale.Minimum.hasValue())
+            {
+                OSL_ASSERT( aScale.Minimum.getValueTypeClass() == uno::TypeClass_DOUBLE );
+                rOutItemSet.Put(
+                    SvxDoubleItem(
+                        *reinterpret_cast< const double * >( aScale.Minimum.getValue()), nWhichId ));
+            }
+            else
+            {
+                if( m_pExplicitScale )
+                    rOutItemSet.Put( SvxDoubleItem( m_pExplicitScale->Minimum, nWhichId ));
+            }
+            break;
+
+        case SCHATTR_AXIS_LOGARITHM:
+        {
+            BOOL bValue = AxisHelper::isLogarithmic( aScale.Scaling );
+            rOutItemSet.Put( SfxBoolItem( nWhichId, bValue ));
+        }
+        break;
+
+        case SCHATTR_AXIS_REVERSE:
+            rOutItemSet.Put( SfxBoolItem( nWhichId, (AxisOrientation_REVERSE == aScale.Orientation) ));
+            break;
+
+        // Increment
+        case SCHATTR_AXIS_AUTO_STEP_MAIN:
+            // if the any has no value => auto is on
+            rOutItemSet.Put( SfxBoolItem( nWhichId, ( ! aInc.Distance.hasValue())));
+            break;
+
+        case SCHATTR_AXIS_STEP_MAIN:
+            if( aInc.Distance.hasValue())
+            {
+                OSL_ASSERT( aInc.Distance.getValueTypeClass() == uno::TypeClass_DOUBLE );
+                rOutItemSet.Put(
+                    SvxDoubleItem(
+                        *reinterpret_cast< const double * >( aInc.Distance.getValue()), nWhichId ));
+            }
+            else
+            {
+                if( m_pExplicitIncrement )
+                    rOutItemSet.Put( SvxDoubleItem( m_pExplicitIncrement->Distance, nWhichId ));
+            }
+            break;
+
+        // SubIncrement
+        case SCHATTR_AXIS_AUTO_STEP_HELP:
+        {
+            // if the any has no value => auto is on
+            rOutItemSet.Put(
+                SfxBoolItem(
+                    nWhichId,
+                    ! ( aSubIncs.getLength() > 0 &&
+                        aSubIncs[0].IntervalCount.hasValue() )));
+        }
+        break;
+
+        case SCHATTR_AXIS_STEP_HELP:
+        {
+            if( aSubIncs.getLength() > 0 &&
+                aSubIncs[0].IntervalCount.hasValue())
+            {
+                OSL_ASSERT( aSubIncs[0].IntervalCount.getValueTypeClass() == uno::TypeClass_LONG );
+                rOutItemSet.Put(
+                    SfxInt32Item(
+                        nWhichId,
+                        *reinterpret_cast< const sal_Int32 * >(
+                            aSubIncs[0].IntervalCount.getValue()) ));
+            }
+            else
+            {
+                if( m_pExplicitIncrement &&
+                    m_pExplicitIncrement->SubIncrements.getLength() > 0 )
+                {
+                    rOutItemSet.Put(
+                        SfxInt32Item(
+                            nWhichId,
+                            m_pExplicitIncrement->SubIncrements[0].IntervalCount ));
+                }
+            }
+        }
+        break;
+
+        case SCHATTR_AXIS_AUTO_ORIGIN:
+        {
+            // if the any has no double value => auto is on
+            rOutItemSet.Put( SfxBoolItem( nWhichId, ( !hasDoubleValue(aScale.Origin) )));
+        }
+        break;
+
+        case SCHATTR_AXIS_ORIGIN:
+        {
+            double fOrigin = 0.0;
+            if( !(aScale.Origin >>= fOrigin) )
+            {
+                if( m_pExplicitScale )
+                    fOrigin = m_pExplicitScale->Origin;
+            }
+            rOutItemSet.Put( SvxDoubleItem( fOrigin, nWhichId ));
+        }
+        break;
+
+        case SCHATTR_AXIS_POSITION:
+        {
+            ::com::sun::star::chart::ChartAxisPosition eAxisPos( ::com::sun::star::chart::ChartAxisPosition_ZERO );
+            GetPropertySet()->getPropertyValue(C2U( "CrossoverPosition" )) >>= eAxisPos;
+            rOutItemSet.Put( SfxInt32Item( nWhichId, eAxisPos ) );
+        }
+        break;
+
+        case SCHATTR_AXIS_POSITION_VALUE:
+        {
+            double fValue = 0.0;
+            if( GetPropertySet()->getPropertyValue(C2U( "CrossoverValue" )) >>= fValue )
+                rOutItemSet.Put( SvxDoubleItem( fValue, nWhichId ) );
+        }
+        break;
+
+        case SCHATTR_AXIS_CROSSING_MAIN_AXIS_NUMBERFORMAT:
+        {
+            //read only item
+            //necessary tp display the crossing value with an appropriate format
+
+            Reference< chart2::XCoordinateSystem > xCooSys( AxisHelper::getCoordinateSystemOfAxis(
+                m_xAxis, ChartModelHelper::findDiagram( m_xChartDoc ) ) );
+
+            Reference< chart2::XAxis > xCrossingMainAxis( AxisHelper::getCrossingMainAxis( m_xAxis, xCooSys ) );
+
+            sal_Int32 nFormatKey = ExplicitValueProvider::getExplicitNumberFormatKeyForAxis(
+                xCrossingMainAxis, xCooSys, Reference< util::XNumberFormatsSupplier >( m_xChartDoc, uno::UNO_QUERY ) );
+
+            rOutItemSet.Put( SfxUInt32Item( nWhichId, nFormatKey ));
+        }
+        break;
+
+        case SCHATTR_AXIS_LABEL_POSITION:
+        {
+            ::com::sun::star::chart::ChartAxisLabelPosition ePos( ::com::sun::star::chart::ChartAxisLabelPosition_NEAR_AXIS );
+            GetPropertySet()->getPropertyValue(C2U( "LabelPosition" )) >>= ePos;
+            rOutItemSet.Put( SfxInt32Item( nWhichId, ePos ) );
+        }
+        break;
+
+        case SCHATTR_AXIS_MARK_POSITION:
+        {
+            ::com::sun::star::chart::ChartAxisMarkPosition ePos( ::com::sun::star::chart::ChartAxisMarkPosition_AT_LABELS_AND_AXIS );
+            GetPropertySet()->getPropertyValue(C2U( "MarkPosition" )) >>= ePos;
+            rOutItemSet.Put( SfxInt32Item( nWhichId, ePos ) );
+        }
+        break;
+
+        case SCHATTR_TEXT_DEGREES:
+        {
+            // convert double to int (times 100)
+            double fVal = 0;
+
+            if( GetPropertySet()->getPropertyValue( C2U( "TextRotation" )) >>= fVal )
+            {
+                rOutItemSet.Put( SfxInt32Item( nWhichId, static_cast< sal_Int32 >(
+                                                   ::rtl::math::round( fVal * 100.0 ) ) ));
+            }
+        }
+        break;
+
+        case SID_ATTR_NUMBERFORMAT_VALUE:
+//         case SCHATTR_AXIS_NUMFMT:
+        {
+            if( m_pExplicitScale )
+            {
+                Reference< chart2::XCoordinateSystem > xCooSys(
+                        AxisHelper::getCoordinateSystemOfAxis(
+                              m_xAxis, ChartModelHelper::findDiagram( m_xChartDoc ) ) );
+
+                sal_Int32 nFormatKey = ExplicitValueProvider::getExplicitNumberFormatKeyForAxis(
+                    m_xAxis, xCooSys, Reference< util::XNumberFormatsSupplier >( m_xChartDoc, uno::UNO_QUERY ) );
+
+                rOutItemSet.Put( SfxUInt32Item( nWhichId, nFormatKey ));
+            }
+        }
+        break;
+
+        case SID_ATTR_NUMBERFORMAT_SOURCE:
+        {
+            bool bNumberFormatIsSet = ( GetPropertySet()->getPropertyValue( C2U( "NumberFormat" )).hasValue());
+            rOutItemSet.Put( SfxBoolItem( nWhichId, ! bNumberFormatIsSet ));
+        }
+        break;
+
+        case SCHATTR_AXISTYPE:
+        rOutItemSet.Put( SfxInt32Item( nWhichId, aScale.AxisType ));
+        break;
+    }
+}
+
+bool AxisItemConverter::ApplySpecialItem( USHORT nWhichId, const SfxItemSet & rItemSet )
+    throw( uno::Exception )
+{
+    if( !m_xAxis.is() )
+        return false;
+
+    chart2::ScaleData     aScale( m_xAxis->getScaleData() );
+
+    bool bSetScale    = false;
+    bool bChangedOtherwise = false;
+
+    uno::Any aValue;
+
+    switch( nWhichId )
+    {
+        case SCHATTR_AXIS_AUTO_MAX:
+            if( (static_cast< const SfxBoolItem & >(
+                     rItemSet.Get( nWhichId )).GetValue() ))
+            {
+                aScale.Maximum.clear();
+                bSetScale = true;
+            }
+            // else SCHATTR_AXIS_MAX must have some value
+            break;
+
+        case SCHATTR_AXIS_MAX:
+            // only if auto if false
+            if( ! (static_cast< const SfxBoolItem & >(
+                       rItemSet.Get( SCHATTR_AXIS_AUTO_MAX )).GetValue() ))
+            {
+                rItemSet.Get( nWhichId ).QueryValue( aValue );
+
+                if( aScale.Maximum != aValue )
+                {
+                    aScale.Maximum = aValue;
+                    bSetScale = true;
+                }
+            }
+            break;
+
+        case SCHATTR_AXIS_AUTO_MIN:
+            if( (static_cast< const SfxBoolItem & >(
+                     rItemSet.Get( nWhichId )).GetValue() ))
+            {
+                aScale.Minimum.clear();
+                bSetScale = true;
+            }
+            // else SCHATTR_AXIS_MIN must have some value
+            break;
+
+        case SCHATTR_AXIS_MIN:
+            // only if auto if false
+            if( ! (static_cast< const SfxBoolItem & >(
+                       rItemSet.Get( SCHATTR_AXIS_AUTO_MIN )).GetValue() ))
+            {
+                rItemSet.Get( nWhichId ).QueryValue( aValue );
+
+                if( aScale.Minimum != aValue )
+                {
+                    aScale.Minimum = aValue;
+                    bSetScale = true;
+                }
+            }
+            break;
+
+        case SCHATTR_AXIS_LOGARITHM:
+        {
+            bool bWasLogarithm = AxisHelper::isLogarithmic( aScale.Scaling );
+
+            if( (static_cast< const SfxBoolItem & >(
+                     rItemSet.Get( nWhichId )).GetValue() ))
+            {
+                // logarithm is true
+                if( ! bWasLogarithm )
+                {
+                    aScale.Scaling = new LogarithmicScaling( 10.0 );
+                    bSetScale = true;
+                }
+            }
+            else
+            {
+                // logarithm is false => linear scaling
+                if( bWasLogarithm )
+                {
+                    aScale.Scaling = new LinearScaling( 1.0, 0.0 );
+                    bSetScale = true;
+                }
+            }
+        }
+        break;
+
+        case SCHATTR_AXIS_REVERSE:
+        {
+            bool bWasReverse = ( AxisOrientation_REVERSE == aScale.Orientation );
+            bool bNewReverse = (static_cast< const SfxBoolItem & >(
+                     rItemSet.Get( nWhichId )).GetValue() );
+            if( bWasReverse != bNewReverse )
+            {
+                aScale.Orientation = bNewReverse ? AxisOrientation_REVERSE : AxisOrientation_MATHEMATICAL;
+                bSetScale = true;
+            }
+        }
+        break;
+
+        // Increment
+        case SCHATTR_AXIS_AUTO_STEP_MAIN:
+            if( (static_cast< const SfxBoolItem & >(
+                     rItemSet.Get( nWhichId )).GetValue() ))
+            {
+                aScale.IncrementData.Distance.clear();
+                bSetScale = true;
+            }
+            // else SCHATTR_AXIS_STEP_MAIN must have some value
+            break;
+
+        case SCHATTR_AXIS_STEP_MAIN:
+            // only if auto if false
+            if( ! (static_cast< const SfxBoolItem & >(
+                       rItemSet.Get( SCHATTR_AXIS_AUTO_STEP_MAIN )).GetValue() ))
+            {
+                rItemSet.Get( nWhichId ).QueryValue( aValue );
+
+                if( aScale.IncrementData.Distance != aValue )
+                {
+                    aScale.IncrementData.Distance = aValue;
+                    bSetScale = true;
+                }
+            }
+            break;
+
+        // SubIncrement
+        case SCHATTR_AXIS_AUTO_STEP_HELP:
+            if( (static_cast< const SfxBoolItem & >(
+                     rItemSet.Get( nWhichId )).GetValue() ) &&
+                aScale.IncrementData.SubIncrements.getLength() > 0 &&
+                aScale.IncrementData.SubIncrements[0].IntervalCount.hasValue() )
+            {
+                    aScale.IncrementData.SubIncrements[0].IntervalCount.clear();
+                    bSetScale = true;
+            }
+            // else SCHATTR_AXIS_STEP_MAIN must have some value
+            break;
+
+        case SCHATTR_AXIS_STEP_HELP:
+            // only if auto if false
+            if( ! (static_cast< const SfxBoolItem & >(
+                       rItemSet.Get( SCHATTR_AXIS_AUTO_STEP_HELP )).GetValue() ) &&
+                aScale.IncrementData.SubIncrements.getLength() > 0 )
+            {
+                rItemSet.Get( nWhichId ).QueryValue( aValue );
+
+                if( ! aScale.IncrementData.SubIncrements[0].IntervalCount.hasValue() ||
+                    aScale.IncrementData.SubIncrements[0].IntervalCount != aValue )
+                {
+                    OSL_ASSERT( aValue.getValueTypeClass() == uno::TypeClass_LONG );
+                    aScale.IncrementData.SubIncrements[0].IntervalCount = aValue;
+                    bSetScale = true;
+                }
+            }
+            break;
+
+        case SCHATTR_AXIS_AUTO_ORIGIN:
+        {
+            if( (static_cast< const SfxBoolItem & >(
+                     rItemSet.Get( nWhichId )).GetValue() ))
+            {
+                aScale.Origin.clear();
+                bSetScale = true;
+            }
+        }
+        break;
+
+        case SCHATTR_AXIS_ORIGIN:
+        {
+            // only if auto is false
+            if( ! (static_cast< const SfxBoolItem & >(
+                       rItemSet.Get( SCHATTR_AXIS_AUTO_ORIGIN )).GetValue() ))
+            {
+                rItemSet.Get( nWhichId ).QueryValue( aValue );
+
+                if( aScale.Origin != aValue )
+                {
+                    aScale.Origin = aValue;
+                    bSetScale = true;
+
+                    if( !AxisHelper::isAxisPositioningEnabled() )
+                    {
+                        //keep old and new settings for axis positioning in sync somehow
+                        Reference< chart2::XCoordinateSystem > xCooSys( AxisHelper::getCoordinateSystemOfAxis(
+                            m_xAxis, ChartModelHelper::findDiagram( m_xChartDoc ) ) );
+
+                        sal_Int32 nDimensionIndex=0;
+                        sal_Int32 nAxisIndex=0;
+                        if( AxisHelper::getIndicesForAxis( m_xAxis, xCooSys, nDimensionIndex, nAxisIndex ) && nAxisIndex==0 )
+                        {
+                            Reference< beans::XPropertySet > xCrossingMainAxis( AxisHelper::getCrossingMainAxis( m_xAxis, xCooSys ), uno::UNO_QUERY );
+                            if( xCrossingMainAxis.is() )
+                            {
+                                double fValue = 0.0;
+                                if( aValue >>= fValue )
+                                {
+                                    xCrossingMainAxis->setPropertyValue( C2U( "CrossoverPosition" ), uno::makeAny( ::com::sun::star::chart::ChartAxisPosition_VALUE ));
+                                    xCrossingMainAxis->setPropertyValue( C2U( "CrossoverValue" ), uno::makeAny( fValue ));
+                                }
+                                else
+                                    xCrossingMainAxis->setPropertyValue( C2U( "CrossoverPosition" ), uno::makeAny( ::com::sun::star::chart::ChartAxisPosition_START ));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        break;
+
+        case SCHATTR_AXIS_POSITION:
+        {
+            ::com::sun::star::chart::ChartAxisPosition eAxisPos =
+                (::com::sun::star::chart::ChartAxisPosition)
+                static_cast< const SfxInt32Item & >( rItemSet.Get( nWhichId )).GetValue();
+
+            ::com::sun::star::chart::ChartAxisPosition eOldAxisPos( ::com::sun::star::chart::ChartAxisPosition_ZERO );
+            bool bPropExisted = ( GetPropertySet()->getPropertyValue(C2U( "CrossoverPosition" )) >>= eOldAxisPos );
+
+            if( !bPropExisted || ( eOldAxisPos != eAxisPos ))
+            {
+                GetPropertySet()->setPropertyValue( C2U( "CrossoverPosition" ), uno::makeAny( eAxisPos ));
+                bChangedOtherwise = true;
+
+                //move the parallel axes to the other side if necessary
+                if( eAxisPos==::com::sun::star::chart::ChartAxisPosition_START || eAxisPos==::com::sun::star::chart::ChartAxisPosition_END )
+                {
+                    Reference< beans::XPropertySet > xParallelAxis( AxisHelper::getParallelAxis( m_xAxis, ChartModelHelper::findDiagram( m_xChartDoc ) ), uno::UNO_QUERY );
+                    if( xParallelAxis.is() )
+                    {
+                        ::com::sun::star::chart::ChartAxisPosition eOtherPos;
+                        if( xParallelAxis->getPropertyValue( C2U( "CrossoverPosition" ) ) >>= eOtherPos )
+                        {
+                            if( eOtherPos == eAxisPos )
+                            {
+                                ::com::sun::star::chart::ChartAxisPosition eOppositePos =
+                                    (eAxisPos==::com::sun::star::chart::ChartAxisPosition_START)
+                                    ? ::com::sun::star::chart::ChartAxisPosition_END
+                                    : ::com::sun::star::chart::ChartAxisPosition_START;
+                                xParallelAxis->setPropertyValue( C2U( "CrossoverPosition" ), uno::makeAny( eOppositePos ));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        break;
+
+        case SCHATTR_AXIS_POSITION_VALUE:
+        {
+            double fValue = static_cast< const SvxDoubleItem & >( rItemSet.Get( nWhichId )).GetValue();
+
+            double fOldValue = 0.0;
+            bool bPropExisted = ( GetPropertySet()->getPropertyValue(C2U( "CrossoverValue" )) >>= fOldValue );
+
+            if( !bPropExisted || ( fOldValue != fValue ))
+            {
+                GetPropertySet()->setPropertyValue( C2U( "CrossoverValue" ), uno::makeAny( fValue ));
+                bChangedOtherwise = true;
+
+                //keep old and new settings for axis positioning in sync somehow
+                {
+                    Reference< chart2::XCoordinateSystem > xCooSys( AxisHelper::getCoordinateSystemOfAxis(
+                        m_xAxis, ChartModelHelper::findDiagram( m_xChartDoc ) ) );
+
+                    sal_Int32 nDimensionIndex=0;
+                    sal_Int32 nAxisIndex=0;
+                    if( AxisHelper::getIndicesForAxis( m_xAxis, xCooSys, nDimensionIndex, nAxisIndex ) && nAxisIndex==0 && nDimensionIndex==0 )
+                    {
+                        Reference< chart2::XAxis > xCrossingMainAxis( AxisHelper::getCrossingMainAxis( m_xAxis, xCooSys ) );
+                        if( xCrossingMainAxis.is() )
+                        {
+                            ScaleData aCrossingScale( xCrossingMainAxis->getScaleData() );
+                            aCrossingScale.Origin = uno::makeAny(fValue);
+                            xCrossingMainAxis->setScaleData(aCrossingScale);
+                        }
+                    }
+                }
+            }
+        }
+        break;
+
+        case SCHATTR_AXIS_LABEL_POSITION:
+        {
+            ::com::sun::star::chart::ChartAxisLabelPosition ePos =
+                (::com::sun::star::chart::ChartAxisLabelPosition)
+                static_cast< const SfxInt32Item & >( rItemSet.Get( nWhichId )).GetValue();
+
+            ::com::sun::star::chart::ChartAxisLabelPosition eOldPos( ::com::sun::star::chart::ChartAxisLabelPosition_NEAR_AXIS );
+            bool bPropExisted = ( GetPropertySet()->getPropertyValue(C2U( "LabelPosition" )) >>= eOldPos );
+
+            if( !bPropExisted || ( eOldPos != ePos ))
+            {
+                GetPropertySet()->setPropertyValue( C2U( "LabelPosition" ), uno::makeAny( ePos ));
+                bChangedOtherwise = true;
+
+                //move the parallel axes to the other side if necessary
+                if( ePos==::com::sun::star::chart::ChartAxisLabelPosition_OUTSIDE_START || ePos==::com::sun::star::chart::ChartAxisLabelPosition_OUTSIDE_END )
+                {
+                    Reference< beans::XPropertySet > xParallelAxis( AxisHelper::getParallelAxis( m_xAxis, ChartModelHelper::findDiagram( m_xChartDoc ) ), uno::UNO_QUERY );
+                    if( xParallelAxis.is() )
+                    {
+                        ::com::sun::star::chart::ChartAxisLabelPosition eOtherPos;
+                        if( xParallelAxis->getPropertyValue( C2U( "LabelPosition" ) ) >>= eOtherPos )
+                        {
+                            if( eOtherPos == ePos )
+                            {
+                                ::com::sun::star::chart::ChartAxisLabelPosition eOppositePos =
+                                    (ePos==::com::sun::star::chart::ChartAxisLabelPosition_OUTSIDE_START)
+                                    ? ::com::sun::star::chart::ChartAxisLabelPosition_OUTSIDE_END
+                                    : ::com::sun::star::chart::ChartAxisLabelPosition_OUTSIDE_START;
+                                xParallelAxis->setPropertyValue( C2U( "LabelPosition" ), uno::makeAny( eOppositePos ));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        break;
+
+        case SCHATTR_AXIS_MARK_POSITION:
+        {
+            ::com::sun::star::chart::ChartAxisMarkPosition ePos =
+                (::com::sun::star::chart::ChartAxisMarkPosition)
+                static_cast< const SfxInt32Item & >( rItemSet.Get( nWhichId )).GetValue();
+
+            ::com::sun::star::chart::ChartAxisMarkPosition eOldPos( ::com::sun::star::chart::ChartAxisMarkPosition_AT_LABELS_AND_AXIS );
+            bool bPropExisted = ( GetPropertySet()->getPropertyValue(C2U( "MarkPosition" )) >>= eOldPos );
+
+            if( !bPropExisted || ( eOldPos != ePos ))
+            {
+                GetPropertySet()->setPropertyValue( C2U( "MarkPosition" ), uno::makeAny( ePos ));
+                bChangedOtherwise = true;
+            }
+        }
+        break;
+
+        case SCHATTR_TEXT_DEGREES:
+        {
+            // convert int to double (divided by 100)
+            double fVal = static_cast< double >(
+                static_cast< const SfxInt32Item & >(
+                    rItemSet.Get( nWhichId )).GetValue()) / 100.0;
+            double fOldVal = 0.0;
+            bool bPropExisted =
+                ( GetPropertySet()->getPropertyValue( C2U( "TextRotation" )) >>= fOldVal );
+
+            if( ! bPropExisted ||
+                ( bPropExisted && fOldVal != fVal ))
+            {
+                GetPropertySet()->setPropertyValue( C2U( "TextRotation" ), uno::makeAny( fVal ));
+                bChangedOtherwise = true;
+            }
+        }
+        break;
+
+        case SID_ATTR_NUMBERFORMAT_VALUE:
+//         case SCHATTR_AXIS_NUMFMT:
+        {
+            if( m_pExplicitScale )
+            {
+                bool bUseSourceFormat =
+                    (static_cast< const SfxBoolItem & >(
+                        rItemSet.Get( SID_ATTR_NUMBERFORMAT_SOURCE )).GetValue() );
+
+                if( ! bUseSourceFormat )
+                {
+                    sal_Int32 nFmt = static_cast< sal_Int32 >(
+                        static_cast< const SfxUInt32Item & >(
+                            rItemSet.Get( nWhichId )).GetValue());
+
+                    aValue = uno::makeAny(nFmt);
+                    if( GetPropertySet()->getPropertyValue( C2U( "NumberFormat" )) != aValue )
+                    {
+                        GetPropertySet()->setPropertyValue( C2U( "NumberFormat" ), aValue );
+                        bChangedOtherwise = true;
+                    }
+                }
+            }
+        }
+        break;
+
+        case SID_ATTR_NUMBERFORMAT_SOURCE:
+        {
+            bool bUseSourceFormat =
+                (static_cast< const SfxBoolItem & >(
+                    rItemSet.Get( nWhichId )).GetValue() );
+            bool bNumberFormatIsSet = ( GetPropertySet()->getPropertyValue( C2U( "NumberFormat" )).hasValue());
+
+            bChangedOtherwise = (bUseSourceFormat == bNumberFormatIsSet);
+            if( bChangedOtherwise )
+            {
+                if( ! bUseSourceFormat )
+                {
+                    SfxItemState aState = rItemSet.GetItemState( SID_ATTR_NUMBERFORMAT_VALUE );
+                    if( aState == SFX_ITEM_SET )
+                    {
+                        sal_Int32 nFormatKey = static_cast< sal_Int32 >(
+                        static_cast< const SfxUInt32Item & >(
+                            rItemSet.Get( SID_ATTR_NUMBERFORMAT_VALUE )).GetValue());
+                        aValue <<= nFormatKey;
+                    }
+                    else
+                    {
+                        Reference< chart2::XCoordinateSystem > xCooSys(
+                        AxisHelper::getCoordinateSystemOfAxis(
+                              m_xAxis, ChartModelHelper::findDiagram( m_xChartDoc ) ) );
+
+                        sal_Int32 nFormatKey = ExplicitValueProvider::getExplicitNumberFormatKeyForAxis(
+                            m_xAxis, xCooSys, Reference< util::XNumberFormatsSupplier >( m_xChartDoc, uno::UNO_QUERY ) );
+
+                        aValue <<= nFormatKey;
+                    }
+                }
+                // else set a void Any
+                GetPropertySet()->setPropertyValue( C2U( "NumberFormat" ), aValue );
+            }
+        }
+        break;
+
+        case SCHATTR_AXISTYPE:
+        //don't allow to change the axis type so far
+        break;
+    }
+
+    if( bSetScale )
+        m_xAxis->setScaleData( aScale );
+
+    return (bSetScale || bChangedOtherwise);
+}
+
+} //  namespace wrapper
+} //  namespace chart

@@ -1,0 +1,10 @@
+# KDE Config File
+[KDE Desktop Entry]
+MimeType=application/x-sdf
+Comment=mime type
+DefaultApp=OpenOffice
+Comment[pl]=Typ mime
+Icon=sdf.xpm
+Type=MimeType
+Patterns=*.sdf;
+Comment[de]=Mime Type

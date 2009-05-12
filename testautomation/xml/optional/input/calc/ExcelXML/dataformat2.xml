@@ -1,0 +1,504 @@
+<?xml version="1.0"?>
+<?mso-application progid="Excel.Sheet"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:o="urn:schemas-microsoft-com:office:office"
+ xmlns:x="urn:schemas-microsoft-com:office:excel"
+ xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:html="http://www.w3.org/TR/REC-html40">
+ <DocumentProperties xmlns="urn:schemas-microsoft-com:office:office">
+  <Author>Gavin Lu</Author>
+  <LastAuthor>Gavin Lu</LastAuthor>
+  <Created>2003-09-12T09:21:32Z</Created>
+  <Company>Sun China Engineering &amp; Research Institute</Company>
+  <Version>11.5606</Version>
+ </DocumentProperties>
+ <OfficeDocumentSettings xmlns="urn:schemas-microsoft-com:office:office">
+  <DownloadComponents/>
+  <LocationOfComponents HRef="/"/>
+ </OfficeDocumentSettings>
+ <ExcelWorkbook xmlns="urn:schemas-microsoft-com:office:excel">
+  <WindowHeight>11025</WindowHeight>
+  <WindowWidth>13860</WindowWidth>
+  <WindowTopX>480</WindowTopX>
+  <WindowTopY>45</WindowTopY>
+  <ProtectStructure>False</ProtectStructure>
+  <ProtectWindows>False</ProtectWindows>
+ </ExcelWorkbook>
+ <Styles>
+  <Style ss:ID="Default" ss:Name="Normal">
+   <Alignment ss:Vertical="Center"/>
+   <Borders/>
+   <Font ss:FontName="宋体" x:CharSet="134" ss:Size="12"/>
+   <Interior/>
+   <NumberFormat/>
+   <Protection/>
+  </Style>
+  <Style ss:ID="s21">
+   <NumberFormat ss:Format="#,##0.0000_ "/>
+  </Style>
+  <Style ss:ID="s22">
+   <NumberFormat ss:Format="_ * #,##0_ ;_ * \-#,##0_ ;[Red]_ * &quot;-&quot;_ ;_ @_ "/>
+  </Style>
+  <Style ss:ID="s23">
+   <NumberFormat ss:Format="#.0000,,"/>
+  </Style>
+  <Style ss:ID="s24">
+   <NumberFormat ss:Format="#&quot;abded&quot;\ ??/??"/>
+  </Style>
+  <Style ss:ID="s25">
+   <NumberFormat ss:Format="#\ ??/100;[Red]\(#\ ??/16\)"/>
+  </Style>
+  <Style ss:ID="s26">
+   <NumberFormat ss:Format="\c\c\c?????0&quot;aaaa&quot;0&quot;bbbb&quot;000000.00%"/>
+  </Style>
+  <Style ss:ID="s27">
+   <NumberFormat ss:Format="0&quot;abde&quot;.0&quot;??&quot;000E+00"/>
+  </Style>
+  <Style ss:ID="s28">
+   <NumberFormat ss:Format="[$RD$-1C0A]#,##0.00;[Red]\-[$RD$-1C0A]#,##0.00"/>
+  </Style>
+  <Style ss:ID="s29">
+   <NumberFormat ss:Format="[$SFr.-810]\ #,##0.00_);[Red]\([$SFr.-810]\ #,##0.00\)"/>
+  </Style>
+  <Style ss:ID="s30">
+   <NumberFormat
+    ss:Format="_ &quot;￥&quot;* #,##0.00_ &quot;Positive&quot;;_ &quot;￥&quot;* \-#,##0.00_ ;_ &quot;￥&quot;* &quot;-&quot;??_ &quot;Negtive&quot;;_ @_ \ &quot;Zero&quot;"/>
+  </Style>
+  <Style ss:ID="s31">
+   <NumberFormat ss:Format="[ENG][$-140C]dddd\ &quot;YeahWoo!&quot;\ ddd\ mmmm\ yyyy;@"/>
+  </Style>
+  <Style ss:ID="s32">
+   <NumberFormat ss:Format="[JPN][$-411]gggyy&quot;年&quot;m&quot;月&quot;d&quot;日&quot;\ dddd;@"/>
+  </Style>
+  <Style ss:ID="s33">
+   <NumberFormat ss:Format="[$-2000000]h:mm:ss;@"/>
+  </Style>
+  <Style ss:ID="s34">
+   <NumberFormat ss:Format="h\.mm&quot; Uhr &quot;;@"/>
+  </Style>
+  <Style ss:ID="s35">
+   <NumberFormat ss:Format="&quot;Haha!&quot;\ @\ &quot;Yeah!&quot;"/>
+  </Style>
+  <Style ss:ID="s36">
+   <NumberFormat ss:Format="[h]\.mm&quot; Uhr &quot;;@"/>
+  </Style>
+  <Style ss:ID="s37">
+   <NumberFormat ss:Format="[$-41C]h:mm:ss\.AM/PM;@"/>
+  </Style>
+  <Style ss:ID="s38">
+   <NumberFormat ss:Format="[$-2010401]d/mm/yyyy\ h:mm\ AM/PM;@"/>
+  </Style>
+  <Style ss:ID="s39">
+   <NumberFormat ss:Format="[ENG][$-444]d\ mmmm\ yyyy;@"/>
+  </Style>
+  <Style ss:ID="s40">
+   <NumberFormat ss:Format="mm:ss.0;@"/>
+  </Style>
+  <Style ss:ID="s41">
+   <NumberFormat ss:Format="[HIJ][$-2060401]d\ mmmm\ yyyy;@"/>
+  </Style>
+  <Style ss:ID="s42">
+   <NumberFormat ss:Format="[ENG][$-C07]dddd\,\ dd\.\ mmmm\ yyyy;@"/>
+  </Style>
+  <Style ss:ID="s43">
+   <NumberFormat ss:Format="[$-412]AM/PM\ h&quot;시&quot;\ mm&quot;분&quot;\ ss&quot;초&quot;;@"/>
+  </Style>
+  <Style ss:ID="s44">
+   <NumberFormat ss:Format="[ENG][$-82C]d\ mmmm\ yyyy;@"/>
+  </Style>
+  <Style ss:ID="s45">
+   <NumberFormat ss:Format="[ENG][$-FC19]yyyy\,\ dd\ mmmm;@"/>
+  </Style>
+  <Style ss:ID="s46">
+   <NumberFormat ss:Format="[ENG][$-425]dddd\,\ d\.\ mmmm\ yyyy;@"/>
+  </Style>
+  <Style ss:ID="s47">
+   <NumberFormat ss:Format="[ENG][$-438]d\.\ mmmm\ yyyy;@"/>
+  </Style>
+  <Style ss:ID="s48">
+   <NumberFormat ss:Format="hh\.mm&quot; h&quot;;@"/>
+  </Style>
+  <Style ss:ID="s49">
+   <NumberFormat ss:Format="[ENG][$-42D]yyyy&quot;(e)ko&quot;\ mmmm&quot;ren&quot;\ d&quot;a&quot;;@"/>
+  </Style>
+  <Style ss:ID="s50">
+   <NumberFormat ss:Format="[HIJ][$-2060401]d/mm/yyyy\ h:mm\ AM/PM;@"/>
+  </Style>
+  <Style ss:ID="s51">
+   <NumberFormat ss:Format="[$-44F]hh:mm:ss\ AM/PM;@"/>
+  </Style>
+  <Style ss:ID="s52">
+   <NumberFormat ss:Format="[ENG][$-FC23]d\ mmmm\ yyyy;@"/>
+  </Style>
+  <Style ss:ID="s53">
+   <NumberFormat ss:Format="[ENG][$-42C]d\ mmmm\ yyyy;@"/>
+  </Style>
+  <Style ss:ID="s54">
+   <NumberFormat ss:Format="h\.mm&quot; u.&quot;;@"/>
+  </Style>
+  <Style ss:ID="s55">
+   <NumberFormat ss:Format="[ENG][$-402]dd\ mmmm\ yyyy\ &quot;г.&quot;;@"/>
+  </Style>
+  <Style ss:ID="s56">
+   <NumberFormat ss:Format="[ENG][$-40C]d/mmm/yyyy;@"/>
+  </Style>
+  <Style ss:ID="s57">
+   <NumberFormat ss:Format="[$-44E]hh:mm:ss\ AM/PM;@"/>
+  </Style>
+  <Style ss:ID="s58">
+   <NumberFormat ss:Format="[ENG][$-40F]dd\.\ mmmm\ yyyy;@"/>
+  </Style>
+  <Style ss:ID="s59">
+   <NumberFormat ss:Format="[ENG][$-44F]dd\ mmmm\ yyyy\ dddd;@"/>
+  </Style>
+  <Style ss:ID="s60">
+   <NumberFormat ss:Format="h&quot;時&quot;mm&quot;分&quot;ss&quot;秒&quot;;@"/>
+  </Style>
+  <Style ss:ID="s61">
+   <NumberFormat ss:Format="[ENG][$-415]d\ mmmm\ yyyy;@"/>
+  </Style>
+  <Style ss:ID="s62">
+   <NumberFormat ss:Format="[ENG][$-40B]d\.\ mmmm\t\a\ yyyy;@"/>
+  </Style>
+  <Style ss:ID="s63">
+   <NumberFormat ss:Format="&quot;kl &quot;hh:mm:ss;@"/>
+  </Style>
+  <Style ss:ID="s64">
+   <NumberFormat ss:Format="yyyy&quot;년&quot;\ m&quot;월&quot;\ d&quot;일&quot;;@"/>
+  </Style>
+  <Style ss:ID="s65">
+   <NumberFormat ss:Format="[ENG][$-437]yyyy\ \წ\ლ\ი\ს\ dd\ mm\,\ dddd;@"/>
+  </Style>
+  <Style ss:ID="s66">
+   <NumberFormat ss:Format="[$-449]hh:mm:ss\ AM/PM;@"/>
+  </Style>
+  <Style ss:ID="s67">
+   <NumberFormat ss:Format="[ENG][$-43F]d\ mmmm\ yyyy\ &quot;ж.&quot;;@"/>
+  </Style>
+  <Style ss:ID="s68">
+   <NumberFormat ss:Format="[ENG][$-416]d\ \ mmmm\,\ yyyy;@"/>
+  </Style>
+  <Style ss:ID="s69">
+   <NumberFormat ss:Format="[$-D000409]h:mm\ AM/PM;@"/>
+  </Style>
+  <Style ss:ID="s70">
+   <NumberFormat ss:Format="[ENG][$-813]dddd\ d\ mmmm\ yyyy;@"/>
+  </Style>
+  <Style ss:ID="s71">
+   <NumberFormat ss:Format="[ENG][$-41D]&quot;den &quot;\ d\ mmmm\ yyyy;@"/>
+  </Style>
+  <Style ss:ID="s72">
+   <NumberFormat ss:Format="[$-1010409]d/m/yyyy\ h:mm\ AM/PM;@"/>
+  </Style>
+  <Style ss:ID="s73">
+   <NumberFormat ss:Format="[ENG][$-403]dddd\,\ d&quot; / &quot;mmmm&quot; / &quot;yyyy;@"/>
+  </Style>
+  <Style ss:ID="s74">
+   <NumberFormat ss:Format="[ENG][$-81A]dddd\,\ d\.\ mmmm\ yyyy;@"/>
+  </Style>
+  <Style ss:ID="s75">
+   <NumberFormat ss:Format="[$-40E]h\ &quot;óra&quot;\ m\ &quot;perckor&quot;\ AM/PM;@"/>
+  </Style>
+  <Style ss:ID="s76">
+   <NumberFormat ss:Format="[ENG][$-41A]d\.\ mmmm\ yyyy\.;@"/>
+  </Style>
+  <Style ss:ID="s77">
+   <NumberFormat ss:Format="[ENG][$-41B]d\.\ mmmm\ yyyy;@"/>
+  </Style>
+  <Style ss:ID="s78">
+   <NumberFormat ss:Format="h\.mm&quot; h&quot;;@"/>
+  </Style>
+  <Style ss:ID="s79">
+   <NumberFormat ss:Format="[ENG][$-405]d\.\ mmmm\ yyyy;@"/>
+  </Style>
+  <Style ss:ID="s80">
+   <NumberFormat ss:Format="[ENG][$-424]dddd\,\ d\.\ mmmm\ yyyy;@"/>
+  </Style>
+  <Style ss:ID="s81">
+   <NumberFormat ss:Format="[$-1409]h:mm:ss\ AM/PM;@"/>
+  </Style>
+  <Style ss:ID="s82">
+   <NumberFormat ss:Format="[ENG][$-457]dd\ mmmm\ yyyy;@"/>
+  </Style>
+  <Style ss:ID="s83">
+   <NumberFormat ss:Format="[ENG][$-449]dd\ mmmm\ yyyy;@"/>
+  </Style>
+  <Style ss:ID="s84">
+   <NumberFormat ss:Format="[$-4000439]h:mm:ss\ AM/PM;@"/>
+  </Style>
+  <Style ss:ID="s85">
+   <NumberFormat ss:Format="[ENG][$-426]dddd\,\ yyyy&quot;. gada &quot;d\.\ mmmm;@"/>
+  </Style>
+  <Style ss:ID="s86">
+   <NumberFormat ss:Format="[$-D010000]d/mm/yyyy\ h:mm\ &quot;น.&quot;;@"/>
+  </Style>
+  <Style ss:ID="s87">
+   <NumberFormat ss:Format="[$-100042A]h:mm:ss\ AM/PM;@"/>
+  </Style>
+  <Style ss:ID="s88">
+   <NumberFormat ss:Format="[ENG][$-427]yyyy\ &quot;m.&quot;\ mmmm\ d\ &quot;d.&quot;;@"/>
+  </Style>
+  <Style ss:ID="s89">
+   <NumberFormat ss:Format="[ENG][$-420]dddd\,\ dd\ mmmm\,\ yyyy;@"/>
+  </Style>
+  <Style ss:ID="s90">
+   <NumberFormat ss:Format="AM/PMh&quot;時&quot;mm&quot;分&quot;ss&quot;秒&quot;;@"/>
+  </Style>
+  <Style ss:ID="s91">
+   <NumberFormat ss:Format="[ENG][$-418]d\ mmmm\ yyyy;@"/>
+  </Style>
+  <Style ss:ID="s92">
+   <NumberFormat ss:Format="[ENG][$-FC22]d\ mmmm\ yyyy&quot; р.&quot;;@"/>
+  </Style>
+  <Style ss:ID="s93">
+   <NumberFormat ss:Format="[$-409]AM/PM\ hh:mm:ss;@"/>
+  </Style>
+  <Style ss:ID="s94">
+   <NumberFormat ss:Format="[ENG][$-44E]d\ mmmm\ yyyy;@"/>
+  </Style>
+  <Style ss:ID="s95">
+   <NumberFormat ss:Format="[ENG][$-843]yyyy\ &quot;й&quot;&quot;и&quot;&quot;л&quot;\ d/mmmm;@"/>
+  </Style>
+  <Style ss:ID="s96">
+   <NumberFormat ss:Format="[DBNum1][$-804]AM/PMh&quot;时&quot;mm&quot;分&quot;;@"/>
+  </Style>
+  <Style ss:ID="s97">
+   <NumberFormat ss:Format="[ENG][$-42F]dddd\,\ dd\ mmmm\ yyyy;@"/>
+  </Style>
+  <Style ss:ID="s98">
+   <NumberFormat ss:Format="[ENG][$-2C0A]dddd\ d&quot; de &quot;mmmm&quot; de &quot;yyyy;@"/>
+  </Style>
+  <Style ss:ID="s99">
+   <NumberFormat ss:Format="[DBNum1][$-804]h&quot;时&quot;mm&quot;分&quot;;@"/>
+  </Style>
+  <Style ss:ID="s100">
+   <NumberFormat ss:Format="[ENG][$-101040D]d\ mmmm\ yyyy;@"/>
+  </Style>
+  <Style ss:ID="s101">
+   <NumberFormat ss:Format="[$-4010439]d/m/yyyy\ h:mm\ AM/PM;@"/>
+  </Style>
+  <Style ss:ID="s102">
+   <NumberFormat ss:Format="[ENG][$-408]d\ mmmm\ yyyy;@"/>
+  </Style>
+  <Style ss:ID="s103">
+   <NumberFormat ss:Format="[ENG][$-421]dd\ mmmm\ yyyy;@"/>
+  </Style>
+  <Style ss:ID="s104">
+   <NumberFormat ss:Format="[ENG][$-40E]yyyy/\ mmmm\ d\.;@"/>
+  </Style>
+  <Style ss:ID="s105">
+   <NumberFormat ss:Format="[ENG][$-101042A]d\ mmmm\ yyyy;@"/>
+  </Style>
+  <Style ss:ID="s106">
+   <NumberFormat ss:Format="[ENG][$-42B]dddd\,\ d\ mmmm\ yyyy;@"/>
+  </Style>
+  <Style ss:ID="s107">
+   <NumberFormat ss:Format="[TWN][DBNum1][$-404]y&quot;年&quot;m&quot;月&quot;d&quot;日&quot;;@"/>
+  </Style>
+  <Style ss:ID="s108">
+   <NumberFormat ss:Format="[ENG][$-410]d\ mmmm\ yyyy;@"/>
+  </Style>
+  <Style ss:ID="s109">
+   <NumberFormat ss:Format="[ENG][$-1004]dddd\,\ d\ mmmm\,\ yyyy;@"/>
+  </Style>
+ </Styles>
+ <Worksheet ss:Name="Sheet1">
+  <Table ss:ExpandedColumnCount="4" ss:ExpandedRowCount="36" x:FullColumns="1"
+   x:FullRows="1" ss:DefaultColumnWidth="54" ss:DefaultRowHeight="14.25">
+   <Column ss:AutoFitWidth="0" ss:Width="186.75"/>
+   <Column ss:AutoFitWidth="0" ss:Width="258.75"/>
+   <Column ss:AutoFitWidth="0" ss:Width="288"/>
+   <Column ss:AutoFitWidth="0" ss:Width="66"/>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">Customed Number</Data></Cell>
+    <Cell ss:StyleID="s21"><Data ss:Type="Number">1255656.34567</Data></Cell>
+    <Cell ss:StyleID="s22"><Data ss:Type="Number">14545452.34567</Data></Cell>
+    <Cell ss:StyleID="s23"><Data ss:Type="Number">1234567890.4542999</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">Customed Fraction</Data></Cell>
+    <Cell ss:StyleID="s24"><Data ss:Type="Number">75756765.566497996</Data></Cell>
+    <Cell ss:StyleID="s25"><Data ss:Type="Number">-34235.34564</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">Customed Percentage</Data></Cell>
+    <Cell ss:StyleID="s26"><Data ss:Type="Number">0.99729999999999996</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">Customed Scientific</Data></Cell>
+    <Cell ss:StyleID="s27"><Data ss:Type="Number">23423342.4635645</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">Customed Currency</Data></Cell>
+    <Cell ss:StyleID="s28"><Data ss:Type="Number">1234.56</Data></Cell>
+    <Cell ss:StyleID="s29"><Data ss:Type="Number">1234.56</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">Customed Accounting</Data></Cell>
+    <Cell ss:StyleID="s30"><Data ss:Type="Number">1234.56</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">Customed Date</Data></Cell>
+    <Cell ss:StyleID="s31"><Data ss:Type="DateTime">2003-04-23T00:00:00.000</Data></Cell>
+    <Cell ss:StyleID="s32"><Data ss:Type="DateTime">2003-04-23T00:00:00.000</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">Customed Time</Data></Cell>
+    <Cell ss:StyleID="s33"><Data ss:Type="DateTime">1899-12-31T12:34:44.000</Data></Cell>
+    <Cell ss:StyleID="s34"><Data ss:Type="DateTime">1900-01-01T08:34:44.000</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell><Data ss:Type="String">Customed Text</Data></Cell>
+    <Cell ss:StyleID="s35"><Data ss:Type="String">This's the true text!</Data></Cell>
+    <Cell ss:StyleID="s36"><Data ss:Type="DateTime">1900-01-01T08:34:44.000</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0"/>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:StyleID="s37"><Data ss:Type="DateTime">1899-12-31T12:34:44.000</Data></Cell>
+    <Cell ss:StyleID="s38"><Data ss:Type="DateTime">2003-04-23T00:00:00.000</Data></Cell>
+    <Cell ss:StyleID="s39"><Data ss:Type="DateTime">2003-04-23T00:00:00.000</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:StyleID="s40"><Data ss:Type="DateTime">1899-12-31T12:34:44.000</Data></Cell>
+    <Cell ss:StyleID="s41"><Data ss:Type="DateTime">2003-04-23T00:00:00.000</Data></Cell>
+    <Cell ss:StyleID="s42"><Data ss:Type="DateTime">2003-04-23T00:00:00.000</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:StyleID="s43"><Data ss:Type="DateTime">1899-12-31T12:34:44.000</Data></Cell>
+    <Cell ss:StyleID="s44"><Data ss:Type="DateTime">2003-04-23T00:00:00.000</Data></Cell>
+    <Cell ss:StyleID="s45"><Data ss:Type="DateTime">2003-04-23T00:00:00.000</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:StyleID="s33"><Data ss:Type="DateTime">1899-12-31T12:34:44.000</Data></Cell>
+    <Cell ss:StyleID="s46"><Data ss:Type="DateTime">2003-04-23T00:00:00.000</Data></Cell>
+    <Cell ss:StyleID="s47"><Data ss:Type="DateTime">2003-04-23T00:00:00.000</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:StyleID="s48"><Data ss:Type="DateTime">1899-12-31T12:34:44.000</Data></Cell>
+    <Cell ss:StyleID="s49"><Data ss:Type="DateTime">2003-04-23T00:00:00.000</Data></Cell>
+    <Cell ss:StyleID="s50"><Data ss:Type="DateTime">2003-04-23T00:00:00.000</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:StyleID="s51"><Data ss:Type="DateTime">1899-12-31T12:34:44.000</Data></Cell>
+    <Cell ss:StyleID="s52"><Data ss:Type="DateTime">2003-04-23T00:00:00.000</Data></Cell>
+    <Cell ss:StyleID="s53"><Data ss:Type="DateTime">2003-04-23T00:00:00.000</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:StyleID="s54"><Data ss:Type="DateTime">1899-12-31T12:34:44.000</Data></Cell>
+    <Cell ss:StyleID="s55"><Data ss:Type="DateTime">2003-04-23T00:00:00.000</Data></Cell>
+    <Cell ss:StyleID="s56"><Data ss:Type="DateTime">2003-04-23T00:00:00.000</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:StyleID="s57"><Data ss:Type="DateTime">1899-12-31T12:34:44.000</Data></Cell>
+    <Cell ss:StyleID="s58"><Data ss:Type="DateTime">2003-04-23T00:00:00.000</Data></Cell>
+    <Cell ss:StyleID="s59"><Data ss:Type="DateTime">2003-04-23T00:00:00.000</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:StyleID="s60"><Data ss:Type="DateTime">1899-12-31T12:34:44.000</Data></Cell>
+    <Cell ss:StyleID="s61"><Data ss:Type="DateTime">2003-04-23T00:00:00.000</Data></Cell>
+    <Cell ss:StyleID="s62"><Data ss:Type="DateTime">2003-04-23T00:00:00.000</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:StyleID="s63"><Data ss:Type="DateTime">1899-12-31T12:34:44.000</Data></Cell>
+    <Cell ss:StyleID="s64"><Data ss:Type="DateTime">2003-04-23T00:00:00.000</Data></Cell>
+    <Cell ss:StyleID="s65"><Data ss:Type="DateTime">2003-04-23T00:00:00.000</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:StyleID="s66"><Data ss:Type="DateTime">1899-12-31T12:34:44.000</Data></Cell>
+    <Cell ss:StyleID="s67"><Data ss:Type="DateTime">2003-04-23T00:00:00.000</Data></Cell>
+    <Cell ss:StyleID="s68"><Data ss:Type="DateTime">2003-04-23T00:00:00.000</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:StyleID="s69"><Data ss:Type="DateTime">1899-12-31T12:34:44.000</Data></Cell>
+    <Cell ss:StyleID="s70"><Data ss:Type="DateTime">2003-04-23T00:00:00.000</Data></Cell>
+    <Cell ss:StyleID="s71"><Data ss:Type="DateTime">2003-04-23T00:00:00.000</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:StyleID="s72"><Data ss:Type="DateTime">1899-12-31T12:34:44.000</Data></Cell>
+    <Cell ss:StyleID="s73"><Data ss:Type="DateTime">2003-04-23T00:00:00.000</Data></Cell>
+    <Cell ss:StyleID="s74"><Data ss:Type="DateTime">2003-04-23T00:00:00.000</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:StyleID="s75"><Data ss:Type="DateTime">1899-12-31T12:34:44.000</Data></Cell>
+    <Cell ss:StyleID="s76"><Data ss:Type="DateTime">2003-04-23T00:00:00.000</Data></Cell>
+    <Cell ss:StyleID="s77"><Data ss:Type="DateTime">2003-04-23T00:00:00.000</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:StyleID="s78"><Data ss:Type="DateTime">1899-12-31T12:34:44.000</Data></Cell>
+    <Cell ss:StyleID="s79"><Data ss:Type="DateTime">2003-04-23T00:00:00.000</Data></Cell>
+    <Cell ss:StyleID="s80"><Data ss:Type="DateTime">2003-04-23T00:00:00.000</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:StyleID="s81"><Data ss:Type="DateTime">1899-12-31T12:34:44.000</Data></Cell>
+    <Cell ss:StyleID="s82"><Data ss:Type="DateTime">2003-04-23T00:00:00.000</Data></Cell>
+    <Cell ss:StyleID="s83"><Data ss:Type="DateTime">2003-04-23T00:00:00.000</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:StyleID="s84"><Data ss:Type="DateTime">1899-12-31T12:34:44.000</Data></Cell>
+    <Cell ss:StyleID="s85"><Data ss:Type="DateTime">2003-04-23T00:00:00.000</Data></Cell>
+    <Cell ss:StyleID="s86"><Data ss:Type="DateTime">2003-04-23T00:00:00.000</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:StyleID="s87"><Data ss:Type="DateTime">1899-12-31T12:34:44.000</Data></Cell>
+    <Cell ss:StyleID="s88"><Data ss:Type="DateTime">2003-04-23T00:00:00.000</Data></Cell>
+    <Cell ss:StyleID="s89"><Data ss:Type="DateTime">2003-04-23T00:00:00.000</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:StyleID="s90"><Data ss:Type="DateTime">1899-12-31T12:34:44.000</Data></Cell>
+    <Cell ss:StyleID="s91"><Data ss:Type="DateTime">2003-04-23T00:00:00.000</Data></Cell>
+    <Cell ss:StyleID="s92"><Data ss:Type="DateTime">2003-04-23T00:00:00.000</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:StyleID="s93"><Data ss:Type="DateTime">1899-12-31T12:34:44.000</Data></Cell>
+    <Cell ss:StyleID="s94"><Data ss:Type="DateTime">2003-04-23T00:00:00.000</Data></Cell>
+    <Cell ss:StyleID="s95"><Data ss:Type="DateTime">2003-04-23T00:00:00.000</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:StyleID="s96"><Data ss:Type="DateTime">1899-12-31T12:34:44.000</Data></Cell>
+    <Cell ss:StyleID="s97"><Data ss:Type="DateTime">2003-04-23T00:00:00.000</Data></Cell>
+    <Cell ss:StyleID="s98"><Data ss:Type="DateTime">2003-04-23T00:00:00.000</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:StyleID="s99"><Data ss:Type="DateTime">1899-12-31T12:34:44.000</Data></Cell>
+    <Cell ss:StyleID="s100"><Data ss:Type="DateTime">2003-04-23T00:00:00.000</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="DateTime">2003-04-23T00:00:00.000</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:Index="2" ss:StyleID="s102"><Data ss:Type="DateTime">2003-04-23T00:00:00.000</Data></Cell>
+    <Cell ss:StyleID="s103"><Data ss:Type="DateTime">2003-04-23T00:00:00.000</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:Index="2" ss:StyleID="s104"><Data ss:Type="DateTime">2003-04-23T00:00:00.000</Data></Cell>
+    <Cell ss:StyleID="s105"><Data ss:Type="DateTime">2003-04-23T00:00:00.000</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:Index="2" ss:StyleID="s106"><Data ss:Type="DateTime">2003-04-23T00:00:00.000</Data></Cell>
+    <Cell ss:StyleID="s107"><Data ss:Type="DateTime">2003-04-23T00:00:00.000</Data></Cell>
+   </Row>
+   <Row ss:AutoFitHeight="0">
+    <Cell ss:Index="2" ss:StyleID="s108"><Data ss:Type="DateTime">2003-04-23T00:00:00.000</Data></Cell>
+    <Cell ss:StyleID="s109"><Data ss:Type="DateTime">2003-04-23T00:00:00.000</Data></Cell>
+   </Row>
+  </Table>
+  <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+   <Unsynced/>
+   <Print>
+    <ValidPrinterInfo/>
+    <PaperSizeIndex>9</PaperSizeIndex>
+    <HorizontalResolution>96</HorizontalResolution>
+    <VerticalResolution>96</VerticalResolution>
+    <NumberofCopies>0</NumberofCopies>
+   </Print>
+   <Selected/>
+   <Panes>
+    <Pane>
+     <Number>3</Number>
+     <ActiveRow>10</ActiveRow>
+     <ActiveCol>2</ActiveCol>
+    </Pane>
+   </Panes>
+   <ProtectObjects>False</ProtectObjects>
+   <ProtectScenarios>False</ProtectScenarios>
+  </WorksheetOptions>
+ </Worksheet>
+</Workbook>

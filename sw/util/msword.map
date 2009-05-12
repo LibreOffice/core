@@ -1,0 +1,10 @@
+MSWORD_1_0 {
+        global:
+                ImportRTF;
+                ExportRTF;
+                ImportDOC;
+                ExportDOC;
+
+        local:
+                *;
+};

@@ -36,6 +36,8 @@
 #include <svtools/filedlg.hxx>
 #include <tools/iparser.hxx>
 #include <tools/geninfo.hxx>
+#include <vcl/gdimtf.hxx>
+#include <vcl/bitmap.hxx>
 #include <appdef.hxx>
 #include "time.h"
 #include <soldep/depper.hxx>
@@ -172,7 +174,7 @@ void SolDep::ProcessChildWindowEvent( const VclWindowEvent& _rVclWindowEvent )
                         {
                             // handle mouse click on ObjectWin object
                             ObjectWin* pWin = (ObjectWin*) pChildWin;
-                            GetObjectList()->ResetSelectedObject();
+                            //GetObjectList()->ResetSelectedObject();
                             if (IsHideMode())      // simple mouse click left
                             {
                                 pWin->CaptureMouse();
@@ -250,9 +252,57 @@ IMPL_LINK( SolDep, ToolSelect, SoldepToolBox* , pBox)
         case TID_SOLDEP_FIND:
             FindProject();
             break;
+        case TID_SOLDEP_CREATEMETA :
+        {
+            VirtualDevice   aVDev;
+            aVDev.SetMapMode( MAP_100TH_MM );
+            GDIMetaFile     aMtf;
+            aVDev.EnableOutput( FALSE );
+            aMtf.Record( &aVDev );
+
+            aVDev.SetLineColor( Color( COL_BLACK ) );
+            aVDev.SetTextAlign( ALIGN_TOP );
+
+            Size aSize( GetDepWin()->GetOutputSizePixel() );
+            long nXMin = aSize.Width();
+            long nXMax = 0;
+            long nYMax = 0;
+            long nYMin = aSize.Height();
+
+            for ( USHORT i=0; i<mpObjectList->Count(); i++ )
+            {
+                Point aPoint = mpObjectList->GetObject(i)->GetPosPixel();
+                Size aSize = mpObjectList->GetObject(i)->GetSizePixel();
+                nXMin = MIN( aPoint.X(), nXMin );
+                nXMax = MAX( aPoint.X() + aSize.Width(), nXMax );
+                nYMin = MIN( aPoint.Y(), nYMin );
+                nYMax = MAX( aPoint.Y() + aSize.Height(), nYMax );
+            }
+
+            Point aOffset( nXMin, nYMin );
+            aOffset = aVDev.PixelToLogic( aOffset );
+
+            GetDepWin()->DrawOutput( &aVDev, aOffset );
+            for ( USHORT i=0; i<mpObjectList->Count(); i++ )
+                if ( mpObjectList->GetObject(i)->IsVisible() )
+                    mpObjectList->GetObject(i)->DrawOutput( &aVDev, aOffset );
+
+            aMtf.Stop();
+            aMtf.WindStart();
+            aMtf.SetPrefMapMode( aVDev.GetMapMode() );
+            Size aDevSize( nXMax-nXMin + 10, nYMax-nYMin + 10);
+            aDevSize =  aVDev.PixelToLogic( aDevSize );
+            aMtf.SetPrefSize( aDevSize );
+            SvFileStream aStream( String::CreateFromAscii("d:\\out.svm"), STREAM_STD_READWRITE );
+            aMtf.Write( aStream );
+            break;
+        }
         case TID_SOLDEP_HIDE_INDEPENDEND:
             {
                 ToggleHideDependency();
+                for ( USHORT i=0; i<mpObjectList->Count(); i++ )
+                    mpObjectList->GetObject(i)->SetViewMask(!mbIsHide);
+
                    maToolBox.CheckItem(TID_SOLDEP_HIDE_INDEPENDEND, IsHideMode());
                    GetDepWin()->Invalidate(); //repaint Main-View
             }
@@ -559,7 +609,7 @@ USHORT SolDep::ReadSource(BOOL bUpdater)
             {
                 pStr = pLst->GetObject(m);
                 pHObject = mpSolIdMapper->Find( *pStr );
-                if ( !pHObject )
+                /*if ( !pHObject )
                 {
     // create new prj
                     Prj *pNewPrj = new Prj( *pStr );
@@ -567,8 +617,10 @@ USHORT SolDep::ReadSource(BOOL bUpdater)
                     nObjectId = AddObject( sPrjName, FALSE );
                     pHObject = mpSolIdMapper->Find( *pStr );
                     ObjIdToPtr( mpObjectList, nObjectId )->SetViewMask( 2 );
-                }
+                }*/
 
+                if ( pHObject )
+                {
                 nHashedId = pHObject->GetId();
                 ByteString sF_Os2 = pPrj->GetProjectName();
                 pStr = &sF_Os2;
@@ -579,6 +631,7 @@ USHORT SolDep::ReadSource(BOOL bUpdater)
                 AddConnectorToObjects( pStartWin, pEndWin );
             }
         }
+    }
     }
     if (!IsPrjView())
     {

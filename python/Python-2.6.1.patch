@@ -1,0 +1,232 @@
+--- misc/Python-2.6.1/Include/pyport.h	Wed Jun 11 09:41:16 2008
++++ misc/build/Python-2.6.1/Include/pyport.h	Fri Apr 17 09:02:52 2009
+@@ -449,11 +449,6 @@
+ in platform-specific #ifdefs.
+ **************************************************************************/
+ 
+-#ifdef SOLARIS
+-/* Unchecked */
+-extern int gethostname(char *, int);
+-#endif
+-
+ #ifdef __BEOS__
+ /* Unchecked */
+ /* It's in the libs, but not the headers... - [cjh] */
+--- misc/Python-2.6.1/PCbuild/pcbuild.sln	2008-06-27 04:30:34.000000000 +0200
++++ misc/build/Python-2.6.1/PCbuild/pcbuild.sln	2009-03-09 22:48:14.546329900 +0100
+@@ -38,12 +38,12 @@
+ 		{CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26} = {CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26}
+ 	EndProjectSection
+ EndProject
+-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "_bsddb", "_bsddb.vcproj", "{B4D38F3F-68FB-42EC-A45D-E00657BB3627}"
+-	ProjectSection(ProjectDependencies) = postProject
+-		{6DE10744-E396-40A5-B4E2-1B69AA7C8D31} = {6DE10744-E396-40A5-B4E2-1B69AA7C8D31}
+-		{CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26} = {CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26}
+-	EndProjectSection
+-EndProject
++#Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "_bsddb", "_bsddb.vcproj", "{B4D38F3F-68FB-42EC-A45D-E00657BB3627}"
++#	ProjectSection(ProjectDependencies) = postProject
++#		{6DE10744-E396-40A5-B4E2-1B69AA7C8D31} = {6DE10744-E396-40A5-B4E2-1B69AA7C8D31}
++#		{CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26} = {CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26}
++#	EndProjectSection
++#EndProject
+ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "_ctypes", "_ctypes.vcproj", "{0E9791DB-593A-465F-98BC-681011311618}"
+ 	ProjectSection(ProjectDependencies) = postProject
+ 		{CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26} = {CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26}
+@@ -69,34 +69,34 @@
+ 		{CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26} = {CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26}
+ 	EndProjectSection
+ EndProject
+-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "_sqlite3", "_sqlite3.vcproj", "{13CECB97-4119-4316-9D42-8534019A5A44}"
+-	ProjectSection(ProjectDependencies) = postProject
+-		{CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26} = {CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26}
+-		{A1A295E5-463C-437F-81CA-1F32367685DA} = {A1A295E5-463C-437F-81CA-1F32367685DA}
+-	EndProjectSection
+-EndProject
+-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "_ssl", "_ssl.vcproj", "{C6E20F84-3247-4AD6-B051-B073268F73BA}"
+-	ProjectSection(ProjectDependencies) = postProject
+-		{B11D750F-CD1F-4A96-85CE-E69A5C5259F9} = {B11D750F-CD1F-4A96-85CE-E69A5C5259F9}
+-		{86937F53-C189-40EF-8CE8-8759D8E7D480} = {86937F53-C189-40EF-8CE8-8759D8E7D480}
+-		{CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26} = {CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26}
+-	EndProjectSection
+-EndProject
++#Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "_sqlite3", "_sqlite3.vcproj", "{13CECB97-4119-4316-9D42-8534019A5A44}"
++#	ProjectSection(ProjectDependencies) = postProject
++#		{CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26} = {CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26}
++#		{A1A295E5-463C-437F-81CA-1F32367685DA} = {A1A295E5-463C-437F-81CA-1F32367685DA}
++#	EndProjectSection
++#EndProject
++#Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "_ssl", "_ssl.vcproj", "{C6E20F84-3247-4AD6-B051-B073268F73BA}"
++#	ProjectSection(ProjectDependencies) = postProject
++#		{B11D750F-CD1F-4A96-85CE-E69A5C5259F9} = {B11D750F-CD1F-4A96-85CE-E69A5C5259F9}
++#		{86937F53-C189-40EF-8CE8-8759D8E7D480} = {86937F53-C189-40EF-8CE8-8759D8E7D480}
++#		{CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26} = {CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26}
++#	EndProjectSection
++#EndProject
+ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "_testcapi", "_testcapi.vcproj", "{6901D91C-6E48-4BB7-9FEC-700C8131DF1D}"
+ 	ProjectSection(ProjectDependencies) = postProject
+ 		{CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26} = {CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26}
+ 	EndProjectSection
+ EndProject
+-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "_tkinter", "_tkinter.vcproj", "{4946ECAC-2E69-4BF8-A90A-F5136F5094DF}"
+-	ProjectSection(ProjectDependencies) = postProject
+-		{CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26} = {CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26}
+-	EndProjectSection
+-EndProject
+-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "bz2", "bz2.vcproj", "{73FCD2BD-F133-46B7-8EC1-144CD82A59D5}"
+-	ProjectSection(ProjectDependencies) = postProject
+-		{CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26} = {CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26}
+-	EndProjectSection
+-EndProject
++#Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "_tkinter", "_tkinter.vcproj", "{4946ECAC-2E69-4BF8-A90A-F5136F5094DF}"
++#	ProjectSection(ProjectDependencies) = postProject
++#		{CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26} = {CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26}
++#	EndProjectSection
++#EndProject
++#Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "bz2", "bz2.vcproj", "{73FCD2BD-F133-46B7-8EC1-144CD82A59D5}"
++#	ProjectSection(ProjectDependencies) = postProject
++#		{CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26} = {CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26}
++#	EndProjectSection
++#EndProject
+ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "select", "select.vcproj", "{18CAE28C-B454-46C1-87A0-493D91D97F03}"
+ 	ProjectSection(ProjectDependencies) = postProject
+ 		{CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26} = {CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26}
+@@ -114,17 +114,17 @@
+ EndProject
+ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "bdist_wininst", "bdist_wininst.vcproj", "{EB1C19C1-1F18-421E-9735-CAEE69DC6A3C}"
+ EndProject
+-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "_hashlib", "_hashlib.vcproj", "{447F05A8-F581-4CAC-A466-5AC7936E207E}"
+-	ProjectSection(ProjectDependencies) = postProject
+-		{B11D750F-CD1F-4A96-85CE-E69A5C5259F9} = {B11D750F-CD1F-4A96-85CE-E69A5C5259F9}
+-		{CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26} = {CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26}
+-	EndProjectSection
+-EndProject
+-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sqlite3", "sqlite3.vcproj", "{A1A295E5-463C-437F-81CA-1F32367685DA}"
+-	ProjectSection(ProjectDependencies) = postProject
+-		{6DE10744-E396-40A5-B4E2-1B69AA7C8D31} = {6DE10744-E396-40A5-B4E2-1B69AA7C8D31}
+-	EndProjectSection
+-EndProject
++#Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "_hashlib", "_hashlib.vcproj", "{447F05A8-F581-4CAC-A466-5AC7936E207E}"
++#ProjectSection(ProjectDependencies) = postProject
++#		{B11D750F-CD1F-4A96-85CE-E69A5C5259F9} = {B11D750F-CD1F-4A96-85CE-E69A5C5259F9}
++#		{CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26} = {CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26}
++#	EndProjectSection
++#EndProject
++#Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sqlite3", "sqlite3.vcproj", "{A1A295E5-463C-437F-81CA-1F32367685DA}"
++#	ProjectSection(ProjectDependencies) = postProject
++#		{6DE10744-E396-40A5-B4E2-1B69AA7C8D31} = {6DE10744-E396-40A5-B4E2-1B69AA7C8D31}
++#	EndProjectSection
++#EndProject
+ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "_multiprocessing", "_multiprocessing.vcproj", "{9E48B300-37D1-11DD-8C41-005056C00008}"
+ 	ProjectSection(ProjectDependencies) = postProject
+ 		{CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26} = {CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26}
+--- misc/Python-2.6.1/Lib/test/test_threading.py.bak	2009-03-12 07:59:17.000000000 +0000
++++ misc/build/Python-2.6.1/Lib/test/test_threading.py	2009-03-12 10:48:04.000000000 +0000
+@@ -382,7 +382,7 @@
+             return
+         # Skip platforms with known problems forking from a worker thread.
+         # See http://bugs.python.org/issue3863.
+-        if sys.platform in ('freebsd4', 'freebsd5', 'freebsd6', 'os2emx'):
++        if sys.platform in ('freebsd4', 'freebsd5', 'freebsd6', 'freebsd7', 'os2emx'):
+             print >>sys.stderr, ('Skipping test_3_join_in_forked_from_thread'
+                                  ' due to known OS bugs on'), sys.platform
+             return
+
+--- misc/Python-2.6.1/Modules/_ctypes/libffi/configure.orig	2008-05-24 00:06:50.000000000 +0900
++++ misc/build/Python-2.6.1/Modules/_ctypes/libffi/configure	2008-10-09 20:24:02.000000000 +0900
+@@ -4725,7 +4725,7 @@
+   rm -rf conftest*
+   ;;
+ 
+-x86_64-*kfreebsd*-gnu|x86_64-*linux*|ppc*-*linux*|powerpc*-*linux*| \
++amd64-*-freebsd*|x86_64-*kfreebsd*-gnu|x86_64-*linux*|ppc*-*linux*|powerpc*-*linux*| \
+ s390*-*linux*|sparc*-*linux*)
+   # Find out which ABI we are using.
+
+--- misc/Python-2.6.1/Python/thread_pthread.h.orig	2006-06-13 16:04:24.000000000 +0100
++++ misc/build/Python-2.6.1/Python/thread_pthread.h	2009-03-12 10:55:49.000000000 +0000
+@@ -26,13 +26,18 @@
+ #endif
+ #endif
+ 
++#ifdef __FreeBSD__
++#include <osreldate.h>
++#endif
++
+ /* The POSIX spec says that implementations supporting the sem_*
+    family of functions must indicate this by defining
+    _POSIX_SEMAPHORES. */   
+ #ifdef _POSIX_SEMAPHORES
+ /* On FreeBSD 4.x, _POSIX_SEMAPHORES is defined empty, so 
+    we need to add 0 to make it work there as well. */
+-#if (_POSIX_SEMAPHORES+0) == -1
++#if defined(__FreeBSD__) && __FreeBSD_version < 701104 && \
++    (_POSIX_SEMAPHORES+0) == -1
+ #define HAVE_BROKEN_POSIX_SEMAPHORES
+ #else
+ #include <semaphore.h>
+@@ -44,7 +49,6 @@
+    in default setting.  So the process scope is preferred to get
+    enough number of threads to work. */
+ #ifdef __FreeBSD__
+-#include <osreldate.h>
+ #if __FreeBSD_version >= 500000 && __FreeBSD_version < 504101
+ #undef PTHREAD_SYSTEM_SCHED_SUPPORTED
+ #endif
+@@ -149,6 +153,9 @@
+ {
+ 	pthread_t th;
+ 	int status;
++#ifdef __FreeBSD__
++	sigset_t set, oset;
++#endif
+ #if defined(THREAD_STACK_SIZE) || defined(PTHREAD_SYSTEM_SCHED_SUPPORTED)
+ 	pthread_attr_t attrs;
+ #endif
+@@ -177,7 +184,10 @@
+ #if defined(PTHREAD_SYSTEM_SCHED_SUPPORTED)
+         pthread_attr_setscope(&attrs, PTHREAD_SCOPE_SYSTEM);
+ #endif
+-
++#ifdef __FreeBSD__
++	sigfillset(&set);
++	SET_THREAD_SIGMASK(SIG_BLOCK, &set, &oset);
++#endif
+ 	status = pthread_create(&th, 
+ #if defined(THREAD_STACK_SIZE) || defined(PTHREAD_SYSTEM_SCHED_SUPPORTED)
+ 				 &attrs,
+@@ -188,6 +198,9 @@
+ 				 (void *)arg
+ 				 );
+ 
++#ifdef __FreeBSD__
++	SET_THREAD_SIGMASK(SIG_SETMASK, &oset, NULL);
++#endif
+ #if defined(THREAD_STACK_SIZE) || defined(PTHREAD_SYSTEM_SCHED_SUPPORTED)
+ 	pthread_attr_destroy(&attrs);
+ #endif
+--- misc/Python-2.6.1/configure	2008-11-17 02:57:10.000000000 +0900
++++ misc/build/Python-2.6.1/configure	2009-03-23 21:18:42.000000000 +0900
+@@ -4110,11 +4110,6 @@
+ 	  LDLIBRARY='libpython$(VERSION).so'
+ 	  BLDLIBRARY='-L. -lpython$(VERSION)'
+ 	  RUNSHARED=LD_LIBRARY_PATH=`pwd`:${LD_LIBRARY_PATH}
+-	  case $ac_sys_system in
+-	      FreeBSD*)
+-		SOVERSION=`echo $SOVERSION|cut -d "." -f 1`
+-		;;
+-	  esac
+ 	  INSTSONAME="$LDLIBRARY".$SOVERSION
+ 	  ;;
+     hp*|HP*)
+--- misc/Python-2.6.1/configure	Sun Nov 16 18:57:10 2008
++++ misc/build/Python-2.6.1/configure	Thu Apr 16 15:16:03 2009
+@@ -4102,7 +4102,7 @@
+           ;;
+     SunOS*)
+ 	  LDLIBRARY='libpython$(VERSION).so'
+-	  BLDLIBRARY='-Wl,-R,$(LIBDIR) -L. -lpython$(VERSION)'
++	  BLDLIBRARY=-R\'\$\$ORIGIN\'' -L. -lpython$(VERSION)'
+ 	  RUNSHARED=LD_LIBRARY_PATH=`pwd`:${LD_LIBRARY_PATH}
+ 	  INSTSONAME="$LDLIBRARY".$SOVERSION
+           ;;

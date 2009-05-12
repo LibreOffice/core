@@ -29,7 +29,7 @@
 #
 #*************************************************************************
 
-.SOURCE.xcu : $(MISC)$/$(EXTNAME)$/merge $(MISC)$/$(EXTNAME)$/registry$/data $(COMPONENT_CONFIGDIR) .
+.SOURCE.xcu : $(MISC)$/$(EXTNAME)$/merge $(MISC)$/$(EXTNAME)$/registry$/data $(MISC)$/$(COMPONENT_SHARED_CONFIG)_in$/merge $(MISC)$/$(COMPONENT_SHARED_CONFIG)_in$/registry$/data $(COMPONENT_CONFIGDIR) .
 .SOURCE.xcs : $(MISC)$/$(EXTNAME)$/registry $(MISC)$/$(EXTNAME)$/registry$/schema .
 
 fixme=$(MISC)$/$(EXTNAME)$/merge$/$(MISC)
@@ -52,9 +52,10 @@ $(EXTENSIONDIR)$/%.jar : $(SOLARBINDIR)$/%.jar
     $(GNUCOPY) $< $@
 
 .IF "$(COMPONENT_FILES)"!=""
+COMPONENT_FILES_SRC*=.$/
 # ugly hacking to workaround prepended first source path - also hits
 # here in case of "just copied" .xcu files
-$(COMPONENT_FILES) : $$(@:s|$(fixme2)|$(MISC)|:s|$(EXTENSIONDIR)$/|.$/|)
+$(COMPONENT_FILES) : $$(@:s|$(fixme2)|$(MISC)|:s|$(EXTENSIONDIR)$/|$(COMPONENT_FILES_SRC)|)
     @@-$(MKDIRHIER) $(@:s|$(fixme2)|$(MISC)|:d)
     $(COPY) $< $(@:s|$(fixme2)|$(MISC)|)
 .ENDIF			# "$(COMPONENT_FILES)"!=""
@@ -71,6 +72,9 @@ $(COMPONENT_LIBRARIES) : $(DLLDEST)$/$$(@:f)
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
 .IF "$(OS)$(CPU)"=="WNTI"
+.IF "$(COM)"=="GCC"
+   $(GNUCOPY) $(SOLARBINDIR)$/mingwm10.dll $(EXTENSIONDIR)
+.ELSE
 .IF "$(PACKMS)"!=""
 .IF "$(CCNUMVER)" <= "001399999999"
     $(GNUCOPY) $(PACKMS)$/msvcr71.dll $(EXTENSIONDIR)
@@ -106,6 +110,7 @@ $(COMPONENT_LIBRARIES) : $(DLLDEST)$/$$(@:f)
 .ENDIF			# "$(CCNUMVER)" <= "001499999999"
 .ENDIF			# "$(CCNUMVER)" <= "001399999999"
 .ENDIF          # "$(PACKMS)"!=""
+.ENDIF	#"$(COM)"=="GCC" 
 .ENDIF 			# "$(OS)$(CPU)"=="WNTI"
 .ENDIF			# "$(COMPONENT_LIBRARIES)"!=""
 

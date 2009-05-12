@@ -278,6 +278,15 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Produc
 	ModuleID = gid_Module_Root;
 	Name = "OFFICEINSTALLLOCATION";
 	Value = "[OFFICEINSTALLLOCATION]";
+	Styles = (LANGUAGEPACK,ALWAYS_REQUIRED,PATCH,UPGRADEKEY);
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Productcode_Productversion
+	ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+	Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\%PRODUCTCODE";
+	ModuleID = gid_Module_Root;
+	Name = "ProductVersion";
+	Value = "[ProductVersion]";
 	Styles = (LANGUAGEPACK,ALWAYS_REQUIRED,PATCH);
 End
 
@@ -287,6 +296,15 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Upgrad
 	ModuleID = gid_Module_Root;
 	Name = "OFFICEINSTALLLOCATION";
 	Value = "[OFFICEINSTALLLOCATION]";
+	Styles = (LANGUAGEPACK,ALWAYS_REQUIRED,PATCH);
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Upgradecode_Productversion
+	ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+	Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\%UPGRADECODE";
+	ModuleID = gid_Module_Root;
+	Name = "ProductVersion";
+	Value = "[ProductVersion]";
 	Styles = (LANGUAGEPACK,ALWAYS_REQUIRED,PATCH);
 End
 
@@ -516,7 +534,7 @@ RegistryItem gid_Regitem_Clsid_7BC0E710_5703_45BE_A29D_5D46D8B39262_InProcServer
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Root;
     Subkey = "CLSID\{7BC0E710-5703-45BE-A29D-5D46D8B39262}\InprocServer32";
-    Value = "<progpath>\program\ooofiltproxy.dll";
+    Value = "[BASISINSTALLLOCATION]program\ooofiltproxy.dll";
 End
 
 RegistryItem gid_Regitem_Clsid_7BC0E710_5703_45BE_A29D_5D46D8B39262_InProcServer32_ThreadingModel

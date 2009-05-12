@@ -1,0 +1,215 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: selector.src,v $
+ * $Revision: 1.13 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#include "helpid.hrc"
+#include <svx/dialogs.hrc>
+#include "selector.hrc"
+
+#define MASKCOLOR  MaskColor = \
+    Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
+
+#define FIXEDTEXT_DIALOG_DESCRIPTION \
+Text [ en-US ] = "Select the library that contains the macro you want. Then select the macro under 'Macro name'." ;\
+
+String STR_SELECTOR_ADD_COMMANDS
+{
+  TEXT [ en-US ] = "Add Commands" ;
+};
+
+String STR_SELECTOR_MACROS
+{
+  Text [ en-US ] = "%PRODUCTNAME Macros" ;
+};
+
+String STR_SELECTOR_CATEGORIES
+{
+    Text [ en-US ] = "~Category" ;
+};
+
+String STR_SELECTOR_COMMANDS
+{
+  Text [ en-US ] = "Commands" ;
+};
+
+String STR_SELECTOR_ADD
+{
+  TEXT [ en-US ] = "Add" ;
+};
+
+String STR_SELECTOR_RUN
+{
+  TEXT [ en-US ] = "Run" ;
+
+};
+
+String STR_SELECTOR_CLOSE
+{
+  TEXT [ en-US ] = "Close" ;
+
+};
+
+String STR_SELECTOR_ADD_COMMANDS_DESCRIPTION
+{
+  TEXT [ en-US ] = "To add a command to a toolbar, select the category and then the command. Then drag the command to the Commands list of the Toolbars tab page in the Customize dialog.";
+};
+
+String STR_BASICMACROS
+{
+    Text [ en-US ] = "BASIC Macros" ;
+};
+
+
+ModelessDialog RID_DLG_SCRIPTSELECTOR
+{
+  OutputSize = TRUE ;
+  Size = MAP_APPFONT ( 256 , 233 ) ;
+  Text [ en-US ] = "Macro Selector" ;
+  HelpId = HID_SELECTOR_DIALOG;
+  SvLook = TRUE ;
+  Moveable = TRUE ;
+  Hide = TRUE;
+  FixedText TXT_SELECTOR_DIALOG_DESCRIPTION
+  {
+    Pos = MAP_APPFONT ( 6 , 8 ) ;
+    Size = MAP_APPFONT ( 190 , 48 ) ;
+    Group = TRUE ;
+    Left = TRUE ;
+    WordBreak = TRUE ;
+    FIXEDTEXT_DIALOG_DESCRIPTION
+  };
+  FixedText TXT_SELECTOR_CATEGORIES
+  {
+    Pos = MAP_APPFONT ( 6 , 62 ) ;
+    Size = MAP_APPFONT ( 83 , 8 ) ;
+    Group = TRUE ;
+    Left = TRUE ;
+    Text [ en-US ] = "Library" ;
+  };
+  Control BOX_SELECTOR_CATEGORIES
+  {
+    Border = TRUE ;
+    Pos = MAP_APPFONT ( 6 , 73 ) ;
+    Size = MAP_APPFONT ( 83 , 89 ) ;
+    TabStop = TRUE;
+    HelpId = HID_SELECTOR_CATEGORIES;
+    String STR_MYMACROS
+    {
+        Text [ en-US ] = "My Macros";
+    };
+    String STR_PRODMACROS
+    {
+        Text [ en-US ] = "%PRODUCTNAME Macros";
+    };
+    Image IMG_HARDDISK
+    {
+        ImageBitmap = Bitmap { File = "harddisk_16.bmp" ; };
+        MASKCOLOR
+    };
+    Image IMG_HARDDISK_HC
+    {
+        ImageBitmap = Bitmap { File = "harddisk_16_h.bmp" ; };
+        MASKCOLOR
+    };
+    Image IMG_LIB
+    {
+        ImageBitmap = Bitmap { File = "im30820.png"; };
+        MASKCOLOR
+    };
+    Image IMG_LIB_HC
+    {
+        ImageBitmap = Bitmap { File = "imh30820.png"; };
+        MASKCOLOR
+    };
+    Image IMG_MACRO
+    {
+        ImageBitmap = Bitmap { File = "im30821.png"; };
+        MASKCOLOR
+    };
+    Image IMG_MACRO_HC
+    {
+        ImageBitmap = Bitmap { File = "imh30821.png"; };
+        MASKCOLOR
+    };
+    Image IMG_DOC
+    {
+        ImageBitmap = Bitmap { File = "im30826.png"; };
+        MASKCOLOR
+    };
+    Image IMG_DOC_HC
+    {
+        ImageBitmap = Bitmap { File = "imh30826.png"; };
+        MASKCOLOR
+    };
+  };
+  FixedText TXT_SELECTOR_COMMANDS
+  {
+    Pos = MAP_APPFONT ( 101 , 62 ) ;
+    Size = MAP_APPFONT ( 93 , 8 ) ;
+    Left = TRUE ;
+    Text [ en-US ] = "Macro name" ;
+  };
+  Control BOX_SELECTOR_COMMANDS
+  {
+    Border = TRUE ;
+    Pos = MAP_APPFONT ( 101 , 73 ) ;
+    Size = MAP_APPFONT ( 93 , 89 ) ;
+    TabStop = TRUE;
+    HelpId = HID_SELECTOR_COMMANDS;
+  };
+  OKButton BTN_SELECTOR_OK
+  {
+    Pos = MAP_APPFONT ( 200 , 73 ) ;
+    Size = MAP_APPFONT ( 50 , 14 ) ;
+    DefButton = TRUE;
+  };
+  CancelButton BTN_SELECTOR_CANCEL
+  {
+    Pos = MAP_APPFONT ( 200 , 90 ) ;
+    Size = MAP_APPFONT ( 50 , 14 ) ;
+  };
+  HelpButton BTN_SELECTOR_HELP
+  {
+    Pos = MAP_APPFONT ( 200 , 107 ) ;
+    Size = MAP_APPFONT ( 50 , 14 ) ;
+  };
+  FixedLine GRP_SELECTOR_DESCRIPTION
+  {
+    Pos = MAP_APPFONT ( 6 , 168 ) ;
+    Size = MAP_APPFONT ( 224 , 8 ) ;
+    Group = TRUE ;
+    Text [ en-US ] = "Description" ;
+  };
+  FixedText TXT_SELECTOR_DESCRIPTION
+  {
+    Pos = MAP_APPFONT ( 12 , 179 ) ;
+    Size = MAP_APPFONT ( 224 , 48 ) ;
+    WordBreak = TRUE ;
+  };
+};
+ // ********************************************************************** EOF

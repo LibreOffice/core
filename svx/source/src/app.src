@@ -1,0 +1,138 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: app.src,v $
+ * $Revision: 1.20 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef _GLOBLMN_HRC
+#include "globlmn_tmpl.hrc"
+#endif
+#ifndef _GLOBALACC_SRC
+#include "globlac.hrc"
+#endif
+#ifndef _SVX_SVXIDS_HRC
+#include <svx/svxids.hrc>
+#endif
+
+#include "app.hrc"
+
+ //----------------------------------------------------------------------------
+
+#define MASKCOLOR       MaskColor = Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; };
+
+ErrorBox RID_ERRBOX_MODULENOTINSTALLED
+{
+    Buttons = WB_OK ;
+    Message [ en-US ] = "The action could not be executed. The %PRODUCTNAME program module needed for this action is currently not installed.";
+};
+
+ // Image-Listen ----------------------------------------------------------
+
+#define IMAGE_ID_LIST\
+    IdList = {\
+        SID_HLINKBAR_LINK; \
+        SID_HLINKBAR_SEARCH; \
+        SID_HLINKBAR_TARGET; \
+        SID_HYPERLINK_DIALOG; \
+        SID_FM_RECORD_ABSOLUTE; \
+        SID_FM_RECORD_FIRST; \
+        SID_FM_RECORD_PREV; \
+        SID_FM_RECORD_NEXT; \
+        SID_FM_RECORD_LAST; \
+        SID_FM_RECORD_SAVE; \
+        SID_FM_RECORD_UNDO; \
+        SID_FM_RECORD_NEW; \
+        SID_FM_RECORD_DELETE; \
+        SID_FM_REFRESH; \
+        SID_FM_SORTUP; \
+        SID_FM_SORTDOWN; \
+        SID_FM_ORDERCRIT; \
+        SID_FM_AUTOFILTER; \
+        SID_FM_FILTERCRIT; \
+        SID_FM_FORM_FILTERED; \
+        SID_FM_REMOVE_FILTER_SORT; \
+    };\
+    IdCount = {\
+        21;\
+    };
+
+ImageList RID_DEFAULTIMAGELIST_SC
+{
+    Prefix = "sc";
+    MASKCOLOR
+    IMAGE_ID_LIST
+};
+
+ImageList RID_DEFAULTIMAGELIST_LC
+{
+    Prefix = "lc";
+    MASKCOLOR
+    IMAGE_ID_LIST
+};
+
+ImageList RID_DEFAULTIMAGELIST_SCH
+{
+    Prefix = "sch";
+    MASKCOLOR
+    IMAGE_ID_LIST
+};
+
+ImageList RID_DEFAULTIMAGELIST_LCH
+{
+    Prefix = "lch";
+    MASKCOLOR
+    IMAGE_ID_LIST
+};
+
+// Strings ---------------------------------------------------------------
+
+#define MN_EDIT 20
+#define MN_VIEW 21
+#define MN_EXTRA 22
+#define MN_WIN 30
+#define MN_HELP 31
+#define MN_TEMPLATES 11
+
+#define  ACC Accelerator
+#define ACCK AcceleratorItem
+
+ // die Acceleratoren
+
+String RID_DESKTOP
+{
+    Text = "%PRODUCTNAME" ;
+};
+
+String STR_SD_STAROFFICE_XML_DRAW
+{
+    Text [ en-US ] = "%PRODUCTNAME XML (Draw)";
+};
+
+String STR_SD_STAROFFICE_XML_IMPRESS
+{
+    Text [ en-US ] = "%PRODUCTNAME XML (Impress)";
+};

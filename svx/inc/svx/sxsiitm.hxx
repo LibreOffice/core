@@ -1,0 +1,48 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: sxsiitm.hxx,v $
+ * $Revision: 1.3 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef _SXSIITM_HXX
+#define _SXSIITM_HXX
+
+#ifndef _SXFIITM_HXX
+#include <svx/sxfiitm.hxx>
+#endif
+
+class SdrScaleItem: public SdrFractionItem {
+public:
+    TYPEINFO();
+    SdrScaleItem(USHORT nId=0): SdrFractionItem(nId,Fraction(1,1)) {}
+    SdrScaleItem(USHORT nId, const Fraction& rVal): SdrFractionItem(nId,rVal) {}
+    SdrScaleItem(USHORT nId, SvStream& rIn): SdrFractionItem(nId,rIn) {}
+    virtual SfxItemPresentation GetPresentation(SfxItemPresentation ePresentation, SfxMapUnit eCoreMetric, SfxMapUnit ePresentationMetric, String &rText, const IntlWrapper * = 0) const;
+    virtual SfxPoolItem*     Create(SvStream&, USHORT nVer) const;
+    virtual SfxPoolItem*     Clone(SfxItemPool *pPool=NULL) const;
+};
+
+#endif

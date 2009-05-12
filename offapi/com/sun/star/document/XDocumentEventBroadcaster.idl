@@ -1,0 +1,127 @@
+/*************************************************************************
+* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+*
+* Copyright 2008 by Sun Microsystems, Inc.
+*
+* OpenOffice.org - a multi-platform office productivity suite
+*
+* $RCSfile: XDocumentEventBroadcaster.idl,v $
+*
+* $Revision: 1.5.2.4 $
+*
+* This file is part of OpenOffice.org.
+*
+* OpenOffice.org is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License version 3
+* only, as published by the Free Software Foundation.
+*
+* OpenOffice.org is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU Lesser General Public License version 3 for more details
+* (a copy is included in the LICENSE file that accompanied this code).
+*
+* You should have received a copy of the GNU Lesser General Public License
+* version 3 along with OpenOffice.org.  If not, see
+* <http://www.openoffice.org/license.html>
+* for a copy of the LGPLv3 License.
+************************************************************************/
+
+#ifndef __com_sun_star_document_XDocumentEventBroadcaster_idl__
+#define __com_sun_star_document_XDocumentEventBroadcaster_idl__
+
+#ifndef __com_sun_star_frame_XController2_idl__
+#include <com/sun/star/frame/XController2.idl>
+#endif
+
+#ifndef __com_sun_star_document_DocumentEvent_idl__
+#include <com/sun/star/document/DocumentEvent.idl>
+#endif
+
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#endif
+
+#ifndef __com_sun_star_lang_NoSupportException_idl__
+#include <com/sun/star/lang/NoSupportException.idl>
+#endif
+
+//=============================================================================
+
+module com { module sun { module star { module document {
+
+interface XDocumentEventListener;
+
+//=============================================================================
+
+/** allows to be notified of events happening in an <type>OfficeDocument</type>, and to cause notification
+    of such events.
+
+    <p>This interface is the successor of the XEventBroadcaster interface, which should not be used
+    anymore.</p>
+
+    @see DocumentEvent
+*/
+interface XDocumentEventBroadcaster
+{
+    /** registers a listener which is notified about document events
+
+        @param _Listener
+            the listener to register. The behaviour of the method is undefined this listener
+            is <NULL/>.
+    */
+    void    addDocumentEventListener( [in] XDocumentEventListener _Listener );
+
+    /** revokes a listener which has previously been registered to be notified about document events.
+
+        @param _Listener
+            the listener to revoke. The behaviour of the method is undefined this listener
+            is <NULL/>.
+    */
+    void    removeDocumentEventListener( [in] XDocumentEventListener _Listener );
+
+    /** causes the broadcaster to notify all registered listeners of the given event
+
+        <p>The method will create a <type>DocumentEvent</type> instance with the given parameters,
+        and fill in the <code>Source</code> member (denoting the broadcaster) as appropriate.</p>
+
+        <p>Whether the actual notification happens synchronously or asynchronously is up to the
+        implementator of this method. However, implementations are encouraged to specify this, for the
+        list of supported event types, in their service contract.</p>
+
+        <p>Implementations might also decide to limit the list of allowed events (means event names) at
+        their own discretion. Again, in this case they're encouraged to document this in their service
+        contract.</p>
+
+        @param _EventName
+            the name of the event to be notified.
+        @param _ViewController
+            the view/controller which the event applies to. May be <NULL/>
+        @param _Supplement
+            supplemental information related to the event.
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            if <arg>_EventName</arg> is empty, or if <arg>_EventName</arg> is not supported by the
+            document implementation.
+
+        @throws ::com::sun::star::lang::NoSupportException
+            if the broadcaster implementation does not supported broadcasting events induced externally.
+            This is usually used for components which multiplex events from multiple sources, and thus would
+            be unable to fill in the <code>Source</code> member of the <type>DocumentEvent</type> instance.
+    */
+    void    notifyDocumentEvent(
+                [in] string _EventName,
+                [in] ::com::sun::star::frame::XController2 _ViewController,
+                [in] any _Supplement
+            )
+            raises ( ::com::sun::star::lang::IllegalArgumentException,
+                     ::com::sun::star::lang::NoSupportException );
+};
+
+//=============================================================================
+
+}; }; }; };
+
+//=============================================================================
+
+#endif

@@ -11,7 +11,7 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 # $RCSfile: installoffice.pl,v $
 #
-# $Revision: 1.3 $
+# $Revision: 1.2.24.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -34,9 +34,10 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 use strict;
 use File::Find;
 use File::Path;
+my $script = $0;
 
-( our $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
-
+( our $script_name = $script ) =~ s/^.*\b(\w+)\.pl$/$1/;
+( our $script_path = $script ) =~ s/$script_name.*//;
 
 our $debug = 0;           # run without executing commands
 
@@ -102,6 +103,7 @@ our $nul ;
 our $RESPFILE;
 our $SVERSION_INI ;
 our $SOFFICEBIN ;
+our $UNOPKGBIN;
 our $bootstrapini ;
 our $bootstrapiniTemp ;
 our $packpackage ;
@@ -132,6 +134,7 @@ if ($gui eq "WNT") {
     $SVERSION_INI = $ENV{USERPROFILE} . $PS . "Anwendungsdaten" . $PS . "sversion.ini";
     $SOFFICEBIN = "soffice.exe";
     $bootstrapini = "bootstrap.ini";
+    $UNOPKGBIN="unopkg.exe";
     $bootstrapiniTemp = $bootstrapini . "_";
     $packpackage = "msi";
     if (!defined($temp_path)) {
@@ -162,6 +165,7 @@ elsif ($gui eq "UNX") {
     $SVERSION_INI = $ENV{HOME} . $PS . ".sversionrc";
     $SOFFICEBIN = "soffice";
     $bootstrapini = "bootstraprc";
+    $UNOPKGBIN="unopkg";
     $bootstrapiniTemp = $bootstrapini . "_";
     $packpackage = $ENV{PKGFORMAT};
     if (!defined($temp_path)) {
@@ -297,9 +301,9 @@ sub makeAutoRun(){
 
     patchBootstraprc($destinationPath);
 
+
     if (patchXCU ($destinationPath) != 0) {
-        #print_error ($error_messages[$error_patchBootstrap], $error_patchBootstrap);
-        print_error("could not pacht XCU files", "1");
+        print_error("could not patch XCU files", "1");
     }
     return 0;
 }
@@ -331,97 +335,29 @@ sub patchBootstraprc(){
     open OUTFILE, ">$bootstraprc" or return errorFromOpen (" for writing " . $bootstraprc);
     print OUTFILE @newContent;
     close OUTFILE;
-    #writeFile($bootstraprc, @newContent);
 
 }
 
 sub patchXCU(){
     my $destinationPath = shift;
-    my $bootstraprc;
+    my $unopkg="";
 
-    find sub { $bootstraprc=$File::Find::name if -e _ && /$bootstrapini$/ }, $destinationPath;
+    find sub { $unopkg=$File::Find::name if -e _ && /$UNOPKGBIN$/ }, $destinationPath;
 
-    print_error("could not find $bootstrapini", "1") if ( !-e $bootstraprc );
-    print "bootstraprc: '$bootstraprc'\n" if $debug;
+    print_error("could not find $UNOPKGBIN", "1") if ( !-e $unopkg );
+    print "unopkg: '$unopkg'\n" if $debug;
 
-    $bootstraprc =~ /(.*)\/(program|MacOS)\/$bootstrapini/
-        or print_error("could not determine basedir", 1);
+    if ($gui eq "WNT") {
+        $unopkg = "\"$unopkg\"";
+    }
 
-    my $basedir = $1;
-
-    print "basedir: $basedir\n" if $debug;
-
-    my $userPath = $basedir.$PS."UserInstallation".$PS."user".$PS."registry".$PS."data".$PS."org".$PS."openoffice".$PS;
-
-    # ..\user\registry\data\org\openoffice\Office\
-    my $userOfficePath = $userPath . "Office" . $PS;
-
-    my $commonXcuPath=$userOfficePath;
-    my $setupXcuPath = $userPath;
-
-    my $success = patchCommonXcu($commonXcuPath);
-
-    $success &= patchSetupXcu($setupXcuPath);
+    my $unopkgCommand = "$unopkg add $script_path".$script_name.".oxt";
+    print "patch xcu files for automatic office start...\n" if $debug;
+    print "call $unopkgCommand\n" if $debug;
+    my $success=0;
+    $success = system($unopkgCommand);
 
     return $success;
-}
-
-sub patchSetupXcu(){
-    my $commonXcuPath=shift;
-    my $setupXcu = $commonXcuPath."Setup.xcu";
-    print "patching $setupXcu\n" if $debug;
-    mkdirs($commonXcuPath);
-    my @content=(
-        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>",
-        "<oor:component-data xmlns:oor=\"http://openoffice.org/2001/registry\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" oor:name=\"Setup\" oor:package=\"org.openoffice\">",
-        " <node oor:name=\"Office\">",
-        "  <prop oor:name=\"LicenseAcceptDate\" oor:type=\"xs:string\">",
-        "   <value>2100-01-01T00:00:00</value>",
-        "  </prop>",
-        "  <prop oor:name=\"FirstStartWizardCompleted\" oor:type=\"xs:boolean\">",
-        "   <value>true</value>",
-        "  </prop>",
-        # "  <prop oor:name=\"ooSetupInstCompleted\" oor:type=\"xs:boolean\">",
-        # "   <value>true</value>",
-        # "  </prop>",
-        " </node>",
-        "</oor:component-data>");
-    return writeFile($setupXcu, @content);
-}
-
-sub patchCommonXcu(){
-    my $commonXcuPath = shift;
-    my $commonXcu = $commonXcuPath."Common.xcu";
-    print "patching $commonXcu\n" if $debug;
-    mkdirs($commonXcuPath);
-    my @content=(
-        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>",
-        "<oor:component-data xmlns:oor=\"http://openoffice.org/2001/registry\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" oor:package=\"org.openoffice.Office\" oor:name=\"Common\">",
-        " <node oor:name=\"Misc\">",
-        "  <prop oor:name=\"FirstRun\" oor:type=\"xs:boolean\">",
-        "   <value>false</value>",
-        "  </prop>",
-        " </node>",
-        " <node oor:name=\"Security\">",
-        "  <node oor:name=\"Scripting\">",
-        "   <prop oor:name=\"OfficeBasic\" oor:type=\"xs:int\">",
-        "    <value>2</value>",
-        "   </prop>",
-        "   <prop oor:name=\"MacroSecurityLevel\" oor:type=\"xs:int\">",
-        "    <value>0</value>",
-        "   </prop>",
-        "  </node>",
-        " </node>",
-        " <node oor:name=\"Help\">",
-        "  <node oor:name=\"Registration\">",
-        "   <prop oor:name=\"ReminderDate\">",
-        "    <value/>",
-        "   </prop>",
-        "  </node>",
-        " </node>",
-        "</oor:component-data>");
-
-    return writeFile($commonXcu, @content);
 }
 
 sub writeFile(){
@@ -452,7 +388,7 @@ sub mkdirs(){
     if ( $PS eq "\\" ){
        $splitter="\\\\";
     }
-    my @aFolder=split($splitter,$directory);!
+    my @aFolder=split($splitter,$directory);
 
     my $dir;
     my $folder;

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--***********************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: LDAP.xcu.sample,v $
+ * $Revision: 1.4 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************ -->
+<!-- This file is an example of an LDAP.xcu ldap configuration file.
+    
+     To use user data from LDAP in your installation, you need to provide a 
+     customized version of this file named 'LDAP.xcu'.
+
+     To customize values in this file, please replace the data within
+     <value>...</value> elements with the values for your organization.
+
+     If a certain setting is not necessary for your installation, you may remove the
+     entire 'prop' element, i.e. everything from '<prop oor:name="[SettingName]"' to 
+     the closing '</prop>'.
+-->
+<oor:component-data oor:name="LDAP" oor:package="org.openoffice" 
+        xmlns:oor="http://openoffice.org/2001/registry" 
+        xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<node oor:name="UserDirectory">
+  		<node oor:name="ServerDefinition">
+   			<prop oor:name="Server" oor:type="xs:string">
+    			<value>ldapserver.mycorp.com</value>
+   			</prop>
+			<prop oor:name="BaseDN" oor:type="xs:string">
+    			<value>dc=mycorp,dc=com</value>
+   			</prop>
+			<prop oor:name="Port" oor:type="xs:int">
+    			<value>389</value>
+   			</prop>
+  		</node>
+        <!-- The following settings should be omitted, if anonymous access is possible
+  		<prop oor:name="SearchUser" oor:type="xs:string"><value>MyUserLogin</value></prop>
+    	<prop oor:name="SearchPassword" oor:type="xs:string"><value>MyPassword</value></prop>
+        -->
+    	<prop oor:name="UserObjectClass" oor:type="xs:string">
+            <value>inetorgperson</value>
+   		</prop>
+    	<prop oor:name="UserUniqueAttribute" oor:type="xs:string">
+            <value>uid</value>
+   		</prop>
+        <prop oor:name="Mapping" oor:type="xs:string">
+            <value>oo-ldap</value>
+   		</prop>
+	</node>
+</oor:component-data>

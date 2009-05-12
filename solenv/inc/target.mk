@@ -8,7 +8,7 @@
 #
 # $RCSfile: target.mk,v $
 #
-# $Revision: 1.211 $
+# $Revision: 1.211.4.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -37,6 +37,13 @@ MKFILENAME:=TARGET.MK
 
 .IF "$(STL_OS2_BUILDING)" != ""
 CDEFS+=-DSTL_OS2_BUILDING
+.ENDIF
+.IF "$(VISIBILITY_HIDDEN)" != ""
+.IF "$(COMNAME)" == "gcc3" && "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
+CFLAGS += -fvisibility=hidden
+.ELIF "$(COMNAME)" == "sunpro5" && "$(CCNUMVER)" >= "00050005"
+CFLAGS += -xldscope=hidden
+.ENDIF
 .ENDIF
 
 .IF "$(TARGET)"==""
@@ -219,7 +226,7 @@ NEWCLASS+=$(CLASSGENDIR)
 .ENDIF			# "$(GENJAVACLASSFILES)"!=""
 .IF "$(NEWCLASS)"!=""
 # See iz36027 for the reason for the strange $(subst ..) construct
-CLASSPATH:=.$(PATH_SEPERATOR)$(CLASSDIR)$(PATH_SEPERATOR)$(XCLASSPATH)$(PATH_SEPERATOR){$(subst,%Z*Z%,$(PATH_SEPERATOR) $(NEWCLASS:s/ /%Z*Z%/))}
+CLASSPATH:=.$(PATH_SEPERATOR)$(CLASSDIR)$(PATH_SEPERATOR)$(XCLASSPATH)$(PATH_SEPERATOR){$(subst,%Z*Z%,$(PATH_SEPERATOR) $(NEWCLASS:s/ /%Z*Z%/))}$(PATH_SEPERATOR)$(SOLARLIBDIR)
 .ENDIF			# "$(NEWCLASS)"!=""
 .ENDIF			# "$(L10N_framework)"==""
 
@@ -280,55 +287,55 @@ NOLIBSLOTARGET=$(SLOFILES)
 
 .IF "$(SRC1FILES)"!=""
 SRC1TARGET=$(SRS)$/$(SRS1NAME).srs
-DEPSRS1FILE+=$(MISC)$/$(PWD:f).$(SRS1NAME).dprr
+DEPSRS1FILE+=$(MISC)$/$(TARGET).$(SRS1NAME).dprr
 DEPSRSFILES+=$(DEPSRS1FILE)
 .ENDIF
 
 .IF "$(SRC2FILES)"!=""
 SRC2TARGET=$(SRS)$/$(SRS2NAME).srs
-DEPSRS2FILE+=$(MISC)$/$(PWD:f).$(SRS2NAME).dprr
+DEPSRS2FILE+=$(MISC)$/$(TARGET).$(SRS2NAME).dprr
 DEPSRSFILES+=$(DEPSRS2FILE)
 .ENDIF
 
 .IF "$(SRC3FILES)"!=""
 SRC3TARGET=$(SRS)$/$(SRS3NAME).srs
-DEPSRS3FILE+=$(MISC)$/$(PWD:f).$(SRS3NAME).dprr
+DEPSRS3FILE+=$(MISC)$/$(TARGET).$(SRS3NAME).dprr
 DEPSRSFILES+=$(DEPSRS3FILE)
 .ENDIF
 
 .IF "$(SRC4FILES)"!=""
 SRC4TARGET=$(SRS)$/$(SRS4NAME).srs
-DEPSRS4FILE+=$(MISC)$/$(PWD:f).$(SRS4NAME).dprr
+DEPSRS4FILE+=$(MISC)$/$(TARGET).$(SRS4NAME).dprr
 DEPSRSFILES+=$(DEPSRS4FILE)
 .ENDIF
 
 .IF "$(SRC5FILES)"!=""
 SRC5TARGET=$(SRS)$/$(SRS5NAME).srs
-DEPSRS5FILE+=$(MISC)$/$(PWD:f).$(SRS5NAME).dprr
+DEPSRS5FILE+=$(MISC)$/$(TARGET).$(SRS5NAME).dprr
 DEPSRSFILES+=$(DEPSRS5FILE)
 .ENDIF
 
 .IF "$(SRC6FILES)"!=""
 SRC6TARGET=$(SRS)$/$(SRS6NAME).srs
-DEPSRS6FILE+=$(MISC)$/$(PWD:f).$(SRS6NAME).dprr
+DEPSRS6FILE+=$(MISC)$/$(TARGET).$(SRS6NAME).dprr
 DEPSRSFILES+=$(DEPSRS6FILE)
 .ENDIF
 
 .IF "$(SRC7FILES)"!=""
 SRC7TARGET=$(SRS)$/$(SRS7NAME).srs
-DEPSRS7FILE+=$(MISC)$/$(PWD:f).$(SRS7NAME).dprr
+DEPSRS7FILE+=$(MISC)$/$(TARGET).$(SRS7NAME).dprr
 DEPSRSFILES+=$(DEPSRS7FILE)
 .ENDIF
 
 .IF "$(SRC8FILES)"!=""
 SRC8TARGET=$(SRS)$/$(SRS8NAME).srs
-DEPSRS8FILE+=$(MISC)$/$(PWD:f).$(SRS8NAME).dprr
+DEPSRS8FILE+=$(MISC)$/$(TARGET).$(SRS8NAME).dprr
 DEPSRSFILES+=$(DEPSRS8FILE)
 .ENDIF
 
 .IF "$(SRC9FILES)"!=""
 SRC9TARGET=$(SRS)$/$(SRS9NAME).srs
-DEPSRS9FILE+=$(MISC)$/$(PWD:f).$(SRS9NAME).dprr
+DEPSRS9FILE+=$(MISC)$/$(TARGET).$(SRS9NAME).dprr
 DEPSRSFILES+=$(DEPSRS9FILE)
 .ENDIF
 
@@ -1388,19 +1395,19 @@ $(EXTUPDATEINFO_DEST) : $(EXTUPDATEINFO_SOURCE)
 
 makedoc:
         @@-mkdir $(OUT)$/ucrdoc
-        $(IDLC) @$(mktmp $(UNOIDLDEFS) $(UNOIDLINCEXTRA) $(UNOIDLINC) -C -O$(OUT)$/ucrdoc$/$(IDLPACKAGE) $(DEPIDLFILES:+"\n"))		
+        $(IDLC) @$(mktmp $(IDLCFLAGS) $(UNOIDLDEFS) $(UNOIDLINCEXTRA) $(UNOIDLINC) -C -O$(OUT)$/ucrdoc$/$(IDLPACKAGE) $(DEPIDLFILES:+"\n"))		
 #		-$(UNOIDL) $(UNOIDLDEFS) $(UNOIDLINCEXTRA) $(UNOIDLINC) -Bdoc -P..$/$(PRJNAME)$/$(IDLPACKAGE) -OH$(PRJ)$/..$/unodoc $(DOCIDLFILES) $(IDLFILES)
 
 .IF "$(LOCALDBTARGET)"!=""
 $(LOCALDBTARGET) : $(URDFILES) $(DEPIDLFILES)
-    $(IDLC) @$(mktmp $(UNOIDLDEFS) $(UNOIDLINCEXTRA) $(UNOIDLINC) -O$(OUT)$/ucr$/$(IDLPACKAGE) $(all_outdated_idl))
+    $(IDLC) @$(mktmp $(IDLCFLAGS) $(UNOIDLDEFS) $(UNOIDLINCEXTRA) $(UNOIDLINC) -O$(OUT)$/ucr$/$(IDLPACKAGE) $(all_outdated_idl))
     -$(RM) $@
     $(REGMERGE) $@ UCR @$(mktmp $(URDFILES))
 .ENDIF
 
 .IF "$(LOCALDOCDBTARGET)"!=""
 $(LOCALDOCDBTARGET) : $(URDDOCFILES) $(DEPIDLFILES)
-    $(IDLC) @$(mktmp $(UNOIDLDEFS) $(UNOIDLINCEXTRA) $(UNOIDLINC) -C -O$(OUT)$/ucrdoc$/$(IDLPACKAGE) $(all_outdated_idl))
+    $(IDLC) @$(mktmp $(IDLCFLAGS) $(UNOIDLDEFS) $(UNOIDLINCEXTRA) $(UNOIDLINC) -C -O$(OUT)$/ucrdoc$/$(IDLPACKAGE) $(all_outdated_idl))
     -$(RM) $@
     $(REGMERGE) $@ UCR @$(mktmp $(URDDOCFILES))
 .ENDIF
@@ -1435,9 +1442,9 @@ $(SCP_PRODUCT_TYPE):
 
 .IF "$(COMPVERMK)"!=""
 .IF "$(UPDATER)"!="" || "$(CWS_WORK_STAMP)"!=""
-.IF "$(COMPATH)"!="$(COMPATH_STORED)"
+.IF "$(COMPATH:s!\!/!)"!="$(COMPATH_STORED)"
 COMPVERMK_PHONY:=.PHONY
-.ENDIF			# "$(COMPATH)"!="$(COMPATH_STORED)"
+.ENDIF			# "$(COMPATH:s!\!/!)"!="$(COMPATH_STORED)"
 COMPVTMP:=$(mktmp iii)
 "$(COMPVERMK)" $(COMPVERMK_PHONY): $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/minormkchanged.flg
 .IF "$(CCNUMVER)"!=""
@@ -1449,9 +1456,9 @@ COMPVTMP:=$(mktmp iii)
     @echo CCNUMVER:=$(CCNUMVER) >> $(COMPVTMP)
     @echo CCVER:=$(CCVER:s/-/ /:1) >> $(COMPVTMP)
     @echo CDEFS+=-DCPPU_ENV=$(COMNAME) >> $(COMPVTMP)
-    @echo COMPATH_STORED:=$(COMPATH) >> $(COMPVTMP)
+    @echo COMPATH_STORED:=$(COMPATH:s!\!/!) >> $(COMPVTMP)
     @@-$(RM) $(@)_$(COMPVTMP:b)
-    @$(TYPE) $(COMPVTMP) > $(@)_$(COMPVTMP:b)
+    @$(TYPE) $(COMPVTMP) | tr -d "\015" > $(@)_$(COMPVTMP:b)
     @$(IFEXIST) $@ $(THEN) $(RM:s/+//) $@ >& $(NULLDEV) $(FI)
     @-$(RENAME) $(@)_$(COMPVTMP:b) $@
     @@-$(RM) $(@)_$(COMPVTMP:b)
@@ -1517,7 +1524,7 @@ $(MISC)$/$(TARGET)_%.done : $(COMMONMISC)$/$(TARGET)$/%.xrb
 $(MISC)$/$(TARGET)_%.done : %.xrb
 .ENDIF			# "$(WITH_LANG)"!=""
     @@-$(RM) $(MISC)$/$(<:b).interm$(TARGET)
-    native2ascii -encoding UTF8 $< $(MISC)$/$(<:b).interm$(TARGET) && xmlex -i $(MISC)$/$(<:b).interm$(TARGET) -o $(CLASSDIR) $(XML_ISO_CODE) -g -d $@
+    native2ascii -encoding UTF8 $< $(MISC)$/$(<:b).interm$(TARGET) && $(XMLEX) -i $(MISC)$/$(<:b).interm$(TARGET) -o $(CLASSDIR) $(XML_ISO_CODE) -g -d $@
     @@$(RM)  $(MISC)$/$(<:b).interm$(TARGET)
 .ENDIF			# "$(XMLPROPERTIES)"!=""
 
@@ -1669,8 +1676,9 @@ $(COMMONPRJHIDOTHERTARGET) : $(PRJHIDOTHERTARGET)
 .IF "$(ZIP1TARGET)" != "" || "$(ZIP2TARGET)" != "" || "$(ZIP3TARGET)" != ""
 .IF "$(nodep)"==""
 .INCLUDE : $(MISC)$/$(TARGET).dpz
-missing_zipdep_langs=$(alllangiso)
-some_dummy_var:=$(foreach,i,$(zipdep_langs) $(assign missing_zipdep_langs:=$(strip $(subst,$i, $(missing_zipdep_langs)))))
+# introduce separation char
+missing_zipdep_langs=$(alllangiso:^"+":+"+")
+some_dummy_var:=$(foreach,i,$(zipdep_langs) $(assign missing_zipdep_langs:=$(strip $(subst,+$(i)+, $(missing_zipdep_langs)))))
 .IF "$(missing_zipdep_langs)"!=""
 ZIPDEPPHONY=.PHONY
 .ENDIF			# "$(missing_zipdep_langs)"!=""
@@ -1993,10 +2001,14 @@ UNOUCRDEPxxx : $(UNOUCRDEP);
 $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/hid.lst .PHONY :
     @echo Making $@ :
     @echo ---------------
-    @$(IFEXIST) $@ $(THEN) $(RM:s/+//) $@ $(FI)
     @echo $(WORK_STAMP).$(LAST_MINOR) 010101010101010 > $@.$(ROUT).tmp
-    $(TYPE) $(SOLARCOMMONBINDIR)$/hid$/*.hid | $(SORT) -u >> $@.$(ROUT).tmp 
-    @$(RENAME) $@.$(ROUT).tmp $@
+    $(TYPE) $(SOLARCOMMONBINDIR)$/hid$/*.hid | tr -d "\015" | $(SORT) -u >> $@.$(ROUT).tmp 
+    @$(IFEXIST) $@ $(THEN) $(RM:s/+//) $@ $(FI)
+    @-$(RENAME) $@.$(ROUT).tmp $@
+    @-mkdir $(@:d)hid
+    $(PERL) $(SOLARENV)$/bin$/gen_userfeedback_VCL_names.pl $@ $(SOLARCOMMONBINDIR)$/win $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/hid$/userfeedback_VCL_names.csv.$(ROUT).tmp
+    @$(IFEXIST) $@ $(THEN) $(RM:s/+//) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/hid$/userfeedback_VCL_names.csv $(FI)
+    @-$(RENAME) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/hid$/userfeedback_VCL_names.csv.$(ROUT).tmp $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/hid$/userfeedback_VCL_names.csv
 
 
 .IF "$(SOLAR_JAVA)"!=""

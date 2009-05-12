@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE set PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+              "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+<set>
+<setinfo>
+<title>Unit Test: set.001</title>
+<releaseinfo role="CVS">$Id: set.001.xml,v 1.2 2008-07-11 07:58:04 rt Exp $</releaseinfo>
+<author><firstname>Norman</firstname><surname>Walsh</surname>
+        <affiliation><address><email>ndw@nwalsh.com</email></address></affiliation>
+</author>
+</setinfo>
+
+<book><title>First Book</title>
+<chapter><title>Chapter</title>
+<para>Some test data</para>
+</chapter>
+</book>
+
+<book><title>Second Book</title>
+<chapter><title>Chapter</title>
+<para>Some test data</para>
+</chapter>
+</book>
+
+<book><title>Third Book</title>
+<chapter><title>Chapter</title>
+<para>Some test data</para>
+</chapter>
+</book>
+
+</set>

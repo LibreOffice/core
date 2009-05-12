@@ -1,0 +1,8 @@
+UDK_3.0 {
+    global:
+        registerAllTestFunction;
+
+    local:
+        *;
+};
+

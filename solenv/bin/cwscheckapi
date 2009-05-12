@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #*************************************************************************
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
@@ -35,9 +35,11 @@ EXIT_ERROR=2
 EXIT_BUG=10
 
 usage() {
-        echo "Usage: $SCRIPTNAME [-m MODULE1[,MODULEn]] [-o] [-h] [-d] [-i] [-t] [-s] [-a]" >&2
+        echo "Usage: $SCRIPTNAME [-m MODULE1[,MODULEn]] [-k] [-o] [-h] [-d] [-i] [-t] [-s] [-a]" >&2
         echo "" >&2
         echo "[-m] list of modules to test like: '-m sw,sc,sd' or '-m all' for all modules" >&2
+        echo "" >&2
+        echo "[-k] keep Office installation, otherwise it will be removed after test" >&2
         echo "" >&2
         echo "[-o] force OpenOffice.org installation instead of StarOffice" >&2
         echo "" >&2
@@ -55,19 +57,40 @@ usage() {
         echo "" >&2
         exit $EXIT_FAILURE
 }
+
+if [ "$PROEXT" != ".pro" ]; then
+    echo "ERROR: cwscheckapi works only on pro-versions" >&2
+    exit $EXIT_FAILURE
+fi
+
+if [ x${USER}x = xx ]; then
+    if [ x${LOGNAME}x = xx ]; then
+        echo "ERROR: could not determine username. Please export variable USER" >&2
+        exit $EXIT_FAILURE
+    else 
+        USER=$LOGNAME
+        export USER
+    fi
+fi
+     
+
+
 DEBUG_I=false
 DEBUG_T=false
 INSTALL=true
 ATTACH=ture
 MODULES="auto"
 OOO=false
+KEEPOFFICE=false
 
-while getopts ':m:ditsaho' OPTION ; do
+while getopts ':m:dkitsaho' OPTION ; do
         case $OPTION in
         d)        DEBUG_I=true
                   DEBUG_T=true
                 ;;
         m)        MODULES="$OPTARG"
+                ;;
+        k)        KEEPOFFICE=true
                 ;;
         o)        OOO=true
                 ;;
@@ -92,14 +115,29 @@ done
 
 shift `expr $OPTIND - 1`
 
+if [ -d /export/home/$USER ]; then
+    CWSCHECKAPIPATH=/export/home/$USER/cwscheckapi
+else
+    if [ -w /export/home ]; then
+        mkdir /export/home/$USER
+        CWSCHECKAPIPATH=/export/home/$USER/cwscheckapi
+    else
+        CWSCHECKAPIPATH=/tmp/$USER/cwscheckapi
+    fi
+fi
 
-DESTPATH=/tmp/$USER/cwscheckapi
-LOCALINSTALLDIR=$DESTPATH/office
-LOCALUNPACKDIR=$DESTPATH/unpack
+# the following line is to cleanup old cwscheckapi-installations. It results form the first version of cwscheckapi
+# The disk space on /tmp is limited. If a lot of users run cwscheckapi a lot of installed offices are in /tmp
+# The new concept is to remove the offices after test. But old unused installations should be removed...
+if [ $CWSCHECKAPIPATH != /tmp/$USER/cwscheckapi ]; then
+    rm -rf /tmp/$USER/cwscheckapi
+fi
+
+LOCALINSTALLDIR=$CWSCHECKAPIPATH/office
+LOCALUNPACKDIR=$CWSCHECKAPIPATH/unpack
 export LOCALINSTALLDIR
 export LOCALUNPACKDIR
 
-unset LD_LIBRARY_PATH
 unset FORCE2ARCHIVE
 
 date 2>&1
@@ -122,23 +160,45 @@ if [ $INSTALL = true ]; then
 	echo "`date` installation successfull, start testing...." 
 fi
 
-if [ $DEBUG_T = true ]; then
-    echo find $LOCALINSTALLDIR -name soffice
+SOFFICE="soffice"
+PS=":"
+CYGWIN=""
+
+SHELL="/bin/bash"
+# cygwin:
+if [ "$GUI" = "WNT" ]; then
+    SOFFICE="soffice.exe"
+    PS=";"
+    CYGWIN="-Cygwin true"
+    SHELL=`which bash`
+    SHELL=`cygpath -w $SHELL`
+    if [ ! -f $SHELL ]; then
+        echo "could not determine bash shell" 
+        exit 1
+    fi
 fi
 
-OFFICEBIN=`find $LOCALINSTALLDIR -name soffice`
+if [ $DEBUG_T = true ]; then
+    echo find $LOCALINSTALLDIR -name $SOFFICE
+fi
+
+OFFICEBIN=`find $LOCALINSTALLDIR -name $SOFFICE`
 
 if [ ! -f "$OFFICEBIN" ]; then
-    echo "could not find 'soffice' in subfolders of $LOCALINSTALLDIR";
+    echo "could not find 'soffice' in subfolders of $LOCALINSTALLDIR"
     exit 1
 fi
 
+if [ "$GUI" = "WNT" ]; then
+    # transform /tmp/... -> c:\tmp\...
+    OFFICEBIN=`cygpath -w $OFFICEBIN`
+fi
 
 JARFOLDER=$SOLARVERSION/$INPATH/bin$UPDMINOREXT
 SOLVER_LIB=$SOLARVERSION/$INPATH/lib$UPDMINOREXT
-myCLASSPATH=$JARFOLDER/OOoRunner.jar:$JARFOLDER/ridl.jar:$JARFOLDER/unoil.jar:$JARFOLDER/jurt.jar:$JARFOLDER/juh.jar:$JARFOLDER/java_uno.jar
-myCLASSPATH=$myCLASSPATH:$JARFOLDER/ridl.jar:$JARFOLDER/unoil.jar:$JARFOLDER/jurt.jar:$JARFOLDER/juh.jar:$JARFOLDER/java_uno.jar
-myCLASSPATH=$myCLASSPATH:/net/unoapi/export/unoapi/bin/mysql.jar:$SOLVER_LIB
+myCLASSPATH=${PS}${JARFOLDER}/ridl.jar${PS}${JARFOLDER}/unoil.jar${PS}${JARFOLDER}/jurt.jar${PS}${JARFOLDER}/juh.jar${PS}${JARFOLDER}/java_uno.jar
+myCLASSPATH=$myCLASSPATH${PS}${JARFOLDER}/OOoRunner.jar
+myCLASSPATH=$myCLASSPATH${PS}/net/unoapi/export/unoapi/bin/mysql.jar${PS}$SOLVER_LIB
 PARAM=""
 if [ -n "$JAVAI" ]; then
         JAVABIN=$JAVAI
@@ -158,19 +218,19 @@ if [ -n "$WORK_STAMP" ]; then
         PARAM="$PARAM -Version cws_${CWS_WORK_STAMP}"
 	else
 	    echo "######"
-	    echo CAUTION! You\'re working on the MWS
+	    echo CAUTION! You are working on the MWS
 	    echo "######"
         PARAM="$PARAM -Version ${WORK_STAMP}_${UPDMINOR}"
 	fi
 fi
 
-PARAM="$PARAM -cmd '$OFFICEBIN  -nofirststartwizard -norestore -nocrashreport -nolockcheck -accept=pipe,name=$USER;urp;'"
+PARAM="$PARAM -cmd '$OFFICEBIN -nofirststartwizard -accept=pipe,name=$USER;urp; -norestore -nocrashreport -nolockcheck -enableautomation'"
 PARAM="$PARAM -cs pipe,name=$USER"
 PARAM="$PARAM -NoOffice true"
-PARAM="$PARAM -OOO_EnvSet setsolar"
 PARAM="$PARAM -SRC_ROOT $SRC_ROOT"
-PARAM="$PARAM -COMP_ENV $INPATH"
-PARAM="$PARAM -Shell /usr/bin/tcsh"
+PARAM="$PARAM -COMP_ENV $OUTPATH"
+PARAM="$PARAM -Shell $SHELL"
+PARAM="$PARAM $CYGWIN"
 PARAM="$PARAM -tb java_complex"
 PARAM="$PARAM -TimeOut 90000"
 PARAM="$PARAM -o complex.unoapi.CheckModuleAPI::module($MODULES)"
@@ -183,10 +243,15 @@ fi
 
 #XDEBUG=" -Xdebug -Xrunjdwp:transport=dt_socket,server=y,address=8001 " 
 COMMAND="$JAVABIN -Xmx120m $XDEBUG -cp $myCLASSPATH org.openoffice.Runner $PARAM $*"
-echo "( unset LD_LIBRARY_PATH ; $COMMAND )"
+echo "$COMMAND"
 
-LOGFILE=$DESTPATH/cwscheckapi.log
-( unset LD_LIBRARY_PATH ; $COMMAND | tee $LOGFILE)
+LOGFILE=$CWSCHECKAPIPATH/cwscheckapi.log
+$COMMAND | tee $LOGFILE
+
+if [ $KEEPOFFICE = false ]; then
+    echo "remove office instrallation in $LOCALINSTALLDIR..."
+    rm -rf $LOCALINSTALLDIR
+fi
 
 echo
 echo A logfile could be found here: $LOGFILE

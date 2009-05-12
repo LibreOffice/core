@@ -1,0 +1,593 @@
+*PPD-Adobe: "4.0"
+*%
+*% DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+*% 
+*% Copyright 2008 by Sun Microsystems, Inc.
+*%
+*% OpenOffice.org - a multi-platform office productivity suite
+*%
+*% $RCSfile: header.hxx,v $
+*%
+*% $Revision: 1.1 $
+*%
+*% This file is part of OpenOffice.org.
+*%
+*% OpenOffice.org is free software: you can redistribute it and/or modify
+*% it under the terms of the GNU Lesser General Public License version 3
+*% only, as published by the Free Software Foundation.
+*%
+*% OpenOffice.org is distributed in the hope that it will be useful,
+*% but WITHOUT ANY WARRANTY; without even the implied warranty of
+*% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*% GNU Lesser General Public License version 3 for more details
+*% (a copy is included in the LICENSE file that accompanied this code).
+*%
+*% You should have received a copy of the GNU Lesser General Public License
+*% version 3 along with OpenOffice.org.  If not, see
+*% <http://www.openoffice.org/license.html>
+*% for a copy of the LGPLv3 License.
+*%
+*%
+*%
+*% The user must print with a PostScript(R) emulator to non PostScript(R)
+*% printers if the system has no specific printer support. This file
+*% allows the user to print to most printers without any modification.
+*% Standard paper sizes and resolutions are defined. There are some
+*% additional definitions for screen or online documents in this file.
+*% To print to a PostScript(R) printer, use the specific PPD file.
+
+*% ===== General =====
+
+*FormatVersion: "4.0"
+*FileVersion: "1.0"
+*LanguageEncoding: ISOLatin1
+*LanguageVersion: English
+*PSVersion: "(1) 1"
+*Product: "(Generic Printer)"
+*ModelName: "Generic Printer"
+*NickName: "Generic Printer"
+*PCFileName: "SGENPRT.PPD"
+
+
+*% ===== Basic Capabilities and Defaults =====
+
+*ColorDevice: True
+*DefaultColorSpace: RGB
+*LanguageLevel: "2"
+
+*% --- For None Color or old PostScript(R) printers use following lines ---
+*% *ColorDevice: False
+*% *DefaultColorSpace: Gray
+*% *LanguageLevel: "1"
+
+*FreeVM: "8388608"
+*VariablePaperSize: True
+*FileSystem: False
+*Throughput: "8"
+*Password: "0"
+*ExitServer: "
+ count 0 eq   % is the password on the stack?
+ { true }
+ { dup		  % potential password
+   statusdict /checkpassword get exec not
+ } ifelse
+ {	%  if no password or not valid
+   (WARNING : Cannot perform the exitserver command.) =
+   (Password supplied is not valid.) =
+   (Please contact the author of this software.) = flush
+   quit
+ } if
+ serverdict /exitserver get exec
+"
+*End
+*Reset: "
+ count 0 eq   % is the password on the stack?
+ { true }
+ { dup		  % potential password
+   statusdict /checkpassword get exec not
+ } ifelse
+ {	%  if no password or not valid
+   (WARNING : Cannot reset printer.) =
+   (Password supplied is not valid.) =
+   (Please contact the author of this software.) = flush
+   quit
+ } if
+ serverdict /exitserver get exec
+ systemdict /quit get exec
+ (WARNING : Printer Reset Failed.) = flush
+"
+*End
+
+
+*DefaultResolution: 300dpi
+
+*ResScreenFreq 72dpi: "60.0"
+*ResScreenFreq 144dpi: "60.0"
+*ResScreenFreq 300dpi: "60.0"
+*ResScreenFreq 360dpi: "60.0"
+*ResScreenFreq 600dpi: "60.0"
+*ResScreenFreq 720dpi: "60.0"
+*ResScreenFreq 1200dpi: "60.0"
+*ResScreenFreq 1440dpi: "60.0"
+*ResScreenFreq 2400dpi: "60.0"
+*ResScreenAngle 72dpi: "45.0"
+*ResScreenAngle 144dpi: "45.0"
+*ResScreenAngle 300dpi: "45.0"
+*ResScreenAngle 360dpi: "45.0"
+*ResScreenAngle 600dpi: "45.0"
+*ResScreenAngle 720dpi: "45.0"
+*ResScreenAngle 1200dpi: "45.0"
+*ResScreenAngle 1440dpi: "45.0"
+*ResScreenAngle 2400dpi: "45.0"
+
+
+*% ===== Halftone =====
+
+*ContoneOnly: False
+*DefaultHalftoneType: 1
+*ScreenFreq: "60.0"
+*ScreenAngle: "45.0"
+*DefaultScreenProc: Dot
+*ScreenProc Dot: "
+ { abs exch abs 2 copy add 1 gt {1 sub dup mul exch 1 sub
+ dup mul add 1 sub } { dup mul exch dup mul add 1 exch sub }
+ ifelse } bind
+"
+*End
+*ScreenProc Line: "{ exch pop abs neg } bind"
+*ScreenProc Ellipse: "
+ { abs exch abs 2 copy mul exch 4 mul add 3 sub dup 0
+ lt { pop dup mul exch .75 div dup mul add 4 div 1 exch sub }
+ { dup 1 gt { pop 1 exch sub dup mul exch 1 exch sub  .75 div
+ dup mul add 4 div 1 sub }
+ { .5 exch sub exch pop exch pop } ifelse  } ifelse } bind
+"
+*End
+*ScreenProc Cross: "{ abs exch abs 2 copy gt { exch } if pop neg } bind"
+
+*DefaultTransfer: Null
+*Transfer Null: "{ } bind"
+*Transfer Null.Inverse: "{ 1 exch sub } bind"
+
+
+*% ===== Paper =====
+
+*OpenUI *PageSize: PickOne
+*OrderDependency: 30 AnySetup *PageSize
+*DefaultPageSize: Letter
+*PageSize A0: "<</PageSize [2384 3370] /ImagingBBox null>> setpagedevice"
+*PageSize A1: "<</PageSize [1684 2384] /ImagingBBox null>> setpagedevice"
+*PageSize A2: "<</PageSize [1191 1684] /ImagingBBox null>> setpagedevice"
+*PageSize A3: "<</PageSize [842 1191] /ImagingBBox null>> setpagedevice"
+*PageSize A4: "<</PageSize [595 842] /ImagingBBox null>> setpagedevice"
+*PageSize A5: "<</PageSize [420 595] /ImagingBBox null>> setpagedevice"
+*PageSize A6: "<</PageSize [297 420] /ImagingBBox null>> setpagedevice"
+*PageSize B4: "<</PageSize [728 1032] /ImagingBBox null>> setpagedevice"
+*PageSize B5: "<</PageSize [516 729] /ImagingBBox null>> setpagedevice"
+*PageSize B6: "<</PageSize [363 516] /ImagingBBox null>> setpagedevice"
+*PageSize Legal/US Legal: "<</PageSize [612 1008] /ImagingBBox null>> setpagedevice"
+*PageSize Letter/US Letter: "<</PageSize [612 792] /ImagingBBox null>> setpagedevice"
+*PageSize Executive: "<</PageSize [522 756] /ImagingBBox null>> setpagedevice"
+*PageSize Statement: "<</PageSize [396 612] /ImagingBBox null>> setpagedevice"
+*PageSize Tabloid/US Tabloid: "<</PageSize [792 1224] /ImagingBBox null>> setpagedevice"
+*PageSize Ledger/Ledger Landscape: "<</PageSize [1224 792] /ImagingBBox null>> setpagedevice"
+*PageSize AnsiC/US C: "<</PageSize [1224 1584] /ImagingBBox null>> setpagedevice"
+*PageSize AnsiD/US D: "<</PageSize [1584 2448] /ImagingBBox null>> setpagedevice"
+*PageSize AnsiE/US E: "<</PageSize [2448 3168] /ImagingBBox null>> setpagedevice"
+*PageSize ARCHA/ARCH A: "<</PageSize [648 864] /ImagingBBox null>> setpagedevice"
+*PageSize ARCHB/ARCH B: "<</PageSize [864 1296] /ImagingBBox null>> setpagedevice"
+*PageSize ARCHC/ARCH C: "<</PageSize [1296 1728] /ImagingBBox null>> setpagedevice"
+*PageSize ARCHD/ARCH D: "<</PageSize [1728 2592] /ImagingBBox null>> setpagedevice"
+*PageSize ARCHE/ARCH E: "<</PageSize [2592 3456] /ImagingBBox null>> setpagedevice"
+*PageSize EnvMonarch/Monarch Envelope: "<</PageSize [279 540] /ImagingBBox null>> setpagedevice"
+*PageSize EnvDL/DL Envelope: "<</PageSize [312 624] /ImagingBBox null>> setpagedevice"
+*PageSize EnvC4/C4 Envelope: "<</PageSize [649 918] /ImagingBBox null>> setpagedevice"
+*PageSize EnvC5/C5 Envelope: "<</PageSize [459 649] /ImagingBBox null>> setpagedevice"
+*PageSize EnvC6/C6 Envelope: "<</PageSize [323 459] /ImagingBBox null>> setpagedevice"
+*PageSize Env10/C10 Envelope: "<</PageSize [297 684] /ImagingBBox null>> setpagedevice"
+*PageSize EnvC65/C65 Envelope: "<</PageSize [324 648] /ImagingBBox null>> setpagedevice"
+*PageSize Folio: "<</PageSize [595 935] /ImagingBBox null>> setpagedevice"
+*?PageSize: "
+ save
+ currentpagedevice /PageSize get aload pop
+ 2 copy gt {exch} if
+ (Unknown)
+ 32 dict
+ dup [2384 3370] (A0) put
+ dup [1684 2384] (A1) put
+ dup [1191 1684] (A2) put
+ dup [842 1191] (A3) put
+ dup [595 842] (A4) put
+ dup [420 595] (A5) put
+ dup [297 420] (A6) put
+ dup [728 1032] (B4) put
+ dup [516 729] (B5) put
+ dup [363 516] (B6) put
+ dup [612 1008] (Legal) put
+ dup [612 792] (Letter) put
+ dup [522 756] (Executive) put
+ dup [396 612] (Statement) put
+ dup [792 1224] (Tabloid) put
+ dup [1224 792] (Ledger) put
+ dup [1224 1584] (AnsiC) put
+ dup [1584 2448] (AnsiD) put
+ dup [2448 3168] (AnsiE) put
+ dup [648 864] (ARCHA) put
+ dup [864 1296] (ARCHB) put
+ dup [1296 1728] (ARCHC) put
+ dup [1728 2592] (ARCHD) put
+ dup [2592 3456] (ARCHE) put
+ dup [279 540] (EnvMonarch) put
+ dup [312 624] (EnvDL) put
+ dup [649 918] (EnvC4) put
+ dup [459 649] (EnvC5) put
+ dup [323 459] (EnvC6) put
+ dup [297 684] (Env10) put
+ dup [324 648] (EnvC65) put
+ dup [595 935] (Folio) put
+ { exch aload pop 4 index sub abs 5 le exch
+   5 index sub abs 5 le and
+ { exch pop exit } { pop } ifelse
+ } bind forall
+ = flush pop pop
+ restore
+"
+*End
+*CloseUI: *PageSize
+
+*OpenUI *PageRegion: PickOne
+*OrderDependency: 40 AnySetup *PageRegion
+*DefaultPageRegion: Letter
+*PageRegion A0: "<</PageSize [2384 3370] /ImagingBBox null>> setpagedevice"
+*PageRegion A1: "<</PageSize [1684 2384] /ImagingBBox null>> setpagedevice"
+*PageRegion A2: "<</PageSize [1191 1684] /ImagingBBox null>> setpagedevice"
+*PageRegion A3: "<</PageSize [842 1191] /ImagingBBox null>> setpagedevice"
+*PageRegion A4: "<</PageSize [595 842] /ImagingBBox null>> setpagedevice"
+*PageRegion A5: "<</PageSize [420 595] /ImagingBBox null>> setpagedevice"
+*PageRegion A6: "<</PageSize [297 420] /ImagingBBox null>> setpagedevice"
+*PageRegion B4: "<</PageSize [728 1032] /ImagingBBox null>> setpagedevice"
+*PageRegion B5: "<</PageSize [516 729] /ImagingBBox null>> setpagedevice"
+*PageRegion B6: "<</PageSize [363 516] /ImagingBBox null>> setpagedevice"
+*PageRegion Legal/US Legal: "<</PageSize [612 1008] /ImagingBBox null>> setpagedevice"
+*PageRegion Letter/US Letter: "<</PageSize [612 792] /ImagingBBox null>> setpagedevice"
+*PageRegion Executive: "<</PageSize [522 756] /ImagingBBox null>> setpagedevice"
+*PageRegion Statement: "<</PageSize [396 612] /ImagingBBox null>> setpagedevice"
+*PageRegion Tabloid/US Tabloid: "<</PageSize [792 1224] /ImagingBBox null>> setpagedevice"
+*PageRegion Ledger/Ledger Landscape: "<</PageSize [1224 792] /ImagingBBox null>> setpagedevice"
+*PageRegion AnsiC/US C: "<</PageSize [1224 1584] /ImagingBBox null>> setpagedevice"
+*PageRegion AnsiD/US D: "<</PageSize [1584 2448] /ImagingBBox null>> setpagedevice"
+*PageRegion AnsiE/US E: "<</PageSize [2448 3168] /ImagingBBox null>> setpagedevice"
+*PageRegion ARCHA/ARCH A: "<</PageSize [648 864] /ImagingBBox null>> setpagedevice"
+*PageRegion ARCHB/ARCH B: "<</PageSize [864 1296] /ImagingBBox null>> setpagedevice"
+*PageRegion ARCHC/ARCH C: "<</PageSize [1296 1728] /ImagingBBox null>> setpagedevice"
+*PageRegion ARCHD/ARCH D: "<</PageSize [1728 2592] /ImagingBBox null>> setpagedevice"
+*PageRegion ARCHE/ARCH E: "<</PageSize [2592 3456] /ImagingBBox null>> setpagedevice"
+*PageRegion EnvMonarch/Monarch Envelope: "<</PageSize [279 540] /ImagingBBox null>> setpagedevice"
+*PageRegion EnvDL/DL Envelope: "<</PageSize [312 624] /ImagingBBox null>> setpagedevice"
+*PageRegion EnvC4/C4 Envelope: "<</PageSize [649 918] /ImagingBBox null>> setpagedevice"
+*PageRegion EnvC5/C5 Envelope: "<</PageSize [459 649] /ImagingBBox null>> setpagedevice"
+*PageRegion EnvC6/C6 Envelope: "<</PageSize [323 459] /ImagingBBox null>> setpagedevice"
+*PageRegion Env10/C10 Envelope: "<</PageSize [297 684] /ImagingBBox null>> setpagedevice"
+*PageRegion EnvC65/C65 Envelope: "<</PageSize [324 648] /ImagingBBox null>> setpagedevice"
+*PageRegion Folio: "<</PageSize [595 935] /ImagingBBox null>> setpagedevice"
+*CloseUI: *PageRegion
+
+*DefaultImageableArea: Letter
+*ImageableArea A0: "0 0 2384 3370"
+*ImageableArea A1: "0 0 1684 2384"
+*ImageableArea A2: "0 0 1191 1684"
+*ImageableArea A3: "18 18 824 1173"
+*ImageableArea A4: "18 18 577 824"
+*ImageableArea A5: "18 18 402 577"
+*ImageableArea A6: "18 18 279 402"
+*ImageableArea B4: "18 18 710 1014"
+*ImageableArea B5: "18 18 498 711"
+*ImageableArea B6: "18 18 345 498"
+*ImageableArea Legal: "18 18 594 990"
+*ImageableArea Letter: "18 18 594 774"
+*ImageableArea Executive: "18 18 504 738"
+*ImageableArea Statement: "18 18 378 594"
+*ImageableArea Tabloid: "18 18 774 1206"
+*ImageableArea Ledger: "18 18 1206 774"
+*ImageableArea AnsiC: "0 0 1224 1584"
+*ImageableArea AnsiD: "0 0 1584 2448"
+*ImageableArea AnsiE: "0 0 2448 3168"
+*ImageableArea ARCHA: "0 0 648 864"
+*ImageableArea ARCHB: "0 0 864 1296"
+*ImageableArea ARCHC: "0 0 1296 1728"
+*ImageableArea ARCHD: "0 0 1728 2592"
+*ImageableArea ARCHE: "0 0 2592 3456"
+*ImageableArea EnvMonarch: "0 0 279 540"
+*ImageableArea EnvDL: "0 0 312 624"
+*ImageableArea EnvC4: "0 0 649 918"
+*ImageableArea EnvC5: "0 0 459 649"
+*ImageableArea EnvC6: "0 0 323 459"
+*ImageableArea Env10: "0 0 297 684"
+*ImageableArea EnvC65: "0 0 324 648"
+*ImageableArea Folio: "0 0 595 935"
+
+*DefaultPaperDimension: Letter
+*PaperDimension A0: "2384 3370"
+*PaperDimension A1: "1684 2384"
+*PaperDimension A2: "1191 1684"
+*PaperDimension A3: "842 1191"
+*PaperDimension A4: "595 842"
+*PaperDimension A5: "420 595"
+*PaperDimension A6: "297 420"
+*PaperDimension B4: "728 1032"
+*PaperDimension B5: "516 729"
+*PaperDimension B6: "363 516"
+*PaperDimension Legal: "612 1008"
+*PaperDimension Letter: "612 792"
+*PaperDimension Executive: "522 756"
+*PaperDimension Statement: "396 612"
+*PaperDimension Tabloid: "792 1224"
+*PaperDimension Ledger: "1224 792"
+*PaperDimension AnsiC: "1224 1584"
+*PaperDimension AnsiD: "1584 2448"
+*PaperDimension AnsiE: "2448 3168"
+*PaperDimension ARCHA: "648 864"
+*PaperDimension ARCHB: "864 1296"
+*PaperDimension ARCHC: "1296 1728"
+*PaperDimension ARCHD: "1728 2592"
+*PaperDimension ARCHE: "2592 3456"
+*PaperDimension EnvMonarch: "279 540"
+*PaperDimension EnvDL: "312 624"
+*PaperDimension EnvC4: "649 918"
+*PaperDimension EnvC5: "459 649"
+*PaperDimension EnvC6: "323 459"
+*PaperDimension Env10: "297 684"
+*PaperDimension EnvC65: "324 648"
+*PaperDimension Folio: "595 935"
+
+*% ===== Duplex =====
+*OpenUI *Duplex/Duplex: PickOne
+*OrderDependency: 30 AnySetup *Duplex
+*DefaultDuplex: Simplex
+*Duplex Simplex: ""
+*Duplex None/Off: "
+<</Duplex false /Tumble false
+  /Policies << /Duplex 1 /Tumble 1 >>
+>> setpagedevice"
+*Duplex DuplexNoTumble/Long edge:"
+<</Duplex true /Tumble false
+  /Policies << /Duplex 1 /Tumble 1 >>
+>> setpagedevice"
+*Duplex DuplexTumble/Short edge:"
+<</Duplex true /Tumble true
+  /Policies << /Duplex 1 /Tumble 1 >>
+>> setpagedevice"
+*End
+*CloseUI: *Duplex
+
+*% ===== ManualFeed ===
+*OpenUI *ManualFeed/Manual Feed: Boolean
+*OrderDependency: 15 AnySetup *ManualFeed
+*DefaultManualFeed: False
+*ManualFeed False: "
+<< /ManualFeed false /Policies << /ManualFeed 1 >> >> setpagedevice"
+*ManualFeed True: "
+<< /ManualFeed true /Policies << /ManualFeed 1 >> >> setpagedevice"
+*End
+*CloseUI: *ManualFeed
+
+*% ===== Fonts =====
+
+*DefaultFont: Courier
+*Font AvantGarde-Book: Standard "(001.002)" Standard ROM
+*Font AvantGarde-BookOblique: Standard "(001.000)" Standard ROM
+*Font AvantGarde-Demi: Standard "(001.000)" Standard ROM
+*Font AvantGarde-DemiOblique: Standard "(001.000)" Standard ROM
+*Font Bookman-Demi: Standard "(001.000)" Standard ROM
+*Font Bookman-DemiItalic: Standard "(001.000)" Standard ROM
+*Font Bookman-Light: Standard "(001.000)" Standard ROM
+*Font Bookman-LightItalic: Standard "(001.000)" Standard ROM
+*Font Courier: Standard "(001.000)" Standard ROM
+*Font Courier-Bold: Standard "(001.000)" Standard ROM
+*Font Courier-BoldOblique: Standard "(001.000)" Standard ROM
+*Font Courier-Oblique: Standard "(001.000)" Standard ROM
+*Font Helvetica: Standard "(001.000)" Standard ROM
+*Font Helvetica-Bold: Standard "(001.000)" Standard ROM
+*Font Helvetica-BoldOblique: Standard "(001.000)" Standard ROM
+*Font Helvetica-Narrow: Standard "(001.000)" Standard ROM
+*Font Helvetica-Narrow-Bold: Standard "(001.000)" Standard ROM
+*Font Helvetica-Narrow-BoldOblique: Standard "(001.000)" Standard ROM
+*Font Helvetica-Narrow-Oblique: Standard "(001.000)" Standard ROM
+*Font Helvetica-Oblique: Standard "(001.000)" Standard ROM
+*Font NewCenturySchlbk-Bold: Standard "(001.000)" Standard ROM
+*Font NewCenturySchlbk-BoldItalic: Standard "(001.000)" Standard ROM
+*Font NewCenturySchlbk-Italic: Standard "(001.000)" Standard ROM
+*Font NewCenturySchlbk-Roman: Standard "(001.000)" Standard ROM
+*Font Palatino-Bold: Standard "(001.000)" Standard ROM
+*Font Palatino-BoldItalic: Standard "(001.000)" Standard ROM
+*Font Palatino-Italic: Standard "(001.000)" Standard ROM
+*Font Palatino-Roman: Standard "(001.000)" Standard ROM
+*Font Symbol: Special "(001.001)" Special ROM
+*Font Times-Bold: Standard "(001.000)" Standard ROM
+*Font Times-BoldItalic: Standard "(001.000)" Standard ROM
+*Font Times-Italic: Standard "(001.000)" Standard ROM
+*Font Times-Roman: Standard "(001.000)" Standard ROM
+*Font ZapfChancery-MediumItalic: Standard "(001.000)" Standard ROM
+*Font ZapfDingbats: Special "(001.000)" Special ROM
+*?FontQuery: "
+ save
+ {
+ count 1 gt
+ {
+ exch dup 127 string cvs (/) print print (:) print
+ /Font resourcestatus {pop pop (Yes)} {(No)} ifelse =
+ }
+ { exit } ifelse
+ } bind loop
+ (*) = flush
+ restore
+"
+*End
+
+*?FontList: "
+ save
+ (*) {cvn ==} 128 string /Font resourceforall
+ (*) = flush
+ restore
+"
+*End
+
+
+*% === Printer Messages ===
+
+*Message: "%%[ exitserver: permanent state may be changed ]%%"
+*Message: "%%[ Flushing: rest of job (to end-of-file) will be ignored ]%%"
+*Message: "\FontName\ not found, using Courier"
+
+*% Status (format: %%[ status: <one of these> %%] )
+*Status: "idle"
+*Status: "busy"
+*Status: "waiting"
+*Status: "printing"
+*Status: "PrinterError: timeout, clearing printer"
+*Status: "PrinterError: paper entry misfeed"
+*Status: "PrinterError: warming up"
+*Status: "PrinterError: service call"
+*Status: "PrinterError: no toner cartridge"
+*Status: "PrinterError: no paper tray"
+*Status: "PrinterError: cover open"
+*Status: "PrinterError: resetting printer"
+*Status: "PrinterError: out of paper"
+*Status: "PrinterError: timeout"
+*Status: "PrinterError: manual feed timeout"
+
+*% Input Sources (format: %%[ status: <stat>; source: <one of these>]%% )
+
+*% Printer Error (format: %%[ PrinterError: <one of these>]%%)
+*PrinterError: "timeout, clearing printer"
+*PrinterError: "paper entry misfeed"
+*PrinterError: "warming up"
+*PrinterError: "service call"
+*PrinterError: "no toner cartridge"
+*PrinterError: "no paper tray"
+*PrinterError: "cover open"
+*PrinterError: "resetting printer"
+*PrinterError: "out of paper"
+*PrinterError: "timeout"
+*PrinterError: "manual feed timeout"
+
+
+*% ===== Color Separation =====
+
+*DefaultColorSep: ProcessBlack.60lpi.300dpi/60 lpi / 300 dpi
+*InkName: ProcessBlack/Process Black
+*InkName: CustomColor/Custom Color
+*InkName: ProcessCyan/Process Cyan
+*InkName: ProcessMagenta/Process Magenta
+*InkName: ProcessYellow/Process Yellow
+
+*% --- For 60 lpi / 72 dpi ---
+*ColorSepScreenAngle ProcessBlack.60lpi.72dpi/60 lpi / 72 dpi: "45"
+*ColorSepScreenAngle CustomColor.60lpi.72dpi/60 lpi / 72 dpi: "45"
+*ColorSepScreenAngle ProcessCyan.60lpi.72dpi/60 lpi / 72 dpi: "15"
+*ColorSepScreenAngle ProcessMagenta.60lpi.72dpi/60 lpi / 72 dpi: "75"
+*ColorSepScreenAngle ProcessYellow.60lpi.72dpi/60 lpi / 72 dpi: "0"
+*ColorSepScreenFreq ProcessBlack.60lpi.72dpi/60 lpi / 72 dpi: "60"
+*ColorSepScreenFreq CustomColor.60lpi.72dpi/60 lpi / 72 dpi: "60"
+*ColorSepScreenFreq ProcessCyan.60lpi.72dpi/60 lpi / 72 dpi: "60"
+*ColorSepScreenFreq ProcessMagenta.60lpi.72dpi/60 lpi / 72 dpi: "60"
+*ColorSepScreenFreq ProcessYellow.60lpi.72dpi/60 lpi / 72 dpi: "60"
+
+*% --- For 60 lpi / 144 dpi ---
+*ColorSepScreenAngle ProcessBlack.60lpi.144dpi/60 lpi / 144 dpi: "45"
+*ColorSepScreenAngle CustomColor.60lpi.144dpi/60 lpi / 144 dpi: "45"
+*ColorSepScreenAngle ProcessCyan.60lpi.144dpi/60 lpi / 144 dpi: "15"
+*ColorSepScreenAngle ProcessMagenta.60lpi.144dpi/60 lpi / 144 dpi: "75"
+*ColorSepScreenAngle ProcessYellow.60lpi.144dpi/60 lpi / 144 dpi: "0"
+*ColorSepScreenFreq ProcessBlack.60lpi.144dpi/60 lpi / 144 dpi: "60"
+*ColorSepScreenFreq CustomColor.60lpi.144dpi/60 lpi / 144 dpi: "60"
+*ColorSepScreenFreq ProcessCyan.60lpi.144dpi/60 lpi / 144 dpi: "60"
+*ColorSepScreenFreq ProcessMagenta.60lpi.144dpi/60 lpi / 144 dpi: "60"
+*ColorSepScreenFreq ProcessYellow.60lpi.144dpi/60 lpi / 144 dpi: "60"
+
+*% --- For 60 lpi / 300 dpi ---
+*ColorSepScreenAngle ProcessBlack.60lpi.300dpi/60 lpi / 300 dpi: "45"
+*ColorSepScreenAngle CustomColor.60lpi.300dpi/60 lpi / 300 dpi: "45"
+*ColorSepScreenAngle ProcessCyan.60lpi.300dpi/60 lpi / 300 dpi: "15"
+*ColorSepScreenAngle ProcessMagenta.60lpi.300dpi/60 lpi / 300 dpi: "75"
+*ColorSepScreenAngle ProcessYellow.60lpi.300dpi/60 lpi / 300 dpi: "0"
+*ColorSepScreenFreq ProcessBlack.60lpi.300dpi/60 lpi / 300 dpi: "60"
+*ColorSepScreenFreq CustomColor.60lpi.300dpi/60 lpi / 300 dpi: "60"
+*ColorSepScreenFreq ProcessCyan.60lpi.300dpi/60 lpi / 300 dpi: "60"
+*ColorSepScreenFreq ProcessMagenta.60lpi.300dpi/60 lpi / 300 dpi: "60"
+*ColorSepScreenFreq ProcessYellow.60lpi.300dpi/60 lpi / 300 dpi: "60"
+
+*% --- For 60 lpi / 360 dpi ---
+*ColorSepScreenAngle ProcessBlack.60lpi.360dpi/60 lpi / 360 dpi: "45"
+*ColorSepScreenAngle CustomColor.60lpi.360dpi/60 lpi / 360 dpi: "45"
+*ColorSepScreenAngle ProcessCyan.60lpi.360dpi/60 lpi / 360 dpi: "15"
+*ColorSepScreenAngle ProcessMagenta.60lpi.360dpi/60 lpi / 360 dpi: "75"
+*ColorSepScreenAngle ProcessYellow.60lpi.360dpi/60 lpi / 360 dpi: "0"
+*ColorSepScreenFreq ProcessBlack.60lpi.360dpi/60 lpi / 360 dpi: "60"
+*ColorSepScreenFreq CustomColor.60lpi.360dpi/60 lpi / 360 dpi: "60"
+*ColorSepScreenFreq ProcessCyan.60lpi.360dpi/60 lpi / 360 dpi: "60"
+*ColorSepScreenFreq ProcessMagenta.60lpi.360dpi/60 lpi / 360 dpi: "60"
+*ColorSepScreenFreq ProcessYellow.60lpi.360dpi/60 lpi / 360 dpi: "60"
+
+*% --- For 71 lpi / 600 dpi ---
+*ColorSepScreenAngle ProcessBlack.71lpi.600dpi/71 lpi / 600 dpi: "45.0"
+*ColorSepScreenAngle CustomColor.71lpi.600dpi/71 lpi / 600 dpi: "45.0"
+*ColorSepScreenAngle ProcessCyan.71lpi.600dpi/71 lpi / 600 dpi: "71.5651"
+*ColorSepScreenAngle ProcessMagenta.71lpi.600dpi/71 lpi / 600 dpi: "18.4349"
+*ColorSepScreenAngle ProcessYellow.71lpi.600dpi/71 lpi / 600 dpi: "0.0"
+*ColorSepScreenFreq ProcessBlack.71lpi.600dpi/71 lpi / 600 dpi: "70.7107"
+*ColorSepScreenFreq CustomColor.71lpi.600dpi/71 lpi / 600 dpi: "70.7107"
+*ColorSepScreenFreq ProcessCyan.71lpi.600dpi/71 lpi / 600 dpi: "63.2456"
+*ColorSepScreenFreq ProcessMagenta.71lpi.600dpi/71 lpi / 600 dpi: "63.2456"
+*ColorSepScreenFreq ProcessYellow.71lpi.600dpi/71 lpi / 600 dpi: "66.6667"
+
+*% --- For 71 lpi / 720 dpi ---
+*ColorSepScreenAngle ProcessBlack.71lpi.720dpi/71 lpi / 720 dpi: "45.0"
+*ColorSepScreenAngle CustomColor.71lpi.720dpi/71 lpi / 720 dpi: "45.0"
+*ColorSepScreenAngle ProcessCyan.71lpi.720dpi/71 lpi / 720 dpi: "71.5651"
+*ColorSepScreenAngle ProcessMagenta.71lpi.720dpi/71 lpi / 720 dpi: "18.4349"
+*ColorSepScreenAngle ProcessYellow.71lpi.720dpi/71 lpi / 720 dpi: "0.0"
+*ColorSepScreenFreq ProcessBlack.71lpi.720dpi/71 lpi / 720 dpi: "70.7107"
+*ColorSepScreenFreq CustomColor.71lpi.720dpi/71 lpi / 720 dpi: "70.7107"
+*ColorSepScreenFreq ProcessCyan.71lpi.720dpi/71 lpi / 720 dpi: "63.2456"
+*ColorSepScreenFreq ProcessMagenta.71lpi.720dpi/71 lpi / 720 dpi: "63.2456"
+*ColorSepScreenFreq ProcessYellow.71lpi.720dpi/71 lpi / 720 dpi: "66.6667"
+
+*% --- For 100 lpi / 1200 dpi ---
+*ColorSepScreenAngle ProcessBlack.100lpi.1200dpi/100 lpi / 1200 dpi: "45.0"
+*ColorSepScreenAngle CustomColor.100lpi.1200dpi/100 lpi / 1200 dpi: "45.0"
+*ColorSepScreenAngle ProcessCyan.100lpi.1200dpi/100 lpi / 1200 dpi: "15.0"
+*ColorSepScreenAngle ProcessMagenta.100lpi.1200dpi/100 lpi / 1200 dpi: "75.0"
+*ColorSepScreenAngle ProcessYellow.100lpi.1200dpi/100 lpi / 1200 dpi: "0.0"
+*ColorSepScreenFreq ProcessBlack.100lpi.1200dpi/100 lpi / 1200 dpi: "100.0"
+*ColorSepScreenFreq CustomColor.100lpi.1200dpi/100 lpi / 1200 dpi: "100.0"
+*ColorSepScreenFreq ProcessCyan.100lpi.1200dpi/100 lpi / 1200 dpi: "100.0"
+*ColorSepScreenFreq ProcessMagenta.100lpi.1200dpi/100 lpi / 1200 dpi: "100.0"
+*ColorSepScreenFreq ProcessYellow.100lpi.1200dpi/100 lpi / 1200 dpi: "100.0"
+
+*% --- For 100 lpi / 1440 dpi ---
+*ColorSepScreenAngle ProcessBlack.100lpi.1440dpi/100 lpi / 1440 dpi: "45.0"
+*ColorSepScreenAngle CustomColor.100lpi.1440dpi/100 lpi / 1440 dpi: "45.0"
+*ColorSepScreenAngle ProcessCyan.100lpi.1440dpi/100 lpi / 1440 dpi: "15.0"
+*ColorSepScreenAngle ProcessMagenta.100lpi.1440dpi/100 lpi / 1440 dpi: "75.0"
+*ColorSepScreenAngle ProcessYellow.100lpi.1440dpi/100 lpi / 1440 dpi: "0.0"
+*ColorSepScreenFreq ProcessBlack.100lpi.1440dpi/100 lpi / 1440 dpi: "100.0"
+*ColorSepScreenFreq CustomColor.100lpi.1440dpi/100 lpi / 1440 dpi: "100.0"
+*ColorSepScreenFreq ProcessCyan.100lpi.1440dpi/100 lpi / 1440 dpi: "100.0"
+*ColorSepScreenFreq ProcessMagenta.100lpi.1440dpi/100 lpi / 1440 dpi: "100.0"
+*ColorSepScreenFreq ProcessYellow.100lpi.1440dpi/100 lpi / 1440 dpi: "100.0"
+
+*% --- For 175 lpi / 2400 dpi ---
+*ColorSepScreenAngle ProcessBlack.175lpi.2400dpi/175 lpi / 2400 dpi: "45.0"
+*ColorSepScreenAngle CustomColor.175lpi.2400dpi/175 lpi / 2400 dpi: "45.0"
+*ColorSepScreenAngle ProcessCyan.175lpi.2400dpi/175 lpi / 2400 dpi: "15.0"
+*ColorSepScreenAngle ProcessMagenta.175lpi.2400dpi/175 lpi / 2400 dpi: "75.0"
+*ColorSepScreenAngle ProcessYellow.175lpi.2400dpi/175 lpi / 2400 dpi: "0.0"
+*ColorSepScreenFreq ProcessBlack.175lpi.2400dpi/175 lpi / 2400 dpi: "175.0"
+*ColorSepScreenFreq CustomColor.175lpi.2400dpi/175 lpi / 2400 dpi: "175.0"
+*ColorSepScreenFreq ProcessCyan.175lpi.2400dpi/175 lpi / 2400 dpi: "175.0"
+*ColorSepScreenFreq ProcessMagenta.175lpi.2400dpi/175 lpi / 2400 dpi: "175.0"
+*ColorSepScreenFreq ProcessYellow.175lpi.2400dpi/175 lpi / 2400 dpi: "175.0"
+
+*% Last Edit Date: March 24 2000
+*% end of PPD file

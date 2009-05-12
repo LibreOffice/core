@@ -1,0 +1,7 @@
+UDK_3_0_0 {
+    global:
+        uno_initEnvironment;
+        uno_ext_getMapping;
+    local:
+    *;
+};

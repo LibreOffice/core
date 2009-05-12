@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file_ooo.scp,v $
- * $Revision: 1.264 $
+ * $Revision: 1.257.18.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -138,28 +138,6 @@ End
 #endif
 #endif
 
-File gid_File_Bin_Setofficelang
-    BIN_FILE_BODY;
-    Dir = gid_Dir_Program;
-    Styles = (PACKED);
-  #ifdef UNX
-    Name = "setofficelang.bin";
-  #else
-    Name = "setofficelang.exe";
-  #endif
-End
-
-#ifdef UNX
-
-File gid_File_Script_Setofficelang
-    BIN_FILE_BODY;
-    Dir = gid_Dir_Program;
-    Styles = (PACKED);
-    Name = "setofficelang";
-End
-
-#endif
-
 File gid_File_Bin_Gengal
     BIN_FILE_BODY;
     Dir = gid_Dir_Program;
@@ -182,13 +160,20 @@ End
 
 #endif
 
+File gid_File_Profile_Gengal
+    BIN_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Styles = (PACKED, PATCH);
+    Name = PROFILENAME(gengal);
+End
+
 #if !defined(WITHOUT_MOZILLA) && defined(UNX) && !defined(QUARTZ)
 
 File gid_File_Bin_Pluginapp
     BIN_FILE_BODY;
     Dir = gid_Dir_Program;
     Name = "pluginapp.bin";
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
 End
 
 #endif
@@ -374,7 +359,7 @@ End
 
 STD_FILTER_FILE( gid_File_Filter_Eme, eme)
 
-STD_FILTER_FILE( gid_File_Filter_Emp, emp)
+STD_FILTER_FILE_PATCH( gid_File_Filter_Emp, emp)
 
 STD_FILTER_FILE( gid_File_Filter_Icg, icg)
 
@@ -493,17 +478,6 @@ STD_JAR_FILE( gid_File_Jar_Js, js )
 
 #ifdef SOLAR_JAVA
 
-File gid_File_Jar_Jut
-    TXT_FILE_BODY;
-    Name = JARFILENAME(jut);
-    Dir = gid_Dir_Classes;
-    Styles = (PACKED);
-End
-
-#endif
-
-#ifdef SOLAR_JAVA
-
 #ifndef MACOSX
 
 File gid_File_Jar_Officebean
@@ -569,7 +543,7 @@ File gid_File_Jar_Unoil
     TXT_FILE_BODY;
     Name = "unoil.jar";
     Dir = gid_Dir_Classes;
-    Styles = (PACKED,DONT_OVERWRITE);
+    Styles = (PACKED,DONT_OVERWRITE,PATCH);
 End
 
 #endif
@@ -1384,11 +1358,18 @@ File gid_File_Oo_Office_Common_Xcs
     Name = "/registry/schema/org/openoffice/Office/Common.xcs";
 End
 
-File gid_File_Oo_Office_Common_Xcu
+File gid_File_Oo_Office_Histories_Xcs
     TXT_FILE_BODY;
-    Styles = (PACKED,SCPZIP_REPLACE);
-    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
-    Name = "/registry/data/org/openoffice/Office/Common.xcu";
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
+    Name = "/registry/schema/org/openoffice/Office/Histories.xcs";
+End
+
+File gid_File_Oo_Office_Ui_WindowContentFactories_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office_Ui;
+    Name = "/registry/schema/org/openoffice/Office/UI/WindowContentFactories.xcs";
 End
 
 File gid_File_Oo_Office_Extendedcolorscheme_Xcs
@@ -1413,6 +1394,13 @@ File gid_File_Oo_Office_Logging_Xcs
     Name = "/registry/schema/org/openoffice/Office/Logging.xcs";
 End
 
+File gid_File_Oo_Office_OOoImprovement_Settings_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office_OOoImprovement;
+    Name = "/registry/schema/org/openoffice/Office/OOoImprovement/Settings.xcs";
+End
+
 File gid_File_Oo_Office_OptionsDialog_Xcs
     TXT_FILE_BODY;
     Styles = (PACKED);
@@ -1425,6 +1413,34 @@ File gid_File_Oo_Office_Recovery_Xcs
     Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
     Name = "/registry/schema/org/openoffice/Office/Recovery.xcs";
+End
+
+File gid_File_Oo_Office_Histories_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
+    Name = "/registry/data/org/openoffice/Office/Histories.xcu";
+End
+
+File gid_File_Oo_Office_Common_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED,SCPZIP_REPLACE);
+    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
+    Name = "/registry/data/org/openoffice/Office/Common.xcu";
+End
+
+File gid_File_Oo_Office_Accelerators_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
+    Name = "/registry/schema/org/openoffice/Office/Accelerators.xcs";
+End
+
+File gid_File_Oo_Office_Accelerators_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED, SCPZIP_REPLACE);
+    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
+    Name = "/registry/data/org/openoffice/Office/Accelerators.xcu";
 End
 
 File gid_File_Oo_Office_Paths_Xcu
@@ -1648,7 +1664,7 @@ End
 
 File gid_File_Oo_Office_Ui_Genericcommands_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
     Name = "/registry/data/org/openoffice/Office/UI/GenericCommands.xcu";
 End
@@ -1711,7 +1727,7 @@ End
 
 File gid_File_Oo_Office_Linguistic_Xcs
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
     Name = "/registry/schema/org/openoffice/Office/Linguistic.xcs";
 End
@@ -2019,6 +2035,13 @@ File gid_File_Oo_Ucb_Configuration_Xcs
     Name = "/registry/schema/org/openoffice/ucb/Configuration.xcs";
 End
 
+File gid_File_Oo_Ucb_InteractionHandler_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Ucb;
+    Name = "/registry/schema/org/openoffice/ucb/InteractionHandler.xcs";
+End
+
 File gid_File_Oo_Ucb_Configuration_Xcu
     TXT_FILE_BODY;
     Styles = (PACKED);
@@ -2100,7 +2123,7 @@ End
 File gid_File_Rdb_Offapi
     TXT_FILE_BODY;
     Dir = gid_Dir_Program;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Name = "offapi.rdb";
 End
 
@@ -2197,6 +2220,17 @@ File gid_File_Registry_Spool_Langpack_Lang
     FILE_ALL_LANG_LETTER(/registry/spool/Langpack-,xcu);
 End
 
+File gid_File_Registry_Spool_Oo_Accelerators_System_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Accelerators;
+#ifdef QUARTZ 
+    Name = "/registry/spool/org/openoffice/Office/Accelerators-macosx.xcu";
+#else
+    Name = "/registry/spool/org/openoffice/Office/Accelerators-unxwnt.xcu";
+#endif
+End
+
 File gid_File_Registry_Spool_Oo_Common_System_Xcu
     TXT_FILE_BODY;
     Styles = (PACKED);
@@ -2208,16 +2242,6 @@ File gid_File_Registry_Spool_Oo_Common_System_Xcu
 #else
     Name = "/registry/spool/org/openoffice/Office/Common-unx.xcu";
 #endif
-End
-
-File gid_File_Registry_Spool_Oo_Common_Cjk_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED,MAKE_LANG_SPECIFIC);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Common;
-    Name (ja) = "/registry/spool/org/openoffice/Office/Common-cjk.xcu";
-    Name (ko) = "/registry/spool/org/openoffice/Office/Common-cjk.xcu";
-    Name (zh-CN) = "/registry/spool/org/openoffice/Office/Common-cjk.xcu";
-    Name (zh-TW) = "/registry/spool/org/openoffice/Office/Common-cjk.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_Common_Ctl_Xcu
@@ -2238,23 +2262,7 @@ File gid_File_Registry_Spool_Oo_Common_Ctl_Xcu
     Name (or) = "/registry/spool/org/openoffice/Office/Common-ctl.xcu";
     Name (ne) = "/registry/spool/org/openoffice/Office/Common-ctl.xcu";
     Name (fa) = "/registry/spool/org/openoffice/Office/Common-ctl.xcu";
-End
-
-File gid_File_Registry_Spool_Oo_Writer_Cjk_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED,MAKE_LANG_SPECIFIC);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Writer;
-    Name (ja) = "/registry/spool/org/openoffice/Office/Writer-cjk.xcu";
-    Name (ko) = "/registry/spool/org/openoffice/Office/Writer-cjk.xcu";
-    Name (zh-CN) = "/registry/spool/org/openoffice/Office/Writer-cjk.xcu";
-    Name (zh-TW) = "/registry/spool/org/openoffice/Office/Writer-cjk.xcu";
-End
-
-File gid_File_Registry_Spool_Oo_Common_Korean_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Common;
-    Name (ko) = "/registry/spool/org/openoffice/Office/Common-korea.xcu";
+    Name (my) = "/registry/spool/org/openoffice/Office/Common-ctl.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_Office_Writer_PyMailMerge_Xcu
@@ -2374,35 +2382,35 @@ End
 
 File gid_File_Xsl_Common_Measure_Conversion
     TXT_FILE_BODY;
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Xslt_Common;
     Name = "/xslt/common/measure_conversion.xsl";
 End
 
 File gid_File_Xsl_Common_Math_Functions
     TXT_FILE_BODY;
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Xslt_Common;
     Name = "/xslt/common/math.xsl";
 End
 
 File gid_File_Xsl_Export_Common_Body
     TXT_FILE_BODY;
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Xslt_Export_Common;
     Name = "/xslt/export/common/body.xsl";
 End
 
 File gid_File_Xsl_Export_Common_Table_Of_Content
     TXT_FILE_BODY;
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Xslt_Export_Common;
     Name = "/xslt/export/common/table_of_content.xsl";
 End
 
 File gid_File_Xsl_Export_Common_Ooo2ms_Docpr
     TXT_FILE_BODY;
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Xslt_Export_Common;
     Name = "/xslt/export/common/ooo2ms_docpr.xsl";
 End
@@ -2423,7 +2431,7 @@ End
 
 File gid_File_Xsl_Export_Common_Table_Table
     TXT_FILE_BODY;
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Xslt_Export_Common_Table;
     Name = "/xslt/export/common/table/table.xsl";
 End
@@ -2437,14 +2445,14 @@ End
 
 File gid_File_Xsl_Export_Common_Table_Table_Columns
     TXT_FILE_BODY;
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Xslt_Export_Common_Table;
     Name = "/xslt/export/common/table/table_columns.xsl";
 End
 
 File gid_File_Xsl_Export_Common_Table_Table_Rows
     TXT_FILE_BODY;
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Xslt_Export_Common_Table;
     Name = "/xslt/export/common/table/table_rows.xsl";
 End
@@ -2702,7 +2710,7 @@ File gid_Starregistry_Services_Rdb
     TXT_FILE_BODY;
     Name = "services.rdb";
     Dir = gid_Dir_Program;
-    Styles = (PACKED, STARREGISTRY);
+    Styles = (PACKED, STARREGISTRY, PATCH);
     NativeServicesURLPrefix = "vnd.sun.star.expand:$OOO_BASE_DIR/program/";
     JavaServicesURLPrefix = "vnd.sun.star.expand:$OOO_BASE_DIR/program/classes/";
 End
@@ -2753,15 +2761,6 @@ File gid_File_Dat_Root5
     Dir = gid_Dir_Program;
     Name = "root5.dat";
     Styles = (PACKED);
-End
-#endif
-
-#if defined MACOSX && !defined QUARTZ
-File gid_File_Bin_Macosxrc
-    TXT_FILE_BODY;
-    Dir = gid_Dir_User;
-    Name = "macosxrc.txt";
-    Styles = (PACKED, WORKSTATION);
 End
 #endif
 
@@ -2876,7 +2875,7 @@ File gid_File_Images_Zip
     TXT_FILE_BODY;
     Dir = gid_Dir_Share_Config;
     Name = "images.zip";
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
 End
 
 File gid_File_ImagesCrystal_Zip
@@ -2941,7 +2940,7 @@ End
 File gid_File_Extension_Dictionary_Af
 	Dir = gid_Brand_Dir_Share_Extension_Install;
 	Name = "dict-af.oxt";
-	Styles = (PACKED);
+	Styles = (PACKED, FORCELANGUAGEPACK);
 	UnixRights = 444;
 End
 #endif
@@ -2950,7 +2949,7 @@ End
 File gid_File_Extension_Dictionary_Cs
 	Dir = gid_Brand_Dir_Share_Extension_Install;
 	Name = "dict-cs.oxt";
-	Styles = (PACKED);
+	Styles = (PACKED, FORCELANGUAGEPACK);
 	UnixRights = 444;
 End
 #endif
@@ -2959,7 +2958,7 @@ End
 File gid_File_Extension_Dictionary_Da
 	Dir = gid_Brand_Dir_Share_Extension_Install;
 	Name = "dict-da.oxt";
-	Styles = (PACKED);
+	Styles = (PACKED, FORCELANGUAGEPACK);
 	UnixRights = 444;
 End
 #endif
@@ -2968,7 +2967,7 @@ End
 File gid_File_Extension_Dictionary_De
 	Dir = gid_Brand_Dir_Share_Extension_Install;
 	Name = "dict-de.oxt";
-	Styles = (PACKED);
+	Styles = (PACKED, FORCELANGUAGEPACK);
 	UnixRights = 444;
 End
 #endif
@@ -2977,7 +2976,7 @@ End
 File gid_File_Extension_Dictionary_En
 	Dir = gid_Brand_Dir_Share_Extension_Install;
 	Name = "dict-en.oxt";
-	Styles = (PACKED);
+	Styles = (PACKED, FORCELANGUAGEPACK);
 	UnixRights = 444;
 End
 #endif
@@ -2986,7 +2985,7 @@ End
 File gid_File_Extension_Dictionary_Es
 	Dir = gid_Brand_Dir_Share_Extension_Install;
 	Name = "dict-es.oxt";
-	Styles = (PACKED);
+	Styles = (PACKED, FORCELANGUAGEPACK);
 	UnixRights = 444;
 End
 #endif
@@ -2995,7 +2994,7 @@ End
 File gid_File_Extension_Dictionary_Et
 	Dir = gid_Brand_Dir_Share_Extension_Install;
 	Name = "dict-et.oxt";
-	Styles = (PACKED);
+	Styles = (PACKED, FORCELANGUAGEPACK);
 	UnixRights = 444;
 End
 #endif
@@ -3004,7 +3003,7 @@ End
 File gid_File_Extension_Dictionary_Fr
 	Dir = gid_Brand_Dir_Share_Extension_Install;
 	Name = "dict-fr.oxt";
-	Styles = (PACKED);
+	Styles = (PACKED, FORCELANGUAGEPACK);
 	UnixRights = 444;
 End
 #endif
@@ -3013,7 +3012,7 @@ End
 File gid_File_Extension_Dictionary_Gl
 	Dir = gid_Brand_Dir_Share_Extension_Install;
 	Name = "dict-gl.oxt";
-	Styles = (PACKED);
+	Styles = (PACKED, FORCELANGUAGEPACK);
 	UnixRights = 444;
 End
 #endif
@@ -3022,7 +3021,7 @@ End
 File gid_File_Extension_Dictionary_Hu
 	Dir = gid_Brand_Dir_Share_Extension_Install;
 	Name = "dict-hu.oxt";
-	Styles = (PACKED);
+	Styles = (PACKED, FORCELANGUAGEPACK);
 	UnixRights = 444;
 End
 #endif
@@ -3031,7 +3030,7 @@ End
 File gid_File_Extension_Dictionary_It
 	Dir = gid_Brand_Dir_Share_Extension_Install;
 	Name = "dict-it.oxt";
-	Styles = (PACKED);
+	Styles = (PACKED, FORCELANGUAGEPACK);
 	UnixRights = 444;
 End
 #endif
@@ -3040,7 +3039,7 @@ End
 File gid_File_Extension_Dictionary_Lt
 	Dir = gid_Brand_Dir_Share_Extension_Install;
 	Name = "dict-lt.oxt";
-	Styles = (PACKED);
+	Styles = (PACKED, FORCELANGUAGEPACK);
 	UnixRights = 444;
 End
 #endif
@@ -3049,7 +3048,7 @@ End
 File gid_File_Extension_Dictionary_Ne
 	Dir = gid_Brand_Dir_Share_Extension_Install;
 	Name = "dict-ne.oxt";
-	Styles = (PACKED);
+	Styles = (PACKED, FORCELANGUAGEPACK);
 	UnixRights = 444;
 End
 #endif
@@ -3058,7 +3057,7 @@ End
 File gid_File_Extension_Dictionary_Nl
 	Dir = gid_Brand_Dir_Share_Extension_Install;
 	Name = "dict-nl.oxt";
-	Styles = (PACKED);
+	Styles = (PACKED, FORCELANGUAGEPACK);
 	UnixRights = 444;
 End
 #endif
@@ -3067,7 +3066,7 @@ End
 File gid_File_Extension_Dictionary_Pl
 	Dir = gid_Brand_Dir_Share_Extension_Install;
 	Name = "dict-pl.oxt";
-	Styles = (PACKED);
+	Styles = (PACKED, FORCELANGUAGEPACK);
 	UnixRights = 444;
 End
 #endif
@@ -3076,7 +3075,7 @@ End
 File gid_File_Extension_Dictionary_Pt
 	Dir = gid_Brand_Dir_Share_Extension_Install;
 	Name = "dict-pt.oxt";
-	Styles = (PACKED);
+	Styles = (PACKED, FORCELANGUAGEPACK);
 	UnixRights = 444;
 End
 #endif
@@ -3085,7 +3084,7 @@ End
 File gid_File_Extension_Dictionary_Ru
 	Dir = gid_Brand_Dir_Share_Extension_Install;
 	Name = "dict-ru.oxt";
-	Styles = (PACKED);
+	Styles = (PACKED, FORCELANGUAGEPACK);
 	UnixRights = 444;
 End
 #endif
@@ -3094,7 +3093,7 @@ End
 File gid_File_Extension_Dictionary_Sk
 	Dir = gid_Brand_Dir_Share_Extension_Install;
 	Name = "dict-sk.oxt";
-	Styles = (PACKED);
+	Styles = (PACKED, FORCELANGUAGEPACK);
 	UnixRights = 444;
 End
 #endif
@@ -3103,6 +3102,15 @@ End
 File gid_File_Extension_Dictionary_Sl
 	Dir = gid_Brand_Dir_Share_Extension_Install;
 	Name = "dict-sl.oxt";
+	Styles = (PACKED, FORCELANGUAGEPACK);
+	UnixRights = 444;
+End
+#endif
+
+#ifndef WITHOUT_MYSPELL_DICTS
+File gid_File_Extension_Dictionary_Sr
+	Dir = gid_Brand_Dir_Share_Extension_Install;
+	Name = "dict-sr.oxt";
 	Styles = (PACKED);
 	UnixRights = 444;
 End
@@ -3112,7 +3120,7 @@ End
 File gid_File_Extension_Dictionary_Sv
 	Dir = gid_Brand_Dir_Share_Extension_Install;
 	Name = "dict-sv.oxt";
-	Styles = (PACKED);
+	Styles = (PACKED, FORCELANGUAGEPACK);
 	UnixRights = 444;
 End
 #endif
@@ -3121,7 +3129,7 @@ End
 File gid_File_Extension_Dictionary_Sw
 	Dir = gid_Brand_Dir_Share_Extension_Install;
 	Name = "dict-sw.oxt";
-	Styles = (PACKED);
+	Styles = (PACKED, FORCELANGUAGEPACK);
 	UnixRights = 444;
 End
 #endif
@@ -3130,7 +3138,7 @@ End
 File gid_File_Extension_Dictionary_Th
 	Dir = gid_Brand_Dir_Share_Extension_Install;
 	Name = "dict-th.oxt";
-	Styles = (PACKED);
+	Styles = (PACKED, FORCELANGUAGEPACK);
 	UnixRights = 444;
 End
 #endif
@@ -3139,7 +3147,7 @@ End
 File gid_File_Extension_Dictionary_Vi
 	Dir = gid_Brand_Dir_Share_Extension_Install;
 	Name = "dict-vi.oxt";
-	Styles = (PACKED);
+	Styles = (PACKED, FORCELANGUAGEPACK);
 	UnixRights = 444;
 End
 #endif
@@ -3148,7 +3156,16 @@ End
 File gid_File_Extension_Dictionary_Zu
 	Dir = gid_Brand_Dir_Share_Extension_Install;
 	Name = "dict-zu.oxt";
-	Styles = (PACKED);
+	Styles = (PACKED, FORCELANGUAGEPACK);
 	UnixRights = 444;
 End
 #endif
+
+// #ifdef BUILD_SPECIAL
+// File gid_File_Extension_Oxt_Oooimprovement
+//    Name = "OOoImprovement.oxt";
+//    Dir = gid_Brand_Dir_Share_Extension_Install;
+//    Styles = (PACKED);
+//    UnixRights = 444;
+// End
+// #endif

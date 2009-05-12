@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: gi_parse.cxx,v $
- * $Revision: 1.6 $
+ * $Revision: 1.6.16.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -266,10 +266,10 @@ GenericInfo_Parser::ReadKey()
 {
     const char * pSearch = sCurParsePosition;
 
-    for ( ; *pSearch > 32; ++pSearch );
+    for ( ; *pSearch > 32; ++pSearch ) ;
     UINT32 nKeyLength = pSearch - sCurParsePosition;
 
-    for ( ; *pSearch <= 32 && *pSearch > '\0'; ++pSearch );
+    for ( ; *pSearch <= 32 && *pSearch > '\0'; ++pSearch ) ;
 
     pResult->AddKey( sCurParsePosition,     nKeyLength,
                      pSearch,               strlen(pSearch),

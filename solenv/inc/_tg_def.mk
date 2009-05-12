@@ -24,19 +24,16 @@ $(DEF1EXPORTFILE) : $(SHL1OBJS) $(SHL1LIBS)
 $(DEF1EXPORTFILE) : $(SHL1VERSIONMAP)
     $(TYPE) $< | $(AWK) -f $(SOLARENV)$/bin$/getcsym.awk > $@
 .IF "$(COM)"=="GCC"
-    -grep -v "\*\|?" $@ > $@.exported-symbols
-    -grep "\*\|?" $@ > $@.symbols-regexp
+    -$(GREP) -v "\*\|?" $@ | $(SED) -e 's@#.*@@' > $@.exported-symbols
+    -$(GREP) "\*\|?" $@ > $@.symbols-regexp
 # Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
 # Extract RTTI symbols from all the objects that will be used to build a shared library
-.IF "$(SHL1OBJS)"!=""
-    -echo $(foreach,i,$(SHL1OBJS) $i) | xargs -n1 nm -gP | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
-.ENDIF
-.IF "$(SHL1LIBS)"!=""
-    -$(TYPE) $(foreach,j,$(SHL1LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gP | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
-.ENDIF
+    nm -gP $(SHL1OBJS) \
+        `$(TYPE) /dev/null $(foreach,j,$(SHL1LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
+        | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp @.symbols-regexp.tmp >> $@.exported-symbols
 # overwrite the map file generate into the local output tree with the generated
 # exported symbols list
-    cp $@.exported-symbols $@
+    $(RENAME) $@.exported-symbols $@
 .ENDIF # .IF "$(COM)"=="GCC"
 
 .ENDIF			# "$(GUI)"=="WNT"
@@ -75,8 +72,10 @@ $(DEF1TARGETN) .PHONY :
     @echo HEAPSIZE	  0 											>>$@.tmpfile
 .ENDIF
     @echo EXPORTS													>>$@.tmpfile
+.IF "$(VERSIONOBJ)"!=""
 #	getversioninfo fuer alle!!
     @echo GetVersionInfo		>>$@.tmpfile
+.ENDIF
 .IF "$(DEFLIB1NAME)"!=""
 .IF "$(COM)"=="GCC"
     @-$(RM) $(MISC)$/$(SHL1TARGET).exp
@@ -190,8 +189,10 @@ $(DEF1TARGETN) .PHONY :
     @echo DATA MULTIPLE	 >>$@.tmpfile
     @echo DESCRIPTION	'StarView 3.00 $(DEF1DES) $(UPD) $(UPDMINOR)' >>$@.tmpfile
     @echo EXPORTS													>>$@.tmpfile
+.IF "$(VERSIONOBJ)"!=""
 #	getversioninfo fuer alle!!
     @echo _GetVersionInfo		>$@.tmp_ord
+.ENDIF
 
 .IF "$(DEFLIB1NAME)"!=""
     @+echo $(SLB)$/$(DEFLIB1NAME).lib
@@ -308,19 +309,16 @@ $(DEF2EXPORTFILE) : $(SHL2OBJS) $(SHL2LIBS)
 $(DEF2EXPORTFILE) : $(SHL2VERSIONMAP)
     $(TYPE) $< | $(AWK) -f $(SOLARENV)$/bin$/getcsym.awk > $@
 .IF "$(COM)"=="GCC"
-    -grep -v "\*\|?" $@ > $@.exported-symbols
-    -grep "\*\|?" $@ > $@.symbols-regexp
+    -$(GREP) -v "\*\|?" $@ | $(SED) -e 's@#.*@@' > $@.exported-symbols
+    -$(GREP) "\*\|?" $@ > $@.symbols-regexp
 # Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
 # Extract RTTI symbols from all the objects that will be used to build a shared library
-.IF "$(SHL2OBJS)"!=""
-    -echo $(foreach,i,$(SHL2OBJS) $i) | xargs -n1 nm -gP | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
-.ENDIF
-.IF "$(SHL2LIBS)"!=""
-    -$(TYPE) $(foreach,j,$(SHL2LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gP | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
-.ENDIF
+    nm -gP $(SHL2OBJS) \
+        `$(TYPE) /dev/null $(foreach,j,$(SHL2LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
+        | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp @.symbols-regexp.tmp >> $@.exported-symbols
 # overwrite the map file generate into the local output tree with the generated
 # exported symbols list
-    cp $@.exported-symbols $@
+    $(RENAME) $@.exported-symbols $@
 .ENDIF # .IF "$(COM)"=="GCC"
 
 .ENDIF			# "$(GUI)"=="WNT"
@@ -359,8 +357,10 @@ $(DEF2TARGETN) .PHONY :
     @echo HEAPSIZE	  0 											>>$@.tmpfile
 .ENDIF
     @echo EXPORTS													>>$@.tmpfile
+.IF "$(VERSIONOBJ)"!=""
 #	getversioninfo fuer alle!!
     @echo GetVersionInfo		>>$@.tmpfile
+.ENDIF
 .IF "$(DEFLIB2NAME)"!=""
 .IF "$(COM)"=="GCC"
     @-$(RM) $(MISC)$/$(SHL2TARGET).exp
@@ -474,8 +474,10 @@ $(DEF2TARGETN) .PHONY :
     @echo DATA MULTIPLE	 >>$@.tmpfile
     @echo DESCRIPTION	'StarView 3.00 $(DEF2DES) $(UPD) $(UPDMINOR)' >>$@.tmpfile
     @echo EXPORTS													>>$@.tmpfile
+.IF "$(VERSIONOBJ)"!=""
 #	getversioninfo fuer alle!!
     @echo _GetVersionInfo		>$@.tmp_ord
+.ENDIF
 
 .IF "$(DEFLIB2NAME)"!=""
     @+echo $(SLB)$/$(DEFLIB2NAME).lib
@@ -592,19 +594,16 @@ $(DEF3EXPORTFILE) : $(SHL3OBJS) $(SHL3LIBS)
 $(DEF3EXPORTFILE) : $(SHL3VERSIONMAP)
     $(TYPE) $< | $(AWK) -f $(SOLARENV)$/bin$/getcsym.awk > $@
 .IF "$(COM)"=="GCC"
-    -grep -v "\*\|?" $@ > $@.exported-symbols
-    -grep "\*\|?" $@ > $@.symbols-regexp
+    -$(GREP) -v "\*\|?" $@ | $(SED) -e 's@#.*@@' > $@.exported-symbols
+    -$(GREP) "\*\|?" $@ > $@.symbols-regexp
 # Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
 # Extract RTTI symbols from all the objects that will be used to build a shared library
-.IF "$(SHL3OBJS)"!=""
-    -echo $(foreach,i,$(SHL3OBJS) $i) | xargs -n1 nm -gP | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
-.ENDIF
-.IF "$(SHL3LIBS)"!=""
-    -$(TYPE) $(foreach,j,$(SHL3LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gP | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
-.ENDIF
+    nm -gP $(SHL3OBJS) \
+        `$(TYPE) /dev/null $(foreach,j,$(SHL3LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
+        | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp @.symbols-regexp.tmp >> $@.exported-symbols
 # overwrite the map file generate into the local output tree with the generated
 # exported symbols list
-    cp $@.exported-symbols $@
+    $(RENAME) $@.exported-symbols $@
 .ENDIF # .IF "$(COM)"=="GCC"
 
 .ENDIF			# "$(GUI)"=="WNT"
@@ -643,8 +642,10 @@ $(DEF3TARGETN) .PHONY :
     @echo HEAPSIZE	  0 											>>$@.tmpfile
 .ENDIF
     @echo EXPORTS													>>$@.tmpfile
+.IF "$(VERSIONOBJ)"!=""
 #	getversioninfo fuer alle!!
     @echo GetVersionInfo		>>$@.tmpfile
+.ENDIF
 .IF "$(DEFLIB3NAME)"!=""
 .IF "$(COM)"=="GCC"
     @-$(RM) $(MISC)$/$(SHL3TARGET).exp
@@ -758,8 +759,10 @@ $(DEF3TARGETN) .PHONY :
     @echo DATA MULTIPLE	 >>$@.tmpfile
     @echo DESCRIPTION	'StarView 3.00 $(DEF3DES) $(UPD) $(UPDMINOR)' >>$@.tmpfile
     @echo EXPORTS													>>$@.tmpfile
+.IF "$(VERSIONOBJ)"!=""
 #	getversioninfo fuer alle!!
     @echo _GetVersionInfo		>$@.tmp_ord
+.ENDIF
 
 .IF "$(DEFLIB3NAME)"!=""
     @+echo $(SLB)$/$(DEFLIB3NAME).lib
@@ -876,19 +879,16 @@ $(DEF4EXPORTFILE) : $(SHL4OBJS) $(SHL4LIBS)
 $(DEF4EXPORTFILE) : $(SHL4VERSIONMAP)
     $(TYPE) $< | $(AWK) -f $(SOLARENV)$/bin$/getcsym.awk > $@
 .IF "$(COM)"=="GCC"
-    -grep -v "\*\|?" $@ > $@.exported-symbols
-    -grep "\*\|?" $@ > $@.symbols-regexp
+    -$(GREP) -v "\*\|?" $@ | $(SED) -e 's@#.*@@' > $@.exported-symbols
+    -$(GREP) "\*\|?" $@ > $@.symbols-regexp
 # Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
 # Extract RTTI symbols from all the objects that will be used to build a shared library
-.IF "$(SHL4OBJS)"!=""
-    -echo $(foreach,i,$(SHL4OBJS) $i) | xargs -n1 nm -gP | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
-.ENDIF
-.IF "$(SHL4LIBS)"!=""
-    -$(TYPE) $(foreach,j,$(SHL4LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gP | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
-.ENDIF
+    nm -gP $(SHL4OBJS) \
+        `$(TYPE) /dev/null $(foreach,j,$(SHL4LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
+        | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp @.symbols-regexp.tmp >> $@.exported-symbols
 # overwrite the map file generate into the local output tree with the generated
 # exported symbols list
-    cp $@.exported-symbols $@
+    $(RENAME) $@.exported-symbols $@
 .ENDIF # .IF "$(COM)"=="GCC"
 
 .ENDIF			# "$(GUI)"=="WNT"
@@ -927,8 +927,10 @@ $(DEF4TARGETN) .PHONY :
     @echo HEAPSIZE	  0 											>>$@.tmpfile
 .ENDIF
     @echo EXPORTS													>>$@.tmpfile
+.IF "$(VERSIONOBJ)"!=""
 #	getversioninfo fuer alle!!
     @echo GetVersionInfo		>>$@.tmpfile
+.ENDIF
 .IF "$(DEFLIB4NAME)"!=""
 .IF "$(COM)"=="GCC"
     @-$(RM) $(MISC)$/$(SHL4TARGET).exp
@@ -1042,8 +1044,10 @@ $(DEF4TARGETN) .PHONY :
     @echo DATA MULTIPLE	 >>$@.tmpfile
     @echo DESCRIPTION	'StarView 3.00 $(DEF4DES) $(UPD) $(UPDMINOR)' >>$@.tmpfile
     @echo EXPORTS													>>$@.tmpfile
+.IF "$(VERSIONOBJ)"!=""
 #	getversioninfo fuer alle!!
     @echo _GetVersionInfo		>$@.tmp_ord
+.ENDIF
 
 .IF "$(DEFLIB4NAME)"!=""
     @+echo $(SLB)$/$(DEFLIB4NAME).lib
@@ -1160,19 +1164,16 @@ $(DEF5EXPORTFILE) : $(SHL5OBJS) $(SHL5LIBS)
 $(DEF5EXPORTFILE) : $(SHL5VERSIONMAP)
     $(TYPE) $< | $(AWK) -f $(SOLARENV)$/bin$/getcsym.awk > $@
 .IF "$(COM)"=="GCC"
-    -grep -v "\*\|?" $@ > $@.exported-symbols
-    -grep "\*\|?" $@ > $@.symbols-regexp
+    -$(GREP) -v "\*\|?" $@ | $(SED) -e 's@#.*@@' > $@.exported-symbols
+    -$(GREP) "\*\|?" $@ > $@.symbols-regexp
 # Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
 # Extract RTTI symbols from all the objects that will be used to build a shared library
-.IF "$(SHL5OBJS)"!=""
-    -echo $(foreach,i,$(SHL5OBJS) $i) | xargs -n1 nm -gP | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
-.ENDIF
-.IF "$(SHL5LIBS)"!=""
-    -$(TYPE) $(foreach,j,$(SHL5LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gP | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
-.ENDIF
+    nm -gP $(SHL5OBJS) \
+        `$(TYPE) /dev/null $(foreach,j,$(SHL5LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
+        | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp @.symbols-regexp.tmp >> $@.exported-symbols
 # overwrite the map file generate into the local output tree with the generated
 # exported symbols list
-    cp $@.exported-symbols $@
+    $(RENAME) $@.exported-symbols $@
 .ENDIF # .IF "$(COM)"=="GCC"
 
 .ENDIF			# "$(GUI)"=="WNT"
@@ -1211,8 +1212,10 @@ $(DEF5TARGETN) .PHONY :
     @echo HEAPSIZE	  0 											>>$@.tmpfile
 .ENDIF
     @echo EXPORTS													>>$@.tmpfile
+.IF "$(VERSIONOBJ)"!=""
 #	getversioninfo fuer alle!!
     @echo GetVersionInfo		>>$@.tmpfile
+.ENDIF
 .IF "$(DEFLIB5NAME)"!=""
 .IF "$(COM)"=="GCC"
     @-$(RM) $(MISC)$/$(SHL5TARGET).exp
@@ -1326,8 +1329,10 @@ $(DEF5TARGETN) .PHONY :
     @echo DATA MULTIPLE	 >>$@.tmpfile
     @echo DESCRIPTION	'StarView 3.00 $(DEF5DES) $(UPD) $(UPDMINOR)' >>$@.tmpfile
     @echo EXPORTS													>>$@.tmpfile
+.IF "$(VERSIONOBJ)"!=""
 #	getversioninfo fuer alle!!
     @echo _GetVersionInfo		>$@.tmp_ord
+.ENDIF
 
 .IF "$(DEFLIB5NAME)"!=""
     @+echo $(SLB)$/$(DEFLIB5NAME).lib
@@ -1444,19 +1449,16 @@ $(DEF6EXPORTFILE) : $(SHL6OBJS) $(SHL6LIBS)
 $(DEF6EXPORTFILE) : $(SHL6VERSIONMAP)
     $(TYPE) $< | $(AWK) -f $(SOLARENV)$/bin$/getcsym.awk > $@
 .IF "$(COM)"=="GCC"
-    -grep -v "\*\|?" $@ > $@.exported-symbols
-    -grep "\*\|?" $@ > $@.symbols-regexp
+    -$(GREP) -v "\*\|?" $@ | $(SED) -e 's@#.*@@' > $@.exported-symbols
+    -$(GREP) "\*\|?" $@ > $@.symbols-regexp
 # Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
 # Extract RTTI symbols from all the objects that will be used to build a shared library
-.IF "$(SHL6OBJS)"!=""
-    -echo $(foreach,i,$(SHL6OBJS) $i) | xargs -n1 nm -gP | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
-.ENDIF
-.IF "$(SHL6LIBS)"!=""
-    -$(TYPE) $(foreach,j,$(SHL6LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gP | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
-.ENDIF
+    nm -gP $(SHL6OBJS) \
+        `$(TYPE) /dev/null $(foreach,j,$(SHL6LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
+        | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp @.symbols-regexp.tmp >> $@.exported-symbols
 # overwrite the map file generate into the local output tree with the generated
 # exported symbols list
-    cp $@.exported-symbols $@
+    $(RENAME) $@.exported-symbols $@
 .ENDIF # .IF "$(COM)"=="GCC"
 
 .ENDIF			# "$(GUI)"=="WNT"
@@ -1495,8 +1497,10 @@ $(DEF6TARGETN) .PHONY :
     @echo HEAPSIZE	  0 											>>$@.tmpfile
 .ENDIF
     @echo EXPORTS													>>$@.tmpfile
+.IF "$(VERSIONOBJ)"!=""
 #	getversioninfo fuer alle!!
     @echo GetVersionInfo		>>$@.tmpfile
+.ENDIF
 .IF "$(DEFLIB6NAME)"!=""
 .IF "$(COM)"=="GCC"
     @-$(RM) $(MISC)$/$(SHL6TARGET).exp
@@ -1610,8 +1614,10 @@ $(DEF6TARGETN) .PHONY :
     @echo DATA MULTIPLE	 >>$@.tmpfile
     @echo DESCRIPTION	'StarView 3.00 $(DEF6DES) $(UPD) $(UPDMINOR)' >>$@.tmpfile
     @echo EXPORTS													>>$@.tmpfile
+.IF "$(VERSIONOBJ)"!=""
 #	getversioninfo fuer alle!!
     @echo _GetVersionInfo		>$@.tmp_ord
+.ENDIF
 
 .IF "$(DEFLIB6NAME)"!=""
     @+echo $(SLB)$/$(DEFLIB6NAME).lib
@@ -1728,19 +1734,16 @@ $(DEF7EXPORTFILE) : $(SHL7OBJS) $(SHL7LIBS)
 $(DEF7EXPORTFILE) : $(SHL7VERSIONMAP)
     $(TYPE) $< | $(AWK) -f $(SOLARENV)$/bin$/getcsym.awk > $@
 .IF "$(COM)"=="GCC"
-    -grep -v "\*\|?" $@ > $@.exported-symbols
-    -grep "\*\|?" $@ > $@.symbols-regexp
+    -$(GREP) -v "\*\|?" $@ | $(SED) -e 's@#.*@@' > $@.exported-symbols
+    -$(GREP) "\*\|?" $@ > $@.symbols-regexp
 # Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
 # Extract RTTI symbols from all the objects that will be used to build a shared library
-.IF "$(SHL7OBJS)"!=""
-    -echo $(foreach,i,$(SHL7OBJS) $i) | xargs -n1 nm -gP | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
-.ENDIF
-.IF "$(SHL7LIBS)"!=""
-    -$(TYPE) $(foreach,j,$(SHL7LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gP | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
-.ENDIF
+    nm -gP $(SHL7OBJS) \
+        `$(TYPE) /dev/null $(foreach,j,$(SHL7LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
+        | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp @.symbols-regexp.tmp >> $@.exported-symbols
 # overwrite the map file generate into the local output tree with the generated
 # exported symbols list
-    cp $@.exported-symbols $@
+    $(RENAME) $@.exported-symbols $@
 .ENDIF # .IF "$(COM)"=="GCC"
 
 .ENDIF			# "$(GUI)"=="WNT"
@@ -1779,8 +1782,10 @@ $(DEF7TARGETN) .PHONY :
     @echo HEAPSIZE	  0 											>>$@.tmpfile
 .ENDIF
     @echo EXPORTS													>>$@.tmpfile
+.IF "$(VERSIONOBJ)"!=""
 #	getversioninfo fuer alle!!
     @echo GetVersionInfo		>>$@.tmpfile
+.ENDIF
 .IF "$(DEFLIB7NAME)"!=""
 .IF "$(COM)"=="GCC"
     @-$(RM) $(MISC)$/$(SHL7TARGET).exp
@@ -1894,8 +1899,10 @@ $(DEF7TARGETN) .PHONY :
     @echo DATA MULTIPLE	 >>$@.tmpfile
     @echo DESCRIPTION	'StarView 3.00 $(DEF7DES) $(UPD) $(UPDMINOR)' >>$@.tmpfile
     @echo EXPORTS													>>$@.tmpfile
+.IF "$(VERSIONOBJ)"!=""
 #	getversioninfo fuer alle!!
     @echo _GetVersionInfo		>$@.tmp_ord
+.ENDIF
 
 .IF "$(DEFLIB7NAME)"!=""
     @+echo $(SLB)$/$(DEFLIB7NAME).lib
@@ -2012,19 +2019,16 @@ $(DEF8EXPORTFILE) : $(SHL8OBJS) $(SHL8LIBS)
 $(DEF8EXPORTFILE) : $(SHL8VERSIONMAP)
     $(TYPE) $< | $(AWK) -f $(SOLARENV)$/bin$/getcsym.awk > $@
 .IF "$(COM)"=="GCC"
-    -grep -v "\*\|?" $@ > $@.exported-symbols
-    -grep "\*\|?" $@ > $@.symbols-regexp
+    -$(GREP) -v "\*\|?" $@ | $(SED) -e 's@#.*@@' > $@.exported-symbols
+    -$(GREP) "\*\|?" $@ > $@.symbols-regexp
 # Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
 # Extract RTTI symbols from all the objects that will be used to build a shared library
-.IF "$(SHL8OBJS)"!=""
-    -echo $(foreach,i,$(SHL8OBJS) $i) | xargs -n1 nm -gP | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
-.ENDIF
-.IF "$(SHL8LIBS)"!=""
-    -$(TYPE) $(foreach,j,$(SHL8LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gP | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
-.ENDIF
+    nm -gP $(SHL8OBJS) \
+        `$(TYPE) /dev/null $(foreach,j,$(SHL8LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
+        | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp @.symbols-regexp.tmp >> $@.exported-symbols
 # overwrite the map file generate into the local output tree with the generated
 # exported symbols list
-    cp $@.exported-symbols $@
+    $(RENAME) $@.exported-symbols $@
 .ENDIF # .IF "$(COM)"=="GCC"
 
 .ENDIF			# "$(GUI)"=="WNT"
@@ -2063,8 +2067,10 @@ $(DEF8TARGETN) .PHONY :
     @echo HEAPSIZE	  0 											>>$@.tmpfile
 .ENDIF
     @echo EXPORTS													>>$@.tmpfile
+.IF "$(VERSIONOBJ)"!=""
 #	getversioninfo fuer alle!!
     @echo GetVersionInfo		>>$@.tmpfile
+.ENDIF
 .IF "$(DEFLIB8NAME)"!=""
 .IF "$(COM)"=="GCC"
     @-$(RM) $(MISC)$/$(SHL8TARGET).exp
@@ -2178,8 +2184,10 @@ $(DEF8TARGETN) .PHONY :
     @echo DATA MULTIPLE	 >>$@.tmpfile
     @echo DESCRIPTION	'StarView 3.00 $(DEF8DES) $(UPD) $(UPDMINOR)' >>$@.tmpfile
     @echo EXPORTS													>>$@.tmpfile
+.IF "$(VERSIONOBJ)"!=""
 #	getversioninfo fuer alle!!
     @echo _GetVersionInfo		>$@.tmp_ord
+.ENDIF
 
 .IF "$(DEFLIB8NAME)"!=""
     @+echo $(SLB)$/$(DEFLIB8NAME).lib
@@ -2296,19 +2304,16 @@ $(DEF9EXPORTFILE) : $(SHL9OBJS) $(SHL9LIBS)
 $(DEF9EXPORTFILE) : $(SHL9VERSIONMAP)
     $(TYPE) $< | $(AWK) -f $(SOLARENV)$/bin$/getcsym.awk > $@
 .IF "$(COM)"=="GCC"
-    -grep -v "\*\|?" $@ > $@.exported-symbols
-    -grep "\*\|?" $@ > $@.symbols-regexp
+    -$(GREP) -v "\*\|?" $@ | $(SED) -e 's@#.*@@' > $@.exported-symbols
+    -$(GREP) "\*\|?" $@ > $@.symbols-regexp
 # Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
 # Extract RTTI symbols from all the objects that will be used to build a shared library
-.IF "$(SHL9OBJS)"!=""
-    -echo $(foreach,i,$(SHL9OBJS) $i) | xargs -n1 nm -gP | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
-.ENDIF
-.IF "$(SHL9LIBS)"!=""
-    -$(TYPE) $(foreach,j,$(SHL9LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gP | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
-.ENDIF
+    nm -gP $(SHL9OBJS) \
+        `$(TYPE) /dev/null $(foreach,j,$(SHL9LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
+        | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp @.symbols-regexp.tmp >> $@.exported-symbols
 # overwrite the map file generate into the local output tree with the generated
 # exported symbols list
-    cp $@.exported-symbols $@
+    $(RENAME) $@.exported-symbols $@
 .ENDIF # .IF "$(COM)"=="GCC"
 
 .ENDIF			# "$(GUI)"=="WNT"
@@ -2347,8 +2352,10 @@ $(DEF9TARGETN) .PHONY :
     @echo HEAPSIZE	  0 											>>$@.tmpfile
 .ENDIF
     @echo EXPORTS													>>$@.tmpfile
+.IF "$(VERSIONOBJ)"!=""
 #	getversioninfo fuer alle!!
     @echo GetVersionInfo		>>$@.tmpfile
+.ENDIF
 .IF "$(DEFLIB9NAME)"!=""
 .IF "$(COM)"=="GCC"
     @-$(RM) $(MISC)$/$(SHL9TARGET).exp
@@ -2462,8 +2469,10 @@ $(DEF9TARGETN) .PHONY :
     @echo DATA MULTIPLE	 >>$@.tmpfile
     @echo DESCRIPTION	'StarView 3.00 $(DEF9DES) $(UPD) $(UPDMINOR)' >>$@.tmpfile
     @echo EXPORTS													>>$@.tmpfile
+.IF "$(VERSIONOBJ)"!=""
 #	getversioninfo fuer alle!!
     @echo _GetVersionInfo		>$@.tmp_ord
+.ENDIF
 
 .IF "$(DEFLIB9NAME)"!=""
     @+echo $(SLB)$/$(DEFLIB9NAME).lib
@@ -2580,19 +2589,16 @@ $(DEF10EXPORTFILE) : $(SHL10OBJS) $(SHL10LIBS)
 $(DEF10EXPORTFILE) : $(SHL10VERSIONMAP)
     $(TYPE) $< | $(AWK) -f $(SOLARENV)$/bin$/getcsym.awk > $@
 .IF "$(COM)"=="GCC"
-    -grep -v "\*\|?" $@ > $@.exported-symbols
-    -grep "\*\|?" $@ > $@.symbols-regexp
+    -$(GREP) -v "\*\|?" $@ | $(SED) -e 's@#.*@@' > $@.exported-symbols
+    -$(GREP) "\*\|?" $@ > $@.symbols-regexp
 # Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
 # Extract RTTI symbols from all the objects that will be used to build a shared library
-.IF "$(SHL10OBJS)"!=""
-    -echo $(foreach,i,$(SHL10OBJS) $i) | xargs -n1 nm -gP | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
-.ENDIF
-.IF "$(SHL10LIBS)"!=""
-    -$(TYPE) $(foreach,j,$(SHL10LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gP | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
-.ENDIF
+    nm -gP $(SHL10OBJS) \
+        `$(TYPE) /dev/null $(foreach,j,$(SHL10LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
+        | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp @.symbols-regexp.tmp >> $@.exported-symbols
 # overwrite the map file generate into the local output tree with the generated
 # exported symbols list
-    cp $@.exported-symbols $@
+    $(RENAME) $@.exported-symbols $@
 .ENDIF # .IF "$(COM)"=="GCC"
 
 .ENDIF			# "$(GUI)"=="WNT"
@@ -2631,8 +2637,10 @@ $(DEF10TARGETN) .PHONY :
     @echo HEAPSIZE	  0 											>>$@.tmpfile
 .ENDIF
     @echo EXPORTS													>>$@.tmpfile
+.IF "$(VERSIONOBJ)"!=""
 #	getversioninfo fuer alle!!
     @echo GetVersionInfo		>>$@.tmpfile
+.ENDIF
 .IF "$(DEFLIB10NAME)"!=""
 .IF "$(COM)"=="GCC"
     @-$(RM) $(MISC)$/$(SHL10TARGET).exp
@@ -2746,8 +2754,10 @@ $(DEF10TARGETN) .PHONY :
     @echo DATA MULTIPLE	 >>$@.tmpfile
     @echo DESCRIPTION	'StarView 3.00 $(DEF10DES) $(UPD) $(UPDMINOR)' >>$@.tmpfile
     @echo EXPORTS													>>$@.tmpfile
+.IF "$(VERSIONOBJ)"!=""
 #	getversioninfo fuer alle!!
     @echo _GetVersionInfo		>$@.tmp_ord
+.ENDIF
 
 .IF "$(DEFLIB10NAME)"!=""
     @+echo $(SLB)$/$(DEFLIB10NAME).lib

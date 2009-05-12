@@ -1,0 +1,2100 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: librdf_repository.cxx,v $
+ * $Revision: 1.2 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "librdf_repository.hxx"
+
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
+#include "com/sun/star/rdf/XDocumentRepository.hpp"
+
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/rdf/XLiteral.hpp>
+#include <com/sun/star/rdf/FileFormat.hpp>
+#include <com/sun/star/rdf/URIs.hpp>
+#include <com/sun/star/rdf/BlankNode.hpp>
+#include <com/sun/star/rdf/URI.hpp>
+#include <com/sun/star/rdf/Literal.hpp>
+
+#include <rtl/ref.hxx>
+#include <rtl/ustring.hxx>
+#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/basemutex.hxx>
+#include <comphelper/sequenceasvector.hxx>
+#include <comphelper/makesequence.hxx>
+
+#include <librdf.h>
+#include <boost/utility.hpp>
+#include <boost/shared_ptr.hpp>
+#include <boost/shared_array.hpp>
+#include <boost/bind.hpp>
+
+#include <map>
+#include <functional>
+#include <algorithm>
+#include <string.h>
+
+
+/**
+    Implementation of the service com.sun.star.rdf.Repository.
+
+    This implementation uses the Redland RDF library (librdf).
+
+    There are several classes involved:
+    librdf_TypeConverter:   helper class to convert data types redland <-> uno
+    librdf_Repository:      the main repository, does almost all the work
+    librdf_NamedGraph:      the XNamedGraph, forwards everything to repository
+    librdf_GraphResult:     an XEnumeration<Statement>
+    librdf_QuerySelectResult:   an XEnumeration<sequence<XNode>>
+
+    @author mst
+ */
+
+/// anonymous implementation namespace
+namespace {
+
+class librdf_NamedGraph;
+class librdf_Repository;
+
+using namespace ::com::sun::star;
+
+typedef std::map< ::rtl::OUString, ::rtl::Reference<librdf_NamedGraph> >
+    NamedGraphMap_t;
+
+const char s_sparql [] = "sparql";
+const char s_nsRDFs [] = "http://www.w3.org/2000/01/rdf-schema#";
+const char s_label  [] = "label";
+const char s_nsOOo  [] = "ooo:internal:implementation-detail:"; // FIXME!!!
+
+////////////////////////////////////////////////////////////////////////////
+
+//FIXME: this approach is not ideal. can we use blind nodes instead?
+bool isInternalContext(librdf_node *i_pNode) throw ()
+{
+    OSL_ENSURE(i_pNode, "isInternalContext: context null");
+    OSL_ENSURE(librdf_node_is_resource(i_pNode),
+        "isInternalContext: context not resource");
+    if (i_pNode) {
+        librdf_uri *pURI(librdf_node_get_uri(i_pNode));
+        OSL_ENSURE(pURI, "isInternalContext: URI null");
+        if (pURI) {
+            unsigned char *pContextURI(librdf_uri_as_string(pURI));
+            OSL_ENSURE(pContextURI,
+                "isInternalContext: URI string null");
+            // if prefix matches reserved uri, it is RDFa context
+            if (!strncmp(reinterpret_cast<char *>(pContextURI),
+                    s_nsOOo, sizeof(s_nsOOo)-1)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    return true;
+}
+
+
+////////////////////////////////////////////////////////////////////////////
+
+#if 0
+class librdf_Statement:
+    public ::cppu::WeakImplHelper1<
+        rdf::XStatement>
+{
+public:
+
+    librdf_Statement(
+            uno::Reference< rdf::XResource > const & i_xSubject,
+            uno::Reference< rdf::XResource > const & i_xPredicate,
+            uno::Reference< rdf::XNode     > const & i_xObject,
+            uno::Reference< rdf::XURI      > const & i_xGraph)
+        : m_xSubject(i_xSubject), m_xPredicate(i_xPredicate),
+          m_xObject(i_xObject), m_xGraph(i_xGraph)
+        { }
+    virtual ~librdf_Statement() {}
+
+    // ::com::sun::star::rdf::XStatement:
+    virtual uno::Reference< rdf::XResource > SAL_CALL getSubject()
+        throw (uno::RuntimeException);
+    virtual uno::Reference< rdf::XResource > SAL_CALL getPredicate()
+        throw (uno::RuntimeException);
+    virtual uno::Reference< rdf::XNode     > SAL_CALL getObject()
+        throw (uno::RuntimeException);
+    virtual uno::Reference< rdf::XURI      > SAL_CALL getGraph()
+        throw (uno::RuntimeException);
+
+private:
+
+    uno::Reference< rdf::XResource > m_xSubject;
+    uno::Reference< rdf::XResource > m_xPredicate;
+    uno::Reference< rdf::XNode     > m_xObject;
+    uno::Reference< rdf::XURI      > m_xGraph;
+};
+
+// ::com::sun::star::rdf::XStatement:
+uno::Reference< rdf::XResource > SAL_CALL
+librdf_Statement::getSubject() throw (uno::RuntimeException)
+{
+    return m_xSubject;
+}
+
+uno::Reference< rdf::XResource > SAL_CALL
+librdf_Statement::getPredicate() throw (uno::RuntimeException)
+{
+    return m_xPredicate;
+}
+
+uno::Reference< rdf::XNode > SAL_CALL
+librdf_Statement::getObject() throw (uno::RuntimeException)
+{
+    return m_xObject;
+}
+
+uno::Reference< rdf::XURI > SAL_CALL
+librdf_Statement::getGraph() throw (uno::RuntimeException)
+{
+    return m_xGraph;
+}
+#endif
+
+
+////////////////////////////////////////////////////////////////////////////
+
+/** converts between librdf types and UNO API types.
+ */
+class librdf_TypeConverter
+{
+public:
+    librdf_TypeConverter(
+            uno::Reference< uno::XComponentContext > const & i_xContext,
+            librdf_Repository &i_rRep)
+        : m_xContext(i_xContext), m_rRep(i_rRep) { };
+
+    librdf_world *createWorld() const;
+    librdf_storage *createStorage(librdf_world *i_pWorld) const;
+    librdf_model *createModel(librdf_world *i_pWorld,
+        librdf_storage * i_pStorage) const;
+    librdf_uri* mkURI( librdf_world* i_pWorld,
+        const uno::Reference< rdf::XURI > & i_xURI) const;
+    librdf_node* mkResource( librdf_world* i_pWorld,
+        const uno::Reference< rdf::XResource > & i_xResource) const;
+    librdf_node* mkNode( librdf_world* i_pWorld,
+        const uno::Reference< rdf::XNode > & i_xNode) const;
+    librdf_statement* mkStatement( librdf_world* i_pWorld,
+        const uno::Reference< rdf::XResource > & i_xSubject,
+        const uno::Reference< rdf::XResource > & i_xPredicate,
+        const uno::Reference< rdf::XNode > & i_xObject) const;
+    uno::Reference<rdf::XURI> convertToXURI(librdf_uri* i_pURI) const;
+    uno::Reference<rdf::XURI> convertToXURI(librdf_node* i_pURI) const;
+    uno::Reference<rdf::XResource>
+        convertToXResource(librdf_node* i_pNode) const;
+    uno::Reference<rdf::XNode> convertToXNode(librdf_node* i_pNode) const;
+//    uno::Reference<rdf::XStatement>
+//        convertToXStatement(librdf_statement* i_pStmt, librdf_node* i_pContext)
+//        const;
+    rdf::Statement
+        convertToStatement(librdf_statement* i_pStmt, librdf_node* i_pContext)
+        const;
+    uno::Reference<rdf::XResource> getRDFsLabel() const;
+
+private:
+    uno::Reference< uno::XComponentContext > m_xContext;
+    librdf_Repository & m_rRep;
+};
+
+
+////////////////////////////////////////////////////////////////////////////
+
+/** implements the repository service.
+ */
+class librdf_Repository:
+    private boost::noncopyable,
+    private ::cppu::BaseMutex,
+    public ::cppu::WeakImplHelper3<
+        lang::XServiceInfo,
+        rdf::XDocumentRepository,
+        lang::XInitialization>
+{
+public:
+
+    explicit librdf_Repository(
+        uno::Reference< uno::XComponentContext > const & i_xContext);
+    virtual ~librdf_Repository() {}
+
+    // ::com::sun::star::lang::XServiceInfo:
+    virtual ::rtl::OUString SAL_CALL getImplementationName()
+        throw (uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL supportsService(
+            const ::rtl::OUString & ServiceName) throw (uno::RuntimeException);
+    virtual uno::Sequence< ::rtl::OUString > SAL_CALL
+        getSupportedServiceNames() throw (uno::RuntimeException);
+
+    // ::com::sun::star::rdf::XRepository:
+    virtual uno::Reference< rdf::XBlankNode > SAL_CALL createBlankNode()
+        throw (uno::RuntimeException);
+    virtual uno::Reference<rdf::XNamedGraph> SAL_CALL importGraph(
+            ::sal_Int16 i_Format,
+            const uno::Reference< io::XInputStream > & i_xInStream,
+            const uno::Reference< rdf::XURI > & i_xGraphName,
+            const uno::Reference< rdf::XURI > & i_xBaseURI)
+        throw (uno::RuntimeException, lang::IllegalArgumentException,
+            datatransfer::UnsupportedFlavorException,
+            container::ElementExistException, rdf::ParseException,
+            rdf::RepositoryException, io::IOException);
+    virtual void SAL_CALL exportGraph(::sal_Int16 i_Format,
+            const uno::Reference< io::XOutputStream > & i_xOutStream,
+            const uno::Reference< rdf::XURI > & i_xGraphName,
+            const uno::Reference< rdf::XURI > & i_xBaseURI)
+        throw (uno::RuntimeException, lang::IllegalArgumentException,
+            datatransfer::UnsupportedFlavorException,
+            container::NoSuchElementException, rdf::RepositoryException,
+            io::IOException);
+    virtual uno::Sequence< uno::Reference< rdf::XURI > > SAL_CALL
+        getGraphNames() throw (uno::RuntimeException, rdf::RepositoryException);
+    virtual uno::Reference< rdf::XNamedGraph > SAL_CALL getGraph(
+            const uno::Reference< rdf::XURI > & i_xGraphName)
+        throw (uno::RuntimeException, lang::IllegalArgumentException,
+            rdf::RepositoryException);
+    virtual uno::Reference< rdf::XNamedGraph > SAL_CALL createGraph(
+            const uno::Reference< rdf::XURI > & i_xGraphName)
+        throw (uno::RuntimeException, lang::IllegalArgumentException,
+            container::ElementExistException, rdf::RepositoryException);
+    virtual void SAL_CALL destroyGraph(
+            const uno::Reference< rdf::XURI > & i_xGraphName)
+        throw (uno::RuntimeException, lang::IllegalArgumentException,
+            container::NoSuchElementException, rdf::RepositoryException);
+    virtual uno::Reference< container::XEnumeration > SAL_CALL getStatements(
+            const uno::Reference< rdf::XResource > & i_xSubject,
+            const uno::Reference< rdf::XResource > & i_xPredicate,
+            const uno::Reference< rdf::XNode > & i_xObject)
+        throw (uno::RuntimeException,
+            rdf::RepositoryException);
+    virtual uno::Reference< rdf::XQuerySelectResult > SAL_CALL
+            querySelect(const ::rtl::OUString & i_rQuery)
+        throw (uno::RuntimeException, rdf::QueryException,
+            rdf::RepositoryException);
+    virtual uno::Reference< container::XEnumeration > SAL_CALL
+        queryConstruct(const ::rtl::OUString & i_rQuery)
+        throw (uno::RuntimeException, rdf::QueryException,
+            rdf::RepositoryException);
+    virtual ::sal_Bool SAL_CALL queryAsk(const ::rtl::OUString & i_rQuery)
+        throw (uno::RuntimeException, rdf::QueryException,
+            rdf::RepositoryException);
+
+    // ::com::sun::star::rdf::XDocumentRepository:
+    virtual void SAL_CALL setStatementRDFa(
+            const uno::Reference< rdf::XURI > & i_xSubject,
+            const uno::Reference< rdf::XURI > & i_xPredicate,
+            const uno::Reference< text::XTextRange > & i_xObject,
+            const ::rtl::OUString & i_rRDFaContent,
+            const uno::Reference< rdf::XURI > & i_xRDFaDatatype)
+        throw (uno::RuntimeException, lang::IllegalArgumentException,
+            rdf::RepositoryException);
+    virtual void SAL_CALL removeStatementRDFa(
+            const uno::Reference< text::XTextRange > & i_xObject)
+        throw (uno::RuntimeException, lang::IllegalArgumentException,
+            rdf::RepositoryException);
+    virtual uno::Sequence<rdf::Statement> SAL_CALL getStatementRDFa(
+            const uno::Reference< rdf::XMetadatable > & i_xElement)
+        throw (uno::RuntimeException, lang::IllegalArgumentException,
+            rdf::RepositoryException);
+    virtual uno::Reference< container::XEnumeration > SAL_CALL
+        getStatementsRDFa(
+            const uno::Reference< rdf::XResource > & i_xSubject,
+            const uno::Reference< rdf::XResource > & i_xPredicate,
+            const uno::Reference< rdf::XNode > & i_xObject)
+        throw (uno::RuntimeException,
+            rdf::RepositoryException);
+
+    // ::com::sun::star::lang::XInitialization:
+    virtual void SAL_CALL initialize(
+            const uno::Sequence< ::com::sun::star::uno::Any > & i_rArguments)
+        throw (uno::RuntimeException, uno::Exception);
+
+    // XNamedGraph forwards ---------------------------------------------
+    const NamedGraphMap_t::iterator SAL_CALL clearGraph(
+            const uno::Reference< rdf::XURI > & i_xName,
+            bool i_Internal = false );
+    void SAL_CALL addStatementGraph(
+            const uno::Reference< rdf::XResource > & i_xSubject,
+            const uno::Reference< rdf::XResource > & i_xPredicate,
+            const uno::Reference< rdf::XNode > & i_xObject,
+            const uno::Reference< rdf::XURI > & i_xName,
+            bool i_Internal = false );
+//        throw (uno::RuntimeException, lang::IllegalArgumentException,
+//            container::NoSuchElementException, rdf::RepositoryException);
+    void SAL_CALL removeStatementsGraph(
+            const uno::Reference< rdf::XResource > & i_xSubject,
+            const uno::Reference< rdf::XResource > & i_xPredicate,
+            const uno::Reference< rdf::XNode > & i_xObject,
+            const uno::Reference< rdf::XURI > & i_xName );
+//        throw (uno::RuntimeException, lang::IllegalArgumentException,
+//            container::NoSuchElementException, rdf::RepositoryException);
+    uno::Reference< container::XEnumeration > SAL_CALL getStatementsGraph(
+            const uno::Reference< rdf::XResource > & i_xSubject,
+            const uno::Reference< rdf::XResource > & i_xPredicate,
+            const uno::Reference< rdf::XNode > & i_xObject,
+            const uno::Reference< rdf::XURI > & i_xName,
+            bool i_Internal = false );
+//        throw (uno::RuntimeException, lang::IllegalArgumentException,
+//            container::NoSuchElementException, rdf::RepositoryException);
+
+    const librdf_TypeConverter& getTypeConverter() { return m_TypeConverter; };
+
+private:
+
+    uno::Reference< uno::XComponentContext > m_xContext;
+
+    // NB: sequence of the shared pointers is important!
+    /// librdf global data -- FIXME: static???
+    boost::shared_ptr<librdf_world> m_pWorld;
+    /// librdf repository storage
+    boost::shared_ptr<librdf_storage> m_pStorage;
+    /// librdf repository model
+    boost::shared_ptr<librdf_model> m_pModel;
+
+    /// all named graphs
+    NamedGraphMap_t m_NamedGraphs;
+
+    /// type conversion helper
+    librdf_TypeConverter m_TypeConverter;
+};
+
+
+////////////////////////////////////////////////////////////////////////////
+
+/** result of operations that return a graph, i.e.,
+    an XEnumeration of statements.
+ */
+class librdf_GraphResult:
+    private boost::noncopyable,
+    public ::cppu::WeakImplHelper1<
+        container::XEnumeration>
+{
+public:
+
+    librdf_GraphResult(librdf_Repository *i_pRepository,
+            ::osl::Mutex & i_rMutex,
+            boost::shared_ptr<librdf_stream> const& i_pStream,
+            boost::shared_ptr<librdf_query>  const& i_pQuery =
+                boost::shared_ptr<librdf_query>() )
+        : m_xRep(i_pRepository), m_rMutex(i_rMutex), m_pQuery(i_pQuery),
+          m_pStream(i_pStream)
+        {};
+    virtual ~librdf_GraphResult() {}
+
+    // ::com::sun::star::container::XEnumeration:
+    virtual ::sal_Bool SAL_CALL hasMoreElements()
+        throw (uno::RuntimeException);
+    virtual uno::Any SAL_CALL nextElement()
+        throw (uno::RuntimeException, container::NoSuchElementException,
+            lang::WrappedTargetException);
+
+private:
+    // NB: this is not a weak pointer: streams _must_ be deleted before the
+    //     storage they point into, so we keep the repository alive here
+    // also, sequence is important: the stream must be destroyed first.
+    ::rtl::Reference< librdf_Repository > m_xRep;
+    // needed for synchronizing access to librdf (it doesnt do win32 threading)
+    ::osl::Mutex & m_rMutex;
+    // the query (in case this is a result of a graph query)
+    // not that the redland documentation spells this out explicity, but
+    // queries must be freed only after all the results are completely read
+    boost::shared_ptr<librdf_query>  m_pQuery;
+    boost::shared_ptr<librdf_stream> m_pStream;
+};
+
+
+// ::com::sun::star::container::XEnumeration:
+::sal_Bool SAL_CALL
+librdf_GraphResult::hasMoreElements() throw (uno::RuntimeException)
+{
+    ::osl::MutexGuard g(m_rMutex);
+    return !librdf_stream_end(m_pStream.get());
+}
+
+::com::sun::star::uno::Any SAL_CALL
+librdf_GraphResult::nextElement()
+throw (uno::RuntimeException, container::NoSuchElementException,
+    lang::WrappedTargetException)
+{
+    ::osl::MutexGuard g(m_rMutex);
+    if (!librdf_stream_end(m_pStream.get())) {
+        librdf_node *pCtxt( static_cast<librdf_node *>
+            (librdf_stream_get_context(m_pStream.get())) );
+        librdf_statement *pStmt( librdf_stream_get_object(m_pStream.get()) );
+        if (!pStmt) {
+            rdf::QueryException e(::rtl::OUString::createFromAscii(
+                "librdf_GraphResult::nextElement: "
+                "librdf_stream_get_object failed"), *this);
+            throw lang::WrappedTargetException(::rtl::OUString::createFromAscii(
+                "librdf_GraphResult::nextElement: "
+                "librdf_stream_get_object failed"), *this,
+                    uno::makeAny(e));
+        }
+        // NB: pCtxt may be null here if this is result of a graph query
+        if (pCtxt && isInternalContext(pCtxt)) {
+            pCtxt = 0; // XML ID context is implementation detail!
+        }
+        rdf::Statement Stmt(
+            m_xRep->getTypeConverter().convertToStatement(pStmt, pCtxt) );
+        // NB: this will invalidate current item.
+        librdf_stream_next(m_pStream.get());
+        return uno::makeAny(Stmt);
+    } else {
+        throw container::NoSuchElementException();
+    }
+}
+
+
+////////////////////////////////////////////////////////////////////////////
+
+/** result of tuple queries ("SELECT").
+ */
+class librdf_QuerySelectResult:
+    private boost::noncopyable,
+    public ::cppu::WeakImplHelper1<
+        rdf::XQuerySelectResult>
+{
+public:
+
+    librdf_QuerySelectResult(librdf_Repository *i_pRepository,
+            ::osl::Mutex & i_rMutex,
+            boost::shared_ptr<librdf_query>  const& i_pQuery,
+            boost::shared_ptr<librdf_query_results> const& i_pQueryResult,
+            uno::Sequence< ::rtl::OUString > const& i_rBindingNames )
+        : m_xRep(i_pRepository), m_rMutex(i_rMutex), m_pQuery(i_pQuery),
+            m_pQueryResult(i_pQueryResult), m_BindingNames(i_rBindingNames)
+        {};
+    virtual ~librdf_QuerySelectResult() {}
+
+    // ::com::sun::star::container::XEnumeration:
+    virtual ::sal_Bool SAL_CALL hasMoreElements()
+        throw (uno::RuntimeException);
+    virtual uno::Any SAL_CALL nextElement()
+        throw (uno::RuntimeException, container::NoSuchElementException,
+            lang::WrappedTargetException);
+
+    // ::com::sun::star::rdf::XQuerySelectResult:
+    virtual uno::Sequence< ::rtl::OUString > SAL_CALL getBindingNames()
+        throw (uno::RuntimeException);
+
+private:
+
+    // NB: this is not a weak pointer: streams _must_ be deleted before the
+    //     storage they point into, so we keep the repository alive here
+    // also, sequence is important: the stream must be destroyed first.
+    ::rtl::Reference< librdf_Repository > m_xRep;
+    // needed for synchronizing access to librdf (it doesnt do win32 threading)
+    ::osl::Mutex & m_rMutex;
+    // not that the redland documentation spells this out explicity, but
+    // queries must be freed only after all the results are completely read
+    boost::shared_ptr<librdf_query>  m_pQuery;
+    boost::shared_ptr<librdf_query_results> m_pQueryResult;
+    uno::Sequence< ::rtl::OUString > m_BindingNames;
+};
+
+
+// ::com::sun::star::container::XEnumeration:
+::sal_Bool SAL_CALL
+librdf_QuerySelectResult::hasMoreElements() throw (uno::RuntimeException)
+{
+    ::osl::MutexGuard g(m_rMutex);
+    return !librdf_query_results_finished(m_pQueryResult.get());
+}
+
+class NodeArrayDeleter : public std::unary_function<librdf_node**, void>
+{
+    const int m_Count;
+
+public:
+    NodeArrayDeleter(int i_Count) : m_Count(i_Count) { }
+
+    void operator() (librdf_node** io_pArray) const throw ()
+    {
+        std::for_each(io_pArray, io_pArray + m_Count, librdf_free_node);
+        delete[] io_pArray;
+    }
+};
+
+::com::sun::star::uno::Any SAL_CALL
+librdf_QuerySelectResult::nextElement()
+throw (uno::RuntimeException, container::NoSuchElementException,
+    lang::WrappedTargetException)
+{
+    ::osl::MutexGuard g(m_rMutex);
+    if (!librdf_query_results_finished(m_pQueryResult.get())) {
+        sal_Int32 count(m_BindingNames.getLength());
+        OSL_ENSURE(count >= 0, "negative length?");
+        boost::shared_array<librdf_node*> pNodes( new librdf_node*[count],
+            NodeArrayDeleter(count));
+        for (int i = 0; i < count; ++i) {
+            pNodes[i] = 0;
+        }
+        if (librdf_query_results_get_bindings(m_pQueryResult.get(), NULL,
+                    pNodes.get()))
+        {
+            rdf::QueryException e(::rtl::OUString::createFromAscii(
+                "librdf_QuerySelectResult::nextElement: "
+                "librdf_query_results_get_bindings failed"), *this);
+            throw lang::WrappedTargetException(::rtl::OUString::createFromAscii(
+                "librdf_QuerySelectResult::nextElement: "
+                "librdf_query_results_get_bindings failed"), *this,
+                uno::makeAny(e));
+        }
+        uno::Sequence< uno::Reference< rdf::XNode > > ret(count);
+        for (int i = 0; i < count; ++i) {
+            ret[i] = m_xRep->getTypeConverter().convertToXNode(pNodes[i]);
+        }
+        // NB: this will invalidate current item.
+        librdf_query_results_next(m_pQueryResult.get());
+        return uno::makeAny(ret);
+    } else {
+        throw container::NoSuchElementException();
+    }
+}
+
+// ::com::sun::star::rdf::XQuerySelectResult:
+uno::Sequence< ::rtl::OUString > SAL_CALL
+librdf_QuerySelectResult::getBindingNames() throw (uno::RuntimeException)
+{
+    return m_BindingNames;
+}
+
+
+////////////////////////////////////////////////////////////////////////////
+
+/** represents a named graph, and forwards all the work to repository.
+ */
+class librdf_NamedGraph:
+    private boost::noncopyable,
+    public ::cppu::WeakImplHelper1<
+        rdf::XNamedGraph>
+{
+public:
+    librdf_NamedGraph(librdf_Repository * i_pRep,
+            uno::Reference<rdf::XURI> const & i_xName)
+        : m_wRep(i_pRep), m_pRep(i_pRep), m_xName(i_xName) {};
+    virtual ~librdf_NamedGraph() {}
+
+    // ::com::sun::star::rdf::XNode:
+    virtual ::rtl::OUString SAL_CALL getStringValue()
+        throw (uno::RuntimeException);
+
+    // ::com::sun::star::rdf::XURI:
+    virtual ::rtl::OUString SAL_CALL getNamespace()
+        throw (uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getLocalName()
+        throw (uno::RuntimeException);
+
+    // ::com::sun::star::rdf::XNamedGraph:
+    virtual uno::Reference<rdf::XURI> SAL_CALL getName()
+        throw (uno::RuntimeException);
+    virtual void SAL_CALL clear()
+        throw (uno::RuntimeException,
+            container::NoSuchElementException, rdf::RepositoryException);
+    virtual void SAL_CALL addStatement(
+            const uno::Reference< rdf::XResource > & i_xSubject,
+            const uno::Reference< rdf::XResource > & i_xPredicate,
+            const uno::Reference< rdf::XNode > & i_xObject)
+        throw (uno::RuntimeException, lang::IllegalArgumentException,
+            container::NoSuchElementException, rdf::RepositoryException);
+    virtual void SAL_CALL removeStatements(
+            const uno::Reference< rdf::XResource > & i_xSubject,
+            const uno::Reference< rdf::XResource > & i_xPredicate,
+            const uno::Reference< rdf::XNode > & i_xObject)
+        throw (uno::RuntimeException,
+            container::NoSuchElementException, rdf::RepositoryException);
+    virtual uno::Reference< container::XEnumeration > SAL_CALL getStatements(
+            const uno::Reference< rdf::XResource > & i_xSubject,
+            const uno::Reference< rdf::XResource > & i_xPredicate,
+            const uno::Reference< rdf::XNode > & i_xObject)
+        throw (uno::RuntimeException,
+            container::NoSuchElementException, rdf::RepositoryException);
+
+private:
+
+    /// weak reference: this is needed to check if m_pRep is valid
+    uno::WeakReference< rdf::XRepository > m_wRep;
+    librdf_Repository *m_pRep;
+    uno::Reference< rdf::XURI > m_xName;
+};
+
+
+// ::com::sun::star::rdf::XNode:
+::rtl::OUString SAL_CALL librdf_NamedGraph::getStringValue()
+throw (uno::RuntimeException)
+{
+    return m_xName->getStringValue();
+}
+
+// ::com::sun::star::rdf::XURI:
+::rtl::OUString SAL_CALL librdf_NamedGraph::getNamespace()
+throw (uno::RuntimeException)
+{
+    return m_xName->getNamespace();
+}
+
+::rtl::OUString SAL_CALL librdf_NamedGraph::getLocalName()
+throw (uno::RuntimeException)
+{
+    return m_xName->getLocalName();
+}
+
+// ::com::sun::star::rdf::XNamedGraph:
+uno::Reference< rdf::XURI > SAL_CALL librdf_NamedGraph::getName()
+throw (uno::RuntimeException)
+{
+    return m_xName;
+}
+
+void SAL_CALL librdf_NamedGraph::clear()
+throw (uno::RuntimeException,
+    container::NoSuchElementException, rdf::RepositoryException)
+{
+    uno::Reference< rdf::XRepository > xRep( m_wRep );
+    if (!xRep.is()) {
+        throw rdf::RepositoryException(::rtl::OUString::createFromAscii(
+            "librdf_NamedGraph::clear: repository is gone"), *this);
+    }
+    try {
+        m_pRep->clearGraph(m_xName);
+    } catch (lang::IllegalArgumentException &) {
+        throw uno::RuntimeException();
+    }
+}
+
+void SAL_CALL librdf_NamedGraph::addStatement(
+    const uno::Reference< rdf::XResource > & i_xSubject,
+    const uno::Reference< rdf::XResource > & i_xPredicate,
+    const uno::Reference< rdf::XNode > & i_xObject)
+throw (uno::RuntimeException, lang::IllegalArgumentException,
+    container::NoSuchElementException, rdf::RepositoryException)
+{
+    uno::Reference< rdf::XRepository > xRep( m_wRep );
+    if (!xRep.is()) {
+        throw rdf::RepositoryException(::rtl::OUString::createFromAscii(
+            "librdf_NamedGraph::addStatement: repository is gone"), *this);
+    }
+    m_pRep->addStatementGraph(i_xSubject, i_xPredicate, i_xObject, m_xName);
+}
+
+void SAL_CALL librdf_NamedGraph::removeStatements(
+    const uno::Reference< rdf::XResource > & i_xSubject,
+    const uno::Reference< rdf::XResource > & i_xPredicate,
+    const uno::Reference< rdf::XNode > & i_xObject)
+throw (uno::RuntimeException,
+    container::NoSuchElementException, rdf::RepositoryException)
+{
+    uno::Reference< rdf::XRepository > xRep( m_wRep );
+    if (!xRep.is()) {
+        throw rdf::RepositoryException(::rtl::OUString::createFromAscii(
+            "librdf_NamedGraph::removeStatements: repository is gone"), *this);
+    }
+    m_pRep->removeStatementsGraph(i_xSubject, i_xPredicate, i_xObject, m_xName);
+}
+
+uno::Reference< container::XEnumeration > SAL_CALL
+librdf_NamedGraph::getStatements(
+    const uno::Reference< rdf::XResource > & i_xSubject,
+    const uno::Reference< rdf::XResource > & i_xPredicate,
+    const uno::Reference< rdf::XNode > & i_xObject)
+throw (uno::RuntimeException,
+    container::NoSuchElementException, rdf::RepositoryException)
+{
+    uno::Reference< rdf::XRepository > xRep( m_wRep );
+    if (!xRep.is()) {
+        throw rdf::RepositoryException(::rtl::OUString::createFromAscii(
+            "librdf_NamedGraph::getStatements: repository is gone"), *this);
+    }
+    return m_pRep->getStatementsGraph(
+            i_xSubject, i_xPredicate, i_xObject, m_xName);
+}
+
+
+////////////////////////////////////////////////////////////////////////////
+
+librdf_Repository::librdf_Repository(
+        uno::Reference< uno::XComponentContext > const & i_xContext) :
+    BaseMutex(), m_xContext(i_xContext),
+    m_pWorld  (static_cast<librdf_world  *>(0), librdf_free_world  ),
+    m_pStorage(static_cast<librdf_storage*>(0), librdf_free_storage),
+    m_pModel  (static_cast<librdf_model  *>(0), librdf_free_model  ),
+    m_NamedGraphs(), m_TypeConverter(i_xContext, *this)
+{
+    OSL_ENSURE(i_xContext.is(), "librdf_Repository: null context");
+}
+
+// com.sun.star.uno.XServiceInfo:
+::rtl::OUString SAL_CALL librdf_Repository::getImplementationName()
+throw (uno::RuntimeException)
+{
+    return comp_librdf_Repository::_getImplementationName();
+}
+
+::sal_Bool SAL_CALL librdf_Repository::supportsService(
+    ::rtl::OUString const & serviceName) throw (uno::RuntimeException)
+{
+    uno::Sequence< ::rtl::OUString > serviceNames
+        = comp_librdf_Repository::_getSupportedServiceNames();
+    for (::sal_Int32 i = 0; i < serviceNames.getLength(); ++i) {
+        if (serviceNames[i] == serviceName)
+            return sal_True;
+    }
+    return sal_False;
+}
+
+uno::Sequence< ::rtl::OUString > SAL_CALL
+librdf_Repository::getSupportedServiceNames() throw (uno::RuntimeException)
+{
+    return comp_librdf_Repository::_getSupportedServiceNames();
+}
+
+// ::com::sun::star::rdf::XRepository:
+uno::Reference< rdf::XBlankNode > SAL_CALL librdf_Repository::createBlankNode()
+throw (uno::RuntimeException)
+{
+    ::osl::MutexGuard g(m_aMutex);
+    const boost::shared_ptr<librdf_node> pNode(
+        librdf_new_node_from_blank_identifier(m_pWorld.get(), NULL),
+        librdf_free_node);
+    if (!pNode) {
+        throw uno::RuntimeException(::rtl::OUString::createFromAscii(
+            "librdf_Repository::createBlankNode: "
+            "librdf_new_node_from_blank_identifier failed"), *this);
+    }
+    const unsigned char * id (librdf_node_get_blank_identifier(pNode.get()));
+    if (!id) {
+        throw uno::RuntimeException(::rtl::OUString::createFromAscii(
+            "librdf_Repository::createBlankNode: "
+            "librdf_node_get_blank_identifier failed"), *this);
+    }
+    const ::rtl::OUString nodeID(::rtl::OUString::createFromAscii(
+        reinterpret_cast<const char *>(id)));
+    try {
+        return rdf::BlankNode::create(m_xContext, nodeID);
+    } catch (lang::IllegalArgumentException & iae) {
+        throw lang::WrappedTargetRuntimeException(
+            ::rtl::OUString::createFromAscii(
+                "librdf_Repository::createBlankNode: "
+                "illegal blank node label"), *this, uno::makeAny(iae));
+    }
+}
+
+bool formatNeedsBaseURI(::sal_Int16 i_Format)
+{
+    (void) i_Format; //FIXME any which dont?
+    return true;
+}
+
+//void SAL_CALL
+uno::Reference<rdf::XNamedGraph> SAL_CALL
+librdf_Repository::importGraph(::sal_Int16 i_Format,
+    const uno::Reference< io::XInputStream > & i_xInStream,
+    const uno::Reference< rdf::XURI > & i_xGraphName,
+    const uno::Reference< rdf::XURI > & i_xBaseURI)
+throw (uno::RuntimeException, lang::IllegalArgumentException,
+    datatransfer::UnsupportedFlavorException,
+    container::ElementExistException, rdf::ParseException,
+    rdf::RepositoryException, io::IOException)
+{
+    ::osl::MutexGuard g(m_aMutex);
+    if (!i_xInStream.is()) {
+        throw lang::IllegalArgumentException(
+            ::rtl::OUString::createFromAscii("librdf_Repository::importGraph: "
+                "stream is null"), *this, 1);
+    }
+    //FIXME: other formats
+    if (i_Format != rdf::FileFormat::RDF_XML) {
+        throw datatransfer::UnsupportedFlavorException(
+            ::rtl::OUString::createFromAscii("librdf_Repository::importGraph: "
+                "file format not supported"), *this);
+    }
+    if (!i_xGraphName.is()) {
+        throw lang::IllegalArgumentException(
+            ::rtl::OUString::createFromAscii("librdf_Repository::importGraph: "
+                "graph name is null"), *this, 2);
+    }
+    if (i_xGraphName->getStringValue().matchAsciiL(s_nsOOo, sizeof(s_nsOOo)-1))
+    {
+        throw lang::IllegalArgumentException(
+            ::rtl::OUString::createFromAscii("librdf_Repository::importGraph: "
+                "URI is reserved"), *this, 0);
+    }
+    if (formatNeedsBaseURI(i_Format) && !i_xBaseURI.is()) {
+        throw lang::IllegalArgumentException(
+            ::rtl::OUString::createFromAscii("librdf_Repository::importGraph: "
+                "base URI is null"), *this, 3);
+    }
+    OSL_ENSURE(i_xBaseURI.is(), "no base uri");
+    const ::rtl::OUString baseURIU( i_xBaseURI->getStringValue() );
+    if (baseURIU.indexOf('#') >= 0) {
+        throw lang::IllegalArgumentException(
+            ::rtl::OUString::createFromAscii("librdf_Repository::importGraph: "
+                "base URI is not absolute"), *this, 3);
+    }
+
+    const ::rtl::OUString contextU( i_xGraphName->getStringValue() );
+    if (m_NamedGraphs.find(contextU) != m_NamedGraphs.end()) {
+        throw container::ElementExistException(
+            ::rtl::OUString::createFromAscii("librdf_Repository::importGraph: "
+                "graph with given URI exists"), *this);
+    }
+    const ::rtl::OString context(
+        ::rtl::OUStringToOString(contextU, RTL_TEXTENCODING_UTF8) );
+
+    const boost::shared_ptr<librdf_node> pContext(
+        librdf_new_node_from_uri_string(m_pWorld.get(),
+            reinterpret_cast<const unsigned char*> (context.getStr())),
+        librdf_free_node);
+    if (!pContext) {
+        throw uno::RuntimeException(::rtl::OUString::createFromAscii(
+            "librdf_Repository::importGraph: "
+            "librdf_new_node_from_uri_string failed"), *this);
+    }
+
+    const ::rtl::OString baseURI(
+        ::rtl::OUStringToOString(baseURIU, RTL_TEXTENCODING_UTF8) );
+    const boost::shared_ptr<librdf_uri> pBaseURI(
+        librdf_new_uri(m_pWorld.get(),
+            reinterpret_cast<const unsigned char*> (baseURI.getStr())),
+        librdf_free_uri);
+    if (!pBaseURI) {
+        throw uno::RuntimeException(::rtl::OUString::createFromAscii(
+            "librdf_Repository::importGraph: "
+            "librdf_new_uri failed"), *this);
+    }
+
+    const boost::shared_ptr<librdf_parser> pParser(
+        librdf_new_parser(m_pWorld.get(), "rdfxml", NULL, NULL),
+        librdf_free_parser);
+    if (!pParser) {
+        throw uno::RuntimeException(::rtl::OUString::createFromAscii(
+            "librdf_Repository::importGraph: "
+            "librdf_new_parser failed"), *this);
+    }
+
+    //FIXME
+    // use XSeekableStream or something
+    uno::Sequence<sal_Int8> buf;
+    // exceptions are propagated
+    i_xInStream->readBytes(buf, 1<<20);
+    const boost::shared_ptr<librdf_stream> pStream(
+        librdf_parser_parse_counted_string_as_stream(pParser.get(),
+            reinterpret_cast<const unsigned char*>(buf.getConstArray()),
+            buf.getLength(), pBaseURI.get()),
+        librdf_free_stream);
+    if (!pStream) {
+        throw rdf::ParseException(::rtl::OUString::createFromAscii(
+            "librdf_Repository::importGraph: "
+            "librdf_parser_parse_counted_string_as_stream failed"), *this);
+    }
+    m_NamedGraphs.insert(std::make_pair(contextU,
+        new librdf_NamedGraph(this, i_xGraphName)));
+    if (librdf_model_context_add_statements(m_pModel.get(),
+            pContext.get(), pStream.get())) {
+        throw rdf::RepositoryException(::rtl::OUString::createFromAscii(
+            "librdf_Repository::importGraph: "
+            "librdf_model_context_add_statements failed"), *this);
+    }
+    return getGraph(i_xGraphName);
+}
+
+void SAL_CALL
+librdf_Repository::exportGraph(::sal_Int16 i_Format,
+    const uno::Reference< io::XOutputStream > & i_xOutStream,
+    const uno::Reference< rdf::XURI > & i_xGraphName,
+    const uno::Reference< rdf::XURI > & i_xBaseURI)
+throw (uno::RuntimeException, lang::IllegalArgumentException,
+    datatransfer::UnsupportedFlavorException,
+    container::NoSuchElementException, rdf::RepositoryException,
+    io::IOException)
+{
+    ::osl::MutexGuard g(m_aMutex);
+    if (!i_xOutStream.is()) {
+        throw lang::IllegalArgumentException(
+            ::rtl::OUString::createFromAscii("librdf_Repository::exportGraph: "
+                "stream is null"), *this, 1);
+    }
+    // FIXME: other formats
+    if (i_Format != rdf::FileFormat::RDF_XML) {
+        throw datatransfer::UnsupportedFlavorException(
+            ::rtl::OUString::createFromAscii("librdf_Repository::exportGraph: "
+                "file format not supported"), *this);
+    }
+    if (!i_xGraphName.is()) {
+        throw lang::IllegalArgumentException(
+            ::rtl::OUString::createFromAscii("librdf_Repository::exportGraph: "
+                "graph name is null"), *this, 2);
+    }
+    if (formatNeedsBaseURI(i_Format) && !i_xBaseURI.is()) {
+        throw lang::IllegalArgumentException(
+            ::rtl::OUString::createFromAscii("librdf_Repository::exportGraph: "
+                "base URI is null"), *this, 3);
+    }
+    OSL_ENSURE(i_xBaseURI.is(), "no base uri");
+    const ::rtl::OUString baseURIU( i_xBaseURI->getStringValue() );
+    if (baseURIU.indexOf('#') >= 0) {
+        throw lang::IllegalArgumentException(
+            ::rtl::OUString::createFromAscii("librdf_Repository::exportGraph: "
+                "base URI is not absolute"), *this, 3);
+    }
+
+    const ::rtl::OUString contextU( i_xGraphName->getStringValue() );
+    if (m_NamedGraphs.find(contextU) == m_NamedGraphs.end()) {
+        throw container::NoSuchElementException(
+            ::rtl::OUString::createFromAscii("librdf_Repository::exportGraph: "
+                "no graph with given URI exists"), *this);
+    }
+    const ::rtl::OString context(
+        ::rtl::OUStringToOString(contextU, RTL_TEXTENCODING_UTF8) );
+
+    const boost::shared_ptr<librdf_node> pContext(
+        librdf_new_node_from_uri_string(m_pWorld.get(),
+            reinterpret_cast<const unsigned char*> (context.getStr())),
+        librdf_free_node);
+    if (!pContext) {
+        throw uno::RuntimeException(::rtl::OUString::createFromAscii(
+            "librdf_Repository::exportGraph: "
+            "librdf_new_node_from_uri_string failed"), *this);
+    }
+    const ::rtl::OString baseURI(
+        ::rtl::OUStringToOString(baseURIU, RTL_TEXTENCODING_UTF8) );
+    const boost::shared_ptr<librdf_uri> pBaseURI(
+        librdf_new_uri(m_pWorld.get(),
+            reinterpret_cast<const unsigned char*> (baseURI.getStr())),
+        librdf_free_uri);
+    if (!pBaseURI) {
+        throw uno::RuntimeException(::rtl::OUString::createFromAscii(
+            "librdf_Repository::exportGraph: "
+            "librdf_new_uri failed"), *this);
+    }
+
+    const boost::shared_ptr<librdf_stream> pStream(
+        librdf_model_context_as_stream(m_pModel.get(), pContext.get()),
+        librdf_free_stream);
+    if (!pStream) {
+        throw rdf::RepositoryException(::rtl::OUString::createFromAscii(
+            "librdf_Repository::exportGraph: "
+            "librdf_model_context_as_stream failed"), *this);
+    }
+//    const char *format("rdfxml");
+    const char *format("rdfxml-abbrev");
+    const boost::shared_ptr<librdf_serializer> pSerializer(
+        librdf_new_serializer(m_pWorld.get(), format, NULL, NULL),
+        librdf_free_serializer);
+    if (!pSerializer) {
+        throw uno::RuntimeException(::rtl::OUString::createFromAscii(
+            "librdf_Repository::exportGraph: "
+            "librdf_new_serializer failed"), *this);
+    }
+    size_t length;
+    const boost::shared_ptr<unsigned char> pBuf(
+        librdf_serializer_serialize_stream_to_counted_string(
+            pSerializer.get(), pBaseURI.get(), pStream.get(), &length), free);
+    if (!pBuf) {
+        throw rdf::RepositoryException(::rtl::OUString::createFromAscii(
+            "librdf_Repository::exportGraph: "
+            "librdf_serializer_serialize_stream_to_counted_string failed"),
+            *this);
+    }
+    const uno::Sequence<sal_Int8> buf(
+        reinterpret_cast<sal_Int8*>(pBuf.get()), length);
+    // exceptions are propagated
+    i_xOutStream->writeBytes(buf);
+}
+
+uno::Sequence< uno::Reference< rdf::XURI > > SAL_CALL
+librdf_Repository::getGraphNames()
+throw (uno::RuntimeException, rdf::RepositoryException)
+{
+    ::osl::MutexGuard g(m_aMutex);
+    ::comphelper::SequenceAsVector< uno::Reference<rdf::XURI> > ret;
+    std::transform(m_NamedGraphs.begin(), m_NamedGraphs.end(),
+        std::back_inserter(ret),
+        boost::bind(&rdf::XNamedGraph::getName,
+            boost::bind(&NamedGraphMap_t::value_type::second, _1)));
+    return ret.getAsConstList();
+}
+
+uno::Reference< rdf::XNamedGraph > SAL_CALL
+librdf_Repository::getGraph(const uno::Reference< rdf::XURI > & i_xGraphName)
+throw (uno::RuntimeException, lang::IllegalArgumentException,
+    rdf::RepositoryException)
+{
+    ::osl::MutexGuard g(m_aMutex);
+    if (!i_xGraphName.is()) {
+        throw lang::IllegalArgumentException(
+            ::rtl::OUString::createFromAscii("librdf_Repository::getGraph: "
+                "URI is null"), *this, 0);
+    }
+    const NamedGraphMap_t::iterator iter(
+        m_NamedGraphs.find(i_xGraphName->getStringValue()) );
+    if (iter != m_NamedGraphs.end()) {
+        return uno::Reference<rdf::XNamedGraph>(iter->second.get());
+    } else {
+        return 0;
+    }
+}
+
+uno::Reference< rdf::XNamedGraph > SAL_CALL
+librdf_Repository::createGraph(const uno::Reference< rdf::XURI > & i_xGraphName)
+throw (uno::RuntimeException, lang::IllegalArgumentException,
+    container::ElementExistException, rdf::RepositoryException)
+{
+    ::osl::MutexGuard g(m_aMutex);
+    if (!i_xGraphName.is()) {
+        throw lang::IllegalArgumentException(
+            ::rtl::OUString::createFromAscii("librdf_Repository::createGraph: "
+                "URI is null"), *this, 0);
+    }
+    if (i_xGraphName->getStringValue().matchAsciiL(s_nsOOo, sizeof(s_nsOOo)-1))
+    {
+        throw lang::IllegalArgumentException(
+            ::rtl::OUString::createFromAscii("librdf_Repository::createGraph: "
+                "URI is reserved"), *this, 0);
+    }
+
+    // NB: librdf does not have a concept of graphs as such;
+    //     a librdf named graph exists iff the model contains a statement with
+    //     the graph name as context
+    const ::rtl::OUString contextU( i_xGraphName->getStringValue() );
+    if (m_NamedGraphs.find(contextU) != m_NamedGraphs.end()) {
+        throw container::ElementExistException(
+            ::rtl::OUString::createFromAscii("librdf_Repository::createGraph: "
+            "graph with given URI exists"), *this);
+    }
+    m_NamedGraphs.insert(std::make_pair(contextU,
+        new librdf_NamedGraph(this, i_xGraphName)));
+    return uno::Reference<rdf::XNamedGraph>(
+        m_NamedGraphs.find(contextU)->second.get());
+}
+
+void SAL_CALL
+librdf_Repository::destroyGraph(
+        const uno::Reference< rdf::XURI > & i_xGraphName)
+throw (uno::RuntimeException, lang::IllegalArgumentException,
+    container::NoSuchElementException, rdf::RepositoryException)
+{
+    ::osl::MutexGuard g(m_aMutex);
+    const NamedGraphMap_t::iterator iter( clearGraph(i_xGraphName) );
+    m_NamedGraphs.erase(iter);
+}
+
+uno::Reference< container::XEnumeration > SAL_CALL
+librdf_Repository::getStatements(
+    const uno::Reference< rdf::XResource > & i_xSubject,
+    const uno::Reference< rdf::XResource > & i_xPredicate,
+    const uno::Reference< rdf::XNode > & i_xObject)
+throw (uno::RuntimeException, rdf::RepositoryException)
+{
+    ::osl::MutexGuard g(m_aMutex);
+    const boost::shared_ptr<librdf_statement> pStatement(
+        m_TypeConverter.mkStatement(m_pWorld.get(),
+            i_xSubject, i_xPredicate, i_xObject),
+        librdf_free_statement);
+    OSL_ENSURE(pStatement, "mkStatement failed");
+
+    const boost::shared_ptr<librdf_stream> pStream(
+        librdf_model_find_statements(m_pModel.get(), pStatement.get()),
+        librdf_free_stream);
+    if (!pStream) {
+        throw rdf::RepositoryException(::rtl::OUString::createFromAscii(
+            "librdf_Repository::getStatements: "
+            "librdf_model_find_statements failed"), *this);
+    }
+
+    return new librdf_GraphResult(this, m_aMutex, pStream);
+}
+
+
+uno::Reference< rdf::XQuerySelectResult > SAL_CALL
+librdf_Repository::querySelect(const ::rtl::OUString & i_rQuery)
+throw (uno::RuntimeException, rdf::QueryException, rdf::RepositoryException)
+{
+    ::osl::MutexGuard g(m_aMutex);
+    const ::rtl::OString query(
+        ::rtl::OUStringToOString(i_rQuery, RTL_TEXTENCODING_UTF8) );
+    const boost::shared_ptr<librdf_query> pQuery(
+        librdf_new_query(m_pWorld.get(), s_sparql, NULL,
+            reinterpret_cast<const unsigned char*> (query.getStr()), NULL),
+        librdf_free_query);
+    if (!pQuery) {
+        throw rdf::QueryException(::rtl::OUString::createFromAscii(
+            "librdf_Repository::querySelect: "
+            "librdf_new_query failed"), *this);
+    }
+    const boost::shared_ptr<librdf_query_results> pResults(
+        librdf_model_query_execute(m_pModel.get(), pQuery.get()),
+        librdf_free_query_results);
+    if (!pResults || !librdf_query_results_is_bindings(pResults.get())) {
+        throw rdf::QueryException(::rtl::OUString::createFromAscii(
+            "librdf_Repository::querySelect: "
+            "query result is null or not bindings"), *this);
+    }
+
+    const int count( librdf_query_results_get_bindings_count(pResults.get()) );
+    if (count >= 0) {
+        uno::Sequence< ::rtl::OUString > names(count);
+        for (int i = 0; i < count; ++i) {
+            const char* name( librdf_query_results_get_binding_name(
+                pResults.get(), i) );
+            if (!name) {
+                throw rdf::QueryException(::rtl::OUString::createFromAscii(
+                    "librdf_Repository::querySelect: "
+                    "binding is null"), *this);
+            }
+
+            names[i] = ::rtl::OUString::createFromAscii(name);
+        }
+
+        return new librdf_QuerySelectResult(this, m_aMutex,
+            pQuery, pResults, names);
+
+    } else {
+        throw rdf::QueryException(::rtl::OUString::createFromAscii(
+            "librdf_Repository::querySelect: "
+            "librdf_query_results_get_bindings_count failed"), *this);
+    }
+}
+
+uno::Reference< container::XEnumeration > SAL_CALL
+librdf_Repository::queryConstruct(const ::rtl::OUString & i_rQuery)
+throw (uno::RuntimeException, rdf::QueryException, rdf::RepositoryException)
+{
+    ::osl::MutexGuard g(m_aMutex);
+    const ::rtl::OString query(
+        ::rtl::OUStringToOString(i_rQuery, RTL_TEXTENCODING_UTF8) );
+    const boost::shared_ptr<librdf_query> pQuery(
+        librdf_new_query(m_pWorld.get(), s_sparql, NULL,
+            reinterpret_cast<const unsigned char*> (query.getStr()), NULL),
+        librdf_free_query);
+    if (!pQuery) {
+        throw rdf::QueryException(::rtl::OUString::createFromAscii(
+            "librdf_Repository::queryConstruct: "
+            "librdf_new_query failed"), *this);
+    }
+    const boost::shared_ptr<librdf_query_results> pResults(
+        librdf_model_query_execute(m_pModel.get(), pQuery.get()),
+        librdf_free_query_results);
+    if (!pResults || !librdf_query_results_is_graph(pResults.get())) {
+        throw rdf::QueryException(::rtl::OUString::createFromAscii(
+            "librdf_Repository::queryConstruct: "
+            "query result is null or not graph"), *this);
+    }
+    const boost::shared_ptr<librdf_stream> pStream(
+        librdf_query_results_as_stream(pResults.get()),
+        librdf_free_stream);
+    if (!pStream) {
+        throw rdf::QueryException(::rtl::OUString::createFromAscii(
+            "librdf_Repository::queryConstruct: "
+            "librdf_query_results_as_stream failed"), *this);
+    }
+
+    return new librdf_GraphResult(this, m_aMutex, pStream, pQuery);
+}
+
+::sal_Bool SAL_CALL
+librdf_Repository::queryAsk(const ::rtl::OUString & i_rQuery)
+throw (uno::RuntimeException, rdf::QueryException, rdf::RepositoryException)
+{
+    ::osl::MutexGuard g(m_aMutex);
+
+    const ::rtl::OString query(
+        ::rtl::OUStringToOString(i_rQuery, RTL_TEXTENCODING_UTF8) );
+    const boost::shared_ptr<librdf_query> pQuery(
+        librdf_new_query(m_pWorld.get(), s_sparql, NULL,
+            reinterpret_cast<const unsigned char*> (query.getStr()), NULL),
+        librdf_free_query);
+    if (!pQuery) {
+        throw rdf::QueryException(::rtl::OUString::createFromAscii(
+            "librdf_Repository::queryAsk: "
+            "librdf_new_query failed"), *this);
+    }
+    const boost::shared_ptr<librdf_query_results> pResults(
+        librdf_model_query_execute(m_pModel.get(), pQuery.get()),
+        librdf_free_query_results);
+    if (!pResults || !librdf_query_results_is_boolean(pResults.get())) {
+        throw rdf::QueryException(::rtl::OUString::createFromAscii(
+            "librdf_Repository::queryAsk: "
+            "query result is null or not boolean"), *this);
+    }
+    return librdf_query_results_get_boolean(pResults.get())
+        ? sal_True : sal_False;
+}
+
+// ::com::sun::star::rdf::XDocumentRepository:
+void SAL_CALL librdf_Repository::setStatementRDFa(
+    const uno::Reference< rdf::XURI > & i_xSubject,
+    const uno::Reference< rdf::XURI > & i_xPredicate,
+    const uno::Reference< text::XTextRange > & i_xObject,
+    const ::rtl::OUString & i_rRDFaContent,
+    const uno::Reference< rdf::XURI > & i_xRDFaDatatype)
+throw (uno::RuntimeException, lang::IllegalArgumentException,
+    rdf::RepositoryException)
+{
+    if (!i_xSubject.is()) {
+        throw lang::IllegalArgumentException(::rtl::OUString::createFromAscii(
+            "librdf_Repository::setStatementRDFa: Subject is null"), *this, 0);
+    }
+    if (!i_xPredicate.is()) {
+        throw lang::IllegalArgumentException(::rtl::OUString::createFromAscii(
+            "librdf_Repository::setStatementRDFa: Predicate is null"),
+            *this, 1);
+    }
+    if (!i_xObject.is()) {
+        throw lang::IllegalArgumentException(::rtl::OUString::createFromAscii(
+            "librdf_Repository::setStatementRDFa: Object is null"), *this, 2);
+    }
+    uno::Reference<rdf::XResource> xSubject(i_xSubject, uno::UNO_QUERY_THROW);
+    uno::Reference<rdf::XResource> xPredicate(i_xPredicate,
+        uno::UNO_QUERY_THROW);
+    uno::Reference<rdf::XMetadatable> xMeta(i_xObject, uno::UNO_QUERY);
+    if (!xMeta.is()) {
+        throw lang::IllegalArgumentException(::rtl::OUString::createFromAscii(
+            "librdf_Repository::setStatementRDFa: Object is not XMetadatable"),
+            *this, 2);
+    }
+    // ensure that the metadatable has an XML ID
+    xMeta->ensureXmlId();
+    OSL_ENSURE(!xMeta->getXmlId().equalsAscii(""), "ensureXmlId didnt");
+    uno::Reference<rdf::XURI> xXmlId;
+    try {
+        xXmlId.set( rdf::URI::create(m_xContext,
+                ::rtl::OUString::createFromAscii(s_nsOOo) + xMeta->getXmlId()),
+            uno::UNO_QUERY_THROW);
+    } catch (lang::IllegalArgumentException & iae) {
+        throw lang::WrappedTargetRuntimeException(
+            ::rtl::OUString::createFromAscii(
+                "librdf_Repository::setStatementRDFa: "
+                "cannot create URI for XML ID"), *this, uno::makeAny(iae));
+    }
+
+    // TODO transaction would be nice here...
+    ::osl::MutexGuard g(m_aMutex);
+    uno::Reference<rdf::XNode> xText;
+    try {
+        xText.set( rdf::Literal::create(m_xContext, i_xObject->getString()),
+            uno::UNO_QUERY_THROW);
+    } catch (lang::IllegalArgumentException & iae) {
+        throw lang::WrappedTargetRuntimeException(
+            ::rtl::OUString::createFromAscii(
+                "librdf_Repository::setStatementRDFa: "
+                "cannot create literal"), *this, uno::makeAny(iae));
+    }
+    if (i_rRDFaContent.equalsAscii("")) {
+        removeStatementRDFa(i_xObject);
+        addStatementGraph(xSubject, xPredicate, xText, xXmlId, true);
+    } else {
+        uno::Reference<rdf::XResource> xLabel( m_TypeConverter.getRDFsLabel() );
+        uno::Reference<rdf::XNode> xContent;
+        try {
+            if (!i_xRDFaDatatype.is()) {
+                xContent.set(rdf::Literal::create(m_xContext, i_rRDFaContent),
+                    uno::UNO_QUERY_THROW);
+            } else {
+                xContent.set(rdf::Literal::createWithType(m_xContext,
+                    i_rRDFaContent, i_xRDFaDatatype), uno::UNO_QUERY_THROW);
+            }
+        } catch (lang::IllegalArgumentException & iae) {
+            throw lang::WrappedTargetRuntimeException(
+                ::rtl::OUString::createFromAscii(
+                    "librdf_Repository::setStatementRDFa: "
+                    "cannot create literal"), *this, uno::makeAny(iae));
+        }
+        removeStatementRDFa(i_xObject);
+        addStatementGraph(xSubject, xPredicate, xContent, xXmlId, true);
+        addStatementGraph(xSubject, xLabel, xText, xXmlId, true);
+    }
+}
+
+void SAL_CALL librdf_Repository::removeStatementRDFa(
+    const uno::Reference< text::XTextRange > & i_xObject)
+throw (uno::RuntimeException, lang::IllegalArgumentException,
+    rdf::RepositoryException)
+{
+    if (!i_xObject.is()) {
+        throw lang::IllegalArgumentException(::rtl::OUString::createFromAscii(
+            "librdf_Repository::removeStatementRDFa: Object is null"),
+            *this, 0);
+    }
+
+    uno::Reference<rdf::XMetadatable> xMeta(i_xObject, uno::UNO_QUERY);
+    if (!xMeta.is()) {
+        throw lang::IllegalArgumentException(::rtl::OUString::createFromAscii(
+            "librdf_Repository::removeStatementRDFa: "
+            "Object is not XMetadatable"), *this, 0);
+    }
+    const ::rtl::OUString XmlId(xMeta->getXmlId());
+    if (XmlId.equalsAscii("")) {
+        return; // nothing to do...
+    }
+    uno::Reference<rdf::XURI> xXmlId;
+    try {
+        xXmlId.set( rdf::URI::create(m_xContext,
+                ::rtl::OUString::createFromAscii(s_nsOOo) + XmlId),
+            uno::UNO_QUERY_THROW);
+    } catch (lang::IllegalArgumentException & iae) {
+        throw lang::WrappedTargetRuntimeException(
+            ::rtl::OUString::createFromAscii(
+                "librdf_Repository::removeStatementRDFa: "
+                "cannot create URI for XML ID"), *this, uno::makeAny(iae));
+    }
+    // clearGraph does locking, not needed here
+    clearGraph(xXmlId, true);
+}
+
+uno::Sequence<rdf::Statement> SAL_CALL
+librdf_Repository::getStatementRDFa(
+    const uno::Reference< rdf::XMetadatable > & i_xElement)
+throw (uno::RuntimeException, lang::IllegalArgumentException,
+    rdf::RepositoryException)
+{
+    if (!i_xElement.is()) {
+        throw lang::IllegalArgumentException(::rtl::OUString::createFromAscii(
+            "librdf_Repository::getStatementRDFa: Element is null"), *this, 0);
+    }
+    const ::rtl::OUString XmlId(i_xElement->getXmlId());
+    if (XmlId.equalsAscii("")) {
+        return uno::Sequence<rdf::Statement>();
+    }
+    uno::Reference<rdf::XURI> xXmlId;
+    try {
+        xXmlId.set( rdf::URI::create(m_xContext,
+                ::rtl::OUString::createFromAscii(s_nsOOo) + XmlId),
+            uno::UNO_QUERY_THROW);
+    } catch (lang::IllegalArgumentException & iae) {
+        throw lang::WrappedTargetRuntimeException(
+            ::rtl::OUString::createFromAscii(
+                "librdf_Repository::getStatementRDFa: "
+                "cannot create URI for XML ID"), *this, uno::makeAny(iae));
+    }
+    rdf::Statement First;
+    rdf::Statement Second;
+    int count(0);
+    ::osl::MutexGuard g(m_aMutex);
+    uno::Reference<container::XEnumeration> xIter(
+        getStatementsGraph(0, 0, 0, xXmlId, true) );
+    OSL_ENSURE(xIter.is(), "getStatementRDFa: no result?");
+    if (xIter->hasMoreElements()) {
+        if (!(xIter->nextElement() >>= First)) {
+            OSL_ENSURE(false, "getStatementRDFa: result 1 wrong type");
+            return uno::Sequence<rdf::Statement>();
+        }
+        ++count;
+    }
+    if (xIter->hasMoreElements()) {
+        if (!(xIter->nextElement() >>= Second)) {
+            OSL_ENSURE(false, "getStatementRDFa: result 2 wrong type");
+            return uno::Sequence<rdf::Statement>();
+        }
+        ++count;
+    }
+    OSL_ENSURE(!xIter->hasMoreElements(), "getStatementRDFa: > 2 results?");
+    switch (count) {
+        case 0:
+            return uno::Sequence<rdf::Statement>();
+        case 1:
+            return ::comphelper::makeSequence(First);
+        case 2:
+            {
+                uno::Reference<rdf::XResource> xLabel(
+                    m_TypeConverter.getRDFsLabel() );
+                OSL_ENSURE(Second.Predicate.is(),
+                    "getStatementRDFa: no predicate?");
+                if (Second.Predicate->getStringValue() !=
+                    xLabel->getStringValue()) {
+                    // sequence is not guaranteed, so we might need to swap
+                    return ::comphelper::makeSequence(Second, First);
+                } else {
+                    return ::comphelper::makeSequence(First, Second);
+                }
+            }
+        default:
+            OSL_ENSURE(false, "getStatementsRDFa: invalid count");
+            throw uno::RuntimeException();
+    }
+}
+
+extern "C"
+librdf_statement *rdfa_context_stream_map_handler(
+    librdf_stream *i_pStream, void *, librdf_statement *i_pStatement)
+{
+    OSL_ENSURE(i_pStream, "rdfa_context_stream_map_handler: stream null");
+    if (i_pStream) {
+        librdf_node *pCtxt( static_cast<librdf_node *>
+            (librdf_stream_get_context(i_pStream)) );
+        OSL_ENSURE(pCtxt, "rdfa_context_stream_map_handler: context null");
+        if (pCtxt && isInternalContext(pCtxt)) {
+            return i_pStatement;
+        }
+    }
+    return 0;
+};
+
+uno::Reference< container::XEnumeration > SAL_CALL
+librdf_Repository::getStatementsRDFa(
+    const uno::Reference< rdf::XResource > & i_xSubject,
+    const uno::Reference< rdf::XResource > & i_xPredicate,
+    const uno::Reference< rdf::XNode > & i_xObject)
+throw (uno::RuntimeException, rdf::RepositoryException)
+{
+    ::osl::MutexGuard g(m_aMutex);
+    const boost::shared_ptr<librdf_statement> pStatement(
+        m_TypeConverter.mkStatement(m_pWorld.get(),
+            i_xSubject, i_xPredicate, i_xObject),
+        librdf_free_statement);
+    OSL_ENSURE(pStatement, "mkStatement failed");
+
+    const boost::shared_ptr<librdf_stream> pStream(
+        librdf_model_find_statements(m_pModel.get(), pStatement.get()),
+        librdf_free_stream);
+    if (!pStream) {
+        throw rdf::RepositoryException(::rtl::OUString::createFromAscii(
+            "librdf_Repository::getStatementsRDFa: "
+            "librdf_model_find_statements failed"), *this);
+    }
+
+    if (librdf_stream_add_map(pStream.get(), rdfa_context_stream_map_handler,
+                0, 0)) {
+        throw rdf::RepositoryException(::rtl::OUString::createFromAscii(
+            "librdf_Repository::getStatementsRDFa: "
+            "librdf_stream_add_map failed"), *this);
+    }
+
+    return new librdf_GraphResult(this, m_aMutex, pStream);
+}
+
+//FIXME ... argh!
+void BUG(librdf_world*) {}
+
+// ::com::sun::star::lang::XInitialization:
+void SAL_CALL librdf_Repository::initialize(
+    const uno::Sequence< ::com::sun::star::uno::Any > & i_rArguments)
+throw (uno::RuntimeException, uno::Exception)
+{
+    (void) i_rArguments;
+
+    ::osl::MutexGuard g(m_aMutex);
+
+//    m_pWorld.reset(m_TypeConverter.createWorld(), librdf_free_world);
+    m_pWorld.reset(m_TypeConverter.createWorld(), BUG);
+    m_pStorage.reset(m_TypeConverter.createStorage(m_pWorld.get()),
+        librdf_free_storage);
+    m_pModel.reset(m_TypeConverter.createModel(
+        m_pWorld.get(), m_pStorage.get()), librdf_free_model);
+}
+
+const NamedGraphMap_t::iterator SAL_CALL librdf_Repository::clearGraph(
+        const uno::Reference< rdf::XURI > & i_xGraphName, bool i_Internal)
+//    throw (uno::RuntimeException, container::NoSuchElementException,
+//        rdf::RepositoryException)
+{
+    if (!i_xGraphName.is()) {
+        throw lang::IllegalArgumentException(
+            ::rtl::OUString::createFromAscii("librdf_Repository::clearGraph: "
+                "URI is null"), *this, 0);
+    }
+    ::osl::MutexGuard g(m_aMutex);
+    const ::rtl::OUString contextU( i_xGraphName->getStringValue() );
+    const NamedGraphMap_t::iterator iter( m_NamedGraphs.find(contextU) );
+    if (!i_Internal && iter == m_NamedGraphs.end()) {
+        throw container::NoSuchElementException(
+            ::rtl::OUString::createFromAscii("librdf_Repository::clearGraph: "
+            "no graph with given URI exists"), *this);
+    }
+    const ::rtl::OString context(
+        ::rtl::OUStringToOString(contextU, RTL_TEXTENCODING_UTF8) );
+
+    const boost::shared_ptr<librdf_node> pContext(
+        librdf_new_node_from_uri_string(m_pWorld.get(),
+            reinterpret_cast<const unsigned char*> (context.getStr())),
+        librdf_free_node);
+    if (!pContext) {
+        throw uno::RuntimeException(::rtl::OUString::createFromAscii(
+            "librdf_Repository::clearGraph: "
+            "librdf_new_node_from_uri_string failed"), *this);
+    }
+    if (librdf_model_context_remove_statements(m_pModel.get(), pContext.get()))
+    {
+        throw rdf::RepositoryException(::rtl::OUString::createFromAscii(
+            "librdf_Repository::clearGraph: "
+            "librdf_model_context_remove_statements failed"), *this);
+    }
+    return iter;
+}
+
+void SAL_CALL librdf_Repository::addStatementGraph(
+    const uno::Reference< rdf::XResource > & i_xSubject,
+    const uno::Reference< rdf::XResource > & i_xPredicate,
+    const uno::Reference< rdf::XNode > & i_xObject,
+    const uno::Reference< rdf::XURI > & i_xGraphName,
+    bool i_Internal)
+//throw (uno::RuntimeException, lang::IllegalArgumentException,
+//    container::NoSuchElementException, rdf::RepositoryException)
+{
+    if (!i_xSubject.is()) {
+        throw lang::IllegalArgumentException(::rtl::OUString::createFromAscii(
+            "librdf_Repository::addStatement: Subject is null"), *this, 0);
+    }
+    if (!i_xPredicate.is()) {
+        throw lang::IllegalArgumentException(::rtl::OUString::createFromAscii(
+            "librdf_Repository::addStatement: Predicate is null"),
+            *this, 1);
+    }
+    if (!i_xObject.is()) {
+        throw lang::IllegalArgumentException(::rtl::OUString::createFromAscii(
+            "librdf_Repository::addStatement: Object is null"), *this, 2);
+    }
+
+    ::osl::MutexGuard g(m_aMutex);
+    const ::rtl::OUString contextU( i_xGraphName->getStringValue() );
+    if (!i_Internal && (m_NamedGraphs.find(contextU) == m_NamedGraphs.end())) {
+        throw container::NoSuchElementException(
+            ::rtl::OUString::createFromAscii("librdf_Repository::addStatement: "
+            "no graph with given URI exists"), *this);
+    }
+    const ::rtl::OString context(
+        ::rtl::OUStringToOString(contextU, RTL_TEXTENCODING_UTF8) );
+
+    const boost::shared_ptr<librdf_node> pContext(
+        librdf_new_node_from_uri_string(m_pWorld.get(),
+            reinterpret_cast<const unsigned char*> (context.getStr())),
+        librdf_free_node);
+    if (!pContext) {
+        throw uno::RuntimeException(::rtl::OUString::createFromAscii(
+            "librdf_Repository::addStatement: "
+            "librdf_new_node_from_uri_string failed"), *this);
+    }
+    const boost::shared_ptr<librdf_statement> pStatement(
+        m_TypeConverter.mkStatement(m_pWorld.get(),
+            i_xSubject, i_xPredicate, i_xObject),
+        librdf_free_statement);
+    OSL_ENSURE(pStatement, "mkStatement failed");
+    if (librdf_model_context_add_statement(m_pModel.get(),
+            pContext.get(), pStatement.get())) {
+        throw rdf::RepositoryException(::rtl::OUString::createFromAscii(
+            "librdf_Repository::addStatement: "
+            "librdf_model_context_add_statement failed"), *this);
+    }
+}
+
+void SAL_CALL librdf_Repository::removeStatementsGraph(
+    const uno::Reference< rdf::XResource > & i_xSubject,
+    const uno::Reference< rdf::XResource > & i_xPredicate,
+    const uno::Reference< rdf::XNode > & i_xObject,
+    const uno::Reference< rdf::XURI > & i_xGraphName)
+//throw (uno::RuntimeException, lang::IllegalArgumentException,
+//    container::NoSuchElementException, rdf::RepositoryException)
+{
+    ::osl::MutexGuard g(m_aMutex);
+    const ::rtl::OUString contextU( i_xGraphName->getStringValue() );
+    if (m_NamedGraphs.find(contextU) == m_NamedGraphs.end()) {
+        throw container::NoSuchElementException(
+            ::rtl::OUString::createFromAscii(
+                "librdf_Repository::removeStatements: "
+                "no graph with given URI exists"), *this);
+    }
+    const ::rtl::OString context(
+        ::rtl::OUStringToOString(contextU, RTL_TEXTENCODING_UTF8) );
+
+    const boost::shared_ptr<librdf_node> pContext(
+        librdf_new_node_from_uri_string(m_pWorld.get(),
+            reinterpret_cast<const unsigned char*> (context.getStr())),
+        librdf_free_node);
+    if (!pContext) {
+        throw uno::RuntimeException(::rtl::OUString::createFromAscii(
+            "librdf_Repository::removeStatements: "
+            "librdf_new_node_from_uri_string failed"), *this);
+    }
+    const boost::shared_ptr<librdf_statement> pStatement(
+        m_TypeConverter.mkStatement(m_pWorld.get(),
+            i_xSubject, i_xPredicate, i_xObject),
+        librdf_free_statement);
+    OSL_ENSURE(pStatement, "mkStatement failed");
+
+    const boost::shared_ptr<librdf_stream> pStream(
+        librdf_model_find_statements_in_context(m_pModel.get(),
+            pStatement.get(), pContext.get()),
+        librdf_free_stream);
+    if (!pStream) {
+        throw rdf::RepositoryException(::rtl::OUString::createFromAscii(
+            "librdf_Repository::removeStatements: "
+            "librdf_model_find_statements_in_context failed"), *this);
+    }
+
+    if (!librdf_stream_end(pStream.get())) {
+        do {
+            librdf_statement *pStmt( librdf_stream_get_object(pStream.get()) );
+            if (!pStmt) {
+                throw rdf::RepositoryException(::rtl::OUString::createFromAscii(
+                    "librdf_Repository::removeStatements: "
+                    "librdf_stream_get_object failed"), *this);
+            }
+            if (librdf_model_context_remove_statement(m_pModel.get(),
+                    pContext.get(), pStmt)) {
+                throw rdf::RepositoryException(::rtl::OUString::createFromAscii(
+                    "librdf_Repository::removeStatements: "
+                    "librdf_model_context_remove_statement failed"), *this);
+            }
+        } while (!librdf_stream_next(pStream.get()));
+    }
+}
+
+uno::Reference< container::XEnumeration > SAL_CALL
+librdf_Repository::getStatementsGraph(
+    const uno::Reference< rdf::XResource > & i_xSubject,
+    const uno::Reference< rdf::XResource > & i_xPredicate,
+    const uno::Reference< rdf::XNode > & i_xObject,
+    const uno::Reference< rdf::XURI > & i_xGraphName,
+    bool i_Internal)
+//throw (uno::RuntimeException, lang::IllegalArgumentException,
+//    container::NoSuchElementException, rdf::RepositoryException)
+{
+
+    ::osl::MutexGuard g(m_aMutex);
+    const ::rtl::OUString contextU( i_xGraphName->getStringValue() );
+    if (!i_Internal && (m_NamedGraphs.find(contextU) == m_NamedGraphs.end())) {
+        throw container::NoSuchElementException(
+            ::rtl::OUString::createFromAscii(
+                "librdf_Repository::getStatements: "
+                "no graph with given URI exists"), *this);
+    }
+    const ::rtl::OString context(
+        ::rtl::OUStringToOString(contextU, RTL_TEXTENCODING_UTF8) );
+
+    const boost::shared_ptr<librdf_node> pContext(
+        librdf_new_node_from_uri_string(m_pWorld.get(),
+            reinterpret_cast<const unsigned char*> (context.getStr())),
+        librdf_free_node);
+    if (!pContext) {
+        throw uno::RuntimeException(::rtl::OUString::createFromAscii(
+            "librdf_Repository::getStatements: "
+            "librdf_new_node_from_uri_string failed"), *this);
+    }
+    const boost::shared_ptr<librdf_statement> pStatement(
+        m_TypeConverter.mkStatement(m_pWorld.get(),
+            i_xSubject, i_xPredicate, i_xObject),
+        librdf_free_statement);
+    OSL_ENSURE(pStatement, "mkStatement failed");
+
+    const boost::shared_ptr<librdf_stream> pStream(
+        librdf_model_find_statements_in_context(m_pModel.get(),
+            pStatement.get(), pContext.get()),
+        librdf_free_stream);
+    if (!pStream) {
+        throw rdf::RepositoryException(::rtl::OUString::createFromAscii(
+            "librdf_Repository::getStatements: "
+            "librdf_model_find_statements_in_context failed"), *this);
+    }
+
+    return new librdf_GraphResult(this, m_aMutex, pStream);
+}
+
+librdf_world *librdf_TypeConverter::createWorld() const
+{
+    // create and initialize world
+    librdf_world *pWorld( librdf_new_world() );
+    if (!pWorld) {
+        throw uno::RuntimeException(::rtl::OUString::createFromAscii(
+            "librdf_TypeConverter::createWorld: librdf_new_world failed"),
+            m_rRep);
+    }
+    //FIXME logger, digest, features?
+    librdf_world_open(pWorld);
+    return pWorld;
+}
+
+librdf_storage *
+librdf_TypeConverter::createStorage(librdf_world *i_pWorld) const
+{
+    librdf_storage *pStorage(
+//        librdf_new_storage(i_pWorld, "memory", NULL, "contexts='yes'") );
+        librdf_new_storage(i_pWorld, "hashes", NULL,
+            "contexts='yes',hash-type='memory'") );
+    if (!pStorage) {
+        throw uno::RuntimeException(::rtl::OUString::createFromAscii(
+            "librdf_TypeConverter::createStorage: librdf_new_storage failed"),
+            m_rRep);
+    }
+    return pStorage;
+}
+
+librdf_model *librdf_TypeConverter::createModel(
+    librdf_world *i_pWorld, librdf_storage * i_pStorage) const
+{
+    librdf_model *pRepository( librdf_new_model(i_pWorld, i_pStorage, NULL) );
+    if (!pRepository) {
+        throw uno::RuntimeException(::rtl::OUString::createFromAscii(
+            "librdf_TypeConverter::createModel: librdf_new_model failed"),
+            m_rRep);
+    }
+    //FIXME
+#if 0
+    {
+        librdf_uri * ctxt = librdf_new_uri(i_pWorld, reinterpret_cast<const unsigned char *>(LIBRDF_MODEL_FEATURE_CONTEXTS));
+        librdf_node * contexts = librdf_model_get_feature(repository, ctxt);
+        if (!contexts)
+            throw;
+        std::cout << "value of contexts feature: ";
+        prtNode(contexts);
+        std::cout << std::endl;
+        // librdf_model_set_feature(repository, LIBRDF_FEATURE_CONTEXTS, ...);
+        librdf_free_node(contexts);
+        librdf_free_uri(ctxt);
+    }
+#endif
+    return pRepository;
+}
+
+// this does NOT create a node, only URI
+librdf_uri* librdf_TypeConverter::mkURI( librdf_world* i_pWorld,
+    const uno::Reference< rdf::XURI > & i_xURI) const
+{
+    const ::rtl::OString uri(
+        ::rtl::OUStringToOString(i_xURI->getStringValue(),
+        RTL_TEXTENCODING_UTF8) );
+    librdf_uri *pURI( librdf_new_uri(i_pWorld,
+        reinterpret_cast<const unsigned char *>(uri.getStr())));
+    if (!pURI) {
+        throw uno::RuntimeException(::rtl::OUString::createFromAscii(
+            "librdf_TypeConverter::mkURI: librdf_new_uri failed"), 0);
+    }
+    return pURI;
+}
+
+// create blank or URI node
+librdf_node* librdf_TypeConverter::mkResource( librdf_world* i_pWorld,
+    const uno::Reference< rdf::XResource > & i_xResource) const
+{
+    if (!i_xResource.is()) return 0;
+    uno::Reference< rdf::XBlankNode > xBlankNode(i_xResource, uno::UNO_QUERY);
+    if (xBlankNode.is()) {
+        const ::rtl::OString label(
+            ::rtl::OUStringToOString(xBlankNode->getStringValue(),
+            RTL_TEXTENCODING_UTF8) );
+        librdf_node *pNode(
+            librdf_new_node_from_blank_identifier(i_pWorld,
+                reinterpret_cast<const unsigned char*> (label.getStr())));
+        if (!pNode) {
+            throw uno::RuntimeException(::rtl::OUString::createFromAscii(
+                "librdf_TypeConverter::mkResource: "
+                "librdf_new_node_from_blank_identifier failed"), 0);
+        }
+        return pNode;
+    } else { // assumption: everything else is URI
+        const ::rtl::OString uri(
+            ::rtl::OUStringToOString(i_xResource->getStringValue(),
+            RTL_TEXTENCODING_UTF8) );
+        librdf_node *pNode(
+            librdf_new_node_from_uri_string(i_pWorld,
+                reinterpret_cast<const unsigned char*> (uri.getStr())));
+        if (!pNode) {
+            throw uno::RuntimeException(::rtl::OUString::createFromAscii(
+                "librdf_TypeConverter::mkResource: "
+                "librdf_new_node_from_uri_string failed"), 0);
+        }
+        return pNode;
+    }
+}
+
+// create blank or URI or literal node
+librdf_node* librdf_TypeConverter::mkNode( librdf_world* i_pWorld,
+    const uno::Reference< rdf::XNode > & i_xNode) const
+{
+    if (!i_xNode.is()) return 0;
+    uno::Reference< rdf::XResource > xResource(i_xNode, uno::UNO_QUERY);
+    if (xResource.is()) {
+        return mkResource(i_pWorld, xResource);
+    }
+    uno::Reference< rdf::XLiteral> xLiteral(i_xNode, uno::UNO_QUERY);
+    OSL_ENSURE(xLiteral.is(),
+        "mkNode: someone invented a new rdf.XNode and did not tell me");
+    if (!xLiteral.is()) return 0;
+    const ::rtl::OString val(
+        ::rtl::OUStringToOString(xLiteral->getValue(),
+        RTL_TEXTENCODING_UTF8) );
+    const ::rtl::OString lang(
+        ::rtl::OUStringToOString(xLiteral->getLanguage(),
+        RTL_TEXTENCODING_UTF8) );
+    const uno::Reference< rdf::XURI > xType(xLiteral->getDatatype());
+    librdf_node * ret(0);
+    if (lang.getLength() == 0) {
+        if (!xType.is()) {
+            ret = librdf_new_node_from_literal(i_pWorld,
+                reinterpret_cast<const unsigned char*> (val.getStr()),
+                NULL, 0);
+        } else {
+            const boost::shared_ptr<librdf_uri> pDatatype(
+                mkURI(i_pWorld, xType), librdf_free_uri);
+            ret = librdf_new_node_from_typed_literal(i_pWorld,
+                reinterpret_cast<const unsigned char*> (val.getStr()),
+                NULL, pDatatype.get());
+        }
+    } else {
+        if (!xType.is()) {
+            ret = librdf_new_node_from_literal(i_pWorld,
+                reinterpret_cast<const unsigned char*> (val.getStr()),
+                (lang.getStr()), 0);
+
+        } else {
+            OSL_ENSURE(false, "mkNode: invalid literal");
+            return 0;
+        }
+    }
+    if (!ret) {
+        throw uno::RuntimeException(::rtl::OUString::createFromAscii(
+            "librdf_TypeConverter::mkNode: "
+            "librdf_new_node_from_literal failed"), 0);
+    }
+    return ret;
+}
+
+librdf_statement* librdf_TypeConverter::mkStatement( librdf_world* i_pWorld,
+    const uno::Reference< rdf::XResource > & i_xSubject,
+    const uno::Reference< rdf::XResource > & i_xPredicate,
+    const uno::Reference< rdf::XNode > & i_xObject) const
+{
+    librdf_node* pSubject( mkResource(i_pWorld, i_xSubject) );
+    librdf_node* pPredicate(0);
+    librdf_node* pObject(0);
+    try {
+        pPredicate = mkResource(i_pWorld, i_xPredicate);
+        try {
+            pObject = mkNode(i_pWorld, i_xObject);
+        } catch (...) {
+            librdf_free_node(pPredicate);
+            throw;
+        }
+    } catch (...) {
+        librdf_free_node(pSubject);
+        throw;
+    }
+    // NB: this takes ownership of the nodes! (which is really ugly)
+    librdf_statement* pStatement( librdf_new_statement_from_nodes(i_pWorld,
+        pSubject, pPredicate, pObject) );
+    if (!pStatement) {
+        throw uno::RuntimeException(::rtl::OUString::createFromAscii(
+            "librdf_TypeConverter::mkStatement: "
+            "librdf_new_statement_from_nodes failed"), 0);
+    }
+    return pStatement;
+}
+
+uno::Reference<rdf::XURI>
+librdf_TypeConverter::convertToXURI(librdf_uri* i_pURI) const
+{
+    if (!i_pURI) return 0;
+    const unsigned char* uri( librdf_uri_as_string(i_pURI) );
+    if (!uri) {
+        throw uno::RuntimeException(::rtl::OUString::createFromAscii(
+            "librdf_TypeConverter::convertToXURI: "
+            "librdf_uri_as_string failed"), m_rRep);
+    }
+    ::rtl::OUString uriU( ::rtl::OStringToOUString(
+        ::rtl::OString(reinterpret_cast<const sal_Char*>(uri)),
+        RTL_TEXTENCODING_UTF8) );
+    try {
+        return rdf::URI::create(m_xContext, uriU);
+    } catch (lang::IllegalArgumentException & iae) {
+        throw lang::WrappedTargetRuntimeException(
+            ::rtl::OUString::createFromAscii(
+                "librdf_TypeConverter::convertToXURI: "
+                "illegal uri"), m_rRep, uno::makeAny(iae));
+    }
+}
+
+uno::Reference<rdf::XURI>
+librdf_TypeConverter::convertToXURI(librdf_node* i_pNode) const
+{
+    if (!i_pNode) return 0;
+    if (librdf_node_is_resource(i_pNode)) {
+        librdf_uri* pURI( librdf_node_get_uri(i_pNode) );
+        if (!pURI) {
+            throw uno::RuntimeException(::rtl::OUString::createFromAscii(
+                "librdf_TypeConverter::convertToXURI: "
+                "resource has no uri"), m_rRep);
+        }
+        return convertToXURI(pURI);
+    } else {
+        OSL_ENSURE(false, "convertToXURI: unknown librdf_node");
+        return 0;
+    }
+}
+
+uno::Reference<rdf::XResource>
+librdf_TypeConverter::convertToXResource(librdf_node* i_pNode) const
+{
+    if (!i_pNode) return 0;
+    if (librdf_node_is_blank(i_pNode)) {
+        const unsigned char* label( librdf_node_get_blank_identifier(i_pNode) );
+        if (!label) {
+            throw uno::RuntimeException(::rtl::OUString::createFromAscii(
+                "librdf_TypeConverter::convertToXResource: "
+                "blank node has no label"), m_rRep);
+        }
+        ::rtl::OUString labelU( ::rtl::OStringToOUString(
+            ::rtl::OString(reinterpret_cast<const sal_Char*>(label)),
+            RTL_TEXTENCODING_UTF8) );
+        try {
+            return uno::Reference<rdf::XResource>(
+                rdf::BlankNode::create(m_xContext, labelU), uno::UNO_QUERY);
+        } catch (lang::IllegalArgumentException & iae) {
+            throw lang::WrappedTargetRuntimeException(
+                ::rtl::OUString::createFromAscii(
+                    "librdf_TypeConverter::convertToXResource: "
+                    "illegal blank node label"), m_rRep, uno::makeAny(iae));
+        }
+    } else {
+        return uno::Reference<rdf::XResource>(convertToXURI(i_pNode),
+            uno::UNO_QUERY);
+    }
+}
+
+uno::Reference<rdf::XNode>
+librdf_TypeConverter::convertToXNode(librdf_node* i_pNode) const
+{
+    if (!i_pNode) return 0;
+    if (!librdf_node_is_literal(i_pNode)) {
+        return uno::Reference<rdf::XNode>(convertToXResource(i_pNode),
+            uno::UNO_QUERY);
+    }
+    const unsigned char* value( librdf_node_get_literal_value(i_pNode) );
+    if (!value) {
+        throw uno::RuntimeException(::rtl::OUString::createFromAscii(
+            "librdf_TypeConverter::convertToXNode: "
+            "literal has no value"), m_rRep);
+    }
+    const char * lang( librdf_node_get_literal_value_language(i_pNode) );
+    librdf_uri* pType(
+        librdf_node_get_literal_value_datatype_uri(i_pNode) );
+    OSL_ENSURE(!lang || !pType, "convertToXNode: invalid literal");
+    const ::rtl::OUString valueU( ::rtl::OStringToOUString(
+        ::rtl::OString(reinterpret_cast<const sal_Char*>(value)),
+        RTL_TEXTENCODING_UTF8) );
+    if (lang) {
+        const ::rtl::OUString langU( ::rtl::OStringToOUString(
+            ::rtl::OString(reinterpret_cast<const sal_Char*>(lang)),
+            RTL_TEXTENCODING_UTF8) );
+        return uno::Reference<rdf::XNode>(
+            rdf::Literal::createWithLanguage(m_xContext, valueU, langU),
+            uno::UNO_QUERY);
+    } else if (pType) {
+        uno::Reference<rdf::XURI> xType(convertToXURI(pType));
+        OSL_ENSURE(xType.is(), "convertToXNode: null uri");
+        return uno::Reference<rdf::XNode>(
+            rdf::Literal::createWithType(m_xContext, valueU, xType),
+            uno::UNO_QUERY);
+    } else {
+        return uno::Reference<rdf::XNode>(
+            rdf::Literal::create(m_xContext, valueU),
+            uno::UNO_QUERY);
+    }
+}
+
+#if 0
+uno::Reference<rdf::XStatement>
+librdf_TypeConverter::convertToXStatement(librdf_statement* i_pStmt,
+    librdf_node* i_pContext) const
+{
+    if (!i_pStmt) {
+        throw uno::RuntimeException();
+    }
+    return new librdf_Statement(
+        convertToXResource(librdf_statement_get_subject(i_pStmt)),
+        convertToXResource(librdf_statement_get_predicate(i_pStmt)),
+        convertToXNode(librdf_statement_get_object(i_pStmt)),
+        convertToXURI(i_pContext));
+}
+#endif
+
+rdf::Statement
+librdf_TypeConverter::convertToStatement(librdf_statement* i_pStmt,
+    librdf_node* i_pContext) const
+{
+    if (!i_pStmt) {
+        throw uno::RuntimeException();
+    }
+    return rdf::Statement(
+        convertToXResource(librdf_statement_get_subject(i_pStmt)),
+        convertToXResource(librdf_statement_get_predicate(i_pStmt)),
+        convertToXNode(librdf_statement_get_object(i_pStmt)),
+        convertToXURI(i_pContext));
+}
+
+uno::Reference<rdf::XResource> librdf_TypeConverter::getRDFsLabel() const
+{
+    static uno::Reference< rdf::XResource > xLabel;
+
+    if (!xLabel.is()) {
+        try {
+            // rdfs:label
+            xLabel.set(rdf::URI::createKnown(m_xContext,
+                rdf::URIs::RDFS_LABEL),
+                uno::UNO_QUERY_THROW);
+        } catch (lang::IllegalArgumentException & iae) {
+            throw lang::WrappedTargetRuntimeException(
+                ::rtl::OUString::createFromAscii(
+                    "librdf_TypeConverter::getRDFsLabel: "
+                    "cannot create rdfs:label"), m_rRep, uno::makeAny(iae));
+        }
+    }
+    return xLabel;
+}
+
+} // closing anonymous implementation namespace
+
+
+
+// component helper namespace
+namespace comp_librdf_Repository {
+
+::rtl::OUString SAL_CALL _getImplementationName() {
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+        "librdf_Repository"));
+}
+
+uno::Sequence< ::rtl::OUString > SAL_CALL _getSupportedServiceNames()
+{
+    uno::Sequence< ::rtl::OUString > s(1);
+    s[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+        "com.sun.star.rdf.Repository"));
+    return s;
+}
+
+uno::Reference< uno::XInterface > SAL_CALL _create(
+    const uno::Reference< uno::XComponentContext > & context)
+        SAL_THROW((uno::Exception))
+{
+    return static_cast< ::cppu::OWeakObject * >(new librdf_Repository(context));
+}
+
+} // closing component helper namespace
+

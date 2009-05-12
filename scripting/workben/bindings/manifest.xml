@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE manifest:manifest PUBLIC "-//OpenOffice.org//DTD Manifest 1.0//EN" "Manifest.dtd">
+<manifest:manifest xmlns:manifest="http://openoffice.org/2001/manifest">
+ <manifest:file-entry manifest:media-type="" manifest:full-path="/"/>
+ <manifest:file-entry manifest:media-type="" manifest:full-path="writermenubar.xml"/>
+ <manifest:file-entry manifest:media-type="" manifest:full-path="writerkeybinding.xml"/>
+ <manifest:file-entry manifest:media-type="" manifest:full-path="calcmenubar.xml"/>
+ <manifest:file-entry manifest:media-type="" manifest:full-path="calckeybinding.xml"/>
+ <manifest:file-entry manifest:media-type="" manifest:full-path="impressmenubar.xml"/>
+ <manifest:file-entry manifest:media-type="" manifest:full-path="impresskeybinding.xml"/>
+ <manifest:file-entry manifest:media-type="" manifest:full-path="drawmenubar.xml"/>
+ <manifest:file-entry manifest:media-type="" manifest:full-path="drawkeybinding.xml"/>
+ <manifest:file-entry manifest:media-type="" manifest:full-path="eventbindings.xml"/>
+</manifest:manifest>

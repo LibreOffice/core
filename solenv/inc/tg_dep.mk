@@ -8,7 +8,7 @@
 #
 # $RCSfile: tg_dep.mk,v $
 #
-# $Revision: 1.30 $
+# $Revision: 1.30.166.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -32,12 +32,12 @@
 .IF "$(SLOFILES)$(OBJFILES)$(DEPOBJFILES)$(SRCFILES)$(SRC1FILES)$(SRC2FILES)$(SRC3FILES)$(RCFILES)$(HDBDEPNTARGET)$(IDLFILES)$(PARFILES)$(ZIP1TARGET)$(ZIP2TARGET)$(ZIP3TARGET)$(ZIP4TARGET)$(ZIP5TARGET)$(ZIP6TARGET)$(ZIP7TARGET)$(ZIP8TARGET)$(ZIP9TARGET)$(COMP1TYPELIST)$(COMP2TYPELIST)$(COMP3TYPELIST)$(COMP4TYPELIST)$(COMP5TYPELIST)$(COMP6TYPELIST)$(COMP7TYPELIST)$(COMP8TYPELIST)$(COMP9TYPELIST)"!=""
 ALLDEP .PHONY: 
 .IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
-    @-$(IFEXIST) $(SRS)$/$(PWD:f).*.dpr $(THEN) $(RM:s/+//) $(SRS)$/$(PWD:f).*.dpr >& $(NULLDEV) $(FI)
+    @-$(IFEXIST) $(SRS)$/$(TARGET).*.dpr $(THEN) $(RM:s/+//) $(SRS)$/$(TARGET).*.dpr >& $(NULLDEV) $(FI)
 .ELSE
-    @@-$(RM) $(SRS)$/$(PWD:f).*.dpr
+    @@-$(RM) $(SRS)$/$(TARGET).*.dpr
 .ENDIF
     @@-$(RM) $(MISC)$/$(TARGET).dpr
-    @@-$(RM) $(MISC)$/$(PWD:f).*.dprr
+    @@-$(RM) $(MISC)$/$(TARGET).*.dprr
     @@-$(RM) $(MISC)$/$(TARGET).dpj
     @@-$(RM) $(MISC)$/$(TARGET).dpz
     @@-$(RM) $(MISC)$/$(COMP1TYPELIST).mk $(MISC)$/$(COMP2TYPELIST).mk $(MISC)$/$(COMP3TYPELIST).mk $(MISC)$/$(COMP4TYPELIST).mk $(MISC)$/$(COMP5TYPELIST).mk $(MISC)$/$(COMP6TYPELIST).mk $(MISC)$/$(COMP7TYPELIST).mk $(MISC)$/$(COMP8TYPELIST).mk $(MISC)$/$(COMP9TYPELIST).mk

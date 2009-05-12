@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+                  "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+<article>
+<articleinfo>
+<title>Unit Test: variablelist.001</title>
+<releaseinfo role="CVS">$Id: variablelist.001.xml,v 1.2 2008-07-11 08:02:17 rt Exp $</releaseinfo>
+<author><firstname>Norman</firstname><surname>Walsh</surname>
+        <affiliation><address><email>ndw@nwalsh.com</email></address></affiliation>
+</author>
+</articleinfo>
+
+<variablelist>
+<?dbfo list-presentation="list" term-width="1.25in" ?>
+<varlistentry>
+<term>short</term>
+<listitem>
+<para>A single short term with a description.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>more</term>
+<listitem>
+<para>Another single short term with a description.
+</para>
+<para>Another paragraph of description.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>again</term>
+<listitem>
+<para>YASSTWAD.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>short</term>
+<listitem>
+<para>A single short term with a description.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>more</term>
+<term>more</term>
+<term>more</term>
+<term>more</term>
+<listitem>
+<para>Several short terms in the same VLE.
+</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>I'm still not satisfied.</term>
+<listitem>
+<para>A single long term with a description.
+</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+</article>

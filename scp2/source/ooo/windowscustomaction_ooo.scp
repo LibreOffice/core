@@ -30,6 +30,24 @@
 
 #include "macros.inc"
 
+WindowsCustomAction gid_Customaction_RenamePrgFolder
+	Name = "RenamePrgFolder";
+	Typ = "1";
+	Source = "shlxtmsi.dll";
+	Target = "RenamePrgFolder";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "VersionNT >= 600 And OLDPRODUCTSSAMEMAJOR And Not REMOVE=\"ALL\" And Not PATCH", "ValidateProductID");
+End
+
+WindowsCustomAction gid_Customaction_RemovePrgFolder
+	Name = "RemovePrgFolder";
+	Typ = "1";
+	Source = "shlxtmsi.dll";
+	Target = "RemovePrgFolder";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "VersionNT >= 600 And OLDPRODUCTSSAMEMAJOR And Not REMOVE=\"ALL\" And Not PATCH", "end");
+End
+
 WindowsCustomAction gid_Customaction_Regallmsdocdll
 	Name = "Regallmsdocdll";
 	Typ = "65";
@@ -81,7 +99,7 @@ WindowsCustomAction gid_Customaction_sdqsmsidll
 	Source = "sdqsmsi.dll";
 	Target = "ShutDownQuickstarter";
 	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "REMOVE=\"ALL\" And Not PATCH", "InstallInitialize");
+	Assignment1 = ("InstallExecuteSequence", "", "IsOfficeRunning");
 End
 
 WindowsCustomAction gid_Customaction_qslnkmsidll
@@ -212,28 +230,9 @@ WindowsCustomAction gid_Customaction_Check_Install_Directory
 	Source = "shlxtmsi.dll";
 	Target = "CheckInstallDirectory";
 	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "Not Installed", "ExitInstallDirNotEmpty");
+	Assignment1 = ("InstallExecuteSequence", "Not Installed", "CheckVersions");
 	Assignment2 = ("ControlEvent", "SetupType", "Next", "DoAction", "CheckInstallDirectory", "_IsSetupTypeMin = \"Typical\" And Not Installed", "2");
 	Assignment3 = ("ControlEvent", "CustomSetup", "Next", "DoAction", "CheckInstallDirectory", "Not Installed", "2");
-End
-
-WindowsCustomAction gid_Customaction_Create_Layerlinks
-	Name = "CreateLayerLinks";
-	Typ = "65";
-	Source = "shlxtmsi.dll";
-	Target = "CreateLayerLinks";
-	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\"", "behind_InstallFinalize");
-	Assignment2 = ("AdminExecuteSequence", "", "behind_SetUreInstallLocation");
-End
-
-WindowsCustomAction gid_Customaction_Remove_Layerlinks
-	Name = "RemoveLayerLinks";
-	Typ = "65";
-	Source = "shlxtmsi.dll";
-	Target = "RemoveLayerLinks";
-	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "REMOVE=\"ALL\"", "behind_CreateLayerLinks");
 End
 
 WindowsCustomAction gid_Customaction_Dotnetcheck
@@ -254,6 +253,16 @@ WindowsCustomAction gid_Customaction_CopyEditionData
     Inbinarytable = 1;
     Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\"", "end");
     Assignment2 = ("AdminExecuteSequence", "", "end");
+End
+
+WindowsCustomAction gid_Customaction_CopyExtensionData
+    Name = "CopyExtensionData";
+    Typ = "1";
+    Source = "shlxtmsi.dll";
+    Target = "copyExtensionData";
+    Inbinarytable = 1;
+    Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\"", "RegisterExtensions");
+    Assignment2 = ("AdminExecuteSequence", "", "RegisterExtensions");
 End
 
 WindowsCustomAction gid_Customaction_RegCleanOld
@@ -292,6 +301,25 @@ WindowsCustomAction gid_Customaction_Patch_InstallExchangeFiles
 	Inbinarytable = 1;
 	Assignment1 = ("InstallExecuteSequence", "Not Installed", "behind_InstallFinalize");
 	Assignment2 = ("AdminExecuteSequence", "", "behind_InstallFinalize");
+End
+
+WindowsCustomAction gid_Customaction_Langpack_Register_Extensions
+	Name = "RegisterExtensions";
+	Typ = "65";
+	Source = "lngpckinsthlp.dll";
+	Target = "RegisterExtensions";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "", "end");
+	Assignment2 = ("AdminExecuteSequence", "", "end");
+End
+
+WindowsCustomAction gid_Customaction_Langpack_Deregister_Extensions
+	Name = "DeregisterExtensions";
+	Typ = "65";
+	Source = "lngpckinsthlp.dll";
+	Target = "DeregisterExtensions";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "", "InstallInitialize");
 End
 
 WindowsCustomAction gid_Customaction_Patch_Register_Extensions
@@ -349,6 +377,33 @@ WindowsCustomAction gid_Customaction_Patch_Isofficerunning
 	Inbinarytable = 1;
 	Assignment1 = ("ControlEvent", "ReadyToInstall", "InstallNow", "DoAction", "IsOfficeRunning", "1", "1");
 	Assignment2 = ("InstallExecuteSequence", "", "RunningOffice");
+End
+
+WindowsCustomAction gid_Customaction_Full_Isofficerunning
+	Name = "IsOfficeRunning";
+	Typ = "65";
+	Source = "shlxtmsi.dll";
+	Target = "IsOfficeRunning";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "", "RunningOffice");
+End
+
+WindowsCustomAction gid_Customaction_Langpack_Isofficerunning
+	Name = "IsOfficeRunning";
+	Typ = "65";
+	Source = "lngpckinsthlp.dll";
+	Target = "IsOfficeRunning";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "PATCH", "RunningOffice");
+End
+
+WindowsCustomAction gid_Customaction_CheckPatchList
+	Name = "CheckPatchList";
+	Typ = "65";
+	Source = "shlxtmsi.dll";
+	Target = "CheckPatchList";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "PATCH", "Patch1NotInstalled");
 End
 
 WindowsCustomAction gid_Customaction_Patch_SetUserInstallMode

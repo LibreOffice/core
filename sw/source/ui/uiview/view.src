@@ -1,0 +1,391 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: view.src,v $
+ * $Revision: 1.52 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include <svx/svxids.hrc>
+#include <svx/globlmn.hrc>
+#include "view.hrc"
+#include "shells.hrc"
+#include "globals.hrc"
+#include "popup.hrc"
+#include "helpid.h"
+#include "cmdid.h"
+ImageButton BTN_PAGEUP
+{
+    SVLOOK = TRUE ;
+    HIDE = TRUE ;
+    RectStyle = TRUE ;
+    SmallStyle = TRUE ;
+    SYMBOL = IMAGEBUTTON_PAGEUP ;
+};
+ImageButton BTN_PAGEDOWN
+{
+    SVLOOK = TRUE ;
+    HIDE = TRUE ;
+    RectStyle = TRUE ;
+    SmallStyle = TRUE ;
+    SYMBOL = IMAGEBUTTON_PAGEDOWN ;
+};
+QueryBox DLG_WRAP
+{
+    BUTTONS = WB_YES_NO ;
+    DEFBUTTON = WB_DEF_YES ;
+    Message [ en-US ] = "Do you want to continue checking at the beginning of the document?" ;
+};
+QueryBox DLG_BODY
+{
+    BUTTONS = WB_YES_NO ;
+    DEFBUTTON = WB_DEF_NO ;
+    Message [ en-US ] = "Do you want to check the main text?" ;
+};
+QueryBox DLG_PRT_FIELDNAME
+{
+    BUTTONS = WB_YES_NO_CANCEL ;
+    DEFBUTTON = WB_DEF_CANCEL ;
+    Message [ en-US ] = "Show field commands option is checked.\nDo you want to print the document with field names?" ;
+};
+QueryBox DLG_SPECIAL
+{
+    BUTTONS = WB_YES_NO ;
+    DEFBUTTON = WB_DEF_NO ;
+    Message [ en-US ] = "Do you want check the special regions?" ;
+};
+QueryBox DLG_THESAURUS
+{
+    BUTTONS = WB_YES_NO ;
+    DEFBUTTON = WB_DEF_NO ;
+    Message [ en-US ] = "This word appears in the list of words you want to avoid! Start thesaurus?" ;
+};
+QueryBox DLG_SPECIAL_FORCED
+{
+    BUTTONS = WB_YES_NO ;
+    DEFBUTTON = WB_DEF_NO ;
+    Message [ en-US ] = "Check special regions is deactivated. Check anyway?" ;
+};
+QueryBox MSG_SEARCH_END
+{
+    Buttons = WB_YES_NO ;
+    DefButton = WB_DEF_YES ;
+    Message [ en-US ] = "%PRODUCTNAME Writer has searched to the end of the document. Do you want to continue at the beginning?" ;
+};
+QueryBox MSG_SEARCH_START
+{
+    Buttons = WB_YES_NO ;
+    DefButton = WB_DEF_YES ;
+    Message [ en-US ] = "%PRODUCTNAME Writer has searched to the beginning of the document. Do you want to continue at the end?" ;
+};
+InfoBox MSG_NO_MERGE_ENTRY
+{
+    Message [ en-US ] = "Could not merge documents." ;
+};
+InfoBox MSG_ERR_INSERT_GLOS
+{
+    Message [ en-US ] = "AutoText could not be created." ;
+};
+InfoBox MSG_ERR_SRCSTREAM
+{
+    Message [ en-US ] = "The source cannot be loaded." ;
+};
+InfoBox MSG_ERR_NO_FAX
+{
+    Message [ en-US ] = "No fax printer has been set under Tools/Options/%1/Print." ;
+};
+String STR_WEBOPTIONS
+{
+    Text [ en-US ] = "HTML document";
+};
+String STR_TEXTOPTIONS
+{
+    Text [ en-US ] = "Text document";
+};
+InfoBox MSG_NOT_FOUND
+{
+    Message [ en-US ] = "Search key not found." ;
+};
+InfoBox MSG_INDEX_OVERFLOW
+{
+    Message [ en-US ] = "found." ;
+};
+InfoBox MSG_SCAN_NOSOURCE
+{
+    Message [ en-US ] = "Source not specified." ;
+};
+String STR_NOGLOS1
+{
+    Text [ en-US ] = "AutoText for Shortcut '" ;
+};
+String STR_NOGLOS2
+{
+    /* ### ACHTUNG: Neuer Text in Resource? ' nicht gefunden. : '' nicht gefunden. */
+    /* ### ACHTUNG: Neuer Text in Resource? ' nicht gefunden. : '' nicht gefunden. */
+    /* ### ACHTUNG: Neuer Text in Resource? ' nicht gefunden. : '' nicht gefunden. */
+    /* ### ACHTUNG: Neuer Text in Resource? ' nicht gefunden. : '' nicht gefunden. */
+    Text [ en-US ] = "' not found." ;
+};
+String STR_NUM_LEVEL
+{
+    Text [ en-US ] = "Level " ;
+};
+//#outline level,zhaojianwei
+String STR_NUM_OUTLINE
+{
+    Text [ en-US ] = "Outline ";
+};//<-end,zhaojianwei
+// <--
+String STR_ERROR_NOLANG
+{
+    Text [ en-US ] = "No language is selected in the proofed section." ;
+};
+String STR_EDIT_FOOTNOTE
+{
+    Text [ en-US ] = "Edit Footnote/Endnote" ;
+};
+String STR_NB_REPLACED
+{
+    Text [ en-US ] = "Search key replaced XX times." ;
+};
+String RID_TOOLS_TOOLBOX
+{
+    Text [ en-US ] = "Main Toolbar" ;
+};
+String STR_SRCVIEW_ROW
+{
+    Text [ en-US ] = "Row " ;
+};
+String STR_SRCVIEW_COL
+{
+    Text [ en-US ] = "Column " ;
+};
+String STR_PRINT_TITLE
+{
+    Text [ en-US ] = "Printing selection";
+};
+String STR_PRINT_MSG
+{
+    Text [ en-US ] = "Do you want to print the selection or the entire document?";
+};
+String STR_PRINT_ALL
+{
+    Text [ en-US ] = "All";
+};
+String STR_PRINT_SELECTION
+{
+    Text [ en-US ] = "Selection";
+};
+String STR_READONLY_SEL
+{
+    Text [ en-US ] = "read-only";
+};
+String STR_SAVEAS_SRC
+{
+    Text [ en-US ] = "~Export source..." ;
+};
+String MN_SRCVIEW_POPUPMENU
+{
+    Text [ en-US ] = "HTML source" ;
+};
+
+ToolBox RID_TOOLS_TOOLBOX
+{
+    HelpID = HID_TOOLS_TOOLBOX ;
+    Border = TRUE ;
+    SVLook = TRUE ;
+    Dockable = TRUE ;
+    Moveable = TRUE ;
+    Sizeable = TRUE ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+    LineSpacing = TRUE ;
+    HideWhenDeactivate = TRUE ;
+    Customize = TRUE ;
+    MenuStrings = TRUE ;
+    Scroll = TRUE ;
+    Align = BOXALIGN_LEFT ;
+    Hide = TRUE ;
+    ItemList =
+    {
+        ToolBoxItem
+        {
+            Identifier = FN_INSERT_CTRL ;
+            HelpID = HID_INSERT_CTRL ;
+            DropDown = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_INSERT_FIELD_CTRL ;
+            HelpID = HID_INSERT_FIELD_CTRL ;
+            DropDown = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_INSERT_OBJ_CTRL ;
+            HelpID = HID_INSERT_OBJ_CTRL ;
+            DropDown = TRUE ;
+        };
+        ToolBoxItem
+        {
+            ITEM_TOOLBAR_INSERT_DRAW
+        };
+        ToolBoxItem
+        {
+            ITEM_FORM_CONFIG
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_GLOSSARY_DLG ;
+            HelpID = FN_GLOSSARY_DLG ;
+            DropDown = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_INSERT_CAPTION;
+            HelpID = FN_INSERT_CAPTION ;
+            Hide = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_INSERT_IDX_ENTRY_DLG;
+            HelpId = FN_INSERT_IDX_ENTRY_DLG;
+            Hide = TRUE;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_INSERT_REF_FIELD;
+            HelpID = FN_INSERT_REF_FIELD ;
+            Hide = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_SHADOWCURSOR ;
+            HelpID = FN_SHADOWCURSOR ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_SPELL_GRAMMAR_DIALOG;
+            HelpID = FN_SPELL_GRAMMAR_DIALOG;
+        };
+        ToolBoxItem
+        {
+            ITEM_TOOLBAR_AUTOSPELL_CHECK
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_HYPHENATE_OPT_DLG;
+            HelpID = FN_HYPHENATE_OPT_DLG;
+            Hide = TRUE;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_THESAURUS_DLG;
+            HelpID = FN_THESAURUS_DLG;
+            Hide = TRUE;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_SEARCH_DLG ;
+            HelpID = SID_SEARCH_DLG ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_VIEW_DATA_SOURCE_BROWSER ;
+            HelpID = SID_VIEW_DATA_SOURCE_BROWSER ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_ZOOM;
+            HelpID = SID_ATTR_ZOOM ;
+            Hide = TRUE;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_VIEW_META_CHARS ;
+            HelpID = FN_VIEW_META_CHARS ;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_VIEW_FIELDNAME ;
+            HelpID = FN_VIEW_FIELDNAME ;
+            Hide = TRUE;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_VIEW_GRAPHIC ;
+            HelpID = FN_VIEW_GRAPHIC ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_BROWSER_MODE ;
+            HelpID = SID_BROWSER_MODE ;
+        };
+    };
+};
+Menu MN_SRCVIEW_POPUPMENU
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            ITEM_FORMAT_ATTR_CHAR_FONT
+        };
+        MenuItem
+        {
+            ITEM_FORMAT_ATTR_CHAR_FONTHEIGHT
+        };
+        MenuItem
+        {
+            Separator = TRUE ;
+        };
+        MenuItem
+        {
+            Identifier = SID_SOURCEVIEW ;
+            HelpID = HID_SOURCEVIEW ;
+            Text [ en-US ] = "HTML Source" ;
+        };
+    };
+};

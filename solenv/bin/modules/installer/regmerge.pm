@@ -242,11 +242,29 @@ sub merge_files
 
         my @regmergeoutput = ();
 
+        my $var_library_path;
+        my $old_library_path;
+        if ($installer::globals::isunix) {
+            $var_library_path = $installer::globals::ismacosx ?
+                'DYLD_LIBRARY_PATH' : 'LD_LIBRARY_PATH';
+            $old_library_path = $ENV{$var_library_path};
+            installer::servicesfile::include_libdir_into_ld_library_path(
+                $var_library_path, $regmergefile);
+        }
+
         open (REG, "$systemcall");
         while (<REG>) {push(@regmergeoutput, $_); }
         close (REG);
 
         my $returnvalue = $?;   # $? contains the return value of the systemcall
+
+        if (defined $var_library_path) {
+            if (defined $old_library_path) {
+                $ENV{$var_library_path} = $old_library_path;
+            } else {
+                delete $ENV{$var_library_path};
+            }
+        }
 
         my $infoline = "Systemcall: $systemcall\n";
         push( @installer::globals::logfileinfo, $infoline);

@@ -8,7 +8,7 @@
 #
 # $RCSfile: tg_srs.mk,v $
 #
-# $Revision: 1.26 $
+# $Revision: 1.26.164.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -47,11 +47,11 @@ ALLTAR : $(HIDSRS$(TNR)PARTICLE)
 
 .ENDIF # "$(BUILDHIDS)"!=""
 
-$(MISC)$/$(PWD:f).$(SRS$(TNR)NAME).dprr: $(SRC$(TNR)FILES) $(HIDSRS$(TNR)PARTICLE) $(HID$(TNR)FILES)
+$(MISC)$/$(TARGET).$(SRS$(TNR)NAME).dprr: $(SRC$(TNR)FILES) $(HIDSRS$(TNR)PARTICLE) $(HID$(TNR)FILES)
     @echo ------------------------------
     @echo Making: $@
-    @@-$(RM) $(MISC)$/$(PWD:f).$(SRS$(TNR)NAME).dprr
-    $(RSC) $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) -I$(INCLOCPRJ)  -I$(INCLOCAL) -I$(INC) -I$(INCCOM) $(RSCDEFS) $(RSCUPDVERDEF) -fp={$(SRS)$/$(SRS$(TNR)NAME).srs} -fo=$@ $(SRC$(TNR)FILES)
+    @@-$(RM) $(MISC)$/$(TARGET).$(SRS$(TNR)NAME).dprr
+    $(RSC) $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) -I$(INCLOCPRJ)  -I$(INCLOCAL) -I$(INC) -I$(INCCOM) $(RSCDEFS) $(RSCUPDVERDEF) -fp={$(SRS)$/$(SRS$(TNR)NAME).srs} -fo=$@ -p=$(TARGET) $(SRC$(TNR)FILES)
 
 .IF "$(WITH_LANG)"!=""
 $(foreach,i,$(SRC$(TNR)FILES) $(COMMONMISC)$/$(TARGET)$/$i) : $$(@:f) localize.sdf 

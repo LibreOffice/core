@@ -1,0 +1,1548 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: objdraw.src,v $
+ * $Revision: 1.72.144.1 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "sc.hrc"
+#include "submenu.hrc"
+#include <svx/globlmn.hrc>
+ //
+ // Defines -------------------------------------------------------------------------------
+ //
+#define MN_RESET\
+    MenuItem\
+    {\
+        Identifier = SID_TEXT_STANDARD ; \
+        HelpID = SID_TEXT_STANDARD ; \
+        Text [ en-US ] = "~Default" ; \
+        Text [ x-comment ] = " ";\
+    };
+
+ // Font (SID_ATTR_CHAR_FONT) und Groesse (SID_ATTR_CHAR_FONTHEIGHT) duerfen nicht im
+ // Formatmenue auftauchen, weil die Controller im ExeEnv sonst im Container angelegt werden
+#define MN_TEXT_ATTR\
+    MenuItem\
+    {\
+        Identifier = RID_MN_FORMAT_STYLE ; \
+        HelpID = RID_MN_FORMAT_STYLE ; \
+        Text [ en-US ] = "~Style" ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_ATTR_CHAR_WEIGHT\
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_ATTR_CHAR_POSTURE\
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_ATTR_CHAR_OVERLINE\
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_ATTR_CHAR_UNDERLINE\
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_ATTR_CHAR_STRIKEOUT\
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_ATTR_CHAR_SHADOWED\
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_ATTR_CHAR_CONTOUR\
+                };\
+                MenuItem\
+                {\
+                    Separator = TRUE ; \
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_SET_SUPER_SCRIPT ; \
+                    HelpID = SID_SET_SUPER_SCRIPT ; \
+                    Text [ en-US ] = "~Superscript" ; \
+                    Text [ x-comment ] = " ";\
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_SET_SUB_SCRIPT ; \
+                    HelpID = SID_SET_SUB_SCRIPT ; \
+                    Text [ en-US ] = "S~ubscript" ; \
+                    Text [ x-comment ] = " ";\
+                };\
+            };\
+        };\
+        Text [ x-comment ] = " ";\
+    };\
+    MenuItem\
+    {\
+        Identifier = RID_MN_FORMAT_ALGN ; \
+        HelpID = RID_MN_FORMAT_ALGN ; \
+        Text [ en-US ] = "~Alignment" ; \
+        RadioCheck = TRUE ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MenuItem\
+                {\
+                    Identifier = SID_ALIGNLEFT ; \
+                    HelpID = SID_ATTR_PARA_ADJUST_LEFT ; \
+                    RadioCheck = TRUE ; \
+                    Text [ en-US ] = "~Left" ;\
+                    Text [ x-comment ] = " ";   \
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_ALIGNRIGHT ; \
+                    HelpID = SID_ATTR_PARA_ADJUST_RIGHT ; \
+                    RadioCheck = TRUE ; \
+                    Text [ en-US ] = "~Right" ;\
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_ALIGNCENTERHOR ; \
+                    HelpID = SID_ATTR_PARA_ADJUST_CENTER ; \
+                    RadioCheck = TRUE ; \
+                    Text [ en-US ] = "~Centered" ;\
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_ALIGNBLOCK ; \
+                    HelpID = SID_ATTR_PARA_ADJUST_BLOCK ; \
+                    RadioCheck = TRUE ; \
+                    Text [ en-US ] = "~Justified" ; \
+                    Text [ x-comment ] = " ";\
+                };\
+            };\
+        };\
+        Text [ x-comment ] = " ";\
+    };\
+    MenuItem\
+    {\
+        Identifier = RID_MN_FORMAT_LINESPACE ; \
+        HelpID = RID_MN_FORMAT_LINESPACE ; \
+        Text [ en-US ] = "~Line Spacing" ; \
+        _MenuItemFlags = MIB_RADIOCHECK ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_PARA_LINESPACE_10\
+                    RadioCheck = TRUE ; \
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_PARA_LINESPACE_15\
+                    RadioCheck = TRUE ; \
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_PARA_LINESPACE_20\
+                    RadioCheck = TRUE ; \
+                };\
+            };\
+        };\
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_DRWTXT \
+    MenuItem\
+    {\
+        ITEM_FORMAT_CHAR_DLG\
+    };\
+    MenuItem\
+    {\
+        ITEM_FORMAT_PARA_DLG\
+    };
+
+#ifdef ISSUE66550_HLINK_FOR_SHAPES
+#define MN_EDITLNK \
+    MenuItem\
+    {\
+        Identifier = SID_DRAW_HLINK_EDIT ; \
+        HelpID = SID_DRAW_HLINK_EDIT ; \
+        Text [ en-US ] = "~Hyperlink..." ; \
+    };
+
+#define MN_DELLNK \
+    MenuItem\
+    {\
+        Identifier = SID_DRAW_HLINK_DELETE ; \
+        HelpID = SID_DRAW_HLINK_DELETE ; \
+        Text [ en-US ] = "~Remove Hyperlink" ; \
+    };
+#endif
+
+#define MN_DRWTXTATTR \
+    MenuItem\
+    {\
+        Identifier = SID_DRAWTEXT_ATTR_DLG ; \
+        HelpID = SID_DRAWTEXT_ATTR_DLG ; \
+        Text [ en-US ] = "Te~xt..." ; \
+        /* ### ACHTUNG: Neuer Text in Resource? Textattribute für die selektierten Textobjekte festlegen : Textattribute f³r die selektierten Textobjekte festlegen */\
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_ASSIGNMACRO \
+     MenuItem\
+     {\
+         Identifier = SID_ASSIGNMACRO ; \
+         HelpID = SID_ASSIGNMACRO ; \
+         Text [ en-US ] = "Assig~n Macro..." ; \
+         Text [ x-comment ] = " ";\
+     };
+
+#define MN_ORIGINALSIZE \
+    MenuItem\
+    {\
+        Identifier = SID_ORIGINALSIZE ; \
+        HelpId = SID_ORIGINALSIZE ; \
+        /* ### ACHTUNG: Neuer Text in Resource? Originalgröße : Originalgr÷˜e */\
+        Text [ en-US ] = "~Original Size" ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_RENAME_OBJECT \
+    MenuItem\
+    {\
+        Identifier = SID_RENAME_OBJECT ; \
+        HelpId = SID_RENAME_OBJECT ; \
+        Text [ en-US ] = "Name...";\
+    };
+
+// #i68101#
+#define MN_TITLE_DESCRIPTION_OBJECT \
+    MenuItem\
+    {\
+        Identifier = SID_TITLE_DESCRIPTION_OBJECT; \
+        HelpId = SID_TITLE_DESCRIPTION_OBJECT; \
+        Text [ en-US ] = "Description...";\
+    };
+
+#define MN_MIRRORSUB \
+    MenuItem\
+    {\
+        Identifier = SUBMENU_OBJMIRROR ; \
+        HelpID = HID_SCMENU_OBJMIRROR ; \
+        Text [ en-US ] = "~Flip" ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MenuItem\
+                {\
+                    Identifier = SID_MIRROR_VERTICAL ; \
+                    HelpId = SID_MIRROR_VERTICAL ; \
+                    Text [ en-US ] = "~Vertically" ; \
+                    Text [ x-comment ] = " ";\
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_MIRROR_HORIZONTAL ; \
+                    HelpId = SID_MIRROR_HORIZONTAL ; \
+                    Text [ en-US ] = "~Horizontal" ; \
+                    Text [ x-comment ] = " ";\
+                };\
+            };\
+        };\
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_ARRANGESUB \
+    MenuItem\
+    {\
+        Identifier = SUBMENU_OBJARRANGE ; \
+        HelpID = HID_SCMENU_OBJARRANGE ; \
+        Text [ en-US ] = "~Arrange" ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_FRAME_TO_TOP\
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_FRAME_UP ; \
+                    HelpId = SID_FRAME_UP ; \
+                    /* ### ACHTUNG: Neuer Text in Resource? W~eiter nach vorn : Weiter nach vorn */\
+                    Text [ en-US ] = "Bring ~Forward" ; \
+                    Text [ x-comment ] = " ";\
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_FRAME_DOWN ; \
+                    HelpId = SID_FRAME_DOWN ; \
+                    /* ### ACHTUNG: Neuer Text in Resource? Weiter ~nach hinten : Weiter nach hinten */\
+                    Text [ en-US ] = "Send Back~ward" ; \
+                    Text [ x-comment ] = " ";\
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_FRAME_TO_BOTTOM\
+                };\
+                MenuItem { Separator = TRUE ; }; \
+                MenuItem\
+                {\
+                    ITEM_FORMAT_OBJECT_HEAVEN\
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_OBJECT_HELL\
+                };\
+            };\
+        };\
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_ANCHORSUB \
+    MenuItem\
+    {\
+        Identifier = SUBMENU_ANCHOR ; \
+        HelpID = HID_SCMENU_ANCHOR ; \
+        Text [ en-US ] = "An~chor" ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MenuItem\
+                {\
+                    Identifier = SID_ANCHOR_PAGE ; \
+                    HelpId = SID_ANCHOR_PAGE ; \
+                    Text [ en-US ] = "To P~age" ; \
+                    Text [ x-comment ] = " ";\
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_ANCHOR_CELL ; \
+                    HelpId = SID_ANCHOR_CELL ; \
+                    Text [ en-US ] = "To ~Cell" ; \
+                    Text [ x-comment ] = " ";\
+                };\
+            };\
+        };\
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_ALIGNSUB \
+    MenuItem\
+    {\
+        Identifier = SID_OBJECT_ALIGN ; \
+        HelpId = SID_OBJECT_ALIGN ; \
+        Text [ en-US ] = "A~lignment" ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_OBJECT_ALIGN_LEFT\
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_OBJECT_ALIGN_CENTER\
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_OBJECT_ALIGN_RIGHT\
+                };\
+                MenuItem\
+                {\
+                    Separator = TRUE ; \
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_OBJECT_ALIGN_UP\
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_OBJECT_ALIGN_MIDDLE\
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_OBJECT_ALIGN_DOWN\
+                };\
+            };\
+        };\
+        Text [ x-comment ] = " ";\
+    };
+
+ //
+ // ------------------------------------------------------------------------------
+ //
+ //
+ //     Objekt-Leisten
+ //
+String RID_DRAW_OBJECTBAR
+{
+    Text [ en-US ] = "Drawing Object Bar" ;
+    Text [ x-comment ] = " ";
+};
+ToolBox RID_DRAW_OBJECTBAR
+{
+    HelpId = HID_SC_TOOLBOX_DRAW ;
+    Dockable = TRUE ;
+    Moveable = TRUE ;
+    Sizeable = TRUE ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+    Customize = TRUE ;
+    HideWhenDeactivate = TRUE ;
+    LineSpacing = TRUE ;
+    Border = TRUE ;
+    SVLook = TRUE ;
+    MenuStrings = TRUE ;
+    ItemList =
+    {
+        ToolBoxItem
+        {
+            Identifier = SID_BEZIER_EDIT ;
+            HelpID = SID_BEZIER_EDIT ;
+
+        };
+         //---------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //---------------------------------------------
+         // Linien
+        ToolBoxItem
+        {
+            Identifier = SID_ATTRIBUTES_LINE ;
+            HelpId = SID_ATTRIBUTES_LINE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_LINEEND_STYLE ;
+            HelpID = SID_ATTR_LINEEND_STYLE ;
+        };
+         //---------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //---------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_LINE_STYLE ;
+            HelpId = SID_ATTR_LINE_STYLE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_LINE_WIDTH ;
+            HelpId = SID_ATTR_LINE_WIDTH ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_LINE_COLOR ;
+            HelpId = SID_ATTR_LINE_COLOR ;
+        };
+         //---------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //---------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_ATTRIBUTES_AREA ;
+            HelpId = SID_ATTRIBUTES_AREA ;
+        };
+         //---------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //---------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_FILL_STYLE ;
+            HelpId = SID_ATTR_FILL_STYLE ;
+        };
+         //---------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //---------------------------------------------
+         // Rest
+        ToolBoxItem
+        {
+            Identifier = SID_OBJECT_ROTATE ;
+            HelpId = SID_OBJECT_ROTATE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ANCHOR_TOGGLE ;
+            HelpId = SID_ANCHOR_TOGGLE ;
+        };
+         //---------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //---------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_FRAME_TO_TOP ;
+            HelpId = SID_FRAME_TO_TOP ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_FRAME_TO_BOTTOM ;
+            HelpId = SID_FRAME_TO_BOTTOM ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_OBJECT_HEAVEN ;
+            HelpID = SID_OBJECT_HEAVEN ;
+
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_OBJECT_HELL ;
+            HelpID = SID_OBJECT_HELL ;
+
+        };
+
+         //---------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //---------------------------------------------
+
+        ToolBoxItem
+        {
+            Identifier = SID_GRID_VISIBLE;
+            HelpID = SID_GRID_VISIBLE;
+            Hide = TRUE;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_GRID_USE;
+            HelpID = SID_GRID_USE;
+            Hide = TRUE;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_HELPLINES_MOVE;
+            HelpID = SID_HELPLINES_MOVE;
+            Hide = TRUE;
+        };
+
+         //---------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //---------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_OBJECT_ALIGN ;
+            HelpId = SID_OBJECT_ALIGN ;
+        };
+    };
+    Scroll = TRUE ;
+};
+ //
+ // Text-Toolbox
+ //
+String RID_TEXT_TOOLBOX
+{
+    Text [ en-US ] = "Text Object Bar" ;
+    Text [ x-comment ] = " ";
+};
+ToolBox RID_TEXT_TOOLBOX
+{
+    HelpId = HID_SC_TOOLBOX_DRTEXT ;
+    LineSpacing = TRUE ;
+    Dockable = TRUE ;
+    Moveable = TRUE ;
+    Sizeable = TRUE ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+    Scroll = TRUE ;
+    Customize = TRUE ;
+    HideWhenDeactivate = TRUE ;
+    Border = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 0 , 0 ) ;
+    Align = BOXALIGN_TOP ;
+    MenuStrings = TRUE ;
+    ItemList =
+    {
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_CHAR_FONT ;
+            HelpId = SID_ATTR_CHAR_FONT ;
+        };
+         //---------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //---------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_CHAR_FONTHEIGHT ;
+            HelpId = SID_ATTR_CHAR_FONTHEIGHT ;
+        };
+         //---------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //---------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_CHAR_WEIGHT ;
+            HelpId = SID_ATTR_CHAR_WEIGHT ;
+            AutoCheck = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_CHAR_POSTURE ;
+            HelpId = SID_ATTR_CHAR_POSTURE ;
+            AutoCheck = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_CHAR_UNDERLINE ;
+            HelpId = SID_ATTR_CHAR_UNDERLINE ;
+            AutoCheck = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ULINE_VAL_DOUBLE;
+            HelpId = SID_ULINE_VAL_DOUBLE;
+            AutoCheck = TRUE ;
+            Hide=TRUE;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_CHAR_COLOR ;
+            HelpId = SID_ATTR_CHAR_COLOR ;
+        };
+         //---------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //---------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_PARA_LINESPACE_10 ;
+            HelpId = SID_ATTR_PARA_LINESPACE_10 ;
+            RadioCheck = TRUE ;
+            AutoCheck = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_PARA_LINESPACE_15 ;
+            HelpId = SID_ATTR_PARA_LINESPACE_15 ;
+            RadioCheck = TRUE ;
+            AutoCheck = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_PARA_LINESPACE_20 ;
+            HelpId = SID_ATTR_PARA_LINESPACE_20 ;
+            RadioCheck = TRUE ;
+            AutoCheck = TRUE ;
+        };
+         //---------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //---------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_ALIGNLEFT ;
+            HelpId = SID_ATTR_PARA_ADJUST_LEFT ;
+            RadioCheck = TRUE ;
+            AutoCheck = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ALIGNCENTERHOR ;
+            HelpId = SID_ATTR_PARA_ADJUST_CENTER ;
+            RadioCheck = TRUE ;
+            AutoCheck = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ALIGNRIGHT ;
+            HelpId = SID_ATTR_PARA_ADJUST_RIGHT ;
+            RadioCheck = TRUE ;
+            AutoCheck = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ALIGNBLOCK ;
+            HelpId = SID_ATTR_PARA_ADJUST_BLOCK ;
+            RadioCheck = TRUE ;
+            AutoCheck = TRUE ;
+        };
+         //---------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //---------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_PARA_LEFT_TO_RIGHT;
+            HelpID = SID_ATTR_PARA_LEFT_TO_RIGHT;
+            RadioCheck = TRUE;
+            Hide = TRUE;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_PARA_RIGHT_TO_LEFT;
+            HelpID = SID_ATTR_PARA_RIGHT_TO_LEFT;
+            RadioCheck = TRUE;
+            Hide = TRUE;
+        };
+         //---------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //---------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_SET_SUPER_SCRIPT ;
+            HelpID = SID_SET_SUPER_SCRIPT ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_SET_SUB_SCRIPT ;
+            HelpID = SID_SET_SUB_SCRIPT ;
+        };
+         //---------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //---------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_TEXTDIRECTION_LEFT_TO_RIGHT ;
+            HelpID = SID_TEXTDIRECTION_LEFT_TO_RIGHT ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_TEXTDIRECTION_TOP_TO_BOTTOM ;
+            HelpID = SID_TEXTDIRECTION_TOP_TO_BOTTOM ;
+        };
+         //---------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //---------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_CHAR_DLG ;
+            HelpID = SID_CHAR_DLG ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_PARA_DLG ;
+            HelpID = SID_PARA_DLG ;
+        };
+    };
+    ItemList[ ar ] =
+    {
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_CHAR_FONT ;
+            HelpId = SID_ATTR_CHAR_FONT ;
+        };
+         //---------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //---------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_CHAR_FONTHEIGHT ;
+            HelpId = SID_ATTR_CHAR_FONTHEIGHT ;
+        };
+         //---------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //---------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_CHAR_WEIGHT ;
+            HelpId = SID_ATTR_CHAR_WEIGHT ;
+            AutoCheck = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_CHAR_POSTURE ;
+            HelpId = SID_ATTR_CHAR_POSTURE ;
+            AutoCheck = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_CHAR_UNDERLINE ;
+            HelpId = SID_ATTR_CHAR_UNDERLINE ;
+            AutoCheck = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ULINE_VAL_DOUBLE;
+            HelpId = SID_ULINE_VAL_DOUBLE;
+            AutoCheck = TRUE ;
+            Hide=TRUE;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_CHAR_COLOR ;
+            HelpId = SID_ATTR_CHAR_COLOR ;
+        };
+         //---------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //---------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_PARA_LINESPACE_10 ;
+            HelpId = SID_ATTR_PARA_LINESPACE_10 ;
+            RadioCheck = TRUE ;
+            AutoCheck = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_PARA_LINESPACE_15 ;
+            HelpId = SID_ATTR_PARA_LINESPACE_15 ;
+            RadioCheck = TRUE ;
+            AutoCheck = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_PARA_LINESPACE_20 ;
+            HelpId = SID_ATTR_PARA_LINESPACE_20 ;
+            RadioCheck = TRUE ;
+            AutoCheck = TRUE ;
+        };
+         //---------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //---------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_ALIGNRIGHT ;
+            HelpId = SID_ATTR_PARA_ADJUST_RIGHT ;
+            RadioCheck = TRUE ;
+            AutoCheck = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ALIGNCENTERHOR ;
+            HelpId = SID_ATTR_PARA_ADJUST_CENTER ;
+            RadioCheck = TRUE ;
+            AutoCheck = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ALIGNLEFT ;
+            HelpId = SID_ATTR_PARA_ADJUST_LEFT ;
+            RadioCheck = TRUE ;
+            AutoCheck = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ALIGNBLOCK ;
+            HelpId = SID_ATTR_PARA_ADJUST_BLOCK ;
+            RadioCheck = TRUE ;
+            AutoCheck = TRUE ;
+        };
+         //---------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //---------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_PARA_RIGHT_TO_LEFT;
+            HelpID = SID_ATTR_PARA_RIGHT_TO_LEFT;
+            RadioCheck = TRUE;
+            Hide = TRUE;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_PARA_LEFT_TO_RIGHT;
+            HelpID = SID_ATTR_PARA_LEFT_TO_RIGHT;
+            RadioCheck = TRUE;
+            Hide = TRUE;
+        };
+         //---------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //---------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_SET_SUPER_SCRIPT ;
+            HelpID = SID_SET_SUPER_SCRIPT ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_SET_SUB_SCRIPT ;
+            HelpID = SID_SET_SUB_SCRIPT ;
+        };
+         //---------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //---------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_TEXTDIRECTION_LEFT_TO_RIGHT ;
+            HelpID = SID_TEXTDIRECTION_LEFT_TO_RIGHT ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_TEXTDIRECTION_TOP_TO_BOTTOM ;
+            HelpID = SID_TEXTDIRECTION_TOP_TO_BOTTOM ;
+        };
+         //---------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //---------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_CHAR_DLG ;
+            HelpID = SID_CHAR_DLG ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_PARA_DLG ;
+            HelpID = SID_PARA_DLG ;
+        };
+    };
+    ItemList[ he ] =
+    {
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_CHAR_FONT ;
+            HelpId = SID_ATTR_CHAR_FONT ;
+        };
+         //---------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //---------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_CHAR_FONTHEIGHT ;
+            HelpId = SID_ATTR_CHAR_FONTHEIGHT ;
+        };
+         //---------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //---------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_CHAR_WEIGHT ;
+            HelpId = SID_ATTR_CHAR_WEIGHT ;
+            AutoCheck = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_CHAR_POSTURE ;
+            HelpId = SID_ATTR_CHAR_POSTURE ;
+            AutoCheck = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_CHAR_UNDERLINE ;
+            HelpId = SID_ATTR_CHAR_UNDERLINE ;
+            AutoCheck = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ULINE_VAL_DOUBLE;
+            HelpId = SID_ULINE_VAL_DOUBLE;
+            AutoCheck = TRUE ;
+            Hide=TRUE;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_CHAR_COLOR ;
+            HelpId = SID_ATTR_CHAR_COLOR ;
+        };
+         //---------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //---------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_PARA_LINESPACE_10 ;
+            HelpId = SID_ATTR_PARA_LINESPACE_10 ;
+            RadioCheck = TRUE ;
+            AutoCheck = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_PARA_LINESPACE_15 ;
+            HelpId = SID_ATTR_PARA_LINESPACE_15 ;
+            RadioCheck = TRUE ;
+            AutoCheck = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_PARA_LINESPACE_20 ;
+            HelpId = SID_ATTR_PARA_LINESPACE_20 ;
+            RadioCheck = TRUE ;
+            AutoCheck = TRUE ;
+        };
+         //---------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //---------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_ALIGNRIGHT ;
+            HelpId = SID_ATTR_PARA_ADJUST_RIGHT ;
+            RadioCheck = TRUE ;
+            AutoCheck = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ALIGNCENTERHOR ;
+            HelpId = SID_ATTR_PARA_ADJUST_CENTER ;
+            RadioCheck = TRUE ;
+            AutoCheck = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ALIGNLEFT ;
+            HelpId = SID_ATTR_PARA_ADJUST_LEFT ;
+            RadioCheck = TRUE ;
+            AutoCheck = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ALIGNBLOCK ;
+            HelpId = SID_ATTR_PARA_ADJUST_BLOCK ;
+            RadioCheck = TRUE ;
+            AutoCheck = TRUE ;
+        };
+         //---------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //---------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_PARA_RIGHT_TO_LEFT;
+            HelpID = SID_ATTR_PARA_RIGHT_TO_LEFT;
+            RadioCheck = TRUE;
+            Hide = TRUE;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_PARA_LEFT_TO_RIGHT;
+            HelpID = SID_ATTR_PARA_LEFT_TO_RIGHT;
+            RadioCheck = TRUE;
+            Hide = TRUE;
+        };
+         //---------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //---------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_SET_SUPER_SCRIPT ;
+            HelpID = SID_SET_SUPER_SCRIPT ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_SET_SUB_SCRIPT ;
+            HelpID = SID_SET_SUB_SCRIPT ;
+        };
+         //---------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //---------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_TEXTDIRECTION_LEFT_TO_RIGHT ;
+            HelpID = SID_TEXTDIRECTION_LEFT_TO_RIGHT ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_TEXTDIRECTION_TOP_TO_BOTTOM ;
+            HelpID = SID_TEXTDIRECTION_TOP_TO_BOTTOM ;
+        };
+         //---------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //---------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_CHAR_DLG ;
+            HelpID = SID_CHAR_DLG ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_PARA_DLG ;
+            HelpID = SID_PARA_DLG ;
+        };
+    };
+};
+ //
+ // Graphics toolbox
+ //
+String RID_GRAPHIC_OBJECTBAR
+{
+    Text [ en-US ] = "Graphics Object Bar";
+};
+ToolBox RID_GRAPHIC_OBJECTBAR
+{
+    HelpId = HID_SC_TOOLBOX_GRAPHIC ;
+    LineSpacing = TRUE ;
+    Dockable = TRUE ;
+    Moveable = TRUE ;
+    Sizeable = TRUE ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+    Scroll = TRUE ;
+    Customize = TRUE ;
+    HideWhenDeactivate = TRUE ;
+    Border = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 0 , 0 ) ;
+    Align = BOXALIGN_TOP ;
+    MenuStrings = TRUE ;
+    ItemList =
+    {
+        ToolBoxItem
+        {
+            Identifier = SID_GRFFILTER;
+            HelpID = SID_GRFFILTER;
+            DropDown = TRUE ;
+            Checkable = FALSE ;
+            RadioCheck = FALSE ;
+        };
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_GRAF_MODE;
+            HelpID = SID_ATTR_GRAF_MODE;
+        };
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_GRAF_RED;
+            HelpID = SID_ATTR_GRAF_RED;
+        };
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_GRAF_GREEN;
+            HelpID = SID_ATTR_GRAF_GREEN;
+        };
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_GRAF_BLUE;
+            HelpID = SID_ATTR_GRAF_BLUE;
+        };
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_GRAF_LUMINANCE;
+            HelpID = SID_ATTR_GRAF_LUMINANCE;
+        };
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_GRAF_CONTRAST;
+            HelpID = SID_ATTR_GRAF_CONTRAST;
+        };
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_GRAF_GAMMA;
+            HelpID = SID_ATTR_GRAF_GAMMA;
+        };
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_GRAF_TRANSPARENCE;
+            HelpID = SID_ATTR_GRAF_TRANSPARENCE;
+        };
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+
+        // #i25616#
+        ToolBoxItem
+        {
+            Identifier = SID_ATTRIBUTES_LINE;
+            HelpID = SID_ATTRIBUTES_LINE;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTRIBUTES_AREA;
+            HelpID = SID_ATTRIBUTES_AREA;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_FILL_SHADOW;
+            HelpID = SID_ATTR_FILL_SHADOW;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_GRAF_CROP;
+            HelpID = SID_ATTR_GRAF_CROP;
+        };
+
+        // copied from the "normal" drawing toolbar:
+
+         //---------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //---------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_ANCHOR_TOGGLE ;
+            HelpId = SID_ANCHOR_TOGGLE ;
+        };
+         //---------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //---------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_FRAME_TO_TOP ;
+            HelpId = SID_FRAME_TO_TOP ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_FRAME_TO_BOTTOM ;
+            HelpId = SID_FRAME_TO_BOTTOM ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_OBJECT_HEAVEN ;
+            HelpID = SID_OBJECT_HEAVEN ;
+
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_OBJECT_HELL ;
+            HelpID = SID_OBJECT_HELL ;
+
+        };
+
+         //---------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //---------------------------------------------
+
+        ToolBoxItem
+        {
+            Identifier = SID_GRID_VISIBLE;
+            HelpID = SID_GRID_VISIBLE;
+            Hide = TRUE;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_GRID_USE;
+            HelpID = SID_GRID_USE;
+            Hide = TRUE;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_HELPLINES_MOVE;
+            HelpID = SID_HELPLINES_MOVE;
+            Hide = TRUE;
+        };
+
+         //---------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //---------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_OBJECT_ALIGN ;
+            HelpId = SID_OBJECT_ALIGN ;
+        };
+    };
+};
+ //
+ // Popup-Menues ---------------------------------------------------------------------
+ //
+String RID_POPUP_DRAW
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Popup-Menü für Zeichenobjekte : Popup-Men³ f³r Zeichenobjekte */
+    Text [ en-US ] = "Pop-up menu for drawing objects" ;
+    Text [ x-comment ] = " ";
+};
+ //
+ //     Popup-Menue fuer (allgemeine) Zeichenobjekte
+ //
+Menu RID_POPUP_DRAW
+{
+    ItemList =
+    {
+        MenuItem { ITEM_FORMAT_ATTRIBUTES_LINE };
+        MenuItem { ITEM_FORMAT_ATTRIBUTES_AREA };
+        MN_DRWTXTATTR // Text...
+        MenuItem { ITEM_FORMAT_ATTR_TRANSFORM };
+
+        //-#i68101#----------------------
+        MenuItem { Separator = TRUE ; };
+        MN_TITLE_DESCRIPTION_OBJECT
+        MN_RENAME_OBJECT
+        //-#i68101#----------------------
+
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MN_MIRRORSUB
+        MN_ARRANGESUB
+        MN_ALIGNSUB
+        MN_ANCHORSUB
+        MN_ASSIGNMACRO
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MenuItem
+        {
+            ITEM_FORMAT_BEZIER_EDIT
+            RadioCheck = FALSE ;
+            AutoCheck = TRUE ;
+        };
+        MenuItem
+        {
+            ITEM_FORMAT_FONTWORK
+        };
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        ITEM_GROUP_MENU
+#ifdef ISSUE66550_HLINK_FOR_SHAPES
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MN_EDITLNK
+        MN_DELLNK
+        MenuItem { ITEM_OPEN_HYPERLINK };
+#endif
+    };
+};
+
+ //
+ //     Popup-Menue fuer (Uno-) Controls
+ //
+
+Menu RID_POPUP_CONTROL
+{
+    ItemList =
+    {
+        MenuItem { ITEM_FORMAT_ATTR_TRANSFORM };
+
+        //-#i68101#----------------------
+        MenuItem { Separator = TRUE ; };
+        MN_TITLE_DESCRIPTION_OBJECT
+        MN_RENAME_OBJECT
+        //-#i68101#----------------------
+
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MenuItem { ITEM_FORM_CONTROL_PROPERTIES };
+        MenuItem { ITEM_FORM_PROPERTIES };
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MN_ARRANGESUB
+        MN_ALIGNSUB
+        MN_ANCHORSUB
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        ITEM_GROUP_MENU
+    };
+};
+
+ //
+ //     Grafik
+ //
+
+Menu RID_POPUP_GRAPHIC
+{
+    ItemList =
+    {
+        MenuItem { ITEM_FORMAT_ATTRIBUTES_LINE }; // #i25616#
+        MenuItem { ITEM_FORMAT_ATTRIBUTES_AREA }; // #i25616#
+        MN_DRWTXTATTR
+        MenuItem { ITEM_FORMAT_ATTR_TRANSFORM };
+        MN_ORIGINALSIZE
+
+        //-#i68101#----------------------
+        MenuItem { Separator = TRUE ; };
+        MN_TITLE_DESCRIPTION_OBJECT
+        MN_RENAME_OBJECT
+        //-#i68101#----------------------
+
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MN_MIRRORSUB
+        MN_ARRANGESUB
+        MN_ALIGNSUB
+        MN_ANCHORSUB
+        MN_ASSIGNMACRO
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        ITEM_GROUP_MENU
+#ifdef ISSUE66550_HLINK_FOR_SHAPES
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MN_EDITLNK
+        MN_DELLNK
+        MenuItem { ITEM_OPEN_HYPERLINK };
+#endif
+    };
+};
+
+ //
+ //     Media
+ //
+
+Menu RID_POPUP_MEDIA
+{
+    ItemList =
+    {
+        MenuItem { ITEM_FORMAT_ATTR_TRANSFORM };
+
+        //-#i68101#----------------------
+        MenuItem { Separator = TRUE ; };
+        MN_TITLE_DESCRIPTION_OBJECT
+        MN_RENAME_OBJECT
+        //-#i68101#----------------------
+
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MN_MIRRORSUB
+        MN_ARRANGESUB
+        MN_ALIGNSUB
+        MN_ANCHORSUB
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        ITEM_GROUP_MENU
+       };
+};
+
+ToolBox RID_MEDIA_OBJECTBAR
+{
+    //HelpId = HID_SC_TOOLBOX_MEDIA ;
+    LineSpacing = TRUE ;
+    Dockable = TRUE ;
+    Moveable = TRUE ;
+    Sizeable = TRUE ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+    Scroll = TRUE ;
+    Customize = TRUE ;
+    HideWhenDeactivate = TRUE ;
+    Border = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 0 , 0 ) ;
+    Align = BOXALIGN_TOP ;
+    MenuStrings = TRUE ;
+    ItemList =
+    {
+        ToolBoxItem
+        {
+            Identifier = SID_AVMEDIA_TOOLBOX;
+            HelpID = SID_AVMEDIA_TOOLBOX;
+            DropDown = FALSE ;
+            Checkable = FALSE ;
+            RadioCheck = FALSE ;
+        };
+    };
+};
+
+ //
+ //     Ole-Objekt
+ //
+
+Menu RID_POPUP_OLE
+{
+    ItemList =
+    {
+        MenuItem { ITEM_FORMAT_ATTR_TRANSFORM };
+        MN_ORIGINALSIZE
+
+        //-#i68101#----------------------
+        MenuItem { Separator = TRUE ; };
+        MN_TITLE_DESCRIPTION_OBJECT
+        MN_RENAME_OBJECT
+        //-#i68101#----------------------
+
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MN_ARRANGESUB
+        MN_ALIGNSUB
+        MN_ANCHORSUB
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        ITEM_GROUP_MENU
+    };
+};
+
+ //
+ //     Charts
+ //
+
+Menu RID_POPUP_CHART
+{
+    ItemList =
+    {
+        MenuItem { ITEM_FORMAT_ATTR_TRANSFORM };
+        MN_ORIGINALSIZE
+
+        //-#i68101#----------------------
+        MenuItem { Separator = TRUE ; };
+        MN_TITLE_DESCRIPTION_OBJECT
+        MN_RENAME_OBJECT
+        //-#i68101#----------------------
+
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MN_ARRANGESUB
+        MN_ALIGNSUB
+        MN_ANCHORSUB
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        ITEM_GROUP_MENU
+    };
+};
+
+ //
+ //  PopUpDraw Text
+ //
+
+String RID_POPUP_DRAWTEXT
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Popup-Menü für Text-Objekte : Popup-Men³ f³r Text-Objekte */
+    Text [ en-US ] = "Pop-up menu for text objects" ;
+    Text [ x-comment ] = " ";
+};
+
+Menu RID_POPUP_DRAWTEXT
+{
+    ItemList =
+    {
+        MN_RESET
+        MenuItem { Separator = TRUE ; };
+        MN_DRWTXTATTR
+        MenuItem { Separator = TRUE ; };
+        MenuItem
+        {
+            ITEM_FORMAT_ATTR_CHAR_FONT
+        };
+        MenuItem
+        {
+            ITEM_FORMAT_ATTR_CHAR_FONTHEIGHT
+        };
+         // Stil, Ausrichtung, Zeilenabstand
+        MN_TEXT_ATTR
+        MenuItem { Separator = TRUE ; };
+         // Zeichen, Absatz
+        MN_DRWTXT
+        MenuItem { Separator = TRUE ; };
+        MenuItem
+        {
+            ITEM_OPEN_HYPERLINK
+        };
+    };
+};
+

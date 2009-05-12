@@ -1,0 +1,131 @@
+/*      Autodoc css file for IDL documentation      */
+
+
+/*See bottom of file for explanations.*/
+
+body { background-color:#ffffff; }
+
+#adc-idlref a { text-decoration: none; }
+#adc-idlref a:link { color: #C44B01; }
+#adc-idlref a:visited { color: #638093; }
+#adc-idlref a:active { color: #9DCA12; }
+
+#adc-idlref h3
+	    { font-size:13pt; font-weight:bold;
+	      margin-top:3pt; margin-bottom:1pt; }
+
+#adc-idlref p, #adc-idlref dt, #adc-idlref dd, #adc-idlref pre
+	    { font-size:11pt;
+	      margin-top:3pt; margin-bottom:1pt; }
+
+#adc-idlref pre            { font-family:monospace; }
+
+#adc-idlref table.subtitle { margin-top:6pt; margin-bottom:6pt; }
+
+#adc-idlref td             { font-size:11pt; }
+#adc-idlref td.title
+	    { font-family: Arial; font-size:19pt; font-weight:bold;
+	      line-height:30pt;
+	      background-image:url(../../images/bg_table.gif);
+	      text-align:center; }
+
+#adc-idlref td.subtitle
+	    { font-family: Arial; font-size:13pt;
+	      line-height:20pt;
+	      background-image:url(../../images/bg_table.gif); }
+
+#adc-idlref td.crosstitle
+	    { font-size:12pt; font-weight:bold;
+	      line-height:15pt;   background-color:#eeeeff; }
+
+#adc-idlref td.imdetail
+	    { width:100%;
+	      background-image:url(../../images/bg_table3.gif); }
+
+#adc-idlref td.imsum_left  { width:30%;  }
+#adc-idlref td.imsum_right { width:70%;  }
+
+#adc-idlref table.navimain { background-image:url(../../images/bg_table2.gif); }
+
+#adc-idlref td.navimain
+	    { background-image:url(../../images/bg_table2.gif);
+	      text-align:center;
+	      font-family: Arial; font-size:12pt; font-weight:bold;
+	      padding-left:7pt; padding-right:7pt; }
+
+#adc-idlref td.navimainself
+	    { text-align:center;
+	      font-family: Arial; font-size:12pt; font-weight:bold;
+	      color:#ffffff; }
+
+#adc-idlref td.navimainnone
+	    { text-align:center;
+	      font-family: Arial; font-size:12pt; }
+
+#adc-idlref td.navisub
+	    { text-align:center;
+	      font-family: Arial; font-size:9pt; font-variant:small-caps;
+	      padding-left:7pt; padding-right:7pt; }
+
+#adc-idlref a.navimain
+	    { text-align:center;
+	      font-family: Arial; font-size:12pt; font-weight:bold;
+	      color:#C44B01; }
+
+#adc-idlref a.navisub
+	    { text-align:center;
+	      font-family: Arial; font-size:9pt; font-variant:small-caps;
+	      color:#C44B01; }
+
+#adc-idlref a.membertitle  { font-size:12pt; font-weight:bold; line-height:18pt; }
+
+#adc-idlref a:link.navimain, #adc-idlref a:link.navisub  { color:#C44B01; }
+#adc-idlref a:visited.navimain, #adc-idlref a:visited.navisub { color: #638093; }
+#adc-idlref a:active.navimain, #adc-idlref a:active.navisub { color: #9DCA12; }
+
+#adc-idlref .dt            { font-weight:bold; }
+#adc-idlref .namechain     { font-size:13pt; font-weight:bold;
+                 margin-top:3pt; margin-bottom:6pt; }
+#adc-idlref .title2        { font-size:13pt; font-style:italic; font-weight:bold; text-align:left; }
+
+#adc-idlref table { empty-cells:show; }
+
+#adc-idlref .childlist td,
+#adc-idlref .commentedlinks td,
+#adc-idlref .memberlist td,
+#adc-idlref .subtitle td,
+#adc-idlref .crosstitle td  { border: .1pt solid grey; }
+
+#adc-idlref .flag-table td { border: .1pt solid #cccccc; }
+
+#adc-idlref .title-table td,
+#adc-idlref .table-in-method td,
+#adc-idlref .table-in-data td,
+#adc-idlref .navimain td,
+#adc-idlref .navisub td,
+#adc-idlref .expl-table td,
+#adc-idlref .param-table td  { border: none; }
+
+
+/* Explanation of CSS classes:
+
+table.lightbg      Background of navigation bar.
+.navimain          Text in main navigation bar.
+.navisub           Text in lower navigation bar.
+td.navimainself    Cell in main navigation bar with "selected" shadow: You are here.
+td.navimainnone    Cell in main navigation bar with no link.
+
+.namechain         Line with current module path.
+
+td.crosstitle      Comment box for bases (base interfaces etc.)
+td.imsum_left      Left part of such boxes.
+td.imsum_right     Right part of such boxes.
+
+td.title           Main title of the page like "interface XYz"
+.subtitle          Tables, and head cells of those, which list members
+                   like "method summary" and "method details".
+
+td.imdetail        Background table of method's detail description.
+a.membertitle      Method name (as jump label) in method's detail
+                   description.
+*/

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="." default="all" name="FirstUnoContact">
+
+    <property environment="env"/>
+    <property name="OFFICE_HOME" value="${env.OFFICE_HOME}"/>
+    <property name="OO_SDK_HOME" value="${env.OO_SDK_HOME}"/>
+
+    <target name="init">
+        <property name="OUTDIR" value="${OO_SDK_HOME}/WINExample.out/class/FirstUnoContact"/>
+    </target>
+
+    <path id="office.class.path">
+        <filelist dir="${OFFICE_HOME}/program/classes"
+            files="jurt.jar,unoil.jar,ridl.jar,juh.jar"/>
+    </path>
+
+    <fileset id="bootstrap.glue.code" dir="${OO_SDK_HOME}/classes">
+        <patternset>
+            <include name="com/sun/star/lib/loader/*.class"/>
+            <include name="win/unowinreg.dll"/>
+        </patternset>
+    </fileset>
+
+    <target name="compile" depends="init">
+        <mkdir dir="${OUTDIR}"/>
+        <javac debug="true" deprecation="true" destdir="${OUTDIR}" srcdir=".">
+            <classpath refid="office.class.path"/>
+        </javac>
+    </target>
+
+    <target name="jar" depends="init,compile">
+        <jar basedir="${OUTDIR}" compress="true"
+            jarfile="${OUTDIR}/FirstUnoContact.jar">
+            <exclude name="**/*.java"/>
+            <exclude name="*.jar"/>
+            <fileset refid="bootstrap.glue.code"/>
+            <manifest>
+                <attribute name="Main-Class" value="com.sun.star.lib.loader.Loader"/>
+                <section name="com/sun/star/lib/loader/Loader.class">
+                <attribute name="Application-Class" value="FirstUnoContact"/>
+                </section>
+            </manifest>
+        </jar>
+    </target>
+
+    <target name="all"  description="Build everything." depends="init,compile,jar">
+        <echo message="Application built. FirstUnoContact!"/>
+    </target>
+
+    <target name="run" description="Try running it." depends="init,all">
+        <java jar="${OUTDIR}/FirstUnoContact.jar" failonerror="true" fork="true">
+        </java>
+    </target>
+
+    <target  name="clean" description="Clean all build products." depends="init">
+        <delete>
+            <fileset dir="${OUTDIR}">
+                <include name="**/*.class"/>
+            </fileset>
+        </delete>
+        <delete file="${OUTDIR}/FirstUnoContact.jar"/>
+    </target>
+
+</project>

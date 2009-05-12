@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE toolbar:toolbar PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "toolbar.dtd">
+<toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
+ <toolbar:toolbaritem xlink:href=".uno:GrafRed" toolbar:helpid="helpid:10865"  />
+ <toolbar:toolbarbreak/>
+ <toolbar:toolbaritem xlink:href=".uno:GrafGreen" toolbar:helpid="helpid:10866"  />
+ <toolbar:toolbarbreak/>
+ <toolbar:toolbaritem xlink:href=".uno:GrafBlue" toolbar:helpid="helpid:10867"  />
+ <toolbar:toolbarbreak/>
+ <toolbar:toolbaritem xlink:href=".uno:GrafLuminance" toolbar:helpid="helpid:10863"  />
+ <toolbar:toolbarbreak/>
+ <toolbar:toolbaritem xlink:href=".uno:GrafContrast" toolbar:helpid="helpid:10864"  />
+ <toolbar:toolbarbreak/>
+ <toolbar:toolbaritem xlink:href=".uno:GrafGamma" toolbar:helpid="helpid:10868"  />
+ <toolbar:toolbarbreak/>
+ <toolbar:toolbaritem xlink:href=".uno:GrafTransparence" toolbar:helpid="helpid:10869"  />
+</toolbar:toolbar>

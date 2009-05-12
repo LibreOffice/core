@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: module_testtool.scp,v $
- * $Revision: 1.9 $
+ * $Revision: 1.9.156.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,4 +37,5 @@ Module gid_Module_Optional_Testtool
     ParentID = gid_Module_Optional;
     Default = NO;
     Files = (gid_File_Exe_Testtool, gid_File_Bin_Testtool, gid_File_Lib_Communi, gid_File_Lib_Simplecm, gid_File_Hid_Testtool, gid_File_Config_Testtool);
+    Unixlinks = (gid_Unixlink_Testtool);
 End

@@ -173,16 +173,16 @@ sub set_master_and_milestone
     my $milestone = shift or return undef;
 
     # if we do not yet have a valid EIS registered CWS use the above more basic methods
-    if ( !$self->{'MASTER'}
-         || !$self->{'MILESTONE'}
+    if ( !$self->master()
+         || !$self->milestone()
          || !$self->eis_id() )
     {
         $self->master($master);
         $self->milestone($milestone);
     } else {
         if ( $self->set_master_and_milestone_in_eis($master, $milestone) ) {
-            $self->{'MASTER'} = $master;
-            $self->{'MILESTONE'} = $milestone;
+            $self->{'MASTER'} = $self->fetch_item_from_eis('master');
+            $self->{'MILESTONE'} = $self->fetch_item_from_eis('milestone');
         }
     }
     my @retarray = ($self->{'MASTER'}, $self->{'MILESTONE'});
@@ -598,6 +598,13 @@ sub get_current_milestone
     my $master    = shift;
 
     return $self->get_current_milestone_from_eis($master);
+}
+
+sub get_milestone_integrated
+{
+    my $self      = shift;
+
+    return $self->get_milestone_integrated_from_eis();
 }
 
 # Get masters
@@ -1670,6 +1677,27 @@ sub get_creation_master_from_eis
     eval { $result = $eis->getCreationMasterWorkspace($id) };
     if ( $@ ) {
         carp("ERROR: get_creation_master(): EIS database transaction failed. Reason:\n$@\n");
+    }
+    return $result;
+
+}
+
+sub get_milestone_integrated_from_eis
+{
+    my $self      = shift;
+
+    # check if child workspace is valid
+    my $id = $self->eis_id();
+    if ( !$id ) {
+        carp("ERROR: Childworkspace not (yet) registered with EIS.\n");
+        return undef;
+    }
+
+    my $eis = Cws::eis();
+    my $result;
+    eval { $result = $eis->getMilestoneIntegrated($id) };
+    if ( $@ ) {
+        carp("ERROR: get_milestone_integrated(): EIS database transaction failed. Reason:\n$@\n");
     }
     return $result;
 

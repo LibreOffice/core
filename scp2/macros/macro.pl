@@ -118,7 +118,9 @@ sub write_DIR_ISOLANGUAGE_ALL_LANG_LPROJ
 {
     print OUTFILE "#define DIR_ISOLANGUAGE_ALL_LANG_LPROJ ";
     foreach $lang (@completelangiso) {
-        print OUTFILE "\\\n\tDosName ($lang) = \"$lang.lproj\"";
+        my $speciallang = $lang;
+        if ( $speciallang eq "en-US" ) { $speciallang = "en"; }
+        print OUTFILE "\\\n\tDosName ($lang) = \"$speciallang.lproj\"";
         print OUTFILE "; " if ( $lang ne $completelangiso[$#completelangiso]);
     }
     print OUTFILE "\n\n";

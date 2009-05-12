@@ -1,0 +1,80 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: galtheme.hrc,v $
+ * $Revision: 1.7 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef _GALTHEME_HRC_
+#define _GALTHEME_HRC_
+
+#define RID_GALLERYSTR_THEME_START          (6000)
+
+#define RID_GALLERYSTR_THEME_3D             (RID_GALLERYSTR_THEME_START + 1)
+#define RID_GALLERYSTR_THEME_ANIMATIONS                 (RID_GALLERYSTR_THEME_START + 2)
+#define RID_GALLERYSTR_THEME_BULLETS                    (RID_GALLERYSTR_THEME_START + 3)
+#define RID_GALLERYSTR_THEME_OFFICE                     (RID_GALLERYSTR_THEME_START + 4)
+#define RID_GALLERYSTR_THEME_FLAGS          (RID_GALLERYSTR_THEME_START + 5)
+#define RID_GALLERYSTR_THEME_FLOWCHARTS                 (RID_GALLERYSTR_THEME_START + 6)
+#define RID_GALLERYSTR_THEME_EMOTICONS                  (RID_GALLERYSTR_THEME_START + 7)
+#define RID_GALLERYSTR_THEME_PHOTOS         (RID_GALLERYSTR_THEME_START + 8)
+#define RID_GALLERYSTR_THEME_BACKGROUNDS                (RID_GALLERYSTR_THEME_START + 9)
+#define RID_GALLERYSTR_THEME_HOMEPAGE                   (RID_GALLERYSTR_THEME_START + 10)
+#define RID_GALLERYSTR_THEME_INTERACTION                (RID_GALLERYSTR_THEME_START + 11)
+#define RID_GALLERYSTR_THEME_MAPS           (RID_GALLERYSTR_THEME_START + 12)
+#define RID_GALLERYSTR_THEME_PEOPLE                     (RID_GALLERYSTR_THEME_START + 13)
+#define RID_GALLERYSTR_THEME_SURFACES                   (RID_GALLERYSTR_THEME_START + 14)
+#define RID_GALLERYSTR_THEME_HTMLBUTTONS                (RID_GALLERYSTR_THEME_START + 15)
+#define RID_GALLERYSTR_THEME_POWERPOINT                 (RID_GALLERYSTR_THEME_START + 16)
+#define RID_GALLERYSTR_THEME_RULERS         (RID_GALLERYSTR_THEME_START + 17)
+#define RID_GALLERYSTR_THEME_SOUNDS         (RID_GALLERYSTR_THEME_START + 18)
+#define RID_GALLERYSTR_THEME_SYMBOLS                    (RID_GALLERYSTR_THEME_START + 19)
+#define RID_GALLERYSTR_THEME_MYTHEME                    (RID_GALLERYSTR_THEME_START + 20)
+#define RID_GALLERYSTR_THEME_USERSOUNDS                 (RID_GALLERYSTR_THEME_START + 21)
+
+#define RID_GALLERYSTR_THEME_ARROWS                     (RID_GALLERYSTR_THEME_START + 22)
+#define RID_GALLERYSTR_THEME_BALLOONS                   (RID_GALLERYSTR_THEME_START + 23)
+#define RID_GALLERYSTR_THEME_KEYBOARD                   (RID_GALLERYSTR_THEME_START + 24)
+#define RID_GALLERYSTR_THEME_TIME                       (RID_GALLERYSTR_THEME_START + 25)
+#define RID_GALLERYSTR_THEME_PRESENTATION               (RID_GALLERYSTR_THEME_START + 26)
+#define RID_GALLERYSTR_THEME_CALENDAR                   (RID_GALLERYSTR_THEME_START + 27)
+#define RID_GALLERYSTR_THEME_NAVIGATION                 (RID_GALLERYSTR_THEME_START + 28)
+#define RID_GALLERYSTR_THEME_COMMUNICATION              (RID_GALLERYSTR_THEME_START + 29)
+#define RID_GALLERYSTR_THEME_FINANCES                   (RID_GALLERYSTR_THEME_START + 30)
+#define RID_GALLERYSTR_THEME_COMPUTER                   (RID_GALLERYSTR_THEME_START + 31)
+
+#define RID_GALLERYSTR_THEME_CLIMA                      (RID_GALLERYSTR_THEME_START + 32)
+#define RID_GALLERYSTR_THEME_EDUCATION                  (RID_GALLERYSTR_THEME_START + 33)
+#define RID_GALLERYSTR_THEME_TROUBLE                    (RID_GALLERYSTR_THEME_START + 34)
+#define RID_GALLERYSTR_THEME_SCREENBEANS                (RID_GALLERYSTR_THEME_START + 35)
+
+#define RID_GALLERYSTR_THEME_DUMMY5                     (RID_GALLERYSTR_THEME_START + 36)
+#define RID_GALLERYSTR_THEME_FONTWORK                   (RID_GALLERYSTR_THEME_START + 37)
+#define RID_GALLERYSTR_THEME_FONTWORK_VERTICAL          (RID_GALLERYSTR_THEME_START + 38)
+
+#define RID_GALLERYSTR_THEME_FIRST          RID_GALLERYSTR_THEME_3D
+#define RID_GALLERYSTR_THEME_LAST           RID_GALLERYSTR_THEME_FONTWORK_VERTICAL
+
+#endif

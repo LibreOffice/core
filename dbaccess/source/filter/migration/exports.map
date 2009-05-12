@@ -1,0 +1,9 @@
+DBACCESS_FLT_1_0 {
+        global:
+                component_getImplementationEnvironment;
+                component_getFactory;
+                component_writeInfo;
+
+        local:
+                *;
+}; 

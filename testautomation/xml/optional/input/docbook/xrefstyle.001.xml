@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+                  "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+<chapter id="chapter">
+<chapterinfo>
+<title>Unit Test: xrefstyle.001.xml</title>
+<releaseinfo role="CVS">$Id: xrefstyle.001.xml,v 1.2 2008-07-11 08:03:15 rt Exp $</releaseinfo>
+<author><firstname>Norman</firstname><surname>Walsh</surname>
+        <affiliation><address><email>ndw@nwalsh.com</email></address></affiliation>
+</author>
+</chapterinfo>
+<title>Unit Test: xrefstyle.001.xml</title>
+
+<para>This is a test of xref styles.</para>
+
+<para>Short self-reference: <xref linkend="chapter"/>.</para>
+<para>Long self-reference: <xref role="title" linkend="chapter"/>.</para>
+
+</chapter>

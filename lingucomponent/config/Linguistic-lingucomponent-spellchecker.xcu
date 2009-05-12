@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<oor:component-data oor:name="Linguistic" oor:package="org.openoffice.Office" xmlns:install="http://openoffice.org/2004/installation" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <node oor:name="ServiceManager">
+        <node oor:name="SpellCheckers">
+            <node oor:name="org.openoffice.lingu.MySpellSpellChecker" oor:op="fuse">
+                <prop oor:name="SupportedDictionaryFormats" oor:type="oor:string-list">
+                    <value>DICT_SPELL</value>
+                </prop>
+            </node>
+        </node>
+    </node>
+</oor:component-data>
+

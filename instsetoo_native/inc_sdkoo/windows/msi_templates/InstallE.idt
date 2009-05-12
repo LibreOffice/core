@@ -53,7 +53,7 @@ RMCCPSearch	Not CCP_SUCCESS And CCP_TEST	250
 ScheduleReboot	ISSCHEDULEREBOOT	3125
 SelfRegModules		2850
 SelfUnregModules		1100
-SetARPInstallLocation	Not Installed	990
+SetARPInstallLocation		990
 SetODBCFolders		550
 StartServices	VersionNT	2800
 StopServices	VersionNT	950

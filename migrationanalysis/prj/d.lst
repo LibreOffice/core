@@ -1,0 +1,3 @@
+..\%__SRC%\bin\ProAnalysisWizard\ProAnalysisWizard.exe %_DEST%\bin%_EXT%\ProAnalysisWizard.exe
+..\%__SRC%\bin\ProAnalysisWizard.zip %_DEST%\bin%_EXT%\ProAnalysisWizard.zip
+

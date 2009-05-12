@@ -1,0 +1,9 @@
+KAB_1_0 {
+    global:
+        createKabConnection;
+        initKApplication;
+        shutdownKApplication;
+        matchKDEVersion;
+    local:
+        *;
+};

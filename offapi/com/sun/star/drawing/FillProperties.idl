@@ -1,0 +1,226 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: FillProperties.idl,v $
+ * $Revision: 1.7 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_drawing_FillProperties_idl__
+#define __com_sun_star_drawing_FillProperties_idl__
+
+#ifndef __com_sun_star_drawing_FillStyle_idl__
+#include <com/sun/star/drawing/FillStyle.idl>
+#endif
+
+#ifndef __com_sun_star_util_Color_idl__
+#include <com/sun/star/util/Color.idl>
+#endif
+
+#ifndef __com_sun_star_awt_Gradient_idl__
+#include <com/sun/star/awt/Gradient.idl>
+#endif
+
+#ifndef __com_sun_star_drawing_Hatch_idl__
+#include <com/sun/star/drawing/Hatch.idl>
+#endif
+
+#ifndef __com_sun_star_drawing_BitmapMode_idl__
+#include <com/sun/star/drawing/BitmapMode.idl>
+#endif
+
+#ifndef __com_sun_star_awt_XBitmap_idl__
+#include <com/sun/star/awt/XBitmap.idl>
+#endif
+
+#ifndef __com_sun_star_drawing_RectanglePoint_idl__
+#include <com/sun/star/drawing/RectanglePoint.idl>
+#endif
+
+
+//=============================================================================
+
+module com { module sun { module star { module drawing {
+
+//=============================================================================
+
+/** This is a set of properties to describe the style for rendering an area.
+ */
+published service FillProperties
+{
+    //-------------------------------------------------------------------------
+    /** This enumeration selects the style with which the area will be filled.
+    */
+    [property] com::sun::star::drawing::FillStyle FillStyle;
+
+    //-------------------------------------------------------------------------
+    /** If the <type>FillStyle</type> is set to <const>FillStyle::SOLID</const>,
+        this is the color used.
+    */
+    [property] com::sun::star::util::Color FillColor;
+
+    //-------------------------------------------------------------------------
+    /** This is the transparence of the filled area.
+
+        <p>This property is only valid if <type>FillStyle</type> is set to
+        <const>FillStyle::SOLID</const>.
+    */
+    [property] short FillTransparence;
+
+    //-------------------------------------------------------------------------
+    /** If a gradient is used for transparency, this is the name of the
+        used transparence gradient style or it is empty. If you set the name
+        of a transparence gradient style contained in the document, this
+        style used.
+    */
+    [property] string FillTransparenceGradientName;
+
+
+    //-------------------------------------------------------------------------
+    /** This describes the transparency of the fill area as a gradient.
+    */
+    [optional, property] com::sun::star::awt::Gradient FillTransparenceGradient;
+
+    //-------------------------------------------------------------------------
+    /** If the <type>FillStyle</type> is set to <const>FillStyle::GRADIENT</const>, this
+        is the name of the used fill gradient style.
+    */
+    [property] string FillGradientName;
+
+    //-------------------------------------------------------------------------
+    /** If the <type>FillStyle</type> is set to <const>FillStyle::GRADIENT</const>, this
+        describes the gradient used.
+    */
+    [optional, property] com::sun::star::awt::Gradient FillGradient;
+
+    //-------------------------------------------------------------------------
+    /** If the <type>FillStyle</type> is set to <const>FillStyle::GRADIENT</const>, this
+        is the name of the used fill hatch style.
+    */
+    [property] string FillHatchName;
+
+    //-------------------------------------------------------------------------
+    /** If the <type>FillStyle</type> is set to <const>FillStyle::HATCH</const>, this
+        describes the hatch used.
+    */
+    [optional, property] com::sun::star::drawing::Hatch FillHatch;
+
+    //-------------------------------------------------------------------------
+    /** If the <type>FillStyle</type> is set to <const>FillStyle::BITMAP</const>, this is
+        the name of the used fill bitmap style.
+    */
+    [property] string FillBitmapName;
+
+    //-------------------------------------------------------------------------
+    /** If the <type>FillStyle</type> is set to <const>FillStyle::BITMAP</const>, this is
+        the bitmap used.
+    */
+    [optional, property] com::sun::star::awt::XBitmap FillBitmap;
+
+    //-------------------------------------------------------------------------
+    /** If the <type>FillStyle</type> is set to <const>FillStyle::BITMAP</const>, this is
+        a URL to the bitmap used.
+    */
+    [optional, property] string FillBitmapURL;
+
+    //-------------------------------------------------------------------------
+    /** This is the horizontal offset where the tile starts.
+
+        <p>It is given in percent in relation to the width of the bitmap.
+    */
+    [property] short FillBitmapOffsetX;
+
+    //-------------------------------------------------------------------------
+    /** This is the vertical offset where the tile starts.
+
+        It is given in percent in relation to the width of the bitmap.
+    */
+    [property] short FillBitmapOffsetY;
+
+    //-------------------------------------------------------------------------
+    /** Every second line of tiles is moved the given percent of the
+        witdh of the bitmap.
+    */
+    [property] short FillBitmapPositionOffsetX;
+
+    //-------------------------------------------------------------------------
+    /** Every second row of tiles is moved the given percent of the
+        width of the bitmap.
+    */
+    [property] short FillBitmapPositionOffsetY;
+
+    //-------------------------------------------------------------------------
+    /** The RectanglePoint specifies the position inside of the bitmap to
+        use as the top left position for rendering.
+    */
+    [property] com::sun::star::drawing::RectanglePoint FillBitmapRectanglePoint;
+
+    //-------------------------------------------------------------------------
+    /** specifies if the size is given in percentage or
+        as an absolute value.
+
+        <p>If this is <TRUE/>, the properties FillBitmapSizeX
+        and  FillBitmapSizeY contain the size of the tile in percent
+        of the size of the original bitmap. If this
+        is <FALSE/>, the size of the tile is specified
+        with 1/100th mm.
+    */
+    [property] boolean FillBitmapLogicalSize;
+
+    //-------------------------------------------------------------------------
+    /** This is the width of the tile for filling.
+
+        <p>Depending on the property FillBitmapLogicalSize, this is
+        either relative or absolute.
+    */
+    [property] long FillBitmapSizeX;
+
+    //-------------------------------------------------------------------------
+    /** This is the height of the tile for filling.
+
+        <p>Depending on the property FillBitmapLogicalSize, this
+        is either relative or absolute.
+    */
+    [property] long FillBitmapSizeY;
+
+    //-------------------------------------------------------------------------
+    /** this enum selects how a area is filled with a single bitmap.
+    */
+    [property] com::sun::star::drawing::BitmapMode FillBitmapMode;
+
+    //-------------------------------------------------------------------------
+    /** if this is <TRUE/>, the transparent background of a
+        hatch filled area is drawn in the current background color
+    */
+    [property] boolean FillBackground;
+
+    //-------------------------------------------------------------------------
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

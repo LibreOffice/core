@@ -1,0 +1,540 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: res_bmp.src,v $
+ * $Revision: 1.55 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include <sfx2/sfx.hrc>
+#include <svtools/style.hrc>
+#include "glob.hrc"
+#include "res_bmp.hrc"
+
+Bitmap BMP_FOIL_00
+{
+    File = "foil00.bmp" ;
+};
+Bitmap BMP_FOIL_00_H
+{
+    File = "foil00_h.bmp" ;
+};
+Bitmap BMP_FOIL_01
+{
+    File = "foil01.bmp" ;
+};
+Bitmap BMP_FOIL_01_H
+{
+    File = "foil01_h.bmp" ;
+};
+Bitmap BMP_FOIL_02
+{
+    File = "foil02.bmp" ;
+};
+Bitmap BMP_FOIL_02_H
+{
+    File = "foil02_h.bmp" ;
+};
+Bitmap BMP_FOIL_03
+{
+    File = "foil03.bmp" ;
+};
+Bitmap BMP_FOIL_03_H
+{
+    File = "foil03_h.bmp" ;
+};
+Bitmap BMP_FOIL_04
+{
+    File = "foil04.bmp" ;
+};
+Bitmap BMP_FOIL_04_H
+{
+    File = "foil04_h.bmp" ;
+};
+Bitmap BMP_FOIL_05
+{
+    File = "foil05.bmp" ;
+};
+Bitmap BMP_FOIL_06
+{
+    File = "foil06.bmp" ;
+};
+Bitmap BMP_FOIL_06_H
+{
+    File = "foil06_h.bmp" ;
+};
+Bitmap BMP_FOIL_07
+{
+    File = "foil07.bmp" ;
+};
+Bitmap BMP_FOIL_07_H
+{
+    File = "foil07_h.bmp" ;
+};
+Bitmap BMP_FOIL_08
+{
+    File = "foil08.bmp" ;
+};
+Bitmap BMP_FOIL_08_H
+{
+    File = "foil08_h.bmp" ;
+};
+Bitmap BMP_FOIL_09
+{
+    File = "foil09.bmp" ;
+};
+Bitmap BMP_FOIL_09_H
+{
+    File = "foil09_h.bmp" ;
+};
+Bitmap BMP_FOIL_10
+{
+    File = "foil10.bmp" ;
+};
+Bitmap BMP_FOIL_10_H
+{
+    File = "foil10_h.bmp" ;
+};
+Bitmap BMP_FOIL_11
+{
+    File = "foil11.bmp" ;
+};
+Bitmap BMP_FOIL_11_H
+{
+    File = "foil11_h.bmp" ;
+};
+Bitmap BMP_FOIL_12
+{
+    File = "foil12.bmp" ;
+};
+Bitmap BMP_FOIL_12_H
+{
+    File = "foil12_h.bmp" ;
+};
+Bitmap BMP_FOIL_13
+{
+    File = "foil13.bmp" ;
+};
+Bitmap BMP_FOIL_13_H
+{
+    File = "foil13_h.bmp" ;
+};
+Bitmap BMP_FOIL_14
+{
+    File = "foil14.bmp" ;
+};
+Bitmap BMP_FOIL_14_H
+{
+    File = "foil14_h.bmp" ;
+};
+Bitmap BMP_FOIL_15
+{
+    File = "foil15.bmp" ;
+};
+Bitmap BMP_FOIL_15_H
+{
+    File = "foil15_h.bmp" ;
+};
+Bitmap BMP_FOIL_16
+{
+    File = "foil16.bmp" ;
+};
+Bitmap BMP_FOIL_16_H
+{
+    File = "foil16_h.bmp" ;
+};
+Bitmap BMP_FOIL_17
+{
+    File = "foil17.bmp" ;
+};
+Bitmap BMP_FOIL_17_H
+{
+    File = "foil17_h.bmp" ;
+};
+Bitmap BMP_FOIL_18
+{
+    File = "foil18.bmp" ;
+};
+Bitmap BMP_FOIL_18_H
+{
+    File = "foil18_h.bmp" ;
+};
+Bitmap BMP_FOIL_19
+{
+    File = "foil19.bmp" ;
+};
+Bitmap BMP_FOIL_19_H
+{
+    File = "foil19_h.bmp" ;
+};
+Bitmap BMP_FOIL_20
+{
+    File = "foil20.bmp" ;
+};
+Bitmap BMP_FOIL_20_H
+{
+    File = "foil20_h.bmp" ;
+};
+Bitmap BMP_FOIL_21
+{
+    File = "foil21.bmp" ;
+};
+Bitmap BMP_FOIL_21_H
+{
+    File = "foil21_h.bmp" ;
+};
+Bitmap BMP_FOIL_22
+{
+    File = "foil22.bmp" ;
+};
+Bitmap BMP_FOIL_22_H
+{
+    File = "foil22_h.bmp" ;
+};
+Bitmap BMP_FOIL_23
+{
+    File = "foil23.bmp" ;
+};
+Bitmap BMP_FOIL_23_H
+{
+    File = "foil23_h.bmp" ;
+};
+Bitmap BMP_FOIL_24
+{
+    File = "foil24.bmp" ;
+};
+Bitmap BMP_FOIL_24_H
+{
+    File = "foil24_h.bmp" ;
+};
+Bitmap BMP_FOIL_25
+{
+    File = "foil25.bmp" ;
+};
+Bitmap BMP_FOIL_25_H
+{
+    File = "foil25_h.bmp" ;
+};
+Bitmap BMP_FOILH_01
+{
+    File = "foilh01.bmp" ;
+};
+Bitmap BMP_FOILH_01_H
+{
+    File = "foilh01_h.bmp" ;
+};
+Bitmap BMP_FOILH_02
+{
+    File = "foilh02.bmp" ;
+};
+Bitmap BMP_FOILH_02_H
+{
+    File = "foilh02_h.bmp" ;
+};
+Bitmap BMP_FOILH_03
+{
+    File = "foilh03.bmp" ;
+};
+Bitmap BMP_FOILH_03_H
+{
+    File = "foilh03_h.bmp" ;
+};
+Bitmap BMP_FOILH_04
+{
+    File = "foilh04.bmp" ;
+};
+Bitmap BMP_FOILH_04_H
+{
+    File = "foilh04_h.bmp" ;
+};
+Bitmap BMP_FOILH_06
+{
+    File = "foilh06.bmp" ;
+};
+Bitmap BMP_FOILH_06_H
+{
+    File = "foilh06_h.bmp" ;
+};
+Bitmap BMP_FOILH_09
+{
+    File = "foilh09.bmp" ;
+};
+Bitmap BMP_FOILH_09_H
+{
+    File = "foilh09_h.bmp" ;
+};
+Bitmap BMP_FOILN_01
+{
+    File = "foiln01.bmp" ;
+};
+Bitmap BMP_FOILN_01_H
+{
+    File = "foiln01_h.bmp" ;
+};
+Bitmap BMP_FOIL_NONE
+{
+    File = "foilnone.bmp" ;
+};
+Bitmap BMP_PAGE
+{
+    File = "page.bmp" ;
+};
+Bitmap BMP_PAGE_H
+{
+    File = "page_h.bmp" ;
+};
+Bitmap BMP_PAGE_EXCLUDED
+{
+    File = "pageexcl.bmp" ;
+};
+Bitmap BMP_PAGE_EXCLUDED_H
+{
+    File = "pageexcl_h.bmp" ;
+};
+Bitmap BMP_PAGEOBJS_EXCLUDED
+{
+    File = "pagobjex.bmp" ;
+};
+Bitmap BMP_PAGEOBJS_EXCLUDED_H
+{
+    File = "pagobjex_h.bmp" ;
+};
+Bitmap BMP_PAGEOBJS
+{
+    File = "pageobjs.bmp" ;
+};
+Bitmap BMP_PAGEOBJS_H
+{
+    File = "pageobjs_h.bmp" ;
+};
+Bitmap BMP_OBJECTS
+{
+    File = "objects.bmp" ;
+};
+Bitmap BMP_OBJECTS_H
+{
+    File = "objects_h.bmp" ;
+};
+Bitmap BMP_OLE
+{
+    File = "ole.bmp" ;
+};
+Bitmap BMP_OLE_H
+{
+    File = "ole_h.bmp" ;
+};
+Bitmap BMP_GROUP
+{
+    File = "group.bmp" ;
+};
+Bitmap BMP_GROUP_H
+{
+    File = "group_h.bmp" ;
+};
+Bitmap BMP_DOC_OPEN
+{
+    File = "docopen.bmp" ;
+};
+Bitmap BMP_DOC_OPEN_H
+{
+    File = "docopen_h.bmp" ;
+};
+Bitmap BMP_DOC_CLOSED
+{
+    File = "docclose.bmp" ;
+};
+Bitmap BMP_DOC_CLOSED_H
+{
+    File = "docclose_h.bmp" ;
+};
+Bitmap BMP_DOC_TEXT
+{
+    File = "doctext.bmp" ;
+};
+Bitmap BMP_DOC_TEXT_H
+{
+    File = "doctext_h.bmp" ;
+};
+Bitmap BMP_EXPAND
+{
+    File = "plus.bmp" ;
+};
+Bitmap BMP_EXPAND_H
+{
+    File = "plus_h.bmp" ;
+};
+Bitmap BMP_COLLAPSE
+{
+    File = "minus.bmp" ;
+};
+Bitmap BMP_COLLAPSE_H
+{
+    File = "minus_h.bmp" ;
+};
+Bitmap BMP_GRAPHIC
+{
+    File = "graphic.bmp" ;
+};
+Bitmap BMP_GRAPHIC_H
+{
+    File = "graphic_h.bmp" ;
+};
+Image IMG_PIPETTE_H
+{
+    ImageBitmap = Bitmap { File = "pipette_h.bmp" ; };
+    MaskColor = IMAGE_MASK_STDCOLOR_HC ;
+};
+Image IMG_GET1OBJECT_H
+{
+    ImageBitmap = Bitmap { File = "get1obj_h.bmp" ; };
+    MaskColor = IMAGE_MASK_STDCOLOR_HC ;
+};
+Image IMG_GETALLOBJECT_H
+{
+    ImageBitmap = Bitmap { File = "getallob_h.bmp" ; };
+    MaskColor = IMAGE_MASK_STDCOLOR_HC ;
+};
+Image IMG_REMOVEBMP_H
+{
+    ImageBitmap = Bitmap { File = "del1bmp_h.bmp" ; };
+    MaskColor = IMAGE_MASK_STDCOLOR_HC ;
+};
+Image IMG_REMOVEALLBMP_H
+{
+    ImageBitmap = Bitmap { File = "delall_h.bmp" ; };
+    MaskColor = IMAGE_MASK_STDCOLOR_HC ;
+};
+#define SfxStyleFamiliesRes1\
+    Text [ en-US ] = "Graphics Styles" ;\
+
+#define SfxStyleFamiliesRes2\
+    Text [ en-US ] = "Presentation Styles" ;\
+
+SfxStyleFamilies DLG_STYLE_DESIGNER
+{
+    StyleFamilyList =
+    {
+        SfxStyleFamilyItem RID_GRAPHICSTYLEFAMILY
+        {
+            SfxStyleFamiliesRes1
+            StyleFamily = SFX_STYLE_FAMILY_PARA ;
+            FilterList  =
+            {
+                < STR_STYLE_FILTER_ALL ; SFXSTYLEBIT_ALL ; > ;
+                < STR_STYLE_FILTER_USED ; SFXSTYLEBIT_USED ; > ;
+                < STR_STYLE_FILTER_USERDEF ; SFXSTYLEBIT_USERDEF ; > ;
+            };
+        };
+        SfxStyleFamilyItem RID_PRESENTATIONSTYLEFAMILY
+        {
+            SfxStyleFamiliesRes2
+            StyleFamily = SFX_STYLE_FAMILY_PSEUDO ;
+            FilterList =
+            {
+                < STR_STYLE_FILTER_ALL ; SFXSTYLEBIT_ALL ; > ;
+            };
+        };
+    };
+    #define STYLE_IMAGE_LISTEF \
+        IdList = \
+        { \
+            1; 2; \
+        }; \
+        IdCount = 2;
+
+    ImageList 1 // == BMP_COLOR_NORMAL + 1
+    {
+        Prefix = "sf";
+        MaskColor = IMAGE_MASK_STDCOLOR;
+        STYLE_IMAGE_LISTEF
+    };
+    ImageList 2 // == BMP_COLOR_HIGHCONTRAST + 1
+    {
+        Prefix = "sfh";
+        MaskColor = IMAGE_MASK_STDCOLOR_HC;
+        STYLE_IMAGE_LISTEF
+    };
+    #undef STYLE_IMAGE_LISTEF
+};
+
+Bitmap BMP_PRESOBJ_GRAPHIC
+{
+    File = "image.bmp" ;
+};
+Bitmap BMP_PRESOBJ_OBJECT
+{
+    File = "object.bmp" ;
+};
+Bitmap BMP_PRESOBJ_CHART
+{
+    File = "chart.bmp" ;
+};
+Bitmap BMP_PRESOBJ_ORGCHART
+{
+    File = "orgchart.bmp" ;
+};
+Bitmap BMP_PRESOBJ_TABLE
+{
+    File = "table.bmp" ;
+};
+Bitmap BMP_WAIT_ICON
+{
+    File = "waiticon.bmp";
+};
+
+// ----------------------------------------
+
+Bitmap BMP_CLOSE_DOC
+{
+    File = "closedoc.bmp";
+};
+Bitmap BMP_CLOSE_DOC_H
+{
+    File = "closedochc.bmp";
+};
+Bitmap BMP_TRIANGLE_RIGHT
+{
+    File = "triangle_right.bmp";
+};
+Bitmap BMP_TRIANGLE_RIGHT_H
+{
+    File = "triangle_right_hc.bmp";
+};
+Bitmap BMP_TRIANGLE_DOWN
+{
+    File = "triangle_down.bmp";
+};
+Bitmap BMP_TRIANGLE_DOWN_H
+{
+    File = "triangle_down_hc.bmp";
+};
+Bitmap BMP_FADE_EFFECT_INDICATOR
+{
+    File = "fade_effect_indicator.bmp";
+};
+Bitmap BMP_FADE_EFFECT_INDICATOR_H
+{
+    File = "fade_effect_indicator_hc.bmp";
+};

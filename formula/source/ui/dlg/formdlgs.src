@@ -1,0 +1,539 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: formdlgs.src,v $
+ * $Revision: 1.49 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "formdlgs.hrc"
+#include "ForResId.hrc"
+#include "helpids.hrc"
+
+
+#define STD_MASKCOLOR Color { Red=0xFFFF; Green=0x0000; Blue=0xFFFF; }
+ //---------------------------------------------------------------------------
+TabPage RID_FORMULATAB_FUNCTION
+{
+    Hide = TRUE ;
+    Size = MAP_APPFONT ( 96 , 180 ) ;
+    HelpId = HID_FORMULATAB_FUNCTION ;
+     // Titel wird dynamisch gesetzt (s.u.)
+     // 1. Seite
+    ListBox LB_CATEGORY
+    {
+        HelpId = HID_FORMULA_LB_CATEGORY;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 14 ) ;
+        Size = MAP_APPFONT ( 86 , 112 ) ;
+        DropDown = TRUE ;
+        StringList [ en-US ] =
+        {
+            < "Last Used" ; Default ; > ;
+            < "All" ; Default ; > ;
+        };
+        //  < "Database" ; Default ; > ;
+        //  < "Date&Time" ; Default ; > ;
+        //  < "Financial" ; Default ; > ;
+        //  < "Information" ; Default ; > ;
+        //  < "Logical" ; Default ; > ;
+        //  < "Mathematical" ; Default ; > ;
+        //  < "Array" ; Default ; > ;
+        //  < "Statistical" ; Default ; > ;
+        //  < "Spreadsheet" ; Default ; > ;
+        //  < "Text" ; Default ; > ;
+        //  < "Add-in" ; Default ; > ;
+        //};
+    };
+    ListBox LB_FUNCTION
+    {
+        HelpId = HID_FORMULA_LB_FUNCTION;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 43 ) ;
+        Size = MAP_APPFONT ( 86 , 133 ) ;
+        Sort = TRUE;
+    };
+    FixedText FT_CATEGORY
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 84 , 8 ) ;
+        Text [ en-US ] = "~Category" ;
+    };
+    FixedText FT_FUNCTION
+    {
+        Pos = MAP_APPFONT ( 6 , 32 ) ;
+        Size = MAP_APPFONT ( 72 , 8 ) ;
+        Text [ en-US ] = "~Function" ;
+    };
+};
+TabPage RID_FORMULATAB_STRUCT
+{
+    Hide = TRUE ;
+    Size = MAP_APPFONT ( 96 , 180 ) ;
+    HelpId = HID_FORMULATAB_STRUCT ;
+     // Titel wird dynamisch gesetzt (s.u.)
+     // 1. Seite
+    Control TLB_STRUCT
+    {
+        Border = TRUE ;
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 14 ) ;
+        Size = MAP_APPFONT ( 86 , 162 ) ;
+        HelpId = HID_FORMULA_FAP_STRUCT ;
+    };
+    FixedText FT_STRUCT
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 86 , 8 ) ;
+        Text [ en-US ] = "~Structure" ;
+    };
+    Image BMP_STR_CLOSE
+    {
+        ImageBitmap = Bitmap { File = "fapclose.bmp"; };
+        MaskColor = STD_MASKCOLOR;
+    };
+    Image BMP_STR_CLOSE_H
+    {
+        ImageBitmap = Bitmap { File = "fapclose_h.bmp"; };
+        MaskColor = STD_MASKCOLOR;
+    };
+    Image BMP_STR_OPEN
+    {
+        ImageBitmap = Bitmap { File = "fapopen.bmp"; };
+        MaskColor = STD_MASKCOLOR;
+    };
+    Image BMP_STR_OPEN_H
+    {
+        ImageBitmap = Bitmap { File = "fapopen_h.bmp"; };
+        MaskColor = STD_MASKCOLOR;
+    };
+    Image BMP_STR_END
+    {
+        ImageBitmap = Bitmap { File = "fapok.bmp"; };
+        MaskColor = STD_MASKCOLOR;
+    };
+    Image BMP_STR_END_H
+    {
+        ImageBitmap = Bitmap { File = "fapok_h.bmp"; };
+        MaskColor = STD_MASKCOLOR;
+    };
+    Image BMP_STR_ERROR
+    {
+        ImageBitmap = Bitmap { File = "faperror.bmp"; };
+        MaskColor = STD_MASKCOLOR;
+    };
+    Image BMP_STR_ERROR_H
+    {
+        ImageBitmap = Bitmap { File = "faperror_h.bmp"; };
+        MaskColor = STD_MASKCOLOR;
+    };
+    String STR_STRUCT_ERR1
+    {
+        Text [ en-US ] = "=?" ;
+    };
+    String STR_STRUCT_ERR2
+    {
+        Text [ en-US ] = "Error" ;
+    };
+};
+ModalDialog RID_FORMULADLG_FORMULA_MODAL
+{
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 321 , 228 ) ;
+    HelpId = HID_FORMULADLG_FORMULA ;
+    Moveable = TRUE ;
+    TabControl TC_FUNCTION
+    {
+        Pos = MAP_APPFONT ( 6 , 5 ) ;
+        Size = MAP_APPFONT ( 102 , 199 ) ;
+        PageList =
+        {
+            PageItem
+            {
+                Identifier = TP_FUNCTION ;
+                Text [ en-US ] = "Functions" ;
+            };
+            PageItem
+            {
+                Identifier = TP_STRUCT ;
+                Text [ en-US ] = "Structure" ;
+            };
+        };
+    };
+    FixedText FT_HEADLINE
+    {
+        Pos = MAP_APPFONT ( 115 , 24 ) ;
+        Size = MAP_APPFONT ( 194 , 8 ) ;
+        WordBreak = TRUE ;
+    };
+    FixedText FT_FUNCNAME
+    {
+        Pos = MAP_APPFONT ( 115 , 38 ) ;
+        Size = MAP_APPFONT ( 194 , 24 ) ;
+        WordBreak = TRUE ;
+    };
+    FixedText FT_FUNCDESC
+    {
+        Pos = MAP_APPFONT ( 115 , 68 ) ;
+        Size = MAP_APPFONT ( 194 , 64 ) ;
+        WordBreak = TRUE ;
+    };
+    FixedText FT_EDITNAME
+    {
+        Pos = MAP_APPFONT ( 113 , 6 ) ;
+        Size = MAP_APPFONT ( 83 , 10 ) ;
+    };
+    GroupBox GB_EDIT
+    {
+        Pos = MAP_APPFONT ( 112 , 18 ) ;
+        Size = MAP_APPFONT ( 203 , 128 ) ;
+    };
+    FixedText FT_FORMULA
+    {
+        Pos = MAP_APPFONT ( 112 , 151 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        WordBreak = TRUE ;
+        Text [ en-US ] = "For~mula" ;
+    };
+    Control ED_FORMULA
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 112 , 161 ) ;
+        Size = MAP_APPFONT ( 203 , 43 ) ;
+        HelpId = HID_FORMULA_FAP_FORMULA ;
+    };
+    FixedText FT_RESULT
+    {
+        Pos = MAP_APPFONT ( 198 , 6 ) ;
+        Size = MAP_APPFONT ( 55 , 10 ) ;
+        Right = TRUE ;
+        Text [ en-US ] = "Function result" ;
+    };
+    Window WND_RESULT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 255 , 4 ) ;
+        Size = MAP_APPFONT ( 60 , 12 ) ;
+    };
+    FixedText FT_FORMULA_RESULT
+    {
+        Pos = MAP_APPFONT ( 217 , 149 ) ;
+        Size = MAP_APPFONT ( 35 , 10 ) ;
+        Text [ en-US ] = "Result" ;
+        Right = TRUE ;
+    };
+    Window WND_FORMULA_RESULT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 255 , 147 ) ;
+        Size = MAP_APPFONT ( 60 , 12 ) ;
+    };
+    CheckBox BTN_MATRIX
+    {
+        Pos = MAP_APPFONT ( 6 , 208 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Array" ;
+    };
+    Edit ED_REF
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 76 , 205 ) ;
+        Size = MAP_APPFONT ( 66 , 12 ) ;
+    };
+    ImageButton RB_REF
+    {
+        Pos = MAP_APPFONT ( 144 , 205 ) ;
+        Size = MAP_APPFONT ( 13 , 15 ) ;
+        TabStop = FALSE ;
+        QuickHelpText [ en-US ] = "Maximize" ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 72 , 208 ) ;
+        Size = MAP_APPFONT ( 45 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 121 , 208 ) ;
+        Size = MAP_APPFONT ( 45 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    PushButton BTN_BACKWARD
+    {
+        Pos = MAP_APPFONT ( 171 , 208 ) ;
+        Size = MAP_APPFONT ( 45 , 14 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "<< ~Back" ;
+    };
+    PushButton BTN_FORWARD
+    {
+        Pos = MAP_APPFONT ( 219 , 208 ) ;
+        Size = MAP_APPFONT ( 45 , 14 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Next >>" ;
+    };
+    OKButton BTN_END
+    {
+        Pos = MAP_APPFONT ( 270 , 208 ) ;
+        Size = MAP_APPFONT ( 45 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    String STR_TITLE1
+    {
+        Text [ en-US ] = "Function Wizard" ;
+    };
+    String STR_TITLE2
+    {
+        Text [ en-US ] = "Function Wizard  -" ;
+    };
+    String STR_END
+    {
+        Text [ en-US ] = "~End" ;
+    };
+
+};
+ModelessDialog RID_FORMULADLG_FORMULA
+{
+    // OutputSize = TRUE ;
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 321 , 228 ) ;
+    HelpId = HID_FORMULADLG_FORMULA ;
+    Moveable = TRUE ;
+    TabControl TC_FUNCTION
+    {
+        Pos = MAP_APPFONT ( 6 , 5 ) ;
+        Size = MAP_APPFONT ( 102 , 199 ) ;
+        PageList =
+        {
+            PageItem
+            {
+                Identifier = TP_FUNCTION ;
+                Text [ en-US ] = "Functions" ;
+            };
+            PageItem
+            {
+                Identifier = TP_STRUCT ;
+                Text [ en-US ] = "Structure" ;
+            };
+        };
+    };
+    FixedText FT_HEADLINE
+    {
+        Pos = MAP_APPFONT ( 115 , 24 ) ;
+        Size = MAP_APPFONT ( 194 , 8 ) ;
+        WordBreak = TRUE ;
+    };
+    FixedText FT_FUNCNAME
+    {
+        Pos = MAP_APPFONT ( 115 , 38 ) ;
+        Size = MAP_APPFONT ( 194 , 24 ) ;
+        WordBreak = TRUE ;
+    };
+    FixedText FT_FUNCDESC
+    {
+        Pos = MAP_APPFONT ( 115 , 68 ) ;
+        Size = MAP_APPFONT ( 194 , 64 ) ;
+        WordBreak = TRUE ;
+    };
+    FixedText FT_EDITNAME
+    {
+        Pos = MAP_APPFONT ( 113 , 6 ) ;
+        Size = MAP_APPFONT ( 83 , 10 ) ;
+    };
+    GroupBox GB_EDIT
+    {
+        Pos = MAP_APPFONT ( 112 , 18 ) ;
+        Size = MAP_APPFONT ( 203 , 128 ) ;
+    };
+    FixedText FT_FORMULA
+    {
+        Pos = MAP_APPFONT ( 112 , 151 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        WordBreak = TRUE ;
+        Text [ en-US ] = "For~mula" ;
+    };
+    Control ED_FORMULA
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 112 , 161 ) ;
+        Size = MAP_APPFONT ( 203 , 43 ) ;
+        HelpId = HID_FORMULA_FAP_FORMULA ;
+    };
+    FixedText FT_RESULT
+    {
+        Pos = MAP_APPFONT ( 198 , 6 ) ;
+        Size = MAP_APPFONT ( 55 , 10 ) ;
+        Right = TRUE ;
+        Text [ en-US ] = "Function result" ;
+    };
+    Window WND_RESULT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 255 , 4 ) ;
+        Size = MAP_APPFONT ( 60 , 12 ) ;
+    };
+    FixedText FT_FORMULA_RESULT
+    {
+        Pos = MAP_APPFONT ( 217 , 149 ) ;
+        Size = MAP_APPFONT ( 35 , 10 ) ;
+        Text [ en-US ] = "Result" ;
+        Right = TRUE ;
+    };
+    Window WND_FORMULA_RESULT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 255 , 147 ) ;
+        Size = MAP_APPFONT ( 60 , 12 ) ;
+    };
+    CheckBox BTN_MATRIX
+    {
+        Pos = MAP_APPFONT ( 6 , 208 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Array" ;
+    };
+    Edit ED_REF
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 76 , 205 ) ;
+        Size = MAP_APPFONT ( 66 , 12 ) ;
+    };
+    ImageButton RB_REF
+    {
+        Pos = MAP_APPFONT ( 144 , 205 ) ;
+        Size = MAP_APPFONT ( 13 , 15 ) ;
+        TabStop = FALSE ;
+        QuickHelpText [ en-US ] = "Maximize" ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 72 , 208 ) ;
+        Size = MAP_APPFONT ( 45 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 121 , 208 ) ;
+        Size = MAP_APPFONT ( 45 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    PushButton BTN_BACKWARD
+    {
+        Pos = MAP_APPFONT ( 171 , 208 ) ;
+        Size = MAP_APPFONT ( 45 , 14 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "<< ~Back" ;
+    };
+    PushButton BTN_FORWARD
+    {
+        Pos = MAP_APPFONT ( 219 , 208 ) ;
+        Size = MAP_APPFONT ( 45 , 14 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Next >>" ;
+    };
+    OKButton BTN_END
+    {
+        Pos = MAP_APPFONT ( 270 , 208 ) ;
+        Size = MAP_APPFONT ( 45 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    String STR_TITLE1
+    {
+        Text [ en-US ] = "Function Wizard" ;
+    };
+    String STR_TITLE2
+    {
+        Text [ en-US ] = "Function Wizard  -" ;
+    };
+    String STR_END
+    {
+        Text [ en-US ] = "~End" ;
+    };
+};
+
+
+Image RID_BMP_REFBTN1
+{
+    ImageBitmap = Bitmap
+    {
+        File = "refinp1.bmp";
+    };
+    MaskColor = STD_MASKCOLOR;
+};
+
+Image RID_BMP_REFBTN1_H
+{
+    ImageBitmap = Bitmap
+    {
+        File = "refinp1_h.bmp";
+    };
+    MaskColor = STD_MASKCOLOR;
+};
+
+Image RID_BMP_REFBTN2
+{
+    ImageBitmap = Bitmap
+    {
+        File = "refinp2.bmp";
+    };
+    MaskColor = STD_MASKCOLOR;
+};
+
+Image RID_BMP_REFBTN2_H
+{
+    ImageBitmap = Bitmap
+    {
+        File = "refinp2_h.bmp";
+    };
+    MaskColor = STD_MASKCOLOR;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

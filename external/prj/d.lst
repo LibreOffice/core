@@ -1,0 +1,66 @@
+mkdir: %_DEST%\inc%_EXT%\external
+mkdir: %_DEST%\inc%_EXT%\external\glibc
+mkdir: %_DEST%\inc%_EXT%\external\gpc
+mkdir: %_DEST%\inc%_EXT%\external\mingw
+mkdir: %_DEST%\inc%_EXT%\external\mingw\include
+mkdir: %_DEST%\inc%_EXT%\external\mingw\include\atl
+mkdir: %_DEST%\inc%_EXT%\external\mingw\include\sys
+
+..\glibc\rtufiles\config.h %_DEST%\inc%_EXT%\external\glibc\config.h
+..\glibc\rtufiles\getopt.h %_DEST%\inc%_EXT%\external\glibc\getopt.h
+..\gpc\gpc.h %_DEST%\inc%_EXT%\external\gpc\gpc.h
+
+..\%__SRC%\slb\gnu_getopt.lib %_DEST%\lib%_EXT%\gnu_getopt.lib
+..\%__SRC%\lib\libgnu_getopt.a %_DEST%\lib%_EXT%\libgnu_getopt.a
+..\%__SRC%\lib\libgnu_getopt_static.a %_DEST%\lib%_EXT%\libgnu_getopt_static.a
+
+..\%__SRC%\misc\mingw\include\*.h %_DEST%\inc%_EXT%\external\mingw\include\*
+..\%__SRC%\misc\mingw\include\atl\*.h %_DEST%\inc%_EXT%\external\mingw\include\atl\*
+..\%__SRC%\misc\mingw\include\sys\*.h %_DEST%\inc%_EXT%\external\mingw\include\sys\*
+
+..\%__SRC%\slb\gpc.lib %_DEST%\lib%_EXT%\gpc.lib
+..\%__SRC%\lib\libgpc.a %_DEST%\lib%_EXT%\libgpc.a
+..\%__SRC%\lib\libgpc_static.a %_DEST%\lib%_EXT%\libgpc_static.a
+
+..\%__SRC%\lib\libautorec*.* %_DEST%\lib%_EXT%\lib*.*
+
+..\%__SRC%\lib\libgcc_s.so.1 %_DEST%\lib%_EXT%\libgcc_s.so.1
+..\%__SRC%\lib\libstdc++.so.6 %_DEST%\lib%_EXT%\libstdc++.so.6
+
+..\dbghelp\dbghelp.dll %_DEST%\bin%_EXT%\dbghelp.dll
+
+..\gdiplus\gdiplus.dll %_DEST%\bin%_EXT%\gdiplus.dll
+
+..\msvcp70\msvcp70.dll %_DEST%\bin%_EXT%\msvcp70.dll
+..\msvcp70\msvcr70.dll %_DEST%\bin%_EXT%\msvcr70.dll
+
+..\msvcp71\msvcp71*.dll %_DEST%\bin%_EXT%
+..\msvcp71\msvcr71*.dll %_DEST%\bin%_EXT%
+
+..\msvcp80\msvcm80*.dll %_DEST%\bin%_EXT%
+..\msvcp80\msvcp80*.dll %_DEST%\bin%_EXT%
+..\msvcp80\msvcr80*.dll %_DEST%\bin%_EXT%
+..\msvcp90\Microsoft.VC80.CRT.manifest %_DEST%\bin%_EXT%\Microsoft.VC80.CRT.manifest
+..\msvcp90\Microsoft.VC80.DebugCRT.manifest %_DEST%\bin%_EXT%\Microsoft.VC80.DebugCRT.manifest
+
+..\msvcp90\msvcm90*.dll %_DEST%\bin%_EXT%
+..\msvcp90\msvcp90*.dll %_DEST%\bin%_EXT%
+..\msvcp90\msvcr90*.dll %_DEST%\bin%_EXT%
+..\msvcp90\Microsoft.VC90.CRT.manifest %_DEST%\bin%_EXT%\Microsoft.VC90.CRT.manifest
+..\msvcp90\Microsoft.VC90.DebugCRT.manifest %_DEST%\bin%_EXT%\Microsoft.VC90.DebugCRT.manifest
+..\msm90\*.msm %_DEST%\bin%_EXT%
+
+..\unicows\unicows.dll %_DEST%\bin%_EXT%\unicows.dll
+
+..\unowinreg\unowinreg.dll %_DEST%\bin%_EXT%\unowinreg.dll
+
+..\msi\instmsia.exe %_DEST%\bin%_EXT%\instmsia.exe
+..\msi\instmsiw.exe %_DEST%\bin%_EXT%\instmsiw.exe
+
+..\%__SRC%\bin\mingwm10.dll %_DEST%\bin%_EXT%\mingwm10.dll
+..\%__SRC%\lib\libmsvcrt*.* %_DEST%\lib%_EXT%\lib*.*
+
+..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
+
+linklib: libgcc_s.*.*
+

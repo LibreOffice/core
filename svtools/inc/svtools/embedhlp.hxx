@@ -1,0 +1,137 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: embedhlp.hxx,v $
+ * $Revision: 1.2 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef _SVTOOLS_EMBEDHLP_HXX
+#define _SVTOOLS_EMBEDHLP_HXX
+
+#include "svtools/svtdllapi.h"
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
+#include <com/sun/star/embed/Aspects.hpp>
+#include <com/sun/star/io/XInputStream.hpp>
+#include <vcl/graph.hxx>
+#ifndef _SV_MAPUNIT_HXX
+#include <vcl/mapunit.hxx>
+#endif
+#include <rtl/ustring.hxx>
+
+#define NS_UNO ::com::sun::star::uno
+#define NS_EMBED ::com::sun::star::embed
+#define NS_IO ::com::sun::star::io
+
+namespace comphelper
+{
+    class EmbeddedObjectContainer;
+}
+
+class Rectangle;
+class OutputDevice;
+class String;
+namespace svt
+{
+    struct EmbeddedObjectRef_Impl;
+    class SVT_DLLPUBLIC EmbeddedObjectRef
+    {
+        EmbeddedObjectRef_Impl*  mpImp;
+        NS_UNO::Reference < NS_EMBED::XEmbeddedObject > mxObj;
+
+        SVT_DLLPRIVATE SvStream*   GetGraphicStream( BOOL bUpdate ) const;
+        /* SVT_DLLPRIVATE */ void        GetReplacement( BOOL bUpdate );
+        SVT_DLLPRIVATE void        Construct_Impl();
+
+        EmbeddedObjectRef& operator = ( const EmbeddedObjectRef& );
+
+    public:
+        const NS_UNO::Reference < NS_EMBED::XEmbeddedObject >& operator ->() const { return mxObj; }
+        const NS_UNO::Reference < NS_EMBED::XEmbeddedObject >& GetObject() const { return mxObj; }
+
+        static void DrawPaintReplacement( const Rectangle &rRect, const String &rText, OutputDevice *pOut );
+        static void DrawShading( const Rectangle &rRect, OutputDevice *pOut );
+        static BOOL TryRunningState( const NS_UNO::Reference < NS_EMBED::XEmbeddedObject >& );
+        static void SetGraphicToContainer( const Graphic& rGraphic,
+                                            comphelper::EmbeddedObjectContainer& aContainer,
+                                            const ::rtl::OUString& aName,
+                                            const ::rtl::OUString& aMediaType );
+
+        static sal_Bool ObjectIsModified( const NS_UNO::Reference < NS_EMBED::XEmbeddedObject >& )
+                                throw( NS_UNO::Exception );
+        static NS_UNO::Reference< NS_IO::XInputStream > GetGraphicReplacementStream(
+                                            sal_Int64 nViewAspect,
+                                            const NS_UNO::Reference < NS_EMBED::XEmbeddedObject >&,
+                                            ::rtl::OUString* pMediaType )
+                                throw();
+
+        // default constructed object; needs further assignment before it can be used
+        EmbeddedObjectRef();
+
+        // assign a previously default constructed object
+        void Assign( const NS_UNO::Reference < NS_EMBED::XEmbeddedObject >& xObj, sal_Int64 nAspect );
+
+        // create object for a certain view aspect
+        EmbeddedObjectRef( const NS_UNO::Reference < NS_EMBED::XEmbeddedObject >& xObj, sal_Int64 nAspect );
+
+        ~EmbeddedObjectRef();
+        EmbeddedObjectRef( const EmbeddedObjectRef& );
+        BOOL TryRunningState();
+
+        // assigning to a container enables the object to exchange graphical representations with a storage
+        void            AssignToContainer( comphelper::EmbeddedObjectContainer* pContainer, const ::rtl::OUString& rPersistName );
+        comphelper::EmbeddedObjectContainer* GetContainer() const;
+
+        ::rtl::OUString GetPersistName() const;
+        sal_Int64       GetViewAspect() const;
+        void            SetViewAspect( sal_Int64 nAspect );
+        Graphic*        GetGraphic( ::rtl::OUString* pMediaType=0 ) const;
+
+        // the original size of the object ( size of the icon for iconified object )
+        // no conversion is done if no target mode is provided
+        Size            GetSize( MapMode* pTargetMapMode = NULL ) const;
+
+        // the following method tries to get the HC graphic if it is possible, otherwise returns NULL
+        Graphic*        GetHCGraphic() const;
+
+        void            SetGraphic( const Graphic& rGraphic, const ::rtl::OUString& rMediaType );
+        void            SetGraphicStream(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xInGrStream,
+                            const ::rtl::OUString& rMediaType );
+
+        void            UpdateReplacement() { GetReplacement( TRUE ); }
+        void            UpdateReplacementOnDemand();
+        MapUnit         GetMapUnit() const;
+        void            Lock( BOOL bLock = TRUE );
+        BOOL            IsLocked() const;
+        void            Clear();
+        BOOL            is() const { return mxObj.is(); }
+
+        BOOL            IsChart() const;
+    };
+}
+
+#endif

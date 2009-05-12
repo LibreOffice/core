@@ -1,0 +1,6 @@
+SCFILT_1_0 {
+  global:
+    ScFilterCreate;
+  local:
+    *;
+};

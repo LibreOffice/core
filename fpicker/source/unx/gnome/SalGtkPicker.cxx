@@ -1,0 +1,234 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: SalGtkPicker.cxx,v $
+ * $Revision: 1.17.32.1 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_fpicker.hxx"
+
+//------------------------------------------------------------------------
+// includes
+//------------------------------------------------------------------------
+#include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uri/XExternalUriReferenceTranslator.hpp>
+#include <com/sun/star/lang/SystemDependent.hpp>
+#include <com/sun/star/awt/XSystemDependentWindowPeer.hpp>
+#include <com/sun/star/awt/SystemDependentXWindow.hpp>
+#include <com/sun/star/beans/NamedValue.hpp>
+#include <comphelper/processfactory.hxx>
+#include <cppuhelper/interfacecontainer.h>
+#include <rtl/process.h>
+#include <osl/diagnose.h>
+#include <com/sun/star/uno/Any.hxx>
+#include <FPServiceInfo.hxx>
+#include <vos/mutex.hxx>
+#include <vcl/svapp.hxx>
+#include "SalGtkPicker.hxx"
+#include <tools/urlobj.hxx>
+#include <stdio.h>
+
+//------------------------------------------------------------------------
+// namespace directives
+//------------------------------------------------------------------------
+
+using namespace ::rtl;
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::uno;
+
+rtl::OUString SalGtkPicker::uritounicode(const gchar* pIn)
+{
+    if (!pIn)
+        return rtl::OUString();
+
+    rtl::OUString sURL( const_cast<const sal_Char *>(pIn), strlen(pIn),
+        RTL_TEXTENCODING_UTF8 );
+
+    INetURLObject aURL(sURL);
+    if (INET_PROT_FILE == aURL.GetProtocol())
+    {
+        gchar *pEncodedFileName = g_filename_from_uri(pIn, NULL, NULL);
+        if ( pEncodedFileName )
+        {
+            rtl::OUString sEncoded(pEncodedFileName, strlen(pEncodedFileName),
+                osl_getThreadTextEncoding());
+            INetURLObject aCurrentURL(sEncoded, INetURLObject::FSYS_UNX);
+            aCurrentURL.SetHost(aURL.GetHost());
+            sURL = aCurrentURL.getExternalURL();
+        }
+        else
+        {
+            OUString aNewURL = Reference<uri::XExternalUriReferenceTranslator>(Reference<XMultiServiceFactory>(comphelper::getProcessServiceFactory(), UNO_QUERY_THROW)->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uri.ExternalUriReferenceTranslator"))), UNO_QUERY_THROW)->translateToInternal(sURL);
+            if( aNewURL.getLength() )
+                sURL = aNewURL;
+        }
+    }
+    return sURL;
+}
+
+rtl::OString SalGtkPicker::unicodetouri(const rtl::OUString &rURL)
+{
+    OString sURL = OUStringToOString(rURL, RTL_TEXTENCODING_UTF8);
+    INetURLObject aURL(rURL);
+    if (INET_PROT_FILE == aURL.GetProtocol())
+    {
+        rtl::OUString sOUURL = aURL.getExternalURL(INetURLObject::DECODE_WITH_CHARSET, osl_getThreadTextEncoding());
+        sURL = OUStringToOString( sOUURL, osl_getThreadTextEncoding());
+    }
+    return sURL;
+}
+
+gboolean canceldialog(RunDialog *pDialog)
+{
+    pDialog->cancel();
+    return false;
+}
+
+extern "C"
+{
+    struct Display;
+    extern GdkDisplay* gdk_x11_lookup_xdisplay (void*xdisplay);
+}
+
+RunDialog::RunDialog( GtkWidget *pDialog, uno::Reference< awt::XExtendedToolkit >& rToolkit ) :
+    cppu::WeakComponentImplHelper1< awt::XTopWindowListener >( maLock ),
+    mpDialog(pDialog), mpCreatedParent(NULL), mxToolkit(rToolkit)
+{
+    awt::SystemDependentXWindow aWindowHandle;
+
+    if (mxToolkit.is())
+    {
+        uno::Reference< awt::XTopWindow > xWindow(mxToolkit->getActiveTopWindow());
+        if (xWindow.is())
+        {
+            uno::Reference< awt::XSystemDependentWindowPeer > xSystemDepParent(xWindow, uno::UNO_QUERY);
+            if (xSystemDepParent.is())
+            {
+
+                sal_Int8 processID[16];
+
+                rtl_getGlobalProcessId( (sal_uInt8*)processID );
+                uno::Sequence<sal_Int8> processIdSeq(processID, 16);
+                uno::Any anyHandle = xSystemDepParent->getWindowHandle(processIdSeq, SystemDependent::SYSTEM_XWINDOW);
+
+                anyHandle >>= aWindowHandle;
+            }
+        }
+    }
+
+    GdkDisplay *pDisplay = aWindowHandle.DisplayPointer ? gdk_x11_lookup_xdisplay(reinterpret_cast<void*>(static_cast<sal_IntPtr>(aWindowHandle.DisplayPointer))) : NULL;
+    GdkWindow* pParent = pDisplay ? gdk_window_lookup_for_display(pDisplay, aWindowHandle.WindowHandle) : NULL;
+    if (!pParent && pDisplay)
+        pParent = mpCreatedParent = gdk_window_foreign_new_for_display( pDisplay, aWindowHandle.WindowHandle);
+    if (pParent)
+    {
+        gtk_widget_realize(mpDialog);
+        gdk_window_set_transient_for(mpDialog->window, pParent);
+    }
+}
+
+
+RunDialog::~RunDialog()
+{
+    if (mpCreatedParent)
+        gdk_window_destroy (mpCreatedParent);
+}
+
+void SAL_CALL RunDialog::windowOpened( const ::com::sun::star::lang::EventObject& )
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    g_timeout_add_full(G_PRIORITY_HIGH_IDLE, 0, (GSourceFunc)canceldialog, this, NULL);
+}
+
+void RunDialog::cancel()
+{
+    gtk_dialog_response( GTK_DIALOG( mpDialog ), GTK_RESPONSE_CANCEL );
+    gtk_widget_hide( mpDialog );
+}
+
+gint RunDialog::run()
+{
+    if (mxToolkit.is())
+        mxToolkit->addTopWindowListener(this);
+
+    gint nStatus = gtk_dialog_run( GTK_DIALOG( mpDialog ) );
+
+    if (mxToolkit.is())
+        mxToolkit->removeTopWindowListener(this);
+
+    if (nStatus != 1)   //PLAY
+        gtk_widget_hide( mpDialog );
+
+    return nStatus;
+}
+
+SalGtkPicker::~SalGtkPicker()
+{
+    if (m_pDialog)
+        gtk_widget_destroy(m_pDialog);
+}
+
+void SAL_CALL SalGtkPicker::implsetDisplayDirectory( const rtl::OUString& aDirectory )
+    throw( lang::IllegalArgumentException, uno::RuntimeException )
+{
+    OSL_ASSERT( m_pDialog != NULL );
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+    OString aTxt = unicodetouri(aDirectory);
+
+    if( aTxt.lastIndexOf('/') == aTxt.getLength() - 1 )
+        aTxt = aTxt.copy( 0, aTxt.getLength() - 1 );
+
+    OSL_TRACE( "setting path to %s\n", aTxt.getStr() );
+
+    gtk_file_chooser_set_current_folder_uri( GTK_FILE_CHOOSER( m_pDialog ),
+                         aTxt.getStr() );
+}
+
+rtl::OUString SAL_CALL SalGtkPicker::implgetDisplayDirectory() throw( uno::RuntimeException )
+{
+    OSL_ASSERT( m_pDialog != NULL );
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+    gchar* pCurrentFolder =
+        gtk_file_chooser_get_current_folder_uri( GTK_FILE_CHOOSER( m_pDialog ) );
+    ::rtl::OUString aCurrentFolderName = uritounicode(pCurrentFolder);
+    g_free( pCurrentFolder );
+
+    return aCurrentFolderName;
+}
+
+void SAL_CALL SalGtkPicker::implsetTitle( const rtl::OUString& aTitle ) throw( uno::RuntimeException )
+{
+    OSL_ASSERT( m_pDialog != NULL );
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+    ::rtl::OString aWindowTitle = OUStringToOString( aTitle, RTL_TEXTENCODING_UTF8 );
+    gtk_window_set_title( GTK_WINDOW( m_pDialog ), aWindowTitle.getStr() );
+}

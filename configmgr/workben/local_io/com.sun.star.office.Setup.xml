@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<com.sun.star.office.Setup>
+    <Language>
+        <Language_ID Type="string"><value>1033</value></Language_ID>
+    </Language>
+    <Modules>
+        <SCalc Type="boolean">
+            <value>true</value>
+        </SCalc>
+        <SChart Type="boolean">
+            <value>true</value>
+        </SChart>
+        <SDraw Type="boolean">
+            <value>true</value>
+        </SDraw>
+        <SImage Type="boolean">
+            <value>true</value>
+        </SImage>
+        <SImpress Type="boolean">
+            <value>true</value>
+        </SImpress>
+        <SMath Type="boolean">
+            <value>true</value>
+        </SMath>
+        <SWriter Type="boolean">
+            <value>true</value>
+        </SWriter>
+ </Modules>
+</com.sun.star.office.Setup>

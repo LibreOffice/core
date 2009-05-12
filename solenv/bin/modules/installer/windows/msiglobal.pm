@@ -1232,6 +1232,33 @@ sub put_productcode_into_setupini
 }
 
 ##########################################################################
+# Writing the ProductVersion from Property table into setup.ini
+##########################################################################
+
+sub put_productversion_into_setupini
+{
+    my ($setupinifile) = @_;
+
+    my $line = "productversion=" . $installer::globals::msiproductversion . "\n";
+    push(@{$setupinifile}, $line);
+}
+
+##########################################################################
+# Writing the key for Minor Upgrades into setup.ini
+##########################################################################
+
+sub put_upgradekey_into_setupini
+{
+    my ($setupinifile) = @_;
+
+    if ( $installer::globals::minorupgradekey ne "" )
+    {
+        my $line = "upgradekey=" . $installer::globals::minorupgradekey . "\n";
+        push(@{$setupinifile}, $line);
+    }
+}
+
+##########################################################################
 # Writing the number of languages into setup.ini
 ##########################################################################
 
@@ -1313,6 +1340,8 @@ sub create_setup_ini
     put_msiversion_into_setupini($setupinifile);
     put_productname_into_setupini($setupinifile, $allvariableshashref);
     put_productcode_into_setupini($setupinifile);
+    put_productversion_into_setupini($setupinifile);
+    put_upgradekey_into_setupini($setupinifile);
 
     $line = "\[languages\]\n";
     push(@setupinifile, $line);
@@ -1977,7 +2006,12 @@ sub set_msiproductversion
     }
     else
     {
-        $productversion = $productversion . "\." . "00" . "\." . $installer::globals::buildid;
+        my $productminor = "00";
+        if (( $allvariables->{'PACKAGEVERSION'} ) && ( $allvariables->{'PACKAGEVERSION'} ne "" ))
+        {
+            if ( $allvariables->{'PACKAGEVERSION'} =~ /^\s*(\d+)\.(\d+)\.(\d+)\s*$/ ) { $productminor = $2; }
+        }
+        $productversion = $productversion . "\." . $productminor . "\." . $installer::globals::buildid;
     }
 
     $installer::globals::msiproductversion = $productversion;
@@ -2067,6 +2101,40 @@ sub update_reglocat_table
             my $infoline = "Updated idt file: $reglocatfilename\n";
             push(@installer::globals::logfileinfo, $infoline);
         }
+    }
+}
+
+
+
+####################################################################################
+# Updating the file RemoveRe.idt dynamically (RemoveRegistry.idt)
+# The name of the component has to be replaced.
+####################################################################################
+
+sub update_removere_table
+{
+    my ($basedir) = @_;
+
+    my $removeregistryfilename = $basedir . $installer::globals::separator . "RemoveRe.idt";
+
+    # Only do something, if this file exists
+
+    if ( -f $removeregistryfilename )
+    {
+        my $removeregistryfile = installer::files::read_file($removeregistryfilename);
+
+        for ( my $i = 0; $i <= $#{$removeregistryfile}; $i++ )
+        {
+            for ( my $i = 0; $i <= $#{$removeregistryfile}; $i++ )
+            {
+                ${$removeregistryfile}[$i] =~ s/\bREGISTRYROOTCOMPONENT\b/$installer::globals::registryrootcomponent/;
+            }
+        }
+
+        # Saving the file
+        installer::files::save_file($removeregistryfilename ,$removeregistryfile);
+        my $infoline = "Updated idt file: $removeregistryfilename \n";
+        push(@installer::globals::logfileinfo, $infoline);
     }
 }
 

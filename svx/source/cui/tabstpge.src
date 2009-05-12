@@ -1,0 +1,234 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: tabstpge.src,v $
+ * $Revision: 1.31 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+ // include ---------------------------------------------------------------
+#include "helpid.hrc"
+#include <svx/dialogs.hrc>
+#include "tabstpge.hrc"
+ // pragma ----------------------------------------------------------------
+
+ // RID_SVXPAGE_TABULATOR -------------------------------------------------
+TabPage RID_SVXPAGE_TABULATOR
+{
+    HelpId = HID_TABULATOR ;
+    Hide = TRUE ;
+    Text [ en-US ] = "Tabs" ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    FixedLine FL_TABPOS
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 48 , 8 ) ;
+        Text [ en-US ] = "Position" ;
+    };
+    MetricBox ED_TABPOS
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 39 , 165 ) ;
+        Minimum = -5600 ;
+        Maximum = 5600 ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_CM ;
+    };
+    FixedLine FL_TABPOS_VERT
+    {
+        Pos = MAP_APPFONT ( 55 , 14 ) ;
+        Size = MAP_APPFONT ( 4 , 165 ) ;
+        Vert = TRUE;
+    };
+    FixedLine FL_TABTYPE
+    {
+        Pos = MAP_APPFONT ( 60 , 3 ) ;
+        Size = MAP_APPFONT ( 138 , 8 ) ;
+        Text [ en-US ] = "Type" ;
+    };
+    RadioButton BTN_TABTYPE_LEFT
+    {
+        Pos = MAP_APPFONT ( 66 , 14 ) ;
+        Size = MAP_APPFONT ( 89 , 10 ) ;
+        Text [ en-US ] = "~Left" ;
+        Check = TRUE ;
+    };
+    Window WIN_TABLEFT
+    {
+        Pos = MAP_APPFONT ( 157 , 14 ) ;
+        Size = MAP_APPFONT ( 7 , 10 ) ;
+    };
+    RadioButton BTN_TABTYPE_RIGHT
+    {
+        Pos = MAP_APPFONT ( 66 , 28 ) ;
+        Size = MAP_APPFONT ( 89 , 10 ) ;
+        Text [ en-US ] = "Righ~t" ;
+    };
+    Window WIN_TABRIGHT
+    {
+        Pos = MAP_APPFONT ( 157 , 28 ) ;
+        Size = MAP_APPFONT ( 7 , 10 ) ;
+    };
+    RadioButton BTN_TABTYPE_CENTER
+    {
+        Pos = MAP_APPFONT ( 66 , 42 ) ;
+        Size = MAP_APPFONT ( 89 , 10 ) ;
+        Text [ en-US ] = "C~entered" ;
+    };
+    Window WIN_TABCENTER
+    {
+        Pos = MAP_APPFONT ( 157 , 42 ) ;
+        Size = MAP_APPFONT ( 7 , 10 ) ;
+    };
+    RadioButton BTN_TABTYPE_DECIMAL
+    {
+        Pos = MAP_APPFONT ( 66 , 56 ) ;
+        Size = MAP_APPFONT ( 89 , 10 ) ;
+        Text [ en-US ] = "Deci~mal" ;
+    };
+    Window WIN_TABDECIMAL
+    {
+        Pos = MAP_APPFONT ( 157 , 56 ) ;
+        Size = MAP_APPFONT ( 7 , 10 ) ;
+    };
+    FixedText FT_TABTYPE_DECCHAR
+    {
+        Pos = MAP_APPFONT ( 75 , 70 ) ;
+        Size = MAP_APPFONT ( 79 , 8 ) ;
+        Text [ en-US ] = "~Character" ;
+    };
+    Edit ED_TABTYPE_DECCHAR
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 156 , 68 ) ;
+        Size = MAP_APPFONT ( 9 , 12 ) ;
+        Left = TRUE ;
+    };
+    FixedLine FL_FILLCHAR
+    {
+        Pos = MAP_APPFONT ( 60 , 86 ) ;
+        Size = MAP_APPFONT ( 138 , 8 ) ;
+        Text [ en-US ] = "Fill character" ;
+    };
+    RadioButton BTN_FILLCHAR_NO
+    {
+        Pos = MAP_APPFONT ( 66 , 97 ) ;
+        Size = MAP_APPFONT ( 89 , 10 ) ;
+        Text [ en-US ] = "N~one" ;
+        Check = TRUE ;
+    };
+    RadioButton BTN_FILLCHAR_POINTS
+    {
+        Pos = MAP_APPFONT ( 66 , 111 ) ;
+        Size = MAP_APPFONT ( 89 , 10 ) ;
+        Text = "~........" ;
+    };
+    RadioButton BTN_FILLCHAR_DASHLINE
+    {
+        Pos = MAP_APPFONT ( 66 , 125 ) ;
+        Size = MAP_APPFONT ( 89 , 10 ) ;
+        Text = "~--------" ;
+    };
+    RadioButton BTN_FILLCHAR_UNDERSCORE
+    {
+        Pos = MAP_APPFONT ( 66 , 139 ) ;
+        Size = MAP_APPFONT ( 89 , 10 ) ;
+        Text = "~_____" ;
+    };
+    RadioButton BTN_FILLCHAR_OTHER
+    {
+        Pos = MAP_APPFONT ( 66 , 153 ) ;
+        Size = MAP_APPFONT ( 89 , 10 ) ;
+        Text [ en-US ] = "Character" ;
+    };
+    Edit ED_FILLCHAR_OTHER
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 156 , 151 ) ;
+        Size = MAP_APPFONT ( 9 , 12 ) ;
+        Left = TRUE ;
+    };
+    PushButton BTN_NEW
+    {
+        Pos = MAP_APPFONT ( 204 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "~New" ;
+    };
+    PushButton BTN_DELALL
+    {
+        Pos = MAP_APPFONT ( 204 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "Delete ~All" ;
+    };
+    PushButton BTN_DEL
+    {
+        Pos = MAP_APPFONT ( 204 , 40 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "~Delete" ;
+    };
+    String ST_LEFTTAB_ASIAN
+    {
+        Text [ en-US ] = "~Left/Top" ;
+    };
+    String ST_RIGHTTAB_ASIAN
+    {
+        Text [ en-US ] = "Righ~t/Bottom" ;
+    };
+};
+ // ********************************************************************** EOF
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,87 @@
+/*************************************************************************
+* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+*
+* Copyright 2008 by Sun Microsystems, Inc.
+*
+* OpenOffice.org - a multi-platform office productivity suite
+*
+* $RCSfile: DocumentEvent.idl,v $
+*
+* $Revision: 1.4.2.2 $
+*
+* This file is part of OpenOffice.org.
+*
+* OpenOffice.org is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License version 3
+* only, as published by the Free Software Foundation.
+*
+* OpenOffice.org is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU Lesser General Public License version 3 for more details
+* (a copy is included in the LICENSE file that accompanied this code).
+*
+* You should have received a copy of the GNU Lesser General Public License
+* version 3 along with OpenOffice.org.  If not, see
+* <http://www.openoffice.org/license.html>
+* for a copy of the LGPLv3 License.
+************************************************************************/
+
+#ifndef __com_sun_star_document_DocumentEvent_idl__
+#define __com_sun_star_document_DocumentEvent_idl__
+
+#ifndef __com_sun_star_lang_EventObject_idl__
+#include <com/sun/star/lang/EventObject.idl>
+#endif
+#ifndef __com_sun_star_frame_XController2_idl__
+#include <com/sun/star/frame/XController2.idl>
+#endif
+
+//=============================================================================
+
+module com { module sun { module star { module document {
+
+//=============================================================================
+
+/** describes an event happening in an <type>OfficeDocument</type>
+
+    <p>The <member scope="com::sun::star::lang">EventObject::Source</member> member
+    of the base type refers to the document which broadcasts the event.</p>
+
+    <p>This type is the successor of the EventObject type, which should not be used
+    anymore.</p>
+
+    @see XDocumentEventBroadcaster
+ */
+struct DocumentEvent : ::com::sun::star::lang::EventObject
+{
+    /** specifies the name of the event.
+
+        <p>It's the responsibility of the component supporting the <type>XDocumentEventBroadcaster</type>
+        interface to specify which events it supports.</p>
+    */
+    string  EventName;
+
+    /** denotes the view respectively controller which the event applies to.
+
+        <p>Might be <NULL/> if the event is not related to a concrete view of
+        the document.</p>
+    */
+    ::com::sun::star::frame::XController2
+            ViewController;
+
+    /** contains supplemental information about the even which is being notified
+
+        <p>The semantics of this additional information needs to be specified by the broadcaster
+        of the event.</p>
+    */
+    any     Supplement;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+//=============================================================================
+
+#endif

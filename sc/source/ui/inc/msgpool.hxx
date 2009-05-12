@@ -1,0 +1,81 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: msgpool.hxx,v $
+ * $Revision: 1.3 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef SC_MSGPOOL_HXX
+#define SC_MSGPOOL_HXX
+
+#include "scitems.hxx"
+#include <svx/srchitem.hxx>
+
+
+#include <svtools/itempool.hxx>
+#include <svtools/stritem.hxx>
+#include <svtools/eitem.hxx>
+
+//#include <dbitems.hxx>
+#include "uiitems.hxx"
+
+
+//------------------------------------------------------------------------
+
+class ScDocumentPool;
+
+//------------------------------------------------------------------------
+
+class ScMessagePool: public SfxItemPool
+{
+    SfxStringItem       aGlobalStringItem;
+    SvxSearchItem       aGlobalSearchItem;
+    ScSortItem          aGlobalSortItem;
+    ScQueryItem         aGlobalQueryItem;
+    ScSubTotalItem      aGlobalSubTotalItem;
+    ScConsolidateItem   aGlobalConsolidateItem;
+    ScPivotItem         aGlobalPivotItem;
+    ScSolveItem         aGlobalSolveItem;
+    ScUserListItem      aGlobalUserListItem;
+
+    SfxBoolItem         aPrintWarnItem;
+
+    SfxPoolItem**   ppPoolDefaults;
+    ScDocumentPool* pDocPool;
+
+public:
+    ScMessagePool();
+protected:
+    virtual ~ScMessagePool();
+public:
+
+    virtual SfxMapUnit              GetMetric( USHORT nWhich ) const;
+};
+
+
+
+#endif
+

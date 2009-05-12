@@ -32,7 +32,7 @@
 #ifdef ENABLE_GIO
 File gid_File_Lib_GIO
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Program;
     Name = STRING(CONCAT2(ucpgio1.uno,UNXSUFFIX));
     RegistryID = gid_Starregistry_Services_Rdb;

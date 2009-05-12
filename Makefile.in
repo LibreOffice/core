@@ -1,0 +1,17 @@
+# just dumb wrapper; make install comes later
+
+SHELL=/bin/sh
+
+all:
+	. ./*Env.Set.sh && \
+	./bootstrap && \
+		cd instsetoo_native && ../solenv/bin/build.pl --all
+
+distclean:
+	. ./*Env.Set.sh && \
+	dmake distclean
+
+clean:
+	. ./*Env.Set.sh && \
+	dmake clean
+	

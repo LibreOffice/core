@@ -1,0 +1,5 @@
+# 
+# basic spreadsheet with currency format round trip conversion no modification
+# 
+TEST||MINICALC|c_cellcurrencyalue
+

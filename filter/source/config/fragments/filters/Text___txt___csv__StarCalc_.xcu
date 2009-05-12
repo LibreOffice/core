@@ -1,0 +1,10 @@
+    <node oor:name="Text - txt - csv (StarCalc)" oor:op="replace">
+        <prop oor:name="Flags"><value>IMPORT EXPORT ALIEN USESOPTIONS</value></prop>
+        <prop oor:name="UIComponent"><value>com.sun.star.comp.Calc.FilterOptionsDialog</value></prop>
+        <prop oor:name="FilterService"/>
+        <prop oor:name="UserData"><value></value></prop>
+        <prop oor:name="FileFormatVersion"><value>0</value></prop>
+        <prop oor:name="Type"><value>calc_Text_txt_csv_StarCalc</value></prop>
+        <prop oor:name="TemplateName"/>
+        <prop oor:name="DocumentService"><value>com.sun.star.sheet.SpreadsheetDocument</value></prop>
+    </node>

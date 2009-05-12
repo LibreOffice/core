@@ -1,0 +1,115 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: XMenuExtended2.idl,v $
+ * $Revision: 1.0 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_awt_XMenuExtended2_idl__
+#define __com_sun_star_awt_XMenuExtended2_idl__
+
+#ifndef __com_sun_star_awt_XMenu_idl__
+#include <com/sun/star/awt/XMenu.idl>
+#endif
+
+#ifndef __com_sun_star_awt_XMenuExtended_idl__
+#include <com/sun/star/awt/XMenuExtended.idl>
+#endif
+
+#ifndef __com_sun_star_awt_MenuItemType_idl__
+#include <com/sun/star/awt/MenuItemType.idl>
+#endif
+
+#ifndef __com_sun_star_container_NoSuchElementException_idl__
+#include <com/sun/star/container/NoSuchElementException.idl>
+#endif
+
+//=============================================================================
+
+module com {  module sun {  module star {  module awt {
+
+/** specifies extended menu functions.
+ */
+
+interface XMenuExtended2
+{
+    /** specifies some extended menu functions, like setting a command URL and a help command for a menu item.<br>
+        These functions are available for both menu bar and popup menu.
+    */
+    interface com::sun::star::awt::XMenuExtended;
+
+    /** specifies basic menu functions.
+    */
+    interface com::sun::star::awt::XMenu;
+
+
+    //=========================================================================
+
+    /** checks whether an <type>XMenu</type> is an <type>XPopupMenu</type>.
+
+        @return
+                <TRUE/> if the menu is a <type>PopupMenu</type>, <FALSE/> if it is a <type>MenuBar</type>.
+    */
+    boolean isPopupMenu();
+
+    //.........................................................................
+
+    /** removes all items from the menu.
+    */
+    void clear();
+
+    //.........................................................................
+
+    /** retrieves the type of the menu item.
+
+        @param nItemPos
+            specifies the position of the menu item for which the item type is queried.
+
+        @throws <type scope="com::sun::star::container">NoSuchElementException</type>
+            if there is no menu item in the position specified in <var>nItemPos</var>.
+
+        @see MenuItemType
+    */
+    ::com::sun::star::awt::MenuItemType getItemType( [in] short nItemPos )
+        raises ( ::com::sun::star::container::NoSuchElementException );
+
+    //.........................................................................
+
+    /** specifies whether disabled menu entries should be hidden, or not.
+
+        @param bHide
+            if <TRUE/>, disabled menu entries are hidden.
+
+        @see
+            <member scope="com::sun::star::awt">XMenu::enableItem()</member>
+    */
+    void hideDisabledEntries( [in] boolean bHide );
+
+
+};
+
+}; }; }; };
+
+#endif

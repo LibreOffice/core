@@ -1,0 +1,97 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: dbregister.src,v $
+ * $Revision: 1.7 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "dbregister.hrc"
+#include <svx/dialogs.hrc>
+#ifndef _SVX_SVXIDS_HRC //autogen
+#include <svx/svxids.hrc>
+#endif
+#ifndef _SVX_DIALOGS_HRC //autogen
+#include <svx/dialogs.hrc>
+#endif
+
+// RID_SFXPAGE_PATH -----------------------------------------------------
+#define STD_MASKCOLOR Color { Red=0xffff; Green=0x0000; Blue=0xffff; }
+TabPage RID_SFXPAGE_DBREGISTER
+{
+    // HelpId = HID_OPTIONS_DBREGISTER ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Hide = TRUE ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Text [ en-US ] = "Registered databases" ;
+
+    FixedText FT_TYPE
+    {
+        Hide = TRUE;
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Text [ en-US ] = "Registered name" ;
+    };
+    FixedText FT_PATH
+    {
+        Hide = TRUE;
+        Pos = MAP_APPFONT ( 110 , 14 ) ;
+        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Text [ en-US ] = "Database file" ;
+    };
+    Control LB_PATH
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 236 , 147 ) ;
+        Border = TRUE ;
+        TabStop = TRUE;
+    };
+    PushButton BTN_NEW
+    {
+        Pos = MAP_APPFONT ( 47 , 165 ) ;
+        Size = MAP_APPFONT ( 65 , 14 ) ;
+        Text [ en-US ] = "~New..." ;
+    };
+    PushButton BTN_EDIT
+    {
+        Pos = MAP_APPFONT ( 183 , 165 ) ;
+        Size = MAP_APPFONT ( 65 , 14 ) ;
+        Text [ en-US ] = "~Edit..." ;
+    };
+    PushButton BTN_DELETE
+    {
+        Pos = MAP_APPFONT ( 115 , 165 ) ;
+        Size = MAP_APPFONT ( 65 , 14 ) ;
+        Text [ en-US ] = "~Delete" ;
+    };
+    FixedLine GB_STD
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "Registered databases" ;
+    };
+};
+

@@ -1,0 +1,10 @@
+    <node oor:name="ppm_Import" oor:op="replace"  >
+        <prop oor:name="Type"><value>ppm_Portable_Pixelmap</value></prop>
+        <prop oor:name="FormatName"><value>ipb</value></prop>
+        <prop oor:name="RealFilterName"><value>PPM - Portable Pixelmap</value></prop>
+        <prop oor:name="UIComponent"/>
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">PPM - Portable Pixelmap</value>
+        </prop>
+        <prop oor:name="Flags"><value>IMPORT</value></prop>
+    </node>

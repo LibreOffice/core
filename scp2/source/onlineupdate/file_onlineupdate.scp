@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file_onlineupdate.scp,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.116.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,7 +30,7 @@
 
 #include "macros.inc"
 
-SPECIAL_UNO_COMPONENT_LIB_FILE( gid_File_Lib_Updchk , updchk.uno )
+SPECIAL_UNO_COMPONENT_LIB_FILE_PATCH( gid_File_Lib_Updchk , updchk.uno )
 
 File gid_File_Registry_Spool_Oo_Office_Addons_Onlineupdate_Xcu
     TXT_FILE_BODY;

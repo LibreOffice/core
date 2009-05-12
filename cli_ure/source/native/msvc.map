@@ -1,0 +1,6 @@
+UDK_3.1 {
+    global:
+
+    local:
+    *;
+};

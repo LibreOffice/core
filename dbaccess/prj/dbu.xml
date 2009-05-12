@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module-description PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "module-description.dtd">
+<module-description xmlns:xlink="http://www.w3.org/1999/xlink">
+    <module-name>dbaccess</module-name>
+    <component-description>
+        <author>Frank Schönheit</author>
+        <name>org.openoffice.comp.dbu.ODatasourceAdministrationDialog</name>
+        <description/>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="final"/>
+        <supported-service>com.sun.star.sdb.DatasourceAdministrationDialog</supported-service>
+        <service-dependency>com.sun.star.sdbc.DriverManager</service-dependency>
+        <service-dependency>com.sun.star.sdb.DatabaseContext</service-dependency>
+        <service-dependency>com.sun.star.sdb.DataSource</service-dependency>
+    </component-description>
+    <component-description>
+        <author>Frank Schönheit</author>
+        <name>org.openoffice.comp.dbu.OSQLMessageDialog</name>
+        <description/>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="final"/>
+        <supported-service>com.sun.star.sdb.ErrorMessageDialog</supported-service>
+    </component-description>
+    <component-description>
+        <author>Frank Schönheit</author>
+        <name>com.sun.star.comp.dbu.OInteractionHandler</name>
+        <description/>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="final"/>
+        <supported-service>com.sun.star.sdb.InteractionHandler</supported-service>
+        <service-dependency>com.sun.star.util.NumberFormatter</service-dependency>
+    </component-description>
+    <component-description>
+        <author>Ocke Janssen</author>
+        <name>org.openoffice.comp.dbu.DBContentLoader</name>
+        <description/>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="final"/>
+        <supported-service>com.sun.star.sdb.ContentLoader</supported-service>
+        <supported-service>com.sun.star.frame.FrameLoader</supported-service>
+        <service-dependency>com.sun.star.sdb.DataSourceBrowser</service-dependency>
+    </component-description>
+    <component-description>
+        <author/>
+        <name>org.openoffice.comp.dbu.ODatasourceBrowser</name>
+        <description/>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="final"/>
+        <supported-service>com.sun.star.sdb.DataSourceBrowser</supported-service>
+        <service-dependency>com.sun.star.util.URLTransformer</service-dependency>
+        <service-dependency>com.sun.star.util.NumberFormatter</service-dependency>
+        <service-dependency>com.sun.star.form.component.Form</service-dependency>
+        <service-dependency>com.sun.star.form.component.GridControl</service-dependency>
+        <service-dependency>com.sun.star.sdb.InteractionHandler</service-dependency>
+        <service-dependency>com.sun.star.sdb.DatabaseContext</service-dependency>
+        <service-dependency>com.sun.star.sdb.DatasourceAdministrationDialog</service-dependency>
+        <service-dependency>com.sun.star.sdb.ErrorMessageDialog</service-dependency>
+    </component-description>
+    <component-description>
+        <author/>
+        <name>com.sun.star.comp.dbu.SbaXGridControl</name>
+        <description/>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="final"/>
+        <supported-service>com.sun.star.awt.UnoControl</supported-service>
+        <supported-service>com.sun.star.form.control.GridControl</supported-service>
+        <supported-service>com.sun.star.form.control.InteractionGridControl</supported-service>
+    </component-description>
+    <component-description>
+        <author>Ocke Janssen</author>
+        <name>org.openoffice.comp.dbu.OQueryDesign</name>
+        <description>Represents the query design.</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="final"/>
+        <supported-service>com.sun.star.sdb.QueryDesign</supported-service>
+    </component-description>
+    <component-description>
+        <author>Ocke Janssen</author>
+        <name>org.openoffice.comp.dbu.JoinViewAccessibility</name>
+        <description>Represents the accessiblity view port for the connection and the tables in the query design.</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="final"/>
+        <supported-service>com.sun.star.accessibility.Accessible</supported-service>
+        <supported-service>com.sun.star.accessibility.AccessibleContext</supported-service>
+    </component-description>
+    <component-description>
+        <author>Ocke Janssen</author>
+        <name>org.openoffice.comp.dbu.TableWindowAccessibility</name>
+        <description>Represents the accessiblity object for a table in the query design.</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="final"/>
+        <supported-service>com.sun.star.accessibility.Accessible</supported-service>
+        <supported-service>com.sun.star.accessibility.AccessibleContext</supported-service>
+    </component-description>
+    <component-description>
+        <author>Ocke Janssen</author>
+        <name>org.openoffice.comp.dbu.ConnectionLineAccessibility</name>
+        <description>Represents the accessiblity object for the connection between two tables in the query design.</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="final"/>
+        <supported-service>com.sun.star.accessibility.Accessible</supported-service>
+        <supported-service>com.sun.star.accessibility.AccessibleContext</supported-service>
+    </component-description>
+    <component-description>
+        <author>Ocke Janssen</author>
+        <name>com.sun.star.comp.dbu.OColumnControl</name>
+        <description>Allows the modification of a column descriptor.</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="final"/>
+        <supported-service>com.sun.star.awt.UnoControl</supported-service>
+        <supported-service>com.sun.star.sdb.ColumnDescriptorControl</supported-service>
+    </component-description>
+    <component-description>
+        <author>Ocke Janssen</author>
+        <name>com.sun.star.comp.dbu.OColumnControlModel</name>
+        <description>The model to hold the column descriptor for the control.</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="final"/>
+        <supported-service>com.sun.star.awt.UnoControlModel</supported-service>
+        <supported-service>com.sun.star.sdb.ColumnDescriptorControlModel</supported-service>
+    </component-description>
+</module-description>

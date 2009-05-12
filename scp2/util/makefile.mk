@@ -87,15 +87,27 @@ SCP1FILES  = installation_ooo.par          \
              profileitem_python.par        \
              ure_into_ooo.par              \
              ure.par                       \
+             module_improvement.par        \
+             file_improvement.par          \
              common_brand.par              \
              common_brand_readme.par       \
              ooo_brand.par
 
+.IF "$(OS)"=="MACOSX" 
+SCP1FILES +=                               \
+             directory_ooo_macosx.par      
+.ENDIF
+ 
 .IF "$(WITH_BINFILTER)" != "NO"
 SCP1FILES +=                               \
              module_binfilter.par          \
              registryitem_binfilter.par    \
              file_binfilter.par
+.ENDIF
+
+.IF "$(ENABLE_OPENGL)" == "TRUE"
+SCP1FILES +=                               \
+             module_ogltrans.par
 .ENDIF
 
 .IF "$(SOLAR_JAVA)"!=""
@@ -118,6 +130,7 @@ SCP1FILES +=                           \
              folderitem_ooo.par        \
              windowscustomaction_ooo.par \
              mergemodules_ooo.par      \
+             vc_redist.par             \
              registryitem_writer.par   \
              folderitem_writer.par     \
              registryitem_calc.par     \
@@ -232,10 +245,17 @@ SCP2FILES  = installation_ooo.par          \
              profileitem_python.par        \
              ure_into_ooo.par              \
              ure.par                       \
+             module_improvement.par        \
+             file_improvement.par          \
              common_brand.par              \
              common_brand_readme.par       \
              ooo_brand.par
 
+.IF "$(OS)"=="MACOSX" 
+SCP2FILES +=                               \
+             directory_ooo_macosx.par      
+.ENDIF
+ 
 .IF "$(WITH_BINFILTER)" != "NO"
 SCP2FILES +=                               \
              module_binfilter.par          \
@@ -264,6 +284,7 @@ SCP2FILES +=                           \
              folderitem_ooo.par        \
              windowscustomaction_ooo.par \
              mergemodules_ooo.par      \
+             vc_redist.par             \
              registryitem_writer.par   \
              folderitem_writer.par     \
              registryitem_calc.par     \

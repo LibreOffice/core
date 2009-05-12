@@ -1,0 +1,123 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: txtstyli.hxx,v $
+ * $Revision: 1.3.102.1 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef _XMLOFF_TXTSTYLI_HXX_
+#define _XMLOFF_TXTSTYLI_HXX_
+
+#include "sal/config.h"
+#include "xmloff/dllapi.h"
+#include <xmloff/prstylei.hxx>
+
+class SvXMLTokenMap;
+class XMLEventsImportContext;
+
+class XMLOFF_DLLPUBLIC XMLTextStyleContext : public XMLPropStyleContext
+{
+    ::rtl::OUString             sListStyleName;
+    ::rtl::OUString             sCategoryVal;
+    ::rtl::OUString             sDropCapTextStyleName;
+    ::rtl::OUString             sMasterPageName;
+    ::rtl::OUString             sDataStyleName; // for grid columns only
+    const ::rtl::OUString       sIsAutoUpdate;
+    const ::rtl::OUString       sCategory;
+    const ::rtl::OUString       sNumberingStyleName;
+    const ::rtl::OUString       sOutlineLevel; //#outline level,add by zhaojianwei
+
+public:
+    const ::rtl::OUString       sDropCapCharStyleName;
+private:
+    const ::rtl::OUString       sPageDescName;
+
+    sal_Int8    nOutlineLevel;
+
+    sal_Bool    bAutoUpdate : 1;
+    sal_Bool    bHasMasterPageName : 1;
+
+    sal_Bool bHasCombinedCharactersLetter : 1;
+
+    // --> OD 2006-09-21 #i69523#
+    // introduce import of empty list style
+    sal_Bool mbListStyleSet : 1;
+    // <--
+
+    XMLEventsImportContext* pEventContext;
+
+protected:
+
+    virtual void SetAttribute( sal_uInt16 nPrefixKey,
+                               const ::rtl::OUString& rLocalName,
+                               const ::rtl::OUString& rValue );
+
+public:
+
+    TYPEINFO();
+
+    XMLTextStyleContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
+            const ::rtl::OUString& rLName,
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
+            SvXMLStylesContext& rStyles, sal_uInt16 nFamily,
+            sal_Bool bDefaultStyle = sal_False );
+    virtual ~XMLTextStyleContext();
+
+    virtual SvXMLImportContext *CreateChildContext(
+            sal_uInt16 nPrefix,
+            const ::rtl::OUString& rLocalName,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
+
+    sal_Bool IsAutoUpdate() const { return bAutoUpdate; }
+
+    const ::rtl::OUString& GetListStyle() const { return sListStyleName; }
+    // --> OD 2006-10-13 #i69629#
+    sal_Bool IsListStyleSet() const
+    {
+        return mbListStyleSet;
+    }
+    // <--
+    const ::rtl::OUString& GetMasterPageName() const { return sMasterPageName; }
+    sal_Bool HasMasterPageName() const { return bHasMasterPageName; }
+    const ::rtl::OUString& GetDropCapStyleName() const { return sDropCapTextStyleName; }
+    const ::rtl::OUString& GetDataStyleName() const { return sDataStyleName; }
+
+    virtual void CreateAndInsert( sal_Bool bOverwrite );
+    virtual void Finish( sal_Bool bOverwrite );
+    virtual void SetDefaults();
+
+    // overload FillPropertySet, so we can get at the combined characters
+    virtual void FillPropertySet(
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::beans::XPropertySet > & rPropSet );
+
+    inline sal_Bool HasCombinedCharactersLetter()
+        { return bHasCombinedCharactersLetter; }
+
+    const ::std::vector< XMLPropertyState > & _GetProperties() { return GetProperties(); }
+};
+
+#endif

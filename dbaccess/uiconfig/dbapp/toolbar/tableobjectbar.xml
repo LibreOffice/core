@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE toolbar:toolbar PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "toolbar.dtd">
+<toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
+ <toolbar:toolbaritem xlink:href=".uno:DBTableOpen" toolbar:helpid="helpid:12278" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:DBTableEdit" toolbar:helpid="helpid:12277" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:DBTableDelete" toolbar:helpid="helpid:12275" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:DBTableRename" toolbar:helpid="helpid:12276" toolbar:text="" />
+</toolbar:toolbar>

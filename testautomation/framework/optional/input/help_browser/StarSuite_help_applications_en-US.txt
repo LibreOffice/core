@@ -1,0 +1,8 @@
+StarSuite Basic
+StarSuite Calc
+StarSuite Chart
+StarSuite Base
+StarSuite Draw
+StarSuite Impress
+StarSuite Math
+StarSuite Writer

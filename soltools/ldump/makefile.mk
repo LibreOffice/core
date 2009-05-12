@@ -47,7 +47,7 @@ LIBSALCPPRT=$(0)
 
 # ldump only supports windows environment
 .IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
-
+.IF "$(COM)"!="GCC"
 #ldump4 reimplements feature set of ldump2 and ldump3
 APP1TARGET=	ldump4
 .IF "$(GUI)"=="WNT"
@@ -55,6 +55,7 @@ APP1STACK=	16000
 .ENDIF
 APP1OBJS=   $(OBJ)$/ldump.obj $(OBJ)$/hashtbl.obj
 
+.ENDIF #"$(COM)"!="GCC"
 .ENDIF #"$(GUI)"=="WNT"
 
 # --- Targets ------------------------------------------------------

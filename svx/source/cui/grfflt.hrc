@@ -1,0 +1,83 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: grfflt.hrc,v $
+ * $Revision: 1.4 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef _SVX_DLGFLT_HRC
+#define _SVX_DLGFLT_HRC
+
+// ----------
+// - Common -
+// ----------
+
+#define BTN_OK                              101
+#define BTN_CANCEL                          102
+#define BTN_HELP                            103
+#define CTL_PREVIEW                         105
+#define FL_PARAMETER                        106
+
+// --------------------
+// - DLG_FILTERMOSAIC -
+// --------------------
+
+#define DLG_FILTERMOSAIC_FT_WIDTH           1
+#define DLG_FILTERMOSAIC_MTR_WIDTH          2
+#define DLG_FILTERMOSAIC_FT_HEIGHT          3
+#define DLG_FILTERMOSAIC_MTR_HEIGHT         4
+#define DLG_FILTERMOSAIC_CBX_EDGES          5
+
+// ----------------------
+// - DLG_FILTERSOLARIZE -
+// ----------------------
+
+#define DLG_FILTERSOLARIZE_FT_THRESHOLD     1
+#define DLG_FILTERSOLARIZE_MTR_THRESHOLD    2
+#define DLG_FILTERSOLARIZE_CBX_INVERT       3
+
+// -------------------
+// - DLG_FILTERSEPIA -
+// -------------------
+
+#define DLG_FILTERSEPIA_FT_SEPIA            1
+#define DLG_FILTERSEPIA_MTR_SEPIA           2
+
+// --------------------
+// - DLG_FILTERPOSTER -
+// --------------------
+
+#define DLG_FILTERPOSTER_FT_POSTER          1
+#define DLG_FILTERPOSTER_NUM_POSTER         2
+
+// --------------------
+// - DLG_FILTEREMBOSS -
+// --------------------
+
+#define DLG_FILTEREMBOSS_FT_LIGHT           1
+#define DLG_FILTEREMBOSS_CTL_LIGHT          2
+
+#endif

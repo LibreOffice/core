@@ -1,0 +1,12 @@
+OOO_1.1 {
+global:
+    GetVersionInfo;
+    getDataArea;
+    getExistMark;
+    getIndex1;
+    getIndex2;
+    getLenArray;
+
+local:
+    *;
+};

@@ -1,0 +1,62 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: RTableConnection.hxx,v $
+ * $Revision: 1.6 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef DBAUI_RTABLECONNECTION_HXX
+#define DBAUI_RTABLECONNECTION_HXX
+
+#ifndef DBAUI_TABLECONNECTION_HXX
+#include "TableConnection.hxx"
+#endif
+#ifndef DBAUI_RTABLECONNECTIONDATA_HXX
+#include "RTableConnectionData.hxx"
+#endif
+
+namespace dbaui
+{
+    class ORelationTableView;
+    //==================================================================
+    class ORelationTableConnection : public OTableConnection
+    {
+    public:
+        ORelationTableConnection( ORelationTableView* pContainer, const TTableConnectionData::value_type& pTabConnData );
+        ORelationTableConnection( const ORelationTableConnection& rConn );
+            // wichtiger Kommentar zum CopyConstructor siehe OTableConnection(const OTableConnection&)
+        virtual ~ORelationTableConnection();
+
+        ORelationTableConnection& operator=( const ORelationTableConnection& rConn );
+
+        virtual void    Draw( const Rectangle& rRect );
+        using OTableConnection::Draw;
+    };
+}
+#endif // DBAUI_RTABLECONNECTION_HXX
+
+
+
+

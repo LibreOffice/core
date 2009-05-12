@@ -8,7 +8,7 @@
 #
 # $RCSfile: languagepack.pm,v $
 #
-# $Revision: 1.16 $
+# $Revision: 1.16.226.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -62,12 +62,15 @@ sub select_language_items
 
         if (!($ismultilingual))
         {
-            # Files with style "LANGUAGEPACK" also have to be included into the language pack
+            # Files with style "LANGUAGEPACK" and "FORCELANGUAGEPACK" also have to be included into the language pack.
+            # Files with style "LANGUAGEPACK" are only included into language packs.
+            # Files with style "FORCELANGUAGEPACK" are included into language packs and non language packs. They are
+            # forced, because otherwise they not not be included into languagepacks.
 
             my $styles = "";
             if ( $oneitem->{'Styles'} ) { $styles = $oneitem->{'Styles'}; }
 
-            if ( $styles =~ /\bLANGUAGEPACK\b/ ) { push(@itemsarray, $oneitem); }
+            if (( $styles =~ /\bLANGUAGEPACK\b/ ) || ( $styles =~ /\bFORCELANGUAGEPACK\b/ )) { push(@itemsarray, $oneitem); }
 
             next;   # single language files are not included into language pack
         }
@@ -296,7 +299,7 @@ sub put_packagename_into_script
 
     if ( $installer::globals::issolarisbuild ) { $installline = "  /usr/sbin/pkgadd -d \$outdir -a \$adminfile"; }
 
-    if ( $installer::globals::islinuxrpmbuild ) { $installline = "  rpm --prefix \$PRODUCTINSTALLLOCATION -i"; }
+    if ( $installer::globals::islinuxrpmbuild ) { $installline = "  rpm --prefix \$PRODUCTINSTALLLOCATION --replacepkgs -i"; }
 
     for ( my $i = 0; $i <= $#{$allnames}; $i++ )
     {
@@ -330,6 +333,57 @@ sub put_productname_into_script
     {
         ${$scriptfile}[$i] =~ s/PRODUCTNAMEPLACEHOLDER/$productname/;
     }
+}
+
+##################################################################
+# Including the full product name into the script template
+# (name and version)
+##################################################################
+
+sub put_fullproductname_into_script
+{
+    my ($scriptfile, $variableshashref) = @_;
+
+    my $productname = $variableshashref->{'PRODUCTNAME'};
+    my $productversion = "";
+    if ( $variableshashref->{'PRODUCTVERSION'} ) { $productversion = $variableshashref->{'PRODUCTVERSION'}; };
+    my $fullproductname = $productname . " " . $productversion;
+
+    my $infoline = "Adding full productname \"$fullproductname\" into language pack script\n";
+    push( @installer::globals::logfileinfo, $infoline);
+
+    for ( my $i = 0; $i <= $#{$scriptfile}; $i++ )
+    {
+        ${$scriptfile}[$i] =~ s/FULLPRODUCTNAMELONGPLACEHOLDER/$fullproductname/;
+    }
+}
+
+##################################################################
+# Including the name of the search package (-core01)
+# into the script template
+##################################################################
+
+sub put_searchpackage_into_script
+{
+    my ($scriptfile, $variableshashref) = @_;
+
+    my $basispackageprefix = $variableshashref->{'BASISPACKAGEPREFIX'};
+    my $basispackageversion = $variableshashref->{'OOOBASEVERSION'};
+
+    if ( $installer::globals::issolarisbuild ) { $basispackageversion =~ s/\.//g; } # "3.0" -> "30"
+
+    my $infoline = "Adding basis package prefix $basispackageprefix into language pack script\n";
+    push( @installer::globals::logfileinfo, $infoline);
+
+    $infoline = "Adding basis package version $basispackageversion into language pack script\n";
+    push( @installer::globals::logfileinfo, $infoline);
+
+    for ( my $i = 0; $i <= $#{$scriptfile}; $i++ )
+    {
+        ${$scriptfile}[$i] =~ s/BASISPACKAGEPREFIXPLACEHOLDER/$basispackageprefix/;
+        ${$scriptfile}[$i] =~ s/OOOBASEVERSIONPLACEHOLDER/$basispackageversion/;
+    }
+
 }
 
 #########################################################
@@ -492,6 +546,12 @@ sub build_installer_for_languagepack
     # add product name into script template
     put_productname_into_script($scriptfile, $allvariableshashref);
 
+    # add product name into script template
+    put_fullproductname_into_script($scriptfile, $allvariableshashref);
+
+    # add product name into script template
+    put_searchpackage_into_script($scriptfile, $allvariableshashref);
+
     # replace linenumber in script template
     put_linenumber_into_script($scriptfile, $licensefile, $allnames);
 
@@ -504,7 +564,6 @@ sub build_installer_for_languagepack
 
     # remove rpm or package
     remove_package($installdir, $packagename);
-
 }
 
 1;

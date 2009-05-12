@@ -56,6 +56,7 @@ Profile gid_Profile_Version_Ini_Basis
     ModuleID = gid_Module_Root;
     Name = PROFILENAME(version);
     Dir = gid_Dir_Program;
+    Styles = (PATCH);
 End
 
 Profile gid_Profile_Fundamentalbasis_Ini

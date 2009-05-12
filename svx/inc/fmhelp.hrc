@@ -1,0 +1,264 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: fmhelp.hrc,v $
+ * $Revision: 1.17 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef _SVX_FMHELP_HRC
+#define _SVX_FMHELP_HRC
+
+// include     -----------------------------------------------------------
+#include <svtools/solar.hrc>
+
+// in solar.hrc
+//#define HID_FORMS_START               (HID_LIB_START+4000)
+//#define HID_FORMS_END                 (HID_LIB_START+4999)
+
+// Help-Ids --------------------------------------------------------------
+
+// insgesamt 200
+#define HID_DLG_DBINFO                          (HID_FORMS_START +   0)
+#define HID_DLG_DBMSG                           (HID_FORMS_START +   1)
+
+#define HID_PROP_GROUPBOX                       (HID_FORMS_START +   2)
+#define HID_PROP_CONTROLSOURCE                  (HID_FORMS_START +   3)
+#define HID_PROP_NAME                           (HID_FORMS_START +   4)
+#define HID_PROP_TABINDEX                       (HID_FORMS_START +   5)
+#define HID_PROP_MASTERFIELDS                   (HID_FORMS_START +   6)
+#define HID_PROP_SLAVEFIELDS                    (HID_FORMS_START +   7)
+#define HID_PROP_DATASOURCE                     (HID_FORMS_START +   8)
+#define HID_PROP_CURSORSOURCE                   (HID_FORMS_START +   9)
+#define HID_PROP_CURSORSOURCETYPE               (HID_FORMS_START +  10)
+#define HID_PROP_CURSORTYPE                     (HID_FORMS_START +  11)
+#define HID_PROP_READONLY                       (HID_FORMS_START +  12)
+#define HID_PROP_DATAENTRY                      (HID_FORMS_START +  13)
+#define HID_PROP_NAVIGATION                     (HID_FORMS_START +  14)
+#define HID_PROP_CYCLE                          (HID_FORMS_START +  15)
+#define HID_PROP_ALLOW_ADDITIONS                (HID_FORMS_START +  16)
+#define HID_PROP_ALLOW_EDITS                    (HID_FORMS_START +  17)
+#define HID_PROP_ALLOW_DELETIONS                (HID_FORMS_START +  18)
+#define HID_PROP_DIRTY                          (HID_FORMS_START +  19)
+#define HID_PROP_OLDVALUE                       (HID_FORMS_START +  20)
+#define HID_PROP_VALUE                          (HID_FORMS_START +  21)
+#define HID_PROP_LOCKED                         (HID_FORMS_START +  22)
+#define HID_PROP_FORMATKEY                      (HID_FORMS_START +  23)
+#define HID_PROP_REQUIRED                       (HID_FORMS_START +  24)
+#define HID_PROP_SCALE                          (HID_FORMS_START +  25)
+#define HID_PROP_SIZE                           (HID_FORMS_START +  26)
+#define HID_PROP_UNIQUE                         (HID_FORMS_START +  27)
+#define HID_PROP_CLASSID                        (HID_FORMS_START +  28)
+#define HID_PROP_LEFT                           (HID_FORMS_START +  29)
+#define HID_PROP_RIGHT                          (HID_FORMS_START +  30)
+#define HID_PROP_HEIGHT                         (HID_FORMS_START +  31)
+#define HID_PROP_WIDTH                          (HID_FORMS_START +  32)
+#define HID_PROP_BOUNDCOLUMN                    (HID_FORMS_START +  33)
+#define HID_PROP_LISTSOURCETYPE                 (HID_FORMS_START +  34)
+#define HID_PROP_LISTSOURCE                     (HID_FORMS_START +  35)
+#define HID_PROP_LISTINDEX                      (HID_FORMS_START +  36)
+#define HID_PROP_TEXT                           (HID_FORMS_START +  37)
+#define HID_PROP_LABEL                          (HID_FORMS_START +  38)
+#define HID_PROP_STRINGITEMLIST                 (HID_FORMS_START +  39)
+#define HID_PROP_SEARCHING                      (HID_FORMS_START +  40)
+#define HID_PROP_FONT                           (HID_FORMS_START +  41)
+#define HID_PROP_ROWHEIGHT                      (HID_FORMS_START +  42)
+#define HID_PROP_BACKGROUNDCOLOR                (HID_FORMS_START +  43)
+#define HID_PROP_FILLCOLOR                      (HID_FORMS_START +  44)
+#define HID_PROP_TEXTCOLOR                      (HID_FORMS_START +  45)
+#define HID_PROP_LINECOLOR                      (HID_FORMS_START +  46)
+#define HID_PROP_BORDER                         (HID_FORMS_START +  47)
+#define HID_PROP_ALIGN                          (HID_FORMS_START +  48)
+#define HID_PROP_DROPDOWN                       (HID_FORMS_START +  49)
+#define HID_PROP_MULTILINE                      (HID_FORMS_START +  50)
+#define HID_PROP_HSCROLL                        (HID_FORMS_START +  51)
+#define HID_PROP_VSCROLL                        (HID_FORMS_START +  52)
+#define HID_PROP_TABSTOP                        (HID_FORMS_START +  53)
+#define HID_PROP_REFVALUE                       (HID_FORMS_START +  54)
+#define HID_PROP_BUTTONTYPE                     (HID_FORMS_START +  55)
+#define HID_PROP_SUBMIT_ACTION                  (HID_FORMS_START +  56)
+#define HID_PROP_SUBMIT_METHOD                  (HID_FORMS_START +  57)
+#define HID_PROP_SUBMIT_ENCODING                (HID_FORMS_START +  58)
+#define HID_PROP_DEFAULTVALUE                   (HID_FORMS_START +  59)
+#define HID_PROP_SUBMIT_TARGET                  (HID_FORMS_START +  60)
+#define HID_PROP_DEFAULT_CHECKED                (HID_FORMS_START +  61)
+#define HID_PROP_IMAGE_URL                      (HID_FORMS_START +  62)
+#define HID_PROP_DEFAULT_SELECT_SEQ             (HID_FORMS_START +  63)
+#define HID_PROP_MULTISELECTION                 (HID_FORMS_START +  64)
+
+#define HID_PROP_DATE                           (HID_FORMS_START +  65)
+#define HID_PROP_DATEMIN                        (HID_FORMS_START +  66)
+#define HID_PROP_DATEMAX                        (HID_FORMS_START +  67)
+#define HID_PROP_DATEFORMAT                     (HID_FORMS_START +  68)
+#define HID_PROP_TIME                           (HID_FORMS_START +  69)
+#define HID_PROP_TIMEMIN                        (HID_FORMS_START +  70)
+#define HID_PROP_TIMEMAX                        (HID_FORMS_START +  71)
+#define HID_PROP_TIMEFORMAT                     (HID_FORMS_START +  72)
+#define HID_PROP_VALUEMIN                       (HID_FORMS_START +  73)
+#define HID_PROP_VALUEMAX                       (HID_FORMS_START +  74)
+#define HID_PROP_VALUESTEP                      (HID_FORMS_START +  75)
+#define HID_PROP_CURRENCYSYMBOL                 (HID_FORMS_START +  76)
+#define HID_PROP_EDITMASK                       (HID_FORMS_START +  77)
+#define HID_PROP_LITERALMASK                    (HID_FORMS_START +  78)
+#define HID_PROP_ENABLED                        (HID_FORMS_START +  79)
+#define HID_PROP_AUTOCOMPLETE                   (HID_FORMS_START +  80)
+#define HID_PROP_LINECOUNT                      (HID_FORMS_START +  81)
+#define HID_PROP_MAXTEXTLEN                     (HID_FORMS_START +  82)
+#define HID_PROP_SPIN                           (HID_FORMS_START +  83)
+#define HID_PROP_STRICTFORMAT                   (HID_FORMS_START +  84)
+#define HID_PROP_SHOWTHOUSANDSEP                (HID_FORMS_START +  85)
+    // FREE
+#define HID_PROP_PRINTABLE                      (HID_FORMS_START +  87)
+#define HID_PROP_TARGET_URL                     (HID_FORMS_START +  88)
+#define HID_PROP_TARGET_FRAME                   (HID_FORMS_START +  89)
+#define HID_PROP_TAG                            (HID_FORMS_START +  90)
+#define HID_PROP_ECHO_CHAR                      (HID_FORMS_START +  91)
+#define HID_PROP_EMPTY_IS_NULL                  (HID_FORMS_START +  92)
+#define HID_PROP_DECIMAL_ACCURACY               (HID_FORMS_START +  93)
+    // FREE
+#define HID_PROP_DEFAULT_BUTTON                 (HID_FORMS_START +  95)
+#define HID_PROP_HIDDEN_VALUE                   (HID_FORMS_START +  96)
+#define HID_PROP_TRISTATE                       (HID_FORMS_START +  97)
+#define HID_PROP_NAVIGATIONBAR                  (HID_FORMS_START +  98)
+#define HID_PROP_FILTER_CRITERIA                (HID_FORMS_START +  99)
+#define HID_PROP_SORT_CRITERIA                  (HID_FORMS_START +  100)
+#define HID_PROP_DEFAULT_LONG_VALUE             (HID_FORMS_START +  101)
+#define HID_PROP_DEFAULT_TIME                   (HID_FORMS_START +  102)
+#define HID_PROP_DEFAULT_DATE                   (HID_FORMS_START +  103)
+#define HID_PROP_HELPTEXT                       (HID_FORMS_START +  104)
+#define HID_PROP_HELPURL                        (HID_FORMS_START +  105)
+#define HID_PROP_RECORDMARKER                   (HID_FORMS_START +  106)
+#define HID_PROP_FILTERPROPOSAL                 (HID_FORMS_START +  107)
+#define HID_PROP_EFFECTIVEMIN                   (HID_FORMS_START +  108)
+#define HID_PROP_EFFECTIVEMAX                   (HID_FORMS_START +  109)
+#define HID_PROP_EFFECTIVEDEFAULT               (HID_FORMS_START +  110)
+#define HID_PROP_CONTROLLABEL                   (HID_FORMS_START +  111)
+#define HID_PROP_CURRSYM_POSITION               (HID_FORMS_START +  112)
+#define HID_PROP_ESCAPE_PROCESSING              (HID_FORMS_START +  113)
+#define HID_PROP_IMAGE_ALIGN                    (HID_FORMS_START +  114)
+
+#define HID_FM_OTHER_START                      (HID_FORMS_START + 300)
+#define HID_FORM_NAVIGATOR                      (HID_FM_OTHER_START +  0)
+#define HID_FORM_NAVIGATOR_WIN                  (HID_FM_OTHER_START +  1)
+#define HID_FIELD_SEL                           (HID_FM_OTHER_START +  2)
+#define HID_FIELD_SEL_WIN                       (HID_FM_OTHER_START +  3)
+#define HID_FILTER_NAVIGATOR                    (HID_FM_OTHER_START +  4)
+#define HID_FILTER_NAVIGATOR_WIN                (HID_FM_OTHER_START +  5)
+
+#define HID_FORM_DLG_START                      (HID_FORMS_START + 400)
+// FREE
+// FREE
+// FREE
+#define HID_FM_PROPDLG_WINDOW                   (HID_FORM_DLG_START +   3)
+#define HID_FM_PROPDLG_CONTAINER                (HID_FORM_DLG_START +   4)
+#define HID_FM_PROPDLG_TABCTR                   (HID_FORM_DLG_START +   5)
+#define HID_FM_PROPDLG_TAB_GENERAL              (HID_FORM_DLG_START +   6)
+#define HID_FM_PROPDLG_TAB_DATA                 (HID_FORM_DLG_START +   7)
+#define HID_FM_PROPDLG_TAB_EVT                  (HID_FORM_DLG_START +   8)
+#define HID_FM_DLG_SEARCH                       (HID_FORM_DLG_START +   9)
+
+#define HID_SEARCH_TEXT                         (HID_FORM_DLG_START +  10)
+#define HID_SEARCH_ALLFIELDS                    (HID_FORM_DLG_START +  11)
+#define HID_SEARCH_SINGLEFIELD                  (HID_FORM_DLG_START +  12)
+#define HID_SEARCH_FIELDSELECTION               (HID_FORM_DLG_START +  13)
+#define HID_SEARCH_POSITION                     (HID_FORM_DLG_START +  14)
+#define HID_SEARCH_FORMATTER                    (HID_FORM_DLG_START +  15)
+#define HID_SEARCH_CASE                         (HID_FORM_DLG_START +  16)
+#define HID_SEARCH_BACKWARD                     (HID_FORM_DLG_START +  17)
+#define HID_SEARCH_STARTOVER                    (HID_FORM_DLG_START +  18)
+#define HID_SEARCH_WILDCARD                     (HID_FORM_DLG_START +  19)
+#define HID_SEARCH_REGULAR                      (HID_FORM_DLG_START +  20)
+#define HID_SEARCH_APPROX                       (HID_FORM_DLG_START +  21)
+#define HID_SEARCH_APPROXSETTINGS               (HID_FORM_DLG_START +  22)
+#define HID_SEARCH_BTN_SEARCH                   (HID_FORM_DLG_START +  23)
+#define HID_SEARCH_BTN_CLOSE                    (HID_FORM_DLG_START +  24)
+
+#define HID_TABORDER_CONTROLS                   (HID_FORM_DLG_START +  25)
+
+#define HID_CONTROLS_DATE_N_TIME                (HID_FORM_DLG_START +  26)
+#define HID_FM_DLG_PARAM                        (HID_FORM_DLG_START +  27)
+
+#define HID_GRID_TRAVEL_FIRST                   (HID_FORM_DLG_START +  28)
+#define HID_GRID_TRAVEL_PREV                    (HID_FORM_DLG_START +  29)
+#define HID_GRID_TRAVEL_NEXT                    (HID_FORM_DLG_START +  30)
+#define HID_GRID_TRAVEL_LAST                    (HID_FORM_DLG_START +  31)
+#define HID_GRID_TRAVEL_NEW                     (HID_FORM_DLG_START +  32)
+#define HID_GRID_TRAVEL_ABSOLUTE                (HID_FORM_DLG_START +  33)
+#define HID_GRID_NUMBEROFRECORDS                (HID_FORM_DLG_START +  34)
+
+#define UID_SEARCH_RECORDSTATUS                 (HID_FORM_DLG_START +  35)
+
+#define UID_FORMPROPBROWSER_FRAME               (HID_FORM_DLG_START +  37)
+#define UID_ABSOLUTE_RECORD_WINDOW              (HID_FORM_DLG_START +  38)
+
+#define HID_DATA_NAVIGATOR_WIN                  (HID_FM_OTHER_START +  39)
+#define HID_XFORMS_ADDDATAITEM_DLG              (HID_FM_OTHER_START +  40)
+#define HID_XFORMS_ADDCONDITION_DLG             (HID_FM_OTHER_START +  41)
+#define HID_XFORMS_NAMESPACEITEM_DLG            (HID_FM_OTHER_START +  42)
+#define HID_XFORMS_NAMESPACEITEM_LIST           (HID_FM_OTHER_START +  43)
+#define HID_XFORMS_MANAGENAMESPACE_DLG          (HID_FM_OTHER_START +  44)
+
+#define HID_TP_XFORMS_INSTANCE                  (HID_FM_OTHER_START +  45)
+#define HID_TP_XFORMS_SUBMISSION                (HID_FM_OTHER_START +  46)
+#define HID_TP_XFORMS_BINDING                   (HID_FM_OTHER_START +  47)
+
+#define HID_MN_XFORMS_MODELS_ADD                (HID_FM_OTHER_START +  48)
+#define HID_MN_XFORMS_MODELS_EDIT               (HID_FM_OTHER_START +  49)
+#define HID_MN_XFORMS_MODELS_REMOVE             (HID_FM_OTHER_START +  50)
+#define HID_MN_XFORMS_INSTANCES_ADD             (HID_FM_OTHER_START +  51)
+#define HID_MN_XFORMS_INSTANCES_EDIT            (HID_FM_OTHER_START +  52)
+#define HID_MN_XFORMS_INSTANCES_REMOVE          (HID_FM_OTHER_START +  53)
+#define HID_MN_XFORMS_SHOW_DETAILS              (HID_FM_OTHER_START +  54)
+#define HID_XFORMS_TOOLBOX                      (HID_FM_OTHER_START +  55)
+#define HID_XFORMS_TOOLBOX_ITEM_ADD             (HID_FM_OTHER_START +  56)
+#define HID_XFORMS_TOOLBOX_ITEM_ADD_ELEMENT     (HID_FM_OTHER_START +  57)
+#define HID_XFORMS_TOOLBOX_ITEM_ADD_ATTRIBUTE   (HID_FM_OTHER_START +  58)
+#define HID_XFORMS_TOOLBOX_ITEM_EDIT            (HID_FM_OTHER_START +  59)
+#define HID_XFORMS_TOOLBOX_ITEM_REMOVE          (HID_FM_OTHER_START +  60)
+#define HID_XFORMS_ITEMS_LIST                   (HID_FM_OTHER_START +  61)
+#define HID_XFORMS_MODELS_LIST                  (HID_FM_OTHER_START +  62)
+#define HID_XFORMS_MODELS_MENUBTN               (HID_FM_OTHER_START +  63)
+#define HID_XFORMS_INSTANCES_MENUBTN            (HID_FM_OTHER_START +  64)
+#define HID_XFORMS_ADDSUBMISSION_DLG            (HID_FM_OTHER_START +  65)
+#define HID_XFORMS_ADDMODEL_DLG                 (HID_FM_OTHER_START +  66)
+#define HID_XFORMS_ADDINSTANCE_DLG              (HID_FM_OTHER_START +  67)
+#define HID_XFORMS_MID_INSERT_CONTROL           (HID_FM_OTHER_START +  68)
+#define HID_XFORMS_TAB_CONTROL                  (HID_FM_OTHER_START +  69)
+
+// if you add a new define here, please adjust the overflow check
+// at the end of the file!!
+
+
+// -----------------------------------------------------------------------
+// "Uberlaufpr"ufung -----------------------------------------------------
+// -----------------------------------------------------------------------
+
+#define ACT_FM_HID_END      HID_XFORMS_TAB_CONTROL
+
+#if ACT_FM_HID_END > HID_FORMS_END
+#error Resource-Ueberlauf in #line, #file
+#endif
+
+#endif
+

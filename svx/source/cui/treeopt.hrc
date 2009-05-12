@@ -1,0 +1,103 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: treeopt.hrc,v $
+ * $Revision: 1.6 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include <svtools/controldims.hrc>
+
+#define PB_OK                   1
+#define PB_CANCEL               2
+#define PB_HELP                 3
+#define PB_BACK                 4
+#define TLB_PAGES               5
+#define FT_HELPTEXT             6
+#define STR_HELPTEXTS           7
+#define IMG_LIST                8
+#define IMG_HELP                9
+#define FT_PAGE_TITLE           10
+#define FL_LINE_1               11
+
+#define BMP_ROOT_CLOSED         17
+#define BMP_ROOT_OPENED         18
+#define FB_BORDER               19
+
+#define IMG_HINT                20
+#define FT_HINT                 21
+#define CB_DISABLE              22
+#define BTN_HINT                23
+#define ST_LOAD_ERROR           24
+
+#define STR_GENERAL_PAGES_START 1
+#define STR_GENERAL             (STR_GENERAL_PAGES_START)
+#define STR_MISC_PAGE           (STR_GENERAL_PAGES_START + 1)
+#define STR_DESKTOP_PAGE        (STR_GENERAL_PAGES_START + 2)
+#define STR_VIEW_PAGE           (STR_GENERAL_PAGES_START + 3)
+#define STR_FONT_PAGE           (STR_GENERAL_PAGES_START + 4)
+#define STR_PRINT_PAGE          (STR_GENERAL_PAGES_START + 5)
+#define STR_COLOR_PAGE          (STR_GENERAL_PAGES_START + 6)
+#define STR_LING_PAGE           (STR_GENERAL_PAGES_START + 7)
+#define STR_PATH_PAGE           (STR_GENERAL_PAGES_START + 8)
+#define STR_SAVE_PAGE           (STR_GENERAL_PAGES_START + 9)
+#define STR_USERDATA_PAGE       (STR_GENERAL_PAGES_START + 10)
+
+#define FB_IMAGE                43
+
+
+// metrics
+
+#define WIDTH_PAGEFRAME         263
+#define HEIGHT_PAGEFRAME        191
+#define WIDTH_IMG_HELP          25
+#define HEIGHT_IMG_HELP         30
+
+#define COL_1                   (RSC_SP_DLG_INNERBORDER_LEFT)
+#define COL_2                   (COL_1+0)
+#define COL_3                   (COL_2+RSC_SP_GRP_SPACE_X)
+#define COL_11                  (COL_3+WIDTH_PAGEFRAME)
+#define COL_12                  (COL_11+RSC_SP_DLG_INNERBORDER_RIGHT)
+#define COL_10                  (COL_11-RSC_CD_PUSHBUTTON_WIDTH)
+#define COL_9                   (COL_10-RSC_SP_CTRL_GROUP_X)
+#define COL_8                   (COL_9-RSC_CD_PUSHBUTTON_WIDTH)
+#define COL_7                   (COL_8-RSC_SP_CTRL_GROUP_X)
+#define COL_6                   (COL_7-RSC_CD_PUSHBUTTON_WIDTH)
+#define COL_5                   (COL_6-RSC_SP_CTRL_GROUP_X)
+#define COL_4                   (COL_5-RSC_CD_PUSHBUTTON_WIDTH)
+#define COL_3_1                 (COL_3+RSC_SP_TBPG_INNERBORDER_LEFT)
+#define COL_3_3                 (COL_3_1+WIDTH_IMG_HELP)
+#define COL_3_5                 (COL_11-RSC_SP_TBPG_INNERBORDER_RIGHT)
+
+#define ROW_1                   (RSC_SP_DLG_INNERBORDER_TOP)
+#define ROW_2                   (ROW_1+HEIGHT_PAGEFRAME)
+#define ROW_3                   (ROW_2+RSC_SP_CTRL_GROUP_Y)
+#define ROW_4                   (ROW_3+RSC_CD_PUSHBUTTON_HEIGHT)
+#define ROW_5                   (ROW_4+RSC_SP_DLG_INNERBORDER_BOTTOM)
+#define ROW_1_1                 (ROW_1+2)
+#define ROW_1_2                 (ROW_1+12)
+#define ROW_1_3                 (ROW_1_1+HEIGHT_IMG_HELP+2)
+#define ROW_1_4                 (ROW_1_3+8)
+

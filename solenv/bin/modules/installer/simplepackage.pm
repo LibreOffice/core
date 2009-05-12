@@ -8,7 +8,7 @@
 #
 # $RCSfile: simplepackage.pm,v $
 #
-# $Revision: 1.19 $
+# $Revision: 1.19.48.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -69,7 +69,7 @@ sub check_simple_packager_project
 
 sub register_extensions
 {
-    my ($officedir) = @_;
+    my ($officedir, $languagestringref) = @_;
 
     my $programdir = $officedir . $installer::globals::separator;
     # if ( $installer::globals::sundirhostname ne "" ) { $programdir = $programdir . $installer::globals::sundirhostname . $installer::globals::separator; }
@@ -85,11 +85,6 @@ sub register_extensions
     #               $installer::globals::separator . $installer::globals::unopkgfile;
 
     my $unopkgfile = $installer::globals::unopkgfile;
-
-    # unset any LIBRARY_PATH variable
-    my $dyld_library_path = delete $ENV{ 'DYLD_LIBRARY_PATH'};
-    my $ld_library_path = delete $ENV{ 'LD_LIBRARY_PATH'};
-    my $library_path = delete $ENV{ 'LIBRARY_PATH'};
 
     # my $extensiondir = $officedir . $installer::globals::separator . "share" .
     #           $installer::globals::separator . "extension" .
@@ -115,7 +110,8 @@ sub register_extensions
             if ( ! -f $unopkgfile ) { installer::exiter::exit_program("ERROR: $unopkgfile not found!", "register_extensions"); }
             if ( ! -f $oneextension ) { installer::exiter::exit_program("ERROR: $oneextension not found!", "register_extensions"); }
 
-            my $localtemppath = $installer::globals::temppath;
+            my $localtemppath = installer::systemactions::create_directories("uno", $languagestringref);
+
             if ( $installer::globals::iswindowsbuild )
             {
                 if (( $^O =~ /cygwin/i ) && ( $ENV{'USE_SHELL'} ne "4nt" ))
@@ -142,13 +138,14 @@ sub register_extensions
             while (<UNOPKG>) {push(@unopkgoutput, $_); }
             close (UNOPKG);
 
+            for ( my $j = 0; $j <= $#unopkgoutput; $j++ ) { push( @installer::globals::logfileinfo, "$unopkgoutput[$j]"); }
+
             my $returnvalue = $?;   # $? contains the return value of the systemcall
 
             if ($returnvalue)
             {
                 $infoline = "ERROR: Could not execute \"$systemcall\"!\nExitcode: '$returnvalue'\n";
                 push( @installer::globals::logfileinfo, $infoline);
-                for ( my $j = 0; $j <= $#unopkgoutput; $j++ ) { push( @installer::globals::logfileinfo, "$unopkgoutput[$j]"); }
                 installer::exiter::exit_program("ERROR: $systemcall failed!", "register_extensions");
             }
             else
@@ -163,10 +160,6 @@ sub register_extensions
         $infoline = "No extensions located in directory $extensiondir.\n";
         push( @installer::globals::logfileinfo, $infoline);
     }
-
-    $ENV{'LIBRARY_PATH'} = $library_path if defined $library_path;
-    $ENV{'LD_LIBRARY_PATH'} = $ld_library_path if defined $ld_library_path;
-    $ENV{'DYLD_LIBRARY_PATH'} = $dyld_library_path if defined $dyld_library_path;
 
     chdir($from);
 }
@@ -206,7 +199,7 @@ sub create_package
      elsif ( $archive =~ /dmg$/ )
     {
         installer::worker::put_scpactions_into_installset("$tempdir/$packagename");
-        my $folder = ( -l "$tempdir/$packagename/Applications" ) ? $packagename : "\.";
+        my $folder = (( -l "$tempdir/$packagename/Applications" ) or ( -l "$tempdir/$packagename/opt" )) ? $packagename : "\.";
 
         if ( $allvariables->{'PACK_INSTALLED'} ) {
             $folder = $packagename;
@@ -407,7 +400,15 @@ sub create_simple_package
 
     installer::logger::print_message( "... registering extensions ...\n" );
     installer::logger::include_header_into_logfile("Registering extensions:");
-    register_extensions($subfolderdir);
+    register_extensions($subfolderdir, $languagestringref);
+
+    # Adding scpactions for mac installations sets, that use not dmg format. Without scpactions the
+    # office does not start.
+
+    if (( $installer::globals::packageformat eq "installed" ) && ( $installer::globals::compiler =~ /^unxmacx/ ))
+    {
+        installer::worker::put_scpactions_into_installset("$installdir/$packagename");
+    }
 
     # Creating archive file
     if (( $installer::globals::packageformat eq "archive" ) || ( $installer::globals::packageformat eq "dmg" ))

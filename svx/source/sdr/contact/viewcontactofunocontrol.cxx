@@ -1,0 +1,191 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: viewcontactofunocontrol.cxx,v $
+ * $Revision: 1.12.18.2 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_svx.hxx"
+
+#include <svx/sdr/contact/viewcontactofunocontrol.hxx>
+#include <svx/sdr/contact/viewobjectcontactofunocontrol.hxx>
+#include <svx/sdr/contact/objectcontactofpageview.hxx>
+#include <svx/sdr/contact/displayinfo.hxx>
+#include <svx/svdouno.hxx>
+#include <svx/svdpagv.hxx>
+#include <svx/svdview.hxx>
+#include <svx/sdrpagewindow.hxx>
+
+/** === begin UNO includes === **/
+#include <com/sun/star/awt/XWindow2.hpp>
+/** === end UNO includes === **/
+
+#include "sdrpaintwindow.hxx"
+#include <tools/diagnose_ex.h>
+#include <vcl/pdfextoutdevdata.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <drawinglayer/primitive2d/controlprimitive2d.hxx>
+#include <svx/sdr/contact/displayinfo.hxx>
+
+//........................................................................
+namespace sdr { namespace contact {
+//........................................................................
+
+    /** === begin UNO using === **/
+    using ::com::sun::star::awt::XControl;
+    using ::com::sun::star::uno::Reference;
+    using ::com::sun::star::awt::XControlContainer;
+    using ::com::sun::star::awt::XControlModel;
+    using ::com::sun::star::awt::XWindow2;
+    using ::com::sun::star::uno::UNO_QUERY;
+    using ::com::sun::star::uno::Exception;
+    /** === end UNO using === **/
+
+    //====================================================================
+    //= ViewContactOfUnoControl
+    //====================================================================
+    class ViewContactOfUnoControl_Impl
+    {
+    public:
+        ViewContactOfUnoControl_Impl();
+        ~ViewContactOfUnoControl_Impl();
+
+    private:
+        ViewContactOfUnoControl_Impl( const ViewContactOfUnoControl_Impl& );            // never implemented
+        ViewContactOfUnoControl_Impl& operator=( const ViewContactOfUnoControl_Impl& ); // never implemented
+    };
+
+    //--------------------------------------------------------------------
+    ViewContactOfUnoControl_Impl::ViewContactOfUnoControl_Impl()
+    {
+    }
+
+    //--------------------------------------------------------------------
+    ViewContactOfUnoControl_Impl::~ViewContactOfUnoControl_Impl()
+    {
+    }
+
+    //====================================================================
+    //= ViewContactOfUnoControl
+    //====================================================================
+    DBG_NAME( ViewContactOfUnoControl )
+    //--------------------------------------------------------------------
+    ViewContactOfUnoControl::ViewContactOfUnoControl( SdrUnoObj& _rUnoObject )
+        :ViewContactOfSdrObj( _rUnoObject )
+        ,m_pImpl( new ViewContactOfUnoControl_Impl )
+    {
+        DBG_CTOR( ViewContactOfUnoControl, NULL );
+    }
+
+    //--------------------------------------------------------------------
+    ViewContactOfUnoControl::~ViewContactOfUnoControl()
+    {
+        DBG_DTOR( ViewContactOfUnoControl, NULL );
+    }
+
+    //--------------------------------------------------------------------
+    Reference< XControl > ViewContactOfUnoControl::getTemporaryControlForWindow(
+        const Window& _rWindow, Reference< XControlContainer >& _inout_ControlContainer ) const
+    {
+        SdrUnoObj* pUnoObject = dynamic_cast< SdrUnoObj* >( TryToGetSdrObject() );
+        OSL_ENSURE( pUnoObject, "ViewContactOfUnoControl::getTemporaryControlForDevice: no SdrUnoObj!" );
+        if ( !pUnoObject )
+            return NULL;
+        return ViewObjectContactOfUnoControl::getTemporaryControlForWindow( _rWindow, _inout_ControlContainer, *pUnoObject );
+    }
+
+    //--------------------------------------------------------------------
+    ViewObjectContact& ViewContactOfUnoControl::CreateObjectSpecificViewObjectContact( ObjectContact& _rObjectContact )
+    {
+        ObjectContactOfPageView* pPageViewContact = dynamic_cast< ObjectContactOfPageView* >( &_rObjectContact  );
+        if ( pPageViewContact )
+        {
+            // special classes for special devices:
+            // - PDF export
+            ::vcl::PDFExtOutDevData* pPDFExport = PTR_CAST( ::vcl::PDFExtOutDevData, pPageViewContact->GetPageWindow().GetPaintWindow().GetOutputDevice().GetExtOutDevData() );
+            if ( pPDFExport != NULL )
+                return *new UnoControlPDFExportContact( *pPageViewContact, *this );
+
+            // - print preview
+            if ( pPageViewContact->GetPageWindow().GetPageView().GetView().IsPrintPreview() )
+                return *new UnoControlPrintOrPreviewContact( *pPageViewContact, *this );
+
+            OutDevType eDeviceType = pPageViewContact->GetPageWindow().GetPaintWindow().GetOutputDevice().GetOutDevType();
+            // - printing
+            if ( eDeviceType == OUTDEV_PRINTER )
+                return *new UnoControlPrintOrPreviewContact( *pPageViewContact, *this );
+
+            // - any other virtual device
+            if ( eDeviceType == OUTDEV_VIRDEV )
+                return *new UnoControlDefaultContact( *pPageViewContact, *this );
+
+            // - normal windows have special, design-mode dependent handling
+            if ( eDeviceType == OUTDEV_WINDOW )
+                return *new UnoControlWindowContact( *pPageViewContact, *this );
+        }
+
+        return *new UnoControlDefaultContact( _rObjectContact, *this );
+    }
+
+    //--------------------------------------------------------------------
+    drawinglayer::primitive2d::Primitive2DSequence ViewContactOfUnoControl::createViewIndependentPrimitive2DSequence() const
+    {
+        Reference< XControlModel > xControlModel = GetSdrUnoObj().GetUnoControlModel();
+
+        if(xControlModel.is())
+        {
+            // create range. Use model data directly, not getBoundRect()/getSnapRect; these will use
+            // the primitive data themselves in the long run. Use SdrUnoObj's (which is a SdrRectObj)
+            // call to GetGeoRect() to access SdrTextObj::aRect directly and without executing anything
+            const Rectangle& rRectangle(GetSdrUnoObj().GetGeoRect());
+            const basegfx::B2DRange aRange(rRectangle.Left(), rRectangle.Top(), rRectangle.Right(), rRectangle.Bottom());
+
+            // create object transform
+            basegfx::B2DHomMatrix aTransform;
+            aTransform.set(0, 0, aRange.getWidth());
+            aTransform.set(1, 1, aRange.getHeight());
+            aTransform.set(0, 2, aRange.getMinX());
+            aTransform.set(1, 2, aRange.getMinY());
+
+            // create control primitive WITHOUT evtl. existing XControl; this would be done in
+            // the VOC in createPrimitive2DSequence()
+            const drawinglayer::primitive2d::Primitive2DReference xRetval(new drawinglayer::primitive2d::ControlPrimitive2D(
+                aTransform, xControlModel));
+
+            return drawinglayer::primitive2d::Primitive2DSequence(&xRetval, 1);
+        }
+        else
+        {
+            // #i93161# This UnoControl does not yet have a xControlModel (can happen
+            // during diverse creations). Without a model, create no visualisation.
+            return drawinglayer::primitive2d::Primitive2DSequence();
+        }
+    }
+
+//........................................................................
+} } // namespace sdr::contact
+//........................................................................

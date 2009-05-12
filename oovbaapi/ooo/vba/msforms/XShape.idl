@@ -1,0 +1,89 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: XShape.idl,v $
+ * $Revision: 1.3 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __ooo_vba_msforms_XShape_idl__
+#define __ooo_vba_msforms_XShape_idl__
+
+#ifndef __ooo_vba_XHelperInterface_idl__
+#include <ooo/vba/XHelperInterface.idl>
+#endif
+
+#ifndef __ooo_vba_excel_XTextFrame_idl__
+#include <ooo/vba/excel/XTextFrame.idl>
+#endif
+
+#ifndef __ooo_vba_msforms_XLineFormat_idl__
+#include <ooo/vba/msforms/XLineFormat.idl>
+#endif
+
+#ifndef __ooo_vba_msforms_XFillFormat_idl__
+#include <ooo/vba/msforms/XFillFormat.idl>
+#endif
+
+#ifndef __ooo_vba_msforms_XPictureFormat_idl__
+#include <ooo/vba/msforms/XPictureFormat.idl>
+#endif
+
+module ooo {  module vba { module msforms {
+interface XShapeRange;
+interface XShape : ooo::vba::XHelperInterface
+{
+    [attribute] string Name;
+    [attribute] double Height;
+    [attribute] double Width;
+    [attribute] double Left;
+    [attribute] double Top;
+    [attribute] boolean Visible;
+    [attribute, readonly] long ZOrderPosition;
+    [attribute, readonly] long Type;
+    [attribute] double Rotation;
+    [attribute, readonly] XLineFormat Line;
+    [attribute, readonly] XFillFormat Fill;
+    [attribute, readonly] XPictureFormat PictureFormat;
+
+    /*
+    using in word
+    [attribute] RelativeHorizontalPosition
+    [attribute] RelativeVerticalPosition
+    [attribute] XWrapFormat WrapFormat;
+    */
+    ooo::vba::excel::XTextFrame TextFrame();
+    void Delete();
+    void ZOrder( [in] long ZOrderCmd );
+    void IncrementRotation( [in] double Increment );
+    void IncrementLeft( [in] double Increment );
+    void IncrementTop( [in] double Increment );
+    void Select( [in]  /*Optional*/ any Replace );
+    void ScaleHeight( [in] double Factor, [in] boolean RelativeToOriginalSize, [in] long Scale );
+    void ScaleWidth( [in] double Factor, [in] boolean RelativeToOriginalSize, [in] long Scale );
+    any ShapeRange( [in] any index );  // only here for convience
+};
+}; }; };
+
+#endif

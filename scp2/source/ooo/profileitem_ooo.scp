@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: profileitem_ooo.scp,v $
- * $Revision: 1.68 $
+ * $Revision: 1.67.2.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -272,7 +272,7 @@ ProfileItem gid_Profileitem_Configmgr_Strata
     Section   = "Bootstrap";
     Order = 25;
     Key  = "CFG_Strata";
-    Value  = "${CFG_LocalDataSvc}:$CFG_DefaultLayerUrl;${CFG_LocalModuleDataSvc}:$CFG_ModuleLayerUrl;${CFG_LocalResDataSvc}:$CFG_DefaultLayerUrl;?${CFG_LocalDataSvc}:$CFG_BrandLayerUrl;?${CFG_LocalModuleDataSvc}:$CFG_BrandLayerModulesUrl;${CFG_LocalDataSvc}:$CFG_UnoSharedPackages;?com.sun.star.comp.configuration.backend.SystemIntegration:;?com.sun.star.comp.configuration.backend.PolicyLayerBackend:;${CFG_LocalDataSvc}:$CFG_UnoUserPackages;${CFG_LocalDataSvc}:$CFG_UserLayerUrl;";
+    Value  = "${CFG_LocalDataSvc}:$CFG_DefaultLayerUrl;${CFG_LocalModuleDataSvc}:$CFG_ModuleLayerUrl;${CFG_LocalResDataSvc}:$CFG_DefaultLayerUrl;?${CFG_LocalDataSvc}:$CFG_BrandLayerUrl;?${CFG_LocalModuleDataSvc}:$CFG_BrandLayerModulesUrl;${CFG_LocalDataSvc}:$CFG_UnoSharedPackages;?com.sun.star.comp.configuration.backend.SystemIntegration:;${CFG_LocalDataSvc}:$CFG_UnoUserPackages;${CFG_LocalDataSvc}:$CFG_UserLayerUrl;";
 End
 
 ProfileItem gid_Profileitem_Configmgr_Ldapmappingurl
@@ -379,28 +379,6 @@ ProfileItem gid_Profileitem_Soffice_Logo
     Key = "Logo";
     Value = "1";
 End
-
-#ifdef MACOSX
-
-ProfileItem gid_ProfileItem_Soffice_Macosxrc
-    ProfileID = gid_Profile_Soffice_Ini;
-    ModuleID = gid_Module_Root;
-    Section = "Bootstrap";
-    Order = 5;
-    Key = "MacOSXIntegrationUserFile";
-    Value = "${$ORIGIN/bootstraprc:UserInstallation}/user/macosxrc.txt";
-End
-
-ProfileItem gid_ProfileItem_Soffice_Macosxrc2
-    ProfileID = gid_Profile_Soffice_Ini;
-    ModuleID = gid_Module_Root;
-    Section = "Bootstrap";
-    Order = 6;
-    Key = "MacOSXIntegrationDefaultFile";
-    Value = "${$ORIGIN/bootstraprc:BaseInstallation}/presets/macosxrc.txt";
-End
-
-#endif
 
 ProfileItem gid_Profileitem_Soffice_ProgressBarColor
     ProfileID = gid_Profile_Soffice_Ini;
@@ -610,14 +588,6 @@ ProfileItem gid_Basis_Profileitem_Version_Buildid
     Value = "<buildid>";
 End
 
-ProfileItem gid_Basis_Profileitem_Version_Productpatch
-    ProfileID = gid_Profile_Version_Ini_Basis;
-    ModuleID = gid_Module_Root;
-    Section = "Version";
-    Key = "ProductPatch";
-    Value = "<productupdate>";
-End
-
 ProfileItem gid_Basis_Profileitem_Version_Productsource
     ProfileID = gid_Profile_Version_Ini_Basis;
     ModuleID = gid_Module_Root;
@@ -657,3 +627,12 @@ ProfileItem gid_Basis_Profileitem_Version_Ooobaseversion
     Key = "OOOBaseVersion";
     Value = "${OOOBASEVERSION}";
 End
+
+ProfileItem gid_Basis_Profileitem_Version_Ooopackageversion
+    ProfileID = gid_Profile_Version_Ini_Basis;
+    ModuleID = gid_Module_Root;
+    Section = "Version";
+    Key = "OOOPackageVersion";
+    Value = "${OOOPACKAGEVERSION}";
+End
+

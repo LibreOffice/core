@@ -1,0 +1,41 @@
+// If using XMultiServiceFactory need to uncomment import directive below:
+//import com.sun.star.lang.XMultiServiceFactory;
+
+// If using XDesktop need to uncomment import directive below:
+//import com.sun.star.frame.XDesktop;
+
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.lang.*;
+import com.sun.star.text.*;
+
+import drafts.com.sun.star.script.framework.runtime.XScriptContext;
+
+
+public class HelloWorld {
+
+  public void printHello(XScriptContext xSc) {
+      
+      /* Methods available from XScriptContext: 
+            xSc.getDocument() returns XModel
+            xSc.getDesktop() returns XDesktop
+            xSc.getMultiComponentFactory() returns XMultiComponentFactory
+        */
+        
+        // Getting the current document as a component
+        XComponent xcomponent = xSc.getDocument();
+        
+        // Getting the text document object
+        XTextDocument xtextdocument = (XTextDocument) UnoRuntime.queryInterface(
+XTextDocument.class, xcomponent);
+
+        //Getting the text object
+        XText oText = xtextdocument.getText();
+
+        //Create a cursor object
+        XTextCursor oCursor = oText.createTextCursor();
+
+        // Print out Hello World
+        oText.insertString( oCursor, "**** HELLO ****", false );
+  }
+
+}

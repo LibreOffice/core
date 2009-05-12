@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE toolbar:toolbar PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "toolbar.dtd">
+<toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <toolbar:toolbaritem xlink:href=".uno:PageUp" toolbar:helpid="20937"/>
+ <toolbar:toolbaritem xlink:href=".uno:PageDown" toolbar:helpid="20938"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:GoToStartOfDoc" toolbar:helpid="20907"/>
+ <toolbar:toolbaritem xlink:href=".uno:GoToEndOfDoc" toolbar:helpid="20908"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:ShowTwoPages" toolbar:helpid="21251"/>
+ <toolbar:toolbaritem xlink:href=".uno:ShowMultiplePages" toolbar:helpid="21252"/>
+ <toolbar:toolbaritem xlink:href=".uno:ShowBookview" toolbar:helpid="helpid:21255"  />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:ZoomPlus" toolbar:helpid="10097"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:PreviewZoom" toolbar:helpid="53071"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:ZoomMinus" toolbar:helpid="10098"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:FullScreen" toolbar:helpid="5627"/>
+ <toolbar:toolbaritem xlink:href=".uno:PrintPagePreView" toolbar:helpid="21253"/>
+ <toolbar:toolbaritem xlink:href=".uno:PreviewPrintOptions" toolbar:helpid="20250"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:ClosePreview" toolbar:helpid="5325"/>
+</toolbar:toolbar>

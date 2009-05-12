@@ -95,6 +95,8 @@ LOCALPYFILES= \
 # setld - Tru64 (setld) software distribution
 # native - "Native" software distribution for the platform
 # portable - Portable software distribution
+xxxx:
+    echo $(PERL) -w $(SOLARENV)$/bin$/gen_update_info.pl --buildid $(BUILD) --arch "$(RTL_ARCH)" --os "$(RTL_OS)" --lstfile $(PRJ)$/util$/openoffice.lst --product OpenOffice --languages $(subst,$(@:s/_/ /:1)_, $(@:b)) $(PRJ)$/util$/update.xml
 
 .IF "$(GUI)"!="WNT" && "$(EPM)"=="NO" && "$(USE_PACKAGER)"==""
 ALLTAR : $(LOCALPYFILES)

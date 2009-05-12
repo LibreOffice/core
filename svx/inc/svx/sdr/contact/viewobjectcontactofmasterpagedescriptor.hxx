@@ -1,0 +1,69 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: viewobjectcontactofmasterpagedescriptor.hxx,v $
+ *
+ * $Revision: 1.2 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef _SDR_CONTACT_VIEWOBJECTCONTACTOFMASTERPAGEDESCRIPTOR_HXX
+#define _SDR_CONTACT_VIEWOBJECTCONTACTOFMASTERPAGEDESCRIPTOR_HXX
+
+#include <svx/sdr/contact/viewobjectcontact.hxx>
+
+//////////////////////////////////////////////////////////////////////////////
+// predeclarations
+
+namespace sdr {
+    class MasterPageDescriptor;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+namespace sdr
+{
+    namespace contact
+    {
+        class ViewObjectContactOfMasterPageDescriptor : public ViewObjectContact
+        {
+        public:
+            ViewObjectContactOfMasterPageDescriptor(ObjectContact& rObjectContact, ViewContact& rViewContact);
+            virtual ~ViewObjectContactOfMasterPageDescriptor();
+
+            // access to MasterPageDescriptor
+            sdr::MasterPageDescriptor& GetMasterPageDescriptor() const;
+
+            virtual bool isPrimitiveVisible(const DisplayInfo& rDisplayInfo) const;
+            virtual drawinglayer::primitive2d::Primitive2DSequence getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo) const;
+        };
+    } // end of namespace contact
+} // end of namespace sdr
+
+//////////////////////////////////////////////////////////////////////////////
+
+#endif //_SDR_CONTACT_VIEWOBJECTCONTACTOFSDRPAGE_HXX
+
+// eof

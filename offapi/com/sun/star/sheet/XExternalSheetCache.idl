@@ -1,0 +1,102 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: XExternalSheetCache.idl,v $
+ * $Revision: 1.1.2.5 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_sheet_XExternalSheetCache_idl__
+#define __com_sun_star_sheet_XExternalSheetCache_idl__
+
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+
+module com {  module sun {  module star {  module sheet {
+
+/** Primary interface for the <type scope="com::sun::star::sheet">ExternalSheetCache</type> service.
+
+    @see com::sun::star::sheet::ExternalSheetCache
+
+    @since OOo 3.1.0
+ */
+interface XExternalSheetCache
+{
+    /** It sets a cached value for a specified cell position.  The value is expected
+        to be either of type <type>string</type> or of type <type>double</type>.  No
+        other data types are supported.
+
+        @param nRow row position (0-based)
+        @param nColumn column position (0-based)
+        @param aValue cell value to be cached
+     */
+    void setCellValue( [in] long nColumn, [in] long nRow, [in] any aValue )
+            raises (com::sun::star::lang::IllegalArgumentException);
+
+    /** It retrieves a cached value from a specified cell position.  The cached
+        value can be either <type>string</type> or <type>double</type>.
+
+        @return any cached cell value
+     */
+    any getCellValue( [in] long nColumn, [in] long nRow )
+            raises (com::sun::star::lang::IllegalArgumentException);
+
+    /** It returns a list of all row numbers where a cached cell or cells exist.
+        The row numbers are sorted in ascending order.
+
+        @return sequence<long> list of all row numbers with cached cell(s)
+     */
+    sequence< long > getAllRows();
+
+    /** Given a row number, this method returns a list of all columns numbers
+        that store cached cell values in that row.  The column numbers are
+        sorted in ascending order.
+
+        @return sequence<long> list of all columns numbers with cached cell values
+     */
+    sequence< long > getAllColumns( [in] long nRow )
+            raises (com::sun::star::lang::IllegalArgumentException);
+
+    //-------------------------------------------------------------------------
+
+    /** Index corresponding to this instance of an external sheet cache for
+        usage in formula tokens.
+
+        <p>This index to the external sheet cache is expected in the
+        <member>SingleReference::Sheet</member> member if it is part of an
+        external reference token.
+
+        <p>Each external sheet cache has a unique index value inside the
+        <type>ExternalDocLink</type> instance.</p>
+
+        @see FormulaToken
+        @see ExternalReference
+     */
+    [attribute, readonly] long TokenIndex;
+
+};
+
+}; }; }; };
+
+#endif

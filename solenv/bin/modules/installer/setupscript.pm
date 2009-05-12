@@ -34,6 +34,7 @@ package installer::setupscript;
 use installer::existence;
 use installer::exiter;
 use installer::globals;
+use installer::logger;
 use installer::remover;
 use installer::scriptitems;
 use installer::ziplist;
@@ -236,6 +237,8 @@ sub replace_all_setupscriptvariables_in_script
 {
     my ( $scriptref, $variablesref ) = @_;
 
+    installer::logger::include_header_into_globallogfile("Replacing variables in setup script (start)");
+
     # make hash of variables to be substituted if they appear in the script
     my %subs;
     for ( my $j = 0; $j <= $#{$variablesref}; $j++ )
@@ -248,22 +251,37 @@ sub replace_all_setupscriptvariables_in_script
         }
     }
 
-    for ( my $i = 0; $i <= $#{$scriptref}; $i++ )
+    # This is far faster than running a regexp for each line
+    my $bigstring = '';
+    for my $line (@{$scriptref}) { $bigstring = $bigstring . $line; }
+
+    foreach my $key ( keys %subs )
     {
-        my $line = ${$scriptref}[$i];
+        # Attention: It must be possible to substitute "%PRODUCTNAMEn", "%PRODUCTNAME%PRODUCTVERSIONabc"
+        my $value = $subs{$key};
+        $bigstring =~ s/$key/$value/g;
+    }
 
-        if ( $line =~ /^.*\%\w+.*$/ )   # only oif "%" occurs
+    my @newlines = split /\n/, $bigstring;
+    $scriptref = \@newlines;
+
+    # now check for any mis-named '%' variables that we have left
+    my $num = 0;
+    for my $check (@newlines)
+    {
+        $num++;
+        if ( $check =~ /^.*\%\w+.*$/ )
         {
-            # Attention: It must be possible to substitute "%PRODUCTNAMEn", "%PRODUCTNAME%PRODUCTVERSIONabc"
-
-            foreach my $key ( keys %subs )
-            {
-                my $value = $subs{$key};
-                $line =~ s/$key/$value/g;
-                ${$scriptref}[$i] = $line;
-            }
+            if (( $check =~ /%1/ ) || ( $check =~ /%2/ ) || ( $check =~ /%verify/ )) { next; }
+            my $infoline = "WARNING: mis-named or un-known '%' variable in setup script at line $num:\n$check\n";
+            push( @installer::globals::globallogfileinfo, $infoline);
+            # print STDERR "Warning: mis-named or un-known '%' variable at line $num:\n$check\n";
         }
     }
+
+    installer::logger::include_header_into_globallogfile("Replacing variables in setup script (end)");
+
+    return $scriptref;
 }
 
 #######################################################################

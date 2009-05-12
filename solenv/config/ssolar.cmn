@@ -67,6 +67,7 @@ common
 		DIC_ALL
 		DPKG
 		DYLD_LIBRARY_PATH
+		LD_LIBRARY_PATH
 		DMAKE_INC
 		DMAKE
 		DRIVE_O
@@ -86,7 +87,6 @@ common
         ENABLE_PASF
         ENABLE_RANDR
         ENABLE_REPORTBUILDER
-        ENABLE_REPORTDESIGN
         ENABLE_SVCTAGS
 		ENABLE_VBA
 		FORCE2ARCHIVE
@@ -244,6 +244,7 @@ common
         XAU_LIBS
 		WINDOWS_VISTA_PSDK
         WITH_LDAP
+        WITH_VC_REDIST
 		WST
 		XCLASSPATH
         XSLTPROC
@@ -267,7 +268,6 @@ common
         NO_HIDS
         PAM_LINK
         PAM
-        PSPRINT
         PYTHONHOME
         PYTHONPATH
         SOLAR_PLUGIN

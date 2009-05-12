@@ -1,0 +1,84 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: newerverwarn.src,v $
+ * $Revision: 1.1.2.1 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#define __RSC
+
+#include "newerverwarn.hrc"
+#include "ids.hrc"
+
+#define STD_MASKCOLOR Color { Red=0xffff; Green=0x0000; Blue=0xffff; }
+
+ModalDialog RID_DLG_NEWER_VERSION_WARNING
+{
+    HelpId = HID_DLG_NEWERVERSIONWARNING;
+    OutputSize = TRUE ;
+    Size = MAP_APPFONT ( DLG_WIDTH , DLG_HEIGHT ) ;
+    SvLook = TRUE ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Text [ en-US ] = "%PRODUCTNAME Update Available" ;
+    FixedImage FI_IMAGE
+    {
+        Pos = MAP_APPFONT ( COL_1 , ROW_1  );
+        Size = MAP_APPFONT ( IMAGE_WIDTH , IMAGE_HEIGHT );
+        Hide = FALSE;
+        Fixed = Image
+        {
+            ImageBitmap = Bitmap { File = "versionwarning.png"; };
+            MaskColor = STD_MASKCOLOR;
+        };
+    };
+    FixedText FT_INFO
+    {
+        Pos = MAP_APPFONT( COL_2, ROW_1 );
+        Size = MAP_APPFONT( INFO_WIDTH, INFO_LINES * RSC_CD_FIXEDTEXT_HEIGHT );
+        Wordbreak = TRUE;
+        Text [ en-US ] = "This document was created by a newer version of %PRODUCTNAME. It may contain features not supported by your current version.\n\nClick 'Update Now...' to run online update and get the latest version of %PRODUCTNAME.";
+    };
+    FixedLine FL_BUTTON
+    {
+        Pos = MAP_APPFONT ( 0 , ROW_2 ) ;
+        Size = MAP_APPFONT ( DLG_WIDTH , RSC_CD_FIXEDLINE_HEIGHT ) ;
+    };
+    PushButton PB_UPDATE
+    {
+        Pos = MAP_APPFONT ( COL_3 , ROW_3 ) ;
+        Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Update Now..." ;
+    };
+    CancelButton PB_LATER
+    {
+        Pos = MAP_APPFONT ( COL_4 , ROW_3 ) ;
+        Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Later" ;
+    };
+};

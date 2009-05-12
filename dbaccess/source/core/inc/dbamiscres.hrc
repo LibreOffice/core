@@ -1,0 +1,65 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: dbamiscres.hrc,v $
+ * $Revision: 1.1.2.1 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef _DBA_MISCRES_HRC_
+#define _DBA_MISCRES_HRC_
+
+//========================================================================
+// string ids (relative to other resources, that's why not unique)
+#define STR_MYSQL_ODBC          1
+#define STR_MYSQL_JDBC          2
+#define STR_ADABAS              3
+#define STR_ORACLE_JDBC         4
+#define STR_JDBC                5
+#define STR_ODBC                6
+#define STR_DBASE               7
+#define STR_MSACCESS            8
+#define STR_MSACCESS2007        9
+#define STR_ADO                 10
+#define STR_FLAT                11
+#define STR_CALC                12
+#define STR_MOZILLA             13
+#define STR_LDAP                14
+#define STR_OUTLOOK             15
+#define STR_OUTLOOKEXP          16
+#define STR_EVOLUTION           17
+#define STR_EVOLUTION_GROUPWISE 18
+#define STR_EVOLUTION_LDAP      19
+#define STR_KAB                 20
+#define STR_MACAB               21
+#define STR_EMBEDDED_HSQLDB     22
+#define STR_THUNDERBIRD         23
+#define STR_MYSQL_NATIVE        24
+
+#define STR_END                 STR_MYSQL_NATIVE + 1
+
+
+#endif // _DBA_MISCRES_HRC_
+

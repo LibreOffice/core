@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: directory_ooo.scp,v $
- * $Revision: 1.55 $
+ * $Revision: 1.55.66.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,21 +29,6 @@
 ************************************************************************/
 
 #include "macros.inc"
-
-#ifdef MACOSX
-Directory gid_Dir_Bundle
-    ParentID = PD_PROGDIR;
-    HostName = "%PRODUCTNAME.app";
-End
-#endif
-
-#ifdef MACOSX
-Directory gid_Dir_Bundle_Contents
-    ParentID = gid_Dir_Bundle;
-    HostName = "Contents";
-    Styles = (OFFICEDIRECTORY);
-End
-#endif
 
 #ifdef MACOSX
 Directory gid_Dir_Bundle_Contents_Resources
@@ -100,9 +85,13 @@ End
 
 #ifndef MACOSX
 Directory gid_Dir_Ooo_Basis
-    ParentID = gid_Dir_Ooo_Openofficeorg;
   #ifdef WNT
-    HostName = "Basis ${OOOBASEVERSION}";
+    ParentID = gid_Dir_Brand_Root;
+  #else
+    ParentID = gid_Dir_Ooo_Openofficeorg;
+  #endif
+  #ifdef WNT
+    HostName = "Basis";
   #else
     HostName = "basis${OOOBASEVERSION}";
   #endif
@@ -216,6 +205,11 @@ End
 Directory gid_Dir_User_Registry_Data_Org_Openoffice_Office_Ui
     ParentID = gid_Dir_User_Registry_Data_Org_Openoffice_Office;
     DosName = "UI";
+End
+
+Directory gid_Dir_User_Registry_Data_Org_Openoffice_Office_OOoImprovement
+    ParentID = gid_Dir_User_Registry_Data_Org_Openoffice_Office;
+    DosName = "OOoImprovement";
 End
 
 Directory gid_Dir_User_Registry_Data_Org_Openoffice_Ucb
@@ -434,11 +428,6 @@ End
 Directory gid_Dir_Share_Xslt_Docbook
     ParentID = gid_Dir_Share_Xslt;
     DosName = "docbook";
-End
-
-Directory gid_Dir_Share_Xslt_Wiki
-    ParentID = gid_Dir_Share_Xslt;
-    DosName = "wiki";
 End
 
 Directory gid_Dir_Share_Xslt_Common
@@ -758,6 +747,11 @@ Directory gid_Dir_Share_Registry_Schema_Org_Openoffice_Office_Ui
     HostName = "UI";
 End
 
+Directory gid_Dir_Share_Registry_Schema_Org_Openoffice_Office_OOoImprovement
+    ParentID = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
+    HostName = "OOoImprovement";
+End
+
 Directory gid_Dir_Share_Registry_Schema_Org_Openoffice_Ucb
     ParentID = gid_Dir_Share_Registry_Schema_Org_Openoffice;
     HostName = "ucb";
@@ -888,6 +882,11 @@ Directory gid_Dir_Share_Registry_Modules_Oo_Inet
     HostName = "Inet";
 End
 
+Directory gid_Dir_Share_Registry_Modules_Oo_Office_Accelerators
+    ParentID = gid_Dir_Share_Registry_Modules_Oo_Office;
+    HostName = "Accelerators";
+End
+
 Directory gid_Dir_Share_Registry_Modules_Oo_Office_Common
     ParentID = gid_Dir_Share_Registry_Modules_Oo_Office;
     HostName = "Common";
@@ -898,9 +897,19 @@ Directory gid_Dir_Share_Registry_Modules_Oo_Office_Writer
     HostName = "Writer";
 End
 
+Directory gid_Dir_Share_Registry_Modules_Oo_Office_Impress
+    ParentID = gid_Dir_Share_Registry_Modules_Oo_Office;
+    HostName = "Impress";
+End
+
 Directory gid_Dir_Share_Registry_Modules_Oo_Office_Linguistic
     ParentID = gid_Dir_Share_Registry_Modules_Oo_Office;
     HostName = "Linguistic";
+End
+
+Directory gid_Dir_Share_Registry_Modules_Oo_Office_Logging
+    ParentID = gid_Dir_Share_Registry_Modules_Oo_Office;
+    HostName = "Logging";
 End
 
 Directory gid_Dir_Share_Registry_Modules_Oo_Office_Embedding

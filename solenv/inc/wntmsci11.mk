@@ -115,6 +115,13 @@ RSCDEFS+=-DFULL_DESK
 CFLAGSEXCEPTIONS=-EHa
 CFLAGS_NO_EXCEPTIONS=
 
+# with the current debug switches PCH won't work
+# anyway. so keep the existing .pch intact and don't
+# touch it
+.IF "$(debug)"!=""
+ENABLE_PCH:=
+.ENDIF "$(debug)"!=""
+
 CFLAGS_CREATE_PCH=-I$(INCPCH) -Fo$(SLO)$/pchname.obj -Ycprecompiled_$(PRJNAME).hxx -DPRECOMPILED_HEADERS
 CFLAGS_USE_PCH=-I$(INCPCH) -Yuprecompiled_$(PRJNAME).hxx -Fp$(SLO)$/pch/precompiled_$(PRJNAME).hxx$(PCHPOST) -DPRECOMPILED_HEADERS
 CFLAGS_USE_EXCEPTIONS_PCH=-I$(INCPCH) -Yuprecompiled_$(PRJNAME).hxx -Fp$(SLO)$/pch_ex/precompiled_$(PRJNAME).hxx$(PCHPOST) -DPRECOMPILED_HEADERS
@@ -199,7 +206,6 @@ CFLAGSWERRCC=-WX
 # COMPILER_WARN_ERRORS=TRUE here instead of setting MODULES_WITH_WARNINGS (see
 # settings.mk):
 MODULES_WITH_WARNINGS := \
-    extensions \
     fpicker \
     soldep
 

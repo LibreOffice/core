@@ -1,0 +1,25 @@
+write "/*************************************************************************"
+write "* SV.HXX"
+write "* __DATE__"
+write "* (c) 1992-1994 STAR DIVISION"
+write "*************************************************************************/"
+write "#ifndef _SVIDL_HXX"
+write "#define _SVIDL_HXX"
+write "#ifndef _PSTREAM_HXX"
+write "#include <pstream.hxx>"
+write "#endif"
+write "#ifndef _SBX_HXX"
+write "#include <sbx.hxx>"
+write "#endif"
+write "#define IDL_COMPILER /*vorlaeufig immer */"
+file char.hxx
+file hash.hxx
+file lex.hxx
+file bastype.hxx
+file basobj.hxx
+file types.hxx
+file object.hxx
+file slot.hxx
+file module.hxx
+file database.hxx
+write "#endif"

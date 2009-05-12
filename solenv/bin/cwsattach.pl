@@ -107,7 +107,10 @@ sub attach_cws
     if ( is_valid_cws($cws) ) {
         #print "CWS is valid filename=" . $filename . " mime_type=" . $mime_type . "\n";
         open(DATA,"<$filename") || die "can't open filename";
-        $data=<DATA>;
+        $data="";
+    while(<DATA>) {
+        $data.=$_;
+    }
         my $result=$cws->save_attachment($filename,$mime_type,$data);
     } else {
         print STDERR "cws is not valid";

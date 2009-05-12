@@ -1,0 +1,3 @@
+The JSR173 is the XML pull API used at build time for the saxon9 XSLT processor, it has become part of OpenJDK 6.
+When using an older JDK, get the API from <https://stax-utils.dev.java.net/source/browse/*checkout*/stax-utils/lib/jars/jsr173_1.0_api.jar> 
+located at the StAS Java site <https://sjsxp.dev.java.net/> and put it into external/StAX.    

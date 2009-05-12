@@ -1,0 +1,2 @@
+mkdir: %_DEST%\inc%_EXT%\fondu
+..\%__SRC%\bin\fondu %_DEST%\bin%_EXT%\fondu

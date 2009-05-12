@@ -1,0 +1,115 @@
+'encoding UTF-8  Do not remove or change this line!
+'**************************************************************************
+'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'* 
+'* Copyright 2008 by Sun Microsystems, Inc.
+'*
+'* OpenOffice.org - a multi-platform office productivity suite
+'*
+'* $RCSfile: g_slidelayer.inc,v $
+'*
+'* $Revision: 1.1 $
+'*
+'* last change: $Author: jsi $ $Date: 2008-06-16 10:42:40 $
+'*
+'* This file is part of OpenOffice.org.
+'*
+'* OpenOffice.org is free software: you can redistribute it and/or modify
+'* it under the terms of the GNU Lesser General Public License version 3
+'* only, as published by the Free Software Foundation.
+'*
+'* OpenOffice.org is distributed in the hope that it will be useful,
+'* but WITHOUT ANY WARRANTY; without even the implied warranty of
+'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+'* GNU Lesser General Public License version 3 for more details
+'* (a copy is included in the LICENSE file that accompanied this code).
+'*
+'* You should have received a copy of the GNU Lesser General Public License
+'* version 3 along with OpenOffice.org.  If not, see
+'* <http://www.openoffice.org/license.html>
+'* for a copy of the LGPLv3 License.
+'*
+'/************************************************************************
+'*
+'* Owner : wolfram.garten@sun.com
+'*
+'* short description :
+'*
+'**************************************************************************************
+' #1 tInsertSlide
+' #1 tInsertDuplicateSlide
+' #1 tInsertLayer
+'\*************************************************************************************
+
+testcase tInsertSlide
+   '/// open application ///'
+   Call  hNewDocument
+   '/// Insert->Slide ///'
+   InsertSlide
+   sleep 2
+   hTypekeys "<Pagedown>"
+   sleep 2
+   try
+      '/// Edit->Delete Slide ///'
+      EditDeleteSlide
+      PrintLog "Slide 2 deleted"
+   catch
+      sleep 2
+      WarnLog "No slide was inserted"
+   endcatch
+   '/// close application ///'
+   hCloseDocument
+endcase
+
+testcase tInsertDuplicateSlide
+   '/// open application ///'
+   Call  hNewDocument
+   sleep 2
+   '/// create rectangle ///'
+   hRechteckErstellen ( 10, 10, 50, 50 )
+   sleep 2
+   '/// Insert->Duplicate Slide ///'
+   InsertDuplicateSlide
+   try
+      '/// Edit->Select All ///'
+      EditSelectAll
+      sleep 2
+      '/// delete the object with a keystroke: [Delete] ///'
+      hTypeKeys "<DELETE>"
+      PrintLog "Slide duplicated"
+   catch
+      Warnlog " Slide not duplicated"
+   endcatch
+   try
+      '/// Edit->Delete Slide ///'
+      EditDeleteSlide
+   catch
+      WarnLog "Error when deleting. Slide is not duplicated ??"
+   endcatch
+   '/// close application ///'
+   hCloseDocument
+endcase
+
+testcase tInsertLayer
+   '/// open application ///'
+   Call hNewDocument
+   sleep 2
+   '/// View->Layer ///'
+   ViewLayer
+   '/// Edit->Layer->Insert ///'
+   InsertLayer
+   Kontext "EbeneEinfuegenDlg"
+   '/// leave dialog with OK ///'
+   EbeneEinfuegenDlg.OK
+   sleep 2
+   try
+      '/// Edit->Layer->Delete ///'
+      EditDeleteLayer
+      Kontext "Active"
+      Active.Yes
+   catch
+      WarnLog "There is no avaiable additional layer to delete"
+   endcatch
+   '/// close application ///'
+   hCloseDocument
+endcase

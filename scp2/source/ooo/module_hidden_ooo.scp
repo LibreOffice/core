@@ -49,8 +49,7 @@ Module gid_Module_Root_Files_2
 	gid_File_Bin_Senddoc,
 	gid_File_Bin_Gengal,
 	gid_File_Script_Gengal,
-	gid_File_Bin_Setofficelang,
-	gid_File_Bin_Setofficelang_C01,
+ 	gid_File_Profile_Gengal,
 	gid_File_Bin_Spadmin_Bin,
 	gid_File_Bin_Uri_Encode,
 	gid_File_Exe_Msfontextract,
@@ -58,8 +57,6 @@ Module gid_Module_Root_Files_2
 	gid_File_Lib_Npsoplugin,
         gid_File_Lib_Soffice,
         gid_File_Lib_Unopkgapp,
-	gid_File_Script_Setofficelang,
-	gid_File_Script_Setofficelang_C01,
 	gid_File_Server_Bonobo_Presentationstarter,
 	gid_File_Txt_Pagein_Common,
 	gid_File_Txt_Pagein_Calc,
@@ -99,7 +96,6 @@ Module gid_Module_Root_Files_3
 	gid_File_Jar_Hsqldb_Sdbc,
 	gid_File_Jar_Accessbridge,
 	gid_File_Jar_Js,
-	gid_File_Jar_Jut,
 	gid_File_Jar_Officebean,
 	gid_File_Jar_Report,
 	gid_File_Jar_Table,
@@ -183,6 +179,8 @@ Module gid_Module_Root_Files_4
 	gid_File_Lib_Dbfile,
 	gid_File_Lib_Drawinglayer,
 	gid_File_Lib_Flat,
+	gid_File_Lib_For,
+	gid_File_Lib_Forui,
 	gid_File_Lib_Frm,
 	gid_File_Lib_Fwe,
 	gid_File_Lib_Fwi,
@@ -381,6 +379,7 @@ Module gid_Module_Root_Files_5
 	gid_File_Lib_Dnd,
 	gid_File_Lib_Dtrans,
 	gid_File_Lib_Emser,
+	gid_File_Lib_Inprocserv,
 	gid_File_Lib_Fop,
 	gid_File_Lib_Fps,
 	gid_File_Lib_Ftransl,
@@ -630,6 +629,7 @@ Module gid_Module_Root_Files_6
 	gid_File_Oo_Inet_Xcs,
 	gid_File_Oo_Inet_Xcu,
 	gid_File_Oo_Office_Addons_Xcs,
+	gid_File_Oo_Office_OOoImprovement_Settings_Xcs,
 	gid_File_Oo_Office_Ui_Basicidecommands_Xcs,
 	gid_File_Oo_Office_Ui_Basicidecommands_Xcu,
 	gid_File_Oo_Office_Ui_Windowstate_Xcs,
@@ -734,6 +734,7 @@ Module gid_Module_Root_Files_6
 	gid_File_Oo_Typedetection_Types_Xcs,
 	gid_File_Oo_Ucb_Configuration_Xcs,
 	gid_File_Oo_Ucb_Configuration_Xcu,
+	gid_File_Oo_Ucb_InteractionHandler_Xcs,
 	gid_File_Oo_Ucb_Hierarchy_Xcs,
 	gid_File_Oo_Ucb_Store_Xcs,
 	gid_File_Oo_Userprofile_Xcs,
@@ -928,10 +929,23 @@ Module gid_Module_Root_Userland
     InstallOrder = "5";
 	Name = "gid_Module_Root_Userland";
 	Description = "gid_Module_Root_Userland";
-    Styles = (HIDDEN_ROOT,USERLANDMODULE,USERINSTALLONLY,NOTRELOCATABLE,XPD_ONLY);
+	Subdir = "userland";
+    Styles = (HIDDEN_ROOT,USERLANDMODULE,USERINSTALLONLY,NOTRELOCATABLE,XPD_ONLY,INSTALLCANFAIL);
     PackageName = "${USERLANDPACKAGENAME}";
 End
 #endif
+
+// #ifdef BUILD_SPECIAL
+// Module gid_Module_Root_Extension_Oooimprovement
+//    Name = "gid_Module_Root_Extension_Oooimprovement";
+//    Description = "gid_Module_Root_Extension_Oooimprovement";
+//    Files = (gid_File_Extension_Oxt_Oooimprovement);
+//    InstallOrder = "1990";
+//    PackageInfo = "packinfo_office.txt";
+//    ParentID = gid_Module_Root;
+//    Styles = (HIDDEN_ROOT);
+// End
+// #endif
 
 Module gid_Module_Root_Extension_Dictionary_Af
 	Name = "gid_Module_Root_Extension_Dictionary_Af";
@@ -1137,6 +1151,17 @@ Module gid_Module_Root_Extension_Dictionary_Sl
 	Files = (gid_File_Extension_Dictionary_Sl);
 	InstallOrder = "2000";
 	Spellcheckerlanguage = "sl";
+	PackageInfo = "packinfo_office.txt";
+	ParentID = gid_Module_Root;
+	Styles = (HIDDEN_ROOT);
+End
+
+Module gid_Module_Root_Extension_Dictionary_Sr
+	Name = "gid_Module_Root_Extension_Dictionary_Sr";
+	Description = "gid_Module_Root_Extension_Dictionary_Sr";
+	Files = (gid_File_Extension_Dictionary_Sr);
+	InstallOrder = "2000";
+	Spellcheckerlanguage = "sr";
 	PackageInfo = "packinfo_office.txt";
 	ParentID = gid_Module_Root;
 	Styles = (HIDDEN_ROOT);

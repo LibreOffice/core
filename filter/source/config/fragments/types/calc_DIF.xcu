@@ -1,0 +1,12 @@
+    <node oor:name="calc_DIF" oor:op="replace" >
+        <prop oor:name="DetectService"><value>com.sun.star.comp.calc.FormatDetector</value></prop>
+        <prop oor:name="URLPattern"/>
+        <prop oor:name="Extensions"><value>dif</value></prop>
+        <prop oor:name="MediaType"/>
+        <prop oor:name="Preferred"><value>false</value></prop>
+        <prop oor:name="PreferredFilter"><value>DIF</value></prop>
+        <prop oor:name="UIName">
+            <value>Data Interchange Format</value>
+        </prop>
+        <prop oor:name="ClipboardFormat"/>
+    </node>

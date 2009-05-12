@@ -206,7 +206,7 @@ en-US = "Out of disk space -- Volume: '[2]'; required space: [3] KB; available s
 en-US = "Are you sure you want to cancel?"
 
 [OOO_ERROR_70]
-en-US = "The file [2][3] is being held in use{ by the following process: Name: [4], ID: [5], Window Title: [6]}.  Close that application and retry."
+en-US = "The file [2][3] is being held in use {by the following process: Name: [4], ID: [5], Window Title: [6]}.  Close that application and retry."
 
 [OOO_ERROR_71]
 en-US = "The product [2] is already installed, preventing the installation of this product.  The two products are incompatible."

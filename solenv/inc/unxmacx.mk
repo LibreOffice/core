@@ -8,7 +8,7 @@
 #
 # $RCSfile: unxmacx.mk,v $
 #
-# $Revision: 1.34 $
+# $Revision: 1.34.56.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -49,7 +49,11 @@ LINKOUTPUT_FILTER=
 #  compiling STLport sources too, either internally or externally.
 CDEFS+=-DGLIBC=2 -D_PTHREADS -D_REENTRANT -DNO_PTHREAD_PRIORITY $(PROCESSOR_DEFINES) -DSTLPORT_VERSION=$(STLPORT_VER) -D_USE_NAMESPACE=1
 .IF "$(GUIBASE)"=="unx" && "$(USE_SYSTEM_STL)"!="YES"
-CDEFS+= -DX_LOCALE
+CDEFS+=-DX_LOCALE
+.ENDIF
+.IF "$(GUIBASE)"=="aqua"
+# TODO: use MACOSX_DEPLOYMENT_TARGET instead of MAC_OS_X_VERSION_MIN_REQUIRED?
+CDEFS+=-DQUARTZ -DMAC_OS_X_VERSION_MIN_REQUIRED=1040
 .ENDIF
 
 # Name of library where static data members are initialized
@@ -256,7 +260,6 @@ STDSLOCUI=
     STDLIBGUIMT=-framework Carbon -framework Cocoa -lpthread CPPRUNTIME -lm
     STDSHLCUIMT=-lpthread CPPRUNTIME -lm
     STDSHLGUIMT=-framework Carbon -framework CoreFoundation -framework Cocoa -lpthread CPPRUNTIME -lm
-    PSPLIB=-lpsp
 .ELSE
     STDLIBCUIMT= CPPRUNTIME -lm
     STDLIBGUIMT=-lX11 -lpthread CPPRUNTIME -lm
@@ -278,3 +281,19 @@ RCFLAGS=-fo$@ $(RCFILES)
 RCLINK=
 RCLINKFLAGS=
 RCSETVERSION=
+
+# Add SOLARLIBDIR to the end of a (potentially previously undefined)
+# DYLD_LIBRARY_PATH (there is no real reason to prefer adding at the end over
+# adding at the start); the ": &&" in the bash case enables this to work at the
+# start of a recipe line that is not prefixed by "+" as well as in the middle of
+# an existing && chain; the tcsh case is somewhat imprecise in that it
+# potentially affects multiple commands following on the recipe line:
+.IF "$(USE_SHELL)" == "bash"
+AUGMENT_LIBRARY_PATH = : && \
+    DYLD_LIBRARY_PATH=$${{DYLD_LIBRARY_PATH+$${{DYLD_LIBRARY_PATH}}:}}$(SOLARLIBDIR)
+.ELSE
+AUGMENT_LIBRARY_PATH = if ($$?DYLD_LIBRARY_PATH == 1) \
+    eval 'setenv DYLD_LIBRARY_PATH "$${{DYLD_LIBRARY_PATH}}:$(SOLARLIBDIR)"' \
+    && if ($$?DYLD_LIBRARY_PATH == 0) \
+    setenv DYLD_LIBRARY_PATH "$(SOLARLIBDIR)" &&
+.ENDIF

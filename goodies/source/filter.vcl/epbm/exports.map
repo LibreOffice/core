@@ -1,0 +1,8 @@
+PBMEXPORTER_1_0 {
+        global:
+                GraphicExport;
+                DoExportDialog;
+
+        local:
+                *;
+};

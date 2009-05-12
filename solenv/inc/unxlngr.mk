@@ -82,7 +82,7 @@ CFLAGSENABLESYMBOLS=-g # was temporarily commented out, reenabled before Beta
 
 .ENDIF
 
-CFLAGS+=-march=armv5te -fno-omit-frame-pointer
+CFLAGS+=-fno-omit-frame-pointer
 # flags for the C++ Compiler
 CFLAGSCC= -pipe $(ARCH_FLAGS)
 # Flags for enabling exception handling

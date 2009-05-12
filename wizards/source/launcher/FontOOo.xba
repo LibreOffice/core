@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="FontOOo" script:language="StarBasic">Option Explicit
+
+Sub StartFontOOo
+
+Dim ThePath as string
+Dim aService as object
+Dim MyFontOOo as string
+dim TheDoc as object 
+dim args(1) as new com.sun.star.beans.PropertyValue
+
+on error resume next
+
+&apos; Find path
+aService = CreateUnoService(&quot;com.sun.star.util.PathSubstitution&quot;)
+ThePath =ConvertToURL(aService.substituteVariables(&quot;$(prog)&quot;, true))
+ThePath=ThePath &amp; &quot;/../share/dict/ooo&quot;
+
+if  fileExists(ThePath &amp; &quot;/FontOOo.lst&quot;) then
+&apos;read FontOOo.lst file
+        Open ThePath &amp; &quot;/FontOOo.lst&quot; for input as #1
+                line input #1, MyFontOOo
+        close #1
+else
+&apos;create default FontOOo.lst file
+        Open ThePath &amp; &quot;/FontOOo.lst&quot; for output as #1
+                MyFontOOo=ThePath &amp; &quot;/FontOOo.sxw&quot;
+                print #1, MyFontOOo
+        close #1
+endif
+
+&apos;security
+if Not fileExists(MyFontOOo) then
+        MyFontOOo= ThePath &amp; &quot;/FontOOo.sxw&quot;
+endif
+MyFontOOo=ConvertToURL(MyFontOOo) 
+
+&apos;Opens FontOOo main file
+args(0).name=&quot;InteractionHandler&quot;
+args(0).value=&quot;&quot;
+args(1).name=&quot;MacroExecutionMode&quot;
+args(1).value=com.sun.star.document.MacroExecMode.ALWAYS_EXECUTE_NO_WARN &apos;4
+TheDoc=StarDesktop.loadComponentFromURL(MyFontOOo,&quot;_blank&quot;,0,args())
+
+End Sub</script:module>

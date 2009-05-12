@@ -1,0 +1,138 @@
+'encoding UTF-8  Do not remove or change this line!
+'**************************************************************************
+'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'* 
+'* Copyright 2008 by Sun Microsystems, Inc.
+'*
+'* OpenOffice.org - a multi-platform office productivity suite
+'*
+'* $RCSfile: basic_dialog_export.inc,v $
+'*
+'* $Revision: 1.1 $
+'*
+'* last change: $Author: jsi $ $Date: 2008-06-16 12:19:03 $
+'*
+'* This file is part of OpenOffice.org.
+'*
+'* OpenOffice.org is free software: you can redistribute it and/or modify
+'* it under the terms of the GNU Lesser General Public License version 3
+'* only, as published by the Free Software Foundation.
+'*
+'* OpenOffice.org is distributed in the hope that it will be useful,
+'* but WITHOUT ANY WARRANTY; without even the implied warranty of
+'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+'* GNU Lesser General Public License version 3 for more details
+'* (a copy is included in the LICENSE file that accompanied this code).
+'*
+'* You should have received a copy of the GNU Lesser General Public License
+'* version 3 along with OpenOffice.org.  If not, see
+'* <http://www.openoffice.org/license.html>
+'* for a copy of the LGPLv3 License.
+'*
+'/******************************************************************************
+'*
+'*  owner : joerg.skottke@sun.com
+'*
+'*  short description : Update test for the dialog export feature
+'*
+'\******************************************************************************
+
+testcase tUpdtDialogExport
+
+
+    '///<h3>Update test for the dialog export feature</h3>
+    
+    if ( gBuild < 9196 ) then
+        printlog( "Test disabled for Build-Id < 9196" )
+        goto endsub
+    endif
+
+    dim brc as boolean
+    dim cMsg as string
+    
+    dim cDlgName as string
+        cDlgName = hGetWorkPath() & "DialogTest"
+        
+    const DLG_SUFFIX = ".xdl"
+        
+    
+    '///<ul>
+    '///+<li>Create a new document</li>
+    hCreateDocument()
+
+    '///+<li>Open the Macro Organizer</li>
+    '///+<li>Create a new module for the document</li>
+    '///+<li>Open the BASIC IDE</li>
+    '///+<li>Create a new Dialog via the tabbar at the bottom of the IDE</li>
+    printlog( "Test init: Setting up environment" )
+    brc = hInitFormControls( "DialogExport" )
+    if ( not brc ) then
+        warnlog( "Failed to initialize BAIC IDE/Dialog editor, aborting" )
+        goto endsub
+    endif
+    
+    '///+<li>Access the DialogBar, it should be visible by default</li>
+    printlog( "Test begin" )
+    kontext "DialogBar"
+    if ( not DialogBar.exists() ) then
+        warnlog( "DialogBar does not exist, aborting" )
+        hClosebasicIDE()
+        hDestroyDocument()
+        goto endsub
+    endif
+    
+    '///+<li>Just click the export button to open the Export dialog</li>
+    printlog( "Click the Export button on the DialogBar" )
+    kontext "DialogBar"
+    Export.click()
+    
+    '///+<li>Verify that the Export Dialog comes up</li>
+    kontext "ExportierenDlg"
+    if ( not ExportierenDlg.exists( 1 ) ) then
+        warnlog( "Export dialog is not open, aborting" )
+        hCloseBasicIDE()
+        hDestroyDocument()
+        goto endsub
+    endif
+    
+    printlog( "Export dialog is open. Good." )
+    
+    '///+<li>Save the dialog without providing an extension</li>
+    kontext "ExportierenDlg"
+    DateiName.setText( cDlgName )
+    Speichern.click()
+    
+    kontext "Active"
+    if ( Active.exists() ) then
+        cMsg = active.getText()
+        cMsg = hRemoveLineBreaks( cMsg )
+        printlog( "File appears to exist, overwriting: " & cMsg )
+        Active.Yes()
+    endif
+    
+    '///+<li>Verify that we are back on the BASIC IDE</li>
+    kontext "DialogBar"
+    if ( not DialogBar.exists() ) then
+        warnlog( "DialogBar is not visible, please check." )
+    endif
+    
+    printlog( "Back on the Basic IDE / Dialog Editor. Good." )
+        
+    '///+<li>Verify that the file has been saved (on filesystem level)</li>
+    '///+<li>Delete it if found</li>
+    cDlgName = cDlgName & DLG_SUFFIX
+    if ( dir( cDlgName ) = "" ) then
+        warnlog( "The dialog was not saved to the expected location" )
+    else
+        hDeleteFile( cDlgName )
+        printlog( "Dialog was exported and deleted. Good." )
+    endif
+    
+    '///+<li>Close the BASIC IDE and the document</li>
+    printlog( "Test end. Cleanup" )
+    hCloseBasicIDE()
+    hDestroyDocument()    
+    '///</ul>
+
+endcase
+

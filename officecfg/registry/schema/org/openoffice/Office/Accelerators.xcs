@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<!--***********************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: Accelerators.xcs,v $
+ *
+ *  $Revision: 1.1.2.6 $
+ *
+ *  last change: $Author: wuy $ $Date: 2008/08/06 08:13:26 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************ -->
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Accelerators" oor:package="org.openoffice.Office" xml:lang="en-US">
+    <info>
+        <desc>Configuration of Accelerators replacing the old not XCU-based configuration</desc>
+    </info>
+	<templates>
+		<group oor:name="Key">		
+            <info>
+                <desc>document the Key format</desc>
+            </info>	
+            <prop oor:name="Command" oor:type="xs:string" oor:localized="true">
+				<info>
+					<desc>e.g..uno:About</desc>
+				</info>
+            </prop>	
+		</group>
+		<set oor:name="Module" oor:node-type="Key">
+            <info>
+                <desc>point to a module of OOo</desc>
+            </info>		
+		</set>
+	</templates>
+	<component>
+	    <group oor:name="PrimaryKeys">
+	        <info>
+	            <desc>contains the preferred keys</desc>
+	        </info>
+	        <set oor:name="Global" oor:node-type="Key">
+	            <info>
+				    <desc>Defined as key-values pairs</desc>
+	            </info>
+	        </set>
+	        <set oor:name="Modules" oor:node-type="Module">
+	            <info>
+				    <desc>containing the modules of OOo, defined as key-values pairs</desc>
+	            </info>
+	        </set>	        
+	    </group>
+	    <group oor:name="SecondaryKeys">
+	        <info>
+	            <desc>contains the secondary keys</desc>
+	        </info>
+	        <set oor:name="Global" oor:node-type="Key">
+	            <info>
+				    <desc>Defined as key-values pairs</desc>
+	            </info>
+	        </set>
+	        <set oor:name="Modules" oor:node-type="Module">
+	            <info>
+				    <desc>containing the modules of OOo, defined as key-values pairs</desc>
+	            </info>
+	        </set>	        
+	    </group>	    
+	</component>
+</oor:component-schema>

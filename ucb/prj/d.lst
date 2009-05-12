@@ -1,0 +1,35 @@
+..\%__SRC%\bin\cached*.dll %_DEST%\bin%_EXT%\cached*.dll
+..\%__SRC%\lib\libcached*.* %_DEST%\lib%_EXT%\libcached*.*
+..\%__SRC%\bin\cached*.map %_DEST%\bin%_EXT%\cached*.map
+..\%__SRC%\bin\cached*.sym %_DEST%\bin%_EXT%\cached*.sym
+..\source\cacher\cached.xml %_DEST%\xml%_EXT%\cached.xml
+
+..\%__SRC%\bin\srtrs*.dll %_DEST%\bin%_EXT%\srtrs*.dll
+..\%__SRC%\lib\libsrtrs*.* %_DEST%\lib%_EXT%\libsrtrs*.*
+..\%__SRC%\bin\srtrs*.map %_DEST%\bin%_EXT%\srtrs*.map
+..\%__SRC%\bin\srtrs*.sym %_DEST%\bin%_EXT%\srtrs*.sym
+..\source\sorter\srtrs.xml %_DEST%\xml%_EXT%\srtrs.xml
+
+..\%__SRC%\bin\ucb*.dll %_DEST%\bin%_EXT%\ucb*.dll
+..\%__SRC%\lib\libucb*.* %_DEST%\lib%_EXT%\libucb*.*
+..\%__SRC%\misc\ucb*.map %_DEST%\bin%_EXT%\ucb*.map
+..\%__SRC%\misc\ucb*.sym %_DEST%\bin%_EXT%\ucb*.sym
+..\source\core\ucb.xml %_DEST%\xml%_EXT%\ucb.xml
+
+..\%__SRC%\bin\ucp*.dll %_DEST%\bin%_EXT%\ucp*.dll
+..\%__SRC%\lib\libucp*.so %_DEST%\lib%_EXT%\libucp*.so
+..\%__SRC%\lib\libucp*.dylib %_DEST%\lib%_EXT%\libucp*.dylib
+..\%__SRC%\lib\ucp*.uno.so %_DEST%\lib%_EXT%\ucp*.uno.so
+..\%__SRC%\lib\ucp*.uno.dylib %_DEST%\lib%_EXT%\ucp*.uno.dylib
+..\%__SRC%\misc\ucp*.map %_DEST%\bin%_EXT%\ucp*.map
+..\%__SRC%\misc\ucp*.sym %_DEST%\bin%_EXT%\ucp*.sym
+..\source\ucp\file\ucpfile.xml %_DEST%\xml%_EXT%\ucpfile.xml
+..\source\ucp\ftp\ucpftp.xml %_DEST%\xml%_EXT%\ucpftp.xml
+..\source\ucp\hierarchy\ucphier.xml %_DEST%\xml%_EXT%\ucphier.xml
+..\source\ucp\package\ucppkg.xml %_DEST%\xml%_EXT%\ucppkg.xml
+..\source\ucp\webdav\ucpdav.xml %_DEST%\xml%_EXT%\ucpdav.xml
+..\source\ucp\gvfs\ucpgvfs.xml %_DEST%\xml%_EXT%\ucpgvfs.xml
+..\source\ucp\tdoc\ucptdoc.xml %_DEST%\xml%_EXT%\ucptdoc.xml
+
+..\%__SRC%\misc\ucpgvfs-ucd.txt  %_DEST%\bin%_EXT%\ucpgvfs-ucd.txt
+..\%__SRC%\misc\ucpgio-ucd.txt  %_DEST%\bin%_EXT%\ucpgio-ucd.txt

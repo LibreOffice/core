@@ -1,0 +1,8 @@
+HEAPSIZE	  0
+EXPORTS
+	uno_initEnvironment
+	uno_ext_getMapping
+
+
+
+

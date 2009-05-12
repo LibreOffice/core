@@ -1,0 +1,13 @@
+    <node oor:name="Pocket Excel" oor:op="replace">
+        <prop oor:name="FileFormatVersion"><value>1</value></prop>
+        <prop oor:name="Type"><value>calc_Pocket_Excel_File</value></prop>
+        <prop oor:name="DocumentService"><value>com.sun.star.sheet.SpreadsheetDocument</value></prop>
+        <prop oor:name="UIComponent"/>
+        <prop oor:name="UserData"><value>com.sun.star.documentconversion.XMergeBridge classes/pexcel.jar com.sun.star.comp.Calc.XMLImporter com.sun.star.comp.Calc.XMLExporter staroffice/sxc application/x-pocket-excel</value></prop>
+        <prop oor:name="FilterService"><value>com.sun.star.comp.Writer.XmlFilterAdaptor</value></prop>
+        <prop oor:name="TemplateName"/>
+        <prop oor:name="UIName">
+            <value>Pocket Excel</value>
+        </prop>
+        <prop oor:name="Flags"><value>IMPORT EXPORT ALIEN 3RDPARTYFILTER</value></prop>
+    </node>

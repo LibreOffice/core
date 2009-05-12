@@ -8,7 +8,7 @@
 #
 # $RCSfile: worker.pm,v $
 #
-# $Revision: 1.65 $
+# $Revision: 1.65.56.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -44,6 +44,7 @@ use installer::globals;
 use installer::logger;
 use installer::mail;
 use installer::pathanalyzer;
+use installer::scpzipfiles;
 use installer::scriptitems;
 use installer::sorter;
 use installer::systemactions;
@@ -301,10 +302,13 @@ sub save_patchlist_file
     installer::files::save_file($installpatchlistdir . $installer::globals::separator . $patchlistfilename, \@installer::globals::patchfilecollector);
     installer::logger::print_message( "... creating patchlist file $patchlistfilename \n" );
 
-    $patchlistfilename =~ s/patchfiles\_/nopatchfiles\_/;
-    my $nopatchlist = create_nopatchlist();
-    installer::files::save_file($installpatchlistdir . $installer::globals::separator . $patchlistfilename, $nopatchlist);
-    installer::logger::print_message( "... creating patch exclusion file $patchlistfilename \n" );
+    if (( $installer::globals::patch ) && ( ! $installer::globals::creating_windows_installer_patch ))  # only for non-Windows patches
+    {
+        $patchlistfilename =~ s/patchfiles\_/nopatchfiles\_/;
+        my $nopatchlist = create_nopatchlist();
+        installer::files::save_file($installpatchlistdir . $installer::globals::separator . $patchlistfilename, $nopatchlist);
+        installer::logger::print_message( "... creating patch exclusion file $patchlistfilename \n" );
+    }
 
 }
 
@@ -459,7 +463,12 @@ sub analyze_and_save_logfile
         {
             if ( $installdir =~ /_download_inprogress/ ) { $destdir = installer::systemactions::rename_string_in_directory($installdir, "_download_inprogress", "_download"); }
             elsif ( $installdir =~ /_jds_inprogress/ ) { $destdir = installer::systemactions::rename_string_in_directory($installdir, "_jds_inprogress", "_jds"); }
-            else { $destdir = installer::systemactions::rename_string_in_directory($installdir, "_inprogress", "_packed"); }
+            elsif ( $installdir =~ /_msp_inprogress/ ) { $destdir = installer::systemactions::rename_string_in_directory($installdir, "_msp_inprogress", "_msp"); }
+            else
+            {
+                if ( $installdir =~ /_packed/ ) { $destdir = installer::systemactions::rename_string_in_directory($installdir, "_inprogress", ""); }
+                else { $destdir = installer::systemactions::rename_string_in_directory($installdir, "_inprogress", "_packed"); }
+            }
             installer::mail::send_success_mail($allsettingsarrayref, $languagestringref, $destdir);
         }
         else
@@ -482,7 +491,9 @@ sub analyze_and_save_logfile
     # installer::worker::save_checksum_file($current_install_number, $installchecksumdir, $checksumfile);
 
     # Saving the list of patchfiles in a patchlist directory in the install directory
-    if ( $installer::globals::patch ) { installer::worker::save_patchlist_file($installlogdir, $numberedlogfilename); }
+    if (( $installer::globals::patch ) || ( $installer::globals::creating_windows_installer_patch )) { installer::worker::save_patchlist_file($installlogdir, $numberedlogfilename); }
+
+    if ( $installer::globals::creating_windows_installer_patch ) { $installer::globals::creating_windows_installer_patch = 0; }
 
     return ($is_success, $finalinstalldir);
 }
@@ -786,7 +797,7 @@ sub install_simple ($$$$$$)
 
         push @lines, "$destination\n";
         # printf "cp $sourcepath $destdir$destination\n";
-        copy ("$sourcepath", "$destdir$destination") || die "Can't copy file: $!";
+        copy ("$sourcepath", "$destdir$destination") || die "Can't copy file: $sourcepath -> $destdir$destination $!";
         my $sourcestat = stat($sourcepath);
         utime ($sourcestat->atime, $sourcestat->mtime, "$destdir$destination");
         chmod (oct($unixrights), "$destdir$destination") || die "Can't change permissions: $!";
@@ -1234,7 +1245,7 @@ sub select_langpack_items
         # Items with style "LANGUAGEPACK" have to be included into the patch
         my $styles = "";
         if ( $oneitem->{'Styles'} ) { $styles = $oneitem->{'Styles'}; }
-        if ( $styles =~ /\bLANGUAGEPACK\b/ ) { push(@itemsarray, $oneitem); }
+        if (( $styles =~ /\bLANGUAGEPACK\b/ ) || ( $styles =~ /\bFORCELANGUAGEPACK\b/ )) { push(@itemsarray, $oneitem); }
     }
 
     return \@itemsarray;
@@ -1511,6 +1522,7 @@ sub shift_section_to_end
     my @patchfile = ();
     my @lastsection = ();
     my $lastsection = "program";
+    my $notlastsection = "Basis\\program";
     my $record = 0;
 
     for ( my $i = 0; $i <= $#{$patchfilelist}; $i++ )
@@ -1519,7 +1531,7 @@ sub shift_section_to_end
 
         if (( $record ) && ( $line =~ /^\s*\[/ )) { $record = 0; }
 
-        if ( $line =~ /^\s*\[\Q$lastsection\E\\\]\s*$/ ) { $record = 1; }
+        if (( $line =~ /^\s*\[\Q$lastsection\E\\\]\s*$/ ) && ( ! ( $line =~ /\Q$notlastsection\E\\\]\s*$/ ))) { $record = 1; }
 
         if ( $record ) { push(@lastsection, $line); }
         else { push(@patchfile, $line); }
@@ -1553,14 +1565,27 @@ sub shift_file_to_end
     my $lastfileline = "";
     my $foundfile = 0;
 
+    # Only searching this file in the last section
+    my $lastsectionname = "";
+
+    for ( my $i = 0; $i <= $#{$patchfilelist}; $i++ )
+    {
+        my $line = ${$patchfilelist}[$i];
+        if ( $line =~ /^\s*\[(.*?)\]\s*$/ ) { $lastsectionname = $1; }
+    }
+
+    my $record = 0;
     for ( my $i = 0; $i <= $#{$patchfilelist}; $i++ )
     {
         my $line = ${$patchfilelist}[$i];
 
-        if ( $line =~ /^\s*\"\Q$lastfilename\E\"\=/ )
+        if ( $line =~ /^\s*\[\Q$lastsectionname\E\]\s*$/ ) { $record = 1; }
+
+        if (( $line =~ /^\s*\"\Q$lastfilename\E\"\=/ ) && ( $record ))
         {
             $lastfileline = $line;
             $foundfile = 1;
+            $record = 0;
             next;
         }
 
@@ -2304,6 +2329,19 @@ sub add_variables_from_inc_to_hashref
             }
         }
     }
+
+    # Allowing different Java versions for Windows and Unix. Instead of "JAVAVERSION"
+    # the property "WINDOWSJAVAVERSION" has to be used, if it is set.
+
+    if ( $installer::globals::iswindowsbuild )
+    {
+        if (( exists($allvariables->{'WINDOWSJAVAVERSION'})) && ( $allvariables->{'WINDOWSJAVAVERSION'} ne "" ))
+        {
+            $allvariables->{'JAVAVERSION'} = $allvariables->{'WINDOWSJAVAVERSION'};
+            $infoline = "Changing value of property \"JAVAVERSION\" to $allvariables->{'JAVAVERSION'} (property \"WINDOWSJAVAVERSION\").\n";
+            push( @installer::globals::globallogfileinfo, $infoline);
+        }
+    }
 }
 
 ##############################################
@@ -2677,7 +2715,6 @@ sub fix_solaris_x86_patch
     chdir($subdir);
 
     # $packagename is: "SUNWstaroffice-core01"
-    # $installer::globals::subdir is "packages"
     # Current working directory is: "<path>/install/en-US_inprogress"
 
     # create new folder in "packages": $packagename . ".i"
@@ -2745,7 +2782,6 @@ sub fix2_solaris_x86_patch
         chdir($subdir);
 
         # $packagename is: "SUNWstaroffice-core01"
-        # $installer::globals::subdir is "packages"
         # Current working directory is: "<path>/install/en-US_inprogress"
 
         # create new package in "packages": $packagename . ".i"
@@ -2931,6 +2967,15 @@ sub set_spellcheckerlanguages
             my $onelang = $1;
             my $languagelist = $2;
             $spellcheckhash{$onelang} = $languagelist;
+
+            # Special handling for language packs. Do only include that one language of the language pack, no further language.
+            # And this only, if the language of the language pack is also already part of the language list
+
+            if ( $installer::globals::languagepack )
+            {
+                if ( $languagelist =~ /\b$onelang\b/ ) { $spellcheckhash{$onelang} = $onelang; }
+                else { $spellcheckhash{$onelang} = ""; }
+            }
         }
     }
 
@@ -2989,6 +3034,283 @@ sub put_license_into_setup
 
     # Write setup
     installer::files::save_file($setupfilename, $setupfile);
+}
+
+################################################
+# Setting global path to getuid.so library
+################################################
+
+sub set_getuid_path
+{
+    my ($includepatharrayref) = @_;
+
+    my $getuidlibraryname = "getuid.so";
+    my $getuidlibraryref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$getuidlibraryname, $includepatharrayref, 0);
+    if ($$getuidlibraryref eq "") { installer::exiter::exit_program("ERROR: Could not find $getuidlibraryname!", "set_getuid_path"); }
+
+    $installer::globals::getuidpath = $$getuidlibraryref;
+    $installer::globals::getuidpathset = 1;
+}
+
+#########################################################
+# Create a tar file from the binary package
+#########################################################
+
+sub tar_package
+{
+    my ( $installdir, $packagename, $tarfilename, $getuidlibrary) = @_;
+
+    my $ldpreloadstring = "";
+    if ( $getuidlibrary ne "" ) { $ldpreloadstring = "LD_PRELOAD=" . $getuidlibrary; }
+
+    my $systemcall = "cd $installdir; $ldpreloadstring tar -cf - $packagename > $tarfilename";
+    # my $systemcall = "cd $installdir; $ldpreloadstring tar -cf - * > $tarfilename";
+
+    my $returnvalue = system($systemcall);
+
+    my $infoline = "Systemcall: $systemcall\n";
+    push( @installer::globals::logfileinfo, $infoline);
+
+    if ($returnvalue)
+    {
+        $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+    else
+    {
+        $infoline = "Success: Executed \"$systemcall\" successfully!\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+
+    my $localcall = "chmod 775 $tarfilename \>\/dev\/null 2\>\&1";
+    $returnvalue = system($localcall);
+
+    my $fulltarfile = $installdir . $installer::globals::separator . $tarfilename;
+    my $filesize = ( -s $fulltarfile );
+
+    return $filesize;
+}
+
+#########################################################
+# Create a tar file from the binary package
+#########################################################
+
+sub untar_package
+{
+    my ( $installdir, $tarfilename, $getuidlibrary) = @_;
+
+    my $ldpreloadstring = "";
+    if ( $getuidlibrary ne "" ) { $ldpreloadstring = "LD_PRELOAD=" . $getuidlibrary; }
+
+    my $systemcall = "cd $installdir; $ldpreloadstring tar -xf $tarfilename";
+
+    my $returnvalue = system($systemcall);
+
+    my $infoline = "Systemcall: $systemcall\n";
+    push( @installer::globals::logfileinfo, $infoline);
+
+    if ($returnvalue)
+    {
+        $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+    else
+    {
+        $infoline = "Success: Executed \"$systemcall\" successfully!\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+
+    my $localcall = "chmod 775 $tarfilename \>\/dev\/null 2\>\&1";
+    $returnvalue = system($localcall);
+}
+
+#########################################################
+# Shuffle an array (Fisher Yates shuffle)
+#########################################################
+
+sub shuffle_array
+{
+    my ( $arrayref ) = @_;
+
+    # my $counter = 0;
+    # my $infoline = "Old package order: \n";
+    # push( @installer::globals::logfileinfo, $infoline);
+    # foreach my $onepackage ( @{$arrayref} )
+    # {
+    #   $counter++;
+    #   $infoline = "$counter: $onepackage->{'module'}\n";
+    #   push( @installer::globals::logfileinfo, $infoline);
+    # }
+
+    my $i = @$arrayref;
+    while (--$i)
+    {
+        my $j = int rand ($i+1);
+        @$arrayref[$i,$j] = @$arrayref[$j,$i];
+    }
+
+    # $counter = 0;
+    # $infoline = "New package order: \n";
+    # push( @installer::globals::logfileinfo, $infoline);
+    # foreach my $onepackage ( @{$arrayref} )
+    # {
+    #   $counter++;
+    #   $infoline = "$counter: $onepackage->{'module'}\n";
+    #   push( @installer::globals::logfileinfo, $infoline);
+    # }
+}
+
+################################################
+# Defining the English license text to add
+# it into Solaris packages.
+################################################
+
+sub set_english_license
+{
+    my $additional_license_name = $installer::globals::englishsolarislicensename;   # always the English file
+    my $licensefileref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$additional_license_name, "" , 0);
+    if ( $$licensefileref eq "" ) { installer::exiter::exit_program("ERROR: Could not find license file $additional_license_name!", "set_english_license"); }
+    $installer::globals::englishlicenseset = 1;
+    $installer::globals::englishlicense = installer::files::read_file($$licensefileref);
+    installer::scpzipfiles::replace_all_ziplistvariables_in_file($installer::globals::englishlicense, $variableshashref);
+}
+
+##############################################
+# Setting time stamp of copied files to avoid
+# errors from pkgchk.
+##############################################
+
+sub set_time_stamp_for_file
+{
+    my ($sourcefile, $destfile) = @_;
+
+    my $systemcall = "touch -r $sourcefile $destfile";
+
+    my $returnvalue = system($systemcall);
+
+    my $infoline = "Systemcall: $systemcall\n";
+    push( @installer::globals::logfileinfo, $infoline);
+
+    if ($returnvalue)
+    {
+        $infoline = "ERROR: \"$systemcall\" failed!\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+    else
+    {
+        $infoline = "Success: \"$systemcall\" !\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+}
+
+##############################################
+# Setting checksum and wordcount for changed
+# pkginfo file into pkgmap.
+##############################################
+
+sub change_onefile_in_pkgmap
+{
+    my ($pkgmapfile, $fullfilename, $shortfilename) = @_;
+
+    # 1 i pkginfo 442 34577 1166716297
+    # ->
+    # 1 i pkginfo 443 34737 1166716297
+    #
+    # wc -c pkginfo | cut -f6 -d' '  -> 442  (variable)
+    # sum pkginfo | cut -f1 -d' '  -> 34577  (variable)
+    # grep 'pkginfo' pkgmap | cut -f6 -d' '  -> 1166716297  (fix)
+
+    my $checksum = call_sum($fullfilename);
+    if ( $checksum =~ /^\s*(\d+)\s+.*$/ ) { $checksum = $1; }
+
+    my $wordcount = call_wc($fullfilename);
+    if ( $wordcount =~ /^\s*(\d+)\s+.*$/ ) { $wordcount = $1; }
+
+    for ( my $i = 0; $i <= $#{$pkgmapfile}; $i++ )
+    {
+        if ( ${$pkgmapfile}[$i] =~ /(^.*\b\Q$shortfilename\E\b\s+)(\d+)(\s+)(\d+)(\s+)(\d+)(\s*$)/ )
+        {
+            my $newline = $1 . $wordcount . $3 . $checksum . $5 . $6 . $7;
+            ${$pkgmapfile}[$i] = $newline;
+            last;
+        }
+    }
+}
+
+################################################
+# Adding the content of the English license
+# file into the system integration packages.
+################################################
+
+sub add_license_into_systemintegrationpackages
+{
+    my ($destdir, $packages) = @_;
+
+    for ( my $i = 0; $i <= $#{$packages}; $i++ )
+    {
+        my $copyrightfilename = ${$packages}[$i] . $installer::globals::separator . "install" . $installer::globals::separator . "copyright";
+        if ( ! -f $copyrightfilename ) { installer::exiter::exit_program("ERROR: Could not find license file in system integration package: $copyrightfilename!", "add_license_into_systemintegrationpackages"); }
+        my $copyrightfile = installer::files::read_file($copyrightfilename);
+
+        # Saving time stamp of old copyrightfile
+        my $savcopyrightfilename = $copyrightfilename . ".sav";
+        installer::systemactions::copy_one_file($copyrightfilename, $savcopyrightfilename);
+        set_time_stamp_for_file($copyrightfilename, $savcopyrightfilename); # now $savcopyrightfile has the time stamp of $copyrightfile
+
+        # Adding license content to copyright file
+        push(@{$copyrightfile}, "\n");
+        for ( my $i = 0; $i <= $#{$installer::globals::englishlicense}; $i++ ) { push(@{$copyrightfile}, ${$installer::globals::englishlicense}[$i]); }
+        installer::files::save_file($copyrightfilename, $copyrightfile);
+
+        # Setting the old time stamp saved with $savcopyrightfilename
+        set_time_stamp_for_file($savcopyrightfilename, $copyrightfilename); # now $copyrightfile has the time stamp of $savcopyrightfile
+        unlink($savcopyrightfilename);
+
+        # Changing content of copyright file in pkgmap
+        my $pkgmapfilename = ${$packages}[$i] . $installer::globals::separator . "pkgmap";
+        if ( ! -f $pkgmapfilename ) { installer::exiter::exit_program("ERROR: Could not find pkgmap in system integration package: $pkgmapfilename!", "add_license_into_systemintegrationpackages"); }
+        my $pkgmap = installer::files::read_file($pkgmapfilename);
+        change_onefile_in_pkgmap($pkgmap, $copyrightfilename, "copyright");
+        installer::files::save_file($pkgmapfilename, $pkgmap);
+    }
+}
+
+#########################################################
+# Collecting all pkgmap files from an installation set
+#########################################################
+
+sub collectpackagemaps
+{
+    my ( $installdir, $languagestringref, $allvariables ) = @_;
+
+    installer::logger::include_header_into_logfile("Collecing all packagemaps (pkgmap):");
+
+    my $pkgmapdir = installer::systemactions::create_directories("pkgmap", $languagestringref);
+    my $subdirname = $allvariables->{'UNIXPRODUCTNAME'} . "_pkgmaps";
+    my $pkgmapsubdir = $pkgmapdir . $installer::globals::separator . $subdirname;
+    if ( -d $pkgmapsubdir ) { installer::systemactions::remove_complete_directory($pkgmapsubdir); }
+    if ( ! -d $pkgmapsubdir ) { installer::systemactions::create_directory($pkgmapsubdir); }
+
+    $installdir =~ s/\/\s*$//;
+    # Collecting all packages in $installdir and its sub package ("packages")
+    my $searchdir = $installdir . $installer::globals::separator . $installer::globals::epmoutpath;
+
+    my $allpackages = installer::systemactions::get_all_directories_without_path($searchdir);
+
+    for ( my $i = 0; $i <= $#{$allpackages}; $i++ )
+    {
+        my $pkgmapfile = $searchdir . $installer::globals::separator . ${$allpackages}[$i] . $installer::globals::separator . "pkgmap";
+        my $destfilename = $pkgmapsubdir . $installer::globals::separator . ${$allpackages}[$i] . "_pkgmap";
+        installer::systemactions::copy_one_file($pkgmapfile, $destfilename);
+    }
+
+    # Create a tar gz file with all package maps
+    my $tarfilename = $subdirname . ".tar";
+    my $targzname = $tarfilename . ".gz";
+    # my $systemcall = "cd $pkgmapdir; tar -cf - $subdirname > $tarfilename";
+    $systemcall = "cd $pkgmapdir; tar -cf - $subdirname | gzip > $targzname";
+    make_systemcall($systemcall);
+    installer::systemactions::remove_complete_directory($pkgmapsubdir, 1);
 }
 
 1;

@@ -1,0 +1,6 @@
+action=nocheck
+conflict=nocheck
+setuid=nocheck
+idepend=nocheck
+mail=
+

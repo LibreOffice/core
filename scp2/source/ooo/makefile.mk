@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.80 $
+# $Revision: 1.77.16.3 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -36,8 +36,6 @@ PRJNAME=scp2
 TARGET=ooo
 TARGETTYPE=CUI
 
-USE_JAVAVER=TRUE
-
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
@@ -55,9 +53,7 @@ SCPDEFS+=-DENABLE_CRASHDUMP
 SCPDEFS+=-DBUILD_SPECIAL
 .ENDIF
 
-.IF "$(JAVANUMVER)" >= "000100050000"
 SCPDEFS+=-DINCLUDE_JAVA_ACCESSBRIDGE
-.ENDIF
 
 .IF "$(PROF_EDITION)"!=""
 SCPDEFS+=-DPROF_EDITION
@@ -103,6 +99,10 @@ SCPDEFS+=-DSYSTEM_FREETYPE
 SCPDEFS+=-DSYSTEM_CAIRO
 .ENDIF
 
+.IF "$(ENABLE_CAIRO)" == "YES"
+SCPDEFS+=-DENABLE_CAIRO
+.ENDIF
+
 .IF "$(SYSTEM_LIBXML)" == "YES"
 SCPDEFS+=-DSYSTEM_LIBXML
 .ENDIF
@@ -111,10 +111,7 @@ SCPDEFS+=-DSYSTEM_LIBXML
 SCPDEFS+=-DSYSTEM_LIBXSLT
 .ELSE
 .INCLUDE :  libxsltversion.mk
-SCPDEFS+=\
-    -DLIBXSLT_MAJOR=$(LIBXSLT_MAJOR) \
-    -DLIBXSLT_MINOR=$(LIBXSLT_MINOR) \
-    -DLIBXSLT_MICRO=$(LIBXSLT_MICRO)
+SCPDEFS+=-DLIBXSLT_MAJOR=$(LIBXSLT_MAJOR)
 .ENDIF
 
 .IF "$(SYSTEM_DB)" == "YES"
@@ -167,14 +164,8 @@ SCPDEFS+=-DSYSTEM_REDLAND
 .INCLUDE :  redlandversion.mk
 SCPDEFS+=\
     -DRAPTOR_MAJOR=$(RAPTOR_MAJOR) \
-    -DRAPTOR_MINOR=$(RAPTOR_MINOR) \
-    -DRAPTOR_MICRO=$(RAPTOR_MICRO) \
     -DRASQAL_MAJOR=$(RASQAL_MAJOR) \
-    -DRASQAL_MINOR=$(RASQAL_MINOR) \
-    -DRASQAL_MICRO=$(RASQAL_MICRO) \
-    -DREDLAND_MAJOR=$(REDLAND_MAJOR) \
-    -DREDLAND_MINOR=$(REDLAND_MINOR) \
-    -DREDLAND_MICRO=$(REDLAND_MICRO)
+    -DREDLAND_MAJOR=$(REDLAND_MAJOR)
 .ENDIF
 
 .IF "$(SYSTEM_BSH)" == "YES"
@@ -242,6 +233,10 @@ SCPDEFS+=-DSYSTEM_PYTHON
 SCPDEFS+=-DENABLE_SVCTAGS
 .ENDIF
 
+.IF "$(WITH_VC_REDIST)" == "TRUE"
+SCPDEFS+=-DWITH_VC_REDIST
+.ENDIF
+
 SCP_PRODUCT_TYPE=osl
 
 ICUVERSION_DEPENDENT_FILES= \
@@ -255,12 +250,14 @@ PARFILES=                          \
         installation_ooo.par       \
         scpaction_ooo.par          \
         directory_ooo.par          \
+        directory_ooo_macosx.par   \
         datacarrier_ooo.par        \
         file_ooo.par               \
         file_extra_ooo.par         \
         file_font_ooo.par          \
         file_library_ooo.par       \
         file_resource_ooo.par      \
+        file_improvement.par       \
         shortcut_ooo.par           \
         module_ooo.par             \
         module_hidden_ooo.par      \
@@ -268,6 +265,7 @@ PARFILES=                          \
         module_lang_template.par   \
         module_java.par            \
         module_systemint.par       \
+        module_improvement.par     \
         profile_ooo.par            \
         profileitem_ooo.par        \
         ure.par                    \
@@ -284,6 +282,7 @@ PARFILES +=                        \
         folderitem_ooo.par         \
         registryitem_ooo.par       \
         mergemodules_ooo.par       \
+        vc_redist.par              \
         windowscustomaction_ooo.par
 .ENDIF
 

@@ -1,0 +1,7 @@
+XPMEXPORTER_1_0 {
+        global:
+                GraphicExport;
+
+        local:
+                *;
+};

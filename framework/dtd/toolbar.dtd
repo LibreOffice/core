@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+  DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+  
+  Copyright 2008 by Sun Microsystems, Inc.
+ 
+  OpenOffice.org - a multi-platform office productivity suite
+ 
+  $RCSfile: toolbar.dtd,v $
+ 
+  $Revision: 1.9 $
+ 
+  This file is part of OpenOffice.org.
+ 
+  OpenOffice.org is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License version 3
+  only, as published by the Free Software Foundation.
+ 
+  OpenOffice.org is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU Lesser General Public License version 3 for more details
+  (a copy is included in the LICENSE file that accompanied this code).
+ 
+  You should have received a copy of the GNU Lesser General Public License
+  version 3 along with OpenOffice.org.  If not, see
+  <http://www.openoffice.org/license.html>
+  for a copy of the LGPLv3 License.
+ 
+-->
+<!ENTITY % boolean "(true|false)">
+<!ENTITY % numeric "CDATA">
+<!ENTITY % alignment "(top|bottom|left|right)">
+<!ENTITY % style "(symbol|text|symboltext)">
+<!ELEMENT toolbar:toolbar (toolbar:toolbaritem | toolbar:toolbarspace | toolbar:toolbarbreak | toolbar:toolbarseparator)*>
+<!ATTLIST toolbar:toolbar
+	xmlns:toolbar CDATA #FIXED "http://openoffice.org/2001/toolbar"
+	xmlns:xlink CDATA #FIXED "http://www.w3.org/1999/xlink"
+>
+<!ELEMENT toolbar:toolbaritem EMPTY>
+<!ATTLIST toolbar:toolbaritem
+	xlink:href CDATA #REQUIRED
+	toolbar:visible %boolean; "true"
+	toolbar:userdefined %boolean; "false"
+	toolbar:text CDATA #IMPLIED
+	toolbar:width %numeric; "0"
+	toolbar:style CDATA #IMPLIED
+	toolbar:bitmap CDATA #IMPLIED
+	toolbar:helpid CDATA #IMPLIED
+>
+<!ELEMENT toolbar:toolbarspace EMPTY>
+<!ELEMENT toolbar:toolbarbreak EMPTY>
+<!ELEMENT toolbar:toolbarseparator EMPTY>
+<!ELEMENT toolbar:toolbarlayouts (toolbar:toolbarlayout*)>
+<!ATTLIST toolbar:toolbarlayouts
+	xmlns:toolbar CDATA #FIXED "http://openoffice.org/2001/toolbar"
+>
+<!ELEMENT toolbar:toolbarlayout EMPTY>
+<!ATTLIST toolbar:toolbarlayout
+	toolbar:id CDATA #REQUIRED
+	toolbar:floatingposleft %numeric; #IMPLIED
+	toolbar:floatingpostop %numeric; #IMPLIED
+	toolbar:floatinglines %numeric; "0"
+	toolbar:dockinglines %numeric; "1"
+	toolbar:align %alignment; "left"
+	toolbar:visible %boolean; "false"
+	toolbar:floating %boolean; "false"
+	toolbar:style %style; "symbol"
+	toolbar:userdefname CDATA #IMPLIED
+>

@@ -1,0 +1,12 @@
+    <node oor:name="impress_StarImpress_40_Vorlage" oor:op="replace" >
+        <prop oor:name="DetectService"><value>com.sun.star.comp.sfx2.BinaryFormatDetector</value></prop>
+        <prop oor:name="URLPattern"/>
+        <prop oor:name="Extensions"><value>vor</value></prop>
+        <prop oor:name="MediaType"/>
+        <prop oor:name="Preferred"><value>false</value></prop>
+        <prop oor:name="PreferredFilter"><value>StarImpress 4.0 Vorlage</value></prop>
+        <prop oor:name="UIName">
+            <value>StarImpress 4.0 Template</value>
+        </prop>
+        <prop oor:name="ClipboardFormat"><value>StarDrawDocument 4.0</value></prop>
+    </node>

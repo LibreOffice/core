@@ -1,0 +1,1051 @@
+*PPD-Adobe: "4.3"
+*% Adobe Systems PostScript(R) Printer Description File
+*% Copyright 1987-1995 Adobe Systems Incorporated. 
+*% All Rights Reserved. 
+*% Permission is granted for redistribution of this file as
+*% long as this copyright notice is intact and the contents
+*% of the file is not altered in any way from its original form.
+*% End of Copyright statement
+*%
+
+*FormatVersion: "4.3"
+*FileVersion: "1.1"
+*LanguageEncoding: ISOLatin1
+*LanguageVersion: English
+*PCFileName: "EP_82F51.PPD"
+*Product: "(EPSON LP-8200PS2)"
+*PSVersion: "(2015.107) 1"
+*ModelName: "EPSON LP-8200PS2 5 Font"
+*Manufacturer: "Epson"
+*ShortNickName: "EPSON LP-8200PS2 5 Font"
+*NickName: "EPSON LP-8200PS2 v2015.107 5 font"
+*% === Options and Constraints =========
+*OpenGroup: InstallableOptions/Options Installed
+
+*OpenUI *Option1/Option Cassette: Boolean
+*DefaultOption1: False
+*Option1 True/Installed: ""
+*Option1 False/None: ""
+*?Option1 : "			
+	currentpagedevice /InputAttributes get 2 get
+	null eq {(False)}{(True)}ifelse 
+	= flush"
+*End
+*CloseUI: *Option1
+
+*OpenUI *Option2/HDD: Boolean
+*DefaultOption2: False
+*Option2 True/Connected: ""
+*Option2 False/None: ""
+*?Option2: "
+  save false
+   (%disk?%) 
+   { currentdevparams dup /Writeable known
+      { /Writeable get {pop true} if }  { pop } ifelse 
+    } 10 string /IODevice resourceforall
+    {(True)}{(False)} ifelse = flush
+ restore"
+*End
+*CloseUI: *Option2
+
+*OpenUI *Option3/Type1 Coprocessor: Boolean
+*DefaultOption3: False
+*Option3 True/Installed: ""
+*Option3 False/None: ""
+*?Option3: "
+  save 
+	(False) (*) {
+	(Type1Coprocessor) eq {pop (True) exit}if
+	} =string /HWOptions resourceforall
+	= flush
+ restore"
+*End
+*CloseUI: *Option3
+
+*OpenUI *Option4/Ethernet Option: Boolean
+*DefaultOption4: False
+*Option4 True/Installed: ""
+*Option4 False/None: ""
+*?Option4: "
+  save 
+  	/AdminUtils /ProcSet findresource begin EtherTalkOptionInstalled end
+	{(True)}{(False)}ifelse
+	= flush
+ restore"
+*End
+*CloseUI: *Option4
+
+*OpenUI *InstalledMemory/Memory: PickOne
+*DefaultInstalledMemory: 8Meg 
+*InstalledMemory 8Meg/Standard(8MB): ""
+*InstalledMemory 12Meg/12MB: ""
+*InstalledMemory 16Meg/16MB: ""
+*InstalledMemory 20Meg/20MB: ""
+*InstalledMemory 24Meg/24MB: ""
+*InstalledMemory 28Meg/28MB: ""
+*InstalledMemory 32Meg/32MB: ""
+*InstalledMemory 40Meg/40MB: ""
+*?InstalledMemory: "
+	save
+	currentsystemparams /RamSize get 16#100000 div 8 sub 4 div cvi
+	[(8Meg) (12Meg) (16Meg) (20Meg) (24Meg) (28Meg) (32Meg) () (40Meg)]
+	exch get = flush
+	restore
+	"
+*End
+*CloseUI: *InstalledMemory
+
+*CloseGroup: InstallableOptions
+
+*UIConstraints: *Option1 False *InputSlot Lower
+
+*UIConstraints: *InputSlot Upper *MediaType Thick
+*UIConstraints: *InputSlot Lower *MediaType Thick
+
+*UIConstraints: *InstalledMemory 8Meg *PageSize MaxPage
+*UIConstraints: *InstalledMemory 8Meg *PageRegion MaxPage
+
+*UIConstraints: *InputSlot Lower *Option1 False
+
+*UIConstraints: *MediaType Thick *InputSlot Upper 
+*UIConstraints: *MediaType Thick *InputSlot Lower 
+
+*UIConstraints: *PageSize MaxPage *InstalledMemory 8Meg
+*UIConstraints: *PageRegion MaxPage *InstalledMemory 8Meg
+
+*% ==== Device Capabilities ===============
+*LanguageLevel: "2"
+*Protocols: BCP TBCP
+
+*FreeVM: "2920000"
+*VMOption 8Meg: "2920000"
+*VMOption 12Meg: "2820000"
+*VMOption 16Meg: "6880000"
+*VMOption 20Meg: "10850000"
+*VMOption 24Meg: "14900000"
+*VMOption 28Meg: "18930000"
+*VMOption 32Meg: "23000000"
+*VMOption 40Meg: "31110000"
+
+ 
+*ColorDevice: False
+*DefaultColorSpace: Gray
+*TTRasterizer: Type42
+*?TTRasterizer: "
+  save
+	42 /FontType resourcestatus {pop pop (Type42)}{(None)}ifelse    
+	= flush
+  restore
+"
+*End
+*FileSystem: True
+*?FileSystem: "
+  save false
+   (%disk?%) 
+   { currentdevparams dup /Writeable known
+      { /Writeable get {pop true} if }  { pop } ifelse 
+    } 10 string /IODevice resourceforall
+    {(True)}{(False)} ifelse = flush
+ restore"
+*End
+
+*Throughput: "10"
+*Password: "()" 
+*ExitServer: "
+ count 0 eq
+ { false } { true exch startjob } ifelse
+ not { 
+     (WARNING: Cannot modify initial VM.) =
+     (Missing or invalid password.) =
+     (Please contact the author of this software.) = flush quit
+     } if
+"
+*End
+*Reset: "
+ count 0 eq
+ { false } { true exch startjob } ifelse
+ not { 
+    (WARNING: Cannot reset printer.) =
+    (Missing or invalid password.) =
+    (Please contact the author of this software.) = flush quit
+    } if
+ systemdict /quit get exec
+ (WARNING : Printer Reset Failed.) = flush
+"
+*End
+*OpenUI *Resolution/Resolution:  PickOne
+*OrderDependency: 20 AnySetup *Resolution
+*DefaultResolution: 600dpi
+*Resolution 600dpi/Fine: "1 dict dup /HWResolution [600 600] put setpagedevice"
+*Resolution 300dpi/Quick: "1 dict dup /HWResolution [300 300] put setpagedevice"
+*?Resolution: "
+  save
+    currentpagedevice /HWResolution get
+    0 get
+    (          ) cvs print
+    (dpi)
+    = flush
+  restore
+"
+*End
+*CloseUI: *Resolution
+
+*% Job Patch File ===============
+*JobPatchFile 0: "
+    10 dict dup /EPSONdict exch def begin
+	/ThickPaper false def
+	/SetPaper {			
+		    3 dict 
+		    dup /PageSize 5 -1 roll put
+		    dup /ImagingBBox 4 -1 roll put
+		    dup ThickPaper {/MediaWeight 110 put}{/MediaWeight 75 put}ifelse
+			setpagedevice
+	}bind def
+	end
+
+"
+*End
+
+*% Halftone Information ===============
+*DefaultHalftoneType: 1
+*ScreenFreq: "85.0"
+*ScreenAngle: "45.0"
+*ResScreenFreq 300dpi: "60.0"
+*ResScreenAngle 300dpi: "45.0"
+*ResScreenFreq 600dpi: "85.0"
+*ResScreenAngle 600dpi: "45.0"
+*DefaultScreenProc: Dot
+*ScreenProc Dot: "
+{abs   exch   abs   2 copy   add   1 gt   {1 sub   dup   mul   exch  
+1 sub   dup   mul   add   1 sub  } {dup   mul   exch   dup   mul  
+add   1 exch   sub  } ifelse  }
+"
+*End
+*ScreenProc Line: "{ pop }"
+*ScreenProc Ellipse: "{ dup 5 mul 8 div mul exch dup mul exch add sqrt 1 exch sub }"
+
+*DefaultTransfer: Null
+*Transfer Null: "{ }"
+*Transfer Null.Inverse: "{ 1 exch sub }"
+
+*OpenUI *Smoothing/RIT:  Boolean
+*OrderDependency: 50 AnySetup *Smoothing
+*DefaultSmoothing:True
+*Smoothing True/ON: "1 dict dup /PostRenderingEnhance true put setpagedevice"
+*Smoothing False/OFF: "1 dict dup /PostRenderingEnhance false put setpagedevice"
+*?Smoothing: "
+  save
+    currentpagedevice /PostRenderingEnhance get
+    {(True)}{(False)}ifelse = flush
+  restore
+"
+*End
+*CloseUI: *Smoothing
+
+
+*OpenUI *EPHT/Halftone:  Boolean
+*OrderDependency: 50 AnySetup *EPHT
+*DefaultEPHT:True
+*EPHT True/Brilliant Screens: "
+   /AdminUtils /ProcSet findresource begin
+   false setDisableABS end
+   currentpagedevice setpagedevice
+"
+*End
+*EPHT False/Spot: "
+   /AdminUtils /ProcSet findresource begin
+   true setDisableABS end
+   currentpagedevice setpagedevice
+"
+*End
+*?EPHT: "
+  save
+    /AdminUtils /ProcSet findresource begin disableABS end
+    {(False)}{(True)}ifelse = flush
+  restore
+"
+*End
+*CloseUI: *EPHT
+
+
+*% Paper Handling ===================
+*LandscapeOrientation: Any
+*% Code in this section both selects a tray and sets up a frame buffer.
+*OpenUI *PageSize: PickOne
+*OrderDependency: 30 AnySetup *PageSize
+*DefaultPageSize: A4
+*PageSize Letter: "
+	EPSONdict begin [612 792] null SetPaper end"
+*End
+*PageSize Legal: "
+	EPSONdict begin [612 1008] null SetPaper end"
+*End
+*PageSize Tabloid/B: "
+	EPSONdict begin [792 1224] null SetPaper end"
+*End
+*PageSize A3: "
+	EPSONdict begin [842 1191] null SetPaper end"
+*End
+*PageSize A4: "
+	EPSONdict begin [595 842] null SetPaper end"
+*End
+*PageSize A5: "
+	EPSONdict begin [420 595] null SetPaper end"
+*End
+*PageSize B4: "
+	EPSONdict begin [729 1032] null SetPaper end"
+*End
+*PageSize B5: "
+	EPSONdict begin [516 729] null SetPaper end"
+*End
+*PageSize Folio: "
+	EPSONdict begin [595 935] null SetPaper end"
+*End
+*PageSize Executive: "
+	EPSONdict begin [522 756] null SetPaper end"
+*End
+*PageSize Env10: "
+	EPSONdict begin [297 684] null SetPaper end"
+*End
+*PageSize EnvDL: "
+	EPSONdict begin [312 624] null SetPaper end"
+*End
+*PageSize EnvC5: "
+	EPSONdict begin [459 649] null SetPaper end"
+*End
+*PageSize FanFoldGermanLegal/GOVLegal: "
+	EPSONdict begin [612 936] null SetPaper end"
+*End
+*PageSize Postcard/Hagaki: "
+	EPSONdict begin [284 419] null SetPaper end"
+*End
+*PageSize EnvMonarch/Monarch: "
+	EPSONdict begin [279 540] null SetPaper end"
+*End
+*PageSize Statement: "
+	EPSONdict begin [396 612] null SetPaper end"
+*End
+*PageSize GOVLetter: "
+	EPSONdict begin [576 756] null SetPaper end"
+*End
+*PageSize A3L: "
+	EPSONdict begin [842 1440] null SetPaper end"
+*End
+*PageSize MaxPage/Banner: "
+	EPSONdict begin [842 2551] null SetPaper end"
+*End
+*?PageSize: "
+ save
+   currentpagedevice /PageSize get aload pop
+   2 copy gt {exch} if 
+   (Unknown) 
+  18 dict
+   dup [612 792] (Letter) put
+   dup [612 1008] (Legal) put
+   dup [792 1224] (Tabloid) put
+   dup [842 1191] (A3) put
+   dup [595 842] (A4) put
+   dup [420 595] (A5) put
+   dup [729 1032] (B4) put
+   dup [516 729] (B5) put
+   dup [595 935] (Folio) put
+   dup [522 756] (Executive) put
+   dup [297 684] (Env10) put
+   dup [312 624] (EnvDL) put
+   dup [459 649] (EnvC5) put
+   dup [612 936] (FanFoldGermanLegal) put
+   dup [284 419] (Postcard) put
+   dup [279 540] (EnvMonarch) put
+   dup [396 612] (Statement) put
+   dup [576 756] (GOVLetter) put
+   dup [842 1440] (A3L) put
+   dup [842 2551] (MaxPage) put
+ 
+ { exch aload pop 4 index sub abs 5 le exch 
+   5 index sub abs 5 le and 
+      {exch pop exit} {pop} ifelse
+   } bind forall
+   = flush pop pop
+restore 
+"
+*End
+*CloseUI: *PageSize
+
+*OpenUI *PageRegion:  PickOne
+*OrderDependency: 40 AnySetup *PageRegion
+*DefaultPageRegion: A4
+*PageRegion Letter: "
+	EPSONdict begin [612 792] null SetPaper end"
+*End
+*PageRegion Legal: "
+	EPSONdict begin [612 1008] null SetPaper end"
+*End
+*PageRegion Tabloid/B: "
+	EPSONdict begin [792 1224] null SetPaper end"
+*End
+*PageRegion A3: "
+	EPSONdict begin [842 1191] null SetPaper end"
+*End
+*PageRegion A4: "
+	EPSONdict begin [595 842] null SetPaper end"
+*End
+*PageRegion A5: "
+	EPSONdict begin [420 595] null SetPaper end"
+*End
+*PageRegion B4: "
+	EPSONdict begin [729 1032] null SetPaper end"
+*End
+*PageRegion B5: "
+	EPSONdict begin [516 729] null SetPaper end"
+*End
+*PageRegion Folio: "
+	EPSONdict begin [595 935] null SetPaper end"
+*End
+*PageRegion Executive: "
+	EPSONdict begin [522 756] null SetPaper end"
+*End
+*PageRegion Env10: "
+	EPSONdict begin [297 684] null SetPaper end"
+*End
+*PageRegion EnvDL: "
+	EPSONdict begin [312 624] null SetPaper end"
+*End
+*PageRegion EnvC5: "
+	EPSONdict begin [459 649] null SetPaper end"
+*End
+*PageRegion FanFoldGermanLegal/GOVLegal: "
+	EPSONdict begin [612 936] null SetPaper end"
+*End
+*PageRegion Postcard/Hagaki: "
+ 	EPSONdict begin [284 419] null SetPaper end"
+*End
+*PageRegion EnvMonarch/Monarch: "
+	EPSONdict begin [279 540] null SetPaper end"
+*End
+*PageRegion Statement: "
+	EPSONdict begin [396 612] null SetPaper end"
+*End
+*PageRegion GOVLetter: "
+	EPSONdict begin [576 756] null SetPaper end"
+*End
+*PageRegion A3L: "
+	EPSONdict begin [842 1440] null SetPaper end"
+*End
+*PageRegion MaxPage/Banner: "
+	EPSONdict begin [842 2551] null SetPaper end"
+*End
+*CloseUI: *PageRegion
+
+*% The following entries provide information about specific paper keywords.
+*DefaultImageableArea: A4
+*ImageableArea Letter: "3.66 3.60 607.5 786.96 "
+*ImageableArea Legal: "3.60 3.66 606.48 1002.54 "
+*ImageableArea Tabloid/B: "3.60 3.66 789.96 1218.06 "
+*ImageableArea A3: "3.60 3.66 836.88 1184.94 "
+*ImageableArea A4: "3.66 3.60 589.74 836.88 "
+*ImageableArea A5: "3.66 3.60 413.1 587.28 "
+*ImageableArea B4: "3.60 3.66 717.84 1026.06 "
+*ImageableArea B5: "3.66 3.60 508.14 721.68"
+*ImageableArea Folio: "3.60 3.66 587.28 927.18 "
+*ImageableArea Executive: "3.66 3.60 514.38 744.72"
+*ImageableArea Env10: "3.60 3.66 291.6 676.14 "
+*ImageableArea EnvDL: "3.60 3.66 303.12 614.22 "
+*ImageableArea EnvC5: "3.60 3.66 452.88 641.1 "
+*ImageableArea FanFoldGermanLegal/GOVLegal: "3.60 3.66 606.48 926.22 "
+*ImageableArea Postcard/Hagaki: "3.60 3.66 276.24 412.14 "
+*ImageableArea EnvMonarch/Monarch: "3.60 3.66 272.4 532.14 "
+*ImageableArea Statement: "3.66 3.60 388.14 606.48"
+*ImageableArea GOVLetter: "3.60 3.66 568.08 748.14 "
+*ImageableArea A3L: "3.60 3.66 836.88 1435.98 "
+*ImageableArea MaxPage/Banner: "3.60 3.66 836.88 2545.74 "
+
+*?ImageableArea: "
+ save
+   /cvp { (                ) cvs print ( ) print } bind def
+   /upperright {10000 mul floor 10000 div} bind def
+   /lowerleft {10000 mul ceiling 10000 div} bind def
+   newpath clippath pathbbox
+   4 -2 roll exch 2 {lowerleft cvp} repeat
+   exch 2 {upperright cvp} repeat flush
+ restore
+"
+*End
+
+*% These provide the physical dimensions of the paper (by keyword)
+*DefaultPaperDimension: A4
+*PaperDimension Letter: "612 792"
+*PaperDimension Legal: "612 1008"
+*PaperDimension Tabloid/B: "792 1224"
+*PaperDimension A3: "842 1191"
+*PaperDimension A4: "595 842"
+*PaperDimension A5: "420 595"
+*PaperDimension B4: "729 1032"
+*PaperDimension B5: "516 729"
+*PaperDimension Folio: "595 935"
+*PaperDimension Executive: "522 756"
+*PaperDimension Env10: "297 684"
+*PaperDimension EnvDL: "312 624"
+*PaperDimension EnvC5: "459 649"
+*PaperDimension FanFoldGermanLegal/GOVLegal: "612 936"
+*PaperDimension Postcard/Hagaki: "284 419"
+*PaperDimension EnvMonarch/Monarch: "279 540"
+*PaperDimension Statement: "396 612"
+*PaperDimension GOVLetter: "576 756"
+*PaperDimension A3L: "842 1440"
+*PaperDimension MaxPage/Banner: "842 2551"
+
+*DefaultOutputBin: OnlyOne
+*DefaultOutputOrder: Normal
+
+*OpenUI *InputSlot: PickOne
+*OrderDependency: 20 AnySetup *InputSlot
+*DefaultInputSlot: Standard
+*InputSlot Standard/Standard: "
+  currentpagedevice /InputAttributes get 0 get
+  dup null eq
+  { pop }
+  { dup length 1 add dict copy
+    dup /InputAttributes
+    1 dict dup /Priority [0] put
+    put setpagedevice
+  } ifelse"
+*End
+*InputSlot Upper/Upper: "
+  currentpagedevice /InputAttributes get 1 get
+  dup null eq
+  { pop }
+  { dup length 1 add dict copy
+    dup /InputAttributes
+    1 dict dup /Priority [1] put
+    put setpagedevice
+  } ifelse"
+*End
+*InputSlot Lower/Lower: "
+  currentpagedevice /InputAttributes get 2 get
+  dup null eq
+  { pop }
+  { dup length 1 add dict copy
+    dup /InputAttributes
+    1 dict dup /Priority [2] put
+    put setpagedevice
+  } ifelse"
+*End
+*?InputSlot: "
+  save
+  2 dict
+  dup /0 (Standard) put
+  dup /1 (Upper) put
+  dup /2 (Lower) put
+  currentpagedevice /InputAttributes get
+  dup /Priority known
+  { /Priority get 0 get (      ) cvs cvn get }
+  {
+    dup length 1 eq
+    { {pop} forall (       ) cvs cvn get }
+    { pop pop (Unknown) } ifelse
+  } ifelse
+  = flush
+restore
+"
+*End
+*CloseUI: *InputSlot
+
+
+*OpenUI *TraySwitch/TraySwitch:  Boolean
+*OrderDependency: 50 AnySetup *TraySwitch
+*DefaultTraySwitch: True
+*TraySwitch True/Auto: "1 dict dup /TraySwitch true put setpagedevice"
+*TraySwitch False/Manual: "1 dict dup /TraySwitch false put setpagedevice"
+*?TraySwitch: "
+save
+  currentpagedevice /TraySwitch get
+  {(True)}{(False)}ifelse = flush
+restore
+"
+*End
+*CloseUI: *TraySwitch
+
+*OpenUI *MediaType/PaperType:  PickOne
+*OrderDependency: 20 AnySetup *MediaType
+*DefaultMediaType: Standard
+*MediaType Standard/Standard: "
+	EPSONdict begin
+	/ThickPaper false def
+	end
+"
+*End
+*MediaType Thick/Thick: "
+	EPSONdict begin
+	/ThickPaper true def
+	end
+"
+*End
+*?MediaType: "
+  save
+  2 dict
+  dup 75 (Standard) put
+  dup 110 (Thick) put
+  currentpagedevice /MediaWeight 
+  get get = flush
+  restore
+"
+*End
+*CloseUI: *MediaType
+
+*OpenUI *EPPCheck/PaperSizeCheck:  Boolean
+*OrderDependency: 10 AnySetup *EPPCheck
+*DefaultEPPCheck: True
+*EPPCheck True/Enable: "<</Policies <</PageSize 2>> >> setpagedevice"
+*EPPCheck False/Disable: "<</Policies <</PageSize 7>> >> setpagedevice"
+*?EPPCheck: "
+save
+  currentpagedevice /Policies get /PageSize get 2 eq
+  {(True)}{(False)}ifelse = flush
+restore
+"
+*End
+*CloseUI: *EPPCheck
+
+
+
+*% Font Information =====================
+*DefaultFont: Courier
+*Font AvantGarde-Book: Standard "(001.006S)" Standard ROM
+*Font AvantGarde-BookOblique: Standard "(001.006S)" Standard ROM
+*Font AvantGarde-Demi: Standard "(001.007S)" Standard ROM
+*Font AvantGarde-DemiOblique: Standard "(001.007S)" Standard ROM
+*Font Bookman-Demi: Standard "(001.004S)" Standard ROM
+*Font Bookman-DemiItalic: Standard "(001.004S)" Standard ROM
+*Font Bookman-Light: Standard "(001.004S)" Standard ROM
+*Font Bookman-LightItalic: Standard "(001.004S)" Standard ROM
+*Font Courier: Standard "(002.004S)" Standard ROM
+*Font Courier-Bold: Standard "(002.004S)" Standard ROM
+*Font Courier-BoldOblique: Standard "(002.004S)" Standard ROM
+*Font Courier-Oblique: Standard "(002.004S)" Standard ROM
+*Font GothicBBB-Medium-78-EUC-H: EUC "(003.002)" JIS-78 Disk
+*Font GothicBBB-Medium-78-EUC-V: EUC "(003.002)" JIS-78 Disk
+*Font GothicBBB-Medium-78-H: JIS "(003.002)" JIS-78 Disk
+*Font GothicBBB-Medium-78-RKSJ-H: RKSJ "(003.002)" JIS-78 Disk
+*Font GothicBBB-Medium-78-RKSJ-V: RKSJ "(003.002)" JIS-78 Disk
+*Font GothicBBB-Medium-78-V: JIS "(003.002)" JIS-78 Disk
+*Font GothicBBB-Medium-83pv-RKSJ-H: RKSJ "(003.002)" 83pv Disk
+*Font GothicBBB-Medium-90pv-RKSJ-H: RKSJ "(003.002)" Special Disk
+*Font GothicBBB-Medium-90pv-RKSJ-V: RKSJ "(003.002)" Special Disk
+*Font GothicBBB-Medium-90ms-RKSJ-H: RKSJ "(003.002)" Special Disk
+*Font GothicBBB-Medium-90ms-RKSJ-V: RKSJ "(003.002)" Special Disk
+*Font GothicBBB-Medium-Add-H: JIS "(003.002)" Add Disk
+*Font GothicBBB-Medium-Add-RKSJ-H: RKSJ "(003.002)" Add Disk
+*Font GothicBBB-Medium-Add-RKSJ-V: RKSJ "(003.002)" Add Disk
+*Font GothicBBB-Medium-Add-V: JIS "(003.002)" Add Disk
+*Font GothicBBB-Medium-EUC-H: EUC "(003.002)" JIS-83 Disk
+*Font GothicBBB-Medium-EUC-V: EUC "(003.002)" JIS-83 Disk
+*Font GothicBBB-Medium-Ext-H: JIS "(003.002)" Ext Disk
+*Font GothicBBB-Medium-Ext-RKSJ-H: RKSJ "(003.002)" Ext Disk
+*Font GothicBBB-Medium-Ext-RKSJ-V: RKSJ "(003.002)" Ext Disk
+*Font GothicBBB-Medium-Ext-V: JIS "(003.002)" Ext Disk
+*Font GothicBBB-Medium-H: JIS "(003.002)" JIS-83 Disk
+*Font GothicBBB-Medium-NWP-H: JIS "(003.002)" NWP Disk
+*Font GothicBBB-Medium-NWP-V: JIS "(003.002)" NWP Disk
+*Font GothicBBB-Medium-RKSJ-H: RKSJ "(003.002)" JIS-83 Disk
+*Font GothicBBB-Medium-RKSJ-V: RKSJ "(003.002)" JIS-83 Disk
+*Font GothicBBB-Medium-V: JIS "(003.002)" JIS-83 Disk
+*Font Helvetica: Standard "(001.006S)" Standard ROM
+*Font Helvetica-Bold: Standard "(001.007S)" Standard ROM
+*Font Helvetica-BoldOblique: Standard "(001.007S)" Standard ROM
+*Font Helvetica-Narrow: Standard "(001.006S)" Standard ROM
+*Font Helvetica-Narrow-Bold: Standard "(001.007S)" Standard ROM
+*Font Helvetica-Narrow-BoldOblique: Standard "(001.007S)" Standard ROM
+*Font Helvetica-Narrow-Oblique: Standard "(001.006S)" Standard ROM
+*Font Helvetica-Oblique: Standard "(001.006S)" Standard ROM
+*Font Jun101-Light-78-EUC-H: EUC "(003.001)" JIS-78 Disk
+*Font Jun101-Light-78-EUC-V: EUC "(003.001)" JIS-78 Disk
+*Font Jun101-Light-78-H: JIS "(003.001)" JIS-78 Disk
+*Font Jun101-Light-78-RKSJ-H: RKSJ "(003.001)" JIS-78 Disk
+*Font Jun101-Light-78-RKSJ-V: RKSJ "(003.001)" JIS-78 Disk
+*Font Jun101-Light-78-V: JIS "(003.001)" JIS-78 Disk
+*Font Jun101-Light-83pv-RKSJ-H: RKSJ "(003.001)" 83pv Disk
+*Font Jun101-Light-90pv-RKSJ-H: RKSJ "(003.001)" Special Disk
+*Font Jun101-Light-90pv-RKSJ-V: RKSJ "(003.001)" Special Disk
+*Font Jun101-Light-90ms-RKSJ-H: RKSJ "(003.001)" Special Disk
+*Font Jun101-Light-90ms-RKSJ-V: RKSJ "(003.001)" Special Disk
+*Font Jun101-Light-Add-H: JIS "(003.001)" Add Disk
+*Font Jun101-Light-Add-RKSJ-H: RKSJ "(003.001)" Add Disk
+*Font Jun101-Light-Add-RKSJ-V: RKSJ "(003.001)" Add Disk
+*Font Jun101-Light-Add-V: JIS "(003.001)" Add Disk
+*Font Jun101-Light-EUC-H: EUC "(003.001)" JIS-83 Disk
+*Font Jun101-Light-EUC-V: EUC "(003.001)" JIS-83 Disk
+*Font Jun101-Light-Ext-H: JIS "(003.001)" Ext Disk
+*Font Jun101-Light-Ext-RKSJ-H: RKSJ "(003.001)" Ext Disk
+*Font Jun101-Light-Ext-RKSJ-V: RKSJ "(003.001)" Ext Disk
+*Font Jun101-Light-Ext-V: JIS "(003.001)" Ext Disk
+*Font Jun101-Light-H: JIS "(003.001)" JIS-83 Disk
+*Font Jun101-Light-NWP-H: JIS "(003.001)" NWP Disk
+*Font Jun101-Light-NWP-V: JIS "(003.001)" NWP Disk
+*Font Jun101-Light-RKSJ-H: RKSJ "(003.001)" JIS-83 Disk
+*Font Jun101-Light-RKSJ-V: RKSJ "(003.001)" JIS-83 Disk
+*Font Jun101-Light-V: JIS "(003.001)" JIS-83 Disk
+*Font MidashiGo-MB31-78-EUC-H: EUC "(003.000)" JIS-78 Disk
+*Font MidashiGo-MB31-78-EUC-V: EUC "(003.000)" JIS-78 Disk
+*Font MidashiGo-MB31-78-H: JIS "(003.000)" JIS-78 Disk
+*Font MidashiGo-MB31-78-RKSJ-H: RKSJ "(003.000)" JIS-78 Disk
+*Font MidashiGo-MB31-78-RKSJ-V: RKSJ "(003.000)" JIS-78 Disk
+*Font MidashiGo-MB31-78-V: JIS "(003.000)" JIS-78 Disk
+*Font MidashiGo-MB31-83pv-RKSJ-H: RKSJ "(003.000)" 83pv Disk
+*Font MidashiGo-MB31-90pv-RKSJ-H: RKSJ "(003.000)" Special Disk
+*Font MidashiGo-MB31-90pv-RKSJ-V: RKSJ "(003.000)" Special Disk
+*Font MidashiGo-MB31-90ms-RKSJ-H: RKSJ "(003.000)" Special Disk
+*Font MidashiGo-MB31-90ms-RKSJ-V: RKSJ "(003.000)" Special Disk
+*Font MidashiGo-MB31-Add-H: JIS "(003.000)" Add Disk
+*Font MidashiGo-MB31-Add-RKSJ-H: RKSJ "(003.000)" Add Disk
+*Font MidashiGo-MB31-Add-RKSJ-V: RKSJ "(003.000)" Add Disk
+*Font MidashiGo-MB31-Add-V: JIS "(003.000)" Add Disk
+*Font MidashiGo-MB31-EUC-H: EUC "(003.000)" JIS-83 Disk
+*Font MidashiGo-MB31-EUC-V: EUC "(003.000)" JIS-83 Disk
+*Font MidashiGo-MB31-Ext-H: JIS "(003.000)" Ext Disk
+*Font MidashiGo-MB31-Ext-RKSJ-H: RKSJ "(003.000)" Ext Disk
+*Font MidashiGo-MB31-Ext-RKSJ-V: RKSJ "(003.000)" Ext Disk
+*Font MidashiGo-MB31-Ext-V: JIS "(003.000)" Ext Disk
+*Font MidashiGo-MB31-H: JIS "(003.000)" JIS-83 Disk
+*Font MidashiGo-MB31-NWP-H: JIS "(003.000)" NWP Disk
+*Font MidashiGo-MB31-NWP-V: JIS "(003.000)" NWP Disk
+*Font MidashiGo-MB31-RKSJ-H: RKSJ "(003.000)" JIS-83 Disk
+*Font MidashiGo-MB31-RKSJ-V: RKSJ "(003.000)" JIS-83 Disk
+*Font MidashiGo-MB31-V: JIS "(003.000)" JIS-83 Disk
+*Font MidashiMin-MA31-78-EUC-H: EUC "(003.001)" JIS-78 Disk
+*Font MidashiMin-MA31-78-EUC-V: EUC "(003.001)" JIS-78 Disk
+*Font MidashiMin-MA31-78-H: JIS "(003.001)" JIS-78 Disk
+*Font MidashiMin-MA31-78-RKSJ-H: RKSJ "(003.001)" JIS-78 Disk
+*Font MidashiMin-MA31-78-RKSJ-V: RKSJ "(003.001)" JIS-78 Disk
+*Font MidashiMin-MA31-78-V: JIS "(003.001)" JIS-78 Disk
+*Font MidashiMin-MA31-83pv-RKSJ-H: RKSJ "(003.001)" 83pv Disk
+*Font MidashiMin-MA31-90pv-RKSJ-H: RKSJ "(003.001)" Special Disk
+*Font MidashiMin-MA31-90pv-RKSJ-V: RKSJ "(003.001)" Special Disk
+*Font MidashiMin-MA31-90ms-RKSJ-H: RKSJ "(003.001)" Special Disk
+*Font MidashiMin-MA31-90ms-RKSJ-V: RKSJ "(003.001)" Special Disk
+*Font MidashiMin-MA31-Add-H: JIS "(003.001)" Add Disk
+*Font MidashiMin-MA31-Add-RKSJ-H: RKSJ "(003.001)" Add Disk
+*Font MidashiMin-MA31-Add-RKSJ-V: RKSJ "(003.001)" Add Disk
+*Font MidashiMin-MA31-Add-V: JIS "(003.001)" Add Disk
+*Font MidashiMin-MA31-EUC-H: EUC "(003.001)" JIS-83 Disk
+*Font MidashiMin-MA31-EUC-V: EUC "(003.001)" JIS-83 Disk
+*Font MidashiMin-MA31-Ext-H: JIS "(003.001)" Ext Disk
+*Font MidashiMin-MA31-Ext-RKSJ-H: RKSJ "(003.001)" Ext Disk
+*Font MidashiMin-MA31-Ext-RKSJ-V: RKSJ "(003.001)" Ext Disk
+*Font MidashiMin-MA31-Ext-V: JIS "(003.001)" Ext Disk
+*Font MidashiMin-MA31-H: JIS "(003.001)" JIS-83 Disk
+*Font MidashiMin-MA31-NWP-H: JIS "(003.001)" NWP Disk
+*Font MidashiMin-MA31-NWP-V: JIS "(003.001)" NWP Disk
+*Font MidashiMin-MA31-RKSJ-H: RKSJ "(003.001)" JIS-83 Disk
+*Font MidashiMin-MA31-RKSJ-V: RKSJ "(003.001)" JIS-83 Disk
+*Font MidashiMin-MA31-V: JIS "(003.001)" JIS-83 Disk
+*Font NewCenturySchlbk-Bold: Standard "(001.009S)" Standard ROM
+*Font NewCenturySchlbk-BoldItalic: Standard "(001.007S)" Standard ROM
+*Font NewCenturySchlbk-Italic: Standard "(001.006S)" Standard ROM
+*Font NewCenturySchlbk-Roman: Standard "(001.007S)" Standard ROM
+*Font Palatino-Bold: Standard "(001.005S)" Standard ROM
+*Font Palatino-BoldItalic: Standard "(001.005S)" Standard ROM
+*Font Palatino-Italic: Standard "(001.005S)" Standard ROM
+*Font Palatino-Roman: Standard "(001.005S)" Standard ROM
+*Font Ryumin-Light-78-EUC-H: EUC "(003.001)" JIS-78 Disk
+*Font Ryumin-Light-78-EUC-V: EUC "(003.001)" JIS-78 Disk
+*Font Ryumin-Light-78-H: JIS "(003.001)" JIS-78 Disk
+*Font Ryumin-Light-78-RKSJ-H: RKSJ "(003.001)" JIS-78 Disk
+*Font Ryumin-Light-78-RKSJ-V: RKSJ "(003.001)" JIS-78 Disk
+*Font Ryumin-Light-78-V: JIS "(003.001)" JIS-78 Disk
+*Font Ryumin-Light-83pv-RKSJ-H: RKSJ "(003.001)" 83pv Disk
+*Font Ryumin-Light-90pv-RKSJ-H: RKSJ "(003.001)" Special Disk
+*Font Ryumin-Light-90pv-RKSJ-V: RKSJ "(003.001)" Special Disk
+*Font Ryumin-Light-90ms-RKSJ-H: RKSJ "(003.001)" Special Disk
+*Font Ryumin-Light-90ms-RKSJ-V: RKSJ "(003.001)" Special Disk
+*Font Ryumin-Light-Add-H: JIS "(003.001)" Add Disk
+*Font Ryumin-Light-Add-RKSJ-H: RKSJ "(003.001)" Add Disk
+*Font Ryumin-Light-Add-RKSJ-V: RKSJ "(003.001)" Add Disk
+*Font Ryumin-Light-Add-V: JIS "(003.001)" Add Disk
+*Font Ryumin-Light-EUC-H: EUC "(003.001)" JIS-83 Disk
+*Font Ryumin-Light-EUC-V: EUC "(003.001)" JIS-83 Disk
+*Font Ryumin-Light-Ext-H: JIS "(003.001)" Ext Disk
+*Font Ryumin-Light-Ext-RKSJ-H: RKSJ "(003.001)" Ext Disk
+*Font Ryumin-Light-Ext-RKSJ-V: RKSJ "(003.001)" Ext Disk
+*Font Ryumin-Light-Ext-V: JIS "(003.001)" Ext Disk
+*Font Ryumin-Light-H: JIS "(003.001)" JIS-83 Disk
+*Font Ryumin-Light-NWP-H: JIS "(003.001)" NWP Disk
+*Font Ryumin-Light-NWP-V: JIS "(003.001)" NWP Disk
+*Font Ryumin-Light-RKSJ-H: RKSJ "(003.001)" JIS-83 Disk
+*Font Ryumin-Light-RKSJ-V: RKSJ "(003.001)" JIS-83 Disk
+*Font Ryumin-Light-V: JIS "(003.001)" JIS-83 Disk
+*Font Symbol: Special "(001.007S)" Special ROM
+*Font Times-Bold: Standard "(001.007S)" Standard ROM
+*Font Times-BoldItalic: Standard "(001.009S)" Standard ROM
+*Font Times-Italic: Standard "(001.007S)" Standard ROM
+*Font Times-Roman: Standard "(001.007S)" Standard ROM
+*Font ZapfChancery-MediumItalic: Standard "(001.007S)" Standard ROM
+*Font ZapfDingbats: Special "(001.004S)" Special ROM
+
+*?FontQuery: "
+ save
+   { count 1 gt
+      { exch dup 127 string cvs (/) print print (:) print
+        /Font resourcestatus {pop pop (Yes)} {(No)} ifelse =
+      } { exit } ifelse 
+   } bind loop
+   (*) = flush
+ restore
+"
+*End
+
+*?FontList: "
+save
+  (*) {cvn ==} 128 string /Font resourceforall
+  (*) = flush
+restore
+"
+*End
+
+*% Printer Messages (verbatim from printer):
+*Message: "%%[ exitserver: permanent state may be changed ]%%"
+*Message: "%%[ Flushing: rest of job (to end-of-file) will be ignored ]%%"
+*Message: "\FontName\ not found, using Courier"
+
+*% Status (format: %%[ status: <one of these> ] %%)
+*Status: "initializing"
+*Status: "idle"
+*Status: "busy"
+*Status: "waiting"
+*Status: "printing"
+*Status: "Tray change timeout"
+*Status: "waiting for a4 tray"
+*Status: "waiting for letter tray"
+*Status: "waiting for b5 tray"
+*Status: "waiting for executivepage tray"
+*Status: "waiting for statement tray"
+*Status: "waiting for b(ledger,tabloid) tray"
+*Status: "waiting for a3 tray"
+*Status: "waiting for b4 tray"
+*Status: "waiting for legal tray"
+*Status: "waiting for glg (legal13) tray"
+*Status: "waiting for monarch envelope tray"
+*Status: "waiting for com10 envelope tray"
+*Status: "waiting for dl envelope tray"
+*Status: "waiting for c5 envelope tray"
+*Status: "waiting for postcard tray"
+*Status: "waiting for glt tray"
+*Status: "waiting for folio tray"
+*Status: "waiting for a5 tray"
+*Status: "waiting for a3l tray"
+*Status: "waiting for banner tray"
+*Status: "waiting for thick a4 tray"
+*Status: "waiting for thick letter tray"
+*Status: "waiting for thick b5 tray"
+*Status: "waiting for thick executivepage tray"
+*Status: "waiting for thick statement tray"
+*Status: "waiting for thick b(ledger,tabloid) tray"
+*Status: "waiting for thick a3 tray"
+*Status: "waiting for thick b4 tray"
+*Status: "waiting for thick legal tray"
+*Status: "waiting for thick glg (legal13) tray"
+*Status: "waiting for thick monarch envelope tray"
+*Status: "waiting for thick com10 envelope tray"
+*Status: "waiting for thick dl envelope tray"
+*Status: "waiting for thick c5 envelope tray"
+*Status: "waiting for thick postcard tray"
+*Status: "waiting for thick glt tray"
+*Status: "waiting for thick folio tray"
+*Status: "waiting for thick a5 tray"
+*Status: "waiting for thick a3l tray"
+*Status: "waiting for thick banner tray"
+*Status: "Stopped waiting for a4 tray"
+*Status: "Stopped waiting for letter tray"
+*Status: "Stopped waiting for b5 tray"
+*Status: "Stopped waiting for executivepage tray"
+*Status: "Stopped waiting for statement tray"
+*Status: "Stopped waiting for b(ledger,tabloid) tray"
+*Status: "Stopped waiting for a3 tray"
+*Status: "Stopped waiting for b4 tray"
+*Status: "Stopped waiting for legal tray"
+*Status: "Stopped waiting for glg (legal13) tray"
+*Status: "Stopped waiting for monarch envelope tray"
+*Status: "Stopped waiting for com10 envelope tray"
+*Status: "Stopped waiting for dl envelope tray"
+*Status: "Stopped waiting for c5 envelope tray"
+*Status: "Stopped waiting for postcard tray"
+*Status: "Stopped waiting for glt tray"
+*Status: "Stopped waiting for folio tray"
+*Status: "Stopped waiting for a5 tray"
+*Status: "Stopped waiting for a3l tray"
+*Status: "Stopped waiting for banner tray"
+*Status: "Stopped waiting for thick a4 tray"
+*Status: "Stopped waiting for thick letter tray"
+*Status: "Stopped waiting for thick b5 tray"
+*Status: "Stopped waiting for thick executivepage tray"
+*Status: "Stopped waiting for thick statement tray"
+*Status: "Stopped waiting for thick b(ledger,tabloid) tray"
+*Status: "Stopped waiting for thick a3 tray"
+*Status: "Stopped waiting for thick b4 tray"
+*Status: "Stopped waiting for thick legal tray"
+*Status: "Stopped waiting for thick glg (legal13) tray"
+*Status: "Stopped waiting for thick monarch envelope tray"
+*Status: "Stopped waiting for thick com10 envelope tray"
+*Status: "Stopped waiting for thick dl envelope tray"
+*Status: "Stopped waiting for thick c5 envelope tray"
+*Status: "Stopped waiting for thick postcard tray"
+*Status: "Stopped waiting for thick glt tray"
+*Status: "Stopped waiting for thick folio tray"
+*Status: "Stopped waiting for thick a5 tray"
+*Status: "Stopped waiting for thick a3l tray"
+*Status: "Stopped waiting for thick banner tray"
+*Status: "a4 tray installed"
+*Status: "letter tray installed"
+*Status: "b5 tray installed"
+*Status: "executivepage installed"
+*Status: "statement tray installed"
+*Status: "b(ledger,tabloid) tray installed"
+*Status: "a3 tray installed"
+*Status: "b4 tray installed"
+*Status: "legal tray installed"
+*Status: "glg (legal13) tray installed"
+*Status: "monarch envelope tray installed"
+*Status: "com10 envelope tray installed"
+*Status: "dl envelope tray installed"
+*Status: "c5 envelope tray installed"
+*Status: "postcard tray installed"
+*Status: "glt tray installed"
+*Status: "folio tray installed"
+*Status: "a5 tray installed"
+*Status: "a3l tray installed"
+*Status: "banner tray installed"
+*Status: "PrinterError: DMA firmware failure: restart"
+*Status: "PrinterError: cover open"
+*Status: "PrinterError: toner low"
+*Status: "PrinterError: toner cartridge out"
+*Status: "PrinterError: paper entry misfeed"
+*Status: "PrinterError: regular paper misfeed"
+*Status: "PrinterError: paper exit misfeed"
+*Status: "PrinterError: standard cassette out/misinstalled"
+*Status: "PrinterError: optional cassette out/misinstalled"
+*Status: "PrinterError: out of paper: standard"
+*Status: "PrinterError: out of paper: optional"
+*Status: "PrinterError: out of paper: front"
+*Status: "PrinterError: paper size error: standard"
+*Status: "PrinterError: paper size error: optional"
+*Status: "PrinterError: paper size error: front"
+*Status: "PrinterError: engine NVRAM malfunction"
+*Status: "PrinterError: fuser malfunction"
+*Status: "PrinterError: scanner motor malfunction"
+*Status: "PrinterError: fan malfunction"
+*Status: "PrinterError: service call"
+*Status: "PrinterError: EEROM error"
+*Status: "PrinterError: HDD read/write error"
+*Status: "PrinterError: ATC error"
+*Status: "PrinterError: warming up"
+
+*% Input Sources (format: %%[ status: <stat>; source: <one of these> ]%% )
+*Source: "LocalTalk"
+*Source: "SerialB"
+*Source: "Parallel"
+*Source: "ScsiComm"
+
+*% Printer Error (format: %%[ PrinterError: <one of these> ]%%)
+*PrinterError: "DMA firmware failure: restart"
+*PrinterError: "cover open"
+*PrinterError: "toner low"
+*PrinterError: "toner cartridge out"
+*PrinterError: "paper entry misfeed"
+*PrinterError: "regular paper misfeed"
+*PrinterError: "paper exit misfeed"
+*PrinterError: "standard cassette out/misinstalled"
+*PrinterError: "optional cassette out/misinstalled"
+*PrinterError: "out of paper: standard"
+*PrinterError: "out of paper: optional"
+*PrinterError: "out of paper: front"
+*PrinterError: "paper size error: standard"
+*PrinterError: "paper size error: optional"
+*PrinterError: "paper size error: front"
+*PrinterError: "engine NVRAM malfunction"
+*PrinterError: "fuser malfunction"
+*PrinterError: "scanner motor malfunction"
+*PrinterError: "fan malfunction"
+*PrinterError: "service call"
+*PrinterError: "EEROM error"
+*PrinterError: "HDD read/write error"
+*PrinterError: "ATC error"
+*PrinterError: "warming up"
+
+*%DeviceAdjustMatrix: "[1 0 0 1 0 0]"
+
+*% Color Separation Information =====================
+
+*DefaultColorSep: ProcessBlack.85lpi.600dpi/85 lpi / 600 dpi
+
+*InkName: ProcessBlack/Process Black
+*InkName: ProcessCyan/Process Cyan
+*InkName: ProcessMagenta/Process Magenta
+*InkName: ProcessYellow/Process Yellow
+
+*%  For 60 lpi / 300 dpi  ===============================
+
+*ColorSepScreenAngle ProcessBlack.60lpi.300dpi/60 lpi / 300 dpi: "45"
+*ColorSepScreenAngle CustomColor.60lpi.300dpi/60 lpi / 300 dpi: "45"
+*ColorSepScreenAngle ProcessCyan.60lpi.300dpi/60 lpi / 300 dpi: "15"
+*ColorSepScreenAngle ProcessMagenta.60lpi.300dpi/60 lpi / 300 dpi: "75"
+*ColorSepScreenAngle ProcessYellow.60lpi.300dpi/60 lpi / 300 dpi: "0"
+
+*ColorSepScreenFreq ProcessBlack.60lpi.300dpi/60 lpi / 300 dpi: "60"
+*ColorSepScreenFreq CustomColor.60lpi.300dpi/60 lpi / 300 dpi: "60"
+*ColorSepScreenFreq ProcessCyan.60lpi.300dpi/60 lpi / 300 dpi: "60"
+*ColorSepScreenFreq ProcessMagenta.60lpi.300dpi/60 lpi / 300 dpi: "60"
+*ColorSepScreenFreq ProcessYellow.60lpi.300dpi/60 lpi / 300 dpi: "60"
+
+*%  For 53 lpi / 300 dpi  ===============================
+
+*ColorSepScreenAngle ProcessBlack.53lpi.300dpi/53 lpi / 300 dpi: "45.0"
+*ColorSepScreenAngle CustomColor.53lpi.300dpi/53 lpi / 300 dpi: "45.0"
+*ColorSepScreenAngle ProcessCyan.53lpi.300dpi/53 lpi / 300 dpi: "71.5651"
+*ColorSepScreenAngle ProcessMagenta.53lpi.300dpi/53 lpi / 300 dpi: "18.4349"
+*ColorSepScreenAngle ProcessYellow.53lpi.300dpi/53 lpi / 300 dpi: "0.0"
+
+*ColorSepScreenFreq ProcessBlack.53lpi.300dpi/53 lpi / 300 dpi: "53.033"
+*ColorSepScreenFreq CustomColor.53lpi.300dpi/53 lpi / 300 dpi: "53.033"
+*ColorSepScreenFreq ProcessCyan.53lpi.300dpi/53 lpi / 300 dpi: "47.4342"
+*ColorSepScreenFreq ProcessMagenta.53lpi.300dpi/53 lpi / 300 dpi: "47.4342"
+*ColorSepScreenFreq ProcessYellow.53lpi.300dpi/53 lpi / 300 dpi: "50.0"
+
+*%  For 85 lpi / 600 dpi  (5,5,2,6,6,2,20/3,0) =====================
+
+*ColorSepScreenAngle ProcessBlack.85lpi.600dpi/85 lpi / 600 dpi: "45.0"
+*ColorSepScreenAngle CustomColor.85lpi.600dpi/85 lpi / 600 dpi: "45.0"
+*ColorSepScreenAngle ProcessCyan.85lpi.600dpi/85 lpi / 600 dpi: "71.5651"
+*ColorSepScreenAngle ProcessMagenta.85lpi.600dpi/85 lpi / 600 dpi: "18.4349"
+*ColorSepScreenAngle ProcessYellow.85lpi.600dpi/85 lpi / 600 dpi: "0.0"
+
+*ColorSepScreenFreq ProcessBlack.85lpi.600dpi/85 lpi / 600 dpi: "84.8528"
+*ColorSepScreenFreq CustomColor.85lpi.600dpi/85 lpi / 600 dpi: "84.8528"
+*ColorSepScreenFreq ProcessCyan.85lpi.600dpi/85 lpi / 600 dpi: "94.8683"
+*ColorSepScreenFreq ProcessMagenta.85lpi.600dpi/85 lpi / 600 dpi: "94.8683"
+*ColorSepScreenFreq ProcessYellow.85lpi.600dpi/85 lpi / 600 dpi: "30.0"
+
+*ColorSepScreenProc ProcessYellow.85lpi.600dpi/85 lpi / 600 dpi: "
+{1 add 2 div 3 mul dup floor sub 2 mul 1 sub exch 
+1 add 2 div 3 mul dup floor sub 2 mul 1 sub exch 
+abs exch abs 2 copy add 1 gt {1 sub dup mul exch 1 sub dup mul add 1 
+sub }{dup mul exch dup mul add 1 exch sub }ifelse }"
+*End
+
+*%  For 71 lpi / 600 dpi  ===============================
+
+*ColorSepScreenAngle ProcessBlack.71lpi.600dpi/71 lpi / 600 dpi: "45.0"
+*ColorSepScreenAngle CustomColor.71lpi.600dpi/71 lpi / 600 dpi: "45.0"
+*ColorSepScreenAngle ProcessCyan.71lpi.600dpi/71 lpi / 600 dpi: "71.5651"
+*ColorSepScreenAngle ProcessMagenta.71lpi.600dpi/71 lpi / 600 dpi: "18.4349"
+*ColorSepScreenAngle ProcessYellow.71lpi.600dpi/71 lpi / 600 dpi: "0.0"
+
+*ColorSepScreenFreq ProcessBlack.71lpi.600dpi/71 lpi / 600 dpi: "70.7107"
+*ColorSepScreenFreq CustomColor.71lpi.600dpi/71 lpi / 600 dpi: "70.7107"
+*ColorSepScreenFreq ProcessCyan.71lpi.600dpi/71 lpi / 600 dpi: "63.2456"
+*ColorSepScreenFreq ProcessMagenta.71lpi.600dpi/71 lpi / 600 dpi: "63.2456"
+*ColorSepScreenFreq ProcessYellow.71lpi.600dpi/71 lpi / 600 dpi: "66.6667"
+
+*% Produced by "bldppd42.ps" version 4.0 edit 13
+*% Last Edit Date: Jun 3 1996
+*% The byte count of this file should be exactly 036629 or 037680
+*% depending on the filesystem it resides in.
+*% end of PPD file for LP-8200PS2

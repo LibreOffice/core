@@ -1,0 +1,7 @@
+#! /bin/sh
+commit=${1-3249db59} # m5
+
+git diff $commit layout | sed 's@^\([+-]\{3\}\) \(a\|b\)/@\1 @' > layout-dialogs-layout.diff
+git diff $commit config_office scp2 | sed 's@^\([+-]\{3\}\) \(a\|b\)/@\1 @' > layout-dialogs-config_office-scp2.diff
+git diff $commit svx sw | sed 's@^\([+-]\{3\}\) \(a\|b\)/@\1 @' > layout-dialogs-svx-sw.diff
+git diff $commit transex3 | sed 's@^\([+-]\{3\}\) \(a\|b\)/@\1 @' > layout-dialogs-transex3.diff

@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Created-By: Sun Microsystems, Inc.
+Main-Class: MergeApp
+Class-Path: .

@@ -1,0 +1,102 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: XStyle.idl,v $
+ * $Revision: 1.3 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __ooo_vba_excel_XStyle_idl__
+#define __ooo_vba_excel_XStyle_idl__
+
+#ifndef __com_sun_star_script_BasicErrorException_idl__
+#include <com/sun/star/script/BasicErrorException.idl>
+#endif
+
+#ifndef __ooo_vba_XHelperInterface_idl__
+#include <ooo/vba/XHelperInterface.idl>
+#endif
+#ifndef __ooo_vba_excel_XFormat_idl__
+#include <ooo/vba/excel/XFormat.idl>
+#endif
+
+module ooo {  module vba { module excel {
+interface XStyle
+{
+    interface XFormat;
+
+    boolean BuiltIn()
+        raises(com::sun::star::script::BasicErrorException);
+
+    void setName([in] string Name)
+        raises(com::sun::star::script::BasicErrorException);
+
+    string getName()
+        raises(com::sun::star::script::BasicErrorException);
+
+    void setNameLocal([in] string NameLocal)
+        raises(com::sun::star::script::BasicErrorException);
+
+    string getNameLocal()
+        raises(com::sun::star::script::BasicErrorException);
+
+    void Delete()
+        raises(com::sun::star::script::BasicErrorException);
+
+    /**    void     setValue( [in] string Value ) raises ( com::sun::star::script::BasicErrorException );
+
+     string     getValue( ) raises ( com::sun::star::script::BasicErrorException );
+
+     void       setIncludeAlignment( [in] boolean IncludeAlignment ) raises ( com::sun::star::script::BasicErrorException );
+
+     boolean        getIncludeAlignment( ) raises ( com::sun::star::script::BasicErrorException );
+
+     void       setIncludeBorder( [in] boolean IncludeBorder ) raises ( com::sun::star::script::BasicErrorException );
+
+     boolean        getIncludeBorder( ) raises ( com::sun::star::script::BasicErrorException );
+
+     void       setIncludeFont( [in] boolean IncludeFont ) raises ( com::sun::star::script::BasicErrorException );
+
+     boolean        getIncludeFont( ) raises ( com::sun::star::script::BasicErrorException );
+
+     void       setIncludeNumber( [in] boolean IncludeNumber ) raises ( com::sun::star::script::BasicErrorException );
+
+     boolean        getIncludeNumber( ) raises ( com::sun::star::script::BasicErrorException );
+
+     void       setIncludePatterns( [in] boolean IncludePatterns ) raises ( com::sun::star::script::BasicErrorException );
+
+     boolean        getIncludePatterns( ) raises ( com::sun::star::script::BasicErrorException );
+
+     void       setIncludeProtection( [in] boolean IncludeProtection ) raises ( com::sun::star::script::BasicErrorException );
+
+     boolean        getIncludeProtection( ) raises ( com::sun::star::script::BasicErrorException );
+     */
+
+};
+
+}; }; };
+
+#endif
+

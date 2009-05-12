@@ -1,0 +1,145 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile
+ *
+ * $Revision$
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+module
+"384E40E0-1F22-101C-9961-04021C007002"
+"5A30E000-1F22-101C-9961-04021C007002"
+StarApplicationFrame
+[
+HelpText( "StarDivision Application Framework" ),
+SlotIdFile( "sfx2/sfx.hrc" )
+TypeLibFile( "sfxslots.tlb" )
+]
+{
+    item void       SfxVoidItem;
+    item BOOL       SfxBoolItem;
+    item INT32      SfxUInt16Item;
+    item INT16      SfxInt16Item;
+    item INT32      SfxUInt32Item;
+    item INT32      SfxInt32Item;
+    item String     SfxStringItem;
+    item BYTE       SfxByteItem;
+    item INT16      SfxEnumItem;
+    item INT16      SfxAllEnumItem;
+    item INT16      TbxImageItem;
+
+    item String     SbxItem;                //! Dummy
+    item String     SfxObjectItem;          //! Dummy
+    item String     SfxTemplateItem;        //! Dummy
+    item String     SfxMacroInfoItem;       //! Dummy
+    item String     SfxImageItem;           //! Dummy
+    item String     SfxFrameItem;           //! Dummy
+    item String     SfxObjectShellItem      //! Dummy
+    item String     SfxUsrAnyItem           //! Dummy
+
+    struct Point
+    {
+        INT32   X   MID_X;
+        INT32   Y   MID_Y;
+    };
+    item Point SfxPointItem;
+
+    struct Rectangle
+    {
+        INT32   Left    MID_RECT_LEFT;
+        INT32   Top     MID_RECT_TOP;
+        INT32   Width   MID_WIDTH;
+        INT32   Height  MID_HEIGHT;
+    };
+    item Rectangle SfxRectangleItem;
+
+    struct DocInfo
+    {
+        BOOL        UseUserData        MID_DOCINFO_USEUSERDATA;
+        BOOL        DeleteUserData    MID_DOCINFO_DELETEUSERDATA;
+        String      Title              MID_DOCINFO_TITLE;
+        String      Subject            MID_DOCINFO_SUBJECT;
+        String      KeyWords           MID_DOCINFO_KEYWORDS;
+        String      Description        MID_DOCINFO_DESCRIPTION;
+        BOOL        AutoReload         MID_DOCINFO_AUTOLOADENABLED;
+        INT32       AutoReloadTime     MID_DOCINFO_AUTOLOADSECS;
+        String      AutoReloadURL      MID_DOCINFO_AUTOLOADURL;
+        String      AutoReloadFrame    MID_DOCINFO_DEFAULTTARGET;
+        String      Field1Title        MID_DOCINFO_FIELD1TITLE;
+        String      Field2Title        MID_DOCINFO_FIELD2TITLE;
+        String      Field3Title        MID_DOCINFO_FIELD3TITLE;
+        String      Field4Title        MID_DOCINFO_FIELD4TITLE;
+        String      Field1             MID_DOCINFO_FIELD1;
+        String      Field2             MID_DOCINFO_FIELD2;
+        String      Field3             MID_DOCINFO_FIELD3;
+        String      Field4             MID_DOCINFO_FIELD4;
+    };
+    item DocInfo SfxDocumentInfoItem;
+
+    struct SvxSearch
+    {
+        INT16       StyleFamily     MID_SEARCH_STYLEFAMILY;
+        UINT16      CellType        MID_SEARCH_CELLTYPE;
+        BOOL        RowDirection    MID_SEARCH_ROWDIRECTION;
+        BOOL        AllTables       MID_SEARCH_ALLTABLES;
+        BOOL        Backward        MID_SEARCH_BACKWARD;
+        BOOL        Pattern         MID_SEARCH_PATTERN;
+        BOOL        Content         MID_SEARCH_CONTENT;
+        BOOL        AsianOptions    MID_SEARCH_ASIANOPTIONS;
+        INT16       AlgorithmType   MID_SEARCH_ALGORITHMTYPE;
+        INT32       SearchFlags     MID_SEARCH_FLAGS;
+        String      SearchString    MID_SEARCH_SEARCHSTRING;
+        String      ReplaceString   MID_SEARCH_REPLACESTRING;
+        INT16       Locale          MID_SEARCH_LOCALE;
+        INT32       ChangedChars    MID_SEARCH_CHANGEDCHARS;
+        INT32       DeletedChars    MID_SEARCH_DELETEDCHARS;
+        INT32       InsertedChars   MID_SEARCH_INSERTEDCHARS;
+        INT32       TransliterateFlags MID_SEARCH_TRANSLITERATEFLAGS;
+        INT16       Command         MID_SEARCH_COMMAND;
+    };
+    item SvxSearch SvxSearchItem;
+
+    struct SvxSize
+    {
+        INT32               Width           MID_SIZE_WIDTH;
+        INT32               Height          MID_SIZE_HEIGHT;
+    };
+    item SvxSize SvxSizeItem;
+
+    struct SfxScriptOrganizer
+    {
+        String Language MID_SCRIPT_ORGANIZER_LANGUAGE;
+    };
+    item SfxScriptOrganizer SfxScriptOrganizerItem;
+
+    include "sfx.sdi"
+    include "docslots.sdi"
+    include "frmslots.sdi"
+    include "viwslots.sdi"
+    include "mdislots.sdi"
+    include "appslots.sdi"
+}
+

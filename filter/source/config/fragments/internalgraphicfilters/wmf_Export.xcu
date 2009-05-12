@@ -1,0 +1,10 @@
+    <node oor:name="wmf_Export" oor:op="replace"  >
+        <prop oor:name="Type"><value>wmf_MS_Windows_Metafile</value></prop>
+        <prop oor:name="FormatName"><value>SVWMF</value></prop>
+        <prop oor:name="RealFilterName"/>
+        <prop oor:name="UIComponent"><value>com.sun.star.svtools.SvFilterOptionsDialog</value></prop>
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">WMF - Windows Metafile</value>
+        </prop>
+        <prop oor:name="Flags"><value>EXPORT</value></prop>
+    </node>

@@ -431,6 +431,24 @@ sub get_installcanfail_value
 }
 
 ###################################################
+# Asking module, if installation can fail
+# scp style: INSTALLCANFAIL
+###################################################
+
+sub get_forceintoupdate_value
+{
+    my ( $module ) = @_;
+
+    my $value = "false";
+
+    my $styles = "";
+    if ( $module->{'Styles'} ) { $styles = $module->{'Styles'}; }
+    if ( $styles =~ /\bFORCEINTOUPDATE\b/ ) { $value = "true"; }
+
+    return $value;
+}
+
+###################################################
 # Substituting all occurences of "\uUXYZ" by
 # "&#xUXYZ;", because the use xml saxparser does
 # not know anything about this encoding. Therfore
@@ -536,16 +554,24 @@ sub get_order_value
 
 sub get_size_value
 {
-    my ( $packagename ) = @_;
+    my ( $packagename, $xpdinfo ) = @_;
 
     my $value = "";
+
+    if ( $xpdinfo->{'FileSize'} )
+    {
+        $value =  $xpdinfo->{'FileSize'};
+        return $value;
+    }
 
     my $isrpmfile = 0;
     if ( $packagename =~ /\.rpm\s*$/ ) { $isrpmfile = 1; }
 
     if (( $installer::globals::islinuxrpmbuild ) && ( $isrpmfile ))
     {
-        if ( ! $installer::globals::rpmquerycommand ) { installer::exiter::exit_program("ERROR: rpm not found for querying packages!", "get_size_value"); }
+        # if ( ! $installer::globals::rpmquerycommand ) { installer::exiter::exit_program("ERROR: rpm not found for querying packages!", "get_size_value"); }
+        if ( ! $installer::globals::rpmquerycommand ) { $installer::globals::rpmquerycommand = "rpm"; } # For queries "rpm" is used, not "rpmbuild"
+
         my $systemcall = "$installer::globals::rpmquerycommand -qp --queryformat \"\[\%\{FILESIZES\}\\n\]\" $packagename 2\>\&1 |";
         my $rpmout = make_systemcall($systemcall, 0);
         $value = do_sum($rpmout);       # adding all filesizes in bytes
@@ -591,9 +617,15 @@ sub get_size_value
 
 sub get_md5_value
 {
-    my ( $packagename ) = @_;
+    my ( $packagename, $xpdinfo ) = @_;
 
     my $value = "";
+
+    if ( $xpdinfo->{'md5sum'} )
+    {
+        $value =  $xpdinfo->{'md5sum'};
+        return $value;
+    }
 
     if ( $installer::globals::islinuxrpmbuild )
     {
@@ -643,7 +675,7 @@ sub get_name_value
 
 sub get_fullpkgname_value
 {
-    my ( $packagename ) = @_;
+    my ( $packagename, $xpdinfo ) = @_;
 
     my $value = "";
     my $isrpmfile = 0;
@@ -651,8 +683,15 @@ sub get_fullpkgname_value
 
     if (( $installer::globals::islinuxrpmbuild ) && ( $isrpmfile ))
     {
-        if ( ! $installer::globals::rpmquerycommand ) { installer::exiter::exit_program("ERROR: rpm not found for querying packages!", "get_size_value"); }
-        my $systemcall = "$installer::globals::rpmquerycommand -qp $packagename 2\>\&1 |";
+        if ( $xpdinfo->{'FullPackageName'} )
+        {
+            $value =  $xpdinfo->{'FullPackageName'};
+            return $value;
+        }
+
+        # if ( ! $installer::globals::rpmquerycommand ) { installer::exiter::exit_program("ERROR: rpm not found for querying packages!", "get_fullpkgname_value"); }
+        if ( ! $installer::globals::rpmquerycommand ) { $installer::globals::rpmquerycommand = "rpm"; } # For queries "rpm" is used, not "rpmbuild"
+        my $systemcall = "$installer::globals::rpmquerycommand -qp $packagename |";
         my $returnarray = make_systemcall($systemcall, 0);
         $value = ${$returnarray}[0];
         installer::remover::remove_leading_and_ending_whitespaces(\$value);
@@ -673,9 +712,15 @@ sub get_fullpkgname_value
 
 sub get_pkgversion_value
 {
-    my ( $completepackagename ) = @_;
+    my ( $completepackagename, $xpdinfo ) = @_;
 
     my $value = "";
+
+    if ( $xpdinfo->{'PkgVersion'} )
+    {
+        $value =  $xpdinfo->{'PkgVersion'};
+        return $value;
+    }
 
     if ( $installer::globals::issolarispkgbuild )
     {
@@ -702,11 +747,13 @@ sub get_pkgversion_value
 
 sub get_subdir_value
 {
-    my ( $packagename, $subdir ) = @_;
+    my ( $packagename, $subdir, $module ) = @_;
 
     my $value = "";
 
     if ( $subdir ) { $value = $subdir; }
+
+    if ( $module->{'Subdir'} ) { $value = $module->{'Subdir'}; }
 
     return $value;
 }
@@ -847,6 +894,25 @@ sub set_macro_tag
 
     return $tag;
 
+}
+
+###################################################
+# Setting the minor of the product version
+# Required to check for Major Upgrades.
+###################################################
+
+sub set_minor_tag
+{
+    my ($allvariables, $indent) = @_;
+
+    my $productminor = 0;
+    if ( $allvariables->{"PACKAGEVERSION"} )
+    {
+        if ( $allvariables->{"PACKAGEVERSION"} =~ /^\s*\d+\.(\d+)/ ) { $productminor = $1; }
+    }
+    my $tag = $indent . "<productminor>" . $productminor . "</productminor>" . "\n";
+
+    return $tag;
 }
 
 ###################################################
@@ -1044,6 +1110,9 @@ sub get_setup_file_content
     $tag = set_productdir_tag($allvariables, $singleindent);
     push(@xpdfile, $tag);
 
+    $tag = set_minor_tag($allvariables, $singleindent);
+    push(@xpdfile, $tag);
+
     $tag = set_update_tag($allvariables, $singleindent);
     push(@xpdfile, $tag);
 
@@ -1077,7 +1146,7 @@ sub get_setup_file_content
 
 sub get_file_content
 {
-    my ( $module, $packagename, $solslanguage, $linkpackage, $isemptyparent, $subdir, $islanguagemodule, $onelanguage ) = @_;
+    my ( $module, $packagename, $solslanguage, $linkpackage, $isemptyparent, $subdir, $islanguagemodule, $onelanguage, $xpdinfo ) = @_;
 
     my @xpdfile = ();
     my $value = "";
@@ -1138,6 +1207,10 @@ sub get_file_content
     $line = get_tag_line($doubleindent, "installcanfail", $value);
     push(@xpdfile, $line);
 
+    $value = get_forceintoupdate_value($module);
+    $line = get_tag_line($doubleindent, "forceintoupdate", $value);
+    push(@xpdfile, $line);
+
     $value = get_useforce_value($module);
     $line = get_tag_line($doubleindent, "useforce", $value);
     push(@xpdfile, $line);
@@ -1158,7 +1231,7 @@ sub get_file_content
         $tag = get_installunit_tag($singleindent);
         push(@xpdfile, $tag);
 
-        $value = get_size_value($packagename);
+        $value = get_size_value($packagename, $xpdinfo);
         $line = get_tag_line($doubleindent, "size", $value);
         push(@xpdfile, $line);
 
@@ -1166,7 +1239,7 @@ sub get_file_content
         $line = get_tag_line($doubleindent, "installorder", $value);
         push(@xpdfile, $line);
 
-        $value = get_md5_value($packagename);
+        $value = get_md5_value($packagename, $xpdinfo);
         $line = get_tag_line($doubleindent, "md5", $value);
         push(@xpdfile, $line);
 
@@ -1174,15 +1247,15 @@ sub get_file_content
         $line = get_tag_line($doubleindent, "name", $value);
         push(@xpdfile, $line);
 
-        $value = get_fullpkgname_value($packagename);
+        $value = get_fullpkgname_value($packagename, $xpdinfo);
         $line = get_tag_line($doubleindent, "fullpkgname", $value);
         push(@xpdfile, $line);
 
-        $value = get_pkgversion_value($packagename);
+        $value = get_pkgversion_value($packagename, $xpdinfo);
         $line = get_tag_line($doubleindent, "pkgversion", $value);
         push(@xpdfile, $line);
 
-        $value = get_subdir_value($packagename, $subdir);
+        $value = get_subdir_value($packagename, $subdir, $module);
         $line = get_tag_line($doubleindent, "subdir", $value);
         push(@xpdfile, $line);
 
@@ -1234,19 +1307,28 @@ sub get_xpd_filename
 
 sub determine_new_packagename
 {
-    my ( $installdir, $subdir ) = @_;
+    my ( $installdir, $subdir, $xpdinfo ) = @_;
 
+    my $newpackage = "";
     $installdir =~ s/\Q$installer::globals::separator\E\s*$//;
     my $directory = $installdir . $installer::globals::separator . $subdir;
     $directory =~ s/\Q$installer::globals::separator\E\s*$//;
 
-    my ($newcontent, $allcontent) = installer::systemactions::find_new_content_in_directory($directory, $installer::globals::currentcontent);
-    $installer::globals::currentcontent = $allcontent;
+    if ( $xpdinfo->{'RealPackageName'} )
+    {
+        $newpackage = $directory . $installer::globals::separator . $xpdinfo->{'RealPackageName'};
+        push(@installer::globals::currentcontent, $newpackage);
+        return $newpackage;
+    }
+
+    my ($newcontent, $allcontent) = installer::systemactions::find_new_content_in_directory($directory, \@installer::globals::currentcontent);
+    @installer::globals::currentcontent = ();
+    foreach my $element ( @{$allcontent} ) { push(@installer::globals::currentcontent, $element); }
 
     my $newentriesnumber = $#{$newcontent} + 1;
     if ( $newentriesnumber > 1 ) { installer::exiter::exit_program("ERROR: More than one new package in directory $directory", "determine_new_packagename (xpdinstaller)"); }
     elsif ( $newentriesnumber < 1 )  { installer::exiter::exit_program("ERROR: No new package in directory $directory", "determine_new_packagename (xpdinstaller)"); }
-    my $newpackage = ${$newcontent}[0];
+    $newpackage = ${$newcontent}[0];
 
     return $newpackage;
 }
@@ -1292,7 +1374,7 @@ sub create_emptyparents_xpd_file
     {
         my $packagename = "";
         # all content saved in scp is now available and can be used to create the xpd file
-        my ( $xpdfile, $newparentgid ) = get_file_content($module, $packagename, "", 0, 1, "", 0, "");
+        my ( $xpdfile, $newparentgid ) = get_file_content($module, $packagename, "", 0, 1, "", 0, "", "");
 
         $grandpagid = $newparentgid;
 
@@ -1369,7 +1451,7 @@ sub change_parent_in_xpdfile
 
 sub create_xpd_file
 {
-    my ($onepackage, $allpackages, $languagestringref, $allvariables, $modulesarrayref, $installdir, $subdir, $linkpackage) = @_;
+    my ($onepackage, $allpackages, $languagestringref, $allvariables, $modulesarrayref, $installdir, $subdir, $linkpackage, $xpdinfo) = @_;
 
     my $infoline = "";
     # creating the directory
@@ -1396,10 +1478,10 @@ sub create_xpd_file
 
     if ( $module ne "" )
     {
-        my $packagename = determine_new_packagename($installdir, $subdir);
+        my $packagename = determine_new_packagename($installdir, $subdir, $xpdinfo);
 
         # all content saved in scp is now available and can be used to create the xpd file
-        my ( $xpdfile, $parentgid ) = get_file_content($module, $packagename, $solslanguage, $linkpackage, 0, "", $islanguagemodule, $onelanguage);
+        my ( $xpdfile, $parentgid ) = get_file_content($module, $packagename, $solslanguage, $linkpackage, 0, "", $islanguagemodule, $onelanguage, $xpdinfo);
 
         my $xpdfilename = get_xpd_filename($modulegid, $linkpackage);
         $xpdfilename = $xpddir . $installer::globals::separator . $xpdfilename;
@@ -1476,7 +1558,7 @@ sub create_xpd_file_for_childproject
     my $completepackage = $currentdir . $installer::globals::separator . $destdir . $installer::globals::separator . $packagename;
 
     # all content saved in scp is now available and can be used to create the xpd file
-    my ( $xpdfile, $parentgid ) = get_file_content($module, $completepackage, "", 0, 0, "", 0, "");
+    my ( $xpdfile, $parentgid ) = get_file_content($module, $completepackage, "", 0, 0, "", 0, "", "");
 
     my $xpdfilename = get_xpd_filename($modulegid, 0);
     $xpdfilename = $installer::globals::xpddir . $installer::globals::separator . $xpdfilename;
@@ -1562,7 +1644,7 @@ sub create_xpd_file_for_systemintegration
         }
 
         # all content saved in scp is now available and can be used to create the xpd file
-        my ( $xpdfile, $parentgid_ ) = get_file_content($childmodule, $newpackagename, "", 0, 0, $subdir, 0, "");
+        my ( $xpdfile, $parentgid_ ) = get_file_content($childmodule, $newpackagename, "", 0, 0, $subdir, 0, "", "");
 
         my $xpdfilename = get_xpd_filename($modulegid, 0);
         $xpdfilename = $installer::globals::xpddir . $installer::globals::separator . $xpdfilename;

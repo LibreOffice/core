@@ -30,16 +30,16 @@
 #*************************************************************************
 
 # Common tools - move this to the end / consolidate
-TRANSEX*=transex3
-ULFEX*=ulfex
-XMLEX*=xmlex
-XRMEX*=xrmex
-CFGEX*=cfgex
-XSLTPROC*=xsltproc
+TRANSEX*=$(AUGMENT_LIBRARY_PATH) transex3
+ULFEX*=$(AUGMENT_LIBRARY_PATH) ulfex
+XMLEX*=$(AUGMENT_LIBRARY_PATH) xmlex
+XRMEX*=$(AUGMENT_LIBRARY_PATH) xrmex
+CFGEX*=$(AUGMENT_LIBRARY_PATH) cfgex
+XSLTPROC*=$(AUGMENT_LIBRARY_PATH) xsltproc
 
-ULFCONV*=ulfconv
+ULFCONV*=$(AUGMENT_LIBRARY_PATH) ulfconv
 
-MAKEDEPEND*=$(SOLARBINDIR)$/makedepend
+MAKEDEPEND*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)$/makedepend
 
 SCP_CHECK_TOOL:=checkscp$E
 
@@ -100,7 +100,7 @@ CHECKZIPRESULT:=^ iff errorlevel == 12 .and. errorlevel == 12 then ( echo Nothin
 CHECKCOPYURESULT:=^ iff errorlevel == 2 then ( echo Nothing to update for copy ^ set somedummyvar=%somedummyvar)
 
 # tell makedepend to write windows native format
-MKDEPFLAGS=-n
+#MKDEPFLAGS=-n
 
 .ENDIF # "$(USE_SHELL)"!="4nt"
 
@@ -109,6 +109,7 @@ MKDEPFLAGS=-n
 AWK*=awk
 SORT*=sort
 SED*=sed
+GNUPATCH*=patch
 .IF "$(USE_SHELL)"!="4nt"
 # change drive and directory
 CDD=cd
@@ -119,6 +120,7 @@ COPYUPDATE=-u
 ECHON=echo -n
 ECHONL=echo
 FIND*=find
+FLIPCMD*=slfl.pl
 GNUCOPY*=cp
 GNUMAKE*=make
 GREP*=grep
@@ -128,11 +130,6 @@ PERL*:=perl
 RENAME*=mv
 TOUCH*=touch
 TYPE*=cat
-TRANSEX*=transex3
-ULFEX*=ulfex
-XMLEX*=xmlex
-XRMEX*=xrmex
-CFGEX*=cfgex
 .ELSE			# "$(USE_SHELL)"!="4nt"
 CDD=+cdd
 COPY*=+copy
@@ -149,6 +146,7 @@ GNUCOPY*=$(BUILD_TOOLS)$/cp.exe
 GNUMAKE*=$(BUILD_TOOLS)$/gnumake.exe
 GREP*=$(BUILD_TOOLS)$/grep.exe
 LS*=$(BUILD_TOOLS)$/ls.exe
+MKDIRHIER=+mkdir /sn
 #wraper for solenv\bin\mkdir.pl to fix mkdir /p problem
 PERL*:=+call perl5.btm
 .EXPORT : PERL
@@ -174,6 +172,7 @@ COPYRECURSE=-r
 AWK*=nawk
 GNUCOPY*=gnucp
 GNUPATCH*=gnupatch
+GNUTAR*=gtar
 .ELSE			# "$(OS)"=="SOLARIS"
 AWK*=awk
 GNUCOPY*=cp
@@ -197,7 +196,7 @@ SORT*=sort
 PERL*=perl
 TYPE=cat
 CDD=@cd
-COPY*=@+copy /b
+COPY*=$(SHELL) /c copy /b
 COPYRECURSE=/s
 COPYUPDATE=/u
 DELAY=sleep
@@ -225,9 +224,19 @@ MKDIR*=mkdir$E
 MKDIRHIER*=mkdir$E -p
 RMDIR*=rmdir
 XARGS*=xargs
+GNUTAR*:=tar
+TAR*:=tar
 
 RM+=$(RMFLAGS)
-ADJUSTVISIBILITY*:=adjustvisibility
+ADJUSTVISIBILITY*=$(AUGMENT_LIBRARY_PATH) adjustvisibility
 CONVERT*:=$(PERL) $(SOLARENV)$/bin$/leconvert.pl
 EXECTEST := $(PERL) -w $(SOLARENV)$/bin$/exectest.pl
 GCCINSTLIB:=$(PERL) -w $(SOLARENV)$/bin$/gccinstlib.pl
+
+# The dmake $(PWD) variable and the tcsh pwd command both apparantly produce
+# paths with symlinks resolved, while the bash pwd command by default produces
+# paths with unresolved symlinks, so that computing PATH_IN_MODULE in
+# settings.mk would fail without the -P flag to the bash pwd command:
+.IF "$(USE_SHELL)" == "bash"
+PWDFLAGS = -P
+.ENDIF

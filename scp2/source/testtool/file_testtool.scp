@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file_testtool.scp,v $
- * $Revision: 1.7 $
+ * $Revision: 1.7.156.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -66,3 +66,16 @@ File gid_File_Config_Testtool
     Name = "testtool.ini";
   #endif
 End
+
+// On Mac OS X, testtool needs to find the Info.plist and needs to be located in
+// the Content/MacOS directory; since the Mac OS X dmg contains all layers,
+// anyway, this hack works for now:
+#if defined MACOSX
+Unixlink gid_Unixlink_Testtool
+    BIN_FILE_BODY;
+    Styles = ();
+    Name = "testtool";
+    Dir = gid_Brand_Dir_Program;
+    Target = "../basis-link/program/testtool.bin";
+End
+#endif

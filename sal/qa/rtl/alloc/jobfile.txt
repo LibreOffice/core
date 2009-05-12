@@ -1,0 +1,8 @@
+# JobFile for rtl_alloc
+# header source sal/inc/rtl/alloc.h
+
+rtl_alloc.test.rtl_allocateMemory_001
+rtl_alloc.test.rtl_reallocateMemory_001
+rtl_alloc.test.rtl_freeMemory_001
+rtl_alloc.test.rtl_allocateZeroMemory_001
+

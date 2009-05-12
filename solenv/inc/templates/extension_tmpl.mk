@@ -8,7 +8,7 @@
 #
 # $RCSfile: extension_tmpl.mk,v $
 #
-# $Revision: 1.3 $
+# $Revision: 1.3.56.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -60,7 +60,7 @@ EXTENSION_ZIPNAME:=MyExtension
 @all:
     @echo "$(EXTENSIONNAME) - extension disabled."
 .ENDIF
-.IF "$(SOLAR_JAVA)"!=""
+.IF "$(SOLAR_JAVA)"==""
 @all:
     @echo "$(EXTENSIONNAME) - extension requires java."
 .ENDIF

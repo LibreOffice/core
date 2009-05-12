@@ -1,0 +1,50 @@
+# inetOrgPerson.givenName
+org.openoffice.UserProfile/Data/givenname = givenname
+
+# person.sn
+org.openoffice.UserProfile/Data/sn = sn
+
+# inetOrgPerson.initials
+org.openoffice.UserProfile/Data/initials = initials
+
+# organizationalPerson.street
+org.openoffice.UserProfile/Data/street = street,postalAddress,streetAddress
+
+# organizationalPerson.l (city)
+org.openoffice.UserProfile/Data/l = l
+
+# organizationalPerson.st (state)
+org.openoffice.UserProfile/Data/st = st
+
+# organizationalPerson.postalCode
+org.openoffice.UserProfile/Data/postalcode = postalcode
+
+# country.c (country)
+org.openoffice.UserProfile/Data/c =
+
+# organizationalPerson.o (company)
+org.openoffice.UserProfile/Data/o = o,organizationName
+
+# deprecated -- no LDAP corollary
+org.openoffice.UserProfile/Data/position =
+
+# organizationalPerson.title
+org.openoffice.UserProfile/Data/title = title
+
+# inetOrgPerson.homePhone
+org.openoffice.UserProfile/Data/homephone = homephone
+
+# organizationalPerson.telephoneNumber
+org.openoffice.UserProfile/Data/telephonenumber = telephonenumber
+
+# organizationalPerson.facsimileTelephoneNumber
+org.openoffice.UserProfile/Data/facsimiletelephonenumber = facsimiletelephonenumber,officeFax
+
+# inetOrgPerson.mail
+org.openoffice.UserProfile/Data/mail = mail
+
+# Deprecated
+#UserGroup =
+
+
+

@@ -1,0 +1,4 @@
+..\%__SRC%\bin\soreport.exe %_DEST%\bin%_EXT%\crashrep.exe
+..\%__SRC%\bin\soreport.exe.manifest %_DEST%\bin%_EXT%\crashrep.exe.manifest
+..\%__SRC%\bin\crash_report.bin %_DEST%\bin%_EXT%\crash_report.bin
+..\%__SRC%\misc\crash_report.sh %_DEST%\bin%_EXT%\crash_report

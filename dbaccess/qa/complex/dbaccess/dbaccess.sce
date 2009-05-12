@@ -1,0 +1,10 @@
+-o complex.dbaccess.SingleSelectQueryComposer
+-o complex.dbaccess.RowSet
+-o complex.dbaccess.PropertyBag
+-o complex.dbaccess.Query
+-o complex.dbaccess.QueryInQuery
+-o complex.dbaccess.DatabaseDocument
+-o complex.dbaccess.DataSource
+-o complex.dbaccess.Parser
+-o complex.dbaccess.ApplicationController
+-o complex.dbaccess.UISettings

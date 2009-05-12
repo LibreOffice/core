@@ -1,0 +1,78 @@
+#*************************************************************************
+#
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+# 
+# Copyright 2008 by Sun Microsystems, Inc.
+#
+# OpenOffice.org - a multi-platform office productivity suite
+#
+# $RCSfile: makefile.mk,v $
+#
+# $Revision: 1.17 $
+#
+# This file is part of OpenOffice.org.
+#
+# OpenOffice.org is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License version 3
+# only, as published by the Free Software Foundation.
+#
+# OpenOffice.org is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License version 3 for more details
+# (a copy is included in the LICENSE file that accompanied this code).
+#
+# You should have received a copy of the GNU Lesser General Public License
+# version 3 along with OpenOffice.org.  If not, see
+# <http://www.openoffice.org/license.html>
+# for a copy of the LGPLv3 License.
+#
+#*************************************************************************
+
+PRJ=..$/..
+
+PRJNAME=sal
+TARGET=oslall
+ENABLE_EXCEPTIONS=TRUE
+USE_LDUMP2=TRUE
+
+PROJECTPCH4DLL=TRUE
+PROJECTPCH=cont_pch
+PROJECTPCHSOURCE=cont_pch
+
+MULTITHREAD_OBJ=TRUE
+
+.IF "$(GUI)" == "OS2"
+STL_OS2_BUILDING=1
+.ENDIF
+
+# --- Settings -----------------------------------------------------
+
+.INCLUDE :  settings.mk
+
+CFLAGS+= $(LFS_CFLAGS)
+CXXFLAGS+= $(LFS_CFLAGS)
+
+# --- Files --------------------------------------------------------
+
+SLOFILES=	\
+            $(SLO)$/utility.obj\
+            $(SLO)$/readline.obj\
+            $(SLO)$/filepath.obj\
+            $(SLO)$/debugbase.obj\
+            $(SLO)$/loadmodulerelative.obj
+
+#.IF "$(UPDATER)"=="YES"
+OBJFILES=	\
+            $(OBJ)$/utility.obj\
+            $(OBJ)$/readline.obj\
+            $(OBJ)$/filepath.obj\
+            $(OBJ)$/debugbase.obj\
+            $(OBJ)$/loadmodulerelative.obj
+#.ENDIF
+
+# --- Targets ------------------------------------------------------
+
+.INCLUDE :  target.mk
+
+

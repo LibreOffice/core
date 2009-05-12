@@ -50,6 +50,7 @@ Module gid_Module_Prg_Wrt_Bin
     gid_File_Lib_Hwpreader,
     gid_File_Lib_Swd,
     gid_File_Lib_Swui,
+    gid_File_Lib_Msword,
     gid_File_Lib_Wpft,
     gid_File_Lib_Writerfilter,
     gid_File_Lib_T602Filter,
@@ -59,7 +60,6 @@ Module gid_Module_Prg_Wrt_Bin
     gid_File_Jar_Email, 
     gid_File_Jar_Mail, 
     gid_File_Jar_Activation,
-    gid_File_Jar_Writer2latex,
     gid_File_Oo_Office_Ui_Writercommands_Xcs,
     gid_File_Oo_Office_Ui_Writercommands_Xcu,
     gid_File_Registry_Spool_Oo_Common_Writer_Xcu,
@@ -75,9 +75,7 @@ Module gid_Module_Prg_Wrt_Bin
     gid_File_Registry_Spool_Oo_TypeDetection_Writer_Types_Xcu, gid_File_Registry_Spool_Oo_TypeDetection_Writer_Filters_Xcu,
     gid_File_Registry_Spool_Oo_TypeDetection_Web_Types_Xcu, gid_File_Registry_Spool_Oo_TypeDetection_Web_Filters_Xcu,
     gid_File_Registry_Spool_Oo_TypeDetection_Global_Types_Xcu, gid_File_Registry_Spool_Oo_TypeDetection_Global_Filters_Xcu,
-    gid_File_Tmp_Userinstall_Wrt_Inf,
-    gid_File_Stw_MediaWikiTemplate,
-    gid_File_Xsl_MediaWiki);
+    gid_File_Tmp_Userinstall_Wrt_Inf);
 End
 
 // Module gid_Module_Prg_Wrt_Help
@@ -112,3 +110,4 @@ Module gid_Module_Langpack_Writer_Template
 End
 
 #include "alllangmodules_writer.inc"
+

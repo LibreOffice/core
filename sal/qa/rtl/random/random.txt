@@ -1,0 +1,5 @@
+rtl_random.createPool.createPool_001
+rtl_random.destroyPool.destroyPool_001
+rtl_random.addBytes.addBytes_001
+rtl_random.getBytes.getBytes_001
+

@@ -1,0 +1,128 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: TextPortion.idl,v $
+ * $Revision: 1.11 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_text_TextPortion_idl__
+#define __com_sun_star_text_TextPortion_idl__
+
+
+#ifndef __com_sun_star_style_ParagraphProperties_idl__
+#include <com/sun/star/style/ParagraphProperties.idl>
+#endif
+
+#ifndef __com_sun_star_beans_XTolerantMultiPropertySet_idl__
+#include <com/sun/star/beans/XTolerantMultiPropertySet.idl>
+#endif
+
+#ifndef __com_sun_star_style_CharacterProperties_idl__
+#include <com/sun/star/style/CharacterProperties.idl>
+#endif
+
+#ifndef __com_sun_star_container_XContentEnumerationAccess_idl__
+#include <com/sun/star/container/XContentEnumerationAccess.idl>
+#endif
+
+#ifndef __com_sun_star_text_TextRange_idl__
+#include <com/sun/star/text/TextRange.idl>
+#endif
+#ifndef __com_sun_star_text_XTextContent_idl__
+#include <com/sun/star/text/XTextContent.idl>
+#endif
+
+//=============================================================================
+
+module com { module sun { module star { module text {
+
+//=============================================================================
+/** A TextPortion is a piece of text within a paragraph that does not
+    contain changes of its attributes inside.
+    <p>It is created by an enumaration implemented in a paragraph service.
+    It is used to export the content of the paragraph to an external document format.</p>
+
+*/
+published service TextPortion
+{
+    service com::sun::star::text::TextRange;
+
+    //-------------------------------------------------------------------------
+    /** contains text frames, graphic objects, embedded objects or
+         shapes that are anchored at or as character.
+        @see com.sun.star.text.TextFrame
+        @see com.sun.star.text.TextGraphicObject
+     */
+    [optional] interface ::com::sun::star::container::XContentEnumerationAccess;
+
+    //-------------------------------------------------------------------------
+    /** gives access to a sequence of properties.
+        @since OOo 2.0.0
+     */
+    [optional] interface ::com::sun::star::beans::XTolerantMultiPropertySet;
+
+    //-------------------------------------------------------------------------
+    /** contains the type of the text portion.
+    <p> Valid content type names are:</p>
+    <UL>
+        <LI><P>Text - string content</P>
+        <LI><P>TextField - TextField content</P>
+        <LI><P>TextContent - text content - supplied via the interface XContentEnumerationAccess</P>
+        <LI><P>Footnote - a footnote or an endnote</P>
+        <LI><P>ControlCharacter - a control character</P>
+        <LI><P>ReferenceMark - a reference mark </P>
+        <LI><P>DocumentIndexMark - a document index mark</P>
+        <LI><P>Bookmark - a bookmark</P>
+        <LI><P>Redline - a redline portion which is a result of the change tracking feature.</P>
+        <LI><P>Ruby - a ruby attribute which is used in Asian text</P>
+        <LI><P>Frame - a frame.</P>
+    </UL>
+    <p>The text portions for reference marks and document index marks are generated twice for
+         each mark since they may include string content.</p>
+     */
+    [readonly, property] string TextPortionType;
+
+    //-------------------------------------------------------------------------
+    /** returns the control character if the text portion contains a ControlCharacter*/
+    [readonly, property] short ControlCharacter;
+
+    //-------------------------------------------------------------------------
+    /** contains the bookmark if the portion is of the type */
+    [optional, property] com::sun::star::text::XTextContent Bookmark;
+
+    //-------------------------------------------------------------------------
+    /** determines whether the portion is a point only.*/
+    [optional, property] boolean IsCollapsed;
+
+    //-------------------------------------------------------------------------
+    /** determines whether the portion is a start portion if two portions are needed to include an
+     object (i.e. DocmentIndexMark)*/
+    [optional, property] boolean IsStart;
+};
+
+//=============================================================================
+
+}; }; }; };
+#endif

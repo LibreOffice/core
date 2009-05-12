@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: file_resource_ooo.scp,v $
- * $Revision: 1.66 $
+ * $Revision: 1.66.96.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -87,7 +87,7 @@ STD_RES_FILE( gid_File_Res_San, san )
 
 STD_RES_FILE( gid_File_Res_Sd, sd )
 
-STD_RES_FILE( gid_File_Res_Sfx, sfx )
+STD_RES_FILE_PATCH( gid_File_Res_Sfx, sfx )
 
 #if defined(UNX) && !defined(QUARTZ)
 
@@ -113,7 +113,7 @@ STD_RES_FILE( gid_File_Res_Acc, acc )
 
 STD_RES_FILE( gid_File_Res_Tpl, tpl )
 
-STD_RES_FILE( gid_File_Res_Uui, uui )
+STD_RES_FILE_PATCH( gid_File_Res_Uui, uui )
 
 STD_RES_FILE( gid_File_Res_Vcl, vcl )
 
@@ -134,4 +134,7 @@ STD_RES_FILE( gid_File_Res_UpdChk, updchk )
 STD_RES_FILE( gid_File_Res_Upd, upd )
 
 STD_RES_FILE( gid_File_Res_T602Filter, t602filter )
+
+STD_RES_FILE( gid_File_Res_Forui, forui )
+STD_RES_FILE( gid_File_Res_For, for )
 

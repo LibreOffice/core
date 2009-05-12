@@ -103,7 +103,7 @@ sub copy_normalized {
     $file = $_;
     for $hc ( @hc_table ) {
         ( $what, $from, $to ) = @$hc;
-        if ( $file =~ /$what/ ) {
+        if ( $file =~ /$what/&&!($file=~/\.svn/) ) {
             my $dir = File::Spec->catdir( $dst, $File::Find::dir );
 
             if ( ! -d $dir ) {

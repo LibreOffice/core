@@ -1,0 +1,56 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: grfpage.hrc,v $
+ * $Revision: 1.4 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#define FT_BOTTOM           1
+#define FT_HEIGHT           2
+#define FT_HEIGHTZOOM       3
+#define FT_LEFT             4
+#define FT_ORIG_SIZE        5
+#define FT_RIGHT            6
+#define FT_TOP              7
+#define FT_WIDTH            8
+#define FT_WIDTHZOOM        9
+#define FL_CROP             10
+#define FL_SIZE             12
+#define FL_ZOOM             13
+#define MF_BOTTOM           14
+#define MF_HEIGHT           15
+#define MF_HEIGHTZOOM       16
+#define MF_LEFT             17
+#define MF_RIGHT            18
+#define MF_TOP              19
+#define MF_WIDTH            20
+#define MF_WIDTHZOOM        21
+#define PB_ORGSIZE          22
+#define RB_SIZECONST        23
+#define RB_ZOOMCONST        24
+#define WN_BSP              25
+
+

@@ -1,0 +1,89 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: anminfo.hxx,v $
+ * $Revision: 1.8 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef _SD_ANMINFO_HXX
+#define _SD_ANMINFO_HXX
+
+#include <com/sun/star/presentation/AnimationEffect.hpp>
+#include <com/sun/star/presentation/AnimationSpeed.hpp>
+#include <com/sun/star/presentation/ClickAction.hpp>
+#include "pres.hxx"
+#include "anmdef.hxx"
+#include <svx/svdobj.hxx>
+#include <tools/color.hxx>
+
+class Polygon;
+class Point;
+class SvStream;
+class SdrObjSurrogate;
+class SdrObject;
+class SdrPathObj;
+class SdDrawDocument;
+
+
+class SdAnimationInfo : public SdrObjUserData
+{
+public:
+    PresObjKind             mePresObjKind;
+
+    /* deprecated animation infos */
+    ::com::sun::star::presentation::AnimationEffect         meEffect;       // Animationseffekt
+    ::com::sun::star::presentation::AnimationEffect         meTextEffect;   // Animationseffekt fuer Textinhalt
+    ::com::sun::star::presentation::AnimationSpeed          meSpeed;            // Geschwindigkeit der Animation
+    BOOL                    mbActive;       // eingeschaltet ?
+    BOOL                    mbDimPrevious;  // Objekt abblenden
+    BOOL                    mbIsMovie;      // wenn Gruppenobjekt, dann Sequenz aus den
+    BOOL                    mbDimHide;      // verstecken statt abblenden
+    Color                   maBlueScreen;   // identifiziert "Hintergrundpixel"
+    Color                   maDimColor;     // zum Abblenden des Objekts
+    String                  maSoundFile;        // Pfad zum Soundfile in MSDOS-Notation
+    BOOL                    mbSoundOn;      // Sound ein/aus
+    BOOL                    mbPlayFull;     // Sound ganz abspielen
+    SdrPathObj*             mpPathObj;      // das Pfadobjekt
+    ::com::sun::star::presentation::ClickAction             meClickAction;  // Aktion bei Mausklick
+    ::com::sun::star::presentation::AnimationEffect         meSecondEffect; // fuer Objekt ausblenden
+    ::com::sun::star::presentation::AnimationSpeed          meSecondSpeed;  // fuer Objekt ausblenden
+    String                  maSecondSoundFile; // fuer Objekt ausblenden
+    BOOL                    mbSecondSoundOn;    // fuer Objekt ausblenden
+    BOOL                    mbSecondPlayFull;// fuer Objekt ausblenden
+    String                  maBookmark;     // Sprung zu Objekt/Seite
+    USHORT                  mnVerb;         // fuer OLE-Objekt
+    ULONG                   mnPresOrder;
+
+public:
+                            SdAnimationInfo();
+                            SdAnimationInfo(const SdAnimationInfo& rAnmInfo);
+    virtual                 ~SdAnimationInfo();
+
+    virtual SdrObjUserData* Clone(SdrObject* pObj) const;
+};
+
+#endif // _SD_ANMINFO_HXX
+

@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--***********************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: Controller.xcu,v $
+ * $Revision: 1.17 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************ -->
+<!DOCTYPE oor:component-data SYSTEM "../../../../../component-update.dtd">
+<oor:component-data oor:name="Controller" oor:package="org.openoffice.Office.UI" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <node oor:name="Registered">
+    <node oor:name="PopupMenu">
+      <node oor:name="c1" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:CharFontName</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.FontMenuController</value>
+        </prop>
+      </node>
+      <node oor:name="c2" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:FontHeight</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.FontSizeMenuController</value>
+        </prop>
+      </node>
+      <node oor:name="c4" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ObjectMenue</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.ObjectMenuController</value>
+        </prop>
+      </node>
+      <node oor:name="c5" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:InsertPageHeader</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.HeaderMenuController</value>
+        </prop>
+      </node>
+      <node oor:name="c6" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:InsertPageFooter</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.FooterMenuController</value>
+        </prop>
+      </node>
+      <node oor:name="c7" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ChangeControlType</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.ControlMenuController</value>
+        </prop>
+      </node>
+      <node oor:name="c8" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:AvailableToolbars</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.ToolBarsMenuController</value>
+        </prop>
+      </node>
+      <node oor:name="c9" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ScriptOrganizer</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.MacrosMenuController</value>
+        </prop>
+      </node>
+      <node oor:name="c10" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:RecentFileList</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.RecentFilesMenuController</value>
+        </prop>
+      </node>
+      <node oor:name="c11" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:AddDirect</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.NewMenuController</value>
+        </prop>
+      </node>
+      <node oor:name="c12" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:AutoPilotMenu</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.NewMenuController</value>
+        </prop>
+      </node>
+      <node oor:name="c13" oor:op="replace">
+        <prop oor:name="Command">
+            <value>.uno:SetLanguageSelectionMenu</value>
+        </prop>
+        <prop oor:name="Module">
+            <value/>
+        </prop>
+        <prop oor:name="Controller">
+            <value>com.sum.star.comp.framework.LanguageSelectionMenuController</value>
+        </prop>
+      </node>
+      <node oor:name="c14" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:SetLanguageAllTextMenu</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+            <value>com.sum.star.comp.framework.LanguageSelectionMenuController</value>
+        </prop>
+      </node>
+      <node oor:name="c15" oor:op="replace">
+        <prop oor:name="Command">
+            <value>.uno:SetLanguageParagraphMenu</value>
+        </prop>
+        <prop oor:name="Module">
+            <value/>
+        </prop>
+        <prop oor:name="Controller">
+            <value>com.sum.star.comp.framework.LanguageSelectionMenuController</value>
+        </prop>
+      </node>
+    </node>
+    <node oor:name="ToolBar">
+      <node oor:name="c1" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:DBNewForm</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.sdb.OfficeDatabaseDocument</value>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.sdb.ApplicationToolboxController</value>
+        </prop>
+      </node>
+      <node oor:name="c2" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:Refresh</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.sdb.OfficeDatabaseDocument</value>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.sdb.ApplicationToolboxController</value>
+        </prop>
+      </node>
+      <node oor:name="c13" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:FontHeight</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.svx.FontHeightToolBoxController</value>
+        </prop>
+      </node>
+    </node>
+    <node oor:name="StatusBar">
+      <node oor:name="c1" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:DBStatusType</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.sdb.OfficeDatabaseDocument</value>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.sdb.ApplicationStatusbarController</value>
+        </prop>
+      </node>
+      <node oor:name="c2" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:DBStatusDBName</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.sdb.OfficeDatabaseDocument</value>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.sdb.ApplicationStatusbarController</value>
+        </prop>
+      </node>
+      <node oor:name="c3" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:DBStatusUserName</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.sdb.OfficeDatabaseDocument</value>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.sdb.ApplicationStatusbarController</value>
+        </prop>
+      </node>
+      <node oor:name="c4" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:DBStatusHostName</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.sdb.OfficeDatabaseDocument</value>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.sdb.ApplicationStatusbarController</value>
+        </prop>
+      </node>
+      <node oor:name="c5" oor:op="replace">
+        <prop oor:name="Command">
+            <value>.uno:StatusbarLogo</value>
+        </prop>
+        <prop oor:name="Module">
+            <value/>
+        </prop>
+        <prop oor:name="Controller">
+            <value>com.sun.star.comp.framework.LogoImageStatusbarController</value>
+        </prop>
+      </node>
+      <node oor:name="c6" oor:op="replace">
+        <prop oor:name="Command">
+            <value>.uno:StatusbarLogoText</value>
+        </prop>
+        <prop oor:name="Module">
+            <value/>
+        </prop>
+        <prop oor:name="Controller">
+            <value>com.sun.star.comp.framework.LogoTextStatusbarController</value>
+        </prop>
+      </node>
+      <node oor:name="c7" oor:op="replace">
+        <prop oor:name="Command">
+            <value>.uno:LanguageStatus</value>
+        </prop>
+        <prop oor:name="Module">
+            <value/>
+        </prop>
+        <prop oor:name="Controller">
+            <value>com.sun.star.comp.framework.LangSelectionStatusbarController</value>
+        </prop>
+      </node>
+    </node>
+  </node>
+</oor:component-data>

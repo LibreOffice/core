@@ -1,0 +1,9 @@
+@namespace url("urn:oasis:names:tc:opendocument:xmlns:text:1.0");
+
+/**
+ * All default styles for form elements.
+ */
+
+p {
+  display: block;
+}

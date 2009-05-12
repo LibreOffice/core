@@ -1,0 +1,310 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: scriptdlg.src,v $
+ * $Revision: 1.13 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include <svx/dialogs.hrc>
+#include "scriptdlg.hrc"
+#include "helpid.hrc"
+
+#define MASKCOLOR  MaskColor = \
+    Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
+
+ModalDialog RID_DLG_SCRIPTORGANIZER
+{
+    OutputSize = TRUE ;
+    Size = MAP_APPFONT ( 210 , 165 ) ;
+    Moveable = TRUE ;
+    Text [ en-US ] = "%MACROLANG Macros";
+    Closeable = TRUE ;
+    HelpId = HID_SCRIPTORG_DIALOG;
+    FixedText SF_TXT_SCRIPTS
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 100 , 10 ) ;
+        Text [ en-US ] = "~Macros" ;
+    };
+
+    Control SF_CTRL_SCRIPTSBOX
+    {
+        HelpId = HID_SCRIPTSBOX ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 16 ) ;
+        Size = MAP_APPFONT ( 130 , 144 ) ;
+        TabStop = TRUE ;
+        Image IMG_HARDDISK
+        {
+            ImageBitmap = Bitmap { File = "harddisk_16.bmp" ; };
+            MASKCOLOR
+        };
+        Image IMG_HARDDISK_HC
+        {
+            ImageBitmap = Bitmap { File = "harddisk_16_h.bmp" ; };
+            MASKCOLOR
+        };
+        Image IMG_LIB
+        {
+            ImageBitmap = Bitmap { File = "im30820.png"; };
+            MASKCOLOR
+        };
+        Image IMG_LIB_HC
+        {
+            ImageBitmap = Bitmap { File = "imh30820.png"; };
+            MASKCOLOR
+        };
+        Image IMG_MACRO
+        {
+            ImageBitmap = Bitmap { File = "im30821.png"; };
+            MASKCOLOR
+        };
+        Image IMG_MACRO_HC
+        {
+            ImageBitmap = Bitmap { File = "imh30821.png"; };
+            MASKCOLOR
+        };
+        Image IMG_DOCUMENT
+        {
+            ImageBitmap = Bitmap { File = "im30826.png"; };
+            MASKCOLOR
+        };
+        Image IMG_DOCUMENT_HC
+        {
+            ImageBitmap = Bitmap { File = "imh30826.png"; };
+            MASKCOLOR
+        };
+        String STR_MYMACROS
+        {
+            Text [ en-US ] = "My Macros";
+        };
+        String STR_PRODMACROS
+        {
+            Text [ en-US ] = "%PRODUCTNAME Macros";
+        };
+    };
+
+    PushButton SF_PB_RUN
+    {
+        Pos = MAP_APPFONT ( 144 , 6 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        DefButton = TRUE;
+        Text [ en-US ] = "R~un" ;
+    };
+    CancelButton SF_PB_CLOSE
+    {
+        Pos = MAP_APPFONT ( 144 , 23 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Close" ;
+    };
+
+    PushButton SF_PB_CREATE
+    {
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        Pos = MAP_APPFONT ( 144 , 60 ) ;
+        Text [ en-US ] = "~Create..." ;
+        TabStop = TRUE ;
+    };
+    PushButton SF_PB_EDIT
+    {
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        Pos = MAP_APPFONT ( 144 , 77 ) ;
+        Text [ en-US ] = "~Edit" ;
+        TabStop = TRUE ;
+    };
+    PushButton SF_PB_RENAME
+    {
+        Pos = MAP_APPFONT ( 144 , 94 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        Text [ en-US ] = "Rename..." ;
+    };
+    PushButton SF_PB_DEL
+    {
+        Pos = MAP_APPFONT ( 144 , 114 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        Text [ en-US ] = "~Delete..." ;
+        TabStop = TRUE ;
+    };
+    HelpButton SF_PB_HELP
+    {
+        Pos = MAP_APPFONT ( 144 , 131 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        TabStop = TRUE ;
+    };
+
+};
+ModalDialog RID_DLG_NEWLIB
+{
+    Text [ en-US ] = "Create Library" ;
+    Size = MAP_APPFONT ( 160 , 50 ) ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    OKButton PB_OK
+    {
+        Pos = MAP_APPFONT ( 104 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton PB_CANCEL
+    {
+        Pos = MAP_APPFONT ( 104 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_NEWLIB
+    {
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 100 , 50 ) ;
+        WordBreak = TRUE ;
+        Text [ en-US ] = "Enter the name for the new library." ;
+    };
+    Edit ED_LIBNAME
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 59 ) ;
+        Size = MAP_APPFONT ( 92 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    String STR_NEWLIB
+    {
+        Text [ en-US ] = "Create Library" ;
+    };
+    String STR_NEWMACRO
+    {
+        Text [ en-US ] = "Create Macro" ;
+    };
+    String STR_FT_NEWMACRO
+    {
+        Text [ en-US ] = "Enter the name for the new macro." ;
+    };
+    String STR_RENAME
+    {
+        Text [ en-US ] = "Rename" ;
+    };
+    String STR_FT_RENAME
+    {
+        Text [ en-US ] = "Enter the new name for the selected object." ;
+    };
+};
+String RID_SVXSTR_DELQUERY
+{
+    Text [ en-US ] = "Do you want to delete the following object?";
+};
+String RID_SVXSTR_DELQUERY_TITLE
+{
+    Text [ en-US ] = "Confirm Deletion";
+};
+String RID_SVXSTR_DELFAILED
+{
+    Text [ en-US ] = "The selected object could not be deleted.";
+};
+String RID_SVXSTR_DELFAILEDPERM
+{
+    Text [ en-US ] = " You do not have permission to delete this object.";
+};
+String RID_SVXSTR_DELFAILED_TITLE
+{
+    Text [ en-US ] = "Error Deleting Object";
+};
+String RID_SVXSTR_CREATEFAILED
+{
+    Text [ en-US ] = "The object could not be created.";
+};
+String RID_SVXSTR_CREATEFAILEDDUP
+{
+    Text [ en-US ] = " Object with the same name already exists.";
+};
+String RID_SVXSTR_CREATEFAILEDPERM
+{
+    Text [ en-US ] = " You do not have permission to create this object.";
+};
+String RID_SVXSTR_CREATEFAILED_TITLE
+{
+    Text [ en-US ] = "Error Creating Object";
+};
+String RID_SVXSTR_RENAMEFAILED
+{
+    Text [ en-US ] = "The object could not be renamed.";
+};
+String RID_SVXSTR_RENAMEFAILEDPERM
+{
+    Text [ en-US ] = " You do not have permission to rename this object.";
+};
+String RID_SVXSTR_RENAMEFAILED_TITLE
+{
+    Text [ en-US ] = "Error Renaming Object";
+};
+
+String RID_SVXSTR_ERROR_TITLE
+{
+    Text [ en-US ] = "%PRODUCTNAME Error";
+};
+
+String RID_SVXSTR_ERROR_LANG_NOT_SUPPORTED
+{
+    Text [ en-US ] = "The scripting language %LANGUAGENAME is not supported.";
+};
+String RID_SVXSTR_ERROR_RUNNING
+{
+    Text [ en-US ] = "An error occurred while running the %LANGUAGENAME script %SCRIPTNAME.";
+};
+
+String RID_SVXSTR_EXCEPTION_RUNNING
+{
+    Text [ en-US ] = "An exception occurred while running the %LANGUAGENAME script %SCRIPTNAME.";
+};
+
+String RID_SVXSTR_ERROR_AT_LINE
+{
+    Text [ en-US ] = "An error occurred while running the %LANGUAGENAME script %SCRIPTNAME at line: %LINENUMBER.";
+};
+
+String RID_SVXSTR_EXCEPTION_AT_LINE
+{
+    Text [ en-US ] = "An exception occurred while running the %LANGUAGENAME script %SCRIPTNAME at line: %LINENUMBER.";
+};
+
+String RID_SVXSTR_FRAMEWORK_ERROR_RUNNING
+{
+    Text [ en-US ] = "A Scripting Framework error occurred while running the %LANGUAGENAME script %SCRIPTNAME.";
+};
+
+String RID_SVXSTR_FRAMEWORK_ERROR_AT_LINE
+{
+    Text [ en-US ] = "A Scripting Framework error occurred while running the %LANGUAGENAME script %SCRIPTNAME at line: %LINENUMBER.";
+};
+
+String RID_SVXSTR_ERROR_TYPE_LABEL
+{
+    Text [ en-US ] = "Type:";
+};
+
+String RID_SVXSTR_ERROR_MESSAGE_LABEL
+{
+    Text [ en-US ] = "Message:";
+};

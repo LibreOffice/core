@@ -31,6 +31,7 @@
 
 package installer::windows::strip;
 
+use File::Temp qw(tmpnam);
 use installer::converter;
 use installer::existence;
 use installer::globals;
@@ -50,8 +51,7 @@ sub need_to_strip
 
     # Check using the "nm" command
 
-    $filename = qx{cygpath -m "$filename"};
-    $filename =~ s/[\r\n]//g;
+    $filename =~ s/\\/\\\\/g;
 
     open (FILE, "nm $filename 2>&1 |");
     my $nmoutput = <FILE>;
@@ -106,11 +106,28 @@ sub strip_binaries
         push(@installer::globals::removedirs, $strippeddirbase);
     }
 
+    my ($tmpfilehandle, $tmpfilename) = tmpnam();
+    open SOURCEPATHLIST, ">$tmpfilename" or die "oops...\n";
     for ( my $i = 0; $i <= $#{$filelist}; $i++ )
     {
-        my $sourcefilename = ${$filelist}[$i]->{'sourcepath'};
+        print SOURCEPATHLIST "${$filelist}[$i]->{'sourcepath'}\n";
+    }
+    close SOURCEPATHLIST;
+    my @filetypelist = qx{file -f "$tmpfilename"};
+    chomp @filetypelist;
+    unlink "$tmpfilename" or die "oops\n";
+    for ( my $i = 0; $i <= $#{$filelist}; $i++ )
+    {
+        ${$filelist}[$i]->{'is_executable'} = ( $filetypelist[$i] =~ /:.*PE executable/ );
+    }
 
-        if ( need_to_strip($sourcefilename) )
+    if ( $^O =~ /cygwin/i ) { installer::worker::generate_cygwin_pathes($filelist); }
+
+    for ( my $i = 0; $i <= $#{$filelist}; $i++ )
+    {
+        my $sourcefilename = ${$filelist}[$i]->{'cyg_sourcepath'};
+
+        if ( ${$filelist}[$i]->{'is_executable'} && need_to_strip($sourcefilename) )
         {
             my $shortfilename = $sourcefilename;
             installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$shortfilename);

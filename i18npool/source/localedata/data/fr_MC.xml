@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Locale SYSTEM 'locale.dtd'>
+<Locale versionDTD="2.0.3" allowUpdateFromCLDR="yes" version="1.2">
+  <LC_INFO>
+    <Language>
+      <LangID>fr</LangID>
+      <DefaultName>French</DefaultName>
+    </Language>
+    <Country>
+      <CountryID>MC</CountryID>
+      <DefaultName>Monaco</DefaultName>
+    </Country>
+  </LC_INFO>
+  <LC_CTYPE ref="fr_FR"/>
+  <LC_FORMAT ref="fr_FR" replaceTo="[$F-180C]"/>
+  <LC_COLLATION ref="fr_FR"/>
+  <LC_SEARCH ref="en_US"/>
+  <LC_INDEX ref="fr_FR"/>
+  <LC_CALENDAR ref="fr_FR"/>
+  <LC_CURRENCY ref="fr_FR"/>
+  <LC_TRANSLITERATION ref="en_US"/>
+  <LC_MISC ref="fr_FR"/>
+  <LC_NumberingLevel ref="en_US"/>
+  <LC_OutLineNumberingLevel ref="en_US"/>
+</Locale>
+

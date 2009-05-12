@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<accel:acceleratorlist xmlns:accel="http://openoffice.org/2001/accel" xmlns:xlink="http://www.w3.org/1999/xlink">
+<accel:item accel:code="KEY_F4" xlink:href=".uno:DBQueryPreview"/>
+<accel:item accel:code="KEY_F5" xlink:href=".uno:SbaExecuteSql"/>
+<accel:item accel:code="KEY_F7" xlink:href=".uno:AddTable"/>
+</accel:acceleratorlist>

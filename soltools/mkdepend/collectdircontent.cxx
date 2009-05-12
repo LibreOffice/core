@@ -26,7 +26,7 @@ void IncludesCollection::add_to_collection(const string& dirPath) {
     };
     do {
         string winFileName(FindFileData.cFileName);
-        transform(winFileName.begin(), winFileName.end(), winFileName.begin(), tolower);
+        transform(winFileName.begin(), winFileName.end(), winFileName.begin(), ::tolower);
         dirContent.insert(winFileName);
     } while (FindNextFile(hFind, &FindFileData));
 #else
@@ -47,7 +47,7 @@ void IncludesCollection::add_to_collection(const string& dirPath) {
 
 bool IncludesCollection::exists(string filePath) {
 #if defined( WNT )
-    transform(filePath.begin(), filePath.end(), filePath.begin(), tolower);
+    transform(filePath.begin(), filePath.end(), filePath.begin(), ::tolower);
 #endif // defined( WNT )
     PathFilePair dirFile = split_path(filePath);
     string dirPath = dirFile.first;

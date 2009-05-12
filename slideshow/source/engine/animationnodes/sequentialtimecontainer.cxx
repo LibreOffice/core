@@ -1,0 +1,158 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: sequentialtimecontainer.cxx,v $
+ * $Revision: 1.12 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_slideshow.hxx"
+
+#include <canvas/debug.hxx>
+#include <canvas/verbosetrace.hxx>
+
+#include "eventqueue.hxx"
+#include "usereventqueue.hxx"
+#include "sequentialtimecontainer.hxx"
+#include "tools.hxx"
+#include "delayevent.hxx"
+
+#include <boost/bind.hpp>
+#include <algorithm>
+
+namespace slideshow {
+namespace internal {
+
+void SequentialTimeContainer::activate_st()
+{
+    // resolve first possible child, ignore
+    for ( ; mnFinishedChildren < maChildren.size(); ++mnFinishedChildren ) {
+        if (resolveChild( maChildren[mnFinishedChildren] ))
+            break;
+        else {
+            // node still UNRESOLVED, no need to deactivate or end...
+            OSL_ENSURE( false, "### resolving child failed!" );
+        }
+    }
+
+    if (isDurationIndefinite() &&
+        (maChildren.empty() || mnFinishedChildren >= maChildren.size()))
+    {
+        // deactivate ASAP:
+        scheduleDeactivationEvent(
+            makeEvent( boost::bind( &AnimationNode::deactivate, getSelf() ) ) );
+    }
+    else // use default
+        scheduleDeactivationEvent();
+}
+
+void SequentialTimeContainer::dispose()
+{
+    BaseContainerNode::dispose();
+    if (mpCurrentSkipEvent) {
+        mpCurrentSkipEvent->dispose();
+        mpCurrentSkipEvent.reset();
+    }
+    if (mpCurrentRewindEvent) {
+        mpCurrentRewindEvent->dispose();
+        mpCurrentRewindEvent.reset();
+    }
+}
+
+void SequentialTimeContainer::skipEffect(
+    AnimationNodeSharedPtr const& pChildNode )
+{
+    if (isChildNode(pChildNode)) {
+        // empty all events ignoring timings => until next effect
+        getContext().mrEventQueue.forceEmpty();
+        getContext().mrEventQueue.addEventForNextRound(
+            makeEvent( boost::bind(&AnimationNode::deactivate, pChildNode) ) );
+    }
+    else
+        OSL_ENSURE( false, "unknown notifier!" );
+}
+
+void SequentialTimeContainer::rewindEffect(
+    AnimationNodeSharedPtr const& /*pChildNode*/ )
+{
+    // xxx todo: ...
+}
+
+bool SequentialTimeContainer::resolveChild(
+    AnimationNodeSharedPtr const& pChildNode )
+{
+    bool const bResolved = pChildNode->resolve();
+    if (bResolved && isMainSequenceRootNode()) {
+        // discharge events:
+        if (mpCurrentSkipEvent)
+            mpCurrentSkipEvent->dispose();
+        if (mpCurrentRewindEvent)
+            mpCurrentRewindEvent->dispose();
+
+        // event that will deactivate the resolved/running child:
+        mpCurrentSkipEvent = makeEvent(
+            boost::bind( &SequentialTimeContainer::skipEffect,
+                         boost::dynamic_pointer_cast<SequentialTimeContainer>( getSelf() ),
+                         pChildNode ) );
+        // event that will reresolve the resolved/activated child:
+        mpCurrentRewindEvent = makeEvent(
+            boost::bind( &SequentialTimeContainer::rewindEffect,
+                         boost::dynamic_pointer_cast<SequentialTimeContainer>( getSelf() ),
+                         pChildNode ) );
+
+        // deactivate child node when skip event occurs:
+        getContext().mrUserEventQueue.registerSkipEffectEvent(
+            mpCurrentSkipEvent );
+        // rewind to previous child:
+        getContext().mrUserEventQueue.registerRewindEffectEvent(
+            mpCurrentRewindEvent );
+    }
+    return bResolved;
+}
+
+void SequentialTimeContainer::notifyDeactivating(
+    AnimationNodeSharedPtr const& rNotifier )
+{
+    if (notifyDeactivatedChild( rNotifier ))
+        return;
+
+    OSL_ASSERT( mnFinishedChildren < maChildren.size() );
+    AnimationNodeSharedPtr const& pNextChild = maChildren[mnFinishedChildren];
+    OSL_ASSERT( pNextChild->getState() == UNRESOLVED );
+
+    if (! resolveChild( pNextChild )) {
+        // could not resolve child - since we risk to
+        // stall the chain of events here, play it safe
+        // and deactivate this node (only if we have
+        // indefinite duration - otherwise, we'll get a
+        // deactivation event, anyways).
+        deactivate();
+    }
+}
+
+} // namespace internal
+} // namespace slideshow
+

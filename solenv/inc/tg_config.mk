@@ -62,12 +62,12 @@ $(XCS_TRIM) :   $(DTDDIR)$/registry$/component-schema.dtd \
 $(PROCESSOUT)$/registry$/schema$/$(PACKAGEDIR)$/%.xcs : %.xcs
     @echo -------------+ validating and stripping schema files
     -$(MKDIRHIER) $(@:d)
-    $(XSLTPROC) --nonet -o $(normpath $(PWD)$/$(@:d)$*.val) \
+    $(XSLTPROC) --nonet -o $(normpath $(subst,$(PATH_IN_MODULE), $(PWD))$/$(subst,$(PRJ), $(@:d))$*.val) \
                 --stringparam componentName $(PACKAGE).$* \
                 $(SYSXSLDIR)schema_val.xsl $<
-    $(XSLTPROC) --nonet -o $(normpath $(PWD)$/$(@:d)$*.san) \
+    $(XSLTPROC) --nonet -o $(normpath $(subst,$(PATH_IN_MODULE), $(PWD))$/$(subst,$(PRJ), $(@:d))$*.san) \
                 $(SYSXSLDIR)sanity.xsl $<
-    $(XSLTPROC) --nonet -o $(normpath $(PWD)$/$@) \
+    $(XSLTPROC) --nonet -o $(normpath $(subst,$(PATH_IN_MODULE), $(PWD))$/$(subst,$(PRJ), $@)) \
                 $(SYSXSLDIR)schema_trim.xsl $<
     +-$(RM) $(@:d)$*.val > $(NULLDEV)
     +-$(RM) $(@:d)$*.san > $(NULLDEV)
@@ -85,7 +85,7 @@ $(XCS_RESOURCES) :   $(XSLDIR)$/resource.xsl
 $(PROCESSOUT)$/registry$/res$/{$(alllangiso)}$/$(PACKAGEDIR)$/%.properties :| $(PROCESSOUT)$/merge$/$(PACKAGEDIR)$/%.xcs
     @echo -------------+ creating locale dependent resource bundles
     -$(MKDIRHIER) $(@:d)
-    $(XSLTPROC) --nonet -o $(normpath $(PWD)$/$@) \
+    $(XSLTPROC) --nonet -o $(normpath $(subst,$(PATH_IN_MODULE), $(PWD))$/$(subst,$(PRJ), $@)) \
                 --stringparam locale {$(subst,$/$(PACKAGEDIR)$/$(@:f), $(subst,$(PROCESSOUT)$/registry$/res$/, $@))} \
                 $(SYSXSLDIR)resource.xsl $<
 
@@ -108,11 +108,11 @@ $(XCU_DEFAULT) : $(DTDDIR)$/registry$/component-update.dtd \
 $(PROCESSOUT)$/registry$/data$/$(PACKAGEDIR)$/%.xcu : %.xcu
     @echo -------------+ validating and creating a locale independent file
     -$(MKDIRHIER) $(@:d) 
-    $(XSLTPROC) --nonet -o $(normpath $(PWD)$/$(@:d)$*.val) \
+    $(XSLTPROC) --nonet -o $(normpath $(subst,$(PATH_IN_MODULE), $(PWD))$/$(subst,$(PRJ), $(@:d))$*.val) \
                 --stringparam xcs $(XCSROOTURL)/registry/schema/$(XSLTPACKAGEDIR)/$*.xcs \
                 --stringparam schemaRoot $(XCSROOTURL)/registry/schema \
                 $(SYSXSLDIR)data_val.xsl $<
-    $(XSLTPROC) --nonet -o $(normpath $(PWD)$/$@) \
+    $(XSLTPROC) --nonet -o $(normpath $(subst,$(PATH_IN_MODULE), $(PWD))$/$(subst,$(PRJ), $@)) \
                 --stringparam xcs $(XCSROOTURL)/registry/schema/$(XSLTPACKAGEDIR)/$*.xcs \
                 --stringparam schemaRoot $(XCSROOTURL)/registry/schema \
                 $(SYSXSLDIR)alllang.xsl $<
@@ -138,7 +138,7 @@ $(PROCESSOUT)$/registry$/res$/{$(alllangiso)}$/$(PACKAGEDIR)$/%.xcu :| %.xcu
 .ENDIF			# "$(WITH_LANG)"!=""
     @echo ------------- creating locale dependent entries
     -$(MKDIRHIER) $(@:d)
-    $(XSLTPROC) --nonet -o $(normpath $(PWD)$/$@) \
+    $(XSLTPROC) --nonet -o $(normpath $(subst,$(PATH_IN_MODULE), $(PWD))$/$(subst,$(PRJ), $@)) \
                 --stringparam xcs $(XCSROOTURL)/registry/schema/$(XSLTPACKAGEDIR)/$*.xcs \
                 --stringparam schemaRoot $(XCSROOTURL)/registry/schema \
                 --stringparam locale {$(subst,$/$(PACKAGEDIR)$/$(@:f), $(subst,$(PROCESSOUT)$/registry$/res$/, $@))} \
@@ -165,7 +165,7 @@ $(XCU_MODULES) : $(XSLDIR)$/alllang.xsl
 $(PROCESSOUT)$/registry$/spool$/$(PACKAGEDIR)$/%.xcu :| $$(@:b:s/-/./:b).xcu
     @echo -------------+ creating a module file
     -$(MKDIRHIER) $(@:d) 
-    $(XSLTPROC) --nonet -o $(normpath $(PWD)$/$@) \
+    $(XSLTPROC) --nonet -o $(normpath $(subst,$(PATH_IN_MODULE), $(PWD))$/$(subst,$(PRJ), $@)) \
                 --stringparam xcs $(XCSROOTURL)/registry/schema/$(XSLTPACKAGEDIR)/$(<:b).xcs \
                 --stringparam schemaRoot $(XCSROOTURL)/registry/schema \
                 --stringparam module $(subst,$(<:b)-, $(*)) \

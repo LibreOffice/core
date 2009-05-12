@@ -1,0 +1,8 @@
+MOZABDRV_1_0 {
+    global:
+        OMozabConnection_CreateInstance;
+        OMozillaBootstrap_CreateInstance;
+        setMozabServiceFactory;
+    local:
+        *;
+};

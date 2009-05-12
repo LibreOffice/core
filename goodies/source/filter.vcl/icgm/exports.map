@@ -1,0 +1,7 @@
+CGMIMPORTER_1_0 {
+        global:
+                ImportCGM;
+
+        local:
+                *;
+};

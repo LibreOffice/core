@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<accel:acceleratorlist xmlns:accel="http://openoffice.org/2001/accel" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <accel:item accel:code="KEY_Q" accel:mod1="true" xlink:href=".uno:Quit"/>
+    <accel:item accel:code="KEY_N" accel:shift="true" accel:mod1="true" xlink:href=".uno:NewDoc"/>
+    <accel:item accel:code="KEY_O" accel:mod1="true" xlink:href=".uno:Open"/>
+    <accel:item accel:code="KEY_OPEN" xlink:href=".uno:Open"/>
+    <accel:item accel:code="KEY_P" accel:mod1="true" xlink:href=".uno:Print"/>
+    <accel:item accel:code="KEY_S" accel:mod1="true" xlink:href=".uno:Save"/>
+    <accel:item accel:code="KEY_N" accel:mod1="true" xlink:href=".uno:AddDirect"/>
+    <accel:item accel:code="KEY_W" accel:mod1="true" xlink:href=".uno:CloseWin"/>
+    <accel:item accel:code="KEY_F4" accel:mod1="true" xlink:href=".uno:CloseWin"/>
+    <accel:item accel:code="KEY_X" accel:mod1="true" xlink:href=".uno:Cut"/>
+    <accel:item accel:code="KEY_DELETE" accel:shift="true" xlink:href=".uno:Cut"/>
+    <accel:item accel:code="KEY_CUT" xlink:href=".uno:Cut"/>
+    <accel:item accel:code="KEY_C" accel:mod1="true" xlink:href=".uno:Copy"/>
+    <accel:item accel:code="KEY_INSERT" accel:mod1="true" xlink:href=".uno:Copy"/>
+    <accel:item accel:code="KEY_COPY" xlink:href=".uno:Copy"/>
+    <accel:item accel:code="KEY_V" accel:mod1="true" xlink:href=".uno:Paste"/>
+    <accel:item accel:code="KEY_INSERT" accel:shift="true" xlink:href=".uno:Paste"/>
+    <accel:item accel:code="KEY_PASTE" xlink:href=".uno:Paste"/>
+    <accel:item accel:code="KEY_DELETE" xlink:href=".uno:Delete"/>
+    <accel:item accel:code="KEY_A" accel:mod1="true" xlink:href=".uno:SelectAll"/>
+    <accel:item accel:code="KEY_F" accel:mod1="true" xlink:href=".uno:SearchDialog"/>
+    <accel:item accel:code="KEY_Q" accel:shift="true" accel:mod1="true" xlink:href=".uno:BasicBreak"/>
+    <accel:item accel:code="KEY_F4" xlink:href=".uno:ViewDataSourceBrowser"/>
+    <accel:item accel:code="KEY_F5" accel:mod1="true" xlink:href=".uno:GrabControlFocus"/>
+    <accel:item accel:code="KEY_F7" accel:shift="true" accel:mod1="true" xlink:href=".uno:HangulHanjaConversion"/>
+</accel:acceleratorlist>

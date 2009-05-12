@@ -324,7 +324,7 @@ sub create_directories
 
     my $path = "";
 
-    if (( $newdirectory eq "zip" ) || ( $newdirectory eq "cab" ) || ( $newdirectory =~ /rdb\s*$/i )) # special handling for zip files, cab files and services file because of performance reasons
+    if (( $newdirectory eq "uno" ) || ( $newdirectory eq "zip" ) || ( $newdirectory eq "cab" ) || ( $newdirectory =~ /rdb\s*$/i )) # special handling for zip files, cab files and services file because of performance reasons
     {
         if ( $installer::globals::temppathdefined ) { $path = $installer::globals::temppath; }
         else { $path = $installer::globals::unpackpath; }
@@ -1114,6 +1114,8 @@ sub rename_string_in_directory
     my $infoline = "";
 
     $newdir =~ s/$oldstring/$newstring/g;
+
+    if (( -d $newdir ) && ( $olddir ne $newdir )) { remove_complete_directory($newdir, 1); }
 
     if ( move($olddir, $newdir) )
     {

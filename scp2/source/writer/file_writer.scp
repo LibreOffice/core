@@ -60,17 +60,6 @@ File gid_File_Exe_Sweb
 End
 #endif
 
-#ifdef SOLAR_JAVA
-#ifndef WITHOUT_WRITER2LATEX
-File gid_File_Jar_Writer2latex
-    TXT_FILE_BODY;
-    Name = "writer2latex.jar";
-    Dir = gid_Dir_Classes;
-    Styles = (PACKED);
-End
-#endif
-#endif
-
 File gid_File_Registry_Spool_Oo_Office_Embedding_Writer_Xcu
     TXT_FILE_BODY;
     Styles = (PACKED);
@@ -266,19 +255,5 @@ File gid_File_Oo_Office_Ui_Writerwebwindowstate_Xcu
     Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
     Name = "/registry/data/org/openoffice/Office/UI/WriterWebWindowState.xcu";
-End
-
-File gid_File_Stw_MediaWikiTemplate
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Xslt_Wiki;
-    Name = "/xslt/export/wiki/oopedia-style.ott";
-End
-
-File gid_File_Xsl_MediaWiki
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Xslt_Wiki;
-    Name = "/xslt/export/wiki/odt2mediawiki.xsl";
 End
 

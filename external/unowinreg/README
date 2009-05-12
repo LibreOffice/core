@@ -1,0 +1,2 @@
+Copy unowinreg.dll from http://tools.openoffice.org/unowinreg_prebuild/680/
+here... [ or rebuild it using --with-mingwin= ]

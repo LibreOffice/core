@@ -1,0 +1,85 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: overlaybitmapex.hxx,v $
+ * $Revision: 1.4 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef _SDR_OVERLAY_OVERLAYBITMAPEX_HXX
+#define _SDR_OVERLAY_OVERLAYBITMAPEX_HXX
+
+#include <svx/sdr/overlay/overlayobject.hxx>
+#include <vcl/bitmapex.hxx>
+
+//////////////////////////////////////////////////////////////////////////////
+
+namespace sdr
+{
+    namespace overlay
+    {
+        class SVX_DLLPUBLIC OverlayBitmapEx : public OverlayObjectWithBasePosition
+        {
+        protected:
+            // the Bitmap itself
+            BitmapEx                                maBitmapEx;
+
+            // position of the basePosition inside the Bitmap, in pixels
+            sal_uInt16                              mnCenterX;
+            sal_uInt16                              mnCenterY;
+
+            // Draw geometry
+            virtual void drawGeometry(OutputDevice& rOutputDevice);
+
+            // Create the BaseRange. This method needs to calculate maBaseRange.
+            virtual void createBaseRange(OutputDevice& rOutputDevice);
+
+        public:
+            OverlayBitmapEx(
+                const basegfx::B2DPoint& rBasePos,
+                const BitmapEx& rBitmapEx,
+                sal_uInt16 nCenX = 0, sal_uInt16 nCenY = 0);
+            virtual ~OverlayBitmapEx();
+
+            const BitmapEx& getBitmapEx() const { return maBitmapEx; }
+            void setBitmapEx(const BitmapEx& rNew);
+
+            sal_uInt16 getCenterX() const { return mnCenterX; }
+            sal_uInt16 getCenterY() const { return mnCenterY; }
+            void setCenterXY(sal_uInt16 nNewX, sal_uInt16 nNewY);
+
+            // Zoom has changed. If the objects logical size
+            // depends on the MapMode of the used OutputDevice, use this call
+            // to invalidate the range in logical coordinates.
+            virtual void zoomHasChanged();
+        };
+    } // end of namespace overlay
+} // end of namespace sdr
+
+//////////////////////////////////////////////////////////////////////////////
+
+#endif //_SDR_OVERLAY_OVERLAYBITMAPEX_HXX
+
+// eof

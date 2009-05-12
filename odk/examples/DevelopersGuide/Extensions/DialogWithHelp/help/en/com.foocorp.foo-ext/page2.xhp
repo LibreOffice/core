@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<helpdocument version="1.0">
+<meta>
+<topic id="comfoocorpfooextpage2" indexer="include" status="PUBLISH">
+<title id="tit" xml-lang="en-US">Extension foo page2</title>
+<filename>/com.foocorp.foo-ext/page2.xhp</filename>
+</topic>
+</meta>
+<body>
+<bookmark xml-lang="en-US" branch="index" id="bm_id0001">
+<bookmark_value>Foo All Pages;page2</bookmark_value>
+</bookmark>
+<paragraph role="heading" id="hd_id0001" xml-lang="en-US" level="1">Extension foo page2</paragraph>
+<paragraph role="paragraph" id="par_id0001" xml-lang="en-US">This is "page2" of extension foo help.</paragraph>
+<paragraph role="heading" id="hd_id0002" xml-lang="en-US" level="2">Some links...</paragraph>
+<paragraph role="paragraph" id="par_id0002" xml-lang="en-US">
+<link href="com.foocorp.foo-ext/page1.xhp#target">This</link> is a link to a section within page1.</paragraph>
+<paragraph role="paragraph" id="par_id0003" xml-lang="en-US">
+<link href="text/shared/guide/main.xhp">This</link> is a link to a file of the already installed help.</paragraph>
+<section id="relatedtopics">
+<paragraph role="paragraph" id="par_id0004" xml-lang="en-US">
+This section shows a link created by embedding the "linkvar" variable defined in subfolder/anotherpage.xhp.</paragraph>
+<embed href="com.foocorp.foo-ext/subfolder/anotherpage.xhp#linkvar"/>
+</section>
+</body>
+</helpdocument>

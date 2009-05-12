@@ -108,15 +108,6 @@ RegistryItem gid_Regitem_Ure_Software_Manufacturer_Productname_Productversion_Up
 	Styles = (ALWAYS_REQUIRED);
 End
 
-RegistryItem gid_Regitem_Ure_Software_OpenOfficeorg_Ooobaseversion_Install
-	ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
-	Subkey = "Software\OpenOffice.org\${REGISTRYLAYERNAME}\URE\%URELAYERVERSION";
-	ModuleID = gid_Module_Root;
-	Name = "INSTALLLOCATION";
-	Value = "[INSTALLLOCATION]";
-	Styles = (ALWAYS_REQUIRED);
-End
-
 RegistryItem gid_Regitem_Ure_Software_Manufacturer_Productname_Productversion_Productcode_Ureinstall
 	ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
 	Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\%PRODUCTCODE";
@@ -135,11 +126,3 @@ RegistryItem gid_Regitem_Ure_Software_Manufacturer_Productname_Productversion_Up
 	Styles = (ALWAYS_REQUIRED);
 End
 
-RegistryItem gid_Regitem_Ure_Software_OpenOfficeorg_Ooobaseversion_Ureinstall
-	ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
-	Subkey = "Software\OpenOffice.org\${REGISTRYLAYERNAME}\URE\%URELAYERVERSION";
-	ModuleID = gid_Module_Root;
-	Name = "UREINSTALLLOCATION";
-	Value = "[UREINSTALLLOCATION]";
-	Styles = (ALWAYS_REQUIRED,LAYER_REGISTRY,USE_URELAYERVERSION);
-End

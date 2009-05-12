@@ -63,7 +63,7 @@ OBJFILES=  \
 
 APP1TARGET=makedepend
 APP1OBJS=$(OBJFILES)
-
+APP1RPATH=NONE
 
 .INCLUDE : target.mk
 

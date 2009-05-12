@@ -1,0 +1,177 @@
+--- misc/zlib-1.1.4/contrib/minizip/unzip.h	Thu Mar 19 00:15:00 1998
++++ misc/build/zlib-1.1.4/contrib/minizip/unzip.h	Fri Mar 14 10:15:45 2008
+@@ -46,7 +46,7 @@
+ #endif
+ 
+ #ifndef _ZLIB_H
+-#include "zlib.h"
++#include "zlib/zlib.h"
+ #endif
+ 
+ #if defined(STRICTUNZIP) || defined(STRICTZIPUNZIP)
+--- misc/zlib-1.1.4/makefile.mk	Fri Mar 14 10:17:06 2008
++++ misc/build/zlib-1.1.4/makefile.mk	Fri Mar 14 10:16:56 2008
+@@ -1 +1,77 @@
+-dummy
++#*************************************************************************
++#
++#   $RCSfile: makefile.mk,v $
++#
++#   $Revision: 1.8 $
++#
++#   last change: $Author: mtg $ $Date: 2000/11/09 10:19:32 $
++#
++#   Copyright according the GNU Public License.
++#
++#*************************************************************************
++
++PRJ=..$/..$/..$/..
++
++PRJNAME=zlib
++TARGET=zlib
++LIBTARGET=NO
++EXTERNAL_WARNINGS_NOT_ERRORS=TRUE
++
++# --- Settings -----------------------------------------------------
++
++.INCLUDE :  settings.mk
++
++# --- Files --------------------------------------------------------
++
++INCEXT=contrib$/minizip
++
++SLOFILES=	$(SLO)$/adler32.obj		\
++			$(SLO)$/compress.obj	\
++			$(SLO)$/deflate.obj		\
++			$(SLO)$/crc32.obj		\
++			$(SLO)$/infblock.obj	\
++			$(SLO)$/infcodes.obj	\
++			$(SLO)$/inffast.obj		\
++			$(SLO)$/inflate.obj		\
++			$(SLO)$/inftrees.obj	\
++			$(SLO)$/infutil.obj		\
++			$(SLO)$/trees.obj		\
++			$(SLO)$/zutil.obj       \
++			$(SLO)$/unzip.obj
++
++
++LIB1TARGET=$(SLB)$/$(TARGET).lib
++LIB1ARCHIV=$(LB)$/lib$(TARGET).a
++LIB1OBJFILES=$(SLOFILES)
++
++.IF "$(BUILD_X64)"!=""
++SLOFILES_X64=	$(SLO_X64)$/adler32.obj		\
++			$(SLO_X64)$/compress.obj	\
++			$(SLO_X64)$/deflate.obj		\
++			$(SLO_X64)$/crc32.obj		\
++			$(SLO_X64)$/infblock.obj	\
++			$(SLO_X64)$/infcodes.obj	\
++			$(SLO_X64)$/inffast.obj		\
++			$(SLO_X64)$/inflate.obj		\
++			$(SLO_X64)$/inftrees.obj	\
++			$(SLO_X64)$/infutil.obj		\
++			$(SLO_X64)$/trees.obj		\
++			$(SLO_X64)$/zutil.obj       \
++			$(SLO_X64)$/unzip.obj
++
++LIB1TARGET_X64=$(SLB_X64)$/$(TARGET).lib
++LIB1OBJFILES_X64=$(SLOFILES_X64)
++.ENDIF # "$(BUILD_X64)"!=""
++
++
++# --- Targets ------------------------------------------------------
++
++$(MISC)$/%.c : contrib$/minizip$/%.c
++	@echo ------------------------------
++	@echo Making: $@
++    @$(COPY) $< $@
++
++.INCLUDE :  set_wntx64.mk
++.INCLUDE :  target.mk
++.INCLUDE :  tg_wntx64.mk
++
+--- misc/zlib-1.1.4/zconf.h	Mon Mar 11 14:16:01 2002
++++ misc/build/zlib-1.1.4/zconf.h	Fri Mar 14 10:15:45 2008
+@@ -12,6 +12,12 @@
+  * If you *really* need a unique prefix for all types and library functions,
+  * compile with -DZ_PREFIX. The "standard" zlib should be compiled without it.
+  */
++/*
++ * we need the prefix to get the same names as in 1.1.3
++*/
++
++#define Z_PREFIX
++
+ #ifdef Z_PREFIX
+ #  define deflateInit_	z_deflateInit_
+ #  define deflate	z_deflate
+@@ -36,10 +42,26 @@
+ #  define crc32		z_crc32
+ #  define get_crc_table z_get_crc_table
+ 
++#  define inflate_blocks z_inflate_blocks
++#  define inflate_blocks_new z_inflate_blocks_new
++#  define inflate_blocks_free z_inflate_blocks_free
++#  define inflate_blocks_reset z_inflate_blocks_reset
++#  define inflate_codes_free z_inflate_codes_free
++#  define inflate_codes z_inflate_codes
++#  define inflate_fast z_inflate_fast
++#  define inflate_flush z_inflate_flush
++#  define inflate_mask z_inflate_mask
++#  define inflate_set_dictionary z_inflate_set_dictionary
++#  define inflate_copyright z_inflate_copyright
++#  define inflate_trees_bits z_inflate_trees_bits
++#  define inflate_trees_dynamic z_inflate_trees_dynamic
++#  define inflate_trees_fixed z_inflate_trees_fixed
++#  define inflate_trees_free z_inflate_trees_free
++
+ #  define Byte		z_Byte
+ #  define uInt		z_uInt
+ #  define uLong		z_uLong
+-#  define Bytef	        z_Bytef
++#  define Bytef	    z_Bytef
+ #  define charf		z_charf
+ #  define intf		z_intf
+ #  define uIntf		z_uIntf
+--- misc/zlib-1.1.4/zlib.h	Mon Mar 11 14:56:38 2002
++++ misc/build/zlib-1.1.4/zlib.h	Fri Mar 14 10:15:45 2008
+@@ -27,7 +27,6 @@
+   Comments) 1950 to 1952 in the files ftp://ds.internic.net/rfc/rfc1950.txt
+   (zlib format), rfc1951.txt (deflate format) and rfc1952.txt (gzip format).
+ */
+-
+ #ifndef _ZLIB_H
+ #define _ZLIB_H
+ 
+@@ -168,7 +167,9 @@
+ 
+                         /* basic functions */
+ 
++#if !defined(ZUTIL_PROTOS_OFF)
+ ZEXTERN const char * ZEXPORT zlibVersion OF((void));
++#endif
+ /* The application can compare zlibVersion and ZLIB_VERSION for consistency.
+    If the first character differs, the library code actually used is
+    not compatible with the zlib.h header file used by the application.
+@@ -882,7 +883,9 @@
+     struct internal_state {int dummy;}; /* hack for buggy compilers */
+ #endif
+ 
++#if !defined(ZUTIL_PROTOS_OFF)
+ ZEXTERN const char   * ZEXPORT zError           OF((int err));
++#endif
+ ZEXTERN int            ZEXPORT inflateSyncPoint OF((z_streamp z));
+ ZEXTERN const uLongf * ZEXPORT get_crc_table    OF((void));
+ 
+--- misc/zlib-1.1.4/zutil.c	Mon Mar 11 14:16:01 2002
++++ misc/build/zlib-1.1.4/zutil.c	Fri Mar 14 10:15:45 2008
+@@ -5,6 +5,9 @@
+ 
+ /* @(#) $Id$ */
+ 
++#ifdef MACOSX
++#define ZUTIL_PROTOS_OFF
++#endif
+ #include "zutil.h"
+ 
+ struct internal_state      {int dummy;}; /* for buggy compilers */

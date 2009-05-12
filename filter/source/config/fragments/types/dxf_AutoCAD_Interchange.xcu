@@ -1,0 +1,12 @@
+    <node oor:name="dxf_AutoCAD_Interchange" oor:op="replace" >
+        <prop oor:name="DetectService"><value>com.sun.star.comp.draw.FormatDetector</value></prop>
+        <prop oor:name="URLPattern"/>
+        <prop oor:name="Extensions"><value>dxf</value></prop>
+        <prop oor:name="MediaType"><value>image/vnd.dxf</value></prop>
+        <prop oor:name="Preferred"><value>false</value></prop>
+        <prop oor:name="PreferredFilter"><value>DXF - AutoCAD Interchange</value></prop>
+        <prop oor:name="UIName">
+            <value>DXF - AutoCAD Interchange Format</value>
+        </prop>
+        <prop oor:name="ClipboardFormat"/>
+    </node>

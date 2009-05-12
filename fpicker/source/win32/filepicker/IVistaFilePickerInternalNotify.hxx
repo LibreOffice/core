@@ -1,0 +1,78 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: IVistaFilePickerInternalNotify.hxx,v $
+ * $Revision: 1.2 $
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef FPICKER_WIN32_VISTA_FILEPICKER_INTERNALNOTIFY_HXX
+#define FPICKER_WIN32_VISTA_FILEPICKER_INTERNALNOTIFY_HXX
+
+//-----------------------------------------------------------------------------
+// includes
+//-----------------------------------------------------------------------------
+
+#include "comptr.hxx"
+#include "vistatypes.h"
+
+#include <cppuhelper/basemutex.hxx>
+#include <osl/interlck.h>
+
+#include <shobjidl.h>
+
+//-----------------------------------------------------------------------------
+// namespace
+//-----------------------------------------------------------------------------
+
+#ifdef css
+    #error "Clash on using CSS as namespace define."
+#else
+    #define css ::com::sun::star
+#endif
+
+namespace fpicker{
+namespace win32{
+namespace vista{
+
+//-----------------------------------------------------------------------------
+// types, const etcpp.
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+/** todo document me
+ */
+class IVistaFilePickerInternalNotify
+{
+    public:
+
+        virtual void onAutoExtensionChanged (bool bChecked) = 0;
+};
+
+}}}
+
+#undef css
+
+#endif FPICKER_WIN32_VISTA_FILEPICKER_INTERNALNOTIFY_HXX

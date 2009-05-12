@@ -1,0 +1,11 @@
+mkdir: %_DEST%\inc%_EXT%\external\libxslt
+..\%__SRC%\inc\*.h %_DEST%\inc%_EXT%\external\libxslt\*.h
+..\%__SRC%\lib\libxslt.so.1 %_DEST%\lib%_EXT%\libxslt.so.1
+symlink: %_DEST%\lib%_EXT%\libxslt.so.1 %_DEST%\lib%_EXT%\libxslt.so
+..\%__SRC%\lib\libexslt.so.0 %_DEST%\lib%_EXT%\libexslt.so.0
+..\%__SRC%\lib\libxslt*.lib %_DEST%\lib%_EXT%
+..\%__SRC%\lib\lib*.dll.a %_DEST%\lib%_EXT%\*.a
+..\%__SRC%\bin\lib*.dll %_DEST%\bin%_EXT%
+..\%__SRC%\bin\xsltproc* %_DEST%\bin%_EXT%
+..\%__SRC%\bin\xslt-config* %_DEST%\bin%_EXT%
+..\libxsltversion.mk %_DEST%\inc%_EXT%\libxsltversion.mk
