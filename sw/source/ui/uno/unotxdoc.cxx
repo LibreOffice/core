@@ -38,16 +38,12 @@
 #include <vcl/svapp.hxx>
 #include <vcl/print.hxx>
 #include <sfx2/viewfrm.hxx>
-#ifndef _TOOLKIT_UNOHLP_HXX
 #include <toolkit/helper/vclunohelper.hxx>
-#endif
 #include <wdocsh.hxx>
 #include <wrtsh.hxx>
 #include <view.hxx>
 #include <pview.hxx>
-#ifndef _SRCVIEW_HXX
 #include <srcview.hxx>
-#endif
 #include <viewsh.hxx>
 #include <pvprtdat.hxx>
 #include <swprtopt.hxx>
@@ -81,14 +77,13 @@
 #include <charatr.hxx>
 #include <svx/xmleohlp.hxx>
 #include <globals.hrc>
+#include <unomid.h>
 
 #include <com/sun/star/util/SearchOptions.hpp>
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
-#ifndef _COM_SUN_STAR_BEANS_PropertyAttribute_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
 #include <com/sun/star/document/RedlineDisplayType.hpp>
 #include <svx/linkmgr.hxx>
 #include <svx/unofill.hxx>
@@ -96,13 +91,9 @@
 #include <sfx2/progress.hxx>
 #include <swmodule.hxx>
 #include <docstat.hxx>
-#ifndef _MODOPT_HXX //
 #include <modcfg.hxx>
-#endif
 #include <ndtxt.hxx>
-#ifndef _UTLUI_HRC
 #include <utlui.hrc>
-#endif
 #include <swcont.hxx>
 #include <unodefaults.hxx>
 #include <SwXDocumentSettings.hxx>
@@ -181,13 +172,13 @@ class SwPrintUIOptions : public vcl::PrinterOptionsHelper
 {
     OutputDevice* mpLast;
 public:
-    SwPrintUIOptions();
+    SwPrintUIOptions( BOOL bWeb );
 
     bool processPropertiesAndCheckFormat( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& i_rNewProp );
 
 };
 
-SwPrintUIOptions::SwPrintUIOptions() :
+SwPrintUIOptions::SwPrintUIOptions( BOOL bWeb ) :
     mpLast( NULL )
 {
     ResStringArray aLocalizedStrings( SW_RES( STR_PRINTOPTUI ) );
@@ -197,57 +188,66 @@ SwPrintUIOptions::SwPrintUIOptions() :
         return;
 
     // create sequence of print UI options
-    m_aUIProperties.realloc( 19 );
+    // (5 options are not available for Writer-Web)
+    const int nNumProps = bWeb? 14 : 19;
+    m_aUIProperties.realloc( nNumProps );
+    int nIdx = 0;
 
     // create Section for Contents (results in an extra tab page in dialog)
-    m_aUIProperties[0].Value = getGroupControlOpt( aLocalizedStrings.GetString( 0 ), rtl::OUString() );
+    m_aUIProperties[ nIdx++ ].Value = getGroupControlOpt( aLocalizedStrings.GetString( 0 ), rtl::OUString() );
 
     // create a bool option for graphics
-    m_aUIProperties[1].Value = getBoolControlOpt( aLocalizedStrings.GetString( 1 ),
+    m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 1 ),
                                                   aLocalizedStrings.GetString( 2 ),
                                                   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintGraphics" ) ),
                                                   sal_True );
     // create a bool option for tables
-    m_aUIProperties[2].Value = getBoolControlOpt( aLocalizedStrings.GetString( 3 ),
+    m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 3 ),
                                                   aLocalizedStrings.GetString( 4 ),
                                                   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintTables" ) ),
                                                   sal_True );
 
-    // create a bool option for drawings
-    m_aUIProperties[3].Value = getBoolControlOpt( aLocalizedStrings.GetString( 5 ),
+    if (!bWeb)
+    {
+        // create a bool option for drawings
+        m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 5 ),
                                                   aLocalizedStrings.GetString( 6 ),
                                                   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDrawings" ) ),
                                                   sal_True );
+    }
 
     // create a bool option for controls
-    m_aUIProperties[4].Value = getBoolControlOpt( aLocalizedStrings.GetString( 7 ),
+    m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 7 ),
                                                   aLocalizedStrings.GetString( 8 ),
                                                   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintControls" ) ),
                                                   sal_True );
 
     // create a bool option for background
-    m_aUIProperties[5].Value = getBoolControlOpt( aLocalizedStrings.GetString( 9 ),
+    m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 9 ),
                                                   aLocalizedStrings.GetString( 10 ),
                                                   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintBackground" ) ),
                                                   sal_True );
 
     // create a bool option for black
-    m_aUIProperties[6].Value = getBoolControlOpt( aLocalizedStrings.GetString( 11 ),
+    m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 11 ),
                                                   aLocalizedStrings.GetString( 12 ),
                                                   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintBlack" ) ),
                                                   sal_False );
 
-    // create a bool option for hidden text
-    m_aUIProperties[7].Value = getBoolControlOpt( aLocalizedStrings.GetString( 13 ),
+    if (!bWeb)
+    {
+        // create a bool option for hidden text
+        m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 13 ),
                                                   aLocalizedStrings.GetString( 14 ),
                                                   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintHiddenText" ) ),
                                                   sal_False );
 
-    // create a bool option for place holder
-    m_aUIProperties[8].Value = getBoolControlOpt( aLocalizedStrings.GetString( 15 ),
+        // create a bool option for place holder
+        m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 15 ),
                                                   aLocalizedStrings.GetString( 16 ),
                                                   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintPlaceholder" ) ),
                                                   sal_False );
+    }
 
     // create a list box for notes content
     Sequence< rtl::OUString > aChoices( 4 );
@@ -258,7 +258,7 @@ SwPrintUIOptions::SwPrintUIOptions() :
     Sequence< rtl::OUString > aHelpText( 2 );
     aHelpText[0] = aLocalizedStrings.GetString( 18 );
     aHelpText[1] = aLocalizedStrings.GetString( 18 );
-    m_aUIProperties[9].Value = getChoiceControlOpt( aLocalizedStrings.GetString( 17 ),
+    m_aUIProperties[ nIdx++ ].Value = getChoiceControlOpt( aLocalizedStrings.GetString( 17 ),
                                                     aHelpText,
                                                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintNotes" ) ),
                                                     aChoices,
@@ -267,35 +267,38 @@ SwPrintUIOptions::SwPrintUIOptions() :
                                                     );
 
     // create Section for Page settings (results in an extra tab page in dialog)
-    m_aUIProperties[10].Value = getGroupControlOpt( aLocalizedStrings.GetString( 23 ), rtl::OUString() );
+    m_aUIProperties[ nIdx++ ].Value = getGroupControlOpt( aLocalizedStrings.GetString( 23 ), rtl::OUString() );
 
-    // create a bool option for left pages
-    m_aUIProperties[11].Value = getBoolControlOpt( aLocalizedStrings.GetString( 24 ),
+    if (!bWeb)
+    {
+        // create a bool option for left pages
+        m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 24 ),
                                                    aLocalizedStrings.GetString( 25 ),
                                                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintLeftPages" ) ),
                                                    sal_True );
 
-    // create a bool option for right pages
-    m_aUIProperties[12].Value = getBoolControlOpt( aLocalizedStrings.GetString( 26 ),
+        // create a bool option for right pages
+        m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 26 ),
                                                    aLocalizedStrings.GetString( 27 ),
                                                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintRightPages" ) ),
                                                    sal_True );
+    }
 
     // create a bool option for reversed order (solve in vcl ?)
-    m_aUIProperties[13].Value = getBoolControlOpt( aLocalizedStrings.GetString( 28 ),
+    m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 28 ),
                                                    aLocalizedStrings.GetString( 29 ),
                                                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintReverseOrder" ) ),
                                                    sal_False );
 
     // create a bool option for brochure
     OUString aBrochurePropertyName( RTL_CONSTASCII_USTRINGPARAM( "PrintBrochure" ) );
-    m_aUIProperties[14].Value = getBoolControlOpt( aLocalizedStrings.GetString( 30 ),
+    m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 30 ),
                                                    aLocalizedStrings.GetString( 31 ),
                                                    aBrochurePropertyName,
                                                    sal_False );
 
     // create a bool option for brochure RTL dependent on brochure
-    m_aUIProperties[15].Value = getBoolControlOpt( aLocalizedStrings.GetString( 32 ),
+    m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 32 ),
                                                    aLocalizedStrings.GetString( 33 ),
                                                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintBrochureRTL" ) ),
                                                    sal_False,
@@ -303,20 +306,21 @@ SwPrintUIOptions::SwPrintUIOptions() :
                                                    );
 
     // create subgroup for misc options
-    m_aUIProperties[16].Value = getSubgroupControlOpt( aLocalizedStrings.GetString( 34 ), rtl::OUString() );
+    m_aUIProperties[ nIdx++ ].Value = getSubgroupControlOpt( aLocalizedStrings.GetString( 34 ), rtl::OUString() );
 
     // create a bool option for blank pages
-    m_aUIProperties[17].Value = getBoolControlOpt( aLocalizedStrings.GetString( 35 ),
+    m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 35 ),
                                                    aLocalizedStrings.GetString( 36 ),
                                                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintEmptyPages" ) ),
                                                    sal_True );
 
     // create a bool option for paper tray
-    m_aUIProperties[18].Value = getBoolControlOpt( aLocalizedStrings.GetString( 37 ),
+    m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 37 ),
                                                    aLocalizedStrings.GetString( 38 ),
                                                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PaperTray" ) ),
                                                    sal_False );
 
+    DBG_ASSERT( nIdx == nNumProps, "number of added properties is not as expected" );
 }
 
 bool SwPrintUIOptions::processPropertiesAndCheckFormat( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& i_rNewProp )
@@ -2774,7 +2778,10 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
         throw RuntimeException();
 
     if( ! m_pPrintUIOptions )
-        m_pPrintUIOptions = new SwPrintUIOptions();
+    {
+        const BOOL bWebDoc    = (0 != PTR_CAST(SwWebDocShell,    pDocShell));
+        m_pPrintUIOptions = new SwPrintUIOptions( bWebDoc );
+    }
     bool bFormat = m_pPrintUIOptions->processPropertiesAndCheckFormat( rxOptions );
 
     SfxViewShell *pView = 0;
@@ -2828,7 +2835,10 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
         throw RuntimeException();
 
     if( ! m_pPrintUIOptions )
-        m_pPrintUIOptions = new SwPrintUIOptions();
+    {
+        const BOOL bWebDoc    = (0 != PTR_CAST(SwWebDocShell,    pDocShell));
+        m_pPrintUIOptions = new SwPrintUIOptions( bWebDoc );
+    }
 
     SfxViewShell *pView = 0;
     SwDoc *pDoc = GetRenderDoc( pView, rSelection );
@@ -2902,9 +2912,6 @@ void SAL_CALL SwXTextDocument::render(
     if(!IsValid())
         throw RuntimeException();
 
-    if( ! m_pPrintUIOptions )
-        m_pPrintUIOptions = new SwPrintUIOptions();
-
     SfxViewShell *pView = GuessViewShell();
     SwDoc *pDoc = GetRenderDoc( pView, rSelection );
     if (!pDoc || !pView)
@@ -2955,11 +2962,35 @@ void SAL_CALL SwXTextDocument::render(
 
     if(pVwSh && pOut)
     {
+        if (!m_pPrintUIOptions)
+        {
+            const BOOL bWebDoc    = (0 != PTR_CAST(SwWebDocShell,    pDocShell));
+            m_pPrintUIOptions = new SwPrintUIOptions( bWebDoc );
+        }
+        m_pPrintUIOptions->processProperties( rxOptions );
+
         SwPrtOptions    aOptions( C2U("PDF export") );
 
+        // get print options to use from provided properties
         const TypeId aSwWebDocShellTypeId = TYPE(SwWebDocShell);
         BOOL bWeb = pDocShell->IsA( aSwWebDocShellTypeId );
         SwView::MakeOptions( NULL, aOptions, NULL, NULL, bWeb, NULL, NULL );
+        aOptions.bPrintGraphic           = m_pPrintUIOptions->getBoolValue( C2U( "PrintGraphics" ),     aOptions.bPrintGraphic );
+        aOptions.bPrintTable             = m_pPrintUIOptions->getBoolValue( C2U( "PrintTables" ),       aOptions.bPrintTable );
+        aOptions.bPrintDraw              = m_pPrintUIOptions->getBoolValue( C2U( "PrintDrawings" ),     aOptions.bPrintDraw );
+        aOptions.bPrintControl           = m_pPrintUIOptions->getBoolValue( C2U( "PrintControls" ),     aOptions.bPrintControl );
+        aOptions.bPrintLeftPage          = m_pPrintUIOptions->getBoolValue( C2U( "PrintLeftPages" ),    aOptions.bPrintLeftPage );
+        aOptions.bPrintRightPage         = m_pPrintUIOptions->getBoolValue( C2U( "PrintRightPages" ),   aOptions.bPrintRightPage );
+        aOptions.bPrintPageBackground    = m_pPrintUIOptions->getBoolValue( C2U( "PrintBackground" ),   aOptions.bPrintPageBackground );
+        aOptions.bPrintEmptyPages        = m_pPrintUIOptions->getBoolValue( C2U( "PrintEmptyPages" ),   aOptions.bPrintEmptyPages );
+        aOptions.bPrintReverse           = m_pPrintUIOptions->getBoolValue( C2U( "PrintReverseOrder" ), aOptions.bPrintReverse );
+        aOptions.bPrintProspect          = m_pPrintUIOptions->getBoolValue( C2U( "PrintBrochure" ),     aOptions.bPrintProspect );
+        aOptions.bPrintProspect_RTL      = m_pPrintUIOptions->getBoolValue( C2U( "PrintBrochureRTL" ),  aOptions.bPrintProspect_RTL );
+        aOptions.bPrintBlackFont         = m_pPrintUIOptions->getBoolValue( C2U( "PrintBlack" ),        aOptions.bPrintBlackFont );
+        aOptions.bPrintHiddenText        = m_pPrintUIOptions->getBoolValue( C2U( "PrintHiddenText" ),   aOptions.bPrintHiddenText );
+        aOptions.bPrintTextPlaceholder   = m_pPrintUIOptions->getBoolValue( C2U( "PrintPlaceholder" ),  aOptions.bPrintTextPlaceholder );
+        aOptions.bPaperFromSetup         = m_pPrintUIOptions->getBoolValue( C2U( "PaperTray" ),         aOptions.bPaperFromSetup );
+        aOptions.nPrintPostIts           = static_cast< sal_Int16 >(m_pPrintUIOptions->getIntValue( C2U( "PrintNotes" ), aOptions.nPrintPostIts ));
 
         Range aPageRange( nRenderer+1, nRenderer+1 );
         MultiSelection aPage( aPageRange );
@@ -2971,7 +3002,8 @@ void SAL_CALL SwXTextDocument::render(
         //! document is created that contains only the selects parts,
         //! and thus that document is to printed in whole the,
         //! aOptions.bPrintSelection parameter will be false.
-        aOptions.bPrintSelection = FALSE;
+        if (!m_pPrintUIOptions->getBoolValue( C2U( "IsPrinter" ), sal_False ) ) // PDF export?
+            aOptions.bPrintSelection = FALSE;
 
         SwViewOptionAdjust_Impl*  pViewOptionAdjust = pView->IsA(aSwViewTypeId) ?
             new SwViewOptionAdjust_Impl(*((SwView*)pView)->GetWrtShellPtr()) : 0;
