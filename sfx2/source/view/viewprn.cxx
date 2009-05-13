@@ -161,7 +161,7 @@ Sequence< beans::PropertyValue > SfxPrinterListener::getMergedOptions() const
         mxDevice = Reference< awt::XDevice >( pXDevice );
     }
 
-    Sequence< beans::PropertyValue > aRenderOptions( 4 );
+    Sequence< beans::PropertyValue > aRenderOptions( 5 );
     aRenderOptions[ 0 ].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RenderDevice" ) );
     aRenderOptions[ 0 ].Value <<= mxDevice;
     aRenderOptions[ 1 ].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsApi" ) );
@@ -170,6 +170,8 @@ Sequence< beans::PropertyValue > SfxPrinterListener::getMergedOptions() const
     aRenderOptions[ 2 ].Value <<= mbDirect;
     aRenderOptions[ 3 ].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "View" ) );
     aRenderOptions[ 3 ].Value = maViewProperty;
+    aRenderOptions[ 4 ].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsPrinter" ) );
+    aRenderOptions[ 4 ].Value = makeAny( sal_True );
 
     aRenderOptions = getJobProperties( aRenderOptions );
     return aRenderOptions;
