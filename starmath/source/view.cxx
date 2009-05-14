@@ -1018,13 +1018,13 @@ void SmViewShell::Impl_Print(
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmViewShell::Impl_Print" );
 
-    const bool bIsPrintTitle = rPrintUIOptions.getBoolValue( A2OU( PRTUIOPT_TITLE_ROW ), sal_True );
-    const bool bIsPrintFrame = rPrintUIOptions.getBoolValue( A2OU( PRTUIOPT_BORDER ), sal_True );
-    const bool bIsPrintFormulaText = rPrintUIOptions.getBoolValue( A2OU( PRTUIOPT_FORMULA_TEXT ), sal_True );
-    SmPrintSize ePrintSize( static_cast< SmPrintSize >( rPrintUIOptions.getIntValue( A2OU( PRTUIOPT_PRINT_FORMAT ), PRINT_SIZE_NORMAL ) ));
-    const USHORT nZoomFactor = static_cast< USHORT >(rPrintUIOptions.getIntValue( A2OU( PRTUIOPT_PRINT_SCALE ), 100 ));
+    const bool bIsPrintTitle = rPrintUIOptions.getBoolValue( PRTUIOPT_TITLE_ROW, sal_True );
+    const bool bIsPrintFrame = rPrintUIOptions.getBoolValue( PRTUIOPT_BORDER, sal_True );
+    const bool bIsPrintFormulaText = rPrintUIOptions.getBoolValue( PRTUIOPT_FORMULA_TEXT, sal_True );
+    SmPrintSize ePrintSize( static_cast< SmPrintSize >( rPrintUIOptions.getIntValue( PRTUIOPT_PRINT_FORMAT, PRINT_SIZE_NORMAL ) ));
+    const USHORT nZoomFactor = static_cast< USHORT >(rPrintUIOptions.getIntValue( PRTUIOPT_PRINT_SCALE, 100 ));
 // IsIgnoreSpacesRight is a parser option! Thus it does not get evaluated here anymore (too late).
-//    const bool bNoRightSpaces = rPrintUIOptions.getBoolValue( A2OU( PRTUIOPT_NO_RIGHT_SPACE ), sal_True );
+//    const bool bNoRightSpaces = rPrintUIOptions.getBoolValue( PRTUIOPT_NO_RIGHT_SPACE, sal_True );
 
     rOutDev.Push();
     rOutDev.SetLineColor( Color(COL_BLACK) );
@@ -1113,7 +1113,7 @@ void SmViewShell::Impl_Print(
 
     MapMode    OutputMapMode;
     // PDF export should always use PRINT_SIZE_NORMAL ...
-    if (!rPrintUIOptions.getBoolValue( A2OU( "IsPrinter" ), sal_False ) )
+    if (!rPrintUIOptions.getBoolValue( "IsPrinter", sal_False ) )
         ePrintSize = PRINT_SIZE_NORMAL;
     switch (ePrintSize)
     {
