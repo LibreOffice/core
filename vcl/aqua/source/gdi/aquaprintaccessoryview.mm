@@ -184,6 +184,14 @@ class ListenerProperties
     }
 };
 
+static void filterAccelerator( rtl::OUString& io_rText )
+{
+    rtl::OUStringBuffer aBuf( io_rText.getLength() );
+    for( sal_Int32 nIndex = 0; nIndex != -1; )
+        aBuf.append( io_rText.getToken( 0, '~', nIndex ) );
+    io_rText = aBuf.makeStringAndClear();
+}
+
 @interface ControlTarget : NSObject
 {
     ListenerProperties* mpListener;
@@ -311,6 +319,7 @@ static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize )
             if( rEntry.Name.equalsAscii( "Text" ) )
             {
                 rEntry.Value >>= aText;
+                filterAccelerator( aText );
             }
             else if( rEntry.Name.equalsAscii( "ControlType" ) )
             {
