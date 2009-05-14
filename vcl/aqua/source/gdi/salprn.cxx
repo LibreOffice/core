@@ -605,6 +605,8 @@ BOOL AquaSalInfoPrinter::StartJob( const String* i_pFileName,
     {
         i_rListener.setLastPage( sal_True );
         GDIMetaFile aPageFile;
+        if( mrContext )
+            SetupPrinterGraphics( mrContext );
         i_rListener.getFilteredPageFile( 0, aPageFile );
     }
 
