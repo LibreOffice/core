@@ -531,6 +531,11 @@ class VCL_DLLPUBLIC PrinterOptionsHelper
     **/
     void appendPrintUIOptions( com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& io_rProps ) const;
 
+    // check if a property exists
+    bool hasProperty( const rtl::OUString& i_rPropertyName ) const;
+    bool hasProperty( const char* i_pPropertyName ) const
+    { return hasProperty( rtl::OUString::createFromAscii( i_pPropertyName ) ); }
+
     // returns an empty Any for not existing properties
     com::sun::star::uno::Any getValue( const rtl::OUString& i_rPropertyName ) const;
 

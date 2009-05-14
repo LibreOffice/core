@@ -864,6 +864,14 @@ Any PrinterOptionsHelper::getValue( const rtl::OUString& i_rPropertyName ) const
     return aRet;
 }
 
+bool PrinterOptionsHelper::hasProperty( const rtl::OUString& i_rPropertyName ) const
+{
+    Any aRet;
+    std::hash_map< rtl::OUString, Any, rtl::OUStringHash >::const_iterator it =
+        m_aPropertyMap.find( i_rPropertyName );
+    return it != m_aPropertyMap.end();
+}
+
 sal_Bool PrinterOptionsHelper::getBoolValue( const rtl::OUString& i_rPropertyName, sal_Bool i_bDefault ) const
 {
     sal_Bool bRet = sal_False;
