@@ -491,7 +491,7 @@ BOOL AquaSalInfoPrinter::StartJob( const String* i_pFileName,
     BOOL bSuccess = FALSE;
     AquaSalInstance* pInst = GetSalData()->mpFirstInstance;
     bool bNeedRestart = true;
-    sal_Int32 nAllPages = 1;
+    sal_Int32 nAllPages = 0;
 
     // reset IsLastPage
     i_rListener.setLastPage( sal_False );
@@ -504,30 +504,37 @@ BOOL AquaSalInfoPrinter::StartJob( const String* i_pFileName,
     {
         if( bNeedRestart )
         {
-            mnCurPageRangeStart = 1;
-            mnCurPageRangeCount = 1;
+            mnCurPageRangeStart = 0;
+            mnCurPageRangeCount = 0;
             nAllPages = i_rListener.getPageCount();
         }
 
         bNeedRestart = false;
-        mnCurPageRangeCount = 1;
-        Size aCurSize( getPageSize( i_rListener, mnCurPageRangeStart ) );
-        Size aNextSize( aCurSize );
 
-        // print pages up to a different size
-        while( mnCurPageRangeCount + mnCurPageRangeStart < nAllPages )
+        Size aCurSize( 21000, 29700 );
+        if( nAllPages > 0 )
         {
-            aNextSize = getPageSize( i_rListener, mnCurPageRangeStart + mnCurPageRangeCount );
-            if( aCurSize == aNextSize // same page size
-                ||
-                (aCurSize.Width() == aNextSize.Height() && aCurSize.Height() == aNextSize.Width()) // same size, but different orientation
-                )
+            mnCurPageRangeCount = 1;
+            aCurSize = getPageSize( i_rListener, mnCurPageRangeStart );
+            Size aNextSize( aCurSize );
+
+            // print pages up to a different size
+            while( mnCurPageRangeCount + mnCurPageRangeStart < nAllPages )
             {
-                mnCurPageRangeCount++;
+                aNextSize = getPageSize( i_rListener, mnCurPageRangeStart + mnCurPageRangeCount );
+                if( aCurSize == aNextSize // same page size
+                    ||
+                    (aCurSize.Width() == aNextSize.Height() && aCurSize.Height() == aNextSize.Width()) // same size, but different orientation
+                    )
+                {
+                    mnCurPageRangeCount++;
+                }
+                else
+                    break;
             }
-            else
-                break;
         }
+        else
+            mnCurPageRangeCount = 0;
 
         // now for the current run
         mnStartPageOffsetX = mnStartPageOffsetY = 0;
@@ -574,7 +581,7 @@ BOOL AquaSalInfoPrinter::StartJob( const String* i_pFileName,
             bool bShowPanel = (! bIsQuickJob && getUseNativeDialog() );
             [pPrintOperation setShowsPrintPanel: bShowPanel ? YES : NO ];
             [pPrintOperation setShowsProgressPanel: YES];
-            if( bShowPanel && mnCurPageRangeStart == 1 ) // only the first range of pages gets the accesory view
+            if( bShowPanel && mnCurPageRangeStart == 0 ) // only the first range of pages gets the accesory view
                 pReleaseAfterUse = [AquaPrintAccessoryView setupPrinterPanel: pPrintOperation withListener: &i_rListener withRestartCondition: &bNeedRestart];
 
             bSuccess = TRUE;
@@ -589,14 +596,17 @@ BOOL AquaSalInfoPrinter::StartJob( const String* i_pFileName,
 
         mnCurPageRangeStart += mnCurPageRangeCount;
         mnCurPageRangeCount = 1;
-    } while( bNeedRestart && mnCurPageRangeCount < nAllPages );
+    } while( bNeedRestart && mnCurPageRangeStart + mnCurPageRangeCount < nAllPages );
 
     // inform applictation that it can release its data
     // this is awkward, but the XRenderable interface has no method for this,
     // so we need to call XRenderadble::render one last time with IsLastPage = TRUE
-    i_rListener.setLastPage( sal_True );
-    GDIMetaFile aPageFile;
-    Size aPageSize = i_rListener.getFilteredPageFile( 0, aPageFile );
+    if( nAllPages > 0 )
+    {
+        i_rListener.setLastPage( sal_True );
+        GDIMetaFile aPageFile;
+        i_rListener.getFilteredPageFile( 0, aPageFile );
+    }
 
     mnCurPageRangeStart = mnCurPageRangeCount = 0;
 

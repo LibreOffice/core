@@ -76,6 +76,7 @@
     int nPage = (int)(aPaperSize.width * rect.origin.y + rect.origin.x);
     
     // page count is 1 based
-    mpListener->printFilteredPage( nPage-1 );
+    if( nPage - 1 < (mpInfoPrinter->getCurPageRangeStart() + mpInfoPrinter->getCurPageRangeCount() ) )
+        mpListener->printFilteredPage( nPage-1 );
 }
 @end
