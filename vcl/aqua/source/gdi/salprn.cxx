@@ -742,6 +742,42 @@ ULONG AquaSalPrinter::GetErrorCode()
     return mpInfoPrinter->GetErrorCode();
 }
 
+void AquaSalInfoPrinter::InitPaperFormats( const ImplJobSetup* i_pSetupData )
+{
+    m_aPaperFormats.clear();
+    m_bPapersInit = true;
+
+    if( mpPrinter )
+    {
+        if( [mpPrinter statusForTable: @"PPD"] == NSPrinterTableOK )
+        {
+            NSArray* pPaperNames = [mpPrinter stringListForKey: @"PageSize" inTable: @"PPD"];
+            if( pPaperNames )
+            {
+                unsigned int nPapers = [pPaperNames count];
+                for( unsigned int i = 0; i < nPapers; i++ )
+                {
+                    NSString* pPaper = [pPaperNames objectAtIndex: i];
+                    NSSize aPaperSize = [mpPrinter pageSizeForPaper: pPaper];
+                    if( aPaperSize.width > 0 && aPaperSize.height > 0 )
+                    {
+                        vcl::PaperInfo aInfo;
+                        aInfo.m_aPaperName = GetOUString( pPaper );
+                        aInfo.m_nPaperWidth = (PtTo10Mu( aPaperSize.width ) + 50 ) / 100;
+                        aInfo.m_nPaperHeight = (PtTo10Mu( aPaperSize.height ) + 50 ) / 100;
+                        m_aPaperFormats.push_back( aInfo );
+                    }
+                }
+            }
+        }
+    }
+}
+
+int AquaSalInfoPrinter::GetLandscapeAngle( const ImplJobSetup* i_pSetupData )
+{
+    return 900;
+}
+
 ////////////////////////////
 //////   IMPLEMENT US  /////
 ////////////////////////////
@@ -751,11 +787,4 @@ DuplexMode AquaSalInfoPrinter::GetDuplexMode( const ImplJobSetup* i_pSetupData )
     return DUPLEX_UNKNOWN;
 }
 
-void AquaSalInfoPrinter::InitPaperFormats( const ImplJobSetup* i_pSetupData )
-{
-}
 
-int AquaSalInfoPrinter::GetLandscapeAngle( const ImplJobSetup* i_pSetupData )
-{
-    return 0;
-}
