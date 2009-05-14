@@ -1100,7 +1100,7 @@ void SAL_CALL SmModel::render(
 
                 // release SmPrintUIOptions when everything is done.
                 // That way, when SmPrintUIOptions is needed again it will read the latest configuration settings in its c-tor.
-                if (m_pPrintUIOptions->getBoolValue( A2OU("IsLastPage"), sal_False ))
+                if (m_pPrintUIOptions->getBoolValue( "IsLastPage", sal_False ))
                 {
                     delete m_pPrintUIOptions;   m_pPrintUIOptions = 0;
                 }
