@@ -69,7 +69,9 @@ AquaSalInfoPrinter::AquaSalInfoPrinter( const SalPrinterQueueInfo& i_rQueue ) :
     mpPrintInfo( nil ),
     mePageOrientation( ORIENTATION_PORTRAIT ),
     mnStartPageOffsetX( 0 ),
-    mnStartPageOffsetY( 0 )
+    mnStartPageOffsetY( 0 ),
+    mnCurPageRangeStart( 0 ),
+    mnCurPageRangeCount( 0 )
 {
     NSString* pStr = CreateNSString( i_rQueue.maPrinterName );
     mpPrinter = [NSPrinter printerWithName: pStr];
@@ -89,6 +91,7 @@ AquaSalInfoPrinter::AquaSalInfoPrinter( const SalPrinterQueueInfo& i_rQueue ) :
     const int nWidth = 100, nHeight = 100;
     maContextMemory.reset( reinterpret_cast<sal_uInt8*>( rtl_allocateMemory( nWidth * 4 * nHeight ) ),
                            boost::bind( rtl_freeMemory, _1 ) );
+
     if( maContextMemory )
     {
         mrContext = CGBitmapContextCreate( maContextMemory.get(), nWidth, nHeight, 8, nWidth * 4, GetSalData()->mxRGBSpace, kCGImageAlphaNoneSkipFirst );
@@ -126,12 +129,9 @@ void AquaSalInfoPrinter::SetupPrinterGraphics( CGContextRef i_rContext ) const
             long nDPIX = 720, nDPIY = 720;
             NSSize aPaperSize = [mpPrintInfo paperSize];
 
-            NSRect aImageRect = [mpPrintInfo imageablePageBounds];
             if( mePageOrientation == ORIENTATION_PORTRAIT )
             {
                 double dX = 0, dY = aPaperSize.height;
-                // dX += aImageRect.origin.x;
-                // dY -= aPaperSize.height - aImageRect.size.height - aImageRect.origin.y;
                 CGContextTranslateCTM( i_rContext, dX + mnStartPageOffsetX, dY - mnStartPageOffsetY );
                 CGContextScaleCTM( i_rContext, 0.1, -0.1 );
             }
@@ -139,9 +139,6 @@ void AquaSalInfoPrinter::SetupPrinterGraphics( CGContextRef i_rContext ) const
             {
                 CGContextRotateCTM( i_rContext, M_PI/2 );
                 double dX = aPaperSize.height, dY = -aPaperSize.width;
-                // dY += aPaperSize.height - aImageRect.size.height - aImageRect.origin.y;
-                // dX -= aImageRect.origin.x;
-
                 CGContextTranslateCTM( i_rContext, dX + mnStartPageOffsetY, dY - mnStartPageOffsetX );
                 CGContextScaleCTM( i_rContext, -0.1, 0.1 );
             }
@@ -291,6 +288,28 @@ BOOL AquaSalInfoPrinter::SetPrinterData( ImplJobSetup* io_pSetupData )
 
 // -----------------------------------------------------------------------
 
+void AquaSalInfoPrinter::setPaperSize( long i_nWidth, long i_nHeight, Orientation i_eSetOrientation )
+{
+
+    Orientation ePaperOrientation = ORIENTATION_PORTRAIT;
+    const vcl::PaperInfo* pPaper = matchPaper( (i_nWidth+50)/100, (i_nHeight+50)/100, ePaperOrientation );
+
+    if( pPaper )
+    {
+        NSString* pPaperName = [CreateNSString( pPaper->m_aPaperName ) autorelease];
+        [mpPrintInfo setPaperName: pPaperName];
+    }
+    else if( i_nWidth > 0 && i_nHeight > 0 )
+    {
+        NSSize aPaperSize = { TenMuToPt(i_nWidth), TenMuToPt(i_nHeight) };
+        [mpPrintInfo setPaperSize: aPaperSize];
+    }
+    // this seems counterintuitive
+    mePageOrientation = i_eSetOrientation;
+}
+
+// -----------------------------------------------------------------------
+
 BOOL AquaSalInfoPrinter::SetData( ULONG i_nFlags, ImplJobSetup* io_pSetupData )
 {
     if( ! io_pSetupData || io_pSetupData->mnSystem != JOBSETUP_SYSTEM_MAC )
@@ -299,27 +318,28 @@ BOOL AquaSalInfoPrinter::SetData( ULONG i_nFlags, ImplJobSetup* io_pSetupData )
 
     if( mpPrintInfo )
     {
+        if( (i_nFlags & SAL_JOBSET_ORIENTATION) != 0 )
+            mePageOrientation = io_pSetupData->meOrientation;
+
         if( (i_nFlags & SAL_JOBSET_PAPERSIZE) !=  0)
         {
             // set paper format
-            double width = 0, height = 0;
+            long width = 0, height = 0;
             if( io_pSetupData->mePaperFormat == PAPER_USER )
             {
-                width = TenMuToPt( io_pSetupData->mnPaperWidth );
-                height = TenMuToPt( io_pSetupData->mnPaperHeight );
+                width = io_pSetupData->mnPaperWidth;
+                height = io_pSetupData->mnPaperHeight;
             }
             else
-                getPaperSize( width, height, io_pSetupData->mePaperFormat );
-
-            if( width > 0 && height > 0 )
             {
-                NSSize aPaperSize = { width, height };
-                [mpPrintInfo setPaperSize: aPaperSize];
+                double w = 595,  h = 842;
+                getPaperSize( w, h, io_pSetupData->mePaperFormat );
+                width = static_cast<long>(PtTo10Mu( w ));
+                height = static_cast<long>(PtTo10Mu( h ));
             }
-        }
 
-        if( (i_nFlags & SAL_JOBSET_ORIENTATION) != 0 )
-            mePageOrientation = io_pSetupData->meOrientation;
+            setPaperSize( width, height, mePageOrientation );
+        }
     }
 
     return mpPrintInfo != nil;
@@ -539,18 +559,7 @@ BOOL AquaSalInfoPrinter::StartJob( const String* i_pFileName,
         // now for the current run
         mnStartPageOffsetX = mnStartPageOffsetY = 0;
         // setup the paper size and orientation
-        if( aCurSize.Width() > aCurSize.Height() )
-        {
-            mePageOrientation = ORIENTATION_LANDSCAPE;
-            long nTmp = aCurSize.Width();
-            aCurSize.Width() = aCurSize.Height();
-            aCurSize.Height() = nTmp;
-        }
-        else
-            mePageOrientation = ORIENTATION_PORTRAIT;
-
-        NSSize aPaperSize = { TenMuToPt(aCurSize.Width()), TenMuToPt(aCurSize.Height()) };
-        [mpPrintInfo setPaperSize: aPaperSize];
+        setPaperSize( aCurSize.Width(), aCurSize.Height(), ORIENTATION_PORTRAIT );
 
         // create view
         NSView* pPrintView = [[AquaPrintView alloc] initWithListener: &i_rListener withInfoPrinter: this];
@@ -771,6 +780,30 @@ void AquaSalInfoPrinter::InitPaperFormats( const ImplJobSetup* i_pSetupData )
             }
         }
     }
+}
+
+const vcl::PaperInfo* AquaSalInfoPrinter::matchPaper( long i_nWidth, long i_nHeight, Orientation& o_rOrientation ) const
+{
+    if( ! m_bPapersInit )
+        const_cast<AquaSalInfoPrinter*>(this)->InitPaperFormats( NULL );
+
+    const vcl::PaperInfo* pMatch = NULL;
+    o_rOrientation = ORIENTATION_PORTRAIT;
+    for( int n = 0; n < 2 ; n++ )
+    {
+        for( size_t i = 0; i < m_aPaperFormats.size(); i++ )
+        {
+            if( abs( m_aPaperFormats[i].m_nPaperWidth - i_nWidth ) < 2 &&
+                abs( m_aPaperFormats[i].m_nPaperHeight - i_nHeight ) < 2 )
+            {
+                pMatch = &m_aPaperFormats[i];
+                return pMatch;
+            }
+        }
+        o_rOrientation = ORIENTATION_LANDSCAPE;
+        std::swap( i_nWidth, i_nHeight );
+    }
+    return pMatch;
 }
 
 int AquaSalInfoPrinter::GetLandscapeAngle( const ImplJobSetup* i_pSetupData )
