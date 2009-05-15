@@ -166,7 +166,6 @@ ScDPObject::ScDPObject( ScDocument* pD ) :
     bSettingsChanged( FALSE ),
     bAlive( FALSE ),
     bAllowMove( FALSE ),
-    bInfoValid( FALSE ),
     nHeaderRows( 0 )
 {
 }
@@ -185,7 +184,6 @@ ScDPObject::ScDPObject(const ScDPObject& r) :
     bSettingsChanged( FALSE ),
     bAlive( FALSE ),
     bAllowMove( FALSE ),
-    bInfoValid( r.bInfoValid ),
     nHeaderRows( r.nHeaderRows )
 {
     if (r.pSaveData)
@@ -310,7 +308,6 @@ void ScDPObject::WriteSourceDataTo( ScDPObject& rDest ) const
 void ScDPObject::WriteTempDataTo( ScDPObject& rDest ) const
 {
     rDest.nHeaderRows = nHeaderRows;
-    rDest.bInfoValid = bInfoValid;
 }
 
 BOOL ScDPObject::IsSheetData() const
@@ -344,7 +341,6 @@ void ScDPObject::CreateOutput()
 
         long nOldRows = nHeaderRows;
         nHeaderRows = pOutput->GetHeaderRows();
-        bInfoValid = TRUE;
 
         if ( bAllowMove && nHeaderRows != nOldRows )
         {
@@ -449,13 +445,11 @@ void ScDPObject::CreateObjects()
 void ScDPObject::InvalidateData()
 {
     bSettingsChanged = TRUE;
-    bInfoValid = FALSE;
 }
 
 void ScDPObject::InvalidateSource()
 {
     xSource = NULL;
-    bInfoValid = FALSE;
 }
 
 ScRange ScDPObject::GetNewOutputRange( BOOL& rOverflow )
@@ -535,8 +529,6 @@ void ScDPObject::RefreshAfterLoad()
     }
     else
         nHeaderRows = 0;        // nothing found, no drop-down lists
-
-    bInfoValid = TRUE;
 }
 
 void ScDPObject::UpdateReference( UpdateRefMode eUpdateRefMode,

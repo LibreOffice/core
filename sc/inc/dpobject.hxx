@@ -107,7 +107,6 @@ private:
     BOOL                    bSettingsChanged;
     BOOL                    bAlive;         // FALSE if only used to hold settings
     BOOL                    bAllowMove;
-    BOOL                    bInfoValid;     // affects: nHeaderRows
     long                    nHeaderRows;    // page fields plus filter button
 
 

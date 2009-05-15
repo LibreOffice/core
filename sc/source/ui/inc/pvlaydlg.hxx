@@ -48,6 +48,7 @@
 #include "pivot.hxx"
 #include "anyrefdg.hxx"
 #include "fieldwnd.hxx"
+#include "formula/funcutl.hxx"
 
 /*==========================================================================*\
 
@@ -129,10 +130,18 @@ private:
     FixedInfo               aFtInfo;
 
     FixedLine               aFlAreas;
+
+    // DP source selection
+    FixedText               aFtInArea;
+    ::formula::RefEdit      aEdInPos;
+    ::formula::RefButton    aRbInPos;
+
+    // DP output location
     ListBox                 aLbOutPos;
     FixedText               aFtOutArea;
-    formula::RefEdit               aEdOutPos;
-    formula::RefButton             aRbOutPos;
+    formula::RefEdit        aEdOutPos;
+    formula::RefButton      aRbOutPos;
+
     CheckBox                aBtnIgnEmptyRows;
     CheckBox                aBtnDetectCat;
     CheckBox                aBtnTotalCol;
@@ -155,6 +164,8 @@ private:
     size_t                  nDnDFromIndex;
     BOOL                    bIsDrag;
 
+    ::formula::RefEdit*     pEditActive;
+
     Rectangle               aRectPage;
     Rectangle               aRectRow;
     Rectangle               aRectCol;
@@ -173,6 +184,7 @@ private:
     ScDPFuncDataVec         aDataArr;
 
     ScDPObjectPtr           xDlgDPObject;
+    ScRange                 aOldRange;
     ScPivotParam            thePivotData;
     ScViewData*             pViewData;
     ScDocument*             pDoc;
@@ -184,6 +196,7 @@ private:
     void                    InitWndSelect   ( LabelData** ppLabelArr, long nLabels );
     void                    InitWnd         ( PivotField* pArr, long nCount, ScDPFieldType eType );
     void                    InitFocus       ();
+    void                    InitFields      ();
     void                    CalcWndSizes    ();
     Point                   DlgPos2WndPos   ( const Point& rPt, Window& rWnd );
     ScDPLabelData*          GetLabelData    ( SCsCOL nCol, size_t* pPos = NULL );
@@ -207,14 +220,19 @@ private:
                                               USHORT&       rColCount,
                                               USHORT&       rRowCount,
                                               USHORT&       rDataCount );
+
+    void                    UpdateSrcRange();
+
     // Handler
     DECL_LINK( ClickHdl, PushButton * );
     DECL_LINK( ScrollHdl, ScrollBar * );
     DECL_LINK( SelAreaHdl, ListBox * );
     DECL_LINK( MoreClickHdl, MoreButton * );
     DECL_LINK( EdModifyHdl, Edit * );
+    DECL_LINK( EdInModifyHdl, Edit * );
     DECL_LINK( OkHdl, OKButton * );
     DECL_LINK( CancelHdl, CancelButton * );
+    DECL_LINK( GetFocusHdl, Control* );
 };
 
 

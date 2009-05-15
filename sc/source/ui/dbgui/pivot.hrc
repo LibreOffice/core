@@ -66,6 +66,10 @@
 #define BTN_FILTER              29
 #define BTN_DRILLDOWN           30
 
+#define FT_INAREA               40
+#define RB_INAREA               41
+#define ED_INAREA               42
+
 #define PIVOTSTR_SUM            1
 #define PIVOTSTR_COUNT          2
 #define PIVOTSTR_AVG            3
