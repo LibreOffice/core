@@ -62,6 +62,7 @@ EditRedo SID_REDO
 EditRepeat SID_REPEAT
 EditCut SID_CUT
 EditCopy .uno:Copy
+EditDoc .uno:EditDoc
 EditPaste SID_PASTE
 EditDelete SID_DELETE
 EditSelectAll SID_SELECTALL

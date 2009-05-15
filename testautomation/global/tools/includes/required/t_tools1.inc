@@ -1201,7 +1201,7 @@ function hUseAsyncSlot( cSlot as string ) as integer
 
     dim iWait as integer
     dim iTime as integer : iTime = 0
-    const MAX_WAIT = 50
+    const MAX_WAIT = 100
     const CFN = "global::tools::includes::required::hUseAsyncSlot():"
 
     if ( VERBOSE ) then printlog( CFN & "Using slot: " & cSlot )    
@@ -1210,11 +1210,12 @@ function hUseAsyncSlot( cSlot as string ) as integer
         try
             select case ( lcase( cSlot ) )
             case "fileclose"                      : FileClose
-            case "filesaveas"                     : FileSaveAs
-            case "filesaveall"                    : FileSaveAll
+            case "filesaveas"                     : FileSaveAs( "SynchronMode", TRUE )
+            case "filesaveall"                    : FileSaveAll( "SynchronMode", TRUE )
             case "fileexport"                     : FileExport
-            case "filereload"                     : FileReload
-            
+            case "filereload"                     : FileReload( "SynchronMode", TRUE )
+			
+            case "editdoc"                        : EditDoc
             case "editcopy"                       : EditCopy
             case "editchangesrecord"              : EditChangesRecord
             case "editchangesshow"                : EditChangesShow

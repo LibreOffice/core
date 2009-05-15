@@ -1024,6 +1024,10 @@ testcase tEditFields
             Auswahl.Select 1
         case 49 : Feldtyp.Select 1
             Auswahl.Select 1
+        case 51 : Feldtyp.Select 5 
+            Auswahl.Select 1
+        case 52 : Feldtyp.Select 5
+            Auswahl.Select 1			
         case 55 : Feldtyp.Select 7
             Auswahl.Select 1
         case 81 : Feldtyp.Select 4
@@ -1069,6 +1073,10 @@ testcase tEditFields
             Auswahl.Select 1
         case 49 : Feldtyp.Select 1
             Auswahl.Select 1
+        case 51 : Feldtyp.Select 6
+            Auswahl.Select 1
+		case 52 : Feldtyp.Select 6
+            Auswahl.Select 1			
         case 55 : Feldtyp.Select 9
             Auswahl.Select 1
         case 81 : Feldtyp.Select 5
@@ -1412,6 +1420,10 @@ testcase tHtmlDocEditFields
         Auswahl.Select 1
     case 49 : Feldtyp.Select 1
         Auswahl.Select 1
+    case 51 : Feldtyp.Select 5
+        Auswahl.Select 1
+    case 52 : Feldtyp.Select 5
+        Auswahl.Select 1		
     case 55 : Feldtyp.Select 7
         Auswahl.Select 1
     case 81 : Feldtyp.Select 4

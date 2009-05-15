@@ -167,7 +167,7 @@ testcase tIBIS111158
             warnlog "Wrong string found in Control: " & testString
         end if
     else
-        warnlog "The control seems to be not named in the document?! Verify!"
+        warnlog "The control seems to be not named in the document?! Verify! If Solaris: #i100870#"
     end if
     call hCloseDocument
 endcase

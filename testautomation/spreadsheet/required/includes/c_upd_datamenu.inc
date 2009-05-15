@@ -940,9 +940,9 @@ testcase tDataDataPilot
     Datenfeld.Cancel
     sleep 2
     Kontext "Datenpilot"
-    '/// Select second item (Sum – 2001) in 'Data Fields' by 4 <TAB>
-    printlog " Select second item (Sum – 2001) in 'Data Fields' by 4 <TAB>"
-    Datenpilot.TypeKeys "<TAB><TAB><TAB><TAB>",TRUE
+    '/// Select second item (Sum – 2001) in 'Data Fields' by 3 <TAB>
+    printlog " Select second item (Sum – 2001) in 'Data Fields' by 3 <TAB>"
+    Datenpilot.TypeKeys "<TAB><TAB><TAB>",TRUE
     Sleep 3
     '/// Click on 'Options' button to open 'Data Filed' dialog
     printlog " Click on 'Options' button to open 'Data Filed' dialog"
