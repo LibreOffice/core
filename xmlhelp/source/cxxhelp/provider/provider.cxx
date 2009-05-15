@@ -48,7 +48,6 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
@@ -388,17 +387,6 @@ ContentProvider::getConfiguration() const
     uno::Reference< lang::XMultiServiceFactory > sProvider;
     if( m_xSMgr.is() )
     {
-        uno::Any aAny;
-        aAny <<= rtl::OUString::createFromAscii( "plugin" );
-        beans::PropertyValue aProp(
-            rtl::OUString::createFromAscii( "servertype" ),
-            -1,
-            aAny,
-            beans::PropertyState_DIRECT_VALUE );
-
-        uno::Sequence< uno::Any > seq(1);
-        seq[0] <<= aProp;
-
         try
         {
             rtl::OUString sProviderService =
@@ -406,8 +394,7 @@ ContentProvider::getConfiguration() const
                     "com.sun.star.configuration.ConfigurationProvider" );
             sProvider =
                 uno::Reference< lang::XMultiServiceFactory >(
-                    m_xSMgr->createInstanceWithArguments(
-                        sProviderService,seq ),
+                    m_xSMgr->createInstance( sProviderService ),
                     uno::UNO_QUERY );
         }
         catch( const uno::Exception& )
