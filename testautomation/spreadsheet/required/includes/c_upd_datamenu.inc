@@ -796,6 +796,15 @@ testcase tDataDataPilot
     Kontext "Datenpilot"
     Zusaetze.Open
     DialogTest ( Datenpilot )
+	'/// Verify that the 'Selection from' editfield is correct
+	printlog "Verify that the 'Selection from' editfield has content"
+    printlog "The Range is" & DataPilotRange.Gettext
+    '/// Click on 'Shrink' button for 'Selection from' to open rangechooser
+    printlog " Click on 'Shrink' button for 'Selection from' to open rangechooser"
+    DataPilotRangeShrink.Click
+    '/// Close rangechooser by click on 'Maximize' button
+    printlog " Close rangechooser by click on 'Maximize' button"
+    DataPilotRangeShrink.Click
     '/// Verify that the 'Results to' combobox has items
     printlog " Verify that the 'Results to' combobox has items"
     If AusgabeAb.GetItemCount < 1 then
