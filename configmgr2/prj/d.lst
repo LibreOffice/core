@@ -1,0 +1,3 @@
+..\%__SRC%\bin\configmgr2.uno.dll %_DEST%\bin%_EXT%\configmgr2.uno.dll
+..\%__SRC%\lib\configmgr2.uno.dylib %_DEST%\bin%_EXT%\configmgr2.uno.dylib
+..\%__SRC%\lib\configmgr2.uno.so %_DEST%\bin%_EXT%\configmgr2.uno.so

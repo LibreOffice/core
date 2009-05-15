@@ -1,0 +1,79 @@
+/*************************************************************************
+* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+*
+* Copyright 2009 by Sun Microsystems, Inc.
+*
+* OpenOffice.org - a multi-platform office productivity suite
+*
+* $RCSfile: code,v $
+*
+* $Revision: 1.4 $
+*
+* This file is part of OpenOffice.org.
+*
+* OpenOffice.org is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License version 3
+* only, as published by the Free Software Foundation.
+*
+* OpenOffice.org is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU Lesser General Public License version 3 for more details
+* (a copy is included in the LICENSE file that accompanied this code).
+*
+* You should have received a copy of the GNU Lesser General Public License
+* version 3 along with OpenOffice.org.  If not, see
+* <http://www.openoffice.org/license.html>
+* for a copy of the LGPLv3 License.
+************************************************************************/
+
+#ifndef INCLUDED_CONFIGMGR_PROPERTYNODE_HXX
+#define INCLUDED_CONFIGMGR_PROPERTYNODE_HXX
+
+#include "sal/config.h"
+
+#include "com/sun/star/uno/Any.hxx"
+#include "rtl/ustring.hxx"
+
+#include "node.hxx"
+#include "type.hxx"
+
+namespace configmgr {
+
+class PropertyNode: public Node {
+public:
+    PropertyNode(
+        rtl::OUString const & name, Type type, bool nillable,
+        com::sun::star::uno::Any const & value, bool extension);
+
+    virtual ~PropertyNode();
+
+    virtual Node * clone() const;
+
+    virtual Node * clone(rtl::OUString const &) const;
+
+    virtual rtl::OUString getName();
+
+    virtual Node * getMember(rtl::OUString const &);
+
+    Type getType() const;
+
+    bool isNillable() const;
+
+    com::sun::star::uno::Any getValue() const;
+
+    void setValue(com::sun::star::uno::Any const & value);
+
+    bool isExtension() const;
+
+private:
+    rtl::OUString name_;
+    Type type_;
+    bool nillable_;
+    com::sun::star::uno::Any value_;
+    bool extension_;
+};
+
+}
+
+#endif
