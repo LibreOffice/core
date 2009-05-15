@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: updatecheckconfig.cxx,v $
- * $Revision: 1.11 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -213,8 +210,14 @@ rtl::OUString UpdateCheckConfig::getDesktopDirectory()
     }
 #else
     // This should become a desktop specific setting in some system backend ..
-    osl::Security().getHomeDir(aRet);
-    aRet += rtl::OUString::createFromAscii("/Desktop");
+    rtl::OUString aHomeDir;
+    osl::Security().getHomeDir( aHomeDir );
+    aRet = aHomeDir + rtl::OUString::createFromAscii("/Desktop");
+
+    // Set path to home directory when there is no /Desktop directory
+    osl::Directory aDocumentsDir( aRet );
+    if( osl::FileBase::E_None != aDocumentsDir.open() )
+        aRet = aHomeDir;
 #endif
 
     return aRet;
