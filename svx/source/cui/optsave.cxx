@@ -607,9 +607,14 @@ void SfxSaveTabPage::Reset( const SfxItemSet& )
             aDocTypeLB.SelectEntryPos(0);
             FilterHdl_Impl(&aDocTypeLB);
         }
-        catch(Exception& )
+        catch(Exception& e)
         {
-            DBG_ERROR("exception in FilterFactory access");
+            (void) e;
+            OSL_TRACE(
+                "exception in FilterFactory access: %s",
+                (rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).
+                 getStr()));
+            OSL_ASSERT(false);
         }
 
         pImpl->bInitialized = sal_True;
