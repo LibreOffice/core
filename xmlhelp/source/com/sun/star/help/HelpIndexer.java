@@ -82,6 +82,7 @@ public class HelpIndexer extends WeakBase
     private static void mainImpl( String[] args, boolean bExtensionMode )
     {
         String aDirToZipStr = "";
+        String aSrcDirStr = "";
         String aLanguageStr = "";
         String aModule = "";
         String aTargetZipFileStr = "";
@@ -90,6 +91,7 @@ public class HelpIndexer extends WeakBase
         boolean bLang = false;
         boolean bMod = false;
         boolean bZipDir = false;
+        boolean bSrcDir = false;
         boolean bOutput = false;
 
         int nArgCount = args.length;
@@ -122,6 +124,15 @@ public class HelpIndexer extends WeakBase
                 }
                 i++;
             }
+            else if( "-srcdir".equals(args[i]) )
+            {
+                if( i + 1 < nArgCount )
+                {
+                    aSrcDirStr = args[i + 1];
+                    bSrcDir = true;
+                }
+                i++;
+            }
             else if( "-o".equals(args[i]) )
             {
                 if( i + 1 < nArgCount )
@@ -142,45 +153,55 @@ public class HelpIndexer extends WeakBase
             System.exit( -1 );
         }
 
-        File docDir = new File( aDirToZipStr );
         String aIndexDirName = aModule + ".idxl";
         File aIndexDir = new File( aDirToZipStr + File.separator + aIndexDirName );
-        File aCaptionFilesDir = new File( aDirToZipStr + File.separator + "caption" );
-        File aContentFilesDir = new File( aDirToZipStr + File.separator + "content" );
+        if( !bSrcDir )
+            aSrcDirStr = aDirToZipStr;
+        File aCaptionFilesDir = new File( aSrcDirStr + File.separator + "caption" );
+        File aContentFilesDir = new File( aSrcDirStr + File.separator + "content" );
 
         try
         {
             Date start = new Date();
             Analyzer analyzer = aLanguageStr.equals("ja") ? (Analyzer)new CJKAnalyzer() : (Analyzer)new StandardAnalyzer();
             IndexWriter writer = new IndexWriter( aIndexDir, analyzer, true );
-            System.out.println( "Lucene: Indexing to directory '" + aIndexDir + "'..." );
-            int nRet = indexDocs( writer, aModule, aCaptionFilesDir, aContentFilesDir );
+            if( !bExtensionMode )
+                System.out.println( "Lucene: Indexing to directory '" + aIndexDir + "'..." );
+            int nRet = indexDocs( writer, aModule, bExtensionMode, aCaptionFilesDir, aContentFilesDir );
             if( nRet != -1 )
             {
-                System.out.println();
-                System.out.println( "Optimizing ..." );
+                if( !bExtensionMode )
+                {
+                    System.out.println();
+                    System.out.println( "Optimizing ..." );
+                }
                 writer.optimize();
             }
             writer.close();
 
             if( bExtensionMode )
             {
-                deleteRecursively( aCaptionFilesDir );
-                deleteRecursively( aContentFilesDir );
+                if( !bSrcDir )
+                {
+                    deleteRecursively( aCaptionFilesDir );
+                    deleteRecursively( aContentFilesDir );
+                }
             }
             else
             {
                 if( nRet == -1 )
                     deleteRecursively( aIndexDir );
 
-                System.out.println( "Zipping ..." );
+                if( !bExtensionMode )
+                    System.out.println( "Zipping ..." );
                 File aDirToZipFile = new File( aDirToZipStr );
                 createZipFile( aDirToZipFile, aTargetZipFileStr );
                 deleteRecursively( aDirToZipFile );
             }
 
             Date end = new Date();
-            System.out.println(end.getTime() - start.getTime() + " total milliseconds");
+            if( !bExtensionMode )
+                System.out.println(end.getTime() - start.getTime() + " total milliseconds");
         }
         catch (IOException e)
         {
@@ -193,17 +214,19 @@ public class HelpIndexer extends WeakBase
         }
     }
 
-    private static int indexDocs(IndexWriter writer, String aModule,
+    private static int indexDocs(IndexWriter writer, String aModule, boolean bExtensionMode,
         File aCaptionFilesDir, File aContentFilesDir) throws IOException
     {
         if( !aCaptionFilesDir.canRead() || !aCaptionFilesDir.isDirectory() )
         {
-            System.out.println( "Not found: " + aCaptionFilesDir );
+            if( !bExtensionMode )
+                System.out.println( "Not found: " + aCaptionFilesDir );
             return -1;
         }
         if( !aContentFilesDir.canRead() || !aContentFilesDir.isDirectory() )
         {
-            System.out.println( "Not found: " + aContentFilesDir );
+            if( !bExtensionMode )
+                System.out.println( "Not found: " + aContentFilesDir );
             return -1;
         }
 
@@ -216,7 +239,8 @@ public class HelpIndexer extends WeakBase
         HashSet aContentFilesHashSet = new HashSet( aContentFilesList );
 
         // Loop over caption files and find corresponding content file
-        System.out.println( "Indexing, adding files" );
+        if( !bExtensionMode )
+            System.out.println( "Indexing, adding files" );
         int nCaptionFilesLen = aCaptionFiles.length;
         for( int i = 0 ; i < nCaptionFilesLen ; i++ )
         {
@@ -226,7 +250,8 @@ public class HelpIndexer extends WeakBase
             if( aContentFilesHashSet.contains( aCaptionFileStr ) )
                 aContentFile = new File( aContentFilesDir, aCaptionFileStr );
 
-            System.out.print( "." );
+            if( !bExtensionMode )
+                System.out.print( "." );
             writer.addDocument( HelpFileDocument.Document( aModule, aCaptionFile, aContentFile ) );
         }
 
@@ -240,7 +265,8 @@ public class HelpIndexer extends WeakBase
                 // Not already handled in caption files loop
                 File aCaptionFile = null;
                 File aContentFile = new File( aContentFilesDir, aContentFileStr );
-                System.out.print( "." );
+                if( !bExtensionMode )
+                    System.out.print( "." );
                 writer.addDocument( HelpFileDocument.Document( aModule, aCaptionFile, aContentFile ) );
             }
         }

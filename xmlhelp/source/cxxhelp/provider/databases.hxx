@@ -211,6 +211,7 @@ namespace chelp {
         StaticModuleInformation* getStaticInformationForModule( const rtl::OUString& Module,
                                                                 const rtl::OUString& Language );
 
+        bool checkModuleMatchForExtension( const rtl::OUString& Database, const rtl::OUString& doclist );
         KeywordInfo* getKeyword( const rtl::OUString& Module,
                                  const rtl::OUString& Language );
 
@@ -278,7 +279,7 @@ namespace chelp {
          *  Maps a given language-locale combination to language.
          */
 
-        rtl::OUString lang( const rtl::OUString& Language );
+        rtl::OUString processLang( const rtl::OUString& Language );
 
 
         /**
@@ -287,13 +288,6 @@ namespace chelp {
          */
 
         rtl::OUString country( const rtl::OUString& Language );
-
-
-        /**
-         *  Maps a given System to the variant part of a locale.
-         */
-
-        rtl::OUString variant( const rtl::OUString& System );
 
 
         void replaceName( rtl::OUString& oustring ) const;
@@ -314,6 +308,7 @@ namespace chelp {
         osl::Mutex                                                                     m_aMutex;
         com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >       m_xContext;
         com::sun::star::uno::Reference< com::sun::star::lang::XMultiComponentFactory > m_xSMgr;
+        com::sun::star::uno::Reference< com::sun::star::ucb::XSimpleFileAccess >       m_xSFA;
 
         sal_Bool m_bShowBasic;
         int    m_nErrorDocLength;
@@ -402,10 +397,6 @@ namespace chelp {
 
         void setInstallPath( const rtl::OUString& aInstallDirectory );
 
-        static void implCollectXhpFiles( const rtl::OUString& aDir,
-            std::vector< rtl::OUString >& o_rXhpFileVector,
-            com::sun::star::uno::Reference< com::sun::star::ucb::XSimpleFileAccess > xSFA );
-
     }; // end class Databases
 
 
@@ -453,6 +444,8 @@ namespace chelp {
             ( com::sun::star::uno::Reference< com::sun::star::deployment::XPackage >& o_xParentPackageBundle );
         rtl::OUString implGetFileFromPackage( const rtl::OUString& rFileExtension,
             com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > xPackage );
+        void implGetLanguageVectorFromPackage( ::std::vector< ::rtl::OUString > &rv,
+            com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > xPackage );
 
         com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >    m_xContext;
         com::sun::star::uno::Reference< com::sun::star::ucb::XSimpleFileAccess >    m_xSFA;
@@ -463,7 +456,6 @@ namespace chelp {
 
         rtl::OUString                                                               m_aInitialModule;
         rtl::OUString                                                               m_aLanguage;
-        rtl::OUString                                                               m_aCorrectedLanguage;
 
         com::sun::star::uno::Sequence< com::sun::star::uno::Reference
             < com::sun::star::deployment::XPackage > >                              m_aUserPackagesSeq;
@@ -538,7 +530,8 @@ namespace chelp {
 
     private:
         com::sun::star::uno::Reference< com::sun::star::container::XHierarchicalNameAccess >
-            implGetJarFromPackage(com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > xPackage );
+            implGetJarFromPackage(com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > xPackage,
+                rtl::OUString* o_pExtensionPath = NULL );
 
     }; // end class JarFileIterator
 
@@ -550,10 +543,11 @@ namespace chelp {
             : ExtensionIteratorBase( rDatabases, aInitialModule, aLanguage )
         {}
 
-        rtl::OUString nextIndexFolder( bool& o_rbExtension );
+        rtl::OUString nextIndexFolder( bool& o_rbExtension, bool& o_rbTemporary );
+        void deleteTempIndexFolder( const rtl::OUString& aIndexFolder );
 
     private:
-        rtl::OUString implGetIndexFolderFromPackage(
+        rtl::OUString implGetIndexFolderFromPackage( bool& o_rbTemporary,
             com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > xPackage );
 
     }; // end class KeyDataBaseFileIterator
