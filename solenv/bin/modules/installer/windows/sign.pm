@@ -8,8 +8,6 @@
 #
 # $RCSfile: binary.pm,v $
 #
-# $Revision: 1.5 $
-#
 # This file is part of OpenOffice.org.
 #
 # OpenOffice.org is free software: you can redistribute it and/or modify
@@ -299,7 +297,6 @@ sub analyze_installset_content
         if ( $sourcefiles[$j] =~ /\.cab\s*$/ ) { $allcabfileshash{$sourcefiles[$j]} = 1; }
         else
         {
-            if ( $sourcefiles[$j] =~ /instmsi\w+.exe\s*$/ ) { next; } # no signing of instmsia.exe and instmsiw.exe
             if ( $sourcefiles[$j] =~ /jre[-\w]+.exe\s*$/ ) { next; } # no signing of java executable
             if ( $sourcefiles[$j] =~ /\.txt\s*$/ ) { next; }
             if ( $sourcefiles[$j] =~ /\.html\s*$/ ) { next; }

@@ -483,3 +483,11 @@ WindowsCustomAction gid_Customaction_ShowReleaseNotes2
 	Assignment1 = ("InstallExecuteSequence", "(Not Installed or ISPATCH) and Not REMOVE=\"ALL\"", "end");
 End
 
+WindowsCustomAction gid_Customaction_ShowSurvey
+	Name = "ShowSurveyAfterUninstall";
+	Typ = "65";
+	Source = "relnotes.dll";
+	Target = "ShowSurveyAfter";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "REMOVE=\"ALL\" and Not UPGRADINGPRODUCTCODE", "end");
+End

@@ -8,8 +8,6 @@
 #
 # $RCSfile: msiglobal.pm,v $
 #
-# $Revision: 1.51 $
-#
 # This file is part of OpenOffice.org.
 #
 # OpenOffice.org is free software: you can redistribute it and/or modify
@@ -1162,34 +1160,6 @@ sub put_databasename_into_setupini
 }
 
 ##########################################################################
-# Writing the path to the instmsiw.exe into setup.ini
-##########################################################################
-
-sub put_instmsiwpath_into_setupini
-{
-    my ($setupinifile) = @_;
-
-    my $instmsiwexepath = "instmsiw.exe";
-    my $line = "instmsiw=" . $instmsiwexepath . "\n";
-
-    push(@{$setupinifile}, $line);
-}
-
-##########################################################################
-# Writing the path to the instmsia.exe into setup.ini
-##########################################################################
-
-sub put_instmsiapath_into_setupini
-{
-    my ($setupinifile) = @_;
-
-    my $instmsiaexepath = "instmsia.exe";
-    my $line = "instmsia=" . $instmsiaexepath . "\n";
-
-    push(@{$setupinifile}, $line);
-}
-
-##########################################################################
 # Writing the required msi version into setup.ini
 ##########################################################################
 
@@ -1335,8 +1305,6 @@ sub create_setup_ini
     push(@setupinifile, $line);
 
     put_databasename_into_setupini($setupinifile, $allvariableshashref);
-    put_instmsiwpath_into_setupini($setupinifile);
-    put_instmsiapath_into_setupini($setupinifile);
     put_msiversion_into_setupini($setupinifile);
     put_productname_into_setupini($setupinifile, $allvariableshashref);
     put_productcode_into_setupini($setupinifile);
@@ -1406,7 +1374,7 @@ sub copy_scpactions_into_installset
 
 #################################################################
 # Copying the files for the Windows installer into the
-# installation set (setup.exe, instmsia.exe, instmsiw.exe).
+# installation set (setup.exe).
 #################################################################
 
 sub copy_windows_installer_files_into_installset
@@ -1416,8 +1384,6 @@ sub copy_windows_installer_files_into_installset
     installer::logger::include_header_into_logfile("Copying Windows installer files into installation set");
 
     @copyfile = ();
-    push(@copyfile, "instmsia.exe");
-    push(@copyfile, "instmsiw.exe");
     push(@copyfile, "loader2.exe");
 
     if ( $allvariables->{'NOLOADERREQUIRED'} ) { @copyfile = (); }
