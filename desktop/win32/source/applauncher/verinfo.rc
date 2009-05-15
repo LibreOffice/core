@@ -2,7 +2,7 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  * 
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2009 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
@@ -29,18 +29,23 @@
 #define LG_D 					// generate always german version
 #endif
 
-#define VER_FIRSTYEAR	2000
+#define VER_FIRSTYEAR	2009
 
 #include <windows.h>
-#include "version.hrc"
+#include "version_so.hrc"
 
 // -----------------------------------------------------------------------
 // 				version information
 // -----------------------------------------------------------------------
 
 VS_VERSION_INFO versioninfo
+#ifndef SUBVERSION
+	fileversion    VERSION, 0, VERVARIANT, VER_COUNT
+	productversion VERSION, 0, VERVARIANT, VER_COUNT
+#else
 	fileversion    VERSION, SUBVERSION, VERVARIANT, VER_COUNT
 	productversion VERSION, SUBVERSION, VERVARIANT, VER_COUNT
+#endif
 	fileflagsmask 0x3F
 	fileflags
 #if defined(DEBUG)
@@ -63,24 +68,24 @@ VS_VERSION_INFO versioninfo
 			block "040704E4"
 			{
 				// German StringTable
-				value "CompanyName",		"OpenOffice.org\0"
+				value "CompanyName",		"Sun Microsystems, Inc.\0"
 				value "FileDescription", "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\0"
 				value "FileVersion",		PPS(VER_LEVEL) "\0"
 				value "ProductVersion",		PPS(VER_LEVEL) "\0"
-				value "OriginalFilename",	"SOFFICE.EXE\0"
-				value "InternalName",		"SOFFICE\0"
+				value "OriginalFilename",	PPS(RES_APP_NAME) ".exe\0"
+				value "InternalName",		PPS(RES_APP_NAME) "\0"
 				value "LegalCopyright",		S_CRIGHT " Sun Microsystems, Inc.\0"
 			}
 #else
 			block "040904E4"
 			{
 				// International StringTable
-				value "CompanyName", 		"OpenOffice.org\0"
+				value "CompanyName", 		"Sun Microsystems, Inc.\0"
 				value "FileDescription",	"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\0"
 				value "FileVersion",		PPS(VER_LEVEL) "\0"
 				value "ProductVersion",		PPS(VER_LEVEL) "\0"
-				value "OriginalFilename",	"SOFFICE.EXE\0"
-				value "InternalName", 		"SOFFICE\0"
+				value "OriginalFilename",	PPS(RES_APP_NAME) ".exe\0"
+				value "InternalName",		PPS(RES_APP_NAME) "\0"
 				value "LegalCopyright", 	S_CRIGHT " Sun Microsystems, Inc.\0"
 			}
 #endif
@@ -95,45 +100,3 @@ VS_VERSION_INFO versioninfo
 #endif
 		}
 	}
-
-
-2 ICON "icons\\ooo3_writer_doc.ico"
-3 ICON "icons\\ooo3_writer_tem.ico"
-4 ICON "icons\\ooo3_calc_doc.ico"
-5 ICON "icons\\ooo3_calc_tem.ico"
-6 ICON "icons\\ooo3_draw_doc.ico"
-7 ICON "icons\\ooo3_draw_tem.ico"
-8 ICON "icons\\ooo3_impress_doc.ico"
-9 ICON "icons\\ooo3_impress_tem.ico"
-10 ICON "icons\\ooo3_impress_doc.ico"
-11 ICON "icons\\ooo3_global_doc.ico"
-12 ICON "icons\\ooo3_html_doc.ico"
-13 ICON "icons\\ooo3_chart_doc.ico"
-14 ICON "icons\\ooo3_base_doc.ico"
-15 ICON "icons\\ooo3_math_doc.ico"
-16 ICON "icons\\ooo3_empty_tem.ico"
-17 ICON "icons\\ooo3_macro_doc.ico"
-18 ICON "icons\\ooo-configuration.ico"
-19 ICON "icons\\ooo-open.ico"
-20 ICON "icons\\ooo-image-doc.ico"
-21 ICON "icons\\ooo3_writer_app.ico"
-22 ICON "icons\\ooo3_calc_app.ico"
-23 ICON "icons\\ooo3_draw_app.ico"
-24 ICON "icons\\ooo3_impress_app.ico"
-25 ICON "icons\\ooo3_math_app.ico"
-26 ICON "icons\\ooo3_base_app.ico"
-27 ICON "icons\\ooo3_empty_doc.ico"
-28 ICON "icons\\ooo11-writer-doc.ico"
-29 ICON "icons\\ooo11-writer-tem.ico"
-30 ICON "icons\\ooo11-calc-doc.ico"
-31 ICON "icons\\ooo11-calc-tem.ico"
-32 ICON "icons\\ooo11-draw-doc.ico"
-33 ICON "icons\\ooo11-draw-tem.ico"
-34 ICON "icons\\ooo11-impress-doc.ico"
-35 ICON "icons\\ooo11-impress-tem.ico"
-36 ICON "icons\\ooo11-master-doc.ico"
-37 ICON "icons\\ooo11-chart-doc.ico"
-38 ICON "icons\\ooo11-base-doc.ico"
-39 ICON "icons\\ooo11-math-doc.ico"
-40 ICON "icons\\oxt-extension.ico"
-

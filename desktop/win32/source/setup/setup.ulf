@@ -30,8 +30,11 @@ en-US = "Setup was unable to find the file '%s'."
 en-US = "Invalid command line option '%s'. Please use '/?' for help."
 
 
-[%ALLOW_MSI_UPDATE%]
-en-US = "This package requires a newer version of the Windows Installer. \nDo you want to update the version of the Windows Installer on your system?"
+[%SETUP_TO_OLD%]
+en-US = "This package requires at least the version '%s' of the Windows Installer. \nYou have Windows Installer '%s' on your system!"
+
+[%SETUP_NOT_FOUND%]
+en-US = "This package requires the Windows Installer. \nYou need at least Windows Installer '%s' on your system!"
 
 
 [%USAGE%]
