@@ -171,7 +171,8 @@ void ScTabControl::MouseButtonUp( const MouseEvent& rMEvt )
     // mouse button down and up on same page?
     if( nMouseClickPageId != GetPageId( aPos ) )
         nMouseClickPageId = TABBAR_PAGE_NOTFOUND;
-    else if ( rMEvt.GetClicks() == 2 && rMEvt.IsLeft() )
+
+    if ( rMEvt.GetClicks() == 2 && rMEvt.IsLeft() && nMouseClickPageId != 0 && nMouseClickPageId != TAB_PAGE_NOTFOUND )
     {
         SfxDispatcher* pDispatcher = pViewData->GetViewShell()->GetViewFrame()->GetDispatcher();
         pDispatcher->Execute( FID_TAB_MENU_RENAME, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD );
@@ -179,9 +180,12 @@ void ScTabControl::MouseButtonUp( const MouseEvent& rMEvt )
 
     if( nMouseClickPageId == 0 )
     {
-        // free area clicked -> add new sheet
+        // Click in the area next to the existing tabs:
+        // #i70320# if several sheets are selected, deselect all ecxept the current sheet,
+        // otherwise add new sheet
+        USHORT nSlot = ( GetSelectPageCount() > 1 ) ? FID_TAB_DESELECTALL : FID_INS_TABLE;
         SfxDispatcher* pDispatcher = pViewData->GetViewShell()->GetViewFrame()->GetDispatcher();
-        pDispatcher->Execute( FID_INS_TABLE, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD );
+        pDispatcher->Execute( nSlot, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD );
         // forget page ID, to be really sure that the dialog is not called twice
         nMouseClickPageId = TABBAR_PAGE_NOTFOUND;
     }
@@ -251,6 +255,7 @@ void ScTabControl::Select()
 
     SfxBindings& rBind = pViewData->GetBindings();
     rBind.Invalidate( FID_FILL_TAB );
+    rBind.Invalidate( FID_TAB_DESELECTALL );
 
     rBind.Invalidate( FID_INS_TABLE );
     rBind.Invalidate( FID_TAB_APPEND );

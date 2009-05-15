@@ -33,6 +33,7 @@
 
 
 #include <sfx2/dispatch.hxx>
+#include <svtools/stritem.hxx>
 
 #include "tabvwsh.hxx"
 #include "reffact.hxx"
@@ -72,6 +73,7 @@ ScConditionalFormatDlg::ScConditionalFormatDlg(
         aRbCond12           ( this, ScResId( RB_COND1_2 ), &aEdtCond12,this ),
         aFtCond1Template    ( this, ScResId( FT_COND1_TEMPLATE ) ),
         aLbCond1Template    ( this, ScResId( LB_COND1_TEMPLATE ) ),
+        aBtnNew1            ( this, ScResId( BTN_COND1_NEW ) ),
         aFlSep1             ( this, ScResId( FL_SEP1 ) ),
 
         aCbxCond2           ( this, ScResId( CBX_COND2 ) ),
@@ -84,6 +86,7 @@ ScConditionalFormatDlg::ScConditionalFormatDlg(
         aRbCond22           ( this, ScResId( RB_COND2_2 ), &aEdtCond22,this ),
         aFtCond2Template    ( this, ScResId( FT_COND2_TEMPLATE ) ),
         aLbCond2Template    ( this, ScResId( LB_COND2_TEMPLATE ) ),
+        aBtnNew2            ( this, ScResId( BTN_COND2_NEW ) ),
         aFlSep2             ( this, ScResId( FL_SEP2 ) ),
 
         aCbxCond3           ( this, ScResId( CBX_COND3 ) ),
@@ -96,6 +99,7 @@ ScConditionalFormatDlg::ScConditionalFormatDlg(
         aRbCond32           ( this, ScResId( RB_COND3_2 ), &aEdtCond32,this ),
         aFtCond3Template    ( this, ScResId( FT_COND3_TEMPLATE ) ),
         aLbCond3Template    ( this, ScResId( LB_COND3_TEMPLATE ) ),
+        aBtnNew3            ( this, ScResId( BTN_COND3_NEW ) ),
 
         aBtnOk              ( this, ScResId( BTN_OK ) ),
         aBtnCancel          ( this, ScResId( BTN_CANCEL ) ),
@@ -127,7 +131,12 @@ ScConditionalFormatDlg::ScConditionalFormatDlg(
     aBtnOk.SetClickHdl    ( LINK( this, ScConditionalFormatDlg, BtnHdl ) );
 //? aBtnCancel.SetClickHdl( LINK( this, ScConditionalFormatDlg, BtnHdl ) );
 
-    Link aLink = LINK( this, ScConditionalFormatDlg, GetFocusHdl );
+    Link aLink = LINK( this, ScConditionalFormatDlg, NewBtnHdl );
+    aBtnNew1.SetClickHdl( aLink );
+    aBtnNew2.SetClickHdl( aLink );
+    aBtnNew3.SetClickHdl( aLink );
+
+    aLink = LINK( this, ScConditionalFormatDlg, GetFocusHdl );
     aEdtCond11.SetGetFocusHdl( aLink );
     aEdtCond12.SetGetFocusHdl( aLink );
     aEdtCond21.SetGetFocusHdl( aLink );
@@ -478,6 +487,7 @@ IMPL_LINK( ScConditionalFormatDlg, ClickCond1Hdl, void *, EMPTYARG )
     aRbCond12.Enable( bChecked );
     aFtCond1Template.Enable( bChecked );
     aLbCond1Template.Enable( bChecked );
+    aBtnNew1.Enable( bChecked );
 
     return( 0L );
 }
@@ -558,6 +568,7 @@ IMPL_LINK( ScConditionalFormatDlg, ClickCond2Hdl, void *, EMPTYARG )
     aRbCond22.Enable( bChecked );
     aFtCond2Template.Enable( bChecked );
     aLbCond2Template.Enable( bChecked );
+    aBtnNew2.Enable( bChecked );
 
     return( 0L );
 }
@@ -638,6 +649,7 @@ IMPL_LINK( ScConditionalFormatDlg, ClickCond3Hdl, void *, EMPTYARG )
     aRbCond32.Enable( bChecked );
     aFtCond3Template.Enable( bChecked );
     aLbCond3Template.Enable( bChecked );
+    aBtnNew3.Enable( bChecked );
 
     return( 0L );
 }
@@ -761,4 +773,60 @@ IMPL_LINK( ScConditionalFormatDlg, BtnHdl, PushButton*, pBtn )
     return( 0L );
 }
 
+
+//----------------------------------------------------------------------------
+
+IMPL_LINK( ScConditionalFormatDlg, NewBtnHdl, PushButton*, pBtn )
+{
+    SfxUInt16Item aFamilyItem( SID_STYLE_FAMILY, SFX_STYLE_FAMILY_PARA );
+    SfxStringItem aRefItem( SID_STYLE_REFERENCE, ScGlobal::GetRscString(STR_STYLENAME_STANDARD) );
+
+    // unlock the dispatcher so SID_STYLE_NEW can be executed
+    // (SetDispatcherLock would affect all Calc documents)
+    SfxDispatcher* pDisp = GetBindings().GetDispatcher();
+    BOOL bLocked = pDisp->IsLocked();
+    if (bLocked)
+        pDisp->Lock(sal_False);
+
+    // Execute the "new style" slot, complete with undo and all necessary updates.
+    // The return value (SfxUInt16Item) is ignored, look for new styles instead.
+    pDisp->Execute( SID_STYLE_NEW, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD | SFX_CALLMODE_MODAL,
+                    &aFamilyItem,
+                    &aRefItem,
+                    0L );
+
+    if (bLocked)
+        pDisp->Lock(sal_True);
+
+    // Find the new style and add it into the style list boxes
+    String aNewStyle;
+    SfxStyleSheetIterator aStyleIter( pDoc->GetStyleSheetPool(), SFX_STYLE_FAMILY_PARA );
+    for ( SfxStyleSheetBase* pStyle = aStyleIter.First(); pStyle; pStyle = aStyleIter.Next() )
+    {
+        String aName = pStyle->GetName();
+        if ( aLbCond1Template.GetEntryPos(aName) == LISTBOX_ENTRY_NOTFOUND )    // all lists contain the same entries
+        {
+            aLbCond1Template.InsertEntry( aName );
+            aLbCond2Template.InsertEntry( aName );
+            aLbCond3Template.InsertEntry( aName );
+            // if there are several new styles (from API or a different view),
+            // assume the last one is the result of the dialog
+            aNewStyle = aName;
+        }
+    }
+
+    // select the new style in the list box for which the button was pressed
+    if ( aNewStyle.Len() )
+    {
+        ListBox* pListBox = &aLbCond1Template;
+        if ( pBtn == &aBtnNew2 )
+            pListBox = &aLbCond2Template;
+        else if ( pBtn == &aBtnNew3 )
+            pListBox = &aLbCond3Template;
+
+        pListBox->SelectEntry( aNewStyle );
+    }
+
+    return 0;
+}
 

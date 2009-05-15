@@ -452,6 +452,11 @@ void __EXPORT ScTabViewShell::GetState( SfxItemSet& rSet )
                 rSet.Put( SfxBoolItem( nWhich, GetViewData()->GetDocShell()->IsReadOnly() ) );
                 break;
 
+            case FID_TAB_DESELECTALL:
+                if ( nTabSelCount == 1 )
+                    rSet.DisableItem( nWhich );     // enabled only if several sheets are selected
+                break;
+
         } // switch ( nWitch )
         nWhich = aIter.NextWhich();
     } // while ( nWitch )

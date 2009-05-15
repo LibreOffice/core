@@ -126,6 +126,7 @@ using namespace ::com::sun::star;
 #include "externalrefmgr.hxx"
 
 #include "sharedocdlg.hxx"
+#include "conditio.hxx"
 
 //------------------------------------------------------------------
 
@@ -1365,6 +1366,23 @@ void ScDocShell::NotifyStyle( const SfxStyleSheetHint& rHint )
                     pBindings->Invalidate( SID_ATTR_PARA_LEFT_TO_RIGHT );
                     pBindings->Invalidate( SID_ATTR_PARA_RIGHT_TO_LEFT );
                 }
+            }
+        }
+    }
+    else if ( pStyle->GetFamily() == SFX_STYLE_FAMILY_PARA )
+    {
+        if ( nId == SFX_STYLESHEET_MODIFIED)
+        {
+            String aNewName = pStyle->GetName();
+            String aOldName = aNewName;
+            BOOL bExtended = rHint.ISA(SfxStyleSheetHintExtended);
+            if (bExtended)
+                aOldName = ((SfxStyleSheetHintExtended&)rHint).GetOldName();
+            if ( aNewName != aOldName )
+            {
+                ScConditionalFormatList* pList = aDocument.GetCondFormList();
+                if (pList)
+                    pList->RenameCellStyle( aOldName,aNewName );
             }
         }
     }

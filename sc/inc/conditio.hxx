@@ -188,6 +188,7 @@ public:
     int             operator== ( const ScCondFormatEntry& r ) const;
 
     const String&   GetStyle() const        { return aStyleName; }
+    void            UpdateStyleName(const String& rNew)  { aStyleName=rNew; }
 
 protected:
     virtual void    DataChanged( const ScRange* pModified ) const;
@@ -224,6 +225,7 @@ public:
     void            UpdateReference( UpdateRefMode eUpdateRefMode,
                                 const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
     void            UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos );
+    void            RenameCellStyle( const String& rOld, const String& rNew );
 
     void            SourceChanged( const ScAddress& rAddr );
 
@@ -278,6 +280,7 @@ public:
     void    CompileXML();
     void    UpdateReference( UpdateRefMode eUpdateRefMode,
                                 const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
+    void    RenameCellStyle( const String& rOld, const String& rNew );
     void    UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos );
 
     void    SourceChanged( const ScAddress& rAddr );
