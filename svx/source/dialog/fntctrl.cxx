@@ -33,7 +33,7 @@
 
 // include ---------------------------------------------------------------
 #include <sfx2/viewsh.hxx>      // SfxViewShell
-#include <sfx2/printer.hxx>     // SfxPrinter
+#include <vcl/print.hxx>        // Printer
 #include <vcl/metric.hxx>
 #include <vcl/svapp.hxx>
 #include <com/sun/star/uno/Reference.h>

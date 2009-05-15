@@ -41,7 +41,6 @@
 #include <svtools/pathoptions.hxx>
 #include <svtools/ctrltool.hxx>
 #include <svtools/sfontitm.hxx>
-#include <sfx2/printer.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/bindings.hxx>
@@ -54,34 +53,6 @@
 #include <svx/dialogs.hrc>
 #include <svx/svxitems.hrc>
 #include "chardlg.hrc"
-
-//Erstmal definieren, damit die Klassendeklarionen angezogen werden.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 #include <svx/xtable.hxx>       // XColorTable
 #include "chardlg.hxx"
@@ -122,6 +93,7 @@
 #include <svtools/intitem.hxx> //CHINA001
 #include <sfx2/request.hxx> //CHINA001
 #include "flagsdef.hxx" //CHINA001
+
 using namespace ::com::sun::star;
 
 // define ----------------------------------------------------------------
