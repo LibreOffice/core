@@ -21,7 +21,7 @@
 >
 
 <!ELEMENT templates (info?, (group | set)*)>
-<!ELEMENT component (info?, (node-ref | group | set)*)>
+<!ELEMENT component (info?, (prop | node-ref | group | set)*)>
 
 <!ELEMENT info (deprecated?, author*, desc*, label*)>
 
