@@ -67,12 +67,12 @@ Node * LocalizedPropertyNode::clone(rtl::OUString const &) const {
         0);
 }
 
-rtl::OUString LocalizedPropertyNode::getName() {
+rtl::OUString LocalizedPropertyNode::getName() const {
     return name_;
 }
 
 Node * LocalizedPropertyNode::getMember(rtl::OUString const &) {
-    return 0; //TODO
+    return 0;
 }
 
 Type LocalizedPropertyNode::getType() const {

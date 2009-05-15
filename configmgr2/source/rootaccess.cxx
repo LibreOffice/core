@@ -32,6 +32,7 @@
 
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "cppuhelper/weak.hxx"
+#include "rtl/ref.hxx"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 
@@ -49,7 +50,7 @@ namespace css = com::sun::star;
 
 RootAccess::RootAccess(
     rtl::OUString const & path, rtl::OUString const & locale):
-    Access(this), path_(path), locale_(locale) {}
+    Access(0), path_(path), locale_(locale) {}
 
 rtl::OUString RootAccess::getLocale() const {
     return locale_; //TODO: handle locale_ == ""
@@ -68,6 +69,10 @@ Node * RootAccess::getNode() {
         }
     }
     return node_;
+}
+
+rtl::Reference< RootAccess > RootAccess::getRoot() {
+    return this;
 }
 
 }

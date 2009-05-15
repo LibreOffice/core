@@ -27,54 +27,40 @@
 * for a copy of the LGPLv3 License.
 ************************************************************************/
 
-#ifndef INCLUDED_CONFIGMGR_LOCALIZEDPROPERTYNODE_HXX
-#define INCLUDED_CONFIGMGR_LOCALIZEDPROPERTYNODE_HXX
+#ifndef INCLUDED_CONFIGMGR_FREEACCESS_HXX
+#define INCLUDED_CONFIGMGR_FREEACCESS_HXX
 
 #include "sal/config.h"
 
-#include "rtl/ustring.hxx"
+#include "com/sun/star/lang/XUnoTunnel.hpp"
+#include "com/sun/star/uno/RuntimeException.hpp"
+#include "com/sun/star/uno/Sequence.hxx"
+#include "cppuhelper/implbase1.hxx"
+#include "rtl/ref.hxx"
+#include "sal/types.h"
 
-#include "localizedvalues.hxx"
-#include "node.hxx"
-#include "type.hxx"
-
-namespace com { namespace sun { namespace star { namespace uno {
-    class Any;
-} } } }
+#include "childaccess.hxx"
 
 namespace configmgr {
 
-class LocalizedPropertyNode: public Node {
+class Node;
+class RootAccess;
+
+class FreeAccess:
+    public cppu::ImplInheritanceHelper1<
+        ChildAccess, com::sun::star::lang::XUnoTunnel >
+{
 public:
-    LocalizedPropertyNode(
-        rtl::OUString const & name, Type type, bool nillable,
-        LocalizedValues const & values);
+    static com::sun::star::uno::Sequence< sal_Int8 > getTunnelId();
 
-    virtual ~LocalizedPropertyNode();
-
-    virtual Node * clone() const;
-
-    virtual Node * clone(rtl::OUString const &) const;
-
-    virtual rtl::OUString getName() const;
-
-    virtual Node * getMember(rtl::OUString const &);
-
-    Type getType() const;
-
-    bool isNillable() const;
-
-    LocalizedValues & getValues();
-
-    void setValues(LocalizedValues const & values);
-
-    com::sun::star::uno::Any getValue(rtl::OUString const & locale) const;
+    FreeAccess(rtl::Reference< RootAccess > const & root, Node * node);
 
 private:
-    rtl::OUString name_;
-    Type type_;
-    bool nillable_;
-    LocalizedValues values_;
+    virtual ~FreeAccess();
+
+    virtual sal_Int64 SAL_CALL getSomething(
+        com::sun::star::uno::Sequence< sal_Int8 > const & aIdentifier)
+        throw (com::sun::star::uno::RuntimeException);
 };
 
 }

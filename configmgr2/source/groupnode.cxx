@@ -55,7 +55,7 @@ Node * GroupNode::clone(rtl::OUString const & name) const {
     return p.release();
 }
 
-rtl::OUString GroupNode::getName() {
+rtl::OUString GroupNode::getName() const {
     return name_;
 }
 

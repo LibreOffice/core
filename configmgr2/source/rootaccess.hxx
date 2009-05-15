@@ -32,6 +32,7 @@
 
 #include "sal/config.h"
 
+#include "rtl/ref.hxx"
 #include "rtl/ustring.hxx"
 
 #include "access.hxx"
@@ -50,6 +51,8 @@ private:
     virtual ~RootAccess();
 
     virtual Node * getNode();
+
+    virtual rtl::Reference< RootAccess > getRoot();
 
     rtl::OUString path_;
     rtl::OUString locale_;

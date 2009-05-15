@@ -27,56 +27,49 @@
 * for a copy of the LGPLv3 License.
 ************************************************************************/
 
-#ifndef INCLUDED_CONFIGMGR_LOCALIZEDPROPERTYNODE_HXX
-#define INCLUDED_CONFIGMGR_LOCALIZEDPROPERTYNODE_HXX
-
+#include "precompiled_configmgr.hxx"
 #include "sal/config.h"
 
-#include "rtl/ustring.hxx"
+#include "com/sun/star/uno/RuntimeException.hpp"
+#include "com/sun/star/uno/Sequence.hxx"
+#include "cppuhelper/implbase1.hxx"
+#include "rtl/ref.hxx"
+#include "rtl/string.h"
+#include "sal/types.h"
 
-#include "localizedvalues.hxx"
+#include "freeaccess.hxx"
 #include "node.hxx"
-#include "type.hxx"
-
-namespace com { namespace sun { namespace star { namespace uno {
-    class Any;
-} } } }
 
 namespace configmgr {
 
-class LocalizedPropertyNode: public Node {
-public:
-    LocalizedPropertyNode(
-        rtl::OUString const & name, Type type, bool nillable,
-        LocalizedValues const & values);
+namespace {
 
-    virtual ~LocalizedPropertyNode();
-
-    virtual Node * clone() const;
-
-    virtual Node * clone(rtl::OUString const &) const;
-
-    virtual rtl::OUString getName() const;
-
-    virtual Node * getMember(rtl::OUString const &);
-
-    Type getType() const;
-
-    bool isNillable() const;
-
-    LocalizedValues & getValues();
-
-    void setValues(LocalizedValues const & values);
-
-    com::sun::star::uno::Any getValue(rtl::OUString const & locale) const;
-
-private:
-    rtl::OUString name_;
-    Type type_;
-    bool nillable_;
-    LocalizedValues values_;
-};
+namespace css = com::sun::star;
 
 }
 
-#endif
+class RootAccess;
+
+css::uno::Sequence< sal_Int8 > FreeAccess::getTunnelId() {
+    static char const id[] = "com.sun.star.comp.configuration.FreeAccess";
+    return css::uno::Sequence< sal_Int8 >(
+        reinterpret_cast< sal_Int8 const * >(id), RTL_CONSTASCII_LENGTH(id));
+}
+
+FreeAccess::FreeAccess(rtl::Reference< RootAccess > const & root, Node * node):
+    ImplInheritanceHelper1(root, node)
+{}
+
+FreeAccess::~FreeAccess() {
+    delete node_;
+}
+
+sal_Int64 FreeAccess::getSomething(
+    css::uno::Sequence< sal_Int8 > const & aIdentifier)
+    throw (css::uno::RuntimeException)
+{
+    return aIdentifier == getTunnelId()
+        ? reinterpret_cast< sal_Int64 >(this) : 0;
+}
+
+}

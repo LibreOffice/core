@@ -27,54 +27,33 @@
 * for a copy of the LGPLv3 License.
 ************************************************************************/
 
-#ifndef INCLUDED_CONFIGMGR_LOCALIZEDPROPERTYNODE_HXX
-#define INCLUDED_CONFIGMGR_LOCALIZEDPROPERTYNODE_HXX
+#ifndef INCLUDED_CONFIGMGR_CHILDACCESS_HXX
+#define INCLUDED_CONFIGMGR_CHILDACCESS_HXX
 
 #include "sal/config.h"
 
-#include "rtl/ustring.hxx"
+#include "rtl/ref.hxx"
 
-#include "localizedvalues.hxx"
-#include "node.hxx"
-#include "type.hxx"
-
-namespace com { namespace sun { namespace star { namespace uno {
-    class Any;
-} } } }
+#include "access.hxx"
 
 namespace configmgr {
 
-class LocalizedPropertyNode: public Node {
+class Node;
+class RootAccess;
+
+class ChildAccess: public Access {
 public:
-    LocalizedPropertyNode(
-        rtl::OUString const & name, Type type, bool nillable,
-        LocalizedValues const & values);
+    ChildAccess(rtl::Reference< RootAccess > const & root, Node * node);
 
-    virtual ~LocalizedPropertyNode();
-
-    virtual Node * clone() const;
-
-    virtual Node * clone(rtl::OUString const &) const;
-
-    virtual rtl::OUString getName() const;
-
-    virtual Node * getMember(rtl::OUString const &);
-
-    Type getType() const;
-
-    bool isNillable() const;
-
-    LocalizedValues & getValues();
-
-    void setValues(LocalizedValues const & values);
-
-    com::sun::star::uno::Any getValue(rtl::OUString const & locale) const;
+protected:
+    virtual ~ChildAccess();
 
 private:
-    rtl::OUString name_;
-    Type type_;
-    bool nillable_;
-    LocalizedValues values_;
+    virtual Node * getNode();
+
+    virtual rtl::Reference< RootAccess > getRoot();
+
+    rtl::Reference< RootAccess > root_;
 };
 
 }

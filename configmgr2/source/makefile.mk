@@ -40,9 +40,11 @@ DLLPRE =
 
 SLOFILES = \
     $(SLO)$/access.obj \
+    $(SLO)$/childaccess.obj \
     $(SLO)$/components.obj \
     $(SLO)$/configurationprovider.obj \
     $(SLO)$/defaultprovider.obj \
+    $(SLO)$/freeaccess.obj \
     $(SLO)$/groupnode.obj \
     $(SLO)$/localizedpropertynode.obj \
     $(SLO)$/lock.obj \

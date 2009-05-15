@@ -39,6 +39,7 @@
 #include "com/sun/star/beans/XHierarchicalPropertySet.hpp"
 #include "com/sun/star/beans/XMultiHierarchicalPropertySet.hpp"
 #include "com/sun/star/beans/XMultiPropertySet.hpp"
+#include "com/sun/star/beans/XProperty.hpp"
 #include "com/sun/star/beans/XPropertySet.hpp"
 #include "com/sun/star/beans/XPropertySetInfo.hpp"
 #include "com/sun/star/container/ElementExistException.hpp"
@@ -51,18 +52,20 @@
 #include "com/sun/star/lang/IllegalArgumentException.hpp"
 #include "com/sun/star/lang/NoSupportException.hpp"
 #include "com/sun/star/lang/WrappedTargetException.hpp"
+#include "com/sun/star/lang/XSingleServiceFactory.hpp"
+#include "com/sun/star/uno/Exception.hpp"
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/Sequence.hxx"
 #include "com/sun/star/util/ChangesSet.hpp"
 #include "com/sun/star/util/XChangesBatch.hpp"
 #include "com/sun/star/util/XChangesNotifier.hpp"
-#include "osl/mutex.hxx"
+#include "rtl/ref.hxx"
 #include "sal/types.h"
 
-#if !defined INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_13
-#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_13
-#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 13
+#if !defined INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_15
+#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_15
+#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 15
 #include "comphelper/implbase_var.hxx"
 #undef COMPHELPER_IMPLBASE_INTERFACE_NUMBER
 #endif
@@ -79,6 +82,7 @@ namespace com { namespace sun { namespace star {
     namespace uno {
         class Any;
         class Type;
+        class XInterface;
     }
     namespace util {
         class XChangesListener;
@@ -91,32 +95,32 @@ class Node;
 class RootAccess;
 
 class Access:
-    private osl::Mutex,
-    public comphelper::WeakComponentImplHelper13<
+    public comphelper::WeakComponentImplHelper15<
         com::sun::star::container::XHierarchicalNameAccess,
         com::sun::star::container::XContainer,
         com::sun::star::beans::XExactName,
         com::sun::star::beans::XPropertySetInfo,
         com::sun::star::container::XHierarchicalName,
         com::sun::star::container::XNamed,
+        com::sun::star::beans::XProperty,
         com::sun::star::beans::XPropertySet,
         com::sun::star::beans::XMultiPropertySet,
         com::sun::star::beans::XHierarchicalPropertySet,
         com::sun::star::beans::XMultiHierarchicalPropertySet,
         com::sun::star::util::XChangesNotifier,
         com::sun::star::container::XNameContainer,
+        com::sun::star::lang::XSingleServiceFactory,
         com::sun::star::util::XChangesBatch >,
     private boost::noncopyable
 {
-public:
-    Access(RootAccess const * root, Node * node);
-
 protected:
-    Access(RootAccess const * root);
+    explicit Access(Node * node);
 
     virtual ~Access();
 
-    virtual Node * getNode();
+    virtual Node * getNode() = 0;
+
+    virtual rtl::Reference< RootAccess > getRoot() = 0;
 
     Node * node_;
 
@@ -170,6 +174,9 @@ private:
         throw (com::sun::star::uno::RuntimeException);
 
     virtual void SAL_CALL setName(rtl::OUString const & aName)
+        throw (com::sun::star::uno::RuntimeException);
+
+    virtual com::sun::star::beans::Property SAL_CALL getAsProperty()
         throw (com::sun::star::uno::RuntimeException);
 
     virtual
@@ -359,6 +366,20 @@ private:
             com::sun::star::lang::WrappedTargetException,
             com::sun::star::uno::RuntimeException);
 
+    virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface >
+    SAL_CALL createInstance()
+        throw (
+            com::sun::star::uno::Exception,
+            com::sun::star::uno::RuntimeException);
+
+    virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface >
+    SAL_CALL createInstanceWithArguments(
+        com::sun::star::uno::Sequence< com::sun::star::uno::Any > const &
+            aArguments)
+        throw (
+            com::sun::star::uno::Exception,
+            com::sun::star::uno::RuntimeException);
+
     virtual void SAL_CALL commitChanges()
         throw (
             com::sun::star::lang::WrappedTargetException,
@@ -370,12 +391,11 @@ private:
     virtual com::sun::star::util::ChangesSet getPendingChanges()
         throw (com::sun::star::uno::RuntimeException);
 
-    RootAccess const * root_;
-
 #if OSL_DEBUG_LEVEL > 0
     enum {
-        IS_GROUP = 0x01, IS_SET = 0x02, IS_GROUP_OR_SET = 0x04, IS_ROOT = 0x08,
-        IS_GROUP_MEMBER = 0x10, IS_SET_MEMBER = 0x20, IS_UPDATE = 0x40 };
+        IS_GROUP = 0x01, IS_SET = 0x02, IS_GROUP_OR_SET = 0x04,
+        IS_GROUP_OR_SET_OR_LOCALIZED = 0x08, IS_ROOT = 0x10,
+        IS_GROUP_MEMBER = 0x20, IS_SET_MEMBER = 0x40, IS_UPDATE = 0x80 };
     bool thisIs(int what);
 #endif
 };

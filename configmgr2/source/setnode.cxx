@@ -61,7 +61,7 @@ Node * SetNode::clone(rtl::OUString const & name) const {
     return p.release();
 }
 
-rtl::OUString SetNode::getName() {
+rtl::OUString SetNode::getName() const {
     return name_;
 }
 

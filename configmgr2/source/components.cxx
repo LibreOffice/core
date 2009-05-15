@@ -133,7 +133,7 @@ public:
 
     virtual Node * clone(rtl::OUString const &) const { return 0; /* dummy */ }
 
-    virtual rtl::OUString getName() { return name_; }
+    virtual rtl::OUString getName() const { return name_; }
 
     virtual Node * getMember(rtl::OUString const &);
 
@@ -1394,6 +1394,11 @@ Node * Components::resolvePath(Node * base, rtl::OUString const & path) {
         n = n1;
     }
     return base;
+}
+
+Node const * Components::getTemplate(rtl::OUString const & fullName) const {
+    NodeMap::const_iterator i(templates_.find(fullName));
+    return i == templates_.end() ? 0 : i->second;
 }
 
 namespace {

@@ -48,6 +48,8 @@ public:
 
     Node * resolvePath(Node * base, rtl::OUString const & path);
 
+    Node const * getTemplate(rtl::OUString const & fullName) const;
+
 private:
     Components();
 

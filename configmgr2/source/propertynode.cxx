@@ -68,7 +68,7 @@ Node * PropertyNode::clone(rtl::OUString const &) const {
         0);
 }
 
-rtl::OUString PropertyNode::getName() {
+rtl::OUString PropertyNode::getName() const {
     return name_;
 }
 

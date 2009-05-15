@@ -49,7 +49,7 @@ public:
 
     virtual Node * clone(rtl::OUString const & name) const;
 
-    virtual rtl::OUString getName();
+    virtual rtl::OUString getName() const;
 
     virtual Node * getMember(rtl::OUString const & name);
 

@@ -52,7 +52,7 @@ public:
 
     virtual Node * clone(rtl::OUString const &) const;
 
-    virtual rtl::OUString getName();
+    virtual rtl::OUString getName() const;
 
     virtual Node * getMember(rtl::OUString const &);
 
