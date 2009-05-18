@@ -311,9 +311,6 @@ void ContentProvider::init()
      *  now determing
      *  productname,
      *  productversion,
-     *  vendorname,
-     *  vendorversion,
-     *  vendorshort
      */
 
     xHierAccess = getHierAccess( sProvider, "org.openoffice.Setup" );
@@ -332,20 +329,6 @@ void ContentProvider::init()
         setupversion +
         rtl::OUString::createFromAscii( " " ) +
         setupextension );
-
-    xHierAccess = getHierAccess( sProvider, "org.openoffice.Webtop.Common" );
-    rtl::OUString vendorname(
-        getKey( xHierAccess,"Product/ooName" ) );
-
-    setupversion = rtl::OUString(
-        getKey( xHierAccess,"Product/ooSetupVersion" ) );
-    setupextension = rtl::OUString(
-        getKey(  xHierAccess,"Product/ooSetupExtension") );
-    rtl::OUString vendorversion(
-        setupversion +
-        rtl::OUString::createFromAscii( " " ) +
-        setupextension );
-    rtl::OUString vendorshort = vendorname;
 
     uno::Sequence< rtl::OUString > aImagesZipPaths( 2 );
     xHierAccess = getHierAccess( sProvider,  "org.openoffice.Office.Common" );
@@ -374,9 +357,6 @@ void ContentProvider::init()
                                   aImagesZipPaths,
                                   productname,
                                   productversion,
-                                  vendorname,
-                                  vendorversion,
-                                  vendorshort,
                                   stylesheet,
                                   xContext );
 }
