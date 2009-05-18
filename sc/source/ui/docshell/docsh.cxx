@@ -1076,6 +1076,7 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
             }
             bSetColWidths = TRUE;
             bSetSimpleTextColWidths = TRUE;
+            bSetRowHeights = TRUE;
         }
         else if (aFltName.EqualsAscii(pFilterSylk))
         {
@@ -1103,6 +1104,7 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
                 SetError(eError);
             bSetColWidths = TRUE;
             bSetSimpleTextColWidths = TRUE;
+            bSetRowHeights = TRUE;
         }
         else if (aFltName.EqualsAscii(pFilterQPro6))
         {

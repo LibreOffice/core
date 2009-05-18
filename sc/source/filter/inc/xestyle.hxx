@@ -643,10 +643,13 @@ public:
         @param nXFFlags  Additional flags allowing to control the creation of an XF.
         @param nForceScNumFmt  The number format to be exported, e.g. formula
             result type. This format will always overwrite the cell's number format.
+        @param bForceLineBreak  true = Set line break flag unconditionally.
+            This is required for cells that contain multi-line text.
         @return  A unique XF record ID. */
     sal_uInt32          InsertWithNumFmt(
                             const ScPatternAttr* pPattern, sal_Int16 nScript,
-                            ULONG nForceScNumFmt );
+                            ULONG nForceScNumFmt,
+                            bool bForceLineBreak );
     /** Inserts the passed cell style. Creates a style XF record and a STYLE record.
         @return  A unique XF record ID. */
     sal_uInt32          InsertStyle( const SfxStyleSheetBase* pStyleSheet );

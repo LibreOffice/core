@@ -38,6 +38,11 @@
     and memory consumption. */
 class ScFormulaResult
 {
+    typedef unsigned char Multiline;
+    static const Multiline MULTILINE_UNKNOWN = 0;
+    static const Multiline MULTILINE_FALSE   = 1;
+    static const Multiline MULTILINE_TRUE    = 2;
+
     union
     {
         double          mfValue;    // double result direct for performance and memory consumption
@@ -47,6 +52,7 @@ class ScFormulaResult
     bool                mbToken :1; // whether content of union is a token
     bool                mbEmpty :1; // empty cell result
     bool                mbEmptyDisplayedAsString :1;    // only if mbEmpty
+    Multiline           meMultiline :2; // result is multiline
 
     /** Reset mnError, mbEmpty and mbEmptyDisplayedAsString to their defaults
         prior to assigning other types */
@@ -69,12 +75,14 @@ public:
                                 /** Effectively type svUnknown. */
                                 ScFormulaResult()
                                     : mpToken(NULL), mnError(0), mbToken(true),
-                                    mbEmpty(false), mbEmptyDisplayedAsString(false) {}
+                                    mbEmpty(false), mbEmptyDisplayedAsString(false),
+                                    meMultiline(MULTILINE_UNKNOWN) {}
 
                                 ScFormulaResult( const ScFormulaResult & r )
                                     : mnError( r.mnError), mbToken( r.mbToken),
                                     mbEmpty( r.mbEmpty),
-                                    mbEmptyDisplayedAsString( r.mbEmptyDisplayedAsString)
+                                    mbEmptyDisplayedAsString( r.mbEmptyDisplayedAsString),
+                                    meMultiline( r.meMultiline)
                                 {
                                     if (mbToken)
                                     {
@@ -99,7 +107,8 @@ public:
     /** Same comments as for SetToken() apply! */
     explicit                    ScFormulaResult( const formula::FormulaToken* p )
                                     : mnError(0), mbToken(false),
-                                    mbEmpty(false), mbEmptyDisplayedAsString(false)
+                                    mbEmpty(false), mbEmptyDisplayedAsString(false),
+                                    meMultiline(MULTILINE_UNKNOWN)
                                 {
                                     SetToken( p);
                                 }
@@ -152,6 +161,10 @@ public:
         cell usually is treated as numeric 0. Use GetCellResultType() for
         details instead. */
     inline  bool                IsValue() const;
+
+    /** Determines whether or not the result is a string containing more than
+        one paragraph */
+    inline  bool                IsMultiline() const;
 
     /** Get error code if set or GetCellResultType() is formula::svError or svUnknown,
         else 0. */
@@ -211,6 +224,7 @@ inline void ScFormulaResult::ResetToDefaults()
     mnError = 0;
     mbEmpty = false;
     mbEmptyDisplayedAsString = false;
+    meMultiline = MULTILINE_UNKNOWN;
 }
 
 
@@ -232,17 +246,20 @@ inline void ScFormulaResult::ResolveToken( const formula::FormulaToken * p )
                 mbToken = false;
                 // set in case mnError is 0 now, which shouldn't happen but ...
                 mfValue = 0.0;
+                meMultiline = MULTILINE_FALSE;
                 break;
             case formula::svEmptyCell:
                 mbEmpty = true;
                 mbEmptyDisplayedAsString = static_cast<const ScEmptyCellToken*>(p)->IsDisplayedAsString();
                 p->DecRef();
                 mbToken = false;
+                meMultiline = MULTILINE_FALSE;
                 break;
             case formula::svDouble:
                 mfValue = p->GetDouble();
                 p->DecRef();
                 mbToken = false;
+                meMultiline = MULTILINE_FALSE;
                 break;
             default:
                 mpToken = p;
@@ -270,6 +287,7 @@ inline void ScFormulaResult::Assign( const ScFormulaResult & r )
         mbToken = false;
         mbEmpty = true;
         mbEmptyDisplayedAsString = r.mbEmptyDisplayedAsString;
+        meMultiline = r.meMultiline;
     }
     else if (r.mbToken)
     {
@@ -352,6 +370,7 @@ inline void ScFormulaResult::SetDouble( double f )
             mpToken->DecRef();
         mfValue = f;
         mbToken = false;
+        meMultiline = MULTILINE_FALSE;
     }
 }
 
@@ -402,6 +421,19 @@ inline bool ScFormulaResult::IsValue() const
 {
     formula::StackVar sv = GetCellResultType();
     return sv == formula::svDouble || sv == formula::svError || sv == formula::svEmptyCell;
+}
+
+inline bool ScFormulaResult::IsMultiline() const
+{
+    if (meMultiline == MULTILINE_UNKNOWN)
+    {
+        const String& rStr = GetString();
+        if (rStr.Len() && rStr.Search( _LF ) != STRING_NOTFOUND)
+            const_cast<ScFormulaResult*>(this)->meMultiline = MULTILINE_TRUE;
+        else
+            const_cast<ScFormulaResult*>(this)->meMultiline = MULTILINE_FALSE;
+    }
+    return meMultiline == MULTILINE_TRUE;
 }
 
 
@@ -537,6 +569,7 @@ inline void ScFormulaResult::SetHybridDouble( double f )
     {
         mfValue = f;
         mbToken = false;
+        meMultiline = MULTILINE_FALSE;
     }
 }
 

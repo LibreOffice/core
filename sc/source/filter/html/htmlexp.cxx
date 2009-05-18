@@ -1154,9 +1154,31 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
     if ( !bFieldText )
     {
         if ( !aStrOut.Len() )
+        {
             TAG_ON( OOO_STRING_SVTOOLS_HTML_linebreak );        // #42573# keine komplett leere Zelle
+        }
         else
-            OUT_STR( aStrOut );
+        {
+            xub_StrLen nPos = aStrOut.Search( _LF );
+            if ( nPos == STRING_NOTFOUND )
+            {
+                OUT_STR( aStrOut );
+            }
+            else
+            {
+                xub_StrLen nStartPos = 0;
+                do
+                {
+                    String aSingleLine( aStrOut, nStartPos, nPos - nStartPos );
+                    OUT_STR( aSingleLine );
+                    TAG_ON( OOO_STRING_SVTOOLS_HTML_linebreak );
+                    nStartPos = nPos + 1;
+                }
+                while( ( nPos = aStrOut.Search( _LF, nStartPos ) ) != STRING_NOTFOUND );
+                String aSingleLine( aStrOut, nStartPos, aStrOut.Len() - nStartPos );
+                OUT_STR( aSingleLine );
+            }
+        }
     }
     if ( pGraphEntry )
         WriteGraphEntry( pGraphEntry );
@@ -1194,7 +1216,7 @@ BOOL ScHTMLExport::WriteFieldText( const ScEditCell* pCell )
         for ( USHORT nPar=0; nPar < nParas; nPar++ )
         {
             if ( nPar > 0 )
-                rStrm << ' ';       // blank between paragraphs
+                TAG_ON( OOO_STRING_SVTOOLS_HTML_linebreak );
             SvUShorts aPortions;
             rEngine.GetPortions( nPar, aPortions );
             USHORT nCnt = aPortions.Count();

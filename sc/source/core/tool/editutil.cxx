@@ -82,17 +82,27 @@ String ScEditUtil::ModifyDelimiters( const String& rOld )
     return aRet;
 }
 
-String ScEditUtil::GetSpaceDelimitedString( const EditEngine& rEngine )
+static String lcl_GetDelimitedString( const EditEngine& rEngine, const sal_Char c )
 {
     String aRet;
     USHORT nParCount = rEngine.GetParagraphCount();
     for (USHORT nPar=0; nPar<nParCount; nPar++)
     {
         if (nPar > 0)
-            aRet += ' ';
+            aRet += c;
         aRet += rEngine.GetText( nPar );
     }
     return aRet;
+}
+
+String ScEditUtil::GetSpaceDelimitedString( const EditEngine& rEngine )
+{
+    return lcl_GetDelimitedString(rEngine, ' ');
+}
+
+String ScEditUtil::GetMultilineString( const EditEngine& rEngine )
+{
+    return lcl_GetDelimitedString(rEngine, '\n');
 }
 
 //------------------------------------------------------------------------

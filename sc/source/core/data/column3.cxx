@@ -846,7 +846,16 @@ ScBaseCell* ScColumn::CloneCell(SCSIZE nIndex, USHORT nFlags, ScDocument& rDestD
                     rForm.GetString( aString );
                     // #33224# do not clone empty string
                     if (aString.Len() > 0)
-                        pNew = new ScStringCell( aString );
+                    {
+                        if ( rForm.IsMultilineResult() )
+                        {
+                            pNew = new ScEditCell( aString, &rDestDoc );
+                        }
+                        else
+                        {
+                            pNew = new ScStringCell( aString );
+                        }
+                    }
                 }
             }
         break;

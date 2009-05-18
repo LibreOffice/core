@@ -2139,8 +2139,10 @@ BOOL ScColumn::HasEditCells(SCROW nStartRow, SCROW nEndRow, SCROW& rFirst) const
     while ( (nIndex < nCount) ? ((nRow=pItems[nIndex].nRow) <= nEndRow) : FALSE )
     {
         ScBaseCell* pCell = pItems[nIndex].pCell;
-        if ( pCell->GetCellType() == CELLTYPE_EDIT ||
-             IsAmbiguousScriptNonZero( pDocument->GetScriptType(nCol, nRow, nTab, pCell) ) )
+        CellType eCellType = pCell->GetCellType();
+        if ( eCellType == CELLTYPE_EDIT ||
+             IsAmbiguousScriptNonZero( pDocument->GetScriptType(nCol, nRow, nTab, pCell) ) ||
+             ((eCellType == CELLTYPE_FORMULA) && ((ScFormulaCell*)pCell)->IsMultilineResult()) )
         {
             rFirst = nRow;
             return TRUE;

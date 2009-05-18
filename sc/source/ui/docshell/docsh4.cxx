@@ -2424,10 +2424,12 @@ long __EXPORT ScDocShell::DdeGetData( const String& rItem,
         if( aDdeTextFmt.EqualsAscii( "CSV" ) ||
             aDdeTextFmt.EqualsAscii( "FCSV" ) )
             aObj.SetSeparator( ',' );
+        aObj.SetExportTextOptions( ScExportTextOptions( ScExportTextOptions::ToSpace, 0, false ) );
         return aObj.ExportData( rMimeType, rValue ) ? 1 : 0;
     }
 
     ScImportExport aObj( &aDocument, rItem );
+    aObj.SetExportTextOptions( ScExportTextOptions( ScExportTextOptions::ToSpace, 0, false ) );
     if( aObj.IsRef() )
         return aObj.ExportData( rMimeType, rValue ) ? 1 : 0;
     return 0;

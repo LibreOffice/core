@@ -2427,7 +2427,8 @@ void ScXMLExport::WriteCell (ScMyCell& aCell)
 
     if (!bIsEmpty)
     {
-        if ((aCell.nType == table::CellContentType_TEXT) && IsEditCell(aCell))
+        if ((aCell.nType == table::CellContentType_TEXT && IsEditCell(aCell)) ||
+            (aCell.nType == table::CellContentType_FORMULA && IsMultiLineFormulaCell(aCell)))
         {
             bEditCell = sal_True;
             uno::Reference<text::XText> xText(xCurrentTableCellRange->getCellByPosition(aCell.aCellAddress.Column, aCell.aCellAddress.Row), uno::UNO_QUERY);
@@ -2842,12 +2843,15 @@ sal_Bool ScXMLExport::IsCellTypeEqual (const ScMyCell& aCell1, const ScMyCell& a
     return (aCell1.nType == aCell2.nType);
 }
 
-sal_Bool ScXMLExport::IsEditCell(const com::sun::star::table::CellAddress& aAddress) const
+sal_Bool ScXMLExport::IsEditCell(const com::sun::star::table::CellAddress& aAddress, ScMyCell* pMyCell) const
 {
     ScAddress aCoreAddress(static_cast<SCCOL>(aAddress.Column),
                         static_cast<SCROW>(aAddress.Row),
                         static_cast<SCTAB>(aAddress.Sheet));
     ScBaseCell* pBaseCell = GetDocument() ? GetDocument()->GetCell(aCoreAddress) : NULL;
+    if (pMyCell)
+        pMyCell->pBaseCell = pBaseCell;
+
     if (pBaseCell)
         return (pBaseCell->GetCellType() == CELLTYPE_EDIT);
     return sal_False;
@@ -2867,10 +2871,34 @@ sal_Bool ScXMLExport::IsEditCell(ScMyCell& rCell) const
         return rCell.bIsEditCell;
     else
     {
-        rCell.bIsEditCell = IsEditCell(rCell.aCellAddress);
+         rCell.bIsEditCell = IsEditCell(rCell.aCellAddress, &rCell);
         rCell.bKnowWhetherIsEditCell = sal_True;
         return rCell.bIsEditCell;
     }
+}
+
+sal_Bool ScXMLExport::IsMultiLineFormulaCell(ScMyCell& rCell) const
+{
+    if (rCell.pBaseCell)
+    {
+        if (rCell.pBaseCell->GetCellType() != CELLTYPE_FORMULA)
+            return false;
+
+        return static_cast<ScFormulaCell*>(rCell.pBaseCell)->IsMultilineResult();
+    }
+
+    ScAddress aAddr(static_cast<SCCOL>(rCell.aCellAddress.Column),
+                    static_cast<SCROW>(rCell.aCellAddress.Row),
+                    static_cast<SCTAB>(rCell.aCellAddress.Sheet));
+    ScBaseCell* pBaseCell = pDoc ? pDoc->GetCell(aAddr) : NULL;
+    if (!pBaseCell)
+        return false;
+
+    rCell.pBaseCell = pBaseCell;
+    if (rCell.pBaseCell->GetCellType() != CELLTYPE_FORMULA)
+        return false;
+
+    return static_cast<ScFormulaCell*>(rCell.pBaseCell)->IsMultilineResult();
 }
 
 //UNUSED2008-05  sal_Bool ScXMLExport::IsAnnotationEqual(const uno::Reference<table::XCell>& /* xCell1 */,

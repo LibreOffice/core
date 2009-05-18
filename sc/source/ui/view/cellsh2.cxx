@@ -1067,6 +1067,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     DBG_ASSERT( pDoc, "ScCellShell::ExecuteDB: SID_TEXT_TO_COLUMNS - pDoc is null!" );
 
                     ScImportExport aExport( pDoc, aRange );
+                    aExport.SetExportTextOptions( ScExportTextOptions( ScExportTextOptions::None, 0, false ) );
 
                     // #i87703# text to columns fails with tab separator
                     aExport.SetDelimiter( static_cast< sal_Unicode >( 0 ) );

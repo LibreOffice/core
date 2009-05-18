@@ -129,7 +129,7 @@ void ScEditCell::GetString( String& rString ) const
         // auch Text von URL-Feldern, Doc-Engine ist eine ScFieldEditEngine
         EditEngine& rEngine = pDoc->GetEditEngine();
         rEngine.SetText( *pData );
-        rString = ScEditUtil::GetSpaceDelimitedString(rEngine);     // space between paragraphs
+        rString = ScEditUtil::GetMultilineString(rEngine); // string with line separators between paragraphs
         // kurze Strings fuer Formeln merken
         if ( rString.Len() < MAXSTRLEN )
             ((ScEditCell*)this)->pString = new String( rString );   //! non-const

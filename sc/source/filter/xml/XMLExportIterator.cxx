@@ -568,6 +568,7 @@ ScMyCell::ScMyCell() :
     aShapeList(),
     aDetectiveObjVec(),
     nValidationIndex(-1),
+    pBaseCell(NULL),
     bIsAutoStyle( sal_False ),
     bHasShape( sal_False ),
     bIsMergedBase( sal_False ),
