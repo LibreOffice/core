@@ -101,6 +101,13 @@
 #include <uielement/menubarmerger.hxx>
 #include <dispatch/uieventloghelper.hxx>
 
+#ifdef WNT
+#include <tools/prewin.h>
+#include <windows.h>
+#include <tools/postwin.h>
+#endif
+#include <vcl/sysdata.hxx>
+
 //_________________________________________________________________________________________________________________
 //  namespace
 //_________________________________________________________________________________________________________________
@@ -134,12 +141,6 @@ const sal_Int32   LEN_DESCRIPTOR_MODULEIDENTIFIER     = 16;
 const sal_Int32   LEN_DESCRIPTOR_DISPATCHPROVIDER     = 16;
 
 const sal_uInt16 ADDONMENU_MERGE_ITEMID_START = 1500;
-
-struct SystemMenuData
-{
-    unsigned long   nSize;          // size in bytes of this structure
-    long            aMenu;          // ???
-};
 
 class StringLength : public ::cppu::WeakImplHelper1< ::com::sun::star::util::XStringWidth >
 {
@@ -463,14 +464,18 @@ Any SAL_CALL MenuBarManager::getMenuHandle( const ::com::sun::star::uno::Sequenc
         aSystemMenuData.nSize = sizeof( SystemMenuData );
 
         m_pVCLMenu->GetSystemMenuData( &aSystemMenuData );
-#ifdef UNX
-        if( SystemType == ::com::sun::star::lang::SystemDependent::SYSTEM_XWINDOW )
+#ifdef QUARTZ
+        if( SystemType == ::com::sun::star::lang::SystemDependent::SYSTEM_MAC )
         {
         }
 #elif (defined WNT)
         if( SystemType == ::com::sun::star::lang::SystemDependent::SYSTEM_WIN32 )
         {
-            a <<= aSystemMenuData.aMenu;
+            a <<= (long) aSystemMenuData.hMenu;
+        }
+#elif (defined UNX)
+        if( SystemType == ::com::sun::star::lang::SystemDependent::SYSTEM_XWINDOW )
+        {
         }
 #endif
     }
