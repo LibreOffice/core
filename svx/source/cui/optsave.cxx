@@ -610,11 +610,14 @@ void SfxSaveTabPage::Reset( const SfxItemSet& )
         catch(Exception& e)
         {
             (void) e;
-            OSL_TRACE(
-                "exception in FilterFactory access: %s",
-                (rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).
-                 getStr()));
-            OSL_ASSERT(false);
+            DBG_ERROR(
+                rtl::OUStringToOString(
+                    (rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM(
+                            "exception in FilterFactory access: ")) +
+                     e.Message),
+                    RTL_TEXTENCODING_UTF8).
+                getStr());
         }
 
         pImpl->bInitialized = sal_True;

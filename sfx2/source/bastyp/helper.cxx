@@ -552,9 +552,17 @@ uno::Sequence < OUString > SfxContentHelper::GetResultSet( const String& rURL )
             }
         }
     }
-    catch( uno::Exception& )
+    catch( uno::Exception& e )
     {
-        DBG_ERRORFILE( "GetResultSet: Any other exception" );
+        (void) e;
+        DBG_ERRORFILE(
+            rtl::OUStringToOString(
+                (rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "GetResultSet: Any other exception: ")) +
+                 e.Message),
+                RTL_TEXTENCODING_UTF8).
+            getStr());
     }
 
     if ( pList )
