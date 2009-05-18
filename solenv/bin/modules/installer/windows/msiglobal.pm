@@ -1977,6 +1977,7 @@ sub set_msiproductversion
         {
             if ( $allvariables->{'PACKAGEVERSION'} =~ /^\s*(\d+)\.(\d+)\.(\d+)\s*$/ ) { $productminor = $2; }
         }
+
         $productversion = $productversion . "\." . $productminor . "\." . $installer::globals::buildid;
     }
 
@@ -2139,7 +2140,7 @@ sub read_saved_mappings
         while (<F>)
         {
             m/^([^\t]+)\t([^\t]+)\t((.*)\|)?([^\t]*)/;
-            print "AAA1: \$1: $1, \$2: $2, \$3: $3, \$4: $4, \$5: $5\n";
+            print "OUT1: \$1: $1, \$2: $2, \$3: $3, \$4: $4, \$5: $5\n";
             next if ("$1" eq "$5") && (!defined($3));
             my $lc1 = lc($1);
 
@@ -2216,7 +2217,7 @@ sub read_saved_mappings
             next if (!defined($3));
             my $lc1 = lc($1);
 
-            print "AAA2: \$1: $1, \$2: $2, \$3: $3\n";
+            print "OUT2: \$1: $1, \$2: $2, \$3: $3\n";
 
             if ( exists($installer::globals::saved83dirmapping{$1}) )
             {

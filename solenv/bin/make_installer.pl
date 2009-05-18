@@ -2298,7 +2298,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         # Creating Windows msp patches
         #######################################################
 
-        if (( $is_success ) && ( $installer::globals::updatedatabase ) && ( $allvariableshashref->{'CREATE_MSP_INSTALLSET'} ) && ( ! ( $^O =~ /cygwin/i ))) # not supported for cygwin yet
+        if (( $is_success ) && ( $installer::globals::updatedatabase ) && ( $allvariableshashref->{'CREATE_MSP_INSTALLSET'} ))
         {
             # Required:
             # Temp path for administrative installations: $installer::globals::temppath

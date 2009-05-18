@@ -123,6 +123,11 @@ sub check_system_path
     # Windows : "msicert.exe", "msidb.exe", "signtool.exe"
 
     my @needed_files_in_path = ("msicert.exe", "msidb.exe", "signtool.exe");
+    if ( $installer::globals::internal_cabinet_signing )
+    {
+        push(@needed_files_in_path, "cabarc.exe");
+        push(@needed_files_in_path, "makecab.exe");
+    }
 
     my $onefile;
     my $error = 0;
@@ -193,6 +198,82 @@ sub make_systemcall
     return $success;
 }
 
+######################################################
+# Making systemcall with warning
+######################################################
+
+sub make_systemcall_with_warning
+{
+    my ($systemcall, $displaysystemcall) = @_;
+
+    installer::logger::print_message( "... $displaysystemcall ...\n" );
+
+    my $success = 1;
+    my $returnvalue = system($systemcall);
+
+    my $infoline = "Systemcall: $displaysystemcall\n";
+    push( @installer::globals::logfileinfo, $infoline);
+
+    if ($returnvalue)
+    {
+        $infoline = "WARNING: Could not execute \"$displaysystemcall\"!\n";
+        push( @installer::globals::logfileinfo, $infoline);
+        $success = 0;
+    }
+    else
+    {
+        $infoline = "Success: Executed \"$displaysystemcall\" successfully!\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+
+    return $success;
+}
+
+######################################################
+# Making systemcall with more return data
+######################################################
+
+sub execute_open_system_call
+{
+    my ( $systemcall ) = @_;
+
+    my @openoutput = ();
+    my $success = 1;
+
+    my $comspec = $ENV{COMSPEC};
+    $comspec = $comspec . " -c ";
+
+    if( $^O =~ /cygwin/i )
+    {
+        # $comspec =~ s/\\/\\\\/g;
+        # $comspec = qx{cygpath -u "$comspec"};
+        # $comspec =~ s/\s*$//g;
+        $comspec = "";
+    }
+
+    my $localsystemcall = "$comspec $systemcall 2>&1 |";
+
+    open( OPN, "$localsystemcall") or warn "Can't execute $localsystemcall\n";
+    while (<OPN>) { push(@openoutput, $_); }
+    close (OPN);
+
+    my $returnvalue = $?;   # $? contains the return value of the systemcall
+
+    if ($returnvalue)
+    {
+        $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
+        push( @installer::globals::logfileinfo, $infoline);
+        $success = 0;
+    }
+    else
+    {
+        $infoline = "Success: Executed \"$systemcall\" successfully!\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+
+    return ($success, \@openoutput);
+}
+
 ########################################################
 # Reading first line of pw file.
 ########################################################
@@ -255,7 +336,7 @@ sub analyze_media_file
 # Collect all DiskIds from database table "Media".
 ########################################################
 
-sub collect_diskid
+sub collect_diskid_from_media_table
 {
     my ($msidatabase, $languagestring) = @_;
 
@@ -265,11 +346,39 @@ sub collect_diskid
 
     # Reading tables
     my $filename = $workdir . $installer::globals::separator . "Media.idt";
-    if ( ! -f $filename ) { installer::exiter::exit_program("ERROR: Could not find required file: $filename !", "collect_diskid"); }
+    if ( ! -f $filename ) { installer::exiter::exit_program("ERROR: Could not find required file: $filename !", "collect_diskid_from_media_table"); }
     my $filecontent = installer::files::read_file($filename);
     my $diskidhash = analyze_media_file($filecontent);
 
     return $diskidhash;
+}
+
+########################################################
+# Check, if this installation set contains
+# internal cabinet files included into the msi
+# database.
+########################################################
+
+sub check_for_internal_cabfiles
+{
+    my ($cabfilehash) = @_;
+
+    my $contains_internal_cabfiles = 0;
+    my %allcabfileshash = ();
+
+    foreach my $filename ( keys %{$cabfilehash} )
+    {
+        if ( $filename =~ /^\s*\#/ )     # starting with a hash
+        {
+            $contains_internal_cabfiles = 1;
+            # setting real filename without hash as key and name with hash as value
+            my $realfilename = $filename;
+            $realfilename =~ s/^\s*\#//;
+            $allcabfileshash{$realfilename} = $filename;
+        }
+    }
+
+    return ( $contains_internal_cabfiles, \%allcabfileshash );
 }
 
 ########################################################
@@ -289,18 +398,19 @@ sub analyze_installset_content
     my %allcabfileshash = ();
     my %allmsidatabaseshash = ();
     my %allfileshash = ();
-    my $contains_cab_file = 0;
+    my $contains_external_cabfiles = 0;
     my $msidatabase = "";
+    my $contains_msidatabase = 0;
 
     for ( my $j = 0; $j <= $#sourcefiles; $j++ )
     {
         if ( $sourcefiles[$j] =~ /\.cab\s*$/ ) { $allcabfileshash{$sourcefiles[$j]} = 1; }
         else
         {
-            if ( $sourcefiles[$j] =~ /jre[-\w]+.exe\s*$/ ) { next; } # no signing of java executable
             if ( $sourcefiles[$j] =~ /\.txt\s*$/ ) { next; }
             if ( $sourcefiles[$j] =~ /\.html\s*$/ ) { next; }
             if ( $sourcefiles[$j] =~ /\.ini\s*$/ ) { next; }
+            if ( $sourcefiles[$j] =~ /\.bmp\s*$/ ) { next; }
             if ( $sourcefiles[$j] =~ /\.msi\s*$/ )
             {
                 if ( $msidatabase eq "" ) { $msidatabase = $sourcefiles[$j]; }
@@ -312,12 +422,14 @@ sub analyze_installset_content
 
     # Is there at least one cab file in the installation set?
     my $cabcounter = get_hash_count(\%allcabfileshash);
-    if ( $cabcounter > 0 ) { $contains_cab_file = 1; }
+    if ( $cabcounter > 0 ) { $contains_external_cabfiles = 1; }
 
     # How about a cab file without a msi database?
     if (( $cabcounter > 0 ) && ( $msidatabase eq "" )) { installer::exiter::exit_program("ERROR: There is no msi database in the installation set, but an external cabinet file. Path: $installsetpath !", "collect_installset_content"); }
 
-    return (\%allcabfileshash, \%allfileshash, $msidatabase, $contains_cab_file);
+    if ( $msidatabase ne "" ) { $contains_msidatabase = 1; }
+
+    return (\%allcabfileshash, \%allfileshash, $msidatabase, $contains_external_cabfiles, $contains_msidatabase);
 }
 
 ########################################################
@@ -327,17 +439,17 @@ sub analyze_installset_content
 
 sub msicert_database
 {
-    my ($msidatabase, $allcabfiles, $languagestring) = @_;
-
-    # exclude media table from msi database and get all diskids.
-    my $cabfilehash = collect_diskid($msidatabase, $languagestring);
+    my ($msidatabase, $allcabfiles, $cabfilehash, $internalcabfile) = @_;
 
     my $fullsuccess = 1;
 
     foreach my $cabfile ( keys %{$allcabfiles} )
     {
-        if ( ! exists($cabfilehash->{$cabfile}) ) { installer::exiter::exit_program("ERROR: Could not determine DiskId from media table for cabinet file \"$cabfile\" !", "msicert_database"); }
-        my $diskid = $cabfilehash->{$cabfile};
+        my $mediacabfilename = $cabfile;
+        if ( $internalcabfile ) { $mediacabfilename = "\#" . $mediacabfilename; }
+        if ( ! exists($cabfilehash->{$mediacabfilename}) ) { installer::exiter::exit_program("ERROR: Could not determine DiskId from media table for cabinet file \"$cabfile\" !", "msicert_database"); }
+        my $diskid = $cabfilehash->{$mediacabfilename};
+
         my $systemcall = "msicert.exe -d $msidatabase -m $diskid -c $cabfile -h";
          $success = make_systemcall($systemcall, $systemcall);
         if ( ! $success ) { $fullsuccess = 0; }
@@ -352,27 +464,444 @@ sub msicert_database
 
 sub sign_files
 {
-    my ( $followmeinfohash, $allfiles, $pw ) = @_;
+    my ( $followmeinfohash, $allfiles, $pw, $cabinternal ) = @_;
 
     my $infoline = "";
     my $fullsuccess = 1;
+    my $maxcounter = 3;
 
     my $productname = "";
     if ( $followmeinfohash->{'allvariableshash'}->{'PRODUCTNAME'} ) { $productname = "/d " . "\"$followmeinfohash->{'allvariableshash'}->{'PRODUCTNAME'}\""; }
     my $url = "";
-    if ( $followmeinfohash->{'allvariableshash'}->{'OPENSOURCE'} == 0 ) { $url = "/du " . "\"http://www.sun.com\""; }
+    if (( ! exists($followmeinfohash->{'allvariableshash'}->{'OPENSOURCE'}) ) || ( $followmeinfohash->{'allvariableshash'}->{'OPENSOURCE'} == 0 )) { $url = "/du " . "\"http://www.sun.com\""; }
     else { $url = "/du " . "\"http://www.openoffice.org\""; }
     my $timestampurl = "http://timestamp.verisign.com/scripts/timestamp.dll";
 
-    foreach my $onefile ( keys %{$allfiles} )
+    my $pfxfilepath = $installer::globals::pfxfile;
+
+    if( $^O =~ /cygwin/i )
     {
-        my $systemcall = "signtool.exe sign /f \"$installer::globals::pfxfile\" /p $pw $productname $url /t \"$timestampurl\" \"$onefile\"";
-        my $displaysystemcall = "signtool.exe sign /f \"$installer::globals::pfxfile\" /p ***** $productname $url /t \"$timestampurl\" \"$onefile\"";
-         my $success = make_systemcall($systemcall, $displaysystemcall);
-         if ( ! $success ) { $fullsuccess = 0; }
+        $pfxfilepath = qx{cygpath -w "$pfxfilepath"};
+        $pfxfilepath =~ s/\\/\\\\/g;
+        $pfxfilepath =~ s/\s*$//g;
+    }
+
+    foreach my $onefile ( reverse sort keys %{$allfiles} )
+    {
+        if ( already_certified($onefile) )
+        {
+            $infoline = "Already certified: Skipping file $onefile\n";
+            push( @installer::globals::logfileinfo, $infoline);
+            next;
+        }
+
+        my $counter = 1;
+        my $success = 0;
+
+        while (( $counter <= $maxcounter ) && ( ! $success ))
+        {
+            if ( $counter > 1 ) { installer::logger::print_message( "\n\n... repeating file $onefile ...\n" ); }
+            if ( $cabinternal ) { installer::logger::print_message("    Signing: $onefile\n"); }
+            my $systemcall = "signtool.exe sign /f \"$pfxfilepath\" /p $pw $productname $url /t \"$timestampurl\" \"$onefile\"";
+            my $displaysystemcall = "signtool.exe sign /f \"$pfxfilepath\" /p ***** $productname $url /t \"$timestampurl\" \"$onefile\"";
+             $success = make_systemcall_with_warning($systemcall, $displaysystemcall);
+             $counter++;
+         }
+
+         if ( ! $success )
+         {
+             $fullsuccess = 0;
+            installer::exiter::exit_program("ERROR: Could not sign file: $onefile!", "sign_files");
+        }
     }
 
     return $fullsuccess;
+}
+
+##########################################################################
+# Lines in ddf files must not contain more than 256 characters
+##########################################################################
+
+sub check_ddf_file
+{
+    my ( $ddffile, $ddffilename ) = @_;
+
+    my $maxlength = 0;
+    my $maxline = 0;
+    my $linelength = 0;
+    my $linenumber = 0;
+
+    for ( my $i = 0; $i <= $#{$ddffile}; $i++ )
+    {
+        my $oneline = ${$ddffile}[$i];
+
+        $linelength = length($oneline);
+        $linenumber = $i + 1;
+
+        if ( $linelength > 256 )
+        {
+            installer::exiter::exit_program("ERROR \"$ddffilename\" line $linenumber: Lines in ddf files must not contain more than 256 characters!", "check_ddf_file");
+        }
+
+        if ( $linelength > $maxlength )
+        {
+            $maxlength = $linelength;
+            $maxline = $linenumber;
+        }
+    }
+
+    my $infoline = "Check of ddf file \"$ddffilename\": Maximum length \"$maxlength\" in line \"$maxline\" (allowed line length: 256 characters)\n";
+    push( @installer::globals::logfileinfo, $infoline);
+}
+
+#################################################################
+# Setting the path, where the cab files are unpacked.
+#################################################################
+
+sub get_cab_path
+{
+    my ($temppath) = @_;
+
+    my $cabpath = "cabs_" . $$;
+    $cabpath = $temppath . $installer::globals::separator . $cabpath;
+    if ( ! -d $cabpath ) { installer::systemactions::create_directory($cabpath); }
+
+    return $cabpath;
+}
+
+#################################################################
+# Exclude all cab files from the msi database.
+#################################################################
+
+sub extract_cabs_from_database
+{
+    my ($msidatabase, $allcabfiles) = @_;
+
+    installer::logger::include_header_into_logfile("Extracting cabs from msi database");
+
+    my $infoline = "";
+    my $fullsuccess = 1;
+    my $msidb = "msidb.exe";    # Has to be in the path
+
+    if ( $ENV{'USE_SHELL'} ne "4nt" ) {
+        # msidb.exe really wants backslashes. (And double escaping because system() expands the string.)
+        $msidatabase =~ s/\//\\\\/g;
+    }
+
+    foreach my $onefile ( keys %{$allcabfiles} )
+    {
+        my $systemcall = $msidb . " -d " . $msidatabase . " -x " . $onefile;
+         my $success = make_systemcall($systemcall, $systemcall);
+        if ( ! $success ) { $fullsuccess = 0; }
+
+        # and removing the stream from the database
+        $systemcall = $msidb . " -d " . $msidatabase . " -k " . $onefile;
+         $success = make_systemcall($systemcall, $systemcall);
+        if ( ! $success ) { $fullsuccess = 0; }
+    }
+
+    return $fullsuccess;
+}
+
+#################################################################
+# Include cab files into the msi database.
+#################################################################
+
+sub include_cabs_into_database
+{
+    my ($msidatabase, $allcabfiles) = @_;
+
+    installer::logger::include_header_into_logfile("Including cabs into msi database");
+
+    my $infoline = "";
+    my $fullsuccess = 1;
+    my $msidb = "msidb.exe";    # Has to be in the path
+
+    if ( $ENV{'USE_SHELL'} ne "4nt" ) {
+        # msidb.exe really wants backslashes. (And double escaping because system() expands the string.)
+        $msidatabase =~ s/\//\\\\/g;
+    }
+
+    foreach my $onefile ( keys %{$allcabfiles} )
+    {
+        my $systemcall = $msidb . " -d " . $msidatabase . " -a " . $onefile;
+         my $success = make_systemcall($systemcall, $systemcall);
+        if ( ! $success ) { $fullsuccess = 0; }
+    }
+
+    return $fullsuccess;
+}
+
+########################################################
+# Reading the order of the files inside the
+# cabinet files.
+########################################################
+
+sub read_cab_file
+{
+    my ($cabfilename) = @_;
+
+    installer::logger::print_message( "\n... reading cabinet file $cabfilename ...\n" );
+    my $infoline = "Reading cabinet file $cabfilename\n";
+    push( @installer::globals::logfileinfo, $infoline);
+
+    my $systemcall = "cabarc.exe" . " L " . $cabfilename;
+    push(@logfile, "$systemcall\n");
+
+    my ($success, $fileorder) = execute_open_system_call($systemcall);
+
+    my @allfiles = ();
+
+    for ( my $i = 0; $i <= $#{$fileorder}; $i++ )
+    {
+        my $line = ${$fileorder}[$i];
+        if ( $line =~ /^\s*(.*?)\s+\d+\s+\d+\/\d+\/\d+\s+\d+\:\d+\:\d+\s+[\w-]+\s*$/ )
+        {
+            my $filename = $1;
+            push(@allfiles, $filename);
+        }
+    }
+
+    return \@allfiles;
+}
+
+########################################################
+# Unpacking a cabinet file.
+########################################################
+
+sub unpack_cab_file
+{
+    my ($cabfilename, $temppath) = @_;
+
+    installer::logger::print_message( "\n... unpacking cabinet file $cabfilename ...\n" );
+    my $infoline = "Unpacking cabinet file $cabfilename\n";
+    push( @installer::globals::logfileinfo, $infoline);
+
+    my $dirname = $cabfilename;
+    $dirname =~ s/\.cab\s*$//;
+    my $workingpath = $temppath . $installer::globals::separator . "unpack_". $dirname . "_" . $$;
+    if ( ! -d $workingpath ) { installer::systemactions::create_directory($workingpath); }
+
+    # changing into unpack directory
+    my $from = cwd();
+    chdir($workingpath);
+
+    my $fullcabfilename = $from . $installer::globals::separator . $cabfilename;
+
+    if( $^O =~ /cygwin/i )
+    {
+        $fullcabfilename = qx{cygpath -w "$fullcabfilename"};
+        $fullcabfilename =~ s/\\/\\\\/g;
+        $fullcabfilename =~ s/\s*$//g;
+    }
+
+    my $systemcall = "cabarc.exe" . " -p X " . $fullcabfilename;
+    $success = make_systemcall($systemcall, $systemcall);
+    if ( ! $success ) { installer::exiter::exit_program("ERROR: Could not unpack cabinet file: $fullcabfilename!", "unpack_cab_file"); }
+
+    # returning to directory
+    chdir($from);
+
+    return $workingpath;
+}
+
+########################################################
+# Returning the header of a ddf file.
+########################################################
+
+sub get_ddf_file_header
+{
+    my ($ddffileref, $cabinetfile, $installdir) = @_;
+
+    my $oneline;
+    my $compressionlevel = 2;
+
+    if( $^O =~ /cygwin/i )
+    {
+        $installdir = qx{cygpath -w "$installdir"};
+        $installdir =~ s/\s*$//g;
+    }
+
+    $oneline = ".Set CabinetName1=" . $cabinetfile . "\n";
+    push(@{$ddffileref} ,$oneline);
+    $oneline = ".Set ReservePerCabinetSize=128\n";  # This reserves space for a digital signature.
+    push(@{$ddffileref} ,$oneline);
+    $oneline = ".Set MaxDiskSize=CDROM\n";          # This allows the .cab file to be as large as needed.
+    push(@{$ddffileref} ,$oneline);
+    $oneline = ".Set CompressionType=LZX\n";
+    push(@{$ddffileref} ,$oneline);
+    $oneline = ".Set Compress=ON\n";
+    push(@{$ddffileref} ,$oneline);
+    $oneline = ".Set CompressionLevel=$compressionlevel\n";
+    push(@{$ddffileref} ,$oneline);
+    $oneline = ".Set Cabinet=ON\n";
+    push(@{$ddffileref} ,$oneline);
+    $oneline = ".Set DiskDirectoryTemplate=" . $installdir . "\n";
+    push(@{$ddffileref} ,$oneline);
+}
+
+########################################################
+# Writing content into ddf file.
+########################################################
+
+sub put_all_files_into_ddffile
+{
+    my ($ddffile, $allfiles, $workingpath) = @_;
+
+    $workingpath =~ s/\//\\/g;
+
+    for ( my $i = 0; $i <= $#{$allfiles}; $i++ )
+    {
+        my $filename = ${$allfiles}[$i];
+        if( $^O =~ /cygwin/i ) { $filename =~ s/\//\\/g; } # Backslash for Cygwin!
+        if ( ! -f $filename ) { installer::exiter::exit_program("ERROR: Could not find file: $filename!", "put_all_files_into_ddffile"); }
+        my $infoline = "\"" . $filename . "\"" . " " . ${$allfiles}[$i] . "\n";
+        push( @{$ddffile}, $infoline);
+    }
+}
+
+########################################################
+# Packing a cabinet file.
+########################################################
+
+sub do_pack_cab_file
+{
+    my ($cabfilename, $allfiles, $workingpath, $temppath) = @_;
+
+    installer::logger::print_message( "\n... packing cabinet file $cabfilename ...\n" );
+    my $infoline = "Packing cabinet file $cabfilename\n";
+    push( @installer::globals::logfileinfo, $infoline);
+
+    if ( -f $cabfilename ) { unlink($cabfilename); } # removing cab file
+    if ( -f $cabfilename ) { installer::exiter::exit_program("ERROR: Failed to remove file: $cabfilename!", "do_pack_cab_file"); }
+
+    # generate ddf file for makecab.exe
+    my @ddffile = ();
+
+    my $dirname = $cabfilename;
+    $dirname =~ s/\.cab\s*$//;
+    my $ddfpath = $temppath . $installer::globals::separator . "ddf_". $dirname . "_" . $$;
+
+    my $ddffilename = $cabfilename;
+    $ddffilename =~ s/.cab/.ddf/;
+    $ddffilename = $ddfpath . $installer::globals::separator . $ddffilename;
+
+    if ( ! -d $ddfpath ) { installer::systemactions::create_directory($ddfpath); }
+
+    my $from = cwd();
+
+    chdir($workingpath); # changing into the directory with the unpacked files
+
+    get_ddf_file_header(\@ddffile, $cabfilename, $from);
+    put_all_files_into_ddffile(\@ddffile, $allfiles, $workingpath);
+    # lines in ddf files must not be longer than 256 characters
+    check_ddf_file(\@ddffile, $ddffilename);
+
+    installer::files::save_file($ddffilename, \@ddffile);
+
+    if( $^O =~ /cygwin/i )
+    {
+        $ddffilename = qx{cygpath -w "$ddffilename"};
+        $ddffilename =~ s/\\/\\\\/g;
+        $ddffilename =~ s/\s*$//g;
+    }
+
+    my $systemcall = "makecab.exe /V1 /F " . $ddffilename;
+    my $success = make_systemcall($systemcall, $systemcall);
+    if ( ! $success ) { installer::exiter::exit_program("ERROR: Could not pack cabinet file!", "do_pack_cab_file"); }
+
+    chdir($from);
+
+    return ($success);
+}
+
+########################################################
+# Extraction the file extension from a file
+########################################################
+
+sub get_extension
+{
+    my ( $file ) = @_;
+
+    my $extension = "";
+
+    if ( $file =~ /^\s*(.*)\.(\w+?)\s*$/ ) { $extension = $2; }
+
+    return $extension;
+}
+
+########################################################
+# Checking, if a file already contains a certificate.
+# This must not be overwritten.
+########################################################
+
+sub already_certified
+{
+    my ( $filename ) = @_;
+
+    my $success = 1;
+    my $is_certified = 0;
+
+    my $systemcall = "signtool.exe verify /q /pa \"$filename\"";
+    my $returnvalue = system($systemcall);
+
+    if ( $returnvalue ) { $success = 0; }
+
+    # my $success = make_systemcall($systemcall, $systemcall);
+
+     if ( $success )
+     {
+         $is_certified = 1;
+        installer::logger::print_message( "... already certified -> skipping $filename ...\n" );
+    }
+
+    return $is_certified;
+}
+
+########################################################
+# Signing the files, that are included into
+# cabinet files.
+########################################################
+
+sub sign_files_in_cabinet_files
+{
+    my ( $followmeinfohash, $allcabfiles, $pw, $temppath ) = @_;
+
+    my $complete_success = 1;
+    my $from = cwd();
+
+    foreach my $cabfilename ( keys %{$allcabfiles} )
+    {
+        my $success = 1;
+
+        # saving order of files in cab file
+        my $fileorder = read_cab_file($cabfilename);
+
+        # unpack into $working path
+        my $workingpath = unpack_cab_file($cabfilename, $temppath);
+
+        chdir($workingpath);
+
+        # sign files
+        my %allfileshash = ();
+        foreach my $onefile ( @{$fileorder} )
+        {
+            my $extension = get_extension($onefile);
+            if ( exists( $installer::globals::sign_extensions{$extension} ) )
+            {
+                $allfileshash{$onefile} = 1;
+            }
+        }
+         $success = sign_files($followmeinfohash, \%allfileshash, $pw, 1);
+        if ( ! $success ) { $complete_success = 0; }
+
+        chdir($from);
+
+        # pack into new directory
+        do_pack_cab_file($cabfilename, $fileorder, $workingpath, $temppath);
+    }
+
+    return $complete_success;
 }
 
 ########################################################
@@ -381,7 +910,7 @@ sub sign_files
 
 sub sign_install_set
 {
-    my ($followmeinfohash, $make_copy) = @_;
+    my ($followmeinfohash, $make_copy, $temppath) = @_;
 
     my $installsetpath = $followmeinfohash->{'finalinstalldir'};
 
@@ -404,24 +933,66 @@ sub sign_install_set
     else { $installsetpath = rename_install_set($installsetpath); }
 
     # collecting all files in the installation set
-    my ($allcabfiles, $allfiles, $msidatabase, $contains_cab_file) = analyze_installset_content($installsetpath);
+    my ($allcabfiles, $allfiles, $msidatabase, $contains_external_cabfiles, $contains_msidatabase) = analyze_installset_content($installsetpath);
 
     # changing into installation set
     my $from = cwd();
+    my $fullmsidatabase = $installsetpath . $installer::globals::separator . $msidatabase;
+
+    if( $^O =~ /cygwin/i )
+    {
+        $fullmsidatabase = qx{cygpath -w "$fullmsidatabase"};
+        $fullmsidatabase =~ s/\\/\\\\/g;
+        $fullmsidatabase =~ s/\s*$//g;
+    }
+
     chdir($installsetpath);
 
-    # Warning: There might be a problem with very big cabinet files
-    # signing all external cab files first
-    if ( $contains_cab_file )
+    if ( $contains_msidatabase )
     {
-        $success = sign_files($followmeinfohash, $allcabfiles, $pw);
-        if ( ! $success ) { $complete_success = 0; }
-        $success = msicert_database($msidatabase, $allcabfiles, $followmeinfohash->{'languagestring'});
-        if ( ! $success ) { $complete_success = 0; }
+        # exclude media table from msi database and get all diskids.
+        my $cabfilehash = collect_diskid_from_media_table($msidatabase, $followmeinfohash->{'languagestring'});
+
+        # Check, if there are internal cab files
+        my ( $contains_internal_cabfiles, $all_internal_cab_files) = check_for_internal_cabfiles($cabfilehash);
+
+        if ( $contains_internal_cabfiles )
+        {
+            my $cabpath = get_cab_path($temppath);
+            chdir($cabpath);
+
+            # Exclude all cabinet files from database
+            $success = extract_cabs_from_database($fullmsidatabase, $all_internal_cab_files);
+            if ( ! $success ) { $complete_success = 0; }
+
+            if ( $installer::globals::internal_cabinet_signing ) { sign_files_in_cabinet_files($followmeinfohash, $all_internal_cab_files, $pw, $temppath); }
+
+            $success = sign_files($followmeinfohash, $all_internal_cab_files, $pw, 0);
+            if ( ! $success ) { $complete_success = 0; }
+            $success = msicert_database($fullmsidatabase, $all_internal_cab_files, $cabfilehash, 1);
+            if ( ! $success ) { $complete_success = 0; }
+
+            # Include all cabinet files into database
+            $success = include_cabs_into_database($fullmsidatabase, $all_internal_cab_files);
+            if ( ! $success ) { $complete_success = 0; }
+            chdir($installsetpath);
+        }
+
+        # Warning: There might be a problem with very big cabinet files
+        # signing all external cab files first
+        if ( $contains_external_cabfiles )
+        {
+            if ( $installer::globals::internal_cabinet_signing ) { sign_files_in_cabinet_files($followmeinfohash, $allcabfiles, $pw, $temppath); }
+
+            $success = sign_files($followmeinfohash, $allcabfiles, $pw, 0);
+            if ( ! $success ) { $complete_success = 0; }
+            $success = msicert_database($msidatabase, $allcabfiles, $cabfilehash, 0);
+            if ( ! $success ) { $complete_success = 0; }
+        }
     }
 
     # finally all other files can be signed
-    $success = sign_files($followmeinfohash, $allfiles, $pw);
+    $success = sign_files($followmeinfohash, $allfiles, $pw, 0);
     if ( ! $success ) { $complete_success = 0; }
 
     # and changing back
