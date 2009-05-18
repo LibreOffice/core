@@ -29,6 +29,7 @@
 #
 #*************************************************************************
 
+use Cwd;
 use File::Copy;
 
 #################################################################################
@@ -44,6 +45,7 @@ BEGIN
     $globaltempdirname = "ooopackaging";
     $savetemppath = "";
     $msiinfo_available = 0;
+    $path_displayed = 0;
 
     $plat = $^O;
 
@@ -435,7 +437,20 @@ sub unpack_cabinet_file
 {
     my ($cabfilename, $unpackdir) = @_;
 
-    my $expandfile = "expand.exe";  # Has to be in the path
+    my $expandfile = "expand.exe"; # has to be in the PATH
+
+    # expand.exe has to be located in the system directory.
+    # Cygwin has another tool expand.exe, that converts tabs to spaces. This cannot be used of course.
+    # But this wrong expand.exe is typically in the PATH before this expand.exe, to unpack
+    # cabinet files.
+
+    if ( $^O =~ /cygwin/i )
+    {
+        $expandfile = $ENV{'SYSTEMROOT'} . "/system32/expand.exe"; # Has to be located in the systemdirectory
+        $expandfile =~ s/\\/\//;
+        if ( ! -f $expandfile ) { exit_program("ERROR: Did not find file $expandfile in the Windows system folder!"); }
+    }
+
     my $expandlogfile = $unpackdir . $separator . "expand.log";
 
     # exclude cabinet file
@@ -445,7 +460,12 @@ sub unpack_cabinet_file
     if ( $^O =~ /cygwin/i ) {
         my $localunpackdir = qx{cygpath -w "$unpackdir"};
         $localunpackdir =~ s/\\/\\\\/g;
-        $systemcall = $expandfile . " " . $cabfilename . " -F:\\\* " . $localunpackdir;
+
+        my $localcabfilename = qx{cygpath -w "$cabfilename"};
+        $localcabfilename =~ s/\\/\\\\/g;
+        $localcabfilename =~ s/\s*$//g;
+
+        $systemcall = $expandfile . " " . $localcabfilename . " -F:\* " . $localunpackdir . " \>\/dev\/null 2\>\&1";
     }
     else
     {
@@ -469,6 +489,16 @@ sub extract_tables_from_database
     my $infoline = "";
     my $systemcall = "";
     my $returnvalue = "";
+
+    if ( $^O =~ /cygwin/i ) {
+        chomp( $fullmsidatabasepath = qx{cygpath -w "$fullmsidatabasepath"} );
+        # msidb.exe really wants backslashes. (And double escaping because system() expands the string.)
+        $fullmsidatabasepath =~ s/\\/\\\\/g;
+        $workdir =~ s/\\/\\\\/g;
+        # and if there are still slashes, they also need to be double backslash
+        $fullmsidatabasepath =~ s/\//\\\\/g;
+        $workdir =~ s/\//\\\\/g;
+    }
 
     # Export of all tables by using "*"
 
@@ -626,6 +656,32 @@ sub create_directory_structure
     return \%fullpathhash;
 }
 
+####################################################################################
+# Cygwin: Setting privileges for files
+####################################################################################
+
+sub change_privileges
+{
+    my ($destfile, $privileges) = @_;
+
+    my $localcall = "chmod $privileges " . "\"" . $destfile . "\"";
+    system($localcall);
+}
+
+####################################################################################
+# Cygwin: Setting privileges for files recursively
+####################################################################################
+
+sub change_privileges_full
+{
+    my ($target) = @_;
+
+    print "Changing privileges\n";
+
+    my $localcall = "chmod -R 755 " . "\"" . $target . "\"";
+    system($localcall);
+}
+
 ######################################################
 # Creating a new directory with defined privileges
 ######################################################
@@ -739,6 +795,7 @@ sub copy_files_into_directory_structure
             if ( $destfile =~ /\.oxt\s*$/ ) { push(@extensions, $destfile); }
             # Searching unopkg.exe
             if ( $destfile =~ /unopkg\.exe\s*$/ ) { $unopkgfile = $destfile; }
+            # if (( $^O =~ /cygwin/i ) && ( $destfile =~ /\.exe\s*$/ )) { change_privileges($destfile, "775"); }
         }
         # else  # allowing missing sequence numbers ?
         # {
@@ -844,12 +901,38 @@ sub register_one_extension
 {
     my ($unopkgfile, $extension, $temppath) = @_;
 
-    print "... $extension\n";
+    my $from = cwd();
+
+    my $path = $unopkgfile;
+    get_path_from_fullqualifiedname(\$path);
+    $path =~ s/\\\s*$//;
+    $path =~ s/\/\s*$//;
+
+    my $executable = $unopkgfile;
+    make_absolute_filename_to_relative_filename(\$executable);
+
+    chdir($path);
+
+    if ( ! $path_displayed )
+    {
+        print "... current dir: $path ...\n";
+        $path_displayed = 1;
+    }
 
     $temppath =~ s/\\/\//g;
     $temppath = "/".$temppath;
 
-    my $systemcall = "\"" . $unopkgfile . "\"" . " add --shared --verbose " . "\"" . $extension . "\"" . " -env:UserInstallation=file://" . "\"" . $temppath . "\"" . " 2\>\&1 |";
+    # Converting path of $extension for cygwin
+
+    my $localextension = $extension;
+    if ( $^O =~ /cygwin/i ) {
+        $localextension = qx{cygpath -w "$extension"};
+        $localextension =~ s/\\/\\\\/g;
+    }
+
+    my $systemcall = $executable . " add --shared --verbose " . "\"" . $localextension . "\"" . " -env:UserInstallation=file://" . $temppath . " 2\>\&1 |";
+
+    print "... $systemcall\n";
 
     my @unopkgoutput = ();
 
@@ -865,6 +948,8 @@ sub register_one_extension
         for ( my $j = 0; $j <= $#unopkgoutput; $j++ ) { print "$unopkgoutput[$j]"; }
         exit_program("ERROR: $systemcall failed!");
     }
+
+    chdir($from);
 }
 
 ####################################################################################
@@ -879,11 +964,15 @@ sub register_extensions
     {
         print "Registering extensions:\n";
 
-        if (( ! -f $unopkgfile ) || ( $unopkgfile eq "" )) { exit_program("ERROR: Could not find unopkg.exe!"); }
-
-        foreach $extension ( @{$extensions} ) { register_one_extension($unopkgfile, $extension, $temppath); }
-
-        remove_complete_directory($temppath, 1)
+        if (( ! -f $unopkgfile ) || ( $unopkgfile eq "" ))
+        {
+            print("WARNING: Could not find unopkg.exe (Language Pack?)!\n");
+        }
+        else
+        {
+            foreach $extension ( @{$extensions} ) { register_one_extension($unopkgfile, $extension, $temppath); }
+            remove_complete_directory($temppath, 1)
+        }
     }
     else
     {
@@ -951,7 +1040,7 @@ sub get_sis_time_string
 
 sub write_sis_info
 {
-    my ($msidatabase) = @_ ;
+    my ($msidatabase) = @_;
 
     print "Setting SIS in msi database\n";
 
@@ -971,7 +1060,17 @@ sub write_sis_info
     my $lastprinted = get_sis_time_string();
     my $lastsavedby = "Installer";
 
-    $systemcall = $msiinfo . " " . "\"" . $msidatabase . "\"" . " -w " . $wordcount . " -s " . "\"" . $lastprinted . "\"" . " -l $lastsavedby";
+    my $localmsidatabase = $msidatabase;
+
+    if( $^O =~ /cygwin/i )
+    {
+        $localmsidatabase = qx{cygpath -w "$localmsidatabase"};
+        $localmsidatabase =~ s/\\/\\\\/g;
+        $localmsidatabase =~ s/\s*$//g;
+    }
+
+    $systemcall = $msiinfo . " " . "\"" . $localmsidatabase . "\"" . " -w " . $wordcount . " -s " . "\"" . $lastprinted . "\"" . " -l $lastsavedby";
+
     $returnvalue = system($systemcall);
 
     if ($returnvalue)
@@ -1059,7 +1158,9 @@ extract_tables_from_database($databasepath, $helperdir, $tablelist);
 
 # Unpack all cab files into $helperdir, cab files must be located next to msi database
 my $installdir = $databasepath;
+
 get_path_from_fullqualifiedname(\$installdir);
+
 my $databasefilename = $databasepath;
 make_absolute_filename_to_relative_filename(\$databasefilename);
 
@@ -1096,6 +1197,7 @@ my $fullpathhash = create_directory_structure($dirhash, $targetdir);
 
 # Copying files
 my ($unopkgfile, $extensions) = copy_files_into_directory_structure($fileorder, $filehash, $componenthash, $fullpathhash, $maxsequence, $unpackdir, $installdir, $dirhash);
+if ( $^O =~ /cygwin/i ) { change_privileges_full($targetdir); }
 
 my $msidatabase = $targetdir . $separator . $databasefilename;
 my $copyreturn = copy($databasepath, $msidatabase);
