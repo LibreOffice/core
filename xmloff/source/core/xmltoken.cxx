@@ -2967,6 +2967,7 @@ namespace xmloff { namespace token {
         TOKEN( "percentage-data-style-name",      XML_PERCENTAGE_DATA_STYLE_NAME ),
         TOKEN( "value-and-percentage",            XML_VALUE_AND_PERCENTAGE ),
         TOKEN( "group-bars-per-axis",             XML_GROUP_BARS_PER_AXIS ),
+        TOKEN( "include-hidden-cells",            XML_INCLUDE_HIDDEN_CELLS ),
         TOKEN( "auto-position",                   XML_AUTOMATIC_POSITION ),
         TOKEN( "auto-size",                       XML_AUTOMATIC_SIZE ),
         TOKEN( "reverse-direction",               XML_REVERSE_DIRECTION ),
