@@ -43,6 +43,8 @@
 #include "DisposeHelper.hxx"
 #include "ControllerLockGuard.hxx"
 #include "ObjectIdentifier.hxx"
+#include "ChartModelHelper.hxx"
+
 #include <comphelper/InlineContainer.hxx>
 #include <comphelper/processfactory.hxx>
 
@@ -703,6 +705,19 @@ sal_Bool SAL_CALL ChartModel::hasInternalDataProvider()
     {
         // /--
         MutexGuard aGuard( m_aModelMutex );
+        uno::Reference< beans::XPropertySet > xProp( xProvider, uno::UNO_QUERY );
+        if( xProp.is() )
+        {
+            try
+            {
+                sal_Bool bIncludeHiddenCells = ChartModelHelper::isIncludeHiddenCells( Reference< frame::XModel >(this) );
+                xProp->setPropertyValue(C2U("IncludeHiddenCells"), uno::makeAny(bIncludeHiddenCells));
+            }
+            catch( const beans::UnknownPropertyException& )
+            {
+            }
+        }
+
         m_pImplChartModel->SetDataProvider( xProvider );
         // \--
     }

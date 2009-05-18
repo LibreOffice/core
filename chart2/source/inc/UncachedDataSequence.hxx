@@ -186,8 +186,6 @@ protected:
     // <properties>
     sal_Int32                                       m_nNumberFormatKey;
     ::rtl::OUString                                 m_sRole;
-    sal_Bool                                        m_bIsHidden;
-    ::com::sun::star::uno::Sequence< sal_Int32 >    m_aHiddenValues;
     ::rtl::OUString                                 m_aXMLRange;
     // </properties>
 

@@ -59,7 +59,7 @@ class VDataSequence
 {
 public:
     void init( const ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::data::XDataSequence >& xModel);
+        ::com::sun::star::chart2::data::XDataSequence >& xModel );
     bool is() const;
     void clear();
     double getValue( sal_Int32 index ) const;

@@ -2740,7 +2740,7 @@ XclExpChChart::XclExpChChart( const XclExpRoot& rRoot,
     maRect.mnWidth = static_cast< sal_Int32 >( aPtSize.Width() << 16 );
     maRect.mnHeight = static_cast< sal_Int32 >( aPtSize.Height() << 16 );
 
-    // global chart properties
+    // global chart properties (default values)
     ::set_flag( maProps.mnFlags, EXC_CHPROPS_MANSERIES );
     ::set_flag( maProps.mnFlags, EXC_CHPROPS_SHOWVISIBLEONLY, false );
     maProps.mnEmptyMode = EXC_CHPROPS_EMPTY_SKIP;
@@ -2751,6 +2751,13 @@ XclExpChChart::XclExpChChart( const XclExpRoot& rRoot,
 
     if( xChartDoc.is() )
     {
+        Reference< XDiagram > xDiagram = xChartDoc->getFirstDiagram();
+
+        // global chart properties (only 'include hidden cells' attribute for now)
+        ScfPropertySet aDiagramProp( xDiagram );
+        bool bIncludeHidden = aDiagramProp.GetBoolProperty( EXC_CHPROP_INCLUDEHIDDENCELLS );
+        ::set_flag( maProps.mnFlags,  EXC_CHPROPS_SHOWVISCELLS, !bIncludeHidden );
+
         // initialize API conversion (remembers xChartDoc internally)
         InitConversion( xChartDoc );
 
@@ -2763,7 +2770,6 @@ XclExpChChart::XclExpChChart( const XclExpRoot& rRoot,
         mxTitle = lclCreateTitle( GetChRoot(), xTitled, EXC_CHOBJLINK_TITLE );
 
         // diagrams (axes sets)
-        Reference< XDiagram > xDiagram = xChartDoc->getFirstDiagram();
         sal_uInt16 nFreeGroupIdx = mxPrimAxesSet->Convert( xDiagram, 0 );
         if( !mxPrimAxesSet->Is3dChart() )
             mxSecnAxesSet->Convert( xDiagram, nFreeGroupIdx );

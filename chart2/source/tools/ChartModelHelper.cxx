@@ -33,6 +33,9 @@
 #include "ChartModelHelper.hxx"
 #include "macros.hxx"
 #include "DiagramHelper.hxx"
+#include "DataSourceHelper.hxx"
+#include "ControllerLockGuard.hxx"
+
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
@@ -135,6 +138,96 @@ void ChartModelHelper::triggerRangeHighlighting( const uno::Reference< frame::XM
             xSelectionChangeListener->selectionChanged( aEvent );
         }
     }
+}
+
+bool ChartModelHelper::isIncludeHiddenCells( const uno::Reference< frame::XModel >& xChartModel )
+{
+    bool bIncluded = true;  // hidden cells are included by default.
+
+    uno::Reference< chart2::XDiagram > xDiagram( ChartModelHelper::findDiagram(xChartModel) );
+    if (!xDiagram.is())
+        return bIncluded;
+
+    uno::Reference< beans::XPropertySet > xProp( xDiagram, uno::UNO_QUERY );
+    if (!xProp.is())
+        return bIncluded;
+
+    try
+    {
+        xProp->getPropertyValue(C2U("IncludeHiddenCells")) >>= bIncluded;
+    }
+    catch( const beans::UnknownPropertyException& )
+    {
+    }
+
+    return bIncluded;
+}
+
+bool ChartModelHelper::setIncludeHiddenCells( bool bIncludeHiddenCells, const uno::Reference< frame::XModel >& xChartModel )
+{
+    bool bChanged = false;
+    try
+    {
+        ControllerLockGuard aLockedControllers( xChartModel );
+
+        uno::Reference< beans::XPropertySet > xDiagramProperties( ChartModelHelper::findDiagram(xChartModel), uno::UNO_QUERY );
+        if (xDiagramProperties.is())
+        {
+            bool bOldValue = bIncludeHiddenCells;
+            xDiagramProperties->getPropertyValue( C2U("IncludeHiddenCells") ) >>= bOldValue;
+            if( bOldValue == bIncludeHiddenCells )
+                bChanged = true;
+
+            //set the property on all instances in all cases to get the different objects in sync!
+
+            uno::Any aNewValue = uno::makeAny(bIncludeHiddenCells);
+
+            try
+            {
+                uno::Reference< chart2::XChartDocument > xChartDoc( xChartModel, uno::UNO_QUERY );
+                if( xChartDoc.is() )
+                {
+                    uno::Reference< beans::XPropertySet > xDataProviderProperties( xChartDoc->getDataProvider(), uno::UNO_QUERY );
+                    if( xDataProviderProperties.is() )
+                        xDataProviderProperties->setPropertyValue(C2U("IncludeHiddenCells"), aNewValue );
+                }
+            }
+            catch( const beans::UnknownPropertyException& )
+            {
+                //the property is optional!
+            }
+
+            try
+            {
+                uno::Reference< chart2::data::XDataSource > xUsedData( DataSourceHelper::getUsedData( xChartModel ) );
+                if( xUsedData.is() )
+                {
+                    uno::Reference< beans::XPropertySet > xProp;
+                    uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aData( xUsedData->getDataSequences());
+                    for( sal_Int32 i=0; i<aData.getLength(); ++i )
+                    {
+                        xProp.set( uno::Reference< beans::XPropertySet >( aData[i]->getValues(), uno::UNO_QUERY ) );
+                        if(xProp.is())
+                            xProp->setPropertyValue(C2U("IncludeHiddenCells"), aNewValue );
+                        xProp.set( uno::Reference< beans::XPropertySet >( aData[i]->getLabel(), uno::UNO_QUERY ) );
+                        if(xProp.is())
+                            xProp->setPropertyValue(C2U("IncludeHiddenCells"), aNewValue );
+                    }
+                }
+            }
+            catch( const beans::UnknownPropertyException& )
+            {
+                //the property is optional!
+            }
+
+            xDiagramProperties->setPropertyValue( C2U("IncludeHiddenCells"), aNewValue);
+        }
+    }
+    catch (uno::Exception& e)
+    {
+        ASSERT_EXCEPTION(e);
+    }
+    return bChanged;
 }
 
 //.............................................................................

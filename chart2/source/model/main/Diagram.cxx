@@ -78,6 +78,7 @@ enum
     PROP_DIAGRAM_SORT_BY_X_VALUES,
     PROP_DIAGRAM_CONNECT_BARS,
     PROP_DIAGRAM_GROUP_BARS_PER_AXIS,
+    PROP_DIAGRAM_INCLUDE_HIDDEN_CELLS,
     PROP_DIAGRAM_STARTING_ANGLE,
     PROP_DIAGRAM_RIGHT_ANGLED_AXES,
     PROP_DIAGRAM_PERSPECTIVE,
@@ -120,6 +121,13 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( C2U("GroupBarsPerAxis"),
                   PROP_DIAGRAM_GROUP_BARS_PER_AXIS,
+                  ::getBooleanCppuType(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
+        Property( C2U("IncludeHiddenCells"),
+                  PROP_DIAGRAM_INCLUDE_HIDDEN_CELLS,
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
@@ -170,6 +178,7 @@ void lcl_AddDefaultsToMap(
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DIAGRAM_SORT_BY_X_VALUES, false );
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DIAGRAM_CONNECT_BARS, false );
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DIAGRAM_GROUP_BARS_PER_AXIS, true );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DIAGRAM_INCLUDE_HIDDEN_CELLS, true );
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DIAGRAM_RIGHT_ANGLED_AXES, false );
     ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_DIAGRAM_STARTING_ANGLE, 90 );
 }

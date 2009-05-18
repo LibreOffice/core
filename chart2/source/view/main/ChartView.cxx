@@ -631,6 +631,7 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
     sal_Bool bSortByXValues = sal_False;
     sal_Bool bConnectBars = sal_False;
     sal_Bool bGroupBarsPerAxis = sal_True;
+    sal_Bool bIncludeHiddenCells = sal_True;
     sal_Int32 nStartingAngle = 90;
     try
     {
@@ -638,6 +639,7 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
         xDiaProp->getPropertyValue( C2U( "SortByXValues" ) ) >>= bSortByXValues;
         xDiaProp->getPropertyValue( C2U( "ConnectBars" ) ) >>= bConnectBars;
         xDiaProp->getPropertyValue( C2U( "GroupBarsPerAxis" ) ) >>= bGroupBarsPerAxis;
+        xDiaProp->getPropertyValue( C2U( "IncludeHiddenCells" ) ) >>= bIncludeHiddenCells;
         xDiaProp->getPropertyValue( C2U( "StartingAngle" ) ) >>= nStartingAngle;
     }
     catch( const uno::Exception & ex )
@@ -703,6 +705,9 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
                 uno::Reference< XDataSeries > xDataSeries( aSeriesList[nS], uno::UNO_QUERY );
                 if(!xDataSeries.is())
                     continue;
+                if( !bIncludeHiddenCells && !DataSeriesHelper::hasUnhiddenData(xDataSeries) )
+                    continue;
+
                 VDataSeries* pSeries = new VDataSeries( xDataSeries );
 
                 pSeries->setGlobalSeriesIndex(nGlobalSeriesIndex);

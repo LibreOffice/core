@@ -623,8 +623,6 @@ void ScTable::CopyToTable(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         {
             //  Charts muessen beim Ein-/Ausblenden angepasst werden
             ScChartListenerCollection* pCharts = pDestTab->pDocument->GetChartListenerCollection();
-            if ( pCharts && !pCharts->GetCount() )
-                pCharts = NULL;
 
             BOOL bWidth  = (nRow1==0 && nRow2==MAXROW && pColWidth && pDestTab->pColWidth);
             BOOL bHeight = (nCol1==0 && nCol2==MAXCOL && pRowHeight && pDestTab->pRowHeight);
@@ -2254,7 +2252,7 @@ void ScTable::ShowCol(SCCOL nCol, BOOL bShow)
                 SetDrawPageSize();
 
             ScChartListenerCollection* pCharts = pDocument->GetChartListenerCollection();
-            if ( pCharts && pCharts->GetCount() )
+            if ( pCharts )
                 pCharts->SetRangeDirty(ScRange( nCol, 0, nTab, nCol, MAXROW, nTab ));
         }
     }
@@ -2291,7 +2289,7 @@ void ScTable::ShowRow(SCROW nRow, BOOL bShow)
                 SetDrawPageSize();
 
             ScChartListenerCollection* pCharts = pDocument->GetChartListenerCollection();
-            if ( pCharts && pCharts->GetCount() )
+            if ( pCharts )
                 pCharts->SetRangeDirty(ScRange( 0, nRow, nTab, MAXCOL, nRow, nTab ));
         }
     }
@@ -2332,7 +2330,7 @@ void ScTable::DBShowRow(SCROW nRow, BOOL bShow)
         if (bWasVis != bShow)
         {
             ScChartListenerCollection* pCharts = pDocument->GetChartListenerCollection();
-            if ( pCharts && pCharts->GetCount() )
+            if ( pCharts )
                 pCharts->SetRangeDirty(ScRange( 0, nRow, nTab, MAXCOL, nRow, nTab ));
 
             if (pOutlineTable)
@@ -2380,7 +2378,7 @@ void ScTable::DBShowRows(SCROW nRow1, SCROW nRow2, BOOL bShow)
         if ( bChanged )
         {
             ScChartListenerCollection* pCharts = pDocument->GetChartListenerCollection();
-            if ( pCharts && pCharts->GetCount() )
+            if ( pCharts )
                 pCharts->SetRangeDirty(ScRange( 0, nStartRow, nTab, MAXCOL, nEndRow, nTab ));
         }
 
@@ -2432,7 +2430,7 @@ void ScTable::ShowRows(SCROW nRow1, SCROW nRow2, BOOL bShow)
         if ( bChanged )
         {
             ScChartListenerCollection* pCharts = pDocument->GetChartListenerCollection();
-            if ( pCharts && pCharts->GetCount() )
+            if ( pCharts )
                 pCharts->SetRangeDirty(ScRange( 0, nStartRow, nTab, MAXCOL, nEndRow, nTab ));
         }
 

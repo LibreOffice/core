@@ -87,6 +87,12 @@ public:
 
     static void triggerRangeHighlighting( const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::frame::XModel >& xModel );
+
+    static bool isIncludeHiddenCells( const ::com::sun::star::uno::Reference<
+                                ::com::sun::star::frame::XModel >& xChartModel );
+
+    static bool setIncludeHiddenCells( bool bIncludeHiddenCells, const ::com::sun::star::uno::Reference<
+                                ::com::sun::star::frame::XModel >& xChartModel );
 };
 
 //.............................................................................

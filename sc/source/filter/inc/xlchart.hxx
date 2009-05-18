@@ -97,6 +97,7 @@ namespace com { namespace sun { namespace star {
 #define EXC_CHPROP_FILLSTYLE                CREATE_OUSTRING( "FillStyle" )
 #define EXC_CHPROP_GAPWIDTHSEQ              CREATE_OUSTRING( "GapwidthSequence" )
 #define EXC_CHPROP_GEOMETRY3D               CREATE_OUSTRING( "Geometry3D" )
+#define EXC_CHPROP_INCLUDEHIDDENCELLS       CREATE_OUSTRING( "IncludeHiddenCells" )
 #define EXC_CHPROP_JAPANESE                 CREATE_OUSTRING( "Japanese" )
 #define EXC_CHPROP_LABEL                    CREATE_OUSTRING( "Label" )
 #define EXC_CHPROP_LABELPLACEMENT           CREATE_OUSTRING( "LabelPlacement" )

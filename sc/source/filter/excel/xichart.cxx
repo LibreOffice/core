@@ -40,6 +40,7 @@
 #include <com/sun/star/drawing/ProjectionMode.hpp>
 #include <com/sun/star/drawing/ShadeMode.hpp>
 #include <com/sun/star/chart/ChartAxisPosition.hpp>
+#include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
@@ -3415,6 +3416,15 @@ void XclImpChChart::Convert( Reference< XChartDocument > xChartDoc, ScfProgressB
     if( xDiagram.is() && mxLegend.is() )
         xDiagram->setLegend( mxLegend->CreateLegend() );
 
+    // set the IncludeHiddenCells property via the old API as only this ensures that the data provider and al created sequences get this flag correctly
+    Reference< com::sun::star::chart::XChartDocument > xStandardApiChartDoc( xChartDoc, UNO_QUERY );
+    if( xStandardApiChartDoc.is() )
+    {
+        ScfPropertySet aDiagramProp( xStandardApiChartDoc->getDiagram() );
+        bool bShowVisCells = (maProps.mnFlags & EXC_CHPROPS_SHOWVISCELLS);
+        aDiagramProp.SetBoolProperty( EXC_CHPROP_INCLUDEHIDDENCELLS, !bShowVisCells  );
+    }
+
     // unlock the model
     FinishConversion( rProgress );
 }
@@ -3425,6 +3435,11 @@ void XclImpChChart::ReadChSeries( XclImpStream& rStrm )
     XclImpChSeriesRef xSeries( new XclImpChSeries( GetChRoot(), nNewSeriesIdx ) );
     xSeries->ReadRecordGroup( rStrm );
     maSeries.push_back( xSeries );
+}
+
+void XclImpChChart::ReadChProperties( XclImpStream& rStrm )
+{
+    rStrm >> maProps.mnFlags >> maProps.mnEmptyMode;
 }
 
 void XclImpChChart::ReadChAxesSet( XclImpStream& rStrm )

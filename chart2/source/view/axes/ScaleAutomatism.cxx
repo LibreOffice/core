@@ -134,7 +134,7 @@ void ScaleAutomatism::calculateExplicitScaleAndIncrement(
         if( m_aSourceScale.AxisType==AxisType::PERCENT )
             rExplicitScale.Minimum = 0.0;
         else if( ::rtl::math::isNan( m_fValueMinimum ) )
-            rExplicitScale.Minimum = 0.0;   //@todo get Minimum from scsaling or from plotter????
+            rExplicitScale.Minimum = 0.0;   //@todo get Minimum from scaling or from plotter????
         else
             rExplicitScale.Minimum = m_fValueMinimum;
     }
@@ -143,7 +143,7 @@ void ScaleAutomatism::calculateExplicitScaleAndIncrement(
     if( bAutoMaximum )
     {
         if( m_aSourceScale.AxisType==AxisType::PERCENT )
-            rExplicitScale.Minimum = 1.0;
+            rExplicitScale.Maximum = 1.0;
         else if( ::rtl::math::isNan( m_fValueMaximum ) )
             rExplicitScale.Maximum = 10.0;  //@todo get Maximum from scaling or from plotter????
         else

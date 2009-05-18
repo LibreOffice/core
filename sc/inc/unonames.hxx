@@ -608,8 +608,9 @@
 #define SC_UNO_COMPILEFAP           "CompileFAP"
 
 // Chart2
-#define SC_UNONAME_ISHIDDEN         "IsHidden"
-#define SC_UNONAME_ROLE             "Role"
+#define SC_UNONAME_ROLE                 "Role"
+#define SC_UNONAME_HIDDENVALUES         "HiddenValues"
+#define SC_UNONAME_INCLUDEHIDDENCELLS   "IncludeHiddenCells"
 #define SC_UNONAME_HIDDENVALUES     "HiddenValues"
 
 // Solver
