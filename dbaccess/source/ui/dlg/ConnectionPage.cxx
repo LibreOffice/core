@@ -161,9 +161,11 @@
 #endif
 
 #ifdef _ADO_DATALINK_BROWSE_
-typedef void*               HWND;
-typedef void*               HMENU;
-typedef void*               HDC;
+#if defined( WNT )
+    #include <tools/prewin.h>
+    #include <windows.h>
+    #include <tools/postwin.h>
+#endif
 #ifndef _SV_SYSDATA_HXX
 #include <vcl/sysdata.hxx>
 #endif
