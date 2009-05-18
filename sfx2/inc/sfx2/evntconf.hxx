@@ -71,7 +71,7 @@ struct SFX2_DLLPUBLIC SfxEventName
                 , maUIName( rUIName ) {}
 };
 
-DECLARE_TABLE( _SfxEventNamesList, SfxEventName* )
+DECLARE_LIST( _SfxEventNamesList, SfxEventName* )
 
 class SFX2_DLLPUBLIC SfxEventNamesList : public _SfxEventNamesList
 {
