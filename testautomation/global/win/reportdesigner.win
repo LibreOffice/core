@@ -36,8 +36,8 @@ TimeFormat                reportdesign:ListBox:RID_DATETIME_DLG:LB_TIME_TYPE
 *ReportSortingGrouping    HID_RPT_GROUPSSORTING_DLG
 Groups                    HID_RPT_GROUPSBRW
 FieldExpression           HID_RPT_FIELDEXPRESSION
-MoveUp                    reportdesign:ImageButton:RID_GROUPS_SORTING:PB_UP
-MoveDown                  reportdesign:ImageButton:RID_GROUPS_SORTING:PB_DOWN
+MoveUp                    HID_RPT_GROUPSORT_MOVE_UP
+MoveDown                  HID_RPT_GROUPSORT_MOVE_DOWN
 Sorting                   reportdesign:ListBox:RID_GROUPS_SORTING:LST_ORDER
 GroupHeader               reportdesign:ListBox:RID_GROUPS_SORTING:LST_HEADERLST
 GroupFooter               reportdesign:ListBox:RID_GROUPS_SORTING:LST_FOOTERLST

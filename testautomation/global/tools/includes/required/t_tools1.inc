@@ -1202,6 +1202,7 @@ function hUseAsyncSlot( cSlot as string ) as integer
     dim iWait as integer
     dim iTime as integer : iTime = 0
     const MAX_WAIT = 100
+    const DELAY = 100
     const CFN = "global::tools::includes::required::hUseAsyncSlot():"
 
     if ( VERBOSE ) then printlog( CFN & "Using slot: " & cSlot )    
@@ -1214,7 +1215,7 @@ function hUseAsyncSlot( cSlot as string ) as integer
             case "filesaveall"                    : FileSaveAll( "SynchronMode", TRUE )
             case "fileexport"                     : FileExport
             case "filereload"                     : FileReload( "SynchronMode", TRUE )
-			
+            
             case "editdoc"                        : EditDoc
             case "editcopy"                       : EditCopy
             case "editchangesrecord"              : EditChangesRecord
@@ -1253,23 +1254,42 @@ function hUseAsyncSlot( cSlot as string ) as integer
             case "formatfliphorizontally"         : FormatFlipHorizontally
             case "formatline"                     : FormatLine
             case "formatpositionandsize"          : FormatPositionAndSize
+            case "formatfontwork"                 : FormatFontwork
+            case "formatparagraph"                : FormatParagraph
+            case "formatstylebold"                : FormatStyleBold
+            case "formatungroupdraw"              : FormatUngroupDraw
+            case "formatexitgroupdraw"            : FormatExitGroupDraw
+            case "formatgroupgroup"               : FormatGroupGroup
+            case "formatgroupeditgroupcalc"       : FormatGroupEditGroupCalc
+            case "formatalignmentlefttext"        : FormatAlignmentLeftText
+            case "formatgraphics"                 : FormatGraphics
+            case "formatanchortopage"             : FormatAnchorToPage
+            case "formatwrapcontour"              : FormatWrapContour
+            case "formatwrapeditcontour"          : FormatWrapEditContour
+            case "formatpagewriter"               : FormatPageWriter
             
             case "insertindexesbibliographyentry" : InsertIndexesBibliographyEntry
             
             case "contextpositionandsize"         : ContextPositionAndSize
+            
+            case "toolslanguagehyphenate"         : ToolsLanguageHyphenate
+            case "toolsupdateallindexes"          : ToolsUpdateAllIndexes
+            case "toolsupdatefields"              : ToolsUpdateFields
+            case "toolsupdatelinks"               : ToolsUpdateLinks
+            case "toolslanguagehangulhanjaconversion" : ToolsLanguageHangulHanjaConversion
             
             case else : warnlog( "Unknown slot called: " & cSlot )
             end select
             
             exit for
         catch
-            wait( 100 )
-            iTime = iWait * 100
+            wait( DELAY )
+            iTime = iWait * DELAY
         endcatch
     next iWait
     
     ' Timeout is -1
-    if ( iTime = 5000 ) then
+    if ( iTime = MAX_WAIT * DELAY ) then
         iTime = -1 
     endif
     if ( VERBOSE ) then printlog( CFN & "Exit with rc=" & iTime )
