@@ -93,10 +93,12 @@ namespace cairocanvas
         virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()  throw( ::com::sun::star::uno::RuntimeException );
 
         bool draw( ::cairo::Cairo* pCairo );
-        bool draw( OutputDevice&                                   rOutDev,
+        bool draw( SurfaceSharedPtr&                               pSurface,
+                   OutputDevice&                                   rOutDev,
                    const Point&                                    rOutpos,
                    const ::com::sun::star::rendering::ViewState&   viewState,
                    const ::com::sun::star::rendering::RenderState& renderState ) const;
+
         void setupTextOffsets( sal_Int32*                                       outputOffsets,
                                const ::com::sun::star::uno::Sequence< double >& inputOffsets,
                                const ::com::sun::star::rendering::ViewState&    viewState,
@@ -112,7 +114,8 @@ namespace cairocanvas
         SurfaceProviderRef                         mpRefDevice;
         sal_Int8                                   mnTextDirection;
 
-    void useFont( ::cairo::Cairo* pCairo );
+        void useFont( ::cairo::Cairo* pCairo );
+        bool isCairoRenderable(SystemFontData aSysFontData) const;
     };
 
 }

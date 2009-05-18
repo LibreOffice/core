@@ -36,10 +36,10 @@
 #endif
 #include <sal/alloca.h>
 
-#include <prex.h>
+#include <tools/prex.h>
 #include <X11/Xlib.h>
 #include <XIM.h>
-#include <postx.h>
+#include <tools/postx.h>
 
 #include <salunx.h>
 

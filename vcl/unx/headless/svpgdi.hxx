@@ -169,6 +169,7 @@ public:
     virtual BOOL            drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, ULONG nSize );
 
     virtual SystemGraphicsData GetGraphicsData() const;
+    virtual SystemFontData     GetSysFontData( int nFallbacklevel ) const;
 };
 
 #endif

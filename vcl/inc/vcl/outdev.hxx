@@ -53,6 +53,8 @@ class ImplFontEntry;
 struct ImplObjStack;
 struct ImplKernPairData;
 struct SystemGraphicsData;
+struct SystemFontData;
+struct SystemTextLayoutData;
 class ImplFontCache;
 class ImplDevFontList;
 class ImplGetDevFontList;
@@ -883,6 +885,12 @@ public:
 
     void                SetFont( const Font& rNewFont );
     const Font&         GetFont() const { return maFont; }
+
+    SystemFontData        GetSysFontData( int nFallbacklevel ) const;
+    SystemTextLayoutData  GetSysTextLayoutData( const Point& rStartPt, const XubString& rStr,
+                                                xub_StrLen nIndex = 0, xub_StrLen nLen = STRING_LEN,
+                                                const sal_Int32* pDXAry = NULL ) const;
+
     void                SetTextColor( const Color& rColor );
     const Color&        GetTextColor() const { return maTextColor; }
     void                SetTextFillColor();

@@ -31,10 +31,12 @@
 #ifndef _SV_SYSDATA_HXX
 #define _SV_SYSDATA_HXX
 
+#include <vector>
+
 #ifdef QUARTZ
 // predeclare the native classes to avoid header/include problems
 typedef struct CGContext *CGContextRef;
-typedef struct CGLayer *CGLayerRef;
+typedef struct CGLayer   *CGLayerRef;
 #ifdef __OBJC__
 @class NSView;
 #else
@@ -139,6 +141,52 @@ struct SystemWindowData
 #elif defined( UNX )
     void*           pVisual;        // the visual to be used
 #endif
+};
+
+
+// --------------------
+// - SystemGlyphData -
+// --------------------
+
+struct SystemGlyphData
+{
+    unsigned long        index;
+    double               x;
+    double               y;
+};
+
+
+// --------------------
+// - SystemFontData -
+// --------------------
+
+struct SystemFontData
+{
+    unsigned long   nSize;          // size in bytes of this structure
+#if defined( WNT )
+    HFONT           hFont;          // native font object
+#elif defined( QUARTZ )
+    void*           aATSUFontID;    // native font object
+#elif defined( UNX )
+    void*           nFontId;        // native font id
+    int             nFontFlags;     // native font flags
+#endif
+    bool            bFakeBold;      // Does this font need faking the bold style
+    bool            bFakeItalic;    // Does this font need faking the italic style
+    bool            bAntialias;     // Should this font be antialiased
+    bool            bVerticalCharacterType;      // Is the font using vertical character type
+};
+
+// --------------------
+// - SystemTextLayoutData -
+// --------------------
+
+struct SystemTextLayoutData
+{
+    unsigned long   nSize;                      // size in bytes of this structure
+    std::vector<SystemGlyphData> rGlyphData;    // glyph data
+    int             orientation;                // Text orientation
+    SystemFontData aSysFontData;                // Font data for the text layout
 };
 
 #endif // _SV_SYSDATA_HXX

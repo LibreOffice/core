@@ -36,7 +36,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#include "prex.h"
+#include <tools/prex.h>
 #include <X11/Xatom.h>
 #include <X11/keysym.h>
 #include "FWS.hxx"
@@ -44,7 +44,7 @@
 #ifndef SOLARIS
 #include <X11/extensions/dpms.h>
 #endif
-#include "postx.h"
+#include <tools/postx.h>
 
 #include "salunx.h"
 #include "saldata.hxx"

@@ -31,11 +31,11 @@
 #ifndef _VCL_GTKDATA_HXX
 #define _VCL_GTKDATA_HXX
 
-#include <prex.h>
+#include <tools/prex.h>
 #include <gdk/gdk.h>
 #include <gdk/gdkx.h>
 #include <gtk/gtk.h>
-#include <postx.h>
+#include <tools/postx.h>
 
 #include <saldisp.hxx>
 #include <saldata.hxx>
