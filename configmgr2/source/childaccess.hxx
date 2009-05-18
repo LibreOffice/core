@@ -32,7 +32,13 @@
 
 #include "sal/config.h"
 
+#include "com/sun/star/lang/XUnoTunnel.hpp"
+#include "com/sun/star/uno/RuntimeException.hpp"
+#include "com/sun/star/uno/Sequence.hxx"
+#include "cppuhelper/implbase1.hxx"
 #include "rtl/ref.hxx"
+#include "rtl/ustring.hxx"
+#include "sal/types.h"
 
 #include "access.hxx"
 
@@ -41,19 +47,34 @@ namespace configmgr {
 class Node;
 class RootAccess;
 
-class ChildAccess: public Access {
+class ChildAccess:
+    public cppu::ImplInheritanceHelper1<
+        Access, com::sun::star::lang::XUnoTunnel >
+{
 public:
-    ChildAccess(rtl::Reference< RootAccess > const & root, Node * node);
+    static com::sun::star::uno::Sequence< sal_Int8 > getTunnelId();
 
-protected:
-    virtual ~ChildAccess();
+    ChildAccess(
+        rtl::Reference< RootAccess > const & root, Node * node,
+        rtl::OUString const & templateName = rtl::OUString());
+
+    rtl::OUString getTemplateName() const;
+
+    void inserted(rtl::Reference< RootAccess > const & newRoot) throw ();
 
 private:
+    virtual ~ChildAccess();
+
     virtual Node * getNode();
 
     virtual rtl::Reference< RootAccess > getRoot();
 
+    virtual sal_Int64 SAL_CALL getSomething(
+        com::sun::star::uno::Sequence< sal_Int8 > const & aIdentifier)
+        throw (com::sun::star::uno::RuntimeException);
+
     rtl::Reference< RootAccess > root_;
+    rtl::OUString templateName_; // != "" iff freestanding (set) child
 };
 
 }

@@ -30,7 +30,13 @@
 #include "precompiled_configmgr.hxx"
 #include "sal/config.h"
 
+#include "com/sun/star/uno/RuntimeException.hpp"
+#include "com/sun/star/uno/Sequence.hxx"
+#include "cppuhelper/implbase1.hxx"
 #include "rtl/ref.hxx"
+#include "rtl/ustring.hxx"
+#include "rtl/uuid.h"
+#include "sal/types.h"
 
 #include "access.hxx"
 #include "childaccess.hxx"
@@ -39,12 +45,45 @@
 
 namespace configmgr {
 
+namespace {
+
+namespace css = com::sun::star;
+
+}
+
+css::uno::Sequence< sal_Int8 > ChildAccess::getTunnelId() {
+    static css::uno::Sequence< sal_Int8 > id;
+    if (id.getLength() == 0) {
+        css::uno::Sequence< sal_Int8 > uuid(16);
+        rtl_createUuid(
+            reinterpret_cast< sal_uInt8 * >(uuid.getArray()), 0, false);
+        id = uuid;
+    }
+    return id;
+}
+
 ChildAccess::ChildAccess(
-    rtl::Reference< RootAccess > const & root, Node * node):
-    Access(node), root_(root)
+    rtl::Reference< RootAccess > const & root, Node * node,
+    rtl::OUString const & templateName):
+    ImplInheritanceHelper1(node), root_(root), templateName_(templateName)
 {}
 
-ChildAccess::~ChildAccess() {}
+rtl::OUString ChildAccess::getTemplateName() const {
+    return templateName_;
+}
+
+void ChildAccess::inserted(rtl::Reference< RootAccess > const & newRoot)
+    throw ()
+{
+    root_ = newRoot;
+    templateName_ = rtl::OUString();
+}
+
+ChildAccess::~ChildAccess() {
+    if (templateName_.getLength() != 0) {
+        delete node_;
+    }
+}
 
 Node * ChildAccess::getNode() {
     return node_;
@@ -52,6 +91,14 @@ Node * ChildAccess::getNode() {
 
 rtl::Reference< RootAccess > ChildAccess::getRoot() {
     return root_;
+}
+
+sal_Int64 ChildAccess::getSomething(
+    css::uno::Sequence< sal_Int8 > const & aIdentifier)
+    throw (css::uno::RuntimeException)
+{
+    return aIdentifier == getTunnelId()
+        ? reinterpret_cast< sal_Int64 >(this) : 0;
 }
 
 }

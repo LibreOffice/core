@@ -30,6 +30,8 @@
 #include "precompiled_configmgr.hxx"
 #include "sal/config.h"
 
+#include <memory>
+
 #include "com/sun/star/beans/Property.hpp"
 #include "com/sun/star/beans/PropertyAttribute.hpp"
 #include "com/sun/star/beans/PropertyVetoException.hpp"
@@ -49,6 +51,7 @@
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/Sequence.hxx"
 #include "com/sun/star/uno/Type.hxx"
+#include "com/sun/star/uno/TypeClass.hpp"
 #include "com/sun/star/uno/XInterface.hpp"
 #include "com/sun/star/util/ChangesSet.hpp"
 #include "com/sun/star/util/XChangesListener.hpp"
@@ -64,8 +67,8 @@
 #include "sal/types.h"
 
 #include "access.hxx"
+#include "childaccess.hxx"
 #include "components.hxx"
-#include "freeaccess.hxx"
 #include "groupnode.hxx"
 #include "localizedpropertynode.hxx"
 #include "localizedvalues.hxx"
@@ -74,6 +77,7 @@
 #include "propertynode.hxx"
 #include "rootaccess.hxx"
 #include "setnode.hxx"
+#include "type.hxx"
 
 #if !defined INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_15
 #define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_15
@@ -682,39 +686,161 @@ void Access::insertByName(
         css::container::ElementExistException,
         css::lang::WrappedTargetException, css::uno::RuntimeException)
 {
-    OSL_ASSERT(thisIs(IS_SET|IS_UPDATE));
+    OSL_ASSERT(thisIs(IS_EXTGROUP_OR_SET|IS_UPDATE));
     osl::MutexGuard g(lock);
-    SetNode * set = dynamic_cast< SetNode * >(getNode());
-    OSL_ASSERT(set != 0);
-    if (set->getMember(aName) != 0) {
-        throw css::container::ElementExistException(
-            aName, static_cast< cppu::OWeakObject * >(this));
+    Node * p = getNode();
+    if (GroupNode * group = dynamic_cast< GroupNode * >(p)) {
+        if (group->getMember(aName) != 0) {
+            throw css::container::ElementExistException(
+                aName, static_cast< cppu::OWeakObject * >(this));
+        }
+        Type type;
+        switch (aElement.getValueTypeClass()) {
+        case css::uno::TypeClass_BOOLEAN:
+            type = TYPE_BOOLEAN;
+            break;
+        case css::uno::TypeClass_SHORT:
+            type = TYPE_SHORT;
+            break;
+        case css::uno::TypeClass_LONG:
+            type = TYPE_INT;
+            break;
+        case css::uno::TypeClass_HYPER:
+            type = TYPE_LONG;
+            break;
+        case css::uno::TypeClass_DOUBLE:
+            type = TYPE_DOUBLE;
+            break;
+        case css::uno::TypeClass_STRING:
+            type = TYPE_STRING;
+            break;
+        case css::uno::TypeClass_SEQUENCE:
+            {
+                rtl::OUString tn(aElement.getValueType().getTypeName());
+                if (tn.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("[]byte"))) {
+                    type = TYPE_HEXBINARY;
+                    break;
+                } else if (tn.equalsAsciiL(
+                               RTL_CONSTASCII_STRINGPARAM("[]boolean")))
+                {
+                    type = TYPE_BOOLEAN_LIST;
+                    break;
+                } else if (tn.equalsAsciiL(
+                               RTL_CONSTASCII_STRINGPARAM("[]short")))
+                {
+                    type = TYPE_SHORT_LIST;
+                    break;
+                } else if (tn.equalsAsciiL(
+                               RTL_CONSTASCII_STRINGPARAM("[]long")))
+                {
+                    type = TYPE_INT_LIST;
+                    break;
+                } else if (tn.equalsAsciiL(
+                               RTL_CONSTASCII_STRINGPARAM("[]hyper")))
+                {
+                    type = TYPE_LONG_LIST;
+                    break;
+                } else if (tn.equalsAsciiL(
+                               RTL_CONSTASCII_STRINGPARAM("[]double")))
+                {
+                    type = TYPE_DOUBLE_LIST;
+                    break;
+                } else if (tn.equalsAsciiL(
+                               RTL_CONSTASCII_STRINGPARAM("[]string")))
+                {
+                    type = TYPE_STRING_LIST;
+                    break;
+                } else if (tn.equalsAsciiL(
+                               RTL_CONSTASCII_STRINGPARAM("[][]byte")))
+                {
+                    type = TYPE_HEXBINARY_LIST;
+                    break;
+                }
+            }
+            // fall through
+        default:
+            throw css::lang::IllegalArgumentException(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "configmgr insertByName inappropriate group element")),
+                static_cast< cppu::OWeakObject * >(this), 1);
+        }
+        std::auto_ptr< Node > prop(
+            new PropertyNode(aName, type, true, aElement, true));
+        group->getMembers().insert(NodeMap::value_type(aName, prop.get()));
+        prop.release();
+        //TODO notify change
+    } else if (SetNode * set = dynamic_cast< SetNode * >(p)) {
+        if (set->getMember(aName) != 0) {
+            throw css::container::ElementExistException(
+                aName, static_cast< cppu::OWeakObject * >(this));
+        }
+        rtl::Reference< ChildAccess > freeAcc;
+        css::uno::Reference< css::lang::XUnoTunnel > tunnel;
+        aElement >>= tunnel;
+        if (tunnel.is()) {
+            freeAcc.set(
+                reinterpret_cast< ChildAccess * >(
+                    tunnel->getSomething(ChildAccess::getTunnelId())));
+        }
+        if (!(freeAcc.is() &&
+              set->isValidTemplate(freeAcc->getTemplateName()))) {
+            throw css::lang::IllegalArgumentException(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "configmgr insertByName inappropriate set element")),
+                static_cast< cppu::OWeakObject * >(this), 1);
+        }
+        rtl::Reference< RootAccess > root(getRoot());
+        set->getMembers().insert(NodeMap::value_type(aName, freeAcc->node_));
+        freeAcc->inserted(root); // must not throw
+        //TODO notify change
+    } else {
+        OSL_ASSERT(false);
+        throw css::uno::RuntimeException(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("this cannot happen")),
+            static_cast< cppu::OWeakObject * >(this));
     }
-    rtl::Reference< FreeAccess > freeAcc;
-    css::uno::Reference< css::lang::XUnoTunnel > tunnel;
-    aElement >>= tunnel;
-    if (tunnel.is()) {
-        freeAcc.set(
-            reinterpret_cast< FreeAccess * >(
-                tunnel->getSomething(FreeAccess::getTunnelId())));
-    }
-    if (!freeAcc.is()) {
-        throw css::lang::IllegalArgumentException(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "configmgr insertByName inappropriate element")),
-            static_cast< cppu::OWeakObject * >(this), 1);
-    }
-    if(true)abort();*(char*)0=0;throw 0;//TODO
 }
 
-void Access::removeByName(rtl::OUString const & /*aName*/)
+void Access::removeByName(rtl::OUString const & aName)
     throw (
         css::container::NoSuchElementException,
         css::lang::WrappedTargetException, css::uno::RuntimeException)
 {
-    OSL_ASSERT(thisIs(IS_SET|IS_UPDATE));
-    if(true)abort();*(char*)0=0;throw 0;//TODO
+    OSL_ASSERT(thisIs(IS_EXTGROUP_OR_SET|IS_UPDATE));
+    osl::MutexGuard g(lock);
+    Node * p = getNode();
+    if (GroupNode * group = dynamic_cast< GroupNode * >(p)) {
+        NodeMap::iterator i(group->getMembers().find(aName));
+        if (i == group->getMembers().end()) {
+            throw css::container::NoSuchElementException(
+                aName, static_cast< cppu::OWeakObject * >(this));
+        }
+        PropertyNode * prop = dynamic_cast< PropertyNode * >(i->second);
+        if (prop == 0 || !prop->isExtension()) {
+            throw css::container::NoSuchElementException(
+                aName, static_cast< cppu::OWeakObject * >(this));
+        }
+        group->getMembers().erase(i);
+        delete prop;
+        //TODO notify change
+    } else if (SetNode * set = dynamic_cast< SetNode * >(p)) {
+        NodeMap::iterator i(set->getMembers().find(aName));
+        if (i == group->getMembers().end()) {
+            throw css::container::NoSuchElementException(
+                aName, static_cast< cppu::OWeakObject * >(this));
+        }
+        Node * node = i->second;
+        set->getMembers().erase(i);
+        delete node;
+        //TODO notify change
+    } else {
+        OSL_ASSERT(false);
+        throw css::uno::RuntimeException(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("this cannot happen")),
+            static_cast< cppu::OWeakObject * >(this));
+    }
 }
 
 css::uno::Reference< css::uno::XInterface > Access::createInstance()
@@ -722,17 +848,17 @@ css::uno::Reference< css::uno::XInterface > Access::createInstance()
 {
     OSL_ASSERT(thisIs(IS_SET|IS_UPDATE));
     osl::MutexGuard g(lock);
-    rtl::OUString name(
+    rtl::OUString tmplName(
         dynamic_cast< SetNode * >(getNode())->getDefaultTemplateName());
-    Node const * p = Components::singleton().getTemplate(name);
+    Node const * p = Components::singleton().getTemplate(tmplName);
     if (p == 0) {
         throw css::uno::Exception(
             (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("unknown template ")) +
-             name),
+             tmplName),
             static_cast< cppu::OWeakObject * >(this));
     }
     return static_cast< cppu::OWeakObject * >(
-        new FreeAccess(getRoot(), p->clone(rtl::OUString())));
+        new ChildAccess(getRoot(), p->clone(rtl::OUString()), tmplName));
 }
 
 css::uno::Reference< css::uno::XInterface > Access::createInstanceWithArguments(
@@ -778,10 +904,18 @@ bool Access::thisIs(int what) {
         ((what & IS_SET) == 0 || dynamic_cast< SetNode * >(p) != 0) &&
         ((what & IS_GROUP_OR_SET) == 0 || dynamic_cast< GroupNode * >(p) != 0 ||
          dynamic_cast< SetNode * >(p) != 0) &&
+        ((what & IS_EXTGROUP_OR_SET) == 0 ||
+         (dynamic_cast< GroupNode * >(p) != 0 &&
+          dynamic_cast< GroupNode * >(p)->isExtensible()) ||
+         dynamic_cast< SetNode * >(p) != 0) &&
         ((what & IS_GROUP_OR_SET_OR_LOCALIZED) == 0 ||
          dynamic_cast< GroupNode * >(p) != 0 ||
          dynamic_cast< SetNode * >(p) != 0 ||
-         dynamic_cast< LocalizedPropertyNode * >(p) != 0);
+         dynamic_cast< LocalizedPropertyNode * >(p) != 0) ||
+        ((what & IS_ROOT) == 0 || dynamic_cast< RootAccess * >(p) != 0) ||
+        ((what & IS_GROUP_MEMBER) == 0 || true/*TODO*/) ||
+        ((what & IS_SET_MEMBER) == 0 || true/*TODO*/) ||
+        ((what & IS_UPDATE) == 0 || true/*TODO*/);
 }
 #endif
 

@@ -393,9 +393,10 @@ private:
 
 #if OSL_DEBUG_LEVEL > 0
     enum {
-        IS_GROUP = 0x01, IS_SET = 0x02, IS_GROUP_OR_SET = 0x04,
-        IS_GROUP_OR_SET_OR_LOCALIZED = 0x08, IS_ROOT = 0x10,
-        IS_GROUP_MEMBER = 0x20, IS_SET_MEMBER = 0x40, IS_UPDATE = 0x80 };
+        IS_GROUP = 0x001, IS_SET = 0x002, IS_GROUP_OR_SET = 0x004,
+        IS_EXTGROUP_OR_SET = 0x008, IS_GROUP_OR_SET_OR_LOCALIZED = 0x010,
+        IS_ROOT = 0x020, IS_GROUP_MEMBER = 0x040, IS_SET_MEMBER = 0x080,
+        IS_UPDATE = 0x100 };
     bool thisIs(int what);
 #endif
 };

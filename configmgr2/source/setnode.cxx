@@ -47,7 +47,14 @@ SetNode::SetNode(
     std::vector< rtl::OUString > const & additionalTemplateNames):
     name_(name), defaultTemplateName_(defaultTemplateName),
     additionalTemplateNames_(additionalTemplateNames)
-{}
+{
+    OSL_ASSERT(
+        defaultTemplateName.getLength() != 0 &&
+        (std::find(
+            additionalTemplateNames.begin(), additionalTemplateNames.end(),
+            rtl::OUString()) ==
+         additionalTemplateNames.end()));
+}
 
 SetNode::~SetNode() {}
 
