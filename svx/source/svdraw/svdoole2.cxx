@@ -1485,7 +1485,7 @@ SdrObject* SdrOle2Obj::getFullDragClone() const
     // create a graphic object with it
     Graphic* pOLEGraphic = GetGraphic();
     SdrObject* pClone = 0;
-    
+
     if(Application::GetSettings().GetStyleSettings().GetHighContrastMode())
     {
         pOLEGraphic = getEmbeddedObjectRef().GetHCGraphic();
@@ -1494,7 +1494,7 @@ SdrObject* SdrOle2Obj::getFullDragClone() const
     if(pOLEGraphic)
     {
         pClone = new SdrGrafObj(*pOLEGraphic, GetSnapRect());
-        
+
         // this would be the place where to copy all attributes
         // when OLE will support fill and line style
         // pClone->SetMergedItem(pOleObject->GetMergedItemSet());
