@@ -1336,7 +1336,7 @@ static void CalcAutoLayoutRectangles( SdPage& rPage, int nLayout, Rectangle* rRe
         rRectangle[6] = Rectangle (aLayoutPos, aLayoutSize);
 
         break;
-    }    
+    }
 
     }
 }

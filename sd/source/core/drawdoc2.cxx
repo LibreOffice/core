@@ -471,7 +471,7 @@ void SdDrawDocument::DeletePage(USHORT nPgNum)
 SdrPage* SdDrawDocument::RemovePage(USHORT nPgNum)
 {
     SdrPage* pPage = FmFormModel::RemovePage(nPgNum);
-    
+
     bool bLast = ((nPgNum+1)/2 == (GetPageCount()+1)/2);
 
     ((SdPage*)pPage)->DisconnectLink();
