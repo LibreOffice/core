@@ -93,7 +93,8 @@ static long ImplGetNumber( BYTE **pBuf, int& nSecurityCount )
     BOOL    bValid = TRUE;
     BOOL    bNegative = FALSE;
     long    nRetValue = 0;
-    while ( ( --nSecurityCount ) && ( **pBuf == ' ' ) || ( **pBuf == 0x9 ) ) (*pBuf)++;
+    while ( ( --nSecurityCount ) && ( ( **pBuf == ' ' ) || ( **pBuf == 0x9 ) ) )
+        (*pBuf)++;
     BYTE nByte = **pBuf;
     while ( nSecurityCount && ( nByte != ' ' ) && ( nByte != 0x9 ) && ( nByte != 0xd ) && ( nByte != 0xa ) )
     {
