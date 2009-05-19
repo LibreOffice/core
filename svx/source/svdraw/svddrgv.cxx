@@ -446,7 +446,19 @@ BOOL SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
                                     return FALSE;
                                 }
 
-                                mpCurrentSdrDragMethod = new SdrDragResize(*this);
+                                sal_Bool bSingleTextObjMark = sal_False;    // SJ: #i100490#
+                                if ( GetMarkedObjectCount() == 1 )
+                                {
+                                    pMarkedObj=GetMarkedObjectByIndex(0);
+                                    if ( pMarkedObj &&
+                                        pMarkedObj->ISA( SdrTextObj ) &&
+                                        static_cast<SdrTextObj*>(pMarkedObj)->IsTextFrame() )
+                                        bSingleTextObjMark = sal_True;
+                                }
+                                if ( bSingleTextObjMark )
+                                    mpCurrentSdrDragMethod = new SdrDragObjOwn(*this);
+                                else
+                                    mpCurrentSdrDragMethod = new SdrDragResize(*this);
                             }
                         }
                         else

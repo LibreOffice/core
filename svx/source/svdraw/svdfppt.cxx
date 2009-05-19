@@ -887,7 +887,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
 
             // replacing the object which we will return with a SdrPageObj
             SdrObject::Free( pRet );
-            pRet = new SdrPageObj( rObjData.rBoundRect, pSdrModel->GetPage( nPageNum - 1 ) );
+            pRet = new SdrPageObj( rObjData.aBoundRect, pSdrModel->GetPage( nPageNum - 1 ) );
         }
         else
         {
@@ -1155,7 +1155,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                     pTObj->SetModel( pSdrModel );
                     SfxItemSet aSet( pSdrModel->GetItemPool() );
                     if ( !pRet )
-                        ((SdrEscherImport*)this)->ApplyAttributes( rSt, aSet, rObjData.eShapeType, rObjData.nSpFlags );
+                        ((SdrEscherImport*)this)->ApplyAttributes( rSt, aSet, rObjData );
                     pTObj->SetMergedItemSet( aSet );
                     if ( pRet )
                     {
@@ -1278,7 +1278,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                         if ( nAngle )
                         {
                             double a = nAngle * nPi180;
-                            pTObj->NbcRotate( rObjData.rBoundRect.Center(), nAngle, sin( a ), cos( a ) );
+                            pTObj->NbcRotate( rObjData.aBoundRect.Center(), nAngle, sin( a ), cos( a ) );
                         }
                     }
                     if ( pRet )
@@ -2911,7 +2911,7 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                             {
                                 case DFF_msofbtSpContainer :
                                 {
-                                    Rectangle aEmpty;
+                                    Rectangle aPageSize( Point(), pRet->GetSize() );
                                     if ( rSlidePersist.aSlideAtom.nFlags & 4 )          // follow master background ?
                                     {
                                         if ( HasMasterPage( nAktPageNum, eAktPageKind ) )
@@ -2933,7 +2933,7 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                                                 sal_Bool bTemporary = ( rSlidePersist.aSlideAtom.nFlags & 2 ) != 0;
                                                 sal_uInt32 nPos = rStCtrl.Tell();
                                                 rStCtrl.Seek( pE->nBackgroundOffset );
-                                                rSlidePersist.pBObj = ImportObj( rStCtrl, (void*)&aProcessData, aEmpty, aEmpty );
+                                                rSlidePersist.pBObj = ImportObj( rStCtrl, (void*)&aProcessData, aPageSize, aPageSize );
                                                 rSlidePersist.bBObjIsTemporary = bTemporary;
                                                 rStCtrl.Seek( nPos );
                                             }
@@ -2950,7 +2950,7 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                                             if ( nSpFlags & SP_FBACKGROUND )
                                             {
                                                 aEscherObjListHd.SeekToBegOfRecord( rStCtrl );
-                                                rSlidePersist.pBObj = ImportObj( rStCtrl, (void*)&aProcessData, aEmpty, aEmpty );
+                                                rSlidePersist.pBObj = ImportObj( rStCtrl, (void*)&aProcessData, aPageSize, aPageSize );
                                                 rSlidePersist.bBObjIsTemporary = sal_False;
                                             }
                                         }
@@ -3150,7 +3150,8 @@ SdrObject* SdrPowerPointImport::ImportPageBackgroundObject( const SdrPage& rPage
                         mnFix16Angle = Fix16ToAngle( GetPropertyValue( DFF_Prop_Rotation, 0 ) );
                         UINT32 nColor = GetPropertyValue( DFF_Prop_fillColor, 0xffffff );
                         pSet = new SfxItemSet( pSdrModel->GetItemPool() );
-                        ApplyAttributes( rStCtrl, *pSet );
+                        DffObjData aObjData( aEscherObjectHd, Rectangle( 0, 0, 28000, 21000 ), 0 );
+                        ApplyAttributes( rStCtrl, *pSet, aObjData );
                         Color aColor( MSO_CLR_ToColor( nColor ) );
                         pSet->Put( XFillColorItem( String(), aColor ) );
                     }

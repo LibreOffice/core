@@ -847,6 +847,7 @@ void SvxTableController::SetTableStyle( const SfxItemSet* pArgs )
 
             pModel->AddUndo( new TableStyleUndo( *pTableObj ) );
 
+/*
             const sal_Int32 nRowCount = mxTable->getRowCount();
             const sal_Int32 nColCount = mxTable->getColumnCount();
             for( sal_Int32 nRow = 0; nRow < nRowCount; nRow++ )
@@ -866,6 +867,7 @@ void SvxTableController::SetTableStyle( const SfxItemSet* pArgs )
                     DBG_ERROR( "svx::SvxTableController::SetTableStyle(), exception caught!" );
                 }
             }
+*/
 
             pTableObj->setTableStyle( xNewTableStyle );
             pModel->EndUndo();
