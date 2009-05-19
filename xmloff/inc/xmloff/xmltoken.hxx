@@ -3072,6 +3072,12 @@ namespace xmloff { namespace token {
         XML_AT_AXIS,
         XML_AT_LABELS_AND_AXIS,
 
+        // MathML only
+        XML_MATHVARIANT,
+        XML_MATHSIZE,
+        XML_MATHWEIGHT,
+        XML_MATHCOLOR,
+
         XML_TOKEN_END
     };
 

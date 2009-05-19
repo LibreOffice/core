@@ -3074,6 +3074,11 @@ namespace xmloff { namespace token {
         TOKEN( "at-axis",               XML_AT_AXIS ),
         TOKEN( "at-labels-and-axis",    XML_AT_LABELS_AND_AXIS ),
 
+        TOKEN( "mathvariant",           XML_MATHVARIANT ),
+        TOKEN( "mathsize",              XML_MATHSIZE ),
+        TOKEN( "mathweight",            XML_MATHWEIGHT ),
+        TOKEN( "mathcolor",             XML_MATHCOLOR ),
+
 #if OSL_DEBUG_LEVEL > 0
         { 0, NULL, NULL,                       XML_TOKEN_END }
 #else

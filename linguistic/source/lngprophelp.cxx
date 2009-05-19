@@ -30,6 +30,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_linguistic.hxx"
+
 #include <tools/debug.hxx>
 
 #include <com/sun/star/linguistic2/LinguServiceEvent.hpp>
@@ -38,9 +39,10 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <osl/mutex.hxx>
 
-#include "misc.hxx"
-#include "lngprops.hxx"
-#include "prophelp.hxx"
+#include <misc.hxx>
+#include <lngprops.hxx>
+
+#include <lngprophelp.hxx>
 
 
 //using namespace utl;
@@ -60,7 +62,6 @@ namespace linguistic
 
 static const char *aCH[] =
 {
-    UPN_IS_GERMAN_PRE_REFORM,   /* deprectaed */
     UPN_IS_IGNORE_CONTROL_CHARACTERS,
     UPN_IS_USE_DICTIONARY_LIST,
 };
@@ -127,7 +128,6 @@ void PropertyChgHelper::AddPropNames( const char *pNewNames[], INT32 nCount )
 
 void PropertyChgHelper::SetDefaultValues()
 {
-    bResIsGermanPreReform           = bIsGermanPreReform            = FALSE;
     bResIsIgnoreControlCharacters   = bIsIgnoreControlCharacters    = TRUE;
     bResIsUseDictionaryList         = bIsUseDictionaryList          = TRUE;
 }
@@ -144,12 +144,7 @@ void PropertyChgHelper::GetCurrentValues()
             BOOL *pbVal     = NULL,
                  *pbResVal  = NULL;
 
-            if (pPropName[i].equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( UPN_IS_GERMAN_PRE_REFORM ) ))    /* deprecated */
-            {
-                pbVal    = &bIsGermanPreReform;
-                pbResVal = &bResIsGermanPreReform;
-            }
-            else if (pPropName[i].equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( UPN_IS_IGNORE_CONTROL_CHARACTERS ) ))
+            if (pPropName[i].equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( UPN_IS_IGNORE_CONTROL_CHARACTERS ) ))
             {
                 pbVal    = &bIsIgnoreControlCharacters;
                 pbResVal = &bResIsIgnoreControlCharacters;
@@ -174,7 +169,6 @@ void PropertyChgHelper::SetTmpPropVals( const PropertyValues &rPropVals )
 {
     // return value is default value unless there is an explicitly supplied
     // temporary value
-    bResIsGermanPreReform           = bIsGermanPreReform;
     bResIsIgnoreControlCharacters   = bIsIgnoreControlCharacters;
     bResIsUseDictionaryList         = bIsUseDictionaryList;
     //
@@ -187,8 +181,6 @@ void PropertyChgHelper::SetTmpPropVals( const PropertyValues &rPropVals )
             BOOL  *pbResVal = NULL;
             switch (pVal[i].Handle)
             {
-                case UPH_IS_GERMAN_PRE_REFORM       :
-                        pbResVal = &bResIsGermanPreReform; break;   /* deprecated */
                 case UPH_IS_IGNORE_CONTROL_CHARACTERS :
                         pbResVal = &bResIsIgnoreControlCharacters; break;
                 case UPH_IS_USE_DICTIONARY_LIST     :
@@ -222,12 +214,6 @@ BOOL PropertyChgHelper::propertyChange_Impl( const PropertyChangeEvent& rEvt )
             {
                 pbVal = &bIsIgnoreControlCharacters;
                 nLngSvcFlags = 0;
-                break;
-            }
-            case UPH_IS_GERMAN_PRE_REFORM         :     /* deprecated */
-            {
-                pbVal = &bIsGermanPreReform;
-                bSCWA = bSWWA = TRUE;
                 break;
             }
             case UPH_IS_USE_DICTIONARY_LIST       :
@@ -588,7 +574,7 @@ static const char *aHP[] =
 };
 
 
-PropertyHelper_Hyph::PropertyHelper_Hyph(
+PropertyHelper_Hyphen::PropertyHelper_Hyphen(
         const Reference< XInterface > & rxSource,
         Reference< XPropertySet > &rxPropSet ) :
     PropertyChgHelper   ( rxSource, rxPropSet, AE_HYPHENATOR )
@@ -599,12 +585,12 @@ PropertyHelper_Hyph::PropertyHelper_Hyph(
 }
 
 
-PropertyHelper_Hyph::~PropertyHelper_Hyph()
+PropertyHelper_Hyphen::~PropertyHelper_Hyphen()
 {
 }
 
 
-void PropertyHelper_Hyph::SetDefaultValues()
+void PropertyHelper_Hyphen::SetDefaultValues()
 {
     PropertyChgHelper::SetDefaultValues();
 
@@ -614,7 +600,7 @@ void PropertyHelper_Hyph::SetDefaultValues()
 }
 
 
-void PropertyHelper_Hyph::GetCurrentValues()
+void PropertyHelper_Hyphen::GetCurrentValues()
 {
     PropertyChgHelper::GetCurrentValues();
 
@@ -653,7 +639,7 @@ void PropertyHelper_Hyph::GetCurrentValues()
 }
 
 
-BOOL PropertyHelper_Hyph::propertyChange_Impl( const PropertyChangeEvent& rEvt )
+BOOL PropertyHelper_Hyphen::propertyChange_Impl( const PropertyChangeEvent& rEvt )
 {
     BOOL bRes = PropertyChgHelper::propertyChange_Impl( rEvt );
 
@@ -689,7 +675,7 @@ BOOL PropertyHelper_Hyph::propertyChange_Impl( const PropertyChangeEvent& rEvt )
 
 
 void SAL_CALL
-    PropertyHelper_Hyph::propertyChange( const PropertyChangeEvent& rEvt )
+    PropertyHelper_Hyphen::propertyChange( const PropertyChangeEvent& rEvt )
         throw(RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
@@ -697,7 +683,7 @@ void SAL_CALL
 }
 
 
-void PropertyHelper_Hyph::SetTmpPropVals( const PropertyValues &rPropVals )
+void PropertyHelper_Hyphen::SetTmpPropVals( const PropertyValues &rPropVals )
 {
     PropertyChgHelper::SetTmpPropVals( rPropVals );
 
