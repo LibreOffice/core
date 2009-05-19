@@ -34,14 +34,6 @@
 
 #include <sal/types.h>
 
-std::string upperCase(const std::string &s) {
-    std::string upper(s);
-    for(size_t i = 0; i < s.length(); i++)
-        upper[i] = sal::static_int_cast< char >( toupper(upper[i]) );
-    return upper;
-}
-
-
 int start(const std::string &s1, const std::string &s2){
     size_t i;
     int ret = 0;
