@@ -154,7 +154,7 @@ SwMSDffManager::SwMSDffManager( SwWW8ImplReader& rRdr )
         rRdr.maTracer.GetTrace()),
     rReader(rRdr), pFallbackStream(0), pOldEscherBlipCache(0)
 {
-    SetSvxMSDffSettings( GetSvxMSDffSettings() | SVXMSDFF_SETTINGS_IMPORT_IAS ); // #i27541#
+    SetSvxMSDffSettings( GetSvxMSDffSettings() );
     nSvxMSDffOLEConvFlags = SwMSDffManager::GetFilterFlags();
 }
 
@@ -471,7 +471,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
             }
 
             if( bIsSimpleDrawingTextBox )
-                ApplyAttributes( rSt, aSet, rObjData.eShapeType, rObjData.nSpFlags );
+                ApplyAttributes( rSt, aSet, rObjData );
 
             bool bFitText = false;
             if (GetPropertyValue(DFF_Prop_FitTextToShape) & 2)
@@ -635,7 +635,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
             pObj = new SdrRectObj(rTextRect);
             pObj->SetModel( pSdrModel );
             SfxItemSet aSet( pSdrModel->GetItemPool() );
-            ApplyAttributes( rSt, aSet, rObjData.eShapeType, rObjData.nSpFlags );
+            ApplyAttributes( rSt, aSet, rObjData );
 
             const SfxPoolItem* pPoolItem=NULL;
             SfxItemState eState = aSet.GetItemState( XATTR_FILLCOLOR,
