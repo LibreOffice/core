@@ -105,7 +105,10 @@ public:
     virtual BOOL        IsPasteAllowed();
 
     virtual SfxUndoManager* GetUndoManager();
-    virtual void        PrintData( Printer* pPrinter );
+    // return number of pages to be printed
+    virtual sal_Int32 countPages( Printer* pPrinter );
+    // print page
+    virtual void printPage( sal_Int32 nPage, Printer* pPrinter );
     virtual void        Deactivating();
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();

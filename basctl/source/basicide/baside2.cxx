@@ -110,7 +110,7 @@ DBG_NAME( ModulWindow )
 
 TYPEINIT1( ModulWindow , IDEBaseWindow );
 
-void lcl_PrintHeader( Printer* pPrinter, USHORT nPages, USHORT nCurPage, const String& rTitle )
+void lcl_PrintHeader( Printer* pPrinter, USHORT nPages, USHORT nCurPage, const String& rTitle, bool bOutput )
 {
     short nLeftMargin   = LMARGPRN;
     Size aSz = pPrinter->GetOutputSize();
@@ -136,14 +136,16 @@ void lcl_PrintHeader( Printer* pPrinter, USHORT nPages, USHORT nCurPage, const S
     long nXLeft = nLeftMargin-nBorder;
     long nXRight = aSz.Width()-RMARGPRN+nBorder;
 
-    pPrinter->DrawRect( Rectangle(
-        Point( nXLeft, nYTop ),
-        Size( nXRight-nXLeft, aSz.Height() - nYTop - BMARGPRN + nBorder ) ) );
+    if( bOutput )
+        pPrinter->DrawRect( Rectangle(
+            Point( nXLeft, nYTop ),
+            Size( nXRight-nXLeft, aSz.Height() - nYTop - BMARGPRN + nBorder ) ) );
 
 
     long nY = TMARGPRN-2*nBorder;
     Point aPos( nLeftMargin, nY );
-    pPrinter->DrawText( aPos, rTitle );
+    if( bOutput )
+        pPrinter->DrawText( aPos, rTitle );
     if ( nPages != 1 )
     {
         aFont.SetWeight( WEIGHT_NORMAL );
@@ -154,13 +156,15 @@ void lcl_PrintHeader( Printer* pPrinter, USHORT nPages, USHORT nCurPage, const S
         aPageStr += String::CreateFromInt32( nCurPage );
         aPageStr += ']';
         aPos.X() += pPrinter->GetTextWidth( rTitle );
-        pPrinter->DrawText( aPos, aPageStr );
+        if( bOutput )
+            pPrinter->DrawText( aPos, aPageStr );
     }
 
 
     nY = TMARGPRN-nBorder;
 
-    pPrinter->DrawLine( Point( nXLeft, nY ), Point( nXRight, nY ) );
+    if( bOutput )
+        pPrinter->DrawLine( Point( nXLeft, nY ), Point( nXRight, nY ) );
 
     pPrinter->SetFont( aOldFont );
     pPrinter->SetFillColor( aOldFillColor );
@@ -905,8 +909,23 @@ void __EXPORT ModulWindow::UpdateData()
     }
 }
 
+sal_Int32 ModulWindow::countPages( Printer* pPrinter )
+{
+    return FormatAndPrint( pPrinter, -1 );
+}
 
-void __EXPORT ModulWindow::PrintData( Printer* pPrinter )
+void ModulWindow::printPage( sal_Int32 nPage, Printer* pPrinter )
+{
+    FormatAndPrint( pPrinter, nPage );
+}
+
+/* implementation note: this is totally inefficient for the XRenderable interface
+   usage since the whole "document" will be format for every page. Should this ever
+   become a problem we should
+   - format only once for every new printer
+   - keep an index list for each page which is the starting paragraph
+*/
+sal_Int32 ModulWindow::FormatAndPrint( Printer* pPrinter, sal_Int32 nPrintPage )
 {
     DBG_CHKTHIS( ModulWindow, 0 );
 
@@ -940,10 +959,8 @@ void __EXPORT ModulWindow::PrintData( Printer* pPrinter )
     USHORT nPages = (USHORT) (nParas/nLinespPage+1 );
     USHORT nCurPage = 1;
 
-    pPrinter->StartJob( aTitle );
-    pPrinter->StartPage();
     // Header drucken...
-    lcl_PrintHeader( pPrinter, nPages, nCurPage, aTitle );
+    lcl_PrintHeader( pPrinter, nPages, nCurPage, aTitle, nPrintPage == 0 );
     Point aPos( LMARGPRN, TMARGPRN );
     for ( ULONG nPara = 0; nPara < nParas; nPara++ )
     {
@@ -957,20 +974,19 @@ void __EXPORT ModulWindow::PrintData( Printer* pPrinter )
             if ( aPos.Y() > ( aPaperSz.Height()+TMARGPRN ) )
             {
                 nCurPage++;
-                pPrinter->EndPage();
-                pPrinter->StartPage();
-                lcl_PrintHeader( pPrinter, nPages, nCurPage, aTitle );
+                lcl_PrintHeader( pPrinter, nPages, nCurPage, aTitle, nCurPage-1 == nPrintPage );
                 aPos = Point( LMARGPRN, TMARGPRN+nLineHeight );
             }
-            pPrinter->DrawText( aPos, aTmpLine );
+            if( nCurPage-1 == nPrintPage )
+                pPrinter->DrawText( aPos, aTmpLine );
         }
         aPos.Y() += nParaSpace;
     }
-    pPrinter->EndPage();
-    pPrinter->EndJob();
 
     pPrinter->SetFont( aOldFont );
     pPrinter->SetMapMode( eOldMapMode );
+
+    return sal_Int32(nCurPage);
 }
 
 

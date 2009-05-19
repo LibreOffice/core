@@ -102,6 +102,8 @@ private:
     DECL_LINK( PaintTimeout, Timer * );
     DECL_LINK( MarkTimeout, Timer * );
 
+    void DlgEditor::Print( Printer* pPrinter, const String& rTitle );
+
 protected:
     ScrollBar*          pHScroll;
     ScrollBar*          pVScroll;
@@ -199,7 +201,8 @@ public:
     void            ShowProperties();
     void            UpdatePropertyBrowserDelayed();
 
-    void            PrintData( Printer*, const String& rTitle );    // not working yet
+    sal_Int32       countPages( Printer* pPrinter );
+    void            printPage( sal_Int32 nPage, Printer* pPrinter, const String& );
 
     bool            AdjustPageSize();
 

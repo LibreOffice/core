@@ -962,9 +962,14 @@ void DialogWindow::Deactivating()
         BasicIDE::MarkDocumentModified( GetDocument() );
 }
 
-void DialogWindow::PrintData( Printer* pPrinter )
+sal_Int32 DialogWindow::countPages( Printer* pPrinter )
 {
-    pEditor->PrintData( pPrinter, CreateQualifiedName() );
+    return pEditor->countPages( pPrinter );
+}
+
+void DialogWindow::printPage( sal_Int32 nPage, Printer* pPrinter )
+{
+    pEditor->printPage( nPage, pPrinter, CreateQualifiedName() );
 }
 
 void DialogWindow::DataChanged( const DataChangedEvent& rDCEvt )

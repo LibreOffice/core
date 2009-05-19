@@ -207,13 +207,6 @@ void __EXPORT IDEBaseWindow::UpdateData()
 }
 
 
-
-void __EXPORT IDEBaseWindow::PrintData( Printer* )
-{
-}
-
-
-
 String __EXPORT IDEBaseWindow::GetTitle()
 {
     return String();

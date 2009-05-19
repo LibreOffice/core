@@ -215,8 +215,12 @@ public:
 
     virtual void    StoreData();
     virtual void    UpdateData();
-    virtual void    PrintData( Printer* pPrinter );
     virtual BOOL    CanClose();
+
+    // return number of pages to be printed
+    virtual sal_Int32 countPages( Printer* pPrinter ) = 0;
+    // print page
+    virtual void printPage( sal_Int32 nPage, Printer* pPrinter ) = 0;
 
     virtual String  GetTitle();
     String          CreateQualifiedName();

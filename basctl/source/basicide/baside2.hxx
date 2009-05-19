@@ -354,6 +354,7 @@ private:
     void                GoOnTop();
     void                AssertValidEditEngine();
 
+    sal_Int32           FormatAndPrint( Printer* pPrinter, sal_Int32 nPage = -1 );
 protected:
     virtual void    Resize();
     virtual void    GetFocus();
@@ -375,7 +376,11 @@ public:
     virtual void    StoreData();
     virtual void    UpdateData();
     virtual BOOL    CanClose();
-    virtual void    PrintData( Printer* pPrinter );
+    // virtual void PrintData( Printer* pPrinter );
+    // return number of pages to be printed
+    virtual sal_Int32 countPages( Printer* pPrinter );
+    // print page
+    virtual void printPage( sal_Int32 nPage, Printer* pPrinter );
     virtual String  GetTitle();
     virtual BasicEntryDescriptor CreateEntryDescriptor();
     virtual BOOL    AllowUndo();
