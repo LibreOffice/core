@@ -486,7 +486,7 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
                     if(!(aValue >>= aString))
                         throw lang::IllegalArgumentException();
 
-                    pInfo->maBookmark = SdDrawPage::getUiNameFromPageApiName( aString );
+                    pInfo->SetBookmark( SdDrawPage::getUiNameFromPageApiName( aString ) );
                     break;
                 }
                 case WID_CLICKACTION:
@@ -726,13 +726,13 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
                 SdDrawDocument* pDoc = mpModel?mpModel->GetDoc():NULL;
                 // is the bookmark a page?
                 BOOL bIsMasterPage;
-                if(pDoc->GetPageByName( pInfo->maBookmark, bIsMasterPage ) != SDRPAGE_NOTFOUND)
+                if(pDoc->GetPageByName( pInfo->GetBookmark(), bIsMasterPage ) != SDRPAGE_NOTFOUND)
                 {
-                    aString = SdDrawPage::getPageApiNameFromUiName( pInfo->maBookmark );
+                    aString = SdDrawPage::getPageApiNameFromUiName( pInfo->GetBookmark() );
                 }
                 else
                 {
-                    aString = pInfo->maBookmark ;
+                    aString = pInfo->GetBookmark() ;
                     sal_Int32 nPos = aString.lastIndexOf( sal_Unicode('#') );
                     if( nPos >= 0 )
                     {
@@ -1160,7 +1160,7 @@ SdUnoEventsAccess::SdUnoEventsAccess( SdXShape* pShape ) throw()
 static void clearEventsInAnimationInfo( SdAnimationInfo* pInfo )
 {
     const String aEmpty;
-    pInfo->maBookmark = aEmpty;
+    pInfo->SetBookmark( aEmpty );
     pInfo->mbSecondSoundOn = sal_False;
     pInfo->mbSecondPlayFull = sal_False;
     pInfo->meClickAction = presentation::ClickAction_NONE;
@@ -1344,7 +1344,7 @@ void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno
                         }
                     }
 
-                    pInfo->maBookmark = aStrBookmark;
+                    pInfo->SetBookmark( aStrBookmark );
                     bOk = sal_True;
                 }
                 break;
@@ -1352,7 +1352,7 @@ void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno
             case presentation::ClickAction_MACRO:
                 if( nFound & FOUND_MACRO )
                 {
-                    pInfo->maBookmark = aStrMacro;
+                    pInfo->SetBookmark( aStrMacro );
                     bOk = sal_True;
                 }
                 break;
@@ -1379,7 +1379,7 @@ void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno
             case presentation::ClickAction_SOUND:
                 if( nFound & FOUND_SOUNDURL )
                 {
-                    pInfo->maBookmark = aStrSoundURL;
+                    pInfo->SetBookmark( aStrSoundURL );
                     if( eClickAction != presentation::ClickAction_SOUND )
                         pInfo->mbSecondSoundOn = aStrSoundURL.getLength() != 0;
                     pInfo->mbSecondPlayFull = nFound & FOUND_PLAYFULL ? bPlayFull : sal_False;
@@ -1404,7 +1404,7 @@ void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno
 
             if ( SfxApplication::IsXScriptURL( aStrMacro ) )
             {
-                pInfo->maBookmark = aStrMacro;
+                pInfo->SetBookmark( aStrMacro );
             }
             else
             {
@@ -1431,7 +1431,7 @@ void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno
                     sBuffer.append( aStrLibrary );
                 }
 
-                pInfo->maBookmark = sBuffer.makeStringAndClear();
+                pInfo->SetBookmark( sBuffer.makeStringAndClear() );
             }
             bOk = sal_True;
         }
@@ -1471,7 +1471,7 @@ uno::Any SAL_CALL SdUnoEventsAccess::getByName( const OUString& aName )
     case presentation::ClickAction_BOOKMARK:
     case presentation::ClickAction_DOCUMENT:
     case presentation::ClickAction_MACRO:
-        if ( !SfxApplication::IsXScriptURL( pInfo->maBookmark ) )
+        if ( !SfxApplication::IsXScriptURL( pInfo->GetBookmark() ) )
             nPropertyCount += 1;
         break;
 
@@ -1493,7 +1493,7 @@ uno::Any SAL_CALL SdUnoEventsAccess::getByName( const OUString& aName )
 
     if( eClickAction == presentation::ClickAction_MACRO )
     {
-        if ( SfxApplication::IsXScriptURL( pInfo->maBookmark ) )
+        if ( SfxApplication::IsXScriptURL( pInfo->GetBookmark() ) )
         {
             // Scripting Framework URL
             aAny <<= maStrScript;;
@@ -1503,7 +1503,7 @@ uno::Any SAL_CALL SdUnoEventsAccess::getByName( const OUString& aName )
             pProperties->State = beans::PropertyState_DIRECT_VALUE;
             pProperties++;
 
-            aAny <<= OUString( pInfo->maBookmark );
+            aAny <<= OUString( pInfo->GetBookmark() );
             pProperties->Name = maStrScript;
             pProperties->Handle = -1;
             pProperties->Value = aAny;
@@ -1520,7 +1520,7 @@ uno::Any SAL_CALL SdUnoEventsAccess::getByName( const OUString& aName )
             pProperties->State = beans::PropertyState_DIRECT_VALUE;
             pProperties++;
 
-            String aMacro = pInfo->maBookmark;
+            String aMacro = pInfo->GetBookmark();
 
             // aMacro has got following format:
             // "Macroname.Modulname.Libname.Documentname" or
@@ -1579,7 +1579,7 @@ uno::Any SAL_CALL SdUnoEventsAccess::getByName( const OUString& aName )
             break;
         case presentation::ClickAction_BOOKMARK:
             {
-                const OUString aStrBookmark( getPageApiNameFromUiName( pInfo->maBookmark ) );
+                const OUString aStrBookmark( getPageApiNameFromUiName( pInfo->GetBookmark()) );
                 pProperties->Name = maStrBookmark;
                 pProperties->Handle = -1;
                 pProperties->Value <<= aStrBookmark;
@@ -1590,7 +1590,7 @@ uno::Any SAL_CALL SdUnoEventsAccess::getByName( const OUString& aName )
         case presentation::ClickAction_DOCUMENT:
         case presentation::ClickAction_PROGRAM:
             {
-                OUString aString( pInfo->maBookmark );
+                OUString aString( pInfo->GetBookmark());
                 sal_Int32 nPos = aString.lastIndexOf( sal_Unicode('#') );
                 if( nPos >= 0 )
                 {
@@ -1625,7 +1625,7 @@ uno::Any SAL_CALL SdUnoEventsAccess::getByName( const OUString& aName )
         case presentation::ClickAction_SOUND:
             if( eClickAction == presentation::ClickAction_SOUND || pInfo->mbSecondSoundOn )
             {
-                aAny <<= OUString( pInfo->maBookmark );
+                aAny <<= OUString( pInfo->GetBookmark());
                 pProperties->Name = maStrSoundURL;
                 pProperties->Handle = -1;
                 pProperties->Value = aAny;

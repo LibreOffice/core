@@ -1254,7 +1254,7 @@ BOOL FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
                 case presentation::ClickAction_BOOKMARK:
                 {
                      // Sprung zu Bookmark (Seite oder Objekt)
-                    SfxStringItem aItem(SID_NAVIGATOR_OBJECT, pInfo->maBookmark);
+                    SfxStringItem aItem(SID_NAVIGATOR_OBJECT, pInfo->GetBookmark());
                     mpViewShell->GetViewFrame()->GetDispatcher()->
                     Execute(SID_NAVIGATOR_OBJECT, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD, &aItem, 0L);
                     bAnimated = TRUE;
@@ -1263,11 +1263,12 @@ BOOL FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
 
                 case presentation::ClickAction_DOCUMENT:
                 {
+                    String sBookmark( pInfo->GetBookmark() );
                     // Sprung zu Dokument
-                    if (pInfo->maBookmark.Len())
+                    if (sBookmark.Len())
                     {
                         SfxStringItem aReferer(SID_REFERER, mpDocSh->GetMedium()->GetName());
-                        SfxStringItem aStrItem(SID_FILE_NAME, pInfo->maBookmark);
+                        SfxStringItem aStrItem(SID_FILE_NAME, sBookmark);
                         SfxViewFrame* pFrame = mpViewShell->GetViewFrame();
                         SfxFrameItem aFrameItem(SID_DOCFRAME, pFrame);
                         SfxBoolItem aBrowseItem( SID_BROWSE, TRUE );
@@ -1328,7 +1329,7 @@ BOOL FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
                 {
                         try
                         {
-                            mxPlayer.set( avmedia::MediaWindow::createPlayer( pInfo->maBookmark ), uno::UNO_QUERY_THROW );
+                            mxPlayer.set( avmedia::MediaWindow::createPlayer( pInfo->GetBookmark()), uno::UNO_QUERY_THROW );
                             mxPlayer->start();
                         }
                         catch( uno::Exception& e )
@@ -1352,7 +1353,7 @@ BOOL FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
                 case presentation::ClickAction_PROGRAM:
                 {
                    String aBaseURL = GetDocSh()->GetMedium()->GetBaseURL();
-                   INetURLObject aURL( ::URIHelper::SmartRel2Abs( INetURLObject(aBaseURL), pInfo->maBookmark,
+                   INetURLObject aURL( ::URIHelper::SmartRel2Abs( INetURLObject(aBaseURL), pInfo->GetBookmark(),
                                                 URIHelper::GetMaybeFileHdl(), true, false,
                                                 INetURLObject::WAS_ENCODED, INetURLObject::DECODE_UNAMBIGUOUS ) );
 
@@ -1377,7 +1378,7 @@ BOOL FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
                 case presentation::ClickAction_MACRO:
                 {
                     // Execute makro
-                    String aMacro = pInfo->maBookmark;
+                    String aMacro = pInfo->GetBookmark();
 
                     if ( SfxApplication::IsXScriptURL( aMacro ) )
                     {

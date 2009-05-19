@@ -195,7 +195,7 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
                 {
                     SdAnimationInfo* pInfo = SdDrawDocument::GetShapeUserData(*pMarkedObj);
                     if( pInfo && (pInfo->meClickAction == presentation::ClickAction_DOCUMENT) )
-                        aHLinkItem.SetURL( pInfo->maBookmark );
+                        aHLinkItem.SetURL( pInfo->GetBookmark());
                     aHLinkItem.SetInsertMode(HLINK_BUTTON);
                 }
             }

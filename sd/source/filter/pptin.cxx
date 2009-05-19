@@ -236,7 +236,7 @@ ImplSdPPTImport::ImplSdPPTImport( SdDrawDocument* pDocument, SvStorage& rStorage
 
         InitSvxMSDffManager( nDggContainerOfs, pStData, nSvxMSDffOLEConvFlags2 );
         SetSvxMSDffSettings( SVXMSDFF_SETTINGS_CROP_BITMAPS
-            | SVXMSDFF_SETTINGS_IMPORT_IAS | SVXMSDFF_SETTINGS_IMPORT_PPT );
+            | SVXMSDFF_SETTINGS_IMPORT_PPT );
         SetModel( mpDoc, 576 );
     }
 }
@@ -2099,7 +2099,7 @@ void ImplSdPPTImport::FillSdAnimationInfo( SdAnimationInfo* pInfo, PptInteractiv
     // Lokale Informationen in pInfo eintragen
     if( pIAtom->nSoundRef )
     {
-        pInfo->maBookmark = ReadSound( pIAtom->nSoundRef ); // Pfad zum Soundfile in MSDOS-Notation
+        pInfo->SetBookmark( ReadSound( pIAtom->nSoundRef ) );   // Pfad zum Soundfile in MSDOS-Notation
         pInfo->meClickAction = ::com::sun::star::presentation::ClickAction_SOUND;           // RunProgramAction
     }
 //  if ( nFlags & 0x01 )    // koennen wir nicht ( beim Anklicken markieren )
@@ -2117,7 +2117,7 @@ void ImplSdPPTImport::FillSdAnimationInfo( SdAnimationInfo* pInfo, PptInteractiv
         case 0x02 :                                         // RunProgramAction
         {
             pInfo->meClickAction = ::com::sun::star::presentation::ClickAction_PROGRAM;
-            pInfo->maBookmark = aMacroName;                 // Programmname in aBookmark
+            pInfo->SetBookmark( aMacroName );                   // Programmname in aBookmark
         }
         break;
         case 0x03 :                                         // JumpAction
@@ -2187,8 +2187,8 @@ void ImplSdPPTImport::FillSdAnimationInfo( SdAnimationInfo* pInfo, PptInteractiv
                     {
                         if ( pPtr->aConvSubString.Len() )
                         {
-                            pInfo->maBookmark = pPtr->aConvSubString;
                             pInfo->meClickAction = ::com::sun::star::presentation::ClickAction_BOOKMARK;
+                            pInfo->SetBookmark( pPtr->aConvSubString );
                         }
                     }
                     break;

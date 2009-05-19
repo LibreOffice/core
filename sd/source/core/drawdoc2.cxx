@@ -50,7 +50,8 @@
 #include <svx/eeitem.hxx>
 #include <svx/langitem.hxx>
 #include <svtools/itempool.hxx>
-
+#include <svx/svdpool.hxx>
+#include <svx/flditem.hxx>
 
 #include <svx/linkmgr.hxx>
 #include <svx/editdata.hxx>
@@ -303,6 +304,114 @@ void SdDrawDocument::UpdatePageObjectsInNotes(USHORT nStartPos)
     }
 }
 
+void SdDrawDocument::UpdatePageRelativeURLs(const String& rOldName, const String& rNewName)
+{
+    if (rNewName.Len() == 0)
+        return;
+
+    SfxItemPool& pPool(GetPool());
+    USHORT nCount = pPool.GetItemCount(EE_FEATURE_FIELD);
+    for (USHORT nOff = 0; nOff < nCount; nOff++)
+    {
+        const SfxPoolItem *pItem = pPool.GetItem(EE_FEATURE_FIELD, nOff);
+        const SvxFieldItem* pFldItem = dynamic_cast< const SvxFieldItem * > (pItem);
+
+        if(pFldItem)
+        {
+            SvxURLField* pURLField = const_cast< SvxURLField* >( dynamic_cast<const SvxURLField*>( pFldItem->GetField() ) );
+
+            if(pURLField)
+            {
+                XubString aURL = pURLField->GetURL();
+
+                if (aURL.Len() && (aURL.GetChar(0) == 35) && (aURL.Search(rOldName, 1) == 1))
+                {
+                    if (aURL.Len() == rOldName.Len() + 1) // standard page name
+                    {
+                        aURL.Erase (1, aURL.Len() - 1);
+                        aURL += rNewName;
+                        pURLField->SetURL(aURL);
+                    }
+                    else
+                    {
+                        const XubString sNotes = SdResId(STR_NOTES);
+                        if (aURL.Len() == rOldName.Len() + 2 + sNotes.Len() && aURL.Search(sNotes, rOldName.Len() + 2) == rOldName.Len() + 2)
+                        {
+                            aURL.Erase (1, aURL.Len() - 1);
+                            aURL += rNewName;
+                            aURL += ' ';
+                            aURL += sNotes;
+                            pURLField->SetURL(aURL);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+void SdDrawDocument::UpdatePageRelativeURLs(SdPage* pPage, USHORT nPos, sal_Int32 nIncrement)
+{
+    bool bNotes = (pPage->GetPageKind() == PK_NOTES);
+
+    SfxItemPool& pPool(GetPool());
+    USHORT nCount = pPool.GetItemCount(EE_FEATURE_FIELD);
+    for (USHORT nOff = 0; nOff < nCount; nOff++)
+    {
+        const SfxPoolItem *pItem = pPool.GetItem(EE_FEATURE_FIELD, nOff);
+        const SvxFieldItem* pFldItem;
+
+        if ((pFldItem = dynamic_cast< const SvxFieldItem * > (pItem)) != 0)
+        {
+            SvxURLField* pURLField = const_cast< SvxURLField* >( dynamic_cast<const SvxURLField*>( pFldItem->GetField() ) );
+
+            if(pURLField)
+            {
+                XubString aURL = pURLField->GetURL();
+
+                if (aURL.Len() && (aURL.GetChar(0) == 35))
+                {
+                    XubString aHashSlide('#');
+                    aHashSlide += SdResId(STR_PAGE);
+
+                    if (aURL.CompareTo(aHashSlide, aHashSlide.Len()) == COMPARE_EQUAL)
+                    {
+                        XubString aURLCopy = aURL;
+                        const XubString sNotes = SdResId(STR_NOTES);
+
+                        aURLCopy.Erase(0, aHashSlide.Len());
+
+                        bool bNotesLink = (aURLCopy.Len() >= sNotes.Len() + 3 && aURLCopy.Search(sNotes, aURLCopy.Len() - sNotes.Len()) == aURLCopy.Len() - sNotes.Len());
+
+                        if (bNotesLink ^ bNotes)
+                            continue; // no compatible link and page
+
+                        if (bNotes)
+                            aURLCopy.Erase(aURLCopy.Len() - sNotes.Len(), sNotes.Len());
+
+                        sal_Int32 number = aURLCopy.ToInt32();
+                        USHORT realPageNumber = (nPos + 1)/ 2;
+
+                        if ( number >= realPageNumber )
+                        {
+                            // update link page number
+                            number += nIncrement;
+                            aURL.Erase (aHashSlide.Len() + 1, aURL.Len() - aHashSlide.Len() - 1);
+                            aURL += XubString::CreateFromInt32(number);
+                            if (bNotes)
+                            {
+                                aURL += ' ';
+                                aURL += sNotes;
+                            }
+                            pURLField->SetURL(aURL);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 /*************************************************************************
 |*
 |*  Seite verschieben
@@ -327,11 +436,17 @@ void SdDrawDocument::MovePage(USHORT nPgNum, USHORT nNewPos)
 
 void SdDrawDocument::InsertPage(SdrPage* pPage, USHORT nPos)
 {
+    bool bLast = (nPos == GetPageCount());
+
     FmFormModel::InsertPage(pPage, nPos);
 
     ((SdPage*)pPage)->ConnectLink();
 
     UpdatePageObjectsInNotes(nPos);
+
+    if (!bLast)
+        UpdatePageRelativeURLs(static_cast<SdPage*>( pPage ), nPos, 1);
+
 }
 
 /*************************************************************************
@@ -356,10 +471,15 @@ void SdDrawDocument::DeletePage(USHORT nPgNum)
 SdrPage* SdDrawDocument::RemovePage(USHORT nPgNum)
 {
     SdrPage* pPage = FmFormModel::RemovePage(nPgNum);
+    
+    bool bLast = ((nPgNum+1)/2 == (GetPageCount()+1)/2);
 
     ((SdPage*)pPage)->DisconnectLink();
     ReplacePageInCustomShows( dynamic_cast< SdPage* >( pPage ), 0 );
     UpdatePageObjectsInNotes(nPgNum);
+
+    if (!bLast)
+        UpdatePageRelativeURLs((SdPage*)pPage, nPgNum, -1);
 
     return pPage;
 }
@@ -965,8 +1085,8 @@ SdAnimationInfo* SdDrawDocument::GetShapeUserData(SdrObject& rObject, bool bCrea
 
     if( (pRet == 0) && bCreate )
     {
-        pRet = new SdAnimationInfo;
-        rObject.InsertUserData( pRet );
+        pRet = new SdAnimationInfo( rObject );
+        rObject.InsertUserData( pRet);
     }
 
     return pRet;

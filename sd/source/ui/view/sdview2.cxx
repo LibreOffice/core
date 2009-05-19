@@ -839,7 +839,7 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTar
                                 pAction->SetPlayFull(pInfo->mbPlayFull, pInfo->mbPlayFull);
                                 pAction->SetPathObj(pInfo->mpPathObj, pInfo->mpPathObj);
                                 pAction->SetClickAction(pInfo->meClickAction, eClickAction);
-                                pAction->SetBookmark(pInfo->maBookmark, aBookmark);
+                                pAction->SetBookmark(pInfo->GetBookmark(), aBookmark);
 //                              pAction->SetInvisibleInPres(pInfo->mbInvisibleInPresentation, TRUE);
                                 pAction->SetVerb(pInfo->mnVerb, pInfo->mnVerb);
                                 pAction->SetSecondEffect(pInfo->meSecondEffect, pInfo->meSecondEffect);
@@ -851,7 +851,7 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTar
                                 pAction->SetComment(aString);
                                 mpDocSh->GetUndoManager()->AddUndoAction(pAction);
                                 pInfo->meClickAction = eClickAction;
-                                pInfo->maBookmark = aBookmark;
+                                pInfo->SetBookmark( aBookmark );
                                 mpDoc->SetChanged();
 
                                 nRet = nDropAction;

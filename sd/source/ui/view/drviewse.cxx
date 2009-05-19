@@ -1552,7 +1552,7 @@ void DrawViewShell::InsertURLButton(const String& rURL, const String& rText,
 
                 SdAnimationInfo* pInfo = SdDrawDocument::GetShapeUserData(*pMarkedObj, true);
                 pInfo->meClickAction = presentation::ClickAction_DOCUMENT;
-                pInfo->maBookmark = sTargetURL;
+                pInfo->SetBookmark( sTargetURL );
             }
         }
         catch( uno::Exception& )
