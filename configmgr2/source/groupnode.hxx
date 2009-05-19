@@ -42,7 +42,9 @@ namespace configmgr {
 
 class GroupNode: public Node {
 public:
-    GroupNode(Node * parent, rtl::OUString const & name, bool extensible);
+    GroupNode(
+        Node * parent, rtl::OUString const & name, bool extensible,
+        rtl::OUString const & templateName);
 
     virtual rtl::Reference< Node > clone(
         Node * parent, rtl::OUString const & name) const;
@@ -51,6 +53,8 @@ public:
 
     bool isExtensible() const;
 
+    rtl::OUString getTemplateName() const;
+
     NodeMap & getMembers();
 
 private:
@@ -58,6 +62,8 @@ private:
 
     bool extensible_;
     NodeMap members_;
+    rtl::OUString templateName_;
+        // non-empty iff this node is a template, free node, or set member
 };
 
 }

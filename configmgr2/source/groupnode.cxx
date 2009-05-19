@@ -40,13 +40,15 @@
 namespace configmgr {
 
 GroupNode::GroupNode(
-    Node * parent, rtl::OUString const & name, bool extensible):
-    Node(parent, name), extensible_(extensible) {}
+    Node * parent, rtl::OUString const & name, bool extensible,
+    rtl::OUString const & templateName):
+    Node(parent, name), extensible_(extensible), templateName_(templateName) {}
 
 rtl::Reference< Node > GroupNode::clone(
     Node * parent, rtl::OUString const & name) const
 {
-    rtl::Reference< GroupNode > fresh(new GroupNode(parent, name, extensible_));
+    rtl::Reference< GroupNode > fresh(
+        new GroupNode(parent, name, extensible_, templateName_));
     members_.clone(fresh.get(), &fresh->members_);
     return fresh.get();
 }
@@ -58,6 +60,10 @@ rtl::Reference< Node > GroupNode::getMember(rtl::OUString const & name) {
 
 bool GroupNode::isExtensible() const {
     return extensible_;
+}
+
+rtl::OUString GroupNode::getTemplateName() const {
+    return templateName_;
 }
 
 NodeMap & GroupNode::getMembers() {

@@ -50,8 +50,7 @@ namespace css = com::sun::star;
 
 RootAccess::RootAccess(
     rtl::OUString const & path, rtl::OUString const & locale, bool update):
-    Access(rtl::Reference< Node >()), path_(path), locale_(locale),
-    update_(update) {}
+    path_(path), locale_(locale), update_(update) {}
 
 rtl::OUString RootAccess::getLocale() const {
     return locale_; //TODO: handle locale_ == ""

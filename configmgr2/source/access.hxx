@@ -44,6 +44,7 @@
 #include "com/sun/star/beans/XPropertySetInfo.hpp"
 #include "com/sun/star/container/ElementExistException.hpp"
 #include "com/sun/star/container/NoSuchElementException.hpp"
+#include "com/sun/star/container/XChild.hpp"
 #include "com/sun/star/container/XContainer.hpp"
 #include "com/sun/star/container/XHierarchicalName.hpp"
 #include "com/sun/star/container/XHierarchicalNameAccess.hpp"
@@ -63,9 +64,9 @@
 #include "rtl/ref.hxx"
 #include "sal/types.h"
 
-#if !defined INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_15
-#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_15
-#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 15
+#if !defined INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_16
+#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_16
+#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 16
 #include "comphelper/implbase_var.hxx"
 #undef COMPHELPER_IMPLBASE_INTERFACE_NUMBER
 #endif
@@ -95,7 +96,7 @@ class Node;
 class RootAccess;
 
 class Access:
-    public comphelper::WeakComponentImplHelper15<
+    public comphelper::WeakComponentImplHelper16<
         com::sun::star::container::XHierarchicalNameAccess,
         com::sun::star::container::XContainer,
         com::sun::star::beans::XExactName,
@@ -103,6 +104,7 @@ class Access:
         com::sun::star::container::XHierarchicalName,
         com::sun::star::container::XNamed,
         com::sun::star::beans::XProperty,
+        com::sun::star::container::XChild,
         com::sun::star::beans::XPropertySet,
         com::sun::star::beans::XMultiPropertySet,
         com::sun::star::beans::XHierarchicalPropertySet,
@@ -114,7 +116,7 @@ class Access:
     private boost::noncopyable
 {
 protected:
-    explicit Access(rtl::Reference< Node > const & node);
+    Access();
 
     virtual ~Access();
 
@@ -122,9 +124,26 @@ protected:
 
     virtual rtl::Reference< RootAccess > getRoot() = 0;
 
-    rtl::Reference< Node > node_;
-
 private:
+    virtual com::sun::star::uno::Type SAL_CALL getElementType()
+        throw (com::sun::star::uno::RuntimeException);
+
+    virtual sal_Bool SAL_CALL hasElements()
+        throw (com::sun::star::uno::RuntimeException);
+
+    virtual com::sun::star::uno::Any SAL_CALL getByName(
+        rtl::OUString const & aName)
+        throw (
+            com::sun::star::container::NoSuchElementException,
+            com::sun::star::lang::WrappedTargetException,
+            com::sun::star::uno::RuntimeException);
+
+    virtual com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL
+    getElementNames() throw (com::sun::star::uno::RuntimeException);
+
+    virtual sal_Bool SAL_CALL hasByName(rtl::OUString const & aName)
+        throw (com::sun::star::uno::RuntimeException);
+
     virtual com::sun::star::uno::Any SAL_CALL getByHierarchicalName(
         rtl::OUString const & aName)
         throw (
@@ -178,6 +197,17 @@ private:
 
     virtual com::sun::star::beans::Property SAL_CALL getAsProperty()
         throw (com::sun::star::uno::RuntimeException);
+
+    virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface >
+    SAL_CALL getParent()
+        throw (com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL setParent(
+        com::sun::star::uno::Reference< com::sun::star::uno::XInterface >
+            const &)
+        throw (
+            com::sun::star::lang::NoSupportException,
+            com::sun::star::uno::RuntimeException);
 
     virtual
     com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo >
@@ -325,25 +355,6 @@ private:
             const & aListener)
         throw (com::sun::star::uno::RuntimeException);
 
-    virtual com::sun::star::uno::Type SAL_CALL getElementType()
-        throw (com::sun::star::uno::RuntimeException);
-
-    virtual sal_Bool SAL_CALL hasElements()
-        throw (com::sun::star::uno::RuntimeException);
-
-    virtual com::sun::star::uno::Any SAL_CALL getByName(
-        rtl::OUString const & aName)
-        throw (
-            com::sun::star::container::NoSuchElementException,
-            com::sun::star::lang::WrappedTargetException,
-            com::sun::star::uno::RuntimeException);
-
-    virtual com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL
-    getElementNames() throw (com::sun::star::uno::RuntimeException);
-
-    virtual sal_Bool SAL_CALL hasByName(rtl::OUString const & aName)
-        throw (com::sun::star::uno::RuntimeException);
-
     virtual void SAL_CALL replaceByName(
         rtl::OUString const & aName, com::sun::star::uno::Any const & aElement)
         throw (
@@ -391,12 +402,16 @@ private:
     virtual com::sun::star::util::ChangesSet getPendingChanges()
         throw (com::sun::star::uno::RuntimeException);
 
+    void setProperty(
+        rtl::Reference< Node > const & node,
+        com::sun::star::uno::Any const & value);
+
 #if OSL_DEBUG_LEVEL > 0
     enum {
         IS_GROUP = 0x001, IS_SET = 0x002, IS_GROUP_OR_SET = 0x004,
         IS_EXTGROUP_OR_SET = 0x008, IS_GROUP_OR_SET_OR_LOCALIZED = 0x010,
-        IS_ROOT = 0x020, IS_GROUP_MEMBER = 0x040, IS_SET_MEMBER = 0x080,
-        IS_UPDATE = 0x100 };
+        IS_ROOT = 0x020, IS_CHILD = 0x040, IS_GROUP_MEMBER = 0x080,
+        IS_SET_MEMBER = 0x100, IS_UPDATE = 0x200 };
     bool thisIs(int what);
 #endif
 };

@@ -505,21 +505,24 @@ void parseXcsGroupContent(
 
 rtl::Reference< Node > parseXcsGroup(
     rtl::OUString const & componentName, xmlDocPtr doc, xmlNodePtr node,
-    Node * parent, rtl::OUString const & name)
+    Node * parent, rtl::OUString const & name,
+    rtl::OUString const & templateName)
 {
     rtl::Reference< GroupNode > group(
         new GroupNode(
             parent, name,
             getBooleanAttribute(
                 doc, node, "http://openoffice.org/2001/registry", "extensible",
-                false)));
+                false),
+            templateName));
     parseXcsGroupContent(componentName, doc, node, group);
     return group.get();
 }
 
 Node * parseXcsSet(
     rtl::OUString const & componentName, xmlDocPtr doc, xmlNodePtr node,
-    Node * parent, rtl::OUString const & name)
+    Node * parent, rtl::OUString const & name,
+    rtl::OUString const & templateName)
 {
     xmlNodePtr p(skipBlank(node->xmlChildrenNode));
     if (isOorElement(p, "info")) {
@@ -540,7 +543,7 @@ Node * parseXcsSet(
     }
     return new SetNode(
         parent, name, parseTemplateReference(componentName, doc, node, 0),
-        additional);
+        additional, templateName);
 }
 
 void parseXcsGroupContent(
@@ -620,10 +623,12 @@ void parseXcsGroupContent(
                 parseTemplateReference(componentName, doc, p, 0));
         } else if (isOorElement(p, "group")) {
             member = parseXcsGroup(
-                componentName, doc, p, group.get(), getNameAttribute(doc, p));
+                componentName, doc, p, group.get(), getNameAttribute(doc, p),
+                rtl::OUString());
         } else if (isOorElement(p, "set")) {
             member = parseXcsSet(
-                componentName, doc, p, group.get(), getNameAttribute(doc, p));
+                componentName, doc, p, group.get(), getNameAttribute(doc, p),
+                rtl::OUString());
         } else {
             throw css::uno::RuntimeException(
                 (rtl::OUString(
@@ -658,14 +663,18 @@ xmlNodePtr parseXcsTemplates(
         p = skipBlank(p->next);
     }
     for (; p != 0; p = skipBlank(p->next)) {
-        rtl::OUString name;
-        rtl::Reference< Node > templ;
+        rtl::OUString tmplName;
+        rtl::Reference< Node > tmpl;
         if (isOorElement(p, "group")) {
-            name = getNameAttribute(doc, p);
-            templ = parseXcsGroup(componentName, doc, p, 0, rtl::OUString());
+            tmplName = fullTemplateName(
+                componentName, getNameAttribute(doc, p));
+            tmpl = parseXcsGroup(
+                componentName, doc, p, 0, rtl::OUString(), tmplName);
         } else if (isOorElement(p, "set")) {
-            name = getNameAttribute(doc, p);
-            templ = parseXcsSet(componentName, doc, p, 0, rtl::OUString());
+            tmplName = fullTemplateName(
+                componentName, getNameAttribute(doc, p));
+            tmpl = parseXcsSet(
+                componentName, doc, p, 0, rtl::OUString(), tmplName);
         } else {
             throw css::uno::RuntimeException(
                 (rtl::OUString(
@@ -674,11 +683,7 @@ xmlNodePtr parseXcsTemplates(
                  fromXmlString(doc->URL)),
                 0);
         }
-        if (!templates->insert(
-                NodeMap::value_type(
-                    fullTemplateName(componentName, name), templ)).
-            second)
-        {
+        if (!templates->insert(NodeMap::value_type(tmplName, tmpl)).second) {
             throw css::uno::RuntimeException(
                 (rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM(
@@ -702,7 +707,8 @@ xmlNodePtr parseXcsComponent(
              fromXmlString(doc->URL)),
             0);
     }
-    rtl::Reference< GroupNode > comp(new GroupNode(0, component, false));
+    rtl::Reference< GroupNode > comp(
+        new GroupNode(0, component, false, rtl::OUString()));
     parseXcsGroupContent(component, doc, node, comp);
     if (!components->insert(NodeMap::value_type(component, comp.get())).second)
     {

@@ -34,7 +34,6 @@
 #include "com/sun/star/uno/Sequence.hxx"
 #include "cppuhelper/implbase1.hxx"
 #include "rtl/ref.hxx"
-#include "rtl/ustring.hxx"
 #include "rtl/uuid.h"
 #include "sal/types.h"
 
@@ -64,8 +63,9 @@ css::uno::Sequence< sal_Int8 > ChildAccess::getTunnelId() {
 
 ChildAccess::ChildAccess(
     rtl::Reference< RootAccess > const & root,
-    rtl::Reference< Node > const & node, rtl::OUString const & templateName):
-    ImplInheritanceHelper1(node), root_(root), templateName_(templateName)
+    rtl::Reference< Access > const & parent,
+    rtl::Reference< Node > const & node):
+    root_(root), parent_(parent), node_(node)
 {}
 
 rtl::Reference< Node > ChildAccess::getNode() {
@@ -76,15 +76,16 @@ rtl::Reference< RootAccess > ChildAccess::getRoot() {
     return root_;
 }
 
-rtl::OUString ChildAccess::getTemplateName() const {
-    return templateName_;
+rtl::Reference< Access > ChildAccess::getParent() const {
+    return parent_;
 }
 
-void ChildAccess::inserted(rtl::Reference< RootAccess > const & newRoot)
-    throw ()
+void ChildAccess::inserted(
+    rtl::Reference< RootAccess > const & root,
+    rtl::Reference< Access > const & parent) throw ()
 {
-    root_ = newRoot;
-    templateName_ = rtl::OUString();
+    root_ = root;
+    parent_ = parent;
 }
 
 ChildAccess::~ChildAccess() {}

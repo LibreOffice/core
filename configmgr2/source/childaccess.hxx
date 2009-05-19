@@ -37,7 +37,6 @@
 #include "com/sun/star/uno/Sequence.hxx"
 #include "cppuhelper/implbase1.hxx"
 #include "rtl/ref.hxx"
-#include "rtl/ustring.hxx"
 #include "sal/types.h"
 
 #include "access.hxx"
@@ -56,16 +55,18 @@ public:
 
     ChildAccess(
         rtl::Reference< RootAccess > const & root,
-        rtl::Reference< Node > const & node,
-        rtl::OUString const & templateName = rtl::OUString());
+        rtl::Reference< Access > const & parent,
+        rtl::Reference< Node > const & node);
 
     virtual rtl::Reference< Node > getNode();
 
     virtual rtl::Reference< RootAccess > getRoot();
 
-    rtl::OUString getTemplateName() const;
+    rtl::Reference< Access > getParent() const;
 
-    void inserted(rtl::Reference< RootAccess > const & newRoot) throw ();
+    void inserted(
+        rtl::Reference< RootAccess > const & root,
+        rtl::Reference< Access > const & parent) throw ();
 
 private:
     virtual ~ChildAccess();
@@ -75,7 +76,8 @@ private:
         throw (com::sun::star::uno::RuntimeException);
 
     rtl::Reference< RootAccess > root_;
-    rtl::OUString templateName_; // != "" iff freestanding (set) child
+    rtl::Reference< Access > parent_;
+    rtl::Reference< Node > node_;
 };
 
 }

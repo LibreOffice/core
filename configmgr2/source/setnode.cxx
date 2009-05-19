@@ -45,9 +45,11 @@ namespace configmgr {
 SetNode::SetNode(
     Node * parent, rtl::OUString const & name,
     rtl::OUString const & defaultTemplateName,
-    std::vector< rtl::OUString > const & additionalTemplateNames):
+    std::vector< rtl::OUString > const & additionalTemplateNames,
+    rtl::OUString const & templateName):
     Node(parent, name), defaultTemplateName_(defaultTemplateName),
-    additionalTemplateNames_(additionalTemplateNames)
+    additionalTemplateNames_(additionalTemplateNames),
+    templateName_(templateName)
 {
     OSL_ASSERT(
         defaultTemplateName.getLength() != 0 &&
@@ -62,7 +64,8 @@ rtl::Reference< Node > SetNode::clone(Node * parent, rtl::OUString const & name)
 {
     rtl::Reference< SetNode > fresh(
         new SetNode(
-            parent, name, defaultTemplateName_, additionalTemplateNames_));
+            parent, name, defaultTemplateName_, additionalTemplateNames_,
+            templateName_));
     members_.clone(fresh.get(), &fresh->members_);
     return fresh.get();
 }
@@ -82,6 +85,10 @@ bool SetNode::isValidTemplate(rtl::OUString const & templateName) const {
             additionalTemplateNames_.begin(), additionalTemplateNames_.end(),
             templateName) !=
          additionalTemplateNames_.end());
+}
+
+rtl::OUString SetNode::getTemplateName() const {
+    return templateName_;
 }
 
 NodeMap & SetNode::getMembers() {

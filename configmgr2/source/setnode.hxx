@@ -47,7 +47,8 @@ public:
     SetNode(
         Node * parent, rtl::OUString const & name,
         rtl::OUString const & defaultTemplateName,
-        std::vector< rtl::OUString > const & additionalTemplateNames);
+        std::vector< rtl::OUString > const & additionalTemplateNames,
+        rtl::OUString const & templateName);
 
     virtual rtl::Reference< Node > clone(
         Node * parent, rtl::OUString const & name) const;
@@ -58,6 +59,8 @@ public:
 
     bool isValidTemplate(rtl::OUString const & templateName) const;
 
+    rtl::OUString getTemplateName() const;
+
     NodeMap & getMembers();
 
 private:
@@ -66,6 +69,8 @@ private:
     rtl::OUString defaultTemplateName_;
     std::vector< rtl::OUString > additionalTemplateNames_;
     NodeMap members_;
+    rtl::OUString templateName_;
+        // non-empty iff this node is a template, free node, or set member
 };
 
 }

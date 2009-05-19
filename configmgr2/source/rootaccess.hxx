@@ -60,6 +60,7 @@ private:
     rtl::OUString path_;
     rtl::OUString locale_;
     bool update_;
+    rtl::Reference< Node > node_;
 };
 
 }
