@@ -30,54 +30,28 @@
 #include "precompiled_configmgr.hxx"
 #include "sal/config.h"
 
-#include "com/sun/star/uno/RuntimeException.hpp"
-#include "cppuhelper/weak.hxx"
-#include "rtl/ref.hxx"
-#include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 
-#include "components.hxx"
 #include "node.hxx"
-#include "rootaccess.hxx"
 
 namespace configmgr {
 
-namespace {
-
-namespace css = com::sun::star;
-
+Node * Node::getParent() const {
+    return parent_;
 }
 
-RootAccess::RootAccess(
-    rtl::OUString const & path, rtl::OUString const & locale, bool update):
-    Access(rtl::Reference< Node >()), path_(path), locale_(locale),
-    update_(update) {}
-
-rtl::OUString RootAccess::getLocale() const {
-    return locale_; //TODO: handle locale_ == ""
+rtl::OUString Node::getName() const {
+    return name_;
 }
 
-bool RootAccess::isUpdate() const {
-    return update_;
+void Node::unbind() throw () {
+    parent_ = 0;
+    name_ = rtl::OUString();
 }
 
-RootAccess::~RootAccess() {}
+Node::Node(Node * parent, rtl::OUString const & name):
+    parent_(parent), name_(name) {}
 
-rtl::Reference< Node > RootAccess::getNode() {
-    if (!node_.is()) {
-        node_ = Components::singleton().resolvePath(0, path_);
-        if (!node_.is()) {
-            throw css::uno::RuntimeException(
-                (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("cannot find ")) +
-                 path_),
-                static_cast< cppu::OWeakObject * >(this));
-        }
-    }
-    return node_;
-}
-
-rtl::Reference< RootAccess > RootAccess::getRoot() {
-    return this;
-}
+Node::~Node() {}
 
 }

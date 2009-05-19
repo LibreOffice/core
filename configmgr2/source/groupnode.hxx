@@ -32,6 +32,7 @@
 
 #include "sal/config.h"
 
+#include "rtl/ref.hxx"
 #include "rtl/ustring.hxx"
 
 #include "node.hxx"
@@ -41,24 +42,20 @@ namespace configmgr {
 
 class GroupNode: public Node {
 public:
-    GroupNode(rtl::OUString const & name, bool extensible);
+    GroupNode(Node * parent, rtl::OUString const & name, bool extensible);
 
-    virtual ~GroupNode();
+    virtual rtl::Reference< Node > clone(
+        Node * parent, rtl::OUString const & name) const;
 
-    virtual GroupNode * clone() const;
-
-    virtual Node * clone(rtl::OUString const & name) const;
-
-    virtual rtl::OUString getName() const;
-
-    virtual Node * getMember(rtl::OUString const & name);
+    virtual rtl::Reference< Node > getMember(rtl::OUString const & name);
 
     bool isExtensible() const;
 
     NodeMap & getMembers();
 
 private:
-    rtl::OUString name_;
+    virtual ~GroupNode();
+
     bool extensible_;
     NodeMap members_;
 };

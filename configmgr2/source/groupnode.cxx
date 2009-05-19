@@ -30,8 +30,7 @@
 #include "precompiled_configmgr.hxx"
 #include "sal/config.h"
 
-#include <memory>
-
+#include "rtl/ref.hxx"
 #include "rtl/ustring.hxx"
 
 #include "groupnode.hxx"
@@ -40,28 +39,21 @@
 
 namespace configmgr {
 
-GroupNode::GroupNode(rtl::OUString const & name, bool extensible):
-    name_(name), extensible_(extensible) {}
+GroupNode::GroupNode(
+    Node * parent, rtl::OUString const & name, bool extensible):
+    Node(parent, name), extensible_(extensible) {}
 
-GroupNode::~GroupNode() {}
-
-GroupNode * GroupNode::clone() const {
-    return new GroupNode(*this);
+rtl::Reference< Node > GroupNode::clone(
+    Node * parent, rtl::OUString const & name) const
+{
+    rtl::Reference< GroupNode > fresh(new GroupNode(parent, name, extensible_));
+    members_.clone(fresh.get(), &fresh->members_);
+    return fresh.get();
 }
 
-Node * GroupNode::clone(rtl::OUString const & name) const {
-    std::auto_ptr< GroupNode > p(clone());
-    p->name_ = name;
-    return p.release();
-}
-
-rtl::OUString GroupNode::getName() const {
-    return name_;
-}
-
-Node * GroupNode::getMember(rtl::OUString const & name) {
+rtl::Reference< Node > GroupNode::getMember(rtl::OUString const & name) {
     NodeMap::iterator i(members_.find(name));
-    return i == members_.end() ? 0 : i->second;
+    return i == members_.end() ? rtl::Reference< Node >() : i->second;
 }
 
 bool GroupNode::isExtensible() const {
@@ -71,5 +63,7 @@ bool GroupNode::isExtensible() const {
 NodeMap & GroupNode::getMembers() {
     return members_;
 }
+
+GroupNode::~GroupNode() {}
 
 }

@@ -55,8 +55,13 @@ public:
     static com::sun::star::uno::Sequence< sal_Int8 > getTunnelId();
 
     ChildAccess(
-        rtl::Reference< RootAccess > const & root, Node * node,
+        rtl::Reference< RootAccess > const & root,
+        rtl::Reference< Node > const & node,
         rtl::OUString const & templateName = rtl::OUString());
+
+    virtual rtl::Reference< Node > getNode();
+
+    virtual rtl::Reference< RootAccess > getRoot();
 
     rtl::OUString getTemplateName() const;
 
@@ -64,10 +69,6 @@ public:
 
 private:
     virtual ~ChildAccess();
-
-    virtual Node * getNode();
-
-    virtual rtl::Reference< RootAccess > getRoot();
 
     virtual sal_Int64 SAL_CALL getSomething(
         com::sun::star::uno::Sequence< sal_Int8 > const & aIdentifier)

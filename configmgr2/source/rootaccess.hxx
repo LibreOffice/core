@@ -43,19 +43,23 @@ class Node;
 
 class RootAccess: public Access {
 public:
-    RootAccess(rtl::OUString const & path, rtl::OUString const & locale);
+    RootAccess(
+        rtl::OUString const & path, rtl::OUString const & locale, bool update);
 
     rtl::OUString getLocale() const;
+
+    bool isUpdate() const;
 
 private:
     virtual ~RootAccess();
 
-    virtual Node * getNode();
+    virtual rtl::Reference< Node > getNode();
 
     virtual rtl::Reference< RootAccess > getRoot();
 
     rtl::OUString path_;
     rtl::OUString locale_;
+    bool update_;
 };
 
 }

@@ -31,9 +31,9 @@
 #include "sal/config.h"
 
 #include <algorithm>
-#include <memory>
 #include <vector>
 
+#include "rtl/ref.hxx"
 #include "rtl/ustring.hxx"
 
 #include "node.hxx"
@@ -43,9 +43,10 @@
 namespace configmgr {
 
 SetNode::SetNode(
-    rtl::OUString const & name, rtl::OUString const & defaultTemplateName,
+    Node * parent, rtl::OUString const & name,
+    rtl::OUString const & defaultTemplateName,
     std::vector< rtl::OUString > const & additionalTemplateNames):
-    name_(name), defaultTemplateName_(defaultTemplateName),
+    Node(parent, name), defaultTemplateName_(defaultTemplateName),
     additionalTemplateNames_(additionalTemplateNames)
 {
     OSL_ASSERT(
@@ -56,25 +57,19 @@ SetNode::SetNode(
          additionalTemplateNames.end()));
 }
 
-SetNode::~SetNode() {}
-
-SetNode * SetNode::clone() const {
-    return new SetNode(*this);
+rtl::Reference< Node > SetNode::clone(Node * parent, rtl::OUString const & name)
+    const
+{
+    rtl::Reference< SetNode > fresh(
+        new SetNode(
+            parent, name, defaultTemplateName_, additionalTemplateNames_));
+    members_.clone(fresh.get(), &fresh->members_);
+    return fresh.get();
 }
 
-Node * SetNode::clone(rtl::OUString const & name) const {
-    std::auto_ptr< SetNode > p(clone());
-    p->name_ = name;
-    return p.release();
-}
-
-rtl::OUString SetNode::getName() const {
-    return name_;
-}
-
-Node * SetNode::getMember(rtl::OUString const & name) {
+rtl::Reference< Node > SetNode::getMember(rtl::OUString const & name) {
     NodeMap::iterator i(members_.find(name));
-    return i == members_.end() ? 0 : i->second;
+    return i == members_.end() ? rtl::Reference< Node >() : i->second;
 }
 
 rtl::OUString const & SetNode::getDefaultTemplateName() const {
@@ -92,5 +87,7 @@ bool SetNode::isValidTemplate(rtl::OUString const & templateName) const {
 NodeMap & SetNode::getMembers() {
     return members_;
 }
+
+SetNode::~SetNode() {}
 
 }

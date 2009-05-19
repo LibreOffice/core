@@ -63,10 +63,18 @@ css::uno::Sequence< sal_Int8 > ChildAccess::getTunnelId() {
 }
 
 ChildAccess::ChildAccess(
-    rtl::Reference< RootAccess > const & root, Node * node,
-    rtl::OUString const & templateName):
+    rtl::Reference< RootAccess > const & root,
+    rtl::Reference< Node > const & node, rtl::OUString const & templateName):
     ImplInheritanceHelper1(node), root_(root), templateName_(templateName)
 {}
+
+rtl::Reference< Node > ChildAccess::getNode() {
+    return node_;
+}
+
+rtl::Reference< RootAccess > ChildAccess::getRoot() {
+    return root_;
+}
 
 rtl::OUString ChildAccess::getTemplateName() const {
     return templateName_;
@@ -79,19 +87,7 @@ void ChildAccess::inserted(rtl::Reference< RootAccess > const & newRoot)
     templateName_ = rtl::OUString();
 }
 
-ChildAccess::~ChildAccess() {
-    if (templateName_.getLength() != 0) {
-        delete node_;
-    }
-}
-
-Node * ChildAccess::getNode() {
-    return node_;
-}
-
-rtl::Reference< RootAccess > ChildAccess::getRoot() {
-    return root_;
-}
+ChildAccess::~ChildAccess() {}
 
 sal_Int64 ChildAccess::getSomething(
     css::uno::Sequence< sal_Int8 > const & aIdentifier)

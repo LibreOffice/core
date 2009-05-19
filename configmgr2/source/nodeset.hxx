@@ -27,57 +27,52 @@
 * for a copy of the LGPLv3 License.
 ************************************************************************/
 
-#include "precompiled_configmgr.hxx"
+#ifndef INCLUDED_CONFIGMGR_NODESET_HXX
+#define INCLUDED_CONFIGMGR_NODESET_HXX
+
 #include "sal/config.h"
 
-#include "com/sun/star/uno/RuntimeException.hpp"
-#include "cppuhelper/weak.hxx"
-#include "rtl/ref.hxx"
-#include "rtl/ustring.h"
-#include "rtl/ustring.hxx"
+#include <cstddef>
 
-#include "components.hxx"
+#include "boost/noncopyable.hpp"
+#include "osl/diagnose.h"
+#include "rtl/ref.hxx"
+#include "rtl/ustring.hxx"
+#include "stl/hash_set"
+
 #include "node.hxx"
-#include "rootaccess.hxx"
 
 namespace configmgr {
 
-namespace {
-
-namespace css = com::sun::star;
-
-}
-
-RootAccess::RootAccess(
-    rtl::OUString const & path, rtl::OUString const & locale, bool update):
-    Access(rtl::Reference< Node >()), path_(path), locale_(locale),
-    update_(update) {}
-
-rtl::OUString RootAccess::getLocale() const {
-    return locale_; //TODO: handle locale_ == ""
-}
-
-bool RootAccess::isUpdate() const {
-    return update_;
-}
-
-RootAccess::~RootAccess() {}
-
-rtl::Reference< Node > RootAccess::getNode() {
-    if (!node_.is()) {
-        node_ = Components::singleton().resolvePath(0, path_);
-        if (!node_.is()) {
-            throw css::uno::RuntimeException(
-                (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("cannot find ")) +
-                 path_),
-                static_cast< cppu::OWeakObject * >(this));
-        }
+struct NodeHash {
+    std::size_t operator ()(rtl::Reference< Node > const & node) {
+        OSL_ASSERT(node.is());
+        return node->getName().hashCode();
     }
-    return node_;
+};
+
+struct NodeEqual {
+    bool operator ()(
+        rtl::Reference< Node > const & node1,
+        rtl::Reference< Node > const & node2)
+    {
+        OSL_ASSERT(node1.is() && node2.is());
+        return node1->getName() == node2->getName();
+    }
+};
+
+class NodeSet:
+    public std::hash_set< rtl::Reference< Node >, NodeHash, NodeEqual >,
+    private boost::noncopyable
+{
+public:
+    NodeSet();
+
+    ~NodeSet();
+
+    void clone(Node * parent, NodeSet * target) const;
+};
+
 }
 
-rtl::Reference< RootAccess > RootAccess::getRoot() {
-    return this;
-}
-
-}
+#endif

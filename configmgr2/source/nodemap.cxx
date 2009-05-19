@@ -30,8 +30,7 @@
 #include "precompiled_configmgr.hxx"
 #include "sal/config.h"
 
-#include <memory>
-
+#include "osl/diagnose.h"
 #include "rtl/ustring.hxx"
 
 #include "node.hxx"
@@ -41,17 +40,13 @@ namespace configmgr {
 
 NodeMap::NodeMap() {}
 
-NodeMap::NodeMap(NodeMap const & other) {
-    for (const_iterator i(other.begin()); i != other.end(); ++i) {
-        std::auto_ptr< Node > clone(i->second->clone());
-        insert(value_type(clone->getName(), clone.get()));
-        clone.release();
-    }
-}
+NodeMap::~NodeMap() {}
 
-NodeMap::~NodeMap() {
-    for (iterator i(begin()); i != end(); ++i) {
-        delete i->second;
+void NodeMap::clone(Node * parent, NodeMap * target) const {
+    OSL_ASSERT(target != 0);
+    for (const_iterator i(begin()); i != end(); ++i) {
+        target->insert(
+            value_type(i->first, i->second->clone(parent, i->first)));
     }
 }
 

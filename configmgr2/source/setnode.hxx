@@ -34,6 +34,7 @@
 
 #include <vector>
 
+#include "rtl/ref.hxx"
 #include "rtl/ustring.hxx"
 
 #include "node.hxx"
@@ -44,18 +45,14 @@ namespace configmgr {
 class SetNode: public Node {
 public:
     SetNode(
-        rtl::OUString const & name, rtl::OUString const & defaultTemplateName,
+        Node * parent, rtl::OUString const & name,
+        rtl::OUString const & defaultTemplateName,
         std::vector< rtl::OUString > const & additionalTemplateNames);
 
-    virtual ~SetNode();
+    virtual rtl::Reference< Node > clone(
+        Node * parent, rtl::OUString const & name) const;
 
-    virtual SetNode * clone() const;
-
-    virtual Node * clone(rtl::OUString const & name) const;
-
-    virtual rtl::OUString getName() const;
-
-    virtual Node * getMember(rtl::OUString const & name);
+    virtual rtl::Reference< Node > getMember(rtl::OUString const & name);
 
     rtl::OUString const & getDefaultTemplateName() const;
 
@@ -64,7 +61,8 @@ public:
     NodeMap & getMembers();
 
 private:
-    rtl::OUString name_;
+    virtual ~SetNode();
+
     rtl::OUString defaultTemplateName_;
     std::vector< rtl::OUString > additionalTemplateNames_;
     NodeMap members_;

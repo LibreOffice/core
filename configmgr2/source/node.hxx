@@ -32,21 +32,35 @@
 
 #include "sal/config.h"
 
-namespace rtl { class OUString; }
+#include "rtl/ref.hxx"
+#include "rtl/ustring.hxx"
+#include "salhelper/simplereferenceobject.hxx"
 
 namespace configmgr {
 
-class Node {
+class Node: public salhelper::SimpleReferenceObject {
 public:
-    virtual ~Node() {}
+    virtual rtl::Reference< Node > clone(
+        Node * parent, rtl::OUString const & name) const = 0;
 
-    virtual Node * clone() const = 0;
+    virtual rtl::Reference< Node > getMember(rtl::OUString const & name) = 0;
 
-    virtual Node * clone(rtl::OUString const & name) const = 0;
+    Node * getParent() const;
 
-    virtual rtl::OUString getName() const = 0;
+    rtl::OUString getName() const;
 
-    virtual Node * getMember(rtl::OUString const & name) = 0;
+    void unbind() throw ();
+
+protected:
+    Node(Node * parent, rtl::OUString const & name);
+
+    virtual ~Node();
+
+    // template or free node: parent_ and name_ both empty
+    // component node: parent_ empty, name_ non-empty
+    // member node: parent_ and name_ both non-empty
+    Node * parent_;
+    rtl::OUString name_;
 };
 
 }

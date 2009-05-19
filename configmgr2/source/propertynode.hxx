@@ -33,6 +33,7 @@
 #include "sal/config.h"
 
 #include "com/sun/star/uno/Any.hxx"
+#include "rtl/ref.hxx"
 #include "rtl/ustring.hxx"
 
 #include "node.hxx"
@@ -43,18 +44,13 @@ namespace configmgr {
 class PropertyNode: public Node {
 public:
     PropertyNode(
-        rtl::OUString const & name, Type type, bool nillable,
+        Node * parent, rtl::OUString const & name, Type type, bool nillable,
         com::sun::star::uno::Any const & value, bool extension);
 
-    virtual ~PropertyNode();
+    virtual rtl::Reference< Node > clone(
+        Node * parent, rtl::OUString const & name) const;
 
-    virtual Node * clone() const;
-
-    virtual Node * clone(rtl::OUString const &) const;
-
-    virtual rtl::OUString getName() const;
-
-    virtual Node * getMember(rtl::OUString const &);
+    virtual rtl::Reference< Node > getMember(rtl::OUString const &);
 
     Type getType() const;
 
@@ -67,7 +63,8 @@ public:
     bool isExtension() const;
 
 private:
-    rtl::OUString name_;
+    virtual ~PropertyNode();
+
     Type type_;
     bool nillable_;
     com::sun::star::uno::Any value_;

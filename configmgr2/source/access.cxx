@@ -30,8 +30,6 @@
 #include "precompiled_configmgr.hxx"
 #include "sal/config.h"
 
-#include <memory>
-
 #include "com/sun/star/beans/Property.hpp"
 #include "com/sun/star/beans/PropertyAttribute.hpp"
 #include "com/sun/star/beans/PropertyVetoException.hpp"
@@ -130,36 +128,52 @@ css::uno::Type mapType(Type type) {
     }
 }
 
-css::beans::Property asProperty(rtl::Reference< RootAccess > const & root, Node const * node) {
+css::beans::Property asProperty(
+    rtl::Reference< RootAccess > const & root,
+    rtl::Reference< Node > const & node)
+{
     css::uno::Type type;
-    if (PropertyNode const * prop = dynamic_cast< PropertyNode const * >(node))
+    bool nillable;
+    bool removable;
+    if (PropertyNode * prop = dynamic_cast< PropertyNode * >(node.get()))
     {
         type = mapType(prop->getType());
-    } else if (LocalizedPropertyNode const * locprop =
-               dynamic_cast< LocalizedPropertyNode const * >(node))
+        nillable = prop->isNillable();
+        removable = prop->isExtension();
+    } else if (LocalizedPropertyNode * locprop =
+               dynamic_cast< LocalizedPropertyNode * >(node.get()))
     {
         if (root->getLocale().equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("*"))) {
             type = cppu::UnoType< css::uno::XInterface >::get();
                 //TODO: correct?
+            removable = false;
         } else {
             type = mapType(locprop->getType());
+            removable = false; //TODO ???
         }
+        nillable = locprop->isNillable();
     } else {
         OSL_ASSERT(
-            dynamic_cast< GroupNode const * >(node) != 0 ||
-            dynamic_cast< SetNode const * >(node) != 0);
+            dynamic_cast< GroupNode * >(node.get()) != 0 ||
+            dynamic_cast< SetNode * >(node.get()) != 0);
         type = cppu::UnoType< css::uno::XInterface >::get(); //TODO: correct?
+        nillable = false;
+        removable = false; //TODO: = node is set element
     }
     return css::beans::Property(
         node->getName(), -1, type,
         (css::beans::PropertyAttribute::BOUND | //TODO: correct for group/set?
-         css::beans::PropertyAttribute::CONSTRAINED));
-        //TODO: MAYBEVOID, READONLY, MAYBEDEFAULT, REMOVEABLE
+         css::beans::PropertyAttribute::CONSTRAINED |
+         (nillable ? css::beans::PropertyAttribute::MAYBEVOID : 0) |
+         (root->isUpdate()
+          ? (removable ? css::beans::PropertyAttribute::REMOVEABLE : 0)
+          : css::beans::PropertyAttribute::READONLY))); //TODO: MAYBEDEFAULT
 }
 
 }
 
-Access::Access(Node * node): WeakComponentImplHelper15(lock), node_(node) {}
+Access::Access(rtl::Reference< Node > const & node):
+    WeakComponentImplHelper15(lock), node_(node) {}
 
 Access::~Access() {}
 
@@ -168,11 +182,12 @@ css::uno::Any Access::getByHierarchicalName(rtl::OUString const & aName)
 {
     OSL_ASSERT(thisIs(IS_GROUP_OR_SET));
     osl::MutexGuard g(lock);
-    Node * p = Components::singleton().resolvePath(getNode(), aName);
-    if (PropertyNode * prop = dynamic_cast< PropertyNode * >(p)) {
+    rtl::Reference< Node > p(
+        Components::singleton().resolvePath(getNode(), aName));
+    if (PropertyNode * prop = dynamic_cast< PropertyNode * >(p.get())) {
         return prop->getValue();
     } else if (LocalizedPropertyNode * locprop =
-               dynamic_cast< LocalizedPropertyNode * >(p))
+               dynamic_cast< LocalizedPropertyNode * >(p.get()))
     {
         rtl::OUString loc(getRoot()->getLocale());
         return loc.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("*"))
@@ -181,18 +196,18 @@ css::uno::Any Access::getByHierarchicalName(rtl::OUString const & aName)
                     static_cast< cppu::OWeakObject * >(
                         new ChildAccess(getRoot(), locprop))))
             : locprop->getValue(loc);
-    } else if (GroupNode * group = dynamic_cast< GroupNode * >(p)) {
+    } else if (GroupNode * group = dynamic_cast< GroupNode * >(p.get())) {
         return css::uno::makeAny(
             css::uno::Reference< css::uno::XInterface >(
                 static_cast< cppu::OWeakObject * >(
                     new ChildAccess(getRoot(), group))));
-    } else if (SetNode * set = dynamic_cast< SetNode * >(p)) {
+    } else if (SetNode * set = dynamic_cast< SetNode * >(p.get())) {
         return css::uno::makeAny(
             css::uno::Reference< css::uno::XInterface >(
                 static_cast< cppu::OWeakObject * >(
                     new ChildAccess(getRoot(), set))));
     } else {
-        OSL_ASSERT(p == 0);
+        OSL_ASSERT(!p.is());
         throw css::container::NoSuchElementException(
             aName, static_cast< cppu::OWeakObject * >(this));
     }
@@ -243,8 +258,8 @@ css::beans::Property Access::getPropertyByName(rtl::OUString const & aName)
 {
     OSL_ASSERT(thisIs(IS_GROUP));
     osl::MutexGuard g(lock);
-    Node * p = getNode()->getMember(aName);
-    if (p == 0) {
+    rtl::Reference< Node > p(getNode()->getMember(aName));
+    if (!p.is()) {
         throw css::beans::UnknownPropertyException(
             aName, static_cast< cppu::OWeakObject * >(this));
     }
@@ -317,11 +332,11 @@ css::uno::Any Access::getPropertyValue(rtl::OUString const & PropertyName)
 {
     OSL_ASSERT(thisIs(IS_GROUP));
     osl::MutexGuard g(lock);
-    Node * p = getNode()->getMember(PropertyName);
-    if (PropertyNode * prop = dynamic_cast< PropertyNode * >(p)) {
+    rtl::Reference< Node > p(getNode()->getMember(PropertyName));
+    if (PropertyNode * prop = dynamic_cast< PropertyNode * >(p.get())) {
         return prop->getValue();
     } else if (LocalizedPropertyNode * locprop =
-               dynamic_cast< LocalizedPropertyNode * >(p))
+               dynamic_cast< LocalizedPropertyNode * >(p.get()))
     {
         rtl::OUString loc(getRoot()->getLocale());
         return loc.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("*"))
@@ -330,12 +345,12 @@ css::uno::Any Access::getPropertyValue(rtl::OUString const & PropertyName)
                     static_cast< cppu::OWeakObject * >(
                         new ChildAccess(getRoot(), locprop))))
             : locprop->getValue(loc);
-    } else if (GroupNode * group = dynamic_cast< GroupNode * >(p)) {
+    } else if (GroupNode * group = dynamic_cast< GroupNode * >(p.get())) {
         return css::uno::makeAny(
             css::uno::Reference< css::uno::XInterface >(
                 static_cast< cppu::OWeakObject * >(
                     new ChildAccess(getRoot(), group))));
-    } else if (SetNode * set = dynamic_cast< SetNode * >(p)) {
+    } else if (SetNode * set = dynamic_cast< SetNode * >(p.get())) {
         return css::uno::makeAny(
             css::uno::Reference< css::uno::XInterface >(
                 static_cast< cppu::OWeakObject * >(
@@ -521,13 +536,13 @@ void Access::removeChangesListener(
 css::uno::Type Access::getElementType() throw (css::uno::RuntimeException) {
     OSL_ASSERT(thisIs(IS_GROUP_OR_SET));
     osl::MutexGuard g(lock);
-    Node * p = getNode();
-    if (dynamic_cast< GroupNode * >(p) != 0) {
+    rtl::Reference< Node > p(getNode());
+    if (dynamic_cast< GroupNode * >(p.get()) != 0) {
         //TODO: Should a specific type be returned for a non-extensible group
         // with homogeneous members or for an extensible group that currently
         // has only homegeneous members?
         return cppu::UnoType< cppu::UnoVoidType >::get();
-    } else if (dynamic_cast< SetNode * >(p) != 0) {
+    } else if (dynamic_cast< SetNode * >(p.get()) != 0) {
         if(true)abort();*(char*)0=0;throw 0;//TODO
     } else {
         OSL_ASSERT(false);
@@ -540,10 +555,10 @@ css::uno::Type Access::getElementType() throw (css::uno::RuntimeException) {
 sal_Bool Access::hasElements() throw (css::uno::RuntimeException) {
     OSL_ASSERT(thisIs(IS_GROUP_OR_SET));
     osl::MutexGuard g(lock);
-    Node * p = getNode();
-    if (GroupNode * group = dynamic_cast< GroupNode * >(p)) {
+    rtl::Reference< Node > p(getNode());
+    if (GroupNode * group = dynamic_cast< GroupNode * >(p.get())) {
         return !group->getMembers().empty();
-    } else if (SetNode * set = dynamic_cast< SetNode * >(p)) {
+    } else if (SetNode * set = dynamic_cast< SetNode * >(p.get())) {
         return !set->getMembers().empty();
     } else {
         OSL_ASSERT(false);
@@ -560,9 +575,9 @@ css::uno::Any Access::getByName(rtl::OUString const & aName)
 {
     OSL_ASSERT(thisIs(IS_GROUP_OR_SET_OR_LOCALIZED));
     osl::MutexGuard g(lock);
-    Node * p = getNode();
+    rtl::Reference< Node > p(getNode());
     if (LocalizedPropertyNode * locprop =
-        dynamic_cast< LocalizedPropertyNode * >(p))
+        dynamic_cast< LocalizedPropertyNode * >(p.get()))
     {
         LocalizedValues::iterator i(locprop->getValues().find(aName));
         if (i != locprop->getValues().end()) {
@@ -570,11 +585,11 @@ css::uno::Any Access::getByName(rtl::OUString const & aName)
         }
     } else {
         p = p->getMember(aName);
-        if (PropertyNode * prop = dynamic_cast< PropertyNode * >(p)) {
+        if (PropertyNode * prop = dynamic_cast< PropertyNode * >(p.get())) {
             return prop->getValue();
         }
         if (LocalizedPropertyNode * locprop =
-            dynamic_cast< LocalizedPropertyNode * >(p))
+            dynamic_cast< LocalizedPropertyNode * >(p.get()))
         {
             rtl::OUString loc(getRoot()->getLocale());
             return loc.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("*"))
@@ -584,13 +599,13 @@ css::uno::Any Access::getByName(rtl::OUString const & aName)
                             new ChildAccess(getRoot(), locprop))))
                 : locprop->getValue(loc);
         }
-        if (GroupNode * group = dynamic_cast< GroupNode * >(p)) {
+        if (GroupNode * group = dynamic_cast< GroupNode * >(p.get())) {
             return css::uno::makeAny(
                 css::uno::Reference< css::uno::XInterface >(
                     static_cast< cppu::OWeakObject * >(
                         new ChildAccess(getRoot(), group))));
         }
-        if (SetNode * set = dynamic_cast< SetNode * >(p)) {
+        if (SetNode * set = dynamic_cast< SetNode * >(p.get())) {
             return css::uno::makeAny(
                 css::uno::Reference< css::uno::XInterface >(
                     static_cast< cppu::OWeakObject * >(
@@ -606,9 +621,9 @@ css::uno::Sequence< rtl::OUString > Access::getElementNames()
 {
     OSL_ASSERT(thisIs(IS_GROUP_OR_SET_OR_LOCALIZED));
     osl::MutexGuard g(lock);
-    Node * p = getNode();
+    rtl::Reference< Node > p(getNode());
     if (LocalizedPropertyNode * locprop =
-        dynamic_cast< LocalizedPropertyNode * >(p))
+        dynamic_cast< LocalizedPropertyNode * >(p.get()))
     {
         comphelper::SequenceAsVector< rtl::OUString > names;
         for (LocalizedValues::iterator i(locprop->getValues().begin());
@@ -618,7 +633,7 @@ css::uno::Sequence< rtl::OUString > Access::getElementNames()
         }
         return names.getAsConstList();
     }
-    if (GroupNode * group = dynamic_cast< GroupNode * >(p)) {
+    if (GroupNode * group = dynamic_cast< GroupNode * >(p.get())) {
         comphelper::SequenceAsVector< rtl::OUString > names;
         for (NodeMap::iterator i(group->getMembers().begin());
              i != group->getMembers().end(); ++i)
@@ -626,7 +641,7 @@ css::uno::Sequence< rtl::OUString > Access::getElementNames()
             names.push_back(i->first);
         }
         return names.getAsConstList();
-    } else if (SetNode * set = dynamic_cast< SetNode * >(p)) {
+    } else if (SetNode * set = dynamic_cast< SetNode * >(p.get())) {
         comphelper::SequenceAsVector< rtl::OUString > names;
         for (NodeMap::iterator i(set->getMembers().begin());
              i != set->getMembers().end(); ++i)
@@ -647,7 +662,7 @@ sal_Bool Access::hasByName(rtl::OUString const & aName)
 {
     OSL_ASSERT(thisIs(IS_GROUP_OR_SET));
     osl::MutexGuard g(lock);
-    return getNode()->getMember(aName) != 0;
+    return getNode()->getMember(aName).is();
 }
 
 void Access::replaceByName(
@@ -659,8 +674,8 @@ void Access::replaceByName(
 {
     OSL_ASSERT(thisIs(IS_GROUP_OR_SET|IS_UPDATE));
     osl::MutexGuard g(lock);
-    Node * p = getNode();
-    if (dynamic_cast< GroupNode * >(p) != 0) {
+    rtl::Reference< Node > p(getNode());
+    if (dynamic_cast< GroupNode * >(p.get()) != 0) {
         try {
             setPropertyValue(aName, aElement);
         } catch (css::beans::UnknownPropertyException & e) {
@@ -669,7 +684,7 @@ void Access::replaceByName(
             css::uno::Any ex(cppu::getCaughtException());
             throw css::lang::WrappedTargetException(e.Message, e.Context, ex);
         }
-    } else if (dynamic_cast< SetNode * >(p) != 0) {
+    } else if (dynamic_cast< SetNode * >(p.get()) != 0) {
         if(true)abort();*(char*)0=0;throw 0;//TODO
     } else {
         OSL_ASSERT(false);
@@ -688,9 +703,9 @@ void Access::insertByName(
 {
     OSL_ASSERT(thisIs(IS_EXTGROUP_OR_SET|IS_UPDATE));
     osl::MutexGuard g(lock);
-    Node * p = getNode();
-    if (GroupNode * group = dynamic_cast< GroupNode * >(p)) {
-        if (group->getMember(aName) != 0) {
+    rtl::Reference< Node > p(getNode());
+    if (GroupNode * group = dynamic_cast< GroupNode * >(p.get())) {
+        if (group->getMember(aName).is()) {
             throw css::container::ElementExistException(
                 aName, static_cast< cppu::OWeakObject * >(this));
         }
@@ -765,13 +780,13 @@ void Access::insertByName(
                         "configmgr insertByName inappropriate group element")),
                 static_cast< cppu::OWeakObject * >(this), 1);
         }
-        std::auto_ptr< Node > prop(
-            new PropertyNode(aName, type, true, aElement, true));
-        group->getMembers().insert(NodeMap::value_type(aName, prop.get()));
-        prop.release();
+        group->getMembers().insert(
+            NodeMap::value_type(
+                aName,
+                new PropertyNode(group, aName, type, true, aElement, true)));
         //TODO notify change
-    } else if (SetNode * set = dynamic_cast< SetNode * >(p)) {
-        if (set->getMember(aName) != 0) {
+    } else if (SetNode * set = dynamic_cast< SetNode * >(p.get())) {
+        if (set->getMember(aName).is()) {
             throw css::container::ElementExistException(
                 aName, static_cast< cppu::OWeakObject * >(this));
         }
@@ -792,7 +807,8 @@ void Access::insertByName(
                 static_cast< cppu::OWeakObject * >(this), 1);
         }
         rtl::Reference< RootAccess > root(getRoot());
-        set->getMembers().insert(NodeMap::value_type(aName, freeAcc->node_));
+        set->getMembers().insert(
+            NodeMap::value_type(aName, freeAcc->getNode()));
         freeAcc->inserted(root); // must not throw
         //TODO notify change
     } else {
@@ -810,30 +826,31 @@ void Access::removeByName(rtl::OUString const & aName)
 {
     OSL_ASSERT(thisIs(IS_EXTGROUP_OR_SET|IS_UPDATE));
     osl::MutexGuard g(lock);
-    Node * p = getNode();
-    if (GroupNode * group = dynamic_cast< GroupNode * >(p)) {
+    rtl::Reference< Node > p(getNode());
+    if (GroupNode * group = dynamic_cast< GroupNode * >(p.get())) {
         NodeMap::iterator i(group->getMembers().find(aName));
         if (i == group->getMembers().end()) {
             throw css::container::NoSuchElementException(
                 aName, static_cast< cppu::OWeakObject * >(this));
         }
-        PropertyNode * prop = dynamic_cast< PropertyNode * >(i->second);
-        if (prop == 0 || !prop->isExtension()) {
+        rtl::Reference< PropertyNode > prop(
+            dynamic_cast< PropertyNode * >(i->second.get()));
+        if (!(prop.is() && prop->isExtension())) {
             throw css::container::NoSuchElementException(
                 aName, static_cast< cppu::OWeakObject * >(this));
         }
         group->getMembers().erase(i);
-        delete prop;
+        prop->unbind(); // must not throw
         //TODO notify change
-    } else if (SetNode * set = dynamic_cast< SetNode * >(p)) {
+    } else if (SetNode * set = dynamic_cast< SetNode * >(p.get())) {
         NodeMap::iterator i(set->getMembers().find(aName));
         if (i == group->getMembers().end()) {
             throw css::container::NoSuchElementException(
                 aName, static_cast< cppu::OWeakObject * >(this));
         }
-        Node * node = i->second;
+        rtl::Reference< Node > removed(i->second);
         set->getMembers().erase(i);
-        delete node;
+        removed->unbind(); // must not throw
         //TODO notify change
     } else {
         OSL_ASSERT(false);
@@ -849,16 +866,16 @@ css::uno::Reference< css::uno::XInterface > Access::createInstance()
     OSL_ASSERT(thisIs(IS_SET|IS_UPDATE));
     osl::MutexGuard g(lock);
     rtl::OUString tmplName(
-        dynamic_cast< SetNode * >(getNode())->getDefaultTemplateName());
-    Node const * p = Components::singleton().getTemplate(tmplName);
-    if (p == 0) {
+        dynamic_cast< SetNode * >(getNode().get())->getDefaultTemplateName());
+    rtl::Reference< Node > p(Components::singleton().getTemplate(tmplName));
+    if (!p.is()) {
         throw css::uno::Exception(
             (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("unknown template ")) +
              tmplName),
             static_cast< cppu::OWeakObject * >(this));
     }
     return static_cast< cppu::OWeakObject * >(
-        new ChildAccess(getRoot(), p->clone(rtl::OUString()), tmplName));
+        new ChildAccess(getRoot(), p->clone(0, rtl::OUString()), tmplName));
 }
 
 css::uno::Reference< css::uno::XInterface > Access::createInstanceWithArguments(
@@ -899,23 +916,25 @@ css::util::ChangesSet Access::getPendingChanges()
 #if OSL_DEBUG_LEVEL > 0
 bool Access::thisIs(int what) {
     osl::MutexGuard g(lock);
-    Node * p = getNode();
-    return ((what & IS_GROUP) == 0 || dynamic_cast< GroupNode * >(p) != 0) &&
-        ((what & IS_SET) == 0 || dynamic_cast< SetNode * >(p) != 0) &&
-        ((what & IS_GROUP_OR_SET) == 0 || dynamic_cast< GroupNode * >(p) != 0 ||
-         dynamic_cast< SetNode * >(p) != 0) &&
+    rtl::Reference< Node > p(getNode());
+    return ((what & IS_GROUP) == 0 ||
+            dynamic_cast< GroupNode * >(p.get()) != 0) &&
+        ((what & IS_SET) == 0 || dynamic_cast< SetNode * >(p.get()) != 0) &&
+        ((what & IS_GROUP_OR_SET) == 0 ||
+         dynamic_cast< GroupNode * >(p.get()) != 0 ||
+         dynamic_cast< SetNode * >(p.get()) != 0) &&
         ((what & IS_EXTGROUP_OR_SET) == 0 ||
-         (dynamic_cast< GroupNode * >(p) != 0 &&
-          dynamic_cast< GroupNode * >(p)->isExtensible()) ||
-         dynamic_cast< SetNode * >(p) != 0) &&
+         (dynamic_cast< GroupNode * >(p.get()) != 0 &&
+          dynamic_cast< GroupNode * >(p.get())->isExtensible()) ||
+         dynamic_cast< SetNode * >(p.get()) != 0) &&
         ((what & IS_GROUP_OR_SET_OR_LOCALIZED) == 0 ||
-         dynamic_cast< GroupNode * >(p) != 0 ||
-         dynamic_cast< SetNode * >(p) != 0 ||
-         dynamic_cast< LocalizedPropertyNode * >(p) != 0) ||
-        ((what & IS_ROOT) == 0 || dynamic_cast< RootAccess * >(p) != 0) ||
+         dynamic_cast< GroupNode * >(p.get()) != 0 ||
+         dynamic_cast< SetNode * >(p.get()) != 0 ||
+         dynamic_cast< LocalizedPropertyNode * >(p.get()) != 0) ||
+        ((what & IS_ROOT) == 0 || dynamic_cast< RootAccess * >(p.get()) != 0) ||
         ((what & IS_GROUP_MEMBER) == 0 || true/*TODO*/) ||
         ((what & IS_SET_MEMBER) == 0 || true/*TODO*/) ||
-        ((what & IS_UPDATE) == 0 || true/*TODO*/);
+        ((what & IS_UPDATE) == 0 || getRoot()->isUpdate());
 }
 #endif
 

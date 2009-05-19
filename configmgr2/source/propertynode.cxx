@@ -31,8 +31,7 @@
 #include "sal/config.h"
 
 #include "com/sun/star/uno/Any.hxx"
-#include "com/sun/star/uno/RuntimeException.hpp"
-#include "osl/diagnose.h"
+#include "rtl/ref.hxx"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 
@@ -49,31 +48,20 @@ namespace css = com::sun::star;
 }
 
 PropertyNode::PropertyNode(
-    rtl::OUString const & name, Type type, bool nillable,
+    Node * parent, rtl::OUString const & name, Type type, bool nillable,
     css::uno::Any const & value, bool extension):
-    name_(name), type_(type), nillable_(nillable), value_(value),
+    Node(parent, name), type_(type), nillable_(nillable), value_(value),
     extension_(extension)
 {}
 
-PropertyNode::~PropertyNode() {}
-
-Node * PropertyNode::clone() const {
-    return new PropertyNode(*this);
+rtl::Reference< Node > PropertyNode::clone(
+    Node * parent, rtl::OUString const & name) const
+{
+    return new PropertyNode(parent, name, type_, nillable_, value_, extension_);
 }
 
-Node * PropertyNode::clone(rtl::OUString const &) const {
-    OSL_ASSERT(false);
-    throw css::uno::RuntimeException(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("this cannot happen")),
-        0);
-}
-
-rtl::OUString PropertyNode::getName() const {
-    return name_;
-}
-
-Node * PropertyNode::getMember(rtl::OUString const &) {
-    return 0;
+rtl::Reference< Node > PropertyNode::getMember(rtl::OUString const &) {
+    return rtl::Reference< Node >();
 }
 
 Type PropertyNode::getType() const {
@@ -95,5 +83,7 @@ void PropertyNode::setValue(css::uno::Any const & value) {
 bool PropertyNode::isExtension() const {
     return extension_;
 }
+
+PropertyNode::~PropertyNode() {}
 
 }

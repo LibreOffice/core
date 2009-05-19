@@ -32,7 +32,7 @@
 
 #include "sal/config.h"
 
-#include "hash_map"
+#include "stl/hash_map"
 
 namespace com { namespace sun { namespace star { namespace uno {
     class Any;

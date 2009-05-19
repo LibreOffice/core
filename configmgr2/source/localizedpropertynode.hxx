@@ -32,6 +32,7 @@
 
 #include "sal/config.h"
 
+#include "rtl/ref.hxx"
 #include "rtl/ustring.hxx"
 
 #include "localizedvalues.hxx"
@@ -47,18 +48,13 @@ namespace configmgr {
 class LocalizedPropertyNode: public Node {
 public:
     LocalizedPropertyNode(
-        rtl::OUString const & name, Type type, bool nillable,
+        Node * parent, rtl::OUString const & name, Type type, bool nillable,
         LocalizedValues const & values);
 
-    virtual ~LocalizedPropertyNode();
+    virtual rtl::Reference< Node > clone(
+        Node * parent, rtl::OUString const & name) const;
 
-    virtual Node * clone() const;
-
-    virtual Node * clone(rtl::OUString const &) const;
-
-    virtual rtl::OUString getName() const;
-
-    virtual Node * getMember(rtl::OUString const &);
+    virtual rtl::Reference< Node > getMember(rtl::OUString const &);
 
     Type getType() const;
 
@@ -71,7 +67,8 @@ public:
     com::sun::star::uno::Any getValue(rtl::OUString const & locale) const;
 
 private:
-    rtl::OUString name_;
+    virtual ~LocalizedPropertyNode();
+
     Type type_;
     bool nillable_;
     LocalizedValues values_;

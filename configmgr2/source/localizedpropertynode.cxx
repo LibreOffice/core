@@ -31,8 +31,7 @@
 #include "sal/config.h"
 
 #include "com/sun/star/uno/Any.hxx"
-#include "com/sun/star/uno/RuntimeException.hpp"
-#include "osl/diagnose.h"
+#include "rtl/ref.hxx"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 
@@ -50,28 +49,18 @@ namespace css = com::sun::star;
 }
 
 LocalizedPropertyNode::LocalizedPropertyNode(
-    rtl::OUString const & name, Type type, bool nillable,
+    Node * parent, rtl::OUString const & name, Type type, bool nillable,
     LocalizedValues const & values):
-    name_(name), type_(type), nillable_(nillable), values_(values) {}
+    Node(parent, name), type_(type), nillable_(nillable), values_(values) {}
 
-LocalizedPropertyNode::~LocalizedPropertyNode() {}
-
-Node * LocalizedPropertyNode::clone() const {
-    return new LocalizedPropertyNode(*this);
+rtl::Reference< Node > LocalizedPropertyNode::clone(
+    Node * parent, rtl::OUString const & name) const
+{
+    return new LocalizedPropertyNode(parent, name, type_, nillable_, values_);
 }
 
-Node * LocalizedPropertyNode::clone(rtl::OUString const &) const {
-    OSL_ASSERT(false);
-    throw css::uno::RuntimeException(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("this cannot happen")),
-        0);
-}
-
-rtl::OUString LocalizedPropertyNode::getName() const {
-    return name_;
-}
-
-Node * LocalizedPropertyNode::getMember(rtl::OUString const &) {
+rtl::Reference< Node > LocalizedPropertyNode::getMember(rtl::OUString const &)
+{
     return 0;
 }
 
@@ -113,5 +102,7 @@ css::uno::Any LocalizedPropertyNode::getValue(rtl::OUString const & locale)
     }
     return css::uno::Any();
 }
+
+LocalizedPropertyNode::~LocalizedPropertyNode() {}
 
 }

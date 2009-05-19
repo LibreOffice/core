@@ -47,6 +47,7 @@ SLOFILES = \
     $(SLO)$/groupnode.obj \
     $(SLO)$/localizedpropertynode.obj \
     $(SLO)$/lock.obj \
+    $(SLO)$/node.obj \
     $(SLO)$/nodemap.obj \
     $(SLO)$/propertynode.obj \
     $(SLO)$/rootaccess.obj \
@@ -59,6 +60,7 @@ SHL1STDLIBS = \
     $(CPPUHELPERLIB) \
     $(CPPULIB) \
     $(LIBXML2LIB) \
+    $(SALHELPERLIB) \
     $(SALLIB)
 SHL1TARGET = configmgr2.uno
 SHL1VERSIONMAP = version.map

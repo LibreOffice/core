@@ -114,15 +114,15 @@ class Access:
     private boost::noncopyable
 {
 protected:
-    explicit Access(Node * node);
+    explicit Access(rtl::Reference< Node > const & node);
 
     virtual ~Access();
 
-    virtual Node * getNode() = 0;
+    virtual rtl::Reference< Node > getNode() = 0;
 
     virtual rtl::Reference< RootAccess > getRoot() = 0;
 
-    Node * node_;
+    rtl::Reference< Node > node_;
 
 private:
     virtual com::sun::star::uno::Any SAL_CALL getByHierarchicalName(

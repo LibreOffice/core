@@ -252,13 +252,13 @@ Service::createInstanceWithArguments(
 
     {
         return static_cast< cppu::OWeakObject * >(
-            new RootAccess(nodepath, locale)); //TODO: r/o
+            new RootAccess(nodepath, locale, false));
     }
     if (ServiceSpecifier.equalsAsciiL(
             RTL_CONSTASCII_STRINGPARAM(updateAccessServiceName)))
     {
         return static_cast< cppu::OWeakObject * >(
-            new RootAccess(nodepath, locale)); //TODO: r/w
+            new RootAccess(nodepath, locale, true));
     }
     throw css::uno::Exception(
         (rtl::OUString(

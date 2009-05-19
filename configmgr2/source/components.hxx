@@ -33,10 +33,15 @@
 #include "sal/config.h"
 
 #include "boost/noncopyable.hpp"
+#include "rtl/ref.hxx"
+#include "stl/hash_map"
 
 #include "nodemap.hxx"
 
-namespace rtl { class OUString; }
+namespace rtl {
+    class OUString;
+    struct OUStringHash;
+}
 
 namespace configmgr {
 
@@ -46,16 +51,21 @@ class Components: private boost::noncopyable {
 public:
     static Components & singleton();
 
-    Node * resolvePath(Node * base, rtl::OUString const & path);
+    rtl::Reference< Node > resolvePath(
+        rtl::Reference< Node > const & base, rtl::OUString const & path);
 
-    Node const * getTemplate(rtl::OUString const & fullName) const;
+    rtl::Reference< Node > getTemplate(rtl::OUString const & fullName) const;
+
+    typedef
+        std::hash_map< rtl::OUString, rtl::Reference< Node>, rtl::OUStringHash >
+        TemplateMap;
 
 private:
     Components();
 
     ~Components();
 
-    NodeMap templates_;
+    TemplateMap templates_;
 
     NodeMap components_;
 };
