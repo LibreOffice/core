@@ -63,7 +63,8 @@ SLO1FILES =  \
         $(SLO)$/dialog.obj \
         $(SLO)$/document.obj \
         $(SLO)$/mathtype.obj \
-        $(SLO)$/mathml.obj \
+        $(SLO)$/mathmlimport.obj \
+        $(SLO)$/mathmlexport.obj \
         $(SLO)$/format.obj \
         $(SLO)$/node.obj \
         $(SLO)$/parse.obj \
@@ -92,7 +93,8 @@ EXCEPTIONSFILES =   \
         $(SLO)$/accessibility.obj \
         $(SLO)$/cfgitem.obj \
         $(SLO)$/document.obj \
-        $(SLO)$/mathml.obj \
+        $(SLO)$/mathmlimport.obj \
+        $(SLO)$/mathmlexport.obj \
         $(SLO)$/mathtype.obj \
         $(SLO)$/view.obj \
         $(SLO)$/viewhdl.obj \

@@ -173,24 +173,17 @@ SV_IMPL_PTRARR( SwGrfFmtColls, SwGrfFmtCollPtr)
     return m_xGCIterator;
 }
 
-void StartGrammarChecking( SwDoc &rDoc, SwRootFrm &rRootFrame )
+void StartGrammarChecking( SwDoc &rDoc )
 {
-//    if (rRootFrame.IsGrammarCheckActive())
-//        return;
-
     uno::Reference< linguistic2::XProofreadingIterator > xGCIterator( rDoc.GetGCIterator() );
     if ( xGCIterator.is() )
     {
         uno::Reference< lang::XComponent >  xDoc( rDoc.GetDocShell()->GetBaseModel(), uno::UNO_QUERY );
         uno::Reference< text::XFlatParagraphIteratorProvider >  xFPIP( xDoc, uno::UNO_QUERY );
 
-        // start automatic background checking
+        // start automatic background checking if not active already
         if ( xFPIP.is() && !xGCIterator->isProofreading( xDoc ) )
-        {
-            // rRootFrame.SetNeedGrammarCheck( false );
-            rRootFrame.SetGrammarCheckActive( true );
             xGCIterator->startProofreading( xDoc, xFPIP );
-        }
     }
 }
 

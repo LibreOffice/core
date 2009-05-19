@@ -1261,22 +1261,6 @@ void SmMathConfig::SetIgnoreSpacesRight( BOOL bVal )
 }
 
 
-BOOL SmMathConfig::IsToolboxVisible() const
-{
-    if (!pOther)
-        ((SmMathConfig *) this)->LoadOther();
-    return pOther->bToolboxVisible;
-}
-
-
-void SmMathConfig::SetToolboxVisible( BOOL bVal )
-{
-    if (!pOther)
-        LoadOther();
-    SetOtherIfNotEqual( pOther->bToolboxVisible, bVal );
-}
-
-
 BOOL SmMathConfig::IsAutoRedraw() const
 {
     if (!pOther)

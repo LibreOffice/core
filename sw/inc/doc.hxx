@@ -268,7 +268,7 @@ SV_DECL_PTRARR_DEL( SwPageDescs, SwPageDescPtr, 4, 4 )
 void SetAllScriptItem( SfxItemSet& rSet, const SfxPoolItem& rItem );
 
 // global function to start grammar checking in the document
-void StartGrammarChecking( SwDoc &rDoc, SwRootFrm &rRootFrame );
+void StartGrammarChecking( SwDoc &rDoc );
 
 class SW_DLLPUBLIC SwDoc :
     public IInterface,
