@@ -628,7 +628,7 @@ bool lcl_ParseTarget( const String& rTarget, ScRange& rTargetRange, Rectangle& r
 BOOL ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
                                      const uno::Sequence< beans::PropertyValue >& rOptions,
                                      ScMarkData& rMark,
-                                     ScPrintSelectionStatus& rStatus ) const
+                                     ScPrintSelectionStatus& rStatus, String& rPagesStr ) const
 {
     DBG_ASSERT( !rMark.IsMarked() && !rMark.IsMultiMarked(), "FillRenderMarkData: MarkData must be empty" );
     DBG_ASSERT( pDocShell, "FillRenderMarkData: DocShell must be set" );
@@ -798,6 +798,11 @@ BOOL ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
     aNewOptions.SetAllSheets( !bSelectedSheetsOnly );
     rStatus.SetOptions( aNewOptions );
 
+    if ( aSelectionString.equalsAscii("all") || aSelectionString.equalsAscii("selection") )
+        rPagesStr.Erase();
+    else
+        rPagesStr = aSelectionString;
+
     return bDone;
 }
 
@@ -812,7 +817,8 @@ sal_Int32 SAL_CALL ScModelObj::getRendererCount( const uno::Any& aSelection,
 
     ScMarkData aMark;
     ScPrintSelectionStatus aStatus;
-    if ( !FillRenderMarkData( aSelection, rOptions, aMark, aStatus ) )
+    String aPagesStr;
+    if ( !FillRenderMarkData( aSelection, rOptions, aMark, aStatus, aPagesStr ) )
         return 0;
 
     //  The same ScPrintFuncCache object in pPrintFuncCache is used as long as
@@ -824,10 +830,36 @@ sal_Int32 SAL_CALL ScModelObj::getRendererCount( const uno::Any& aSelection,
         delete pPrintFuncCache;
         pPrintFuncCache = new ScPrintFuncCache( pDocShell, aMark, aStatus );
     }
-    return pPrintFuncCache->GetPageCount();
+    sal_Int32 nPages = pPrintFuncCache->GetPageCount();
+
+    sal_Int32 nSelectCount = nPages;
+    if ( aPagesStr.Len() )
+    {
+        MultiSelection aPageRanges( aPagesStr );
+        aPageRanges.SetTotalRange( Range( 1, nPages ) );
+        nSelectCount = aPageRanges.GetSelectCount();
+    }
+    return nSelectCount;
 }
 
-uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 nRenderer,
+sal_Int32 lcl_GetRendererNum( sal_Int32 nSelRenderer, const String& rPagesStr, sal_Int32 nTotalPages )
+{
+    if ( !rPagesStr.Len() )
+        return nSelRenderer;
+
+    MultiSelection aPageRanges( rPagesStr );
+    aPageRanges.SetTotalRange( Range( 1, nTotalPages ) );
+
+    sal_Int32 nSelected = aPageRanges.FirstSelected();
+    while ( nSelRenderer > 0 )
+    {
+        nSelected = aPageRanges.NextSelected();
+        --nSelRenderer;
+    }
+    return nSelected - 1;       // selection is 1-based
+}
+
+uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 nSelRenderer,
                                     const uno::Any& aSelection, const uno::Sequence<beans::PropertyValue>& rOptions  )
                                 throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
@@ -837,7 +869,8 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
 
     ScMarkData aMark;
     ScPrintSelectionStatus aStatus;
-    if ( !FillRenderMarkData( aSelection, rOptions, aMark, aStatus ) )
+    String aPagesStr;
+    if ( !FillRenderMarkData( aSelection, rOptions, aMark, aStatus, aPagesStr ) )
         throw lang::IllegalArgumentException();
 
     if ( !pPrintFuncCache || !pPrintFuncCache->IsSameSelection( aStatus ) )
@@ -846,9 +879,10 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
         pPrintFuncCache = new ScPrintFuncCache( pDocShell, aMark, aStatus );
     }
     long nTotalPages = pPrintFuncCache->GetPageCount();
+    sal_Int32 nRenderer = lcl_GetRendererNum( nSelRenderer, aPagesStr, nTotalPages );
     if ( nRenderer >= nTotalPages )
     {
-        if ( nRenderer == 0 )
+        if ( nSelRenderer == 0 )
         {
             // getRenderer(0) is used to query the settings, so it must always return something
 
@@ -923,7 +957,7 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
     return aSequence;
 }
 
-void SAL_CALL ScModelObj::render( sal_Int32 nRenderer, const uno::Any& aSelection,
+void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelection,
                                     const uno::Sequence<beans::PropertyValue>& rOptions )
                                 throw(lang::IllegalArgumentException, uno::RuntimeException)
 {
@@ -933,7 +967,8 @@ void SAL_CALL ScModelObj::render( sal_Int32 nRenderer, const uno::Any& aSelectio
 
     ScMarkData aMark;
     ScPrintSelectionStatus aStatus;
-    if ( !FillRenderMarkData( aSelection, rOptions, aMark, aStatus ) )
+    String aPagesStr;
+    if ( !FillRenderMarkData( aSelection, rOptions, aMark, aStatus, aPagesStr ) )
         throw lang::IllegalArgumentException();
 
     if ( !pPrintFuncCache || !pPrintFuncCache->IsSameSelection( aStatus ) )
@@ -942,6 +977,7 @@ void SAL_CALL ScModelObj::render( sal_Int32 nRenderer, const uno::Any& aSelectio
         pPrintFuncCache = new ScPrintFuncCache( pDocShell, aMark, aStatus );
     }
     long nTotalPages = pPrintFuncCache->GetPageCount();
+    sal_Int32 nRenderer = lcl_GetRendererNum( nSelRenderer, aPagesStr, nTotalPages );
     if ( nRenderer >= nTotalPages )
         throw lang::IllegalArgumentException();
 
