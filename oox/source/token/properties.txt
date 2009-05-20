@@ -150,6 +150,7 @@ HorizontalSplitPositionTwips
 IgnoreBlankCells
 IgnoreCase
 IgnoreLeadingSpaces
+IncludeHiddenCells
 InputMessage
 InputTitle
 IsAdjustHeightEnabled
