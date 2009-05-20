@@ -173,7 +173,6 @@ USHORT SfxEventNamesItem::GetVersion( USHORT ) const
 
 void SfxEventNamesItem::AddEvent( const String& rName, const String& rUIName, USHORT nID )
 {
-    SfxEventName* pName;
     aEventsList.Insert( new SfxEventName( nID, rName, rUIName.Len() ? rUIName : rName ) );
 }
 
