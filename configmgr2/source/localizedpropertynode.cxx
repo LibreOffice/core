@@ -30,14 +30,14 @@
 #include "precompiled_configmgr.hxx"
 #include "sal/config.h"
 
-#include "com/sun/star/uno/Any.hxx"
 #include "rtl/ref.hxx"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 
 #include "localizedpropertynode.hxx"
-#include "localizedvalues.hxx"
+#include "localizedpropertyvaluenode.hxx"
 #include "node.hxx"
+#include "nodemap.hxx"
 #include "type.hxx"
 
 namespace configmgr {
@@ -49,19 +49,23 @@ namespace css = com::sun::star;
 }
 
 LocalizedPropertyNode::LocalizedPropertyNode(
-    Node * parent, rtl::OUString const & name, Type type, bool nillable,
-    LocalizedValues const & values):
-    Node(parent, name), type_(type), nillable_(nillable), values_(values) {}
+    Node * parent, rtl::OUString const & name, Type type, bool nillable):
+    Node(parent, name), type_(type), nillable_(nillable) {}
 
 rtl::Reference< Node > LocalizedPropertyNode::clone(
     Node * parent, rtl::OUString const & name) const
 {
-    return new LocalizedPropertyNode(parent, name, type_, nillable_, values_);
+    rtl::Reference< LocalizedPropertyNode > fresh(
+        new LocalizedPropertyNode(parent, name, type_, nillable_));
+    members_.clone(fresh.get(), &fresh->members_);
+    return fresh.get();
 }
 
-rtl::Reference< Node > LocalizedPropertyNode::getMember(rtl::OUString const &)
+rtl::Reference< Node > LocalizedPropertyNode::getMember(
+    rtl::OUString const & name)
 {
-    return 0;
+    NodeMap::iterator i(members_.find(name));
+    return i == members_.end() ? rtl::Reference< Node >() : i->second;
 }
 
 Type LocalizedPropertyNode::getType() const {
@@ -72,35 +76,31 @@ bool LocalizedPropertyNode::isNillable() const {
     return nillable_;
 }
 
-LocalizedValues & LocalizedPropertyNode::getValues() {
-    return values_;
-}
-
-void LocalizedPropertyNode::setValues(LocalizedValues const & values) {
-    values_ = values;
-}
-
-css::uno::Any LocalizedPropertyNode::getValue(rtl::OUString const & locale)
-    const
+rtl::Reference< LocalizedPropertyValueNode > LocalizedPropertyNode::getValue(
+    rtl::OUString const & locale) const
 {
     //TODO
-    LocalizedValues::const_iterator i(values_.find(locale));
-    if (i != values_.end()) {
-        return i->second;
+    NodeMap::const_iterator i(members_.find(locale));
+    if (i != members_.end()) {
+        return dynamic_cast< LocalizedPropertyValueNode * >(i->second.get());
     }
-    i = values_.find(rtl::OUString());
-    if (i != values_.end()) {
-        return i->second;
+    i = members_.find(rtl::OUString());
+    if (i != members_.end()) {
+        return dynamic_cast< LocalizedPropertyValueNode * >(i->second.get());
     }
-    i = values_.find(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en-US")));
-    if (i != values_.end()) {
-        return i->second;
+    i = members_.find(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en-US")));
+    if (i != members_.end()) {
+        return dynamic_cast< LocalizedPropertyValueNode * >(i->second.get());
     }
-    i = values_.begin();
-    if (i != values_.end()) {
-        return i->second;
+    i = members_.begin();
+    if (i != members_.end()) {
+        return dynamic_cast< LocalizedPropertyValueNode * >(i->second.get());
     }
-    return css::uno::Any();
+    return rtl::Reference< LocalizedPropertyValueNode >();
+}
+
+NodeMap & LocalizedPropertyNode::getMembers() {
+    return members_;
 }
 
 LocalizedPropertyNode::~LocalizedPropertyNode() {}

@@ -60,6 +60,7 @@
 #include "cppuhelper/weak.hxx"
 #include "osl/mutex.hxx"
 #include "sal/types.h"
+#include "rtl/ref.hxx"
 #include "rtl/unload.h"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
@@ -247,26 +248,36 @@ Service::createInstanceWithArguments(
             locale = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en"));//TODO
         }
     }
+    bool update;
     if (ServiceSpecifier.equalsAsciiL(
             RTL_CONSTASCII_STRINGPARAM(accessServiceName)))
 
     {
-        return static_cast< cppu::OWeakObject * >(
-            new RootAccess(nodepath, locale, false));
-    }
-    if (ServiceSpecifier.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM(updateAccessServiceName)))
+        update = false;
+    } else if (ServiceSpecifier.equalsAsciiL(
+                   RTL_CONSTASCII_STRINGPARAM(updateAccessServiceName)))
     {
-        return static_cast< cppu::OWeakObject * >(
-            new RootAccess(nodepath, locale, true));
+        update = true;
+    } else {
+        throw css::uno::Exception(
+            (rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "com.sun.star.configuration.ConfigurationProvider does not"
+                    " support service ")) +
+             ServiceSpecifier),
+            static_cast< cppu::OWeakObject * >(this));
     }
-    throw css::uno::Exception(
-        (rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.configuration.ConfigurationProvider does not"
-                " support service ")) +
-         ServiceSpecifier),
-        static_cast< cppu::OWeakObject * >(this));
+    rtl::Reference< RootAccess > root(new RootAccess(nodepath, locale, update));
+    if (root->isValue()) {
+        throw css::uno::Exception(
+            (rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "com.sun.star.configuration.ConfigurationProvider: there is"
+                    " a leaf value at nodepath ")) +
+             nodepath),
+            static_cast< cppu::OWeakObject * >(this));
+    }
+    return static_cast< cppu::OWeakObject * >(root.get());
 }
 
 css::uno::Sequence< rtl::OUString > Service::getAvailableServiceNames()

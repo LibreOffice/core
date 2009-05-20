@@ -34,10 +34,11 @@
 
 #include "com/sun/star/uno/Any.hxx"
 #include "rtl/ref.hxx"
-#include "rtl/ustring.hxx"
 
 #include "node.hxx"
 #include "type.hxx"
+
+namespace rtl { class OUString; }
 
 namespace configmgr {
 

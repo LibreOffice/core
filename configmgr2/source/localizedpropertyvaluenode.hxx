@@ -27,52 +27,39 @@
 * for a copy of the LGPLv3 License.
 ************************************************************************/
 
-#ifndef INCLUDED_CONFIGMGR_COMPONENTS_HXX
-#define INCLUDED_CONFIGMGR_COMPONENTS_HXX
+#ifndef INCLUDED_CONFIGMGR_LOCALIZEDPROPERTYVALUENODE_HXX
+#define INCLUDED_CONFIGMGR_LOCALIZEDPROPERTYVALUENODE_HXX
 
 #include "sal/config.h"
 
-#include "boost/noncopyable.hpp"
+#include "com/sun/star/uno/Any.hxx"
 #include "rtl/ref.hxx"
-#include "stl/hash_map"
 
-#include "nodemap.hxx"
+#include "node.hxx"
 
-namespace rtl {
-    class OUString;
-    struct OUStringHash;
-}
+namespace rtl { class OUString; }
 
 namespace configmgr {
 
-class Node;
-
-class Components: private boost::noncopyable {
+class LocalizedPropertyValueNode: public Node {
 public:
-    static Components & singleton();
+    LocalizedPropertyValueNode(
+        Node * parent, rtl::OUString const & name,
+        com::sun::star::uno::Any const & value);
 
-    static bool allLocales(rtl::OUString const & locale);
+    virtual rtl::Reference< Node > clone(
+        Node * parent, rtl::OUString const & name) const;
 
-    static bool parseSegment(
-        rtl::OUString const & segment, rtl::OUString * name, bool * setElement,
-        rtl::OUString * templateName);
+    virtual rtl::Reference< Node > getMember(rtl::OUString const &);
 
-    rtl::Reference< Node > resolvePath(rtl::OUString const & path);
+    com::sun::star::uno::Any getValue() const;
 
-    rtl::Reference< Node > getTemplate(rtl::OUString const & fullName) const;
-
-    typedef
-        std::hash_map< rtl::OUString, rtl::Reference< Node>, rtl::OUStringHash >
-        TemplateMap;
+    void setValue(com::sun::star::uno::Any const & value);
 
 private:
-    Components();
+    virtual ~LocalizedPropertyValueNode();
 
-    ~Components();
-
-    TemplateMap templates_;
-
-    NodeMap components_;
+    com::sun::star::uno::Any value_;
 };
 
 }

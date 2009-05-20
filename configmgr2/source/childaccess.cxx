@@ -30,9 +30,13 @@
 #include "precompiled_configmgr.hxx"
 #include "sal/config.h"
 
+#include "com/sun/star/uno/Any.hxx"
+#include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/Sequence.hxx"
+#include "com/sun/star/uno/XInterface.hpp"
 #include "cppuhelper/implbase1.hxx"
+#include "cppuhelper/weak.hxx"
 #include "osl/diagnose.h"
 #include "rtl/ref.hxx"
 #include "rtl/uuid.h"
@@ -40,7 +44,11 @@
 
 #include "access.hxx"
 #include "childaccess.hxx"
+#include "components.hxx"
+#include "localizedpropertynode.hxx"
+#include "localizedpropertyvaluenode.hxx"
 #include "node.hxx"
+#include "propertynode.hxx"
 #include "rootaccess.hxx"
 
 namespace configmgr {
@@ -100,6 +108,26 @@ void ChildAccess::unbind() throw () {
     OSL_ASSERT(!acquiredRoot_.is());
     acquiredRoot_ = root_;
     parent_ = 0;
+}
+
+css::uno::Any ChildAccess::asValue() {
+    rtl::Reference< Node > p(getNode());
+    if (PropertyNode * prop = dynamic_cast< PropertyNode * >(p.get())) {
+        return prop->getValue();
+    }
+    if (LocalizedPropertyNode * locprop =
+        dynamic_cast< LocalizedPropertyNode * >(p.get()))
+    {
+        rtl::OUString locale(getRoot()->getLocale());
+        if (!Components::allLocales(locale)) {
+            rtl::Reference< LocalizedPropertyValueNode > value(
+                locprop->getValue(locale));
+            return value.is() ? value->getValue() : css::uno::Any();
+        }
+    }
+    return css::uno::makeAny(
+        css::uno::Reference< css::uno::XInterface >(
+            static_cast< cppu::OWeakObject * >(this)));
 }
 
 ChildAccess::~ChildAccess() {}

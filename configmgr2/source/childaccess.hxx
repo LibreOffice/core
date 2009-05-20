@@ -41,6 +41,10 @@
 
 #include "access.hxx"
 
+namespace com { namespace sun { namespace star { namespace uno {
+    class Any;
+} } } }
+
 namespace configmgr {
 
 class Node;
@@ -70,6 +74,8 @@ public:
     void bind(RootAccess * root, Access * parent) throw ();
 
     void unbind() throw ();
+
+    com::sun::star::uno::Any asValue();
 
 private:
     virtual ~ChildAccess();

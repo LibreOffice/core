@@ -64,7 +64,7 @@ RootAccess::~RootAccess() {}
 
 rtl::Reference< Node > RootAccess::getNode() {
     if (!node_.is()) {
-        node_ = Components::singleton().resolvePath(0, path_);
+        node_ = Components::singleton().resolvePath(path_);
         if (!node_.is()) {
             throw css::uno::RuntimeException(
                 (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("cannot find ")) +

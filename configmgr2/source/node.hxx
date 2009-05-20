@@ -58,7 +58,8 @@ protected:
 
     // template or free node: parent_ and name_ both empty
     // component node: parent_ empty, name_ non-empty
-    // member node: parent_ and name_ both non-empty
+    // member node: parent_ and name_ both non-empty (name_ may be empty for the
+    //  default value of a localized property, however)
     Node * parent_;
     rtl::OUString name_;
 };

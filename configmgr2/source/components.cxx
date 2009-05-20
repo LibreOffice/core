@@ -52,11 +52,12 @@
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
+#include "stl/hash_map"
 
 #include "components.hxx"
 #include "groupnode.hxx"
 #include "localizedpropertynode.hxx"
-#include "localizedvalues.hxx"
+#include "localizedpropertyvaluenode.hxx"
 #include "lock.hxx"
 #include "node.hxx"
 #include "nodemap.hxx"
@@ -68,6 +69,21 @@ namespace configmgr {
 namespace {
 
 namespace css = com::sun::star;
+
+typedef std::hash_map< rtl::OUString, css::uno::Any, rtl::OUStringHash >
+    LocalizedValues;
+
+void setValues(LocalizedPropertyNode * node, LocalizedValues const & values) {
+    for (LocalizedValues::const_iterator i(values.begin()); i != values.end();
+         ++i)
+    {
+        node->getMembers().insert(
+            NodeMap::value_type(
+                i->first,
+                new LocalizedPropertyValueNode(
+                    node, i->first, i->second)));
+    }
+}
 
 template< typename T > sal_Int32 findFirst(
     rtl::OUString const & string, T sub, sal_Int32 fromIndex)
@@ -588,23 +604,26 @@ void parseXcsGroupContent(
                      fromXmlString(doc->URL)),
                     0);
             }
-            member =
-                getBooleanAttribute(
+            if (getBooleanAttribute(
                     doc, p, "http://openoffice.org/2001/registry", "localized",
-                    false)
-                ? static_cast< Node * >(
+                    false))
+            {
+                rtl::Reference< LocalizedPropertyNode > locprop(
                     new LocalizedPropertyNode(
                         group.get(), getNameAttribute(doc, p), type,
                         getBooleanAttribute(
                             doc, p, "http://openoffice.org/2001/registry",
-                            "nillable", true), values))
-                : static_cast< Node * >(
-                    new PropertyNode(
-                        group.get(), getNameAttribute(doc, p), type,
-                        getBooleanAttribute(
-                            doc, p, "http://openoffice.org/2001/registry",
-                            "nillable", true),
-                        values[rtl::OUString()], false));
+                            "nillable", true)));
+                setValues(locprop.get(), values);
+                member = locprop.get();
+            } else {
+                member = new PropertyNode(
+                    group.get(), getNameAttribute(doc, p), type,
+                    getBooleanAttribute(
+                        doc, p, "http://openoffice.org/2001/registry",
+                        "nillable", true),
+                    values[rtl::OUString()], false);
+            }
         } else if (isOorElement(p, "node-ref")) {
             xmlNodePtr q(skipBlank(p->xmlChildrenNode));
             if (isOorElement(q, "info")) {
@@ -942,7 +961,21 @@ void parseXcuNode(
                             for (LocalizedValues::iterator j(values.begin());
                                  j != values.end(); ++j)
                             {
-                                localized->getValues()[j->first] = j->second;
+                                NodeMap::iterator k(
+                                    localized->getMembers().find(j->first));
+                                if (k == localized->getMembers().end()) {
+                                    localized->getMembers().insert(
+                                        NodeMap::value_type(
+                                            j->first,
+                                            new LocalizedPropertyValueNode(
+                                                localized, j->first,
+                                                j->second)));
+                                } else {
+                                    dynamic_cast<
+                                        LocalizedPropertyValueNode * >(
+                                            k->second.get())->
+                                        setValue(j->second);
+                                }
                             }
                         }
                         break;
@@ -950,7 +983,8 @@ void parseXcuNode(
                         if (property != 0) {
                             property->setValue(values[rtl::OUString()]);
                         } else {
-                            localized->setValues(values);
+                            localized->getMembers().clear();
+                            setValues(localized, values);
                         }
                         break;
                     case OPERATION_REMOVE:
@@ -1269,6 +1303,10 @@ Components & Components::singleton() {
     return *c;
 }
 
+bool Components::allLocales(rtl::OUString const & locale) {
+    return locale.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("*"));
+}
+
 bool Components::parseSegment(
     rtl::OUString const & segment, rtl::OUString * name, bool * setElement,
     rtl::OUString * templateName)
@@ -1327,40 +1365,21 @@ bool Components::parseSegment(
     return true;
 }
 
-rtl::Reference< Node > Components::resolvePath(
-    rtl::Reference< Node > const & base, rtl::OUString const & path)
-{
-    if (path.getLength() == 0) {
-        if (!base.is()) {
-            throw css::uno::RuntimeException(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bad path ")) + path,
-                0);
-        }
-        return base;
+rtl::Reference< Node > Components::resolvePath(rtl::OUString const & path) {
+    if (path.getLength() == 0 || path[0] != '/') {
+        throw css::uno::RuntimeException(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bad path ")) + path, 0);
     }
-    rtl::Reference< Node > p;
-    sal_Int32 n = -1;
-    if (path[0] == '/') {
-        n = findFirst(path, '/', 1);
-        rtl::OUString seg;
-        bool setElement;
-        if (!parseSegment(path.copy(1, n - 1), &seg, &setElement, 0) ||
-            setElement)
-        {
-            throw css::uno::RuntimeException(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bad path ")) + path,
-                0);
-        }
-        NodeMap::iterator i(components_.find(path.copy(1, n - 1)));
-        p = i == components_.end() ? 0 : i->second;
-    } else {
-        if (base == 0) {
-            throw css::uno::RuntimeException(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bad path ")) + path,
-                0);
-        }
-        p = base;
+    sal_Int32 n = findFirst(path, '/', 1);
+    rtl::OUString seg;
+    bool setElement;
+    if (!parseSegment(path.copy(1, n - 1), &seg, &setElement, 0) || setElement)
+    {
+        throw css::uno::RuntimeException(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bad path ")) + path, 0);
     }
+    NodeMap::iterator i(components_.find(path.copy(1, n - 1)));
+    rtl::Reference< Node > p(i == components_.end() ? 0 : i->second);
     while (p != 0 && n != path.getLength()) {
         sal_Int32 n1 = findFirst(path, '/', n + 1);
         rtl::OUString segment(path.copy(n + 1, n1 - (n + 1)));
@@ -1368,8 +1387,6 @@ rtl::Reference< Node > Components::resolvePath(
         if (segment.getLength() == 0 && n1 == path.getLength()) {
             break;
         }
-        rtl::OUString seg;
-        bool setElement;
         rtl::OUString templateName;
         if (!parseSegment(segment, &seg, &setElement, &templateName)) {
             throw css::uno::RuntimeException(

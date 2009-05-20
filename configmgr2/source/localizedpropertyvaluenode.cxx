@@ -27,27 +27,50 @@
 * for a copy of the LGPLv3 License.
 ************************************************************************/
 
-#ifndef INCLUDED_CONFIGMGR_LOCALIZEDVALUES_HXX
-#define INCLUDED_CONFIGMGR_LOCALIZEDVALUES_HXX
-
+#include "precompiled_configmgr.hxx"
 #include "sal/config.h"
 
-#include "stl/hash_map"
+#include "com/sun/star/uno/Any.hxx"
+#include "rtl/ref.hxx"
+#include "rtl/ustring.h"
+#include "rtl/ustring.hxx"
 
-namespace com { namespace sun { namespace star { namespace uno {
-    class Any;
-} } } }
-namespace rtl {
-    class OUString;
-    struct OUStringHash;
-}
+#include "localizedpropertyvaluenode.hxx"
+#include "node.hxx"
 
 namespace configmgr {
 
-typedef
-    std::hash_map< rtl::OUString, com::sun::star::uno::Any, rtl::OUStringHash >
-    LocalizedValues;
+namespace {
+
+namespace css = com::sun::star;
 
 }
 
-#endif
+LocalizedPropertyValueNode::LocalizedPropertyValueNode(
+    Node * parent, rtl::OUString const & name, css::uno::Any const & value):
+    Node(parent, name), value_(value)
+{}
+
+rtl::Reference< Node > LocalizedPropertyValueNode::clone(
+    Node * parent, rtl::OUString const & name) const
+{
+    return new LocalizedPropertyValueNode(parent, name, value_);
+}
+
+rtl::Reference< Node > LocalizedPropertyValueNode::getMember(
+    rtl::OUString const &)
+{
+    return rtl::Reference< Node >();
+}
+
+css::uno::Any LocalizedPropertyValueNode::getValue() const {
+    return value_;
+}
+
+void LocalizedPropertyValueNode::setValue(css::uno::Any const & value) {
+    value_ = value;
+}
+
+LocalizedPropertyValueNode::~LocalizedPropertyValueNode() {}
+
+}

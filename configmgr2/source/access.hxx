@@ -121,6 +121,9 @@ class Access:
         com::sun::star::util::XChangesBatch >,
     private boost::noncopyable
 {
+public:
+    bool isValue();
+
 protected:
     Access();
 
@@ -408,15 +411,13 @@ private:
     virtual com::sun::star::util::ChangesSet getPendingChanges()
         throw (com::sun::star::uno::RuntimeException);
 
-    enum ChildStatus { CHILD_NONE, CHILD_VALUE, CHILD_NODE };
+    rtl::Reference< ChildAccess > getChild(rtl::OUString const & name);
 
-    ChildStatus getChild(
-        rtl::OUString const & name, com::sun::star::uno::Any * value,
-        rtl::Reference< ChildAccess > * node);
+    rtl::Reference< ChildAccess > getSubChild(rtl::OUString const & path);
 
-    void setProperty(
-        rtl::Reference< Node > const & node,
-        com::sun::star::uno::Any const & value);
+    com::sun::star::beans::Property asProperty();
+
+    void setProperty(com::sun::star::uno::Any const & value);
 
     typedef
         std::hash_map<

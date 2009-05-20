@@ -33,45 +33,42 @@
 #include "sal/config.h"
 
 #include "rtl/ref.hxx"
-#include "rtl/ustring.hxx"
 
-#include "localizedvalues.hxx"
 #include "node.hxx"
+#include "nodemap.hxx"
 #include "type.hxx"
 
-namespace com { namespace sun { namespace star { namespace uno {
-    class Any;
-} } } }
+namespace rtl { class OUString; }
 
 namespace configmgr {
+
+class LocalizedPropertyValueNode;
 
 class LocalizedPropertyNode: public Node {
 public:
     LocalizedPropertyNode(
-        Node * parent, rtl::OUString const & name, Type type, bool nillable,
-        LocalizedValues const & values);
+        Node * parent, rtl::OUString const & name, Type type, bool nillable);
 
     virtual rtl::Reference< Node > clone(
         Node * parent, rtl::OUString const & name) const;
 
-    virtual rtl::Reference< Node > getMember(rtl::OUString const &);
+    virtual rtl::Reference< Node > getMember(rtl::OUString const & name);
 
     Type getType() const;
 
     bool isNillable() const;
 
-    LocalizedValues & getValues();
+    rtl::Reference< LocalizedPropertyValueNode > getValue(
+        rtl::OUString const & locale) const;
 
-    void setValues(LocalizedValues const & values);
-
-    com::sun::star::uno::Any getValue(rtl::OUString const & locale) const;
+    NodeMap & getMembers();
 
 private:
     virtual ~LocalizedPropertyNode();
 
     Type type_;
     bool nillable_;
-    LocalizedValues values_;
+    NodeMap members_;
 };
 
 }

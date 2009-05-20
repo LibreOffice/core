@@ -69,7 +69,7 @@
 #include "components.hxx"
 #include "groupnode.hxx"
 #include "localizedpropertynode.hxx"
-#include "localizedvalues.hxx"
+#include "localizedpropertyvaluenode.hxx"
 #include "lock.hxx"
 #include "node.hxx"
 #include "propertynode.hxx"
@@ -180,54 +180,14 @@ Type mapType(css::uno::Type type) {
     }
 }
 
-bool allLocales(rtl::OUString const & locale) {
-    return locale.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("*"));
 }
 
-css::beans::Property asProperty(
-    rtl::Reference< RootAccess > const & root,
-    rtl::Reference< Node > const & node)
-{
-    css::uno::Type type;
-    bool nillable;
-    bool removable;
-    if (PropertyNode * prop = dynamic_cast< PropertyNode * >(node.get()))
-    {
-        type = mapType(prop->getType());
-        nillable = prop->isNillable();
-        removable = prop->isExtension();
-    } else if (LocalizedPropertyNode * locprop =
-               dynamic_cast< LocalizedPropertyNode * >(node.get()))
-    {
-        if (allLocales(root->getLocale())) {
-            type = cppu::UnoType< css::uno::XInterface >::get();
-                //TODO: correct?
-            removable = false;
-        } else {
-            type = mapType(locprop->getType());
-            removable = false; //TODO ???
-        }
-        nillable = locprop->isNillable();
-    } else {
-        OSL_ASSERT(
-            dynamic_cast< GroupNode * >(node.get()) != 0 ||
-            dynamic_cast< SetNode * >(node.get()) != 0);
-        type = cppu::UnoType< css::uno::XInterface >::get(); //TODO: correct?
-        nillable = false;
-        removable = node->getParent() == 0
-            ? node->getName().getLength() == 0
-            : dynamic_cast< SetNode * >(node->getParent()) != 0;
-    }
-    return css::beans::Property(
-        node->getName(), -1, type,
-        (css::beans::PropertyAttribute::BOUND | //TODO: correct for group/set?
-         css::beans::PropertyAttribute::CONSTRAINED |
-         (nillable ? css::beans::PropertyAttribute::MAYBEVOID : 0) |
-         (root->isUpdate()
-          ? (removable ? css::beans::PropertyAttribute::REMOVEABLE : 0)
-          : css::beans::PropertyAttribute::READONLY))); //TODO: MAYBEDEFAULT
-}
-
+bool Access::isValue() {
+    osl::MutexGuard g(lock);
+    rtl::Reference< Node > p(getNode());
+    return dynamic_cast< PropertyNode * >(p.get()) != 0 ||
+        (dynamic_cast< LocalizedPropertyNode * >(p.get()) != 0 &&
+         !Components::allLocales(getRoot()->getLocale()));
 }
 
 Access::Access(): WeakComponentImplHelper16(lock) {}
@@ -261,8 +221,10 @@ sal_Bool Access::hasElements() throw (css::uno::RuntimeException) {
     OSL_ASSERT(thisIs(IS_GROUP_OR_SET_OR_LOCALIZED));
     osl::MutexGuard g(lock);
     rtl::Reference< Node > p(getNode());
-    if (dynamic_cast< LocalizedPropertyNode * >(p.get()) != 0) {
-        return true; //TODO: correct?
+    if (LocalizedPropertyNode * locprop =
+        dynamic_cast< LocalizedPropertyNode * >(p.get()))
+    {
+        return !locprop->getMembers().empty();
     } else if (GroupNode * group = dynamic_cast< GroupNode * >(p.get())) {
         return !group->getMembers().empty();
     } else if (SetNode * set = dynamic_cast< SetNode * >(p.get())) {
@@ -282,19 +244,12 @@ css::uno::Any Access::getByName(rtl::OUString const & aName)
 {
     OSL_ASSERT(thisIs(IS_GROUP_OR_SET_OR_LOCALIZED));
     osl::MutexGuard g(lock);
-    css::uno::Any value;
-    rtl::Reference< ChildAccess > node;
-    switch (getChild(aName, &value, &node)) {
-    case CHILD_NONE:
+    rtl::Reference< ChildAccess > child(getChild(aName));
+    if (!child.is()) {
         throw css::container::NoSuchElementException(
             aName, static_cast< cppu::OWeakObject * >(this));
-    case CHILD_VALUE:
-        return value;
-    case CHILD_NODE:
-        return css::uno::makeAny(
-            css::uno::Reference< css::uno::XInterface >(
-                static_cast< cppu::OWeakObject * >(node.get())));
     }
+    return child->asValue();
 }
 
 css::uno::Sequence< rtl::OUString > Access::getElementNames()
@@ -307,8 +262,8 @@ css::uno::Sequence< rtl::OUString > Access::getElementNames()
         dynamic_cast< LocalizedPropertyNode * >(p.get()))
     {
         comphelper::SequenceAsVector< rtl::OUString > names;
-        for (LocalizedValues::iterator i(locprop->getValues().begin());
-             i != locprop->getValues().end(); ++i)
+        for (NodeMap::iterator i(locprop->getMembers().begin());
+             i != locprop->getMembers().end(); ++i)
         {
             names.push_back(i->first);
         }
@@ -343,17 +298,7 @@ sal_Bool Access::hasByName(rtl::OUString const & aName)
 {
     OSL_ASSERT(thisIs(IS_GROUP_OR_SET_OR_LOCALIZED));
     osl::MutexGuard g(lock);
-    rtl::Reference< Node > p(getNode());
-    if (LocalizedPropertyNode * locprop =
-        dynamic_cast< LocalizedPropertyNode * >(p.get()))
-    {
-        return locprop->getValues().find(aName) != locprop->getValues().end();
-    } else {
-        OSL_ASSERT(
-            dynamic_cast< GroupNode * >(p.get()) != 0 ||
-            dynamic_cast< SetNode * >(p.get()) != 0);
-        return p->getMember(aName).is();
-    }
+    return getChild(aName).is();
 }
 
 css::uno::Any Access::getByHierarchicalName(rtl::OUString const & aName)
@@ -361,45 +306,12 @@ css::uno::Any Access::getByHierarchicalName(rtl::OUString const & aName)
 {
     OSL_ASSERT(thisIs(IS_GROUP_OR_SET));
     osl::MutexGuard g(lock);
-    sal_Int32 i = aName.indexOf('/');
-    rtl::OUString name;
-    bool setElement;
-    rtl::OUString templateName;
-    if (Components::parseSegment(
-            i == -1 ? aName : aName.copy(0, i), &name, &setElement,
-            &templateName))
-    {
-        css::uno::Any value;
-        rtl::Reference< ChildAccess > node;
-        switch (getChild(name, &value, &node)) {
-        case CHILD_NONE:
-            break;
-        case CHILD_VALUE:
-            if (i != -1) {
-                break;
-            }
-            return value;
-        case CHILD_NODE:
-            if (setElement) {
-                SetNode * set = dynamic_cast< SetNode * >(getNode().get());
-                if (set == 0 ||
-                    (templateName.getLength() != 0 &&
-                     !set->isValidTemplate(templateName)))
-                {
-                    break;
-                }
-            }
-            // For backwards compatibility, ignore a final slash:
-            return i == -1 || i + 1 == aName.getLength()
-                ? css::uno::makeAny(
-                    css::uno::Reference< css::uno::XInterface >(
-                        static_cast< cppu::OWeakObject * >(node.get())))
-                : node->getByHierarchicalName(aName.copy(i + 1));
-                //TODO: optimize
-        }
+    rtl::Reference< ChildAccess > child(getSubChild(aName));
+    if (!child.is()) {
+        throw css::container::NoSuchElementException(
+            aName, static_cast< cppu::OWeakObject * >(this));
     }
-    throw css::container::NoSuchElementException(
-        aName, static_cast< cppu::OWeakObject * >(this));
+    return child->asValue();
 }
 
 sal_Bool Access::hasByHierarchicalName(rtl::OUString const & aName)
@@ -407,7 +319,7 @@ sal_Bool Access::hasByHierarchicalName(rtl::OUString const & aName)
 {
     OSL_ASSERT(thisIs(IS_GROUP_OR_SET));
     osl::MutexGuard g(lock);
-    return Components::singleton().resolvePath(getNode(), aName) != 0;
+    return getSubChild(aName).is();
 }
 
 void Access::addContainerListener(
@@ -447,19 +359,20 @@ css::beans::Property Access::getPropertyByName(rtl::OUString const & aName)
 {
     OSL_ASSERT(thisIs(IS_GROUP));
     osl::MutexGuard g(lock);
-    rtl::Reference< Node > p(getNode()->getMember(aName));
-    if (!p.is()) {
+    rtl::Reference< ChildAccess > child(getChild(aName));
+    if (!child.is()) {
         throw css::beans::UnknownPropertyException(
             aName, static_cast< cppu::OWeakObject * >(this));
     }
-    return asProperty(getRoot(), p);
+    return child->asProperty();
 }
 
 sal_Bool Access::hasPropertyByName(rtl::OUString const & Name)
     throw (css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_GROUP));
-    return hasByName(Name);
+    osl::MutexGuard g(lock);
+    return getChild(Name).is();
 }
 
 rtl::OUString Access::getHierarchicalName() throw (css::uno::RuntimeException) {
@@ -493,7 +406,7 @@ css::beans::Property Access::getAsProperty() throw (css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_GROUP_OR_SET_OR_LOCALIZED));
     osl::MutexGuard g(lock);
-    return asProperty(getRoot(), getNode());
+    return asProperty();
 }
 
 css::uno::Reference< css::uno::XInterface > Access::getParent()
@@ -537,12 +450,12 @@ void Access::setPropertyValue(
                     "configmgr insertByName on non-update access")),
             static_cast< cppu::OWeakObject * >(this));
     }
-    rtl::Reference< Node > p(getNode()->getMember(aPropertyName));
-    if (!p.is()) {
+    rtl::Reference< ChildAccess > child(getChild(aPropertyName));
+    if (!child.is()) {
         throw css::beans::UnknownPropertyException(
             aPropertyName, static_cast< cppu::OWeakObject * >(this));
     }
-    setProperty(p, aValue);
+    child->setProperty(aValue);
 }
 
 css::uno::Any Access::getPropertyValue(rtl::OUString const & PropertyName)
@@ -552,19 +465,12 @@ css::uno::Any Access::getPropertyValue(rtl::OUString const & PropertyName)
 {
     OSL_ASSERT(thisIs(IS_GROUP));
     osl::MutexGuard g(lock);
-    css::uno::Any value;
-    rtl::Reference< ChildAccess > node;
-    switch (getChild(PropertyName, &value, &node)) {
-    case CHILD_NONE:
+    rtl::Reference< ChildAccess > child(getChild(PropertyName));
+    if (!child.is()) {
         throw css::beans::UnknownPropertyException(
             PropertyName, static_cast< cppu::OWeakObject * >(this));
-    case CHILD_VALUE:
-        return value;
-    case CHILD_NODE:
-        return css::uno::makeAny(
-            css::uno::Reference< css::uno::XInterface >(
-                static_cast< cppu::OWeakObject * >(node.get())));
     }
+    return child->asValue();
 }
 
 void Access::addPropertyChangeListener(
@@ -694,15 +600,13 @@ void Access::setHierarchicalPropertyValue(
                     "configmgr insertByName on non-update access")),
             static_cast< cppu::OWeakObject * >(this));
     }
-    rtl::Reference< Node > p(
-        Components::singleton().resolvePath(
-            getNode(), aHierarchicalPropertyName));
-    if (!p.is()) {
+    rtl::Reference< ChildAccess > child(getSubChild(aHierarchicalPropertyName));
+    if (!child.is()) {
         throw css::beans::UnknownPropertyException(
             aHierarchicalPropertyName,
             static_cast< cppu::OWeakObject * >(this));
     }
-    setProperty(p, aValue);
+    child->setProperty(aValue);
 }
 
 css::uno::Any Access::getHierarchicalPropertyValue(
@@ -963,65 +867,100 @@ css::util::ChangesSet Access::getPendingChanges()
     if(true)abort();*(char*)0=0;throw 0;//TODO
 }
 
-Access::ChildStatus Access::getChild(
-    rtl::OUString const & name, css::uno::Any * value,
-    rtl::Reference< ChildAccess > * node)
-{
-    OSL_ASSERT(value != 0 && node != 0);
+rtl::Reference< ChildAccess > Access::getChild(rtl::OUString const & name) {
     ChildMap::iterator i(children_.find(name));
     if (i != children_.end()) {
-        *node = i->second;
-        return CHILD_NODE;
+        return i->second;
     }
-    rtl::Reference< Node > p(getNode());
-    if (LocalizedPropertyNode * locprop =
-        dynamic_cast< LocalizedPropertyNode * >(p.get()))
-    {
-        LocalizedValues::iterator j(locprop->getValues().find(name));
-        if (j == locprop->getValues().end()) {
-            return CHILD_NONE;
-        }
-        *value = j->second;
-        return CHILD_VALUE;
+    rtl::Reference< Node > node(getNode()->getMember(name));
+    if (!node.is()) {
+        return rtl::Reference< ChildAccess >();
     }
-    p = p->getMember(name);
-    if (p == 0) {
-        return CHILD_NONE;
-    }
-    if (PropertyNode * prop = dynamic_cast< PropertyNode * >(p.get())) {
-        *value = prop->getValue();
-        return CHILD_VALUE;
-    }
-    rtl::Reference< ChildAccess > child;
-    if (LocalizedPropertyNode * locprop =
-        dynamic_cast< LocalizedPropertyNode * >(p.get()))
-    {
-        rtl::OUString loc(getRoot()->getLocale());
-        if (!allLocales(loc)) {
-            *value = locprop->getValue(loc);
-            return CHILD_VALUE;
-        }
-        child = new ChildAccess(getRoot().get(), this, locprop);
-    } else if (GroupNode * group = dynamic_cast< GroupNode * >(p.get())) {
-        child = new ChildAccess(getRoot().get(), this, group);
-    } else if (SetNode * set = dynamic_cast< SetNode * >(p.get())) {
-        child = new ChildAccess(getRoot().get(), this, set);
-    } else {
-        OSL_ASSERT(false);
-        throw css::uno::RuntimeException(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("this cannot happen")),
-            static_cast< cppu::OWeakObject * >(this));
-    }
+    rtl::Reference< ChildAccess > child(
+        new ChildAccess(getRoot().get(), this, node));
     children_.insert(ChildMap::value_type(name, child));
-    *node = child;
-    return CHILD_NODE;
+    return child;
 }
 
-void Access::setProperty(
-    rtl::Reference< Node > const & node, css::uno::Any const & value)
-{
-    OSL_ASSERT(node.is());
-    if (PropertyNode * prop = dynamic_cast< PropertyNode * >(node.get())) {
+rtl::Reference< ChildAccess > Access::getSubChild(rtl::OUString const & path) {
+    sal_Int32 i = path.indexOf('/');
+    rtl::OUString name;
+    bool setElement;
+    rtl::OUString templateName;
+    if (!Components::parseSegment(
+            i == -1 ? path : path.copy(0, i), &name, &setElement,
+            &templateName))
+    {
+        return rtl::Reference< ChildAccess >();
+    }
+    rtl::Reference< ChildAccess > child(getChild(name));
+    if (!child.is()) {
+        return child;
+    }
+    if (child->isValue()) {
+        if (i != -1) {
+            return rtl::Reference< ChildAccess >();
+        }
+        return child;
+    }
+    if (setElement) {
+        SetNode * set = dynamic_cast< SetNode * >(getNode().get());
+        if (set == 0 ||
+            (templateName.getLength() != 0 &&
+             !set->isValidTemplate(templateName)))
+        {
+            return rtl::Reference< ChildAccess >();
+        }
+    }
+    // For backwards compatibility, ignore a final slash:
+    return i == -1 || i + 1 == path.getLength()
+        ? child : child->getSubChild(path.copy(i + 1));
+}
+
+css::beans::Property Access::asProperty() {
+    css::uno::Type type;
+    bool nillable;
+    bool removable;
+    rtl::Reference< Node > p(getNode());
+    if (PropertyNode * prop = dynamic_cast< PropertyNode * >(p.get())) {
+        type = mapType(prop->getType());
+        nillable = prop->isNillable();
+        removable = prop->isExtension();
+    } else if (LocalizedPropertyNode * locprop =
+               dynamic_cast< LocalizedPropertyNode * >(p.get()))
+    {
+        if (Components::allLocales(getRoot()->getLocale())) {
+            type = cppu::UnoType< css::uno::XInterface >::get();
+                //TODO: correct?
+            removable = false;
+        } else {
+            type = mapType(locprop->getType());
+            removable = false; //TODO ???
+        }
+        nillable = locprop->isNillable();
+    } else {
+        OSL_ASSERT(
+            dynamic_cast< GroupNode * >(p.get()) != 0 ||
+            dynamic_cast< SetNode * >(p.get()) != 0);
+        type = cppu::UnoType< css::uno::XInterface >::get(); //TODO: correct?
+        nillable = false;
+        removable = p->getParent() == 0
+            ? p->getName().getLength() == 0
+            : dynamic_cast< SetNode * >(p->getParent()) != 0;
+    }
+    return css::beans::Property(
+        p->getName(), -1, type,
+        (css::beans::PropertyAttribute::BOUND | //TODO: correct for group/set?
+         css::beans::PropertyAttribute::CONSTRAINED |
+         (nillable ? css::beans::PropertyAttribute::MAYBEVOID : 0) |
+         (getRoot()->isUpdate()
+          ? (removable ? css::beans::PropertyAttribute::REMOVEABLE : 0)
+          : css::beans::PropertyAttribute::READONLY))); //TODO: MAYBEDEFAULT
+}
+
+void Access::setProperty(css::uno::Any const & value) {
+    rtl::Reference< Node > p(getNode());
+    if (PropertyNode * prop = dynamic_cast< PropertyNode * >(p.get())) {
         Type type = mapType(value.getValueType());
         if (value.hasValue()
             ? (type == TYPE_NONE ||
@@ -1039,10 +978,10 @@ void Access::setProperty(
         return;
     }
     if (LocalizedPropertyNode * locprop =
-        dynamic_cast< LocalizedPropertyNode * >(node.get()))
+        dynamic_cast< LocalizedPropertyNode * >(p.get()))
     {
         rtl::OUString loc(getRoot()->getLocale());
-        if (!allLocales(loc)) {
+        if (!Components::allLocales(loc)) {
             Type type = mapType(value.getValueType());
             if (value.hasValue()
                 ? (type == TYPE_NONE ||
@@ -1057,7 +996,16 @@ void Access::setProperty(
                             " value")),
                     static_cast< cppu::OWeakObject * >(this), 1);
             }
-            locprop->getValues()[loc] = value;
+            NodeMap::iterator i(locprop->getMembers().find(loc));
+            if (i == locprop->getMembers().end()) {
+                locprop->getMembers().insert(
+                    NodeMap::value_type(
+                        loc,
+                        new LocalizedPropertyValueNode(locprop, loc, value)));
+            } else {
+                dynamic_cast< LocalizedPropertyValueNode * >(i->second.get())->
+                    setValue(value);
+            }
             //TODO notify change
             return;
         }
@@ -1087,7 +1035,7 @@ bool Access::thisIs(int what) {
          dynamic_cast< GroupNode * >(p.get()) != 0 ||
          dynamic_cast< SetNode * >(p.get()) != 0 ||
          (dynamic_cast< LocalizedPropertyNode * >(p.get()) != 0 &&
-          allLocales(getRoot()->getLocale()))) ||
+          Components::allLocales(getRoot()->getLocale()))) ||
         ((what & IS_ROOT) == 0 || dynamic_cast< RootAccess * >(p.get()) != 0) ||
         ((what & IS_CHILD) == 0 ||
          dynamic_cast< ChildAccess * >(p.get()) != 0) ||
