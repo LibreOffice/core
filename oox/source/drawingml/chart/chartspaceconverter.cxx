@@ -151,7 +151,7 @@ void ChartSpaceConverter::convertFromModel()
     if( xStandardApiChartDoc.is() )
     {
         PropertySet aStandardApiDiagramProp( xStandardApiChartDoc->getDiagram() );
-        aStandardApiDiagramProp.setProperty( CREATE_OUSTRING("IncludeHiddenCells"), !mrModel.mbPlotVisOnly );
+        aStandardApiDiagramProp.setProperty( PROP_IncludeHiddenCells, !mrModel.mbPlotVisOnly );
     }
 }
 
