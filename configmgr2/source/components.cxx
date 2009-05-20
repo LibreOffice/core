@@ -1269,17 +1269,16 @@ Components & Components::singleton() {
     return *c;
 }
 
-namespace {
-
-rtl::OUString parseSegment(
-    rtl::OUString const & segment, bool * setElement,
+bool Components::parseSegment(
+    rtl::OUString const & segment, rtl::OUString * name, bool * setElement,
     rtl::OUString * templateName)
 {
-    OSL_ASSERT(setElement != 0);
+    OSL_ASSERT(name != 0 && setElement != 0);
     sal_Int32 i = segment.indexOf('[');
     if (i == -1) {
+        *name = segment;
         *setElement = false;
-        return segment;
+        return true;
     }
     *setElement = true;
     if (templateName != 0) {
@@ -1295,10 +1294,7 @@ rtl::OUString parseSegment(
         segment.getLength() - 2 <= i + 1 ||
         segment[segment.getLength() - 2] != segment[i + 1])
     {
-        throw css::uno::RuntimeException(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM("bad path segment ")) + segment,
-            0);
+        return false;
     }
     rtl::OUStringBuffer buf;
     i += 2;
@@ -1320,20 +1316,15 @@ rtl::OUString parseSegment(
                 buf.append(sal_Unicode('\''));
                 i += RTL_CONSTASCII_LENGTH("&apos;");
             } else {
-                throw css::uno::RuntimeException(
-                    (rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM("bad path segment ")) +
-                     segment),
-                    0);
+                return false;
             }
         } else {
             buf.append(c);
             ++i;
         }
     }
-    return buf.makeStringAndClear();
-}
-
+    *name = buf.makeStringAndClear();
+    return true;
 }
 
 rtl::Reference< Node > Components::resolvePath(
@@ -1351,9 +1342,11 @@ rtl::Reference< Node > Components::resolvePath(
     sal_Int32 n = -1;
     if (path[0] == '/') {
         n = findFirst(path, '/', 1);
+        rtl::OUString seg;
         bool setElement;
-        rtl::OUString seg(parseSegment(path.copy(1, n - 1), &setElement, 0));
-        if (setElement) {
+        if (!parseSegment(path.copy(1, n - 1), &seg, &setElement, 0) ||
+            setElement)
+        {
             throw css::uno::RuntimeException(
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bad path ")) + path,
                 0);
@@ -1375,9 +1368,14 @@ rtl::Reference< Node > Components::resolvePath(
         if (segment.getLength() == 0 && n1 == path.getLength()) {
             break;
         }
+        rtl::OUString seg;
         bool setElement;
         rtl::OUString templateName;
-        rtl::OUString seg(parseSegment(segment, &setElement, &templateName));
+        if (!parseSegment(segment, &seg, &setElement, &templateName)) {
+            throw css::uno::RuntimeException(
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bad path ")) + path,
+                0);
+        }
         if (setElement) {
             SetNode * set = dynamic_cast< SetNode * >(p.get());
             if (set == 0 ||

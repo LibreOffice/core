@@ -54,19 +54,22 @@ public:
     static com::sun::star::uno::Sequence< sal_Int8 > getTunnelId();
 
     ChildAccess(
+        RootAccess * root, Access * parent,
+        rtl::Reference< Node > const & node);
+
+    ChildAccess(
         rtl::Reference< RootAccess > const & root,
-        rtl::Reference< Access > const & parent,
         rtl::Reference< Node > const & node);
 
     virtual rtl::Reference< Node > getNode();
 
     virtual rtl::Reference< RootAccess > getRoot();
 
-    rtl::Reference< Access > getParent() const;
+    Access * getParentAccess() const;
 
-    void inserted(
-        rtl::Reference< RootAccess > const & root,
-        rtl::Reference< Access > const & parent) throw ();
+    void bind(RootAccess * root, Access * parent) throw ();
+
+    void unbind() throw ();
 
 private:
     virtual ~ChildAccess();
@@ -75,8 +78,9 @@ private:
         com::sun::star::uno::Sequence< sal_Int8 > const & aIdentifier)
         throw (com::sun::star::uno::RuntimeException);
 
-    rtl::Reference< RootAccess > root_;
-    rtl::Reference< Access > parent_;
+    RootAccess * root_;
+    rtl::Reference< RootAccess > acquiredRoot_; // only for free nodes (= root_)
+    Access * parent_; // non-null iff non-free node
     rtl::Reference< Node > node_;
 };
 

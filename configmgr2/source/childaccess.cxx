@@ -33,6 +33,7 @@
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/Sequence.hxx"
 #include "cppuhelper/implbase1.hxx"
+#include "osl/diagnose.h"
 #include "rtl/ref.hxx"
 #include "rtl/uuid.h"
 #include "sal/types.h"
@@ -62,11 +63,19 @@ css::uno::Sequence< sal_Int8 > ChildAccess::getTunnelId() {
 }
 
 ChildAccess::ChildAccess(
-    rtl::Reference< RootAccess > const & root,
-    rtl::Reference< Access > const & parent,
-    rtl::Reference< Node > const & node):
+    RootAccess * root, Access * parent, rtl::Reference< Node > const & node):
     root_(root), parent_(parent), node_(node)
-{}
+{
+    OSL_ASSERT(root != 0 && parent != 0 && node.is());
+}
+
+ChildAccess::ChildAccess(
+    rtl::Reference< RootAccess > const & root,
+    rtl::Reference< Node > const & node):
+    root_(root.get()), acquiredRoot_(root), parent_(0), node_(node)
+{
+    OSL_ASSERT(root.is() && node.is());
+}
 
 rtl::Reference< Node > ChildAccess::getNode() {
     return node_;
@@ -76,16 +85,21 @@ rtl::Reference< RootAccess > ChildAccess::getRoot() {
     return root_;
 }
 
-rtl::Reference< Access > ChildAccess::getParent() const {
+Access * ChildAccess::getParentAccess() const {
     return parent_;
 }
 
-void ChildAccess::inserted(
-    rtl::Reference< RootAccess > const & root,
-    rtl::Reference< Access > const & parent) throw ()
-{
+void ChildAccess::bind(RootAccess * root, Access * parent) throw () {
+    OSL_ASSERT(acquiredRoot_.is());
+    acquiredRoot_.clear();
     root_ = root;
     parent_ = parent;
+}
+
+void ChildAccess::unbind() throw () {
+    OSL_ASSERT(!acquiredRoot_.is());
+    acquiredRoot_ = root_;
+    parent_ = 0;
 }
 
 ChildAccess::~ChildAccess() {}

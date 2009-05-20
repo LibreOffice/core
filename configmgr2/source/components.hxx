@@ -51,6 +51,10 @@ class Components: private boost::noncopyable {
 public:
     static Components & singleton();
 
+    static bool parseSegment(
+        rtl::OUString const & segment, rtl::OUString * name, bool * setElement,
+        rtl::OUString * templateName);
+
     rtl::Reference< Node > resolvePath(
         rtl::Reference< Node > const & base, rtl::OUString const & path);
 

@@ -63,6 +63,7 @@
 #include "com/sun/star/util/XChangesNotifier.hpp"
 #include "rtl/ref.hxx"
 #include "sal/types.h"
+#include "stl/hash_map"
 
 #if !defined INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_16
 #define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_16
@@ -89,9 +90,14 @@ namespace com { namespace sun { namespace star {
         class XChangesListener;
     }
 } } }
+namespace rtl {
+    class OUString;
+    struct OUStringHash;
+}
 
 namespace configmgr {
 
+class ChildAccess;
 class Node;
 class RootAccess;
 
@@ -402,9 +408,22 @@ private:
     virtual com::sun::star::util::ChangesSet getPendingChanges()
         throw (com::sun::star::uno::RuntimeException);
 
+    enum ChildStatus { CHILD_NONE, CHILD_VALUE, CHILD_NODE };
+
+    ChildStatus getChild(
+        rtl::OUString const & name, com::sun::star::uno::Any * value,
+        rtl::Reference< ChildAccess > * node);
+
     void setProperty(
         rtl::Reference< Node > const & node,
         com::sun::star::uno::Any const & value);
+
+    typedef
+        std::hash_map<
+            rtl::OUString, rtl::Reference< ChildAccess >, rtl::OUStringHash >
+        ChildMap;
+
+    ChildMap children_;
 
 #if OSL_DEBUG_LEVEL > 0
     enum {
