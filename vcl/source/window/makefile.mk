@@ -45,6 +45,7 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files --------------------------------------------------------
 
 SLOFILES= \
+            $(SLO)$/arrange.obj		\
             $(SLO)$/abstdlg.obj		\
             $(SLO)$/accel.obj		\
             $(SLO)$/accmgr.obj		\
