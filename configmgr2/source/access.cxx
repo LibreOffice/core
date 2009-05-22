@@ -186,6 +186,7 @@ bool Access::isValue() {
     osl::MutexGuard g(lock);
     rtl::Reference< Node > p(getNode());
     return dynamic_cast< PropertyNode * >(p.get()) != 0 ||
+        dynamic_cast< LocalizedPropertyValueNode * >(p.get()) != 0 ||
         (dynamic_cast< LocalizedPropertyNode * >(p.get()) != 0 &&
          !Components::allLocales(getRoot()->getLocale()));
 }
@@ -1021,8 +1022,8 @@ void Access::setProperty(css::uno::Any const & value) {
 bool Access::thisIs(int what) {
     osl::MutexGuard g(lock);
     rtl::Reference< Node > p(getNode());
-    return ((what & IS_GROUP) == 0 ||
-            dynamic_cast< GroupNode * >(p.get()) != 0) &&
+    return !isValue() &&
+        ((what & IS_GROUP) == 0 || dynamic_cast< GroupNode * >(p.get()) != 0) &&
         ((what & IS_SET) == 0 || dynamic_cast< SetNode * >(p.get()) != 0) &&
         ((what & IS_GROUP_OR_SET) == 0 ||
          dynamic_cast< GroupNode * >(p.get()) != 0 ||

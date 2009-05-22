@@ -115,6 +115,11 @@ css::uno::Any ChildAccess::asValue() {
     if (PropertyNode * prop = dynamic_cast< PropertyNode * >(p.get())) {
         return prop->getValue();
     }
+    if (LocalizedPropertyValueNode * locval =
+        dynamic_cast< LocalizedPropertyValueNode * >(p.get()))
+    {
+        return locval->getValue();
+    }
     if (LocalizedPropertyNode * locprop =
         dynamic_cast< LocalizedPropertyNode * >(p.get()))
     {
