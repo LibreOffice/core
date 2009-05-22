@@ -147,7 +147,9 @@ SfxPrinterListener::~SfxPrinterListener()
 
 const Any& SfxPrinterListener::getSelectionObject() const
 {
-    return getSelectionString().equalsAscii( "selection" ) ? maSelection : maCompleteSelection;
+    // FIXME
+    // return getSelectionString().equalsAscii( "selection" ) ? maSelection : maCompleteSelection;
+    return maCompleteSelection;
 }
 
 Sequence< beans::PropertyValue > SfxPrinterListener::getMergedOptions() const
@@ -967,6 +969,8 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
         case SID_PRINTDOC:
         case SID_PRINTDOCDIRECT:
         {
+            // FIXME: set properties from SfxRequest
+
             // get the current selection; our controller should know it
             Reference< frame::XController > xController( GetController() );
             Reference< view::XSelectionSupplier > xSupplier( xController, UNO_QUERY );
