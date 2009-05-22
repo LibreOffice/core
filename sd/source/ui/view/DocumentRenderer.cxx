@@ -541,6 +541,27 @@ namespace {
                                 sal_False
                                 )
                             );
+            // print range selection
+            AddDialogControl( vcl::PrinterOptionsHelper::getSubgroupControlOpt(
+                                String( SdResId( _STR_IMPRESS_PRINT_UI_PAGE_RANGE ) ),
+                                rtl::OUString(), true, true )
+                             );
+
+            // create a choice for the content to create
+            rtl::OUString aPrintRangeName( RTL_CONSTASCII_USTRINGPARAM( "PrintContent" ) );
+            AddDialogControl( vcl::PrinterOptionsHelper::getChoiceControlOpt( rtl::OUString(),
+                                CreateChoice(_STR_IMPRESS_PRINT_UI_PAGE_RANGE_CHOICE_HELP),
+                                aPrintRangeName,
+                                CreateChoice(_STR_IMPRESS_PRINT_UI_PAGE_RANGE_CHOICE),
+                                0 )
+                            );
+            // create a an Edit dependent on "Pages" selected
+            AddDialogControl( vcl::PrinterOptionsHelper::getEditControlOpt( rtl::OUString(),
+                                rtl::OUString(),
+                                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PageRange" ) ),
+                                rtl::OUString(),
+                                &aPrintRangeName, 1 )
+                            );
 
             FreeResource();
         }

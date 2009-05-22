@@ -219,4 +219,27 @@ Resource _STR_IMPRESS_PRINT_UI_OPTIONS
     {
         Text [ en-US ] = "Determines that the paper tray to be used is the one defined in the printer setup.";
     };
+    String _STR_IMPRESS_PRINT_UI_PAGE_RANGE
+    {
+        Text [en-US] = "Print range";
+    };
+    StringArray _STR_IMPRESS_PRINT_UI_PAGE_RANGE_CHOICE
+    {
+        ItemList [ en-US ] =
+        {
+            < "~All"; >;
+            < "~Pages"; >;
+            < "~Selection"; >;
+        };
+    };
+
+    StringArray _STR_IMPRESS_PRINT_UI_PAGE_RANGE_CHOICE_HELP
+    {
+        ItemList [ en-US ] =
+        {
+            < "Print the whole document."; >;
+            < "Print a specified range of the document."; >;
+            < "Print only the currently selected content."; >;
+        };
+    };
 };
