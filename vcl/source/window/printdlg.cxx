@@ -591,143 +591,119 @@ void PrintDialog::setupOptionalUI()
                     pRadioColumn->addWindow( pBtn );
                 }
             }
-            else if( aCtrlType.equalsAscii( "List" ) && pCurParent )
+            else if( ( aCtrlType.equalsAscii( "List" )   ||
+                       aCtrlType.equalsAscii( "Range" )  ||
+                       aCtrlType.equalsAscii( "Edit" )
+                     ) && pCurParent )
             {
-                // create a row in the current column
-                vcl::RowOrColumn* pPair = new vcl::RowOrColumn( pCurColumn, false );
-                pCurColumn->addChild( pPair );
-
-                // add a FixedText:
-                FixedText* pHeading = new FixedText( pCurParent, WB_VCENTER );
-                maControls.push_front( pHeading );
-                pHeading->SetText( aText );
-                pHeading->Show();
-
-                // set help id
-                setSmartId( pHeading, "FixedText", -1, aPropertyName );
-
-                // add to pair
-                pPair->addWindow( pHeading );
-
-                ListBox* pList = new ListBox( pCurParent, WB_DROPDOWN | WB_BORDER );
-                maControls.push_front( pList );
-
-                // iterate options
-                for( sal_Int32 m = 0; m < aChoices.getLength(); m++ )
-                {
-                    pList->InsertEntry( aChoices[m] );
-                }
-                sal_Int32 nSelectVal = 0;
-                PropertyValue* pVal = maPListener->getValue( aPropertyName );
-                if( pVal && pVal->Value.hasValue() )
-                    pVal->Value >>= nSelectVal;
-                pList->SelectEntryPos( static_cast<USHORT>(nSelectVal) );
-                pList->Enable( maPListener->isUIOptionEnabled( aPropertyName ) );
-                pList->SetSelectHdl( LINK( this, PrintDialog, UIOption_SelectHdl ) );
-                pList->Show();
-
-                // set help id
-                setSmartId( pList, "ListBox", -1, aPropertyName );
-                // set help text
-                setHelpText( pList, aHelpTexts, 0 );
-
-                maPropertyToWindowMap.insert( std::pair< rtl::OUString, Window* >( aPropertyName, pList ) );
-                maControlToPropertyMap[pList] = aPropertyName;
-
-                // finish the pair
-                pPair->addWindow( pList );
-            }
-            else if( aCtrlType.equalsAscii( "Range" ) && pCurParent )
-            {
-                // create a row in the current column
-                vcl::RowOrColumn* pPair = new vcl::RowOrColumn( pCurColumn, false );
-                pCurColumn->addChild( pPair );
-
-                // add a FixedText:
-                FixedText* pHeading = new FixedText( pCurParent );
-                maControls.push_front( pHeading );
-                pHeading->SetText( aText );
-                pHeading->Show();
-
-                // set help id
-                setSmartId( pHeading, "FixedText", -1, aPropertyName );
-
-                // add to pair
-                pPair->addWindow( pHeading );
-
-                NumericField* pField = new NumericField( pCurParent, WB_BORDER | WB_SPIN );
-                maControls.push_front( pField );
-
-                // set min/max and current value
-                if( nMinValue != nMaxValue )
-                {
-                    pField->SetMin( nMinValue );
-                    pField->SetMax( nMaxValue );
-                }
-                sal_Int64 nCurVal = 0;
-                PropertyValue* pVal = maPListener->getValue( aPropertyName );
-                if( pVal && pVal->Value.hasValue() )
-                    pVal->Value >>= nCurVal;
-                pField->SetValue( nCurVal );
-
-                pField->Enable( maPListener->isUIOptionEnabled( aPropertyName ) );
-                pField->SetModifyHdl( LINK( this, PrintDialog, UIOption_ModifyHdl ) );
-                pField->Show();
-
-                // set help id
-                setSmartId( pField, "NumericField", -1, aPropertyName );
-                // set help text
-                setHelpText( pField, aHelpTexts, 0 );
-
-                maPropertyToWindowMap.insert( std::pair< rtl::OUString, Window* >( aPropertyName, pField ) );
-                maControlToPropertyMap[pField] = aPropertyName;
-
-                // add to pair
-                pPair->addWindow( pField );
-            }
-            else if( aCtrlType.equalsAscii( "Edit" ) && pCurParent )
-            {
-                vcl::RowOrColumn* pEditColumn = pCurColumn;
-                FixedText* pHeading = NULL;
+                vcl::RowOrColumn* pFieldColumn = pCurColumn;
                 if( aText.getLength() )
                 {
                     // create a row in the current column
-                    vcl::RowOrColumn* pPair = new vcl::RowOrColumn( pCurColumn, false );
-                    pCurColumn->addChild( pPair );
-                    pEditColumn = pPair;
+                    pFieldColumn = new vcl::RowOrColumn( pCurColumn, false );
+                    pCurColumn->addChild( pFieldColumn );
 
                     // add a FixedText:
-                    pHeading = new FixedText( pCurParent );
+                    FixedText* pHeading = new FixedText( pCurParent, WB_VCENTER );
                     maControls.push_front( pHeading );
                     pHeading->SetText( aText );
                     pHeading->Show();
 
                     // set help id
                     setSmartId( pHeading, "FixedText", -1, aPropertyName );
-                    pPair->addWindow( pHeading );
+
+                    // add to row
+                    pFieldColumn->addWindow( pHeading );
                 }
 
-                Edit* pField = new Edit( pCurParent, WB_BORDER );
-                maControls.push_front( pField );
+                if( aCtrlType.equalsAscii( "List" ) )
+                {
+                    ListBox* pList = new ListBox( pCurParent, WB_DROPDOWN | WB_BORDER );
+                    maControls.push_front( pList );
 
-                rtl::OUString aCurVal;
-                PropertyValue* pVal = maPListener->getValue( aPropertyName );
-                if( pVal && pVal->Value.hasValue() )
-                    pVal->Value >>= aCurVal;
-                pField->SetText( aCurVal );
-                pField->Enable( maPListener->isUIOptionEnabled( aPropertyName ) );
-                pField->SetModifyHdl( LINK( this, PrintDialog, UIOption_ModifyHdl ) );
-                pField->Show();
+                    // iterate options
+                    for( sal_Int32 m = 0; m < aChoices.getLength(); m++ )
+                    {
+                        pList->InsertEntry( aChoices[m] );
+                    }
+                    sal_Int32 nSelectVal = 0;
+                    PropertyValue* pVal = maPListener->getValue( aPropertyName );
+                    if( pVal && pVal->Value.hasValue() )
+                        pVal->Value >>= nSelectVal;
+                    pList->SelectEntryPos( static_cast<USHORT>(nSelectVal) );
+                    pList->Enable( maPListener->isUIOptionEnabled( aPropertyName ) );
+                    pList->SetSelectHdl( LINK( this, PrintDialog, UIOption_SelectHdl ) );
+                    pList->SetDropDownLineCount( aChoices.getLength() );
+                    pList->Show();
 
-                // set help id
-                setSmartId( pField, "Edit", -1, aPropertyName );
-                // set help text
-                setHelpText( pField, aHelpTexts, 0 );
+                    // set help id
+                    setSmartId( pList, "ListBox", -1, aPropertyName );
+                    // set help text
+                    setHelpText( pList, aHelpTexts, 0 );
 
-                maPropertyToWindowMap.insert( std::pair< rtl::OUString, Window* >( aPropertyName, pField ) );
-                maControlToPropertyMap[pField] = aPropertyName;
+                    maPropertyToWindowMap.insert( std::pair< rtl::OUString, Window* >( aPropertyName, pList ) );
+                    maControlToPropertyMap[pList] = aPropertyName;
 
-                pEditColumn->addWindow( pField );
+                    // finish the pair
+                    pFieldColumn->addWindow( pList );
+                }
+                else if( aCtrlType.equalsAscii( "Range" ) )
+                {
+                    NumericField* pField = new NumericField( pCurParent, WB_BORDER | WB_SPIN );
+                    maControls.push_front( pField );
+
+                    // set min/max and current value
+                    if( nMinValue != nMaxValue )
+                    {
+                        pField->SetMin( nMinValue );
+                        pField->SetMax( nMaxValue );
+                    }
+                    sal_Int64 nCurVal = 0;
+                    PropertyValue* pVal = maPListener->getValue( aPropertyName );
+                    if( pVal && pVal->Value.hasValue() )
+                        pVal->Value >>= nCurVal;
+                    pField->SetValue( nCurVal );
+
+                    pField->Enable( maPListener->isUIOptionEnabled( aPropertyName ) );
+                    pField->SetModifyHdl( LINK( this, PrintDialog, UIOption_ModifyHdl ) );
+                    pField->Show();
+
+                    // set help id
+                    setSmartId( pField, "NumericField", -1, aPropertyName );
+                    // set help text
+                    setHelpText( pField, aHelpTexts, 0 );
+
+                    maPropertyToWindowMap.insert( std::pair< rtl::OUString, Window* >( aPropertyName, pField ) );
+                    maControlToPropertyMap[pField] = aPropertyName;
+
+                    // add to row
+                    pFieldColumn->addWindow( pField );
+                }
+                else if( aCtrlType.equalsAscii( "Edit" ) )
+                {
+                    Edit* pField = new Edit( pCurParent, WB_BORDER );
+                    maControls.push_front( pField );
+
+                    rtl::OUString aCurVal;
+                    PropertyValue* pVal = maPListener->getValue( aPropertyName );
+                    if( pVal && pVal->Value.hasValue() )
+                        pVal->Value >>= aCurVal;
+                    pField->SetText( aCurVal );
+                    pField->Enable( maPListener->isUIOptionEnabled( aPropertyName ) );
+                    pField->SetModifyHdl( LINK( this, PrintDialog, UIOption_ModifyHdl ) );
+                    pField->Show();
+
+                    // set help id
+                    setSmartId( pField, "Edit", -1, aPropertyName );
+                    // set help text
+                    setHelpText( pField, aHelpTexts, 0 );
+
+                    maPropertyToWindowMap.insert( std::pair< rtl::OUString, Window* >( aPropertyName, pField ) );
+                    maControlToPropertyMap[pField] = aPropertyName;
+
+                    // add to row
+                    pFieldColumn->addWindow( pField );
+                }
             }
         }
         else
