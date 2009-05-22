@@ -738,5 +738,17 @@ StringArray SCSTR_PRINT_OPTIONS
         < "Sheets"; >;
         < "Print ~only selected sheets"; >;
         < "Specifies that only contents from selected sheets are printed, even if you specify a wider range in the Format - Print Ranges dialog. Content from sheets that are not selected will not be printed."; >;
+        < "Print content"; >;
+        < "~All Sheets"; >;
+        < "The printout will be created from all sheets in the document."; >;
+        < "~Selected Sheets"; >;
+        < "The printout will be created only from the currently selected sheets."; >;
+        < "Selected Cells"; >;
+        < "The printout will be created only from the currently selected cells."; >;
+        < "Print range"; >;
+        < "All ~Pages"; >;
+        < "Print all pages of the printable content."; >;
+        < "Pa~ges"; >;
+        < "Print only some pages of the printable content."; >;
     };
 };

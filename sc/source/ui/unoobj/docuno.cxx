@@ -220,11 +220,11 @@ public:
 ScPrintUIOptions::ScPrintUIOptions( sal_Bool i_bEmptyPages, sal_Bool i_bSelectedOnly )
 {
     ResStringArray aStrings( ScResId( SCSTR_PRINT_OPTIONS ) );
-    DBG_ASSERT( aStrings.Count() >= 6, "resource incomplete" );
-    if( aStrings.Count() < 6 ) // bad resource ?
+    DBG_ASSERT( aStrings.Count() >= 18, "resource incomplete" );
+    if( aStrings.Count() < 18 ) // bad resource ?
         return;
 
-    m_aUIProperties.realloc( 5 );
+    m_aUIProperties.realloc( 10 );
 
     // create Section for spreadsheet (results in an extra tab page in dialog)
     m_aUIProperties[0].Value = getGroupControlOpt( rtl::OUString( String( ScResId( SCSTR_HUMAN_SCDOC_NAME ) ) ), rtl::OUString() );
@@ -238,12 +238,53 @@ ScPrintUIOptions::ScPrintUIOptions( sal_Bool i_bEmptyPages, sal_Bool i_bSelected
                                                   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsSuppressEmptyPages" ) ),
                                                   i_bEmptyPages
                                                   );
+    // create Subgroup for print content
+    m_aUIProperties[3].Value = getSubgroupControlOpt( rtl::OUString( aStrings.GetString( 6 ) ), rtl::OUString(), true );
+
+    // create a choice for the content to create
+    uno::Sequence< rtl::OUString > aChoices( 3 ), aHelpTexts( 3 );
+    aChoices[0] = aStrings.GetString( 7 );
+    aHelpTexts[0] = aStrings.GetString( 8 );
+    aChoices[1] = aStrings.GetString( 9 );
+    aHelpTexts[1] = aStrings.GetString( 10 );
+    aChoices[2] = aStrings.GetString( 11 );
+    aHelpTexts[2] = aStrings.GetString( 12 );
+    m_aUIProperties[4].Value = getChoiceControlOpt( rtl::OUString(),
+                                                    aHelpTexts,
+                                                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintContent" ) ),
+                                                    aChoices,
+                                                    0 );
+
+    // create Subgroup for print range
+    m_aUIProperties[5].Value = getSubgroupControlOpt( rtl::OUString( aStrings.GetString( 13 ) ), rtl::OUString(), true , true);
+
+    // create a choice for the range to print
+    rtl::OUString aPrintRangeName( RTL_CONSTASCII_USTRINGPARAM( "PrintRange" ) );
+    aChoices.realloc( 2 );
+    aHelpTexts.realloc( 2 );
+    aChoices[0] = aStrings.GetString( 14 );
+    aHelpTexts[0] = aStrings.GetString( 15 );
+    aChoices[1] = aStrings.GetString( 16 );
+    aHelpTexts[1] = aStrings.GetString( 17 );
+    m_aUIProperties[6].Value = getChoiceControlOpt( rtl::OUString(),
+                                                    aHelpTexts,
+                                                    aPrintRangeName,
+                                                    aChoices,
+                                                    0 );
+
+    // create a an Edit dependent on "Pages" selected
+    m_aUIProperties[7].Value = getEditControlOpt( rtl::OUString(),
+                                                  rtl::OUString(),
+                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PageRange" ) ),
+                                                  rtl::OUString(),
+                                                  &aPrintRangeName, 1
+                                                  );
 
     // create subgroup for sheets
-    m_aUIProperties[3].Value = getSubgroupControlOpt( rtl::OUString( aStrings.GetString( 3 ) ), rtl::OUString() );
+    m_aUIProperties[8].Value = getSubgroupControlOpt( rtl::OUString( aStrings.GetString( 3 ) ), rtl::OUString() );
 
     // create a bool option for selected pages only
-    m_aUIProperties[4].Value = getBoolControlOpt( rtl::OUString( aStrings.GetString( 4 ) ),
+    m_aUIProperties[9].Value = getBoolControlOpt( rtl::OUString( aStrings.GetString( 4 ) ),
                                                   rtl::OUString( aStrings.GetString( 5 ) ),
                                                   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsOnlySelectedSheets" ) ),
                                                   i_bSelectedOnly
