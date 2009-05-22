@@ -40,6 +40,7 @@
 #include "vcl/jobset.h"
 #include "vcl/status.hxx"
 #include "vcl/decoview.hxx"
+#include "vcl/arrange.hxx"
 
 #include "rtl/ustrbuf.hxx"
 
@@ -331,21 +332,21 @@ static void setHelpText( Window* i_pWindow, const Sequence< rtl::OUString >& i_r
         i_pWindow->SetHelpText( i_rHelpTexts.getConstArray()[i_nIndex] );
 }
 
-// FIXME: this is evil hackery and witchcraft
-// the automatic controls should be replaced by some kind of row/column widget
 void PrintDialog::setupOptionalUI()
 {
+    const long nBorderWidth = maJobPage.maCopies.GetPosPixel().X();
+
+    vcl::RowOrColumn aPrintRangeRow( NULL, false, nBorderWidth );
+    std::vector<vcl::RowOrColumn*> aDynamicColumns;
+    vcl::RowOrColumn* pCurColumn = 0;
+
+    aPrintRangeRow.setParentWindow( &maJobPage );
+    aPrintRangeRow.setOuterBorder( nBorderWidth );
+
     Window* pCurParent = 0, *pDynamicPageParent = 0;
-    long nCurY = 0, nXPos = 5, nMaxY = 0, nJobPageCurY = 0, nDynamicPageCurY = 0;
-    USHORT nOptPageId = 9, nCurSubGroup = 0, nJobGroups = 0;
-    MapMode aFontMapMode( MAP_APPFONT );
+    USHORT nOptPageId = 9, nCurSubGroup = 0;
     bool bOnJobPage = false;
 
-    nJobPageCurY = maJobPage.PixelToLogic( maJobPage.maCollateImage.GetPosPixel(), aFontMapMode ).Y();
-    nJobPageCurY += maJobPage.PixelToLogic( maJobPage.maCollateImage.GetSizePixel(), aFontMapMode ).Height();
-    nJobPageCurY += 5;
-
-    Size aTabSize = maTabCtrl.GetTabPageSizePixel();
     const Sequence< PropertyValue >& rOptions( maPListener->getUIOptions() );
     for( int i = 0; i < rOptions.getLength(); i++ )
     {
@@ -360,7 +361,6 @@ void PrintDialog::setupOptionalUI()
         Sequence< rtl::OUString > aChoices;
         Sequence< rtl::OUString > aHelpTexts;
         sal_Int64 nMinValue = 0, nMaxValue = 0;
-        long nDependencyIndent = 0;
         sal_Int32 nCurHelpText = 0;
         sal_Bool bOnJobPageValue = sal_False;
 
@@ -407,16 +407,14 @@ void PrintDialog::setupOptionalUI()
                     if( pWin->GetParent() == pCurParent )
                     {
                         // is it a labeled window ?
-                        if( dynamic_cast< ListBox* >(pWin) ||
-                            dynamic_cast< NumericField* >(pWin) )
+                        if( dynamic_cast< ListBox* >(pWin)       ||
+                            dynamic_cast< Edit* >(pWin)
+                          )
                         {
                             Window* pLabelWin = pWin->GetLabeledBy();
                             if( dynamic_cast<FixedText*>(pLabelWin) ) // sanity check
                                 pWin = pLabelWin;
                         }
-                        long nDependencyXPos = PixelToLogic( pWin->GetPosPixel(), aFontMapMode ).X();
-                        if( (nDependencyXPos + 5)  > nXPos )
-                            nDependencyIndent = nDependencyXPos + 5 - nXPos;
                     }
                 }
             }
@@ -452,15 +450,10 @@ void PrintDialog::setupOptionalUI()
         {
             if( aCtrlType.equalsAscii( "Group" ) || ! pCurParent )
             {
-                if( nCurY > nMaxY )
-                    nMaxY = nCurY;
-
                 // add new tab page
                 TabPage* pNewGroup = new TabPage( &maTabCtrl );
                 maControls.push_front( pNewGroup );
                 pCurParent = pNewGroup;
-                nCurY = 5;
-                nXPos = 5;
                 pNewGroup->SetText( aText );
                 maTabCtrl.InsertPage( ++nOptPageId, aText );
                 maTabCtrl.SetTabPage( nOptPageId, pNewGroup );
@@ -472,52 +465,54 @@ void PrintDialog::setupOptionalUI()
 
                 // reset subgroup counter
                 nCurSubGroup = 0;
+
+                aDynamicColumns.push_back( new vcl::RowOrColumn( NULL, true, nBorderWidth ) );
+                pCurColumn = aDynamicColumns.back();
+                pCurColumn->setParentWindow( pNewGroup );
+                pCurColumn->setOuterBorder( nBorderWidth );
             }
 
             if( aCtrlType.equalsAscii( "Subgroup" ) && pCurParent )
             {
-                nXPos = 5;
                 // change to job page or back if necessary
                 if( (bOnJobPage && ! bOnJobPageValue) ||
                     (! bOnJobPage && bOnJobPageValue) )
                 {
-                    if( nCurY > nMaxY )                     // keep track of maximum Y
-                        nMaxY = nCurY;
                     bOnJobPage = bOnJobPageValue;
                     if( bOnJobPage )
                     {
-                        nDynamicPageCurY = nCurY;           // save nCurY
                         pDynamicPageParent = pCurParent;    // save current parent
                         pCurParent = &maJobPage;            // set job page as current parent
                     }
                     else
                     {
-                        nCurY = nDynamicPageCurY;           // set dynamic CurY
                         pCurParent = pDynamicPageParent;    // set current tab page as parent
                     }
                 }
+
                 if( bOnJobPage )
                 {
-                    nXPos += 100 * nJobGroups++;
-                    nCurY = nJobPageCurY;
+                    // create a new column in the PrintRange row
+                    vcl::RowOrColumn* pNewColumn = new vcl::RowOrColumn( &aPrintRangeRow, true, nBorderWidth );
+                    aPrintRangeRow.addChild( pNewColumn );
+                    pCurColumn = pNewColumn;
                 }
+                else
+                    pCurColumn = aDynamicColumns.back();
+
+                // create group FixedLine
                 FixedLine* pNewSub = new FixedLine( pCurParent );
                 maControls.push_front( pNewSub );
                 pNewSub->SetText( aText );
-                nCurY += 4;
-                Size aPixelSize( aTabSize );
-                aPixelSize.Width() /= 3;
-                aPixelSize.Height() = pCurParent->GetTextHeight() + 4;
-                pNewSub->SetPosSizePixel( pNewSub->LogicToPixel( Point( nXPos, nCurY ), aFontMapMode ),
-                                          aPixelSize );
                 pNewSub->Show();
-                nCurY += 12;
-                nXPos += 5;
 
                 // set help id
                 setSmartId( pNewSub, "FixedLine", sal_Int32( nCurSubGroup++ ) );
                 // set help text
                 setHelpText( pNewSub, aHelpTexts, 0 );
+
+                // add group to current column
+                pCurColumn->addWindow( pNewSub );
             }
             else if( aCtrlType.equalsAscii( "Bool" ) && pCurParent )
             {
@@ -525,13 +520,8 @@ void PrintDialog::setupOptionalUI()
                 CheckBox* pNewBox = new CheckBox( pCurParent );
                 maControls.push_front( pNewBox );
                 pNewBox->SetText( aText );
-
-                // FIXME: measure text
-                pNewBox->SetPosSizePixel( pNewBox->LogicToPixel( Point( nXPos + nDependencyIndent, nCurY ), aFontMapMode ),
-                                          pNewBox->LogicToPixel( Size( 100, 10 ), aFontMapMode ) );
-                nCurY += 12;
-
                 pNewBox->Show();
+
                 sal_Bool bVal = sal_False;
                 PropertyValue* pVal = maPListener->getValue( aPropertyName );
                 if( pVal )
@@ -547,34 +537,34 @@ void PrintDialog::setupOptionalUI()
                 setSmartId( pNewBox, "CheckBox", -1, aPropertyName );
                 // set help text
                 setHelpText( pNewBox, aHelpTexts, 0 );
+
+                // add checkbox to current column
+                pCurColumn->addWindow( pNewBox );
             }
             else if( aCtrlType.equalsAscii( "Radio" ) && pCurParent )
             {
-                long nOldXPos = nXPos;
+                vcl::RowOrColumn* pRadioColumn = pCurColumn;
                 if( aText.getLength() )
                 {
                     // add a FixedText:
                     FixedText* pHeading = new FixedText( pCurParent );
                     maControls.push_front( pHeading );
                     pHeading->SetText( aText );
-                    Size aPixelSize( pHeading->LogicToPixel( Size( 10, 10 ), aFontMapMode ) );
-                    if( bOnJobPage )
-                        aPixelSize.Width() = maJobPage.LogicToPixel( Size( 90, 10 ), aFontMapMode ).Width();
-                    else
-                        aPixelSize.Width() = aTabSize.Width() - aPixelSize.Width();
-                    pHeading->SetPosSizePixel( pHeading->LogicToPixel( Point( nXPos + nDependencyIndent, nCurY ), aFontMapMode ),
-                                               aPixelSize );
                     pHeading->Show();
-
-                    nXPos += 10;
-                    nCurY += 12;
 
                     // set help id
                     setSmartId( pHeading, "FixedText", -1, aPropertyName );
                     // set help text
                     setHelpText( pHeading, aHelpTexts, nCurHelpText++ );
+                    // add fixed text to current column
+                    pCurColumn->addWindow( pHeading );
+                    // add an indent to the current column
+                    vcl::Indenter* pIndent = new vcl::Indenter( pCurColumn, 15 );
+                    pCurColumn->addChild( pIndent );
+                    // and create a column inside the indent
+                    pRadioColumn = new vcl::RowOrColumn( pIndent );
+                    pIndent->setChild( pRadioColumn );
                 }
-
                 // iterate options
                 sal_Int32 nSelectVal = 0;
                 PropertyValue* pVal = maPListener->getValue( aPropertyName );
@@ -586,13 +576,6 @@ void PrintDialog::setupOptionalUI()
                     maControls.push_front( pBtn );
                     pBtn->SetText( aChoices[m] );
                     pBtn->Check( m == nSelectVal );
-                    Size aPixelSize( pBtn->LogicToPixel( Size( 10 + nXPos + nDependencyIndent, 12 ), aFontMapMode ) );
-                    if( bOnJobPage )
-                        aPixelSize.Width() = maJobPage.LogicToPixel( Size( 80, 10 ), aFontMapMode ).Width();
-                    else
-                        aPixelSize.Width() = aTabSize.Width() - aPixelSize.Width();
-                    pBtn->SetPosSizePixel( pBtn->LogicToPixel( Point( nXPos, nCurY ), aFontMapMode ),
-                                           aPixelSize );
                     pBtn->Enable( maPListener->isUIOptionEnabled( aPropertyName ) );
                     pBtn->SetToggleHdl( LINK( this, PrintDialog, UIOption_RadioHdl ) );
                     pBtn->Show();
@@ -604,67 +587,41 @@ void PrintDialog::setupOptionalUI()
                     setSmartId( pBtn, "RadioButton", m, aPropertyName );
                     // set help text
                     setHelpText( pBtn, aHelpTexts, nCurHelpText++ );
-
-                    nCurY += 12;
+                    // add the radio button to the column
+                    pRadioColumn->addWindow( pBtn );
                 }
-                nCurY += 2;
-                nXPos = nOldXPos;
             }
             else if( aCtrlType.equalsAscii( "List" ) && pCurParent )
             {
+                // create a row in the current column
+                vcl::RowOrColumn* pPair = new vcl::RowOrColumn( pCurColumn, false );
+                pCurColumn->addChild( pPair );
+
                 // add a FixedText:
-                FixedText* pHeading = new FixedText( pCurParent );
+                FixedText* pHeading = new FixedText( pCurParent, WB_VCENTER );
                 maControls.push_front( pHeading );
                 pHeading->SetText( aText );
-                Size aPixelSize( pHeading->LogicToPixel( Size( 10, 10 ), aFontMapMode ) );
-                aPixelSize.Width() += pHeading->GetTextWidth( aText );
-                pHeading->SetPosSizePixel( pHeading->LogicToPixel( Point( nXPos + nDependencyIndent, nCurY ), aFontMapMode ),
-                                           aPixelSize );
                 pHeading->Show();
 
                 // set help id
                 setSmartId( pHeading, "FixedText", -1, aPropertyName );
 
+                // add to pair
+                pPair->addWindow( pHeading );
+
                 ListBox* pList = new ListBox( pCurParent, WB_DROPDOWN | WB_BORDER );
                 maControls.push_front( pList );
 
                 // iterate options
-                long nMaxTextWidth = 0;
                 for( sal_Int32 m = 0; m < aChoices.getLength(); m++ )
                 {
                     pList->InsertEntry( aChoices[m] );
-                    long nEntryWidth = pList->GetTextWidth( aChoices[m] );
-                    if( nEntryWidth > nMaxTextWidth )
-                        nMaxTextWidth = nEntryWidth;
                 }
-                nMaxTextWidth += 50;
                 sal_Int32 nSelectVal = 0;
                 PropertyValue* pVal = maPListener->getValue( aPropertyName );
                 if( pVal && pVal->Value.hasValue() )
                     pVal->Value >>= nSelectVal;
                 pList->SelectEntryPos( static_cast<USHORT>(nSelectVal) );
-
-                aPixelSize = Size( pList->LogicToPixel( Size( 25, 12 ), aFontMapMode ) );
-                aPixelSize.Width() = nMaxTextWidth;
-                aPixelSize.Height() *= aChoices.getLength() > 15 ? 15 : aChoices.getLength();
-
-                Point aListPos;
-                bool bDoAlign = false;
-                if( nMaxTextWidth + aPixelSize.Width() < aTabSize.Width() - 10 )
-                {
-                    aListPos      = pHeading->GetPosPixel();
-                    aListPos.X() += pHeading->GetSizePixel().Width() + 5;
-
-                    // align heading and list box
-                    bDoAlign = true;
-                }
-                else
-                {
-                    nCurY += 12;
-                    aListPos = pCurParent->LogicToPixel( Point( 15 + nDependencyIndent, nCurY ), aFontMapMode );
-                }
-
-                pList->SetPosSizePixel( aListPos, aPixelSize );
                 pList->Enable( maPListener->isUIOptionEnabled( aPropertyName ) );
                 pList->SetSelectHdl( LINK( this, PrintDialog, UIOption_SelectHdl ) );
                 pList->Show();
@@ -676,30 +633,27 @@ void PrintDialog::setupOptionalUI()
 
                 maPropertyToWindowMap.insert( std::pair< rtl::OUString, Window* >( aPropertyName, pList ) );
                 maControlToPropertyMap[pList] = aPropertyName;
-                nCurY += 16;
 
-                if( bDoAlign )
-                {
-                    Point aPos = pHeading->GetPosPixel();
-                    Size aSize = pHeading->GetSizePixel();
-                    aPos.Y() += (pList->GetSizePixel().Height() - aSize.Height())/2;
-                    pHeading->SetPosSizePixel( aPos, aSize );
-                }
+                // finish the pair
+                pPair->addWindow( pList );
             }
             else if( aCtrlType.equalsAscii( "Range" ) && pCurParent )
             {
+                // create a row in the current column
+                vcl::RowOrColumn* pPair = new vcl::RowOrColumn( pCurColumn, false );
+                pCurColumn->addChild( pPair );
+
                 // add a FixedText:
                 FixedText* pHeading = new FixedText( pCurParent );
                 maControls.push_front( pHeading );
                 pHeading->SetText( aText );
-                Size aPixelSize( pHeading->LogicToPixel( Size( 10, 10 ), aFontMapMode ) );
-                aPixelSize.Width() += pHeading->GetTextWidth( aText );
-                pHeading->SetPosSizePixel( pHeading->LogicToPixel( Point( nXPos + nDependencyIndent, nCurY ), aFontMapMode ),
-                                           aPixelSize );
                 pHeading->Show();
 
                 // set help id
                 setSmartId( pHeading, "FixedText", -1, aPropertyName );
+
+                // add to pair
+                pPair->addWindow( pHeading );
 
                 NumericField* pField = new NumericField( pCurParent, WB_BORDER | WB_SPIN );
                 maControls.push_front( pField );
@@ -716,25 +670,6 @@ void PrintDialog::setupOptionalUI()
                     pVal->Value >>= nCurVal;
                 pField->SetValue( nCurVal );
 
-                aPixelSize = Size( pField->LogicToPixel( Size( 80, 12 ), aFontMapMode ) );
-
-                Point aFieldPos;
-                bool bDoAlign = false;
-                if( aPixelSize.Width() < aTabSize.Width() - 10 )
-                {
-                    aFieldPos      = pHeading->GetPosPixel();
-                    aFieldPos.X() += pHeading->GetSizePixel().Width() + 5;
-
-                    // align heading and list box
-                    bDoAlign = true;
-                }
-                else
-                {
-                    nCurY += 12;
-                    aFieldPos = pCurParent->LogicToPixel( Point( 15 + nDependencyIndent, nCurY ), aFontMapMode );
-                }
-
-                pField->SetPosSizePixel( aFieldPos, aPixelSize );
                 pField->Enable( maPListener->isUIOptionEnabled( aPropertyName ) );
                 pField->SetModifyHdl( LINK( this, PrintDialog, UIOption_ModifyHdl ) );
                 pField->Show();
@@ -746,34 +681,30 @@ void PrintDialog::setupOptionalUI()
 
                 maPropertyToWindowMap.insert( std::pair< rtl::OUString, Window* >( aPropertyName, pField ) );
                 maControlToPropertyMap[pField] = aPropertyName;
-                nCurY += 16;
 
-                if( bDoAlign )
-                {
-                    Point aPos = pHeading->GetPosPixel();
-                    Size aSize = pHeading->GetSizePixel();
-                    aPos.Y() += (pField->GetSizePixel().Height() - aSize.Height())/2;
-                    pHeading->SetPosSizePixel( aPos, aSize );
-                }
+                // add to pair
+                pPair->addWindow( pField );
             }
             else if( aCtrlType.equalsAscii( "Edit" ) && pCurParent )
             {
+                vcl::RowOrColumn* pEditColumn = pCurColumn;
                 FixedText* pHeading = NULL;
-                Size aPixelSize;
                 if( aText.getLength() )
                 {
+                    // create a row in the current column
+                    vcl::RowOrColumn* pPair = new vcl::RowOrColumn( pCurColumn, false );
+                    pCurColumn->addChild( pPair );
+                    pEditColumn = pPair;
+
                     // add a FixedText:
                     pHeading = new FixedText( pCurParent );
                     maControls.push_front( pHeading );
                     pHeading->SetText( aText );
-                    aPixelSize = pHeading->LogicToPixel( Size( 10, 10 ), aFontMapMode );
-                    aPixelSize.Width() += pHeading->GetTextWidth( aText );
-                    pHeading->SetPosSizePixel( pHeading->LogicToPixel( Point( nXPos + nDependencyIndent, nCurY ), aFontMapMode ),
-                                               aPixelSize );
                     pHeading->Show();
 
                     // set help id
                     setSmartId( pHeading, "FixedText", -1, aPropertyName );
+                    pPair->addWindow( pHeading );
                 }
 
                 Edit* pField = new Edit( pCurParent, WB_BORDER );
@@ -784,27 +715,6 @@ void PrintDialog::setupOptionalUI()
                 if( pVal && pVal->Value.hasValue() )
                     pVal->Value >>= aCurVal;
                 pField->SetText( aCurVal );
-
-                aPixelSize = Size( pField->LogicToPixel( Size( 80, 12 ), aFontMapMode ) );
-
-                Point aFieldPos;
-                bool bDoAlign = false;
-                if( pHeading && aPixelSize.Width() < aTabSize.Width() - 10 )
-                {
-                    aFieldPos      = pHeading->GetPosPixel();
-                    aFieldPos.X() += pHeading->GetSizePixel().Width() + 5;
-
-                    // align heading and list box
-                    bDoAlign = true;
-                }
-                else
-                {
-                    if( pHeading )
-                        nCurY += 12;
-                    aFieldPos = pCurParent->LogicToPixel( Point( nXPos + nDependencyIndent, nCurY ), aFontMapMode );
-                }
-
-                pField->SetPosSizePixel( aFieldPos, aPixelSize );
                 pField->Enable( maPListener->isUIOptionEnabled( aPropertyName ) );
                 pField->SetModifyHdl( LINK( this, PrintDialog, UIOption_ModifyHdl ) );
                 pField->Show();
@@ -816,15 +726,8 @@ void PrintDialog::setupOptionalUI()
 
                 maPropertyToWindowMap.insert( std::pair< rtl::OUString, Window* >( aPropertyName, pField ) );
                 maControlToPropertyMap[pField] = aPropertyName;
-                nCurY += 16;
 
-                if( bDoAlign )
-                {
-                    Point aPos = pHeading->GetPosPixel();
-                    Size aSize = pHeading->GetSizePixel();
-                    aPos.Y() += (pField->GetSizePixel().Height() - aSize.Height())/2;
-                    pHeading->SetPosSizePixel( aPos, aSize );
-                }
+                pEditColumn->addWindow( pField );
             }
         }
         else
@@ -833,16 +736,55 @@ void PrintDialog::setupOptionalUI()
         }
     }
 
-    if( nCurY > nMaxY )
-        nMaxY = nCurY;
+    // calculate job page
+    long nJobPageCurY = maJobPage.maCollateImage.GetPosPixel().Y();
+    nJobPageCurY += maJobPage.maCollateImage.GetSizePixel().Height();
+
+    Size aMaxSize = aPrintRangeRow.getOptimalSize( WINDOWSIZE_PREFERRED );
+    aMaxSize.Height() += nJobPageCurY;
+
+    Size aMaxPageSize;
+    for( std::vector< vcl::RowOrColumn* >::iterator it = aDynamicColumns.begin();
+         it != aDynamicColumns.end(); ++it )
+    {
+        Size aPageSize( (*it)->getOptimalSize( WINDOWSIZE_PREFERRED ) );
+        if( aPageSize.Width() > aMaxPageSize.Width() )
+            aMaxPageSize.Width() = aPageSize.Width();
+        if( aPageSize.Height() > aMaxPageSize.Height() )
+            aMaxPageSize.Height() = aPageSize.Height();
+    }
+    if( aMaxPageSize.Width() > aMaxSize.Width() )
+        aMaxSize.Width() = aMaxPageSize.Width();
+    if( aMaxPageSize.Height() > aMaxSize.Height() )
+        aMaxSize.Height() = aMaxPageSize.Height();
 
     // resize dialog if necessary
-    Size aMaxSize( LogicToPixel( Size( nMaxY, nMaxY ), aFontMapMode ) );
-    if( aMaxSize.Height() > aTabSize.Height() )
+    Size aTabSize = maTabCtrl.GetTabPageSizePixel();
+    if( aMaxSize.Height() > aTabSize.Height() || aMaxSize.Width() > aTabSize.Width() )
     {
         Size aCurSize( GetSizePixel() );
-        aCurSize.Height() += aMaxSize.Height() - aTabSize.Height();
+        if( aMaxSize.Height() > aTabSize.Height() )
+            aCurSize.Height() += aMaxSize.Height() - aTabSize.Height();
+        if( aMaxSize.Width() > aTabSize.Width() )
+        {
+            aCurSize.Width() += aMaxSize.Width() - aTabSize.Width();
+            // and the tab ctrl needs more space, too
+            aTabSize.Width() = aMaxSize.Width();
+            maTabCtrl.SetSizePixel( aTabSize );
+        }
         SetSizePixel( aCurSize );
+    }
+
+    // and finally arrange controls
+    aTabSize = maTabCtrl.GetTabPageSizePixel();
+    aPrintRangeRow.setManagedArea( Rectangle( Point( 0, nJobPageCurY ),
+                                   Size( aTabSize.Width(), aTabSize.Height() - nJobPageCurY ) ) );
+    for( std::vector< vcl::RowOrColumn* >::iterator it = aDynamicColumns.begin();
+         it != aDynamicColumns.end(); ++it )
+    {
+        (*it)->setManagedArea( Rectangle( Point(), aMaxPageSize ) );
+        delete *it;
+        *it = NULL;
     }
 }
 

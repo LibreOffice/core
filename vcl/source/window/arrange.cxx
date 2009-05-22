@@ -122,17 +122,20 @@ Size RowOrColumn::getOptimalSize( WindowSizeType i_eType ) const
 
 void RowOrColumn::distributeRowWidth( std::vector<Size>& io_rSizes, long /*i_nUsedWidth*/, long i_nExtraWidth )
 {
-    // distribute extra space evenly among elements
-    size_t nElements = io_rSizes.size();
-    long nDelta = i_nExtraWidth / nElements;
-    for( size_t i = 0; i < nElements; i++ )
+    if( ! io_rSizes.empty() )
     {
-        io_rSizes[i].Width() += nDelta;
-        i_nExtraWidth -= nDelta;
+        // distribute extra space evenly among elements
+        size_t nElements = io_rSizes.size();
+        long nDelta = i_nExtraWidth / nElements;
+        for( size_t i = 0; i < nElements; i++ )
+        {
+            io_rSizes[i].Width() += nDelta;
+            i_nExtraWidth -= nDelta;
+        }
+        // add the last pixels to the last row element
+        if( i_nExtraWidth > 0 && nElements > 0 )
+            io_rSizes.back().Width() += i_nExtraWidth;
     }
-    // add the last pixels to the last row element
-    if( i_nExtraWidth > 0 && nElements > 0 )
-        io_rSizes.back().Width() += i_nExtraWidth;
 }
 
 void RowOrColumn::resize()
@@ -154,7 +157,7 @@ void RowOrColumn::resize()
     size_t nElements = m_aElements.size();
     // get all element sizes for sizing
     std::vector<Size> aElementSizes( nElements );
-    long nUsedWidth = m_nOuterBorder - (nElements ? m_nBorderWidth : 0);
+    long nUsedWidth = 2*m_nOuterBorder - (nElements ? m_nBorderWidth : 0);
     for( size_t i = 0; i < nElements; i++ )
     {
         aElementSizes[i] = m_aElements[i].m_pElement
