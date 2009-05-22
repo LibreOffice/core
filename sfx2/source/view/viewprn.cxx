@@ -147,9 +147,11 @@ SfxPrinterListener::~SfxPrinterListener()
 
 const Any& SfxPrinterListener::getSelectionObject() const
 {
-    // FIXME
-    // return getSelectionString().equalsAscii( "selection" ) ? maSelection : maCompleteSelection;
-    return maCompleteSelection;
+    sal_Int32 nChoice = 0;
+    const beans::PropertyValue* pVal = getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintContent" ) ) );
+    if( pVal )
+        pVal->Value >>= nChoice;
+    return nChoice > 1 ? maSelection : maCompleteSelection;
 }
 
 Sequence< beans::PropertyValue > SfxPrinterListener::getMergedOptions() const
