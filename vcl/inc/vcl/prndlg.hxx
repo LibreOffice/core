@@ -98,11 +98,6 @@ namespace vcl
         public:
             ListBox                                 maPrinters;
             CheckBox                                maToFileBox;
-            FixedLine                               maPrintRange;
-            RadioButton                             maAllButton;
-            RadioButton                             maPagesButton;
-            RadioButton                             maSelectionButton;
-            Edit                                    maPagesEdit;
 
             FixedLine                               maCopies;
             FixedText                               maCopyCount;
@@ -123,7 +118,7 @@ namespace vcl
         CancelButton                            maCancelButton;
         PrintPreviewWindow                      maPreviewWindow;
         FixedText                               maPageText;
-        ScrollBar                               maPageScrollbar;
+        ScrollBar                               maPageSlider;
 
         TabControl                              maTabCtrl;
         PrinterTabPage                          maPrinterPage;
@@ -159,8 +154,8 @@ namespace vcl
 
         virtual void Resize();
 
-        DECL_LINK( ScrollHdl, ScrollBar* );
-        DECL_LINK( ScrollEndHdl, ScrollBar* );
+        DECL_LINK( SlideHdl, ScrollBar* );
+        DECL_LINK( EndSlideHdl, ScrollBar* );
         DECL_LINK( SelectHdl, ListBox* );
         DECL_LINK( ClickHdl, Button* );
         DECL_LINK( ModifyHdl, Edit* );

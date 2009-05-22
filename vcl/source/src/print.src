@@ -219,53 +219,21 @@ ModalDialog SV_DLG_PRINT
             Size = MAP_APPFONT( 200, 12 );
             Text [en-US] = "Print to file";
         };
-        FixedLine SV_PRINT_RANGE
-        {
-            Pos = MAP_APPFONT( 5, 35 );
-            Size = MAP_APPFONT( 150, 10 );
-            Text [en-US] = "Print range";
-        };
-        RadioButton SV_PRINT_ALL
-        {
-            Pos = MAP_APPFONT( 10, 45 );
-            Size = MAP_APPFONT( 145, 15 );
-            Text [en-US] = "All pages";
-            Check = TRUE;
-        };
-        RadioButton SV_PRINT_PAGERANGE
-        {
-            Pos = MAP_APPFONT( 10, 60 );
-            Size = MAP_APPFONT( 60, 15 );
-            Text [en-US] = "Pages";
-        };
-        Edit SV_PRINT_PAGERANGE_EDIT
-        {
-            Pos = MAP_APPFONT( 70, 60 );
-            Size = MAP_APPFONT( 80, 12 );
-            Border = TRUE;
-        };
-        RadioButton SV_PRINT_SELECTION
-        {
-            Pos = MAP_APPFONT( 10, 75 );
-            Size = MAP_APPFONT( 145, 15 );
-            Text [en-US] = "Selection";
-        };
-
         FixedLine SV_PRINT_COPIES
         {
-            Pos = MAP_APPFONT( 5, 95 );
+            Pos = MAP_APPFONT( 5, 35 );
             Size = MAP_APPFONT( 150, 10 );
             Text [en-US] = "Copies";
         };
         FixedText SV_PRINT_COPYCOUNT
         {
-            Pos = MAP_APPFONT( 10, 105 );
+            Pos = MAP_APPFONT( 10, 45 );
             Size = MAP_APPFONT( 80, 10 );
             Text [en-US] = "Number of copies";
         };
         NumericField SV_PRINT_COPYCOUNT_FIELD
         {
-            Pos = MAP_APPFONT( 90, 105 );
+            Pos = MAP_APPFONT( 90, 45 );
             Size = MAP_APPFONT( 40, 12 );
             Border = TRUE;
             Spin = TRUE;
@@ -275,12 +243,12 @@ ModalDialog SV_DLG_PRINT
         };
         FixedImage SV_PRINT_COLLATE_IMAGE
         {
-            Pos = MAP_APPFONT( 10, 125 );
+            Pos = MAP_APPFONT( 10, 65 );
             Size = MAP_PIXEL( 80, 30 );
         };
         CheckBox SV_PRINT_COLLATE
         {
-            Pos = MAP_APPFONT( 80, 125 );
+            Pos = MAP_APPFONT( 80, 65 );
             Size = MAP_APPFONT( 70, 10 );
             Text [en-US] = "Collate";
         };

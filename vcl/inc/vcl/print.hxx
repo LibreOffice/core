@@ -456,12 +456,6 @@ public:
     com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >
         getJobProperties( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& i_rMergeList ) const;
 
-    /* get the current selection string; either a UI editable string or "all"
-       a special value "selection" is supported signifying the current selected contents
-       of the printed document is to be printed.
-    */
-    const rtl::OUString& getSelectionString() const;
-
     /* get the PropertyValue of a Property
     */
     com::sun::star::beans::PropertyValue* getValue( const rtl::OUString& rPropertyName );
@@ -500,7 +494,6 @@ public:
     void SAL_DLLPRIVATE setPrinter( const boost::shared_ptr<Printer>& );
     void SAL_DLLPRIVATE setOptionChangeHdl( const Link& );
     void SAL_DLLPRIVATE createProgressDialog();
-    void SAL_DLLPRIVATE setPrintSelection( const rtl::OUString& );
     void SAL_DLLPRIVATE setMultipage( int nRows, int nColumns, const Size& rPaperSize );
     void SAL_DLLPRIVATE setLastPage( sal_Bool i_bLastPage );
 };
@@ -560,11 +553,11 @@ class VCL_DLLPUBLIC PrinterOptionsHelper
     static com::sun::star::uno::Any getUIControlOpt( const rtl::OUString& i_rTitle,
                                                      const com::sun::star::uno::Sequence< rtl::OUString >& i_rHelpText,
                                                      const rtl::OUString& i_rType,
-                                                     const com::sun::star::beans::PropertyValue* i_pVal = NULL,
-                                                     const com::sun::star::uno::Sequence< rtl::OUString >* i_pChoices = NULL,
+                                                     const com::sun::star::beans::PropertyValue* i_pValue = NULL,
                                                      const rtl::OUString* i_pDependsOnName = NULL,
                                                      sal_Int32 i_nDependsOnEntry = -1,
-                                                     sal_Int32 i_nMinValue = -1, sal_Int32 i_nMaxValue = -2
+                                                     const com::sun::star::beans::PropertyValue* i_pAddProps = NULL,
+                                                     sal_Int32 i_nAddProps = 0
                                                      );
     // create a group (e.g. a TabPage); following controls will be grouped in it until the next
     // group begins
@@ -572,7 +565,8 @@ class VCL_DLLPUBLIC PrinterOptionsHelper
 
     // create a subgroup (e.g. a FixedLine); following controls will be grouped in it until the next
     // subgroup or group begins
-    static com::sun::star::uno::Any getSubgroupControlOpt( const rtl::OUString& i_rTitle, const rtl::OUString& i_rHelpText );
+    // setting bJobPage = true will make the subgroup appear on the first page of the print dialog
+    static com::sun::star::uno::Any getSubgroupControlOpt( const rtl::OUString& i_rTitle, const rtl::OUString& i_rHelpText, bool i_bJobPage = false, bool i_bInternalOnly = false );
 
     // create a bool option (usually a checkbox)
     static com::sun::star::uno::Any getBoolControlOpt( const rtl::OUString& i_rTitle,
@@ -605,6 +599,16 @@ class VCL_DLLPUBLIC PrinterOptionsHelper
                                                         const rtl::OUString* i_pDependsOnName = NULL,
                                                         sal_Int32 i_nDependsOnEntry = -1
                                                         );
+
+    // create a string field
+    // note: max value < min value means do not apply min/max values
+    static com::sun::star::uno::Any getEditControlOpt( const rtl::OUString& i_rTitle,
+                                                       const rtl::OUString& i_rHelpText,
+                                                       const rtl::OUString& i_rProperty,
+                                                       const rtl::OUString& i_rValue,
+                                                       const rtl::OUString* i_pDependsOnName = NULL,
+                                                       sal_Int32 i_nDependsOnEntry = -1
+                                                       );
 };
 
 }
