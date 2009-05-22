@@ -201,7 +201,12 @@ namespace {
 
         OUString GetPrinterSelection (void) const
         {
-            OUString sValue ( mrProperties.getStringValue( "PrintSelection", A2S("all") ) );
+            sal_Int32 nContent = mrProperties.getIntValue( "PrintContent", 0 );
+            OUString sValue( A2S("all") );
+            if( nContent == 1 )
+                sValue = mrProperties.getStringValue( "PageRange", A2S( "all" ) );
+            else if( nContent == 2 )
+                sValue = A2S( "selection" );
             return sValue;
         }
 
