@@ -183,13 +183,13 @@ SwPrintUIOptions::SwPrintUIOptions( BOOL bWeb ) :
 {
     ResStringArray aLocalizedStrings( SW_RES( STR_PRINTOPTUI ) );
 
-    DBG_ASSERT( aLocalizedStrings.Count() >= 39, "resource incomplete" );
-    if( aLocalizedStrings.Count() < 39 ) // bad resource ?
+    DBG_ASSERT( aLocalizedStrings.Count() >= 46, "resource incomplete" );
+    if( aLocalizedStrings.Count() < 46 ) // bad resource ?
         return;
 
     // create sequence of print UI options
     // (5 options are not available for Writer-Web)
-    const int nNumProps = bWeb? 14 : 19;
+    const int nNumProps = bWeb? 17 : 22;
     m_aUIProperties.realloc( nNumProps );
     int nIdx = 0;
 
@@ -319,6 +319,33 @@ SwPrintUIOptions::SwPrintUIOptions( BOOL bWeb ) :
                                                    aLocalizedStrings.GetString( 38 ),
                                                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PaperTray" ) ),
                                                    sal_False );
+
+    // print range selection
+    m_aUIProperties[nIdx++].Value = getSubgroupControlOpt( rtl::OUString( aLocalizedStrings.GetString( 39 ) ), rtl::OUString(), true, true );
+
+    // create a choice for the content to create
+    rtl::OUString aPrintRangeName( RTL_CONSTASCII_USTRINGPARAM( "PrintContent" ) );
+    aChoices.realloc( 3 );
+    aHelpText.realloc( 3 );
+    aChoices[0] = aLocalizedStrings.GetString( 40 );
+    aHelpText[0] = aLocalizedStrings.GetString( 41 );
+    aChoices[1] = aLocalizedStrings.GetString( 42 );
+    aHelpText[1] = aLocalizedStrings.GetString( 43 );
+    aChoices[2] = aLocalizedStrings.GetString( 44 );
+    aHelpText[2] = aLocalizedStrings.GetString( 45 );
+    m_aUIProperties[nIdx++].Value = getChoiceControlOpt( rtl::OUString(),
+                                                         aHelpText,
+                                                         aPrintRangeName,
+                                                         aChoices,
+                                                         0 );
+    // create a an Edit dependent on "Pages" selected
+    m_aUIProperties[nIdx++].Value = getEditControlOpt( rtl::OUString(),
+                                                       rtl::OUString(),
+                                                       rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PageRange" ) ),
+                                                       rtl::OUString(),
+                                                       &aPrintRangeName, 1
+                                                     );
+
 
     DBG_ASSERT( nIdx == nNumProps, "number of added properties is not as expected" );
 }

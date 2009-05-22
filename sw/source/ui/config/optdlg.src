@@ -979,6 +979,13 @@ StringArray STR_PRINTOPTUI
         < "If this option is enabled automatically inserted blank pages are printed. This is best if you are printing double-sided. For example, in a book, a \"chapter\" paragraph style has been set to always start with an odd numbered page. If the previous chapter ends on an odd page, %PRODUCTNAME inserts an even numbered blank page. This option controls whether to print that even numbered page or not"; >;
         < "~Paper tray from printer settings"; >;
         < "For printers with multiple trays this option specifies whether the paper tray used is specified by the system settings of the printer."; >;
+        < "Print Range"; >;
+        < "~All pages"; >;
+        < "Print all pages of the document."; >;
+        < "~Pages"; >;
+        < "Print a range of pages of the document."; >;
+        < "~Selection"; >;
+        < "Print only the currently selected content."; >;
     };
 };
 
