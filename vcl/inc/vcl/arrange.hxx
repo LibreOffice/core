@@ -34,6 +34,7 @@
 #include "vcl/window.hxx"
 
 #include <vector>
+#include <boost/shared_ptr.hpp>
 
 namespace vcl
 {
@@ -54,12 +55,12 @@ namespace vcl
         protected:
         struct Element
         {
-            Window*          m_pElement;
-            WindowArranger*  m_pChild;
+            Window*                            m_pElement;
+            boost::shared_ptr<WindowArranger>  m_pChild;
 
             Element()
             : m_pElement( NULL )
-            , m_pChild( NULL )
+            , m_pChild()
             {}
 
             Element( Window* i_pWin, WindowArranger* i_pChild )
@@ -67,7 +68,7 @@ namespace vcl
             , m_pChild( i_pChild )
             {}
 
-            void deleteChild() { delete m_pChild; m_pChild = NULL; }
+            void deleteChild() { m_pChild.reset(); }
         };
 
         Window*                     m_pParentWindow;
@@ -162,7 +163,7 @@ namespace vcl
         virtual void resize();
         virtual void setParentWindow( Window* );
         virtual size_t countElements() const { return (m_aElement.m_pElement != 0 || m_aElement.m_pChild != 0) ? 1 : 0; }
-        virtual WindowArranger* getChild( size_t i_nIndex ) const { return (i_nIndex == 0) ? m_aElement.m_pChild : NULL; }
+        virtual WindowArranger* getChild( size_t i_nIndex ) const { return (i_nIndex == 0) ? m_aElement.m_pChild.get() : 0; }
         virtual Window* getWindow( size_t i_nIndex ) const { return (i_nIndex == 0) ? m_aElement.m_pElement : NULL; }
 
         void setIndent( long i_nIndent )
@@ -177,3 +178,4 @@ namespace vcl
 }
 
 #endif
+
