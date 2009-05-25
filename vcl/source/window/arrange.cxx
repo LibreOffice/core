@@ -65,7 +65,7 @@ RowOrColumn::~RowOrColumn()
 
 WindowArranger* RowOrColumn::getChild( size_t i_nIndex ) const
 {
-    return i_nIndex < m_aElements.size() ? m_aElements[i_nIndex].m_pChild : NULL;
+    return i_nIndex < m_aElements.size() ? m_aElements[i_nIndex].m_pChild.get() : NULL;
 }
 
 Window* RowOrColumn::getWindow( size_t i_nIndex ) const
@@ -274,7 +274,7 @@ void RowOrColumn::remove( WindowArranger* i_pChild )
         for( std::vector< WindowArranger::Element >::iterator it = m_aElements.begin();
             it != m_aElements.end(); ++it )
         {
-            if( it->m_pChild == i_pChild )
+            if( it->m_pChild.get() == i_pChild )
             {
                 m_aElements.erase( it );
                 return;
@@ -327,8 +327,8 @@ void Indenter::setWindow( Window* i_pWindow )
 
 void Indenter::setChild( WindowArranger* i_pChild )
 {
-    OSL_VERIFY( (m_aElement.m_pElement == 0 && m_aElement.m_pChild == 0) || i_pChild == 0 );
-    m_aElement.m_pChild = i_pChild;
+    OSL_VERIFY( (m_aElement.m_pElement == 0 && m_aElement.m_pChild == 0 ) || i_pChild == 0 );
+    m_aElement.m_pChild.reset( i_pChild );
 }
 
 void Indenter::setParentWindow( Window* i_pNewParent )

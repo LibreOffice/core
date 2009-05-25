@@ -633,7 +633,7 @@ void PrintDialog::setupOptionalUI()
                     pList->SelectEntryPos( static_cast<USHORT>(nSelectVal) );
                     pList->Enable( maPListener->isUIOptionEnabled( aPropertyName ) );
                     pList->SetSelectHdl( LINK( this, PrintDialog, UIOption_SelectHdl ) );
-                    pList->SetDropDownLineCount( aChoices.getLength() );
+                    pList->SetDropDownLineCount( static_cast<USHORT>(aChoices.getLength()) );
                     pList->Show();
 
                     // set help id
