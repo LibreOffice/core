@@ -102,7 +102,7 @@ private:
     DECL_LINK( PaintTimeout, Timer * );
     DECL_LINK( MarkTimeout, Timer * );
 
-    void DlgEditor::Print( Printer* pPrinter, const String& rTitle );
+    void Print( Printer* pPrinter, const String& rTitle );
 
 protected:
     ScrollBar*          pHScroll;
