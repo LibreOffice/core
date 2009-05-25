@@ -2169,11 +2169,13 @@ void ImplSdPPTImport::FillSdAnimationInfo( SdAnimationInfo* pInfo, PptInteractiv
                             if ( pDocShell )
                             {
                                 String aBaseURL = pDocShell->GetMedium()->GetBaseURL();
+                                String aBookmarkURL( pInfo->GetBookmark() );
                                 INetURLObject aURL( pPtr->aTarget );
                                 if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
-                                    utl::LocalFileHelper::ConvertSystemPathToURL( pPtr->aTarget, aBaseURL, pInfo->maBookmark );
-                                if( !pInfo->maBookmark.Len() )
-                                    pInfo->maBookmark = URIHelper::SmartRel2Abs( INetURLObject(aBaseURL), pPtr->aTarget, URIHelper::GetMaybeFileHdl(), true );
+                                    utl::LocalFileHelper::ConvertSystemPathToURL( pPtr->aTarget, aBaseURL, aBookmarkURL );
+                                if( !aBookmarkURL.Len() )
+                                    aBookmarkURL = URIHelper::SmartRel2Abs( INetURLObject(aBaseURL), pPtr->aTarget, URIHelper::GetMaybeFileHdl(), true );
+                                pInfo->SetBookmark( aBookmarkURL );
                                 pInfo->meClickAction = ::com::sun::star::presentation::ClickAction_PROGRAM;
                             }
                         }
