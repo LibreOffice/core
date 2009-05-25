@@ -623,7 +623,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
             {
                 // rotate text with shape ?
                 double a = mnFix16Angle * nPi180;
-                pObj->NbcRotate( rObjData.rBoundRect.Center(), mnFix16Angle,
+                pObj->NbcRotate( rObjData.aBoundRect.Center(), mnFix16Angle,
                     sin( a ), cos( a ) );
             }
         }
