@@ -2756,7 +2756,7 @@ XclExpChChart::XclExpChChart( const XclExpRoot& rRoot,
         // global chart properties (only 'include hidden cells' attribute for now)
         ScfPropertySet aDiagramProp( xDiagram );
         bool bIncludeHidden = aDiagramProp.GetBoolProperty( EXC_CHPROP_INCLUDEHIDDENCELLS );
-        ::set_flag( maProps.mnFlags,  EXC_CHPROPS_SHOWVISCELLS, !bIncludeHidden );
+        ::set_flag( maProps.mnFlags,  EXC_CHPROPS_SHOWVISIBLEONLY, !bIncludeHidden );
 
         // initialize API conversion (remembers xChartDoc internally)
         InitConversion( xChartDoc );

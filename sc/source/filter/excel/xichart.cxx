@@ -3421,7 +3421,7 @@ void XclImpChChart::Convert( Reference< XChartDocument > xChartDoc, ScfProgressB
     if( xStandardApiChartDoc.is() )
     {
         ScfPropertySet aDiagramProp( xStandardApiChartDoc->getDiagram() );
-        bool bShowVisCells = (maProps.mnFlags & EXC_CHPROPS_SHOWVISCELLS);
+        bool bShowVisCells = (maProps.mnFlags & EXC_CHPROPS_SHOWVISIBLEONLY);
         aDiagramProp.SetBoolProperty( EXC_CHPROP_INCLUDEHIDDENCELLS, !bShowVisCells  );
     }
 
