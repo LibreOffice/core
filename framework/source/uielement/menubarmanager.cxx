@@ -101,12 +101,15 @@
 #include <uielement/menubarmerger.hxx>
 #include <dispatch/uieventloghelper.hxx>
 
-#ifdef WNT
-#include <tools/prewin.h>
-#include <windows.h>
-#include <tools/postwin.h>
-#endif
-#include <vcl/sysdata.hxx>
+// Be careful removing this "bad" construct. There are serious problems
+// with #define STRICT and including windows.h. Changing this needs some
+// redesign on other projects, too. Especially sal/main.h which defines
+// HINSTANCE depending on STRCIT!!!!!!!!!!!!!!!
+struct SystemMenuData
+{
+    unsigned long nSize;
+    long          hMenu;
+};
 
 //_________________________________________________________________________________________________________________
 //  namespace
