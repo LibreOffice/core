@@ -93,6 +93,8 @@ EXCEPTIONSFILES =   \
         $(SLO)$/accessibility.obj \
         $(SLO)$/cfgitem.obj \
         $(SLO)$/document.obj \
+        $(SLO)$/node.obj \
+        $(SLO)$/parse.obj \
         $(SLO)$/mathmlimport.obj \
         $(SLO)$/mathmlexport.obj \
         $(SLO)$/mathtype.obj \
