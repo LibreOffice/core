@@ -3472,11 +3472,6 @@ void XclImpChChart::ReadChText( XclImpStream& rStrm )
     }
 }
 
-void XclImpChChart::ReadChProperties( XclImpStream& rStrm )
-{
-    rStrm >> maProps.mnFlags >> maProps.mnEmptyMode;
-}
-
 void XclImpChChart::Finalize()
 {
     // finalize series (must be done first)

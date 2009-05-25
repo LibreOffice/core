@@ -1348,14 +1348,12 @@ public:
 private:
     /** Reads a CHSERIES group (data series source and formatting). */
     void                ReadChSeries( XclImpStream& rStrm );
-    /** Reads a CHPROPERTIES record. */
+    /** Reads a CHPROPERTIES record (global chart properties). */
     void                ReadChProperties( XclImpStream& rStrm );
     /** Reads a CHAXESSET group (primary/secondary axes set). */
     void                ReadChAxesSet( XclImpStream& rStrm );
     /** Reads a CHTEXT group (chart title and series/point captions). */
     void                ReadChText( XclImpStream& rStrm );
-    /** Reads a CHPROPERTIES record (global chart properties). */
-    void                ReadChProperties( XclImpStream& rStrm );
 
     /** Final processing after reading the entire chart data. */
     void                Finalize();
