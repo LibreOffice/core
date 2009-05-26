@@ -896,26 +896,27 @@ rtl::Reference< ChildAccess > Access::getSubChild(rtl::OUString const & path) {
     }
     rtl::Reference< ChildAccess > child(getChild(name));
     if (!child.is()) {
-        return child;
-    }
-    if (child->isValue()) {
-        if (i != -1) {
-            return rtl::Reference< ChildAccess >();
-        }
-        return child;
+        return rtl::Reference< ChildAccess >();
     }
     if (setElement) {
-        SetNode * set = dynamic_cast< SetNode * >(getNode().get());
-        if (set == 0 ||
-            (templateName.getLength() != 0 &&
-             !set->isValidTemplate(templateName)))
+        rtl::Reference< Node > p(getNode());
+        SetNode * set = dynamic_cast< SetNode * >(p.get());
+        LocalizedPropertyNode * locprop =
+            Components::allLocales(getRoot()->getLocale())
+            ? dynamic_cast< LocalizedPropertyNode * >(p.get()) : 0;
+        if ((set == 0 && locprop == 0) ||
+            (set != 0 && templateName.getLength() != 0 &&
+             !set->isValidTemplate(templateName)) ||
+            (locprop != 0 && templateName.getLength() != 0))
         {
             return rtl::Reference< ChildAccess >();
         }
     }
-    // For backwards compatibility, ignore a final slash:
-    return i == -1 || i + 1 == path.getLength()
-        ? child : child->getSubChild(path.copy(i + 1));
+    // For backwards compatibility, ignore a final slash after non-value nodes:
+    return child->isValue()
+        ? (i == -1 ? child : rtl::Reference< ChildAccess >())
+        : (i == -1 || i + 1 == path.getLength()
+           ? child : child->getSubChild(path.copy(i + 1)));
 }
 
 css::beans::Property Access::asProperty() {
@@ -927,6 +928,14 @@ css::beans::Property Access::asProperty() {
         type = mapType(prop->getType());
         nillable = prop->isNillable();
         removable = prop->isExtension();
+    } else if (LocalizedPropertyValueNode * locval =
+               dynamic_cast< LocalizedPropertyValueNode * >(p.get())) {
+        LocalizedPropertyNode * locprop =
+            dynamic_cast< LocalizedPropertyNode * >(locval->getParent());
+        OSL_ASSERT(locprop != 0);
+        type = mapType(locprop->getType());
+        nillable = locprop->isNillable();
+        removable = false; //TODO ???
     } else if (LocalizedPropertyNode * locprop =
                dynamic_cast< LocalizedPropertyNode * >(p.get()))
     {
@@ -972,9 +981,30 @@ void Access::setProperty(css::uno::Any const & value) {
                 rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM(
                         "configmgr setPropertyValue inappropriate prop value")),
-                static_cast< cppu::OWeakObject * >(this), 1);
+                static_cast< cppu::OWeakObject * >(this), -1);
         }
         prop->setValue(value);
+        //TODO notify change
+        return;
+    }
+    if (LocalizedPropertyValueNode * locval =
+               dynamic_cast< LocalizedPropertyValueNode * >(p.get())) {
+        LocalizedPropertyNode * locprop =
+            dynamic_cast< LocalizedPropertyNode * >(locval->getParent());
+        OSL_ASSERT(locprop != 0);
+        Type type = mapType(value.getValueType());
+        if (value.hasValue()
+            ? (type == TYPE_NONE ||
+               (locprop->getType() != TYPE_ANY && type != locprop->getType()))
+            : !locprop->isNillable())
+        {
+            throw css::lang::IllegalArgumentException(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "configmgr setPropertyValue inappropriate prop value")),
+                static_cast< cppu::OWeakObject * >(this), -1);
+        }
+        locval->setValue(value);
         //TODO notify change
         return;
     }
@@ -995,7 +1025,7 @@ void Access::setProperty(css::uno::Any const & value) {
                         RTL_CONSTASCII_USTRINGPARAM(
                             "configmgr setPropertyValue inappropriate prop"
                             " value")),
-                    static_cast< cppu::OWeakObject * >(this), 1);
+                    static_cast< cppu::OWeakObject * >(this), -1);
             }
             NodeMap::iterator i(locprop->getMembers().find(loc));
             if (i == locprop->getMembers().end()) {
@@ -1015,7 +1045,7 @@ void Access::setProperty(css::uno::Any const & value) {
         rtl::OUString(
             RTL_CONSTASCII_USTRINGPARAM(
                 "configmgr setPropertyValue naming an inappropriate member")),
-        static_cast< cppu::OWeakObject * >(this), 0);
+        static_cast< cppu::OWeakObject * >(this), -1);
 }
 
 #if OSL_DEBUG_LEVEL > 0
