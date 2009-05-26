@@ -32,17 +32,21 @@
 
 #include "sal/config.h"
 
+#include "com/sun/star/container/XChild.hpp"
+#include "com/sun/star/lang/NoSupportException.hpp"
 #include "com/sun/star/lang/XUnoTunnel.hpp"
+#include "com/sun/star/uno/Any.hxx"
+#include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/Sequence.hxx"
-#include "cppuhelper/implbase1.hxx"
+#include "cppuhelper/implbase2.hxx"
 #include "rtl/ref.hxx"
 #include "sal/types.h"
 
 #include "access.hxx"
 
 namespace com { namespace sun { namespace star { namespace uno {
-    class Any;
+    class XInterface;
 } } } }
 
 namespace configmgr {
@@ -51,15 +55,19 @@ class Node;
 class RootAccess;
 
 class ChildAccess:
-    public cppu::ImplInheritanceHelper1<
-        Access, com::sun::star::lang::XUnoTunnel >
+    public cppu::ImplInheritanceHelper2<
+        Access, com::sun::star::container::XChild,
+        com::sun::star::lang::XUnoTunnel >
 {
 public:
+    enum Status {
+        STATUS_UNMODIFIED, STATUS_CHANGED, STATUS_ADDED, STATUS_REMOVED };
+
     static com::sun::star::uno::Sequence< sal_Int8 > getTunnelId();
 
     ChildAccess(
         RootAccess * root, Access * parent,
-        rtl::Reference< Node > const & node);
+        rtl::Reference< Node > const & node, Status status);
 
     ChildAccess(
         rtl::Reference< RootAccess > const & root,
@@ -69,16 +77,32 @@ public:
 
     virtual rtl::Reference< RootAccess > getRoot();
 
-    Access * getParentAccess() const;
-
     void bind(RootAccess * root, Access * parent) throw ();
 
     void unbind() throw ();
+
+    void setStatus(
+        Status status,
+        com::sun::star::uno::Any const & changedValue =
+            com::sun::star::uno::Any());
+
+    Status getStatus() const { return status_; }
 
     com::sun::star::uno::Any asValue();
 
 private:
     virtual ~ChildAccess();
+
+    virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface >
+    SAL_CALL getParent()
+        throw (com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL setParent(
+        com::sun::star::uno::Reference< com::sun::star::uno::XInterface >
+            const &)
+        throw (
+            com::sun::star::lang::NoSupportException,
+            com::sun::star::uno::RuntimeException);
 
     virtual sal_Int64 SAL_CALL getSomething(
         com::sun::star::uno::Sequence< sal_Int8 > const & aIdentifier)
@@ -88,6 +112,8 @@ private:
     rtl::Reference< RootAccess > acquiredRoot_; // only for free nodes (= root_)
     Access * parent_; // non-null iff non-free node
     rtl::Reference< Node > node_;
+    Status status_;
+    com::sun::star::uno::Any changedValue_; // valid iff STATUS_CHANGED
 };
 
 }

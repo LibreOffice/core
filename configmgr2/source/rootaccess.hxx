@@ -32,16 +32,31 @@
 
 #include "sal/config.h"
 
+#include "com/sun/star/lang/WrappedTargetException.hpp"
+#include "com/sun/star/uno/RuntimeException.hpp"
+#include "com/sun/star/util/ChangesSet.hpp"
+#include "com/sun/star/util/XChangesBatch.hpp"
+#include "com/sun/star/util/XChangesNotifier.hpp"
+#include "cppuhelper/implbase2.hxx"
 #include "rtl/ref.hxx"
 #include "rtl/ustring.hxx"
+#include "sal/types.h"
 
 #include "access.hxx"
+
+namespace com { namespace sun { namespace star { namespace util {
+    class XChangesListener;
+} } } }
 
 namespace configmgr {
 
 class Node;
 
-class RootAccess: public Access {
+class RootAccess:
+    public cppu::ImplInheritanceHelper2<
+        Access, com::sun::star::util::XChangesNotifier,
+        com::sun::star::util::XChangesBatch  >
+{
 public:
     RootAccess(
         rtl::OUString const & path, rtl::OUString const & locale, bool update);
@@ -56,6 +71,27 @@ private:
     virtual rtl::Reference< Node > getNode();
 
     virtual rtl::Reference< RootAccess > getRoot();
+
+    virtual void SAL_CALL addChangesListener(
+        com::sun::star::uno::Reference< com::sun::star::util::XChangesListener >
+            const & aListener)
+        throw (com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL removeChangesListener(
+        com::sun::star::uno::Reference< com::sun::star::util::XChangesListener >
+            const & aListener)
+        throw (com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL commitChanges()
+        throw (
+            com::sun::star::lang::WrappedTargetException,
+            com::sun::star::uno::RuntimeException);
+
+    virtual sal_Bool SAL_CALL hasPendingChanges()
+        throw (com::sun::star::uno::RuntimeException);
+
+    virtual com::sun::star::util::ChangesSet SAL_CALL getPendingChanges()
+        throw (com::sun::star::uno::RuntimeException);
 
     rtl::OUString path_;
     rtl::OUString locale_;

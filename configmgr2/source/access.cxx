@@ -51,8 +51,6 @@
 #include "com/sun/star/uno/Type.hxx"
 #include "com/sun/star/uno/TypeClass.hpp"
 #include "com/sun/star/uno/XInterface.hpp"
-#include "com/sun/star/util/ChangesSet.hpp"
-#include "com/sun/star/util/XChangesListener.hpp"
 #include "comphelper/sequenceasvector.hxx"
 #include "cppu/unotype.hxx"
 #include "cppuhelper/exc_hlp.hxx"
@@ -77,9 +75,9 @@
 #include "setnode.hxx"
 #include "type.hxx"
 
-#if !defined INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_16
-#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_16
-#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 16
+#if !defined INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_13
+#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_13
+#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 13
 #include "comphelper/implbase_var.hxx"
 #undef COMPHELPER_IMPLBASE_INTERFACE_NUMBER
 #endif
@@ -191,12 +189,12 @@ bool Access::isValue() {
          !Components::allLocales(getRoot()->getLocale()));
 }
 
-Access::Access(): WeakComponentImplHelper16(lock) {}
+Access::Access(): WeakComponentImplHelper13(lock) {}
 
 Access::~Access() {}
 
 css::uno::Type Access::getElementType() throw (css::uno::RuntimeException) {
-    OSL_ASSERT(thisIs(IS_GROUP_OR_SET_OR_LOCALIZED));
+    OSL_ASSERT(thisIs(IS_ANY));
     osl::MutexGuard g(lock);
     rtl::Reference< Node > p(getNode());
     if (LocalizedPropertyNode * locprop =
@@ -219,7 +217,7 @@ css::uno::Type Access::getElementType() throw (css::uno::RuntimeException) {
 }
 
 sal_Bool Access::hasElements() throw (css::uno::RuntimeException) {
-    OSL_ASSERT(thisIs(IS_GROUP_OR_SET_OR_LOCALIZED));
+    OSL_ASSERT(thisIs(IS_ANY));
     osl::MutexGuard g(lock);
     rtl::Reference< Node > p(getNode());
     if (LocalizedPropertyNode * locprop =
@@ -243,7 +241,7 @@ css::uno::Any Access::getByName(rtl::OUString const & aName)
         css::container::NoSuchElementException,
         css::lang::WrappedTargetException, css::uno::RuntimeException)
 {
-    OSL_ASSERT(thisIs(IS_GROUP_OR_SET_OR_LOCALIZED));
+    OSL_ASSERT(thisIs(IS_ANY));
     osl::MutexGuard g(lock);
     rtl::Reference< ChildAccess > child(getChild(aName));
     if (!child.is()) {
@@ -256,7 +254,7 @@ css::uno::Any Access::getByName(rtl::OUString const & aName)
 css::uno::Sequence< rtl::OUString > Access::getElementNames()
     throw (css::uno::RuntimeException)
 {
-    OSL_ASSERT(thisIs(IS_GROUP_OR_SET_OR_LOCALIZED));
+    OSL_ASSERT(thisIs(IS_ANY));
     osl::MutexGuard g(lock);
     rtl::Reference< Node > p(getNode());
     if (LocalizedPropertyNode * locprop =
@@ -297,7 +295,7 @@ css::uno::Sequence< rtl::OUString > Access::getElementNames()
 sal_Bool Access::hasByName(rtl::OUString const & aName)
     throw (css::uno::RuntimeException)
 {
-    OSL_ASSERT(thisIs(IS_GROUP_OR_SET_OR_LOCALIZED));
+    OSL_ASSERT(thisIs(IS_ANY));
     osl::MutexGuard g(lock);
     return getChild(aName).is();
 }
@@ -405,27 +403,9 @@ void Access::setName(rtl::OUString const & /*aName*/)
 
 css::beans::Property Access::getAsProperty() throw (css::uno::RuntimeException)
 {
-    OSL_ASSERT(thisIs(IS_GROUP_OR_SET_OR_LOCALIZED));
+    OSL_ASSERT(thisIs(IS_ANY));
     osl::MutexGuard g(lock);
     return asProperty();
-}
-
-css::uno::Reference< css::uno::XInterface > Access::getParent()
-    throw (css::uno::RuntimeException)
-{
-    OSL_ASSERT(thisIs(IS_GROUP_OR_SET_OR_LOCALIZED|IS_CHILD));
-    osl::MutexGuard g(lock);
-    return static_cast< cppu::OWeakObject * >(
-        dynamic_cast< ChildAccess * >(this)->getParentAccess());
-}
-
-void Access::setParent(css::uno::Reference< css::uno::XInterface > const &)
-    throw (css::lang::NoSupportException, css::uno::RuntimeException)
-{
-    OSL_ASSERT(thisIs(IS_GROUP_OR_SET_OR_LOCALIZED|IS_CHILD));
-    throw css::lang::NoSupportException(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("setParent")),
-        static_cast< cppu::OWeakObject * >(this));
 }
 
 css::uno::Reference< css::beans::XPropertySetInfo > Access::getPropertySetInfo()
@@ -642,24 +622,6 @@ css::uno::Sequence< css::uno::Any > Access::getHierarchicalPropertyValues(
     if(true)abort();*(char*)0=0;throw 0;//TODO
 }
 
-void Access::addChangesListener(
-    css::uno::Reference< css::util::XChangesListener > const & aListener)
-    throw (css::uno::RuntimeException)
-{
-    OSL_ASSERT(thisIs(IS_GROUP_OR_SET|IS_ROOT));
-    rBHelper.addListener(
-        cppu::UnoType< css::util::XChangesListener >::get(), aListener);
-}
-
-void Access::removeChangesListener(
-    css::uno::Reference< css::util::XChangesListener > const & aListener)
-    throw (css::uno::RuntimeException)
-{
-    OSL_ASSERT(thisIs(IS_GROUP_OR_SET|IS_ROOT));
-    rBHelper.removeListener(
-        cppu::UnoType< css::util::XChangesListener >::get(), aListener);
-}
-
 void Access::replaceByName(
     rtl::OUString const & aName, css::uno::Any const & aElement)
     throw (
@@ -700,7 +662,7 @@ void Access::insertByName(
     osl::MutexGuard g(lock);
     rtl::Reference< Node > p(getNode());
     if (GroupNode * group = dynamic_cast< GroupNode * >(p.get())) {
-        if (group->getMember(aName).is()) {
+        if (getChild(aName).is()) {
             throw css::container::ElementExistException(
                 aName, static_cast< cppu::OWeakObject * >(this));
         }
@@ -712,10 +674,16 @@ void Access::insertByName(
                         "configmgr insertByName inappropriate group element")),
                 static_cast< cppu::OWeakObject * >(this), 1);
         }
+        children_[aName] = new ChildAccess(
+            getRoot().get(), this,
+            new PropertyNode(group, aName, type, true, aElement, true),
+            ChildAccess::STATUS_ADDED);
+/*TODO:
         group->getMembers().insert(
             NodeMap::value_type(
                 aName,
                 new PropertyNode(group, aName, type, true, aElement, true)));
+*/
         //TODO notify change
     } else if (SetNode * set = dynamic_cast< SetNode * >(p.get())) {
         if (set->getMember(aName).is()) {
@@ -750,8 +718,13 @@ void Access::insertByName(
                 static_cast< cppu::OWeakObject * >(this), 1);
         }
         rtl::Reference< RootAccess > root(getRoot());
+        children_[aName] = new ChildAccess(
+            getRoot().get(), this, freeAcc->getNode(),
+            ChildAccess::STATUS_ADDED);
+/*TODO:
         set->getMembers().insert(
             NodeMap::value_type(aName, freeAcc->getNode()));
+*/
         freeAcc->bind(root.get(), this); // must not throw
         //TODO notify change
     } else {
@@ -769,28 +742,34 @@ void Access::removeByName(rtl::OUString const & aName)
 {
     OSL_ASSERT(thisIs(IS_EXTGROUP_OR_SET|IS_UPDATE));
     osl::MutexGuard g(lock);
+
     rtl::Reference< Node > p(getNode());
     if (GroupNode * group = dynamic_cast< GroupNode * >(p.get())) {
-        NodeMap::iterator i(group->getMembers().find(aName));
-        if (i == group->getMembers().end()) {
+        rtl::Reference< ChildAccess > child(getChild(aName));
+        if (!child.is()) {
             throw css::container::NoSuchElementException(
                 aName, static_cast< cppu::OWeakObject * >(this));
         }
         rtl::Reference< PropertyNode > prop(
-            dynamic_cast< PropertyNode * >(i->second.get()));
+            dynamic_cast< PropertyNode * >(child->getNode().get()));
         if (!(prop.is() && prop->isExtension())) {
             throw css::container::NoSuchElementException(
                 aName, static_cast< cppu::OWeakObject * >(this));
         }
+        child->setStatus(ChildAccess::STATUS_REMOVED);
+/*TODO:
         group->getMembers().erase(i);
         prop->unbind(); // must not throw
+*/
         //TODO notify change
     } else if (SetNode * set = dynamic_cast< SetNode * >(p.get())) {
-        NodeMap::iterator i(set->getMembers().find(aName));
-        if (i == group->getMembers().end()) {
+        rtl::Reference< ChildAccess > child(getChild(aName));
+        if (!child.is()) {
             throw css::container::NoSuchElementException(
                 aName, static_cast< cppu::OWeakObject * >(this));
         }
+        child->setStatus(ChildAccess::STATUS_REMOVED);
+/*TODO:
         ChildMap::iterator j(children_.find(aName));
         rtl::Reference< ChildAccess > oldChild;
         ChildMap newChildren;
@@ -806,6 +785,7 @@ void Access::removeByName(rtl::OUString const & aName)
             children_.swap(newChildren);
             oldChild->unbind();
         }
+*/
         //TODO notify change
     } else {
         OSL_ASSERT(false);
@@ -849,36 +829,19 @@ css::uno::Reference< css::uno::XInterface > Access::createInstanceWithArguments(
     return createInstance();
 }
 
-void Access::commitChanges()
-    throw (css::lang::WrappedTargetException, css::uno::RuntimeException)
-{
-    OSL_ASSERT(thisIs(IS_GROUP_OR_SET|IS_ROOT|IS_UPDATE));
-    //TODO
-}
-
-sal_Bool Access::hasPendingChanges() throw (css::uno::RuntimeException) {
-    OSL_ASSERT(thisIs(IS_GROUP_OR_SET|IS_ROOT|IS_UPDATE));
-    return false;//TODO
-}
-
-css::util::ChangesSet Access::getPendingChanges()
-    throw (css::uno::RuntimeException)
-{
-    OSL_ASSERT(thisIs(IS_GROUP_OR_SET|IS_ROOT|IS_UPDATE));
-    if(true)abort();*(char*)0=0;throw 0;//TODO
-}
-
 rtl::Reference< ChildAccess > Access::getChild(rtl::OUString const & name) {
     ChildMap::iterator i(children_.find(name));
     if (i != children_.end()) {
-        return i->second;
+        return i->second->getStatus() == ChildAccess::STATUS_REMOVED
+            ? rtl::Reference< ChildAccess >() : i->second;
     }
     rtl::Reference< Node > node(getNode()->getMember(name));
     if (!node.is()) {
         return rtl::Reference< ChildAccess >();
     }
     rtl::Reference< ChildAccess > child(
-        new ChildAccess(getRoot().get(), this, node));
+        new ChildAccess(
+            getRoot().get(), this, node, ChildAccess::STATUS_UNMODIFIED));
     children_.insert(ChildMap::value_type(name, child));
     return child;
 }
@@ -980,15 +943,17 @@ void Access::setProperty(css::uno::Any const & value) {
             throw css::lang::IllegalArgumentException(
                 rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM(
-                        "configmgr setPropertyValue inappropriate prop value")),
+                        "configmgr setProperty inappropriate prop value")),
                 static_cast< cppu::OWeakObject * >(this), -1);
         }
-        prop->setValue(value);
+        dynamic_cast< ChildAccess * >(this)->setStatus(
+            ChildAccess::STATUS_CHANGED, value);
         //TODO notify change
         return;
     }
     if (LocalizedPropertyValueNode * locval =
-               dynamic_cast< LocalizedPropertyValueNode * >(p.get())) {
+               dynamic_cast< LocalizedPropertyValueNode * >(p.get()))
+    {
         LocalizedPropertyNode * locprop =
             dynamic_cast< LocalizedPropertyNode * >(locval->getParent());
         OSL_ASSERT(locprop != 0);
@@ -1001,10 +966,11 @@ void Access::setProperty(css::uno::Any const & value) {
             throw css::lang::IllegalArgumentException(
                 rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM(
-                        "configmgr setPropertyValue inappropriate prop value")),
+                        "configmgr setProperty inappropriate prop value")),
                 static_cast< cppu::OWeakObject * >(this), -1);
         }
-        locval->setValue(value);
+        dynamic_cast< ChildAccess * >(this)->setStatus(
+            ChildAccess::STATUS_CHANGED, value);
         //TODO notify change
         return;
     }
@@ -1023,20 +989,11 @@ void Access::setProperty(css::uno::Any const & value) {
                 throw css::lang::IllegalArgumentException(
                     rtl::OUString(
                         RTL_CONSTASCII_USTRINGPARAM(
-                            "configmgr setPropertyValue inappropriate prop"
-                            " value")),
+                            "configmgr setProperty inappropriate prop value")),
                     static_cast< cppu::OWeakObject * >(this), -1);
             }
-            NodeMap::iterator i(locprop->getMembers().find(loc));
-            if (i == locprop->getMembers().end()) {
-                locprop->getMembers().insert(
-                    NodeMap::value_type(
-                        loc,
-                        new LocalizedPropertyValueNode(locprop, loc, value)));
-            } else {
-                dynamic_cast< LocalizedPropertyValueNode * >(i->second.get())->
-                    setValue(value);
-            }
+            dynamic_cast< ChildAccess * >(this)->setStatus(
+                ChildAccess::STATUS_CHANGED, value);
             //TODO notify change
             return;
         }
@@ -1044,7 +1001,7 @@ void Access::setProperty(css::uno::Any const & value) {
     throw css::lang::IllegalArgumentException(
         rtl::OUString(
             RTL_CONSTASCII_USTRINGPARAM(
-                "configmgr setPropertyValue naming an inappropriate member")),
+                "configmgr setProperty naming an inappropriate member")),
         static_cast< cppu::OWeakObject * >(this), -1);
 }
 
@@ -1062,14 +1019,6 @@ bool Access::thisIs(int what) {
          (dynamic_cast< GroupNode * >(p.get()) != 0 &&
           dynamic_cast< GroupNode * >(p.get())->isExtensible()) ||
          dynamic_cast< SetNode * >(p.get()) != 0) &&
-        ((what & IS_GROUP_OR_SET_OR_LOCALIZED) == 0 ||
-         dynamic_cast< GroupNode * >(p.get()) != 0 ||
-         dynamic_cast< SetNode * >(p.get()) != 0 ||
-         (dynamic_cast< LocalizedPropertyNode * >(p.get()) != 0 &&
-          Components::allLocales(getRoot()->getLocale()))) ||
-        ((what & IS_ROOT) == 0 || dynamic_cast< RootAccess * >(p.get()) != 0) ||
-        ((what & IS_CHILD) == 0 ||
-         dynamic_cast< ChildAccess * >(p.get()) != 0) ||
         ((what & IS_GROUP_MEMBER) == 0 ||
          dynamic_cast< GroupNode * >(p->getParent()) != 0) ||
         ((what & IS_SET_MEMBER) == 0 ||

@@ -44,7 +44,6 @@
 #include "com/sun/star/beans/XPropertySetInfo.hpp"
 #include "com/sun/star/container/ElementExistException.hpp"
 #include "com/sun/star/container/NoSuchElementException.hpp"
-#include "com/sun/star/container/XChild.hpp"
 #include "com/sun/star/container/XContainer.hpp"
 #include "com/sun/star/container/XHierarchicalName.hpp"
 #include "com/sun/star/container/XHierarchicalNameAccess.hpp"
@@ -58,16 +57,13 @@
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/Sequence.hxx"
-#include "com/sun/star/util/ChangesSet.hpp"
-#include "com/sun/star/util/XChangesBatch.hpp"
-#include "com/sun/star/util/XChangesNotifier.hpp"
 #include "rtl/ref.hxx"
 #include "sal/types.h"
 #include "stl/hash_map"
 
-#if !defined INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_16
-#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_16
-#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 16
+#if !defined INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_13
+#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_13
+#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 13
 #include "comphelper/implbase_var.hxx"
 #undef COMPHELPER_IMPLBASE_INTERFACE_NUMBER
 #endif
@@ -86,9 +82,6 @@ namespace com { namespace sun { namespace star {
         class Type;
         class XInterface;
     }
-    namespace util {
-        class XChangesListener;
-    }
 } } }
 namespace rtl {
     class OUString;
@@ -97,12 +90,13 @@ namespace rtl {
 
 namespace configmgr {
 
+class Change;
 class ChildAccess;
 class Node;
 class RootAccess;
 
 class Access:
-    public comphelper::WeakComponentImplHelper16<
+    public comphelper::WeakComponentImplHelper13<
         com::sun::star::container::XHierarchicalNameAccess,
         com::sun::star::container::XContainer,
         com::sun::star::beans::XExactName,
@@ -110,15 +104,12 @@ class Access:
         com::sun::star::container::XHierarchicalName,
         com::sun::star::container::XNamed,
         com::sun::star::beans::XProperty,
-        com::sun::star::container::XChild,
         com::sun::star::beans::XPropertySet,
         com::sun::star::beans::XMultiPropertySet,
         com::sun::star::beans::XHierarchicalPropertySet,
         com::sun::star::beans::XMultiHierarchicalPropertySet,
-        com::sun::star::util::XChangesNotifier,
         com::sun::star::container::XNameContainer,
-        com::sun::star::lang::XSingleServiceFactory,
-        com::sun::star::util::XChangesBatch >,
+        com::sun::star::lang::XSingleServiceFactory >,
     private boost::noncopyable
 {
 public:
@@ -206,17 +197,6 @@ private:
 
     virtual com::sun::star::beans::Property SAL_CALL getAsProperty()
         throw (com::sun::star::uno::RuntimeException);
-
-    virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface >
-    SAL_CALL getParent()
-        throw (com::sun::star::uno::RuntimeException);
-
-    virtual void SAL_CALL setParent(
-        com::sun::star::uno::Reference< com::sun::star::uno::XInterface >
-            const &)
-        throw (
-            com::sun::star::lang::NoSupportException,
-            com::sun::star::uno::RuntimeException);
 
     virtual
     com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo >
@@ -354,16 +334,6 @@ private:
             com::sun::star::lang::WrappedTargetException,
             com::sun::star::uno::RuntimeException);
 
-    virtual void SAL_CALL addChangesListener(
-        com::sun::star::uno::Reference< com::sun::star::util::XChangesListener >
-            const & aListener)
-        throw (com::sun::star::uno::RuntimeException);
-
-    virtual void SAL_CALL removeChangesListener(
-        com::sun::star::uno::Reference< com::sun::star::util::XChangesListener >
-            const & aListener)
-        throw (com::sun::star::uno::RuntimeException);
-
     virtual void SAL_CALL replaceByName(
         rtl::OUString const & aName, com::sun::star::uno::Any const & aElement)
         throw (
@@ -400,17 +370,6 @@ private:
             com::sun::star::uno::Exception,
             com::sun::star::uno::RuntimeException);
 
-    virtual void SAL_CALL commitChanges()
-        throw (
-            com::sun::star::lang::WrappedTargetException,
-            com::sun::star::uno::RuntimeException);
-
-    virtual sal_Bool SAL_CALL hasPendingChanges()
-        throw (com::sun::star::uno::RuntimeException);
-
-    virtual com::sun::star::util::ChangesSet getPendingChanges()
-        throw (com::sun::star::uno::RuntimeException);
-
     rtl::Reference< ChildAccess > getChild(rtl::OUString const & name);
 
     rtl::Reference< ChildAccess > getSubChild(rtl::OUString const & path);
@@ -427,11 +386,11 @@ private:
     ChildMap children_;
 
 #if OSL_DEBUG_LEVEL > 0
+protected:
     enum {
-        IS_GROUP = 0x001, IS_SET = 0x002, IS_GROUP_OR_SET = 0x004,
-        IS_EXTGROUP_OR_SET = 0x008, IS_GROUP_OR_SET_OR_LOCALIZED = 0x010,
-        IS_ROOT = 0x020, IS_CHILD = 0x040, IS_GROUP_MEMBER = 0x080,
-        IS_SET_MEMBER = 0x100, IS_UPDATE = 0x200 };
+        IS_ANY = 0, IS_GROUP = 0x01, IS_SET = 0x02, IS_GROUP_OR_SET = 0x04,
+        IS_EXTGROUP_OR_SET = 0x08, IS_GROUP_MEMBER = 0x20, IS_SET_MEMBER = 0x40,
+        IS_UPDATE = 0x80 };
     bool thisIs(int what);
 #endif
 };

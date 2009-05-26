@@ -30,13 +30,20 @@
 #include "precompiled_configmgr.hxx"
 #include "sal/config.h"
 
+#include "com/sun/star/lang/WrappedTargetException.hpp"
 #include "com/sun/star/uno/RuntimeException.hpp"
+#include "com/sun/star/util/ChangesSet.hpp"
+#include "com/sun/star/util/XChangesListener.hpp"
+#include "cppu/unotype.hxx"
 #include "cppuhelper/weak.hxx"
+#include "osl/diagnose.h"
+#include "osl/mutex.hxx"
 #include "rtl/ref.hxx"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 
 #include "components.hxx"
+#include "lock.hxx"
 #include "node.hxx"
 #include "rootaccess.hxx"
 
@@ -77,6 +84,44 @@ rtl::Reference< Node > RootAccess::getNode() {
 
 rtl::Reference< RootAccess > RootAccess::getRoot() {
     return this;
+}
+
+void RootAccess::addChangesListener(
+    css::uno::Reference< css::util::XChangesListener > const & aListener)
+    throw (css::uno::RuntimeException)
+{
+    OSL_ASSERT(thisIs(IS_ANY));
+    rBHelper.addListener(
+        cppu::UnoType< css::util::XChangesListener >::get(), aListener);
+}
+
+void RootAccess::removeChangesListener(
+    css::uno::Reference< css::util::XChangesListener > const & aListener)
+    throw (css::uno::RuntimeException)
+{
+    OSL_ASSERT(thisIs(IS_ANY));
+    rBHelper.removeListener(
+        cppu::UnoType< css::util::XChangesListener >::get(), aListener);
+}
+
+void RootAccess::commitChanges()
+    throw (css::lang::WrappedTargetException, css::uno::RuntimeException)
+{
+    OSL_ASSERT(thisIs(IS_ANY|IS_UPDATE));
+    //TODO
+}
+
+sal_Bool RootAccess::hasPendingChanges() throw (css::uno::RuntimeException) {
+    OSL_ASSERT(thisIs(IS_ANY|IS_UPDATE));
+    osl::MutexGuard g(lock);
+    return false;//TODO
+}
+
+css::util::ChangesSet RootAccess::getPendingChanges()
+    throw (css::uno::RuntimeException)
+{
+    OSL_ASSERT(thisIs(IS_ANY|IS_UPDATE));
+    if(true)abort();*(char*)0=0;throw 0;//TODO
 }
 
 }

@@ -30,6 +30,7 @@
 #include "precompiled_configmgr.hxx"
 #include "sal/config.h"
 
+#include "com/sun/star/lang/NoSupportException.hpp"
 #include "com/sun/star/uno/Any.hxx"
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
@@ -38,7 +39,10 @@
 #include "cppuhelper/implbase1.hxx"
 #include "cppuhelper/weak.hxx"
 #include "osl/diagnose.h"
+#include "osl/mutex.hxx"
 #include "rtl/ref.hxx"
+#include "rtl/ustring.h"
+#include "rtl/ustring.hxx"
 #include "rtl/uuid.h"
 #include "sal/types.h"
 
@@ -47,6 +51,7 @@
 #include "components.hxx"
 #include "localizedpropertynode.hxx"
 #include "localizedpropertyvaluenode.hxx"
+#include "lock.hxx"
 #include "node.hxx"
 #include "propertynode.hxx"
 #include "rootaccess.hxx"
@@ -71,8 +76,9 @@ css::uno::Sequence< sal_Int8 > ChildAccess::getTunnelId() {
 }
 
 ChildAccess::ChildAccess(
-    RootAccess * root, Access * parent, rtl::Reference< Node > const & node):
-    root_(root), parent_(parent), node_(node)
+    RootAccess * root, Access * parent, rtl::Reference< Node > const & node,
+    Status status):
+    root_(root), parent_(parent), node_(node), status_(status)
 {
     OSL_ASSERT(root != 0 && parent != 0 && node.is());
 }
@@ -80,7 +86,8 @@ ChildAccess::ChildAccess(
 ChildAccess::ChildAccess(
     rtl::Reference< RootAccess > const & root,
     rtl::Reference< Node > const & node):
-    root_(root.get()), acquiredRoot_(root), parent_(0), node_(node)
+    root_(root.get()), acquiredRoot_(root), parent_(0), node_(node),
+    status_(STATUS_UNMODIFIED)
 {
     OSL_ASSERT(root.is() && node.is());
 }
@@ -91,10 +98,6 @@ rtl::Reference< Node > ChildAccess::getNode() {
 
 rtl::Reference< RootAccess > ChildAccess::getRoot() {
     return root_;
-}
-
-Access * ChildAccess::getParentAccess() const {
-    return parent_;
 }
 
 void ChildAccess::bind(RootAccess * root, Access * parent) throw () {
@@ -110,7 +113,15 @@ void ChildAccess::unbind() throw () {
     parent_ = 0;
 }
 
+void ChildAccess::setStatus(Status status, css::uno::Any const & changedValue) {
+    status_ = status;
+    changedValue_ = changedValue;
+}
+
 css::uno::Any ChildAccess::asValue() {
+    if (status_ == STATUS_CHANGED) {
+        return changedValue_;
+    }
     rtl::Reference< Node > p(getNode());
     if (PropertyNode * prop = dynamic_cast< PropertyNode * >(p.get())) {
         return prop->getValue();
@@ -136,6 +147,23 @@ css::uno::Any ChildAccess::asValue() {
 }
 
 ChildAccess::~ChildAccess() {}
+
+css::uno::Reference< css::uno::XInterface > ChildAccess::getParent()
+    throw (css::uno::RuntimeException)
+{
+    OSL_ASSERT(thisIs(IS_ANY));
+    osl::MutexGuard g(lock);
+    return static_cast< cppu::OWeakObject * >(parent_);
+}
+
+void ChildAccess::setParent(css::uno::Reference< css::uno::XInterface > const &)
+    throw (css::lang::NoSupportException, css::uno::RuntimeException)
+{
+    OSL_ASSERT(thisIs(IS_ANY));
+    throw css::lang::NoSupportException(
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("setParent")),
+        static_cast< cppu::OWeakObject * >(this));
+}
 
 sal_Int64 ChildAccess::getSomething(
     css::uno::Sequence< sal_Int8 > const & aIdentifier)
