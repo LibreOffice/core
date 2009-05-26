@@ -28,6 +28,8 @@
  *
  ************************************************************************/
 
+#include "precompiled_vcl.hxx"
+
 #include "vcl/arrange.hxx"
 
 #include "osl/diagnose.h"
