@@ -302,7 +302,9 @@ SwPrintUIOptions::SwPrintUIOptions( BOOL bWeb ) :
                                                    aLocalizedStrings.GetString( 33 ),
                                                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintBrochureRTL" ) ),
                                                    sal_False,
-                                                   &aBrochurePropertyName
+                                                   &aBrochurePropertyName,
+                                                   -1,
+                                                   sal_True
                                                    );
 
     // create subgroup for misc options
@@ -343,7 +345,7 @@ SwPrintUIOptions::SwPrintUIOptions( BOOL bWeb ) :
                                                        rtl::OUString(),
                                                        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PageRange" ) ),
                                                        rtl::OUString(),
-                                                       &aPrintRangeName, 1
+                                                       &aPrintRangeName, 1, sal_True
                                                      );
 
 
