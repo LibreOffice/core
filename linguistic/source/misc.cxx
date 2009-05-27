@@ -796,17 +796,62 @@ sal_Unicode ToUpper( const sal_Unicode cChar, INT16 nLanguage )
     return rCC.upper( cChar ).GetChar(0);
 }
 
-
-BOOL HasDigits( const String &rText )
+// sorted(!) array of unicode ranges for code points that are exclusively(!) used as numbers
+// and thus may NOT not be part of names or words like the Chinese/Japanese number characters
+static const sal_uInt32 the_aDigitZeroes [] =
 {
-    xub_StrLen nLen = rText.Len();
+    0x00000030, //0039    ; Decimal # Nd  [10] DIGIT ZERO..DIGIT NINE
+    0x00000660, //0669    ; Decimal # Nd  [10] ARABIC-INDIC DIGIT ZERO..ARABIC-INDIC DIGIT NINE
+    0x000006F0, //06F9    ; Decimal # Nd  [10] EXTENDED ARABIC-INDIC DIGIT ZERO..EXTENDED ARABIC-INDIC DIGIT NINE
+    0x000007C0, //07C9    ; Decimal # Nd  [10] NKO DIGIT ZERO..NKO DIGIT NINE
+    0x00000966, //096F    ; Decimal # Nd  [10] DEVANAGARI DIGIT ZERO..DEVANAGARI DIGIT NINE
+    0x000009E6, //09EF    ; Decimal # Nd  [10] BENGALI DIGIT ZERO..BENGALI DIGIT NINE
+    0x00000A66, //0A6F    ; Decimal # Nd  [10] GURMUKHI DIGIT ZERO..GURMUKHI DIGIT NINE
+    0x00000AE6, //0AEF    ; Decimal # Nd  [10] GUJARATI DIGIT ZERO..GUJARATI DIGIT NINE
+    0x00000B66, //0B6F    ; Decimal # Nd  [10] ORIYA DIGIT ZERO..ORIYA DIGIT NINE
+    0x00000BE6, //0BEF    ; Decimal # Nd  [10] TAMIL DIGIT ZERO..TAMIL DIGIT NINE
+    0x00000C66, //0C6F    ; Decimal # Nd  [10] TELUGU DIGIT ZERO..TELUGU DIGIT NINE
+    0x00000CE6, //0CEF    ; Decimal # Nd  [10] KANNADA DIGIT ZERO..KANNADA DIGIT NINE
+    0x00000D66, //0D6F    ; Decimal # Nd  [10] MALAYALAM DIGIT ZERO..MALAYALAM DIGIT NINE
+    0x00000E50, //0E59    ; Decimal # Nd  [10] THAI DIGIT ZERO..THAI DIGIT NINE
+    0x00000ED0, //0ED9    ; Decimal # Nd  [10] LAO DIGIT ZERO..LAO DIGIT NINE
+    0x00000F20, //0F29    ; Decimal # Nd  [10] TIBETAN DIGIT ZERO..TIBETAN DIGIT NINE
+    0x00001040, //1049    ; Decimal # Nd  [10] MYANMAR DIGIT ZERO..MYANMAR DIGIT NINE
+    0x00001090, //1099    ; Decimal # Nd  [10] MYANMAR SHAN DIGIT ZERO..MYANMAR SHAN DIGIT NINE
+    0x000017E0, //17E9    ; Decimal # Nd  [10] KHMER DIGIT ZERO..KHMER DIGIT NINE
+    0x00001810, //1819    ; Decimal # Nd  [10] MONGOLIAN DIGIT ZERO..MONGOLIAN DIGIT NINE
+    0x00001946, //194F    ; Decimal # Nd  [10] LIMBU DIGIT ZERO..LIMBU DIGIT NINE
+    0x000019D0, //19D9    ; Decimal # Nd  [10] NEW TAI LUE DIGIT ZERO..NEW TAI LUE DIGIT NINE
+    0x00001B50, //1B59    ; Decimal # Nd  [10] BALINESE DIGIT ZERO..BALINESE DIGIT NINE
+    0x00001BB0, //1BB9    ; Decimal # Nd  [10] SUNDANESE DIGIT ZERO..SUNDANESE DIGIT NINE
+    0x00001C40, //1C49    ; Decimal # Nd  [10] LEPCHA DIGIT ZERO..LEPCHA DIGIT NINE
+    0x00001C50, //1C59    ; Decimal # Nd  [10] OL CHIKI DIGIT ZERO..OL CHIKI DIGIT NINE
+    0x0000A620, //A629    ; Decimal # Nd  [10] VAI DIGIT ZERO..VAI DIGIT NINE
+    0x0000A8D0, //A8D9    ; Decimal # Nd  [10] SAURASHTRA DIGIT ZERO..SAURASHTRA DIGIT NINE
+    0x0000A900, //A909    ; Decimal # Nd  [10] KAYAH LI DIGIT ZERO..KAYAH LI DIGIT NINE
+    0x0000AA50, //AA59    ; Decimal # Nd  [10] CHAM DIGIT ZERO..CHAM DIGIT NINE
+    0x0000FF10, //FF19    ; Decimal # Nd  [10] FULLWIDTH DIGIT ZERO..FULLWIDTH DIGIT NINE
+    0x000104A0, //104A9   ; Decimal # Nd  [10] OSMANYA DIGIT ZERO..OSMANYA DIGIT NINE
+    0x0001D7CE  //1D7FF   ; Decimal # Nd  [50] MATHEMATICAL BOLD DIGIT ZERO..MATHEMATICAL MONOSPACE DIGIT NINE
+};
 
-    xub_StrLen i = 0;
-    while (i < nLen)
+BOOL HasDigits( const OUString &rText )
+{
+    static const int nNumDigitZeroes = sizeof(the_aDigitZeroes) / sizeof(the_aDigitZeroes[0]);
+    const sal_Int32 nLen = rText.getLength();
+
+    sal_Int32 i = 0;
+    while (i < nLen) // for all characters ...
     {
-        sal_Unicode cChar = rText.GetChar( i++ );
-        if ((sal_Unicode)'0' <= cChar  &&  cChar <= (sal_Unicode)'9')
-            return TRUE;
+        const sal_uInt32 nCodePoint = rText.iterateCodePoints( &i );    // handle unicode surrogates correctly...
+        for (int j = 0; j < nNumDigitZeroes; ++j)   // ... check in all 0..9 ranges
+        {
+            sal_uInt32 nDigitZero = the_aDigitZeroes[ j ];
+            if (nDigitZero > nCodePoint)
+                break;
+            if (/*nDigitZero <= nCodePoint &&*/ nCodePoint <= nDigitZero + 9)
+                return TRUE;
+        }
     }
     return FALSE;
 }
@@ -875,6 +920,15 @@ uno::Reference< XDictionaryList > GetDictionaryList()
 {
     return uno::Reference< XDictionaryList > (
         GetOneInstanceService( SN_DICTIONARY_LIST ), UNO_QUERY );
+}
+
+uno::Reference< XDictionary > GetIgnoreAllList()
+{
+    uno::Reference< XDictionary > xRes;
+    uno::Reference< XDictionaryList > xDL( GetDictionaryList() );
+    if (xDL.is())
+        xRes = xDL->getDictionaryByName( A2OU("IgnoreAllList") );
+    return xRes;
 }
 
 ///////////////////////////////////////////////////////////////////////////

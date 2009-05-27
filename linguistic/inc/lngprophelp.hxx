@@ -28,13 +28,13 @@
  *
  ************************************************************************/
 
-#ifndef _LINGUISTIC_PROPHELP_HXX_
-#define _LINGUISTIC_PROPHELP_HXX_
+#ifndef _LINGUISTIC_LNGPROPHELP_HXX_
+#define _LINGUISTIC_LNGPROPHELP_HXX_
 
 #include <tools/solar.h>
 
-#include <uno/lbnames.h>            // CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
-#include <cppuhelper/implbase2.hxx> // helper for implementations
+#include <uno/lbnames.h>
+#include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/beans/PropertyValues.hpp>
@@ -83,12 +83,10 @@ class PropertyChgHelper :
     int     nEvtFlags;  // flags for event types allowed to be launched
 
     // default values
-    BOOL    bIsGermanPreReform;
     BOOL    bIsIgnoreControlCharacters;
     BOOL    bIsUseDictionaryList;
 
     // return values, will be set to default value or current temporary value
-    BOOL    bResIsGermanPreReform;
     BOOL    bResIsIgnoreControlCharacters;
     BOOL    bResIsUseDictionaryList;
 
@@ -160,7 +158,6 @@ public:
         ::com::sun::star::uno::XInterface > &
             GetEvtObj() const       { return xMyEvtObj; }
 
-    BOOL    IsGermanPreReform() const           { return bResIsGermanPreReform; }
     BOOL    IsIgnoreControlCharacters() const   { return bResIsIgnoreControlCharacters; }
     BOOL    IsUseDictionaryList() const         { return bResIsUseDictionaryList; }
 };
@@ -242,7 +239,7 @@ public:
 
 ///////////////////////////////////////////////////////////////////////////
 
-class PropertyHelper_Hyph :
+class PropertyHelper_Hyphen :
     public PropertyChgHelper
 {
     // default values
@@ -256,8 +253,8 @@ class PropertyHelper_Hyph :
             nResHyphMinWordLength;
 
     // disallow use of copy-constructor and assignment-operator
-    PropertyHelper_Hyph( const PropertyHelper_Hyph & );
-    PropertyHelper_Hyph & operator = ( const PropertyHelper_Hyph & );
+    PropertyHelper_Hyphen( const PropertyHelper_Hyphen & );
+    PropertyHelper_Hyphen & operator = ( const PropertyHelper_Hyphen & );
 
 protected:
     // PropertyChgHelper
@@ -267,12 +264,12 @@ protected:
                             const ::com::sun::star::beans::PropertyChangeEvent& rEvt );
 
 public:
-    PropertyHelper_Hyph(
+    PropertyHelper_Hyphen(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::uno::XInterface > &rxSource,
             ::com::sun::star::uno::Reference<
                 ::com::sun::star::beans::XPropertySet > &rxPropSet);
-    virtual ~PropertyHelper_Hyph();
+    virtual ~PropertyHelper_Hyphen();
 
     virtual void    SetTmpPropVals( const com::sun::star::beans::PropertyValues &rPropVals );
 

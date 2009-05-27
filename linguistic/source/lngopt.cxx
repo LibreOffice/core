@@ -204,17 +204,18 @@ void LinguOptions::GetValue( Any &rVal, INT32 nWID ) const
 
     INT16 *pnVal = 0;
     BOOL  *pbVal = 0;
+    BOOL  bDummy = FALSE;
 
     switch( nWID )
     {
-        case WID_IS_GERMAN_PRE_REFORM :     /*! deprecated !*/ break;
+        case WID_IS_GERMAN_PRE_REFORM :     pbVal = &bDummy; /*! deprecated !*/ break;
         case WID_IS_USE_DICTIONARY_LIST :   pbVal = &pData->bIsUseDictionaryList;   break;
         case WID_IS_IGNORE_CONTROL_CHARACTERS : pbVal = &pData->bIsIgnoreControlCharacters; break;
         case WID_IS_HYPH_AUTO :             pbVal = &pData->bIsHyphAuto;    break;
         case WID_IS_HYPH_SPECIAL :          pbVal = &pData->bIsHyphSpecial; break;
         case WID_IS_SPELL_AUTO :            pbVal = &pData->bIsSpellAuto;   break;
-        case WID_IS_SPELL_HIDE :            /*! deprecated !*/ break;
-        case WID_IS_SPELL_IN_ALL_LANGUAGES :/*! deprecated !*/ break;
+        case WID_IS_SPELL_HIDE :            pbVal = &bDummy; /*! deprecated !*/ break;
+        case WID_IS_SPELL_IN_ALL_LANGUAGES :pbVal = &bDummy; /*! deprecated !*/ break;
         case WID_IS_SPELL_SPECIAL :         pbVal = &pData->bIsSpellSpecial;    break;
         case WID_IS_WRAP_REVERSE :          pbVal = &pData->bIsSpellReverse;    break;
         case WID_DEFAULT_LANGUAGE :         pnVal = &pData->nDefaultLanguage;   break;

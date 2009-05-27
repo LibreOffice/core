@@ -94,12 +94,11 @@ using namespace com::sun::star;
 SfxEventNamesList& SfxEventNamesList::operator=( const SfxEventNamesList& rTbl )
 {
     DelDtor();
-    SfxEventName* pTmp = ((SfxEventNamesList&)rTbl).First();
-    while( pTmp )
+    for (USHORT n=0; n<rTbl.Count(); n++ )
     {
+        SfxEventName* pTmp = ((SfxEventNamesList&)rTbl).GetObject(n);
         SfxEventName *pNew = new SfxEventName( *pTmp );
-        Insert( rTbl.GetCurKey(), pNew );
-        pTmp = ((SfxEventNamesList&)rTbl).Next();
+        Insert( pNew, n );
     }
     return *this;
 }
@@ -122,16 +121,14 @@ int SfxEventNamesItem::operator==( const SfxPoolItem& rAttr ) const
     const SfxEventNamesList& rOwn = aEventsList;
     const SfxEventNamesList& rOther = ( (SfxEventNamesItem&) rAttr ).aEventsList;
 
-    // Anzahl unterschiedlich => auf jeden Fall ungleich
     if ( rOwn.Count() != rOther.Count() )
         return FALSE;
 
-    // einzeln verleichen; wegen Performance ist die Reihenfolge wichtig
     for ( USHORT nNo = 0; nNo < rOwn.Count(); ++nNo )
     {
         const SfxEventName *pOwn = rOwn.GetObject(nNo);
         const SfxEventName *pOther = rOther.GetObject(nNo);
-        if (    rOwn.GetKey(pOwn) != rOther.GetKey(pOther)  ||
+        if (    pOwn->mnId != pOther->mnId ||
                 pOwn->maEventName != pOther->maEventName ||
                 pOwn->maUIName != pOther->maUIName )
             return FALSE;
@@ -176,13 +173,7 @@ USHORT SfxEventNamesItem::GetVersion( USHORT ) const
 
 void SfxEventNamesItem::AddEvent( const String& rName, const String& rUIName, USHORT nID )
 {
-    SfxEventName* pName;
-    if ( 0 != (pName=aEventsList.Get(nID)) )
-    {
-        DBG_WARNING("Event already added!");
-    }
-    else
-        aEventsList.Insert( nID, new SfxEventName( nID, rName, rUIName.Len() ? rUIName : rName ) );
+    aEventsList.Insert( new SfxEventName( nID, rName, rUIName.Len() ? rUIName : rName ) );
 }
 
 // class SfxAsyncEvent_Impl ----------------------------------------------
@@ -606,12 +597,12 @@ void SfxEventConfiguration::RegisterEvent( USHORT nId,
         return;
     }
 
-    gp_Id_SortList->Insert( nPos, new SfxEventName( nId, rMacroName, rUIName ) );
+    gp_Id_SortList->Insert( new SfxEventName( nId, rMacroName, rUIName ), nPos );
     nPos = GetPos_Impl( rMacroName, bFound );
 
     DBG_ASSERT( !bFound, "RegisterEvent: Name in List, but ID not?" );
 
-    gp_Name_SortList->Insert( nPos, new SfxEventName( nId, rMacroName, rUIName ) );
+    gp_Name_SortList->Insert( new SfxEventName( nId, rMacroName, rUIName ), nPos );
 
     SFX_APP()->GetEventConfig();
 }

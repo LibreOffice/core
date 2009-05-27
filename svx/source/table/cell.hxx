@@ -34,6 +34,7 @@
 #include <com/sun/star/table/XMergeableCell.hpp>
 #include <com/sun/star/awt/XLayoutConstrains.hpp>
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>
+#include <com/sun/star/lang/XEventListener.hpp>
 
 #include <rtl/ref.hxx>
 
@@ -61,13 +62,13 @@ class Cell :    public SdrText,
                 public SvxUnoTextBase,
                 public ::com::sun::star::table::XMergeableCell,
                 public ::com::sun::star::awt::XLayoutConstrains,
+                public ::com::sun::star::lang::XEventListener,
                 public ::cppu::OWeakObject
 {
     friend class CellUndo;
 
 public:
-    Cell( SdrTableObj& rTableObj, OutlinerParaObject* pOutlinerParaObject ) throw();
-    virtual ~Cell() throw();
+    static rtl::Reference< Cell > create( SdrTableObj& rTableObj, OutlinerParaObject* pOutlinerParaObject );
 
     // private
     void dispose();
@@ -192,6 +193,9 @@ public:
     virtual ::rtl::OUString SAL_CALL getString(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setString( const ::rtl::OUString& aString ) throw (::com::sun::star::uno::RuntimeException);
 
+    // XEventListener
+    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
+
     virtual void SetOutlinerParaObject( OutlinerParaObject* pTextObject );
 
     void    AddUndo();
@@ -212,6 +216,9 @@ protected:
     ::com::sun::star::uno::Any GetAnyForItem( SfxItemSet& aSet, const SfxItemPropertyMap* pMap );
 
 private:
+    Cell( SdrTableObj& rTableObj, OutlinerParaObject* pOutlinerParaObject ) throw();
+    virtual ~Cell() throw();
+
     SvxItemPropertySet maPropSet;
 
     sdr::properties::TextProperties*    mpProperties;

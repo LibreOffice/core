@@ -2676,7 +2676,7 @@ Pointer SdrTableObj::GetCreatePointer() const
 
 void SdrTableObj::createCell( CellRef& xNewCell )
 {
-    xNewCell.set( new Cell( *this, 0 ) );
+    xNewCell = Cell::create( *this, 0 );
 }
 
 // --------------------------------------------------------------------

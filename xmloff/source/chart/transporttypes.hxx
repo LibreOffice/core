@@ -68,6 +68,8 @@ struct SchXMLTable
 
     ::rtl::OUString aTableNameOfFile;                   /// the table name read at the table:table element
 
+    ::std::vector< sal_Int32 > aHiddenColumns;
+
     SchXMLTable() : nRowIndex( -1 ),
                     nColumnIndex( -1 ),
                     nMaxColumnIndex( -1 ),

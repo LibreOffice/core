@@ -52,11 +52,11 @@ SLOFILES = \
         $(SLO)$/hyphdta.obj\
         $(SLO)$/iprcache.obj\
         $(SLO)$/lngopt.obj\
+        $(SLO)$/lngprophelp.obj\
         $(SLO)$/lngreg.obj\
         $(SLO)$/lngsvcmgr.obj\
         $(SLO)$/misc.obj\
         $(SLO)$/misc2.obj\
-        $(SLO)$/prophelp.obj\
         $(SLO)$/spelldsp.obj\
         $(SLO)$/spelldta.obj\
         $(SLO)$/thesdsp.obj\

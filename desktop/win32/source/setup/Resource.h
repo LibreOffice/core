@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: Resource.h,v $
- * $Revision: 1.7 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -45,6 +42,8 @@
 #define IDS_UNKNOWN_ERROR   21
 #define IDS_INVALID_PROFILE 22
 #define IDS_UNKNOWN_LANG    23
+#define IDS_SETUP_TO_OLD    24
+#define IDS_SETUP_NOT_FOUND 25
 #define IDS_LANGUAGE_ENGLISH    50
 #define IDS_LANGUAGE_SPAIN  51
 #define IDS_LANGUAGE_GERMAN 52

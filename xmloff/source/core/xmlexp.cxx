@@ -1393,6 +1393,10 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
     return 0;
 }
 
+void SvXMLExport::ResetNamespaceMap()
+{
+    delete mpNamespaceMap;    mpNamespaceMap = new SvXMLNamespaceMap;
+}
 
 void SvXMLExport::_ExportMeta()
 {

@@ -142,6 +142,8 @@ namespace sdr
 
             void ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem);
 
+            void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr);
+
             sdr::table::CellRef mxCell;
         };
 
@@ -272,6 +274,23 @@ namespace sdr
             AttributeProperties::ItemChange( nWhich, pNewItem );
         }
 
+        void CellProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr)
+        {
+            TextProperties::SetStyleSheet( pNewStyleSheet, bDontRemoveHardAttr );
+
+            if( bDontRemoveHardAttr && pNewStyleSheet )
+            {
+                GetObjectItemSet();
+
+                const SfxItemSet& rStyleAttribs = pNewStyleSheet->GetItemSet();
+
+                for ( USHORT nWhich = SDRATTR_START; nWhich <= SDRATTR_TABLE_LAST; nWhich++ )
+                {
+                    if ( rStyleAttribs.GetItemState( nWhich ) == SFX_ITEM_ON )
+                        mpItemSet->ClearItem( nWhich );
+                }
+            }
+        }
     } // end of namespace properties
 } // end of namespace sdr
 
@@ -279,6 +298,19 @@ namespace sdr { namespace table {
 
 // -----------------------------------------------------------------------------
 // Cell
+// -----------------------------------------------------------------------------
+
+rtl::Reference< Cell > Cell::create( SdrTableObj& rTableObj, OutlinerParaObject* pOutlinerParaObject )
+{
+    rtl::Reference< Cell > xCell( new Cell( rTableObj, pOutlinerParaObject ) );
+    if( xCell->mxTable.is() )
+    {
+        Reference< XEventListener > xListener( xCell.get() );
+        xCell->mxTable->addEventListener( xListener );
+    }
+    return xCell;
+}
+
 // -----------------------------------------------------------------------------
 
 Cell::Cell( SdrTableObj& rTableObj, OutlinerParaObject* pOutlinerParaObject ) throw()
@@ -309,7 +341,19 @@ Cell::~Cell() throw()
 
 void Cell::dispose()
 {
-    mxTable.clear();
+    if( mxTable.is() )
+    {
+        try
+        {
+            Reference< XEventListener > xThis( this );
+            mxTable->removeEventListener( xThis );
+        }
+        catch( Exception& )
+        {
+            DBG_ERROR("Cell::dispose(), exception caught!");
+        }
+        mxTable.clear();
+    }
 
     if( mpProperties )
     {
@@ -621,7 +665,7 @@ sal_Int32 Cell::getMinimumHeight()
         pEditOutliner->SetMaxAutoPaperSize(aSize);
         nMinimumHeight = pEditOutliner->GetTextHeight()+1;
     }
-    else
+    else /*if ( hasText() )*/
     {
         Outliner& rOutliner=rTableObj.ImpGetDrawOutliner();
         rOutliner.SetPaperSize(aSize);
@@ -736,6 +780,9 @@ Any SAL_CALL Cell::queryInterface( const Type & rType ) throw(RuntimeException)
 
     if( rType == XLayoutConstrains::static_type() )
         return Any( Reference< XLayoutConstrains >( this ) );
+
+    if( rType == XEventListener::static_type() )
+        return Any( Reference< XEventListener >( this ) );
 
     Any aRet( SvxUnoTextBase::queryAggregation( rType ) );
     if( aRet.hasValue() )
@@ -1695,6 +1742,13 @@ void SAL_CALL Cell::setString( const OUString& aString ) throw (RuntimeException
 {
     SvxUnoTextBase::setString( aString );
     notifyModified();
+}
+
+// XEventListener
+void SAL_CALL Cell::disposing( const EventObject& /*Source*/ ) throw (RuntimeException)
+{
+    mxTable.clear();
+    dispose();
 }
 
 } }

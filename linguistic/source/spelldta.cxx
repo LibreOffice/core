@@ -151,8 +151,8 @@ void SearchSimilarText( const OUString &rText, INT16 nLanguage,
         {
 #if OSL_DEBUG_LEVEL > 1
             DictionaryType  eType = xDic->getDictionaryType();
-            DBG_ASSERT( eType != DictionaryType_MIXED,
-                    "unexpected dictionary type" );
+            (void) eType;
+            DBG_ASSERT( eType != DictionaryType_MIXED, "unexpected dictionary type" );
 #endif
             const Sequence< Reference< XDictionaryEntry > > aEntries = xDic->getEntries();
             const Reference< XDictionaryEntry > *pEntries = aEntries.getConstArray();

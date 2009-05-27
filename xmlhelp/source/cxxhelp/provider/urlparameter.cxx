@@ -303,7 +303,11 @@ void URLParameter::readBerkeley()
     DataBaseIterator aDbIt( *m_pDatabases, aModule, aLanguage, false );
     bool bSuccess = false;
 
+    int nSize = 0;
+    const sal_Char* pData = NULL;
+
     Dbt data;
+    DBData aDBData;
     rtl::OUString aExtensionPath;
     while( true )
     {
@@ -312,21 +316,36 @@ void URLParameter::readBerkeley()
             break;
 
         rtl::OString keyStr( m_aId.getStr(),m_aId.getLength(),RTL_TEXTENCODING_UTF8 );
-        Dbt key( static_cast< void* >( const_cast< sal_Char* >( keyStr.getStr() ) ),
-                 keyStr.getLength() );
 
-        int err = db->get( 0,&key,&data,0 );
-        if( err == 0 )
+        DBHelp* pDBHelp = db->getDBHelp();
+        if( pDBHelp != NULL )
         {
-            bSuccess = true;
-            break;
+            bSuccess = pDBHelp->getValueForKey( keyStr, aDBData );
+            if( bSuccess )
+            {
+                nSize = aDBData.getSize();
+                pData = aDBData.getData();
+                break;
+            }
+        }
+        else
+        {
+            Dbt key( static_cast< void* >( const_cast< sal_Char* >( keyStr.getStr() ) ),
+                     keyStr.getLength() );
+            int err = db->get( 0,&key,&data,0 );
+            if( err == 0 )
+            {
+                bSuccess = true;
+                nSize = data.get_size();
+                pData = static_cast<sal_Char*>( data.get_data() );
+                break;
+            }
         }
     }
 
     if( bSuccess )
     {
-        DbtToStringConverter converter( static_cast< sal_Char* >( data.get_data() ),
-                                        data.get_size() );
+        DbtToStringConverter converter( pData, nSize );
         m_aTitle = converter.getTitle();
         m_pDatabases->replaceName( m_aTitle );
         m_aPath  = converter.getFile();
@@ -1025,12 +1044,6 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
             rtl::OUString aOUExpandedExtensionPath = Databases::expandURL( aExtensionPath, xContext );
             rtl::OString aExpandedExtensionPath = rtl::OUStringToOString( aOUExpandedExtensionPath, osl_getThreadTextEncoding() );
 
-            // Add extension language part
-            rtl::OString aExtensionLanguage = aPureLanguage;
-            if( aExtensionLanguage.getLength() > 2 )
-                aExtensionLanguage = aExtensionLanguage.copy( 0, 2 );
-            aExpandedExtensionPath += rtl::OString('/');
-            aExpandedExtensionPath += aExtensionLanguage;
             parString[last++] = "ExtensionPath";
             parString[last++] = rtl::OString('\'') + aExpandedExtensionPath + rtl::OString('\'');
 

@@ -1283,7 +1283,7 @@ OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSe
         String aStr_( pCurr->GetBankSymbol() );
         aStr_ += aTwoSpace;
         aStr_ += pCurr->GetSymbol();
-        aStr = ApplyLreOrRleEmbedding( aStr_ );
+        aStr_ = ApplyLreOrRleEmbedding( aStr_ );
         aStr_ += aTwoSpace;
         aStr_ += ApplyLreOrRleEmbedding( pLanguageTable->GetString( pCurr->GetLanguage() ) );
         USHORT nPos = aCurrencyLB.InsertEntry( aStr_ );

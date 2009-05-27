@@ -64,6 +64,8 @@
 #define PRODUCT_NAME_VAR    TEXT( "%PRODUCTNAME" )
 #define PRODUCT_VERSION     TEXT( "ProductVersion" )
 #define ERROR_SHOW_USAGE      -2
+#define ERROR_SETUP_TO_OLD    -3
+#define ERROR_SETUP_NOT_FOUND -4
 
 #define PARAM_SETUP_USED    TEXT( " SETUP_USED=1 " )
 #define PARAM_PACKAGE       TEXT( "/I " )
@@ -124,8 +126,6 @@ SetupAppX::SetupAppX()
     m_pCmdLine  = NULL;
 
     m_pDatabase = NULL;
-    m_pInstMsiW = NULL;
-    m_pInstMsiA = NULL;
     m_pReqVersion   = NULL;
     m_pProductName  = NULL;
     m_pAdvertise    = NULL;
@@ -183,8 +183,6 @@ SetupAppX::~SetupAppX()
 
     if ( m_pAppTitle ) delete [] m_pAppTitle;
     if ( m_pDatabase ) delete [] m_pDatabase;
-    if ( m_pInstMsiW ) delete [] m_pInstMsiW;
-    if ( m_pInstMsiA ) delete [] m_pInstMsiA;
     if ( m_pReqVersion ) delete [] m_pReqVersion;
     if ( m_pProductName ) delete [] m_pProductName;
     if ( m_pAdvertise )   delete [] m_pAdvertise;
@@ -346,16 +344,6 @@ boolean SetupAppX::ReadProfile()
                     m_pDatabase = pValue;
                     Log( TEXT( "    Database = %s\r\n" ), pValue );
                 }
-                else if ( lstrcmpi( TEXT( "instmsiw" ), pName ) == 0 )
-                {
-                    m_pInstMsiW = pValue;
-                    Log( TEXT( "    instmsiw = %s\r\n" ), pValue );
-                }
-                else if ( lstrcmpi( TEXT( "instmsia" ), pName ) == 0 )
-                {
-                    m_pInstMsiA = pValue;
-                    Log( TEXT( "    instmsia = %s\r\n" ), pValue );
-                }
                 else if ( lstrcmpi( TEXT( "msiversion" ), pName ) == 0 )
                 {
                     m_pReqVersion = pValue;
@@ -389,7 +377,7 @@ boolean SetupAppX::ReadProfile()
             }
         }
 
-        if ( bRet && ( !m_pDatabase || !m_pInstMsiW || !m_pInstMsiA || !m_pReqVersion || !m_pProductName ) )
+        if ( bRet && ( !m_pDatabase || !m_pReqVersion || !m_pProductName ) )
         {
             Log( TEXT( "ERROR: incomplete 'Setup' section in profile\r\n" ) );
             SetError( ERROR_INVALID_DATA );
@@ -1081,6 +1069,14 @@ void SetupAppX::DisplayError( UINT nErr ) const
                                 StringCchPrintf( sError, MAX_TEXT_LENGTH, sTmp, m_pErrorText );
                                 break;
 
+        case ERROR_SETUP_TO_OLD:    // - 3
+                                WIN::LoadString( m_hInst, IDS_SETUP_TO_OLD, sTmp, MAX_TEXT_LENGTH );
+                                StringCchPrintf( sError, MAX_TEXT_LENGTH, sTmp, m_pReqVersion, m_pErrorText );
+                                break;
+        case ERROR_SETUP_NOT_FOUND: // - 4
+                                WIN::LoadString( m_hInst, IDS_SETUP_NOT_FOUND, sTmp, MAX_TEXT_LENGTH );
+                                StringCchPrintf( sError, MAX_TEXT_LENGTH, sTmp, m_pReqVersion );
+                                break;
         case ERROR_SHOW_USAGE:      // - 2
                                 nMsgType = MB_OK | MB_ICONINFORMATION;
                                 WIN::LoadString( m_hInst, IDS_USAGE, sError, MAX_TEXT_LENGTH );
@@ -1156,15 +1152,15 @@ void SetupAppX::GetLanguageName( long nLanguage, LPTSTR sName ) const
 //--------------------------------------------------------------------------
 boolean SetupAppX::CheckVersion()
 {
-    boolean bRet = true;
-    boolean bNeedUpdate = true;
+    boolean bRet = false;
     HMODULE hMsi = LoadMsiLibrary();
 
     Log( TEXT( " Looking for installed MSI with version >= %s\r\n" ), m_pReqVersion );
 
     if ( !hMsi )
     {
-        Log( TEXT( "Warning: No MSI found, update needed!\r\n" ) );
+        Log( TEXT( "Error: No MSI found!\r\n" ) );
+        SetError( (UINT) ERROR_SETUP_NOT_FOUND );
     }
     else
     {
@@ -1184,12 +1180,14 @@ boolean SetupAppX::CheckVersion()
                                  aInfo.dwBuildNumber );
                 if ( _tcsncmp( pMsiVersion, m_pReqVersion, _tcslen( pMsiVersion ) ) < 0 )
                 {
+                    StringCchCopy( m_pErrorText, MAX_TEXT_LENGTH, pMsiVersion );
+                    SetError( (UINT) ERROR_SETUP_TO_OLD );
                     Log( TEXT( "Warning: Old MSI version found <%s>, update needed!\r\n" ), pMsiVersion );
                 }
                 else
                 {
                     Log( TEXT( " Found MSI version <%s>, no update needed\r\n" ), pMsiVersion );
-                    bNeedUpdate = false;
+                    bRet = true;
                 }
                 if ( aInfo.dwMajorVersion >= 3 )
                     m_bSupportsPatch = true;
@@ -1199,26 +1197,6 @@ boolean SetupAppX::CheckVersion()
         }
 
         FreeLibrary( hMsi );
-    }
-
-    if ( bNeedUpdate )
-    {
-        LPTSTR  pInstaller = 0;
-
-        if ( IsWin9x() )
-            bRet = GetPathToFile( m_pInstMsiA, &pInstaller );
-        else
-            bRet = GetPathToFile( m_pInstMsiW, &pInstaller );
-
-        if ( bRet )
-            bRet = InstallMsi( pInstaller );
-        else
-            Log( TEXT( "ERROR: Could not find InstMsiA/InstMsiW!\r\n" ) );
-
-        if ( bRet && IsWin9x() && ( GetMinorVersion() <= 10 ) )
-            SetRebootNeeded( true );
-
-        if ( pInstaller ) delete [] pInstaller;
     }
 
     return bRet;
@@ -1273,98 +1251,6 @@ boolean SetupAppX::CheckForUpgrade()
 
         delete [] sProductVersion;
     }
-
-    return true;
-}
-
-//--------------------------------------------------------------------------
-boolean SetupAppX::InstallMsi( LPCTSTR pInstaller )
-{
-    if ( ! IsAdmin() )
-    {
-        Log( TEXT( "Error: need admin rights to update/install MSI!\r\n" ) );
-        SetError( ERROR_DS_INSUFF_ACCESS_RIGHTS );
-        return false;
-    }
-
-    if ( ! m_bQuiet )
-    {
-        TCHAR sUserPrompt[ MAX_TEXT_LENGTH ] = {0};
-        WIN::LoadString( m_hInst, IDS_ALLOW_MSI_UPDATE, sUserPrompt, MAX_TEXT_LENGTH );
-        ConvertNewline( sUserPrompt );
-
-        if ( IDYES != WIN::MessageBox( NULL, sUserPrompt, m_pAppTitle, MB_YESNO | MB_ICONQUESTION ) )
-        {
-            SetError( ERROR_INSTALL_USEREXIT );
-            Log( TEXT( "Error: User canceled update/installation of new MSI!\r\n" ) );
-            return false;
-        }
-    }
-
-    STARTUPINFO         aSUI;
-    PROCESS_INFORMATION aPI;
-
-    Log( TEXT( " Will install <%s>\r\n" ), pInstaller );
-
-    ZeroMemory( (void*)&aPI, sizeof( PROCESS_INFORMATION ) );
-    ZeroMemory( (void*)&aSUI, sizeof( STARTUPINFO ) );
-
-    aSUI.cb          = sizeof(STARTUPINFO);
-    aSUI.dwFlags     = STARTF_USESHOWWINDOW;
-    aSUI.wShowWindow = SW_SHOW;
-
-    DWORD  nCmdLineLength = lstrlen( pInstaller ) + lstrlen( sDelayReboot ) + 3;
-
-    if ( m_bQuiet )
-        nCmdLineLength += lstrlen( sMsiQuiet );
-
-    TCHAR *sCmdLine = new TCHAR[ nCmdLineLength ];
-
-    if ( FAILED( StringCchCopy( sCmdLine, nCmdLineLength, TEXT("\"")) ) ||
-         FAILED( StringCchCat(  sCmdLine, nCmdLineLength, pInstaller) ) ||
-         FAILED( StringCchCat(  sCmdLine, nCmdLineLength, TEXT("\"")) ) ||
-         FAILED( StringCchCat(  sCmdLine, nCmdLineLength, sDelayReboot) ) ||
-         ( m_bQuiet && FAILED( StringCchCat( sCmdLine, nCmdLineLength, sMsiQuiet ) ) ) )
-    {
-        Log( TEXT( "ERROR: Could not create command line for updating MSI.\r\n" ) );
-        delete [] sCmdLine;
-        SetError( ERROR_INSTALL_FAILURE );
-        return false;
-    }
-
-    if ( !WIN::CreateProcess( NULL, sCmdLine, NULL, NULL, FALSE,
-                              CREATE_DEFAULT_ERROR_MODE, NULL, NULL,
-                              &aSUI, &aPI ) )
-    {
-        Log( TEXT( "ERROR: Could not create process %s.\r\n" ), sCmdLine );
-        SetError( WIN::GetLastError() );
-        delete [] sCmdLine;
-        return false;
-    }
-
-    DWORD nResult = WaitForProcess( aPI.hProcess );
-
-    if( ERROR_SUCCESS != nResult )
-    {
-        Log( TEXT( "ERROR: While waiting for %s.\r\n" ), sCmdLine );
-        delete [] sCmdLine;
-        SetError( nResult );
-        return false;
-    }
-
-    GetExitCodeProcess( aPI.hProcess, &nResult );
-    CloseHandle( aPI.hProcess );
-
-    if ( nResult != ERROR_SUCCESS )
-    {
-        TCHAR sBuf[80];
-        StringCchPrintf( sBuf, 80, TEXT("Warning: Installation returned %u.\r\n"), nResult );
-        Log( sBuf );
-    }
-    else
-        Log( TEXT( " Installation of new version completed successfully.\r\n" ) );
-
-    delete [] sCmdLine;
 
     return true;
 }
