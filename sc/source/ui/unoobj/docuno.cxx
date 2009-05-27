@@ -684,6 +684,7 @@ BOOL ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
     sal_Bool bSuppressEmptyPages = sal_False;
 
     rtl::OUString aSelectionString( RTL_CONSTASCII_USTRINGPARAM( "all" ) );
+    sal_Int32 nPrintContent = 0;
     for( sal_Int32 i = 0, nLen = rOptions.getLength(); i < nLen; i++ )
     {
         if( rOptions[i].Name.equalsAscii( "IsOnlySelectedSheets" ) )
@@ -696,16 +697,25 @@ BOOL ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
             bHaveOptions = true;
             rOptions[i].Value >>= bSuppressEmptyPages;
         }
-        else if( rOptions[i].Name.equalsAscii( "PrintSelection" ) )
+        else if( rOptions[i].Name.equalsAscii( "PrintRange" ) )
         {
             bHaveOptions = true;
             rOptions[i].Value >>= aSelectionString;
+        }
+        else if( rOptions[i].Name.equalsAscii( "PrintContent" ) )
+        {
+            bHaveOptions = true;
+            rOptions[i].Value >>= nPrintContent;
         }
         else if( rOptions[i].Name.equalsAscii( "View" ) )
         {
             rOptions[i].Value >>= xView;
         }
     }
+    if( nPrintContent == 0 )
+        aSelectionString = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "all" ) );
+    else if( nPrintContent == 2 )
+        aSelectionString = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "selection" ) );
 
     uno::Reference<uno::XInterface> xInterface(aSelection, uno::UNO_QUERY);
     if ( xInterface.is() )
