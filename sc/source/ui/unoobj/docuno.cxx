@@ -277,7 +277,7 @@ ScPrintUIOptions::ScPrintUIOptions( sal_Bool i_bEmptyPages, sal_Bool i_bSelected
                                                   rtl::OUString(),
                                                   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PageRange" ) ),
                                                   rtl::OUString(),
-                                                  &aPrintRangeName, 1
+                                                  &aPrintRangeName, 1, sal_True
                                                   );
 
     // create subgroup for sheets
