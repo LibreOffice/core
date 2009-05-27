@@ -434,7 +434,8 @@ void PrintDialog::setupOptionalUI()
             }
         }
 
-        if( aCtrlType.equalsAscii( "Group" ) || ! pCurParent )
+        if( aCtrlType.equalsAscii( "Group" ) ||
+            ( ! pCurParent && ! (bOnJobPage || bOnJobPageValue) ) )
         {
             // add new tab page
             TabPage* pNewGroup = new TabPage( &maTabCtrl );
@@ -457,7 +458,7 @@ void PrintDialog::setupOptionalUI()
             pCurColumn->setParentWindow( pNewGroup );
             pCurColumn->setOuterBorder( nBorderWidth );
         }
-        else if( aCtrlType.equalsAscii( "Subgroup" ) && pCurParent )
+        else if( aCtrlType.equalsAscii( "Subgroup" ) && (pCurParent || bOnJobPageValue) )
         {
             // change to job page or back if necessary
             if( (bOnJobPage && ! bOnJobPageValue) ||
