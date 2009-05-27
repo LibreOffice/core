@@ -347,6 +347,8 @@ void PrintDialog::setupOptionalUI()
     USHORT nOptPageId = 9, nCurSubGroup = 0;
     bool bOnJobPage = false;
 
+    std::multimap< rtl::OUString, vcl::RowOrColumn* > aPropertyToDependencyRowMap;
+
     const Sequence< PropertyValue >& rOptions( maPListener->getUIOptions() );
     for( int i = 0; i < rOptions.getLength(); i++ )
     {
@@ -363,6 +365,9 @@ void PrintDialog::setupOptionalUI()
         sal_Int64 nMinValue = 0, nMaxValue = 0;
         sal_Int32 nCurHelpText = 0;
         sal_Bool bOnJobPageValue = sal_False;
+        rtl::OUString aDependsOnName;
+        sal_Int32 nDependsOnValue = 0;
+        sal_Bool bUseDependencyRow = sal_False;
 
         for( int n = 0; n < aOptProp.getLength(); n++ )
         {
@@ -397,26 +402,15 @@ void PrintDialog::setupOptionalUI()
             }
             else if( rEntry.Name.equalsAscii( "DependsOnName" ) )
             {
-                rtl::OUString aDepName;
-                rEntry.Value >>= aDepName;
-                std::map< rtl::OUString, Window* >::iterator it( maPropertyToWindowMap.find( aDepName ) );
-                if( it != maPropertyToWindowMap.end() )
-                {
-                    Window* pWin = it->second;
-                    // still on the same page ?
-                    if( pWin->GetParent() == pCurParent )
-                    {
-                        // is it a labeled window ?
-                        if( dynamic_cast< ListBox* >(pWin)       ||
-                            dynamic_cast< Edit* >(pWin)
-                          )
-                        {
-                            Window* pLabelWin = pWin->GetLabeledBy();
-                            if( dynamic_cast<FixedText*>(pLabelWin) ) // sanity check
-                                pWin = pLabelWin;
-                        }
-                    }
-                }
+                rEntry.Value >>= aDependsOnName;
+            }
+            else if( rEntry.Name.equalsAscii( "DependsOnEntry" ) )
+            {
+                rEntry.Value >>= nDependsOnValue;
+            }
+            else if( rEntry.Name.equalsAscii( "AttachToDependency" ) )
+            {
+                rEntry.Value >>= bUseDependencyRow;
             }
             else if( rEntry.Name.equalsAscii( "MinValue" ) )
             {
@@ -440,81 +434,95 @@ void PrintDialog::setupOptionalUI()
             }
         }
 
-        if( aCtrlType.equalsAscii( "Group" ) ||
-            aCtrlType.equalsAscii( "Subgroup" ) ||
-            aCtrlType.equalsAscii( "Radio" ) ||
-            aCtrlType.equalsAscii( "List" )  ||
-            aCtrlType.equalsAscii( "Range" )  ||
-            aCtrlType.equalsAscii( "Edit" )  ||
-            aCtrlType.equalsAscii( "Bool" ) )
+        if( aCtrlType.equalsAscii( "Group" ) || ! pCurParent )
         {
-            if( aCtrlType.equalsAscii( "Group" ) || ! pCurParent )
+            // add new tab page
+            TabPage* pNewGroup = new TabPage( &maTabCtrl );
+            maControls.push_front( pNewGroup );
+            pCurParent = pNewGroup;
+            pNewGroup->SetText( aText );
+            maTabCtrl.InsertPage( ++nOptPageId, aText );
+            maTabCtrl.SetTabPage( nOptPageId, pNewGroup );
+
+            // set help id
+            setSmartId( pNewGroup, "TabPage", nOptPageId );
+            // set help text
+            setHelpText( pNewGroup, aHelpTexts, 0 );
+
+            // reset subgroup counter
+            nCurSubGroup = 0;
+
+            aDynamicColumns.push_back( new vcl::RowOrColumn( NULL, true, nBorderWidth ) );
+            pCurColumn = aDynamicColumns.back();
+            pCurColumn->setParentWindow( pNewGroup );
+            pCurColumn->setOuterBorder( nBorderWidth );
+        }
+        else if( aCtrlType.equalsAscii( "Subgroup" ) && pCurParent )
+        {
+            // change to job page or back if necessary
+            if( (bOnJobPage && ! bOnJobPageValue) ||
+                (! bOnJobPage && bOnJobPageValue) )
             {
-                // add new tab page
-                TabPage* pNewGroup = new TabPage( &maTabCtrl );
-                maControls.push_front( pNewGroup );
-                pCurParent = pNewGroup;
-                pNewGroup->SetText( aText );
-                maTabCtrl.InsertPage( ++nOptPageId, aText );
-                maTabCtrl.SetTabPage( nOptPageId, pNewGroup );
-
-                // set help id
-                setSmartId( pNewGroup, "TabPage", nOptPageId );
-                // set help text
-                setHelpText( pNewGroup, aHelpTexts, 0 );
-
-                // reset subgroup counter
-                nCurSubGroup = 0;
-
-                aDynamicColumns.push_back( new vcl::RowOrColumn( NULL, true, nBorderWidth ) );
-                pCurColumn = aDynamicColumns.back();
-                pCurColumn->setParentWindow( pNewGroup );
-                pCurColumn->setOuterBorder( nBorderWidth );
-            }
-
-            if( aCtrlType.equalsAscii( "Subgroup" ) && pCurParent )
-            {
-                // change to job page or back if necessary
-                if( (bOnJobPage && ! bOnJobPageValue) ||
-                    (! bOnJobPage && bOnJobPageValue) )
-                {
-                    bOnJobPage = bOnJobPageValue;
-                    if( bOnJobPage )
-                    {
-                        pDynamicPageParent = pCurParent;    // save current parent
-                        pCurParent = &maJobPage;            // set job page as current parent
-                    }
-                    else
-                    {
-                        pCurParent = pDynamicPageParent;    // set current tab page as parent
-                    }
-                }
-
+                bOnJobPage = bOnJobPageValue;
                 if( bOnJobPage )
                 {
-                    // create a new column in the PrintRange row
-                    vcl::RowOrColumn* pNewColumn = new vcl::RowOrColumn( &aPrintRangeRow, true, nBorderWidth );
-                    aPrintRangeRow.addChild( pNewColumn );
-                    pCurColumn = pNewColumn;
+                    pDynamicPageParent = pCurParent;    // save current parent
+                    pCurParent = &maJobPage;            // set job page as current parent
                 }
                 else
-                    pCurColumn = aDynamicColumns.back();
-
-                // create group FixedLine
-                FixedLine* pNewSub = new FixedLine( pCurParent );
-                maControls.push_front( pNewSub );
-                pNewSub->SetText( aText );
-                pNewSub->Show();
-
-                // set help id
-                setSmartId( pNewSub, "FixedLine", sal_Int32( nCurSubGroup++ ) );
-                // set help text
-                setHelpText( pNewSub, aHelpTexts, 0 );
-
-                // add group to current column
-                pCurColumn->addWindow( pNewSub );
+                {
+                    pCurParent = pDynamicPageParent;    // set current tab page as parent
+                }
             }
-            else if( aCtrlType.equalsAscii( "Bool" ) && pCurParent )
+
+            if( bOnJobPage )
+            {
+                // create a new column in the PrintRange row
+                vcl::RowOrColumn* pNewColumn = new vcl::RowOrColumn( &aPrintRangeRow, true, nBorderWidth );
+                aPrintRangeRow.addChild( pNewColumn );
+                pCurColumn = pNewColumn;
+            }
+            else
+                pCurColumn = aDynamicColumns.back();
+
+            // create group FixedLine
+            FixedLine* pNewSub = new FixedLine( pCurParent );
+            maControls.push_front( pNewSub );
+            pNewSub->SetText( aText );
+            pNewSub->Show();
+
+            // set help id
+            setSmartId( pNewSub, "FixedLine", sal_Int32( nCurSubGroup++ ) );
+            // set help text
+            setHelpText( pNewSub, aHelpTexts, 0 );
+
+            // add group to current column
+            pCurColumn->addWindow( pNewSub );
+        }
+        else
+        {
+            vcl::RowOrColumn* pSaveCurColumn = pCurColumn;
+
+            if( bUseDependencyRow && aDependsOnName.getLength() )
+            {
+                // find the correct dependency row (if any)
+                std::pair< std::multimap< rtl::OUString, vcl::RowOrColumn* >::iterator,
+                           std::multimap< rtl::OUString, vcl::RowOrColumn* >::iterator > aDepRange;
+                aDepRange = aPropertyToDependencyRowMap.equal_range( aDependsOnName );
+                if( aDepRange.first != aDepRange.second )
+                {
+                    while( nDependsOnValue && aDepRange.first != aDepRange.second )
+                    {
+                        nDependsOnValue--;
+                        ++aDepRange.first;
+                    }
+                    if( aDepRange.first != aPropertyToDependencyRowMap.end() )
+                    {
+                        pCurColumn = aDepRange.first->second;
+                    }
+                }
+            }
+            if( aCtrlType.equalsAscii( "Bool" ) && pCurParent )
             {
                 // add a check box
                 CheckBox* pNewBox = new CheckBox( pCurParent );
@@ -538,8 +546,12 @@ void PrintDialog::setupOptionalUI()
                 // set help text
                 setHelpText( pNewBox, aHelpTexts, 0 );
 
+                vcl::RowOrColumn* pDependencyRow = new vcl::RowOrColumn( pCurColumn, false );
+                pCurColumn->addChild( pDependencyRow );
+                aPropertyToDependencyRowMap.insert( std::pair< rtl::OUString, vcl::RowOrColumn* >( aPropertyName, pDependencyRow ) );
+
                 // add checkbox to current column
-                pCurColumn->addWindow( pNewBox );
+                pDependencyRow->addWindow( pNewBox );
             }
             else if( aCtrlType.equalsAscii( "Radio" ) && pCurParent )
             {
@@ -572,6 +584,10 @@ void PrintDialog::setupOptionalUI()
                     pVal->Value >>= nSelectVal;
                 for( sal_Int32 m = 0; m < aChoices.getLength(); m++ )
                 {
+                    vcl::RowOrColumn* pDependencyRow = new vcl::RowOrColumn( pCurColumn, false );
+                    pRadioColumn->addChild( pDependencyRow );
+                    aPropertyToDependencyRowMap.insert( std::pair< rtl::OUString, vcl::RowOrColumn* >( aPropertyName, pDependencyRow ) );
+
                     RadioButton* pBtn = new RadioButton( pCurParent, m == 0 ? WB_GROUP : 0 );
                     maControls.push_front( pBtn );
                     pBtn->SetText( aChoices[m] );
@@ -588,7 +604,7 @@ void PrintDialog::setupOptionalUI()
                     // set help text
                     setHelpText( pBtn, aHelpTexts, nCurHelpText++ );
                     // add the radio button to the column
-                    pRadioColumn->addWindow( pBtn );
+                    pDependencyRow->addWindow( pBtn );
                 }
             }
             else if( ( aCtrlType.equalsAscii( "List" )   ||
@@ -596,13 +612,13 @@ void PrintDialog::setupOptionalUI()
                        aCtrlType.equalsAscii( "Edit" )
                      ) && pCurParent )
             {
-                vcl::RowOrColumn* pFieldColumn = pCurColumn;
+                // create a row in the current column
+                vcl::RowOrColumn* pFieldColumn = new vcl::RowOrColumn( pCurColumn, false );
+                pCurColumn->addChild( pFieldColumn );
+                aPropertyToDependencyRowMap.insert( std::pair< rtl::OUString, vcl::RowOrColumn* >( aPropertyName, pFieldColumn ) );
+
                 if( aText.getLength() )
                 {
-                    // create a row in the current column
-                    pFieldColumn = new vcl::RowOrColumn( pCurColumn, false );
-                    pCurColumn->addChild( pFieldColumn );
-
                     // add a FixedText:
                     FixedText* pHeading = new FixedText( pCurParent, WB_VCENTER );
                     maControls.push_front( pHeading );
@@ -702,13 +718,15 @@ void PrintDialog::setupOptionalUI()
                     maControlToPropertyMap[pField] = aPropertyName;
 
                     // add to row
-                    pFieldColumn->addWindow( pField );
+                    pFieldColumn->addWindow( pField, 2 );
                 }
             }
-        }
-        else
-        {
-            DBG_ERROR( "Unsupported UI option" );
+            else
+            {
+                DBG_ERROR( "Unsupported UI option" );
+            }
+
+            pCurColumn = pSaveCurColumn;
         }
     }
 

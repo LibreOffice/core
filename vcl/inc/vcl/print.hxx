@@ -556,6 +556,7 @@ class VCL_DLLPUBLIC PrinterOptionsHelper
                                                      const com::sun::star::beans::PropertyValue* i_pValue = NULL,
                                                      const rtl::OUString* i_pDependsOnName = NULL,
                                                      sal_Int32 i_nDependsOnEntry = -1,
+                                                     sal_Bool i_bAttachToDependency = sal_False,
                                                      const com::sun::star::beans::PropertyValue* i_pAddProps = NULL,
                                                      sal_Int32 i_nAddProps = 0
                                                      );
@@ -574,7 +575,8 @@ class VCL_DLLPUBLIC PrinterOptionsHelper
                                                        const rtl::OUString& i_rProperty,
                                                        sal_Bool i_bValue,
                                                        const rtl::OUString* i_pDependsOnName = NULL,
-                                                       sal_Int32 i_nDependsOnEntry = -1
+                                                       sal_Int32 i_nDependsOnEntry = -1,
+                                                       sal_Bool i_bAttachToDependency = sal_False
                                                        );
 
     // create a set of choices (either a radio button group or a list box)
@@ -585,7 +587,8 @@ class VCL_DLLPUBLIC PrinterOptionsHelper
                                                          sal_Int32 i_nValue,
                                                          const rtl::OUString& i_rType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Radio" ) ),
                                                          const rtl::OUString* i_pDependsOnName = NULL,
-                                                         sal_Int32 i_nDependsOnEntry = -1
+                                                         sal_Int32 i_nDependsOnEntry = -1,
+                                                         sal_Bool i_bAttachToDependency = sal_False
                                                          );
 
     // create an integer range (e.g. a spin field)
@@ -597,7 +600,8 @@ class VCL_DLLPUBLIC PrinterOptionsHelper
                                                         sal_Int32 i_nMinValue = -1,
                                                         sal_Int32 i_nMaxValue = -2,
                                                         const rtl::OUString* i_pDependsOnName = NULL,
-                                                        sal_Int32 i_nDependsOnEntry = -1
+                                                        sal_Int32 i_nDependsOnEntry = -1,
+                                                        sal_Bool i_bAttachToDependency = sal_False
                                                         );
 
     // create a string field
@@ -607,7 +611,8 @@ class VCL_DLLPUBLIC PrinterOptionsHelper
                                                        const rtl::OUString& i_rProperty,
                                                        const rtl::OUString& i_rValue,
                                                        const rtl::OUString* i_pDependsOnName = NULL,
-                                                       sal_Int32 i_nDependsOnEntry = -1
+                                                       sal_Int32 i_nDependsOnEntry = -1,
+                                                       sal_Bool i_bAttachToDependency = sal_False
                                                        );
 };
 

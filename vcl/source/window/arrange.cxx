@@ -31,6 +31,7 @@
 #include "precompiled_vcl.hxx"
 
 #include "vcl/arrange.hxx"
+#include "vcl/edit.hxx"
 
 #include "osl/diagnose.h"
 
@@ -50,6 +51,22 @@ void WindowArranger::setParent( WindowArranger* i_pParent )
     m_pParentArranger = i_pParent;
     m_pParentWindow = i_pParent->m_pParentWindow;
     setParentWindow( m_pParentWindow );
+}
+
+sal_Int32 WindowArranger::Element::getExpandPriority() const
+{
+    sal_Int32 nPrio = m_nExpandPriority;
+    if( m_pChild )
+    {
+        size_t nElements = m_pChild->countElements();
+        for( size_t i = 0; i < nElements; i++ )
+        {
+            sal_Int32 nCPrio = m_pChild->getExpandPriority( i );
+            if( nCPrio > nPrio )
+                nPrio = nCPrio;
+        }
+    }
+    return nPrio;
 }
 
 // ----------------------------------------
@@ -73,6 +90,11 @@ boost::shared_ptr<WindowArranger> RowOrColumn::getChild( size_t i_nIndex ) const
 Window* RowOrColumn::getWindow( size_t i_nIndex ) const
 {
     return i_nIndex < m_aElements.size() ? m_aElements[i_nIndex].m_pElement : NULL;
+}
+
+sal_Int32 RowOrColumn::getExpandPriority( size_t i_nIndex ) const
+{
+    return i_nIndex < m_aElements.size() ? m_aElements[i_nIndex].getExpandPriority() : 0;
 }
 
 Size RowOrColumn::getOptimalSize( WindowSizeType i_eType ) const
@@ -124,19 +146,38 @@ Size RowOrColumn::getOptimalSize( WindowSizeType i_eType ) const
 
 void RowOrColumn::distributeRowWidth( std::vector<Size>& io_rSizes, long /*i_nUsedWidth*/, long i_nExtraWidth )
 {
-    if( ! io_rSizes.empty() )
+    if( ! io_rSizes.empty() && io_rSizes.size() == m_aElements.size() )
     {
-        // distribute extra space evenly among elements
-        size_t nElements = io_rSizes.size();
-        long nDelta = i_nExtraWidth / nElements;
+        // find all elements with the highest expand priority
+        size_t nElements = m_aElements.size();
+        std::vector< size_t > aIndices;
+        sal_Int32 nHighPrio = 0;
         for( size_t i = 0; i < nElements; i++ )
         {
-            io_rSizes[i].Width() += nDelta;
-            i_nExtraWidth -= nDelta;
+            sal_Int32 nCurPrio = m_aElements[ i ].getExpandPriority();
+            if( nCurPrio > nHighPrio )
+            {
+                aIndices.clear();
+                nHighPrio = nCurPrio;
+            }
+            if( nCurPrio == nHighPrio )
+                aIndices.push_back( i );
         }
-        // add the last pixels to the last row element
-        if( i_nExtraWidth > 0 && nElements > 0 )
-            io_rSizes.back().Width() += i_nExtraWidth;
+
+        // distribute extra space evenly among elements
+        nElements = aIndices.size();
+        if( nElements > 0 ) // sanity check
+        {
+            long nDelta = i_nExtraWidth / nElements;
+            for( size_t i = 0; i < nElements; i++ )
+            {
+                io_rSizes[ aIndices[i] ].Width() += nDelta;
+                i_nExtraWidth -= nDelta;
+            }
+            // add the last pixels to the last row element
+            if( i_nExtraWidth > 0 && nElements > 0 )
+                io_rSizes[aIndices.back()].Width() += i_nExtraWidth;
+        }
     }
 }
 
@@ -227,29 +268,29 @@ void RowOrColumn::setParentWindow( Window* i_pNewParent )
     }
 }
 
-void RowOrColumn::addWindow( Window* i_pWindow, sal_Int32 i_nIndex )
+void RowOrColumn::addWindow( Window* i_pWindow, sal_Int32 i_nExpandPrio, sal_Int32 i_nIndex )
 {
     if( i_nIndex < 0 || size_t(i_nIndex) >= m_aElements.size() )
-        m_aElements.push_back( WindowArranger::Element( i_pWindow ) );
+        m_aElements.push_back( WindowArranger::Element( i_pWindow, boost::shared_ptr<WindowArranger>(), i_nExpandPrio ) );
     else
     {
         std::vector< WindowArranger::Element >::iterator it = m_aElements.begin();
         while( i_nIndex-- )
             ++it;
-        m_aElements.insert( it, WindowArranger::Element( i_pWindow ) );
+        m_aElements.insert( it, WindowArranger::Element( i_pWindow, boost::shared_ptr<WindowArranger>(), i_nExpandPrio ) );
     }
 }
 
-void RowOrColumn::addChild( boost::shared_ptr<WindowArranger> const & i_pChild, sal_Int32 i_nIndex )
+void RowOrColumn::addChild( boost::shared_ptr<WindowArranger> const & i_pChild, sal_Int32 i_nExpandPrio, sal_Int32 i_nIndex )
 {
     if( i_nIndex < 0 || size_t(i_nIndex) >= m_aElements.size() )
-        m_aElements.push_back( WindowArranger::Element( NULL, i_pChild ) );
+        m_aElements.push_back( WindowArranger::Element( NULL, i_pChild, i_nExpandPrio ) );
     else
     {
         std::vector< WindowArranger::Element >::iterator it = m_aElements.begin();
         while( i_nIndex-- )
             ++it;
-        m_aElements.insert( it, WindowArranger::Element( NULL, i_pChild ) );
+        m_aElements.insert( it, WindowArranger::Element( NULL, i_pChild, i_nExpandPrio ) );
     }
 }
 
@@ -320,17 +361,19 @@ void Indenter::resize()
         m_aElement.m_pChild->setManagedArea( Rectangle( aPt, aSz ) );
 }
 
-void Indenter::setWindow( Window* i_pWindow )
+void Indenter::setWindow( Window* i_pWindow, sal_Int32 i_nExpandPrio )
 {
     OSL_VERIFY( (m_aElement.m_pElement == 0 && m_aElement.m_pChild == 0) || i_pWindow == 0 );
     OSL_VERIFY( i_pWindow == 0 || i_pWindow->GetParent() == m_pParentWindow );
     m_aElement.m_pElement = i_pWindow;
+    m_aElement.m_nExpandPriority = i_nExpandPrio;
 }
 
-void Indenter::setChild( boost::shared_ptr<WindowArranger> const & i_pChild )
+void Indenter::setChild( boost::shared_ptr<WindowArranger> const & i_pChild, sal_Int32 i_nExpandPrio )
 {
     OSL_VERIFY( (m_aElement.m_pElement == 0 && m_aElement.m_pChild == 0 ) || i_pChild == 0 );
     m_aElement.m_pChild = i_pChild;
+    m_aElement.m_nExpandPriority = i_nExpandPrio;
 }
 
 void Indenter::setParentWindow( Window* i_pNewParent )

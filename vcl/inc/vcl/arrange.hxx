@@ -57,18 +57,26 @@ namespace vcl
         {
             Window*                            m_pElement;
             boost::shared_ptr<WindowArranger>  m_pChild;
+            sal_Int32                          m_nExpandPriority;
 
             Element()
             : m_pElement( NULL )
             , m_pChild()
+            , m_nExpandPriority( 0 )
             {}
 
-            Element( Window* i_pWin, boost::shared_ptr<WindowArranger> const & i_pChild = boost::shared_ptr<WindowArranger>() )
+            Element( Window* i_pWin,
+                     boost::shared_ptr<WindowArranger> const & i_pChild = boost::shared_ptr<WindowArranger>(),
+                     sal_Int32 i_nExpandPriority = 0
+                   )
             : m_pElement( i_pWin )
             , m_pChild( i_pChild )
+            , m_nExpandPriority( i_nExpandPriority )
             {}
 
             void deleteChild() { m_pChild.reset(); }
+
+            sal_Int32 getExpandPriority() const;
         };
 
         Window*                     m_pParentWindow;
@@ -99,6 +107,7 @@ namespace vcl
         virtual size_t countElements() const = 0;
         virtual boost::shared_ptr<WindowArranger> getChild( size_t i_nIndex ) const = 0;
         virtual Window* getWindow( size_t i_nIndex ) const = 0;
+        virtual sal_Int32 getExpandPriority( size_t i_nIndex ) const = 0;
 
         void setManagedArea( const Rectangle& i_rArea )
         {
@@ -137,16 +146,17 @@ namespace vcl
         virtual size_t countElements() const { return m_aElements.size(); }
         virtual boost::shared_ptr<WindowArranger> getChild( size_t i_nIndex ) const;
         virtual Window* getWindow( size_t i_nIndex ) const;
+        virtual sal_Int32 getExpandPriority( size_t i_nIndex ) const;
 
         // add a managed window at the given index
         // an index smaller than zero means add the window at the end
-        void addWindow( Window*, sal_Int32 nIndex = -1 );
+        void addWindow( Window*, sal_Int32 i_nExpandPrio = 0, sal_Int32 i_nIndex = -1 );
         void remove( Window* );
 
-        void addChild( boost::shared_ptr<WindowArranger> const &, sal_Int32 nIndex = -1 );
+        void addChild( boost::shared_ptr<WindowArranger> const &, sal_Int32 i_nExpandPrio = 0, sal_Int32 i_nIndex = -1 );
         // convenience: use for addChild( new WindowArranger( ... ) ) constructs
-        void addChild( WindowArranger* i_pNewChild, sal_Int32 nIndex = -1 )
-        { addChild( boost::shared_ptr<WindowArranger>( i_pNewChild ), nIndex ); }
+        void addChild( WindowArranger* i_pNewChild, sal_Int32 i_nExpandPrio = 0, sal_Int32 i_nIndex = -1 )
+        { addChild( boost::shared_ptr<WindowArranger>( i_pNewChild ), i_nExpandPrio, i_nIndex ); }
         void remove( boost::shared_ptr<WindowArranger> const & );
     };
 
@@ -169,6 +179,8 @@ namespace vcl
         virtual size_t countElements() const { return (m_aElement.m_pElement != 0 || m_aElement.m_pChild != 0) ? 1 : 0; }
         virtual boost::shared_ptr<WindowArranger> getChild( size_t i_nIndex ) const { return (i_nIndex == 0) ? m_aElement.m_pChild : boost::shared_ptr<WindowArranger>(); }
         virtual Window* getWindow( size_t i_nIndex ) const { return (i_nIndex == 0) ? m_aElement.m_pElement : NULL; }
+        virtual sal_Int32 getExpandPriority( size_t i_nIndex ) const
+        { return (i_nIndex == 0) ? m_aElement.getExpandPriority() : 0; }
 
         void setIndent( long i_nIndent )
         {
@@ -176,11 +188,11 @@ namespace vcl
             resize();
         }
 
-        void setWindow( Window* );
-        void setChild( boost::shared_ptr<WindowArranger> const & );
+        void setWindow( Window*, sal_Int32 i_nExpandPrio = 0 );
+        void setChild( boost::shared_ptr<WindowArranger> const &, sal_Int32 i_nExpandPrio = 0 );
         // convenience: use for setChild( new WindowArranger( ... ) ) constructs
-        void setChild( WindowArranger* i_pChild )
-        { setChild( boost::shared_ptr<WindowArranger>( i_pChild ) ); }
+        void setChild( WindowArranger* i_pChild, sal_Int32 i_nExpandPrio = 0 )
+        { setChild( boost::shared_ptr<WindowArranger>( i_pChild ), i_nExpandPrio ); }
     };
 }
 

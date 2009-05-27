@@ -927,6 +927,7 @@ Any PrinterOptionsHelper::getUIControlOpt( const rtl::OUString& i_rTitle,
                                            const PropertyValue* i_pVal,
                                            const rtl::OUString* i_pDependsOnName,
                                            sal_Int32 i_nDependsOnEntry,
+                                           sal_Bool i_bAttachToDependency,
                                            const PropertyValue* i_pAddProps,
                                            sal_Int32 i_nAddProps
                                            )
@@ -937,6 +938,7 @@ Any PrinterOptionsHelper::getUIControlOpt( const rtl::OUString& i_rTitle,
         + (i_rHelpTexts.getLength() ? 1 : 0)                            // HelpText
         + (i_pVal ? 1 : 0)                                              // Property
         + (i_pDependsOnName ? (i_nDependsOnEntry != -1 ? 2 : 1) : 0)    // dependencies
+        + (i_pDependsOnName && i_bAttachToDependency ? 1 : 0)           // attach to dependency
         + i_nAddProps
         ;
 
@@ -967,6 +969,11 @@ Any PrinterOptionsHelper::getUIControlOpt( const rtl::OUString& i_rTitle,
         {
             aCtrl[nUsed  ].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DependsOnEntry" ) );
             aCtrl[nUsed++].Value = makeAny( i_nDependsOnEntry );
+        }
+        if( i_bAttachToDependency )
+        {
+            aCtrl[nUsed  ].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "AttachToDependency" ) );
+            aCtrl[nUsed++].Value = makeAny( i_bAttachToDependency );
         }
     }
     for( sal_Int32 i = 0; i < i_nAddProps; i++ )
@@ -1010,7 +1017,7 @@ Any PrinterOptionsHelper::getSubgroupControlOpt( const rtl::OUString& i_rTitle, 
         *aHelpText.getArray() = i_rHelpText;
     }
     return getUIControlOpt( i_rTitle, aHelpText, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Subgroup" ) ),
-                            NULL, NULL, -1, aAddProps, nUsed );
+                            NULL, NULL, -1, sal_False, aAddProps, nUsed );
 }
 
 Any PrinterOptionsHelper::getBoolControlOpt( const rtl::OUString& i_rTitle,
@@ -1018,7 +1025,8 @@ Any PrinterOptionsHelper::getBoolControlOpt( const rtl::OUString& i_rTitle,
                                              const rtl::OUString& i_rProperty,
                                              sal_Bool i_bValue,
                                              const rtl::OUString* i_pDependsOnName,
-                                             sal_Int32 i_nDependsOnEntry
+                                             sal_Int32 i_nDependsOnEntry,
+                                             sal_Bool i_bAttachToDependency
                                              )
 {
     Sequence< rtl::OUString > aHelpText;
@@ -1030,7 +1038,7 @@ Any PrinterOptionsHelper::getBoolControlOpt( const rtl::OUString& i_rTitle,
     PropertyValue aVal;
     aVal.Name = i_rProperty;
     aVal.Value = makeAny( i_bValue );
-    return getUIControlOpt( i_rTitle, aHelpText, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Bool" ) ), &aVal, i_pDependsOnName, i_nDependsOnEntry );
+    return getUIControlOpt( i_rTitle, aHelpText, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Bool" ) ), &aVal, i_pDependsOnName, i_nDependsOnEntry, i_bAttachToDependency );
 }
 
 Any PrinterOptionsHelper::getChoiceControlOpt( const rtl::OUString& i_rTitle,
@@ -1040,7 +1048,8 @@ Any PrinterOptionsHelper::getChoiceControlOpt( const rtl::OUString& i_rTitle,
                                                sal_Int32 i_nValue,
                                                const rtl::OUString& i_rType,
                                                const rtl::OUString* i_pDependsOnName,
-                                               sal_Int32 i_nDependsOnEntry
+                                               sal_Int32 i_nDependsOnEntry,
+                                               sal_Bool i_bAttachToDependency
                                                )
 {
     PropertyValue aAddProps[2];
@@ -1051,7 +1060,7 @@ Any PrinterOptionsHelper::getChoiceControlOpt( const rtl::OUString& i_rTitle,
     PropertyValue aVal;
     aVal.Name = i_rProperty;
     aVal.Value = makeAny( i_nValue );
-    return getUIControlOpt( i_rTitle, i_rHelpText, i_rType, &aVal, i_pDependsOnName, i_nDependsOnEntry, aAddProps, nUsed );
+    return getUIControlOpt( i_rTitle, i_rHelpText, i_rType, &aVal, i_pDependsOnName, i_nDependsOnEntry, i_bAttachToDependency, aAddProps, nUsed );
 }
 
 Any PrinterOptionsHelper::getRangeControlOpt( const rtl::OUString& i_rTitle,
@@ -1061,7 +1070,8 @@ Any PrinterOptionsHelper::getRangeControlOpt( const rtl::OUString& i_rTitle,
                                               sal_Int32 i_nMinValue,
                                               sal_Int32 i_nMaxValue,
                                               const rtl::OUString* i_pDependsOnName,
-                                              sal_Int32 i_nDependsOnEntry
+                                              sal_Int32 i_nDependsOnEntry,
+                                              sal_Bool i_bAttachToDependency
                                             )
 {
     PropertyValue aAddProps[2];
@@ -1089,6 +1099,7 @@ Any PrinterOptionsHelper::getRangeControlOpt( const rtl::OUString& i_rTitle,
                             &aVal,
                             i_pDependsOnName,
                             i_nDependsOnEntry,
+                            i_bAttachToDependency,
                             aAddProps, nUsed );
 }
 
@@ -1097,7 +1108,8 @@ Any PrinterOptionsHelper::getEditControlOpt( const rtl::OUString& i_rTitle,
                                              const rtl::OUString& i_rProperty,
                                              const rtl::OUString& i_rValue,
                                              const rtl::OUString* i_pDependsOnName,
-                                             sal_Int32 i_nDependsOnEntry
+                                             sal_Int32 i_nDependsOnEntry,
+                                             sal_Bool i_bAttachToDependency
                                            )
 {
     Sequence< rtl::OUString > aHelpText;
@@ -1115,5 +1127,6 @@ Any PrinterOptionsHelper::getEditControlOpt( const rtl::OUString& i_rTitle,
                             &aVal,
                             i_pDependsOnName,
                             i_nDependsOnEntry,
+                            i_bAttachToDependency,
                             0, 0 );
 }

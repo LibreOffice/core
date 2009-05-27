@@ -2831,6 +2831,11 @@ void Edit::SetSubEdit( Edit* pEdit )
 Size Edit::CalcMinimumSize() const
 {
     Size aSize ( GetTextWidth( GetText() ), GetTextHeight() );
+    // do not create edit fields in which one cannot enter anything
+    // a default minimum width should exist for at least 3 characters
+    Size aMinSize ( CalcSize( 3 ) );
+    if( aSize.Width() < aMinSize.Width() )
+        aSize.Width() = aMinSize.Width();
     return CalcWindowSize( aSize );
 }
 
