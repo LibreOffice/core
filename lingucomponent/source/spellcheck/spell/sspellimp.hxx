@@ -45,9 +45,10 @@
 #include <com/sun/star/linguistic2/XLinguServiceEventBroadcaster.hpp>
 #include <tools/table.hxx>
 
-#include <lingutil.hxx>
 #include <linguistic/misc.hxx>
-#include "sprophelp.hxx"
+#include <linguistic/lngprophelp.hxx>
+
+#include <lingutil.hxx>
 
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
@@ -79,15 +80,15 @@ class SpellChecker :
 
     ::cppu::OInterfaceContainerHelper       aEvtListeners;
     Reference< XPropertyChangeListener >    xPropHelper;
-    PropertyHelper_Spell *                  pPropHelper;
+    linguistic::PropertyHelper_Spell *      pPropHelper;
     BOOL                                    bDisposing;
 
     // disallow copy-constructor and assignment-operator for now
     SpellChecker(const SpellChecker &);
     SpellChecker & operator = (const SpellChecker &);
 
-    PropertyHelper_Spell &  GetPropHelper_Impl();
-    PropertyHelper_Spell &  GetPropHelper()
+    linguistic::PropertyHelper_Spell &  GetPropHelper_Impl();
+    linguistic::PropertyHelper_Spell &  GetPropHelper()
     {
         return pPropHelper ? *pPropHelper : GetPropHelper_Impl();
     }

@@ -57,11 +57,9 @@ HUNSPELL_CFLAGS += -I$(SOLARINCDIR)$/hunspell
 CFLAGS += -I..$/..$/..$/lingutil $(HUNSPELL_CFLAGS)
 
 EXCEPTIONSFILES=	\
-        $(SLO)$/hprophelp.obj\
         $(SLO)$/hyphenimp.obj
 
 SLOFILES=	\
-        $(SLO)$/hprophelp.obj\
         $(SLO)$/hreg.obj\
         $(SLO)$/hyphenimp.obj
 
@@ -82,7 +80,7 @@ SHL1STDLIBS= \
         $(HUNSPELLLIB)
 
 # build DLL
-SHL1LIBS=		$(SLB)$/$(TARGET).lib
+SHL1LIBS=       $(SLB)$/$(TARGET).lib $(SLB)$/libulingu.lib
 SHL1IMPLIB=		i$(REALNAME)
 SHL1DEPN=		$(SHL1LIBS)
 SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
