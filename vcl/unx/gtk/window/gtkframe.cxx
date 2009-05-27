@@ -45,9 +45,9 @@
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 
-#include <prex.h>
+#include <tools/prex.h>
 #include <X11/Xatom.h>
-#include <postx.h>
+#include <tools/postx.h>
 
 #include <dlfcn.h>
 #include <vcl/salbtype.hxx>

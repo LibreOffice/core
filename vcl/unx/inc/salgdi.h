@@ -336,6 +336,7 @@ public:
                                            long nHeight, sal_uInt8 nTransparency );
 
     virtual SystemGraphicsData GetGraphicsData() const;
+    virtual SystemFontData     GetSysFontData( int nFallbacklevel ) const;
 
     /*  use to handle GraphicsExpose/NoExpose after XCopyArea & friends
      *  if pFrame is not NULL, corresponding Paint events are generated

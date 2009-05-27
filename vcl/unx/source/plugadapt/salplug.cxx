@@ -37,9 +37,9 @@
 #include <rtl/ustrbuf.hxx>
 
 #include <svunx.h>
-#include <prex.h>
+#include <tools/prex.h>
 #include <X11/Xatom.h>
-#include <postx.h>
+#include <tools/postx.h>
 
 #include <vcl/salinst.hxx>
 #include <saldata.hxx>

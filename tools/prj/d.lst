@@ -31,6 +31,9 @@ mkdir: %_DEST%\inc%_EXT%\bootstrp
 ..\inc\tools\postwin.h %_DEST%\inc%_EXT%\tools\postwin.h
 ..\inc\tools\prewin.h %_DEST%\inc%_EXT%\tools\prewin.h
 
+..\inc\tools\postx.h %_DEST%\inc%_EXT%\tools\postx.h
+..\inc\tools\prex.h %_DEST%\inc%_EXT%\tools\prex.h
+
 ..\inc\tools\agapi.hxx %_DEST%\inc%_EXT%\tools\agapi.hxx
 ..\inc\tools\agapi.hxx %_DEST%\inc%_EXT%\tools\agapi.hxx
 ..\inc\tools\agitem.hxx %_DEST%\inc%_EXT%\tools\agitem.hxx

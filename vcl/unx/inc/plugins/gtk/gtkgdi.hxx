@@ -31,11 +31,11 @@
 #ifndef _VCL_GTKGDI_HXX
 #define _VCL_GTKGDI_HXX
 
-#include <prex.h>
+#include <tools/prex.h>
 #include <gtk/gtk.h>
 #include <gdk/gdkx.h>
 #include <gdk/gdkkeysyms.h>
-#include <postx.h>
+#include <tools/postx.h>
 
 #include <salgdi.h>
 

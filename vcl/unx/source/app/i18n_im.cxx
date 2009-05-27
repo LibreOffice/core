@@ -44,11 +44,11 @@
 #include <sal/alloca.h>
 #endif
 
-#include <prex.h>
+#include <tools/prex.h>
 #include <X11/Xlocale.h>
 #include <X11/Xlib.h>
 #include <XIM.h>
-#include <postx.h>
+#include <tools/postx.h>
 
 #include <salunx.h>
 #include <saldisp.hxx>

@@ -160,7 +160,7 @@ public:
         const OUString&    sTitle   ,
         const OUString&    sPassword );
 
-private: 
+private:
     void impl_truncateList (EHistoryType eHistory, sal_uInt32 nSize);
 
 private:
@@ -433,12 +433,12 @@ Sequence< Sequence< PropertyValue > > SvtHistoryOptions_Impl::GetList( EHistoryT
     seqProperties[s_nOffsetPassword  ].Name = HISTORY_PROPERTYNAME_PASSWORD;
 
     try
-    { 
+    {
         switch( eHistory )
         {
         case ePICKLIST:
             {
-                m_xCfg->getByName(s_sPickList) >>= xListAccess; 
+                m_xCfg->getByName(s_sPickList) >>= xListAccess;
                 break;
             }
 

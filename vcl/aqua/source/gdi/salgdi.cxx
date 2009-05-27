@@ -2298,6 +2298,43 @@ void AquaSalGraphics::FreeEmbedFontData( const void* pData, long nDataLen )
 
 // -----------------------------------------------------------------------
 
+SystemFontData AquaSalGraphics::GetSysFontData( int /* nFallbacklevel */ ) const
+{
+    SystemFontData aSysFontData;
+    OSStatus err;
+    aSysFontData.nSize = sizeof( SystemFontData );
+
+    // NOTE: Native ATSU font fallbacks are used, not the VCL fallbacks.
+    ATSUFontID fontId;
+    err = ATSUGetAttribute( maATSUStyle, kATSUFontTag, sizeof(fontId), &fontId, 0 );
+    if (err) fontId = 0;
+    aSysFontData.aATSUFontID = (void *) fontId;
+
+    Boolean bFbold;
+    err = ATSUGetAttribute( maATSUStyle, kATSUQDBoldfaceTag, sizeof(bFbold), &bFbold, 0 );
+    if (err) bFbold = FALSE;
+    aSysFontData.bFakeBold = (bool) bFbold;
+
+    Boolean bFItalic;
+    err = ATSUGetAttribute( maATSUStyle, kATSUQDItalicTag, sizeof(bFItalic), &bFItalic, 0 );
+    if (err) bFItalic = FALSE;
+    aSysFontData.bFakeItalic = (bool) bFItalic;
+
+    ATSUVerticalCharacterType aVerticalCharacterType;
+    err = ATSUGetAttribute( maATSUStyle, kATSUVerticalCharacterTag, sizeof(aVerticalCharacterType), &aVerticalCharacterType, 0 );
+    if (!err && aVerticalCharacterType == kATSUStronglyVertical) {
+        aSysFontData.bVerticalCharacterType = true;
+    } else {
+        aSysFontData.bVerticalCharacterType = false;
+    }
+
+    aSysFontData.bAntialias = !mbNonAntialiasedText;
+
+    return aSysFontData;
+}
+
+// -----------------------------------------------------------------------
+
 SystemGraphicsData AquaSalGraphics::GetGraphicsData() const
 {
     SystemGraphicsData aRes;

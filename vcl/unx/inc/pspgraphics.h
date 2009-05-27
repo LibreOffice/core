@@ -197,6 +197,7 @@ public:
     virtual bool            drawAlphaRect( long nX, long nY, long nWidth, long nHeight, sal_uInt8 nTransparency );
 
     virtual SystemGraphicsData GetGraphicsData() const;
+    virtual SystemFontData     GetSysFontData( int nFallbacklevel ) const;
 };
 
 #endif // _VCL_PSPGRAPHICS_H

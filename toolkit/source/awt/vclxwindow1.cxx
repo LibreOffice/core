@@ -38,7 +38,12 @@
 #include <vcl/wrkwin.hxx>
 #endif
 #include <vcl/window.hxx>
-#ifdef QUARTZ
+
+#ifdef WNT
+#include <tools/prewin.h>
+#include <windows.h>
+#include <tools/postwin.h>
+#elif defined ( QUARTZ )
 #include "premac.h"
 #include <Cocoa/Cocoa.h>
 #include "postmac.h"

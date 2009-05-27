@@ -52,7 +52,7 @@
 #include <osl/module.h>
 #endif
 
-#include <prex.h>
+#include <tools/prex.h>
 #include <X11/cursorfont.h>
 #include "salcursors.h"
 #include "invert50.h"
@@ -81,7 +81,7 @@ Status XineramaGetInfo(Display*, int, XRectangle*, unsigned char*, int*);
 #endif
 #endif
 
-#include <postx.h>
+#include <tools/postx.h>
 
 #include <salunx.h>
 #include <sal/types.h>
