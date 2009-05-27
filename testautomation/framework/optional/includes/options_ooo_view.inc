@@ -76,15 +76,6 @@ sub checkPage( sFile as string , bDisabled as boolean, optional iMiddleMouseButt
     dim iMiddleMouseButtonExtern as integer
     dim iTemp as integer
 
-<<<<<<< .working
-   checkEntryField( sFile , "*" , FontScale)
-   checkListBox( sFile , "*" , IconScale )
-   checkCheckBox( sFile , "*" , IconsInMenueAnzeigen )
-   checkCheckBox( sFile , "*" , VorschauInSchriftlisten )
-   checkCheckBox( sFile , "*" , SchriftenHistorie )
-   
-   checkListBox( sFile , "*" , MousePositioning)
-=======
     ' depends on if defaults or chnges are checked;
     ' changes : 1
     ' defaults: 0
@@ -134,7 +125,6 @@ sub checkPage( sFile as string , bDisabled as boolean, optional iMiddleMouseButt
     endif
     checkCheckBox( sFile , "*" , UseAntiAliasing )
     checkListBox( sFile , "*" , MousePositioning)
->>>>>>> .merge-right.r270772
     ' needs to get handled differently on platforms!
     iMiddleMouseButton = MausAktion.getSelIndex
     if iMiddleMouseButtonExtern = 1 then
@@ -176,26 +166,6 @@ sub changePage( sFile as string , bInverted as boolean, optional iMiddleMouseBut
     printlog( " * Changing current settings according to the reference list." )
     printlog( " * Using settings from file: " & sFile )
 
-<<<<<<< .working
-   ' Antialiasing settings only exist for Linux and Solaris
-   if ( gPlatGroup <> "w95" ) then
-      if ( bInverted ) then
-         setEntryField( sFile , "*" , AAPixel )
-         setCheckBox( sFile , "*" , FontAntiAliasing )
-      else
-         setCheckBox( sFile , "*" , FontAntiAliasing )
-         setEntryField( sFile , "*" , AAPixel )
-      endif
-   endif
-       
-   setEntryField( sFile , "*" , FontScale )
-   setListBox( sFile , "*" , IconScale )
-   setCheckBox( sFile , "*" , IconsInMenueAnzeigen )
-   setCheckBox( sFile , "*" , VorschauInSchriftlisten )
-   setCheckBox( sFile , "*" , SchriftenHistorie )
-   
-   setListBox( sFile , "*" , MousePositioning )
-=======
     ToolsOptions
     call hToolsOptions( "StarOffice" , "View" )
     sleep( 2 )
@@ -225,7 +195,6 @@ sub changePage( sFile as string , bInverted as boolean, optional iMiddleMouseBut
     endif
     setCheckBox( sFile , "*" , useantialiasing )
     setListBox( sFile , "*" , MousePositioning )
->>>>>>> .merge-right.r270772
     ' needs to get handled differently on platforms!
     if iMiddleMouseButtonExtern = 1 then
         setListBox( sFile , "*" , MausAktion )

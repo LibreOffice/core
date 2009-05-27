@@ -66,6 +66,19 @@ testcase tFileNewLabels
     Dim iType as integer
     Dim sTypes as integer
     Dim vTypes as integer
+    
+    ' The brands have fixed names and should not change
+    dim cBrandList( 10 ) as string
+        cBrandList(  1 ) = "Avery A4" 
+        cBrandList(  2 ) = "Avery A4/Asia"
+        cBrandList(  3 ) = "Avery Letter Size"
+        cBrandlist(  4 ) = "Avery Zweckform"
+        cBrandList(  5 ) = "Herlitz"
+        cBrandList(  6 ) = "Herma A4"
+        cBrandList(  7 ) = "Herma A5"
+        cBrandList(  8 ) = "Herma endlos"
+        cBrandList(  9 ) = "Leitz"
+        cBrandList( 10 ) = "Sigel"
 
     PrintLog "Open Labels-dialog with File / New / Labels"
     if ( hCreateLabels ) then 
@@ -89,7 +102,7 @@ testcase tFileNewLabels
             PrintLog "There should be 10 brands in list"
             For iBrandIndex = 1 to Marke.GetItemCount
             
-                Marke.Select iBrandIndex
+                Marke.Select( cBrandList( iBrandIndex ) )
                 printlog "- Brand: " & Marke.GetSelText
                 sTypes = Typ.GetItemCount
                 
@@ -244,6 +257,20 @@ testcase tFileNewBusinessCards
     Dim iWait as integer
     Dim sTypes as integer
     Dim vTypes as integer
+    
+    ' The brands have fixed names and should not change
+    dim cBrandList( 10 ) as string
+        cBrandList(  1 ) = "Avery A4" 
+        cBrandList(  2 ) = "Avery A4/Asia"
+        cBrandList(  3 ) = "Avery Letter Size"
+        cBrandlist(  4 ) = "Avery Zweckform"
+        cBrandList(  5 ) = "Herlitz"
+        cBrandList(  6 ) = "Herma A4"
+        cBrandList(  7 ) = "Herma A5"
+        cBrandList(  8 ) = "Herma endlos"
+        cBrandList(  9 ) = "Leitz"
+        cBrandList( 10 ) = "Sigel"
+    
 
 	PrintLog "Open Business Cards dialog with File / New / Business Cards"
 	if ( hCreateBusinessCards ) then     
@@ -268,7 +295,7 @@ testcase tFileNewBusinessCards
                 
                 PrintLog "There should be 10 brands in list"
                 For iBrand = 1 to Marke.GetItemCount
-                    Marke.Select iBrand
+                    Marke.Select( cBrandList( iBrand ) )
                     printlog "- Brand: " & Marke.GetSelText
                     sTypes = Typ.GetItemCount
                     Select Case iBrand

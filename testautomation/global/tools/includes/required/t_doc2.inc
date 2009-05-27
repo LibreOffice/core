@@ -127,6 +127,7 @@ function sMakeReadOnlyDocumentEditable() as boolean
     ' no action was required (that is: Document was not read-only)
 
     dim iTry as integer
+    dim rc as integer
     const CFN = "sMakeReadOnlyDocumentEditable::"
     
     if ( VERBOSE ) then printlog( CFN & "Making document editable (create a copy) if it is readonly" )
@@ -136,31 +137,34 @@ function sMakeReadOnlyDocumentEditable() as boolean
         
         if ( Bearbeiten.getState( 2 ) = 0 ) then
             
-            Bearbeiten.Click()
+			rc = hUseAsyncSlot("editdoc")
 
-            for iTry = 1 to 2
-            
-                sleep( 2 )
-            
-                Kontext "Active"
-                if ( Active.exists( 5 ) ) then
+            if ( rc >= 0 ) then
+                for iTry = 1 to 2
                 
-                    printlog( CFN & "Messagebox: " & Active.getText() )
+                
+                    Kontext "Active"
+                    if ( Active.exists( 5 ) ) then
                     
-                    try
-                        if ( VERBOSE ) then printlog( CFN & "Document was read-only. A copy will be used." )
-                        Active.Yes()
-                        if ( VERBOSE ) then printlog( CFN & "Closed 'use copy' message" )
-                    catch
-                        if ( VERBOSE ) then printlog( CFN & "Probing for unexpected messagebox..." )
-                        active.ok()
-                        warnlog( "#i100701 - Object not found message" )
-                    endcatch
-                else
-                    printlog( CFN & "No messagebox informing about a copy being used" )
-                endif
-                sMakeReadOnlyDocumentEditable() = TRUE
-            next iTry
+                        printlog( CFN & "Messagebox: " & Active.getText() )
+                        
+                        try
+                            if ( VERBOSE ) then printlog( CFN & "Document was read-only. A copy will be used." )
+                            Active.Yes()
+                            if ( VERBOSE ) then printlog( CFN & "Closed 'use copy' message" )
+                        catch
+                            if ( VERBOSE ) then printlog( CFN & "Probing for unexpected messagebox..." )
+                            active.ok()
+                            qaerrorlog( "#i100701 - Object not found message" )
+                        endcatch
+                    else
+                        printlog( CFN & "No messagebox informing about a copy being used" )
+                    endif
+                    sMakeReadOnlyDocumentEditable() = TRUE
+                next iTry
+            else
+                printlog( CFN & "Document appears to be editable" )
+            endif
         else
             if ( VERBOSE ) then printlog( CFN & "Button <Bearbeiten> is pressed, document is editable" )
             sMakeReadOnlyDocumentEditable() = FALSE

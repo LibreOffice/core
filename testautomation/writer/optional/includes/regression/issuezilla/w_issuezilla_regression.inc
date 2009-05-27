@@ -71,11 +71,10 @@ testcase i64991
         Call hCloseDocument
         goto endsub
     end if
-    Call sMakeReadOnlyDocumentEditable
-    '/// Now Execute Macro 'Main' in Node 'i64991'->'check_page_style'
-	Kontext "SecurityWarning"
-    if SecurityWarning.Exists(2) then SecurityWarning.OK	
     
+	printlog "Save document to be able to find macro module later"    
+    Call hFileSaveAsKill (gOfficepath + "user\work\i64991.odt")
+	
 	printlog "- execute macro"
     ToolsMacrosRunMacro
     ' Sometimes it lasts long until dialog is shown

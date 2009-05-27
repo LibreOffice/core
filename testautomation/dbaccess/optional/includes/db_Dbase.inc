@@ -113,11 +113,9 @@ testcase db_Dbase
                        
             call db_Query(sFileName,"dbase")
             
-            'outcomment because of some bugs in forms
-            'use "dbaccess/optional/includes/b_lvl1_Forms.inc"
-            'call b_lvl1_Forms ("TT_dBase")
-            
-                      
+            use "dbaccess/optional/includes/db_IndexDesign.inc"
+            call tIndex(sFileName, sTableName)
+
 		else 
             warnlog "Data Source could not be created - beyond testcases stopped"
 		endif

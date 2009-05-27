@@ -117,6 +117,7 @@ if ($gui eq "WNT") {
     $bootstrapini = "bootstrap.ini";
     $bootstrapiniTemp = $bootstrapini . "_";
     $packpackage = "msi";
+    $installpath_without =~ s/\//\\/g;
 }
 elsif ($gui eq "UNX") {
     $is_do_deinstall = 0;
@@ -166,6 +167,7 @@ elsif ($gui eq $cygwin) {
     $WinLineends = "\r\n";
     &SetWinLineends();
     $packpackage = "msi";
+    $installpath_without =~ s/\\/\//g;
 }
 else {
     print_error ("not supported system\n",1);
@@ -238,12 +240,6 @@ $WORK_STAMP_LC=$ENV{WORK_STAMP};
 $WORK_STAMP_LC =~ tr/A-Z/a-z/;
 $ENV{DBGSV_INIT} = $DATA . "dbgsv.ini";
 $ExtensionDir = $ENV{DMAKE_WORK_DIR} . $PathSeparator . $ENV{OUTPATH} . $ENV{PROEXT} . $PathSeparator . "bin" . $PathSeparator;
-if (defined($ENV{INSTALLPATH_SMOKETEST})) {
-    $installpath_without = $ENV{INSTALLPATH_SMOKETEST};
-}
-else {
-    $installpath_without = $temp_path;
-}
 
 if (defined($vcsid)) {
     $installpath_without .= $PathSeparator . $vcsid;
