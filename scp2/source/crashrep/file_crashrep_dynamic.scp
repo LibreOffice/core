@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: file_crashrep_dynamic.scp,v $
- * $Revision: 1.9 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -41,6 +38,7 @@ File gid_Brand_File_Bin_Crashreport
   #endif
     Dir = gid_Brand_Dir_Program;
   #ifdef WNT
+    FileDescription = "%PRODUCTNAME Crashreporter";
     Styles = (PACKED, PATCH_SO_NAME);
   #else
     Styles = (PACKED);

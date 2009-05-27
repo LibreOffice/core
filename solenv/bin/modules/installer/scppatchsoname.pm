@@ -78,7 +78,7 @@ sub convert_to_unicode
 
 sub replace_productname_in_file
 {
-    my ($sourcepath, $destpath, $variableshashref) = @_;
+    my ($sourcepath, $destpath, $variableshashref, $filedescription) = @_;
 
     my $onefile = installer::files::read_binary_file($sourcepath);
 
@@ -87,6 +87,7 @@ sub replace_productname_in_file
     for ( my $i = 1; $i <= 80; $i++ ) { $replacestring .= $onestring; }
 
     my $productname = $variableshashref->{'PRODUCTNAME'} . " " . $variableshashref->{'PRODUCTVERSION'};
+    if ( $filedescription ne "" ) { $productname = $filedescription; }
     my $unicode_productname = convert_to_unicode($productname);
 
     change_length_of_string(\$unicode_productname, $replacestring);
@@ -124,6 +125,7 @@ sub resolving_patchsoname_flag
             # Language specific subdirectory
 
             my $onelanguage = $onefile->{'specificlanguage'};
+            my $filedescription = "";
 
             if ($onelanguage eq "")
             {
@@ -140,6 +142,8 @@ sub resolving_patchsoname_flag
             my $destinationpath = $replacedir . $onefilename;
             my $movepath = $destinationpath . ".orig";
 
+            if ( exists($onefile-> {'FileDescription'}) ) { $filedescription = $onefile-> {'FileDescription'}; }
+
             # if (!(-f $destinationpath))   # do nothing if the file already exists
             # {
 
@@ -148,7 +152,7 @@ sub resolving_patchsoname_flag
             if ( $copysuccess )
             {
                 # Now the file can be patch (binary!)
-                my $found = replace_productname_in_file($movepath, $destinationpath, $variableshashref);
+                my $found = replace_productname_in_file($movepath, $destinationpath, $variableshashref, $filedescription);
 
                 if ($found == 0)
                 {

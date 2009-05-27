@@ -80,7 +80,7 @@ sub check_needed_files_in_path
 sub check_system_path
 {
     # The following files have to be found in the environment variable PATH
-    # All platforms: zip, unzip
+    # All platforms: zip
     # Windows only: msvcp70.dll, msvcr70.dll for regcomp.exe
     # Windows only: "msiinfo.exe", "msidb.exe", "uuidgen.exe", "makecab.exe", "msitran.exe", "expand.exe" for msi database and packaging
 
@@ -103,7 +103,7 @@ sub check_system_path
 
     if (($installer::globals::iswin) && ($installer::globals::iswindowsbuild))
     {
-        @needed_files_in_path = ("zip.exe", "unzip.exe", "msiinfo.exe", "msidb.exe", "uuidgen.exe", "makecab.exe", "msitran.exe", "expand.exe");
+        @needed_files_in_path = ("zip.exe", "msiinfo.exe", "msidb.exe", "uuidgen.exe", "makecab.exe", "msitran.exe", "expand.exe");
 
         if ( $installer::globals::compiler eq "wntmsci8" )
         {
@@ -120,11 +120,11 @@ sub check_system_path
     }
     elsif ($installer::globals::iswin)
     {
-        @needed_files_in_path = ("zip.exe", "unzip.exe");
+        @needed_files_in_path = ("zip.exe");
     }
     else
     {
-        @needed_files_in_path = ("zip", "unzip");
+        @needed_files_in_path = ("zip");
     }
 
     foreach $onefile ( @needed_files_in_path )

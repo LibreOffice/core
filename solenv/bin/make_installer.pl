@@ -8,8 +8,6 @@
 #
 # $RCSfile: make_installer.pl,v $
 #
-# $Revision: 1.121 $
-#
 # This file is part of OpenOffice.org.
 #
 # OpenOffice.org is free software: you can redistribute it and/or modify
@@ -2221,14 +2219,14 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         }
 
         # Analyzing the ScpActions and copying the files into the installation set
-        # At least the loader, instmsia.exe and instmsiw.exe
+        # At least the loader.exe
 
         installer::logger::print_message( "... copying files into installation set ...\n" );
 
         # installer::windows::msiglobal::copy_scpactions_into_installset($defaultlanguage, $installdir, $scpactionsinproductlanguageresolvedarrayref);
         installer::worker::put_scpactions_into_installset($installdir);
 
-        # ... copying the setup.exe, instmsia.exe and instmsiw.exe
+        # ... copying the setup.exe
 
         installer::windows::msiglobal::copy_windows_installer_files_into_installset($installdir, $includepatharrayref, $allvariableshashref);
 
@@ -2300,7 +2298,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         # Creating Windows msp patches
         #######################################################
 
-        if (( $is_success ) && ( $installer::globals::updatedatabase ) && ( $allvariableshashref->{'CREATE_MSP_INSTALLSET'} ) && ( ! ( $^O =~ /cygwin/i ))) # not supported for cygwin yet
+        if (( $is_success ) && ( $installer::globals::updatedatabase ) && ( $allvariableshashref->{'CREATE_MSP_INSTALLSET'} ))
         {
             # Required:
             # Temp path for administrative installations: $installer::globals::temppath
