@@ -853,7 +853,7 @@ void PrintDialog::preparePreview( bool i_bNewPage )
 
     setPreviewText( mnCurPage );
 
-    maPageSlider.SetRange( Range( 0, nPages-1 ) );
+    maPageSlider.SetRange( Range( 0, nPages ) );
     maPageSlider.SetThumbPos( mnCurPage );
     maPageSlider.SetVisibleSize( 1 );
 
