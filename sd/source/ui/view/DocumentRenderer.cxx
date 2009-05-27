@@ -526,7 +526,7 @@ namespace {
                                 String( SdResId(_STR_IMPRESS_PRINT_UI_BROCHURE_FRONT_HELP) ),
                                 OUString( RTL_CONSTASCII_USTRINGPARAM( "Front" ) ),
                                 sal_True,
-                                &aDep, 3
+                                &aDep, 3, sal_True
                                 )
                             );
 
@@ -535,7 +535,7 @@ namespace {
                                 String( SdResId(_STR_IMPRESS_PRINT_UI_BROCHURE_BACK_HELP) ),
                                 OUString( RTL_CONSTASCII_USTRINGPARAM( "Back" ) ),
                                 sal_True,
-                                &aDep, 3
+                                &aDep, 3, sal_True
                                 )
                             );
 
@@ -565,7 +565,7 @@ namespace {
                                 rtl::OUString(),
                                 rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PageRange" ) ),
                                 rtl::OUString(),
-                                &aPrintRangeName, 1 )
+                                &aPrintRangeName, 1, sal_True )
                             );
 
             FreeResource();
