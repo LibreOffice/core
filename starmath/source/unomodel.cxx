@@ -147,8 +147,7 @@ SmPrintUIOptions::SmPrintUIOptions()
                                                      pConfig->GetPrintZoomFactor(),    // initial value
                                                      10,     // min value
                                                      1000,   // max value
-                                                     &aPrintFormatProp,
-                                                     2 );
+                                                     &aPrintFormatProp, 2 , sal_True );
 
 // IsIgnoreSpacesRight is a parser option! Thus we don't add it to the printer UI.
 //
