@@ -27,6 +27,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_linguistic2_LinguProperties_idl__
 #define __com_sun_star_linguistic2_LinguProperties_idl__
 
@@ -65,10 +66,9 @@ published service LinguProperties
          text or not when doing spellchecking or hyphenation, or using the
          thesaurus.
 
-        @deprecated
-        @since OOo 3.01
+        @deprecated since OOo 3.0.1
       */
-    [property] boolean IsGermanPreReform;
+    [property, maybevoid] boolean IsGermanPreReform;
 
     //-------------------------------------------------------------------------
     /** defines if the dictionary-list should be used for spellchecking
@@ -143,19 +143,17 @@ published service LinguProperties
     /** indicates whether the markings for incorrectly spelled text should be
          hidden or not.
 
-        @deprecated
-        @since OOo 3.01
+        @deprecated since OOo 3.0.1
     */
-    [property] boolean IsSpellHide;
+    [property, maybevoid] boolean IsSpellHide;
 
     //-------------------------------------------------------------------------
     /** indicates if spellchecking should be performed in all available
          languages.
 
-        @deprecated
-        @since OOo 3.01
+        @deprecated since OOo 3.0.1
     */
-    [property] boolean IsSpellInAllLanguages;
+    [property, maybevoid] boolean IsSpellInAllLanguages;
 
     //-------------------------------------------------------------------------
     /** defines whether spellchecking should be done in special regions of
