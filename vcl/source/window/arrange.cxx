@@ -65,9 +65,9 @@ RowOrColumn::~RowOrColumn()
     }
 }
 
-WindowArranger* RowOrColumn::getChild( size_t i_nIndex ) const
+boost::shared_ptr<WindowArranger> RowOrColumn::getChild( size_t i_nIndex ) const
 {
-    return i_nIndex < m_aElements.size() ? m_aElements[i_nIndex].m_pChild.get() : NULL;
+    return i_nIndex < m_aElements.size() ? m_aElements[i_nIndex].m_pChild : boost::shared_ptr<WindowArranger>();
 }
 
 Window* RowOrColumn::getWindow( size_t i_nIndex ) const
@@ -230,17 +230,17 @@ void RowOrColumn::setParentWindow( Window* i_pNewParent )
 void RowOrColumn::addWindow( Window* i_pWindow, sal_Int32 i_nIndex )
 {
     if( i_nIndex < 0 || size_t(i_nIndex) >= m_aElements.size() )
-        m_aElements.push_back( WindowArranger::Element( i_pWindow, NULL ) );
+        m_aElements.push_back( WindowArranger::Element( i_pWindow ) );
     else
     {
         std::vector< WindowArranger::Element >::iterator it = m_aElements.begin();
         while( i_nIndex-- )
             ++it;
-        m_aElements.insert( it, WindowArranger::Element( i_pWindow, NULL ) );
+        m_aElements.insert( it, WindowArranger::Element( i_pWindow ) );
     }
 }
 
-void RowOrColumn::addChild( WindowArranger* i_pChild, sal_Int32 i_nIndex )
+void RowOrColumn::addChild( boost::shared_ptr<WindowArranger> const & i_pChild, sal_Int32 i_nIndex )
 {
     if( i_nIndex < 0 || size_t(i_nIndex) >= m_aElements.size() )
         m_aElements.push_back( WindowArranger::Element( NULL, i_pChild ) );
@@ -269,14 +269,14 @@ void RowOrColumn::remove( Window* i_pWindow )
     }
 }
 
-void RowOrColumn::remove( WindowArranger* i_pChild )
+void RowOrColumn::remove( boost::shared_ptr<WindowArranger> const & i_pChild )
 {
     if( i_pChild )
     {
         for( std::vector< WindowArranger::Element >::iterator it = m_aElements.begin();
             it != m_aElements.end(); ++it )
         {
-            if( it->m_pChild.get() == i_pChild )
+            if( it->m_pChild == i_pChild )
             {
                 m_aElements.erase( it );
                 return;
@@ -327,10 +327,10 @@ void Indenter::setWindow( Window* i_pWindow )
     m_aElement.m_pElement = i_pWindow;
 }
 
-void Indenter::setChild( WindowArranger* i_pChild )
+void Indenter::setChild( boost::shared_ptr<WindowArranger> const & i_pChild )
 {
     OSL_VERIFY( (m_aElement.m_pElement == 0 && m_aElement.m_pChild == 0 ) || i_pChild == 0 );
-    m_aElement.m_pChild.reset( i_pChild );
+    m_aElement.m_pChild = i_pChild;
 }
 
 void Indenter::setParentWindow( Window* i_pNewParent )
