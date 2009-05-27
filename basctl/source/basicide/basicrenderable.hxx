@@ -33,25 +33,22 @@
 #include "com/sun/star/view/XRenderable.hpp"
 #include "cppuhelper/compbase1.hxx"
 
+#include "vcl/print.hxx"
+
 class IDEBaseWindow;
-class Printer;
 
 namespace basicide
 {
 class BasicRenderable :
-        public cppu::WeakComponentImplHelper1< com::sun::star::view::XRenderable >
+        public cppu::WeakComponentImplHelper1< com::sun::star::view::XRenderable >,
+        public vcl::PrinterOptionsHelper
 {
     IDEBaseWindow*      mpWindow;
     osl::Mutex          maMutex;
 
-    Printer* getPrinter( const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue >& xOptions );
+    Printer* getPrinter();
 public:
-    BasicRenderable( IDEBaseWindow* pWin )
-    : cppu::WeakComponentImplHelper1< com::sun::star::view::XRenderable >( maMutex )
-    , mpWindow( pWin )
-    {
-    }
-
+    BasicRenderable( IDEBaseWindow* pWin );
     virtual ~BasicRenderable();
 
     // XRenderable

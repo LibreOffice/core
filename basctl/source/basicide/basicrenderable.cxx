@@ -31,38 +31,70 @@
 
 #include "basicrenderable.hxx"
 #include "bastypes.hxx"
+#include "basidesh.hrc"
 
 #include "com/sun/star/awt/XDevice.hpp"
 #include "toolkit/awt/vclxdevice.hxx"
 #include "vcl/print.hxx"
+#include "tools/multisel.hxx"
+#include "tools/resary.hxx"
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace basicide;
 
+BasicRenderable::BasicRenderable( IDEBaseWindow* pWin )
+: cppu::WeakComponentImplHelper1< com::sun::star::view::XRenderable >( maMutex )
+, mpWindow( pWin )
+{
+    ResStringArray aStrings( IDEResId( RID_PRINTDLG_STRLIST )  );
+    DBG_ASSERT( aStrings.Count() >= 5, "resource incomplete" );
+    if( aStrings.Count() < 5 ) // bad resource ?
+        return;
+
+    m_aUIProperties.realloc( 3 );
+
+    // create Subgroup for print range
+    m_aUIProperties[0].Value = getSubgroupControlOpt( rtl::OUString( aStrings.GetString( 0 ) ), rtl::OUString(), true , true);
+
+    // create a choice for the range to print
+    rtl::OUString aPrintContentName( RTL_CONSTASCII_USTRINGPARAM( "PrintContent" ) );
+    Sequence< rtl::OUString > aChoices( 2 );
+    Sequence< rtl::OUString > aHelpTexts( 2 );
+    aChoices[0] = aStrings.GetString( 1 );
+    aHelpTexts[0] = aStrings.GetString( 2 );
+    aChoices[1] = aStrings.GetString( 3 );
+    aHelpTexts[1] = aStrings.GetString( 4 );
+    m_aUIProperties[1].Value = getChoiceControlOpt( rtl::OUString(),
+                                                    aHelpTexts,
+                                                    aPrintContentName,
+                                                    aChoices,
+                                                    0 );
+
+    // create a an Edit dependent on "Pages" selected
+    m_aUIProperties[2].Value = getEditControlOpt( rtl::OUString(),
+                                                  rtl::OUString(),
+                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PageRange" ) ),
+                                                  rtl::OUString(),
+                                                  &aPrintContentName, 1, sal_True
+                                                  );
+}
+
 BasicRenderable::~BasicRenderable()
 {
 }
 
-Printer* BasicRenderable::getPrinter ( const Sequence<beans::PropertyValue >& i_xOptions )
+Printer* BasicRenderable::getPrinter()
 {
     Printer* pPrinter = NULL;
-    sal_Int32 nProps = i_xOptions.getLength();
-    const beans::PropertyValue* pProps = i_xOptions.getConstArray();
-    for( sal_Int32 i = 0; i < nProps; i++ )
-    {
-        if( pProps[i].Name.equalsAscii( "RenderDevice" ) )
-        {
-            Reference<awt::XDevice> xRenderDevice;
+    Any aValue( getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RenderDevice" ) ) ) );
+    Reference<awt::XDevice> xRenderDevice;
 
-            if( pProps[i].Value >>= xRenderDevice )
-            {
-                VCLXDevice* pDevice = VCLXDevice::GetImplementation(xRenderDevice);
-                OutputDevice* pOut = pDevice ? pDevice->GetOutputDevice() : NULL;
-                pPrinter = dynamic_cast<Printer*>(pOut);
-                break;
-            }
-        }
+    if( aValue >>= xRenderDevice )
+    {
+        VCLXDevice* pDevice = VCLXDevice::GetImplementation(xRenderDevice);
+        OutputDevice* pOut = pDevice ? pDevice->GetOutputDevice() : NULL;
+        pPrinter = dynamic_cast<Printer*>(pOut);
     }
     return pPrinter;
 }
@@ -71,12 +103,25 @@ sal_Int32 SAL_CALL BasicRenderable::getRendererCount (
         const Any&, const Sequence<beans::PropertyValue >& i_xOptions
         ) throw (lang::IllegalArgumentException, RuntimeException)
 {
+    processProperties( i_xOptions );
+
     sal_Int32 nCount = 0;
     if( mpWindow )
     {
-        Printer* pPrinter = getPrinter( i_xOptions );
+        Printer* pPrinter = getPrinter();
         if( pPrinter )
+        {
             nCount = mpWindow->countPages( pPrinter );
+            sal_Int64 nContent = getIntValue( "PrintContent", -1 );
+            if( nContent == 1 )
+            {
+                rtl::OUString aPageRange( getStringValue( "PageRange" ) );
+                MultiSelection aSel( aPageRange );
+                long nSelCount = aSel.GetSelectCount();
+                if( nSelCount >= 0 && nSelCount < nCount )
+                    nCount = nSelCount;
+            }
+        }
         else
             throw lang::IllegalArgumentException();
     }
@@ -88,9 +133,11 @@ Sequence<beans::PropertyValue> SAL_CALL BasicRenderable::getRenderer (
         sal_Int32, const Any&, const Sequence<beans::PropertyValue>& i_xOptions
         ) throw (lang::IllegalArgumentException, RuntimeException)
 {
+    processProperties( i_xOptions );
+
     Sequence< beans::PropertyValue > aVals;
     // insert page size here
-    Printer* pPrinter = getPrinter( i_xOptions );
+    Printer* pPrinter = getPrinter();
     // no renderdevice is legal; the first call is to get our print ui options
     if( pPrinter )
     {
@@ -104,6 +151,8 @@ Sequence<beans::PropertyValue> SAL_CALL BasicRenderable::getRenderer (
         aVals[0].Value <<= aSize;
     }
 
+    appendPrintUIOptions( aVals );
+
     return aVals;
 }
 
@@ -112,11 +161,27 @@ void SAL_CALL BasicRenderable::render (
         const Sequence<beans::PropertyValue>& i_xOptions
         ) throw (lang::IllegalArgumentException, RuntimeException)
 {
+    processProperties( i_xOptions );
+
     if( mpWindow )
     {
-        Printer* pPrinter = getPrinter( i_xOptions );
+        Printer* pPrinter = getPrinter();
         if( pPrinter )
-            mpWindow->printPage( nRenderer, pPrinter );
+        {
+            sal_Int64 nContent = getIntValue( "PrintContent", -1 );
+            if( nContent == 1 )
+            {
+                rtl::OUString aPageRange( getStringValue( "PageRange" ) );
+                MultiSelection aSel( aPageRange );
+                long nSelect = aSel.FirstSelected();
+                while( nSelect != long(SFX_ENDOFSELECTION) && nRenderer-- )
+                    nSelect = aSel.NextSelected();
+                if( nSelect != long(SFX_ENDOFSELECTION) )
+                    mpWindow->printPage( sal_Int32(nSelect-1), pPrinter );
+            }
+            else
+                mpWindow->printPage( nRenderer, pPrinter );
+        }
         else
             throw lang::IllegalArgumentException();
     }
