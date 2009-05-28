@@ -2108,7 +2108,9 @@ void ScDocShell::Print( SfxProgress& rProgress, PrintDialog* pPrintDialog,
                 }
             }
 
-            if ( n+1 < nCollateCopies && pPrinter->GetDuplexMode() == DUPLEX_ON && ( nPrinted % 2 ) == 1 )
+            if ( n+1 < nCollateCopies &&
+                 (pPrinter->GetDuplexMode() == DUPLEX_SHORTEDGE || pPrinter->GetDuplexMode() == DUPLEX_LONGEDGE) &&
+                 ( nPrinted % 2 ) == 1 )
             {
                 // #105584# when several collated copies are printed in duplex mode, and there is
                 // an odd number of pages, print an empty page between copies, so the first page of
