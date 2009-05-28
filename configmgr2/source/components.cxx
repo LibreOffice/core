@@ -112,12 +112,20 @@ rtl::OUString fromXmlString(xmlChar const * str, xmlChar const * end) {
 }
 
 struct XmlString: private boost::noncopyable {
-    xmlChar * const str;
+    xmlChar * str;
 
-    explicit XmlString(xmlChar * theStr): str(theStr) {}
+    explicit XmlString(xmlChar * theStr = 0): str(theStr) {}
 
     ~XmlString() { xmlFree(str); }
+
+    XmlString & operator =(xmlChar * theStr);
 };
+
+XmlString & XmlString::operator =(xmlChar * theStr) {
+    OSL_ASSERT(str == 0);
+    str = theStr;
+    return *this;
+}
 
 struct XmlDoc: private boost::noncopyable {
     xmlDocPtr doc;
@@ -348,66 +356,239 @@ bool getBooleanAttribute(
         0);
 }
 
+bool parseBooleanValue(
+    xmlChar const * text, xmlChar const * end, sal_Bool * value)
+{
+    OSL_ASSERT(text != 0 && value != 0);
+    if (end == 0) {
+        if (xmlStrEqual(text, xmlString("true")) ||
+            xmlStrEqual(text, xmlString("1")))
+        {
+            *value = true;
+            return true;
+        }
+        if (xmlStrEqual(text, xmlString("false")) ||
+            xmlStrEqual(text, xmlString("0")))
+        {
+            *value = false;
+            return true;
+        }
+    } else {
+        int len = xmlStrlen(text);
+        if ((len == RTL_CONSTASCII_LENGTH("true") &&
+             (xmlStrncmp(text, xmlString("true"), RTL_CONSTASCII_LENGTH("true"))
+              == 0)) ||
+            (len == RTL_CONSTASCII_LENGTH("1") &&
+             xmlStrncmp(text, xmlString("1"), RTL_CONSTASCII_LENGTH("1")) == 0))
+        {
+            *value = true;
+            return true;
+        }
+        if ((len == RTL_CONSTASCII_LENGTH("false") &&
+             (xmlStrncmp(
+                 text, xmlString("false"), RTL_CONSTASCII_LENGTH("false"))
+              == 0)) ||
+            (len == RTL_CONSTASCII_LENGTH("0") &&
+             xmlStrncmp(text, xmlString("0"), RTL_CONSTASCII_LENGTH("0")) == 0))
+        {
+            *value = false;
+            return true;
+        }
+    }
+    return false;
+}
+
+bool parseShortValue(
+    xmlChar const * text, xmlChar const * end, sal_Int16 * value)
+{
+    OSL_ASSERT(text != 0 && value != 0);
+    sal_Int32 n;
+    if (end == 0) {
+        n = rtl_str_toInt32(reinterpret_cast< char const * >(text), 10);
+            //TODO: check valid lexical representation
+    } else {
+        n = fromXmlString(text, end).toInt32();
+            //TODO: check valid lexical representation
+    }
+    if (n >= SAL_MIN_INT16 && n <= SAL_MAX_INT16) {
+        *value = static_cast< sal_Int16 >(n);
+        return true;
+    }
+    return false;
+}
+
+bool parseIntValue(
+    xmlChar const * text, xmlChar const * end, sal_Int32 * value)
+{
+    OSL_ASSERT(text != 0 && value != 0);
+    if (end == 0) {
+        *value = rtl_str_toInt32(reinterpret_cast< char const * >(text), 10);
+            //TODO: check valid lexical representation
+        return true;
+    }
+    *value = fromXmlString(text, end).toInt32();
+        //TODO: check valid lexical representation
+    return true;
+}
+
+bool parseLongValue(
+    xmlChar const * text, xmlChar const * end, sal_Int64 * value)
+{
+    OSL_ASSERT(text != 0 && value != 0);
+    if (end == 0) {
+        *value = rtl_str_toInt64(reinterpret_cast< char const * >(text), 10);
+            //TODO: check valid lexical representation
+        return true;
+    }
+    *value = fromXmlString(text, end).toInt64();
+        //TODO: check valid lexical representation
+    return true;
+}
+
+bool parseDoubleValue(xmlChar const * text, xmlChar const * end, double * value)
+{
+    OSL_ASSERT(text != 0 && value != 0);
+    if (end == 0) {
+        *value = rtl_str_toDouble(reinterpret_cast< char const * >(text));
+            //TODO: check valid lexical representation
+        return true;
+    }
+    *value = fromXmlString(text, end).toDouble();
+        //TODO: check valid lexical representation
+    return true;
+}
+
+bool parseStringValue(
+    xmlChar const * text, xmlChar const * end, rtl::OUString * value)
+{
+    OSL_ASSERT((text != 0 || end == 0) && value != 0);
+    if (end == 0) {
+        *value = fromXmlString(text);
+        return true;
+    }
+    *value = fromXmlString(text, end);
+    return true;
+}
+
+bool parseHexbinaryValue(
+    xmlChar const * text, xmlChar const * /*end*/,
+    css::uno::Sequence< sal_Int8 > * value)
+{
+    OSL_ASSERT(text != 0 && value != 0);
+    if(true)abort();*(char*)0=0;throw 0;//TODO
+}
+
+template< typename T > bool parseListValue(
+    xmlNodePtr node, xmlChar const * text,
+    bool (* parse)(xmlChar const *, xmlChar const *, T *),
+    css::uno::Sequence< T > * value)
+{
+    OSL_ASSERT(parse != 0 && value != 0);
+    comphelper::SequenceAsVector< T > seq;
+    if (text != 0) {
+        XmlString sepAttr(
+            xmlGetNsProp(
+                node, xmlString("separator"),
+                xmlString("http://openoffice.org/2001/registry")));
+        XmlString col;
+        xmlChar const * p;
+        xmlChar const * sep;
+        int sepLen;
+        if (sepAttr.str == 0) {
+            col = xmlSchemaCollapseString(text);
+            p = col.str == 0 ? text : col.str;
+            sep = xmlString(" ");
+            sepLen = RTL_CONSTASCII_LENGTH(" ");
+        } else {
+            p = text;
+            sep = sepAttr.str;
+            sepLen = xmlStrlen(sep);
+        }
+        if (*p != '\0') {
+            for (;;) {
+                xmlChar const * q = xmlStrstr(p, sep);
+                T val;
+                if (!(*parse)(p, q, &val)) {
+                    return false;
+                }
+                seq.push_back(val);
+                if (q == 0) {
+                    break;
+                }
+                p = q + sepLen;
+            }
+        }
+    }
+    *value = seq.getAsConstList();
+    return true;
+}
+
 css::uno::Any parseValue(xmlDocPtr doc, xmlNodePtr node, Type type) {
     XmlString text(xmlNodeListGetString(doc, node->xmlChildrenNode, 1));
     switch (type) {
     case TYPE_BOOLEAN:
-        {
+        if (text.str != 0) {
             XmlString col(xmlSchemaCollapseString(text.str));
-            xmlChar * p = col.str == 0 ? text.str : col.str;
-            if (xmlStrEqual(p, xmlString("true")) ||
-                xmlStrEqual(p, xmlString("1")))
-            {
-                return css::uno::makeAny(true);
-            } else if (xmlStrEqual(p, xmlString("false")) ||
-                       xmlStrEqual(p, xmlString("0")))
-            {
-                return css::uno::makeAny(false);
+            sal_Bool val;
+            if (parseBooleanValue(col.str == 0 ? text.str : col.str, 0, &val)) {
+                return css::uno::makeAny(val);
             }
         }
         break;
     case TYPE_SHORT:
-        {
+        if (text.str != 0) {
             XmlString col(xmlSchemaCollapseString(text.str));
-            sal_Int64 n = rtl_str_toInt64(
-                reinterpret_cast< char * >(col.str == 0 ? text.str : col.str),
-                10); //TODO: check valid lexical representation
-            if (n >= SAL_MIN_INT16 && n <= SAL_MAX_INT16) {
-                return css::uno::makeAny(static_cast< sal_Int16 >(n));
+            sal_Int16 val;
+            if (parseShortValue(col.str == 0 ? text.str : col.str, 0, &val)) {
+                return css::uno::makeAny(val);
             }
         }
         break;
     case TYPE_INT:
-        {
+        if (text.str != 0) {
             XmlString col(xmlSchemaCollapseString(text.str));
-            return css::uno::makeAny(
-                rtl_str_toInt32(
-                    reinterpret_cast< char * >(
-                        col.str == 0 ? text.str : col.str),
-                    10)); //TODO: check valid lexical representation
+            sal_Int32 val;
+            if (parseIntValue(col.str == 0 ? text.str : col.str, 0, &val)) {
+                return css::uno::makeAny(val);
+            }
         }
+        break;
     case TYPE_LONG:
-        {
+        if (text.str != 0) {
             XmlString col(xmlSchemaCollapseString(text.str));
-            return css::uno::makeAny(
-                rtl_str_toInt64(
-                    reinterpret_cast< char * >(
-                        col.str == 0 ? text.str : col.str),
-                    10)); //TODO: check valid lexical representation
+            sal_Int64 val;
+            if (parseLongValue(col.str == 0 ? text.str : col.str, 0, &val)) {
+                return css::uno::makeAny(val);
+            }
         }
+        break;
     case TYPE_DOUBLE:
-        {
+        if (text.str != 0) {
             XmlString col(xmlSchemaCollapseString(text.str));
-            return css::uno::makeAny(
-                rtl_str_toDouble(
-                    reinterpret_cast< char * >(
-                        col.str == 0 ? text.str : col.str)));
-                //TODO: check valid lexical representation
+            double val;
+            if (parseDoubleValue(col.str == 0 ? text.str : col.str, 0, &val)) {
+                return css::uno::makeAny(val);
+            }
         }
+        break;
     case TYPE_STRING:
-        return css::uno::makeAny(fromXmlString(text.str));
+        {
+            rtl::OUString val;
+            if (parseStringValue(text.str, 0, &val)) {
+                return css::uno::makeAny(val);
+            }
+        }
+        break;
     case TYPE_HEXBINARY:
-        //TODO
+        //TODO: text.str == 0 OK?  xmlSchemaCollapseString?
+        if (text.str != 0) {
+            XmlString col(xmlSchemaCollapseString(text.str));
+            double val;
+            if (parseDoubleValue(col.str == 0 ? text.str : col.str, 0, &val)) {
+                return css::uno::makeAny(val);
+            }
+        }
+        break;
     case TYPE_ANY:
         throw css::uno::RuntimeException(
             (rtl::OUString(
@@ -415,56 +596,61 @@ css::uno::Any parseValue(xmlDocPtr doc, xmlNodePtr node, Type type) {
              fromXmlString(doc->URL)),
             0);
     case TYPE_BOOLEAN_LIST:
-        //TODO
+        {
+            css::uno::Sequence< sal_Bool > val;
+            if (parseListValue(node, text.str, &parseBooleanValue, &val)) {
+                return css::uno::makeAny(val);
+            }
+        }
+        break;
     case TYPE_SHORT_LIST:
-        //TODO
+        {
+            css::uno::Sequence< sal_Int16 > val;
+            if (parseListValue(node, text.str, &parseShortValue, &val)) {
+                return css::uno::makeAny(val);
+            }
+        }
+        break;
     case TYPE_INT_LIST:
-        //TODO
+        {
+            css::uno::Sequence< sal_Int32 > val;
+            if (parseListValue(node, text.str, &parseIntValue, &val)) {
+                return css::uno::makeAny(val);
+            }
+        }
+        break;
     case TYPE_LONG_LIST:
-        //TODO
+        {
+            css::uno::Sequence< sal_Int64 > val;
+            if (parseListValue(node, text.str, &parseLongValue, &val)) {
+                return css::uno::makeAny(val);
+            }
+        }
+        break;
     case TYPE_DOUBLE_LIST:
-        //TODO
+        {
+            css::uno::Sequence< double > val;
+            if (parseListValue(node, text.str, &parseDoubleValue, &val)) {
+                return css::uno::makeAny(val);
+            }
+        }
+        break;
     case TYPE_STRING_LIST:
         {
-            XmlString sep(
-                xmlGetNsProp(
-                    node, xmlString("separator"),
-                    xmlString("http://openoffice.org/2001/registry")));
-            comphelper::SequenceAsVector< rtl::OUString > seq;
-            if (sep.str == 0) {
-                XmlString col(xmlSchemaCollapseString(text.str));
-                xmlChar const * p = col.str == 0 ? text.str : col.str;
-                if (*p != '\0') {
-                    for (;;) {
-                        xmlChar const * q = xmlStrchr(p, ' ');
-                        if (q == 0) {
-                            seq.push_back(fromXmlString(p));
-                            break;
-                        }
-                        seq.push_back(fromXmlString(p, q));
-                        p = q + 1;
-                    }
-                }
-            } else if (*text.str != '\0') {
-                //XXX There is no way to encode a string-list that contains the
-                // empty string as its only element.
-                //TODO: use xmlStrstr
-                rtl::OUString text2(fromXmlString(text.str));
-                rtl::OUString sep2(fromXmlString(sep.str));
-                for (sal_Int32 i = 0;;) {
-                    sal_Int32 j = findFirst(text2, sep2, i);
-                    seq.push_back(text2.copy(i, j - i));
-                    if (j == text2.getLength()) {
-                        break;
-                    } else {
-                        i = j + sep2.getLength();
-                    }
-                }
+            css::uno::Sequence< rtl::OUString > val;
+            if (parseListValue(node, text.str, &parseStringValue, &val)) {
+                return css::uno::makeAny(val);
             }
-            return css::uno::makeAny(seq.getAsConstList());
         }
+        break;
     case TYPE_HEXBINARY_LIST:
-        //TODO
+        {
+            css::uno::Sequence< css::uno::Sequence< sal_Int8 > > val;
+            if (parseListValue(node, text.str, &parseHexbinaryValue, &val)) {
+                return css::uno::makeAny(val);
+            }
+        }
+        break;
     default:
         OSL_ASSERT(false);
         break;
@@ -1367,19 +1553,21 @@ NodeMap::iterator Components::resolveNode(
 {
     OSL_ASSERT(map != 0);
     NodeMap::iterator i(map->find(name));
-    if (NodeRef * ref = dynamic_cast< NodeRef * >(i->second.get())) {
-        NodeMap::const_iterator j(
-            ref->getTemplates().find(ref->getTemplateName()));
-        if (j == ref->getTemplates().end()) {
-            throw css::uno::RuntimeException(
-                (rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM("unknown node-ref ")) +
-                 ref->getTemplateName()),
-                css::uno::Reference< css::uno::XInterface >());
+    if (i != map->end()) {
+        if (NodeRef * ref = dynamic_cast< NodeRef * >(i->second.get())) {
+            NodeMap::const_iterator j(
+                ref->getTemplates().find(ref->getTemplateName()));
+            if (j == ref->getTemplates().end()) {
+                throw css::uno::RuntimeException(
+                    (rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM("unknown node-ref ")) +
+                     ref->getTemplateName()),
+                    css::uno::Reference< css::uno::XInterface >());
+            }
+            rtl::Reference< Node > removed(ref);
+            i->second = j->second->clone(ref->getParent(), ref->getName());
+            removed->unbind(); // must not throw
         }
-        rtl::Reference< Node > removed(ref);
-        i->second = j->second->clone(ref->getParent(), ref->getName());
-        removed->unbind(); // must not throw
     }
     return i;
 }
