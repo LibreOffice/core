@@ -164,7 +164,6 @@ private:
 };
 
 rtl::Reference< Node > NodeRef::getMember(rtl::OUString const &) {
-/*SB*/*(char*)0=0;
     throw css::uno::RuntimeException(
         rtl::OUString(
             RTL_CONSTASCII_USTRINGPARAM("unresolved node-ref ")) + name_,
