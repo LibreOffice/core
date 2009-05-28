@@ -70,6 +70,12 @@
 #pragma disable_warn
 #elif defined _MSC_VER
 #pragma warning(push, 1)
+/**/
+#ifdef yywrap
+#undef  yywrap
+#define yywrap() 1
+#endif
+/**/
 #endif
 
 using namespace connectivity;
