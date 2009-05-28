@@ -63,7 +63,6 @@ public:
     virtual String                  GetPaperBinName( const ImplJobSetup* pSetupData, ULONG nPaperBin );
     virtual void                    InitPaperFormats( const ImplJobSetup* pSetupData );
     virtual int                 GetLandscapeAngle( const ImplJobSetup* pSetupData );
-    virtual DuplexMode          GetDuplexMode( const ImplJobSetup* pSetupData );
 };
 
 class PspSalPrinter : public SalPrinter

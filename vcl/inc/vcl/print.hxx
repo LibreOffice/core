@@ -335,6 +335,7 @@ public:
     BOOL                        SetOrientation( Orientation eOrient );
     Orientation                 GetOrientation() const;
     DuplexMode                  GetDuplexMode() const;
+    BOOL                        SetDuplexMode( DuplexMode );
     // returns the angle that a landscape page will be turned counterclockwise
     // wrt to portrait. The return value may be only valid for
     // the current paper

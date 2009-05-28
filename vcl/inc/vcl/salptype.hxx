@@ -40,7 +40,11 @@
 #define SAL_JOBSET_ORIENTATION                  ((ULONG)0x00000001)
 #define SAL_JOBSET_PAPERBIN                     ((ULONG)0x00000002)
 #define SAL_JOBSET_PAPERSIZE                    ((ULONG)0x00000004)
-#define SAL_JOBSET_ALL                          (SAL_JOBSET_ORIENTATION | SAL_JOBSET_PAPERBIN | SAL_JOBSET_PAPERSIZE)
+#define SAL_JOBSET_DUPLEXMODE                   ((ULONG)0x00000008)
+#define SAL_JOBSET_ALL                          (SAL_JOBSET_ORIENTATION |\
+                                                 SAL_JOBSET_PAPERBIN    |\
+                                                 SAL_JOBSET_PAPERSIZE   |\
+                                                 SAL_JOBSET_DUPLEXMODE)
 
 // -------------------
 // - SalPrinterError -

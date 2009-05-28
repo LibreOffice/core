@@ -923,6 +923,21 @@ static void ImplDevModeToJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
                 break;
         }
     }
+
+    if( nFlags & SAL_JOBSET_DUPLEXMODE )
+    {
+        DuplexMode eDuplex = DUPLEX_UNKNOWN;
+        if( (CHOOSE_DEVMODE(dmFields) & DM_DUPLEX) )
+        {
+            if( CHOOSE_DEVMODE(dmDuplex) == DMDUP_SIMPLEX )
+                eDuplex = DUPLEX_OFF;
+            else if( CHOOSE_DEVMODE(dmDuplex) == DMDUP_VERTICAL )
+                eDuplex = DUPLEX_LONGEDGE;
+            else if( CHOOSE_DEVMODE(dmDuplex) == DMDUP_HORIZONTAL )
+                eDuplex = DUPLEX_SHORTEDGE;
+        }
+        pSetupData->meDuplexMode = eDuplex;
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -1073,6 +1088,26 @@ static void ImplJobSetupToDevMode( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
 
                 break;
             }
+        }
+    }
+    if( (nFlags & SAL_JOBSET_DUPLEXMODE) )
+    {
+        switch( pSetupData->meDuplexMode )
+        {
+        case DUPLEX_OFF:
+            CHOOSE_DEVMODE(dmFields) |= DM_DUPLEX;
+            CHOOSE_DEVMODE(dmDuplex) = DMDUP_SIMPLEX;
+            break;
+        case DUPLEX_SHORTEDGE:
+            CHOOSE_DEVMODE(dmFields) |= DM_DUPLEX;
+            CHOOSE_DEVMODE(dmDuplex) = DMDUP_HORIZONTAL;
+            break;
+        case DUPLEX_LONGEDGE:
+            CHOOSE_DEVMODE(dmFields) |= DM_DUPLEX;
+            CHOOSE_DEVMODE(dmDuplex) = DMDUP_VERTICAL;
+            break;
+        case DUPLEX_UNKNOWN:
+            break;
         }
     }
 }
@@ -1312,39 +1347,6 @@ void WinSalInfoPrinter::InitPaperFormats( const ImplJobSetup* pSetupData )
     }
 
     m_bPapersInit = true;
-}
-
-// -----------------------------------------------------------------------
-
-DuplexMode WinSalInfoPrinter::GetDuplexMode( const ImplJobSetup* pSetupData )
-{
-    DuplexMode nRet = DUPLEX_UNKNOWN;
-    if ( pSetupData &&pSetupData->mpDriverData )
-    {
-        if( aSalShlData.mbWPrinter )
-        {
-            DEVMODEW* pDevMode = SAL_DEVMODE_W( pSetupData );
-            if ( pDevMode && (pDevMode->dmFields & DM_DUPLEX ))
-            {
-                if ( pDevMode->dmDuplex == DMDUP_SIMPLEX )
-                    nRet = DUPLEX_OFF;
-                else
-                    nRet = DUPLEX_ON;
-            }
-        }
-        else
-        {
-            DEVMODEA* pDevMode = SAL_DEVMODE_A( pSetupData );
-            if ( pDevMode && (pDevMode->dmFields & DM_DUPLEX ))
-            {
-                if ( pDevMode->dmDuplex == DMDUP_SIMPLEX )
-                    nRet = DUPLEX_OFF;
-                else
-                    nRet = DUPLEX_ON;
-            }
-        }
-    }
-    return nRet;
 }
 
 // -----------------------------------------------------------------------

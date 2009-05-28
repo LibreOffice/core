@@ -96,8 +96,6 @@ class AquaSalInfoPrinter : public SalInfoPrinter
     virtual String              GetPaperBinName( const ImplJobSetup* i_pSetupData, ULONG i_nPaperBin );
     virtual void                InitPaperFormats( const ImplJobSetup* i_pSetupData );
     virtual int                 GetLandscapeAngle( const ImplJobSetup* i_pSetupData );
-    virtual DuplexMode          GetDuplexMode( const ImplJobSetup* i_pSetupData );
-
 
     // the artificial separation between InfoPrinter and Printer
     // is not really useful for us

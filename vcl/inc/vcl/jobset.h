@@ -60,12 +60,13 @@ struct ImplJobSetup
     String          maPrinterName;      // Printer-Name
     String          maDriver;           // Driver-Name
     Orientation     meOrientation;      // Orientation
-    USHORT          mnPaperBin;         // Papierschacht
-    Paper           mePaperFormat;      // Papierformat
-    long            mnPaperWidth;       // Papierbreite in 100tel mm
-    long            mnPaperHeight;      // Papierhoehe in 100tel mm
-    ULONG           mnDriverDataLen;    // Laenge der systemabhaengigen Daten
-    BYTE*           mpDriverData;       // Systemabhaengige Daten die als Byte-Block rausgeschrieben werden
+    DuplexMode      meDuplexMode;       // Duplex
+    USHORT          mnPaperBin;         // paper bin / in tray
+    Paper           mePaperFormat;      // paper format
+    long            mnPaperWidth;       // paper width (100th mm)
+    long            mnPaperHeight;      // paper height (100th mm)
+    ULONG           mnDriverDataLen;    // length of system specific data
+    BYTE*           mpDriverData;       // system specific data (will be streamed a byte block)
     ::std::hash_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash >            maValueMap;
 
                     ImplJobSetup();

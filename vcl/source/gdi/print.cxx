@@ -1200,7 +1200,44 @@ BOOL Printer::SetPaperFromInfo( const vcl::PaperInfo& rInfo )
 
 DuplexMode Printer::GetDuplexMode() const
 {
-    return mpInfoPrinter ? mpInfoPrinter->GetDuplexMode( maJobSetup.ImplGetConstData() ) : DUPLEX_UNKNOWN;
+    return maJobSetup.ImplGetConstData()->meDuplexMode;
+}
+
+// -----------------------------------------------------------------------
+
+BOOL Printer::SetDuplexMode( DuplexMode eDuplex )
+{
+    if ( mbInPrintPage )
+        return FALSE;
+
+    if ( maJobSetup.ImplGetConstData()->meDuplexMode != eDuplex )
+    {
+        JobSetup        aJobSetup = maJobSetup;
+        ImplJobSetup*   pSetupData = aJobSetup.ImplGetData();
+        pSetupData->meDuplexMode = eDuplex;
+
+        if ( IsDisplayPrinter() )
+        {
+            mbNewJobSetup = TRUE;
+            maJobSetup = aJobSetup;
+            return TRUE;
+        }
+
+        ImplReleaseGraphics();
+        if ( mpInfoPrinter->SetData( SAL_JOBSET_DUPLEXMODE, pSetupData ) )
+        {
+            ImplUpdateJobSetupPaper( aJobSetup );
+            mbNewJobSetup = TRUE;
+            maJobSetup = aJobSetup;
+            ImplUpdatePageData();
+            ImplUpdateFontList();
+            return TRUE;
+        }
+        else
+            return FALSE;
+    }
+
+    return TRUE;
 }
 
 // -----------------------------------------------------------------------

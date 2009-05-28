@@ -435,6 +435,8 @@ ULONG AquaSalInfoPrinter::GetCapabilities( const ImplJobSetup* i_pSetupData, USH
             return 0;
         case PRINTER_CAPABILITIES_SETORIENTATION:
             return 1;
+        case PRINTER_CAPABILITIES_SETDUPLEX:
+            return 0;
         case PRINTER_CAPABILITIES_SETPAPERBIN:
             return 0;
         case PRINTER_CAPABILITIES_SETPAPERSIZE:
@@ -809,15 +811,6 @@ const vcl::PaperInfo* AquaSalInfoPrinter::matchPaper( long i_nWidth, long i_nHei
 int AquaSalInfoPrinter::GetLandscapeAngle( const ImplJobSetup* i_pSetupData )
 {
     return 900;
-}
-
-////////////////////////////
-//////   IMPLEMENT US  /////
-////////////////////////////
-
-DuplexMode AquaSalInfoPrinter::GetDuplexMode( const ImplJobSetup* i_pSetupData )
-{
-    return DUPLEX_UNKNOWN;
 }
 
 

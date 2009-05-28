@@ -101,7 +101,6 @@ public:
     virtual void                    InitPaperFormats( const ImplJobSetup* pSetupData ) = 0;
     // returns angle that a landscape page will be turned counterclockwise wrt to portrait
     virtual int                 GetLandscapeAngle( const ImplJobSetup* pSetupData ) = 0;
-    virtual DuplexMode          GetDuplexMode( const ImplJobSetup* pSetupData ) = 0;
 };
 
 // --------------

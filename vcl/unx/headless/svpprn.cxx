@@ -154,6 +154,32 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
             pJobSetup->mnPaperBin = 0xffff;
     }
 
+    // copy duplex
+    pKey = NULL;
+    pValue = NULL;
+
+    pJobSetup->meDuplexMode = DUPLEX_UNKNOWN;
+    if( rData.m_pParser )
+        pKey = rData.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "Duplex" ) ) );
+    if( pKey )
+        pValue = rData.m_aContext.getValue( pKey );
+    if( pKey && pValue )
+    {
+        if( pValue->m_aOption.EqualsIgnoreCaseAscii( "None" ) ||
+            pValue->m_aOption.EqualsIgnoreCaseAscii( "Simplex", 0, 7 )
+           )
+        {
+            pJobSetup->meDuplexMode = DUPLEX_OFF;
+        }
+        else if( pValue->m_aOption.EqualsIgnoreCaseAscii( "DuplexNoTumble" ) )
+        {
+            pJobSetup->meDuplexMode = DUPLEX_LONGEDGE;
+        }
+        else if( pValue->m_aOption.EqualsIgnoreCaseAscii( "DuplexTumble" ) )
+        {
+            pJobSetup->meDuplexMode = DUPLEX_SHORTEDGE;
+        }
+    }
 
     // copy the whole context
     if( pJobSetup->mpDriverData )
@@ -491,34 +517,6 @@ void PspSalInfoPrinter::InitPaperFormats( const ImplJobSetup* )
 
 // -----------------------------------------------------------------------
 
-DuplexMode PspSalInfoPrinter::GetDuplexMode( const ImplJobSetup* pJobSetup )
-{
-    DuplexMode aRet = DUPLEX_UNKNOWN;
-    PrinterInfo aInfo( PrinterInfoManager::get().getPrinterInfo( pJobSetup->maPrinterName ) );
-    if ( pJobSetup->mpDriverData )
-        JobData::constructFromStreamBuffer( pJobSetup->mpDriverData, pJobSetup->mnDriverDataLen, aInfo );
-    if( aInfo.m_pParser )
-    {
-        const PPDKey * pKey = aInfo.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "Duplex" ) ) );
-        if( pKey )
-        {
-            const PPDValue* pVal = aInfo.m_aContext.getValue( pKey );
-            if( pVal && (
-                pVal->m_aOption.EqualsIgnoreCaseAscii( "None" )          ||
-                pVal->m_aOption.EqualsIgnoreCaseAscii( "Simplex", 0, 7 )
-                ) )
-            {
-                aRet = DUPLEX_OFF;
-            }
-            else
-                aRet = DUPLEX_ON;
-        }
-    }
-    return aRet;
-}
-
-// -----------------------------------------------------------------------
-
 int PspSalInfoPrinter::GetLandscapeAngle( const ImplJobSetup* )
 {
     return 900;
@@ -660,6 +658,37 @@ BOOL PspSalInfoPrinter::SetData(
         if( nSetDataFlags & SAL_JOBSET_ORIENTATION )
             aData.m_eOrientation = pJobSetup->meOrientation == ORIENTATION_LANDSCAPE ? orientation::Landscape : orientation::Portrait;
 
+        // merge duplex if necessary
+        if( nSetDataFlags & SAL_JOBSET_DUPLEXMODE )
+        {
+            pKey = aData.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "Duplex" ) ) );
+            if( pKey )
+            {
+                pValue = NULL;
+                switch( pJobSetup->meDuplexMode )
+                {
+                case DUPLEX_OFF:
+                    pValue = pKey->getValue( String( RTL_CONSTASCII_USTRINGPARAM( "None" ) ) );
+                    if( pValue == NULL )
+                        pValue = pKey->getValue( String( RTL_CONSTASCII_USTRINGPARAM( "SimplexNoTumble" ) ) );
+                    break;
+                case DUPLEX_SHORTEDGE:
+                    pValue = pKey->getValue( String( RTL_CONSTASCII_USTRINGPARAM( "DuplexTumble" ) ) );
+                    break;
+                case DUPLEX_LONGEDGE:
+                    pValue = pKey->getValue( String( RTL_CONSTASCII_USTRINGPARAM( "DuplexNoTumble" ) ) );
+                    break;
+                case DUPLEX_UNKNOWN:
+                default:
+                    pValue = 0;
+                    break;
+                }
+                if( ! pValue )
+                    pValue = pKey->getDefaultValue();
+                aData.m_aContext.setValue( pKey, pValue );
+            }
+        }
+
         m_aJobData = aData;
         copyJobDataToJobSetup( pJobSetup, aData );
         return TRUE;
@@ -763,6 +792,8 @@ ULONG PspSalInfoPrinter::GetCapabilities( const ImplJobSetup* pJobSetup, USHORT 
         case PRINTER_CAPABILITIES_COLLATECOPIES:
             return 0;
         case PRINTER_CAPABILITIES_SETORIENTATION:
+            return 1;
+        case PRINTER_CAPABILITIES_SETDUPLEX:
             return 1;
         case PRINTER_CAPABILITIES_SETPAPERBIN:
             return 1;

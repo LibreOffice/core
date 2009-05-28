@@ -1831,9 +1831,4 @@ int Os2SalInfoPrinter::GetLandscapeAngle( const ImplJobSetup* pSetupData )
     printf("Os2SalInfoPrinter::GetLandscapeAngle\n");
     return 0;
 }
-DuplexMode Os2SalInfoPrinter::GetDuplexMode( const ImplJobSetup* pSetupData )
-{
-    DuplexMode nRet = DUPLEX_UNKNOWN;
-    printf("Os2SalInfoPrinter::GetDuplexMode\n");
-    return nRet;
-}
+

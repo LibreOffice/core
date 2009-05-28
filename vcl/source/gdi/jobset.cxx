@@ -73,6 +73,7 @@ ImplJobSetup::ImplJobSetup()
     mnRefCount          = 1;
     mnSystem            = 0;
     meOrientation       = ORIENTATION_PORTRAIT;
+    meDuplexMode        = DUPLEX_UNKNOWN;
     mnPaperBin          = 0;
     mePaperFormat       = PAPER_USER;
     mnPaperWidth        = 0;
@@ -90,6 +91,7 @@ ImplJobSetup::ImplJobSetup( const ImplJobSetup& rJobSetup ) :
     mnRefCount          = 1;
     mnSystem            = rJobSetup.mnSystem;
     meOrientation       = rJobSetup.meOrientation;
+    meDuplexMode        = rJobSetup.meDuplexMode;
     mnPaperBin          = rJobSetup.mnPaperBin;
     mePaperFormat       = rJobSetup.mePaperFormat;
     mnPaperWidth        = rJobSetup.mnPaperWidth;
@@ -277,6 +279,7 @@ BOOL JobSetup::operator==( const JobSetup& rJobSetup ) const
          (pData1->maPrinterName     == pData2->maPrinterName)           &&
          (pData1->maDriver          == pData2->maDriver)                &&
          (pData1->meOrientation     == pData2->meOrientation)           &&
+         (pData1->meDuplexMode      == pData2->meDuplexMode)            &&
          (pData1->mnPaperBin        == pData2->mnPaperBin)              &&
          (pData1->mePaperFormat     == pData2->mePaperFormat)           &&
          (pData1->mnPaperWidth      == pData2->mnPaperWidth)            &&
@@ -337,6 +340,7 @@ SvStream& operator>>( SvStream& rIStream, JobSetup& rJobSetup )
                 pJobData->mnSystem                  = SVBT16ToShort( pOldJobData->nSystem );
                 pJobData->mnDriverDataLen           = SVBT32ToUInt32( pOldJobData->nDriverDataLen );
                 pJobData->meOrientation             = (Orientation)SVBT16ToShort( pOldJobData->nOrientation );
+                pJobData->meDuplexMode              = DUPLEX_UNKNOWN;
                 pJobData->mnPaperBin                = SVBT16ToShort( pOldJobData->nPaperBin );
                 pJobData->mePaperFormat             = (Paper)SVBT16ToShort( pOldJobData->nPaperFormat );
                 pJobData->mnPaperWidth              = (long)SVBT32ToUInt32( pOldJobData->nPaperWidth );
@@ -355,7 +359,19 @@ SvStream& operator>>( SvStream& rIStream, JobSetup& rJobSetup )
                         String aKey, aValue;
                         rIStream.ReadByteString( aKey, RTL_TEXTENCODING_UTF8 );
                         rIStream.ReadByteString( aValue, RTL_TEXTENCODING_UTF8 );
-                        pJobData->maValueMap[ aKey ] = aValue;
+                        if( aKey.EqualsAscii( "COMPAT_DUPLEX_MODE" ) )
+                        {
+                            if( aValue.EqualsAscii( "DUPLEX_UNKNOWN" ) )
+                                pJobData->meDuplexMode = DUPLEX_UNKNOWN;
+                            else if( aValue.EqualsAscii( "DUPLEX_OFF" ) )
+                                pJobData->meDuplexMode = DUPLEX_OFF;
+                            else if( aValue.EqualsAscii( "DUPLEX_SHORTEDGE" ) )
+                                pJobData->meDuplexMode = DUPLEX_SHORTEDGE;
+                            else if( aValue.EqualsAscii( "DUPLEX_LONGEDGE" ) )
+                                pJobData->meDuplexMode = DUPLEX_LONGEDGE;
+                        }
+                        else
+                            pJobData->maValueMap[ aKey ] = aValue;
                     }
                     DBG_ASSERT( rIStream.Tell() == nFirstPos+nLen, "corrupted job setup" );
                     // ensure correct stream position
@@ -420,6 +436,14 @@ SvStream& operator<<( SvStream& rOStream, const JobSetup& rJobSetup )
             {
                 rOStream.WriteByteString( it->first, RTL_TEXTENCODING_UTF8 );
                 rOStream.WriteByteString( it->second, RTL_TEXTENCODING_UTF8 );
+            }
+            rOStream.WriteByteString( "COMPAT_DUPLEX_MODE" ) ;
+            switch( pJobData->meDuplexMode )
+            {
+            case DUPLEX_UNKNOWN: rOStream.WriteByteString( "DUPLEX_UNKNOWN" );break;
+            case DUPLEX_OFF: rOStream.WriteByteString( "DUPLEX_OFF" );break;
+            case DUPLEX_SHORTEDGE: rOStream.WriteByteString( "DUPLEX_SHORTEDGE" );break;
+            case DUPLEX_LONGEDGE: rOStream.WriteByteString( "DUPLEX_LONGEDGE" );break;
             }
             nLen = sal::static_int_cast<USHORT>(rOStream.Tell() - nPos);
             rOStream.Seek( nPos );
