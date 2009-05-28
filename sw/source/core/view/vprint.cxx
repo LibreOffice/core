@@ -1373,7 +1373,7 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress* pProgress,
                         // we are have an odd page count in collation/duplex
                         // mode and there are still some copies to print:
                         if ( pPrt && ( 1 == ( nPagesPrinted % 2 ) ) &&
-                             DUPLEX_ON == pPrt->GetDuplexMode() &&
+                             ( DUPLEX_SHORTEDGE == pPrt->GetDuplexMode() || DUPLEX_LONGEDGE == pPrt->GetDuplexMode() ) &&
                              nCnt + 1 < nCopyCnt )
                         {
                             pPrt->StartPage();
