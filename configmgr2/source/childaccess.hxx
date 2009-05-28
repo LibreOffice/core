@@ -32,6 +32,8 @@
 
 #include "sal/config.h"
 
+#include <vector>
+
 #include "com/sun/star/container/XChild.hpp"
 #include "com/sun/star/lang/NoSupportException.hpp"
 #include "com/sun/star/lang/XUnoTunnel.hpp"
@@ -45,9 +47,10 @@
 
 #include "access.hxx"
 
-namespace com { namespace sun { namespace star { namespace uno {
-    class XInterface;
-} } } }
+namespace com { namespace sun { namespace star {
+    namespace uno { class XInterface; }
+    namespace util { struct ElementChange; }
+} } }
 
 namespace configmgr {
 
@@ -83,10 +86,15 @@ public:
 
     void setStatus(
         Status status,
-        com::sun::star::uno::Any const & changedValue =
+        com::sun::star::uno::Any const & changeData =
             com::sun::star::uno::Any());
 
     Status getStatus() const { return status_; }
+
+    void reportChanges(
+        std::vector< com::sun::star::util::ElementChange > * changes) const;
+
+    void commitChanges();
 
     com::sun::star::uno::Any asValue();
 
@@ -113,7 +121,8 @@ private:
     Access * parent_; // non-null iff non-free node
     rtl::Reference< Node > node_;
     Status status_;
-    com::sun::star::uno::Any changedValue_; // valid iff STATUS_CHANGED
+    com::sun::star::uno::Any changeData_;
+        // STATUS_CHANGED: new value; STATUS_REMOVED: old name
 };
 
 }

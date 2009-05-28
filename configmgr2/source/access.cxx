@@ -678,12 +678,6 @@ void Access::insertByName(
             getRoot().get(), this,
             new PropertyNode(group, aName, type, true, aElement, true),
             ChildAccess::STATUS_ADDED);
-/*TODO:
-        group->getMembers().insert(
-            NodeMap::value_type(
-                aName,
-                new PropertyNode(group, aName, type, true, aElement, true)));
-*/
         //TODO notify change
     } else if (SetNode * set = dynamic_cast< SetNode * >(p.get())) {
         if (set->getMember(aName).is()) {
@@ -721,10 +715,6 @@ void Access::insertByName(
         children_[aName] = new ChildAccess(
             getRoot().get(), this, freeAcc->getNode(),
             ChildAccess::STATUS_ADDED);
-/*TODO:
-        set->getMembers().insert(
-            NodeMap::value_type(aName, freeAcc->getNode()));
-*/
         freeAcc->bind(root.get(), this); // must not throw
         //TODO notify change
     } else {
@@ -742,7 +732,6 @@ void Access::removeByName(rtl::OUString const & aName)
 {
     OSL_ASSERT(thisIs(IS_EXTGROUP_OR_SET|IS_UPDATE));
     osl::MutexGuard g(lock);
-
     rtl::Reference< Node > p(getNode());
     if (GroupNode * group = dynamic_cast< GroupNode * >(p.get())) {
         rtl::Reference< ChildAccess > child(getChild(aName));
@@ -756,11 +745,8 @@ void Access::removeByName(rtl::OUString const & aName)
             throw css::container::NoSuchElementException(
                 aName, static_cast< cppu::OWeakObject * >(this));
         }
-        child->setStatus(ChildAccess::STATUS_REMOVED);
-/*TODO:
-        group->getMembers().erase(i);
+        child->setStatus(ChildAccess::STATUS_REMOVED, css::uno::makeAny(aName));
         prop->unbind(); // must not throw
-*/
         //TODO notify change
     } else if (SetNode * set = dynamic_cast< SetNode * >(p.get())) {
         rtl::Reference< ChildAccess > child(getChild(aName));
@@ -768,7 +754,7 @@ void Access::removeByName(rtl::OUString const & aName)
             throw css::container::NoSuchElementException(
                 aName, static_cast< cppu::OWeakObject * >(this));
         }
-        child->setStatus(ChildAccess::STATUS_REMOVED);
+        child->setStatus(ChildAccess::STATUS_REMOVED, css::uno::makeAny(aName));
 /*TODO:
         ChildMap::iterator j(children_.find(aName));
         rtl::Reference< ChildAccess > oldChild;

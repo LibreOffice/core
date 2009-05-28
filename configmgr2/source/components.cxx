@@ -35,6 +35,7 @@
 #include "boost/noncopyable.hpp"
 #include "com/sun/star/uno/Any.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
+#include "com/sun/star/uno/XInterface.hpp"
 #include "comphelper/sequenceasvector.hxx"
 #include "libxml/parser.h"
 #include "libxml/xmlschemastypes.h"
@@ -140,46 +141,34 @@ class NodeRef: public Node {
 public:
     NodeRef(
         Node * parent, rtl::OUString const & name,
-        rtl::OUString const & templateName):
-        Node(parent, name), templateName_(templateName) {}
+        rtl::OUString const & templateName,
+        Components::TemplateMap const & templates):
+        Node(parent, name), templateName_(templateName), templates_(templates)
+    {}
 
     virtual rtl::Reference< Node > clone(
         Node * parent, rtl::OUString const & name) const
-    { return new NodeRef(parent, name, templateName_); }
+    { return new NodeRef(parent, name, templateName_, templates_); }
 
     virtual rtl::Reference< Node > getMember(rtl::OUString const &);
 
     rtl::OUString getTemplateName() const { return templateName_; }
 
+    Components::TemplateMap const & getTemplates() const { return templates_; }
+
 private:
     virtual ~NodeRef() {}
 
     rtl::OUString templateName_;
+    Components::TemplateMap const & templates_;
 };
 
 rtl::Reference< Node > NodeRef::getMember(rtl::OUString const &) {
+/*SB*/*(char*)0=0;
     throw css::uno::RuntimeException(
         rtl::OUString(
             RTL_CONSTASCII_USTRINGPARAM("unresolved node-ref ")) + name_,
         0);
-}
-
-void resolveNodeRef(
-    Components::TemplateMap const & templates, NodeMap::iterator it)
-{
-    if (NodeRef * p = dynamic_cast< NodeRef * >(it->second.get())) {
-        NodeMap::const_iterator i(templates.find(p->getTemplateName()));
-        if (i == templates.end()) {
-            throw css::uno::RuntimeException(
-                (rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM("unknown node-ref ")) +
-                 p->getTemplateName()),
-                0);
-        }
-        rtl::Reference< Node > removed(p);
-        it->second = i->second->clone(p->getParent(), p->getName());
-        removed->unbind(); // must not throw
-    }
 }
 
 xmlDocPtr parseXmlFile(rtl::OUString const & url) {
@@ -517,12 +506,14 @@ rtl::OUString parseTemplateReference(
 
 void parseXcsGroupContent(
     rtl::OUString const & componentName, xmlDocPtr doc, xmlNodePtr node,
-    rtl::Reference< GroupNode > const & group);
+    rtl::Reference< GroupNode > const & group,
+    Components::TemplateMap const & templates);
 
 rtl::Reference< Node > parseXcsGroup(
     rtl::OUString const & componentName, xmlDocPtr doc, xmlNodePtr node,
     Node * parent, rtl::OUString const & name,
-    rtl::OUString const & templateName)
+    rtl::OUString const & templateName,
+    Components::TemplateMap const & templates)
 {
     rtl::Reference< GroupNode > group(
         new GroupNode(
@@ -531,7 +522,7 @@ rtl::Reference< Node > parseXcsGroup(
                 doc, node, "http://openoffice.org/2001/registry", "extensible",
                 false),
             templateName));
-    parseXcsGroupContent(componentName, doc, node, group);
+    parseXcsGroupContent(componentName, doc, node, group, templates);
     return group.get();
 }
 
@@ -564,7 +555,8 @@ Node * parseXcsSet(
 
 void parseXcsGroupContent(
     rtl::OUString const & componentName, xmlDocPtr doc, xmlNodePtr node,
-    rtl::Reference< GroupNode > const & group)
+    rtl::Reference< GroupNode > const & group,
+    Components::TemplateMap const & templates)
 {
     xmlNodePtr p(skipBlank(node->xmlChildrenNode));
     if (isOorElement(p, "info")) {
@@ -639,11 +631,11 @@ void parseXcsGroupContent(
             }
             member = new NodeRef(
                 group.get(), getNameAttribute(doc, p),
-                parseTemplateReference(componentName, doc, p, 0));
+                parseTemplateReference(componentName, doc, p, 0), templates);
         } else if (isOorElement(p, "group")) {
             member = parseXcsGroup(
                 componentName, doc, p, group.get(), getNameAttribute(doc, p),
-                rtl::OUString());
+                rtl::OUString(), templates);
         } else if (isOorElement(p, "set")) {
             member = parseXcsSet(
                 componentName, doc, p, group.get(), getNameAttribute(doc, p),
@@ -688,7 +680,8 @@ xmlNodePtr parseXcsTemplates(
             tmplName = fullTemplateName(
                 componentName, getNameAttribute(doc, p));
             tmpl = parseXcsGroup(
-                componentName, doc, p, 0, rtl::OUString(), tmplName);
+                componentName, doc, p, 0, rtl::OUString(), tmplName,
+                *templates);
         } else if (isOorElement(p, "set")) {
             tmplName = fullTemplateName(
                 componentName, getNameAttribute(doc, p));
@@ -716,7 +709,7 @@ xmlNodePtr parseXcsTemplates(
 
 xmlNodePtr parseXcsComponent(
     xmlDocPtr doc, rtl::OUString const & component, xmlNodePtr node,
-    NodeMap * components)
+    NodeMap * components, Components::TemplateMap const & templates)
 {
     if (!isOorElement(node, "component")) {
         throw css::uno::RuntimeException(
@@ -728,7 +721,7 @@ xmlNodePtr parseXcsComponent(
     }
     rtl::Reference< GroupNode > comp(
         new GroupNode(0, component, false, rtl::OUString()));
-    parseXcsGroupContent(component, doc, node, comp);
+    parseXcsGroupContent(component, doc, node, comp, templates);
     if (!components->insert(NodeMap::value_type(component, comp.get())).second)
     {
         throw css::uno::RuntimeException(
@@ -794,7 +787,7 @@ void parseXcsFile(
         p = skipBlank(p->next);
     }
     p = skipBlank(parseXcsTemplates(comp, doc.doc, p, templates));
-    p = skipBlank(parseXcsComponent(doc.doc, comp, p, components));
+    p = skipBlank(parseXcsComponent(doc.doc, comp, p, components, *templates));
     if (p != 0) {
         throw css::uno::RuntimeException(
             (rtl::OUString(
@@ -818,7 +811,8 @@ void parseXcuNode(
                 rtl::OUString name(getNameAttribute(doc, p));
                 PropertyNode * property = 0;
                 LocalizedPropertyNode * localized = 0;
-                NodeMap::iterator i(group->getMembers().find(name));
+                NodeMap::iterator i(
+                    Components::resolveNode(name, &group->getMembers()));
                 if (i != group->getMembers().end()) {
                     property = dynamic_cast< PropertyNode * >(i->second.get());
                     localized = dynamic_cast< LocalizedPropertyNode * >(
@@ -962,7 +956,8 @@ void parseXcuNode(
                                  j != values.end(); ++j)
                             {
                                 NodeMap::iterator k(
-                                    localized->getMembers().find(j->first));
+                                    Components::resolveNode(
+                                        j->first, &localized->getMembers()));
                                 if (k == localized->getMembers().end()) {
                                     localized->getMembers().insert(
                                         NodeMap::value_type(
@@ -1017,7 +1012,8 @@ void parseXcuNode(
                 }
                 //TODO: oor:component, oor:finalized, oor:mandatory, oor:node-type attributes
                 NodeMap::iterator i(
-                    group->getMembers().find(getNameAttribute(doc, p)));
+                    Components::resolveNode(
+                        getNameAttribute(doc, p), &group->getMembers()));
                 if (i == group->getMembers().end()) {
                     throw css::uno::RuntimeException(
                         (rtl::OUString(
@@ -1026,7 +1022,6 @@ void parseXcuNode(
                          fromXmlString(doc->URL)),
                         0);
                 }
-                resolveNodeRef(templates, i);
                 parseXcuNode(componentName, templates, doc, p, i->second);
             } else {
                 throw css::uno::RuntimeException(
@@ -1077,7 +1072,8 @@ void parseXcuNode(
             switch (getOperationAttribute(doc, p)) {
             case OPERATION_MODIFY:
                 {
-                    NodeMap::iterator j(set->getMembers().find(name));
+                    NodeMap::iterator j(
+                        Components::resolveNode(name, &set->getMembers()));
                     if (j == set->getMembers().end()) {
                         throw css::uno::RuntimeException(
                             (rtl::OUString(
@@ -1095,7 +1091,8 @@ void parseXcuNode(
                     rtl::Reference< Node > member(
                         i->second->clone(group, name));
                     parseXcuNode(componentName, templates, doc, p, member);
-                    NodeMap::iterator j(set->getMembers().find(name));
+                    NodeMap::iterator j(
+                        Components::resolveNode(name, &set->getMembers()));
                     if (j == set->getMembers().end()) {
                         set->getMembers().insert(
                             NodeMap::value_type(name, member));
@@ -1108,7 +1105,8 @@ void parseXcuNode(
                 break;
             case OPERATION_FUSE:
                 {
-                    NodeMap::iterator j(set->getMembers().find(name));
+                    NodeMap::iterator j(
+                        Components::resolveNode(name, &set->getMembers()));
                     if (j == set->getMembers().end()) {
                         rtl::Reference< Node > member(
                             i->second->clone(group, name));
@@ -1124,7 +1122,8 @@ void parseXcuNode(
                 break;
             case OPERATION_REMOVE:
                 {
-                    NodeMap::iterator j(set->getMembers().find(name));
+                    NodeMap::iterator j(
+                        Components::resolveNode(name, &set->getMembers()));
                     // Ignore unknown members:
                     if (j != set->getMembers().end()) {
                         rtl::Reference< Node > removed(j->second);
@@ -1186,7 +1185,7 @@ void parseXcuFile(
     buf.append(getNameAttribute(doc.doc, root));
     rtl::OUString comp(buf.makeStringAndClear());
     //TODO: root oor:finalized, oor:op attributes
-    NodeMap::iterator i(components->find(comp));
+    NodeMap::iterator i(Components::resolveNode(comp, components));
     if (i == components->end()) {
         throw css::uno::RuntimeException(
             (rtl::OUString(
@@ -1195,7 +1194,6 @@ void parseXcuFile(
              fromXmlString(doc.doc->URL)),
             0);
     }
-    resolveNodeRef(*templates, i);
     parseXcuNode(comp, *templates, doc.doc, root, i->second);
 }
 
@@ -1365,6 +1363,28 @@ bool Components::parseSegment(
     return true;
 }
 
+NodeMap::iterator Components::resolveNode(
+    rtl::OUString const & name, NodeMap * map)
+{
+    OSL_ASSERT(map != 0);
+    NodeMap::iterator i(map->find(name));
+    if (NodeRef * ref = dynamic_cast< NodeRef * >(i->second.get())) {
+        NodeMap::const_iterator j(
+            ref->getTemplates().find(ref->getTemplateName()));
+        if (j == ref->getTemplates().end()) {
+            throw css::uno::RuntimeException(
+                (rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM("unknown node-ref ")) +
+                 ref->getTemplateName()),
+                css::uno::Reference< css::uno::XInterface >());
+        }
+        rtl::Reference< Node > removed(ref);
+        i->second = j->second->clone(ref->getParent(), ref->getName());
+        removed->unbind(); // must not throw
+    }
+    return i;
+}
+
 rtl::Reference< Node > Components::resolvePath(rtl::OUString const & path) {
     if (path.getLength() == 0 || path[0] != '/') {
         throw css::uno::RuntimeException(
@@ -1378,7 +1398,7 @@ rtl::Reference< Node > Components::resolvePath(rtl::OUString const & path) {
         throw css::uno::RuntimeException(
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bad path ")) + path, 0);
     }
-    NodeMap::iterator i(components_.find(path.copy(1, n - 1)));
+    NodeMap::iterator i(resolveNode(path.copy(1, n - 1), &components_));
     rtl::Reference< Node > p(i == components_.end() ? 0 : i->second);
     while (p != 0 && n != path.getLength()) {
         sal_Int32 n1 = findFirst(path, '/', n + 1);

@@ -30,12 +30,15 @@
 #include "precompiled_configmgr.hxx"
 #include "sal/config.h"
 
+#include <vector>
+
 #include "com/sun/star/lang/NoSupportException.hpp"
 #include "com/sun/star/uno/Any.hxx"
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/Sequence.hxx"
 #include "com/sun/star/uno/XInterface.hpp"
+#include "com/sun/star/util/ElementChange.hpp"
 #include "cppuhelper/implbase1.hxx"
 #include "cppuhelper/weak.hxx"
 #include "osl/diagnose.h"
@@ -113,14 +116,82 @@ void ChildAccess::unbind() throw () {
     parent_ = 0;
 }
 
-void ChildAccess::setStatus(Status status, css::uno::Any const & changedValue) {
+void ChildAccess::reportChanges(
+    std::vector< css::util::ElementChange > * changes) const
+{
+    OSL_ASSERT(changes != 0);
+    switch (status_) {
+    case STATUS_CHANGED:
+        changes->push_back(css::util::ElementChange()); //TODO
+        break;
+    case STATUS_ADDED:
+        changes->push_back(css::util::ElementChange()); //TODO
+        // fall through
+    case STATUS_UNMODIFIED:
+        for (ChildMap::const_iterator i(children_.begin());
+             i != children_.end(); ++i)
+        {
+            i->second->reportChanges(changes);
+        }
+        break;
+    case STATUS_REMOVED:
+        changes->push_back(css::util::ElementChange()); //TODO
+        break;
+    }
+}
+
+void ChildAccess::commitChanges() {
+/*
+    switch (status_) {
+    case STATUS_UNMODIFIED:
+    case STATUS_CHANGED:
+    case STATUS_ADDED:
+        {
+            rtl::Reference< Node > p(parent_->getNode());
+            if (GroupNode * group = dynamic_cast< GroupNode * >(p.get())) {
+                group->getMembers()[getNode()->getName()] = getNode();
+            } else if (SetNode * set = dynamic_cast< SetNode * >(p.get())) {
+                set->getMembers()[getNode()->getName()] = getNode();
+            } else {
+                OSL_ASSERT(false);
+                throw css::uno::RuntimeException(
+                    rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM("this cannot happen")),
+                    static_cast< cppu::OWeakObject * >(this));
+            }
+        }
+        break;
+    case STATUS_REMOVED:
+        {
+            rtl::Reference< Node > p(parent_->getNode());
+            if (GroupNode * group = dynamic_cast< GroupNode * >(p.get())) {
+                rtl::OUString name;
+                changeData_ >>= name;
+                group->getMembers().erase(name);
+            } else if (SetNode * set = dynamic_cast< SetNode * >(p.get())) {
+
+                set->getMembers()[getNode()->getName()] = getNode();
+            } else {
+                OSL_ASSERT(false);
+                throw css::uno::RuntimeException(
+                    rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM("this cannot happen")),
+                    static_cast< cppu::OWeakObject * >(this));
+            }
+        }
+        break;
+    }
+*/
+}
+
+void ChildAccess::setStatus(Status status, css::uno::Any const & changeData) {
     status_ = status;
-    changedValue_ = changedValue;
+    changeData_ = changeData;
 }
 
 css::uno::Any ChildAccess::asValue() {
     if (status_ == STATUS_CHANGED) {
-        return changedValue_;
+        return changeData_;
     }
     rtl::Reference< Node > p(getNode());
     if (PropertyNode * prop = dynamic_cast< PropertyNode * >(p.get())) {

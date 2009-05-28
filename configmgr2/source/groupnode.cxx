@@ -33,6 +33,7 @@
 #include "rtl/ref.hxx"
 #include "rtl/ustring.hxx"
 
+#include "components.hxx"
 #include "groupnode.hxx"
 #include "node.hxx"
 #include "nodemap.hxx"
@@ -54,7 +55,7 @@ rtl::Reference< Node > GroupNode::clone(
 }
 
 rtl::Reference< Node > GroupNode::getMember(rtl::OUString const & name) {
-    NodeMap::iterator i(members_.find(name));
+    NodeMap::iterator i(Components::resolveNode(name, &members_));
     return i == members_.end() ? rtl::Reference< Node >() : i->second;
 }
 

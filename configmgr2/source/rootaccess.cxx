@@ -33,7 +33,9 @@
 #include "com/sun/star/lang/WrappedTargetException.hpp"
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/util/ChangesSet.hpp"
+#include "com/sun/star/util/ElementChange.hpp"
 #include "com/sun/star/util/XChangesListener.hpp"
+#include "comphelper/sequenceasvector.hxx"
 #include "cppu/unotype.hxx"
 #include "cppuhelper/weak.hxx"
 #include "osl/diagnose.h"
@@ -42,6 +44,7 @@
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 
+#include "childaccess.hxx"
 #include "components.hxx"
 #include "lock.hxx"
 #include "node.hxx"
@@ -108,20 +111,28 @@ void RootAccess::commitChanges()
     throw (css::lang::WrappedTargetException, css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_ANY|IS_UPDATE));
-    //TODO
+    osl::MutexGuard g(lock);
+    for (ChildMap::iterator i(children_.begin()); i != children_.end(); ++i) {
+        i->second->commitChanges();
+    }
+    //TODO: write changes to disk
 }
 
 sal_Bool RootAccess::hasPendingChanges() throw (css::uno::RuntimeException) {
     OSL_ASSERT(thisIs(IS_ANY|IS_UPDATE));
-    osl::MutexGuard g(lock);
-    return false;//TODO
+    return getPendingChanges().getLength() != 0; //TODO: optimize
 }
 
 css::util::ChangesSet RootAccess::getPendingChanges()
     throw (css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_ANY|IS_UPDATE));
-    if(true)abort();*(char*)0=0;throw 0;//TODO
+    osl::MutexGuard g(lock);
+    comphelper::SequenceAsVector< css::util::ElementChange > changes;
+    for (ChildMap::iterator i(children_.begin()); i != children_.end(); ++i) {
+        i->second->reportChanges(&changes);
+    }
+    return changes.getAsConstList();
 }
 
 }

@@ -59,7 +59,7 @@ public:
     bool isNillable() const;
 
     rtl::Reference< LocalizedPropertyValueNode > getValue(
-        rtl::OUString const & locale) const;
+        rtl::OUString const & locale);
 
     NodeMap & getMembers();
 

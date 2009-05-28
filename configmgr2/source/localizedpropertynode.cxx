@@ -34,6 +34,7 @@
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 
+#include "components.hxx"
 #include "localizedpropertynode.hxx"
 #include "localizedpropertyvaluenode.hxx"
 #include "node.hxx"
@@ -64,7 +65,7 @@ rtl::Reference< Node > LocalizedPropertyNode::clone(
 rtl::Reference< Node > LocalizedPropertyNode::getMember(
     rtl::OUString const & name)
 {
-    NodeMap::iterator i(members_.find(name));
+    NodeMap::iterator i(Components::resolveNode(name, &members_));
     return i == members_.end() ? rtl::Reference< Node >() : i->second;
 }
 
@@ -77,18 +78,19 @@ bool LocalizedPropertyNode::isNillable() const {
 }
 
 rtl::Reference< LocalizedPropertyValueNode > LocalizedPropertyNode::getValue(
-    rtl::OUString const & locale) const
+    rtl::OUString const & locale)
 {
     //TODO
-    NodeMap::const_iterator i(members_.find(locale));
+    NodeMap::const_iterator i(Components::resolveNode(locale, &members_));
     if (i != members_.end()) {
         return dynamic_cast< LocalizedPropertyValueNode * >(i->second.get());
     }
-    i = members_.find(rtl::OUString());
+    i = Components::resolveNode(rtl::OUString(), &members_);
     if (i != members_.end()) {
         return dynamic_cast< LocalizedPropertyValueNode * >(i->second.get());
     }
-    i = members_.find(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en-US")));
+    i = Components::resolveNode(
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en-US")), &members_);
     if (i != members_.end()) {
         return dynamic_cast< LocalizedPropertyValueNode * >(i->second.get());
     }

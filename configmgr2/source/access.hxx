@@ -124,6 +124,13 @@ protected:
 
     virtual rtl::Reference< RootAccess > getRoot() = 0;
 
+    typedef
+        std::hash_map<
+            rtl::OUString, rtl::Reference< ChildAccess >, rtl::OUStringHash >
+        ChildMap;
+
+    ChildMap children_;
+
 private:
     virtual com::sun::star::uno::Type SAL_CALL getElementType()
         throw (com::sun::star::uno::RuntimeException);
@@ -377,13 +384,6 @@ private:
     com::sun::star::beans::Property asProperty();
 
     void setProperty(com::sun::star::uno::Any const & value);
-
-    typedef
-        std::hash_map<
-            rtl::OUString, rtl::Reference< ChildAccess >, rtl::OUStringHash >
-        ChildMap;
-
-    ChildMap children_;
 
 #if OSL_DEBUG_LEVEL > 0
 protected:
