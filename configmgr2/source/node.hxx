@@ -40,28 +40,20 @@ namespace configmgr {
 
 class Node: public salhelper::SimpleReferenceObject {
 public:
-    virtual rtl::Reference< Node > clone(
-        Node * parent, rtl::OUString const & name) const = 0;
+    virtual rtl::Reference< Node > clone(Node * parent) const = 0;
 
     virtual rtl::Reference< Node > getMember(rtl::OUString const & name) = 0;
 
     Node * getParent() const;
 
-    rtl::OUString getName() const;
-
     void unbind() throw ();
 
 protected:
-    Node(Node * parent, rtl::OUString const & name);
+    Node(Node * parent);
 
     virtual ~Node();
 
-    // template or free node: parent_ and name_ both empty
-    // component node: parent_ empty, name_ non-empty
-    // member node: parent_ and name_ both non-empty (name_ may be empty for the
-    //  default value of a localized property, however)
-    Node * parent_;
-    rtl::OUString name_;
+    Node * parent_; // null iff component or template or free node
 };
 
 }

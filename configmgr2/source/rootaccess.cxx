@@ -60,7 +60,8 @@ namespace css = com::sun::star;
 
 RootAccess::RootAccess(
     rtl::OUString const & path, rtl::OUString const & locale, bool update):
-    path_(path), locale_(locale), update_(update) {}
+    path_(path), locale_(locale), update_(update)
+{}
 
 rtl::OUString RootAccess::getLocale() const {
     return locale_; //TODO: handle locale_ == ""
@@ -74,7 +75,7 @@ RootAccess::~RootAccess() {}
 
 rtl::Reference< Node > RootAccess::getNode() {
     if (!node_.is()) {
-        node_ = Components::singleton().resolvePath(path_);
+        node_ = Components::singleton().resolvePath(path_, &name_);
         if (!node_.is()) {
             throw css::uno::RuntimeException(
                 (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("cannot find ")) +
@@ -87,6 +88,12 @@ rtl::Reference< Node > RootAccess::getNode() {
 
 rtl::Reference< RootAccess > RootAccess::getRoot() {
     return this;
+}
+
+rtl::OUString RootAccess::getName() throw (css::uno::RuntimeException) {
+    osl::MutexGuard g(lock);
+    getNode();
+    return name_;
 }
 
 void RootAccess::addChangesListener(
@@ -112,12 +119,14 @@ void RootAccess::commitChanges()
 {
     OSL_ASSERT(thisIs(IS_ANY|IS_UPDATE));
     osl::MutexGuard g(lock);
+/*TOOD:
     while (!modifiedChildren_.empty()) {
         rtl::Reference< ChildAccess > child(modifiedChildren_.begin()->second);
         modifiedChildren_.erase(modifiedChildren_.begin());
             //TODO: commitChanges lost if this throws
         child->commitChanges();
     }
+*/
     //TODO: write changes to disk
 }
 

@@ -48,16 +48,14 @@ namespace css = com::sun::star;
 }
 
 PropertyNode::PropertyNode(
-    Node * parent, rtl::OUString const & name, Type type, bool nillable,
-    css::uno::Any const & value, bool extension):
-    Node(parent, name), type_(type), nillable_(nillable), value_(value),
+    Node * parent, Type type, bool nillable, css::uno::Any const & value,
+    bool extension):
+    Node(parent), type_(type), nillable_(nillable), value_(value),
     extension_(extension)
 {}
 
-rtl::Reference< Node > PropertyNode::clone(
-    Node * parent, rtl::OUString const & name) const
-{
-    return new PropertyNode(parent, name, type_, nillable_, value_, extension_);
+rtl::Reference< Node > PropertyNode::clone(Node * parent) const {
+    return new PropertyNode(parent, type_, nillable_, value_, extension_);
 }
 
 rtl::Reference< Node > PropertyNode::getMember(rtl::OUString const &) {

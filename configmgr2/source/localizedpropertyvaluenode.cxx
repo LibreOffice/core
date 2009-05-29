@@ -47,14 +47,12 @@ namespace css = com::sun::star;
 }
 
 LocalizedPropertyValueNode::LocalizedPropertyValueNode(
-    Node * parent, rtl::OUString const & name, css::uno::Any const & value):
-    Node(parent, name), value_(value)
+    Node * parent, css::uno::Any const & value):
+    Node(parent), value_(value)
 {}
 
-rtl::Reference< Node > LocalizedPropertyValueNode::clone(
-    Node * parent, rtl::OUString const & name) const
-{
-    return new LocalizedPropertyValueNode(parent, name, value_);
+rtl::Reference< Node > LocalizedPropertyValueNode::clone(Node * parent) const {
+    return new LocalizedPropertyValueNode(parent, value_);
 }
 
 rtl::Reference< Node > LocalizedPropertyValueNode::getMember(

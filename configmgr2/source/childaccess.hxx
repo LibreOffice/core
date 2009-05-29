@@ -71,7 +71,7 @@ public:
 
     ChildAccess(
         rtl::Reference< RootAccess > const & root,
-        rtl::Reference< Access > const & parent,
+        rtl::Reference< Access > const & parent, rtl::OUString const & name,
         rtl::Reference< Node > const & node);
 
     ChildAccess(
@@ -94,7 +94,7 @@ public:
 
     void setStatus(
         Status status,
-        com::sun::star::uno::Any const & changeData =
+        com::sun::star::uno::Any const & changedValue =
             com::sun::star::uno::Any());
 
     Status getStatus() const { return status_; }
@@ -108,6 +108,9 @@ public:
 
 private:
     virtual ~ChildAccess();
+
+    virtual rtl::OUString SAL_CALL getName()
+        throw (com::sun::star::uno::RuntimeException);
 
     virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface >
     SAL_CALL getParent()
@@ -126,10 +129,10 @@ private:
 
     rtl::Reference< RootAccess > root_;
     rtl::Reference< Access > parent_; // null iff free node
+    rtl::OUString name_;
     rtl::Reference< Node > node_;
     Status status_;
-    com::sun::star::uno::Any changeData_;
-        // STATUS_CHANGED: new value; STATUS_REMOVED: old name
+    com::sun::star::uno::Any changedValue_; // ignored unless STATUS_CHANGED
 };
 
 }

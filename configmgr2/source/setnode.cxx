@@ -44,11 +44,10 @@
 namespace configmgr {
 
 SetNode::SetNode(
-    Node * parent, rtl::OUString const & name,
-    rtl::OUString const & defaultTemplateName,
+    Node * parent, rtl::OUString const & defaultTemplateName,
     std::vector< rtl::OUString > const & additionalTemplateNames,
     rtl::OUString const & templateName):
-    Node(parent, name), defaultTemplateName_(defaultTemplateName),
+    Node(parent), defaultTemplateName_(defaultTemplateName),
     additionalTemplateNames_(additionalTemplateNames),
     templateName_(templateName)
 {
@@ -60,12 +59,10 @@ SetNode::SetNode(
          additionalTemplateNames.end()));
 }
 
-rtl::Reference< Node > SetNode::clone(Node * parent, rtl::OUString const & name)
-    const
-{
+rtl::Reference< Node > SetNode::clone(Node * parent) const {
     rtl::Reference< SetNode > fresh(
         new SetNode(
-            parent, name, defaultTemplateName_, additionalTemplateNames_,
+            parent, defaultTemplateName_, additionalTemplateNames_,
             templateName_));
     members_.clone(fresh.get(), &fresh->members_);
     return fresh.get();

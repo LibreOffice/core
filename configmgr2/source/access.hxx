@@ -61,8 +61,6 @@
 #include "sal/types.h"
 #include "stl/hash_map"
 
-#include "childaccessreference.hxx"
-
 #if !defined INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_13
 #define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_13
 #define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 13
@@ -128,15 +126,12 @@ protected:
 
     virtual rtl::Reference< RootAccess > getRoot() = 0;
 
-    typedef std::hash_map< rtl::OUString, ChildAccess *, rtl::OUStringHash >
-        WeakChildMap;
-
     typedef
         std::hash_map<
             rtl::OUString, rtl::Reference< ChildAccess >, rtl::OUStringHash >
         HardChildMap;
 
-    WeakChildMap children_;
+public: //TODO
     HardChildMap modifiedChildren_;
 
 private:
@@ -205,7 +200,7 @@ private:
             com::sun::star::uno::RuntimeException);
 
     virtual rtl::OUString SAL_CALL getName()
-        throw (com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException) = 0;
 
     virtual void SAL_CALL setName(rtl::OUString const & aName)
         throw (com::sun::star::uno::RuntimeException);
@@ -392,6 +387,11 @@ private:
     com::sun::star::beans::Property asProperty();
 
     void setProperty(com::sun::star::uno::Any const & value);
+
+    typedef std::hash_map< rtl::OUString, ChildAccess *, rtl::OUStringHash >
+        WeakChildMap;
+
+    WeakChildMap children_;
 
 #if OSL_DEBUG_LEVEL > 0
 protected:

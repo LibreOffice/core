@@ -60,7 +60,8 @@ public:
     static NodeMap::iterator resolveNode(
         rtl::OUString const & name, NodeMap * map);
 
-    rtl::Reference< Node > resolvePath(rtl::OUString const & path);
+    rtl::Reference< Node > resolvePath(
+        rtl::OUString const & path, rtl::OUString * finalSegment);
 
     rtl::Reference< Node > getTemplate(rtl::OUString const & fullName) const;
 

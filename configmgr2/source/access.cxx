@@ -393,11 +393,6 @@ rtl::OUString Access::composeHierarchicalName(
     if(true)abort();*(char*)0=0;throw 0;//TODO
 }
 
-rtl::OUString Access::getName() throw (css::uno::RuntimeException) {
-    OSL_ASSERT(thisIs(IS_GROUP_OR_SET));
-    if(true)abort();*(char*)0=0;throw 0;//TODO
-}
-
 void Access::setName(rtl::OUString const & /*aName*/)
     throw (css::uno::RuntimeException)
 {
@@ -432,7 +427,7 @@ void Access::setPropertyValue(
         throw css::uno::RuntimeException(
             rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
-                    "configmgr insertByName on non-update access")),
+                    "configmgr setPropertyValue on non-update access")),
             static_cast< cppu::OWeakObject * >(this));
     }
     rtl::Reference< ChildAccess > child(getChild(aPropertyName));
@@ -582,7 +577,8 @@ void Access::setHierarchicalPropertyValue(
         throw css::uno::RuntimeException(
             rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
-                    "configmgr insertByName on non-update access")),
+                    "configmgr setHierarchicalPropertyName on non-update"
+                    " access")),
             static_cast< cppu::OWeakObject * >(this));
     }
     rtl::Reference< ChildAccess > child(getSubChild(aHierarchicalPropertyName));
@@ -680,8 +676,8 @@ void Access::insertByName(
         }
         rtl::Reference< ChildAccess > child(
             new ChildAccess(
-                getRoot(), this,
-                new PropertyNode(group, aName, type, true, aElement, true)));
+                getRoot(), this, aName,
+                new PropertyNode(group, type, true, aElement, true)));
         children_[aName] = child.get();
         child->setStatus(ChildAccess::STATUS_ADDED);
         //TODO notify change
@@ -720,7 +716,7 @@ void Access::insertByName(
         rtl::Reference< RootAccess > root(getRoot());
         rtl::Reference< ChildAccess > child(
             new ChildAccess(
-                getRoot(), this, freeAcc->getNode()));
+                getRoot(), this, aName, freeAcc->getNode()));
         children_[aName] = child.get();
         child->setStatus(ChildAccess::STATUS_ADDED);
         freeAcc->bind(root, this); // must not throw
@@ -804,7 +800,7 @@ css::uno::Reference< css::uno::XInterface > Access::createInstance()
             static_cast< cppu::OWeakObject * >(this));
     }
     return static_cast< cppu::OWeakObject * >(
-        new ChildAccess(getRoot(), p->clone(0, rtl::OUString())));
+        new ChildAccess(getRoot(), p->clone(0)));
 }
 
 css::uno::Reference< css::uno::XInterface > Access::createInstanceWithArguments(
@@ -840,7 +836,8 @@ rtl::Reference< ChildAccess > Access::getChild(rtl::OUString const & name) {
     if (!node.is()) {
         return rtl::Reference< ChildAccess >();
     }
-    rtl::Reference< ChildAccess > child(new ChildAccess(getRoot(), this, node));
+    rtl::Reference< ChildAccess > child(
+        new ChildAccess(getRoot(), this, name, node));
     children_[name] = child.get();
     return child;
 }
@@ -916,12 +913,10 @@ css::beans::Property Access::asProperty() {
             dynamic_cast< SetNode * >(p.get()) != 0);
         type = cppu::UnoType< css::uno::XInterface >::get(); //TODO: correct?
         nillable = false;
-        removable = p->getParent() == 0
-            ? p->getName().getLength() == 0
-            : dynamic_cast< SetNode * >(p->getParent()) != 0;
+        removable = dynamic_cast< SetNode * >(p->getParent()) != 0;
     }
     return css::beans::Property(
-        p->getName(), -1, type,
+        getName(), -1, type,
         (css::beans::PropertyAttribute::BOUND | //TODO: correct for group/set?
          css::beans::PropertyAttribute::CONSTRAINED |
          (nillable ? css::beans::PropertyAttribute::MAYBEVOID : 0) |

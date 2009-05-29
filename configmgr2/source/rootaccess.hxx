@@ -72,6 +72,9 @@ private:
 
     virtual rtl::Reference< RootAccess > getRoot();
 
+    virtual rtl::OUString SAL_CALL getName()
+        throw (com::sun::star::uno::RuntimeException);
+
     virtual void SAL_CALL addChangesListener(
         com::sun::star::uno::Reference< com::sun::star::util::XChangesListener >
             const & aListener)
@@ -97,6 +100,7 @@ private:
     rtl::OUString locale_;
     bool update_;
     rtl::Reference< Node > node_;
+    rtl::OUString name_;
 };
 
 }

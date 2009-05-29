@@ -81,9 +81,10 @@ css::uno::Sequence< sal_Int8 > ChildAccess::getTunnelId() {
 
 ChildAccess::ChildAccess(
     rtl::Reference< RootAccess > const & root,
-    rtl::Reference< Access > const & parent,
+    rtl::Reference< Access > const & parent, rtl::OUString const & name,
     rtl::Reference< Node > const & node):
-    root_(root), parent_(parent), node_(node), status_(STATUS_UNMODIFIED)
+    root_(root), parent_(parent), name_(name), node_(node),
+    status_(STATUS_UNMODIFIED)
 {
     OSL_ASSERT(root.is() && parent.is() && node.is());
 }
@@ -194,15 +195,24 @@ void ChildAccess::commitChanges() {
 */
 }
 
-void ChildAccess::setStatus(Status status, css::uno::Any const & changeData) {
-    //TODO: parent hierarchy
+void ChildAccess::setStatus(Status status, css::uno::Any const & changedValue) {
+    if (status == STATUS_UNMODIFIED) {
+        //TODO: remove from modifiedChildren_ parent hierarchy
+    } else {
+        //TODO: add to complete modifiedChildren_ parent hierarchy
+        for (ChildAccess * p = this; p != 0 && p->parent_.is();
+             p = dynamic_cast< ChildAccess * >(p->parent_.get()))
+        {
+            p->parent_->modifiedChildren_[p->name_] = p;
+        }
+    }
     status_ = status;
-    changeData_ = changeData;
+    changedValue_ = changedValue;
 }
 
 css::uno::Any ChildAccess::asValue() {
     if (status_ == STATUS_CHANGED) {
-        return changeData_;
+        return changedValue_;
     }
     rtl::Reference< Node > p(getNode());
     if (PropertyNode * prop = dynamic_cast< PropertyNode * >(p.get())) {
@@ -231,8 +241,12 @@ css::uno::Any ChildAccess::asValue() {
 ChildAccess::~ChildAccess() {
     osl::MutexGuard g(lock);
     if (parent_.is()) {
-        parent_->releaseChild(getNode()->getName());
+        parent_->releaseChild(name_);
     }
+}
+
+rtl::OUString ChildAccess::getName() throw (css::uno::RuntimeException) {
+    return name_;
 }
 
 css::uno::Reference< css::uno::XInterface > ChildAccess::getParent()

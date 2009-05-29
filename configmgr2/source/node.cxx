@@ -40,17 +40,11 @@ Node * Node::getParent() const {
     return parent_;
 }
 
-rtl::OUString Node::getName() const {
-    return name_;
-}
-
 void Node::unbind() throw () {
     parent_ = 0;
-    name_ = rtl::OUString();
 }
 
-Node::Node(Node * parent, rtl::OUString const & name):
-    parent_(parent), name_(name) {}
+Node::Node(Node * parent): parent_(parent) {}
 
 Node::~Node() {}
 

@@ -80,9 +80,7 @@ void setValues(LocalizedPropertyNode * node, LocalizedValues const & values) {
     {
         node->getMembers().insert(
             NodeMap::value_type(
-                i->first,
-                new LocalizedPropertyValueNode(
-                    node, i->first, i->second)));
+                i->first, new LocalizedPropertyValueNode(node, i->second)));
     }
 }
 
@@ -148,15 +146,13 @@ rtl::OUString fullTemplateName(
 class NodeRef: public Node {
 public:
     NodeRef(
-        Node * parent, rtl::OUString const & name,
-        rtl::OUString const & templateName,
+        Node * parent, rtl::OUString const & templateName,
         Components::TemplateMap const & templates):
-        Node(parent, name), templateName_(templateName), templates_(templates)
+        Node(parent), templateName_(templateName), templates_(templates)
     {}
 
-    virtual rtl::Reference< Node > clone(
-        Node * parent, rtl::OUString const & name) const
-    { return new NodeRef(parent, name, templateName_, templates_); }
+    virtual rtl::Reference< Node > clone(Node * parent) const
+    { return new NodeRef(parent, templateName_, templates_); }
 
     virtual rtl::Reference< Node > getMember(rtl::OUString const &);
 
@@ -173,9 +169,7 @@ private:
 
 rtl::Reference< Node > NodeRef::getMember(rtl::OUString const &) {
     throw css::uno::RuntimeException(
-        rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM("unresolved node-ref ")) + name_,
-        0);
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("unresolved node-ref")), 0);
 }
 
 xmlDocPtr parseXmlFile(rtl::OUString const & url) {
@@ -696,13 +690,12 @@ void parseXcsGroupContent(
 
 rtl::Reference< Node > parseXcsGroup(
     rtl::OUString const & componentName, xmlDocPtr doc, xmlNodePtr node,
-    Node * parent, rtl::OUString const & name,
-    rtl::OUString const & templateName,
+    Node * parent, rtl::OUString const & templateName,
     Components::TemplateMap const & templates)
 {
     rtl::Reference< GroupNode > group(
         new GroupNode(
-            parent, name,
+            parent,
             getBooleanAttribute(
                 doc, node, "http://openoffice.org/2001/registry", "extensible",
                 false),
@@ -713,8 +706,7 @@ rtl::Reference< Node > parseXcsGroup(
 
 Node * parseXcsSet(
     rtl::OUString const & componentName, xmlDocPtr doc, xmlNodePtr node,
-    Node * parent, rtl::OUString const & name,
-    rtl::OUString const & templateName)
+    Node * parent, rtl::OUString const & templateName)
 {
     xmlNodePtr p(skipBlank(node->xmlChildrenNode));
     if (isOorElement(p, "info")) {
@@ -734,8 +726,8 @@ Node * parseXcsSet(
             0);
     }
     return new SetNode(
-        parent, name, parseTemplateReference(componentName, doc, node, 0),
-        additional, templateName);
+        parent, parseTemplateReference(componentName, doc, node, 0), additional,
+        templateName);
 }
 
 void parseXcsGroupContent(
@@ -787,7 +779,7 @@ void parseXcsGroupContent(
             {
                 rtl::Reference< LocalizedPropertyNode > locprop(
                     new LocalizedPropertyNode(
-                        group.get(), getNameAttribute(doc, p), type,
+                        group.get(), type,
                         getBooleanAttribute(
                             doc, p, "http://openoffice.org/2001/registry",
                             "nillable", true)));
@@ -795,7 +787,7 @@ void parseXcsGroupContent(
                 member = locprop.get();
             } else {
                 member = new PropertyNode(
-                    group.get(), getNameAttribute(doc, p), type,
+                    group.get(), type,
                     getBooleanAttribute(
                         doc, p, "http://openoffice.org/2001/registry",
                         "nillable", true),
@@ -815,16 +807,14 @@ void parseXcsGroupContent(
                     0);
             }
             member = new NodeRef(
-                group.get(), getNameAttribute(doc, p),
-                parseTemplateReference(componentName, doc, p, 0), templates);
+                group.get(), parseTemplateReference(componentName, doc, p, 0),
+                templates);
         } else if (isOorElement(p, "group")) {
             member = parseXcsGroup(
-                componentName, doc, p, group.get(), getNameAttribute(doc, p),
-                rtl::OUString(), templates);
+                componentName, doc, p, group.get(), rtl::OUString(), templates);
         } else if (isOorElement(p, "set")) {
             member = parseXcsSet(
-                componentName, doc, p, group.get(), getNameAttribute(doc, p),
-                rtl::OUString());
+                componentName, doc, p, group.get(), rtl::OUString());
         } else {
             throw css::uno::RuntimeException(
                 (rtl::OUString(
@@ -834,7 +824,7 @@ void parseXcsGroupContent(
                 0);
         }
         if (!group->getMembers().insert(
-                NodeMap::value_type(member->getName(), member)).
+                NodeMap::value_type(getNameAttribute(doc, p), member)).
             second)
         {
             throw css::uno::RuntimeException(
@@ -865,13 +855,11 @@ xmlNodePtr parseXcsTemplates(
             tmplName = fullTemplateName(
                 componentName, getNameAttribute(doc, p));
             tmpl = parseXcsGroup(
-                componentName, doc, p, 0, rtl::OUString(), tmplName,
-                *templates);
+                componentName, doc, p, 0, tmplName, *templates);
         } else if (isOorElement(p, "set")) {
             tmplName = fullTemplateName(
                 componentName, getNameAttribute(doc, p));
-            tmpl = parseXcsSet(
-                componentName, doc, p, 0, rtl::OUString(), tmplName);
+            tmpl = parseXcsSet(componentName, doc, p, 0, tmplName);
         } else {
             throw css::uno::RuntimeException(
                 (rtl::OUString(
@@ -904,8 +892,7 @@ xmlNodePtr parseXcsComponent(
              fromXmlString(doc->URL)),
             0);
     }
-    rtl::Reference< GroupNode > comp(
-        new GroupNode(0, component, false, rtl::OUString()));
+    rtl::Reference< GroupNode > comp(new GroupNode(0, false, rtl::OUString()));
     parseXcsGroupContent(component, doc, node, comp, templates);
     if (!components->insert(NodeMap::value_type(component, comp.get())).second)
     {
@@ -1123,8 +1110,8 @@ void parseXcuNode(
                             NodeMap::value_type(
                                 name,
                                 new PropertyNode(
-                                    group, name, type, true,
-                                    values[rtl::OUString()], true)));
+                                    group, type, true, values[rtl::OUString()],
+                                    true)));
                         break;
                     case OPERATION_REMOVE:
                         // ignore unknown (presumably extension) properties
@@ -1148,8 +1135,7 @@ void parseXcuNode(
                                         NodeMap::value_type(
                                             j->first,
                                             new LocalizedPropertyValueNode(
-                                                localized, j->first,
-                                                j->second)));
+                                                localized, j->second)));
                                 } else {
                                     dynamic_cast<
                                         LocalizedPropertyValueNode * >(
@@ -1273,8 +1259,7 @@ void parseXcuNode(
                 break;
             case OPERATION_REPLACE:
                 {
-                    rtl::Reference< Node > member(
-                        i->second->clone(group, name));
+                    rtl::Reference< Node > member(i->second->clone(group));
                     parseXcuNode(componentName, templates, doc, p, member);
                     NodeMap::iterator j(
                         Components::resolveNode(name, &set->getMembers()));
@@ -1293,12 +1278,10 @@ void parseXcuNode(
                     NodeMap::iterator j(
                         Components::resolveNode(name, &set->getMembers()));
                     if (j == set->getMembers().end()) {
-                        rtl::Reference< Node > member(
-                            i->second->clone(group, name));
+                        rtl::Reference< Node > member(i->second->clone(group));
                         parseXcuNode(componentName, templates, doc, p, member);
                         set->getMembers().insert(
-                            NodeMap::value_type(
-                                member->getName(), member));
+                            NodeMap::value_type(name, member));
                     } else {
                         parseXcuNode(
                             componentName, templates, doc, p, j->second);
@@ -1565,14 +1548,17 @@ NodeMap::iterator Components::resolveNode(
                     css::uno::Reference< css::uno::XInterface >());
             }
             rtl::Reference< Node > removed(ref);
-            i->second = j->second->clone(ref->getParent(), ref->getName());
+            i->second = j->second->clone(ref->getParent());
             removed->unbind(); // must not throw
         }
     }
     return i;
 }
 
-rtl::Reference< Node > Components::resolvePath(rtl::OUString const & path) {
+rtl::Reference< Node > Components::resolvePath(
+    rtl::OUString const & path, rtl::OUString * finalSegment)
+{
+    OSL_ASSERT(finalSegment != 0);
     if (path.getLength() == 0 || path[0] != '/') {
         throw css::uno::RuntimeException(
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bad path ")) + path, 0);
@@ -1622,6 +1608,7 @@ rtl::Reference< Node > Components::resolvePath(rtl::OUString const & path) {
         }
         n = n1;
     }
+    *finalSegment = seg;
     return p;
 }
 

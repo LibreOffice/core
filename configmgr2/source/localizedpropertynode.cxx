@@ -50,14 +50,13 @@ namespace css = com::sun::star;
 }
 
 LocalizedPropertyNode::LocalizedPropertyNode(
-    Node * parent, rtl::OUString const & name, Type type, bool nillable):
-    Node(parent, name), type_(type), nillable_(nillable) {}
+    Node * parent, Type type, bool nillable):
+    Node(parent), type_(type), nillable_(nillable)
+{}
 
-rtl::Reference< Node > LocalizedPropertyNode::clone(
-    Node * parent, rtl::OUString const & name) const
-{
+rtl::Reference< Node > LocalizedPropertyNode::clone(Node * parent) const {
     rtl::Reference< LocalizedPropertyNode > fresh(
-        new LocalizedPropertyNode(parent, name, type_, nillable_));
+        new LocalizedPropertyNode(parent, type_, nillable_));
     members_.clone(fresh.get(), &fresh->members_);
     return fresh.get();
 }
