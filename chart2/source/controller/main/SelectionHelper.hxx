@@ -59,6 +59,8 @@ public: //methods
                         ::com::sun::star::frame::XModel >& xChartModel );
     bool isDragableObjectSelected();
 
+    bool isNonGraphicObjectShapeSelected();
+
     //returns true if selection has changed
     bool setSelection( const ::rtl::OUString& rCID );
     bool setSelection( const ::com::sun::star::uno::Reference<

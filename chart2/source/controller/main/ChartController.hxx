@@ -161,6 +161,7 @@ class ChartController   : public ::cppu::WeakImplHelper12 <
         , public WindowController
 {
     friend class DrawCommandDispatch;
+    friend class ShapeController;
 
 public:
     //no default constructor

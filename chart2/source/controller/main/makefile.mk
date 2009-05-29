@@ -71,7 +71,9 @@ SLOFILES =  \
             $(SLO)$/ChartDropTargetHelper.obj \
             $(SLO)$/StatusBarCommandDispatch.obj \
             $(SLO)$/ChartTransferable.obj \
-            $(SLO)$/DrawCommandDispatch.obj
+            $(SLO)$/FeatureCommandDispatchBase.obj \
+            $(SLO)$/DrawCommandDispatch.obj \
+            $(SLO)$/ShapeController.obj
 
 #			$(SLO)$/CommonConverters.obj \
 #			$(SLO)$/Scaling.obj	\

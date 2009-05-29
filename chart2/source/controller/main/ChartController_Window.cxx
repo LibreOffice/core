@@ -51,6 +51,7 @@
 #include "chartview/ExplicitValueProvider.hxx"
 #include "RelativePositionHelper.hxx"
 #include "chartview/DrawModelWrapper.hxx"
+#include "MenuResIds.hrc"
 
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart2/RelativeSize.hpp>
@@ -893,54 +894,71 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
         if( m_aSelection.isSelectionDifferentFromBeforeMouseDown() )
             impl_notifySelectionChangeListeners();
 
-        // todo: the context menu should be specified by an xml file in uiconfig
-        uno::Reference< awt::XPopupMenu > xPopupMenu(
-            m_xCC->getServiceManager()->createInstanceWithContext(
-                C2U("com.sun.star.awt.PopupMenu"), m_xCC ), uno::UNO_QUERY );
-        uno::Reference< awt::XMenuExtended > xMenuEx( xPopupMenu, uno::UNO_QUERY );
-        if( xPopupMenu.is() && xMenuEx.is())
+        if ( m_aSelection.isNonGraphicObjectShapeSelected() ||
+             ( m_pDrawViewWrapper->AreObjectsMarked() && ( m_pDrawViewWrapper->GetCurrentObjIdentifier() == OBJ_TEXT ) ) )
         {
-            sal_Int16 nUniqueId = 1;
-            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DiagramObjects"));
-            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:TransformDialog"));
-            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId, C2U(".uno:ArrangeRow"));
-            uno::Reference< awt::XPopupMenu > xArrangePopupMenu(
-                m_xCC->getServiceManager()->createInstanceWithContext(
-                    C2U("com.sun.star.awt.PopupMenu"), m_xCC ), uno::UNO_QUERY );
-            uno::Reference< awt::XMenuExtended > xArrangeMenuEx( xArrangePopupMenu, uno::UNO_QUERY );
-            if( xArrangePopupMenu.is() && xArrangeMenuEx.is())
-            {
-                sal_Int16 nSubId = nUniqueId + 1;
-                lcl_insertMenuCommand( xArrangePopupMenu, xArrangeMenuEx, nSubId++, C2U(".uno:Forward"));
-                lcl_insertMenuCommand( xArrangePopupMenu, xArrangeMenuEx, nSubId, C2U(".uno:Backward"));
-                xPopupMenu->setPopupMenu( nUniqueId, xArrangePopupMenu );
-                nUniqueId = nSubId;
-            }
-            ++nUniqueId;
-            xPopupMenu->insertSeparator( -1 );
-            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DiagramType"));
-            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DataRanges"));
-            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:View3D"));
-            xPopupMenu->insertSeparator( -1 );
-            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DiagramData"));
-            xPopupMenu->insertSeparator( -1 );
-            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertYErrorbar"));
-            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DeleteYErrorbar"));
-            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertMeanValue"));
-            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DeleteMeanValue"));
-            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertTrendline"));
-            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DeleteTrendline"));
-            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertTrendlineEquation"));
-            xPopupMenu->insertSeparator( -1 );
-            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:Cut"));
-            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:Copy"));
-            lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:Paste"));
-
+            // #i12587# support for shapes in chart
+            PopupMenu aContextMenu( SchResId( m_pDrawViewWrapper->IsTextEdit() ?
+                RID_CONTEXTMENU_SHAPEEDIT : RID_CONTEXTMENU_SHAPE ) );
             ::svt::ContextMenuHelper aContextMenuHelper( m_xFrame );
             Point aPos( rCEvt.GetMousePosPixel() );
             if( !rCEvt.IsMouseEvent() )
+            {
                 aPos = m_pChartWindow->GetPointerState().maPos;
-            aContextMenuHelper.completeAndExecute( aPos, xPopupMenu );
+            }
+            aContextMenuHelper.completeAndExecute( aPos, aContextMenu );
+        }
+        else
+        {
+            // todo: the context menu should be specified by an xml file in uiconfig
+            uno::Reference< awt::XPopupMenu > xPopupMenu(
+                m_xCC->getServiceManager()->createInstanceWithContext(
+                    C2U("com.sun.star.awt.PopupMenu"), m_xCC ), uno::UNO_QUERY );
+            uno::Reference< awt::XMenuExtended > xMenuEx( xPopupMenu, uno::UNO_QUERY );
+            if( xPopupMenu.is() && xMenuEx.is())
+            {
+                sal_Int16 nUniqueId = 1;
+                lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DiagramObjects"));
+                lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:TransformDialog"));
+                lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId, C2U(".uno:ArrangeRow"));
+                uno::Reference< awt::XPopupMenu > xArrangePopupMenu(
+                    m_xCC->getServiceManager()->createInstanceWithContext(
+                        C2U("com.sun.star.awt.PopupMenu"), m_xCC ), uno::UNO_QUERY );
+                uno::Reference< awt::XMenuExtended > xArrangeMenuEx( xArrangePopupMenu, uno::UNO_QUERY );
+                if( xArrangePopupMenu.is() && xArrangeMenuEx.is())
+                {
+                    sal_Int16 nSubId = nUniqueId + 1;
+                    lcl_insertMenuCommand( xArrangePopupMenu, xArrangeMenuEx, nSubId++, C2U(".uno:Forward"));
+                    lcl_insertMenuCommand( xArrangePopupMenu, xArrangeMenuEx, nSubId, C2U(".uno:Backward"));
+                    xPopupMenu->setPopupMenu( nUniqueId, xArrangePopupMenu );
+                    nUniqueId = nSubId;
+                }
+                ++nUniqueId;
+                xPopupMenu->insertSeparator( -1 );
+                lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DiagramType"));
+                lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DataRanges"));
+                lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:View3D"));
+                xPopupMenu->insertSeparator( -1 );
+                lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DiagramData"));
+                xPopupMenu->insertSeparator( -1 );
+                lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertYErrorbar"));
+                lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DeleteYErrorbar"));
+                lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertMeanValue"));
+                lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DeleteMeanValue"));
+                lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertTrendline"));
+                lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DeleteTrendline"));
+                lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertTrendlineEquation"));
+                xPopupMenu->insertSeparator( -1 );
+                lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:Cut"));
+                lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:Copy"));
+                lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:Paste"));
+
+                ::svt::ContextMenuHelper aContextMenuHelper( m_xFrame );
+                Point aPos( rCEvt.GetMousePosPixel() );
+                if( !rCEvt.IsMouseEvent() )
+                    aPos = m_pChartWindow->GetPointerState().maPos;
+                aContextMenuHelper.completeAndExecute( aPos, xPopupMenu );
+            }
         }
     }
     else if( ( rCEvt.GetCommand() == COMMAND_STARTEXTTEXTINPUT ) ||

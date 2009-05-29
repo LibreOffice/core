@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: DrawCommandDispatch.cxx,v $
- * $Revision: 1.4 $
+ * $RCSfile: ShapeController.cxx,v $
+ * $Revision: 1.0 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,11 +31,18 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_chart2.hxx"
 
-#include "DrawCommandDispatch.hxx"
+#include "ShapeController.hxx"
 #include "ChartController.hxx"
-#include "DrawViewWrapper.hxx"
+#include "ChartWindow.hxx"
+#include "ViewElementListProvider.hxx"
+#include "dlg_ShapeFont.hxx"
 
+#include <vos/mutex.hxx>
+#include <vcl/msgbox.hxx>
+#include <vcl/svapp.hxx>
 #include <svx/svxids.hrc>
+
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::frame;
@@ -48,34 +55,34 @@ namespace chart
 {
 //.............................................................................
 
-DrawCommandDispatch::DrawCommandDispatch( const Reference< uno::XComponentContext >& rxContext,
+ShapeController::ShapeController( const Reference< uno::XComponentContext >& rxContext,
     ChartController* pController )
     :FeatureCommandDispatchBase( rxContext )
     ,m_pChartController( pController )
 {
 }
 
-DrawCommandDispatch::~DrawCommandDispatch()
+ShapeController::~ShapeController()
 {
 }
 
-void DrawCommandDispatch::initialize()
+void ShapeController::initialize()
 {
     FeatureCommandDispatchBase::initialize();
 }
 
 // WeakComponentImplHelperBase
-void DrawCommandDispatch::disposing()
+void ShapeController::disposing()
 {
 }
 
 // XEventListener
-void DrawCommandDispatch::disposing( const lang::EventObject& /* Source */ )
+void ShapeController::disposing( const lang::EventObject& /* Source */ )
     throw (uno::RuntimeException)
 {
 }
 
-FeatureState DrawCommandDispatch::getState( const ::rtl::OUString& rCommand ) const
+FeatureState ShapeController::getState( const ::rtl::OUString& rCommand ) const
 {
     FeatureState aReturn;
     aReturn.bEnabled = false;
@@ -84,10 +91,7 @@ FeatureState DrawCommandDispatch::getState( const ::rtl::OUString& rCommand ) co
 
     switch ( nFeatureId )
     {
-        case SID_OBJECT_SELECT:
-        case SID_DRAW_LINE:
-        case SID_DRAW_RECT:
-        case SID_DRAW_TEXT:
+        case SID_CHAR_DLG:
             {
                 aReturn.bEnabled = true;
                 aReturn.aState <<= false;
@@ -104,81 +108,51 @@ FeatureState DrawCommandDispatch::getState( const ::rtl::OUString& rCommand ) co
     return aReturn;
 }
 
-void DrawCommandDispatch::execute( const ::rtl::OUString& rCommand, const Sequence< beans::PropertyValue>& rArgs )
+void ShapeController::execute( const ::rtl::OUString& rCommand, const Sequence< beans::PropertyValue>& rArgs )
 {
     (void)rArgs;
 
-    ChartDrawMode eDrawMode = CHARTDRAW_SELECT;
-    SdrObjKind eKind = OBJ_NONE;
-    bool bCreate = false;
     sal_uInt16 nFeatureId = m_aSupportedFeatures[ rCommand ].nFeatureId;
 
     switch ( nFeatureId )
     {
-        case SID_OBJECT_SELECT:
+        case SID_CHAR_DLG:
             {
-                eDrawMode = CHARTDRAW_SELECT;
-                eKind = OBJ_NONE;
-            }
-            break;
-        case SID_DRAW_LINE:
-            {
-                eDrawMode = CHARTDRAW_INSERT;
-                eKind = OBJ_LINE;
-            }
-            break;
-        case SID_DRAW_RECT:
-            {
-                eDrawMode = CHARTDRAW_INSERT;
-                eKind = OBJ_RECT;
-            }
-            break;
-        case SID_DRAW_TEXT:
-            {
-                eDrawMode = CHARTDRAW_INSERT;
-                eKind = OBJ_TEXT;
-                bCreate = true;
+                executeDispatch_FontDialog();
             }
             break;
         default:
             {
-                eDrawMode = CHARTDRAW_SELECT;
-                eKind = OBJ_NONE;
             }
             break;
     }
+}
 
+void ShapeController::describeSupportedFeatures()
+{
+    implDescribeSupportedFeature( ".uno:FontDialog",    SID_CHAR_DLG,   CommandGroup::TEXT );
+}
+
+void ShapeController::executeDispatch_FontDialog()
+{
     if ( m_pChartController )
     {
-        m_pChartController->setDrawMode( eDrawMode );
-        setInsertObj( sal::static_int_cast< USHORT >( eKind ) );
-        if ( bCreate )
+        DrawModelWrapper* pDrawModelWrapper = m_pChartController->GetDrawModelWrapper();
+        DrawViewWrapper* pDrawViewWrapper = m_pChartController->GetDrawViewWrapper();
+        if ( pDrawModelWrapper && pDrawViewWrapper )
         {
-            DrawViewWrapper* pDrawViewWrapper = m_pChartController->GetDrawViewWrapper();
-            if ( pDrawViewWrapper )
+            Window* pParent = dynamic_cast< Window* >( m_pChartController->m_pChartWindow );
+            SfxItemSet aSet( pDrawViewWrapper->GetModel()->GetItemPool() );
+            pDrawViewWrapper->GetAttributes( aSet );
+            ViewElementListProvider aViewElementListProvider( pDrawModelWrapper );
+            ::vos::OGuard aGuard( Application::GetSolarMutex() );
+            ::boost::scoped_ptr< ShapeFontDialog > pDlg( new ShapeFontDialog( pParent, &aSet, &aViewElementListProvider ) );
+            if ( pDlg->Execute() == RET_OK )
             {
-                pDrawViewWrapper->SetCreateMode();
+                const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
+                pDrawViewWrapper->SetAttributes( *pOutSet );
             }
         }
-    }
-}
-
-void DrawCommandDispatch::describeSupportedFeatures()
-{
-    implDescribeSupportedFeature( ".uno:SelectObject",  SID_OBJECT_SELECT,  CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:Line",          SID_DRAW_LINE,      CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:Rect",          SID_DRAW_RECT,      CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:DrawText",      SID_DRAW_TEXT,      CommandGroup::INSERT );
-}
-
-void DrawCommandDispatch::setInsertObj( USHORT eObj, const ::rtl::OUString& rShapeType )
-{
-    (void)rShapeType;
-
-    DrawViewWrapper* pDrawViewWrapper = ( m_pChartController ? m_pChartController->GetDrawViewWrapper() : NULL );
-    if ( pDrawViewWrapper )
-    {
-        pDrawViewWrapper->SetCurrentObj( eObj /*, Inventor */);
     }
 }
 

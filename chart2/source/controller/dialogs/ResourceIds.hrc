@@ -51,6 +51,7 @@
 #define DLG_SPLINE_PROPERTIES 904
 #define DLG_DATA_TRENDLINE  841
 #define DLG_DATA_YERRORBAR  842
+#define DLG_SHAPE_FONT      921
 
 //-----------------------------------------------------------------------------
 //TabPage Ids:

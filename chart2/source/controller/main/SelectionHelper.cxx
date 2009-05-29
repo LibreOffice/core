@@ -321,6 +321,23 @@ bool Selection::isDragableObjectSelected()
     return m_xSelectAdditionalShape.is();
 }
 
+bool Selection::isNonGraphicObjectShapeSelected()
+{
+    if ( m_xSelectAdditionalShape.is() )
+    {
+        uno::Reference< drawing::XShapeDescriptor > xShapeDescriptor( m_xSelectAdditionalShape, uno::UNO_QUERY );
+        if ( xShapeDescriptor.is() )
+        {
+            ::rtl::OUString aShapeType = xShapeDescriptor->getShapeType();
+            if ( !aShapeType.equals( C2U( "com.sun.star.drawing.GraphicObjectShape" ) ) )
+            {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------

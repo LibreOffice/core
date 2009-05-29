@@ -54,6 +54,7 @@
 #include "dlg_ChartType.hxx"
 //#include "svx/ActionDescriptionProvider.hxx"
 #include "DrawCommandDispatch.hxx"
+#include "ShapeController.hxx"
 
 #include <comphelper/InlineContainer.hxx>
 
@@ -574,13 +575,20 @@ void SAL_CALL ChartController::modeChanged( const util::ModeChangeEvent& rEvent 
     // the dispatch container will return "this" for all commands returned by
     // impl_getAvailableCommands().  That means, for those commands dispatch()
     // is called here at the ChartController.
-    m_aDispatchContainer.setFallbackDispatch( pDispatch, impl_getAvailableCommands() );
+    m_aDispatchContainer.setChartDispatch( pDispatch, impl_getAvailableCommands() );
 
     DrawCommandDispatch* pDrawDispatch = new DrawCommandDispatch( m_xCC, this );
     if ( pDrawDispatch )
     {
         pDrawDispatch->initialize();
         m_aDispatchContainer.setDrawCommandDispatch( pDrawDispatch );
+    }
+
+    ShapeController* pShapeController = new ShapeController( m_xCC, this );
+    if ( pShapeController )
+    {
+        pShapeController->initialize();
+        m_aDispatchContainer.setShapeController( pShapeController );
     }
 
 #ifdef TEST_ENABLE_MODIFY_LISTENER

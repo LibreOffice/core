@@ -54,6 +54,7 @@
 
 // header for class SvxShape
 #include <svx/unoshape.hxx>
+#include <svx/fhgtitem.hxx>
 
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
@@ -164,6 +165,14 @@ DrawViewWrapper::DrawViewWrapper( SdrModel* pSdrModel, OutputDevice* pOut, bool 
     SetBufferedOverlayAllowed(true);
 
     SetPagePaintingAllowed(bPaintPageForEditMode);
+
+    // #i12587# set font height without changing SdrEngineDefaults
+    SdrOutliner* pOutliner = getOutliner();
+    SfxItemPool* pOutlinerPool = ( pOutliner ? pOutliner->GetEditTextObjectPool() : NULL );
+    if ( pOutlinerPool )
+    {
+        pOutlinerPool->SetPoolDefaultItem( SvxFontHeightItem( 423, 100, EE_CHAR_FONTHEIGHT ) );  // 12pt
+    }
 
     ReInit();
 }

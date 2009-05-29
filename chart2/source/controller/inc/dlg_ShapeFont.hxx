@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: DrawCommandDispatch.hxx,v $
- * $Revision: 1.4 $
+ * $RCSfile: dlg_ShapeFont.hxx,v $
+ * $Revision: 1.0 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,58 +27,36 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef CHART2_DRAWCOMMANDDISPATCH_HXX
-#define CHART2_DRAWCOMMANDDISPATCH_HXX
+#ifndef CHART2_DLG_SHAPEFONT_HXX
+#define CHART2_DLG_SHAPEFONT_HXX
 
-#include "FeatureCommandDispatchBase.hxx"
-
-#include <tools/solar.h>
+#include <sfx2/tabdlg.hxx>
 
 //.............................................................................
 namespace chart
 {
 //.............................................................................
 
-class ChartController;
+class ViewElementListProvider;
 
-/** This is a CommandDispatch implementation for drawing objects.
+/** dialog for font properties of shapes
  */
-class DrawCommandDispatch: public FeatureCommandDispatchBase
+class ShapeFontDialog : public SfxTabDialog
 {
 public:
-    DrawCommandDispatch( const ::com::sun::star::uno::Reference<
-        ::com::sun::star::uno::XComponentContext >& rxContext, ChartController* pController );
-    virtual ~DrawCommandDispatch();
-
-    // late initialisation, especially for adding as listener
-    virtual void initialize();
-
-protected:
-    // WeakComponentImplHelperBase
-    virtual void SAL_CALL disposing();
-
-    // XEventListener
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source )
-        throw (::com::sun::star::uno::RuntimeException);
-
-    // state of a feature
-    virtual FeatureState getState( const ::rtl::OUString& rCommand ) const;
-
-    // execute a feature
-    virtual void execute( const ::rtl::OUString& rCommand, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rArgs );
-
-    // all the features which should be handled by this class
-    virtual void describeSupportedFeatures();
+    ShapeFontDialog( Window* pParent, const SfxItemSet* pAttr,
+        const ViewElementListProvider* pViewElementListProvider );
+    virtual ~ShapeFontDialog();
 
 private:
-    void setInsertObj( USHORT eObj, const ::rtl::OUString& rShapeType = ::rtl::OUString() );
+    virtual void PageCreated( USHORT nId, SfxTabPage& rPage );
 
-    ChartController* m_pChartController;
+    const ViewElementListProvider* m_pViewElementListProvider;
 };
 
 //.............................................................................
 } //  namespace chart
 //.............................................................................
 
-// CHART2_DRAWCOMMANDDISPATCH_HXX
+// CHART2_DLG_SHAPEFONT_HXX
 #endif

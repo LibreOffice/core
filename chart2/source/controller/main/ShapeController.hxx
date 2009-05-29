@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: DrawCommandDispatch.hxx,v $
- * $Revision: 1.4 $
+ * $RCSfile: ShapeController.hxx,v $
+ * $Revision: 1.0 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,12 +27,10 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef CHART2_DRAWCOMMANDDISPATCH_HXX
-#define CHART2_DRAWCOMMANDDISPATCH_HXX
+#ifndef CHART2_SHAPECONTROLLER_HXX
+#define CHART2_SHAPECONTROLLER_HXX
 
 #include "FeatureCommandDispatchBase.hxx"
-
-#include <tools/solar.h>
 
 //.............................................................................
 namespace chart
@@ -41,14 +39,14 @@ namespace chart
 
 class ChartController;
 
-/** This is a CommandDispatch implementation for drawing objects.
+/** This is a CommandDispatch implementation for shapes.
  */
-class DrawCommandDispatch: public FeatureCommandDispatchBase
+class ShapeController: public FeatureCommandDispatchBase
 {
 public:
-    DrawCommandDispatch( const ::com::sun::star::uno::Reference<
+    ShapeController( const ::com::sun::star::uno::Reference<
         ::com::sun::star::uno::XComponentContext >& rxContext, ChartController* pController );
-    virtual ~DrawCommandDispatch();
+    virtual ~ShapeController();
 
     // late initialisation, especially for adding as listener
     virtual void initialize();
@@ -71,7 +69,7 @@ protected:
     virtual void describeSupportedFeatures();
 
 private:
-    void setInsertObj( USHORT eObj, const ::rtl::OUString& rShapeType = ::rtl::OUString() );
+    void executeDispatch_FontDialog();
 
     ChartController* m_pChartController;
 };
@@ -80,5 +78,5 @@ private:
 } //  namespace chart
 //.............................................................................
 
-// CHART2_DRAWCOMMANDDISPATCH_HXX
+// CHART2_SHAPECONTROLLER_HXX
 #endif
