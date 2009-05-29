@@ -189,6 +189,10 @@ bool Access::isValue() {
          !Components::allLocales(getRoot()->getLocale()));
 }
 
+void Access::releaseChild(rtl::OUString const & name) {
+    children_.erase(name);
+}
+
 Access::Access(): WeakComponentImplHelper13(lock) {}
 
 Access::~Access() {}
@@ -674,10 +678,12 @@ void Access::insertByName(
                         "configmgr insertByName inappropriate group element")),
                 static_cast< cppu::OWeakObject * >(this), 1);
         }
-        children_[aName] = new ChildAccess(
-            getRoot().get(), this,
-            new PropertyNode(group, aName, type, true, aElement, true),
-            ChildAccess::STATUS_ADDED);
+        rtl::Reference< ChildAccess > child(
+            new ChildAccess(
+                getRoot(), this,
+                new PropertyNode(group, aName, type, true, aElement, true)));
+        children_[aName] = child.get();
+        child->setStatus(ChildAccess::STATUS_ADDED);
         //TODO notify change
     } else if (SetNode * set = dynamic_cast< SetNode * >(p.get())) {
         if (set->getMember(aName).is()) {
@@ -712,10 +718,12 @@ void Access::insertByName(
                 static_cast< cppu::OWeakObject * >(this), 1);
         }
         rtl::Reference< RootAccess > root(getRoot());
-        children_[aName] = new ChildAccess(
-            getRoot().get(), this, freeAcc->getNode(),
-            ChildAccess::STATUS_ADDED);
-        freeAcc->bind(root.get(), this); // must not throw
+        rtl::Reference< ChildAccess > child(
+            new ChildAccess(
+                getRoot(), this, freeAcc->getNode()));
+        children_[aName] = child.get();
+        child->setStatus(ChildAccess::STATUS_ADDED);
+        freeAcc->bind(root, this); // must not throw
         //TODO notify change
     } else {
         OSL_ASSERT(false);
@@ -816,19 +824,24 @@ css::uno::Reference< css::uno::XInterface > Access::createInstanceWithArguments(
 }
 
 rtl::Reference< ChildAccess > Access::getChild(rtl::OUString const & name) {
-    ChildMap::iterator i(children_.find(name));
+    WeakChildMap::iterator i(children_.find(name));
     if (i != children_.end()) {
-        return i->second->getStatus() == ChildAccess::STATUS_REMOVED
-            ? rtl::Reference< ChildAccess >() : i->second;
+        rtl::Reference< ChildAccess > child;
+        if (i->second->acquireCounting() > 1) {
+            child.set(i->second); // must not throw
+        }
+        i->second->releaseNondeleting();
+        if (child.is()) {
+            return child->getStatus() == ChildAccess::STATUS_REMOVED
+                ? rtl::Reference< ChildAccess >() : child;
+        }
     }
     rtl::Reference< Node > node(getNode()->getMember(name));
     if (!node.is()) {
         return rtl::Reference< ChildAccess >();
     }
-    rtl::Reference< ChildAccess > child(
-        new ChildAccess(
-            getRoot().get(), this, node, ChildAccess::STATUS_UNMODIFIED));
-    children_.insert(ChildMap::value_type(name, child));
+    rtl::Reference< ChildAccess > child(new ChildAccess(getRoot(), this, node));
+    children_[name] = child.get();
     return child;
 }
 

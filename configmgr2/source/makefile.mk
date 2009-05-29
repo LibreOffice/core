@@ -41,6 +41,7 @@ DLLPRE =
 SLOFILES = \
     $(SLO)$/access.obj \
     $(SLO)$/childaccess.obj \
+    $(SLO)$/childaccessreference.obj \
     $(SLO)$/components.obj \
     $(SLO)$/configurationprovider.obj \
     $(SLO)$/defaultprovider.obj \

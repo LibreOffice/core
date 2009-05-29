@@ -61,6 +61,8 @@
 #include "sal/types.h"
 #include "stl/hash_map"
 
+#include "childaccessreference.hxx"
+
 #if !defined INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_13
 #define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_13
 #define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 13
@@ -115,6 +117,8 @@ class Access:
 public:
     bool isValue();
 
+    void releaseChild(rtl::OUString const & name);
+
 protected:
     Access();
 
@@ -124,12 +128,16 @@ protected:
 
     virtual rtl::Reference< RootAccess > getRoot() = 0;
 
+    typedef std::hash_map< rtl::OUString, ChildAccess *, rtl::OUStringHash >
+        WeakChildMap;
+
     typedef
         std::hash_map<
             rtl::OUString, rtl::Reference< ChildAccess >, rtl::OUStringHash >
-        ChildMap;
+        HardChildMap;
 
-    ChildMap children_;
+    WeakChildMap children_;
+    HardChildMap modifiedChildren_;
 
 private:
     virtual com::sun::star::uno::Type SAL_CALL getElementType()

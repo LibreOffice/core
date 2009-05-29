@@ -112,8 +112,11 @@ void RootAccess::commitChanges()
 {
     OSL_ASSERT(thisIs(IS_ANY|IS_UPDATE));
     osl::MutexGuard g(lock);
-    for (ChildMap::iterator i(children_.begin()); i != children_.end(); ++i) {
-        i->second->commitChanges();
+    while (!modifiedChildren_.empty()) {
+        rtl::Reference< ChildAccess > child(modifiedChildren_.begin()->second);
+        modifiedChildren_.erase(modifiedChildren_.begin());
+            //TODO: commitChanges lost if this throws
+        child->commitChanges();
     }
     //TODO: write changes to disk
 }
@@ -129,7 +132,9 @@ css::util::ChangesSet RootAccess::getPendingChanges()
     OSL_ASSERT(thisIs(IS_ANY|IS_UPDATE));
     osl::MutexGuard g(lock);
     comphelper::SequenceAsVector< css::util::ElementChange > changes;
-    for (ChildMap::iterator i(children_.begin()); i != children_.end(); ++i) {
+    for (HardChildMap::iterator i(modifiedChildren_.begin());
+         i != modifiedChildren_.end(); ++i)
+    {
         i->second->reportChanges(&changes);
     }
     return changes.getAsConstList();

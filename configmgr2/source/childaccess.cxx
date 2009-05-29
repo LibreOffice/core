@@ -42,6 +42,7 @@
 #include "cppuhelper/implbase1.hxx"
 #include "cppuhelper/weak.hxx"
 #include "osl/diagnose.h"
+#include "osl/interlck.h"
 #include "osl/mutex.hxx"
 #include "rtl/ref.hxx"
 #include "rtl/ustring.h"
@@ -79,18 +80,18 @@ css::uno::Sequence< sal_Int8 > ChildAccess::getTunnelId() {
 }
 
 ChildAccess::ChildAccess(
-    RootAccess * root, Access * parent, rtl::Reference< Node > const & node,
-    Status status):
-    root_(root), parent_(parent), node_(node), status_(status)
+    rtl::Reference< RootAccess > const & root,
+    rtl::Reference< Access > const & parent,
+    rtl::Reference< Node > const & node):
+    root_(root), parent_(parent), node_(node), status_(STATUS_UNMODIFIED)
 {
-    OSL_ASSERT(root != 0 && parent != 0 && node.is());
+    OSL_ASSERT(root.is() && parent.is() && node.is());
 }
 
 ChildAccess::ChildAccess(
     rtl::Reference< RootAccess > const & root,
     rtl::Reference< Node > const & node):
-    root_(root.get()), acquiredRoot_(root), parent_(0), node_(node),
-    status_(STATUS_UNMODIFIED)
+    root_(root), node_(node), status_(STATUS_UNMODIFIED)
 {
     OSL_ASSERT(root.is() && node.is());
 }
@@ -103,17 +104,26 @@ rtl::Reference< RootAccess > ChildAccess::getRoot() {
     return root_;
 }
 
-void ChildAccess::bind(RootAccess * root, Access * parent) throw () {
-    OSL_ASSERT(acquiredRoot_.is());
-    acquiredRoot_.clear();
+oslInterlockedCount ChildAccess::acquireCounting() {
+    return osl_incrementInterlockedCount(&m_refCount);
+}
+
+void ChildAccess::releaseNondeleting() {
+    osl_decrementInterlockedCount(&m_refCount);
+}
+
+void ChildAccess::bind(
+    rtl::Reference< RootAccess > const & root,
+    rtl::Reference< Access > const & parent) throw ()
+{
+    OSL_ASSERT(!parent_.is() && root.is() && parent.is());
     root_ = root;
     parent_ = parent;
 }
 
 void ChildAccess::unbind() throw () {
-    OSL_ASSERT(!acquiredRoot_.is());
-    acquiredRoot_ = root_;
-    parent_ = 0;
+    OSL_ASSERT(parent_.is());
+    parent_.clear();
 }
 
 void ChildAccess::reportChanges(
@@ -128,8 +138,8 @@ void ChildAccess::reportChanges(
         changes->push_back(css::util::ElementChange()); //TODO
         // fall through
     case STATUS_UNMODIFIED:
-        for (ChildMap::const_iterator i(children_.begin());
-             i != children_.end(); ++i)
+        for (HardChildMap::const_iterator i(modifiedChildren_.begin());
+             i != modifiedChildren_.end(); ++i)
         {
             i->second->reportChanges(changes);
         }
@@ -185,6 +195,7 @@ void ChildAccess::commitChanges() {
 }
 
 void ChildAccess::setStatus(Status status, css::uno::Any const & changeData) {
+    //TODO: parent hierarchy
     status_ = status;
     changeData_ = changeData;
 }
@@ -217,14 +228,19 @@ css::uno::Any ChildAccess::asValue() {
             static_cast< cppu::OWeakObject * >(this)));
 }
 
-ChildAccess::~ChildAccess() {}
+ChildAccess::~ChildAccess() {
+    osl::MutexGuard g(lock);
+    if (parent_.is()) {
+        parent_->releaseChild(getNode()->getName());
+    }
+}
 
 css::uno::Reference< css::uno::XInterface > ChildAccess::getParent()
     throw (css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_ANY));
     osl::MutexGuard g(lock);
-    return static_cast< cppu::OWeakObject * >(parent_);
+    return static_cast< cppu::OWeakObject * >(parent_.get());
 }
 
 void ChildAccess::setParent(css::uno::Reference< css::uno::XInterface > const &)

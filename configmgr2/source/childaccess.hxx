@@ -42,6 +42,7 @@
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/Sequence.hxx"
 #include "cppuhelper/implbase2.hxx"
+#include "osl/interlck.h"
 #include "rtl/ref.hxx"
 #include "sal/types.h"
 
@@ -69,8 +70,9 @@ public:
     static com::sun::star::uno::Sequence< sal_Int8 > getTunnelId();
 
     ChildAccess(
-        RootAccess * root, Access * parent,
-        rtl::Reference< Node > const & node, Status status);
+        rtl::Reference< RootAccess > const & root,
+        rtl::Reference< Access > const & parent,
+        rtl::Reference< Node > const & node);
 
     ChildAccess(
         rtl::Reference< RootAccess > const & root,
@@ -80,7 +82,13 @@ public:
 
     virtual rtl::Reference< RootAccess > getRoot();
 
-    void bind(RootAccess * root, Access * parent) throw ();
+    oslInterlockedCount acquireCounting();
+
+    void releaseNondeleting();
+
+    void bind(
+        rtl::Reference< RootAccess > const & root,
+        rtl::Reference< Access > const & parent) throw ();
 
     void unbind() throw ();
 
@@ -116,9 +124,8 @@ private:
         com::sun::star::uno::Sequence< sal_Int8 > const & aIdentifier)
         throw (com::sun::star::uno::RuntimeException);
 
-    RootAccess * root_;
-    rtl::Reference< RootAccess > acquiredRoot_; // only for free nodes (= root_)
-    Access * parent_; // non-null iff non-free node
+    rtl::Reference< RootAccess > root_;
+    rtl::Reference< Access > parent_; // null iff free node
     rtl::Reference< Node > node_;
     Status status_;
     com::sun::star::uno::Any changeData_;
