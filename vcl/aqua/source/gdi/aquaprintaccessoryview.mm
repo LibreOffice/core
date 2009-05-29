@@ -300,6 +300,7 @@ static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize )
     NSRect aViewFrame = { { 0, 0 }, {400, 400 } };
     NSSize aMaxTabSize = { 0, 0 };
     NSTabView* pTabView = [[NSTabView alloc] initWithFrame: aViewFrame];
+    sal_Bool bIgnoreSubgroup = sal_False;
     
     for( int i = 0; i < rOptions.getLength(); i++ )
     {
@@ -312,6 +313,7 @@ static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize )
         rtl::OUString aText;
         rtl::OUString aPropertyName;
         Sequence< rtl::OUString > aChoices;
+        sal_Bool bIgnore = sal_False;
 
         for( int n = 0; n < aOptProp.getLength(); n++ )
         {
@@ -340,6 +342,10 @@ static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize )
                 sal_Bool bValue = sal_True;
                 rEntry.Value >>= bValue;
                 bEnabled = bValue;
+            }
+            else if( rEntry.Name.equalsAscii( "InternalUIOnly" ) )
+            {
+                rEntry.Value >>= bIgnore;
             }
         }
 
@@ -374,6 +380,10 @@ static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize )
             
             if( aCtrlType.equalsAscii( "Subgroup" ) && pCurParent )
             {
+                bIgnoreSubgroup = bIgnore;
+                if( bIgnore )
+                    continue;
+
                 NSString* pText = CreateNSString( aText );
                 NSRect aTextRect = { { 0, 0 }, { 300, 15 } };
                 NSTextView* pTextView = [[NSTextView alloc] initWithFrame: aTextRect];
@@ -398,6 +408,8 @@ static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize )
                 // cleanup
                 [pText release];
             }
+            else if( bIgnoreSubgroup || bIgnore )
+                continue;
             else if( aCtrlType.equalsAscii( "Bool" ) && pCurParent )
             {
                 NSString* pText = CreateNSString( aText );
@@ -480,6 +492,7 @@ static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize )
                 for( sal_Int32 m = 0; m < aChoices.getLength(); m++ )
                 {
                     NSCell* pCell = [pCells objectAtIndex: m];
+                    filterAccelerator( aChoices[m] );
                     NSString* pTitle = CreateNSString( aChoices[m] );
                     [pCell setTitle: pTitle];
                     // connect target and action
