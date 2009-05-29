@@ -607,7 +607,7 @@ BOOL AquaSalInfoPrinter::StartJob( const String* i_pFileName,
 
         mnCurPageRangeStart += mnCurPageRangeCount;
         mnCurPageRangeCount = 1;
-    } while( bNeedRestart && mnCurPageRangeStart + mnCurPageRangeCount < nAllPages );
+    } while( bNeedRestart || mnCurPageRangeStart + mnCurPageRangeCount < nAllPages );
 
     // inform applictation that it can release its data
     // this is awkward, but the XRenderable interface has no method for this,

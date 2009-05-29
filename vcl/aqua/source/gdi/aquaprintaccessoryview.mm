@@ -517,7 +517,6 @@ static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize )
                 // update nCurY
                 nCurY = aRadioRect.origin.y - 5;
                 
-                
                 [pProto release];
             }
             else if( aCtrlType.equalsAscii( "List" ) && pCurParent )
