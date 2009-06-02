@@ -40,6 +40,15 @@
 class AquaSalInfoPrinter;
 namespace vcl { class PrinterListener; }
 
+struct PrintAccessoryViewState
+{
+    bool        bNeedRestart;
+    sal_Int32   nLastPage;
+
+    PrintAccessoryViewState()
+    : bNeedRestart( false ), nLastPage( 0 ) {}
+};
+
 @interface AquaPrintView : NSView
 {
     vcl::PrinterListener*       mpListener;
@@ -55,7 +64,7 @@ namespace vcl { class PrinterListener; }
 @interface AquaPrintAccessoryView : NSObject
 {
 }
-+(NSObject*)setupPrinterPanel: (NSPrintOperation*)pOp withListener: (vcl::PrinterListener*)pListener withRestartCondition: (bool*)pbRestart;
++(NSObject*)setupPrinterPanel: (NSPrintOperation*)pOp withListener: (vcl::PrinterListener*)pListener withState: (PrintAccessoryViewState*)pState;
 @end
 
 

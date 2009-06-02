@@ -56,18 +56,23 @@ class ListenerProperties
     std::vector< NSObject* >            maViews;
     int                                 mnNextTag;
     sal_Int32                           mnLastPageCount;
-    bool*                               mpNeedRestart;
+    PrintAccessoryViewState*            mpState;
     NSPrintOperation*                   mpOp;
+    NSTabView*                          mpTabView;
     
     public:
-    ListenerProperties( vcl::PrinterListener* i_pListener, NSPrintOperation* i_pOp, bool* i_pNeedRestart )
+    ListenerProperties( vcl::PrinterListener* i_pListener,
+                        NSPrintOperation* i_pOp,
+                        NSTabView* i_pTabView,
+                        PrintAccessoryViewState* i_pState )
     : mpListener( i_pListener ),
       mnNextTag( 0 ),
       mnLastPageCount( i_pListener->getPageCount() ),
-      mpNeedRestart( i_pNeedRestart ),
-      mpOp( i_pOp )
+      mpState( i_pState ),
+      mpOp( i_pOp ),
+      mpTabView( i_pTabView )
     {
-        *mpNeedRestart = false;
+        mpState->bNeedRestart = false;
     }
     
     void updatePrintJob()
@@ -80,9 +85,14 @@ class ListenerProperties
         if( nPages != mnLastPageCount )
             fprintf( stderr, "trouble: number of pages changed from %ld to %ld !\n", mnLastPageCount, nPages );
         #endif
-        *mpNeedRestart = (nPages != mnLastPageCount);
+        mpState->bNeedRestart = (nPages != mnLastPageCount);
+        NSTabViewItem* pItem = [mpTabView selectedTabViewItem];
+        if( pItem )
+            mpState->nLastPage = [mpTabView indexOfTabViewItem: pItem];
+        else
+            mpState->nLastPage = 0;
         mnLastPageCount = nPages;
-        if( *mpNeedRestart )
+        if( mpState->bNeedRestart )
         {
             // Warning: bad hack ahead
             // Apple does not give as a chance of changing the page count,
@@ -285,14 +295,11 @@ static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize )
 }
 
 @implementation AquaPrintAccessoryView
-+(NSObject*)setupPrinterPanel: (NSPrintOperation*)pOp withListener: (vcl::PrinterListener*)pListener  withRestartCondition: (bool*)pbRestart;
++(NSObject*)setupPrinterPanel: (NSPrintOperation*)pOp withListener: (vcl::PrinterListener*)pListener  withState: (PrintAccessoryViewState*)pState;
 {
     const Sequence< PropertyValue >& rOptions( pListener->getUIOptions() );
     if( rOptions.getLength() == 0 )
         return nil;
-
-    ListenerProperties* pListenerProperties = new ListenerProperties( pListener, pOp, pbRestart );
-    ControlTarget* pCtrlTarget = [[ControlTarget alloc] initWithListenerMap: pListenerProperties];
 
     NSView* pCurParent = 0;
     long nCurY = 0;
@@ -302,6 +309,9 @@ static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize )
     NSTabView* pTabView = [[NSTabView alloc] initWithFrame: aViewFrame];
     sal_Bool bIgnoreSubgroup = sal_False;
     
+    ListenerProperties* pListenerProperties = new ListenerProperties( pListener, pOp, pTabView, pState );
+    ControlTarget* pCtrlTarget = [[ControlTarget alloc] initWithListenerMap: pListenerProperties];
+
     for( int i = 0; i < rOptions.getLength(); i++ )
     {
         Sequence< beans::PropertyValue > aOptProp;
@@ -483,10 +493,10 @@ static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize )
                                                       numberOfRows: aChoices.getLength()
                                                       numberOfColumns: 1];
                 // get currently selected value
-                rtl::OUString aSelectVal;
+                sal_Int32 nSelectVal;
                 PropertyValue* pVal = pListener->getValue( aPropertyName );
                 if( pVal && pVal->Value.hasValue() )
-                    pVal->Value >>= aSelectVal;
+                    pVal->Value >>= nSelectVal;
                 // set individual titles
                 NSArray* pCells = [pMatrix cells];
                 for( sal_Int32 m = 0; m < aChoices.getLength(); m++ )
@@ -503,7 +513,7 @@ static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize )
                     [pCell setTag: nTag];
                     [pTitle release];
                     // set current selection
-                    if( aSelectVal == aChoices[m] )
+                    if( nSelectVal == m )
                         [pMatrix selectCellAtRow: m column: 0];
                 }
                 [pMatrix sizeToFit];
@@ -616,6 +626,10 @@ static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize )
 
     // set the accessory view
     [pOp setAccessoryView: pTabView];
+    
+    // set the current selecte tab item
+    if( pState->nLastPage >= 0 && pState->nLastPage < [pTabView numberOfTabViewItems] )
+        [pTabView selectTabViewItemAtIndex: pState->nLastPage];
         
     return pCtrlTarget;
 }

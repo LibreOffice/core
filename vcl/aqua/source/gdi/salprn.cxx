@@ -512,8 +512,10 @@ BOOL AquaSalInfoPrinter::StartJob( const String* i_pFileName,
 
     BOOL bSuccess = FALSE;
     AquaSalInstance* pInst = GetSalData()->mpFirstInstance;
-    bool bNeedRestart = true;
+    PrintAccessoryViewState aAccViewState;
     sal_Int32 nAllPages = 0;
+
+    aAccViewState.bNeedRestart = true;
 
     // reset IsLastPage
     i_rListener.setLastPage( sal_False );
@@ -524,14 +526,14 @@ BOOL AquaSalInfoPrinter::StartJob( const String* i_pFileName,
 
     do
     {
-        if( bNeedRestart )
+        if( aAccViewState.bNeedRestart )
         {
             mnCurPageRangeStart = 0;
             mnCurPageRangeCount = 0;
             nAllPages = i_rListener.getPageCount();
         }
 
-        bNeedRestart = false;
+        aAccViewState.bNeedRestart = false;
 
         Size aCurSize( 21000, 29700 );
         if( nAllPages > 0 )
@@ -593,7 +595,7 @@ BOOL AquaSalInfoPrinter::StartJob( const String* i_pFileName,
             [pPrintOperation setShowsPrintPanel: bShowPanel ? YES : NO ];
             [pPrintOperation setShowsProgressPanel: YES];
             if( bShowPanel && mnCurPageRangeStart == 0 ) // only the first range of pages gets the accesory view
-                pReleaseAfterUse = [AquaPrintAccessoryView setupPrinterPanel: pPrintOperation withListener: &i_rListener withRestartCondition: &bNeedRestart];
+                pReleaseAfterUse = [AquaPrintAccessoryView setupPrinterPanel: pPrintOperation withListener: &i_rListener withState: &aAccViewState];
 
             bSuccess = TRUE;
             mbJob = true;
@@ -607,7 +609,7 @@ BOOL AquaSalInfoPrinter::StartJob( const String* i_pFileName,
 
         mnCurPageRangeStart += mnCurPageRangeCount;
         mnCurPageRangeCount = 1;
-    } while( bNeedRestart || mnCurPageRangeStart + mnCurPageRangeCount < nAllPages );
+    } while( aAccViewState.bNeedRestart || mnCurPageRangeStart + mnCurPageRangeCount < nAllPages );
 
     // inform applictation that it can release its data
     // this is awkward, but the XRenderable interface has no method for this,
