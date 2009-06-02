@@ -117,12 +117,12 @@ public:
 
     void releaseChild(rtl::OUString const & name);
 
+    virtual rtl::Reference< Node > getNode() = 0;
+
 protected:
     Access();
 
     virtual ~Access();
-
-    virtual rtl::Reference< Node > getNode() = 0;
 
     virtual rtl::Reference< RootAccess > getRoot() = 0;
 

@@ -119,14 +119,11 @@ void RootAccess::commitChanges()
 {
     OSL_ASSERT(thisIs(IS_ANY|IS_UPDATE));
     osl::MutexGuard g(lock);
-/*TOOD:
     while (!modifiedChildren_.empty()) {
         rtl::Reference< ChildAccess > child(modifiedChildren_.begin()->second);
-        modifiedChildren_.erase(modifiedChildren_.begin());
-            //TODO: commitChanges lost if this throws
         child->commitChanges();
+        modifiedChildren_.erase(modifiedChildren_.begin());
     }
-*/
     //TODO: write changes to disk
 }
 

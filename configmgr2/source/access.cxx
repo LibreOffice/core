@@ -715,8 +715,7 @@ void Access::insertByName(
         }
         rtl::Reference< RootAccess > root(getRoot());
         rtl::Reference< ChildAccess > child(
-            new ChildAccess(
-                getRoot(), this, aName, freeAcc->getNode()));
+            new ChildAccess(root, this, aName, freeAcc->getNode()));
         children_[aName] = child.get();
         child->setStatus(ChildAccess::STATUS_ADDED);
         freeAcc->bind(root, this); // must not throw
@@ -749,7 +748,7 @@ void Access::removeByName(rtl::OUString const & aName)
             throw css::container::NoSuchElementException(
                 aName, static_cast< cppu::OWeakObject * >(this));
         }
-        child->setStatus(ChildAccess::STATUS_REMOVED, css::uno::makeAny(aName));
+        child->setStatus(ChildAccess::STATUS_REMOVED);
         prop->unbind(); // must not throw
         //TODO notify change
     } else if (SetNode * set = dynamic_cast< SetNode * >(p.get())) {
@@ -758,7 +757,7 @@ void Access::removeByName(rtl::OUString const & aName)
             throw css::container::NoSuchElementException(
                 aName, static_cast< cppu::OWeakObject * >(this));
         }
-        child->setStatus(ChildAccess::STATUS_REMOVED, css::uno::makeAny(aName));
+        child->setStatus(ChildAccess::STATUS_REMOVED);
 /*TODO:
         ChildMap::iterator j(children_.find(aName));
         rtl::Reference< ChildAccess > oldChild;

@@ -30,6 +30,7 @@
 #include "precompiled_configmgr.hxx"
 #include "sal/config.h"
 
+#include "com/sun/star/uno/Any.hxx"
 #include "rtl/ref.hxx"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
@@ -80,7 +81,7 @@ rtl::Reference< LocalizedPropertyValueNode > LocalizedPropertyNode::getValue(
     rtl::OUString const & locale)
 {
     //TODO
-    NodeMap::const_iterator i(Components::resolveNode(locale, &members_));
+    NodeMap::iterator i(Components::resolveNode(locale, &members_));
     if (i != members_.end()) {
         return dynamic_cast< LocalizedPropertyValueNode * >(i->second.get());
     }
@@ -98,6 +99,20 @@ rtl::Reference< LocalizedPropertyValueNode > LocalizedPropertyNode::getValue(
         return dynamic_cast< LocalizedPropertyValueNode * >(i->second.get());
     }
     return rtl::Reference< LocalizedPropertyValueNode >();
+}
+
+void LocalizedPropertyNode::setValue(
+    rtl::OUString const & locale, css::uno::Any const & value)
+{
+    NodeMap::iterator i(Components::resolveNode(locale, &members_));
+    if (i == members_.end()) {
+        members_.insert(
+            NodeMap::value_type(
+                locale, new LocalizedPropertyValueNode(this, value)));
+    } else {
+        dynamic_cast< LocalizedPropertyValueNode * >(
+            i->second.get())->setValue(value);
+    }
 }
 
 NodeMap & LocalizedPropertyNode::getMembers() {

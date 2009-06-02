@@ -53,11 +53,13 @@
 #include "access.hxx"
 #include "childaccess.hxx"
 #include "components.hxx"
+#include "groupnode.hxx"
 #include "localizedpropertynode.hxx"
 #include "localizedpropertyvaluenode.hxx"
 #include "lock.hxx"
 #include "node.hxx"
 #include "propertynode.hxx"
+#include "setnode.hxx"
 #include "rootaccess.hxx"
 
 namespace configmgr {
@@ -152,17 +154,46 @@ void ChildAccess::reportChanges(
 }
 
 void ChildAccess::commitChanges() {
-/*
+    if (status_ != STATUS_REMOVED) {
+        while (!modifiedChildren_.empty()) {
+            rtl::Reference< ChildAccess > child(
+                modifiedChildren_.begin()->second);
+            child->commitChanges();
+            modifiedChildren_.erase(modifiedChildren_.begin());
+        }
+    }
     switch (status_) {
     case STATUS_UNMODIFIED:
+        break;
     case STATUS_CHANGED:
+        {
+            rtl::Reference< Node > p(getNode());
+            if (PropertyNode * prop = dynamic_cast< PropertyNode * >(p.get())) {
+                prop->setValue(changedValue_);
+            } else if (LocalizedPropertyValueNode * locval =
+                       dynamic_cast< LocalizedPropertyValueNode * >(p.get()))
+            {
+                locval->setValue(changedValue_);
+            } else if (LocalizedPropertyNode * locprop =
+                       dynamic_cast< LocalizedPropertyNode * >(p.get()))
+            {
+                locprop->setValue(getRoot()->getLocale(), changedValue_);
+            } else {
+                OSL_ASSERT(false);
+                throw css::uno::RuntimeException(
+                    rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM("this cannot happen")),
+                    static_cast< cppu::OWeakObject * >(this));
+            }
+        }
+        break;
     case STATUS_ADDED:
         {
             rtl::Reference< Node > p(parent_->getNode());
             if (GroupNode * group = dynamic_cast< GroupNode * >(p.get())) {
-                group->getMembers()[getNode()->getName()] = getNode();
+                group->getMembers()[name_] = getNode();
             } else if (SetNode * set = dynamic_cast< SetNode * >(p.get())) {
-                set->getMembers()[getNode()->getName()] = getNode();
+                set->getMembers()[name_] = getNode();
             } else {
                 OSL_ASSERT(false);
                 throw css::uno::RuntimeException(
@@ -176,12 +207,9 @@ void ChildAccess::commitChanges() {
         {
             rtl::Reference< Node > p(parent_->getNode());
             if (GroupNode * group = dynamic_cast< GroupNode * >(p.get())) {
-                rtl::OUString name;
-                changeData_ >>= name;
-                group->getMembers().erase(name);
+                group->getMembers().erase(name_);
             } else if (SetNode * set = dynamic_cast< SetNode * >(p.get())) {
-
-                set->getMembers()[getNode()->getName()] = getNode();
+                set->getMembers().erase(name_);
             } else {
                 OSL_ASSERT(false);
                 throw css::uno::RuntimeException(
@@ -192,19 +220,18 @@ void ChildAccess::commitChanges() {
         }
         break;
     }
-*/
+    status_ = STATUS_UNMODIFIED;
+    changedValue_.clear();
 }
 
 void ChildAccess::setStatus(Status status, css::uno::Any const & changedValue) {
-    if (status == STATUS_UNMODIFIED) {
-        //TODO: remove from modifiedChildren_ parent hierarchy
-    } else {
-        //TODO: add to complete modifiedChildren_ parent hierarchy
-        for (ChildAccess * p = this; p != 0 && p->parent_.is();
-             p = dynamic_cast< ChildAccess * >(p->parent_.get()))
-        {
-            p->parent_->modifiedChildren_[p->name_] = p;
-        }
+    OSL_ASSERT(
+        status != STATUS_UNMODIFIED &&
+        (status == STATUS_CHANGED || !changedValue.hasValue()));
+    for (ChildAccess * p = this; p != 0 && p->parent_.is();
+         p = dynamic_cast< ChildAccess * >(p->parent_.get()))
+    {
+        p->parent_->modifiedChildren_[p->name_] = p;
     }
     status_ = status;
     changedValue_ = changedValue;
