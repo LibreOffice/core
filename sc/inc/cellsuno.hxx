@@ -980,7 +980,6 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Int16 SAL_CALL resetActionLocks() throw(::com::sun::star::uno::RuntimeException);
 
-    static String       GetInputString_Impl(ScDocument* pDoc, const ScAddress& aPos, BOOL bEnglish);
     static String       GetOutputString_Impl(ScDocument* pDoc, const ScAddress& aPos);
 };
 

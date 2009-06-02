@@ -6218,11 +6218,6 @@ String ScCellObj::GetInputString_Impl(BOOL bEnglish) const      // fuer getFormu
     return String();
 }
 
-String ScCellObj::GetInputString_Impl(ScDocument* pDoc, const ScAddress& aPos, BOOL bEnglish)       // fuer getFormula / FormulaLocal
-{
-    return lcl_GetInputString( pDoc, aPos, bEnglish );
-}
-
 String ScCellObj::GetOutputString_Impl(ScDocument* pDoc, const ScAddress& aCellPos)
 {
     String aVal;
@@ -9608,90 +9603,124 @@ struct ScPatternHashCode
     }
 };
 
+// Hash map to find a range by its start row
+typedef ::std::hash_map< SCROW, ScRange > ScRowRangeHashMap;
+
+typedef ::std::vector<ScRange> ScRangeVector;
+
 // Hash map entry.
-// Keeps track of column positions and calls Join only for ranges between empty columns.
+// The Join method depends on the column-wise order of ScAttrRectIterator
 class ScUniqueFormatsEntry
 {
-    ScRangeListRef  aCompletedRanges;
-    ScRangeListRef  aJoinedRanges;
-    SCCOL           nLastColumn;
-    SCCOL           nLastStart;
+    enum EntryState { STATE_EMPTY, STATE_SINGLE, STATE_COMPLEX };
 
-    void            MoveToCompleted();
+    EntryState          eState;
+    ScRange             aSingleRange;
+    ScRowRangeHashMap   aJoinedRanges;      // "active" ranges to be merged
+    ScRangeVector       aCompletedRanges;   // ranges that will no longer be touched
+    ScRangeListRef      aReturnRanges;      // result as ScRangeList for further use
 
 public:
-                        ScUniqueFormatsEntry() : nLastColumn(0), nLastStart(0) {}
+                        ScUniqueFormatsEntry() : eState( STATE_EMPTY ) {}
                         ScUniqueFormatsEntry( const ScUniqueFormatsEntry& r ) :
-                            aCompletedRanges( r.aCompletedRanges ),
+                            eState( r.eState ),
+                            aSingleRange( r.aSingleRange ),
                             aJoinedRanges( r.aJoinedRanges ),
-                            nLastColumn( r.nLastColumn ),
-                            nLastStart( r.nLastStart ) {}
+                            aCompletedRanges( r.aCompletedRanges ),
+                            aReturnRanges( r.aReturnRanges ) {}
                         ~ScUniqueFormatsEntry() {}
 
-    void                Join( const ScRange& rRange );
+    void                Join( const ScRange& rNewRange );
     const ScRangeList&  GetRanges();
-    void                Clear()
-                        {
-                            aCompletedRanges.Clear();
-                            aJoinedRanges.Clear();
-                        }
+    void                Clear() { aReturnRanges.Clear(); }  // aJoinedRanges and aCompletedRanges are cleared in GetRanges
 };
 
-void ScUniqueFormatsEntry::MoveToCompleted()
+void ScUniqueFormatsEntry::Join( const ScRange& rNewRange )
 {
-    if ( !aCompletedRanges.Is() )
-        aCompletedRanges = new ScRangeList;
+    // Special-case handling for single range
 
-    if ( aJoinedRanges.Is() )
+    if ( eState == STATE_EMPTY )
     {
-        for ( const ScRange* pRange = aJoinedRanges->First(); pRange; pRange = aJoinedRanges->Next() )
-            aCompletedRanges->Append( *pRange );
-        aJoinedRanges->RemoveAll();
+        aSingleRange = rNewRange;
+        eState = STATE_SINGLE;
+        return;
     }
-}
-
-void ScUniqueFormatsEntry::Join( const ScRange& rRange )
-{
-    if ( !aJoinedRanges.Is() )
+    if ( eState == STATE_SINGLE )
     {
-        // first range - store and initialize columns
-        aJoinedRanges = new ScRangeList;
-        aJoinedRanges->Append( rRange );
-        nLastColumn = rRange.aEnd.Col();
-        nLastStart = rRange.aStart.Col();
-    }
-    else
-    {
-        // This works only if the start columns never go back
-        DBG_ASSERT( rRange.aStart.Col() >= nLastStart, "wrong column order in ScUniqueFormatsEntry" );
-
-        if ( rRange.aStart.Col() <= nLastColumn + 1 )
+        if ( aSingleRange.aStart.Row() == rNewRange.aStart.Row() &&
+             aSingleRange.aEnd.Row() == rNewRange.aEnd.Row() &&
+             aSingleRange.aEnd.Col() + 1 == rNewRange.aStart.Col() )
         {
-            // The new range may touch one of the existing ranges, have to use Join.
-            aJoinedRanges->Join( rRange );
+            aSingleRange.aEnd.SetCol( rNewRange.aEnd.Col() );
+            return;     // still a single range
+        }
+
+        SCROW nSingleRow = aSingleRange.aStart.Row();
+        aJoinedRanges.insert( ScRowRangeHashMap::value_type( nSingleRow, aSingleRange ) );
+        eState = STATE_COMPLEX;
+        // continue normally
+    }
+
+    // This is called in the order of ScAttrRectIterator results.
+    // rNewRange can only be joined with an existing entry if it's the same rows, starting in the next column.
+    // If the old entry for the start row extends to a different end row, or ends in a different column, it
+    // can be moved to aCompletedRanges because it can't be joined with following iterator results.
+    // Everything happens within one sheet, so Tab can be ignored.
+
+    SCROW nStartRow = rNewRange.aStart.Row();
+    ScRowRangeHashMap::iterator aIter( aJoinedRanges.find( nStartRow ) );       // find the active entry for the start row
+    if ( aIter != aJoinedRanges.end() )
+    {
+        ScRange& rOldRange = aIter->second;
+        if ( rOldRange.aEnd.Row() == rNewRange.aEnd.Row() &&
+             rOldRange.aEnd.Col() + 1 == rNewRange.aStart.Col() )
+        {
+            // extend existing range
+            rOldRange.aEnd.SetCol( rNewRange.aEnd.Col() );
         }
         else
         {
-            // The new range starts right of all existing ranges.
-            // The existing ranges can be ignored for all future Join calls.
-
-            MoveToCompleted();                  // aJoinedRanges is emptied
-            aJoinedRanges->Append( rRange );
+            // move old range to aCompletedRanges, keep rNewRange for joining
+            aCompletedRanges.push_back( rOldRange );
+            rOldRange = rNewRange;  // replace in hash map
         }
-
-        if ( rRange.aEnd.Col() > nLastColumn )
-            nLastColumn = rRange.aEnd.Col();
-        nLastStart = rRange.aStart.Col();
+    }
+    else
+    {
+        // keep rNewRange for joining
+        aJoinedRanges.insert( ScRowRangeHashMap::value_type( nStartRow, rNewRange ) );
     }
 }
 
 const ScRangeList& ScUniqueFormatsEntry::GetRanges()
 {
-    if ( aJoinedRanges.Is() && !aCompletedRanges.Is() )
-        return *aJoinedRanges;
+    if ( eState == STATE_SINGLE )
+    {
+        aReturnRanges = new ScRangeList;
+        aReturnRanges->Append( aSingleRange );
+        return *aReturnRanges;
+    }
 
-    MoveToCompleted();          // aCompletedRanges is always set after this
-    return *aCompletedRanges;
+    // move remaining entries from aJoinedRanges to aCompletedRanges
+
+    ScRowRangeHashMap::const_iterator aJoinedEnd = aJoinedRanges.end();
+    for ( ScRowRangeHashMap::const_iterator aJoinedIter = aJoinedRanges.begin(); aJoinedIter != aJoinedEnd; ++aJoinedIter )
+        aCompletedRanges.push_back( aJoinedIter->second );
+    aJoinedRanges.clear();
+
+    // sort all ranges for a predictable API result
+
+    std::sort( aCompletedRanges.begin(), aCompletedRanges.end() );
+
+    // fill and return ScRangeList
+
+    aReturnRanges = new ScRangeList;
+    ScRangeVector::const_iterator aCompEnd( aCompletedRanges.end() );
+    for ( ScRangeVector::const_iterator aCompIter( aCompletedRanges.begin() ); aCompIter != aCompEnd; ++aCompIter )
+        aReturnRanges->Append( *aCompIter );
+    aCompletedRanges.clear();
+
+    return *aReturnRanges;
 }
 
 typedef ::std::hash_map< const ScPatternAttr*, ScUniqueFormatsEntry, ScPatternHashCode > ScUniqueFormatsHashMap;
