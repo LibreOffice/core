@@ -53,6 +53,7 @@ class ListenerProperties
     vcl::PrinterListener*               mpListener;
     std::map< int, rtl::OUString >      maTagToPropertyName;
     std::map< int, sal_Int32 >          maTagToValueInt;
+    std::map< NSView*, NSView* >        maViewPairMap;
     std::vector< NSObject* >            maViews;
     int                                 mnNextTag;
     sal_Int32                           mnLastPageCount;
@@ -136,6 +137,21 @@ class ListenerProperties
         maViews.push_back( i_pView );
     }
     
+    void addViewPair( NSView* i_pLeft, NSView* i_pRight )
+    {
+        maViewPairMap[ i_pLeft ] = i_pRight;
+        maViewPairMap[ i_pRight ] = i_pLeft;
+    }
+    
+    NSView* getPair( NSView* i_pLeft ) const
+    {
+        NSView* pRight = nil;
+        std::map< NSView*, NSView* >::const_iterator it = maViewPairMap.find( i_pLeft );
+        if( it != maViewPairMap.end() )
+            pRight = it->second;
+        return pRight;
+    }
+    
     void changePropertyWithIntValue( int i_nTag )
     {
         std::map< int, rtl::OUString >::const_iterator name_it = maTagToPropertyName.find( i_nTag );
@@ -150,6 +166,20 @@ class ListenerProperties
             }
         }
     }
+
+    void changePropertyWithIntValue( int i_nTag, sal_Int64 i_nValue )
+    {
+        std::map< int, rtl::OUString >::const_iterator name_it = maTagToPropertyName.find( i_nTag );
+        if( name_it != maTagToPropertyName.end() )
+        {
+            PropertyValue* pVal = mpListener->getValue( name_it->second );
+            if( pVal )
+            {
+                pVal->Value <<= i_nValue;
+                updatePrintJob();
+            }
+        }
+    }
     
     void changePropertyWithBoolValue( int i_nTag, sal_Bool i_bValue )
     {
@@ -160,6 +190,20 @@ class ListenerProperties
             if( pVal )
             {
                 pVal->Value <<= i_bValue;
+                updatePrintJob(); 
+            }
+        }
+    }
+    
+    void changePropertyWithStringValue( int i_nTag, const rtl::OUString& i_rValue )
+    {
+        std::map< int, rtl::OUString >::const_iterator name_it = maTagToPropertyName.find( i_nTag );
+        if( name_it != maTagToPropertyName.end() )
+        {
+            PropertyValue* pVal = mpListener->getValue( name_it->second );
+            if( pVal )
+            {
+                pVal->Value <<= i_rValue;
                 updatePrintJob(); 
             }
         }
@@ -186,9 +230,15 @@ class ListenerProperties
             {
                 MacOSBOOL bEnabled = mpListener->isUIOptionEnabled( name_it->second ) ? YES : NO;
                 if( pCtrl )
+                {
                     [pCtrl setEnabled: bEnabled];
+                    NSView* pOther = getPair( pCtrl );
+                    if( pOther && [pOther isKindOfClass: [NSControl class]] )
+                        [(NSControl*)pOther setEnabled: bEnabled];
+                }
                 else if( pCell )
                     [pCell setEnabled: bEnabled];
+                
             }
         }
     }
@@ -208,6 +258,7 @@ static void filterAccelerator( rtl::OUString& io_rText )
 }
 -(id)initWithListenerMap: (ListenerProperties*)pListener;
 -(void)triggered:(id)pSender;
+-(void)triggeredNumeric:(id)pSender;
 -(void)dealloc;
 @end
 
@@ -247,6 +298,45 @@ static void filterAccelerator( rtl::OUString& io_rText )
             int nTag = [pCell tag];
             mpListener->changePropertyWithIntValue( nTag );
         }
+    }
+    else if( [pSender isMemberOfClass: [NSTextField class]] )
+    {
+        NSTextField* pField = (NSTextField*)pSender;
+        int nTag = [pField tag];
+        rtl::OUString aValue = GetOUString( [pSender stringValue] );
+        mpListener->changePropertyWithStringValue( nTag, aValue );
+    }
+    else
+    {
+        DBG_ERROR( "unsupported class" );
+    }
+    mpListener->updateEnableState();
+}
+-(void)triggeredNumeric:(id)pSender;
+{
+    if( [pSender isMemberOfClass: [NSTextField class]] )
+    {
+        NSTextField* pField = (NSTextField*)pSender;
+        int nTag = [pField tag];
+        sal_Int64 nValue = [pField intValue];
+        
+        NSView* pOther = mpListener->getPair( pField );
+        if( pOther )
+            [(NSControl*)pOther setIntValue: nValue];
+
+        mpListener->changePropertyWithIntValue( nTag, nValue );
+    }
+    else if( [pSender isMemberOfClass: [NSStepper class]] )
+    {
+        NSStepper* pStep = (NSStepper*)pSender;
+        int nTag = [pStep tag];
+        sal_Int64 nValue = [pStep intValue];
+
+        NSView* pOther = mpListener->getPair( pStep );
+        if( pOther )
+            [(NSControl*)pOther setIntValue: nValue];
+
+        mpListener->changePropertyWithIntValue( nTag, nValue );
     }
     else
     {
@@ -323,6 +413,8 @@ static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize )
         rtl::OUString aText;
         rtl::OUString aPropertyName;
         Sequence< rtl::OUString > aChoices;
+        sal_Int64 nMinValue = 0, nMaxValue = 0;
+        long nAttachOffset = 0;
         sal_Bool bIgnore = sal_False;
 
         for( int n = 0; n < aOptProp.getLength(); n++ )
@@ -353,6 +445,18 @@ static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize )
                 rEntry.Value >>= bValue;
                 bEnabled = bValue;
             }
+            else if( rEntry.Name.equalsAscii( "MinValue" ) )
+            {
+                rEntry.Value >>= nMinValue;
+            }
+            else if( rEntry.Name.equalsAscii( "MaxValue" ) )
+            {
+                rEntry.Value >>= nMaxValue;
+            }
+            else if( rEntry.Name.equalsAscii( "AttachToDependency" ) )
+            {
+                nAttachOffset = 20;
+            }
             else if( rEntry.Name.equalsAscii( "InternalUIOnly" ) )
             {
                 rEntry.Value >>= bIgnore;
@@ -363,6 +467,8 @@ static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize )
             aCtrlType.equalsAscii( "Subgroup" ) ||
             aCtrlType.equalsAscii( "Radio" ) ||
             aCtrlType.equalsAscii( "List" )  ||
+            aCtrlType.equalsAscii( "Edit" )  ||
+            aCtrlType.equalsAscii( "Range" )  ||
             aCtrlType.equalsAscii( "Bool" ) )
         {
             // since our build target is MacOSX 10.4 we can have only one accessory view
@@ -412,9 +518,6 @@ static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize )
                 // update nCurY
                 nCurY = aTextRect.origin.y - 5;
                 
-                // set indent
-                nCurX = 20;
-
                 // cleanup
                 [pText release];
             }
@@ -423,7 +526,7 @@ static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize )
             else if( aCtrlType.equalsAscii( "Bool" ) && pCurParent )
             {
                 NSString* pText = CreateNSString( aText );
-                NSRect aCheckRect = { { nCurX, 0 }, { 0, 15 } };
+                NSRect aCheckRect = { { nCurX + nAttachOffset, 0 }, { 0, 15 } };
                 NSButton* pBtn = [[NSButton alloc] initWithFrame: aCheckRect];
                 [pBtn setButtonType: NSSwitchButton];
                 [pBtn setTitle: pText];
@@ -432,7 +535,6 @@ static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize )
                 if( pVal )
                     pVal->Value >>= bVal;
                 [pBtn setState: bVal ? NSOnState : NSOffState];
-                [pBtn setEnabled: (pListener->isUIOptionEnabled( aPropertyName ) && pVal != NULL) ? YES : NO];
                 [pBtn sizeToFit];
                 [pCurParent addSubview: pBtn];
                 
@@ -457,11 +559,12 @@ static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize )
             }
             else if( aCtrlType.equalsAscii( "Radio" ) && pCurParent )
             {
+                sal_Int32 nOff = 0;
                 if( aText.getLength() )
                 {
                     // add a label
                     NSString* pText = CreateNSString( aText );
-                    NSRect aTextRect = { { nCurX, 0 }, { 300, 15 } };
+                    NSRect aTextRect = { { nCurX + nAttachOffset, 0 }, { 300, 15 } };
                     NSTextView* pTextView = [[NSTextView alloc] initWithFrame: aTextRect];
                     [pTextView setEditable: NO];
                     [pTextView setSelectable: NO];
@@ -477,6 +580,9 @@ static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize )
                     // update nCurY
                     nCurY = aTextRect.origin.y - 5;
                     
+                    // indent the radio group relative to the text
+                    // nOff = 20;
+                    
                     // cleanup
                     [pText release];
                 }
@@ -484,7 +590,7 @@ static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize )
                 // setup radio matrix
                 NSButtonCell* pProto = [[NSButtonCell alloc] init];
                 
-                NSRect aRadioRect = { { nCurX + 20, 0 }, { 280 - nCurX, 5*aChoices.getLength() } };
+                NSRect aRadioRect = { { nCurX + nOff, 0 }, { 280 - nCurX, 5*aChoices.getLength() } };
                 [pProto setTitle: @"RadioButtonGroup"];
                 [pProto setButtonType: NSRadioButton];
                 NSMatrix* pMatrix = [[NSMatrix alloc] initWithFrame: aRadioRect
@@ -548,7 +654,7 @@ static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize )
                 // will have to suffice for the time being.
                 aTextSize.width *= 1.5;
                 aTextSize.height += 3;
-                NSRect aTextRect = { { nCurX, 0 }, aTextSize };
+                NSRect aTextRect = { { nCurX + nAttachOffset, 0 }, aTextSize };
                 NSTextView* pTextView = [[NSTextView alloc] initWithFrame: aTextRect];
                 [pTextView setEditable: NO];
                 [pTextView setSelectable: NO];
@@ -561,7 +667,7 @@ static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize )
                 aTextRect = [pTextView frame];
 
 
-                NSRect aBtnRect = { { nCurX + aTextRect.size.width, 0 }, { 0, 15 } };
+                NSRect aBtnRect = { { nCurX + nAttachOffset + aTextRect.size.width, 0 }, { 0, 15 } };
                 NSPopUpButton* pBtn = [[NSPopUpButton alloc] initWithFrame: aBtnRect pullsDown: NO];
 
                 // iterate options
@@ -580,7 +686,6 @@ static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize )
                 if( pVal && pVal->Value.hasValue() )
                     pVal->Value >>= aSelectVal;
                 [pBtn selectItemAtIndex: aSelectVal];
-                [pBtn setEnabled: (pListener->isUIOptionEnabled( aPropertyName ) && pVal != NULL) ? YES : NO];
                 
                 // add the button to observed controls for enabled state changes
                 // also add a tag just for this purpose
@@ -609,12 +714,143 @@ static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize )
                 // cleanup
                 [pText release];
             }
+            else if( (aCtrlType.equalsAscii( "Edit" ) || aCtrlType.equalsAscii( "Range" )) && pCurParent )
+            {
+                sal_Int32 nOff = 0;
+                if( aText.getLength() )
+                {
+                    // add a label
+                    NSString* pText = CreateNSString( aText );
+                    NSFont* pFont = [NSFont labelFontOfSize: 0];
+                    NSDictionary* pDict = [NSDictionary dictionaryWithObject: pFont
+                                                        forKey: NSFontAttributeName];
+                                 
+                    NSSize aTextSize = [pText sizeWithAttributes: pDict];
+                    // FIXME: the only thing reliable about sizeWithAttributes is
+                    // that the size it outputs is way too small for our NSTextView
+                    // that would not matter so much if NSTextView's fitToSize actually
+                    // did something out of the box, alas it doesn't. This probably needs more
+                    // fiddling with NSTextView's and NSTextContainer's parameters, however
+                    // since this already almost cost me my sanity a Murphy factor of 1.5
+                    // will have to suffice for the time being.
+                    aTextSize.width *= 1.5;
+                    aTextSize.height += 3;
+                    NSRect aTextRect = { { nCurX + nAttachOffset, 0 }, aTextSize };
+                    NSTextView* pTextView = [[NSTextView alloc] initWithFrame: aTextRect];
+                    [pTextView setEditable: NO];
+                    [pTextView setSelectable: NO];
+                    [pTextView setDrawsBackground: NO];
+                    [pTextView setString: pText];
+                    [pTextView sizeToFit]; // FIXME: this does nothing
+                    [pCurParent addSubview: pTextView];
+                    
+                    // move to nCurY
+                    aTextRect.origin.y = nCurY - aTextRect.size.height;
+                    [pTextView setFrame: aTextRect];
+                    
+                    // update nCurY
+                    nCurY = aTextRect.origin.y - 5;
+                    
+                    // and set the offset for the real edit field
+                    nOff = aTextSize.width + 5;
+                    
+                    // cleanup
+                    [pText release];
+                }
+                
+                NSRect aFieldRect = { { nCurX + nOff +  nAttachOffset, 0 }, { 100, 25 } };
+                NSTextField* pFieldView = [[NSTextField alloc] initWithFrame: aFieldRect];
+                [pFieldView setEditable: YES];
+                [pFieldView setSelectable: YES];
+                [pFieldView setDrawsBackground: YES];
+                [pFieldView sizeToFit]; // FIXME: this does nothing
+                [pCurParent addSubview: pFieldView];
+                
+                // add the field to observed controls for enabled state changes
+                // also add a tag just for this purpose
+                pListenerProperties->addObservedControl( pFieldView );
+                int nTag = pListenerProperties->addNameTag( aPropertyName );
+                [pFieldView setTag: nTag];
+                // pListenerProperties->addNamedView( pFieldView, aPropertyName );
+
+                // move to nCurY
+                aFieldRect.origin.y = nCurY - aFieldRect.size.height;
+                [pFieldView setFrame: aFieldRect];
+
+                // current value
+                PropertyValue* pVal = pListener->getValue( aPropertyName );
+                if( aCtrlType.equalsAscii( "Range" ) )
+                {
+                    // add a stepper control
+                    NSRect aStepFrame = { { aFieldRect.origin.x + aFieldRect.size.width + 5,
+                                            aFieldRect.origin.y },
+                                        { 15, aFieldRect.size.height } };
+                    NSStepper* pStep = [[NSStepper alloc] initWithFrame: aStepFrame];
+                    [pStep setIncrement: 1];
+                    [pStep setValueWraps: NO];
+                    [pStep setTag: nTag];
+                    [pCurParent addSubview: pStep];
+                    pListenerProperties->addObservedControl( pStep );
+                    [pStep setTarget: pCtrlTarget];
+                    [pStep setAction: @selector(triggered:)];
+                    
+                    // constrain the text field to decimal numbers
+                    NSNumberFormatter* pFormatter = [[NSNumberFormatter alloc] init];
+                    [pFormatter setNumberStyle: NSNumberFormatterDecimalStyle];
+                    [pFormatter setAllowsFloats: NO];
+                    if( nMinValue != nMaxValue )
+                    {
+                        [pFormatter setMinimum: [[NSNumber numberWithInt: nMinValue] autorelease]];
+                        [pStep setMinValue: nMinValue];
+                        [pFormatter setMaximum: [[NSNumber numberWithInt: nMaxValue] autorelease]];
+                        [pStep setMaxValue: nMaxValue];
+                    }
+                    [pFieldView setFormatter: pFormatter];
+
+                    sal_Int64 nSelectVal = 0;
+                    if( pVal && pVal->Value.hasValue() )
+                        pVal->Value >>= nSelectVal;
+                    
+                    [pFieldView setIntValue: nSelectVal];
+                    [pStep setIntValue: nSelectVal];
+
+                    pListenerProperties->addViewPair( pFieldView, pStep );
+                    // connect target and action
+                    [pFieldView setTarget: pCtrlTarget];
+                    [pFieldView setAction: @selector(triggeredNumeric:)];
+                    [pStep setTarget: pCtrlTarget];
+                    [pStep setAction: @selector(triggeredNumeric:)];
+                }
+                else
+                {
+                    // connect target and action
+                    [pFieldView setTarget: pCtrlTarget];
+                    [pFieldView setAction: @selector(triggered:)];
+
+                    if( pVal && pVal->Value.hasValue() )
+                    {
+                        rtl::OUString aValue;
+                        pVal->Value >>= aValue;
+                        if( aValue.getLength() )
+                        {
+                            NSString* pText = CreateNSString( aValue );
+                            [pFieldView setStringValue: pText];
+                            [pText release];
+                        }
+                    }
+                }
+
+                // update nCurY
+                nCurY = aFieldRect.origin.y - 5;
+                
+            }
         }
         else
         {
             DBG_ERROR( "Unsupported UI option" );
         }
     }
+    pListenerProperties->updateEnableState();
     adjustViewAndChildren( pCurParent, aMaxTabSize );
         
     // find the minimum needed tab size
