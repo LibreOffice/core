@@ -91,6 +91,9 @@ namespace vcl
 
             PrinterTabPage( Window*, const ResId& );
             virtual ~PrinterTabPage();
+
+            void readFromSettings();
+            void storeToSettings();
         };
 
         class JobTabPage : public TabPage
@@ -112,6 +115,9 @@ namespace vcl
 
             JobTabPage( Window*, const ResId& );
             virtual ~JobTabPage();
+
+            void readFromSettings();
+            void storeToSettings();
         };
 
         OKButton                                maOKButton;
@@ -150,6 +156,8 @@ namespace vcl
         void checkControlDependencies();
         void checkOptionalControlDependencies();
         void setupOptionalUI();
+        void readFromSettings();
+        void storeToSettings();
         com::sun::star::beans::PropertyValue* getValueForWindow( Window* ) const;
 
         virtual void Resize();

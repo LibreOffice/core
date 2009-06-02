@@ -41,6 +41,7 @@
 #include "vcl/status.hxx"
 #include "vcl/decoview.hxx"
 #include "vcl/arrange.hxx"
+#include "vcl/configsettings.hxx"
 
 #include "rtl/ustrbuf.hxx"
 
@@ -141,6 +142,43 @@ PrintDialog::PrinterTabPage::~PrinterTabPage()
 {
 }
 
+void PrintDialog::PrinterTabPage::readFromSettings()
+{
+    SettingsConfigItem* pItem = SettingsConfigItem::get();
+    rtl::OUString aValue;
+
+    aValue = pItem->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog_PrinterPage" ) ),
+                              rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NUp-Rows" ) ) );
+    sal_Int32 nVal = aValue.toInt32();
+    maNupRowsEdt.SetValue( sal_Int64( nVal > 1 ? nVal : 1) );
+
+    aValue = pItem->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog_PrinterPage" ) ),
+                              rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NUp-Columns" ) ) );
+    nVal = aValue.toInt32();
+    maNupColEdt.SetValue( sal_Int64(nVal > 1 ? nVal : 1) );
+
+    aValue = pItem->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog_PrinterPage" ) ),
+                              rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NUp-Portrait" ) ) );
+    if( aValue.equalsIgnoreAsciiCaseAscii( "true" ) )
+        maNupPortrait.Check();
+    else
+        maNupLandscape.Check();
+}
+
+void PrintDialog::PrinterTabPage::storeToSettings()
+{
+    SettingsConfigItem* pItem = SettingsConfigItem::get();
+    pItem->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog_PrinterPage" ) ),
+                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NUp-Rows" ) ),
+                     maNupRowsEdt.GetText() );
+    pItem->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog_PrinterPage" ) ),
+                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NUp-Columns" ) ),
+                     maNupColEdt.GetText() );
+    pItem->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog_PrinterPage" ) ),
+                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NUp-Portrait" ) ),
+                     rtl::OUString::createFromAscii( maNupPortrait.IsChecked() ? "true" : "false" ) );
+}
+
 PrintDialog::JobTabPage::JobTabPage( Window* i_pParent, const ResId& rResId )
     : TabPage( i_pParent, rResId )
     , maPrinters( this, VclResId( SV_PRINT_PRINTERS) )
@@ -167,6 +205,39 @@ PrintDialog::JobTabPage::JobTabPage( Window* i_pParent, const ResId& rResId )
 
 PrintDialog::JobTabPage::~JobTabPage()
 {
+}
+
+void PrintDialog::JobTabPage::readFromSettings()
+{
+    SettingsConfigItem* pItem = SettingsConfigItem::get();
+    rtl::OUString aValue;
+
+    aValue = pItem->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog_JobPage" ) ),
+                              rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ToFile" ) ) );
+    maToFileBox.Check( aValue.equalsIgnoreAsciiCaseAscii( "true" ) );
+
+    aValue = pItem->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog_JobPage" ) ),
+                              rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Copies" ) ) );
+    sal_Int32 nVal = aValue.toInt32();
+    maCopyCountField.SetValue( sal_Int64(nVal > 1 ? nVal : 1) );
+
+    aValue = pItem->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog_JobPage" ) ),
+                              rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Collate" ) ) );
+    maCollateBox.Check( aValue.equalsIgnoreAsciiCaseAscii( "true" ) );
+}
+
+void PrintDialog::JobTabPage::storeToSettings()
+{
+    SettingsConfigItem* pItem = SettingsConfigItem::get();
+    pItem->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog_JobPage" ) ),
+                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ToFile" ) ),
+                     rtl::OUString::createFromAscii( maToFileBox.IsChecked() ? "true" : "false" ) );
+    pItem->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog_JobPage" ) ),
+                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Copies" ) ),
+                     maCopyCountField.GetText() );
+    pItem->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog_JobPage" ) ),
+                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Collate" ) ),
+                     rtl::OUString::createFromAscii( maCollateBox.IsChecked() ? "true" : "false" ) );
 }
 
 PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterListener>& i_rListener )
@@ -220,10 +291,23 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterList
     }
     else
     {
-        // fall back to default printer
-        maPrinterPage.maPrinters.SelectEntry( Printer::GetDefaultPrinterName() );
-        maJobPage.maPrinters.SelectEntry( Printer::GetDefaultPrinterName() );
-        maPListener->setPrinter( boost::shared_ptr<Printer>( new Printer( Printer::GetDefaultPrinterName() ) ) );
+        // fall back to last printer
+        SettingsConfigItem* pItem = SettingsConfigItem::get();
+        String aValue( pItem->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
+                                        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LastPrinter" ) ) ) );
+        if( maPrinterPage.maPrinters.GetEntryPos( aValue ) != LISTBOX_ENTRY_NOTFOUND )
+        {
+            maPrinterPage.maPrinters.SelectEntry( aValue );
+            maJobPage.maPrinters.SelectEntry( aValue );
+            maPListener->setPrinter( boost::shared_ptr<Printer>( new Printer( aValue ) ) );
+        }
+        else
+        {
+            // fall back to default printer
+            maPrinterPage.maPrinters.SelectEntry( Printer::GetDefaultPrinterName() );
+            maJobPage.maPrinters.SelectEntry( Printer::GetDefaultPrinterName() );
+            maPListener->setPrinter( boost::shared_ptr<Printer>( new Printer( Printer::GetDefaultPrinterName() ) ) );
+        }
     }
     // update the text fields for the printer
     updatePrinterText();
@@ -249,6 +333,10 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterList
     }
 
     // setup click handler on the various buttons
+    maOKButton.SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
+    #if OSL_DEBUG_LEVEL > 1
+    maCancelButton.SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
+    #endif
     maJobPage.maCollateBox.SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
     maPrinterPage.maSetupButton.SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
     maPrinterPage.maNupPortrait.SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
@@ -267,6 +355,9 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterList
 
     // set min size pixel to current size
     SetMinOutputSizePixel( GetOutputSizePixel() );
+
+    // restore settings from last run
+    readFromSettings();
 
     // setup dependencies
     checkControlDependencies();
@@ -287,6 +378,44 @@ PrintDialog::~PrintDialog()
         delete maControls.front();
         maControls.pop_front();
     }
+}
+
+void PrintDialog::readFromSettings()
+{
+    maJobPage.readFromSettings();
+    maPrinterPage.readFromSettings();
+
+    // read last selected tab page; if it exists, actiavte it
+    SettingsConfigItem* pItem = SettingsConfigItem::get();
+    rtl::OUString aValue = pItem->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
+                                            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LastPage" ) ) );
+    USHORT nCount = maTabCtrl.GetPageCount();
+    for( USHORT i = 0; i < nCount; i++ )
+    {
+        USHORT nPageId = maTabCtrl.GetPageId( i );
+        if( aValue.equals( maTabCtrl.GetPageText( nPageId ) ) )
+        {
+            maTabCtrl.SelectTabPage( nPageId );
+            break;
+        }
+    }
+}
+
+void PrintDialog::storeToSettings()
+{
+    maJobPage.storeToSettings();
+    maPrinterPage.storeToSettings();
+
+    // store last selected printer
+    SettingsConfigItem* pItem = SettingsConfigItem::get();
+    pItem->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
+                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LastPrinter" ) ),
+                     maJobPage.maPrinters.GetSelectEntry() );
+
+    pItem->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
+                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LastPage" ) ),
+                     maTabCtrl.GetPageText( maTabCtrl.GetCurPageId() ) );
+    pItem->Commit();
 }
 
 bool PrintDialog::isPrintToFile()
@@ -966,13 +1095,21 @@ IMPL_LINK( PrintDialog, SelectHdl, ListBox*, pBox )
 
 IMPL_LINK( PrintDialog, ClickHdl, Button*, pButton )
 {
-    if( pButton == &maPrinterPage.maSetupButton )
+    if( pButton == &maOKButton || pButton == &maCancelButton )
     {
-        maPListener->getPrinter()->Setup( this );
+        storeToSettings();
+        EndDialog( pButton == &maOKButton );
     }
-    checkControlDependencies();
-    if( pButton == &maPrinterPage.maNupPortrait || pButton == &maPrinterPage.maNupLandscape )
-        updateNup();
+    else
+    {
+        if( pButton == &maPrinterPage.maSetupButton )
+        {
+            maPListener->getPrinter()->Setup( this );
+        }
+        checkControlDependencies();
+        if( pButton == &maPrinterPage.maNupPortrait || pButton == &maPrinterPage.maNupLandscape )
+            updateNup();
+    }
     return 0;
 }
 
