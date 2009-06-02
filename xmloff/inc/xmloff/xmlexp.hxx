@@ -580,6 +580,9 @@ public:
     // --> OD 2008-11-26 #158694#
     sal_Bool exportTextNumberElement() const;
     // <--
+
+    /// set null date from model to unit converter, if not already done
+    sal_Bool SetNullDateOnUnitConverter();
 };
 
 inline UniReference< XMLTextParagraphExport > SvXMLExport::GetTextParagraphExport()

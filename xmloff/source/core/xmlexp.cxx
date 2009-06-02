@@ -225,6 +225,7 @@ public:
     // --> OD 2008-11-26 #158694#
     sal_Bool                                            mbExportTextNumberElement;
     // <--
+    sal_Bool                                            mbNullDateInitialized;
 };
 
 SvXMLExport_Impl::SvXMLExport_Impl()
@@ -238,6 +239,7 @@ SvXMLExport_Impl::SvXMLExport_Impl()
     // --> OD 2008-11-26 #158694#
         ,mbExportTextNumberElement( sal_False )
     // <--
+        ,mbNullDateInitialized( sal_False )
 {
     mxUriReferenceFactory = uri::UriReferenceFactory::create(
             comphelper_getProcessComponentContext());
@@ -2385,6 +2387,15 @@ sal_Bool SvXMLExport::exportTextNumberElement() const
     return mpImpl->mbExportTextNumberElement;
 }
 // <--
+
+sal_Bool SvXMLExport::SetNullDateOnUnitConverter()
+{
+    // if the null date has already been set, don't set it again (performance)
+    if (!mpImpl->mbNullDateInitialized)
+        mpImpl->mbNullDateInitialized = GetMM100UnitConverter().setNullDate(GetModel());
+
+    return mpImpl->mbNullDateInitialized;
+}
 
 //=============================================================================
 
