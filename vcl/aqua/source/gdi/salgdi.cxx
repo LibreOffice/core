@@ -416,6 +416,16 @@ void AquaSalGraphics::GetResolution( long& rDPIX, long& rDPIY )
     rDPIY = static_cast<long>(mfFakeDPIScale * mnRealDPIY);
 }
 
+void AquaSalGraphics::copyResolution( AquaSalGraphics& rGraphics )
+{
+    if( !rGraphics.mnRealDPIY && rGraphics.mbWindow && rGraphics.mpFrame )
+        rGraphics.initResolution( rGraphics.mpFrame->mpWindow );
+
+    mnRealDPIX = rGraphics.mnRealDPIX;
+    mnRealDPIY = rGraphics.mnRealDPIY;
+    mfFakeDPIScale = rGraphics.mfFakeDPIScale;
+}
+
 // -----------------------------------------------------------------------
 
 USHORT AquaSalGraphics::GetBitCount()

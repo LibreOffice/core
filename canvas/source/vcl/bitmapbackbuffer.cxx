@@ -105,6 +105,19 @@ namespace vclcanvas
         return *maBitmap;
     }
 
+    Size BitmapBackBuffer::getBitmapSizePixel() const
+    {
+        Size aSize = maBitmap->GetSizePixel();
+
+        if( mbVDevContentIsCurrent && mpVDev )
+        {
+            mpVDev->EnableMapMode( FALSE );
+            aSize = mpVDev->GetOutputSizePixel();
+        }
+
+        return aSize;
+    }
+
     void BitmapBackBuffer::createVDev() const
     {
         if( !mpVDev )
@@ -151,5 +164,5 @@ namespace vclcanvas
         mbBitmapContentIsCurrent = false;
         mbVDevContentIsCurrent   = true;
     }
-
 }
+

@@ -87,7 +87,8 @@ protected:
     SalColormap    *m_pDeleteColormap;
     Drawable        hDrawable_;     // use
     int             m_nScreen;
-    void*           pRenderFormat_;
+    void*           m_pRenderFormat;
+    XID             m_aRenderPicture;
     CairoFontsCache m_aCairoFontsCache;
 
     XLIB_Region     pPaintRegion_;
@@ -215,14 +216,14 @@ public:
     inline  const SalVisual&    GetVisual() const;
     inline  Drawable        GetDrawable() const { return hDrawable_; }
     void                    SetDrawable( Drawable d, int nScreen );
-    inline  void*           GetXRenderFormat() { return pRenderFormat_; }
-    inline  void            SetXRenderFormat( void* pRenderFormat ) { pRenderFormat_ = pRenderFormat; }
+    XID                     GetXRenderPicture();
+    void*                   GetXRenderFormat() const { return m_pRenderFormat; }
+    inline  void            SetXRenderFormat( void* pRenderFormat ) { m_pRenderFormat = pRenderFormat; }
     inline  const SalColormap&    GetColormap() const { return *m_pColormap; }
     using SalGraphics::GetPixel;
     inline  Pixel           GetPixel( SalColor nSalColor ) const;
 
-    int                     GetScreenNumber() const
-    { return m_nScreen; }
+    int                     GetScreenNumber() const { return m_nScreen; }
 
     // overload all pure virtual methods
     virtual void            GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY );
@@ -248,7 +249,7 @@ public:
     virtual void            SetROPFillColor( SalROPColor nROPColor );
 
     virtual void            SetTextColor( SalColor nSalColor );
-    virtual USHORT         SetFont( ImplFontSelectData*, int nFallbackLevel );
+    virtual USHORT          SetFont( ImplFontSelectData*, int nFallbackLevel );
     virtual void            GetFontMetric( ImplFontMetricData* );
     virtual ULONG           GetKernPairs( ULONG nPairs, ImplKernPairData* pKernPairs );
     virtual ImplFontCharMap* GetImplFontCharMap() const;

@@ -417,6 +417,14 @@ GtkSalFrame::GtkSalFrame( SystemParentData* pSysData )
 
 GtkSalFrame::~GtkSalFrame()
 {
+    for( unsigned int i = 0; i < sizeof(m_aGraphics)/sizeof(m_aGraphics[0]); ++i )
+    {
+        if( !m_aGraphics[i].pGraphics )
+            continue;
+        m_aGraphics[i].pGraphics->SetDrawable( None, m_nScreen );
+        m_aGraphics[i].bInUse = false;
+    }
+
     if( m_pParent )
         m_pParent->m_aChildren.remove( this );
 

@@ -831,24 +831,28 @@ void SalDisplay::Init()
     int nDisplayScreens = ScreenCount( pDisp_ );
     m_aScreens = std::vector<ScreenData>(nDisplayScreens);
 
-    const char *value;
+    mbExactResolution = false;
     /*  #i15507#
      *  Xft resolution should take precedence since
      *  it is what modern desktops use.
      */
-    if ((value = XGetDefault (pDisp_, "Xft", "dpi")))
+    const char* pValStr = XGetDefault( pDisp_, "Xft", "dpi" );
+    if( pValStr != NULL )
     {
-        rtl::OString str (value);
-        long dpi = (long) str.toDouble();
-        aResolution_ = Pair( dpi, dpi );
-        mbExactResolution = true;
+        const rtl::OString aValStr( pValStr );
+        const long nDPI = (long) aValStr.toDouble();
+        // guard against insane resolution
+        if( (nDPI >= 50) && (nDPI <= 500) )
+        {
+            aResolution_ = Pair( nDPI, nDPI );
+            mbExactResolution = true;
+        }
     }
-    else
+    if( mbExactResolution == false )
     {
         aResolution_     =
             Pair( DPI( WidthOfScreen( DefaultScreenOfDisplay( pDisp_ ) ), DisplayWidthMM ( pDisp_, m_nDefaultScreen ) ),
                   DPI( HeightOfScreen( DefaultScreenOfDisplay( pDisp_ ) ), DisplayHeightMM( pDisp_, m_nDefaultScreen ) ) );
-        mbExactResolution   = false;
     }
 
     nMaxRequestSize_    = XExtendedMaxRequestSize( pDisp_ ) * 4;

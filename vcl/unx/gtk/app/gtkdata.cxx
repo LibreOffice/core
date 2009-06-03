@@ -126,6 +126,12 @@ void signalScreenSizeChanged( GdkScreen* pScreen, gpointer data )
     pDisp->screenSizeChanged( pScreen );
 }
 
+void signalMonitorsChanged( GdkScreen* pScreen, gpointer data )
+{
+    GtkSalDisplay* pDisp = (GtkSalDisplay*)data;
+    pDisp->monitorsChanged( pScreen );
+}
+
 }
 
 GdkFilterReturn GtkSalDisplay::filterGdkEvent( GdkXEvent* sys_event,
@@ -192,11 +198,43 @@ void GtkSalDisplay::screenSizeChanged( GdkScreen* pScreen )
             {
                 rSD.m_aSize = Size( gdk_screen_get_width( pScreen ),
                                     gdk_screen_get_height( pScreen ) );
+                if( ! m_aFrames.empty() )
+                    m_aFrames.front()->CallCallback( SALEVENT_DISPLAYCHANGED, 0 );
             }
         }
         else
         {
             DBG_ERROR( "unknown screen changed size" );
+        }
+    }
+}
+
+void GtkSalDisplay::monitorsChanged( GdkScreen* pScreen )
+{
+    if( pScreen )
+    {
+        if( gdk_display_get_n_screens(m_pGdkDisplay) == 1 )
+        {
+            int nScreen = gdk_screen_get_number( pScreen );
+            if( nScreen == m_nDefaultScreen ) //To-Do, make m_aXineramaScreens a per-screen thing ?
+            {
+                gint nMonitors = gdk_screen_get_n_monitors(pScreen);
+                m_aXineramaScreens = std::vector<Rectangle>();
+                for (gint i = 0; i < nMonitors; ++i)
+                {
+                    GdkRectangle dest;
+                    gdk_screen_get_monitor_geometry(pScreen, i, &dest);
+                    m_aXineramaScreens.push_back( Rectangle( Point(dest.x,
+                                                                   dest.y ), Size( dest.width, dest.height ) ) );
+                }
+                m_bXinerama = m_aXineramaScreens.size() > 1;
+                if( ! m_aFrames.empty() )
+                    m_aFrames.front()->CallCallback( SALEVENT_DISPLAYCHANGED, 0 );
+            }
+            else
+            {
+                DBG_ERROR( "monitors for non-default screen changed, extend-me" );
+            }
         }
     }
 }
@@ -626,7 +664,10 @@ void GtkXLib::Init()
     {
         GdkScreen *pScreen = gdk_display_get_screen( pGdkDisp, n );
         if( pScreen )
+        {
             g_signal_connect( G_OBJECT(pScreen), "size-changed", G_CALLBACK(signalScreenSizeChanged), m_pGtkSalDisplay );
+            g_signal_connect( G_OBJECT(pScreen), "monitors-changed", G_CALLBACK(signalMonitorsChanged), m_pGtkSalDisplay );
+        }
     }
 }
 

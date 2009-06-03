@@ -5056,11 +5056,11 @@ MenuBarWindow::MenuBarWindow( Window* pParent ) :
 
     if( pResMgr )
     {
-        Bitmap aBitmap( ResId( SV_RESID_BITMAP_CLOSEDOC, *pResMgr ) );
-        Bitmap aBitmapHC( ResId( SV_RESID_BITMAP_CLOSEDOCHC, *pResMgr ) );
+        BitmapEx aBitmap( ResId( SV_RESID_BITMAP_CLOSEDOC, *pResMgr ) );
+        BitmapEx aBitmapHC( ResId( SV_RESID_BITMAP_CLOSEDOCHC, *pResMgr ) );
 
-        aCloser.maImage = Image( aBitmap, Color( COL_LIGHTMAGENTA ) );
-        aCloser.maImageHC = Image( aBitmapHC, Color( COL_LIGHTMAGENTA ) );
+        aCloser.maImage = Image( aBitmap );
+        aCloser.maImageHC = Image( aBitmapHC );
 
         aCloser.SetOutStyle( TOOLBOX_STYLE_FLAT );
         aCloser.SetBackground();
