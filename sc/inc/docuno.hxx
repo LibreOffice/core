@@ -112,6 +112,8 @@ private:
                                                 ScMarkData& rMark, ScPrintSelectionStatus& rStatus ) const;
 
     rtl::OUString           maBuildId;
+protected:
+    const SfxItemPropertySet&   GetPropertySet() const { return aPropSet; }
 
 public:
                             ScModelObj(ScDocShell* pDocSh);

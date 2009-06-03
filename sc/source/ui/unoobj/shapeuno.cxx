@@ -64,9 +64,9 @@ DECLARE_STL_USTRINGACCESS_MAP( uno::Sequence< sal_Int8 > *,  ScShapeImplementati
 
 static ScShapeImplementationIdMap aImplementationIdMap;
 
-const SfxItemPropertyMap* lcl_GetShapeMap()
+const SfxItemPropertyMapEntry* lcl_GetShapeMap()
 {
-    static SfxItemPropertyMap aShapeMap_Impl[] =
+    static SfxItemPropertyMapEntry aShapeMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNONAME_ANCHOR), 0, &getCppuType((uno::Reference<uno::XInterface>*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_HORIPOS), 0, &getCppuType((sal_Int32*)0), 0, 0 },

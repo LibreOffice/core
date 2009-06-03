@@ -57,9 +57,9 @@ using namespace com::sun::star;
 
 //  Map nur fuer PropertySetInfo
 
-const SfxItemPropertyMap* lcl_GetValidatePropertyMap()
+const SfxItemPropertyMapEntry* lcl_GetValidatePropertyMap()
 {
-    static SfxItemPropertyMap aValidatePropertyMap_Impl[] =
+    static SfxItemPropertyMapEntry aValidatePropertyMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNONAME_ERRALSTY), 0,  &getCppuType((sheet::ValidationAlertStyle*)0),  0, 0},
         {MAP_CHAR_LEN(SC_UNONAME_ERRMESS),  0,  &getCppuType((rtl::OUString*)0),                0, 0},

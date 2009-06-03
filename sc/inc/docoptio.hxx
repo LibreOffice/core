@@ -33,6 +33,7 @@
 
 #include <unotools/configitem.hxx>
 #include <svtools/poolitem.hxx>
+#include <svtools/itemprop.hxx>
 #include "scdllapi.h"
 #include "optutil.hxx"
 

@@ -90,9 +90,9 @@ using ::boost::shared_ptr;
 
 namespace
 {
-const SfxItemPropertyMap* lcl_GetDataProviderPropertyMap()
+const SfxItemPropertyMapEntry* lcl_GetDataProviderPropertyMap()
 {
-    static SfxItemPropertyMap aDataProviderPropertyMap_Impl[] =
+    static SfxItemPropertyMapEntry aDataProviderPropertyMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNONAME_INCLUDEHIDDENCELLS), 0,        &getBooleanCppuType(),                  0, 0 },
         {0,0,0,0,0,0}
@@ -100,9 +100,9 @@ const SfxItemPropertyMap* lcl_GetDataProviderPropertyMap()
     return aDataProviderPropertyMap_Impl;
 }
 
-const SfxItemPropertyMap* lcl_GetDataSequencePropertyMap()
+const SfxItemPropertyMapEntry* lcl_GetDataSequencePropertyMap()
 {
-    static SfxItemPropertyMap aDataSequencePropertyMap_Impl[] =
+    static SfxItemPropertyMapEntry aDataSequencePropertyMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNONAME_HIDDENVALUES), 0, &getCppuType((uno::Sequence<sal_Int32>*)0 ),                 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_ROLE), 0, &getCppuType((::com::sun::star::chart2::data::DataSequenceRole*)0),                  0, 0 },

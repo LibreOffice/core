@@ -115,7 +115,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScAddressConversionObj::getProp
 
     if ( bIsRange )
     {
-        static SfxItemPropertyMap aPropertyMap[] =
+        static SfxItemPropertyMapEntry aPropertyMap[] =
         {
             {MAP_CHAR_LEN(SC_UNONAME_ADDRESS),  0,  &getCppuType((table::CellRangeAddress*)0), 0, 0 },
             {MAP_CHAR_LEN(SC_UNONAME_PERSREPR), 0,  &getCppuType((rtl::OUString*)0),    0, 0 },
@@ -128,7 +128,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScAddressConversionObj::getProp
     }
     else
     {
-        static SfxItemPropertyMap aPropertyMap[] =
+        static SfxItemPropertyMapEntry aPropertyMap[] =
         {
             {MAP_CHAR_LEN(SC_UNONAME_ADDRESS),  0,  &getCppuType((table::CellAddress*)0), 0, 0 },
             {MAP_CHAR_LEN(SC_UNONAME_PERSREPR), 0,  &getCppuType((rtl::OUString*)0),    0, 0 },

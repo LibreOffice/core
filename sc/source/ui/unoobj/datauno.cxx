@@ -75,11 +75,11 @@ SV_IMPL_PTRARR( XDBRefreshListenerArr_Impl, XDBRefreshListenerPtr );
 
 //  alles ohne Which-ID, Map nur fuer PropertySetInfo
 
-const SfxItemPropertyMap* lcl_GetSubTotalPropertyMap()
+const SfxItemPropertyMapEntry* lcl_GetSubTotalPropertyMap()
 {
     // some old property names are for 5.2 compatibility
 
-    static SfxItemPropertyMap aSubTotalPropertyMap_Impl[] =
+    static SfxItemPropertyMapEntry aSubTotalPropertyMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNONAME_BINDFMT),  0,  &getBooleanCppuType(),       0, 0},
         {MAP_CHAR_LEN(SC_UNONAME_CASE),     0,  &getBooleanCppuType(),       0, 0},
@@ -98,9 +98,9 @@ const SfxItemPropertyMap* lcl_GetSubTotalPropertyMap()
     return aSubTotalPropertyMap_Impl;
 }
 
-const SfxItemPropertyMap* lcl_GetFilterPropertyMap()
+const SfxItemPropertyMapEntry* lcl_GetFilterPropertyMap()
 {
-    static SfxItemPropertyMap aFilterPropertyMap_Impl[] =
+    static SfxItemPropertyMapEntry aFilterPropertyMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNONAME_CONTHDR),  0,  &getBooleanCppuType(),                      0, 0},
         {MAP_CHAR_LEN(SC_UNONAME_COPYOUT),  0,  &getBooleanCppuType(),                      0, 0},
@@ -116,9 +116,9 @@ const SfxItemPropertyMap* lcl_GetFilterPropertyMap()
     return aFilterPropertyMap_Impl;
 }
 
-const SfxItemPropertyMap* lcl_GetDBRangePropertyMap()
+const SfxItemPropertyMapEntry* lcl_GetDBRangePropertyMap()
 {
-    static SfxItemPropertyMap aDBRangePropertyMap_Impl[] =
+    static SfxItemPropertyMapEntry aDBRangePropertyMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNONAME_AUTOFLT),  0,  &getBooleanCppuType(),                      0, 0},
         {MAP_CHAR_LEN(SC_UNONAME_FLTCRT),   0,  &getCppuType((table::CellRangeAddress*)0),  0, 0},

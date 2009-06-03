@@ -1133,7 +1133,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPSource::getPropertySetInfo(
 {
     ScUnoGuard aGuard;
 
-    static SfxItemPropertyMap aDPSourceMap_Impl[] =
+    static SfxItemPropertyMapEntry aDPSourceMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNO_COLGRAND), 0,  &getBooleanCppuType(),              0, 0 },
         {MAP_CHAR_LEN(SC_UNO_DATADESC), 0,  &getCppuType((rtl::OUString*)0),    beans::PropertyAttribute::READONLY, 0 },
@@ -1512,7 +1512,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPDimension::getPropertySetIn
 {
     ScUnoGuard aGuard;
 
-    static SfxItemPropertyMap aDPDimensionMap_Impl[] =
+    static SfxItemPropertyMapEntry aDPDimensionMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNO_FILTER),   0,  &getCppuType((uno::Sequence<sheet::TableFilterField>*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNO_FUNCTION), 0,  &getCppuType((sheet::GeneralFunction*)0),   0, 0 },
@@ -2197,7 +2197,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPLevel::getPropertySetInfo()
 {
     ScUnoGuard aGuard;
 
-    static SfxItemPropertyMap aDPLevelMap_Impl[] =
+    static SfxItemPropertyMapEntry aDPLevelMap_Impl[] =
     {
         //! change type of AutoShow/Layout/Sorting to API struct when available
         {MAP_CHAR_LEN(SC_UNO_AUTOSHOW), 0,  &getCppuType((sheet::DataPilotFieldAutoShowInfo*)0),     0, 0 },
@@ -2664,7 +2664,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPMember::getPropertySetInfo(
 {
     ScUnoGuard aGuard;
 
-    static SfxItemPropertyMap aDPMemberMap_Impl[] =
+    static SfxItemPropertyMapEntry aDPMemberMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNO_ISVISIBL), 0,  &getBooleanCppuType(),              0, 0 },
         {MAP_CHAR_LEN(SC_UNO_POSITION), 0,  &getCppuType((sal_Int32*)0),        0, 0 },
