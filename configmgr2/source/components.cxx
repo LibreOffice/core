@@ -35,6 +35,7 @@
 #include "boost/noncopyable.hpp"
 #include "com/sun/star/uno/Any.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
+#include "com/sun/star/uno/Sequence.hxx"
 #include "com/sun/star/uno/XInterface.hpp"
 #include "comphelper/sequenceasvector.hxx"
 #include "libxml/parser.h"
@@ -169,7 +170,8 @@ private:
 
 rtl::Reference< Node > NodeRef::getMember(rtl::OUString const &) {
     throw css::uno::RuntimeException(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("unresolved node-ref")), 0);
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("unresolved node-ref")),
+        css::uno::Reference< css::uno::XInterface >());
 }
 
 xmlDocPtr parseXmlFile(rtl::OUString const & url) {
@@ -181,7 +183,7 @@ xmlDocPtr parseXmlFile(rtl::OUString const & url) {
             (rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM("cannot get system path for ")) +
              url),
-            0);
+            css::uno::Reference< css::uno::XInterface >());
     }
     rtl::OString path2;
     if (!path1.convertToString(
@@ -193,7 +195,7 @@ xmlDocPtr parseXmlFile(rtl::OUString const & url) {
             (rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM("cannot translate system path ")) +
              path1),
-            0);
+            css::uno::Reference< css::uno::XInterface >());
     }
     xmlDocPtr doc(xmlParseFile(path2.getStr()));
     if (doc == 0) {
@@ -201,7 +203,7 @@ xmlDocPtr parseXmlFile(rtl::OUString const & url) {
             (rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM("xmlParseFile failed for ")) +
              url),
-            0);
+            css::uno::Reference< css::uno::XInterface >());
     }
     return doc;
 }
@@ -230,7 +232,7 @@ rtl::OUString getNameAttribute(xmlDocPtr doc, xmlNodePtr node) {
             (rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM("missing name attribute in ")) +
              fromXmlString(doc->URL)),
-            0);
+            css::uno::Reference< css::uno::XInterface >());
     }
     return fromXmlString(name.str);
 }
@@ -256,7 +258,7 @@ Operation getOperationAttribute(xmlDocPtr doc, xmlNodePtr node) {
             (rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM("invalid op attribute in ")) +
              fromXmlString(doc->URL)),
-            0);
+            css::uno::Reference< css::uno::XInterface >());
     }
 }
 
@@ -274,7 +276,7 @@ Type getTypeAttribute(xmlDocPtr doc, xmlNodePtr node) {
             (rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM("invalid type attribute ")) +
              fromXmlString(doc->URL)),
-            0);
+            css::uno::Reference< css::uno::XInterface >());
     }
     XmlString prefix(xmlStrsub(type.str, 0, p - type.str));
     xmlNsPtr ns(xmlSearchNs(doc, node, prefix.str));
@@ -283,7 +285,7 @@ Type getTypeAttribute(xmlDocPtr doc, xmlNodePtr node) {
             (rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM("invalid type attribute ")) +
              fromXmlString(doc->URL)),
-            0);
+            css::uno::Reference< css::uno::XInterface >());
     }
     if (xmlStrEqual(ns->href, xmlString("http://www.w3.org/2001/XMLSchema"))) {
         if (xmlStrEqual(p + 1, xmlString("boolean"))) {
@@ -326,7 +328,7 @@ Type getTypeAttribute(xmlDocPtr doc, xmlNodePtr node) {
         (rtl::OUString(
             RTL_CONSTASCII_USTRINGPARAM("invalid type attribute ")) +
          fromXmlString(doc->URL)),
-        0);
+        css::uno::Reference< css::uno::XInterface >());
 }
 
 bool getBooleanAttribute(
@@ -347,7 +349,7 @@ bool getBooleanAttribute(
         (rtl::OUString(
             RTL_CONSTASCII_USTRINGPARAM("bad boolean attribute value in ")) +
          fromXmlString(doc->URL)),
-        0);
+        css::uno::Reference< css::uno::XInterface >());
 }
 
 bool parseBooleanValue(
@@ -464,12 +466,58 @@ bool parseStringValue(
     return true;
 }
 
-bool parseHexbinaryValue(
-    xmlChar const * text, xmlChar const * /*end*/,
-    css::uno::Sequence< sal_Int8 > * value)
+enum ParseResult { PARSE_END, PARSE_GOOD, PARSE_BAD };
+
+ParseResult parseHexDigit(
+    xmlChar const * text, xmlChar const * end, int * value)
 {
     OSL_ASSERT(text != 0 && value != 0);
-    if(true)abort();*(char*)0=0;throw 0;//TODO
+    if (end == 0 ? *text == '\0' : text == end) {
+        return PARSE_END;
+    }
+    xmlChar c = *text;
+    if (c >= '0' && c <= '9') {
+        *value = c - '0';
+        return PARSE_GOOD;
+    }
+    if (c >= 'A' && c <= 'F') {
+        *value = c - 'A' + 10;
+        return PARSE_GOOD;
+    }
+    if (c >= 'a' && c <= 'f') {
+        *value = c - 'a' + 10;
+        return PARSE_GOOD;
+    }
+    return PARSE_BAD;
+}
+
+bool parseHexbinaryValue(
+    xmlChar const * text, xmlChar const * end,
+    css::uno::Sequence< sal_Int8 > * value)
+{
+    OSL_ASSERT((text != 0 || end == 0) && value != 0);
+    comphelper::SequenceAsVector< sal_Int8 > seq;
+    if (text != 0) {
+        for (xmlChar const * p = text;;) {
+            int n1;
+            switch (parseHexDigit(p++, end, &n1)) {
+            case PARSE_END:
+                goto done;
+            case PARSE_GOOD:
+                break;
+            case PARSE_BAD:
+                return false;
+            }
+            int n2;
+            if (parseHexDigit(p++, end, &n2) != PARSE_GOOD) {
+                return false;
+            }
+            seq.push_back(static_cast< sal_Int8 >((n1 << 4) | n2));
+        }
+    done:;
+    }
+    *value = seq.getAsConstList();
+    return true;
 }
 
 template< typename T > bool parseListValue(
@@ -574,11 +622,14 @@ css::uno::Any parseValue(xmlDocPtr doc, xmlNodePtr node, Type type) {
         }
         break;
     case TYPE_HEXBINARY:
-        //TODO: text.str == 0 OK?  xmlSchemaCollapseString?
-        if (text.str != 0) {
-            XmlString col(xmlSchemaCollapseString(text.str));
-            double val;
-            if (parseDoubleValue(col.str == 0 ? text.str : col.str, 0, &val)) {
+        {
+            XmlString col;
+            if (text.str != 0) {
+                col = xmlSchemaCollapseString(text.str);
+            }
+            css::uno::Sequence< sal_Int8 > val;
+            if (parseHexbinaryValue(col.str == 0 ? text.str : col.str, 0, &val))
+            {
                 return css::uno::makeAny(val);
             }
         }
@@ -588,7 +639,7 @@ css::uno::Any parseValue(xmlDocPtr doc, xmlNodePtr node, Type type) {
             (rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM("invalid value of type any in ")) +
              fromXmlString(doc->URL)),
-            0);
+            css::uno::Reference< css::uno::XInterface >());
     case TYPE_BOOLEAN_LIST:
         {
             css::uno::Sequence< sal_Bool > val;
@@ -652,7 +703,7 @@ css::uno::Any parseValue(xmlDocPtr doc, xmlNodePtr node, Type type) {
     throw css::uno::RuntimeException(
         (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("invalid value in ")) +
          fromXmlString(doc->URL)),
-        0);
+        css::uno::Reference< css::uno::XInterface >());
 }
 
 rtl::OUString parseTemplateReference(
@@ -672,7 +723,7 @@ rtl::OUString parseTemplateReference(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "xcs: missing node-type attribute in ")) +
              fromXmlString(doc->URL)),
-            0);
+            css::uno::Reference< css::uno::XInterface >());
     }
     XmlString component(
         xmlGetNsProp(
@@ -723,7 +774,7 @@ Node * parseXcsSet(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "xcs: bad set content in ")) +
              fromXmlString(doc->URL)),
-            0);
+            css::uno::Reference< css::uno::XInterface >());
     }
     return new SetNode(
         parent, parseTemplateReference(componentName, doc, node, 0), additional,
@@ -749,7 +800,7 @@ void parseXcsGroupContent(
                         RTL_CONSTASCII_USTRINGPARAM(
                             "xcs: missing type attribute in ")) +
                      fromXmlString(doc->URL)),
-                    0);
+                    css::uno::Reference< css::uno::XInterface >());
             }
             xmlNodePtr q(skipBlank(p->xmlChildrenNode));
             if (isOorElement(q, "info")) {
@@ -771,7 +822,7 @@ void parseXcsGroupContent(
                         RTL_CONSTASCII_USTRINGPARAM(
                             "xcs: bad prop content in ")) +
                      fromXmlString(doc->URL)),
-                    0);
+                    css::uno::Reference< css::uno::XInterface >());
             }
             if (getBooleanAttribute(
                     doc, p, "http://openoffice.org/2001/registry", "localized",
@@ -804,7 +855,7 @@ void parseXcsGroupContent(
                         RTL_CONSTASCII_USTRINGPARAM(
                             "xcs: bad set content in ")) +
                      fromXmlString(doc->URL)),
-                    0);
+                    css::uno::Reference< css::uno::XInterface >());
             }
             member = new NodeRef(
                 group.get(), parseTemplateReference(componentName, doc, p, 0),
@@ -821,7 +872,7 @@ void parseXcsGroupContent(
                     RTL_CONSTASCII_USTRINGPARAM(
                         "xcs: bad component-schema/component content in ")) +
                  fromXmlString(doc->URL)),
-                0);
+                css::uno::Reference< css::uno::XInterface >());
         }
         if (!group->getMembers().insert(
                 NodeMap::value_type(getNameAttribute(doc, p), member)).
@@ -832,7 +883,7 @@ void parseXcsGroupContent(
                     RTL_CONSTASCII_USTRINGPARAM(
                         "xcs: multiple members with same name in ")) +
                  fromXmlString(doc->URL)),
-                0);
+                css::uno::Reference< css::uno::XInterface >());
         }
     }
 }
@@ -866,7 +917,7 @@ xmlNodePtr parseXcsTemplates(
                     RTL_CONSTASCII_USTRINGPARAM(
                         "xcs: bad component-schema/templates content in ")) +
                  fromXmlString(doc->URL)),
-                0);
+                css::uno::Reference< css::uno::XInterface >());
         }
         if (!templates->insert(NodeMap::value_type(tmplName, tmpl)).second) {
             throw css::uno::RuntimeException(
@@ -874,7 +925,7 @@ xmlNodePtr parseXcsTemplates(
                     RTL_CONSTASCII_USTRINGPARAM(
                         "xcs: multiple templates with same name in ")) +
                  fromXmlString(doc->URL)),
-                0);
+                css::uno::Reference< css::uno::XInterface >());
         }
     }
     return node->next;
@@ -890,7 +941,7 @@ xmlNodePtr parseXcsComponent(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "xcs: bad component-schema content in ")) +
              fromXmlString(doc->URL)),
-            0);
+            css::uno::Reference< css::uno::XInterface >());
     }
     rtl::Reference< GroupNode > comp(new GroupNode(0, false, rtl::OUString()));
     parseXcsGroupContent(component, doc, node, comp, templates);
@@ -901,7 +952,7 @@ xmlNodePtr parseXcsComponent(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "xcs: multiply defined component-schema in ")) +
              fromXmlString(doc->URL)),
-            0);
+            css::uno::Reference< css::uno::XInterface >());
     }
     return node->next;
 }
@@ -917,7 +968,7 @@ void parseXcsFile(
             (rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM("xcs: no root element in ")) +
              fromXmlString(doc.doc->URL)),
-            0);
+            css::uno::Reference< css::uno::XInterface >());
     }
     if (!xmlStrEqual(root->name, xmlString("component-schema")) ||
         root->ns == 0 ||
@@ -929,7 +980,7 @@ void parseXcsFile(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "xcs: non component-schema root element in ")) +
              fromXmlString(doc.doc->URL)),
-            0);
+            css::uno::Reference< css::uno::XInterface >());
     }
     XmlString package(
         xmlGetNsProp(
@@ -941,7 +992,7 @@ void parseXcsFile(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "xcs: no root package attribute in ")) +
              fromXmlString(doc.doc->URL)),
-            0);
+            css::uno::Reference< css::uno::XInterface >());
     }
     rtl::OUStringBuffer buf(fromXmlString(package.str));
     buf.append(sal_Unicode('.'));
@@ -966,7 +1017,7 @@ void parseXcsFile(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "xcs: bad component-schema content in ")) +
              fromXmlString(doc.doc->URL)),
-            0);
+            css::uno::Reference< css::uno::XInterface >());
     }
 }
 
@@ -995,7 +1046,7 @@ void parseXcuNode(
                                 RTL_CONSTASCII_USTRINGPARAM(
                                     "xcu: inappropriate prop in ")) +
                              fromXmlString(doc->URL)),
-                            0);
+                            css::uno::Reference< css::uno::XInterface >());
                     }
                 }
                 Type type(getTypeAttribute(doc, p));
@@ -1005,7 +1056,7 @@ void parseXcuNode(
                             RTL_CONSTASCII_USTRINGPARAM(
                                 "xcu: invalid type attribute in ")) +
                          fromXmlString(doc->URL)),
-                        0);
+                        css::uno::Reference< css::uno::XInterface >());
                 }
                 //TODO: oor:finalized attributes
                 xmlNodePtr q(skipBlank(p->xmlChildrenNode));
@@ -1022,7 +1073,7 @@ void parseXcuNode(
                                     RTL_CONSTASCII_USTRINGPARAM(
                                         "xcu: missing type attribute in ")) +
                                  fromXmlString(doc->URL)),
-                                0);
+                                css::uno::Reference< css::uno::XInterface >());
                         }
                         if (type == TYPE_ANY) {
                             throw css::uno::RuntimeException(
@@ -1030,7 +1081,7 @@ void parseXcuNode(
                                     RTL_CONSTASCII_USTRINGPARAM(
                                         "xcu: missing type attribute in ")) +
                                  fromXmlString(doc->URL)),
-                                0);
+                                css::uno::Reference< css::uno::XInterface >());
                         }
                     }
                     bool nil = getBooleanAttribute(
@@ -1046,7 +1097,7 @@ void parseXcuNode(
                                     "xcu: xsi:nil attribute for non-nillable"
                                     " prop in ")) +
                              fromXmlString(doc->URL)),
-                            0);
+                            css::uno::Reference< css::uno::XInterface >());
                     }
                     XmlString lang(xmlNodeGetLang(q));
                     if (lang.str != 0 && localized == 0) {
@@ -1056,7 +1107,7 @@ void parseXcuNode(
                                     "xcu: xml:lang attribute for non-localized"
                                     " prop in ")) +
                              fromXmlString(doc->URL)),
-                            0);
+                            css::uno::Reference< css::uno::XInterface >());
                     }
                     // For nil values, any actually provided value is simply
                     // ignored for now:
@@ -1074,7 +1125,7 @@ void parseXcuNode(
                                     "xcu: multiple values (for same xml:lang)"
                                     " in ")) +
                              fromXmlString(doc->URL)),
-                            0);
+                            css::uno::Reference< css::uno::XInterface >());
                     }
                     q = skipBlank(q->next);
                 }
@@ -1084,7 +1135,7 @@ void parseXcuNode(
                             RTL_CONSTASCII_USTRINGPARAM(
                                 "xcu: bad prop content in ")) +
                          fromXmlString(doc->URL)),
-                        0);
+                        css::uno::Reference< css::uno::XInterface >());
                 }
                 if (i == group->getMembers().end()) {
                     if (!group->isExtensible()) {
@@ -1093,7 +1144,7 @@ void parseXcuNode(
                                 RTL_CONSTASCII_USTRINGPARAM(
                                     "xcu: unknown prop name in ")) +
                              fromXmlString(doc->URL)),
-                            0);
+                            css::uno::Reference< css::uno::XInterface >());
                     }
                     switch (getOperationAttribute(doc, p)) {
                     case OPERATION_MODIFY:
@@ -1103,7 +1154,7 @@ void parseXcuNode(
                                     "xcu: invalid modify of extension property"
                                     " in ")) +
                              fromXmlString(doc->URL)),
-                            0);
+                            css::uno::Reference< css::uno::XInterface >());
                     case OPERATION_REPLACE:
                     case OPERATION_FUSE:
                         group->getMembers().insert(
@@ -1162,7 +1213,8 @@ void parseXcuNode(
                                             "xcu: invalid remove of"
                                             " non-extension property in ")) +
                                      fromXmlString(doc->URL)),
-                                    0);
+                                    css::uno::Reference<
+                                        css::uno::XInterface >());
                             }
                             rtl::Reference< Node > removed(i->second);
                             group->getMembers().erase(i);
@@ -1179,7 +1231,7 @@ void parseXcuNode(
                             RTL_CONSTASCII_USTRINGPARAM(
                                 "xcu: invalid operation on group node in")) +
                          fromXmlString(doc->URL)),
-                        0);
+                        css::uno::Reference< css::uno::XInterface >());
                 }
                 //TODO: oor:component, oor:finalized, oor:mandatory, oor:node-type attributes
                 NodeMap::iterator i(
@@ -1191,7 +1243,7 @@ void parseXcuNode(
                             RTL_CONSTASCII_USTRINGPARAM(
                                 "xcu: unknown node name in ")) +
                          fromXmlString(doc->URL)),
-                        0);
+                        css::uno::Reference< css::uno::XInterface >());
                 }
                 parseXcuNode(componentName, templates, doc, p, i->second);
             } else {
@@ -1200,7 +1252,7 @@ void parseXcuNode(
                         RTL_CONSTASCII_USTRINGPARAM(
                             "xcu: bad component-data or node content in ")) +
                      fromXmlString(doc->URL)),
-                    0);
+                    css::uno::Reference< css::uno::XInterface >());
             }
         }
     } else if (SetNode * set = dynamic_cast< SetNode * >(node.get())) {
@@ -1214,7 +1266,7 @@ void parseXcuNode(
                             "xcu: non-node element within set node element"
                             " in ")) +
                      fromXmlString(doc->URL)),
-                    0);
+                    css::uno::Reference< css::uno::XInterface >());
             }
             rtl::OUString name(getNameAttribute(doc, p));
             rtl::OUString templateName(
@@ -1227,7 +1279,7 @@ void parseXcuNode(
                             "xcu: set member node references invalid template"
                             " in ")) +
                      fromXmlString(doc->URL)),
-                    0);
+                    css::uno::Reference< css::uno::XInterface >());
             }
             Components::TemplateMap::const_iterator i(
                 templates.find(templateName));
@@ -1238,7 +1290,7 @@ void parseXcuNode(
                             "xcu: set member node references undefined template"
                             " in ")) +
                      fromXmlString(doc->URL)),
-                    0);
+                    css::uno::Reference< css::uno::XInterface >());
             }
             switch (getOperationAttribute(doc, p)) {
             case OPERATION_MODIFY:
@@ -1252,7 +1304,7 @@ void parseXcuNode(
                                     "xcu: invalid modify of unknown set member"
                                     " node in ")) +
                              fromXmlString(doc->URL)),
-                            0);
+                            css::uno::Reference< css::uno::XInterface >());
                     }
                     parseXcuNode(componentName, templates, doc, p, j->second);
                 }
@@ -1307,7 +1359,7 @@ void parseXcuNode(
             (rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM("xcu: inappropriate node in ")) +
              fromXmlString(doc->URL)),
-            0);
+            css::uno::Reference< css::uno::XInterface >());
     }
 }
 
@@ -1322,7 +1374,7 @@ void parseXcuFile(
             (rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM("xcu: no root element in ")) +
              fromXmlString(doc.doc->URL)),
-            0);
+            css::uno::Reference< css::uno::XInterface >());
     }
     if (!xmlStrEqual(root->name, xmlString("component-data")) ||
         root->ns == 0 ||
@@ -1334,7 +1386,7 @@ void parseXcuFile(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "xcu: non component-data root element in ")) +
              fromXmlString(doc.doc->URL)),
-            0);
+            css::uno::Reference< css::uno::XInterface >());
     }
     XmlString package(
         xmlGetNsProp(
@@ -1346,7 +1398,7 @@ void parseXcuFile(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "xcu: no root package attribute in ")) +
              fromXmlString(doc.doc->URL)),
-            0);
+            css::uno::Reference< css::uno::XInterface >());
     }
     rtl::OUStringBuffer buf(fromXmlString(package.str));
     buf.append(sal_Unicode('.'));
@@ -1360,7 +1412,7 @@ void parseXcuFile(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "xcu: unknown component-data name in ")) +
              fromXmlString(doc.doc->URL)),
-            0);
+            css::uno::Reference< css::uno::XInterface >());
     }
     parseXcuNode(comp, *templates, doc.doc, root, i->second);
 }
@@ -1386,7 +1438,7 @@ void parseFiles(
             (rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM("cannot open directory ")) +
              url),
-            0);
+            css::uno::Reference< css::uno::XInterface >());
     }
     for (;;) {
         osl::DirectoryItem i;
@@ -1399,7 +1451,7 @@ void parseFiles(
                 (rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM("cannot iterate directory ")) +
                  url),
-                0);
+                css::uno::Reference< css::uno::XInterface >());
         }
         osl::FileStatus stat(
             FileStatusMask_Type | FileStatusMask_FileName |
@@ -1409,7 +1461,7 @@ void parseFiles(
                 (rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM("cannot stat in directory ")) +
                  url),
-                0);
+                css::uno::Reference< css::uno::XInterface >());
         }
         if (stat.getFileType() == osl::FileStatus::Directory) { //TODO: symlinks
             parseFiles(
@@ -1584,7 +1636,7 @@ rtl::Reference< Node > Components::resolvePath(
         if (!parseSegment(segment, &seg, &setElement, &templateName)) {
             throw css::uno::RuntimeException(
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bad path ")) + path,
-                0);
+                css::uno::Reference< css::uno::XInterface >());
         }
         if (setElement) {
             SetNode * set = dynamic_cast< SetNode * >(p.get());
@@ -1595,11 +1647,32 @@ rtl::Reference< Node > Components::resolvePath(
                 throw css::uno::RuntimeException(
                     (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bad path ")) +
                      path),
-                    0);
+                    css::uno::Reference< css::uno::XInterface >());
             }
             p = set->getMember(seg);
             if (templateName.getLength() != 0 && p != 0) {
-                //TODO: check match
+                rtl::OUString name;
+                if (GroupNode * member = dynamic_cast< GroupNode * >(p.get())) {
+                    name = member->getTemplateName();
+                } else if (SetNode * member =
+                           dynamic_cast< SetNode * >(p.get()))
+                {
+                    name = member->getTemplateName();
+                } else {
+                    OSL_ASSERT(false);
+                    throw css::uno::RuntimeException(
+                        rtl::OUString(
+                            RTL_CONSTASCII_USTRINGPARAM("this cannot happen")),
+                        css::uno::Reference< css::uno::XInterface >());
+                }
+                OSL_ASSERT(name.getLength() != 0);
+                if (templateName != name) {
+                    throw css::uno::RuntimeException(
+                        (rtl::OUString(
+                            RTL_CONSTASCII_USTRINGPARAM("bad path ")) +
+                         path),
+                        css::uno::Reference< css::uno::XInterface >());
+                }
             }
         } else {
             // For backwards compatibility, allow set members to be accessed

@@ -675,7 +675,7 @@ void Access::insertByName(
         child->setStatus(ChildAccess::STATUS_ADDED);
         //TODO notify change
     } else if (SetNode * set = dynamic_cast< SetNode * >(p.get())) {
-        if (set->getMember(aName).is()) {
+        if (getChild(aName).is()) {
             throw css::container::ElementExistException(
                 aName, static_cast< cppu::OWeakObject * >(this));
         }
@@ -687,17 +687,24 @@ void Access::insertByName(
                 reinterpret_cast< ChildAccess * >(
                     tunnel->getSomething(ChildAccess::getTunnelId())));
         }
+        if (!freeAcc.is() ||
+            freeAcc->getStatus() != ChildAccess::STATUS_UNMODIFIED)
+        {
+            throw css::lang::IllegalArgumentException(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "configmgr insertByName inappropriate set element")),
+                static_cast< cppu::OWeakObject * >(this), 1);
+        }
         rtl::OUString tmplName;
-        if (freeAcc.is()) {
-            if (GroupNode * freeGroup = dynamic_cast< GroupNode * >(
-                    freeAcc->getNode().get()))
-            {
-                tmplName = freeGroup->getTemplateName();
-            } else if (SetNode * freeSet = dynamic_cast< SetNode * >(
-                           freeAcc->getNode().get()))
-            {
-                tmplName = freeSet->getTemplateName();
-            }
+        if (GroupNode * freeGroup = dynamic_cast< GroupNode * >(
+                freeAcc->getNode().get()))
+        {
+            tmplName = freeGroup->getTemplateName();
+        } else if (SetNode * freeSet = dynamic_cast< SetNode * >(
+                       freeAcc->getNode().get()))
+        {
+            tmplName = freeSet->getTemplateName();
         }
         if (!set->isValidTemplate(tmplName)) {
             throw css::lang::IllegalArgumentException(
@@ -742,7 +749,6 @@ void Access::removeByName(rtl::OUString const & aName)
                 aName, static_cast< cppu::OWeakObject * >(this));
         }
         child->setStatus(ChildAccess::STATUS_REMOVED);
-        prop->unbind(); // must not throw
         //TODO notify change
     } else if (dynamic_cast< SetNode * >(p.get()) != 0) {
         rtl::Reference< ChildAccess > child(getChild(aName));

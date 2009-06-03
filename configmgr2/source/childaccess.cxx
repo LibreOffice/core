@@ -133,19 +133,21 @@ void ChildAccess::reportChanges(
     std::vector< css::util::ElementChange > * changes) const
 {
     OSL_ASSERT(changes != 0);
-    switch (status_) {
-    case STATUS_CHANGED:
-        changes->push_back(css::util::ElementChange()); //TODO
-        break;
-    case STATUS_ADDED:
-        changes->push_back(css::util::ElementChange()); //TODO
-        // fall through
-    case STATUS_UNMODIFIED:
+    if (status_ != STATUS_REMOVED) {
         for (HardChildMap::const_iterator i(modifiedChildren_.begin());
              i != modifiedChildren_.end(); ++i)
         {
             i->second->reportChanges(changes);
         }
+    }
+    switch (status_) {
+    case STATUS_UNMODIFIED:
+        break;
+    case STATUS_CHANGED:
+        changes->push_back(css::util::ElementChange()); //TODO
+        break;
+    case STATUS_ADDED:
+        changes->push_back(css::util::ElementChange()); //TODO
         break;
     case STATUS_REMOVED:
         changes->push_back(css::util::ElementChange()); //TODO
@@ -207,7 +209,11 @@ void ChildAccess::commitChanges() {
         {
             rtl::Reference< Node > p(parent_->getNode());
             if (GroupNode * group = dynamic_cast< GroupNode * >(p.get())) {
-                group->getMembers().erase(name_);
+                NodeMap::iterator i(group->getMembers().find(name_));
+                OSL_ASSERT(i != group->getMembers().end());
+                rtl::Reference< Node > child(i->second);
+                group->getMembers().erase(i);
+                child->unbind(); // must not throw
             } else if (SetNode * set = dynamic_cast< SetNode * >(p.get())) {
                 set->getMembers().erase(name_);
             } else {
