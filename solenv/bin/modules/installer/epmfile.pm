@@ -2519,7 +2519,7 @@ sub create_packages_without_epm
 
         # saving globally for later usage
         $installer::globals::rpmcommand = $rpmcommand;
-        $installer::globals::rpmquerycommand = "rpm"; # For queries "rpm" is used, not "rpmbuild" (for this call the LD_LIBRARY_PATH is not required!)
+        $installer::globals::rpmquerycommand = "rpm";
 
         my $target = "";
         if ( $installer::globals::compiler =~ /unxlngi/) { $target = "i586"; }
@@ -2536,7 +2536,7 @@ sub create_packages_without_epm
             $buildrootstring = "--buildroot=$buildroot";
         }
 
-        my $systemcall = "$rpmcommand -bb $specfilename --target $target $buildrootstring 2\>\&1 |";
+        my $systemcall = "$rpmcommand -bb --define \"_unpackaged_files_terminate_build  0\" $specfilename --target $target $buildrootstring 2\>\&1 |";
 
         installer::logger::print_message( "... $systemcall ...\n" );
 
