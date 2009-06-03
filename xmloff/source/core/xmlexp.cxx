@@ -208,6 +208,7 @@ public:
     ::comphelper::UnoInterfaceToUniqueIdentifierMapper  maInterfaceToIdentifierMapper;
     uno::Reference< uri::XUriReferenceFactory >         mxUriReferenceFactory;
     rtl::OUString                                       msPackageURI;
+    rtl::OUString                                       msPackageURIScheme;
     // --> OD 2006-09-27 #i69627#
     sal_Bool                                            mbOutlineStyleAsNormalListStyle;
     // <--
@@ -226,6 +227,13 @@ public:
     sal_Bool                                            mbExportTextNumberElement;
     // <--
     sal_Bool                                            mbNullDateInitialized;
+
+    void SetSchemeOf( const ::rtl::OUString& rOrigFileName )
+    {
+        sal_Int32 nSep = rOrigFileName.indexOf(':');
+        if( nSep != -1 )
+            msPackageURIScheme = rOrigFileName.copy( 0, nSep );
+    }
 };
 
 SvXMLExport_Impl::SvXMLExport_Impl()
@@ -425,6 +433,7 @@ SvXMLExport::SvXMLExport(
     msWS( GetXMLToken(XML_WS) ),
     mbSaveLinkedSections(sal_True)
 {
+    mpImpl->SetSchemeOf( msOrigFileName );
     DBG_ASSERT( mxServiceFactory.is(), "got no service manager" );
     _InitCtor();
 
@@ -464,6 +473,7 @@ SvXMLExport::SvXMLExport(
     msWS( GetXMLToken(XML_WS) ),
     mbSaveLinkedSections(sal_True)
 {
+    mpImpl->SetSchemeOf( msOrigFileName );
     DBG_ASSERT( mxServiceFactory.is(), "got no service manager" );
     _InitCtor();
 
@@ -504,6 +514,7 @@ SvXMLExport::SvXMLExport(
     msWS( GetXMLToken(XML_WS) ),
     mbSaveLinkedSections(sal_True)
 {
+    mpImpl->SetSchemeOf( msOrigFileName );
     DBG_ASSERT( mxServiceFactory.is(), "got no service manager" );
     _InitCtor();
 
@@ -727,6 +738,7 @@ void SAL_CALL SvXMLExport::initialize( const uno::Sequence< uno::Any >& aArgumen
             uno::Any aAny = mxExportInfo->getPropertyValue(sPropName);
             aAny >>= msOrigFileName;
             mpImpl->msPackageURI = msOrigFileName;
+            mpImpl->SetSchemeOf( msOrigFileName );
         }
         OUString sRelPath;
         sPropName = OUString( RTL_CONSTASCII_USTRINGPARAM("StreamRelPath" ) );
@@ -2112,11 +2124,12 @@ OUString SvXMLExport::GetRelativeReference(const OUString& rValue)
     OUString sValue( rValue );
     // #i65474# handling of fragment URLs ("#....") is undefined
     // they are stored 'as is'
+    uno::Reference< uri::XUriReference > xUriRef;
     if(sValue.getLength() && sValue.getStr()[0] != '#')
     {
         try
         {
-            uno::Reference< uri::XUriReference > xUriRef = mpImpl->mxUriReferenceFactory->parse( rValue );
+            xUriRef = mpImpl->mxUriReferenceFactory->parse( rValue );
             if( xUriRef.is() && !xUriRef->isAbsolute() )
             {
                 //#i61943# relative URLs need special handling
@@ -2129,7 +2142,17 @@ OUString SvXMLExport::GetRelativeReference(const OUString& rValue)
         {
         }
     }
-    return URIHelper::simpleNormalizedMakeRelative(msOrigFileName, sValue);
+    OUString sRet = sValue;
+    if( xUriRef.is() )//no conversion for empty values or for fragments
+    {
+        //conversion for matching schemes only
+        if( xUriRef->getScheme() == mpImpl->msPackageURIScheme )
+        {
+            sValue = INetURLObject::GetRelURL( msOrigFileName, sValue,
+                INetURLObject::WAS_ENCODED, INetURLObject::DECODE_TO_IURI, RTL_TEXTENCODING_UTF8, INetURLObject::FSYS_DETECT);
+        }
+    }
+    return sValue;
 }
 
 void SvXMLExport::StartElement(sal_uInt16 nPrefix,

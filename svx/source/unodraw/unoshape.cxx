@@ -121,10 +121,10 @@ using namespace ::com::sun::star::container;
     if( rType == ::getCppuType((const uno::Reference< xint >*)0) ) \
         aAny <<= uno::Reference< xint >(this)
 
-const SfxItemPropertyMap* ImplGetSvxUnoOutlinerTextCursorPropertyMap()
+const SfxItemPropertyMapEntry* ImplGetSvxUnoOutlinerTextCursorPropertyMap()
 {
     // Propertymap fuer einen Outliner Text
-    static const SfxItemPropertyMap aSvxUnoOutlinerTextCursorPropertyMap[] =
+    static const SfxItemPropertyMapEntry aSvxUnoOutlinerTextCursorPropertyMap[] =
     {
         SVX_UNOEDIT_CHAR_PROPERTIES,
         SVX_UNOEDIT_FONT_PROPERTIES,
@@ -137,24 +137,15 @@ const SfxItemPropertyMap* ImplGetSvxUnoOutlinerTextCursorPropertyMap()
 
     return aSvxUnoOutlinerTextCursorPropertyMap;
 }
-
-const SfxItemPropertyMap* ImplGetSvxTextPortionPropertyMap()
+const SfxItemPropertySet* ImplGetSvxUnoOutlinerTextCursorSfxPropertySet()
 {
-    // Propertymap fuer einen Outliner Text
-    static const SfxItemPropertyMap aSvxTextPortionPropertyMap[] =
-    {
-        SVX_UNOEDIT_CHAR_PROPERTIES,
-        SVX_UNOEDIT_FONT_PROPERTIES,
-        SVX_UNOEDIT_OUTLINER_PROPERTIES,
-        SVX_UNOEDIT_PARA_PROPERTIES,
-        {MAP_CHAR_LEN("TextField"),                     EE_FEATURE_FIELD,   &::getCppuType((const uno::Reference< text::XTextField >*)0),   beans::PropertyAttribute::READONLY, 0 },
-        {MAP_CHAR_LEN("TextPortionType"),               WID_PORTIONTYPE,    &::getCppuType((const ::rtl::OUString*)0), beans::PropertyAttribute::READONLY, 0 },
-        {MAP_CHAR_LEN("TextUserDefinedAttributes"),         EE_CHAR_XMLATTRIBS,     &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,        0,     0},
-        {MAP_CHAR_LEN("ParaUserDefinedAttributes"),         EE_PARA_XMLATTRIBS,     &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,        0,     0},
-        {0,0,0,0,0,0}
-    };
-
-    return aSvxTextPortionPropertyMap;
+    static SfxItemPropertySet aTextCursorSfxPropertySet( ImplGetSvxUnoOutlinerTextCursorPropertyMap() );
+    return &aTextCursorSfxPropertySet;
+}
+const SvxItemPropertySet* ImplGetSvxUnoOutlinerTextCursorSvxPropertySet()
+{
+    static SvxItemPropertySet aTextCursorSvxPropertySet( ImplGetSvxUnoOutlinerTextCursorPropertyMap() );
+    return &aTextCursorSvxPropertySet;
 }
 
 class GDIMetaFile;
@@ -189,7 +180,8 @@ SvxShape::SvxShape( SdrObject* pObject ) throw()
 :   maSize(100,100)
 ,   mpImpl(NULL)
 ,   mbIsMultiPropertyCall(false)
-,   maPropSet(aSvxMapProvider.GetMap(SVXMAP_SHAPE))
+,   mpPropSet(aSvxMapProvider.GetPropertySet(SVXMAP_SHAPE))
+,   maPropMapEntries(aSvxMapProvider.GetMap(SVXMAP_SHAPE))
 ,   maDisposeListeners( maMutex )
 ,   mbDisposing( false )
 ,   mpObj(pObject)
@@ -201,11 +193,12 @@ SvxShape::SvxShape( SdrObject* pObject ) throw()
 }
 
 //----------------------------------------------------------------------
-SvxShape::SvxShape( SdrObject* pObject, const SfxItemPropertyMap* pPropertyMap ) throw()
+SvxShape::SvxShape( SdrObject* pObject, const SfxItemPropertyMapEntry* pEntries, const SvxItemPropertySet* pPropertySet ) throw()
 :   maSize(100,100)
 ,   mpImpl(NULL)
 ,   mbIsMultiPropertyCall(false)
-,   maPropSet(pPropertyMap)
+,   mpPropSet(pPropertySet)
+,   maPropMapEntries(pEntries)
 ,   maDisposeListeners( maMutex )
 ,   mbDisposing( false )
 ,   mpObj(pObject)
@@ -221,7 +214,8 @@ SvxShape::SvxShape() throw()
 :   maSize(100,100)
 ,   mpImpl(NULL)
 ,   mbIsMultiPropertyCall(false)
-,   maPropSet(aSvxMapProvider.GetMap(SVXMAP_SHAPE))
+,   mpPropSet(aSvxMapProvider.GetPropertySet(SVXMAP_SHAPE))
+,   maPropMapEntries(aSvxMapProvider.GetMap(SVXMAP_SHAPE))
 ,   maDisposeListeners( maMutex )
 ,   mbDisposing( false )
 ,   mpObj(NULL)
@@ -467,7 +461,7 @@ void SvxShape::Create( SdrObject* pNewObj, SvxDrawPage* /*pNewPage*/ ) throw()
 
         Init();
 
-        ObtainSettingsFromPropertySet( maPropSet );
+        ObtainSettingsFromPropertySet( *mpPropSet );
 
         // save user call
         SdrObjUserCall* pUser = mpObj->GetUserCall();
@@ -551,37 +545,6 @@ void SvxShape::ForceMetricToItemPoolMetric(Pair& rPoint) const throw()
 }
 
 //----------------------------------------------------------------------
-// --> OD 2009-01-16 #i59051#
-void SvxShape::ForceMetricToItemPoolMetric(basegfx::B2DPolyPolygon& rPolyPolygon) const throw()
-{
-    DBG_TESTSOLARMUTEX();
-    if(mpModel)
-    {
-        SfxMapUnit eMapUnit = mpModel->GetItemPool().GetMetric(0);
-        if(eMapUnit != SFX_MAPUNIT_100TH_MM)
-        {
-            switch(eMapUnit)
-            {
-                case SFX_MAPUNIT_TWIP :
-                {
-                    basegfx::B2DHomMatrix aTransform;
-                    const double fMMToTWIPS(72.0 / 127.0);
-
-                    aTransform.scale(fMMToTWIPS, fMMToTWIPS);
-                    rPolyPolygon.transform(aTransform);
-                    break;
-                }
-                default:
-                {
-                    DBG_ERROR("Missing unit translation to PoolMetric!");
-                }
-            }
-        }
-    }
-}
-// <--
-
-//----------------------------------------------------------------------
 void SvxShape::ForceMetricTo100th_mm(Pair& rPoint) const throw()
 {
     DBG_TESTSOLARMUTEX();
@@ -609,45 +572,14 @@ void SvxShape::ForceMetricTo100th_mm(Pair& rPoint) const throw()
 }
 
 //----------------------------------------------------------------------
-// --> OD 2009-01-16 #i59051#
-void SvxShape::ForceMetricTo100th_mm(basegfx::B2DPolyPolygon& rPolyPolygon) const throw()
-{
-    DBG_TESTSOLARMUTEX();
-    SfxMapUnit eMapUnit = SFX_MAPUNIT_100TH_MM;
-    if(mpModel)
-    {
-        eMapUnit = mpModel->GetItemPool().GetMetric(0);
-        if(eMapUnit != SFX_MAPUNIT_100TH_MM)
-        {
-            switch(eMapUnit)
-            {
-                case SFX_MAPUNIT_TWIP :
-                {
-                    basegfx::B2DHomMatrix aTransform;
-                    const double fTWIPSToMM(127.0 / 72.0);
-
-                    aTransform.scale(fTWIPSToMM, fTWIPSToMM);
-                    rPolyPolygon.transform(aTransform);
-                    break;
-                }
-                default:
-                {
-                    DBG_ERROR("Missing unit translation to 100th mm!");
-                }
-            }
-        }
-    }
-}
-// <--
-//----------------------------------------------------------------------
-void SvxShape::ObtainSettingsFromPropertySet(SvxItemPropertySet& rPropSet) throw()
+void SvxShape::ObtainSettingsFromPropertySet(const SvxItemPropertySet& rPropSet) throw()
 {
     DBG_TESTSOLARMUTEX();
     if(mpObj.is() && rPropSet.AreThereOwnUsrAnys() && mpModel)
     {
         SfxItemSet aSet( mpModel->GetItemPool(), SDRATTR_START, SDRATTR_END, 0);
         Reference< beans::XPropertySet > xShape( (OWeakObject*)this, UNO_QUERY );
-        maPropSet.ObtainSettingsFromPropertySet(rPropSet, aSet, xShape);
+        mpPropSet->ObtainSettingsFromPropertySet(rPropSet, aSet, xShape);
 
         mpObj->SetMergedItemSetAndBroadcast(aSet);
 
@@ -1426,7 +1358,7 @@ Reference< beans::XPropertySetInfo > SAL_CALL
 Reference< beans::XPropertySetInfo > SAL_CALL
     SvxShape::_getPropertySetInfo() throw(uno::RuntimeException)
 {
-    return maPropSet.getPropertySetInfo();
+    return mpPropSet->getPropertySetInfo();
 }
 
 //----------------------------------------------------------------------
@@ -1656,7 +1588,8 @@ sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rN
 //----------------------------------------------------------------------
 
 // static
-uno::Any SAL_CALL SvxShape::GetFillAttributeByName(
+/* os: unused function
+   uno::Any SAL_CALL SvxShape::GetFillAttributeByName(
     const ::rtl::OUString& rPropertyName, const ::rtl::OUString& rName, SdrModel* pModel )
 {
     uno::Any aResult;
@@ -1837,7 +1770,7 @@ uno::Any SAL_CALL SvxShape::GetFillAttributeByName(
     }
 
     return aResult;
-}
+} */
 
 //----------------------------------------------------------------------
 
@@ -1859,7 +1792,7 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    const SfxItemPropertyMap* pMap = maPropSet.getPropertyMapEntry(rPropertyName);
+    const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMapEntry(rPropertyName);
 
     if( mpObj.is() && mpModel )
     {
@@ -1871,7 +1804,7 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
 
         mpModel->SetChanged();
 
-        if(!setPropertyValueImpl( pMap, rVal ) )
+        if(!setPropertyValueImpl( rPropertyName, pMap, rVal ) )
         {
             DBG_ASSERT( pMap->nWID == SDRATTR_TEXTDIRECTION || pMap->nWID < SDRATTR_NOTPERSIST_FIRST || pMap->nWID > SDRATTR_NOTPERSIST_LAST, "Not persist item not handled!" );
             DBG_ASSERT( pMap->nWID < OWN_ATTR_VALUE_START || pMap->nWID > OWN_ATTR_VALUE_END, "Not item property not handled!" );
@@ -1925,7 +1858,7 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
 
                 if( pSet->GetItemState( pMap->nWID ) == SFX_ITEM_SET )
                 {
-                    maPropSet.setPropertyValue( pMap, rVal, *pSet );
+                    mpPropSet->setPropertyValue( pMap, rVal, *pSet );
 
                 }
             }
@@ -1963,7 +1896,7 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
 //        that support additional properties that we don't
 //        know here we silently store *all* properties, even
 //        if they may be not supported after creation
-            maPropSet.setPropertyValue( pMap, rVal );
+            mpPropSet->setPropertyValue( pMap, rVal );
     }
 }
 
@@ -1985,7 +1918,7 @@ uno::Any SvxShape::_getPropertyValue( const OUString& PropertyName )
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    const SfxItemPropertyMap* pMap = maPropSet.getPropertyMapEntry(PropertyName);
+    const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMapEntry(PropertyName);
 
     uno::Any aAny;
     if( mpObj.is() && mpModel )
@@ -1993,7 +1926,7 @@ uno::Any SvxShape::_getPropertyValue( const OUString& PropertyName )
         if(pMap == NULL )
             throw beans::UnknownPropertyException();
 
-        if( !getPropertyValueImpl( pMap, aAny ) )
+        if( !getPropertyValueImpl( PropertyName, pMap, aAny ) )
         {
             DBG_ASSERT( pMap->nWID == SDRATTR_TEXTDIRECTION || (pMap->nWID < SDRATTR_NOTPERSIST_FIRST || pMap->nWID > SDRATTR_NOTPERSIST_LAST), "Not persist item not handled!" );
             DBG_ASSERT( pMap->nWID < OWN_ATTR_VALUE_START || pMap->nWID > OWN_ATTR_VALUE_END, "Not item property not handled!" );
@@ -2031,7 +1964,7 @@ uno::Any SvxShape::_getPropertyValue( const OUString& PropertyName )
 
         if(pMap && pMap->nWID)
 //      FixMe: see setPropertyValue
-            aAny = maPropSet.getPropertyValue( pMap );
+            aAny = mpPropSet->getPropertyValue( pMap );
 
     }
     return aAny;
@@ -2170,7 +2103,7 @@ void SAL_CALL SvxShape::firePropertiesChangeEvent( const ::com::sun::star::uno::
 
 //----------------------------------------------------------------------
 
-uno::Any SvxShape::GetAnyForItem( SfxItemSet& aSet, const SfxItemPropertyMap* pMap ) const
+uno::Any SvxShape::GetAnyForItem( SfxItemSet& aSet, const SfxItemPropertySimpleEntry* pMap ) const
 {
     DBG_TESTSOLARMUTEX();
     uno::Any aAny;
@@ -2226,7 +2159,7 @@ uno::Any SvxShape::GetAnyForItem( SfxItemSet& aSet, const SfxItemPropertyMap* pM
     default:
     {
         // Hole Wert aus ItemSet
-        aAny = maPropSet.getPropertyValue( pMap, aSet );
+        aAny = mpPropSet->getPropertyValue( pMap, aSet );
 
         if( *pMap->pType != aAny.getValueType() )
         {
@@ -2270,7 +2203,7 @@ beans::PropertyState SAL_CALL SvxShape::_getPropertyState( const OUString& Prope
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    const SfxItemPropertyMap* pMap = maPropSet.getPropertyMapEntry(PropertyName);
+    const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMapEntry(PropertyName);
 
     if( !mpObj.is() || pMap == NULL )
         throw beans::UnknownPropertyException();
@@ -2338,7 +2271,7 @@ beans::PropertyState SAL_CALL SvxShape::_getPropertyState( const OUString& Prope
 
 //----------------------------------------------------------------------
 
-bool SvxShape::setPropertyValueImpl( const SfxItemPropertyMap* pProperty, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+bool SvxShape::setPropertyValueImpl( const ::rtl::OUString&, const SfxItemPropertySimpleEntry* pProperty, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     switch( pProperty->nWID )
     {
@@ -2482,15 +2415,10 @@ bool SvxShape::setPropertyValueImpl( const SfxItemPropertyMap* pProperty, const 
                     if( rValue >>= aUnoPoint )
                     {
                         Point aPoint( aUnoPoint.X, aUnoPoint.Y );
-                        // --> OD 2009-01-16 #i59051#
-                        // perform metric change before applying anchor position,
-                        // because the anchor position is in pool metric.
-                        ForceMetricToItemPoolMetric( aPoint );
-                        // <--
                         if( mpModel->IsWriter() )
                             aPoint += mpObj->GetAnchorPos();
 
-//                        ForceMetricToItemPoolMetric( aPoint );
+                        ForceMetricToItemPoolMetric( aPoint );
                         pEdgeObj->SetTailPoint( pProperty->nWID == OWN_ATTR_EDGE_START_POS, aPoint );
                         return true;
                     }
@@ -2514,9 +2442,6 @@ bool SvxShape::setPropertyValueImpl( const SfxItemPropertyMap* pProperty, const 
                     if ( rValue >>= aPolyPoly )
                     {
                         basegfx::B2DPolyPolygon aNewPolyPolygon( SvxConvertPolyPolygonBezierToB2DPolyPolygon( &aPolyPoly ) );
-                        // --> OD 2009-01-16 #i59051#
-                        ForceMetricToItemPoolMetric( aNewPolyPolygon );
-                        // <--
                         if( mpModel->IsWriter() )
                         {
                             Point aPoint( mpObj->GetAnchorPos() );
@@ -2541,9 +2466,6 @@ bool SvxShape::setPropertyValueImpl( const SfxItemPropertyMap* pProperty, const 
         if(pMeasureObj && ( rValue >>= aUnoPoint ) )
         {
             Point aPoint( aUnoPoint.X, aUnoPoint.Y );
-            // --> OD 2009-01-12 #i59051#
-            ForceMetricToItemPoolMetric( aPoint );
-            // <--
 
             if( mpModel->IsWriter() )
                 aPoint += mpObj->GetAnchorPos();
@@ -2760,7 +2682,7 @@ bool SvxShape::setPropertyValueImpl( const SfxItemPropertyMap* pProperty, const 
 
 //----------------------------------------------------------------------
 
-bool SvxShape::getPropertyValueImpl( const SfxItemPropertyMap* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+bool SvxShape::getPropertyValueImpl( const ::rtl::OUString&, const SfxItemPropertySimpleEntry* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     switch( pProperty->nWID )
     {
@@ -2964,9 +2886,6 @@ bool SvxShape::getPropertyValueImpl( const SfxItemPropertyMap* pProperty, ::com:
                         aMatrix.translate( -aPoint.X(), -aPoint.Y() );
                         aPolyPoly.transform( aMatrix );
                     }
-                    // --> OD 2009-01-16 #i59051#
-                    ForceMetricTo100th_mm( aPolyPoly );
-                    // <--
                     drawing::PolyPolygonBezierCoords aRetval;
                     SvxConvertB2DPolyPolygonToPolyPolygonBezier( aPolyPoly, aRetval);
                     rValue <<= aRetval;
@@ -2987,9 +2906,6 @@ bool SvxShape::getPropertyValueImpl( const SfxItemPropertyMap* pProperty, ::com:
             if( mpModel->IsWriter() )
                 aPoint -= mpObj->GetAnchorPos();
 
-            // --> OD 2009-01-12 #i59051#
-            ForceMetricTo100th_mm( aPoint );
-            // <--
             awt::Point aUnoPoint( aPoint.X(), aPoint.Y() );
 
             rValue <<= aUnoPoint;
@@ -3161,7 +3077,7 @@ bool SvxShape::getPropertyValueImpl( const SfxItemPropertyMap* pProperty, ::com:
 
 //----------------------------------------------------------------------
 
-bool SvxShape::getPropertyStateImpl( const SfxItemPropertyMap* pProperty, ::com::sun::star::beans::PropertyState& rState ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)
+bool SvxShape::getPropertyStateImpl( const SfxItemPropertySimpleEntry* pProperty, ::com::sun::star::beans::PropertyState& rState ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)
 {
     if( pProperty->nWID == OWN_ATTR_FILLBMP_MODE )
     {
@@ -3192,7 +3108,7 @@ bool SvxShape::getPropertyStateImpl( const SfxItemPropertyMap* pProperty, ::com:
 
 //----------------------------------------------------------------------
 
-bool SvxShape::setPropertyToDefaultImpl( const SfxItemPropertyMap* pProperty ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)
+bool SvxShape::setPropertyToDefaultImpl( const SfxItemPropertySimpleEntry* pProperty ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)
 {
     if( pProperty->nWID == OWN_ATTR_FILLBMP_MODE )
     {
@@ -3257,7 +3173,7 @@ void SAL_CALL SvxShape::_setPropertyToDefault( const OUString& PropertyName )
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    const SfxItemPropertyMap* pProperty = maPropSet.getPropertyMapEntry(PropertyName);
+    const SfxItemPropertySimpleEntry* pProperty = mpPropSet->getPropertyMapEntry(PropertyName);
 
     if( !mpObj.is() || mpModel == NULL || pProperty == NULL )
         throw beans::UnknownPropertyException();
@@ -3290,7 +3206,7 @@ uno::Any SAL_CALL SvxShape::_getPropertyDefault( const OUString& aPropertyName )
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    const SfxItemPropertyMap* pMap = maPropSet.getPropertyMapEntry(aPropertyName);
+    const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMapEntry(aPropertyName);
 
     if( !mpObj.is() || pMap == NULL || mpModel == NULL )
         throw beans::UnknownPropertyException();
@@ -4243,21 +4159,21 @@ void SvxShape::updateShapeKind()
 * class SvxShapeText                                                   *
 ***********************************************************************/
 SvxShapeText::SvxShapeText() throw ()
-: SvxShape(NULL, aSvxMapProvider.GetMap(SVXMAP_TEXT) ), SvxUnoTextBase( ImplGetSvxUnoOutlinerTextCursorPropertyMap() )
+: SvxShape(NULL, aSvxMapProvider.GetMap(SVXMAP_TEXT), aSvxMapProvider.GetPropertySet(SVXMAP_TEXT) ), SvxUnoTextBase( ImplGetSvxUnoOutlinerTextCursorSvxPropertySet() )
 {
 }
 
 //----------------------------------------------------------------------
 SvxShapeText::SvxShapeText( SdrObject* pObject ) throw ()
-: SvxShape( pObject, aSvxMapProvider.GetMap(SVXMAP_TEXT) ), SvxUnoTextBase( ImplGetSvxUnoOutlinerTextCursorPropertyMap() )
+: SvxShape( pObject, aSvxMapProvider.GetMap(SVXMAP_TEXT), aSvxMapProvider.GetPropertySet(SVXMAP_TEXT) ), SvxUnoTextBase( ImplGetSvxUnoOutlinerTextCursorSvxPropertySet() )
 {
     if( pObject && pObject->GetModel() )
         SetEditSource( new SvxTextEditSource( pObject, 0, static_cast< uno::XWeak * >( this ) ) );
 }
 
 //----------------------------------------------------------------------
-SvxShapeText::SvxShapeText( SdrObject* pObject, const SfxItemPropertyMap* pPropertySet ) throw ()
-: SvxShape( pObject, pPropertySet ), SvxUnoTextBase( ImplGetSvxUnoOutlinerTextCursorPropertyMap() )
+SvxShapeText::SvxShapeText( SdrObject* pObject, const SfxItemPropertyMapEntry* pPropertyMap, const SvxItemPropertySet* pPropertySet ) throw ()
+: SvxShape( pObject, pPropertyMap, pPropertySet ), SvxUnoTextBase( ImplGetSvxUnoOutlinerTextCursorSvxPropertySet() )
 {
     if( pObject && pObject->GetModel() )
         SetEditSource( new SvxTextEditSource( pObject, 0, static_cast< uno::XWeak * >( this ) ) );
@@ -4433,7 +4349,7 @@ void SAL_CALL SvxShapeText::setString( const OUString& aString ) throw(uno::Runt
 }
 
 // overide these for special property handling in subcasses. Return true if property is handled
-bool SvxShapeText::setPropertyValueImpl( const SfxItemPropertyMap* pProperty, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+bool SvxShapeText::setPropertyValueImpl( const ::rtl::OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     // HACK-fix #99090#
     // since SdrTextObj::SetVerticalWriting exchanges
@@ -4453,10 +4369,10 @@ bool SvxShapeText::setPropertyValueImpl( const SfxItemPropertyMap* pProperty, co
         }
         return true;
     }
-    return SvxShape::setPropertyValueImpl( pProperty, rValue );
+    return SvxShape::setPropertyValueImpl( rName, pProperty, rValue );
 }
 
-bool SvxShapeText::getPropertyValueImpl( const SfxItemPropertyMap* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+bool SvxShapeText::getPropertyValueImpl( const ::rtl::OUString& rName, const SfxItemPropertySimpleEntry* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     if( pProperty->nWID == SDRATTR_TEXTDIRECTION )
     {
@@ -4468,15 +4384,15 @@ bool SvxShapeText::getPropertyValueImpl( const SfxItemPropertyMap* pProperty, ::
         return true;
     }
 
-    return SvxShape::getPropertyValueImpl( pProperty, rValue );
+    return SvxShape::getPropertyValueImpl( rName, pProperty, rValue );
 }
 
-bool SvxShapeText::getPropertyStateImpl( const SfxItemPropertyMap* pProperty, ::com::sun::star::beans::PropertyState& rState ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)
+bool SvxShapeText::getPropertyStateImpl( const SfxItemPropertySimpleEntry* pProperty, ::com::sun::star::beans::PropertyState& rState ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)
 {
     return SvxShape::getPropertyStateImpl( pProperty, rState );
 }
 
-bool SvxShapeText::setPropertyToDefaultImpl( const SfxItemPropertyMap* pProperty ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)
+bool SvxShapeText::setPropertyToDefaultImpl( const SfxItemPropertySimpleEntry* pProperty ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)
 {
     return SvxShape::setPropertyToDefaultImpl( pProperty );
 }
@@ -4486,7 +4402,7 @@ bool SvxShapeText::setPropertyToDefaultImpl( const SfxItemPropertyMap* pProperty
 ***********************************************************************/
 DBG_NAME(SvxShapeRect)
 SvxShapeRect::SvxShapeRect( SdrObject* pObj ) throw()
-: SvxShapeText( pObj, aSvxMapProvider.GetMap(SVXMAP_SHAPE) )
+: SvxShapeText( pObj, aSvxMapProvider.GetMap(SVXMAP_SHAPE), aSvxMapProvider.GetPropertySet(SVXMAP_SHAPE) )
 
 {
     DBG_CTOR(SvxShapeRect,NULL);

@@ -87,12 +87,12 @@ using namespace ::com::sun::star::beans;
 
 ///////////////////////////////////////////////////////////////////////
 SvxOle2Shape::SvxOle2Shape( SdrObject* pObject ) throw()
-: SvxShape( pObject, aSvxMapProvider.GetMap(SVXMAP_OLE2)  )
+: SvxShape( pObject, aSvxMapProvider.GetMap(SVXMAP_OLE2), aSvxMapProvider.GetPropertySet(SVXMAP_OLE2)  )
 {
 }
 
-SvxOle2Shape::SvxOle2Shape( SdrObject* pObject, const SfxItemPropertyMap* pPropertySet ) throw ()
-: SvxShape( pObject, pPropertySet  )
+SvxOle2Shape::SvxOle2Shape( SdrObject* pObject, const SfxItemPropertyMapEntry* pPropertyMap, const SvxItemPropertySet* pPropertySet ) throw ()
+: SvxShape( pObject, pPropertyMap, pPropertySet  )
 {
 }
 
@@ -106,7 +106,7 @@ SvxOle2Shape::~SvxOle2Shape() throw()
 }
 
 //XPropertySet
-bool SvxOle2Shape::setPropertyValueImpl( const SfxItemPropertyMap* pProperty, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+bool SvxOle2Shape::setPropertyValueImpl( const ::rtl::OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     switch( pProperty->nWID )
     {
@@ -255,13 +255,13 @@ bool SvxOle2Shape::setPropertyValueImpl( const SfxItemPropertyMap* pProperty, co
         break;
     }
     default:
-        return SvxShape::setPropertyValueImpl( pProperty, rValue );
+        return SvxShape::setPropertyValueImpl( rName, pProperty, rValue );
     }
 
     throw IllegalArgumentException();
 }
 
-bool SvxOle2Shape::getPropertyValueImpl( const SfxItemPropertyMap* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+bool SvxOle2Shape::getPropertyValueImpl( const ::rtl::OUString& rName, const SfxItemPropertySimpleEntry* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     switch( pProperty->nWID )
     {
@@ -450,7 +450,7 @@ bool SvxOle2Shape::getPropertyValueImpl( const SfxItemPropertyMap* pProperty, ::
         break;
     }
     default:
-        return SvxShape::getPropertyValueImpl( pProperty, rValue );
+        return SvxShape::getPropertyValueImpl( rName, pProperty, rValue );
     }
 
     return true;
@@ -630,7 +630,7 @@ const SvGlobalName SvxOle2Shape::GetClassName_Impl(rtl::OUString& rHexCLSID)
 ///////////////////////////////////////////////////////////////////////
 
 SvxAppletShape::SvxAppletShape( SdrObject* pObject ) throw()
-: SvxOle2Shape( pObject, aSvxMapProvider.GetMap(SVXMAP_APPLET)  )
+: SvxOle2Shape( pObject, aSvxMapProvider.GetMap(SVXMAP_APPLET), aSvxMapProvider.GetPropertySet(SVXMAP_APPLET)  )
 {
     SetShapeType( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.AppletShape" ) ) );
 }
@@ -659,7 +659,7 @@ void SAL_CALL SvxAppletShape::setPropertyValues( const ::com::sun::star::uno::Se
     resetModifiedState();
 }
 
-bool SvxAppletShape::setPropertyValueImpl( const SfxItemPropertyMap* pProperty, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+bool SvxAppletShape::setPropertyValueImpl( const ::rtl::OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     if( (pProperty->nWID >= OWN_ATTR_APPLET_DOCBASE) && (pProperty->nWID <= OWN_ATTR_APPLET_ISSCRIPT) )
     {
@@ -669,18 +669,18 @@ bool SvxAppletShape::setPropertyValueImpl( const SfxItemPropertyMap* pProperty, 
             if( xSet.is() )
             {
                 // allow exceptions to pass through
-                xSet->setPropertyValue( OUString::createFromAscii( pProperty->pName ), rValue );
+                xSet->setPropertyValue( rName, rValue );
             }
         }
         return true;
     }
     else
     {
-        return SvxOle2Shape::setPropertyValueImpl( pProperty, rValue );
+        return SvxOle2Shape::setPropertyValueImpl( rName, pProperty, rValue );
     }
 }
 
-bool SvxAppletShape::getPropertyValueImpl( const SfxItemPropertyMap* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+bool SvxAppletShape::getPropertyValueImpl( const ::rtl::OUString& rName, const SfxItemPropertySimpleEntry* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     if( (pProperty->nWID >= OWN_ATTR_APPLET_DOCBASE) && (pProperty->nWID <= OWN_ATTR_APPLET_ISSCRIPT) )
     {
@@ -689,21 +689,21 @@ bool SvxAppletShape::getPropertyValueImpl( const SfxItemPropertyMap* pProperty, 
             uno::Reference < beans::XPropertySet > xSet( static_cast<SdrOle2Obj*>(mpObj.get())->GetObjRef()->getComponent(), uno::UNO_QUERY );
             if( xSet.is() )
             {
-                rValue = xSet->getPropertyValue( OUString::createFromAscii( pProperty->pName ) );
+                rValue = xSet->getPropertyValue( rName );
             }
         }
         return true;
     }
     else
     {
-        return SvxOle2Shape::getPropertyValueImpl( pProperty, rValue );
+        return SvxOle2Shape::getPropertyValueImpl( rName, pProperty, rValue );
     }
 }
 
 ///////////////////////////////////////////////////////////////////////
 
 SvxPluginShape::SvxPluginShape( SdrObject* pObject ) throw()
-: SvxOle2Shape( pObject, aSvxMapProvider.GetMap(SVXMAP_PLUGIN)  )
+: SvxOle2Shape( pObject, aSvxMapProvider.GetMap(SVXMAP_PLUGIN), aSvxMapProvider.GetPropertySet(SVXMAP_PLUGIN) )
 {
     SetShapeType( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.PluginShape" ) ) );
 }
@@ -732,7 +732,7 @@ void SAL_CALL SvxPluginShape::setPropertyValues( const ::com::sun::star::uno::Se
     resetModifiedState();
 }
 
-bool SvxPluginShape::setPropertyValueImpl( const SfxItemPropertyMap* pProperty, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+bool SvxPluginShape::setPropertyValueImpl( const ::rtl::OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     if( (pProperty->nWID >= OWN_ATTR_PLUGIN_MIMETYPE) && (pProperty->nWID <= OWN_ATTR_PLUGIN_COMMANDS) )
     {
@@ -742,18 +742,18 @@ bool SvxPluginShape::setPropertyValueImpl( const SfxItemPropertyMap* pProperty, 
             if( xSet.is() )
             {
                 // allow exceptions to pass through
-                xSet->setPropertyValue( OUString::createFromAscii( pProperty->pName ), rValue );
+                xSet->setPropertyValue( rName, rValue );
             }
         }
         return true;
     }
     else
     {
-        return SvxOle2Shape::setPropertyValueImpl( pProperty, rValue );
+        return SvxOle2Shape::setPropertyValueImpl( rName, pProperty, rValue );
     }
 }
 
-bool SvxPluginShape::getPropertyValueImpl( const SfxItemPropertyMap* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+bool SvxPluginShape::getPropertyValueImpl( const ::rtl::OUString& rName, const SfxItemPropertySimpleEntry* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     if( (pProperty->nWID >= OWN_ATTR_PLUGIN_MIMETYPE) && (pProperty->nWID <= OWN_ATTR_PLUGIN_COMMANDS) )
     {
@@ -762,21 +762,21 @@ bool SvxPluginShape::getPropertyValueImpl( const SfxItemPropertyMap* pProperty, 
             uno::Reference < beans::XPropertySet > xSet( static_cast<SdrOle2Obj*>(mpObj.get())->GetObjRef()->getComponent(), uno::UNO_QUERY );
             if( xSet.is() )
             {
-                rValue <<= xSet->getPropertyValue( OUString::createFromAscii( pProperty->pName ) );
+                rValue <<= xSet->getPropertyValue( rName );
             }
         }
         return true;
     }
     else
     {
-        return SvxOle2Shape::getPropertyValueImpl( pProperty, rValue );
+        return SvxOle2Shape::getPropertyValueImpl( rName, pProperty, rValue );
     }
 }
 
 ///////////////////////////////////////////////////////////////////////
 
 SvxFrameShape::SvxFrameShape( SdrObject* pObject ) throw()
-: SvxOle2Shape( pObject, aSvxMapProvider.GetMap(SVXMAP_FRAME)  )
+: SvxOle2Shape( pObject, aSvxMapProvider.GetMap(SVXMAP_FRAME), aSvxMapProvider.GetPropertySet(SVXMAP_FRAME)  )
 {
     SetShapeType( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.FrameShape" ) ) );
 }
@@ -805,7 +805,7 @@ void SAL_CALL SvxFrameShape::setPropertyValues( const ::com::sun::star::uno::Seq
     resetModifiedState();
 }
 
-bool SvxFrameShape::setPropertyValueImpl( const SfxItemPropertyMap* pProperty, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+bool SvxFrameShape::setPropertyValueImpl( const ::rtl::OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     if( (pProperty->nWID >= OWN_ATTR_FRAME_URL) && (pProperty->nWID <= OWN_ATTR_FRAME_MARGIN_HEIGHT) )
     {
@@ -815,18 +815,18 @@ bool SvxFrameShape::setPropertyValueImpl( const SfxItemPropertyMap* pProperty, c
             if( xSet.is() )
             {
                 // allow exceptions to pass through
-                xSet->setPropertyValue( OUString::createFromAscii( pProperty->pName ), rValue );
+                xSet->setPropertyValue( rName, rValue );
             }
         }
         return true;
     }
     else
     {
-        return SvxOle2Shape::setPropertyValueImpl( pProperty, rValue );
+        return SvxOle2Shape::setPropertyValueImpl( rName, pProperty, rValue );
     }
 }
 
-bool SvxFrameShape::getPropertyValueImpl( const SfxItemPropertyMap* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+bool SvxFrameShape::getPropertyValueImpl( const ::rtl::OUString& rName, const SfxItemPropertySimpleEntry* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     if( (pProperty->nWID >= OWN_ATTR_FRAME_URL) && (pProperty->nWID <= OWN_ATTR_FRAME_MARGIN_HEIGHT) )
     {
@@ -835,14 +835,14 @@ bool SvxFrameShape::getPropertyValueImpl( const SfxItemPropertyMap* pProperty, :
             uno::Reference < beans::XPropertySet > xSet( static_cast<SdrOle2Obj*>(mpObj.get())->GetObjRef()->getComponent(), uno::UNO_QUERY );
             if( xSet.is() )
             {
-                rValue <<= xSet->getPropertyValue( OUString::createFromAscii( pProperty->pName ) );
+                rValue <<= xSet->getPropertyValue( rName );
             }
         }
         return true;
     }
     else
     {
-        return SvxOle2Shape::getPropertyValueImpl( pProperty, rValue );
+        return SvxOle2Shape::getPropertyValueImpl( rName, pProperty, rValue );
     }
 }
 
@@ -851,7 +851,7 @@ bool SvxFrameShape::getPropertyValueImpl( const SfxItemPropertyMap* pProperty, :
 ***********************************************************************/
 
 SvxMediaShape::SvxMediaShape( SdrObject* pObj ) throw()
-:   SvxShape( pObj, aSvxMapProvider.GetMap(SVXMAP_MEDIA) )
+:   SvxShape( pObj, aSvxMapProvider.GetMap(SVXMAP_MEDIA), aSvxMapProvider.GetPropertySet(SVXMAP_MEDIA) )
 {
     SetShapeType( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.MediaShape" ) ) );
 }
@@ -863,7 +863,7 @@ SvxMediaShape::~SvxMediaShape() throw()
 
 //----------------------------------------------------------------------
 
-bool SvxMediaShape::setPropertyValueImpl( const SfxItemPropertyMap* pProperty, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+bool SvxMediaShape::setPropertyValueImpl( const ::rtl::OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     if( (pProperty->nWID >= OWN_ATTR_MEDIA_URL) && (pProperty->nWID <= OWN_ATTR_MEDIA_ZOOM) )
     {
@@ -944,7 +944,7 @@ bool SvxMediaShape::setPropertyValueImpl( const SfxItemPropertyMap* pProperty, c
     }
     else
     {
-        return SvxShape::setPropertyValueImpl( pProperty, rValue );
+        return SvxShape::setPropertyValueImpl( rName, pProperty, rValue );
     }
 
     throw IllegalArgumentException();
@@ -952,7 +952,7 @@ bool SvxMediaShape::setPropertyValueImpl( const SfxItemPropertyMap* pProperty, c
 
 //----------------------------------------------------------------------
 
-bool SvxMediaShape::getPropertyValueImpl( const SfxItemPropertyMap* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+bool SvxMediaShape::getPropertyValueImpl( const ::rtl::OUString& rName, const SfxItemPropertySimpleEntry* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     if( ( pProperty->nWID >= OWN_ATTR_MEDIA_URL ) && ( pProperty->nWID <= OWN_ATTR_MEDIA_ZOOM ) )
     {
@@ -988,6 +988,6 @@ bool SvxMediaShape::getPropertyValueImpl( const SfxItemPropertyMap* pProperty, :
     }
     else
     {
-        return SvxShape::getPropertyValueImpl( pProperty, rValue );
+        return SvxShape::getPropertyValueImpl( rName, pProperty, rValue );
     }
 }

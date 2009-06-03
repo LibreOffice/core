@@ -74,7 +74,7 @@ class SVX_DLLPUBLIC SvxUnoTextField : public SvxMutexHelper,
 {
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > mxAnchor;
-    SfxItemPropertySet* mpPropSet;
+    const SfxItemPropertySet*   mpPropSet;
     sal_Int32               mnServiceId;
     SvxUnoFieldData_Impl*   mpImpl;
 

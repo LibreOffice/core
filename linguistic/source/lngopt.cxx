@@ -318,55 +318,58 @@ OUString LinguOptions::GetName( INT32 nWID )
 ///////////////////////////////////////////////////////////////////////////
 
 //! map must be sorted by first entry in alphabetical increasing order.
-static SfxItemPropertyMap aLinguProps[] =
+const SfxItemPropertyMapEntry* lcl_GetLinguProps()
 {
-    { MAP_CHAR_LEN(UPN_DEFAULT_LANGUAGE),           WID_DEFAULT_LANGUAGE,
-            &::getCppuType( (sal_Int16*)0 ),    0, 0 },
-    { MAP_CHAR_LEN(UPN_DEFAULT_LOCALE),             WID_DEFAULT_LOCALE,
-            &::getCppuType( (Locale* )0),       0, 0 },
-    { MAP_CHAR_LEN(UPN_DEFAULT_LOCALE_CJK),         WID_DEFAULT_LOCALE_CJK,
-            &::getCppuType( (Locale* )0),       0, 0 },
-    { MAP_CHAR_LEN(UPN_DEFAULT_LOCALE_CTL),         WID_DEFAULT_LOCALE_CTL,
-            &::getCppuType( (Locale* )0),       0, 0 },
-    { MAP_CHAR_LEN(UPN_HYPH_MIN_LEADING),           WID_HYPH_MIN_LEADING,
-            &::getCppuType( (sal_Int16*)0 ),    0, 0 },
-    { MAP_CHAR_LEN(UPN_HYPH_MIN_TRAILING),          WID_HYPH_MIN_TRAILING,
-            &::getCppuType( (sal_Int16*)0 ),    0, 0 },
-    { MAP_CHAR_LEN(UPN_HYPH_MIN_WORD_LENGTH),       WID_HYPH_MIN_WORD_LENGTH,
-            &::getCppuType( (sal_Int16*)0 ),    0, 0 },
-    { MAP_CHAR_LEN(UPN_IS_GERMAN_PRE_REFORM),       WID_IS_GERMAN_PRE_REFORM,       /*! deprecated !*/
-            &::getBooleanCppuType(),            0, 0 },
-    { MAP_CHAR_LEN(UPN_IS_HYPH_AUTO),               WID_IS_HYPH_AUTO,
-            &::getBooleanCppuType(),            0, 0 },
-    { MAP_CHAR_LEN(UPN_IS_HYPH_SPECIAL),            WID_IS_HYPH_SPECIAL,
-            &::getBooleanCppuType(),            0, 0 },
-    { MAP_CHAR_LEN(UPN_IS_IGNORE_CONTROL_CHARACTERS),   WID_IS_IGNORE_CONTROL_CHARACTERS,
-            &::getBooleanCppuType(),            0, 0 },
-    { MAP_CHAR_LEN(UPN_IS_SPELL_AUTO),              WID_IS_SPELL_AUTO,
-            &::getBooleanCppuType(),            0, 0 },
-    { MAP_CHAR_LEN(UPN_IS_SPELL_CAPITALIZATION),    WID_IS_SPELL_CAPITALIZATION,
-            &::getBooleanCppuType(),            0, 0 },
-    { MAP_CHAR_LEN(UPN_IS_SPELL_HIDE),              WID_IS_SPELL_HIDE,              /*! deprecated !*/
-            &::getBooleanCppuType(),            0, 0 },
-    { MAP_CHAR_LEN(UPN_IS_SPELL_IN_ALL_LANGUAGES),  WID_IS_SPELL_IN_ALL_LANGUAGES,  /*! deprecated !*/
-            &::getBooleanCppuType(),            0, 0 },
-    { MAP_CHAR_LEN(UPN_IS_SPELL_SPECIAL),           WID_IS_SPELL_SPECIAL,
-            &::getBooleanCppuType(),            0, 0 },
-    { MAP_CHAR_LEN(UPN_IS_SPELL_UPPER_CASE),        WID_IS_SPELL_UPPER_CASE,
-            &::getBooleanCppuType(),            0, 0 },
-    { MAP_CHAR_LEN(UPN_IS_SPELL_WITH_DIGITS),       WID_IS_SPELL_WITH_DIGITS,
-            &::getBooleanCppuType(),            0, 0 },
-    { MAP_CHAR_LEN(UPN_IS_USE_DICTIONARY_LIST),     WID_IS_USE_DICTIONARY_LIST,
-            &::getBooleanCppuType(),            0, 0 },
-    { MAP_CHAR_LEN(UPN_IS_WRAP_REVERSE),            WID_IS_WRAP_REVERSE,
-            &::getBooleanCppuType(),            0, 0 },
-    { 0,0,0,0,0,0 }
-};
-
+    static const SfxItemPropertyMapEntry aLinguProps[] =
+    {
+        { MAP_CHAR_LEN(UPN_DEFAULT_LANGUAGE),           WID_DEFAULT_LANGUAGE,
+                &::getCppuType( (sal_Int16*)0 ),    0, 0 },
+        { MAP_CHAR_LEN(UPN_DEFAULT_LOCALE),             WID_DEFAULT_LOCALE,
+                &::getCppuType( (Locale* )0),       0, 0 },
+        { MAP_CHAR_LEN(UPN_DEFAULT_LOCALE_CJK),         WID_DEFAULT_LOCALE_CJK,
+                &::getCppuType( (Locale* )0),       0, 0 },
+        { MAP_CHAR_LEN(UPN_DEFAULT_LOCALE_CTL),         WID_DEFAULT_LOCALE_CTL,
+                &::getCppuType( (Locale* )0),       0, 0 },
+        { MAP_CHAR_LEN(UPN_HYPH_MIN_LEADING),           WID_HYPH_MIN_LEADING,
+                &::getCppuType( (sal_Int16*)0 ),    0, 0 },
+        { MAP_CHAR_LEN(UPN_HYPH_MIN_TRAILING),          WID_HYPH_MIN_TRAILING,
+                &::getCppuType( (sal_Int16*)0 ),    0, 0 },
+        { MAP_CHAR_LEN(UPN_HYPH_MIN_WORD_LENGTH),       WID_HYPH_MIN_WORD_LENGTH,
+                &::getCppuType( (sal_Int16*)0 ),    0, 0 },
+        { MAP_CHAR_LEN(UPN_IS_GERMAN_PRE_REFORM),       WID_IS_GERMAN_PRE_REFORM,       /*! deprecated !*/
+                &::getBooleanCppuType(),            0, 0 },
+        { MAP_CHAR_LEN(UPN_IS_HYPH_AUTO),               WID_IS_HYPH_AUTO,
+                &::getBooleanCppuType(),            0, 0 },
+        { MAP_CHAR_LEN(UPN_IS_HYPH_SPECIAL),            WID_IS_HYPH_SPECIAL,
+                &::getBooleanCppuType(),            0, 0 },
+        { MAP_CHAR_LEN(UPN_IS_IGNORE_CONTROL_CHARACTERS),   WID_IS_IGNORE_CONTROL_CHARACTERS,
+                &::getBooleanCppuType(),            0, 0 },
+        { MAP_CHAR_LEN(UPN_IS_SPELL_AUTO),              WID_IS_SPELL_AUTO,
+                &::getBooleanCppuType(),            0, 0 },
+        { MAP_CHAR_LEN(UPN_IS_SPELL_CAPITALIZATION),    WID_IS_SPELL_CAPITALIZATION,
+                &::getBooleanCppuType(),            0, 0 },
+        { MAP_CHAR_LEN(UPN_IS_SPELL_HIDE),              WID_IS_SPELL_HIDE,              /*! deprecated !*/
+                &::getBooleanCppuType(),            0, 0 },
+        { MAP_CHAR_LEN(UPN_IS_SPELL_IN_ALL_LANGUAGES),  WID_IS_SPELL_IN_ALL_LANGUAGES,  /*! deprecated !*/
+                &::getBooleanCppuType(),            0, 0 },
+        { MAP_CHAR_LEN(UPN_IS_SPELL_SPECIAL),           WID_IS_SPELL_SPECIAL,
+                &::getBooleanCppuType(),            0, 0 },
+        { MAP_CHAR_LEN(UPN_IS_SPELL_UPPER_CASE),        WID_IS_SPELL_UPPER_CASE,
+                &::getBooleanCppuType(),            0, 0 },
+        { MAP_CHAR_LEN(UPN_IS_SPELL_WITH_DIGITS),       WID_IS_SPELL_WITH_DIGITS,
+                &::getBooleanCppuType(),            0, 0 },
+        { MAP_CHAR_LEN(UPN_IS_USE_DICTIONARY_LIST),     WID_IS_USE_DICTIONARY_LIST,
+                &::getBooleanCppuType(),            0, 0 },
+        { MAP_CHAR_LEN(UPN_IS_WRAP_REVERSE),            WID_IS_WRAP_REVERSE,
+                &::getBooleanCppuType(),            0, 0 },
+        { 0,0,0,0,0,0 }
+    };
+    return aLinguProps;
+}
 LinguProps::LinguProps() :
     aEvtListeners   (GetLinguMutex()),
     aPropListeners  (GetLinguMutex()),
-    pMap            (aLinguProps)
+    aPropertyMap(lcl_GetLinguProps())
 {
     bDisposing = FALSE;
 }
@@ -401,7 +404,7 @@ Reference< XPropertySetInfo > SAL_CALL LinguProps::getPropertySetInfo()
     MutexGuard  aGuard( GetLinguMutex() );
 
     static Reference< XPropertySetInfo > aRef =
-            new SfxItemPropertySetInfo( pMap );
+            new SfxItemPropertySetInfo( &aPropertyMap );
     return aRef;
 }
 
@@ -412,8 +415,7 @@ void SAL_CALL LinguProps::setPropertyValue(
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    const SfxItemPropertyMap* pCur =
-            SfxItemPropertyMap::GetByName(pMap, rPropertyName);
+    const SfxItemPropertySimpleEntry* pCur = aPropertyMap.getByName( rPropertyName );
     if (pCur)
     {
         Any aOld( aConfig.GetProperty( pCur->nWID ) );
@@ -439,7 +441,7 @@ Any SAL_CALL LinguProps::getPropertyValue( const OUString& rPropertyName )
 
     Any aRet;
 
-    const SfxItemPropertyMap* pCur = SfxItemPropertyMap::GetByName(pMap, rPropertyName);
+    const SfxItemPropertySimpleEntry* pCur = aPropertyMap.getByName( rPropertyName );
     if(pCur)
     {
         aRet = aConfig.GetProperty( pCur->nWID );
@@ -463,8 +465,7 @@ void SAL_CALL LinguProps::addPropertyChangeListener(
 
     if (!bDisposing && rxListener.is())
     {
-        const SfxItemPropertyMap* pCur =
-                SfxItemPropertyMap::GetByName( pMap, rPropertyName );
+        const SfxItemPropertySimpleEntry* pCur = aPropertyMap.getByName( rPropertyName );
         if(pCur)
             aPropListeners.addInterface( pCur->nWID, rxListener );
 #ifdef LINGU_EXCEPTIONS
@@ -485,8 +486,7 @@ void SAL_CALL LinguProps::removePropertyChangeListener(
 
     if (!bDisposing && rxListener.is())
     {
-        const SfxItemPropertyMap* pCur =
-                SfxItemPropertyMap::GetByName( pMap, rPropertyName );
+        const SfxItemPropertySimpleEntry* pCur = aPropertyMap.getByName( rPropertyName );
         if(pCur)
             aPropListeners.removeInterface( pCur->nWID, rxListener );
 #ifdef LINGU_EXCEPTIONS
@@ -547,17 +547,18 @@ Sequence< PropertyValue > SAL_CALL
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    INT32 nLen = sizeof (aLinguProps) / sizeof aLinguProps[0] - 1;
+    INT32 nLen = aPropertyMap.getSize();
     Sequence< PropertyValue > aProps( nLen );
     PropertyValue *pProp = aProps.getArray();
-    for (INT32 i = 0;  i < nLen;  i++)
+    PropertyEntryVector_t aPropEntries = aPropertyMap.getPropertyEntries();
+    PropertyEntryVector_t::const_iterator aIt = aPropEntries.begin();
+    for (INT32 i = 0;  i < nLen;  ++i, ++aIt)
     {
         PropertyValue &rVal = pProp[i];
-        SfxItemPropertyMap &rItem = aLinguProps[i];
-        Any aAny( aConfig.GetProperty( rItem.nWID ) );
+        Any aAny( aConfig.GetProperty( aIt->nWID ) );
 
-        rVal.Name   = OUString( rItem.pName, rItem.nNameLen, RTL_TEXTENCODING_ASCII_US );
-        rVal.Handle = rItem.nWID;
+        rVal.Name   = aIt->sName;
+        rVal.Handle = aIt->nWID;
         rVal.Value  = aAny;
         rVal.State  = PropertyState_DIRECT_VALUE ;
     }

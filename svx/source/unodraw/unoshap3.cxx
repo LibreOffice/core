@@ -81,7 +81,7 @@ using namespace ::com::sun::star::container;
 
 //----------------------------------------------------------------------
 Svx3DSceneObject::Svx3DSceneObject( SdrObject* pObj, SvxDrawPage* pDrawPage ) throw()
-:   SvxShape( pObj, aSvxMapProvider.GetMap(SVXMAP_3DSCENEOBJECT) )
+:   SvxShape( pObj, aSvxMapProvider.GetMap(SVXMAP_3DSCENEOBJECT), aSvxMapProvider.GetPropertySet(SVXMAP_3DSCENEOBJECT) )
 ,   mxPage( pDrawPage )
 {
 }
@@ -334,7 +334,7 @@ struct ImpRememberTransAndRect
     Rectangle                   maRect;
 };
 
-bool Svx3DSceneObject::setPropertyValueImpl( const SfxItemPropertyMap* pProperty, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+bool Svx3DSceneObject::setPropertyValueImpl( const ::rtl::OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     switch( pProperty->nWID )
     {
@@ -438,7 +438,7 @@ bool Svx3DSceneObject::setPropertyValueImpl( const SfxItemPropertyMap* pProperty
         break;
     }
     default:
-        return SvxShape::setPropertyValueImpl(pProperty, rValue);
+        return SvxShape::setPropertyValueImpl(rName, pProperty, rValue);
     }
 
     throw IllegalArgumentException();
@@ -446,7 +446,7 @@ bool Svx3DSceneObject::setPropertyValueImpl( const SfxItemPropertyMap* pProperty
 
 //----------------------------------------------------------------------
 
-bool Svx3DSceneObject::getPropertyValueImpl( const SfxItemPropertyMap* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+bool Svx3DSceneObject::getPropertyValueImpl( const ::rtl::OUString& rName, const SfxItemPropertySimpleEntry* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     switch( pProperty->nWID )
     {
@@ -483,7 +483,7 @@ bool Svx3DSceneObject::getPropertyValueImpl( const SfxItemPropertyMap* pProperty
         break;
     }
     default:
-        return SvxShape::getPropertyValueImpl( pProperty, rValue );
+        return SvxShape::getPropertyValueImpl( rName, pProperty, rValue );
     }
 
     return true;
@@ -504,7 +504,7 @@ uno::Sequence< OUString > SAL_CALL Svx3DSceneObject::getSupportedServiceNames()
 
 //----------------------------------------------------------------------
 Svx3DCubeObject::Svx3DCubeObject( SdrObject* pObj ) throw()
-:   SvxShape( pObj, aSvxMapProvider.GetMap(SVXMAP_3DCUBEOBJEKT) )
+:   SvxShape( pObj, aSvxMapProvider.GetMap(SVXMAP_3DCUBEOBJEKT), aSvxMapProvider.GetPropertySet(SVXMAP_3DCUBEOBJEKT) )
 {
 }
 
@@ -514,7 +514,7 @@ Svx3DCubeObject::~Svx3DCubeObject() throw()
 }
 
 //----------------------------------------------------------------------
-bool Svx3DCubeObject::setPropertyValueImpl( const SfxItemPropertyMap* pProperty, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+bool Svx3DCubeObject::setPropertyValueImpl( const ::rtl::OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
@@ -563,7 +563,7 @@ bool Svx3DCubeObject::setPropertyValueImpl( const SfxItemPropertyMap* pProperty,
         break;
     }
     default:
-        return SvxShape::setPropertyValueImpl( pProperty, rValue );
+        return SvxShape::setPropertyValueImpl( rName, pProperty, rValue );
     }
 
     throw IllegalArgumentException();
@@ -571,7 +571,7 @@ bool Svx3DCubeObject::setPropertyValueImpl( const SfxItemPropertyMap* pProperty,
 
 //----------------------------------------------------------------------
 
-bool Svx3DCubeObject::getPropertyValueImpl( const SfxItemPropertyMap* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+bool Svx3DCubeObject::getPropertyValueImpl( const ::rtl::OUString& rName, const SfxItemPropertySimpleEntry* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     switch( pProperty->nWID )
     {
@@ -613,7 +613,7 @@ bool Svx3DCubeObject::getPropertyValueImpl( const SfxItemPropertyMap* pProperty,
         break;
     }
     default:
-        return SvxShape::getPropertyValueImpl( pProperty, rValue );
+        return SvxShape::getPropertyValueImpl( rName, pProperty, rValue );
     }
 
     return true;
@@ -635,7 +635,7 @@ uno::Sequence< OUString > SAL_CALL Svx3DCubeObject::getSupportedServiceNames()
 
 //----------------------------------------------------------------------
 Svx3DSphereObject::Svx3DSphereObject( SdrObject* pObj ) throw()
-:   SvxShape( pObj, aSvxMapProvider.GetMap(SVXMAP_3DSPHEREOBJECT) )
+:   SvxShape( pObj, aSvxMapProvider.GetMap(SVXMAP_3DSPHEREOBJECT), aSvxMapProvider.GetPropertySet(SVXMAP_3DSPHEREOBJECT) )
 {
 }
 
@@ -646,7 +646,7 @@ Svx3DSphereObject::~Svx3DSphereObject() throw()
 
 //----------------------------------------------------------------------
 
-bool Svx3DSphereObject::setPropertyValueImpl( const SfxItemPropertyMap* pProperty, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+bool Svx3DSphereObject::setPropertyValueImpl( const ::rtl::OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     switch( pProperty->nWID )
     {
@@ -684,7 +684,7 @@ bool Svx3DSphereObject::setPropertyValueImpl( const SfxItemPropertyMap* pPropert
         break;
     }
     default:
-        return SvxShape::setPropertyValueImpl( pProperty, rValue );
+        return SvxShape::setPropertyValueImpl( rName, pProperty, rValue );
     }
 
     throw IllegalArgumentException();
@@ -692,7 +692,7 @@ bool Svx3DSphereObject::setPropertyValueImpl( const SfxItemPropertyMap* pPropert
 
 //----------------------------------------------------------------------
 
-bool Svx3DSphereObject::getPropertyValueImpl( const SfxItemPropertyMap* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+bool Svx3DSphereObject::getPropertyValueImpl( const ::rtl::OUString& rName, const SfxItemPropertySimpleEntry* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     switch( pProperty->nWID )
     {
@@ -729,7 +729,7 @@ bool Svx3DSphereObject::getPropertyValueImpl( const SfxItemPropertyMap* pPropert
         break;
     }
     default:
-        return SvxShape::getPropertyValueImpl( pProperty, rValue );
+        return SvxShape::getPropertyValueImpl( rName, pProperty, rValue );
     }
 
     return true;
@@ -751,7 +751,7 @@ uno::Sequence< OUString > SAL_CALL Svx3DSphereObject::getSupportedServiceNames()
 
 //----------------------------------------------------------------------
 Svx3DLatheObject::Svx3DLatheObject( SdrObject* pObj ) throw()
-:   SvxShape( pObj, aSvxMapProvider.GetMap(SVXMAP_3DLATHEOBJECT) )
+:   SvxShape( pObj, aSvxMapProvider.GetMap(SVXMAP_3DLATHEOBJECT), aSvxMapProvider.GetPropertySet(SVXMAP_3DLATHEOBJECT) )
 {
 }
 
@@ -840,7 +840,7 @@ static void B3dPolyPolygon_to_PolyPolygonShape3D( const basegfx::B3DPolyPolygon&
 
 //----------------------------------------------------------------------
 
-bool Svx3DLatheObject::setPropertyValueImpl( const SfxItemPropertyMap* pProperty, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+bool Svx3DLatheObject::setPropertyValueImpl( const ::rtl::OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     switch( pProperty->nWID )
     {
@@ -878,14 +878,14 @@ bool Svx3DLatheObject::setPropertyValueImpl( const SfxItemPropertyMap* pProperty
         break;
     }
     default:
-        return SvxShape::setPropertyValueImpl( pProperty, rValue );
+        return SvxShape::setPropertyValueImpl( rName, pProperty, rValue );
     }
 
     throw IllegalArgumentException();
 }
 
 //----------------------------------------------------------------------
-bool Svx3DLatheObject::getPropertyValueImpl( const SfxItemPropertyMap* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+bool Svx3DLatheObject::getPropertyValueImpl( const ::rtl::OUString& rName, const SfxItemPropertySimpleEntry* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     switch( pProperty->nWID )
     {
@@ -925,7 +925,7 @@ bool Svx3DLatheObject::getPropertyValueImpl( const SfxItemPropertyMap* pProperty
         break;
     }
     default:
-        return SvxShape::getPropertyValueImpl( pProperty, rValue );
+        return SvxShape::getPropertyValueImpl( rName, pProperty, rValue );
     }
 
     return true;
@@ -946,7 +946,7 @@ uno::Sequence< OUString > SAL_CALL Svx3DLatheObject::getSupportedServiceNames()
 ***********************************************************************/
 
 Svx3DExtrudeObject::Svx3DExtrudeObject( SdrObject* pObj ) throw()
-:   SvxShape( pObj, aSvxMapProvider.GetMap(SVXMAP_3DEXTRUDEOBJECT) )
+:   SvxShape( pObj, aSvxMapProvider.GetMap(SVXMAP_3DEXTRUDEOBJECT), aSvxMapProvider.GetPropertySet(SVXMAP_3DEXTRUDEOBJECT) )
 {
 }
 
@@ -957,7 +957,7 @@ Svx3DExtrudeObject::~Svx3DExtrudeObject() throw()
 
 //----------------------------------------------------------------------
 
-bool Svx3DExtrudeObject::setPropertyValueImpl( const SfxItemPropertyMap* pProperty, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+bool Svx3DExtrudeObject::setPropertyValueImpl( const ::rtl::OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     switch( pProperty->nWID )
     {
@@ -984,7 +984,7 @@ bool Svx3DExtrudeObject::setPropertyValueImpl( const SfxItemPropertyMap* pProper
         break;
     }
     default:
-        return SvxShape::setPropertyValueImpl( pProperty, rValue );
+        return SvxShape::setPropertyValueImpl( rName, pProperty, rValue );
     }
 
     throw IllegalArgumentException();
@@ -992,7 +992,7 @@ bool Svx3DExtrudeObject::setPropertyValueImpl( const SfxItemPropertyMap* pProper
 
 //----------------------------------------------------------------------
 
-bool Svx3DExtrudeObject::getPropertyValueImpl( const SfxItemPropertyMap* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+bool Svx3DExtrudeObject::getPropertyValueImpl( const ::rtl::OUString& rName, const SfxItemPropertySimpleEntry* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     switch( pProperty->nWID )
     {
@@ -1034,7 +1034,7 @@ bool Svx3DExtrudeObject::getPropertyValueImpl( const SfxItemPropertyMap* pProper
         break;
     }
     default:
-        return SvxShape::getPropertyValueImpl( pProperty, rValue );
+        return SvxShape::getPropertyValueImpl( rName, pProperty, rValue );
     }
 
     return true;
@@ -1056,7 +1056,7 @@ uno::Sequence< OUString > SAL_CALL Svx3DExtrudeObject::getSupportedServiceNames(
 
 //----------------------------------------------------------------------
 Svx3DPolygonObject::Svx3DPolygonObject( SdrObject* pObj ) throw()
-:   SvxShape( pObj, aSvxMapProvider.GetMap(SVXMAP_3DPOLYGONOBJECT) )
+:   SvxShape( pObj, aSvxMapProvider.GetMap(SVXMAP_3DPOLYGONOBJECT), aSvxMapProvider.GetPropertySet(SVXMAP_3DPOLYGONOBJECT) )
 {
 }
 
@@ -1066,7 +1066,7 @@ Svx3DPolygonObject::~Svx3DPolygonObject() throw()
 }
 
 //----------------------------------------------------------------------
-bool Svx3DPolygonObject::setPropertyValueImpl( const SfxItemPropertyMap* pProperty, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+bool Svx3DPolygonObject::setPropertyValueImpl( const ::rtl::OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     switch( pProperty->nWID )
     {
@@ -1127,14 +1127,14 @@ bool Svx3DPolygonObject::setPropertyValueImpl( const SfxItemPropertyMap* pProper
         break;
     }
     default:
-        return SvxShape::setPropertyValueImpl( pProperty, rValue );
+        return SvxShape::setPropertyValueImpl( rName, pProperty, rValue );
     }
 
     throw IllegalArgumentException();
 }
 
 //----------------------------------------------------------------------
-bool Svx3DPolygonObject::getPropertyValueImpl( const SfxItemPropertyMap* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+bool Svx3DPolygonObject::getPropertyValueImpl( const ::rtl::OUString& rName, const SfxItemPropertySimpleEntry* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     switch( pProperty->nWID )
     {
@@ -1173,7 +1173,7 @@ bool Svx3DPolygonObject::getPropertyValueImpl( const SfxItemPropertyMap* pProper
     }
 
     default:
-        return SvxShape::getPropertyValueImpl( pProperty, rValue );
+        return SvxShape::getPropertyValueImpl( rName, pProperty, rValue );
     }
 
     return true;
