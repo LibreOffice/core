@@ -95,8 +95,8 @@ class ChildAccess;
 class Node;
 class RootAccess;
 
-class Access:
-    public comphelper::WeakComponentImplHelper13<
+typedef
+    comphelper::WeakComponentImplHelper13<
         com::sun::star::container::XHierarchicalNameAccess,
         com::sun::star::container::XContainer,
         com::sun::star::beans::XExactName,
@@ -109,9 +109,10 @@ class Access:
         com::sun::star::beans::XHierarchicalPropertySet,
         com::sun::star::beans::XMultiHierarchicalPropertySet,
         com::sun::star::container::XNameContainer,
-        com::sun::star::lang::XSingleServiceFactory >,
-    private boost::noncopyable
-{
+        com::sun::star::lang::XSingleServiceFactory >
+    AccessBase;
+
+class Access: public AccessBase, private boost::noncopyable {
 public:
     bool isValue();
 

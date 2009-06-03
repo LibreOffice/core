@@ -89,20 +89,22 @@ void badNodePath() {
         0);
 }
 
-class Service:
-    private osl::Mutex,
-    public cppu::WeakComponentImplHelper5<
+typedef
+    cppu::WeakComponentImplHelper5<
         css::lang::XServiceInfo, css::lang::XMultiServiceFactory,
         css::util::XRefreshable, css::util::XFlushable,
-        css::lang::XLocalizable >,
-    private boost::noncopyable
+        css::lang::XLocalizable >
+    ServiceBase;
+
+class Service:
+    private osl::Mutex, public ServiceBase, private boost::noncopyable
 {
 public:
     Service(
         css::uno::Reference< css::uno::XComponentContext > const context,
         rtl::OUString const & locale):
-        cppu::WeakComponentImplHelper5(*static_cast< osl::Mutex * >(this)),
-        context_(context), locale_(locale)
+        ServiceBase(*static_cast< osl::Mutex * >(this)), context_(context),
+        locale_(locale)
     {}
 
 private:

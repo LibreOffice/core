@@ -75,13 +75,6 @@
 #include "setnode.hxx"
 #include "type.hxx"
 
-#if !defined INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_13
-#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_13
-#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 13
-#include "comphelper/implbase_var.hxx"
-#undef COMPHELPER_IMPLBASE_INTERFACE_NUMBER
-#endif
-
 namespace configmgr {
 
 namespace {
@@ -90,7 +83,7 @@ namespace css = com::sun::star;
 
 css::uno::Type mapType(Type type) {
     switch (type) {
-    case TYPE_NONE: //TODO: can happen?
+    default: // case TYPE_NONE: //TODO: can happen?
         return cppu::UnoType< cppu::UnoVoidType >::get();
     case TYPE_BOOLEAN:
         return cppu::UnoType< sal_Bool >::get();
@@ -193,7 +186,7 @@ void Access::releaseChild(rtl::OUString const & name) {
     children_.erase(name);
 }
 
-Access::Access(): WeakComponentImplHelper13(lock) {}
+Access::Access(): AccessBase(lock) {}
 
 Access::~Access() {}
 
@@ -696,14 +689,14 @@ void Access::insertByName(
         }
         rtl::OUString tmplName;
         if (freeAcc.is()) {
-            if (GroupNode * p = dynamic_cast< GroupNode * >(
+            if (GroupNode * freeGroup = dynamic_cast< GroupNode * >(
                     freeAcc->getNode().get()))
             {
-                tmplName = p->getTemplateName();
-            } else if (SetNode * p = dynamic_cast< SetNode * >(
+                tmplName = freeGroup->getTemplateName();
+            } else if (SetNode * freeSet = dynamic_cast< SetNode * >(
                            freeAcc->getNode().get()))
             {
-                tmplName = p->getTemplateName();
+                tmplName = freeSet->getTemplateName();
             }
         }
         if (!set->isValidTemplate(tmplName)) {
@@ -736,7 +729,7 @@ void Access::removeByName(rtl::OUString const & aName)
     OSL_ASSERT(thisIs(IS_EXTGROUP_OR_SET|IS_UPDATE));
     osl::MutexGuard g(lock);
     rtl::Reference< Node > p(getNode());
-    if (GroupNode * group = dynamic_cast< GroupNode * >(p.get())) {
+    if (dynamic_cast< GroupNode * >(p.get()) != 0) {
         rtl::Reference< ChildAccess > child(getChild(aName));
         if (!child.is()) {
             throw css::container::NoSuchElementException(
@@ -751,7 +744,7 @@ void Access::removeByName(rtl::OUString const & aName)
         child->setStatus(ChildAccess::STATUS_REMOVED);
         prop->unbind(); // must not throw
         //TODO notify change
-    } else if (SetNode * set = dynamic_cast< SetNode * >(p.get())) {
+    } else if (dynamic_cast< SetNode * >(p.get()) != 0) {
         rtl::Reference< ChildAccess > child(getChild(aName));
         if (!child.is()) {
             throw css::container::NoSuchElementException(
