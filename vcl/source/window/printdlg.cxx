@@ -999,7 +999,7 @@ void PrintDialog::updatePrinterText()
     }
 }
 
-void PrintDialog::setPreviewText( sal_Int32 nSetPage )
+void PrintDialog::setPreviewText( sal_Int32 )
 {
     if( mnCachedPages != 0 )
     {
