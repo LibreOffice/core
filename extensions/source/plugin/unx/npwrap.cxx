@@ -262,6 +262,17 @@ static GSourceFuncs aXtEventFuncs =
   NULL
 };
 
+static gboolean pollXtTimerCallback(gpointer)
+{
+    for(int i = 0; i < 5; i++)
+    {
+        if( (XtAppPending(app_context) & (XtIMAll & ~XtIMXEvent)) == 0 )
+            break;
+        XtAppProcessEvent(app_context, XtIMAll & ~XtIMXEvent);
+    }
+    return TRUE;
+}
+
 static gboolean prepareWakeupEvent( GSource*, gint* )
 {
     struct pollfd aPoll = { wakeup_fd[0], POLLIN, 0 };
@@ -411,6 +422,7 @@ int main( int argc, char **argv)
     aXtPollDesc.revents = 0;
     g_source_add_poll( pXTSource, &aXtPollDesc );
 
+    gint xt_polling_timer_id = g_timeout_add( 25, pollXtTimerCallback, NULL);
     // Initialize wakeup events listener
     GSource *pWakeupSource = g_source_new( &aWakeupEventFuncs, sizeof(GSource) );
     if ( pWakeupSource == NULL )
@@ -472,6 +484,8 @@ int main( int argc, char **argv)
     } while( ! XtAppGetExitFlag( app_context ) && ! bPluginAppQuit );
 
     medDebug( 1, "left plugin app main loop\n" );
+
+    g_source_remove(xt_polling_timer_id);
 
     pNP_Shutdown();
     medDebug( 1, "NP_Shutdown done\n" );
