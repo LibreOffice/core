@@ -1267,7 +1267,23 @@ Size ListBox::CalcMinimumSize() const
     {
         aSz.Height() = mpImplLB->CalcSize( 1 ).Height();
         aSz.Width() = mpImplLB->GetMaxEntryWidth();
-        aSz.Width() += GetSettings().GetStyleSettings().GetScrollBarSize();
+
+        // try native borders; scrollbar size may not be a good indicator
+        // see how large the edit area inside is to estimate what is needed for the dropdown
+        ImplControlValue aControlValue;
+        Point aPoint;
+        Region aContent, aBound;
+        Size aTestSize( 100, 20 );
+        Region aArea( Rectangle( aPoint, aTestSize ) );
+        if( const_cast<ListBox*>(this)->GetNativeControlRegion(
+                       CTRL_LISTBOX, PART_SUB_EDIT, aArea, 0, aControlValue, rtl::OUString(), aBound, aContent) )
+        {
+            // use the themes drop down size
+            Rectangle aContentRect = aContent.GetBoundRect();
+            aSz.Width() += aTestSize.Width() - aContentRect.GetWidth();
+        }
+        else
+            aSz.Width() += GetSettings().GetStyleSettings().GetScrollBarSize();
     }
 
     aSz = CalcWindowSize( aSz );

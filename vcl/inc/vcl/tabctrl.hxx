@@ -31,15 +31,16 @@
 #ifndef _SV_TABCTRL_HXX
 #define _SV_TABCTRL_HXX
 
-#include <vcl/sv.h>
-#include <vcl/dllapi.h>
-#include <vcl/ctrl.hxx>
+#include "vcl/sv.h"
+#include "vcl/dllapi.h"
+#include "vcl/ctrl.hxx"
 
 struct ImplTabItem;
 struct ImplTabCtrlData;
 class ImplTabItemList;
 class TabPage;
 class PushButton;
+class ListBox;
 
 // --------------------
 // - TabControl-Types -
@@ -92,6 +93,7 @@ private:
     SAL_DLLPRIVATE void         ImplPaint( const Rectangle& rRect, bool bLayout = false );
     SAL_DLLPRIVATE void         ImplFreeLayoutData();
     DECL_DLLPRIVATE_LINK(       ImplScrollBtnHdl, PushButton* pBtn );
+    DECL_DLLPRIVATE_LINK(       ImplListBoxSelectHdl, ListBox* );
 
 protected:
     using Window::ImplInit;
