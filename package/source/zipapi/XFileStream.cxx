@@ -84,7 +84,7 @@ XFileStream::XFileStream( ZipEntry & rEntry,
         if ( bHaveEncryptData )
         {
             if ( !bNewRawStream )
-                ZipFile::StaticGetCipher ( rData, maCipher );
+                ZipFile::StaticGetCipher ( rData, maCipher, sal_True );
             else
             {
                 // Put in the EncryptedDataHeader

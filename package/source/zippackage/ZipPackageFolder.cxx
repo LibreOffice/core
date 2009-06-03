@@ -449,25 +449,16 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
                     if ( bToBeEncrypted && !bTransportOwnEncrStreamAsRaw )
                     {
                         Sequence < sal_uInt8 > aSalt ( 16 ), aVector ( 8 );
-                        Sequence < sal_Int8 > aKey ( 16 );
                         rtl_random_getBytes ( rRandomPool, aSalt.getArray(), 16 );
                         rtl_random_getBytes ( rRandomPool, aVector.getArray(), 8 );
                         sal_Int32 nIterationCount = 1024;
 
-                        if ( pStream->HasOwnKey() )
-                            rtl_digest_PBKDF2 ( reinterpret_cast < sal_uInt8 * > (aKey.getArray()), 16,
-                                                reinterpret_cast < const sal_uInt8 * > (pStream->getKey().getConstArray()), pStream->getKey().getLength(),
-                                                reinterpret_cast < const sal_uInt8 * > ( aSalt.getConstArray() ), 16,
-                                                nIterationCount );
-                        else
-                            rtl_digest_PBKDF2 ( reinterpret_cast < sal_uInt8 * > (aKey.getArray()), 16,
-                                                reinterpret_cast < const sal_uInt8 * > (rEncryptionKey.getConstArray()), rEncryptionKey.getLength(),
-                                                reinterpret_cast < const sal_uInt8 * > ( aSalt.getConstArray() ), 16,
-                                                nIterationCount );
+                        if ( !pStream->HasOwnKey() )
+                            pStream->setKey ( rEncryptionKey );
+
                         pStream->setInitialisationVector ( aVector );
                         pStream->setSalt ( aSalt );
                         pStream->setIterationCount ( nIterationCount );
-                        pStream->setKey ( aKey );
                     }
 
                     // last property is digest, which is inserted later if we didn't have

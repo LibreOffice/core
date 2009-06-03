@@ -14,23 +14,30 @@ import share.LogWriter;
 import complex.storages.TestHelper;
 import complex.storages.StorageTest;
 
-public class Test08 implements StorageTest {
+public class Test18 implements StorageTest {
 
     XMultiServiceFactory m_xMSF;
     XSingleServiceFactory m_xStorageFactory;
     TestHelper m_aTestHelper;
 
-    public Test08( XMultiServiceFactory xMSF, XSingleServiceFactory xStorageFactory, LogWriter aLogWriter )
+    public Test18( XMultiServiceFactory xMSF, XSingleServiceFactory xStorageFactory, LogWriter aLogWriter )
     {
         m_xMSF = xMSF;
         m_xStorageFactory = xStorageFactory;
-        m_aTestHelper = new TestHelper( aLogWriter, "Test08: " );
+        m_aTestHelper = new TestHelper( aLogWriter, "Test18: " );
     }
 
     public boolean test()
     {
         try
         {
+            // test the default value of Compressed property
+            String sTempFileURL = m_aTestHelper.CreateTempFile( m_xMSF );
+            if ( sTempFileURL == null || sTempFileURL == "" )
+            {
+                m_aTestHelper.Error( "No valid temporary file was created!" );
+                return false;
+            }
 
             // create temporary storage based on arbitrary medium
             // after such a storage is closed it is lost
@@ -39,28 +46,6 @@ public class Test08 implements StorageTest {
             if ( xTempStorage == null )
             {
                 m_aTestHelper.Error( "Can't create temporary storage representation!" );
-                return false;
-            }
-
-            // set the global password for the root storage
-            XEncryptionProtectedSource xTempStorageEncryption =
-                (XEncryptionProtectedSource) UnoRuntime.queryInterface( XEncryptionProtectedSource.class, xTempStorage );
-
-            if ( xTempStorageEncryption == null )
-            {
-                m_aTestHelper.Message( "Optional interface XEncryptionProtectedSource is not implemented, feature can not be tested!" );
-                return true;
-            }
-
-            String sPass1 = "123";
-            String sPass2 = "321";
-
-            try {
-                xTempStorageEncryption.setEncryptionPassword( sPass1 );
-            }
-            catch( Exception e )
-            {
-                m_aTestHelper.Error( "Can't set a common encryption key for the storage, exception:" + e );
                 return false;
             }
 
@@ -74,58 +59,37 @@ public class Test08 implements StorageTest {
                 return false;
             }
 
-            byte pBigBytes[] = new byte[33000];
-            for ( int nInd = 0; nInd < 33000; nInd++ )
-                pBigBytes[nInd] = (byte)( nInd % 128 );
-
-            // open a new substream, set "MediaType" and "Compressed" properties to it and write some bytes
-            // the stream will be encrypted with common password
             byte pBytes1[] = { 1, 1, 1, 1, 1 };
-            if ( !m_aTestHelper.WBToSubstrOfEncr( xTempSubStorage, "SubStream1", "MediaType1", true, pBytes1, true ) )
-                return false;
-            if ( !m_aTestHelper.WBToSubstrOfEncr( xTempSubStorage, "BigSubStream1", "MediaType1", true, pBigBytes, true ) )
+
+            // open a new substream, set "MediaType" and "Compressed" properties to it and write some bytes
+            if ( !m_aTestHelper.WriteBytesToSubstreamDefaultCompressed( xTempSubStorage, "SubStream1", "image/jpeg", pBytes1 ) )
                 return false;
 
             // open a new substream, set "MediaType" and "Compressed" properties to it and write some bytes
-            // the stream will not be encrypted
-            byte pBytes2[] = { 2, 2, 2, 2, 2 };
-            if ( !m_aTestHelper.WBToSubstrOfEncr( xTempSubStorage, "SubStream2", "MediaType2", false, pBytes2, false ) )
-                return false;
-            if ( !m_aTestHelper.WBToSubstrOfEncr( xTempSubStorage, "BigSubStream2", "MediaType2", false, pBigBytes, false ) )
+            if ( !m_aTestHelper.WriteBytesToSubstreamDefaultCompressed( xTempSubStorage, "SubStream2", "image/png", pBytes1 ) )
                 return false;
 
             // open a new substream, set "MediaType" and "Compressed" properties to it and write some bytes
-            // the stream will be compressed with own password
-            byte pBytes3[] = { 3, 3, 3, 3, 3 };
+            if ( !m_aTestHelper.WriteBytesToSubstreamDefaultCompressed( xTempSubStorage, "SubStream3", "image/gif", pBytes1 ) )
+                return false;
 
             // open a new substream, set "MediaType" and "Compressed" properties to it and write some bytes
-            // the stream will not be encrypted
-            if ( !m_aTestHelper.WriteBytesToEncrSubstream( xTempSubStorage, "SubStream3", "MediaType3", false, pBytes3, sPass2 ) )
-                return false;
-            if ( !m_aTestHelper.WriteBytesToEncrSubstream( xTempSubStorage, "BigSubStream3", "MediaType3", false, pBigBytes, sPass2 ) )
+            if ( !m_aTestHelper.WriteBytesToSubstreamDefaultCompressed( xTempSubStorage, "SubStream4", "MediaType1", pBytes1 ) )
                 return false;
 
             // set "MediaType" property for storages and check that "IsRoot" and "OpenMode" properties are set correctly
             if ( !m_aTestHelper.setStorageTypeAndCheckProps( xTempStorage,
-                                                            "MediaType4",
+                                                            "MediaType3",
                                                             true,
                                                             ElementModes.WRITE ) )
                 return false;
 
             // set "MediaType" property for storages and check that "IsRoot" and "OpenMode" properties are set correctly
             if ( !m_aTestHelper.setStorageTypeAndCheckProps( xTempSubStorage,
-                                                            "MediaType5",
+                                                            "MediaType4",
                                                             false,
                                                             ElementModes.WRITE ) )
                 return false;
-
-            // create temporary file
-            String sTempFileURL = m_aTestHelper.CreateTempFile( m_xMSF );
-            if ( sTempFileURL == null || sTempFileURL == "" )
-            {
-                m_aTestHelper.Error( "No valid temporary file was created!" );
-                return false;
-            }
 
             // create temporary storage based on a previously created temporary file
             Object pArgs[] = new Object[2];
@@ -154,7 +118,7 @@ public class Test08 implements StorageTest {
             // ================================================
 
             // the temporary file must not be locked any more after storage disposing
-            pArgs[1] = new Integer( ElementModes.READ );
+            pArgs[1] = new Integer( ElementModes.WRITE );
             Object oResultStorage = m_xStorageFactory.createInstanceWithArguments( pArgs );
             XStorage xResultStorage = (XStorage) UnoRuntime.queryInterface( XStorage.class, oResultStorage );
             if ( xResultStorage == null )
@@ -163,7 +127,7 @@ public class Test08 implements StorageTest {
                 return false;
             }
 
-            if ( !m_aTestHelper.checkStorageProperties( xResultStorage, "MediaType4", true, ElementModes.READ ) )
+            if ( !m_aTestHelper.checkStorageProperties( xResultStorage, "MediaType3", true, ElementModes.WRITE ) )
                 return false;
 
             // open existing substorage
@@ -176,42 +140,19 @@ public class Test08 implements StorageTest {
                 return false;
             }
 
-            if ( !m_aTestHelper.checkStorageProperties( xResultSubStorage, "MediaType5", false, ElementModes.READ ) )
+            if ( !m_aTestHelper.checkStorageProperties( xResultSubStorage, "MediaType4", false, ElementModes.READ ) )
                 return false;
 
-            // set the global password for the root storage
-            XEncryptionProtectedSource xResultStorageEncryption =
-                (XEncryptionProtectedSource) UnoRuntime.queryInterface( XEncryptionProtectedSource.class, xResultStorage );
-
-            if ( xResultStorageEncryption == null )
-            {
-                m_aTestHelper.Error( "XEncryptionProtectedSource was successfully used already, so it must be supported!" );
-                return false;
-            }
-
-            try {
-                xResultStorageEncryption.setEncryptionPassword( sPass2 );
-            }
-            catch( Exception e )
-            {
-                m_aTestHelper.Error( "Can't set a common encryption key for the storage, exception:" + e );
-                return false;
-            }
-
-            if ( !m_aTestHelper.checkEncrStream( xResultSubStorage, "SubStream1", "MediaType1", pBytes1, sPass1 ) )
-                return false;
-            if ( !m_aTestHelper.checkEncrStream( xResultSubStorage, "BigSubStream1", "MediaType1", pBigBytes, sPass1 ) )
+            if ( !m_aTestHelper.checkStream( xResultSubStorage, "SubStream1", "image/jpeg", false, pBytes1 ) )
                 return false;
 
-            if ( !m_aTestHelper.checkStream( xResultSubStorage, "SubStream2", "MediaType2", false, pBytes2 ) )
-                return false;
-            if ( !m_aTestHelper.checkStream( xResultSubStorage, "BigSubStream2", "MediaType2", false, pBigBytes ) )
+            if ( !m_aTestHelper.checkStream( xResultSubStorage, "SubStream2", "image/png", false, pBytes1 ) )
                 return false;
 
-            // the common root storage password should allow to open this stream
-            if ( !m_aTestHelper.checkStream( xResultSubStorage, "SubStream3", "MediaType3", true, pBytes3 ) )
+            if ( !m_aTestHelper.checkStream( xResultSubStorage, "SubStream3", "image/gif", false, pBytes1 ) )
                 return false;
-            if ( !m_aTestHelper.checkStream( xResultSubStorage, "BigSubStream3", "MediaType3", true, pBigBytes ) )
+
+            if ( !m_aTestHelper.checkStream( xResultSubStorage, "SubStream4", "MediaType1", true, pBytes1 ) )
                 return false;
 
             // dispose used storages to free resources
@@ -226,5 +167,6 @@ public class Test08 implements StorageTest {
             return false;
         }
     }
+
 }
 

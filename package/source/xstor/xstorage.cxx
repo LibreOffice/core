@@ -1384,7 +1384,7 @@ SotElement_Impl* OStorage_Impl::InsertStream( ::rtl::OUString aName, sal_Bool bE
 
     // the mode is not needed for storage stream internal implementation
     SotElement_Impl* pNewElement = InsertElement( aName, sal_False );
-    pNewElement->m_pStream = new OWriteStream_Impl( this, xPackageSubStream, m_xPackage, m_xFactory, bEncr, m_nStorageType );
+    pNewElement->m_pStream = new OWriteStream_Impl( this, xPackageSubStream, m_xPackage, m_xFactory, bEncr, m_nStorageType, sal_True );
 
     m_aChildrenList.push_back( pNewElement );
     m_bIsModified = sal_True;
@@ -1425,7 +1425,7 @@ SotElement_Impl* OStorage_Impl::InsertRawStream( ::rtl::OUString aName, const un
 
     // the mode is not needed for storage stream internal implementation
     SotElement_Impl* pNewElement = InsertElement( aName, sal_False );
-    pNewElement->m_pStream = new OWriteStream_Impl( this, xPackageSubStream, m_xPackage, m_xFactory, sal_True, m_nStorageType );
+    pNewElement->m_pStream = new OWriteStream_Impl( this, xPackageSubStream, m_xPackage, m_xFactory, sal_True, m_nStorageType, sal_False );
     // the stream is inserted and must be treated as a commited one
     pNewElement->m_pStream->SetToBeCommited();
 
@@ -1564,7 +1564,7 @@ void OStorage_Impl::OpenSubStream( SotElement_Impl* pElement )
             throw uno::RuntimeException(); // TODO
 
         // the stream can never be inserted here, because inserted stream element holds the stream till commit or destruction
-        pElement->m_pStream = new OWriteStream_Impl( this, xPackageSubStream, m_xPackage, m_xFactory, sal_False, m_nStorageType, GetRelInfoStreamForName( pElement->m_aOriginalName ) );
+        pElement->m_pStream = new OWriteStream_Impl( this, xPackageSubStream, m_xPackage, m_xFactory, sal_False, m_nStorageType, sal_False, GetRelInfoStreamForName( pElement->m_aOriginalName ) );
     }
 }
 

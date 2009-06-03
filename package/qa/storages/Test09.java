@@ -45,10 +45,15 @@ public class Test09 implements StorageTest {
             String sPass1 = "123";
             String sPass2 = "321";
             byte pBytes[] = { 1, 1, 1, 1, 1 };
+            byte pBigBytes[] = new byte[33000];
+            for ( int nInd = 0; nInd < 33000; nInd++ )
+                pBigBytes[nInd] = (byte)( nInd % 128 );
 
             // open a new substream, set "MediaType" and "Compressed" properties to it and write some bytes
             // the stream will not be encrypted
             if ( !m_aTestHelper.WriteBytesToEncrSubstream( xTempStorage, "SubStream1", "MediaType1", false, pBytes, sPass1 ) )
+                return false;
+            if ( !m_aTestHelper.WriteBytesToEncrSubstream( xTempStorage, "BigSubStream1", "MediaType1", false, pBigBytes, sPass1 ) )
                 return false;
 
             // create temporary file
@@ -84,6 +89,13 @@ public class Test09 implements StorageTest {
             else if ( nResult == -1 )
                 return true; // tested optional feature is not supported
 
+            // change password of the substream of new storage based on file
+            nResult = m_aTestHelper.ChangeStreamPass( xTempFileStorage, "BigSubStream1", sPass1, sPass2 );
+            if ( nResult == 0 )
+                return false; // test failed
+            else if ( nResult == -1 )
+                return true; // tested optional feature is not supported
+
             if ( !m_aTestHelper.commitStorage( xTempFileStorage ) )
                 return false;
 
@@ -106,6 +118,8 @@ public class Test09 implements StorageTest {
             }
 
             if ( !m_aTestHelper.checkEncrStream( xResultStorage, "SubStream1", "MediaType1", pBytes, sPass2 ) )
+                return false;
+            if ( !m_aTestHelper.checkEncrStream( xResultStorage, "BigSubStream1", "MediaType1", pBigBytes, sPass2 ) )
                 return false;
 
             // dispose used storages to free resources
