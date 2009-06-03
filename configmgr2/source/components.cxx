@@ -268,7 +268,7 @@ Type getTypeAttribute(xmlDocPtr doc, xmlNodePtr node) {
             node, xmlString("type"),
             xmlString("http://openoffice.org/2001/registry")));
     if (type.str == 0) {
-        return TYPE_NONE;
+        return TYPE_ERROR;
     }
     xmlChar const * p = xmlStrchr(type.str, ':');
     if (p == 0) {
@@ -794,7 +794,7 @@ void parseXcsGroupContent(
         rtl::Reference< Node > member;
         if (isOorElement(p, "prop")) {
             Type type(getTypeAttribute(doc, p));
-            if (type == TYPE_NONE) {
+            if (type == TYPE_ERROR) {
                 throw css::uno::RuntimeException(
                     (rtl::OUString(
                         RTL_CONSTASCII_USTRINGPARAM(
@@ -1062,7 +1062,7 @@ void parseXcuNode(
                 xmlNodePtr q(skipBlank(p->xmlChildrenNode));
                 LocalizedValues values;
                 while (isOorElement(q, "value")) {
-                    if (type == TYPE_NONE) {
+                    if (type == TYPE_ERROR) {
                         if (property != 0) {
                             type = property->getType();
                         } else if (localized != 0) {

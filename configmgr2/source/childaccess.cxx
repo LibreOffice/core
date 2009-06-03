@@ -107,6 +107,35 @@ rtl::Reference< RootAccess > ChildAccess::getRoot() {
     return root_;
 }
 
+rtl::OUString ChildAccess::getName() throw (css::uno::RuntimeException) {
+    return name_;
+}
+
+css::uno::Reference< css::uno::XInterface > ChildAccess::getParent()
+    throw (css::uno::RuntimeException)
+{
+    OSL_ASSERT(thisIs(IS_ANY));
+    osl::MutexGuard g(lock);
+    return static_cast< cppu::OWeakObject * >(parent_.get());
+}
+
+void ChildAccess::setParent(css::uno::Reference< css::uno::XInterface > const &)
+    throw (css::lang::NoSupportException, css::uno::RuntimeException)
+{
+    OSL_ASSERT(thisIs(IS_ANY));
+    throw css::lang::NoSupportException(
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("setParent")),
+        static_cast< cppu::OWeakObject * >(this));
+}
+
+sal_Int64 ChildAccess::getSomething(
+    css::uno::Sequence< sal_Int8 > const & aIdentifier)
+    throw (css::uno::RuntimeException)
+{
+    return aIdentifier == getTunnelId()
+        ? reinterpret_cast< sal_Int64 >(this) : 0;
+}
+
 oslInterlockedCount ChildAccess::acquireCounting() {
     return osl_incrementInterlockedCount(&m_refCount);
 }
@@ -276,35 +305,6 @@ ChildAccess::~ChildAccess() {
     if (parent_.is()) {
         parent_->releaseChild(name_);
     }
-}
-
-rtl::OUString ChildAccess::getName() throw (css::uno::RuntimeException) {
-    return name_;
-}
-
-css::uno::Reference< css::uno::XInterface > ChildAccess::getParent()
-    throw (css::uno::RuntimeException)
-{
-    OSL_ASSERT(thisIs(IS_ANY));
-    osl::MutexGuard g(lock);
-    return static_cast< cppu::OWeakObject * >(parent_.get());
-}
-
-void ChildAccess::setParent(css::uno::Reference< css::uno::XInterface > const &)
-    throw (css::lang::NoSupportException, css::uno::RuntimeException)
-{
-    OSL_ASSERT(thisIs(IS_ANY));
-    throw css::lang::NoSupportException(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("setParent")),
-        static_cast< cppu::OWeakObject * >(this));
-}
-
-sal_Int64 ChildAccess::getSomething(
-    css::uno::Sequence< sal_Int8 > const & aIdentifier)
-    throw (css::uno::RuntimeException)
-{
-    return aIdentifier == getTunnelId()
-        ? reinterpret_cast< sal_Int64 >(this) : 0;
 }
 
 }

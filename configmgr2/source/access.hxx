@@ -32,6 +32,8 @@
 
 #include "sal/config.h"
 
+#include <vector>
+
 #include "boost/noncopyable.hpp"
 #include "com/sun/star/beans/PropertyVetoException.hpp"
 #include "com/sun/star/beans/UnknownPropertyException.hpp"
@@ -382,6 +384,8 @@ private:
             com::sun::star::uno::RuntimeException);
 
     rtl::Reference< ChildAccess > getChild(rtl::OUString const & name);
+
+    std::vector< rtl::Reference< ChildAccess > > getAllChildren();
 
     rtl::Reference< ChildAccess > getSubChild(rtl::OUString const & path);
 

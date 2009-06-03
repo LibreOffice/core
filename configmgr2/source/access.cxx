@@ -30,6 +30,8 @@
 #include "precompiled_configmgr.hxx"
 #include "sal/config.h"
 
+#include <vector>
+
 #include "com/sun/star/beans/Property.hpp"
 #include "com/sun/star/beans/PropertyAttribute.hpp"
 #include "com/sun/star/beans/PropertyVetoException.hpp"
@@ -83,7 +85,9 @@ namespace css = com::sun::star;
 
 css::uno::Type mapType(Type type) {
     switch (type) {
-    default: // case TYPE_NONE: //TODO: can happen?
+    default: // case TYPE_ERROR: //TODO: can happen?
+        return cppu::UnoType< cppu::UnoVoidType >::get();
+    case TYPE_NIL: //TODO: can happen?
         return cppu::UnoType< cppu::UnoVoidType >::get();
     case TYPE_BOOLEAN:
         return cppu::UnoType< sal_Bool >::get();
@@ -119,23 +123,32 @@ css::uno::Type mapType(Type type) {
     }
 }
 
-Type mapType(css::uno::Type type) {
-    switch (type.getTypeClass()) {
+Type mapType(css::uno::Any value) {
+    switch (value.getValueType().getTypeClass()) {
     case css::uno::TypeClass_BOOLEAN:
         return TYPE_BOOLEAN;
+    case css::uno::TypeClass_BYTE:
+        return TYPE_SHORT;
     case css::uno::TypeClass_SHORT:
         return TYPE_SHORT;
+    case css::uno::TypeClass_UNSIGNED_SHORT:
+        return value.has< sal_Int16 >() ? TYPE_SHORT : TYPE_INT;
     case css::uno::TypeClass_LONG:
         return TYPE_INT;
+    case css::uno::TypeClass_UNSIGNED_LONG:
+        return value.has< sal_Int32 >() ? TYPE_INT : TYPE_LONG;
     case css::uno::TypeClass_HYPER:
         return TYPE_LONG;
+    case css::uno::TypeClass_UNSIGNED_HYPER:
+        return value.has< sal_Int64 >() ? TYPE_LONG : TYPE_ERROR;
+    case css::uno::TypeClass_FLOAT:
     case css::uno::TypeClass_DOUBLE:
         return TYPE_DOUBLE;
     case css::uno::TypeClass_STRING:
         return TYPE_STRING;
-    case css::uno::TypeClass_SEQUENCE:
+    case css::uno::TypeClass_SEQUENCE: //TODO
         {
-            rtl::OUString name(type.getTypeName());
+            rtl::OUString name(value.getValueType().getTypeName());
             if (name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("[]byte"))) {
                 return TYPE_HEXBINARY;
             } else if (name.equalsAsciiL(
@@ -167,7 +180,7 @@ Type mapType(css::uno::Type type) {
         }
         // fall through
     default:
-        return TYPE_NONE;
+        return TYPE_ERROR;
     }
 }
 
@@ -253,40 +266,15 @@ css::uno::Sequence< rtl::OUString > Access::getElementNames()
 {
     OSL_ASSERT(thisIs(IS_ANY));
     osl::MutexGuard g(lock);
-    rtl::Reference< Node > p(getNode());
-    if (LocalizedPropertyNode * locprop =
-        dynamic_cast< LocalizedPropertyNode * >(p.get()))
+    std::vector< rtl::Reference< ChildAccess > > children(getAllChildren());
+    comphelper::SequenceAsVector< rtl::OUString > names;
+    for (std::vector< rtl::Reference< ChildAccess > >::iterator i(
+             children.begin());
+         i != children.end(); ++i)
     {
-        comphelper::SequenceAsVector< rtl::OUString > names;
-        for (NodeMap::iterator i(locprop->getMembers().begin());
-             i != locprop->getMembers().end(); ++i)
-        {
-            names.push_back(i->first);
-        }
-        return names.getAsConstList();
+        names.push_back((*i)->getName());
     }
-    if (GroupNode * group = dynamic_cast< GroupNode * >(p.get())) {
-        comphelper::SequenceAsVector< rtl::OUString > names;
-        for (NodeMap::iterator i(group->getMembers().begin());
-             i != group->getMembers().end(); ++i)
-        {
-            names.push_back(i->first);
-        }
-        return names.getAsConstList();
-    } else if (SetNode * set = dynamic_cast< SetNode * >(p.get())) {
-        comphelper::SequenceAsVector< rtl::OUString > names;
-        for (NodeMap::iterator i(set->getMembers().begin());
-             i != set->getMembers().end(); ++i)
-        {
-            names.push_back(i->first);
-        }
-        return names.getAsConstList();
-    } else {
-        OSL_ASSERT(false);
-        throw css::uno::RuntimeException(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("this cannot happen")),
-            static_cast< cppu::OWeakObject * >(this));
-    }
+    return names.getAsConstList();
 }
 
 sal_Bool Access::hasByName(rtl::OUString const & aName)
@@ -347,7 +335,16 @@ css::uno::Sequence< css::beans::Property > Access::getProperties()
     throw (css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_GROUP));
-    if(true)abort();*(char*)0=0;throw 0;//TODO
+    osl::MutexGuard g(lock);
+    std::vector< rtl::Reference< ChildAccess > > children(getAllChildren());
+    comphelper::SequenceAsVector< css::beans::Property > properties;
+    for (std::vector< rtl::Reference< ChildAccess > >::iterator i(
+             children.begin());
+         i != children.end(); ++i)
+    {
+        properties.push_back((*i)->asProperty());
+    }
+    return properties.getAsConstList();
 }
 
 css::beans::Property Access::getPropertyByName(rtl::OUString const & aName)
@@ -659,8 +656,8 @@ void Access::insertByName(
             throw css::container::ElementExistException(
                 aName, static_cast< cppu::OWeakObject * >(this));
         }
-        Type type = mapType(aElement.getValueType());
-        if (type == TYPE_NONE) {
+        Type type = mapType(aElement);
+        if (type == TYPE_ERROR) {
             throw css::lang::IllegalArgumentException(
                 rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM(
@@ -840,6 +837,39 @@ rtl::Reference< ChildAccess > Access::getChild(rtl::OUString const & name) {
     return child;
 }
 
+std::vector< rtl::Reference< ChildAccess > > Access::getAllChildren() {
+    NodeMap * members;
+    rtl::Reference< Node > p(getNode());
+    if (LocalizedPropertyNode * locprop =
+        dynamic_cast< LocalizedPropertyNode * >(p.get()))
+    {
+        members = &locprop->getMembers();
+    } else if (GroupNode * group = dynamic_cast< GroupNode * >(p.get())) {
+        members = &group->getMembers();
+    } else if (SetNode * set = dynamic_cast< SetNode * >(p.get())) {
+        members = &set->getMembers();
+    } else {
+        OSL_ASSERT(false);
+        throw css::uno::RuntimeException(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("this cannot happen")),
+            static_cast< cppu::OWeakObject * >(this));
+    }
+    std::vector< rtl::Reference< ChildAccess > > vec;
+    for (NodeMap::iterator i(members->begin()); i != members->end(); ++i) {
+        if (modifiedChildren_.find(i->first) == modifiedChildren_.end()) {
+            vec.push_back(getChild(i->first));
+        }
+    }
+    for (HardChildMap::iterator i(modifiedChildren_.begin());
+         i != modifiedChildren_.end(); ++i)
+    {
+        if (i->second->getStatus() != ChildAccess::STATUS_REMOVED) {
+            vec.push_back(i->second);
+        }
+    }
+    return vec;
+}
+
 rtl::Reference< ChildAccess > Access::getSubChild(rtl::OUString const & path) {
     sal_Int32 i = path.indexOf('/');
     rtl::OUString name;
@@ -924,77 +954,66 @@ css::beans::Property Access::asProperty() {
 }
 
 void Access::setProperty(css::uno::Any const & value) {
+    Type type = TYPE_ERROR;
+    bool nillable = false;
     rtl::Reference< Node > p(getNode());
     if (PropertyNode * prop = dynamic_cast< PropertyNode * >(p.get())) {
-        Type type = mapType(value.getValueType());
-        if (value.hasValue()
-            ? (type == TYPE_NONE ||
-               (prop->getType() != TYPE_ANY && type != prop->getType()))
-            : !prop->isNillable())
-        {
-            throw css::lang::IllegalArgumentException(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "configmgr setProperty inappropriate prop value")),
-                static_cast< cppu::OWeakObject * >(this), -1);
-        }
-        dynamic_cast< ChildAccess * >(this)->setStatus(
-            ChildAccess::STATUS_CHANGED, value);
-        //TODO notify change
-        return;
-    }
-    if (LocalizedPropertyValueNode * locval =
+        type = prop->getType();
+        nillable = prop->isNillable();
+    } else if (LocalizedPropertyValueNode * locval =
                dynamic_cast< LocalizedPropertyValueNode * >(p.get()))
     {
         LocalizedPropertyNode * locprop =
             dynamic_cast< LocalizedPropertyNode * >(locval->getParent());
         OSL_ASSERT(locprop != 0);
-        Type type = mapType(value.getValueType());
-        if (value.hasValue()
-            ? (type == TYPE_NONE ||
-               (locprop->getType() != TYPE_ANY && type != locprop->getType()))
-            : !locprop->isNillable())
-        {
-            throw css::lang::IllegalArgumentException(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "configmgr setProperty inappropriate prop value")),
-                static_cast< cppu::OWeakObject * >(this), -1);
-        }
-        dynamic_cast< ChildAccess * >(this)->setStatus(
-            ChildAccess::STATUS_CHANGED, value);
-        //TODO notify change
-        return;
-    }
-    if (LocalizedPropertyNode * locprop =
-        dynamic_cast< LocalizedPropertyNode * >(p.get()))
+        type = locprop->getType();
+        nillable = locprop->isNillable();
+    } else if (LocalizedPropertyNode * locprop =
+               dynamic_cast< LocalizedPropertyNode * >(p.get()))
     {
-        rtl::OUString loc(getRoot()->getLocale());
-        if (!Components::allLocales(loc)) {
-            Type type = mapType(value.getValueType());
-            if (value.hasValue()
-                ? (type == TYPE_NONE ||
-                   (locprop->getType() != TYPE_ANY &&
-                    type != locprop->getType()))
-                : !locprop->isNillable())
-            {
-                throw css::lang::IllegalArgumentException(
-                    rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM(
-                            "configmgr setProperty inappropriate prop value")),
-                    static_cast< cppu::OWeakObject * >(this), -1);
-            }
-            dynamic_cast< ChildAccess * >(this)->setStatus(
-                ChildAccess::STATUS_CHANGED, value);
-            //TODO notify change
-            return;
+        if (!Components::allLocales(getRoot()->getLocale())) {
+            type = locprop->getType();
+            nillable = locprop->isNillable();
         }
     }
-    throw css::lang::IllegalArgumentException(
-        rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM(
-                "configmgr setProperty naming an inappropriate member")),
-        static_cast< cppu::OWeakObject * >(this), -1);
+    bool ok;
+    switch (type) {
+    case TYPE_ERROR:
+        ok = false;
+        break;
+    case TYPE_ANY:
+        switch (mapType(value)) {
+        case TYPE_ERROR:
+            ok = false;
+            break;
+        case TYPE_NIL:
+            ok = nillable;
+            break;
+        case TYPE_ANY:
+            OSL_ASSERT(false);
+            // fall through (cannot happen)
+        default:
+            ok = true;
+            break;
+        }
+        break;
+    case TYPE_NIL:
+        OSL_ASSERT(false);
+        // fall through (cannot happen)
+    default:
+        ok = value.hasValue() ? value.isExtractableTo(mapType(type)) : nillable;
+        break;
+    }
+    if (!ok) {
+        throw css::lang::IllegalArgumentException(
+            rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "configmgr inappropriate setProperty")),
+            static_cast< cppu::OWeakObject * >(this), -1);
+    }
+    dynamic_cast< ChildAccess * >(this)->setStatus(
+        ChildAccess::STATUS_CHANGED, value);
+    //TODO notify change
 }
 
 #if OSL_DEBUG_LEVEL > 0

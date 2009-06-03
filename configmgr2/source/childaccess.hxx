@@ -82,6 +82,24 @@ public:
 
     virtual rtl::Reference< RootAccess > getRoot();
 
+    virtual rtl::OUString SAL_CALL getName()
+        throw (com::sun::star::uno::RuntimeException);
+
+    virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface >
+    SAL_CALL getParent()
+        throw (com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL setParent(
+        com::sun::star::uno::Reference< com::sun::star::uno::XInterface >
+            const &)
+        throw (
+            com::sun::star::lang::NoSupportException,
+            com::sun::star::uno::RuntimeException);
+
+    virtual sal_Int64 SAL_CALL getSomething(
+        com::sun::star::uno::Sequence< sal_Int8 > const & aIdentifier)
+        throw (com::sun::star::uno::RuntimeException);
+
     oslInterlockedCount acquireCounting();
 
     void releaseNondeleting();
@@ -108,24 +126,6 @@ public:
 
 private:
     virtual ~ChildAccess();
-
-    virtual rtl::OUString SAL_CALL getName()
-        throw (com::sun::star::uno::RuntimeException);
-
-    virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface >
-    SAL_CALL getParent()
-        throw (com::sun::star::uno::RuntimeException);
-
-    virtual void SAL_CALL setParent(
-        com::sun::star::uno::Reference< com::sun::star::uno::XInterface >
-            const &)
-        throw (
-            com::sun::star::lang::NoSupportException,
-            com::sun::star::uno::RuntimeException);
-
-    virtual sal_Int64 SAL_CALL getSomething(
-        com::sun::star::uno::Sequence< sal_Int8 > const & aIdentifier)
-        throw (com::sun::star::uno::RuntimeException);
 
     rtl::Reference< RootAccess > root_;
     rtl::Reference< Access > parent_; // null iff free node
