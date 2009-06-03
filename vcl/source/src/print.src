@@ -59,25 +59,36 @@ ModalDialog SV_DLG_PRINT
         Size = MAP_APPFONT( 130, 130 );
         Border = TRUE;
     };
-    ScrollBar SV_PRINT_PAGE_SCROLL
+    NumericField SV_PRINT_PAGE_EDIT
     {
         Pos = MAP_APPFONT( 5, 140 );
-        Size = MAP_APPFONT( 130, 10 );
+        Size = MAP_APPFONT( 30, 12 );
         SVLook = TRUE;
-        HScroll = TRUE;
-        TabStop = TRUE;
+        Spin = TRUE;
+        Border = TRUE;
     };
     FixedText SV_PRINT_PAGE_TXT
     {
-        Pos = MAP_APPFONT( 5,150 );
-        Size = MAP_APPFONT( 130, 10 );
-        Text [ en-US ] = "Page %p of %n";
-        Center = TRUE;
+        Pos = MAP_APPFONT( 40,142 );
+        Size = MAP_APPFONT( 30, 12 );
+        Text [ en-US ] = "/ %n";
+        VCenter = TRUE;
+    };
+    PushButton SV_PRINT_PAGE_FORWARD
+    {
+        Pos = MAP_APPFONT( 95, 140 );
+        Size = MAP_APPFONT( 15, 12 );
+    };
+    PushButton SV_PRINT_PAGE_BACKWARD
+    {
+        Pos = MAP_APPFONT( 80, 140 );
+        Size = MAP_APPFONT( 15, 12 );
     };
     TabControl SV_PRINT_TABCTRL
     {
         Pos = MAP_APPFONT( 140, 5 );
         Size = MAP_APPFONT( 205, 165 );
+//      DropDown = TRUE;
     };
     FixedLine SV_PRINT_BUTTONLINE
     {
@@ -89,82 +100,43 @@ ModalDialog SV_DLG_PRINT
         Text [en-US] = "No pages";
     };
 
-    TabPage SV_PRINT_TAB_PRINTER
+    String SV_PRINT_PRT_TYPE
     {
-        Text [en-US] = "Printer";
+        Text [en-US] = "Type: %s";
+    };
+    String SV_PRINT_PRT_STATUS
+    {
+        Text [en-US] = "Status: %s";
+    };
+    String SV_PRINT_PRT_LOCATION
+    {
+        Text [en-US] = "Location: %s";
+    };
+    String SV_PRINT_PRT_COMMENT
+    {
+        Text [en-US] = "Comment: %s";
+    };
+
+    TabPage SV_PRINT_TAB_NUP
+    {
+        Text [en-US] = "N-Up";
         Hide = TRUE;
 
-        ListBox SV_PRINT_PRINTERS
-        {
-            Pos = MAP_APPFONT( 5, 5 );
-            Size = MAP_APPFONT( 100, 200 );
-            DropDown = TRUE;
-        };
-        PushButton SV_PRINT_PRT_SETUP
-        {
-            Pos = MAP_APPFONT( 115, 5 );
-            Size = MAP_APPFONT( 50, 15 );
-            Text [en-US] = "Properties...";
-        };
-        FixedText SV_PRINT_PRT_TYPE
-        {
-            Pos = MAP_APPFONT( 5, 30 );
-            Size = MAP_APPFONT( 40, 10 );
-            Text [en-US] = "Type";
-        };
-        FixedText SV_PRINT_PRT_TYPE_TXT
-        {
-            Pos = MAP_APPFONT( 50, 30 );
-            Size = MAP_APPFONT( 200, 10 );
-        };
-        FixedText SV_PRINT_PRT_STATUS
-        {
-            Pos = MAP_APPFONT( 5, 42 );
-            Size = MAP_APPFONT( 40, 10 );
-            Text [en-US] = "Status";
-        };
-        FixedText SV_PRINT_PRT_STATUS_TXT
-        {
-            Pos = MAP_APPFONT( 50, 42 );
-            Size = MAP_APPFONT( 200, 10 );
-        };
-        FixedText SV_PRINT_PRT_LOCATION
-        {
-            Pos = MAP_APPFONT( 5, 54 );
-            Size = MAP_APPFONT( 40, 10 );
-            Text [en-US] = "Location";
-        };
-        FixedText SV_PRINT_PRT_LOCATION_TXT
-        {
-            Pos = MAP_APPFONT( 50, 54 );
-            Size = MAP_APPFONT( 200, 10 );
-        };
-        FixedText SV_PRINT_PRT_COMMENT
-        {
-            Pos = MAP_APPFONT( 5, 66 );
-            Size = MAP_APPFONT( 40, 10 );
-            Text [en-US] = "Comment";
-        };
-        FixedText SV_PRINT_PRT_COMMENT_TXT
-        {
-            Pos = MAP_APPFONT( 50, 66 );
-            Size = MAP_APPFONT( 200, 10 );
-        };
         FixedLine SV_PRINT_PRT_NUP
         {
-            Pos = MAP_APPFONT( 5, 80 );
+            Pos = MAP_APPFONT( 5, 10 );
             Size = MAP_APPFONT( 150, 10 );
             Text [en-US] = "N-Up printing";
         };
         FixedText SV_PRINT_PRT_NUP_ROWS_TXT
         {
-            Pos = MAP_APPFONT( 10, 95 );
+            Pos = MAP_APPFONT( 10, 25 );
             Size = MAP_APPFONT( 40, 10 );
             Text [en-US] = "~Rows";
         };
         NumericField SV_PRINT_PRT_NUP_ROWS_EDT
         {
-            Pos = MAP_APPFONT( 55, 95 );
+            Pos = MAP_APPFONT( 55, 25 );
             Size = MAP_APPFONT( 40, 12 );
             Border = TRUE;
             Spin = TRUE;
@@ -174,13 +146,13 @@ ModalDialog SV_DLG_PRINT
         };
         FixedText SV_PRINT_PRT_NUP_COLUMNS_TXT
         {
-            Pos = MAP_APPFONT( 10, 110 );
+            Pos = MAP_APPFONT( 10, 50 );
             Size = MAP_APPFONT( 40, 10 );
             Text [en-US] = "C~olumns";
         };
         NumericField SV_PRINT_PRT_NUP_COLUMNS_EDT
         {
-            Pos = MAP_APPFONT( 55, 110 );
+            Pos = MAP_APPFONT( 55, 50 );
             Size = MAP_APPFONT( 40, 12 );
             Border = TRUE;
             Spin = TRUE;
@@ -190,13 +162,13 @@ ModalDialog SV_DLG_PRINT
         };
         RadioButton SV_PRINT_PRT_NUP_PORTRAIT
         {
-            Pos = MAP_APPFONT( 110, 95 );
+            Pos = MAP_APPFONT( 110, 25 );
             Size = MAP_APPFONT( 90, 10 );
             Text [en-US] = "Po~rtrait";
         };
         RadioButton SV_PRINT_PRT_NUP_LANDSCAPE
         {
-            Pos = MAP_APPFONT( 110, 105 );
+            Pos = MAP_APPFONT( 110, 35 );
             Size = MAP_APPFONT( 90, 10 );
             Text [en-US] = "~Landscape";
         };
@@ -212,6 +184,12 @@ ModalDialog SV_DLG_PRINT
             Pos = MAP_APPFONT( 5, 5 );
             Size = MAP_APPFONT( 100, 200 );
             DropDown = TRUE;
+        };
+        PushButton SV_PRINT_PRT_SETUP
+        {
+            Pos = MAP_APPFONT( 115, 5 );
+            Size = MAP_APPFONT( 50, 15 );
+            Text [en-US] = "Properties...";
         };
         CheckBox SV_PRINT_PRT_TOFILE
         {
@@ -233,7 +211,7 @@ ModalDialog SV_DLG_PRINT
         };
         NumericField SV_PRINT_COPYCOUNT_FIELD
         {
-            Pos = MAP_APPFONT( 90, 45 );
+            Pos = MAP_APPFONT( 10, 55 );
             Size = MAP_APPFONT( 40, 12 );
             Border = TRUE;
             Spin = TRUE;
@@ -243,12 +221,12 @@ ModalDialog SV_DLG_PRINT
         };
         FixedImage SV_PRINT_COLLATE_IMAGE
         {
-            Pos = MAP_APPFONT( 10, 65 );
+            Pos = MAP_APPFONT( 90, 60 );
             Size = MAP_PIXEL( 80, 30 );
         };
         CheckBox SV_PRINT_COLLATE
         {
-            Pos = MAP_APPFONT( 80, 65 );
+            Pos = MAP_APPFONT( 90, 45 );
             Size = MAP_APPFONT( 70, 10 );
             Text [en-US] = "Collate";
         };

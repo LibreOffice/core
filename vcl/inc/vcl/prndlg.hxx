@@ -39,7 +39,6 @@
 #include "vcl/dialog.hxx"
 #include "vcl/fixed.hxx"
 #include "vcl/button.hxx"
-#include "vcl/scrbar.hxx"
 #include "vcl/gdimtf.hxx"
 #include "vcl/lstbox.hxx"
 #include "vcl/field.hxx"
@@ -53,6 +52,16 @@ namespace vcl
 {
     class PrintDialog : public ModalDialog
     {
+        class PrinterListBox : public ListBox
+        {
+        public:
+            PrinterListBox( Window* i_pParent, const ResId& i_rId )
+            : ListBox( i_pParent, i_rId )
+            {}
+            virtual ~PrinterListBox() {}
+            virtual void RequestHelp( const HelpEvent& i_rHEvt );
+        };
+
         class PrintPreviewWindow : public Window
         {
             GDIMetaFile         maMtf;
@@ -68,19 +77,9 @@ namespace vcl
             void setScale( double fScaleX, double fScaleY );
         };
 
-        class PrinterTabPage : public TabPage
+        class NUpTabPage : public TabPage
         {
         public:
-            ListBox                                 maPrinters;
-            PushButton                              maSetupButton;
-            FixedText                               maType;
-            FixedText                               maTypeText;
-            FixedText                               maStatus;
-            FixedText                               maStatusText;
-            FixedText                               maLocation;
-            FixedText                               maLocText;
-            FixedText                               maComment;
-            FixedText                               maCommentText;
             FixedLine                               maNupLine;
             FixedText                               maNupRowsTxt;
             NumericField                            maNupRowsEdt;
@@ -89,8 +88,8 @@ namespace vcl
             RadioButton                             maNupPortrait;
             RadioButton                             maNupLandscape;
 
-            PrinterTabPage( Window*, const ResId& );
-            virtual ~PrinterTabPage();
+            NUpTabPage( Window*, const ResId& );
+            virtual ~NUpTabPage();
 
             void readFromSettings();
             void storeToSettings();
@@ -99,7 +98,8 @@ namespace vcl
         class JobTabPage : public TabPage
         {
         public:
-            ListBox                                 maPrinters;
+            PrinterListBox                          maPrinters;
+            PushButton                              maSetupButton;
             CheckBox                                maToFileBox;
 
             FixedLine                               maCopies;
@@ -123,11 +123,13 @@ namespace vcl
         OKButton                                maOKButton;
         CancelButton                            maCancelButton;
         PrintPreviewWindow                      maPreviewWindow;
-        FixedText                               maPageText;
-        ScrollBar                               maPageSlider;
+        NumericField                            maPageEdit;
+        FixedText                               maNumPagesText;
+        PushButton                              maForwardBtn;
+        PushButton                              maBackwardBtn;
 
         TabControl                              maTabCtrl;
-        PrinterTabPage                          maPrinterPage;
+        NUpTabPage                              maNUpPage;
         JobTabPage                              maJobPage;
 
         FixedLine                               maButtonLine;
@@ -149,6 +151,11 @@ namespace vcl
         Size                                    maNupPortraitSize;
         Size                                    maNupLandscapeSize;
 
+        rtl::OUString                           maCommentText;
+        rtl::OUString                           maStatusText;
+        rtl::OUString                           maLocationText;
+        rtl::OUString                           maTypeText;
+
         void updateNup();
         void preparePreview( bool i_bPrintChanged = true );
         void setPreviewText( sal_Int32 );
@@ -162,8 +169,6 @@ namespace vcl
 
         virtual void Resize();
 
-        DECL_LINK( SlideHdl, ScrollBar* );
-        DECL_LINK( EndSlideHdl, ScrollBar* );
         DECL_LINK( SelectHdl, ListBox* );
         DECL_LINK( ClickHdl, Button* );
         DECL_LINK( ModifyHdl, Edit* );
@@ -190,8 +195,8 @@ namespace vcl
         CancelButton        maButton;
 
         bool                mbCanceled;
-        int                 mnCur;
-        int                 mnMax;
+        sal_Int32           mnCur;
+        sal_Int32           mnMax;
         long                mnProgressHeight;
         Rectangle           maProgressRect;
         bool                mbNativeProgress;

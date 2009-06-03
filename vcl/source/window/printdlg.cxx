@@ -42,6 +42,7 @@
 #include "vcl/decoview.hxx"
 #include "vcl/arrange.hxx"
 #include "vcl/configsettings.hxx"
+#include "vcl/help.hxx"
 
 #include "rtl/ustrbuf.hxx"
 
@@ -55,6 +56,14 @@ using namespace com::sun::star::beans;
 #define HELPID_PREFIX ".HelpId:vcl:PrintDialog"
 #define SMHID2( a, b ) SetSmartHelpId( SmartId( String( RTL_CONSTASCII_USTRINGPARAM( HELPID_PREFIX ":" a ":" b ) ) ) )
 #define SMHID1( a ) SetSmartHelpId( SmartId( String( RTL_CONSTASCII_USTRINGPARAM( HELPID_PREFIX  ":" a ) ) ) )
+
+void PrintDialog::PrinterListBox::RequestHelp( const HelpEvent& i_rHEvt )
+{
+    if( i_rHEvt.GetMode() & HELPMODE_QUICK )
+        Help::ShowBalloon( this, i_rHEvt.GetMousePosPixel(), GetHelpText() );
+    else
+        ListBox::RequestHelp( i_rHEvt );
+}
 
 PrintDialog::PrintPreviewWindow::PrintPreviewWindow( Window* i_pParent, const ResId& i_rId )
     : Window( i_pParent, i_rId ),
@@ -98,18 +107,8 @@ void PrintDialog::PrintPreviewWindow::setScale( double fScaleX, double fScaleY )
     Invalidate();
 }
 
-PrintDialog::PrinterTabPage::PrinterTabPage( Window* i_pParent, const ResId& rResId )
+PrintDialog::NUpTabPage::NUpTabPage( Window* i_pParent, const ResId& rResId )
     : TabPage( i_pParent, rResId )
-    , maPrinters( this, VclResId( SV_PRINT_PRINTERS) )
-    , maSetupButton( this, VclResId( SV_PRINT_PRT_SETUP ) )
-    , maType( this, VclResId( SV_PRINT_PRT_TYPE ) )
-    , maTypeText( this, VclResId( SV_PRINT_PRT_TYPE_TXT ) )
-    , maStatus( this, VclResId( SV_PRINT_PRT_STATUS ) )
-    , maStatusText(this, VclResId( SV_PRINT_PRT_STATUS_TXT ) )
-    , maLocation( this, VclResId( SV_PRINT_PRT_LOCATION ) )
-    , maLocText( this, VclResId( SV_PRINT_PRT_LOCATION_TXT ) )
-    , maComment( this, VclResId( SV_PRINT_PRT_COMMENT ) )
-    , maCommentText( this, VclResId( SV_PRINT_PRT_COMMENT_TXT ) )
     , maNupLine( this, VclResId( SV_PRINT_PRT_NUP ) )
     , maNupRowsTxt( this, VclResId( SV_PRINT_PRT_NUP_ROWS_TXT ) )
     , maNupRowsEdt( this, VclResId( SV_PRINT_PRT_NUP_ROWS_EDT ) )
@@ -119,45 +118,35 @@ PrintDialog::PrinterTabPage::PrinterTabPage( Window* i_pParent, const ResId& rRe
     , maNupLandscape( this, VclResId( SV_PRINT_PRT_NUP_LANDSCAPE ) )
 {
     FreeResource();
-    maPrinters.SMHID2( "PrinterPage", "PrinterList" );
-    maSetupButton.SMHID2( "PrinterPage", "Setup" );
-    maType.SMHID2( "PrinterPage", "Type" );
-    maTypeText.SMHID2( "PrinterPage", "TypeText" );
-    maStatus.SMHID2( "PrinterPage", "Status" );
-    maStatusText.SMHID2( "PrinterPage", "StatusText" );
-    maLocation.SMHID2( "PrinterPage", "Locaction" );
-    maLocText.SMHID2( "PrinterPage", "LocactionText" );
-    maComment.SMHID2( "PrinterPage", "Comment" );
-    maCommentText.SMHID2( "PrinterPage", "CommentText" );
-    maNupLine.SMHID2( "PrinterPage", "NUPline" );
-    maNupRowsTxt.SMHID2( "PrinterPage", "NUPRowsText" );
-    maNupRowsEdt.SMHID2( "PrinterPage", "NUPRows" );
-    maNupColTxt.SMHID2( "PrinterPage", "NUPColumnsText" );
-    maNupColEdt.SMHID2( "PrinterPage", "NUPColumns" );
-    maNupPortrait.SMHID2( "PrinterPage", "NUPPortrait" );
-    maNupLandscape.SMHID2( "PrinterPage", "NUPLandscape" );
+    maNupLine.SMHID2( "NUpPage", "NUPline" );
+    maNupRowsTxt.SMHID2( "NUpPage", "NUPRowsText" );
+    maNupRowsEdt.SMHID2( "NUpPage", "NUPRows" );
+    maNupColTxt.SMHID2( "NUpPage", "NUPColumnsText" );
+    maNupColEdt.SMHID2( "NUpPage", "NUPColumns" );
+    maNupPortrait.SMHID2( "NUpPage", "NUPPortrait" );
+    maNupLandscape.SMHID2( "NUpPage", "NUPLandscape" );
 }
 
-PrintDialog::PrinterTabPage::~PrinterTabPage()
+PrintDialog::NUpTabPage::~NUpTabPage()
 {
 }
 
-void PrintDialog::PrinterTabPage::readFromSettings()
+void PrintDialog::NUpTabPage::readFromSettings()
 {
     SettingsConfigItem* pItem = SettingsConfigItem::get();
     rtl::OUString aValue;
 
-    aValue = pItem->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog_PrinterPage" ) ),
+    aValue = pItem->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog_NUpPage" ) ),
                               rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NUp-Rows" ) ) );
     sal_Int32 nVal = aValue.toInt32();
     maNupRowsEdt.SetValue( sal_Int64( nVal > 1 ? nVal : 1) );
 
-    aValue = pItem->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog_PrinterPage" ) ),
+    aValue = pItem->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog_NUpPage" ) ),
                               rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NUp-Columns" ) ) );
     nVal = aValue.toInt32();
     maNupColEdt.SetValue( sal_Int64(nVal > 1 ? nVal : 1) );
 
-    aValue = pItem->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog_PrinterPage" ) ),
+    aValue = pItem->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog_NUpPage" ) ),
                               rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NUp-Portrait" ) ) );
     if( aValue.equalsIgnoreAsciiCaseAscii( "true" ) )
         maNupPortrait.Check();
@@ -165,16 +154,16 @@ void PrintDialog::PrinterTabPage::readFromSettings()
         maNupLandscape.Check();
 }
 
-void PrintDialog::PrinterTabPage::storeToSettings()
+void PrintDialog::NUpTabPage::storeToSettings()
 {
     SettingsConfigItem* pItem = SettingsConfigItem::get();
-    pItem->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog_PrinterPage" ) ),
+    pItem->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog_NUpPage" ) ),
                      rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NUp-Rows" ) ),
                      maNupRowsEdt.GetText() );
-    pItem->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog_PrinterPage" ) ),
+    pItem->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog_NUpPage" ) ),
                      rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NUp-Columns" ) ),
                      maNupColEdt.GetText() );
-    pItem->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog_PrinterPage" ) ),
+    pItem->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog_NUpPage" ) ),
                      rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NUp-Portrait" ) ),
                      rtl::OUString::createFromAscii( maNupPortrait.IsChecked() ? "true" : "false" ) );
 }
@@ -182,6 +171,7 @@ void PrintDialog::PrinterTabPage::storeToSettings()
 PrintDialog::JobTabPage::JobTabPage( Window* i_pParent, const ResId& rResId )
     : TabPage( i_pParent, rResId )
     , maPrinters( this, VclResId( SV_PRINT_PRINTERS) )
+    , maSetupButton( this, VclResId( SV_PRINT_PRT_SETUP ) )
     , maToFileBox( this, VclResId( SV_PRINT_PRT_TOFILE ) )
     , maCopies( this, VclResId( SV_PRINT_COPIES ) )
     , maCopyCount( this, VclResId( SV_PRINT_COPYCOUNT ) )
@@ -195,6 +185,7 @@ PrintDialog::JobTabPage::JobTabPage( Window* i_pParent, const ResId& rResId )
 {
     FreeResource();
     maPrinters.SMHID2( "JobPage", "PrinterList" );
+    maSetupButton.SMHID2( "JobPage", "Setup" );
     maToFileBox.SMHID2( "JobPage", "ToFile" );
     maCopies.SMHID2( "JobPage", "CopiesLine" );
     maCopyCount.SMHID2( "JobPage", "CopiesText" );
@@ -245,48 +236,53 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterList
     , maOKButton( this, VclResId( SV_PRINT_OK ) )
     , maCancelButton( this, VclResId( SV_PRINT_CANCEL ) )
     , maPreviewWindow( this, VclResId( SV_PRINT_PAGE_PREVIEW ) )
-    , maPageText( this, VclResId( SV_PRINT_PAGE_TXT ) )
-    , maPageSlider( this, VclResId( SV_PRINT_PAGE_SCROLL ) )
+    , maPageEdit( this, VclResId( SV_PRINT_PAGE_EDIT ) )
+    , maNumPagesText( this, VclResId( SV_PRINT_PAGE_TXT ) )
+    , maForwardBtn( this, VclResId( SV_PRINT_PAGE_FORWARD ) )
+    , maBackwardBtn( this, VclResId( SV_PRINT_PAGE_BACKWARD ) )
     , maTabCtrl( this, VclResId( SV_PRINT_TABCTRL ) )
-    , maPrinterPage( &maTabCtrl, VclResId( SV_PRINT_TAB_PRINTER ) )
+    , maNUpPage( &maTabCtrl, VclResId( SV_PRINT_TAB_NUP ) )
     , maJobPage( &maTabCtrl, VclResId( SV_PRINT_TAB_JOB ) )
     , maButtonLine( this, VclResId( SV_PRINT_BUTTONLINE ) )
     , maPListener( i_rListener )
     , maNoPageStr( String( VclResId( SV_PRINT_NOPAGES ) ) )
     , mnCurPage( 0 )
     , mnCachedPages( 0 )
+    , maCommentText( String( VclResId( SV_PRINT_PRT_COMMENT ) ) )
+    , maStatusText( String( VclResId( SV_PRINT_PRT_STATUS ) ) )
+    , maLocationText( String( VclResId( SV_PRINT_PRT_LOCATION ) ) )
+    , maTypeText( String( VclResId( SV_PRINT_PRT_TYPE ) ) )
 {
     FreeResource();
 
     // insert the tab pages
     maTabCtrl.InsertPage( SV_PRINT_TAB_JOB, maJobPage.GetText() );
     maTabCtrl.SetTabPage( SV_PRINT_TAB_JOB, &maJobPage );
-    maTabCtrl.InsertPage( SV_PRINT_PAGE_PREVIEW, maPrinterPage.GetText() );
-    maTabCtrl.SetTabPage( SV_PRINT_PAGE_PREVIEW, &maPrinterPage );
+    maTabCtrl.InsertPage( SV_PRINT_PAGE_PREVIEW, maNUpPage.GetText() );
+    maTabCtrl.SetTabPage( SV_PRINT_PAGE_PREVIEW, &maNUpPage );
 
-    maPageStr = maPageText.GetText();
+    // set symbols on forward and backward button
+    maBackwardBtn.SetSymbol( SYMBOL_PREV );
+    maForwardBtn.SetSymbol( SYMBOL_NEXT );
+    maBackwardBtn.ImplSetSmallSymbol( TRUE );
+    maForwardBtn.ImplSetSmallSymbol( TRUE );
+
+    maPageStr = maNumPagesText.GetText();
     // save space for the preview window
     maPreviewSpace = Rectangle( maPreviewWindow.GetPosPixel(), maPreviewWindow.GetSizePixel() );
     // get the first page
     preparePreview();
-
-    // set up the slider for the preview pages
-    maPageSlider.SetScrollHdl( LINK( this, PrintDialog, SlideHdl ) );
-    maPageSlider.SetEndScrollHdl( LINK( this, PrintDialog, EndSlideHdl ) );
-    maPageSlider.EnableDrag( TRUE );
 
     // fill printer listbox
     const std::vector< rtl::OUString >& rQueues( Printer::GetPrinterQueues() );
     for( std::vector< rtl::OUString >::const_iterator it = rQueues.begin();
          it != rQueues.end(); ++it )
     {
-        maPrinterPage.maPrinters.InsertEntry( *it );
         maJobPage.maPrinters.InsertEntry( *it );
     }
     // select current printer
-    if( maPrinterPage.maPrinters.GetEntryPos( maPListener->getPrinter()->GetName() ) != LISTBOX_ENTRY_NOTFOUND )
+    if( maJobPage.maPrinters.GetEntryPos( maPListener->getPrinter()->GetName() ) != LISTBOX_ENTRY_NOTFOUND )
     {
-        maPrinterPage.maPrinters.SelectEntry( maPListener->getPrinter()->GetName() );
         maJobPage.maPrinters.SelectEntry( maPListener->getPrinter()->GetName() );
     }
     else
@@ -295,16 +291,14 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterList
         SettingsConfigItem* pItem = SettingsConfigItem::get();
         String aValue( pItem->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
                                         rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LastPrinter" ) ) ) );
-        if( maPrinterPage.maPrinters.GetEntryPos( aValue ) != LISTBOX_ENTRY_NOTFOUND )
+        if( maJobPage.maPrinters.GetEntryPos( aValue ) != LISTBOX_ENTRY_NOTFOUND )
         {
-            maPrinterPage.maPrinters.SelectEntry( aValue );
             maJobPage.maPrinters.SelectEntry( aValue );
             maPListener->setPrinter( boost::shared_ptr<Printer>( new Printer( aValue ) ) );
         }
         else
         {
             // fall back to default printer
-            maPrinterPage.maPrinters.SelectEntry( Printer::GetDefaultPrinterName() );
             maJobPage.maPrinters.SelectEntry( Printer::GetDefaultPrinterName() );
             maPListener->setPrinter( boost::shared_ptr<Printer>( new Printer( Printer::GetDefaultPrinterName() ) ) );
         }
@@ -313,7 +307,6 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterList
     updatePrinterText();
 
     // set a select handler
-    maPrinterPage.maPrinters.SetSelectHdl( LINK( this, PrintDialog, SelectHdl ) );
     maJobPage.maPrinters.SetSelectHdl( LINK( this, PrintDialog, SelectHdl ) );
 
     // setup sizes for N-Up
@@ -323,13 +316,13 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterList
     {
         maNupLandscapeSize = aNupSize;
         maNupPortraitSize = Size( aNupSize.Height(), aNupSize.Width() );
-        maPrinterPage.maNupLandscape.Check();
+        maNUpPage.maNupLandscape.Check();
     }
     else
     {
         maNupPortraitSize = aNupSize;
         maNupLandscapeSize = Size( aNupSize.Height(), aNupSize.Width() );
-        maPrinterPage.maNupPortrait.Check();
+        maNUpPage.maNupPortrait.Check();
     }
 
     // setup click handler on the various buttons
@@ -337,15 +330,18 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterList
     #if OSL_DEBUG_LEVEL > 1
     maCancelButton.SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
     #endif
+    maForwardBtn.SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
+    maBackwardBtn.SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
     maJobPage.maCollateBox.SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
-    maPrinterPage.maSetupButton.SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
-    maPrinterPage.maNupPortrait.SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
-    maPrinterPage.maNupLandscape.SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
+    maJobPage.maSetupButton.SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
+    maNUpPage.maNupPortrait.SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
+    maNUpPage.maNupLandscape.SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
 
     // setup modify hdl
+    maPageEdit.SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
     maJobPage.maCopyCountField.SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
-    maPrinterPage.maNupRowsEdt.SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
-    maPrinterPage.maNupColEdt.SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
+    maNUpPage.maNupRowsEdt.SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
+    maNUpPage.maNupColEdt.SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
 
     // setup optional UI options set by application
     setupOptionalUI();
@@ -366,8 +362,10 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterList
     maOKButton.SMHID1( "OK" );
     maCancelButton.SMHID1( "Cancel" );
     maPreviewWindow.SMHID1( "Preview" );
-    maPageText.SMHID1( "PageText" );
-    maPageSlider.SMHID1( "PageSlider" );
+    maNumPagesText.SMHID1( "NumPagesText" );
+    maPageEdit.SMHID1( "PageEdit" );
+    maForwardBtn.SMHID1( "ForwardBtn" );
+    maBackwardBtn.SMHID1( "BackwardBtn" );
     maTabCtrl.SMHID1( "TabPages" );
 }
 
@@ -383,7 +381,7 @@ PrintDialog::~PrintDialog()
 void PrintDialog::readFromSettings()
 {
     maJobPage.readFromSettings();
-    maPrinterPage.readFromSettings();
+    maNUpPage.readFromSettings();
 
     // read last selected tab page; if it exists, actiavte it
     SettingsConfigItem* pItem = SettingsConfigItem::get();
@@ -404,7 +402,7 @@ void PrintDialog::readFromSettings()
 void PrintDialog::storeToSettings()
 {
     maJobPage.storeToSettings();
-    maPrinterPage.storeToSettings();
+    maNUpPage.storeToSettings();
 
     // store last selected printer
     SettingsConfigItem* pItem = SettingsConfigItem::get();
@@ -923,16 +921,38 @@ void PrintDialog::checkControlDependencies()
     if( GetSettings().GetStyleSettings().GetFieldColor().IsDark() )
         aImg = maJobPage.maCollateBox.IsChecked() ? maJobPage.maCollateHCImg : maJobPage.maNoCollateHCImg;
 
-    // adjust position and size of image
+    // adjust size of image
     maJobPage.maCollateImage.SetSizePixel( aImg.GetSizePixel() );
-    Point aPos( maJobPage.maCollateImage.GetPosPixel() );
-    aPos.Y() = maJobPage.maCollateBox.GetPosPixel().Y();
-    aPos.Y() -= (aImg.GetSizePixel().Height() - maJobPage.maCollateBox.GetSizePixel().Height())/2;
-    maJobPage.maCollateImage.SetPosPixel( aPos );
     maJobPage.maCollateImage.SetImage( aImg );
 
     // enable setup button only for printers that can be setup
-    maPrinterPage.maSetupButton.Enable( maPListener->getPrinter()->HasSupport( SUPPORT_SETUPDIALOG ) );
+    bool bHaveSetup = maPListener->getPrinter()->HasSupport( SUPPORT_SETUPDIALOG );
+    maJobPage.maSetupButton.Enable( bHaveSetup );
+    if( bHaveSetup )
+    {
+        if( ! maJobPage.maSetupButton.IsVisible() )
+        {
+            Point aPrinterPos( maJobPage.maPrinters.GetPosPixel() );
+            Point aSetupPos( maJobPage.maSetupButton.GetPosPixel() );
+            Size aPrinterSize( maJobPage.maPrinters.GetSizePixel() );
+            aPrinterSize.Width() = aSetupPos.X() - aPrinterPos.X() - LogicToPixel( Size( 5, 5 ), MapMode( MAP_APPFONT ) ).Width();
+            maJobPage.maPrinters.SetSizePixel( aPrinterSize );
+            maJobPage.maSetupButton.Show();
+        }
+    }
+    else
+    {
+        if( maJobPage.maSetupButton.IsVisible() )
+        {
+            Point aPrinterPos( maJobPage.maPrinters.GetPosPixel() );
+            Point aSetupPos( maJobPage.maSetupButton.GetPosPixel() );
+            Size aPrinterSize( maJobPage.maPrinters.GetSizePixel() );
+            Size aSetupSize( maJobPage.maSetupButton.GetSizePixel() );
+            aPrinterSize.Width() = aSetupPos.X() + aSetupSize.Width() - aPrinterPos.X();
+            maJobPage.maPrinters.SetSizePixel( aPrinterSize );
+            maJobPage.maSetupButton.Hide();
+        }
+    }
 }
 
 void PrintDialog::checkOptionalControlDependencies()
@@ -948,27 +968,14 @@ void PrintDialog::checkOptionalControlDependencies()
     }
 }
 
-void PrintDialog::updatePrinterText()
-{
-    const QueueInfo* pInfo = Printer::GetQueueInfo( maPrinterPage.maPrinters.GetSelectEntry(), true );
-    if( pInfo )
-    {
-        maPrinterPage.maTypeText.SetText( pInfo->GetDriver() );
-        // FIXME: status message
-        // maJobPage.maStatusText.SetText();
-        maPrinterPage.maLocText.SetText( pInfo->GetLocation() );
-        maPrinterPage.maCommentText.SetText( pInfo->GetComment() );
-    }
-}
-
-static rtl::OUString searchAndReplace( const rtl::OUString& i_rOrig, const char* i_pRepl, sal_Int32 i_nReplLen, sal_Int32 i_nReplacement )
+static rtl::OUString searchAndReplace( const rtl::OUString& i_rOrig, const char* i_pRepl, sal_Int32 i_nReplLen, const rtl::OUString& i_rRepl )
 {
     sal_Int32 nPos = i_rOrig.indexOfAsciiL( i_pRepl, i_nReplLen );
     if( nPos != -1 )
     {
         rtl::OUStringBuffer aBuf( i_rOrig.getLength() );
         aBuf.append( i_rOrig.getStr(), nPos );
-        aBuf.append( i_nReplacement );
+        aBuf.append( i_rRepl );
         if( nPos + i_nReplLen < i_rOrig.getLength() )
             aBuf.append( i_rOrig.getStr() + nPos + i_nReplLen );
         return aBuf.makeStringAndClear();
@@ -976,16 +983,31 @@ static rtl::OUString searchAndReplace( const rtl::OUString& i_rOrig, const char*
     return i_rOrig;
 }
 
+void PrintDialog::updatePrinterText()
+{
+    const QueueInfo* pInfo = Printer::GetQueueInfo( maJobPage.maPrinters.GetSelectEntry(), true );
+    if( pInfo )
+    {
+        rtl::OUStringBuffer aBuf( 256 );
+        aBuf.append( searchAndReplace( maTypeText, "%s", 2, pInfo->GetDriver() ) );
+        aBuf.append( sal_Unicode( '\n' ) );
+        aBuf.append( searchAndReplace( maLocationText, "%s", 2, pInfo->GetLocation() ) );
+        aBuf.append( sal_Unicode( '\n' ) );
+        aBuf.append( searchAndReplace( maCommentText, "%s", 2, pInfo->GetComment() ) );
+        aBuf.append( sal_Unicode( '\n' ) );
+        maJobPage.maPrinters.SetHelpText( aBuf.makeStringAndClear() );
+    }
+}
+
 void PrintDialog::setPreviewText( sal_Int32 nSetPage )
 {
     if( mnCachedPages != 0 )
     {
-        rtl::OUString aNewText( searchAndReplace( maPageStr, "%p", 2, nSetPage+1 ) );
-        aNewText = searchAndReplace( aNewText, "%n", 2, mnCachedPages );
-        maPageText.SetText( aNewText );
+        rtl::OUString aNewText( searchAndReplace( maPageStr, "%n", 2, rtl::OUString::valueOf( mnCachedPages )  ) );
+        maNumPagesText.SetText( aNewText );
     }
     else
-        maPageText.SetText( maNoPageStr );
+        maNumPagesText.SetText( maNoPageStr );
 }
 
 void PrintDialog::preparePreview( bool i_bNewPage )
@@ -1001,9 +1023,8 @@ void PrintDialog::preparePreview( bool i_bNewPage )
 
     setPreviewText( mnCurPage );
 
-    maPageSlider.SetRange( Range( 0, nPages ) );
-    maPageSlider.SetThumbPos( mnCurPage );
-    maPageSlider.SetVisibleSize( 1 );
+    maPageEdit.SetMin( 1 );
+    maPageEdit.SetMax( nPages );
 
     boost::shared_ptr<Printer> aPrt( maPListener->getPrinter() );
 
@@ -1044,47 +1065,22 @@ void PrintDialog::preparePreview( bool i_bNewPage )
 
 void PrintDialog::updateNup()
 {
-    int nRows = int(maPrinterPage.maNupRowsEdt.GetValue());
-    int nCols = int(maPrinterPage.maNupColEdt.GetValue());
+    int nRows = int(maNUpPage.maNupRowsEdt.GetValue());
+    int nCols = int(maNUpPage.maNupColEdt.GetValue());
 
     maPListener->setMultipage( nRows, nCols,
-                               maPrinterPage.maNupPortrait.IsChecked()
+                               maNUpPage.maNupPortrait.IsChecked()
                                ? maNupPortraitSize : maNupLandscapeSize );
 
     preparePreview();
 }
 
-IMPL_LINK( PrintDialog, SlideHdl, ScrollBar*, pSlider )
-{
-    if( pSlider == &maPageSlider )
-    {
-        sal_Int32 nNewPage = static_cast<sal_Int32>( maPageSlider.GetThumbPos() );
-        setPreviewText( nNewPage );
-    }
-    return 0;
-}
-
-IMPL_LINK( PrintDialog, EndSlideHdl, ScrollBar*, pSlider )
-{
-    if( pSlider == &maPageSlider )
-    {
-        sal_Int32 nNewPage = static_cast<sal_Int32>( maPageSlider.GetThumbPos() );
-        if( nNewPage != mnCurPage )
-        {
-            mnCurPage = nNewPage;
-            preparePreview();
-        }
-    }
-    return 0;
-}
-
 IMPL_LINK( PrintDialog, SelectHdl, ListBox*, pBox )
 {
-    if( pBox == &maPrinterPage.maPrinters || pBox == &maJobPage.maPrinters )
+    if(  pBox == &maJobPage.maPrinters )
     {
         String aNewPrinter( pBox->GetSelectEntry() );
         maJobPage.maPrinters.SelectEntry( aNewPrinter );
-        maPrinterPage.maPrinters.SelectEntry( aNewPrinter );
         // set new printer
         maPListener->setPrinter( boost::shared_ptr<Printer>( new Printer( aNewPrinter ) ) );
         // update text fields
@@ -1100,14 +1096,22 @@ IMPL_LINK( PrintDialog, ClickHdl, Button*, pButton )
         storeToSettings();
         EndDialog( pButton == &maOKButton );
     }
+    else if( pButton == &maForwardBtn )
+    {
+        maPageEdit.Up();
+    }
+    else if( pButton == &maBackwardBtn )
+    {
+        maPageEdit.Down();
+    }
     else
     {
-        if( pButton == &maPrinterPage.maSetupButton )
+        if( pButton == &maJobPage.maSetupButton )
         {
             maPListener->getPrinter()->Setup( this );
         }
         checkControlDependencies();
-        if( pButton == &maPrinterPage.maNupPortrait || pButton == &maPrinterPage.maNupLandscape )
+        if( pButton == &maNUpPage.maNupPortrait || pButton == &maNUpPage.maNupLandscape )
             updateNup();
     }
     return 0;
@@ -1116,9 +1120,14 @@ IMPL_LINK( PrintDialog, ClickHdl, Button*, pButton )
 IMPL_LINK( PrintDialog, ModifyHdl, Edit*, pEdit )
 {
     checkControlDependencies();
-    if( pEdit == &maPrinterPage.maNupRowsEdt || pEdit == &maPrinterPage.maNupColEdt )
+    if( pEdit == &maNUpPage.maNupRowsEdt || pEdit == &maNUpPage.maNupColEdt )
     {
         updateNup();
+    }
+    else if( pEdit == &maPageEdit )
+    {
+        mnCurPage = sal_Int32( maPageEdit.GetValue() - 1 );
+        preparePreview();
     }
     return 0;
 }
@@ -1266,23 +1275,28 @@ void PrintDialog::Resize()
     long nMaxX = maTabCtrl.GetPosPixel().X() - 2*aPixDiff.Width();
     long nMaxY = maButtonLine.GetPosPixel().Y()
                  - 2 * aPixDiff.Height()
-                 - maPageText.GetSizePixel().Height()
-                 - maPageSlider.GetSizePixel().Height();
+                 - maForwardBtn.GetSizePixel().Height();
     long nPreviewLength = std::min( nMaxX, nMaxY );
     maPreviewSpace = Rectangle( Point( aPixDiff.Width(), aPixDiff.Height() ),
                                 Size( nPreviewLength, nPreviewLength ) );
 
-    // position text and slider below preview
-    aBtnRect = Rectangle( Point( aPixDiff.Width(), 2*aPixDiff.Height() + nPreviewLength ),
-                          Size( nPreviewLength, maPageSlider.GetSizePixel().Height() ) );
-    maPageSlider.SetPosSizePixel( aBtnRect.TopLeft(), aBtnRect.GetSize() );
-
-    aBtnRect.Top() = aBtnRect.Bottom() + aPixDiff.Height()/2;
-    aBtnRect.Bottom() = aBtnRect.Top() + maPageText.GetSizePixel().Height() - 1;
-    maPageText.SetPosSizePixel( aBtnRect.TopLeft(), aBtnRect.GetSize() );
-
     // and do the preview; however the metafile does not need to be gotten anew
     preparePreview( false );
+
+    // position text and slider below preview, aligned
+    Point aCtrlPos( maPreviewWindow.GetPosPixel().X(), 2*aPixDiff.Height() + nPreviewLength );
+    maPageEdit.SetPosPixel( aCtrlPos );
+
+    aCtrlPos.X() += maPageEdit.GetSizePixel().Width() + aPixDiff.Width();
+    maNumPagesText.SetPosPixel( aCtrlPos );
+
+    aCtrlPos.X() = maPreviewWindow.GetPosPixel().X() + maPreviewWindow.GetSizePixel().Width();
+    aCtrlPos.X() -= maForwardBtn.GetSizePixel().Width();
+    maForwardBtn.SetPosPixel( aCtrlPos );
+
+    aCtrlPos.X() -= aPixDiff.Width() + maBackwardBtn.GetSizePixel().Width();
+    maBackwardBtn.SetPosPixel( aCtrlPos );
+
 }
 
 // -----------------------------------------------------------------------------
@@ -1355,8 +1369,8 @@ void PrintProgressDialog::setProgress( int i_nCurrent, int i_nMax )
     if( mnMax < 1 )
         mnMax = 1;
 
-    rtl::OUString aNewText( searchAndReplace( maStr, "%p", 2, mnCur ) );
-    aNewText = searchAndReplace( aNewText, "%n", 2, mnMax );
+    rtl::OUString aNewText( searchAndReplace( maStr, "%p", 2, rtl::OUString::valueOf( mnCur ) ) );
+    aNewText = searchAndReplace( aNewText, "%n", 2, rtl::OUString::valueOf( mnMax ) );
     maText.SetText( aNewText );
 
     // update progress
