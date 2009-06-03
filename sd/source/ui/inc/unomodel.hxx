@@ -122,7 +122,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > mxMarkerTable;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > mxDrawingPool;
 
-    SvxItemPropertySet  maPropSet;
+    const SvxItemPropertySet*   mpPropSet;
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > maTypeSequence;
 

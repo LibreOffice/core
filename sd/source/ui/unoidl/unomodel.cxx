@@ -187,10 +187,10 @@ const sal_Int32 WID_MODEL_BUILDID = 10;
 const sal_Int32 WID_MODEL_HASVALIDSIGNATURES = 11;
 const sal_Int32 WID_MODEL_DIALOGLIBS = 12;
 
-const SfxItemPropertyMap* ImplGetDrawModelPropertyMap()
+const SvxItemPropertySet* ImplGetDrawModelPropertySet()
 {
     // Achtung: Der erste Parameter MUSS sortiert vorliegen !!!
-    const static SfxItemPropertyMap aDrawModelPropertyMap_Impl[] =
+    const static SfxItemPropertyMapEntry aDrawModelPropertyMap_Impl[] =
     {
         { MAP_CHAR_LEN("BuildId"),                      WID_MODEL_BUILDID,  &::getCppuType(static_cast< const rtl::OUString * >(0)), 0, 0},
         { MAP_CHAR_LEN(sUNO_Prop_CharLocale),           WID_MODEL_LANGUAGE, &::getCppuType((const lang::Locale*)0),     0,  0},
@@ -206,8 +206,8 @@ const SfxItemPropertyMap* ImplGetDrawModelPropertyMap()
         { MAP_CHAR_LEN(sUNO_Prop_HasValidSignatures),   WID_MODEL_HASVALIDSIGNATURES, &::getCppuType(static_cast< const sal_Bool * >(0)), beans::PropertyAttribute::READONLY, 0 },
         { 0,0,0,0,0,0 }
     };
-
-    return aDrawModelPropertyMap_Impl;
+    static SvxItemPropertySet aDrawModelPropertySet_Impl( aDrawModelPropertyMap_Impl );
+    return &aDrawModelPropertySet_Impl;
 }
 
 // this ctor is used from the DocShell
@@ -218,7 +218,7 @@ SdXImpressDocument::SdXImpressDocument (::sd::DrawDocShell* pShell, bool bClipBo
     mbDisposed(false),
     mbImpressDoc( pShell && pShell->GetDoc() && pShell->GetDoc()->GetDocumentType() == DOCUMENT_TYPE_IMPRESS ),
     mbClipBoard( bClipBoard ),
-    maPropSet( ImplGetDrawModelPropertyMap() )
+    mpPropSet( ImplGetDrawModelPropertySet() )
 {
     if( mpDoc )
     {
@@ -237,7 +237,7 @@ SdXImpressDocument::SdXImpressDocument( SdDrawDocument* pDoc, bool bClipBoard ) 
     mbDisposed(false),
     mbImpressDoc( pDoc && pDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS ),
     mbClipBoard( bClipBoard ),
-    maPropSet( ImplGetDrawModelPropertyMap() )
+    mpPropSet( ImplGetDrawModelPropertySet() )
 {
     if( mpDoc )
     {
@@ -1270,7 +1270,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL SdXImpressDocument::getProper
     throw(uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
-    return maPropSet.getPropertySetInfo();
+    return mpPropSet->getPropertySetInfo();
 }
 
 void SAL_CALL SdXImpressDocument::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue )
@@ -1281,9 +1281,9 @@ void SAL_CALL SdXImpressDocument::setPropertyValue( const OUString& aPropertyNam
     if( NULL == mpDoc )
         throw lang::DisposedException();
 
-    const SfxItemPropertyMap* pMap = maPropSet.getPropertyMapEntry(aPropertyName);
+    const SfxItemPropertySimpleEntry* pEntry = mpPropSet->getPropertyMapEntry(aPropertyName);
 
-    switch( pMap ? pMap->nWID : -1 )
+    switch( pEntry ? pEntry->nWID : -1 )
     {
         case WID_MODEL_LANGUAGE:
         {
@@ -1356,9 +1356,9 @@ uno::Any SAL_CALL SdXImpressDocument::getPropertyValue( const OUString& Property
     if( NULL == mpDoc )
         throw lang::DisposedException();
 
-    const SfxItemPropertyMap* pMap = maPropSet.getPropertyMapEntry(PropertyName);
+    const SfxItemPropertySimpleEntry* pEntry = mpPropSet->getPropertyMapEntry(PropertyName);
 
-    switch( pMap ? pMap->nWID : -1 )
+    switch( pEntry ? pEntry->nWID : -1 )
     {
         case WID_MODEL_LANGUAGE:
         {

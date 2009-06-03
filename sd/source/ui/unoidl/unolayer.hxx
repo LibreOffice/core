@@ -106,7 +106,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XLayerManager > mxLayerManager;
 
     SdrLayer*           pLayer;
-    SvxItemPropertySet  aPropSet;
+    const SvxItemPropertySet*   pPropSet;
 
     sal_Bool get( LayerAttribute what ) throw();
     void set( LayerAttribute what, sal_Bool flag ) throw();

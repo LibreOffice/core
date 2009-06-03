@@ -82,9 +82,9 @@ using namespace ::com::sun::star;
 #define WID_LAYER_TITLE     5
 #define WID_LAYER_DESC      6
 
-const SfxItemPropertyMap* ImplGetSdLayerPropertyMap()
+const SvxItemPropertySet* ImplGetSdLayerPropertySet()
 {
-    static const SfxItemPropertyMap aSdLayerPropertyMap_Impl[] =
+    static const SfxItemPropertyMapEntry aSdLayerPropertyMap_Impl[] =
     {
         { MAP_CHAR_LEN(UNO_NAME_LAYER_LOCKED),      WID_LAYER_LOCKED,   &::getBooleanCppuType(),            0, 0 },
         { MAP_CHAR_LEN(UNO_NAME_LAYER_PRINTABLE),   WID_LAYER_PRINTABLE,&::getBooleanCppuType(),            0, 0 },
@@ -94,8 +94,8 @@ const SfxItemPropertyMap* ImplGetSdLayerPropertyMap()
         { MAP_CHAR_LEN("Description"),              WID_LAYER_DESC,     &::getCppuType((const OUString*)0), 0, 0 },
         { 0,0,0,0,0,0}
     };
-
-    return aSdLayerPropertyMap_Impl;
+    static SvxItemPropertySet aSDLayerPropertySet_Impl( aSdLayerPropertyMap_Impl );
+    return &aSDLayerPropertySet_Impl;
 }
 
 String SdLayer::convertToInternalName( const OUString& rName )
@@ -160,7 +160,7 @@ SdLayer::SdLayer( SdLayerManager* pLayerManager_, SdrLayer* pSdrLayer_ ) throw()
 : pLayerManager(pLayerManager_)
 , mxLayerManager(pLayerManager_)
 , pLayer(pSdrLayer_)
-, aPropSet(ImplGetSdLayerPropertyMap())
+, pPropSet(ImplGetSdLayerPropertySet())
 {
 }
 
@@ -198,7 +198,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL SdLayer::getPropertySetInfo( 
     throw(uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
-    return aPropSet.getPropertySetInfo();
+    return pPropSet->getPropertySetInfo();
 }
 
 void SAL_CALL SdLayer::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue )
@@ -209,9 +209,9 @@ void SAL_CALL SdLayer::setPropertyValue( const OUString& aPropertyName, const un
     if(pLayer == NULL || pLayerManager == NULL)
         throw lang::DisposedException();
 
-    const SfxItemPropertyMap* pMap = aPropSet.getPropertyMapEntry(aPropertyName);
+    const SfxItemPropertySimpleEntry* pEntry = pPropSet->getPropertyMapEntry(aPropertyName);
 
-    switch( pMap ? pMap->nWID : -1 )
+    switch( pEntry ? pEntry->nWID : -1 )
     {
     case WID_LAYER_LOCKED:
     {
@@ -286,11 +286,11 @@ uno::Any SAL_CALL SdLayer::getPropertyValue( const OUString& PropertyName )
     if(pLayer == NULL || pLayerManager == NULL)
         throw lang::DisposedException();
 
-    const SfxItemPropertyMap* pMap = aPropSet.getPropertyMapEntry(PropertyName);
+    const SfxItemPropertySimpleEntry* pEntry = pPropSet->getPropertyMapEntry(PropertyName);
 
     uno::Any aValue;
 
-    switch( pMap ? pMap->nWID : -1 )
+    switch( pEntry ? pEntry->nWID : -1 )
     {
     case WID_LAYER_LOCKED:
         sd::bool2any( get( LOCKED ), aValue );

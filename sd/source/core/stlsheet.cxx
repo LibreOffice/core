@@ -84,9 +84,9 @@ using namespace ::com::sun::star::drawing;
 #define WID_STYLE_DISPNAME  7998
 #define WID_STYLE_FAMILY    7999
 
-static SvxItemPropertySet& GetStylePropertyMap()
+static SvxItemPropertySet& GetStylePropertySet()
 {
-    static const SfxItemPropertyMap aFullPropertyMap_Impl[] =
+    static const SfxItemPropertyMapEntry aFullPropertyMap_Impl[] =
     {
         { RTL_CONSTASCII_STRINGPARAM("Family"),                 WID_STYLE_FAMILY,       &::getCppuType((const OUString*)0), PropertyAttribute::READONLY,    0},
         { RTL_CONSTASCII_STRINGPARAM("UserDefinedAttributes"),  SDRATTR_XMLATTRIBUTES,  &XNameContainer::static_type(), 0,     0},
@@ -1091,7 +1091,10 @@ void SAL_CALL SdStyleSheet::setParentStyle( const OUString& rParentName  ) throw
 Reference< XPropertySetInfo > SdStyleSheet::getPropertySetInfo() throw(RuntimeException)
 {
     throwIfDisposed();
-    return GetStylePropertyMap().getPropertySetInfo();
+    static Reference< XPropertySetInfo > xInfo;
+    if( !xInfo.is() )
+        xInfo = GetStylePropertySet().getPropertySetInfo();
+    return xInfo;
 }
 
 // --------------------------------------------------------------------
@@ -1101,20 +1104,20 @@ void SAL_CALL SdStyleSheet::setPropertyValue( const OUString& aPropertyName, con
     OGuard aGuard( Application::GetSolarMutex() );
     throwIfDisposed();
 
-    const SfxItemPropertyMap* pMap = getPropertyMapEntry( aPropertyName );
-    if( pMap == NULL )
+    const SfxItemPropertySimpleEntry* pEntry = getPropertyMapEntry( aPropertyName );
+    if( pEntry == NULL )
     {
         throw UnknownPropertyException();
     }
     else
     {
-        if( pMap->nWID == SDRATTR_TEXTDIRECTION )
+        if( pEntry->nWID == SDRATTR_TEXTDIRECTION )
             return; // not yet implemented for styles
 
-        if( pMap->nWID == WID_STYLE_FAMILY )
+        if( pEntry->nWID == WID_STYLE_FAMILY )
             throw PropertyVetoException();
 
-        if( (pMap->nWID == EE_PARA_NUMBULLET) && (GetFamily() == SD_STYLE_FAMILY_MASTERPAGE) )
+        if( (pEntry->nWID == EE_PARA_NUMBULLET) && (GetFamily() == SD_STYLE_FAMILY_MASTERPAGE) )
         {
             String aStr;
             const sal_uInt32 nTempHelpId = GetHelpId( aStr );
@@ -1125,7 +1128,7 @@ void SAL_CALL SdStyleSheet::setPropertyValue( const OUString& aPropertyName, con
 
         SfxItemSet &rStyleSet = GetItemSet();
 
-        if( pMap->nWID == OWN_ATTR_FILLBMP_MODE )
+        if( pEntry->nWID == OWN_ATTR_FILLBMP_MODE )
         {
             BitmapMode eMode;
             if( aValue >>= eMode )
@@ -1137,12 +1140,12 @@ void SAL_CALL SdStyleSheet::setPropertyValue( const OUString& aPropertyName, con
             throw IllegalArgumentException();
         }
 
-        SfxItemSet aSet( GetPool().GetPool(),   pMap->nWID, pMap->nWID);
+        SfxItemSet aSet( GetPool().GetPool(),   pEntry->nWID, pEntry->nWID);
         aSet.Put( rStyleSet );
 
         if( !aSet.Count() )
         {
-            if( EE_PARA_NUMBULLET == pMap->nWID )
+            if( EE_PARA_NUMBULLET == pEntry->nWID )
             {
                 Font aBulletFont;
                 SdStyleSheetPool::PutNumBulletItem( this, aBulletFont );
@@ -1150,24 +1153,24 @@ void SAL_CALL SdStyleSheet::setPropertyValue( const OUString& aPropertyName, con
             }
             else
             {
-                aSet.Put( GetPool().GetPool().GetDefaultItem( pMap->nWID ) );
+                aSet.Put( GetPool().GetPool().GetDefaultItem( pEntry->nWID ) );
             }
         }
 
-        if( pMap->nMemberId == MID_NAME &&
-            ( pMap->nWID == XATTR_FILLBITMAP || pMap->nWID == XATTR_FILLGRADIENT ||
-              pMap->nWID == XATTR_FILLHATCH || pMap->nWID == XATTR_FILLFLOATTRANSPARENCE ||
-              pMap->nWID == XATTR_LINESTART || pMap->nWID == XATTR_LINEEND || pMap->nWID == XATTR_LINEDASH) )
+        if( pEntry->nMemberId == MID_NAME &&
+            ( pEntry->nWID == XATTR_FILLBITMAP || pEntry->nWID == XATTR_FILLGRADIENT ||
+              pEntry->nWID == XATTR_FILLHATCH || pEntry->nWID == XATTR_FILLFLOATTRANSPARENCE ||
+              pEntry->nWID == XATTR_LINESTART || pEntry->nWID == XATTR_LINEEND || pEntry->nWID == XATTR_LINEDASH) )
         {
             OUString aTempName;
             if(!(aValue >>= aTempName ))
                 throw IllegalArgumentException();
 
-            SvxShape::SetFillAttribute( pMap->nWID, aTempName, aSet );
+            SvxShape::SetFillAttribute( pEntry->nWID, aTempName, aSet );
         }
-        else if(!SvxUnoTextRangeBase::SetPropertyValueHelper( aSet, pMap, aValue, aSet ))
+        else if(!SvxUnoTextRangeBase::SetPropertyValueHelper( aSet, pEntry, aValue, aSet ))
         {
-            GetStylePropertyMap().setPropertyValue( pMap, aValue, aSet );
+            GetStylePropertySet().setPropertyValue( pEntry, aValue, aSet );
         }
 
         rStyleSet.Put( aSet );
@@ -1183,8 +1186,8 @@ Any SAL_CALL SdStyleSheet::getPropertyValue( const OUString& PropertyName ) thro
 
     throwIfDisposed();
 
-    const SfxItemPropertyMap* pMap = getPropertyMapEntry( PropertyName );
-    if( pMap == NULL )
+    const SfxItemPropertySimpleEntry* pEntry = getPropertyMapEntry( PropertyName );
+    if( pEntry == NULL )
     {
         throw UnknownPropertyException();
     }
@@ -1192,7 +1195,7 @@ Any SAL_CALL SdStyleSheet::getPropertyValue( const OUString& PropertyName ) thro
     {
         Any aAny;
 
-        if( pMap->nWID == WID_STYLE_FAMILY )
+        if( pEntry->nWID == WID_STYLE_FAMILY )
         {
             if( nFamily == SD_STYLE_FAMILY_MASTERPAGE )
             {
@@ -1204,15 +1207,15 @@ Any SAL_CALL SdStyleSheet::getPropertyValue( const OUString& PropertyName ) thro
                 aAny <<= GetFamilyString(nFamily);
             }
         }
-        else if( pMap->nWID == WID_STYLE_DISPNAME )
+        else if( pEntry->nWID == WID_STYLE_DISPNAME )
         {
             aAny <<= maDisplayName;
         }
-        else if( pMap->nWID == SDRATTR_TEXTDIRECTION )
+        else if( pEntry->nWID == SDRATTR_TEXTDIRECTION )
         {
             aAny <<= sal_False;
         }
-        else if( pMap->nWID == OWN_ATTR_FILLBMP_MODE )
+        else if( pEntry->nWID == OWN_ATTR_FILLBMP_MODE )
         {
             SfxItemSet &rStyleSet = GetItemSet();
 
@@ -1231,28 +1234,28 @@ Any SAL_CALL SdStyleSheet::getPropertyValue( const OUString& PropertyName ) thro
         }
         else
         {
-            SfxItemSet aSet( GetPool().GetPool(),   pMap->nWID, pMap->nWID);
+            SfxItemSet aSet( GetPool().GetPool(),   pEntry->nWID, pEntry->nWID);
 
             const SfxPoolItem* pItem;
             SfxItemSet& rStyleSet = GetItemSet();
 
-            if( rStyleSet.GetItemState( pMap->nWID, sal_True, &pItem ) == SFX_ITEM_SET )
+            if( rStyleSet.GetItemState( pEntry->nWID, sal_True, &pItem ) == SFX_ITEM_SET )
                 aSet.Put(  *pItem );
 
             if( !aSet.Count() )
-                aSet.Put( GetPool().GetPool().GetDefaultItem( pMap->nWID ) );
+                aSet.Put( GetPool().GetPool().GetDefaultItem( pEntry->nWID ) );
 
-            if(SvxUnoTextRangeBase::GetPropertyValueHelper( aSet, pMap, aAny ))
+            if(SvxUnoTextRangeBase::GetPropertyValueHelper( aSet, pEntry, aAny ))
                 return aAny;
 
             // Hole Wert aus ItemSet
-            aAny = GetStylePropertyMap().getPropertyValue( pMap, aSet );
+            aAny = GetStylePropertySet().getPropertyValue( pEntry, aSet );
         }
 
-        if( *pMap->pType != aAny.getValueType() )
+        if( *pEntry->pType != aAny.getValueType() )
         {
             // since the sfx uint16 item now exports a sal_Int32, we may have to fix this here
-            if( ( *pMap->pType == ::getCppuType((const sal_Int16*)0)) && aAny.getValueType() == ::getCppuType((const sal_Int32*)0) )
+            if( ( *pEntry->pType == ::getCppuType((const sal_Int16*)0)) && aAny.getValueType() == ::getCppuType((const sal_Int32*)0) )
             {
                 sal_Int32 nValue = 0;
                 aAny >>= nValue;
@@ -1285,20 +1288,20 @@ PropertyState SAL_CALL SdStyleSheet::getPropertyState( const OUString& PropertyN
 
     throwIfDisposed();
 
-    const SfxItemPropertyMap* pMap = getPropertyMapEntry( PropertyName );
+    const SfxItemPropertySimpleEntry* pEntry = getPropertyMapEntry( PropertyName );
 
-    if( pMap == NULL )
+    if( pEntry == NULL )
         throw UnknownPropertyException();
 
-    if( pMap->nWID == WID_STYLE_FAMILY )
+    if( pEntry->nWID == WID_STYLE_FAMILY )
     {
         return PropertyState_DIRECT_VALUE;
     }
-    else if( pMap->nWID == SDRATTR_TEXTDIRECTION )
+    else if( pEntry->nWID == SDRATTR_TEXTDIRECTION )
     {
         return PropertyState_DEFAULT_VALUE;
     }
-    else if( pMap->nWID == OWN_ATTR_FILLBMP_MODE )
+    else if( pEntry->nWID == OWN_ATTR_FILLBMP_MODE )
     {
         const SfxItemSet& rSet = GetItemSet();
 
@@ -1318,7 +1321,7 @@ PropertyState SAL_CALL SdStyleSheet::getPropertyState( const OUString& PropertyN
 
         PropertyState eState;
 
-        switch( rStyleSet.GetItemState( pMap->nWID, sal_False ) )
+        switch( rStyleSet.GetItemState( pEntry->nWID, sal_False ) )
         {
         case SFX_ITEM_READONLY:
         case SFX_ITEM_SET:
@@ -1337,7 +1340,7 @@ PropertyState SAL_CALL SdStyleSheet::getPropertyState( const OUString& PropertyN
         // if a item is set, this doesn't mean we want it :)
         if( ( PropertyState_DIRECT_VALUE == eState ) )
         {
-            switch( pMap->nWID )
+            switch( pEntry->nWID )
             {
             case XATTR_FILLBITMAP:
             case XATTR_FILLGRADIENT:
@@ -1347,7 +1350,7 @@ PropertyState SAL_CALL SdStyleSheet::getPropertyState( const OUString& PropertyN
             case XATTR_LINESTART:
             case XATTR_LINEDASH:
                 {
-                    NameOrIndex* pItem = (NameOrIndex*)rStyleSet.GetItem((USHORT)pMap->nWID);
+                    NameOrIndex* pItem = (NameOrIndex*)rStyleSet.GetItem((USHORT)pEntry->nWID);
                     if( ( pItem == NULL ) || ( pItem->GetName().Len() == 0) )
                         eState = PropertyState_DEFAULT_VALUE;
                 }
@@ -1386,20 +1389,20 @@ void SAL_CALL SdStyleSheet::setPropertyToDefault( const OUString& PropertyName )
 
     throwIfDisposed();
 
-    const SfxItemPropertyMap* pMap = getPropertyMapEntry( PropertyName );
-    if( pMap == NULL )
+    const SfxItemPropertySimpleEntry* pEntry = getPropertyMapEntry( PropertyName );
+    if( pEntry == NULL )
         throw UnknownPropertyException();
 
     SfxItemSet &rStyleSet = GetItemSet();
 
-    if( pMap->nWID == OWN_ATTR_FILLBMP_MODE )
+    if( pEntry->nWID == OWN_ATTR_FILLBMP_MODE )
     {
         rStyleSet.ClearItem( XATTR_FILLBMP_STRETCH );
         rStyleSet.ClearItem( XATTR_FILLBMP_TILE );
     }
     else
     {
-        rStyleSet.ClearItem( pMap->nWID );
+        rStyleSet.ClearItem( pEntry->nWID );
     }
     Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
 }
@@ -1412,44 +1415,37 @@ Any SAL_CALL SdStyleSheet::getPropertyDefault( const OUString& aPropertyName ) t
 
     throwIfDisposed();
 
-    const SfxItemPropertyMap* pMap = getPropertyMapEntry( aPropertyName );
-    if( pMap == NULL )
+    const SfxItemPropertySimpleEntry* pEntry = getPropertyMapEntry( aPropertyName );
+    if( pEntry == NULL )
         throw UnknownPropertyException();
-
-    if( pMap->nWID == WID_STYLE_FAMILY )
+    Any aRet;
+    if( pEntry->nWID == WID_STYLE_FAMILY )
     {
-        return Any( GetFamilyString(nFamily) );
+        aRet <<= GetFamilyString(nFamily);
     }
-    else if( pMap->nWID == SDRATTR_TEXTDIRECTION )
+    else if( pEntry->nWID == SDRATTR_TEXTDIRECTION )
     {
-        return Any( sal_False );
+        aRet <<= sal_False;
     }
-    else if( pMap->nWID == OWN_ATTR_FILLBMP_MODE )
+    else if( pEntry->nWID == OWN_ATTR_FILLBMP_MODE )
     {
-        return Any( BitmapMode_REPEAT );
+        aRet <<= BitmapMode_REPEAT;
     }
     else
     {
         SfxItemPool& rMyPool = GetPool().GetPool();
-        SfxItemSet aSet( rMyPool,   pMap->nWID, pMap->nWID);
-        aSet.Put( rMyPool.GetDefaultItem( pMap->nWID ) );
-        return( GetStylePropertyMap().getPropertyValue( pMap, aSet ) );
+        SfxItemSet aSet( rMyPool,   pEntry->nWID, pEntry->nWID);
+        aSet.Put( rMyPool.GetDefaultItem( pEntry->nWID ) );
+        aRet = GetStylePropertySet().getPropertyValue( pEntry, aSet );
     }
+    return aRet;
 }
 
 // --------------------------------------------------------------------
 
 /** this is used because our property map is not sorted yet */
-const SfxItemPropertyMap* SdStyleSheet::getPropertyMapEntry( const OUString& rPropertyName ) const throw()
+const SfxItemPropertySimpleEntry* SdStyleSheet::getPropertyMapEntry( const OUString& rPropertyName ) const throw()
 {
-    const SfxItemPropertyMap*pMap = GetStylePropertyMap().getPropertyMap();
-    while( pMap->pName )
-    {
-        if( rPropertyName.compareToAscii( pMap->pName ) == 0 )
-            return pMap;
-        ++pMap;
-    }
-
-    return NULL;
+    return GetStylePropertySet().getPropertyMapEntry(rPropertyName);
 }
 
