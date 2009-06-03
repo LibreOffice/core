@@ -599,7 +599,7 @@ static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize )
                                                       numberOfRows: aChoices.getLength()
                                                       numberOfColumns: 1];
                 // get currently selected value
-                sal_Int32 nSelectVal;
+                sal_Int32 nSelectVal = 0;
                 PropertyValue* pVal = pListener->getValue( aPropertyName );
                 if( pVal && pVal->Value.hasValue() )
                     pVal->Value >>= nSelectVal;
