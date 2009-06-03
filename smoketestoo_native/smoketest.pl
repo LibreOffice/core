@@ -47,7 +47,7 @@ use Getopt::Long;
 #                       #
 #########################
 $is_debug = 0;           # run without executing commands
-$is_command_infos = 0;   # print command details before exec
+$is_command_infos = 1;   # print command details before exec
 $is_protocol_test = 0;
 $is_remove_on_error = 0;
 $is_remove_at_end = 1;
@@ -677,7 +677,16 @@ sub doInstall {
                 $rpmdir = "$dest_installdir" . "rpm" . $PathSeparator;
                 createPath ($optdir, $error_setup);
                 createPath ($rpmdir, $error_setup);
-                $Command = "rpm --initdb --dbpath $rpmdir";
+                my $ld_library_backup = $ENV{LD_LIBRARY_PATH};
+                if ( defined $ENV{SYSBASE}) {
+                    my $sysbase=$ENV{SYSBASE};
+                    if ( "$ld_library_backup" eq "" ) {
+                        $ENV{LD_LIBRARY_PATH} = "$sysbase/usr/lib";
+                    } else {
+                        $ENV{LD_LIBRARY_PATH} = "$ld_library_backup:$sysbase/lib";
+                    }
+                }
+                $Command = "rpm --initdb --define \"_dbpath $rpmdir\"";
                 execute_Command ($Command, $error_setup, $show_Message, $command_withoutOutput);
                 $mask = "\\.rpm\$";
                 getSubFiles ("$installsetpath", \@DirArray, $mask);
@@ -688,9 +697,10 @@ sub doInstall {
                     if ( ($file =~ /-menus-/) or ($file =~ /^adabas/) or (/^j2re-/) or ($file =~ /-gnome-/) ) {
                         next;
                     }
-                    $Command = "rpm --install --ignoresize --nodeps -vh --relocate /opt=${dest_installdir}opt --dbpath $rpmdir $installsetpath$file";
+                    $Command = "rpm --define \"_dbpath $rpmdir\" --install --ignoresize --nodeps -vh --relocate /opt=${dest_installdir}opt $installsetpath$file";
                     execute_Command ($Command, $error_setup, $show_Message, $command_withoutErrorcheck | $command_withoutOutput);
                 }
+                $ENV{LD_LIBRARY_PATH}=$ld_library_backup;
             }
         }
         elsif ( (defined($system)) && ($system eq "SunOS") ) {
