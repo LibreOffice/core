@@ -220,6 +220,10 @@ namespace drawinglayer
 
                     if( pTCPP != NULL )
                     {
+                        // set the color of text decorations
+                        const basegfx::BColor aTextlineColor = maBColorModifierStack.getModifiedColor(pTCPP->getTextlineColor());
+                        mpOutputDevice->SetTextLineColor( Color(aTextlineColor) );
+
                         // set Overline attribute
                         FontUnderline eFontOverline = mapTextLineStyle( pTCPP->getFontOverline() );
                         if( eFontOverline != UNDERLINE_NONE )

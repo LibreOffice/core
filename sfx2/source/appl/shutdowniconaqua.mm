@@ -33,14 +33,22 @@
 
 #include "svtools/moduleoptions.hxx"
 #include "svtools/dynamicmenuoptions.hxx"
-#include <comphelper/sequenceashashmap.hxx>
+#include "svtools/historyoptions.hxx"
+#include "tools/urlobj.hxx"
+#include "osl/file.h"
+#include "comphelper/sequenceashashmap.hxx"
 #include "vos/mutex.hxx"
 #include "sfx2/app.hxx"
 #include "app.hrc"
 #define USE_APP_SHORTCUTS
 #include "shutdownicon.hxx"
 
+#include "com/sun/star/util/XStringWidth.hpp"
+
+#include "cppuhelper/implbase1.hxx"
+
 #include <set>
+#include <vector>
 
 #include "premac.h"
 #include <Cocoa/Cocoa.h>
@@ -52,6 +60,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::util;
 
 #define MI_OPEN                    1
 #define MI_WRITER                  2
@@ -130,6 +139,173 @@ static NSString* getAutoreleasedString( const rtl::OUString& rStr )
     return [[[NSString alloc] initWithCharacters: rStr.getStr() length: rStr.getLength()] autorelease];
 }
 
+struct RecentMenuEntry
+{
+    rtl::OUString aURL;
+    rtl::OUString aFilter;
+    rtl::OUString aTitle;
+    rtl::OUString aPassword;
+};
+
+class RecentFilesStringLength : public ::cppu::WeakImplHelper1< ::com::sun::star::util::XStringWidth >
+{
+	public:
+		RecentFilesStringLength() {}
+		virtual ~RecentFilesStringLength() {}
+
+		// XStringWidth
+		sal_Int32 SAL_CALL queryStringWidth( const ::rtl::OUString& aString )
+			throw (::com::sun::star::uno::RuntimeException)
+		{
+			return aString.getLength();
+		}
+};
+
+@interface RecentMenuDelegate : NSObject
+{
+    std::vector< RecentMenuEntry >* m_pRecentFilesItems;
+}
+-(id)init;
+-(void)dealloc;
+-(void)menuNeedsUpdate:(NSMenu *)menu;
+-(void)executeRecentEntry: (NSMenuItem*)item;
+@end
+
+@implementation RecentMenuDelegate
+-(id)init
+{
+    if( (self = [super init]) )
+    {
+        m_pRecentFilesItems = new std::vector< RecentMenuEntry >();
+    }
+    return self;
+}
+
+-(void)dealloc
+{
+    delete m_pRecentFilesItems;
+    [super dealloc];
+}
+
+-(void)menuNeedsUpdate:(NSMenu *)menu
+{
+    // clear menu
+    int nItems = [menu numberOfItems];
+    while( nItems -- )
+        [menu removeItemAtIndex: 0];
+    
+    // update recent item list
+    Sequence< Sequence< PropertyValue > > aHistoryList( SvtHistoryOptions().GetList( ePICKLIST ) );
+
+    int nPickListMenuItems = ( aHistoryList.getLength() > 99 ) ? 99 : aHistoryList.getLength();
+        
+    m_pRecentFilesItems->clear();
+    if( ( nPickListMenuItems > 0 ) )
+    {
+        for ( int i = 0; i < nPickListMenuItems; i++ )
+        {
+            Sequence< PropertyValue >& rPickListEntry = aHistoryList[i];
+            RecentMenuEntry aRecentFile;
+            
+            for ( int j = 0; j < rPickListEntry.getLength(); j++ )
+            {
+                Any a = rPickListEntry[j].Value;
+                
+                if ( rPickListEntry[j].Name == HISTORY_PROPERTYNAME_URL )
+                    a >>= aRecentFile.aURL;
+                else if ( rPickListEntry[j].Name == HISTORY_PROPERTYNAME_FILTER )
+                    a >>= aRecentFile.aFilter;
+                else if ( rPickListEntry[j].Name == HISTORY_PROPERTYNAME_TITLE )
+                    a >>= aRecentFile.aTitle;
+                else if ( rPickListEntry[j].Name == HISTORY_PROPERTYNAME_PASSWORD )
+                    a >>= aRecentFile.aPassword;
+            }
+            
+            m_pRecentFilesItems->push_back( aRecentFile );
+        }
+    }
+
+    // insert new recent items
+    for ( sal_uInt32 i = 0; i < m_pRecentFilesItems->size(); i++ )
+    {
+        rtl::OUString	aMenuTitle;
+        INetURLObject	aURL( (*m_pRecentFilesItems)[i].aURL );
+        
+        if ( aURL.GetProtocol() == INET_PROT_FILE )
+        {
+            // Do handle file URL differently => convert it to a system
+            // path and abbreviate it with a special function:
+            String aFileSystemPath( aURL.getFSysPath( INetURLObject::FSYS_DETECT ) );
+            
+            ::rtl::OUString	aSystemPath( aFileSystemPath );
+            ::rtl::OUString	aCompactedSystemPath;
+            
+            oslFileError nError = osl_abbreviateSystemPath( aSystemPath.pData, &aCompactedSystemPath.pData, 46, NULL );
+            if ( !nError )
+                aMenuTitle = String( aCompactedSystemPath );
+            else
+                aMenuTitle = aSystemPath;
+        }
+        else
+        {
+            // Use INetURLObject to abbreviate all other URLs
+            Reference< XStringWidth > xStringLength( new RecentFilesStringLength() );
+            aMenuTitle = aURL.getAbbreviated( xStringLength, 46, INetURLObject::DECODE_UNAMBIGUOUS );
+        }
+        
+        NSMenuItem* pNewItem = [[NSMenuItem alloc] initWithTitle: getAutoreleasedString( aMenuTitle )
+                                                   action: @selector(executeRecentEntry:)
+                                                   keyEquivalent: @""];
+        [pNewItem setTag: i];
+        [pNewItem setTarget: self];
+        [pNewItem setEnabled: YES];
+        [menu addItem: pNewItem];
+        [pNewItem autorelease];
+    }
+}
+
+-(void)executeRecentEntry: (NSMenuItem*)item
+{
+    sal_Int32 nIndex = [item tag];
+    if( ( nIndex >= 0 ) && ( nIndex < static_cast<sal_Int32>( m_pRecentFilesItems->size() ) ) )
+    {
+        const RecentMenuEntry& rRecentFile = (*m_pRecentFilesItems)[ nIndex ];
+        int NUM_OF_PICKLIST_ARGS = 3;
+        Sequence< PropertyValue > aArgsList( NUM_OF_PICKLIST_ARGS );
+        
+        aArgsList[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Referer" ));
+        aArgsList[0].Value = makeAny( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:user" ) ) );
+
+        // documents in the picklist will never be opened as templates
+        aArgsList[1].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "AsTemplate" ));
+        aArgsList[1].Value = makeAny( (sal_Bool) sal_False );
+
+        ::rtl::OUString  aFilter( rRecentFile.aFilter );
+        sal_Int32 nPos = aFilter.indexOf( '|' );
+        if ( nPos >= 0 )
+        {
+	        rtl::OUString aFilterOptions;
+
+	        if ( nPos < ( aFilter.getLength() - 1 ) )
+		        aFilterOptions = aFilter.copy( nPos+1 );
+
+	        aArgsList[2].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterOptions" ));
+	        aArgsList[2].Value = makeAny( aFilterOptions );
+
+	        aFilter = aFilter.copy( 0, nPos-1 );
+	        aArgsList.realloc( ++NUM_OF_PICKLIST_ARGS );
+        }
+
+        aArgsList[NUM_OF_PICKLIST_ARGS-1].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterName" ));
+        aArgsList[NUM_OF_PICKLIST_ARGS-1].Value = makeAny( aFilter );
+
+        ShutdownIcon::OpenURL( rRecentFile.aURL, OUString( RTL_CONSTASCII_USTRINGPARAM( "_default" ) ), aArgsList );
+    }
+}
+@end
+
+static RecentMenuDelegate* pRecentDelegate = nil;
+
 static rtl::OUString getShortCut( const rtl::OUString i_rTitle )
 {
     // create shortcut
@@ -173,6 +349,36 @@ static void appendMenuItem( NSMenu* i_pMenu, NSMenu* i_pDockMenu, const rtl::OUS
         [pItem setTarget: pExecute];
         [pItem setEnabled: YES];
         [i_pDockMenu addItem: pItem];
+    }
+}
+
+static void appendRecentMenu( NSMenu* i_pMenu, NSMenu* i_pDockMenu, const String& i_rTitle )
+{
+    if( ! pRecentDelegate )
+        pRecentDelegate = [[RecentMenuDelegate alloc] init];
+    
+    NSMenuItem* pItem = [i_pMenu addItemWithTitle: getAutoreleasedString( i_rTitle )
+                                                   action: @selector(executeMenuItem:)
+                                                   keyEquivalent: @""
+                        ];
+    [pItem setEnabled: YES];
+    NSMenu* pRecentMenu = [[NSMenu alloc] initWithTitle: getAutoreleasedString( i_rTitle ) ];
+    [pRecentMenu setDelegate: pRecentDelegate];
+    [pRecentMenu setAutoenablesItems: NO];
+    [pItem setSubmenu: pRecentMenu];
+
+    if( i_pDockMenu )
+    {
+        // create a similar entry in the dock menu
+        pItem = [i_pDockMenu addItemWithTitle: getAutoreleasedString( i_rTitle )
+                             action: @selector(executeMenuItem:)
+                             keyEquivalent: @""
+                        ];
+        [pItem setEnabled: YES];
+        pRecentMenu = [[NSMenu alloc] initWithTitle: getAutoreleasedString( i_rTitle ) ];
+        [pRecentMenu setDelegate: pRecentDelegate];
+        [pRecentMenu setAutoenablesItems: NO];
+        [pItem setSubmenu: pRecentMenu];
     }
 }
 
@@ -270,6 +476,10 @@ void aqua_init_systray()
             }
 
             // insert the remaining menu entries
+
+            // add recent menu
+            appendRecentMenu( pMenu, pDockMenu, pShutdownIcon->GetResString( STR_QUICKSTART_RECENTDOC ) );
+
             rtl::OUString aTitle( pShutdownIcon->GetResString( STR_QUICKSTART_FROMTEMPLATE ) );
             rtl::OUString aKeyEquiv( getShortCut( aTitle ) );
             appendMenuItem( pMenu, pDockMenu, aTitle, MI_TEMPLATE, aKeyEquiv );

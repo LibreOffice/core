@@ -1034,6 +1034,11 @@ String STR_QUICKSTART_STARTCENTER
     Text [ en-US ] = "Startcenter";
 };
 
+String STR_QUICKSTART_RECENTDOC
+{
+    Text [ en-US ] = "Recent Documents";
+};
+
 String STR_QUERY_UPDATE_LINKS
 {
     Text [ en-US ] = "Update all links?" ;
