@@ -50,15 +50,9 @@
 #define _SVSTDARR_USHORTSSORT
 #include <svtools/svstdarr.hxx>
 
-//#ifndef _COM_SUN_STAR_BEANS_SETPROPERTYTOLERANTFAILED_HPP_
-//#include <com/sun/star/beans/SetPropertyTolerantFailed.hpp>
-//#endif
-//#ifndef _COM_SUN_STAR_BEANS_GETPROPERTYTOLERANTRESULT_HPP_
-//#include <com/sun/star/beans/GetPropertyTolerantResult.hpp>
-//#endif
-//#ifndef _COM_SUN_STAR_BEANS_TOLERANTPROPERTYSETRESULTTYPE_HPP_
-//#include <com/sun/star/beans/TolerantPropertySetResultType.hpp>
-//#endif
+#include <com/sun/star/beans/SetPropertyTolerantFailed.hpp>
+#include <com/sun/star/beans/GetPropertyTolerantResult.hpp>
+#include <com/sun/star/beans/TolerantPropertySetResultType.hpp>
 #ifndef _COM_SUN_STAR_BEANS_PropertyAttribute_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
@@ -75,7 +69,7 @@ using ::rtl::OUString;
 beans::PropertyState lcl_SwXParagraph_getPropertyState(
                             SwUnoCrsr& rUnoCrsr,
                             const SwAttrSet** ppSet,
-                            const SfxItemPropertyMap& rMap,
+                            const SfxItemPropertySimpleEntry& rEntry,
                             sal_Bool &rAttrSetFetched )
                                 throw( beans::UnknownPropertyException);
 
@@ -160,7 +154,7 @@ uno::Sequence< OUString > SwXParagraph::getSupportedServiceNames(void) throw( un
 SwXParagraph::SwXParagraph() :
     xParentText(0),
     aLstnrCntnr( (text::XTextRange*)this),
-    aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_PARAGRAPH)),
+    m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_PARAGRAPH)),
     nSelectionStartPos(-1),
     nSelectionEndPos(-1),
     m_bIsDescriptor(TRUE)
@@ -174,7 +168,7 @@ SwXParagraph::SwXParagraph(SwXText* pParent, SwUnoCrsr* pCrsr, sal_Int32 nSelSta
     SwClient(pCrsr),
     xParentText(pParent),
     aLstnrCntnr( (text::XTextRange*)this),
-    aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_PARAGRAPH)),
+    m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_PARAGRAPH)),
     nSelectionStartPos(nSelStart),
     nSelectionEndPos(nSelEnd),
     m_bIsDescriptor(FALSE)
@@ -215,7 +209,7 @@ void SwXParagraph::attachToText(SwXText* pParent, SwUnoCrsr* pCrsr)
 uno::Reference< beans::XPropertySetInfo >  SwXParagraph::getPropertySetInfo(void)
                                             throw( uno::RuntimeException )
 {
-    static uno::Reference< beans::XPropertySetInfo >  xRef = aPropSet.getPropertySetInfo();
+    static uno::Reference< beans::XPropertySetInfo >  xRef = m_pPropSet->getPropertySetInfo();
     return xRef;
 }
 /*-- 11.12.98 08:12:49---------------------------------------------------
@@ -258,22 +252,21 @@ void SAL_CALL SwXParagraph::SetPropertyValues_Impl(
     {
         const OUString* pPropertyNames = rPropertyNames.getConstArray();
         const uno::Any* pValues = rValues.getConstArray();
-        const SfxItemPropertyMap*   pMap = aPropSet.getPropertyMap();
+        const SfxItemPropertyMap*   pMap = m_pPropSet->getPropertyMap();
         OUString sTmp;
         SwParaSelection aParaSel(pUnoCrsr);
         for(sal_Int32 nProp = 0; nProp < rPropertyNames.getLength(); nProp++)
         {
-            pMap = SfxItemPropertyMap::GetByName(pMap, pPropertyNames[nProp]);
-            if(!pMap)
+            const SfxItemPropertySimpleEntry* pEntry = pMap->getByName( pPropertyNames[nProp] );
+            if(!pEntry)
                 throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + pPropertyNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
             else
             {
-                if ( pMap->nFlags & beans::PropertyAttribute::READONLY)
+                if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
                     throw beans::PropertyVetoException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + pPropertyNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
 
-                SwXTextCursor::SetPropertyValue(*pUnoCrsr, aPropSet,
-                                        sTmp, pValues[nProp], pMap);
-                pMap++;
+                SwXTextCursor::SetPropertyValue(*pUnoCrsr, *m_pPropSet,
+                                        sTmp, pValues[nProp]);
             }
         }
     }
@@ -316,25 +309,24 @@ uno::Sequence< uno::Any > SAL_CALL SwXParagraph::GetPropertyValues_Impl(
     {
         uno::Any* pValues = aValues.getArray();
         const OUString* pPropertyNames = rPropertyNames.getConstArray();
-        const SfxItemPropertyMap*   pMap = aPropSet.getPropertyMap();
+        const SfxItemPropertyMap*   pMap = m_pPropSet->getPropertyMap();
         SwNode& rTxtNode = pUnoCrsr->GetPoint()->nNode.GetNode();
         const SwAttrSet& rAttrSet = ((SwTxtNode&)rTxtNode).GetSwAttrSet();
         for(sal_Int32 nProp = 0; nProp < rPropertyNames.getLength(); nProp++)
         {
-            pMap = SfxItemPropertyMap::GetByName(pMap, pPropertyNames[nProp]);
-            if(pMap)
+            const SfxItemPropertySimpleEntry* pEntry = pMap->getByName( pPropertyNames[nProp] );
+            if(pEntry)
             {
                 if(!SwXParagraph::getDefaultTextContentValue(
-                    pValues[nProp], pPropertyNames[nProp], pMap->nWID))
+                    pValues[nProp], pPropertyNames[nProp], pEntry->nWID))
                 {
                     BOOL bDone = FALSE;
                     beans::PropertyState eTemp;
                     bDone = SwUnoCursorHelper::getCrsrPropertyValue(
-                                pMap, *pUnoCrsr, &(pValues[nProp]), eTemp, rTxtNode.GetTxtNode() );
+                                *pEntry, *pUnoCrsr, &(pValues[nProp]), eTemp, rTxtNode.GetTxtNode() );
                     if(!bDone)
-                        pValues[nProp] = aPropSet.getPropertyValue(*pMap, rAttrSet);
+                        m_pPropSet->getPropertyValue(*pEntry, rAttrSet, pValues[nProp]);
                 }
-                ++pMap;
             }
             else
                 throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + pPropertyNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
@@ -397,9 +389,9 @@ void SwXParagraph::firePropertiesChangeEvent(
 
  ---------------------------------------------------------------------------*/
 
-/* disabled for #i46921#
+/* disabled for #i46921# */
 
-uno::Sequence< SetPropertyTolerantFailed > SAL_CALL SwXParagraph::setPropertyValuesTolerant(
+uno::Sequence< beans::SetPropertyTolerantFailed > SAL_CALL SwXParagraph::setPropertyValuesTolerant(
         const uno::Sequence< OUString >& rPropertyNames,
         const uno::Sequence< uno::Any >& rValues )
     throw (lang::IllegalArgumentException, uno::RuntimeException)
@@ -412,22 +404,22 @@ uno::Sequence< SetPropertyTolerantFailed > SAL_CALL SwXParagraph::setPropertyVal
     if(!pUnoCrsr)
         throw uno::RuntimeException();
 
-    SwNode& rTxtNode = pUnoCrsr->GetPoint()->nNode.GetNode();
-    SwAttrSet& rAttrSet = ((SwTxtNode&)rTxtNode).GetSwAttrSet();
-    USHORT nAttrCount = rAttrSet.Count();
+    //SwNode& rTxtNode = pUnoCrsr->GetPoint()->nNode.GetNode();
+    //const SwAttrSet& rAttrSet = ((SwTxtNode&)rTxtNode).GetSwAttrSet();
+    //USHORT nAttrCount = rAttrSet.Count();
 
     sal_Int32 nProps = rPropertyNames.getLength();
     const OUString *pProp = rPropertyNames.getConstArray();
 
-    sal_Int32 nVals = rValues.getLength();
+    //sal_Int32 nVals = rValues.getLength();
     const uno::Any *pValue = rValues.getConstArray();
 
     sal_Int32 nFailed = 0;
-    uno::Sequence< SetPropertyTolerantFailed > aFailed( nProps );
-    SetPropertyTolerantFailed *pFailed = aFailed.getArray();
+    uno::Sequence< beans::SetPropertyTolerantFailed > aFailed( nProps );
+    beans::SetPropertyTolerantFailed *pFailed = aFailed.getArray();
 
     // get entry to start with
-    const SfxItemPropertyMap*   pStartEntry = aPropSet.getPropertyMap();
+    const SfxItemPropertyMap*  pPropMap = m_pPropSet->getPropertyMap();
 
     OUString sTmp;
     SwParaSelection aParaSel( pUnoCrsr );
@@ -435,46 +427,41 @@ uno::Sequence< SetPropertyTolerantFailed > SAL_CALL SwXParagraph::setPropertyVal
     {
         try
         {
-            pFailed[ nFailed ].Name    = pProp[i];
+            pFailed[ nFailed ].Name = pProp[i];
 
-            const SfxItemPropertyMap* pEntry =
-                    SfxItemPropertyMap::GetByName( pStartEntry, pProp[i] );
+            const SfxItemPropertySimpleEntry* pEntry = pPropMap->getByName( pProp[i] );
             if (!pEntry)
-                pFailed[ nFailed++ ].Result  = TolerantPropertySetResultType::UNKNOWN_PROPERTY;
+                pFailed[ nFailed++ ].Result  = beans::TolerantPropertySetResultType::UNKNOWN_PROPERTY;
             else
             {
                 // set property value
                 // (compare to SwXParagraph::setPropertyValues)
                 if (pEntry->nFlags & beans::PropertyAttribute::READONLY)
-                    pFailed[ nFailed++ ].Result  = TolerantPropertySetResultType::PROPERTY_VETO;
+                    pFailed[ nFailed++ ].Result  = beans::TolerantPropertySetResultType::PROPERTY_VETO;
                 else
                 {
                     SwXTextCursor::SetPropertyValue(
-                                *pUnoCrsr, aPropSet, sTmp, pValue[i], pEntry );
+                                *pUnoCrsr, *m_pPropSet, pProp[i], pValue[i] );
                 }
-
-                // continue with search for next property after current entry
-                // (property map and sequence of property names are sorted!)
-                pStartEntry = ++pEntry;
             }
         }
         catch (beans::UnknownPropertyException &)
         {
             // should not occur because property was searched for before
             DBG_ERROR( "unexpected exception catched" );
-            pFailed[ nFailed++ ].Result = TolerantPropertySetResultType::UNKNOWN_PROPERTY;
+            pFailed[ nFailed++ ].Result = beans::TolerantPropertySetResultType::UNKNOWN_PROPERTY;
         }
         catch (lang::IllegalArgumentException &)
         {
-            pFailed[ nFailed++ ].Result = TolerantPropertySetResultType::ILLEGAL_ARGUMENT;
+            pFailed[ nFailed++ ].Result = beans::TolerantPropertySetResultType::ILLEGAL_ARGUMENT;
         }
         catch (beans::PropertyVetoException &)
         {
-            pFailed[ nFailed++ ].Result = TolerantPropertySetResultType::PROPERTY_VETO;
+            pFailed[ nFailed++ ].Result = beans::TolerantPropertySetResultType::PROPERTY_VETO;
         }
         catch (lang::WrappedTargetException &)
         {
-            pFailed[ nFailed++ ].Result = TolerantPropertySetResultType::WRAPPED_TARGET;
+            pFailed[ nFailed++ ].Result = beans::TolerantPropertySetResultType::WRAPPED_TARGET;
         }
     }
 
@@ -483,27 +470,27 @@ uno::Sequence< SetPropertyTolerantFailed > SAL_CALL SwXParagraph::setPropertyVal
 }
 
 
-uno::Sequence< GetPropertyTolerantResult > SAL_CALL SwXParagraph::getPropertyValuesTolerant(
+uno::Sequence< beans::GetPropertyTolerantResult > SAL_CALL SwXParagraph::getPropertyValuesTolerant(
         const uno::Sequence< OUString >& rPropertyNames )
     throw (uno::RuntimeException)
 {
     vos::OGuard aGuard( Application::GetSolarMutex() );
 
-    uno::Sequence< GetDirectPropertyTolerantResult > aTmpRes(
+    uno::Sequence< beans::GetDirectPropertyTolerantResult > aTmpRes(
             GetPropertyValuesTolerant_Impl( rPropertyNames, sal_False ) );
-    const GetDirectPropertyTolerantResult *pTmpRes = aTmpRes.getConstArray();
+    const beans::GetDirectPropertyTolerantResult *pTmpRes = aTmpRes.getConstArray();
 
     // copy temporary result to final result type
     sal_Int32 nLen = aTmpRes.getLength();
-    uno::Sequence< GetPropertyTolerantResult > aRes( nLen );
-    GetPropertyTolerantResult *pRes = aRes.getArray();
+    uno::Sequence< beans::GetPropertyTolerantResult > aRes( nLen );
+    beans::GetPropertyTolerantResult *pRes = aRes.getArray();
     for (sal_Int32 i = 0;  i < nLen;  i++)
         *pRes++ = *pTmpRes++;
     return aRes;
 }
 
 
-uno::Sequence< GetDirectPropertyTolerantResult > SAL_CALL SwXParagraph::getDirectPropertyValuesTolerant(
+uno::Sequence< beans::GetDirectPropertyTolerantResult > SAL_CALL SwXParagraph::getDirectPropertyValuesTolerant(
         const uno::Sequence< OUString >& rPropertyNames )
     throw (uno::RuntimeException)
 {
@@ -512,7 +499,7 @@ uno::Sequence< GetDirectPropertyTolerantResult > SAL_CALL SwXParagraph::getDirec
 }
 
 
-uno::Sequence< GetDirectPropertyTolerantResult > SAL_CALL SwXParagraph::GetPropertyValuesTolerant_Impl(
+uno::Sequence< beans::GetDirectPropertyTolerantResult > SAL_CALL SwXParagraph::GetPropertyValuesTolerant_Impl(
         const uno::Sequence< OUString >& rPropertyNames,
         sal_Bool bDirectValuesOnly )
     throw (uno::RuntimeException)
@@ -521,7 +508,7 @@ uno::Sequence< GetDirectPropertyTolerantResult > SAL_CALL SwXParagraph::GetPrope
 
     SwUnoCrsr* pUnoCrsr = ((SwXParagraph*)this)->GetCrsr();
     if (!pUnoCrsr)
-        throw RuntimeException();
+        throw uno::RuntimeException();
     SwTxtNode* pTxtNode = pUnoCrsr->GetPoint()->nNode.GetNode().GetTxtNode();
     DBG_ASSERT( pTxtNode != NULL, "need text node" );
 
@@ -534,40 +521,39 @@ uno::Sequence< GetDirectPropertyTolerantResult > SAL_CALL SwXParagraph::GetPrope
     sal_Int32 nProps = rPropertyNames.getLength();
     const OUString *pProp = rPropertyNames.getConstArray();
 
-    uno::Sequence< GetDirectPropertyTolerantResult > aResult( nProps );
-    GetDirectPropertyTolerantResult *pResult = aResult.getArray();
+    uno::Sequence< beans::GetDirectPropertyTolerantResult > aResult( nProps );
+    beans::GetDirectPropertyTolerantResult *pResult = aResult.getArray();
     sal_Int32 nIdx = 0;
 
     // get entry to start with
-    const SfxItemPropertyMap *pStartEntry = aPropSet.getPropertyMap();
+    const SfxItemPropertyMap *pPropMap = m_pPropSet->getPropertyMap();
 
     for (sal_Int32 i = 0;  i < nProps;  ++i)
     {
         DBG_ASSERT( nIdx < nProps, "index out ouf bounds" );
-        GetDirectPropertyTolerantResult &rResult = pResult[nIdx];
+        beans::GetDirectPropertyTolerantResult &rResult = pResult[nIdx];
 
         try
         {
             rResult.Name = pProp[i];
 
-            const SfxItemPropertyMap *pEntry =
-                    SfxItemPropertyMap::GetByName( pStartEntry, pProp[i] );
+            const SfxItemPropertySimpleEntry* pEntry = pPropMap->getByName( pProp[i] );
             if (!pEntry)  // property available?
-                rResult.Result = TolerantPropertySetResultType::UNKNOWN_PROPERTY;
+                rResult.Result = beans::TolerantPropertySetResultType::UNKNOWN_PROPERTY;
             else
             {
                 // get property state
                 // (compare to SwXParagraph::getPropertyState)
                 sal_Bool bAttrSetFetched = sal_True;
-                PropertyState eState = lcl_SwXParagraph_getPropertyState(
+                beans::PropertyState eState = lcl_SwXParagraph_getPropertyState(
                             *pUnoCrsr, &pAttrSet, *pEntry, bAttrSetFetched );
                 rResult.State  = eState;
 
 //                if (bDirectValuesOnly  &&  PropertyState_DIRECT_VALUE != eState)
-//                    rResult.Result = TolerantPropertySetResultType::NO_DIRECT_VALUE;
+//                    rResult.Result = beans::TolerantPropertySetResultType::NO_DIRECT_VALUE;
 //                else
-                rResult.Result = TolerantPropertySetResultType::UNKNOWN_FAILURE;
-                if (!bDirectValuesOnly  ||  PropertyState_DIRECT_VALUE == eState)
+                rResult.Result = beans::TolerantPropertySetResultType::UNKNOWN_FAILURE;
+                if (!bDirectValuesOnly  ||  beans::PropertyState_DIRECT_VALUE == eState)
                 {
                     // get property value
                     // (compare to SwXParagraph::getPropertyValue(s))
@@ -578,46 +564,43 @@ uno::Sequence< GetDirectPropertyTolerantResult > SAL_CALL SwXParagraph::GetPrope
                         // handle properties that are not part of the attribute
                         // and thus only pretendend to be paragraph attributes
                         BOOL bDone = FALSE;
-                        PropertyState eTemp;
+                        beans::PropertyState eTemp;
                         bDone = SwUnoCursorHelper::getCrsrPropertyValue(
-                                    pEntry, *pUnoCrsr, &aValue, eTemp, pTxtNode );
+                                    *pEntry, *pUnoCrsr, &aValue, eTemp, pTxtNode );
 
                         // if not found try the real paragraph attributes...
                         if (!bDone)
-                            aValue = aPropSet.getPropertyValue( *pEntry, rValueAttrSet );
+                            m_pPropSet->getPropertyValue( *pEntry, rValueAttrSet, aValue );
                     }
 
                     rResult.Value  = aValue;
-                    rResult.Result = TolerantPropertySetResultType::SUCCESS;
+                    rResult.Result = beans::TolerantPropertySetResultType::SUCCESS;
 
                     nIdx++;
                 }
                 // this assertion should never occur!
-                DBG_ASSERT( nIdx < 1  ||  pResult[nIdx - 1].Result != TolerantPropertySetResultType::UNKNOWN_FAILURE,
+                DBG_ASSERT( nIdx < 1  ||  pResult[nIdx - 1].Result != beans::TolerantPropertySetResultType::UNKNOWN_FAILURE,
                         "unknown failure while retrieving property" );
 
-                // continue with search for next property after current entry
-                // (property map and sequence of property names are sorted!)
-                pStartEntry = ++pEntry;
             }
         }
         catch (beans::UnknownPropertyException &)
         {
             // should not occur because property was searched for before
-            DBG_ERROR( "unexpected exception catched" );
-            rResult.Result = TolerantPropertySetResultType::UNKNOWN_PROPERTY;
+            DBG_ERROR( "unexpected exception caught" );
+            rResult.Result = beans::TolerantPropertySetResultType::UNKNOWN_PROPERTY;
         }
         catch (lang::IllegalArgumentException &)
         {
-            rResult.Result = TolerantPropertySetResultType::ILLEGAL_ARGUMENT;
+            rResult.Result = beans::TolerantPropertySetResultType::ILLEGAL_ARGUMENT;
         }
         catch (beans::PropertyVetoException &)
         {
-            rResult.Result = TolerantPropertySetResultType::PROPERTY_VETO;
+            rResult.Result = beans::TolerantPropertySetResultType::PROPERTY_VETO;
         }
         catch (lang::WrappedTargetException &)
         {
-            rResult.Result = TolerantPropertySetResultType::WRAPPED_TARGET;
+            rResult.Result = beans::TolerantPropertySetResultType::WRAPPED_TARGET;
         }
     }
 
@@ -626,9 +609,6 @@ uno::Sequence< GetDirectPropertyTolerantResult > SAL_CALL SwXParagraph::GetPrope
 
     return aResult;
 }
-
-
-*/
 
 /* -----------------------------12.09.00 11:09--------------------------------
 
@@ -699,7 +679,7 @@ void SwXParagraph::removeVetoableChangeListener(const OUString& /*PropertyName*/
 beans::PropertyState lcl_SwXParagraph_getPropertyState(
                             SwUnoCrsr& rUnoCrsr,
                             const SwAttrSet** ppSet,
-                            const SfxItemPropertyMap& rMap,
+                            const SfxItemPropertySimpleEntry& rEntry,
                             sal_Bool &rAttrSetFetched )
                                 throw( beans::UnknownPropertyException)
 {
@@ -711,7 +691,7 @@ beans::PropertyState lcl_SwXParagraph_getPropertyState(
         (*ppSet) = ((SwTxtNode&)rTxtNode).GetpSwAttrSet();
         rAttrSetFetched = sal_True;
     }
-    switch( rMap.nWID )
+    switch( rEntry.nWID )
     {
     case FN_UNO_NUM_RULES:
         //wenn eine Numerierung gesetzt ist, dann hier herausreichen, sonst nichts tun
@@ -720,18 +700,18 @@ beans::PropertyState lcl_SwXParagraph_getPropertyState(
     case FN_UNO_ANCHOR_TYPES:
         break;
     case RES_ANCHOR:
-        if ( MID_SURROUND_SURROUNDTYPE != rMap.nMemberId )
+        if ( MID_SURROUND_SURROUNDTYPE != rEntry.nMemberId )
             goto lcl_SwXParagraph_getPropertyStateDEFAULT;
         break;
     case RES_SURROUND:
-        if ( MID_ANCHOR_ANCHORTYPE != rMap.nMemberId )
+        if ( MID_ANCHOR_ANCHORTYPE != rEntry.nMemberId )
             goto lcl_SwXParagraph_getPropertyStateDEFAULT;
         break;
     case FN_UNO_PARA_STYLE:
     case FN_UNO_PARA_CONDITIONAL_STYLE_NAME:
         {
             SwFmtColl* pFmt = SwXTextCursor::GetCurTxtFmtColl(
-                rUnoCrsr, rMap.nWID == FN_UNO_PARA_CONDITIONAL_STYLE_NAME);
+                rUnoCrsr, rEntry.nWID == FN_UNO_PARA_CONDITIONAL_STYLE_NAME);
             eRet = pFmt ? beans::PropertyState_DIRECT_VALUE
                         : beans::PropertyState_AMBIGUOUS_VALUE;
         }
@@ -746,7 +726,7 @@ beans::PropertyState lcl_SwXParagraph_getPropertyState(
         break;
     lcl_SwXParagraph_getPropertyStateDEFAULT:
     default:
-        if((*ppSet) && SFX_ITEM_SET == (*ppSet)->GetItemState(rMap.nWID, FALSE))
+        if((*ppSet) && SFX_ITEM_SET == (*ppSet)->GetItemState(rEntry.nWID, FALSE))
             eRet = beans::PropertyState_DIRECT_VALUE;
         break;
     }
@@ -765,12 +745,11 @@ beans::PropertyState SwXParagraph::getPropertyState(const OUString& rPropertyNam
     if( pUnoCrsr )
     {
         const SwAttrSet* pSet = 0;
-        const SfxItemPropertyMap* pMap = SfxItemPropertyMap::GetByName(
-                                    aPropSet.getPropertyMap(), rPropertyName );
-        if(!pMap)
+        const SfxItemPropertySimpleEntry* pEntry = m_pPropSet->getPropertyMap()->getByName( rPropertyName );
+        if(!pEntry)
             throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
         sal_Bool bDummy = sal_False;
-        eRet = lcl_SwXParagraph_getPropertyState( *pUnoCrsr, &pSet, *pMap,
+        eRet = lcl_SwXParagraph_getPropertyState( *pUnoCrsr, &pSet, *pEntry,
                                                      bDummy );
     }
     else
@@ -791,22 +770,22 @@ uno::Sequence< beans::PropertyState > SwXParagraph::getPropertyStates(
     beans::PropertyState* pStates = aRet.getArray();
 
     SwUnoCrsr* pUnoCrsr = ((SwXParagraph*)this)->GetCrsr();
-    const SfxItemPropertyMap* pMap = aPropSet.getPropertyMap();
+    const SfxItemPropertyMap* pMap = m_pPropSet->getPropertyMap();
     if( pUnoCrsr )
     {
         const SwAttrSet* pSet = 0;
         sal_Bool bAttrSetFetched = sal_False;
-        for(sal_Int32 i = 0, nEnd = PropertyNames.getLength(); i < nEnd; i++,++pStates,++pMap,++pNames )
+        for(sal_Int32 i = 0, nEnd = PropertyNames.getLength(); i < nEnd; i++,++pStates,++pNames )
         {
-            pMap = SfxItemPropertyMap::GetByName( pMap, *pNames );
-            if(!pMap)
+            const SfxItemPropertySimpleEntry* pEntry = pMap->getByName( *pNames );
+            if(!pEntry)
                 throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + *pNames, static_cast < cppu::OWeakObject * > ( this ) );
             if (bAttrSetFetched && !pSet &&
-                pMap->nWID >= RES_CHRATR_BEGIN &&
-                pMap->nWID <= RES_UNKNOWNATR_END )
+                pEntry->nWID >= RES_CHRATR_BEGIN &&
+                pEntry->nWID <= RES_UNKNOWNATR_END )
                 *pStates = beans::PropertyState_DEFAULT_VALUE;
             else
-                *pStates = lcl_SwXParagraph_getPropertyState( *pUnoCrsr, &pSet,*pMap, bAttrSetFetched );
+                *pStates = lcl_SwXParagraph_getPropertyState( *pUnoCrsr, &pSet,*pEntry, bAttrSetFetched );
         }
     }
     else
@@ -831,18 +810,17 @@ void SwXParagraph::setPropertyToDefault(const OUString& rPropertyName)
 
         // Absatz selektieren
         SwParaSelection aParaSel(pUnoCrsr);
-        const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
-                                aPropSet.getPropertyMap(), rPropertyName);
-        if(pMap)
+        const SfxItemPropertySimpleEntry* pEntry = m_pPropSet->getPropertyMap()->getByName( rPropertyName );
+        if(pEntry)
         {
-            if ( pMap->nFlags & beans::PropertyAttribute::READONLY)
+            if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
                 throw uno::RuntimeException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only:" ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
-            if(pMap->nWID < RES_FRMATR_END)
+            if(pEntry->nWID < RES_FRMATR_END)
             {
                 SvUShortsSort aWhichIds;
-                aWhichIds.Insert(pMap->nWID);
-                if(pMap->nWID < RES_PARATR_BEGIN)
+                aWhichIds.Insert(pEntry->nWID);
+                if(pEntry->nWID < RES_PARATR_BEGIN)
                     pUnoCrsr->GetDoc()->ResetAttrs(*pUnoCrsr, sal_True, &aWhichIds);
                 else
                 {
@@ -868,7 +846,7 @@ void SwXParagraph::setPropertyToDefault(const OUString& rPropertyName)
                 }
             }
             else
-                SwUnoCursorHelper::resetCrsrPropertyValue(pMap, *pUnoCrsr);
+                SwUnoCursorHelper::resetCrsrPropertyValue(*pEntry, *pUnoCrsr);
         }
         else
             throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
@@ -889,15 +867,14 @@ uno::Any SwXParagraph::getPropertyDefault(const OUString& rPropertyName)
         if(SwXParagraph::getDefaultTextContentValue(aRet, rPropertyName))
             return aRet;
 
-        const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
-                                aPropSet.getPropertyMap(), rPropertyName);
-        if(pMap)
+        const SfxItemPropertySimpleEntry* pEntry = m_pPropSet->getPropertyMap()->getByName( rPropertyName );
+        if(pEntry)
         {
-            if(pMap->nWID < RES_FRMATR_END)
+            if(pEntry->nWID < RES_FRMATR_END)
             {
                 const SfxPoolItem& rDefItem =
-                    pUnoCrsr->GetDoc()->GetAttrPool().GetDefaultItem(pMap->nWID);
-                rDefItem.QueryValue(aRet, pMap->nMemberId);
+                    pUnoCrsr->GetDoc()->GetAttrPool().GetDefaultItem(pEntry->nWID);
+                rDefItem.QueryValue(aRet, pEntry->nMemberId);
             }
         }
         else

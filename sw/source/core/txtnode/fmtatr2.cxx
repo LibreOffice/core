@@ -184,7 +184,7 @@ BOOL SwFmtAutoFmt::QueryValue( uno::Any& rVal, BYTE ) const
 
 BOOL SwFmtAutoFmt::PutValue( const uno::Any& , BYTE )
 {
-    DBG_ERROR("ToDo!");
+    //the format is not renameable via API
     return FALSE;
 }
 

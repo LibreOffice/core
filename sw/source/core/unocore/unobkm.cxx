@@ -286,13 +286,7 @@ uno::Reference< beans::XPropertySetInfo >  SwXBookmark::getPropertySetInfo(void)
     static uno::Reference< beans::XPropertySetInfo >  aRef;
     if(!aRef.is())
     {
-        const SfxItemPropertyMap* pMap = aSwMapProvider.GetPropertyMap(PROPERTY_MAP_BOOKMARK);
-        uno::Reference< beans::XPropertySetInfo >  xInfo = new SfxItemPropertySetInfo(pMap);
-        // extend PropertySetInfo!
-        const uno::Sequence<beans::Property> aPropSeq = xInfo->getProperties();
-        aRef = new SfxExtItemPropertySetInfo(
-            aSwMapProvider.GetPropertyMap(PROPERTY_MAP_PARAGRAPH_EXTENSIONS),
-            aPropSeq );
+        uno::Reference< beans::XPropertySetInfo >  xInfo = aSwMapProvider.GetPropertySet(PROPERTY_MAP_BOOKMARK)->getPropertySetInfo();
     }
     return aRef;
 }

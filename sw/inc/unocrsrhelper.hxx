@@ -32,9 +32,9 @@
 
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <unocrsr.hxx>
+#include <map>
 
-
-struct SfxItemPropertyMap;
+struct SfxItemPropertySimpleEntry;
 class SwPaM;
 class SwDoc;
 
@@ -46,12 +46,23 @@ namespace com{ namespace sun{ namespace star{
         struct PropertyValue;
     }
 }}}
+
 /* -----------------------------14.12.00 15:06--------------------------------
 
  ---------------------------------------------------------------------------*/
 namespace SwUnoCursorHelper
 {
-    sal_Bool                    getCrsrPropertyValue(const SfxItemPropertyMap* pMap
+    //  keep Any's mapped by (WhichId << 16 ) + (MemberId)
+    typedef std::map< sal_uInt32, com::sun::star::uno::Any *> AnyMapHelper_t;
+    class SwAnyMapHelper : public AnyMapHelper_t
+    {
+        public:
+            ~SwAnyMapHelper();
+
+            void    SetValue( USHORT nWhichId, USHORT nMemberId, const com::sun::star::uno::Any& rAny );
+            bool    FillValue( USHORT nWhichId, USHORT nMemberId, const com::sun::star::uno::Any*& pAny );
+    };
+    sal_Bool                    getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                                         , SwPaM& rPam
                                         , com::sun::star::uno::Any *pAny
                                         , com::sun::star::beans::PropertyState& eState
@@ -65,7 +76,7 @@ namespace SwUnoCursorHelper
                                         { return rUnoCrsr.GetCntntNode() &&
                                             rUnoCrsr.GetPoint()->nContent == rUnoCrsr.GetCntntNode()->Len();}
 
-    void                        resetCrsrPropertyValue(const SfxItemPropertyMap* pMap, SwPaM& rPam);
+    void                        resetCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry, SwPaM& rPam);
     void                        InsertFile(SwUnoCrsr* pUnoCrsr,
                                     const String& rURL,
                                     const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rOptions

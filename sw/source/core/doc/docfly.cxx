@@ -120,6 +120,7 @@ USHORT SwDoc::GetFlyCount( FlyCntType eType ) const
 /*-----------------17.02.98 08:35-------------------
 
 --------------------------------------------------*/
+// If you change this, also update SwXFrameEnumeration in unocoll.
 SwFrmFmt* SwDoc::GetFlyNum( USHORT nIdx, FlyCntType eType )
 {
     SwSpzFrmFmts& rFmts = *GetSpzFrmFmts();

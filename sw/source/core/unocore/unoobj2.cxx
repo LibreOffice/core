@@ -1176,7 +1176,7 @@ SwXTextRange::SwXTextRange(SwPaM& rPam, const uno::Reference< XText > & rxParent
     pBox(0),
     pBoxStartNode(0),
     aObjectDepend(this, 0),
-    aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_CURSOR)),
+    m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_CURSOR)),
     xParentText(rxParent),
     pMark(NULL)
 {
@@ -1190,7 +1190,7 @@ SwXTextRange::SwXTextRange(SwFrmFmt& rFmt, SwPaM& rPam) :
     pBox(0),
     pBoxStartNode(0),
     aObjectDepend(this, &rFmt),
-    aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_CURSOR)),
+    m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_CURSOR)),
     pMark(NULL)
 {
     //Bookmark an der anlegen
@@ -1203,7 +1203,7 @@ SwXTextRange::SwXTextRange(SwFrmFmt& rTblFmt, SwTableBox& rTblBox, SwPaM& rPam) 
     pBox(&rTblBox),
     pBoxStartNode(0),
     aObjectDepend(this, &rTblFmt),
-    aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_CURSOR)),
+    m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_CURSOR)),
     pMark(NULL)
 {
     //Bookmark an der anlegen
@@ -1216,7 +1216,7 @@ SwXTextRange::SwXTextRange(SwFrmFmt& rTblFmt, const SwStartNode& rStartNode, SwP
     pBox(0),
     pBoxStartNode(&rStartNode),
     aObjectDepend(this, &rTblFmt),
-    aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_CURSOR)),
+    m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_CURSOR)),
     pMark(NULL)
 {
     //Bookmark an der anlegen
@@ -1229,9 +1229,10 @@ SwXTextRange::SwXTextRange(SwFrmFmt& rTblFmt) :
     pBox(0),
     pBoxStartNode(0),
     aObjectDepend(this, &rTblFmt),
-    aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_CURSOR)),
+    m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_CURSOR)),
     pMark(NULL)
-{ }
+{
+}
 
 SwXTextRange::~SwXTextRange()
 {
@@ -1731,8 +1732,7 @@ Sequence< OUString > SAL_CALL SwXTextRange::getAvailableServiceNames(void) throw
 uno::Reference< XPropertySetInfo > SAL_CALL SwXTextRange::getPropertySetInfo(  ) throw(RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    static uno::Reference< XPropertySetInfo > xRef =
-        aPropSet.getPropertySetInfo();
+    static uno::Reference< XPropertySetInfo > xRef = m_pPropSet->getPropertySetInfo();
     return xRef;
 }
 
@@ -1746,7 +1746,7 @@ void SAL_CALL SwXTextRange::setPropertyValue(
         throw RuntimeException();
     SwPaM aPaM(GetDoc()->GetNodes());
     SwXTextRange::GetPositions(aPaM);
-    SwXTextCursor::SetPropertyValue(aPaM, aPropSet, rPropertyName, rValue);
+    SwXTextCursor::SetPropertyValue(aPaM, *m_pPropSet, rPropertyName, rValue);
 }
 
 Any SAL_CALL SwXTextRange::getPropertyValue( const OUString& rPropertyName )
@@ -1757,7 +1757,7 @@ Any SAL_CALL SwXTextRange::getPropertyValue( const OUString& rPropertyName )
         throw RuntimeException();
     SwPaM aPaM(((SwDoc*)GetDoc())->GetNodes());
     SwXTextRange::GetPositions(aPaM);
-    return SwXTextCursor::GetPropertyValue(aPaM, aPropSet, rPropertyName);
+    return SwXTextCursor::GetPropertyValue(aPaM, *m_pPropSet, rPropertyName);
 }
 
 void SAL_CALL SwXTextRange::addPropertyChangeListener(
@@ -1796,7 +1796,7 @@ PropertyState SAL_CALL SwXTextRange::getPropertyState( const OUString& rProperty
         throw RuntimeException();
     SwPaM aPaM(((SwDoc*)GetDoc())->GetNodes());
     SwXTextRange::GetPositions(aPaM);
-    return SwXTextCursor::GetPropertyState(aPaM, aPropSet, rPropertyName);
+    return SwXTextCursor::GetPropertyState(aPaM, *m_pPropSet, rPropertyName);
 }
 
 Sequence< PropertyState > SAL_CALL SwXTextRange::getPropertyStates(
@@ -1807,7 +1807,7 @@ Sequence< PropertyState > SAL_CALL SwXTextRange::getPropertyStates(
         throw RuntimeException();
     SwPaM aPaM(((SwDoc*)GetDoc())->GetNodes());
     SwXTextRange::GetPositions(aPaM);
-    return SwXTextCursor::GetPropertyStates(aPaM, aPropSet, rPropertyName);
+    return SwXTextCursor::GetPropertyStates(aPaM, *m_pPropSet, rPropertyName);
 }
 
 void SAL_CALL SwXTextRange::setPropertyToDefault( const OUString& rPropertyName )
@@ -1818,7 +1818,7 @@ void SAL_CALL SwXTextRange::setPropertyToDefault( const OUString& rPropertyName 
         throw RuntimeException();
     SwPaM aPaM(((SwDoc*)GetDoc())->GetNodes());
     SwXTextRange::GetPositions(aPaM);
-    SwXTextCursor::SetPropertyToDefault(aPaM, aPropSet, rPropertyName);
+    SwXTextCursor::SetPropertyToDefault(aPaM, *m_pPropSet, rPropertyName);
 }
 
 Any SAL_CALL SwXTextRange::getPropertyDefault( const OUString& rPropertyName )
@@ -1829,7 +1829,7 @@ Any SAL_CALL SwXTextRange::getPropertyDefault( const OUString& rPropertyName )
         throw RuntimeException();
     SwPaM aPaM(((SwDoc*)GetDoc())->GetNodes());
     SwXTextRange::GetPositions(aPaM);
-    return SwXTextCursor::GetPropertyDefault(aPaM, aPropSet, rPropertyName);
+    return SwXTextCursor::GetPropertyDefault(aPaM, *m_pPropSet, rPropertyName);
 }
 
 void SwXTextRange::makeRedline(

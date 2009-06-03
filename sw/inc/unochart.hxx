@@ -281,7 +281,7 @@ class SwChartDataSequence :
     SwUnoCrsr*                  pTblCrsr;   // cursor spanned over cells to use
     SwDepend                    aCursorDepend; //the cursor is removed after the doc has been removed
 
-    const SfxItemPropertyMap*   pMap;
+    const SfxItemPropertySet*   _pPropSet;
 
     sal_Bool    bDisposed;
 
