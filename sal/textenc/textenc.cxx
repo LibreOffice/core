@@ -222,7 +222,8 @@ Impl_getTextEncodingData(rtl_TextEncoding nEncoding) SAL_THROW_EXTERN_C()
             &aImplJavaUtf8TextEncodingData, /* JAVA_UTF8 */
             &adobeStandardEncodingData, /* ADOBE_STANDARD */
             &adobeSymbolEncodingData, /* ADOBE_SYMBOL */
-            &aImplPT154TextEncodingData }; /* PT154 */
+            &aImplPT154TextEncodingData, /* PT154 */
+            &adobeDingbatsEncodingData }; /* ADOBE_DINGBATS */
     return
         nEncoding < sizeof aData / sizeof aData[0] ? aData[nEncoding] : NULL;
 }
