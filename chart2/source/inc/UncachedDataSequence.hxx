@@ -73,7 +73,7 @@ typedef ::cppu::WeakComponentImplHelper8<
     UncachedDataSequence_Base;
 }
 
-class OOO_DLLPUBLIC_CHARTTOOLS UncachedDataSequence :
+class UncachedDataSequence :
         public ::comphelper::OMutexAndBroadcastHelper,
         public ::comphelper::OPropertyContainer,
         public ::comphelper::OPropertyArrayUsageHelper< UncachedDataSequence >,

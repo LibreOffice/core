@@ -67,8 +67,8 @@ public:
             ::com::sun::star::frame::XModel > & xModel );
     ~ControllerLockHelper();
 
-    void lockControllers();
-    void unlockControllers();
+    SAL_DLLPRIVATE void lockControllers();
+    SAL_DLLPRIVATE void unlockControllers();
 
 private:
     ::com::sun::star::uno::Reference<

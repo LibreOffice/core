@@ -36,6 +36,11 @@
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/chart/ChartAxisLabelPosition.hpp>
+#include <com/sun/star/chart/ChartAxisPosition.hpp>
+#include <com/sun/star/chart/DataLabelPlacement.hpp>
+#include <com/sun/star/chart/ErrorBarStyle.hpp>
+#include <com/sun/star/chart/MissingValueTreatment.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
@@ -51,9 +56,6 @@
 #include <com/sun/star/chart2/DataPointLabel.hpp>
 #include <com/sun/star/chart2/StackingDirection.hpp>
 #include <com/sun/star/chart2/TickmarkStyle.hpp>
-#include <com/sun/star/chart/DataLabelPlacement.hpp>
-#include <com/sun/star/chart/ErrorBarStyle.hpp>
-#include <com/sun/star/chart/MissingValueTreatment.hpp>
 
 #include <vcl/outdev.hxx>
 #include <svx/escherex.hxx>
@@ -61,13 +63,13 @@
 #include "document.hxx"
 #include "rangelst.hxx"
 #include "rangeutl.hxx"
+#include "compiler.hxx"
+#include "tokenarray.hxx"
+#include "token.hxx"
 #include "xeformula.hxx"
 #include "xehelper.hxx"
 #include "xepage.hxx"
 #include "xestyle.hxx"
-#include "compiler.hxx"
-#include "tokenarray.hxx"
-#include "token.hxx"
 
 using ::rtl::OUString;
 using ::com::sun::star::uno::Any;
@@ -103,6 +105,9 @@ using ::com::sun::star::chart2::data::XDataSource;
 using ::com::sun::star::chart2::data::XLabeledDataSequence;
 using ::com::sun::star::chart2::data::XDataSequence;
 
+using ::formula::FormulaGrammar;
+using ::formula::FormulaToken;
+
 // Helpers ====================================================================
 
 namespace {
@@ -129,17 +134,25 @@ void lclSaveRecord( XclExpStream& rStrm, XclExpRecordRef xRec, sal_uInt16 nRecId
     }
 }
 
+void lclWriteChFrBlockRecord( XclExpStream& rStrm, const XclChFrBlock& rFrBlock, bool bBegin )
+{
+    sal_uInt16 nRecId = bBegin ? EXC_ID_CHFRBLOCKBEGIN : EXC_ID_CHFRBLOCKEND;
+    rStrm.StartRecord( nRecId, 12 );
+    rStrm << nRecId << EXC_FUTUREREC_EMPTYFLAGS << rFrBlock.mnType << rFrBlock.mnContext << rFrBlock.mnValue1 << rFrBlock.mnValue2;
+    rStrm.EndRecord();
+}
+
 template< typename Type >
 inline bool lclIsAutoAnyOrGetValue( Type& rValue, const Any& rAny )
 {
     return !rAny.hasValue() || !(rAny >>= rValue);
 }
 
-bool lclIsAutoAnyOrGetScaledValue( double& rfValue, const Any& rAny, Reference< XScaling > xScaling )
+bool lclIsAutoAnyOrGetScaledValue( double& rfValue, const Any& rAny, bool bLogScale )
 {
     bool bIsAuto = lclIsAutoAnyOrGetValue( rfValue, rAny );
-    if( !bIsAuto && xScaling.is() )
-        rfValue = xScaling->doScaling( rfValue );
+    if( !bIsAuto && bLogScale )
+        rfValue = log( rfValue ) / log( 10.0 );
     return bIsAuto;
 }
 
@@ -156,13 +169,72 @@ public:
     /** Returns a reference to the parent chart data object. */
     inline XclExpChChart& GetChartData() const { return *mpChartData; }
 
+    /** Registers a new future record level. */
+    void                RegisterFutureRecBlock( const XclChFrBlock& rFrBlock );
+    /** Initializes the current future record level (writes all unwritten CHFRBLOCKBEGIN records). */
+    void                InitializeFutureRecBlock( XclExpStream& rStrm );
+    /** Finalizes the current future record level (writes CHFRBLOCKEND record if needed). */
+    void                FinalizeFutureRecBlock( XclExpStream& rStrm );
+
 private:
+    typedef ::std::vector< XclChFrBlock > XclChFrBlockVector;
+
     XclExpChChart*      mpChartData;            /// Pointer to the chart data object.
+    XclChFrBlockVector  maWrittenFrBlocks;      /// Stack of future record levels already written out.
+    XclChFrBlockVector  maUnwrittenFrBlocks;    /// Stack of future record levels not yet written out.
 };
+
+// ----------------------------------------------------------------------------
 
 XclExpChRootData::XclExpChRootData( XclExpChChart* pChartData ) :
     mpChartData( pChartData )
 {
+}
+
+void XclExpChRootData::RegisterFutureRecBlock( const XclChFrBlock& rFrBlock )
+{
+    maUnwrittenFrBlocks.push_back( rFrBlock );
+}
+
+void XclExpChRootData::InitializeFutureRecBlock( XclExpStream& rStrm )
+{
+    // first call from a future record writes all missing CHFRBLOCKBEGIN records
+    if( !maUnwrittenFrBlocks.empty() )
+    {
+        // write the leading CHFRINFO record
+        if( maWrittenFrBlocks.empty() )
+        {
+            rStrm.StartRecord( EXC_ID_CHFRINFO, 20 );
+            rStrm << EXC_ID_CHFRINFO << EXC_FUTUREREC_EMPTYFLAGS << EXC_CHFRINFO_EXCELXP2003 << EXC_CHFRINFO_EXCELXP2003 << sal_uInt16( 3 );
+            rStrm << sal_uInt16( 0x0850 ) << sal_uInt16( 0x085A ) << sal_uInt16( 0x0861 ) << sal_uInt16( 0x0861 ) << sal_uInt16( 0x086A ) << sal_uInt16( 0x086B );
+            rStrm.EndRecord();
+        }
+        // write all unwritten CHFRBLOCKBEGIN records
+        for( XclChFrBlockVector::const_iterator aIt = maUnwrittenFrBlocks.begin(), aEnd = maUnwrittenFrBlocks.end(); aIt != aEnd; ++aIt )
+        {
+            DBG_ASSERT( aIt->mnType != EXC_CHFRBLOCK_TYPE_UNKNOWN, "XclExpChRootData::InitializeFutureRecBlock - unknown future record block type" );
+            lclWriteChFrBlockRecord( rStrm, *aIt, true );
+        }
+        // move all record infos to vector of written blocks
+        maWrittenFrBlocks.insert( maWrittenFrBlocks.end(), maUnwrittenFrBlocks.begin(), maUnwrittenFrBlocks.end() );
+        maUnwrittenFrBlocks.clear();
+    }
+}
+
+void XclExpChRootData::FinalizeFutureRecBlock( XclExpStream& rStrm )
+{
+    DBG_ASSERT( !maUnwrittenFrBlocks.empty() || !maWrittenFrBlocks.empty(), "XclExpChRootData::FinalizeFutureRecBlock - no future record level found" );
+    if( !maUnwrittenFrBlocks.empty() )
+    {
+        // no future record has been written, just forget the topmost level
+        maUnwrittenFrBlocks.pop_back();
+    }
+    else if( !maWrittenFrBlocks.empty() )
+    {
+        // write the CHFRBLOCKEND record for the topmost block and delete it
+        lclWriteChFrBlockRecord( rStrm, maWrittenFrBlocks.back(), false );
+        maWrittenFrBlocks.pop_back();
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -255,10 +327,28 @@ sal_uInt16 XclExpChRoot::ConvertPieRotation( const ScfPropertySet& rPropSet )
     return static_cast< sal_uInt16 >( (450 - (nApiRot % 360)) % 360 );
 }
 
+void XclExpChRoot::RegisterFutureRecBlock( const XclChFrBlock& rFrBlock )
+{
+    mxChData->RegisterFutureRecBlock( rFrBlock );
+}
+
+void XclExpChRoot::InitializeFutureRecBlock( XclExpStream& rStrm )
+{
+    mxChData->InitializeFutureRecBlock( rStrm );
+}
+
+void XclExpChRoot::FinalizeFutureRecBlock( XclExpStream& rStrm )
+{
+    mxChData->FinalizeFutureRecBlock( rStrm );
+}
+
 // ----------------------------------------------------------------------------
 
-XclExpChGroupBase::XclExpChGroupBase( sal_uInt16 nRecId, sal_Size nRecSize ) :
-    XclExpRecord( nRecId, nRecSize )
+XclExpChGroupBase::XclExpChGroupBase( const XclExpChRoot& rRoot,
+        sal_uInt16 nFrType, sal_uInt16 nRecId, sal_Size nRecSize ) :
+    XclExpRecord( nRecId, nRecSize ),
+    XclExpChRoot( rRoot ),
+    maFrBlock( nFrType )
 {
 }
 
@@ -273,10 +363,14 @@ void XclExpChGroupBase::Save( XclExpStream& rStrm )
     // group records
     if( HasSubRecords() )
     {
+        // register the future record context corresponding to this record group
+        RegisterFutureRecBlock( maFrBlock );
         // CHBEGIN record
         XclExpEmptyRecord( EXC_ID_CHBEGIN ).Save( rStrm );
         // embedded records
         WriteSubRecords( rStrm );
+        // finalize the future records, must be done before the closing CHEND
+        FinalizeFutureRecBlock( rStrm );
         // CHEND record
         XclExpEmptyRecord( EXC_ID_CHEND ).Save( rStrm );
     }
@@ -285,6 +379,28 @@ void XclExpChGroupBase::Save( XclExpStream& rStrm )
 bool XclExpChGroupBase::HasSubRecords() const
 {
     return true;
+}
+
+void XclExpChGroupBase::SetFutureRecordContext( sal_uInt16 nFrContext, sal_uInt16 nFrValue1, sal_uInt16 nFrValue2 )
+{
+    maFrBlock.mnContext = nFrContext;
+    maFrBlock.mnValue1  = nFrValue1;
+    maFrBlock.mnValue2  = nFrValue2;
+}
+
+// ----------------------------------------------------------------------------
+
+XclExpChFutureRecordBase::XclExpChFutureRecordBase( const XclExpChRoot& rRoot,
+        XclFutureRecType eRecType, sal_uInt16 nRecId, sal_Size nRecSize ) :
+    XclExpFutureRecord( eRecType, nRecId, nRecSize ),
+    XclExpChRoot( rRoot )
+{
+}
+
+void XclExpChFutureRecordBase::Save( XclExpStream& rStrm )
+{
+    InitializeFutureRecBlock( rStrm );
+    XclExpFutureRecord::Save( rStrm );
 }
 
 // Frame formatting ===========================================================
@@ -451,22 +567,20 @@ void XclExpChAreaFormat::WriteBody( XclExpStream& rStrm )
 // ----------------------------------------------------------------------------
 
 XclExpChEscherFormat::XclExpChEscherFormat( const XclExpChRoot& rRoot ) :
-    XclExpChGroupBase( EXC_ID_CHESCHERFORMAT ),
+    XclExpChGroupBase( rRoot, EXC_CHFRBLOCK_TYPE_UNKNOWN, EXC_ID_CHESCHERFORMAT ),
     mnColor1Id( XclExpPalette::GetColorIdFromIndex( EXC_COLOR_CHWINDOWBACK ) ),
     mnColor2Id( XclExpPalette::GetColorIdFromIndex( EXC_COLOR_CHWINDOWBACK ) )
 {
-    DBG_ASSERT_BIFF( rRoot.GetBiff() == EXC_BIFF8 );
-    (void)rRoot;
+    DBG_ASSERT_BIFF( GetBiff() == EXC_BIFF8 );
 }
 
-void XclExpChEscherFormat::Convert( const XclExpChRoot& rRoot,
-        const ScfPropertySet& rPropSet, XclChObjectType eObjType )
+void XclExpChEscherFormat::Convert( const ScfPropertySet& rPropSet, XclChObjectType eObjType )
 {
-    const XclChFormatInfo& rFmtInfo = rRoot.GetFormatInfo( eObjType );
-    rRoot.ConvertEscherFormat( maData, maPicFmt, rPropSet, rFmtInfo.mePropMode );
+    const XclChFormatInfo& rFmtInfo = GetFormatInfo( eObjType );
+    ConvertEscherFormat( maData, maPicFmt, rPropSet, rFmtInfo.mePropMode );
     // register colors in palette
-    mnColor1Id = RegisterColor( rRoot, ESCHER_Prop_fillColor );
-    mnColor2Id = RegisterColor( rRoot, ESCHER_Prop_fillBackColor );
+    mnColor1Id = RegisterColor( ESCHER_Prop_fillColor );
+    mnColor2Id = RegisterColor( ESCHER_Prop_fillBackColor );
 }
 
 bool XclExpChEscherFormat::IsValid() const
@@ -479,7 +593,7 @@ void XclExpChEscherFormat::Save( XclExpStream& rStrm )
     if( maData.mxEscherSet.is() )
     {
         // replace RGB colors with palette indexes in the Escher container
-        const XclExpPalette& rPal = rStrm.GetRoot().GetPalette();
+        const XclExpPalette& rPal = GetPalette();
         maData.mxEscherSet->AddOpt( ESCHER_Prop_fillColor, 0x08000000 | rPal.GetColorIndex( mnColor1Id ) );
         maData.mxEscherSet->AddOpt( ESCHER_Prop_fillBackColor, 0x08000000 | rPal.GetColorIndex( mnColor2Id ) );
 
@@ -501,7 +615,7 @@ void XclExpChEscherFormat::WriteSubRecords( XclExpStream& rStrm )
     rStrm.EndRecord();
 }
 
-sal_uInt32 XclExpChEscherFormat::RegisterColor( const XclExpChRoot& rRoot, sal_uInt16 nPropId )
+sal_uInt32 XclExpChEscherFormat::RegisterColor( sal_uInt16 nPropId )
 {
     sal_uInt32 nBGRValue;
     if( maData.mxEscherSet.is() && maData.mxEscherSet->GetOpt( nPropId, nBGRValue ) )
@@ -511,7 +625,7 @@ sal_uInt32 XclExpChEscherFormat::RegisterColor( const XclExpChRoot& rRoot, sal_u
             COLORDATA_BLUE( nBGRValue ),
             COLORDATA_GREEN( nBGRValue ),
             COLORDATA_RED( nBGRValue ) ) );
-        return rRoot.GetPalette().InsertColor( aColor, EXC_COLOR_CHARTAREA );
+        return GetPalette().InsertColor( aColor, EXC_COLOR_CHARTAREA );
     }
     return XclExpPalette::GetColorIdFromIndex( EXC_COLOR_CHWINDOWBACK );
 }
@@ -550,7 +664,7 @@ void XclExpChFrameBase::ConvertFrameBase( const XclExpChRoot& rRoot,
         if( (rRoot.GetBiff() == EXC_BIFF8) && bComplexFill )
         {
             mxEscherFmt.reset( new XclExpChEscherFormat( rRoot ) );
-            mxEscherFmt->Convert( rRoot, rPropSet, eObjType );
+            mxEscherFmt->Convert( rPropSet, eObjType );
             if( mxEscherFmt->IsValid() )
                 mxAreaFmt->SetAuto( false );
             else
@@ -591,8 +705,7 @@ void XclExpChFrameBase::WriteFrameRecords( XclExpStream& rStrm )
 // ----------------------------------------------------------------------------
 
 XclExpChFrame::XclExpChFrame( const XclExpChRoot& rRoot, XclChObjectType eObjType ) :
-    XclExpChGroupBase( EXC_ID_CHFRAME, 4 ),
-    XclExpChRoot( rRoot ),
+    XclExpChGroupBase( rRoot, EXC_CHFRBLOCK_TYPE_FRAME, EXC_ID_CHFRAME, 4 ),
     meObjType( eObjType )
 {
 }
@@ -649,43 +762,41 @@ XclExpChFrameRef lclCreateFrame( const XclExpChRoot& rRoot,
     return xFrame;
 }
 
-void lclAddDoubleRefData(ScTokenArray& rArray, const ::formula::FormulaToken& rToken,
-                         SCsTAB nTab1, SCsTAB nTab2, SCsCOL nCol1, SCsCOL nCol2, SCsROW nRow1, SCsROW nRow2)
+} // namespace
+
+// Source links ===============================================================
+
+namespace {
+
+void lclAddDoubleRefData(
+        ScTokenArray& orArray, const FormulaToken& rToken,
+        SCsTAB nScTab1, SCsCOL nScCol1, SCsROW nScRow1,
+        SCsTAB nScTab2, SCsCOL nScCol2, SCsROW nScRow2 )
 {
-    using namespace ::formula;
+    ScComplexRefData aComplexRef;
+    aComplexRef.InitFlags();
+    aComplexRef.Ref1.SetFlag3D( true );
+    aComplexRef.Ref1.nTab = nScTab1;
+    aComplexRef.Ref1.nCol = nScCol1;
+    aComplexRef.Ref1.nRow = nScRow1;
+    aComplexRef.Ref2.nTab = nScTab2;
+    aComplexRef.Ref2.nCol = nScCol2;
+    aComplexRef.Ref2.nRow = nScRow2;
 
-    StackVar eType = rToken.GetType();
-    bool bExternal = (eType == svExternalDoubleRef);
-    DBG_ASSERT(eType == svDoubleRef || eType == svExternalDoubleRef, "not a double ref token!");
+    if( orArray.GetLen() > 0 )
+        orArray.AddOpCode( ocUnion );
 
-    ScComplexRefData aData;
-
-    aData.InitFlags();
-    aData.Ref1.SetFlag3D(true);
-    aData.Ref1.SetTabRel(false);
-    aData.Ref1.SetColRel(false);
-    aData.Ref1.SetRowRel(false);
-    aData.Ref2.SetFlag3D(false);
-    aData.Ref2.SetTabRel(false);
-    aData.Ref2.SetColRel(false);
-    aData.Ref2.SetRowRel(false);
-
-    aData.Ref1.nTab = nTab1;
-    aData.Ref1.nCol = nCol1;
-    aData.Ref1.nRow = nRow1;
-    aData.Ref2.nTab = nTab2;
-    aData.Ref2.nCol = nCol2;
-    aData.Ref2.nRow = nRow2;
-
-    if (bExternal)
-        rArray.AddExternalDoubleReference(rToken.GetIndex(), rToken.GetString(), aData);
+    DBG_ASSERT( (rToken.GetType() == ::formula::svDoubleRef) || (rToken.GetType() == ::formula::svExternalDoubleRef),
+        "lclAddDoubleRefData - double reference token expected");
+    if( rToken.GetType() == ::formula::svExternalDoubleRef )
+        orArray.AddExternalDoubleReference( rToken.GetIndex(), rToken.GetString(), aComplexRef );
     else
-        rArray.AddDoubleReference(aData);
+        orArray.AddDoubleReference( aComplexRef );
 }
 
 } // namespace
 
-// Source links ===============================================================
+// ----------------------------------------------------------------------------
 
 XclExpChSourceLink::XclExpChSourceLink( const XclExpChRoot& rRoot, sal_uInt8 nDestType ) :
     XclExpRecord( EXC_ID_CHSOURCELINK ),
@@ -697,80 +808,67 @@ XclExpChSourceLink::XclExpChSourceLink( const XclExpChRoot& rRoot, sal_uInt8 nDe
 
 sal_uInt16 XclExpChSourceLink::ConvertDataSequence( Reference< XDataSequence > xDataSeq, bool bSplitToColumns, sal_uInt16 nDefCount )
 {
-    using namespace ::formula;
-
     mxLinkFmla.reset();
     maData.mnLinkType = EXC_CHSRCLINK_DEFAULT;
-    sal_uInt16 nValueCount = nDefCount;
 
-    if (!xDataSeq.is())
-        return nValueCount;
+    if( !xDataSeq.is() )
+        return nDefCount;
 
-    // Compile the range representation string into token array.
+    // compile the range representation string into token array
     OUString aRangeRepr = xDataSeq->getSourceRangeRepresentation();
-    ScRangeList aScRanges;
-    ScCompiler aComp(GetDocPtr(), ScAddress());
-    aComp.SetGrammar(FormulaGrammar::GRAM_ENGLISH);
-    ScTokenArray* pArray = aComp.CompileString(aRangeRepr);
-    if (!pArray)
-        return nValueCount;
+    ScCompiler aComp( GetDocPtr(), ScAddress() );
+    aComp.SetGrammar( FormulaGrammar::GRAM_ENGLISH );
+    ScTokenArray* pArray = aComp.CompileString( aRangeRepr );
+    if( !pArray )
+        return nDefCount;
 
     ScTokenArray aArray;
+    sal_uInt32 nValueCount = 0;
     pArray->Reset();
-    bool bFirst = true;
-    for (const FormulaToken* p = pArray->First(); p; p = pArray->Next())
+    for( const FormulaToken* pToken = pArray->First(); pToken; pToken = pArray->Next() )
     {
-        StackVar eType = p->GetType();
-        if (eType == svSingleRef || eType == svExternalSingleRef)
+        switch( pToken->GetType() )
         {
-            // For a single ref token, just add it to the new token array as is.
-            if (bFirst)
-                bFirst = false;
-            else
-                aArray.AddOpCode(ocUnion);
+            case ::formula::svSingleRef:
+            case ::formula::svExternalSingleRef:
+                // for a single ref token, just add it to the new token array as is
+                if( aArray.GetLen() > 0 )
+                    aArray.AddOpCode( ocUnion );
+                aArray.AddToken( *pToken );
+                ++nValueCount;
+            break;
 
-            aArray.AddToken(*p);
-        }
-
-        if (eType != svDoubleRef && eType != svExternalDoubleRef)
-            continue;
-
-        // split 3-dimensional ranges into single sheets.
-        const ScComplexRefData& r = static_cast<const ScToken*>(p)->GetDoubleRef();
-        const ScSingleRefData& s = r.Ref1;
-        const ScSingleRefData& e = r.Ref2;
-        for (SCsTAB nTab = s.nTab; nTab <= e.nTab; ++nTab)
-        {
-            if (bSplitToColumns && (s.nRow != e.nRow))
+            case ::formula::svDoubleRef:
+            case ::formula::svExternalDoubleRef:
             {
-                // split 2-dimensional ranges into single columns.
-                for (SCsCOL nCol = s.nCol; nCol <= e.nCol; ++nCol)
+                // split 3-dimensional ranges into single sheets
+                const ScComplexRefData& rComplexRef = static_cast< const ScToken* >( pToken )->GetDoubleRef();
+                const ScSingleRefData& rRef1 = rComplexRef.Ref1;
+                const ScSingleRefData& rRef2 = rComplexRef.Ref2;
+                for( SCsTAB nScTab = rRef1.nTab; nScTab <= rRef2.nTab; ++nScTab )
                 {
-                    if (bFirst)
-                        bFirst = false;
+                    // split 2-dimensional ranges into single columns
+                    if( bSplitToColumns && (rRef1.nCol < rRef2.nCol) && (rRef1.nRow < rRef2.nRow) )
+                        for( SCsCOL nScCol = rRef1.nCol; nScCol <= rRef2.nCol; ++nScCol )
+                            lclAddDoubleRefData( aArray, *pToken, nScTab, nScCol, rRef1.nRow, nScTab, nScCol, rRef2.nRow );
                     else
-                        aArray.AddOpCode(ocUnion);
-
-                    lclAddDoubleRefData(aArray, *p, nTab, nTab, nCol, nCol, s.nRow, e.nRow);
+                        lclAddDoubleRefData( aArray, *pToken, nScTab, rRef1.nCol, rRef1.nRow, nScTab, rRef2.nCol, rRef2.nRow );
                 }
+                sal_uInt32 nTabs = static_cast< sal_uInt32 >( rRef2.nTab - rRef1.nTab + 1 );
+                sal_uInt32 nCols = static_cast< sal_uInt32 >( rRef2.nCol - rRef1.nCol + 1 );
+                sal_uInt32 nRows = static_cast< sal_uInt32 >( rRef2.nRow - rRef1.nRow + 1 );
+                nValueCount += nCols * nRows * nTabs;
             }
-            else
-            {
-                if (bFirst)
-                    bFirst = false;
-                else
-                    aArray.AddOpCode(ocUnion);
+            break;
 
-                lclAddDoubleRefData(aArray, *p, nTab, nTab, s.nCol, e.nCol, s.nRow, e.nRow);
-            }
+            default:;
         }
     }
 
-    const ScAddress aBaseCell(0,0,0);
-    mxLinkFmla = GetFormulaCompiler().CreateFormula(EXC_FMLATYPE_CHART, aArray, &aBaseCell);
+    const ScAddress aBaseCell;
+    mxLinkFmla = GetFormulaCompiler().CreateFormula( EXC_FMLATYPE_CHART, aArray, &aBaseCell );
     maData.mnLinkType = EXC_CHSRCLINK_WORKSHEET;
-    nValueCount = ulimit_cast< sal_uInt16 >( aScRanges.GetCellCount(), EXC_CHDATAFORMAT_MAXPOINTCOUNT );
-    return nValueCount;
+    return ulimit_cast< sal_uInt16 >( nValueCount, EXC_CHDATAFORMAT_MAXPOINTCOUNT );
 }
 
 sal_uInt16 XclExpChSourceLink::ConvertStringSequence( const Sequence< Reference< XFormattedString > >& rStringSeq )
@@ -918,6 +1016,35 @@ void XclExpChObjectLink::WriteBody( XclExpStream& rStrm )
 
 // ----------------------------------------------------------------------------
 
+XclExpChFrLabelProps::XclExpChFrLabelProps( const XclExpChRoot& rRoot ) :
+    XclExpChFutureRecordBase( rRoot, EXC_FUTUREREC_UNUSEDREF, EXC_ID_CHFRLABELPROPS, 4 )
+{
+}
+
+void XclExpChFrLabelProps::Convert( const ScfPropertySet& rPropSet, bool bShowSeries,
+        bool bShowCateg, bool bShowValue, bool bShowPercent, bool bShowBubble )
+{
+    // label value flags
+    ::set_flag( maData.mnFlags, EXC_CHFRLABELPROPS_SHOWSERIES,  bShowSeries );
+    ::set_flag( maData.mnFlags, EXC_CHFRLABELPROPS_SHOWCATEG,   bShowCateg );
+    ::set_flag( maData.mnFlags, EXC_CHFRLABELPROPS_SHOWVALUE,   bShowValue );
+    ::set_flag( maData.mnFlags, EXC_CHFRLABELPROPS_SHOWPERCENT, bShowPercent );
+    ::set_flag( maData.mnFlags, EXC_CHFRLABELPROPS_SHOWBUBBLE,  bShowBubble );
+
+    // label value separator
+    rPropSet.GetStringProperty( maData.maSeparator, EXC_CHPROP_LABELSEPARATOR );
+    if( maData.maSeparator.Len() == 0 )
+        maData.maSeparator = String( sal_Unicode( ' ' ) );
+}
+
+void XclExpChFrLabelProps::WriteBody( XclExpStream& rStrm )
+{
+    XclExpString aXclSep( maData.maSeparator, EXC_STR_FORCEUNICODE | EXC_STR_SMARTFLAGS );
+    rStrm << maData.mnFlags << aXclSep;
+}
+
+// ----------------------------------------------------------------------------
+
 XclExpChFontBase::~XclExpChFontBase()
 {
 }
@@ -937,17 +1064,16 @@ void XclExpChFontBase::ConvertFontBase( const XclExpChRoot& rRoot, const ScfProp
 }
 
 void XclExpChFontBase::ConvertRotationBase(
-        const XclExpChRoot& rRoot, const ScfPropertySet& rPropSet )
+        const XclExpChRoot& rRoot, const ScfPropertySet& rPropSet, bool bSupportsStacked )
 {
-    sal_uInt16 nRotation = rRoot.GetChartPropSetHelper().ReadRotationProperties( rPropSet );
+    sal_uInt16 nRotation = rRoot.GetChartPropSetHelper().ReadRotationProperties( rPropSet, bSupportsStacked );
     SetRotation( nRotation );
 }
 
 // ----------------------------------------------------------------------------
 
 XclExpChText::XclExpChText( const XclExpChRoot& rRoot ) :
-    XclExpChGroupBase( EXC_ID_CHTEXT, (rRoot.GetBiff() == EXC_BIFF8) ? 32 : 26 ),
-    XclExpChRoot( rRoot ),
+    XclExpChGroupBase( rRoot, EXC_CHFRBLOCK_TYPE_TEXT, EXC_ID_CHTEXT, (rRoot.GetBiff() == EXC_BIFF8) ? 32 : 26 ),
     mnTextColorId( XclExpPalette::GetColorIdFromIndex( EXC_COLOR_CHWINDOWTEXT ) )
 {
 }
@@ -968,6 +1094,14 @@ void XclExpChText::SetRotation( sal_uInt16 nRotation )
 
 void XclExpChText::ConvertTitle( Reference< XTitle > xTitle, sal_uInt16 nTarget )
 {
+    switch( nTarget )
+    {
+        case EXC_CHOBJLINK_TITLE:   SetFutureRecordContext( EXC_CHFRBLOCK_TEXT_TITLE );         break;
+        case EXC_CHOBJLINK_YAXIS:   SetFutureRecordContext( EXC_CHFRBLOCK_TEXT_AXISTITLE, 1 );  break;
+        case EXC_CHOBJLINK_XAXIS:   SetFutureRecordContext( EXC_CHFRBLOCK_TEXT_AXISTITLE, 0 );  break;
+        case EXC_CHOBJLINK_ZAXIS:   SetFutureRecordContext( EXC_CHFRBLOCK_TEXT_AXISTITLE, 2 );  break;
+    }
+
     mxSrcLink.reset();
     mxObjLink.reset( new XclExpChObjectLink( nTarget, XclChDataPointPos( 0, 0 ) ) );
 
@@ -983,7 +1117,7 @@ void XclExpChText::ConvertTitle( Reference< XTitle > xTitle, sal_uInt16 nTarget 
         ConvertFontBase( GetChRoot(), nFontIdx );
 
         // rotation
-        ConvertRotationBase( GetChRoot(), aTitleProp );
+        ConvertRotationBase( GetChRoot(), aTitleProp, true );
     }
     else
     {
@@ -1001,69 +1135,93 @@ void XclExpChText::ConvertLegend( const ScfPropertySet& rPropSet )
 bool XclExpChText::ConvertDataLabel( const ScfPropertySet& rPropSet,
         const XclChTypeInfo& rTypeInfo, const XclChDataPointPos& rPointPos )
 {
+    SetFutureRecordContext( EXC_CHFRBLOCK_TEXT_DATALABEL, rPointPos.mnPointIdx, rPointPos.mnSeriesIdx );
+
     namespace cssc = ::com::sun::star::chart2;
     cssc::DataPointLabel aPointLabel;
-    if( rPropSet.GetProperty( aPointLabel, EXC_CHPROP_LABEL ) )
+    if( !rPropSet.GetProperty( aPointLabel, EXC_CHPROP_LABEL ) )
+        return false;
+
+    // percentage only allowed in pie and donut charts
+    bool bIsPie = rTypeInfo.meTypeCateg == EXC_CHTYPECATEG_PIE;
+    // bubble sizes only allowed in bubble charts
+    bool bIsBubble = rTypeInfo.meTypeId == EXC_CHTYPEID_BUBBLES;
+    DBG_ASSERT( (GetBiff() == EXC_BIFF8) || !bIsBubble, "XclExpChText::ConvertDataLabel - bubble charts only in BIFF8" );
+
+    // raw show flags
+    bool bShowValue   = !bIsBubble && aPointLabel.ShowNumber;       // Chart2 uses 'ShowNumber' for bubble size
+    bool bShowPercent = bIsPie && aPointLabel.ShowNumberInPercent;  // percentage only in pie/donut charts
+    bool bShowCateg   = aPointLabel.ShowCategoryName;
+    bool bShowBubble  = bIsBubble && aPointLabel.ShowNumber;        // Chart2 uses 'ShowNumber' for bubble size
+    bool bShowAny     = bShowValue || bShowPercent || bShowCateg || bShowBubble;
+
+    // create the CHFRLABELPROPS record for extended settings in BIFF8
+    if( bShowAny && (GetBiff() == EXC_BIFF8) )
     {
-        //! TODO: make value and percent independent
-        bool bIsPie       = rTypeInfo.meTypeCateg == EXC_CHTYPECATEG_PIE;
-        bool bShowValue   = aPointLabel.ShowNumber;
-        bool bShowPercent = bIsPie && !bShowValue && aPointLabel.ShowNumberInPercent;
-        bool bShowCateg   = !bShowValue && aPointLabel.ShowCategoryName;
-        bool bShowAny     = bShowValue || bShowPercent || bShowCateg;
-        bool bShowSymbol  = bShowAny && aPointLabel.ShowLegendSymbol;
-
-        ::set_flag( maData.mnFlags, EXC_CHTEXT_AUTOTEXT );
-        ::set_flag( maData.mnFlags, EXC_CHTEXT_SHOWVALUE, bShowValue );
-        ::set_flag( maData.mnFlags, EXC_CHTEXT_SHOWPERCENT, bShowPercent );
-        ::set_flag( maData.mnFlags, EXC_CHTEXT_SHOWCATEG, bShowCateg );
-        ::set_flag( maData.mnFlags, EXC_CHTEXT_SHOWCATEGPERC, bShowPercent && bShowCateg );
-        ::set_flag( maData.mnFlags, EXC_CHTEXT_SHOWSYMBOL, bShowSymbol );
-        ::set_flag( maData.mnFlags, EXC_CHTEXT_DELETED, !bShowAny );
-
-        if( bShowAny )
-        {
-            // font settings
-            ConvertFontBase( GetChRoot(), rPropSet );
-            // label placement
-            sal_Int32 nPlacement = 0;
-            if( rPropSet.GetProperty( nPlacement, EXC_CHPROP_LABELPLACEMENT ) )
-            {
-                using namespace ::com::sun::star::chart::DataLabelPlacement;
-                if( nPlacement == rTypeInfo.mnDefaultLabelPos )
-                {
-                    maData.mnPlacement = EXC_CHTEXT_POS_DEFAULT;
-                }
-                else switch( nPlacement )
-                {
-                    case AVOID_OVERLAP:     maData.mnPlacement = EXC_CHTEXT_POS_AUTO;       break;
-                    case CENTER:            maData.mnPlacement = EXC_CHTEXT_POS_CENTER;     break;
-                    case TOP:               maData.mnPlacement = EXC_CHTEXT_POS_ABOVE;      break;
-                    case TOP_LEFT:          maData.mnPlacement = EXC_CHTEXT_POS_LEFT;       break;
-                    case LEFT:              maData.mnPlacement = EXC_CHTEXT_POS_LEFT;       break;
-                    case BOTTOM_LEFT:       maData.mnPlacement = EXC_CHTEXT_POS_LEFT;       break;
-                    case BOTTOM:            maData.mnPlacement = EXC_CHTEXT_POS_BELOW;      break;
-                    case BOTTOM_RIGHT:      maData.mnPlacement = EXC_CHTEXT_POS_RIGHT;      break;
-                    case RIGHT:             maData.mnPlacement = EXC_CHTEXT_POS_RIGHT;      break;
-                    case TOP_RIGHT:         maData.mnPlacement = EXC_CHTEXT_POS_RIGHT;      break;
-                    case INSIDE:            maData.mnPlacement = EXC_CHTEXT_POS_INSIDE;     break;
-                    case OUTSIDE:           maData.mnPlacement = EXC_CHTEXT_POS_OUTSIDE;    break;
-                    case NEAR_ORIGIN:       maData.mnPlacement = EXC_CHTEXT_POS_AXIS;       break;
-                    default:                DBG_ERRORFILE( "XclExpChText::ConvertDataLabel - unknown label placement type" );
-                }
-            }
-            // source link (contains number format)
-            mxSrcLink.reset( new XclExpChSourceLink( GetChRoot(), EXC_CHSRCLINK_TITLE ) );
-            if( bShowValue || bShowPercent )
-                // percentage format wins over value format
-                mxSrcLink->ConvertNumFmt( rPropSet, bShowPercent );
-            // object link
-            mxObjLink.reset( new XclExpChObjectLink( EXC_CHOBJLINK_DATA, rPointPos ) );
-            // return true to indicate existing label
-            return true;
-        }
+        mxLabelProps.reset( new XclExpChFrLabelProps( GetChRoot() ) );
+        mxLabelProps->Convert( rPropSet, false, bShowCateg, bShowValue, bShowPercent, bShowBubble );
     }
-    return false;
+
+    // restrict to combinations allowed in CHTEXT
+    if( bShowPercent ) bShowValue = false;              // percent wins over value
+    if( bShowValue ) bShowCateg = false;                // value wins over category
+    if( bShowValue || bShowCateg ) bShowBubble = false; // value or category wins over bubble size
+
+    // set all flags
+    ::set_flag( maData.mnFlags, EXC_CHTEXT_AUTOTEXT );
+    ::set_flag( maData.mnFlags, EXC_CHTEXT_SHOWVALUE, bShowValue );
+    ::set_flag( maData.mnFlags, EXC_CHTEXT_SHOWPERCENT, bShowPercent );
+    ::set_flag( maData.mnFlags, EXC_CHTEXT_SHOWCATEG, bShowCateg );
+    ::set_flag( maData.mnFlags, EXC_CHTEXT_SHOWCATEGPERC, bShowPercent && bShowCateg );
+    ::set_flag( maData.mnFlags, EXC_CHTEXT_SHOWBUBBLE, bShowBubble );
+    ::set_flag( maData.mnFlags, EXC_CHTEXT_SHOWSYMBOL, bShowAny && aPointLabel.ShowLegendSymbol );
+    ::set_flag( maData.mnFlags, EXC_CHTEXT_DELETED, !bShowAny );
+
+    if( bShowAny )
+    {
+        // font settings
+        ConvertFontBase( GetChRoot(), rPropSet );
+        ConvertRotationBase( GetChRoot(), rPropSet, false );
+        // label placement
+        sal_Int32 nPlacement = 0;
+        if( rPropSet.GetProperty( nPlacement, EXC_CHPROP_LABELPLACEMENT ) )
+        {
+            using namespace ::com::sun::star::chart::DataLabelPlacement;
+            if( nPlacement == rTypeInfo.mnDefaultLabelPos )
+            {
+                maData.mnPlacement = EXC_CHTEXT_POS_DEFAULT;
+            }
+            else switch( nPlacement )
+            {
+                case AVOID_OVERLAP:     maData.mnPlacement = EXC_CHTEXT_POS_AUTO;       break;
+                case CENTER:            maData.mnPlacement = EXC_CHTEXT_POS_CENTER;     break;
+                case TOP:               maData.mnPlacement = EXC_CHTEXT_POS_ABOVE;      break;
+                case TOP_LEFT:          maData.mnPlacement = EXC_CHTEXT_POS_LEFT;       break;
+                case LEFT:              maData.mnPlacement = EXC_CHTEXT_POS_LEFT;       break;
+                case BOTTOM_LEFT:       maData.mnPlacement = EXC_CHTEXT_POS_LEFT;       break;
+                case BOTTOM:            maData.mnPlacement = EXC_CHTEXT_POS_BELOW;      break;
+                case BOTTOM_RIGHT:      maData.mnPlacement = EXC_CHTEXT_POS_RIGHT;      break;
+                case RIGHT:             maData.mnPlacement = EXC_CHTEXT_POS_RIGHT;      break;
+                case TOP_RIGHT:         maData.mnPlacement = EXC_CHTEXT_POS_RIGHT;      break;
+                case INSIDE:            maData.mnPlacement = EXC_CHTEXT_POS_INSIDE;     break;
+                case OUTSIDE:           maData.mnPlacement = EXC_CHTEXT_POS_OUTSIDE;    break;
+                case NEAR_ORIGIN:       maData.mnPlacement = EXC_CHTEXT_POS_AXIS;       break;
+                default:                DBG_ERRORFILE( "XclExpChText::ConvertDataLabel - unknown label placement type" );
+            }
+        }
+        // source link (contains number format)
+        mxSrcLink.reset( new XclExpChSourceLink( GetChRoot(), EXC_CHSRCLINK_TITLE ) );
+        if( bShowValue || bShowPercent )
+            // percentage format wins over value format
+            mxSrcLink->ConvertNumFmt( rPropSet, bShowPercent );
+        // object link
+        mxObjLink.reset( new XclExpChObjectLink( EXC_CHOBJLINK_DATA, rPointPos ) );
+    }
+
+    /*  Return true to indicate valid label settings:
+        - for existing labels at entire series
+        - for any settings at single data point (to be able to delete a point label) */
+    return bShowAny || (rPointPos.mnPointIdx != EXC_CHDATAFORMAT_ALLPOINTS);
 }
 
 void XclExpChText::ConvertTrendLineEquation( const ScfPropertySet& rPropSet, const XclChDataPointPos& rPointPos )
@@ -1105,6 +1263,8 @@ void XclExpChText::WriteSubRecords( XclExpStream& rStrm )
     lclSaveRecord( rStrm, mxFrame );
     // CHOBJECTLINK record
     lclSaveRecord( rStrm, mxObjLink );
+    // CHFRLABELPROPS record
+    lclSaveRecord( rStrm, mxLabelProps );
 }
 
 void XclExpChText::WriteBody( XclExpStream& rStrm )
@@ -1284,8 +1444,7 @@ XclExpChAttachedLabel::XclExpChAttachedLabel( sal_uInt16 nFlags ) :
 
 XclExpChDataFormat::XclExpChDataFormat( const XclExpChRoot& rRoot,
         const XclChDataPointPos& rPointPos, sal_uInt16 nFormatIdx ) :
-    XclExpChGroupBase( EXC_ID_CHDATAFORMAT, 8 ),
-    XclExpChRoot( rRoot )
+    XclExpChGroupBase( rRoot, EXC_CHFRBLOCK_TYPE_DATAFORMAT, EXC_ID_CHDATAFORMAT, 8 )
 {
     maData.maPointPos = rPointPos;
     maData.mnFormatIdx = nFormatIdx;
@@ -1533,8 +1692,7 @@ ScfPropertySet lclGetPointPropSet( Reference< XDataSeries > xDataSeries, sal_Int
 } // namespace
 
 XclExpChSeries::XclExpChSeries( const XclExpChRoot& rRoot, sal_uInt16 nSeriesIdx ) :
-    XclExpChGroupBase( EXC_ID_CHSERIES, (rRoot.GetBiff() == EXC_BIFF8) ? 12 : 8 ),
-    XclExpChRoot( rRoot ),
+    XclExpChGroupBase( rRoot, EXC_CHFRBLOCK_TYPE_SERIES, EXC_ID_CHSERIES, (rRoot.GetBiff() == EXC_BIFF8) ? 12 : 8 ),
     mnGroupIdx( EXC_CHSERGROUP_NONE ),
     mnSeriesIdx( nSeriesIdx ),
     mnParentIdx( EXC_CHSERIES_INVALID )
@@ -1620,15 +1778,15 @@ bool XclExpChSeries::ConvertDataSeries(
                     {
                         const OUString aFillStyleName = CREATE_OUSTRING( "FillStyle" );
                         const OUString aColorName = CREATE_OUSTRING( "Color" );
-                        namespace csscd = ::com::sun::star::drawing;
+                        namespace cssd = ::com::sun::star::drawing;
                         for( sal_Int32 nPointIdx = 0; nPointIdx < nMaxPointCount; ++nPointIdx )
                         {
                             aPointPos.mnPointIdx = static_cast< sal_uInt16 >( nPointIdx );
                             ScfPropertySet aPointProp = lclGetPointPropSet( xDataSeries, nPointIdx );
                             // test that the point fill style is solid, but no color is set
-                            csscd::FillStyle eFillStyle = csscd::FillStyle_NONE;
+                            cssd::FillStyle eFillStyle = cssd::FillStyle_NONE;
                             if( aPointProp.GetProperty( eFillStyle, aFillStyleName ) &&
-                                (eFillStyle == csscd::FillStyle_SOLID) &&
+                                (eFillStyle == cssd::FillStyle_SOLID) &&
                                 !aPointProp.HasProperty( aColorName ) )
                             {
                                 aPointProp.SetProperty( aColorName, xColorScheme->getColorByIndex( nPointIdx ) );
@@ -1969,8 +2127,7 @@ void XclExpChChart3d::WriteBody( XclExpStream& rStrm )
 // ----------------------------------------------------------------------------
 
 XclExpChLegend::XclExpChLegend( const XclExpChRoot& rRoot ) :
-    XclExpChGroupBase( EXC_ID_CHLEGEND, 20 ),
-    XclExpChRoot( rRoot )
+    XclExpChGroupBase( rRoot, EXC_CHFRBLOCK_TYPE_LEGEND, EXC_ID_CHLEGEND, 20 )
 {
 }
 
@@ -1998,19 +2155,19 @@ void XclExpChLegend::WriteBody( XclExpStream& rStrm )
 
 // ----------------------------------------------------------------------------
 
-XclExpChDropBar::XclExpChDropBar( XclChObjectType eObjType ) :
-    XclExpChGroupBase( EXC_ID_CHDROPBAR, 2 ),
+XclExpChDropBar::XclExpChDropBar( const XclExpChRoot& rRoot, XclChObjectType eObjType ) :
+    XclExpChGroupBase( rRoot, EXC_CHFRBLOCK_TYPE_DROPBAR, EXC_ID_CHDROPBAR, 2 ),
     meObjType( eObjType ),
     mnBarDist( 100 )
 {
 }
 
-void XclExpChDropBar::Convert( const XclExpChRoot& rRoot, const ScfPropertySet& rPropSet )
+void XclExpChDropBar::Convert( const ScfPropertySet& rPropSet )
 {
     if( rPropSet.Is() )
-        ConvertFrameBase( rRoot, rPropSet, meObjType );
+        ConvertFrameBase( GetChRoot(), rPropSet, meObjType );
     else
-        SetDefaultFrameBase( rRoot, EXC_CHFRAMETYPE_INVISIBLE, true );
+        SetDefaultFrameBase( GetChRoot(), EXC_CHFRAMETYPE_INVISIBLE, true );
 }
 
 void XclExpChDropBar::WriteSubRecords( XclExpStream& rStrm )
@@ -2026,8 +2183,7 @@ void XclExpChDropBar::WriteBody( XclExpStream& rStrm )
 // ----------------------------------------------------------------------------
 
 XclExpChTypeGroup::XclExpChTypeGroup( const XclExpChRoot& rRoot, sal_uInt16 nGroupIdx ) :
-    XclExpChGroupBase( EXC_ID_CHTYPEGROUP, 20 ),
-    XclExpChRoot( rRoot ),
+    XclExpChGroupBase( rRoot, EXC_CHFRBLOCK_TYPE_TYPEGROUP, EXC_ID_CHTYPEGROUP, 20 ),
     maType( rRoot ),
     maTypeInfo( maType.GetTypeInfo() )
 {
@@ -2200,13 +2356,13 @@ void XclExpChTypeGroup::CreateAllStockSeries(
         // white dropbar format
         aTypeProp.GetProperty( xWhitePropSet, EXC_CHPROP_WHITEDAY );
         ScfPropertySet aWhiteProp( xWhitePropSet );
-        mxUpBar.reset( new XclExpChDropBar( EXC_CHOBJTYPE_WHITEDROPBAR ) );
-        mxUpBar->Convert( GetChRoot(), aWhiteProp );
+        mxUpBar.reset( new XclExpChDropBar( GetChRoot(), EXC_CHOBJTYPE_WHITEDROPBAR ) );
+        mxUpBar->Convert( aWhiteProp );
         // black dropbar format
         aTypeProp.GetProperty( xBlackPropSet, EXC_CHPROP_BLACKDAY );
         ScfPropertySet aBlackProp( xBlackPropSet );
-        mxDownBar.reset( new XclExpChDropBar( EXC_CHOBJTYPE_BLACKDROPBAR ) );
-        mxDownBar->Convert( GetChRoot(), aBlackProp );
+        mxDownBar.reset( new XclExpChDropBar( GetChRoot(), EXC_CHOBJTYPE_BLACKDROPBAR ) );
+        mxDownBar->Convert( aBlackProp );
     }
 }
 
@@ -2246,13 +2402,27 @@ void XclExpChLabelRange::Convert( const ScaleData& rScaleData, bool bMirrorOrien
     // origin
     double fOrigin = 0.0;
     if( !lclIsAutoAnyOrGetValue( fOrigin, rScaleData.Origin ) )
-        maData.mnCross = limit_cast< sal_uInt16 >( fOrigin, 1, 32767 );
+        maData.mnCross = limit_cast< sal_uInt16 >( fOrigin, 1, 31999 );
 
     // reverse order
     if( (rScaleData.Orientation == ::com::sun::star::chart2::AxisOrientation_REVERSE) != bMirrorOrient )
-    {
         ::set_flag( maData.mnFlags, EXC_CHLABELRANGE_REVERSE );
-        SwapAxisMaxCross();
+}
+
+void XclExpChLabelRange::ConvertAxisPosition( const ScfPropertySet& rPropSet )
+{
+    namespace cssc = ::com::sun::star::chart;
+    cssc::ChartAxisPosition eAxisPos = cssc::ChartAxisPosition_VALUE;
+    rPropSet.GetProperty( eAxisPos, EXC_CHPROP_CROSSOVERPOSITION );
+    double fCrossingPos = 1.0;
+    rPropSet.GetProperty( fCrossingPos, EXC_CHPROP_CROSSOVERVALUE );
+    switch( eAxisPos )
+    {
+        case cssc::ChartAxisPosition_ZERO:  maData.mnCross = 1;                                                     break;
+        case cssc::ChartAxisPosition_START: maData.mnCross = 1;                                                     break;
+        case cssc::ChartAxisPosition_END:   ::set_flag( maData.mnFlags, EXC_CHLABELRANGE_MAXCROSS );                break;
+        case cssc::ChartAxisPosition_VALUE: maData.mnCross = limit_cast< sal_uInt16 >( fCrossingPos, 1, 31999 );    break;
+        default:                            maData.mnCross = 1;
     }
 }
 
@@ -2274,18 +2444,15 @@ void XclExpChValueRange::Convert( const ScaleData& rScaleData )
     // scaling algorithm
     bool bLogScale = ScfApiHelper::GetServiceName( rScaleData.Scaling ) == SERVICE_CHART2_LOGSCALING;
     ::set_flag( maData.mnFlags, EXC_CHVALUERANGE_LOGSCALE, bLogScale );
-    Reference< XScaling > xLogScaling;
-    if( bLogScale )
-        xLogScaling = rScaleData.Scaling;
 
     // min/max
-    bool bAutoMin = lclIsAutoAnyOrGetScaledValue( maData.mfMin, rScaleData.Minimum, xLogScaling );
+    bool bAutoMin = lclIsAutoAnyOrGetScaledValue( maData.mfMin, rScaleData.Minimum, bLogScale );
     ::set_flag( maData.mnFlags, EXC_CHVALUERANGE_AUTOMIN, bAutoMin );
-    bool bAutoMax = lclIsAutoAnyOrGetScaledValue( maData.mfMax, rScaleData.Maximum, xLogScaling );
+    bool bAutoMax = lclIsAutoAnyOrGetScaledValue( maData.mfMax, rScaleData.Maximum, bLogScale );
     ::set_flag( maData.mnFlags, EXC_CHVALUERANGE_AUTOMAX, bAutoMax );
 
     // origin
-    bool bAutoCross = lclIsAutoAnyOrGetScaledValue( maData.mfCross, rScaleData.Origin, xLogScaling );
+    bool bAutoCross = lclIsAutoAnyOrGetScaledValue( maData.mfCross, rScaleData.Origin, bLogScale );
     ::set_flag( maData.mnFlags, EXC_CHVALUERANGE_AUTOCROSS, bAutoCross );
 
     // major increment
@@ -2295,7 +2462,7 @@ void XclExpChValueRange::Convert( const ScaleData& rScaleData )
     // minor increment
     const Sequence< SubIncrement >& rSubIncrementSeq = rIncrementData.SubIncrements;
     sal_Int32 nCount = 0;
-    bool bAutoMinor = bAutoMajor || (rSubIncrementSeq.getLength() < 1) ||
+    bool bAutoMinor = bLogScale || bAutoMajor || (rSubIncrementSeq.getLength() < 1) ||
         lclIsAutoAnyOrGetValue( nCount, rSubIncrementSeq[ 0 ].IntervalCount ) || (nCount < 1);
     if( !bAutoMinor )
         maData.mfMinorStep = maData.mfMajorStep / nCount;
@@ -2304,6 +2471,32 @@ void XclExpChValueRange::Convert( const ScaleData& rScaleData )
     // reverse order
     namespace cssc = ::com::sun::star::chart2;
     ::set_flag( maData.mnFlags, EXC_CHVALUERANGE_REVERSE, rScaleData.Orientation == cssc::AxisOrientation_REVERSE );
+}
+
+void XclExpChValueRange::ConvertAxisPosition( const ScfPropertySet& rPropSet )
+{
+    namespace cssc = ::com::sun::star::chart;
+    cssc::ChartAxisPosition eAxisPos = cssc::ChartAxisPosition_VALUE;
+    double fCrossingPos = 0.0;
+    if( rPropSet.GetProperty( eAxisPos, EXC_CHPROP_CROSSOVERPOSITION ) && rPropSet.GetProperty( fCrossingPos, EXC_CHPROP_CROSSOVERVALUE ) )
+    {
+        switch( eAxisPos )
+        {
+            case cssc::ChartAxisPosition_ZERO:
+            case cssc::ChartAxisPosition_START:
+                ::set_flag( maData.mnFlags, EXC_CHVALUERANGE_AUTOCROSS );
+            break;
+            case cssc::ChartAxisPosition_END:
+                ::set_flag( maData.mnFlags, EXC_CHVALUERANGE_MAXCROSS );
+            break;
+            case cssc::ChartAxisPosition_VALUE:
+                ::set_flag( maData.mnFlags, EXC_CHVALUERANGE_AUTOCROSS, false );
+                maData.mfCross = ::get_flagvalue< double >( maData.mnFlags, EXC_CHVALUERANGE_LOGSCALE, log( fCrossingPos ) / log( 10.0 ), fCrossingPos );
+            break;
+            default:
+                ::set_flag( maData.mnFlags, EXC_CHVALUERANGE_AUTOCROSS );
+        }
+    }
 }
 
 void XclExpChValueRange::WriteBody( XclExpStream& rStrm )
@@ -2338,14 +2531,46 @@ XclExpChTick::XclExpChTick( const XclExpChRoot& rRoot ) :
 {
 }
 
-void XclExpChTick::Convert( const ScfPropertySet& rPropSet )
+void XclExpChTick::Convert( const ScfPropertySet& rPropSet, const XclChExtTypeInfo& rTypeInfo, sal_uInt16 nAxisType )
 {
     // tick mark style
-    sal_Int32 nApiTickmarks(0);
+    sal_Int32 nApiTickmarks = 0;
     if( rPropSet.GetProperty( nApiTickmarks, EXC_CHPROP_MAJORTICKS ) )
         maData.mnMajor = lclGetXclTickPos( nApiTickmarks );
     if( rPropSet.GetProperty( nApiTickmarks, EXC_CHPROP_MINORTICKS ) )
         maData.mnMinor = lclGetXclTickPos( nApiTickmarks );
+
+    // axis labels
+    if( (rTypeInfo.meTypeCateg == EXC_CHTYPECATEG_RADAR) && (nAxisType == EXC_CHAXIS_X) )
+    {
+        /*  Radar charts disable their category labels via chart type, not via
+            axis, and axis labels are always 'near axis'. */
+        maData.mnLabelPos = EXC_CHTICK_NEXT;
+    }
+    else if( !rPropSet.GetBoolProperty( EXC_CHPROP_DISPLAYLABELS ) )
+    {
+        // no labels
+        maData.mnLabelPos = EXC_CHTICK_NOLABEL;
+    }
+    else if( rTypeInfo.mb3dChart && (nAxisType == EXC_CHAXIS_Y) )
+    {
+        // Excel expects 'near axis' at Y axes in 3D charts
+        maData.mnLabelPos = EXC_CHTICK_NEXT;
+    }
+    else
+    {
+        namespace cssc = ::com::sun::star::chart;
+        cssc::ChartAxisLabelPosition eApiLabelPos = cssc::ChartAxisLabelPosition_NEAR_AXIS;
+        rPropSet.GetProperty( eApiLabelPos, EXC_CHPROP_LABELPOSITION );
+        switch( eApiLabelPos )
+        {
+            case cssc::ChartAxisLabelPosition_NEAR_AXIS:
+            case cssc::ChartAxisLabelPosition_NEAR_AXIS_OTHER_SIDE: maData.mnLabelPos = EXC_CHTICK_NEXT;    break;
+            case cssc::ChartAxisLabelPosition_OUTSIDE_START:        maData.mnLabelPos = EXC_CHTICK_LOW;     break;
+            case cssc::ChartAxisLabelPosition_OUTSIDE_END:          maData.mnLabelPos = EXC_CHTICK_HIGH;    break;
+            default:                                                maData.mnLabelPos = EXC_CHTICK_NEXT;
+        }
+    }
 }
 
 void XclExpChTick::SetFontColor( const Color& rColor, sal_uInt32 nColorId )
@@ -2384,10 +2609,9 @@ Reference< XAxis > lclGetApiAxis( Reference< XCoordinateSystem > xCoordSystem,
         sal_Int32 nApiAxisDim, sal_Int32 nApiAxesSetIdx )
 {
     Reference< XAxis > xAxis;
-    try
+    if( (nApiAxisDim >= 0) && xCoordSystem.is() ) try
     {
-        if( xCoordSystem.is() )
-            xAxis = xCoordSystem->getAxisByDimension( nApiAxisDim, nApiAxesSetIdx );
+        xAxis = xCoordSystem->getAxisByDimension( nApiAxisDim, nApiAxesSetIdx );
     }
     catch( Exception& )
     {
@@ -2398,8 +2622,7 @@ Reference< XAxis > lclGetApiAxis( Reference< XCoordinateSystem > xCoordSystem,
 } // namespace
 
 XclExpChAxis::XclExpChAxis( const XclExpChRoot& rRoot, sal_uInt16 nAxisType ) :
-    XclExpChGroupBase( EXC_ID_CHAXIS, 18 ),
-    XclExpChRoot( rRoot ),
+    XclExpChGroupBase( rRoot, EXC_CHFRBLOCK_TYPE_AXIS, EXC_ID_CHAXIS, 18 ),
     mnNumFmtIdx( EXC_FORMAT_NOTFOUND )
 {
     maData.mnType = nAxisType;
@@ -2418,7 +2641,7 @@ void XclExpChAxis::SetRotation( sal_uInt16 nRotation )
         mxTick->SetRotation( nRotation );
 }
 
-void XclExpChAxis::Convert( Reference< XAxis > xAxis, const XclChExtTypeInfo& rTypeInfo, sal_Int32 nApiAxesSetIdx )
+void XclExpChAxis::Convert( Reference< XAxis > xAxis, Reference< XAxis > xCrossingAxis, const XclChExtTypeInfo& rTypeInfo )
 {
     ScfPropertySet aAxisProp( xAxis );
     bool bCategoryAxis = ((GetAxisType() == EXC_CHAXIS_X) && rTypeInfo.mbCategoryAxis) || (GetAxisType() == EXC_CHAXIS_Z);
@@ -2432,6 +2655,7 @@ void XclExpChAxis::Convert( Reference< XAxis > xAxis, const XclChExtTypeInfo& rT
 
     // axis scaling and increment ---------------------------------------------
 
+    ScfPropertySet aCrossingProp( xCrossingAxis );
     if( bCategoryAxis )
     {
         mxLabelRange.reset( new XclExpChLabelRange( GetChRoot() ) );
@@ -2439,38 +2663,29 @@ void XclExpChAxis::Convert( Reference< XAxis > xAxis, const XclChExtTypeInfo& rT
         if( xAxis.is() )
             // #i71684# radar charts have reversed rotation direction
             mxLabelRange->Convert( xAxis->getScaleData(), (GetAxisType() == EXC_CHAXIS_X) && (rTypeInfo.meTypeCateg == EXC_CHTYPECATEG_RADAR) );
-        // swap max-cross flag for secondary X axis to have the secondary Y axis at right side
-        if( (GetAxisType() == EXC_CHAXIS_X) && (nApiAxesSetIdx == EXC_CHAXESSET_SECONDARY) )
-            mxLabelRange->SwapAxisMaxCross();
+        // get position of crossing axis on this axis from passed axis object
+        if( aCrossingProp.Is() )
+            mxLabelRange->ConvertAxisPosition( aCrossingProp );
     }
     else
     {
         mxValueRange.reset( new XclExpChValueRange( GetChRoot() ) );
         if( xAxis.is() )
             mxValueRange->Convert( xAxis->getScaleData() );
+        // get position of crossing axis on this axis from passed axis object
+        if( aCrossingProp.Is() )
+            mxValueRange->ConvertAxisPosition( aCrossingProp );
     }
 
     // axis caption text ------------------------------------------------------
 
     // axis ticks properties
     mxTick.reset( new XclExpChTick( GetChRoot() ) );
-    mxTick->Convert( aAxisProp );
-
-    // existence and position of axis labels
-    sal_uInt8 nLabelPos = EXC_CHTICK_NOLABEL;
-    if( rTypeInfo.meTypeCateg == EXC_CHTYPECATEG_RADAR )
-        /*  Radar charts disable their category labels via chart type, not via
-            axis, and axis labels are always 'near axis' in Chart2. */
-        nLabelPos = EXC_CHTICK_NEXT;
-    else if( aAxisProp.GetBoolProperty( EXC_CHPROP_DISPLAYLABELS ) )
-        /*  #i85862# Axis labels in other chart types always have position 'low'
-            in Chart2, but Excel expects 'near axis' at Y axes in 3D charts. */
-        nLabelPos = (rTypeInfo.mb3dChart && (GetAxisType() == EXC_CHAXIS_Y)) ? EXC_CHTICK_NEXT : EXC_CHTICK_LOW;
-    mxTick->SetLabelPos( nLabelPos );
+    mxTick->Convert( aAxisProp, rTypeInfo, GetAxisType() );
 
     // axis label formatting and rotation
     ConvertFontBase( GetChRoot(), aAxisProp );
-    ConvertRotationBase( GetChRoot(), aAxisProp );
+    ConvertRotationBase( GetChRoot(), aAxisProp, true );
 
     // axis number format
     sal_Int32 nApiNumFmt = 0;
@@ -2539,10 +2754,10 @@ void XclExpChAxis::WriteBody( XclExpStream& rStrm )
 // ----------------------------------------------------------------------------
 
 XclExpChAxesSet::XclExpChAxesSet( const XclExpChRoot& rRoot, sal_uInt16 nAxesSetId ) :
-    XclExpChGroupBase( EXC_ID_CHAXESSET, 18 ),
-    XclExpChRoot( rRoot )
+    XclExpChGroupBase( rRoot, EXC_CHFRBLOCK_TYPE_AXESSET, EXC_ID_CHAXESSET, 18 )
 {
     maData.mnAxesSetId = nAxesSetId;
+    SetFutureRecordContext( 0, nAxesSetId );
 }
 
 sal_uInt16 XclExpChAxesSet::Convert( Reference< XDiagram > xDiagram, sal_uInt16 nFirstGroupIdx )
@@ -2621,10 +2836,10 @@ sal_uInt16 XclExpChAxesSet::Convert( Reference< XDiagram > xDiagram, sal_uInt16 
                 // create axes according to chart type (no axes for pie and donut charts)
                 if( rTypeInfo.meTypeCateg != EXC_CHTYPECATEG_PIE )
                 {
-                    ConvertAxis( mxXAxis, EXC_CHAXIS_X, mxXAxisTitle, EXC_CHOBJLINK_XAXIS, xCoordSystem, rTypeInfo );
-                    ConvertAxis( mxYAxis, EXC_CHAXIS_Y, mxYAxisTitle, EXC_CHOBJLINK_YAXIS, xCoordSystem, rTypeInfo );
+                    ConvertAxis( mxXAxis, EXC_CHAXIS_X, mxXAxisTitle, EXC_CHOBJLINK_XAXIS, xCoordSystem, rTypeInfo, EXC_CHART_AXIS_Y );
+                    ConvertAxis( mxYAxis, EXC_CHAXIS_Y, mxYAxisTitle, EXC_CHOBJLINK_YAXIS, xCoordSystem, rTypeInfo, EXC_CHART_AXIS_X );
                     if( pGroup->Is3dDeepChart() )
-                        ConvertAxis( mxZAxis, EXC_CHAXIS_Z, mxZAxisTitle, EXC_CHOBJLINK_ZAXIS, xCoordSystem, rTypeInfo );
+                        ConvertAxis( mxZAxis, EXC_CHAXIS_Z, mxZAxisTitle, EXC_CHOBJLINK_ZAXIS, xCoordSystem, rTypeInfo, EXC_CHART_AXIS_NONE );
                 }
 
                 // X axis category ranges
@@ -2708,14 +2923,16 @@ XclExpChTypeGroupRef XclExpChAxesSet::GetLastTypeGroup() const
 void XclExpChAxesSet::ConvertAxis(
         XclExpChAxisRef& rxChAxis, sal_uInt16 nAxisType,
         XclExpChTextRef& rxChAxisTitle, sal_uInt16 nTitleTarget,
-        Reference< XCoordinateSystem > xCoordSystem, const XclChExtTypeInfo& rTypeInfo )
+        Reference< XCoordinateSystem > xCoordSystem, const XclChExtTypeInfo& rTypeInfo,
+        sal_Int32 nCrossingAxisDim )
 {
     // create and convert axis object
     rxChAxis.reset( new XclExpChAxis( GetChRoot(), nAxisType ) );
     sal_Int32 nApiAxisDim = rxChAxis->GetApiAxisDimension();
     sal_Int32 nApiAxesSetIdx = GetApiAxesSetIndex();
     Reference< XAxis > xAxis = lclGetApiAxis( xCoordSystem, nApiAxisDim, nApiAxesSetIdx );
-    rxChAxis->Convert( xAxis, rTypeInfo, nApiAxesSetIdx );
+    Reference< XAxis > xCrossingAxis = lclGetApiAxis( xCoordSystem, nCrossingAxisDim, nApiAxesSetIdx );
+    rxChAxis->Convert( xAxis, xCrossingAxis, rTypeInfo );
 
     // create and convert axis title
     Reference< XTitled > xTitled( xAxis, UNO_QUERY );
@@ -2731,8 +2948,7 @@ void XclExpChAxesSet::WriteBody( XclExpStream& rStrm )
 
 XclExpChChart::XclExpChChart( const XclExpRoot& rRoot,
         Reference< XChartDocument > xChartDoc, const Size& rSize ) :
-    XclExpChGroupBase( EXC_ID_CHCHART, 16 ),
-    XclExpChRoot( rRoot, this )
+    XclExpChGroupBase( XclExpChRoot( rRoot, this ), EXC_CHFRBLOCK_TYPE_CHART, EXC_ID_CHCHART, 16 )
 {
     Size aPtSize = OutputDevice::LogicToLogic( rSize, MapMode( MAP_100TH_MM ), MapMode( MAP_POINT ) );
     // rectangle is stored in 16.16 fixed-point format

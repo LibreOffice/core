@@ -38,7 +38,7 @@
 #include "ChartTypeHelper.hxx"
 #include "ContainerHelper.hxx"
 #include "DataSeriesHelper.hxx"
-#include "MeanValueRegressionCurveCalculator.hxx"
+#include "RegressionCurveHelper.hxx"
 
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
 #include <com/sun/star/chart2/Symbol.hpp>
@@ -140,11 +140,6 @@ void lcl_clearIfTextIsContained( VDataSequence& rData, const uno::Reference<data
     }
 }
 
-}
-
-VDataSeries::VDataSeries()
-{
-    DBG_ERROR("not implemented");
 }
 
 VDataSeries::VDataSeries( const uno::Reference< XDataSeries >& xDataSeries )
@@ -624,7 +619,7 @@ double VDataSeries::getYMeanValue() const
 {
     if( ::rtl::math::isNan( m_fYMeanValue ) )
     {
-        uno::Reference< XRegressionCurveCalculator > xCalculator( new MeanValueRegressionCurveCalculator() );
+        uno::Reference< XRegressionCurveCalculator > xCalculator( RegressionCurveHelper::createRegressionCurveCalculatorByServiceName( C2U("com.sun.star.chart2.MeanValueRegressionCurve") ) );
         uno::Sequence< double > aXValuesDummy;
         xCalculator->recalculateRegression( aXValuesDummy, getAllY() );
         double fXDummy = 1.0;

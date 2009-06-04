@@ -59,11 +59,6 @@ ChartRenderer::ChartRenderer( const Reference< frame::XModel >& xChartModel )
 {
 }
 
-ChartRenderer::ChartRenderer( const Reference< uno::XComponentContext >& /*xContext*/)
-    : m_xChartModel()
-{
-}
-
 ChartRenderer::~ChartRenderer()
 {
 }

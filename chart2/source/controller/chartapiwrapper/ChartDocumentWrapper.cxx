@@ -43,7 +43,6 @@
 #include "chartview/ExplicitValueProvider.hxx"
 #include "chartview/DrawModelWrapper.hxx"
 #include "Chart2ModelContact.hxx"
-#include "InternalDataProvider.hxx"
 
 #include "DiagramHelper.hxx"
 #include "DataSourceHelper.hxx"
@@ -899,7 +898,7 @@ void SAL_CALL ChartDocumentWrapper::attachData( const Reference< XChartData >& x
 
         // create a data provider containing the new data
         Reference< chart2::data::XDataProvider > xTempDataProvider(
-            new InternalDataProvider( xDataArray ));
+            ChartModelHelper::createInternalDataProvider( xDataArray ));
 
         if( ! xTempDataProvider.is())
             throw uno::RuntimeException( C2U("Couldn't create temporary data provider"),

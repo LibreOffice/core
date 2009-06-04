@@ -50,7 +50,7 @@ namespace chart
 namespace DataSeriesHelper
 {
 
-OOO_DLLPUBLIC_CHARTTOOLS ::rtl::OUString GetRole(
+::rtl::OUString GetRole(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::data::XLabeledDataSequence >& xLabeledDataSequence );
 

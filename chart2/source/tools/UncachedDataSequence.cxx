@@ -79,7 +79,7 @@ UncachedDataSequence::UncachedDataSequence(
           UncachedDataSequence_Base( GetMutex()),
           m_xDataProvider( xIntDataProv ),
           m_aSourceRepresentation( rRangeRepresentation ),
-          m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
+          m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {
     registerProperties();
 }
@@ -92,7 +92,7 @@ UncachedDataSequence::UncachedDataSequence(
           UncachedDataSequence_Base( GetMutex()),
           m_xDataProvider( xIntDataProv ),
           m_aSourceRepresentation( rRangeRepresentation ),
-          m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
+          m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {
     registerProperties();
     setFastPropertyValue_NoBroadcast( PROP_PROPOSED_ROLE, uno::makeAny( rRole ));
@@ -107,7 +107,7 @@ UncachedDataSequence::UncachedDataSequence( const UncachedDataSequence & rSource
           m_sRole( rSource.m_sRole ),
           m_xDataProvider( rSource.m_xDataProvider ),
           m_aSourceRepresentation( rSource.m_aSourceRepresentation ),
-          m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
+          m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {
     registerProperties();
 }

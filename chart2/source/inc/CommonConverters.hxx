@@ -101,21 +101,9 @@ OOO_DLLPUBLIC_CHARTTOOLS com::sun::star::drawing::Direction3D B3DVectorToDirecti
 OOO_DLLPUBLIC_CHARTTOOLS com::sun::star::drawing::Position3D B3DPointToPosition3D( const ::basegfx::B3DPoint& rPoint);
 
 //-----------------------------------------------------------------------------
-/** Direction3D -> B3DPoint
-*/
-OOO_DLLPUBLIC_CHARTTOOLS ::basegfx::B3DPoint Direction3DToB3DPoint( const com::sun::star::drawing::Direction3D& rDirection);
-
-//-----------------------------------------------------------------------------
 /** Direction3D -> B3DVector
 */
 OOO_DLLPUBLIC_CHARTTOOLS ::basegfx::B3DVector Direction3DToB3DVector( const com::sun::star::drawing::Direction3D& rDirection);
-
-//-----------------------------------------------------------------------------
-/** two drawing::Position3D -> PolyPolygonShape3D
-*/
-OOO_DLLPUBLIC_CHARTTOOLS ::com::sun::star::drawing::PolyPolygonShape3D
-    MakeLine3D( const ::com::sun::star::drawing::Position3D & rStart,
-                const ::com::sun::star::drawing::Position3D & rEnd );
 
 //-----------------------------------------------------------------------------
 /** PolyPolygonShape3D + drawing::Position3D -> PolyPolygonShape3D
@@ -168,33 +156,11 @@ OOO_DLLPUBLIC_CHARTTOOLS com::sun::star::drawing::Position3D
                            , const com::sun::star::drawing::Direction3D& rDirection);
 
 //-----------------------------------------------------------------------------
-/** Direction3D + Direction3D == Direction3D
-*/
-OOO_DLLPUBLIC_CHARTTOOLS com::sun::star::drawing::Direction3D
-                operator+( const com::sun::star::drawing::Direction3D& rDirection
-                           , const com::sun::star::drawing::Direction3D& rDirectionAdd);
-
-//-----------------------------------------------------------------------------
-/** Position3D - Direction3D == Position3D
-*/
-OOO_DLLPUBLIC_CHARTTOOLS com::sun::star::drawing::Position3D
-                operator-( const com::sun::star::drawing::Position3D& rPos
-                           , const com::sun::star::drawing::Direction3D& rDirection);
-
-
-//-----------------------------------------------------------------------------
 /** Position3D - Position3D == Direction3D
 */
 OOO_DLLPUBLIC_CHARTTOOLS com::sun::star::drawing::Direction3D
                 operator-( const com::sun::star::drawing::Position3D& rPos1
                            , const com::sun::star::drawing::Position3D& rPos2);
-
-//-----------------------------------------------------------------------------
-/** Direction3D * double == Direction3D
-*/
-OOO_DLLPUBLIC_CHARTTOOLS com::sun::star::drawing::Direction3D
-                operator*( const com::sun::star::drawing::Direction3D& rDirection
-                           , double fFraction);
 
 //-----------------------------------------------------------------------------
 /** Position3D == Position3D ?
@@ -240,13 +206,6 @@ OOO_DLLPUBLIC_CHARTTOOLS com::sun::star::drawing::Position3D
 
 OOO_DLLPUBLIC_CHARTTOOLS com::sun::star::uno::Sequence< double >
                 Position3DToSequence( const com::sun::star::drawing::Position3D& rPosition );
-
-//-----------------------------------------------------------------------------
-/** drawing::Direction3D / double
-*/
-
-OOO_DLLPUBLIC_CHARTTOOLS com::sun::star::drawing::Direction3D
-                operator/( const com::sun::star::drawing::Direction3D& rDirection, double f );
 
 //-----------------------------------------------------------------------------
 /** chart2::XDataSequence -> uno::Sequence< double >

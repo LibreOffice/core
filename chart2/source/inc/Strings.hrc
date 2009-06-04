@@ -33,7 +33,8 @@
 // this includes no link dependency
 #include <svtools/solar.hrc>
 
-//next is 281
+//single free is: 134
+//next free is 282
 
 //#define RID_APP_START 30000
 ////#define STR_NULL                            (RID_APP_START +  1)
@@ -149,7 +150,7 @@
 #define STR_INDICATE_BOTH                   (RID_APP_START + 131)
 #define STR_INDICATE_UP                     (RID_APP_START + 132)
 #define STR_INDICATE_DOWN                   (RID_APP_START + 133)
-#define STR_REGRESSION_NONE                 (RID_APP_START + 134)
+
 #define STR_REGRESSION_LINEAR               (RID_APP_START + 135)
 #define STR_REGRESSION_LOG                  (RID_APP_START + 136)
 #define STR_REGRESSION_EXP                  (RID_APP_START + 137)
@@ -287,6 +288,7 @@
 #define STR_DLG_NUMBERFORMAT_FOR_PERCENTAGE_VALUE   (RID_APP_START + 266)
 
 #define STR_PAGE_POSITIONING  (RID_APP_START + 277)
+#define STR_PAGE_ASIAN                       (RID_APP_START + 281)
 
 //-----------------------------------------------------------------------------
 //strings used as description for actions on toolbar icons, as tip help or for undo

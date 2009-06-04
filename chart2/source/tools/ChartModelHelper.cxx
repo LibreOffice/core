@@ -35,6 +35,9 @@
 #include "DiagramHelper.hxx"
 #include "DataSourceHelper.hxx"
 #include "ControllerLockGuard.hxx"
+#include "UndoManager.hxx"
+#include "RangeHighlighter.hxx"
+#include "InternalDataProvider.hxx"
 
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
@@ -54,6 +57,39 @@ namespace chart
 //.............................................................................
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
+
+//static
+uno::Reference< chart2::XUndoManager > ChartModelHelper::createUndoManager()
+{
+    return new UndoManager();
+}
+
+//static
+uno::Reference< chart2::data::XRangeHighlighter > ChartModelHelper::createRangeHighlighter(
+        const uno::Reference< view::XSelectionSupplier > & xSelectionSupplier )
+{
+    return new RangeHighlighter( xSelectionSupplier );
+}
+
+//static
+uno::Reference< chart2::data::XDataProvider > ChartModelHelper::createInternalDataProvider()
+{
+    return new InternalDataProvider();
+}
+
+//static
+uno::Reference< chart2::data::XDataProvider > ChartModelHelper::createInternalDataProvider(
+    const uno::Reference< ::com::sun::star::chart::XChartDataArray >& xDataToCopy )
+{
+    return new InternalDataProvider( xDataToCopy );
+}
+
+//static
+uno::Reference< chart2::data::XDataProvider > ChartModelHelper::createInternalDataProvider(
+    const uno::Reference< ::com::sun::star::chart2::XChartDocument >& xChartDoc )
+{
+    return new InternalDataProvider( xChartDoc );
+}
 
 //static
 uno::Reference< XDiagram > ChartModelHelper::findDiagram( const uno::Reference< frame::XModel >& xModel )

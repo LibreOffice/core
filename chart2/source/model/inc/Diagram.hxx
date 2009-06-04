@@ -45,7 +45,6 @@
 #include <com/sun/star/util/XModifyListener.hpp>
 
 #include "ServiceMacros.hxx"
-#include "ModifyListenerHelper.hxx"
 
 #include <map>
 #include <vector>

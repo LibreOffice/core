@@ -91,13 +91,6 @@ void TextSeparatorResources::PositionBelowControl( const Window& rWindow )
     m_aLB_Separator.SetPosPixel( Point( aPoint.X()+m_aFT_Separator.GetSizePixel().Width()+aDistanceSize.Width(), aPoint.Y()-aDistanceSize.Height()-1) );
 }
 
-long TextSeparatorResources::GetBottom() const
-{
-    Point aPoint( m_aLB_Separator.GetPosPixel() );
-    aPoint.Y() += m_aLB_Separator.GetSizePixel().Height();
-    return aPoint.Y();
-}
-
 void TextSeparatorResources::AlignListBoxWidthAndXPos( long nWantedLeftBorder /*use -1 to indicate that this can be automatic*/
                                                      , long nWantedRightBorder /*use -1 to indicate that this can be automatic*/
                                                      , long nMinimumListBoxWidth /*use -1 to indicate that this can be automatic*/ )

@@ -124,13 +124,7 @@ public:
                     ::com::sun::star::frame::XModel >& xChartModel
         , sal_Int32 nSubIndex = -1 );//-1: main grid, 0: first subgrid etc
 
-    static rtl::OUString createClassifiedIdentifierForAxis(
-          const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::chart2::XAxis >& xAxis
-        , const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::frame::XModel >& xChartModel );
-
-    static rtl::OUString createParticleForDiagram(
+    SAL_DLLPRIVATE static rtl::OUString createParticleForDiagram(
           const ::com::sun::star::uno::Reference<
                     ::com::sun::star::chart2::XDiagram >& xDiagram
         , const ::com::sun::star::uno::Reference<
@@ -195,7 +189,7 @@ public:
     static rtl::OUString createDataCurveCID( const rtl::OUString& rSeriesParticle, sal_Int32 nCurveIndex, bool bAverageLine );
     static rtl::OUString createDataCurveEquationCID( const rtl::OUString& rSeriesParticle, sal_Int32 nCurveIndex );
 
-    static rtl::OUString getObjectID( const rtl::OUString& rCID );
+    SAL_DLLPRIVATE static rtl::OUString getObjectID( const rtl::OUString& rCID );
     static rtl::OUString getParticleID( const rtl::OUString& rCID );
     static rtl::OUString getFullParentParticle( const rtl::OUString& rCID );
 

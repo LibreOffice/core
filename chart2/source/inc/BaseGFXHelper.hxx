@@ -68,17 +68,15 @@ OOO_DLLPUBLIC_CHARTTOOLS
 com::sun::star::awt::Rectangle B2IRectangleToAWTRectangle(
     const ::basegfx::B2IRectangle& rB2IRectangle );
 
-OOO_DLLPUBLIC_CHARTTOOLS ::basegfx::B3DVector Direction3DToB3DVector(
+::basegfx::B3DVector Direction3DToB3DVector(
     const com::sun::star::drawing::Direction3D& rDirection );
 
-OOO_DLLPUBLIC_CHARTTOOLS
 com::sun::star::drawing::Direction3D B3DVectorToDirection3D(
     const ::basegfx::B3DVector& rB3DVector );
 
-OOO_DLLPUBLIC_CHARTTOOLS ::basegfx::B3DVector Position3DToB3DVector(
+::basegfx::B3DVector Position3DToB3DVector(
     const com::sun::star::drawing::Position3D& rPosition );
 
-OOO_DLLPUBLIC_CHARTTOOLS
 com::sun::star::drawing::Position3D B3DVectorToPosition3D(
     const ::basegfx::B3DVector& rB3DVector );
 
@@ -95,7 +93,6 @@ OOO_DLLPUBLIC_CHARTTOOLS ::basegfx::B3DTuple GetRotationFromMatrix(
 OOO_DLLPUBLIC_CHARTTOOLS ::basegfx::B3DTuple GetScaleFromMatrix(
     const ::basegfx::B3DHomMatrix & rB3DMatrix );
 
-OOO_DLLPUBLIC_CHARTTOOLS
 void ReduceToRotationMatrix( ::basegfx::B3DHomMatrix & rB3DMatrix );
 
 OOO_DLLPUBLIC_CHARTTOOLS double Deg2Rad( double fDegrees );

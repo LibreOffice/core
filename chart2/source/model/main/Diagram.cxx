@@ -250,7 +250,7 @@ namespace chart
 Diagram::Diagram( uno::Reference< uno::XComponentContext > const & xContext ) :
         ::property::OPropertySet( m_aMutex ),
         m_xContext( xContext ),
-        m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
+        m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {
     // Set camera position to a default position (that should be set hard, so
     // that it will be exported.  The property default is a camera looking
@@ -266,7 +266,7 @@ Diagram::Diagram( const Diagram & rOther ) :
         impl::Diagram_Base(),
         ::property::OPropertySet( rOther, m_aMutex ),
     m_xContext( rOther.m_xContext ),
-    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
+    m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {
     lcl_tCooSysMapping aCooSysMapping =
         lcl_CloneCoordinateSystems( rOther.m_aCoordSystems, m_aCoordSystems );
@@ -361,7 +361,7 @@ Reference< chart2::XColorScheme > SAL_CALL Diagram::getDefaultColorScheme()
 {
     if( ! m_xColorScheme.is())
     {
-        m_xColorScheme.set( new ConfigColorScheme( m_xContext ));
+        m_xColorScheme.set( createConfigColorScheme( m_xContext ));
     }
     return m_xColorScheme;
 }

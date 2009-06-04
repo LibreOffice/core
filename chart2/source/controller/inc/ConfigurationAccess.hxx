@@ -43,15 +43,8 @@ namespace chart
 /**
 */
 
-class CalcConfigItem;
-class ConfigurationAccess
+namespace ConfigurationAccess
 {
-public:
-    // use this to get the singleton ConfigurationAccess (CTOR is private)
-    static ConfigurationAccess *  getConfigurationAccess();
-
-    ~ConfigurationAccess();
-
     /** @descr Retrieve the FieldUnit to be used for the UI.  This unit is retrieved
     from the registry settings of the Calc application.
 
@@ -61,13 +54,7 @@ public:
     @return the FieldUnit enum.  See <vcl/fldunit.hxx> for definition
     */
     FieldUnit getFieldUnit();
-
-private:
-    ConfigurationAccess();
-
-    static ConfigurationAccess *  m_pThis;
-    CalcConfigItem* m_pCalcConfigItem;
-};
+}
 
 //.............................................................................
 } //namespace chart

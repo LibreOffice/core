@@ -39,7 +39,6 @@
 #include "ContainerHelper.hxx"
 #include "ChartTypeHelper.hxx"
 
-#include "Scaling.hxx"
 #include "CartesianCoordinateSystem.hxx"
 #include "AxisHelper.hxx"
 #include "LegendHelper.hxx"

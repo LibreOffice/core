@@ -81,7 +81,7 @@ CachedDataSequence::CachedDataSequence()
         : OPropertyContainer( GetBroadcastHelper()),
           CachedDataSequence_Base( GetMutex()),
           m_eCurrentDataType( NUMERICAL ),
-          m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
+          m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {
     registerProperties();
 }
@@ -89,28 +89,8 @@ CachedDataSequence::CachedDataSequence( const Reference< uno::XComponentContext 
         : OPropertyContainer( GetBroadcastHelper()),
           CachedDataSequence_Base( GetMutex()),
           m_eCurrentDataType( MIXED ),
-          m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( ))
+          m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder( ))
 {
-    registerProperties();
-}
-
-CachedDataSequence::CachedDataSequence( const ::std::vector< double > & rVector )
-        : OPropertyContainer( GetBroadcastHelper()),
-          CachedDataSequence_Base( GetMutex()),
-          m_eCurrentDataType( NUMERICAL ),
-          m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
-{
-    m_aNumericalSequence = ContainerToSequence( rVector );
-    registerProperties();
-}
-
-CachedDataSequence::CachedDataSequence( const ::std::vector< OUString > & rVector )
-        : OPropertyContainer( GetBroadcastHelper()),
-          CachedDataSequence_Base( GetMutex()),
-          m_eCurrentDataType( TEXTUAL ),
-          m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
-{
-    m_aTextualSequence = ContainerToSequence( rVector );
     registerProperties();
 }
 
@@ -118,20 +98,10 @@ CachedDataSequence::CachedDataSequence( const OUString & rSingleText )
         : OPropertyContainer( GetBroadcastHelper()),
           CachedDataSequence_Base( GetMutex()),
           m_eCurrentDataType( TEXTUAL ),
-          m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
+          m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {
     m_aTextualSequence.realloc(1);
     m_aTextualSequence[0] = rSingleText;
-    registerProperties();
-}
-
-CachedDataSequence::CachedDataSequence( const ::std::vector< Any > & rVector )
-        : OPropertyContainer( GetBroadcastHelper()),
-          CachedDataSequence_Base( GetMutex()),
-          m_eCurrentDataType( MIXED ),
-          m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
-{
-    m_aMixedSequence = ContainerToSequence( rVector );
     registerProperties();
 }
 
@@ -143,7 +113,7 @@ CachedDataSequence::CachedDataSequence( const CachedDataSequence & rSource )
           m_nNumberFormatKey( rSource.m_nNumberFormatKey ),
           m_sRole( rSource.m_sRole ),
           m_eCurrentDataType( rSource.m_eCurrentDataType ),
-          m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
+          m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {
     switch( m_eCurrentDataType )
     {

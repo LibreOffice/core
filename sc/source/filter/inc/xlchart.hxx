@@ -74,11 +74,14 @@ namespace com { namespace sun { namespace star {
 #define SERVICE_CHART2_TITLE                CREATE_OUSTRING( "com.sun.star.chart2.Title" )
 
 // property names
+#define EXC_CHPROP_ARRANGEORDER             CREATE_OUSTRING( "ArrangeOrder" )
 #define EXC_CHPROP_ATTAXISINDEX             CREATE_OUSTRING( "AttachedAxisIndex" )
 #define EXC_CHPROP_ATTRIBDATAPOINTS         CREATE_OUSTRING( "AttributedDataPoints" )
 #define EXC_CHPROP_BLACKDAY                 CREATE_OUSTRING( "BlackDay" )
 #define EXC_CHPROP_COLOR                    CREATE_OUSTRING( "Color" )
 #define EXC_CHPROP_CONNECTBARS              CREATE_OUSTRING( "ConnectBars" )
+#define EXC_CHPROP_CROSSOVERPOSITION        CREATE_OUSTRING( "CrossoverPosition" )
+#define EXC_CHPROP_CROSSOVERVALUE           CREATE_OUSTRING( "CrossoverValue" )
 #define EXC_CHPROP_CURVESTYLE               CREATE_OUSTRING( "CurveStyle" )
 #define EXC_CHPROP_D3DCAMERAGEOMETRY        CREATE_OUSTRING( "D3DCameraGeometry" )
 #define EXC_CHPROP_D3DSCENEAMBIENTCOLOR     CREATE_OUSTRING( "D3DSceneAmbientColor" )
@@ -101,7 +104,10 @@ namespace com { namespace sun { namespace star {
 #define EXC_CHPROP_JAPANESE                 CREATE_OUSTRING( "Japanese" )
 #define EXC_CHPROP_LABEL                    CREATE_OUSTRING( "Label" )
 #define EXC_CHPROP_LABELPLACEMENT           CREATE_OUSTRING( "LabelPlacement" )
+#define EXC_CHPROP_LABELPOSITION            CREATE_OUSTRING( "LabelPosition" )
+#define EXC_CHPROP_LABELSEPARATOR           CREATE_OUSTRING( "LabelSeparator" )
 #define EXC_CHPROP_MAJORTICKS               CREATE_OUSTRING( "MajorTickmarks" )
+#define EXC_CHPROP_MARKPOSITION             CREATE_OUSTRING( "MarkPosition" )
 #define EXC_CHPROP_MINORTICKS               CREATE_OUSTRING( "MinorTickmarks" )
 #define EXC_CHPROP_MISSINGVALUETREATMENT    CREATE_OUSTRING( "MissingValueTreatment" )
 #define EXC_CHPROP_NEGATIVEERROR            CREATE_OUSTRING( "NegativeError" )
@@ -123,12 +129,14 @@ namespace com { namespace sun { namespace star {
 #define EXC_CHPROP_SHOWHIGHLOW              CREATE_OUSTRING( "ShowHighLow" )
 #define EXC_CHPROP_SHOWNEGATIVEERROR        CREATE_OUSTRING( "ShowNegativeError" )
 #define EXC_CHPROP_SHOWPOSITIVEERROR        CREATE_OUSTRING( "ShowPositiveError" )
+#define EXC_CHPROP_STACKCHARACTERS          CREATE_OUSTRING( "StackCharacters" )
 #define EXC_CHPROP_STACKINGDIR              CREATE_OUSTRING( "StackingDirection" )
 #define EXC_CHPROP_STARTINGANGLE            CREATE_OUSTRING( "StartingAngle" )
 #define EXC_CHPROP_SWAPXANDYAXIS            CREATE_OUSTRING( "SwapXAndYAxis" )
 #define EXC_CHPROP_SYMBOL                   CREATE_OUSTRING( "Symbol" )
 #define EXC_CHPROP_TEXTBREAK                CREATE_OUSTRING( "TextBreak" )
 #define EXC_CHPROP_TEXTOVERLAP              CREATE_OUSTRING( "TextOverlap" )
+#define EXC_CHPROP_TEXTROTATION             CREATE_OUSTRING( "TextRotation" )
 #define EXC_CHPROP_USERINGS                 CREATE_OUSTRING( "UseRings" )
 #define EXC_CHPROP_VARYCOLORSBY             CREATE_OUSTRING( "VaryColorsByPoint" )
 #define EXC_CHPROP_WEIGHT                   CREATE_OUSTRING( "Weight" )
@@ -161,6 +169,52 @@ const sal_Int32 EXC_CHART_AXIS_Z                = 2;        /// API Z axis index
 const sal_Int32 EXC_CHART_AXESSET_NONE          = -1;       /// For internal use only.
 const sal_Int32 EXC_CHART_AXESSET_PRIMARY       = 0;        /// API primary axes set index.
 const sal_Int32 EXC_CHART_AXESSET_SECONDARY     = 1;        /// API secondary axes set index.
+
+// (0x0850) CHFRINFO ----------------------------------------------------------
+
+const sal_uInt16 EXC_ID_CHFRINFO                = 0x0850;
+
+const sal_uInt8 EXC_CHFRINFO_EXCEL2000          = 9;
+const sal_uInt8 EXC_CHFRINFO_EXCELXP2003        = 10;
+const sal_uInt8 EXC_CHFRINFO_EXCEL2007          = 11;
+
+// (0x0852, 0x0853) CHFRBLOCKBEGIN, CHFRBLOCKEND ------------------------------
+
+const sal_uInt16 EXC_ID_CHFRBLOCKBEGIN          = 0x0852;
+const sal_uInt16 EXC_ID_CHFRBLOCKEND            = 0x0853;
+
+const sal_uInt16 EXC_CHFRBLOCK_TYPE_AXESSET     = 0;
+const sal_uInt16 EXC_CHFRBLOCK_TYPE_TEXT        = 2;
+const sal_uInt16 EXC_CHFRBLOCK_TYPE_AXIS        = 4;
+const sal_uInt16 EXC_CHFRBLOCK_TYPE_TYPEGROUP   = 5;
+const sal_uInt16 EXC_CHFRBLOCK_TYPE_DATATABLE   = 6;
+const sal_uInt16 EXC_CHFRBLOCK_TYPE_FRAME       = 7;
+const sal_uInt16 EXC_CHFRBLOCK_TYPE_LEGEND      = 9;
+const sal_uInt16 EXC_CHFRBLOCK_TYPE_LEGENDEX    = 10;
+const sal_uInt16 EXC_CHFRBLOCK_TYPE_SERIES      = 12;
+const sal_uInt16 EXC_CHFRBLOCK_TYPE_CHART       = 13;
+const sal_uInt16 EXC_CHFRBLOCK_TYPE_DATAFORMAT  = 14;
+const sal_uInt16 EXC_CHFRBLOCK_TYPE_DROPBAR     = 15;
+const sal_uInt16 EXC_CHFRBLOCK_TYPE_UNKNOWN     = 0xFFFF;   /// For internal use only.
+
+const sal_uInt16 EXC_CHFRBLOCK_TEXT_TITLE       = 0;
+const sal_uInt16 EXC_CHFRBLOCK_TEXT_DEFTEXT     = 2;
+const sal_uInt16 EXC_CHFRBLOCK_TEXT_AXISTITLE   = 4;
+const sal_uInt16 EXC_CHFRBLOCK_TEXT_DATALABEL   = 5;
+
+const sal_uInt16 EXC_CHFRBLOCK_FRAME_STANDARD   = 0;
+const sal_uInt16 EXC_CHFRBLOCK_FRAME_PLOTFRAME  = 1;
+const sal_uInt16 EXC_CHFRBLOCK_FRAME_BACKGROUND = 2;
+
+// (0x086B) CHFRLABELPROPS ----------------------------------------------------
+
+const sal_uInt16 EXC_ID_CHFRLABELPROPS          = 0x086B;
+
+const sal_uInt16 EXC_CHFRLABELPROPS_SHOWSERIES  = 0x0001;
+const sal_uInt16 EXC_CHFRLABELPROPS_SHOWCATEG   = 0x0002;
+const sal_uInt16 EXC_CHFRLABELPROPS_SHOWVALUE   = 0x0004;
+const sal_uInt16 EXC_CHFRLABELPROPS_SHOWPERCENT = 0x0008;
+const sal_uInt16 EXC_CHFRLABELPROPS_SHOWBUBBLE  = 0x0010;
 
 // (0x1001) CHUNITS -----------------------------------------------------------
 
@@ -700,6 +754,20 @@ struct XclChDataPointPos
 
 bool operator<( const XclChDataPointPos& rL, const XclChDataPointPos& rR );
 
+// ----------------------------------------------------------------------------
+
+/** Contains the type and context of a block of future records which are
+    guarded by CHFRBLOCKBEGIN and CHFRBLOCKEND records. */
+struct XclChFrBlock
+{
+    sal_uInt16          mnType;             /// Type of the future record block.
+    sal_uInt16          mnContext;          /// Context dependent on type.
+    sal_uInt16          mnValue1;           /// Optional primary value for current context.
+    sal_uInt16          mnValue2;           /// Optional secondary value for current context.
+
+    explicit            XclChFrBlock( sal_uInt16 nType );
+};
+
 // Frame formatting ===========================================================
 
 struct XclChFramePos
@@ -794,6 +862,16 @@ struct XclChObjectLink
     sal_uInt16          mnTarget;           /// Target of the link.
 
     explicit            XclChObjectLink();
+};
+
+// ----------------------------------------------------------------------------
+
+struct XclChFrLabelProps
+{
+    String              maSeparator;        /// Separator between label values.
+    sal_uInt16          mnFlags;            /// Flags indicating which values to be displayed.
+
+    explicit            XclChFrLabelProps();
 };
 
 // ----------------------------------------------------------------------------
@@ -1282,7 +1360,8 @@ public:
                             sal_uInt16 nFormatIdx );
     /** Reads rotation properties from the passed property set. */
     sal_uInt16          ReadRotationProperties(
-                            const ScfPropertySet& rPropSet );
+                            const ScfPropertySet& rPropSet,
+                            bool bSupportsStacked );
     /** Reads all legend properties from the passed property set. */
     void                ReadLegendProperties(
                             XclChLegend& rLegend,
@@ -1315,7 +1394,8 @@ public:
     /** Writes rotation properties to the passed property set. */
     void                WriteRotationProperties(
                             ScfPropertySet& rPropSet,
-                            sal_uInt16 nRotation );
+                            sal_uInt16 nRotation,
+                            bool bSupportsStacked );
     /** Writes all legend properties to the passed property set. */
     void                WriteLegendProperties(
                             ScfPropertySet& rPropSet,
@@ -1342,7 +1422,6 @@ private:
     ScfPropSetHelper    maHatchHlpCommon;   /// Properties for hatches in common objects.
     ScfPropSetHelper    maHatchHlpFilled;   /// Properties for hatches in filled series.
     ScfPropSetHelper    maBitmapHlp;        /// Properties for bitmaps.
-    ScfPropSetHelper    maRotationHlp;      /// Properties for text rotation.
     ScfPropSetHelper    maLegendHlp;        /// Properties for legend.
 };
 

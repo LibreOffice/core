@@ -40,8 +40,6 @@
 #include "macros.hxx"
 #include "Strings.hrc"
 #include "ResId.hxx"
-#include "LabeledDataSequence.hxx"
-#include "CachedDataSequence.hxx"
 #include "ContainerHelper.hxx"
 #include "CommonFunctors.hxx"
 #include "ControllerLockGuard.hxx"
@@ -328,26 +326,26 @@ Reference< XDataSeries > lcl_CreateNewSeries(
             {
                 if( aRoles[nI].equals( lcl_aLabelRole ))
                     continue;
-                Reference< data::XDataSequence > xSeq( new ::chart::CachedDataSequence());
+                Reference< data::XDataSequence > xSeq( ::chart::DataSourceHelper::createCachedDataSequence() );
                 lcl_SetSequenceRole( xSeq, aRoles[nI] );
                 // assert that aRoleOfSeqForSeriesLabel is part of the mandatory roles
                 if( aRoles[nI].equals( aRoleOfSeqForSeriesLabel ))
                 {
-                    Reference< data::XDataSequence > xLabel( new ::chart::CachedDataSequence( aLabel ));
+                    Reference< data::XDataSequence > xLabel( ::chart::DataSourceHelper::createCachedDataSequence( aLabel ));
                     lcl_SetSequenceRole( xLabel, lcl_aLabelRole );
-                    aNewSequences.push_back( new ::chart::LabeledDataSequence( xSeq, xLabel ));
+                    aNewSequences.push_back( ::chart::DataSourceHelper::createLabeledDataSequence( xSeq, xLabel ));
                 }
                 else
-                    aNewSequences.push_back( new ::chart::LabeledDataSequence( xSeq ));
+                    aNewSequences.push_back( ::chart::DataSourceHelper::createLabeledDataSequence( xSeq ));
             }
 
             for(nI=0; nI<aOptRoles.getLength(); ++nI)
             {
                 if( aOptRoles[nI].equals( lcl_aLabelRole ))
                     continue;
-                Reference< data::XDataSequence > xSeq( new ::chart::CachedDataSequence());
+                Reference< data::XDataSequence > xSeq( ::chart::DataSourceHelper::createCachedDataSequence());
                 lcl_SetSequenceRole( xSeq, aOptRoles[nI] );
-                aNewSequences.push_back( new ::chart::LabeledDataSequence( xSeq ));
+                aNewSequences.push_back( ::chart::DataSourceHelper::createLabeledDataSequence( xSeq ));
             }
 
             xSink->setData( ContainerToSequence( aNewSequences ));
@@ -723,12 +721,6 @@ OUString DialogModel::ConvertRoleFromInternalToUI( const OUString & rRoleString 
 }
 
 // static
-OUString DialogModel::ConvertRoleFromUIToInternal( const OUString & rRoleString )
-{
-    return lcl_ConvertRole( rRoleString, false );
-}
-
-// static
 OUString DialogModel::GetRoleDataLabel()
 {
     return OUString( String( ::chart::SchResId( STR_OBJECT_DATALABELS )));
@@ -748,43 +740,6 @@ sal_Int32 DialogModel::GetRoleIndexForSorting( const ::rtl::OUString & rInternal
         return aIt->second;
 
     return 0;
-}
-
-// static
-bool DialogModel::isSeriesValid(
-        const Reference< chart2::XDataSeries > & xSeries,
-        const OUString & aRoleOfSequenceForLabel,
-        const Reference< chart2::XChartType > & xChartType )
-{
-    if( ! (xSeries.is() && xChartType.is()))
-        return false;
-
-    try
-    {
-        sal_Int32 nFoundRoles = 0;
-        DialogModel::tRolesWithRanges aRolesWithRanges;
-        Reference< data::XDataSource > xSource( xSeries, uno::UNO_QUERY_THROW );
-        const Sequence< Reference< data::XLabeledDataSequence > > aSeq( xSource->getDataSequences());
-        ::std::copy( aSeq.getConstArray(), aSeq.getConstArray() + aSeq.getLength(),
-                     lcl_RolesWithRangeAppend( aRolesWithRanges, aRoleOfSequenceForLabel ));
-        const Sequence< OUString > aRoles( xChartType->getSupportedMandatoryRoles());
-        for( sal_Int32 nI = 0; nI < aRoles.getLength(); ++nI )
-            if( !aRoles[nI].equals( lcl_aLabelRole ) && aRolesWithRanges.find( aRoles[nI] ) != aRolesWithRanges.end() )
-                ++nFoundRoles;
-        // strong condition: all mandatory roles exist (except the label)
-//             if( !aRoles[nI].equals( lcl_aLabelRole ) && aRolesWithRanges.find( aRoles[nI] ) == aRolesWithRanges.end() )
-//                 return false;
-        // weak condition: one mandatory role exists
-        if( aRoles.getLength() > 0 && nFoundRoles == 0 )
-            return false;
-    }
-    catch( uno::Exception & ex )
-    {
-        ASSERT_EXCEPTION( ex );
-        return false;
-    }
-
-    return true;
 }
 
 // private methods

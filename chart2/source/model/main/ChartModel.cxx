@@ -39,7 +39,7 @@
 #include "servicenames.hxx"
 #include "DataSourceHelper.hxx"
 #include "NoWarningThisInCTOR.hxx"
-#include "RangeHighlighter.hxx"
+#include "ChartModelHelper.hxx"
 #include "DisposeHelper.hxx"
 #include "ControllerLockGuard.hxx"
 #include "ObjectIdentifier.hxx"
@@ -784,7 +784,7 @@ sal_Bool SAL_CALL ChartModel::hasInternalDataProvider()
     {
         uno::Reference< view::XSelectionSupplier > xSelSupp( this->getCurrentController(), uno::UNO_QUERY );
         if( xSelSupp.is() )
-            m_xRangeHighlighter.set( new RangeHighlighter( xSelSupp ));
+            m_xRangeHighlighter.set( ChartModelHelper::createRangeHighlighter( xSelSupp ));
     }
     return m_xRangeHighlighter;
 }

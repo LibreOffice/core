@@ -64,7 +64,7 @@ private: //private member
 };
 
 
-class OOO_DLLPUBLIC_CHARTVIEW FixedNumberFormatter
+class FixedNumberFormatter
 {
 public:
     FixedNumberFormatter( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xSupplier

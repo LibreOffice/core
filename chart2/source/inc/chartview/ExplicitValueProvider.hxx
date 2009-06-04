@@ -91,7 +91,7 @@ public:
             , const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XCoordinateSystem > & xCorrespondingCoordinateSystem
             , const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xNumberFormatsSupplier );
 
-    static sal_Int32 getPercentNumberFormat( const ::com::sun::star::uno::Reference<
+    SAL_DLLPRIVATE static sal_Int32 getPercentNumberFormat( const ::com::sun::star::uno::Reference<
                 ::com::sun::star::util::XNumberFormatsSupplier >& xNumberFormatsSupplier );
 
     static sal_Int32 getExplicitNumberFormatKeyForLabel(

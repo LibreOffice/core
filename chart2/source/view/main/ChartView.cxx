@@ -1694,11 +1694,11 @@ bool lcl_getPropertySwapXAndYAxis( const uno::Reference< XDiagram >& xDiagram )
 
 }
 
-//static
-sal_Int32 ExplicitValueProvider::getExplicitNumberFormatKeyForAxis(
+sal_Int32 lcl_getExplicitNumberFormatKeyForAxis(
                   const Reference< chart2::XAxis >& xAxis
                 , const Reference< chart2::XCoordinateSystem > & xCorrespondingCoordinateSystem
-                , const Reference< util::XNumberFormatsSupplier >& xNumberFormatsSupplier )
+                , const Reference< util::XNumberFormatsSupplier >& xNumberFormatsSupplier
+                , bool bSearchForParallelAxisIfNothingIsFound )
 {
     sal_Int32 nNumberFormatKey(0);
     Reference< beans::XPropertySet > xProp( xAxis, uno::UNO_QUERY );
@@ -1725,13 +1725,15 @@ sal_Int32 ExplicitValueProvider::getExplicitNumberFormatKeyForAxis(
             typedef ::std::map< sal_Int32, sal_Int32 > tNumberformatFrequency;
             tNumberformatFrequency aKeyMap;
 
+            bool bNumberFormatKeyFoundViaAttachedData = false;
+            sal_Int32 nAxisIndex = 0;
+            sal_Int32 nDimensionIndex = 1;
+
             try
             {
                 Reference< XChartTypeContainer > xCTCnt( xCorrespondingCoordinateSystem, uno::UNO_QUERY_THROW );
                 if( xCTCnt.is() )
                 {
-                    sal_Int32 nDimensionIndex = 1;
-                    sal_Int32 nAxisIndex = 0;
                     AxisHelper::getIndicesForAxis( xAxis, xCorrespondingCoordinateSystem, nDimensionIndex, nAxisIndex );
                     ::rtl::OUString aRoleToMatch;
                     if( nDimensionIndex == 0 )
@@ -1801,13 +1803,36 @@ sal_Int32 ExplicitValueProvider::getExplicitNumberFormatKeyForAxis(
                     if( (*aIt).second > nMaxFreq )
                     {
                         nNumberFormatKey = (*aIt).first;
+                        bNumberFormatKeyFoundViaAttachedData = true;
                         nMaxFreq = (*aIt).second;
                     }
+                }
+            }
+
+            if( bSearchForParallelAxisIfNothingIsFound )
+            {
+                //no format is set to this axis and no data is set to this axis
+                //--> try to obtain the format from the parallel y-axis
+                if( !bNumberFormatKeyFoundViaAttachedData && nDimensionIndex == 1 )
+                {
+                    sal_Int32 nParallelAxisIndex = (nAxisIndex==1) ?0 :1;
+                    Reference< XAxis > xParallelAxis( AxisHelper::getAxis( 1, nParallelAxisIndex, xCorrespondingCoordinateSystem ) );
+                    nNumberFormatKey = lcl_getExplicitNumberFormatKeyForAxis( xParallelAxis, xCorrespondingCoordinateSystem, xNumberFormatsSupplier, false );
                 }
             }
         }
     }
     return nNumberFormatKey;
+}
+
+//static
+sal_Int32 ExplicitValueProvider::getExplicitNumberFormatKeyForAxis(
+                  const Reference< chart2::XAxis >& xAxis
+                , const Reference< chart2::XCoordinateSystem > & xCorrespondingCoordinateSystem
+                , const Reference< util::XNumberFormatsSupplier >& xNumberFormatsSupplier )
+{
+    return lcl_getExplicitNumberFormatKeyForAxis( xAxis, xCorrespondingCoordinateSystem, xNumberFormatsSupplier
+        , true /*bSearchForParallelAxisIfNothingIsFound*/ );
 }
 
 //static

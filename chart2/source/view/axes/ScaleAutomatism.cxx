@@ -33,7 +33,6 @@
 #include "ScaleAutomatism.hxx"
 #include "macros.hxx"
 #include "TickmarkHelper.hxx"
-#include "Scaling.hxx"
 #include "AxisHelper.hxx"
 #include <rtl/math.hxx>
 #include <tools/debug.hxx>
@@ -257,6 +256,9 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForLogarithmic(
 {
     // *** STEP 1: initialize the range data ***
 
+    const double fInputMinimum = rExplicitScale.Minimum;
+    const double fInputMaximum = rExplicitScale.Maximum;
+
     double fSourceMinimum = rExplicitScale.Minimum;
     double fSourceMaximum = rExplicitScale.Maximum;
 
@@ -269,7 +271,7 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForLogarithmic(
         values. In the last step, the original values will be restored. */
     uno::Reference< XScaling > xScaling = rExplicitScale.Scaling;
     if( !xScaling.is() )
-        xScaling.set( new LogarithmicScaling );
+        xScaling.set( AxisHelper::createLogarithmicScaling() );
     uno::Reference< XScaling > xInverseScaling = xScaling->getInverseScaling();
 
     fSourceMinimum = xScaling->doScaling( fSourceMinimum );
@@ -412,9 +414,37 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForLogarithmic(
 
         // round to entire multiples of the distance and add additional space
         if( bAutoMinimum && m_bExpandBorderToIncrementRhythm )
+        {
             fAxisMinimum = TickmarkHelper::getMinimumAtIncrement( fAxisMinimum, rExplicitIncrement );
+
+            //ensure valid values after scaling #i100995#
+            if( !bAutoDistance )
+            {
+                double fCheck = xInverseScaling->doScaling( fAxisMinimum );
+                if( !::rtl::math::isFinite( fCheck ) || fCheck <= 0 )
+                {
+                    bAutoDistance = true;
+                    bHasCalculatedDistance = false;
+                    continue;
+                }
+            }
+        }
         if( bAutoMaximum && m_bExpandBorderToIncrementRhythm )
+        {
             fAxisMaximum = TickmarkHelper::getMaximumAtIncrement( fAxisMaximum, rExplicitIncrement );
+
+            //ensure valid values after scaling #i100995#
+            if( !bAutoDistance )
+            {
+                double fCheck = xInverseScaling->doScaling( fAxisMaximum );
+                if( !::rtl::math::isFinite( fCheck ) || fCheck <= 0 )
+                {
+                    bAutoDistance = true;
+                    bHasCalculatedDistance = false;
+                    continue;
+                }
+            }
+        }
 
         // set the resulting limits (swap back to negative range if needed)
         if( bSwapAndNegateRange )
@@ -440,6 +470,22 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForLogarithmic(
         // convert limits back to logarithmic scale
         rExplicitScale.Minimum = xInverseScaling->doScaling( rExplicitScale.Minimum );
         rExplicitScale.Maximum = xInverseScaling->doScaling( rExplicitScale.Maximum );
+
+        //ensure valid values after scaling #i100995#
+        if( !::rtl::math::isFinite( rExplicitScale.Minimum ) || rExplicitScale.Minimum <= 0)
+        {
+            rExplicitScale.Minimum = fInputMinimum;
+            if( !::rtl::math::isFinite( rExplicitScale.Minimum ) || rExplicitScale.Minimum <= 0 )
+                rExplicitScale.Minimum = 1.0;
+        }
+        if( !::rtl::math::isFinite( rExplicitScale.Maximum) || rExplicitScale.Maximum <= 0 )
+        {
+            rExplicitScale.Maximum= fInputMaximum;
+            if( !::rtl::math::isFinite( rExplicitScale.Maximum) || rExplicitScale.Maximum <= 0 )
+                rExplicitScale.Maximum = 10.0;
+        }
+        if( rExplicitScale.Maximum < rExplicitScale.Minimum )
+            ::std::swap( rExplicitScale.Maximum, rExplicitScale.Minimum );
     }
 
     //---------------------------------------------------------------

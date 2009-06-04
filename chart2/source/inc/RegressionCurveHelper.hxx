@@ -49,14 +49,14 @@ class OOO_DLLPUBLIC_CHARTTOOLS RegressionCurveHelper
 {
 public:
     /// returns a model mean-value line
-    static ::com::sun::star::uno::Reference<
+    SAL_DLLPRIVATE static ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XRegressionCurve >
         createMeanValueLine(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::uno::XComponentContext > & xContext );
 
     /// returns a model regression curve
-    static ::com::sun::star::uno::Reference<
+    SAL_DLLPRIVATE static ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XRegressionCurve >
         createRegressionCurveByServiceName(
             const ::com::sun::star::uno::Reference<
@@ -187,7 +187,7 @@ public:
             If false, the sequence (1, 2, 3, ...) will always be used, even if
             there is a data-sequence with role "values-x"
      */
-    static void initializeCurveCalculator(
+    SAL_DLLPRIVATE static void initializeCurveCalculator(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XRegressionCurveCalculator > & xOutCurveCalculator,
         const ::com::sun::star::uno::Reference<

@@ -521,6 +521,24 @@ bool DataPointItemConverter::ApplySpecialItem(
             }
         }
         break;
+
+        case SCHATTR_TEXT_DEGREES:
+        {
+            double fValue = static_cast< double >(
+                static_cast< const SfxInt32Item & >(
+                    rItemSet.Get( nWhichId )).GetValue()) / 100.0;
+            double fOldValue = 0.0;
+            bool bPropExisted =
+                ( GetPropertySet()->getPropertyValue( C2U( "TextRotation" )) >>= fOldValue );
+
+            if( ! bPropExisted ||
+                ( bPropExisted && fOldValue != fValue ))
+            {
+                GetPropertySet()->setPropertyValue( C2U( "TextRotation" ), uno::makeAny( fValue ));
+                bChanged = true;
+            }
+        }
+        break;
     }
 
     return bChanged;
@@ -654,6 +672,18 @@ void DataPointItemConverter::FillSpecialItem(
                && aSymbol.Graphic.is() )
             {
                 rOutItemSet.Put( SvxBrushItem( Graphic( aSymbol.Graphic ), GPOS_MM, SCHATTR_SYMBOL_BRUSH ));
+            }
+        }
+        break;
+
+        case SCHATTR_TEXT_DEGREES:
+        {
+            double fValue = 0;
+
+            if( GetPropertySet()->getPropertyValue( C2U( "TextRotation" )) >>= fValue )
+            {
+                rOutItemSet.Put( SfxInt32Item( nWhichId, static_cast< sal_Int32 >(
+                                                   ::rtl::math::round( fValue * 100.0 ) ) ));
             }
         }
         break;

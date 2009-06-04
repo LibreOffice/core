@@ -156,6 +156,12 @@ String STR_PAGE_ILLUMINATION
 {
     Text [ en-US ] = "Illumination" ;
 };
+
+String STR_PAGE_ASIAN
+{
+    Text [ en-US ] = "Asian Typography" ;
+};
+
 String STR_OBJECT_AVERAGE_LINE_WITH_PARAMETERS
 {
     Text [ en-US ] = "Mean value line with value %AVERAGE_VALUE and standard deviation %STD_DEVIATION";
