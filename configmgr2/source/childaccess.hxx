@@ -108,7 +108,8 @@ public:
 
     void bind(
         rtl::Reference< RootAccess > const & root,
-        rtl::Reference< Access > const & parent) throw ();
+        rtl::Reference< Access > const & parent, rtl::OUString const & name)
+        throw ();
 
     void unbind() throw ();
 

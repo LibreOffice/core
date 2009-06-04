@@ -690,7 +690,9 @@ void Access::insertByName(
                     tunnel->getSomething(ChildAccess::getTunnelId())));
         }
         if (!freeAcc.is() ||
-            freeAcc->getStatus() != ChildAccess::STATUS_UNMODIFIED)//TODO
+            (freeAcc->getParentAccess().is() &&
+             (freeAcc->getRootAccess() != getRootAccess() ||
+              freeAcc->getStatus() != ChildAccess::STATUS_REMOVED)))
         {
             throw css::lang::IllegalArgumentException(
                 rtl::OUString(
@@ -708,6 +710,7 @@ void Access::insertByName(
         {
             tmplName = freeSet->getTemplateName();
         }
+        OSL_ASSERT(tmplName.getLength() != 0);
         if (!set->isValidTemplate(tmplName)) {
             throw css::lang::IllegalArgumentException(
                 rtl::OUString(
@@ -716,12 +719,9 @@ void Access::insertByName(
                 static_cast< cppu::OWeakObject * >(this), 1);
         }
         rtl::Reference< RootAccess > root(getRootAccess());
-        rtl::Reference< ChildAccess > child(
-            new ChildAccess(root, this, aName, freeAcc->getNode()));
-            //TODO: reuse freeAcc instead of new ChildAccess
-        children_[aName] = child.get();
-        child->setStatus(ChildAccess::STATUS_ADDED);
-        freeAcc->bind(root, this); // must not throw
+        children_[aName] = freeAcc.get();
+        freeAcc->setStatus(ChildAccess::STATUS_ADDED); //TODO: must not throw
+        freeAcc->bind(root, this, aName); // must not throw
         //TODO notify change
     } else {
         OSL_ASSERT(false);

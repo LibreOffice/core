@@ -151,16 +151,20 @@ void ChildAccess::releaseNondeleting() {
 
 void ChildAccess::bind(
     rtl::Reference< RootAccess > const & root,
-    rtl::Reference< Access > const & parent) throw ()
+    rtl::Reference< Access > const & parent, rtl::OUString const & name)
+    throw ()
 {
-    OSL_ASSERT(!parent_.is() && root.is() && parent.is());
+    OSL_ASSERT(
+        !parent_.is() && root.is() && parent.is() && name.getLength() != 0);
     root_ = root;
     parent_ = parent;
+    name_ = name;
 }
 
 void ChildAccess::unbind() throw () {
     OSL_ASSERT(parent_.is());
     parent_.clear();
+    //TODO: clear name_?
 }
 
 void ChildAccess::reportChanges(
