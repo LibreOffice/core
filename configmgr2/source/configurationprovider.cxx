@@ -161,7 +161,8 @@ private:
     virtual void SAL_CALL setLocale(css::lang::Locale const & eLocale)
         throw (css::uno::RuntimeException);
 
-    virtual css::lang::Locale getLocale() throw (css::uno::RuntimeException);
+    virtual css::lang::Locale SAL_CALL getLocale()
+        throw (css::uno::RuntimeException);
 
     css::uno::Reference< css::uno::XComponentContext > context_;
     rtl::OUString locale_;

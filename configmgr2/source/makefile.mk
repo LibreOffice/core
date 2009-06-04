@@ -64,5 +64,6 @@ SHL1STDLIBS = \
     $(SALLIB)
 SHL1TARGET = configmgr2.uno
 SHL1VERSIONMAP = version.map
+DEF1NAME = $(SHL1TARGET)
 
 .INCLUDE: target.mk
