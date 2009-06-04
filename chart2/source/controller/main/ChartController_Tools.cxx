@@ -520,6 +520,17 @@ bool ChartController::isObjectDeleteable( const uno::Any& rSelection )
     return false;
 }
 
+bool ChartController::isShapeContext() const
+{
+    if ( m_aSelection.isNonGraphicObjectShapeSelected() ||
+         ( m_pDrawViewWrapper->AreObjectsMarked() && ( m_pDrawViewWrapper->GetCurrentObjIdentifier() == OBJ_TEXT ) ) )
+    {
+        return true;
+    }
+
+    return false;
+}
+
 void ChartController::impl_ClearSelection()
 {
     if( m_aSelection.hasSelection())

@@ -44,6 +44,7 @@
 namespace chart
 {
 
+class ChartController;
 class DrawCommandDispatch;
 class ShapeController;
 
@@ -81,7 +82,8 @@ public:
     // itself)
     explicit CommandDispatchContainer(
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::uno::XComponentContext > & xContext );
+            ::com::sun::star::uno::XComponentContext > & xContext,
+        ChartController* pController );
 
     void setModel(
         const ::com::sun::star::uno::Reference<
@@ -147,6 +149,7 @@ private:
 
     ::std::set< ::rtl::OUString >                                          m_aContainerDocumentCommands;
 
+    ChartController* m_pChartController;
     DrawCommandDispatch* m_pDrawCommandDispatch;
     ShapeController* m_pShapeController;
 };

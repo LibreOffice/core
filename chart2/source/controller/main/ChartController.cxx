@@ -129,7 +129,7 @@ ChartController::ChartController(uno::Reference<uno::XComponentContext> const & 
     , m_bWaitingForMouseUp(false)
     , m_bConnectingToView(false)
     , m_xUndoManager( 0 )
-    , m_aDispatchContainer( m_xCC )
+    , m_aDispatchContainer( m_xCC, this )
     , m_eDrawMode( CHARTDRAW_SELECT )
 {
     DBG_CTOR(ChartController,NULL);

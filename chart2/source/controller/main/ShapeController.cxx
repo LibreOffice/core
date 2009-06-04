@@ -40,7 +40,9 @@
 #include <vos/mutex.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
+#include <svx/svxdlg.hxx>
 #include <svx/svxids.hrc>
+#include <svx/dialogs.hrc>
 
 #include <boost/scoped_ptr.hpp>
 
@@ -91,6 +93,7 @@ FeatureState ShapeController::getState( const ::rtl::OUString& rCommand ) const
 
     switch ( nFeatureId )
     {
+        case SID_ATTR_TRANSFORM:
         case SID_CHAR_DLG:
             {
                 aReturn.bEnabled = true;
@@ -116,6 +119,11 @@ void ShapeController::execute( const ::rtl::OUString& rCommand, const Sequence< 
 
     switch ( nFeatureId )
     {
+        case SID_ATTR_TRANSFORM:
+            {
+                executeDispatch_TransformDialog();
+            }
+            break;
         case SID_CHAR_DLG:
             {
                 executeDispatch_FontDialog();
@@ -130,7 +138,63 @@ void ShapeController::execute( const ::rtl::OUString& rCommand, const Sequence< 
 
 void ShapeController::describeSupportedFeatures()
 {
-    implDescribeSupportedFeature( ".uno:FontDialog",    SID_CHAR_DLG,   CommandGroup::TEXT );
+    implDescribeSupportedFeature( ".uno:TransformDialog",   SID_ATTR_TRANSFORM,   CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:FontDialog",        SID_CHAR_DLG,         CommandGroup::EDIT );
+}
+
+void ShapeController::executeDispatch_TransformDialog()
+{
+    if ( m_pChartController )
+    {
+        Window* pParent = dynamic_cast< Window* >( m_pChartController->m_pChartWindow );
+        DrawViewWrapper* pDrawViewWrapper = m_pChartController->GetDrawViewWrapper();
+        if ( pDrawViewWrapper )
+        {
+            SdrObject* pObj = pDrawViewWrapper->getSelectedObject();
+            if ( pObj && pObj->GetObjIdentifier() == OBJ_CAPTION )
+            {
+                // item set for caption
+                SfxItemSet aSet( pDrawViewWrapper->GetModel()->GetItemPool() );
+                pDrawViewWrapper->GetAttributes( aSet );
+                // item set for position and size
+                SfxItemSet aGeoSet( pDrawViewWrapper->GetGeoAttrFromMarked() );
+                ::vos::OGuard aGuard( Application::GetSolarMutex() );
+                SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+                if ( pFact )
+                {
+                    ::boost::scoped_ptr< SfxAbstractTabDialog > pDlg(
+                        pFact->CreateCaptionDialog( pParent, pDrawViewWrapper, RID_SVXDLG_CAPTION ) );
+                    const USHORT* pRange = pDlg->GetInputRanges( *aSet.GetPool() );
+                    SfxItemSet aCombSet( *aSet.GetPool(), pRange );
+                    aCombSet.Put( aSet );
+                    aCombSet.Put( aGeoSet );
+                    pDlg->SetInputSet( &aCombSet );
+                    if ( pDlg->Execute() == RET_OK )
+                    {
+                        const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
+                        pDrawViewWrapper->SetAttributes( *pOutSet );
+                        pDrawViewWrapper->SetGeoAttrToMarked( *pOutSet );
+                    }
+                }
+            }
+            else
+            {
+                SfxItemSet aGeoSet( pDrawViewWrapper->GetGeoAttrFromMarked() );
+                ::vos::OGuard aGuard( Application::GetSolarMutex() );
+                SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+                if ( pFact )
+                {
+                    ::boost::scoped_ptr< SfxAbstractTabDialog > pDlg(
+                        pFact->CreateSvxTransformTabDialog( pParent, &aGeoSet, pDrawViewWrapper, RID_SVXDLG_TRANSFORM ) );
+                    if ( pDlg->Execute() == RET_OK )
+                    {
+                        const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
+                        pDrawViewWrapper->SetGeoAttrToMarked( *pOutSet );
+                    }
+                }
+            }
+        }
+    }
 }
 
 void ShapeController::executeDispatch_FontDialog()

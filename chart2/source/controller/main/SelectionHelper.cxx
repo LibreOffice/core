@@ -321,7 +321,7 @@ bool Selection::isDragableObjectSelected()
     return m_xSelectAdditionalShape.is();
 }
 
-bool Selection::isNonGraphicObjectShapeSelected()
+bool Selection::isNonGraphicObjectShapeSelected() const
 {
     if ( m_xSelectAdditionalShape.is() )
     {

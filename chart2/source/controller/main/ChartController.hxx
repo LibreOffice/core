@@ -474,6 +474,8 @@ public:
     void setDrawMode( ChartDrawMode eMode ) { m_eDrawMode = eMode; }
     ChartDrawMode getDrawMode() const { return m_eDrawMode; }
 
+    bool isShapeContext() const;
+
 public:
     //-----------------------------------------------------------------
     //-----------------------------------------------------------------

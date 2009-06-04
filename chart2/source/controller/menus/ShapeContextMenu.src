@@ -38,6 +38,12 @@ Menu RID_CONTEXTMENU_SHAPE
     {
         MenuItem
         {
+            Identifier = SID_ATTR_TRANSFORM;
+            HelpId = SID_ATTR_TRANSFORM ;
+            Command = ".uno:TransformDialog";
+        };
+        MenuItem
+        {
             Separator = TRUE;
         };
         MenuItem

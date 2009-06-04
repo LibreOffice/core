@@ -897,8 +897,7 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
         if( m_aSelection.isSelectionDifferentFromBeforeMouseDown() )
             impl_notifySelectionChangeListeners();
 
-        if ( m_aSelection.isNonGraphicObjectShapeSelected() ||
-             ( m_pDrawViewWrapper->AreObjectsMarked() && ( m_pDrawViewWrapper->GetCurrentObjIdentifier() == OBJ_TEXT ) ) )
+        if ( isShapeContext() )
         {
             // #i12587# support for shapes in chart
             PopupMenu aContextMenu( SchResId( m_pDrawViewWrapper->IsTextEdit() ?

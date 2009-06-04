@@ -36,6 +36,7 @@
 #include "StatusBarCommandDispatch.hxx"
 #include "DisposeHelper.hxx"
 #include "macros.hxx"
+#include "ChartController.hxx"
 #include "DrawCommandDispatch.hxx"
 #include "ShapeController.hxx"
 
@@ -53,8 +54,9 @@ namespace chart
 {
 
 CommandDispatchContainer::CommandDispatchContainer(
-    const Reference< uno::XComponentContext > & xContext )
+    const Reference< uno::XComponentContext > & xContext, ChartController* pController )
         :m_xContext( xContext )
+        ,m_pChartController( pController )
         ,m_pDrawCommandDispatch( NULL )
         ,m_pShapeController( NULL )
 {
@@ -96,6 +98,14 @@ Reference< frame::XDispatch > CommandDispatchContainer::getDispatchForURL(
     const util::URL & rURL )
 {
     Reference< frame::XDispatch > xResult;
+
+    // #i12587# support for shapes in chart
+    if ( m_pChartController && m_pChartController->isShapeContext() &&
+         rURL.Path.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "TransformDialog" ) ) )
+    {
+        xResult.set( m_pShapeController );
+        return xResult;
+    }
 
     tDispatchMap::const_iterator aIt( m_aCachedDispatches.find( rURL.Complete ));
     if( aIt != m_aCachedDispatches.end())
@@ -142,7 +152,8 @@ Reference< frame::XDispatch > CommandDispatchContainer::getDispatchForURL(
         }
         // #i12587# support for shapes in chart
         // Note, that the chart dispatcher must be queried first, because
-        // the chart dispatcher handles all context sensitive commands.
+        // the chart dispatcher is the default dispatcher for all context
+        // sensitive commands.
         else if ( m_pDrawCommandDispatch && m_pDrawCommandDispatch->isFeatureSupported( rURL ) )
         {
             xResult.set( m_pDrawCommandDispatch );
@@ -179,6 +190,7 @@ void CommandDispatchContainer::DisposeAndClear()
     m_aToBeDisposedDispatches.clear();
     m_xChartDispatcher.clear();
     m_aChartCommands.clear();
+    m_pChartController = NULL;
     m_pDrawCommandDispatch = NULL;
     m_pShapeController = NULL;
 }
