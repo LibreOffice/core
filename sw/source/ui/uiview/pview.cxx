@@ -2470,7 +2470,7 @@ USHORT  SwPagePreView::Print( SfxProgress &rProgress, BOOL bIsAPI, PrintDialog *
         if( bPrtPros )
             pSh->PrintProspect( aOpts, rProgress, bPrtPros_RTL );
         else
-            pSh->Prt( aOpts, &rProgress );
+            pSh->Prt( pPrinter, aOpts, &rProgress );    /*TLPDF*/
     }
     else
     {

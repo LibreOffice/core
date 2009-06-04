@@ -38,6 +38,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/print.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <sfx2/sfxbasecontroller.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <wdocsh.hxx>
 #include <wrtsh.hxx>
@@ -308,7 +309,7 @@ SwPrintUIOptions::SwPrintUIOptions( BOOL bWeb ) :
                                                    );
 
     // create subgroup for misc options
-    m_aUIProperties[ nIdx++ ].Value = getSubgroupControlOpt( aLocalizedStrings.GetString( 34 ), rtl::OUString() );
+    m_aUIProperties[ nIdx++ ].Value = getSubgroupControlOpt( rtl::OUString( aLocalizedStrings.GetString( 34 ) ), rtl::OUString() );
 
     // create a bool option for blank pages
     m_aUIProperties[ nIdx++ ].Value = getBoolControlOpt( aLocalizedStrings.GetString( 35 ),
@@ -2758,8 +2759,9 @@ SwViewOptionAdjust_Impl::~SwViewOptionAdjust_Impl()
  *  SfxViewShell.
 */
 
-SwDoc * SwXTextDocument::GetRenderDoc( SfxViewShell *&rpView, const uno::Any& rSelection )
+SwDoc * SwXTextDocument::GetRenderDoc( SfxViewShell *&rpView, const uno::Any& rSelection, bool bIsPDFExport )
 {
+    (void) bIsPDFExport;
     SwDoc *pDoc = 0;
 
     uno::Reference< frame::XModel > xModel;
@@ -2768,6 +2770,11 @@ SwDoc * SwXTextDocument::GetRenderDoc( SfxViewShell *&rpView, const uno::Any& rS
         pDoc = pDocShell->GetDoc();
     else
     {
+        // important check since GuessViewShell below should only get called for PDF export.
+        // Otherwise the View should be obtained from the "View" property passed on in the
+        // calls to the XRenderable functions.
+        DBG_ASSERT( bIsPDFExport, "code should have been called for PDF export only..." );
+
         // used for PDF export of (multi-)selection
         if (rSelection.hasValue())     // is anything selected ?
         {
@@ -2812,18 +2819,19 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
         m_pPrintUIOptions = new SwPrintUIOptions( bWebDoc );
     }
     bool bFormat = m_pPrintUIOptions->processPropertiesAndCheckFormat( rxOptions );
+    const bool bIsPDFExport = !m_pPrintUIOptions->hasProperty( "IsPrinter" );
 
     SfxViewShell *pView = 0;
-    SwDoc *pDoc = GetRenderDoc( pView, rSelection );
+    SwDoc *pDoc = GetRenderDoc( pView, rSelection, bIsPDFExport );
     if (!pDoc)
         throw RuntimeException();
 
     SwDocShell *pRenderDocShell = pDoc->GetDocShell();
-        // #i38289
-        if(pDoc->get(IDocumentSettingAccess::BROWSE_MODE))
-        {
-            pRenderDocShell->ToggleBrowserMode(false,NULL);
-        }
+    // #i38289
+    if(pDoc->get(IDocumentSettingAccess::BROWSE_MODE) /*TLPDF for printing as well?*/)
+    {
+        pRenderDocShell->ToggleBrowserMode(false,NULL);
+    }
 
     SwWrtShell *pWrtShell = pRenderDocShell->GetWrtShell();
 
@@ -2839,12 +2847,16 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
     SwViewOptionAdjust_Impl aAdjust(*pWrtShell);
     if( bFormat )
     {
-        pWrtShell->SetPDFExportOption( sal_True );
+        if (bIsPDFExport)
+            pWrtShell->SetPDFExportOption( sal_True );
+
         // --> FME 2005-05-23 #122919# Force field update before PDF export:
         pWrtShell->ViewShell::UpdateFlds(TRUE);
         // <--
         pWrtShell->CalcLayout();
-        pWrtShell->SetPDFExportOption( sal_False );
+
+        if (bIsPDFExport)
+            pWrtShell->SetPDFExportOption( sal_False );
     }
     nRet = pDoc->GetPageCount();
 
@@ -2868,9 +2880,11 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
         const BOOL bWebDoc    = (0 != PTR_CAST(SwWebDocShell,    pDocShell));
         m_pPrintUIOptions = new SwPrintUIOptions( bWebDoc );
     }
+    m_pPrintUIOptions->processProperties( rxOptions );
+    const bool bIsPDFExport = !m_pPrintUIOptions->hasProperty( "IsPrinter" );
 
     SfxViewShell *pView = 0;
-    SwDoc *pDoc = GetRenderDoc( pView, rSelection );
+    SwDoc *pDoc = GetRenderDoc( pView, rSelection, bIsPDFExport );
     if (!pDoc)
         throw RuntimeException();
 
@@ -2882,13 +2896,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
     if (nRenderer >= pDoc->GetPageCount())
         return uno::Sequence< beans::PropertyValue >();
 
-    bool bSkipEmptyPages = false;
-    for( sal_Int32 nProperty = 0, nPropertyCount = rxOptions.getLength(); nProperty < nPropertyCount; ++nProperty )
-    {
-        if( rxOptions[ nProperty ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "IsSkipEmptyPages" ) ) )
-            rxOptions[ nProperty].Value >>= bSkipEmptyPages;
-    }
-
+    bool bSkipEmptyPages = m_pPrintUIOptions->getBoolValue( "IsSkipEmptyPages", sal_False );
     Size aPgSize( pDoc->GetPageSize( sal_uInt16(nRenderer + 1), bSkipEmptyPages ) );
 
     awt::Size aPageSize( TWIP_TO_MM100( aPgSize.Width() ),
@@ -2941,8 +2949,31 @@ void SAL_CALL SwXTextDocument::render(
     if(!IsValid())
         throw RuntimeException();
 
-    SfxViewShell *pView = GuessViewShell();
-    SwDoc *pDoc = GetRenderDoc( pView, rSelection );
+    if (!m_pPrintUIOptions)
+    {
+        const BOOL bWebDoc    = (0 != PTR_CAST(SwWebDocShell,    pDocShell));
+        m_pPrintUIOptions = new SwPrintUIOptions( bWebDoc );
+    }
+    m_pPrintUIOptions->processProperties( rxOptions );
+    const bool bIsPDFExport = !m_pPrintUIOptions->hasProperty( "IsPrinter" );
+
+    // get view shell to use
+    SfxViewShell *pView = 0;
+    if (bIsPDFExport)
+        pView = GuessViewShell();
+    else
+    {
+        uno::Any aTmp( m_pPrintUIOptions->getValue( C2U("View") ) );
+        uno::Reference< frame::XController > xController;
+        if (aTmp >>= xController)
+        {
+            const SfxBaseController *pController = dynamic_cast< const SfxBaseController * >( xController.get() );
+            pView = pController ? pController->GetViewShell_Impl() : 0;
+        }
+    }
+
+    SwDoc *pDoc = GetRenderDoc( pView, rSelection, bIsPDFExport );
+
     if (!pDoc || !pView)
         throw RuntimeException();
 
@@ -2967,7 +2998,6 @@ void SAL_CALL SwXTextDocument::render(
     bool bLastPage = false;
     rtl::OUString aPages;
     bool bSkipEmptyPages = false;
-
     for( sal_Int32 nProperty = 0, nPropertyCount = rxOptions.getLength(); nProperty < nPropertyCount; ++nProperty )
     {
         if( rxOptions[ nProperty ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "RenderDevice" ) ) )
@@ -2991,13 +3021,6 @@ void SAL_CALL SwXTextDocument::render(
 
     if(pVwSh && pOut)
     {
-        if (!m_pPrintUIOptions)
-        {
-            const BOOL bWebDoc    = (0 != PTR_CAST(SwWebDocShell,    pDocShell));
-            m_pPrintUIOptions = new SwPrintUIOptions( bWebDoc );
-        }
-        m_pPrintUIOptions->processProperties( rxOptions );
-
         SwPrtOptions    aOptions( C2U("PDF export") );
 
         // get print options to use from provided properties
@@ -3031,14 +3054,14 @@ void SAL_CALL SwXTextDocument::render(
         //! document is created that contains only the selects parts,
         //! and thus that document is to printed in whole the,
         //! aOptions.bPrintSelection parameter will be false.
-        if (!m_pPrintUIOptions->getBoolValue( C2U( "IsPrinter" ), sal_False ) ) // PDF export?
+        if (bIsPDFExport)
             aOptions.bPrintSelection = FALSE;
 
         SwViewOptionAdjust_Impl*  pViewOptionAdjust = pView->IsA(aSwViewTypeId) ?
             new SwViewOptionAdjust_Impl(*((SwView*)pView)->GetWrtShellPtr()) : 0;
 
-
-        pVwSh->SetPDFExportOption( sal_True );
+        if (bIsPDFExport)
+            pVwSh->SetPDFExportOption( sal_True );
 
         // --> FME 2004-06-08 #i12836# enhanced pdf export
         //
@@ -3050,13 +3073,14 @@ void SAL_CALL SwXTextDocument::render(
                                 ((SwView*)pView)->GetWrtShellPtr() :
                                 0;
 
-        if ( bFirstPage && pWrtShell )
+        if (bIsPDFExport && bFirstPage && pWrtShell)    /*TLPDF*/
         {
             SwEnhancedPDFExportHelper aHelper( *pWrtShell, *pOut, aPages, bSkipEmptyPages, sal_False );
         }
         // <--
 
-        pVwSh->Prt( aOptions, 0, pOut );
+        OutputDevice *pOldDev = pVwSh->GetOut();   // TLPDF
+        pVwSh->Prt( pOut, aOptions, 0, bIsPDFExport );
 
         // --> FME 2004-10-08 #i35176#
         //
@@ -3064,25 +3088,28 @@ void SAL_CALL SwXTextDocument::render(
         // from the EditEngine. The links are generated during the painting
         // process, but the destinations are still missing.
         //
-        if ( bLastPage && pWrtShell )
+        if (bIsPDFExport && bLastPage && pWrtShell) /*TLPDF*/
         {
             SwEnhancedPDFExportHelper aHelper( *pWrtShell, *pOut, aPages, bSkipEmptyPages,  sal_True );
         }
         // <--
 
-        pVwSh->SetPDFExportOption( sal_False );
+        if (bIsPDFExport)
+            pVwSh->SetPDFExportOption( sal_False );
+
         // #i96167# haggai: delete pViewOptionsAdjust here because it makes use
         // of the shell, which might get destroyed in lcl_DisposeView!
         delete pViewOptionAdjust;
 
-        if( bLastPage && m_pHiddenViewFrame)
+        if (bLastPage)
         {
-            lcl_DisposeView( m_pHiddenViewFrame, pDocShell );
-            m_pHiddenViewFrame = 0;
-        }
-
-        if( bLastPage )
+            if (m_pHiddenViewFrame)
+            {
+                lcl_DisposeView( m_pHiddenViewFrame, pDocShell );
+                m_pHiddenViewFrame = 0;
+            }
             delete m_pPrintUIOptions, m_pPrintUIOptions = NULL;
+        }
     }
 }
 /* -----------------------------03.10.04 -------------------------------------

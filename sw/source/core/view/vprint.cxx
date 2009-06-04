@@ -232,9 +232,10 @@ void SetSwVisArea( ViewShell *pSh, const SwRect &rRect, BOOL bPDFExport )
         aPt += pSh->aPrtOffst;
     aPt.X() = -aPt.X(); aPt.Y() = -aPt.Y();
 
-    OutputDevice *pOut = bPDFExport ?
-                         pSh->GetOut() :
-                         pSh->getIDocumentDeviceAccess()->getPrinter( false );
+// TLPDF   OutputDevice *pOut = bPDFExport ?
+// TLPDF                        pSh->GetOut() :
+// TLPDF                        pSh->getIDocumentDeviceAccess()->getPrinter( false );
+    OutputDevice *pOut = pSh->GetOut();
 
     MapMode aMapMode( pOut->GetMapMode() );
     aMapMode.SetOrigin( aPt );
@@ -518,23 +519,24 @@ void lcl_PrintPostItsEndPage( ViewShell* pPrtShell,
 }
 
 /******************************************************************************
- *  Methode     :   void ViewShell::InitPrt( SfxPrinter *pNew, OutputDevice *pPDFOut )
+ *  Methode     :   void ViewShell::InitPrt( Printer *pNew, OutputDevice *pPDFOut )
  *  Beschreibung:
  *  Erstellt    :   OK 07.11.94 10:22
  *  Aenderung   :
  ******************************************************************************/
 
-void ViewShell::InitPrt( SfxPrinter *pPrt, OutputDevice *pPDFOut )
+void ViewShell::InitPrt( /*Printer *pPrt,*/ OutputDevice *pOutDev ) /* TLPDF */
 {
     //Fuer den Printer merken wir uns einen negativen Offset, der
     //genau dem Offset de OutputSize entspricht. Das ist notwendig,
     //weil unser Ursprung der linken ober Ecke der physikalischen
     //Seite ist, die Ausgaben (SV) aber den Outputoffset als Urstprung
     //betrachten.
-    OutputDevice *pTmpDev = pPDFOut ? pPDFOut : (OutputDevice *) pPrt;
+    OutputDevice *pTmpDev = pOutDev; // TLPDF pPDFOut ? pPDFOut : (OutputDevice *) pPrt;
     if ( pTmpDev )
     {
-        aPrtOffst = pPrt ? pPrt->GetPageOffset() : Point();
+// TLPDRF        aPrtOffst = pPrt ? pPrt->GetPageOffset() : Point();
+        aPrtOffst = Point();
 
         aPrtOffst += pTmpDev->GetMapMode().GetOrigin();
         MapMode aMapMode( pTmpDev->GetMapMode() );
@@ -745,7 +747,7 @@ void ViewShell::CalcPagesForPrint( USHORT nMax, SfxProgress* pProgress,
 
 /******************************************************************************/
 
-SwDoc * ViewShell::CreatePrtDoc( SfxPrinter* pPrt, SfxObjectShellRef &rDocShellRef)
+SwDoc * ViewShell::CreatePrtDoc( /*Printer* pPrt,*/ SfxObjectShellRef &rDocShellRef)    // TLPDF
 {
     ASSERT( this->IsA( TYPE(SwFEShell) ),"ViewShell::Prt for FEShell only");
     SwFEShell* pFESh = (SwFEShell*)this;
@@ -755,10 +757,11 @@ SwDoc * ViewShell::CreatePrtDoc( SfxPrinter* pPrt, SfxObjectShellRef &rDocShellR
     pPrtDoc->SetRefForDocShell( (SfxObjectShellRef*)&(long&)rDocShellRef );
     pPrtDoc->LockExpFlds();
 
+/* TLPDF
     // Der Drucker wird uebernommen
     if (pPrt)
         pPrtDoc->setPrinter( pPrt, true, true );
-
+*/
     const SfxPoolItem* pCpyItem;
     const SfxItemPool& rPool = GetAttrPool();
     for( USHORT nWh = POOLATTR_BEGIN; nWh < POOLATTR_END; ++nWh )
@@ -831,6 +834,7 @@ SwDoc * ViewShell::CreatePrtDoc( SfxPrinter* pPrt, SfxObjectShellRef &rDocShellR
     }
     return pPrtDoc;
 }
+
 SwDoc * ViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
 {
     ASSERT( this->IsA( TYPE(SwFEShell) ),"ViewShell::Prt for FEShell only");
@@ -922,22 +926,23 @@ SwDoc * ViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
 }
 
 /******************************************************************************
- *  Methode     :   void ViewShell::Prt( const SwPrtOptions& rOptions,
- *                                       SfxProgress* pProgress,
- *                                       OutputDevice* pPDFOut )
+ *  Methode     :   void ViewShell::Prt
  *  Beschreibung:
  *  Erstellt    :   OK 04.11.94 15:33
  *  Aenderung   :   MA 10. May. 95
  ******************************************************************************/
 
 
-BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress* pProgress,
-                     OutputDevice* pPDFOut )
+BOOL ViewShell::Prt(
+    OutputDevice* pOutDev,
+    SwPrtOptions& rOptions,
+    SfxProgress* pProgress,
+    bool bIsPDFExport )
 {
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 //Immer die Druckroutine in viewpg.cxx (fuer Seitenvorschau) mitpflegen!!
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    ASSERT( pPDFOut || pProgress, "Printing without progress bar!" )
+    ASSERT( bIsPDFExport || pProgress, "Printing without progress bar!" )
 
     BOOL bStartJob = FALSE;
 
@@ -961,31 +966,31 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress* pProgress,
     ASSERT( aPages.Min() <= aPages.Max(),
             "MinSeite groesser MaxSeite." );
 
-    SfxPrinter* pPrt = 0;   //!! will be 0 for PDF export !!
-    if (pPDFOut)
-        pPDFOut->Push();
+    Printer* pPrt = 0;   //!! will be 0 for PDF export !!    /*TLPDF*/
+    if (bIsPDFExport)
+        pOutDev->Push();
     else
     {
-        // wenn kein Drucker vorhanden ist, wird nicht gedruckt
-        pPrt = getIDocumentDeviceAccess()->getPrinter( false );
-        if( !pPrt || !pPrt->GetName().Len() )
+#ifdef TL_NOT_NOW /*TLPDF*/
+//        pOutDev = dynamic_cast< Printer* >(pOutDev);
+        DBG_ASSERT( pOutDev, "printer missing" );
+        if( !pOutDev || !pOutDev->GetName().Len() )
         {
             ASSERT( FALSE, "Drucken ohne Drucker?" );
             return bStartJob;
         }
 
-        if( !rOptions.GetJobName().Len() && !pPrt->IsJobActive() )
+        if( !rOptions.GetJobName().Len() && !pOutDev->IsJobActive() )
             return bStartJob;
+#endif // TL_NOT_NOW /*TLPDF*/
     }
 
     // Einstellungen am Drucker merken
-    SwPrtOptSave aPrtSave( pPrt );
-
-    OutputDevice *pPrtOrPDFOut = pPDFOut ? pPDFOut : (OutputDevice *) pPrt;
+//    SwPrtOptSave aPrtSave( pOutDev );      /*TLPDF ???*/
 
     // eine neue Shell fuer den Printer erzeugen
     ViewShell *pShell;
-    SwDoc *pPrtDoc;
+    SwDoc *pOutDevDoc;
 
     //!! muss warum auch immer hier in diesem scope existieren !!
     //!! (h?ngt mit OLE Objekten im Dokument zusammen.)
@@ -999,18 +1004,26 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress* pProgress,
     // to be created that often here in the 'then' part.
     if ( bSelection )
     {
-        pPrtDoc = CreatePrtDoc( pPrt, aDocShellRef );
+        pOutDevDoc = CreatePrtDoc( /*TLPDF pOutDev,*/ aDocShellRef );
 
         // eine ViewShell darauf
-        OutputDevice *pTmpDev = pPDFOut ? pPDFOut : 0;
-        pShell = new ViewShell( *pPrtDoc, 0, pOpt, pTmpDev );
-        pPrtDoc->SetRefForDocShell( 0 );
+// TLPDF       OutputDevice *pTmpDev = bIsPDFExport ? pOutDev : 0;
+// TLPDF       pShell = new ViewShell( *pOutDevDoc, 0, pOpt, pTmpDev );
+        pShell = new ViewShell( *pOutDevDoc, 0, pOpt, pOutDev );
+        pOutDevDoc->SetRefForDocShell( 0 );
     }
     else
     {
-        pPrtDoc = GetDoc();
-        OutputDevice *pTmpDev = pPDFOut ? pPDFOut : 0;
-        pShell = new ViewShell( *this, 0, pTmpDev );
+        pOutDevDoc = GetDoc();
+// TLPDF        OutputDevice *pTmpDev = bIsPDFExport ? pOutDev : 0;
+// TLPDF        pShell = new ViewShell( *this, 0, pTmpDev );
+        pShell = new ViewShell( *this, 0, pOutDev );
+    }
+    SdrView *pDrawView = pShell->GetDrawView();
+    if (pDrawView)
+    {
+        pDrawView->SetBufferedOutputAllowed( false );  // TLPDF
+        pDrawView->SetBufferedOverlayAllowed( false ); // TLPDF
     }
 
     {   //Zusaetzlicher Scope, damit die CurrShell vor dem zerstoeren der
@@ -1018,11 +1031,13 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress* pProgress,
 
     SET_CURR_SHELL( pShell );
 
+#ifdef TL_NOT_NOW  /*TLPDF*/
     if ( pProgress )
     {
-        Link aLnk = LINK(pShell->Imp(), SwViewImp, SetStopPrt);
+        Link aLnk = LINK(pShell->Imp(), SwViewImp, SetStopOutDev);
         ((SfxPrintProgress *)pProgress)->SetCancelHdl(aLnk);
     }
+#endif // TL_NOT_NOW  /*TLPDF*/
 
     //JP 01.02.99: das ReadOnly Flag wird NIE mitkopiert; Bug 61335
     if( pOpt->IsReadonly() )
@@ -1064,12 +1079,14 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress* pProgress,
     // --> FME 2004-06-21 #i9684# For performance reasons, we do not update
     //                            the fields during pdf export.
     // #i56195# prevent update of fields (for mail merge)
-    if ( !pPDFOut && rOptions.bUpdateFieldsInPrinting )
+    if ( !bIsPDFExport && rOptions.bUpdateFieldsInPrinting )
     // <--
         pShell->UpdateFlds(TRUE);
 
-    if( !pShell->Imp()->IsStopPrt() &&
-        ( pPDFOut || rOptions.GetJobName().Len() || pPrt->IsJobActive()) )
+// TLPDF   if( !pShell->Imp()->IsStopOutDev() &&
+// TLPDF       ( bIsPDFExport || rOptions.GetJobName().Len() || pOutDev->IsJobActive()) )
+    if( /*!pShell->Imp()->IsStopOutDev() && */
+        ( bIsPDFExport || rOptions.GetJobName().Len() /*TLPDF|| pOutDev->IsJobActive()*/) )
     {
         BOOL bStop = FALSE;
         int nJobStartError = JOBSET_ERR_DEFAULT;
@@ -1087,25 +1104,26 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress* pProgress,
             USHORT nFirstPageNo = 0;
             USHORT nLastPageNo  = 0;
             USHORT nPageNo      = 1;
-
-            if (pPrt)
+#ifdef TL_NOT_NOW  /*TLPDF*/
+            if (pOutDev)
             {
                 if( rOptions.IsPrintSingleJobs() && sJobName.Len() &&
                     ( bStartJob || rOptions.bJobStartet ) )
                 {
-                    pPrt->EndJob();
+                    pOutDev->EndJob();
                     bStartJob = FALSE;
                     rOptions.bJobStartet = TRUE;
 
                     // Reschedule statt Yield, da Yield keine Events abarbeitet
                     // und es sonst eine Endlosschleife gibt.
-                    while( pPrt->IsPrinting() && pProgress )
+                    while( pOutDev->IsPrinting() && pProgress )
                             pProgress->Reschedule();
 
                     sJobName = rOptions.MakeNextJobName();
                     nJobStartError = JOBSET_ERR_DEFAULT;
                 }
             }
+#endif //TL_NOT_NOW  /*TLPDF*/
 
             for( USHORT i = 1; i <= (USHORT)aPages.Max(); ++i )
             {
@@ -1183,8 +1201,10 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress* pProgress,
             {
                 lcl_GetPostIts( pDoc, aPostItFields );
                 pPostItDoc   = new SwDoc;
-                if (pPrt)
-                    pPostItDoc->setPrinter( pPrt, true, true );
+/* TLPDF
+                if (pOutDev)
+                    pPostItDoc->setPrinter( pOutDev, true, true );
+*/
                 pPostItShell = new ViewShell( *pPostItDoc, 0,
                                                pShell->GetViewOptions() );
                 // Wenn PostIts am Dokumentenende gedruckt werden sollen,
@@ -1205,13 +1225,15 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress* pProgress,
             BOOL bSetPaperSz  = FALSE;
             BOOL bSetPaperBin = FALSE;
             BOOL bSetPrt      = FALSE;
-            if (pPrt)
+            if (pOutDev)
             {
-                bSetOrient      = pPrt->HasSupport( SUPPORT_SET_ORIENTATION );
-                bSetPaperSz     = pPrt->HasSupport( SUPPORT_SET_PAPERSIZE );
+#ifdef TL_NOT_NOW /*TLPDF*/
+                bSetOrient      = pOutDev->HasSupport( SUPPORT_SET_ORIENTATION );
+                bSetPaperSz     = pOutDev->HasSupport( SUPPORT_SET_PAPERSIZE );
                 bSetPaperBin    =  !rOptions.bPaperFromSetup &&
-                                    pPrt->HasSupport( SUPPORT_SET_PAPERBIN );
+                                    pOutDev->HasSupport( SUPPORT_SET_PAPERBIN );
                 bSetPrt = bSetOrient || bSetPaperSz || bSetPaperBin;
+#endif // TL_NOT_NOW /*TLPDF*/
             }
 
             if ( rOptions.nPrintPostIts != POSTITS_ONLY )
@@ -1231,28 +1253,30 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress* pProgress,
                     if ( pProgress )
                         pProgress->Reschedule();
 
-                    if (pPrt)
+#ifdef TL_NOT_NOW /*TLPDF*/
+                    if (pOutDev)
                     {
                         if (    JOBSET_ERR_ERROR == nJobStartError ||
-                             ( !pPrt->IsJobActive() && ( !sJobName.Len() || bStartJob ) ) ||
-                                pShell->Imp()->IsStopPrt() )
+                             ( !pOutDev->IsJobActive() && ( !sJobName.Len() || bStartJob ) ) ||
+                                pShell->Imp()->IsStopOutDev() )
                         {
                             bStop = TRUE;
                             break;
                         }
                     }
+#endif // TL_NOT_NOW /*TLPDF*/
 
-                    ::SetSwVisArea( pShell, pStPage->Frm(), 0 != pPDFOut );
+                    ::SetSwVisArea( pShell, pStPage->Frm(), bIsPDFExport );
 
                     //  wenn wir einen Umschlag drucken wird ein Offset beachtet
                     if( pStPage->GetFmt()->GetPoolFmtId() == RES_POOLPAGE_JAKET )
                     {
-                        aOldMapMode = pPrtOrPDFOut->GetMapMode();
-                        Point aNewOrigin = pPrtOrPDFOut->GetMapMode().GetOrigin();
+                        aOldMapMode = pOutDev->GetMapMode();
+                        Point aNewOrigin = pOutDev->GetMapMode().GetOrigin();
                         aNewOrigin += rOptions.aOffset;
-                        MapMode aTmp( pPrtOrPDFOut->GetMapMode() );
+                        MapMode aTmp( pOutDev->GetMapMode() );
                         aTmp.SetOrigin( aNewOrigin );
-                        pPrtOrPDFOut->SetMapMode( aTmp );
+                        pOutDev->SetMapMode( aTmp );
                     }
 
                     const BOOL bRightPg = pStPage->OnRightPage();
@@ -1271,22 +1295,27 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress* pProgress,
 
                                 const BOOL bLandScp = rFormatPage.GetPageDesc()->GetLandscape();
 
+#ifdef TL_NOT_NOW /*TLPDF*/
                                 if( bSetPaperBin )      // Schacht einstellen.
-                                    pPrt->SetPaperBin( rFormatPage.GetFmt()->
+                                    pOutDev->SetPaperBin( rFormatPage.GetFmt()->
                                                        GetPaperBin().GetValue() );
+#endif // TL_NOT_NOW /*TLPDF*/
 
                                 if (bSetOrient )
                                  {
+#ifdef TL_NOT_NOW /*TLPDF*/
                                         // Orientation einstellen: Breiter als Hoch
                                         //  -> Landscape, sonst -> Portrait.
                                         if( bLandScp )
-                                            pPrt->SetOrientation(ORIENTATION_LANDSCAPE);
+                                        pOutDev->SetOrientation(ORIENTATION_LANDSCAPE);
                                         else
-                                            pPrt->SetOrientation(ORIENTATION_PORTRAIT);
+                                        pOutDev->SetOrientation(ORIENTATION_PORTRAIT);
+#endif // TL_NOT_NOW /*TLPDF*/
                                  }
 
                                  if (bSetPaperSz )
                                  {
+#ifdef TL_NOT_NOW /*TLPDF*/
                                     Size aSize = pStPage->Frm().SSize();
                                     if ( bLandScp && bSetOrient )
                                     {
@@ -1299,9 +1328,10 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress* pProgress,
                                     }
                                     Paper ePaper = SvxPaperInfo::GetSvPaper(aSize,MAP_TWIP,TRUE);
                                     if ( PAPER_USER == ePaper )
-                                            pPrt->SetPaperSizeUser( aSize );
+                                            pOutDev->SetPaperSizeUser( aSize );
                                     else
-                                            pPrt->SetPaper( ePaper );
+                                            pOutDev->SetPaper( ePaper );
+#endif // TL_NOT_NOW /*TLPDF*/
                                  }
                             }
                         }
@@ -1323,33 +1353,36 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress* pProgress,
                         if( !bStartJob && JOBSET_ERR_DEFAULT == nJobStartError
                             && sJobName.Len() )
                         {
-                            if( pPrt && !pPrt->IsJobActive() )
+#ifdef TL_NOT_NOW /*TLPDF*/
+                            if( pOutDev && !pOutDev->IsJobActive() )
                             {
-                                bStartJob = pPrt->StartJob( sJobName );
+                                bStartJob = pOutDev->StartJob( sJobName );
                                 if( !bStartJob )
                                 {
                                     nJobStartError = JOBSET_ERR_ERROR;
                                     continue;
                                 }
                             }
+#endif // TL_NOT_NOW /*TLPDF*/
 
-                            pShell->InitPrt( pPrt, pPDFOut );
+// TLPDF                            pShell->InitPrt( pOutDev, bIsPDFExport ? pOutDev : 0 );
+                           pShell->InitPrt( pOutDev );
 
-                            ::SetSwVisArea( pShell, pStPage->Frm(), 0 != pPDFOut );
+                            ::SetSwVisArea( pShell, pStPage->Frm(), TRUE /*bIsPDFExport*/ );     // TLPDF
                             nJobStartError = JOBSET_ERR_ISSTARTET;
                         }
                         // --> FME 2005-12-12 #b6354161# Feature - Print empty pages
                         if ( rOptions.bPrintEmptyPages || pStPage->Frm().Height() )
                         // <--
                         {
-                            if (pPrt)
-                                pPrt->StartPage();
+// TLPDF                            if (pOutDev)
+// TLPDF                                pOutDev->StartPage();
 
                             pStPage->GetUpper()->Paint( pStPage->Frm() );
                             ++nPagesPrinted;
 
-                            if (pPrt)
-                                pPrt->EndPage();
+// TLPDF                            if (pOutDev)
+// TLPDF                                pOutDev->EndPage();
                         }
                         SwPaintQueue::Repaint();
 
@@ -1365,10 +1398,11 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress* pProgress,
                     // den eventl. fuer Umschlaege modifizierte OutDevOffset wieder
                     // zuruecksetzen.
                     if( pStPage->GetFmt()->GetPoolFmtId() == RES_POOLPAGE_JAKET )
-                        pPrtOrPDFOut->SetMapMode( aOldMapMode );
+                        pOutDev->SetMapMode( aOldMapMode );
 
                     if ( pStPage == pEndPage )
                     {
+#ifdef TL_NOT_NOW /*TLPDF*/
                         // --> FME 2005-01-05 #110536# Print emtpy page if
                         // we are have an odd page count in collation/duplex
                         // mode and there are still some copies to print:
@@ -1376,11 +1410,11 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress* pProgress,
                              ( DUPLEX_SHORTEDGE == pPrt->GetDuplexMode() || DUPLEX_LONGEDGE == pPrt->GetDuplexMode() ) &&
                              nCnt + 1 < nCopyCnt )
                         {
-                            pPrt->StartPage();
-                            pPrt->EndPage();
+                            pOutDev->StartPage();
+                            pOutDev->EndPage();
                         }
                         // <--
-
+#endif // TL_NOT_NOW /*TLPDF*/
                         pStPage = 0;
                     }
                     else if ( rOptions.bPrintReverse )
@@ -1425,15 +1459,15 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress* pProgress,
     if (bSelection )
     {
          // damit das Dokument nicht den Drucker mit ins Grab nimmt
-        pPrtDoc->setPrinter( 0, false, false );
+        pOutDevDoc->setPrinter( 0, false, false );
 
-        if ( !pPrtDoc->release() )
-            delete pPrtDoc;
+        if ( !pOutDevDoc->release() )
+            delete pOutDevDoc;
     }
 
-    // restore settings of OutputDevicef
-    if (pPDFOut)
-        pPDFOut->Pop();
+    // restore settings of OutputDevice
+    if (bIsPDFExport)
+        pOutDev->Pop();
 
     return bStartJob;
 }

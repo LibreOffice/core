@@ -108,6 +108,8 @@ void ViewShell::Init( const SwViewOption *pNewOpt )
 
     // --> FME 2007-11-06 #i82967#
     OutputDevice* pPDFOut = 0;
+// TLPDF    if ( pOut && pOut->GetPDFWriter() )
+// TLPDF        pPDFOut = pOut;
     if ( pOut && pOut->GetPDFWriter() )
         pPDFOut = pOut;
     // <--
@@ -119,8 +121,10 @@ void ViewShell::Init( const SwViewOption *pNewOpt )
     const bool bCreatePrinter = !bBrowseMode &&
                                 !pIDSA->get(IDocumentSettingAccess::USE_VIRTUAL_DEVICE);
     SfxPrinter* pPrinter = getIDocumentDeviceAccess()->getPrinter( bCreatePrinter );
-    if( pPrinter )
-        InitPrt( pPrinter, pPDFOut );
+// TLPDF    if( pPrinter )
+// TLPDF       InitPrt( pPrinter, pPDFOut );
+    if( pPDFOut )
+        InitPrt( pPDFOut );
     // <--
 
     // --> FME 2005-03-16 #i44963# Good occasion to check if page sizes in

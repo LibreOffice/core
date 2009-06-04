@@ -224,7 +224,7 @@ class SwXTextDocument : public SwXTextDocumentBaseClass,
 
     // used for XRenderable implementation
     SfxViewShell *  GuessViewShell();
-    SwDoc *         GetRenderDoc( SfxViewShell *&rpView, const ::com::sun::star::uno::Any& rSelection );
+    SwDoc *         GetRenderDoc( SfxViewShell *&rpView, const ::com::sun::star::uno::Any& rSelection, bool bIsPDFExport );
 
     rtl::OUString           maBuildId;
 

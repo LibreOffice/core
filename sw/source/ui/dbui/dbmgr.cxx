@@ -988,7 +988,7 @@ BOOL SwNewDBMgr::MergePrint( SwView& rView,
                     bRet = TRUE;
                 }
             }
-            else if( pSh->Prt( rOpt, &rProgress ) )
+            else if( pSh->Prt( pPrt, rOpt, &rProgress ) )   /* TLPDF */
                 bRet = TRUE;
             bMergeLock = FALSE;
 
@@ -1145,7 +1145,7 @@ BOOL SwNewDBMgr::MergePrintDocuments( SwView& rView,
                 bRet = TRUE;
             }
         }
-        else if( pSh->Prt( rOpt, &rProgress ) )
+        else if( pSh->Prt( pPrt, rOpt, &rProgress ) )   /* TLPDF */
             bRet = TRUE;
         bMergeLock = FALSE;
 

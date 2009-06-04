@@ -392,7 +392,7 @@ ErrCode SwView::DoPrint( SfxPrinter *pPrinter, PrintDialog *pDlg, BOOL bSilent, 
                         pSh->PrintProspect( aOpts, *pProgress, bPrtPros_RTL );
                 }
                 else
-                    bStartJob = pSh->Prt( aOpts, pProgress );
+                    bStartJob = pSh->Prt( pPrinter, aOpts, pProgress );   /*TLPDF*/
 
                 if ( bBrowse )
                 {

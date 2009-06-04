@@ -39,6 +39,7 @@
 #include <swrect.hxx>
 #include <errhdl.hxx>
 #include <vcl/mapmod.hxx>
+#include <vcl/print.hxx>
 
 namespace com { namespace sun { namespace star { namespace accessibility {
            class XAccessible; } } } }
@@ -210,7 +211,7 @@ public:
 
     //Nach Druckerwechsel, vom Doc
     //pPDFOut != NULL is used for PDF export.
-    void            InitPrt( SfxPrinter * , OutputDevice *pPDFOut = NULL );
+    void            InitPrt( /*TLPDF Printer * ,*/ OutputDevice *pOutDev /* = NULL */ );
 
     //Klammerung von zusammengehoerenden Aktionen.
     inline void StartAction();
@@ -362,16 +363,16 @@ public:
     void   ChgAllPageSize( Size &rSz );
 
     //Druckauftrag abwickeln.
-    // pPDFOut != Null is: do PDF Export (no printing!)
-    sal_Bool Prt( SwPrtOptions& rOptions, SfxProgress* pProgress,
-                  OutputDevice* pPDFOut = NULL );
+    // bIsPDFExport == true is: do PDF Export (no printing!)
+    sal_Bool Prt( OutputDevice* pOutDev, SwPrtOptions& rOptions, SfxProgress* pProgress,
+                  bool bIsPDFExport = false );
 
     //"Drucken" fuer OLE 2.0
     static void PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, SwPrtOptions& rOptions,
                          OutputDevice* pOleOut, const Rectangle& rRect );
 
     // creates temporary doc with selected text for PDF export
-    SwDoc * CreatePrtDoc( SfxPrinter* pPrt, SfxObjectShellRef& );
+    SwDoc * CreatePrtDoc( /*Printer* pPrt,*/ SfxObjectShellRef& );
     SwDoc * FillPrtDoc( SwDoc* pPrtDoc, const SfxPrinter* pPrt );
 
     //Wird intern fuer die Shell gerufen die Druckt. Formatiert die Seiten.
