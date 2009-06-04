@@ -143,6 +143,7 @@ class SVT_DLLPUBLIC SfxUndoManager
     SfxUndoArray            *pActUndoArray;
     SfxUndoArray            *pFatherUndoArray;
 
+    bool                    mbUndoEnabled;
 public:
                             SfxUndoManager( USHORT nMaxUndoActionCount = 20 );
     virtual                 ~SfxUndoManager();
@@ -182,6 +183,16 @@ public:
 
     /** clears the redo stack and removes the top undo action */
     void                    RemoveLastUndoAction();
+
+    // enables (true) or disables (false) recording of undo actions
+    // If undo actions are added while undo is disabled, they are deleted.
+    // Disabling undo does not clear the current undo buffer!
+    void                    EnableUndo( bool bEnable );
+
+    // returns true if undo is currently enabled
+    // This returns false if undo was disabled using EnableUndo( false ) and
+    // also during the runtime of the Undo() and Redo() methods.
+    bool                    IsUndoEnabled() const { return mbUndoEnabled; }
 };
 
 //=========================================================================
