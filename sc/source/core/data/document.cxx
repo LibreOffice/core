@@ -4475,5 +4475,18 @@ BOOL ScDocument::NeedPageResetAfterTab( SCTAB nTab ) const
     return FALSE;       // sonst nicht
 }
 
+SfxUndoManager* ScDocument::GetUndoManager()
+{
+    if (!mpUndoManager)
+        mpUndoManager = new SfxUndoManager;
+    return mpUndoManager;
+}
+
+
+void ScDocument::EnableUndo( bool bVal )
+{
+    GetUndoManager()->EnableUndo(bVal);
+    mbUndoEnabled = bVal;
+}
 
 

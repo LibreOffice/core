@@ -2167,7 +2167,6 @@ BOOL ScDocShell::HasAutomaticTableName( const String& rFilter )     // static
         aDdeTextFmt(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("TEXT"))), \
         nPrtToScreenFactor( 1.0 ), \
         pImpl           ( new DocShell_Impl ), \
-        pUndoManager    ( NULL ), \
         bHeaderOn       ( TRUE ), \
         bFooterOn       ( TRUE ), \
         bNoInformLost   ( TRUE ), \
@@ -2267,7 +2266,8 @@ __EXPORT ScDocShell::~ScDocShell()
         pSfxApp->RemoveDdeTopic( this );
 
     delete pDocFunc;
-    delete pUndoManager;
+    delete aDocument.mpUndoManager;
+    aDocument.mpUndoManager = 0;
     delete pImpl;
 
     delete pPaintLockData;
@@ -2288,9 +2288,7 @@ __EXPORT ScDocShell::~ScDocShell()
 
 SfxUndoManager* __EXPORT ScDocShell::GetUndoManager()
 {
-    if (!pUndoManager)
-        pUndoManager = new SfxUndoManager;
-    return pUndoManager;
+    return aDocument.GetUndoManager();
 }
 
 void ScDocShell::SetModified( BOOL bModified )

@@ -136,6 +136,7 @@ class ScAutoNameCache;
 class ScTemporaryChartLock;
 class ScLookupCache;
 struct ScLookupCacheMapImpl;
+class SfxUndoManager;
 
 namespace com { namespace sun { namespace star {
     namespace lang {
@@ -232,6 +233,7 @@ friend class ScHorizontalCellIterator;
 friend class ScHorizontalAttrIterator;
 friend class ScDocAttrIterator;
 friend class ScAttrRectIterator;
+friend class ScDocShell;
 #if OLD_PIVOT_IMPLEMENTATION
 friend class ScPivot;
 #endif
@@ -241,6 +243,7 @@ private:
 
     vos::ORef<ScPoolHelper> xPoolHelper;
 
+    SfxUndoManager*     mpUndoManager;
     ScFieldEditEngine*  pEditEngine;                    // uses pEditPool from xPoolHelper
     ScNoteEditEngine*   pNoteEngine;                    // uses pEditPool from xPoolHelper
     SfxItemPool*    pNoteItemPool; // SfxItemPool to be used if pDrawLayer not created.
@@ -407,7 +410,7 @@ private:
 
     mutable BOOL        bStyleSheetUsageInvalid;
 
-    BOOL                bUndoEnabled;
+    bool                mbUndoEnabled;
     bool                mbAdjustHeightEnabled;
     bool                mbExecuteLinkEnabled;
     bool                mbChangeReadOnlyEnabled;    // allow changes in read-only document (for API import filters)
@@ -914,8 +917,9 @@ public:
     BOOL            IsClipOrUndo() const                        { return bIsClip || bIsUndo; }
     BOOL            IsUndo() const                              { return bIsUndo; }
     BOOL            IsClipboard() const                         { return bIsClip; }
-    BOOL            IsUndoEnabled() const                       { return bUndoEnabled; }
-    void            EnableUndo( BOOL bVal )                     { bUndoEnabled = bVal; }
+    bool            IsUndoEnabled() const                       { return mbUndoEnabled; }
+    void            EnableUndo( bool bVal );
+
     bool            IsAdjustHeightEnabled() const               { return mbAdjustHeightEnabled; }
     void            EnableAdjustHeight( bool bVal )             { mbAdjustHeightEnabled = bVal; }
     bool            IsExecuteLinkEnabled() const                { return mbExecuteLinkEnabled; }
@@ -1678,6 +1682,7 @@ public:
     formula::FormulaGrammar::Grammar  GetStorageGrammar() const
                             { return eStorageGrammar; }
 
+    SfxUndoManager*     GetUndoManager();
 private: // CLOOK-Impl-Methoden
 
     void    ImplCreateOptions(); // bei Gelegenheit auf on-demand umstellen?
