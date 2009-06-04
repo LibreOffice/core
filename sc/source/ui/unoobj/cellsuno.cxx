@@ -1572,6 +1572,14 @@ void ScCellRangesBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 bGotDataChangedHint = FALSE;
             }
         }
+        else if ( nId == SC_HINT_CALCALL )
+        {
+            // broadcast from DoHardRecalc - set bGotDataChangedHint
+            // (SFX_HINT_DATACHANGED follows separately)
+
+            if ( aValueListeners.Count() )
+                bGotDataChangedHint = TRUE;
+        }
     }
     else if ( rHint.ISA( ScUnoRefUndoHint ) )
     {

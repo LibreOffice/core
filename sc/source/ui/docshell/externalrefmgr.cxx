@@ -328,7 +328,7 @@ const String* ScExternalRefCache::getRealRangeName(sal_uInt16 nFileId, const Str
 
 ScExternalRefCache::TokenRef ScExternalRefCache::getCellData(
     sal_uInt16 nFileId, const String& rTabName, SCCOL nCol, SCROW nRow,
-    bool bEmptyCellOnNull, sal_uInt32* pnFmtIndex)
+    bool bEmptyCellOnNull, bool bWriteEmpty, sal_uInt32* pnFmtIndex)
 {
     DocDataType::const_iterator itrDoc = maDocs.find(nFileId);
     if (itrDoc == maDocs.end())
@@ -355,12 +355,16 @@ ScExternalRefCache::TokenRef ScExternalRefCache::getCellData(
 
     TokenRef pToken = pTableData->getCell(nCol, nRow, pnFmtIndex);
     if (!pToken && bEmptyCellOnNull)
+    {
         pToken.reset(new ScEmptyCellToken(false, false));
+        if (bWriteEmpty)
+            pTableData->setCell(nCol, nRow, pToken);
+    }
     return pToken;
 }
 
 ScExternalRefCache::TokenArrayRef ScExternalRefCache::getCellRangeData(
-    sal_uInt16 nFileId, const String& rTabName, const ScRange& rRange, bool bEmptyCellOnNull)
+    sal_uInt16 nFileId, const String& rTabName, const ScRange& rRange, bool bEmptyCellOnNull, bool bWriteEmpty)
 {
     DocDataType::iterator itrDoc = maDocs.find(nFileId);
     if (itrDoc == maDocs.end())
@@ -413,7 +417,11 @@ ScExternalRefCache::TokenArrayRef ScExternalRefCache::getCellRangeData(
                 if (!pToken)
                 {
                     if (bEmptyCellOnNull)
+                    {
                         pToken.reset(new ScEmptyCellToken(false, false));
+                        if (bWriteEmpty)
+                            pTab->setCell(nCol, nRow, pToken);
+                    }
                     else
                         return TokenArrayRef();
                 }
@@ -1504,10 +1512,18 @@ ScExternalRefCache::TokenRef ScExternalRefManager::getSingleRefToken(
     if (pFmt)
         pFmt->mbIsSet = false;
 
+    bool bLoading = mpDoc->IsImportingXML();
+
     // Check if the given table name and the cell position is cached.
+    // #i101304# When loading a file, the saved cache (hidden sheet)
+    // is assumed to contain all data for the loaded formulas.
+    // No cache entries are created from empty cells in the saved sheet,
+    // so they have to be created here (bWriteEmpty parameter).
+    // Otherwise, later interpretation of the loaded formulas would
+    // load the source document even if the user didn't want to update.
     sal_uInt32 nFmtIndex = 0;
     ScExternalRefCache::TokenRef pToken = maRefCache.getCellData(
-        nFileId, rTabName, rCell.Col(), rCell.Row(), false, &nFmtIndex);
+        nFileId, rTabName, rCell.Col(), rCell.Row(), bLoading, bLoading, &nFmtIndex);
     if (pToken)
     {
         if (pFmt)
@@ -1531,7 +1547,7 @@ ScExternalRefCache::TokenRef ScExternalRefManager::getSingleRefToken(
         // once again, but this time treat a non-cached cell as an empty cell
         // as long as the table itself is cached.
         pToken = maRefCache.getCellData(
-            nFileId, rTabName, rCell.Col(), rCell.Row(), true, &nFmtIndex);
+            nFileId, rTabName, rCell.Col(), rCell.Row(), true, false, &nFmtIndex);
         return pToken;
     }
 
@@ -1580,8 +1596,11 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getDoubleRefTokens(sal_u
 
     maybeLinkExternalFile(nFileId);
 
+    bool bLoading = mpDoc->IsImportingXML();
+
     // Check if the given table name and the cell position is cached.
-    ScExternalRefCache::TokenArrayRef p = maRefCache.getCellRangeData(nFileId, rTabName, rRange, false);
+    // #i101304# When loading, put empty cells into cache, see getSingleRefToken.
+    ScExternalRefCache::TokenArrayRef p = maRefCache.getCellRangeData(nFileId, rTabName, rRange, bLoading, bLoading);
     if (p.get())
         return p;
 
@@ -1591,7 +1610,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getDoubleRefTokens(sal_u
         // Source document is not reachable.  Try to get data from the cache
         // once again, but this time treat non-cached cells as empty cells as
         // long as the table itself is cached.
-        return maRefCache.getCellRangeData(nFileId, rTabName, rRange, true);
+        return maRefCache.getCellRangeData(nFileId, rTabName, rRange, true, false);
     }
 
     SCTAB nTab1;

@@ -1267,6 +1267,8 @@ void ScDocShell::DoRecalc( BOOL bApi )
         if ( pSh )
             pSh->UpdateCharts(TRUE);
 
+        aDocument.BroadcastUno( SfxSimpleHint( SFX_HINT_DATACHANGED ) );
+
         //  #47939# Wenn es Charts gibt, dann alles painten, damit nicht
         //  PostDataChanged und die Charts nacheinander kommen und Teile
         //  doppelt gepainted werden.
@@ -1292,6 +1294,12 @@ void ScDocShell::DoHardRecalc( BOOL /* bApi */ )
     GetDocFunc().DetectiveRefresh();    // erzeugt eigenes Undo
     if ( pSh )
         pSh->UpdateCharts(TRUE);
+
+    // CalcAll doesn't broadcast value changes, so SC_HINT_CALCALL is broadcasted globally
+    // in addition to SFX_HINT_DATACHANGED.
+    aDocument.BroadcastUno( SfxSimpleHint( SC_HINT_CALCALL ) );
+    aDocument.BroadcastUno( SfxSimpleHint( SFX_HINT_DATACHANGED ) );
+
     PostPaintGridAll();
 }
 

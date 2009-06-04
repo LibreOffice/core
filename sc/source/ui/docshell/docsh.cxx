@@ -283,6 +283,7 @@ void ScDocShell::BeforeXMLLoading()
     pModificator = new ScDocShellModificator( *this );
 
     aDocument.SetImportingXML( TRUE );
+    aDocument.EnableExecuteLink( false );   // #i101304# to be safe, prevent nested loading from external references
     aDocument.EnableUndo( FALSE );
     // prevent unnecessary broadcasts and "half way listeners"
     aDocument.SetInsertingFromOtherDoc( TRUE );
@@ -363,6 +364,7 @@ void ScDocShell::AfterXMLLoading(sal_Bool bRet)
         aDocument.SetInsertingFromOtherDoc( FALSE );
 
     aDocument.SetImportingXML( FALSE );
+    aDocument.EnableExecuteLink( true );
     aDocument.EnableUndo( TRUE );
     bIsEmpty = FALSE;
 

@@ -2931,8 +2931,10 @@ void ScChart2DataSequence::BuildDataCache()
                                     break;
 
                                 if (pFCell->HasValueData())
+                                {
                                     rItem.mfValue = pFCell->GetValue();
                                     rItem.mbIsValue = true;
+                                }
                             }
                             break;
 #if DBG_UTIL
@@ -3162,6 +3164,14 @@ void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
 
                 m_bGotDataChangedHint = false;
             }
+        }
+        else if ( nId == SC_HINT_CALCALL )
+        {
+            // broadcast from DoHardRecalc - set m_bGotDataChangedHint
+            // (SFX_HINT_DATACHANGED follows separately)
+
+            if ( m_aValueListeners.Count() )
+                m_bGotDataChangedHint = true;
         }
     }
     else if ( rHint.ISA( ScUpdateRefHint ) )
