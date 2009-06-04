@@ -31,6 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+#include <svx/svdmodel.hxx>
 
 #include <vcl/wrkwin.hxx>
 #include <doc.hxx>
@@ -112,6 +113,10 @@ bool SwDoc::IsUndoNoResetModified() const
 void SwDoc::DoUndo(bool bUn)
 {
     mbUndo = bUn;
+
+    SdrModel* pSdrModel = GetDrawModel();
+    if( pSdrModel )
+        pSdrModel->EnableUndo(bUn);
 }
 
 bool SwDoc::DoesUndo() const
