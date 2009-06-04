@@ -91,8 +91,8 @@
 
 sub sFileExport
 
-    '/// just exporting is done in qatesttool/framework/first test: 'tGraphicExport' but there is no loading, ///'
-    '///+ of the created files and the items on the dialogs are not checked completely ///'
+    printlog " just exporting is done in qatesttool/framework/first test: 'tGraphicExport' but there is no loading, "
+    printlog "+ of the created files and the items on the dialogs are not checked completely "
     Dim ExZaehler as Integer
     Dim ExPath as String
     Dim Liste( 50 ) as String
@@ -103,10 +103,10 @@ sub sFileExport
       ExtensionString = "odg"
     end if
 
-    '///- all files are saved in [StarOfficePath]/user/work/[applicatoion]/export ///'
+    printlog "- all files are saved in [StarOfficePath]/user/work/[application]/export "
     ExPath = ConvertPath (gOfficePath + "user\work\" + gApplication + "\export\" )
     OutputGrafikTBO = ExPath & "expo"
-    Printlog "Create the export-dir for the graphics ( " + ExPath + " )"
+    Printlog "Create the export-dir for the graphics (  + ExPath + )"
     try
       app.mkDir ( ExPath )
       ExZaehler = GetFileList ( ExPath , "*.*" , Liste() )
@@ -121,7 +121,7 @@ sub sFileExport
     exit sub
     endcatch
     
-    '///+ open the test document qatesttool/graphics/required/input/graphicexport.od ? ] ///'
+    printlog "+ open the test document qatesttool/graphics/required/input/graphicexport.od ? ] "
 
 end sub
 
@@ -216,9 +216,9 @@ sub sPrintCheckOrder (optional bcheck as boolean)
    dim sTemp as string
    dim sTemp2 as string
    dim i as integer
-   '/// deselect all ///'
+   printlog " deselect all "
    Printlog "-----------------------------------"
-   '/// select in default order and take Position X in mind ;-) ///'
+   printlog " select in default order and take Position X in mind ;-) "
    hTypeKeys ("<escape><escape>")
    for i = 1 to 3
       hTypeKeys ("<TAB>")
@@ -295,7 +295,7 @@ end sub
 '-------------------------------------------------------------------------------
 sub Select_Copy
 
-   '/// Select and copy ///'
+   printlog " Select and copy "
    Sleep 10
    if gApplication = "DRAW" then
       EditSelectAll
@@ -323,7 +323,7 @@ sub SaveMeasurementSetFirst
     elseIf (gApplication = "CALC") then
        sApplication = "CALC"
     endif
-    printlog "   '/// - save states ///'"
+    printlog "   printlog " - save states ""
     ToolsOptions
      hToolsOptions (sApplication,"General")
      ReferenceOld = Masseinheit.GetSelText
@@ -375,7 +375,7 @@ sub ResetMeasurement
     elseIf (gApplication = "CALC") then
        sApplication = "CALC"
     endif
-    printlog "'/// - Reset states back to what they were before ///'"
+    printlog "printlog " - Reset states back to what they were before ""
     ToolsOptions
      hToolsOptions (sApplication,"General")
      if Masseinheit.GetSelText <> ReferenceOld then 'find the right one.
@@ -398,19 +398,19 @@ sub SetKontextApplication
     Select Case gApplication
       Case "DRAW"
          Kontext "DocumentDraw"
-    '         Printlog "gApplication / Kontext is now: DocumentDraw"
+    'Printlog "gApplication / Kontext is now: DocumentDraw"
          sleep 1
       Case "IMPRESS"
          Kontext "DocumentImpress"
-    '         Printlog "gApplication / Kontext is now is now: DocumentImpress"
+    'Printlog "gApplication / Kontext is now is now: DocumentImpress"
          sleep 1
       Case "WRITER"
          Kontext "DocumentWriter"
-    '         Printlog "gApplication / Kontext is now is now: DocumentWriter"
+    'Printlog "gApplication / Kontext is now is now: DocumentWriter"
          sleep 1
       Case "CALC"
          Kontext "DocumentCalc"
-    '         Printlog "gApplication / Kontext is now is now: DocumentCalc"
+    'Printlog "gApplication / Kontext is now is now: DocumentCalc"
          sleep 1
     end select
    sleep 1
@@ -419,33 +419,33 @@ end sub
 '-------------------------------------------------------------------------------
 
 sub hSetSpellHypLanguage
-'/// select a language with a dictionary, used for spellcheck, thesaurus and hyphenation ///'
+printlog " select a language with a dictionary, used for spellcheck, thesaurus and hyphenation "
     dim sTrieit as string
 
     ' only for asian languages i need to set the default language for the current document  to 'English(USA)'
     ' in all other languages the default has a dictionary
     if (bAsianLan or (iSprache=55)) then
-        '/// Tools->Options ///'
+        printlog " Tools->Options "
         ToolsOptions
-        '/// select from section 'Language Settings' the item 'Languages' ///'
+        printlog " select from section 'Language Settings' the item 'Languages' "
         hToolsOptions ("LANGUAGESETTINGS","LANGUAGES")
-        '/// check checkbox 'For the current document only' in section 'Default languages for document' ///'
+        printlog " check checkbox 'For the current document only' in section 'Default languages for document' "
         AktuellesDokument.Check
-        '/// If there is no Language defined in 'locale-file' (in same directory as this file is) be smart and select one that supports spellchecking ///'
+        printlog " If there is no Language defined in 'locale-file' (in same directory as this file is) be smart and select one that supports spellchecking "
         if (glLocale(4) = "") then
             Kontext "ExtrasOptionenDlg"
-            '///+ cancel dialog 'Options - ' ///'
+            printlog "+ cancel dialog 'Options - ' "
             ExtrasOptionenDlg.Cancel
-            '///+ call the smart subroutine that tells you a valid language with an dictionary ///'
+            printlog "+ call the smart subroutine that tells you a valid language with an dictionary "
             sTrieit = hFindSpellHypLanguage
-            '///+ Tools->Options ///'
+            printlog "+ Tools->Options "
             ToolsOptions
-            '///+ select from section 'Language Settings' the item 'Languages' ///'
+            printlog "+ select from section 'Language Settings' the item 'Languages' "
             hToolsOptions ("LANGUAGESETTINGS","LANGUAGES")
-            '///+ check checkbox 'For the current document only' in section 'Default languages for document' ///'
+            printlog "+ check checkbox 'For the current document only' in section 'Default languages for document' "
             AktuellesDokument.Check
-            '/// if smart routine found something, select it in section 'Default languages for document' listbox 'Western' ///'
-            '///+ (manual users just select a language that has an icon in front of it ('ABC' with a checkmark) ///'
+            printlog " if smart routine found something, select it in section 'Default languages for document' listbox 'Western' "
+            printlog "+ (manual users just select a language that has an icon in front of it ('ABC' with a checkmark) "
             if (sTrieit <> "") then
                 try
                     Westlich.Select sTrieit
@@ -456,11 +456,11 @@ sub hSetSpellHypLanguage
                 qaErrorLog "Sorry no spellbook found: id_tools.inc::hSetSpellHypLanguage"
             endif
         else
-        '/// if a Language is already defined in the textfile ///'
+        printlog " if a Language is already defined in the textfile "
             printlog glLocale (4)
             try
-                '/// select it in section 'Default languages for document' listbox 'Western' ///'
-                '///+ (manual users just select a language that has an icon in front of it ('ABC' with a checkmark) ///'
+                printlog " select it in section 'Default languages for document' listbox 'Western' "
+                printlog "+ (manual users just select a language that has an icon in front of it ('ABC' with a checkmark) "
                 try
                     Westlich.Select glLocale (4)
                 catch
@@ -478,7 +478,7 @@ sub hSetSpellHypLanguage
                 printlog "selected: '" + Asiatisch.GetSelText + "'"
             endcatch
         Kontext "ExtrasOptionenDlg"
-        '///+ close dialog 'Options - ' with OK ///'
+        printlog "+ close dialog 'Options - ' with OK "
         ExtrasOptionenDlg.OK
     endif
 end sub
@@ -546,7 +546,7 @@ sub mouseclickinpresentation
 
   Kontext "DocumentPresentation"
   autoexecute=false
-  DocumentPresentation.MouseDown ( 50, 50 )   '/// switch slides using mouse clicks ///'
+  DocumentPresentation.MouseDown ( 50, 50 )   printlog " switch slides using mouse clicks "
   DocumentPresentation.MouseUp ( 50, 50 )
   autoexecute=true
 end sub
@@ -837,7 +837,7 @@ sub id_005
    call tiFormatStylesSlideDesign
    call tiFormatFontwork
    call tiFormatGroup
-   '/// format->group is also modify->group ///'
+   printlog " format->group is also modify->group "
 '        tiFormatLayer ' not in impress
 end sub
 
@@ -931,58 +931,58 @@ sub hWalkTheStyles (optional a as integer,optional b as integer)
     i=1
     if a <= i AND i <= b then
     Kontext
-    '/// switch to tabpage 'Line' ///'
+    printlog " switch to tabpage 'Line' "
     Messagebox.SetPage TabLinie
       kontext "TabLinie"
       Call DialogTest ( TabLinie )
     Kontext
-    '/// switch to tabpage 'Area' ///'
+    printlog " switch to tabpage 'Area' "
     Messagebox.SetPage TabArea
       kontext "TabArea"
       Call DialogTest ( TabArea )
-    '/// select radio button 'none' ///'
+    printlog " select radio button 'none' "
       NoFill.Check
       Call DialogTest ( TabArea, 1 )
-    '/// select radio button 'color' ///'
+    printlog " select radio button 'color' "
       Color.Check
       Call DialogTest ( TabArea, 2 )
-    '/// select radio button 'gradient' ///'
+    printlog " select radio button 'gradient' "
       Gradient.Check
       Call DialogTest ( TabArea, 3 )
-    '/// select radio button 'hatching' ///'
+    printlog " select radio button 'hatching' "
       Hatching.Check
       Call DialogTest ( TabArea, 4 )
-    '/// select radio button 'bitmap' ///'
+    printlog " select radio button 'bitmap' "
       Bitmap.Check
       Call DialogTest ( TabArea, 5 )
     Kontext
-    '/// switch to tabpage 'shadowing' ///'
+    printlog " switch to tabpage 'shadowing' "
     Messagebox.SetPage TabSchatten
       kontext "TabSchatten"
-    '/// check 'use shadow' ///'
+    printlog " check 'use shadow' "
       Anzeigen.check
       Call DialogTest ( TabSchatten )
     Kontext
-    '/// switch to tabpage 'Transparency' ///'
+    printlog " switch to tabpage 'Transparency' "
     Messagebox.SetPage TabTransparenz
       kontext "TabTransparenz"
-    '/// check 'No transparency' ///'
+    printlog " check 'No transparency' "
       KeineTransparenz.Check
-    '/// check 'Transparency' ///'
+    printlog " check 'Transparency' "
       LineareTransparenz.Check
-    '/// check 'Gradient' ///'
+    printlog " check 'Gradient' "
       Transparenzverlauf.Check
     Kontext
-    '/// switch to tabpage 'Font' ///'
+    printlog " switch to tabpage 'Font' "
     Messagebox.SetPage TabFont
       kontext "TabFont"
       Call DialogTest ( TabFont )
     Kontext
-    '/// switch to tabpage 'Font Effect' ///'
+    printlog " switch to tabpage 'Font Effect' "
     Messagebox.SetPage TabFontEffects
       kontext "TabFontEffects"
     Kontext
-    '/// switch to tabpage 'indents & spacing' ///'
+    printlog " switch to tabpage 'indents & spacing' "
     Messagebox.SetPage TabEinzuegeUndAbstaende
       kontext "TabEinzuegeUndAbstaende"
       Call DialogTest ( TabEinzuegeUndAbstaende )
@@ -990,32 +990,32 @@ sub hWalkTheStyles (optional a as integer,optional b as integer)
     i=2
     if a <= i AND i <= b then
     Kontext
-    '/// switch to tabpage 'Organize' ///'
+    printlog " switch to tabpage 'Organize' "
     Messagebox.SetPage TabVerwalten
       kontext "TabVerwalten"
       Call DialogTest ( TabVerwalten )
     Kontext
-    '/// switch to tabpage 'text' ///'
+    printlog " switch to tabpage 'text' "
     Messagebox.SetPage TabText
       Kontext "TabText"
       Call DialogTest ( TabText )
     Kontext
-    '/// switch to tabpage 'text animation' ///'
+    printlog " switch to tabpage 'text animation' "
     Messagebox.SetPage TabLauftext
       Kontext "TabLauftext"
       Call DialogTest ( TabLauftext )
     Kontext
-    '/// switch to tabpage 'dimension' ///'
+    printlog " switch to tabpage 'dimension' "
     Messagebox.SetPage TabBemassung
       Kontext "TabBemassung"
       Call DialogTest ( TabBemassung )
     Kontext
-    '/// switch to tabpage 'connector' ///'
+    printlog " switch to tabpage 'connector' "
     Messagebox.setpage TabVerbinder
       Kontext "TabVerbinder"
       Call Dialogtest ( TabVerbinder )
     Kontext
-    '/// switch to tabpage 'alignment' ///'
+    printlog " switch to tabpage 'alignment' "
     Messagebox.setpage TabAusrichtungAbsatz
       Kontext "TabAusrichtungAbsatz"
          Links.Check
@@ -1023,44 +1023,44 @@ sub hWalkTheStyles (optional a as integer,optional b as integer)
          Zentriert.Check
          Blocksatz.Check
     Kontext
-    '/// switch to tabpage 'Tabs' ///'
+    printlog " switch to tabpage 'Tabs' "
     Messagebox.setpage TabTabulator
       Kontext "TabTabulator"
-    '/// click 'new' ///'
+    printlog " click 'new' "
          Neu.click
-    '///                                    ' MAYBE CHECK COUNT OF THIS ?? Position               svx:MetricBox:RID_SVXPAGE_TABULATOR:ED_TABPOS ///'
-    '/// click 'delete all' ///'
+    printlog "                                    ' MAYBE CHECK COUNT OF THIS ?? Position               svx:MetricBox:RID_SVXPAGE_TABULATOR:ED_TABPOS "
+    printlog " click 'delete all' "
          AlleLoeschen.click
-    '/// click 'new' ///'
+    printlog " click 'new' "
          Neu.click
-    '/// click 'delete' ///'
+    printlog " click 'delete' "
          Loeschen.click
     endif
     i=3
     if a <= i AND i <= b then
       Kontext
-    '/// switch to tabpage 'Bullets' ///'
+    printlog " switch to tabpage 'Bullets' "
       Messagebox.SetPage TabBullet
       Kontext "TabBullet"
       sleep 1
       Call DialogTest (TabBullet)
       sleep 1
       Kontext
-    '/// switch to tabpage 'Numbering Type' ///'
+    printlog " switch to tabpage 'Numbering Type' "
       Messagebox.SetPage TabNumerierungsart
       Kontext "TabNumerierungsart"
       sleep 1
       Call DialogTest (TabNumerierungsart)
       sleep 1
       Kontext
-    '/// switch to tabpage 'Graphics' ///'
+    printlog " switch to tabpage 'Graphics' "
       Messagebox.SetPage TabGrafiken
       Kontext "TabGrafiken"
       sleep 1
       Call DialogTest (TabGrafiken)
       sleep 1
       Kontext
-    '/// switch to tabpage 'Customize' ///'
+    printlog " switch to tabpage 'Customize' "
       Messagebox.SetPage TabOptionenNumerierung
       Kontext "TabOptionenNumerierung"
       sleep 1

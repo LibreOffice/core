@@ -78,33 +78,33 @@
 '\*****************************************************************
 
 function hFindSpellHypLanguage (optional sBooks()) as string
-'/// print all available languages that have a 'language module' ///'
+    printlog "print all available languages that have a language module"
     dim iListLength as integer
     dim i as integer
     dim sTemp as string
 
-    '/// only necessarry for asian languages ///'
+    printlog "only necessary for asian languages"
     if (bAsianLan or (iSprache=55)) then
-        '/// Tools->Options ///'
+        printlog "Tools->Options"
         ToolsOptions
-        '/// select from section 'Language Settings' the item 'Writing Aids' ///'
+        printlog "select from section 'Language Settings' the item 'Writing Aids'"
         hToolsOptions ("LANGUAGESETTINGS","WRITINGAIDS")
-        '/// click button 'Edit...' in section 'Available language modules' ///'
+        printlog "click button 'Edit...' in section 'Available language modules'"
         SprachmoduleBearbeiten.click
         kontext "ModuleBearbeiten"
-        '/// print all entries from listbox 'Language' ///'
+        printlog "print all entries from listbox 'Language'"
         for i = 1 to Sprache.GetItemCount
             sTemp = Sprache.GetItemText(i)
             if (NOT isMissing(sBooks())) then
                 listAppend(sBooks(), sTemp)
             endif
-            '/// return the first entry in the listbox ///'
+            printlog " return the first entry in the listbox "
             if i = 1 then hFindSpellHypLanguage = sTemp
         next i
-        '/// close dialog 'Edit Modules' ///'
+        printlog "close dialog 'Edit Modules'"
         ModuleBearbeiten.Close
         Kontext "ExtrasOptionenDlg"
-        '/// close dialog 'Options - ' ///'
+        printlog "close dialog 'Options - '"
         ExtrasOptionenDlg.OK
         sleep 1
     endif
@@ -113,81 +113,76 @@ end function
 '-------------------------------------------------------------------------------
 function GetDecimalSeperator ( sDummy$ ) as String
 
-'/// Input : number with fractionmark from 'NumericField' as String ///'
-'///+ Output: '.' or ',' as String                                  ///'
-   dim i1, i2 as integer
-
-' get position of fraction mark / get IT
-   i1 = instr (sDummy$, ",")
-   i2 = instr (sDummy$, ".")
-   if i1 > i2 then GetDecimalSeperator = "," else GetDecimalSeperator = "."
+    printlog "Input : number with fractionmark from 'NumericField' as String "
+    printlog "+ Output: '.' or ',' as String                                  "
+    dim i1, i2 as integer
+    
+    printlog "get position of fraction mark / get IT"
+    i1 = instr (sDummy$, ",")
+    i2 = instr (sDummy$, ".")
+    if i1 > i2 then GetDecimalSeperator = "," else GetDecimalSeperator = "."
 end function
 
 '-------------------------------------------------------------------------------
 function LiberalMeasurement ( sShould$, sActual$) as Boolean
 
-    '/// Input : (1. Should, 2. Actual) as Number with or without MeasurementUnit 'NumericField' as String ///'
-    '///+          if input has no MeasurementUnit i take it as 'cm' (was the default in old tests) ///'
-    '///+ Output: Boolean are they likely the same?
-    '/// NEEDED: mathematical proofment of iTolerance, by now just some guesses :-| ///'
-    '/// reason for this function:///'
-    '///+   because SO counts internaly in 'twip???s' 'twentieth of a point' there are some rounding errors ///'
-    '///+ there are also some rounding errors because of the internal representatio of floating point numbers in computers ///'
-    '///+   now lets try to get rid of them and have a nicer output in tests... ///'
-    '/// measurement units are defined in http://gsl.openoffice.org/source/browse/gsl/vcl/source/src/units.src ///'
+    printlog " Input : (1. Should, 2. Actual) as Number with or without MeasurementUnit 'NumericField' as String "
+    printlog "+          if input has no MeasurementUnit i take it as 'cm' (was the default in old tests) "
+    printlog "+ Output: Boolean are they likely the same?"
+    printlog " NEEDED: mathematical proofment of iTolerance, by now just some guesses :-| "
+    printlog " reason for this function:"
+    printlog "+   because SO counts internaly in 'twip???s' 'twentieth of a point' there are some rounding errors "
+    printlog "+ there are also some rounding errors because of the internal representatio of floating point numbers in computers "
+    printlog "+   now lets try to get rid of them and have a nicer output in tests... "
+    printlog " measurement units are defined in http://gsl.openoffice.org/source/browse/gsl/vcl/source/src/units.src "
    
     dim iTolerance as Double
 
-    LiberalMeasurement = False ' worst case
+    LiberalMeasurement = False 
 
-   'trivial
     if (sShould$ = sActual$) then
-      LiberalMeasurement = True
+        LiberalMeasurement = True
     else
-      ' check if measunit is the same !!
-      if (GetMeasUnit(sShould$) <> GetMeasUnit(sActual$) ) then
-         warnlog "In function LiberalMeasurement the measUnit is different, compare not possible yet"
-      else
-        ' set factor for liberality ;-)
-        ' took units from http://gsl.openoffice.org/source/browse/gsl/vcl/source/src/units.src
-         select case GetMeasUnit(sShould$)
-            case "mm", "ミリ", "公厘" : iTolerance = 2.0             '01, 81,     88
-            case "cm","センチ","厘米","公分"  : iTolerance = 0.5       '01, 81, 86, 88
-            case chr$(34) : iTolerance = 2.5
-            case "pi","ピクセル" : iTolerance = 2.5                 '01, 81
-            case "pt",  "ポイント" : iTolerance = 2.5                '01, 81
-            case "" : iTolerance = 1.5 ' cm is presubposition in old functions
-         case else
-            iTolerance = 2.5
-            qaErrorLog "This Unit is not available in this function. '" + GetMeasUnit(sShould$) + "'"
-         end select
-         ' have to get the measurem unit, cause the offset is different for each :-(
-         ' !!! val(str()) is important because of double calculating actions !!! #110996#
-         if ( val(str(StrToDouble(sShould$)+iTolerance)) >= StrToDouble(sActual$) ) AND (val(str(StrToDouble ( sShould$ )-iTolerance)) <= StrToDouble ( sActual$ )) then
-             LiberalMeasurement = True
-         else
-            LiberalMeasurement = False
-            'printlog "LM: ---------------------------: "+sShould$ +":"+sActual$
-         end if
-         'printlog "### LibMeas: "+ (StrToDouble(sShould$) + iTolerance) +" - "+ StrToDouble(sShould$) +" - "+ (StrToDouble ( sShould$ ) - iTolerance)+" ; '"+GetMeasUnit(sShould$)+"'"
-      end if
+        printlog "check if measunit is the same"
+        if (GetMeasUnit(sShould$) <> GetMeasUnit(sActual$) ) then
+            warnlog "In function LiberalMeasurement the measUnit is different, compare not possible yet"
+        else
+            printlog "set factor for liberality ;-)
+            printlog "took units from http://gsl.openoffice.org/source/browse/gsl/vcl/source/src/units.src"
+            select case GetMeasUnit(sShould$)
+                case "mm", "ミリ", "公厘" : iTolerance = 2.0             '01, 81,     88
+                case "cm","センチ","厘米","公分"  : iTolerance = 0.5       '01, 81, 86, 88
+                case chr$(34) : iTolerance = 2.5
+                case "pi","ピクセル" : iTolerance = 2.5                 '01, 81
+                case "pt",  "ポイント" : iTolerance = 2.5                '01, 81
+                case "" : iTolerance = 1.5 ' cm is presubposition in old functions
+            case else
+                iTolerance = 2.5
+                qaErrorLog "This Unit is not available in this function. '" + GetMeasUnit(sShould$) + "'"
+            end select
+            printlog "have to get the measurem unit, cause the offset is different for each"
+            printlog "!!! val(str()) is important because of double calculating actions !!! #110996#"
+            if ( val(str(StrToDouble(sShould$)+iTolerance)) >= StrToDouble(sActual$) ) AND (val(str(StrToDouble ( sShould$ )-iTolerance)) <= StrToDouble ( sActual$ )) then
+                 LiberalMeasurement = True
+            else
+                LiberalMeasurement = False
+            end if
+        end if
     end if
-    'Printlog "+++++++++++++++++++++++++++++++++++++meas lib was here: "+LiberalMeasurement
 end function
 
 '-------------------------------------------------------------------------------
 function GetMeasUnit ( sWert$ ) as String
 
     dim iBounder as integer
-    '/// Input : Number with or without MeasurementUnit 'NumericField' as String ///'
-    '///+ Output: Initials of MeasurementUnit as String or "" when only a number ///'
+    printlog " Input : Number with or without MeasurementUnit 'NumericField' as String "
+    printlog "+ Output: Initials of MeasurementUnit as String or "" when only a number "
 
     iBounder = -1
     do
         inc iBounder
     loop until ( isNumeric(mid (sWert$, len(sWert$)-iBounder, 1)) OR (len(sWert$) <= (iBounder + 1)) )
 
-   ' printlog right (sWert$, iBounder)
     if (len(sWert$) <= (iBounder + 1)) then
         if isNumeric(left (sWert$, 1)) then
             GetMeasUnit = right (sWert$, iBounder)
@@ -209,37 +204,37 @@ function StrToDouble ( sWert$ ) as Double
     dim c as double
     dim n as integer
 
-    '/// Input : {'a[. ,]b[mm cm " pi pt]' with a, b as integer} as String ///'
-    '///+ Output: a[. , ]b as double ///'
+    printlog " Input : {'a[. ,]b[mm cm  pi pt]' with a, b as integer} as String "
+    printlog "+ Output: a[. , ]b as double "
 
-    ' get rid of measure unit, the only single character is '"' all others are two chars
-    ' there was a problem, if there is NO meas.unit!!!
-      if (isNumeric (sWert$) = FALSE) then
-         if (  StrComp (right (sWert$, 1), chr$(34) ) = 0 ) then
-            sDummy$ = Left ( sWert$, Len(sWert$)-1 )
-         else
-            sDummy$ = Left ( sWert$, Len(sWert$)-2 )
-         endif
-      else
-         sDummy$ = sWert$
-      endif
-   ' get position of fraction mark
-      i1 = instr (sDummy$, ",")  ' wrong output
-      i2 = instr (sDummy$, ".")
-      if i1 > i2 then i = i1 else i = i2
-        ' in front of decimal seperator
-         try
+    printlog "get rid of measure unit, the only single character is '' all others are two chars"
+    printlog "there was a problem, if there is NO meas.unit!!"
+        if (isNumeric (sWert$) = FALSE) then
+            if (  StrComp (right (sWert$, 1), chr$(34) ) = 0 ) then
+                sDummy$ = Left ( sWert$, Len(sWert$)-1 )
+            else
+                sDummy$ = Left ( sWert$, Len(sWert$)-2 )
+            endif
+        else
+            sDummy$ = sWert$
+        endif
+    printlog "get position of fraction mark"
+    i1 = instr (sDummy$, ",")  ' wrong output
+    i2 = instr (sDummy$, ".")
+    if i1 > i2 then i = i1 else i = i2
+        printlog " in front of decimal seperator:"
+        try
             a = val (left (sDummy$,i-1))
-         catch
-            'printlog sWert$ + ":" + sDummy$ + ":" + i + ":" + i1+ ":" + i2
-         endcatch
-      ' after the decimal seperator
-         n = (len (sDummy$)-i)
-         b = val (right (sDummy$, n) )
-         c = b * 10 ^ -n
-         'printlog "-------------- :"+sWert$ +" :'"+a+"' :"+n+" :"+b+" :'"+c+"':"
-         ' !!! val(str()) is important because of double calculating actions !!! #110996#
-         StrToDouble = val(str(a + c))
+        catch
+        'printlog sWert$ + ":" + sDummy$ + ":" + i + ":" + i1+ ":" + i2
+        endcatch
+        printlog "after the decimal seperator"
+        n = (len (sDummy$)-i)
+        b = val (right (sDummy$, n) )
+        c = b * 10 ^ -n
+        'printlog "-------------- :"+sWert$ +" :'"+a+"' :"+n+" :"+b+" :'"+c+"':"
+        ' !!! val(str()) is important because of double calculating actions !!! #110996#
+        StrToDouble = val(str(a + c))
 end function
 
 '-------------------------------------------------------------------------------
@@ -265,11 +260,11 @@ end function
 '-------------------------------------------------------------------------------
 function setStartCurrentPage(optional bState as boolean) as boolean
 
-    '/// tools->options ///'
+    printlog " tools->options "
     ToolsOptions
-    '///+ select in section 'Presentation' tabpage 'general' ///'
+    printlog "+ select in section 'Presentation' tabpage 'general' "
     hToolsOptions ("IMPRESS","General")
-        '///+ check the checkbox 'Always with current page' ///'
+        printlog "+ check the checkbox 'Always with current page' "
         setStartCurrentPage = MitAktuellerSeite.isChecked
         if bState then
             MitAktuellerSeite.Check
@@ -277,17 +272,17 @@ function setStartCurrentPage(optional bState as boolean) as boolean
             MitAktuellerSeite.UnCheck
         endif
     Kontext "ExtrasOptionenDlg"
-    '///+ close dialog 'Options - Presenation - General' with OK ///'
+    printlog "+ close dialog 'Options - Presenation - General' with OK "
     ExtrasOptionenDlg.OK
 end function
 
 '-------------------------------------------------------------------------------
 function fIsDocumentWritable() as boolean
 
-    '/// check if a document is writeable
-    '/// <u>parameter:</u>
-    '/// <u>return:</u>
-    '/// true if the document is writeable otherwise false
+    printlog " check if a document is writeable
+    printlog " <u>parameter:</u>
+    printlog " <u>return:</u>
+    printlog " true if the document is writeable otherwise false
 
     Kontext "Standardbar"
         if Bearbeiten.GetState(2) <> 1 then
@@ -301,10 +296,10 @@ end function
 '-------------------------------------------------------------------------------
 function fMakeDocumentWritable() as boolean
 
-    '/// make a document is writeable
-    '/// <u>parameter:</u>
-    '/// <u>return:</u>
-    '/// true if the document can make writeable otherwise false
+    printlog " make a document is writeable
+    printlog " <u>parameter:</u>
+    printlog " <u>return:</u>
+    printlog " true if the document can make writeable otherwise false
 
     Kontext "Standardbar"
     sleep (1)
@@ -471,16 +466,16 @@ end function
 '-------------------------------------------------------------------------------
 function hScreenFontAntialiasing (bEnable as boolean) as boolean
 
-   ToolsOptions
-   hToolsOptions ("STAROFFICE", "VIEW")
-   hScreenFontAntialiasing = FontAntiAliasing.IsChecked
-   if (bEnable) then
-      FontAntiAliasing.Check
-   else
-      FontAntiAliasing.Uncheck
-   endif
-   Kontext "ExtrasOptionenDlg"
-   ExtrasOptionenDlg.OK
+    ToolsOptions
+    hToolsOptions ("STAROFFICE", "VIEW")
+    hScreenFontAntialiasing = FontAntiAliasing.IsChecked
+    if (bEnable) then
+        FontAntiAliasing.Check
+    else
+        FontAntiAliasing.Uncheck
+    endif
+    Kontext "ExtrasOptionenDlg"
+    ExtrasOptionenDlg.OK
 end function
 
 '-------------------------------------------------------------------------------
@@ -501,17 +496,17 @@ function fSaveLoadAllFormats (NewFileDir as String)
             kontext "ExportierenDlg"
         endif
         Dateiname.SetText (ConvertPath (NewFileDir) + "file" + iFileTypeCounter)
-            Dateityp.Select (iFileTypeCounter)
-            sleep (1)
-            Printlog "   Saving file: " + (ConvertPath (NewFileDir) + ("file" + (iFileTypeCounter) + "." + left(right(Dateityp.GetSelText,4),3)))
-            SavedFile(iFileTypeCounter) = ("file" + (iFileTypeCounter) + "." + left(right(Dateityp.GetSelText,4),3))
-            Speichern.Click
-            Kontext "Active"
-            if Active.Exists(2) then Active.Yes ' File already exists, overwrite?
-            '        printlog " Saved file ( SavedFile(" + iFileTypeCounter + ") ) as: '" + SavedFile(iFileTypeCounter) +"'."
-            Kontext "AlienWarning"
-            if AlienWarning.Exists(2) then AlienWarning.OK
-            kontext "DocumentImpress"
+        Dateityp.Select (iFileTypeCounter)
+        sleep (1)
+        Printlog "   Saving file: " + (ConvertPath (NewFileDir) + ("file" + (iFileTypeCounter) + "." + left(right(Dateityp.GetSelText,4),3)))
+        SavedFile(iFileTypeCounter) = ("file" + (iFileTypeCounter) + "." + left(right(Dateityp.GetSelText,4),3))
+        Speichern.Click
+        Kontext "Active"
+        if Active.Exists(2) then Active.Yes ' File already exists, overwrite?
+        'printlog " Saved file ( SavedFile(" + iFileTypeCounter + ") ) as: '" + SavedFile(iFileTypeCounter) +"'."
+        Kontext "AlienWarning"
+        if AlienWarning.Exists(2) then AlienWarning.OK
+        kontext "DocumentImpress"
     Next iFileTypeCounter
     printlog "Close the file."
     FileClose
@@ -567,22 +562,22 @@ end function
 
 '-------------------------------------------------------------------------------
 function toggleGermanSpellchecking as string
-
-    '/// activate old german spellchecking ///'
-    '///+ Tools->Options ///'
+    
+    printlog " activate old german spellchecking "
+    printlog "+ Tools->Options "
     ToolsOptions
-    '///+ select tabpage 'writing aids' in category 'Languagesettings' ///'
+    printlog "+ select tabpage 'writing aids' in category 'Languagesettings' "
     hToolsOptions("LANGUAGESETTINGS","WRITINGAIDS")
     kontext "TabLinguistik"
-        '///+ hopefully it never changes for any reason between the languages!: select the 8th entry 'German spelling - old' ///'
-        printlog " - 'German Spelling - old' ?= " + Optionen.getItemText(8)
-        Optionen.select(8)
-    '///+ default is 'unselected' - i can't check it automatically - so i depend on it! ///'
-    '///+ press [space] to select it///'
+    printlog "+ hopefully it never changes for any reason between the languages!: select the 8th entry 'German spelling - old' "
+    printlog " - 'German Spelling - old' ?= " + Optionen.getItemText(8)
+    Optionen.select(8)
+    printlog "+ default is 'unselected' - i can't check it automatically - so i depend on it! "
+    printlog "+ press [space] to select it"
     Optionen.typeKeys "<space>"
     Kontext "ExtrasOptionenDlg"
-        '///+ close options with OK button ///'
-        ExtrasOptionenDlg.OK
+    printlog "+ close options with OK button "
+    ExtrasOptionenDlg.OK
 end function
 
 '-------------------------------------------------------------------------------
@@ -602,14 +597,14 @@ function sAnalyseContextMenu(iItems as integer, optional iError as long) as inte
     dim bDifferent as boolean
     dim iInternError as long
     dim iError1 as long  ' misplaced
-'    i22192: context menu opens not on cursor position
+    'i22192: context menu opens not on cursor position
     dim iError2 as long  ' no context menu
 
-    '/// goto start of textbox ///'
+    printlog "goto start of textbox "
     call hTypeKeys "<mod1 home>"
-    '/// for every word, check the context menu to get suggestions for correction ///'
+    printlog "for every word, check the context menu to get suggestions for correction "
     for i = 0 to (iItems-1)
-        '/// copy current word to clipboard ///'
+        printlog " copy current word to clipboard "
         call hTypeKeys "<Shift mod1 right>"
         EditCopy
         sCandidates(1) = getClipboardText()
@@ -617,7 +612,7 @@ function sAnalyseContextMenu(iItems as integer, optional iError as long) as inte
             sCandidates(1) = left(sCandidates(1),len(sCandidates(1))-1)
         end if
         call hTypeKeys "<mod1 left>"
-        '/// open context menu ///'
+        printlog " open context menu "
         printlog "   About to call the ContextMenu."
         call hOpenContextMenu()
         sleep 3
@@ -625,7 +620,7 @@ function sAnalyseContextMenu(iItems as integer, optional iError as long) as inte
         ' collecting criteria for underlining:
         ' 1st one: is word selected? yes: underlined;
 
-        '/// If the string "vnd.sun.search:SubMenu" (the SunSearch-menu) is found in the menu, we'll skip that word. ///'
+        printlog " If the string "vnd.sun.search:SubMenu" (the SunSearch-menu) is found in the menu, we'll skip that word. "
 
         'Get first entry. 
         f = MenuGetItemCommand (MenuGetItemID (1))
@@ -669,15 +664,15 @@ function sAnalyseContextMenu(iItems as integer, optional iError as long) as inte
             ' if context menu open do....
             if (not bNoContextMenu) then
         '        printlog ""+i+" C: " + x + ";------ " + getClipboardText + " -------- " + hMenuItemGetText(1)
-                '/// analyze context menu entries ///'
+                printlog " analyze context menu entries "
                 for y = 1 to x
                     z = hMenuGetItemId(y)
                     if (1 = y) then iSlot = z  ' criteria for WorkAround
                     if (z = 27019) then iSpecialCharacterEntry = y    ' entry to select for WorkAround
                     Printlog ("---i: "+ y +"; " + z + "  ; " +hMenuItemGetText(y) + " ; " + hMenuGetItemCommand(y))
                 next y
-                '/// if first slot not a spelling suggestion -> WorkAround 112919 ///'
-                '/// close Context Menu ///'
+                printlog " if first slot not a spelling suggestion -> WorkAround 112919 "
+                printlog " close Context Menu "
                 if (iSlot <> 10456) then
                     if (not bDifferent) then  ' WorkAround ##
     '                qaerrorlog "" + iSlot + " UNDERLINED"
@@ -697,10 +692,10 @@ function sAnalyseContextMenu(iItems as integer, optional iError as long) as inte
             call hMenuClose()
         end if
         Sleep (1)
-        '/// goto next word with keys [strg]+[right] ///'
+        printlog " goto next word with keys [strg]+[right] "
         call hTypeKeys "<mod1 right>"
     next i
-    '/// leave textbox edit mode ///'
+    printlog " leave textbox edit mode "
 
     iInternError = iError1 OR iError2
     if (iError1 > 0) then
@@ -768,20 +763,20 @@ function fGetIntoDictionary as boolean
     dim bFound as boolean
     dim iBooks as integer
     dim i as integer
-
+    
     iBooks = Benutzerwoerterbuch.GetItemCount
     i=0
     bFound=TRUE
     while (bFound AND (i < iBooks))
-        inc i
-        Benutzerwoerterbuch.select i
-        printlog Benutzerwoerterbuch.getSelText + i
-        try
-            Bearbeiten.Click
-            bFound = FALSE
-        catch
-            printLog "wIgLi" + i
-        endcatch
+    inc i
+    Benutzerwoerterbuch.select i
+    printlog Benutzerwoerterbuch.getSelText + i
+    try
+        Bearbeiten.Click
+        bFound = FALSE
+    catch
+        printLog "wIgLi" + i
+    endcatch
     wend
     fGetIntoDictionary = bFound
 end function
@@ -789,15 +784,15 @@ end function
 '-------------------------------------------------------------------------------
 function hSelectInList (window, sEntry as String) as Boolean
 
-'/// alternativ method to 'hDoubleClickInList' (without mouse) ///'
-'///+ window: name of list ///'
-'///+ sEntry: string to find in list ///'
-'///+ ReturnValue: if found: TRUE; else FALSE ///'
+printlog " alternativ method to 'hDoubleClickInList' (without mouse) "
+printlog "+ window: name of list "
+printlog "+ sEntry: string to find in list "
+printlog "+ ReturnValue: if found: TRUE; else FALSE "
     Dim i as Integer
     Dim sTemp as String
     Dim sLastTemp as String
 
-    '/// go through list from bottom and stop on the entry sEntry ///'
+    printlog " go through list from bottom and stop on the entry sEntry "
     window.TypeKeys "<End>"
     sTemp = ""
     do
@@ -805,7 +800,7 @@ function hSelectInList (window, sEntry as String) as Boolean
         sTemp = window.GetText
         window.TypeKeys "<Up>"
     loop while ((sEntry <> sTemp) AND (sLastTemp <> sTemp))
-    '/// press key [Return] ///'
+    printlog " press key [Return] "
     if (sEntry = sTemp) then
         window.TypeKeys "<Return>"
         hSelectInList = TRUE
@@ -825,7 +820,7 @@ function hWalkTheStyles2 (atemp)
     dim aSettings(5,5)
 '    dim atemp
 
-    '/// Organizer ///'
+    printlog " Organizer "
     i=1
     Kontext
     printlog aSettings(i,3)
@@ -833,12 +828,11 @@ function hWalkTheStyles2 (atemp)
     printlog val(aSettings(i,1))
     printlog atemp
     Messagebox.SetPage TabArea
-        kontext "TabArea"
-        'press button standard :-))))))
+    kontext "TabArea"
     atemp = Hatching
     printlog atemp
 
-        if aSettings(i,3) then
+    if aSettings(i,3) then
         itemp = val(aSettings(i,1))
         printlog isobject(atemp)
         printlog isNumeric(atemp)
@@ -848,108 +842,107 @@ function hWalkTheStyles2 (atemp)
     else
 '        aSettings(i,1).Uncheck
     endif
-    'print "baeh"
     i=2
     Kontext
     Messagebox.SetPage TabSchatten
-        kontext "TabSchatten"
+    kontext "TabSchatten"
 
     Kontext
     Messagebox.SetPage TabVerwalten
-        kontext "TabVerwalten"
-        '/// Line ///'
+    kontext "TabVerwalten"
+    printlog " Line "
     i=2
     Kontext
     Messagebox.SetPage TabLinie
-        kontext "TabLinie"
-        'Context: *Line; Line Styles; Arrow Styles
-        '/// Area ///'
+    kontext "TabLinie"
+    'Context: *Line; Line Styles; Arrow Styles
+    printlog " Area "
     i=3
     Kontext
     Messagebox.SetPage TabArea
-        kontext "TabArea"
-        'Context: *Area; *Shadow; Transparency; Colors; Gradients; Hatching; Bitmaps
-        '/// Shadowing ///'
+    kontext "TabArea"
+    'Context: *Area; *Shadow; Transparency; Colors; Gradients; Hatching; Bitmaps
+    printlog " Shadowing "
     i=4
     Kontext
     Messagebox.SetPage TabSchatten
-        kontext "TabSchatten"
-        '/// Transparency ///'
+    kontext "TabSchatten"
+    printlog " Transparency "
     i=5
     Kontext
     Messagebox.SetPage TabTransparenz
-        kontext "TabTransparenz"
-        '/// Font ///'
+    kontext "TabTransparenz"
+    printlog " Font "
     i=6
     Kontext
     Messagebox.SetPage TabFont
-        kontext "TabFont"
-        'Context: *Font; *Font Effect; Position
-        '/// Font Effect ///'
+    kontext "TabFont"
+    'Context: *Font; *Font Effect; Position
+    printlog " Font Effect "
     i=7
     Kontext
     Messagebox.SetPage TabFontEffects
-        kontext "TabFontEffects"
-        '/// Indents & Spacing ///'
+    kontext "TabFontEffects"
+    printlog " Indents & Spacing "
     i=8
     Kontext
     Messagebox.SetPage TabEinzuegeUndAbstaende
-        kontext "TabEinzuegeUndAbstaende"
-        'Context: *Indents & Spacing; *Alignment; *Tabs
-        '/// Text ///'
+    kontext "TabEinzuegeUndAbstaende"
+    'Context: *Indents & Spacing; *Alignment; *Tabs
+    printlog " Text "
     i=9
     Kontext
     Messagebox.SetPage TabText
-        Kontext "TabText"
-        'Context: *Text; *Text Animation
-        '/// Text Animation ///'
+    Kontext "TabText"
+    'Context: *Text; *Text Animation
+    printlog " Text Animation "
     i=10
     Kontext
     Messagebox.SetPage TabLauftext
-        Kontext "TabLauftext"
-        '/// Dimensioning ///'
+    Kontext "TabLauftext"
+    printlog " Dimensioning "
     i=11
     Kontext
     Messagebox.SetPage TabBemassung
-        Kontext "TabBemassung"
-        '/// Connector ///'
+    Kontext "TabBemassung"
+    printlog " Connector "
     i=12
     Kontext
     Messagebox.setpage TabVerbinder
-        Kontext "TabVerbinder"
-        '/// Alignment ///'
+    Kontext "TabVerbinder"
+    printlog " Alignment "
     i=13
     Kontext
     Messagebox.setpage TabAusrichtungAbsatz
-        Kontext "TabAusrichtungAbsatz"
-        '/// Tabs ///'
+    Kontext "TabAusrichtungAbsatz"
+    printlog " Tabs "
     i=14
     Kontext
     Messagebox.setpage TabTabulator
-        Kontext "TabTabulator"
+    Kontext "TabTabulator"
 
-'    '/// switch to tabpage 'Bullets' ///'
+'    printlog " switch to tabpage 'Bullets' "
 '      Messagebox.SetPage TabBullet
 '      Kontext "TabBullet"
 '      sleep 1
 '      Call DialogTest (TabBullet)
 '      sleep 1
 '      Kontext
-'    '/// switch to tabpage 'Numbering Type' ///'
+'    printlog " switch to tabpage 'Numbering Type' "
 '      Messagebox.SetPage TabNumerierungsart
 '      Kontext "TabNumerierungsart"
 '      sleep 1
 '      Call DialogTest (TabNumerierungsart)
 '      sleep 1
 '      Kontext
-'    '/// switch to tabpage 'Graphics' ///'
+'    printlog " switch to tabpage 'Graphics' "
 '      Messagebox.SetPage TabGrafiken
 '      Kontext "TabGrafiken"
 '      sleep 1
 '      Call DialogTest (TabGrafiken)
 '      sleep 1
 '      Kontext
-'    '/// switch to tabpage 'Customize' ///'
+'    printlog " switch to tabpage 'Customize' "
 '      Messagebox.SetPage TabOptionenNumerierung
 '      Kontext "TabOptionenNumerierung"
 '      sleep 1
@@ -960,11 +953,11 @@ end function
 '-------------------------------------------------------------------------------
 function fGetSlideNumber (optional sCompare as integer) as integer
 
-    '/// PRESUPPOSITION: open Navigator ///'
-    '///+ ENTRY: with or without a string ///'
-    '///+ if string is given, it is compared with the actual selected slidename in the navigator, if not equal print warnlog ///'
-    '///+ RETURN:  selected slidename in the navigator / empty string if navvigator is not open ///'
-    '///+ EXIT: kontext on  DocumentPresentation ///'
+    printlog " PRESUPPOSITION: open Navigator "
+    printlog "+ ENTRY: with or without a string "
+    printlog "+ if string is given, it is compared with the actual selected slidename in the navigator, if not equal print warnlog "
+    printlog "+ RETURN:  selected slidename in the navigator / empty string if navvigator is not open "
+    printlog "+ EXIT: kontext on  DocumentPresentation "
 
     Kontext "NavigatorDraw"
     printlog "Checking if navigator is open, closing and opening for updating.."
@@ -973,7 +966,7 @@ function fGetSlideNumber (optional sCompare as integer) as integer
         sleep 3
         ViewNavigator
         sleep 3
-        '/// check in list, if the page changed ///'
+        printlog " check in list, if the page changed "
         
     else
         printlog "If Navigator is not open, opening it now."
@@ -996,12 +989,12 @@ end function
 '-------------------------------------------------------------------------------
 function fGetSlideCount (optional iCount as integer) as integer
 
-    '/// purpose: open navigator in impress and check/get number of slides from listbox ///'
-    '///+ input  : optional number of slides, to compare to: if different warnlog ///'
-    '///+ output : number of slides in presentation ///'
+    printlog " purpose: open navigator in impress and check/get number of slides from listbox "
+    printlog "+ input  : optional number of slides, to compare to: if different warnlog "
+    printlog "+ output : number of slides in presentation "
     dim i as integer
 
-   '/// open navigator ///'
+   printlog " open navigator "
    Kontext "Navigator"
    if Navigator.exists then
       Printlog "Navigator: open :-)"
@@ -1010,7 +1003,7 @@ function fGetSlideCount (optional iCount as integer) as integer
       ViewNavigator
    endif
    Sleep 1
-   '/// count rows in list of navigator: usually number of slides ///'
+   printlog " count rows in list of navigator: usually number of slides "
    Kontext "NavigatorDraw"
    i = Liste.GetItemCount
    if (isMissing(iCount) = FALSE) then
@@ -1020,7 +1013,7 @@ function fGetSlideCount (optional iCount as integer) as integer
          Printlog "ok"
       endif
    endif
-   '/// close navigator ///'
+   printlog " close navigator "
    ViewNavigator
    fGetSlideCount = i
 end function
@@ -1028,13 +1021,13 @@ end function
 '-------------------------------------------------------------------------------
 function fGetSlideName (optional sCompare as string) as string
 
-'/// PRESUPPOSITION: open Navigator ///'
-'///+ ENTRY: with or without a string ///'
-'///+ if string is given, it is compared with the actual selected slidename in the navigator, if not equal print warnlog ///'
-'///+ RETURN:  selected slidename in the navigator / empty string if navvigator is not open ///'
-'///+ EXIT: kontext on  DocumentPresentation ///'
+    printlog " PRESUPPOSITION: open Navigator "
+    printlog "+ ENTRY: with or without a string "
+    printlog "+ if string is given, it is compared with the actual selected slidename in the navigator, if not equal print warnlog "
+    printlog "+ RETURN:  selected slidename in the navigator / empty string if navvigator is not open "
+    printlog "+ EXIT: kontext on  DocumentPresentation "
 
-   Kontext "NavigatorDraw"
+    Kontext "NavigatorDraw"
    if NavigatorDraw.exists (5) then
       sleep 3
       printlog "check in list, if the page changed"
@@ -1056,13 +1049,13 @@ end function
 
 '------------------------------------------------------------------------------
 function fGetSetPageBackground (iSelect as integer, iWhere as integer) as integer
+    
+    printlog " Get or Set the Page Background via stylist (iWhere = 0) or format menue (...= 1) "
+    printlog "+ if iSelect > 0 then set, else get "
+    printlog "+ return selected color number or -1 on error "
 
-'/// Get or Set the Page Background via stylist (iWhere = 0) or format menue (...= 1) ///'
-'///+ if iSelect > 0 then set, else get ///'
-'///+ return selected color number or -1 on error ///'
-
-   if (iWhere = 0) then
-      '/// Stylist -> Background -> Kontext menu -> modify -> Area -> Color ///'
+    if (iWhere = 0) then
+    printlog " Stylist -> Background -> Kontext menu -> modify -> Area -> Color "
       fGetSetPageBackground = -1 ' worst case
       Kontext "Stylist"
       if Stylist.NotExists (5) then
@@ -1079,13 +1072,13 @@ function fGetSetPageBackground (iSelect as integer, iWhere as integer) as intege
       sleep 1
       hMenuSelectNr (1)
    else
-      '/// Format -> Page -> Background -> Color ///''FormatPage
+      printlog " Format -> Page -> Background -> Color "'FormatPage
       sleep 1
       try          ' this was just paranoia to find a not mentioned messagebox
          FormatSlideDraw
-      catch
-         warnlog "slooooow slot TBO :-("
-         exit function
+        catch
+        warnlog "slooooow slot TBO :-("
+        exit function
       endcatch
       sleep 1
       Kontext
@@ -1140,7 +1133,7 @@ function fGetSetPageBackground (iSelect as integer, iWhere as integer) as intege
    endif
 
    if (iWhere = 0) then
-        sleep 1 ' ABSOLUT NECESSARRY !!! (TBO) else crash on UNIX on following command!!!!
+        sleep 1 ' ABSOLUT NECESSARY !!! (TBO) else crash on UNIX on following command!!!!
         FormatStylist ' closing
    endif
    sleep 4
@@ -1157,13 +1150,13 @@ function CreateTextSetEffectAndAngle
         WaitSlot (1000)
         EffectAdd.Click
         kontext
-        '/// Switch to TabPage: Entrance ///'
+        printlog " Switch to TabPage: Entrance "
         active.setPage(TabEntrance)
         kontext "TabEntrance"
             if TabEntrance.exists(5) then
-                '/// select in the listbox 'Effects' the second entry///'
+                printlog " select in the listbox 'Effects' the second entry"
                 Effects.select (24)
-                '/// select speed 'Fast' -> fourth item in list ///'
+                printlog " select speed 'Fast' -> fourth item in list "
                 Speed.Select 2
                 TabEntrance.OK
             end if
@@ -1186,14 +1179,14 @@ end function
 '-------------------------------------------------------------------------------
 function fGetPresentationStyle (optional sCompare as integer) as integer
 
-    '///+ ENTRY: with or without a string ///'
-    '///+ if string is given, it is compared with the LAST CHARACTER of the actual selected style in the stylist, if not equal print warnlog ///'
-    '///+ RETURN:  LAST CHARACTER of the actual selected style in the stylist ///'
+    printlog "+ ENTRY: with or without a string "
+    printlog "+ if string is given, it is compared with the LAST CHARACTER of the actual selected style in the stylist, if not equal print warnlog "
+    printlog "+ RETURN:  LAST CHARACTER of the actual selected style in the stylist "
     dim sTemp as integer
     dim sTemp0 as string
     
     sTemp = (-1)
-    '/// open stylist if not already open: Format->Stylist ///'
+    printlog " open stylist if not already open: Format->Stylist "
     kontext "Stylist"
     if (Stylist.exists = FALSE) then
       try
@@ -1332,7 +1325,7 @@ function optionstest
            for ota = 1 to TextAnimation.GetItemCount
                TextAnimation.Select ota
            next ota
-           '/// switch to TabPage 'Timing' ///'
+           printlog " switch to TabPage 'Timing' "
            Kontext
            Active.SetPage TabTiming
            kontext "TabTiming"
@@ -1373,7 +1366,7 @@ function optionstest
            else
               warnlog "Impress:Tasks Pane:Custom Animation:Effect Options: Timing TabPage didn't work."
            endif
-           '/// switch to TabPage 'Timing' ///'
+           printlog " switch to TabPage 'Timing' "
            Kontext
            active.setPage TabTextAnimation
            kontext "TabTextAnimation"
@@ -1434,7 +1427,7 @@ function optionstest2
            if Play.IsEnabled then
               Play.Click
            else
-              warnlog "   Play should have been enabled after selecting a sound."
+              warnlog "Play should have been enabled after selecting a sound."
            endif
            AfterAnimation.Select 2
            if DimColor.isEnabled then
@@ -1448,7 +1441,7 @@ function optionstest2
            else
               Warnlog "DelayBetweenCharacters should have been enabled"
            endif
-           '/// switch to TabPage 'Timing' ///'
+           printlog " switch to TabPage 'Timing' "
            Kontext
            Active.SetPage TabTiming
            kontext "TabTiming"
@@ -1510,7 +1503,7 @@ function optionstest2
            else
               warnlog "Impress:Tasks Pane:Custom Animation:Effect Options: Timing TabPage didn't work."
            endif
-           '/// switch to TabPage 'Timing' ///'
+           printlog " switch to TabPage 'Timing' "
            Kontext
            active.setPage TabTextAnimation
            kontext "TabTextAnimation"
