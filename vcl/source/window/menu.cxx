@@ -2487,23 +2487,8 @@ static void ImplPaintCheckBackground( Window* i_pWindow, const Rectangle& i_rRec
     if( ! bNativeOk )
     {
         const StyleSettings& rSettings = i_pWindow->GetSettings().GetStyleSettings();
-        if( i_bHighlight )
-        {
-            i_pWindow->Push( PUSH_ALL );
-            Color aCol = rSettings.GetMenuHighlightTextColor();
-            i_pWindow->SetFillColor( rSettings.GetMenuHighlightTextColor() );
-            if( aCol.IsDark() )
-                aCol.IncreaseLuminance( 128 );
-            else
-                aCol.DecreaseLuminance( 128 );
-            i_pWindow->SetLineColor( aCol );
-            Polygon aPoly( i_rRect );
-            PolyPolygon aPolyPoly( aPoly );
-            i_pWindow->DrawTransparent( aPolyPoly, 20 );
-            i_pWindow->Pop();
-        }
-        else
-            i_pWindow->DrawSelectionBackground( i_rRect, 1, FALSE, TRUE, FALSE );
+        Color aColor( i_bHighlight ? rSettings.GetMenuHighlightTextColor() : rSettings.GetHighlightColor() );
+        i_pWindow->DrawSelectionBackground( i_rRect, 0, i_bHighlight, TRUE, FALSE, 2, NULL, &aColor );
     }
 }
 

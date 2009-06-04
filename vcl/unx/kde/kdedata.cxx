@@ -248,7 +248,7 @@ extern "C" {
         if( nMajor != 3 || nMinor < 2 || (nMinor == 2 && nMicro < 2) )
         {
 #if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "unsuitable qt version %d.%d.%d\n", (int)nMajor, (int)nMinor, (int)nMicro );
+            fprintf( stderr, "unsuitable qt version %"SAL_PRIdINT32".%"SAL_PRIdINT32".%"SAL_PRIdINT32"\n", nMajor, nMinor, nMicro );
 #endif
             return NULL;
         }
