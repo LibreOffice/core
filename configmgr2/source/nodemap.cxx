@@ -42,10 +42,10 @@ NodeMap::NodeMap() {}
 
 NodeMap::~NodeMap() {}
 
-void NodeMap::clone(Node * parent, NodeMap * target) const {
+void NodeMap::clone(NodeMap * target) const {
     OSL_ASSERT(target != 0);
     for (const_iterator i(begin()); i != end(); ++i) {
-        target->insert(value_type(i->first, i->second->clone(parent)));
+        target->insert(value_type(i->first, i->second->clone()));
     }
 }
 

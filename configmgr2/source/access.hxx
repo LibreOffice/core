@@ -127,7 +127,9 @@ protected:
 
     virtual ~Access();
 
-    virtual rtl::Reference< RootAccess > getRoot() = 0;
+    virtual rtl::Reference< RootAccess > getRootAccess() = 0;
+
+    virtual rtl::Reference< Access > getParentAccess() = 0;
 
     typedef
         std::hash_map<
@@ -382,6 +384,8 @@ private:
         throw (
             com::sun::star::uno::Exception,
             com::sun::star::uno::RuntimeException);
+
+    rtl::Reference< Node > getParentNode();
 
     rtl::Reference< ChildAccess > getChild(rtl::OUString const & name);
 

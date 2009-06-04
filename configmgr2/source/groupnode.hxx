@@ -42,10 +42,9 @@ namespace configmgr {
 
 class GroupNode: public Node {
 public:
-    GroupNode(
-        Node * parent, bool extensible, rtl::OUString const & templateName);
+    GroupNode(bool extensible, rtl::OUString const & templateName);
 
-    virtual rtl::Reference< Node > clone(Node * parent) const;
+    virtual rtl::Reference< Node > clone() const;
 
     virtual rtl::Reference< Node > getMember(rtl::OUString const & name);
 

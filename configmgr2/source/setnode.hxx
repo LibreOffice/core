@@ -45,11 +45,11 @@ namespace configmgr {
 class SetNode: public Node {
 public:
     SetNode(
-        Node * parent, rtl::OUString const & defaultTemplateName,
+        rtl::OUString const & defaultTemplateName,
         std::vector< rtl::OUString > const & additionalTemplateNames,
         rtl::OUString const & templateName);
 
-    virtual rtl::Reference< Node > clone(Node * parent) const;
+    virtual rtl::Reference< Node > clone() const;
 
     virtual rtl::Reference< Node > getMember(rtl::OUString const & name);
 

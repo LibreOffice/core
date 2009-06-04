@@ -40,14 +40,14 @@
 
 namespace configmgr {
 
-GroupNode::GroupNode(
-    Node * parent, bool extensible, rtl::OUString const & templateName):
-    Node(parent), extensible_(extensible), templateName_(templateName) {}
+GroupNode::GroupNode(bool extensible, rtl::OUString const & templateName):
+    extensible_(extensible), templateName_(templateName)
+{}
 
-rtl::Reference< Node > GroupNode::clone(Node * parent) const {
+rtl::Reference< Node > GroupNode::clone() const {
     rtl::Reference< GroupNode > fresh(
-        new GroupNode(parent, extensible_, templateName_));
-    members_.clone(fresh.get(), &fresh->members_);
+        new GroupNode(extensible_, templateName_));
+    members_.clone(&fresh->members_);
     return fresh.get();
 }
 

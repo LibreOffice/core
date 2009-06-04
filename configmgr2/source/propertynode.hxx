@@ -45,10 +45,10 @@ namespace configmgr {
 class PropertyNode: public Node {
 public:
     PropertyNode(
-        Node * parent, Type type, bool nillable,
-        com::sun::star::uno::Any const & value, bool extension);
+        Type type, bool nillable, com::sun::star::uno::Any const & value,
+        bool extension);
 
-    virtual rtl::Reference< Node > clone(Node * parent) const;
+    virtual rtl::Reference< Node > clone() const;
 
     virtual rtl::Reference< Node > getMember(rtl::OUString const &);
 

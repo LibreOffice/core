@@ -55,7 +55,7 @@ public:
 
     ~NodeMap();
 
-    void clone(Node * parent, NodeMap * target) const;
+    void clone(NodeMap * target) const;
 };
 
 }

@@ -40,20 +40,14 @@ namespace configmgr {
 
 class Node: public salhelper::SimpleReferenceObject {
 public:
-    virtual rtl::Reference< Node > clone(Node * parent) const = 0;
+    virtual rtl::Reference< Node > clone() const = 0;
 
     virtual rtl::Reference< Node > getMember(rtl::OUString const & name) = 0;
 
-    Node * getParent() const;
-
-    void unbind() throw ();
-
 protected:
-    Node(Node * parent);
+    Node() {}
 
-    virtual ~Node();
-
-    Node * parent_; // null iff component or template or free node
+    virtual ~Node() {}
 };
 
 }

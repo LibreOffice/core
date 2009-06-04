@@ -86,8 +86,12 @@ rtl::Reference< Node > RootAccess::getNode() {
     return node_;
 }
 
-rtl::Reference< RootAccess > RootAccess::getRoot() {
+rtl::Reference< RootAccess > RootAccess::getRootAccess() {
     return this;
+}
+
+rtl::Reference< Access > RootAccess::getParentAccess() {
+    return rtl::Reference< Access >();
 }
 
 rtl::OUString RootAccess::getName() throw (css::uno::RuntimeException) {

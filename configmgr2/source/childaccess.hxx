@@ -80,7 +80,9 @@ public:
 
     virtual rtl::Reference< Node > getNode();
 
-    virtual rtl::Reference< RootAccess > getRoot();
+    virtual rtl::Reference< RootAccess > getRootAccess();
+
+    virtual rtl::Reference< Access > getParentAccess();
 
     virtual rtl::OUString SAL_CALL getName()
         throw (com::sun::star::uno::RuntimeException);

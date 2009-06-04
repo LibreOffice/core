@@ -103,8 +103,12 @@ rtl::Reference< Node > ChildAccess::getNode() {
     return node_;
 }
 
-rtl::Reference< RootAccess > ChildAccess::getRoot() {
+rtl::Reference< RootAccess > ChildAccess::getRootAccess() {
     return root_;
+}
+
+rtl::Reference< Access > ChildAccess::getParentAccess() {
+    return parent_;
 }
 
 rtl::OUString ChildAccess::getName() throw (css::uno::RuntimeException) {
@@ -208,7 +212,7 @@ void ChildAccess::commitChanges() {
             } else if (LocalizedPropertyNode * locprop =
                        dynamic_cast< LocalizedPropertyNode * >(p.get()))
             {
-                locprop->setValue(getRoot()->getLocale(), changedValue_);
+                locprop->setValue(getRootAccess()->getLocale(), changedValue_);
             } else {
                 OSL_ASSERT(false);
                 throw css::uno::RuntimeException(
@@ -238,11 +242,7 @@ void ChildAccess::commitChanges() {
         {
             rtl::Reference< Node > p(parent_->getNode());
             if (GroupNode * group = dynamic_cast< GroupNode * >(p.get())) {
-                NodeMap::iterator i(group->getMembers().find(name_));
-                OSL_ASSERT(i != group->getMembers().end());
-                rtl::Reference< Node > child(i->second);
-                group->getMembers().erase(i);
-                child->unbind(); // must not throw
+                group->getMembers().erase(name_);
             } else if (SetNode * set = dynamic_cast< SetNode * >(p.get())) {
                 set->getMembers().erase(name_);
             } else {
@@ -288,7 +288,7 @@ css::uno::Any ChildAccess::asValue() {
     if (LocalizedPropertyNode * locprop =
         dynamic_cast< LocalizedPropertyNode * >(p.get()))
     {
-        rtl::OUString locale(getRoot()->getLocale());
+        rtl::OUString locale(getRootAccess()->getLocale());
         if (!Components::allLocales(locale)) {
             rtl::Reference< LocalizedPropertyValueNode > value(
                 locprop->getValue(locale));

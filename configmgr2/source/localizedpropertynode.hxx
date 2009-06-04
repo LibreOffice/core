@@ -49,9 +49,9 @@ class LocalizedPropertyValueNode;
 
 class LocalizedPropertyNode: public Node {
 public:
-    LocalizedPropertyNode(Node * parent, Type type, bool nillable);
+    LocalizedPropertyNode(Type type, bool nillable);
 
-    virtual rtl::Reference< Node > clone(Node * parent) const;
+    virtual rtl::Reference< Node > clone() const;
 
     virtual rtl::Reference< Node > getMember(rtl::OUString const & name);
 

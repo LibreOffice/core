@@ -50,15 +50,14 @@ namespace css = com::sun::star;
 
 }
 
-LocalizedPropertyNode::LocalizedPropertyNode(
-    Node * parent, Type type, bool nillable):
-    Node(parent), type_(type), nillable_(nillable)
+LocalizedPropertyNode::LocalizedPropertyNode(Type type, bool nillable):
+    type_(type), nillable_(nillable)
 {}
 
-rtl::Reference< Node > LocalizedPropertyNode::clone(Node * parent) const {
+rtl::Reference< Node > LocalizedPropertyNode::clone() const {
     rtl::Reference< LocalizedPropertyNode > fresh(
-        new LocalizedPropertyNode(parent, type_, nillable_));
-    members_.clone(fresh.get(), &fresh->members_);
+        new LocalizedPropertyNode(type_, nillable_));
+    members_.clone(&fresh->members_);
     return fresh.get();
 }
 
@@ -107,8 +106,7 @@ void LocalizedPropertyNode::setValue(
     NodeMap::iterator i(Components::resolveNode(locale, &members_));
     if (i == members_.end()) {
         members_.insert(
-            NodeMap::value_type(
-                locale, new LocalizedPropertyValueNode(this, value)));
+            NodeMap::value_type(locale, new LocalizedPropertyValueNode(value)));
     } else {
         dynamic_cast< LocalizedPropertyValueNode * >(
             i->second.get())->setValue(value);

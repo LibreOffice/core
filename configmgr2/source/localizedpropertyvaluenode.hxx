@@ -43,10 +43,9 @@ namespace configmgr {
 
 class LocalizedPropertyValueNode: public Node {
 public:
-    LocalizedPropertyValueNode(
-        Node * parent, com::sun::star::uno::Any const & value);
+    LocalizedPropertyValueNode(com::sun::star::uno::Any const & value);
 
-    virtual rtl::Reference< Node > clone(Node * parent) const;
+    virtual rtl::Reference< Node > clone() const;
 
     virtual rtl::Reference< Node > getMember(rtl::OUString const &);
 
