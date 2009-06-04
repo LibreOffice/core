@@ -3079,7 +3079,7 @@ void SAL_CALL SwXTextDocument::render(
         }
         // <--
 
-        OutputDevice *pOldDev = pVwSh->GetOut();   // TLPDF
+        // TLPDF OutputDevice *pOldDev = pVwSh->GetOut();   // TLPDF
         pVwSh->Prt( pOut, aOptions, 0, bIsPDFExport );
 
         // --> FME 2004-10-08 #i35176#

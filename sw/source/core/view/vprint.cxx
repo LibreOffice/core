@@ -966,7 +966,9 @@ BOOL ViewShell::Prt(
     ASSERT( aPages.Min() <= aPages.Max(),
             "MinSeite groesser MaxSeite." );
 
+#ifdef TL_NOT_NOW /*TLPDF*/
     Printer* pPrt = 0;   //!! will be 0 for PDF export !!    /*TLPDF*/
+#endif // TL_NOT_NOW /*TLPDF*/
     if (bIsPDFExport)
         pOutDev->Push();
     else
@@ -1223,7 +1225,9 @@ BOOL ViewShell::Prt(
             const SwPageDesc *pLastPageDesc = NULL;
             BOOL bSetOrient   = FALSE;
             BOOL bSetPaperSz  = FALSE;
+#ifdef TL_NOT_NOW /*TLPDF*/
             BOOL bSetPaperBin = FALSE;
+#endif // TL_NOT_NOW /*TLPDF*/
             BOOL bSetPrt      = FALSE;
             if (pOutDev)
             {
@@ -1293,9 +1297,9 @@ BOOL ViewShell::Prt(
                             {
                                 pLastPageDesc = rFormatPage.GetPageDesc();
 
+#ifdef TL_NOT_NOW /*TLPDF*/
                                 const BOOL bLandScp = rFormatPage.GetPageDesc()->GetLandscape();
 
-#ifdef TL_NOT_NOW /*TLPDF*/
                                 if( bSetPaperBin )      // Schacht einstellen.
                                     pOutDev->SetPaperBin( rFormatPage.GetFmt()->
                                                        GetPaperBin().GetValue() );
