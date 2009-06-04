@@ -1640,12 +1640,10 @@ rtl::Reference< Node > Components::resolvePath(
             p = set->getMember(seg);
             if (templateName.getLength() != 0 && p != 0) {
                 rtl::OUString name;
-                if (GroupNode * member = dynamic_cast< GroupNode * >(p.get())) {
-                    name = member->getTemplateName();
-                } else if (SetNode * member =
-                           dynamic_cast< SetNode * >(p.get()))
-                {
-                    name = member->getTemplateName();
+                if (GroupNode * mg = dynamic_cast< GroupNode * >(p.get())) {
+                    name = mg->getTemplateName();
+                } else if (SetNode * ms = dynamic_cast< SetNode * >(p.get())) {
+                    name = ms->getTemplateName();
                 } else {
                     OSL_ASSERT(false);
                     throw css::uno::RuntimeException(

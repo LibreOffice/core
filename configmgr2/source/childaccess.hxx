@@ -119,6 +119,8 @@ public:
 
     Status getStatus() const { return status_; }
 
+    bool isCurrent() const;
+
     void reportChanges(
         std::vector< com::sun::star::util::ElementChange > * changes) const;
 
@@ -133,6 +135,7 @@ private:
     rtl::Reference< Access > parent_; // null iff free node
     rtl::OUString name_;
     rtl::Reference< Node > node_;
+    unsigned nodeGeneration_;
     Status status_;
     com::sun::star::uno::Any changedValue_; // ignored unless STATUS_CHANGED
 };

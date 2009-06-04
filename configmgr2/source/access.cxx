@@ -85,7 +85,7 @@ namespace css = com::sun::star;
 
 css::uno::Type mapType(Type type) {
     switch (type) {
-    default: // case TYPE_ERROR: //TODO: can happen?
+    default: // TYPE_ERROR //TODO: can happen?
         return cppu::UnoType< cppu::UnoVoidType >::get();
     case TYPE_NIL: //TODO: can happen?
         return cppu::UnoType< cppu::UnoVoidType >::get();
@@ -656,7 +656,7 @@ void Access::insertByName(
     OSL_ASSERT(thisIs(IS_EXTGROUP_OR_SET|IS_UPDATE));
     osl::MutexGuard g(lock);
     rtl::Reference< Node > p(getNode());
-    if (GroupNode * group = dynamic_cast< GroupNode * >(p.get())) {
+    if (dynamic_cast< GroupNode * >(p.get()) != 0) {
         if (getChild(aName).is()) {
             throw css::container::ElementExistException(
                 aName, static_cast< cppu::OWeakObject * >(this));
@@ -690,7 +690,7 @@ void Access::insertByName(
                     tunnel->getSomething(ChildAccess::getTunnelId())));
         }
         if (!freeAcc.is() ||
-            freeAcc->getStatus() != ChildAccess::STATUS_UNMODIFIED)
+            freeAcc->getStatus() != ChildAccess::STATUS_UNMODIFIED)//TODO
         {
             throw css::lang::IllegalArgumentException(
                 rtl::OUString(
@@ -718,6 +718,7 @@ void Access::insertByName(
         rtl::Reference< RootAccess > root(getRootAccess());
         rtl::Reference< ChildAccess > child(
             new ChildAccess(root, this, aName, freeAcc->getNode()));
+            //TODO: reuse freeAcc instead of new ChildAccess
         children_[aName] = child.get();
         child->setStatus(ChildAccess::STATUS_ADDED);
         freeAcc->bind(root, this); // must not throw
@@ -827,9 +828,8 @@ rtl::Reference< ChildAccess > Access::getChild(rtl::OUString const & name) {
             child.set(i->second); // must not throw
         }
         i->second->releaseNondeleting();
-        if (child.is()) {
-            return child->getStatus() == ChildAccess::STATUS_REMOVED
-                ? rtl::Reference< ChildAccess >() : child;
+        if (child.is() && child->isCurrent()) {
+            return child;
         }
     }
     rtl::Reference< Node > node(getNode()->getMember(name));
@@ -868,7 +868,7 @@ std::vector< rtl::Reference< ChildAccess > > Access::getAllChildren() {
     for (HardChildMap::iterator i(modifiedChildren_.begin());
          i != modifiedChildren_.end(); ++i)
     {
-        if (i->second->getStatus() != ChildAccess::STATUS_REMOVED) {
+        if (i->second->isCurrent()) {
             vec.push_back(i->second);
         }
     }

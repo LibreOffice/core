@@ -86,7 +86,7 @@ ChildAccess::ChildAccess(
     rtl::Reference< Access > const & parent, rtl::OUString const & name,
     rtl::Reference< Node > const & node):
     root_(root), parent_(parent), name_(name), node_(node),
-    status_(STATUS_UNMODIFIED)
+    nodeGeneration_(node->getGeneration()), status_(STATUS_UNMODIFIED)
 {
     OSL_ASSERT(root.is() && parent.is() && node.is());
 }
@@ -94,7 +94,8 @@ ChildAccess::ChildAccess(
 ChildAccess::ChildAccess(
     rtl::Reference< RootAccess > const & root,
     rtl::Reference< Node > const & node):
-    root_(root), node_(node), status_(STATUS_UNMODIFIED)
+    root_(root), node_(node), nodeGeneration_(node->getGeneration()),
+    status_(STATUS_UNMODIFIED)
 {
     OSL_ASSERT(root.is() && node.is());
 }
@@ -202,15 +203,17 @@ void ChildAccess::commitChanges() {
         break;
     case STATUS_CHANGED:
         {
-            rtl::Reference< Node > p(getNode());
-            if (PropertyNode * prop = dynamic_cast< PropertyNode * >(p.get())) {
+            if (PropertyNode * prop =
+                dynamic_cast< PropertyNode * >(node_.get()))
+            {
                 prop->setValue(changedValue_);
             } else if (LocalizedPropertyValueNode * locval =
-                       dynamic_cast< LocalizedPropertyValueNode * >(p.get()))
+                       dynamic_cast< LocalizedPropertyValueNode * >(
+                           node_.get()))
             {
                 locval->setValue(changedValue_);
             } else if (LocalizedPropertyNode * locprop =
-                       dynamic_cast< LocalizedPropertyNode * >(p.get()))
+                       dynamic_cast< LocalizedPropertyNode * >(node_.get()))
             {
                 locprop->setValue(getRootAccess()->getLocale(), changedValue_);
             } else {
@@ -224,11 +227,16 @@ void ChildAccess::commitChanges() {
         break;
     case STATUS_ADDED:
         {
-            rtl::Reference< Node > p(parent_->getNode());
-            if (GroupNode * group = dynamic_cast< GroupNode * >(p.get())) {
-                group->getMembers()[name_] = getNode();
-            } else if (SetNode * set = dynamic_cast< SetNode * >(p.get())) {
-                set->getMembers()[name_] = getNode();
+            rtl::Reference< Node > parent(parent_->getNode());
+            if (GroupNode * group = dynamic_cast< GroupNode * >(parent.get())) {
+                //TODO: collision handling?
+                group->getMembers()[name_] = node_;
+                nodeGeneration_ = node_->nextGeneration();
+            } else if (SetNode * set = dynamic_cast< SetNode * >(parent.get()))
+            {
+                //TODO: collision handling?
+                set->getMembers()[name_] = node_;
+                nodeGeneration_ = node_->nextGeneration();
             } else {
                 OSL_ASSERT(false);
                 throw css::uno::RuntimeException(
@@ -240,11 +248,16 @@ void ChildAccess::commitChanges() {
         break;
     case STATUS_REMOVED:
         {
-            rtl::Reference< Node > p(parent_->getNode());
-            if (GroupNode * group = dynamic_cast< GroupNode * >(p.get())) {
+            rtl::Reference< Node > parent(parent_->getNode());
+            if (GroupNode * group = dynamic_cast< GroupNode * >(parent.get())) {
+                //TODO: collision handling?
                 group->getMembers().erase(name_);
-            } else if (SetNode * set = dynamic_cast< SetNode * >(p.get())) {
+                nodeGeneration_ = node_->nextGeneration();
+            } else if (SetNode * set = dynamic_cast< SetNode * >(parent.get()))
+            {
+                //TODO: collision handling?
                 set->getMembers().erase(name_);
+                nodeGeneration_ = node_->nextGeneration();
             } else {
                 OSL_ASSERT(false);
                 throw css::uno::RuntimeException(
@@ -272,21 +285,31 @@ void ChildAccess::setStatus(Status status, css::uno::Any const & changedValue) {
     changedValue_ = changedValue;
 }
 
+bool ChildAccess::isCurrent() const {
+    switch (status_) {
+    case STATUS_ADDED:
+        return true;
+    case STATUS_REMOVED:
+        return false;
+    default: // STATUS_UNMODIFIED, STATUS_CHANGED
+        return nodeGeneration_ == node_->getGeneration();
+    }
+}
+
 css::uno::Any ChildAccess::asValue() {
     if (status_ == STATUS_CHANGED) {
         return changedValue_;
     }
-    rtl::Reference< Node > p(getNode());
-    if (PropertyNode * prop = dynamic_cast< PropertyNode * >(p.get())) {
+    if (PropertyNode * prop = dynamic_cast< PropertyNode * >(node_.get())) {
         return prop->getValue();
     }
     if (LocalizedPropertyValueNode * locval =
-        dynamic_cast< LocalizedPropertyValueNode * >(p.get()))
+        dynamic_cast< LocalizedPropertyValueNode * >(node_.get()))
     {
         return locval->getValue();
     }
     if (LocalizedPropertyNode * locprop =
-        dynamic_cast< LocalizedPropertyNode * >(p.get()))
+        dynamic_cast< LocalizedPropertyNode * >(node_.get()))
     {
         rtl::OUString locale(getRootAccess()->getLocale());
         if (!Components::allLocales(locale)) {

@@ -44,10 +44,16 @@ public:
 
     virtual rtl::Reference< Node > getMember(rtl::OUString const & name) = 0;
 
+    unsigned nextGeneration() throw () { return ++generation_; }
+
+    unsigned getGeneration() const { return generation_; }
+
 protected:
-    Node() {}
+    Node(): generation_(0) {}
 
     virtual ~Node() {}
+
+    unsigned generation_;
 };
 
 }
