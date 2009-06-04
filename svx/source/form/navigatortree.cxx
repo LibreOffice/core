@@ -1161,9 +1161,13 @@ namespace svxform
             return DND_ACTION_NONE;
 
         // fuer's Undo
-        XubString strUndoDescription(SVX_RES(RID_STR_UNDO_CONTAINER_REPLACE));
-            // TODO : den ::rtl::OUString aussagekraeftiger machen
-        pFormModel->BegUndo(strUndoDescription);
+        const bool bUndo = pFormModel->IsUndoEnabled();
+
+        if( bUndo )
+        {
+            XubString strUndoDescription(SVX_RES(RID_STR_UNDO_CONTAINER_REPLACE));
+            pFormModel->BegUndo(strUndoDescription);
+        }
 
         // ich nehme vor dem Einfuegen eines Eintrages seine Selection raus, damit die Markierung dabei nicht flackert
         // -> das Handeln des Select locken
@@ -1199,9 +1203,15 @@ namespace svxform
             sal_Int32 nIndex = getElementPos(Reference< XIndexAccess > (xContainer, UNO_QUERY), xCurrentChild);
             GetNavModel()->m_pPropChangeList->Lock();
             // die Undo-Action fuer das Rausnehmen
-            if (GetNavModel()->m_pPropChangeList->CanUndo())
+            if ( bUndo && GetNavModel()->m_pPropChangeList->CanUndo())
+            {
                 pFormModel->AddUndo(new FmUndoContainerAction(*pFormModel, FmUndoContainerAction::Removed,
                                                             xContainer, xCurrentChild, nIndex));
+            }
+            else if( !GetNavModel()->m_pPropChangeList->CanUndo() )
+            {
+                FmUndoContainerAction::DisposeElement( xCurrentChild );
+            }
 
             // Events mitkopieren
             Reference< XEventAttacherManager >  xManager(xContainer, UNO_QUERY);
@@ -1226,7 +1236,7 @@ namespace svxform
             nIndex = xContainer->getCount();
 
             // UndoAction fuer das Einfuegen
-            if (GetNavModel()->m_pPropChangeList->CanUndo())
+            if ( bUndo && GetNavModel()->m_pPropChangeList->CanUndo())
                 pFormModel->AddUndo(new FmUndoContainerAction(*pFormModel, FmUndoContainerAction::Inserted,
                                                          xContainer, xCurrentChild, nIndex));
 
@@ -1272,7 +1282,9 @@ namespace svxform
         }
 
         UnlockSelectionHandling();
-        pFormModel->EndUndo();
+
+        if( bUndo )
+            pFormModel->EndUndo();
 
         // During the move, the markings of the underlying view did not change (because the view is not affected by the logical
         // hierarchy of the form/control models. But my selection changed - which means I have to adjust it according to the

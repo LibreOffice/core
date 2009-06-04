@@ -355,10 +355,14 @@ Reference< XForm >  FmFormPageImpl::getDefaultForm()
     if ( !xForm.is() )
     {
         SdrModel* pModel = pPage->GetModel();
-        XubString aStr(SVX_RES(RID_STR_FORM));
-        XubString aUndoStr(SVX_RES(RID_STR_UNDO_CONTAINER_INSERT));
-        aUndoStr.SearchAndReplace('#', aStr);
-        pModel->BegUndo(aUndoStr);
+
+        if( pModel->IsUndoEnabled() )
+        {
+            XubString aStr(SVX_RES(RID_STR_FORM));
+            XubString aUndoStr(SVX_RES(RID_STR_UNDO_CONTAINER_INSERT));
+            aUndoStr.SearchAndReplace('#', aStr);
+            pModel->BegUndo(aUndoStr);
+        }
 
         try
         {
@@ -373,11 +377,14 @@ Reference< XForm >  FmFormPageImpl::getDefaultForm()
             xFormProps->setPropertyValue( FM_PROP_NAME, makeAny( sName ) );
 
             Reference< XIndexContainer > xContainer( xForms, UNO_QUERY );
-            pModel->AddUndo(new FmUndoContainerAction(*(FmFormModel*)pModel,
-                                                       FmUndoContainerAction::Inserted,
-                                                       xContainer,
-                                                       xForm,
-                                                       xContainer->getCount()));
+            if( pModel->IsUndoEnabled() )
+            {
+                pModel->AddUndo(new FmUndoContainerAction(*(FmFormModel*)pModel,
+                                                           FmUndoContainerAction::Inserted,
+                                                           xContainer,
+                                                           xForm,
+                                                           xContainer->getCount()));
+            }
             xForms->insertByName( sName, makeAny( xForm ) );
             xCurrentForm = xForm;
         }
@@ -387,7 +394,8 @@ Reference< XForm >  FmFormPageImpl::getDefaultForm()
             xForm.clear();
         }
 
-        pModel->EndUndo();
+        if( pModel->IsUndoEnabled() )
+            pModel->EndUndo();
     }
 
     return xForm;
@@ -429,10 +437,17 @@ Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::findPlaceInFormCompo
         if (!xForm.is())
         {
             SdrModel* pModel = pPage->GetModel();
-            XubString aStr(SVX_RES(RID_STR_FORM));
-            XubString aUndoStr(SVX_RES(RID_STR_UNDO_CONTAINER_INSERT));
-            aUndoStr.SearchAndReplace('#', aStr);
-            pModel->BegUndo(aUndoStr);
+
+            const bool bUndo = pModel->IsUndoEnabled();
+
+            if( bUndo )
+            {
+                XubString aStr(SVX_RES(RID_STR_FORM));
+                XubString aUndoStr(SVX_RES(RID_STR_UNDO_CONTAINER_INSERT));
+                aUndoStr.SearchAndReplace('#', aStr);
+                pModel->BegUndo(aUndoStr);
+            }
+
             xForm = Reference< ::com::sun::star::form::XForm >(::comphelper::getProcessServiceFactory()->createInstance(FM_SUN_COMPONENT_FORM), UNO_QUERY);
             // a form should always have the command type table as default
             Reference< ::com::sun::star::beans::XPropertySet > xFormProps(xForm, UNO_QUERY);
@@ -465,16 +480,20 @@ Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::findPlaceInFormCompo
 
             xFormProps->setPropertyValue(FM_PROP_NAME, makeAny(aName));
 
-            Reference< ::com::sun::star::container::XIndexContainer >  xContainer( getForms(), UNO_QUERY );
-            pModel->AddUndo(new FmUndoContainerAction(*(FmFormModel*)pModel,
-                                                     FmUndoContainerAction::Inserted,
-                                                     xContainer,
-                                                     xForm,
-                                                     xContainer->getCount()));
-
+            if( bUndo )
+            {
+                Reference< ::com::sun::star::container::XIndexContainer >  xContainer( getForms(), UNO_QUERY );
+                pModel->AddUndo(new FmUndoContainerAction(*(FmFormModel*)pModel,
+                                                         FmUndoContainerAction::Inserted,
+                                                         xContainer,
+                                                         xForm,
+                                                         xContainer->getCount()));
+            }
 
             getForms()->insertByName(aName, makeAny(xForm));
-            pModel->EndUndo();
+
+            if( bUndo )
+                pModel->EndUndo();
         }
         xCurrentForm = xForm;
     }

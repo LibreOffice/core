@@ -569,9 +569,9 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
         // now we have access to the cached info about the property affected
         // and are able to decide wether or not we need an undo action
 
-        bool bAddUndoAction = true;
+        bool bAddUndoAction = rModel.IsUndoEnabled();
         // no UNDO for transient/readonly properties
-        if ( aPropertyPos->second.bIsTransientOrReadOnly )
+        if ( bAddUndoAction && aPropertyPos->second.bIsTransientOrReadOnly )
             bAddUndoAction = false;
 
         if ( bAddUndoAction && aPropertyPos->second.bIsValueProperty )
@@ -996,16 +996,23 @@ FmUndoContainerAction::FmUndoContainerAction(FmFormModel& _rMod,
 FmUndoContainerAction::~FmUndoContainerAction()
 {
     // if we own the object ....
-    Reference< XComponent > xComp( m_xOwnElement, UNO_QUERY );
+    DisposeElement( m_xOwnElement );
+    DBG_DTOR(FmUndoContainerAction,NULL);
+}
+
+//------------------------------------------------------------------------------
+
+void FmUndoContainerAction::DisposeElement( const Reference< XInterface > & xElem )
+{
+    Reference< XComponent > xComp( xElem, UNO_QUERY );
     if ( xComp.is() )
     {
         // and the object does not have a parent
-        Reference< XChild >  xChild( m_xOwnElement, UNO_QUERY );
+        Reference< XChild >  xChild( xElem, UNO_QUERY );
         if ( xChild.is() && !xChild->getParent().is() )
             // -> dispose it
             xComp->dispose();
     }
-    DBG_DTOR(FmUndoContainerAction,NULL);
 }
 
 //------------------------------------------------------------------------------
@@ -1139,10 +1146,17 @@ FmUndoModelReplaceAction::FmUndoModelReplaceAction(FmFormModel& _rMod, SdrUnoObj
 FmUndoModelReplaceAction::~FmUndoModelReplaceAction()
 {
     // dispose our element if nobody else is responsible for
-    Reference< XComponent >  xComp(m_xReplaced, UNO_QUERY);
+    DisposeElement(m_xReplaced);
+}
+
+//------------------------------------------------------------------------------
+
+void FmUndoModelReplaceAction::DisposeElement( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel>& xReplaced )
+{
+    Reference< XComponent >  xComp(xReplaced, UNO_QUERY);
     if (xComp.is())
     {
-        Reference< XChild >  xChild(m_xReplaced, UNO_QUERY);
+        Reference< XChild >  xChild(xReplaced, UNO_QUERY);
         if (!xChild.is() || !xChild->getParent().is())
             xComp->dispose();
     }

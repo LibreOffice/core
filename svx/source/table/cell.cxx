@@ -743,7 +743,7 @@ void Cell::SetOutlinerParaObject( OutlinerParaObject* pTextObject )
 void Cell::AddUndo()
 {
     SdrObject& rObj = GetObject();
-    if( rObj.IsInserted() && GetModel() )
+    if( rObj.IsInserted() && GetModel() && GetModel()->IsUndoEnabled() )
     {
         CellRef xCell( this );
         GetModel()->AddUndo( new CellUndo( &rObj, xCell ) );

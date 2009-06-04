@@ -1214,8 +1214,14 @@ bool FmXFormShell::executeControlConversionSlot( const Reference< XFormComponent
             // create an undo action
             FmFormModel* pModel = m_pShell->GetFormModel();
             DBG_ASSERT(pModel != NULL, "FmXFormShell::executeControlConversionSlot: my shell has no model !");
-            if (pModel)
+            if (pModel && pModel->IsUndoEnabled() )
+            {
                 pModel->AddUndo(new FmUndoModelReplaceAction(*pModel, pFormObject, xOldModel));
+            }
+            else
+            {
+                FmUndoModelReplaceAction::DisposeElement( xOldModel );
+            }
 
             return true;
         }

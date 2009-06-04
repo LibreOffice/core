@@ -305,13 +305,18 @@ BOOL SdrExchangeView::Paste(SvStream& rInput, const String& rBaseURL, USHORT eFo
 BOOL SdrExchangeView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjList* pLst, UINT32 nOptions)
 {
     const SdrModel* pSrcMod=&rMod;
-    if (pSrcMod==pMod) return FALSE; // na so geht's ja nun nicht
+    if (pSrcMod==pMod)
+        return FALSE; // na so geht's ja nun nicht
 
-    BegUndo(ImpGetResStr(STR_ExchangePaste));
+    const bool bUndo = IsUndoEnabled();
+
+    if( bUndo )
+        BegUndo(ImpGetResStr(STR_ExchangePaste));
 
     if( mxSelectionController.is() && mxSelectionController->PasteObjModel( rMod ) )
     {
-        EndUndo();
+        if( bUndo )
+            EndUndo();
         return TRUE;
     }
 
@@ -327,9 +332,12 @@ BOOL SdrExchangeView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjList*
     }
 
     ImpLimitToWorkArea( aPos );
-    if (pLst==NULL) return FALSE;
+    if (pLst==NULL)
+        return FALSE;
+
     BOOL bUnmark=(nOptions&(SDRINSERT_DONTMARK|SDRINSERT_ADDMARK))==0 && !IsTextEdit();
-    if (bUnmark) UnmarkAllObj();
+    if (bUnmark)
+        UnmarkAllObj();
 
     // evtl. umskalieren bei unterschiedlicher MapUnit am Model
     // Dafuer erstmal die Faktoren berechnen
@@ -338,20 +346,23 @@ BOOL SdrExchangeView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjList*
     BOOL bResize=eSrcUnit!=eDstUnit;
     Fraction xResize,yResize;
     Point aPt0;
-    if (bResize) {
+    if (bResize)
+    {
         FrPair aResize(GetMapFactor(eSrcUnit,eDstUnit));
         xResize=aResize.X();
         yResize=aResize.Y();
     }
     SdrObjList*  pDstLst=pLst;
     USHORT nPg,nPgAnz=pSrcMod->GetPageCount();
-    for (nPg=0; nPg<nPgAnz; nPg++) {
+    for (nPg=0; nPg<nPgAnz; nPg++)
+    {
         const SdrPage* pSrcPg=pSrcMod->GetPage(nPg);
 
         // #104148# Use SnapRect, not BoundRect here
         Rectangle aR=pSrcPg->GetAllObjSnapRect();
 
-        if (bResize) ResizeRect(aR,aPt0,xResize,yResize);
+        if (bResize)
+            ResizeRect(aR,aPt0,xResize,yResize);
         Point aDist(aPos-aR.Center());
         Size  aSiz(aDist.X(),aDist.Y());
         //ULONG nDstObjAnz0=pDstLst->GetObjCount();
@@ -363,7 +374,8 @@ BOOL SdrExchangeView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjList*
         // New mechanism to re-create the connections of cloned connectors
         CloneList aCloneList;
 
-        for (nOb=0; nOb<nObAnz; nOb++) {
+        for (nOb=0; nOb<nObAnz; nOb++)
+        {
             const SdrObject* pSrcOb=pSrcPg->GetObj(nOb);
 
             // #116235#
@@ -413,7 +425,9 @@ BOOL SdrExchangeView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjList*
                 SdrInsertReason aReason(SDRREASON_VIEWCALL);
                 pDstLst->InsertObject(pNeuObj,CONTAINER_APPEND,&aReason);
 
-                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pNeuObj));
+                if( bUndo )
+                    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pNeuObj));
+
                 if (bMark) {
                     // Markhandles noch nicht sofort setzen!
                     // Das erledigt das ModelHasChanged der MarkView.
@@ -455,7 +469,10 @@ BOOL SdrExchangeView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjList*
 #endif
         }
     }
-    EndUndo();
+
+    if( bUndo )
+        EndUndo();
+
     return TRUE;
 }
 
@@ -497,17 +514,22 @@ void SdrExchangeView::ImpPasteObject(SdrObject* pObj, SdrObjList& rLst, const Po
     pObj->SetLogicRect(aR);
     SdrInsertReason aReason(SDRREASON_VIEWCALL);
     rLst.InsertObject(pObj,CONTAINER_APPEND,&aReason);
-    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pObj));
+
+    if( IsUndoEnabled() )
+        AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pObj));
+
     SdrPageView* pMarkPV=NULL;
     SdrPageView* pPV = GetSdrPageView();
 
     if(pPV)
     {
-        if (pPV->GetObjList()==&rLst) pMarkPV=pPV;
+        if (pPV->GetObjList()==&rLst)
+            pMarkPV=pPV;
     }
 
     BOOL bMark=pMarkPV!=NULL && !IsTextEdit() && (nOptions&SDRINSERT_DONTMARK)==0;
-    if (bMark) { // Obj in der ersten gefundenen PageView markieren
+    if (bMark)
+    { // Obj in der ersten gefundenen PageView markieren
         MarkObj(pObj,pMarkPV);
     }
 }

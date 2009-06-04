@@ -564,7 +564,8 @@ BOOL SdrDragView::EndDragObj(BOOL bCopy)
             nHdlAnzMerk=GetMarkablePointCount();
         }
 
-        if (IsInsertGluePoint())
+        const bool bUndo = IsUndoEnabled();
+        if (IsInsertGluePoint() && bUndo)
         {
             BegUndo(aInsPointUndoStr);
             AddUndo(pInsPointUndo);
@@ -572,7 +573,7 @@ BOOL SdrDragView::EndDragObj(BOOL bCopy)
 
         bRet = mpCurrentSdrDragMethod->EndSdrDrag(bCopy);
 
-        if (IsInsertGluePoint())
+        if( IsInsertGluePoint() && bUndo)
             EndUndo();
 
         delete mpCurrentSdrDragMethod;
@@ -590,9 +591,12 @@ BOOL SdrDragView::EndDragObj(BOOL bCopy)
         {
             SetMarkHandles();
             bInsPolyPoint=FALSE;
-            BegUndo(aInsPointUndoStr);
-            AddUndo(pInsPointUndo);
-            EndUndo();
+            if( bUndo )
+            {
+                BegUndo(aInsPointUndoStr);
+                AddUndo(pInsPointUndo);
+                EndUndo();
+            }
         }
 
         eDragHdl=HDL_MOVE;

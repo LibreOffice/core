@@ -520,13 +520,15 @@ void SvxTableController::onInsert( sal_uInt16 nSId )
 
         const OUString sSize( RTL_CONSTASCII_USTRINGPARAM( "Size" ) );
 
+        const bool bUndo = mpModel && mpModel->IsUndoEnabled();
+
         switch( nSId )
         {
         case SID_TABLE_INSERT_COL:
         {
             TableModelNotifyGuard aGuard( mxTable.get() );
 
-            if( mpModel )
+            if( bUndo )
             {
                 mpModel->BegUndo( ImpGetResStr(STR_TABLE_INSCOL) );
                 mpModel->AddUndo( mpModel->GetSdrUndoFactory().CreateUndoGeoObject(*pTableObj) );
@@ -544,11 +546,11 @@ void SvxTableController::onInsert( sal_uInt16 nSId )
                             getPropertyValue( sSize ) );
             }
 
-            if( mpModel )
-            {
+            if( bUndo )
                 mpModel->EndUndo();
+
+            if( mpModel )
                 mpModel->SetChanged();
-            }
 
             aStart.mnCol = aEnd.mnCol+1;
             aStart.mnRow = 0;
@@ -561,7 +563,7 @@ void SvxTableController::onInsert( sal_uInt16 nSId )
         {
             TableModelNotifyGuard aGuard( mxTable.get() );
 
-            if( mpModel )
+            if( bUndo )
             {
                 mpModel->BegUndo( ImpGetResStr(STR_TABLE_INSROW ) );
                 mpModel->AddUndo( mpModel->GetSdrUndoFactory().CreateUndoGeoObject(*pTableObj) );
@@ -579,8 +581,11 @@ void SvxTableController::onInsert( sal_uInt16 nSId )
                             getPropertyValue( sSize ) );
             }
 
-            if( mpModel )
+            if( bUndo )
                 mpModel->EndUndo();
+
+            if( mpModel )
+                mpModel->SetChanged();
 
             aStart.mnCol = 0;
             aStart.mnRow = aEnd.mnRow+1;
@@ -843,9 +848,13 @@ void SvxTableController::SetTableStyle( const SfxItemSet* pArgs )
             // found table style with the same name
             Reference< XIndexAccess > xNewTableStyle( xTableFamilyAccess->getByName( pArg->GetValue() ), UNO_QUERY_THROW );
 
-            pModel->BegUndo( ImpGetResStr(STR_TABLE_STYLE) );
+            const bool bUndo = pModel->IsUndoEnabled();
 
-            pModel->AddUndo( new TableStyleUndo( *pTableObj ) );
+            if( bUndo )
+            {
+                pModel->BegUndo( ImpGetResStr(STR_TABLE_STYLE) );
+                pModel->AddUndo( new TableStyleUndo( *pTableObj ) );
+            }
 
 /*
             const sal_Int32 nRowCount = mxTable->getRowCount();
@@ -857,7 +866,8 @@ void SvxTableController::SetTableStyle( const SfxItemSet* pArgs )
                     CellRef xCell( dynamic_cast< Cell* >( mxTable->getCellByPosition( nCol, nRow ).get() ) );
                     if( xCell.is() )
                     {
-                        xCell->AddUndo();
+                        if( bUndo )
+                            xCell->AddUndo();
                         xCell->setAllPropertiesToDefault();
                     }
                 }
@@ -870,7 +880,9 @@ void SvxTableController::SetTableStyle( const SfxItemSet* pArgs )
 */
 
             pTableObj->setTableStyle( xNewTableStyle );
-            pModel->EndUndo();
+
+            if( bUndo )
+                pModel->EndUndo();
         }
     }
     catch( Exception& e )
@@ -913,10 +925,18 @@ void SvxTableController::SetTableStyleSettings( const SfxItemSet* pArgs )
     if( aSettings == pTableObj->getTableStyleSettings() )
         return;
 
-    pModel->BegUndo( ImpGetResStr(STR_TABLE_STYLE_SETTINGS) );
-    pModel->AddUndo( new TableStyleUndo( *pTableObj ) );
+    const bool bUndo = pModel->IsUndoEnabled();
+
+    if( bUndo )
+    {
+        pModel->BegUndo( ImpGetResStr(STR_TABLE_STYLE_SETTINGS) );
+        pModel->AddUndo( new TableStyleUndo( *pTableObj ) );
+    }
+
     pTableObj->setTableStyleSettings( aSettings );
-    pModel->EndUndo();
+
+    if( bUndo )
+        pModel->EndUndo();
 }
 
 void SvxTableController::SetVertical( sal_uInt16 nSId )
@@ -1000,7 +1020,8 @@ void SvxTableController::SplitMarkedCells()
             {
                 TableModelNotifyGuard aGuard( mxTable.get() );
 
-                if( mpModel )
+                const bool bUndo = mpModel && mpModel->IsUndoEnabled();
+                if( bUndo )
                 {
                     mpModel->BegUndo( ImpGetResStr(STR_TABLE_SPLIT) );
                     mpModel->AddUndo( mpModel->GetSdrUndoFactory().CreateUndoGeoObject(*pTableObj) );
@@ -1015,11 +1036,11 @@ void SvxTableController::SplitMarkedCells()
                     xRange->split( nCount, 0 );
                 }
 
-                if( mpModel )
-                {
+                if( bUndo )
                     mpModel->EndUndo();
+
+                if( mpModel )
                     mpModel->SetChanged();
-                }
             }
             aEnd.mnRow += mxTable->getRowCount() - nRowCount;
             aEnd.mnCol += mxTable->getColumnCount() - nColCount;
@@ -1034,7 +1055,8 @@ void SvxTableController::DistributeColumns()
     SdrTableObj* pTableObj = dynamic_cast< SdrTableObj* >( mxTableObj.get() );
     if( pTableObj )
     {
-        if( mpModel )
+        const bool bUndo = mpModel && mpModel->IsUndoEnabled();
+        if( bUndo )
         {
             mpModel->BegUndo( ImpGetResStr(STR_TABLE_DISTRIBUTE_COLUMNS) );
             mpModel->AddUndo( mpModel->GetSdrUndoFactory().CreateUndoGeoObject(*pTableObj) );
@@ -1044,7 +1066,7 @@ void SvxTableController::DistributeColumns()
         getSelectedCells( aStart, aEnd );
         pTableObj->DistributeColumns( aStart.mnCol, aEnd.mnCol );
 
-        if( mpModel )
+        if( bUndo )
             mpModel->EndUndo();
     }
 }
@@ -1054,7 +1076,8 @@ void SvxTableController::DistributeRows()
     SdrTableObj* pTableObj = dynamic_cast< SdrTableObj* >( mxTableObj.get() );
     if( pTableObj )
     {
-        if( mpModel )
+        const bool bUndo = mpModel && mpModel->IsUndoEnabled();
+        if( bUndo )
         {
             mpModel->BegUndo( ImpGetResStr(STR_TABLE_DISTRIBUTE_ROWS) );
             mpModel->AddUndo( mpModel->GetSdrUndoFactory().CreateUndoGeoObject(*pTableObj) );
@@ -1064,7 +1087,7 @@ void SvxTableController::DistributeRows()
         getSelectedCells( aStart, aEnd );
         pTableObj->DistributeRows( aStart.mnRow, aEnd.mnRow );
 
-        if( mpModel )
+        if( bUndo )
             mpModel->EndUndo();
     }
 }
@@ -1543,7 +1566,8 @@ void SvxTableController::MergeRange( sal_Int32 nFirstCol, sal_Int32 nFirstRow, s
         Reference< XMergeableCellRange > xRange( mxTable->createCursorByRange( mxTable->getCellRangeByPosition( nFirstCol, nFirstRow,nLastCol, nLastRow ) ), UNO_QUERY_THROW );
         if( xRange->isMergeable() )
         {
-            if( mpModel )
+            const bool bUndo = mpModel && mpModel->IsUndoEnabled();
+            if( bUndo )
             {
                 mpModel->BegUndo( ImpGetResStr(STR_TABLE_MERGE) );
                 mpModel->AddUndo( mpModel->GetSdrUndoFactory().CreateUndoGeoObject(*mxTableObj.get()) );
@@ -1551,7 +1575,7 @@ void SvxTableController::MergeRange( sal_Int32 nFirstCol, sal_Int32 nFirstRow, s
 
             xRange->merge();
 
-            if( mpModel )
+            if( bUndo )
                 mpModel->EndUndo();
         }
     }
@@ -2257,7 +2281,9 @@ void SvxTableController::SetAttrToSelectedCells(const SfxItemSet& rAttr, bool bR
 {
     if( mxTable.is() )
     {
-        if( mpModel )
+        const bool bUndo = mpModel && mpModel->IsUndoEnabled();
+
+        if( bUndo )
             mpModel->BegUndo( ImpGetResStr(STR_TABLE_NUMFORMAT) );
 
         CellPos aStart, aEnd;
@@ -2281,7 +2307,8 @@ void SvxTableController::SetAttrToSelectedCells(const SfxItemSet& rAttr, bool bR
                 CellRef xCell( dynamic_cast< Cell* >( mxTable->getCellByPosition( nCol, nRow ).get() ) );
                 if( xCell.is() )
                 {
-                    xCell->AddUndo();
+                    if( bUndo )
+                        xCell->AddUndo();
                     xCell->SetMergedItemSetAndBroadcast(aAttr, bReplaceAll);
                 }
             }
@@ -2294,7 +2321,7 @@ void SvxTableController::SetAttrToSelectedCells(const SfxItemSet& rAttr, bool bR
 
         UpdateTableShape();
 
-        if( mpModel )
+        if( bUndo )
             mpModel->EndUndo();
 
     }

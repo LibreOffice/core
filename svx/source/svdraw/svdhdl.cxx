@@ -1250,7 +1250,7 @@ void SdrHdlGradient::FromIAOToItem(SdrObject* _pObj, BOOL bSetItemOnObject, BOOL
             aNewSet.Put(aNewTransItem);
         }
 
-        if(bUndo)
+        if(bUndo && pModel->IsUndoEnabled())
         {
             pModel->BegUndo(SVX_RESSTR(IsGradient() ? SIP_XA_FILLGRADIENT : SIP_XA_FILLTRANSPARENCE));
             pModel->AddUndo(pModel->GetSdrUndoFactory().CreateUndoAttrObject(*_pObj));

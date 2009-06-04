@@ -861,15 +861,22 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
     SfxItemPool&    rPool = rView.GetModel()->GetItemPool();
     SfxItemSet      aSet( rPool, SDRATTR_GRAF_FIRST, SDRATTR_GRAF_LAST );
 
-    String              aUndoStr( rView.GetDescriptionOfMarkedObjects() );
+    const bool bUndo = rView.IsUndoEnabled();
+
+    String              aUndoStr;
+
+    if( bUndo )
+    {
+        aUndoStr = rView.GetDescriptionOfMarkedObjects();
+        aUndoStr.Append( sal_Unicode(' ') );
+    }
+
     const SfxItemSet*   pArgs = rReq.GetArgs();
     const SfxPoolItem*  pItem;
     USHORT              nSlot = rReq.GetSlot();
 
     if( !pArgs || SFX_ITEM_SET != pArgs->GetItemState( nSlot, FALSE, &pItem ))
         pItem = 0;
-
-    aUndoStr.Append( sal_Unicode(' ') );
 
     switch( nSlot )
     {
@@ -878,7 +885,8 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
             if( pItem )
             {
                 aSet.Put( SdrGrafRedItem( ((SfxInt16Item*)pItem)->GetValue() ));
-                aUndoStr.Append( String( SVX_RESSTR( RID_SVXSTR_UNDO_GRAFRED ) ) );
+                if( bUndo )
+                    aUndoStr.Append( String( SVX_RESSTR( RID_SVXSTR_UNDO_GRAFRED ) ) );
             }
         }
         break;
@@ -888,7 +896,8 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
             if( pItem )
             {
                 aSet.Put( SdrGrafGreenItem( ((SfxInt16Item*)pItem)->GetValue() ));
-                aUndoStr.Append( String( SVX_RESSTR( RID_SVXSTR_UNDO_GRAFGREEN ) ) );
+                if( bUndo )
+                    aUndoStr.Append( String( SVX_RESSTR( RID_SVXSTR_UNDO_GRAFGREEN ) ) );
             }
         }
         break;
@@ -898,7 +907,8 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
             if( pItem )
             {
                 aSet.Put( SdrGrafBlueItem( ((SfxInt16Item*)pItem)->GetValue() ));
-                aUndoStr.Append( String( SVX_RESSTR( RID_SVXSTR_UNDO_GRAFBLUE ) ) );
+                if( bUndo )
+                    aUndoStr.Append( String( SVX_RESSTR( RID_SVXSTR_UNDO_GRAFBLUE ) ) );
             }
         }
         break;
@@ -908,7 +918,8 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
             if( pItem )
             {
                 aSet.Put( SdrGrafLuminanceItem( ((SfxInt16Item*)pItem)->GetValue() ));
-                aUndoStr.Append( String( SVX_RESSTR( RID_SVXSTR_UNDO_GRAFLUMINANCE ) ) );
+                if( bUndo )
+                    aUndoStr.Append( String( SVX_RESSTR( RID_SVXSTR_UNDO_GRAFLUMINANCE ) ) );
             }
         }
         break;
@@ -918,7 +929,8 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
             if( pItem )
             {
                 aSet.Put( SdrGrafContrastItem( ((SfxInt16Item*)pItem)->GetValue() ));
-                aUndoStr.Append( String( SVX_RESSTR( RID_SVXSTR_UNDO_GRAFCONTRAST ) ) );
+                if( bUndo )
+                    aUndoStr.Append( String( SVX_RESSTR( RID_SVXSTR_UNDO_GRAFCONTRAST ) ) );
             }
         }
         break;
@@ -928,7 +940,8 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
             if( pItem )
             {
                 aSet.Put( SdrGrafGamma100Item( ((SfxUInt32Item*)pItem)->GetValue() ));
-                aUndoStr.Append( String( SVX_RESSTR( RID_SVXSTR_UNDO_GRAFGAMMA ) ) );
+                if( bUndo )
+                    aUndoStr.Append( String( SVX_RESSTR( RID_SVXSTR_UNDO_GRAFGAMMA ) ) );
             }
         }
         break;
@@ -938,7 +951,8 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
             if( pItem )
             {
                 aSet.Put( SdrGrafTransparenceItem( ((SfxUInt16Item*)pItem)->GetValue() ));
-                aUndoStr.Append( String( SVX_RESSTR( RID_SVXSTR_UNDO_GRAFTRANSPARENCY ) ) );
+                if( bUndo )
+                    aUndoStr.Append( String( SVX_RESSTR( RID_SVXSTR_UNDO_GRAFTRANSPARENCY ) ) );
             }
         }
         break;
@@ -948,7 +962,8 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
             if( pItem )
             {
                 aSet.Put( SdrGrafModeItem( (GraphicDrawMode) ((SfxUInt16Item*)pItem)->GetValue() ));
-                aUndoStr.Append( String( SVX_RESSTR( RID_SVXSTR_UNDO_GRAFMODE ) ) );
+                if( bUndo )
+                    aUndoStr.Append( String( SVX_RESSTR( RID_SVXSTR_UNDO_GRAFMODE ) ) );
             }
         }
         break;
@@ -1075,11 +1090,16 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
                                     rView.SetMarkedObjRect( aNewRect );
                                 else
                                 {
-                                    rView.BegUndo( aUndoStr );
-                                    rView.AddUndo( rView.GetModel()->GetSdrUndoFactory().CreateUndoGeoObject( *pObj ) );
+                                    if( bUndo )
+                                    {
+                                        rView.BegUndo( aUndoStr );
+                                        rView.AddUndo( rView.GetModel()->GetSdrUndoFactory().CreateUndoGeoObject( *pObj ) );
+                                    }
                                     pObj->SetSnapRect( aNewRect );
                                     rView.SetAttributes( aSet );
-                                    rView.EndUndo();
+
+                                    if( bUndo )
+                                        rView.EndUndo();
                                     aSet.ClearItem();
                                 }
                             }
@@ -1106,9 +1126,13 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
 
     if( aSet.Count() )
     {
-        rView.BegUndo( aUndoStr );
+        if( bUndo )
+            rView.BegUndo( aUndoStr );
+
         rView.SetAttributes( aSet );
-        rView.EndUndo();
+
+        if( bUndo )
+            rView.EndUndo();
     }
 }
 
