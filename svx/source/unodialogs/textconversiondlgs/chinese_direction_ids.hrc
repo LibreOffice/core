@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: chinese_dictionarydialog.hrc,v $
- * $Revision: 1.4 $
+ * $RCSfile: chinese_direction_ids.hrc,v $
+ * $Revision: 1.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,30 +27,11 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _TEXTCONVERSIONDLGS_CHINESE_DICTIONARYDLG_HRC
-#define _TEXTCONVERSIONDLGS_CHINESE_DICTIONARYDLG_HRC
 
-#include "resids.hrc"
-#include "buttongroup.hrc"
-#include "chinese_direction_ids.hrc"
+#ifndef _TEXTCONVERSIONDLGS_CHINESE_DIRECTION_IDS_HXX
+#define _TEXTCONVERSIONDLGS_CHINESE_DIRECTION_IDS_HXX
 
-#define ED_TERM             1
-#define ED_MAPPING          2
-
-#define LB_PROPERTY         1
-
-#define CB_REVERSE          1
-
-#define FT_TERM             1
-#define FT_MAPPING          2
-#define FT_PROPERTY         3
-
-#define CT_MAPPINGLIST     1
-
-#define PB_ADD      1
-#define PB_MODIFY   2
-#define PB_DELETE   3
-
-#define FL_BOTTOMLINE       1
+#define RB_TO_SIMPLIFIED    1
+#define RB_TO_TRADITIONAL   2
 
 #endif
