@@ -1233,14 +1233,25 @@ void Star::UpdateFileList( GenericInformationList *pStandLst, ByteString &rVersi
                             sSourceRoot = aEntry.GetFull();
                             GenericInformationList *pProjects = pProjectsKey->GetSubList();
                             if ( pProjects ) {
-                                for ( ULONG k = 0; k < pProjects->Count(); k++ ) {
-                                    ByteString sProject( *pProjects->GetObject( k ));
+                                GenericInformation * pProject = pProjects->First();
+                                while (pProject) {
+                                    String sLocalSourceRoot = sSourceRoot;
+                                    ByteString sProject( *pProject );
                                     String ssProject( sProject, RTL_TEXTENCODING_ASCII_US );
 
-                                    String aBuildListPath = CreateFileName(ssProject);
+                                    ByteString aDirStr ("Directory");
+                                    GenericInformation * pDir = pProject->GetSubInfo (aDirStr);
+                                    if (pDir) {
+                                        ByteString aDir = pDir->GetValue();
+                                        DirEntry aRootEntry = aEntry.GetPath() + DirEntry(aDir);
+                                        sLocalSourceRoot = aRootEntry.GetFull();
+                                    }
+
+                                    String aBuildListPath = CreateFileName(ssProject, sLocalSourceRoot);
 
                                     pFileList->Insert( new String( aBuildListPath ), LIST_APPEND );
                                     ByteString sFile( aBuildListPath, RTL_TEXTENCODING_ASCII_US );
+                                    pProject = pProjects->Next();
                                 }
                             }
                         }
@@ -1483,7 +1494,7 @@ void Star::Read( SolarFileList *pSolarFiles )
 }
 
 /*****************************************************************************/
-String Star::CreateFileName( String sProject )
+String Star::CreateFileName( String& rProject, String& rSourceRoot )
 /*****************************************************************************/
 {
     // this method is used to find solarlist parts of nabours (other projects)
@@ -1491,14 +1502,20 @@ String Star::CreateFileName( String sProject )
     String sBuildList( String::CreateFromAscii( "build.lst" ));
     String sXmlBuildList( String::CreateFromAscii( "build.xlist" ));
 
-    DirEntry aEntry( sSourceRoot );
-    aEntry += DirEntry( sProject );
+    DirEntry aEntry( rSourceRoot );
+    aEntry += DirEntry( rProject );
 
     // if this project not exists, maybe it's a not added project of a CWS
 
-    aEntry.SetExtension(String::CreateFromAscii( "lnk" ));
-    if ( !aEntry.Exists() )
-        aEntry.CutExtension();
+    if ( !aEntry.Exists() ) {
+        aEntry.SetExtension(String::CreateFromAscii( "lnk" ));
+        if ( !aEntry.Exists() )
+            aEntry.CutExtension();
+
+        aEntry.SetExtension(String::CreateFromAscii( "link" ));
+        if ( !aEntry.Exists() )
+            aEntry.CutExtension();
+    }
 
     aEntry += DirEntry( sPrjDir );
 
@@ -1511,7 +1528,7 @@ String Star::CreateFileName( String sProject )
     if (aPossibleEntry.Exists()) {
         aActualEntry = aPossibleEntry;
     } else if ( !aActualEntry.Exists() && aDBNotFoundHdl.IsSet())
-        aDBNotFoundHdl.Call( &sProject );
+        aDBNotFoundHdl.Call( &rProject );
     return aActualEntry.GetFull();
 }
 
@@ -1520,7 +1537,7 @@ void Star::InsertSolarList( String sProject )
 /*****************************************************************************/
 {
     // inserts a new solarlist part of another project
-    String sFileName_l( CreateFileName( sProject ));
+    String sFileName_l( CreateFileName( sProject, sSourceRoot ));
 
     for ( ULONG i = 0; i < aFileList.Count(); i++ ) {
         if (( *aFileList.GetObject( i )) == sFileName_l )
@@ -1733,10 +1750,12 @@ void Star::InsertToken ( char *yytext )
                         pPrj->HasHardDependencies( bHardDep );
                         pPrj->HasFixedDependencies( bFixedDep );
 
+/*
                         if ( nStarMode == STAR_MODE_RECURSIVE_PARSE ) {
                             String sItem( aItem, RTL_TEXTENCODING_ASCII_US );
                             InsertSolarList( sItem );
                         }
+                        */
                     }
                 }
                 break;
@@ -1782,6 +1801,7 @@ void Star::InsertToken ( char *yytext )
     i++;
 
     // und wer raeumt die depLst wieder ab ?
+    // CommandData macht das
 }
 
 /*****************************************************************************/
@@ -2363,11 +2383,19 @@ StarWriter::StarWriter( XmlBuildList* pXmlBuildListObj, GenericInformationList *
                                 String sPrjDir( String::CreateFromAscii( "prj" ));
                                 String sSolarFile( String::CreateFromAscii( "build.lst" ));
 
-                                for ( ULONG k = 0; k < pProjects->Count(); k++ ) {
-                                    ByteString sProject( *pProjects->GetObject( k ));
+                                GenericInformation * pProject = pProjects->First();
+                                while (pProject) {
+                                    ByteString sProject( *pProject);
                                     String ssProject( sProject, RTL_TEXTENCODING_ASCII_US );
 
                                     DirEntry aPrjEntry( aEntry );
+
+                                    ByteString aDirStr ("Directory");
+                                    GenericInformation * pDir = pProject->GetSubInfo (aDirStr);
+                                    if (pDir) {
+                                        ByteString aDir = pDir->GetValue();
+                                        aPrjEntry = aEntry.GetPath() + DirEntry(aDir);
+                                    }
 
                                     aPrjEntry += DirEntry( ssProject );
                                     aPrjEntry += DirEntry( sPrjDir );
@@ -2377,6 +2405,7 @@ StarWriter::StarWriter( XmlBuildList* pXmlBuildListObj, GenericInformationList *
 
                                     ByteString sFile( aPrjEntry.GetFull(), RTL_TEXTENCODING_ASCII_US );
                                     fprintf( stdout, "%s\n", sFile.GetBuffer());
+                                    pProject = pProjects->Next();
                                 }
                             }
                         }
@@ -2737,7 +2766,6 @@ void StarWriter::InsertTokenLine ( ByteString& rString )
                             sClientRestriction = aWhatOS.Copy( aWhatOS.GetToken( 0, ',' ).Len() + 1 );
                             aWhatOS = aWhatOS.GetToken( 0, ',' );
                         }
-                        aWhatOS = aWhatOS.GetToken( 0, ',' );
                         nOSType = GetOSType (aWhatOS);
                     }
                     break;
@@ -2801,14 +2829,15 @@ void StarWriter::InsertTokenLine ( ByteString& rString )
                                 pPrj->AddDependencies( aItem, sMode );
                             else
                                 pPrj->AddDependencies( aItem );
-                            pPrj->AddDependencies( aItem );
                             pPrj->HasHardDependencies( bHardDep );
                             pPrj->HasFixedDependencies( bFixedDep );
 
+                            /*
                             if ( nStarMode == STAR_MODE_RECURSIVE_PARSE ) {
                                 String sItem( aItem, RTL_TEXTENCODING_ASCII_US );
                                 InsertSolarList( sItem );
                             }
+                            */
                         }
 
                     }
