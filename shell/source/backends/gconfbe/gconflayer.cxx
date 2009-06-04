@@ -396,16 +396,11 @@ sal_Bool SAL_CALL isDependencySatisfied( const ConfigurationValue aValue )
 
         case SETTING_WORK_DIRECTORY:
         {
-            osl::Security aSecurity;
-            rtl::OUString aDocumentsDirURL;
-            if ( aSecurity.getHomeDir( aDocumentsDirURL ) )
-            {
-                aDocumentsDirURL += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/Documents" ) );
-                osl::Directory aDocumentsDir( aDocumentsDirURL );
+            rtl::OUString aDocumentsDirURL = xdg_user_dir_lookup("DOCUMENTS");
+            osl::Directory aDocumentsDir( aDocumentsDirURL );
 
-                if( osl::FileBase::E_None == aDocumentsDir.open() )
-                    return sal_True;
-            }
+            if( osl::FileBase::E_None == aDocumentsDir.open() )
+                return sal_True;
         }
             break;
 
