@@ -530,7 +530,7 @@ BOOL AquaSalInfoPrinter::StartJob( const String* i_pFileName,
         {
             mnCurPageRangeStart = 0;
             mnCurPageRangeCount = 0;
-            nAllPages = i_rListener.getPageCount();
+            nAllPages = i_rListener.getFilteredPageCount();
         }
 
         aAccViewState.bNeedRestart = false;
