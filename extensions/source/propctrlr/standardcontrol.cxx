@@ -1055,7 +1055,7 @@ namespace pcr
     {
         SetCompoundControl( TRUE );
 
-        m_pImplEdit = new MultiLineEdit( this, WB_TABSTOP | WB_IGNORETAB | WB_NOBORDER | _nStyle & WB_READONLY );
+        m_pImplEdit = new MultiLineEdit( this, WB_TABSTOP | WB_IGNORETAB | WB_NOBORDER | (_nStyle & WB_READONLY) );
         SetSubEdit( m_pImplEdit );
         m_pImplEdit->Show();
 
