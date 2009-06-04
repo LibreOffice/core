@@ -75,6 +75,7 @@
 #include "propertynode.hxx"
 #include "rootaccess.hxx"
 #include "setnode.hxx"
+#include "status.hxx"
 #include "type.hxx"
 
 namespace configmgr {
@@ -674,7 +675,7 @@ void Access::insertByName(
                 getRootAccess(), this, aName,
                 new PropertyNode(type, true, aElement, true)));
         children_[aName] = child.get();
-        child->setStatus(ChildAccess::STATUS_ADDED);
+        child->setStatus(std::auto_ptr< Status >(new InsertedStatus()));
         //TODO notify change
     } else if (SetNode * set = dynamic_cast< SetNode * >(p.get())) {
         if (getChild(aName).is()) {
@@ -692,7 +693,8 @@ void Access::insertByName(
         if (!freeAcc.is() ||
             (freeAcc->getParentAccess().is() &&
              (freeAcc->getRootAccess() != getRootAccess() ||
-              freeAcc->getStatus() != ChildAccess::STATUS_REMOVED)))
+              (dynamic_cast< RemovedStatus const * >(freeAcc->getStatus()) ==
+               0))))
         {
             throw css::lang::IllegalArgumentException(
                 rtl::OUString(
@@ -720,8 +722,10 @@ void Access::insertByName(
         }
         rtl::Reference< RootAccess > root(getRootAccess());
         children_[aName] = freeAcc.get();
-        freeAcc->setStatus(ChildAccess::STATUS_ADDED); //TODO: must not throw
         freeAcc->bind(root, this, aName); // must not throw
+        freeAcc->setStatus(std::auto_ptr< Status >(new InsertedStatus()));
+            //TODO: must not throw
+            //TODO: or TransferedStatus
         //TODO notify change
     } else {
         OSL_ASSERT(false);
@@ -751,7 +755,7 @@ void Access::removeByName(rtl::OUString const & aName)
             throw css::container::NoSuchElementException(
                 aName, static_cast< cppu::OWeakObject * >(this));
         }
-        child->setStatus(ChildAccess::STATUS_REMOVED);
+        child->setStatus(std::auto_ptr< Status >(new RemovedStatus()));
         //TODO notify change
     } else if (dynamic_cast< SetNode * >(p.get()) != 0) {
         rtl::Reference< ChildAccess > child(getChild(aName));
@@ -759,7 +763,7 @@ void Access::removeByName(rtl::OUString const & aName)
             throw css::container::NoSuchElementException(
                 aName, static_cast< cppu::OWeakObject * >(this));
         }
-        child->setStatus(ChildAccess::STATUS_REMOVED);
+        child->setStatus(std::auto_ptr< Status >(new RemovedStatus()));
 /*TODO:
         ChildMap::iterator j(children_.find(aName));
         rtl::Reference< ChildAccess > oldChild;
@@ -821,13 +825,19 @@ css::uno::Reference< css::uno::XInterface > Access::createInstanceWithArguments(
 }
 
 rtl::Reference< ChildAccess > Access::getChild(rtl::OUString const & name) {
-    WeakChildMap::iterator i(children_.find(name));
-    if (i != children_.end()) {
+    //TODO: does not work yet (modifiedChildren_->isCurrent() false due to mixed genCount etc.)
+    HardChildMap::iterator i(modifiedChildren_.find(name));
+    if (i != modifiedChildren_.end()) {
+        return i->second->isCurrent() ?
+            i->second : rtl::Reference< ChildAccess >();
+    }
+    WeakChildMap::iterator j(children_.find(name));
+    if (j != children_.end()) {
         rtl::Reference< ChildAccess > child;
-        if (i->second->acquireCounting() > 1) {
-            child.set(i->second); // must not throw
+        if (j->second->acquireCounting() > 1) {
+            child.set(j->second); // must not throw
         }
-        i->second->releaseNondeleting();
+        j->second->releaseNondeleting();
         if (child.is() && child->isCurrent()) {
             return child;
         }
@@ -1014,7 +1024,7 @@ void Access::setProperty(css::uno::Any const & value) {
             static_cast< cppu::OWeakObject * >(this), -1);
     }
     dynamic_cast< ChildAccess * >(this)->setStatus(
-        ChildAccess::STATUS_CHANGED, value);
+        std::auto_ptr< Status >(new ChangedStatus(value)));
     //TODO notify change
 }
 

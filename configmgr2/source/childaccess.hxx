@@ -32,6 +32,7 @@
 
 #include "sal/config.h"
 
+#include <memory>
 #include <vector>
 
 #include "com/sun/star/container/XChild.hpp"
@@ -57,6 +58,7 @@ namespace configmgr {
 
 class Node;
 class RootAccess;
+class Status;
 
 class ChildAccess:
     public cppu::ImplInheritanceHelper2<
@@ -64,9 +66,6 @@ class ChildAccess:
         com::sun::star::lang::XUnoTunnel >
 {
 public:
-    enum Status {
-        STATUS_UNMODIFIED, STATUS_CHANGED, STATUS_ADDED, STATUS_REMOVED };
-
     static com::sun::star::uno::Sequence< sal_Int8 > getTunnelId();
 
     ChildAccess(
@@ -113,12 +112,9 @@ public:
 
     void unbind() throw ();
 
-    void setStatus(
-        Status status,
-        com::sun::star::uno::Any const & changedValue =
-            com::sun::star::uno::Any());
+    void setStatus(std::auto_ptr< Status > status);
 
-    Status getStatus() const { return status_; }
+    Status const * getStatus() const { return status_.get(); }
 
     bool isCurrent() const;
 
@@ -137,8 +133,7 @@ private:
     rtl::OUString name_;
     rtl::Reference< Node > node_;
     unsigned nodeGeneration_;
-    Status status_;
-    com::sun::star::uno::Any changedValue_; // ignored unless STATUS_CHANGED
+    std::auto_ptr< Status > status_;
 };
 
 }

@@ -30,6 +30,7 @@
 #include "precompiled_configmgr.hxx"
 #include "sal/config.h"
 
+#include <memory>
 #include <vector>
 
 #include "com/sun/star/lang/NoSupportException.hpp"
@@ -59,8 +60,9 @@
 #include "lock.hxx"
 #include "node.hxx"
 #include "propertynode.hxx"
-#include "setnode.hxx"
 #include "rootaccess.hxx"
+#include "setnode.hxx"
+#include "status.hxx"
 
 namespace configmgr {
 
@@ -86,7 +88,7 @@ ChildAccess::ChildAccess(
     rtl::Reference< Access > const & parent, rtl::OUString const & name,
     rtl::Reference< Node > const & node):
     root_(root), parent_(parent), name_(name), node_(node),
-    nodeGeneration_(node->getGeneration()), status_(STATUS_UNMODIFIED)
+    nodeGeneration_(node->getGeneration())
 {
     OSL_ASSERT(root.is() && parent.is() && node.is());
 }
@@ -94,8 +96,7 @@ ChildAccess::ChildAccess(
 ChildAccess::ChildAccess(
     rtl::Reference< RootAccess > const & root,
     rtl::Reference< Node > const & node):
-    root_(root), node_(node), nodeGeneration_(node->getGeneration()),
-    status_(STATUS_UNMODIFIED)
+    root_(root), node_(node), nodeGeneration_(node->getGeneration())
 {
     OSL_ASSERT(root.is() && node.is());
 }
@@ -171,30 +172,26 @@ void ChildAccess::reportChanges(
     std::vector< css::util::ElementChange > * changes) const
 {
     OSL_ASSERT(changes != 0);
-    if (status_ != STATUS_REMOVED) {
+    if (dynamic_cast< RemovedStatus * >(status_.get()) == 0) {
         for (HardChildMap::const_iterator i(modifiedChildren_.begin());
              i != modifiedChildren_.end(); ++i)
         {
             i->second->reportChanges(changes);
         }
     }
-    switch (status_) {
-    case STATUS_UNMODIFIED:
-        break;
-    case STATUS_CHANGED:
+    if (dynamic_cast< ChangedStatus * >(status_.get()) != 0) {
         changes->push_back(css::util::ElementChange()); //TODO
-        break;
-    case STATUS_ADDED:
+    } else if (dynamic_cast< RemovedStatus * >(status_.get()) != 0) {
         changes->push_back(css::util::ElementChange()); //TODO
-        break;
-    case STATUS_REMOVED:
+    } else if (dynamic_cast< InsertedStatus * >(status_.get()) != 0) {
         changes->push_back(css::util::ElementChange()); //TODO
-        break;
+    } else if (dynamic_cast< TransferedStatus * >(status_.get()) != 0) {
+        changes->push_back(css::util::ElementChange()); //TODO
     }
 }
 
 void ChildAccess::commitChanges() {
-    if (status_ != STATUS_REMOVED) {
+    if (dynamic_cast< RemovedStatus * >(status_.get()) == 0) {
         while (!modifiedChildren_.empty()) {
             rtl::Reference< ChildAccess > child(
                 modifiedChildren_.begin()->second);
@@ -202,107 +199,89 @@ void ChildAccess::commitChanges() {
             modifiedChildren_.erase(modifiedChildren_.begin());
         }
     }
-    switch (status_) {
-    case STATUS_UNMODIFIED:
-        break;
-    case STATUS_CHANGED:
+    if (ChangedStatus * changed =
+        dynamic_cast< ChangedStatus * >(status_.get()))
+    {
+        if (PropertyNode * prop = dynamic_cast< PropertyNode * >(node_.get())) {
+            prop->setValue(changed->getValue());
+        } else if (LocalizedPropertyValueNode * locval =
+                   dynamic_cast< LocalizedPropertyValueNode * >(node_.get()))
         {
-            if (PropertyNode * prop =
-                dynamic_cast< PropertyNode * >(node_.get()))
-            {
-                prop->setValue(changedValue_);
-            } else if (LocalizedPropertyValueNode * locval =
-                       dynamic_cast< LocalizedPropertyValueNode * >(
-                           node_.get()))
-            {
-                locval->setValue(changedValue_);
-            } else if (LocalizedPropertyNode * locprop =
-                       dynamic_cast< LocalizedPropertyNode * >(node_.get()))
-            {
-                locprop->setValue(getRootAccess()->getLocale(), changedValue_);
-            } else {
-                OSL_ASSERT(false);
-                throw css::uno::RuntimeException(
-                    rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM("this cannot happen")),
-                    static_cast< cppu::OWeakObject * >(this));
-            }
-        }
-        break;
-    case STATUS_ADDED:
+            locval->setValue(changed->getValue());
+        } else if (LocalizedPropertyNode * locprop =
+                   dynamic_cast< LocalizedPropertyNode * >(node_.get()))
         {
-            rtl::Reference< Node > parent(parent_->getNode());
-            if (GroupNode * group = dynamic_cast< GroupNode * >(parent.get())) {
-                //TODO: collision handling?
-                group->getMembers()[name_] = node_;
-                nodeGeneration_ = node_->nextGeneration();
-            } else if (SetNode * set = dynamic_cast< SetNode * >(parent.get()))
-            {
-                //TODO: collision handling?
-                set->getMembers()[name_] = node_;
-                nodeGeneration_ = node_->nextGeneration();
-            } else {
-                OSL_ASSERT(false);
-                throw css::uno::RuntimeException(
-                    rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM("this cannot happen")),
-                    static_cast< cppu::OWeakObject * >(this));
-            }
+            locprop->setValue(
+                getRootAccess()->getLocale(), changed->getValue());
+        } else {
+            OSL_ASSERT(false);
+            throw css::uno::RuntimeException(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM("this cannot happen")),
+                static_cast< cppu::OWeakObject * >(this));
         }
-        break;
-    case STATUS_REMOVED:
-        {
-            rtl::Reference< Node > parent(parent_->getNode());
-            if (GroupNode * group = dynamic_cast< GroupNode * >(parent.get())) {
-                //TODO: collision handling?
-                group->getMembers().erase(name_);
-                nodeGeneration_ = node_->nextGeneration();
-            } else if (SetNode * set = dynamic_cast< SetNode * >(parent.get()))
-            {
-                //TODO: collision handling?
-                set->getMembers().erase(name_);
-                nodeGeneration_ = node_->nextGeneration();
-            } else {
-                OSL_ASSERT(false);
-                throw css::uno::RuntimeException(
-                    rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM("this cannot happen")),
-                    static_cast< cppu::OWeakObject * >(this));
-            }
+    } else if (dynamic_cast< RemovedStatus * >(status_.get()) != 0) {
+        rtl::Reference< Node > parent(parent_->getNode());
+        if (GroupNode * group = dynamic_cast< GroupNode * >(parent.get())) {
+            //TODO: collision handling?
+            group->getMembers().erase(name_);
+            nodeGeneration_ = node_->nextGeneration();
+        } else if (SetNode * set = dynamic_cast< SetNode * >(parent.get())) {
+            //TODO: collision handling?
+            set->getMembers().erase(name_);
+            nodeGeneration_ = node_->nextGeneration();
+        } else {
+            OSL_ASSERT(false);
+            throw css::uno::RuntimeException(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM("this cannot happen")),
+                static_cast< cppu::OWeakObject * >(this));
         }
-        break;
+    } else if (dynamic_cast< InsertedStatus * >(status_.get()) != 0) {
+        rtl::Reference< Node > parent(parent_->getNode());
+        if (GroupNode * group = dynamic_cast< GroupNode * >(parent.get())) {
+            //TODO: collision handling?
+            group->getMembers()[name_] = node_;
+            nodeGeneration_ = node_->nextGeneration();
+        } else if (SetNode * set = dynamic_cast< SetNode * >(parent.get())) {
+            //TODO: collision handling?
+            set->getMembers()[name_] = node_;
+            nodeGeneration_ = node_->nextGeneration();
+        } else {
+            OSL_ASSERT(false);
+            throw css::uno::RuntimeException(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM("this cannot happen")),
+                static_cast< cppu::OWeakObject * >(this));
+        }
+    } else if (dynamic_cast< TransferedStatus * >(status_.get()) != 0) {
+        //TODO
     }
-    status_ = STATUS_UNMODIFIED;
-    changedValue_.clear();
+    status_.release();
 }
 
-void ChildAccess::setStatus(Status status, css::uno::Any const & changedValue) {
-    OSL_ASSERT(
-        status != STATUS_UNMODIFIED &&
-        (status == STATUS_CHANGED || !changedValue.hasValue()));
+void ChildAccess::setStatus(std::auto_ptr< Status > status) {
+    OSL_ASSERT(status.get() != 0);
     for (ChildAccess * p = this; p != 0 && p->parent_.is();
          p = dynamic_cast< ChildAccess * >(p->parent_.get()))
     {
         p->parent_->modifiedChildren_[p->name_] = p;
     }
     status_ = status;
-    changedValue_ = changedValue;
 }
 
 bool ChildAccess::isCurrent() const {
-    switch (status_) {
-    case STATUS_ADDED:
-        return true;
-    case STATUS_REMOVED:
-        return false;
-    default: // STATUS_UNMODIFIED, STATUS_CHANGED
-        return nodeGeneration_ == node_->getGeneration();
-    }
+    return dynamic_cast< InsertedStatus * >(status_.get()) != 0 ||
+        dynamic_cast< TransferedStatus * >(status_.get()) != 0 ||
+        (dynamic_cast< RemovedStatus * >(status_.get()) == 0 &&
+         nodeGeneration_ == node_->getGeneration());
 }
 
 css::uno::Any ChildAccess::asValue() {
-    if (status_ == STATUS_CHANGED) {
-        return changedValue_;
+    if (ChangedStatus * changed =
+        dynamic_cast< ChangedStatus * >(status_.get()))
+    {
+        return changed->getValue();
     }
     if (PropertyNode * prop = dynamic_cast< PropertyNode * >(node_.get())) {
         return prop->getValue();
