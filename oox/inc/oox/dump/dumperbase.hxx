@@ -1408,6 +1408,11 @@ protected:
     template< typename Type >
     void                writeValueItem( const ItemFormat& rItemFmt, Type nData );
 
+    template< typename Type >
+    void                writeDecPairItem( const String& rName, Type nData1, Type nData2, sal_Unicode cSep = ',' );
+    template< typename Type >
+    void                writeHexPairItem( const String& rName, Type nData1, Type nData2, sal_Unicode cSep = ',' );
+
 private:
     OutputRef           mxOut;
 };
@@ -1503,6 +1508,24 @@ void OutputObjectBase::writeValueItem( const ItemFormat& rItemFmt, Type nData )
     writeValueItem( aNameUtf8.getStr(), nData, rItemFmt.meFmtType, rItemFmt.maListName );
 }
 
+template< typename Type >
+void OutputObjectBase::writeDecPairItem( const String& rName, Type nData1, Type nData2, sal_Unicode cSep )
+{
+    ItemGuard aItem( *mxOut, rName );
+    mxOut->writeDec( nData1 );
+    mxOut->writeChar( cSep );
+    mxOut->writeDec( nData2 );
+}
+
+template< typename Type >
+void OutputObjectBase::writeHexPairItem( const String& rName, Type nData1, Type nData2, sal_Unicode cSep )
+{
+    ItemGuard aItem( *mxOut, rName );
+    mxOut->writeHex( nData1 );
+    mxOut->writeChar( cSep );
+    mxOut->writeHex( nData2 );
+}
+
 // ============================================================================
 // ============================================================================
 
@@ -1588,6 +1611,11 @@ protected:
     Type1               dumpBool( bool bType1, const String& rName, const NameListWrapper& rListWrp = NO_LIST );
     template< typename Type1, typename Type2 >
     Type1               dumpValue( bool bType1, const ItemFormat& rItemFmt );
+
+    template< typename Type >
+    void                dumpDecPair( const String& rName, sal_Unicode cSep = ',' );
+    template< typename Type >
+    void                dumpHexPair( const String& rName, sal_Unicode cSep = ',' );
 
 private:
     BinaryInputStreamRef mxStrm;
@@ -1700,6 +1728,22 @@ template< typename Type1, typename Type2 >
 Type1 InputObjectBase::dumpValue( bool bType1, const ItemFormat& rItemFmt )
 {
     return bType1 ? dumpValue< Type1 >( rItemFmt ) : static_cast< Type1 >( dumpValue< Type2 >( rItemFmt ) );
+}
+
+template< typename Type >
+void InputObjectBase::dumpDecPair( const String& rName, sal_Unicode cSep )
+{
+    Type nData1, nData2;
+    *mxStrm >> nData1 >> nData2;
+    writeDecPairItem( rName, nData1, nData2, cSep );
+}
+
+template< typename Type >
+void InputObjectBase::dumpHexPair( const String& rName, sal_Unicode cSep )
+{
+    Type nData1, nData2;
+    *mxStrm >> nData1 >> nData2;
+    writeHexPairItem( rName, nData1, nData2, cSep );
 }
 
 // ============================================================================

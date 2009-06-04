@@ -1126,18 +1126,22 @@ void ObjectFormatter::convertTextFormatting( PropertySet& rPropSet, const TextCh
         pFormat->convertTextFormatting( rPropSet, rTextProps );
 }
 
-void ObjectFormatter::convertTextRotation( PropertySet& rPropSet, const ModelRef< TextBody >& rxTextProp )
+void ObjectFormatter::convertTextRotation( PropertySet& rPropSet, const ModelRef< TextBody >& rxTextProp, bool bSupportsStacked )
 {
     if( rxTextProp.is() )
     {
-        // Chart2 expects rotation angle as double value in range of [0,360)
-        double fAngle = static_cast< double >( rxTextProp->getTextProperties().moRotation.get( 0 ) ) / 60000.0;
-        while( fAngle < 0.0 ) fAngle += 360.0;
+        /*  Chart2 expects rotation angle as double value in range of [0,360).
+            OOXML counts clockwise, Chart2 counts counterclockwise. */
+        double fAngle = rxTextProp->getTextProperties().moRotation.get( 0 );
+        fAngle = getDoubleIntervalValue< double >( -fAngle / 60000.0, 0.0, 360.0 );
         rPropSet.setProperty( PROP_TextRotation, fAngle );
 
-        sal_Int32 nVert = rxTextProp->getTextProperties().moVert.get( XML_horz );
-        bool bStacked = (nVert == XML_wordArtVert) || (nVert == XML_wordArtVertRtl);
-        rPropSet.setProperty( PROP_StackCharacters, bStacked );
+        if( bSupportsStacked )
+        {
+            sal_Int32 nVert = rxTextProp->getTextProperties().moVert.get( XML_horz );
+            bool bStacked = (nVert == XML_wordArtVert) || (nVert == XML_wordArtVertRtl);
+            rPropSet.setProperty( PROP_StackCharacters, bStacked );
+        }
     }
 }
 

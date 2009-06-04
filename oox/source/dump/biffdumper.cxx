@@ -676,6 +676,19 @@ sal_uInt16 BiffObjectBase::dumpRepeatedRecId()
     return dumpHex< sal_uInt16 >( "repeated-rec-id", getRecNames() );
 }
 
+void BiffObjectBase::dumpFrHeader( bool bWithFlags, bool bWithRange )
+{
+    dumpHex< sal_uInt16 >( "rec-id", getRecNames() );
+    sal_Int16 nFlags = bWithFlags ? dumpHex< sal_uInt16 >( "flags", "FR-FLAGS" ) : 0x0001;
+    if( bWithRange )
+    {
+        if( getFlag< sal_uInt16 >( nFlags, 0x0001 ) )
+            dumpRange( "range" );
+        else
+            dumpUnused( 8 );
+    }
+}
+
 void BiffObjectBase::dumpDffClientRect()
 {
     lclDumpDffClientRect( out(), in() );
@@ -1736,6 +1749,50 @@ void WorkbookStreamObject::implDumpRecordBody()
             dumpRect< sal_Int32 >( "position", (eBiff <= BIFF4) ? "CONV-TWIP-TO-CM" : "" );
         break;
 
+        case BIFF_ID_CHFRBLOCKBEGIN:
+            dumpFrHeader( true, false );
+            dumpDec< sal_uInt16 >( "type", "CHFRBLOCK-TYPE" );
+            dumpDec< sal_uInt16 >( "context" );
+            dumpDec< sal_uInt16 >( "value-1" );
+            dumpDec< sal_uInt16 >( "value-2" );
+        break;
+
+        case BIFF_ID_CHFRBLOCKEND:
+            dumpFrHeader( true, false );
+            dumpDec< sal_uInt16 >( "type", "CHFRBLOCK-TYPE" );
+            if( rStrm.getRemaining() >= 6 )
+                dumpUnused( 6 );
+        break;
+
+        case BIFF_ID_CHFRINFO:
+        {
+            dumpFrHeader( true, false );
+            dumpDec< sal_uInt8 >( "creator", "CHFRINFO-APPVERSION" );
+            dumpDec< sal_uInt8 >( "writer", "CHFRINFO-APPVERSION" );
+            sal_uInt16 nCount = dumpDec< sal_uInt16 >( "rec-range-count" );
+            out().resetItemIndex();
+            for( sal_uInt16 nIndex = 0; !rStrm.isEof() && (nIndex < nCount); ++nIndex )
+                dumpHexPair< sal_uInt16 >( "#rec-range", '-' );
+        }
+        break;
+
+        case BIFF_ID_CHFRLABELPROPS:
+            dumpFrHeader( true, true );
+            dumpHex< sal_uInt16 >( "flags", "CHFRLABELPROPS-FLAGS" );
+            dumpUniString( "separator", BIFF_STR_SMARTFLAGS );
+        break;
+
+        case BIFF_ID_CHFRUNITPROPS:
+            dumpFrHeader( true, false );
+            dumpDec< sal_Int16 >( "preset", "CHFRUNITPROPS-PRESET" );
+            dumpDec< double >( "unit" );
+            dumpHex< sal_uInt16 >( "flags", "CHFRUNITPROPS-FLAGS" );
+        break;
+
+        case BIFF_ID_CHFRWRAPPER:
+            dumpFrHeader( true, false );
+        break;
+
         case BIFF_ID_CHLABELRANGE:
             dumpDec< sal_uInt16 >( "axis-crossing" );
             dumpDec< sal_uInt16 >( "label-frequency" );
@@ -1884,14 +1941,6 @@ void WorkbookStreamObject::implDumpRecordBody()
             if( eBiff == BIFF8 ) dumpDec< sal_uInt16 >( "label-rotation", "TEXTROTATION" );
         break;
 
-        case BIFF_ID_CHUNITPROPERTIES:
-            dumpRepeatedRecId();
-            dumpUnused( 2 );
-            dumpDec< sal_Int16 >( "preset", "CHUNITPROPERTIES-PRESET" );
-            dumpDec< double >( "unit" );
-            dumpHex< sal_uInt16 >( "flags", "CHUNITPROPERTIES-FLAGS" );
-        break;
-
         case BIFF_ID_CHVALUERANGE:
             dumpDec< double >( "minimum" );
             dumpDec< double >( "maximum" );
@@ -1899,11 +1948,6 @@ void WorkbookStreamObject::implDumpRecordBody()
             dumpDec< double >( "minor-inc" );
             dumpDec< double >( "axis-crossing" );
             dumpHex< sal_uInt16 >( "flags", "CHVALUERANGE-FLAGS" );
-        break;
-
-        case BIFF_ID_CHWRAPPEDRECORD:
-            dumpRepeatedRecId();
-            dumpUnused( 2 );
         break;
 
         case BIFF_ID_CODENAME:
@@ -2511,8 +2555,7 @@ void WorkbookStreamObject::implDumpRecordBody()
         break;
 
         case BIFF_ID_SCREENTIP:
-            dumpRepeatedRecId();
-            dumpRange();
+            dumpFrHeader( false, true );
             dumpNullUnicodeArray( "tooltip" );
         break;
 
@@ -2543,8 +2586,8 @@ void WorkbookStreamObject::implDumpRecordBody()
         break;
 
         case BIFF_ID_SHEETPROTECTION:
-            dumpRepeatedRecId();
-            dumpUnused( 17 );
+            dumpFrHeader( true, true );
+            dumpUnused( 7 );
             dumpHex< sal_uInt16 >( "allowed-flags", "SHEETPROTECTION-FLAGS" );
             dumpUnused( 2 );
         break;
