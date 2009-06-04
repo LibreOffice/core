@@ -796,7 +796,7 @@ BOOL FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                     {
                         SfxStyleSheet* pStyleSheet = static_cast<SfxStyleSheet*>(
                             pPool->GetActualStyleSheet());
-                        if (pStyleSheet != NULL)
+                        if (pStyleSheet != NULL && mpView->IsUndoEnabled() )
                         {
                             // #108981#
                             // Added UNDOs for the WaterCan mode. This was never done in

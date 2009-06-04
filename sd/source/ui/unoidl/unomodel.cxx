@@ -88,6 +88,7 @@
 #include <sdresid.hxx>
 #include <sdpage.hxx>
 
+#include <strings.hrc>
 #include "unohelp.hxx"
 #include <unolayer.hxx>
 #include <unoprnms.hxx>
@@ -2453,10 +2454,12 @@ void SAL_CALL SdDrawPagesAccess::remove( const uno::Reference< drawing::XDrawPag
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    if( NULL == mpModel )
+    if( NULL == mpModel || mpModel->mpDoc == NULL )
         throw lang::DisposedException();
 
-    sal_uInt16 nPageCount = mpModel->mpDoc->GetSdPageCount( PK_STANDARD );
+    SdDrawDocument& rDoc = *mpModel->mpDoc;
+
+    sal_uInt16 nPageCount = rDoc.GetSdPageCount( PK_STANDARD );
     if( nPageCount > 1 )
     {
         // pPage von xPage besorgen und dann die Id (nPos )ermitteln
@@ -2464,16 +2467,33 @@ void SAL_CALL SdDrawPagesAccess::remove( const uno::Reference< drawing::XDrawPag
         if( pSvxPage )
         {
             SdPage* pPage = (SdPage*) pSvxPage->GetSdrPage();
-            if(pPage)
+            if(pPage && ( pPage->GetPageKind() == PK_STANDARD ) )
             {
-                // Es duerfen nur Standardpages DIREKT geloescht werden
-                if( pPage->GetPageKind() == PK_STANDARD )
-                {
-                    sal_uInt16 nPage = pPage->GetPageNum();
-                    mpModel->mpDoc->RemovePage( nPage );
+                sal_uInt16 nPage = pPage->GetPageNum();
 
-                    // Die darauffolgende Seite ist die dazugeoerige Notizseite
-                    mpModel->mpDoc->RemovePage( nPage );
+                SdPage* pNotesPage = static_cast< SdPage* >( rDoc.GetPage( nPage+1 ) );
+
+                bool bUndo = rDoc.IsUndoEnabled();
+                if( bUndo )
+                {
+                    // Add undo actions and delete the pages.  The order of adding
+                    // the undo actions is important.
+                    rDoc.BegUndo( SdResId( STR_UNDO_DELETEPAGES ) );
+                    rDoc.AddUndo(rDoc.GetSdrUndoFactory().CreateUndoDeletePage(*pNotesPage));
+                    rDoc.AddUndo(rDoc.GetSdrUndoFactory().CreateUndoDeletePage(*pPage));
+                }
+
+                rDoc.RemovePage( nPage ); // the page
+                rDoc.RemovePage( nPage ); // the notes page
+
+                if( bUndo )
+                {
+                    rDoc.EndUndo();
+                }
+                else
+                {
+                    delete pNotesPage;
+                    delete pPage;
                 }
             }
         }
@@ -2708,8 +2728,10 @@ void SAL_CALL SdMasterPagesAccess::remove( const uno::Reference< drawing::XDrawP
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    if( NULL == mpModel )
+    if( NULL == mpModel || mpModel->mpDoc == NULL )
         throw lang::DisposedException();
+
+    SdDrawDocument& rDoc = *mpModel->mpDoc;
 
     SdMasterPage* pSdPage = SdMasterPage::getImplementation( xPage );
     if(pSdPage == NULL)
@@ -2726,10 +2748,31 @@ void SAL_CALL SdMasterPagesAccess::remove( const uno::Reference< drawing::XDrawP
     if( pPage->GetPageKind() == PK_STANDARD )
     {
         sal_uInt16 nPage = pPage->GetPageNum();
-        mpModel->mpDoc->RemoveMasterPage( nPage );
 
-        // next page is the notes master
-        mpModel->mpDoc->RemoveMasterPage( nPage );
+        SdPage* pNotesPage = static_cast< SdPage* >( rDoc.GetMasterPage( nPage+1 ) );
+
+        bool bUndo = rDoc.IsUndoEnabled();
+        if( bUndo )
+        {
+            // Add undo actions and delete the pages.  The order of adding
+            // the undo actions is important.
+            rDoc.BegUndo( SdResId( STR_UNDO_DELETEPAGES ) );
+            rDoc.AddUndo(rDoc.GetSdrUndoFactory().CreateUndoDeletePage(*pNotesPage));
+            rDoc.AddUndo(rDoc.GetSdrUndoFactory().CreateUndoDeletePage(*pPage));
+        }
+
+        rDoc.RemoveMasterPage( nPage );
+        rDoc.RemoveMasterPage( nPage );
+
+        if( bUndo )
+        {
+            rDoc.EndUndo();
+        }
+        else
+        {
+            delete pNotesPage;
+            delete pPage;
+        }
     }
 }
 

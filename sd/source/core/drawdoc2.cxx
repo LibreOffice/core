@@ -812,7 +812,10 @@ BOOL SdDrawDocument::MovePages(USHORT nTargetPage)
     USHORT  nNoOfPages         = GetSdPageCount(PK_STANDARD);
     BOOL    bSomethingHappened = FALSE;
 
-    BegUndo(String(SdResId(STR_UNDO_MOVEPAGES)));
+    const bool bUndo = IsUndoEnabled();
+
+    if( bUndo )
+        BegUndo(String(SdResId(STR_UNDO_MOVEPAGES)));
 
     // Liste mit selektierten Seiten
     List    aPageList;
@@ -853,10 +856,12 @@ BOOL SdDrawDocument::MovePages(USHORT nTargetPage)
             if (nPage != 0)
             {
                 SdrPage* pPg = GetPage(nPage);
-                AddUndo(GetSdrUndoFactory().CreateUndoSetPageNum(*pPg, nPage, 1));
+                if( bUndo )
+                    AddUndo(GetSdrUndoFactory().CreateUndoSetPageNum(*pPg, nPage, 1));
                 MovePage(nPage, 1);
                 pPg = GetPage(nPage+1);
-                AddUndo(GetSdrUndoFactory().CreateUndoSetPageNum(*pPg, nPage+1, 2));
+                if( bUndo )
+                    AddUndo(GetSdrUndoFactory().CreateUndoSetPageNum(*pPg, nPage+1, 2));
                 MovePage(nPage+1, 2);
                 bSomethingHappened = TRUE;
             }
@@ -880,10 +885,12 @@ BOOL SdDrawDocument::MovePages(USHORT nTargetPage)
                 if (nPage != nTargetPage)
                 {
                     SdrPage* pPg = GetPage(nPage);
-                    AddUndo(GetSdrUndoFactory().CreateUndoSetPageNum(*pPg, nPage, nTargetPage));
+                    if( bUndo )
+                        AddUndo(GetSdrUndoFactory().CreateUndoSetPageNum(*pPg, nPage, nTargetPage));
                     MovePage(nPage, nTargetPage);
                     pPg = GetPage(nPage+1);
-                    AddUndo(GetSdrUndoFactory().CreateUndoSetPageNum(*pPg, nPage+1, nTargetPage+1));
+                    if( bUndo )
+                        AddUndo(GetSdrUndoFactory().CreateUndoSetPageNum(*pPg, nPage+1, nTargetPage+1));
                     MovePage(nPage+1, nTargetPage+1);
                     bSomethingHappened = TRUE;
                 }
@@ -893,10 +900,12 @@ BOOL SdDrawDocument::MovePages(USHORT nTargetPage)
                 if (nPage != nTargetPage)
                 {
                     SdrPage* pPg = GetPage(nPage+1);
-                    AddUndo(GetSdrUndoFactory().CreateUndoSetPageNum(*pPg, nPage+1, nTargetPage+1));
+                    if( bUndo )
+                        AddUndo(GetSdrUndoFactory().CreateUndoSetPageNum(*pPg, nPage+1, nTargetPage+1));
                     MovePage(nPage+1, nTargetPage+1);
                     pPg = GetPage(nPage);
-                    AddUndo(GetSdrUndoFactory().CreateUndoSetPageNum(*pPg, nPage, nTargetPage));
+                    if( bUndo )
+                        AddUndo(GetSdrUndoFactory().CreateUndoSetPageNum(*pPg, nPage, nTargetPage));
                     MovePage(nPage, nTargetPage);
                     bSomethingHappened = TRUE;
                 }
@@ -906,7 +915,8 @@ BOOL SdDrawDocument::MovePages(USHORT nTargetPage)
         }
     }
 
-    EndUndo();
+    if( bUndo )
+        EndUndo();
 
     return bSomethingHappened;
 }

@@ -460,6 +460,7 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
     // -------------------------------------
 
     SdDrawDocument* pDoc = mrDocShell.GetDoc();
+    pDoc->EnableUndo(false);
     pDoc->NewOrLoadCompleted( NEW_DOC );
     pDoc->CreateFirstPages();
     pDoc->StopWorkStartupDelay();
@@ -806,6 +807,7 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
         }
     }
 
+    pDoc->EnableUndo(true);
     mrDocShell.ClearUndoBuffer();
     return nRet == 0;
 }

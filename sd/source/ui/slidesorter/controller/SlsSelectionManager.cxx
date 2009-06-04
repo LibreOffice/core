@@ -60,6 +60,7 @@
 
 
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::uno;
 using namespace ::sd::slidesorter::model;
 using namespace ::sd::slidesorter::view;
@@ -156,51 +157,33 @@ void SelectionManager::DeleteSelectedPages (void)
 void SelectionManager::DeleteSelectedNormalPages (const ::std::vector<SdPage*>& rSelectedPages)
 {
     // Prepare the deletion via the UNO API.
-    Reference<drawing::XDrawPages> xPages;
     OSL_ASSERT(mrSlideSorter.GetModel().GetEditMode() == EM_PAGE);
 
-    Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier (
-        mrSlideSorter.GetModel().GetDocument()->getUnoModel(), UNO_QUERY);
-    if (xDrawPagesSupplier.is())
-        xPages = xDrawPagesSupplier->getDrawPages();
-
-    SdDrawDocument* pDocument = mrSlideSorter.GetModel().GetDocument();
-    OSL_ASSERT(pDocument!=NULL);
-
-    // Iterate over all pages that where seleted when this method was called
-    // and delete the draw page the notes page.  The iteration is done in
-    // reverse order so that when one slide is not deleted (to avoid an
-    // empty document) the remaining slide is the first one.
-    ::std::vector<SdPage*>::const_reverse_iterator aI;
-    for (aI=rSelectedPages.rbegin(); aI!=rSelectedPages.rend(); aI++)
+    try
     {
-        // Do not delete the last slide in the document.
-        if (pDocument->GetSdPageCount(PK_STANDARD) <= 1)
-            break;
+        Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier( mrSlideSorter.GetModel().GetDocument()->getUnoModel(), UNO_QUERY_THROW );
+        Reference<drawing::XDrawPages> xPages( xDrawPagesSupplier->getDrawPages(), UNO_QUERY_THROW );
 
-        USHORT nPage = ((*aI)->GetPageNum()-1) / 2;
-
-        // Get pointers to the page and its notes page.
-        SdPage* pPage = pDocument->GetSdPage (nPage, PK_STANDARD);
-        SdPage* pNotesPage = pDocument->GetSdPage (nPage, PK_NOTES);
-
-        DBG_ASSERT(pPage!=NULL, "page does not exist");
-        DBG_ASSERT(pNotesPage!=NULL, "notes does not exist");
-
-        // Remove regular slides with the API.
-        if (xPages.is())
+        // Iterate over all pages that where seleted when this method was called
+        // and delete the draw page the notes page.  The iteration is done in
+        // reverse order so that when one slide is not deleted (to avoid an
+        // empty document) the remaining slide is the first one.
+        ::std::vector<SdPage*>::const_reverse_iterator aI;
+        for (aI=rSelectedPages.rbegin(); aI!=rSelectedPages.rend(); aI++)
         {
-            SlideSorterView& rView (mrSlideSorter.GetView());
+            // Do not delete the last slide in the document.
+            if (xPages->getCount() <= 1)
+                break;
 
-            // Add undo actions and delete the pages.  The order of adding
-            // the undo actions is important.
-            rView.AddUndo(rView.GetModel()->GetSdrUndoFactory().CreateUndoDeletePage(*pNotesPage));
-            rView.AddUndo(rView.GetModel()->GetSdrUndoFactory().CreateUndoDeletePage(*pPage));
+            USHORT nPage = ((*aI)->GetPageNum()-1) / 2;
 
-            // The XDrawPagesSupplier deletes both the slide and notes page.
-            xPages->remove (Reference<drawing::XDrawPage>(
-                pPage->getUnoPage(), UNO_QUERY));
+            Reference< XDrawPage > xPage( xPages->getByIndex( nPage ), UNO_QUERY_THROW );
+            xPages->remove(xPage);
         }
+    }
+    catch( Exception& )
+    {
+        DBG_ERROR("SelectionManager::DeleteSelectedNormalPages(), exception caught!");
     }
 }
 
@@ -212,43 +195,31 @@ void SelectionManager::DeleteSelectedMasterPages (const ::std::vector<SdPage*>& 
     // Prepare the deletion via the UNO API.
     OSL_ASSERT(mrSlideSorter.GetModel().GetEditMode() == EM_MASTERPAGE);
 
-    SdDrawDocument* pDocument = mrSlideSorter.GetModel().GetDocument();
-    OSL_ASSERT(pDocument!=NULL);
-
-    // Iterate over all pages that where seleted when this method was called
-    // and delete the draw page the notes page.  The iteration is done in
-    // reverse order so that when one slide is not deleted (to avoid an
-    // empty document) the remaining slide is the first one.
-    ::std::vector<SdPage*>::const_reverse_iterator aI;
-    for (aI=rSelectedPages.rbegin(); aI!=rSelectedPages.rend(); aI++)
+    try
     {
-        // Do not delete the last slide in the document.
-        if (pDocument->GetMasterSdPageCount(PK_STANDARD) <= 1)
-            break;
+        Reference<drawing::XMasterPagesSupplier> xDrawPagesSupplier( mrSlideSorter.GetModel().GetDocument()->getUnoModel(), UNO_QUERY_THROW );
+        Reference<drawing::XDrawPages> xPages( xDrawPagesSupplier->getMasterPages(), UNO_QUERY_THROW );
 
-        USHORT nPage = ((*aI)->GetPageNum()-1) / 2;
-
-        // Get pointers to the page and its notes page.
-        SdPage* pPage = pDocument->GetMasterSdPage (nPage, PK_STANDARD);
-        SdPage* pNotesPage = pDocument->GetMasterSdPage (nPage, PK_NOTES);
-
-        DBG_ASSERT(pPage!=NULL, "page does not exist");
-        DBG_ASSERT(pNotesPage!=NULL, "notes does not exist");
-
-        // Remove master slides with the core since the API does not only
-        // remove but also delete the page.
-        if (pDocument->GetMasterPageUserCount(pPage) == 0)
+        // Iterate over all pages that where seleted when this method was called
+        // and delete the draw page the notes page.  The iteration is done in
+        // reverse order so that when one slide is not deleted (to avoid an
+        // empty document) the remaining slide is the first one.
+        ::std::vector<SdPage*>::const_reverse_iterator aI;
+        for (aI=rSelectedPages.rbegin(); aI!=rSelectedPages.rend(); aI++)
         {
-            SlideSorterView& rView (mrSlideSorter.GetView());
+            // Do not delete the last slide in the document.
+            if (xPages->getCount() <= 1)
+                break;
 
-            // Add undo actions and delete the pages.  The order of adding
-            // the undo actions is important.
-            rView.AddUndo(rView.GetModel()->GetSdrUndoFactory().CreateUndoDeletePage(*pNotesPage));
-            rView.AddUndo(rView.GetModel()->GetSdrUndoFactory().CreateUndoDeletePage(*pPage));
+            USHORT nPage = ((*aI)->GetPageNum()-1) / 2;
 
-            pDocument->RemoveMasterPage (pPage->GetPageNum());
-            pDocument->RemoveMasterPage (pNotesPage->GetPageNum());
+            Reference< XDrawPage > xPage( xPages->getByIndex( nPage ), UNO_QUERY_THROW );
+            xPages->remove(xPage);
         }
+    }
+    catch( Exception& )
+    {
+        DBG_ERROR("SelectionManager::DeleteSelectedMasterPages(), exception caught!");
     }
 }
 

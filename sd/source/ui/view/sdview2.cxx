@@ -421,10 +421,13 @@ void View::StartDrag( const Point& rStartPos, ::Window* pWindow )
         mpDragSrcMarkList = new SdrMarkList(GetMarkedObjectList());
         mnDragSrcPgNum = GetSdrPageView()->GetPage()->GetPageNum();
 
-        String aStr( SdResId(STR_UNDO_DRAGDROP) );
-        aStr += sal_Unicode(' ');
-        aStr += mpDragSrcMarkList->GetMarkDescription();
-        BegUndo(aStr);
+        if( IsUndoEnabled() )
+        {
+            String aStr( SdResId(STR_UNDO_DRAGDROP) );
+            aStr += sal_Unicode(' ');
+            aStr += mpDragSrcMarkList->GetMarkDescription();
+            BegUndo(aStr);
+        }
         CreateDragDataObject( this, *pWindow, rStartPos );
     }
 }
@@ -433,6 +436,8 @@ void View::StartDrag( const Point& rStartPos, ::Window* pWindow )
 
 void View::DragFinished( sal_Int8 nDropAction )
 {
+    const bool bUndo = IsUndoEnabled();
+
     SdTransferable* pDragTransferable = SD_MOD()->pTransferDrag;
 
     if( pDragTransferable )
@@ -444,7 +449,9 @@ void View::DragFinished( sal_Int8 nDropAction )
         !IsPresObjSelected() )
     {
         mpDragSrcMarkList->ForceSort();
-        BegUndo();
+
+        if( bUndo )
+            BegUndo();
 
         ULONG nm, nAnz = mpDragSrcMarkList->GetMarkCount();
 
@@ -452,7 +459,8 @@ void View::DragFinished( sal_Int8 nDropAction )
         {
             nm--;
             SdrMark* pM=mpDragSrcMarkList->GetMark(nm);
-            AddUndo(mpDoc->GetSdrUndoFactory().CreateUndoDeleteObject(*pM->GetMarkedSdrObj()));
+            if( bUndo )
+                AddUndo(mpDoc->GetSdrUndoFactory().CreateUndoDeleteObject(*pM->GetMarkedSdrObj()));
         }
 
         mpDragSrcMarkList->GetMark(0)->GetMarkedSdrObj()->GetOrdNum();
@@ -474,13 +482,15 @@ void View::DragFinished( sal_Int8 nDropAction )
             }
         }
 
-        EndUndo();
+        if( bUndo )
+            EndUndo();
     }
 
     if( pDragTransferable )
         pDragTransferable->SetInternalMove( FALSE );
 
-    EndUndo();
+    if( bUndo )
+        EndUndo();
     mnDragSrcPgNum = SDRPAGE_NOTFOUND;
     delete mpDragSrcMarkList;
     mpDragSrcMarkList = NULL;
