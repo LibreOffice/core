@@ -153,13 +153,6 @@ CodeExplorer::AcknowledgeResult()
     }   // end switch(CurResult().eStackAction)
 }
 
-ary::loc::Le_id
-CodeExplorer::CurFile() const
-{
-    // KORR_FUTURE
-    return ary::loc::Le_id(0);
-}
-
 const Token &
 CodeExplorer::CurToken() const
 {

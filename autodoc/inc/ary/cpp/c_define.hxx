@@ -61,10 +61,6 @@ class Define : public DefineEntity
                                                 i_definition,
                             loc::Le_id          i_declaringFile );
     virtual             ~Define();
-
-    // INQUIRY
-    void                GetText(
-                            csv::StreamStr &    o_rText ) const;
   private:
     // Interface csv::ConstProcessorClient
     virtual void        do_Accept(

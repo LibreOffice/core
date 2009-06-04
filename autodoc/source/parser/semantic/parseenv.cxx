@@ -87,17 +87,3 @@ ParseEnvironment::ParseEnvironment( ParseEnvironment *  i_pParent )
         pCurSubPe(0)
 {
 }
-
-void
-ParseEnvironment::GlobalHandlingOfSyntaxError( const char * i_sTokenText,
-                                               const char * i_sFileName,
-                                               uintt        i_nLineCount )
-{
-    throw X_Parser( X_Parser::x_UnexpectedToken,
-                    i_sTokenText,
-                    i_sFileName,
-                    i_nLineCount );
-}
-
-
-

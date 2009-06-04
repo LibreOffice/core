@@ -79,8 +79,6 @@ class PE_File : public Cpp_PE
                             const cpp::Token &  i_rTok );
     virtual Cpp_PE *    Handle_ChildFailure();
 
-    ary::cpp::Gate &    AryGate() const;
-
   private:
     typedef SubPe< PE_File, PE_Namespace>   SP_Namespace;
     typedef SubPe< PE_File, PE_Typedef>     SP_Typedef;

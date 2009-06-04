@@ -43,29 +43,6 @@ namespace ary
 namespace cpp
 {
 
-
-Class::Class()
-    :   aEssentials(),
-        aAssignedNode(),
-           aBaseClasses(),
-           aTemplateParameterTypes(),
-        aClasses(),
-        aEnums(),
-        aTypedefs(),
-        aOperations(),
-        aStaticOperations(),
-        aData(),
-        aStaticData(),
-        aFriendClasses(),
-        aFriendOperations(),
-        aKnownDerivatives(),
-        eClassKey(CK_class),
-        eProtection(PROTECT_global),
-        eVirtuality(VIRTUAL_none)
-{
-    aAssignedNode.Assign_Entity(*this);
-}
-
 Class::Class( const String  &     i_sLocalName,
               Ce_id               i_nOwner,
               E_Protection        i_eProtection,
@@ -305,21 +282,6 @@ Class::PosOfName( const List_LocalCe &  i_rList,
     }
     return i_rList.end();
 }
-
-Class::Iterator_Locals
-Class::PosOfName( List_LocalCe &    i_rList,
-                  const String  &   i_sName )
-{
-    for ( Iterator_Locals ret = i_rList.begin();
-          ret != i_rList.end();
-          ++ret )
-    {
-         if ( (*ret).sLocalName == i_sName )
-            return ret;
-    }
-    return i_rList.end();
-}
-
 
 }   //  namespace   cpp
 }   //  namespace   ary

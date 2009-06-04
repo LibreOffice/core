@@ -53,9 +53,6 @@ struct Ce_Traits
     static entity_base_type &
                         EntityOf_(
                             id_type             i_id );
-    static id_type      IdOf_(
-                            const entity_base_type &
-                                                i_entity );
 };
 
 

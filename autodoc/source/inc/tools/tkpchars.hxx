@@ -76,12 +76,6 @@ class CharacterSource
         **/
         void            LoadText(
                             csv::bstream &      io_rSource);
-        /** Loads the complete contents of in_rSource into the classes private memory.
-            If in_rSource is a file, it has to be open of course.
-            After loading the text, the CurChar() is set on the begin of the text.
-        **/
-        void            LoadText(
-                            const char *        i_sSourceText );
 
         void            InsertTextAtCurPos(
                             const char *        i_sText2Insert );

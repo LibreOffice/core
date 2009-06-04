@@ -78,12 +78,6 @@ struct ChildList_Display::S_AreaCo
                             Area_Result &       o_rResult,
                             const char *        i_sLabel,
                             const char *        i_sTitle );
-                        S_AreaCo(
-                            Area_Result &       o_rResult,
-                            const char *        i_sLabel,
-                            const char *        i_sTitle_classes,
-                            const char *        i_sTitle_structs,
-                            const char *        i_sTitle_unions );
                         ~S_AreaCo();
 
     void                PerformResult();
@@ -559,17 +553,6 @@ S_AreaCo::S_AreaCo( Area_Result &       o_rResult,
                     const char *        i_sLabel,
                     const char *        i_sTitle )
     :   aArea(i_sLabel, i_sTitle),
-        pResult(&o_rResult)
-{
-}
-
-ChildList_Display::
-S_AreaCo::S_AreaCo( Area_Result &       o_rResult,
-                    const char *        i_sLabel,
-                    const char *        i_sTitle_classes,
-                    const char *        i_sTitle_structs,
-                    const char *        i_sTitle_unions )
-    :   aArea(i_sLabel, i_sTitle_classes, i_sTitle_structs, i_sTitle_unions ),
         pResult(&o_rResult)
 {
 }

@@ -66,20 +66,6 @@ LinkHelper::Search_Module( output::Node & i_node ) const
     return & rEnv.Data().Find_Module( ary::idl::Ce_id(nId) );
 }
 
-LinkHelper::OutPosition
-LinkHelper::PositionOf_Ce(const CE & i_ce) const
-{
-    static StringVector aModule_;
-    csv::erase_container(aModule_);
-    String sCe;
-    String sMember;
-    rEnv.Data().Get_CeText(aModule_, sCe, sMember, i_ce);
-    output::Node &
-        rNode = rEnv.OutputTree().RootNode().Provide_Child(aModule_);
-    return OutPosition(rNode,sCe);
-}
-
-
 namespace
 {
     const String C_sXrefsSuffix("-xref");

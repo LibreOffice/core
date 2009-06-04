@@ -59,22 +59,6 @@ EasyWriter::Finish_OutputNode()
     aCurDestination.pop();
 }
 
-void
-EasyWriter::Add_HorizontalLine()
-{
-    Out() << new HorizontalLine;
-}
-
-void
-EasyWriter::Write( const char *        i_sFormatTag,
-                   const char *        i_sText )
-{
-    DYN csi::xml::Element * dpNew = new csi::xml::APureElement( i_sFormatTag );
-    *dpNew << i_sText;
-    Out() << dpNew;
-}
-
-
 csi::xml::Element &
 EasyWriter::Out()
 {

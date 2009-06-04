@@ -36,7 +36,6 @@
 #include <cosv/tpl/processor.hxx>
 #include <ary/idl/i_gate.hxx>
 #include <ary/idl/ip_type.hxx>
-#include "i_strconst.hxx"
 
 
 

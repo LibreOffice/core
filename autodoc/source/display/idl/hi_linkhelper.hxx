@@ -56,8 +56,6 @@ class LinkHelper
     OutPosition         PositionOf_CurModule() const
                         { return OutPosition( rEnv.CurPosition(),
                                               output::ModuleFileName()); }
-    OutPosition         PositionOf_Ce(
-                            const CE &          i_ce ) const;
 
     OutPosition         PositionOf_CurXRefs(
                             const String &      i_ceName) const;
@@ -74,21 +72,6 @@ class LinkHelper
 
     const CE *          Search_CeFromType(
                             ary::idl::Type_id   i_type ) const;
-
-
-//        OutPosition         Search_Ce(
-//                                String &            o_member,
-//                                const char *        i_sText,
-//                            OutPosition *       i_referingScope = 0 ) const;
-
-//    OutPosition         PositionOf_Ce(
-//                            const char *        i_sScope,
-//                            const char *        i_sCeName ) const
-//                        { const CE *
-//                            pce = rEnv.Data().Search_Ce( i_sScope,
-//                                                       i_sCeName );
-//                          if (pce != 0) return rEnv.Data().PositionOfCe(*pce);
-//                          else return OutPosition(); }
 
     void                Get_Link2Position(
                             StreamStr &         o_link,

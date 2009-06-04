@@ -651,28 +651,6 @@ HF_IdlTypeText::errorOut_UnresolvedLink( const StringVector & i_module,
     errorOut_UnresolvedLink(slName().c_str());
 }
 
-void
-HF_IdlTypeText::errorOut_UnresolvedLink( const String &      i_module,
-                                         const String &      i_ce,
-                                         const String &      i_member ) const
-{
-    StreamLock slName(500);
-
-    if (i_module.size() > 0)
-    {
-        slName() << i_module;
-         if (NOT i_ce.empty())
-            slName() << "::";
-    }
-    if (NOT i_ce.empty())
-    {
-        slName() << i_ce;
-        if (NOT i_member.empty())
-            slName() << "::" << i_member;
-    }
-    errorOut_UnresolvedLink(slName().c_str());
-}
-
 bool
 HF_IdlTypeText::is_ExternLink( const StringVector & i_module ) const
 {

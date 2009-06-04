@@ -60,7 +60,6 @@ class OperationSignature
   public:
     typedef std::vector<Type_id>    ParameterTypeList;
 
-                        OperationSignature();
                         OperationSignature(
                             ParameterTypeList   i_parameterTypes,  // Non const, because it will be swapped with aParameterTypes.
                             E_ConVol            i_conVol );

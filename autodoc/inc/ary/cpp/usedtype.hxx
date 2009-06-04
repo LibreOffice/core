@@ -81,8 +81,6 @@ class UsedType : public Type
                             const char *        i_sSeg );
     ut::List_TplParameter &
                         Enter_Template();
-    void                LeaveTemplate();
-
     void                Set_Unsigned();
     void                Set_Signed();
     void                Set_BuiltIn(
@@ -191,12 +189,6 @@ class List_TplParameter
 
     void                AddParam_Type(
                             Type_id             i_nType );
-    void                AddParam_Constant(
-                            const String  &     i_sConst );
-
-    const_iterator      Begin() const;
-    const_iterator      End() const;
-
     /// puts "< " TemplateArgumentList " >" to o_rOut.
     void                Get_Text(
                             StreamStr &         o_rOut,

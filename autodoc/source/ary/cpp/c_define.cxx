@@ -75,37 +75,5 @@ Define::inq_DefinitionText() const
      return aDefinition;
 }
 
-void
-Define::GetText( StreamStr & o_rText ) const
-{
-    if ( aDefinition.begin() == aDefinition.end() )
-        return;
-
-
-    bool bSwitch_Stringify = false;
-    bool bSwitch_Concatenate = false;
-
-    for ( StringVector::const_iterator it = aDefinition.begin();
-          it != aDefinition.end();
-          ++it )
-    {
-        if ( HandleOperatorsBeforeTextItem( o_rText,
-                                            bSwitch_Stringify,
-                                            bSwitch_Concatenate,
-                                            *it ) )
-        {
-            continue;
-        }
-
-        o_rText << (*it);
-
-        Do_bStringify_end(o_rText, bSwitch_Stringify);
-        o_rText << " ";
-    }
-    o_rText.seekp(-1, csv::cur);
-}
-
-
-
 }   // namespace cpp
 }   // namespace ary

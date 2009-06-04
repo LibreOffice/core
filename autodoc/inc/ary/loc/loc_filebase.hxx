@@ -52,8 +52,6 @@ class FileBase : public LocationEntity
   public:
     virtual             ~FileBase() {}
 
-    String              Extension() const;
-
   protected:
                         FileBase(
                             const String  &     i_localName ,

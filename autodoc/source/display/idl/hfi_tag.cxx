@@ -93,28 +93,6 @@ HF_IdlTag::Produce_byData( Xml::Element &              o_rTitle,
 }
 
 void
-HF_IdlTag::Produce_byData( Xml::Element &      o_rTitle,
-                           Xml::Element &      o_rText,
-                           const std::vector< csi::dsapi::DT_SeeAlsoAtTag* > &
-                                                i_seeAlsoVector ) const
-{
-    o_rTitle << "See also";
-    for ( std::vector< csi::dsapi::DT_SeeAlsoAtTag* >::const_iterator
-            it = i_seeAlsoVector.begin();
-          it != i_seeAlsoVector.end();
-          ++it )
-    {
-        if (it != i_seeAlsoVector.begin())
-        {
-            o_rText << ", ";
-        }
-        HF_IdlTypeText
-            aLinkText(Env(), o_rText, true, &aTextOut.ScopeGivingCe());
-        aLinkText.Produce_byData( (*it)->LinkText() );
-    }
-}
-
-void
 HF_IdlTag::Display_StdAtTag( const csi::dsapi::DT_StdAtTag & i_rTag )
 {
     if ( i_rTag.Text().IsEmpty() )

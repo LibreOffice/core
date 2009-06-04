@@ -56,7 +56,6 @@ class Variable : public CodeEntity
     // LIFECYCLE
     enum E_ClassId { class_id = 1005 };
 
-                        Variable();
                         Variable(
                             const String  &     i_sLocalName,
                             Ce_id               i_nOwner,

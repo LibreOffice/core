@@ -85,17 +85,6 @@ class NameLookup
                             Ce_id               i_id,
                             ClassId             i_class,
                             Ce_id               i_owner );
-    // INQUIRY
-    /**
-    */
-    bool                Has_Name(
-                            const String &      i_name,
-                            ClassId             i_class,
-                            Ce_id               i_owner ) const;
-    void                Get_Names(
-                            Dyn_StdConstIterator<Map_Names::value_type> &
-                                                o_rResult,
-                            const String &      i_name ) const;
   private:
     // DATA
     Map_Names           aNames;

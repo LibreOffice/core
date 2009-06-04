@@ -52,14 +52,10 @@ PRJINC=$(PRJ)$/source
 OBJFILES= \
     $(OBJ)$/ary_disp.obj        \
     $(OBJ)$/cessentl.obj        \
-    $(OBJ)$/instlist.obj        \
     $(OBJ)$/namesort.obj        \
-    $(OBJ)$/nametree.obj        \
     $(OBJ)$/qualiname.obj       \
     $(OBJ)$/reposy.obj          \
-    $(OBJ)$/segmentedname.obj   \
-    $(OBJ)$/slots.obj           \
-    $(OBJ)$/x_ary.obj
+    $(OBJ)$/slots.obj
 
 
 

@@ -44,14 +44,6 @@ namespace ary
 namespace cpp
 {
 
-
-Enum::Enum()
-    :   aEssentials(),
-        aValues(),
-        eProtection(PROTECT_global)
-{
-}
-
 Enum::Enum( const String  &     i_sLocalName,
             Ce_id               i_nOwner,
             E_Protection        i_eProtection,

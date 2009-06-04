@@ -41,15 +41,6 @@ namespace ary
 namespace idl
 {
 
-
-Parameter::Parameter()
-    :   sName(),
-        nType(0),
-        eDirection(param_in)
-{
-}
-
-
 Parameter::Parameter( const String &        i_sName,
                       Type_id               i_nType,
                       E_ParameterDirection  i_eDirection )

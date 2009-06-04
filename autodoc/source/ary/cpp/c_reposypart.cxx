@@ -51,7 +51,6 @@
 #include <ary/loc/locp_le.hxx>
 #include <ary/getncast.hxx>
 #include <loc_internalgate.hxx>
-#include <nametree.hxx>
 #include <reposy.hxx>
 #include "ca_ce.hxx"
 #include "ca_def.hxx"

@@ -125,10 +125,6 @@ class HF_IdlTypeText : public HtmlFactory_Idl
                                                 i_module,
                             const String &      i_ce,
                             const String &      i_member ) const;
-    void                errorOut_UnresolvedLink(
-                            const String &      i_module,
-                            const String &      i_ce,
-                            const String &      i_member ) const;
     bool                is_ExternLink(
                             const StringVector &
                                                 i_module ) const;

@@ -72,35 +72,6 @@ TplParameter_Type::Get_Text( StreamStr &                    o_rOut,
     i_rGate.Types().Get_TypeText( o_rOut, nType );
 }
 
-TplParameter_Const::TplParameter_Const( const String  & i_sConst )
-    :   sConstant(i_sConst)
-{
-}
-
-TplParameter_Const::~TplParameter_Const()
-{
-}
-
-intt
-TplParameter_Const::Compare( const TemplateParameter & i_rOther ) const
-{
-    const TplParameter_Const * pOther
-            = dynamic_cast< const TplParameter_Const* >( &i_rOther );
-    if (pOther == 0)
-        return +1;
-
-    return strcmp( sConstant.c_str(), pOther->sConstant.c_str() );
-}
-
-void
-TplParameter_Const::Get_Text( StreamStr &               o_out,
-                              const ary::cpp::Gate &    ) const
-{
-    o_out << sConstant;
-}
-
-
-
 }   // namespace ut
 }   // namespace cpp
 }   // namespace ary

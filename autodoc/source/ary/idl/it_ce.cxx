@@ -38,7 +38,6 @@
 #include <ary/idl/i_gate.hxx>
 #include <ary/idl/i_module.hxx>
 #include <ary/idl/ip_ce.hxx>
-#include "i_strconst.hxx"
 
 
 

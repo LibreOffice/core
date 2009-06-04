@@ -56,7 +56,6 @@ class EnumValue : public CodeEntity
     enum E_ClassId { class_id = 1006 };
 
     // LIFECYCLE
-                        EnumValue();
                         EnumValue(
                             const String  &     i_sLocalName,
                             Ce_id               i_nOwner,

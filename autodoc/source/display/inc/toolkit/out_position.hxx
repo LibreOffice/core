@@ -75,9 +75,6 @@ class Position
     void                Get_Chain(
                             StringVector &      o_result ) const
                                                 { pDirectory->Get_Chain(o_result); }
-    String              LinkTo(
-                            const Position &    i_destination,
-                            const String &      i_localLabel = String::Null_() ) const;
     String              LinkToRoot(
                             const String &      i_localLabel = String::Null_() ) const;
 

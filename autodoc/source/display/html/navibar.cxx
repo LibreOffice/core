@@ -144,6 +144,12 @@ SubRow::SubRow( const char * i_sTitle )
 
 SubRow::~SubRow()
 {
+    for ( List_Items::iterator it = aItemList.begin();
+          it != aItemList.end();
+          ++it )
+    {
+         delete (*it);
+    }
 }
 
 inline void

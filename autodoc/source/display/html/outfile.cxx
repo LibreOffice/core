@@ -258,13 +258,6 @@ HtmlDocuFile::SetTitle( const char * i_sTitle )
 }
 
 void
-HtmlDocuFile::SetBodyAttr( const char *        i_sAttrName,
-                           const char *        i_sAttrValue )
-{
-    aBodyData << new AnAttribute( i_sAttrName, i_sAttrValue );
-}
-
-void
 HtmlDocuFile::SetCopyright( const char * i_sCopyright )
 {
     sCopyright = i_sCopyright;

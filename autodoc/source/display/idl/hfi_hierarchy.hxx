@@ -65,18 +65,6 @@ class HF_IdlBaseNode
     typedef ary::idl::Ce_id                 Ce_id;
     typedef ary::idl::Type_id               Type_id;
 
-    /** Constructor for the most derived class, whose base hierarchy
-        is to be built.
-
-        The constructor recursively calls further constructors of
-        HF_IdlBaseNode for the bases of ->i_rCe.
-        So it builds up a complete hierarchy tree of all base classes
-        of ->i_rCe.
-    */
-                        HF_IdlBaseNode(
-                            const CE &          i_rCe,
-                            const GATE &        i_rGate );
-
     /** @descr
         The constructor recursively calls further constructors of
         HF_IdlBaseNode for the bases of ->i_rType, if ->i_rType matches to a
@@ -97,26 +85,6 @@ class HF_IdlBaseNode
     void                FillPositionList(
                             std::vector< const HF_IdlBaseNode* > &
                                                 o_rPositionList ) const;
-
-    /** Writes the base hierarchy of this node into ->o_rOut.
-
-        It ends at the position where the name of the most derived
-        class would have to be written. Example:
-
-        abc::MyClass
-         |
-         | AnotherClass
-         |  |
-         +--+--XYZ
-
-         The "XYZ" would NOT be written, that is the task of the caller.
-
-    */
-    void                WriteBaseHierarchy(
-                            csi::xml::Element & o_rOut,
-                            const HF_IdlInterface &
-                                                io_rDisplayer,
-                            const String &      i_sMainNodesText );
 
     Type_id             Type() const            { return nType; }
     intt                BaseCount() const       { return nCountBases; }

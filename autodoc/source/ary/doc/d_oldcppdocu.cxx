@@ -329,23 +329,11 @@ OldCppDocu::IsInterface() const
     return bIsInterface;
 }
 
-
-const OldCppDocu &
-OldCppDocu::Null_()
-{
-    static const OldCppDocu
-        aNull_;
-    return aNull_;
-}
-
 void
 OldCppDocu::do_Accept(csv::ProcessorIfc & io_processor) const
 {
     csv::CheckedCall(io_processor, *this);
 }
-
-
-
 
 }   // namespace doc
 }   // namespace ary

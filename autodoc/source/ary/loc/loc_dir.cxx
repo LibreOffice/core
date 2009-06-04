@@ -97,16 +97,6 @@ Directory::Add_File(const File & i_file)
 }
 
 Le_id
-Directory::Search_Child(const String & i_name) const
-{
-    Le_id
-        ret = Search_Dir(i_name);
-    if (ret.IsValid())
-        return ret;
-    return Search_File(i_name);
-}
-
-Le_id
 Directory::Search_Dir(const String & i_name) const
 {
     return pChildren->aSubDirectories.Search(i_name);

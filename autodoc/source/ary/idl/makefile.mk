@@ -68,7 +68,6 @@ OBJFILES= \
     $(OBJ)$/i_singleton.obj     \
     $(OBJ)$/i_siservice.obj     \
     $(OBJ)$/i_sisingleton.obj   \
-    $(OBJ)$/i_strconst.obj      \
     $(OBJ)$/i_struct.obj        \
     $(OBJ)$/i_structelem.obj    \
     $(OBJ)$/i_traits.obj        \

@@ -81,27 +81,6 @@ class TplParameter_Type : public TemplateParameter
     Tid                 nType;
 };
 
-class TplParameter_Const : public TemplateParameter
-{
-  public:
-                        TplParameter_Const(
-                            const String  &     i_sConst );
-                        ~TplParameter_Const();
-
-    virtual intt        Compare(
-                            const TemplateParameter &
-                                                i_rOther ) const;
-    virtual void        Get_Text(
-                            StreamStr &         o_rOut,
-                            const ary::cpp::Gate &
-                                                i_rGate ) const;
-  private:
-    String              sConstant;
-};
-
-
-
-
 }   // namespace ut
 }   // namespace cpp
 }   // namespace ary

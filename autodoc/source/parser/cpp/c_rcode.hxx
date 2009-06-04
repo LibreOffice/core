@@ -73,8 +73,6 @@ class CodeExplorer : private TokenProcessing_Types
     void                StartNewFile();
     void                Process_Token(
                             DYN cpp::Token &    let_drToken );
-    ary::loc::Le_id     CurFile() const;
-
     // ACCESS
     FileScope_EventHandler &
                         FileEventHandler()      { return aGlobalParseContext; }

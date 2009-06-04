@@ -53,17 +53,6 @@ Ce_Traits::EntityOf_(id_type i_id)
     return Ce_Storage::Instance_()[i_id];
 }
 
-Ce_Traits::id_type
-Ce_Traits::IdOf_(const entity_base_type & i_entity)
-{
-    return i_entity.CeId();
-}
-
-
-
-
-
-
 //********************      Ce_Compare      ********************//
 const Ce_Compare::key_type &
 Ce_Compare::KeyOf_(const entity_base_type & i_entity)

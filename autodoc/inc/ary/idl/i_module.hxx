@@ -77,8 +77,6 @@ class Module : public CodeEntity
                             const String &      i_sName,
                             Ce_id               i_nId );
     // INQUIRY
-    /// @return 0 for the global namespace, +1 for each level below the global namespace.
-    intt                Depth() const;
     Ce_id               Search_Name(
                             const String &      i_sName ) const;
     void                Get_Names(

@@ -74,11 +74,6 @@ class ParseEnvironment : protected TokenProcessing_Types
                         ParseEnvironment(
                             ParseEnvironment *  i_pParent );
     const SubPeUseIfc * CurSubPeUse() const;
-    void                GlobalHandlingOfSyntaxError(
-                            const char *        i_sTokenText,
-                            const char *        i_sFileName,
-                            uintt               i_nLineCount );
-
   private:
     virtual void        InitData() = 0;
     virtual void        TransferData() = 0;

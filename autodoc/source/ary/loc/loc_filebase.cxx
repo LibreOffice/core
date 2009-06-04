@@ -41,18 +41,6 @@ namespace ary
 namespace loc
 {
 
-
-String
-FileBase::Extension() const
-{
-    const char *
-        extension = strrchr(sLocalName.c_str(), '.');
-    if (extension != 0)
-        return String(extension + 1);
-    return String::Null_();
-}
-
-
 FileBase::FileBase( const String  &     i_localName,
                     Le_id               i_parentDirectory )
     :   sLocalName(i_localName),

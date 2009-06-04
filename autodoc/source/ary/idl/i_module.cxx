@@ -48,7 +48,6 @@
 #include <ary/idl/i_sisingleton.hxx>
 #include <ary/idl/ip_ce.hxx>
 #include <nametreenode.hxx>
-#include "i_strconst.hxx"
 
 
 namespace ary
@@ -80,41 +79,6 @@ Module::Add_Name( const String &    i_sName,
     pImpl->Add_Name(i_sName, i_nCodeEntity);
 }
 
-
-//void
-//Module::Get_FullName( StringVector &      o_rText,
-//                      Ce_idList *         o_pRelatedCes,
-//                      const Gate &        i_rGate ) const
-//{
-//    if (pImpl->Depth() < 1)
-//        return;
-//
-//    if (o_pRelatedCes == 0)
-//    {
-//        for ( StringVector::const_iterator it = pImpl->NameChain_Begin();
-//              it != pImpl->NameChain_End();
-//              ++it )
-//        {
-//            o_rText.push_back(strconst::NamespaceSeparator());
-//            o_rText.push_back(*it);
-//        }
-//    }
-//    else
-//    {
-//        if (pImpl->Depth() > 1)
-//        {
-//            i_rGate.Ces().Find_Module(pImpl->Parent())
-//                .Get_FullName(  o_rText,
-//                                o_pRelatedCes,
-//                                i_rGate );
-//        }
-//
-//        o_rText.push_back(strconst::NamespaceSeparator());
-//        o_rText.push_back(pImpl->Name());
-//        o_pRelatedCes->push_back(CeId());
-//    }
-//}
-
 Ce_id
 Module::Search_Name( const String & i_sName ) const
 {
@@ -125,12 +89,6 @@ void
 Module::Get_Names( Dyn_StdConstIterator<Ce_id> & o_rResult ) const
 {
     pImpl->Get_Names( o_rResult );
-}
-
-intt
-Module::Depth() const
-{
-    return pImpl->Depth();
 }
 
 void

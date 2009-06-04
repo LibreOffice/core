@@ -72,12 +72,6 @@ DocuFile_Html::SetTitle( const char * i_sTitle )
 }
 
 void
-DocuFile_Html::SetInlineStyle( const char * i_sStyle )
-{
-    sStyle = i_sStyle;
-}
-
-void
 DocuFile_Html::SetRelativeCssPath( const char * i_sCssFile_relativePath )
 {
     sCssFile = i_sCssFile_relativePath;

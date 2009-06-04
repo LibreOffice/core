@@ -55,17 +55,6 @@ namespace adcdisp
 
 typedef csi::xml::Element XmlElement;
 
-class PageTitle_Central
-{
-  public:
-                        PageTitle_Central(
-                            XmlElement &        o_rOwner );
-    XmlElement &        Out()                   { return *pOut; }
-
-  private:
-    XmlElement *        pOut;
-};
-
 class PageTitle_Left
 {
   public:
@@ -179,10 +168,6 @@ class FlagTable
                             uintt               i_nColumnPosition,  /// Starting with 0.
                             const char *        i_sColumnName,
                             bool                i_bValue );         /// "YES" or "NO"
-    void                SetColumn(
-                            uintt               i_nColumnPosition,  /// Starting with 0.
-                            const char *        i_sColumnName,
-                            const char *        i_sValue );
   private:
     typedef std::pair< csi::html::TableCell*, csi::html::TableCell* > CellPair;
 

@@ -67,8 +67,6 @@ Cpp_PE::Cpp_PE( EnvData & i_rEnv )
 void
 Cpp_PE::StdHandlingOfSyntaxError( const char * )
 {
-//  GlobalHandlingOfSyntaxError(i_sText, Env().CurFileName(), Env().LineCount());
-
     SetTokenResult(not_done, pop_failure);
 }
 

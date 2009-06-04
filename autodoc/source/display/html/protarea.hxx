@@ -51,11 +51,6 @@ class ProtectionArea
                             ProtectionArea(
                                 const char *        i_sLabel,
                                 const char *        i_sTitle );
-                            ProtectionArea(
-                                const char *        i_sLabel,
-                                const char *        i_sTitle_class,
-                                const char *        i_sTitle_struct,
-                                const char *        i_sTitle_union );
                             ~ProtectionArea();
 
     csi::html::Table &      GetTable();
@@ -71,10 +66,6 @@ class ProtectionArea
     int                     Size() const            { return pSglTable ? 1 : 3; }
 
     bool                    WasUsed_Area() const;
-    bool                    WasUsed_Table() const;
-    bool                    WasUsed_Table(
-                                ary::cpp::E_ClassKey
-                                                    i_eClassKey ) const;
   private:
     struct S_Slot_Table
     {

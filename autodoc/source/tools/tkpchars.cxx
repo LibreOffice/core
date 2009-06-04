@@ -75,20 +75,6 @@ CharacterSource::LoadText(csv::bstream & io_rSource)
     BeginSource();
 }
 
-void
-CharacterSource::LoadText( const char * i_sSourceText )
-{
-    if (dpSource != 0)
-        delete [] dpSource;
-
-    nSourceSize = strlen(i_sSourceText);
-
-    dpSource = new char[nSourceSize+1];
-    strcpy( dpSource,  i_sSourceText);      // SAFE STRCPY (#100211# - checked)
-
-    BeginSource();
-}
-
 ///  KORR_FUTURE:  So far, this works only when tokens do not cross inserted text boundaries.
 void
 CharacterSource::InsertTextAtCurPos( const char * i_sText2Insert )

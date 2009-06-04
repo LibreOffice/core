@@ -139,7 +139,7 @@ Context_ConstNumeric::ReadCharChain(CharacterSource & io_rText)
     do {
         do {
             cNext = static_cast<char>( tolower(io_rText.MoveOn()) );
-        } while (cNext != 'e' AND isalnum(cNext) OR cNext == '.');
+        } while ( (cNext != 'e' AND isalnum(cNext)) OR cNext == '.');
         if (cNext == 'e')
         {
             cNext = io_rText.MoveOn();

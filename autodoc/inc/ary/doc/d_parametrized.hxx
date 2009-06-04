@@ -34,11 +34,6 @@
 // USED SERVICES
     // BASE CLASSES
 #include <ary/doc/d_node.hxx>
-    // OTHER
-#include <ary/doc/d_hypertext.hxx>
-
-
-
 
 namespace ary
 {

@@ -89,7 +89,6 @@ class Class : public CodeEntity,
 
 
     // LIFECYCLE
-                        Class();
                         Class(
                             const String  &     i_sLocalName,
                             Ce_id               i_nOwner,
@@ -189,9 +188,6 @@ class Class : public CodeEntity,
     CIterator_Locals    PosOfName(
                             const List_LocalCe& i_rList,
                             const String  &     i_sName ) const;
-    Iterator_Locals     PosOfName(
-                            List_LocalCe &      io_rList,
-                            const String  &     i_sName );
     // DATA
     CeEssentials        aEssentials;
     node_t              aAssignedNode;
