@@ -42,7 +42,7 @@
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <vos/mutex.hxx>
 #include <cppuhelper/implbase1.hxx>
-#include <unotools/servicehelper.hxx>
+#include <comphelper/servicehelper.hxx>
 
 class AccessibleStateSetHelperImpl;
 

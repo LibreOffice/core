@@ -30,6 +30,8 @@
 
 #include "precompiled_comphelper.hxx"
 
+#include "comphelper_module.hxx"
+
 #include <sal/config.h>
 #include <osl/mutex.hxx>
 #include <cppuhelper/factory.hxx>
@@ -41,11 +43,6 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 using namespace ::com::sun::star;
-
-
-::rtl::OUString SAL_CALL SequenceOutputStreamService_getImplementationName();
-uno::Sequence< ::rtl::OUString > SAL_CALL SequenceOutputStreamService_getSupportedServiceNames();
-uno::Reference< uno::XInterface > SAL_CALL SequenceOutputStreamService_createInstance( const uno::Reference< uno::XComponentContext >& rxContext )SAL_THROW((uno::Exception));
 
 
 namespace {
@@ -60,6 +57,11 @@ public:
     virtual ::rtl::OUString SAL_CALL getImplementationName() throw ( uno::RuntimeException );
     virtual ::sal_Bool SAL_CALL supportsService( const ::rtl::OUString & ServiceName ) throw ( uno::RuntimeException );
     virtual uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw ( uno::RuntimeException );
+
+    // XServiceInfo - static versions (used for component registration)
+    static ::rtl::OUString SAL_CALL getImplementationName_static();
+    static uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames_static();
+    static uno::Reference< uno::XInterface > SAL_CALL Create( const uno::Reference< uno::XComponentContext >& );
 
     // ::com::sun::star::io::XOutputStream:
     virtual void SAL_CALL writeBytes( const uno::Sequence< ::sal_Int8 > & aData ) throw ( io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException );
@@ -88,12 +90,17 @@ SequenceOutputStreamService::SequenceOutputStreamService()
 // com.sun.star.uno.XServiceInfo:
 ::rtl::OUString SAL_CALL SequenceOutputStreamService::getImplementationName() throw ( uno::RuntimeException )
 {
-    return SequenceOutputStreamService_getImplementationName();
+    return getImplementationName_static();
+}
+
+::rtl::OUString SAL_CALL SequenceOutputStreamService::getImplementationName_static()
+{
+    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.SequenceOutputStreamService" ) );
 }
 
 ::sal_Bool SAL_CALL SequenceOutputStreamService::supportsService( ::rtl::OUString const & serviceName ) throw ( uno::RuntimeException )
 {
-    uno::Sequence< ::rtl::OUString > serviceNames = SequenceOutputStreamService_getSupportedServiceNames();
+    uno::Sequence< ::rtl::OUString > serviceNames = getSupportedServiceNames();
     for ( ::sal_Int32 i = 0; i < serviceNames.getLength(); ++i ) {
         if ( serviceNames[i] == serviceName )
             return sal_True;
@@ -103,7 +110,20 @@ SequenceOutputStreamService::SequenceOutputStreamService()
 
 uno::Sequence< ::rtl::OUString > SAL_CALL SequenceOutputStreamService::getSupportedServiceNames() throw ( uno::RuntimeException )
 {
-    return SequenceOutputStreamService_getSupportedServiceNames();
+    return getSupportedServiceNames_static();
+}
+
+uno::Sequence< ::rtl::OUString > SAL_CALL SequenceOutputStreamService::getSupportedServiceNames_static()
+{
+    uno::Sequence< ::rtl::OUString > s( 1 );
+    s[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.io.SequenceOutputStream" ) );
+    return s;
+}
+
+uno::Reference< uno::XInterface > SAL_CALL SequenceOutputStreamService::Create(
+    const uno::Reference< uno::XComponentContext >& )
+{
+    return static_cast< ::cppu::OWeakObject * >( new SequenceOutputStreamService());
 }
 
 // ::com::sun::star::io::XOutputStream:
@@ -149,23 +169,7 @@ uno::Sequence< ::sal_Int8 > SAL_CALL SequenceOutputStreamService::getWrittenByte
 
 } // anonymous namespace
 
-::rtl::OUString SAL_CALL SequenceOutputStreamService_getImplementationName() {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.comp.SequenceOutputStreamService" ) );
-}
-
-uno::Sequence< ::rtl::OUString > SAL_CALL SequenceOutputStreamService_getSupportedServiceNames()
+void createRegistryInfo_SequenceOutputStream()
 {
-    uno::Sequence< ::rtl::OUString > s( 1 );
-    s[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.io.SequenceOutputStream" ) );
-    return s;
+    static ::comphelper::module::OAutoRegistration< SequenceOutputStreamService > aAutoRegistration;
 }
-
-uno::Reference< uno::XInterface > SAL_CALL SequenceOutputStreamService_createInstance(
-    const uno::Reference< uno::XComponentContext >& )
-    SAL_THROW( (uno::Exception) )
-{
-    return static_cast< ::cppu::OWeakObject * >( new SequenceOutputStreamService());
-}
-

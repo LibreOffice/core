@@ -31,6 +31,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_comphelper.hxx"
 
+#include "comphelper_module.hxx"
+
 /**************************************************************************
                                 TODO
  **************************************************************************
@@ -50,53 +52,6 @@ using namespace comphelper;
 //=========================================================================
 // helpers
 //=========================================================================
-
-uno::Sequence< rtl::OUString > SAL_CALL
-OfficeInstallationDirectories_getSupportedServiceNames()
-    throw()
-{
-    const rtl::OUString aServiceName(
-        RTL_CONSTASCII_USTRINGPARAM(
-            "com.sun.star.util.OfficeInstallationDirectories" ) );
-    return uno::Sequence< rtl::OUString >( &aServiceName, 1 );
-}
-
-//=========================================================================
-rtl::OUString SAL_CALL OfficeInstallationDirectories_getImplementationName()
-    throw()
-{
-    return rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM(
-            "com.sun.star.comp.util.OfficeInstallationDirectories" ) );
-}
-
-//=========================================================================
-rtl::OUString SAL_CALL OfficeInstallationDirectories_getSingletonName()
-    throw()
-{
-    return rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM(
-            "com.sun.star.util.theOfficeInstallationDirectories" ) );
-}
-
-//=========================================================================
-rtl::OUString SAL_CALL OfficeInstallationDirectories_getSingletonServiceName()
-    throw()
-{
-    return rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM(
-            "com.sun.star.util.OfficeInstallationDirectories" ) );
-}
-
-//=========================================================================
-uno::Reference< uno::XInterface > SAL_CALL
-OfficeInstallationDirectories_createInstance(
-        const uno::Reference< uno::XComponentContext > & rxContext )
-    throw( uno::Exception )
-{
-    return static_cast< cppu::OWeakObject * >(
-        new OfficeInstallationDirectories( rxContext ) );
-}
 
 //=========================================================================
 static bool makeCanonicalFileURL( rtl::OUString & rURL )
@@ -272,7 +227,7 @@ rtl::OUString SAL_CALL
 OfficeInstallationDirectories::getImplementationName()
     throw ( uno::RuntimeException )
 {
-    return OfficeInstallationDirectories_getImplementationName();
+    return getImplementationName_static();
 }
 
 //=========================================================================
@@ -282,7 +237,7 @@ OfficeInstallationDirectories::supportsService( const rtl::OUString& ServiceName
     throw ( uno::RuntimeException )
 {
     const uno::Sequence< rtl::OUString > & aNames
-        = OfficeInstallationDirectories_getSupportedServiceNames();
+        = getSupportedServiceNames();
     const rtl::OUString * p = aNames.getConstArray();
     for ( sal_Int32 nPos = 0; nPos < aNames.getLength(); nPos++ )
     {
@@ -299,7 +254,47 @@ uno::Sequence< ::rtl::OUString > SAL_CALL
 OfficeInstallationDirectories::getSupportedServiceNames()
     throw ( uno::RuntimeException )
 {
-    return OfficeInstallationDirectories_getSupportedServiceNames();
+    return getSupportedServiceNames_static();
+}
+
+//=========================================================================
+// static
+rtl::OUString SAL_CALL
+OfficeInstallationDirectories::getImplementationName_static()
+{
+    return rtl::OUString(
+        RTL_CONSTASCII_USTRINGPARAM(
+            "com.sun.star.comp.util.OfficeInstallationDirectories" ) );
+}
+
+//=========================================================================
+// static
+uno::Sequence< ::rtl::OUString > SAL_CALL
+OfficeInstallationDirectories::getSupportedServiceNames_static()
+{
+    const rtl::OUString aServiceName(
+        RTL_CONSTASCII_USTRINGPARAM(
+            "com.sun.star.util.OfficeInstallationDirectories" ) );
+    return uno::Sequence< rtl::OUString >( &aServiceName, 1 );
+}
+
+//=========================================================================
+// static
+rtl::OUString SAL_CALL OfficeInstallationDirectories::getSingletonName_static()
+{
+    return rtl::OUString(
+        RTL_CONSTASCII_USTRINGPARAM(
+            "com.sun.star.util.theOfficeInstallationDirectories" ) );
+}
+
+//=========================================================================
+// static
+uno::Reference< uno::XInterface > SAL_CALL
+OfficeInstallationDirectories::Create(
+        const uno::Reference< uno::XComponentContext > & rxContext )
+{
+    return static_cast< cppu::OWeakObject * >(
+        new OfficeInstallationDirectories( rxContext ) );
 }
 
 //=========================================================================
@@ -352,3 +347,7 @@ void OfficeInstallationDirectories::initDirs()
     }
 }
 
+void createRegistryInfo_OfficeInstallationDirectories()
+{
+    static ::comphelper::module::OSingletonRegistration< OfficeInstallationDirectories > aAutoRegistration;
+}

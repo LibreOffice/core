@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.3.48.1 $
+# $Revision: 1.2.20.2 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -29,61 +29,73 @@
 #
 #*************************************************************************
 
-PRJ = ..$/..$/..
-TARGET = SequenceOutputStreamUnitTest
+PRJ = ..$/..
+TARGET  = ComphelperComplexTests
 PRJNAME = comphelper
-PACKAGE = complex$/sequenceoutputstream
 
 # --- Settings -----------------------------------------------------
 .INCLUDE: settings.mk
 
 
+.IF "$(BUILD_QADEVOOO)" == "YES"
+
 #----- compile .java files -----------------------------------------
 
-JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar OOoRunner.jar
-
-JAVAFILES       =\
-                                SequenceOutputStreamUnitTest.java\
-                                SequenceOutputStreamTest.java\
-                                Test01.java\
-                                TestHelper.java\
-
-JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
+JARFILES        := ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar OOoRunner.jar
+JAVAFILES       := $(shell @$(FIND) . -name "*.java")
+JAVACLASSFILES	:= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(i:d)$/$(i:b).class)
 
 #----- make a jar from compiled files ------------------------------
 
 MAXLINELENGTH = 100000
 
-JARCLASSDIRS    = $(PACKAGE)
+#JARCLASSDIRS    =
 JARTARGET       = $(TARGET).jar
 JARCOMPRESS 	= TRUE
 
-# --- Parameters for the test --------------------------------------
+# --- Runner Settings ----------------------------------------------
+
+# classpath and argument list
+RUNNER_CLASSPATH = -cp $(CLASSPATH)$(PATH_SEPERATOR)$(SOLARBINDIR)$/OOoRunner.jar
 
 # start an office if the parameter is set for the makefile
 .IF "$(OFFICE)" == ""
-CT_APPEXECCOMMAND =
+RUNNER_APPEXECCOMMAND =
 .ELSE
-CT_APPEXECCOMMAND = -AppExecutionCommand "$(OFFICE)$/soffice -accept=socket,host=localhost,port=8100;urp;"
+RUNNER_APPEXECCOMMAND = -AppExecutionCommand "$(OFFICE)$/soffice -accept=socket,host=localhost,port=8100;urp;"
 .ENDIF
 
-# test base is java complex
-CT_TESTBASE = -TestBase java_complex
+RUNNER_ARGS = org.openoffice.Runner -TestBase java_complex $(RUNNER_APPEXECCOMMAND)
 
-# test looks something like the.full.package.TestName
-CT_TEST     = -o $(PACKAGE:s\$/\.\).$(JAVAFILES:b)
-
-# start the runner application
-CT_APP      = org.openoffice.Runner
+.END    # "$(BUILD_QADEVOOO)" == "YES"
 
 # --- Targets ------------------------------------------------------
 
-.INCLUDE: target.mk
+.IF "$(depend)" == ""
+ALL :   ALLTAR
+    @echo -----------------------------------------------------
+    @echo - do a 'dmake show_targets' to show available targets
+    @echo -----------------------------------------------------
+.ELSE
+ALL: 	ALLDEP
+.ENDIF
 
-RUN: run
+.INCLUDE :  target.mk
+
+.IF "$(BUILD_QADEVOOO)" == "YES"
+show_targets:
+    +@java $(RUNNER_CLASSPATH) complexlib.ShowTargets $(foreach,i,$(JAVAFILES) $(i:s#.java##:s#./#complex.#))
 
 run:
-    +java -cp $(CLASSPATH) $(CT_APP) $(CT_TESTBASE) $(CT_APPEXECCOMMAND) $(CT_TEST)
+    +java $(RUNNER_CLASSPATH) $(RUNNER_ARGS) -sce comphelper_all.sce
 
+run_%:
+    +java $(RUNNER_CLASSPATH) $(RUNNER_ARGS) -o complex.$(PRJNAME).$(@:s/run_//)
 
+.ELSE
+run: show_targets
 
+show_targets:
+    +@echo "Built without qadevOOo, no QA tests"
+
+.ENDIF

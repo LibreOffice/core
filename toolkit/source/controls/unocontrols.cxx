@@ -230,17 +230,7 @@ void UnoEditControl::ImplSetPeerProperty( const ::rtl::OUString& rPropName, cons
         {
             ::rtl::OUString sText;
             rVal >>= sText;
-            if (( sText.getLength() > 0 ) &&
-                ( sText.compareToAscii( "&", 1 ) == 0 ))
-            {
-                // Magic symbol '&' found at first place. Interpret as a place
-                // holder identifier. Now try to map it to the real value. The
-                // magic symbol must be removed.
-                rtl::OUString aKeyValue( sText.copy( 1 ));
-                if ( UnoControl::ImplMapPlaceHolder( aKeyValue ))
-                   sText = aKeyValue;
-            }
-
+            ImplCheckLocalize( sText );
             xTextComponent->setText( sText );
             bDone = sal_True;
         }
@@ -3532,16 +3522,7 @@ void UnoPatternFieldControl::ImplSetPeerProperty( const ::rtl::OUString& rPropNa
         {
             // same comment as in UnoControl::ImplSetPeerProperty - see there
             ::rtl::OUString sText( Text );
-            if (( Text.getLength() > 0 ) &&
-                ( Text.compareToAscii( "&", 1 ) == 0 ))
-            {
-                // Magic symbol '&' found at first place. Interpret as a place
-                // holder identifier. Now try to map it to the real value. The
-                // magic symbol must be removed.
-                rtl::OUString aKeyValue( Text.copy( 1 ));
-                if ( UnoControl::ImplMapPlaceHolder( aKeyValue ))
-                   sText = aKeyValue;
-            }
+            ImplCheckLocalize( sText );
             xPF->setString( sText );
             xPF->setMasks( EditMask, LiteralMask );
         }
