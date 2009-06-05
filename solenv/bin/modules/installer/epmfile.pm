@@ -593,6 +593,9 @@ sub create_epm_header
     # if ( $installer::globals::patch )
     # {
     #   $onepackage->{$provides} = "";
+        my $isdict = 0;
+        if ( $onepackage->{'packagename'} =~ /-dict-/ ) { $isdict = 1;  }
+
     #   $onepackage->{$requires} = "";
     # }
 
@@ -636,7 +639,7 @@ sub create_epm_header
         {
             my $onerequires = ${$allrequires}[$i];
             $onerequires =~ s/\s*$//;
-            installer::packagelist::resolve_packagevariables(\$onerequires, $variableshashref, 0);
+            installer::packagelist::resolve_packagevariables2(\$onerequires, $variableshashref, 0, $isdict);
 
             # Special handling for Solaris. In depend files, the names of the packages are required, not
             # only the abbreviation. Therefore there is a special syntax for names in packagelist:

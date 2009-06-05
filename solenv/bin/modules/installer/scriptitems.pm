@@ -638,6 +638,28 @@ sub shift_basis_directory_parents
 }
 
 ################################################################################
+# Setting the name of the directory with style OFFICEDIRECTORY.
+# The name can be defined in property OFFICEDIRECTORYNAME.
+################################################################################
+
+sub set_officedirectory_name
+{
+    my ($dirsref, $officedirname) = @_;
+
+    for ( my $i = 0; $i <= $#{$dirsref}; $i++ )
+    {
+        my $onedir = ${$dirsref}[$i];
+        my $styles = "";
+        if ( $onedir->{'Styles'} ) { $styles = $onedir->{'Styles'}; }
+        if ( $styles =~ /\bOFFICEDIRECTORY\b/ )
+        {
+            $onedir->{'HostName'} = $officedirname;
+            last;
+        }
+    }
+}
+
+################################################################################
 # Simplifying the name for language dependent items from "Name (xy)" to "Name"
 ################################################################################
 

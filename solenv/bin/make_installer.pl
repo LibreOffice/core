@@ -410,6 +410,9 @@ if ( $installer::globals::globallogging ) { installer::files::save_array_of_hash
 
 if ( $allvariableshashref->{'SHIFT_BASIS_INTO_BRAND_LAYER'} ) { $dirsinproductarrayref = installer::scriptitems::shift_basis_directory_parents($dirsinproductarrayref); }
 if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productdirectories1a.log", $dirsinproductarrayref); }
+if ( $allvariableshashref->{'OFFICEDIRECTORYNAME'} ) { installer::scriptitems::set_officedirectory_name($dirsinproductarrayref, $allvariableshashref->{'OFFICEDIRECTORYNAME'}); }
+if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productdirectories1b.log", $dirsinproductarrayref); }
+
 
 installer::scriptitems::resolve_all_directory_names($dirsinproductarrayref);
 if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productdirectories2.log", $dirsinproductarrayref); }
