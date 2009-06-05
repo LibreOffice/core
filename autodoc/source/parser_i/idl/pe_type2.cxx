@@ -85,7 +85,8 @@ PE_Type::PE_Type( ary::idl::Type_id & o_rResult )
         eState(e_none),
         sLastPart(),
         pPE_TemplateType(0), // @attention Recursion, only initiate, if needed!
-        nTemplateType(0)
+        nTemplateType(0),
+        aTemplateParameters()
 {
 }
 
@@ -172,9 +173,23 @@ PE_Type::Process_Punctuation( const TokPunctuation & i_rToken )
     }
     else if (eState == in_template_type)
     {
-        csv_assert( i_rToken.Id() == TokPunctuation::Greater );
+        aTemplateParameters.push_back(nTemplateType);
+        nTemplateType = 0;
+
+        if (i_rToken.Id() == TokPunctuation::Greater)
+        {
         eState = expect_quname_separator;
         SetResult(done, stay);
+    }
+        else if (i_rToken.Id() == TokPunctuation::Comma)
+        {
+              SetResult(done, push_sure, &MyTemplateType());
+        }
+        else
+        {
+            csv_assert(false);
+            Finish();
+        }
     }
 }
 
@@ -269,6 +284,7 @@ PE_Type::InitData()
     sFullType.Empty();
     sLastPart.clear();
     nTemplateType = 0;
+    csv::erase_container(aTemplateParameters);
 }
 
 void
@@ -285,7 +301,7 @@ PE_Type::TransferData()
         result = Gate().Types().CheckIn_Type( sFullType,
                                               nIsSequenceCounter,
                                               CurNamespace().CeId(),
-                                              nTemplateType );
+                                              &aTemplateParameters );
     *pResult = result.TypeId();
     eState = e_none;
 }

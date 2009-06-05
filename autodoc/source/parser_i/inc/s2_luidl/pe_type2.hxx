@@ -104,6 +104,8 @@ class PE_Type : public UnoIDL_PE,
 
     Dyn<PE_Type>        pPE_TemplateType;   /// @attention Recursion, only initiate, if needed!
     ary::idl::Type_id   nTemplateType;
+    std::vector<ary::idl::Type_id>
+                        aTemplateParameters;
 };
 
 

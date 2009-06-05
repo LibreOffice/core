@@ -183,7 +183,7 @@ SecondariesCalculator::CheckAllInterfaceBases()
         rType = pTypes->CheckIn_Type(   aXInterface,
                                         0,
                                         rGlobalNamespace.CeId(),
-                                        Type_id( 0 ) );
+                                        0 );
     Type_id
         nTypeXInterface = rType.TypeId();
     const ExplicitType &
@@ -227,7 +227,7 @@ SecondariesCalculator::Connect_Types2Ces()
         if (nRelatedCe.IsValid())
         {
             Ce_Type *
-                pNew = new Ce_Type(nRelatedCe, rType.TemplateType());
+                pNew = new Ce_Type(nRelatedCe, rType.TemplateParameters());
             my_TypeStorage().Replace_Entity( rType.TypeId(),
                                              *pNew );
         }

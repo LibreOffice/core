@@ -37,10 +37,15 @@
 #include <ary/idl/i_type.hxx>
 #include <ary/idl/i_ce.hxx>
 #include <ary/idl/i_module.hxx>
+#include <ary/idl/i_module.hxx>
 #include <ary/idl/ik_ce.hxx>
 #include <adc_cl.hxx>
 #include <adc_msg.hxx>
 #include "hi_linkhelper.hxx"
+
+
+
+
 
 
 inline const ary::idl::Module *
@@ -82,7 +87,7 @@ HF_IdlTypeText::~HF_IdlTypeText()
 }
 
 void
-HF_IdlTypeText::Produce_byData( ary::idl::Type_id i_idType ) const
+HF_IdlTypeText::Produce_byData(ary::idl::Type_id i_idType) const
 {
     StringVector        aModule_;
     String              sName;
@@ -93,8 +98,6 @@ HF_IdlTypeText::Produce_byData( ary::idl::Type_id i_idType ) const
     const ary::idl::Type &
         rType = Env().Data().Find_Type(i_idType);
     Env().Data().Get_TypeText(aModule_, sName, nCe, nSequenceCount, rType);
-    ary::idl::Type_id
-        nTemplateType = rType.TemplateParameterType();
 
     if ( Env().Data().IsBuiltInOrRelated(rType) )
     {
@@ -107,7 +110,7 @@ HF_IdlTypeText::Produce_byData( ary::idl::Type_id i_idType ) const
                          String::Null_(),
                          nSequenceCount,
                          (nCe.IsValid() ? exists_yes : exists_no),
-                         nTemplateType );
+                         rType.FirstEnclosedNonSequenceType(Env().Gate()).TemplateParameters() );
     }
 }
 
@@ -338,13 +341,14 @@ HF_IdlTypeText::produce_FromStd( const StringVector & i_module,
                                  const String &       i_member,
                                  int                  i_sequenceCount,
                                  E_Existence          i_ceExists,
-                                 ary::idl::Type_id    i_nTemplateType ) const
+                                 const std::vector<ary::idl::Type_id> *
+                                                      i_templateParameters ) const
 {
     if (i_ceExists == exists_no)
     {
         if ( is_ExternLink(i_module) )
         {
-            produce_ExternLink(i_module,i_ce,i_member,i_sequenceCount,i_nTemplateType);
+            produce_ExternLink(i_module,i_ce,i_member,i_sequenceCount,i_templateParameters);
             return;
         }
         errorOut_UnresolvedLink(i_module, i_ce, i_member);
@@ -428,16 +432,8 @@ HF_IdlTypeText::produce_FromStd( const StringVector & i_module,
             CurOut() << i_ce;
         }
 
-        if (i_nTemplateType.IsValid())
-        {
-            CurOut() << "< ";
-
-            HF_IdlTypeText
-                aTemplateParamWriter(Env(), CurOut(), true, pReferingCe);
-            aTemplateParamWriter.Produce_byData(i_nTemplateType);
-
-            CurOut() << " >";
-        }
+        if (i_templateParameters != 0)
+            write_TemplateParameterList(*i_templateParameters);
 
         if (bUseMember)
         {
@@ -678,7 +674,8 @@ HF_IdlTypeText::produce_ExternLink( const StringVector & i_module,
                                     const String &       i_ce,
                                     const String &       i_member,
                                     int                  i_sequenceCount,
-                                    ary::idl::Type_id    i_nTemplateType ) const
+                                    const std::vector<ary::idl::Type_id> *
+                                                         i_templateParameters ) const
 {
     // KORR
     // Look again at this code and take some time.
@@ -726,16 +723,8 @@ HF_IdlTypeText::produce_ExternLink( const StringVector & i_module,
             << i_ce;
     }
 
-    if (i_nTemplateType.IsValid())
-    {
-        CurOut() << "< ";
-
-        HF_IdlTypeText
-            aTemplateParamWriter(Env(), CurOut(), true, pReferingCe);
-        aTemplateParamWriter.Produce_byData(i_nTemplateType);
-
-        CurOut() << " >";
-    }
+    if (i_templateParameters != 0)
+        write_TemplateParameterList(*i_templateParameters);
 
     // Member
     if (i_member.length() > 0)
@@ -747,4 +736,25 @@ HF_IdlTypeText::produce_ExternLink( const StringVector & i_module,
 
     if (i_sequenceCount > 0)
         finish_Sequence(i_sequenceCount);
+}
+
+void
+HF_IdlTypeText::write_TemplateParameterList(
+                    const std::vector<ary::idl::Type_id> & i_templateParameters ) const
+{
+    if (i_templateParameters.size() == 0)
+        return;
+
+    HF_IdlTypeText
+        aTemplateParamWriter(Env(), CurOut(), true, pReferingCe);
+    CurOut() << "< ";
+    std::vector<ary::idl::Type_id>::const_iterator
+        it = i_templateParameters.begin();
+    aTemplateParamWriter.Produce_byData(*it);
+    for ( ++it; it != i_templateParameters.end(); ++it )
+    {
+        CurOut() << ", ";
+        aTemplateParamWriter.Produce_byData(*it);
+    }
+    CurOut() << " >";
 }

@@ -78,10 +78,16 @@ TemplateParamType::inq_Get_Text( StringVector &      ,          // o_module
 
 //*************    Implemented default function for idl::Type ********//
 
-Type_id
-Type::inq_TemplateParameterType() const
+const std::vector<Type_id> *
+Type::inq_TemplateParameters() const
 {
-    return Type_id::Null_();
+    return 0;
+}
+
+const Type &
+Type::inq_FirstEnclosedNonSequenceType(const Gate & ) const
+{
+    return *this;
 }
 
 

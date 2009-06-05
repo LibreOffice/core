@@ -56,14 +56,14 @@ class ExplicitType : public Named_Type
                             const String &      i_sName,
                             Type_id             i_nXNameRoom,
                             Ce_id               i_nModuleOfOccurrence,
-                            Type_id             i_nTemplateType );
+                            const std::vector<Type_id> *
+                                                i_templateParameters );
     virtual             ~ExplicitType();
 
     // INQUIRY
     Ce_id               ModuleOfOccurrence() const
                                                 { return nModuleOfOccurrence; }
     Type_id             NameRoom() const        { return nXNameRoom; }
-    Type_id             TemplateType() const    { return nTemplateType; }
 
   private:
     // Interface csv::ConstProcessorClient:
@@ -79,12 +79,13 @@ class ExplicitType : public Named_Type
                             Ce_id &             o_nRelatedCe,
                             int &               o_nSequemceCount,
                             const Gate &        i_rGate ) const;
-    virtual Type_id     inq_TemplateParameterType() const;
-
+    virtual const std::vector<Type_id> *
+                        inq_TemplateParameters() const;
     // DATA
     Type_id             nXNameRoom;             // As written in code.
     Ce_id               nModuleOfOccurrence;
-    Type_id             nTemplateType;
+    Dyn< const std::vector<Type_id> >
+                        pTemplateParameters;
 };
 
 

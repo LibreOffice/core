@@ -47,11 +47,13 @@ namespace idl
 {
 
 
-Ce_Type::Ce_Type( Ce_id     i_nRelatedCe,
-                  Type_id   i_nTemplateType )
-    :   nRelatedCe(i_nRelatedCe),
-        nTemplateType(i_nTemplateType)
+Ce_Type::Ce_Type( Ce_id                        i_relatedCe,
+                  const std::vector<Type_id> * i_templateParameters )
+    :   nRelatedCe(i_relatedCe),
+        pTemplateParameters(0)
 {
+    if (i_templateParameters != 0)
+        pTemplateParameters = new std::vector<Type_id>(*i_templateParameters);
 }
 
 Ce_Type::~Ce_Type()
@@ -88,10 +90,10 @@ Ce_Type::inq_Get_Text( StringVector &      o_module,
     o_nRelatedCe = nRelatedCe;
 }
 
-Type_id
-Ce_Type::inq_TemplateParameterType() const
+const std::vector<Type_id> *
+Ce_Type::inq_TemplateParameters() const
 {
-    return nTemplateType;
+    return pTemplateParameters.Ptr();
 }
 
 

@@ -102,7 +102,8 @@ class HF_IdlTypeText : public HtmlFactory_Idl
                             const String &      i_member,
                             int                 i_sequenceCount,
                             E_Existence         i_ceExists,
-                            ary::idl::Type_id   i_nTemplateType = ary::idl::Type_id::Null_() ) const;
+                            const std::vector<ary::idl::Type_id> *
+                                                i_templateParameters = 0 ) const;
     void                produce_BuiltIn(
                             const String &      i_type,
                             int                 i_sequenceCount ) const;
@@ -134,8 +135,11 @@ class HF_IdlTypeText : public HtmlFactory_Idl
                             const String &      i_ce,
                             const String &      i_member,
                             int                 i_sequenceCount,
-                            ary::idl::Type_id   i_nTemplateType ) const;
-
+                            const std::vector<ary::idl::Type_id> *
+                                                i_templateParameters ) const;
+    void                write_TemplateParameterList(
+                            const std::vector<ary::idl::Type_id> &
+                                                i_templateParameters ) const;
     const ary::idl::Module *
                         referingModule() const;
     const client *      referingCe() const;

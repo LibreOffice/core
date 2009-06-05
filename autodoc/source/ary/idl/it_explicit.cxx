@@ -51,12 +51,15 @@ namespace idl
 ExplicitType::ExplicitType( const String &      i_sName,
                             Type_id             i_nXNameRoom,
                             Ce_id               i_nModuleOfOccurrence,
-                            Type_id             i_nTemplateType )
+                            const std::vector<Type_id> *
+                                                i_templateParameters )
     :   Named_Type(i_sName),
         nXNameRoom(i_nXNameRoom),
         nModuleOfOccurrence(i_nModuleOfOccurrence),
-        nTemplateType(i_nTemplateType)
+        pTemplateParameters(0)
 {
+    if (i_templateParameters != 0)
+        pTemplateParameters = new std::vector<Type_id>(*i_templateParameters);
 }
 
 ExplicitType::~ExplicitType()
@@ -89,10 +92,10 @@ ExplicitType::inq_Get_Text( StringVector &      o_module,
     o_name = Name();
 }
 
-Type_id
-ExplicitType::inq_TemplateParameterType() const
+const std::vector<Type_id> *
+ExplicitType::inq_TemplateParameters() const
 {
-    return nTemplateType;
+    return pTemplateParameters.Ptr();
 }
 
 

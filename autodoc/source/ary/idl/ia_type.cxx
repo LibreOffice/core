@@ -53,6 +53,12 @@ namespace ary
 namespace idl
 {
 
+String              MakeTemplateName(
+                        const String &      i_localName,
+                        const std::vector<Type_id> &
+                                            i_templateParameters );
+
+
 
 inline CeAdmin &
 TypeAdmin::my_Ces() const
@@ -119,17 +125,16 @@ Type_id
 TypeAdmin::lhf_CheckIn_TypeName( const String &        i_sLocalName,
                                       ExplicitNameRoom &    io_rXNameRoom,
                                       Ce_id                 i_nModuleOfOccurrence,
-                                      Type_id               i_nTemplateType )
+                                 const std::vector<Type_id> *   i_templateParameters )
 {
     String sSearchLocalName( i_sLocalName );
-    if ( i_nTemplateType.IsValid() )
+    if ( i_templateParameters != 0
+         ?  i_templateParameters->size() > 0
+         :  false )
     {
-        sSearchLocalName =
-            StreamLock(200)()
-                << i_sLocalName
-                << C_cTemplateDelimiter
-                << i_nTemplateType.Value()
-                << c_str;
+        sSearchLocalName = MakeTemplateName(
+                                i_sLocalName,
+                                *i_templateParameters);
     }
 
     Type_id
@@ -140,7 +145,7 @@ TypeAdmin::lhf_CheckIn_TypeName( const String &        i_sLocalName,
             rNewType = *new ExplicitType(  i_sLocalName,
                                            io_rXNameRoom.TypeId(),
                                            i_nModuleOfOccurrence,
-                                           i_nTemplateType );
+                                           i_templateParameters );
         lhf_Put2Storage_and_AssignId(rNewType);
         ret = rNewType.TypeId();
         io_rXNameRoom.Add_Name( sSearchLocalName, ret );
@@ -244,7 +249,7 @@ const Type &
 TypeAdmin::CheckIn_Type( QualifiedName &     i_rFullName,
                                  uintt               i_nSequenceCount,
                                  Ce_id               i_nModuleOfOccurrence,
-                                 Type_id             i_nTemplateType )
+                         const std::vector<Type_id> *   i_templateParameters )
 {
     // Look in built-in types:
     Type_id
@@ -256,7 +261,7 @@ TypeAdmin::CheckIn_Type( QualifiedName &     i_rFullName,
         nType = lhf_CheckIn_TypeName( i_rFullName.LocalName(),
                                       rNameRoom,
                                       i_nModuleOfOccurrence,
-                                      i_nTemplateType );
+                                      i_templateParameters );
     }   // endif
 
     for ( uintt s = 0; s < i_nSequenceCount; ++s )
@@ -337,6 +342,23 @@ TypeAdmin::IsBuiltInOrRelated( const Type & i_rType ) const
         }
         return is_type<BuiltInType>(*pType);
     }
+}
+
+
+String
+MakeTemplateName( const String &                i_localName,
+                  const std::vector<Type_id> &  )
+{
+    StreamLock
+        sl(200);
+
+    // This is the simple solution, assuming that there is only
+    // one version of templatisation allowed with a given name.
+    return
+        sl()
+            << i_localName
+            << C_cTemplateDelimiter
+            << c_str;
 }
 
 
