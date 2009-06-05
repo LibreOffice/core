@@ -999,8 +999,9 @@ Reference< chart2::data::XDataSource > SAL_CALL InternalDataProvider::createData
     impl::InternalData & rData( getInternalData());
 
     // categories
-    aResultLSeqVec.push_back(
-        new LabeledDataSequence( createDataSequenceAndAddToMap( lcl_aCategoriesRangeName, lcl_aCategoriesRoleName )));
+    if ( bHasCategories )
+        aResultLSeqVec.push_back(
+            new LabeledDataSequence( createDataSequenceAndAddToMap( lcl_aCategoriesRangeName, lcl_aCategoriesRoleName )));
 
     // data with labels
     ::std::vector< Reference< chart2::data::XLabeledDataSequence > > aDataVec;

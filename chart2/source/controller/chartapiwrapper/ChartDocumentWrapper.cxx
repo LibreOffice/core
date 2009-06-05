@@ -55,6 +55,7 @@
 #include "LegendWrapper.hxx"
 #include "AreaWrapper.hxx"
 #include "WrappedAddInProperty.hxx"
+#include "WrappedIgnoreProperty.hxx"
 #include "ChartRenderer.hxx"
 #include <com/sun/star/chart2/XTitled.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
@@ -69,6 +70,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/util/DateTime.hpp>
 
 #include <vector>
 #include <algorithm>
@@ -150,7 +152,8 @@ enum
     PROP_DOCUMENT_ADDIN,
     PROP_DOCUMENT_BASEDIAGRAM,
     PROP_DOCUMENT_ADDITIONAL_SHAPES,
-    PROP_DOCUMENT_UPDATE_ADDIN
+    PROP_DOCUMENT_UPDATE_ADDIN,
+    PROP_DOCUMENT_NULL_DATE
 };
 
 void lcl_AddPropertiesToVector(
@@ -214,6 +217,13 @@ void lcl_AddPropertiesToVector(
                   PROP_DOCUMENT_UPDATE_ADDIN,
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND ));
+
+    // table:null-date // i99104
+    rOutProperties.push_back(
+        Property( C2U( "NullDate" ),
+                  PROP_DOCUMENT_NULL_DATE,
+                  ::getCppuType( static_cast< const ::com::sun::star::util::DateTime * >(0)),
+                  beans::PropertyAttribute::MAYBEVOID ));
 }
 
 const uno::Sequence< Property > & lcl_GetPropertySequence()
@@ -695,7 +705,6 @@ Any WrappedHasSubTitleProperty::getPropertyDefault( const Reference< beans::XPro
 //-----------------------------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------------------------
-
 ChartDocumentWrapper::ChartDocumentWrapper(
     const Reference< uno::XComponentContext > & xContext ) :
         m_spChart2ModelContact( new Chart2ModelContact( xContext ) ),
@@ -1631,6 +1640,7 @@ const std::vector< WrappedProperty* > ChartDocumentWrapper::createWrappedPropert
     aWrappedProperties.push_back( new WrappedBaseDiagramProperty( *this ) );
     aWrappedProperties.push_back( new WrappedAdditionalShapesProperty( *this ) );
     aWrappedProperties.push_back( new WrappedRefreshAddInAllowedProperty( *this ) );
+    aWrappedProperties.push_back( new WrappedIgnoreProperty( C2U("NullDate"),Any() ) ); // i99104
 
     return aWrappedProperties;
 }

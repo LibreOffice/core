@@ -77,5 +77,5 @@ CT_APP      = org.openoffice.Runner
 RUN: run
 
 run:
-    +java -cp $(CLASSPATH) $(CT_APP) $(CT_APPEXECCOMMAND) $(CT_TESTBASE) $(CT_TEST)
+    +java -cp "$(CLASSPATH)" $(CT_APP) $(CT_APPEXECCOMMAND) $(CT_TESTBASE) $(CT_TEST)
 

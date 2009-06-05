@@ -39,6 +39,7 @@
 #include <svx/svdobj.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/unofield.hxx>
+#include <svx/shapepropertynotifier.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <cppuhelper/implbase2.hxx>
 
@@ -89,11 +90,23 @@ const SvEventDescription* ScShapeObj::GetSupportedMacroItems()
 
 //------------------------------------------------------------------------
 
+namespace
+{
+    void lcl_initializeNotifier( SdrObject& _rSdrObj, ::cppu::OWeakObject& _rShape )
+    {
+        ::svx::PPropertyValueProvider pProvider( new ::svx::PropertyValueProvider( _rShape, "Anchor" ) );
+        _rSdrObj.getShapePropertyChangeNotifier().registerProvider( ::svx::eSpreadsheetAnchor, pProvider );
+    }
+}
+
+//------------------------------------------------------------------------
+
 ScShapeObj::ScShapeObj( uno::Reference<drawing::XShape>& xShape ) :
       pShapePropertySet(NULL),
       pShapePropertyState(NULL),
       pImplementationId(NULL),
-      bIsTextShape(FALSE)
+      bIsTextShape(FALSE),
+      bInitializedNotifier(false)
 {
     comphelper::increment( m_refCount );
 
@@ -113,6 +126,15 @@ ScShapeObj::ScShapeObj( uno::Reference<drawing::XShape>& xShape ) :
         bIsTextShape = ( SvxUnoTextBase::getImplementation( mxShapeAgg ) != NULL );
     }
 
+    {
+        SdrObject* pObj = GetSdrObject();
+        if ( pObj )
+        {
+            lcl_initializeNotifier( *pObj, *this );
+            bInitializedNotifier = true;
+        }
+    }
+
     comphelper::decrement( m_refCount );
 }
 
@@ -127,22 +149,11 @@ ScShapeObj::~ScShapeObj()
 uno::Any SAL_CALL ScShapeObj::queryInterface( const uno::Type& rType )
                                                 throw(uno::RuntimeException)
 {
-    SC_QUERYINTERFACE( beans::XPropertySet )
-    SC_QUERYINTERFACE( beans::XPropertyState )
-    SC_QUERYINTERFACE( text::XTextContent )
-    SC_QUERYINTERFACE( lang::XComponent )
-    SC_QUERYINTERFACE( document::XEventsSupplier )
-    if ( bIsTextShape )
-    {
-        //  #105585# for text shapes, XText (and parent interfaces) must
-        //  be handled here, too (for ScCellFieldObj handling):
-        SC_QUERYINTERFACE( text::XText )
-        SC_QUERYINTERFACE( text::XSimpleText )
-        SC_QUERYINTERFACE( text::XTextRange )
-    }
-    SC_QUERYINTERFACE( lang::XTypeProvider )
+    uno::Any aRet = ScShapeObj_Base::queryInterface( rType );
 
-    uno::Any aRet(OWeakObject::queryInterface( rType ));
+    if ( !aRet.hasValue() && bIsTextShape )
+        aRet = ScShapeObj_TextBase::queryInterface( rType );
+
     if ( !aRet.hasValue() && mxShapeAgg.is() )
         aRet = mxShapeAgg->queryAggregation( rType );
 
@@ -151,12 +162,12 @@ uno::Any SAL_CALL ScShapeObj::queryInterface( const uno::Type& rType )
 
 void SAL_CALL ScShapeObj::acquire() throw()
 {
-    OWeakObject::acquire();
+        OWeakObject::acquire();
 }
 
 void SAL_CALL ScShapeObj::release() throw()
 {
-    OWeakObject::release();
+        OWeakObject::release();
 }
 
 void ScShapeObj::GetShapePropertySet()
@@ -828,6 +839,18 @@ void SAL_CALL ScShapeObj::addPropertyChangeListener( const rtl::OUString& aPrope
     GetShapePropertySet();
     if (pShapePropertySet)
         pShapePropertySet->addPropertyChangeListener( aPropertyName, aListener );
+
+    if ( !bInitializedNotifier )
+    {
+        // here's the latest chance to initialize the property notification at the SdrObject
+        // (in the ctor, where we also attempt to do this, we do not necessarily have
+        // and SdrObject, yet)
+        SdrObject* pObj = GetSdrObject();
+        OSL_ENSURE( pObj, "ScShapeObj::addPropertyChangeListener: no SdrObject -> no property change notification!" );
+        if ( pObj )
+            lcl_initializeNotifier( *pObj, *this );
+        bInitializedNotifier = true;
+    }
 }
 
 void SAL_CALL ScShapeObj::removePropertyChangeListener( const rtl::OUString& aPropertyName,
@@ -1245,23 +1268,22 @@ void SAL_CALL ScShapeObj::setString( const rtl::OUString& aText ) throw(uno::Run
 
 uno::Sequence<uno::Type> SAL_CALL ScShapeObj::getTypes() throw(uno::RuntimeException)
 {
-    uno::Sequence< uno::Type > aTypeSequence;
+    uno::Sequence< uno::Type > aBaseTypes( ScShapeObj_Base::getTypes() );
+
+    uno::Sequence< uno::Type > aTextTypes;
+    if ( bIsTextShape )
+        aTextTypes = ScShapeObj_TextBase::getTypes();
 
     uno::Reference<lang::XTypeProvider> xBaseProvider;
     if ( mxShapeAgg.is() )
         mxShapeAgg->queryAggregation( getCppuType((uno::Reference<lang::XTypeProvider>*) 0) ) >>= xBaseProvider;
-
     DBG_ASSERT( xBaseProvider.is(), "ScShapeObj: No XTypeProvider from aggregated shape!" );
-    if( xBaseProvider.is() )
-    {
-        aTypeSequence = xBaseProvider->getTypes();
-        long nBaseLen = aTypeSequence.getLength();
 
-        aTypeSequence.realloc( nBaseLen + 1 );
-        uno::Type* pPtr = aTypeSequence.getArray();
-        pPtr[nBaseLen + 0] = getCppuType((const uno::Reference<text::XTextContent>*)0);
-    }
-    return aTypeSequence;
+    uno::Sequence< uno::Type > aAggTypes;
+    if( xBaseProvider.is() )
+        aAggTypes = xBaseProvider->getTypes();
+
+    return ::comphelper::concatSequences( aBaseTypes, aTextTypes, aAggTypes );
 }
 
 uno::Sequence<sal_Int8> SAL_CALL ScShapeObj::getImplementationId()
@@ -1469,3 +1491,34 @@ ScShapeObj::getEvents(  ) throw(uno::RuntimeException)
     return new ShapeUnoEventAccessImpl( this );
 }
 
+::rtl::OUString SAL_CALL ScShapeObj::getImplementationName(  ) throw (uno::RuntimeException)
+{
+    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.sc.ScShapeObj" ) );
+}
+
+::sal_Bool SAL_CALL ScShapeObj::supportsService( const ::rtl::OUString& _ServiceName ) throw (uno::RuntimeException)
+{
+    uno::Sequence< ::rtl::OUString > aSupported( getSupportedServiceNames() );
+    for ( const ::rtl::OUString* pSupported = aSupported.getConstArray();
+          pSupported != aSupported.getConstArray() + aSupported.getLength();
+          ++pSupported
+        )
+        if ( _ServiceName == *pSupported )
+            return sal_True;
+    return sal_False;
+}
+
+uno::Sequence< ::rtl::OUString > SAL_CALL ScShapeObj::getSupportedServiceNames(  ) throw (uno::RuntimeException)
+{
+    uno::Reference<lang::XServiceInfo> xSI;
+    if ( mxShapeAgg.is() )
+        mxShapeAgg->queryAggregation( lang::XServiceInfo::static_type() ) >>= xSI;
+
+    uno::Sequence< ::rtl::OUString > aSupported;
+    if ( xSI.is() )
+        aSupported = xSI->getSupportedServiceNames();
+
+    aSupported.realloc( aSupported.getLength() + 1 );
+    aSupported[ aSupported.getLength() - 1 ] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sheet.Shape" ) );
+    return aSupported;
+}

@@ -61,6 +61,7 @@ private: //private member
                         m_xNumberFormatsSupplier;
 
     SvNumberFormatter* m_pNumberFormatter;
+    ::com::sun::star::uno::Any m_aNullDate;
 };
 
 

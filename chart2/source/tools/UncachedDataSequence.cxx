@@ -77,6 +77,7 @@ UncachedDataSequence::UncachedDataSequence(
     const OUString & rRangeRepresentation )
         : OPropertyContainer( GetBroadcastHelper()),
           UncachedDataSequence_Base( GetMutex()),
+          m_nNumberFormatKey(0),
           m_xDataProvider( xIntDataProv ),
           m_aSourceRepresentation( rRangeRepresentation ),
           m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
@@ -90,6 +91,7 @@ UncachedDataSequence::UncachedDataSequence(
     const OUString & rRole )
         : OPropertyContainer( GetBroadcastHelper()),
           UncachedDataSequence_Base( GetMutex()),
+          m_nNumberFormatKey(0),
           m_xDataProvider( xIntDataProv ),
           m_aSourceRepresentation( rRangeRepresentation ),
           m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
@@ -248,7 +250,7 @@ Sequence< OUString > SAL_CALL UncachedDataSequence::generateLabel( chart2::data:
     throw (lang::IndexOutOfBoundsException,
            uno::RuntimeException)
 {
-    return 0;
+    return m_nNumberFormatKey;
 }
 
 // ____ XIndexReplace ____

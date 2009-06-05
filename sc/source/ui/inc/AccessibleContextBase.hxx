@@ -53,7 +53,7 @@
 #include <svtools/lstner.hxx>
 #include <cppuhelper/compbase5.hxx>
 #include <cppuhelper/implbase1.hxx>
-#include <unotools/servicehelper.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <comphelper/broadcasthelper.hxx>
 
 class Rectangle;

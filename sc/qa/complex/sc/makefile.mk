@@ -58,4 +58,4 @@ JARCOMPRESS 	= TRUE
 
 
 run:
-    +java -cp $(CLASSPATH) org.openoffice.Runner -TimeOut 0 -tb java_complex -o $(PACKAGE:s#$/#.#).$(JAVAFILES:b)
+    +java -cp "$(CLASSPATH)" org.openoffice.Runner -TimeOut 0 -tb java_complex -o $(PACKAGE:s#$/#.#).$(JAVAFILES:b)
