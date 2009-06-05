@@ -2,6 +2,7 @@ AbsoluteName
 ActiveSplitRange
 ActiveTable
 Adjust
+ArrangeOrder
 AttachedAxisIndex
 AutoFilter
 AutoShowInfo
@@ -70,6 +71,7 @@ ConditionalFormat
 ConnectBars
 ContainsHeader
 CrossoverPosition
+CrossoverValue
 CursorPositionX
 CursorPositionY
 CurveStyle
@@ -175,6 +177,7 @@ IterationEpsilon
 Japanese
 Label
 LabelPlacement
+LabelPosition
 LabelSeparator
 LayoutInfo
 LeftBorder
@@ -196,6 +199,7 @@ LineTransparence
 LineWidth
 LookUpLabels
 MajorTickmarks
+MarkPosition
 MaxFieldCount
 MinorTickmarks
 MissingValueTreatment
