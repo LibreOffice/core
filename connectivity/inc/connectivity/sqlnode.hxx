@@ -69,7 +69,7 @@ namespace connectivity
     class OSQLParseNode;
     class IParseContext;
 
-    typedef ::std::vector< OSQLParseNode* > OSQLParseNodes;
+    typedef ::std::vector< OSQLParseNode* >                  OSQLParseNodes;
 
     enum SQLNodeType    {SQL_NODE_RULE, SQL_NODE_LISTRULE, SQL_NODE_COMMALISTRULE,
                          SQL_NODE_KEYWORD, SQL_NODE_COMPARISON, SQL_NODE_NAME,
@@ -119,7 +119,7 @@ namespace connectivity
     {
         friend class OSQLParser;
 
-        OSQLParseNodes                  m_aChilds;
+        OSQLParseNodes                  m_aChildren;
         OSQLParseNode*                  m_pParent;      // pParent fuer Reuckverkettung im Baum
         ::rtl::OUString                 m_aNodeValue;   // Token-Name oder leer bei Regeln oder ::rtl::OUString bei
                                                         // ::rtl::OUString, INT, usw. -Werten
@@ -256,7 +256,7 @@ namespace connectivity
         void setParent(OSQLParseNode* pParseNode) {m_pParent = pParseNode;};
 
         // ChildCount liefert die Anzahl der Kinder eines Knotens
-        sal_uInt32 count() const {return m_aChilds.size();};
+        sal_uInt32 count() const {return m_aChildren.size();};
         inline OSQLParseNode* getChild(sal_uInt32 nPos) const;
 
         void append(OSQLParseNode* pNewSubTree);
@@ -371,7 +371,7 @@ namespace connectivity
         void setTokenValue(const ::rtl::OUString& rString) {    if (isToken()) m_aNodeValue = rString;}
 
             // IsLeaf testet ob ein Node ein Blatt ist
-        sal_Bool isLeaf() const {return m_aChilds.empty();}
+        sal_Bool isLeaf() const {return m_aChildren.empty();}
 
         // negate only a searchcondition, any other rule could cause a gpf
         static void negateSearchCondition(OSQLParseNode*& pSearchCondition,sal_Bool bNegate=sal_False);
@@ -443,10 +443,10 @@ namespace connectivity
     //-----------------------------------------------------------------------------
     inline OSQLParseNode* OSQLParseNode::getChild(sal_uInt32 nPos) const
     {
-        OSL_ENSURE(nPos < m_aChilds.size(), "Invalid Position");
+        OSL_ENSURE(nPos < m_aChildren.size(), "Invalid Position");
 
-        //  return m_aChilds[nPos];
-        return m_aChilds.at(nPos);
+        //  return m_aChildren[nPos];
+        return m_aChildren.at(nPos);
     }
 
     // Utility-Methoden zum Abfragen auf bestimmte Rules, Token oder Punctuation:

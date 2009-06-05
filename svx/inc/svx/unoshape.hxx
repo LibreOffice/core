@@ -60,7 +60,7 @@
 
 #include <svx/svdouno.hxx>
 
-#include <unotools/servicehelper.hxx>
+#include <comphelper/servicehelper.hxx>
 
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase12.hxx>
@@ -107,8 +107,7 @@ class SVX_DLLPUBLIC SvxShape : public SvxShape_UnoImplHelper,
                  public SfxListener,
                  public SvxShapeMutex
 {
- private:
-    SVX_DLLPRIVATE void     Init() throw();
+private:
     ::com::sun::star::awt::Size maSize;
     ::com::sun::star::awt::Point maPosition;
     ::rtl::OUString maShapeType;
@@ -127,10 +126,6 @@ protected:
 
     const SvxItemPropertySet* mpPropSet;
     const SfxItemPropertyMapEntry* maPropMapEntries;
-
-    // for xComponent
-    ::cppu::OInterfaceContainerHelper maDisposeListeners;
-    bool mbDisposing;
 
     ::tools::WeakReference< SdrObject > mpObj;
     SdrModel* mpModel;
@@ -175,8 +170,8 @@ public:
     virtual ~SvxShape() throw ();
 
     // Internals
-    void ObtainSettingsFromPropertySet(const SvxItemPropertySet& rPropSet) throw ();
-    virtual void Create( SdrObject* pNewOpj, SvxDrawPage* pNewPage = NULL ) throw ();
+    void ObtainSettingsFromPropertySet(const SvxItemPropertySet& rPropSet);
+    virtual void Create( SdrObject* pNewOpj, SvxDrawPage* pNewPage = NULL );
     /** takes the ownership of the SdrObject.
 
         When the shape is disposed, and it has the ownership of its associated SdrObject, then
@@ -193,6 +188,8 @@ public:
     void SetShapeType( const ::rtl::OUString& ShapeType ) { maShapeType = ShapeType; }
     ::com::sun::star::uno::Any GetBitmap( BOOL bMetaFile = FALSE ) const throw ();
     static SvxShape* GetShapeForSdrObj( SdrObject* pObj ) throw ();
+
+    ::svx::PropertyChangeNotifier& getShapePropertyChangeNotifier();
 
     void setShapeKind( sal_uInt32 nKind );
     sal_uInt32 getShapeKind() const;
@@ -232,10 +229,11 @@ public:
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) throw ();
 
 
-    /** called from SdrObject::SendUserCall
-        Currently only called for SDRUSERCALL_CHILD_CHGATTR
+    /** @obsolete
+        not used anymore
     */
     virtual void onUserCall(SdrUserCallType eUserCall, const Rectangle& rBoundRect);
+
     // XAggregation
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& aType ) throw (::com::sun::star::uno::RuntimeException);
 
@@ -317,6 +315,13 @@ public:
     virtual void SAL_CALL removeActionLock(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setActionLocks( sal_Int16 nLock ) throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Int16 SAL_CALL resetActionLocks(  ) throw (::com::sun::star::uno::RuntimeException);
+
+private:
+    /** initializes SdrObj-dependent members. Only to be called when GetSdrObject() != NULL
+    */
+    SVX_DLLPRIVATE void impl_initFromSdrObject();
+    /// CTOR-Impl
+    SVX_DLLPRIVATE void impl_construct();
 };
 
 #include <svx/unotext.hxx>
@@ -346,7 +351,7 @@ public:
     SvxShapeText( SdrObject* pObject, const SfxItemPropertyMapEntry* pPropertyMap, const SvxItemPropertySet* pPropertySet ) throw ();
     virtual ~SvxShapeText() throw ();
 
-    virtual void Create( SdrObject* pNewOpj, SvxDrawPage* pNewPage = NULL ) throw ();
+    virtual void Create( SdrObject* pNewOpj, SvxDrawPage* pNewPage = NULL );
 
     // XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
@@ -406,7 +411,7 @@ public:
     SvxShapeGroup( SdrObject* pObj,SvxDrawPage* pDrawPage ) throw ();
     virtual ~SvxShapeGroup() throw ();
 
-    virtual void Create( SdrObject* pNewOpj, SvxDrawPage* pNewPage = NULL ) throw ();
+    virtual void Create( SdrObject* pNewOpj, SvxDrawPage* pNewPage = NULL );
 
     // XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
@@ -690,7 +695,7 @@ public:
 
     virtual ~Svx3DSceneObject() throw();
 
-    virtual void Create( SdrObject* pNewOpj, SvxDrawPage* pNewPage = NULL ) throw();
+    virtual void Create( SdrObject* pNewOpj, SvxDrawPage* pNewPage = NULL );
 
     // XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
@@ -833,7 +838,7 @@ public:
 
     virtual ~SvxCustomShape() throw ();
 
-    virtual void Create( SdrObject* pNewOpj, SvxDrawPage* pNewPage = NULL ) throw();
+    virtual void Create( SdrObject* pNewOpj, SvxDrawPage* pNewPage = NULL );
 
     // XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);

@@ -39,7 +39,7 @@
 #include <cppuhelper/component.hxx>
 #include "svx/svxdllapi.h"
 
-#include <unotools/servicehelper.hxx>
+#include <comphelper/servicehelper.hxx>
 
 #include <svx/mutxhelp.hxx>
 

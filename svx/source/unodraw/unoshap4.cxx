@@ -639,7 +639,7 @@ SvxAppletShape::~SvxAppletShape() throw()
 {
 }
 
-void SvxAppletShape::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage ) throw ()
+void SvxAppletShape::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage )
 {
     SvxShape::Create( pNewObj, pNewPage );
     const SvGlobalName aAppletClassId( SO3_APPLET_CLASSID );
@@ -712,7 +712,7 @@ SvxPluginShape::~SvxPluginShape() throw()
 {
 }
 
-void SvxPluginShape::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage ) throw ()
+void SvxPluginShape::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage )
 {
     SvxShape::Create( pNewObj, pNewPage );
     const SvGlobalName aPluginClassId( SO3_PLUGIN_CLASSID );

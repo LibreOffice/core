@@ -222,7 +222,7 @@ void OStatement_Base::createTable( )
             MDatabaseMetaDataHelper     _aDbHelper;
             if (!_aDbHelper.NewAddressBook(m_pConnection,ouTableName))
             {
-                getOwnConnection()->throwGenericSQLException( _aDbHelper.getErrorResourceId(),*this );
+                getOwnConnection()->throwSQLException( _aDbHelper.getError(), *this );
             }
             m_pSQLIterator.reset( new ::connectivity::OSQLParseTreeIterator(
                 m_pConnection, m_pConnection->createCatalog()->getTables(), m_aParser, NULL ) );
@@ -230,7 +230,7 @@ void OStatement_Base::createTable( )
 
     }
     else
-        getOwnConnection()->throwGenericSQLException( STR_QUERY_TOO_COMPLEX ,*this);
+        getOwnConnection()->throwSQLException( STR_QUERY_TOO_COMPLEX, *this );
 }
 // -------------------------------------------------------------------------
 sal_Bool OStatement_Base::parseSql( const ::rtl::OUString& sql , sal_Bool bAdjusted)
@@ -256,7 +256,7 @@ sal_Bool OStatement_Base::parseSql( const ::rtl::OUString& sql , sal_Bool bAdjus
         m_pSQLIterator->traverseAll();
         const OSQLTables& xTabs = m_pSQLIterator->getTables();
         if(xTabs.empty())
-            getOwnConnection()->throwGenericSQLException( STR_QUERY_AT_LEAST_ONE_TABLES,*this );
+            getOwnConnection()->throwSQLException( STR_QUERY_AT_LEAST_ONE_TABLES, *this );
 
 #if OSL_DEBUG_LEVEL > 0
         OSQLTables::const_iterator citer;
@@ -290,7 +290,7 @@ sal_Bool OStatement_Base::parseSql( const ::rtl::OUString& sql , sal_Bool bAdjus
             createTable();
             return sal_False;
         default:
-            getOwnConnection()->throwGenericSQLException( STR_QUERY_TOO_COMPLEX ,*this);
+            getOwnConnection()->throwSQLException( STR_QUERY_TOO_COMPLEX, *this );
         }
     }
     else if(!bAdjusted) //Our sql parser does not support a statement like "create table foo"
@@ -299,7 +299,7 @@ sal_Bool OStatement_Base::parseSql( const ::rtl::OUString& sql , sal_Bool bAdjus
         return parseSql(sql + ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("(""E-mail"" caracter)")),sal_True);
     }
     else
-        getOwnConnection()->throwGenericSQLException( STR_QUERY_TOO_COMPLEX ,*this);
+        getOwnConnection()->throwSQLException( STR_QUERY_TOO_COMPLEX, *this );
     return sal_True;
 
 }

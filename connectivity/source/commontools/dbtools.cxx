@@ -1711,13 +1711,63 @@ sal_Bool implSetObject( const Reference< XParameters >& _rxParameters,
 }
 
 //..................................................................
+namespace
+{
+    class OParameterWrapper : public ::cppu::WeakImplHelper1< XIndexAccess >
+    {
+        ::std::bit_vector       m_aSet;
+        Reference<XIndexAccess> m_xSource;
+    public:
+        OParameterWrapper(const ::std::bit_vector& _aSet,const Reference<XIndexAccess>& _xSource) : m_aSet(_aSet),m_xSource(_xSource){}
+    private:
+        // ::com::sun::star::container::XElementAccess
+        virtual Type SAL_CALL getElementType() throw(RuntimeException)
+        {
+            return m_xSource->getElementType();
+        }
+        virtual sal_Bool SAL_CALL hasElements(  ) throw(RuntimeException)
+        {
+            if ( m_aSet.empty() )
+                return m_xSource->hasElements();
+            return ::std::count(m_aSet.begin(),m_aSet.end(),false) != 0;
+        }
+        // ::com::sun::star::container::XIndexAccess
+        virtual sal_Int32 SAL_CALL getCount(  ) throw(RuntimeException)
+        {
+            if ( m_aSet.empty() )
+                return m_xSource->getCount();
+            return ::std::count(m_aSet.begin(),m_aSet.end(),false);
+        }
+        virtual Any SAL_CALL getByIndex( sal_Int32 Index ) throw(IndexOutOfBoundsException, WrappedTargetException, RuntimeException)
+        {
+            if ( m_aSet.empty() )
+                return m_xSource->getByIndex(Index);
+            if ( m_aSet.size() < (size_t)Index )
+                throw IndexOutOfBoundsException();
 
+            ::std::bit_vector::iterator aIter = m_aSet.begin();
+            ::std::bit_vector::iterator aEnd = m_aSet.end();
+            sal_Int32 i = 0;
+            sal_Int32 nParamPos = -1;
+            for(; aIter != aEnd && i <= Index; ++aIter)
+            {
+                ++nParamPos;
+                if ( !*aIter )
+                {
+                    ++i;
+                }
+            }
+            return m_xSource->getByIndex(nParamPos);
+        }
+    };
+}
 
 // -----------------------------------------------------------------------------
 void askForParameters(const Reference< XSingleSelectQueryComposer >& _xComposer,
                       const Reference<XParameters>& _xParameters,
                       const Reference< XConnection>& _xConnection,
-                      const Reference< XInteractionHandler >& _rxHandler)
+                      const Reference< XInteractionHandler >& _rxHandler,
+                      const ::std::bit_vector& _aParametersSet)
 {
     OSL_ENSURE(_xComposer.is(),"dbtools::askForParameters XSQLQueryComposer is null!");
     OSL_ENSURE(_xParameters.is(),"dbtools::askForParameters XParameters is null!");
@@ -1730,7 +1780,7 @@ void askForParameters(const Reference< XSingleSelectQueryComposer >& _xComposer,
     Reference<XIndexAccess>  xParamsAsIndicies = xParameters.is() ? xParameters->getParameters() : Reference<XIndexAccess>();
     Reference<XNameAccess>   xParamsAsNames(xParamsAsIndicies, UNO_QUERY);
     sal_Int32 nParamCount = xParamsAsIndicies.is() ? xParamsAsIndicies->getCount() : 0;
-    if (nParamCount)
+    if ( (nParamCount && _aParametersSet.empty()) || ::std::count(_aParametersSet.begin(),_aParametersSet.end(),true) != nParamCount )
     {
         // build an interaction request
         // two continuations (Ok and Cancel)
@@ -1738,7 +1788,8 @@ void askForParameters(const Reference< XSingleSelectQueryComposer >& _xComposer,
         OParameterContinuation* pParams = new OParameterContinuation;
         // the request
         ParametersRequest aRequest;
-        aRequest.Parameters = xParamsAsIndicies;
+        Reference<XIndexAccess> xWrappedParameters = new OParameterWrapper(_aParametersSet,xParamsAsIndicies);
+        aRequest.Parameters = xWrappedParameters;
         aRequest.Connection = _xConnection;
         OInteractionRequest* pRequest = new OInteractionRequest(makeAny(aRequest));
         Reference< XInteractionRequest > xRequest(pRequest);
@@ -1762,8 +1813,7 @@ void askForParameters(const Reference< XSingleSelectQueryComposer >& _xComposer,
         const PropertyValue* pFinalValues = aFinalValues.getConstArray();
         for (sal_Int32 i=0; i<aFinalValues.getLength(); ++i, ++pFinalValues)
         {
-            Reference< XPropertySet > xParamColumn;
-            ::cppu::extractInterface(xParamColumn, xParamsAsIndicies->getByIndex(i));
+            Reference< XPropertySet > xParamColumn(xWrappedParameters->getByIndex(i),UNO_QUERY);
             if (xParamColumn.is())
             {
 #ifdef DBG_UTIL
@@ -1779,7 +1829,19 @@ void askForParameters(const Reference< XSingleSelectQueryComposer >& _xComposer,
                 if (hasProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE), xParamColumn))
                     xParamColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE)) >>= nScale;
                 // and set the value
-                _xParameters->setObjectWithInfo(i + 1, pFinalValues->Value, nParamType, nScale);
+                ::std::bit_vector::const_iterator aIter = _aParametersSet.begin();
+                ::std::bit_vector::const_iterator aEnd = _aParametersSet.end();
+                sal_Int32 j = 0;
+                sal_Int32 nParamPos = -1;
+                for(; aIter != aEnd && j <= i; ++aIter)
+                {
+                    ++nParamPos;
+                    if ( !*aIter )
+                    {
+                        ++j;
+                    }
+                }
+                _xParameters->setObjectWithInfo(nParamPos + 1, pFinalValues->Value, nParamType, nScale);
                     // (the index of the parameters is one-based)
             }
         }

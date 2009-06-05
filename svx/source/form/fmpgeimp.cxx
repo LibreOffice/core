@@ -30,6 +30,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
+
 #include "svxerr.hxx"
 #include "fmpgeimp.hxx"
 #include "fmundo.hxx"
@@ -44,6 +45,8 @@
 
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
+#include <com/sun/star/container/EnumerableMap.hpp>
+#include <com/sun/star/drawing/XControlShape.hpp>
 
 #include <sfx2/objsh.hxx>
 #include <svx/fmglob.hxx>
@@ -55,6 +58,7 @@
 #include <vcl/stdtext.hxx>
 #include <svx/dialmgr.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/componentcontext.hxx>
 #include <comphelper/uno3.hxx>
 #include <comphelper/types.hxx>
 #include <unotools/streamwrap.hxx>
@@ -69,12 +73,15 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::form;
 using ::com::sun::star::util::XCloneable;
 using ::com::sun::star::awt::XControlModel;
+using ::com::sun::star::container::XMap;
+using ::com::sun::star::container::EnumerableMap;
+using ::com::sun::star::drawing::XControlShape;
 using namespace ::svxform;
 
 DBG_NAME(FmFormPageImpl)
 //------------------------------------------------------------------------------
-FmFormPageImpl::FmFormPageImpl(FmFormPage* _pPage)
-               :pPage(_pPage)
+FmFormPageImpl::FmFormPageImpl( FmFormPage& _rPage )
+               :m_rPage( _rPage )
                ,m_bFirstActivation( sal_True )
                ,m_bAttemptedFormCreation( false )
                ,m_bInFind( false )
@@ -162,13 +169,11 @@ namespace
 }
 
 //------------------------------------------------------------------------------
-FmFormPageImpl::FmFormPageImpl(FmFormPage* _pPage, const FmFormPageImpl& rImpl)
-    :pPage(_pPage)
+FmFormPageImpl::FmFormPageImpl( FmFormPage& _rPage, const FmFormPageImpl& rImpl )
+    :m_rPage( _rPage )
     ,m_bFirstActivation( sal_True )
     ,m_bAttemptedFormCreation( false )
-               ,m_bInFind( false )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPageImpl::FmFormPageImpl" );
     DBG_CTOR(FmFormPageImpl,NULL);
 
     // clone the Forms collection
@@ -193,8 +198,8 @@ FmFormPageImpl::FmFormPageImpl(FmFormPage* _pPage, const FmFormPageImpl& rImpl)
         aVisitor.process( FormComponentPair( xCloneable, m_xForms ), aAssignmentProcessor );
 
         // assign the cloned models to their SdrObjects
-        SdrObjListIter aForeignIter( *rImpl.pPage );
-        SdrObjListIter aOwnIter( *pPage );
+        SdrObjListIter aForeignIter( rImpl.m_rPage );
+        SdrObjListIter aOwnIter( m_rPage );
 
         OSL_ENSURE( aForeignIter.IsMore() == aOwnIter.IsMore(), "FmFormPageImpl::FmFormPageImpl: inconsistent number of objects (1)!" );
         while ( aForeignIter.IsMore() && aOwnIter.IsMore() )
@@ -242,6 +247,85 @@ FmFormPageImpl::FmFormPageImpl(FmFormPage* _pPage, const FmFormPageImpl& rImpl)
 }
 
 //------------------------------------------------------------------------------
+Reference< XMap > FmFormPageImpl::getControlToShapeMap()
+{
+    Reference< XMap > xControlShapeMap( m_aControlShapeMap.get(), UNO_QUERY );
+    if ( xControlShapeMap.is() )
+        return xControlShapeMap;
+
+    xControlShapeMap = impl_createControlShapeMap_nothrow();
+    m_aControlShapeMap = xControlShapeMap;
+    return xControlShapeMap;
+}
+
+//------------------------------------------------------------------------------
+namespace
+{
+    static void lcl_insertFormObject_throw( const FmFormObj& _object, const Reference< XMap >& _map )
+    {
+        // the control model
+        Reference< XControlModel > xControlModel( _object.GetUnoControlModel(), UNO_QUERY );
+        OSL_ENSURE( xControlModel.is(), "lcl_insertFormObject_throw: suspicious: no control model!" );
+        if ( !xControlModel.is() )
+            return;
+
+        Reference< XControlShape > xControlShape( const_cast< FmFormObj& >( _object ).getUnoShape(), UNO_QUERY );
+        OSL_ENSURE( xControlShape.is(), "lcl_insertFormObject_throw: suspicious: no control shape!" );
+        if ( !xControlShape.is() )
+            return;
+
+        _map->put( makeAny( xControlModel ), makeAny( xControlShape ) );
+    }
+
+    static void lcl_removeFormObject( const FmFormObj& _object, const Reference< XMap >& _map )
+    {
+        // the control model
+        Reference< XControlModel > xControlModel( _object.GetUnoControlModel(), UNO_QUERY );
+        OSL_ENSURE( xControlModel.is(), "lcl_removeFormObject: suspicious: no control model!" );
+        if ( !xControlModel.is() )
+            return;
+
+    #if OSL_DEBUG_LEVEL > 0
+        Any aOldAssignment =
+    #endif
+            _map->remove( makeAny( xControlModel ) );
+        OSL_ENSURE( aOldAssignment == makeAny( Reference< XControlShape >( const_cast< FmFormObj& >( _object ).getUnoShape(), UNO_QUERY ) ),
+            "lcl_removeFormObject: map was inconsistent!" );
+    }
+}
+
+//------------------------------------------------------------------------------
+Reference< XMap > FmFormPageImpl::impl_createControlShapeMap_nothrow()
+{
+    Reference< XMap > xMap;
+
+    try
+    {
+        ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
+        xMap.set( EnumerableMap::create( aContext.getUNOContext(),
+            ::cppu::UnoType< XControlModel >::get(),
+            ::cppu::UnoType< XControlShape >::get()
+        ).get(), UNO_SET_THROW );
+
+        SdrObjListIter aPageIter( m_rPage );
+        while ( aPageIter.IsMore() )
+        {
+            // only FmFormObjs are what we're interested in
+            FmFormObj* pCurrent = FmFormObj::GetFormObject( aPageIter.Next() );
+            if ( !pCurrent )
+                continue;
+
+            lcl_insertFormObject_throw( *pCurrent, xMap );
+        }
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+    return xMap;
+}
+
+//------------------------------------------------------------------------------
 const Reference< XNameContainer >& FmFormPageImpl::getForms( bool _bForceCreate )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPageImpl::getForms" );
@@ -264,7 +348,7 @@ const Reference< XNameContainer >& FmFormPageImpl::getForms( bool _bForceCreate 
             m_aFormsCreationHdl.Call( this );
         }
 
-        FmFormModel* pFormsModel = pPage ? PTR_CAST( FmFormModel, pPage->GetModel() ) : NULL;
+        FmFormModel* pFormsModel = PTR_CAST( FmFormModel, m_rPage.GetModel() );
 
         // give the newly created collection a place in the universe
         Reference< XChild > xAsChild( m_xForms, UNO_QUERY );
@@ -354,7 +438,7 @@ Reference< XForm >  FmFormPageImpl::getDefaultForm()
     // did not find an existing suitable form -> create a new one
     if ( !xForm.is() )
     {
-        SdrModel* pModel = pPage->GetModel();
+        SdrModel* pModel = m_rPage.GetModel();
 
         if( pModel->IsUndoEnabled() )
         {
@@ -436,7 +520,7 @@ Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::findPlaceInFormCompo
         // wenn keine ::com::sun::star::form gefunden, dann eine neue erzeugen
         if (!xForm.is())
         {
-            SdrModel* pModel = pPage->GetModel();
+            SdrModel* pModel = m_rPage.GetModel();
 
             const bool bUndo = pModel->IsUndoEnabled();
 
@@ -697,4 +781,39 @@ UniString FmFormPageImpl::getDefaultName( sal_Int16 _nClassId, const Reference< 
         sName = sClassName + ::rtl::OUString::valueOf(++n);
 
     return sName;
+}
+
+//------------------------------------------------------------------
+void FmFormPageImpl::formObjectInserted( const FmFormObj& _object )
+{
+    Reference< XMap > xControlShapeMap( m_aControlShapeMap.get(), UNO_QUERY );
+    if ( !xControlShapeMap.is() )
+        // our map does not exist -> not interested in this event
+        return;
+
+    try
+    {
+        lcl_insertFormObject_throw( _object,  xControlShapeMap );
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+}
+
+void FmFormPageImpl::formObjectRemoved( const FmFormObj& _object )
+{
+    Reference< XMap > xControlShapeMap( m_aControlShapeMap.get(), UNO_QUERY );
+    if ( !xControlShapeMap.is() )
+        // our map does not exist -> not interested in this event
+        return;
+
+    try
+    {
+        lcl_removeFormObject( _object, xControlShapeMap );
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
 }

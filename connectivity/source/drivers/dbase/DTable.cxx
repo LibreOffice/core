@@ -42,8 +42,10 @@
 #include <tools/config.hxx>
 #include "dbase/DIndex.hxx"
 #include "dbase/DIndexes.hxx"
+//#include "file/FDriver.hxx"
 #include <comphelper/sequence.hxx>
 #include <svtools/zforlist.hxx>
+#include <svtools/syslocale.hxx>
 #include <rtl/math.hxx>
 #include <stdio.h>      //sprintf
 #include <ucbhelper/content.hxx>
@@ -52,6 +54,7 @@
 #include <connectivity/dbconversion.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <comphelper/property.hxx>
+//#include <unotools/calendarwrapper.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <comphelper/types.hxx>
@@ -81,15 +84,14 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::i18n;
 
 // stored as the Field Descriptor terminator
 #define FIELD_DESCRIPTOR_TERMINATOR 0x0D
 #define DBF_EOL                     0x1A
 
-//==================================================================
 namespace
 {
-//==================================================================
 sal_Int32 lcl_getFileSize(SvStream& _rStream)
 {
     sal_Int32 nFileSize = 0;
@@ -102,9 +104,123 @@ sal_Int32 lcl_getFileSize(SvStream& _rStream)
         nFileSize -= 1;
     return nFileSize;
 }
-//==================================================================
+/**
+    calculates the Julian date
+*/
+void lcl_CalcJulDate(sal_Int32& _nJulianDate,sal_Int32& _nJulianTime,const com::sun::star::util::DateTime _aDateTime)
+{
+    com::sun::star::util::DateTime aDateTime = _aDateTime;
+    // weird: months fix
+    if (aDateTime.Month > 12)
+    {
+        aDateTime.Month--;
+        sal_uInt16 delta = _aDateTime.Month / 12;
+        aDateTime.Year += delta;
+        aDateTime.Month -= delta * 12;
+        aDateTime.Month++;
+    }
+
+    _nJulianTime = ((aDateTime.Hours*3600000)+(aDateTime.Minutes*60000)+(aDateTime.Seconds*1000)+(aDateTime.HundredthSeconds*10));
+    /* conversion factors */
+    sal_uInt16 iy0;
+    sal_uInt16 im0;
+    if ( aDateTime.Month <= 2 )
+    {
+        iy0 = aDateTime.Year - 1;
+        im0 = aDateTime.Month + 12;
+    }
+    else
+    {
+        iy0 = aDateTime.Year;
+        im0 = aDateTime.Month;
+    }
+    sal_Int32 ia = iy0 / 100;
+    sal_Int32 ib = 2 - ia + (ia >> 2);
+    /* calculate julian date    */
+    if ( aDateTime.Year <= 0 )
+    {
+        _nJulianDate = (sal_Int32) ((365.25 * iy0) - 0.75)
+            + (sal_Int32) (30.6001 * (im0 + 1) )
+            + aDateTime.Day + 1720994;
+    } // if ( _aDateTime.Year <= 0 )
+    else
+    {
+        _nJulianDate = static_cast<sal_Int32>( ((365.25 * iy0)
+            + (sal_Int32) (30.6001 * (im0 + 1))
+            + aDateTime.Day + 1720994));
+    }
+    double JD = _nJulianDate + 0.5;
+    _nJulianDate = (sal_Int32)( JD + 0.5);
+    const double gyr = aDateTime.Year + (0.01 * aDateTime.Month) + (0.0001 * aDateTime.Day);
+    if ( gyr >= 1582.1015 ) /* on or after 15 October 1582  */
+        _nJulianDate += ib;
 }
-//==================================================================
+
+/**
+    calculates date time from the Julian Date
+*/
+void lcl_CalDate(sal_Int32 _nJulianDate,sal_Int32 _nJulianTime,com::sun::star::util::DateTime& _rDateTime)
+{
+    if ( _nJulianDate )
+    {
+        sal_Int32 ialp;
+        sal_Int32 ka = _nJulianDate;
+        if ( _nJulianDate >= 2299161 )
+        {
+            ialp = (sal_Int32)( ((double) _nJulianDate - 1867216.25 ) / ( 36524.25 ));
+            ka = _nJulianDate + 1 + ialp - ( ialp >> 2 );
+        }
+        sal_Int32 kb = ka + 1524;
+        sal_Int32 kc =  (sal_Int32) ( ((double) kb - 122.1 ) / 365.25 );
+        sal_Int32 kd = (sal_Int32) ((double) kc * 365.25);
+        sal_Int32 ke = (sal_Int32) ((double) ( kb - kd ) / 30.6001 );
+        _rDateTime.Day = static_cast<sal_uInt16>(kb - kd - ((sal_Int32) ( (double) ke * 30.6001 )));
+        if ( ke > 13 )
+            _rDateTime.Month = static_cast<sal_uInt16>(ke - 13);
+        else
+            _rDateTime.Month = static_cast<sal_uInt16>(ke - 1);
+        if ( (_rDateTime.Month == 2) && (_rDateTime.Day > 28) )
+            _rDateTime.Day = 29;
+        if ( (_rDateTime.Month == 2) && (_rDateTime.Day == 29) && (ke == 3) )
+            _rDateTime.Year = static_cast<sal_uInt16>(kc - 4716);
+        else if ( _rDateTime.Month > 2 )
+            _rDateTime.Year = static_cast<sal_uInt16>(kc - 4716);
+        else
+            _rDateTime.Year = static_cast<sal_uInt16>(kc - 4715);
+    } // if ( _nJulianDate )
+
+    if ( _nJulianTime )
+    {
+        double d_s = _nJulianTime / 1000;
+        double d_m = d_s / 60;
+        double d_h  = d_m / 60;
+        _rDateTime.Hours = (sal_uInt16) (d_h);
+        _rDateTime.Minutes = (sal_uInt16) d_m;          // integer _aDateTime.Minutes
+        //// weird: time fix
+     //   int test = (_rDateTime.Hours % 3) * 100 + _rDateTime.Minutes;
+        //int test_tbl[] = {0, 1, 2, 11, 12, 13, 22, 23, 24, 25, 34, 35, 36,
+        //  45, 46, 47, 56, 57, 58, 107, 108, 109, 110, 119, 120, 121,
+        //  130, 131, 132, 141, 142, 143, 152, 153, 154, 155, 204, 205,
+        //  206, 215, 216, 217, 226, 227, 228, 237, 238, 239, 240, 249,
+        //  250, 251};
+     //   for (int i = 0; i < sizeof(test_tbl)/sizeof(test_tbl[0]); i++)
+        //{
+        //    if (test == test_tbl[i])
+        //    {
+        //  // frac += 0.000012;
+        //      //d_hour = frac * 24.0;
+        //      _rDateTime.Hours = (sal_uInt16)d_hour;
+        //      d_minute = (d_hour - (double)_rDateTime.Hours) * 60.0;
+        //      _rDateTime.Minutes = (sal_uInt16)d_minute;
+        //      break;
+        //    }
+     //   }
+
+        _rDateTime.Seconds = static_cast<sal_uInt16>(( d_m - (double) _rDateTime.Minutes ) * 60.0);
+    }
+}
+
+}
 
 // -------------------------------------------------------------------------
 void ODbaseTable::readHeader()
@@ -152,6 +268,7 @@ void ODbaseTable::readHeader()
             case dBaseIV:
             case dBaseV:
             case VisualFoxPro:
+            case VisualFoxProAuto:
             case dBaseFS:
             case dBaseFSMemo:
             case dBaseIVMemoSQL:
@@ -227,6 +344,7 @@ void ODbaseTable::fillColumns()
     ::rtl::OUString aTypeName;
     static const ::rtl::OUString sVARCHAR(RTL_CONSTASCII_USTRINGPARAM("VARCHAR"));
     const sal_Bool bCase = getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers();
+    const bool bFoxPro = m_aHeader.db_typ == VisualFoxPro || m_aHeader.db_typ == VisualFoxProAuto || m_aHeader.db_typ == FoxProMemo;
 
     sal_Int32 i = 0;
     for (; i < nFieldCount; i++)
@@ -236,60 +354,95 @@ void ODbaseTable::fillColumns()
         if ( FIELD_DESCRIPTOR_TERMINATOR == aDBFColumn.db_fnm[0] ) // 0x0D stored as the Field Descriptor terminator.
             break;
 
+        sal_Bool bIsRowVersion = bFoxPro && ( aDBFColumn.db_frei2[0] & 0x01 ) == 0x01;
+        //if ( bFoxPro && ( aDBFColumn.db_frei2[0] & 0x01 ) == 0x01 ) // system column not visible to user
+        //    continue;
         const String aColumnName((const char *)aDBFColumn.db_fnm,m_eEncoding);
 
+        m_aRealFieldLengths.push_back(aDBFColumn.db_flng);
         sal_Int32 nPrecision = aDBFColumn.db_flng;
         sal_Int32 eType;
+        sal_Bool bIsCurrency = sal_False;
+
+        char cType[2];
+        cType[0] = aDBFColumn.db_typ;
+        cType[1] = 0;
+        aTypeName = ::rtl::OUString::createFromAscii(cType);
 
         switch (aDBFColumn.db_typ)
         {
             case 'C':
-                eType = DataType::VARCHAR;
-                aTypeName = sVARCHAR;
+                eType = DataType::CHAR;
+                aTypeName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VARCHAR"));
                 break;
             case 'F':
+                aTypeName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DECIMAL"));
             case 'N':
+                if ( aDBFColumn.db_typ == 'N' )
+                    aTypeName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NUMERIC"));
                 eType = DataType::DECIMAL;
-                aTypeName = ::rtl::OUString::createFromAscii("DECIMAL");
 
                 // Bei numerischen Feldern werden zwei Zeichen mehr geschrieben, als die Precision der Spaltenbeschreibung eigentlich
                 // angibt, um Platz fuer das eventuelle Vorzeichen und das Komma zu haben. Das muss ich jetzt aber wieder rausrechnen.
                 nPrecision = SvDbaseConverter::ConvertPrecisionToOdbc(nPrecision,aDBFColumn.db_dez);
                     // leider gilt das eben Gesagte nicht fuer aeltere Versionen ....
-                    ;
                 break;
             case 'L':
                 eType = DataType::BIT;
-                aTypeName = ::rtl::OUString::createFromAscii("BIT");
+                aTypeName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BOOLEAN"));
+                break;
+            case 'Y':
+                bIsCurrency = sal_True;
+                eType = DataType::DOUBLE;
+                aTypeName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DOUBLE"));
                 break;
             case 'D':
                 eType = DataType::DATE;
-                aTypeName = ::rtl::OUString::createFromAscii("DATE");
+                aTypeName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DATE"));
+                break;
+            case 'T':
+                eType = DataType::TIMESTAMP;
+                aTypeName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TIMESTAMP"));
+                break;
+            case 'I':
+                eType = DataType::INTEGER;
+                aTypeName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("INTEGER"));
                 break;
             case 'M':
-                eType = DataType::LONGVARCHAR;
-                aTypeName = ::rtl::OUString::createFromAscii("LONGVARCHAR");
-                nPrecision = 65535;
+                if ( bFoxPro && ( aDBFColumn.db_frei2[0] & 0x04 ) == 0x04 )
+                {
+                    eType = DataType::LONGVARBINARY;
+                    aTypeName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LONGVARBINARY"));
+                }
+                else
+                {
+                    aTypeName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LONGVARCHAR"));
+                    eType = DataType::LONGVARCHAR;
+                }
+                nPrecision = 2147483647;
+                break;
+            case 'P':
+                aTypeName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LONGVARBINARY"));
+                eType = DataType::LONGVARBINARY;
+                nPrecision = 2147483647;
+                break;
+            case '0':
+            case 'B':
+                if ( m_aHeader.db_typ == VisualFoxPro || m_aHeader.db_typ == VisualFoxProAuto )
+                {
+                    aTypeName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DOUBLE"));
+                    eType = DataType::DOUBLE;
+                }
+                else
+                {
+                    aTypeName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LONGVARBINARY"));
+                    eType = DataType::LONGVARBINARY;
+                    nPrecision = 2147483647;
+                }
                 break;
             default:
-                aTypeName = ::rtl::OUString::createFromAscii("OTHER");
                 eType = DataType::OTHER;
-
         }
-
-//      sal_Int32 nFlags = 0;
-//      switch (aDBFColumn.db_typ)
-//      {
-//          case 'C':
-//          case 'D':
-//          case 'L':   nFlags = ColumnSearch::FULL; break;
-//          case 'F':
-//          case 'N':   nFlags = ColumnSearch::BASIC; break;
-//          case 'M':   nFlags = ColumnSearch::CHAR; break;
-//          default:
-//                      nFlags = ColumnSearch::NONE;
-//
-//      }
 
         m_aTypes.push_back(eType);
         m_aPrecisions.push_back(nPrecision);
@@ -303,8 +456,8 @@ void ODbaseTable::fillColumns()
                                                     aDBFColumn.db_dez,
                                                     eType,
                                                     sal_False,
-                                                    sal_False,
-                                                    sal_False,
+                                                    bIsRowVersion,
+                                                    bIsCurrency,
                                                     bCase);
         m_aColumns->get().push_back(xCol);
     } // for (; i < nFieldCount; i++)
@@ -380,7 +533,7 @@ void ODbaseTable::construct()
             // Memo-Dateinamen bilden (.DBT):
             // nyi: Unschoen fuer Unix und Mac!
 
-            if ( m_aHeader.db_typ == FoxProMemo || VisualFoxPro == m_aHeader.db_typ ) // foxpro uses another extension
+            if ( m_aHeader.db_typ == FoxProMemo || VisualFoxPro == m_aHeader.db_typ || VisualFoxProAuto == m_aHeader.db_typ ) // foxpro uses another extension
                 aURL.SetExtension(String::CreateFromAscii("fpt"));
             else
                 aURL.SetExtension(String::CreateFromAscii("dbt"));
@@ -465,6 +618,7 @@ BOOL ODbaseTable::ReadMemoHeader()
             }
             break;
         case VisualFoxPro:
+        case VisualFoxProAuto:
         case FoxProMemo:
             m_aMemoHeader.db_typ    = MemoFoxPro;
             m_pMemoStream->Seek(6L);
@@ -693,15 +847,23 @@ sal_Bool ODbaseTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols, s
         }
         switch(nType)
         {
-            case DataType::DATE:        nLen = 8; break;
+            case DataType::INTEGER:
+            case DataType::DOUBLE:
+            case DataType::TIMESTAMP:
+            case DataType::DATE:
+            case DataType::BIT:
+            case DataType::LONGVARCHAR:
+            case DataType::LONGVARBINARY:
+                nLen = m_aRealFieldLengths[i-1];
+                break;
             case DataType::DECIMAL:
                 if(_bUseTableDefs)
                     nLen = SvDbaseConverter::ConvertPrecisionToDbase(nLen,m_aScales[i-1]);
                 else
                     nLen = SvDbaseConverter::ConvertPrecisionToDbase(nLen,getINT32((*aIter)->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE))));
                 break;  // das Vorzeichen und das Komma
-            case DataType::BIT:         nLen = 1; break;
-            case DataType::LONGVARCHAR: nLen = 10; break;
+
+            case DataType::BINARY:
             case DataType::OTHER:
                 nByteOffset += nLen;
                 continue;
@@ -714,7 +876,9 @@ sal_Bool ODbaseTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols, s
             nByteOffset += nLen;
             OSL_ENSURE( nByteOffset <= m_nBufferSize ,"ByteOffset > m_nBufferSize!");
             continue;
-        }
+        } // if ( !(_rRow->get())[i]->isBound() )
+        if ( ( nByteOffset + nLen) > m_nBufferSize )
+            break; // length doesn't match buffer size.
 
         char *pData = (char *) (m_pBuffer + nByteOffset);
 
@@ -733,6 +897,48 @@ sal_Bool ODbaseTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols, s
                 (_rRow->get())[i]->setNull();
 
             pData[nLen] = cLast;
+        } // if (nType == DataType::CHAR || nType == DataType::VARCHAR)
+        else if ( DataType::TIMESTAMP == nType )
+        {
+            sal_Int32 nDate = 0,nTime = 0;
+            memcpy(&nDate, pData, 4);
+            memcpy(&nTime, pData+ 4, 4);
+            if ( !nDate && !nTime )
+            {
+                (_rRow->get())[i]->setNull();
+            }
+            else
+            {
+                ::com::sun::star::util::DateTime aDateTime;
+                lcl_CalDate(nDate,nTime,aDateTime);
+                *(_rRow->get())[i] = aDateTime;
+            }
+        }
+        else if ( DataType::INTEGER == nType )
+        {
+            sal_Int32 nValue = 0;
+            memcpy(&nValue, pData, nLen);
+            *(_rRow->get())[i] = nValue;
+        }
+        else if ( DataType::DOUBLE == nType )
+        {
+            double d = 0.0;
+            if (getBOOL((*aIter)->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISCURRENCY)))) // Currency wird gesondert behandelt
+            {
+                sal_Int64 nValue = 0;
+                memcpy(&nValue, pData, nLen);
+
+                if ( m_aScales[i-1] )
+                    d = (double)(nValue / pow(10.0,(int)m_aScales[i-1]));
+                else
+                    d = (double)(nValue);
+            }
+            else
+            {
+                memcpy(&d, pData, nLen);
+            }
+
+            *(_rRow->get())[i] = d;
         }
         else
         {
@@ -789,6 +995,8 @@ sal_Bool ODbaseTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols, s
                     //  pVal->setDouble(b);
                 }
                 break;
+                case DataType::LONGVARBINARY:
+                case DataType::BINARY:
                 case DataType::LONGVARCHAR:
                 {
                     const long nBlockNo = aStr.ToInt32();   // Blocknummer lesen
@@ -806,9 +1014,6 @@ sal_Bool ODbaseTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols, s
             (_rRow->get())[i]->setTypeKind(nType);
         }
 
-//      if (aStatus.IsError())
-//          break;
-        // Und weiter ...
         nByteOffset += nLen;
         OSL_ENSURE( nByteOffset <= m_nBufferSize ,"ByteOffset > m_nBufferSize!");
     }
@@ -978,38 +1183,78 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
     if (!m_pFileStream)
         return sal_False;
 
+    BYTE nDbaseType = dBaseIII;
+    Reference<XIndexAccess> xColumns(getColumns(),UNO_QUERY);
+    Reference<XPropertySet> xCol;
+    const ::rtl::OUString sPropType = OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE);
+
+    try
+    {
+        const sal_Int32 nCount = xColumns->getCount();
+        for(sal_Int32 i=0;i<nCount;++i)
+        {
+            xColumns->getByIndex(i) >>= xCol;
+            OSL_ENSURE(xCol.is(),"This should be a column!");
+
+            switch (getINT32(xCol->getPropertyValue(sPropType)))
+            {
+                case DataType::DOUBLE:
+                case DataType::INTEGER:
+                case DataType::TIMESTAMP:
+                case DataType::LONGVARBINARY:
+                    nDbaseType = VisualFoxPro;
+                    i = nCount; // no more columns need to be checked
+                    break;
+            } // switch (getINT32(xCol->getPropertyValue(sPropType)))
+        }
+    }
+    catch ( const Exception& e )
+    {
+        (void)e;
+
+        try
+        {
+            // we have to drop the file because it is corrupted now
+            DropImpl();
+        }
+        catch(const Exception&) { }
+        throw;
+    }
+
     char aBuffer[21];               // write buffer
     memset(aBuffer,0,sizeof(aBuffer));
 
     m_pFileStream->Seek(0L);
-    (*m_pFileStream) << (BYTE) dBaseIII;                                                                // dBase format
+    (*m_pFileStream) << (BYTE) nDbaseType;                              // dBase format
     (*m_pFileStream) << (BYTE) (aDate.GetYear() % 100);                 // aktuelles Datum
 
 
     (*m_pFileStream) << (BYTE) aDate.GetMonth();
     (*m_pFileStream) << (BYTE) aDate.GetDay();
-    (*m_pFileStream) << 0L;                                                                                                     // Anzahl der Datensaetze
-    (*m_pFileStream) << (USHORT)((m_pColumns->getCount()+1) * 32 + 1);                // Kopfinformationen,
+    (*m_pFileStream) << 0L;                                             // Anzahl der Datensaetze
+    (*m_pFileStream) << (USHORT)((m_pColumns->getCount()+1) * 32 + 1);  // Kopfinformationen,
                                                                         // pColumns erhaelt immer eine Spalte mehr
-    (*m_pFileStream) << (USHORT) 0;                                                                                     // Satzlaenge wird spaeter bestimmt
+    (*m_pFileStream) << (USHORT) 0;                                     // Satzlaenge wird spaeter bestimmt
     m_pFileStream->Write(aBuffer, 20);
 
-    USHORT nRecLength = 1;                                                                                          // Laenge 1 fuer deleted flag
+    USHORT nRecLength = 1;                                              // Laenge 1 fuer deleted flag
     sal_Int32  nMaxFieldLength = m_pConnection->getMetaData()->getMaxColumnNameLength();
-    Reference<XIndexAccess> xColumns(getColumns(),UNO_QUERY);
-
     ::rtl::OUString aName;
-    Reference<XPropertySet> xCol;
+    const ::rtl::OUString sPropName = OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME);
+    const ::rtl::OUString sPropPrec = OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION);
+    const ::rtl::OUString sPropScale = OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE);
+
     try
     {
-        for(sal_Int32 i=0;i<xColumns->getCount();++i)
+        const sal_Int32 nCount = xColumns->getCount();
+        for(sal_Int32 i=0;i<nCount;++i)
         {
-            ::cppu::extractInterface(xCol,xColumns->getByIndex(i));
+            xColumns->getByIndex(i) >>= xCol;
             OSL_ENSURE(xCol.is(),"This should be a column!");
 
             char cTyp( 'C' );
 
-            xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= aName;
+            xCol->getPropertyValue(sPropName) >>= aName;
 
             ::rtl::OString aCol;
             if ( DBTypeConversion::convertUnicodeString( aName, aCol, m_eEncoding ) > nMaxFieldLength)
@@ -1020,21 +1265,38 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
             (*m_pFileStream) << aCol.getStr();
             m_pFileStream->Write(aBuffer, 11 - aCol.getLength());
 
-            switch (getINT32(xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))))
+            sal_Int32 nPrecision = 0;
+            xCol->getPropertyValue(sPropPrec) >>= nPrecision;
+            sal_Int32 nScale = 0;
+            xCol->getPropertyValue(sPropScale) >>= nScale;
+
+            bool bBinary = false;
+
+            switch (getINT32(xCol->getPropertyValue(sPropType)))
             {
                 case DataType::CHAR:
                 case DataType::VARCHAR:
                     cTyp = 'C';
                     break;
+                case DataType::DOUBLE:
+                    if (getBOOL(xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISCURRENCY)))) // Currency wird gesondert behandelt
+                        cTyp = 'Y';
+                    else
+                        cTyp = 'B';
+                    break;
+                case DataType::INTEGER:
+                    cTyp = 'I';
+                    break;
                 case DataType::TINYINT:
                 case DataType::SMALLINT:
-                case DataType::INTEGER:
                 case DataType::BIGINT:
                 case DataType::DECIMAL:
                 case DataType::NUMERIC:
                 case DataType::REAL:
-                case DataType::DOUBLE:
                     cTyp = 'N';                             // nur dBase 3 format
+                    break;
+                case DataType::TIMESTAMP:
+                    cTyp = 'T';
                     break;
                 case DataType::DATE:
                     cTyp = 'D';
@@ -1043,6 +1305,8 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
                     cTyp = 'L';
                     break;
                 case DataType::LONGVARBINARY:
+                    bBinary = true;
+                    // run through
                 case DataType::LONGVARCHAR:
                     cTyp = 'M';
                     break;
@@ -1053,12 +1317,10 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
             }
 
             (*m_pFileStream) << cTyp;
-            m_pFileStream->Write(aBuffer, 4);
-
-            sal_Int32 nPrecision = 0;
-            xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION)) >>= nPrecision;
-            sal_Int32 nScale = 0;
-            xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE)) >>= nScale;
+            if ( nDbaseType == VisualFoxPro )
+                (*m_pFileStream) << (nRecLength-1);
+            else
+                m_pFileStream->Write(aBuffer, 4);
 
             switch(cTyp)
             {
@@ -1092,14 +1354,22 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
 
                         (*m_pFileStream) << (BYTE)( nPrec);
                         (*m_pFileStream) << (BYTE)nScale;
-                        nRecLength = nRecLength + (USHORT)nPrec;
+                        nRecLength += (USHORT)nPrec;
                     }
                     break;
                 case 'L':
                     (*m_pFileStream) << (BYTE)1;
                     (*m_pFileStream) << (BYTE)0;
-                    nRecLength++;
+                    ++nRecLength;
                     break;
+                case 'I':
+                    (*m_pFileStream) << (BYTE)4;
+                    (*m_pFileStream) << (BYTE)0;
+                    nRecLength += 4;
+                    break;
+                case 'Y':
+                case 'B':
+                case 'T':
                 case 'D':
                     (*m_pFileStream) << (BYTE)8;
                     (*m_pFileStream) << (BYTE)0;
@@ -1110,11 +1380,14 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
                     (*m_pFileStream) << (BYTE)10;
                     (*m_pFileStream) << (BYTE)0;
                     nRecLength += 10;
+                    if ( bBinary )
+                        aBuffer[0] = 0x06;
                     break;
                 default:
                     throwInvalidColumnType(STR_INVALID_COLUMN_TYPE, aName);
             }
             m_pFileStream->Write(aBuffer, 14);
+            aBuffer[0] = 0x00;
         }
 
         (*m_pFileStream) << (BYTE)FIELD_DESCRIPTOR_TERMINATOR;              // kopf ende
@@ -1125,7 +1398,10 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
         if (bCreateMemo)
         {
             m_pFileStream->Seek(0L);
-            (*m_pFileStream) << (BYTE) dBaseIIIMemo;
+            if (nDbaseType == VisualFoxPro)
+                (*m_pFileStream) << (BYTE) FoxProMemo;
+            else
+                (*m_pFileStream) << (BYTE) dBaseIIIMemo;
         } // if (bCreateMemo)
     }
     catch ( const Exception& e )
@@ -1252,7 +1528,7 @@ BOOL ODbaseTable::InsertRow(OValueRefVector& rRow, BOOL bFlush,const Reference<X
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::InsertRow" );
     // Buffer mit Leerzeichen fuellen
     AllocBuffer();
-    memset(m_pBuffer, ' ', m_aHeader.db_slng);
+    memset(m_pBuffer, 0, m_aHeader.db_slng);
 
     // Gesamte neue Row uebernehmen:
     // ... und am Ende als neuen Record hinzufuegen:
@@ -1436,7 +1712,7 @@ BOOL ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const
     Reference<XPropertySet> xIndex;
     USHORT i;
     ::rtl::OUString aColName;
-    sal_Int32 nColumnCount = m_pColumns->getCount();
+    const sal_Int32 nColumnCount = m_pColumns->getCount();
     ::std::vector< Reference<XPropertySet> > aIndexedCols(nColumnCount);
 
     ::comphelper::UStringMixEqual aCase(isCaseSensitive());
@@ -1490,7 +1766,11 @@ BOOL ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const
                         xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= aColName;
                         xCol = NULL;
                     } // if ( !aColName.getLength() )
-                    throwInvalidColumnType(STR_DUPLICATE_VALUE_IN_COLUMN,aColName);
+                    const ::rtl::OUString sError( getConnection()->getResources().getResourceStringWithSubstitution(
+                            STR_DUPLICATE_VALUE_IN_COLUMN
+                            ,"$columnname$", aColName
+                         ) );
+                    ::dbtools::throwGenericSQLException( sError, *this );
                 }
             }
         }
@@ -1522,15 +1802,24 @@ BOOL ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const
             }
         }
 
+        bool bSetZero = false;
         switch (nType)
         {
-            case DataType::DATE:        nLen = 8; break;
+            case DataType::INTEGER:
+            case DataType::DOUBLE:
+            case DataType::TIMESTAMP:
+                bSetZero = true;
+            case DataType::LONGVARBINARY:
+            case DataType::DATE:
+            case DataType::BIT:
+            case DataType::LONGVARCHAR:
+                nLen = m_aRealFieldLengths[i];
+                break;
             case DataType::DECIMAL:
                 nLen = SvDbaseConverter::ConvertPrecisionToDbase(nLen,nScale);
                 break;  // das Vorzeichen und das Komma
-            case DataType::BIT:         nLen = 1; break;
-            case DataType::LONGVARCHAR: nLen = 10; break;
-            default:                    break;
+            default:
+                break;
 
         } // switch (nType)
 
@@ -1580,7 +1869,10 @@ BOOL ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const
         char* pData = (char *)(m_pBuffer + nByteOffset);
         if (rRow.get()[nPos]->getValue().isNull())
         {
-            memset(pData,' ',nLen); // Zuruecksetzen auf NULL
+            if ( bSetZero )
+                memset(pData,0,nLen);   // Zuruecksetzen auf NULL
+            else
+                memset(pData,' ',nLen); // Zuruecksetzen auf NULL
             nByteOffset += nLen;
             OSL_ENSURE( nByteOffset <= m_nBufferSize ,"ByteOffset > m_nBufferSize!");
             continue;
@@ -1591,6 +1883,15 @@ BOOL ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const
         {
             switch (nType)
             {
+                case DataType::TIMESTAMP:
+                    {
+                        sal_Int32 nJulianDate = 0, nJulianTime = 0;
+                        lcl_CalcJulDate(nJulianDate,nJulianTime,rRow.get()[nPos]->getValue());
+                        // Genau 8 Byte kopieren:
+                        memcpy(pData,&nJulianDate,4);
+                        memcpy(pData+4,&nJulianTime,4);
+                    }
+                    break;
                 case DataType::DATE:
                 {
                     ::com::sun::star::util::Date aDate;
@@ -1609,6 +1910,30 @@ BOOL ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const
                     // Genau 8 Byte kopieren:
                     strncpy(pData,s,sizeof s - 1);
                 } break;
+                case DataType::INTEGER:
+                    {
+                        sal_Int32 nValue = rRow.get()[nPos]->getValue();
+                        memcpy(pData,&nValue,nLen);
+                    }
+                    break;
+                case DataType::DOUBLE:
+                    {
+                        const double d = rRow.get()[nPos]->getValue();
+                        m_pColumns->getByIndex(i) >>= xCol;
+
+                        if (getBOOL(xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISCURRENCY)))) // Currency wird gesondert behandelt
+                        {
+                            sal_Int64 nValue = 0;
+                            if ( m_aScales[i] )
+                                nValue = (sal_Int64)(d * pow(10.0,(int)m_aScales[i]));
+                            else
+                                nValue = (sal_Int64)(d);
+                            memcpy(pData,&nValue,nLen);
+                        } // if (getBOOL(xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISCURRENCY)))) // Currency wird gesondert behandelt
+                        else
+                            memcpy(pData,&d,nLen);
+                    }
+                    break;
                 case DataType::DECIMAL:
                 {
                     memset(pData,' ',nLen); // Zuruecksetzen auf NULL
@@ -1647,6 +1972,7 @@ BOOL ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const
                 case DataType::BIT:
                     *pData = rRow.get()[nPos]->getValue().getBool() ? 'T' : 'F';
                     break;
+                case DataType::LONGVARBINARY:
                 case DataType::LONGVARCHAR:
                 {
                     char cNext = pData[nLen]; // merken und temporaer durch 0 ersetzen
@@ -1714,12 +2040,20 @@ BOOL ODbaseTable::WriteMemo(ORowSetValue& aVariable, ULONG& rBlockNr)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::WriteMemo" );
     // wird die BlockNr 0 vorgegeben, wird der block ans Ende gehaengt
-
-    BYTE nHeader[4];
-
-    ::rtl::OUString sStringToWrite( aVariable.getString() );
+    ULONG nSize = 0;
     ::rtl::OString aStr;
-    ULONG nSize = DBTypeConversion::convertUnicodeString( sStringToWrite, aStr, m_eEncoding );
+    ::com::sun::star::uno::Sequence<sal_Int8> aValue;
+    BYTE nHeader[4];
+    const bool bBinary = aVariable.getTypeKind() == DataType::LONGVARBINARY && m_aMemoHeader.db_typ == MemoFoxPro;
+    if ( bBinary )
+    {
+        aValue = aVariable.getSequence();
+        nSize = aValue.getLength();
+    }
+    else
+    {
+        nSize = DBTypeConversion::convertUnicodeString( aVariable.getString(), aStr, m_eEncoding );
+    }
 
     // Anhaengen oder ueberschreiben
     BOOL bAppend = rBlockNr == 0;
@@ -1779,29 +2113,28 @@ BOOL ODbaseTable::WriteMemo(ORowSetValue& aVariable, ULONG& rBlockNr)
         {
             const char cEOF = (char) DBF_EOL;
             nSize++;
-
-//          if (pData)
-//          {
-//              m_pMemoStream->Write((const char*) pData->getConstArray(), pData->getLength());
-//          }
-//          else
-//          {
-                m_pMemoStream->Write( aStr.getStr(), aStr.getLength() );
-            //  }
-
+            m_pMemoStream->Write( aStr.getStr(), aStr.getLength() );
             (*m_pMemoStream) << cEOF << cEOF;
         } break;
         case MemoFoxPro:
         case MemodBaseIV: // dBase IV-Memofeld mit Laengenangabe
         {
-            (*m_pMemoStream) << (BYTE)0xFF
-                                         << (BYTE)0xFF
-                                         << (BYTE)0x08;
+            if ( MemodBaseIV == m_aMemoHeader.db_typ )
+                (*m_pMemoStream) << (BYTE)0xFF
+                                 << (BYTE)0xFF
+                                 << (BYTE)0x08;
+            else
+                (*m_pMemoStream) << (BYTE)0x00
+                                 << (BYTE)0x00
+                                 << (BYTE)0x00;
 
             UINT32 nWriteSize = nSize;
             if (m_aMemoHeader.db_typ == MemoFoxPro)
             {
-                (*m_pMemoStream) << (BYTE) 0x01; // ((pData = NULL) ? 0x01 : 0x00);
+                if ( bBinary )
+                    (*m_pMemoStream) << (BYTE) 0x00; // Picture
+                else
+                    (*m_pMemoStream) << (BYTE) 0x01; // Memo
                 for (int i = 4; i > 0; nWriteSize >>= 8)
                     nHeader[--i] = (BYTE) (nWriteSize % 256);
             }
@@ -1814,14 +2147,10 @@ BOOL ODbaseTable::WriteMemo(ORowSetValue& aVariable, ULONG& rBlockNr)
             }
 
             m_pMemoStream->Write(nHeader,4);
-//          if (pData)
-//          {
-//              m_pMemoStream->Write((const char*) pData->getConstArray(), pData->getLength());
-//          }
-//          else
-//          {
+            if ( bBinary )
+                m_pMemoStream->Write( aValue.getConstArray(), aValue.getLength() );
+            else
                 m_pMemoStream->Write( aStr.getStr(), aStr.getLength() );
-            //  }
             m_pMemoStream->Flush();
         }
     }
@@ -2419,18 +2748,18 @@ BOOL ODbaseTable::ReadMemo(ULONG nBlockNo, ORowSetValue& aVariable)
             // Foxpro stores text and binary data
             if (m_aMemoHeader.db_typ == MemoFoxPro)
             {
-                if (((BYTE)sHeader[0]) != 0 || ((BYTE)sHeader[1]) != 0 || ((BYTE)sHeader[2]) != 0)
-                {
-//                  String aText = String(SdbResId(STR_STAT_IResultSetHelper::INVALID));
-//                  aText.SearchAndReplace(String::CreateFromAscii("%%d"),m_pMemoStream->GetFileName());
-//                  aText.SearchAndReplace(String::CreateFromAscii("%%t"),aStatus.TypeToString(MEMO));
-//                  aStatus.Set(SDB_STAT_ERROR,
-//                          String::CreateFromAscii("01000"),
-//                          aStatus.CreateErrorMessage(aText),
-//                          0, String() );
-                    return sal_False;
-                }
-
+//              if (((BYTE)sHeader[0]) != 0 || ((BYTE)sHeader[1]) != 0 || ((BYTE)sHeader[2]) != 0)
+//              {
+////                    String aText = String(SdbResId(STR_STAT_IResultSetHelper::INVALID));
+////                    aText.SearchAndReplace(String::CreateFromAscii("%%d"),m_pMemoStream->GetFileName());
+////                    aText.SearchAndReplace(String::CreateFromAscii("%%t"),aStatus.TypeToString(MEMO));
+////                    aStatus.Set(SDB_STAT_ERROR,
+////                            String::CreateFromAscii("01000"),
+////                            aStatus.CreateErrorMessage(aText),
+////                            0, String() );
+//                  return sal_False;
+//              }
+//
                 bIsText = sHeader[3] != 0;
             }
             else if (((BYTE)sHeader[0]) != 0xFF || ((BYTE)sHeader[1]) != 0xFF || ((BYTE)sHeader[2]) != 0x08)
@@ -2451,28 +2780,40 @@ BOOL ODbaseTable::ReadMemo(ULONG nBlockNo, ORowSetValue& aVariable)
             if (m_aMemoHeader.db_typ == MemodBaseIV)
                 nLength -= 8;
 
-            //  char cChar;
-            ::rtl::OUString aStr;
-            while ( nLength > STRING_MAXLEN )
+            if ( nLength )
             {
-                ByteString aBStr;
-                aBStr.Expand(STRING_MAXLEN);
-                m_pMemoStream->Read(aBStr.AllocBuffer(STRING_MAXLEN),STRING_MAXLEN);
-                aStr += ::rtl::OUString(aBStr.GetBuffer(),aBStr.Len(), m_eEncoding);
-                nLength -= STRING_MAXLEN;
-            }
-            if ( nLength > 0 )
-            {
-                ByteString aBStr;
-                aBStr.Expand(static_cast<xub_StrLen>(nLength));
-                m_pMemoStream->Read(aBStr.AllocBuffer(static_cast<xub_StrLen>(nLength)),nLength);
-                //  aBStr.ReleaseBufferAccess();
+                if ( bIsText )
+                {
+                    //  char cChar;
+                    ::rtl::OUString aStr;
+                    while ( nLength > STRING_MAXLEN )
+                    {
+                        ByteString aBStr;
+                        aBStr.Expand(STRING_MAXLEN);
+                        m_pMemoStream->Read(aBStr.AllocBuffer(STRING_MAXLEN),STRING_MAXLEN);
+                        aStr += ::rtl::OUString(aBStr.GetBuffer(),aBStr.Len(), m_eEncoding);
+                        nLength -= STRING_MAXLEN;
+                    }
+                    if ( nLength > 0 )
+                    {
+                        ByteString aBStr;
+                        aBStr.Expand(static_cast<xub_StrLen>(nLength));
+                        m_pMemoStream->Read(aBStr.AllocBuffer(static_cast<xub_StrLen>(nLength)),nLength);
+                        //  aBStr.ReleaseBufferAccess();
 
-                aStr += ::rtl::OUString(aBStr.GetBuffer(),aBStr.Len(), m_eEncoding);
+                        aStr += ::rtl::OUString(aBStr.GetBuffer(),aBStr.Len(), m_eEncoding);
 
-            }
-            if ( aStr.getLength() )
-                aVariable = aStr;
+                    }
+                    if ( aStr.getLength() )
+                        aVariable = aStr;
+                } // if ( bIsText )
+                else
+                {
+                    ::com::sun::star::uno::Sequence< sal_Int8 > aData(nLength);
+                    m_pMemoStream->Read(aData.getArray(),nLength);
+                    aVariable = aData;
+                }
+            } // if ( nLength )
         }
     }
     return sal_True;

@@ -144,7 +144,7 @@ public:
     const String& GetUnoControlModelTypeName() const { return aUnoControlTypeName; }
     const String& GetUnoControlTypeName() const { return aUnoControlTypeName; }
 
-    void SetUnoControlModel(::com::sun::star::uno::Reference< com::sun::star::awt::XControlModel > xModel);
+    virtual void SetUnoControlModel( const ::com::sun::star::uno::Reference< com::sun::star::awt::XControlModel >& xModel );
 
 protected:
     // SdrObject overridables

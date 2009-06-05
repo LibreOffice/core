@@ -37,7 +37,6 @@
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/drawing/CircleKind.hpp>
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
-#include <cppuhelper/interfacecontainer.hxx>
 #include <vcl/svapp.hxx>
 #include <svtools/itemprop.hxx>
 #include <svtools/fltcall.hxx>
@@ -47,6 +46,7 @@
 #include <svx/svdoole2.hxx>
 #include <osl/mutex.hxx>
 #include <comphelper/extract.hxx>
+#include "svx/shapepropertynotifier.hxx"
 
 #include <toolkit/unohlp.hxx>
 
@@ -84,6 +84,7 @@
 #include "svx/dialogs.hrc"      //
 #include "svx/svdocapt.hxx"
 #include <svx/obj3d.hxx>
+#include <tools/diagnose_ex.h>
 #include "svx/xflftrit.hxx"
 #include "svx/xtable.hxx"
 #include "svx/xbtmpit.hxx"
@@ -116,6 +117,8 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
+using ::svx::PropertyValueProvider;
+using ::svx::IPropertyValueProvider;
 
 #define QUERYINT( xint ) \
     if( rType == ::getCppuType((const uno::Reference< xint >*)0) ) \
@@ -156,15 +159,17 @@ sal_Bool ConvertGDIMetaFileToWMF( const GDIMetaFile & rMTF, SvStream & rTargetSt
 uno::Reference< uno::XInterface > SAL_CALL SvxUnoGluePointAccess_createInstance( SdrObject* pObject );
 
 /***********************************************************************
-* class SvxShape                                                       *
+* class SvxShapeImpl                                                   *
 ***********************************************************************/
 
 struct SvxShapeImpl
 {
+    SvxShape&       mrAntiImpl;
     SfxItemSet*     mpItemSet;
     sal_uInt32      mnObjId;
     SvxShapeMaster* mpMaster;
     bool            mbHasSdrObjectOwnership;
+    bool            mbDisposing;
 
     /** CL, OD 2005-07-19 #i52126# - this is initially 0 and set when
      *  a SvxShape::Create() call is executed. It is then set to the created
@@ -172,58 +177,105 @@ struct SvxShapeImpl
      *  is prohibited.
      */
     SdrObject*      mpCreatedObj;
+
+    // for xComponent
+    ::cppu::OInterfaceContainerHelper   maDisposeListeners;
+    ::svx::PropertyChangeNotifier       maPropertyNotifier;
+
+    SvxShapeImpl( SvxShape& _rAntiImpl, ::osl::Mutex& _rMutex )
+        :mrAntiImpl( _rAntiImpl )
+        ,mpItemSet( NULL )
+        ,mnObjId( 0 )
+        ,mpMaster( NULL )
+        ,mbHasSdrObjectOwnership( false )
+        ,mbDisposing( false )
+        ,mpCreatedObj( NULL )
+        ,maDisposeListeners( _rMutex )
+        ,maPropertyNotifier( _rAntiImpl, _rMutex )
+    {
+    }
 };
+
+/**********************************************************************/
+class ShapePositionProvider : public PropertyValueProvider
+{
+public:
+    ShapePositionProvider( const SvxShapeImpl& _shapeImpl )
+        :PropertyValueProvider( _shapeImpl.mrAntiImpl, "Position" )
+    {
+    }
+
+protected:
+    virtual void getCurrentValue( Any& _out_rCurrentValue ) const
+    {
+        _out_rCurrentValue <<= static_cast< SvxShape& >( getContext() ).getPosition();
+    }
+};
+
+//----------------------------------------------------------------------
+class ShapeSizeProvider : public PropertyValueProvider
+{
+public:
+    ShapeSizeProvider( const SvxShapeImpl& _shapeImpl )
+        :PropertyValueProvider( _shapeImpl.mrAntiImpl, "Size" )
+    {
+    }
+
+protected:
+    virtual void getCurrentValue( Any& _out_rCurrentValue ) const
+    {
+        _out_rCurrentValue <<= static_cast< SvxShape& >( getContext() ).getSize();
+    }
+};
+
+/***********************************************************************
+* class SvxShape                                                       *
+***********************************************************************/
 
 DBG_NAME(SvxShape)
 
 SvxShape::SvxShape( SdrObject* pObject ) throw()
 :   maSize(100,100)
-,   mpImpl(NULL)
+,   mpImpl( new SvxShapeImpl( *this, maMutex ) )
 ,   mbIsMultiPropertyCall(false)
 ,   mpPropSet(aSvxMapProvider.GetPropertySet(SVXMAP_SHAPE))
 ,   maPropMapEntries(aSvxMapProvider.GetMap(SVXMAP_SHAPE))
-,   maDisposeListeners( maMutex )
-,   mbDisposing( false )
 ,   mpObj(pObject)
 ,   mpModel(NULL)
 ,   mnLockCount(0)
 {
     DBG_CTOR(SvxShape,NULL);
-    Init();
+    impl_construct();
 }
 
 //----------------------------------------------------------------------
 SvxShape::SvxShape( SdrObject* pObject, const SfxItemPropertyMapEntry* pEntries, const SvxItemPropertySet* pPropertySet ) throw()
 :   maSize(100,100)
-,   mpImpl(NULL)
+,   mpImpl( new SvxShapeImpl( *this, maMutex ) )
 ,   mbIsMultiPropertyCall(false)
 ,   mpPropSet(pPropertySet)
 ,   maPropMapEntries(pEntries)
-,   maDisposeListeners( maMutex )
-,   mbDisposing( false )
 ,   mpObj(pObject)
 ,   mpModel(NULL)
 ,   mnLockCount(0)
 {
     DBG_CTOR(SvxShape,NULL);
-    Init();
+    impl_construct();
 }
 
 //----------------------------------------------------------------------
 SvxShape::SvxShape() throw()
 :   maSize(100,100)
-,   mpImpl(NULL)
+,   mpImpl( new SvxShapeImpl( *this, maMutex ) )
 ,   mbIsMultiPropertyCall(false)
 ,   mpPropSet(aSvxMapProvider.GetPropertySet(SVXMAP_SHAPE))
 ,   maPropMapEntries(aSvxMapProvider.GetMap(SVXMAP_SHAPE))
-,   maDisposeListeners( maMutex )
-,   mbDisposing( false )
 ,   mpObj(NULL)
 ,   mpModel(NULL)
 ,   mnLockCount(0)
 {
     DBG_CTOR(SvxShape,NULL);
-    Init();
+    impl_construct();
 }
 
 //----------------------------------------------------------------------
@@ -233,11 +285,14 @@ SvxShape::~SvxShape() throw()
 
     DBG_ASSERT( mnLockCount == 0, "Locked shape was disposed!" );
 
-    if( mpModel )
+    if ( mpModel )
         EndListening( *mpModel );
 
-    if(mpImpl && mpImpl->mpMaster)
+    if ( mpImpl->mpMaster )
         mpImpl->mpMaster->dispose();
+
+    if ( mpObj.is() )
+        mpObj->setUnoShape( NULL, SdrObject::GrantXShapeAccess() );
 
     if( HasSdrObjectOwnership() && mpObj.is() )
     {
@@ -255,18 +310,13 @@ SvxShape::~SvxShape() throw()
 
 void SvxShape::TakeSdrObjectOwnership()
 {
-    if ( mpImpl )
-        mpImpl->mbHasSdrObjectOwnership = true;
+    mpImpl->mbHasSdrObjectOwnership = true;
 }
 
 //----------------------------------------------------------------------
 
 bool SvxShape::HasSdrObjectOwnership() const
 {
-    OSL_PRECOND( mpImpl, "SvxShape::HasSdrObjectOwnership: no impl!?" );
-    if ( !mpImpl )
-        return false;
-
     if ( !mpImpl->mbHasSdrObjectOwnership )
         return false;
 
@@ -278,15 +328,14 @@ bool SvxShape::HasSdrObjectOwnership() const
 
 void SvxShape::setShapeKind( sal_uInt32 nKind )
 {
-    if( mpImpl )
-        mpImpl->mnObjId = nKind;
+    mpImpl->mnObjId = nKind;
 }
 
 //----------------------------------------------------------------------
 
 sal_uInt32 SvxShape::getShapeKind() const
 {
-    return mpImpl ? mpImpl->mnObjId : (sal_uInt32)OBJ_NONE;
+    return mpImpl->mnObjId;
 }
 
 //----------------------------------------------------------------------
@@ -298,12 +347,12 @@ void SvxShape::setMaster( SvxShapeMaster* pMaster )
 
 SvxShapeMaster* SvxShape::getMaster()
 {
-    return mpImpl ? mpImpl->mpMaster : NULL;
+    return mpImpl->mpMaster;
 }
 
 const SvxShapeMaster* SvxShape::getMaster() const
 {
-    return mpImpl ? mpImpl->mpMaster : NULL;
+    return mpImpl->mpMaster;
 }
 
 //----------------------------------------------------------------------
@@ -338,7 +387,7 @@ const ::com::sun::star::uno::Sequence< sal_Int8 > & SvxShape::getUnoTunnelId() t
 }
 
 //----------------------------------------------------------------------
-SvxShape* SvxShape::getImplementation( uno::Reference< uno::XInterface > xInt ) throw()
+SvxShape* SvxShape::getImplementation( const uno::Reference< uno::XInterface >& xInt )
 {
     uno::Reference< lang::XUnoTunnel > xUT( xInt, ::com::sun::star::uno::UNO_QUERY );
     if( xUT.is() )
@@ -366,27 +415,30 @@ SvxShape* SvxShape::GetShapeForSdrObj( SdrObject* pObj ) throw()
     return getImplementation( pObj->getUnoShape() );
 }
 
-void SvxShape::Init() throw()
+//----------------------------------------------------------------------
+::svx::PropertyChangeNotifier& SvxShape::getShapePropertyChangeNotifier()
 {
-    if( NULL == mpImpl )
-    {
-        mpImpl = new SvxShapeImpl;
-        mpImpl->mpItemSet = NULL;
-        mpImpl->mpMaster = NULL;
-        mpImpl->mnObjId = 0;
-        mpImpl->mbHasSdrObjectOwnership= false;
-        // --> CL, OD 2005-07-19 #i52126#
-        mpImpl->mpCreatedObj = NULL;
-        // <--
-    }
+    return mpImpl->maPropertyNotifier;
+}
 
-    mbIsMultiPropertyCall = sal_False;
+//----------------------------------------------------------------------
+void SvxShape::impl_construct()
+{
+    mpImpl->maPropertyNotifier.registerProvider( ::svx::eShapePosition,
+        ::svx::PPropertyValueProvider( new ShapePositionProvider( *mpImpl ) ) );
+    mpImpl->maPropertyNotifier.registerProvider( ::svx::eShapeSize,
+        ::svx::PPropertyValueProvider( new ShapeSizeProvider( *mpImpl ) ) );
 
-    // only init if we already have an object
-    // if we get an object later Init() will
-    // be called again
+    if ( mpObj.is() )
+        impl_initFromSdrObject();
+}
+
+//----------------------------------------------------------------------
+void SvxShape::impl_initFromSdrObject()
+{
     DBG_TESTSOLARMUTEX();
-    if(!mpObj.is())
+    OSL_PRECOND( mpObj.is(), "SvxShape::impl_initFromSdrObject: not to be called without SdrObject!" );
+    if ( !mpObj.is() )
         return;
 
     osl_incrementInterlockedCount( &m_refCount );
@@ -437,14 +489,19 @@ void SvxShape::Init() throw()
 }
 
 //----------------------------------------------------------------------
-void SvxShape::Create( SdrObject* pNewObj, SvxDrawPage* /*pNewPage*/ ) throw()
+void SvxShape::Create( SdrObject* pNewObj, SvxDrawPage* /*pNewPage*/ )
 {
-    DBG_ASSERT( mpImpl, "svx::SvxShape::Create(), no mpImpl!" );
-
     DBG_TESTSOLARMUTEX();
 
+    OSL_PRECOND( pNewObj, "SvxShape::Create: invalid new object!" );
+    if ( !pNewObj )
+        return;
+
+    OSL_ENSURE( ( mpImpl->mpCreatedObj == NULL ) || ( mpImpl->mpCreatedObj == pNewObj ),
+        "SvxShape::Create: the same shape used for two different objects?! Strange ..." );
+
     // --> CL, OD 2005-07-19 #i52126# - correct condition
-    if ( pNewObj && (mpImpl && (mpImpl->mpCreatedObj != pNewObj) ) )
+    if ( mpImpl->mpCreatedObj != pNewObj )
     // <--
     {
         DBG_ASSERT( pNewObj->GetModel(), "no model for SdrObject?" );
@@ -459,7 +516,11 @@ void SvxShape::Create( SdrObject* pNewObj, SvxDrawPage* /*pNewPage*/ ) throw()
 
         mpObj.reset( pNewObj );
 
-        Init();
+        OSL_ENSURE( !mbIsMultiPropertyCall, "SvxShape::Create: hmm?" );
+            // this was previously set in impl_initFromSdrObject, but I think it was superfluous
+            // (it definitely was in the other context where it was called, but I strongly suppose
+            // it was also superfluous when called from here)
+        impl_initFromSdrObject();
 
         ObtainSettingsFromPropertySet( *mpPropSet );
 
@@ -572,7 +633,7 @@ void SvxShape::ForceMetricTo100th_mm(Pair& rPoint) const throw()
 }
 
 //----------------------------------------------------------------------
-void SvxShape::ObtainSettingsFromPropertySet(const SvxItemPropertySet& rPropSet) throw()
+void SvxShape::ObtainSettingsFromPropertySet(const SvxItemPropertySet& rPropSet)
 {
     DBG_TESTSOLARMUTEX();
     if(mpObj.is() && rPropSet.AreThereOwnUsrAnys() && mpModel)
@@ -973,25 +1034,9 @@ Reference< uno::XInterface > SvxShape_NewInstance()
 
 //----------------------------------------------------------------------
 
-/** called from SdrObject::SendUserCall
-    Currently only called for SDRUSERCALL_CHILD_CHGATTR
-*/
-void SvxShape::onUserCall(SdrUserCallType eUserCall, const Rectangle& )
+void SvxShape::onUserCall(SdrUserCallType /*_eUserCall*/, const Rectangle& /*_rNewBoundRect*/ )
 {
-    switch( eUserCall )
-    {
-    case SDRUSERCALL_CHILD_CHGATTR:
-        {
-            beans::PropertyChangeEvent aEvent;
-            aEvent.Further = sal_False;
-            aEvent.PropertyHandle = 0;
-            aEvent.Source = static_cast< ::cppu::OWeakObject* >( this );
-            maDisposeListeners.notifyEach( &beans::XPropertyChangeListener::propertyChange, aEvent );
-        }
-        break;
-    default:
-        break;
-    }
+    // obsolete, not called anymore
 }
 
 //----------------------------------------------------------------------
@@ -1043,9 +1088,7 @@ void SvxShape::Notify( SfxBroadcaster&, const SfxHint& rHint ) throw()
     {
         if( !HasSdrObjectOwnership() )
             mpObj.reset( NULL );
-        /*mpImpl->mbHasSdrObjectOwnerhship = false;
-        mpObj.reset( NULL );*/
-        if(!mbDisposing)
+        if ( !mpImpl->mbDisposing )
             dispose();
     }
 }
@@ -1287,32 +1330,49 @@ void SAL_CALL SvxShape::dispose() throw(uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    if( mbDisposing )
+    if( mpImpl->mbDisposing )
         return; // caught a recursion
 
-    mbDisposing = true;
+    mpImpl->mbDisposing = true;
 
     lang::EventObject aEvt;
     aEvt.Source = *(OWeakAggObject*) this;
-    maDisposeListeners.disposeAndClear(aEvt);
+    mpImpl->maDisposeListeners.disposeAndClear(aEvt);
+    mpImpl->maPropertyNotifier.disposing();
 
-    if(mpObj.is() && mpObj->IsInserted() && mpObj->GetPage() )
+    if ( mpObj.is() )
     {
-        SdrPage* pPage = mpObj->GetPage();
-        // SdrObject aus der Page loeschen
-        sal_uInt32 nCount = pPage->GetObjCount();
-        for( sal_uInt32 nNum = 0; nNum < nCount; nNum++ )
+        bool bFreeSdrObject = false;
+
+        if ( mpObj->IsInserted() && mpObj->GetPage() )
         {
-            if(pPage->GetObj(nNum) == mpObj.get())
+            OSL_ENSURE( HasSdrObjectOwnership(), "SvxShape::dispose: is the below code correct?" );
+                // normally, we are allowed to free the SdrObject only if we have its ownership.
+                // Why isn't this checked here?
+
+            SdrPage* pPage = mpObj->GetPage();
+            // SdrObject aus der Page loeschen
+            sal_uInt32 nCount = pPage->GetObjCount();
+            for ( sal_uInt32 nNum = 0; nNum < nCount; ++nNum )
             {
-                OSL_VERIFY( pPage->RemoveObject(nNum) == mpObj.get() );
-                // in case we have the ownership of the SdrObject, a Free
-                // would do nothing. So ensure the ownership is reset.
-                mpImpl->mbHasSdrObjectOwnership = false;
-                SdrObject* pObject = mpObj.get();
-                SdrObject::Free( pObject );
-                break;
+                if ( pPage->GetObj( nNum ) == mpObj.get() )
+                {
+                    OSL_VERIFY( pPage->RemoveObject( nNum ) == mpObj.get() );
+                    bFreeSdrObject = true;
+                    break;
+                }
             }
+        }
+
+        mpObj->setUnoShape( NULL, SdrObject::GrantXShapeAccess() );
+
+        if ( bFreeSdrObject )
+        {
+            // in case we have the ownership of the SdrObject, a Free
+            // would do nothing. So ensure the ownership is reset.
+            mpImpl->mbHasSdrObjectOwnership = false;
+            SdrObject* pObject = mpObj.get();
+            SdrObject::Free( pObject );
         }
     }
 
@@ -1328,14 +1388,14 @@ void SAL_CALL SvxShape::dispose() throw(uno::RuntimeException)
 void SAL_CALL SvxShape::addEventListener( const Reference< lang::XEventListener >& xListener )
     throw(uno::RuntimeException)
 {
-    maDisposeListeners.addInterface(xListener);
+    mpImpl->maDisposeListeners.addInterface(xListener);
 }
 
 //----------------------------------------------------------------------
 
 void SAL_CALL SvxShape::removeEventListener( const Reference< lang::XEventListener >& aListener ) throw(uno::RuntimeException)
 {
-   maDisposeListeners.removeInterface(aListener);
+   mpImpl->maDisposeListeners.removeInterface(aListener);
 }
 
 // XPropertySet
@@ -1363,22 +1423,33 @@ Reference< beans::XPropertySetInfo > SAL_CALL
 
 //----------------------------------------------------------------------
 
-void SAL_CALL SvxShape::addPropertyChangeListener( const OUString& , const Reference< beans::XPropertyChangeListener >& xListener  ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL SvxShape::addPropertyChangeListener( const OUString& _propertyName, const Reference< beans::XPropertyChangeListener >& _listener  ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    maDisposeListeners.addInterface(xListener);
+    ::osl::MutexGuard aGuard( maMutex );
+    mpImpl->maPropertyNotifier.addPropertyChangeListener( _propertyName, _listener );
 }
 
 //----------------------------------------------------------------------
 
-void SAL_CALL SvxShape::removePropertyChangeListener( const OUString& , const Reference< beans::XPropertyChangeListener >& xListener  ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL SvxShape::removePropertyChangeListener( const OUString& _propertyName, const Reference< beans::XPropertyChangeListener >& _listener  ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    maDisposeListeners.removeInterface(xListener);
+    ::osl::MutexGuard aGuard( maMutex );
+    mpImpl->maPropertyNotifier.removePropertyChangeListener( _propertyName, _listener );
 }
 
 //----------------------------------------------------------------------
 
-void SAL_CALL SvxShape::addVetoableChangeListener( const OUString& , const Reference< beans::XVetoableChangeListener >&  ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
-void SAL_CALL SvxShape::removeVetoableChangeListener( const OUString& , const Reference< beans::XVetoableChangeListener >&  ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
+void SAL_CALL SvxShape::addVetoableChangeListener( const OUString& , const Reference< beans::XVetoableChangeListener >&  ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    OSL_ENSURE( false, "SvxShape::addVetoableChangeListener: don't have any vetoable properties, so why ...?" );
+}
+
+//----------------------------------------------------------------------
+
+void SAL_CALL SvxShape::removeVetoableChangeListener( const OUString& , const Reference< beans::XVetoableChangeListener >&  ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    OSL_ENSURE( false, "SvxShape::removeVetoableChangeListener: don't have any vetoable properties, so why ...?" );
+}
 
 //----------------------------------------------------------------------
 
@@ -1905,7 +1976,7 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
 uno::Any SAL_CALL SvxShape::getPropertyValue( const OUString& PropertyName )
     throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    if( mpImpl && mpImpl->mpMaster )
+    if ( mpImpl->mpMaster )
         return mpImpl->mpMaster->getPropertyValue( PropertyName );
     else
         return _getPropertyValue( PropertyName );
@@ -4187,7 +4258,7 @@ SvxShapeText::~SvxShapeText() throw ()
         "svx::SvxShapeText::~SvxShapeText(), text shape with living text ranges destroyed!");
 }
 
-void SvxShapeText::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage ) throw ()
+void SvxShapeText::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage )
 {
     if( pNewObj && (NULL == GetEditSource()))
         SetEditSource( new SvxTextEditSource( pNewObj, 0, static_cast< uno::XWeak* >(this) ) );

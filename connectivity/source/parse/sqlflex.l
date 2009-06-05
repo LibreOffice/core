@@ -41,9 +41,7 @@
 #include <string.h>
 #endif
 
-#ifndef _CONNECTIVITY_SQLINTERNALNODE_HXX
 #include "internalnode.hxx"
-#endif
 
 #ifndef _CONNECTIVITY_SQLYACC_HXX
 #define _CONNECTIVITY_SQLYACC_HXX
@@ -54,15 +52,10 @@
 
 #include "sqlbison.hxx"
 #endif
-#ifndef _CONNECTIVITY_SQLSCAN_HXX
 #include "sqlscan.hxx"
-#endif
-#ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
-#endif
-#ifndef _CONNECTIVITY_SQLPARSE_HXX
+#include <rtl/strbuf.hxx>
 #include <connectivity/sqlparse.hxx>
-#endif
 
 #if defined __GNUC__
     #pragma GCC system_header
@@ -460,14 +453,8 @@ inline bool checkeof(int c) { return c == 0 || c == EOF; }
  */
 sal_Int32 gatherString( sal_Int32 delim, sal_Int32 nTyp)
 {
-	sal_Int32 ch;
-	static sal_Int32 BUFFERSIZE = 256;
-	static sal_Char* Buffer = 0;
-	if(!Buffer)
-		Buffer = new sal_Char[BUFFERSIZE];
-	
-	sal_Char *s = Buffer;
-	sal_Int32 nPos = 0;
+	sal_Char ch;
+	::rtl::OStringBuffer sBuffer(256);
 
 	while (!checkeof(ch = yyinput())) 
 	{
@@ -478,40 +465,22 @@ sal_Int32 gatherString( sal_Int32 delim, sal_Int32 nTyp)
 				if (!checkeof(ch))
 					unput(ch);
 				
-				*s = '\0';		 		
-				
 				switch(nTyp)
 				{
 					case 0:
-						SQL_NEW_NODE(::rtl::OUString(Buffer,nPos,RTL_TEXTENCODING_UTF8), SQL_NODE_NAME);
-						delete[] Buffer;
-						Buffer = NULL;
+						SQL_NEW_NODE(::rtl::OStringToOUString(sBuffer.makeStringAndClear(),RTL_TEXTENCODING_UTF8), SQL_NODE_NAME);
 						return SQL_TOKEN_NAME;											
 					case 1:
-						SQL_NEW_NODE(::rtl::OUString(Buffer,nPos,RTL_TEXTENCODING_UTF8), SQL_NODE_STRING);
-						delete[] Buffer;
-						Buffer = NULL;
+						SQL_NEW_NODE(::rtl::OStringToOUString(sBuffer.makeStringAndClear(),RTL_TEXTENCODING_UTF8), SQL_NODE_STRING);
 						return SQL_TOKEN_STRING;
 					case 2:
-						SQL_NEW_NODE(::rtl::OUString(Buffer,nPos,RTL_TEXTENCODING_UTF8), SQL_NODE_ACCESS_DATE);
-						delete[] Buffer;
-						Buffer = NULL;
+						SQL_NEW_NODE(::rtl::OStringToOUString(sBuffer.makeStringAndClear(),RTL_TEXTENCODING_UTF8), SQL_NODE_ACCESS_DATE);
 						return SQL_TOKEN_ACCESS_DATE;
 				}				
 			} 
 			else
 			{
-				*s++ = ch;
-				if (++nPos == BUFFERSIZE)
-				{
-					::rtl::OString aBuf(Buffer);
-					delete[] Buffer;
-					BUFFERSIZE *=2;
-					Buffer = new sal_Char[BUFFERSIZE];
-					for(sal_Int32 i=0;i<aBuf.getLength();++i,++Buffer)
-						*Buffer = aBuf.getStr()[i];
-					s = &Buffer[nPos];
-				}
+			    sBuffer.append(ch);
 			}
 
 		} 
@@ -519,23 +488,10 @@ sal_Int32 gatherString( sal_Int32 delim, sal_Int32 nTyp)
 			break;					
 		else
 		{
-			*s++ = ch;
-			if (++nPos == BUFFERSIZE)
-			{
-				::rtl::OString aBuf(Buffer);
-				delete[] Buffer;
-				BUFFERSIZE *=2;
-				Buffer = new sal_Char[BUFFERSIZE];
-				for(sal_Int32 i=0;i<aBuf.getLength();++i,++Buffer)
-					*Buffer = aBuf.getStr()[i];
-				s = &Buffer[nPos];
-			}
+		    sBuffer.append(ch);
 		}
 	}
-	*s = '\0';		 		
 	YY_FATAL_ERROR("Unterminated name string"); 
-	delete[] Buffer;
-	Buffer = NULL;
 	return SQL_TOKEN_INVALIDSYMBOL;		
 }
 

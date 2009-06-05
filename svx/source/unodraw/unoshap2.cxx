@@ -111,7 +111,7 @@ SvxShapeGroup::~SvxShapeGroup() throw()
 }
 
 //----------------------------------------------------------------------
-void SvxShapeGroup::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage ) throw()
+void SvxShapeGroup::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage )
 {
     SvxShape::Create( pNewObj, pNewPage );
     mxPage = pNewPage;
@@ -1895,7 +1895,7 @@ SvxCustomShape::~SvxCustomShape() throw()
 
 //----------------------------------------------------------------------
 
-void SvxCustomShape::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage ) throw()
+void SvxCustomShape::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage )
 {
     SvxShapeText::Create( pNewObj, pNewPage );
 }

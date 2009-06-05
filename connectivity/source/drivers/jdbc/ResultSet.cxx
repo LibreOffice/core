@@ -348,6 +348,7 @@ Any SAL_CALL java_sql_ResultSet::getObject( sal_Int32 columnIndex, const Referen
 
     } //t.pEnv
     // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
+    ::dbtools::throwFunctionNotSupportedException( "XRow::getObject", *this );
     return out==0 ? Any() : Any();//new java_lang_Object( t.pEnv, out );
 }
 // -------------------------------------------------------------------------

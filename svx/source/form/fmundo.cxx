@@ -336,12 +336,12 @@ void FmXUndoEnvironment::Inserted(FmFormObj* pObj)
                 }
                 else
                 {
-                    xForm.set( rPage.GetImpl()->findPlaceInFormComponentHierarchy( xContent ), UNO_SET_THROW );
+                    xForm.set( rPage.GetImpl().findPlaceInFormComponentHierarchy( xContent ), UNO_SET_THROW );
                     xNewParent.set( xForm, UNO_QUERY_THROW );
                     nPos = xNewParent->getCount();
                 }
 
-                rPage.GetImpl()->setUniqueName( xContent, xForm );
+                rPage.GetImpl().setUniqueName( xContent, xForm );
                 xNewParent->insertByIndex( nPos, makeAny( xContent ) );
 
                 Reference< XEventAttacherManager >  xManager( xNewParent, UNO_QUERY_THROW );

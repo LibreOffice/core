@@ -73,7 +73,7 @@
 #include <osl/mutex.hxx>
 #include "svx/svxdllapi.h"
 
-#include <unotools/servicehelper.hxx>
+#include <comphelper/servicehelper.hxx>
 
 #ifndef SEQTYPE
  #if defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)

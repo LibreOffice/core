@@ -35,6 +35,7 @@
 #include "connectivity/FValue.hxx"
 #include "connectivity/CommonTools.hxx"
 #include <connectivity/dbconversion.hxx>
+#include <cppuhelper/extract.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <rtl/logfile.hxx>
 
@@ -1811,15 +1812,17 @@ void ORowSetValue::fill(sal_Int32 _nPos,
                      sal_Int32 _nType,
                      const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow>& _xRow)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbtools", "Ocke.Janssen@sun.com", "ORowSetValue::fill" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbtools", "Ocke.Janssen@sun.com", "ORowSetValue::fill (1)" );
     fill(_nPos,_nType,sal_True,_xRow);
 }
+
+// -----------------------------------------------------------------------------
 void ORowSetValue::fill(sal_Int32 _nPos,
                      sal_Int32 _nType,
                      sal_Bool  _bNullable,
                      const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow>& _xRow)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbtools", "Ocke.Janssen@sun.com", "ORowSetValue::fill" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbtools", "Ocke.Janssen@sun.com", "ORowSetValue::fill (2)" );
     sal_Bool bReadData = sal_True;
     switch(_nType)
     {
@@ -1888,7 +1891,8 @@ void ORowSetValue::fill(sal_Int32 _nPos,
         setTypeKind(DataType::BLOB);
         break;
     default:
-        bReadData = sal_False;
+        OSL_ENSURE( false, "ORowSetValue::fill: unsupported type!" );
+        bReadData = false;
         break;
     }
     if ( bReadData && _bNullable && _xRow->wasNull() )
@@ -1898,7 +1902,7 @@ void ORowSetValue::fill(sal_Int32 _nPos,
 // -----------------------------------------------------------------------------
 void ORowSetValue::fill(const Any& _rValue)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbtools", "Ocke.Janssen@sun.com", "ORowSetValue::fill" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbtools", "Ocke.Janssen@sun.com", "ORowSetValue::fill (3)" );
     switch (_rValue.getValueType().getTypeClass())
     {
         case TypeClass_VOID:
@@ -1991,11 +1995,44 @@ void ORowSetValue::fill(const Any& _rValue)
             setSigned(sal_False);
             break;
         }
+        case TypeClass_ENUM:
+        {
+            sal_Int32 enumValue( 0 );
+            ::cppu::enum2int( enumValue, _rValue );
+            (*this) = enumValue;
+        }
+        break;
+
         case TypeClass_SEQUENCE:
         {
             Sequence<sal_Int8> aDummy;
             if ( _rValue >>= aDummy )
                 (*this) = aDummy;
+            else
+                OSL_ENSURE( false, "ORowSetValue::fill: unsupported sequence type!" );
+            break;
+        }
+
+        case TypeClass_STRUCT:
+        {
+            ::com::sun::star::util::Date aDate;
+            ::com::sun::star::util::Time aTime;
+            ::com::sun::star::util::DateTime aDateTime;
+            if ( _rValue >>= aDate )
+            {
+                (*this) = aDate;
+            }
+            else if ( _rValue >>= aTime )
+            {
+                (*this) = aTime;
+            }
+            else if ( _rValue >>= aDateTime )
+            {
+                (*this) = aDateTime;
+            }
+            else
+                OSL_ENSURE( false, "ORowSetValue::fill: unsupported structure!" );
+
             break;
         }
 

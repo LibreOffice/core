@@ -92,7 +92,7 @@ Svx3DSceneObject::~Svx3DSceneObject() throw()
 }
 
 //----------------------------------------------------------------------
-void Svx3DSceneObject::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage ) throw()
+void Svx3DSceneObject::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage )
 {
     SvxShape::Create( pNewObj, pNewPage );
     mxPage = pNewPage;

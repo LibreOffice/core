@@ -1538,7 +1538,7 @@ namespace svxform
         SdrPageView*    pPageView       = pFormView->GetSdrPageView();
         FmFormPage*     pPage           = (FmFormPage*)pPageView->GetPage();
 
-        ::rtl::OUString sName = pPage->GetImpl()->setUniqueName( xNewComponent, xParentForm );
+        ::rtl::OUString sName = pPage->GetImpl().setUniqueName( xNewComponent, xParentForm );
 
         pNewFormControlData->SetText( sName );
 

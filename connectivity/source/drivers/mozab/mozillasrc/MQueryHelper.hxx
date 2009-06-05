@@ -68,7 +68,7 @@ namespace connectivity
             sal_Int32 getRowStates()  { return m_RowStates;};
         };
 
-        class MQueryHelper : public nsIAbDirectoryQueryResultListener, public ErrorResourceAccess
+        class MQueryHelper : public nsIAbDirectoryQueryResultListener
         {
         private:
             typedef std::vector< MQueryHelperResultEntry* > resultsArray;
@@ -81,6 +81,7 @@ namespace connectivity
             sal_Bool            m_bAtEnd;
             sal_Bool            m_bErrorCondition;
             sal_Bool            m_bQueryComplete;
+            ErrorDescriptor     m_aError;
 
             void            append(MQueryHelperResultEntry* resEnt );
 
@@ -112,6 +113,8 @@ namespace connectivity
             MQueryHelperResultEntry*   next( );
 
             MQueryHelperResultEntry*   getByIndex( sal_uInt32 nRow );
+
+            const ErrorDescriptor&     getError() const { return m_aError; }
 
             sal_Bool                   isError() const;
 

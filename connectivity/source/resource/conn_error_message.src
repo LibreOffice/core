@@ -75,11 +75,15 @@ String 256 + 2*303 + 0
 
 String 256 + 2*304 + 0
 {
-    Text = "No connection to the database exists.";
-    // TODO: localize
+    Text [ en-US ] = "No connection to the database exists.";
 };
 
 String 256 + 2*304 + 1
 {
     Text = "08003";
+};
+
+String 256 + 2*500 + 0
+{
+    Text [ en-US ] = "No $1$ exists.";
 };
