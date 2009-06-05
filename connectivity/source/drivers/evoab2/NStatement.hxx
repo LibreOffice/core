@@ -37,52 +37,149 @@
 #include <com/sun/star/sdbc/XCloseable.hpp>
 #include <com/sun/star/sdbc/SQLWarning.hpp>
 #include <comphelper/proparrhlp.hxx>
-#include <cppuhelper/compbase3.hxx>
+#include <cppuhelper/compbase2.hxx>
 #include <comphelper/uno3.hxx>
 #include "connectivity/CommonTools.hxx"
-#ifndef INCLUDED_LIST
-#include <list>
-#define INCLUDED_LIST
-#endif
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <comphelper/broadcasthelper.hxx>
 #include "connectivity/sqliterator.hxx"
-#ifndef _CONNECTIVITY_PARSE_SQLPARSE_HXX_
 #include "connectivity/sqlparse.hxx"
-#endif
 #include <connectivity/FValue.hxx>
 #include "OSubComponent.hxx"
 #include <com/sun/star/util/XCancellable.hpp>
 #include <cppuhelper/compbase5.hxx>
+#include <comphelper/propertycontainer.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+
 #include "EApi.h"
+
+#include <list>
+
 namespace connectivity
 {
     namespace evoab
     {
         class OEvoabResultSet;
         class OEvoabConnection;
-        typedef ::cppu::WeakComponentImplHelper3<   ::com::sun::star::sdbc::XStatement,
-                                ::com::sun::star::sdbc::XWarningsSupplier,
-                                ::com::sun::star::sdbc::XCloseable> OStatement_BASE;
+        typedef ::cppu::WeakComponentImplHelper2    <   ::com::sun::star::sdbc::XWarningsSupplier
+                                                    ,   ::com::sun::star::sdbc::XCloseable
+                                                    >   OCommonStatement_IBase;
+
+        struct FieldSort
+        {
+            sal_Int32       nField;
+            bool            bAscending;
+
+            FieldSort() : nField(0), bAscending( true ) { }
+            FieldSort( const sal_Int32 _nField, const bool _bAscending ) : nField( _nField ), bAscending( _bAscending ) { }
+        };
+        typedef ::std::vector< FieldSort >  SortDescriptor;
+
+        enum QueryFilterType
+        {
+            eFilterAlwaysFalse,
+            eFilterNone,
+            eFilterOther
+        };
+
+        struct QueryData
+        {
+        private:
+            EBookQuery*     pQuery;
+
+        public:
+            ::rtl::OUString                             sTable;
+            QueryFilterType                             eFilterType;
+            ::vos::ORef< ::connectivity::OSQLColumns >  xSelectColumns;
+            SortDescriptor                              aSortOrder;
+
+            QueryData()
+                :pQuery( NULL )
+                ,sTable()
+                ,eFilterType( eFilterOther )
+                ,xSelectColumns()
+                ,aSortOrder()
+            {
+            }
+
+            QueryData( const QueryData& _rhs )
+                :pQuery( NULL )
+                ,sTable()
+                ,eFilterType( eFilterType )
+                ,xSelectColumns()
+                ,aSortOrder()
+            {
+                *this = _rhs;
+            }
+
+            QueryData& operator=( const QueryData& _rhs )
+            {
+                if ( this == &_rhs )
+                    return *this;
+
+                setQuery( _rhs.pQuery );
+                sTable = _rhs.sTable;
+                eFilterType = _rhs.eFilterType;
+                xSelectColumns = _rhs.xSelectColumns;
+                aSortOrder = _rhs.aSortOrder;
+
+                return *this;
+            }
+
+            ~QueryData()
+            {
+                setQuery( NULL );
+            }
+
+            EBookQuery* getQuery() const { return pQuery; }
+
+            void setQuery( EBookQuery* _pQuery )
+            {
+                if ( pQuery )
+                    e_book_query_unref( pQuery );
+                pQuery = _pQuery;
+                if ( pQuery )
+                    e_book_query_ref( pQuery );
+            }
+        };
 
         //**************************************************************
-        //************ Class: OStatement_Base
+        //************ Class: OCommonStatement
         // is a base class for the normal statement and for the prepared statement
         //**************************************************************
-        class OStatement_Base       :   public comphelper::OBaseMutex,
-                            public  OStatement_BASE,
-                            public  ::cppu::OPropertySetHelper,
-                            public  ::comphelper::OPropertyArrayUsageHelper<OStatement_Base>
+        class OCommonStatement;
+        typedef OSubComponent< OCommonStatement, OCommonStatement_IBase >   OStatement_CBase;
 
+        class OCommonStatement  :public comphelper::OBaseMutex
+                                ,public OCommonStatement_IBase
+                                ,public ::comphelper::OPropertyContainer
+                                ,public ::comphelper::OPropertyArrayUsageHelper< OCommonStatement >
+                                ,public OStatement_CBase
         {
-        protected:
+            friend class OSubComponent< OCommonStatement, OCommonStatement_IBase >;
+
+        private:
             ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XResultSet>    m_xResultSet;   // The last ResultSet created
             OEvoabResultSet                      *m_pResultSet;
             OEvoabConnection                     *m_pConnection;
             connectivity::OSQLParser              m_aParser;
             connectivity::OSQLParseTreeIterator   m_aSQLIterator;
             connectivity::OSQLParseNode          *m_pParseTree;
+
+            // <properties>
+            ::rtl::OUString                             m_aCursorName;
+            sal_Int32                                   m_nMaxFieldSize;
+            sal_Int32                                   m_nMaxRows;
+            sal_Int32                                   m_nQueryTimeOut;
+            sal_Int32                                   m_nFetchSize;
+            sal_Int32                                   m_nResultSetType;
+            sal_Int32                                   m_nFetchDirection;
+            sal_Int32                                   m_nResultSetConcurrency;
+            sal_Bool                                    m_bEscapeProcessing;
+            // </properties>
+
+            ::cppu::OBroadcastHelper& rBHelper;
+
         protected:
 
             void disposeResultSet();
@@ -91,48 +188,33 @@ namespace connectivity
             virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const;
             // OPropertySetHelper
             virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
-            virtual sal_Bool SAL_CALL convertFastPropertyValue(
-                                       ::com::sun::star::uno::Any & rConvertedValue,
-                                       ::com::sun::star::uno::Any & rOldValue,
-                                       sal_Int32 nHandle,
-                                       const ::com::sun::star::uno::Any& rValue )
-                throw (::com::sun::star::lang::IllegalArgumentException);
-            virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
-                                           sal_Int32 nHandle,
-                                           const ::com::sun::star::uno::Any& rValue)    throw (::com::sun::star::uno::Exception);
-            virtual void SAL_CALL getFastPropertyValue(
-                                   ::com::sun::star::uno::Any& rValue,
-                                   sal_Int32 nHandle) const;
-            virtual ~OStatement_Base();
+
+            virtual ~OCommonStatement();
 
         protected:
-            /* Driver Internal Methods */
-            OEvoabResultSet *createResultSet();
-
             void         reset () throw( ::com::sun::star::sdbc::SQLException);
             void         clearMyResultSet () throw( ::com::sun::star::sdbc::SQLException);
-            EBookQuery  *parseSql( const ::rtl::OUString& sql, ::rtl::OString &rTable, bool &bIsWithoutWhere )
-                                            throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            EBookQuery  *whereAnalysis( const OSQLParseNode*  parseTree )
-                                            throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            void         parseSql( const ::rtl::OUString& sql, QueryData& _out_rQueryData );
+            EBookQuery  *whereAnalysis( const OSQLParseNode*  parseTree );
+            void         orderByAnalysis( const OSQLParseNode* _pOrderByClause, SortDescriptor& _out_rSort );
             rtl::OUString getTableName();
             EBookQuery  *createTrue();
             EBookQuery  *createTest( const ::rtl::OUString &aColumnName,
                                      EBookQueryTest eTest,
-                                     const ::rtl::OUString &aMatch,
-                                     bool bGeneric = false );
+                                     const ::rtl::OUString &aMatch );
 
         public:
 
             // other methods
             OEvoabConnection* getOwnConnection() const { return m_pConnection;}
-            ::cppu::OBroadcastHelper& rBHelper;
 
-            OStatement_Base(OEvoabConnection* _pConnection );
-            using OStatement_BASE::operator ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >;
+            using OCommonStatement_IBase::operator ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >;
+
+        protected:
+            OCommonStatement( OEvoabConnection* _pConnection );
 
             // OComponentHelper
-            virtual void SAL_CALL disposing(void){OStatement_BASE::disposing();}
+            virtual void SAL_CALL disposing(void);
             // XInterface
             virtual void SAL_CALL release() throw();
             virtual void SAL_CALL acquire() throw();
@@ -143,46 +225,66 @@ namespace connectivity
 
             // XPropertySet
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
+
+            // XWarningsSupplier
+            virtual ::com::sun::star::uno::Any SAL_CALL getWarnings(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL clearWarnings(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
+            // XCloseable
+            virtual void SAL_CALL close(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
+        protected:
+            /** will return the EBookQuery representing the stamement's WHERE condition, or throw
+
+                Also, all statement dependent members (such as the parser/iterator) will be inited afterwards.
+            */
+            QueryData
+                impl_getEBookQuery_throw( const ::rtl::OUString& _rSql );
+
+            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >
+                impl_executeQuery_throw( const ::rtl::OUString& _rSql );
+
+            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >
+                impl_executeQuery_throw( const QueryData& _rData );
+
+            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
+                impl_getConnection() { return ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >( (::com::sun::star::sdbc::XConnection*)m_pConnection ); }
+
+            ::rtl::OUString
+                impl_getColumnRefColumnName_throw( const ::connectivity::OSQLParseNode& _rColumnRef );
+        };
+
+        typedef ::cppu::ImplHelper2 <   ::com::sun::star::lang::XServiceInfo
+                                    ,   ::com::sun::star::sdbc::XStatement
+                                    >   OStatement_IBase;
+        class OStatement    :public OCommonStatement
+                            ,public OStatement_IBase
+        {
+        protected:
+            virtual ~OStatement(){}
+
+        public:
+            OStatement( OEvoabConnection* _pConnection)
+                :OCommonStatement( _pConnection)
+            {
+            }
+
+            // XInterface
+            virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL acquire() throw();
+            virtual void SAL_CALL release() throw();
+
+            // XTypeProvider
+            DECLARE_XTYPEPROVIDER()
+
+            // XServiceInfo
+            DECLARE_SERVICE_INFO();
+
             // XStatement
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > SAL_CALL executeQuery( const ::rtl::OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) ;
             virtual sal_Int32 SAL_CALL executeUpdate( const ::rtl::OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) ;
             virtual sal_Bool SAL_CALL execute( const ::rtl::OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) ;
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL getConnection(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) ;
-            // XWarningsSupplier
-            virtual ::com::sun::star::uno::Any SAL_CALL getWarnings(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL clearWarnings(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            // XCloseable
-            virtual void SAL_CALL close(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-
-            };
-
-        class OStatement_BASE2  : public OStatement_Base,
-                      public ::connectivity::OSubComponent<OStatement_BASE2, OStatement_BASE>
-
-        {
-            friend class OSubComponent<OStatement_BASE2, OStatement_BASE>;
-        public:
-            OStatement_BASE2(OEvoabConnection* _pConnection ) :  OStatement_Base(_pConnection ),
-                                         ::connectivity::OSubComponent<OStatement_BASE2, OStatement_BASE>((::cppu::OWeakObject*)_pConnection, this){}
-            // OComponentHelper
-            virtual void SAL_CALL disposing(void);
-            // XInterface
-            virtual void SAL_CALL release() throw();
-        };
-
-        class OStatement :  public OStatement_BASE2,
-                    public ::com::sun::star::lang::XServiceInfo
-        {
-        protected:
-            virtual ~OStatement(){}
-        public:
-            // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
-            OStatement( OEvoabConnection* _pConnection) : OStatement_BASE2( _pConnection){}
-            DECLARE_SERVICE_INFO();
-
-            virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL acquire() throw();
-            virtual void SAL_CALL release() throw();
         };
     }
 }

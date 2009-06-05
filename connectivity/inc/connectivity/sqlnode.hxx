@@ -63,6 +63,11 @@ namespace com
     }
 }
 
+namespace rtl
+{
+    class OUStringBuffer;
+}
+
 namespace connectivity
 {
     class OSQLParser;
@@ -337,7 +342,8 @@ namespace connectivity
 
 #if OSL_DEBUG_LEVEL > 0
             // zeigt den ParseTree mit tabs und linefeeds
-        void showParseTree(::rtl::OUString& rString, sal_uInt32 nLevel=0);
+        void showParseTree( ::rtl::OUString& rString ) const;
+        void showParseTree( ::rtl::OUStringBuffer& _inout_rBuf, sal_uInt32 nLevel ) const;
 #endif
 
             // GetNodeType gibt den Knotentyp zurueck

@@ -480,9 +480,14 @@ String STR_INVALID_DBASE_FILE
 
 // Evoab2
 
-String STR_USE_WHERE_CRIT
+String STR_CANNOT_OPEN_BOOK
 {
-    Text [ en-US ] = "Use the SQL query with \"where clause\" or \"criteria\", to get the results.";
+    Text [ en-US ] = "Cannot open Evolution address book.";
+};
+
+String STR_SORT_BY_COL_ONLY
+{
+    Text [ en-US ] = "Can only sort by table columns.";
 };
 
 // File

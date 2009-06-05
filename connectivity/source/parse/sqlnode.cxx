@@ -76,6 +76,7 @@
 #include <algorithm>
 #include <functional>
 #include <rtl/logfile.hxx>
+#include <rtl/ustrbuf.hxx>
 
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::util;
@@ -2232,89 +2233,128 @@ void OSQLParseNode::compress(OSQLParseNode *&pSearchCondition)
         }
     }
 }
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
 // -----------------------------------------------------------------------------
-void OSQLParseNode::showParseTree(::rtl::OUString& rString, sal_uInt32 nLevel)
+void OSQLParseNode::showParseTree( ::rtl::OUString& rString ) const
+{
+    ::rtl::OUStringBuffer aBuf;
+    showParseTree( aBuf, 0 );
+    rString = aBuf.makeStringAndClear();
+}
+
+// -----------------------------------------------------------------------------
+void OSQLParseNode::showParseTree( ::rtl::OUStringBuffer& _inout_rBuffer, sal_uInt32 nLevel ) const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseNode::showParseTree" );
 
-    if (!isToken())
+    for ( sal_uInt32 j=0; j<nLevel; ++j)
+        _inout_rBuffer.appendAscii( "  " );
+
+    if ( !isToken() )
     {
-        for (sal_uInt32 j=0; j<nLevel; j++) {rString+= ::rtl::OUString::createFromAscii("\t");};
         // Regelnamen als rule: ...
-        rString+= ::rtl::OUString::createFromAscii("RULE_ID:\t ");
-        rString += ::rtl::OUString::valueOf( (sal_Int32)getRuleID());
-        rString+= ::rtl::OUString::createFromAscii("(");
-        rString += OSQLParser::RuleIDToStr(getRuleID());
-        rString+= ::rtl::OUString::createFromAscii(")");
-        rString+= ::rtl::OUString::createFromAscii("\n");
+        _inout_rBuffer.appendAscii( "RULE_ID: " );
+        _inout_rBuffer.append( (sal_Int32)getRuleID() );
+        _inout_rBuffer.append( sal_Unicode( '(' ) );
+        _inout_rBuffer.append( OSQLParser::RuleIDToStr( getRuleID() ) );
+        _inout_rBuffer.append( sal_Unicode( ')' ) );
+        _inout_rBuffer.append( sal_Unicode( '\n' ) );
 
         // hol dir den ersten Subtree
-        for (OSQLParseNodes::const_iterator i = m_aChildren.begin();
-            i != m_aChildren.end(); i++)
-            (*i)->showParseTree(rString, nLevel+1);
+        for (   OSQLParseNodes::const_iterator i = m_aChildren.begin();
+                i != m_aChildren.end();
+                ++i
+             )
+            (*i)->showParseTree( _inout_rBuffer, nLevel+1 );
     }
     else
     {
         // ein Token gefunden
-        // tabs fuer das Einruecken entsprechend nLevel
-        for (sal_uInt32 j=0; j<nLevel; j++) {rString+= ::rtl::OUString::createFromAscii("\t");};
-
-        switch (m_eNodeType) {
+        switch (m_eNodeType)
+        {
 
         case SQL_NODE_KEYWORD:
-            {rString+= ::rtl::OUString::createFromAscii("SQL_KEYWORD:\t");
-            ::rtl::OString sT = OSQLParser::TokenIDToStr(getTokenID());
-            rString += ::rtl::OUString(sT,sT.getLength(),RTL_TEXTENCODING_UTF8);
-            rString+= ::rtl::OUString::createFromAscii("\n");
-            break;}
+            _inout_rBuffer.appendAscii( "SQL_KEYWORD: " );
+            _inout_rBuffer.append( ::rtl::OStringToOUString( OSQLParser::TokenIDToStr( getTokenID() ), RTL_TEXTENCODING_UTF8 ) );
+            _inout_rBuffer.append( sal_Unicode( '\n' ) );
+            break;
 
         case SQL_NODE_COMPARISON:
-            {rString+= ::rtl::OUString::createFromAscii("SQL_COMPARISON:\t");
-            rString += m_aNodeValue;    // haenge Nodevalue an
-            rString+= ::rtl::OUString::createFromAscii("\n");       // und beginne neu Zeile
-            break;}
+            _inout_rBuffer.appendAscii( "SQL_COMPARISON: " );
+            _inout_rBuffer.append( m_aNodeValue );
+            _inout_rBuffer.append( sal_Unicode( '\n' ) );
+            break;
 
         case SQL_NODE_NAME:
-            {rString+= ::rtl::OUString::createFromAscii("SQL_NAME:\t");
-             rString+= ::rtl::OUString::createFromAscii("\"");
-             rString += m_aNodeValue;
-             rString+= ::rtl::OUString::createFromAscii("\"");
-             rString+= ::rtl::OUString::createFromAscii("\n");
-             break;}
+            _inout_rBuffer.appendAscii( "SQL_NAME: " );
+            _inout_rBuffer.append( sal_Unicode( '"' ) );
+            _inout_rBuffer.append( m_aNodeValue );
+            _inout_rBuffer.append( sal_Unicode( '"' ) );
+            _inout_rBuffer.append( sal_Unicode( '\n' ) );
+             break;
 
         case SQL_NODE_STRING:
-            {rString += ::rtl::OUString::createFromAscii("SQL_STRING:\t'");
-             rString += m_aNodeValue;
-             rString += ::rtl::OUString::createFromAscii("'\n");
-             break;}
+            _inout_rBuffer.appendAscii( "SQL_STRING: " );
+            _inout_rBuffer.append( sal_Unicode( '\'' ) );
+            _inout_rBuffer.append( m_aNodeValue );
+            _inout_rBuffer.append( sal_Unicode( '\'' ) );
+            _inout_rBuffer.append( sal_Unicode( '\n' ) );
+            break;
 
         case SQL_NODE_INTNUM:
-            {rString += ::rtl::OUString::createFromAscii("SQL_INTNUM:\t");
-             rString += m_aNodeValue;
-             rString += ::rtl::OUString::createFromAscii("\n");
-             break;}
+            _inout_rBuffer.appendAscii( "SQL_INTNUM: " );
+            _inout_rBuffer.append( m_aNodeValue );
+            _inout_rBuffer.append( sal_Unicode( '\n' ) );
+            break;
 
         case SQL_NODE_APPROXNUM:
-            {rString += ::rtl::OUString::createFromAscii("SQL_APPROXNUM:\t");
-             rString += m_aNodeValue;
-             rString += ::rtl::OUString::createFromAscii("\n");
-             break;}
+            _inout_rBuffer.appendAscii( "SQL_APPROXNUM: " );
+            _inout_rBuffer.append( m_aNodeValue );
+            _inout_rBuffer.append( sal_Unicode( '\n' ) );
+             break;
 
         case SQL_NODE_PUNCTUATION:
-            {rString += ::rtl::OUString::createFromAscii("SQL_PUNCTUATION:\t");
-            rString += m_aNodeValue;    // haenge Nodevalue an
-            rString += ::rtl::OUString::createFromAscii("\n");      // und beginne neu Zeile
-            break;}
+            _inout_rBuffer.appendAscii( "SQL_PUNCTUATION: " );
+            _inout_rBuffer.append( m_aNodeValue );
+            _inout_rBuffer.append( sal_Unicode( '\n' ) );
+            break;
 
         case SQL_NODE_AMMSC:
-            {rString += ::rtl::OUString::createFromAscii("SQL_AMMSC:\t");
-            rString += m_aNodeValue;    // haenge Nodevalue an
-            rString += ::rtl::OUString::createFromAscii("\n");      // und beginne neu Zeile
-            break;}
+            _inout_rBuffer.appendAscii( "SQL_AMMSC: " );
+            _inout_rBuffer.append( m_aNodeValue );
+            _inout_rBuffer.append( sal_Unicode( '\n' ) );
+            break;
+
+        case SQL_NODE_EQUAL:
+        case SQL_NODE_LESS:
+        case SQL_NODE_GREAT:
+        case SQL_NODE_LESSEQ:
+        case SQL_NODE_GREATEQ:
+        case SQL_NODE_NOTEQUAL:
+            _inout_rBuffer.append( m_aNodeValue );
+            _inout_rBuffer.append( sal_Unicode( '\n' ) );
+            break;
+
+        case SQL_NODE_ACCESS_DATE:
+            _inout_rBuffer.appendAscii( "SQL_ACCESS_DATE: " );
+            _inout_rBuffer.append( m_aNodeValue );
+            _inout_rBuffer.append( sal_Unicode( '\n' ) );
+            break;
+
+        case SQL_NODE_DATE:
+            _inout_rBuffer.appendAscii( "SQL_DATE: " );
+            _inout_rBuffer.append( m_aNodeValue );
+            _inout_rBuffer.append( sal_Unicode( '\n' ) );
+            break;
+
+        case SQL_NODE_CONCAT:
+            _inout_rBuffer.appendAscii( "||" );
+            _inout_rBuffer.append( sal_Unicode( '\n' ) );
+            break;
 
         default:
-            OSL_ASSERT("OSQLParser::ShowParseTree: unzulaessiger NodeType");
+            OSL_TRACE( "-- %i", int( m_eNodeType ) );
+            OSL_ENSURE( false, "OSQLParser::ShowParseTree: unzulaessiger NodeType" );
         }
     }
 }

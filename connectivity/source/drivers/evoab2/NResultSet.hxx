@@ -42,12 +42,12 @@
 #include <com/sun/star/sdbc/XRowUpdate.hpp>
 #include <com/sun/star/sdbcx/XRowLocate.hpp>
 #include <com/sun/star/sdbcx/XDeleteRows.hpp>
-#ifndef _CPPUHELPER_COMPBASE12_HXX_
 #include <cppuhelper/compbase8.hxx>
-#endif
 #include <comphelper/proparrhlp.hxx>
+#include <comphelper/propertycontainer.hxx>
 #include "connectivity/CommonTools.hxx"
 #include "connectivity/FValue.hxx"
+#include "connectivity/warningscontainer.hxx"
 #include "NStatement.hxx"
 #include "OSubComponent.hxx"
 #include "NResultSetMetaData.hxx"
@@ -56,76 +56,61 @@ namespace connectivity
 {
     namespace evoab
     {
-        typedef ::cppu::WeakComponentImplHelper8<      ::com::sun::star::sdbc::XResultSet,
-                                   ::com::sun::star::sdbc::XRow,
-                                   ::com::sun::star::sdbc::XResultSetMetaDataSupplier,
-                                   ::com::sun::star::util::XCancellable,
-                                   ::com::sun::star::sdbc::XWarningsSupplier,
-                                   ::com::sun::star::sdbc::XCloseable,
-                                   ::com::sun::star::sdbc::XColumnLocate,
-                                   ::com::sun::star::lang::XServiceInfo> OResultSet_BASE;
+        typedef ::cppu::WeakComponentImplHelper8    <   ::com::sun::star::sdbc::XResultSet
+                                                    ,   ::com::sun::star::sdbc::XRow
+                                                    ,   ::com::sun::star::sdbc::XResultSetMetaDataSupplier
+                                                    ,   ::com::sun::star::util::XCancellable
+                                                    ,   ::com::sun::star::sdbc::XWarningsSupplier
+                                                    ,   ::com::sun::star::sdbc::XCloseable
+                                                    ,   ::com::sun::star::sdbc::XColumnLocate
+                                                    ,   ::com::sun::star::lang::XServiceInfo
+                                                    >   OResultSet_BASE;
 
 
-        class OEvoabResultSet : public  comphelper::OBaseMutex,
-                    public  OResultSet_BASE,
-                    public  ::cppu::OPropertySetHelper,
-                    public  ::comphelper::OPropertyArrayUsageHelper<OEvoabResultSet>
+        class OEvoabResultSet   :public comphelper::OBaseMutex
+                                ,public OResultSet_BASE
+                                ,public ::comphelper::OPropertyContainer
+                                ,public ::comphelper::OPropertyArrayUsageHelper<OEvoabResultSet>
         {
 
         protected:
 
-            OStatement_Base    *m_pStatement;
-            OEvoabConnection   *m_pConnection;
-            ::com::sun::star::uno::WeakReferenceHelper  m_aStatement;
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData>        m_xMetaData;
+            OCommonStatement*                                                               m_pStatement;
+            OEvoabConnection*                                                               m_pConnection;
+            ::com::sun::star::uno::WeakReferenceHelper                                      m_aStatement;
+            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData >  m_xMetaData;
+            ::dbtools::WarningsContainer                                                    m_aWarnings;
 
-            sal_Bool                                    m_bWasNull;
+            bool                                        m_bWasNull;
+            // <properties>
             sal_Int32                                   m_nFetchSize;
             sal_Int32                                   m_nResultSetType;
             sal_Int32                                   m_nFetchDirection;
             sal_Int32                                   m_nResultSetConcurrency;
+            // </properties>
 
             // Data & iteration
             GList    *m_pContacts;
             sal_Int32 m_nIndex;
             sal_Int32 m_nLength;
-            connectivity::OSQLParseTreeIterator&    m_aSQLIterator;
             EContact *getCur()
             {
                 gpointer pData = g_list_nth_data (m_pContacts, m_nIndex);
                 return pData ? E_CONTACT (pData) : NULL;
             }
-            bool      getValue( sal_Int32 nColumnIndex, GType nType, GValue *pStackValue);
 
             // OPropertyArrayUsageHelper
             virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
             // OPropertySetHelper
             virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
 
-            virtual sal_Bool SAL_CALL convertFastPropertyValue(
-                                       ::com::sun::star::uno::Any & rConvertedValue,
-                                       ::com::sun::star::uno::Any & rOldValue,
-                                       sal_Int32 nHandle,
-                                       const ::com::sun::star::uno::Any& rValue )
-                throw (::com::sun::star::lang::IllegalArgumentException);
-            virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
-                                           sal_Int32 nHandle,
-                                           const ::com::sun::star::uno::Any& rValue
-                                           )
-                throw (::com::sun::star::uno::Exception);
-            virtual void SAL_CALL getFastPropertyValue(
-                                   ::com::sun::star::uno::Any& rValue,
-                                   sal_Int32 nHandle
-                                   ) const;
-
             // you can't delete objects of this type
             virtual ~OEvoabResultSet();
         public:
             DECLARE_SERVICE_INFO();
 
-            OEvoabResultSet(OStatement_Base *pStmt, OEvoabConnection *pConnection,OSQLParseTreeIterator&    _aSQLIterator);
-            virtual void construct(void);
-            void construct( EBookQuery *pQuery, rtl::OString aTable, bool bIsWithoutWhere );
+            OEvoabResultSet( OCommonStatement *pStmt, OEvoabConnection *pConnection );
+            void construct( const QueryData& _rData );
 
             OEvoabConnection * getConnection() { return m_pConnection; }
 

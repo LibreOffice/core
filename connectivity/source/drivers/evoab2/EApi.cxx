@@ -69,6 +69,7 @@ typedef void (*SymbolFunc) (void);
     SYM_MAP( e_book_query_and ),
     SYM_MAP( e_book_query_or ),
     SYM_MAP( e_book_query_not ),
+    SYM_MAP( e_book_query_ref ),
     SYM_MAP( e_book_query_unref ),
     SYM_MAP( e_book_query_from_string ),
     SYM_MAP( e_book_query_to_string ),
@@ -83,7 +84,7 @@ tryLink( oslModule &aModule, const char *pName )
     for( guint i = 0; i < G_N_ELEMENTS( aApiMap ); i++ )
     {
     SymbolFunc aMethod;
-    aMethod = (SymbolFunc) osl_getSymbol
+    aMethod = (SymbolFunc) osl_getFunctionSymbol
         ( aModule, rtl::OUString::createFromAscii ( aApiMap[ i ].sym_name ).pData );
     if( !aMethod )
     {

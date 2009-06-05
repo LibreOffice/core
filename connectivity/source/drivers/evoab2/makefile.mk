@@ -6,10 +6,6 @@
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.8 $
-#
 # This file is part of OpenOffice.org.
 #
 # OpenOffice.org is free software: you can redistribute it and/or modify
@@ -42,18 +38,18 @@ dummy:
 .ELSE
 
 # --- Settings ----------------------------------
-.IF "$(DBGUTIL_OJ)"!=""
-ENVCFLAGS+=/FR$(SLO)$/ 
-.ENDIF
 
 .INCLUDE : settings.mk
 .INCLUDE :  $(PRJ)$/version.mk
+
+PKGCONFIG_MODULES=gtk+-2.0
+.INCLUDE : pkg_config.mk
 
 CFLAGS+=$(GOBJECT_CFLAGS)
 
 # --- Files -------------------------------------
 
-EXCEPTIONSFILES=\
+SLOFILES=\
     $(SLO)$/NDriver.obj \
     $(SLO)$/NTable.obj \
     $(SLO)$/NColumns.obj \
@@ -66,12 +62,8 @@ EXCEPTIONSFILES=\
     $(SLO)$/NServices.obj \
     $(SLO)$/NResultSet.obj  \
     $(SLO)$/NResultSetMetaData.obj \
-    $(SLO)$/EApi.obj 
-
-SLOFILES=\
-    $(EXCEPTIONSFILES)				\
+    $(SLO)$/EApi.obj \
     $(SLO)$/NDebug.obj
-
 
 SHL1VERSIONMAP=$(TARGET).map
 
@@ -99,6 +91,15 @@ SHL1STDLIBS=\
 SHL1STDLIBS+= ifile.lib
 .ENDIF
 SHL1STDLIBS+=$(GOBJECT_LIBS)
+
+
+SHL1STDLIBS+=$(PKGCONFIG_LIBS:s/ -lpangoxft-1.0//)
+# hack for faked SO environment
+.IF "$(PKGCONFIG_ROOT)"!=""
+SHL1SONAME+=-z nodefs
+SHL1NOCHECK=TRUE
+.ENDIF          # "$(PKGCONFIG_ROOT)"!=""
+
 
 SHL1DEPN=
 SHL1IMPLIB=	i$(TARGET)
