@@ -383,6 +383,11 @@
                     <value xml:lang="en-US">S~econdary Y Axis...</value>
                 </prop>
             </node>
+            <node oor:name=".uno:TextAttributes" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Te~xt...</value>
+                </prop>
+            </node>
         </node>
         <node oor:name="Popups">
             <node oor:name=".uno:ArrangeRow" oor:op="replace">
