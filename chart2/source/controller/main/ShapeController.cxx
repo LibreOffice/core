@@ -37,6 +37,7 @@
 #include "ViewElementListProvider.hxx"
 #include "dlg_ShapeFont.hxx"
 #include "chartview/DrawModelWrapper.hxx"
+#include "SchSlotIds.hxx"
 
 #include <vos/mutex.hxx>
 #include <vcl/msgbox.hxx>
@@ -97,6 +98,7 @@ FeatureState ShapeController::getState( const ::rtl::OUString& rCommand ) const
     {
         case SID_ATTRIBUTES_LINE:
         case SID_ATTRIBUTES_AREA:
+        case SID_ATTRIBUTES_TEXT:
         case SID_ATTR_TRANSFORM:
         case SID_CHAR_DLG:
             {
@@ -133,6 +135,11 @@ void ShapeController::execute( const ::rtl::OUString& rCommand, const Sequence< 
                 executeDispatch_FormatArea();
             }
             break;
+        case SID_ATTRIBUTES_TEXT:
+            {
+                executeDispatch_TextAttributes();
+            }
+            break;
         case SID_ATTR_TRANSFORM:
             {
                 executeDispatch_TransformDialog();
@@ -154,6 +161,7 @@ void ShapeController::describeSupportedFeatures()
 {
     implDescribeSupportedFeature( ".uno:FormatLine",        SID_ATTRIBUTES_LINE,    CommandGroup::FORMAT );
     implDescribeSupportedFeature( ".uno:FormatArea",        SID_ATTRIBUTES_AREA,    CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:TextAttributes",    SID_ATTRIBUTES_TEXT,    CommandGroup::FORMAT );
     implDescribeSupportedFeature( ".uno:TransformDialog",   SID_ATTR_TRANSFORM,     CommandGroup::FORMAT );
     implDescribeSupportedFeature( ".uno:FontDialog",        SID_CHAR_DLG,           CommandGroup::EDIT );
 }
@@ -240,6 +248,43 @@ void ShapeController::executeDispatch_FormatArea()
                         {
                             pDrawViewWrapper->SetDefaultAttr( *pOutAttr, FALSE );
                         }
+                    }
+                }
+            }
+        }
+    }
+}
+
+void ShapeController::executeDispatch_TextAttributes()
+{
+    if ( m_pChartController )
+    {
+        Window* pParent = dynamic_cast< Window* >( m_pChartController->m_pChartWindow );
+        DrawViewWrapper* pDrawViewWrapper = m_pChartController->GetDrawViewWrapper();
+        if ( pParent && pDrawViewWrapper )
+        {
+            SfxItemSet aAttr( pDrawViewWrapper->GetDefaultAttr() );
+            BOOL bHasMarked = pDrawViewWrapper->AreObjectsMarked();
+            if ( bHasMarked )
+            {
+                pDrawViewWrapper->MergeAttrFromMarked( aAttr, FALSE );
+            }
+            ::vos::OGuard aGuard( Application::GetSolarMutex() );
+            SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+            if ( pFact )
+            {
+                ::boost::scoped_ptr< SfxAbstractTabDialog > pDlg(
+                    pFact->CreateTextTabDialog( pParent, &aAttr, RID_SVXDLG_TEXT, pDrawViewWrapper ) );
+                if ( pDlg.get() && ( pDlg->Execute() == RET_OK ) )
+                {
+                    const SfxItemSet* pOutAttr = pDlg->GetOutputItemSet();
+                    if ( bHasMarked )
+                    {
+                        pDrawViewWrapper->SetAttributes( *pOutAttr );
+                    }
+                    else
+                    {
+                        pDrawViewWrapper->SetDefaultAttr( *pOutAttr, FALSE );
                     }
                 }
             }

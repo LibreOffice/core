@@ -28,6 +28,7 @@
  *
  ************************************************************************/
 #include "MenuResIds.hrc"
+#include "SchSlotIds.hxx"
 
 #include <svx/globlmn.hrc>
 #include <svx/svxids.hrc>
@@ -47,6 +48,12 @@ Menu RID_CONTEXTMENU_SHAPE
             Identifier = SID_ATTRIBUTES_AREA;
             HelpId = SID_ATTRIBUTES_AREA;
             Command = ".uno:FormatArea";
+        };
+        MenuItem
+        {
+            Identifier = SID_ATTRIBUTES_TEXT;
+            HelpId = SID_ATTRIBUTES_TEXT;
+            Command = ".uno:TextAttributes";
         };
         MenuItem
         {

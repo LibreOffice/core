@@ -71,6 +71,7 @@ protected:
 private:
     void executeDispatch_FormatLine();
     void executeDispatch_FormatArea();
+    void executeDispatch_TextAttributes();
     void executeDispatch_TransformDialog();
     void executeDispatch_FontDialog();
 

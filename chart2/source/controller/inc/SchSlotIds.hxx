@@ -38,6 +38,7 @@
 //#define SID_COPYFORMAT            SID_OBJ1_START
 //not used as slot in old chart
 //#define SID_PASTEFORMAT       (SID_OBJ1_START +  1)
+#define SID_ATTRIBUTES_TEXT     (SID_OBJ1_START +  1)
 
 //still used as help id
 #define SID_DIAGRAM_DATA        (SID_OBJ1_START +  2)
