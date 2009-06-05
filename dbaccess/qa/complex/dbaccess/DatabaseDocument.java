@@ -338,7 +338,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
 
         for ( int i=0; i<unsupportedMethods.length; ++i)
         {
-            verifyExpectedException( _document, unsupportedMethods[i].unoInterfaceClass,
+            assureException( _document, unsupportedMethods[i].unoInterfaceClass,
                 unsupportedMethods[i].methodName, new Object[]{}, _isInitialized ? null : NotInitializedException.class );
         }
     }
@@ -428,9 +428,9 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
         impl_checkDocumentInitState( databaseDoc, true );
 
         // and while we are here ... initilizing the same document again should not be possible
-        verifyExpectedException( databaseDoc, XLoadable.class, "initNew", new Object[0],
+        assureException( databaseDoc, XLoadable.class, "initNew", new Object[0],
             DoubleInitializationException.class );
-        verifyExpectedException( databaseDoc, XLoadable.class, "load", new Object[] { new PropertyValue[0] },
+        assureException( databaseDoc, XLoadable.class, "load", new Object[] { new PropertyValue[0] },
             DoubleInitializationException.class );
 
         // ....................................................................
@@ -443,9 +443,9 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
         impl_checkDocumentInitState( databaseDoc, true );
 
         // same as above - initializing the document a second time must fail
-        verifyExpectedException( databaseDoc, XLoadable.class, "initNew", new Object[0],
+        assureException( databaseDoc, XLoadable.class, "initNew", new Object[0],
             DoubleInitializationException.class );
-        verifyExpectedException( databaseDoc, XLoadable.class, "load", new Object[] { new PropertyValue[0] },
+        assureException( databaseDoc, XLoadable.class, "load", new Object[] { new PropertyValue[0] },
             DoubleInitializationException.class );
     }
 

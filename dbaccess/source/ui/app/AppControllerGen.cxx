@@ -619,7 +619,7 @@ void OApplicationController::onDocumentOpened( const ::rtl::OUString& _rName, co
 
     try
     {
-        m_pSubComponentManager->onSubComponentOpened( _rName, _nType, _eMode, _xDocument );
+        m_pSubComponentManager->onSubComponentOpened( _rName, _nType, _eMode, _rxDefinition.is() ? _rxDefinition : _xDocument );
 
         if ( _rxDefinition.is() )
         {

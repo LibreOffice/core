@@ -70,4 +70,3 @@ namespace rptui
 
     IMPLEMENT_CONSTASCII_USTRING(DBTEXTBOXBOUNDCONTENT          , "TextBoxBoundContent");
 }
-

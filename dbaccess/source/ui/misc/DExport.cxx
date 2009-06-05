@@ -234,7 +234,7 @@ ODatabaseExport::ODatabaseExport(const SharedConnection& _rxConnection,
             sal_Int32 nType = aValue;
             ++nPos;
 
-            if( nType == DataType::VARCHAR)
+            if( nType == DataType::VARCHAR )
             {
                 m_pTypeInfo                 = TOTypeInfoSP(new OTypeInfo());
 
@@ -291,7 +291,9 @@ ODatabaseExport::ODatabaseExport(const SharedConnection& _rxConnection,
                 break;
             }
         }
-    }
+    } // if(xSet.is())
+    if ( !m_pTypeInfo )
+        m_pTypeInfo = TOTypeInfoSP(new OTypeInfo());
     SetColumnTypes(pList,_pInfoMap);
 }
 //---------------------------------------------------------------------------
@@ -432,10 +434,11 @@ sal_Int16 ODatabaseExport::CheckString(const String& aCheckToken, sal_Int16 _nOl
         if ( m_pFormatter && m_sNumToken.Len() )
         {
             LanguageType eNumLang;
-            sal_uInt32 nNumberFormat2;
-            fOutNumber = SfxHTMLParser::GetTableDataOptionsValNum(nNumberFormat2,eNumLang,m_sTextToken,m_sNumToken,*m_pFormatter);
+            sal_uInt32 nFormatKey;
+            fOutNumber = SfxHTMLParser::GetTableDataOptionsValNum(nFormatKey,eNumLang,m_sTextToken,m_sNumToken,*m_pFormatter);
             //double fOutNumber2 = SfxHTMLParser::GetTableDataOptionsValNum(nNumberFormat2,eNumLang,m_sValToken,m_sNumToken,*m_pFormatter);
-            nNumberFormat = static_cast<sal_Int16>(nNumberFormat2);
+            Reference<XPropertySet> xProp = xFormats->getByKey(nFormatKey);
+            xProp->getPropertyValue(PROPERTY_TYPE) >>= nNumberFormat;
         }
         else
         {
@@ -559,16 +562,15 @@ void ODatabaseExport::SetColumnTypes(const TColumnVector* _pList,const OTypeInfo
     DBG_CHKTHIS(ODatabaseExport,NULL);
     if(_pList && _pInfoMap)
     {
+        OSL_ENSURE(m_vNumberFormat.size() == m_vColumnSize.size() && m_vColumnSize.size() == _pList->size(),"Illegal columns in list");
         Reference< XNumberFormatsSupplier > xSupplier = m_xFormatter->getNumberFormatsSupplier();
         Reference< XNumberFormats >         xFormats = xSupplier->getNumberFormats();
         TColumnVector::const_iterator aIter = _pList->begin();
         TColumnVector::const_iterator aEnd = _pList->end();
-        for(sal_Int32 i= 0;aIter != aEnd;++aIter,++i)
+        for(sal_Int32 i= 0;aIter != aEnd && (i) < static_cast<sal_Int32>(m_vNumberFormat.size()) && (i) < static_cast<sal_Int32>(m_vColumnSize.size()) ;++aIter,++i)
         {
             sal_Int32 nDataType;
             sal_Int32 nLength(0),nScale(0);
-            OSL_ENSURE((i) < static_cast<sal_Int32>(m_vNumberFormat.size()),"m_vFormatKey: Illegal index for vector");
-            OSL_ENSURE((i) < static_cast<sal_Int32>(m_vColumnSize.size()),"m_vColumnSize: Illegal index for vector");
             sal_Int16 nType = m_vNumberFormat[i];
 
             switch ( nType )

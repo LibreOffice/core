@@ -216,6 +216,7 @@ sal_Bool OCopyTable::LeavePage()
     // first check if the table already exists in the database
     if( m_pParent->getOperation() != CopyTableOperation::AppendData )
     {
+        m_pParent->clearDestColumns();
         DynamicTableOrQueryNameCheck aNameCheck( m_pParent->m_xDestConnection, CommandType::TABLE );
         SQLExceptionInfo aErrorInfo;
         if ( !aNameCheck.isNameValid( m_edTableName.GetText(), aErrorInfo ) )
@@ -342,7 +343,7 @@ sal_Bool OCopyTable::checkAppendData()
         {
             bNotConvert = sal_True;
             m_pParent->m_vColumnPos[i] = ODatabaseExport::TPositions::value_type(nPos,nPos);
-            TOTypeInfoSP pTypeInfo = m_pParent->convertType((*aDestIter)->second->getTypeInfo(),bNotConvert);
+            TOTypeInfoSP pTypeInfo = m_pParent->convertType((*aDestIter)->second->getSpecialTypeInfo(),bNotConvert);
             if ( !bNotConvert )
             {
                 m_pParent->showColumnTypeNotSupported((*aDestIter)->first);

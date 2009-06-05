@@ -58,7 +58,8 @@ using namespace ::xmloff::token;
 ::rtl::OUString lcl_createAttribute(const xmloff::token::XMLTokenEnum& _eNamespace,const xmloff::token::XMLTokenEnum& _eAttribute);
 
 ImportDocumentHandler::ImportDocumentHandler(uno::Reference< uno::XComponentContext > const & context) :
-    m_xContext(context)
+     m_xContext(context)
+    ,m_bOnlyOnce(true)
 {
 }
 // -----------------------------------------------------------------------------
@@ -167,7 +168,6 @@ void SAL_CALL ImportDocumentHandler::startElement(const ::rtl::OUString & _sName
                         break;
                 }
             }
-            m_xDatabaseDataProvider->execute();
         }
         catch(uno::Exception&)
         {
@@ -224,10 +224,52 @@ void SAL_CALL ImportDocumentHandler::startElement(const ::rtl::OUString & _sName
         bExport = false;
     else if ( _sName.equalsAscii("chart:plot-area"))
     {
+        sal_Bool bHasCategories = sal_True;
+        const sal_Int16 nLength = (_xAttrList.is()) ? _xAttrList->getLength() : 0;
+        ::std::auto_ptr<SvXMLTokenMap> pMasterElemTokenMap( OXMLHelper::GetSubDocumentElemTokenMap());
+        for(sal_Int16 i = 0; i < nLength; ++i)
+        {
+            ::rtl::OUString sLocalName;
+            const rtl::OUString sAttrName = _xAttrList->getNameByIndex( i );
+            const sal_Int32 nColonPos = sAttrName.indexOf( sal_Unicode(':') );
+            if( -1L == nColonPos )
+                sLocalName = sAttrName;
+            else
+                sLocalName = sAttrName.copy( nColonPos + 1L );
+            if ( sLocalName.equalsAscii("data-source-has-labels") )
+            {
+                const rtl::OUString sValue = _xAttrList->getValueByIndex( i );
+                bHasCategories = sValue.equalsAscii("both");
+                break;
+            }
+        } // for(sal_Int16 i = 0; i < nLength; ++i)
+        beans::PropertyValue* pArgIter = m_aArguments.getArray();
+        beans::PropertyValue* pArgEnd  = pArgIter + m_aArguments.getLength();
+        for(;pArgIter != pArgEnd;++pArgIter)
+        {
+            if ( pArgIter->Name.equalsAscii("HasCategories") )
+            {
+                pArgIter->Value <<= bHasCategories;
+                break;
+            }
+        } // for(;pArgIter != pArgEnd;++pArgIter)
+
+        if ( m_bOnlyOnce )
+        {
+            try
+            {
+                m_xDatabaseDataProvider->createDataSource(m_aArguments);
+                m_bOnlyOnce = false;
+            }
+            catch(uno::Exception)
+            {}
+        } // if ( m_bOnlyOnce )
+
         SvXMLAttributeList* pList = new SvXMLAttributeList();
         xNewAttribs = pList;
         pList->AppendAttributeList(_xAttrList);
         pList->AddAttribute(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("table:cell-range-address")),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("local-table.$A$1:.$Z$65536")));
+
     }
 
     if ( bExport )
@@ -239,7 +281,9 @@ void SAL_CALL ImportDocumentHandler::endElement(const ::rtl::OUString & _sName) 
     bool bExport = true;
     ::rtl::OUString sNewName = _sName;
     if ( _sName.equalsAscii("office:report") )
+    {
         sNewName = lcl_createAttribute(XML_NP_OFFICE,XML_CHART);
+    }
     else if ( _sName.equalsAscii("rpt:master-detail-fields") )
     {
         if ( !m_aMasterFields.empty() )
@@ -302,7 +346,9 @@ void SAL_CALL ImportDocumentHandler::initialize( const uno::Sequence< uno::Any >
 
         uno::Reference< chart2::data::XDataReceiver > xReceiver(m_xModel,uno::UNO_QUERY_THROW);
         xReceiver->attachDataProvider(m_xDatabaseDataProvider.get());
-    }
+    } // if ( !m_xDatabaseDataProvider.is() )
+
+    m_aArguments = m_xDatabaseDataProvider->detectArguments(NULL);
 
     uno::Reference< reflection::XProxyFactory > xProxyFactory( m_xContext->getServiceManager()->createInstanceWithContext(
         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.ProxyFactory")),m_xContext),

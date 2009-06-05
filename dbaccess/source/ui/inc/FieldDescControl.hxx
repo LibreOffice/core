@@ -160,6 +160,10 @@ namespace dbaui
         void                ScrollAllAggregates();
 
         sal_Bool            isTextFormat(const OFieldDescription* _pFieldDescr,sal_uInt32& _nFormatKey) const;
+        void                Contruct();
+        OPropNumericEditCtrl* CreateNumericControl(USHORT _nHelpStr,short _nProperty,ULONG _nHelpId);
+        FixedText*          CreateText(USHORT _nTextRes);
+        void                InitializeControl(Control* _pControl,ULONG _nHelpId,bool _bAddChangeHandler);
 
     protected:
         inline  void    setRightAligned()       { m_bRightAligned = true; }
@@ -169,7 +173,8 @@ namespace dbaui
         inline  OFieldDescription*  getCurrentFieldDescData() { return pActFieldDescr; }
         inline  void                setCurrentFieldDescData( OFieldDescription* _pDesc ) { pActFieldDescr = _pDesc; }
 
-        USHORT              CountActiveAggregates() const;
+        sal_uInt16          CountActiveAggregates() const;
+        sal_Int32           GetMaxControlHeight() const;
 
         virtual void        ActivateAggregate( EControlType eType );
         virtual void        DeactivateAggregate( EControlType eType );

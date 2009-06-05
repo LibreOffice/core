@@ -590,11 +590,11 @@ TOTypeInfoSP getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
             // -> drop the precision and the scale restriction, accept any type with the property
             // type id (nType)
 
-            OSL_ENSURE(sal_False,
-                (   ::rtl::OString("getTypeInfoFromType: did not find a matching type")
-                +=  ::rtl::OString(" (expected type name: ")
-                +=  ::rtl::OString(_sTypeName.getStr(), _sTypeName.getLength(), gsl_getSystemTextEncoding())
-                +=  ::rtl::OString(")! Defaulting to the first matching type.")).getStr());
+            //OSL_ENSURE(sal_False,
+            //  (   ::rtl::OString("getTypeInfoFromType: did not find a matching type")
+            //  +=  ::rtl::OString(" (expected type name: ")
+            //  +=  ::rtl::OString(_sTypeName.getStr(), _sTypeName.getLength(), gsl_getSystemTextEncoding())
+            //  +=  ::rtl::OString(")! Defaulting to the first matching type.")).getStr());
             for(aIter = aPair.first; aIter != aPair.second; ++aIter)
             {
                 // search the best matching type (now comparing the local names)
@@ -700,6 +700,7 @@ void fillTypeInfo(  const Reference< ::com::sun::star::sdbc::XConnection>& _rxCo
                     nCount = 18;
                 aTypes.reserve(nCount+1);
                 aTypes.push_back(-1);
+                aNullable.push_back(sal_False);
                 for (sal_Int32 j = 1; j <= nCount ; ++j)
                 {
                     aTypes.push_back(xResultSetMetaData->getColumnType(j));

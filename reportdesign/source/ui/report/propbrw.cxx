@@ -446,6 +446,7 @@ void PropBrw::implSetNewObject( const uno::Sequence< Reference<uno::XInterface> 
 // -----------------------------------------------------------------------------
 uno::Reference< uno::XInterface> PropBrw::CreateComponentPair(OObjectBase* _pObj)
 {
+    _pObj->initializeOle();
     return CreateComponentPair(_pObj->getAwtComponent(),_pObj->getReportComponent());
 }
 //----------------------------------------------------------------------------

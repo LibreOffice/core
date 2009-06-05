@@ -446,9 +446,6 @@ Reference< XPropertySet> OUndoPropertyReportSectionAction::getObject()
 {
     return m_pMemberFunction(&m_aReportHelper).get();
 }
-
-
-
 //============================================================================
 } // rptui
 //============================================================================

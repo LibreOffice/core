@@ -66,6 +66,9 @@
 #ifndef TOOLS_DIAGNOSE_EX_H
 #include <tools/diagnose_ex.h>
 #endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
+#endif
 
 using namespace dbaccess;
 using namespace dbtools;
@@ -164,6 +167,7 @@ void OTableContainer::removeMasterContainerListener()
 // XServiceInfo
 //------------------------------------------------------------------------------
 IMPLEMENT_SERVICE_INFO2(OTableContainer, "com.sun.star.sdb.dbaccess.OTableContainer", SERVICE_SDBCX_CONTAINER, SERVICE_SDBCX_TABLES)
+
 // -----------------------------------------------------------------------------
 namespace
 {

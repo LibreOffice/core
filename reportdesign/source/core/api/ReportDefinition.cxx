@@ -39,26 +39,35 @@
 #include <com/sun/star/style/GraphicLocation.hpp>
 #include <com/sun/star/xml/AttributeData.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <comphelper/namecontainer.hxx>
 #include <comphelper/broadcasthelper.hxx>
+#include <comphelper/documentconstants.hxx>
+#include <comphelper/genericpropertyset.hxx>
+#include <comphelper/mediadescriptor.hxx>
+#include <comphelper/mimeconfighelper.hxx>
+#include <comphelper/namecontainer.hxx>
+#include <comphelper/namedvaluecollection.hxx>
+#include <comphelper/numberedcollection.hxx>
+#include <comphelper/propertystatecontainer.hxx>
+#include <comphelper/proparrhlp.hxx>
+#include <comphelper/property.hxx>
+#include <comphelper/propertysetinfo.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/seqstream.hxx>
 #include <comphelper/storagehelper.hxx>
+#include <comphelper/uno3.hxx>
 #include <com/sun/star/chart2/data/DatabaseDataProvider.hpp>
 #include <vcl/svapp.hxx>
+#include <vcl/virdev.hxx>
 #include <vos/mutex.hxx>
-#include <comphelper/uno3.hxx>
-#include <comphelper/propertystatecontainer.hxx>
-#include <comphelper/namedvaluecollection.hxx>
-#include <comphelper/proparrhlp.hxx>
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>
 #include <com/sun/star/document/EventObject.hpp>
 #include <com/sun/star/document/XEventListener.hpp>
 #include <com/sun/star/style/XStyle.hpp>
-#include <comphelper/documentconstants.hxx>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/EmbedMapUnits.hpp>
 #include <com/sun/star/embed/EntryInitModes.hpp>
+#include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
@@ -71,6 +80,8 @@
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/task/ErrorCodeIOException.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
+#include <com/sun/star/frame/XComponentLoader.hpp>
+#include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include "corestrings.hrc"
 #include "Groups.hxx"
 #include "RptDef.hxx"
@@ -81,14 +92,10 @@
 #include "Tools.hxx"
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
+#include <unotools/streamwrap.hxx>
 #include <connectivity/CommonTools.hxx>
-#include <comphelper/numberedcollection.hxx>
+#include <connectivity/dbconversion.hxx>
 #include <framework/titlehelper.hxx>
-#include <comphelper/property.hxx>
-#include <comphelper/propertysetinfo.hxx>
-#include <comphelper/genericpropertyset.hxx>
-#include <comphelper/mediadescriptor.hxx>
-#include <comphelper/namecontainer.hxx>
 #include <connectivity/dbtools.hxx>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include "Functions.hxx"
@@ -104,6 +111,8 @@
 #include "Shape.hxx"
 #include "ReportHelperImpl.hxx"
 #include <svtools/itempool.hxx>
+#include <svtools/moduleoptions.hxx>
+#include <osl/thread.hxx>
 
 #include <svx/paperinf.hxx>
 #include <svx/svdlayer.hxx>
@@ -494,6 +503,75 @@ uno::Sequence< uno::Any > SAL_CALL OStyle::getPropertyDefaults( const uno::Seque
         aRet[i] = getPropertyDefault(*pIter);
     return aRet;
 }
+namespace
+{
+    class FactoryLoader : public ::osl::Thread
+    {
+        ::rtl::OUString                          m_sMimeType;
+        uno::Reference< uno::XComponentContext > m_xContext;
+    public:
+        FactoryLoader(const ::rtl::OUString& _sMimeType,uno::Reference< uno::XComponentContext > const & _xContext)
+            :m_sMimeType(_sMimeType)
+            ,m_xContext(_xContext)
+        {}
+
+    protected:
+        virtual ~FactoryLoader(){}
+
+        /// Working method which should be overridden.
+        virtual void SAL_CALL run();
+        virtual void SAL_CALL onTerminated();
+    };
+
+    void SAL_CALL FactoryLoader::run()
+    {
+        try
+        {
+            uno::Reference<frame::XComponentLoader> xFrameLoad( m_xContext->getServiceManager()->createInstanceWithContext(
+                                                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop"))
+                                                        ,m_xContext)
+                                                        ,uno::UNO_QUERY);
+            ::rtl::OUString sTarget(RTL_CONSTASCII_USTRINGPARAM("_blank"));
+            sal_Int32 nFrameSearchFlag = frame::FrameSearchFlag::TASKS | frame::FrameSearchFlag::CREATE;
+            uno::Reference< frame::XFrame> xFrame = uno::Reference< frame::XFrame>(xFrameLoad,uno::UNO_QUERY)->findFrame(sTarget,nFrameSearchFlag);
+            xFrameLoad.set( xFrame,uno::UNO_QUERY);
+
+            if ( xFrameLoad.is() )
+            {
+                uno::Sequence < beans::PropertyValue > aArgs( 3);
+                sal_Int32 nLen = 0;
+                aArgs[nLen].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AsTemplate"));
+                aArgs[nLen++].Value <<= sal_False;
+
+                aArgs[nLen].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReadOnly"));
+                aArgs[nLen++].Value <<= sal_True;
+
+                aArgs[nLen].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Hidden"));
+                aArgs[nLen++].Value <<= sal_True;
+
+                uno::Reference< lang::XMultiServiceFactory > xFac(m_xContext->getServiceManager(),uno::UNO_QUERY);
+                ::comphelper::MimeConfigurationHelper aHelper(xFac);
+                SvtModuleOptions aModuleOptions;
+                uno::Reference< frame::XModel > xModel(xFrameLoad->loadComponentFromURL(
+                    aModuleOptions.GetFactoryEmptyDocumentURL( aModuleOptions.ClassifyFactoryByServiceName( aHelper.GetDocServiceNameFromMediaType(m_sMimeType) )),
+                    ::rtl::OUString(), // empty frame name
+                    0,
+                    aArgs
+                    ),uno::UNO_QUERY);
+                ::comphelper::disposeComponent(xModel);
+            }
+        }
+        catch(uno::Exception& ex)
+        {
+            (void)ex;
+            OSL_ASSERT(0);
+        }
+    }
+    void SAL_CALL FactoryLoader::onTerminated()
+    {
+        delete this;
+    }
+}
 // -----------------------------------------------------------------------------
 struct OReportDefinitionImpl
 {
@@ -555,6 +633,9 @@ struct OReportDefinitionImpl
     ,m_aDocEventListeners(_aMutex)
     ,m_sMimeType(MIMETYPE_OASIS_OPENDOCUMENT_TEXT)
     ,m_sIdentifier(SERVICE_REPORTDEFINITION)
+    // default visual area is 8 x 7 cm
+    ,m_aVisualAreaSize( 8000, 7000 )
+    ,m_nAspect(embed::Aspects::MSOLE_CONTENT)
     ,m_nGroupKeepTogether(0)
     ,m_nPageHeaderOption(0)
     ,m_nPageFooterOption(0)
@@ -672,6 +753,22 @@ void OReportDefinition::init()
 {
     try
     {
+        static bool s_bFirstTime = sal_True;
+        if ( s_bFirstTime )
+        {
+            s_bFirstTime = false;
+            const uno::Sequence< ::rtl::OUString > aMimeTypes = getAvailableMimeTypes();
+            const ::rtl::OUString* pIter = aMimeTypes.getConstArray();
+            const ::rtl::OUString* pEnd  = pIter + aMimeTypes.getLength();
+            for ( ; pIter != pEnd; ++pIter )
+            {
+                FactoryLoader* pCreatorThread = new FactoryLoader(*pIter,m_aProps->m_xContext);
+                pCreatorThread->createSuspended();
+                pCreatorThread->setPriority(osl_Thread_PriorityBelowNormal);
+                pCreatorThread->resume();
+            } // for ( ; pIter != pEnd; ++pIter )
+        }
+
         m_pImpl->m_pReportModel.reset(new OReportModel(this));
         m_pImpl->m_pReportModel->GetItemPool().FreezeIdRanges();
         m_pImpl->m_pReportModel->SetScaleUnit( MAP_100TH_MM );
@@ -1491,6 +1588,24 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
             bErr = sal_True;
             sErrFile = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("content.xml"));
         }
+    } // if ( !bErr )
+
+    uno::Any aImage;
+    uno::Reference< embed::XVisualObject > xCurrentController(getCurrentController(),uno::UNO_QUERY);
+    if ( xCurrentController.is() )
+    {
+        xCurrentController->setVisualAreaSize(m_pImpl->m_nAspect,m_pImpl->m_aVisualAreaSize);
+        aImage = xCurrentController->getPreferredVisualRepresentation( m_pImpl->m_nAspect ).Data;
+    }
+    if ( aImage.hasValue() )
+    {
+        ::rtl::OUString sObject1(RTL_CONSTASCII_USTRINGPARAM("report"));
+        ::rtl::OUString sPng(RTL_CONSTASCII_USTRINGPARAM("image/png"));
+
+        uno::Sequence<sal_Int8> aSeq;
+        aImage >>= aSeq;
+        uno::Reference<io::XInputStream> xStream = new ::comphelper::SequenceInputStream( aSeq );
+        m_pImpl->m_pObjectContainer->InsertGraphicStreamDirectly(xStream,sObject1,sPng);
     }
 
     if ( !bErr )
@@ -1788,23 +1903,44 @@ void SAL_CALL OReportDefinition::setVisualAreaSize( ::sal_Int64 _nAspect, const 
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
-    m_pImpl->m_aVisualAreaSize = _aSize;
+    //if( nAspect == embed::Aspects::MSOLE_CONTENT )
+    {
+        bool bChanged =
+            (m_pImpl->m_aVisualAreaSize.Width != _aSize.Width ||
+             m_pImpl->m_aVisualAreaSize.Height != _aSize.Height);
+        m_pImpl->m_aVisualAreaSize = _aSize;
+        if( bChanged )
+            setModified( sal_True );
+    }
     m_pImpl->m_nAspect = _nAspect;
 }
 // -----------------------------------------------------------------------------
-awt::Size SAL_CALL OReportDefinition::getVisualAreaSize( ::sal_Int64 /*nAspect*/ ) throw (lang::IllegalArgumentException, embed::WrongStateException, uno::Exception, uno::RuntimeException)
+awt::Size SAL_CALL OReportDefinition::getVisualAreaSize( ::sal_Int64 /*_nAspect*/ ) throw (lang::IllegalArgumentException, embed::WrongStateException, uno::Exception, uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
     return m_pImpl->m_aVisualAreaSize;
 }
 // -----------------------------------------------------------------------------
-embed::VisualRepresentation SAL_CALL OReportDefinition::getPreferredVisualRepresentation( ::sal_Int64 /*nAspect*/ ) throw (lang::IllegalArgumentException, embed::WrongStateException, uno::Exception, uno::RuntimeException)
+embed::VisualRepresentation SAL_CALL OReportDefinition::getPreferredVisualRepresentation( ::sal_Int64 /*_nAspect*/ ) throw (lang::IllegalArgumentException, embed::WrongStateException, uno::Exception, uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
-    embed::VisualRepresentation aVisualRepresentation;
-    return aVisualRepresentation;
+    embed::VisualRepresentation aResult;
+    ::rtl::OUString sImageName(RTL_CONSTASCII_USTRINGPARAM("report"));
+    ::rtl::OUString sMimeType;
+    uno::Reference<io::XInputStream> xStream = m_pImpl->m_pObjectContainer->GetGraphicStream(sImageName,&sMimeType);
+    if ( xStream.is() )
+    {
+        uno::Sequence<sal_Int8> aSeq;
+        xStream->readBytes(aSeq,xStream->available());
+        xStream->closeInput();
+        aResult.Data <<= aSeq;
+        aResult.Flavor.MimeType = sMimeType;
+        aResult.Flavor.DataType = ::getCppuType( &aSeq );
+    }
+
+    return aResult;
 }
 // -----------------------------------------------------------------------------
 ::sal_Int32 SAL_CALL OReportDefinition::getMapUnit( ::sal_Int64 /*nAspect*/ ) throw (uno::Exception, uno::RuntimeException)
@@ -1829,6 +1965,9 @@ void SAL_CALL OReportDefinition::setModified( ::sal_Bool _bModified ) throw (bea
     if ( m_pImpl->m_bModified != _bModified )
     {
         m_pImpl->m_bModified = _bModified;
+        if ( m_pImpl->m_pReportModel->IsChanged() != _bModified )
+            m_pImpl->m_pReportModel->SetChanged(_bModified);
+
         lang::EventObject aEvent(*this);
         aGuard.clear();
         m_pImpl->m_aModifyListeners.notifyEach(&util::XModifyListener::modified,aEvent);
@@ -2205,6 +2344,9 @@ uno::Reference< uno::XInterface > SAL_CALL OReportDefinition::createInstance( co
     {
         uno::Reference<chart2::data::XDatabaseDataProvider> xDataProvider(chart2::data::DatabaseDataProvider::createWithConnection( m_aProps->m_xContext, m_pImpl->m_xActiveConnection ));
         xDataProvider->setRowLimit(10);
+        uno::Reference< container::XChild > xChild(xDataProvider,uno::UNO_QUERY);
+        if ( xChild.is() )
+            xChild->setParent(*this);
         return uno::Reference< uno::XInterface >(xDataProvider,uno::UNO_QUERY);
     }
     else if ( aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.xml.NamespaceMap")) == 0 )
@@ -2318,36 +2460,28 @@ class OStylesHelper : public ::cppu::BaseMutex, public TStylesBASE
     OStylesHelper(const OStylesHelper&);
     void operator =(const OStylesHelper&);
 protected:
-    // TODO: VirtualFunctionFinder: This is virtual function!
-    //
     virtual ~OStylesHelper(){}
 public:
     OStylesHelper(const uno::Type _aType = ::getCppuType(static_cast< uno::Reference< container::XElementAccess >* >(NULL)));
 
     // XNameContainer
-    // TODO: VirtualFunctionFinder: This is virtual function!
-    //
     virtual void SAL_CALL insertByName( const ::rtl::OUString& aName, const uno::Any& aElement ) throw(lang::IllegalArgumentException, container::ElementExistException,lang::WrappedTargetException, uno::RuntimeException);
-    // TODO: VirtualFunctionFinder: This is virtual function!
-    //
     virtual void SAL_CALL removeByName( const ::rtl::OUString& Name ) throw(container::NoSuchElementException, lang::WrappedTargetException,uno::RuntimeException);
 
     // XNameReplace
-    // TODO: VirtualFunctionFinder: This is virtual function!
-    //
     virtual void SAL_CALL replaceByName( const ::rtl::OUString& aName, const uno::Any& aElement ) throw(lang::IllegalArgumentException, container::NoSuchElementException,lang::WrappedTargetException, uno::RuntimeException);
 
     // container::XElementAccess
-    uno::Type SAL_CALL getElementType(  ) throw(uno::RuntimeException);
-    sal_Bool SAL_CALL hasElements(  ) throw(uno::RuntimeException);
+    virtual uno::Type SAL_CALL getElementType(  ) throw(uno::RuntimeException);
+    virtual sal_Bool SAL_CALL hasElements(  ) throw(uno::RuntimeException);
     // container::XIndexAccess
-    sal_Int32 SAL_CALL getCount(  ) throw(uno::RuntimeException);
-    uno::Any SAL_CALL getByIndex( sal_Int32 Index ) throw(lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getCount(  ) throw(uno::RuntimeException);
+    virtual uno::Any SAL_CALL getByIndex( sal_Int32 Index ) throw(lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException);
 
-        // container::XNameAccess
-    uno::Any SAL_CALL getByName( const ::rtl::OUString& aName ) throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException);
-    uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames(  ) throw(uno::RuntimeException);
-    sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName ) throw(uno::RuntimeException);
+    // container::XNameAccess
+    virtual uno::Any SAL_CALL getByName( const ::rtl::OUString& aName ) throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException);
+    virtual uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames(  ) throw(uno::RuntimeException);
+    virtual sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName ) throw(uno::RuntimeException);
 };
 
 OStylesHelper::OStylesHelper(const uno::Type _aType)
@@ -2411,8 +2545,6 @@ sal_Bool SAL_CALL OStylesHelper::hasByName( const ::rtl::OUString& aName ) throw
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_aElements.find(aName) != m_aElements.end();
 }
-// TODO: VirtualFunctionFinder: This is virtual function!
-//
 // -----------------------------------------------------------------------------
 // XNameContainer
 void SAL_CALL OStylesHelper::insertByName( const ::rtl::OUString& aName, const uno::Any& aElement ) throw(lang::IllegalArgumentException, container::ElementExistException,lang::WrappedTargetException, uno::RuntimeException)
@@ -2425,8 +2557,6 @@ void SAL_CALL OStylesHelper::insertByName( const ::rtl::OUString& aName, const u
         throw lang::IllegalArgumentException();
 
     m_aElementsPos.push_back(m_aElements.insert(TStyleElements::value_type(aName,aElement)).first);
-    // TODO: VirtualFunctionFinder: This is virtual function!
-    //
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL OStylesHelper::removeByName( const ::rtl::OUString& aName ) throw(container::NoSuchElementException, lang::WrappedTargetException,uno::RuntimeException)
@@ -2438,8 +2568,6 @@ void SAL_CALL OStylesHelper::removeByName( const ::rtl::OUString& aName ) throw(
     m_aElementsPos.erase(::std::find(m_aElementsPos.begin(),m_aElementsPos.end(),aFind));
     m_aElements.erase(aFind);
 }
-// TODO: VirtualFunctionFinder: This is virtual function!
-//
 // -----------------------------------------------------------------------------
 // XNameReplace
 void SAL_CALL OStylesHelper::replaceByName( const ::rtl::OUString& aName, const uno::Any& aElement ) throw(lang::IllegalArgumentException, container::NoSuchElementException,lang::WrappedTargetException, uno::RuntimeException)
@@ -2723,6 +2851,47 @@ uno::Reference< uno::XComponentContext > OReportDefinition::getContext() const
 {
     return m_aProps->m_xContext;
 }
+// -----------------------------------------------------------------------------
+uno::Any SAL_CALL OReportDefinition::getTransferData( const datatransfer::DataFlavor& aFlavor ) throw (datatransfer::UnsupportedFlavorException, io::IOException, uno::RuntimeException)
+{
+    uno::Any aResult;
+    if( isDataFlavorSupported( aFlavor ) )
+    {
+        try
+        {
+            aResult <<= getPreferredVisualRepresentation(0).Data;
+        }
+        catch( uno::Exception & ex )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+            (void)ex;
+        }
+    }
+    else
+    {
+        throw datatransfer::UnsupportedFlavorException(aFlavor.MimeType, static_cast< ::cppu::OWeakObject* >( this ));
+    }
+
+    return aResult;
+}
+// -----------------------------------------------------------------------------
+uno::Sequence< datatransfer::DataFlavor > SAL_CALL OReportDefinition::getTransferDataFlavors(  ) throw (uno::RuntimeException)
+{
+    uno::Sequence< datatransfer::DataFlavor > aRet(1);
+
+    aRet[0] = datatransfer::DataFlavor( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("image/png")),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PNG")),
+        ::getCppuType( (const uno::Sequence< sal_Int8 >*) NULL ) );
+
+    return aRet;
+}
+// -----------------------------------------------------------------------------
+::sal_Bool SAL_CALL OReportDefinition::isDataFlavorSupported( const datatransfer::DataFlavor& aFlavor ) throw (uno::RuntimeException)
+{
+    return aFlavor.MimeType.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("image/png")));
+}
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // =============================================================================
 }// namespace reportdesign
 // =============================================================================

@@ -323,7 +323,7 @@ ORptExport::ORptExport(const Reference< XMultiServiceFactory >& _rxMSF,sal_uInt1
 
     UniReference < XMLPropertySetMapper > xPropMapper(new XMLTextPropertySetMapper( TEXT_PROP_MAP_PARA ));
     m_xParaPropMapper = new OSpecialHanldeXMLExportPropertyMapper( xPropMapper);
-    //m_xParaPropMapper->ChainExportMapper(XMLTextParagraphExport::CreateParaExtPropMapper(*this));
+    // m_xParaPropMapper->ChainExportMapper(XMLTextParagraphExport::CreateParaExtPropMapper(*this));
 
     ::rtl::OUString sFamily( GetXMLToken(XML_PARAGRAPH) );
     ::rtl::OUString aPrefix( String( 'P' ) );
@@ -948,6 +948,10 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
                                     AddAttribute(XML_NAMESPACE_FORM, XML_IMAGE_DATA,sTargetLocation);
                                 }
                                 bExportData = sal_True;
+                                ::rtl::OUStringBuffer sValue;
+                                const SvXMLEnumMapEntry* aXML_ImageScaleEnumMap = OXMLHelper::GetImageScaleOptions();
+                                if ( SvXMLUnitConverter::convertEnum( sValue, xImage->getScaleMode(),aXML_ImageScaleEnumMap ) )
+                                    AddAttribute(XML_NAMESPACE_REPORT, XML_SCALE, sValue.makeStringAndClear() );
                             }
                             else if ( xReportDefinition.is() )
                             {
@@ -1268,37 +1272,37 @@ void ORptExport::exportAutoStyle(XPropertySet* _xProp,const Reference<XFormatted
     }
     else
     {
-        sal_Int32 nTextAlignIndex = m_xCellStylesExportPropertySetMapper->getPropertySetMapper()->FindEntryIndex( CTF_SD_SHAPE_PARA_ADJUST );
-        if ( nTextAlignIndex != -1 )
-        {
-            ::std::vector< XMLPropertyState >::iterator aIter = aPropertyStates.begin();
-            ::std::vector< XMLPropertyState >::iterator aEnd = aPropertyStates.end();
-            for (; aIter != aEnd; ++aIter)
-            {
-                if ( aIter->mnIndex == nTextAlignIndex )
-                {
-                    sal_Int16 nTextAlign = 0;
-                    aIter->maValue >>= nTextAlign;
-                    switch(nTextAlign)
-                    {
-                        case awt::TextAlign::LEFT:
-                            nTextAlign = style::ParagraphAdjust_LEFT;
-                            break;
-                        case awt::TextAlign::CENTER:
-                            nTextAlign = style::ParagraphAdjust_CENTER;
-                            break;
-                        case awt::TextAlign::RIGHT:
-                            nTextAlign = style::ParagraphAdjust_RIGHT;
-                            break;
-                        default:
-                            OSL_ENSURE(0,"Illegal text alignment value!");
-                            break;
-                    }
-                    aIter->maValue <<= nTextAlign;
-                    break;
-                }
-            }
-        }
+        //sal_Int32 nTextAlignIndex = m_xCellStylesExportPropertySetMapper->getPropertySetMapper()->FindEntryIndex( CTF_SD_SHAPE_PARA_ADJUST );
+        //if ( nTextAlignIndex != -1 )
+        //{
+        //    ::std::vector< XMLPropertyState >::iterator aIter = aPropertyStates.begin();
+        //    ::std::vector< XMLPropertyState >::iterator aEnd = aPropertyStates.end();
+        //    for (; aIter != aEnd; ++aIter)
+        //    {
+        //        if ( aIter->mnIndex == nTextAlignIndex )
+        //        {
+        //            sal_Int16 nTextAlign = 0;
+        //            aIter->maValue >>= nTextAlign;
+        //            switch(nTextAlign)
+        //            {
+        //                case awt::TextAlign::LEFT:
+        //                    nTextAlign = style::ParagraphAdjust_LEFT;
+        //                    break;
+        //                case awt::TextAlign::CENTER:
+        //                    nTextAlign = style::ParagraphAdjust_CENTER;
+        //                    break;
+        //                case awt::TextAlign::RIGHT:
+        //                    nTextAlign = style::ParagraphAdjust_RIGHT;
+        //                    break;
+        //                default:
+        //                    OSL_ENSURE(0,"Illegal text alignment value!");
+        //                    break;
+        //            }
+        //            aIter->maValue <<= nTextAlign;
+        //            break;
+        //        }
+        //    }
+        //}
         const Reference<XFormattedField> xFormattedField(_xProp,uno::UNO_QUERY);
         if ( (_xParentFormattedField.is() || xFormattedField.is()) && !aPropertyStates.empty() )
         {

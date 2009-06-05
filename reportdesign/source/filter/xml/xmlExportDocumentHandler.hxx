@@ -96,9 +96,11 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDatabaseDataProvider >   m_xDatabaseDataProvider;
     ::com::sun::star::uno::Sequence< ::rtl::OUString >                                  m_aColumns;
     sal_Int32                                                                           m_nCurrentCellIndex;
+    sal_Int32                                                                           m_nColumnCount;
     bool m_bTableRowsStarted;
     bool m_bFirstRowExported;
     bool m_bExportChar;
+    bool m_bCountColumnHeader;
 };
 // -----------------------------------------------------------------------------
 } // namespace rptxml

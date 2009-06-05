@@ -234,13 +234,13 @@ void SAL_CALL clazz::setCharScaleWidth(::sal_Int16 the_value) throw (uno::Runtim
     float newValue = the_value; \
     set(PROPERTY_CHARSCALEWIDTH,newValue,varName.aFontDescriptor.CharacterWidth); \
 } \
-::sal_Int16 SAL_CALL clazz::getParaAdjust() throw (beans::UnknownPropertyException,uno::RuntimeException) \
+sal_Int16 SAL_CALL clazz::getParaAdjust() throw (beans::UnknownPropertyException,uno::RuntimeException) \
 { \
     ::osl::MutexGuard aGuard(m_aMutex); \
     return varName.nAlign; \
 } \
  \
-void SAL_CALL clazz::setParaAdjust( ::sal_Int16 _align ) throw (beans::UnknownPropertyException,uno::RuntimeException) \
+void SAL_CALL clazz::setParaAdjust( sal_Int16 _align ) throw (beans::UnknownPropertyException,uno::RuntimeException) \
 { \
     set(PROPERTY_PARAADJUST,_align,varName.nAlign); \
 } \
@@ -320,16 +320,14 @@ void SAL_CALL clazz::setCharUnderlineColor( ::sal_Int32 _textlinecolor ) throw (
     set(PROPERTY_CHARUNDERLINECOLOR,_textlinecolor,varName.nTextLineColor); \
 } \
  \
-short SAL_CALL clazz::getParaVertAlignment() throw (uno::RuntimeException) \
+style::VerticalAlignment SAL_CALL clazz::getVerticalAlign() throw (beans::UnknownPropertyException,uno::RuntimeException) \
 { \
     ::osl::MutexGuard aGuard(m_aMutex); \
     return varName.aVerticalAlignment; \
 } \
  \
-void SAL_CALL clazz::setParaVertAlignment( short _verticalalign ) throw (lang::IllegalArgumentException,uno::RuntimeException) \
+void SAL_CALL clazz::setVerticalAlign( style::VerticalAlignment _verticalalign ) throw (lang::IllegalArgumentException,beans::UnknownPropertyException,uno::RuntimeException) \
 { \
-    if ( _verticalalign < text::ParagraphVertAlign::AUTOMATIC || _verticalalign > text::ParagraphVertAlign::BOTTOM ) \
-        throw lang::IllegalArgumentException(); \
     set(PROPERTY_VERTICALALIGN,_verticalalign,varName.aVerticalAlignment); \
 } \
  \
@@ -801,11 +799,11 @@ void SAL_CALL clazz::setCharLocaleComplex( const ::com::sun::star::lang::Locale&
 
 
 #define NO_REPORTCONTROLFORMAT_IMPL(clazz)  \
-::sal_Int16 SAL_CALL clazz::getParaAdjust() throw (uno::RuntimeException, beans::UnknownPropertyException)\
+sal_Int16 SAL_CALL clazz::getParaAdjust() throw (uno::RuntimeException, beans::UnknownPropertyException)\
 {\
     throw beans::UnknownPropertyException();\
 }\
-void SAL_CALL clazz::setParaAdjust(::sal_Int16 /*the_value*/) throw (uno::RuntimeException, beans::UnknownPropertyException)\
+void SAL_CALL clazz::setParaAdjust(sal_Int16 /*the_value*/) throw (uno::RuntimeException, beans::UnknownPropertyException)\
 {\
     throw beans::UnknownPropertyException();\
 }\
@@ -1030,16 +1028,14 @@ void SAL_CALL clazz::setCharUnderlineColor( ::sal_Int32 /*_textlinecolor*/ ) thr
     throw beans::UnknownPropertyException();\
 }\
 \
-short SAL_CALL clazz::getParaVertAlignment() throw (uno::RuntimeException)\
+style::VerticalAlignment SAL_CALL clazz::getVerticalAlign() throw (beans::UnknownPropertyException,uno::RuntimeException)\
 {\
     ::osl::MutexGuard aGuard(m_aMutex);\
     return m_aProps.aFormatProperties.aVerticalAlignment;\
 }\
 \
-void SAL_CALL clazz::setParaVertAlignment( short _verticalalign ) throw (lang::IllegalArgumentException,uno::RuntimeException)\
+void SAL_CALL clazz::setVerticalAlign( style::VerticalAlignment _verticalalign ) throw (lang::IllegalArgumentException,beans::UnknownPropertyException,uno::RuntimeException)\
 {\
-    if ( _verticalalign < text::ParagraphVertAlign::AUTOMATIC || _verticalalign > text::ParagraphVertAlign::BOTTOM )\
-        throw lang::IllegalArgumentException();\
     set(PROPERTY_VERTICALALIGN,_verticalalign,m_aProps.aFormatProperties.aVerticalAlignment);\
 }\
 \

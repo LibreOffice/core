@@ -740,6 +740,7 @@ sal_Bool OSelectionBrowseBox::saveField(const String& _sFieldName,OTableFieldDes
     // second test if the name can be set as select columns in a pseudo statement
     // we have to look which entries  we should quote
 
+    const ::rtl::OUString sFieldAlias = _pEntry->GetFieldAlias();
     size_t nPass = 4;
     ::connectivity::OSQLParser& rParser( rController.getParser() );
     OSQLParseNode* pParseNode = NULL;
@@ -759,6 +760,11 @@ sal_Bool OSelectionBrowseBox::saveField(const String& _sFieldName,OTableFieldDes
             sSql += ::dbtools::quoteName( xMetaData->getIdentifierQuoteString(), _sFieldName );
         else
             sSql += _sFieldName;
+        if ( sFieldAlias.getLength() )
+        { // always quote the alias name there canbe no function in it
+            sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" "));
+            sSql += ::dbtools::quoteName( xMetaData->getIdentifierQuoteString(), sFieldAlias );
+        }
         sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" FROM x"));
 
         pParseNode = rParser.parseTree( sErrorMsg, sSql, bInternational );

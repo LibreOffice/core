@@ -206,7 +206,7 @@ sal_Bool OWizNameMatching::LeavePage()
             m_pParent->m_vColumnPos[nPos].first = ++nParamPos;
             m_pParent->m_vColumnPos[nPos].second = ::std::distance(pDestColumns->begin(),aDestIter) + 1;
             sal_Bool bNotConvert = sal_True;
-            TOTypeInfoSP pTypeInfo = m_pParent->convertType((*aDestIter)->second->getTypeInfo(),bNotConvert);
+            TOTypeInfoSP pTypeInfo = m_pParent->convertType((*aDestIter)->second->getSpecialTypeInfo(),bNotConvert);
             sal_Int32 nType = ::com::sun::star::sdbc::DataType::VARCHAR;
             if ( pTypeInfo.get() )
                 nType = pTypeInfo->nType;

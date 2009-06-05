@@ -123,6 +123,7 @@ namespace dbaui
         sal_Int32                   GetFormatKey()          const;
         SvxCellHorJustify           GetHorJustify()         const;
         TOTypeInfoSP                getTypeInfo()           const;
+        TOTypeInfoSP                getSpecialTypeInfo()    const;
         sal_Bool                    IsAutoIncrement()       const;
         sal_Bool                    IsPrimaryKey()          const;
         sal_Bool                    IsCurrency()            const;

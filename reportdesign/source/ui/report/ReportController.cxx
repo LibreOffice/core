@@ -62,6 +62,7 @@
 #include "reportformula.hxx"
 
 #include <comphelper/documentconstants.hxx>
+#include <comphelper/mediadescriptor.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/types.hxx>
@@ -71,11 +72,13 @@
 #include <com/sun/star/style/GraphicLocation.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/style/PageStyleLayout.hpp>
+#include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
+#include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/report/XImageControl.hpp>
@@ -89,6 +92,7 @@
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
+#include <com/sun/star/embed/EmbedMapUnits.hpp>
 #include <comphelper/streamsection.hxx>
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
@@ -159,6 +163,8 @@
 #include <helpids.hrc>
 
 #include <ReportControllerObserver.hxx>
+
+#define MAX_ROWS_FOR_PREVIEW    50
 
 using namespace ::com::sun::star;
 using namespace uno;
@@ -306,6 +312,7 @@ OReportController::OReportController(Reference< XComponentContext > const & xCon
 ,m_bHelplinesMove(sal_True)
 ,m_bChartEnabled(false)
 ,m_bChartEnabledAsked(false)
+,m_bInGeneratePreview(false)
 {
     // new Observer
     m_pReportControllerObserver = new OXReportControllerObserver(*this);
@@ -850,6 +857,7 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
         case SID_ATTR_PARA_ADJUST_LEFT:
         case SID_ATTR_PARA_ADJUST_CENTER:
         case SID_ATTR_PARA_ADJUST_RIGHT:
+        case SID_ATTR_PARA_ADJUST_BLOCK:
             impl_fillState_nothrow(PROPERTY_PARAADJUST,aReturn);
             if ( aReturn.bEnabled )
             {
@@ -858,14 +866,18 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
                 {
                     switch(nParaAdjust)
                     {
-                        case awt::TextAlign::LEFT:
+                        case style::ParagraphAdjust_LEFT:
                             aReturn.bChecked = _nId == SID_ATTR_PARA_ADJUST_LEFT;
                             break;
-                        case awt::TextAlign::CENTER:
-                            aReturn.bChecked = _nId == SID_ATTR_PARA_ADJUST_CENTER;
-                            break;
-                        case awt::TextAlign::RIGHT:
+                        case style::ParagraphAdjust_RIGHT:
                             aReturn.bChecked = _nId == SID_ATTR_PARA_ADJUST_RIGHT;
+                            break;
+                        case style::ParagraphAdjust_BLOCK:
+                        case style::ParagraphAdjust_STRETCH:
+                            aReturn.bChecked = _nId == SID_ATTR_PARA_ADJUST_BLOCK;
+                            break;
+                        case style::ParagraphAdjust_CENTER:
+                            aReturn.bChecked = _nId == SID_ATTR_PARA_ADJUST_CENTER;
                             break;
                     }
                 } // if ( aReturn.aValue >>= nParaAdjust )
@@ -1505,25 +1517,30 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
         case SID_ATTR_PARA_ADJUST_LEFT:
         case SID_ATTR_PARA_ADJUST_CENTER:
         case SID_ATTR_PARA_ADJUST_RIGHT:
+        case SID_ATTR_PARA_ADJUST_BLOCK:
             {
-                sal_Int16 nValue = awt::TextAlign::LEFT;
+                sal_Int16 eParagraphAdjust = style::ParagraphAdjust_LEFT;
                 switch(_nId)
                 {
                     case SID_ATTR_PARA_ADJUST_LEFT:
-                        nValue = awt::TextAlign::LEFT;
+                        eParagraphAdjust = style::ParagraphAdjust_LEFT;
                         break;
                     case SID_ATTR_PARA_ADJUST_CENTER:
-                        nValue = awt::TextAlign::CENTER;
+                        eParagraphAdjust = style::ParagraphAdjust_CENTER;
                         break;
                     case SID_ATTR_PARA_ADJUST_RIGHT:
-                        nValue = awt::TextAlign::RIGHT;
+                        eParagraphAdjust = style::ParagraphAdjust_RIGHT;
+                        break;
+                    case SID_ATTR_PARA_ADJUST_BLOCK:
+                        eParagraphAdjust = style::ParagraphAdjust_BLOCK;
                         break;
                 } // switch(_nId)
-                impl_setPropertyAtControls_throw(RID_STR_UNDO_ALIGNMENT,PROPERTY_PARAADJUST,uno::makeAny(nValue),aArgs);
+                impl_setPropertyAtControls_throw(RID_STR_UNDO_ALIGNMENT,PROPERTY_PARAADJUST,uno::makeAny(eParagraphAdjust),aArgs);
 
                 InvalidateFeature(SID_ATTR_PARA_ADJUST_LEFT);
                 InvalidateFeature(SID_ATTR_PARA_ADJUST_CENTER);
                 InvalidateFeature(SID_ATTR_PARA_ADJUST_RIGHT);
+                InvalidateFeature(SID_ATTR_PARA_ADJUST_BLOCK);
             }
             break;
         case SID_CHAR_DLG:
@@ -1686,7 +1703,11 @@ void OReportController::impl_initialize( )
             m_xFormatter.set(getORB()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.NumberFormatter"))), UNO_QUERY);
             m_xFormatter->attachNumberFormatsSupplier(Reference< XNumberFormatsSupplier>(m_xReportDefinition,uno::UNO_QUERY));
 
-            if ( !m_xReportDefinition->getCommand().getLength() && getConnection().is())
+            ::comphelper::MediaDescriptor aDescriptor( m_xReportDefinition->getArgs() );
+            ::rtl::OUString sHierarchicalDocumentName;
+            sHierarchicalDocumentName = aDescriptor.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HierarchicalDocumentName")),sHierarchicalDocumentName);
+
+            if ( !sHierarchicalDocumentName.getLength() && getConnection().is() )
             {
                 uno::Reference<sdbcx::XTablesSupplier> xTablesSup(getConnection(),uno::UNO_QUERY_THROW);
                 uno::Reference<container::XNameAccess> xTables = xTablesSup->getTables();
@@ -1866,6 +1887,8 @@ void OReportController::describeSupportedFeatures()
     implDescribeSupportedFeature( ".uno:LeftPara",                  SID_ATTR_PARA_ADJUST_LEFT,      CommandGroup::FORMAT );
     implDescribeSupportedFeature( ".uno:CenterPara",                SID_ATTR_PARA_ADJUST_CENTER,    CommandGroup::FORMAT );
     implDescribeSupportedFeature( ".uno:RightPara",                 SID_ATTR_PARA_ADJUST_RIGHT,     CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:JustifyPara",               SID_ATTR_PARA_ADJUST_BLOCK,     CommandGroup::FORMAT );
+
     implDescribeSupportedFeature( ".uno:FontHeight",                SID_ATTR_CHAR_FONTHEIGHT,       CommandGroup::FORMAT );
     implDescribeSupportedFeature( ".uno:CharFontName",              SID_ATTR_CHAR_FONT,             CommandGroup::FORMAT );
 
@@ -2418,26 +2441,24 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
         SID_ATTR_METRIC,SID_ATTR_METRIC,
         0
     };
-
-    SfxItemPool* pPool = new SfxItemPool(String::CreateFromAscii("ReportPageProperties"), RPTUI_ID_LRSPACE,RPTUI_ID_METRIC, aItemInfos, pDefaults);
+    SfxItemPool* pPool( new SfxItemPool(String::CreateFromAscii("ReportPageProperties"), RPTUI_ID_LRSPACE,RPTUI_ID_METRIC, aItemInfos, pDefaults) );
     pPool->SetDefaultMetric( SFX_MAPUNIT_100TH_MM );    // ripped, don't understand why
     pPool->FreezeIdRanges();                        // the same
 
     try
     {
-        SfxItemSet aDescriptor(*pPool, pRanges);
-
+        ::std::auto_ptr<SfxItemSet> pDescriptor(new SfxItemSet(*pPool, pRanges));
         // fill it
         if ( _xSection.is() )
-            aDescriptor.Put(SvxBrushItem(::Color(_xSection->getBackColor()),ITEMID_BRUSH));
+            pDescriptor->Put(SvxBrushItem(::Color(_xSection->getBackColor()),ITEMID_BRUSH));
         else
         {
-            aDescriptor.Put(SvxSizeItem(RPTUI_ID_SIZE,VCLSize(getStyleProperty<awt::Size>(m_xReportDefinition,PROPERTY_PAPERSIZE))));
-            aDescriptor.Put(SvxLRSpaceItem(getStyleProperty<sal_Int32>(m_xReportDefinition,PROPERTY_LEFTMARGIN)
+            pDescriptor->Put(SvxSizeItem(RPTUI_ID_SIZE,VCLSize(getStyleProperty<awt::Size>(m_xReportDefinition,PROPERTY_PAPERSIZE))));
+            pDescriptor->Put(SvxLRSpaceItem(getStyleProperty<sal_Int32>(m_xReportDefinition,PROPERTY_LEFTMARGIN)
                                             ,getStyleProperty<sal_Int32>(m_xReportDefinition,PROPERTY_RIGHTMARGIN),0,0,RPTUI_ID_LRSPACE));
-            aDescriptor.Put(SvxULSpaceItem(static_cast<USHORT>(getStyleProperty<sal_Int32>(m_xReportDefinition,PROPERTY_TOPMARGIN))
+            pDescriptor->Put(SvxULSpaceItem(static_cast<USHORT>(getStyleProperty<sal_Int32>(m_xReportDefinition,PROPERTY_TOPMARGIN))
                                             ,static_cast<USHORT>(getStyleProperty<sal_Int32>(m_xReportDefinition,PROPERTY_BOTTOMMARGIN)),RPTUI_ID_ULSPACE));
-            aDescriptor.Put(SfxUInt16Item(SID_ATTR_METRIC,static_cast<UINT16>(eUserMetric)));
+            pDescriptor->Put(SfxUInt16Item(SID_ATTR_METRIC,static_cast<UINT16>(eUserMetric)));
 
             uno::Reference< style::XStyle> xPageStyle(getUsedStyle(m_xReportDefinition));
             if ( xPageStyle.is() )
@@ -2448,13 +2469,13 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
                 aPageItem.PutValue(xProp->getPropertyValue(PROPERTY_PAGESTYLELAYOUT),MID_PAGE_LAYOUT);
                 aPageItem.SetLandscape(getStyleProperty<sal_Bool>(m_xReportDefinition,PROPERTY_ISLANDSCAPE));
                 aPageItem.SetNumType((SvxNumType)getStyleProperty<sal_Int16>(m_xReportDefinition,PROPERTY_NUMBERINGTYPE));
-                aDescriptor.Put(aPageItem);
-                aDescriptor.Put(SvxBrushItem(::Color(getStyleProperty<sal_Int32>(m_xReportDefinition,PROPERTY_BACKCOLOR)),RPTUI_ID_BRUSH));
+                pDescriptor->Put(aPageItem);
+                pDescriptor->Put(SvxBrushItem(::Color(getStyleProperty<sal_Int32>(m_xReportDefinition,PROPERTY_BACKCOLOR)),RPTUI_ID_BRUSH));
             }
         }
 
         {   // want the dialog to be destroyed before our set
-            ORptPageDialog aDlg(getView(), &aDescriptor, _xSection.is() ? RID_PAGEDIALOG_BACKGROUND : RID_PAGEDIALOG_PAGE);
+            ORptPageDialog aDlg(getView(), pDescriptor.get(),_xSection.is() ? RID_PAGEDIALOG_BACKGROUND : RID_PAGEDIALOG_PAGE);
             if (RET_OK == aDlg.Execute())
             {
                 // ------------
@@ -2516,11 +2537,11 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
     {
         DBG_UNHANDLED_EXCEPTION();
     }
-
     SfxItemPool::Free(pPool);
 
     for (sal_uInt16 i=0; i<sizeof(pDefaults)/sizeof(pDefaults[0]); ++i)
         delete pDefaults[i];
+
 }
 // -----------------------------------------------------------------------------
 sal_Bool SAL_CALL OReportController::attachModel(const uno::Reference< frame::XModel > & xModel) throw( uno::RuntimeException )
@@ -2895,6 +2916,7 @@ uno::Reference<frame::XModel> OReportController::executeReport()
         }
         else
         {
+            m_bInGeneratePreview = true;
             try
             {
                 WaitObject aWait(getView()); // cursor
@@ -2943,7 +2965,8 @@ uno::Reference<frame::XModel> OReportController::executeReport()
             {
                 const String suSQLContext = String( ModuleRes( RID_STR_COULD_NOT_CREATE_REPORT ) );
                 aInfo.prepend(suSQLContext);
-            }
+            } // if (aInfo.isValid())
+            m_bInGeneratePreview = false;
         }
 
         if (aInfo.isValid())
@@ -2975,11 +2998,12 @@ uno::Reference< sdbc::XRowSet > OReportController::getRowSet()
         xRowSetProp->setPropertyValue( PROPERTY_ACTIVECONNECTION, uno::makeAny( getConnection() ) );
         xRowSetProp->setPropertyValue( PROPERTY_APPLYFILTER, uno::makeAny( sal_True ) );
 
+        ::boost::shared_ptr<AnyConverter> aNoConverter(new AnyConverter());
         TPropertyNamePair aPropertyMediation;
-        aPropertyMediation.insert( TPropertyNamePair::value_type( PROPERTY_COMMAND, PROPERTY_COMMAND ) );
-        aPropertyMediation.insert( TPropertyNamePair::value_type( PROPERTY_COMMANDTYPE, PROPERTY_COMMANDTYPE ) );
-        aPropertyMediation.insert( TPropertyNamePair::value_type( PROPERTY_ESCAPEPROCESSING, PROPERTY_ESCAPEPROCESSING ) );
-        aPropertyMediation.insert( TPropertyNamePair::value_type( PROPERTY_FILTER, PROPERTY_FILTER ) );
+        aPropertyMediation.insert( TPropertyNamePair::value_type( PROPERTY_COMMAND, TPropertyConverter(PROPERTY_COMMAND,aNoConverter) ) );
+        aPropertyMediation.insert( TPropertyNamePair::value_type( PROPERTY_COMMANDTYPE, TPropertyConverter(PROPERTY_COMMANDTYPE,aNoConverter) ) );
+        aPropertyMediation.insert( TPropertyNamePair::value_type( PROPERTY_ESCAPEPROCESSING, TPropertyConverter(PROPERTY_ESCAPEPROCESSING,aNoConverter) ) );
+        aPropertyMediation.insert( TPropertyNamePair::value_type( PROPERTY_FILTER, TPropertyConverter(PROPERTY_FILTER,aNoConverter) ) );
 
         m_xRowSetMediator = new OPropertyMediator( m_xReportDefinition.get(), xRowSetProp, aPropertyMediation );
         m_xRowSet = xRowSet;
@@ -4221,21 +4245,18 @@ void OReportController::openZoomDialog()
             SID_ATTR_ZOOM,SID_ATTR_ZOOM,
             0
         };
-
-        SfxItemPool* pPool = new SfxItemPool(String::CreateFromAscii("ZoomProperties"), SID_ATTR_ZOOM,SID_ATTR_ZOOM, aItemInfos, pDefaults);
+        SfxItemPool* pPool( new SfxItemPool(String::CreateFromAscii("ZoomProperties"), SID_ATTR_ZOOM,SID_ATTR_ZOOM, aItemInfos, pDefaults) );
         pPool->SetDefaultMetric( SFX_MAPUNIT_100TH_MM );    // ripped, don't understand why
         pPool->FreezeIdRanges();                        // the same
-
         try
         {
-            SfxItemSet aDescriptor(*pPool, pRanges);
-
+            ::std::auto_ptr<SfxItemSet> pDescriptor(new SfxItemSet(*pPool, pRanges));
             // fill it
             SvxZoomItem aZoomItem( m_eZoomType, m_nZoomValue, SID_ATTR_ZOOM );
             aZoomItem.SetValueSet(SVX_ZOOM_ENABLE_100|SVX_ZOOM_ENABLE_WHOLEPAGE|SVX_ZOOM_ENABLE_PAGEWIDTH);
-            aDescriptor.Put(aZoomItem);
+            pDescriptor->Put(aZoomItem);
 
-            ::std::auto_ptr<AbstractSvxZoomDialog> pDlg( pFact->CreateSvxZoomDialog(NULL, aDescriptor, RID_SVXDLG_ZOOM) );
+            ::std::auto_ptr<AbstractSvxZoomDialog> pDlg( pFact->CreateSvxZoomDialog(NULL, *pDescriptor.get(), RID_SVXDLG_ZOOM) );
             pDlg->SetLimits( 20, 400 );
             bool bCancel = ( RET_CANCEL == pDlg->Execute() );
 
@@ -4254,7 +4275,6 @@ void OReportController::openZoomDialog()
         {
             DBG_UNHANDLED_EXCEPTION();
         }
-
         SfxItemPool::Free(pPool);
 
         for (sal_uInt16 i=0; i<sizeof(pDefaults)/sizeof(pDefaults[0]); ++i)
@@ -4262,3 +4282,70 @@ void OReportController::openZoomDialog()
     } // if(pFact)
 }
 // -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// XVisualObject
+void SAL_CALL OReportController::setVisualAreaSize( ::sal_Int64 _nAspect, const awt::Size& _aSize ) throw (lang::IllegalArgumentException, embed::WrongStateException, uno::Exception, uno::RuntimeException)
+{
+    ::osl::MutexGuard aGuard( getMutex() );
+    //if( nAspect == embed::Aspects::MSOLE_CONTENT )
+    {
+        bool bChanged =
+            (m_aVisualAreaSize.Width != _aSize.Width ||
+             m_aVisualAreaSize.Height != _aSize.Height);
+        m_aVisualAreaSize = _aSize;
+        if( bChanged )
+            setModified( sal_True );
+    }
+    m_nAspect = _nAspect;
+}
+// -----------------------------------------------------------------------------
+awt::Size SAL_CALL OReportController::getVisualAreaSize( ::sal_Int64 /*nAspect*/ ) throw (lang::IllegalArgumentException, embed::WrongStateException, uno::Exception, uno::RuntimeException)
+{
+    ::osl::MutexGuard aGuard( getMutex() );
+    return m_aVisualAreaSize;
+}
+// -----------------------------------------------------------------------------
+embed::VisualRepresentation SAL_CALL OReportController::getPreferredVisualRepresentation( ::sal_Int64 _nAspect ) throw (lang::IllegalArgumentException, embed::WrongStateException, uno::Exception, uno::RuntimeException)
+{
+    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    ::osl::MutexGuard aGuard( getMutex() );
+    embed::VisualRepresentation aResult;
+    if ( !m_bInGeneratePreview )
+    {
+        m_bInGeneratePreview = true;
+        try
+        {
+            if ( !m_xReportEngine.is() )
+                m_xReportEngine.set(getORB()->createInstance(SERVICE_REPORTENGINE),uno::UNO_QUERY_THROW);
+            const sal_Int32 nOldMaxRows = m_xReportEngine->getMaxRows();
+            m_xReportEngine->setMaxRows(MAX_ROWS_FOR_PREVIEW);
+            m_xReportEngine->setReportDefinition(m_xReportDefinition);
+            m_xReportEngine->setActiveConnection(getConnection());
+            try
+            {
+                Reference<embed::XVisualObject> xTransfer(m_xReportEngine->createDocumentModel(),UNO_QUERY);
+                if ( xTransfer.is() )
+                {
+                    xTransfer->setVisualAreaSize(m_nAspect,m_aVisualAreaSize);
+                    aResult = xTransfer->getPreferredVisualRepresentation( _nAspect );
+                } // if ( xTransfer.is() )
+            }
+            catch( uno::Exception & ex )
+            {
+                (void)ex;
+            }
+            m_xReportEngine->setMaxRows(nOldMaxRows);
+        }
+        catch( uno::Exception & ex )
+        {
+            (void)ex;
+        }
+        m_bInGeneratePreview = false;
+    }
+    return aResult;
+}
+// -----------------------------------------------------------------------------
+::sal_Int32 SAL_CALL OReportController::getMapUnit( ::sal_Int64 /*nAspect*/ ) throw (uno::Exception, uno::RuntimeException)
+{
+    return embed::EmbedMapUnits::ONE_100TH_MM;
+}

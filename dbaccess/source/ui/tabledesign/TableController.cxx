@@ -1482,6 +1482,7 @@ void OTableController::alterColumns()
 // -----------------------------------------------------------------------------
 void OTableController::dropPrimaryKey()
 {
+    SQLExceptionInfo aInfo;
     try
     {
         Reference<XKeysSupplier> xKeySup(m_xTable,UNO_QUERY);
@@ -1506,11 +1507,24 @@ void OTableController::dropPrimaryKey()
             }
         }
     }
+    catch(const SQLContext& e)
+    {
+        aInfo = SQLExceptionInfo(e);
+    }
+    catch(const SQLWarning& e)
+    {
+        aInfo = SQLExceptionInfo(e);
+    }
+    catch(const SQLException& e)
+    {
+        aInfo = SQLExceptionInfo(e);
+    }
     catch( const Exception& )
     {
         DBG_UNHANDLED_EXCEPTION();
     }
 
+    showError(aInfo);
 }
 // -----------------------------------------------------------------------------
 void OTableController::assignTable()

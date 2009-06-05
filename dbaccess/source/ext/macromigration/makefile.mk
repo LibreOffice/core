@@ -79,7 +79,8 @@ SHL1STDLIBS= \
         $(SVLLIB)           \
         $(VCLLIB)           \
         $(SVXLIB)           \
-        $(UCBHELPERLIB)
+        $(UCBHELPERLIB)     \
+        $(XMLSCRIPTLIB)
 
 SHL1LIBS=       $(SLB)$/$(TARGET).lib
 SHL1IMPLIB=     i$(TARGET)

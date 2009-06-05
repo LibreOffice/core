@@ -401,7 +401,6 @@ void OAddFieldWindow::Resize()
     // Help text
     Point aFTPos( aRelated.Width(), aFLPos.Y() + aFLSize.Height() + aRelated.Height() );
     m_aHelpText.SetPosSizePixel( aFTPos, aHelpTextSize );
-
 }
 // -----------------------------------------------------------------------------
 uno::Reference< sdbc::XConnection> OAddFieldWindow::getConnection() const

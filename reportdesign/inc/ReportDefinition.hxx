@@ -33,7 +33,7 @@
 
 #include "dllapi.h"
 #include <com/sun/star/report/XReportDefinition.hpp>
-#include <cppuhelper/compbase11.hxx>
+#include <cppuhelper/compbase12.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
@@ -41,13 +41,15 @@
 #include <com/sun/star/frame/XTitle.hpp>
 #include <com/sun/star/frame/XTitleChangeBroadcaster.hpp>
 #include <com/sun/star/frame/XUntitledNumbers.hpp>
+#include <com/sun/star/frame/XModule.hpp>
+#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <cppuhelper/propertysetmixin.hxx>
 #include <comphelper/uno3.hxx>
 #include <comphelper/embeddedobjectcontainer.hxx>
 #include <svx/unomod.hxx>
-#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
-#include <com/sun/star/frame/XModule.hpp>
+
 #include "ReportHelperDefines.hxx"
 #include <boost/shared_ptr.hpp>
 
@@ -63,7 +65,7 @@ namespace comphelper
 namespace reportdesign
 {
     class OReportComponentProperties;
-    typedef ::cppu::WeakComponentImplHelper11<  com::sun::star::report::XReportDefinition
+    typedef ::cppu::WeakComponentImplHelper12<  com::sun::star::report::XReportDefinition
                                  ,com::sun::star::document::XEventBroadcaster
                                  ,com::sun::star::lang::XServiceInfo
                                  ,com::sun::star::frame::XModule
@@ -73,6 +75,7 @@ namespace reportdesign
                                  ,::com::sun::star::frame::XTitleChangeBroadcaster
                                  ,::com::sun::star::frame::XUntitledNumbers
                                  ,::com::sun::star::document::XDocumentPropertiesSupplier
+                                 ,::com::sun::star::datatransfer::XTransferable
                                  ,SvxUnoDrawMSFactory> ReportDefinitionBase;
     typedef ::cppu::PropertySetMixin<com::sun::star::report::XReportDefinition> ReportDefinitionPropertySet;
 
@@ -145,6 +148,17 @@ namespace reportdesign
 
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XTitle >             impl_getTitleHelper_throw();
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XUntitledNumbers >   impl_getUntitledHelper_throw();
+
+        /** loads the report definition from the given storage
+            @precond
+                our mutex is locked
+            @throws
+        */
+        void impl_loadFromStorage_nolck_throw(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _rxStorage,
+            const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rArguments
+        );
+
     protected:
         virtual ~OReportDefinition();
 
@@ -359,6 +373,11 @@ namespace reportdesign
         // XDocumentPropertiesSupplier
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentProperties > SAL_CALL getDocumentProperties(  ) throw (::com::sun::star::uno::RuntimeException);
 
+        // XTransferable
+        virtual ::com::sun::star::uno::Any SAL_CALL getTransferData( const ::com::sun::star::datatransfer::DataFlavor& aFlavor ) throw (::com::sun::star::datatransfer::UnsupportedFlavorException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::sal_Bool SAL_CALL isDataFlavorSupported( const ::com::sun::star::datatransfer::DataFlavor& aFlavor ) throw (::com::sun::star::uno::RuntimeException);
+
         // comphelper::IEmbeddedHelper
         virtual com::sun::star::uno::Reference < com::sun::star::embed::XStorage > getStorage() const;
         virtual ::comphelper::EmbeddedObjectContainer& getEmbeddedObjectContainer() const;
@@ -366,19 +385,6 @@ namespace reportdesign
         virtual bool isEnableSetModified() const;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > getContext() const;
-
-    private:
-        /** loads the report definition from the given storage
-
-            @precond
-                our mutex is locked
-            @throws
-        */
-        void impl_loadFromStorage_nolck_throw(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _rxStorage,
-            const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rArguments
-        );
-
       };
 // =============================================================================
 } // namespace reportdesign

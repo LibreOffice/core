@@ -96,7 +96,7 @@ String STR_TAB_FIELD_COLUMN_NAME
 };
 String STR_TAB_FIELD_DATATYPE
 {
-    Text [ en-US ] = "Field type" ;
+    Text [ en-US ] = "Field ~type" ;
 };
 String STR_TAB_FIELD_COLUMN_DATATYPE
 {

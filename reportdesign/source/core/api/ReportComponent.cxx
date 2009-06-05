@@ -41,7 +41,7 @@
 #include "ReportControlModel.hxx"
 #include <com/sun/star/reflection/XProxyFactory.hpp>
 #include <com/sun/star/text/ParagraphVertAlign.hpp>
-// #include <svx/unoshape.hxx>
+#include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <svx/unolingu.hxx>
 #include <svtools/syslocale.hxx>
 #include <svtools/lingucfg.hxx>
@@ -73,14 +73,14 @@ void lcl_getDefaultFonts( Font& rLatinFont, Font& rCJKFont, Font& rCTLFont,Langu
         rCTLFont = OutputDevice::GetDefaultFont( DEFAULTFONT_CTL_PRESENTATION, _eCTL, DEFAULTFONT_FLAGS_ONLYONE ) ;
 }
 OFormatProperties::OFormatProperties()
-    :nAlign(0)
+    :nAlign(style::ParagraphAdjust_LEFT)
     ,nFontEmphasisMark(0)
     ,nFontRelief(0)
     ,nTextColor(0)
     ,nTextLineColor(0)
     ,nCharUnderlineColor(0xFFFFFFFF)
     ,nBackgroundColor(COL_TRANSPARENT)
-    ,aVerticalAlignment(text::ParagraphVertAlign::TOP)
+    ,aVerticalAlignment( style::VerticalAlignment_TOP )
     ,nCharEscapement(0)
     ,nCharCaseMap(0)
     ,nCharKerning(0)
@@ -114,7 +114,6 @@ OFormatProperties::OFormatProperties()
     }
     aFontDescriptor.Weight = awt::FontWeight::NORMAL;
     aFontDescriptor.CharacterWidth = awt::FontWidth::NORMAL;
-
     // aCharLocale = SvtSysLocale().GetLocaleData().getLocale();
 }
 // -----------------------------------------------------------------------------

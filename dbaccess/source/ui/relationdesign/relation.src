@@ -70,15 +70,15 @@ QueryBox RELATION_DESIGN_SAVEMODIFIED
     Message [ en-US ] = "The relation design has been changed.\nDo you want to save the changes?" ;
 };
 
-/*
-  The menubar resource has become obsolete - you can now find the menubar definition at: <project>/uiconfig/dbrelation/menubar/menubar.xml
-*/
-
 String STR_QUERY_REL_DELETE_WINDOW
 {
     Text [ en-US ] = "When you delete this table all corresponding relations will be deleted as well. Continue?";
 };
 
+String STR_QUERY_REL_COULD_NOT_CREATE
+{
+    Text [ en-US ] = "The datbase could not create the relation. May be foreign keys for this kind of table aren't supported.\nPlease check your documentation of the database.";
+};
 
 
 

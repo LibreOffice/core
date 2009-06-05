@@ -37,111 +37,44 @@
 #define ITEMID_LINEBREAK        SID_ATTR_ALIGN_LINEBREAK
 #define ITEMID_MARGIN           SID_ATTR_ALIGN_MARGIN
 
-#ifndef DBAUI_FIELDDESCRIPTIONCONTROL_HXX
 #include "FieldDescControl.hxx"
-#endif
-#ifndef DBAUI_FIELDCONTROLS_HXX
 #include "FieldControls.hxx"
-#endif
-#ifndef _ZFORLIST_HXX //autogen
+#include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
+#include "TableDesignHelpBar.hxx"
+#include <vcl/scrbar.hxx>
+#include <vcl/button.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/fixed.hxx>
+#include <vcl/msgbox.hxx>
+#include <vector>
+#include "FieldDescriptions.hxx"
+#include "dlgattr.hxx"
+#include <svx/numfmtsh.hxx>
+#include <svx/svxids.hrc>
+#include <svx/algitem.hxx>
+#include <svtools/itempool.hxx>
 #define _ZFORLIST_DECLARE_TABLE     // ohne das bekomme ich einen Compiler-Fehler in <svtools/zforlist.hxx>
 #include <svtools/zforlist.hxx>
-#endif
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
-#endif
-#ifndef DBAUI_TABLEDESIGNHELPBAR_HXX
-#include "TableDesignHelpBar.hxx"
-#endif
-#ifndef _SV_SCRBAR_HXX
-#include <vcl/scrbar.hxx>
-#endif
-#ifndef _SV_BUTTON_HXX
-#include <vcl/button.hxx>
-#endif
-#ifndef _SVX_NUMFMTSH_HXX
-#include <svx/numfmtsh.hxx>
-#endif
-#ifndef _DBU_CONTROL_HRC_
-#include "dbu_control.hrc"
-#endif
-#ifndef _DBU_TBL_HRC_
-#include "dbu_tbl.hrc"
-#endif
-
-#ifndef _SV_SVAPP_HXX
-#include <vcl/svapp.hxx>
-#endif
-#ifndef _SV_FIXED_HXX
-#include <vcl/fixed.hxx>
-#endif
-#ifndef _SV_MSGBOX_HXX
-#include <vcl/msgbox.hxx>
-#endif
-#ifndef _VECTOR_
-#include <vector>
-#endif
-#ifndef DBAUI_FIELDDESCRIPTIONS_HXX
-#include "FieldDescriptions.hxx"
-#endif
-#ifndef _SFXITEMPOOL_HXX
-#include <svtools/itempool.hxx>
-#endif
-#ifndef DBAUI_SBATTRDLG_HXX
-#include "dlgattr.hxx"
-#endif
-#ifndef _SVX_SVXIDS_HRC
-#include <svx/svxids.hrc>
-#endif
-#ifndef _SVX_ALGITEM_HXX
-#include <svx/algitem.hxx>
-#endif
-#ifndef _SFXRNGITEM_HXX
 #include <svtools/rngitem.hxx>
-#endif
-#ifndef _SFXINTITEM_HXX
 #include <svtools/intitem.hxx>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
-#include <com/sun/star/lang/XUnoTunnel.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_NUMBERFORMAT_HPP_
-#include <com/sun/star/util/NumberFormat.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATPREVIEWER_HPP_
-#include <com/sun/star/util/XNumberFormatPreviewer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATTYPES_HPP_
-#include <com/sun/star/util/XNumberFormatTypes.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
-#include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef DBAUI_ENUMTYPES_HXX
-#include "QEnumTypes.hxx"
-#endif
-#ifndef _DBA_DBACCESS_HELPID_HRC_
-#include "dbaccess_helpid.hrc"
-#endif
-#ifndef _NUMUNO_HXX
 #include <svtools/numuno.hxx>
-#endif
-#ifndef _CONNECTIVITY_DBTOOLS_HXX_
-#include <connectivity/dbtools.hxx>
-#endif
-#ifndef _COMPHELPER_NUMBERS_HXX_
-#include <comphelper/numbers.hxx>
-#endif
-#ifndef DBAUI_TOOLS_HXX
-#include "UITools.hxx"
-#endif
-#include <memory>
-#ifndef _DBHELPER_DBCONVERSION_HXX_
-#include <connectivity/dbconversion.hxx>
-#endif
-#ifndef _TRANSFER_HXX
 #include <svtools/transfer.hxx>
-#endif
+#include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <com/sun/star/util/NumberFormat.hpp>
+#include <com/sun/star/util/XNumberFormatPreviewer.hpp>
+#include <com/sun/star/util/XNumberFormatTypes.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include "QEnumTypes.hxx"
+#include "dbaccess_helpid.hrc"
+#include <connectivity/dbtools.hxx>
+#include <connectivity/dbconversion.hxx>
+#include <comphelper/numbers.hxx>
+#include "UITools.hxx"
+#include <memory>
+#include "dbu_control.hrc"
+#include "dbu_tbl.hrc"
+
 
 using namespace dbaui;
 using namespace dbtools;
@@ -156,7 +89,6 @@ using namespace ::com::sun::star::util;
 // fuer die Controls auf der OFieldDescGenPage
 #define CONTROL_SPACING_X   18  // 6
 #define CONTROL_SPACING_Y   4
-#define CONTROL_HEIGHT      10
 #define CONTROL_WIDTH_1     160 // 100
 #define CONTROL_WIDTH_2     100 // 60
 #define CONTROL_WIDTH_3     250
@@ -185,6 +117,20 @@ namespace
         return nValue;
     }
     // -----------------------------------------------------------------------------
+    template< typename T1, typename T2> void lcl_HideAndDeleteControl(short& _nPos,T1** _pControl,T2** _pControlText)
+    {
+        if ( *_pControl )
+        {
+            --_nPos;
+            (*_pControl)->Hide();
+            (*_pControlText)->Hide();
+            delete *_pControl;
+            delete *_pControlText;
+            (*_pControl) = NULL;
+            (*_pControlText) = NULL;
+        }
+    }
+
 }
 
 //==================================================================
@@ -241,22 +187,7 @@ OFieldDescControl::OFieldDescControl( Window* pParent, const ResId& rResId, OTab
 {
     DBG_CTOR(OFieldDescControl,NULL);
 
-    m_pVertScroll = new ScrollBar(this, WB_VSCROLL | WB_REPEAT | WB_DRAG);
-    m_pHorzScroll = new ScrollBar(this, WB_HSCROLL | WB_REPEAT | WB_DRAG);
-    m_pVertScroll->SetScrollHdl(LINK(this, OFieldDescControl, OnScroll));
-    m_pHorzScroll->SetScrollHdl(LINK(this, OFieldDescControl, OnScroll));
-    m_pVertScroll->Show();
-    m_pHorzScroll->Show();
-
-    m_pVertScroll->EnableClipSiblings();
-    m_pHorzScroll->EnableClipSiblings();
-
-    m_pVertScroll->SetLineSize(1);
-    m_pVertScroll->SetPageSize(1);
-    m_pHorzScroll->SetLineSize(1);
-    m_pHorzScroll->SetPageSize(1);
-
-    m_nOldVThumb = m_nOldHThumb = 0;
+    Contruct();
 }
 //------------------------------------------------------------------------------
 OFieldDescControl::OFieldDescControl( Window* pParent, OTableDesignHelpBar* pHelpBar )
@@ -305,7 +236,11 @@ OFieldDescControl::OFieldDescControl( Window* pParent, OTableDesignHelpBar* pHel
     ,pActFieldDescr(NULL)
 {
     DBG_CTOR(OFieldDescControl,NULL);
-
+    Contruct();
+}
+// -----------------------------------------------------------------------------
+void OFieldDescControl::Contruct()
+{
     m_pVertScroll = new ScrollBar(this, WB_VSCROLL | WB_REPEAT | WB_DRAG);
     m_pHorzScroll = new ScrollBar(this, WB_HSCROLL | WB_REPEAT | WB_DRAG);
     m_pVertScroll->SetScrollHdl(LINK(this, OFieldDescControl, OnScroll));
@@ -322,7 +257,6 @@ OFieldDescControl::OFieldDescControl( Window* pParent, OTableDesignHelpBar* pHel
     m_pHorzScroll->SetPageSize(1);
 
     m_nOldVThumb = m_nOldHThumb = 0;
-
 }
 
 //------------------------------------------------------------------------------
@@ -451,7 +385,7 @@ void OFieldDescControl::CheckScrollBars()
     sal_uInt16 nActive = CountActiveAggregates();
     // welches ist das letzte, was ganz drauf passt ?
     sal_uInt16 nLastVisible;
-    const sal_Int32 nControlHeight = LogicToPixel(Size(0, CONTROL_HEIGHT),MAP_APPFONT).Height();
+    const sal_Int32 nControlHeight = GetMaxControlHeight();
     const sal_Int32 nControl_Spacing_y = LogicToPixel(Size(0, CONTROL_SPACING_Y),MAP_APPFONT).Height();
     if (bNeedHScrollBar)
         nLastVisible = static_cast<sal_uInt16>((szOverallSize.Height() - nControl_Spacing_y - nHScrollHeight) / (nControl_Spacing_y + nControlHeight));
@@ -536,7 +470,7 @@ void OFieldDescControl::ScrollAllAggregates()
 
     if (m_nOldVThumb != m_pVertScroll->GetThumbPos())
     {
-        const sal_Int32 nControlHeight = LogicToPixel(Size(0, CONTROL_HEIGHT),MAP_APPFONT).Height();
+        const sal_Int32 nControlHeight = GetMaxControlHeight();
         const sal_Int32 nControl_Spacing_y = LogicToPixel(Size(0, CONTROL_SPACING_Y),MAP_APPFONT).Height();
         nDeltaY = (m_nOldVThumb - m_pVertScroll->GetThumbPos()) * (nControl_Spacing_y + nControlHeight);
         m_nOldVThumb = m_pVertScroll->GetThumbPos();
@@ -573,7 +507,23 @@ sal_uInt16 OFieldDescControl::CountActiveAggregates() const
             ++nVisibleAggregates;
     return nVisibleAggregates;
 }
+//------------------------------------------------------------------------------
+sal_Int32 OFieldDescControl::GetMaxControlHeight() const
+{
+    Size aHeight;
+    Control* ppAggregates[] = { pRequired, pNumType, pAutoIncrement, pDefault, pTextLen, pLength, pScale, pFormat, m_pColumnName, m_pType,m_pAutoIncrementValue};
+    for (sal_uInt16 i=0; i<sizeof(ppAggregates)/sizeof(ppAggregates[0]); ++i)
+    {
+        if ( ppAggregates[i] )
+        {
+            const Size aTemp( ppAggregates[i]->GetOptimalSize(WINDOWSIZE_PREFERRED) );
+            if ( aTemp.Height() > aHeight.Height() )
+                aHeight.Height() = aTemp.Height();
+        } // if ( ppAggregates[i] )
+    }
 
+    return aHeight.Height();
+}
 //------------------------------------------------------------------------------
 void OFieldDescControl::SetReadOnly( sal_Bool bReadOnly )
 {
@@ -909,7 +859,8 @@ void OFieldDescControl::ArrangeAggregates()
 
             // die Z-Order so, dass die Controls auch wirklich in derselben Reihenfolge durchwandert werden koennen, in der sie
             // hier angeordnet wurden
-            adAggregates[i].pctrlInputControl->SetZOrder(pZOrderPredecessor, pZOrderPredecessor ? WINDOW_ZORDER_BEHIND : WINDOW_ZORDER_FIRST);
+            adAggregates[i].pctrlTextControl->SetZOrder(pZOrderPredecessor, pZOrderPredecessor ? WINDOW_ZORDER_BEHIND : WINDOW_ZORDER_FIRST);
+            adAggregates[i].pctrlInputControl->SetZOrder(adAggregates[i].pctrlTextControl, WINDOW_ZORDER_BEHIND );
             pZOrderPredecessor = adAggregates[i].pctrlInputControl;
 
             if (adAggregates[i].pctrlInputControl == pFormatSample)
@@ -947,36 +898,18 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
         if( pDefault )
             return;
         m_nPos++;
-        pDefaultText  =new FixedText( this );
-        pDefaultText->SetText( ModuleRes(STR_DEFAULT_VALUE) );
+        pDefaultText = CreateText(STR_DEFAULT_VALUE);
         pDefault = new OPropEditCtrl( this, STR_HELP_DEFAULT_VALUE, FIELD_PROPERTY_DEFAULT, WB_BORDER );
-        pDefault->SetHelpId(HID_TAB_ENT_DEFAULT);
-        //  SetPosSize( (Control**)&pDefaultText, m_nPos, 0 );
-        //  SetPosSize( (Control**)&pDefault, m_nPos, 3 );
-
-        pDefault->SetGetFocusHdl(LINK(this, OFieldDescControl, OnControlFocusGot));
-        pDefault->SetLoseFocusHdl(LINK(this, OFieldDescControl, OnControlFocusLost));
-
-        pDefaultText->EnableClipSiblings();
-        pDefault->EnableClipSiblings();
+        InitializeControl(pDefault,HID_TAB_ENT_DEFAULT,false);
         break;
     case tpAutoIncrementValue:
         if( m_pAutoIncrementValue || !isAutoIncrementValueEnabled() )
             return;
         m_nPos++;
-        m_pAutoIncrementValueText  =new FixedText( this );
-        m_pAutoIncrementValueText->SetText( ModuleRes(STR_AUTOINCREMENT_VALUE) );
+        m_pAutoIncrementValueText = CreateText(STR_AUTOINCREMENT_VALUE);
         m_pAutoIncrementValue = new OPropEditCtrl( this, STR_HELP_AUTOINCREMENT_VALUE, FIELD_PRPOERTY_AUTOINCREMENT, WB_BORDER );
-        m_pAutoIncrementValue->SetHelpId(HID_TAB_AUTOINCREMENTVALUE);
-        //  SetPosSize( (Control**)&m_pAutoIncrementValueText, m_nPos, 0 );
-        //  SetPosSize( (Control**)&m_pAutoIncrementValue, m_nPos, 3 );
-
-        m_pAutoIncrementValue->SetGetFocusHdl(LINK(this, OFieldDescControl, OnControlFocusGot));
-        m_pAutoIncrementValue->SetLoseFocusHdl(LINK(this, OFieldDescControl, OnControlFocusLost));
-
-        m_pAutoIncrementValueText->EnableClipSiblings();
-        m_pAutoIncrementValue->EnableClipSiblings();
         m_pAutoIncrementValue->SetText( getAutoIncrementValue() );
+        InitializeControl(m_pAutoIncrementValue,HID_TAB_AUTOINCREMENTVALUE,false);
         break;
 
     case tpRequired:
@@ -988,21 +921,14 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
         if(xMetaData.is() && xMetaData->supportsNonNullableColumns())
         {
             m_nPos++;
-            pRequiredText  =new FixedText( this );
-            pRequiredText->SetText( ModuleRes(STR_FIELD_REQUIRED) );
+            pRequiredText = CreateText(STR_FIELD_REQUIRED);
             pRequired = new OPropListBoxCtrl( this, STR_HELP_FIELD_REQUIRED, FIELD_PROPERTY_REQUIRED, WB_DROPDOWN);
-            pRequired->SetHelpId(HID_TAB_ENT_REQUIRED);
 
             pRequired->InsertEntry( aYes );
             pRequired->InsertEntry( aNo );
             pRequired->SelectEntryPos(1);
-            pRequired->SetSelectHdl(LINK(this,OFieldDescControl,ChangeHdl));
 
-            pRequired->SetGetFocusHdl(LINK(this, OFieldDescControl, OnControlFocusGot));
-            pRequired->SetLoseFocusHdl(LINK(this, OFieldDescControl, OnControlFocusLost));
-
-            pRequiredText->EnableClipSiblings();
-            pRequired->EnableClipSiblings();
+            InitializeControl(pRequired,HID_TAB_ENT_REQUIRED,true);
         }
     }
     break;
@@ -1011,53 +937,28 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
         if( pAutoIncrement )
             return;
         m_nPos++;
-        pAutoIncrementText  =new FixedText( this );
-        pAutoIncrementText->SetText( ModuleRes(STR_FIELD_AUTOINCREMENT) );
+        pAutoIncrementText = CreateText(STR_FIELD_AUTOINCREMENT);
         pAutoIncrement = new OPropListBoxCtrl( this, STR_HELP_AUTOINCREMENT, FIELD_PROPERTY_AUTOINC, WB_DROPDOWN );
-        pAutoIncrement->SetHelpId(HID_TAB_ENT_AUTOINCREMENT);
-
         pAutoIncrement->InsertEntry( aYes );
         pAutoIncrement->InsertEntry( aNo );
         pAutoIncrement->SelectEntryPos(0);
-        pAutoIncrement->SetSelectHdl(LINK(this,OFieldDescControl,ChangeHdl));
-
-        pAutoIncrement->SetGetFocusHdl(LINK(this, OFieldDescControl, OnControlFocusGot));
-        pAutoIncrement->SetLoseFocusHdl(LINK(this, OFieldDescControl, OnControlFocusLost));
-
-        pAutoIncrementText->EnableClipSiblings();
-        pAutoIncrement->EnableClipSiblings();
+        InitializeControl(pAutoIncrement,HID_TAB_ENT_AUTOINCREMENT,true);
     }
     break;
     case tpTextLen:
         if( pTextLen )
             return;
         m_nPos++;
-        pTextLenText  =new FixedText( this );
-        pTextLenText->SetText( ModuleRes(STR_TEXT_LENGTH) );
-
-        pTextLen = new OPropNumericEditCtrl( this, STR_HELP_TEXT_LENGTH, FIELD_PROPERTY_TEXTLEN, WB_BORDER );
-        pTextLen->SetDecimalDigits(0);
-        pTextLen->SetMin(0);
-        pTextLen->SetMax(0x7FFFFFFF);   // soll draussen geaendert werden, wenn noetig
-        pTextLen->SetStrictFormat(TRUE);
-
-        pTextLen->SetHelpId(HID_TAB_ENT_TEXT_LEN);
-
-        pTextLen->SetGetFocusHdl(LINK(this, OFieldDescControl, OnControlFocusGot));
-        pTextLen->SetLoseFocusHdl(LINK(this, OFieldDescControl, OnControlFocusLost));
-
-        pTextLenText->EnableClipSiblings();
-        pTextLen->EnableClipSiblings();
+        pTextLenText = CreateText(STR_TEXT_LENGTH);
+        pTextLen = CreateNumericControl(STR_HELP_TEXT_LENGTH, FIELD_PROPERTY_TEXTLEN,HID_TAB_ENT_TEXT_LEN);
         break;
 
     case tpType:
         if( m_pType)
             return;
         m_nPos++;
-        m_pTypeText  =new FixedText( this );
-        m_pTypeText->SetText( ModuleRes(STR_TAB_FIELD_DATATYPE) );
+        m_pTypeText = CreateText(STR_TAB_FIELD_DATATYPE);
         m_pType = new OPropListBoxCtrl( this, STR_HELP_AUTOINCREMENT, FIELD_PRPOERTY_TYPE, WB_DROPDOWN );
-        m_pType->SetHelpId(HID_TAB_ENT_TYPE);
         m_pType->SetDropDownLineCount(20);
         {
             const OTypeInfoMap* pTypeInfo = getTypeInfo();
@@ -1066,50 +967,48 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
                 m_pType->InsertEntry( aIter->second->aUIName );
         }
         m_pType->SelectEntryPos(0);
-        m_pType->SetSelectHdl(LINK(this,OFieldDescControl,ChangeHdl));
-
-        m_pType->SetGetFocusHdl(LINK(this, OFieldDescControl, OnControlFocusGot));
-        m_pType->SetLoseFocusHdl(LINK(this, OFieldDescControl, OnControlFocusLost));
-
-        m_pTypeText->EnableClipSiblings();
-        m_pType->EnableClipSiblings();
+        InitializeControl(m_pType,HID_TAB_ENT_TYPE,true);
         break;
     case tpColumnName:
         if( m_pColumnName )
             return;
         m_nPos++;
         {
-            Reference< XDatabaseMetaData> xMetaData = getMetaData();
-            sal_uInt32 nMax = xMetaData.is() ? xMetaData->getMaxColumnNameLength() : EDIT_NOLIMIT;
-            m_pColumnNameText  =new FixedText( this );
-            m_pColumnNameText->SetText( ModuleRes(STR_TAB_FIELD_NAME) );
-            ::rtl::OUString aTmpString( xMetaData.is() ? xMetaData->getExtraNameCharacters() : ::rtl::OUString() );
+            sal_uInt32 nMax = EDIT_NOLIMIT;
+            ::rtl::OUString aTmpString;
+            try
+            {
+                Reference< XDatabaseMetaData> xMetaData = getMetaData();
+                if ( xMetaData.is() )
+                {
+                    nMax =  xMetaData->getMaxColumnNameLength();
+                    aTmpString = xMetaData->getExtraNameCharacters();
+                }
+            }
+            catch(Exception&)
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
+            m_pColumnNameText = CreateText(STR_TAB_FIELD_NAME);
             m_pColumnName = new OPropColumnEditCtrl( this,
                                                     aTmpString,
                                                     STR_HELP_DEFAULT_VALUE,
                                                     FIELD_PRPOERTY_COLUMNNAME,
                                                     WB_BORDER );
-            m_pColumnName->SetHelpId(HID_TAB_ENT_COLUMNNAME);
             m_pColumnName->SetMaxTextLen(xub_StrLen( nMax ? nMax : EDIT_NOLIMIT));
             m_pColumnName->setCheck( isSQL92CheckEnabled(getConnection()) );
         }
 
-        m_pColumnName->SetGetFocusHdl(LINK(this, OFieldDescControl, OnControlFocusGot));
-        m_pColumnName->SetLoseFocusHdl(LINK(this, OFieldDescControl, OnControlFocusLost));
-
-        m_pColumnNameText->EnableClipSiblings();
-        m_pColumnName->EnableClipSiblings();
+        InitializeControl(m_pColumnName,HID_TAB_ENT_COLUMNNAME,false);
         break;
     case tpNumType:
         if( pNumType )
             return;
         m_nPos++;
-        pNumTypeText  =new FixedText( this );
-        pNumTypeText->SetText( ModuleRes(STR_NUMERIC_TYPE) );
+        pNumTypeText = CreateText(STR_NUMERIC_TYPE);
 
         pNumType = new OPropListBoxCtrl( this, STR_HELP_NUMERIC_TYPE, FIELD_PROPERTY_NUMTYPE, WB_DROPDOWN );
         pNumType->SetDropDownLineCount(5);
-        pNumType->SetHelpId(HID_TAB_ENT_NUMTYP);
 
         pNumType->InsertEntry( String::CreateFromAscii("Byte") );
         pNumType->InsertEntry( String::CreateFromAscii("SmallInt") );
@@ -1117,84 +1016,41 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
         pNumType->InsertEntry( String::CreateFromAscii("Single") );
         pNumType->InsertEntry( String::CreateFromAscii("Double") );
         pNumType->SelectEntryPos(2);
-        pNumType->SetSelectHdl(LINK(this,OFieldDescControl,ChangeHdl));
-
-        pNumType->SetGetFocusHdl(LINK(this, OFieldDescControl, OnControlFocusGot));
-        pNumType->SetLoseFocusHdl(LINK(this, OFieldDescControl, OnControlFocusLost));
-
-        pNumTypeText->EnableClipSiblings();
-        pNumType->EnableClipSiblings();
+        InitializeControl(pNumType,HID_TAB_ENT_NUMTYP,true);
         break;
 
     case tpLength:
         if( pLength )
             return;
         m_nPos++;
-        pLengthText  =new FixedText( this );
-        pLengthText->SetText( ModuleRes(STR_LENGTH) );
-
-        pLength = new OPropNumericEditCtrl( this, STR_HELP_LENGTH, FIELD_PROPERTY_LENGTH, WB_BORDER );
-        pLength->SetDecimalDigits(0);
-        pLength->SetMin(0);
-        pLength->SetMax(0x7FFFFFFF);    // soll draussen geaendert werden, wenn noetig
-        pLength->SetStrictFormat(TRUE);
-
-        pLength->SetHelpId(HID_TAB_ENT_LEN);
-
-        pLength->SetGetFocusHdl(LINK(this, OFieldDescControl, OnControlFocusGot));
-        pLength->SetLoseFocusHdl(LINK(this, OFieldDescControl, OnControlFocusLost));
-
-        pLengthText->EnableClipSiblings();
-        pLength->EnableClipSiblings();
+        pLengthText = CreateText(STR_LENGTH);
+        pLength = CreateNumericControl(STR_HELP_LENGTH, FIELD_PROPERTY_LENGTH,HID_TAB_ENT_LEN);
         break;
 
     case tpScale:
         if( pScale )
             return;
         m_nPos++;
-        pScaleText  =new FixedText( this );
-        pScaleText->SetText( ModuleRes(STR_SCALE) );
-        pScale = new OPropNumericEditCtrl( this, STR_HELP_SCALE, FIELD_PROPERTY_SCALE, WB_BORDER );
-        pScale->SetDecimalDigits(0);
-        pScale->SetMin(0);
-        pScale->SetMax(0x7FFFFFFF); // soll draussen geaendert werden, wenn noetig
-        pScale->SetStrictFormat(TRUE);
-
-        pScale->SetHelpId(HID_TAB_ENT_SCALE);
-
-        pScale->SetGetFocusHdl(LINK(this, OFieldDescControl, OnControlFocusGot));
-        pScale->SetLoseFocusHdl(LINK(this, OFieldDescControl, OnControlFocusLost));
-
-        pScaleText->EnableClipSiblings();
-        pScale->EnableClipSiblings();
+        pScaleText = CreateText(STR_SCALE);
+        pScale = CreateNumericControl(STR_HELP_SCALE, FIELD_PROPERTY_SCALE,HID_TAB_ENT_SCALE);
         break;
 
     case tpFormat:
         if (!pFormat)
         {
             m_nPos++;
-            pFormatText  =new FixedText( this );
-            pFormatText->SetText( ModuleRes(STR_FORMAT) );
+            pFormatText = CreateText(STR_FORMAT);
 
             pFormatSample = new OPropEditCtrl( this, STR_HELP_FORMAT_CODE, -1, WB_BORDER );
-            pFormatSample->SetHelpId(HID_TAB_ENT_FORMAT_SAMPLE);
             pFormatSample->SetReadOnly(sal_True);
             pFormatSample->Enable(sal_False);
+            InitializeControl(pFormatSample,HID_TAB_ENT_FORMAT_SAMPLE,false);
 
             pFormat = new PushButton( this, ModuleRes(PB_FORMAT) );
-            pFormat->SetHelpId(HID_TAB_ENT_FORMAT);
-            const sal_Int32 nControlHeight = LogicToPixel(Size(0, CONTROL_HEIGHT),MAP_APPFONT).Height();
+            const sal_Int32 nControlHeight = GetMaxControlHeight();
             pFormat->SetSizePixel(Size(nControlHeight, nControlHeight));
             pFormat->SetClickHdl( LINK( this, OFieldDescControl, FormatClickHdl ) );
-
-            pFormatSample->SetGetFocusHdl(LINK(this, OFieldDescControl, OnControlFocusGot));
-            pFormatSample->SetLoseFocusHdl(LINK(this, OFieldDescControl, OnControlFocusLost));
-            pFormat->SetGetFocusHdl(LINK(this, OFieldDescControl, OnControlFocusGot));
-            pFormat->SetLoseFocusHdl(LINK(this, OFieldDescControl, OnControlFocusLost));
-
-            pFormatText->EnableClipSiblings();
-            pFormatSample->EnableClipSiblings();
-            pFormat->EnableClipSiblings();
+            InitializeControl(pFormat,HID_TAB_ENT_FORMAT,false);
         }
 
         UpdateFormatSample(pActFieldDescr);
@@ -1204,25 +1060,49 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
             return;
 
         m_nPos++;
-        pBoolDefaultText  =new FixedText(this);
-        pBoolDefaultText->SetText(ModuleRes(STR_DEFAULT_VALUE));
+        pBoolDefaultText = CreateText(STR_DEFAULT_VALUE);
         pBoolDefault = new OPropListBoxCtrl( this, STR_HELP_BOOL_DEFAULT, FIELD_PROPERTY_BOOL_DEFAULT, WB_DROPDOWN );
         pBoolDefault->SetDropDownLineCount(3);
         pBoolDefault->InsertEntry(String(ModuleRes(STR_VALUE_NONE)));
         pBoolDefault->InsertEntry(aYes);
         pBoolDefault->InsertEntry(aNo);
-        pBoolDefault->SetHelpId(HID_TAB_ENT_BOOL_DEFAULT);
 
-        pBoolDefault->SetGetFocusHdl(LINK(this, OFieldDescControl, OnControlFocusGot));
-        pBoolDefault->SetLoseFocusHdl(LINK(this, OFieldDescControl, OnControlFocusLost));
-
-        pBoolDefaultText->EnableClipSiblings();
-        pBoolDefault->EnableClipSiblings();
+        InitializeControl(pBoolDefault,HID_TAB_ENT_BOOL_DEFAULT,false);
         break;
-
     }
 }
+// -----------------------------------------------------------------------------
+void OFieldDescControl::InitializeControl(Control* _pControl,ULONG _nHelpId,bool _bAddChangeHandler)
+{
+    _pControl->SetHelpId(_nHelpId);
+    if ( _bAddChangeHandler )
+        ((OPropListBoxCtrl*)_pControl)->SetSelectHdl(LINK(this,OFieldDescControl,ChangeHdl));
 
+    _pControl->SetGetFocusHdl(LINK(this, OFieldDescControl, OnControlFocusGot));
+    _pControl->SetLoseFocusHdl(LINK(this, OFieldDescControl, OnControlFocusLost));
+    _pControl->EnableClipSiblings();
+}
+// -----------------------------------------------------------------------------
+FixedText* OFieldDescControl::CreateText(USHORT _nTextRes)
+{
+    FixedText* pFixedText = new FixedText( this );
+    pFixedText->SetText( ModuleRes(_nTextRes) );
+    pFixedText->EnableClipSiblings();
+    return pFixedText;
+}
+// -----------------------------------------------------------------------------
+OPropNumericEditCtrl* OFieldDescControl::CreateNumericControl(USHORT _nHelpStr,short _nProperty,ULONG _nHelpId)
+{
+    OPropNumericEditCtrl* pControl = new OPropNumericEditCtrl( this, _nHelpStr, _nProperty, WB_BORDER );
+    pControl->SetDecimalDigits(0);
+    pControl->SetMin(0);
+    pControl->SetMax(0x7FFFFFFF);   // soll draussen geaendert werden, wenn noetig
+    pControl->SetStrictFormat(TRUE);
+
+    InitializeControl(pControl,_nHelpId,false);
+
+    return pControl;
+}
 //------------------------------------------------------------------------------
 void OFieldDescControl::DeactivateAggregate( EControlType eType )
 {
@@ -1233,150 +1113,58 @@ void OFieldDescControl::DeactivateAggregate( EControlType eType )
     switch( eType )
     {
     case tpDefault:
-        if( !pDefault )
-            return;
-        m_nPos--;
-        pDefault->Hide();
-        pDefaultText->Hide();
-        delete pDefault;
-        delete pDefaultText;
-        pDefault = NULL;
-        pDefaultText  =NULL;
+        lcl_HideAndDeleteControl(m_nPos,&pDefault,&pDefaultText);
         break;
 
     case tpAutoIncrementValue:
-        if( !m_pAutoIncrementValue )
-            return;
-        m_nPos--;
-        m_pAutoIncrementValue->Hide();
-        m_pAutoIncrementValueText->Hide();
-        delete m_pAutoIncrementValue;
-        delete m_pAutoIncrementValueText;
-        m_pAutoIncrementValue = NULL;
-        m_pAutoIncrementValueText  =NULL;
+        lcl_HideAndDeleteControl(m_nPos,&m_pAutoIncrementValue,&m_pAutoIncrementValueText);
         break;
 
     case tpColumnName:
-        if( !m_pColumnName )
-            return;
-        m_nPos--;
-        m_pColumnName->Hide();
-        m_pColumnNameText->Hide();
-        delete m_pColumnName;
-        delete m_pColumnNameText;
-        m_pColumnName = NULL;
-        m_pColumnNameText  =NULL;
+        lcl_HideAndDeleteControl(m_nPos,&m_pColumnName,&m_pColumnNameText);
         break;
 
     case tpType:
-        if( !m_pType )
-            return;
-        m_nPos--;
-        m_pType->Hide();
-        m_pTypeText->Hide();
-        delete m_pType;
-        delete m_pTypeText;
-        m_pType = NULL;
-        m_pTypeText  =NULL;
+        lcl_HideAndDeleteControl(m_nPos,&m_pType,&m_pTypeText);
         break;
 
     case tpAutoIncrement:
-        if( !pAutoIncrement )
-            return;
-        m_nPos--;
-        pAutoIncrement->Hide();
-        pAutoIncrementText->Hide();
-        delete pAutoIncrement;
-        delete pAutoIncrementText;
-        pAutoIncrement = NULL;
-        pAutoIncrementText  =NULL;
+        lcl_HideAndDeleteControl(m_nPos,&pAutoIncrement,&pAutoIncrementText);
         break;
 
     case tpRequired:
-        if( !pRequired )
-            return;
-        m_nPos--;
-        pRequired->Hide();
-        pRequiredText->Hide();
-        delete pRequired;
-        delete pRequiredText;
-        pRequired = NULL;
-        pRequiredText  =NULL;
+        lcl_HideAndDeleteControl(m_nPos,&pRequired,&pRequiredText);
         break;
 
     case tpTextLen:
-        if( !pTextLen )
-            return;
-        m_nPos--;
-        pTextLen->Hide();
-        pTextLenText->Hide();
-        delete pTextLen;
-        delete pTextLenText;
-        pTextLen = NULL;
-        pTextLenText  =NULL;
+        lcl_HideAndDeleteControl(m_nPos,&pTextLen,&pTextLenText);
         break;
 
     case tpNumType:
-        if( !pNumType )
-            return;
-        m_nPos--;
-        pNumType->Hide();
-        pNumTypeText->Hide();
-        delete pNumType;
-        delete pNumTypeText;
-        pNumType = NULL;
-        pNumTypeText  =NULL;
+        lcl_HideAndDeleteControl(m_nPos,&pNumType,&pNumTypeText);
         break;
 
     case tpLength:
-        if( !pLength )
-            return;
-        m_nPos--;
-        pLength->Hide();
-        pLengthText->Hide();
-        delete pLength;
-        delete pLengthText;
-        pLength = NULL;
-        pLengthText  =NULL;
+        lcl_HideAndDeleteControl(m_nPos,&pLength,&pLengthText);
         break;
 
     case tpScale:
-        if( !pScale )
-            return;
-        m_nPos--;
-        pScale->Hide();
-        pScaleText->Hide();
-        delete pScale;
-        delete pScaleText;
-        pScale = NULL;
-        pScaleText  =NULL;
+        lcl_HideAndDeleteControl(m_nPos,&pScale,&pScaleText);
         break;
 
     case tpFormat:
-        if( !pFormat )
-            return;
-        pFormatText->Hide();
-        pFormatSample->Hide();
-        pFormat->Hide();
-        delete pFormatText;
-        delete pFormatSample;
-        delete pFormat;
-        pFormatText  =NULL;
-        pFormatSample = NULL;
-        pFormat = NULL;
+        // TODO: we have to check if we have to increment m_nPos again
+        lcl_HideAndDeleteControl(m_nPos,&pFormat,&pFormatText);
+        if ( pFormatSample )
+        {
+            pFormatSample->Hide();
+            delete pFormatSample;
+            pFormatSample = NULL;
+        }
         break;
     case tpBoolDefault:
-        if (!pBoolDefault)
-            return;
-        m_nPos--;
-        pBoolDefault->Hide();
-        pBoolDefaultText->Hide();
-        delete pBoolDefault;
-        delete pBoolDefaultText;
-        pBoolDefault = NULL;
-        pBoolDefaultText  =NULL;
+        lcl_HideAndDeleteControl(m_nPos,&pBoolDefault,&pBoolDefaultText);
         break;
-
     }
 }
 
@@ -1387,48 +1175,28 @@ void OFieldDescControl::SetPosSize( Control** ppControl, long nRow, sal_uInt16 n
 
     //////////////////////////////////////////////////////////////////////
     // Groesse ermitteln
-    const sal_Int32 nControlHeight = LogicToPixel(Size(0, CONTROL_HEIGHT),MAP_APPFONT).Height();
-    Size aSize;
-    switch( nCol )
+    const sal_Int32 nControlHeight = GetMaxControlHeight();
+    Size aSize(0,nControlHeight);
+    if ( isRightAligned() && nCol )
+        aSize.Width() = LogicToPixel(Size(m_nWidth, 0),MAP_APPFONT).Width();
+    else
     {
-    case 0:
-        aSize.Width()  = CONTROL_WIDTH_1;
-        aSize.Height() = nControlHeight;
-        break;
-    case 1:
-        if ( isRightAligned() )
-            aSize.Width() = LogicToPixel(Size(m_nWidth, 0),MAP_APPFONT).Width();
-        else
-            aSize.Width()  = CONTROL_WIDTH_2;
-        aSize.Height() = nControlHeight;
-        break;
-    case 2:
-        if ( isRightAligned() )
-            aSize.Width() = LogicToPixel(Size(m_nWidth, 0),MAP_APPFONT).Width();
-        else
-            aSize.Width()  = CONTROL_WIDTH_2;
-        aSize.Height() = long(1.5*nControlHeight);
-        break;
-    case 3:
-        if ( isRightAligned() )
-            aSize.Width() = LogicToPixel(Size(m_nWidth, 0),MAP_APPFONT).Width();
-        else
-            aSize.Width()  = CONTROL_WIDTH_3;
-        aSize.Height() = nControlHeight;
-        break;
-    case 4:
-        if ( isRightAligned() )
-            aSize.Width() = LogicToPixel(Size(m_nWidth, 0),MAP_APPFONT).Width();
-        else
-            aSize.Width()  = CONTROL_WIDTH_4;
-        aSize.Height() = nControlHeight;
-        break;
-    default:
-        if ( isRightAligned() )
-            aSize.Width() = LogicToPixel(Size(m_nWidth, 0),MAP_APPFONT).Width();
-        else
+        switch( nCol )
+        {
+        case 0:
+        default:
             aSize.Width()  = CONTROL_WIDTH_1;
-        aSize.Height() = nControlHeight;
+            break;
+        case 1:
+            aSize.Width()  = CONTROL_WIDTH_2;
+            break;
+        case 3:
+            aSize.Width()  = CONTROL_WIDTH_3;
+            break;
+        case 4:
+            aSize.Width()  = CONTROL_WIDTH_4;
+            break;
+        } // switch( nCol )
     }
 
 
@@ -1442,7 +1210,6 @@ void OFieldDescControl::SetPosSize( Control** ppControl, long nRow, sal_uInt16 n
         aPosition.Y() = 1;
         break;
     case 1:
-    case 2:
     case 3:
     case 4:
         if ( isRightAligned() )
@@ -1965,12 +1732,8 @@ void OFieldDescControl::SaveData( OFieldDescription* pFieldDescr )
 //------------------------------------------------------------------------------
 void OFieldDescControl::UpdateFormatSample(OFieldDescription* pFieldDescr)
 {
-    if(!pFieldDescr)
-        return;
-    if(!pFormatSample)
-        return;
-
-    pFormatSample->SetText(getControlDefault(pFieldDescr,sal_False));
+    if ( pFieldDescr && pFormatSample )
+        pFormatSample->SetText(getControlDefault(pFieldDescr,sal_False));
 }
 
 //------------------------------------------------------------------------------
@@ -2169,8 +1932,3 @@ String OFieldDescControl::getControlDefault( const OFieldDescription* _pFieldDes
     return sDefault;
 }
 // -----------------------------------------------------------------------------
-
-
-
-
-

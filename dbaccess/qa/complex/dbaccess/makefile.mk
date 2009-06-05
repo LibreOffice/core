@@ -59,7 +59,7 @@ JARCLASSDIRS    = $(PACKAGE)
 JARTARGET       = $(TARGET).jar
 JARCOMPRESS 	= TRUE
 
-RUNNER_ARGS = -cp $(CLASSPATH)$(PATH_SEPERATOR)$(SOLARBINDIR)$/OOoRunner.jar org.openoffice.Runner -TestBase java_complex 
+RUNNER_ARGS = -cp "$(CLASSPATH)$(PATH_SEPERATOR)$(SOLARBINDIR)$/OOoRunner.jar" org.openoffice.Runner -TestBase java_complex 
 
 # --- Targets ------------------------------------------------------
 

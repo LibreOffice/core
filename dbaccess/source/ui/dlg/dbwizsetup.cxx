@@ -316,7 +316,7 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(Window* _pParent
     if (pCollectionItem)
         m_pCollection = pCollectionItem->getCollection();
 
-    DBG_ASSERT(m_pCollection, "OGeneralPage::OGeneralPage : really need a DSN type collection !");
+    DBG_ASSERT(m_pCollection, "ODbTypeWizDialogSetup::ODbTypeWizDialogSetup : really need a DSN type collection !");
 
     FreeResource();
 

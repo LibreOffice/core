@@ -578,6 +578,15 @@ TOTypeInfoSP                OFieldDescription::getTypeInfo()            const
     return m_pType;
 }
 // -----------------------------------------------------------------------------
+TOTypeInfoSP                OFieldDescription::getSpecialTypeInfo() const
+{
+    TOTypeInfoSP pSpecialType( new OTypeInfo() );
+    *pSpecialType = *m_pType;
+    pSpecialType->nPrecision = GetPrecision();
+    pSpecialType->nMaximumScale = static_cast<sal_Int16>(GetScale());
+    return pSpecialType;
+}
+// -----------------------------------------------------------------------------
 sal_Bool                    OFieldDescription::IsAutoIncrement()        const
 {
     if ( m_xDest.is() && m_xDestInfo->hasPropertyByName(PROPERTY_ISAUTOINCREMENT) )

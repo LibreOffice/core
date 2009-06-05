@@ -61,10 +61,11 @@
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/util/SearchOptions.hpp>
+#include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/inspection/XNumericControl.hpp>
-#include <com/sun/star/util/MeasureUnit.hpp>
+#include <com/sun/star/style/ParagraphAdjust.hpp>
 
 #include <vcl/msgbox.hxx>
 #include <vcl/waitobj.hxx>
@@ -651,7 +652,7 @@ void SAL_CALL GeometryHandler::setPropertyValue(const ::rtl::OUString & Property
                 }
             }
             break;
-        case PROPERTY_ID_CHARFONTNAME:
+        case PROPERTY_ID_FONT:
             {
                 const uno::Reference< report::XReportControlFormat > xReportControlFormat( m_xReportComponent,uno::UNO_QUERY_THROW );
                 uno::Sequence< beans::NamedValue > aFontSettings;
@@ -825,7 +826,7 @@ inspection::LineDescriptor SAL_CALL GeometryHandler::describePropertyLine(const 
         case PROPERTY_ID_CONTROLBACKGROUND:
             aOut.Control = _xControlFactory->createPropertyControl( inspection::PropertyControlType::ColorListBox, sal_False );
             break;
-        case PROPERTY_ID_CHARFONTNAME:
+        case PROPERTY_ID_FONT:
             aOut.PrimaryButtonId = UID_RPT_RPT_PROP_DLG_FONT_TYPE;
             aOut.Control = _xControlFactory->createPropertyControl( inspection::PropertyControlType::TextField, sal_True );
             aOut.HasPrimaryButton = sal_True;
@@ -834,6 +835,12 @@ inspection::LineDescriptor SAL_CALL GeometryHandler::describePropertyLine(const 
             aOut.PrimaryButtonId = UID_RPT_RPT_PROP_DLG_AREA;
             aOut.Control = _xControlFactory->createPropertyControl( inspection::PropertyControlType::TextField, sal_True );
             aOut.HasPrimaryButton = sal_True;
+            break;
+        case PROPERTY_ID_VERTICALALIGN:
+            implCreateListLikeControl(_xControlFactory,aOut,RID_STR_VERTICAL_ALIGN_CONST,sal_False,sal_True);
+            break;
+        case PROPERTY_ID_PARAADJUST:
+            implCreateListLikeControl(_xControlFactory,aOut,RID_STR_PARAADJUST_CONST,sal_False,sal_True);
             break;
         default:
             {
@@ -1051,8 +1058,9 @@ uno::Any SAL_CALL GeometryHandler::convertToPropertyValue(const ::rtl::OUString 
                 aPropertyValue <<= nPosX;
             }
             break;
-        case PROPERTY_ID_CHARFONTNAME:
-            return m_xFormComponentHandler->convertToPropertyValue(PROPERTY_FONTNAME, _rControlValue);
+        case PROPERTY_ID_FONT:
+            aPropertyValue = m_xFormComponentHandler->convertToPropertyValue(PROPERTY_FONT, _rControlValue);
+            break;
         case PROPERTY_ID_SCOPE:
         case PROPERTY_ID_FORMULALIST:
         case PROPERTY_ID_AREA:
@@ -1071,6 +1079,28 @@ uno::Any SAL_CALL GeometryHandler::convertToPropertyValue(const ::rtl::OUString 
             break;
         case PROPERTY_ID_MIMETYPE:
             aPropertyValue = _rControlValue;
+            break;
+        case PROPERTY_ID_VERTICALALIGN:
+            {
+                ::rtl::OUString sValue;
+                _rControlValue >>= sValue;
+                ::std::vector< ::rtl::OUString > aList;
+                tools::StringListResource aRes(ModuleRes(RID_STR_VERTICAL_ALIGN_CONST),aList);
+                ::std::vector< ::rtl::OUString >::iterator aFind = ::std::find(aList.begin(),aList.end(),sValue);
+                if ( aFind != aList.end() )
+                    aPropertyValue <<= static_cast<style::VerticalAlignment>(aFind - aList.begin());
+            }
+            break;
+        case PROPERTY_ID_PARAADJUST:
+            {
+                ::rtl::OUString sValue;
+                _rControlValue >>= sValue;
+                ::std::vector< ::rtl::OUString > aList;
+                tools::StringListResource aRes(ModuleRes(RID_STR_PARAADJUST_CONST),aList);
+                ::std::vector< ::rtl::OUString >::iterator aFind = ::std::find(aList.begin(),aList.end(),sValue);
+                if ( aFind != aList.end() )
+                    aPropertyValue <<= static_cast<sal_Int16>(aFind - aList.begin());
+            }
             break;
         default:
             return m_xFormComponentHandler->convertToPropertyValue(PropertyName, _rControlValue);
@@ -1158,8 +1188,8 @@ uno::Any SAL_CALL GeometryHandler::convertToControlValue(const ::rtl::OUString &
                     lcl_convertFormulaTo(aPropertyValue,aControlValue);
             }
             break;
-        case PROPERTY_ID_CHARFONTNAME:
-            aControlValue = m_xFormComponentHandler->convertToControlValue(PROPERTY_FONTNAME, aPropertyValue, _rControlValueType);
+        case PROPERTY_ID_FONT:
+            aControlValue = m_xFormComponentHandler->convertToControlValue(PROPERTY_FONT, aPropertyValue, _rControlValueType);
             break;
         case PROPERTY_ID_POSITIONX:
             {
@@ -1187,6 +1217,26 @@ uno::Any SAL_CALL GeometryHandler::convertToControlValue(const ::rtl::OUString &
                 tools::StringListResource aRes(ModuleRes(RID_STR_TYPE_CONST),aList);
                 if ( m_nDataFieldType < aList.size() )
                     aControlValue <<= aList[m_nDataFieldType];
+            }
+            break;
+        case PROPERTY_ID_VERTICALALIGN:
+            {
+                style::VerticalAlignment nParagraphVertAlign = style::VerticalAlignment_TOP;
+                aPropertyValue >>= nParagraphVertAlign;
+                ::std::vector< ::rtl::OUString > aList;
+                tools::StringListResource aRes(ModuleRes(RID_STR_VERTICAL_ALIGN_CONST),aList);
+                if ( static_cast<sal_Int16>(nParagraphVertAlign) < static_cast<sal_Int16>(aList.size()) )
+                    aControlValue <<= aList[nParagraphVertAlign];
+            }
+            break;
+        case PROPERTY_ID_PARAADJUST:
+            {
+                sal_Int16 nParagraphAdjust = style::ParagraphAdjust_LEFT;
+                aPropertyValue >>= nParagraphAdjust;
+                ::std::vector< ::rtl::OUString > aList;
+                tools::StringListResource aRes(ModuleRes(RID_STR_PARAADJUST_CONST),aList);
+                if ( nParagraphAdjust < static_cast<sal_Int16>(aList.size()) )
+                    aControlValue <<= aList[nParagraphAdjust];
             }
             break;
         case PROPERTY_ID_BACKCOLOR:
@@ -1249,13 +1299,15 @@ uno::Sequence< beans::Property > SAL_CALL GeometryHandler::getSupportedPropertie
         ,PROPERTY_INITIALFORMULA
         ,PROPERTY_PRESERVEIRI
         ,PROPERTY_DATAFIELD
-        ,PROPERTY_CHARFONTNAME
+        ,PROPERTY_FONT
         ,PROPERTY_BACKCOLOR
         ,PROPERTY_BACKTRANSPARENT
         ,PROPERTY_CONTROLBACKGROUND
         ,PROPERTY_CONTROLBACKGROUNDTRANSPARENT
         ,PROPERTY_LABEL
         ,PROPERTY_MIMETYPE
+        ,PROPERTY_VERTICALALIGN
+        ,PROPERTY_PARAADJUST
     };
     const uno::Reference < beans::XPropertySetInfo > xInfo = m_xReportComponent->getPropertySetInfo();
     const uno::Sequence< beans::Property> aSeq = xInfo->getProperties();
@@ -1346,7 +1398,7 @@ inspection::InteractiveSelectionResult SAL_CALL GeometryHandler::onInteractivePr
         }
         return eResult;
     }
-    else if ( PropertyName.equalsAscii(PROPERTY_CHARFONTNAME) )
+    else if ( PropertyName.equalsAscii(PROPERTY_FONT) )
     {
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
 

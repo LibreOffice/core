@@ -336,7 +336,7 @@ void OWizColumnSelect::createNewColumn( ListBox* _pListbox,
     OFieldDescription* pNewField = new OFieldDescription(*_pSrcField);
     pNewField->SetName(sConvertedName);
     sal_Bool bNotConvert = sal_True;
-    pNewField->SetType(m_pParent->convertType(_pSrcField->getTypeInfo(),bNotConvert));
+    pNewField->SetType(m_pParent->convertType(_pSrcField->getSpecialTypeInfo(),bNotConvert));
     if ( !m_pParent->supportsPrimaryKey() )
         pNewField->SetPrimaryKey(sal_False);
 
