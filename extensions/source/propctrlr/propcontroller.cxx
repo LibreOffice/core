@@ -755,23 +755,32 @@ namespace pcr
             return;
         }
 
-        if ( m_sCommittingProperty != _rEvent.PropertyName )
+        if ( m_sCommittingProperty == _rEvent.PropertyName )
+            return;
+
+        if ( !haveView() )
+            return;
+
+        Any aNewValue( _rEvent.NewValue );
+        if ( impl_hasPropertyHandlerFor_nothrow( _rEvent.PropertyName ) )
         {
-            Any aNewValue( _rEvent.NewValue );
-            if ( impl_hasPropertyHandlerFor_nothrow( _rEvent.PropertyName ) )
-            {
-                aNewValue = impl_getPropertyValue_throw( _rEvent.PropertyName );
+            // forward the new value to the property box, to reflect the change in the UI
+            aNewValue = impl_getPropertyValue_throw( _rEvent.PropertyName );
 
-                if ( haveView() )
-                    // forward the new value to the property box, to reflect the change in the UI
-                    getPropertyBox().SetPropertyValue( _rEvent.PropertyName, aNewValue );
-            }
+            // check whether the state is ambiguous. This is interesting in case we display the properties
+            // for multiple objects at once: In this case, we'll get a notification from one of the objects,
+            // but need to care for the "composed" value, which can be "ambiguous".
+            PropertyHandlerRef xHandler( impl_getHandlerForProperty_throw( _rEvent.PropertyName ), UNO_SET_THROW );
+            PropertyState ePropertyState( xHandler->getPropertyState( _rEvent.PropertyName ) );
+            bool bAmbiguousValue = ( PropertyState_AMBIGUOUS_VALUE == ePropertyState );
 
-            // if it's a actuating property, then update the UI for any dependent
-            // properties
-            if ( impl_isActuatingProperty_nothrow( _rEvent.PropertyName ) )
-                impl_broadcastPropertyChange_nothrow( _rEvent.PropertyName, aNewValue, _rEvent.OldValue, false );
+            getPropertyBox().SetPropertyValue( _rEvent.PropertyName, aNewValue, bAmbiguousValue );
         }
+
+        // if it's a actuating property, then update the UI for any dependent
+        // properties
+        if ( impl_isActuatingProperty_nothrow( _rEvent.PropertyName ) )
+            impl_broadcastPropertyChange_nothrow( _rEvent.PropertyName, aNewValue, _rEvent.OldValue, false );
     }
 
     //------------------------------------------------------------------------
@@ -1423,14 +1432,14 @@ namespace pcr
                 impl_broadcastPropertyChange_nothrow( rName, aNormalizedValue, aOldValue, false );
 
             // and display it again. This ensures proper formatting
-            getPropertyBox().SetPropertyValue( rName, aNormalizedValue );
+            getPropertyBox().SetPropertyValue( rName, aNormalizedValue, false );
         }
         catch(PropertyVetoException& eVetoException)
         {
             InfoBox(m_pView, eVetoException.Message).Execute();
             PropertyHandlerRef handler = impl_getHandlerForProperty_throw( rName );
             Any aNormalizedValue = handler->getPropertyValue( rName );
-            getPropertyBox().SetPropertyValue( rName, aNormalizedValue );
+            getPropertyBox().SetPropertyValue( rName, aNormalizedValue, false );
         }
         catch(Exception&)
         {

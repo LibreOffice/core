@@ -46,7 +46,7 @@ import com.sun.star.wizards.web.data.CGIconSet;
  * It also implements the ImageList.ImageRenderer interface, to handle
  * its own objects.
  */
-public class IconsDialog extends ImageListDialog implements ImageList.ImageRenderer, ListModel
+public class IconsDialog extends ImageListDialog implements ImageList.IImageRenderer, ListModel
 {
 
     private ConfigSet set;

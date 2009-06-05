@@ -56,7 +56,7 @@ public abstract class DBLimitedFieldSelection
     protected int iCurPosY;
     protected int FirstHelpIndex;
     protected int iCompPosX;
-    protected int MaxSelIndex;
+    // protected int MaxSelIndex;
 
     public DBLimitedFieldSelection(WizardDialog _CurUnoDialog, int iStep, int _iCompPosX, int iCompPosY, int iCompWidth, int _FirstHelpIndex)
     {
@@ -70,7 +70,7 @@ public abstract class DBLimitedFieldSelection
         ICompPosX = new Integer(iCompPosX);
         ICompPosY = new Integer(iCompPosY);
         ICompWidth = new Integer(iCompWidth);
-        boolean bDoEnable;
+        // boolean bDoEnable;
         iCurPosY = iCompPosY;
         for (int i = 0; i < rowcount; i++)
         {
@@ -86,20 +86,22 @@ public abstract class DBLimitedFieldSelection
 
     protected abstract void updateFromNextControlRow(int CurIndex);
 
-    protected abstract void setMaxSelIndex();
+    // protected abstract void setMaxSelIndex();
+
+    protected abstract int getMaxSelIndex();
 
     protected void moveupSelectedItems(int CurIndex, boolean bDoEnable)
     {
-        short iNextItemPos;
+        // short iNextItemPos;
         if ((bDoEnable == false) && (MAXSELINDEX > CurIndex))
         {
             for (int i = CurIndex; i < MAXSELINDEX; i++)
             {
                 updateFromNextControlRow(i);
             }
-            if (MaxSelIndex < rowcount - 2)
+            if (getMaxSelIndex() < rowcount - 2)
             {
-                toggleControlRow(MaxSelIndex + 2, false);
+                toggleControlRow(getMaxSelIndex() + 2, false);
             }
         }
         else
@@ -131,26 +133,17 @@ public abstract class DBLimitedFieldSelection
                 int index = JavaTools.FieldInList(_AllFieldNames, _SelFieldNames[curindex]);
                 if (index > -1)
                 {
-                    SelList = new short[]
-                            {
-                                (short) (index)
-                            };
+                    SelList = new short[] { (short) (index) };
                 }
                 else
                 {
-                    SelList = new short[]
-                            {
-                                (short) (0)
-                            };
+                    SelList = new short[] { (short) (0) };
                 }
                 Helper.setUnoPropertyValue(UnoDialog.getModel(xListBox), "SelectedItems", SelList);
                 return;
             }
         }
-        SelList = new short[]
-                {
-                    (short) (0)
-                };
+        SelList = new short[] { (short) (0) };
         Helper.setUnoPropertyValue(UnoDialog.getModel(xListBox), "SelectedItems", SelList);
 
     }
@@ -160,10 +153,7 @@ public abstract class DBLimitedFieldSelection
         Helper.setUnoPropertyValue(UnoDialog.getModel(xListBox), "StringItemList", _AllFieldNames);
         short[] SelList = null;
         int index = JavaTools.FieldInList(_AllFieldNames, _SelFieldName);
-        SelList = new short[]
-                {
-                    (short) (index)
-                };
+        SelList = new short[] { (short) (index) };
         Helper.setUnoPropertyValue(UnoDialog.getModel(xListBox), "SelectedItems", SelList);
     }
 }

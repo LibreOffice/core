@@ -30,14 +30,18 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_forms.hxx"
+
 #include "Button.hxx"
-#include <tools/debug.hxx>
-#include <tools/urlobj.hxx>
-#include <vos/mutex.hxx>
-#include <vcl/svapp.hxx>
+
+#include <com/sun/star/awt/XVclWindowPeer.hpp>
+
 #include <comphelper/streamsection.hxx>
 #include <comphelper/basicio.hxx>
-#include <com/sun/star/awt/XVclWindowPeer.hpp>
+#include <tools/diagnose_ex.h>
+#include <tools/debug.hxx>
+#include <tools/urlobj.hxx>
+#include <vcl/svapp.hxx>
+#include <vos/mutex.hxx>
 
 //.........................................................................
 namespace frm
@@ -71,16 +75,40 @@ InterfaceRef SAL_CALL OButtonModel_CreateInstance(const Reference<XMultiServiceF
 OButtonModel::OButtonModel(const Reference<XMultiServiceFactory>& _rxFactory)
     :OClickableImageBaseModel( _rxFactory, VCL_CONTROLMODEL_COMMANDBUTTON, FRM_SUN_CONTROL_COMMANDBUTTON )
                                     // use the old control name for compatibility reasons
+    ,m_aResetHelper( *this, m_aMutex )
+    ,m_eDefaultState( STATE_NOCHECK )
 {
     DBG_CTOR( OButtonModel, NULL );
     m_nClassId = FormComponentType::COMMANDBUTTON;
 }
 
 //------------------------------------------------------------------
+Any SAL_CALL OButtonModel::queryAggregation( const Type& _type ) throw(RuntimeException)
+{
+    Any aReturn = OClickableImageBaseModel::queryAggregation( _type );
+    if ( !aReturn.hasValue() )
+        aReturn = OButtonModel_Base::queryInterface( _type );
+    return aReturn;
+}
+
+//------------------------------------------------------------------
+Sequence< Type > OButtonModel::_getTypes()
+{
+    return ::comphelper::concatSequences(
+        OClickableImageBaseModel::_getTypes(),
+        OButtonModel_Base::getTypes()
+    );
+}
+
+//------------------------------------------------------------------
 OButtonModel::OButtonModel( const OButtonModel* _pOriginal, const Reference<XMultiServiceFactory>& _rxFactory )
     :OClickableImageBaseModel( _pOriginal, _rxFactory )
+    ,m_aResetHelper( *this, m_aMutex )
+    ,m_eDefaultState( _pOriginal->m_eDefaultState )
 {
     DBG_CTOR( OButtonModel, NULL );
+    m_nClassId = FormComponentType::COMMANDBUTTON;
+
     implInitializeImageURL();
 }
 
@@ -93,12 +121,13 @@ OButtonModel::~OButtonModel()
 //------------------------------------------------------------------------------
 void OButtonModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
-    BEGIN_DESCRIBE_PROPERTIES( 5, OClickableImageBaseModel )
-        DECL_PROP1(BUTTONTYPE,      FormButtonType,             BOUND);
-        DECL_PROP1(DISPATCHURLINTERNAL, sal_Bool,               BOUND);
-        DECL_PROP1(TARGET_URL,      ::rtl::OUString,            BOUND);
-        DECL_PROP1(TARGET_FRAME,    ::rtl::OUString,            BOUND);
-        DECL_PROP1(TABINDEX,        sal_Int16,                  BOUND);
+    BEGIN_DESCRIBE_PROPERTIES( 6, OClickableImageBaseModel )
+        DECL_PROP1( BUTTONTYPE,             FormButtonType,             BOUND );
+        DECL_PROP1( DEFAULT_STATE,          sal_Int16,                  BOUND );
+        DECL_PROP1( DISPATCHURLINTERNAL,    sal_Bool,                   BOUND );
+        DECL_PROP1( TARGET_URL,             ::rtl::OUString,            BOUND );
+        DECL_PROP1( TARGET_FRAME,           ::rtl::OUString,            BOUND );
+        DECL_PROP1( TABINDEX,               sal_Int16,                  BOUND );
     END_DESCRIBE_PROPERTIES();
 }
 
@@ -202,6 +231,118 @@ void OButtonModel::read(const Reference<XObjectInputStream>& _rxInStream) throw 
             m_sTargetURL = ::rtl::OUString();
             m_sTargetFrame = ::rtl::OUString();
             break;
+    }
+}
+
+//--------------------------------------------------------------------
+void SAL_CALL OButtonModel::disposing()
+{
+    m_aResetHelper.disposing();
+    OClickableImageBaseModel::disposing();
+}
+
+//--------------------------------------------------------------------
+void SAL_CALL OButtonModel::reset() throw (RuntimeException)
+{
+    if ( !m_aResetHelper.approveReset() )
+        return;
+
+    impl_resetNoBroadcast_nothrow();
+
+    m_aResetHelper.notifyResetted();
+}
+
+//--------------------------------------------------------------------
+void SAL_CALL OButtonModel::addResetListener( const Reference< XResetListener >& _listener ) throw (RuntimeException)
+{
+    m_aResetHelper.addResetListener( _listener );
+}
+
+//--------------------------------------------------------------------
+void SAL_CALL OButtonModel::removeResetListener( const Reference< XResetListener >& _listener ) throw (RuntimeException)
+{
+    m_aResetHelper.removeResetListener( _listener );
+}
+
+//--------------------------------------------------------------------
+void SAL_CALL OButtonModel::getFastPropertyValue( Any& _rValue, sal_Int32 _nHandle ) const
+{
+    switch ( _nHandle )
+    {
+    case PROPERTY_ID_DEFAULT_STATE:
+        _rValue <<= (sal_Int16)m_eDefaultState;
+        break;
+
+    default:
+        OClickableImageBaseModel::getFastPropertyValue( _rValue, _nHandle );
+        break;
+    }
+}
+
+//--------------------------------------------------------------------
+void SAL_CALL OButtonModel::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const Any& _rValue ) throw (Exception)
+{
+    switch ( _nHandle )
+    {
+    case PROPERTY_ID_DEFAULT_STATE:
+    {
+        sal_Int16 nDefaultState( (sal_Int16)STATE_NOCHECK );
+        OSL_VERIFY( _rValue >>= nDefaultState );
+        m_eDefaultState = (ToggleState)nDefaultState;
+        impl_resetNoBroadcast_nothrow();
+    }
+    break;
+
+    default:
+        OClickableImageBaseModel::setFastPropertyValue_NoBroadcast( _nHandle, _rValue );
+        break;
+    }
+}
+
+//--------------------------------------------------------------------
+sal_Bool SAL_CALL OButtonModel::convertFastPropertyValue( Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue ) throw (IllegalArgumentException)
+{
+    sal_Bool bModified = sal_False;
+    switch ( _nHandle )
+    {
+    case PROPERTY_ID_DEFAULT_STATE:
+        bModified = tryPropertyValue( _rConvertedValue, _rOldValue, _rValue, (sal_Int16)m_eDefaultState );
+        break;
+
+    default:
+        bModified = OClickableImageBaseModel::convertFastPropertyValue( _rConvertedValue, _rOldValue, _nHandle, _rValue );
+        break;
+    }
+    return bModified;
+}
+
+//--------------------------------------------------------------------
+Any OButtonModel::getPropertyDefaultByHandle( sal_Int32 _nHandle ) const
+{
+    Any aDefault;
+    switch ( _nHandle )
+    {
+    case PROPERTY_ID_DEFAULT_STATE:
+        aDefault <<= (sal_Int16)STATE_NOCHECK;
+        break;
+
+    default:
+        aDefault = OClickableImageBaseModel::getPropertyDefaultByHandle( _nHandle );
+        break;
+    }
+    return aDefault;
+}
+
+//--------------------------------------------------------------------
+void OButtonModel::impl_resetNoBroadcast_nothrow()
+{
+    try
+    {
+        setPropertyValue( PROPERTY_STATE, getPropertyValue( PROPERTY_DEFAULT_STATE ) );
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 

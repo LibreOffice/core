@@ -40,6 +40,7 @@
 #include <com/sun/star/form/binding/XValueBinding.hpp>
 #include <com/sun/star/form/binding/XListEntrySource.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/sheet/XSpreadsheet.hpp>
 /** === end UNO includes === **/
 
 //............................................................................
@@ -205,6 +206,13 @@ namespace pcr
                             const ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XListEntrySource >& _rxSource
                         ) const;
 
+        /** retrieves the index of the sheet which our control belongs to
+            @return the index of the sheet which our control belongs to or -1, if an error occured
+        */
+        sal_Int16       getControlSheetIndex(
+                            ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheet >& _out_rxSheet
+                        ) const;
+
     protected:
         /** creates an address object from a string representation of a cell address
         */
@@ -219,11 +227,6 @@ namespace pcr
                             const ::rtl::OUString& _rAddressDescription,
                             ::com::sun::star::table::CellRangeAddress& /* [out] */ _rAddress
                         ) const;
-
-        /** retrieves the index of the sheet which our control belongs to
-            @return the index of the sheet which our control belongs to or -1, if an error occured
-        */
-        sal_Int16       getControlSheetIndex( ) const;
 
         /** determines if our document is a spreadsheet document, *and* can supply
             the given service

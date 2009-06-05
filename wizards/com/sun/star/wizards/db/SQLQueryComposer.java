@@ -337,7 +337,7 @@ public class SQLQueryComposer
         FieldColumn CurFieldColumn = CurDBMetaData.getFieldColumnByDisplayName(_fieldname);
         CommandName curComposedCommandName = getComposedCommandByDisplayName(CurFieldColumn.getCommandName());
         String curAliasName = curComposedCommandName.getAliasName();
-        return quoteName(curAliasName) + "." + quoteName(CurFieldColumn.m_sFieldName);
+        return quoteName(curAliasName) + "." + quoteName(CurFieldColumn.getFieldName());
     }
 
     private CommandName getComposedCommandByAliasName(String _AliasName)

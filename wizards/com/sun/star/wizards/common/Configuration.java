@@ -152,7 +152,12 @@ public abstract class Configuration
         ((XHierarchicalPropertySet) UnoRuntime.queryInterface(XHierarchicalPropertySet.class, parent)).setHierarchicalPropertyValue(name, value);
     }
 
-    /** Creates a new instance of RegistryEntry */
+    /** Creates a new instance of RegistryEntry
+     * @param name
+     * @param parent
+     * @return
+     * @throws Exception
+     */
     public static Object getConfigurationNode(String name, Object parent) throws Exception
     {
         return ((XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, parent)).getByName(name);

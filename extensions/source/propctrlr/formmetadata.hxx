@@ -200,7 +200,7 @@ namespace pcr
     #define PROPERTY_ID_LISTINDEX            56
     #define PROPERTY_ID_STRINGITEMLIST       57
     #define PROPERTY_ID_DEFAULT_TEXT         58
-    #define PROPERTY_ID_FONT_NAME            59
+    #define PROPERTY_ID_FONT                 59
     #define PROPERTY_ID_ALIGN                60
     #define PROPERTY_ID_ROWHEIGHT            61
     #define PROPERTY_ID_BACKGROUNDCOLOR      62
@@ -225,7 +225,7 @@ namespace pcr
     #define PROPERTY_ID_SUBMIT_TARGET        81
     #define PROPERTY_ID_SUBMIT_METHOD        82
     #define PROPERTY_ID_SUBMIT_ENCODING      83
-    #define PROPERTY_ID_DEFAULTCHECKED       84
+    #define PROPERTY_ID_DEFAULT_STATE        84
     #define PROPERTY_ID_DEFAULTBUTTON        85
     #define PROPERTY_ID_IMAGE_URL            86
     #define PROPERTY_ID_DEFAULT_SELECT_SEQ   87
@@ -340,6 +340,8 @@ namespace pcr
     #define PROPERTY_ID_SCALE_MODE                  196
     #define PROPERTY_ID_INPUT_REQUIRED              197
     #define PROPERTY_ID_WRITING_MODE                198
+    #define PROPERTY_ID_TEXT_ANCHOR_TYPE            199
+    #define PROPERTY_ID_SHEET_ANCHOR_TYPE           200
 
 //............................................................................
 } // namespace pcr

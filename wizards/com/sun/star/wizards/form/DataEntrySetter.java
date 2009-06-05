@@ -41,19 +41,19 @@ import com.sun.star.wizards.ui.UIConsts;
 public class DataEntrySetter
 {
 
-    WizardDialog CurUnoDialog;
-    short curtabindex;
-    XRadioButton optNewDataOnly;
-    XRadioButton optDisplayAllData;
-    XCheckBox chknomodification;
-    XCheckBox chknodeletion;
-    XCheckBox chknoaddition;
+    private WizardDialog CurUnoDialog;
+    private short curtabindex;
+    private XRadioButton optNewDataOnly;
+    private XRadioButton optDisplayAllData;
+    private XCheckBox chknomodification;
+    private XCheckBox chknodeletion;
+    private XCheckBox chknoaddition;
 
     public DataEntrySetter(WizardDialog _CurUnoDialog)
     {
         this.CurUnoDialog = _CurUnoDialog;
-        curtabindex = (short) (FormWizard.SODATAPAGE * 100);
-        Integer IDataStep = new Integer(FormWizard.SODATAPAGE);
+        curtabindex = (short) (FormWizard.SODATA_PAGE * 100);
+        Integer IDataStep = new Integer(FormWizard.SODATA_PAGE);
         String sNewDataOnly = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 44);    //
         String sDisplayAllData = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 46); //
         String sNoModification = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 47); // AllowUpdates

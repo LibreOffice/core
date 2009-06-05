@@ -132,7 +132,7 @@
 #define RID_STR_SUBMIT_TARGET               ( RID_FORMBROWSER_START + 101 )
 #define RID_STR_SUBMIT_METHOD               ( RID_FORMBROWSER_START + 102 )
 #define RID_STR_SUBMIT_ENCODING             ( RID_FORMBROWSER_START + 103 )
-#define RID_STR_DEFAULT_CHECKED             ( RID_FORMBROWSER_START + 104 )
+#define RID_STR_DEFAULT_STATE               ( RID_FORMBROWSER_START + 104 )
 #define RID_STR_DEFAULT_BUTTON              ( RID_FORMBROWSER_START + 105 )
 #define RID_STR_IMAGE_URL                   ( RID_FORMBROWSER_START + 106 )
 #define RID_STR_DEFAULT_SELECT_SEQ          ( RID_FORMBROWSER_START + 107 )
@@ -222,7 +222,7 @@
 #define RID_STR_BOUND_CELL                  ( RID_FORMBROWSER_START + 191 )
 #define RID_STR_LIST_CELL_RANGE             ( RID_FORMBROWSER_START + 192 )
 #define RID_STR_CELL_EXCHANGE_TYPE          ( RID_FORMBROWSER_START + 193 )
-    // FREE
+#define RID_STR_ANCHOR_TYPE                 ( RID_FORMBROWSER_START + 194 )
 #define RID_STR_SCROLLVALUE_MIN             ( RID_FORMBROWSER_START + 195 )
 #define RID_STR_DEFAULT_SCROLLVALUE         ( RID_FORMBROWSER_START + 196 )
 #define RID_STR_REPEAT_DELAY                ( RID_FORMBROWSER_START + 197 )
@@ -279,7 +279,12 @@
 #define RID_STR_SHOWS_ROOT_HANDLES          ( RID_FORMBROWSER_START + 247 )
 #define RID_STR_EDITABLE                    ( RID_FORMBROWSER_START + 248 )
 #define RID_STR_INVOKES_STOP_NOT_EDITING    ( RID_FORMBROWSER_START + 249 )
-#define RID_STR_NOLABEL                 ( RID_FORMBROWSER_START + 250 )
+#define RID_STR_NOLABEL                     ( RID_FORMBROWSER_START + 250 )
+#define RID_STR_FONTSTYLE_REGULAR           ( RID_FORMBROWSER_START + 251 )
+#define RID_STR_FONTSTYLE_BOLD_ITALIC       ( RID_FORMBROWSER_START + 252 )
+#define RID_STR_FONTSTYLE_ITALIC            ( RID_FORMBROWSER_START + 253 )
+#define RID_STR_FONTSTYLE_BOLD              ( RID_FORMBROWSER_START + 254 )
+#define RID_STR_FONT_DEFAULT                ( RID_FORMBROWSER_START + 255 )
 
 
 // -----------------------------------------------------------------------
@@ -340,6 +345,8 @@
 #define RID_RSC_ENUM_YESNO                  ( RID_PROPCONTROLLER_START + 27 )
 #define RID_RSC_ENUM_SHOWHIDE               ( RID_PROPCONTROLLER_START + 28 )
 #define RID_RSC_ENUM_WRITING_MODE           ( RID_PROPCONTROLLER_START + 29 )
+#define RID_RSC_ENUM_TEXT_ANCHOR_TYPE       ( RID_PROPCONTROLLER_START + 30 )
+#define RID_RSC_ENUM_SHEET_ANCHOR_TYPE      ( RID_PROPCONTROLLER_START + 31 )
 
 // -----------------------------------------------------------------------
 // - ImageList - local ids
