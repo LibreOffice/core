@@ -224,7 +224,7 @@ ScPrintUIOptions::ScPrintUIOptions( sal_Bool i_bEmptyPages, sal_Bool i_bSelected
     if( aStrings.Count() < 18 ) // bad resource ?
         return;
 
-    m_aUIProperties.realloc( 10 );
+    m_aUIProperties.realloc( 8 );
 
     // create Section for spreadsheet (results in an extra tab page in dialog)
     m_aUIProperties[0].Value = getGroupControlOpt( rtl::OUString( String( ScResId( SCSTR_HUMAN_SCDOC_NAME ) ) ), rtl::OUString() );
@@ -253,7 +253,7 @@ ScPrintUIOptions::ScPrintUIOptions( sal_Bool i_bEmptyPages, sal_Bool i_bSelected
                                                     aHelpTexts,
                                                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintContent" ) ),
                                                     aChoices,
-                                                    0 );
+                                                    i_bSelectedOnly ? 1 : 0 );
 
     // create Subgroup for print range
     m_aUIProperties[5].Value = getSubgroupControlOpt( rtl::OUString( aStrings.GetString( 13 ) ), rtl::OUString(), true , true);
@@ -280,6 +280,8 @@ ScPrintUIOptions::ScPrintUIOptions( sal_Bool i_bEmptyPages, sal_Bool i_bSelected
                                                   &aPrintRangeName, 1, sal_True
                                                   );
 
+    // "Print only selected sheets" isn't needed because of the "Selected Sheets" choice in "Print content"
+#if 0
     // create subgroup for sheets
     m_aUIProperties[8].Value = getSubgroupControlOpt( rtl::OUString( aStrings.GetString( 3 ) ), rtl::OUString() );
 
@@ -289,6 +291,7 @@ ScPrintUIOptions::ScPrintUIOptions( sal_Bool i_bEmptyPages, sal_Bool i_bSelected
                                                   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsOnlySelectedSheets" ) ),
                                                   i_bSelectedOnly
                                                   );
+#endif
 }
 
 // static
@@ -676,35 +679,38 @@ BOOL ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
 
     BOOL bDone = FALSE;
 
-    bool bHaveOptions = false;
     uno::Reference<frame::XController> xView;
 
     // defaults when no options are passed: all sheets, include empty pages
     sal_Bool bSelectedSheetsOnly = sal_False;
     sal_Bool bSuppressEmptyPages = sal_False;
 
-    rtl::OUString aSelectionString( RTL_CONSTASCII_USTRINGPARAM( "all" ) );
-    sal_Int32 nPrintContent = 0;
+    bool bHasPrintContent = false;
+    sal_Int32 nPrintContent = 0;        // all sheets / selected sheets / selected cells
+    sal_Int32 nPrintRange = 0;          // all pages / pages
+    rtl::OUString aPageRange;           // "pages" edit value
+
     for( sal_Int32 i = 0, nLen = rOptions.getLength(); i < nLen; i++ )
     {
         if( rOptions[i].Name.equalsAscii( "IsOnlySelectedSheets" ) )
         {
-            bHaveOptions = true;
             rOptions[i].Value >>= bSelectedSheetsOnly;
         }
         else if( rOptions[i].Name.equalsAscii( "IsSuppressEmptyPages" ) )
         {
-            bHaveOptions = true;
             rOptions[i].Value >>= bSuppressEmptyPages;
+        }
+        else if( rOptions[i].Name.equalsAscii( "PageRange" ) )
+        {
+            rOptions[i].Value >>= aPageRange;
         }
         else if( rOptions[i].Name.equalsAscii( "PrintRange" ) )
         {
-            bHaveOptions = true;
-            rOptions[i].Value >>= aSelectionString;
+            rOptions[i].Value >>= nPrintRange;
         }
         else if( rOptions[i].Name.equalsAscii( "PrintContent" ) )
         {
-            bHaveOptions = true;
+            bHasPrintContent = true;
             rOptions[i].Value >>= nPrintContent;
         }
         else if( rOptions[i].Name.equalsAscii( "View" ) )
@@ -712,48 +718,16 @@ BOOL ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
             rOptions[i].Value >>= xView;
         }
     }
-    if( nPrintContent == 0 )
-        aSelectionString = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "all" ) );
-    else if( nPrintContent == 2 )
-        aSelectionString = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "selection" ) );
+
+    // "Print Content" selection wins over "Selected Sheets" option
+    if ( bHasPrintContent )
+        bSelectedSheetsOnly = ( nPrintContent != 0 );
 
     uno::Reference<uno::XInterface> xInterface(aSelection, uno::UNO_QUERY);
     if ( xInterface.is() )
     {
         ScCellRangesBase* pSelObj = ScCellRangesBase::getImplementation( xInterface );
         uno::Reference< drawing::XShapes > xShapes( xInterface, uno::UNO_QUERY );
-
-#if 0
-        if( bHaveOptions )
-        {
-            // FIXME: handle bSelectedSheetsOnly
-            // FIXME: handle bSuppressEmptyPages
-            // FIXME: handle print range "selection"
-            // FIXME: handle print range other than "all"
-
-            if( aSelectionString.equalsAscii( "selection" ) )
-            {
-            }
-            // whole document: aSelectionString = "all" or a range of tables
-            else if ( ScModelObj::getImplementation( xInterface ) == this )
-            {
-                MultiSelection aSel( aSelectionString );
-                SCTAB nTabCount = pDocShell->GetDocument()->GetTableCount();
-                aSel.SetTotalRange( Range( 1, nTabCount ) );
-                if( aSelectionString.equalsAscii( "all" ) )
-                    aSel.SelectAll();
-                for (SCTAB nTab = 0; nTab < nTabCount; nTab++)
-                {
-                    if( aSel.IsSelected( nTab+1 ) )
-                        rMark.SelectTable( nTab, TRUE );
-                }
-                rStatus.SetMode( aSel.IsAllSelected() ? SC_PRINTSEL_DOCUMENT : SC_PRINTSEL_RANGE );
-                bDone = TRUE;
-            }
-        }
-        else
-#endif
-
         if ( pSelObj && pSelObj->GetDocShell() == pDocShell )
         {
             BOOL bSheet = ( ScTableSheetObj::getImplementation( xInterface ) != NULL );
@@ -849,10 +823,11 @@ BOOL ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
     aNewOptions.SetAllSheets( !bSelectedSheetsOnly );
     rStatus.SetOptions( aNewOptions );
 
-    if ( aSelectionString.equalsAscii("all") || aSelectionString.equalsAscii("selection") )
-        rPagesStr.Erase();
+    // "PrintRange" enables (1) or disables (0) the "PageRange" edit
+    if ( nPrintRange == 1 )
+        rPagesStr = aPageRange;
     else
-        rPagesStr = aSelectionString;
+        rPagesStr.Erase();
 
     return bDone;
 }
