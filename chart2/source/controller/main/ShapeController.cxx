@@ -41,6 +41,7 @@
 #include <vos/mutex.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
+#include <svx/drawitem.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/svxids.hrc>
 #include <svx/dialogs.hrc>
@@ -95,6 +96,7 @@ FeatureState ShapeController::getState( const ::rtl::OUString& rCommand ) const
     switch ( nFeatureId )
     {
         case SID_ATTRIBUTES_LINE:
+        case SID_ATTRIBUTES_AREA:
         case SID_ATTR_TRANSFORM:
         case SID_CHAR_DLG:
             {
@@ -126,6 +128,11 @@ void ShapeController::execute( const ::rtl::OUString& rCommand, const Sequence< 
                 executeDispatch_FormatLine();
             }
             break;
+        case SID_ATTRIBUTES_AREA:
+            {
+                executeDispatch_FormatArea();
+            }
+            break;
         case SID_ATTR_TRANSFORM:
             {
                 executeDispatch_TransformDialog();
@@ -146,6 +153,7 @@ void ShapeController::execute( const ::rtl::OUString& rCommand, const Sequence< 
 void ShapeController::describeSupportedFeatures()
 {
     implDescribeSupportedFeature( ".uno:FormatLine",        SID_ATTRIBUTES_LINE,    CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:FormatArea",        SID_ATTRIBUTES_AREA,    CommandGroup::FORMAT );
     implDescribeSupportedFeature( ".uno:TransformDialog",   SID_ATTR_TRANSFORM,     CommandGroup::FORMAT );
     implDescribeSupportedFeature( ".uno:FontDialog",        SID_CHAR_DLG,           CommandGroup::EDIT );
 }
@@ -157,7 +165,7 @@ void ShapeController::executeDispatch_FormatLine()
         Window* pParent = dynamic_cast< Window* >( m_pChartController->m_pChartWindow );
         DrawModelWrapper* pDrawModelWrapper = m_pChartController->GetDrawModelWrapper();
         DrawViewWrapper* pDrawViewWrapper = m_pChartController->GetDrawViewWrapper();
-        if ( pDrawModelWrapper && pDrawViewWrapper )
+        if ( pParent && pDrawModelWrapper && pDrawViewWrapper )
         {
             SdrObject* pObj = pDrawViewWrapper->getSelectedObject();
             SfxItemSet aAttr( pDrawViewWrapper->GetDefaultAttr() );
@@ -190,13 +198,62 @@ void ShapeController::executeDispatch_FormatLine()
     }
 }
 
+void ShapeController::executeDispatch_FormatArea()
+{
+    if ( m_pChartController )
+    {
+        Window* pParent = dynamic_cast< Window* >( m_pChartController->m_pChartWindow );
+        DrawModelWrapper* pDrawModelWrapper = m_pChartController->GetDrawModelWrapper();
+        DrawViewWrapper* pDrawViewWrapper = m_pChartController->GetDrawViewWrapper();
+        if ( pParent && pDrawModelWrapper && pDrawViewWrapper )
+        {
+            SfxItemSet aAttr( pDrawViewWrapper->GetDefaultAttr() );
+            BOOL bHasMarked = pDrawViewWrapper->AreObjectsMarked();
+            if ( bHasMarked )
+            {
+                pDrawViewWrapper->MergeAttrFromMarked( aAttr, FALSE );
+            }
+            ::vos::OGuard aGuard( Application::GetSolarMutex() );
+            SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+            if ( pFact )
+            {
+                ::boost::scoped_ptr< AbstractSvxAreaTabDialog > pDlg(
+                    pFact->CreateSvxAreaTabDialog( pParent, &aAttr, &pDrawModelWrapper->getSdrModel(),
+                        RID_SVXDLG_AREA, pDrawViewWrapper ) );
+                if ( pDlg.get() )
+                {
+                    SfxItemPool& rItemPool = pDrawViewWrapper->GetModel()->GetItemPool();
+                    SfxItemSet aSet( rItemPool, rItemPool.GetFirstWhich(), rItemPool.GetLastWhich() );
+                    const SvxColorTableItem* pColorItem = static_cast< const SvxColorTableItem* >( aSet.GetItem( SID_COLOR_TABLE ) );
+                    if ( pColorItem && pColorItem->GetColorTable() == XColorTable::GetStdColorTable() )
+                    {
+                        pDlg->DontDeleteColorTable();
+                    }
+                    if ( pDlg->Execute() == RET_OK )
+                    {
+                        const SfxItemSet* pOutAttr = pDlg->GetOutputItemSet();
+                        if ( bHasMarked )
+                        {
+                            pDrawViewWrapper->SetAttrToMarked( *pOutAttr, FALSE );
+                        }
+                        else
+                        {
+                            pDrawViewWrapper->SetDefaultAttr( *pOutAttr, FALSE );
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 void ShapeController::executeDispatch_TransformDialog()
 {
     if ( m_pChartController )
     {
         Window* pParent = dynamic_cast< Window* >( m_pChartController->m_pChartWindow );
         DrawViewWrapper* pDrawViewWrapper = m_pChartController->GetDrawViewWrapper();
-        if ( pDrawViewWrapper )
+        if ( pParent && pDrawViewWrapper )
         {
             SdrObject* pObj = pDrawViewWrapper->getSelectedObject();
             if ( pObj && pObj->GetObjIdentifier() == OBJ_CAPTION )
@@ -252,11 +309,11 @@ void ShapeController::executeDispatch_FontDialog()
 {
     if ( m_pChartController )
     {
+        Window* pParent = dynamic_cast< Window* >( m_pChartController->m_pChartWindow );
         DrawModelWrapper* pDrawModelWrapper = m_pChartController->GetDrawModelWrapper();
         DrawViewWrapper* pDrawViewWrapper = m_pChartController->GetDrawViewWrapper();
-        if ( pDrawModelWrapper && pDrawViewWrapper )
+        if ( pParent && pDrawModelWrapper && pDrawViewWrapper )
         {
-            Window* pParent = dynamic_cast< Window* >( m_pChartController->m_pChartWindow );
             SfxItemSet aAttr( pDrawViewWrapper->GetModel()->GetItemPool() );
             pDrawViewWrapper->GetAttributes( aAttr );
             ViewElementListProvider aViewElementListProvider( pDrawModelWrapper );

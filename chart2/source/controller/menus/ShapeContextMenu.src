@@ -44,6 +44,12 @@ Menu RID_CONTEXTMENU_SHAPE
         };
         MenuItem
         {
+            Identifier = SID_ATTRIBUTES_AREA;
+            HelpId = SID_ATTRIBUTES_AREA;
+            Command = ".uno:FormatArea";
+        };
+        MenuItem
+        {
             Identifier = SID_ATTR_TRANSFORM;
             HelpId = SID_ATTR_TRANSFORM;
             Command = ".uno:TransformDialog";
