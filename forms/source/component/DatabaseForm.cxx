@@ -447,6 +447,11 @@ void ODatabaseForm::impl_construct()
         m_pAggregatePropertyMultiplexer->addProperty(PROPERTY_ACTIVE_CONNECTION);
     }
 
+    {
+        Reference< XWarningsSupplier > xRowSetWarnings( m_xAggregate, UNO_QUERY );
+        m_aWarnings.setExternalWarnings( xRowSetWarnings );
+    }
+
     if ( m_xAggregate.is() )
     {
         m_xAggregate->setDelegator( static_cast< XWeak* >( this ) );
@@ -474,6 +479,8 @@ ODatabaseForm::~ODatabaseForm()
 
     if (m_xAggregate.is())
         m_xAggregate->setDelegator( NULL );
+
+    m_aWarnings.setExternalWarnings( NULL );
 
     if (m_pAggregatePropertyMultiplexer)
     {
@@ -1471,6 +1478,18 @@ Sequence< PropertyValue > SAL_CALL ODatabaseForm::getPropertyValues() throw (Run
 void SAL_CALL ODatabaseForm::setPropertyValues( const Sequence< PropertyValue >& _rProps ) throw (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
     m_aPropertyBagHelper.setPropertyValues( _rProps );
+}
+
+//------------------------------------------------------------------------------
+Any SAL_CALL ODatabaseForm::getWarnings(  ) throw (SQLException, RuntimeException)
+{
+    return m_aWarnings.getWarnings();
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL ODatabaseForm::clearWarnings(  ) throw (SQLException, RuntimeException)
+{
+    m_aWarnings.clearWarnings();
 }
 
 //------------------------------------------------------------------------------

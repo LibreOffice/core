@@ -117,7 +117,9 @@ namespace abp
 
         inline sal_Bool needManualFieldMapping( AddressSourceType _eType ) const
         {
-            return ( AST_OTHER == _eType ) || ( AST_KAB == _eType );
+            return  ( AST_OTHER == _eType ) || ( AST_KAB == _eType ) ||
+                    ( AST_EVOLUTION == _eType ) || ( AST_EVOLUTION_GROUPWISE == _eType ) ||
+                    ( AST_EVOLUTION_LDAP == _eType );
         }
         /// checks if we need a manual (user-guided) field mapping
         inline sal_Bool needManualFieldMapping() const
@@ -128,8 +130,7 @@ namespace abp
         /// determines whether the given address book type does provide one table only
         inline bool needTableSelection( AddressSourceType _eType ) const
         {
-            return  ( AST_LDAP != _eType ) && ( AST_KAB != _eType ) && ( AST_EVOLUTION != _eType )
-                &&  ( AST_EVOLUTION_GROUPWISE != _eType ) && ( AST_EVOLUTION_LDAP != _eType );
+            return  ( AST_LDAP != _eType ) && ( AST_KAB != _eType );
         }
 
         inline bool needTableSelection() const

@@ -48,11 +48,11 @@ namespace abp
     protected:
         FixedText       m_aHint;
         FixedLine       m_aTypeSep;
-        RadioButton     m_aMORK;
-        RadioButton     m_aThunderbird;
+        RadioButton     m_aEvolution;
         RadioButton     m_aEvolutionGroupwise;
         RadioButton     m_aEvolutionLdap;
-        RadioButton     m_aEvolution;
+        RadioButton     m_aMORK;
+        RadioButton     m_aThunderbird;
         RadioButton     m_aKab;
         RadioButton     m_aMacab;
         RadioButton     m_aLDAP;
@@ -78,6 +78,7 @@ namespace abp
 
     public:
         TypeSelectionPage( OAddessBookSourcePilot* _pParent );
+        ~TypeSelectionPage();
 
         // retrieves the currently selected type
         AddressSourceType   getSelectedType() const;
