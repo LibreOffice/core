@@ -1246,7 +1246,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
             break;
             case SID_ATTR_ZOOM:
             {
-                if ( GetDocShell()->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
+                if ( ( GetDocShell()->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED ) || !GetDocShell()->IsInPlaceActive() )
                 {
                     const SwViewOption* pVOpt = rShell.GetViewOptions();
                     SvxZoomType eZoom = (SvxZoomType) pVOpt->GetZoomType();
@@ -1268,7 +1268,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
             break;
             case SID_ATTR_VIEWLAYOUT:
             {
-                if ( GetDocShell()->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
+                if ( ( GetDocShell()->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED ) || !GetDocShell()->IsInPlaceActive() )
                 {
                     const SwViewOption* pVOpt = rShell.GetViewOptions();
                     const USHORT nColumns  = pVOpt->GetViewLayoutColumns();
@@ -1282,7 +1282,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
             break;
             case SID_ATTR_ZOOMSLIDER:
             {
-                if ( GetDocShell()->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
+                if ( ( GetDocShell()->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED ) || !GetDocShell()->IsInPlaceActive() )
                 {
                     const SwViewOption* pVOpt = rShell.GetViewOptions();
                     const USHORT nCurrentZoom = pVOpt->GetZoom();
@@ -1590,13 +1590,13 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
         break;
         case SID_ATTR_ZOOM:
         {
-            if ( GetDocShell()->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
+            if ( ( GetDocShell()->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED ) || !GetDocShell()->IsInPlaceActive() )
             {
                 const SfxItemSet *pSet = 0;
                 AbstractSvxZoomDialog *pDlg = 0;
                 if ( pArgs )
                     pSet = pArgs;
-                else if ( GetDocShell()->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
+                else
                 {
                     const SwViewOption& rViewOptions = *rSh.GetViewOptions();
                     SfxItemSet aCoreSet(pShell->GetPool(), SID_ATTR_ZOOM, SID_ATTR_ZOOM, SID_ATTR_VIEWLAYOUT, SID_ATTR_VIEWLAYOUT, 0 );
@@ -1661,7 +1661,7 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
         case SID_ATTR_VIEWLAYOUT:
         {
             if ( pArgs && !rSh.getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) &&
-                 GetDocShell()->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
+                ( ( GetDocShell()->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED ) || !GetDocShell()->IsInPlaceActive() ) )
             {
                 // PAGES01
                 if ( SFX_ITEM_SET == pArgs->GetItemState(SID_ATTR_VIEWLAYOUT, TRUE, &pItem ))
@@ -1684,7 +1684,7 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
 
         case SID_ATTR_ZOOMSLIDER:
         {
-            if ( pArgs && GetDocShell()->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
+            if ( pArgs && ( ( GetDocShell()->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED ) || !GetDocShell()->IsInPlaceActive() ) )
             {
                 // PAGES01
                 if ( SFX_ITEM_SET == pArgs->GetItemState(SID_ATTR_ZOOMSLIDER, TRUE, &pItem ))

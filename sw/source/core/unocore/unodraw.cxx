@@ -63,6 +63,7 @@
 #include <rootfrm.hxx>
 #include <svx/lrspitem.hxx>
 #include <svx/ulspitem.hxx>
+#include <svx/shapepropertynotifier.hxx>
 #include <crstate.hxx>
 #include <vos/mutex.hxx>
 #include <comphelper/extract.hxx>
@@ -120,6 +121,9 @@ class SwShapeDescriptor_Impl
     // <--
 
 public:
+    bool    bInitializedPropertyNotifier;
+
+public:
     SwShapeDescriptor_Impl() :
      // --> OD 2004-08-18 #i32349# - no defaults, in order to determine on
      // adding a shape, if positioning attributes are set or not.
@@ -139,7 +143,8 @@ public:
                             text::WrapInfluenceOnPosition::ONCE_CONCURRENT ) ),
      // <--
      // --> OD 2004-08-06 #i28749#
-     mnPositionLayoutDir( text::PositionLayoutDir::PositionInLayoutDirOfAnchor )
+     mnPositionLayoutDir( text::PositionLayoutDir::PositionInLayoutDirOfAnchor ),
+     bInitializedPropertyNotifier(false)
      {}
 
     ~SwShapeDescriptor_Impl()
@@ -974,6 +979,15 @@ sal_Int64 SAL_CALL SwXShape::getSomething( const uno::Sequence< sal_Int8 >& rId 
     }
     return 0;
 }
+namespace
+{
+    static void lcl_addShapePropertyEventFactories( SdrObject& _rObj, SwXShape& _rShape )
+    {
+        ::svx::PPropertyValueProvider pProvider( new ::svx::PropertyValueProvider( _rShape, "AnchorType" ) );
+        _rObj.getShapePropertyChangeNotifier().registerProvider( ::svx::eTextShapeAnchorType, pProvider );
+    }
+}
+
 /* -----------------01.02.99 11:38-------------------
  *
  * --------------------------------------------------*/
@@ -981,7 +995,7 @@ SwXShape::SwXShape(uno::Reference< uno::XInterface > & xShape) :
     m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_SHAPE)),
     m_pPropertyMapEntries(aSwMapProvider.GetPropertyMapEntries(PROPERTY_MAP_TEXT_SHAPE)),
     pImplementationId(0),
-    pImpl(new SwShapeDescriptor_Impl),
+    pImpl(new SwShapeDescriptor_Impl()),
     m_bDescriptor(sal_True)
 {
     if(xShape.is())  // default Ctor
@@ -1019,6 +1033,37 @@ SwXShape::SwXShape(uno::Reference< uno::XInterface > & xShape) :
             SwFrmFmt* pFmt = ::FindFrmFmt( pObj );
             if(pFmt)
                 pFmt->Add(this);
+
+            lcl_addShapePropertyEventFactories( *pObj, *this );
+            pImpl->bInitializedPropertyNotifier = true;
+        }
+    }
+}
+
+/*-- 09.04.09 15:06:13---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwXShape::AddExistingShapeToFmt( SdrObject& _rObj )
+{
+    SwXShape* pSwShape = NULL;
+    uno::Reference< lang::XUnoTunnel > xShapeTunnel( _rObj.getWeakUnoShape(), uno::UNO_QUERY );
+    if ( xShapeTunnel.is() )
+        pSwShape = reinterpret_cast< SwXShape * >(
+                sal::static_int_cast< sal_IntPtr >( xShapeTunnel->getSomething( SwXShape::getUnoTunnelId() ) ) );
+    if ( pSwShape )
+    {
+        if ( pSwShape->m_bDescriptor )
+        {
+            SwFrmFmt* pFmt = ::FindFrmFmt( &const_cast< SdrObject& >( _rObj ) );
+            if ( pFmt )
+                pFmt->Add( pSwShape );
+            pSwShape->m_bDescriptor = sal_False;
+        }
+
+        if ( !pSwShape->pImpl->bInitializedPropertyNotifier )
+        {
+            lcl_addShapePropertyEventFactories( _rObj, *pSwShape );
+            pSwShape->pImpl->bInitializedPropertyNotifier = true;
         }
     }
 }
@@ -1986,23 +2031,35 @@ uno::Any SwXShape::getPropertyDefault( const rtl::OUString& rPropertyName )
 
   -----------------------------------------------------------------------*/
 void SwXShape::addPropertyChangeListener(
-    const rtl::OUString& /*PropertyName*/,
-    const uno::Reference< beans::XPropertyChangeListener > & /*aListener*/)
+    const rtl::OUString& _propertyName,
+    const uno::Reference< beans::XPropertyChangeListener > & _listener )
     throw( beans::UnknownPropertyException, lang::WrappedTargetException,
            uno::RuntimeException )
 {
-    DBG_WARNING("not implemented");
+    if ( !xShapeAgg.is() )
+        throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "no shape aggregate" ) ), *this );
+
+    // must be handled by the aggregate
+    uno::Reference< beans::XPropertySet > xShapeProps;
+    if ( xShapeAgg->queryAggregation( beans::XPropertySet::static_type() ) >>= xShapeProps )
+        xShapeProps->addPropertyChangeListener( _propertyName, _listener );
 }
 /*-- 22.01.99 11:42:27---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 void SwXShape::removePropertyChangeListener(
-    const rtl::OUString& /*PropertyName*/,
-    const uno::Reference< beans::XPropertyChangeListener > & /*aListener*/)
+    const rtl::OUString& _propertyName,
+    const uno::Reference< beans::XPropertyChangeListener > & _listener)
     throw( beans::UnknownPropertyException, lang::WrappedTargetException,
            uno::RuntimeException )
 {
-    DBG_WARNING("not implemented");
+    if ( !xShapeAgg.is() )
+        throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "no shape aggregate" ) ), *this );
+
+    // must be handled by the aggregate
+    uno::Reference< beans::XPropertySet > xShapeProps;
+    if ( xShapeAgg->queryAggregation( beans::XPropertySet::static_type() ) >>= xShapeProps )
+        xShapeProps->removePropertyChangeListener( _propertyName, _listener );
 }
 /*-- 22.01.99 11:42:28---------------------------------------------------
 
@@ -2504,14 +2561,14 @@ awt::Point SwXShape::_GetAttrPosition()
     // <--
     // --> OD 2004-11-10 #i35007# - If drawing object is anchored as-character,
     // it's x-position isn't sensible. Thus, return the x-position as zero in this case.
-    text::TextContentAnchorType eAnchorType =
+    text::TextContentAnchorType eTextAnchorType =
                             text::TextContentAnchorType_AT_PARAGRAPH;
     {
         rtl::OUString sAnchorType( RTL_CONSTASCII_USTRINGPARAM( "AnchorType" ) );
         uno::Any aAny = getPropertyValue( sAnchorType );
-        aAny >>= eAnchorType;
+        aAny >>= eTextAnchorType;
     }
-    if ( eAnchorType == text::TextContentAnchorType_AS_CHARACTER )
+    if ( eTextAnchorType == text::TextContentAnchorType_AS_CHARACTER )
     {
         aAttrPos.X = 0;
     }
@@ -2648,14 +2705,14 @@ void SwXShape::_AdjustPositionProperties( const awt::Point _aPosition )
     // handle x-position
     // --> OD 2004-11-10 #i35007# - no handling of x-position, if drawing
     // object is anchored as-character, because it doesn't make sense.
-    text::TextContentAnchorType eAnchorType =
+    text::TextContentAnchorType eTextAnchorType =
                             text::TextContentAnchorType_AT_PARAGRAPH;
     {
         rtl::OUString sAnchorType( RTL_CONSTASCII_USTRINGPARAM( "AnchorType" ) );
         uno::Any aAny = getPropertyValue( sAnchorType );
-        aAny >>= eAnchorType;
+        aAny >>= eTextAnchorType;
     }
-    if ( eAnchorType != text::TextContentAnchorType_AS_CHARACTER )
+    if ( eTextAnchorType != text::TextContentAnchorType_AS_CHARACTER )
     // <--
     {
         // determine current x-postion

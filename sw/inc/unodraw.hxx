@@ -318,6 +318,9 @@ public:
 
     SwShapeDescriptor_Impl*     GetDescImpl() {return pImpl;}
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >                 GetAggregationInterface() {return xShapeAgg;}
+
+    // helper
+    static void AddExistingShapeToFmt( SdrObject& _rObj );
 };
 /* -----------------------------31.05.01 09:54--------------------------------
 
