@@ -43,7 +43,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.zip.DeflaterOutputStream;
 import java.util.zip.InflaterInputStream;
-
+import com.sun.star.report.ReportEngineParameterNames;
 import com.sun.star.report.ImageService;
 import com.sun.star.report.InputRepository;
 import com.sun.star.report.OutputRepository;
@@ -65,6 +65,7 @@ import org.apache.commons.logging.LogFactory;
 import org.jfree.layouting.input.style.parser.CSSValueFactory;
 import org.jfree.layouting.input.style.parser.StyleSheetParserUtil;
 import org.jfree.layouting.input.style.values.CSSNumericValue;
+import org.jfree.layouting.input.style.values.CSSNumericType;
 import org.jfree.layouting.layouter.style.CSSValueResolverUtility;
 import org.jfree.layouting.namespace.NamespaceDefinition;
 import org.jfree.layouting.namespace.Namespaces;
@@ -300,7 +301,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
         this.imageNames = new AttributeNameGenerator();
 
         this.imageProducer = new ImageProducer(inputRepository, outputRepository, imageService);
-        this.oleProducer = new OleProducer(inputRepository, outputRepository, imageService, datasourcefactory);
+        this.oleProducer = new OleProducer(inputRepository, outputRepository, imageService, datasourcefactory,(Integer)reportJob.getParameters().get(ReportEngineParameterNames.MAXROWS));
 
         try
         {
@@ -1121,7 +1122,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
         }
         catch (IOException ioe)
         {
-            throw new ReportProcessingException("Unable to create the buffer");
+            throw new ReportProcessingException("Unable to create the buffer",ioe);
         }
     }
 
@@ -1152,8 +1153,9 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
         return null;
     }
 
-        protected AttributeList buildAttributeList(final AttributeMap attrs)
+    protected AttributeList buildAttributeList(final AttributeMap attrs)
     {
+        final String elementType = ReportTargetUtil.getElemenTypeFromAttribute(attrs);
         final AttributeList attrList = new AttributeList();
         final String[] namespaces = attrs.getNameSpaces();
         for (int i = 0; i < namespaces.length; i++)
@@ -1179,7 +1181,8 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
                             tableNameGenerator.generateName(saneName));
                 }
                 else if (OfficeNamespaces.DRAWING_NS.equals(attrNamespace) &&
-                        "name".equals(key))
+                        "name".equals(key) &&
+                        !"equation".equals(elementType) )
                 {
                     final String objectName = String.valueOf(entry.getValue());
                     attrList.setAttribute(attrNamespace, key,
@@ -1284,6 +1287,9 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
 
             CSSNumericValue imageAreaWidthVal;
             CSSNumericValue imageAreaHeightVal;
+            CSSNumericValue posX = CSSNumericValue.createValue(CSSNumericType.CM, 0.0);
+            CSSNumericValue posY = CSSNumericValue.createValue(CSSNumericType.CM, 0.0);
+
             String styleName = null;
             if (imageContext != null)
             {
@@ -1303,8 +1309,8 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
                     final CSSNumericValue normalizedImageHeight =
                             CSSValueResolverUtility.convertLength(height, imageAreaHeightVal.getType());
 
-                    final boolean scale = OfficeToken.TRUE.equals(attrs.getAttribute(JFreeReportInfo.REPORT_NAMESPACE, OfficeToken.SCALE));
-                    if (!scale && normalizedImageWidth.getValue() > 0 && normalizedImageHeight.getValue() > 0)
+                    final String scale = (String)attrs.getAttribute(JFreeReportInfo.REPORT_NAMESPACE, OfficeToken.SCALE);
+                    if ( OfficeToken.NONE.equals(scale) && normalizedImageWidth.getValue() > 0 && normalizedImageHeight.getValue() > 0)
                     {
                         final double clipWidth = normalizedImageWidth.getValue() - imageAreaWidthVal.getValue();
                         final double clipHeight = normalizedImageHeight.getValue() - imageAreaHeightVal.getValue();
@@ -1373,6 +1379,16 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
                             imageAreaHeightVal = normalizedImageHeight;
                         }
                     }
+                    else if ( OfficeToken.ISOTROPIC.equals(scale) )
+                    {
+                        final double[] ret = calcPaintSize(imageAreaWidthVal,imageAreaHeightVal,normalizedImageWidth,normalizedImageHeight);
+
+                        posX = CSSNumericValue.createValue(imageAreaWidthVal.getType(),( imageAreaWidthVal.getValue() - ret[0]) * 0.5);
+                        posY = CSSNumericValue.createValue(imageAreaHeightVal.getType(),( imageAreaHeightVal.getValue() - ret[1]) * 0.5);
+
+                        imageAreaWidthVal = CSSNumericValue.createValue(imageAreaWidthVal.getType(),ret[0]);
+                        imageAreaHeightVal = CSSNumericValue.createValue(imageAreaHeightVal.getType(),ret[1]);
+                    }
                 }
             // If we do scale, then we simply use the given image-area-size as valid image size and dont
             // care about the image itself ..
@@ -1393,8 +1409,9 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
             }
             frameList.setAttribute(OfficeNamespaces.TEXT_NS, "anchor-type", OfficeToken.PARAGRAPH);
             frameList.setAttribute(OfficeNamespaces.SVG_NS, "z-index", "0");
-            frameList.setAttribute(OfficeNamespaces.SVG_NS, "x", ZERO_CM);
-            frameList.setAttribute(OfficeNamespaces.SVG_NS, "y", ZERO_CM);
+            frameList.setAttribute(OfficeNamespaces.SVG_NS, "x", posX.getValue() + posX.getType().getType());
+            frameList.setAttribute(OfficeNamespaces.SVG_NS, "y", posY.getValue() + posY.getType().getType());
+
 
             LOGGER.debug("Image " + imageData + " A-Width: " + imageAreaWidthVal + ", A-Height: " + imageAreaHeightVal);
 
@@ -1635,7 +1652,28 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
         {
             throw new ReportProcessingException(FAILED, ioe);
         }
+    }
+    static private double[] calcPaintSize(  final CSSNumericValue areaWidth, final CSSNumericValue areaHeight,
+                                final CSSNumericValue imageWidth, final CSSNumericValue imageHeight)
+    {
 
+        final double ratioX = areaWidth.getValue() / imageWidth.getValue();
+        final double ratioY = areaHeight.getValue() / imageHeight.getValue();
+        final double ratioMin = Math.min( ratioX, ratioY );
 
+        double[] ret = new double[2];
+        ret[0] = imageWidth.getValue() * ratioMin;
+        ret[1] = imageHeight.getValue() * ratioMin;
+        return ret;
+    }
+    protected void writeNullDate() throws IOException
+    {
+        // write NULL DATE
+        final XmlWriter xmlWriter = getXmlWriter();
+        xmlWriter.writeTag(OfficeNamespaces.TABLE_NS, "calculation-settings", null, XmlWriterSupport.OPEN);
+        final AttributeMap nullDateAttributes = new AttributeMap();
+        nullDateAttributes.setAttribute(OfficeNamespaces.TABLE_NS, "date-value", "1900-01-01");
+        xmlWriter.writeTag(OfficeNamespaces.TABLE_NS, "null-date", buildAttributeList(nullDateAttributes), XmlWriterSupport.CLOSE);
+        xmlWriter.writeCloseTag();
     }
 }

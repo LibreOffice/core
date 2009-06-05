@@ -40,7 +40,7 @@ public interface ReportEngineMetaData
      * @param mimeType
      * @return true, if the output type is supported; false otherwise.
      */
-    public boolean isOutputSupported(String mimeType);
+    boolean isOutputSupported(String mimeType);
 
     /**
      * Lists all supported output parameters for the given mime-type.
@@ -50,13 +50,13 @@ public interface ReportEngineMetaData
      * @param mimeType
      * @return
      */
-    public String[] getOutputParameters(String mimeType);
+    String[] getOutputParameters(String mimeType);
 
-    public Class getParameterType(String parameter);
+    Class getParameterType(String parameter);
 
-    public boolean isMandatory(String parameter);
+    boolean isMandatory(String parameter);
 
-    public boolean isEnumeration(String parameter);
+    boolean isEnumeration(String parameter);
 
-    public Object[] getEnumerationValues(String parameter);
+    Object[] getEnumerationValues(String parameter);
 }

@@ -53,7 +53,7 @@ public interface OutputRepository
      * @return the outputstream
      * @throws IOException if opening the stream fails
      */
-    public OutputStream createOutputStream(final String name, final String mimeType) throws IOException;
+    OutputStream createOutputStream(final String name, final String mimeType) throws IOException;
 
     /** allows to acces sub repositories inside this repository
      *
@@ -61,13 +61,13 @@ public interface OutputRepository
      * @return the sub repository
      * @throws java.io.IOException when the sub repository doesn't exist.
      */
-    public OutputRepository openOutputRepository(final String name, final String mimeType) throws IOException;
+    OutputRepository openOutputRepository(final String name, final String mimeType) throws IOException;
 
-    public boolean exists(final String name);
+    boolean exists(final String name);
 
-    public boolean existsStorage(final String name);
+    boolean existsStorage(final String name);
 
-    public boolean isWritable(final String name);
+    boolean isWritable(final String name);
 
-    public void closeOutputRepository();
+    void closeOutputRepository();
 }

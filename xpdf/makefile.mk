@@ -81,7 +81,7 @@ CONFIGURE_ACTION=./configure --without-x --enable-multithreaded --enable-excepti
 .ELSE
 #CONFIGURE_ACTION=./configure
 #CONFIGURE_ACTION=./configure --without-x --enable-multithreaded --enable-exceptions CFLAGS="-g -O0" CXXFLAGS="-g -O0"
-CONFIGURE_ACTION=./configure --without-libpaper-library --without-x --enable-multithreaded --enable-exceptions
+CONFIGURE_ACTION=./configure --without-libpaper-library --without-t1-library --without-x --enable-multithreaded --enable-exceptions
 .ENDIF
 
 BUILD_ACTION=$(GNUMAKE) -j$(EXTMAXPROCESS)

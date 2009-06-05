@@ -27,7 +27,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
 package com.sun.star.report.util;
 
 import org.pentaho.reporting.libraries.base.util.ObjectUtilities;
@@ -36,9 +35,14 @@ import org.pentaho.reporting.libraries.base.util.ObjectUtilities;
  *
  * @author Ocke Janssen
  */
-public class ReportUtil {
+public class ReportUtil
+{
 
-    public static boolean equalString(final String uri,final String uri2)
+    private ReportUtil()
+    {
+    }
+
+    public static boolean equalString(final String uri, final String uri2)
     {
         return ObjectUtilities.equal(uri, uri2);
     }

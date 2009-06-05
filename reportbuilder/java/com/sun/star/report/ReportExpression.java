@@ -47,8 +47,8 @@ package com.sun.star.report;
  */
 public interface ReportExpression
 {
-  public void setParameters (Object[] parameters);
-  public Object getParameters ();
+  void setParameters (Object[] parameters);
+  Object getParameters ();
 
-  public Object getValue(DataRow row);
+  Object getValue(DataRow row);
 }

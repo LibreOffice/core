@@ -43,6 +43,8 @@ import org.jfree.report.data.DefaultDataFlags;
 import org.jfree.report.expressions.FormulaExpression;
 import org.jfree.report.flow.FlowController;
 import org.jfree.report.flow.layoutprocessor.LayoutControllerUtil;
+import org.pentaho.reporting.libraries.formula.util.DateUtil;
+import org.pentaho.reporting.libraries.formula.util.HSSFDateUtil;
 
 /**
  * Creation-Date: 06.06.2007, 17:03:30
@@ -100,13 +102,21 @@ public class FormatValueUtility
         return ret;
     }
 
-    public static void applyValueForCell(final Object value, final AttributeMap variableSection)
+    public static void applyValueForCell(final Object value, final AttributeMap variableSection,final String valueType)
     {
-        if (value instanceof Date)
+        if (value instanceof Date )
         {
-            variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, "date-value", formatDate((Date) value));
+            if ( "date".equals(valueType) )
+            {
+                variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, "date-value", formatDate((Date) value));
+            }
+            else
+            {
+                variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, "value", String.valueOf(HSSFDateUtil.getExcelDate((Date)value)));
+            }
+
         }
-        else if (value instanceof Number)
+        else if (value instanceof Number )
         {
             variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, "value", String.valueOf(value));
         }
@@ -123,7 +133,24 @@ public class FormatValueUtility
         }
         else if (value != null)
         {
-            variableSection.setAttribute(OfficeNamespaces.OFFICE_NS,STRING_VALUE, String.valueOf(value));
+            try
+            {
+                final Float number = Float.valueOf(String.valueOf(value));
+                applyValueForCell(number,variableSection,valueType);
+                return;
+            }
+            catch(NumberFormatException e)
+            {
+
+            }
+            if ( !"string".equals(valueType))
+            {
+                variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, "value", String.valueOf(value));
+            }
+            else
+            {
+                variableSection.setAttribute(OfficeNamespaces.OFFICE_NS,STRING_VALUE, String.valueOf(value));
+            }
         }
         else
         {

@@ -156,7 +156,7 @@ public final class StarFunctionCategory extends WeakBase
     {
         if ( position >= functions.length )
             throw new IndexOutOfBoundsException();
-        return new StarFunctionDescription(defaultContext,m_xContext,this,functionRegistry,functionRegistry.getMetaData(functions[position]));
+        return new StarFunctionDescription(defaultContext,m_xContext,this,functionRegistry.getMetaData(functions[position]));
     }
 
 }

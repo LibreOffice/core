@@ -41,11 +41,11 @@ package com.sun.star.report;
 public interface DataSource extends DataRow
 {
 
-    public int getRowCount() throws DataSourceException;
+    int getRowCount() throws DataSourceException;
 
-    public boolean absolute(int row) throws DataSourceException;
+    boolean absolute(int row) throws DataSourceException;
 
-    public boolean next() throws DataSourceException;
+    boolean next() throws DataSourceException;
 
-    public void close() throws DataSourceException;
+    void close() throws DataSourceException;
 }

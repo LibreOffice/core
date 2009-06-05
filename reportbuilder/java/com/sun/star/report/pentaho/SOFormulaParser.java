@@ -82,9 +82,9 @@ public final class SOFormulaParser extends ComponentBase
     private final Map parserAllOpCodes = new HashMap();
     private final Map parserNames = new HashMap();
     private final Map[] groupOpCodes = new HashMap[5];
-    private final Vector specialOpCodes = new Vector();
+    private final List specialOpCodes = new ArrayList();
 
-    public Vector getSpecialOpCodes()
+    public List getSpecialOpCodes()
     {
         return specialOpCodes;
     }
@@ -92,7 +92,7 @@ public final class SOFormulaParser extends ComponentBase
     private final FormulaOpCodeMapEntry opCodePush;
     private final FormulaParser parser;
 
-    public SOFormulaParser(XComponentContext context)
+    public SOFormulaParser(final XComponentContext context)
     {
 
         m_xContext = context;
@@ -131,7 +131,6 @@ public final class SOFormulaParser extends ComponentBase
             addOpCodes(names, opCodes, ARRAY_SEPARATORS, false);
 
             opCodes = mapper.getAvailableMappings(FormulaLanguage.ODFF, FormulaMapGroup.SPECIAL);
-            names = new String[opCodes.length];
 
             for (int i = 0; i < opCodes.length; i++)
             {
@@ -179,9 +178,9 @@ public final class SOFormulaParser extends ComponentBase
                     final String upper = token.image.toUpperCase();
                     if ( parserNames.containsKey(upper) )
                     {
-                        if ( token.image.equals("("))
+                        if ( "(".equals(token.image))
                             brackets++;
-                        else if ( token.image.equals(")"))
+                        else if ( ")".equals(token.image))
                             --brackets;
                         final FormulaOpCodeMapEntry opCode = (FormulaOpCodeMapEntry) parserNames.get(upper);
                         formulaToken = opCode.Token;
@@ -237,8 +236,7 @@ public final class SOFormulaParser extends ComponentBase
             {
             }
         }
-        FormulaToken[] ret = (FormulaToken[]) tokens.toArray(new FormulaToken[tokens.size()]);
-        return ret;
+        return (FormulaToken[]) tokens.toArray(new FormulaToken[tokens.size()]);
     }
 
     public String printFormula(com.sun.star.sheet.FormulaToken[] aTokens)
@@ -345,7 +343,7 @@ public final class SOFormulaParser extends ComponentBase
     {
         if ( formulaOpCodeMapper == null )
         {
-            formulaOpCodeMapper = new SOFormulaOpCodeMapper(m_xContext, this);
+            formulaOpCodeMapper = new SOFormulaOpCodeMapper(this);
         }
 
         return formulaOpCodeMapper;
@@ -384,12 +382,12 @@ public final class SOFormulaParser extends ComponentBase
         }
     }
 
-    final public Map getNames()
+    public Map getNames()
     {
         return parserNames;
     }
 
-    final public Map getGroup(int group)
+    public Map getGroup(int group)
     {
         return groupOpCodes[group];
     }

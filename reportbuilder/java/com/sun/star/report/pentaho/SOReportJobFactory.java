@@ -174,9 +174,9 @@ public class SOReportJobFactory
             try
             {
                 simpleReg.open(path, true, false);
-                XRegistryKey xRegistryRootKey = simpleReg.getRootKey();
+                final XRegistryKey xRegistryRootKey = simpleReg.getRootKey();
                 // read locale
-                XRegistryKey locale = xRegistryRootKey.openKey(value);
+                final XRegistryKey locale = xRegistryRootKey.openKey(value);
                 if ( locale != null )
                 {
                     final String newLocale = locale.getStringValue();
@@ -205,7 +205,7 @@ public class SOReportJobFactory
             Thread.currentThread().setContextClassLoader(this.getClass().getClassLoader());
             try
             {
-                XSimpleRegistry simpleReg = (XSimpleRegistry) UnoRuntime.queryInterface(XSimpleRegistry.class,
+                final XSimpleRegistry simpleReg = (XSimpleRegistry) UnoRuntime.queryInterface(XSimpleRegistry.class,
                     m_cmpCtx.getServiceManager().createInstanceWithContext("com.sun.star.configuration.ConfigurationRegistry", m_cmpCtx));
 
                 String currentLocale = getLocaleFromRegistry(simpleReg,"org.openoffice.Setup","L10N/ooSetupSystemLocale");
@@ -242,6 +242,7 @@ public class SOReportJobFactory
             String mimetype = null;
             String author = null;
             String title = null;
+            Integer maxRows = null;
 
             for ( int i = 0; i < namedValue.length; ++i )
             {
@@ -269,6 +270,10 @@ public class SOReportJobFactory
                 else if ( "mimetype".equalsIgnoreCase(aProps.Name) )
                 {
                     mimetype = (String) aProps.Value;
+                }
+                else if ( "MaxRows".equalsIgnoreCase(aProps.Name) )
+                {
+                    maxRows = (Integer) aProps.Value;
                 }
                 else if ( ReportEngineParameterNames.AUTHOR.equalsIgnoreCase(aProps.Name) )
                 {
@@ -324,6 +329,7 @@ public class SOReportJobFactory
             procParms.setProperty(ReportEngineParameterNames.INPUT_DATASOURCE_FACTORY, dataFactory);
             procParms.setProperty(ReportEngineParameterNames.IMAGE_SERVICE, new SOImageService(m_cmpCtx));
             procParms.setProperty(ReportEngineParameterNames.INPUT_REPORTJOB_FACTORY, this);
+            procParms.setProperty(ReportEngineParameterNames.MAXROWS, maxRows);
             if ( author != null )
             {
                 procParms.setProperty(ReportEngineParameterNames.AUTHOR, author);
