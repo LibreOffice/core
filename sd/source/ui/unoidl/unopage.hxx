@@ -45,7 +45,7 @@
 #include <svx/fmdpage.hxx>
 #include <svx/svdpool.hxx>
 
-#include <unotools/servicehelper.hxx>
+#include <comphelper/servicehelper.hxx>
 
 #include "unosrch.hxx"
 

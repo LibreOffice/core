@@ -38,7 +38,7 @@
 #include <svx/unoshprp.hxx>
 #include <svx/unoipset.hxx>
 
-#include <unotools/servicehelper.hxx>
+#include <comphelper/servicehelper.hxx>
 
 #include <cppuhelper/implbase4.hxx>
 

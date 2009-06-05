@@ -35,7 +35,7 @@
 #include <com/sun/star/drawing/XLayerManager.hpp>
 
 #include <cppuhelper/implbase5.hxx>
-#include <unotools/servicehelper.hxx>
+#include <comphelper/servicehelper.hxx>
 
 #include <unomodel.hxx>
 

@@ -58,7 +58,7 @@
 
 #include <svx/unoipset.hxx>
 
-#include <unotools/servicehelper.hxx>
+#include <comphelper/servicehelper.hxx>
 
 class SdDrawDocument;
 class SdPage;
