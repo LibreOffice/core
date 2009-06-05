@@ -304,6 +304,8 @@ namespace dbaui
             case  ::dbaccess::DST_OUTLOOK:
             case  ::dbaccess::DST_OUTLOOKEXP:
             case  ::dbaccess::DST_EVOLUTION:
+            case  ::dbaccess::DST_EVOLUTION_GROUPWISE:
+            case  ::dbaccess::DST_EVOLUTION_LDAP:
             case  ::dbaccess::DST_KAB:
             case  ::dbaccess::DST_MACAB:
                 m_aFT_Connection.SetText(String(ModuleRes(STR_NO_ADDITIONAL_SETTINGS)));

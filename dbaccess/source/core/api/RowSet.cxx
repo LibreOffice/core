@@ -1850,6 +1850,13 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
 
         Reference< XResultSet > xResultSet( impl_prepareAndExecute_throw() );
 
+        // let our warnings container forget the reference to the (possibly disposed) old result set
+        m_aWarnings.setExternalWarnings( NULL );
+        // clear all current warnings
+        m_aWarnings.clearWarnings();
+        // let the warnings container know about the new "external warnings"
+        m_aWarnings.setExternalWarnings( Reference< XWarningsSupplier >( xResultSet, UNO_QUERY ) );
+
         ::rtl::OUString aComposedUpdateTableName;
         if ( m_aUpdateTableName.getLength() )
             aComposedUpdateTableName = composeTableName( m_xActiveConnection->getMetaData(), m_aUpdateCatalogName, m_aUpdateSchemaName, m_aUpdateTableName, sal_False, ::dbtools::eInDataManipulation );
@@ -2669,6 +2676,19 @@ void SAL_CALL ORowSet::clearParameters(  ) throw(SQLException, RuntimeException)
         getParameterStorage( (sal_Int32)i ).setNull();
     m_aParametersSet.clear();
 }
+
+// -------------------------------------------------------------------------
+Any SAL_CALL ORowSet::getWarnings(  ) throw (SQLException, RuntimeException)
+{
+    return m_aWarnings.getWarnings();
+}
+
+// -------------------------------------------------------------------------
+void SAL_CALL ORowSet::clearWarnings(  ) throw (SQLException, RuntimeException)
+{
+    m_aWarnings.clearWarnings();
+}
+
 // -------------------------------------------------------------------------
 void ORowSet::firePropertyChange(sal_Int32 _nPos,const ::connectivity::ORowSetValue& _rOldValue)
 {

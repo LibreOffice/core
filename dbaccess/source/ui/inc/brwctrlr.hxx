@@ -64,6 +64,11 @@ class ResMgr;
 struct FmFoundRecordInformation;
 struct FmSearchContext;
 
+namespace dbtools
+{
+    class SQLExceptionInfo;
+}
+
 namespace dbaui
 {
 
@@ -125,6 +130,7 @@ namespace dbaui
         sal_Bool                m_bLoadCanceled : 1;            // the load was canceled somehow
         sal_Bool                m_bClosingKillOpen : 1;         // are we killing the load thread because we are to be suspended ?
         sal_Bool                m_bErrorOccured : 1;            // see enter-/leaveFormAction
+        bool                    m_bCannotSelectUnfiltered : 1;  // recieved an DATA_CANNOT_SELECT_UNFILTERED error
 
     protected:
         class FormErrorHelper
@@ -151,7 +157,7 @@ namespace dbaui
         sal_Bool    isValidCursor() const;  // checks the ::com::sun::star::data::XDatabaseCursor-interface of m_xRowSet
         sal_Bool    isLoaded() const;
         sal_Bool    loadingCancelled() const { return m_bLoadCanceled; }
-        void        setLoadingStarted()     { m_bLoadCanceled = sal_False; }
+        void        onStartLoading( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XLoadable >& _rxLoadable );
         void        setLoadingCancelled()   { m_bLoadCanceled = sal_True; }
 
         const TransferableDataHelper&
@@ -345,6 +351,8 @@ namespace dbaui
         sal_Int16   getCurrentColumnPosition();
         void        setCurrentColumnPosition( sal_Int16 _nPos );
         void        addColumnListeners(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > & _xGridControlModel);
+
+        void        impl_checkForCannotSelectUnfiltered( const ::dbtools::SQLExceptionInfo& _rError );
 
         // time to check the CUT/COPY/PASTE-slot-states
         DECL_LINK( OnInvalidateClipboard, AutoTimer* );

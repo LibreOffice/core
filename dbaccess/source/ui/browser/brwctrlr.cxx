@@ -134,6 +134,9 @@
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
 #endif
+#ifndef _CPPUHELPER_EXC_HLP_HXX_
+#include <cppuhelper/exc_hlp.hxx>
+#endif
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
@@ -154,6 +157,9 @@
 #endif
 #ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
+#endif
+#ifndef _DBHELPER_DBEXCEPTION_HXX_
+#include <connectivity/dbexception.hxx>
 #endif
 #ifndef _CPPUHELPER_IMPLBASE2_HXX_
 #include <cppuhelper/implbase2.hxx>
@@ -176,6 +182,9 @@
 #ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>
 #endif
+#ifndef CONNECTIVITY_SQLERROR_HXX
+#include <connectivity/sqlerror.hxx>
+#endif
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
 #endif
@@ -187,6 +196,12 @@
 #endif
 #ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
 #include <com/sun/star/task/XInteractionHandler.hpp>
+#endif
+#ifndef INCLUDED_COM_SUN_STAR_SDBC_XWARNINGSSUPPLIER_HPP
+#include <com/sun/star/sdbc/XWarningsSupplier.hpp>
+#endif
+#ifndef INCLUDED_COM_SUN_STAR_SDB_ERRORCONDITION_HPP
+#include <com/sun/star/sdb/ErrorCondition.hpp>
 #endif
 #ifndef DBAUI_QUERYFILTER_HXX
 #include "queryfilter.hxx"
@@ -484,6 +499,7 @@ SbaXDataBrowserController::SbaXDataBrowserController(const Reference< ::com::sun
     ,m_bLoadCanceled( sal_False )
     ,m_bClosingKillOpen( sal_False )
     ,m_bErrorOccured( sal_False )
+    ,m_bCannotSelectUnfiltered( true )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaui", "Ocke.Janssen@sun.com", "SbaXDataBrowserController::SbaXDataBrowserController" );
     DBG_CTOR(SbaXDataBrowserController,NULL);
@@ -545,18 +561,52 @@ void SbaXDataBrowserController::stopFrameListening( const Reference< XFrame >& _
 }
 
 // -----------------------------------------------------------------------------
-sal_Bool SbaXDataBrowserController::reloadForm(const Reference< XLoadable >& _rxLoadable)
+void SbaXDataBrowserController::onStartLoading( const Reference< XLoadable >& _rxLoadable )
+{
+    m_bLoadCanceled = sal_False;
+    m_bCannotSelectUnfiltered = false;
+
+    Reference< XWarningsSupplier > xWarnings( _rxLoadable, UNO_QUERY );
+    if ( xWarnings.is() )
+        xWarnings->clearWarnings();
+}
+
+// -----------------------------------------------------------------------------
+void SbaXDataBrowserController::impl_checkForCannotSelectUnfiltered( const SQLExceptionInfo& _rError )
+{
+    ::connectivity::SQLError aError( getORB() );
+    ::connectivity::ErrorCode nErrorCode( aError.getErrorCode( ErrorCondition::DATA_CANNOT_SELECT_UNFILTERED ) );
+    if ( ((const SQLException*)_rError)->ErrorCode == nErrorCode )
+    {
+        m_bCannotSelectUnfiltered = true;
+        InvalidateFeature( ID_BROWSER_FILTERCRIT );
+    }
+}
+
+// -----------------------------------------------------------------------------
+sal_Bool SbaXDataBrowserController::reloadForm( const Reference< XLoadable >& _rxLoadable )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaui", "Ocke.Janssen@sun.com", "SbaXDataBrowserController::reloadForm" );
     WaitObject aWO(getBrowserView());
 
-    setLoadingStarted();
+    onStartLoading( _rxLoadable );
 
     FormErrorHelper aReportError(this);
     if (_rxLoadable->isLoaded())
         _rxLoadable->reload();
     else
         _rxLoadable->load();
+
+    Reference< XWarningsSupplier > xWarnings( _rxLoadable, UNO_QUERY );
+    if ( xWarnings.is() )
+    {
+        SQLExceptionInfo aInfo( xWarnings->getWarnings() );
+        if ( aInfo.isValid() )
+        {
+            showError( aInfo );
+            impl_checkForCannotSelectUnfiltered( aInfo );
+        }
+    }
 
     return _rxLoadable->isLoaded() && !errorOccured();
 }
@@ -1302,8 +1352,7 @@ void SbaXDataBrowserController::errorOccured(const ::com::sun::star::sdb::SQLErr
     if ( aInfo.isValid() )
     {
         ::vos::OGuard aGuard(Application::GetSolarMutex());
-        OSQLMessageBox aDlg(getBrowserView(), aInfo);
-        aDlg.Execute();
+        showError( aInfo );
     }
     if (m_nFormActionNestingLevel)
         m_bErrorOccured = true;
@@ -1523,35 +1572,34 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
 
                 aReturn.bEnabled = ::comphelper::getBOOL(xCurrentField->getPropertyValue(PROPERTY_ISSEARCHABLE));
                 const Reference< XRowSet > xRow = getRowSet();
-                if(aReturn.bEnabled && xRow.is()) // check if we stand on a valid row
-                    aReturn.bEnabled = !(xRow->isBeforeFirst() || xRow->isAfterLast() || xRow->rowDeleted() || ::comphelper::getINT32(xFormSet->getPropertyValue(PROPERTY_ROWCOUNT)) == 0);
+                aReturn.bEnabled =  aReturn.bEnabled
+                                &&  xRow.is()
+                                &&  !xRow->isBeforeFirst()
+                                &&  !xRow->isAfterLast()
+                                &&  !xRow->rowDeleted()
+                                &&  ( ::comphelper::getINT32( xFormSet->getPropertyValue( PROPERTY_ROWCOUNT ) ) != 0 );
             }
             break;
 
-            case ID_BROWSER_ORDERCRIT:
             case ID_BROWSER_FILTERCRIT:
+                if ( m_bCannotSelectUnfiltered )
+                {
+                    aReturn.bEnabled = sal_True;
+                    break;
+                }
+                // no break
+            case ID_BROWSER_ORDERCRIT:
                 {
                     const Reference< XPropertySet >  xFormSet(getRowSet(), UNO_QUERY);
                     if ( !::comphelper::getBOOL(xFormSet->getPropertyValue(PROPERTY_ESCAPE_PROCESSING)))
                         break;
 
-                    Reference< XPropertySet >  xCurrentField = getBoundField();
-                    // we are not in the handle column
-                    aReturn.bEnabled = getBrowserView()->getVclControl()->GetCurColumnId() != 0 &&
-                                        xCurrentField.is() &&
-                                       ::comphelper::getBOOL(xCurrentField->getPropertyValue(PROPERTY_ISSEARCHABLE));
-
-                    const Reference< XRowSet > xRow = getRowSet();
-
-                    if(aReturn.bEnabled && xRow.is()) // check if we stand on a valid row
-                        aReturn.bEnabled = !(xRow->isBeforeFirst() || xRow->isAfterLast() || xRow->rowDeleted() || ::comphelper::getINT32(xFormSet->getPropertyValue(PROPERTY_ROWCOUNT)) == 0);
-                    // a native statement can't be filtered or sorted
-                    //  aReturn.bEnabled &= m_xParser.is();
+                    aReturn.bEnabled =  getRowSet().is()
+                                    &&  ( ::comphelper::getINT32( xFormSet->getPropertyValue( PROPERTY_ROWCOUNT ) ) != 0 );
                 }
                 break;
 
             case ID_BROWSER_REFRESH:
-                //  aReturn.bEnabled = isValidCursor();
                 aReturn.bEnabled = sal_True;
                 break;
 
@@ -1728,11 +1776,6 @@ void SbaXDataBrowserController::ExecuteFilterSortCrit(sal_Bool bFilter)
 
     Reference< XPropertySet >  xFormSet(getRowSet(), UNO_QUERY);
 
-    // no condition for searching
-    if (getRowSet()->isBeforeFirst() || getRowSet()->isAfterLast() ||
-        getRowSet()->rowDeleted())
-        return;
-
     initializeParser();
     const ::rtl::OUString sOldVal = bFilter ? m_xParser->getFilter() : m_xParser->getOrder();
     const ::rtl::OUString sOldHaving = m_xParser->getHavingClause();
@@ -1764,7 +1807,12 @@ void SbaXDataBrowserController::ExecuteFilterSortCrit(sal_Bool bFilter)
             aDlg.BuildOrderPart();
         }
     }
-    catch(SQLException& e) { showError(SQLExceptionInfo(e)); return; }
+    catch(const SQLException& )
+    {
+        SQLExceptionInfo aError( ::cppu::getCaughtException() );
+        showError( aError );
+        return;
+    }
     catch(Exception&)
     {
         return;
@@ -2293,40 +2341,6 @@ IMPL_LINK(SbaXDataBrowserController, OnInvalidateClipboard, AutoTimer*, _pTimer)
     return 0L;
 }
 
-// ------------------------------------------------------------------------------
-//sal_uInt16 SbaXDataBrowserController::SaveData(sal_Bool bUI, sal_Bool bForBrowsing)
-//{
-//  if (!getBrowserView())
-//      return sal_True;
-//
-//  if (!isValidCursor())
-//      return sal_True;
-//
-//  if (bUI && GetState(ID_BROWSER_SAVEDOC).bEnabled)
-//  {
-//      getBrowserView()->getVclControl()->GrabFocus();
-//
-//      QueryBox aQry(getBrowserView()->getVclControl(), ModuleRes(QUERY_BRW_SAVEMODIFIED));
-//      if (bForBrowsing)
-//          aQry.AddButton(ResId(RID_STR_NEW_TASK), RET_NEWTASK,
-//              BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_FOCUSBUTTON);
-//
-//      switch (aQry.Execute())
-//      {
-//          case RET_NO:
-//              Execute(ID_BROWSER_UNDO);
-//              return sal_True;
-//          case RET_CANCEL:
-//              return sal_False;
-//          case RET_NEWTASK:
-//              return RET_NEWTASK;
-//      }
-//  }
-//
-//
-//  return SbaXDataBrowserController_Base::SaveData(bUI,bForBrowsing);
-//}
-//
 // -------------------------------------------------------------------------
 Reference< XPropertySet >  SbaXDataBrowserController::getBoundField(sal_uInt16 nViewPos) const
 {
@@ -2686,7 +2700,7 @@ sal_Bool SbaXDataBrowserController::isValidCursor() const
         if ( !bIsValid )
         {
             initializeParser();
-            bIsValid = (m_xParser.is() && (m_xParser->getFilter().getLength() || m_xParser->getHavingClause().getLength() || m_xParser->getOrder().getLength()));
+            bIsValid = m_xParser.is();
         }
     } // if ( !bIsValid )
     return bIsValid;

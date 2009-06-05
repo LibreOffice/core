@@ -119,7 +119,7 @@ OQueryContainer::OQueryContainer(
                   const Reference< XNameContainer >& _rxCommandDefinitions
                 , const Reference< XConnection >& _rxConn
                 , const Reference< XMultiServiceFactory >& _rxORB,
-                IWarningsContainer* _pWarnings)
+                ::dbtools::IWarningsContainer* _pWarnings)
     :ODefinitionContainer(_rxORB,NULL,TContentPtr(new ODefinitionContainer_Impl))
     ,m_pWarnings( _pWarnings )
     ,m_xCommandDefinitions(_rxCommandDefinitions)

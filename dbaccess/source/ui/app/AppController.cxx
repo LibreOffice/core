@@ -959,7 +959,15 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                 if ( aReturn.bEnabled )
                 {
                     ::dbaccess::DATASOURCE_TYPE eType = m_aTypeCollection.getType(::comphelper::getString(m_xDataSource->getPropertyValue(PROPERTY_URL)));
-                    aReturn.bEnabled =  ::dbaccess::DST_EMBEDDED_HSQLDB != eType &&  ::dbaccess::DST_MOZILLA != eType &&  ::dbaccess::DST_EVOLUTION != eType &&  ::dbaccess::DST_KAB != eType &&  ::dbaccess::DST_MACAB != eType &&  ::dbaccess::DST_OUTLOOK != eType &&  ::dbaccess::DST_OUTLOOKEXP != eType;
+                    aReturn.bEnabled =  ::dbaccess::DST_EMBEDDED_HSQLDB != eType
+                                    &&  ::dbaccess::DST_MOZILLA != eType
+                                    &&  ::dbaccess::DST_EVOLUTION != eType
+                                    &&  ::dbaccess::DST_EVOLUTION_GROUPWISE != eType
+                                    &&  ::dbaccess::DST_EVOLUTION_LDAP != eType
+                                    &&  ::dbaccess::DST_KAB != eType
+                                    &&  ::dbaccess::DST_MACAB != eType
+                                    &&  ::dbaccess::DST_OUTLOOK != eType
+                                    &&  ::dbaccess::DST_OUTLOOKEXP != eType;
                 }
                 break;
             case SID_DB_APP_DSCONNECTION_TYPE:

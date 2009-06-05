@@ -70,8 +70,8 @@
 #ifndef DBACCESS_CORE_FILTERED_CONTAINER_HXX
 #include "FilteredContainer.hxx"
 #endif
-#ifndef DBA_CORE_WARNINGS_HXX
-#include "warnings.hxx"
+#ifndef DBTOOLS_WARNINGSCONTAINER_HXX
+#include <connectivity/warningscontainer.hxx>
 #endif
 #ifndef DBA_CORE_REFRESHLISTENER_HXX
 #include "RefreshListener.hxx"
@@ -140,7 +140,7 @@ namespace dbaccess
             sal_Bool _bCase,
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >&  _xTableDefinitions,
             IRefreshListener*   _pRefreshListener,
-            IWarningsContainer* _pWarningsContainer,
+            ::dbtools::IWarningsContainer* _pWarningsContainer,
             oslInterlockedCount& _nInAppend
             );
 

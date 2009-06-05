@@ -1284,11 +1284,13 @@ Any SAL_CALL ORowSetBase::getWarnings(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::getWarnings" );
     ::osl::MutexGuard aGuard( *m_pMutex );
-    checkCache();
 
-    Reference< XWarningsSupplier > xWarnings( m_pCache->m_xSet.get(), UNO_QUERY );
-    if ( xWarnings.is() )
-        return xWarnings->getWarnings();
+    if ( m_pCache )
+    {
+        Reference< XWarningsSupplier > xWarnings( m_pCache->m_xSet.get(), UNO_QUERY );
+        if ( xWarnings.is() )
+            return xWarnings->getWarnings();
+    }
 
     return Any();
 }
@@ -1297,12 +1299,13 @@ void SAL_CALL ORowSetBase::clearWarnings(  ) throw(SQLException, RuntimeExceptio
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::clearWarnings" );
     ::osl::MutexGuard aGuard( *m_pMutex );
-    checkCache();
 
-
-    Reference< XWarningsSupplier > xWarnings( m_pCache->m_xSet.get(), UNO_QUERY );
-    if ( xWarnings.is() )
-        xWarnings->clearWarnings();
+    if ( m_pCache )
+    {
+        Reference< XWarningsSupplier > xWarnings( m_pCache->m_xSet.get(), UNO_QUERY );
+        if ( xWarnings.is() )
+            xWarnings->clearWarnings();
+    }
 }
 // -------------------------------------------------------------------------
 void ORowSetBase::firePropertyChange(const ORowSetRow& _rOldRow)
