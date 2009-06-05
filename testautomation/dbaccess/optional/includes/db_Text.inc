@@ -130,8 +130,8 @@ testcase tOpenUTF8File(sFilename as string)
     call fOpendatabase(sFileName)    
         
     '/// open the table text_database
-    printlog "open the table text_database"    
-    call fOpenTable("text_database")
+    printlog "open the table text_Database"    
+    call fOpenTable("text_Database")
     
     '/// check if the first row contains the string öäü
     printlog "check if the first row contains the string öäü"

@@ -72,6 +72,11 @@ testcase tLoadForm
     printlog "execute the form filter"    
 	FM_FF_Execute
 	wait(1000)
+    qaerrorlog "workarounf issue 102010"
+	DocumentWriter.TypeKeys "<MOD1 F6>" , true
+    sleep(1)
+    DocumentWriter.TypeKeys "<MOD1 F5>" , true   
+    sleep(1)
     '/// use tab to get in the second textbox
     printlog "use tab to get in the second textbox"    
 	DocumentWriter.TypeKeys "<TAB>" , true
@@ -99,6 +104,17 @@ testcase tLoadForm
     printlog "execute the filter"    
 	FM_FF_Execute
 	wait(1000)
+    
+    qaerrorlog "workarounf issue 102010"
+    DocumentWriter.TypeKeys "<MOD1 F6>" , true
+    sleep(1)
+    DocumentWriter.TypeKeys "<MOD1 F5>" , true   
+    sleep(1)
+    
+    '/// use tab to get in the second textbox
+    printlog "use tab to get in the second textbox" 
+    DocumentWriter.TypeKeys "<TAB>" , true   
+    sleep(1)
     '/// select the text in the second textbox
     printlog "select the text in the second textbox"    
 	DocumentWriter.TypeKeys "<SHIFT END>" , true
