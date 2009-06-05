@@ -69,6 +69,7 @@ protected:
     virtual void describeSupportedFeatures();
 
 private:
+    void executeDispatch_FormatLine();
     void executeDispatch_TransformDialog();
     void executeDispatch_FontDialog();
 
