@@ -194,6 +194,28 @@ namespace vcl
         void setChild( WindowArranger* i_pChild, sal_Int32 i_nExpandPrio = 0 )
         { setChild( boost::shared_ptr<WindowArranger>( i_pChild ), i_nExpandPrio ); }
     };
+
+    class Spacer : public WindowArranger
+    {
+        WindowArranger::Element     m_aElement;
+        public:
+        Spacer( WindowArranger* i_pParent = NULL, sal_Int32 i_nPrio = 20 )
+        : WindowArranger( i_pParent )
+        , m_aElement( NULL, boost::shared_ptr<WindowArranger>(), i_nPrio )
+        {}
+
+        virtual ~Spacer() {}
+
+        virtual Size getOptimalSize( WindowSizeType ) const
+        { return Size( 0, 0 ); }
+        virtual void resize() {}
+        virtual void setParentWindow( Window* ) {}
+        virtual size_t countElements() const { return 1; }
+        virtual boost::shared_ptr<WindowArranger> getChild( size_t i_nIndex ) const { return boost::shared_ptr<WindowArranger>(); }
+        virtual Window* getWindow( size_t i_nIndex ) const { return NULL; }
+        virtual sal_Int32 getExpandPriority( size_t i_nIndex ) const
+        { return (i_nIndex == 0) ? m_aElement.getExpandPriority() : 0; }
+    };
 }
 
 #endif

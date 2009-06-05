@@ -44,6 +44,7 @@
 #include "vcl/field.hxx"
 #include "vcl/tabctrl.hxx"
 #include "vcl/tabpage.hxx"
+#include "vcl/arrange.hxx"
 
 #include <boost/shared_ptr.hpp>
 #include <map>
@@ -155,6 +156,8 @@ namespace vcl
         rtl::OUString                           maStatusText;
         rtl::OUString                           maLocationText;
         rtl::OUString                           maTypeText;
+
+        vcl::RowOrColumn                        maPreviewCtrlRow;
 
         void updateNup();
         void preparePreview( bool i_bPrintChanged = true );

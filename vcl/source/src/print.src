@@ -57,14 +57,14 @@ ModalDialog SV_DLG_PRINT
     {
         Pos = MAP_APPFONT( 5, 5 );
         Size = MAP_APPFONT( 130, 130 );
-        Border = TRUE;
+        Border = FALSE;
     };
     NumericField SV_PRINT_PAGE_EDIT
     {
         Pos = MAP_APPFONT( 5, 140 );
         Size = MAP_APPFONT( 30, 12 );
         SVLook = TRUE;
-        Spin = TRUE;
+        Spin = FALSE;
         Border = TRUE;
     };
     FixedText SV_PRINT_PAGE_TXT
@@ -211,7 +211,7 @@ ModalDialog SV_DLG_PRINT
         };
         NumericField SV_PRINT_COPYCOUNT_FIELD
         {
-            Pos = MAP_APPFONT( 10, 55 );
+            Pos = MAP_APPFONT( 10, 56 );
             Size = MAP_APPFONT( 40, 12 );
             Border = TRUE;
             Spin = TRUE;
@@ -221,12 +221,12 @@ ModalDialog SV_DLG_PRINT
         };
         FixedImage SV_PRINT_COLLATE_IMAGE
         {
-            Pos = MAP_APPFONT( 90, 60 );
+            Pos = MAP_APPFONT( 95, 60 );
             Size = MAP_PIXEL( 80, 30 );
         };
         CheckBox SV_PRINT_COLLATE
         {
-            Pos = MAP_APPFONT( 90, 45 );
+            Pos = MAP_APPFONT( 95, 45 );
             Size = MAP_APPFONT( 70, 10 );
             Text [en-US] = "Collate";
         };

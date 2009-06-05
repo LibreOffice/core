@@ -252,8 +252,19 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterList
     , maStatusText( String( VclResId( SV_PRINT_PRT_STATUS ) ) )
     , maLocationText( String( VclResId( SV_PRINT_PRT_LOCATION ) ) )
     , maTypeText( String( VclResId( SV_PRINT_PRT_TYPE ) ) )
+    , maPreviewCtrlRow( NULL, false )
 {
     FreeResource();
+
+    // setup preview controls
+    maForwardBtn.SetStyle( maForwardBtn.GetStyle() | WB_BEVELBUTTON );
+    maBackwardBtn.SetStyle( maBackwardBtn.GetStyle() | WB_BEVELBUTTON );
+    maPreviewCtrlRow.setParentWindow( this );
+    maPreviewCtrlRow.addWindow( &maPageEdit );
+    maPreviewCtrlRow.addWindow( &maNumPagesText );
+    maPreviewCtrlRow.addChild( new vcl::Spacer( &maPreviewCtrlRow ) );
+    maPreviewCtrlRow.addWindow( &maBackwardBtn );
+    maPreviewCtrlRow.addWindow( &maForwardBtn );
 
     // insert the tab pages
     maTabCtrl.InsertPage( SV_PRINT_TAB_JOB, maJobPage.GetText() );
@@ -1284,19 +1295,10 @@ void PrintDialog::Resize()
     preparePreview( false );
 
     // position text and slider below preview, aligned
+    Size aPrefSize( maPreviewCtrlRow.getOptimalSize( WINDOWSIZE_PREFERRED ) );
+    aPrefSize.Width() = maPreviewWindow.GetSizePixel().Width();
     Point aCtrlPos( maPreviewWindow.GetPosPixel().X(), 2*aPixDiff.Height() + nPreviewLength );
-    maPageEdit.SetPosPixel( aCtrlPos );
-
-    aCtrlPos.X() += maPageEdit.GetSizePixel().Width() + aPixDiff.Width();
-    maNumPagesText.SetPosPixel( aCtrlPos );
-
-    aCtrlPos.X() = maPreviewWindow.GetPosPixel().X() + maPreviewWindow.GetSizePixel().Width();
-    aCtrlPos.X() -= maForwardBtn.GetSizePixel().Width();
-    maForwardBtn.SetPosPixel( aCtrlPos );
-
-    aCtrlPos.X() -= aPixDiff.Width() + maBackwardBtn.GetSizePixel().Width();
-    maBackwardBtn.SetPosPixel( aCtrlPos );
-
+    maPreviewCtrlRow.setManagedArea( Rectangle( aCtrlPos, aPrefSize ) );
 }
 
 // -----------------------------------------------------------------------------
