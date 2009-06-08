@@ -214,11 +214,16 @@ SC_SIMPLE_SERVICE_INFO( ScTableSheetsObj, "ScTableSheetsObj", "com.sun.star.shee
 class ScPrintUIOptions : public vcl::PrinterOptionsHelper
 {
 public:
-    ScPrintUIOptions( sal_Bool i_bEmptyPages, sal_Bool i_bSelectedOnly );
+    ScPrintUIOptions();
+    void SetDefaults();
 };
 
-ScPrintUIOptions::ScPrintUIOptions( sal_Bool i_bEmptyPages, sal_Bool i_bSelectedOnly )
+ScPrintUIOptions::ScPrintUIOptions()
 {
+    const ScPrintOptions& rPrintOpt = SC_MOD()->GetPrintOptions();
+    sal_Int32 nContent = rPrintOpt.GetAllSheets() ? 0 : 1;
+    sal_Bool bSuppress = rPrintOpt.GetSkipEmpty();
+
     ResStringArray aStrings( ScResId( SCSTR_PRINT_OPTIONS ) );
     DBG_ASSERT( aStrings.Count() >= 18, "resource incomplete" );
     if( aStrings.Count() < 18 ) // bad resource ?
@@ -236,7 +241,7 @@ ScPrintUIOptions::ScPrintUIOptions( sal_Bool i_bEmptyPages, sal_Bool i_bSelected
     m_aUIProperties[2].Value = getBoolControlOpt( rtl::OUString( aStrings.GetString( 1 ) ),
                                                   rtl::OUString( aStrings.GetString( 2 ) ),
                                                   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsSuppressEmptyPages" ) ),
-                                                  i_bEmptyPages
+                                                  bSuppress
                                                   );
     // create Subgroup for print content
     m_aUIProperties[3].Value = getSubgroupControlOpt( rtl::OUString( aStrings.GetString( 6 ) ), rtl::OUString(), true );
@@ -253,7 +258,7 @@ ScPrintUIOptions::ScPrintUIOptions( sal_Bool i_bEmptyPages, sal_Bool i_bSelected
                                                     aHelpTexts,
                                                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintContent" ) ),
                                                     aChoices,
-                                                    i_bSelectedOnly ? 1 : 0 );
+                                                    nContent );
 
     // create Subgroup for print range
     m_aUIProperties[5].Value = getSubgroupControlOpt( rtl::OUString( aStrings.GetString( 13 ) ), rtl::OUString(), true , true);
@@ -292,6 +297,45 @@ ScPrintUIOptions::ScPrintUIOptions( sal_Bool i_bEmptyPages, sal_Bool i_bSelected
                                                   i_bSelectedOnly
                                                   );
 #endif
+}
+
+void ScPrintUIOptions::SetDefaults()
+{
+    // re-initialize the default values from print options
+
+    const ScPrintOptions& rPrintOpt = SC_MOD()->GetPrintOptions();
+    sal_Int32 nContent = rPrintOpt.GetAllSheets() ? 0 : 1;
+    sal_Bool bSuppress = rPrintOpt.GetSkipEmpty();
+
+    for (sal_Int32 nUIPos=0; nUIPos<m_aUIProperties.getLength(); ++nUIPos)
+    {
+        uno::Sequence<beans::PropertyValue> aUIProp;
+        if ( m_aUIProperties[nUIPos].Value >>= aUIProp )
+        {
+            for (sal_Int32 nPropPos=0; nPropPos<aUIProp.getLength(); ++nPropPos)
+            {
+                rtl::OUString aName = aUIProp[nPropPos].Name;
+                if ( aName.equalsAscii("Property") )
+                {
+                    beans::PropertyValue aPropertyValue;
+                    if ( aUIProp[nPropPos].Value >>= aPropertyValue )
+                    {
+                        if ( aPropertyValue.Name.equalsAscii( "PrintContent" ) )
+                        {
+                            aPropertyValue.Value <<= nContent;
+                            aUIProp[nPropPos].Value <<= aPropertyValue;
+                        }
+                        else if ( aPropertyValue.Name.equalsAscii( "IsSuppressEmptyPages" ) )
+                        {
+                            ScUnoHelpFunctions::SetBoolInAny( aPropertyValue.Value, bSuppress );
+                            aUIProp[nPropPos].Value <<= aPropertyValue;
+                        }
+                    }
+                }
+            }
+            m_aUIProperties[nUIPos].Value <<= aUIProp;
+        }
+    }
 }
 
 // static
@@ -922,9 +966,10 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
             pArray[0].Name = rtl::OUString::createFromAscii( SC_UNONAME_PAGESIZE );
             pArray[0].Value <<= aPageSize;
 
-            const ScPrintOptions& rPrintOpt = SC_MOD()->GetPrintOptions();
             if( ! pPrinterOptions )
-                pPrinterOptions = new ScPrintUIOptions( rPrintOpt.GetSkipEmpty(), !rPrintOpt.GetAllSheets() );
+                pPrinterOptions = new ScPrintUIOptions;
+            else
+                pPrinterOptions->SetDefaults();
             pPrinterOptions->appendPrintUIOptions( aSequence );
             return aSequence;
         }
@@ -978,7 +1023,9 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
 
     const ScPrintOptions& rPrintOpt = SC_MOD()->GetPrintOptions();
     if( ! pPrinterOptions )
-        pPrinterOptions = new ScPrintUIOptions( rPrintOpt.GetSkipEmpty(), !rPrintOpt.GetAllSheets() );
+        pPrinterOptions = new ScPrintUIOptions;
+    else
+        pPrinterOptions->SetDefaults();
     pPrinterOptions->appendPrintUIOptions( aSequence );
     return aSequence;
 }
