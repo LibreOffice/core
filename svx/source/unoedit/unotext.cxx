@@ -1220,8 +1220,8 @@ void SvxUnoTextRangeBase::_setPropertyToDefault(const OUString& PropertyName, sa
 
     if( pForwarder )
     {
-        const SfxItemPropertyMap* pMap = SfxItemPropertyMap::GetByName(maPropSet.getPropertyMap(), PropertyName );
-        if( pMap )
+        const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMapEntry( PropertyName );
+        if ( pMap )
         {
             CheckSelection( maSelection, mpEditSource->GetTextForwarder() );
             _setPropertyToDefault( pForwarder, pMap, nPara );
@@ -1232,7 +1232,7 @@ void SvxUnoTextRangeBase::_setPropertyToDefault(const OUString& PropertyName, sa
     throw beans::UnknownPropertyException();
 }
 
-void SvxUnoTextRangeBase::_setPropertyToDefault(SvxTextForwarder* pForwarder, const SfxItemPropertyMap* pMap, sal_Int32 nPara )
+void SvxUnoTextRangeBase::_setPropertyToDefault(SvxTextForwarder* pForwarder, const SfxItemPropertySimpleEntry* pMap, sal_Int32 nPara )
     throw( beans::UnknownPropertyException, uno::RuntimeException )
 {
     do
@@ -1329,9 +1329,12 @@ void SAL_CALL SvxUnoTextRangeBase::setAllPropertiesToDefault(  ) throw (uno::Run
 
     if( pForwarder )
     {
-        for( const SfxItemPropertyMap* pMap = maPropSet.getPropertyMap(); pMap->pName; pMap++ )
+        PropertyEntryVector_t aEntries = mpPropSet->getPropertyMap()->getPropertyEntries();
+        PropertyEntryVector_t::const_iterator aIt = aEntries.begin();
+        while( aIt != aEntries.end() )
         {
-            _setPropertyToDefault( pForwarder, pMap, -1 );
+            _setPropertyToDefault( pForwarder, &(*aIt), -1 );
+            ++aIt;
         }
     }
 }
