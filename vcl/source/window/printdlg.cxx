@@ -43,6 +43,7 @@
 #include "vcl/arrange.hxx"
 #include "vcl/configsettings.hxx"
 #include "vcl/help.hxx"
+#include "vcl/decoview.hxx"
 
 #include "rtl/ustrbuf.hxx"
 
@@ -1252,6 +1253,34 @@ IMPL_LINK( PrintDialog, UIOption_ModifyHdl, Edit*, i_pBox )
     return 0;
 }
 
+void PrintDialog::Paint( const Rectangle& i_rRect )
+{
+    ModalDialog::Paint( i_rRect );
+
+    #if 0
+    // sadly Tab panes are not a reliable choice for a grouping background
+    // since they depend on the tab items above in some themes
+    if( IsNativeControlSupported( CTRL_TAB_PANE, PART_ENTIRE_CONTROL) )
+    {
+        Rectangle aPrevBg( maPreviewBackground );
+        #ifdef QUARTZ
+        // FIXME: this interacts with vcl/aqua/source/gdi/salnativewidgets.cxx where
+        // some magic offsets are added to the area
+        aPrevBg.Top() += 10;
+        #endif
+        const ImplControlValue aControlValue( BUTTONVALUE_DONTKNOW, rtl::OUString(), 0 );
+
+        ControlState nState = CTRL_STATE_ENABLED;
+        Region aCtrlRegion( aPrevBg );
+        DrawNativeControl( CTRL_TAB_PANE, PART_ENTIRE_CONTROL, aCtrlRegion, nState,
+                           aControlValue, rtl::OUString() );
+    }
+    #else
+    DecorationView aVw( this );
+    aVw.DrawFrame( maPreviewBackground, FRAME_DRAW_IN );
+    #endif
+}
+
 void PrintDialog::Resize()
 {
     Size aPixDiff( LogicToPixel( Size( 5, 5 ), MapMode( MAP_APPFONT ) ) );
@@ -1285,20 +1314,25 @@ void PrintDialog::Resize()
     // set size for preview
     long nMaxX = maTabCtrl.GetPosPixel().X() - 2*aPixDiff.Width();
     long nMaxY = maButtonLine.GetPosPixel().Y()
-                 - 2 * aPixDiff.Height()
+                 - 4 * aPixDiff.Height()
                  - maForwardBtn.GetSizePixel().Height();
     long nPreviewLength = std::min( nMaxX, nMaxY );
-    maPreviewSpace = Rectangle( Point( aPixDiff.Width(), aPixDiff.Height() ),
+    maPreviewSpace = Rectangle( Point( aPixDiff.Width(), 2 * aPixDiff.Height() ),
                                 Size( nPreviewLength, nPreviewLength ) );
+
+    // position text and slider below preview, aligned
+    Size aPrefSize( maPreviewCtrlRow.getOptimalSize( WINDOWSIZE_PREFERRED ) );
+    aPrefSize.Width() = nPreviewLength - 2* aPixDiff.Width();
+    Point aCtrlPos( 2*aPixDiff.Width(), 3*aPixDiff.Height() + nPreviewLength );
+    maPreviewCtrlRow.setManagedArea( Rectangle( aCtrlPos, aPrefSize ) );
+    maPreviewBackground.Left() = aPixDiff.Width();
+    maPreviewBackground.Top() = aPixDiff.Height();
+    maPreviewBackground.Right() = aPixDiff.Width() + nPreviewLength;
+    maPreviewBackground.Bottom() = maPreviewCtrlRow.getManagedArea().Bottom() + aPixDiff.Height();
 
     // and do the preview; however the metafile does not need to be gotten anew
     preparePreview( false );
 
-    // position text and slider below preview, aligned
-    Size aPrefSize( maPreviewCtrlRow.getOptimalSize( WINDOWSIZE_PREFERRED ) );
-    aPrefSize.Width() = maPreviewWindow.GetSizePixel().Width();
-    Point aCtrlPos( maPreviewWindow.GetPosPixel().X(), 2*aPixDiff.Height() + nPreviewLength );
-    maPreviewCtrlRow.setManagedArea( Rectangle( aCtrlPos, aPrefSize ) );
 }
 
 // -----------------------------------------------------------------------------

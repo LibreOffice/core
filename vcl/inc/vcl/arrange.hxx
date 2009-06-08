@@ -114,6 +114,7 @@ namespace vcl
             m_aManagedArea = i_rArea;
             resize();
         }
+        const Rectangle& getManagedArea() const { return m_aManagedArea; }
 
         void setOuterBorder( long i_nBorder )
         {

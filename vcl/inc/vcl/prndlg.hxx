@@ -158,6 +158,7 @@ namespace vcl
         rtl::OUString                           maTypeText;
 
         vcl::RowOrColumn                        maPreviewCtrlRow;
+        Rectangle                               maPreviewBackground;
 
         void updateNup();
         void preparePreview( bool i_bPrintChanged = true );
@@ -171,6 +172,7 @@ namespace vcl
         com::sun::star::beans::PropertyValue* getValueForWindow( Window* ) const;
 
         virtual void Resize();
+        virtual void Paint( const Rectangle& );
 
         DECL_LINK( SelectHdl, ListBox* );
         DECL_LINK( ClickHdl, Button* );
