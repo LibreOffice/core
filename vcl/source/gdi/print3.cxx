@@ -80,16 +80,12 @@ public:
     ControlDependencyMap                                        maControlDependencies;
     sal_Bool                                                    mbLastPage;
 
-    int                                                         mnMultiPageRows;
-    int                                                         mnMultiPageColumns;
-    Size                                                        maMultiPageSize;
+    vcl::PrinterListener::MultiPageSetup                        maMultiPage;
 
     vcl::PrintProgressDialog*                                   mpProgress;
 
     ImplPrinterListenerData() :
         mbLastPage( sal_False ),
-        mnMultiPageRows( 1 ),
-        mnMultiPageColumns( 1 ),
         mpProgress( NULL )
     {}
     ~ImplPrinterListenerData() { delete mpProgress; }
@@ -383,7 +379,6 @@ void PrinterListener::setPrinter( const boost::shared_ptr<Printer>& i_rPrinter )
 {
     mpImplData->mpPrinter = i_rPrinter;
     Size aPaperSize( i_rPrinter->PixelToLogic( i_rPrinter->GetPaperSizePixel(), MapMode( MAP_100TH_MM ) ) );
-    mpImplData->maMultiPageSize = aPaperSize;
 }
 
 static Size modifyJobSetup( Printer* pPrinter, const Sequence< PropertyValue >& i_rProps )
@@ -446,7 +441,7 @@ Size PrinterListener::getPageFile( int i_nUnfilteredPage, GDIMetaFile& o_rMtf )
     return aPageSize;
 }
 
-static void appendSubPage( GDIMetaFile& o_rMtf, const Rectangle& i_rClipRect, GDIMetaFile& io_rSubPage )
+static void appendSubPage( GDIMetaFile& o_rMtf, const Rectangle& i_rClipRect, GDIMetaFile& io_rSubPage, bool i_bDrawBorder )
 {
     // intersect all clipregion actions with our clip rect
     io_rSubPage.WindStart();
@@ -456,14 +451,17 @@ static void appendSubPage( GDIMetaFile& o_rMtf, const Rectangle& i_rClipRect, GD
     o_rMtf.AddAction( new MetaPushAction( PUSH_LINECOLOR | PUSH_FILLCOLOR | PUSH_CLIPREGION | PUSH_MAPMODE ) );
 
     // draw a border
-    Rectangle aBorderRect( i_rClipRect );
-    aBorderRect.Left()   -= 100;
-    aBorderRect.Top()    -= 100;
-    aBorderRect.Right()  += 100;
-    aBorderRect.Bottom() += 100;
-    o_rMtf.AddAction( new MetaLineColorAction( Color( COL_BLACK ), TRUE ) );
-    o_rMtf.AddAction( new MetaFillColorAction( Color( COL_TRANSPARENT ), FALSE ) );
-    o_rMtf.AddAction( new MetaRectAction( aBorderRect ) );
+    if( i_bDrawBorder )
+    {
+        Rectangle aBorderRect( i_rClipRect );
+        aBorderRect.Left()   -= 100;
+        aBorderRect.Top()    -= 100;
+        aBorderRect.Right()  += 100;
+        aBorderRect.Bottom() += 100;
+        o_rMtf.AddAction( new MetaLineColorAction( Color( COL_BLACK ), TRUE ) );
+        o_rMtf.AddAction( new MetaFillColorAction( Color( COL_TRANSPARENT ), FALSE ) );
+        o_rMtf.AddAction( new MetaRectAction( aBorderRect ) );
+    }
 
     // clip to page rect
     o_rMtf.AddAction( new MetaClipRegionAction( Region( i_rClipRect ), TRUE ) );
@@ -478,21 +476,36 @@ static void appendSubPage( GDIMetaFile& o_rMtf, const Rectangle& i_rClipRect, GD
 
 Size PrinterListener::getFilteredPageFile( int i_nFilteredPage, GDIMetaFile& o_rMtf )
 {
-    int nSubPages = mpImplData->mnMultiPageRows * mpImplData->mnMultiPageColumns;
+    const MultiPageSetup& rMPS( mpImplData->maMultiPage );
+    int nSubPages = rMPS.nRows * rMPS.nColumns;
     if( nSubPages < 1 )
         nSubPages = 1;
 
-    if( nSubPages == 1 )
+    // there is no filtering to be done (and especially the page size of the
+    // original page is to be set), when N-Up is "neutral" that is there is
+    // only one subpage and the margins are 0
+    if( nSubPages == 1 &&
+        rMPS.nLeftMargin == 0 && rMPS.nRightMargin == 0 &&
+        rMPS.nTopMargin == 0 && rMPS.nBottomMargin == 0 )
+    {
         return getPageFile( i_nFilteredPage, o_rMtf );
+    }
 
-    Size aPaperSize( mpImplData->maMultiPageSize );
+    Size aPaperSize( mpImplData->maMultiPage.aPaperSize );
+    // multi page area: paper size minus margins + one time spacing right and down
+    // the added spacing is so each subpage can be calculated including its spacing
+    Size aMPArea( aPaperSize );
+    aMPArea.Width()  -= rMPS.nLeftMargin + rMPS.nRightMargin;
+    aMPArea.Width()  += rMPS.nHorizontalSpacing;
+    aMPArea.Height() -= rMPS.nTopMargin + rMPS.nBottomMargin;
+    aMPArea.Height() += rMPS.nVerticalSpacing;
 
     // determine offsets
-    long nAdvX = aPaperSize.Width() / mpImplData->mnMultiPageColumns;
-    long nAdvY = aPaperSize.Height() / mpImplData->mnMultiPageRows;
+    long nAdvX = aMPArea.Width() / rMPS.nColumns;
+    long nAdvY = aMPArea.Height() / rMPS.nRows;
 
     // determine size of a "cell" subpage, leave a little space around pages
-    Size aSubPageSize( nAdvX - 500, nAdvY - 500 );
+    Size aSubPageSize( nAdvX - rMPS.nHorizontalSpacing, nAdvY - rMPS.nVerticalSpacing );
 
     o_rMtf.Clear();
     o_rMtf.SetPrefSize( aPaperSize );
@@ -516,10 +529,10 @@ Size PrinterListener::getFilteredPageFile( int i_nFilteredPage, GDIMetaFile& o_r
             aPageFile.WindStart();
 
             // move the subpage so it is centered in its "cell"
-            long nOffX = (nAdvX - long(double(aPageSize.Width()) * fScale)) / 2;
-            long nOffY = (nAdvY - long(double(aPageSize.Height()) * fScale)) / 2;
-            long nX = nOffX + nAdvX * (nSubP % mpImplData->mnMultiPageColumns);
-            long nY = nOffY + nAdvY * (nSubP / mpImplData->mnMultiPageColumns);
+            long nOffX = (aSubPageSize.Width() - long(double(aPageSize.Width()) * fScale)) / 2;
+            long nOffY = (aSubPageSize.Height() - long(double(aPageSize.Height()) * fScale)) / 2;
+            long nX = rMPS.nLeftMargin + nOffX + nAdvX * (nSubP % rMPS.nColumns);
+            long nY = rMPS.nTopMargin + nOffY + nAdvY * (nSubP / rMPS.nColumns);
             aPageFile.Move( nX, nY );
             aPageFile.WindStart();
             // calculate border rectangle
@@ -528,7 +541,7 @@ Size PrinterListener::getFilteredPageFile( int i_nFilteredPage, GDIMetaFile& o_r
                                           long(double(aPageSize.Height())*fScale) ) );
 
             // append subpage to page
-            appendSubPage( o_rMtf, aSubPageRect, aPageFile );
+            appendSubPage( o_rMtf, aSubPageRect, aPageFile, rMPS.bDrawBorder );
         }
     }
     o_rMtf.WindStart();
@@ -538,7 +551,7 @@ Size PrinterListener::getFilteredPageFile( int i_nFilteredPage, GDIMetaFile& o_r
 
 int PrinterListener::getFilteredPageCount()
 {
-    int nDiv = mpImplData->mnMultiPageRows * mpImplData->mnMultiPageColumns;
+    int nDiv = mpImplData->maMultiPage.nRows * mpImplData->maMultiPage.nColumns;
     if( nDiv < 1 )
         nDiv = 1;
     return (getPageCount() + (nDiv-1)) / nDiv;
@@ -556,7 +569,7 @@ void PrinterListener::printFilteredPage( int i_nPage )
            return;
     }
 
-    bool bMultiPageOutput = mpImplData->mnMultiPageRows != 1 || mpImplData->mnMultiPageColumns != 1;
+    bool bMultiPageOutput = mpImplData->maMultiPage.nRows != 1 || mpImplData->maMultiPage.nColumns != 1;
     ULONG nRestoreDrawMode = mpImplData->mpPrinter->GetDrawMode();
     sal_Int32 nMaxBmpDPIX = mpImplData->mpPrinter->ImplGetDPIX();
     sal_Int32 nMaxBmpDPIY = mpImplData->mpPrinter->ImplGetDPIY();
@@ -613,7 +626,7 @@ void PrinterListener::printFilteredPage( int i_nPage )
     // in N-Up printing set the correct page size
     mpImplData->mpPrinter->SetMapMode( MAP_100TH_MM );
     if( bMultiPageOutput )
-        mpImplData->mpPrinter->SetPaperSizeUser( aPageSize = mpImplData->maMultiPageSize );
+        mpImplData->mpPrinter->SetPaperSizeUser( aPageSize = mpImplData->maMultiPage.aPaperSize );
 
     // actually print the page
     mpImplData->mpPrinter->StartPage();
@@ -830,11 +843,14 @@ void PrinterListener::createProgressDialog()
     }
 }
 
-void PrinterListener::setMultipage( int i_nRows, int i_nColumns, const Size& rPaperSize )
+void PrinterListener::setMultipage( const MultiPageSetup& i_rMPS )
 {
-    mpImplData->mnMultiPageRows = i_nRows;
-    mpImplData->mnMultiPageColumns = i_nColumns;
-    mpImplData->maMultiPageSize = rPaperSize;
+    mpImplData->maMultiPage = i_rMPS;
+}
+
+const PrinterListener::MultiPageSetup& PrinterListener::getMultipage() const
+{
+    return mpImplData->maMultiPage;
 }
 
 /*

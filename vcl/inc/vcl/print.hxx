@@ -446,6 +446,30 @@ class VCL_DLLPUBLIC PrinterListener
 protected:
     PrinterListener( const boost::shared_ptr<Printer>& );
 public:
+    struct MultiPageSetup
+    {
+        // all metrics in 100th mm
+        int         nRows;
+        int         nColumns;
+        Size        aPaperSize;
+        long        nLeftMargin;
+        long        nTopMargin;
+        long        nRightMargin;
+        long        nBottomMargin;
+        long        nHorizontalSpacing;
+        long        nVerticalSpacing;
+        bool        bDrawBorder;
+
+        MultiPageSetup()
+        : nRows( 1 ), nColumns( 1 ), aPaperSize( 21000, 29700 )
+        , nLeftMargin( 0 ), nTopMargin( 0 )
+        , nRightMargin( 0 ), nBottomMargin( 0 )
+        , nHorizontalSpacing( 500 ), nVerticalSpacing( 500 )
+        , bDrawBorder( true )
+        {
+        }
+    };
+
     PrinterListener();
     virtual ~PrinterListener();
 
@@ -497,7 +521,8 @@ public:
     void SAL_DLLPRIVATE setPrinter( const boost::shared_ptr<Printer>& );
     void SAL_DLLPRIVATE setOptionChangeHdl( const Link& );
     void SAL_DLLPRIVATE createProgressDialog();
-    void SAL_DLLPRIVATE setMultipage( int nRows, int nColumns, const Size& rPaperSize );
+    void SAL_DLLPRIVATE setMultipage( const MultiPageSetup& );
+    const MultiPageSetup& getMultipage() const;
     void SAL_DLLPRIVATE setLastPage( sal_Bool i_bLastPage );
 };
 

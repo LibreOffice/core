@@ -115,8 +115,22 @@ PrintDialog::NUpTabPage::NUpTabPage( Window* i_pParent, const ResId& rResId )
     , maNupRowsEdt( this, VclResId( SV_PRINT_PRT_NUP_ROWS_EDT ) )
     , maNupColTxt( this, VclResId( SV_PRINT_PRT_NUP_COLUMNS_TXT ) )
     , maNupColEdt( this, VclResId( SV_PRINT_PRT_NUP_COLUMNS_EDT ) )
+    , maBorderCB( this, VclResId( SV_PRINT_PRT_NUP_BORDER_CB ) )
     , maNupPortrait( this, VclResId( SV_PRINT_PRT_NUP_PORTRAIT ) )
     , maNupLandscape( this, VclResId( SV_PRINT_PRT_NUP_LANDSCAPE ) )
+    , maMargins( this, VclResId( SV_PRINT_PRT_NUP_MARGINS_FL ) )
+    , maLeftMarginTxt( this, VclResId( SV_PRINT_PRT_NUP_MARGINS_LEFT_TXT ) )
+    , maLeftMarginEdt( this, VclResId( SV_PRINT_PRT_NUP_MARGINS_LEFT_EDT) )
+    , maRightMarginTxt( this, VclResId( SV_PRINT_PRT_NUP_MARGINS_RIGHT_TXT ) )
+    , maRightMarginEdt( this, VclResId( SV_PRINT_PRT_NUP_MARGINS_RIGHT_EDT ) )
+    , maTopMarginTxt( this, VclResId( SV_PRINT_PRT_NUP_MARGINS_TOP_TXT ) )
+    , maTopMarginEdt( this, VclResId( SV_PRINT_PRT_NUP_MARGINS_TOP_EDT ) )
+    , maBottomMarginTxt( this, VclResId( SV_PRINT_PRT_NUP_MARGINS_BOTTOM_TXT ) )
+    , maBottomMarginEdt( this, VclResId( SV_PRINT_PRT_NUP_MARGINS_BOTTOM_EDT ) )
+    , maHSpaceTxt( this, VclResId( SV_PRINT_PRT_NUP_MARGINS_HSPACE_TXT ) )
+    , maHSpaceEdt( this, VclResId( SV_PRINT_PRT_NUP_MARGINS_HSPACE_EDT ) )
+    , maVSpaceTxt( this, VclResId( SV_PRINT_PRT_NUP_MARGINS_VSPACE_TXT ) )
+    , maVSpaceEdt( this, VclResId( SV_PRINT_PRT_NUP_MARGINS_VSPACE_EDT ) )
 {
     FreeResource();
     maNupLine.SMHID2( "NUpPage", "NUPline" );
@@ -126,14 +140,42 @@ PrintDialog::NUpTabPage::NUpTabPage( Window* i_pParent, const ResId& rResId )
     maNupColEdt.SMHID2( "NUpPage", "NUPColumns" );
     maNupPortrait.SMHID2( "NUpPage", "NUPPortrait" );
     maNupLandscape.SMHID2( "NUpPage", "NUPLandscape" );
+    maBorderCB.SMHID2( "NUpPage", "NUPBorder" );
+    maMargins.SMHID2( "NUpPage", "NUPMargins" );
+    maLeftMarginTxt.SMHID2( "NUpPage", "NUPLeftText" );
+    maLeftMarginEdt.SMHID2( "NUpPage", "NUPLeft" );
+    maTopMarginTxt.SMHID2( "NUpPage", "NUPTopText" );
+    maTopMarginEdt.SMHID2( "NUpPage", "NUPTop" );
+    maRightMarginTxt.SMHID2( "NUpPage", "NUPRightText" );
+    maRightMarginEdt.SMHID2( "NUpPage", "NUPRight" );
+    maBottomMarginTxt.SMHID2( "NUpPage", "NUPBottomText" );
+    maBottomMarginEdt.SMHID2( "NUpPage", "NUPBottom" );
+    maHSpaceTxt.SMHID2( "NUpPage", "NUPHSpaceText" );
+    maHSpaceEdt.SMHID2( "NUpPage", "NUPHSpace" );
+    maVSpaceTxt.SMHID2( "NUpPage", "NUPVSpaceText" );
+    maVSpaceEdt.SMHID2( "NUpPage", "NUPVSpace" );
 }
 
 PrintDialog::NUpTabPage::~NUpTabPage()
 {
 }
 
+void PrintDialog::NUpTabPage::initFromMultiPageSetup( const vcl::PrinterListener::MultiPageSetup& i_rMPS )
+{
+    maLeftMarginEdt.SetValue( i_rMPS.nLeftMargin, FUNIT_100TH_MM );
+    maTopMarginEdt.SetValue( i_rMPS.nTopMargin, FUNIT_100TH_MM );
+    maRightMarginEdt.SetValue( i_rMPS.nRightMargin, FUNIT_100TH_MM );
+    maBottomMarginEdt.SetValue( i_rMPS.nBottomMargin, FUNIT_100TH_MM );
+    maHSpaceEdt.SetValue( i_rMPS.nHorizontalSpacing, FUNIT_100TH_MM );
+    maVSpaceEdt.SetValue( i_rMPS.nVerticalSpacing, FUNIT_100TH_MM );
+    maBorderCB.Check( i_rMPS.bDrawBorder );
+    maNupRowsEdt.SetValue( i_rMPS.nRows );
+    maNupColEdt.SetValue( i_rMPS.nColumns );
+}
+
 void PrintDialog::NUpTabPage::readFromSettings()
 {
+    #if 0
     SettingsConfigItem* pItem = SettingsConfigItem::get();
     rtl::OUString aValue;
 
@@ -153,10 +195,12 @@ void PrintDialog::NUpTabPage::readFromSettings()
         maNupPortrait.Check();
     else
         maNupLandscape.Check();
+    #endif
 }
 
 void PrintDialog::NUpTabPage::storeToSettings()
 {
+    #if 0
     SettingsConfigItem* pItem = SettingsConfigItem::get();
     pItem->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog_NUpPage" ) ),
                      rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NUp-Rows" ) ),
@@ -167,6 +211,7 @@ void PrintDialog::NUpTabPage::storeToSettings()
     pItem->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog_NUpPage" ) ),
                      rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NUp-Portrait" ) ),
                      rtl::OUString::createFromAscii( maNupPortrait.IsChecked() ? "true" : "false" ) );
+    #endif
 }
 
 PrintDialog::JobTabPage::JobTabPage( Window* i_pParent, const ResId& rResId )
@@ -208,10 +253,14 @@ void PrintDialog::JobTabPage::readFromSettings()
                               rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ToFile" ) ) );
     maToFileBox.Check( aValue.equalsIgnoreAsciiCaseAscii( "true" ) );
 
+    #if 0
+    // do not actually make copy count persistent
+    // the assumption is that this would lead to a lot of unwanted copies
     aValue = pItem->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog_JobPage" ) ),
                               rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Copies" ) ) );
     sal_Int32 nVal = aValue.toInt32();
     maCopyCountField.SetValue( sal_Int64(nVal > 1 ? nVal : 1) );
+    #endif
 
     aValue = pItem->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog_JobPage" ) ),
                               rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Collate" ) ) );
@@ -336,6 +385,8 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterList
         maNupLandscapeSize = Size( aNupSize.Height(), aNupSize.Width() );
         maNUpPage.maNupPortrait.Check();
     }
+    maNUpPage.initFromMultiPageSetup( maPListener->getMultipage() );
+
 
     // setup click handler on the various buttons
     maOKButton.SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
@@ -348,12 +399,19 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterList
     maJobPage.maSetupButton.SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
     maNUpPage.maNupPortrait.SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
     maNUpPage.maNupLandscape.SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
+    maNUpPage.maBorderCB.SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
 
     // setup modify hdl
     maPageEdit.SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
     maJobPage.maCopyCountField.SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
     maNUpPage.maNupRowsEdt.SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
     maNUpPage.maNupColEdt.SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
+    maNUpPage.maLeftMarginEdt.SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
+    maNUpPage.maTopMarginEdt.SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
+    maNUpPage.maRightMarginEdt.SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
+    maNUpPage.maBottomMarginEdt.SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
+    maNUpPage.maHSpaceEdt.SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
+    maNUpPage.maVSpaceEdt.SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
 
     // setup optional UI options set by application
     setupOptionalUI();
@@ -1080,9 +1138,22 @@ void PrintDialog::updateNup()
     int nRows = int(maNUpPage.maNupRowsEdt.GetValue());
     int nCols = int(maNUpPage.maNupColEdt.GetValue());
 
-    maPListener->setMultipage( nRows, nCols,
-                               maNUpPage.maNupPortrait.IsChecked()
-                               ? maNupPortraitSize : maNupLandscapeSize );
+    PrinterListener::MultiPageSetup aMPS;
+    aMPS.nRows         = nRows;
+    aMPS.nColumns      = nCols;
+    aMPS.aPaperSize    = maNUpPage.maNupPortrait.IsChecked()
+                         ? maNupPortraitSize : maNupLandscapeSize;
+    aMPS.nLeftMargin   = long(maNUpPage.maLeftMarginEdt.GetValue( FUNIT_100TH_MM ));
+    aMPS.nTopMargin    = long(maNUpPage.maTopMarginEdt.GetValue( FUNIT_100TH_MM ));
+    aMPS.nRightMargin  = long(maNUpPage.maRightMarginEdt.GetValue( FUNIT_100TH_MM ));
+    aMPS.nBottomMargin = long(maNUpPage.maBottomMarginEdt.GetValue( FUNIT_100TH_MM ));
+
+    aMPS.nHorizontalSpacing = long(maNUpPage.maHSpaceEdt.GetValue( FUNIT_100TH_MM ));
+    aMPS.nVerticalSpacing   = long(maNUpPage.maVSpaceEdt.GetValue( FUNIT_100TH_MM ));
+
+    aMPS.bDrawBorder        = maNUpPage.maBorderCB.IsChecked();
+
+    maPListener->setMultipage( aMPS );
 
     preparePreview();
 }
@@ -1123,7 +1194,7 @@ IMPL_LINK( PrintDialog, ClickHdl, Button*, pButton )
             maPListener->getPrinter()->Setup( this );
         }
         checkControlDependencies();
-        if( pButton == &maNUpPage.maNupPortrait || pButton == &maNUpPage.maNupLandscape )
+        if( pButton == &maNUpPage.maNupPortrait || pButton == &maNUpPage.maNupLandscape || pButton == &maNUpPage.maBorderCB )
             updateNup();
     }
     return 0;
@@ -1132,7 +1203,11 @@ IMPL_LINK( PrintDialog, ClickHdl, Button*, pButton )
 IMPL_LINK( PrintDialog, ModifyHdl, Edit*, pEdit )
 {
     checkControlDependencies();
-    if( pEdit == &maNUpPage.maNupRowsEdt || pEdit == &maNUpPage.maNupColEdt )
+    if( pEdit == &maNUpPage.maNupRowsEdt || pEdit == &maNUpPage.maNupColEdt ||
+        pEdit == &maNUpPage.maLeftMarginEdt || pEdit == &maNUpPage.maTopMarginEdt ||
+        pEdit == &maNUpPage.maRightMarginEdt || pEdit == &maNUpPage.maBottomMarginEdt ||
+        pEdit == &maNUpPage.maHSpaceEdt || pEdit == &maNUpPage.maVSpaceEdt
+       )
     {
         updateNup();
     }

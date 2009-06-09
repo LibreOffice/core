@@ -124,19 +124,19 @@ ModalDialog SV_DLG_PRINT
 
         FixedLine SV_PRINT_PRT_NUP
         {
-            Pos = MAP_APPFONT( 5, 10 );
+            Pos = MAP_APPFONT( 5, 5 );
             Size = MAP_APPFONT( 150, 10 );
             Text [en-US] = "N-Up printing";
         };
         FixedText SV_PRINT_PRT_NUP_ROWS_TXT
         {
-            Pos = MAP_APPFONT( 10, 25 );
+            Pos = MAP_APPFONT( 10, 20 );
             Size = MAP_APPFONT( 40, 10 );
             Text [en-US] = "~Rows";
         };
         NumericField SV_PRINT_PRT_NUP_ROWS_EDT
         {
-            Pos = MAP_APPFONT( 55, 25 );
+            Pos = MAP_APPFONT( 55, 20 );
             Size = MAP_APPFONT( 40, 12 );
             Border = TRUE;
             Spin = TRUE;
@@ -146,13 +146,13 @@ ModalDialog SV_DLG_PRINT
         };
         FixedText SV_PRINT_PRT_NUP_COLUMNS_TXT
         {
-            Pos = MAP_APPFONT( 10, 50 );
+            Pos = MAP_APPFONT( 10, 35 );
             Size = MAP_APPFONT( 40, 10 );
             Text [en-US] = "C~olumns";
         };
         NumericField SV_PRINT_PRT_NUP_COLUMNS_EDT
         {
-            Pos = MAP_APPFONT( 55, 50 );
+            Pos = MAP_APPFONT( 55, 35 );
             Size = MAP_APPFONT( 40, 12 );
             Border = TRUE;
             Spin = TRUE;
@@ -160,17 +160,120 @@ ModalDialog SV_DLG_PRINT
             Maximum = 32;
             Value = 1;
         };
+        CheckBox SV_PRINT_PRT_NUP_BORDER_CB
+        {
+            Pos = MAP_APPFONT( 10, 50 );
+            Size = MAP_APPFONT( 150, 12 );
+            Text [en-US] = "~Draw a Border around each page";
+        };
         RadioButton SV_PRINT_PRT_NUP_PORTRAIT
         {
-            Pos = MAP_APPFONT( 110, 25 );
+            Pos = MAP_APPFONT( 110, 20 );
             Size = MAP_APPFONT( 90, 10 );
             Text [en-US] = "Po~rtrait";
         };
         RadioButton SV_PRINT_PRT_NUP_LANDSCAPE
         {
-            Pos = MAP_APPFONT( 110, 35 );
+            Pos = MAP_APPFONT( 110, 30 );
             Size = MAP_APPFONT( 90, 10 );
             Text [en-US] = "~Landscape";
+        };
+        FixedLine SV_PRINT_PRT_NUP_MARGINS_FL
+        {
+            Pos = MAP_APPFONT( 5, 65 );
+            Size = MAP_APPFONT( 150, 10 );
+            Text [en-US] = "Margins";
+        };
+        FixedText SV_PRINT_PRT_NUP_MARGINS_LEFT_TXT
+        {
+            Pos = MAP_APPFONT( 10, 80 );
+            Size = MAP_APPFONT( 40, 10 );
+            Text [en-US] = "~Left";
+        };
+        MetricField SV_PRINT_PRT_NUP_MARGINS_LEFT_EDT
+        {
+            Pos = MAP_APPFONT( 55, 80 );
+            Size = MAP_APPFONT( 40, 12 );
+            Spin = TRUE;
+            Border = TRUE;
+            Value = 0;
+            Unit = FUNIT_MM;
+        };
+        FixedText SV_PRINT_PRT_NUP_MARGINS_RIGHT_TXT
+        {
+            Pos = MAP_APPFONT( 110, 80 );
+            Size = MAP_APPFONT( 40, 10 );
+            Text [en-US] = "~Right";
+        };
+        MetricField SV_PRINT_PRT_NUP_MARGINS_RIGHT_EDT
+        {
+            Pos = MAP_APPFONT( 155, 80 );
+            Size = MAP_APPFONT( 40, 12 );
+            Spin = TRUE;
+            Border = TRUE;
+            Value = 0;
+            Unit = FUNIT_MM;
+        };
+        FixedText SV_PRINT_PRT_NUP_MARGINS_TOP_TXT
+        {
+            Pos = MAP_APPFONT( 10, 95 );
+            Size = MAP_APPFONT( 40, 10 );
+            Text [en-US] = "~Top";
+        };
+        MetricField SV_PRINT_PRT_NUP_MARGINS_TOP_EDT
+        {
+            Pos = MAP_APPFONT( 55, 95 );
+            Size = MAP_APPFONT( 40, 12 );
+            Spin = TRUE;
+            Border = TRUE;
+            Value = 0;
+            Unit = FUNIT_MM;
+        };
+        FixedText SV_PRINT_PRT_NUP_MARGINS_BOTTOM_TXT
+        {
+            Pos = MAP_APPFONT( 110, 95 );
+            Size = MAP_APPFONT( 40, 10 );
+            Text [en-US] = "~Bottom";
+        };
+        MetricField SV_PRINT_PRT_NUP_MARGINS_BOTTOM_EDT
+        {
+            Pos = MAP_APPFONT( 155, 95 );
+            Size = MAP_APPFONT( 40, 12 );
+            Spin = TRUE;
+            Border = TRUE;
+            Value = 0;
+            Unit = FUNIT_MM;
+        };
+
+        FixedText SV_PRINT_PRT_NUP_MARGINS_HSPACE_TXT
+        {
+            Pos = MAP_APPFONT( 10, 115 );
+            Size = MAP_APPFONT( 80, 10 );
+            Text [en-US] = "~Horizontal spacing";
+        };
+        MetricField SV_PRINT_PRT_NUP_MARGINS_HSPACE_EDT
+        {
+            Pos = MAP_APPFONT( 95, 115 );
+            Size = MAP_APPFONT( 40, 12 );
+            Spin = TRUE;
+            Border = TRUE;
+            Value = 0;
+            Unit = FUNIT_MM;
+        };
+        FixedText SV_PRINT_PRT_NUP_MARGINS_VSPACE_TXT
+        {
+            Pos = MAP_APPFONT( 10, 130 );
+            Size = MAP_APPFONT( 80, 10 );
+            Text [en-US] = "~Vertical spacing";
+        };
+        MetricField SV_PRINT_PRT_NUP_MARGINS_VSPACE_EDT
+        {
+            Pos = MAP_APPFONT( 95, 130 );
+            Size = MAP_APPFONT( 40, 12 );
+            Spin = TRUE;
+            Border = TRUE;
+            Value = 0;
+            Unit = FUNIT_MM;
         };
     };
 

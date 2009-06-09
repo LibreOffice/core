@@ -86,14 +86,31 @@ namespace vcl
             NumericField                            maNupRowsEdt;
             FixedText                               maNupColTxt;
             NumericField                            maNupColEdt;
+            CheckBox                                maBorderCB;
             RadioButton                             maNupPortrait;
             RadioButton                             maNupLandscape;
+
+            FixedLine                               maMargins;
+            FixedText                               maLeftMarginTxt;
+            MetricField                             maLeftMarginEdt;
+            FixedText                               maRightMarginTxt;
+            MetricField                             maRightMarginEdt;
+            FixedText                               maTopMarginTxt;
+            MetricField                             maTopMarginEdt;
+            FixedText                               maBottomMarginTxt;
+            MetricField                             maBottomMarginEdt;
+
+            FixedText                               maHSpaceTxt;
+            MetricField                             maHSpaceEdt;
+            FixedText                               maVSpaceTxt;
+            MetricField                             maVSpaceEdt;
 
             NUpTabPage( Window*, const ResId& );
             virtual ~NUpTabPage();
 
             void readFromSettings();
             void storeToSettings();
+            void initFromMultiPageSetup( const vcl::PrinterListener::MultiPageSetup& );
         };
 
         class JobTabPage : public TabPage
