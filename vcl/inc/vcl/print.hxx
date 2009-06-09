@@ -443,6 +443,8 @@ class ImplPrinterListenerData;
 class VCL_DLLPUBLIC PrinterListener
 {
     ImplPrinterListenerData* mpImplData;
+protected:
+    PrinterListener( const boost::shared_ptr<Printer>& );
 public:
     PrinterListener();
     virtual ~PrinterListener();

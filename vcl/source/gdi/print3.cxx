@@ -100,6 +100,12 @@ PrinterListener::PrinterListener()
 {
 }
 
+PrinterListener::PrinterListener( const boost::shared_ptr<Printer>& i_pPrinter )
+    : mpImplData( new ImplPrinterListenerData )
+{
+    mpImplData->mpPrinter = i_pPrinter;
+}
+
 static rtl::OUString queryFile( Printer* pPrinter )
 {
     rtl::OUString aResult;
