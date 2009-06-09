@@ -28,10 +28,11 @@
  *
  ************************************************************************/
 #include "MenuResIds.hrc"
-#include "SchSlotIds.hxx"
+#include "ShapeController.hrc"
 
 #include <svx/globlmn.hrc>
 #include <svx/svxids.hrc>
+
 
 Menu RID_CONTEXTMENU_SHAPE
 {
@@ -39,27 +40,37 @@ Menu RID_CONTEXTMENU_SHAPE
     {
         MenuItem
         {
-            Identifier = SID_ATTRIBUTES_LINE;
-            HelpId = SID_ATTRIBUTES_LINE;
+            Identifier = COMMAND_ID_FORMAT_LINE;
             Command = ".uno:FormatLine";
         };
         MenuItem
         {
-            Identifier = SID_ATTRIBUTES_AREA;
-            HelpId = SID_ATTRIBUTES_AREA;
+            Identifier = COMMAND_ID_FORMAT_AREA;
             Command = ".uno:FormatArea";
         };
         MenuItem
         {
-            Identifier = SID_ATTRIBUTES_TEXT;
-            HelpId = SID_ATTRIBUTES_TEXT;
+            Identifier = COMMAND_ID_TEXT_ATTRIBUTES;
             Command = ".uno:TextAttributes";
         };
         MenuItem
         {
-            Identifier = SID_ATTR_TRANSFORM;
-            HelpId = SID_ATTR_TRANSFORM;
+            Identifier = COMMAND_ID_TRANSFORM_DIALOG;
             Command = ".uno:TransformDialog";
+        };
+        MenuItem
+        {
+            Separator = TRUE;
+        };
+        MenuItem
+        {
+            Identifier = COMMAND_ID_OBJECT_TITLE_DESCRIPTION;
+            Command = ".uno:ObjectTitleDescription";
+        };
+        MenuItem
+        {
+            Identifier = COMMAND_ID_RENAME_OBJECT;
+            Command = ".uno:RenameObject";
         };
         MenuItem
         {

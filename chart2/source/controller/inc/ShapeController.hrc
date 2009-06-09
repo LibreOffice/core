@@ -6,7 +6,7 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: ShapeContextMenu.src,v $
+ * $RCSfile: ShapeController.hrc,v $
  * $Revision: 1.0 $
  *
  * This file is part of OpenOffice.org.
@@ -27,36 +27,18 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include "MenuResIds.hrc"
-#include "ShapeController.hrc"
+#ifndef CHART_SHAPECONTROLLER_HRC
+#define CHART_SHAPECONTROLLER_HRC
 
-#include <svx/globlmn.hrc>
-#include <svx/svxids.hrc>
+//-----------------------------------------------------------------------------
+//Command Ids:
+#define COMMAND_ID_FORMAT_LINE                  1
+#define COMMAND_ID_FORMAT_AREA                  2
+#define COMMAND_ID_TEXT_ATTRIBUTES              3
+#define COMMAND_ID_TRANSFORM_DIALOG             4
+#define COMMAND_ID_OBJECT_TITLE_DESCRIPTION     5
+#define COMMAND_ID_RENAME_OBJECT                6
+#define COMMAND_ID_FONT_DIALOG                  7
 
-Menu RID_CONTEXTMENU_SHAPEEDIT
-{
-    ItemList =
-    {
-        MenuItem
-        {
-            Identifier = COMMAND_ID_FONT_DIALOG;
-            Command = ".uno:FontDialog";
-        };
-        MenuItem
-        {
-            Separator = TRUE;
-        };
-        MenuItem
-        {
-            ITEM_EDIT_CUT
-        };
-        MenuItem
-        {
-            ITEM_EDIT_COPY
-        };
-        MenuItem
-        {
-            ITEM_EDIT_PASTE
-        };
-    };
-};
+// CHART_SHAPECONTROLLER_HRC
+#endif

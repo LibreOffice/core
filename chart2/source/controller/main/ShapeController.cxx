@@ -32,12 +32,12 @@
 #include "precompiled_chart2.hxx"
 
 #include "ShapeController.hxx"
+#include "ShapeController.hrc"
 #include "ChartController.hxx"
 #include "ChartWindow.hxx"
 #include "ViewElementListProvider.hxx"
 #include "dlg_ShapeFont.hxx"
 #include "chartview/DrawModelWrapper.hxx"
-#include "SchSlotIds.hxx"
 
 #include <vos/mutex.hxx>
 #include <vcl/msgbox.hxx>
@@ -96,11 +96,13 @@ FeatureState ShapeController::getState( const ::rtl::OUString& rCommand ) const
 
     switch ( nFeatureId )
     {
-        case SID_ATTRIBUTES_LINE:
-        case SID_ATTRIBUTES_AREA:
-        case SID_ATTRIBUTES_TEXT:
-        case SID_ATTR_TRANSFORM:
-        case SID_CHAR_DLG:
+        case COMMAND_ID_FORMAT_LINE:
+        case COMMAND_ID_FORMAT_AREA:
+        case COMMAND_ID_TEXT_ATTRIBUTES:
+        case COMMAND_ID_TRANSFORM_DIALOG:
+        case COMMAND_ID_OBJECT_TITLE_DESCRIPTION:
+        case COMMAND_ID_RENAME_OBJECT:
+        case COMMAND_ID_FONT_DIALOG:
             {
                 aReturn.bEnabled = true;
                 aReturn.aState <<= false;
@@ -125,27 +127,37 @@ void ShapeController::execute( const ::rtl::OUString& rCommand, const Sequence< 
 
     switch ( nFeatureId )
     {
-        case SID_ATTRIBUTES_LINE:
+        case COMMAND_ID_FORMAT_LINE:
             {
                 executeDispatch_FormatLine();
             }
             break;
-        case SID_ATTRIBUTES_AREA:
+        case COMMAND_ID_FORMAT_AREA:
             {
                 executeDispatch_FormatArea();
             }
             break;
-        case SID_ATTRIBUTES_TEXT:
+        case COMMAND_ID_TEXT_ATTRIBUTES:
             {
                 executeDispatch_TextAttributes();
             }
             break;
-        case SID_ATTR_TRANSFORM:
+        case COMMAND_ID_TRANSFORM_DIALOG:
             {
                 executeDispatch_TransformDialog();
             }
             break;
-        case SID_CHAR_DLG:
+        case COMMAND_ID_OBJECT_TITLE_DESCRIPTION:
+            {
+                executeDispatch_ObjectTitleDescription();
+            }
+            break;
+        case COMMAND_ID_RENAME_OBJECT:
+            {
+                executeDispatch_RenameObject();
+            }
+            break;
+        case COMMAND_ID_FONT_DIALOG:
             {
                 executeDispatch_FontDialog();
             }
@@ -159,11 +171,31 @@ void ShapeController::execute( const ::rtl::OUString& rCommand, const Sequence< 
 
 void ShapeController::describeSupportedFeatures()
 {
-    implDescribeSupportedFeature( ".uno:FormatLine",        SID_ATTRIBUTES_LINE,    CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:FormatArea",        SID_ATTRIBUTES_AREA,    CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:TextAttributes",    SID_ATTRIBUTES_TEXT,    CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:TransformDialog",   SID_ATTR_TRANSFORM,     CommandGroup::FORMAT );
-    implDescribeSupportedFeature( ".uno:FontDialog",        SID_CHAR_DLG,           CommandGroup::EDIT );
+    implDescribeSupportedFeature( ".uno:FormatLine",                COMMAND_ID_FORMAT_LINE,                 CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:FormatArea",                COMMAND_ID_FORMAT_AREA,                 CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:TextAttributes",            COMMAND_ID_TEXT_ATTRIBUTES,             CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:TransformDialog",           COMMAND_ID_TRANSFORM_DIALOG,            CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:ObjectTitleDescription",    COMMAND_ID_OBJECT_TITLE_DESCRIPTION,    CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:RenameObject",              COMMAND_ID_RENAME_OBJECT,               CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:FontDialog",                COMMAND_ID_FONT_DIALOG,                 CommandGroup::EDIT );
+}
+
+IMPL_LINK( ShapeController, CheckNameHdl, AbstractSvxNameDialog*, pDialog )
+{
+    String aName;
+    if ( pDialog )
+    {
+        pDialog->GetName( aName );
+    }
+    if ( aName.Len() )
+    {
+        DrawViewWrapper* pDrawViewWrapper = ( m_pChartController ? m_pChartController->GetDrawViewWrapper() : NULL );
+        if ( pDrawViewWrapper && pDrawViewWrapper->getNamedSdrObject( aName ) )
+        {
+            return 0;
+        }
+    }
+    return 1;
 }
 
 void ShapeController::executeDispatch_FormatLine()
@@ -175,7 +207,7 @@ void ShapeController::executeDispatch_FormatLine()
         DrawViewWrapper* pDrawViewWrapper = m_pChartController->GetDrawViewWrapper();
         if ( pParent && pDrawModelWrapper && pDrawViewWrapper )
         {
-            SdrObject* pObj = pDrawViewWrapper->getSelectedObject();
+            SdrObject* pSelectedObj = pDrawViewWrapper->getSelectedObject();
             SfxItemSet aAttr( pDrawViewWrapper->GetDefaultAttr() );
             BOOL bHasMarked = pDrawViewWrapper->AreObjectsMarked();
             if ( bHasMarked )
@@ -188,7 +220,7 @@ void ShapeController::executeDispatch_FormatLine()
             {
                 ::boost::scoped_ptr< SfxAbstractTabDialog > pDlg(
                     pFact->CreateSvxLineTabDialog( pParent, &aAttr, &pDrawModelWrapper->getSdrModel(),
-                        RID_SVXDLG_LINE, pObj, bHasMarked ) );
+                        RID_SVXDLG_LINE, pSelectedObj, bHasMarked ) );
                 if ( pDlg.get() && ( pDlg->Execute() == RET_OK ) )
                 {
                     const SfxItemSet* pOutAttr = pDlg->GetOutputItemSet();
@@ -300,8 +332,8 @@ void ShapeController::executeDispatch_TransformDialog()
         DrawViewWrapper* pDrawViewWrapper = m_pChartController->GetDrawViewWrapper();
         if ( pParent && pDrawViewWrapper )
         {
-            SdrObject* pObj = pDrawViewWrapper->getSelectedObject();
-            if ( pObj && pObj->GetObjIdentifier() == OBJ_CAPTION )
+            SdrObject* pSelectedObj = pDrawViewWrapper->getSelectedObject();
+            if ( pSelectedObj && pSelectedObj->GetObjIdentifier() == OBJ_CAPTION )
             {
                 // item set for caption
                 SfxItemSet aAttr( pDrawViewWrapper->GetModel()->GetItemPool() );
@@ -343,6 +375,69 @@ void ShapeController::executeDispatch_TransformDialog()
                     {
                         const SfxItemSet* pOutAttr = pDlg->GetOutputItemSet();
                         pDrawViewWrapper->SetGeoAttrToMarked( *pOutAttr );
+                    }
+                }
+            }
+        }
+    }
+}
+
+void ShapeController::executeDispatch_ObjectTitleDescription()
+{
+    if ( m_pChartController )
+    {
+        DrawViewWrapper* pDrawViewWrapper = m_pChartController->GetDrawViewWrapper();
+        if ( pDrawViewWrapper && pDrawViewWrapper->GetMarkedObjectCount() == 1 )
+        {
+            SdrObject* pSelectedObj = pDrawViewWrapper->getSelectedObject();
+            if ( pSelectedObj )
+            {
+                String aTitle( pSelectedObj->GetTitle() );
+                String aDescription( pSelectedObj->GetDescription() );
+                ::vos::OGuard aGuard( Application::GetSolarMutex() );
+                SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+                if ( pFact )
+                {
+                    ::boost::scoped_ptr< AbstractSvxObjectTitleDescDialog > pDlg(
+                        pFact->CreateSvxObjectTitleDescDialog( NULL, aTitle, aDescription, RID_SVXDLG_OBJECT_TITLE_DESC ) );
+                    if ( pDlg.get() && ( pDlg->Execute() == RET_OK ) )
+                    {
+                        pDlg->GetTitle( aTitle );
+                        pDlg->GetDescription( aDescription );
+                        pSelectedObj->SetTitle( aTitle );
+                        pSelectedObj->SetDescription( aDescription );
+                    }
+                }
+            }
+        }
+    }
+}
+
+void ShapeController::executeDispatch_RenameObject()
+{
+    if ( m_pChartController )
+    {
+        DrawViewWrapper* pDrawViewWrapper = m_pChartController->GetDrawViewWrapper();
+        if ( pDrawViewWrapper && pDrawViewWrapper->GetMarkedObjectCount() == 1 )
+        {
+            SdrObject* pSelectedObj = pDrawViewWrapper->getSelectedObject();
+            if ( pSelectedObj )
+            {
+                String aName( pSelectedObj->GetName() );
+                ::vos::OGuard aGuard( Application::GetSolarMutex() );
+                SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+                if ( pFact )
+                {
+                    ::boost::scoped_ptr< AbstractSvxObjectNameDialog > pDlg(
+                        pFact->CreateSvxObjectNameDialog( NULL, aName, RID_SVXDLG_OBJECT_NAME ) );
+                    pDlg->SetCheckNameHdl( LINK( this, ShapeController, CheckNameHdl ) );
+                    if ( pDlg.get() && ( pDlg->Execute() == RET_OK ) )
+                    {
+                        pDlg->GetName( aName );
+                        if ( aName != pSelectedObj->GetName() )
+                        {
+                            pSelectedObj->SetName( aName );
+                        }
                     }
                 }
             }

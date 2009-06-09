@@ -31,6 +31,9 @@
 #define CHART2_SHAPECONTROLLER_HXX
 
 #include "FeatureCommandDispatchBase.hxx"
+#include <tools/link.hxx>
+
+class AbstractSvxNameDialog;
 
 //.............................................................................
 namespace chart
@@ -69,10 +72,14 @@ protected:
     virtual void describeSupportedFeatures();
 
 private:
+    DECL_LINK( CheckNameHdl, AbstractSvxNameDialog* );
+
     void executeDispatch_FormatLine();
     void executeDispatch_FormatArea();
     void executeDispatch_TextAttributes();
     void executeDispatch_TransformDialog();
+    void executeDispatch_ObjectTitleDescription();
+    void executeDispatch_RenameObject();
     void executeDispatch_FontDialog();
 
     ChartController* m_pChartController;
