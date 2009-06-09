@@ -38,6 +38,7 @@
 #endif
 #include <svtools/svarray.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <sal/types.h>
 
 #include <vector>
 #include <list>
@@ -176,7 +177,7 @@ namespace
         : public unary_function<Reference<XTextFrame>, size_t>
     {
         size_t operator()(const Reference<XTextFrame> xFrame) const
-            { return reinterpret_cast<sal_Int32>(xFrame.get()) & 0xffffffff; }
+            { return sal::static_int_cast<size_t>(reinterpret_cast<sal_uIntPtr>(xFrame.get())); }
     };
 
     static bool lcl_TextContentsUnfiltered(const Reference<XTextContent>&)
