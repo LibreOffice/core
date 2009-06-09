@@ -60,11 +60,16 @@
 #include "unotools/localedatawrapper.hxx"
 #include "unotools/configitem.hxx"
 #include "unotools/configmgr.hxx"
+
+#include "com/sun/star/awt/Size.hpp"
+
 using namespace psp;
 using namespace rtl;
 using namespace padmin;
 using namespace osl;
+using namespace com::sun::star;
 using namespace com::sun::star::uno;
+using namespace com::sun::star::beans;
 
 PADialog* PADialog::Create( Window* pParent, BOOL bAdmin )
 {
@@ -96,7 +101,6 @@ PADialog::PADialog( Window* pParent, BOOL /*bAdmin*/ ) :
         m_aCancelButton( this, PaResId( RID_PA_BTN_CANCEL ) ),
         m_aDefPrt( PaResId( RID_PA_STR_DEFPRT ) ),
         m_aRenameStr( PaResId( RID_PA_STR_RENAME ) ),
-        m_pPrinter( 0 ),
         m_rPIManager( PrinterInfoManager::get() )
 {
     FreeResource();
@@ -248,18 +252,6 @@ IMPL_LINK( PADialog, SelectHdl, ListBox*, pListBox )
     return 0;
 }
 
-IMPL_LINK( PADialog, EndPrintHdl, void*, EMPTYARG )
-{
-    String aInfoString( PaResId( RID_PA_TXT_TESTPAGE_PRINTED ) );
-    InfoBox aInfoBox( this, aInfoString );
-    aInfoBox.SetText( String( PaResId( RID_BXT_TESTPAGE ) ) );
-    aInfoBox.Execute();
-
-    delete m_pPrinter;
-    m_pPrinter = NULL;
-    return 0;
-}
-
 void PADialog::UpdateDefPrt()
 {
     m_rPIManager.setDefaultPrinter( getSelectedDevice() );
@@ -369,66 +361,77 @@ static Color approachColor( const Color& rFrom, const Color& rTo )
     return aColor;
 }
 
-#define DELTA 5.0
-void PADialog::PrintTestPage()
+class SpaPrinterListener : public vcl::PrinterListener
 {
-    if( m_pPrinter ) // already printing; user pressed button twice
-        return;
+public:
+    SpaPrinterListener( const boost::shared_ptr<Printer>& i_pPrinter )
+    : vcl::PrinterListener( i_pPrinter )
+    {}
+    virtual ~SpaPrinterListener()
+    {}
 
-    String sPrinter( getSelectedDevice() );
+    virtual int getPageCount() const { return 1; }
+    virtual Sequence< PropertyValue > getPageParameters( int i_nPage ) const;
+    virtual void printPage( int i_nPage ) const;
+    virtual void jobFinished();
+};
 
-    m_pPrinter = new Printer( sPrinter );
+Sequence< PropertyValue > SpaPrinterListener::getPageParameters( int ) const
+{
+    Sequence< PropertyValue > aRet( 1 );
 
-    PrinterInfo aInfo( m_rPIManager.getPrinterInfo( sPrinter ) );
+    Size aPageSize( getPrinter()->GetPaperSizePixel() );
+    aPageSize = getPrinter()->PixelToLogic( aPageSize, MapMode( MAP_100TH_MM ) );
+
+    awt::Size aSize;
+    aSize.Width = aPageSize.Width();
+    aSize.Height = aPageSize.Height();
+    aRet[0].Value = makeAny(aSize);
+
+    return aRet;
+}
+
+void SpaPrinterListener::printPage( int ) const
+{
+    const double DELTA = 5.0;
+
+    boost::shared_ptr<Printer> pPrinter( getPrinter() );
+
+    PrinterInfo aInfo( psp::PrinterInfoManager::get().getPrinterInfo( pPrinter->GetName() ) );
     const PPDParser* pPrintParser = aInfo.m_pParser;
 
     MapMode aMapMode( MAP_100TH_MM );
 
     Bitmap aButterfly( PaResId( RID_BUTTERFLY ) );
 
-    m_pPrinter->SetMapMode( aMapMode );
-    m_pPrinter->SetEndPrintHdl( LINK( this, PADialog, EndPrintHdl ) );
+    pPrinter->SetMapMode( aMapMode );
 
     Any aRet = utl::ConfigManager::GetDirectConfigProperty( utl::ConfigManager::PRODUCTNAME );
     OUString aJobName;
     aRet >>= aJobName;
 
     aJobName = aJobName + OUString( RTL_CONSTASCII_USTRINGPARAM( " Testpage" ) );
-    if( m_pPrinter->GetName() != sPrinter || ! m_pPrinter->StartJob( aJobName ) )
-    {
-        String aString( PaResId( RID_ERR_NOPRINTER ) );
-        aString.SearchAndReplaceAscii( "%s", sPrinter );
 
-        ErrorBox aErrorBox( this, WB_OK | WB_DEF_OK, aString );
-        aErrorBox.SetText( String( PaResId( RID_BXT_ENVIRONMENT ) ) );
-        aErrorBox.Execute();
-        delete m_pPrinter;
-        m_pPrinter = 0;
-        return;
-    }
-    m_pPrinter->StartPage();
-
-    Size aPaperSize=m_pPrinter->GetOutputSize();
+    Size aPaperSize=pPrinter->GetOutputSize();
     Point aCenter( aPaperSize.Width()/2-300,
                    aPaperSize.Height() - aPaperSize.Width()/2 );
     Point aP1( aPaperSize.Width()/48, 0), aP2( aPaperSize.Width()/40, 0 ), aPoint;
 
-    m_pPrinter->DrawRect( Rectangle( Point( 0,0 ), aPaperSize ) );
-    m_pPrinter->DrawRect( Rectangle( Point( 100,100 ),
+    pPrinter->DrawRect( Rectangle( Point( 0,0 ), aPaperSize ) );
+    pPrinter->DrawRect( Rectangle( Point( 100,100 ),
                                     Size( aPaperSize.Width()-200,
                                           aPaperSize.Height()-200 ) ) );
-    m_pPrinter->DrawRect( Rectangle( Point( 200,200 ),
+    pPrinter->DrawRect( Rectangle( Point( 200,200 ),
                                     Size( aPaperSize.Width()-400,
                                           aPaperSize.Height()-400 ) ) );
-    m_pPrinter->DrawRect( Rectangle( Point( 300,300 ),
+    pPrinter->DrawRect( Rectangle( Point( 300,300 ),
                                     Size( aPaperSize.Width()-600,
                                           aPaperSize.Height()-600 ) ) );
 
-    Font aFont( m_pPrinter->GetFont() );
-    aFont.SetName( String( RTL_CONSTASCII_USTRINGPARAM( "Courier" ) ) );
+    Font aFont( String( RTL_CONSTASCII_USTRINGPARAM( "Courier" ) ), Size( 0, 400 ) );
     aFont.SetWeight( WEIGHT_NORMAL );
     aFont.SetItalic( ITALIC_NONE );
-    m_pPrinter->SetFont( aFont );
+    pPrinter->SetFont( aFont );
 
     OUStringBuffer aPrintText(1024);
     long nWidth = 0, nMaxWidth = 0;
@@ -455,12 +458,12 @@ void PADialog::PrintTestPage()
             aToken = String::CreateFromAscii( aResIds[i].pDirect );
         else
             aToken = String( PaResId( aResIds[i].nResId ) );
-        nMaxWidth = ( nWidth = m_pPrinter->GetTextWidth( aToken ) ) > nMaxWidth ? nWidth : nMaxWidth;
+        nMaxWidth = ( nWidth = pPrinter->GetTextWidth( aToken ) ) > nMaxWidth ? nWidth : nMaxWidth;
         aPrintText.append( aToken );
         aPrintText.append( (sal_Unicode)'\n' );
     };
 
-    m_pPrinter->DrawText( Rectangle( Point( 1000, 2000 ),
+    pPrinter->DrawText( Rectangle( Point( 1000, 1000 ),
                                     Size( aPaperSize.Width() - 2000,
                                           aPaperSize.Height() - 4000 ) ),
                           aPrintText.makeStringAndClear(),
@@ -470,7 +473,7 @@ void PADialog::PrintTestPage()
     const LocaleDataWrapper& rLocaleWrapper( aSettings.GetLocaleDataWrapper() );
 
     aPrintText.appendAscii( ": " );
-    aPrintText.append( sPrinter );
+    aPrintText.append( pPrinter->GetName() );
     aPrintText.appendAscii( "\n: " );
     if( pPrintParser )
         aPrintText.append( pPrintParser->getPrinterName() );
@@ -487,17 +490,17 @@ void PADialog::PrintTestPage()
     aPrintText.appendAscii( "\n: " );
     aPrintText.append( rLocaleWrapper.getTime( Time() ) );
 
-    m_pPrinter->DrawText( Rectangle( Point( 1100 + nMaxWidth, 2000 ),
+    pPrinter->DrawText( Rectangle( Point( 1100 + nMaxWidth, 1000 ),
                                     Size( aPaperSize.Width() - 2100 - nMaxWidth,
                                           aPaperSize.Height() - 4000 ) ),
                          aPrintText.makeStringAndClear(),
                          TEXT_DRAW_MULTILINE );
 
-    m_pPrinter->DrawBitmap( Point( aPaperSize.Width() - 4000, 1000 ),
+    pPrinter->DrawBitmap( Point( aPaperSize.Width() - 4000, 1000 ),
                            Size( 3000,3000 ),
                            aButterfly );
-    m_pPrinter->SetFillColor();
-    m_pPrinter->DrawRect( Rectangle( Point( aPaperSize.Width() - 4000, 1000 ),
+    pPrinter->SetFillColor();
+    pPrinter->DrawRect( Rectangle( Point( aPaperSize.Width() - 4000, 1000 ),
                                      Size( 3000,3000 ) ) );
 
     Color aWhite( 0xff, 0xff, 0xff );
@@ -511,22 +514,22 @@ void PADialog::PrintTestPage()
 
     Gradient aGradient( GRADIENT_LINEAR, aBlack, aWhite );
     aGradient.SetAngle( 900 );
-    m_pPrinter->DrawGradient( Rectangle( Point( 1000, 5500 ),
+    pPrinter->DrawGradient( Rectangle( Point( 1000, 5500 ),
                                         Size( aPaperSize.Width() - 2000,
                                               500 ) ), aGradient );
     aGradient.SetStartColor( aDarkRed );
     aGradient.SetEndColor( aLightBlue );
-    m_pPrinter->DrawGradient( Rectangle( Point( 1000, 6300 ),
+    pPrinter->DrawGradient( Rectangle( Point( 1000, 6300 ),
                                         Size( aPaperSize.Width() - 2000,
                                               500 ) ), aGradient );
     aGradient.SetStartColor( aDarkBlue );
     aGradient.SetEndColor( aLightGreen );
-    m_pPrinter->DrawGradient( Rectangle( Point( 1000, 7100 ),
+    pPrinter->DrawGradient( Rectangle( Point( 1000, 7100 ),
                                         Size( aPaperSize.Width() - 2000,
                                               500 ) ), aGradient );
     aGradient.SetStartColor( aDarkGreen );
     aGradient.SetEndColor( aLightRed );
-    m_pPrinter->DrawGradient( Rectangle( Point( 1000, 7900 ),
+    pPrinter->DrawGradient( Rectangle( Point( 1000, 7900 ),
                                         Size( aPaperSize.Width() - 2000,
                                               500 ) ), aGradient );
 
@@ -543,7 +546,7 @@ void PADialog::PrintTestPage()
     {
         aLineInfo.SetWidth( n/3 );
         aLineColor = approachColor( aLineColor, aApproachColor );
-        m_pPrinter->SetLineColor( aLineColor );
+        pPrinter->SetLineColor( aLineColor );
 
         // switch aproach color
         if( aApproachColor.IsRGBEqual( aLineColor ) )
@@ -556,7 +559,7 @@ void PADialog::PrintTestPage()
                 aApproachColor = Color( 0, 200, 0 );
         }
 
-        m_pPrinter->DrawLine( project( aP1 ) + aCenter,
+        pPrinter->DrawLine( project( aP1 ) + aCenter,
                              project( aP2 ) + aCenter,
                              aLineInfo );
         aPoint.X() = (int)((((double)aP1.X())*cosd - ((double)aP1.Y())*sind)*factor);
@@ -569,8 +572,38 @@ void PADialog::PrintTestPage()
 #if (OSL_DEBUG_LEVEL > 1) || defined DBG_UTIL
     fprintf( stderr, "%d lines\n",n );
 #endif
-    m_pPrinter->EndPage();
-    m_pPrinter->EndJob();
+}
+
+void SpaPrinterListener::jobFinished()
+{
+    String aInfoString( PaResId( RID_PA_TXT_TESTPAGE_PRINTED ) );
+    InfoBox aInfoBox( NULL, aInfoString );
+    aInfoBox.SetText( String( PaResId( RID_BXT_TESTPAGE ) ) );
+    aInfoBox.Execute();
+}
+
+void PADialog::PrintTestPage()
+{
+    String sPrinter( getSelectedDevice() );
+
+    boost::shared_ptr<Printer> pPrinter( new Printer( sPrinter ) );
+
+    if( pPrinter->GetName() != sPrinter )
+    {
+        String aString( PaResId( RID_ERR_NOPRINTER ) );
+        aString.SearchAndReplaceAscii( "%s", sPrinter );
+
+        ErrorBox aErrorBox( this, WB_OK | WB_DEF_OK, aString );
+        aErrorBox.SetText( String( PaResId( RID_BXT_ENVIRONMENT ) ) );
+        aErrorBox.Execute();
+        return;
+    }
+
+    boost::shared_ptr<vcl::PrinterListener> pListener( new SpaPrinterListener( pPrinter ) );
+    JobSetup aJobSetup( pPrinter->GetJobSetup() );
+    aJobSetup.SetValue( String( RTL_CONSTASCII_USTRINGPARAM( "IsQuickJob" ) ),
+                        String( RTL_CONSTASCII_USTRINGPARAM( "true" ) ) );
+    Printer::PrintJob( pListener, aJobSetup );
 }
 
 void PADialog::AddDevice()
