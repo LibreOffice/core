@@ -513,35 +513,38 @@ Size PrinterListener::getFilteredPageFile( int i_nFilteredPage, GDIMetaFile& o_r
     o_rMtf.AddAction( new MetaMapModeAction( MapMode( MAP_100TH_MM ) ) );
 
     int nDocPages = getPageCount();
-    for( int nPage = i_nFilteredPage * nSubPages, nSubP = 0;
-         nPage < (i_nFilteredPage+1)*nSubPages && nPage < nDocPages;
-         nPage++, nSubP++ )
+    for( int nSubPage = 0; nSubPage < nSubPages; nSubPage++ )
     {
-        GDIMetaFile aPageFile;
-        Size aPageSize = getPageFile( nPage, aPageFile );
-        if( aPageSize.Width() && aPageSize.Height() )
+        // map current sub page to real page
+        int nPage = (i_nFilteredPage * nSubPages + nSubPage) / rMPS.nRepeat;
+        if( nPage < nDocPages )
         {
-            // scale the metafile down to a sub page size
-            double fScaleX = double(aSubPageSize.Width())/double(aPageSize.Width());
-            double fScaleY = double(aSubPageSize.Height())/double(aPageSize.Height());
-            double fScale  = std::min( fScaleX, fScaleY );
-            aPageFile.Scale( fScale, fScale );
-            aPageFile.WindStart();
+            GDIMetaFile aPageFile;
+            Size aPageSize = getPageFile( nPage, aPageFile );
+            if( aPageSize.Width() && aPageSize.Height() )
+            {
+                // scale the metafile down to a sub page size
+                double fScaleX = double(aSubPageSize.Width())/double(aPageSize.Width());
+                double fScaleY = double(aSubPageSize.Height())/double(aPageSize.Height());
+                double fScale  = std::min( fScaleX, fScaleY );
+                aPageFile.Scale( fScale, fScale );
+                aPageFile.WindStart();
 
-            // move the subpage so it is centered in its "cell"
-            long nOffX = (aSubPageSize.Width() - long(double(aPageSize.Width()) * fScale)) / 2;
-            long nOffY = (aSubPageSize.Height() - long(double(aPageSize.Height()) * fScale)) / 2;
-            long nX = rMPS.nLeftMargin + nOffX + nAdvX * (nSubP % rMPS.nColumns);
-            long nY = rMPS.nTopMargin + nOffY + nAdvY * (nSubP / rMPS.nColumns);
-            aPageFile.Move( nX, nY );
-            aPageFile.WindStart();
-            // calculate border rectangle
-            Rectangle aSubPageRect( Point( nX, nY ),
-                                    Size( long(double(aPageSize.Width())*fScale),
-                                          long(double(aPageSize.Height())*fScale) ) );
+                // move the subpage so it is centered in its "cell"
+                long nOffX = (aSubPageSize.Width() - long(double(aPageSize.Width()) * fScale)) / 2;
+                long nOffY = (aSubPageSize.Height() - long(double(aPageSize.Height()) * fScale)) / 2;
+                long nX = rMPS.nLeftMargin + nOffX + nAdvX * (nSubPage % rMPS.nColumns);
+                long nY = rMPS.nTopMargin + nOffY + nAdvY * (nSubPage / rMPS.nColumns);
+                aPageFile.Move( nX, nY );
+                aPageFile.WindStart();
+                // calculate border rectangle
+                Rectangle aSubPageRect( Point( nX, nY ),
+                                        Size( long(double(aPageSize.Width())*fScale),
+                                              long(double(aPageSize.Height())*fScale) ) );
 
-            // append subpage to page
-            appendSubPage( o_rMtf, aSubPageRect, aPageFile, rMPS.bDrawBorder );
+                // append subpage to page
+                appendSubPage( o_rMtf, aSubPageRect, aPageFile, rMPS.bDrawBorder );
+            }
         }
     }
     o_rMtf.WindStart();
@@ -554,7 +557,7 @@ int PrinterListener::getFilteredPageCount()
     int nDiv = mpImplData->maMultiPage.nRows * mpImplData->maMultiPage.nColumns;
     if( nDiv < 1 )
         nDiv = 1;
-    return (getPageCount() + (nDiv-1)) / nDiv;
+    return (getPageCount() * mpImplData->maMultiPage.nRepeat + (nDiv-1)) / nDiv;
 }
 
 void PrinterListener::printFilteredPage( int i_nPage )

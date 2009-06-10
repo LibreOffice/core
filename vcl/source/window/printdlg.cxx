@@ -117,6 +117,8 @@ PrintDialog::NUpTabPage::NUpTabPage( Window* i_pParent, const ResId& rResId )
     , maNupRowsEdt( this, VclResId( SV_PRINT_PRT_NUP_ROWS_EDT ) )
     , maNupColTxt( this, VclResId( SV_PRINT_PRT_NUP_COLUMNS_TXT ) )
     , maNupColEdt( this, VclResId( SV_PRINT_PRT_NUP_COLUMNS_EDT ) )
+    , maNupRepTxt( this, VclResId( SV_PRINT_PRT_NUP_PAGEREPEAT_TXT ) )
+    , maNupRepEdt( this, VclResId( SV_PRINT_PRT_NUP_PAGEREPEAT_EDT ) )
     , maBorderCB( this, VclResId( SV_PRINT_PRT_NUP_BORDER_CB ) )
     , maNupPortrait( this, VclResId( SV_PRINT_PRT_NUP_PORTRAIT ) )
     , maNupLandscape( this, VclResId( SV_PRINT_PRT_NUP_LANDSCAPE ) )
@@ -166,6 +168,8 @@ PrintDialog::NUpTabPage::NUpTabPage( Window* i_pParent, const ResId& rResId )
     maNupRowsEdt.SMHID2( "NUpPage", "NUPRows" );
     maNupColTxt.SMHID2( "NUpPage", "NUPColumnsText" );
     maNupColEdt.SMHID2( "NUpPage", "NUPColumns" );
+    maNupRepTxt.SMHID2( "NUpPage", "NUPRepeatText" );
+    maNupRepEdt.SMHID2( "NUpPage", "NUPRepeat" );
     maNupPortrait.SMHID2( "NUpPage", "NUPPortrait" );
     maNupLandscape.SMHID2( "NUpPage", "NUPLandscape" );
     maBorderCB.SMHID2( "NUpPage", "NUPBorder" );
@@ -199,6 +203,7 @@ void PrintDialog::NUpTabPage::initFromMultiPageSetup( const vcl::PrinterListener
     maBorderCB.Check( i_rMPS.bDrawBorder );
     maNupRowsEdt.SetValue( i_rMPS.nRows );
     maNupColEdt.SetValue( i_rMPS.nColumns );
+    maNupRepEdt.SetValue( i_rMPS.nRepeat );
 }
 
 void PrintDialog::NUpTabPage::readFromSettings()
@@ -434,6 +439,7 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterList
     maJobPage.maCopyCountField.SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
     maNUpPage.maNupRowsEdt.SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
     maNUpPage.maNupColEdt.SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
+    maNUpPage.maNupRepEdt.SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
     maNUpPage.maLeftMarginEdt.SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
     maNUpPage.maTopMarginEdt.SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
     maNUpPage.maRightMarginEdt.SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
@@ -1163,12 +1169,14 @@ void PrintDialog::preparePreview( bool i_bNewPage )
 
 void PrintDialog::updateNup()
 {
-    int nRows = int(maNUpPage.maNupRowsEdt.GetValue());
-    int nCols = int(maNUpPage.maNupColEdt.GetValue());
+    int nRows   = int(maNUpPage.maNupRowsEdt.GetValue());
+    int nCols   = int(maNUpPage.maNupColEdt.GetValue());
+    int nRepeat = int(maNUpPage.maNupRepEdt.GetValue());
 
     PrinterListener::MultiPageSetup aMPS;
     aMPS.nRows         = nRows;
     aMPS.nColumns      = nCols;
+    aMPS.nRepeat       = nRepeat;
     aMPS.aPaperSize    = maNUpPage.maNupPortrait.IsChecked()
                          ? maNupPortraitSize : maNupLandscapeSize;
     aMPS.nLeftMargin   = long(maNUpPage.maLeftMarginEdt.Denormalize(maNUpPage.maLeftMarginEdt.GetValue( FUNIT_100TH_MM )));
@@ -1231,7 +1239,7 @@ IMPL_LINK( PrintDialog, ClickHdl, Button*, pButton )
 IMPL_LINK( PrintDialog, ModifyHdl, Edit*, pEdit )
 {
     checkControlDependencies();
-    if( pEdit == &maNUpPage.maNupRowsEdt || pEdit == &maNUpPage.maNupColEdt ||
+    if( pEdit == &maNUpPage.maNupRowsEdt || pEdit == &maNUpPage.maNupColEdt || pEdit == &maNUpPage.maNupRepEdt ||
         pEdit == &maNUpPage.maLeftMarginEdt || pEdit == &maNUpPage.maTopMarginEdt ||
         pEdit == &maNUpPage.maRightMarginEdt || pEdit == &maNUpPage.maBottomMarginEdt ||
         pEdit == &maNUpPage.maHSpaceEdt || pEdit == &maNUpPage.maVSpaceEdt

@@ -86,6 +86,8 @@ namespace vcl
             NumericField                            maNupRowsEdt;
             FixedText                               maNupColTxt;
             NumericField                            maNupColEdt;
+            FixedText                               maNupRepTxt;
+            NumericField                            maNupRepEdt;
             CheckBox                                maBorderCB;
             RadioButton                             maNupPortrait;
             RadioButton                             maNupLandscape;

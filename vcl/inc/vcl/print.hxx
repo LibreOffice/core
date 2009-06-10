@@ -451,6 +451,7 @@ public:
         // all metrics in 100th mm
         int         nRows;
         int         nColumns;
+        int         nRepeat;
         Size        aPaperSize;
         long        nLeftMargin;
         long        nTopMargin;
@@ -461,7 +462,7 @@ public:
         bool        bDrawBorder;
 
         MultiPageSetup()
-        : nRows( 1 ), nColumns( 1 ), aPaperSize( 21000, 29700 )
+        : nRows( 1 ), nColumns( 1 ), nRepeat( 1 ), aPaperSize( 21000, 29700 )
         , nLeftMargin( 0 ), nTopMargin( 0 )
         , nRightMargin( 0 ), nBottomMargin( 0 )
         , nHorizontalSpacing( 500 ), nVerticalSpacing( 500 )
