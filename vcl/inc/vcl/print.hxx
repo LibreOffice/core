@@ -516,8 +516,8 @@ public:
 
     // implementation details, not usable outside vcl
     int  SAL_DLLPRIVATE getFilteredPageCount();
-    Size SAL_DLLPRIVATE getPageFile( int i_inUnfilteredPage, GDIMetaFile& rMtf );
-    Size SAL_DLLPRIVATE getFilteredPageFile( int i_nFilteredPage, GDIMetaFile& o_rMtf );
+    Size SAL_DLLPRIVATE getPageFile( int i_inUnfilteredPage, GDIMetaFile& rMtf, bool i_bMayUseCache = false );
+    Size SAL_DLLPRIVATE getFilteredPageFile( int i_nFilteredPage, GDIMetaFile& o_rMtf, bool i_bMayUseCache = false );
     void SAL_DLLPRIVATE printFilteredPage( int i_nPage );
     void SAL_DLLPRIVATE setPrinter( const boost::shared_ptr<Printer>& );
     void SAL_DLLPRIVATE setOptionChangeHdl( const Link& );

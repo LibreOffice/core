@@ -57,6 +57,79 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 using namespace vcl;
 
+class ImplPageCache
+{
+    std::vector< GDIMetaFile >  maPages;
+    std::vector< sal_Int32 >    maPageNumbers;
+    std::vector< sal_Int32 >    maCacheRanking;
+
+    static const sal_Int32 nCacheSize = 6;
+
+    void updateRanking( sal_Int32 nLastHit )
+    {
+        if( maCacheRanking[0] != nLastHit )
+        {
+            bool bMove = false;
+            for( sal_Int32 i = nCacheSize-1; i > 0; i-- )
+            {
+                if( maCacheRanking[i] == nLastHit )
+                    bMove = true;
+                maCacheRanking[i] = maCacheRanking[i-1];
+            }
+            maCacheRanking[0] = nLastHit;
+        }
+    }
+
+public:
+    ImplPageCache()
+    : maPages( nCacheSize )
+    , maPageNumbers( nCacheSize, -1 )
+    , maCacheRanking( nCacheSize )
+    {
+        for( sal_Int32 i = 0; i < nCacheSize; i++ )
+            maCacheRanking[i] = nCacheSize - i - 1;
+    }
+
+    // caution: does not ensure uniqueness
+    void insert( sal_Int32 i_nPageNo, const GDIMetaFile& i_rPage )
+    {
+        sal_Int32 nReplacePage = maCacheRanking.back();
+        maPages[ nReplacePage ] = i_rPage;
+        maPageNumbers[ nReplacePage ] = i_nPageNo;
+        // cache insertion means in our case, the page was just queried
+        // so update the ranking
+        updateRanking( nReplacePage );
+    }
+
+    // caution: bad algorithm; should there ever be reason to increase the cache size beyond 6
+    // this needs to be urgently rewritten. However do NOT increase the cache size lightly,
+    // whole pages can be rather memory intensive
+    const GDIMetaFile* get( sal_Int32 i_nPageNo )
+    {
+        const GDIMetaFile* pRet = NULL;
+        for( sal_Int32 i = 0; i < nCacheSize; ++i )
+        {
+            if( maPageNumbers[i] == i_nPageNo )
+            {
+                updateRanking( i );
+                pRet = &maPages[i];
+                break;
+            }
+        }
+        return pRet;
+    }
+
+    void invalidate()
+    {
+        for( sal_Int32 i = 0; i < nCacheSize; ++i )
+        {
+            maPageNumbers[i] = -1;
+            maPages[i].Clear();
+            maCacheRanking[i] = nCacheSize - i - 1;
+        }
+    }
+};
+
 class vcl::ImplPrinterListenerData
 {
 public:
@@ -83,6 +156,8 @@ public:
     vcl::PrinterListener::MultiPageSetup                        maMultiPage;
 
     vcl::PrintProgressDialog*                                   mpProgress;
+
+    ImplPageCache                                               maPageCache;
 
     ImplPrinterListenerData() :
         mbLastPage( sal_False ),
@@ -401,7 +476,7 @@ static Size modifyJobSetup( Printer* pPrinter, const Sequence< PropertyValue >& 
     return aPageSize;
 }
 
-Size PrinterListener::getPageFile( int i_nUnfilteredPage, GDIMetaFile& o_rMtf )
+Size PrinterListener::getPageFile( int i_nUnfilteredPage, GDIMetaFile& o_rMtf, bool i_bMayUseCache )
 {
     // update progress if necessary
     if( mpImplData->mpProgress )
@@ -412,6 +487,18 @@ Size PrinterListener::getPageFile( int i_nUnfilteredPage, GDIMetaFile& o_rMtf )
         mpImplData->mpProgress->tick();
         Application::Reschedule( true );
     }
+
+    if( i_bMayUseCache )
+    {
+        const GDIMetaFile* pCached = mpImplData->maPageCache.get( i_nUnfilteredPage );
+        if( pCached )
+        {
+            o_rMtf = *pCached;
+            return pCached->GetPrefSize();
+        }
+    }
+    else
+        mpImplData->maPageCache.invalidate();
 
     o_rMtf.Clear();
 
@@ -437,6 +524,9 @@ Size PrinterListener::getPageFile( int i_nUnfilteredPage, GDIMetaFile& o_rMtf )
     o_rMtf.Stop();
     o_rMtf.WindStart();
     mpImplData->mpPrinter->Pop();
+
+    if( i_bMayUseCache )
+        mpImplData->maPageCache.insert( i_nUnfilteredPage, o_rMtf );
 
     return aPageSize;
 }
@@ -474,7 +564,7 @@ static void appendSubPage( GDIMetaFile& o_rMtf, const Rectangle& i_rClipRect, GD
     o_rMtf.AddAction( new MetaPopAction() );
 }
 
-Size PrinterListener::getFilteredPageFile( int i_nFilteredPage, GDIMetaFile& o_rMtf )
+Size PrinterListener::getFilteredPageFile( int i_nFilteredPage, GDIMetaFile& o_rMtf, bool i_bMayUseCache )
 {
     const MultiPageSetup& rMPS( mpImplData->maMultiPage );
     int nSubPages = rMPS.nRows * rMPS.nColumns;
@@ -488,7 +578,7 @@ Size PrinterListener::getFilteredPageFile( int i_nFilteredPage, GDIMetaFile& o_r
         rMPS.nLeftMargin == 0 && rMPS.nRightMargin == 0 &&
         rMPS.nTopMargin == 0 && rMPS.nBottomMargin == 0 )
     {
-        return getPageFile( i_nFilteredPage, o_rMtf );
+        return getPageFile( i_nFilteredPage, o_rMtf, i_bMayUseCache );
     }
 
     Size aPaperSize( mpImplData->maMultiPage.aPaperSize );
@@ -520,7 +610,7 @@ Size PrinterListener::getFilteredPageFile( int i_nFilteredPage, GDIMetaFile& o_r
         if( nPage < nDocPages )
         {
             GDIMetaFile aPageFile;
-            Size aPageSize = getPageFile( nPage, aPageFile );
+            Size aPageSize = getPageFile( nPage, aPageFile, i_bMayUseCache );
             if( aPageSize.Width() && aPageSize.Height() )
             {
                 // scale the metafile down to a sub page size

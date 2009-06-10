@@ -180,7 +180,7 @@ namespace vcl
         Rectangle                               maPreviewBackground;
 
         void updateNup();
-        void preparePreview( bool i_bPrintChanged = true );
+        void preparePreview( bool i_bPrintChanged = true, bool i_bMayUseCache = false );
         void setPreviewText( sal_Int32 );
         void updatePrinterText();
         void checkControlDependencies();

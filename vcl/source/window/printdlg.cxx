@@ -365,7 +365,7 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterList
     // save space for the preview window
     maPreviewSpace = Rectangle( maPreviewWindow.GetPosPixel(), maPreviewWindow.GetSizePixel() );
     // get the first page
-    preparePreview();
+    preparePreview( true, true );
 
     // fill printer listbox
     const std::vector< rtl::OUString >& rQueues( Printer::GetPrinterQueues() );
@@ -1114,7 +1114,7 @@ void PrintDialog::setPreviewText( sal_Int32 )
         maNumPagesText.SetText( maNoPageStr );
 }
 
-void PrintDialog::preparePreview( bool i_bNewPage )
+void PrintDialog::preparePreview( bool i_bNewPage, bool i_bMayUseCache )
 {
     // page range may have changed depending on options
     sal_Int32 nPages = maPListener->getFilteredPageCount();
@@ -1138,7 +1138,7 @@ void PrintDialog::preparePreview( bool i_bNewPage )
         const MapMode aMapMode( MAP_100TH_MM );
         GDIMetaFile aMtf;
         if( nPages > 0 )
-            maCurPageSize = maPListener->getFilteredPageFile( mnCurPage, aMtf );
+            maCurPageSize = maPListener->getFilteredPageFile( mnCurPage, aMtf, i_bMayUseCache );
 
         maPreviewWindow.setPreview( aMtf );
     }
@@ -1191,7 +1191,7 @@ void PrintDialog::updateNup()
 
     maPListener->setMultipage( aMPS );
 
-    preparePreview();
+    preparePreview( true, true );
 }
 
 IMPL_LINK( PrintDialog, SelectHdl, ListBox*, pBox )
@@ -1250,7 +1250,7 @@ IMPL_LINK( PrintDialog, ModifyHdl, Edit*, pEdit )
     else if( pEdit == &maPageEdit )
     {
         mnCurPage = sal_Int32( maPageEdit.GetValue() - 1 );
-        preparePreview();
+        preparePreview( true, true );
     }
     return 0;
 }
