@@ -45,6 +45,8 @@
 #include "vcl/help.hxx"
 #include "vcl/decoview.hxx"
 
+#include "unotools/localedatawrapper.hxx"
+
 #include "rtl/ustrbuf.hxx"
 
 #include "com/sun/star/awt/Size.hpp"
@@ -133,6 +135,32 @@ PrintDialog::NUpTabPage::NUpTabPage( Window* i_pParent, const ResId& rResId )
     , maVSpaceEdt( this, VclResId( SV_PRINT_PRT_NUP_MARGINS_VSPACE_EDT ) )
 {
     FreeResource();
+
+    // setup field units for metric fields
+    const LocaleDataWrapper& rLocWrap( maLeftMarginEdt.GetLocaleDataWrapper() );
+    FieldUnit eUnit = FUNIT_MM;
+    USHORT nDigits = 0;
+    if( rLocWrap.getMeasurementSystemEnum() == MEASURE_US )
+    {
+        eUnit = FUNIT_INCH;
+        nDigits = 2;
+    }
+    // set units
+    maLeftMarginEdt.SetUnit( eUnit );
+    maTopMarginEdt.SetUnit( eUnit );
+    maRightMarginEdt.SetUnit( eUnit );
+    maBottomMarginEdt.SetUnit( eUnit );
+    maHSpaceEdt.SetUnit( eUnit );
+    maVSpaceEdt.SetUnit( eUnit );
+
+    // set precision
+    maLeftMarginEdt.SetDecimalDigits( nDigits );
+    maTopMarginEdt.SetDecimalDigits( nDigits );
+    maRightMarginEdt.SetDecimalDigits( nDigits );
+    maBottomMarginEdt.SetDecimalDigits( nDigits );
+    maHSpaceEdt.SetDecimalDigits( nDigits );
+    maVSpaceEdt.SetDecimalDigits( nDigits );
+
     maNupLine.SMHID2( "NUpPage", "NUPline" );
     maNupRowsTxt.SMHID2( "NUpPage", "NUPRowsText" );
     maNupRowsEdt.SMHID2( "NUpPage", "NUPRows" );
@@ -162,12 +190,12 @@ PrintDialog::NUpTabPage::~NUpTabPage()
 
 void PrintDialog::NUpTabPage::initFromMultiPageSetup( const vcl::PrinterListener::MultiPageSetup& i_rMPS )
 {
-    maLeftMarginEdt.SetValue( i_rMPS.nLeftMargin, FUNIT_100TH_MM );
-    maTopMarginEdt.SetValue( i_rMPS.nTopMargin, FUNIT_100TH_MM );
-    maRightMarginEdt.SetValue( i_rMPS.nRightMargin, FUNIT_100TH_MM );
-    maBottomMarginEdt.SetValue( i_rMPS.nBottomMargin, FUNIT_100TH_MM );
-    maHSpaceEdt.SetValue( i_rMPS.nHorizontalSpacing, FUNIT_100TH_MM );
-    maVSpaceEdt.SetValue( i_rMPS.nVerticalSpacing, FUNIT_100TH_MM );
+    maLeftMarginEdt.SetValue( maLeftMarginEdt.Normalize( i_rMPS.nLeftMargin ), FUNIT_100TH_MM );
+    maTopMarginEdt.SetValue( maTopMarginEdt.Normalize( i_rMPS.nTopMargin ), FUNIT_100TH_MM );
+    maRightMarginEdt.SetValue( maRightMarginEdt.Normalize( i_rMPS.nRightMargin ), FUNIT_100TH_MM );
+    maBottomMarginEdt.SetValue( maBottomMarginEdt.Normalize( i_rMPS.nBottomMargin ), FUNIT_100TH_MM );
+    maHSpaceEdt.SetValue( maHSpaceEdt.Normalize( i_rMPS.nHorizontalSpacing ), FUNIT_100TH_MM );
+    maVSpaceEdt.SetValue( maVSpaceEdt.Normalize( i_rMPS.nVerticalSpacing ), FUNIT_100TH_MM );
     maBorderCB.Check( i_rMPS.bDrawBorder );
     maNupRowsEdt.SetValue( i_rMPS.nRows );
     maNupColEdt.SetValue( i_rMPS.nColumns );
@@ -1143,13 +1171,13 @@ void PrintDialog::updateNup()
     aMPS.nColumns      = nCols;
     aMPS.aPaperSize    = maNUpPage.maNupPortrait.IsChecked()
                          ? maNupPortraitSize : maNupLandscapeSize;
-    aMPS.nLeftMargin   = long(maNUpPage.maLeftMarginEdt.GetValue( FUNIT_100TH_MM ));
-    aMPS.nTopMargin    = long(maNUpPage.maTopMarginEdt.GetValue( FUNIT_100TH_MM ));
-    aMPS.nRightMargin  = long(maNUpPage.maRightMarginEdt.GetValue( FUNIT_100TH_MM ));
-    aMPS.nBottomMargin = long(maNUpPage.maBottomMarginEdt.GetValue( FUNIT_100TH_MM ));
+    aMPS.nLeftMargin   = long(maNUpPage.maLeftMarginEdt.Denormalize(maNUpPage.maLeftMarginEdt.GetValue( FUNIT_100TH_MM )));
+    aMPS.nTopMargin    = long(maNUpPage.maTopMarginEdt.Denormalize(maNUpPage.maTopMarginEdt.GetValue( FUNIT_100TH_MM )));
+    aMPS.nRightMargin  = long(maNUpPage.maRightMarginEdt.Denormalize(maNUpPage.maRightMarginEdt.GetValue( FUNIT_100TH_MM )));
+    aMPS.nBottomMargin = long(maNUpPage.maBottomMarginEdt.Denormalize(maNUpPage.maBottomMarginEdt.GetValue( FUNIT_100TH_MM )));
 
-    aMPS.nHorizontalSpacing = long(maNUpPage.maHSpaceEdt.GetValue( FUNIT_100TH_MM ));
-    aMPS.nVerticalSpacing   = long(maNUpPage.maVSpaceEdt.GetValue( FUNIT_100TH_MM ));
+    aMPS.nHorizontalSpacing = long(maNUpPage.maHSpaceEdt.Denormalize(maNUpPage.maHSpaceEdt.GetValue( FUNIT_100TH_MM )));
+    aMPS.nVerticalSpacing   = long(maNUpPage.maVSpaceEdt.Denormalize(maNUpPage.maVSpaceEdt.GetValue( FUNIT_100TH_MM )));
 
     aMPS.bDrawBorder        = maNUpPage.maBorderCB.IsChecked();
 
