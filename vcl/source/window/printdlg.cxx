@@ -1428,9 +1428,9 @@ void PrintDialog::Resize()
     aPrefSize.Width() = nPreviewLength - 2* aPixDiff.Width();
     Point aCtrlPos( 2*aPixDiff.Width(), 3*aPixDiff.Height() + nPreviewLength );
     maPreviewCtrlRow.setManagedArea( Rectangle( aCtrlPos, aPrefSize ) );
-    maPreviewBackground.Left() = aPixDiff.Width();
-    maPreviewBackground.Top() = aPixDiff.Height();
-    maPreviewBackground.Right() = aPixDiff.Width() + nPreviewLength;
+    maPreviewBackground.Left() = aPixDiff.Width() - 2;
+    maPreviewBackground.Top() = aPixDiff.Height() - 2;
+    maPreviewBackground.Right() = aPixDiff.Width() + nPreviewLength + 2;
     maPreviewBackground.Bottom() = maPreviewCtrlRow.getManagedArea().Bottom() + aPixDiff.Height();
 
     // and do the preview; however the metafile does not need to be gotten anew
