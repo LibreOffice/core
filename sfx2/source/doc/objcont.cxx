@@ -1005,6 +1005,7 @@ BOOL SfxObjectShell::Remove
 
 //--------------------------------------------------------------------
 
+#if 0
 BOOL SfxObjectShell::Print
 (
     Printer&        rPrt,
@@ -1152,6 +1153,20 @@ BOOL SfxObjectShell::Print
     }
     return TRUE;
 }
+#else
+BOOL SfxObjectShell::Print
+(
+    Printer&,
+    USHORT,
+    USHORT,
+    USHORT,
+    const String*
+)
+{
+    DBG_ERROR( "SfxObjectShell::Print, dead code !" );
+    return FALSE;
+}
+#endif
 
 //--------------------------------------------------------------------
 

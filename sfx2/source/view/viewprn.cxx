@@ -1011,7 +1011,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
 
 //--------------------------------------------------------------------
 
-PrintDialog* SfxViewShell::CreatePrintDialog( Window* pParent )
+PrintDialog* SfxViewShell::CreatePrintDialog( Window* /*pParent*/ )
 
 /*  [Beschreibung]
 
@@ -1021,11 +1021,15 @@ PrintDialog* SfxViewShell::CreatePrintDialog( Window* pParent )
 */
 
 {
+    #if 0
     PrintDialog *pDlg = new PrintDialog( pParent, false );
     pDlg->SetFirstPage( 1 );
     pDlg->SetLastPage( 9999 );
     pDlg->EnableCollate();
     return pDlg;
+    #else
+    return NULL;
+    #endif
 }
 
 //--------------------------------------------------------------------
@@ -1037,10 +1041,11 @@ void SfxViewShell::PreparePrint( PrintDialog * )
 //--------------------------------------------------------------------
 
 
-ErrCode SfxViewShell::DoPrint( SfxPrinter *pPrinter,
-                               PrintDialog *pPrintDlg,
-                               BOOL bSilent, BOOL bIsAPI )
+ErrCode SfxViewShell::DoPrint( SfxPrinter* /*pPrinter*/,
+                               PrintDialog* /*pPrintDlg*/,
+                               BOOL /*bSilent*/, BOOL /*bIsAPI*/ )
 {
+    #if 0
     // Printer-Dialogbox waehrend des Ausdrucks mu\s schon vor
     // StartJob erzeugt werden, da SV bei einem Quit-Event h"angt
     SfxPrintProgress *pProgress = new SfxPrintProgress( this, !bSilent );
@@ -1072,6 +1077,10 @@ ErrCode SfxViewShell::DoPrint( SfxPrinter *pPrinter,
     }
 
     return pPrinter->GetError();
+    #else
+    DBG_ERROR( "DoPrint called, dead code !" );
+    return ERRCODE_IO_NOTSUPPORTED;
+    #endif
 }
 
 //--------------------------------------------------------------------
