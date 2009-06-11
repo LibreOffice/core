@@ -150,7 +150,9 @@ void ViewShell::PrintPreViewPage( SwPrtOptions& rOptions,
         if( rOptions.IsPrintSingleJobs() && rOptions.GetJobName().Len() &&
             ( bStartJob || rOptions.bJobStartet ) )
         {
+#ifdef TL_NOT_NOW /*TLPDF*/
             pPrt->EndJob();
+#endif
             rOptions.bJobStartet = TRUE;
 
             // Reschedule statt Yield, da Yield keine Events abarbeitet
@@ -159,7 +161,9 @@ void ViewShell::PrintPreViewPage( SwPrtOptions& rOptions,
                     rProgress.Reschedule();
 
             rOptions.MakeNextJobName();
-            bStartJob = pPrt->StartJob( rOptions.GetJobName() );
+#ifdef TL_NOT_NOW /*TLPDF*/
+            // bStartJob = pPrt->StartJob( rOptions.GetJobName() );
+#endif
         }
 
         const SwPageFrm *pStPage  = (SwPageFrm*)GetLayout()->Lower();
@@ -340,7 +344,9 @@ void ViewShell::PrintPreViewPage( SwPrtOptions& rOptions,
                     // dann kann das drucken losgehen
                     rProgress.SetState( nPrintCount++, nSelCount );
 
+#ifdef TL_NOT_NOW /*TLPDF*/
                     pPrt->StartPage();
+#endif
                     Point aCalcPt;
                     SwPageFrm** ppTmpPg = aPageArr;
 
@@ -401,7 +407,9 @@ void ViewShell::PrintPreViewPage( SwPrtOptions& rOptions,
                         }
                         aCalcPt.Y() += nVOffs + nPageHeight;
                     }
+#ifdef TL_NOT_NOW /*TLPDF*/
                     pPrt->EndPage();
+#endif
                     SwPaintQueue::Repaint();
 
                     memset( aPageArr, 0, sizeof( SwPageFrm* ) * nPages );
@@ -569,7 +577,9 @@ void ViewShell::PrintProspect( SwPrtOptions& rOptions,
         if( rOptions.IsPrintSingleJobs() && rOptions.GetJobName().Len() &&
             ( bStartJob || rOptions.bJobStartet ) )
         {
+#ifdef TL_NOT_NOW /*TLPDF*/
             pPrt->EndJob();
+#endif
             rOptions.bJobStartet = TRUE;
 
             // Reschedule statt Yield, da Yield keine Events abarbeitet
@@ -578,7 +588,8 @@ void ViewShell::PrintProspect( SwPrtOptions& rOptions,
                     rProgress.Reschedule();
 
             rOptions.MakeNextJobName();
-            bStartJob = pPrt->StartJob( rOptions.GetJobName() );
+            DBG_ERROR( "StartJob does not exist anymore" );
+            // bStartJob = pPrt->StartJob( rOptions.GetJobName() );
         }
 
         // dann sorge mal dafuer, das alle Seiten in der richtigen
@@ -714,7 +725,9 @@ void ViewShell::PrintProspect( SwPrtOptions& rOptions,
             bStartJob = TRUE;
             rProgress.SetState( nPrintCount, nCntPage );
 
+#ifdef TL_NOT_NOW /*TLPDF*/
             pPrt->StartPage();
+#endif
 
             Point aSttPt;
             for( int nC = 0; nC < 2; ++nC )
@@ -736,7 +749,9 @@ void ViewShell::PrintProspect( SwPrtOptions& rOptions,
                 aSttPt.X() += aTmpPrtSize.Width() / 2;
             }
 
+#ifdef TL_NOT_NOW /*TLPDF*/
             pPrt->EndPage();
+#endif
             SwPaintQueue::Repaint();
             nSPg = nSPg + nStep;
             nEPg = nEPg - nStep;

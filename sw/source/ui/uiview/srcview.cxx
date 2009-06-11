@@ -753,8 +753,9 @@ USHORT SwSrcView::SetPrinter(SfxPrinter* pNew, USHORT nDiffFlags, bool )
     Beschreibung:
  --------------------------------------------------------------------*/
 
-ErrCode SwSrcView::DoPrint( SfxPrinter *pPrinter, PrintDialog *pDlg, BOOL bSilent, BOOL bIsAPI )
+ErrCode SwSrcView::DoPrint( SfxPrinter */*pPrinter*/, PrintDialog */*pDlg*/, BOOL /*bSilent*/, BOOL /*bIsAPI*/ )
 {
+    #if 0
     SfxPrintProgress *pProgress = new SfxPrintProgress( this, !bSilent );
     SfxPrinter *pDocPrinter = GetPrinter(TRUE);
     if ( !pPrinter )
@@ -845,6 +846,10 @@ ErrCode SwSrcView::DoPrint( SfxPrinter *pPrinter, PrintDialog *pDlg, BOOL bSilen
     pProgress->DeleteOnEndPrint();
     pPrinter->EndJob();
     return pPrinter->GetError();
+    #else
+    DBG_ERROR( "dead code" );
+    return ERRCODE_IO_NOTSUPPORTED;
+    #endif
 }
 
 /*--------------------------------------------------------------------

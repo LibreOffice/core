@@ -976,12 +976,14 @@ BOOL SwNewDBMgr::MergePrint( SwView& rView,
             bMergeLock = TRUE;
             if(rOpt.IsPrintProspect())
             {
+#ifdef TL_NOT_NOW /*TLPDF*/
                 if( ! pPrt->IsJobActive() )
                 {
                     pPrt->SetJobValue( String( RTL_CONSTASCII_USTRINGPARAM( "IsQuickJob" ) ),
                                        String( RTL_CONSTASCII_USTRINGPARAM( "true" ) ) );
                     pPrt->StartJob( rOpt.GetJobName() );
                 }
+#endif
                 if( pPrt->IsJobActive() )
                 {
                     pSh->PrintProspect( rOpt, rProgress, rOpt.IsPrintProspect_RTL() );
@@ -1139,7 +1141,11 @@ BOOL SwNewDBMgr::MergePrintDocuments( SwView& rView,
         bMergeLock = TRUE;
         if(rOpt.IsPrintProspect())
         {
-            if( pPrt->IsJobActive() || pPrt->StartJob( rOpt.GetJobName() ))
+            if( pPrt->IsJobActive()
+#ifdef TL_NOT_NOW /*TLPDF*/
+               || pPrt->StartJob( rOpt.GetJobName() )
+#endif
+               )
             {
                 pSh->PrintProspect( rOpt, rProgress,  rOpt.IsPrintProspect_RTL() );
                 bRet = TRUE;

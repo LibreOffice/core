@@ -174,8 +174,9 @@ USHORT __EXPORT SwView::SetPrinter(SfxPrinter* pNew, USHORT nDiffFlags, bool  )
     Beschreibung:
  --------------------------------------------------------------------*/
 
-ErrCode SwView::DoPrint( SfxPrinter *pPrinter, PrintDialog *pDlg, BOOL bSilent, BOOL bIsAPI )
+ErrCode SwView::DoPrint( SfxPrinter */*pPrinter*/, PrintDialog */*pDlg*/, BOOL /*bSilent*/, BOOL /*bIsAPI*/ )
 {
+    #if 0
     // First test
     SwWrtShell* pSh = &GetWrtShell();
     SwNewDBMgr* pMgr = pSh->GetNewDBMgr();
@@ -434,6 +435,10 @@ ErrCode SwView::DoPrint( SfxPrinter *pPrinter, PrintDialog *pDlg, BOOL bSilent, 
     pProgress->DeleteOnEndPrint();
     pPrinter->EndJob();
     return pPrinter->GetError();
+    #else
+    DBG_ERROR( "dead code" );
+    return ERRCODE_IO_NOTSUPPORTED;
+    #endif
 }
 
 

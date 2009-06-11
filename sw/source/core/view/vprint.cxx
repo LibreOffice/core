@@ -381,6 +381,7 @@ void lcl_FormatPostIt( IDocumentContentOperations* pIDCO, SwPaM& aPam, SwPostItF
 void lcl_PrintPostIts( ViewShell* pPrtShell, const XubString& rJobName,
                         BOOL& rStartJob, int& rJobStartError, BOOL bReverse)
 {
+#ifdef TL_NOT_NOW /*TLPDF*/
     // Formatieren und Ausdrucken
     pPrtShell->CalcLayout();
 
@@ -427,6 +428,13 @@ void lcl_PrintPostIts( ViewShell* pPrtShell, const XubString& rJobName,
         pPrn->EndPage();
         pPage = bReverse ? pPage->GetPrev() : pPage->GetNext();
     }
+    #else
+    (void)pPrtShell;
+    (void)rJobName;
+    (void)rStartJob;
+    (void)rJobStartError;
+    (void)bReverse;
+    #endif
 }
 
 /******************************************************************************
