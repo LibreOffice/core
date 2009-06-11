@@ -332,7 +332,10 @@ sal_Bool VCLXPrinter::start( const ::rtl::OUString& rJobName, sal_Int16 /*nCopie
 
     sal_Bool bDone = sal_True;
     if ( GetPrinter() )
-        bDone = GetPrinter()->StartJob( rJobName );
+    {
+        // FIXME: adapt to new interface
+        // bDone = GetPrinter()->StartJob( rJobName );
+    }
 
     return bDone;
 }
@@ -342,7 +345,10 @@ void VCLXPrinter::end(  ) throw(::com::sun::star::awt::PrinterException, ::com::
     ::osl::Guard< ::osl::Mutex > aGuard( Mutex );
 
     if ( GetPrinter() )
-        GetPrinter()->EndJob();
+    {
+        // FIXME: adapt to new interface
+        // GetPrinter()->EndJob();
+    }
 }
 
 void VCLXPrinter::terminate(  ) throw(::com::sun::star::uno::RuntimeException)
@@ -358,7 +364,10 @@ void VCLXPrinter::terminate(  ) throw(::com::sun::star::uno::RuntimeException)
     ::osl::Guard< ::osl::Mutex > aGuard( Mutex );
 
     if ( GetPrinter() )
-        GetPrinter()->StartPage();
+    {
+        // FIXME: adapt to new interface
+        // GetPrinter()->StartPage();
+    }
     return GetDevice();
 }
 
@@ -367,7 +376,10 @@ void VCLXPrinter::endPage(  ) throw(::com::sun::star::awt::PrinterException, ::c
     ::osl::Guard< ::osl::Mutex > aGuard( Mutex );
 
     if ( GetPrinter() )
-        GetPrinter()->EndPage();
+    {
+        // FIXME: adapt to new interface
+        // GetPrinter()->EndPage();
+    }
 }
 
 
