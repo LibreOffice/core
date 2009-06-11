@@ -2143,8 +2143,11 @@ void ScDocShell::Print( SfxProgress& rProgress, PrintDialog* pPrintDialog,
                 // the second copy isn't printed on the back of the last page of the first copy.
                 // (same as in Writer ViewShell::Prt)
 
+                // FIXME: needs to be adapted to XRenderable interface
+                #if 0
                 pPrinter->StartPage();
                 pPrinter->EndPage();
+                #endif
             }
         }
     }

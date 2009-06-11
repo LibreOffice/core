@@ -1021,7 +1021,11 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
         pArray[1].Value <<= aRangeAddress;
     }
 
-    const ScPrintOptions& rPrintOpt = SC_MOD()->GetPrintOptions();
+    #if 0
+    const ScPrintOptions& rPrintOpt =
+    #endif
+    // FIXME: is this for side effects ?
+        SC_MOD()->GetPrintOptions();
     if( ! pPrinterOptions )
         pPrinterOptions = new ScPrintUIOptions;
     else

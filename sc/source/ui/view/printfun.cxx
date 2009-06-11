@@ -2042,7 +2042,10 @@ long ScPrintFunc::PrintNotes( long nPageNo, long nNoteStart, BOOL bDoPrint, ScPr
     }
 
     if ( pPrinter && bDoPrint )
-        pPrinter->StartPage();
+    {
+        DBG_ERROR( "StartPage does not exist anymore" );
+        // pPrinter->StartPage();
+    }
 
     if ( bDoPrint || pLocationData )
     {
@@ -2063,7 +2066,10 @@ long ScPrintFunc::PrintNotes( long nPageNo, long nNoteStart, BOOL bDoPrint, ScPr
     long nCount = DoNotes( nNoteStart, bDoPrint, pLocationData );
 
     if ( pPrinter && bDoPrint )
-        pPrinter->EndPage();
+    {
+        DBG_ERROR( "EndPage does not exist anymore" );
+        // pPrinter->EndPage();
+    }
 
     return nCount;
 }
@@ -2125,7 +2131,10 @@ void ScPrintFunc::PrintPage( long nPageNo, SCCOL nX1, SCROW nY1, SCCOL nX2, SCRO
     }
 
     if ( pPrinter && bDoPrint )
-        pPrinter->StartPage();
+    {
+        DBG_ERROR( "StartPage does not exist anymore" );
+        // pPrinter->StartPage();
+    }
 
     //  Kopf- und Fusszeilen (ohne Zentrierung)
 
@@ -2407,7 +2416,10 @@ void ScPrintFunc::PrintPage( long nPageNo, SCCOL nX1, SCROW nY1, SCCOL nX2, SCRO
     }
 
     if ( pPrinter && bDoPrint )
-        pPrinter->EndPage();
+    {
+        DBG_ERROR( "EndPage does not exist anymore" );
+        // pPrinter->EndPage();
+    }
 
     aLastSourceRange = ScRange( nX1, nY1, nPrintTab, nX2, nY2, nPrintTab );
     bSourceRangeValid = TRUE;
