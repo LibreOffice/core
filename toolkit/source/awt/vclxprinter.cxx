@@ -326,7 +326,7 @@ IMPL_XTYPEPROVIDER_START( VCLXPrinter )
     VCLXPrinterPropertySet::getTypes()
 IMPL_XTYPEPROVIDER_END
 
-sal_Bool VCLXPrinter::start( const ::rtl::OUString& rJobName, sal_Int16 /*nCopies*/, sal_Bool /*bCollate*/ ) throw(::com::sun::star::awt::PrinterException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
+sal_Bool VCLXPrinter::start( const ::rtl::OUString& /*rJobName*/, sal_Int16 /*nCopies*/, sal_Bool /*bCollate*/ ) throw(::com::sun::star::awt::PrinterException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( Mutex );
 
