@@ -70,7 +70,6 @@
 #include <vcl/wrkwin.hxx>
 
 #include "unomodel.hxx"
-#include "mathml.hxx"
 #include "view.hxx"
 #include "config.hxx"
 #include "dialog.hxx"
