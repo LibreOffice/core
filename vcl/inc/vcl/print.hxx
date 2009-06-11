@@ -279,6 +279,10 @@ private:
 public:
     SAL_DLLPRIVATE void         ImplEndPrint();
     SAL_DLLPRIVATE void         ImplUpdateQuickStatus();
+    SAL_DLLPRIVATE BOOL         StartJob( const XubString& rJobName );
+    SAL_DLLPRIVATE BOOL         EndJob();
+    SAL_DLLPRIVATE BOOL         StartPage();
+    SAL_DLLPRIVATE BOOL         EndPage();
 private:
     SAL_DLLPRIVATE              Printer( const Printer& rPrinter );
     SAL_DLLPRIVATE Printer&     operator =( const Printer& rPrinter );
@@ -374,14 +378,10 @@ public:
     const XubString&            GetPrintFile() const { return maPrintFile; }
     void                        EnablePrintFile( BOOL bEnable ) { mbPrintFile = bEnable; }
     BOOL                        IsPrintFileEnabled() const { return mbPrintFile; }
-    BOOL                        StartJob( const XubString& rJobName );
-    BOOL                        EndJob();
     BOOL                        AbortJob();
     const XubString&            GetCurJobName() const { return maJobName; }
     USHORT                      GetCurPage() const { return mnCurPage; }
     BOOL                        IsJobActive() const { return mbJobActive; }
-    BOOL                        StartPage();
-    BOOL                        EndPage();
 
     void                        SetPageQueueSize( USHORT nPages ) { mnPageQueueSize = nPages; }
     USHORT                      GetPageQueueSize() const { return mnPageQueueSize; }

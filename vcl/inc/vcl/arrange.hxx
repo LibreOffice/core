@@ -212,8 +212,8 @@ namespace vcl
         virtual void resize() {}
         virtual void setParentWindow( Window* ) {}
         virtual size_t countElements() const { return 1; }
-        virtual boost::shared_ptr<WindowArranger> getChild( size_t i_nIndex ) const { return boost::shared_ptr<WindowArranger>(); }
-        virtual Window* getWindow( size_t i_nIndex ) const { return NULL; }
+        virtual boost::shared_ptr<WindowArranger> getChild( size_t ) const { return boost::shared_ptr<WindowArranger>(); }
+        virtual Window* getWindow( size_t ) const { return NULL; }
         virtual sal_Int32 getExpandPriority( size_t i_nIndex ) const
         { return (i_nIndex == 0) ? m_aElement.getExpandPriority() : 0; }
     };
