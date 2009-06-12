@@ -44,18 +44,6 @@ class JobSetup;
 namespace vcl
 { class PrinterListener; }
 
-// ------------------------
-// - private printer data -
-// ------------------------
-struct ImplPrivatePrinterData
-{
-    bool        mbNextJobIsQuick;
-
-    ImplPrivatePrinterData() :
-        mbNextJobIsQuick( false )
-    {}
-};
-
 // --------------------
 // - ImplPrnQueueData -
 // --------------------

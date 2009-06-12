@@ -53,8 +53,6 @@ struct SalPrinterQueueInfo;
 class SalPrinter;
 class VirtualDevice;
 class Window;
-class ImplQPrinter;
-struct ImplPrivatePrinterData;
 
 namespace vcl {
     class PrinterListener;
@@ -224,16 +222,12 @@ class VCL_DLLPUBLIC Printer : public OutputDevice
     friend class ImplQPrinter;
 
 private:
-    ImplPrivatePrinterData*     mpPrinterData;
     SalInfoPrinter*             mpInfoPrinter;
     SalPrinter*                 mpPrinter;
-    Printer*                    mpJobPrinter;
     SalGraphics*                mpJobGraphics;
     Printer*                    mpPrev;
     Printer*                    mpNext;
     VirtualDevice*              mpDisplayDev;
-    ImplQPrinter*               mpQPrinter;
-    GDIMetaFile*                mpQMtf;
     PrinterOptions*             mpPrinterOptions;
     XubString                   maPrinterName;
     XubString                   maDriver;
@@ -258,9 +252,6 @@ private:
     BOOL                        mbUserSetupCompleted;
     BOOL                        mbUserSetupResult;
     Link                        maErrorHdl;
-    Link                        maStartPrintHdl;
-    Link                        maEndPrintHdl;
-    Link                        maPrintPageHdl;
 
     SAL_DLLPRIVATE void         ImplInitData();
     SAL_DLLPRIVATE void         ImplInit( SalPrinterQueueInfo* pInfo );
@@ -276,23 +267,18 @@ private:
 
     static SAL_DLLPRIVATE ULONG ImplSalPrinterErrorCodeToVCL( ULONG nError );
 
-public:
+private:
     SAL_DLLPRIVATE void         ImplEndPrint();
-    SAL_DLLPRIVATE void         ImplUpdateQuickStatus();
     SAL_DLLPRIVATE BOOL         StartJob( const XubString& rJobName );
     SAL_DLLPRIVATE BOOL         EndJob();
-    SAL_DLLPRIVATE BOOL         StartPage();
-    SAL_DLLPRIVATE BOOL         EndPage();
-private:
     SAL_DLLPRIVATE              Printer( const Printer& rPrinter );
     SAL_DLLPRIVATE Printer&     operator =( const Printer& rPrinter );
-
-#ifdef _SPOOLPRINTER_EXT
+public:
+    SAL_DLLPRIVATE void         ImplStartPage();
+    SAL_DLLPRIVATE void         ImplEndPage();
 public:
     void                        DrawGradientEx( OutputDevice* pOut, const Rectangle& rRect, const Gradient& rGradient );
     void                        DrawGradientEx( OutputDevice* pOut, const PolyPolygon& rPolyPoly, const Gradient& rGradient );
-
-#endif // _SPOOLPRINTER_EXT
 
 protected:
 
@@ -312,9 +298,6 @@ public:
     static XubString            GetDefaultPrinterName();
 
     virtual void                Error();
-    virtual void                StartPrint();
-    virtual void                EndPrint();
-    virtual void                PrintPage();
 
     const XubString&            GetName() const             { return maPrinterName; }
     const XubString&            GetDriverName() const       { return maDriver; }
@@ -371,7 +354,6 @@ public:
     USHORT                      GetCopyCount() const { return mnCopyCount; }
     BOOL                        IsCollateCopy() const { return mbCollateCopy; }
 
-    USHORT                      GetCurPrintPage() const { return mnCurPrintPage; }
     BOOL                        IsPrinting() const { return mbPrinting; }
 
     void                        SetPrintFile( const XubString& rFileName ) { maPrintFile = rFileName; }
@@ -383,35 +365,13 @@ public:
     USHORT                      GetCurPage() const { return mnCurPage; }
     BOOL                        IsJobActive() const { return mbJobActive; }
 
-    void                        SetPageQueueSize( USHORT nPages ) { mnPageQueueSize = nPages; }
-    USHORT                      GetPageQueueSize() const { return mnPageQueueSize; }
-
     ULONG                       GetError() const { return ERRCODE_TOERROR(mnError); }
     ULONG                       GetErrorCode() const { return mnError; }
 
     void                        SetErrorHdl( const Link& rLink ) { maErrorHdl = rLink; }
     const Link&                 GetErrorHdl() const { return maErrorHdl; }
-    void                        SetStartPrintHdl( const Link& rLink ) { maStartPrintHdl = rLink; }
-    const Link&                 GetStartPrintHdl() const { return maStartPrintHdl; }
-    void                        SetEndPrintHdl( const Link& rLink ) { maEndPrintHdl = rLink; }
-    const Link&                 GetEndPrintHdl() const   { return maEndPrintHdl;   }
-    void                        SetPrintPageHdl( const Link& rLink ) { maPrintPageHdl = rLink; }
-    const Link&                 GetPrintPageHdl() const  { return maPrintPageHdl;  }
 
     void                        Compat_OldPrinterMetrics( bool bSet );
-
-    /** Notify that the next StartJob belongs to a UI less "direct print" job
-    *
-    *   deprecated: the canonical way to notify a UI less job is to set the
-    *   JobSetup value "IsQuickJob" to "true". If set at all, the "IsQuickJob" value
-    *   on JobSetup will be preferred. However if no "IsQuickJob" value is set,
-    *   setting SetNextJobIsQuick will cause the following StartJob to set this value
-    *   to "true" in the current JobSetup.
-    *
-    *   the paramter can be set to "false" again in case a job was not started and the
-    *   printer is to be reused.
-    */
-    void                        SetNextJobIsQuick( bool bQuick = true );
 
     /** checks the printer list and updates it necessary
     *

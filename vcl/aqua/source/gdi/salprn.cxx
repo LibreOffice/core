@@ -38,7 +38,6 @@
 #include "saldata.hxx"
 #include "vcl/jobset.h"
 #include "vcl/salptype.hxx"
-#include "vcl/impprn.hxx"
 #include "vcl/print.hxx"
 #include "vcl/unohelp.hxx"
 

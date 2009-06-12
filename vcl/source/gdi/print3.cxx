@@ -330,13 +330,6 @@ bool Printer::StartJob( const XubString& i_rJobName, boost::shared_ptr<vcl::Prin
     if ( IsJobActive() || IsPrinting() )
         return FALSE;
 
-    if( mpPrinterData->mbNextJobIsQuick )
-    {
-        String aKey( RTL_CONSTASCII_USTRINGPARAM( "IsQuickJob" ) );
-        if( maJobSetup.GetValue( aKey ).Len() == 0 )
-            maJobSetup.SetValue( aKey, String( RTL_CONSTASCII_USTRINGPARAM( "true" ) ) );
-    }
-
     ULONG   nCopies = mnCopyCount;
     BOOL    bCollateCopy = mbCollateCopy;
     BOOL    bUserCopy = FALSE;
@@ -722,14 +715,14 @@ void PrinterListener::printFilteredPage( int i_nPage )
         mpImplData->mpPrinter->SetPaperSizeUser( aPageSize = mpImplData->maMultiPage.aPaperSize );
 
     // actually print the page
-    mpImplData->mpPrinter->StartPage();
+    mpImplData->mpPrinter->ImplStartPage();
 
     mpImplData->mpPrinter->Push();
     aCleanedFile.WindStart();
     aCleanedFile.Play( mpImplData->mpPrinter.get() );
     mpImplData->mpPrinter->Pop();
 
-    mpImplData->mpPrinter->EndPage();
+    mpImplData->mpPrinter->ImplEndPage();
 
     mpImplData->mpPrinter->SetDrawMode( nRestoreDrawMode );
 }

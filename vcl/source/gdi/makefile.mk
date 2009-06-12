@@ -76,7 +76,6 @@ SLOFILES=	$(SLO)$/salmisc.obj 	\
             $(SLO)$/impgraph.obj	\
             $(SLO)$/impimagetree.obj \
             $(SLO)$/imagerepository.obj   \
-            $(SLO)$/impprn.obj		\
             $(SLO)$/impvect.obj 	\
             $(SLO)$/implncvt.obj	\
             $(SLO)$/jobset.obj		\
@@ -138,7 +137,6 @@ EXCEPTIONSFILES=	$(SLO)$/salmisc.obj 	\
                     $(SLO)$/pngread.obj		\
                     $(SLO)$/pngwrite.obj    \
                     $(SLO)$/virdev.obj \
-                    $(SLO)$/impprn.obj \
                     $(SLO)$/graphictools.obj
 
 

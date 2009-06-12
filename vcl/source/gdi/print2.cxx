@@ -31,8 +31,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#define _SPOOLPRINTER_EXT
-
 #include <functional>
 #include <algorithm>
 #include <utility>
