@@ -62,6 +62,7 @@
 #include <svtools/useroptions.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/oldprintadaptor.hxx>
 
 #include <sfx2/app.hxx>
 #include "sfxresid.hxx"
@@ -1005,7 +1006,6 @@ BOOL SfxObjectShell::Remove
 
 //--------------------------------------------------------------------
 
-#if 0
 BOOL SfxObjectShell::Print
 (
     Printer&        rPrt,
@@ -1032,26 +1032,18 @@ BOOL SfxObjectShell::Print
             if ( !pStyle )
                 return TRUE;
 
-            if ( !rPrt.StartJob(String(SfxResId(STR_STYLES))) )
-            {
-                delete pIter;
-                return FALSE;
-            }
-            if ( !rPrt.StartPage() )
-            {
-                delete pIter;
-                return FALSE;
-            }
-            Reference< task::XStatusIndicator > xStatusIndicator;
-            xStatusIndicator = SFX_APP()->GetStatusIndicator();
-            if ( xStatusIndicator.is() )
-                xStatusIndicator->start( String(SfxResId(STR_PRINT_STYLES)), nStyles );
+            // pepare adaptor for old style StartPage/EndPage printing
+            boost::shared_ptr< Printer > pPrinter( new Printer( rPrt.GetJobSetup() ) );
+            vcl::OldStylePrintAdaptor* pAdaptor = new vcl::OldStylePrintAdaptor( pPrinter );
+            boost::shared_ptr< vcl::PrinterListener > pListener( pAdaptor );
 
-            rPrt.SetMapMode(MapMode(MAP_10TH_MM));
+            pAdaptor->StartPage();
+
+            pPrinter->SetMapMode(MapMode(MAP_10TH_MM));
             Font aFont( DEFINE_CONST_UNICODE( "Arial" ), Size(0, 64));   // 18pt
             aFont.SetWeight(WEIGHT_BOLD);
-            rPrt.SetFont(aFont);
-            const Size aPageSize(rPrt.GetOutputSize());
+            pPrinter->SetFont(aFont);
+            const Size aPageSize(pPrinter->GetOutputSize());
             const USHORT nXIndent = 200;
             USHORT nYIndent = 200;
             Point aOutPos(nXIndent, nYIndent);
@@ -1060,68 +1052,66 @@ BOOL SfxObjectShell::Print
                 aHeader += *pObjectName;
             else
                 aHeader += GetTitle();
-            long nTextHeight( rPrt.GetTextHeight() );
-            rPrt.DrawText(aOutPos, aHeader);
+            long nTextHeight( pPrinter->GetTextHeight() );
+            pPrinter->DrawText(aOutPos, aHeader);
             aOutPos.Y() += nTextHeight;
             aOutPos.Y() += nTextHeight/2;
             aFont.SetSize(Size(0, 35)); // 10pt
             nStyles = 1;
             while(pStyle)
             {
-                if ( xStatusIndicator.is() )
-                    xStatusIndicator->setValue( nStyles++ );
-                // Ausgabe des Vorlagennamens
+                // print template name
                 String aStr(pStyle->GetName());
                 aFont.SetWeight(WEIGHT_BOLD);
-                rPrt.SetFont(aFont);
-                nTextHeight = rPrt.GetTextHeight();
-                // Seitenwechsel
+                pPrinter->SetFont(aFont);
+                nTextHeight = pPrinter->GetTextHeight();
+                // check for new page
                 if ( aOutPos.Y() + nTextHeight*2 >
                     aPageSize.Height() - (long) nYIndent )
                 {
-                    rPrt.EndPage();
-                    rPrt.StartPage();
+                    pAdaptor->EndPage();
+                    pAdaptor->StartPage();
                     aOutPos.Y() = nYIndent;
                 }
-                rPrt.DrawText(aOutPos, aStr);
+                pPrinter->DrawText(aOutPos, aStr);
                 aOutPos.Y() += nTextHeight;
 
-                // Ausgabe der Vorlagenbeschreibung
+                // print template description
                 aFont.SetWeight(WEIGHT_NORMAL);
-                rPrt.SetFont(aFont);
+                pPrinter->SetFont(aFont);
                 aStr = pStyle->GetDescription();
                 const char cDelim = ' ';
                 USHORT nStart = 0, nIdx = 0;
 
-                nTextHeight = rPrt.GetTextHeight();
-                // wie viele Worte passen auf eine Zeile
+                nTextHeight = pPrinter->GetTextHeight();
+                // break text into lines
                 while(nIdx < aStr.Len())
                 {
                     USHORT  nOld = nIdx;
                     long nTextWidth;
                     nIdx = aStr.Search(cDelim, nStart);
-                    nTextWidth = rPrt.GetTextWidth(aStr, nStart, nIdx-nStart);
+                    nTextWidth = pPrinter->GetTextWidth(aStr, nStart, nIdx-nStart);
                     while(nIdx != STRING_NOTFOUND &&
                           aOutPos.X() + nTextWidth <
                           aPageSize.Width() - (long) nXIndent)
                     {
                         nOld = nIdx;
                         nIdx = aStr.Search(cDelim, nIdx+1);
-                        nTextWidth = rPrt.GetTextWidth(aStr, nStart, nIdx-nStart);
+                        nTextWidth = pPrinter->GetTextWidth(aStr, nStart, nIdx-nStart);
                     }
                     String aTmp(aStr, nStart, nIdx == STRING_NOTFOUND?
                                 STRING_LEN :
                                 nOld-nStart);
                     if ( aTmp.Len() )
                     {
-                        nStart = nOld+1;    // wegen trailing space
+                        nStart = nOld+1;    // trailing space
                     }
                     else
                     {
                         USHORT nChar = 1;
                         while(
                             nStart + nChar < aStr.Len() &&
-                            aOutPos.X() + rPrt.GetTextWidth(
+                            aOutPos.X() + pPrinter->GetTextWidth(
                                 aStr, nStart, nChar) <
                             aPageSize.Width() - nXIndent)
                             ++nChar;
@@ -1132,19 +1122,19 @@ BOOL SfxObjectShell::Print
                     if ( aOutPos.Y() + nTextHeight*2 >
                         aPageSize.Height() - nYIndent )
                     {
-                        rPrt.EndPage();
-                        rPrt.StartPage();
+                        pAdaptor->EndPage();
+                        pAdaptor->StartPage();
                         aOutPos.Y() = nYIndent;
                     }
-                    rPrt.DrawText(aOutPos, aTmp);
-                    aOutPos.Y() += rPrt.GetTextHeight();
+                    pPrinter->DrawText(aOutPos, aTmp);
+                    aOutPos.Y() += pPrinter->GetTextHeight();
                 }
                 pStyle = pIter->Next();
             }
-            rPrt.EndPage();
-            rPrt.EndJob();
-            if ( xStatusIndicator.is() )
-                xStatusIndicator->end();
+            pAdaptor->EndPage();
+
+            Printer::PrintJob( pListener, rPrt.GetJobSetup() );
+
             delete pIter;
             break;
         }
@@ -1153,20 +1143,6 @@ BOOL SfxObjectShell::Print
     }
     return TRUE;
 }
-#else
-BOOL SfxObjectShell::Print
-(
-    Printer&,
-    USHORT,
-    USHORT,
-    USHORT,
-    const String*
-)
-{
-    DBG_ERROR( "SfxObjectShell::Print, dead code !" );
-    return FALSE;
-}
-#endif
 
 //--------------------------------------------------------------------
 
