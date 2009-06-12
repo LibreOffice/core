@@ -1721,8 +1721,8 @@ bool PrintManager::IsScreenFormat (void)
         Swap(aPaperSize);
 
     // Check whether paper size is 'Screen'
-    SvxPaper ePaper (SvxPaperInfo::GetPaper(aPaperSize, MAP_100TH_MM, TRUE));
-    return (ePaper == SVX_PAPER_SCREEN);
+    Paper ePaper(SvxPaperInfo::GetSvxPaper(aPaperSize, MAP_100TH_MM, TRUE));
+    return (ePaper == PAPER_SCREEN);
 }
 
 

@@ -853,9 +853,9 @@ void SdModule::ChangeMedium( ::sd::DrawDocShell* pDocShell, SfxViewFrame* pViewF
                 // Der Printer gibt leider kein exaktes
                 // Format (z.B. A4) zurueck
                 Size aSize(pPrinter->GetPaperSize());
-                SvxPaper ePaper = SvxPaperInfo::GetSvxPaper( aSize, MAP_100TH_MM, TRUE);
+                Paper ePaper = SvxPaperInfo::GetSvxPaper( aSize, MAP_100TH_MM, TRUE);
 
-                if (ePaper != SVX_PAPER_USER)
+                if (ePaper != PAPER_USER)
                 {
                     // Korrekte Size holen
                     aSize = SvxPaperInfo::GetPaperSize(ePaper, MAP_100TH_MM);
