@@ -76,16 +76,21 @@ BasicPrinter::BasicPrinter() : Printer()
     // Output: 6 Lines/Inch = 12 Point
     nLines = (short) s.Height() / 12;
     nYoff  = 12;
+    // FIXME: new API
+    #if 0
     SetStartPrintHdl( LINK( this, BasicPrinter, StartPrintHdl ) );
     SetEndPrintHdl( LINK( this, BasicPrinter, EndPrintHdl ) );
     SetPrintPageHdl( LINK( this, BasicPrinter, PrintPageHdl ) );
+    #endif
 }
 
 void BasicPrinter::Header()
 {
-    if( nPage ) EndPage();
+    // FIXME: new API
+    // if( nPage ) EndPage();
     nPage++;
-    StartPage();
+    // FIXME: new API
+    // StartPage();
     String aHdr;
     String aPage( SttResId( IDS_PAGE ) );
     aPage.Append( String::CreateFromInt32(nPage) );
@@ -116,8 +121,10 @@ void BasicPrinter::Print( const String& rFile, const String& rText, BasicFrame *
 
     pDlg->ChangeMessage( 1 );
     pDlg->Show();
-    StartJob( rFile );
-    StartPage();
+
+    // FIXME: new API
+    // StartJob( rFile );
+    // StartPage();
     xub_StrLen nDone=0;
     while( nDone < rText.Len() )
     {
@@ -130,8 +137,9 @@ void BasicPrinter::Print( const String& rFile, const String& rText, BasicFrame *
         nLine++;
         Application::Reschedule();
     }
-    EndPage();
-    EndJob();
+    // FIXME: new API
+    // EndPage();
+    // EndJob();
     nPage = 1;
     while( IsPrinting() ) Application::Reschedule();
     delete pDlg; pDlg = NULL;

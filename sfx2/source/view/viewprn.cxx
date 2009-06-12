@@ -891,7 +891,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                     return;
                 }
 
-                pPrinter->SetNextJobIsQuick();
+                // pPrinter->SetNextJobIsQuick();
             }
 
             // if "Collate" was checked, the SfxPrinter must handle the CopyCount itself,
@@ -903,7 +903,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                 pPrinter->SetCopyCount( nCopies );
 
             // enable background printing
-            pPrinter->SetPageQueueSize( 1 );
+            // pPrinter->SetPageQueueSize( 1 );
 
             // refresh document info
             using namespace ::com::sun::star;
@@ -961,7 +961,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                 rReq.Ignore();
             }
 
-            pPrinter->SetNextJobIsQuick( false );
+            // pPrinter->SetNextJobIsQuick( false );
 
             delete pPrintDlg;
         }

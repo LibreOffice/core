@@ -274,10 +274,12 @@ SfxPrintProgress::SfxPrintProgress( SfxViewShell* pViewSh, FASTBOOL bShow )
                  String(SfxResId(STR_PRINTING)), 1, FALSE ),
     pImp( new SfxPrintProgress_Impl( pViewSh, pViewSh->GetPrinter() ) )
 {
+    #if 0
     pImp->pPrinter->SetEndPrintHdl( LINK( this, SfxPrintProgress, EndPrintNotify ) );
     pImp->pPrinter->SetErrorHdl( LINK( this, SfxPrintProgress, PrintErrorNotify ) );
     pImp->pPrinter->SetStartPrintHdl( LINK( this, SfxPrintProgress, StartPrintNotify ) );
     pImp->bCallbacks = TRUE;
+    #endif
 
     SfxObjectShell* pDoc = pViewSh->GetObjectShell();
     SFX_ITEMSET_ARG( pDoc->GetMedium()->GetItemSet(), pItem, SfxBoolItem, SID_HIDDEN, FALSE );
@@ -307,7 +309,7 @@ SfxPrintProgress::~SfxPrintProgress()
     // ggf. Callbacks entfermen
     if ( pImp->bCallbacks )
     {
-        pImp->pPrinter->SetEndPrintHdl( Link() );
+        // pImp->pPrinter->SetEndPrintHdl( Link() );
         pImp->pPrinter->SetErrorHdl( Link() );
         pImp->bCallbacks = FALSE;
     }
@@ -410,7 +412,7 @@ IMPL_LINK( SfxPrintProgress, EndPrintNotify, void *, EMPTYARG )
     //! if( pMDI->IsPrinterChanged() ) pMDI->Changed( 0L );
 
     // Callbacks rausnehmen
-    pImp->pPrinter->SetEndPrintHdl( Link() );
+    // pImp->pPrinter->SetEndPrintHdl( Link() );
     pImp->pPrinter->SetErrorHdl( Link() );
     pImp->bCallbacks = FALSE;
 
