@@ -1766,6 +1766,11 @@ std::vector<BYTE> ChpxToSprms(const Word2CHPX &rChpx);
 
 ULONG SafeReadString(ByteString &rStr,USHORT nLen,SvStream &rStrm);
 
+//MS has a (slightly) inaccurate view of how many twips
+//are in the default letter size of a page
+const USHORT lLetterWidth = 12242;
+const USHORT lLetterHeight = 15842;
+
 #endif
 
 /* vi:set tabstop=4 shiftwidth=4 expandtab: */

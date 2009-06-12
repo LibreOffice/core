@@ -166,7 +166,7 @@ extern BOOL bDDINetAttr;
 extern BOOL bExecuteDrag;
 
 
-#define OLESIZE lA4Width - 2 * lMinBorder, 6 * MM50
+#define OLESIZE 11905 - 2 * lMinBorder, 6 * MM50
 
 #define SWTRANSFER_OBJECTTYPE_DRAWMODEL         0x00000001
 #define SWTRANSFER_OBJECTTYPE_HTML              0x00000002

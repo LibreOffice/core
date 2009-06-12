@@ -384,7 +384,7 @@ SwPreviewPrintOptionsDialog::SwPreviewPrintOptionsDialog( SwPagePreViewWin& rPar
     aSettings.aPrtSize = pPrinter->GetPaperSize();
     //#97682# make sure that no division by zero occurs
     if(!aSettings.aPrtSize.Width() || !aSettings.aPrtSize.Height())
-        aSettings.aPrtSize = Size(lA4Width, lA4Height);
+        aSettings.aPrtSize = SvxPaperInfo::GetPaperSize(PAPER_A4);
     aSettings.bPrinterLandscape = pPrinter->GetOrientation() == ORIENTATION_LANDSCAPE;
 
 

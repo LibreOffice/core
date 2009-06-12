@@ -328,7 +328,7 @@ SwColumnOnlyExample::SwColumnOnlyExample( Window* pParent, const ResId& rResId) 
 
     SetBorderStyle( WINDOW_BORDER_MONO );
 
-    m_aFrmSize  = Size(11907, 16433);// DIN A4
+    m_aFrmSize  = SvxPaperInfo::GetPaperSize(PAPER_A4);// DIN A4
     ::FitToActualSize(m_aCols, (USHORT)m_aFrmSize.Width());
 
     long nHeight = m_aFrmSize.Height();

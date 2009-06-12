@@ -118,6 +118,7 @@
 #include <svx/xlnwtit.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/outlobj.hxx>
+#include <svx/paperinf.hxx>
 
 #include <tools/stream.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -3295,7 +3296,8 @@ void SwRTFParser::ReadPageDescTbl()
 
     SvxULSpaceItem aUL( RES_UL_SPACE ), aHUL( RES_UL_SPACE ), aFUL( RES_UL_SPACE );
     SvxLRSpaceItem aLR( RES_LR_SPACE ), aHLR( RES_LR_SPACE ), aFLR( RES_LR_SPACE );
-    SwFmtFrmSize aSz( ATT_FIX_SIZE, 11905, 16837 );     // DIN A4 defaulten
+    Size a4 = SvxPaperInfo::GetPaperSize(PAPER_A4);
+    SwFmtFrmSize aSz( ATT_FIX_SIZE, a4.Width(), a4.Height() );     // DIN A4 defaulten
     SwFmtFrmSize aFSz( ATT_MIN_SIZE ), aHSz( ATT_MIN_SIZE );
 
     SvxFrameDirectionItem aFrmDir(FRMDIR_HORI_LEFT_TOP, RES_FRAMEDIR);
@@ -3358,8 +3360,7 @@ void SwRTFParser::ReadPageDescTbl()
 #ifndef CFRONT
     SETPAGEDESC_DEFAULTS:
 #endif
-            // aSz = pPgFmt->GetFrmSize();
-            aSz.SetWidth( 11905 ); aSz.SetHeight( 16837 );      // DIN A4 defaulten
+            aSz.SetWidth( a4.Width() ); aSz.SetHeight( a4.Height() );
             aLR.SetLeft( 0 );   aLR.SetRight( 0 );
             aUL.SetLower( 0 );  aUL.SetUpper( 0 );
             aHLR.SetLeft( 0 );  aHLR.SetRight( 0 );
@@ -3415,8 +3416,7 @@ void SwRTFParser::ReadPageDescTbl()
             aHUL.SetLower( 0 ); aHUL.SetUpper( 0 );
             aFLR.SetLeft( 0 );  aFLR.SetRight( 0 );
             aFUL.SetLower( 0 ); aFUL.SetUpper( 0 );
-//          aSz = pPgFmt->GetFrmSize();
-            aSz.SetWidth( 11905 ); aSz.SetHeight( 16837 );      // DIN A4 defaulten
+            aSz.SetWidth( a4.Width() ); aSz.SetHeight( a4.Height() ); // DIN A4 default
             nCols = USHRT_MAX; nColSpace = USHRT_MAX; nAktCol = 0;
             aFSz.SetHeightSizeType( ATT_MIN_SIZE ); aFSz.SetHeight( 0 );
             aHSz.SetHeightSizeType( ATT_MIN_SIZE ); aHSz.SetHeight( 0 );

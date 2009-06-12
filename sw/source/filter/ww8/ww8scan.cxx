@@ -7283,7 +7283,7 @@ SEPr::SEPr() :
     dttmPropRMark(0), dxtCharSpace(0), dyaLinePitch(0), clm(0), reserved1(0),
     dmOrientPage(0), iHeadingPgn(0), pgnStart(1), lnnMin(0), wTextFlow(0),
     reserved2(0), pgbApplyTo(0), pgbPageDepth(0), pgbOffsetFrom(0),
-    xaPage(12240), yaPage(15840), xaPageNUp(12240), yaPageNUp(15840),
+    xaPage(lLetterWidth), yaPage(lLetterHeight), xaPageNUp(lLetterWidth), yaPageNUp(lLetterHeight),
     dxaLeft(1800), dxaRight(1800), dyaTop(1440), dyaBottom(1440), dzaGutter(0),
     dyaHdrTop(720), dyaHdrBottom(720), ccolM1(0), fEvenlySpaced(1),
     reserved3(0), fBiDi(0), fFacingCol(0), fRTLGutter(0), fRTLAlignment(0),

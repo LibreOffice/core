@@ -77,9 +77,7 @@
 #include <svx/shdditem.hxx>
 #include <svx/akrnitem.hxx>
 #include <svx/pbinitem.hxx>
-#ifndef _SVX_EMPHITEM_HXX
 #include <svx/emphitem.hxx>
-#endif
 #include <svx/twolinesitem.hxx>
 #include <svx/charscaleitem.hxx>
 #include <svx/charrotateitem.hxx>
@@ -89,6 +87,7 @@
 #include <svx/frmdiritem.hxx>
 #include <svx/blnkitem.hxx>
 #include <svx/charhiddenitem.hxx>
+#include <svx/paperinf.hxx>
 #include <fmtfld.hxx>
 #include <fchrfmt.hxx>
 #include <fmtfsize.hxx>
@@ -184,7 +183,7 @@ static Writer& OutWW8_SwNumRuleItem( Writer& rWrt, const SfxPoolItem& rHt );
 
 /*
 Sadly word does not have two different sizes for asian font size and western
-font size, it has to different fonts, but not sizes, so we have to use our
+font size, it has two different fonts, but not sizes, so we have to use our
 guess as to the script used and disable the export of one type. The same
 occurs for font weight and posture (bold and italic)
 
@@ -3424,7 +3423,7 @@ static Writer& OutWW8_SwFrmSize( Writer& rWrt, const SfxPoolItem& rHt )
         else
             rWW8Wrt.pO->Insert( 164, rWW8Wrt.pO->Count() );
         rWW8Wrt.InsUInt16(
-            msword_cast<sal_uInt16>(SnapPageDimension(rSz.GetWidth())));
+            msword_cast<sal_uInt16>(SvxPaperInfo::GetSloppyPaperDimension(rSz.GetWidth())));
 
         /*sprmSYaPage*/
         if( rWW8Wrt.bWrtWW8 )
@@ -3432,7 +3431,7 @@ static Writer& OutWW8_SwFrmSize( Writer& rWrt, const SfxPoolItem& rHt )
         else
             rWW8Wrt.pO->Insert( 165, rWW8Wrt.pO->Count() );
         rWW8Wrt.InsUInt16(
-            msword_cast<sal_uInt16>(SnapPageDimension(rSz.GetHeight())));
+            msword_cast<sal_uInt16>(SvxPaperInfo::GetSloppyPaperDimension(rSz.GetHeight())));
     }
     return rWrt;
 }

@@ -1566,7 +1566,7 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
         {
             aLR.SetLeft( 0 ); aLR.SetRight( 0 );
             aUL.SetUpper( 0 ); aUL.SetLower( 0 );
-            Size aPSize( SvxPaperInfo::GetPaperSize( SVX_PAPER_C65 ) );
+            Size aPSize( SvxPaperInfo::GetPaperSize( PAPER_ENV_C65 ) );
             LandscapeSwap( aPSize );
             aSet.Put( SwFmtFrmSize( ATT_FIX_SIZE, aPSize.Width(), aPSize.Height() ));
             aSet.Put( aLR );

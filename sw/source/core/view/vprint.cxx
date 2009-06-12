@@ -1297,7 +1297,7 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress* pProgress,
                                             aSize.Width() = aSize.Height();
                                             aSize.Height() = nWidth;
                                     }
-                                    Paper ePaper = SvxPaperInfo::GetSvPaper(aSize,MAP_TWIP,TRUE);
+                                    Paper ePaper = SvxPaperInfo::GetSvxPaper(aSize,MAP_TWIP,TRUE);
                                     if ( PAPER_USER == ePaper )
                                             pPrt->SetPaperSizeUser( aSize );
                                     else
