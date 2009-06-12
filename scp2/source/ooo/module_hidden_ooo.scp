@@ -296,6 +296,7 @@ Module gid_Module_Root_Files_5
 	gid_File_Lib_Fps_Gnome,
 	gid_File_Lib_Dbodbcbase,
 	gid_File_Lib_I18npool,
+	gid_File_Lib_I18npaper,
 	gid_File_Lib_I18nregexp,
 	gid_File_Lib_I18nsearch,
     gid_File_Lib_I18nisolang,
