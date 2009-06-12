@@ -904,9 +904,11 @@ BOOL SwNewDBMgr::MergePrint( SwView& rView,
     pModOpt->SetSinglePrintJob(rOpt.IsPrintSingleJobs());
 
     SfxPrinter *pPrt = pSh->getIDocumentDeviceAccess()->getPrinter( false );
+#ifdef TL_NOT_NOW /*TLPDF*/
     Link aSfxSaveLnk = pPrt->GetEndPrintHdl();
     if( rOpt.IsPrintSingleJobs()  )
         pPrt->SetEndPrintHdl( Link() );
+#endif
 
     BOOL bUserBreak = FALSE,
          bRet = FALSE;
@@ -1009,6 +1011,7 @@ BOOL SwNewDBMgr::MergePrint( SwView& rView,
         nEndRow = pImpl->pMergeData ? pImpl->pMergeData->xResultSet->getRow() : 0;
     } while( bSynchronizedDoc && (nStartRow != nEndRow)? ExistsNextRecord() : ToNextMergeRecord());
 
+#ifdef TL_NOT_NOW /*TLPDF*/
     if( rOpt.IsPrintSingleJobs() )
     {
         SfxPrinter* pTmpPrinter = pSh->getIDocumentDeviceAccess()->getPrinter( true );
@@ -1016,6 +1019,7 @@ BOOL SwNewDBMgr::MergePrint( SwView& rView,
         if ( !bUserBreak && !pTmpPrinter->IsJobActive() )        //Schon zu spaet?
             aSfxSaveLnk.Call( pTmpPrinter );
     }
+#endif
 
     rOpt.nMergeCnt = 0;
     rOpt.nMergeAct = 0;
@@ -1048,9 +1052,11 @@ BOOL SwNewDBMgr::MergePrintDocuments( SwView& rView,
     rOpt.SetPrintSingleJobs( sal_True );
 
     SfxPrinter *pPrt = pSh->getIDocumentDeviceAccess()->getPrinter( false );
+#ifdef TL_NOT_NOW /*TLPDF*/
     Link aSfxSaveLnk = pPrt->GetEndPrintHdl();
     if( rOpt.IsPrintSingleJobs()  )
         pPrt->SetEndPrintHdl( Link() );
+#endif
 
     BOOL bUserBreak = FALSE,
          bRet = FALSE;
@@ -1168,6 +1174,7 @@ BOOL SwNewDBMgr::MergePrintDocuments( SwView& rView,
         }
     }
 
+#ifdef TL_NOT_NOW /*TLPDF*/
     if( rOpt.IsPrintSingleJobs() )
     {
         SfxPrinter* pTmpPrinter = pSh->getIDocumentDeviceAccess()->getPrinter( true );
@@ -1175,6 +1182,7 @@ BOOL SwNewDBMgr::MergePrintDocuments( SwView& rView,
         if ( !bUserBreak && !pTmpPrinter->IsJobActive() )     //Schon zu spaet?
             aSfxSaveLnk.Call( pTmpPrinter );
     }
+#endif
 
     rOpt.nMergeCnt = 0;
     rOpt.nMergeAct = 0;
