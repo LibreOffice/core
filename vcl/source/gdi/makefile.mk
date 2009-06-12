@@ -84,6 +84,7 @@ SLOFILES=	$(SLO)$/salmisc.obj 	\
             $(SLO)$/metaact.obj 	\
             $(SLO)$/metric.obj		\
             $(SLO)$/octree.obj		\
+            $(SLO)$/oldprintadaptor.obj		\
             $(SLO)$/outmap.obj		\
             $(SLO)$/outdev.obj		\
             $(SLO)$/outdev2.obj 	\
@@ -126,6 +127,7 @@ EXCEPTIONSFILES=	$(SLO)$/salmisc.obj 	\
                     $(SLO)$/impimage.obj		\
                     $(SLO)$/impgraph.obj	\
                     $(SLO)$/metric.obj		\
+                    $(SLO)$/oldprintadaptor.obj		\
                     $(SLO)$/pdfwriter_impl.obj	\
                     $(SLO)$/pdffontcache.obj\
                     $(SLO)$/fontcfg.obj		\

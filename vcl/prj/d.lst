@@ -82,6 +82,7 @@ mkdir: %_DEST%\inc%_EXT%\vcl\plug\vcl
 ..\inc\vcl\morebtn.hxx %_DEST%\inc%_EXT%\vcl\morebtn.hxx
 ..\inc\vcl\msgbox.hxx %_DEST%\inc%_EXT%\vcl\msgbox.hxx
 ..\inc\vcl\octree.hxx %_DEST%\inc%_EXT%\vcl\octree.hxx
+..\inc\vcl\oldprintadaptor.hxx %_DEST%\inc%_EXT%\vcl\oldprintadaptor.hxx
 ..\inc\vcl\outdev.hxx %_DEST%\inc%_EXT%\vcl\outdev.hxx
 ..\inc\vcl\pointr.hxx %_DEST%\inc%_EXT%\vcl\pointr.hxx
 ..\inc\vcl\print.hxx %_DEST%\inc%_EXT%\vcl\print.hxx
