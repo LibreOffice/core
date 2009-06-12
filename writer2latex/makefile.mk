@@ -1,4 +1,4 @@
-#************************************************************************
+#*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.8 $
+# $Revision: 1.3 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -27,55 +27,44 @@
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
 #
-# ***********************************************************************/
+#*************************************************************************
 
-PRJ=..
-PRJNAME=writerfilter
-TARGET=writerfilter
-ENABLE_EXCEPTIONS=TRUE
+PRJ=.
+
+PRJNAME=writer2latex
+TARGET=so_writer2latex
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  settings.mk
+.INCLUDE :	settings.mk
+.INCLUDE : antsettings.mk
 
-CDEFS+=-DWRITERFILTER_DLLIMPLEMENTATION
-
+.IF "$(WITH_WRITER2LATEX)" == "NO"
+@all:
+    echo "building without writer2latex"
+.ELSE
+.IF "$(SOLAR_JAVA)" != ""
 # --- Files --------------------------------------------------------
 
-LIB1TARGET=$(SLB)$/$(TARGET).lib
-LIB1FILES=  \
-    $(SLB)$/ooxml.lib \
-    $(SLB)$/doctok.lib \
-    $(SLB)$/resourcemodel.lib \
-    $(SLB)$/dmapper.lib \
-    $(SLB)$/filter.lib
+TARFILE_NAME=writer2latex0502
 
-SHL1LIBS=$(SLB)$/$(TARGET).lib
+TARFILE_ROOTDIR=writer2latex05
 
+PATCH_FILES=writer2latex05.patch
 
-SHL1TARGET=$(TARGET)$(DLLPOSTFIX)
-SHL1STDLIBS=\
-    $(I18NISOLANGLIB) \
-    $(I18NPAPERLIB) \
-    $(SOTLIB) \
-    $(TOOLSLIB) \
-    $(UNOTOOLSLIB) \
-    $(CPPUHELPERLIB)    \
-    $(COMPHELPERLIB)    \
-    $(CPPULIB)          \
-    $(SALLIB)
+CONVERTFILES=build.xml
+JARFILES 		= ridl.jar unoil.jar jurt.jar juh.jar
+BUILD_ACTION=$(ANT) $(ANT_FLAGS) -DSOLVER=$(SOLARVER)/$(INPATH)  -Dsolarbindir=$(SOLARBINDIR) oxt
 
-
-SHL1DEPN=
-SHL1IMPLIB= i$(SHL1TARGET)
-SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
-SHL1VERSIONMAP=exports.map
-
-DEF1NAME=$(SHL1TARGET)
-
+.ENDIF # $(SOLAR_JAVA)!= ""
+.ENDIF
 
 # --- Targets ------------------------------------------------------
 
-.INCLUDE :	target.mk
+.INCLUDE : set_ext.mk
+.INCLUDE : target.mk
 
+.IF "$(SOLAR_JAVA)" != ""
+.INCLUDE : tg_ext.mk
+.ENDIF
 

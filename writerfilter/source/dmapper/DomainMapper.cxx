@@ -36,6 +36,7 @@
 #include <MeasureHandler.hxx>
 #include <OLEHandler.hxx>
 #include <i18npool/mslangid.hxx>
+#include <i18npool/paper.hxx>
 #include <ooxml/OOXMLFastTokens.hxx>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XOOXMLDocumentPropertiesImporter.hpp>
@@ -1816,8 +1817,8 @@ void DomainMapper::attribute(Id nName, Value & val)
         case NS_ooxml::LN_CT_PageSz_h:
             /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
             {
-                sal_Int32 nHeight = ConversionHelper::SnapPageDimension(nIntValue);
-                CT_PageSz.h = ConversionHelper::convertTwipToMM100(nHeight);
+                sal_Int32 nHeight = ConversionHelper::convertTwipToMM100(nIntValue);
+                CT_PageSz.h = PaperInfo::sloppyFitPageDimension(nHeight);
             }
             break;
         case NS_ooxml::LN_CT_PageSz_orient:
@@ -1827,8 +1828,8 @@ void DomainMapper::attribute(Id nName, Value & val)
         case NS_ooxml::LN_CT_PageSz_w:
             /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
             {
-                sal_Int32 nWidth = ConversionHelper::SnapPageDimension(nIntValue);
-                CT_PageSz.w = ConversionHelper::convertTwipToMM100(nWidth);
+                sal_Int32 nWidth = ConversionHelper::convertTwipToMM100(nIntValue);
+                CT_PageSz.w = PaperInfo::sloppyFitPageDimension(nWidth);
             }
             break;
 
@@ -3346,16 +3347,16 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
     {
         /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
         //page height, rounded to default values, default: 0x3dc0 twip
-        sal_Int32 nHeight = ConversionHelper::SnapPageDimension( nIntValue );
-        rContext->Insert( PROP_HEIGHT, false, uno::makeAny( ConversionHelper::convertTwipToMM100( nHeight ) ) );
+        sal_Int32 nHeight = ConversionHelper::convertTwipToMM100( nIntValue );
+        rContext->Insert( PROP_HEIGHT, false, uno::makeAny( PaperInfo::sloppyFitPageDimension( nHeight ) ) );
     }
     break;
     case NS_sprm::LN_SXaPage:   // sprmSXaPage
     {
         /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
         //page width, rounded to default values, default 0x2fd0 twip
-        sal_Int32 nWidth = ConversionHelper::SnapPageDimension( nIntValue );
-        rContext->Insert( PROP_WIDTH, false, uno::makeAny( ConversionHelper::convertTwipToMM100( nWidth ) ) );
+        sal_Int32 nWidth = ConversionHelper::convertTwipToMM100( nIntValue );
+        rContext->Insert( PROP_WIDTH, false, uno::makeAny( PaperInfo::sloppyFitPageDimension( nWidth ) ) );
     }
     break;
     case 166:
@@ -3801,8 +3802,11 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
     case NS_ooxml::LN_EG_SectPrContents_pgSz:
         /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
         CT_PageSz.code = 0;
-        CT_PageSz.h = ConversionHelper::convertTwipToMM100( ConversionHelper::SnapPageDimension( sal_Int32(15840) ));
-        CT_PageSz.w = ConversionHelper::convertTwipToMM100( ConversionHelper::SnapPageDimension( sal_Int32(12240) ));
+        {
+            PaperInfo aLetter(PAPER_LETTER);
+            CT_PageSz.w = aLetter.getWidth();
+            CT_PageSz.h = aLetter.getHeight();
+        }
         CT_PageSz.orient = false;
         resolveSprmProps(rSprm);
         OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
