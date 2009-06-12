@@ -658,7 +658,7 @@ void ScTransferObj::InitDocShell()
 
         //  page format (grid etc) and page size (maximum size for ole object)
 
-        Size aPaperSize = SvxPaperInfo::GetPaperSize( SVX_PAPER_A4 );       // Twips
+        Size aPaperSize = SvxPaperInfo::GetPaperSize( PAPER_A4 );       // Twips
         ScStyleSheetPool* pStylePool = pDoc->GetStyleSheetPool();
         String aStyleName = pDoc->GetPageStyle( aBlock.aStart.Tab() );
         SfxStyleSheetBase* pStyleSheet = pStylePool->Find( aStyleName, SFX_STYLE_FAMILY_PAGE );

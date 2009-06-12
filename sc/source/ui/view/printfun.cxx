@@ -886,7 +886,7 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
     if ( !aPageSize.Width() || !aPageSize.Height() )
     {
         DBG_ERROR("PageSize Null ?!?!?");
-        aPageSize = SvxPaperInfo::GetPaperSize( SVX_PAPER_A4 );
+        aPageSize = SvxPaperInfo::GetPaperSize( PAPER_A4 );
     }
 
     pBorderItem     = (const SvxBoxItem*)    &pParamSet->Get(ATTR_BORDER);
@@ -2677,7 +2677,7 @@ void ScPrintFunc::ApplyPrintSettings()
                 aEnumSize.Width() = aEnumSize.Height();
                 aEnumSize.Height() = nTemp;
         }
-        Paper ePaper = SvxPaperInfo::GetSvPaper( aEnumSize, MAP_TWIP, TRUE );
+        Paper ePaper = SvxPaperInfo::GetSvxPaper( aEnumSize, MAP_TWIP, TRUE );
         USHORT nPaperBin = ((const SvxPaperBinItem&)pParamSet->Get(ATTR_PAGE_PAPERBIN)).GetValue();
 
         pPrinter->SetPaper( ePaper );
