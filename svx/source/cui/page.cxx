@@ -310,8 +310,8 @@ SvxPageDescPage::SvxPageDescPage( Window* pParent, const SfxItemSet& rAttr ) :
 
     bLandscape          ( FALSE ),
     eMode               ( SVX_PAGE_MODE_STANDARD ),
-    ePaperStart         ( SVX_PAPER_A3 ),
-    ePaperEnd           ( SVX_PAPER_DL ),
+    ePaperStart         ( PAPER_A3 ),
+    ePaperEnd           ( PAPER_ENV_DL ),
     pImpl               ( new SvxPage_Impl )
 
 {
@@ -455,6 +455,7 @@ void SvxPageDescPage::Init_Impl()
 
         // Handler einstellen
     aLayoutBox.SetSelectHdl( LINK( this, SvxPageDescPage, LayoutHdl_Impl ) );
+    aPaperSizeBox.SetDropDownLineCount(10);
 
     aPaperTrayBox.SetGetFocusHdl(
         LINK( this, SvxPageDescPage, PaperBinHdl_Impl ) );
@@ -606,11 +607,11 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
     if ( bLandscape )
         Swap( aTmpSize );
     // aktuelles Format
-    SvxPaper ePaper = SvxPaperInfo::GetPaper( aTmpSize, (MapUnit)eUnit, TRUE );
+    Paper ePaper = SvxPaperInfo::GetSvxPaper( aTmpSize, (MapUnit)eUnit, TRUE );
     USHORT nActPos = LISTBOX_ENTRY_NOTFOUND;
     USHORT nAryId = RID_SVXSTRARY_PAPERSIZE_STD;
 
-    if ( ePaperStart != SVX_PAPER_A3 )
+    if ( ePaperStart != PAPER_A3 )
         nAryId = RID_SVXSTRARY_PAPERSIZE_DRAW;
     ResStringArray aPaperAry( SVX_RES( nAryId ) );
     sal_uInt32 nCnt = aPaperAry.Count();
@@ -618,7 +619,7 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
     for ( sal_uInt32 i = 0; i < nCnt; ++i )
     {
         String aStr = aPaperAry.GetString(i);
-        SvxPaper eSize = (SvxPaper)aPaperAry.GetValue(i);
+        Paper eSize = (Paper)aPaperAry.GetValue(i);
         USHORT nPos = aPaperSizeBox.InsertEntry( aStr );
         aPaperSizeBox.SetEntryData( nPos, (void*)(ULONG)eSize );
 
@@ -825,11 +826,11 @@ BOOL SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
     }
 
     nPos = aPaperSizeBox.GetSelectEntryPos();
-    SvxPaper ePaper = (SvxPaper)(ULONG)aPaperSizeBox.GetEntryData( nPos );
+    Paper ePaper = (Paper)(ULONG)aPaperSizeBox.GetEntryData( nPos );
     const USHORT nOld = aPaperSizeBox.GetSavedValue();
     BOOL bChecked = aLandscapeBtn.IsChecked();
 
-    if ( SVX_PAPER_USER == ePaper )
+    if ( PAPER_USER == ePaper )
     {
         if ( nOld != nPos                       ||
              aPaperWidthEdit.IsValueModified()  ||
@@ -1039,9 +1040,9 @@ IMPL_LINK( SvxPageDescPage, PaperBinHdl_Impl, ListBox *, EMPTYARG )
 IMPL_LINK( SvxPageDescPage, PaperSizeSelect_Impl, ListBox *, pBox )
 {
     const USHORT nPos = pBox->GetSelectEntryPos();
-    SvxPaper ePaper = (SvxPaper)(ULONG)aPaperSizeBox.GetEntryData( nPos );
+    Paper ePaper = (Paper)(ULONG)aPaperSizeBox.GetEntryData( nPos );
 
-    if ( ePaper != SVX_PAPER_USER )
+    if ( ePaper != PAPER_USER )
     {
         Size aSize( SvxPaperInfo::GetPaperSize( ePaper ) );
 
@@ -1067,7 +1068,7 @@ IMPL_LINK( SvxPageDescPage, PaperSizeSelect_Impl, ListBox *, pBox )
         {
             // Draw: bei Papierformat soll der Rand 1cm betragen
             long nTmp = 0;
-            BOOL bScreen = ( SVX_PAPER_SCREEN == ePaper );
+            BOOL bScreen = ( PAPER_SCREEN == ePaper );
 
             if ( !bScreen )
                 // bei Bildschirm keinen Rand
@@ -1116,12 +1117,12 @@ IMPL_LINK( SvxPageDescPage, PaperSizeModify_Impl, Edit *, EMPTYARG )
     SfxMapUnit eUnit = GetItemSet().GetPool()->GetMetric( nWhich );
     Size aSize( GetCoreValue( aPaperWidthEdit, eUnit ),
                 GetCoreValue( aPaperHeightEdit, eUnit ) );
-    SvxPaper ePaper = SvxPaperInfo::GetPaper( aSize, (MapUnit)eUnit, TRUE );
+    Paper ePaper = SvxPaperInfo::GetSvxPaper( aSize, (MapUnit)eUnit, TRUE );
     USHORT nEntryCount = aPaperSizeBox.GetEntryCount();
 
     for ( USHORT i = 0; i < nEntryCount; ++i )
     {
-        SvxPaper eTmp = (SvxPaper)(ULONG)aPaperSizeBox.GetEntryData(i);
+        Paper eTmp = (Paper)(ULONG)aPaperSizeBox.GetEntryData(i);
 
         if ( eTmp == ePaper )
         {
@@ -1478,9 +1479,9 @@ int SvxPageDescPage::DeactivatePage( SfxItemSet* _pSet )
     // Wenn nicht, dann den Anwender fragen, ob sie "ubernommen werden sollen.
     // Wenn nicht, dann auf der TabPage bleiben.
     USHORT nPos = aPaperSizeBox.GetSelectEntryPos();
-    SvxPaper ePaper = (SvxPaper)(ULONG)aPaperSizeBox.GetEntryData( nPos );
+    Paper ePaper = (Paper)(ULONG)aPaperSizeBox.GetEntryData( nPos );
 
-    if ( ePaper != SVX_PAPER_SCREEN && IsMarginOutOfRange() )
+    if ( ePaper != PAPER_SCREEN && IsMarginOutOfRange() )
     {
         if ( QueryBox( this, WB_YES_NO | WB_DEF_NO, aPrintRangeQueryText ).Execute() == RET_NO )
         {
@@ -1775,7 +1776,7 @@ void SvxPageDescPage::PageCreated (SfxAllItemSet aSet) //add CHINA001
     if (pModeItem)
         SetMode((SvxModeType)pModeItem->GetEnumValue());
     if (pPaperStartItem && pPaperEndItem)
-        SetPaperFormatRanges( (SvxPaper)pPaperStartItem->GetEnumValue(), (SvxPaper)pPaperEndItem->GetEnumValue() );
+        SetPaperFormatRanges( (Paper)pPaperStartItem->GetEnumValue(), (Paper)pPaperEndItem->GetEnumValue() );
     if (pCollectListItem)
         SetCollectionList(pCollectListItem->GetList());
 }
