@@ -44,7 +44,7 @@ namespace vcl
     {
         std::vector< AdaptorPage >  maPages;
     };
-};
+}
 
 using namespace vcl;
 using namespace cppu;
