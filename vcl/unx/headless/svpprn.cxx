@@ -73,37 +73,6 @@ inline int PtTo10Mu( int nPoints ) { return (int)((((double)nPoints)*35.27777778
 
 inline int TenMuToPt( int nUnits ) { return (int)((((double)nUnits)/35.27777778)+0.5); }
 
-static struct
-{
-    int         width;
-    int         height;
-    const char* name;
-    int         namelength;
-    Paper       paper;
-} aPaperTab[] =
-{
-    { 29700, 42000, "A3",           2,  PAPER_A3        },
-    { 21000, 29700, "A4",           2,  PAPER_A4        },
-    { 14800, 21000, "A5",           2,  PAPER_A5        },
-    { 25000, 35300, "B4",           2,  PAPER_B4        },
-    { 17600, 25000, "B5",           2,  PAPER_B5        },
-    { 21600, 27900, "Letter",       6,  PAPER_LETTER    },
-    { 21600, 35600, "Legal",        5,  PAPER_LEGAL     },
-    { 27900, 43100, "Tabloid",      7,  PAPER_TABLOID   },
-    { 0, 0,         "USER",         4,  PAPER_USER      }
-};
-
-static Paper getPaperType( const String& rPaperName )
-{
-    ByteString aPaper( rPaperName, RTL_TEXTENCODING_ISO_8859_1 );
-    for( unsigned int i = 0; i < sizeof( aPaperTab )/sizeof( aPaperTab[0] ); i++ )
-    {
-        if( ! strcmp( aPaper.GetBuffer(), aPaperTab[i].name ) )
-            return aPaperTab[i].paper;
-    }
-    return PAPER_USER;
-}
-
 static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
 {
     pJobSetup->meOrientation    = (Orientation)(rData.m_eOrientation == orientation::Landscape ? ORIENTATION_LANDSCAPE : ORIENTATION_PORTRAIT);
@@ -113,7 +82,7 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
     int width, height;
 
     rData.m_aContext.getPageSize( aPaper, width, height );
-    pJobSetup->mePaperFormat    = getPaperType( aPaper );
+    pJobSetup->mePaperFormat    = PaperInfo::fromPSName(OUStringToOString( aPaper, RTL_TEXTENCODING_ISO_8859_1 ));
     pJobSetup->mnPaperWidth     = 0;
     pJobSetup->mnPaperHeight    = 0;
     if( pJobSetup->mePaperFormat == PAPER_USER )
@@ -475,14 +444,9 @@ void PspSalInfoPrinter::InitPaperFormats( const ImplJobSetup* )
             for( int i = 0; i < nValues; i++ )
             {
                 const PPDValue* pValue = pKey->getValue( i );
-                vcl::PaperInfo aInfo;
-                aInfo.m_aPaperName = pValue->m_aOptionTranslation;
-                if( ! aInfo.m_aPaperName.Len() )
-                    aInfo.m_aPaperName = pValue->m_aOption;
                 int nWidth = 0, nHeight = 0;
                 m_aJobData.m_pParser->getPaperDimension( pValue->m_aOption, nWidth, nHeight );
-                aInfo.m_nPaperWidth = (unsigned long)((PtTo10Mu( nWidth )+50)/100);
-                aInfo.m_nPaperHeight = (unsigned long)((PtTo10Mu( nHeight )+50)/100);
+                PaperInfo aInfo(PtTo10Mu( nWidth ), PtTo10Mu( nHeight ));
                 m_aPaperFormats.push_back( aInfo );
             }
         }
@@ -628,7 +592,7 @@ BOOL PspSalInfoPrinter::SetData(
                     TenMuToPt( pJobSetup->mnPaperWidth ),
                     TenMuToPt( pJobSetup->mnPaperHeight ) );
             else
-                aPaper = String( ByteString( aPaperTab[ pJobSetup->mePaperFormat ].name ), RTL_TEXTENCODING_ISO_8859_1 );
+                aPaper = rtl::OStringToOUString(PaperInfo::toPSName(pJobSetup->mePaperFormat), RTL_TEXTENCODING_ISO_8859_1);
 
             pKey = aData.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) ) );
             pValue = pKey ? pKey->getValue( aPaper ) : NULL;

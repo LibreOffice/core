@@ -1,5 +1,5 @@
 #*************************************************************************
-#
+#*
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
 # Copyright 2008 by Sun Microsystems, Inc.
@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.5 $
+# $Revision: 1.9 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -27,43 +27,49 @@
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
 #
-#*************************************************************************
+#************************************************************************/
 
 PRJ=..$/..
 
-PRJNAME=vcl
-TARGET=svp
-TARGETTYPE=CUI
+PRJNAME=i18npool
+TARGET=i18npaper
 
-# --- Settings -----------------------------------------------------------
+ENABLE_EXCEPTIONS=TRUE
 
-.INCLUDE :  settings.mk
+# --- Settings -----------------------------------------------------
 
-.IF "$(OS)" == "SOLARIS"
-LINKFLAGSRUNPATH_OOO := -R/usr/sfw/lib $(LINKFLAGSRUNPATH_OOO)
-.ENDIF
+.INCLUDE : settings.mk
+.INCLUDE : $(PRJ)$/version.mk
+.INCLUDE : $(PRJ)$/util$/makefile.pmk
 
-.IF "$(GUIBASE)" == "unx"
-# headless plugin
-LIB1TARGET=$(SLB)$/isvpplug
-LIB1FILES= $(SLB)$/svpplug.lib \
-           $(SLB)$/printergfx.lib
-SHL1TARGET=vclplug_svp$(DLLPOSTFIX)
-SHL1IMPLIB=isvpplug
-SHL1LIBS=$(LIB1TARGET)
-SHL1DEPN=$(LB)$/libvcl$(DLLPOSTFIX)$(DLLPOST)
-SHL1STDLIBS=\
-            $(VCLLIB)\
-            $(I18NPAPERLIB)\
-            $(BASEBMPLIB)\
-            $(BASEGFXLIB)\
-            $(TOOLSLIB)         \
-            $(VOSLIB)           \
-            $(SALLIB)
-.ENDIF # GUIBASE unx
+# --- Files --------------------------------------------------------
+#
+SLOFILES=$(SLO)$/paper.obj
+SHL1OBJS=$(SLOFILES)
 
+SHL1TARGET=$(TARGET)$(DLLPOSTFIX)
+SHL1IMPLIB=i$(TARGET)
 
-# --- Allgemein ----------------------------------------------------------
+DEF1DEPN=$(MISC)$/$(SHL1TARGET).flt
+SHL1DEF=$(MISC)$/$(SHL1TARGET).def
+DEF1NAME=$(SHL1TARGET)
+DEFLIB1NAME=$(SHL1TARGET)
 
-.INCLUDE :  target.mk
+LIB1TARGET=     $(SLB)$/$(SHL1TARGET).lib
+LIB1OBJFILES=$(SHL1OBJS)
 
+SHL1STDLIBS= \
+    $(I18NISOLANGLIB) \
+    $(COMPHELPERLIB) \
+    $(CPPULIB) \
+    $(SALLIB)
+
+# --- Targets ------------------------------------------------------
+
+.INCLUDE :	target.mk
+
+$(MISC)$/$(SHL1TARGET).flt: makefile.mk
+    @echo ------------------------------
+    @echo Making: $@
+    @echo CLEAR_THE_FILE > $@
+    @echo __CT >> $@

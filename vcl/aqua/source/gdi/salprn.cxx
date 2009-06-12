@@ -187,8 +187,8 @@ static struct PaperSizeEntry
     { 420,  595, PAPER_A5 },
     { 612,  792, PAPER_LETTER },
     { 612, 1008, PAPER_LEGAL },
-    { 728, 1032, PAPER_B4 },
-    { 516,  729, PAPER_B5 },
+    { 728, 1032, PAPER_B4_JIS },
+    { 516,  729, PAPER_B5_JIS },
     { 792, 1224, PAPER_TABLOID }
 };
 
@@ -216,8 +216,8 @@ static Paper recognizePaper( double i_fWidth, double i_fHeight )
     case 595000842: aPaper = PAPER_A4;      break;
     case 420000595: aPaper = PAPER_A5;      break;
     case 612000792: aPaper = PAPER_LETTER;  break;
-    case 728001032: aPaper = PAPER_B4;      break;
-    case 516000729: aPaper = PAPER_B5;      break;
+    case 728001032: aPaper = PAPER_B4_JIS;  break;
+    case 516000729: aPaper = PAPER_B5_JIS;  break;
     case 612001008: aPaper = PAPER_LEGAL;   break;
     case 792001224: aPaper = PAPER_TABLOID; break;
     default:
