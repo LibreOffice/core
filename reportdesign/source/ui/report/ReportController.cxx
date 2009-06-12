@@ -2429,8 +2429,8 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
         new SvxPageItem(RPTUI_ID_PAGE),
         new SvxSizeItem(RPTUI_ID_SIZE),
         new SfxAllEnumItem(RPTUI_ID_PAGE_MODE,SVX_PAGE_MODE_STANDARD),
-        new SfxAllEnumItem(RPTUI_ID_START,SVX_PAPER_A4),
-        new SfxAllEnumItem(RPTUI_ID_END,SVX_PAPER_E),
+        new SfxAllEnumItem(RPTUI_ID_START,PAPER_A4),
+        new SfxAllEnumItem(RPTUI_ID_END,PAPER_E),
         new SvxBrushItem(ITEMID_BRUSH),
         new SfxUInt16Item(RPTUI_ID_METRIC,static_cast<UINT16>(eUserMetric))
     };
