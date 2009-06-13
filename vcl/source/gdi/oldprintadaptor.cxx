@@ -25,6 +25,8 @@
  *
  ************************************************************************/
 
+#include "precompiled_vcl.hxx"
+
 #include "vcl/oldprintadaptor.hxx"
 #include "vcl/gdimtf.hxx"
 
