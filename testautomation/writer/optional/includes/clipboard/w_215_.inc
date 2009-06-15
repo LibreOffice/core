@@ -48,6 +48,7 @@ sub w_215_
 
 end sub
 
+'--------------------------------------------------------
 
 testcase CalcToWriterText1
   gApplication = "CALC"
@@ -96,18 +97,18 @@ testcase CalcToWriterText1
                 Warnlog "Unable to remove checkbox: " + Active.Gettext
                 Active.ok
             endcatch
-        endif
-    endif    
+        end if
+    end if    
     Wait 500
-    Call hCloseDocument
     printlog "  Close saved document "
+    Call hCloseDocument
   else
     Warnlog "Dialog 'Paste Special' is not up!"
     Call hCloseDocument
     goto endsub
   end if
-  Call hCloseDocument
   printlog "  Close active document "
+  Call hCloseDocument
 endcase
 
 ' ---------------------------------------------------------------------------------
@@ -148,21 +149,21 @@ testcase CalcToWriterText2
     Call hFileSaveAsWithFilterKill (gOfficepath + "user\work\writer_to_writer_textformat_cellcontent.odt", "writer8")
     printlog "  Save document as ..\user\work\writer_to_writer_textformat_cellcontent.odt"
     Wait 500
-    Call hCloseDocument
     printlog "  Close saved document "
+    Call hCloseDocument
     wait 500
-    Call hFileOpen (gOfficepath + "user\work\writer_to_writer_textformat_cellcontent.odt",false)
     printlog "  Reopen saved document "
+    Call hFileOpen (gOfficepath + "user\work\writer_to_writer_textformat_cellcontent.odt",false)
     Wait 500
-    Call hCloseDocument
     printlog "  Close saved document "
+    Call hCloseDocument
   else
     Warnlog "Dialog 'Paste Special' is not up!"
     Call hCloseDocument
     goto endsub
   end if
-  Call hCloseDocument
   printlog "  Close active document "
+  Call hCloseDocument
 endcase
 
 ' ---------------------------------------------------------------------------------
@@ -215,18 +216,18 @@ testcase CalcToWriterCalculation
                 Warnlog "Unable to remove checkbox: " + Active.Gettext
                 Active.ok
             endcatch
-        endif
-    endif        
+        end if
+    end if
     Wait 500
-    Call hCloseDocument
     printlog "  Close saved document "
+    Call hCloseDocument
   else
     Warnlog "Dialog 'Paste Special' is not up!"
     Call hCloseDocument
     goto endsub
   end if
-  Call hCloseDocument
   printlog "  Close active document "
+  Call hCloseDocument
 endcase
 
 ' ---------------------------------------------------------------------------------
@@ -278,18 +279,18 @@ testcase CalcToWriterHyperlink1
                 Warnlog "Unable to remove checkbox: " + Active.Gettext
                 Active.ok
             endcatch
-        endif
-    endif            
+        end if
+    end if
     Wait 500
-    Call hCloseDocument
     printlog "  Close saved document "
+    Call hCloseDocument
   else
     Warnlog "Dialog 'Paste Special' is not up!"
     Call hCloseDocument
     goto endsub
   end if
-  Call hCloseDocument
   printlog "  Close active document "
+  Call hCloseDocument
 endcase
 
 ' ---------------------------------------------------------------------------------
@@ -325,26 +326,26 @@ testcase CalcToWriterHyperlink2
   printlog "  Paste 'Text' in all available clipboard formats "
   Kontext "InhaltEinfuegen"
   if InhaltEinfuegen.Exists then
-    Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"text")
     printlog "  Write Clipboard format under pasted content "
-    Call hFileSaveAsWithFilterKill (gOfficepath + "user\work\writer_to_writer_hyperlink_cellcontent.odt", "writer8")
+    Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"text")
     printlog "  Save document as ..\user\work\writer_to_writer_hyperlink_cellcontent.odt"
+    Call hFileSaveAsWithFilterKill (gOfficepath + "user\work\writer_to_writer_hyperlink_cellcontent.odt", "writer8")
     Wait 500
-    Call hCloseDocument
     printlog "  Close saved document "
+    Call hCloseDocument
     wait 500
-    Call hFileOpen (gOfficepath + "user\work\writer_to_writer_hyperlink_cellcontent.odt",false)
     printlog "  Reopen saved document "
+    Call hFileOpen (gOfficepath + "user\work\writer_to_writer_hyperlink_cellcontent.odt",false)
     Wait 500
-    Call hCloseDocument
     printlog "  Close saved document "
+    Call hCloseDocument
   else
     Warnlog "Dialog 'Paste Special' is not up!"
     Call hCloseDocument
     goto endsub
   end if
-  Call hCloseDocument
   printlog "  Close active document "
+  Call hCloseDocument
 endcase
 
 ' ---------------------------------------------------------------------------------
@@ -377,26 +378,26 @@ testcase CalcToWriterDrawObject
   printlog "  Paste 'Text' in all available clipboard formats "
   Kontext "InhaltEinfuegen"
   if InhaltEinfuegen.Exists then
-    Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"ctext")
     printlog "  Write Clipboard format under pasted content "
-    Call hFileSaveAsWithFilterKill (gOfficepath + "user\work\writer_to_writer_draw.odt", "writer8")
+    Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"ctext")
     printlog "  Save document as ..\user\work\writer_to_writer_draw.odt"
+    Call hFileSaveAsWithFilterKill (gOfficepath + "user\work\writer_to_writer_draw.odt", "writer8")
     Wait 500
-    Call hCloseDocument
     printlog "  Close saved document "
+    Call hCloseDocument
     wait 500
-    Call hFileOpen (gOfficepath + "user\work\writer_to_writer_draw.odt",false)
     printlog "  Reopen saved document "
+    Call hFileOpen (gOfficepath + "user\work\writer_to_writer_draw.odt",false)
     Wait 500
-    Call hCloseDocument
     printlog "  Close saved document "
+    Call hCloseDocument
   else
     Warnlog "Dialog 'Paste Special' is not up!"
     Call hCloseDocument
     goto endsub
   end if
-  Call hCloseDocument
   printlog "  Close active document "
+  Call hCloseDocument
 endcase
 
 ' ---------------------------------------------------------------------------------
@@ -429,25 +430,25 @@ testcase CalcToWriterOLE
   printlog "  Paste 'Text' in all available clipboard formats "
   Kontext "InhaltEinfuegen"
   if InhaltEinfuegen.Exists then
-    Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"ctext")
     printlog "  Write Clipboard format under pasted content "
-    Call hFileSaveAsWithFilterKill (gOfficepath + "user\work\writer_to_writer_ole.odt", "writer8")
+    Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"ctext")
     printlog "  Save document as ..\user\work\writer_to_writer_ole.odt"
+    Call hFileSaveAsWithFilterKill (gOfficepath + "user\work\writer_to_writer_ole.odt", "writer8")
     Wait 500
-    Call hCloseDocument
     printlog "  Close saved document "
+    Call hCloseDocument
     wait 500
-    Call hFileOpen (gOfficepath + "user\work\writer_to_writer_ole.odt",false)
     printlog "  Reopen saved document "
+    Call hFileOpen (gOfficepath + "user\work\writer_to_writer_ole.odt",false)
     Wait 500
-    Call hCloseDocument
     printlog "  Close saved document "
+    Call hCloseDocument
   else
     Warnlog "Dialog 'Paste Special' is not up!"
     Call hCloseDocument
     goto endsub
   end if
-  Call hCloseDocument
   printlog "  Close active document "
+  Call hCloseDocument
 endcase
 

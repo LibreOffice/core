@@ -50,22 +50,22 @@ end sub
 ' ---------------------------------------------------------------------------------
 
 testcase HTMLToDRAWText
-  gApplication = "HTML"
-  printlog "  Open File '..\\writer\\optional\\input\\clipboard\\html.html' "
-  printlog " + Jump to beginning of document "
-  printlog " + Select first paragraph "
-  printlog " + Copy selected text "
-  Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html")
-  Call sMakeReadOnlyDocumentEditable
-  printlog "  Jump to beginning of document "
-  Call wTypeKeys "<Mod1 Home>"
-  Call wTypeKeys "<Shift Down><Shift End>"
-  EditCopy
+    gApplication = "HTML"
+    printlog "  Open File '..\\writer\\optional\\input\\clipboard\\html.html' "
+    printlog " + Jump to beginning of document "
+    printlog " + Select first paragraph "
+    printlog " + Copy selected text "
+    Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\html.html")
+    Call sMakeReadOnlyDocumentEditable
+    printlog "  Jump to beginning of document "
+    Call wTypeKeys "<Mod1 Home>"
+    Call wTypeKeys "<Shift Down><Shift End>"
+    EditCopy
 
-  gApplication = "DRAW"
-  printlog " + Open new document "
-  Call hNewDocument
-  printlog " + Edit / Paste Special "
+    gApplication = "DRAW"
+    printlog " + Open new document "
+    Call hNewDocument
+    printlog " + Edit / Paste Special "
     Sleep 2
     try
         EditPasteSpecial
@@ -75,39 +75,39 @@ testcase HTMLToDRAWText
         Call hCloseDocument
         goto endsub
     endcatch
-  Wait 500
-  printlog "  Paste 'Text' in all available clipboard formats "
-  Kontext "InhaltEinfuegen"
-  if InhaltEinfuegen.Exists then
-   Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"text")
-   printlog " + Write Clipboard format under pasted content "
-   Call hFileSaveAsWithFilterKill (gOfficepath + "user\work\html_to_draw_text.odg", "draw8")
-   printlog " + Save document as ..\user\work\html_to_draw_text.odg"
-   Wait 500
-   Call hCloseDocument
-   printlog " + Close saved document "
-   wait 500
-   printlog " + Reopen saved document "
-   if hFileOpen (gOfficepath + "user\work\html_to_draw_text.odg",false) = false then
-        Kontext "Active"
-        if Active.Exists then
-            try
-                Active.Yes
-            catch
-                Warnlog "Unable to remove checkbox: " + Active.Gettext
-                Active.ok
-            endcatch
-        endif
-   endif      
-   Wait 500
-   Call hCloseDocument
-   printlog " + Close saved document "
-  else
-   Warnlog "Dialog 'Paste Special' is not up!"
-   Call hCloseDocument
-   goto endsub
-  end if
-  printlog "  Close active document "
+    Wait 500
+    printlog "  Paste 'Text' in all available clipboard formats "
+    Kontext "InhaltEinfuegen"
+    if InhaltEinfuegen.Exists then
+        printlog " + Write Clipboard format under pasted content "
+        Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"text")
+        printlog " + Save document as ..\user\work\html_to_draw_text.odg"
+        Call hFileSaveAsWithFilterKill (gOfficepath + "user\work\html_to_draw_text.odg", "draw8")
+        Wait 500
+        printlog " + Close saved document "
+        Call hCloseDocument
+        wait 500
+        printlog " + Reopen saved document "
+        if hFileOpen (gOfficepath + "user\work\html_to_draw_text.odg",false) = false then
+            Kontext "Active"
+            if Active.Exists then
+                try
+                    Active.Yes
+                catch
+                    Warnlog "Unable to remove checkbox: " + Active.Gettext
+                    Active.ok
+                endcatch
+            end if
+        end if      
+        Wait 500
+        printlog " + Close saved document "
+        Call hCloseDocument
+    else
+        Warnlog "Dialog 'Paste Special' is not up!"
+        Call hCloseDocument
+        goto endsub
+    end if
+    printlog "  Close active document "
     Do Until GetDocumentCount = 0
         Call hCloseDocument
     Loop
@@ -151,19 +151,19 @@ testcase HTMLToDRAWField
     printlog "  Paste 'Field' in all available clipboard formats "
     Kontext "InhaltEinfuegen"
     if InhaltEinfuegen.Exists then
-        Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"field")
         printlog " + Write Clipboard format under pasted content "
-        Call hFileSaveAsWithFilterKill (gOfficepath + "user\work\html_to_draw_field.odg", "draw8")
+        Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"field")
         printlog " + Save document as ..\user\work\html_to_draw_field.odg"
+        Call hFileSaveAsWithFilterKill (gOfficepath + "user\work\html_to_draw_field.odg", "draw8")
         Wait 500
-        Call hCloseDocument
         printlog " + Close saved document "
+        Call hCloseDocument
         sleep (2)
-        Call hFileOpen (gOfficepath + "user\work\html_to_draw_field.odg",false)
         printlog " + Reopen saved document "
+        Call hFileOpen (gOfficepath + "user\work\html_to_draw_field.odg",false)
         Wait 500
-        Call hCloseDocument
         printlog " + Close saved document "
+        Call hCloseDocument
     else
         Warnlog "Dialog 'Paste Special' is not up!"
         Call hCloseDocument
@@ -208,19 +208,19 @@ testcase HTMLToDRAWTable
   printlog "  Paste 'Table' in all available clipboard formats "
   Kontext "InhaltEinfuegen"
    if InhaltEinfuegen.Exists then
-     Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"table")
      printlog " + Write Clipboard format under pasted content "
-     Call hFileSaveAsWithFilterKill (gOfficepath + "user\work\html_to_draw_table.odg", "draw8")
+     Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"table")
      printlog " + Save document as ..\user\work\html_to_draw_table.odg"
+     Call hFileSaveAsWithFilterKill (gOfficepath + "user\work\html_to_draw_table.odg", "draw8")
      Wait 500
-     Call hCloseDocument
      printlog " + Close saved document "
+     Call hCloseDocument
      wait 500
-     Call hFileOpen (gOfficepath + "user\work\html_to_draw_table.odg",false)
      printlog " + Reopen saved document "
+     Call hFileOpen (gOfficepath + "user\work\html_to_draw_table.odg",false)
      Wait 500
-     Call hCloseDocument
      printlog " + Close saved document "
+     Call hCloseDocument
    else
      Warnlog "Dialog 'Paste Special' is not up!"
      Call hCloseDocument
@@ -264,19 +264,19 @@ testcase HTMLToDRAWGraphicLinked
     printlog "  Paste 'Linked Graphic' in all available clipboard formats "
     Kontext "InhaltEinfuegen"
     if InhaltEinfuegen.Exists then
-        Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"graphicL")
         printlog " + Write Clipboard format under pasted content "
-        Call hFileSaveAsWithFilterKill (gOfficepath + "user\work\html_to_draw_graphic1.odg", "draw8")
+        Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"graphicL")
         printlog " + Save document as ..\user\work\html_to_draw_graphic1.odg"
+        Call hFileSaveAsWithFilterKill (gOfficepath + "user\work\html_to_draw_graphic1.odg", "draw8")
         Wait 500
-        Call hCloseDocument
         printlog " + Close saved document "
+        Call hCloseDocument
         wait 500
-        Call hFileOpen (gOfficepath + "user\work\html_to_draw_graphic1.odg",false)
         printlog " + Reopen saved document "
+        Call hFileOpen (gOfficepath + "user\work\html_to_draw_graphic1.odg",false)
         Wait 500
-        Call hCloseDocument
         printlog " + Close saved document "
+        Call hCloseDocument
     else
         Warnlog "Dialog 'Paste Special' is not up!"
         Call hCloseDocument
@@ -321,19 +321,19 @@ testcase HTMLToDRAWControl
     printlog "  Paste 'Control' in all available clipboard formats "
     Kontext "InhaltEinfuegen"
     if InhaltEinfuegen.Exists then
-        Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"control")
         printlog " + Write Clipboard format under pasted content "
-        Call hFileSaveAsWithFilterKill (gOfficepath + "user\work\html_to_draw_control.odg", "draw8")
+        Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"control")
         printlog " + Save document as ..\user\work\html_to_draw_control.odg"
+        Call hFileSaveAsWithFilterKill (gOfficepath + "user\work\html_to_draw_control.odg", "draw8")
         Wait 500
-        Call hCloseDocument
         printlog " + Close saved document "
+        Call hCloseDocument
         wait 500
-        Call hFileOpen (gOfficepath + "user\work\html_to_draw_control.odg",false)
         printlog " + Reopen saved document "
+        Call hFileOpen (gOfficepath + "user\work\html_to_draw_control.odg",false)
         Wait 500
-        Call hCloseDocument
         printlog " + Close saved document "
+        Call hCloseDocument
     else
         Warnlog "Dialog 'Paste Special' is not up!"
         Call hCloseDocument
@@ -383,19 +383,19 @@ testcase HTMLToDRAWFloatingFrame
     printlog "  Paste 'Floating Frame' in all available clipboard formats "
     Kontext "InhaltEinfuegen"
     if InhaltEinfuegen.Exists then
-        Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"control")
         printlog " + Write Clipboard format under pasted content "
-        Call hFileSaveAsWithFilterKill (gOfficepath + "user\work\html_to_draw_float.odg", "draw8")
+        Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"control")
         printlog " + Save document as ..\user\work\html_to_draw_float.odg"
+        Call hFileSaveAsWithFilterKill (gOfficepath + "user\work\html_to_draw_float.odg", "draw8")
         Wait 500
-        Call hCloseDocument
         printlog " + Close saved document "
+        Call hCloseDocument
         wait 500
-        Call hFileOpen (gOfficepath + "user\work\html_to_draw_float.odg",false)
         printlog " + Reopen saved document "
+        Call hFileOpen (gOfficepath + "user\work\html_to_draw_float.odg",false)
         Wait 500
-        Call hCloseDocument
         printlog " + Close saved document "
+        Call hCloseDocument
     else
         Warnlog "Dialog 'Paste Special' is not up!"
         Call hCloseDocument

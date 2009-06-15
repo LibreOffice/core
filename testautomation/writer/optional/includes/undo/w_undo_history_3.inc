@@ -241,6 +241,10 @@ endcase
 
 testcase tUndoBookmark
 
+Warnlog "#i102310# - tUndoBookmark outcommented due to bug."
+goto endsub
+
+
 	'/// <B>Bookmark (Insert/Rename/Delete)</B>
 	printlog "- Insert Bookmark"
 	'/// new document

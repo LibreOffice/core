@@ -68,7 +68,6 @@ sub w_007_
     gApplication = "MASTERDOCUMENT"
     Call tMasterDocToolsHyphenation
     gApplication = "WRITER"
-
 end sub
 
 ' -------------------------------------------
@@ -122,10 +121,8 @@ testcase tToolsSpellcheck
     case else
     end select
 
-    ToolsSpellcheckWriter
-
     printlog " Tools / Spellcheck / Check"
-
+    ToolsSpellcheckWriter
     Kontext "Active"
     if ( Active.Exists( 1 ) ) then
         if Active.GetRT = 304 then
@@ -209,12 +206,13 @@ testcase tToolsSpellcheck
     wait 500
 
     Kontext "Spellcheck"
-    Spellcheck.Close
     printlog " Close 'Spellcheck' dialog"
+    Spellcheck.Close
     wait 500
-    Call hCloseDocument
-    printlog " Close active document"
-
+    PrintLog "Close active documents"
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' -------------------------------------------
@@ -304,11 +302,12 @@ testcase tToolsThesaurus
     printlog " Close 'Language' dialog"
     SpracheAuswaehlen.Cancel
     Kontext "Thesaurus"
-    Thesaurus.Cancel
     printlog " Close 'Thesaurus' dialog"
-    Call hCloseDocument
-    printlog " Close active document"
-
+    Thesaurus.Cancel
+    PrintLog "Close active documents"
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' -------------------------------------------
@@ -413,9 +412,10 @@ testcase tToolsHyphenation
         end if
     end if
 
-    Call hCloseDocument
-    printlog " Close active document"
-    if gApplication = "MASTERDOCUMENT" then Call hCloseDocument
+    PrintLog "Close active documents"
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' -------------------------------------------
@@ -564,11 +564,10 @@ testcase tToolsAutocorrectAutoformat
     Kontext "TabWortergaenzung"
     Call DialogTest ( TabWortergaenzung )
     printlog " Close Autocorrect dialogue"
-
     TabWortergaenzung.Cancel
 
-    Call hCloseDocument
     printlog " Close active document"
+    Call hCloseDocument
 endcase
 
 ' -------------------------------------------
@@ -591,9 +590,8 @@ testcase tToolsOutlineNumbering
     printlog " Step through tabpages and close dialog"
 
     TabPositionKapitelnumerierung.Cancel
-    Call hCloseDocument
     printlog " Close active document"
-
+    Call hCloseDocument
 endcase
 
 ' -------------------------------------------
@@ -611,8 +609,8 @@ testcase tToolsLineNumbering
     Call DialogTest ( TabZeilennumerierung )
     printlog " Close dialog"
     TabZeilennumerierung.Cancel
-    Call hCloseDocument
     printlog " Close active document"
+    Call hCloseDocument
 endcase
 
 '-----------------------------------------------------------
@@ -635,14 +633,15 @@ testcase tToolsFootnotes
     DialogTest ( TabEndnoten )
     printlog " Close dialog"
     TabEndnoten.Cancel
-    Call hCloseDocument
     printlog " Close active document"
+    Call hCloseDocument
 endcase
 
 ' -------------------------------------------
 
 testcase tToolsGallery
     Dim i as integer
+
     printlog "- Tools / Gallery"
     Call hNewDocument
     printlog " Open new document"
@@ -671,9 +670,8 @@ testcase tToolsGallery
     Kontext "Gallery"
     if Gallery.Exists then Warnlog "Gallery has not been closed!"
 
-    Call hCloseDocument
     printlog " Close active document"
-
+    Call hCloseDocument
 endcase
 
 ' -------------------------------------------
@@ -687,7 +685,7 @@ testcase tToolsMailMergeWizard
     Call hNewDocument
     printlog " Open new document"
     ToolsMailMergeWizard
-    
+
     printlog " Tools / Mail Merge Wizard"
     Kontext "MailMergeWizard"
     if ( MailMergeWizard.Exists( 5 ) ) then
@@ -704,7 +702,7 @@ testcase tToolsMailMergeWizard
     Wait 500
     printlog " Click document 'Browse' button"
     BrowseDocument.Click
-    
+
     Kontext "OeffnenDlg"
     if ( OeffnenDlg.Exists( 1 ) ) then
         OeffnenDlg.Cancel
@@ -722,7 +720,7 @@ testcase tToolsMailMergeWizard
         Neu.Cancel
     else
         warnlog( "Dialog <Neu> is not available" )
-    endif
+    end if
 
     Kontext "TabMailMergeSourceDocument"
     printlog " Check 'Use the current document' radio button"
@@ -772,7 +770,7 @@ testcase tToolsMailMergeWizard
         OeffnenDlg.Cancel
     else
         Warnlog "Filedialog not up on template 'Browse' button"
-    endif
+    end if
 
     Kontext "SelectAddressList"
     if ( SelectAddressList.exists( 1 ) ) then
@@ -780,7 +778,7 @@ testcase tToolsMailMergeWizard
         Create.Click
     else
         warnlog( "Dialog <SelectAddressList> is not available" )
-    endif
+    end if
 
     Kontext "NewAddressList"
     if ( NewAddressList.exists( 1 ) ) then
@@ -789,7 +787,7 @@ testcase tToolsMailMergeWizard
         Find.Click
     else
         warnlog( "Dialog <NewAddressList> is not available" )
-    endif
+    end if
 
     Kontext "FindEntry"
     if ( FindEntry.Exists( 1 ) ) then
@@ -826,29 +824,29 @@ testcase tToolsMailMergeWizard
     else
         Warnlog "Dialog 'Customize Address List' is not up"
     end if
-    
+
     printlog " Close all open dialogs"
-    
+
     Kontext "NewAddressList"
     if ( NewAddressList.exists( 1 ) ) then
         NewAddressList.Cancel
     else
         warnlog( "Dialog <NewAddressList> is not available" )
-    endif
-    
+    end if
+
     Kontext "SelectAddressList"
     if ( SelectAddressList.exists( 1 ) ) then
         SelectAddressList.Cancel
     else
         warnlog( "Dialog <SelectAddressList> is not available" )
-    endif
+    end if
 
     Kontext "MailMergeWizard"
     if ( MailMergeWizard.exists( 1 ) ) then
         MailMergeWizard.Cancel
     else
         warnlog( "Dialog <MailMergeWizard> is not available" )
-    endif
+    end if
 
     printlog " Close active document"
     Call hCloseDocument
@@ -912,7 +910,6 @@ testcase tToolsCalculate
     EditPaste
     Call hCloseDocument
     printlog " Close active document"
-
 endcase
 
 ' -------------------------------------------
@@ -931,7 +928,7 @@ testcase tToolsUpdate
     Call wTypeKeys ("Dieser Text ist zur Aktualisierung")
     printlog " Insert / Indexes"
     InsertIndexes
- 
+
     Kontext "Active"
     if ( Active.Exists( 2 ) ) then
         if active.GetRT = 304 then
@@ -939,7 +936,7 @@ testcase tToolsUpdate
             Active.Ok
         end if
     end if
-    
+
     Kontext
     Active.Setpage TabVerzeichnisseVerzeichnis
 
@@ -964,14 +961,13 @@ testcase tToolsUpdate
 
     printlog " Tools / Update / Fields"
     hUseAsyncSlot( "ToolsUpdateFields" )
-    
 
     printlog "  - Update links"
     printlog " Insert a graphic from file"
     Call hGrafikVerknuepftEinfuegen ( gTesttoolPath + "writer\required\input\graphics\jolink.jpg" )
     if ( hUseAsyncSlot( "ToolsUpdateLinks" ) = -1 ) then
         Warnlog "Links can't be updated!"
-    endif
+    end if
 
     printlog "  - Update / Reformat Pages  with  Tools / Page formatting"
     ToolsPageFormatting
@@ -986,13 +982,12 @@ endcase
 ' -------------------------------------------
 
 testcase tToolsHangulHanjaConversion
-
     Dim bAsianLanguage as Boolean
     Dim sTestFile as String
-    
+
     if ( gApplication = "MASTERDOCUMENT" ) then
         goto endsub
-    endif
+    end if
 
     select case gApplication
     case "HTML"   : sTestFile = gTesttoolpath & "writer\required\input\hangul.html"
@@ -1059,7 +1054,9 @@ testcase tToolsHangulHanjaConversion
     end if
 
     printlog " Close all active documents"
-    hFileCloseAll()
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 ' -------------------------------------------
@@ -1132,7 +1129,6 @@ endcase
 ' -------------------------------------------
 
 testcase tHtmlDocToolsHangulHanjaConversion
-
     Dim bAsianLanguage as Boolean
     Dim sTestFile as String
 
@@ -1154,7 +1150,7 @@ testcase tHtmlDocToolsHangulHanjaConversion
         bAsianLanguage = ActiveDeactivateAsianSupport(False)
         Call hCloseDocument
         goto endsub
-    endif
+    end if
 
     Kontext "HangulHanjaConversion"
     if ( HangulHanjaConversion.Exists( 1 ) ) then
@@ -1194,22 +1190,22 @@ testcase tHtmlDocToolsHangulHanjaConversion
         Call ActiveDeactivateAsianSupport(FALSE)
     end if
 
-    printlog " Close active document"
-    Call hCloseDocument
+    PrintLog "Close active documents"
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
     gApplication = "WRITER"
 endcase
 
 ' -------------------------------------------
 
 testcase tMasterDocToolsHyphenation
-
     Dim sTestFile as string
     Dim LingFile as string
 
     gApplication = "MASTERDOCUMENT"
-    
     PrintLog "- Tools / Hyphenation"
-    
+
     ' As long as OOo has no modules for that, disabled
     if ( gOOO ) then
         printlog "No hyphenation in OOo"
@@ -1240,9 +1236,8 @@ testcase tMasterDocToolsHyphenation
         sTestFile = gTesttoolpath + "writer\required\input\linguistik\0" + trim$(str$(iSprache)) + ".odt"
         LingFile = str$(iSprache) + "-hyph.dat"
     end select
-    
-    sTestFile = convertpath( sTestFile )
 
+    sTestFile = convertpath( sTestFile )
     if ( not hFileExists( sTestFile ) )then
         Warnlog "No defined Errortext for language: " + isprache + "! Exit!"
         goto endsub
@@ -1255,14 +1250,13 @@ testcase tMasterDocToolsHyphenation
         Call hNewDocument
         printlog " Open new document"
         hUseAsyncSlot( "EditPaste" )
-    endif
+    end if
 
     Call sMakeReadOnlyDocumentEditable
     printlog " Insert file 'writer\required\input\linguistik\0 + [OfficeLanguage] + '.odt'"
     Sleep 1
     Call wTypeKeys ("<Mod1 Home>")
 
-    
     printlog " Tools / Hyphenate"
     hUseAsyncSlot( "ToolsLanguageHyphenate" )
     
@@ -1304,7 +1298,7 @@ testcase tMasterDocToolsHyphenation
                 hUseAsyncSlot( "ToolsLanguageHyphenate" )
             end if
         end if
-    endif
+    end if
 
     Kontext "Silbentrennung"
     printlog " Close upcoming 'Hyphenation' dialog"
@@ -1324,6 +1318,7 @@ testcase tMasterDocToolsHyphenation
 
     printlog " Close active documents"
     hFileCloseAll()
-    
     gApplication = "WRITER"
 endcase
+
+' -------------------------------------------

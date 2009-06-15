@@ -133,6 +133,9 @@ endcase
 
 testcase tHyphenation_2
 
+warnlog "#i102304# - outcommenting tHyphenation_2 due to bug."
+goto endsub
+
   Dim testFile as String
   Dim testWord as String
   Dim firstPartOfTestWord as String
@@ -247,6 +250,9 @@ endcase
 
 testcase tHyphenation_3
 
+warnlog "#i102304# - outcommenting tHyphenation_3 due to bug."
+goto endsub
+
   Dim testFile as String
   Dim testWord as String
   Dim firstPartOfTestWord
@@ -254,18 +260,17 @@ testcase tHyphenation_3
   Dim testWordInHyphenationDlg1 as String
   Dim testWordInHyphenationDlg2 as String
 
-  testFile                  =  "tHyphenation.odt"
-  testWord                  =  "following"
-  firstPartOfTestWord       =  "fol"
-  secondPartOfTestWord      =  "follow"
-  testWordInHyphenationDlg1 =  "fol=low-ing"
-  testWordInHyphenationDlg2 =  "fol-low=ing"
+    testFile                  =  "tHyphenation.odt"
+    testWord                  =  "following"
+    firstPartOfTestWord       =  "fol"
+    secondPartOfTestWord      =  "follow"
+    testWordInHyphenationDlg1 =  "fol=low-ing"
+    testWordInHyphenationDlg2 =  "fol-low=ing"
 
-  PrintLog "- Test Hyphenation  using Tools/Hyphenation ,test like follow-ing"
+    printLog "- Test Hyphenation  using Tools/Hyphenation ,test like follow-ing"
+    printlog "Test Hyphenation  using Tools/Hyphenation ,test like follow-ing"
 
-   printlog "Test Hyphenation  using Tools/Hyphenation ,test like follow-ing"
-
-   printlog "open a test file"
+    printlog "open a test file"
     Call hFileOpen ( gTesttoolPath + "writer\optional\input\hyphenation\" + testFile )
     Call sMakeReadOnlyDocumentEditable
 

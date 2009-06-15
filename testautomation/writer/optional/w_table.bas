@@ -127,7 +127,7 @@ sub TableConfiguration
 
     mUnit = fSetMeasurementToCM()
     ToolsOptions
-    Call hToolsOptions ("WRITER","GENERAL")
+    Call hToolsOptions ("Writer","GENERAL")
     cDecSep = GetDecimalSeperator(Tabulatorenabstand.GetText)
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.Ok
