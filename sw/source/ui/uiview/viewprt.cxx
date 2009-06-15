@@ -174,7 +174,7 @@ USHORT __EXPORT SwView::SetPrinter(SfxPrinter* pNew, USHORT nDiffFlags, bool  )
     Beschreibung:
  --------------------------------------------------------------------*/
 
-ErrCode SwView::DoPrint( SfxPrinter */*pPrinter*/, PrintDialog */*pDlg*/, BOOL /*bSilent*/, BOOL /*bIsAPI*/ )
+ErrCode SwView::DoPrint( SfxPrinter* /*pPrinter*/, PrintDialog* /*pDlg*/, BOOL /*bSilent*/, BOOL /*bIsAPI*/ )
 {
     #if 0
     // First test
