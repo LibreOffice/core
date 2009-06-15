@@ -753,7 +753,7 @@ USHORT SwSrcView::SetPrinter(SfxPrinter* pNew, USHORT nDiffFlags, bool )
     Beschreibung:
  --------------------------------------------------------------------*/
 
-ErrCode SwSrcView::DoPrint( SfxPrinter */*pPrinter*/, PrintDialog */*pDlg*/, BOOL /*bSilent*/, BOOL /*bIsAPI*/ )
+ErrCode SwSrcView::DoPrint( SfxPrinter * /*pPrinter*/, PrintDialog * /*pDlg*/, BOOL /*bSilent*/, BOOL /*bIsAPI*/ )
 {
     #if 0
     SfxPrintProgress *pProgress = new SfxPrintProgress( this, !bSilent );
