@@ -740,7 +740,9 @@ vector<Reference<VendorBase> > getAllJREInfos()
     //Otherwise in SDKs Java may be started twice
      createJavaInfoFromPath(vecInfos);
 
+#ifdef UNX
     createJavaInfoDirScan(vecInfos);
+#endif
 
     bubbleSortVersion(vecInfos);
     return vecInfos;
