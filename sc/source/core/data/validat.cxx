@@ -695,6 +695,40 @@ bool ScValidationData::GetSelectionFromFormula( TypedScStrCollection* pStrings,
     SCSIZE  nCol, nRow, nCols, nRows, n = 0;
     pValues->GetDimensions( nCols, nRows );
 
+    BOOL bRef = FALSE;
+    ScRange aRange;
+
+    ScTokenArray* pArr = (ScTokenArray*) &rTokArr;
+    pArr->Reset();
+    ScToken* t = NULL;
+    if (pArr->GetLen() == 1 && (t = static_cast<ScToken*>(pArr->GetNextReferenceOrName())) != NULL)
+    {
+        if (t->GetOpCode() == ocDBArea)
+        {
+            if( ScDBData* pDBData = pDocument->GetDBCollection()->FindIndex( t->GetIndex() ) )
+            {
+                pDBData->GetArea(aRange);
+                bRef = TRUE;
+            }
+        }
+        else if (t->GetOpCode() == ocName)
+        {
+            ScRangeData* pName = pDocument->GetRangeName()->FindIndex( t->GetIndex() );
+            if (pName && pName->IsReference(aRange))
+            {
+                bRef = TRUE;
+            }
+        }
+        else if (t->GetType() != svIndex)
+        {
+            t->CalcAbsIfRel(rPos);
+            if (pArr->IsValidReference(aRange))
+            {
+                bRef = TRUE;
+            }
+        }
+    }
+
     /* XL artificially limits things to a single col or row in the UI but does
      * not list the constraint in MOOXml. If a defined name or INDIRECT
      * resulting in 1D is entered in the UI and the definition later modified
@@ -735,7 +769,15 @@ bool ScValidationData::GetSelectionFromFormula( TypedScStrCollection* pStrings,
                 {
                     // FIXME FIXME FIXME
                     // Feature regression.  Date formats are lost passing through the matrix
-                    pFormatter->GetInputLineString( pMatVal->fVal, 0, aValStr );
+                    //pFormatter->GetInputLineString( pMatVal->fVal, 0, aValStr );
+                    //For external reference and a formula that results in an area or array, date formats are still lost.
+                    if ( bRef )
+                    {
+                        pDocument->GetInputString((SCCOL)(nCol+aRange.aStart.Col()),
+                            (SCROW)(nRow+aRange.aStart.Row()), aRange.aStart.Tab() , aValStr);
+                    }
+                    else
+                        pFormatter->GetInputLineString( pMatVal->fVal, 0, aValStr );
                 }
 
                 if( pCell && rMatch < 0 )

@@ -1139,6 +1139,13 @@ void ScGridWindow::ExecFilter( ULONG nSel,
 
         if (SC_AUTOFILTER_CUSTOM == nSel)
         {
+            SCTAB nAreaTab;
+            SCCOL nStartCol;
+            SCROW nStartRow;
+            SCCOL nEndCol;
+            SCROW nEndRow;
+            pDBData->GetArea( nAreaTab, nStartCol,nStartRow,nEndCol,nEndRow );
+            pViewData->GetView()->MarkRange( ScRange( nStartCol,nStartRow,nAreaTab,nEndCol,nEndRow,nAreaTab));
             pViewData->GetView()->SetCursor(nCol,nRow);     //! auch ueber Slot ??
             pViewData->GetDispatcher().Execute( SID_FILTER, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD );
         }

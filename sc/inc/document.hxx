@@ -889,22 +889,26 @@ public:
 
     BOOL            InsertRow( SCCOL nStartCol, SCTAB nStartTab,
                                SCCOL nEndCol,   SCTAB nEndTab,
-                               SCROW nStartRow, SCSIZE nSize, ScDocument* pRefUndoDoc = NULL );
+                               SCROW nStartRow, SCSIZE nSize, ScDocument* pRefUndoDoc = NULL,
+                               const ScMarkData* pTabMark = NULL );
     SC_DLLPUBLIC BOOL           InsertRow( const ScRange& rRange, ScDocument* pRefUndoDoc = NULL );
     void            DeleteRow( SCCOL nStartCol, SCTAB nStartTab,
                                SCCOL nEndCol,   SCTAB nEndTab,
                                SCROW nStartRow, SCSIZE nSize,
-                               ScDocument* pRefUndoDoc = NULL, BOOL* pUndoOutline = NULL );
+                               ScDocument* pRefUndoDoc = NULL, BOOL* pUndoOutline = NULL,
+                               const ScMarkData* pTabMark = NULL );
     void            DeleteRow( const ScRange& rRange,
                                ScDocument* pRefUndoDoc = NULL, BOOL* pUndoOutline = NULL );
     BOOL            InsertCol( SCROW nStartRow, SCTAB nStartTab,
                                SCROW nEndRow,   SCTAB nEndTab,
-                               SCCOL nStartCol, SCSIZE nSize, ScDocument* pRefUndoDoc = NULL );
+                               SCCOL nStartCol, SCSIZE nSize, ScDocument* pRefUndoDoc = NULL,
+                               const ScMarkData* pTabMark = NULL );
     SC_DLLPUBLIC BOOL           InsertCol( const ScRange& rRange, ScDocument* pRefUndoDoc = NULL );
     void            DeleteCol( SCROW nStartRow, SCTAB nStartTab,
                                SCROW nEndRow, SCTAB nEndTab,
                                SCCOL nStartCol, SCSIZE nSize,
-                               ScDocument* pRefUndoDoc = NULL, BOOL* pUndoOutline = NULL );
+                               ScDocument* pRefUndoDoc = NULL, BOOL* pUndoOutline = NULL,
+                               const ScMarkData* pTabMark = NULL );
     void            DeleteCol( const ScRange& rRange,
                                ScDocument* pRefUndoDoc = NULL, BOOL* pUndoOutline = NULL );
 

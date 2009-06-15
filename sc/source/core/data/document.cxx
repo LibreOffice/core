@@ -657,6 +657,43 @@ void ScDocument::LimitChartIfAll( ScRangeListRef& rRangeList )
 }
 
 
+void lcl_GetFirstTabRange( SCTAB& rTabRangeStart, SCTAB& rTabRangeEnd, const ScMarkData* pTabMark )
+{
+    // without ScMarkData, leave start/end unchanged
+    if ( pTabMark )
+    {
+        for (SCTAB nTab=0; nTab<=MAXTAB; ++nTab)
+            if (pTabMark->GetTableSelect(nTab))
+            {
+                // find first range of consecutive selected sheets
+                rTabRangeStart = nTab;
+                while ( nTab+1 <= MAXTAB && pTabMark->GetTableSelect(nTab+1) )
+                    ++nTab;
+                rTabRangeEnd = nTab;
+                return;
+            }
+    }
+}
+
+bool lcl_GetNextTabRange( SCTAB& rTabRangeStart, SCTAB& rTabRangeEnd, const ScMarkData* pTabMark )
+{
+    if ( pTabMark )
+    {
+        // find next range of consecutive selected sheets after rTabRangeEnd
+        for (SCTAB nTab=rTabRangeEnd+1; nTab<=MAXTAB; ++nTab)
+            if (pTabMark->GetTableSelect(nTab))
+            {
+                rTabRangeStart = nTab;
+                while ( nTab+1 <= MAXTAB && pTabMark->GetTableSelect(nTab+1) )
+                    ++nTab;
+                rTabRangeEnd = nTab;
+                return true;
+            }
+    }
+    return false;
+}
+
+
 BOOL ScDocument::CanInsertRow( const ScRange& rRange ) const
 {
     SCCOL nStartCol = rRange.aStart.Col();
@@ -681,39 +718,60 @@ BOOL ScDocument::CanInsertRow( const ScRange& rRange ) const
 
 BOOL ScDocument::InsertRow( SCCOL nStartCol, SCTAB nStartTab,
                             SCCOL nEndCol,   SCTAB nEndTab,
-                            SCROW nStartRow, SCSIZE nSize, ScDocument* pRefUndoDoc )
+                            SCROW nStartRow, SCSIZE nSize, ScDocument* pRefUndoDoc,
+                            const ScMarkData* pTabMark )
 {
     SCTAB i;
 
     PutInOrder( nStartCol, nEndCol );
     PutInOrder( nStartTab, nEndTab );
+    if ( pTabMark )
+    {
+        nStartTab = 0;
+        nEndTab = MAXTAB;
+    }
 
     BOOL bTest = TRUE;
     BOOL bRet = FALSE;
     BOOL bOldAutoCalc = GetAutoCalc();
     SetAutoCalc( FALSE );   // Mehrfachberechnungen vermeiden
     for ( i = nStartTab; i <= nEndTab && bTest; i++)
-        if (pTab[i])
+        if (pTab[i] && (!pTabMark || pTabMark->GetTableSelect(i)))
             bTest &= pTab[i]->TestInsertRow( nStartCol, nEndCol, nSize );
     if (bTest)
     {
         // UpdateBroadcastAreas muss vor UpdateReference gerufen werden, damit nicht
         // Eintraege verschoben werden, die erst bei UpdateReference neu erzeugt werden
 
-        UpdateBroadcastAreas( URM_INSDEL, ScRange(
-            ScAddress( nStartCol, nStartRow, nStartTab ),
-            ScAddress( nEndCol, MAXROW, nEndTab )), 0, static_cast<SCsROW>(nSize), 0 );
-        UpdateReference( URM_INSDEL, nStartCol, nStartRow, nStartTab,
-                         nEndCol, MAXROW, nEndTab,
-                         0, static_cast<SCsROW>(nSize), 0, pRefUndoDoc, FALSE );        // without drawing objects
+        // handle chunks of consecutive selected sheets together
+        SCTAB nTabRangeStart = nStartTab;
+        SCTAB nTabRangeEnd = nEndTab;
+        lcl_GetFirstTabRange( nTabRangeStart, nTabRangeEnd, pTabMark );
+        do
+        {
+            UpdateBroadcastAreas( URM_INSDEL, ScRange(
+                ScAddress( nStartCol, nStartRow, nTabRangeStart ),
+                ScAddress( nEndCol, MAXROW, nTabRangeEnd )), 0, static_cast<SCsROW>(nSize), 0 );
+        }
+        while ( lcl_GetNextTabRange( nTabRangeStart, nTabRangeEnd, pTabMark ) );
+
+        lcl_GetFirstTabRange( nTabRangeStart, nTabRangeEnd, pTabMark );
+        do
+        {
+            UpdateReference( URM_INSDEL, nStartCol, nStartRow, nTabRangeStart,
+                             nEndCol, MAXROW, nTabRangeEnd,
+                             0, static_cast<SCsROW>(nSize), 0, pRefUndoDoc, FALSE );        // without drawing objects
+        }
+        while ( lcl_GetNextTabRange( nTabRangeStart, nTabRangeEnd, pTabMark ) );
+
         for (i=nStartTab; i<=nEndTab; i++)
-            if (pTab[i])
+            if (pTab[i] && (!pTabMark || pTabMark->GetTableSelect(i)))
                 pTab[i]->InsertRow( nStartCol, nEndCol, nStartRow, nSize );
 
         //  #82991# UpdateRef for drawing layer must be after inserting,
         //  when the new row heights are known.
         for (i=nStartTab; i<=nEndTab; i++)
-            if (pTab[i])
+            if (pTab[i] && (!pTabMark || pTabMark->GetTableSelect(i)))
                 pTab[i]->UpdateDrawRef( URM_INSDEL,
                             nStartCol, nStartRow, nStartTab, nEndCol, MAXROW, nEndTab,
                             0, static_cast<SCsROW>(nSize), 0 );
@@ -756,42 +814,61 @@ BOOL ScDocument::InsertRow( const ScRange& rRange, ScDocument* pRefUndoDoc )
 void ScDocument::DeleteRow( SCCOL nStartCol, SCTAB nStartTab,
                             SCCOL nEndCol,   SCTAB nEndTab,
                             SCROW nStartRow, SCSIZE nSize,
-                            ScDocument* pRefUndoDoc, BOOL* pUndoOutline )
+                            ScDocument* pRefUndoDoc, BOOL* pUndoOutline,
+                            const ScMarkData* pTabMark )
 {
     SCTAB i;
 
     PutInOrder( nStartCol, nEndCol );
     PutInOrder( nStartTab, nEndTab );
+    if ( pTabMark )
+    {
+        nStartTab = 0;
+        nEndTab = MAXTAB;
+    }
 
     BOOL bOldAutoCalc = GetAutoCalc();
     SetAutoCalc( FALSE );   // Mehrfachberechnungen vermeiden
 
-    if ( ValidRow(nStartRow+nSize) )
+    // handle chunks of consecutive selected sheets together
+    SCTAB nTabRangeStart = nStartTab;
+    SCTAB nTabRangeEnd = nEndTab;
+    lcl_GetFirstTabRange( nTabRangeStart, nTabRangeEnd, pTabMark );
+    do
     {
-        DelBroadcastAreasInRange( ScRange(
-            ScAddress( nStartCol, nStartRow, nStartTab ),
-            ScAddress( nEndCol, nStartRow+nSize-1, nEndTab ) ) );
-        UpdateBroadcastAreas( URM_INSDEL, ScRange(
-            ScAddress( nStartCol, nStartRow+nSize, nStartTab ),
-            ScAddress( nEndCol, MAXROW, nEndTab )), 0, -(static_cast<SCsROW>(nSize)), 0 );
+        if ( ValidRow(nStartRow+nSize) )
+        {
+            DelBroadcastAreasInRange( ScRange(
+                ScAddress( nStartCol, nStartRow, nTabRangeStart ),
+                ScAddress( nEndCol, nStartRow+nSize-1, nTabRangeEnd ) ) );
+            UpdateBroadcastAreas( URM_INSDEL, ScRange(
+                ScAddress( nStartCol, nStartRow+nSize, nTabRangeStart ),
+                ScAddress( nEndCol, MAXROW, nTabRangeEnd )), 0, -(static_cast<SCsROW>(nSize)), 0 );
+        }
+        else
+            DelBroadcastAreasInRange( ScRange(
+                ScAddress( nStartCol, nStartRow, nTabRangeStart ),
+                ScAddress( nEndCol, MAXROW, nTabRangeEnd ) ) );
     }
-    else
-        DelBroadcastAreasInRange( ScRange(
-            ScAddress( nStartCol, nStartRow, nStartTab ),
-            ScAddress( nEndCol, MAXROW, nEndTab ) ) );
+    while ( lcl_GetNextTabRange( nTabRangeStart, nTabRangeEnd, pTabMark ) );
 
     if ( ValidRow(nStartRow+nSize) )
     {
-        UpdateReference( URM_INSDEL, nStartCol, nStartRow+nSize, nStartTab,
-                         nEndCol, MAXROW, nEndTab,
-                         0, -(static_cast<SCsROW>(nSize)), 0, pRefUndoDoc );
+        lcl_GetFirstTabRange( nTabRangeStart, nTabRangeEnd, pTabMark );
+        do
+        {
+            UpdateReference( URM_INSDEL, nStartCol, nStartRow+nSize, nTabRangeStart,
+                             nEndCol, MAXROW, nTabRangeEnd,
+                             0, -(static_cast<SCsROW>(nSize)), 0, pRefUndoDoc );
+        }
+        while ( lcl_GetNextTabRange( nTabRangeStart, nTabRangeEnd, pTabMark ) );
     }
 
     if (pUndoOutline)
         *pUndoOutline = FALSE;
 
     for ( i = nStartTab; i <= nEndTab; i++)
-        if (pTab[i])
+        if (pTab[i] && (!pTabMark || pTabMark->GetTableSelect(i)))
             pTab[i]->DeleteRow( nStartCol, nEndCol, nStartRow, nSize, pUndoOutline );
 
     if ( ValidRow(nStartRow+nSize) )
@@ -844,30 +921,51 @@ BOOL ScDocument::CanInsertCol( const ScRange& rRange ) const
 
 BOOL ScDocument::InsertCol( SCROW nStartRow, SCTAB nStartTab,
                             SCROW nEndRow,   SCTAB nEndTab,
-                            SCCOL nStartCol, SCSIZE nSize, ScDocument* pRefUndoDoc )
+                            SCCOL nStartCol, SCSIZE nSize, ScDocument* pRefUndoDoc,
+                            const ScMarkData* pTabMark )
 {
     SCTAB i;
 
     PutInOrder( nStartRow, nEndRow );
     PutInOrder( nStartTab, nEndTab );
+    if ( pTabMark )
+    {
+        nStartTab = 0;
+        nEndTab = MAXTAB;
+    }
 
     BOOL bTest = TRUE;
     BOOL bRet = FALSE;
     BOOL bOldAutoCalc = GetAutoCalc();
     SetAutoCalc( FALSE );   // Mehrfachberechnungen vermeiden
     for ( i = nStartTab; i <= nEndTab && bTest; i++)
-        if (pTab[i])
+        if (pTab[i] && (!pTabMark || pTabMark->GetTableSelect(i)))
             bTest &= pTab[i]->TestInsertCol( nStartRow, nEndRow, nSize );
     if (bTest)
     {
-        UpdateBroadcastAreas( URM_INSDEL, ScRange(
-            ScAddress( nStartCol, nStartRow, nStartTab ),
-            ScAddress( MAXCOL, nEndRow, nEndTab )), static_cast<SCsCOL>(nSize), 0, 0 );
-        UpdateReference( URM_INSDEL, nStartCol, nStartRow, nStartTab,
-                         MAXCOL, nEndRow, nEndTab,
-                         static_cast<SCsCOL>(nSize), 0, 0, pRefUndoDoc );
+        // handle chunks of consecutive selected sheets together
+        SCTAB nTabRangeStart = nStartTab;
+        SCTAB nTabRangeEnd = nEndTab;
+        lcl_GetFirstTabRange( nTabRangeStart, nTabRangeEnd, pTabMark );
+        do
+        {
+            UpdateBroadcastAreas( URM_INSDEL, ScRange(
+                ScAddress( nStartCol, nStartRow, nTabRangeStart ),
+                ScAddress( MAXCOL, nEndRow, nTabRangeEnd )), static_cast<SCsCOL>(nSize), 0, 0 );
+        }
+        while ( lcl_GetNextTabRange( nTabRangeStart, nTabRangeEnd, pTabMark ) );
+
+        lcl_GetFirstTabRange( nTabRangeStart, nTabRangeEnd, pTabMark );
+        do
+        {
+            UpdateReference( URM_INSDEL, nStartCol, nStartRow, nTabRangeStart,
+                             MAXCOL, nEndRow, nTabRangeEnd,
+                             static_cast<SCsCOL>(nSize), 0, 0, pRefUndoDoc );
+        }
+        while ( lcl_GetNextTabRange( nTabRangeStart, nTabRangeEnd, pTabMark ) );
+
         for (i=nStartTab; i<=nEndTab; i++)
-            if (pTab[i])
+            if (pTab[i] && (!pTabMark || pTabMark->GetTableSelect(i)))
                 pTab[i]->InsertCol( nStartCol, nStartRow, nEndRow, nSize );
 
         if ( pChangeTrack && pChangeTrack->IsInDeleteUndo() )
@@ -907,42 +1005,60 @@ BOOL ScDocument::InsertCol( const ScRange& rRange, ScDocument* pRefUndoDoc )
 
 void ScDocument::DeleteCol(SCROW nStartRow, SCTAB nStartTab, SCROW nEndRow, SCTAB nEndTab,
                                 SCCOL nStartCol, SCSIZE nSize, ScDocument* pRefUndoDoc,
-                                BOOL* pUndoOutline )
+                                BOOL* pUndoOutline, const ScMarkData* pTabMark )
 {
     SCTAB i;
 
     PutInOrder( nStartRow, nEndRow );
     PutInOrder( nStartTab, nEndTab );
+    if ( pTabMark )
+    {
+        nStartTab = 0;
+        nEndTab = MAXTAB;
+    }
 
     BOOL bOldAutoCalc = GetAutoCalc();
     SetAutoCalc( FALSE );   // Mehrfachberechnungen vermeiden
 
-    if ( ValidCol(sal::static_int_cast<SCCOL>(nStartCol+nSize)) )
+    // handle chunks of consecutive selected sheets together
+    SCTAB nTabRangeStart = nStartTab;
+    SCTAB nTabRangeEnd = nEndTab;
+    lcl_GetFirstTabRange( nTabRangeStart, nTabRangeEnd, pTabMark );
+    do
     {
-        DelBroadcastAreasInRange( ScRange(
-            ScAddress( nStartCol, nStartRow, nStartTab ),
-            ScAddress( sal::static_int_cast<SCCOL>(nStartCol+nSize-1), nEndRow, nEndTab ) ) );
-        UpdateBroadcastAreas( URM_INSDEL, ScRange(
-            ScAddress( sal::static_int_cast<SCCOL>(nStartCol+nSize), nStartRow, nStartTab ),
-            ScAddress( MAXCOL, nEndRow, nEndTab )), -static_cast<SCsCOL>(nSize), 0, 0 );
+        if ( ValidCol(sal::static_int_cast<SCCOL>(nStartCol+nSize)) )
+        {
+            DelBroadcastAreasInRange( ScRange(
+                ScAddress( nStartCol, nStartRow, nTabRangeStart ),
+                ScAddress( sal::static_int_cast<SCCOL>(nStartCol+nSize-1), nEndRow, nTabRangeEnd ) ) );
+            UpdateBroadcastAreas( URM_INSDEL, ScRange(
+                ScAddress( sal::static_int_cast<SCCOL>(nStartCol+nSize), nStartRow, nTabRangeStart ),
+                ScAddress( MAXCOL, nEndRow, nTabRangeEnd )), -static_cast<SCsCOL>(nSize), 0, 0 );
+        }
+        else
+            DelBroadcastAreasInRange( ScRange(
+                ScAddress( nStartCol, nStartRow, nTabRangeStart ),
+                ScAddress( MAXCOL, nEndRow, nTabRangeEnd ) ) );
     }
-    else
-        DelBroadcastAreasInRange( ScRange(
-            ScAddress( nStartCol, nStartRow, nStartTab ),
-            ScAddress( MAXCOL, nEndRow, nEndTab ) ) );
+    while ( lcl_GetNextTabRange( nTabRangeStart, nTabRangeEnd, pTabMark ) );
 
     if ( ValidCol(sal::static_int_cast<SCCOL>(nStartCol+nSize)) )
     {
-        UpdateReference( URM_INSDEL, sal::static_int_cast<SCCOL>(nStartCol+nSize), nStartRow, nStartTab,
-                         MAXCOL, nEndRow, nEndTab,
-                         -static_cast<SCsCOL>(nSize), 0, 0, pRefUndoDoc );
+        lcl_GetFirstTabRange( nTabRangeStart, nTabRangeEnd, pTabMark );
+        do
+        {
+            UpdateReference( URM_INSDEL, sal::static_int_cast<SCCOL>(nStartCol+nSize), nStartRow, nTabRangeStart,
+                             MAXCOL, nEndRow, nTabRangeEnd,
+                             -static_cast<SCsCOL>(nSize), 0, 0, pRefUndoDoc );
+        }
+        while ( lcl_GetNextTabRange( nTabRangeStart, nTabRangeEnd, pTabMark ) );
     }
 
     if (pUndoOutline)
         *pUndoOutline = FALSE;
 
     for ( i = nStartTab; i <= nEndTab; i++)
-        if (pTab[i])
+        if (pTab[i] && (!pTabMark || pTabMark->GetTableSelect(i)))
             pTab[i]->DeleteCol( nStartCol, nStartRow, nEndRow, nSize, pUndoOutline );
 
     if ( ValidCol(sal::static_int_cast<SCCOL>(nStartCol+nSize)) )
@@ -1781,9 +1897,17 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
             nXw = sal::static_int_cast<SCCOL>( nXw + nDestAddX );
             nYw = sal::static_int_cast<SCROW>( nYw + nDestAddY );   // ClipArea, plus ExtendMerge value
 
-            //  Inhalte entweder komplett oder gar nicht loeschen:
+            /*  Decide which contents to delete before copying. Delete all
+                contents if nInsFlag contains any real content flag.
+                #i102056# Notes are pasted from clipboard in a second pass,
+                together with the special flag IDF_ADDNOTES that states to not
+                overwrite/delete existing cells but to insert the notes into
+                these cells. In this case, just delete old notes from the
+                destination area. */
             USHORT nDelFlag = IDF_NONE;
-            if ( nInsFlag & IDF_CONTENTS )
+            if ( (nInsFlag & (IDF_CONTENTS | IDF_ADDNOTES)) == (IDF_NOTE | IDF_ADDNOTES) )
+                nDelFlag |= IDF_NOTE;
+            else if ( nInsFlag & IDF_CONTENTS )
                 nDelFlag |= IDF_CONTENTS;
             //  With bSkipAttrForEmpty, don't remove attributes, copy
             //  on top of existing attributes instead.
@@ -4030,16 +4154,21 @@ void ScDocument::ApplySelectionFrame( const ScMarkData& rMark,
                                       const SvxBoxItem* pLineOuter,
                                       const SvxBoxInfoItem* pLineInner )
 {
-    if (rMark.IsMarked())
+    ScRangeList aRangeList;
+    rMark.FillRangeListWithMarks( &aRangeList, FALSE );
+    ULONG nRangeCount = aRangeList.Count();
+    for (SCTAB i=0; i<=MAXTAB; i++)
     {
-        ScRange aRange;
-        rMark.GetMarkArea(aRange);
-        for (SCTAB i=0; i<=MAXTAB; i++)
-            if (pTab[i])
-                if (rMark.GetTableSelect(i))
-                    pTab[i]->ApplyBlockFrame( pLineOuter, pLineInner,
-                                                aRange.aStart.Col(), aRange.aStart.Row(),
-                                                aRange.aEnd.Col(),   aRange.aEnd.Row() );
+        if (pTab[i] && rMark.GetTableSelect(i))
+        {
+            for (ULONG j=0; j<nRangeCount; j++)
+            {
+                ScRange aRange = *aRangeList.GetObject(j);
+                pTab[i]->ApplyBlockFrame( pLineOuter, pLineInner,
+                    aRange.aStart.Col(), aRange.aStart.Row(),
+                    aRange.aEnd.Col(),   aRange.aEnd.Row() );
+            }
+        }
     }
 }
 

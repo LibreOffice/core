@@ -1179,103 +1179,69 @@ void ScViewFunc::ApplyPatternLines( const ScPatternAttr& rAttr, const SvxBoxItem
                                     const SvxBoxInfoItem* pNewInner, BOOL bRecord )
 {
     ScDocument* pDoc = GetViewData()->GetDocument();
-    ScMarkData& rMark = GetViewData()->GetMarkData();
+    ScMarkData aFuncMark( GetViewData()->GetMarkData() );       // local copy for UnmarkFiltered
+    ScViewUtil::UnmarkFiltered( aFuncMark, pDoc );
     if (bRecord && !pDoc->IsUndoEnabled())
         bRecord = FALSE;
 
-    SCCOL nStartCol;
-    SCROW nStartRow;
-    SCTAB nStartTab;
-    SCCOL nEndCol;
-    SCROW nEndRow;
-    SCTAB nEndTab;
-
-    ScMarkType eMarkType = GetViewData()->GetSimpleArea( nStartCol, nStartRow,
-            nStartTab, nEndCol, nEndRow, nEndTab);
-    if (eMarkType == SC_MARK_SIMPLE || eMarkType == SC_MARK_SIMPLE_FILTERED)
-    {
-        bool bChangeSelection = false;
-        ScRange aMarkRange( nStartCol, nStartRow, nStartTab, nEndCol, nEndRow, nEndTab );
-        if ( eMarkType == SC_MARK_SIMPLE_FILTERED )
-        {
-            ScMarkData aVisibleMark( rMark );
-            ScViewUtil::UnmarkFiltered( aVisibleMark, pDoc );
-            ScRangeList aRangeList;
-            aVisibleMark.FillRangeListWithMarks( &aRangeList, FALSE );
-            if ( aRangeList.Count() > 0 )
-            {
-                // use the first range of visible cells
-                // (might also show an error message instead, or, later, allow multiple ranges)
-
-                aMarkRange = *aRangeList.GetObject(0);
-            }
-            else    // all hidden -> cursor position
-            {
-                aMarkRange.aStart.SetCol(GetViewData()->GetCurX());
-                aMarkRange.aStart.SetRow(GetViewData()->GetCurY());
-                aMarkRange.aStart.SetTab(GetViewData()->GetTabNo());
-                aMarkRange.aEnd = aMarkRange.aStart;
-            }
-            aMarkRange.GetVars( nStartCol, nStartRow, nStartTab, nEndCol, nEndRow, nEndTab );
-            bChangeSelection = true;    // change the selection to only the affected cells
-        }
-
-        rMark.MarkToSimple();   // not done by GetSimpleArea anymore
-
-        ScDocShell* pDocSh = GetViewData()->GetDocShell();
-
-        ScDocShellModificator aModificator( *pDocSh );
-
-        if (!rMark.IsMarked() || bChangeSelection)
-        {
-            DoneBlockMode();
-            InitOwnBlockMode();
-            rMark.SetMarkArea( ScRange( nStartCol, nStartRow, nStartTab, nEndCol, nEndRow, nEndTab ) );
-            MarkDataChanged();
-        }
-
-        if (bRecord)
-        {
-            SCTAB nTabCount = pDoc->GetTableCount();
-            ScDocument* pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
-            pUndoDoc->InitUndo( pDoc, nStartTab, nStartTab );
-            for (SCTAB i=0; i<nTabCount; i++)
-                if (i != nStartTab && rMark.GetTableSelect(i))
-                    pUndoDoc->AddUndoTab( i, i );
-            pDoc->CopyToDocument( nStartCol, nStartRow, 0, nEndCol, nEndRow, nTabCount-1,
-                                    IDF_ATTRIB, FALSE, pUndoDoc );
-
-            pDocSh->GetUndoManager()->AddUndoAction(
-                new ScUndoSelectionAttr( pDocSh, rMark,
-                                         nStartCol, nStartRow, nStartTab,
-                                         nEndCol,   nEndRow,   nEndTab,
-                                         pUndoDoc, FALSE, &rAttr, pNewOuter, pNewInner ) );
-        }
-
-        USHORT nExt = SC_PF_TESTMERGE;
-        pDocSh->UpdatePaintExt( nExt, nStartCol, nStartRow, nStartTab,
-                                      nEndCol,   nEndRow,   nEndTab );      // content before the change
-
-        pDoc->ApplySelectionFrame( rMark, pNewOuter, pNewInner );
-
-        pDocSh->UpdatePaintExt( nExt, nStartCol, nStartRow, nStartTab,
-                                      nEndCol,   nEndRow,   nEndTab );      // content after the change
-
-        rMark.MarkToMulti();
-        pDoc->ApplySelectionPattern( rAttr, rMark );
-
-        pDocSh->PostPaint( nStartCol, nStartRow, nStartTab,
-                           nEndCol,   nEndRow,   nEndTab,
-                           PAINT_GRID, nExt );
-        pDocSh->UpdateOle(GetViewData());
-        aModificator.SetDocumentModified();
-        CellContentChanged();
-        rMark.MarkToSimple();
-    }
+    ScRange aMarkRange;
+    aFuncMark.MarkToSimple();
+    BOOL bMulti = aFuncMark.IsMultiMarked();
+    if (bMulti)
+        aFuncMark.GetMultiMarkArea( aMarkRange );
+    else if (aFuncMark.IsMarked())
+        aFuncMark.GetMarkArea( aMarkRange );
     else
-    {       // "Rahmen nicht auf Mehrfachselektion"
-        ErrorMessage(STR_MSSG_APPLYPATTLINES_0);
+    {
+        aMarkRange = ScRange( GetViewData()->GetCurX(),
+                            GetViewData()->GetCurY(), GetViewData()->GetTabNo() );
+        DoneBlockMode();
+        InitOwnBlockMode();
+        aFuncMark.SetMarkArea(aMarkRange);
+        MarkDataChanged();
     }
+
+    ScDocShell* pDocSh = GetViewData()->GetDocShell();
+
+    ScDocShellModificator aModificator( *pDocSh );
+
+    if (bRecord)
+    {
+        ScDocument* pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
+        SCTAB nStartTab = aMarkRange.aStart.Tab();
+        SCTAB nTabCount = pDoc->GetTableCount();
+        pUndoDoc->InitUndo( pDoc, nStartTab, nStartTab );
+        for (SCTAB i=0; i<nTabCount; i++)
+            if (i != nStartTab && aFuncMark.GetTableSelect(i))
+                pUndoDoc->AddUndoTab( i, i );
+
+        ScRange aCopyRange = aMarkRange;
+        aCopyRange.aStart.SetTab(0);
+        aCopyRange.aEnd.SetTab(nTabCount-1);
+        pDoc->CopyToDocument( aCopyRange, IDF_ATTRIB, bMulti, pUndoDoc, &aFuncMark );
+
+        pDocSh->GetUndoManager()->AddUndoAction(
+            new ScUndoSelectionAttr(
+            pDocSh, aFuncMark,
+            aMarkRange.aStart.Col(), aMarkRange.aStart.Row(), aMarkRange.aStart.Tab(),
+            aMarkRange.aEnd.Col(), aMarkRange.aEnd.Row(), aMarkRange.aEnd.Tab(),
+            pUndoDoc, bMulti, &rAttr, pNewOuter, pNewInner ) );
+    }
+
+    USHORT nExt = SC_PF_TESTMERGE;
+    pDocSh->UpdatePaintExt( nExt, aMarkRange ); // content before the change
+
+    pDoc->ApplySelectionFrame( aFuncMark, pNewOuter, pNewInner );
+
+    pDocSh->UpdatePaintExt( nExt, aMarkRange ); // content after the change
+
+    aFuncMark.MarkToMulti();
+    pDoc->ApplySelectionPattern( rAttr, aFuncMark );
+
+    pDocSh->PostPaint( aMarkRange, PAINT_GRID, nExt );
+    pDocSh->UpdateOle(GetViewData());
+    aModificator.SetDocumentModified();
+    CellContentChanged();
 
     StartFormatArea();
 }

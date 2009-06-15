@@ -1340,6 +1340,14 @@ BOOL ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
         }
     }
 
+    ScMarkData aFullMark( aMark );          // including scenario sheets
+    for( i=0; i<nTabCount; i++ )
+        if( aMark.GetTableSelect( i ) )
+        {
+            for( SCTAB j = i+1; j<nTabCount && pDoc->IsScenario(j); j++ )
+                aFullMark.SelectTable( j, TRUE );
+        }
+
     SCTAB nSelCount = aMark.GetSelectCount();
 
     //  zugehoerige Szenarien auch anpassen
@@ -1543,66 +1551,22 @@ BOOL ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
     switch (eCmd)
     {
         case INS_CELLSDOWN:
-            bSuccess = TRUE;
-            for( i=0; i<nTabCount; i++ )
-            {
-                if( aMark.GetTableSelect( i ) )
-                {
-                    SCTAB nScenarioCount = 0;
-                    for( SCTAB j = i+1; j<nTabCount && pDoc->IsScenario(j); j++ )
-                        nScenarioCount ++;
-
-                    bSuccess &= pDoc->InsertRow( nStartCol, i, nEndCol, i+nScenarioCount, nStartRow, static_cast<SCSIZE>(nEndRow-nStartRow+1), pRefUndoDoc );
-                }
-            }
+            bSuccess = pDoc->InsertRow( nStartCol, 0, nEndCol, MAXTAB, nStartRow, static_cast<SCSIZE>(nEndRow-nStartRow+1), pRefUndoDoc, &aFullMark );
             nPaintEndY = MAXROW;
             break;
         case INS_INSROWS:
-            bSuccess = TRUE;
-            for( i=0; i<nTabCount; i++ )
-            {
-                if( aMark.GetTableSelect( i ) )
-                {
-                    SCTAB nScenarioCount = 0;
-                    for( SCTAB j = i+1; j<nTabCount && pDoc->IsScenario(j); j++ )
-                        nScenarioCount ++;
-
-                    bSuccess &= pDoc->InsertRow( 0, i, MAXCOL, i+nScenarioCount, nStartRow, static_cast<SCSIZE>(nEndRow-nStartRow+1), pRefUndoDoc );
-                }
-            }
+            bSuccess = pDoc->InsertRow( 0, 0, MAXCOL, MAXTAB, nStartRow, static_cast<SCSIZE>(nEndRow-nStartRow+1), pRefUndoDoc, &aFullMark );
             nPaintStartX = 0;
             nPaintEndX = MAXCOL;
             nPaintEndY = MAXROW;
             nPaintFlags |= PAINT_LEFT;
             break;
         case INS_CELLSRIGHT:
-            bSuccess = TRUE;
-            for( i=0; i<nTabCount; i++ )
-            {
-                if( aMark.GetTableSelect( i ) )
-                {
-                    SCTAB nScenarioCount = 0;
-                    for( SCTAB j = i+1; j<nTabCount && pDoc->IsScenario(j); j++ )
-                        nScenarioCount ++;
-
-                    bSuccess &= pDoc->InsertCol( nStartRow, i, nEndRow, i+nScenarioCount, nStartCol, static_cast<SCSIZE>(nEndCol-nStartCol+1), pRefUndoDoc );
-                }
-            }
+            bSuccess = pDoc->InsertCol( nStartRow, 0, nEndRow, MAXTAB, nStartCol, static_cast<SCSIZE>(nEndCol-nStartCol+1), pRefUndoDoc, &aFullMark );
             nPaintEndX = MAXCOL;
             break;
         case INS_INSCOLS:
-            bSuccess = TRUE;
-            for( i=0; i<nTabCount; i++ )
-            {
-                if( aMark.GetTableSelect( i ) )
-                {
-                    SCTAB nScenarioCount = 0;
-                    for( SCTAB j = i+1; j<nTabCount && pDoc->IsScenario(j); j++ )
-                        nScenarioCount ++;
-
-                    bSuccess &= pDoc->InsertCol( 0, i, MAXROW, i+nScenarioCount, nStartCol, static_cast<SCSIZE>(nEndCol-nStartCol+1), pRefUndoDoc );
-                }
-            }
+            bSuccess = pDoc->InsertCol( 0, 0, MAXROW, MAXTAB, nStartCol, static_cast<SCSIZE>(nEndCol-nStartCol+1), pRefUndoDoc, &aFullMark );
             nPaintStartY = 0;
             nPaintEndY = MAXROW;
             nPaintEndX = MAXCOL;
@@ -1794,6 +1758,14 @@ BOOL ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
             }
         }
     }
+
+    ScMarkData aFullMark( aMark );          // including scenario sheets
+    for( i=0; i<nTabCount; i++ )
+        if( aMark.GetTableSelect( i ) )
+        {
+            for( SCTAB j = i+1; j<nTabCount && pDoc->IsScenario(j); j++ )
+                aFullMark.SelectTable( j, TRUE );
+        }
 
     SCTAB nSelCount = aMark.GetSelectCount();
 
@@ -2035,66 +2007,22 @@ BOOL ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
     switch (eCmd)
     {
         case DEL_CELLSUP:
-            for( i=0; i<nTabCount; i++ )
-            {
-                if( aMark.GetTableSelect( i ) )
-                {
-                    SCTAB nScenarioCount = 0;
-
-                    for( SCTAB j = i+1; j<nTabCount && pDoc->IsScenario(j); j++ )
-                        nScenarioCount ++;
-
-                    pDoc->DeleteRow( nStartCol, i, nEndCol, i+nScenarioCount, nStartRow, static_cast<SCSIZE>(nEndRow-nStartRow+1), pRefUndoDoc );
-                }
-            }
+            pDoc->DeleteRow( nStartCol, 0, nEndCol, MAXTAB, nStartRow, static_cast<SCSIZE>(nEndRow-nStartRow+1), pRefUndoDoc, NULL, &aFullMark );
             nPaintEndY = MAXROW;
             break;
         case DEL_DELROWS:
-            for( i=0; i<nTabCount; i++ )
-            {
-                if( aMark.GetTableSelect( i ) )
-                {
-                    SCTAB nScenarioCount = 0;
-
-                    for( SCTAB j = i+1; j<nTabCount && pDoc->IsScenario(j); j++ )
-                        nScenarioCount ++;
-
-                    pDoc->DeleteRow( 0, i, MAXCOL, i+nScenarioCount, nStartRow, static_cast<SCSIZE>(nEndRow-nStartRow+1), pRefUndoDoc, &bUndoOutline );
-                }
-            }
+            pDoc->DeleteRow( 0, 0, MAXCOL, MAXTAB, nStartRow, static_cast<SCSIZE>(nEndRow-nStartRow+1), pRefUndoDoc, &bUndoOutline, &aFullMark );
             nPaintStartX = 0;
             nPaintEndX = MAXCOL;
             nPaintEndY = MAXROW;
             nPaintFlags |= PAINT_LEFT;
             break;
         case DEL_CELLSLEFT:
-            for( i=0; i<nTabCount; i++ )
-            {
-                if( aMark.GetTableSelect( i ) )
-                {
-                    SCTAB nScenarioCount = 0;
-
-                    for( SCTAB j = i+1; j<nTabCount && pDoc->IsScenario(j); j++ )
-                        nScenarioCount ++;
-
-                    pDoc->DeleteCol( nStartRow, i, nEndRow, i+nScenarioCount, nStartCol, static_cast<SCSIZE>(nEndCol-nStartCol+1), pRefUndoDoc );
-                }
-            }
+            pDoc->DeleteCol( nStartRow, 0, nEndRow, MAXTAB, nStartCol, static_cast<SCSIZE>(nEndCol-nStartCol+1), pRefUndoDoc, NULL, &aFullMark );
             nPaintEndX = MAXCOL;
             break;
         case DEL_DELCOLS:
-            for( i=0; i<nTabCount; i++ )
-            {
-                if( aMark.GetTableSelect( i ) )
-                {
-                    SCTAB nScenarioCount = 0;
-
-                    for( SCTAB j = i+1; j<nTabCount && pDoc->IsScenario(j); j++ )
-                        nScenarioCount ++;
-
-                    pDoc->DeleteCol( 0, i, MAXROW, i+nScenarioCount, nStartCol, static_cast<SCSIZE>(nEndCol-nStartCol+1), pRefUndoDoc, &bUndoOutline );
-                }
-            }
+            pDoc->DeleteCol( 0, 0, MAXROW, MAXTAB, nStartCol, static_cast<SCSIZE>(nEndCol-nStartCol+1), pRefUndoDoc, &bUndoOutline, &aFullMark );
             nPaintStartY = 0;
             nPaintEndY = MAXROW;
             nPaintEndX = MAXCOL;
@@ -2109,8 +2037,9 @@ BOOL ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
 
     if ( bRecord )
     {
-        for ( i=nStartTab; i<=nTabCount; i++)
-            pRefUndoDoc->DeleteAreaTab(nUndoStartX,nUndoStartY,nUndoEndX,nUndoEndY, i, IDF_ALL);
+        for( i=0; i<nTabCount; i++ )
+            if( aFullMark.GetTableSelect( i ) )
+                pRefUndoDoc->DeleteAreaTab(nUndoStartX,nUndoStartY,nUndoEndX,nUndoEndY, i, IDF_ALL);
 
             //  alle Tabellen anlegen, damit Formeln kopiert werden koennen:
         pUndoDoc->AddUndoTab( 0, nTabCount-1, FALSE, FALSE );
@@ -2492,9 +2421,13 @@ BOOL ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
 
     /*  Paste cell notes and drawing objects after adjusting formula references
         and row heights. There are no cell notes or drawing objects, if the
-        clipdoc does not contain a drawing layer. */
+        clipdoc does not contain a drawing layer.
+        #i102056# Passing IDF_NOTE only would overwrite cell contents with
+        empty note cells, therefore the special modifier IDF_ADDNOTES is passed
+        here too which changes the behaviour of ScColumn::CopyFromClip() to not
+        touch existing cells. */
     if ( pClipDoc->GetDrawLayer() )
-        pDoc->CopyFromClip( aPasteDest, aDestMark, IDF_NOTE | IDF_OBJECTS,
+        pDoc->CopyFromClip( aPasteDest, aDestMark, IDF_NOTE | IDF_ADDNOTES | IDF_OBJECTS,
                             pRefUndoDoc, pClipDoc, TRUE, FALSE, bIncludeFiltered );
 
     if (bRecord)

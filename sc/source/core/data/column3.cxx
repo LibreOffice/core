@@ -521,6 +521,15 @@ void ScColumn::DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex, USHORT nDelFla
     for ( FormulaCellVector::iterator aIt = aDelCells.begin(), aEnd = aDelCells.end(); aIt != aEnd; ++aIt )
         (*aIt)->EndListeningTo( pDocument );
 
+    // #i101869# if the note cell with the broadcaster was deleted in EndListening,
+    // forget the pointer to the broadcaster
+    for ( FormulaCellVector::iterator aIt = aDelCells.begin(), aEnd = aDelCells.end(); aIt != aEnd; ++aIt )
+    {
+        SCSIZE nIndex;
+        if ( !Search( (*aIt)->aPos.Row(), nIndex ) )
+            (*aIt)->ReleaseBroadcaster();
+    }
+
     // broadcast SC_HINT_DYING for all cells and delete them
     for ( FormulaCellVector::iterator aIt = aDelCells.begin(), aEnd = aDelCells.end(); aIt != aEnd; ++aIt )
     {
@@ -739,6 +748,9 @@ void ScColumn::CopyFromClip(SCROW nRow1, SCROW nRow2, long nDy,
             Resize( nNew );
     }
 
+    // IDF_ADDNOTES must be passed without other content flags than IDF_NOTE
+    bool bAddNotes = (nInsFlag & (IDF_CONTENTS | IDF_ADDNOTES)) == (IDF_NOTE | IDF_ADDNOTES);
+
     BOOL bAtEnd = FALSE;
     for (SCSIZE i = 0; i < nColCount && !bAtEnd; i++)
     {
@@ -751,12 +763,37 @@ void ScColumn::CopyFromClip(SCROW nRow1, SCROW nRow2, long nDy,
             //  nDestRow may be negative then
 
             ScAddress aDestPos( nCol, (SCROW)nDestRow, nTab );
-            ScBaseCell* pNew = bAsLink ?
-                rColumn.CreateRefCell( pDocument, aDestPos, i, nInsFlag ) :
-                rColumn.CloneCell( i, nInsFlag, *pDocument, aDestPos );
 
-            if (pNew)
-                Insert((SCROW)nDestRow, pNew);
+            /*  #i102056# Paste from clipboard needs to paste the cell notes in
+                a second pass. This must not overwrite the existing cells
+                already copied to the destination position in the first pass.
+                To indicate this special case, the modifier IDF_ADDNOTES is
+                passed together with IDF_NOTE in nInsFlag. Of course, there is
+                still the need to create a new cell, if there is no cell at the
+                destination position at all. */
+            ScBaseCell* pAddNoteCell = bAddNotes ? GetCell( aDestPos.Row() ) : 0;
+            if (pAddNoteCell)
+            {
+                // do nothing if source cell does not contain a note
+                const ScBaseCell* pSourceCell = rColumn.pItems[i].pCell;
+                const ScPostIt* pSourceNote = pSourceCell ? pSourceCell->GetNote() : 0;
+                if (pSourceNote)
+                {
+                    DBG_ASSERT( !pAddNoteCell->HasNote(), "ScColumn::CopyFromClip - unexpected note at destination cell" );
+                    bool bCloneCaption = (nInsFlag & IDF_NOCAPTIONS) == 0;
+                    // #i52342# if caption is cloned, the note must be constructed with the destination document
+                    ScPostIt* pNewNote = ScNoteUtil::CloneNote( *pDocument, aDestPos, *pSourceNote, bCloneCaption );
+                    pAddNoteCell->TakeNote( pNewNote );
+                }
+            }
+            else
+            {
+                ScBaseCell* pNewCell = bAsLink ?
+                    rColumn.CreateRefCell( pDocument, aDestPos, i, nInsFlag ) :
+                    rColumn.CloneCell( i, nInsFlag, *pDocument, aDestPos );
+                if (pNewCell)
+                    Insert( aDestPos.Row(), pNewCell );
+            }
         }
     }
 }

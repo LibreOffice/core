@@ -5439,7 +5439,7 @@ void SAL_CALL ScCellRangeObj::fillAuto( sheet::FillDirection nFillDirection,
     if ( pDocSh && nSourceCount )
     {
         ScRange aSourceRange(aRange);
-        SCCOLROW nCount = 0;                    // "Dest-Count"
+        SCsCOLROW nCount = 0;                   // "Dest-Count"
         FillDir eDir = FILL_TO_BOTTOM;
         BOOL bError = FALSE;
         switch (nFillDirection)
@@ -5467,7 +5467,7 @@ void SAL_CALL ScCellRangeObj::fillAuto( sheet::FillDirection nFillDirection,
             default:
                 bError = TRUE;
         }
-        if (nCount > MAXROW)        // Ueberlauf
+        if (nCount < 0 || nCount > MAXROW)      // overflow
             bError = TRUE;
 
         if (!bError)

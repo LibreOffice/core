@@ -1673,7 +1673,10 @@ void ScColumn::UpdateReference( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW
                     if( pCell->GetCellType() == CELLTYPE_FORMULA)
                     {
                         SCROW nRow = pItems[i].nRow;
-                        ((ScFormulaCell*)pCell)->UpdateReference( eUpdateRefMode, aRange, nDx, nDy, nDz, pUndoDoc );
+                        // When deleting rows on several sheets, the formula's position may be updated with the first call,
+                        // so the undo position must be passed from here.
+                        ScAddress aUndoPos( nCol, nRow, nTab );
+                        ((ScFormulaCell*)pCell)->UpdateReference( eUpdateRefMode, aRange, nDx, nDy, nDz, pUndoDoc, &aUndoPos );
                         if ( nRow != pItems[i].nRow )
                             Search( nRow, i );  // Listener removed/inserted?
                     }
