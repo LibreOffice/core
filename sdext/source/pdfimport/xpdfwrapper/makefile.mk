@@ -57,8 +57,9 @@ UWINAPILIB:=
 APP1TARGET=$(TARGET)
 APP1LIBSALCPPRT=
 APP1OBJS= \
-    $(OBJ)$/wrapper_gpl.obj $(OBJ)/pdfioutdev_gpl.obj
+    $(OBJ)$/wrapper_gpl.obj $(OBJ)/pdfioutdev_gpl.obj $(OBJ)/pnghelper.obj
 
+APP1STDLIBS+=$(ZLIB3RDLIB)
 
 .IF "$(SYSTEM_POPPLER)" == "YES"
 APP1STDLIBS+=$(POPPLER_LIBS)

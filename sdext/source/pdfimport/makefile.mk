@@ -125,7 +125,11 @@ COMPONENT_HELP= \
 COMPONENT_LIBRARIES= \
     $(EXTENSIONDIR)$/$(SHL1TARGET)$(DLLPOST)
 
-EXTENSION_PACKDEPS=$(CONVERTER_FILE) $(COMPONENT_DIALOGS) $(COMPONENT_HELP) makefile.mk
+COMPONENT_IMAGES=\
+    $(EXTENSIONDIR)$/images$/pdfiext.png \
+    $(EXTENSIONDIR)$/images$/pdfiext_hc.png
+
+EXTENSION_PACKDEPS=$(CONVERTER_FILE) $(COMPONENT_DIALOGS) $(COMPONENT_HELP) $(COMPONENT_IMAGES) makefile.mk
 
 .INCLUDE : extension_pre.mk
 .INCLUDE : target.mk
@@ -140,5 +144,9 @@ $(COMPONENT_DIALOGS) : dialogs$/$$(@:f)
     $(COPY) $< $@
 
 $(COMPONENT_HELP) : help$/$$(@:f)
+    @@-$(MKDIRHIER) $(@:d)
+    $(COPY) $< $@
+
+$(COMPONENT_IMAGES) : images$/$$(@:f)
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
