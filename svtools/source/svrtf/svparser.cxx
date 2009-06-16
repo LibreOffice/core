@@ -666,4 +666,64 @@ IMPL_STATIC_LINK( SvParser, NewDataRead, void*, EMPTYARG )
     return 0;
 }
 
+/*========================================================================
+ *
+ * SvKeyValueIterator.
+ *
+ *======================================================================*/
+SV_DECL_PTRARR_DEL(SvKeyValueList_Impl, SvKeyValue*, 0, 4)
+SV_IMPL_PTRARR(SvKeyValueList_Impl, SvKeyValue*);
+
+/*
+ * SvKeyValueIterator.
+ */
+SvKeyValueIterator::SvKeyValueIterator (void)
+    : m_pList (new SvKeyValueList_Impl),
+      m_nPos  (0)
+{
+}
+
+/*
+ * ~SvKeyValueIterator.
+ */
+SvKeyValueIterator::~SvKeyValueIterator (void)
+{
+    delete m_pList;
+}
+
+/*
+ * GetFirst.
+ */
+BOOL SvKeyValueIterator::GetFirst (SvKeyValue &rKeyVal)
+{
+    m_nPos = m_pList->Count();
+    return GetNext (rKeyVal);
+}
+
+/*
+ * GetNext.
+ */
+BOOL SvKeyValueIterator::GetNext (SvKeyValue &rKeyVal)
+{
+    if (m_nPos > 0)
+    {
+        rKeyVal = *m_pList->GetObject(--m_nPos);
+        return TRUE;
+    }
+    else
+    {
+        // Nothing to do.
+        return FALSE;
+    }
+}
+
+/*
+ * Append.
+ */
+void SvKeyValueIterator::Append (const SvKeyValue &rKeyVal)
+{
+    SvKeyValue *pKeyVal = new SvKeyValue (rKeyVal);
+    m_pList->C40_INSERT(SvKeyValue, pKeyVal, m_pList->Count());
+}
+
 /* vi:set tabstop=4 shiftwidth=4 expandtab: */
