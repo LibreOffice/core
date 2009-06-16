@@ -576,21 +576,9 @@ void OHTMLReader::setTextEncoding()
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OHTMLReader::setTextEncoding" );
     DBG_CHKTHIS(OHTMLReader,NULL);
     m_bMetaOptions = sal_True;
-    USHORT nContentOption = HTML_O_CONTENT;
-    rtl_TextEncoding eEnc = RTL_TEXTENCODING_DONTKNOW;
-
-    SfxHTMLParser::ParseMetaOptions(NULL, NULL,
-                                  GetOptions(&nContentOption),
-                                  eEnc );
-
-    // If the encoding is set by a META tag, it may only overwrite the
-    // current encoding if both, the current and the new encoding, are 1-BYTE
-    // encodings. Everything else cannot lead to reasonable results.
-    if( RTL_TEXTENCODING_DONTKNOW != eEnc &&
-        rtl_isOctetTextEncoding( eEnc ) &&
-        rtl_isOctetTextEncoding( GetSrcEncoding() ) )
-        SetSrcEncoding( eEnc );
+    ParseMetaOptions(NULL, NULL);
 }
+
 // -----------------------------------------------------------------------------
 void OHTMLReader::release()
 {
