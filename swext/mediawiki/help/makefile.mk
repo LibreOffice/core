@@ -72,6 +72,6 @@ $(OUT_HELP)$/{$(MEDIAWIKI_LANG)}$/$(PACKAGE)$/%.xhp :| %.xhp
 
 
 $(OUT_MEDIAWIKI)$/$(TARGET).done : localize.sdf $(XHPFILES) $(HLANGXHPFILES)
-    @$(AUGMENT_LIBRARY_PATH) $(WRAPCMD) helpex -QQ -p $(PRJNAME) -r $(PRJ) -i @$(mktmp $(uniq $(foreach,i,$? $(!eq,$(i:f),$(i:f:s/.xhp//) $(i:f) $(XHPFILES))))) -x $(OUT_HELP) -y $(PACKAGE) -l all -lf $(MEDIAWIKI_LANG:t",") -m localize.sdf && $(TOUCH) $@
+    @$(HELPEX) -QQ -p $(PRJNAME) -r $(PRJ) -i @$(mktmp $(uniq $(foreach,i,$? $(!eq,$(i:f),$(i:f:s/.xhp//) $(i:f) $(XHPFILES))))) -x $(OUT_HELP) -y $(PACKAGE) -l all -lf $(MEDIAWIKI_LANG:t",") -m localize.sdf && $(TOUCH) $@
 .ENDIF
 
