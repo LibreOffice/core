@@ -49,10 +49,10 @@
 #include <svx/udlnitem.hxx>
 #include <svx/wghtitem.hxx>
 #include <svx/boxitem.hxx>
-#include <sfx2/frmhtml.hxx>
 #include <sfx2/objsh.hxx>
 #include <svtools/eitem.hxx>
 #include <svtools/filter.hxx>
+#include <svtools/parhtml.hxx>
 #include <svtools/htmlkywd.hxx>
 #include <svtools/htmltokn.h>
 #include <sfx2/docfile.hxx>
@@ -1544,25 +1544,12 @@ void ScHTMLLayoutParser::ProcToken( ImportInfo* pInfo )
     {
         case HTML_META:
         {
-            USHORT nContentOpt = HTML_O_CONTENT;
-            rtl_TextEncoding eEnc = RTL_TEXTENCODING_DONTKNOW;
             HTMLParser* pParser = (HTMLParser*) pInfo->pParser;
-            const HTMLOptions* pOptions = pParser->GetOptions( &nContentOpt );
             uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
                 mpDoc->GetDocumentShell()->GetModel(), uno::UNO_QUERY_THROW);
-            SfxFrameHTMLParser::ParseMetaOptions(
+            pParser->ParseMetaOptions(
                 xDPS->getDocumentProperties(),
-                mpDoc->GetDocumentShell()->GetHeaderAttributes(),
-                pOptions, eEnc );
-            // If the encoding is set by a META tag, it may only overwrite the
-            // current encoding if both, the current and the new encoding, are 1-BYTE
-            // encodings. Everything else cannot lead to reasonable results.
-            if ( rtl_isOctetTextEncoding( eEnc ) &&
-                    rtl_isOctetTextEncoding( pParser->GetSrcEncoding() ) )
-            {
-                eEnc = GetExtendedCompatibilityTextEncoding( eEnc );
-                pParser->SetSrcEncoding( eEnc );
-            }
+                mpDoc->GetDocumentShell()->GetHeaderAttributes() );
         }
         break;
         case HTML_TITLE_ON:
@@ -2960,26 +2947,13 @@ void ScHTMLQueryParser::MetaOn( const ImportInfo& rInfo )
 {
     if( mpDoc->GetDocumentShell() )
     {
-        sal_uInt16 nContentOpt = HTML_O_CONTENT;
-        rtl_TextEncoding eEnc = RTL_TEXTENCODING_DONTKNOW;
         HTMLParser* pParser = static_cast< HTMLParser* >( rInfo.pParser );
-        const HTMLOptions* pOptions = pParser->GetOptions( &nContentOpt );
 
         uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
             mpDoc->GetDocumentShell()->GetModel(), uno::UNO_QUERY_THROW);
-        SfxFrameHTMLParser::ParseMetaOptions(
+        pParser->ParseMetaOptions(
             xDPS->getDocumentProperties(),
-            mpDoc->GetDocumentShell()->GetHeaderAttributes(),
-            pOptions, eEnc );
-        // If the encoding is set by a META tag, it may only overwrite the
-        // current encoding if both, the current and the new encoding, are 1-BYTE
-        // encodings. Everything else cannot lead to reasonable results.
-        if( rtl_isOctetTextEncoding( eEnc ) &&
-            rtl_isOctetTextEncoding( pParser->GetSrcEncoding() ) )
-        {
-            eEnc = GetExtendedCompatibilityTextEncoding( eEnc );
-            pParser->SetSrcEncoding( eEnc );
-        }
+            mpDoc->GetDocumentShell()->GetHeaderAttributes() );
     }
 }
 
