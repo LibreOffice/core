@@ -833,7 +833,7 @@ BOOL SmDocShell::Load( SfxMedium& rMedium )
             SmXMLImportWrapper aEquation(xModel);
             ULONG nError = aEquation.Import(rMedium);
             bRet = 0 == nError;
-            SetError( nError );
+            SetError( nError, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
         }
     }
 

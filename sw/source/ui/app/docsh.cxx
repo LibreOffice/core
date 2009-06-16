@@ -336,7 +336,7 @@ BOOL SwDocShell::ConvertFrom( SfxMedium& rMedium )
 
     SW_MOD()->SetEmbeddedLoadSave( FALSE );
 
-    SetError( nErr );
+    SetError( nErr, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
     BOOL bOk = !IsError( nErr );
 
     // --> OD 2006-11-07 #i59688#
@@ -443,7 +443,7 @@ BOOL SwDocShell::Save()
         }
         SW_MOD()->SetEmbeddedLoadSave( FALSE );
     }
-    SetError( nErr ? nErr : nVBWarning );
+    SetError( nErr ? nErr : nVBWarning, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
 
     SfxViewFrame* pFrm = pWrtShell ? pWrtShell->GetView().GetViewFrame() : 0;
     if( pFrm )
@@ -578,7 +578,7 @@ sal_Bool SwDocShell::SaveAs( SfxMedium& rMedium )
 
         SW_MOD()->SetEmbeddedLoadSave( FALSE );
     }
-    SetError( nErr ? nErr : nVBWarning );
+    SetError( nErr ? nErr : nVBWarning, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
 
     return !IsError( nErr );
 }
@@ -616,7 +616,7 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
     {
         if(!SwWarnPassword::WarningOnPassword( rMedium ))
         {
-            SetError(ERRCODE_ABORT);
+            SetError(ERRCODE_ABORT, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
             return FALSE;
         }
     }
@@ -672,7 +672,7 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
                     Sequence<rtl::OUString> aModNames = xLib->getElementNames();
                     if(aModNames.getLength())
                     {
-                        SetError(WARN_SWG_HTML_NO_MACROS);
+                        SetError(WARN_SWG_HTML_NO_MACROS, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
                         break;
                     }
                 }
@@ -844,7 +844,7 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
     }
 
     SW_MOD()->SetEmbeddedLoadSave( FALSE );
-    SetError( nErrno ? nErrno : nVBWarning );
+    SetError( nErrno ? nErrno : nVBWarning, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
     if( !rMedium.IsStorage() )
         rMedium.CloseOutStream();
 

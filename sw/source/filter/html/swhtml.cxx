@@ -50,9 +50,7 @@
 #include <svtools/ctrltool.hxx>
 #include <svtools/pathoptions.hxx>
 #include <vcl/svapp.hxx>
-#ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
-#endif
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/docfile.hxx>
 
@@ -99,9 +97,7 @@
 #include <poolfmt.hxx>
 #include <pagedesc.hxx>
 #include <IMark.hxx>        // fuer SwBookmark ...
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <editsh.hxx>       // fuer Start/EndAction
 #include <docufld.hxx>
 #include <swcss1.hxx>
@@ -334,6 +330,7 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
     bInFootEndNoteSymbol( FALSE ),
 //    bIgnoreHTMLComments( bNoHTMLComments )
     bIgnoreHTMLComments( bNoHTMLComments ),
+    bRemoveHidden( FALSE ),
     pTempViewFrame(0)
 {
     nEventId = 0;
@@ -501,10 +498,17 @@ __EXPORT SwHTMLParser::~SwHTMLParser()
     {
         // keiner will mehr das Doc haben, also weg damit
         delete pDoc;
+        pDoc = NULL;
     }
 
     if ( pTempViewFrame )
+    {
         pTempViewFrame->DoClose();
+
+        // the temporary view frame is hidden, so the hidden flag might need to be removed
+        if ( bRemoveHidden && pDoc && pDoc->GetDocShell() && pDoc->GetDocShell()->GetMedium() )
+            pDoc->GetDocShell()->GetMedium()->GetItemSet()->ClearItem( SID_HIDDEN );
+    }
 }
 
 IMPL_LINK( SwHTMLParser, AsyncCallback, void*, /*pVoid*/ )
@@ -1341,11 +1345,7 @@ void __EXPORT SwHTMLParser::NextToken( int nToken )
                     xDocProps = xDPS->getDocumentProperties();
                     DBG_ASSERT(xDocProps.is(), "DocumentProperties is null");
                 }
-                // always call ParseMetaOptions, it sets the encoding (#i96700#)
-                if (!ParseMetaOptions( xDocProps, pHTTPHeader ) && IsNewDoc())
-                {
-                    ParseMoreMetaOptions();
-                }
+                ParseMetaOptions( xDocProps, pHTTPHeader );
             }
         }
         break;
@@ -5501,3 +5501,32 @@ void _HTMLAttr::InsertPrev( _HTMLAttr *pPrv )
 
     pAttr->pPrev = pPrv;
 }
+
+bool SwHTMLParser::ParseMetaOptions(
+        const uno::Reference<document::XDocumentProperties> & i_xDocProps,
+        SvKeyValueIterator *i_pHeader )
+{
+    // always call base ParseMetaOptions, it sets the encoding (#i96700#)
+    bool ret( HTMLParser::ParseMetaOptions(i_xDocProps, i_pHeader) );
+    if (!ret && IsNewDoc())
+    {
+        ParseMoreMetaOptions();
+    }
+    return ret;
+}
+
+// override so we can parse DOCINFO field subtypes INFO[1-4]
+void SwHTMLParser::AddMetaUserDefined( ::rtl::OUString const & i_rMetaName )
+{
+    // unless we already have 4 names, append the argument to m_InfoNames
+    ::rtl::OUString* pName // the first empty string in m_InfoNames
+         (!m_InfoNames[0].getLength() ? &m_InfoNames[0] :
+         (!m_InfoNames[1].getLength() ? &m_InfoNames[1] :
+         (!m_InfoNames[2].getLength() ? &m_InfoNames[2] :
+         (!m_InfoNames[3].getLength() ? &m_InfoNames[3] : 0 ))));
+    if (pName)
+    {
+        (*pName) = i_rMetaName;
+    }
+}
+
