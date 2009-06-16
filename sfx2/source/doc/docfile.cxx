@@ -71,6 +71,7 @@
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
 #include <com/sun/star/ucb/OpenMode.hpp>
 #include <com/sun/star/ucb/NameClashException.hpp>
+#include <com/sun/star/logging/XSimpleLogRing.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #ifndef _COM_SUN_STAR_SECURITY_DOCUMENTSIGNATURESINFORMATION_HPP_
@@ -82,6 +83,7 @@
 #include <tools/urlobj.hxx>
 #include <unotools/tempfile.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/componentcontext.hxx>
 #include <unotools/streamhelper.hxx>
 #include <unotools/localedatawrapper.hxx>
 #ifndef _MSGBOX_HXX //autogen
@@ -93,6 +95,7 @@
 #include <svtools/sfxecode.hxx>
 #include <svtools/itemset.hxx>
 #include <svtools/intitem.hxx>
+#include <svtools/svparser.hxx> // SvKeyValue
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/implbase1.hxx>
 
@@ -149,12 +152,73 @@ using namespace ::com::sun::star::io;
 
 #define MAX_REDIRECT 5
 
+
+//==========================================================
 namespace {
-    static const sal_Int8 LOCK_UI_NOLOCK = 0;
-    static const sal_Int8 LOCK_UI_SUCCEEDED = 1;
-    static const sal_Int8 LOCK_UI_TRY = 2;
+
+static const sal_Int8 LOCK_UI_NOLOCK = 0;
+static const sal_Int8 LOCK_UI_SUCCEEDED = 1;
+static const sal_Int8 LOCK_UI_TRY = 2;
+
+//----------------------------------------------------------------
+sal_Bool IsSystemFileLockingUsed()
+{
+    // check whether system file locking has been used, the default value is false
+    sal_Bool bUseSystemLock = sal_False;
+    try
+    {
+
+        uno::Reference< uno::XInterface > xCommonConfig = ::comphelper::ConfigurationHelper::openConfig(
+                            ::comphelper::getProcessServiceFactory(),
+                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.Common" ) ),
+                            ::comphelper::ConfigurationHelper::E_STANDARD );
+        if ( !xCommonConfig.is() )
+            throw uno::RuntimeException();
+
+        ::comphelper::ConfigurationHelper::readRelativeKey(
+                xCommonConfig,
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Misc/" ) ),
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UseDocumentSystemFileLocking" ) ) ) >>= bUseSystemLock;
+    }
+    catch( const uno::Exception& )
+    {
+    }
+
+    return bUseSystemLock;
 }
 
+//----------------------------------------------------------------
+sal_Bool IsOOoLockFileUsed()
+{
+    // check whether system file locking has been used, the default value is false
+    sal_Bool bOOoLockFileUsed = sal_False;
+    try
+    {
+
+        uno::Reference< uno::XInterface > xCommonConfig = ::comphelper::ConfigurationHelper::openConfig(
+                            ::comphelper::getProcessServiceFactory(),
+                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.Common" ) ),
+                            ::comphelper::ConfigurationHelper::E_STANDARD );
+        if ( !xCommonConfig.is() )
+            throw uno::RuntimeException();
+
+        ::comphelper::ConfigurationHelper::readRelativeKey(
+                xCommonConfig,
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Misc/" ) ),
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UseDocumentOOoLockFile" ) ) ) >>= bOOoLockFileUsed;
+    }
+    catch( const uno::Exception& )
+    {
+    }
+
+    return bOOoLockFileUsed;
+}
+
+} // anonymous namespace
+//==========================================================
+
+
+//----------------------------------------------------------------
 class SfxMediumHandler_Impl : public ::cppu::WeakImplHelper1< com::sun::star::task::XInteractionHandler >
 {
     com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler > m_xInter;
@@ -170,10 +234,12 @@ public:
     ~SfxMediumHandler_Impl();
 };
 
+//----------------------------------------------------------------
 SfxMediumHandler_Impl::~SfxMediumHandler_Impl()
 {
 }
 
+//----------------------------------------------------------------
 void SAL_CALL SfxMediumHandler_Impl::handle( const com::sun::star::uno::Reference< com::sun::star::task::XInteractionRequest >& xRequest )
         throw( com::sun::star::uno::RuntimeException )
 {
@@ -192,6 +258,7 @@ void SAL_CALL SfxMediumHandler_Impl::handle( const com::sun::star::uno::Referenc
         m_xInter->handle( xRequest );
 }
 
+//----------------------------------------------------------------
 class SfxPoolCancelManager_Impl  :   public SfxCancelManager ,
                                      public SfxCancellable   ,
                                      public SfxListener      ,
@@ -208,6 +275,7 @@ public:
     virtual void Cancel();
 };
 
+//----------------------------------------------------------------
 SV_DECL_IMPL_REF( SfxPoolCancelManager_Impl )
 
 
@@ -327,6 +395,8 @@ public:
 
     util::DateTime m_aDateTime;
 
+    uno::Reference< logging::XSimpleLogRing > m_xLogRing;
+
     SfxPoolCancelManager_Impl* GetCancelManager();
 
     SfxMedium_Impl( SfxMedium* pAntiImplP );
@@ -341,7 +411,7 @@ void SfxMedium::DataAvailable_Impl()
 
 void SfxMedium::Cancel_Impl()
 {
-    SetError( ERRCODE_IO_GENERAL );
+    SetError( ERRCODE_IO_GENERAL, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
 }
 
 SfxPoolCancelManager_Impl* SfxMedium_Impl::GetCancelManager()
@@ -449,6 +519,33 @@ sal_uInt32 SfxMedium::GetLastStorageCreationState()
 }
 
 //------------------------------------------------------------------
+void SfxMedium::AddLog( const ::rtl::OUString& aMessage )
+{
+    if ( !pImp->m_xLogRing.is() )
+    {
+        try
+        {
+            ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
+            if ( aContext.is() )
+                pImp->m_xLogRing.set( aContext.getSingleton( "com.sun.star.logging.DocumentIOLogRing" ), UNO_QUERY_THROW );
+        }
+        catch( uno::Exception& )
+        {}
+    }
+
+    if ( pImp->m_xLogRing.is() )
+        pImp->m_xLogRing->logString( aMessage );
+}
+
+//------------------------------------------------------------------
+void SfxMedium::SetError( sal_uInt32 nError, const ::rtl::OUString& aLogMessage )
+{
+    eError = nError;
+    if ( eError != ERRCODE_NONE && aLogMessage.getLength() )
+        AddLog( aLogMessage );
+}
+
+//------------------------------------------------------------------
 sal_uInt32 SfxMedium::GetErrorCode() const
 {
     sal_uInt32 lError=eError;
@@ -479,28 +576,7 @@ void SfxMedium::CheckFileDate( const util::DateTime& aInitDate )
       || pImp->m_aDateTime.Month != aInitDate.Month
       || pImp->m_aDateTime.Year != aInitDate.Year )
     {
-        // check whether system file locking has been used, the default value is false
-        sal_Bool bUseSystemLock = sal_False;
-        try
-        {
-
-            uno::Reference< uno::XInterface > xCommonConfig = ::comphelper::ConfigurationHelper::openConfig(
-                                ::comphelper::getProcessServiceFactory(),
-                                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.Common" ) ),
-                                ::comphelper::ConfigurationHelper::E_STANDARD );
-            if ( !xCommonConfig.is() )
-                throw uno::RuntimeException();
-
-            ::comphelper::ConfigurationHelper::readRelativeKey(
-                    xCommonConfig,
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Misc/" ) ),
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UseDocumentSystemFileLocking" ) ) ) >>= bUseSystemLock;
-        }
-        catch( const uno::Exception& )
-        {
-        }
-
-        if ( !bUseSystemLock )
+        if ( !IsSystemFileLockingUsed() )
         {
             uno::Reference< task::XInteractionHandler > xHandler = GetInteractionHandler();
 
@@ -520,7 +596,7 @@ void SfxMedium::CheckFileDate( const util::DateTime& aInitDate )
                     ::rtl::Reference< ::ucbhelper::InteractionContinuation > xSelected = xInteractionRequestImpl->getSelection();
                     if ( uno::Reference< task::XInteractionAbort >( xSelected.get(), uno::UNO_QUERY ).is() )
                     {
-                        SetError( ERRCODE_ABORT );
+                        SetError( ERRCODE_ABORT, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
                     }
                 }
                 catch ( uno::Exception& )
@@ -946,7 +1022,7 @@ void SfxMedium::StorageBackup_Impl()
     {
         DoInternalBackup_Impl( aOriginalContent );
         if( !pImp->m_aBackupURL.getLength() )
-            SetError( ERRCODE_SFX_CANTCREATEBACKUP );
+            SetError( ERRCODE_SFX_CANTCREATEBACKUP, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
     }
 }
 
@@ -1021,7 +1097,7 @@ void SfxMedium::SetPasswordToStorage_Impl()
             {
                 OSL_ENSURE( sal_False, "It must be possible to set a common password for the storage" );
                 // TODO/LATER: set the error code in case of problem
-                // SetError( ERRCODE_IO_GENERAL );
+                // SetError( ERRCODE_IO_GENERAL, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
             }
         }
     }
@@ -1090,7 +1166,7 @@ sal_Int8 SfxMedium::ShowLockedDocumentDialog( const uno::Sequence< ::rtl::OUStri
         ::rtl::Reference< ::ucbhelper::InteractionContinuation > xSelected = xInteractionRequestImpl->getSelection();
         if ( uno::Reference< task::XInteractionAbort >( xSelected.get(), uno::UNO_QUERY ).is() )
         {
-            SetError( ERRCODE_ABORT );
+            SetError( ERRCODE_ABORT, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
         }
         else if ( uno::Reference< task::XInteractionDisapprove >( xSelected.get(), uno::UNO_QUERY ).is() )
         {
@@ -1129,7 +1205,7 @@ sal_Int8 SfxMedium::ShowLockedDocumentDialog( const uno::Sequence< ::rtl::OUStri
             GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, sal_True ) );
         }
         else
-            SetError( ERRCODE_IO_ACCESSDENIED );
+            SetError( ERRCODE_IO_ACCESSDENIED, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
 
     }
 
@@ -1184,24 +1260,7 @@ sal_Bool SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI )
                 sal_Int8 bUIStatus = LOCK_UI_NOLOCK;
 
                 // check whether system file locking has been used, the default value is false
-                sal_Bool bUseSystemLock = sal_False;
-                try
-                {
-                    uno::Reference< uno::XInterface > xCommonConfig = ::comphelper::ConfigurationHelper::openConfig(
-                                        ::comphelper::getProcessServiceFactory(),
-                                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.Common" ) ),
-                                        ::comphelper::ConfigurationHelper::E_STANDARD );
-                    if ( !xCommonConfig.is() )
-                        throw uno::RuntimeException();
-
-                    ::comphelper::ConfigurationHelper::readRelativeKey(
-                            xCommonConfig,
-                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Misc/" ) ),
-                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UseDocumentSystemFileLocking" ) ) ) >>= bUseSystemLock;
-                }
-                catch( const uno::Exception& )
-                {
-                }
+                sal_Bool bUseSystemLock = IsSystemFileLockingUsed();
 
                 // TODO/LATER: This implementation does not allow to detect the system lock on saving here, actually this is no big problem
                 // if system lock is used the writeable stream should be available
@@ -1220,35 +1279,55 @@ sal_Bool SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI )
                             }
                             catch ( ucb::InteractiveIOException& e )
                             {
-                                if ( e.Code == IOErrorCode_INVALID_PARAMETER )
+                                // exception means that the lock file can not be successfuly accessed
+                                // in this case it should be ignored if system file locking is anyway active
+                                if ( bUseSystemLock || !IsOOoLockFileUsed() )
                                 {
-                                    // it looks like the lock file name is not accepted by the content
-                                    if ( !bUseSystemLock )
-                                    {
-                                        // system file locking is not active, ask user whether he wants to open the document without any locking
-                                        uno::Reference< task::XInteractionHandler > xHandler = GetInteractionHandler();
-
-                                        if ( xHandler.is() )
-                                        {
-                                            ::rtl::Reference< ::ucbhelper::InteractionRequest > xIgnoreRequestImpl
-                                                = new ::ucbhelper::InteractionRequest( uno::makeAny( document::LockFileIgnoreRequest() ) );
-
-                                            uno::Sequence< uno::Reference< task::XInteractionContinuation > > aContinuations( 2 );
-                                            aContinuations[0] = new ::ucbhelper::InteractionAbort( xIgnoreRequestImpl.get() );
-                                            aContinuations[1] = new ::ucbhelper::InteractionApprove( xIgnoreRequestImpl.get() );
-                                            xIgnoreRequestImpl->setContinuations( aContinuations );
-
-                                            xHandler->handle( xIgnoreRequestImpl.get() );
-
-                                            ::rtl::Reference< ::ucbhelper::InteractionContinuation > xSelected = xIgnoreRequestImpl->getSelection();
-                                            bResult = (  uno::Reference< task::XInteractionApprove >( xSelected.get(), uno::UNO_QUERY ).is() );
-                                        }
-                                    }
-                                    else
-                                        bResult = sal_True;
+                                    bResult = sal_True;
+                                    // take the ownership over the lock file
+                                    aLockFile.OverwriteOwnLockFile();
                                 }
-                                else
-                                    throw;
+                                else if ( e.Code == IOErrorCode_INVALID_PARAMETER )
+                                {
+                                    // system file locking is not active, ask user whether he wants to open the document without any locking
+                                    uno::Reference< task::XInteractionHandler > xHandler = GetInteractionHandler();
+
+                                    if ( xHandler.is() )
+                                    {
+                                        ::rtl::Reference< ::ucbhelper::InteractionRequest > xIgnoreRequestImpl
+                                            = new ::ucbhelper::InteractionRequest( uno::makeAny( document::LockFileIgnoreRequest() ) );
+
+                                        uno::Sequence< uno::Reference< task::XInteractionContinuation > > aContinuations( 2 );
+                                        aContinuations[0] = new ::ucbhelper::InteractionAbort( xIgnoreRequestImpl.get() );
+                                        aContinuations[1] = new ::ucbhelper::InteractionApprove( xIgnoreRequestImpl.get() );
+                                        xIgnoreRequestImpl->setContinuations( aContinuations );
+
+                                        xHandler->handle( xIgnoreRequestImpl.get() );
+
+                                        ::rtl::Reference< ::ucbhelper::InteractionContinuation > xSelected = xIgnoreRequestImpl->getSelection();
+                                        bResult = (  uno::Reference< task::XInteractionApprove >( xSelected.get(), uno::UNO_QUERY ).is() );
+                                    }
+                                }
+                            }
+                            catch ( uno::Exception& )
+                            {
+                                // exception means that the lock file can not be successfuly accessed
+                                // in this case it should be ignored if system file locking is anyway active
+                                if ( bUseSystemLock || !IsOOoLockFileUsed() )
+                                {
+                                    bResult = sal_True;
+                                    // take the ownership over the lock file
+                                    aLockFile.OverwriteOwnLockFile();
+                                }
+                            }
+
+                            // in case OOo locking is turned off the lock file is still written if possible
+                            // but it is ignored while deciding whether the document should be opened for editing or not
+                            if ( !bResult && !IsOOoLockFileUsed() )
+                            {
+                                bResult = sal_True;
+                                // take the ownership over the lock file
+                                aLockFile.OverwriteOwnLockFile();
                             }
                         }
 
@@ -1316,7 +1395,7 @@ sal_Bool SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI )
 
         SFX_ITEMSET_ARG( pSet, pReadOnlyItem, SfxBoolItem, SID_DOC_READONLY, FALSE );
         if ( !bLoading || (pReadOnlyItem && !pReadOnlyItem->GetValue()) )
-            SetError( ERRCODE_IO_ACCESSDENIED );
+            SetError( ERRCODE_IO_ACCESSDENIED, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
         else
             GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, sal_True ) );
     }
@@ -1816,13 +1895,13 @@ sal_Bool SfxMedium::StorageCommit_Impl()
                         }
 
                         if ( !GetError() )
-                            SetError( ERRCODE_IO_GENERAL );
+                            SetError( ERRCODE_IO_GENERAL, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
                     }
                 }
                 catch ( uno::Exception& )
                 {
                     //TODO/LATER: improve error handling
-                    SetError( ERRCODE_IO_GENERAL );
+                    SetError( ERRCODE_IO_GENERAL, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
                 }
             }
         }
@@ -2102,7 +2181,7 @@ void SfxMedium::Transfer_Impl()
             else
             {
                 DBG_ERROR( "Illegal Output stream parameter!\n" );
-                SetError( ERRCODE_IO_GENERAL );
+                SetError( ERRCODE_IO_GENERAL, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
             }
 
             // free the reference
@@ -2147,7 +2226,7 @@ void SfxMedium::Transfer_Impl()
             {
                 //TODO/MBA: error handling
                 //if ( !GetError() )
-                  //  SetError( xStor->GetError() );
+                  //  SetError( xStor->GetError(, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) )) );
             }
             return;
         }
@@ -2192,7 +2271,7 @@ void SfxMedium::Transfer_Impl()
                     SetStorage_Impl( xStor );
                 }
                 else if ( !GetError() )
-                    SetError( xStor->GetError() );
+                    SetError( xStor->GetError(, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) )) );
                 return;
             }*/
         }
@@ -2573,7 +2652,7 @@ void SfxMedium::GetMedium_Impl()
 
         //TODO/MBA: ErrorHandling - how to transport error from MediaDescriptor
         if ( !GetError() && !pImp->xStream.is() && !pImp->xInputStream.is() )
-            SetError( ERRCODE_IO_ACCESSDENIED );
+            SetError( ERRCODE_IO_ACCESSDENIED, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
 
         if ( !GetError() )
         {
@@ -3696,17 +3775,17 @@ void SfxMedium::TryToSwitchToRepairedTemp()
                 catch ( uno::Exception& )
                 {
                     //TODO/MBA: error handling
-                    //SetError( aNewStorage->GetError() );
+                    //SetError( aNewStorage->GetError(, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) )) );
                 }
             }
             else
-                SetError( ERRCODE_IO_CANTWRITE );
+                SetError( ERRCODE_IO_CANTWRITE, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
 
             if (pImp->pTempFile != pTmpFile)
                 delete pTmpFile;
         }
         else
-            SetError( ERRCODE_IO_CANTREAD );
+            SetError( ERRCODE_IO_CANTREAD, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
     }
 }
 
@@ -3756,7 +3835,7 @@ void SfxMedium::CreateTempFile()
     aName = pImp->pTempFile->GetFileName();
     if ( !aName.Len() )
     {
-        SetError( ERRCODE_IO_CANTWRITE );
+        SetError( ERRCODE_IO_CANTWRITE, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
         return;
     }
 
@@ -3800,7 +3879,7 @@ void SfxMedium::CreateTempFileNoCopy()
     aName = pImp->pTempFile->GetFileName();
     if ( !aName.Len() )
     {
-        SetError( ERRCODE_IO_CANTWRITE );
+        SetError( ERRCODE_IO_CANTWRITE, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
         return;
     }
 
@@ -4003,61 +4082,6 @@ sal_Bool SfxMedium::EqualURLs( const ::rtl::OUString& aFirstURL, const ::rtl::OU
     }
 
     return bResult;
-}
-
-SV_DECL_PTRARR_DEL(SvKeyValueList_Impl, SvKeyValue*, 0, 4)
-SV_IMPL_PTRARR(SvKeyValueList_Impl, SvKeyValue*);
-
-/*
- * SvKeyValueIterator.
- */
-SvKeyValueIterator::SvKeyValueIterator (void)
-    : m_pList (new SvKeyValueList_Impl),
-      m_nPos  (0)
-{
-}
-
-/*
- * ~SvKeyValueIterator.
- */
-SvKeyValueIterator::~SvKeyValueIterator (void)
-{
-    delete m_pList;
-}
-
-/*
- * GetFirst.
- */
-BOOL SvKeyValueIterator::GetFirst (SvKeyValue &rKeyVal)
-{
-    m_nPos = m_pList->Count();
-    return GetNext (rKeyVal);
-}
-
-/*
- * GetNext.
- */
-BOOL SvKeyValueIterator::GetNext (SvKeyValue &rKeyVal)
-{
-    if (m_nPos > 0)
-    {
-        rKeyVal = *m_pList->GetObject(--m_nPos);
-        return TRUE;
-    }
-    else
-    {
-        // Nothing to do.
-        return FALSE;
-    }
-}
-
-/*
- * Append.
- */
-void SvKeyValueIterator::Append (const SvKeyValue &rKeyVal)
-{
-    SvKeyValue *pKeyVal = new SvKeyValue (rKeyVal);
-    m_pList->C40_INSERT(SvKeyValue, pKeyVal, m_pList->Count());
 }
 
 BOOL SfxMedium::HasStorage_Impl() const

@@ -343,7 +343,7 @@ FileProvider::queryContent(
                                               aUnc );
 
     if(  err )
-        throw IllegalIdentifierException();
+        throw IllegalIdentifierException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
     return Reference< XContent >( new BaseContent( m_pMyShell,xIdentifier,aUnc ) );
 }
@@ -534,7 +534,7 @@ XPropertySetInfoImpl2::getPropertyByName(
         if( m_seq[i].Name == aName )
             return m_seq[i];
 
-    throw UnknownPropertyException();
+    throw UnknownPropertyException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 }
 
 
@@ -616,7 +616,7 @@ FileProvider::setPropertyValue( const rtl::OUString& aPropertyName,
         aPropertyName.compareToAscii( "HostName" ) == 0 )
         return;
     else
-        throw UnknownPropertyException();
+        throw UnknownPropertyException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 }
 
 
@@ -648,7 +648,7 @@ FileProvider::getPropertyValue(
         return aAny;
     }
     else
-        throw UnknownPropertyException();
+        throw UnknownPropertyException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 }
 
 

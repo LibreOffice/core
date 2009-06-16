@@ -1916,40 +1916,60 @@ void SdrOle2Obj::NbcMove(const Size& rSize)
 
 // -----------------------------------------------------------------------------
 
-sal_Bool SdrOle2Obj::Unload( const uno::Reference< embed::XEmbeddedObject >& xObj, sal_Int64 nAspect )
+sal_Bool SdrOle2Obj::CanUnloadRunningObj( const uno::Reference< embed::XEmbeddedObject >& xObj, sal_Int64 nAspect )
 {
     sal_Bool bResult = sal_False;
 
     sal_Int32 nState = xObj->getCurrentState();
     if ( nState == embed::EmbedStates::LOADED )
     {
+        // the object is already unloaded
         bResult = sal_True;
     }
     else
     {
-        sal_Int64 nMiscStatus = xObj->getStatus( nAspect );
         uno::Reference < util::XModifiable > xModifiable( xObj->getComponent(), uno::UNO_QUERY );
-
-        if ( embed::EmbedMisc::MS_EMBED_ALWAYSRUN != ( nMiscStatus & embed::EmbedMisc::MS_EMBED_ALWAYSRUN ) &&
-        embed::EmbedMisc::EMBED_ACTIVATEIMMEDIATELY != ( nMiscStatus & embed::EmbedMisc::EMBED_ACTIVATEIMMEDIATELY ) &&
-        !( xModifiable.is() && xModifiable->isModified() ) &&
-        !( nState == embed::EmbedStates::INPLACE_ACTIVE || nState == embed::EmbedStates::UI_ACTIVE || nState == embed::EmbedStates::ACTIVE ) )
+        if ( !xModifiable.is() )
+            bResult = sal_True;
+        else
         {
-            try
+            sal_Int64 nMiscStatus = xObj->getStatus( nAspect );
+
+            if ( embed::EmbedMisc::MS_EMBED_ALWAYSRUN != ( nMiscStatus & embed::EmbedMisc::MS_EMBED_ALWAYSRUN ) &&
+            embed::EmbedMisc::EMBED_ACTIVATEIMMEDIATELY != ( nMiscStatus & embed::EmbedMisc::EMBED_ACTIVATEIMMEDIATELY ) &&
+            !( xModifiable.is() && xModifiable->isModified() ) &&
+            !( nState == embed::EmbedStates::INPLACE_ACTIVE || nState == embed::EmbedStates::UI_ACTIVE || nState == embed::EmbedStates::ACTIVE ) )
             {
-                xObj->changeState( embed::EmbedStates::LOADED );
                 bResult = sal_True;
             }
-            catch( ::com::sun::star::uno::Exception& e )
-            {
-                (void)e;
-                DBG_ERROR(
-                    (OString("SdrOle2Obj::Unload=(), "
-                            "exception caught: ") +
-                    rtl::OUStringToOString(
-                        comphelper::anyToString( cppu::getCaughtException() ),
-                        RTL_TEXTENCODING_UTF8 )).getStr() );
-            }
+        }
+    }
+
+    return bResult;
+}
+
+// -----------------------------------------------------------------------------
+
+sal_Bool SdrOle2Obj::Unload( const uno::Reference< embed::XEmbeddedObject >& xObj, sal_Int64 nAspect )
+{
+    sal_Bool bResult = sal_False;
+
+    if ( CanUnloadRunningObj( xObj, nAspect ) )
+    {
+        try
+        {
+            xObj->changeState( embed::EmbedStates::LOADED );
+            bResult = sal_True;
+        }
+        catch( ::com::sun::star::uno::Exception& e )
+        {
+            (void)e;
+            DBG_ERROR(
+                (OString("SdrOle2Obj::Unload=(), "
+                        "exception caught: ") +
+                rtl::OUStringToOString(
+                    comphelper::anyToString( cppu::getCaughtException() ),
+                    RTL_TEXTENCODING_UTF8 )).getStr() );
         }
     }
 

@@ -325,7 +325,10 @@ public:
     void                        ResetError();
     sal_uInt32                  GetError() const;
     sal_uInt32                  GetErrorCode() const;
-    void                        SetError(sal_uInt32 rErr);
+    void                        SetError( sal_uInt32 rErr, const ::rtl::OUString& aLogMessage );
+
+    void                        AddLog( const ::rtl::OUString& aMessage );
+    void                        StoreLog();
 
     sal_Bool                    DoInitNew( SfxMedium* pMedium=0 );
     sal_Bool                    DoLoad( SfxMedium* pMedium );
