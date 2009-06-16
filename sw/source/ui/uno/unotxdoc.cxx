@@ -70,6 +70,7 @@
 #include <unofield.hxx>
 #include <unoidx.hxx>
 #include <unoflatpara.hxx>
+#include <unotxvw.hxx>
 #include <poolfmt.hxx>
 #include <globdoc.hxx>
 #include <viewopt.hxx>
@@ -2962,8 +2963,15 @@ void SAL_CALL SwXTextDocument::render(
         uno::Reference< frame::XController > xController;
         if (aTmp >>= xController)
         {
-            const SfxBaseController *pController = dynamic_cast< const SfxBaseController * >( xController.get() );
-            pView = pController ? pController->GetViewShell_Impl() : 0;
+            uno::Reference< lang::XUnoTunnel > xTunnel( xController, uno::UNO_QUERY );
+            if (xTunnel.is())
+            {
+                SwXTextView *pTextView = reinterpret_cast< SwXTextView * >(
+                        sal::static_int_cast< sal_IntPtr >( xTunnel->getSomething( SwXTextView::getUnoTunnelId()) ));
+                if (pTextView)
+                    pView = pTextView->GetView();
+            }
+
         }
     }
 

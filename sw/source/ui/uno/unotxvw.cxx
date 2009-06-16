@@ -295,6 +295,11 @@ uno::Any SAL_CALL SwXTextView::queryInterface( const uno::Type& aType )
         uno::Reference<datatransfer::XTransferableSupplier> xRet = this;
         aRet.setValue(&xRet, aType);
     }
+    else if(aType == ::getCppuType((uno::Reference<lang::XUnoTunnel   >*)0))
+    {
+        uno::Reference<lang::XUnoTunnel> xRet = this;
+        aRet.setValue(&xRet, aType);
+    }
     else
         aRet = SfxBaseController::queryInterface(aType);
     return aRet;
@@ -2216,5 +2221,25 @@ void SAL_CALL SwXTextView::insertTransferable( const uno::Reference< datatransfe
         }
     }
 }
+
+const uno::Sequence< sal_Int8 > & SwXTextView::getUnoTunnelId()
+{
+    static uno::Sequence< sal_Int8 > aSeq = ::CreateUnoTunnelId();
+    return aSeq;
+}
+
+sal_Int64 SAL_CALL SwXTextView::getSomething(
+    const uno::Sequence< sal_Int8 >& rId )
+throw(uno::RuntimeException)
+{
+    if( rId.getLength() == 16
+        && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
+                                        rId.getConstArray(), 16 ) )
+    {
+        return sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >( this ));
+    }
+    return 0;
+}
+
 // -----------------------------------------------------------------------------
 

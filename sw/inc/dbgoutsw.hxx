@@ -118,7 +118,7 @@ const char * dbg_out(const std::hash_map<tKey, tMember, fHashFunction> & rMap)
 {
     return dbg_out(lcl_dbg_out(rMap));
 }
-const char * dbg_out(const SwFormToken & rToken);
-const char * dbg_out(const SwFormTokens & rTokens);
+SW_DLLPUBLIC const char * dbg_out(const SwFormToken & rToken);
+SW_DLLPUBLIC const char * dbg_out(const SwFormTokens & rTokens);
 #endif // DEBUG
 #endif // __DBGOUTSW_HXX

@@ -72,6 +72,7 @@ class SwXTextView :
     public ::com::sun::star::view::XViewSettingsSupplier,
     public ::com::sun::star::beans::XPropertySet,
     public ::com::sun::star::datatransfer::XTransferableSupplier,
+    public ::com::sun::star::lang::XUnoTunnel,
     public SfxBaseController
 {
     SelectionChangeListenerArr aSelChangedListeners;
@@ -151,6 +152,11 @@ public:
     //XTransferableSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > SAL_CALL getTransferable(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL insertTransferable( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& xTrans ) throw (::com::sun::star::datatransfer::UnsupportedFlavorException, ::com::sun::star::uno::RuntimeException);
+
+    // XUnoTunnel
+    virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
+
+    static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 
     void                    NotifySelChanged();
     void                    NotifyDBChanged();
