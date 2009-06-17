@@ -59,6 +59,20 @@ File gid_File_Lib_Basprov
   #endif
 End
 
+#ifdef ENABLE_VBA
+File gid_File_Lib_Vbaevent
+    TXT_FILE_BODY;
+    Styles = (PACKED,UNO_COMPONENT);
+    RegistryID = gid_Starregistry_Services_Rdb;
+    Dir = gid_Dir_Program;
+  #ifdef UNX
+    Name = STRING(CONCAT4(vbaevents,DLLPOSTFIX,.uno,UNXSUFFIX));
+  #else
+    Name = STRING(CONCAT4(vbaevents,DLLPOSTFIX,.uno,.dll));
+  #endif
+End
+#endif // ENABLE_VBA
+
 STD_UNO_LIB_FILE( gid_File_Lib_Bib , bib)
 
 File gid_File_Lib_Cached1
