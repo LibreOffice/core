@@ -102,10 +102,10 @@ IMPL_XTYPEPROVIDER_END
 
 VCLXPrinterPropertySet::VCLXPrinterPropertySet( const String& rPrinterName )
     : OPropertySetHelper( BrdcstHelper )
+    , mpPrinter( new Printer( rPrinterName ) )
 {
     osl::Guard< vos::IMutex > aSolarGuard( Application::GetSolarMutex() );
 
-    mpPrinter = new Printer( rPrinterName );
     mnOrientation = 0;
     mbHorizontal = sal_False;
 }
@@ -113,8 +113,7 @@ VCLXPrinterPropertySet::VCLXPrinterPropertySet( const String& rPrinterName )
 VCLXPrinterPropertySet::~VCLXPrinterPropertySet()
 {
     osl::Guard< vos::IMutex > aSolarGuard( Application::GetSolarMutex() );
-
-     delete mpPrinter;
+    mpPrinter.reset();
 }
 
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice >  VCLXPrinterPropertySet::GetDevice()
@@ -331,10 +330,10 @@ sal_Bool VCLXPrinter::start( const ::rtl::OUString& /*rJobName*/, sal_Int16 /*nC
     ::osl::Guard< ::osl::Mutex > aGuard( Mutex );
 
     sal_Bool bDone = sal_True;
-    if ( GetPrinter() )
+    if ( mpListener.get() )
     {
-        // FIXME: adapt to new interface
-        // bDone = GetPrinter()->StartJob( rJobName );
+        maInitJobSetup = mpPrinter->GetJobSetup();
+        mpListener.reset( new vcl::OldStylePrintAdaptor( mpPrinter ) );
     }
 
     return bDone;
@@ -344,10 +343,10 @@ void VCLXPrinter::end(  ) throw(::com::sun::star::awt::PrinterException, ::com::
 {
     ::osl::Guard< ::osl::Mutex > aGuard( Mutex );
 
-    if ( GetPrinter() )
+    if ( mpListener.get() )
     {
-        // FIXME: adapt to new interface
-        // GetPrinter()->EndJob();
+        Printer::PrintJob( mpListener, maInitJobSetup );
+        mpListener.reset();
     }
 }
 
@@ -355,18 +354,16 @@ void VCLXPrinter::terminate(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( Mutex );
 
-    if ( GetPrinter() )
-        GetPrinter()->AbortJob();
+    mpListener.reset();
 }
 
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice > VCLXPrinter::startPage(  ) throw(::com::sun::star::awt::PrinterException, ::com::sun::star::uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( Mutex );
 
-    if ( GetPrinter() )
+    if ( mpListener.get() )
     {
-        // FIXME: adapt to new interface
-        // GetPrinter()->StartPage();
+        mpListener->StartPage();
     }
     return GetDevice();
 }
@@ -375,10 +372,9 @@ void VCLXPrinter::endPage(  ) throw(::com::sun::star::awt::PrinterException, ::c
 {
     ::osl::Guard< ::osl::Mutex > aGuard( Mutex );
 
-    if ( GetPrinter() )
+    if ( mpListener.get() )
     {
-        // FIXME: adapt to new interface
-        // GetPrinter()->EndPage();
+        mpListener->EndPage();
     }
 }
 
