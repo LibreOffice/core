@@ -90,6 +90,7 @@ Global gCTLSup as Boolean           '///+ gCTLSup   => if CTL support is activat
 Global gAccessibility as Boolean    '///+ gAccessibility => If an accessibility tool is detected (gnome, JAWS)
 Global gProductName as string        '///+ gProductName => Name of the product (StarOffice, OpenOffice.org, ...)
 Global gMacroSecurityLevel as integer'///+ gMacroSecurityLevel => Macro Security Level (0: Low ... 3: Very High) 
+Global gOfficeVersion as string     '///+ gOfficeVersion => The version number of the office like 3.1, 9.0 ...
 
 '/// - global OLE-objectnames
 global gOLEWriter as String         '///+ gOLEWriter       => OLE-object-name for Writer

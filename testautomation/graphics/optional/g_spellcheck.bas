@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -50,17 +50,17 @@ sub main
     hSetLocaleStrings ( gTesttoolPath + "graphics\tools\locale_1.txt" , glLocale () )
 
     PrintLog "-------------------------" + gApplication + "-------------------"
-        Call tiToolsSpellcheckCorrect
-        Call tiToolsSpellcheckError
-        Call tiToolsSpellcheckCheck        
-        Call tToolsSpellcheckAutoSpellcheck
+    Call tiToolsSpellcheckCorrect
+    Call tiToolsSpellcheckError
+    Call tiToolsSpellcheckCheck
+    Call tToolsSpellcheckAutoSpellcheck
 
     gApplication = "DRAW"
     PrintLog "-------------------------" + gApplication + "-------------------"
-        Call tiToolsSpellcheckCorrect
-        Call tiToolsSpellcheckError
-        Call tiToolsSpellcheckCheck
-        Call tToolsSpellcheckAutoSpellcheck
+    Call tiToolsSpellcheckCorrect
+    Call tiToolsSpellcheckError
+    Call tiToolsSpellcheckCheck
+    Call tToolsSpellcheckAutoSpellcheck
 
     Call hStatusOut
 end sub

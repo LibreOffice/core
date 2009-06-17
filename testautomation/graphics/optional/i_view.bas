@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -41,26 +41,26 @@ public glLocale (15*20) as string
 
 sub main
     PrintLog "------------------------- i_view test -------------------------"
-   Call hStatusIn ( "Graphics","i_view.bas")
+    Call hStatusIn ( "Graphics","i_view.bas")
 
     use "graphics\tools\id_tools.inc"
     use "graphics\tools\id_tools_2.inc"
     use "graphics\optional\includes\impress\i_view.inc"
 
-   hSetLocaleStrings ( gTesttoolPath + "graphics\tools\locale_1.txt" , glLocale () )
+    hSetLocaleStrings ( gTesttoolPath + "graphics\tools\locale_1.txt" , glLocale () )
 
-   Call tAnsichtHintergrundNotizen
-   Call tViewWorkspaceHandoutView
-   Call tViewWorkspaceOutlineView
-   Call tViewWorkspaceDrawingView
-   Call tAnsichtEbene
+    Call tAnsichtHintergrundNotizen
+    Call tViewWorkspaceHandoutView
+    Call tViewWorkspaceOutlineView
+    Call tViewWorkspaceDrawingView
+    Call tAnsichtEbene
 
-   Call hStatusOut
+    Call hStatusOut
 end sub
 
 sub LoadIncludeFiles
-   use "global\system\includes\master.inc"
-   use "global\system\includes\gvariabl.inc"
-   gApplication = "IMPRESS"
-   Call GetUseFiles
+    use "global\system\includes\master.inc"
+    use "global\system\includes\gvariabl.inc"
+    gApplication = "IMPRESS"
+    Call GetUseFiles
 end sub

@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -38,7 +38,7 @@
 '\******************************************************************
 
 sub main
-   Call hStatusIn ( "Graphics","g_clipexport.bas")
+    Call hStatusIn ( "Graphics","g_clipexport.bas")
 
     use "graphics\tools\id_tools.inc"
     use "graphics\tools\id_tools_2.inc"
@@ -51,24 +51,24 @@ sub main
 
     gApplication = "IMPRESS"
     PrintLog "-------------------------" + gApplication + "-------------------"
-   Call tClipboardFromDrawTest
+    Call tClipboardFromDrawTest
 
-'TODO FHA - Find and write bugs for exporting to writer and calc.
-'    gApplication = "WRITER"
-'    PrintLog "-------------------------" + gApplication + "-------------------"
-'       Call tClipboardFromDrawTest
+    'TODO FHA - Find and write bugs for exporting to writer and calc.
+    '    gApplication = "WRITER"
+    '    PrintLog "-------------------------" + gApplication + "-------------------"
+    '       Call tClipboardFromDrawTest
 
-'    gApplication = "CALC"
-'    PrintLog "-------------------------" + gApplication + "-------------------"
-'       Call tClipboardFromDrawTest
+    '    gApplication = "CALC"
+    '    PrintLog "-------------------------" + gApplication + "-------------------"
+    '       Call tClipboardFromDrawTest
 
-   Call hStatusOut
+    Call hStatusOut
 end sub
 
 sub LoadIncludeFiles
-   use "global\system\includes\master.inc"
-   use "global\system\includes\gvariabl.inc"
-   use "global\tools\includes\required\t_menu.inc"   'Window-control
-   gApplication = "DRAW"
-   Call GetUseFiles
+    use "global\system\includes\master.inc"
+    use "global\system\includes\gvariabl.inc"
+    use "global\tools\includes\required\t_menu.inc"   'Window-control
+    gApplication = "DRAW"
+    Call GetUseFiles
 end sub

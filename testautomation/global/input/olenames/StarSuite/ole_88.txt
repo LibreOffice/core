@@ -1,7 +1,0 @@
-CALC=StarSuite 9 工作表文件
-CHART=StarSuite 9 圖表
-DRAW=StarSuite 9 繪圖
-IMPRESS=StarSuite 9 簡報
-MATH=StarSuite 9 公式
-WRITER=StarSuite 9 文字
-OTHER=其他的物件
