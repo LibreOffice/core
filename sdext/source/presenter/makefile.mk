@@ -33,7 +33,7 @@ PRJ=..$/..
 PRJNAME=sdext
 TARGET=PresenterScreen
 GEN_HID=FALSE
-EXTNAME=presenter
+EXTNAME=PresenterScreen
 
 ENABLE_EXCEPTIONS=TRUE
 
@@ -121,13 +121,21 @@ PACKLICS:=$(foreach,i,$(alllangiso) $(ZIP1DIR)$/registry$/license_$i)
 PACKLICS:=$(foreach,i,$(alllangiso) $(ZIP1DIR)$/registry$/LICENSE_$i)
 .ENDIF
 
+.IF "$(WITH_LANG)"==""
+FIND_XCU=registry/data
+.ELSE			# "$(WITH_LANG)"==""
+FIND_XCU=$(MISC)$/$(EXTNAME)_in$/merge
+.ENDIF			# "$(WITH_LANG)"==""
 
 
 COMPONENT_FILES=																			\
     $(ZIP1DIR)$/registry$/data$/org$/openoffice$/Office$/Jobs.xcu							\
     $(ZIP1DIR)$/registry$/data$/org$/openoffice$/Office$/ProtocolHandler.xcu				\
-    $(ZIP1DIR)$/registry$/data$/org$/openoffice$/Office$/extension$/PresenterScreen.xcu		\
-    $(ZIP1DIR)$/registry$/schema/org$/openoffice$/Office$/extension$/PresenterScreen.xcs
+    $(ZIP1DIR)$/registry$/schema/org$/openoffice$/Office$/extension$/PresenterScreen.xcs   \
+   $(ZIP1DIR)$/registry$/data/$/org$/openoffice$/Office$/extension$/PresenterScreen.xcu 
+
+#COMPONENT_MERGED_XCU= \
+#	$(FIND_XCU)$/org$/openoffice$/Office$/extension$/PresenterScreen.xcu 
 
 COMPONENT_BITMAPS=												\
     $(ZIP1DIR)$/bitmaps$/BorderTop.png							\
@@ -243,6 +251,7 @@ ZIP1DEPS=					\
     $(COMPONENT_BITMAPS)	\
     $(COMPONENT_LIBRARY)	\
     $(COMPONENT_HELP)
+#	$(COMPONENT_MERGED_XCU) \
 
 PLATFORMID:=$(RTL_OS:l)_$(RTL_ARCH:l)
 
@@ -265,8 +274,8 @@ $(COMPONENT_HELP) : help$/$$(@:f)
     $(COPY) $< $@
 
 #$(COMPONENT_FILES) : $$(@:f)
-#	@-$(MKDIRHIER) $(@:d)
-#    +$(COPY) $< $@
+#	-$(MKDIRHIER) $(@:d)
+#	$(COPY) $< $@
 
 $(COMPONENT_BITMAPS) : bitmaps$/$$(@:f)
     @-$(MKDIRHIER) $(@:d)
@@ -327,6 +336,7 @@ $(PACKLICS) : $(SOLARBINDIR)$/osl$/LICENSE$$(@:b:s/_/./:e:s/./_/)$$(@:e)
     @@-$(MKDIRHIER) $(@:d)
     $(GNUCOPY) $< $@
 .ENDIF
+
 
 $(ZIP1DIR)/%.xcu : %.xcu
     @@-$(MKDIRHIER) $(@:d)

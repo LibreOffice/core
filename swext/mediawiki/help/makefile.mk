@@ -30,7 +30,7 @@
 #*************************************************************************
 
 PRJ=..$/..
-PRJNAME=mediawiki
+PRJNAME=swext
 TARGET=$(PRJNAME)_help
 
 .INCLUDE : settings.mk
@@ -42,7 +42,7 @@ PACKAGE=com.sun.sun-mediawiki
 # workaround for the problem in help, the help uses en instead of en-US
 MEDIAWIKI_LANG= en $(alllangiso)
 
-OUT_MEDIAWIKI=$(MISC)$/$(PRJNAME)
+OUT_MEDIAWIKI=$(MISC)$/mediawiki
 OUT_HELP=$(OUT_MEDIAWIKI)$/help
 
 XHPFILES= \
@@ -71,7 +71,7 @@ $(OUT_HELP)$/{$(MEDIAWIKI_LANG)}$/$(PACKAGE)$/%.xhp :| %.xhp
 #    @$(NULL)
 
 
-$(OUT_MEDIAWIKI)$/$(TARGET).done : localize.sdf $(XHPFILES) $(HLANGXHPFILES)
-    @$(HELPEX) -QQ -p $(PRJNAME) -r $(PRJ) -i @$(mktmp $(uniq $(foreach,i,$? $(!eq,$(i:f),$(i:f:s/.xhp//) $(i:f) $(XHPFILES))))) -x $(OUT_HELP) -y $(PACKAGE) -l all -lf $(MEDIAWIKI_LANG:t",") -m localize.sdf && $(TOUCH) $@
+$(OUT_MEDIAWIKI)$/$(TARGET).done : $(LOCALIZESDF) $(XHPFILES) $(HLANGXHPFILES)
+    @$(AUGMENT_LIBRARY_PATH) $(WRAPCMD) helpex -QQ -p $(PRJNAME) -r $(PRJ) -i @$(mktmp $(uniq $(foreach,i,$? $(!eq,$(i:f),$(i:f:s/.xhp//) $(i:f) $(XHPFILES))))) -x $(OUT_HELP) -y $(PACKAGE) -l all -lf $(MEDIAWIKI_LANG:t",") -m $(LOCALIZESDF) && $(TOUCH) $@
 .ENDIF
 

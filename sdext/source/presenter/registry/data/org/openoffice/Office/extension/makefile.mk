@@ -34,18 +34,18 @@ PRJ=..$/..$/..$/..$/..$/..$/..$/..
 PRJNAME=sdext
 TARGET=data_ooOfficeext
 PACKAGE=org.openoffice.Office.extension
-EXTNAME=presenter
+EXTENSIONNAME=PresenterScreen
 
 .INCLUDE :  settings.mk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 XCSROOT=$(PRJ)$/source$/presenter
-ABSXCSROOT=$(PRJ)$/source$/presenter
+ABSXCSROOT=$(PWD)/$(PRJ)$/source$/presenter
 
 # --- Targets ------------------------------------------------------
 
 XCUFILES= \
-    PresenterScren.xcu
+    PresenterScreen.xcu
 
 MODULEFILES=
 
