@@ -86,6 +86,90 @@ using namespace ::com::sun::star::reflection;
 using namespace ::com::sun::star::form::binding;
 using namespace ::svxform;
 
+
+#include <com/sun/star/script/XScriptListener.hdl>
+#include <comphelper/processfactory.hxx>
+#include <cppuhelper/implbase1.hxx>
+
+typedef cppu::WeakImplHelper1< XScriptListener > ScriptEventListener_BASE;
+class ScriptEventListenerWrapper : public ScriptEventListener_BASE
+{
+public:
+    ScriptEventListenerWrapper( FmFormModel& _rModel) throw ( RuntimeException ) : pModel(&_rModel)
+    {
+        Reference < XPropertySet > xProps(
+            ::comphelper::getProcessServiceFactory(), UNO_QUERY );
+        if ( xProps.is() )
+        {
+            Reference< XComponentContext > xCtx( xProps->getPropertyValue(
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))), UNO_QUERY );
+            if ( xCtx.is() )
+            {
+                Reference< XMultiComponentFactory > xMFac(
+                    xCtx->getServiceManager(), UNO_QUERY );
+                if ( xMFac.is() )
+                {
+                    m_vbaListener.set( xMFac->createInstanceWithContext(
+                        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                            "ooo.vba.EventListener"  ) ), xCtx ),
+                                UNO_QUERY_THROW );
+                }
+            }
+        }
+    }
+    // XEventListener
+    virtual void SAL_CALL disposing(const EventObject& ) throw( RuntimeException ){}
+
+    // XScriptListener
+    virtual void SAL_CALL firing(const  ScriptEvent& evt) throw(RuntimeException)
+    {
+        setModel();
+        if ( m_vbaListener.is() )
+        {
+            m_vbaListener->firing( evt );
+        }
+    }
+
+    virtual Any SAL_CALL approveFiring(const ScriptEvent& evt) throw( com::sun::star::reflection::InvocationTargetException, RuntimeException)
+    {
+        setModel();
+        if ( m_vbaListener.is() )
+        {
+            return m_vbaListener->approveFiring( evt );
+        }
+        return Any();
+    }
+
+private:
+    void setModel()
+    {
+        Reference< XPropertySet > xProps( m_vbaListener, UNO_QUERY );
+        if ( xProps.is() )
+        {
+            try
+            {
+                SfxObjectShellRef xObjSh = pModel->GetObjectShell();
+                if ( xObjSh.Is() && m_vbaListener.is() )
+                {
+                    Any aVal;
+                    aVal <<= xObjSh->GetModel();
+                    xProps->setPropertyValue(
+                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Model" ) ),
+                        aVal );
+                }
+            }
+            catch( Exception& )
+            {
+                //swallow any errors
+            }
+        }
+    }
+    FmFormModel* pModel;
+    Reference< XScriptListener > m_vbaListener;
+
+
+};
+
 //------------------------------------------------------------------------------
 // some helper structs for caching property infos
 //------------------------------------------------------------------------------
@@ -128,6 +212,13 @@ FmXUndoEnvironment::FmXUndoEnvironment(FmFormModel& _rModel)
                    ,m_bDisposed( false )
 {
     DBG_CTOR(FmXUndoEnvironment,NULL);
+    try
+    {
+        m_vbaListener =  new ScriptEventListenerWrapper( _rModel );
+    }
+    catch( Exception& )
+    {
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -752,9 +843,17 @@ void FmXUndoEnvironment::switchListening( const Reference< XIndexContainer >& _r
         if ( xManager.is() )
         {
             if ( _bStartListening )
+            {
                 m_pScriptingEnv->registerEventAttacherManager( xManager );
+                if ( m_vbaListener.is() )
+                    xManager->addScriptListener( m_vbaListener );
+            }
             else
+            {
                 m_pScriptingEnv->revokeEventAttacherManager( xManager );
+                if ( m_vbaListener.is() )
+                    xManager->removeScriptListener( m_vbaListener );
+            }
         }
 
         // also handle all children of this element

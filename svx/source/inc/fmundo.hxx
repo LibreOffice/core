@@ -213,7 +213,7 @@ private:
 
     void    switchListening( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >& _rxContainer, bool _bStartListening ) SAL_THROW(());
     void    switchListening( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxObject, bool _bStartListening ) SAL_THROW(());
-
+    ::com::sun::star::uno::Reference< com::sun::star::script::XScriptListener > m_vbaListener;
 public:
     // Methoden zur Zuordnung von Controls zu Forms,
     // werden von der Seite und der UndoUmgebung genutzt

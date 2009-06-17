@@ -41,8 +41,8 @@
 module ooo {  module vba {
 interface XVBAToOOEventDescGen : com::sun::star::uno::XInterface
 {
-    sequence< com::sun::star::script::ScriptEventDescriptor >  getEventDescriptions( [in] com::sun::star::uno::XInterface xControl, [in] string sLibModName, [in] sequence< string > handlerExts );
-    com::sun::star::script::XScriptEventsSupplier getEventSupplier( [in] com::sun::star::uno::XInterface xControl );
+    sequence< com::sun::star::script::ScriptEventDescriptor >  getEventDescriptions( [in] com::sun::star::uno::XInterface xControl, [in] string sCodeName );
+    com::sun::star::script::XScriptEventsSupplier getEventSupplier( [in] com::sun::star::uno::XInterface xControl, [in] string sCodeName );
 };
 
 }; };

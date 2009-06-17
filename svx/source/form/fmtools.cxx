@@ -105,6 +105,7 @@
 #include <comphelper/uno3.hxx>
 #include <connectivity/dbexception.hxx>
 #include <comphelper/extract.hxx>
+#include <comphelper/evtmethodhelper.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <algorithm>
 
@@ -719,36 +720,6 @@ sal_Int16 getControlTypeByObject(const Reference< ::com::sun::star::lang::XServi
     return ::rtl::OUString();
 }
 //------------------------------------------------------------------------------
-Sequence< ::rtl::OUString> getEventMethods(const Type& type)
-{
-    typelib_InterfaceTypeDescription *pType=0;
-    type.getDescription( (typelib_TypeDescription**)&pType);
-
-    if(!pType)
-        return Sequence< ::rtl::OUString>();
-
-    Sequence< ::rtl::OUString> aNames(pType->nMembers);
-    ::rtl::OUString* pNames = aNames.getArray();
-    for(sal_Int32 i=0;i<pType->nMembers;i++,++pNames)
-    {
-        // the decription reference
-        typelib_TypeDescriptionReference* pMemberDescriptionReference = pType->ppMembers[i];
-        // the description for the reference
-        typelib_TypeDescription* pMemberDescription = NULL;
-        typelib_typedescriptionreference_getDescription(&pMemberDescription, pMemberDescriptionReference);
-        if (pMemberDescription)
-        {
-            typelib_InterfaceMemberTypeDescription* pRealMemberDescription =
-                reinterpret_cast<typelib_InterfaceMemberTypeDescription*>(pMemberDescription);
-            *pNames = pRealMemberDescription->pMemberName;
-        }
-    }
-    typelib_typedescription_release( (typelib_TypeDescription *)pType );
-    return aNames;
-}
-
-
-//------------------------------------------------------------------------------
 void TransferEventScripts(const Reference< ::com::sun::star::awt::XControlModel>& xModel, const Reference< ::com::sun::star::awt::XControl>& xControl,
     const Sequence< ::com::sun::star::script::ScriptEventDescriptor>& rTransferIfAvailable)
 {
@@ -821,7 +792,8 @@ void TransferEventScripts(const Reference< ::com::sun::star::awt::XControlModel>
                     continue;
 
                 // now check the methods
-                Sequence< ::rtl::OUString> aMethodsNames = getEventMethods(*pCurrentListeners);
+                Sequence< ::rtl::OUString> aMethodsNames = ::comphelper::getEventMethodsForType(*pCurrentListeners);
+
                 const ::rtl::OUString* pMethodsNames = aMethodsNames.getConstArray();
                 for (k=0; k<aMethodsNames.getLength(); ++k, ++pMethodsNames)
                 {

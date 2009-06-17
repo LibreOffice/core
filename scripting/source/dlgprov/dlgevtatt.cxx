@@ -121,18 +121,20 @@ namespace dlgprov
     DialogVBAScriptListenerImpl::DialogVBAScriptListenerImpl( const Reference< XComponentContext >& rxContext, const Reference< awt::XControl >& rxControl, const Reference< frame::XModel >& xModel ) : DialogScriptListenerImpl( rxContext )
     {
         Reference< XMultiComponentFactory > xSMgr( m_xContext->getServiceManager() );
+        Sequence< Any > args(1);
         if ( xSMgr.is() )
         {
-            Sequence< Any > args(1);
             args[0] <<= xModel;
             mxListener = Reference< XScriptListener >( xSMgr->createInstanceWithArgumentsAndContext( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.EventListener" ) ), args, m_xContext ), UNO_QUERY );
         }
         if ( rxControl.is() )
         {
-            Reference< XPropertySet > xProps( rxControl->getModel(), UNO_QUERY );
             try
             {
+                Reference< XPropertySet > xProps( rxControl->getModel(), UNO_QUERY_THROW );
                 xProps->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name") ) ) >>= msDialogCodeName;
+                xProps.set( mxListener, UNO_QUERY_THROW );
+                xProps->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Model") ), args[ 0 ] );
             }
             catch ( Exception&  ) {}
         }
@@ -193,7 +195,7 @@ namespace dlgprov
         return it->second;
     }
 #ifdef FAKE_VBA_EVENT_SUPPORT
-    Reference< XScriptEventsSupplier > DialogEventsAttacherImpl::getFakeVbaEventsSupplier( const Reference< XControl >& xControl )
+    Reference< XScriptEventsSupplier > DialogEventsAttacherImpl::getFakeVbaEventsSupplier( const Reference< XControl >& xControl, rtl::OUString& sControlName )
     {
         Reference< XScriptEventsSupplier > xEventsSupplier;
         Reference< XMultiComponentFactory > xSMgr( m_xContext->getServiceManager() );
@@ -201,7 +203,7 @@ namespace dlgprov
         {
             Reference< ooo::vba::XVBAToOOEventDescGen > xVBAToOOEvtDesc( xSMgr->createInstanceWithContext( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBAToOOEventDesc" ) ), m_xContext ), UNO_QUERY );
             if ( xVBAToOOEvtDesc.is() )
-                xEventsSupplier.set( xVBAToOOEvtDesc->getEventSupplier( xControl ), UNO_QUERY );
+                xEventsSupplier.set( xVBAToOOEvtDesc->getEventSupplier( xControl, sControlName ), UNO_QUERY );
 
         }
         return xEventsSupplier;
@@ -324,6 +326,20 @@ namespace dlgprov
         // go over all objects
         const Reference< XInterface >* pObjects = Objects.getConstArray();
         sal_Int32 nObjCount = Objects.getLength();
+#ifdef FAKE_VBA_EVENT_SUPPORT
+        Reference< awt::XControl > xDlgControl( Objects[ nObjCount - 1 ], uno::UNO_QUERY ); // last object is the dialog
+        rtl::OUString sDialogCodeName;
+        if ( xDlgControl.is() )
+        {
+            Reference< XPropertySet > xProps( xDlgControl->getModel(), UNO_QUERY );
+            try
+            {
+                xProps->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name") ) ) >>= sDialogCodeName;
+            }
+            catch( Exception& ){}
+        }
+#endif
+
         for ( sal_Int32 i = 0; i < nObjCount; ++i )
         {
             // We know that we have to do with instances of XControl.
@@ -338,7 +354,7 @@ namespace dlgprov
             Reference< XScriptEventsSupplier > xEventsSupplier( xControlModel, UNO_QUERY );
             attachEventsToControl( xControl, xEventsSupplier, Helper );
 #ifdef FAKE_VBA_EVENT_SUPPORT
-            xEventsSupplier.set( getFakeVbaEventsSupplier( xControl ) );
+            xEventsSupplier.set( getFakeVbaEventsSupplier( xControl, sDialogCodeName ) );
             attachEventsToControl( xControl, xEventsSupplier, Helper );
 #endif
         }
