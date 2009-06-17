@@ -58,6 +58,7 @@ SLOFILES=   \
             $(SLO)$/componentmodule.obj \
             $(SLO)$/configurationhelper.obj \
             $(SLO)$/documentinfo.obj \
+        $(SLO)$/evtmethodhelper.obj \
             $(SLO)$/evtlistenerhlp.obj \
             $(SLO)$/facreg.obj \
             $(SLO)$/ihwrapnofilter.obj \
