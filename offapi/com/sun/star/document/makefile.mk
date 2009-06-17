@@ -115,7 +115,9 @@ IDLFILES=\
     LinkUpdateModes.idl\
     XDocumentRevisionListPersistence.idl\
     DocumentRevisionListPersistence.idl \
-    XDocumentLanguages.idl
+    XDocumentLanguages.idl \
+    XCodeNameQuery.idl
+
 
 # ------------------------------------------------------------------
 
