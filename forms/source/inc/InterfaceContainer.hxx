@@ -260,6 +260,9 @@ protected:
     void implCheckIndex( const sal_Int32 _nIndex ) SAL_THROW( ( ::com::sun::star::lang::IndexOutOfBoundsException ) );
 
 private:
+    // hack for Vba Events
+    void fakeVbaEventsHack( sal_Int32 _nIndex );
+
     // the runtime event format has changed from version SO5.2 to OOo
     enum EventFormat
     {

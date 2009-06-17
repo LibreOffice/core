@@ -60,13 +60,20 @@
 #include <rtl/logfile.hxx>
 
 //.........................................................................
+#include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/document/XCodeNameQuery.hpp>
+#include <ooo/vba/XVBAToOOEventDescGen.hpp>
+#include <comphelper/processfactory.hxx>
+
 namespace frm
 {
 //.........................................................................
 
+using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::io;
@@ -81,6 +88,90 @@ namespace
     }
 }
 
+bool
+lcl_hasVbaEvents( const Sequence< ScriptEventDescriptor >& sEvents  )
+{
+    const ScriptEventDescriptor* pDesc = sEvents.getConstArray();
+    const ScriptEventDescriptor* pEnd = ( pDesc + sEvents.getLength() );
+    for ( ; pDesc != pEnd; ++pDesc )
+    {
+        if ( pDesc->ScriptType.equals( rtl::OUString::createFromAscii( "VBAInterop" ) ) )
+            return true;
+    }
+    return false;
+}
+
+Sequence< ScriptEventDescriptor >
+lcl_stripVbaEvents( const Sequence< ScriptEventDescriptor >& sEvents )
+{
+    Sequence< ScriptEventDescriptor > sStripped( sEvents.getLength() );
+
+    const ScriptEventDescriptor* pDesc = sEvents.getConstArray();
+    const ScriptEventDescriptor* pEnd = ( pDesc + sEvents.getLength() );
+    sal_Int32 nCopied = 0;
+    for ( ; pDesc != pEnd; ++pDesc )
+    {
+        if ( !pDesc->ScriptType.equals( rtl::OUString::createFromAscii( "VBAInterop" ) ) )
+        {
+            sStripped[ nCopied++ ] = *pDesc;
+        }
+    }
+    if ( nCopied )
+        sStripped.realloc( nCopied );
+    return sStripped;
+}
+
+void
+OInterfaceContainer::fakeVbaEventsHack(  sal_Int32 _nIndex )
+{
+    // we are dealing with form controls
+    try
+    {
+        Reference< XFormComponent > xForm( static_cast< XContainer* >(this), UNO_QUERY_THROW );
+        // grand-parent should be the model, no parent ? if not
+        // we'll ignore,  we'll get called back here  anyway )
+        Reference< XChild > xChild(  xForm->getParent(), UNO_QUERY_THROW );
+        Reference< XModel > xDocOwner( xChild->getParent(), UNO_QUERY );
+        OSL_TRACE(" Is DOC ????? %s", xDocOwner.is() ? "true" : "false" );
+        if ( xDocOwner.is() )
+        {
+            bool hasVBABindings = lcl_hasVbaEvents( m_xEventAttacher->getScriptEvents( _nIndex ) );
+            if ( hasVBABindings )
+            {
+                OSL_TRACE("Has VBA bindings already, returning ");
+                return;
+            }
+            Reference< XMultiServiceFactory > xFac(  comphelper::getProcessServiceFactory(), UNO_QUERY );
+                        Reference< XMultiServiceFactory > xDocFac(  xDocOwner, UNO_QUERY );
+            if ( xFac.is() && xDocFac.is() )
+            {
+                try
+                {
+                    Reference< ooo::vba::XVBAToOOEventDescGen > xDescSupplier( xFac->createInstance( rtl::OUString::createFromAscii( "ooo.vba.VBAToOOEventDesc" ) ), UNO_QUERY_THROW );
+                    Reference< XInterface > xIf( getByIndex( _nIndex ) , UNO_QUERY_THROW );
+                                        Reference< XCodeNameQuery > xNameQuery(  xDocFac->createInstance( rtl::OUString::createFromAscii( "ooo.vba.VBACodeNameProvider" ) ), UNO_QUERY_THROW );
+
+                    rtl::OUString sCodeName;
+                    sCodeName = xNameQuery->getCodeNameForObject( xIf );
+                    Reference< XPropertySet > xProps( xIf, UNO_QUERY );
+                    rtl::OUString sServiceName;
+                    xProps->getPropertyValue( rtl::OUString::createFromAscii("DefaultControl" ) ) >>= sServiceName;
+
+                    Sequence< ScriptEventDescriptor > vbaEvents = xDescSupplier->getEventDescriptions( xFac->createInstance( sServiceName ), sCodeName );
+                    // register the vba script events
+                    if ( m_xEventAttacher.is() )
+                        m_xEventAttacher->registerScriptEvents( _nIndex, vbaEvents );
+                }
+                catch( Exception& e ){ OSL_TRACE("lcl_fakevbaevents - Caught Exception trying to create control eventstuff "); }
+            }
+
+        }
+    }
+    catch( Exception& e )
+    {
+    }
+
+}
 //==================================================================
 //= ElementDescription
 //==================================================================
@@ -743,6 +834,23 @@ void OInterfaceContainer::implInsert(sal_Int32 _nIndex, const Reference< XProper
     {
         m_xEventAttacher->insertEntry(_nIndex);
         m_xEventAttacher->attach( _nIndex, pElementMetaData->xInterface, makeAny( _rxElement ) );
+        // insert fake events?
+        Reference< XEventAttacherManager > xMgr ( pElementMetaData->xInterface, UNO_QUERY );
+        if ( xMgr.is() )
+        {
+            OInterfaceContainer* pIfcMgr = dynamic_cast< OInterfaceContainer* >( xMgr.get() );
+            sal_Int32 nLen = pIfcMgr->getCount();
+            for ( sal_Int32 i = 0; (i < nLen) && pIfcMgr ; ++i )
+            {
+                // add fake events to the control at index i
+                pIfcMgr->fakeVbaEventsHack( i );
+            }
+        }
+        else
+        {
+            // add fake events to the control at index i
+            fakeVbaEventsHack(  _nIndex );
+        }
     }
 
     // notify derived classes
@@ -1022,20 +1130,29 @@ void SAL_CALL OInterfaceContainer::removeByName(const ::rtl::OUString& Name) thr
 //------------------------------------------------------------------------
 void SAL_CALL OInterfaceContainer::registerScriptEvent( sal_Int32 nIndex, const ScriptEventDescriptor& aScriptEvent ) throw(IllegalArgumentException, RuntimeException)
 {
+    OSL_TRACE("*** registerScriptEvent %d", nIndex);
     if ( m_xEventAttacher.is() )
+    {
         m_xEventAttacher->registerScriptEvent( nIndex, aScriptEvent );
+            fakeVbaEventsHack( nIndex ); // add fake vba events
+    }
 }
 
 //------------------------------------------------------------------------
 void SAL_CALL OInterfaceContainer::registerScriptEvents( sal_Int32 nIndex, const Sequence< ScriptEventDescriptor >& aScriptEvents ) throw(IllegalArgumentException, RuntimeException)
 {
+    OSL_TRACE("*** registerScriptEvent(s) %d", nIndex);
     if ( m_xEventAttacher.is() )
+    {
         m_xEventAttacher->registerScriptEvents( nIndex, aScriptEvents );
+        fakeVbaEventsHack( nIndex ); // add fake vba events
+    }
 }
 
 //------------------------------------------------------------------------
 void SAL_CALL OInterfaceContainer::revokeScriptEvent( sal_Int32 nIndex, const ::rtl::OUString& aListenerType, const ::rtl::OUString& aEventMethod, const ::rtl::OUString& aRemoveListenerParam ) throw(IllegalArgumentException, RuntimeException)
 {
+    OSL_TRACE("*** revokeScriptEvent %d listenertype %s, eventMethod %s", nIndex, rtl::OUStringToOString( aListenerType, RTL_TEXTENCODING_UTF8 ).getStr(), rtl::OUStringToOString( aEventMethod, RTL_TEXTENCODING_UTF8 ).getStr());
     if ( m_xEventAttacher.is() )
         m_xEventAttacher->revokeScriptEvent( nIndex, aListenerType, aEventMethod, aRemoveListenerParam );
 }
@@ -1064,9 +1181,16 @@ void SAL_CALL OInterfaceContainer::removeEntry( sal_Int32 nIndex ) throw(Illegal
 //------------------------------------------------------------------------
 Sequence< ScriptEventDescriptor > SAL_CALL OInterfaceContainer::getScriptEvents( sal_Int32 nIndex ) throw(IllegalArgumentException, RuntimeException)
 {
+    OSL_TRACE("getScriptEvents");
     Sequence< ScriptEventDescriptor > aReturn;
     if ( m_xEventAttacher.is() )
+    {
         aReturn = m_xEventAttacher->getScriptEvents( nIndex );
+            if ( lcl_hasVbaEvents( aReturn ) )
+            {
+                aReturn = lcl_stripVbaEvents( aReturn );
+            }
+    }
     return aReturn;
 }
 
