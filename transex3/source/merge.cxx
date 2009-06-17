@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: merge.cxx,v $
- * $Revision: 1.29 $
+ * $Revision: 1.27.36.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -210,38 +210,39 @@ MergeDataFile::MergeDataFile( const ByteString &rFileName, const ByteString& sFi
     ByteString sTEXT;
     ByteString sQHTEXT;
     ByteString sTITLE;
+    ByteString sHACK("HACK");
 
     const ByteString sEmpty("");
 
     if( !aInputStream.IsOpen() ) {
-        printf("ERROR : Can't open %s\n", rFileName.GetBuffer());
-        exit( -1 );
+        printf("Warning : Can't open %s\n", rFileName.GetBuffer());
+        //exit( -1 );
+        return;
     }
     while ( !aInputStream.IsEof()) {
+        xub_StrLen nToks;
         aInputStream.ReadLine( sLine );
         sLine = sLine.Convert( RTL_TEXTENCODING_MS_1252, aCharSet );
 
-        if ( sLine.GetTokenCount( '\t' ) == 15  ) {
+        nToks = sLine.GetTokenCount( '\t' );
+        if ( nToks == 15 ) {
             // Skip all wrong filenames
             ByteString filename = sLine.GetToken( 1 , '\t' );
             filename = filename.Copy( filename.SearchCharBackward( "\\" )+1 , filename.Len() );
 
             if( sFile.Equals( sEmpty ) || ( !sFile.Equals( sEmpty ) && filename.Equals( sFile )  ) )
             {
-                sTYP = sLine.GetToken( 3, '\t' );
-                sGID = sLine.GetToken( 4, '\t' );
-                sLID = sLine.GetToken( 5, '\t' );
-                sPFO = sLine.GetToken( 7, '\t' );
-                sPFO = ByteString("HACK");
-                nLANG = sLine.GetToken( 9, '\t' );
+              xub_StrLen rIdx = 0;
+              sTYP = sLine.GetToken( 3, '\t', rIdx );
+              sGID = sLine.GetToken( 0, '\t', rIdx ); // 4
+              sLID = sLine.GetToken( 0, '\t', rIdx ); // 5
+              sPFO = sLine.GetToken( 1, '\t', rIdx ); // 7
+              sPFO = sHACK;
+              nLANG = sLine.GetToken( 1, '\t', rIdx ); // 9
+              sTEXT = sLine.GetToken( 0, '\t', rIdx ); // 10
 
-                sTEXT = sLine.GetToken( 10, '\t' );
-    //            printf("%s\n",sTEXT.GetBuffer());
-    //            Quote( sTEXT );
-    //            printf("%s\n",sTEXT.GetBuffer());
-
-                sQHTEXT = sLine.GetToken( 12, '\t' );
-                sTITLE = sLine.GetToken( 13, '\t' );
+              sQHTEXT = sLine.GetToken( 1, '\t', rIdx ); // 12
+              sTITLE = sLine.GetToken( 0, '\t', rIdx );  // 13
 
                 nLANG.EraseLeadingAndTrailingChars();
 
@@ -250,20 +251,22 @@ MergeDataFile::MergeDataFile( const ByteString &rFileName, const ByteString& sFi
 #else
                 if (  !nLANG.EqualsIgnoreCaseAscii("en-US")  ){
 #endif
-                    InsertEntry( sTYP, sGID, sLID, sPFO, nLANG, sTEXT, sQHTEXT, sTITLE , filename , bCaseSensitive );
-                    if( nLANG.Len() > 0 ){
-                        bool bFound = false;
-                        for( unsigned int x = 0; x < aLanguages.size(); x++ ){
-                            if( aLanguages[ x ].Equals( nLANG ) )
-                                bFound = true;
-                        }
+                  ByteStringHashMap::const_iterator lit;
+                  lit = aLanguageMap.find (nLANG);
+                  ByteString aLANG;
+                  if (lit == aLanguageMap.end()) {
+                    aLANG = nLANG;
+                    aLanguageMap.insert( ByteStringHashMap::value_type( aLANG, aLANG ) );
                         // Remember read languages for -l all switch
-                        if( !bFound )   aLanguages.push_back( nLANG );
-                    }
+                    aLanguageList.push_back( nLANG );
+                  } else
+                    aLANG = lit->first;
+
+                  InsertEntry( sTYP, sGID, sLID, sPFO, aLANG, sTEXT, sQHTEXT, sTITLE , filename , bCaseSensitive );
                 }
             }
         }
-        else if ( sLine.GetTokenCount( '\t' ) == 10 ){
+        else if ( nToks == 10 ) {
             printf("ERROR: File format is obsolete and no longer supported!\n");
         }
     }
@@ -286,7 +289,7 @@ ByteString MergeDataFile::Dump(){
     ByteString sRet( "MergeDataFile\n" );
 
       //sRet.Append( Export::DumpMap( "aLanguageSet" , aLanguageSet ) );
-    //sRet.Append( Export::DumpMap( "aLanguages" , aLanguages ) );
+    //sRet.Append( Export::DumpMap( "aLanguageList" , aLanguageList ) );
     printf("MergeDataFile\n");
     MergeDataHashMap::const_iterator idbg;
     for( idbg = aMap.begin() ; idbg != aMap.end(); ++idbg ){
@@ -318,7 +321,7 @@ void MergeDataFile::WriteError( const ByteString &rLine )
         fprintf( stderr, "%s\n", rLine.GetBuffer());
 }
 std::vector<ByteString> MergeDataFile::GetLanguages(){
-    return aLanguages;
+    return aLanguageList;
 }
 
 /*****************************************************************************/
@@ -379,23 +382,32 @@ void MergeDataFile::InsertEntry(
                     const ByteString &rLID, const ByteString &rPFO,
                     const ByteString &nLANG, const ByteString &rTEXT,
                     const ByteString &rQHTEXT, const ByteString &rTITLE ,
-                    const ByteString &rFilename , bool bCaseSensitive
+                    const ByteString &rInFilename , bool bCaseSensitive
                     )
 /*****************************************************************************/
 {
     MergeData *pData;
     BOOL bFound = FALSE;
 
+    // uniquify the filename to save memory.
+    ByteStringHashMap::const_iterator fit = aFilenames.find (rInFilename);
+    ByteString aFilename;
+    if (fit == aFilenames.end()) {
+        aFilename = rInFilename;
+        aFilenames.insert (ByteStringHashMap::value_type (aFilename, aFilename));
+    } else
+        aFilename = fit->first;
+
     // search for MergeData
 
-    ByteString sKey = CreateKey( rTYP , rGID , rLID , rFilename , bCaseSensitive );
-    ByteString sKey2;
-
-    if( aMap.find( sKey ) != aMap.end() ){
-        pData = aMap[ sKey ];
+    ByteString sKey = CreateKey( rTYP , rGID , rLID , aFilename , bCaseSensitive );
+    MergeDataHashMap::const_iterator mit;
+    mit = aMap.find( sKey );
+    if( mit != aMap.end() ){
+        pData = mit->second;
     }else{
-        pData = new MergeData( rTYP, rGID, rLID , rFilename );
-        aMap.insert( MergeDataHashMap::value_type( CreateKey( rTYP , rGID , rLID , rFilename , bCaseSensitive ) , pData ) );
+        pData = new MergeData( rTYP, rGID, rLID, aFilename );
+        aMap.insert( MergeDataHashMap::value_type( sKey, pData ) );
     }
 
     bFound = FALSE;
