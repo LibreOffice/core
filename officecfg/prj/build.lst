@@ -1,4 +1,4 @@
-oc  officecfg   :   soltools solenv transex3 LIBXSLT:libxslt NULL
+oc  officecfg   :    l10n soltools solenv LIBXSLT:libxslt NULL
 oc  officecfg                               usr30073    -   none NULL
 oc  officecfg                               usr1        -   all oc_mkout NULL
 oc  officecfg\registry\schema               nmake       -   all oc_reg_schema NULL
