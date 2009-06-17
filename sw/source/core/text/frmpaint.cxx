@@ -458,8 +458,8 @@ SwRect SwTxtFrm::Paint()
         long l;
         //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
         if ( IsVertical() )
-        pRepaint->Chg( ( GetUpper()->Frm() ).Pos() + ( GetUpper()->Prt() ).Pos(), ( GetUpper()->Prt() ).SSize() );
-        //End of SCMS
+            pRepaint->Chg( ( GetUpper()->Frm() ).Pos() + ( GetUpper()->Prt() ).Pos(), ( GetUpper()->Prt() ).SSize() );
+
         if( pRepaint->GetOfst() )
             pRepaint->Left( pRepaint->GetOfst() );
 

@@ -235,9 +235,7 @@ void SwFrm::CheckDirChange()
     BOOL bChg = bOldR2L != IsRightToLeft();
     //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
     BOOL bOldVertL2R = IsVertLR();
-    //if( ( IsVertical() != bOldVert ) || bChg || IsReverse() != bOldRev )
     if( ( IsVertical() != bOldVert ) || bChg || IsReverse() != bOldRev || bOldVertL2R != IsVertLR() )
-    //End of SCMS
     {
         InvalidateAll();
         if( IsLayoutFrm() )
@@ -332,10 +330,8 @@ Point SwFrm::GetFrmAnchorPos( sal_Bool bIgnoreFlysAnchoredAtThisFrame ) const
 {
     Point aAnchor = Frm().Pos();
     //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
-    //if ( IsVertical() || IsRightToLeft() )
     if ( ( IsVertical() && !IsVertLR() ) || IsRightToLeft() )
         aAnchor.X() += Frm().Width();
-    //End of SCMS
 
     if ( IsTxtFrm() )
     {
@@ -610,9 +606,8 @@ const SwRect SwFrm::PaintArea() const
     SwRect aRect = IsRowFrm() ? GetUpper()->Frm() : Frm();
     const BOOL bVert = IsVertical();
     //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
-    //SwRectFn fnRect = bVert ? fnRectVert : fnRectHori;
     SwRectFn fnRect = bVert ? ( IsVertLR() ? fnRectVertL2R : fnRectVert ) : fnRectHori;
-    //End of SCMS
+
     long nRight = (aRect.*fnRect->fnGetRight)();
     long nLeft  = (aRect.*fnRect->fnGetLeft)();
     const SwFrm* pTmp = this;
@@ -712,9 +707,8 @@ const SwRect SwFrm::UnionFrm( BOOL bBorder ) const
 {
     BOOL bVert = IsVertical();
     //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
-    //SwRectFn fnRect = bVert ? fnRectVert : fnRectHori;
     SwRectFn fnRect = bVert ? ( IsVertLR() ? fnRectVertL2R : fnRectVert ) : fnRectHori;
-    //End of SCMS
+
     long nLeft = (Frm().*fnRect->fnGetLeft)();
     long nWidth = (Frm().*fnRect->fnGetWidth)();
     long nPrtLeft = (Prt().*fnRect->fnGetLeft)();

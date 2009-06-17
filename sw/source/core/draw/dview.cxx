@@ -205,13 +205,9 @@ void SwDrawView::AddCustomHdl()
     }
 
     // add anchor handle:
-    //aHdl.AddHdl( new SwSdrHdl( aPos, pAnch->IsVertical() ||
-    //                                 pAnch->IsRightToLeft() ) );
     //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
     aHdl.AddHdl( new SwSdrHdl( aPos, ( pAnch->IsVertical() && !pAnch->IsVertLR() ) ||
                                      pAnch->IsRightToLeft() ) );
-    //End of SCMS
-
 }
 
 /*************************************************************************
@@ -760,13 +756,10 @@ const SwFrm* SwDrawView::CalcAnchor()
         aMyRect = pObj->GetSnapRect();
     }
 
-    //const sal_Bool bTopRight = pAnch && ( pAnch->IsVertical() ||
-    //                                      pAnch->IsRightToLeft() );
     //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
     const sal_Bool bTopRight = pAnch && ( ( pAnch->IsVertical() &&
                                             !pAnch->IsVertLR() ) ||
                                              pAnch->IsRightToLeft() );
-    //End of SCMS
     const Point aMyPt = bTopRight ? aMyRect.TopRight() : aMyRect.TopLeft();
 
     Point aPt;

@@ -487,17 +487,14 @@ void SwTxtFrm::AdjustFrm( const SwTwips nChgHght, sal_Bool bHasToFit )
             ASSERT( ! IsSwapped(),"Swapped frame while calculating nRstHeight" );
 
             //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
-            //nRstHeight = Frm().Left() + Frm().Width() -
-            //             ( GetUpper()->Frm().Left() + GetUpper()->Prt().Left() );
             if ( IsVertLR() )
                     nRstHeight = GetUpper()->Frm().Left()
                                + GetUpper()->Prt().Left()
                                + GetUpper()->Prt().Width()
                                - Frm().Left();
-               else
-            nRstHeight = Frm().Left() + Frm().Width() -
+            else
+                nRstHeight = Frm().Left() + Frm().Width() -
                             ( GetUpper()->Frm().Left() + GetUpper()->Prt().Left() );
-            //End of SCMS
          }
         else
             nRstHeight = GetUpper()->Frm().Top()
@@ -1153,9 +1150,7 @@ void SwTxtFrm::FormatAdjust( SwTxtFormatter &rLine,
     // of the frame for rotation. This point changes when growing/shrinking.
 
     //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
-    //if ( IsVertical() && nChg )
     if ( IsVertical() && !IsVertLR() && nChg )
-    //End of SCMS
     {
         SwRect &rRepaint = *(pPara->GetRepaint());
         rRepaint.Left( rRepaint.Left() - nChg );

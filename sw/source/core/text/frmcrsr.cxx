@@ -228,13 +228,10 @@ sal_Bool SwTxtFrm::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
 
     // nMaxY is an absolute value
     //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
-    //SwTwips nMaxY = bVert ?
-    //                Max( nFrmMaxY, nUpperMaxY ) :
-    //                Min( nFrmMaxY, nUpperMaxY );
     SwTwips nMaxY = bVert ?
                     ( bVertL2R ? Min( nFrmMaxY, nUpperMaxY ) : Max( nFrmMaxY, nUpperMaxY ) ) :
                     Min( nFrmMaxY, nUpperMaxY );
-    //End of SCMS
+
     sal_Bool bRet = sal_False;
 
     if ( pFrm->IsEmpty() || ! (pFrm->Prt().*fnRect->fnGetHeight)() )
@@ -250,11 +247,8 @@ sal_Bool SwTxtFrm::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
             if( nFirstOffset > 0 )
                 aPnt1.Y() += nFirstOffset;
             //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
-            //if ( aPnt1.X() < nMaxY )
-            //    aPnt1.X() = nMaxY;
             if ( aPnt1.X() < nMaxY && !bVertL2R )
                 aPnt1.X() = nMaxY;
-            //End of SCMS
             aPnt2.X() = aPnt1.X() + pFrm->Prt().Width();
             aPnt2.Y() = aPnt1.Y();
             if( aPnt2.X() < nMaxY )
@@ -407,24 +401,19 @@ sal_Bool SwTxtFrm::GetAutoPos( SwRect& rOrig, const SwPosition &rPos ) const
 
     // nMaxY is in absolute value
     //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
-    //SwTwips nMaxY = bVert ?
-     //               Max( (pFrm->*fnRect->fnGetPrtBottom)(), nUpperMaxY ) :
-     //               Min( (pFrm->*fnRect->fnGetPrtBottom)(), nUpperMaxY );
     SwTwips nMaxY = bVert ?
                     ( bVertL2R ? Min( (pFrm->*fnRect->fnGetPrtBottom)(), nUpperMaxY ) : Max( (pFrm->*fnRect->fnGetPrtBottom)(), nUpperMaxY ) ) :
                     Min( (pFrm->*fnRect->fnGetPrtBottom)(), nUpperMaxY );
-    //End of SCMS
+
     if ( pFrm->IsEmpty() || ! (pFrm->Prt().*fnRect->fnGetHeight)() )
     {
         Point aPnt1 = pFrm->Frm().Pos() + pFrm->Prt().Pos();
         Point aPnt2;
         if ( bVert )
         {
-            //if ( aPnt1.X() < nMaxY )
-            //    aPnt1.X() = nMaxY;
             if ( aPnt1.X() < nMaxY && !bVertL2R )
                 aPnt1.X() = nMaxY;
-            //End of SCMS
+
             aPnt2.X() = aPnt1.X() + pFrm->Prt().Width();
             aPnt2.Y() = aPnt1.Y();
             if( aPnt2.X() < nMaxY )

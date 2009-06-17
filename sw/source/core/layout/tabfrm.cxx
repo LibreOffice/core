@@ -4907,9 +4907,7 @@ SwTwips SwRowFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
             SwTwips nHeight = (Frm().*fnRect->fnGetHeight)();
             (Frm().*fnRect->fnSetHeight)( nHeight - nReal );
             //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
-            //if( IsVertical() && !bRev )
             if( IsVertical() && !IsVertLR() && !bRev )
-            //End of SCMS
                 Frm().Pos().X() += nReal;
         }
 
@@ -4924,9 +4922,7 @@ SwTwips SwRowFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
                 SwTwips nHeight = (Frm().*fnRect->fnGetHeight)();
                 (Frm().*fnRect->fnSetHeight)( nHeight + nReal );
                 //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
-                //if( IsVertical() && !bRev )
                 if( IsVertical() && !IsVertLR() && !bRev )
-                //End of SCMS
                     Frm().Pos().X() -= nReal;
             }
             nReal = nTmp;

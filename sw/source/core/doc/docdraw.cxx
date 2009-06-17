@@ -184,22 +184,6 @@ void lcl_AdjustPositioningAttr( SwDrawFrmFmt* _pFrmFmt,
         }
         // use geometry of drawing object
         const SwRect aObjRect = _rSdrObj.GetSnapRect();
-        //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
-        /*if ( bVert )
-        {
-            nHoriRelPos = aObjRect.Top() - aAnchorPos.Y();
-            nVertRelPos = aAnchorPos.X() - aObjRect.Right();
-        }
-        else if ( bR2L )
-        {
-            nHoriRelPos = aAnchorPos.X() - aObjRect.Right();
-            nVertRelPos = aObjRect.Top() - aAnchorPos.Y();
-        }
-        else
-        {
-            nHoriRelPos = aObjRect.Left() - aAnchorPos.X();
-            nVertRelPos = aObjRect.Top() - aAnchorPos.Y();
-        }*/
 
         if ( bVert )
         {

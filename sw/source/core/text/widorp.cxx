@@ -229,15 +229,13 @@ void SwTxtFrmBreak::SetRstHeight( const SwTxtMargin &rLine )
     nRstHeight = (pFrm->*fnRect->fnGetBottomMargin)();
 
     if ( bVert )
-        //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
-        //nRstHeight += nOrigin - pFrm->SwitchHorizontalToVertical( rLine.Y() );
-        {
-            if ( pFrm->IsVertLR() )
-                nRstHeight = (*fnRect->fnYDiff)( pFrm->SwitchHorizontalToVertical( rLine.Y() ) , nOrigin );
-            else
-                nRstHeight += nOrigin - pFrm->SwitchHorizontalToVertical( rLine.Y() );
-        }
-        //End of SCMS
+    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+    {
+           if ( pFrm->IsVertLR() )
+              nRstHeight = (*fnRect->fnYDiff)( pFrm->SwitchHorizontalToVertical( rLine.Y() ) , nOrigin );
+           else
+               nRstHeight += nOrigin - pFrm->SwitchHorizontalToVertical( rLine.Y() );
+    }
     else
         nRstHeight += rLine.Y() - nOrigin;
 }

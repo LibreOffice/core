@@ -425,9 +425,7 @@ SwTwips SwFtnContFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL )
     {
         (Frm().*fnRect->fnSetHeight)( (Frm().*fnRect->fnGetHeight)() + nDist );
         //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
-        //if( IsVertical() && !IsReverse() )
         if( IsVertical() && !IsVertLR() && !IsReverse() )
-        //End of SCMS
             Frm().Pos().X() -= nDist;
     }
     long nGrow = nDist - nAvail,
@@ -470,10 +468,8 @@ SwTwips SwFtnContFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL )
             //Den masslosen Wunsch koennen wir leider nur in Grenzen erfuellen.
             Frm().SSize().Height() -= nDist;
             //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
-            //if( IsVertical() && !IsReverse() )
             if( IsVertical() && !IsVertLR() && !IsReverse() )
                 Frm().Pos().X() += nDist;
-            //End of SCMS
         }
 
         //Nachfolger braucht nicht invalidiert werden, denn wir wachsen

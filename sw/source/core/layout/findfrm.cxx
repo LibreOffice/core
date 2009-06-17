@@ -1466,7 +1466,7 @@ void SwFrm::SetDirFlags( BOOL bVert )
                 //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
                 if ( !pAsk->bInvalidVert )
                     bInvalidVert = FALSE;
-                //End of SCMS
+
             }
         }
         else
