@@ -8,7 +8,7 @@
 #
 # $RCSfile: unitools.mk,v $
 #
-# $Revision: 1.59 $
+# $Revision: 1.53.30.4 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -63,14 +63,17 @@ USQ:="
 
 NULLDEV:=/dev/null
 
+
 # iz29609 helpmacro to check if file exists
 .IF "$(USE_SHELL)"=="bash"
-IFEXIST:=if test -e
-THEN:= ; then
+IFEXIST:=if [ -f 
+IFNOTEXIST:= if ! test -f
+THEN:= ] ; then
 FI:= ; fi
 PIPEERROR=2>&1 |
 .ELSE
 IFEXIST:=if ( -e
+IFNOTEXIST:=if ( ! -e
 THEN:= )
 FI:=
 PIPEERROR=|&
@@ -94,6 +97,7 @@ NULLDEV:=nul
 
 # iz29609 helpmacro to check if file exists 4nt style
 IFEXIST:=+if exist
+IFNOTEXIST:=+if not exist
 THEN:=
 FI:=
 PIPEERROR=|&

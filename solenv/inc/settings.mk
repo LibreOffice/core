@@ -8,7 +8,7 @@
 #
 # $RCSfile: settings.mk,v $
 #
-# $Revision: 1.238 $
+# $Revision: 1.214.30.8 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -638,6 +638,7 @@ $(LOCAL_COMMON_OUT)$/inc$/%world.mk :
 .ENDIF			# "$(PRJNAME)"!="solenv"
 .ENDIF			# "$(common_build)"!=""
 
+.INCLUDE .IGNORE : office.mk
 
 # Misc-Pfad
 .IF "$(UNR)"!=""
@@ -648,6 +649,34 @@ MISC=$(OUT)$/misc
 # pointing to misc in common output tree if exists
 COMMONMISC={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))}
 .ENDIF
+
+L10N_MODULE*=l10n
+ALT_L10N_MODULE*=l10n_so
+
+.IF "$(WITH_LANG)"!=""
+.INCLUDE .IGNORE: $(SOLARSRC)$/$(L10N_MODULE)/localization_present.mk
+.INCLUDE .IGNORE: $(SOLARSRC)$/$(ALT_L10N_MODULE)/localization_present.mk
+
+#.IF "$(USE_SHELL)"!="4nt"
+#PATH_IN_MODULE:=$(subst,$(shell @+cd $(PRJ);pwd)$/,$(NULL) $(PWD))
+#.ELSE			# "$(USE_SHELL)"!="4nt"
+#PATH_IN_MODULE:=$(subst,$(shell @+cd $(PRJ) ^ echo %_cwd)$/,$(NULL) $(PWD))
+#.ENDIF			# "$(USE_SHELL)"!="4nt"
+.IF "$(LOCALIZATION_FOUND)"!="" || "$(ALT_LOCALIZATION_FOUND)"!=""
+TRYSDF:=$(SOLARSRC)$/$(L10N_MODULE)$/$(COMMON_OUTDIR)$(PROEXT)$/misc/sdf$/$(PRJNAME)$/$(PATH_IN_MODULE)$/localize.sdf
+.IF "$(ALT_LOCALIZATION_FOUND)"!=""
+TRYALTSDF:=$(SOLARSRC)$/$(ALT_L10N_MODULE)$/$(COMMON_OUTDIR)$(PROEXT)$/misc/sdf$/$(PRJNAME)$/$(PATH_IN_MODULE)$/localize.sdf
+# TODO: check performance impact...
+LOCALIZESDF:=$(strip $(shell @+$(IFEXIST) $(TRYALTSDF) $(THEN) echo $(TRYALTSDF) $(FI)))
+.ENDIF			# "$(ALT_LOCALIZATION_FOUND)"!=""
+some_local_helper_var:=$(strip $(shell +$(IFEXIST) $(TRYSDF) $(THEN) echo $(TRYSDF) $(FI) ))
+LOCALIZESDF!:=$(eq,$(LOCALIZESDF),$(NULL) $(some_local_helper_var) $(LOCALIZESDF))
+LOCALIZESDF!:=$(eq,$(LOCALIZESDF),$(NULL) $(COMMONMISC)$/$(PRJNAME)$/$(PATH_IN_MODULE)$/localize.sdf $(LOCALIZESDF))
+.ELSE			# "$(LOCALIZATION_FOUND)"!="" || "$(ALT_LOCALIZATION_FOUND)"!=""
+LOCALIZESDF:=$(COMMONMISC)$/$(PRJNAME)$/$(PATH_IN_MODULE)$/localize.sdf
+.ENDIF			# "$(LOCALIZATION_FOUND)"!="" || "$(ALT_LOCALIZATION_FOUND)"!=""
+.ENDIF			# "$(WITH_LANG)"!=""
+
 
 OUTCXX=$(OUT)$/cxx
 
@@ -707,7 +736,6 @@ CLASSPATH!:=$(CLASSPATH:s/tkt/no/)
 PROCESSOUT*:=$(MISC)
 
 # Makros fuer die Librarynamen des Solar
-.INCLUDE .IGNORE : office.mk
 .INCLUDE : libs.mk
 
 .IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
@@ -808,13 +836,16 @@ SOLARPARDIR=$(SOLARVERSION)$/$(INPATH)$/par$(EXT_UPDMINOR)
 SOLARXMLDIR=$(SOLARVERSION)$/$(INPATH)$/xml$(EXT_UPDMINOR)
 SOLARDOCDIR=$(SOLARVERSION)$/$(INPATH)$/doc$(EXT_UPDMINOR)
 SOLARPCKDIR=$(SOLARVERSION)$/$(INPATH)$/pck$(EXT_UPDMINOR)
+SOLARSDFDIR=$(SOLARVERSION)$/$(INPATH)$/sdf$(EXT_UPDMINOR)
 SOLARCOMMONBINDIR=$(SOLARVERSION)$/common$(PROEXT)$/bin$(EXT_UPDMINOR)
 SOLARCOMMONRESDIR=$(SOLARVERSION)$/common$(PROEXT)$/res$(EXT_UPDMINOR)
 SOLARCOMMONPCKDIR=$(SOLARVERSION)$/common$(PROEXT)$/pck$(EXT_UPDMINOR)
+SOLARCOMMONSDFDIR=$(SOLARVERSION)$/common$(PROEXT)$/sdf$(EXT_UPDMINOR)
 .IF "$(common_build)"==""
 SOLARCOMMONBINDIR=$(SOLARBINDIR)
 SOLARCOMMONRESDIR=$(SOLARRESDIR)
 SOLARCOMMONPCKDIR=$(SOLARPCKDIR)
+SOLARCOMMONSDFDIR=$(SOLARSDFDIR)
 .ENDIF
 
 .EXPORT : SOLARBINDIR

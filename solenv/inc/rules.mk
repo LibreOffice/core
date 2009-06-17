@@ -752,37 +752,38 @@ $(MISC)$/%.sh : %.sh
 $(COMMONMISC)$/$(TARGET)$/%.ulf : %.ulf
     -$(MKDIR) $(@:d)
     -$(RM) $@
-    $(ULFEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m localize.sdf -l all
+    $(ULFEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m $(LOCALIZESDF) -l all
     $(RENAME) $@.$(INPATH) $@
     -$(RM) $@.$(INPATH)
 
 $(COMMONMISC)$/$(TARGET)$/%.xrb : %.xrb
     -$(MKDIR) $(@:d)
     -$(RM) $@
-    $(XMLEX) -t xrb -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m localize.sdf -l all
+    $(XMLEX) -t xrb -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m $(LOCALIZESDF) -l all
     $(RENAME) $@.$(INPATH) $@
     -$(RM) $@.$(INPATH)
 
 $(COMMONMISC)$/$(MYPATH)$/%.xrm : %.xrm
     -$(MKDIRHIER) $(@:d)
     -$(RM) $@
-    $(XRMEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m localize.sdf -l all
+    echo trysdf = $(TRYSDF)
+    $(XRMEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m $(LOCALIZESDF) -l all
     $(RENAME) $@.$(INPATH) $@
     -$(RM) $@.$(INPATH)
 
-$(COMMONMISC)$/$(TARGET)$/%.xrm : %.xrm
-    -$(MKDIRHIER) $(@:d)
-    -$(RM) $@
-    $(XRMEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m localize.sdf -l all
-    $(RENAME) $@.$(INPATH) $@
-    -$(RM) $@.$(INPATH)
-
-$(COMMONMISC)$/%.xrm : %.xrm
-    -$(MKDIR) $(@:d)
-    -$(RM) $@
-    $(XRMEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m localize.sdf -l all
-    $(RENAME) $@.$(INPATH) $@
-    -$(RM) $@.$(INPATH)
+#$(COMMONMISC)$/$(TARGET)$/%.xrm : %.xrm
+#    -$(MKDIRHIER) $(@:d)
+#    -$(RM) $@
+#	$(XRMEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m $(LOCALIZESDF) -l all
+#    $(RENAME) $@.$(INPATH) $@
+#    -$(RM) $@.$(INPATH)
+#
+#$(COMMONMISC)$/%.xrm : %.xrm
+#    -$(MKDIR) $(@:d)
+#    -$(RM) $@
+#	$(XRMEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m $(LOCALIZESDF) -l all
+#    $(RENAME) $@.$(INPATH) $@
+#    -$(RM) $@.$(INPATH)
 .ENDIF			# "$(WITH_LANG)"!=""
 
 .IF "$(WITH_LANG)"!=""
@@ -818,15 +819,16 @@ $(COMMONMISC)$/$(TARGET)$/%.uulf : $$(@:b).ulf
     @$(RENAME) $@.$(INPATH) $@
     @-$(RM) $@.$(INPATH)
 
-#$(COMMONMISC)$/$(TARGET)$/%.xrm : %.xrm
-#    -$(MKDIR) $(@:d)
-#    -$(RM) $@
-#	$(XRMEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m localize.sdf -l all
-#    $(RENAME) $@.$(INPATH) $@
-#    -$(RM) $@.$(INPATH)
+# This is still needed?????
+$(COMMONMISC)$/$(TARGET)$/%.xrm : %.xrm
+    -$(MKDIR) $(@:d)
+    -$(RM) $@
+    $(XRMEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m $(LOCALIZESDF) -l all
+    $(RENAME) $@.$(INPATH) $@
+    -$(RM) $@.$(INPATH)
 
 # dirty hack
 # if local *.sdf file is missing
-%.sdf:
-    echo > $@
+#%.sdf:
+#    echo > $@
 
