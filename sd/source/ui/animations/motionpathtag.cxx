@@ -508,6 +508,7 @@ bool MotionPathTag::MouseButtonDown( const MouseEvent& rMEvt, SmartHdl& rHdl )
     {
         SmartTagReference xTag( this );
         mrView.getSmartTags().select( xTag );
+        selectionChanged();
         return true;
     }
     else
@@ -941,16 +942,13 @@ void MotionPathTag::CheckPossibilities()
     {
         if( isSelected() )
         {
-            if( mrView.IsFrameDragSingles() )
-            {
-                mrView.SetMoveAllowed( true );
-                mrView.SetMoveProtected( false );
-                mrView.SetResizeFreeAllowed( true );
-                mrView.SetResizePropAllowed( true );
-                mrView.SetResizeProtected( false );
+            mrView.SetMoveAllowed( true );
+            mrView.SetMoveProtected( false );
+            mrView.SetResizeFreeAllowed( true );
+            mrView.SetResizePropAllowed( true );
+            mrView.SetResizeProtected( false );
 
-            }
-            else
+            if( !mrView.IsFrameDragSingles() )
             {
                 bool b1stSmooth(true);
                 bool b1stSegm(true);
@@ -1117,8 +1115,18 @@ void MotionPathTag::deselect()
         if( pPts )
             pPts->Clear();
     }
+
+    selectionChanged();
 }
 
+void MotionPathTag::selectionChanged()
+{
+    if( mrView.GetViewShell() && mrView.GetViewShell()->GetViewFrame() )
+    {
+        SfxBindings& rBindings = mrView.GetViewShell()->GetViewFrame()->GetBindings();
+        rBindings.InvalidateAll(TRUE);
+    }
+}
 // --------------------------------------------------------------------
 // IPolyPolygonEditorController
 // --------------------------------------------------------------------

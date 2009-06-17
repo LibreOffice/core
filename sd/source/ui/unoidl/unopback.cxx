@@ -141,18 +141,56 @@ void SdUnoPageBackground::fillItemSet( SdDrawDocument* pDoc, SfxItemSet& rSet ) 
                 pAny = mpPropSet->GetUsrAnyForID( aIt->nWID );
                 if( pAny )
                 {
-                    if ( aIt->nWID == XATTR_FILLBITMAP )
+                    OUString aPropertyName( OUString::createFromAscii(pMap->pName));
+                    switch( pMap->nWID )
                     {
-                        if ( ( ( pAny->getValueType() == ::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap >*)0) ) ||
-                                ( pAny->getValueType() == ::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >*)0) ) ) &&
-                                ( aIt->nMemberId == MID_BITMAP ) )
+                        case XATTR_FILLFLOATTRANSPARENCE :
+                        case XATTR_FILLGRADIENT :
                         {
-                            setPropertyValue( aIt->sName, *pAny );
+                            if ( ( pAny->getValueType() == ::getCppuType((const ::com::sun::star::awt::Gradient*)0) )
+                                && ( pMap->nMemberId == MID_FILLGRADIENT ) )
+                            {
+                                setPropertyValue( aPropertyName, *pAny );
+                            }
+                            else if ( ( pAny->getValueType() == ::getCppuType((const ::rtl::OUString*)0) ) &&
+                                        ( pMap->nMemberId == MID_NAME ) )
+                            {
+                                setPropertyValue( aPropertyName, *pAny );
+                            }
                         }
-                        else if ( ( pAny->getValueType() == ::getCppuType((const ::rtl::OUString*)0) ) &&
-                                    ( ( aIt->nMemberId == MID_NAME ) || ( aIt->nMemberId == MID_GRAFURL ) ) )
+                        break;
+                        case XATTR_FILLHATCH :
                         {
-                            setPropertyValue( aIt->sName, *pAny );
+                            if ( ( pAny->getValueType() == ::getCppuType((const ::com::sun::star::drawing::Hatch*)0) )
+                                && ( pMap->nMemberId == MID_FILLHATCH ) )
+                            {
+                                setPropertyValue( aPropertyName, *pAny );
+                            }
+                            else if ( ( pAny->getValueType() == ::getCppuType((const ::rtl::OUString*)0) ) &&
+                                        ( pMap->nMemberId == MID_NAME ) )
+                            {
+                                setPropertyValue( aPropertyName, *pAny );
+                            }
+                        }
+                        break;
+                        case XATTR_FILLBITMAP :
+                        {
+                            if ( ( ( pAny->getValueType() == ::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap >*)0) ) ||
+                                    ( pAny->getValueType() == ::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >*)0) ) ) &&
+                                    ( pMap->nMemberId == MID_BITMAP ) )
+                            {
+                                setPropertyValue( aPropertyName, *pAny );
+                            }
+                            else if ( ( pAny->getValueType() == ::getCppuType((const ::rtl::OUString*)0) ) &&
+                                        ( ( pMap->nMemberId == MID_NAME ) || ( pMap->nMemberId == MID_GRAFURL ) ) )
+                            {
+                                setPropertyValue( aPropertyName, *pAny );
+                            }
+                        }
+                        break;
+
+                        default:
+                            setPropertyValue( aPropertyName, *pAny );
                         }
                     }
                     else

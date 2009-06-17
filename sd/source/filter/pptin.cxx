@@ -2599,6 +2599,14 @@ SdrObject* ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
     // Animationseffekte des Objektes lesen
     if ( pObj )
     {
+        // further setup placeholder objects
+        if( pObj->ISA(SdrPageObj) && pData )
+        {
+            const ProcessData* pProcessData=(const ProcessData*)pData;
+            if( pProcessData->pPage )
+                pProcessData->pPage->InsertPresObj( pObj, PRESOBJ_PAGE );
+        }
+
         BOOL bInhabitanceChecked = FALSE;
         BOOL bAnimationInfoFound = FALSE;
         DffRecordHeader aMasterShapeHd;

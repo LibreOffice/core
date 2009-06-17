@@ -751,8 +751,6 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
                                    SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aIsChangedItem, &eAutoLayout, 0L);
                             }
 
-                            pDoc->SetChanged(!bIsDocEmpty);
-
                             // clear document info
                             using namespace ::com::sun::star;
                             uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
@@ -764,6 +762,8 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
                                 SvtUserOptions().GetFullName() );
                             xDocProps->setTemplateName(xDocProps->getTitle());
                             xDocProps->setTemplateURL(pPilotDlg->GetDocPath());
+
+                            pDoc->SetChanged(!bIsDocEmpty);
 
                             pDocShell->SetUseUserData(TRUE);
 
