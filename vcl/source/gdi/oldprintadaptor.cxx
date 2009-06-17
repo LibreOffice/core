@@ -71,6 +71,14 @@ void OldStylePrintAdaptor::StartPage()
     mpData->maPages.back().maPageSize.Width = aPaperSize.getWidth();
     mpData->maPages.back().maPageSize.Height = aPaperSize.getHeight();
     getPrinter()->SetConnectMetaFile( &mpData->maPages.back().maPage );
+
+    // copy state into metafile
+    boost::shared_ptr<Printer> pPrinter( getPrinter() );
+    pPrinter->SetMapMode( pPrinter->GetMapMode() );
+    pPrinter->SetFont( pPrinter->GetFont() );
+    pPrinter->SetDrawMode( pPrinter->GetDrawMode() );
+    pPrinter->SetLineColor( pPrinter->GetLineColor() );
+    pPrinter->SetFillColor( pPrinter->GetFillColor() );
 }
 
 void OldStylePrintAdaptor::EndPage()
