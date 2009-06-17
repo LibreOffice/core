@@ -150,6 +150,32 @@ BOOL ScDocument::GetName( SCTAB nTab, String& rName ) const
     return FALSE;
 }
 
+BOOL ScDocument::SetCodeName( SCTAB nTab, String& rName )
+{
+    if (VALIDTAB(nTab))
+    {
+        if (pTab[nTab])
+        {
+            pTab[nTab]->SetCodeName( rName );
+            return TRUE;
+        }
+    }
+    OSL_TRACE( "**** can't set code name %s", rtl::OUStringToOString( rName, RTL_TEXTENCODING_UTF8 ).getStr() );
+    return FALSE;
+}
+
+BOOL ScDocument::GetCodeName( SCTAB nTab, String& rName ) const
+{
+    if (VALIDTAB(nTab))
+        if (pTab[nTab])
+        {
+            pTab[nTab]->GetCodeName( rName );
+            return TRUE;
+        }
+    rName.Erase();
+    return FALSE;
+}
+
 
 BOOL ScDocument::GetTable( const String& rName, SCTAB& rTab ) const
 {
@@ -289,6 +315,7 @@ BOOL ScDocument::InsertTab( SCTAB nPos, const String& rName,
         if (nPos == SC_TAB_APPEND || nPos == nTabCount)
         {
             pTab[nTabCount] = new ScTable(this, nTabCount, rName);
+            pTab[nTabCount]->SetCodeName( rName );
             ++nMaxTableNumber;
             if ( bExternalDocument )
                 pTab[nTabCount]->SetVisible( FALSE );
@@ -321,10 +348,16 @@ BOOL ScDocument::InsertTab( SCTAB nPos, const String& rName,
                 for (i = 0; i <= MAXTAB; i++)
                     if (pTab[i])
                         pTab[i]->UpdateInsertTab(nPos);
+
                 for (i = nTabCount; i > nPos; i--)
+                {
                     pTab[i] = pTab[i - 1];
+                }
+
                 pTab[nPos] = new ScTable(this, nPos, rName);
+                pTab[nPos]->SetCodeName( rName );
                 ++nMaxTableNumber;
+
                 for (i = 0; i <= MAXTAB; i++)
                     if (pTab[i])
                         pTab[i]->UpdateCompile();

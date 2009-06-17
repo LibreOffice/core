@@ -113,7 +113,7 @@ using namespace com::sun::star;
 
 
 ImportExcel8::ImportExcel8( XclImpRootData& rImpData, SvStream& rStrm ) :
-    ImportExcel( rImpData, rStrm )
+    ImportExcel( rImpData, rStrm ), mnTab(0)
 {
     delete pFormConv;
 
@@ -242,9 +242,15 @@ void ImportExcel8::Codename( BOOL bWorkbookGlobals )
         if( aName.Len() )
         {
             if( bWorkbookGlobals )
+            {
                 GetExtDocOptions().GetDocSettings().maGlobCodeName = aName;
+                GetDoc().SetCodeName( aName );
+            }
             else
+            {
                 GetExtDocOptions().AppendCodeName( aName );
+                GetDoc().SetCodeName( mnTab++, aName );
+            }
         }
     }
 }

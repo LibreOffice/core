@@ -81,6 +81,7 @@ private:
     ScColumn        aCol[MAXCOLCOUNT];
 
     String          aName;
+    String          aCodeName;
     String          aComment;
     BOOL            bScenario;
     BOOL            bLayoutRTL;
@@ -211,6 +212,9 @@ public:
 
     void        GetName( String& rName ) const;
     void        SetName( const String& rNewName );
+
+    void        GetCodeName( String& rName ) const {  rName = aCodeName; }
+    void        SetCodeName( const String& rNewName ) { aCodeName = rNewName; }
 
     const String&   GetUpperName() const;
 

@@ -124,6 +124,7 @@ extern BOOL bIsOlk, bOderSo;
 ScTable::ScTable( ScDocument* pDoc, SCTAB nNewTab, const String& rNewName,
                     BOOL bColInfo, BOOL bRowInfo ) :
     aName( rNewName ),
+    aCodeName( rNewName ),
     bScenario( FALSE ),
     bLayoutRTL( FALSE ),
     bLoadingRTL( FALSE ),

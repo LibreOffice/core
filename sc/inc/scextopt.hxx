@@ -126,6 +126,8 @@ public:
     const String&       GetCodeName( size_t nIdx ) const;
     /** Appends a codename for a sheet. */
     void                AppendCodeName( const String& rCodeName );
+    void                SetCodeName( const String& rCodeName, size_t nIdx );
+    void                DeleteCodeName( size_t nIdx );
 
 private:
     ::std::auto_ptr< ScExtDocOptionsImpl > mxImpl;
