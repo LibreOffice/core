@@ -53,6 +53,9 @@ namespace sdr
                 return (SdrObjCustomShape&)GetSdrObject();
             }
 
+            // #i101684# internal tooling
+            basegfx::B2DRange getCorrectedTextBoundRect() const;
+
         public:
             // basic constructor, used from SdrObject.
             ViewContactOfSdrObjCustomShape(SdrObjCustomShape& rCustomShape);

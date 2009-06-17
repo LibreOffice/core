@@ -52,6 +52,8 @@
 #include "svdstr.hrc"
 #include "svdglob.hxx"
 
+//#define PLEASE_DEBUG_THE_TABLES 1
+
 using ::rtl::OUString;
 using namespace ::osl;
 using namespace ::vos;
@@ -620,14 +622,29 @@ void TableModel::notifyModification()
     ::osl::MutexGuard guard( m_aMutex );
     if( (mnNotifyLock == 0) && mpTableObj && mpTableObj->GetModel() )
     {
+        mbNotifyPending = false;
+
+        ::cppu::OInterfaceContainerHelper * pModifyListeners = rBHelper.getContainer( XModifyListener::static_type() );
+        if( pModifyListeners )
+        {
+            EventObject aSource;
+            aSource.Source = static_cast< ::cppu::OWeakObject* >(this);
+            pModifyListeners->notifyEach( &XModifyListener::modified, aSource);
+        }
+    }
+    else
+    {
+        mbNotifyPending = true;
+    }
 
 #ifdef PLEASE_DEBUG_THE_TABLES
-        FILE* file = fopen( "e:\\table.log","a+" );
+        FILE* file = fopen( "c:\\table.xml","w" );
 
         const sal_Int32 nColCount = getColumnCountImpl();
         const sal_Int32 nRowCount = getRowCountImpl();
 
-        fprintf( file, "<table columns=\"%ld\" rows=\"%ld\">\n\r", nColCount, nRowCount );
+        fprintf( file, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\r" );
+        fprintf( file, "<table columns=\"%ld\" rows=\"%ld\" updated=\"%s\">\n\r", nColCount, nRowCount, mbNotifyPending ? "false" : "true");
 
         for( sal_Int32 nCol = 0; nCol < nColCount; ++nCol )
         {
@@ -647,9 +664,9 @@ void TableModel::notifyModification()
                 sal_Int32 nColSpan = xCell->getColumnSpan();
                 sal_Bool bMerged = xCell->isMerged();
 
-                if( nColSpan > 1 )
+                if( nColSpan != 1 )
                     fprintf( file, " column-span=\"%ld\"", nColSpan );
-                if( nRowSpan > 1 )
+                if( nRowSpan != 1 )
                     fprintf( file, " row-span=\"%ld\"", nRowSpan );
 
                 if( bMerged )
@@ -663,20 +680,6 @@ void TableModel::notifyModification()
         fprintf( file, "</table>\n\r" );
         fclose( file );
 #endif
-        mbNotifyPending = false;
-
-        ::cppu::OInterfaceContainerHelper * pModifyListeners = rBHelper.getContainer( XModifyListener::static_type() );
-        if( pModifyListeners )
-        {
-            EventObject aSource;
-            aSource.Source = static_cast< ::cppu::OWeakObject* >(this);
-            pModifyListeners->notifyEach( &XModifyListener::modified, aSource);
-        }
-    }
-    else
-    {
-        mbNotifyPending = true;
-    }
 }
 
 // -----------------------------------------------------------------------------
@@ -784,19 +787,7 @@ void TableModel::insertColumns( sal_Int32 nIndex, sal_Int32 nCount )
                         // cell merges over newly created columns, so add the new columns to the merged cell
                         const sal_Int32 nRowSpan = xCell->getRowSpan();
                         nColSpan += nCount;
-                        if( bUndo )
-                            xCell->AddUndo();
-                        xCell->merge( nColSpan, nRowSpan );
-                        // set newly inserted cells to merged state
-                        for( sal_Int32 nColOffset = 0; nColOffset < nCount; ++nColOffset )
-                        {
-                            for( sal_Int32 nRowOffset = 0; nRowOffset < nRowSpan; ++nRowOffset )
-                            {
-                                CellRef xMergedCell( getCell( nIndex + nColOffset, nRow + nRowOffset ) );
-                                if( xMergedCell.is() )
-                                    xMergedCell->setMerged();
-                            }
-                        }
+                        merge( nCol, nRow, nColSpan, nRowSpan );
                     }
                 }
             }
@@ -909,7 +900,10 @@ void TableModel::removeColumns( sal_Int32 nIndex, sal_Int32 nCount )
                 maRows[nRows]->removeColumns( nIndex, nCount );
 
             if( bUndo )
+            {
                 pModel->EndUndo();
+                pModel->SetChanged();
+            }
         }
         catch( Exception& )
         {
@@ -964,20 +958,7 @@ void TableModel::insertRows( sal_Int32 nIndex, sal_Int32 nCount )
                         // cell merges over newly created columns, so add the new columns to the merged cell
                         const sal_Int32 nColSpan = xCell->getColumnSpan();
                         nRowSpan += nCount;
-                        if( bUndo )
-                            xCell->AddUndo();
-                        xCell->merge( nColSpan, nRowSpan );
-
-                        // set newly inserted cells to merged state
-                        for( sal_Int32 nColOffset = 1; nColOffset < nColSpan; ++nColOffset )
-                        {
-                            for( sal_Int32 nRowOffset = 0; nRowOffset <= nCount; ++nRowOffset )
-                            {
-                                CellRef xMergedCell( getCell( nCol + nColOffset - 1, nIndex + nRowOffset ) );
-                                if( xMergedCell.is() )
-                                    xMergedCell->setMerged();
-                            }
-                        }
+                        merge( nCol, nRow, nColSpan, nRowSpan );
                     }
                 }
             }
@@ -1075,7 +1056,10 @@ void TableModel::removeRows( sal_Int32 nIndex, sal_Int32 nCount )
             remove_range<RowVector,RowVector::iterator>( maRows, nIndex, nCount );
 
             if( bUndo )
+            {
                 pModel->EndUndo();
+                pModel->SetChanged();
+            }
         }
         catch( Exception& )
         {
@@ -1195,6 +1179,50 @@ void TableModel::optimize()
     if( bWasModified )
         setModified(sal_True);
 }
+
+// -----------------------------------------------------------------------------
+
+void TableModel::merge( sal_Int32 nCol, sal_Int32 nRow, sal_Int32 nColSpan, sal_Int32 nRowSpan )
+{
+    const bool bUndo = pModel && mpTableObj->IsInserted() && pModel->IsUndoEnabled();
+
+    const sal_Int32 nLastRow = nRow + nRowSpan;
+    const sal_Int32 nLastCol = nCol + nColSpan;
+
+    if( (nLastRow > getRowCount()) || (nLastCol > getRowCount() ) )
+    {
+        DBG_ERROR("TableModel::merge(), merge beyound the table!");
+    }
+
+    // merge first cell
+    CellRef xOriginCell( dynamic_cast< Cell* >( getCellByPosition( nCol, nRow ).get() ) );
+    if( xOriginCell.is() )
+    {
+        if( bUndo )
+            xOriginCell->AddUndo();
+        xOriginCell->merge( nColSpan, nRowSpan );
+    }
+
+    sal_Int32 nTempCol = nCol + 1;
+
+    // merge remaining cells
+    for( ; nRow < nLastRow; nRow++ )
+    {
+        for( ; nTempCol < nLastCol; nTempCol++ )
+        {
+            CellRef xCell( dynamic_cast< Cell* >( getCellByPosition( nTempCol, nRow ).get() ) );
+            if( xCell.is() && !xCell->isMerged() )
+            {
+                if( bUndo )
+                    xCell->AddUndo();
+                xCell->setMerged();
+                xOriginCell->mergeContent( xCell );
+            }
+        }
+        nTempCol = nCol;
+    }
+}
+
 
 // -----------------------------------------------------------------------------
 

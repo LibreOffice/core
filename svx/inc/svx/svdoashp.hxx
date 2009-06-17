@@ -199,6 +199,8 @@ public:
     virtual void NbcSetSnapRect(const Rectangle& rRect);
     virtual void NbcSetLogicRect(const Rectangle& rRect);
 
+    virtual SdrGluePoint GetVertexGluePoint(USHORT nNum) const;
+
     virtual void NbcSetStyleSheet( SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr );
 
     // special drag methods
