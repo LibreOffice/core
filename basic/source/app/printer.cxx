@@ -64,40 +64,32 @@ public:
     void ChangeMessage( short );
 };
 
-BasicPrinter::BasicPrinter() : Printer()
+BasicPrinter::BasicPrinter() : mpPrinter( new Printer() )
 {
     nPage = 0; nLine = 9999;
-    SetMapMode( MapMode( MAP_POINT ) );
-    Size s( GetOutputSize() );
+    mpPrinter->SetMapMode( MapMode( MAP_POINT ) );
+    Size s( mpPrinter->GetOutputSize() );
     // Use 10 point font
     Font aFont( FAMILY_MODERN, Size( 0, 10 ) );
     aFont.SetPitch( PITCH_FIXED );
-    SetFont( aFont );
+    mpPrinter->SetFont( aFont );
     // Output: 6 Lines/Inch = 12 Point
     nLines = (short) s.Height() / 12;
     nYoff  = 12;
-    // FIXME: new API
-    #if 0
-    SetStartPrintHdl( LINK( this, BasicPrinter, StartPrintHdl ) );
-    SetEndPrintHdl( LINK( this, BasicPrinter, EndPrintHdl ) );
-    SetPrintPageHdl( LINK( this, BasicPrinter, PrintPageHdl ) );
-    #endif
 }
 
 void BasicPrinter::Header()
 {
-    // FIXME: new API
-    // if( nPage ) EndPage();
+    if( nPage ) mpListener->EndPage();
     nPage++;
-    // FIXME: new API
-    // StartPage();
+    mpListener->StartPage();
     String aHdr;
     String aPage( SttResId( IDS_PAGE ) );
     aPage.Append( String::CreateFromInt32(nPage) );
     aHdr = aFile.Copy( 0, 80 - aPage.Len() );
     aHdr.Expand( 80 - aPage.Len(), ' ' );
     aHdr += aPage;
-    DrawText( Point( 0, 0 ), aHdr );
+    mpPrinter->DrawText( Point( 0, 0 ), aHdr );
     nLine = 2;
 }
 
@@ -105,101 +97,29 @@ void BasicPrinter::Print( const String& rFile, const String& rText, BasicFrame *
 {
     nPage = 0; nLine = 9999;
     aFile = rFile;
-    // Setup dialog
-    SttResId aResId( IDD_PRINT_DIALOG );
-    pDlg = new PrintingDialog
-          ( aBasicApp.pFrame, this, aResId, aFile );
-    // Set position of dialog
-    Size s1 = aBasicApp.pFrame->GetSizePixel();
-    Size s2 = pDlg->GetSizePixel();
-    pDlg->SetPosPixel( Point( (s1.Width() - s2.Width() )  / 2,
-                                (s1.Height()- s2.Height() ) / 2 ) );
     // Disable PRINT-Menu
     MenuBar* pBar = pFrame->GetMenuBar();
     Menu* pFileMenu = pBar->GetPopupMenu( RID_APPFILE );
     pFileMenu->EnableItem( RID_FILEPRINT, FALSE );
 
-    pDlg->ChangeMessage( 1 );
-    pDlg->Show();
-
-    // FIXME: new API
-    // StartJob( rFile );
-    // StartPage();
+    mpListener.reset( new vcl::OldStylePrintAdaptor( mpPrinter ) );
+    mpListener->StartPage();
     xub_StrLen nDone=0;
     while( nDone < rText.Len() )
     {
         if( nLine >= nLines ) Header();
         xub_StrLen nLineEnd = std::min( rText.Search( '\n', nDone ), rText.Search( '\r', nDone ) );
-        DrawText( Point( 0, nLine * nYoff ), rText, nDone, nLineEnd-nDone-1 );
+        mpPrinter->DrawText( Point( 0, nLine * nYoff ), rText, nDone, nLineEnd-nDone-1 );
         nDone = nLineEnd;
         if( nDone <= rText.Len() && rText.GetChar(nDone) == '\r' ) nDone++;
         if( nDone <= rText.Len() && rText.GetChar(nDone) == '\n' ) nDone++;
         nLine++;
-        Application::Reschedule();
     }
-    // FIXME: new API
-    // EndPage();
-    // EndJob();
+    mpListener->EndPage();
+
+    Printer::PrintJob( mpListener, mpPrinter->GetJobSetup() );
     nPage = 1;
-    while( IsPrinting() ) Application::Reschedule();
-    delete pDlg; pDlg = NULL;
     pFileMenu->EnableItem( RID_FILEPRINT, TRUE );
 }
 
-IMPL_LINK_INLINE_START( BasicPrinter, StartPrintHdl, Printer *, pPrinter )
-{
-    (void) pPrinter; /* avoid warning about unused parameter */
-    if( pDlg != NULL )
-        pDlg->Show();
-    return 0;
-}
-IMPL_LINK_INLINE_END( BasicPrinter, StartPrintHdl, Printer *, pPrinter )
-
-IMPL_LINK_INLINE_START( BasicPrinter, EndPrintHdl, Printer *, pPrinter )
-{
-    (void) pPrinter; /* avoid warning about unused parameter */
-    if( pDlg != NULL)
-       pDlg->Hide();
-    return 0;
-}
-IMPL_LINK_INLINE_END( BasicPrinter, EndPrintHdl, Printer *, pPrinter )
-
-IMPL_LINK_INLINE_START( BasicPrinter, PrintPageHdl, Printer *, pPrinter )
-{
-    (void) pPrinter; /* avoid warning about unused parameter */
-    if( pDlg != NULL)
-        pDlg->ChangeMessage( nPage );
-    return 0;
-}
-IMPL_LINK_INLINE_END( BasicPrinter, PrintPageHdl, Printer *, pPrinter )
-
-IMPL_LINK_INLINE( BasicPrinter, Abort , void *, EMPTYARG,
-{
-    AbortJob();
-    return 0L;
-}
-)
-
-/////////////////////////////////////////////////////////////////////////
-
-PrintingDialog::PrintingDialog
-              ( Window* pParent, BasicPrinter* pPrn, ResId& rId, String& rName )
-: ModelessDialog( pParent, rId )
-, aName  ( rName )
-, aText  ( this, ResId( RID_TEXT, *rId.GetResMgr() ) )
-, aCancel( this, ResId( RID_CANCEL, *rId.GetResMgr() ) )
-{
-    FreeResource();
-    aCancel.SetClickHdl( LINK( pPrn, BasicPrinter, Abort ) );
-}
-
-void PrintingDialog::ChangeMessage( short nPage )
-{
-    String aMsg( SttResId( IDS_PRINTMSG ) );
-    aMsg += aName;
-    aMsg += CUniString("\n");
-    aMsg += String( SttResId( IDS_PAGE ) );
-    aMsg += String::CreateFromInt32( nPage );
-    aText.SetText( aMsg );
-}
 

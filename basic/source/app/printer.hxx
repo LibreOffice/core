@@ -31,31 +31,25 @@
 #ifndef _BASICPRN_HXX
 #define _BASICPRN_HXX
 
-#ifndef _PRINT_HXX //autogen
-#include <vcl/print.hxx>
-#endif
+#include "vcl/print.hxx"
+#include "vcl/oldprintadaptor.hxx"
 
-class PrintingDialog;
+class BasicPrinter
+{
+    boost::shared_ptr<Printer>                      mpPrinter;
+    boost::shared_ptr<vcl::OldStylePrintAdaptor>    mpListener;
 
-class BasicPrinter : public Printer {
     short nLine;                        // aktuelle Zeile
     short nPage;                        // aktuelle Seite
     short nLines;                       // Zeilen pro Seite
     short nYoff;                        // Zeilenabstand in Points
     String aFile;                       // Dateiname
-    PrintingDialog* pDlg;               // Druck-Dialog
+
     void Header();                      // Seitenkopf drucken
+    void StartPage();
 public:
     BasicPrinter();
     void Print( const String& rFile, const String& rText, BasicFrame *pFrame );
-    DECL_LINK( Abort, void * );
-    DECL_LINK( StartPrintHdl, Printer * );
-    DECL_LINK( EndPrintHdl, Printer * );
-    DECL_LINK( PrintPageHdl, Printer * );
-#if defined( PM20 )
-    // StarView-Bug, bald wieder zu entfernen:
-    virtual void SetPageQueueSize( USHORT ) {}
-#endif
 };
 
 #endif
