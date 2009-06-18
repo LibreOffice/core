@@ -641,11 +641,7 @@ void SvtMatchContext_Impl::run()
     // if the user input is a valid URL, go on with it
     // otherwise it could be parsed smart with a predefined smart protocol
     // ( or if this is not set with the protocol of a predefined base URL )
-<<<<<<< .working
     if( eProt == INET_PROT_NOT_VALID || eProt == eSmartProt || (eSmartProt == INET_PROT_NOT_VALID && eProt == eBaseProt) )
-=======
-    if( eProt == INET_PROT_NOT_VALID || eProt == eSmartProt || (eSmartProt == INET_PROT_NOT_VALID && eProt == eBaseProt) )
->>>>>>> .merge-right.r272982
     {
         // not stopped yet ?
         if( schedule() )
