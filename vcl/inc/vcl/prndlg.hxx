@@ -113,6 +113,8 @@ namespace vcl
             void readFromSettings();
             void storeToSettings();
             void initFromMultiPageSetup( const vcl::PrinterListener::MultiPageSetup& );
+
+            virtual void Resize();
         };
 
         class JobTabPage : public TabPage

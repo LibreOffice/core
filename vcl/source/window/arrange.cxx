@@ -388,3 +388,217 @@ void Indenter::setParentWindow( Window* i_pNewParent )
     if( m_aElement.m_pChild )
         m_aElement.m_pChild->setParentWindow( i_pNewParent );
 }
+
+// ----------------------------------------
+// vcl::MatrixArranger
+//-----------------------------------------
+MatrixArranger::~MatrixArranger()
+{
+}
+
+Size MatrixArranger::getOptimalSize( WindowSizeType i_eType, std::vector<long>& o_rColumnWidths, std::vector<long>& o_rRowHeights ) const
+{
+    Size aMatrixSize( 2*m_nOuterBorder, 2*m_nOuterBorder );
+
+    // first find out the current number of rows and columns
+    sal_uInt32 nRows = 0, nColumns = 0;
+    for( std::vector< MatrixElement >::const_iterator it = m_aElements.begin();
+            it != m_aElements.end(); ++it )
+    {
+        if( it->m_nX >= nColumns )
+            nColumns = it->m_nX+1;
+        if( it->m_nY >= nRows )
+            nRows = it->m_nY+1;
+    }
+
+    // now allocate row and column depth vectors
+    o_rColumnWidths = std::vector< long >( nColumns, 0 );
+    o_rRowHeights   = std::vector< long >( nRows, 0 );
+
+    // get sizes an allocate them into rows/columns
+    for( std::vector< MatrixElement >::const_iterator it = m_aElements.begin();
+            it != m_aElements.end(); ++it )
+    {
+        Size aSize;
+        if( it->m_pElement )
+            aSize = it->m_pElement->GetOptimalSize( i_eType );
+        else if( it->m_pChild )
+            aSize = it->m_pChild->getOptimalSize( i_eType );
+        if( aSize.Width() > o_rColumnWidths[ it->m_nX ] )
+            o_rColumnWidths[ it->m_nX ] = aSize.Width();
+        if( aSize.Height() > o_rRowHeights[ it->m_nY ] )
+            o_rRowHeights[ it->m_nY ] = aSize.Height();
+    }
+
+    // add up sizes
+    for( sal_uInt32 i = 0; i < nColumns; i++ )
+        aMatrixSize.Width() += o_rColumnWidths[i] + m_nBorderX;
+    if( nColumns > 0 )
+        aMatrixSize.Width() -= m_nBorderX;
+
+    for( sal_uInt32 i = 0; i < nRows; i++ )
+        aMatrixSize.Height() += o_rRowHeights[i] + m_nBorderY;
+    if( nRows > 0 )
+        aMatrixSize.Height() -= m_nBorderY;
+
+    return aMatrixSize;
+}
+
+Size MatrixArranger::getOptimalSize( WindowSizeType i_eType ) const
+{
+    std::vector<long> aColumnWidths, aRowHeights;
+    return getOptimalSize( i_eType, aColumnWidths, aRowHeights );
+}
+
+void MatrixArranger::resize()
+{
+    // assure that we have at least one row and column
+    if( m_aElements.empty() )
+        return;
+
+    // check if we can get optimal size, else fallback to minimal size
+    std::vector<long> aColumnWidths, aRowHeights;
+    Size aOptSize( getOptimalSize( WINDOWSIZE_PREFERRED, aColumnWidths, aRowHeights ) );
+    if( aOptSize.Height() > m_aManagedArea.GetHeight() ||
+        aOptSize.Width() > m_aManagedArea.GetWidth() )
+    {
+        std::vector<long> aMinColumnWidths, aMinRowHeights;
+        getOptimalSize( WINDOWSIZE_MINIMUM, aMinColumnWidths, aMinRowHeights );
+        if( aOptSize.Height() > m_aManagedArea.GetHeight() )
+            aRowHeights = aMinRowHeights;
+        if( aOptSize.Width() > m_aManagedArea.GetWidth() )
+            aColumnWidths = aMinColumnWidths;
+    }
+
+    // FIXME: distribute extra space available
+
+    // prepare offsets
+    std::vector<long> aColumnX( aColumnWidths.size() );
+    aColumnX[0] = m_aManagedArea.Left() + m_nOuterBorder;
+    for( size_t i = 1; i < aColumnX.size(); i++ )
+        aColumnX[i] = aColumnX[i-1] + aColumnWidths[i-1] + m_nBorderX;
+
+    std::vector<long> aRowY( aRowHeights.size() );
+    aRowY[0] = m_aManagedArea.Top() + m_nOuterBorder;
+    for( size_t i = 1; i < aRowY.size(); i++ )
+        aRowY[i] = aRowY[i-1] + aRowHeights[i-1] + m_nBorderY;
+
+    // now iterate over the elements and assign their positions
+    for( std::vector< MatrixElement >::iterator it = m_aElements.begin();
+         it != m_aElements.end(); ++it )
+    {
+        Point aCellPos( aColumnX[it->m_nX], aRowY[it->m_nY] );
+        Size  aCellSize( aColumnWidths[it->m_nX], aRowHeights[it->m_nY] );
+        if( it->m_pElement )
+            it->m_pElement->SetPosSizePixel( aCellPos, aCellSize );
+        else if( it->m_pChild )
+            it->m_pChild->setManagedArea( Rectangle( aCellPos, aCellSize ) );
+    }
+}
+
+void MatrixArranger::setParentWindow( Window* i_pNewParent )
+{
+    m_pParentWindow = i_pNewParent;
+    for( std::vector< MatrixElement >::const_iterator it = m_aElements.begin();
+         it != m_aElements.end(); ++it )
+    {
+        #if OSL_DEBUG_LEVEL > 0
+        if( it->m_pElement )
+        {
+            OSL_VERIFY( it->m_pElement->GetParent() == i_pNewParent );
+        }
+        #endif
+        if( it->m_pChild )
+            it->m_pChild->setParentWindow( i_pNewParent );
+    }
+}
+
+boost::shared_ptr<WindowArranger> MatrixArranger::getChild( size_t i_nIndex ) const
+{
+    return i_nIndex < m_aElements.size() ? m_aElements[i_nIndex].m_pChild : boost::shared_ptr<WindowArranger>();
+}
+
+Window* MatrixArranger::getWindow( size_t i_nIndex ) const
+{
+    return i_nIndex < m_aElements.size() ? m_aElements[i_nIndex].m_pElement : NULL;
+}
+
+sal_Int32 MatrixArranger::getExpandPriority( size_t i_nIndex ) const
+{
+    return i_nIndex < m_aElements.size() ? m_aElements[i_nIndex].getExpandPriority() : 0;
+}
+
+void MatrixArranger::addWindow( Window* i_pWindow, sal_uInt32 i_nX, sal_uInt32 i_nY, sal_Int32 i_nExpandPrio )
+{
+    sal_uInt64 nMapValue = getMap( i_nX, i_nY );
+    std::map< sal_uInt64, size_t >::const_iterator it = m_aMatrixMap.find( nMapValue );
+    if( it == m_aMatrixMap.end() )
+    {
+        m_aMatrixMap[ nMapValue ] = m_aElements.size();
+        m_aElements.push_back( MatrixElement( i_pWindow, i_nX, i_nY, boost::shared_ptr<WindowArranger>(), i_nExpandPrio ) );
+    }
+    else
+    {
+        MatrixElement& rEle( m_aElements[ it->second ] );
+        rEle.m_pElement = i_pWindow;
+        rEle.m_pChild.reset();
+        rEle.m_nExpandPriority = i_nExpandPrio;
+        rEle.m_nX = i_nX;
+        rEle.m_nY = i_nY;
+    }
+}
+
+void MatrixArranger::remove( Window* i_pWindow )
+{
+    if( i_pWindow )
+    {
+        for( std::vector< MatrixElement >::iterator it = m_aElements.begin();
+            it != m_aElements.end(); ++it )
+        {
+            if( it->m_pElement == i_pWindow )
+            {
+                m_aMatrixMap.erase( getMap( it->m_nX, it->m_nY ) );
+                m_aElements.erase( it );
+                return;
+            }
+        }
+    }
+}
+
+void MatrixArranger::addChild( boost::shared_ptr<WindowArranger> const &i_pChild, sal_uInt32 i_nX, sal_uInt32 i_nY, sal_Int32 i_nExpandPrio )
+{
+    sal_uInt64 nMapValue = getMap( i_nX, i_nY );
+    std::map< sal_uInt64, size_t >::const_iterator it = m_aMatrixMap.find( nMapValue );
+    if( it == m_aMatrixMap.end() )
+    {
+        m_aMatrixMap[ nMapValue ] = m_aElements.size();
+        m_aElements.push_back( MatrixElement( NULL, i_nX, i_nY, i_pChild, i_nExpandPrio ) );
+    }
+    else
+    {
+        MatrixElement& rEle( m_aElements[ it->second ] );
+        rEle.m_pElement = 0;
+        rEle.m_pChild = i_pChild;
+        rEle.m_nExpandPriority = i_nExpandPrio;
+        rEle.m_nX = i_nX;
+        rEle.m_nY = i_nY;
+    }
+}
+
+void MatrixArranger::remove( boost::shared_ptr<WindowArranger> const &i_pChild )
+{
+    if( i_pChild )
+    {
+        for( std::vector< MatrixElement >::iterator it = m_aElements.begin();
+            it != m_aElements.end(); ++it )
+        {
+            if( it->m_pChild == i_pChild )
+            {
+                m_aMatrixMap.erase( getMap( it->m_nX, it->m_nY ) );
+                m_aElements.erase( it );
+                return;
+            }
+        }
+    }
+}
+

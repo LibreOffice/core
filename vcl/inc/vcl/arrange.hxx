@@ -34,6 +34,7 @@
 #include "vcl/window.hxx"
 
 #include <vector>
+#include <map>
 #include <boost/shared_ptr.hpp>
 
 namespace vcl
@@ -217,6 +218,72 @@ namespace vcl
         virtual sal_Int32 getExpandPriority( size_t i_nIndex ) const
         { return (i_nIndex == 0) ? m_aElement.getExpandPriority() : 0; }
     };
+
+    class MatrixArranger : public WindowArranger
+    {
+        long    m_nBorderX;
+        long    m_nBorderY;
+
+        struct MatrixElement : public WindowArranger::Element
+        {
+            sal_uInt32  m_nX;
+            sal_uInt32  m_nY;
+
+            MatrixElement()
+            : WindowArranger::Element()
+            , m_nX( 0 )
+            , m_nY( 0 )
+            {}
+
+            MatrixElement( Window* i_pWin,
+                           sal_uInt32 i_nX, sal_uInt32 i_nY,
+                           boost::shared_ptr<WindowArranger> const & i_pChild = boost::shared_ptr<WindowArranger>(),
+                           sal_Int32 i_nExpandPriority = 0
+                          )
+            : WindowArranger::Element( i_pWin, i_pChild, i_nExpandPriority )
+            , m_nX( i_nX )
+            , m_nY( i_nY )
+            {
+            }
+        };
+
+        std::vector< MatrixElement >            m_aElements;
+        std::map< sal_uInt64, size_t >          m_aMatrixMap;  // maps (x | (y << 32)) to index in m_aElements
+
+        sal_uInt64 getMap( sal_uInt32 i_nX, sal_uInt32 i_nY )
+        { return static_cast< sal_uInt64 >(i_nX) | (static_cast< sal_uInt64>(i_nY) << 32 ); }
+
+        Size getOptimalSize( WindowSizeType, std::vector<long>& o_rColumnWidths, std::vector<long>& o_rRowHeights ) const;
+        public:
+        MatrixArranger( WindowArranger* i_pParent = NULL,
+                        long i_nBorderX = 5,
+                        long i_nBorderY = 5 )
+        : WindowArranger( i_pParent )
+        , m_nBorderX( i_nBorderX )
+        , m_nBorderY( i_nBorderY )
+        {}
+
+        virtual ~MatrixArranger();
+
+        virtual Size getOptimalSize( WindowSizeType ) const;
+        virtual void resize();
+        virtual void setParentWindow( Window* );
+        virtual size_t countElements() const { return m_aElements.size(); }
+        virtual boost::shared_ptr<WindowArranger> getChild( size_t i_nIndex ) const;
+        virtual Window* getWindow( size_t i_nIndex ) const;
+        virtual sal_Int32 getExpandPriority( size_t i_nIndex ) const;
+
+        // add a managed window at the given matrix position
+        void addWindow( Window*, sal_uInt32 i_nX, sal_uInt32 i_nY, sal_Int32 i_nExpandPrio = 0 );
+        void remove( Window* );
+
+        void addChild( boost::shared_ptr<WindowArranger> const &, sal_uInt32 i_nX, sal_uInt32 i_nY, sal_Int32 i_nExpandPrio = 0 );
+        // convenience: use for addChild( new WindowArranger( ... ) ) constructs
+        void addChild( WindowArranger* i_pNewChild, sal_uInt32 i_nX, sal_uInt32 i_nY, sal_Int32 i_nExpandPrio = 0 )
+        { addChild( boost::shared_ptr<WindowArranger>( i_pNewChild ), i_nX, i_nY, i_nExpandPrio ); }
+        void remove( boost::shared_ptr<WindowArranger> const & );
+    };
+
 }
 
 #endif

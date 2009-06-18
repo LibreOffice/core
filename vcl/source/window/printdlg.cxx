@@ -192,6 +192,65 @@ PrintDialog::NUpTabPage::~NUpTabPage()
 {
 }
 
+void PrintDialog::NUpTabPage::Resize()
+{
+    Size aBorder( LogicToPixel( Size( 5, 5 ), MapMode( MAP_APPFONT ) ) );
+
+    boost::shared_ptr<vcl::RowOrColumn> aPage( new vcl::RowOrColumn() );
+    aPage->setParentWindow( this );
+    aPage->setOuterBorder( aBorder.Width() );
+    aPage->addWindow( &maNupLine );
+
+    boost::shared_ptr<vcl::Indenter> aNupIndent( new vcl::Indenter( aPage.get(), aBorder.Width() ) );
+    aPage->addChild( aNupIndent );
+    boost::shared_ptr<vcl::RowOrColumn> aNupColumn( new vcl::RowOrColumn( aNupIndent.get() ) );
+    aNupIndent->setChild( aNupColumn );
+
+    boost::shared_ptr<vcl::RowOrColumn> aNupRow( new vcl::RowOrColumn( aNupColumn.get(), false ) );
+    aNupColumn->addChild( aNupRow );
+    boost::shared_ptr<vcl::MatrixArranger> aNupMat( new vcl::MatrixArranger( aNupRow.get(), aBorder.Width(), aBorder.Height() ) );
+    aNupRow->addChild( aNupMat );
+    aNupMat->addWindow( &maNupRowsTxt, 0, 0 );
+    aNupMat->addWindow( &maNupRowsEdt, 1, 0 );
+    aNupMat->addWindow( &maNupColTxt, 0, 1 );
+    aNupMat->addWindow( &maNupColEdt, 1, 1 );
+    aNupMat->addWindow( &maNupRepTxt, 0, 2 );
+    aNupMat->addWindow( &maNupRepEdt, 1, 2 );
+    boost::shared_ptr<vcl::RowOrColumn> aOriCol( new vcl::RowOrColumn( aNupRow.get() ) );
+    aNupRow->addChild( aOriCol );
+    aOriCol->addWindow( &maNupPortrait );
+    aOriCol->addWindow( &maNupLandscape );
+
+    aNupColumn->addWindow( &maBorderCB );
+
+    aPage->addWindow( &maMargins );
+
+    boost::shared_ptr<vcl::Indenter> aMargIndent( new vcl::Indenter( aPage.get(), aBorder.Width() ) );
+    aPage->addChild( aMargIndent );
+    boost::shared_ptr<vcl::RowOrColumn> aMargColumn( new vcl::RowOrColumn( aMargIndent.get(), true, 2*aBorder.Height() ) );
+    aMargIndent->setChild( aMargColumn );
+
+    boost::shared_ptr<vcl::MatrixArranger> aMargMat( new vcl::MatrixArranger( aMargIndent.get(), aBorder.Width(), aBorder.Height() ) );
+    aMargColumn->addChild( aMargMat );
+    aMargMat->addWindow( &maLeftMarginTxt, 0, 0 );
+    aMargMat->addWindow( &maLeftMarginEdt, 1, 0 );
+    aMargMat->addWindow( &maRightMarginTxt, 3, 0 );
+    aMargMat->addWindow( &maRightMarginEdt, 4, 0 );
+    aMargMat->addWindow( &maTopMarginTxt, 0, 1 );
+    aMargMat->addWindow( &maTopMarginEdt, 1, 1 );
+    aMargMat->addWindow( &maBottomMarginTxt, 3, 1 );
+    aMargMat->addWindow( &maBottomMarginEdt, 4, 1 );
+
+    boost::shared_ptr<vcl::MatrixArranger> aSpacingMat( new vcl::MatrixArranger( aPage.get(), aBorder.Width(), aBorder.Height() ) );
+    aMargColumn->addChild( aSpacingMat );
+    aSpacingMat->addWindow( &maHSpaceTxt, 0, 0 );
+    aSpacingMat->addWindow( &maHSpaceEdt, 1, 0 );
+    aSpacingMat->addWindow( &maVSpaceTxt, 0, 1 );
+    aSpacingMat->addWindow( &maVSpaceEdt, 1, 1 );
+
+    aPage->setManagedArea( Rectangle( Point(), GetOutputSizePixel() ) );
+}
+
 void PrintDialog::NUpTabPage::initFromMultiPageSetup( const vcl::PrinterListener::MultiPageSetup& i_rMPS )
 {
     maLeftMarginEdt.SetValue( maLeftMarginEdt.Normalize( i_rMPS.nLeftMargin ), FUNIT_100TH_MM );
