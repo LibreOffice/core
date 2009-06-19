@@ -121,8 +121,13 @@ struct ScDPOutLevelData
     uno::Sequence<sheet::MemberResult>  aResult;
     String                              maName;   /// Name is the internal field name.
     String                              aCaption; /// Caption is the name visible in the output table.
+    bool                                mbHasHiddenMember;
 
-    ScDPOutLevelData() { nDim = nHier = nLevel = nDimPos = -1; }
+    ScDPOutLevelData()
+    {
+        nDim = nHier = nLevel = nDimPos = -1;
+        mbHasHiddenMember = false;
+    }
 
     BOOL operator<(const ScDPOutLevelData& r) const
         { return nDimPos<r.nDimPos || ( nDimPos==r.nDimPos && nHier<r.nHier ) ||
@@ -371,6 +376,7 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
     aStartPos( rPos ),
     bDoFilter( bFilter ),
     bResultsError( FALSE ),
+    mbHasDataLayout(false),
     pColNumFmt( NULL ),
     pRowNumFmt( NULL ),
     nColFmtCount( 0 ),
@@ -415,6 +421,8 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
                 BOOL bIsDataLayout = ScUnoHelpFunctions::GetBoolProperty(
                                                 xDimProp,
                                                 rtl::OUString::createFromAscii(DP_PROP_ISDATALAYOUT) );
+                bool bHasHiddenMember = ScUnoHelpFunctions::GetBoolProperty(
+                    xDimProp, OUString::createFromAscii(SC_UNO_HAS_HIDDEN_MEMBER));
 
                 if ( eDimOrient != sheet::DataPilotFieldOrientation_HIDDEN )
                 {
@@ -454,6 +462,8 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
                                         OUString::createFromAscii(SC_UNO_LAYOUTNAME));
                                     any >>= aCaption;
                                 }
+
+                                bool bRowFieldHasMember = false;
                                 switch ( eDimOrient )
                                 {
                                     case sheet::DataPilotFieldOrientation_COLUMN:
@@ -464,6 +474,7 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
                                         pColFields[nColFieldCount].aResult = xLevRes->getResults();
                                         pColFields[nColFieldCount].maName  = aName;
                                         pColFields[nColFieldCount].aCaption= aCaption;
+                                        pColFields[nColFieldCount].mbHasHiddenMember = bHasHiddenMember;
                                         if (!lcl_MemberEmpty(pColFields[nColFieldCount].aResult))
                                             ++nColFieldCount;
                                         break;
@@ -475,8 +486,12 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
                                         pRowFields[nRowFieldCount].aResult = xLevRes->getResults();
                                         pRowFields[nRowFieldCount].maName  = aName;
                                         pRowFields[nRowFieldCount].aCaption= aCaption;
+                                        pRowFields[nRowFieldCount].mbHasHiddenMember = bHasHiddenMember;
                                         if (!lcl_MemberEmpty(pRowFields[nRowFieldCount].aResult))
+                                        {
                                             ++nRowFieldCount;
+                                            bRowFieldHasMember = true;
+                                        }
                                         break;
                                     case sheet::DataPilotFieldOrientation_PAGE:
                                         pPageFields[nPageFieldCount].nDim    = nDim;
@@ -486,6 +501,7 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
                                         pPageFields[nPageFieldCount].aResult = lcl_GetSelectedPageAsResult(xDimProp);
                                         pPageFields[nPageFieldCount].maName  = aName;
                                         pPageFields[nPageFieldCount].aCaption= aCaption;
+                                        pPageFields[nPageFieldCount].mbHasHiddenMember = bHasHiddenMember;
                                         // no check on results for page fields
                                         ++nPageFieldCount;
                                         break;
@@ -498,6 +514,9 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
                                 // get number formats from data dimensions
                                 if ( bIsDataLayout )
                                 {
+                                    if (bRowFieldHasMember)
+                                        mbHasDataLayout = true;
+
                                     DBG_ASSERT( nLevCount == 1, "data layout: multiple levels?" );
                                     if ( eDimOrient == sheet::DataPilotFieldOrientation_COLUMN )
                                         lcl_FillNumberFormats( pColNumFmt, nColFmtCount, xLevRes, xDims );
@@ -658,14 +677,20 @@ void ScDPOutput::HeaderCell( SCCOL nCol, SCROW nRow, SCTAB nTab,
     }
 }
 
-void ScDPOutput::FieldCell( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rCaption, BOOL bFrame )
+void ScDPOutput::FieldCell( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rCaption,
+                            bool bInTable, bool bPopup, bool bHasHiddenMember )
 {
     pDoc->SetString( nCol, nRow, nTab, rCaption );
-    if (bFrame)
+    if (bInTable)
         lcl_SetFrame( pDoc,nTab, nCol,nRow, nCol,nRow, 20 );
 
     //  Button
-    pDoc->ApplyAttr( nCol, nRow, nTab, ScMergeFlagAttr(SC_MF_BUTTON) );
+    sal_uInt16 nMergeFlag = SC_MF_BUTTON;
+    if (bPopup)
+        nMergeFlag |= SC_MF_BUTTON_POPUP;
+    if (bHasHiddenMember)
+        nMergeFlag |= SC_MF_HIDDEN_MEMBER;
+    pDoc->ApplyFlagsTab(nCol, nRow, nCol, nRow, nTab, nMergeFlag);
 
     lcl_SetStyleById( pDoc,nTab, nCol,nRow, nCol,nRow, STR_PIVOT_STYLE_FIELDNAME );
 }
@@ -673,7 +698,7 @@ void ScDPOutput::FieldCell( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rC
 void lcl_DoFilterButton( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab )
 {
     pDoc->SetString( nCol, nRow, nTab, ScGlobal::GetRscString(STR_CELL_FILTER) );
-    pDoc->ApplyAttr( nCol, nRow, nTab, ScMergeFlagAttr(SC_MF_BUTTON) );
+    pDoc->ApplyFlagsTab(nCol, nRow, nCol, nRow, nTab, SC_MF_BUTTON);
 }
 
 void ScDPOutput::CalcSizes()
@@ -799,7 +824,7 @@ void ScDPOutput::Output()
         SCCOL nHdrCol = aStartPos.Col();
         SCROW nHdrRow = aStartPos.Row() + nField + ( bDoFilter ? 1 : 0 );
         // draw without frame for consistency with filter button:
-        FieldCell( nHdrCol, nHdrRow, nTab, pPageFields[nField].aCaption, FALSE );
+        FieldCell( nHdrCol, nHdrRow, nTab, pPageFields[nField].aCaption, false, false, pPageFields[nField].mbHasHiddenMember );
         SCCOL nFldCol = nHdrCol + 1;
 
         String aPageValue;
@@ -838,7 +863,7 @@ void ScDPOutput::Output()
     for (nField=0; nField<nColFieldCount; nField++)
     {
         SCCOL nHdrCol = nDataStartCol + (SCCOL)nField;              //! check for overflow
-        FieldCell( nHdrCol, nTabStartRow, nTab, pColFields[nField].aCaption );
+        FieldCell( nHdrCol, nTabStartRow, nTab, pColFields[nField].aCaption, true, true, pColFields[nField].mbHasHiddenMember );
 
         SCROW nRowPos = nMemberStartRow + (SCROW)nField;                //! check for overflow
         const uno::Sequence<sheet::MemberResult> rSequence = pColFields[nField].aResult;
@@ -873,9 +898,12 @@ void ScDPOutput::Output()
 
     for (nField=0; nField<nRowFieldCount; nField++)
     {
+        bool bDataLayout = mbHasDataLayout && (nField == nRowFieldCount-1);
+
         SCCOL nHdrCol = nTabStartCol + (SCCOL)nField;                   //! check for overflow
         SCROW nHdrRow = nDataStartRow - 1;
-        FieldCell( nHdrCol, nHdrRow, nTab, pRowFields[nField].aCaption );
+        FieldCell( nHdrCol, nHdrRow, nTab, pRowFields[nField].aCaption, true, !bDataLayout,
+                   pRowFields[nField].mbHasHiddenMember );
 
         SCCOL nColPos = nMemberStartCol + (SCCOL)nField;                //! check for overflow
         const uno::Sequence<sheet::MemberResult> rSequence = pRowFields[nField].aResult;

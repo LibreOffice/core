@@ -535,6 +535,9 @@ void ScDPObject::Output()
 
     //  aOutRange is always the range that was last output to the document
     aOutRange = pOutput->GetOutputRange();
+    const ScAddress& s = aOutRange.aStart;
+    const ScAddress& e = aOutRange.aEnd;
+    pDoc->ApplyFlagsTab(s.Col(), s.Row(), e.Col(), e.Row(), s.Tab(), SC_MF_DP_TABLE);
 }
 
 const ScRange ScDPObject::GetOutputRangeByType( sal_Int32 nType )
@@ -1801,7 +1804,7 @@ BOOL ScDPObject::FillOldParam(ScPivotParam& rParam, BOOL bForFile) const
     return TRUE;
 }
 
-void lcl_FillLabelData( LabelData& rData, const uno::Reference< beans::XPropertySet >& xDimProp )
+void lcl_FillLabelData( ScDPLabelData& rData, const uno::Reference< beans::XPropertySet >& xDimProp )
 {
     uno::Reference<sheet::XHierarchiesSupplier> xDimSupp( xDimProp, uno::UNO_QUERY );
     if ( xDimProp.is() && xDimSupp.is() )
@@ -1847,6 +1850,8 @@ void lcl_FillLabelData( LabelData& rData, const uno::Reference< beans::XProperty
 
 BOOL ScDPObject::FillLabelData(ScPivotParam& rParam)
 {
+    rParam.maLabelArray.clear();
+
     ((ScDPObject*)this)->CreateObjects();
 
     uno::Reference<container::XNameAccess> xDimsName = xSource->getDimensions();
@@ -1857,8 +1862,6 @@ BOOL ScDPObject::FillLabelData(ScPivotParam& rParam)
     if (!nDimCount)
         return FALSE;
 
-    SCSIZE nOutCount = 0;
-    LabelData** aLabelArr = new LabelData*[nDimCount];
     for (long nDim=0; nDim < nDimCount; nDim++)
     {
         String aFieldName;
@@ -1893,23 +1896,14 @@ BOOL ScDPObject::FillLabelData(ScPivotParam& rParam)
                 SCsCOL nCol = static_cast< SCsCOL >( nDim );           //! ???
                 bool bIsValue = true;                               //! check
 
-                aLabelArr[nOutCount] = new LabelData( aFieldName, nCol, bIsValue );
-
-                LabelData& rLabelData = *aLabelArr[nOutCount];
-                GetHierarchies( nDim, rLabelData.maHiers );
-                GetMembers( nDim, rLabelData.maMembers, &rLabelData.maVisible, &rLabelData.maShowDet );
-                lcl_FillLabelData( rLabelData, xDimProp );
-
-                ++nOutCount;
+                ScDPLabelDataRef pNewLabel(new ScDPLabelData(aFieldName, nCol, bIsValue));
+                GetHierarchies(nDim, pNewLabel->maHiers);
+                GetMembers(nDim, pNewLabel->maMembers, &pNewLabel->maVisible, &pNewLabel->maShowDet);
+                lcl_FillLabelData(*pNewLabel, xDimProp);
+                rParam.maLabelArray.push_back(pNewLabel);
             }
         }
     }
-
-    rParam.SetLabelData( aLabelArr, nOutCount );
-
-    for (SCSIZE i=0; i<nOutCount; i++)
-        delete aLabelArr[i];
-    delete[] aLabelArr;
 
     return TRUE;
 }
@@ -2489,7 +2483,7 @@ void ScDPCollection::WriteRefsTo( ScDPCollection& r ) const
 
                 ScDPObject* pDestObj = new ScDPObject( *pSourceObj );
                 pDestObj->SetAlive(TRUE);
-                if ( !r.Insert(pDestObj) )
+                if ( !r.InsertNewTable(pDestObj) )
                 {
                     DBG_ERROR("cannot insert DPObject");
                     DELETEZ( pDestObj );
@@ -2522,6 +2516,39 @@ String ScDPCollection::CreateNewName( USHORT nMin ) const
 ScSimpleSharedString& ScDPCollection::GetSharedString()
 {
     return maSharedString;
+}
+
+void ScDPCollection::FreeTable(ScDPObject* pDPObj)
+{
+    const ScRange& rOutRange = pDPObj->GetOutRange();
+    const ScAddress& s = rOutRange.aStart;
+    const ScAddress& e = rOutRange.aEnd;
+    pDoc->RemoveFlagsTab(s.Col(), s.Row(), e.Col(), e.Row(), s.Tab(), SC_MF_DP_TABLE);
+    Free(pDPObj);
+}
+
+bool ScDPCollection::InsertNewTable(ScDPObject* pDPObj)
+{
+    bool bSuccess = Insert(pDPObj);
+    if (bSuccess)
+    {
+        const ScRange& rOutRange = pDPObj->GetOutRange();
+        const ScAddress& s = rOutRange.aStart;
+        const ScAddress& e = rOutRange.aEnd;
+        pDoc->ApplyFlagsTab(s.Col(), s.Row(), e.Col(), e.Row(), s.Tab(), SC_MF_DP_TABLE);
+    }
+    return bSuccess;
+}
+
+bool ScDPCollection::HasDPTable(SCCOL nCol, SCROW nRow, SCTAB nTab) const
+{
+    const ScMergeFlagAttr* pMergeAttr = static_cast<const ScMergeFlagAttr*>(
+            pDoc->GetAttr(nCol, nRow, nTab, ATTR_MERGE_FLAG));
+
+    if (!pMergeAttr)
+        return false;
+
+    return pMergeAttr->HasDPTable();
 }
 
 ScDPCacheCell* ScDPCollection::getCacheCellFromPool(const ScDPCacheCell& rCell)

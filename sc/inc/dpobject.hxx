@@ -316,6 +316,11 @@ public:
 
     ScSimpleSharedString& GetSharedString();
 
+    void FreeTable(ScDPObject* pDPObj);
+    SC_DLLPUBLIC bool InsertNewTable(ScDPObject* pDPObj);
+
+    bool        HasDPTable(SCCOL nCol, SCROW nRow, SCTAB nTab) const;
+
     ScDPCacheCell* getCacheCellFromPool(const ScDPCacheCell& rCell);
     void clearCacheCellPool();
 };

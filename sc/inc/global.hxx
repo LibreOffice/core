@@ -94,8 +94,6 @@ extern "C" {
 #define OLD_PIVOT_IMPLEMENTATION 0
 
 //------------------------------------------------------------------------
-struct LabelData;
-//------------------------------------------------------------------------
 
 //  die 1000 Namen des Calc...
 //  Clipboard-Namen sind jetzt in so3/soapp.hxx

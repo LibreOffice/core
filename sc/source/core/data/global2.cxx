@@ -56,6 +56,7 @@
 #include "sc.hrc"
 #include "globstr.hrc"
 
+using ::std::vector;
 
 // -----------------------------------------------------------------------
 
@@ -817,7 +818,6 @@ bool PivotField::operator==( const PivotField& r ) const
 
 ScPivotParam::ScPivotParam()
     :   nCol(0), nRow(0), nTab(0),
-        ppLabelArr( NULL ), nLabels(0),
         nPageCount(0), nColCount(0), nRowCount(0), nDataCount(0),
         bIgnoreEmptyRows(FALSE), bDetectCategories(FALSE),
         bMakeTotalCol(TRUE), bMakeTotalRow(TRUE)
@@ -828,23 +828,22 @@ ScPivotParam::ScPivotParam()
 
 ScPivotParam::ScPivotParam( const ScPivotParam& r )
     :   nCol( r.nCol ), nRow( r.nRow ), nTab( r.nTab ),
-        ppLabelArr( NULL ), nLabels(0),
         nPageCount(0), nColCount(0), nRowCount(0), nDataCount(0),
         bIgnoreEmptyRows(r.bIgnoreEmptyRows),
         bDetectCategories(r.bDetectCategories),
         bMakeTotalCol(r.bMakeTotalCol),
         bMakeTotalRow(r.bMakeTotalRow)
 {
-    SetLabelData    ( r.ppLabelArr, r.nLabels );
     SetPivotArrays  ( r.aPageArr, r.aColArr, r.aRowArr, r.aDataArr,
                       r.nPageCount, r.nColCount, r.nRowCount, r.nDataCount );
+
+    SetLabelData(r.maLabelArray);
 }
 
 //------------------------------------------------------------------------
 
 __EXPORT ScPivotParam::~ScPivotParam()
 {
-    ClearLabelData();
 }
 
 //------------------------------------------------------------------------
@@ -856,25 +855,9 @@ void __EXPORT ScPivotParam::Clear()
     nTab = 0;
     bIgnoreEmptyRows = bDetectCategories = FALSE;
     bMakeTotalCol = bMakeTotalRow = TRUE;
-    ClearLabelData();
     ClearPivotArrays();
+    maLabelArray.clear();
 }
-
-//------------------------------------------------------------------------
-
-void __EXPORT ScPivotParam::ClearLabelData()
-{
-    if ( (nLabels > 0) && ppLabelArr )
-    {
-        for ( SCSIZE i=0; i<nLabels; i++ )
-            delete ppLabelArr[i];
-        delete [] ppLabelArr;
-        ppLabelArr = NULL;
-        nLabels = 0;
-    }
-}
-
-//------------------------------------------------------------------------
 
 void __EXPORT ScPivotParam::ClearPivotArrays()
 {
@@ -888,20 +871,17 @@ void __EXPORT ScPivotParam::ClearPivotArrays()
     nDataCount = 0;
 }
 
-//------------------------------------------------------------------------
-
-void __EXPORT ScPivotParam::SetLabelData( LabelData**   pLabArr,
-                                          SCSIZE        nLab )
+void ScPivotParam::SetLabelData(const vector<ScDPLabelDataRef>& r)
 {
-    ClearLabelData();
-
-    if ( (nLab > 0) && pLabArr )
+    vector<ScDPLabelDataRef> aNewArray;
+    aNewArray.reserve(r.size());
+    for (vector<ScDPLabelDataRef>::const_iterator itr = r.begin(), itrEnd = r.end();
+          itr != itrEnd; ++itr)
     {
-        nLabels = (nLab>MAX_LABELS) ? MAX_LABELS : nLab;
-        ppLabelArr = new LabelData*[nLabels];
-        for ( SCSIZE i=0; i<nLabels; i++ )
-            ppLabelArr[i] = new LabelData( *(pLabArr[i]) );
+        ScDPLabelDataRef p(new ScDPLabelData(**itr));
+        aNewArray.push_back(p);
     }
+    maLabelArray.swap(aNewArray);
 }
 
 //------------------------------------------------------------------------
@@ -943,10 +923,9 @@ ScPivotParam& __EXPORT ScPivotParam::operator=( const ScPivotParam& r )
     bMakeTotalCol     = r.bMakeTotalCol;
     bMakeTotalRow     = r.bMakeTotalRow;
 
-    SetLabelData    ( r.ppLabelArr, r.nLabels );
     SetPivotArrays  ( r.aPageArr, r.aColArr, r.aRowArr, r.aDataArr,
                       r.nPageCount, r.nColCount, r.nRowCount, r.nDataCount );
-
+    SetLabelData(r.maLabelArray);
     return *this;
 }
 
@@ -961,7 +940,7 @@ BOOL __EXPORT ScPivotParam::operator==( const ScPivotParam& r ) const
                  && (bDetectCategories == r.bDetectCategories)
                  && (bMakeTotalCol == r.bMakeTotalCol)
                  && (bMakeTotalRow == r.bMakeTotalRow)
-                 && (nLabels    == r.nLabels)
+                 && (maLabelArray.size() == r.maLabelArray.size())
                  && (nPageCount == r.nPageCount)
                  && (nColCount  == r.nColCount)
                  && (nRowCount  == r.nRowCount)

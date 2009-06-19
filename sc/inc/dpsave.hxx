@@ -179,6 +179,10 @@ public:
 
     void                    WriteToSource( const com::sun::star::uno::Reference<
                                             com::sun::star::uno::XInterface>& xDim );
+
+    void                    UpdateMemberVisibility(const ::std::hash_map< ::rtl::OUString, bool, ::rtl::OUStringHash>& rData);
+
+    bool                    HasInvisibleMember() const;
 };
 
 
@@ -256,6 +260,13 @@ public:
     SC_DLLPUBLIC ScDPDimensionSaveData*  GetDimensionData();     // create if not there
     void                    SetDimensionData( const ScDPDimensionSaveData* pNew );      // copied
     void                    BuildAllDimensionMembers(ScDPTableData* pData);
+
+    /**
+     * Check whether a dimension has one or more invisible members.
+     *
+     * @param rDimName dimension name
+     */
+    SC_DLLPUBLIC bool       HasInvisibleMember(const ::rtl::OUString& rDimName) const;
 };
 
 

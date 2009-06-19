@@ -53,6 +53,7 @@
 #include "address.hxx"
 
 #include <vector>
+#include <boost/shared_ptr.hpp>
 
 class SubTotal;
 #include "collect.hxx"
@@ -80,7 +81,9 @@ class ScUserListData;
 class ScMultipleReadHeader;
 class ScMultipleWriteHeader;
 class ScProgress;
-struct LabelData;
+struct ScDPLabelData;
+
+typedef ::boost::shared_ptr<ScDPLabelData> ScDPLabelDataRef;
 
 // -----------------------------------------------------------------------
 
@@ -104,8 +107,7 @@ struct ScPivotParam
     SCCOL           nCol;           // Cursor Position /
     SCROW           nRow;           // bzw. Anfang des Zielbereiches
     SCTAB           nTab;
-    LabelData**     ppLabelArr;
-    SCSIZE          nLabels;
+    ::std::vector<ScDPLabelDataRef> maLabelArray;
     PivotField      aPageArr[PIVOT_MAXPAGEFIELD];
     PivotField      aColArr[PIVOT_MAXFIELD];
     PivotField      aRowArr[PIVOT_MAXFIELD];
@@ -126,10 +128,8 @@ struct ScPivotParam
     ScPivotParam&   operator=       ( const ScPivotParam& r );
     BOOL            operator==      ( const ScPivotParam& r ) const;
     void            Clear           ();
-    void            ClearLabelData  ();
     void            ClearPivotArrays();
-    void            SetLabelData    ( LabelData**   ppLabArr,
-                                      SCSIZE        nLab );
+    void            SetLabelData    (const ::std::vector<ScDPLabelDataRef>& r);
     void            SetPivotArrays  ( const PivotField* pPageArr,
                                       const PivotField* pColArr,
                                       const PivotField* pRowArr,
@@ -366,7 +366,7 @@ public:
 
 //------------------------------------------------------------------------
 
-struct LabelData
+struct ScDPLabelData
 {
     String              maName;         /// Visible name of the dimension.
     SCsCOL              mnCol;
@@ -383,7 +383,7 @@ struct LabelData
     ::com::sun::star::sheet::DataPilotFieldLayoutInfo   maLayoutInfo;   /// Layout info.
     ::com::sun::star::sheet::DataPilotFieldAutoShowInfo maShowInfo;     /// AutoShow info.
 
-    explicit            LabelData( const String& rName, short nCol, bool bIsValue );
+    explicit            ScDPLabelData( const String& rName, short nCol, bool bIsValue );
 };
 
 // ============================================================================
@@ -401,7 +401,6 @@ struct ScDPFuncData
 
 // ============================================================================
 
-typedef LabelData ScDPLabelData;
 typedef std::vector< ScDPLabelData > ScDPLabelDataVec;
 typedef std::vector< String > ScDPNameVec;
 

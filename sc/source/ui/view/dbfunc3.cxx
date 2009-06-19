@@ -81,9 +81,13 @@
 #include "patattr.hxx"
 #include "unonames.hxx"
 #include "cell.hxx"
+#include "userlist.hxx"
 
 #include <hash_set>
+#include <hash_map>
 #include <memory>
+#include <list>
+#include <vector>
 
 using namespace com::sun::star;
 using ::com::sun::star::uno::Any;
@@ -94,8 +98,13 @@ using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::container::XNameAccess;
 using ::com::sun::star::sheet::XDimensionsSupplier;
 using ::rtl::OUString;
+using ::rtl::OUStringHash;
 using ::rtl::OUStringBuffer;
 using ::std::auto_ptr;
+using ::std::list;
+using ::std::vector;
+using ::std::hash_map;
+using ::std::hash_set;
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -1679,6 +1688,134 @@ void lcl_MoveToEnd( ScDPSaveDimension& rDim, const String& rItemName )
     rDim.AddMember( pNewMember );
     // AddMember takes ownership of the new pointer,
     // puts it to the end of the list even if it was in the list before.
+}
+
+bool ScDBFunc::DataPilotSort( const ScAddress& rPos, bool bAscending, sal_uInt16* pUserListId )
+{
+    ScDocument* pDoc = GetViewData()->GetDocument();
+    ScDPObject* pDPObj = pDoc->GetDPAtCursor(rPos.Col(), rPos.Row(), rPos.Tab());
+    if (!pDPObj)
+        return false;
+
+    // We need to run this to get all members later.
+    pDPObj->BuildAllDimensionMembers();
+
+    USHORT nOrientation;
+    long nDimIndex = pDPObj->GetHeaderDim(rPos, nOrientation);
+    if (nDimIndex < 0)
+        // Invalid dimension index.  Bail out.
+        return false;
+
+    BOOL bDataLayout;
+    ScDPSaveData* pSaveData = pDPObj->GetSaveData();
+    if (!pSaveData)
+        return false;
+
+    ScDPSaveData aNewSaveData(*pSaveData);
+    String aDimName = pDPObj->GetDimName(nDimIndex, bDataLayout);
+    ScDPSaveDimension* pSaveDim = aNewSaveData.GetDimensionByName(aDimName);
+    if (!pSaveDim)
+        return false;
+
+    typedef ScDPSaveDimension::MemberList MemList;
+    const MemList& rDimMembers = pSaveDim->GetMembers();
+    list<OUString> aMembers;
+    hash_set<OUString, ::rtl::OUStringHash> aMemberSet;
+    size_t nMemberCount = 0;
+    for (MemList::const_iterator itr = rDimMembers.begin(), itrEnd = rDimMembers.end();
+          itr != itrEnd; ++itr)
+    {
+        ScDPSaveMember* pMem = *itr;
+        aMembers.push_back(pMem->GetName());
+        aMemberSet.insert(pMem->GetName());
+        ++nMemberCount;
+    }
+
+    // Sort the member list in ascending order.
+    aMembers.sort();
+
+    // Collect and rank those custom sort strings that also exist in the member name list.
+
+    typedef hash_map<OUString, sal_uInt16, OUStringHash> UserSortMap;
+    UserSortMap aSubStrs;
+    sal_uInt16 nSubCount = 0;
+    if (pUserListId)
+    {
+        ScUserList* pUserList = ScGlobal::GetUserList();
+        if (!pUserList)
+            return false;
+
+        {
+            sal_uInt16 n = pUserList->GetCount();
+            if (!n || *pUserListId >= n)
+                return false;
+        }
+
+        ScUserListData* pData = static_cast<ScUserListData*>((*pUserList)[*pUserListId]);
+        if (pData)
+        {
+            sal_uInt16 n = pData->GetSubCount();
+            for (sal_uInt16 i = 0; i < n; ++i)
+            {
+                OUString aSub = pData->GetSubStr(i);
+                if (!aMemberSet.count(aSub))
+                    // This string doesn't exist in the member name set.  Don't add this.
+                    continue;
+
+                aSubStrs.insert(UserSortMap::value_type(aSub, nSubCount++));
+            }
+        }
+    }
+
+    // Rank all members.
+
+    vector<OUString> aRankedNames(nMemberCount);
+    sal_uInt16 nCurStrId = 0;
+    for (list<OUString>::const_iterator itr = aMembers.begin(), itrEnd = aMembers.end();
+          itr != itrEnd; ++itr)
+    {
+        OUString aName = *itr;
+        sal_uInt16 nRank = 0;
+        UserSortMap::const_iterator itrSub = aSubStrs.find(aName);
+        if (itrSub == aSubStrs.end())
+            nRank = nSubCount + nCurStrId++;
+        else
+            nRank = itrSub->second;
+
+        if (!bAscending)
+            nRank = nMemberCount - nRank - 1;
+
+        aRankedNames[nRank] = aName;
+    }
+
+    // Re-order ScDPSaveMember instances with the new ranks.
+
+    for (vector<OUString>::const_iterator itr = aRankedNames.begin(), itrEnd = aRankedNames.end();
+          itr != itrEnd; ++itr)
+    {
+        const ScDPSaveMember* pOldMem = pSaveDim->GetExistingMemberByName(*itr);
+        if (!pOldMem)
+            // All members are supposed to be present.
+            continue;
+
+        ScDPSaveMember* pNewMem = new ScDPSaveMember(*pOldMem);
+        pSaveDim->AddMember(pNewMem);
+    }
+
+    // Set the sorting mode to manual for now.  We may introduce a new sorting
+    // mode later on.
+
+    sheet::DataPilotFieldSortInfo aSortInfo;
+    aSortInfo.Mode = sheet::DataPilotFieldSortMode::MANUAL;
+    pSaveDim->SetSortInfo(&aSortInfo);
+
+    // Update the datapilot with the newly sorted field members.
+
+    auto_ptr<ScDPObject> pNewObj(new ScDPObject(*pDPObj));
+    pNewObj->SetSaveData(aNewSaveData);
+    ScDBDocFunc aFunc(*GetViewData()->GetDocShell());
+
+    return aFunc.DataPilotUpdate(pDPObj, pNewObj.get(), true, false);
 }
 
 BOOL ScDBFunc::DataPilotMove( const ScRange& rSource, const ScAddress& rDest )

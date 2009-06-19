@@ -73,6 +73,7 @@
 #include "editutil.hxx"
 #include "inputopt.hxx"
 #include "fillinfo.hxx"
+#include "dpcontrol.hxx"
 #include "sc.hrc"
 #include <vcl/virdev.hxx>
 
@@ -1203,6 +1204,8 @@ void ScGridWindow::DrawButtons( SCCOL nX1, SCROW /*nY1*/, SCCOL nX2, SCROW /*nY2
 {
     aComboButton.SetOutputDevice( pContentDev );
 
+    ScDPFieldButton aDPFieldBtn(pContentDev, &GetSettings().GetStyleSettings());
+
     SCCOL nCol;
     SCROW nRow;
     SCSIZE nArrY;
@@ -1318,13 +1321,13 @@ void ScGridWindow::DrawButtons( SCCOL nX1, SCROW /*nY1*/, SCCOL nX2, SCROW /*nY2
                         nPosX -= nSizeX - 2;
                     }
 
-                    pContentDev->SetLineColor( GetSettings().GetStyleSettings().GetLightColor() );
-                    pContentDev->DrawLine( Point(nPosX,nPosY), Point(nPosX,nPosY+nSizeY-1) );
-                    pContentDev->DrawLine( Point(nPosX,nPosY), Point(nPosX+nSizeX-1,nPosY) );
-                    pContentDev->SetLineColor( GetSettings().GetStyleSettings().GetDarkShadowColor() );
-                    pContentDev->DrawLine( Point(nPosX,nPosY+nSizeY-1), Point(nPosX+nSizeX-1,nPosY+nSizeY-1) );
-                    pContentDev->DrawLine( Point(nPosX+nSizeX-1,nPosY), Point(nPosX+nSizeX-1,nPosY+nSizeY-1) );
-                    pContentDev->SetLineColor( COL_BLACK );
+                    String aStr;
+                    pDoc->GetString(nCol, nRow, nTab, aStr);
+                    aDPFieldBtn.setText(aStr);
+                    aDPFieldBtn.setBoundingBox(Point(nPosX,nPosY), Size(nSizeX-1, nSizeY-1));
+                    aDPFieldBtn.setDrawPopupButton(pInfo->bPopupButton);
+                    aDPFieldBtn.setHasHiddenMember(pInfo->bFilterActive);
+                    aDPFieldBtn.draw();
                 }
             }
         }

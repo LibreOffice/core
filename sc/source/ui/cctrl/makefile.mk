@@ -45,21 +45,29 @@ LIBTARGET=NO
 # --- Files --------------------------------------------------------
 
 EXCEPTIONSFILES= \
-    $(SLO)$/tbzoomsliderctrl.obj
+    $(SLO)$/tbzoomsliderctrl.obj \
+    $(SLO)$/dpcontrol.obj
 
 SLOFILES =	\
         $(SLO)$/popmenu.obj		\
         $(SLO)$/tbinsert.obj	\
         $(SLO)$/cbuttonw.obj	\
+        $(SLO)$/dpcontrol.obj	\
         $(SLO)$/editfield.obj	\
         $(EXCEPTIONSFILES)
+
+SRS1NAME=$(TARGET)
+SRC1FILES = \
+    dpcontrol.src
 
 LIB1TARGET=$(SLB)$/$(TARGET).lib
 LIB1OBJFILES= \
         $(SLO)$/popmenu.obj		\
         $(SLO)$/tbinsert.obj	\
         $(SLO)$/cbuttonw.obj	\
+        $(SLO)$/dpcontrol.obj	\
         $(SLO)$/tbzoomsliderctrl.obj
+
 
 # --- Tagets -------------------------------------------------------
 

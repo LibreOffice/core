@@ -48,7 +48,9 @@
 #include "dpdimsave.hxx"
 #include "dpobject.hxx"
 #include "dpshttab.hxx"
+#include "dpoutputgeometry.hxx"
 #include "scitems.hxx"
+#include "attrib.hxx"
 
 #include "xltracer.hxx"
 #include "xistream.hxx"
@@ -60,6 +62,8 @@
 #include "excform.hxx"
 #include "xltable.hxx"
 
+#include <vector>
+
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 using ::com::sun::star::sheet::DataPilotFieldOrientation;
@@ -68,6 +72,7 @@ using ::com::sun::star::sheet::DataPilotFieldSortInfo;
 using ::com::sun::star::sheet::DataPilotFieldAutoShowInfo;
 using ::com::sun::star::sheet::DataPilotFieldLayoutInfo;
 using ::com::sun::star::sheet::DataPilotFieldReference;
+using ::std::vector;
 
 // ============================================================================
 // Pivot cache
@@ -1418,8 +1423,10 @@ void XclImpPivotTable::Convert()
     pDPObj->SetAlive( TRUE );
     pDPObj->SetHeaderLayout( maPTViewEx9Info.mnGridLayout == 0 );
 
-    GetDoc().GetDPCollection()->Insert( pDPObj );
+    GetDoc().GetDPCollection()->InsertNewTable(pDPObj);
     mpDPObj = pDPObj;
+
+    ApplyMergeFlags(aOutRange, aSaveData);
 }
 
 void XclImpPivotTable::MaybeRefresh()
@@ -1429,6 +1436,71 @@ void XclImpPivotTable::MaybeRefresh()
         // 'refresh table on load' flag is set.  Refresh the table now.  Some
         // Excel files contain partial table output when this flag is set.
         mpDPObj->Output();
+    }
+}
+
+void XclImpPivotTable::ApplyMergeFlags(const ScRange& rOutRange, const ScDPSaveData& rSaveData)
+{
+    // Apply merge flags for varoius datapilot controls.
+
+    ScDPOutputGeometry aGeometry(rOutRange, false);
+    aGeometry.setColumnFieldCount(maPTInfo.mnColFields);
+    aGeometry.setPageFieldCount(maPTInfo.mnPageFields);
+    aGeometry.setDataFieldCount(maPTInfo.mnDataFields);
+
+    // Excel includes data layout field in the row field count.  We need to
+    // subtract it.
+    bool bDataLayout = maPTInfo.mnDataFields > 1;
+    aGeometry.setRowFieldCount(maPTInfo.mnRowFields - static_cast<sal_uInt32>(bDataLayout));
+
+    ScDocument& rDoc = GetDoc();
+
+    vector<ScAddress> aPageBtns;
+    aGeometry.getPageFieldPositions(aPageBtns);
+    vector<ScAddress>::const_iterator itr = aPageBtns.begin(), itrEnd = aPageBtns.end();
+    for (; itr != itrEnd; ++itr)
+    {
+        sal_uInt16 nMFlag = SC_MF_BUTTON;
+        String aName;
+        rDoc.GetString(itr->Col(), itr->Row(), itr->Tab(), aName);
+        if (rSaveData.HasInvisibleMember(aName))
+            nMFlag |= SC_MF_HIDDEN_MEMBER;
+
+        rDoc.ApplyFlagsTab(itr->Col(), itr->Row(), itr->Col(), itr->Row(), itr->Tab(), nMFlag);
+        rDoc.ApplyFlagsTab(itr->Col()+1, itr->Row(), itr->Col()+1, itr->Row(), itr->Tab(), SC_MF_AUTO);
+    }
+
+    vector<ScAddress> aColBtns;
+    aGeometry.getColumnFieldPositions(aColBtns);
+    itr    = aColBtns.begin();
+    itrEnd = aColBtns.end();
+    for (; itr != itrEnd; ++itr)
+    {
+        sal_Int16 nMFlag = SC_MF_BUTTON | SC_MF_BUTTON_POPUP;
+        String aName;
+        rDoc.GetString(itr->Col(), itr->Row(), itr->Tab(), aName);
+        if (rSaveData.HasInvisibleMember(aName))
+            nMFlag |= SC_MF_HIDDEN_MEMBER;
+        rDoc.ApplyFlagsTab(itr->Col(), itr->Row(), itr->Col(), itr->Row(), itr->Tab(), nMFlag);
+    }
+
+    vector<ScAddress> aRowBtns;
+    aGeometry.getRowFieldPositions(aRowBtns);
+    itr    = aRowBtns.begin();
+    itrEnd = aRowBtns.end();
+    for (; itr != itrEnd; ++itr)
+    {
+        sal_Int16 nMFlag = SC_MF_BUTTON | SC_MF_BUTTON_POPUP;
+        String aName;
+        rDoc.GetString(itr->Col(), itr->Row(), itr->Tab(), aName);
+        if (rSaveData.HasInvisibleMember(aName))
+            nMFlag |= SC_MF_HIDDEN_MEMBER;
+        rDoc.ApplyFlagsTab(itr->Col(), itr->Row(), itr->Col(), itr->Row(), itr->Tab(), nMFlag);
+    }
+    if (bDataLayout)
+    {
+        --itr; // move back to the last row field position.
+        rDoc.ApplyFlagsTab(itr->Col(), itr->Row(), itr->Col(), itr->Row(), itr->Tab(), SC_MF_BUTTON);
     }
 }
 

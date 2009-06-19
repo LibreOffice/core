@@ -95,6 +95,7 @@
 #include "globstr.hrc"
 #include "sc.hrc"
 #include "charthelper.hxx"
+#include "dpobject.hxx"
 
 #define GET_SCALEVALUE(set,id)  ((const SfxUInt16Item&)(set.Get( id ))).GetValue()
 
@@ -712,8 +713,13 @@ BOOL ScDocument::OnlineSpellInRange( const ScRange& rSpellRange, ScAddress& rSpe
     //  skip everything left of rSpellPos:
     while ( pCell && nRow == rSpellPos.Row() && nCol < rSpellPos.Col() )
         pCell = aIter.GetNext( nCol, nRow );
-    while ( pCell )
+
+    for (; pCell; pCell = aIter.GetNext(nCol, nRow))
     {
+        if (pDPCollection && pDPCollection->HasDPTable(nCol, nRow, nTab))
+            // Don't spell check within datapilot table.
+            continue;
+
         CellType eType = pCell->GetCellType();
         if ( eType == CELLTYPE_STRING || eType == CELLTYPE_EDIT )
         {
@@ -798,8 +804,6 @@ BOOL ScDocument::OnlineSpellInRange( const ScRange& rSpellRange, ScAddress& rSpe
 
         if ( ++nCellCount >= SPELL_MAXCELLS )           // seen enough cells?
             break;
-
-        pCell = aIter.GetNext( nCol, nRow );
     }
 
     if ( pCell )

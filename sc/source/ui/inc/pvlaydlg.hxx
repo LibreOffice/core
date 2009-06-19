@@ -193,7 +193,7 @@ private:
 private:
     ScDPFieldWindow&        GetFieldWindow  ( ScDPFieldType eType );
     void                    Init            ();
-    void                    InitWndSelect   ( LabelData** ppLabelArr, long nLabels );
+    void                    InitWndSelect   ( const ::std::vector<ScDPLabelDataRef>& rLabels );
     void                    InitWnd         ( PivotField* pArr, long nCount, ScDPFieldType eType );
     void                    InitFocus       ();
     void                    InitFields      ();

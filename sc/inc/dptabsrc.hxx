@@ -348,6 +348,7 @@ private:
     BOOL                bHasSelectedPage;
     String              aSelectedPage;
     ScDPItemData*       pSelectedData;      // internal, temporary, created from aSelectedPage
+    sal_Bool            mbHasHiddenMember;
 
 public:
                             ScDPDimension( ScDPSource* pSrc, long nD );

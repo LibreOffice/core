@@ -64,6 +64,7 @@
 #include "scabstdlg.hxx" //CHINA001
 using namespace com::sun::star;
 using ::rtl::OUString;
+using ::std::vector;
 
 //----------------------------------------------------------------------------
 
@@ -379,24 +380,23 @@ void ScDPLayoutDlg::StateChanged( StateChangedType nStateChange )
 
 //----------------------------------------------------------------------------
 
-void ScDPLayoutDlg::InitWndSelect( LabelData** ppLabelArr, long nLabels )
+void ScDPLayoutDlg::InitWndSelect( const vector<ScDPLabelDataRef>& rLabels )
 {
-    if ( ppLabelArr )
+    size_t nLabelCount = rLabels.size();
+    if (nLabelCount > MAX_LABELS)
+        nLabelCount = MAX_LABELS;
+    size_t nLast = (nLabelCount > PAGE_SIZE) ? (PAGE_SIZE - 1) : (nLabelCount - 1);
+
+    aLabelDataArr.clear();
+    aLabelDataArr.reserve( nLabelCount );
+    for ( size_t i=0; i < nLabelCount; i++ )
     {
-        size_t nLabelCount = static_cast< size_t >( (nLabels > MAX_LABELS) ? MAX_LABELS : nLabels );
-        size_t nLast = (nLabelCount > PAGE_SIZE) ? (PAGE_SIZE - 1) : (nLabelCount - 1);
+        aLabelDataArr.push_back(*rLabels[i]);
 
-        aLabelDataArr.clear();
-        aLabelDataArr.reserve( nLabelCount );
-        for ( size_t i=0; i < nLabelCount; i++ )
+        if ( i <= nLast )
         {
-            aLabelDataArr.push_back( *ppLabelArr[i] );
-
-            if ( i <= nLast )
-            {
-                aWndSelect.AddField( aLabelDataArr[i].maName, i );
-                aSelectArr[i].reset( new ScDPFuncData( aLabelDataArr[i].mnCol, aLabelDataArr[i].mnFuncMask ) );
-            }
+            aWndSelect.AddField( aLabelDataArr[i].maName, i );
+            aSelectArr[i].reset( new ScDPFuncData( aLabelDataArr[i].mnCol, aLabelDataArr[i].mnFuncMask ) );
         }
     }
 }
@@ -494,18 +494,19 @@ void ScDPLayoutDlg::InitFocus()
 
 void ScDPLayoutDlg::InitFields()
 {
-    InitWndSelect( thePivotData.ppLabelArr, static_cast<long>(thePivotData.nLabels) );
+    InitWndSelect(thePivotData.maLabelArray);
     InitWnd( thePivotData.aPageArr, static_cast<long>(thePivotData.nPageCount), TYPE_PAGE );
     InitWnd( thePivotData.aColArr,  static_cast<long>(thePivotData.nColCount),  TYPE_COL );
     InitWnd( thePivotData.aRowArr,  static_cast<long>(thePivotData.nRowCount),  TYPE_ROW );
     InitWnd( thePivotData.aDataArr, static_cast<long>(thePivotData.nDataCount), TYPE_DATA );
 
+    size_t nLabels = thePivotData.maLabelArray.size();
     aSlider.SetPageSize( PAGE_SIZE );
     aSlider.SetVisibleSize( PAGE_SIZE );
     aSlider.SetLineSize( LINE_SIZE );
-    aSlider.SetRange( Range( 0, static_cast<long>(((thePivotData.nLabels+LINE_SIZE-1)/LINE_SIZE)*LINE_SIZE) ) );
+    aSlider.SetRange( Range( 0, static_cast<long>(((nLabels+LINE_SIZE-1)/LINE_SIZE)*LINE_SIZE) ) );
 
-    if ( thePivotData.nLabels > PAGE_SIZE )
+    if ( nLabels > PAGE_SIZE )
     {
         aSlider.SetEndScrollHdl( LINK( this, ScDPLayoutDlg, ScrollHdl ) );
         aSlider.Show();

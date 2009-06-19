@@ -363,6 +363,8 @@ public:
 
     void                MaybeRefresh();
 
+    void                ApplyMergeFlags(const ScRange& rOutRange, const ScDPSaveData& rSaveData);
+
     // ------------------------------------------------------------------------
 private:
     typedef ::std::vector< XclImpPTFieldRef > XclImpPTFieldVec;

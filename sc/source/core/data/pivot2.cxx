@@ -158,12 +158,7 @@ void ScPivot::SetJustifyRight(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2
 
 void ScPivot::SetButton(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2)
 {
-    if (pDoc->pTab[nDestTab])
-    {
-        ScPatternAttr aPattern( pDoc->GetPool() );
-        aPattern.GetItemSet().Put( ScMergeFlagAttr(SC_MF_BUTTON) );
-        pDoc->pTab[nDestTab]->ApplyPatternArea(nCol1, nRow1, nCol2, nRow2, aPattern);
-    }
+    pDoc->ApplyFlagsTab(nCol1, nRow1, nCol2, nRow2, nDestTab, SC_MF_BUTTON);
 }
 
 void ScPivot::SetStyle(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, USHORT nId)
@@ -492,7 +487,7 @@ ScDataObject*   ScPivotCollection::Clone() const
 
 // ============================================================================
 
-LabelData::LabelData( const String& rName, short nCol, bool bIsValue ) :
+ScDPLabelData::ScDPLabelData( const String& rName, short nCol, bool bIsValue ) :
     maName( rName ),
     mnCol( nCol ),
     mnFuncMask( PIVOT_FUNC_NONE ),

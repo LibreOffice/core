@@ -55,11 +55,23 @@
 #include "dpoutput.hxx"     // ScDPPositionData
 #include "dpshttab.hxx"
 #include "dbdocfun.hxx"
+#include "dpcontrol.hxx"
+#include "dpcontrol.hrc"
+#include "strload.hxx"
+#include "userlist.hxx"
 
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include "scabstdlg.hxx" //CHINA001
-using namespace com::sun::star;
 
+#include <vector>
+#include <hash_map>
+
+using namespace com::sun::star;
+using ::std::vector;
+using ::std::auto_ptr;
+using ::std::hash_map;
+using ::rtl::OUString;
+using ::rtl::OUStringHash;
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -199,6 +211,15 @@ void ScGridWindow::DoPushButton( SCCOL nCol, SCROW nRow, const MouseEvent& rMEvt
             bDPMouse   = TRUE;
             nDPField   = nField;
             pDragDPObj = pDPObj;
+
+            if (DPTestFieldPopupArrow(rMEvt, aPos, pDPObj))
+            {
+                // field name pop up menu has been launched.  Don't activate
+                // field move.
+                bDPMouse = false;
+                return;
+            }
+
             DPTestMouse( rMEvt, TRUE );
             StartTracking();
         }
@@ -724,6 +745,185 @@ void ScGridWindow::DPTestMouse( const MouseEvent& rMEvt, BOOL bMove )
         pViewData->GetView()->SetTimer( this, rMEvt );          // repeat event
     else
         pViewData->GetView()->ResetTimer();
+}
+
+bool ScGridWindow::DPTestFieldPopupArrow(const MouseEvent& rMEvt, const ScAddress& rPos, ScDPObject* pDPObj)
+{
+    // Get the geometry of the cell.
+    Point aSrcPos = pViewData->GetScrPos(rPos.Col(), rPos.Row(), eWhich);
+    long nSizeX, nSizeY;
+    pViewData->GetMergeSizePixel(rPos.Col(), rPos.Row(), nSizeX, nSizeY);
+    Size aSrcSize(nSizeX-1, nSizeY-1);
+
+    // Check if the mouse cursor is clicking on the popup arrow box.
+    ScDPFieldButton aBtn(this, &GetSettings().GetStyleSettings());
+    aBtn.setBoundingBox(aSrcPos, aSrcSize);
+    Point aPopupPos;
+    Size aPopupSize;
+    aBtn.getPopupBoundingBox(aPopupPos, aPopupSize);
+    Rectangle aRec(aPopupPos, aPopupSize);
+    if (aRec.IsInside(rMEvt.GetPosPixel()))
+    {
+        // Mouse cursor inside the popup arrow box.  Launch the field menu.
+        DPLaunchFieldPopupMenu(OutputToScreenPixel(aSrcPos), aSrcSize, rPos, pDPObj);
+        return true;
+    }
+
+    return false;
+}
+
+namespace {
+
+struct DPFieldPopupData : public ScDPFieldPopupWindow::ExtendedData
+{
+    ScPivotParam    maDPParam;
+    ScDPObject*     mpDPObj;
+    long            mnDim;
+};
+
+class DPFieldPopupOKAction : public ScMenuFloatingWindow::Action
+{
+public:
+    explicit DPFieldPopupOKAction(ScGridWindow* p) :
+        mpGridWindow(p) {}
+
+    virtual void execute()
+    {
+        mpGridWindow->UpdateDPFromFieldPopupMenu();
+    }
+private:
+    ScGridWindow* mpGridWindow;
+};
+
+class PopupSortAction : public ScMenuFloatingWindow::Action
+{
+public:
+    enum SortType { ASCENDING, DESCENDING, CUSTOM };
+
+    explicit PopupSortAction(const ScAddress& rPos, SortType eType, sal_uInt16 nUserListIndex, ScTabViewShell* pViewShell) :
+        maPos(rPos), meType(eType), mnUserListIndex(nUserListIndex), mpViewShell(pViewShell) {}
+
+    virtual void execute()
+    {
+        switch (meType)
+        {
+            case ASCENDING:
+                mpViewShell->DataPilotSort(maPos, true);
+            break;
+            case DESCENDING:
+                mpViewShell->DataPilotSort(maPos, false);
+            break;
+            case CUSTOM:
+                mpViewShell->DataPilotSort(maPos, true, &mnUserListIndex);
+            break;
+            default:
+                ;
+        }
+    }
+
+private:
+    ScAddress       maPos;
+    SortType        meType;
+    sal_uInt16      mnUserListIndex;
+    ScTabViewShell* mpViewShell;
+};
+
+}
+
+void ScGridWindow::DPLaunchFieldPopupMenu(
+    const Point& rSrcPos, const Size& rSrcSize, const ScAddress& rPos, ScDPObject* pDPObj)
+{
+    // We need to get the list of field members.
+    auto_ptr<DPFieldPopupData> pDPData(new DPFieldPopupData);
+    pDPObj->FillLabelData(pDPData->maDPParam);
+    pDPData->mpDPObj = pDPObj;
+
+    USHORT nOrient;
+    pDPData->mnDim = pDPObj->GetHeaderDim(rPos, nOrient);
+
+    if (pDPData->maDPParam.maLabelArray.size() <= static_cast<size_t>(pDPData->mnDim))
+        // out-of-bound dimension ID.  This should never happen!
+        return;
+
+    const ScDPLabelData& rLabelData = *pDPData->maDPParam.maLabelArray[pDPData->mnDim];
+
+    mpDPFieldPopup.reset(new ScDPFieldPopupWindow(this));
+    mpDPFieldPopup->setExtendedData(pDPData.release());
+    mpDPFieldPopup->setOKAction(new DPFieldPopupOKAction(this));
+    {
+        sal_Int32 n = rLabelData.maMembers.getLength();
+        mpDPFieldPopup->setMemberSize(n);
+        for (sal_Int32 i = 0; i < n; ++i)
+            mpDPFieldPopup->addMember(rLabelData.maMembers[i], rLabelData.maVisible[i]);
+        mpDPFieldPopup->initMembers();
+    }
+
+    vector<OUString> aUserSortNames;
+    ScUserList* pUserList = ScGlobal::GetUserList();
+    if (pUserList)
+    {
+        sal_uInt16 n = pUserList->GetCount();
+        aUserSortNames.reserve(n);
+        for (sal_uInt16 i = 0; i < n; ++i)
+        {
+            ScUserListData* pData = static_cast<ScUserListData*>((*pUserList)[i]);
+            aUserSortNames.push_back(pData->GetString());
+        }
+    }
+
+    // Populate the menus.
+    ScTabViewShell* pViewShell = pViewData->GetViewShell();
+    mpDPFieldPopup->addMenuItem(
+        ScRscStrLoader(RID_POPUP_FILTER, STR_MENU_SORT_ASC).GetString(), true,
+        new PopupSortAction(rPos, PopupSortAction::ASCENDING, 0, pViewShell));
+    mpDPFieldPopup->addMenuItem(
+        ScRscStrLoader(RID_POPUP_FILTER, STR_MENU_SORT_DESC).GetString(), true,
+        new PopupSortAction(rPos, PopupSortAction::DESCENDING, 0, pViewShell));
+    ScMenuFloatingWindow* pSubMenu = mpDPFieldPopup->addSubMenuItem(
+        ScRscStrLoader(RID_POPUP_FILTER, STR_MENU_SORT_CUSTOM).GetString(), !aUserSortNames.empty());
+
+    if (pSubMenu && !aUserSortNames.empty())
+    {
+        size_t n = aUserSortNames.size();
+        for (size_t i = 0; i < n; ++i)
+        {
+            pSubMenu->addMenuItem(
+                aUserSortNames[i], true,
+                new PopupSortAction(rPos, PopupSortAction::CUSTOM, i, pViewShell));
+        }
+    }
+
+    mpDPFieldPopup->SetPopupModeEndHdl( LINK(this, ScGridWindow, PopupModeEndHdl) );
+    Rectangle aCellRect(rSrcPos, rSrcSize);
+    mpDPFieldPopup->StartPopupMode(aCellRect, (FLOATWIN_POPUPMODE_DOWN | FLOATWIN_POPUPMODE_GRABFOCUS));
+}
+
+void ScGridWindow::UpdateDPFromFieldPopupMenu()
+{
+    if (!mpDPFieldPopup.get())
+        return;
+
+    DPFieldPopupData* pDPData = static_cast<DPFieldPopupData*>(mpDPFieldPopup->getExtendedData());
+    if (!pDPData)
+        return;
+
+    ScDPObject* pDPObj = pDPData->mpDPObj;
+    ScDPObject aNewDPObj(*pDPObj);
+    aNewDPObj.BuildAllDimensionMembers();
+    ScDPSaveData* pSaveData = aNewDPObj.GetSaveData();
+
+    BOOL bIsDataLayout;
+    String aDimName = pDPObj->GetDimName(pDPData->mnDim, bIsDataLayout);
+    ScDPSaveDimension* pDim = pSaveData->GetDimensionByName(aDimName);
+    if (!pDim)
+        return;
+
+    hash_map<OUString, bool, OUStringHash> aResult;
+    mpDPFieldPopup->getResult(aResult);
+    pDim->UpdateMemberVisibility(aResult);
+
+    ScDBDocFunc aFunc(*pViewData->GetDocShell());
+    aFunc.DataPilotUpdate(pDPObj, &aNewDPObj, true, false);
 }
 
 void ScGridWindow::DPMouseMove( const MouseEvent& rMEvt )

@@ -1375,7 +1375,8 @@ ScDPDimension::ScDPDimension( ScDPSource* pSrc, long nD ) :
     mpSubtotalName(NULL),
     nSourceDim( -1 ),
     bHasSelectedPage( FALSE ),
-    pSelectedData( NULL )
+    pSelectedData( NULL ),
+    mbHasHiddenMember(false)
 {
     //! hold pSource
 }
@@ -1571,6 +1572,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPDimension::getPropertySetIn
         {MAP_CHAR_LEN(SC_UNO_USEDHIER), 0,  &getCppuType((sal_Int32*)0),                0, 0 },
         {MAP_CHAR_LEN(SC_UNO_LAYOUTNAME), 0, &getCppuType(static_cast<rtl::OUString*>(0)), 0, 0 },
         {MAP_CHAR_LEN(SC_UNO_FIELD_SUBTOTALNAME), 0, &getCppuType(static_cast<rtl::OUString*>(0)), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_HAS_HIDDEN_MEMBER), 0, &getBooleanCppuType(), 0, 0 },
         {0,0,0,0,0,0}
     };
     static uno::Reference<beans::XPropertySetInfo> aRef =
@@ -1653,6 +1655,8 @@ void SAL_CALL ScDPDimension::setPropertyValue( const rtl::OUString& aPropertyNam
         if (aValue >>= aTmpName)
             mpSubtotalName.reset(new OUString(aTmpName));
     }
+    else if (aNameStr.EqualsAscii(SC_UNO_HAS_HIDDEN_MEMBER))
+        aValue >>= mbHasHiddenMember;
     else
     {
         DBG_ERROR("unknown property");
@@ -1716,6 +1720,8 @@ uno::Any SAL_CALL ScDPDimension::getPropertyValue( const rtl::OUString& aPropert
         aRet <<= mpLayoutName.get() ? *mpLayoutName : OUString::createFromAscii("");
     else if (aNameStr.EqualsAscii(SC_UNO_FIELD_SUBTOTALNAME))
         aRet <<= mpSubtotalName.get() ? *mpSubtotalName : OUString::createFromAscii("");
+    else if (aNameStr.EqualsAscii(SC_UNO_HAS_HIDDEN_MEMBER))
+        aRet <<= mbHasHiddenMember;
     else
     {
         DBG_ERROR("unknown property");

@@ -39,6 +39,7 @@
 #include <svx/sdr/overlay/overlayobject.hxx>
 
 #include <vector>
+#include <memory>
 
 // ---------------------------------------------------------------------------
 
@@ -48,6 +49,7 @@ class ScViewSelectionEngine;
 class ScPivot;
 #endif
 class ScDPObject;
+class ScDPFieldPopupWindow;
 class ScOutputData;
 class ScFilterListBox;
 class AutoFilterPopup;
@@ -159,6 +161,7 @@ private:
 
     ScFilterListBox*        pFilterBox;
     FloatingWindow*         pFilterFloat;
+    ::std::auto_ptr<ScDPFieldPopupWindow> mpDPFieldPopup;
 
     USHORT                  nCursorHideCount;
 
@@ -244,6 +247,16 @@ private:
     void            DPMouseMove( const MouseEvent& rMEvt );
     void            DPMouseButtonUp( const MouseEvent& rMEvt );
     void            DPTestMouse( const MouseEvent& rMEvt, BOOL bMove );
+
+    /**
+     * Check if the mouse click is on a field popup button.
+     *
+     * @return bool true if the field popup menu has been launched and no
+     *         further mouse event handling is necessary, false otherwise.
+     */
+    bool            DPTestFieldPopupArrow(const MouseEvent& rMEvt, const ScAddress& rPos, ScDPObject* pDPObj);
+    void            DPLaunchFieldPopupMenu(
+        const Point& rSrcPos, const Size& rSrcSize, const ScAddress& rPos, ScDPObject* pDPObj);
 
     void            RFMouseMove( const MouseEvent& rMEvt, BOOL bUp );
 
@@ -408,6 +421,8 @@ public:
     void            DoInvertRect( const Rectangle& rPixel );
 
     void            CheckNeedsRepaint();
+
+    void            UpdateDPFromFieldPopupMenu();
 
     // #114409#
     void CursorChanged();

@@ -48,6 +48,7 @@
 #include "dpgroup.hxx"
 #include "dpdimsave.hxx"
 #include "rangeutl.hxx"
+#include "dpoutputgeometry.hxx"
 
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>
@@ -131,6 +132,10 @@ ScXMLDataPilotTableContext::ScXMLDataPilotTableContext( ScXMLImport& rImport,
     sDataPilotTableName(),
     sApplicationData(),
     sGrandTotal(GetXMLToken(XML_BOTH)),
+    mnRowFieldCount(0),
+    mnColFieldCount(0),
+    mnPageFieldCount(0),
+    mnDataFieldCount(0),
     bIsNative(sal_True),
     bIgnoreEmptyRows(sal_False),
     bIdentifyCategories(sal_False),
@@ -280,6 +285,12 @@ SvXMLImportContext *ScXMLDataPilotTableContext::CreateChildContext( USHORT nPref
 
 void ScXMLDataPilotTableContext::SetButtons()
 {
+    ScDPOutputGeometry aGeometry(aTargetRangeAddress, bShowFilter);
+    aGeometry.setColumnFieldCount(mnColFieldCount);
+    aGeometry.setRowFieldCount(mnRowFieldCount);
+    aGeometry.setPageFieldCount(mnPageFieldCount);
+    aGeometry.setDataFieldCount(mnDataFieldCount);
+
     OUString sAddress;
     sal_Int32 nOffset = 0;
     while( nOffset >= 0 )
@@ -291,8 +302,21 @@ void ScXMLDataPilotTableContext::SetButtons()
             sal_Int32 nAddrOffset(0);
             if (pDoc && ScRangeStringConverter::GetAddressFromString( aScAddress, sAddress, pDoc, ::formula::FormulaGrammar::CONV_OOO, nAddrOffset ))
             {
-                ScMergeFlagAttr aAttr( SC_MF_BUTTON );
-                pDoc->ApplyAttr( aScAddress.Col(), aScAddress.Row(), aScAddress.Tab(), aAttr );
+                ScDPOutputGeometry::FieldType eType = aGeometry.getFieldButtonType(aScAddress);
+
+                sal_Int16 nMFlag = SC_MF_BUTTON;
+                if (eType == ScDPOutputGeometry::Column || eType == ScDPOutputGeometry::Row)
+                    nMFlag |= SC_MF_BUTTON_POPUP;
+
+                // Use the cell's string value to see if this field contains a
+                // hidden member.  Isn't there a better way?  GetString() is
+                // quite expensive...
+                String aCellStr;
+                pDoc->GetString(aScAddress.Col(), aScAddress.Row(), aScAddress.Tab(), aCellStr);
+                if (maHiddenMemberFields.count(aCellStr))
+                    nMFlag |= SC_MF_HIDDEN_MEMBER;
+
+                pDoc->ApplyFlagsTab(aScAddress.Col(), aScAddress.Row(), aScAddress.Col(), aScAddress.Row(), aScAddress.Tab(), nMFlag);
             }
         }
     }
@@ -301,7 +325,7 @@ void ScXMLDataPilotTableContext::SetButtons()
         pDPObject->RefreshAfterLoad();
 }
 
-void ScXMLDataPilotTableContext::AddDimension(ScDPSaveDimension* pDim)
+void ScXMLDataPilotTableContext::AddDimension(ScDPSaveDimension* pDim, bool bHasHiddenMember)
 {
     if (pDPSave)
     {
@@ -311,6 +335,30 @@ void ScXMLDataPilotTableContext::AddDimension(ScDPSaveDimension* pDim)
                 pDPSave->GetExistingDimensionByName(pDim->GetName()) )
             pDim->SetDupFlag( TRUE );
 
+        if (!pDim->IsDataLayout())
+        {
+            switch (pDim->GetOrientation())
+            {
+                case sheet::DataPilotFieldOrientation_ROW:
+                    ++mnRowFieldCount;
+                break;
+                case sheet::DataPilotFieldOrientation_COLUMN:
+                    ++mnColFieldCount;
+                break;
+                case sheet::DataPilotFieldOrientation_PAGE:
+                    ++mnPageFieldCount;
+                break;
+                case sheet::DataPilotFieldOrientation_DATA:
+                    ++mnDataFieldCount;
+                break;
+                case sheet::DataPilotFieldOrientation_HIDDEN:
+                default:
+                    ;
+            }
+
+            if (bHasHiddenMember)
+                maHiddenMemberFields.insert(pDim->GetName());
+        }
         pDPSave->AddDimension(pDim);
     }
 }
@@ -405,7 +453,7 @@ void ScXMLDataPilotTableContext::EndElement()
         {
             ScDPCollection* pDPCollection = pDoc->GetDPCollection();
             pDPObject->SetAlive(sal_True);
-            pDPCollection->Insert(pDPObject);
+            pDPCollection->InsertNewTable(pDPObject);
         }
         SetButtons();
     }
@@ -833,7 +881,8 @@ ScXMLDataPilotFieldContext::ScXMLDataPilotFieldContext( ScXMLImport& rImport,
     bIsGroupField(sal_False),
     bDateValue(sal_False),
     bAutoStart(sal_False),
-    bAutoEnd(sal_False)
+    bAutoEnd(sal_False),
+    mbHasHiddenMember(false)
 {
     sal_Bool bHasName(sal_False);
     sal_Bool bDataLayout(sal_False);
@@ -928,6 +977,22 @@ SvXMLImportContext *ScXMLDataPilotFieldContext::CreateChildContext( USHORT nPref
     return pContext;
 }
 
+void ScXMLDataPilotFieldContext::AddMember(ScDPSaveMember* pMember)
+{
+    if (pDim)
+        pDim->AddMember(pMember);
+
+    if (!pMember->GetIsVisible())
+        // This member is hidden.
+        mbHasHiddenMember = true;
+}
+
+void ScXMLDataPilotFieldContext::SetSubTotalName(const OUString& rName)
+{
+    if (pDim)
+        pDim->SetSubtotalName(rName);
+}
+
 void ScXMLDataPilotFieldContext::AddGroup(const ::std::vector<rtl::OUString>& rMembers, const rtl::OUString& rName)
 {
     ScXMLDataPilotGroup aGroup;
@@ -948,7 +1013,7 @@ void ScXMLDataPilotFieldContext::EndElement()
             String sPage(sSelectedPage);
             pDim->SetCurrentPage(&sPage);
         }
-        pDataPilotTable->AddDimension(pDim);
+        pDataPilotTable->AddDimension(pDim, mbHasHiddenMember);
         if (bIsGroupField)
         {
             ScDPNumGroupInfo aInfo;
@@ -993,12 +1058,6 @@ void ScXMLDataPilotFieldContext::EndElement()
             }
         }
     }
-}
-
-void ScXMLDataPilotFieldContext::SetSubTotalName(const OUString& rName)
-{
-    if (pDim)
-        pDim->SetSubtotalName(rName);
 }
 
 ScXMLDataPilotFieldReferenceContext::ScXMLDataPilotFieldReferenceContext( ScXMLImport& rImport, USHORT nPrfx,

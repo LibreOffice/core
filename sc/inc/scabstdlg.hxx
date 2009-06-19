@@ -235,7 +235,7 @@ class AbstractScDPSubtotalDlg : public VclAbstractDialog  //add for ScDPSubtotal
 {
 public:
     virtual USHORT  GetFuncMask() const = 0;
-    virtual void    FillLabelData( LabelData& rLabelData ) const = 0;
+    virtual void    FillLabelData( ScDPLabelData& rLabelData ) const = 0;
 };
 
 class AbstractScDPNumGroupDlg : public VclAbstractDialog

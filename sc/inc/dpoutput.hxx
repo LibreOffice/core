@@ -94,6 +94,7 @@ private:
         com::sun::star::uno::Sequence<
             com::sun::star::sheet::DataResult> > aData;
     BOOL                    bResultsError;
+    bool                    mbHasDataLayout;
     String                  aDataDescription;
 
     // Number format related parameters
@@ -125,7 +126,7 @@ private:
                                 const com::sun::star::sheet::MemberResult& rData,
                                 BOOL bColHeader, long nLevel );
     void            FieldCell( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rCaption,
-                                BOOL bFrame = TRUE );
+                               bool bInTable, bool bPopup, bool bHasHiddenMember );
     void            CalcSizes();
 
     /** Query which sub-area of the table the cell is in. See

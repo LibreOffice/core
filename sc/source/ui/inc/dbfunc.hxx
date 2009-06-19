@@ -99,6 +99,7 @@ public:
     void            UngroupDataPilot();
     void            DataPilotInput( const ScAddress& rPos, const String& rString );
 
+    bool            DataPilotSort( const ScAddress& rPos, bool bAscending, sal_uInt16* pUserListId = NULL );
     BOOL            DataPilotMove( const ScRange& rSource, const ScAddress& rDest );
 
     BOOL            HasSelectionForDrillDown( USHORT& rOrientation );

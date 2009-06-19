@@ -119,6 +119,7 @@
 #include "drwlayer.hxx"
 #include "attrib.hxx"
 #include "validat.hxx"
+#include "dpcontrol.hxx"
 
 // #114409#
 #include <vcl/salbtype.hxx>     // FRound
@@ -370,6 +371,7 @@ ScGridWindow::ScGridWindow( Window* pParent, ScViewData* pData, ScSplitPos eWhic
             pNoteMarker( NULL ),
             pFilterBox( NULL ),
             pFilterFloat( NULL ),
+            mpDPFieldPopup(NULL),
             nCursorHideCount( 0 ),
             bMarking( FALSE ),
             nButtonDown( 0 ),

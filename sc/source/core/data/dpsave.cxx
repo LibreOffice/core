@@ -62,6 +62,7 @@
 
 using namespace com::sun::star;
 using ::rtl::OUString;
+using ::rtl::OUStringHash;
 using ::std::hash_map;
 using ::std::auto_ptr;
 
@@ -642,6 +643,8 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xD
         nHierCount = xHiers->getCount();
     }
 
+    sal_Bool bHasHiddenMember = false;
+
     for (long nHier=0; nHier<nHierCount; nHier++)
     {
         uno::Reference<uno::XInterface> xHierarchy = ScUnoHelpFunctions::AnyToInterface( xHiers->getByIndex(nHier) );
@@ -734,12 +737,15 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xD
 
                         for (MemberList::const_iterator i=maMemberList.begin(); i != maMemberList.end() ; i++)
                         {
-                            rtl::OUString aMemberName = (*i)->GetName();
+                            ScDPSaveMember* pMember = *i;
+                            if (!pMember->GetIsVisible())
+                                bHasHiddenMember = true;
+                            rtl::OUString aMemberName = pMember->GetName();
                             if ( xMembers->hasByName( aMemberName ) )
                             {
                                 uno::Reference<uno::XInterface> xMemberInt = ScUnoHelpFunctions::AnyToInterface(
                                     xMembers->getByName( aMemberName ) );
-                                (*i)->WriteToSource( xMemberInt, nPosition );
+                                pMember->WriteToSource( xMemberInt, nPosition );
 
                                 if ( nPosition >= 0 )
                                     ++nPosition;            // increase if initialized
@@ -751,6 +757,40 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xD
             }
         }
     }
+
+    if (xDimProp.is())
+    {
+        uno::Any any;
+        any <<= bHasHiddenMember;
+        xDimProp->setPropertyValue(
+            OUString::createFromAscii(SC_UNO_HAS_HIDDEN_MEMBER), any);
+    }
+}
+
+void ScDPSaveDimension::UpdateMemberVisibility(const hash_map<OUString, bool, OUStringHash>& rData)
+{
+    typedef hash_map<OUString, bool, OUStringHash> DataMap;
+    MemberList::iterator itrMem = maMemberList.begin(), itrMemEnd = maMemberList.end();
+    for (; itrMem != itrMemEnd; ++itrMem)
+    {
+        ScDPSaveMember* pMem = *itrMem;
+        const String& rMemName = pMem->GetName();
+        DataMap::const_iterator itr = rData.find(rMemName);
+        if (itr != rData.end())
+            pMem->SetIsVisible(itr->second);
+    }
+}
+
+bool ScDPSaveDimension::HasInvisibleMember() const
+{
+    MemberList::const_iterator itrMem = maMemberList.begin(), itrMemEnd = maMemberList.end();
+    for (; itrMem != itrMemEnd; ++itrMem)
+    {
+        const ScDPSaveMember* pMem = *itrMem;
+        if (!pMem->GetIsVisible())
+            return true;
+    }
+    return false;
 }
 
 // -----------------------------------------------------------------------
@@ -1304,3 +1344,11 @@ void ScDPSaveData::BuildAllDimensionMembers(ScDPTableData* pData)
     mbDimensionMembersBuilt = true;
 }
 
+bool ScDPSaveData::HasInvisibleMember(const OUString& rDimName) const
+{
+    ScDPSaveDimension* pDim = GetExistingDimensionByName(rDimName);
+    if (!pDim)
+        return false;
+
+    return pDim->HasInvisibleMember();
+}
