@@ -109,6 +109,7 @@ private:
     long                    nColCount;
     long                    nRowCount;
     long                    nHeaderSize;
+    bool                    mbHeaderLayout;  // TRUE : grid, FALSE : standard
     SCCOL                   nTabStartCol;
     SCROW                   nTabStartRow;
     SCCOL                   nMemberStartCol;
@@ -161,6 +162,9 @@ public:
     BOOL            IsFilterButton( const ScAddress& rPos );
 
     void            GetMemberResultNames( ScStrCollection& rNames, long nDimension );
+
+    void            SetHeaderLayout(bool bUseGrid);
+    bool            GetHeaderLayout() const;
 
     static void     GetDataDimensionNames( String& rSourceName, String& rGivenName,
                                            const com::sun::star::uno::Reference<

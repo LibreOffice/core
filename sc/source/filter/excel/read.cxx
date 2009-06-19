@@ -1143,6 +1143,7 @@ FltError ImportExcel8::Read( void )
                     case EXC_ID_SXDI:           rPTableMgr.ReadSxdi( maStrm );      break;
                     case EXC_ID_SXVDEX:         rPTableMgr.ReadSxvdex( maStrm );    break;
                     case EXC_ID_SXEX:           rPTableMgr.ReadSxex( maStrm );      break;
+                    case EXC_ID_SXVIEWEX9:      rPTableMgr.ReadSxViewEx9( maStrm ); break;
                 }
             }
             break;

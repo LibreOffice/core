@@ -1220,6 +1220,8 @@ XclExpPivotTable::XclExpPivotTable( const XclExpRoot& rRoot, const ScDPObject& r
         maPTInfo.maDataName = ScGlobal::GetRscString( STR_PIVOT_DATA );
         maPTInfo.mnCacheIdx = mrPCache.GetCacheIndex();
 
+        maPTAutoFormat.Init( rDPObj );
+
         if( const ScDPSaveData* pSaveData = rDPObj.GetSaveData() )
         {
             // additional properties from ScDPSaveData
@@ -1299,6 +1301,8 @@ void XclExpPivotTable::Save( XclExpStream& rStrm )
         WriteSxli( rStrm, maPTInfo.mnDataCols, maPTInfo.mnColFields );
         // SXEX
         WriteSxex( rStrm );
+        // SX_AUTOFORMAT
+        WriteSxAutoformat( rStrm );
     }
 }
 
@@ -1439,6 +1443,8 @@ void XclExpPivotTable::Finalize()
     rnDataXclRow = rnXclRow1 + maPTInfo.mnColFields + 1;
     if( maDataFields.empty() )
         ++rnDataXclRow;
+    if( 0 == maPTAutoFormat.mnGridLayout )
+        ++rnDataXclRow;
     rnXclCol2 = ::std::max( rnXclCol2, rnDataXclCol );
     rnXclRow2 = ::std::max( rnXclRow2, rnDataXclRow );
     maPTInfo.mnDataCols = rnXclCol2 - rnDataXclCol + 1;
@@ -1446,6 +1452,8 @@ void XclExpPivotTable::Finalize()
 
     // first heading
     maPTInfo.mnFirstHeadRow = rnXclRow1 + 1;
+    if( 0 == maPTAutoFormat.mnGridLayout )
+        maPTInfo.mnFirstHeadRow++;
 }
 
 // records ----------------------------------------------------------------
@@ -1523,6 +1531,18 @@ void XclExpPivotTable::WriteSxex( XclExpStream& rStrm ) const
     rStrm.StartRecord( EXC_ID_SXEX, 24 );
     rStrm << maPTExtInfo;
     rStrm.EndRecord();
+}
+
+void XclExpPivotTable::WriteSxAutoformat( XclExpStream& rStrm ) const
+{
+    // Until we sync the autoformat ids only export if using grid header layout
+    // That could only have been set via xls import so far.
+    if ( 0 == maPTAutoFormat.mnGridLayout )
+    {
+        rStrm.StartRecord( EXC_ID_SXVIEWEX9, 17 );
+        rStrm << maPTAutoFormat;
+        rStrm.EndRecord();
+    }
 }
 
 // ============================================================================

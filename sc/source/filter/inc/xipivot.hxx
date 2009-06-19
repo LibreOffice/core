@@ -350,6 +350,9 @@ public:
     void                ReadSxdi( XclImpStream& rStrm );
     /** Reads an SXEX record containing additional settings for the pivot table. */
     void                ReadSxex( XclImpStream& rStrm );
+    /** Reads an SXVIEWEX9 record that specifies the pivot tables
+     *  autoformat. */
+    void                ReadSxViewEx9( XclImpStream& rStrm );
 
     // ------------------------------------------------------------------------
 
@@ -364,6 +367,7 @@ private:
 
     XclPTInfo           maPTInfo;           /// General info about the pivot table (SXVIEW record).
     XclPTExtInfo        maPTExtInfo;        /// Extended info about the pivot table (SXEX record).
+    XclPTAutoFormat     maPTAutoFormat;     /// The selected autoformat (SX_AUTOFORMAT)
     XclImpPTFieldVec    maFields;           /// Vector containing all fields.
     XclImpPTFieldRef    mxCurrField;        /// Current field for importing additional info.
     ScfStringVec        maVisFieldNames;    /// Vector containing all visible field names.
@@ -422,6 +426,9 @@ public:
     void                ReadSxvi( XclImpStream& rStrm );
     /** Reads an SXEX record containing additional settings for a pivot table. */
     void                ReadSxex( XclImpStream& rStrm );
+    /** Reads an SXVIEWEX9 record that specifies the pivot tables
+     *  autoformat. */
+    void                ReadSxViewEx9( XclImpStream& rStrm );
 
     // ------------------------------------------------------------------------
 

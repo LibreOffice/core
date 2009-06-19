@@ -106,9 +106,10 @@ private:
     ScDPOutput*             pOutput;
     BOOL                    bSettingsChanged;
     BOOL                    bAlive;         // FALSE if only used to hold settings
-    sal_uInt16              nAutoFormatIndex;
+    sal_uInt16              mnAutoFormatIndex;
     BOOL                    bAllowMove;
     long                    nHeaderRows;    // page fields plus filter button
+    bool                    mbHeaderLayout;  // TRUE : grid, FALSE : standard
 
 
     SC_DLLPRIVATE void              CreateObjects();
@@ -139,6 +140,9 @@ public:
 
     void                SetAutoFormatIndex (const sal_uInt16 nIndex);
     sal_uInt16          GetAutoFormatIndex() const;
+
+    void                SetHeaderLayout(bool bUseGrid);
+    bool                GetHeaderLayout() const;
 
     void                SetSheetDesc(const ScSheetSourceDesc& rDesc);
     void                SetImportDesc(const ScImportSourceDesc& rDesc);

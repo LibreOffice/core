@@ -376,7 +376,8 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
     nRowFmtCount( 0 ),
     nSingleNumFmt( 0 ),
     bSizesValid( FALSE ),
-    bSizeOverflow( FALSE )
+    bSizeOverflow( FALSE ),
+    mbHeaderLayout( false )
 {
     nTabStartCol = nMemberStartCol = nDataStartCol = nTabEndCol = 0;
     nTabStartRow = nMemberStartRow = nDataStartRow = nTabEndRow = 0;
@@ -666,7 +667,11 @@ void ScDPOutput::CalcSizes()
         nRowCount = aData.getLength();
         const uno::Sequence<sheet::DataResult>* pRowAry = aData.getConstArray();
         nColCount = nRowCount ? ( pRowAry[0].getLength() ) : 0;
-        nHeaderSize = 1;            // one row for field names
+
+        nHeaderSize = 1;
+        if (GetHeaderLayout() && nColFieldCount == 0)
+            // Insert an extra header row only when there is no column field.
+            nHeaderSize = 2;
 
         //  calculate output positions and sizes
 
@@ -993,6 +998,16 @@ void ScDPOutput::GetMemberResultNames( ScStrCollection& rNames, long nDimension 
     }
 }
 
+void ScDPOutput::SetHeaderLayout(bool bUseGrid)
+{
+    mbHeaderLayout = bUseGrid;
+    bSizesValid = false;
+}
+
+bool ScDPOutput::GetHeaderLayout() const
+{
+    return mbHeaderLayout;
+}
 
 void ScDPOutput::GetPositionData(const ScAddress& rPos, DataPilotTablePositionData& rPosData)
 {

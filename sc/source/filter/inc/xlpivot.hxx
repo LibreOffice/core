@@ -41,6 +41,7 @@
 #include <tools/datetime.hxx>
 #include "ftools.hxx"
 #include "xladdress.hxx"
+#include "dpobject.hxx"
 
 class XclImpStream;
 class XclExpStream;
@@ -72,6 +73,10 @@ const sal_uInt16 EXC_PT_MAXDATACOUNT        = 256;
 
 // pivot table items
 const sal_uInt16 EXC_PT_MAXITEMCOUNT        = 32500;
+
+const sal_uInt16 EXC_PT_AUTOFMT_HEADER      = 0x810;
+const sal_uInt16 EXC_PT_AUTOFMT_ZERO        = 0;
+const sal_uInt32 EXC_PT_AUTOFMT_FLAGS       = 0x20;
 
 /** Data type of a pivot cache item. */
 enum XclPCItemType
@@ -395,6 +400,9 @@ const double EXC_SXDBEX_CREATION_DATE       = 51901.029652778;
 
 const sal_uInt16 EXC_ID_SXFDBTYPE           = 0x01BB;
 const sal_uInt16 EXC_SXFDBTYPE_DEFAULT      = 0x0000;
+
+// (0x0810) SXVIEWEX9 ---------------------------------------------------------
+const sal_uInt16 EXC_ID_SXVIEWEX9       = 0x0810;
 
 // ============================================================================
 // Pivot cache
@@ -786,5 +794,22 @@ XclExpStream& operator<<( XclExpStream& rStrm, const XclPTExtInfo& rInfo );
 
 // ============================================================================
 
+// Pivot table autoformat settings ==============================================
+
+/** Pivot table autoformat settings (SX_AUTOFORMAT record). */
+struct XclPTAutoFormat
+{
+    sal_uInt32          mbReport;           /// 2 for report* fmts ?
+    sal_uInt8           mnAutoFormat;       /// AutoFormat ID
+    sal_uInt8           mnGridLayout;       /// 0 == gridlayout, 0x10 == modern
+
+    explicit            XclPTAutoFormat();
+    void                Init( const ScDPObject& rDPObj );
+};
+
+XclImpStream& operator>>( XclImpStream& rStrm, XclPTAutoFormat& rInfo );
+XclExpStream& operator<<( XclExpStream& rStrm, const XclPTAutoFormat& rInfo );
+
+// ============================================================================
 #endif
 

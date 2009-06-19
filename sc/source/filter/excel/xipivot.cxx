@@ -1296,6 +1296,11 @@ void XclImpPivotTable::ReadSxex( XclImpStream& rStrm )
     rStrm >> maPTExtInfo;
 }
 
+void XclImpPivotTable::ReadSxViewEx9( XclImpStream& rStrm )
+{
+    rStrm >> maPTAutoFormat;
+}
+
 // ----------------------------------------------------------------------------
 
 void XclImpPivotTable::Convert()
@@ -1363,6 +1368,7 @@ void XclImpPivotTable::Convert()
     pDPObj->SetSheetDesc( aDesc );
     pDPObj->SetOutRange( aOutRange );
     pDPObj->SetAlive( TRUE );
+    pDPObj->SetHeaderLayout( maPTAutoFormat.mnGridLayout == 0 );
     GetDoc().GetDPCollection()->Insert( pDPObj );
 }
 
@@ -1458,6 +1464,12 @@ void XclImpPivotTableManager::ReadSxex( XclImpStream& rStrm )
         maPTables.back()->ReadSxex( rStrm );
 }
 
+void XclImpPivotTableManager::ReadSxViewEx9( XclImpStream& rStrm )
+{
+    if( !maPTables.empty() )
+        maPTables.back()->ReadSxViewEx9( rStrm );
+}
+
 // ----------------------------------------------------------------------------
 
 void XclImpPivotTableManager::ReadPivotCaches( XclImpStream& rStrm )
@@ -1470,6 +1482,87 @@ void XclImpPivotTableManager::ConvertPivotTables()
 {
     for( XclImpPivotTableVec::iterator aIt = maPTables.begin(), aEnd = maPTables.end(); aIt != aEnd; ++aIt )
         (*aIt)->Convert();
+}
+
+// ============================================================================
+
+// Pivot table autoformat settings ============================================
+
+/**
+classic     : 10 08 00 00 00 00 00 00 20 00 00 00 01 00 00 00 00
+default     : 10 08 00 00 00 00 00 00 20 00 00 00 01 00 00 00 00
+report01    : 10 08 02 00 00 00 00 00 20 00 00 00 00 10 00 00 00
+report02    : 10 08 02 00 00 00 00 00 20 00 00 00 01 10 00 00 00
+report03    : 10 08 02 00 00 00 00 00 20 00 00 00 02 10 00 00 00
+report04    : 10 08 02 00 00 00 00 00 20 00 00 00 03 10 00 00 00
+report05    : 10 08 02 00 00 00 00 00 20 00 00 00 04 10 00 00 00
+report06    : 10 08 02 00 00 00 00 00 20 00 00 00 05 10 00 00 00
+report07    : 10 08 02 00 00 00 00 00 20 00 00 00 06 10 00 00 00
+report08    : 10 08 02 00 00 00 00 00 20 00 00 00 07 10 00 00 00
+report09    : 10 08 02 00 00 00 00 00 20 00 00 00 08 10 00 00 00
+report10    : 10 08 02 00 00 00 00 00 20 00 00 00 09 10 00 00 00
+table01     : 10 08 00 00 00 00 00 00 20 00 00 00 0a 10 00 00 00
+table02     : 10 08 00 00 00 00 00 00 20 00 00 00 0b 10 00 00 00
+table03     : 10 08 00 00 00 00 00 00 20 00 00 00 0c 10 00 00 00
+table04     : 10 08 00 00 00 00 00 00 20 00 00 00 0d 10 00 00 00
+table05     : 10 08 00 00 00 00 00 00 20 00 00 00 0e 10 00 00 00
+table06     : 10 08 00 00 00 00 00 00 20 00 00 00 0f 10 00 00 00
+table07     : 10 08 00 00 00 00 00 00 20 00 00 00 10 10 00 00 00
+table08     : 10 08 00 00 00 00 00 00 20 00 00 00 11 10 00 00 00
+table09     : 10 08 00 00 00 00 00 00 20 00 00 00 12 10 00 00 00
+table10     : 10 08 00 00 00 00 00 00 20 00 00 00 13 10 00 00 00
+none        : 10 08 00 00 00 00 00 00 20 00 00 00 15 10 00 00 00
+**/
+
+XclPTAutoFormat::XclPTAutoFormat() :
+    mbReport( 0 ),
+    mnAutoFormat( 0 ),
+    mnGridLayout( 0x10 )
+{
+}
+
+void XclPTAutoFormat::Init( const ScDPObject& rDPObj )
+{
+    if( rDPObj.GetHeaderLayout() )
+    {
+        mbReport     = 0;
+        mnAutoFormat = 1;
+        mnGridLayout = 0;
+    }
+    else
+    {
+        // Report1 for now
+        // TODO : sync with autoformat indicies
+        mbReport     = 2;
+        mnAutoFormat = 1;
+        mnGridLayout = 0x10;
+    }
+}
+
+XclImpStream& operator>>( XclImpStream& rStrm, XclPTAutoFormat& rInfo )
+{
+    rStrm.Ignore( 2 );
+    rStrm >> rInfo.mbReport;            /// 2 for report* fmts ?
+    rStrm.Ignore( 6 );
+    sal_uInt8 nDummy;
+    return rStrm
+        >> rInfo.mnAutoFormat
+        >> rInfo.mnGridLayout
+        >> nDummy >> nDummy >> nDummy;
+}
+
+XclExpStream& operator<<( XclExpStream& rStrm, const XclPTAutoFormat& rInfo )
+{
+    return rStrm
+        << EXC_PT_AUTOFMT_HEADER
+        << rInfo.mbReport
+        << EXC_PT_AUTOFMT_ZERO
+        << EXC_PT_AUTOFMT_FLAGS
+        << rInfo.mnAutoFormat
+        << rInfo.mnGridLayout
+        << static_cast<sal_uInt8>(0x00)
+        << static_cast<sal_uInt8>(0x00)
+        << static_cast<sal_uInt8>(0x00);
 }
 
 // ============================================================================

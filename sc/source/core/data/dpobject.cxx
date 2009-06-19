@@ -165,9 +165,10 @@ ScDPObject::ScDPObject( ScDocument* pD ) :
     pOutput( NULL ),
     bSettingsChanged( FALSE ),
     bAlive( FALSE ),
-    nAutoFormatIndex( 65535 ),
+    mnAutoFormatIndex( 65535 ),
     bAllowMove( FALSE ),
-    nHeaderRows( 0 )
+    nHeaderRows( 0 ),
+    mbHeaderLayout(false)
 {
 }
 
@@ -184,9 +185,10 @@ ScDPObject::ScDPObject(const ScDPObject& r) :
     pOutput( NULL ),
     bSettingsChanged( FALSE ),
     bAlive( FALSE ),
-    nAutoFormatIndex( r.nAutoFormatIndex ),
+    mnAutoFormatIndex( r.mnAutoFormatIndex ),
     bAllowMove( FALSE ),
-    nHeaderRows( r.nHeaderRows )
+    nHeaderRows( r.nHeaderRows ),
+    mbHeaderLayout( r.mbHeaderLayout )
 {
     if (r.pSaveData)
         pSaveData = new ScDPSaveData(*r.pSaveData);
@@ -236,12 +238,22 @@ void ScDPObject::SetSaveData(const ScDPSaveData& rData)
 
 void ScDPObject::SetAutoFormatIndex(const sal_uInt16 nIndex)
 {
-    nAutoFormatIndex = nIndex;
+    mnAutoFormatIndex = nIndex;
 }
 
 sal_uInt16 ScDPObject::GetAutoFormatIndex() const
 {
-    return nAutoFormatIndex;
+    return mnAutoFormatIndex;
+}
+
+void ScDPObject::SetHeaderLayout (bool bUseGrid)
+{
+    mbHeaderLayout = bUseGrid;
+}
+
+bool ScDPObject::GetHeaderLayout() const
+{
+    return mbHeaderLayout;
 }
 
 void ScDPObject::SetOutRange(const ScRange& rRange)
@@ -350,6 +362,7 @@ void ScDPObject::CreateOutput()
     {
         BOOL bFilterButton = IsSheetData() && pSaveData && pSaveData->GetFilterButton();
         pOutput = new ScDPOutput( pDoc, xSource, aOutRange.aStart, bFilterButton );
+        pOutput->SetHeaderLayout ( mbHeaderLayout );
 
         long nOldRows = nHeaderRows;
         nHeaderRows = pOutput->GetHeaderRows();
