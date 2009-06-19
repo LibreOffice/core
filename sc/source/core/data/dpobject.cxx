@@ -165,6 +165,7 @@ ScDPObject::ScDPObject( ScDocument* pD ) :
     pOutput( NULL ),
     bSettingsChanged( FALSE ),
     bAlive( FALSE ),
+    nAutoFormatIndex( 65535 ),
     bAllowMove( FALSE ),
     nHeaderRows( 0 )
 {
@@ -183,6 +184,7 @@ ScDPObject::ScDPObject(const ScDPObject& r) :
     pOutput( NULL ),
     bSettingsChanged( FALSE ),
     bAlive( FALSE ),
+    nAutoFormatIndex( r.nAutoFormatIndex ),
     bAllowMove( FALSE ),
     nHeaderRows( r.nHeaderRows )
 {
@@ -230,6 +232,16 @@ void ScDPObject::SetSaveData(const ScDPSaveData& rData)
     }
 
     InvalidateData();       // re-init source from SaveData
+}
+
+void ScDPObject::SetAutoFormatIndex(const sal_uInt16 nIndex)
+{
+    nAutoFormatIndex = nIndex;
+}
+
+sal_uInt16 ScDPObject::GetAutoFormatIndex() const
+{
+    return nAutoFormatIndex;
 }
 
 void ScDPObject::SetOutRange(const ScRange& rRange)

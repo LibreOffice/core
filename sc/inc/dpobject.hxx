@@ -106,6 +106,7 @@ private:
     ScDPOutput*             pOutput;
     BOOL                    bSettingsChanged;
     BOOL                    bAlive;         // FALSE if only used to hold settings
+    sal_uInt16              nAutoFormatIndex;
     BOOL                    bAllowMove;
     long                    nHeaderRows;    // page fields plus filter button
 
@@ -135,6 +136,9 @@ public:
 
     void                SetOutRange(const ScRange& rRange);
     const ScRange&      GetOutRange() const     { return aOutRange; }
+
+    void                SetAutoFormatIndex (const sal_uInt16 nIndex);
+    sal_uInt16          GetAutoFormatIndex() const;
 
     void                SetSheetDesc(const ScSheetSourceDesc& rDesc);
     void                SetImportDesc(const ScImportSourceDesc& rDesc);
