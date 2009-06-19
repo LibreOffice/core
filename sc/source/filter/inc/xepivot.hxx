@@ -412,8 +412,10 @@ private:
     void                WriteSxli( XclExpStream& rStrm, sal_uInt16 nLineCount, sal_uInt16 nIndexCount ) const;
     /** Writes the SXEX records containing additional pivot table info. */
     void                WriteSxex( XclExpStream& rStrm ) const;
+
+    void                WriteQsiSxTag( XclExpStream& rStrm ) const;
     /** Writes the SX_AUTOFORMAT records with the autoformat id and header layout */
-    void                WriteSxAutoformat( XclExpStream& rStrm ) const;
+    void                WriteSxViewEx9( XclExpStream& rStrm ) const;
 
     // ------------------------------------------------------------------------
 private:
@@ -424,7 +426,7 @@ private:
     const XclExpPivotCache& mrPCache;       /// The pivot cache this pivot table bases on.
     XclPTInfo           maPTInfo;           /// Info about the pivot table (SXVIEW record).
     XclPTExtInfo        maPTExtInfo;        /// Extended info about the pivot table (SXEX record).
-    XclPTAutoFormat     maPTAutoFormat;     /// The selected autoformat (SXVIEWEX9)
+    XclPTViewEx9Info    maPTViewEx9Info;    /// The selected autoformat (SXVIEWEX9)
     XclExpPTFieldList   maFieldList;        /// All fields in pivot cache order.
     ScfUInt16Vec        maRowFields;        /// Row field indexes.
     ScfUInt16Vec        maColFields;        /// Column field indexes.

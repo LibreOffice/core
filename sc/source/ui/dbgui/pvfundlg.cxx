@@ -705,7 +705,9 @@ ScDPShowDetailDlg::ScDPShowDetailDlg( Window* pParent, ScDPObject& rDPObj, USHOR
     maLbDims        ( this, ScResId( LB_DIMS ) ),
     maBtnOk         ( this, ScResId( BTN_OK ) ),
     maBtnCancel     ( this, ScResId( BTN_CANCEL ) ),
-    maBtnHelp       ( this, ScResId( BTN_HELP ) )
+    maBtnHelp       ( this, ScResId( BTN_HELP ) ),
+
+    mrDPObj(rDPObj)
 {
     FreeResource();
 
@@ -719,7 +721,13 @@ ScDPShowDetailDlg::ScDPShowDetailDlg( Window* pParent, ScDPObject& rDPObj, USHOR
         {
             const ScDPSaveDimension* pDimension = pSaveData ? pSaveData->GetExistingDimensionByName(aName) : 0;
             if ( !pDimension || (pDimension->GetOrientation() != nOrient) )
+            {
+                const OUString* pLayoutName = pDimension->GetLayoutName();
+                if (pLayoutName)
+                    aName = *pLayoutName;
                 maLbDims.InsertEntry( aName );
+                maNameIndexMap.insert(DimNameIndexMap::value_type(aName, nDim));
+            }
         }
     }
     if( maLbDims.GetEntryCount() )
@@ -735,7 +743,17 @@ short ScDPShowDetailDlg::Execute()
 
 String ScDPShowDetailDlg::GetDimensionName() const
 {
-    return maLbDims.GetSelectEntry();
+    // Look up the internal dimension name which may be different from the
+    // displayed field name.
+    String aSelectedName = maLbDims.GetSelectEntry();
+    DimNameIndexMap::const_iterator itr = maNameIndexMap.find(aSelectedName);
+    if (itr == maNameIndexMap.end())
+        // This should never happen!
+        return aSelectedName;
+
+    long nDim = itr->second;
+    BOOL bIsDataLayout = false;
+    return mrDPObj.GetDimName(nDim, bIsDataLayout);
 }
 
 IMPL_LINK( ScDPShowDetailDlg, DblClickHdl, ListBox*, pLBox )

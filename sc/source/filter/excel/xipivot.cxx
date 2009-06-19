@@ -847,6 +847,11 @@ void XclImpPivotCache::ReadPivotCacheStream( XclImpStream& rStrm )
     }
 }
 
+bool XclImpPivotCache::IsRefreshOnLoad() const
+{
+    return static_cast<bool>(maPCInfo.mnFlags & 0x0004);
+}
+
 // ============================================================================
 // Pivot table
 // ============================================================================
@@ -882,6 +887,8 @@ void XclImpPTItem::ConvertItem( ScDPSaveDimension& rSaveDim ) const
         ScDPSaveMember& rMember = *rSaveDim.GetMemberByName( *pItemName );
         rMember.SetIsVisible( !::get_flag( maItemInfo.mnFlags, EXC_SXVI_HIDDEN ) );
         rMember.SetShowDetails( !::get_flag( maItemInfo.mnFlags, EXC_SXVI_HIDEDETAIL ) );
+        if (maItemInfo.HasVisName())
+            rMember.SetLayoutName(*maItemInfo.GetVisName());
     }
 }
 
@@ -1043,7 +1050,7 @@ ScDPSaveDimension* XclImpPTField::ConvertRCPField( ScDPSaveData& rSaveData ) con
     // visible name
     if( const String* pVisName = maFieldInfo.GetVisName() )
         if( pVisName->Len() > 0 )
-            rSaveDim.SetLayoutName( pVisName );
+            rSaveDim.SetLayoutName( *pVisName );
 
     // subtotal function(s)
     XclPTSubtotalVec aSubtotalVec;
@@ -1075,6 +1082,10 @@ ScDPSaveDimension* XclImpPTField::ConvertRCPField( ScDPSaveData& rSaveData ) con
     // grouping info
     pCacheField->ConvertGroupField( rSaveData, mrPTable.GetVisFieldNames() );
 
+    // custom subtotal name
+    if (maFieldExtInfo.mpFieldTotalName.get())
+        rSaveDim.SetSubtotalName(*maFieldExtInfo.mpFieldTotalName);
+
     return &rSaveDim;
 }
 
@@ -1099,7 +1110,7 @@ void XclImpPTField::ConvertDataFieldInfo( ScDPSaveDimension& rSaveDim, const Xcl
     // visible name
     if( const String* pVisName = rDataInfo.GetVisName() )
         if( pVisName->Len() > 0 )
-            rSaveDim.SetLayoutName( pVisName );
+            rSaveDim.SetLayoutName( *pVisName );
 
     // aggregation function
     rSaveDim.SetFunction( static_cast< USHORT >( rDataInfo.GetApiAggFunc() ) );
@@ -1134,7 +1145,8 @@ void XclImpPTField::ConvertItems( ScDPSaveDimension& rSaveDim ) const
 
 XclImpPivotTable::XclImpPivotTable( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot ),
-    maDataOrientField( *this, EXC_SXIVD_DATA )
+    maDataOrientField( *this, EXC_SXIVD_DATA ),
+    mpDPObj(NULL)
 {
 }
 
@@ -1298,7 +1310,7 @@ void XclImpPivotTable::ReadSxex( XclImpStream& rStrm )
 
 void XclImpPivotTable::ReadSxViewEx9( XclImpStream& rStrm )
 {
-    rStrm >> maPTAutoFormat;
+    rStrm >> maPTViewEx9Info;
 }
 
 // ----------------------------------------------------------------------------
@@ -1336,11 +1348,14 @@ void XclImpPivotTable::Convert()
         if( const XclImpPTField* pField = GetField( *aIt ) )
             pField->ConvertPageField( aSaveData );
 
+#if 0 // Why do we do this ???
+
     // hidden fields
     for( sal_uInt16 nField = 0, nCount = GetFieldCount(); nField < nCount; ++nField )
         if( const XclImpPTField* pField = GetField( nField ) )
             if( (pField->GetAxes() & EXC_SXVD_AXIS_ROWCOLPAGE) == 0 )
                 pField->ConvertHiddenField( aSaveData );
+#endif
 
     // data fields
     for( aIt = maFiltDataFields.begin(), aEnd = maFiltDataFields.end(); aIt != aEnd; ++aIt )
@@ -1364,12 +1379,30 @@ void XclImpPivotTable::Convert()
     // create the DataPilot
     ScDPObject* pDPObj = new ScDPObject( GetDocPtr() );
     pDPObj->SetName( maPTInfo.maTableName );
+    if (maPTInfo.maDataName.Len() > 0)
+        aSaveData.GetDataLayoutDimension()->SetLayoutName(maPTInfo.maDataName);
+
+    if (maPTViewEx9Info.maGrandTotalName.Len() > 0)
+        aSaveData.SetGrandTotalName(maPTViewEx9Info.maGrandTotalName);
+
     pDPObj->SetSaveData( aSaveData );
     pDPObj->SetSheetDesc( aDesc );
     pDPObj->SetOutRange( aOutRange );
     pDPObj->SetAlive( TRUE );
-    pDPObj->SetHeaderLayout( maPTAutoFormat.mnGridLayout == 0 );
+    pDPObj->SetHeaderLayout( maPTViewEx9Info.mnGridLayout == 0 );
+
     GetDoc().GetDPCollection()->Insert( pDPObj );
+    mpDPObj = pDPObj;
+}
+
+void XclImpPivotTable::MaybeRefresh()
+{
+    if (mpDPObj && mxPCache->IsRefreshOnLoad())
+    {
+        // 'refresh table on load' flag is set.  Refresh the table now.  Some
+        // Excel files contain partial table output when this flag is set.
+        mpDPObj->Output();
+    }
 }
 
 // ============================================================================
@@ -1484,85 +1517,10 @@ void XclImpPivotTableManager::ConvertPivotTables()
         (*aIt)->Convert();
 }
 
-// ============================================================================
-
-// Pivot table autoformat settings ============================================
-
-/**
-classic     : 10 08 00 00 00 00 00 00 20 00 00 00 01 00 00 00 00
-default     : 10 08 00 00 00 00 00 00 20 00 00 00 01 00 00 00 00
-report01    : 10 08 02 00 00 00 00 00 20 00 00 00 00 10 00 00 00
-report02    : 10 08 02 00 00 00 00 00 20 00 00 00 01 10 00 00 00
-report03    : 10 08 02 00 00 00 00 00 20 00 00 00 02 10 00 00 00
-report04    : 10 08 02 00 00 00 00 00 20 00 00 00 03 10 00 00 00
-report05    : 10 08 02 00 00 00 00 00 20 00 00 00 04 10 00 00 00
-report06    : 10 08 02 00 00 00 00 00 20 00 00 00 05 10 00 00 00
-report07    : 10 08 02 00 00 00 00 00 20 00 00 00 06 10 00 00 00
-report08    : 10 08 02 00 00 00 00 00 20 00 00 00 07 10 00 00 00
-report09    : 10 08 02 00 00 00 00 00 20 00 00 00 08 10 00 00 00
-report10    : 10 08 02 00 00 00 00 00 20 00 00 00 09 10 00 00 00
-table01     : 10 08 00 00 00 00 00 00 20 00 00 00 0a 10 00 00 00
-table02     : 10 08 00 00 00 00 00 00 20 00 00 00 0b 10 00 00 00
-table03     : 10 08 00 00 00 00 00 00 20 00 00 00 0c 10 00 00 00
-table04     : 10 08 00 00 00 00 00 00 20 00 00 00 0d 10 00 00 00
-table05     : 10 08 00 00 00 00 00 00 20 00 00 00 0e 10 00 00 00
-table06     : 10 08 00 00 00 00 00 00 20 00 00 00 0f 10 00 00 00
-table07     : 10 08 00 00 00 00 00 00 20 00 00 00 10 10 00 00 00
-table08     : 10 08 00 00 00 00 00 00 20 00 00 00 11 10 00 00 00
-table09     : 10 08 00 00 00 00 00 00 20 00 00 00 12 10 00 00 00
-table10     : 10 08 00 00 00 00 00 00 20 00 00 00 13 10 00 00 00
-none        : 10 08 00 00 00 00 00 00 20 00 00 00 15 10 00 00 00
-**/
-
-XclPTAutoFormat::XclPTAutoFormat() :
-    mbReport( 0 ),
-    mnAutoFormat( 0 ),
-    mnGridLayout( 0x10 )
+void XclImpPivotTableManager::MaybeRefreshPivotTables()
 {
-}
-
-void XclPTAutoFormat::Init( const ScDPObject& rDPObj )
-{
-    if( rDPObj.GetHeaderLayout() )
-    {
-        mbReport     = 0;
-        mnAutoFormat = 1;
-        mnGridLayout = 0;
-    }
-    else
-    {
-        // Report1 for now
-        // TODO : sync with autoformat indicies
-        mbReport     = 2;
-        mnAutoFormat = 1;
-        mnGridLayout = 0x10;
-    }
-}
-
-XclImpStream& operator>>( XclImpStream& rStrm, XclPTAutoFormat& rInfo )
-{
-    rStrm.Ignore( 2 );
-    rStrm >> rInfo.mbReport;            /// 2 for report* fmts ?
-    rStrm.Ignore( 6 );
-    sal_uInt8 nDummy;
-    return rStrm
-        >> rInfo.mnAutoFormat
-        >> rInfo.mnGridLayout
-        >> nDummy >> nDummy >> nDummy;
-}
-
-XclExpStream& operator<<( XclExpStream& rStrm, const XclPTAutoFormat& rInfo )
-{
-    return rStrm
-        << EXC_PT_AUTOFMT_HEADER
-        << rInfo.mbReport
-        << EXC_PT_AUTOFMT_ZERO
-        << EXC_PT_AUTOFMT_FLAGS
-        << rInfo.mnAutoFormat
-        << rInfo.mnGridLayout
-        << static_cast<sal_uInt8>(0x00)
-        << static_cast<sal_uInt8>(0x00)
-        << static_cast<sal_uInt8>(0x00);
+    for( XclImpPivotTableVec::iterator aIt = maPTables.begin(), aEnd = maPTables.end(); aIt != aEnd; ++aIt )
+        (*aIt)->MaybeRefresh();
 }
 
 // ============================================================================

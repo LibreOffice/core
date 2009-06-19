@@ -81,6 +81,7 @@
 
 using namespace com::sun::star;
 using ::std::vector;
+using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::Reference;
@@ -98,7 +99,6 @@ using ::rtl::OUString;
 #define DP_PROP_ORIENTATION         "Orientation"
 #define DP_PROP_POSITION            "Position"
 #define DP_PROP_USEDHIERARCHY       "UsedHierarchy"
-#define DP_PROP_DATADESCR           "DataDescription"
 #define DP_PROP_ISDATALAYOUT        "IsDataLayoutDimension"
 #define DP_PROP_NUMBERFORMAT        "NumberFormat"
 #define DP_PROP_FILTER              "Filter"
@@ -119,7 +119,8 @@ struct ScDPOutLevelData
     long                                nLevel;
     long                                nDimPos;
     uno::Sequence<sheet::MemberResult>  aResult;
-    String                              aCaption;
+    String                              maName;   /// Name is the internal field name.
+    String                              aCaption; /// Caption is the name visible in the output table.
 
     ScDPOutLevelData() { nDim = nHier = nLevel = nDimPos = -1; }
 
@@ -444,7 +445,15 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
                                     xLevel, uno::UNO_QUERY );
                             if ( xLevNam.is() && xLevRes.is() )
                             {
-                                String aCaption = String(xLevNam->getName());   //! Caption...
+                                String aName = xLevNam->getName();
+                                OUString aCaption = aName; // Caption equals the field name by default.
+                                Reference<XPropertySet> xPropSet(xLevel, UNO_QUERY);
+                                if (xPropSet.is())
+                                {
+                                    Any any = xPropSet->getPropertyValue(
+                                        OUString::createFromAscii(SC_UNO_LAYOUTNAME));
+                                    any >>= aCaption;
+                                }
                                 switch ( eDimOrient )
                                 {
                                     case sheet::DataPilotFieldOrientation_COLUMN:
@@ -453,6 +462,7 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
                                         pColFields[nColFieldCount].nLevel  = nLev;
                                         pColFields[nColFieldCount].nDimPos = nDimPos;
                                         pColFields[nColFieldCount].aResult = xLevRes->getResults();
+                                        pColFields[nColFieldCount].maName  = aName;
                                         pColFields[nColFieldCount].aCaption= aCaption;
                                         if (!lcl_MemberEmpty(pColFields[nColFieldCount].aResult))
                                             ++nColFieldCount;
@@ -463,6 +473,7 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
                                         pRowFields[nRowFieldCount].nLevel  = nLev;
                                         pRowFields[nRowFieldCount].nDimPos = nDimPos;
                                         pRowFields[nRowFieldCount].aResult = xLevRes->getResults();
+                                        pRowFields[nRowFieldCount].maName  = aName;
                                         pRowFields[nRowFieldCount].aCaption= aCaption;
                                         if (!lcl_MemberEmpty(pRowFields[nRowFieldCount].aResult))
                                             ++nRowFieldCount;
@@ -473,6 +484,7 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
                                         pPageFields[nPageFieldCount].nLevel  = nLev;
                                         pPageFields[nPageFieldCount].nDimPos = nDimPos;
                                         pPageFields[nPageFieldCount].aResult = lcl_GetSelectedPageAsResult(xDimProp);
+                                        pPageFields[nPageFieldCount].maName  = aName;
                                         pPageFields[nPageFieldCount].aCaption= aCaption;
                                         // no check on results for page fields
                                         ++nPageFieldCount;
@@ -529,7 +541,7 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
         try
         {
             uno::Any aAny = xSrcProp->getPropertyValue(
-                    rtl::OUString::createFromAscii(DP_PROP_DATADESCR) );
+                    rtl::OUString::createFromAscii(SC_UNO_DATADESC) );
             rtl::OUString aUStr;
             aAny >>= aUStr;
             aDataDescription = String( aUStr );
@@ -606,9 +618,16 @@ void ScDPOutput::HeaderCell( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                 const sheet::MemberResult& rData, BOOL bColHeader, long nLevel )
 {
     long nFlags = rData.Flags;
+
+    rtl::OUStringBuffer aCaptionBuf;
+    if (!(nFlags & sheet::MemberResultFlags::NUMERIC))
+        // This caption is not a number.  Make sure it won't get parsed as one.
+        aCaptionBuf.append(sal_Unicode('\''));
+    aCaptionBuf.append(rData.Caption);
+
     if ( nFlags & sheet::MemberResultFlags::HASMEMBER )
     {
-        pDoc->SetString( nCol, nRow, nTab, rData.Caption );
+        pDoc->SetString( nCol, nRow, nTab, aCaptionBuf.makeStringAndClear() );
     }
     else
     {
@@ -1161,7 +1180,7 @@ bool ScDPOutput::GetDataResultPositionData(vector<sheet::DataPilotFieldFilter>& 
     for (SCCOL nColField = 0; nColField < nColFieldCount && bFilterByCol; ++nColField)
     {
         sheet::DataPilotFieldFilter filter;
-        filter.FieldName = pColFields[nColField].aCaption;
+        filter.FieldName = pColFields[nColField].maName;
 
         const uno::Sequence<sheet::MemberResult> rSequence = pColFields[nColField].aResult;
         const sheet::MemberResult* pArray = rSequence.getConstArray();
@@ -1178,10 +1197,15 @@ bool ScDPOutput::GetDataResultPositionData(vector<sheet::DataPilotFieldFilter>& 
     }
 
     // row fields
+    bool bDataLayoutExists = (nDataFieldCount > 1);
     for (SCROW nRowField = 0; nRowField < nRowFieldCount && bFilterByRow; ++nRowField)
     {
+        if (bDataLayoutExists && nRowField == nRowFieldCount - 1)
+            // There is no sense including the data layout field for filtering.
+            continue;
+
         sheet::DataPilotFieldFilter filter;
-        filter.FieldName = pRowFields[nRowField].aCaption;
+        filter.FieldName = pRowFields[nRowField].maName;
 
         const uno::Sequence<sheet::MemberResult> rSequence = pRowFields[nRowField].aResult;
         const sheet::MemberResult* pArray = rSequence.getConstArray();
@@ -1213,8 +1237,7 @@ bool lcl_IsNamedDataField( const ScDPGetPivotDataField& rTarget, const String& r
 
 bool lcl_IsNamedCategoryField( const ScDPGetPivotDataField& rFilter, const ScDPOutLevelData& rField )
 {
-    //! name from source instead of caption?
-    return ScGlobal::pTransliteration->isEqual( rFilter.maFieldName, rField.aCaption );
+    return ScGlobal::pTransliteration->isEqual( rFilter.maFieldName, rField.maName );
 }
 
 bool lcl_IsCondition( const sheet::MemberResult& rResultEntry, const ScDPGetPivotDataField& rFilter )

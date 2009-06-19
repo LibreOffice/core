@@ -43,6 +43,7 @@ const XclStrFlags EXC_STR_FORCEUNICODE      = 0x0001;   /// Always use UCS-2 cha
 const XclStrFlags EXC_STR_8BITLENGTH        = 0x0002;   /// 8-bit string length field (default: 16-bit).
 const XclStrFlags EXC_STR_SMARTFLAGS        = 0x0004;   /// Omit flags on empty string (default: read/write always). BIFF8 only.
 const XclStrFlags EXC_STR_SEPARATEFORMATS   = 0x0008;   /// Import: Keep old formats when reading unformatted string (default: clear formats); Export: Write unformatted string.
+const XclStrFlags EXC_STR_NOHEADER          = 0x0010;   /// Export: Don't write the length and flag fields.
 
 // ----------------------------------------------------------------------------
 

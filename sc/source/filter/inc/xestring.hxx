@@ -323,6 +323,7 @@ private:
     bool                mbSmartFlags;   /// true = omit flags on empty string; false = always write flags.
     bool                mbSkipFormats;  /// true = skip formats on export; false = write complete formatted string.
     bool                mbWrapped;      /// true = text contains several paragraphs.
+    bool                mbSkipHeader;   /// ture = skip length and flags when writing string bytes.
 };
 
 inline bool operator==( const XclExpString& rLeft, const XclExpString& rRight )

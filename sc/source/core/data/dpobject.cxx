@@ -78,6 +78,7 @@
 
 using namespace com::sun::star;
 using ::std::vector;
+using ::boost::shared_ptr;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY;
@@ -162,6 +163,7 @@ ScDPObject::ScDPObject( ScDocument* pD ) :
     pSheetDesc( NULL ),
     pImpDesc( NULL ),
     pServDesc( NULL ),
+    mpTableData(static_cast<ScDPTableData*>(NULL)),
     pOutput( NULL ),
     bSettingsChanged( FALSE ),
     bAlive( FALSE ),
@@ -182,6 +184,7 @@ ScDPObject::ScDPObject(const ScDPObject& r) :
     pSheetDesc( NULL ),
     pImpDesc( NULL ),
     pServDesc( NULL ),
+    mpTableData(static_cast<ScDPTableData*>(NULL)),
     pOutput( NULL ),
     bSettingsChanged( FALSE ),
     bAlive( FALSE ),
@@ -349,6 +352,22 @@ void ScDPObject::SetTag(const String& rNew)
     aTableTag = rNew;
 }
 
+bool ScDPObject::IsDataDescriptionCell(const ScAddress& rPos)
+{
+    if (!pSaveData)
+        return false;
+
+    long nDataDimCount = pSaveData->GetDataDimensionCount();
+    if (nDataDimCount != 1)
+        // There has to be exactly one data dimension for the description to
+        // appear at top-left corner.
+        return false;
+
+    CreateOutput();
+    ScRange aTabRange = pOutput->GetOutputRange(sheet::DataPilotOutputRangeType::TABLE);
+    return (rPos == aTabRange.aStart);
+}
+
 uno::Reference<sheet::XDimensionsSupplier> ScDPObject::GetSource()
 {
     CreateObjects();
@@ -390,11 +409,43 @@ void ScDPObject::CreateOutput()
     }
 }
 
+ScDPTableData* ScDPObject::GetTableData()
+{
+    if (!mpTableData)
+    {
+        if ( pImpDesc )
+        {
+            // database data
+            mpTableData.reset(new ScDatabaseDPData(pDoc, *pImpDesc));
+        }
+        else
+        {
+            // cell data
+            if (!pSheetDesc)
+            {
+                DBG_ERROR("no source descriptor");
+                pSheetDesc = new ScSheetSourceDesc;     // dummy defaults
+            }
+            mpTableData.reset(new ScSheetDPData(pDoc, *pSheetDesc));
+        }
+
+        // grouping (for cell or database data)
+        if ( pSaveData && pSaveData->GetExistingDimensionData() )
+        {
+            shared_ptr<ScDPGroupTableData> pGroupData(new ScDPGroupTableData(mpTableData, pDoc));
+            pSaveData->GetExistingDimensionData()->WriteToData(*pGroupData);
+            mpTableData = pGroupData;
+        }
+    }
+
+    return mpTableData.get();
+}
+
 void ScDPObject::CreateObjects()
 {
     // if groups are involved, create a new source with the ScDPGroupTableData
     if ( bSettingsChanged && pSaveData && pSaveData->GetExistingDimensionData() )
-        xSource = NULL;
+        InvalidateSource();
 
     if (!xSource.is())
     {
@@ -412,33 +463,9 @@ void ScDPObject::CreateObjects()
         if ( !xSource.is() )    // database or sheet data, or error in CreateSource
         {
             DBG_ASSERT( !pServDesc, "DPSource could not be created" );
-
-            ScDPTableData* pData = NULL;
-            if ( pImpDesc )
-            {
-                // database data
-                pData = new ScDatabaseDPData( pDoc, *pImpDesc );
-            }
-            else
-            {
-                // cell data
-                if (!pSheetDesc)
-                {
-                    DBG_ERROR("no source descriptor");
-                    pSheetDesc = new ScSheetSourceDesc;     // dummy defaults
-                }
-                pData = new ScSheetDPData( pDoc, *pSheetDesc );
-            }
-
-            // grouping (for cell or database data)
-            if ( pSaveData && pSaveData->GetExistingDimensionData() )
-            {
-                ScDPGroupTableData* pGroupData = new ScDPGroupTableData( pData, pDoc );
-                pSaveData->GetExistingDimensionData()->WriteToData( *pGroupData );
-                pData = pGroupData;
-            }
-
-            xSource = new ScDPSource( pData );
+            ScDPTableData* pData = GetTableData();
+            ScDPSource* pSource = new ScDPSource( pData );
+            xSource = pSource;
         }
 
         if (pSaveData)
@@ -475,6 +502,7 @@ void ScDPObject::InvalidateData()
 void ScDPObject::InvalidateSource()
 {
     xSource = NULL;
+    mpTableData.reset();
 }
 
 ScRange ScDPObject::GetNewOutputRange( BOOL& rOverflow )
@@ -554,6 +582,14 @@ void ScDPObject::RefreshAfterLoad()
     }
     else
         nHeaderRows = 0;        // nothing found, no drop-down lists
+}
+
+void ScDPObject::BuildAllDimensionMembers()
+{
+    if (!pSaveData)
+        return;
+
+    pSaveData->BuildAllDimensionMembers(GetTableData());
 }
 
 void ScDPObject::UpdateReference( UpdateRefMode eUpdateRefMode,
@@ -678,23 +714,33 @@ void ScDPObject::GetDrillDownData(const ScAddress& rPos, Sequence< Sequence<Any>
     rTableData = xDrillDownData->getDrillDownData(filters);
 }
 
-BOOL ScDPObject::IsDimNameInUse( const String& rName ) const
+bool ScDPObject::IsDimNameInUse(const OUString& rName) const
 {
-    if ( xSource.is() )
+    if (!xSource.is())
+        return false;
+
+    Reference<container::XNameAccess> xDims = xSource->getDimensions();
+    Sequence<OUString> aDimNames = xDims->getElementNames();
+    sal_Int32 n = aDimNames.getLength();
+    for (sal_Int32 i = 0; i < n; ++i)
     {
-        uno::Reference<container::XNameAccess> xDimsName = xSource->getDimensions();
-        if ( xDimsName.is() )
+        const OUString& rDimName = aDimNames[i];
+        if (rDimName.equalsIgnoreAsciiCase(rName))
+            return true;
+
+        Reference<beans::XPropertySet> xPropSet(xDims->getByName(rDimName), UNO_QUERY);
+        if (!xPropSet.is())
+            continue;
+
+        Any any = xPropSet->getPropertyValue(OUString::createFromAscii(SC_UNO_LAYOUTNAME));
+        OUString aLayoutName;
+        if (any >>= aLayoutName)
         {
-            rtl::OUString aCompare( rName );
-            uno::Sequence<rtl::OUString> aNames = xDimsName->getElementNames();
-            long nCount = aNames.getLength();
-            const rtl::OUString* pArr = aNames.getConstArray();
-            for (long nPos=0; nPos<nCount; nPos++)
-                if ( pArr[nPos] == aCompare )            //! ignore case
-                    return TRUE;
+            if (aLayoutName.equalsIgnoreAsciiCase(rName))
+                return true;
         }
     }
-    return FALSE;   // not found
+    return false;
 }
 
 String ScDPObject::GetDimName( long nDim, BOOL& rIsDataLayout )

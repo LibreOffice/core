@@ -423,7 +423,8 @@ void XclExpString::WriteFormats( XclExpStream& rStrm, bool bWriteSize ) const
 
 void XclExpString::Write( XclExpStream& rStrm ) const
 {
-    WriteHeader( rStrm );
+    if (!mbSkipHeader)
+        WriteHeader( rStrm );
     WriteBuffer( rStrm );
     if( IsWriteFormats() )      // only in BIFF8 included in string
         WriteFormats( rStrm );
@@ -589,6 +590,7 @@ void XclExpString::Init( sal_Int32 nCurrLen, XclStrFlags nFlags, sal_uInt16 nMax
     mbSmartFlags = bBiff8 && ::get_flag( nFlags, EXC_STR_SMARTFLAGS );
     mbSkipFormats = ::get_flag( nFlags, EXC_STR_SEPARATEFORMATS );
     mbWrapped = false;
+    mbSkipHeader = ::get_flag( nFlags, EXC_STR_NOHEADER );
     mnMaxLen = nMaxLen;
     SetStrLen( nCurrLen );
 

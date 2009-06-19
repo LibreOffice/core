@@ -38,6 +38,8 @@
 #include "dpoutput.hxx"
 #include <com/sun/star/sheet/XDimensionsSupplier.hpp>
 
+#include <boost/shared_ptr.hpp>
+
 //------------------------------------------------------------------
 
 namespace com { namespace sun { namespace star { namespace sheet {
@@ -66,6 +68,7 @@ class ScStrCollection;
 class TypedScStrCollection;
 struct PivotField;
 class ScDPCacheTable;
+class ScDPTableData;
 
 struct ScDPServiceDesc
 {
@@ -101,6 +104,7 @@ private:
     ScSheetSourceDesc*      pSheetDesc;     //  for sheet data
     ScImportSourceDesc*     pImpDesc;       //  for database data
     ScDPServiceDesc*        pServDesc;      //  for external service
+    ::boost::shared_ptr<ScDPTableData>  mpTableData;
                                             // cached data
     com::sun::star::uno::Reference<com::sun::star::sheet::XDimensionsSupplier> xSource;
     ScDPOutput*             pOutput;
@@ -112,6 +116,7 @@ private:
     bool                    mbHeaderLayout;  // TRUE : grid, FALSE : standard
 
 
+    SC_DLLPRIVATE ScDPTableData*    GetTableData();
     SC_DLLPRIVATE void              CreateObjects();
     SC_DLLPRIVATE void              CreateOutput();
 
@@ -166,7 +171,14 @@ public:
     void                SetTag(const String& rNew);
     const String&       GetTag() const                  { return aTableTag; }
 
-    BOOL                IsDimNameInUse( const String& rName ) const;
+    /**
+     *  Data description cell displays the description of a data dimension if
+     *  and only if there is only one data dimension.  It's usually located at
+     *  the upper-left corner of the table output.
+     */
+    bool                IsDataDescriptionCell(const ScAddress& rPos);
+
+    bool                IsDimNameInUse(const ::rtl::OUString& rName) const;
     String              GetDimName( long nDim, BOOL& rIsDataLayout );
     BOOL                IsDuplicated( long nDim );
     long                GetDimCount();
@@ -229,6 +241,8 @@ public:
     // apply drop-down attribute, initialize nHeaderRows, without accessing the source
     // (button attribute must be present)
     void                RefreshAfterLoad();
+
+    void                BuildAllDimensionMembers();
 
     static BOOL         HasRegisteredSources();
     static com::sun::star::uno::Sequence<rtl::OUString> GetRegisteredSources();

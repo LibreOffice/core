@@ -34,9 +34,11 @@
 #include <tools/string.hxx>
 #include <tools/list.hxx>
 #include <com/sun/star/sheet/XDimensionsSupplier.hpp>
+#include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include "scdllapi.h"
 #include <hash_map>
 #include <list>
+#include <memory>
 
 namespace com { namespace sun { namespace star { namespace sheet {
     struct DataPilotFieldReference;
@@ -46,6 +48,7 @@ namespace com { namespace sun { namespace star { namespace sheet {
 } } } }
 
 class ScDPDimensionSaveData;
+class ScDPTableData;
 
 // --------------------------------------------------------------------
 //
@@ -57,6 +60,7 @@ class ScDPSaveMember
 {
 private:
     String      aName;
+    ::std::auto_ptr<rtl::OUString> mpLayoutName; // custom name to be displayed in the table.
     USHORT      nVisibleMode;
     USHORT      nShowDetailsMode;
 
@@ -77,18 +81,23 @@ public:
 
     void                    SetName( const String& rNew );  // used if the source member was renamed (groups)
 
+    SC_DLLPUBLIC void                    SetLayoutName( const ::rtl::OUString& rName );
+    SC_DLLPUBLIC const ::rtl::OUString*  GetLayoutName() const;
+    void                    RemoveLayoutName();
+
     void                    WriteToSource( const com::sun::star::uno::Reference<
                                             com::sun::star::uno::XInterface>& xMember,
                                             sal_Int32 nPosition );
 };
 
 
-class ScDPSaveDimension
+class SC_DLLPUBLIC ScDPSaveDimension
 {
 private:
     String      aName;
-    String*     pLayoutName;        // alternative name for layout, not used (yet)
     String*     pSelectedPage;
+    ::std::auto_ptr<rtl::OUString> mpLayoutName;
+    ::std::auto_ptr<rtl::OUString> mpSubtotalName;
     BOOL        bIsDataLayout;
     BOOL        bDupFlag;
     USHORT      nOrientation;
@@ -127,39 +136,44 @@ public:
 
     void                    SetName( const String& rNew );  // used if the source dim was renamed (groups)
 
-    SC_DLLPUBLIC void                   SetOrientation(USHORT nNew);
+    void                    SetOrientation(USHORT nNew);
     void                    SetSubTotals(BOOL bSet);        // to be removed!
-    SC_DLLPUBLIC void                   SetSubTotals(long nCount, const USHORT* pFuncs);
+    void                    SetSubTotals(long nCount, const USHORT* pFuncs);
     long                    GetSubTotalsCount() const { return nSubTotalCount; }
     USHORT                  GetSubTotalFunc(long nIndex) const { return pSubTotalFuncs[nIndex]; }
-    SC_DLLPUBLIC void                   SetShowEmpty(BOOL bSet);
+    void                    SetShowEmpty(BOOL bSet);
     BOOL                    GetShowEmpty() const { return BOOL(nShowEmptyMode); }
-    SC_DLLPUBLIC void                   SetFunction(USHORT nNew);       // enum GeneralFunction
+    void                    SetFunction(USHORT nNew);       // enum GeneralFunction
     USHORT                  GetFunction() const { return nFunction; }
     void                    SetUsedHierarchy(long nNew);
     long                    GetUsedHierarchy() const { return nUsedHierarchy; }
-    SC_DLLPUBLIC void                   SetLayoutName(const String* pName);
-    SC_DLLPUBLIC const String&          GetLayoutName() const;
-    SC_DLLPUBLIC BOOL                   HasLayoutName() const;
+
+    void                    SetLayoutName(const ::rtl::OUString& rName);
+    const ::rtl::OUString*  GetLayoutName() const;
+    void                    RemoveLayoutName();
+    void                    SetSubtotalName(const ::rtl::OUString& rName);
+    const ::rtl::OUString*  GetSubtotalName() const;
+
+    bool                    IsMemberNameInUse(const ::rtl::OUString& rName) const;
 
     const ::com::sun::star::sheet::DataPilotFieldReference* GetReferenceValue() const   { return pReferenceValue; }
-    SC_DLLPUBLIC void                   SetReferenceValue(const ::com::sun::star::sheet::DataPilotFieldReference* pNew);
+    void                    SetReferenceValue(const ::com::sun::star::sheet::DataPilotFieldReference* pNew);
 
     const ::com::sun::star::sheet::DataPilotFieldSortInfo* GetSortInfo() const          { return pSortInfo; }
-    SC_DLLPUBLIC void                    SetSortInfo(const ::com::sun::star::sheet::DataPilotFieldSortInfo* pNew);
+    void                    SetSortInfo(const ::com::sun::star::sheet::DataPilotFieldSortInfo* pNew);
     const ::com::sun::star::sheet::DataPilotFieldAutoShowInfo* GetAutoShowInfo() const  { return pAutoShowInfo; }
-    SC_DLLPUBLIC void                    SetAutoShowInfo(const ::com::sun::star::sheet::DataPilotFieldAutoShowInfo* pNew);
+    void                    SetAutoShowInfo(const ::com::sun::star::sheet::DataPilotFieldAutoShowInfo* pNew);
     const ::com::sun::star::sheet::DataPilotFieldLayoutInfo* GetLayoutInfo() const      { return pLayoutInfo; }
-    SC_DLLPUBLIC void                    SetLayoutInfo(const ::com::sun::star::sheet::DataPilotFieldLayoutInfo* pNew);
+    void                    SetLayoutInfo(const ::com::sun::star::sheet::DataPilotFieldLayoutInfo* pNew);
 
-    SC_DLLPUBLIC void                   SetCurrentPage( const String* pPage );      // NULL = no selection (all)
-    SC_DLLPUBLIC BOOL                   HasCurrentPage() const;
-    SC_DLLPUBLIC const String&          GetCurrentPage() const;
+    void                    SetCurrentPage( const String* pPage );      // NULL = no selection (all)
+    BOOL                    HasCurrentPage() const;
+    const String&           GetCurrentPage() const;
 
     USHORT                  GetOrientation() const  { return nOrientation; }
 
     ScDPSaveMember*         GetExistingMemberByName(const String& rName);
-    SC_DLLPUBLIC ScDPSaveMember*            GetMemberByName(const String& rName);
+    ScDPSaveMember*         GetMemberByName(const String& rName);
 
     void                    SetMemberPosition( const String& rName, sal_Int32 nNewPos );
 
@@ -180,6 +194,12 @@ private:
     BOOL        bFilterButton;      // not passed to DataPilotSource
     BOOL        bDrillDown;         // not passed to DataPilotSource
 
+    /** if true, all dimensions already have all of their member instances
+     *  created. */
+    bool        mbDimensionMembersBuilt;
+
+    ::std::auto_ptr<rtl::OUString> mpGrandTotalName;
+
 public:
     SC_DLLPUBLIC                        ScDPSaveData();
                             ScDPSaveData(const ScDPSaveData& r);
@@ -189,21 +209,26 @@ public:
 
     BOOL                    operator== ( const ScDPSaveData& r ) const;
 
+    SC_DLLPUBLIC void                    SetGrandTotalName(const ::rtl::OUString& rName);
+    SC_DLLPUBLIC const ::rtl::OUString*  GetGrandTotalName() const;
+
     const List&             GetDimensions() const { return aDimList; }
     void                    AddDimension(ScDPSaveDimension* pDim) { aDimList.Insert(pDim, LIST_APPEND); }
 
     ScDPSaveDimension*      GetDimensionByName(const String& rName);
     SC_DLLPUBLIC ScDPSaveDimension*     GetDataLayoutDimension();
+    SC_DLLPUBLIC ScDPSaveDimension*      GetExistingDataLayoutDimension() const;
 
     ScDPSaveDimension*      DuplicateDimension(const String& rName);
     SC_DLLPUBLIC ScDPSaveDimension&      DuplicateDimension(const ScDPSaveDimension& rDim);
 
-    SC_DLLPUBLIC ScDPSaveDimension*     GetExistingDimensionByName(const String& rName);
+    SC_DLLPUBLIC ScDPSaveDimension*     GetExistingDimensionByName(const String& rName) const;
     SC_DLLPUBLIC ScDPSaveDimension*     GetNewDimensionByName(const String& rName);
 
     void                    RemoveDimensionByName(const String& rName);
 
     ScDPSaveDimension*      GetInnermostDimension(USHORT nOrientation);
+    ScDPSaveDimension*      GetFirstDimension(::com::sun::star::sheet::DataPilotFieldOrientation eOrientation);
     long                    GetDataDimensionCount() const;
 
 
@@ -230,6 +255,7 @@ public:
     const ScDPDimensionSaveData* GetExistingDimensionData() const   { return pDimensionData; }
     SC_DLLPUBLIC ScDPDimensionSaveData*  GetDimensionData();     // create if not there
     void                    SetDimensionData( const ScDPDimensionSaveData* pNew );      // copied
+    void                    BuildAllDimensionMembers(ScDPTableData* pData);
 };
 
 

@@ -91,6 +91,10 @@ using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::beans::XPropertySet;
+using ::com::sun::star::container::XNameAccess;
+using ::com::sun::star::sheet::XDimensionsSupplier;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 using ::std::auto_ptr;
 
 // STATIC DATA -----------------------------------------------------------
@@ -1351,123 +1355,304 @@ void ScDBFunc::UngroupDataPilot()
     }
 }
 
+OUString lcl_replaceMemberNameInSubtotal(const OUString& rSubtotal, const OUString& rMemberName)
+{
+    sal_Int32 n = rSubtotal.getLength();
+    const sal_Unicode* p = rSubtotal.getStr();
+    OUStringBuffer aBuf, aWordBuf;
+    for (sal_Int32 i = 0; i < n; ++i)
+    {
+        sal_Unicode c = p[i];
+        if (c == sal_Unicode(' '))
+        {
+            OUString aWord = aWordBuf.makeStringAndClear();
+            if (aWord.equals(rMemberName))
+                aBuf.append(sal_Unicode('?'));
+            else
+                aBuf.append(aWord);
+            aBuf.append(c);
+        }
+        else
+            aWordBuf.append(c);
+    }
+
+    if (aWordBuf.getLength() > 0)
+    {
+        OUString aWord = aWordBuf.makeStringAndClear();
+        if (aWord.equals(rMemberName))
+            aBuf.append(sal_Unicode('?'));
+        else
+            aBuf.append(aWord);
+    }
+
+    return aBuf.makeStringAndClear();
+}
+
 void ScDBFunc::DataPilotInput( const ScAddress& rPos, const String& rString )
 {
+    using namespace ::com::sun::star::sheet;
+
     String aNewName( rString );
 
     ScDocument* pDoc = GetViewData()->GetDocument();
     ScDPObject* pDPObj = pDoc->GetDPAtCursor( rPos.Col(), rPos.Row(), rPos.Tab() );
-    if ( pDPObj )
+    if (!pDPObj)
+        return;
+
+    String aOldText;
+    pDoc->GetString( rPos.Col(), rPos.Row(), rPos.Tab(), aOldText );
+
+    if ( aOldText == rString )
     {
-        String aOldText;
-        pDoc->GetString( rPos.Col(), rPos.Row(), rPos.Tab(), aOldText );
+        // nothing to do: silently exit
+        return;
+    }
 
-        if ( aOldText == rString )
+    USHORT nErrorId = 0;
+
+    pDPObj->BuildAllDimensionMembers();
+    ScDPSaveData aData( *pDPObj->GetSaveData() );
+    BOOL bChange = FALSE;
+
+    USHORT nOrient = DataPilotFieldOrientation_HIDDEN;
+    long nField = pDPObj->GetHeaderDim( rPos, nOrient );
+    if ( nField >= 0 )
+    {
+        // changing a field title
+        if ( aData.GetExistingDimensionData() )
         {
-            // nothing to do: silently exit
-            return;
-        }
+            // only group dimensions can be renamed
 
-        USHORT nErrorId = 0;
-
-        ScDPSaveData aData( *pDPObj->GetSaveData() );
-        BOOL bChange = FALSE;
-
-        USHORT nOrient = sheet::DataPilotFieldOrientation_HIDDEN;
-        long nField = pDPObj->GetHeaderDim( rPos, nOrient );
-        if ( nField >= 0 )
-        {
-            // changing a field title
-
-            if ( aData.GetExistingDimensionData() )
+            ScDPDimensionSaveData* pDimData = aData.GetDimensionData();
+            ScDPSaveGroupDimension* pGroupDim = pDimData->GetNamedGroupDimAcc( aOldText );
+            if ( pGroupDim )
             {
-                // only group dimensions can be renamed
+                // valid name: not empty, no existing dimension (group or other)
+                if ( rString.Len() && !pDPObj->IsDimNameInUse(rString) )
+                {
+                    pGroupDim->Rename( aNewName );
+
+                    // also rename in SaveData to preserve the field settings
+                    ScDPSaveDimension* pSaveDim = aData.GetDimensionByName( aOldText );
+                    pSaveDim->SetName( aNewName );
+
+                    bChange = TRUE;
+                }
+                else
+                    nErrorId = STR_INVALIDNAME;
+            }
+        }
+        else if (nOrient == DataPilotFieldOrientation_COLUMN || nOrient == DataPilotFieldOrientation_ROW)
+        {
+            BOOL bDataLayout = false;
+            String aDimName = pDPObj->GetDimName(nField, bDataLayout);
+            ScDPSaveDimension* pDim = bDataLayout ? aData.GetDataLayoutDimension() : aData.GetDimensionByName(aDimName);
+            if (pDim)
+            {
+                if (rString.Len())
+                {
+                    if (rString.EqualsIgnoreCaseAscii(aDimName))
+                    {
+                        pDim->RemoveLayoutName();
+                        bChange = true;
+                    }
+                    else if (!pDPObj->IsDimNameInUse(rString))
+                    {
+                        pDim->SetLayoutName(rString);
+                        bChange = true;
+                    }
+                    else
+                        nErrorId = STR_INVALIDNAME;
+                }
+                else
+                    nErrorId = STR_INVALIDNAME;
+            }
+        }
+    }
+    else if (pDPObj->IsDataDescriptionCell(rPos))
+    {
+        // There is only one data dimension.
+        ScDPSaveDimension* pDim = aData.GetFirstDimension(sheet::DataPilotFieldOrientation_DATA);
+        if (pDim)
+        {
+            if (rString.Len())
+            {
+                if (rString.EqualsIgnoreCaseAscii(pDim->GetName()))
+                {
+                    pDim->RemoveLayoutName();
+                    bChange = true;
+                }
+                else if (!pDPObj->IsDimNameInUse(rString))
+                {
+                    pDim->SetLayoutName(rString);
+                    bChange = true;
+                }
+                else
+                    nErrorId = STR_INVALIDNAME;
+            }
+            else
+                nErrorId = STR_INVALIDNAME;
+        }
+    }
+    else
+    {
+        // This is not a field header.
+        sheet::DataPilotTableHeaderData aPosData;
+        pDPObj->GetHeaderPositionData(rPos, aPosData);
+
+        if ( (aPosData.Flags & MemberResultFlags::HASMEMBER) && aOldText.Len() )
+        {
+            if ( aData.GetExistingDimensionData() && !(aPosData.Flags & MemberResultFlags::SUBTOTAL))
+            {
+                BOOL bIsDataLayout;
+                String aDimName = pDPObj->GetDimName( aPosData.Dimension, bIsDataLayout );
 
                 ScDPDimensionSaveData* pDimData = aData.GetDimensionData();
-                ScDPSaveGroupDimension* pGroupDim = pDimData->GetNamedGroupDimAcc( aOldText );
+                ScDPSaveGroupDimension* pGroupDim = pDimData->GetNamedGroupDimAcc( aDimName );
                 if ( pGroupDim )
                 {
-                    // valid name: not empty, no existing dimension (group or other)
-                    if ( aNewName.Len() && !pDPObj->IsDimNameInUse( aNewName ) )
+                    // valid name: not empty, no existing group in this dimension
+                    //! ignore case?
+                    if ( aNewName.Len() && !pGroupDim->GetNamedGroup( aNewName ) )
                     {
-                        pGroupDim->Rename( aNewName );
+                        ScDPSaveGroupItem* pGroup = pGroupDim->GetNamedGroupAcc( aOldText );
+                        if ( pGroup )
+                            pGroup->Rename( aNewName );     // rename the existing group
+                        else
+                        {
+                            // create a new group to replace the automatic group
+                            ScDPSaveGroupItem aGroup( aNewName );
+                            aGroup.AddElement( aOldText );
+                            pGroupDim->AddGroupItem( aGroup );
+                        }
 
-                        // also rename in SaveData to preserve the field settings
-                        ScDPSaveDimension* pSaveDim = aData.GetDimensionByName( aOldText );
-                        pSaveDim->SetName( aNewName );
+                        // in both cases also adjust savedata, to preserve member settings (show details)
+                        ScDPSaveDimension* pSaveDim = aData.GetDimensionByName( aDimName );
+                        ScDPSaveMember* pSaveMember = pSaveDim->GetExistingMemberByName( aOldText );
+                        if ( pSaveMember )
+                            pSaveMember->SetName( aNewName );
 
                         bChange = TRUE;
                     }
                     else
                         nErrorId = STR_INVALIDNAME;
-                }
+                 }
             }
-        }
-        else
-        {
-            // renaming a group (item)?
-            // allow only on the item name itself - not on empty cells, not on subtotals
-
-            sheet::DataPilotTableHeaderData aPosData;
-            pDPObj->GetHeaderPositionData(rPos, aPosData);
-            if ( ( aPosData.Flags & sheet::MemberResultFlags::HASMEMBER ) &&
-                 ! ( aPosData.Flags & sheet::MemberResultFlags::SUBTOTAL ) &&
-                 aOldText.Len() )
+            else if ((aPosData.Flags & MemberResultFlags::GRANDTOTAL))
             {
-                if ( aData.GetExistingDimensionData() )
+                aData.SetGrandTotalName(rString);
+                bChange = true;
+            }
+            else if (aPosData.Dimension >= 0 && aPosData.MemberName.getLength() > 0)
+            {
+                BOOL bDataLayout = false;
+                String aDimName = pDPObj->GetDimName(static_cast<long>(aPosData.Dimension), bDataLayout);
+                if (bDataLayout)
                 {
-                    BOOL bIsDataLayout;
-                    String aDimName = pDPObj->GetDimName( aPosData.Dimension, bIsDataLayout );
-
-                    ScDPDimensionSaveData* pDimData = aData.GetDimensionData();
-                    ScDPSaveGroupDimension* pGroupDim = pDimData->GetNamedGroupDimAcc( aDimName );
-                    if ( pGroupDim )
+                    // data dimension
+                    do
                     {
-                        // valid name: not empty, no existing group in this dimension
-                        //! ignore case?
-                        if ( aNewName.Len() && !pGroupDim->GetNamedGroup( aNewName ) )
+                        if ((aPosData.Flags & MemberResultFlags::SUBTOTAL))
+                            break;
+
+                        ScDPSaveDimension* pDim = aData.GetDimensionByName(aPosData.MemberName);
+                        if (!pDim)
+                            break;
+
+                        if (!rString.Len())
                         {
-                            ScDPSaveGroupItem* pGroup = pGroupDim->GetNamedGroupAcc( aOldText );
-                            if ( pGroup )
-                                pGroup->Rename( aNewName );     // rename the existing group
-                            else
-                            {
-                                // create a new group to replace the automatic group
-                                ScDPSaveGroupItem aGroup( aNewName );
-                                aGroup.AddElement( aOldText );
-                                pGroupDim->AddGroupItem( aGroup );
-                            }
+                            nErrorId = STR_INVALIDNAME;
+                            break;
+                        }
 
-                            // in both cases also adjust savedata, to preserve member settings (show details)
-                            ScDPSaveDimension* pSaveDim = aData.GetDimensionByName( aDimName );
-                            ScDPSaveMember* pSaveMember = pSaveDim->GetExistingMemberByName( aOldText );
-                            if ( pSaveMember )
-                                pSaveMember->SetName( aNewName );
-
-                            bChange = TRUE;
+                        if (aPosData.MemberName.equalsIgnoreAsciiCase(rString))
+                        {
+                            pDim->RemoveLayoutName();
+                            bChange = true;
+                        }
+                        else if (!pDPObj->IsDimNameInUse(rString))
+                        {
+                            pDim->SetLayoutName(rString);
+                            bChange = true;
                         }
                         else
                             nErrorId = STR_INVALIDNAME;
                     }
+                    while (false);
+                }
+                else
+                {
+                    // field member
+                    do
+                    {
+                        ScDPSaveDimension* pDim = aData.GetDimensionByName(aDimName);
+                        if (!pDim)
+                            break;
+
+                        ScDPSaveMember* pMem = pDim->GetExistingMemberByName(aPosData.MemberName);
+                        if (!pMem)
+                            break;
+
+                        if ((aPosData.Flags & MemberResultFlags::SUBTOTAL))
+                        {
+                            // Change subtotal only when the table has one data dimension.
+                            if (aData.GetDataDimensionCount() > 1)
+                                break;
+
+                            const OUString* pLayoutName = pMem->GetLayoutName();
+                            String aMemberName;
+                            if (pLayoutName)
+                                aMemberName = *pLayoutName;
+                            else
+                                aMemberName = aPosData.MemberName;
+
+                            String aNew = lcl_replaceMemberNameInSubtotal(rString, aMemberName);
+                            pDim->SetSubtotalName(aNew);
+                            bChange = true;
+                        }
+                        else
+                        {
+                            // Check to make sure the member name isn't
+                            // already used.
+                            if (rString.Len())
+                            {
+                                if (rString.EqualsIgnoreCaseAscii(pMem->GetName()))
+                                {
+                                    pMem->RemoveLayoutName();
+                                    bChange = true;
+                                }
+                                else if (!pDim->IsMemberNameInUse(rString))
+                                {
+                                    pMem->SetLayoutName(rString);
+                                    bChange = true;
+                                }
+                                else
+                                    nErrorId = STR_INVALIDNAME;
+                            }
+                            else
+                                nErrorId = STR_INVALIDNAME;
+                        }
+                    }
+                    while (false);
                 }
             }
         }
+    }
 
-        if ( bChange )
-        {
-            // apply changes
-            ScDBDocFunc aFunc( *GetViewData()->GetDocShell() );
-            ScDPObject* pNewObj = new ScDPObject( *pDPObj );
-            pNewObj->SetSaveData( aData );
-            aFunc.DataPilotUpdate( pDPObj, pNewObj, TRUE, FALSE );
-            delete pNewObj;
-        }
-        else
-        {
-            if ( !nErrorId )
-                nErrorId = STR_ERR_DATAPILOT_INPUT;
-            ErrorMessage( nErrorId );
-        }
+    if ( bChange )
+    {
+        // apply changes
+        ScDBDocFunc aFunc( *GetViewData()->GetDocShell() );
+        ScDPObject* pNewObj = new ScDPObject( *pDPObj );
+        pNewObj->SetSaveData( aData );
+        aFunc.DataPilotUpdate( pDPObj, pNewObj, TRUE, FALSE );
+        delete pNewObj;
+    }
+    else
+    {
+        if ( !nErrorId )
+            nErrorId = STR_ERR_DATAPILOT_INPUT;
+        ErrorMessage( nErrorId );
     }
 }
 

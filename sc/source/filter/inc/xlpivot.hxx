@@ -43,6 +43,8 @@
 #include "xladdress.hxx"
 #include "dpobject.hxx"
 
+#include <memory>
+
 class XclImpStream;
 class XclExpStream;
 
@@ -671,6 +673,8 @@ struct XclPTFieldExtInfo
     sal_uInt32          mnFlags;        /// Several flags and number of items for AutoShow.
     sal_uInt16          mnSortField;    /// Index to data field sorting bases on.
     sal_uInt16          mnShowField;    /// Index to data field AutoShow bases on.
+    sal_uInt16          mnNumFmt;
+    ::std::auto_ptr<rtl::OUString> mpFieldTotalName;
 
     explicit            XclPTFieldExtInfo();
 
@@ -796,19 +800,20 @@ XclExpStream& operator<<( XclExpStream& rStrm, const XclPTExtInfo& rInfo );
 
 // Pivot table autoformat settings ==============================================
 
-/** Pivot table autoformat settings (SX_AUTOFORMAT record). */
-struct XclPTAutoFormat
+/** Pivot table autoformat settings (SXVIEWEX9 record). */
+struct XclPTViewEx9Info
 {
     sal_uInt32          mbReport;           /// 2 for report* fmts ?
     sal_uInt8           mnAutoFormat;       /// AutoFormat ID
     sal_uInt8           mnGridLayout;       /// 0 == gridlayout, 0x10 == modern
+    String              maGrandTotalName;
 
-    explicit            XclPTAutoFormat();
+    explicit            XclPTViewEx9Info();
     void                Init( const ScDPObject& rDPObj );
 };
 
-XclImpStream& operator>>( XclImpStream& rStrm, XclPTAutoFormat& rInfo );
-XclExpStream& operator<<( XclExpStream& rStrm, const XclPTAutoFormat& rInfo );
+XclImpStream& operator>>( XclImpStream& rStrm, XclPTViewEx9Info& rInfo );
+XclExpStream& operator<<( XclExpStream& rStrm, const XclPTViewEx9Info& rInfo );
 
 // ============================================================================
 #endif

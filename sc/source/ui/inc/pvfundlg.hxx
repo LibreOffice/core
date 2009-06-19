@@ -55,6 +55,8 @@
 #include <sfx2/itemconnect.hxx>
 #include "pivot.hxx"
 
+#include <hash_map>
+
 // ============================================================================
 
 typedef sfx::ListBoxWrapper< sal_Int32 > ScDPListBoxWrapper;
@@ -217,6 +219,11 @@ public:
 
     virtual short       Execute();
 
+    /**
+     * @return String internal name of the selected field.  Note that this may
+     *         be different from the name displayed in the dialog if the field
+     *         has a layout name.
+     */
     String              GetDimensionName() const;
 
 private:
@@ -228,6 +235,10 @@ private:
     OKButton            maBtnOk;
     CancelButton        maBtnCancel;
     HelpButton          maBtnHelp;
+
+    typedef ::std::hash_map<String, long, ScStringHashCode> DimNameIndexMap;
+    DimNameIndexMap     maNameIndexMap;
+    ScDPObject&         mrDPObj;
 };
 
 // ============================================================================

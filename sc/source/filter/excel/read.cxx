@@ -1178,6 +1178,9 @@ FltError ImportExcel8::Read( void )
             eLastErr = SCWARN_IMPORT_ROW_OVERFLOW;
         else if( rAddrConv.IsColTruncated() )
             eLastErr = SCWARN_IMPORT_COLUMN_OVERFLOW;
+
+        if( GetBiff() == EXC_BIFF8 )
+            GetPivotTableManager().MaybeRefreshPivotTables();
     }
 
     return eLastErr;

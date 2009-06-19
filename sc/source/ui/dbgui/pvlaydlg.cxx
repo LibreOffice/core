@@ -63,6 +63,7 @@
 #include "sc.hrc" //CHINA001
 #include "scabstdlg.hxx" //CHINA001
 using namespace com::sun::star;
+using ::rtl::OUString;
 
 //----------------------------------------------------------------------------
 
@@ -1491,6 +1492,8 @@ IMPL_LINK( ScDPLayoutDlg, OkHdl, OKButton *, EMPTYARG )
                                     nPageCount,    nColCount,    nRowCount,    nDataCount );
         if ( bFit )
         {
+            ScDPSaveData* pOldSaveData = xDlgDPObject->GetSaveData();
+
             ScRange aOutRange( aAdrDest );      // bToNewTable is passed separately
 
             ScDPSaveData aSaveData;
@@ -1522,6 +1525,22 @@ IMPL_LINK( ScDPLayoutDlg, OkHdl, OKButton *, EMPTYARG )
                     pDim->SetSortInfo( &aIt->maSortInfo );
                     pDim->SetLayoutInfo( &aIt->maLayoutInfo );
                     pDim->SetAutoShowInfo( &aIt->maShowInfo );
+                    ScDPSaveDimension* pOldDim = NULL;
+                    if (pOldSaveData)
+                    {
+                        // Transfer the existing layout names to new dimension instance.
+                        pOldDim = pOldSaveData->GetExistingDimensionByName(aIt->maName);
+                        if (pOldDim)
+                        {
+                            const OUString* pLayoutName = pOldDim->GetLayoutName();
+                            if (pLayoutName)
+                                pDim->SetLayoutName(*pLayoutName);
+
+                            const OUString* pSubtotalName = pOldDim->GetSubtotalName();
+                            if (pSubtotalName)
+                                pDim->SetSubtotalName(*pSubtotalName);
+                        }
+                    }
 
                     bool bManualSort = ( aIt->maSortInfo.Mode == sheet::DataPilotFieldSortMode::MANUAL );
 
@@ -1542,9 +1561,31 @@ IMPL_LINK( ScDPLayoutDlg, OkHdl, OKButton *, EMPTYARG )
                                 ScDPSaveMember* pMember = pDim->GetMemberByName( *pItem );
                                 pMember->SetIsVisible( bIsVisible );
                                 pMember->SetShowDetails( bShowDetails );
+                                if (pOldDim)
+                                {
+                                    // Transfer the existing layout name.
+                                    ScDPSaveMember* pOldMember = pOldDim->GetMemberByName(*pItem);
+                                    if (pOldMember)
+                                    {
+                                        const OUString* pLayoutName = pOldMember->GetLayoutName();
+                                        if (pLayoutName)
+                                            pMember->SetLayoutName(*pLayoutName);
+                                    }
+                                }
                             }
                         }
                     }
+                }
+            }
+            ScDPSaveDimension* pDim = aSaveData.GetDataLayoutDimension();
+            if (pDim && pOldSaveData)
+            {
+                ScDPSaveDimension* pOldDim = pOldSaveData->GetDataLayoutDimension();
+                if (pOldDim)
+                {
+                    const OUString* pLayoutName = pOldDim->GetLayoutName();
+                    if (pLayoutName)
+                        pDim->SetLayoutName(*pLayoutName);
                 }
             }
 
