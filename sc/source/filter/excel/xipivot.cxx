@@ -1374,14 +1374,15 @@ void XclImpPivotTable::Convert()
         if( const XclImpPTField* pField = GetField( *aIt ) )
             pField->ConvertPageField( aSaveData );
 
-#if 0 // Why do we do this ???
+    // We need to import hidden fields because hidden fields may contain
+    // special settings for subtotals (aggregation function, filters, custom
+    // name etc.) and members (hidden, custom name etc.).
 
     // hidden fields
     for( sal_uInt16 nField = 0, nCount = GetFieldCount(); nField < nCount; ++nField )
         if( const XclImpPTField* pField = GetField( nField ) )
             if( (pField->GetAxes() & EXC_SXVD_AXIS_ROWCOLPAGE) == 0 )
                 pField->ConvertHiddenField( aSaveData );
-#endif
 
     // data fields
     for( aIt = maFiltDataFields.begin(), aEnd = maFiltDataFields.end(); aIt != aEnd; ++aIt )
