@@ -514,6 +514,7 @@ namespace xmloff { namespace token {
         XML_DATA_LABEL_SYMBOL,
         XML_DATA_LABEL_TEXT,
         XML_DATA_PILOT_FIELD,
+        XML_DATA_PILOT_GRAND_TOTAL,
         XML_DATA_PILOT_LEVEL,
         XML_DATA_PILOT_MEMBER,
         XML_DATA_PILOT_MEMBERS,
