@@ -1344,6 +1344,7 @@ const SvXMLTokenMap& ScXMLImport::GetDataPilotTableElemTokenMap()
         {
             { XML_NAMESPACE_TABLE, XML_DATABASE_SOURCE_SQL, XML_TOK_DATA_PILOT_TABLE_ELEM_SOURCE_SQL        },
             { XML_NAMESPACE_TABLE, XML_DATABASE_SOURCE_TABLE,   XML_TOK_DATA_PILOT_TABLE_ELEM_SOURCE_TABLE      },
+            { XML_NAMESPACE_TABLE, XML_DATA_PILOT_GRAND_TOTAL,  XML_TOK_DATA_PILOT_TABLE_ELEM_GRAND_TOTAL       },
             { XML_NAMESPACE_TABLE, XML_DATABASE_SOURCE_QUERY,   XML_TOK_DATA_PILOT_TABLE_ELEM_SOURCE_QUERY      },
             { XML_NAMESPACE_TABLE, XML_SOURCE_SERVICE,          XML_TOK_DATA_PILOT_TABLE_ELEM_SOURCE_SERVICE    },
             { XML_NAMESPACE_TABLE, XML_SOURCE_CELL_RANGE,       XML_TOK_DATA_PILOT_TABLE_ELEM_SOURCE_CELL_RANGE },
@@ -1375,6 +1376,24 @@ const SvXMLTokenMap& ScXMLImport::GetDataPilotTableSourceServiceAttrTokenMap()
     } // if( !pDataPilotTableSourceServiceAttrTokenMap )
 
     return *pDataPilotTableSourceServiceAttrTokenMap;
+}
+
+const SvXMLTokenMap& ScXMLImport::GetDataPilotGrandTotalAttrTokenMap()
+{
+    if (!pDataPilotGrandTotalAttrTokenMap)
+    {
+        static __FAR_DATA SvXMLTokenMapEntry aDataPilotGrandTotalAttrTokenMap[] =
+        {
+            { XML_NAMESPACE_TABLE, XML_DISPLAY,      XML_TOK_DATA_PILOT_GRAND_TOTAL_ATTR_DISPLAY      },
+            { XML_NAMESPACE_TABLE, XML_ORIENTATION,  XML_TOK_DATA_PILOT_GRAND_TOTAL_ATTR_ORIENTATION  },
+            { XML_NAMESPACE_TABLE, XML_DISPLAY_NAME, XML_TOK_DATA_PILOT_GRAND_TOTAL_ATTR_DISPLAY_NAME },
+            XML_TOKEN_MAP_END
+        };
+
+        pDataPilotGrandTotalAttrTokenMap = new SvXMLTokenMap( aDataPilotGrandTotalAttrTokenMap );
+    }
+
+    return *pDataPilotGrandTotalAttrTokenMap;
 }
 
 const SvXMLTokenMap& ScXMLImport::GetDataPilotTableSourceCellRangeAttrTokenMap()
@@ -1416,6 +1435,7 @@ const SvXMLTokenMap& ScXMLImport::GetDataPilotFieldAttrTokenMap()
         static __FAR_DATA SvXMLTokenMapEntry aDataPilotFieldAttrTokenMap[] =
         {
             { XML_NAMESPACE_TABLE, XML_SOURCE_FIELD_NAME,       XML_TOK_DATA_PILOT_FIELD_ATTR_SOURCE_FIELD_NAME     },
+            { XML_NAMESPACE_TABLE, XML_DISPLAY_NAME,            XML_TOK_DATA_PILOT_FIELD_ATTR_DISPLAY_NAME          },
             { XML_NAMESPACE_TABLE, XML_IS_DATA_LAYOUT_FIELD,    XML_TOK_DATA_PILOT_FIELD_ATTR_IS_DATA_LAYOUT_FIELD  },
             { XML_NAMESPACE_TABLE, XML_FUNCTION,                XML_TOK_DATA_PILOT_FIELD_ATTR_FUNCTION              },
             { XML_NAMESPACE_TABLE, XML_ORIENTATION,             XML_TOK_DATA_PILOT_FIELD_ATTR_ORIENTATION           },
@@ -1507,6 +1527,7 @@ const SvXMLTokenMap& ScXMLImport::GetDataPilotSubTotalAttrTokenMap()
         static __FAR_DATA SvXMLTokenMapEntry aDataPilotSubTotalAttrTokenMap[] =
         {
             { XML_NAMESPACE_TABLE, XML_FUNCTION,                XML_TOK_DATA_PILOT_SUBTOTAL_ATTR_FUNCTION           },
+            { XML_NAMESPACE_TABLE, XML_DISPLAY_NAME,            XML_TOK_DATA_PILOT_SUBTOTAL_ATTR_DISPLAY_NAME       },
             XML_TOKEN_MAP_END
         };
 
@@ -1539,6 +1560,7 @@ const SvXMLTokenMap& ScXMLImport::GetDataPilotMemberAttrTokenMap()
         static __FAR_DATA SvXMLTokenMapEntry aDataPilotMemberAttrTokenMap[] =
         {
             { XML_NAMESPACE_TABLE, XML_NAME,                    XML_TOK_DATA_PILOT_MEMBER_ATTR_NAME                 },
+            { XML_NAMESPACE_TABLE, XML_DISPLAY_NAME,        XML_TOK_DATA_PILOT_MEMBER_ATTR_DISPLAY_NAME         },
             { XML_NAMESPACE_TABLE, XML_DISPLAY,             XML_TOK_DATA_PILOT_MEMBER_ATTR_DISPLAY              },
             { XML_NAMESPACE_TABLE, XML_SHOW_DETAILS,        XML_TOK_DATA_PILOT_MEMBER_ATTR_SHOW_DETAILS     },
             XML_TOKEN_MAP_END
@@ -1674,6 +1696,7 @@ ScXMLImport::ScXMLImport(
     pDataPilotTableAttrTokenMap( 0 ),
     pDataPilotTableElemTokenMap( 0 ),
     pDataPilotTableSourceServiceAttrTokenMap( 0 ),
+    pDataPilotGrandTotalAttrTokenMap(NULL),
     pDataPilotTableSourceCellRangeElemTokenMap( 0 ),
     pDataPilotTableSourceCellRangeAttrTokenMap( 0 ),
     pDataPilotFieldAttrTokenMap( 0 ),

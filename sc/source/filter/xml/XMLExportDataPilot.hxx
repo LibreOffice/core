@@ -34,6 +34,7 @@
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <rtl/ustring.hxx>
 #include "global.hxx"
+#include "xmloff/xmltoken.hxx"
 
 class ScXMLExport;
 class ScDocument;
@@ -68,6 +69,8 @@ class ScXMLExportDataPilot
     void WriteNumGroupDim(const ScDPSaveNumGroupDimension* pNumGroupDim);
     void WriteDimension(ScDPSaveDimension* pDim, const ScDPDimensionSaveData* pDimData);
     void WriteDimensions(ScDPSaveData* pDPSave);
+
+    void WriteGrandTotal(::xmloff::token::XMLTokenEnum eOrient, bool bVisible, const ::rtl::OUString* pGrandTotal);
 
 public:
     ScXMLExportDataPilot(ScXMLExport& rExport);

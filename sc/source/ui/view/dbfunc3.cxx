@@ -1355,7 +1355,7 @@ void ScDBFunc::UngroupDataPilot()
     }
 }
 
-OUString lcl_replaceMemberNameInSubtotal(const OUString& rSubtotal, const OUString& rMemberName)
+static OUString lcl_replaceMemberNameInSubtotal(const OUString& rSubtotal, const OUString& rMemberName)
 {
     sal_Int32 n = rSubtotal.getLength();
     const sal_Unicode* p = rSubtotal.getStr();
@@ -1371,6 +1371,18 @@ OUString lcl_replaceMemberNameInSubtotal(const OUString& rSubtotal, const OUStri
             else
                 aBuf.append(aWord);
             aBuf.append(c);
+        }
+        else if (c == sal_Unicode('\\'))
+        {
+            // Escape a backslash character.
+            aWordBuf.append(c);
+            aWordBuf.append(c);
+        }
+        else if (c == sal_Unicode('?'))
+        {
+            // A literal '?' must be escaped with a backslash ('\');
+            aWordBuf.append(sal_Unicode('\\'));
+            aWordBuf.append(c);
         }
         else
             aWordBuf.append(c);

@@ -1186,20 +1186,28 @@ void ScDPResultMember::ProcessData( const vector<ScDPItemData>& aChildMembers, c
 }
 
 /**
- * Parse subtotal string and replace all occurrences of '?' with the
- * caption string.
+ * Parse subtotal string and replace all occurrences of '?' with the caption
+ * string.  Do ensure that escaped characters are not translated.
  */
 static String lcl_parseSubtotalName(const String& rSubStr, const String& rCaption)
 {
     String aNewStr;
     xub_StrLen n = rSubStr.Len();
+    bool bEscaped = false;
     for (xub_StrLen i = 0; i < n; ++i)
     {
         sal_Unicode c = rSubStr.GetChar(i);
-        if (c == sal_Unicode('?'))
+        if (!bEscaped && c == sal_Unicode('\\'))
+        {
+            bEscaped = true;
+            continue;
+        }
+
+        if (!bEscaped && c == sal_Unicode('?'))
             aNewStr.Append(rCaption);
         else
             aNewStr.Append(c);
+        bEscaped = false;
     }
     return aNewStr;
 }

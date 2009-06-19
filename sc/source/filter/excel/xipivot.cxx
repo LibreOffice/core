@@ -61,6 +61,7 @@
 #include "xltable.hxx"
 
 using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 using ::com::sun::star::sheet::DataPilotFieldOrientation;
 using ::com::sun::star::sheet::DataPilotFieldOrientation_DATA;
 using ::com::sun::star::sheet::DataPilotFieldSortInfo;
@@ -1029,6 +1030,28 @@ void XclImpPTField::ConvertDataField( ScDPSaveData& rSaveData ) const
 
 // private --------------------------------------------------------------------
 
+/**
+ * Convert Excel-encoded subtotal name to a Calc-encoded one.
+ */
+static OUString lcl_convertExcelSubtotalName(const OUString& rName)
+{
+    OUStringBuffer aBuf;
+    const sal_Unicode* p = rName.getStr();
+    sal_Int32 n = rName.getLength();
+    for (sal_Int32 i = 0; i < n; ++i)
+    {
+        const sal_Unicode c = p[i];
+        if (c == sal_Unicode('\\'))
+        {
+            aBuf.append(c);
+            aBuf.append(c);
+        }
+        else
+            aBuf.append(c);
+    }
+    return aBuf.makeStringAndClear();
+}
+
 ScDPSaveDimension* XclImpPTField::ConvertRCPField( ScDPSaveData& rSaveData ) const
 {
     const String& rFieldName = GetFieldName();
@@ -1084,7 +1107,10 @@ ScDPSaveDimension* XclImpPTField::ConvertRCPField( ScDPSaveData& rSaveData ) con
 
     // custom subtotal name
     if (maFieldExtInfo.mpFieldTotalName.get())
-        rSaveDim.SetSubtotalName(*maFieldExtInfo.mpFieldTotalName);
+    {
+        OUString aSubName = lcl_convertExcelSubtotalName(*maFieldExtInfo.mpFieldTotalName);
+        rSaveDim.SetSubtotalName(aSubName);
+    }
 
     return &rSaveDim;
 }

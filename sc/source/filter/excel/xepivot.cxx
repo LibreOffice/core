@@ -1035,6 +1035,31 @@ sal_uInt16 XclExpPTField::GetItemIndex( const String& rName, sal_uInt16 nDefault
 
 // fill data --------------------------------------------------------------
 
+/**
+ * Calc's subtotal names are escaped with backslashes ('\'), while Excel's
+ * are not escaped at all.
+ */
+static OUString lcl_convertCalcSubtotalName(const OUString& rName)
+{
+    OUStringBuffer aBuf;
+    const sal_Unicode* p = rName.getStr();
+    sal_Int32 n = rName.getLength();
+    bool bEscaped = false;
+    for (sal_Int32 i = 0; i < n; ++i)
+    {
+        const sal_Unicode c = p[i];
+        if (!bEscaped && c == sal_Unicode('\\'))
+        {
+            bEscaped = true;
+            continue;
+        }
+
+        aBuf.append(c);
+        bEscaped = false;
+    }
+    return aBuf.makeStringAndClear();
+}
+
 void XclExpPTField::SetPropertiesFromDim( const ScDPSaveDimension& rSaveDim )
 {
     // orientation
@@ -1052,7 +1077,10 @@ void XclExpPTField::SetPropertiesFromDim( const ScDPSaveDimension& rSaveDim )
 
     const rtl::OUString* pSubtotalName = rSaveDim.GetSubtotalName();
     if (pSubtotalName)
-        maFieldExtInfo.mpFieldTotalName.reset(new rtl::OUString(*pSubtotalName));
+    {
+        OUString aSubName = lcl_convertCalcSubtotalName(*pSubtotalName);
+        maFieldExtInfo.mpFieldTotalName.reset(new rtl::OUString(aSubName));
+    }
 
     // subtotals
     XclPTSubtotalVec aSubtotals;

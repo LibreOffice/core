@@ -79,10 +79,18 @@ public:
 
 class ScXMLDataPilotTableContext : public SvXMLImportContext
 {
+    struct GrandTotalItem
+    {
+        ::rtl::OUString maDisplayName;
+        bool            mbVisible;
+        GrandTotalItem();
+    };
     ScDocument*     pDoc;
     ScDPObject*     pDPObject;
     ScDPSaveData*   pDPSave;
     ScDPDimensionSaveData* pDPDimSaveData;
+    GrandTotalItem  maRowGrandTotal;
+    GrandTotalItem  maColGrandTotal;
     rtl::OUString   sDataPilotTableName;
     rtl::OUString   sApplicationData;
     rtl::OUString   sGrandTotal;
@@ -131,6 +139,7 @@ public:
 
     virtual void EndElement();
 
+    void SetGrandTotal(::xmloff::token::XMLTokenEnum eOrientation, bool bVisible, const ::rtl::OUString& rDisplayName);
     void SetDatabaseName(const rtl::OUString& sValue) { sDatabaseName = sValue; }
     void SetSourceObject(const rtl::OUString& sValue) { sSourceObject = sValue; }
     void SetNative(const sal_Bool bValue) { bIsNative = bValue; }
@@ -253,6 +262,34 @@ public:
     virtual void EndElement();
 };
 
+class ScXMLDataPilotGrandTotalContext : public SvXMLImportContext
+{
+    enum Orientation { COLUMN, ROW, BOTH, NONE };
+
+    ScXMLImport& GetScImport();
+
+    ScXMLDataPilotTableContext* mpTableContext;
+    ::rtl::OUString             maDisplayName;
+    Orientation                 meOrientation;
+    bool                        mbVisible;
+
+public:
+    ScXMLDataPilotGrandTotalContext(
+        ScXMLImport& rImport, USHORT nPrefix, const ::rtl::OUString& rLName,
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+        ScXMLDataPilotTableContext* pTableContext );
+
+    virtual ~ScXMLDataPilotGrandTotalContext();
+
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
+                                     const ::rtl::OUString& rLocalName,
+                                     const ::com::sun::star::uno::Reference<
+                                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
+
+    virtual void EndElement();
+};
+
 class ScXMLSourceCellRangeContext : public SvXMLImportContext
 {
     ScXMLDataPilotTableContext* pDataPilotTable;
@@ -329,6 +366,7 @@ public:
 
     void SetShowEmpty(const sal_Bool bValue) { if (pDim) pDim->SetShowEmpty(bValue); }
     void SetSubTotals(const sal_uInt16* pFunctions, const sal_Int16 nCount) { if(pDim) pDim->SetSubTotals(nCount, pFunctions); }
+    void SetSubTotalName(const ::rtl::OUString& rName);
     void AddMember(ScDPSaveMember* pMember) { if (pDim) pDim->AddMember(pMember); }
     void SetFieldReference(const com::sun::star::sheet::DataPilotFieldReference& aRef) { if (pDim) pDim->SetReferenceValue(&aRef); }
     void SetAutoShowInfo(const com::sun::star::sheet::DataPilotFieldAutoShowInfo& aInfo) { if (pDim) pDim->SetAutoShowInfo(&aInfo); }
@@ -453,6 +491,7 @@ class ScXMLDataPilotSubTotalsContext : public SvXMLImportContext
 
     sal_Int16   nFunctionCount;
     sal_uInt16* pFunctions;
+    ::rtl::OUString maDisplayName;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -476,6 +515,7 @@ public:
 
     virtual void EndElement();
     void AddFunction(sal_Int16 nFunction);
+    void SetDisplayName(const ::rtl::OUString& rName);
 };
 
 class ScXMLDataPilotSubTotalContext : public SvXMLImportContext
@@ -533,6 +573,7 @@ class ScXMLDataPilotMemberContext : public SvXMLImportContext
     ScXMLDataPilotFieldContext* pDataPilotField;
 
     rtl::OUString sName;
+    rtl::OUString maDisplayName;
     sal_Bool    bDisplay;
     sal_Bool    bDisplayDetails;
     sal_Bool    bHasName;

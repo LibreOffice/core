@@ -65,6 +65,8 @@
 
 using namespace com::sun::star;
 using namespace xmloff::token;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::xml::sax::XAttributeList;
 using ::rtl::OUString;
 
 //------------------------------------------------------------------
@@ -113,6 +115,9 @@ void ScXMLDataPilotTablesContext::EndElement()
 {
 }
 
+ScXMLDataPilotTableContext::GrandTotalItem::GrandTotalItem() :
+    mbVisible(false) {}
+
 ScXMLDataPilotTableContext::ScXMLDataPilotTableContext( ScXMLImport& rImport,
                                       USHORT nPrfx,
                                       const ::rtl::OUString& rLName,
@@ -159,6 +164,19 @@ ScXMLDataPilotTableContext::ScXMLDataPilotTableContext( ScXMLImport& rImport,
             case XML_TOK_DATA_PILOT_TABLE_ATTR_GRAND_TOTAL :
             {
                 sGrandTotal = sValue;
+                if (IsXMLToken(sValue, XML_BOTH))
+                {
+                    maRowGrandTotal.mbVisible = true;
+                    maColGrandTotal.mbVisible = true;
+                }
+                else if (IsXMLToken(sValue, XML_ROW))
+                {
+                    maRowGrandTotal.mbVisible = true;
+                }
+                else if (IsXMLToken(sValue, XML_COLUMN))
+                {
+                    maColGrandTotal.mbVisible = true;
+                }
             }
             break;
             case XML_TOK_DATA_PILOT_TABLE_ATTR_IGNORE_EMPTY_ROWS :
@@ -236,6 +254,11 @@ SvXMLImportContext *ScXMLDataPilotTableContext::CreateChildContext( USHORT nPref
         {
             pContext = new ScXMLSourceServiceContext(GetScImport(), nPrefix, rLName, xAttrList, this);
             nSourceType = SERVICE;
+        }
+        break;
+        case XML_TOK_DATA_PILOT_TABLE_ELEM_GRAND_TOTAL:
+        {
+            pContext = new ScXMLDataPilotGrandTotalContext(GetScImport(), nPrefix, rLName, xAttrList, this);
         }
         break;
         case XML_TOK_DATA_PILOT_TABLE_ELEM_SOURCE_CELL_RANGE :
@@ -362,26 +385,15 @@ void ScXMLDataPilotTableContext::EndElement()
             }
             break;
         }
-        if (IsXMLToken(sGrandTotal, XML_BOTH))
-        {
-            pDPSave->SetRowGrand(sal_True);
-            pDPSave->SetColumnGrand(sal_True);
-        }
-        else if (IsXMLToken(sGrandTotal, XML_ROW))
-        {
-            pDPSave->SetRowGrand(sal_True);
-            pDPSave->SetColumnGrand(sal_False);
-        }
-        else if (IsXMLToken(sGrandTotal, XML_COLUMN))
-        {
-            pDPSave->SetRowGrand(sal_False);
-            pDPSave->SetColumnGrand(sal_True);
-        }
-        else
-        {
-            pDPSave->SetRowGrand(sal_False);
-            pDPSave->SetColumnGrand(sal_False);
-        }
+
+        pDPSave->SetRowGrand(maRowGrandTotal.mbVisible);
+        pDPSave->SetColumnGrand(maColGrandTotal.mbVisible);
+        if (maRowGrandTotal.maDisplayName.getLength())
+            // TODO: Right now, we only support one grand total name for both
+            // column and row totals.  Take the value from the row total for
+            // now.
+            pDPSave->SetGrandTotalName(maRowGrandTotal.maDisplayName);
+
         pDPSave->SetIgnoreEmptyRows(bIgnoreEmptyRows);
         pDPSave->SetRepeatIfEmpty(bIdentifyCategories);
         pDPSave->SetFilterButton(bShowFilter);
@@ -396,6 +408,30 @@ void ScXMLDataPilotTableContext::EndElement()
             pDPCollection->Insert(pDPObject);
         }
         SetButtons();
+    }
+}
+
+void ScXMLDataPilotTableContext::SetGrandTotal(
+    XMLTokenEnum eOrientation, bool bVisible, const OUString& rDisplayName)
+{
+    switch (eOrientation)
+    {
+        case XML_BOTH:
+            maRowGrandTotal.mbVisible     = bVisible;
+            maRowGrandTotal.maDisplayName = rDisplayName;
+            maColGrandTotal.mbVisible     = bVisible;
+            maColGrandTotal.maDisplayName = rDisplayName;
+        break;
+        case XML_ROW:
+            maRowGrandTotal.mbVisible     = bVisible;
+            maRowGrandTotal.maDisplayName = rDisplayName;
+        break;
+        case XML_COLUMN:
+            maColGrandTotal.mbVisible     = bVisible;
+            maColGrandTotal.maDisplayName = rDisplayName;
+        break;
+        default:
+            ;
     }
 }
 
@@ -643,6 +679,80 @@ void ScXMLSourceServiceContext::EndElement()
 {
 }
 
+ScXMLImport& ScXMLDataPilotGrandTotalContext::GetScImport()
+{
+    return static_cast<ScXMLImport&>(GetImport());
+}
+
+ScXMLDataPilotGrandTotalContext::ScXMLDataPilotGrandTotalContext(
+    ScXMLImport& rImport, USHORT nPrefix, const OUString& rLName, const Reference<XAttributeList>& xAttrList,
+    ScXMLDataPilotTableContext* pTableContext ) :
+    SvXMLImportContext( rImport, nPrefix, rLName ),
+    mpTableContext(pTableContext),
+    meOrientation(NONE),
+    mbVisible(false)
+{
+    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetDataPilotGrandTotalAttrTokenMap();
+    for (sal_Int16 i = 0; i < nAttrCount; ++i)
+    {
+        const OUString& rAttrName  = xAttrList->getNameByIndex(i);
+        const OUString& rAttrValue = xAttrList->getValueByIndex(i);
+
+        OUString aLocalName;
+        USHORT nLocalPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(rAttrName, &aLocalName);
+        switch (rAttrTokenMap.Get(nLocalPrefix, aLocalName))
+        {
+            case XML_TOK_DATA_PILOT_GRAND_TOTAL_ATTR_DISPLAY:
+                mbVisible = IsXMLToken(rAttrValue, XML_TRUE);
+            break;
+            case XML_TOK_DATA_PILOT_GRAND_TOTAL_ATTR_ORIENTATION:
+                if (IsXMLToken(rAttrValue, XML_BOTH))
+                    meOrientation = BOTH;
+                else if (IsXMLToken(rAttrValue, XML_ROW))
+                    meOrientation = ROW;
+                else if (IsXMLToken(rAttrValue, XML_COLUMN))
+                    meOrientation = COLUMN;
+            break;
+            case XML_TOK_DATA_PILOT_GRAND_TOTAL_ATTR_DISPLAY_NAME:
+                maDisplayName = rAttrValue;
+            break;
+            default:
+                ;
+        }
+    }
+}
+
+ScXMLDataPilotGrandTotalContext::~ScXMLDataPilotGrandTotalContext()
+{
+}
+
+SvXMLImportContext* ScXMLDataPilotGrandTotalContext::CreateChildContext(
+    USHORT /*nPrefix*/, const ::rtl::OUString& /*rLocalName*/, const Reference<XAttributeList>& /*xAttrList*/ )
+{
+    return NULL;
+}
+
+void ScXMLDataPilotGrandTotalContext::EndElement()
+{
+    XMLTokenEnum eOrient = XML_NONE;
+    switch (meOrientation)
+    {
+        case BOTH:
+            eOrient = XML_BOTH;
+        break;
+        case ROW:
+            eOrient = XML_ROW;
+        break;
+        case COLUMN:
+            eOrient = XML_COLUMN;
+        break;
+        default:
+            ;
+    }
+    mpTableContext->SetGrandTotal(eOrient, mbVisible, maDisplayName);
+}
+
 ScXMLSourceCellRangeContext::ScXMLSourceCellRangeContext( ScXMLImport& rImport,
                                       USHORT nPrfx,
                                       const ::rtl::OUString& rLName,
@@ -727,6 +837,7 @@ ScXMLDataPilotFieldContext::ScXMLDataPilotFieldContext( ScXMLImport& rImport,
 {
     sal_Bool bHasName(sal_False);
     sal_Bool bDataLayout(sal_False);
+    OUString aDisplayName;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetDataPilotFieldAttrTokenMap();
     for( sal_Int16 i=0; i < nAttrCount; ++i )
@@ -743,6 +854,11 @@ ScXMLDataPilotFieldContext::ScXMLDataPilotFieldContext( ScXMLImport& rImport,
             {
                 sName = sValue;
                 bHasName = sal_True;
+            }
+            break;
+            case XML_TOK_DATA_PILOT_FIELD_ATTR_DISPLAY_NAME:
+            {
+                aDisplayName = sValue;
             }
             break;
             case XML_TOK_DATA_PILOT_FIELD_ATTR_IS_DATA_LAYOUT_FIELD :
@@ -774,7 +890,11 @@ ScXMLDataPilotFieldContext::ScXMLDataPilotFieldContext( ScXMLImport& rImport,
         }
     }
     if (bHasName)
+    {
         pDim = new ScDPSaveDimension(String(sName), bDataLayout);
+        if (aDisplayName.getLength())
+            pDim->SetLayoutName(aDisplayName);
+    }
 }
 
 ScXMLDataPilotFieldContext::~ScXMLDataPilotFieldContext()
@@ -873,6 +993,12 @@ void ScXMLDataPilotFieldContext::EndElement()
             }
         }
     }
+}
+
+void ScXMLDataPilotFieldContext::SetSubTotalName(const OUString& rName)
+{
+    if (pDim)
+        pDim->SetSubtotalName(rName);
 }
 
 ScXMLDataPilotFieldReferenceContext::ScXMLDataPilotFieldReferenceContext( ScXMLImport& rImport, USHORT nPrfx,
@@ -1199,6 +1325,8 @@ SvXMLImportContext *ScXMLDataPilotSubTotalsContext::CreateChildContext( USHORT n
 void ScXMLDataPilotSubTotalsContext::EndElement()
 {
     pDataPilotField->SetSubTotals(pFunctions, nFunctionCount);
+    if (maDisplayName.getLength())
+        pDataPilotField->SetSubTotalName(maDisplayName);
 }
 
 void ScXMLDataPilotSubTotalsContext::AddFunction(sal_Int16 nFunction)
@@ -1219,6 +1347,11 @@ void ScXMLDataPilotSubTotalsContext::AddFunction(sal_Int16 nFunction)
         pFunctions = new sal_uInt16[nFunctionCount];
         pFunctions[0] = nFunction;
     }
+}
+
+void ScXMLDataPilotSubTotalsContext::SetDisplayName(const OUString& rName)
+{
+    maDisplayName = rName;
 }
 
 ScXMLDataPilotSubTotalContext::ScXMLDataPilotSubTotalContext( ScXMLImport& rImport,
@@ -1247,6 +1380,8 @@ ScXMLDataPilotSubTotalContext::ScXMLDataPilotSubTotalContext( ScXMLImport& rImpo
                 pDataPilotSubTotals->AddFunction( sal::static_int_cast<sal_Int16>(
                                 ScXMLConverter::GetFunctionFromString( sValue ) ) );
             }
+            case XML_TOK_DATA_PILOT_SUBTOTAL_ATTR_DISPLAY_NAME:
+                pDataPilotSubTotals->SetDisplayName(sValue);
             break;
         }
     }
@@ -1344,6 +1479,10 @@ ScXMLDataPilotMemberContext::ScXMLDataPilotMemberContext( ScXMLImport& rImport,
                 bHasName = sal_True;
             }
             break;
+            case XML_TOK_DATA_PILOT_MEMBER_ATTR_DISPLAY_NAME:
+            {
+                maDisplayName = sValue;
+            }
             case XML_TOK_DATA_PILOT_MEMBER_ATTR_DISPLAY :
             {
                 bDisplay = IsXMLToken(sValue, XML_TRUE);
@@ -1380,6 +1519,8 @@ void ScXMLDataPilotMemberContext::EndElement()
     if (bHasName)   // #i53407# don't check sName, empty name is allowed
     {
         ScDPSaveMember* pMember = new ScDPSaveMember(String(sName));
+        if (maDisplayName.getLength())
+            pMember->SetLayoutName(maDisplayName);
         pMember->SetIsVisible(bDisplay);
         pMember->SetShowDetails(bDisplayDetails);
         pDataPilotField->AddMember(pMember);
