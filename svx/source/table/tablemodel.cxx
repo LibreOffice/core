@@ -1184,6 +1184,8 @@ void TableModel::optimize()
 
 void TableModel::merge( sal_Int32 nCol, sal_Int32 nRow, sal_Int32 nColSpan, sal_Int32 nRowSpan )
 {
+    SdrModel* pModel = mpTableObj->GetModel();
+
     const bool bUndo = pModel && mpTableObj->IsInserted() && pModel->IsUndoEnabled();
 
     const sal_Int32 nLastRow = nRow + nRowSpan;
