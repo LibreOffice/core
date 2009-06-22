@@ -99,9 +99,6 @@ struct StorInternalData_Impl
 };
 
 //=========================================================
-
-extern uno::Sequence< sal_Int8 > MakeKeyFromPass( ::rtl::OUString aPass, sal_Bool bUseUTF );
-
 ::rtl::OUString GetNewTempFileURL( const uno::Reference< lang::XMultiServiceFactory > xFactory );
 
 // static
@@ -4657,7 +4654,7 @@ void SAL_CALL OStorage::setEncryptionPassword( const ::rtl::OUString& aPass )
         try
         {
             xPackPropSet->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "EncryptionKey" ) ),
-                                            uno::makeAny( MakeKeyFromPass( aPass, sal_True ) ) );
+                                            uno::makeAny( ::package::MakeKeyFromPass( aPass, sal_True ) ) );
 
             m_pImpl->m_bHasCommonPassword = sal_True;
             m_pImpl->m_aCommonPassword = aPass;

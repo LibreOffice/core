@@ -78,6 +78,7 @@ namespace cppu {
 
 namespace package {
     void StaticAddLog( const ::rtl::OUString& aMessage );
+    ::com::sun::star::uno::Sequence< sal_Int8 > MakeKeyFromPass( const ::rtl::OUString& aPass, sal_Bool bUseUTF );
 }
 
 struct WSInternalData_Impl

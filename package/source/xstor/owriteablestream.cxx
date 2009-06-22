@@ -65,7 +65,7 @@ using namespace ::com::sun::star;
 namespace package
 {
 //-----------------------------------------------
-uno::Sequence< sal_Int8 > MakeKeyFromPass( ::rtl::OUString aPass, sal_Bool bUseUTF )
+uno::Sequence< sal_Int8 > MakeKeyFromPass( const ::rtl::OUString& aPass, sal_Bool bUseUTF )
 {
     // MS_1252 encoding was used for SO60 document format password encoding,
     // this encoding supports only a minor subset of nonascii characters,
@@ -90,9 +90,6 @@ uno::Sequence< sal_Int8 > MakeKeyFromPass( ::rtl::OUString aPass, sal_Bool bUseU
 
 }
 
-// ================================================================
-namespace
-{
 //-----------------------------------------------
 void StaticAddLog( const ::rtl::OUString& aMessage )
 {
@@ -112,6 +109,9 @@ void StaticAddLog( const ::rtl::OUString& aMessage )
 }
 } // namespace package
 
+// ================================================================
+namespace
+{
 //-----------------------------------------------
 void SetEncryptionKeyProperty_Impl( const uno::Reference< beans::XPropertySet >& xPropertySet,
                                     const uno::Sequence< sal_Int8 >& aKey )
@@ -723,7 +723,7 @@ uno::Reference< io::XInputStream > OWriteStream_Impl::GetTempFileAsInputStream()
             {
                 xInputStream = xTempAccess->openFileRead( m_aTempURL );
             }
-            catch( uno::Exception& )
+            catch( uno::Exception& aException )
             {
                 AddLog( aException.Message );
                 AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Quiet exception" ) ) );
@@ -764,7 +764,7 @@ void OWriteStream_Impl::CopyTempFileToOutput( uno::Reference< io::XOutputStream 
             if ( xTempInp.is() )
                 ::comphelper::OStorageHelper::CopyInputToOutput( xTempInStream, xOutStream );
         }
-        catch( uno::Exception& )
+        catch( uno::Exception& aException )
         {
             AddLog( aException.Message );
             AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Quiet exception" ) ) );
@@ -789,7 +789,7 @@ void OWriteStream_Impl::CopyTempFileToOutput( uno::Reference< io::XOutputStream 
         {
             xTempInStream = xTempAccess->openFileRead( m_aTempURL );
         }
-        catch( uno::Exception& )
+        catch( uno::Exception& aException )
         {
             AddLog( aException.Message );
             AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Quiet exception" ) ) );
@@ -995,7 +995,7 @@ void OWriteStream_Impl::Commit()
             throw uno::RuntimeException();
 
         xPropertySet->setPropertyValue( ::rtl::OUString::createFromAscii( "EncryptionKey" ),
-                                        uno::makeAny( MakeKeyFromPass( m_aPass, sal_True ) ) );
+                                        uno::makeAny( ::package::MakeKeyFromPass( m_aPass, sal_True ) ) );
     }
 
     // the stream should be free soon, after package is stored
@@ -1328,7 +1328,7 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream( sal_Int32 nStreamMod
     }
     else
     {
-        SetEncryptionKeyProperty_Impl( xPropertySet, MakeKeyFromPass( aPass, sal_True ) );
+        SetEncryptionKeyProperty_Impl( xPropertySet, ::package::MakeKeyFromPass( aPass, sal_True ) );
 
         try {
             xResultStream = GetStream_Impl( nStreamMode, bHierarchyAccess );
@@ -1340,7 +1340,7 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream( sal_Int32 nStreamMod
         catch( packages::WrongPasswordException& )
         {
             // retry with different encoding
-            SetEncryptionKeyProperty_Impl( xPropertySet, MakeKeyFromPass( aPass, sal_False ) );
+            SetEncryptionKeyProperty_Impl( xPropertySet, ::package::MakeKeyFromPass( aPass, sal_False ) );
             try {
                 // the stream must be cashed to be resaved
                 xResultStream = GetStream_Impl( nStreamMode | embed::ElementModes::SEEKABLE, bHierarchyAccess );
@@ -1688,8 +1688,8 @@ void OWriteStream_Impl::GetCopyOfLastCommit( uno::Reference< io::XStream >& xTar
     {
         // TODO: introduce last commited cashed password information and use it here
         // that means "use common pass" also should be remembered on flash
-        uno::Sequence< sal_Int8 > aNewKey = MakeKeyFromPass( aPass, sal_True );
-        uno::Sequence< sal_Int8 > aOldKey = MakeKeyFromPass( aPass, sal_False );
+        uno::Sequence< sal_Int8 > aNewKey = ::package::MakeKeyFromPass( aPass, sal_True );
+        uno::Sequence< sal_Int8 > aOldKey = ::package::MakeKeyFromPass( aPass, sal_False );
 
         uno::Reference< beans::XPropertySet > xProps( m_xPackageStream, uno::UNO_QUERY );
         if ( !xProps.is() )
@@ -1711,7 +1711,7 @@ void OWriteStream_Impl::GetCopyOfLastCommit( uno::Reference< io::XStream >& xTar
     else
     {
         uno::Reference< beans::XPropertySet > xPropertySet( m_xPackageStream, uno::UNO_QUERY );
-        SetEncryptionKeyProperty_Impl( xPropertySet, MakeKeyFromPass( aPass, sal_True ) );
+        SetEncryptionKeyProperty_Impl( xPropertySet, ::package::MakeKeyFromPass( aPass, sal_True ) );
 
         try {
             xDataToCopy = m_xPackageStream->getDataStream();
@@ -1724,7 +1724,7 @@ void OWriteStream_Impl::GetCopyOfLastCommit( uno::Reference< io::XStream >& xTar
         }
         catch( packages::WrongPasswordException& aWrongPasswordException )
         {
-            SetEncryptionKeyProperty_Impl( xPropertySet, MakeKeyFromPass( aPass, sal_False ) );
+            SetEncryptionKeyProperty_Impl( xPropertySet, ::package::MakeKeyFromPass( aPass, sal_False ) );
             try {
                 xDataToCopy = m_xPackageStream->getDataStream();
 
