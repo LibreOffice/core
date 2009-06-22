@@ -136,24 +136,25 @@ void SdUnoPageBackground::fillItemSet( SdDrawDocument* pDoc, SfxItemSet& rSet ) 
             uno::Any* pAny;
             PropertyEntryVector_t aProperties = mpPropSet->getPropertyMap()->getPropertyEntries();
             PropertyEntryVector_t::const_iterator aIt = aProperties.begin();
+
             while( aIt != aProperties.end() )
             {
                 pAny = mpPropSet->GetUsrAnyForID( aIt->nWID );
                 if( pAny )
                 {
-                    OUString aPropertyName( OUString::createFromAscii(pMap->pName));
-                    switch( pMap->nWID )
+                    OUString aPropertyName( aIt->sName );
+                    switch( aIt->nWID )
                     {
                         case XATTR_FILLFLOATTRANSPARENCE :
                         case XATTR_FILLGRADIENT :
                         {
                             if ( ( pAny->getValueType() == ::getCppuType((const ::com::sun::star::awt::Gradient*)0) )
-                                && ( pMap->nMemberId == MID_FILLGRADIENT ) )
+                                && ( aIt->nMemberId == MID_FILLGRADIENT ) )
                             {
                                 setPropertyValue( aPropertyName, *pAny );
                             }
                             else if ( ( pAny->getValueType() == ::getCppuType((const ::rtl::OUString*)0) ) &&
-                                        ( pMap->nMemberId == MID_NAME ) )
+                                        ( aIt->nMemberId == MID_NAME ) )
                             {
                                 setPropertyValue( aPropertyName, *pAny );
                             }
@@ -162,12 +163,12 @@ void SdUnoPageBackground::fillItemSet( SdDrawDocument* pDoc, SfxItemSet& rSet ) 
                         case XATTR_FILLHATCH :
                         {
                             if ( ( pAny->getValueType() == ::getCppuType((const ::com::sun::star::drawing::Hatch*)0) )
-                                && ( pMap->nMemberId == MID_FILLHATCH ) )
+                                && ( aIt->nMemberId == MID_FILLHATCH ) )
                             {
                                 setPropertyValue( aPropertyName, *pAny );
                             }
                             else if ( ( pAny->getValueType() == ::getCppuType((const ::rtl::OUString*)0) ) &&
-                                        ( pMap->nMemberId == MID_NAME ) )
+                                        ( aIt->nMemberId == MID_NAME ) )
                             {
                                 setPropertyValue( aPropertyName, *pAny );
                             }
@@ -177,12 +178,12 @@ void SdUnoPageBackground::fillItemSet( SdDrawDocument* pDoc, SfxItemSet& rSet ) 
                         {
                             if ( ( ( pAny->getValueType() == ::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap >*)0) ) ||
                                     ( pAny->getValueType() == ::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >*)0) ) ) &&
-                                    ( pMap->nMemberId == MID_BITMAP ) )
+                                    ( aIt->nMemberId == MID_BITMAP ) )
                             {
                                 setPropertyValue( aPropertyName, *pAny );
                             }
                             else if ( ( pAny->getValueType() == ::getCppuType((const ::rtl::OUString*)0) ) &&
-                                        ( ( pMap->nMemberId == MID_NAME ) || ( pMap->nMemberId == MID_GRAFURL ) ) )
+                                        ( ( aIt->nMemberId == MID_NAME ) || ( aIt->nMemberId == MID_GRAFURL ) ) )
                             {
                                 setPropertyValue( aPropertyName, *pAny );
                             }
