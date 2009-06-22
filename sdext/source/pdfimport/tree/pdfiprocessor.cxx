@@ -455,35 +455,7 @@ void PDFIProcessor::drawGlyphLine( const rtl::OUString&             rGlyphs,
     )
     {
         processGlyphLine();
-
-       CharGlyph aGlyph;
-
-       aGlyph.setGlyph ( rGlyphs );
-       aGlyph.setRect  ( rRect );
-       aGlyph.setFontMatrix ( rFontMatrix );
-       aGlyph.setGraphicsContext ( getCurrentContext() );
-       getGCId(getCurrentContext());
-       aGlyph.setCurElement( m_pCurElement );
-
-       aGlyph.setYPrevGlyphPosition( fYPrevTextPosition );
-       aGlyph.setXPrevGlyphPosition( fXPrevTextPosition );
-       aGlyph.setPrevGlyphHeight  ( fPrevTextHeight );
-       aGlyph.setPrevGlyphWidth   ( fPrevTextWidth );
-
-       m_GlyphsList.push_back( aGlyph );
-
-       fYPrevTextPosition  = rRect.Y1;
-       fXPrevTextPosition  = rRect.X2;
-       fPrevTextHeight     = rRect.Y2-rRect.Y1;
-       fPrevTextWidth      = rRect.X2-rRect.X1;
-
-       if( !m_bIsWhiteSpaceInLine )
-       {
-         rtl::OUString tempWhiteSpaceStr( 32 );
-         m_bIsWhiteSpaceInLine=rGlyphs.equals( tempWhiteSpaceStr );
-       }
-
-=======
+    }
 
     CharGlyph aGlyph;
 
@@ -512,7 +484,6 @@ void PDFIProcessor::drawGlyphLine( const rtl::OUString&             rGlyphs,
         static rtl::OUString tempWhiteSpaceNonBreakingStr( 0xa0 );
         m_bIsWhiteSpaceInLine=(rGlyphs.equals( tempWhiteSpaceStr ) || rGlyphs.equals( tempWhiteSpaceNonBreakingStr ));
     }
->>>>>>> .merge-right.r272944
 }
 
 GraphicsContext& PDFIProcessor::getTransformGlyphContext( CharGlyph& rGlyph )
