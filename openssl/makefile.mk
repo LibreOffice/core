@@ -70,6 +70,11 @@ OUT2INC += include/openssl/*
     ADDITIONAL_FILES:= \
         libcrypto_OOo_0_9_8k.map \
         libssl_OOo_0_9_8k.map
+    .IF "$(CPU)" == "X"
+        CONFIGURE_ACTION=Configure linux-generic64
+    .ELSE
+        CONFIGURE_ACTION=Configure linux-elf
+    .ENDIF
     # if you build openssl as shared library you have to patch the Makefile.Shared "LD_LIBRARY_PATH=$$LD_LIBRARY_PATH \"
     #BUILD_ACTION=make 'SHARED_LDFLAGS=-Wl,--version-script=./lib$$(SHLIBDIRS)_OOo_0_9_8e.map'
 .ENDIF
@@ -87,7 +92,7 @@ OUT2INC += include/openssl/*
 
     # Solaris INTEL
     .IF "$(CPUNAME)" == "INTEL" 
-        .IF "$(USE_64)" == "1"
+        .IF "$(CPU)" == "X"
            CONFIGURE_ACTION=Configure solaris64-x86_64-cc
         .ELSE
            CONFIGURE_ACTION=Configure solaris-x86-cc
