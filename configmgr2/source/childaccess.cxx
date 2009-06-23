@@ -87,8 +87,7 @@ ChildAccess::ChildAccess(
     rtl::Reference< RootAccess > const & root,
     rtl::Reference< Access > const & parent, rtl::OUString const & name,
     rtl::Reference< Node > const & node):
-    root_(root), parent_(parent), name_(name), node_(node),
-    nodeGeneration_(node->getGeneration())
+    root_(root), parent_(parent), name_(name), node_(node)
 {
     OSL_ASSERT(root.is() && parent.is() && node.is());
 }
@@ -96,7 +95,7 @@ ChildAccess::ChildAccess(
 ChildAccess::ChildAccess(
     rtl::Reference< RootAccess > const & root,
     rtl::Reference< Node > const & node):
-    root_(root), node_(node), nodeGeneration_(node->getGeneration())
+    root_(root), node_(node)
 {
     OSL_ASSERT(root.is() && node.is());
 }
@@ -225,11 +224,9 @@ void ChildAccess::commitChanges() {
         if (GroupNode * group = dynamic_cast< GroupNode * >(parent.get())) {
             //TODO: collision handling?
             group->getMembers().erase(name_);
-            nodeGeneration_ = node_->nextGeneration();
         } else if (SetNode * set = dynamic_cast< SetNode * >(parent.get())) {
             //TODO: collision handling?
             set->getMembers().erase(name_);
-            nodeGeneration_ = node_->nextGeneration();
         } else {
             OSL_ASSERT(false);
             throw css::uno::RuntimeException(
@@ -242,11 +239,9 @@ void ChildAccess::commitChanges() {
         if (GroupNode * group = dynamic_cast< GroupNode * >(parent.get())) {
             //TODO: collision handling?
             group->getMembers()[name_] = node_;
-            nodeGeneration_ = node_->nextGeneration();
         } else if (SetNode * set = dynamic_cast< SetNode * >(parent.get())) {
             //TODO: collision handling?
             set->getMembers()[name_] = node_;
-            nodeGeneration_ = node_->nextGeneration();
         } else {
             OSL_ASSERT(false);
             throw css::uno::RuntimeException(
@@ -260,6 +255,11 @@ void ChildAccess::commitChanges() {
     status_.release();
 }
 
+void ChildAccess::setNode(rtl::Reference< Node > const & node) {
+    OSL_ASSERT(status_.get() == 0);
+    node_ = node;
+}
+
 void ChildAccess::setStatus(std::auto_ptr< Status > status) {
     OSL_ASSERT(status.get() != 0);
     for (ChildAccess * p = this; p != 0 && p->parent_.is();
@@ -268,13 +268,6 @@ void ChildAccess::setStatus(std::auto_ptr< Status > status) {
         p->parent_->modifiedChildren_[p->name_] = p;
     }
     status_ = status;
-}
-
-bool ChildAccess::isCurrent() const {
-    return dynamic_cast< InsertedStatus * >(status_.get()) != 0 ||
-        dynamic_cast< TransferedStatus * >(status_.get()) != 0 ||
-        (dynamic_cast< RemovedStatus * >(status_.get()) == 0 &&
-         nodeGeneration_ == node_->getGeneration());
 }
 
 css::uno::Any ChildAccess::asValue() {

@@ -387,6 +387,12 @@ private:
 
     rtl::Reference< Node > getParentNode();
 
+    rtl::Reference< ChildAccess > getModifiedChild(
+        rtl::Reference< ChildAccess > const & child);
+
+    rtl::Reference< ChildAccess > getUnmodifiedChild(
+        rtl::OUString const & name);
+
     rtl::Reference< ChildAccess > getChild(rtl::OUString const & name);
 
     std::vector< rtl::Reference< ChildAccess > > getAllChildren();
@@ -400,7 +406,7 @@ private:
     typedef std::hash_map< rtl::OUString, ChildAccess *, rtl::OUStringHash >
         WeakChildMap;
 
-    WeakChildMap children_;
+    WeakChildMap cachedChildren_;
 
 #if OSL_DEBUG_LEVEL > 0
 protected:

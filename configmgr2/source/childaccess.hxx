@@ -112,11 +112,11 @@ public:
 
     void unbind() throw ();
 
+    void setNode(rtl::Reference< Node > const & node);
+
     void setStatus(std::auto_ptr< Status > status);
 
     Status const * getStatus() const { return status_.get(); }
-
-    bool isCurrent() const;
 
     void reportChanges(
         std::vector< com::sun::star::util::ElementChange > * changes) const;
@@ -132,7 +132,6 @@ private:
     rtl::Reference< Access > parent_; // null iff free node
     rtl::OUString name_;
     rtl::Reference< Node > node_;
-    unsigned nodeGeneration_;
     std::auto_ptr< Status > status_;
 };
 

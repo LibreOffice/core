@@ -197,7 +197,7 @@ bool Access::isValue() {
 }
 
 void Access::releaseChild(rtl::OUString const & name) {
-    children_.erase(name);
+    cachedChildren_.erase(name);
 }
 
 Access::Access(): AccessBase(lock) {}
@@ -674,7 +674,7 @@ void Access::insertByName(
             new ChildAccess(
                 getRootAccess(), this, aName,
                 new PropertyNode(type, true, aElement, true)));
-        children_[aName] = child.get();
+        cachedChildren_[aName] = child.get();
         child->setStatus(std::auto_ptr< Status >(new InsertedStatus()));
         //TODO notify change
     } else if (SetNode * set = dynamic_cast< SetNode * >(p.get())) {
@@ -721,7 +721,7 @@ void Access::insertByName(
                 static_cast< cppu::OWeakObject * >(this), 1);
         }
         rtl::Reference< RootAccess > root(getRootAccess());
-        children_[aName] = freeAcc.get();
+        cachedChildren_[aName] = freeAcc.get();
         freeAcc->bind(root, this, aName); // must not throw
         freeAcc->setStatus(std::auto_ptr< Status >(new InsertedStatus()));
             //TODO: must not throw
@@ -824,32 +824,43 @@ css::uno::Reference< css::uno::XInterface > Access::createInstanceWithArguments(
     return createInstance();
 }
 
-rtl::Reference< ChildAccess > Access::getChild(rtl::OUString const & name) {
-    //TODO: does not work yet (modifiedChildren_->isCurrent() false due to mixed genCount etc.)
-    HardChildMap::iterator i(modifiedChildren_.find(name));
-    if (i != modifiedChildren_.end()) {
-        return i->second->isCurrent() ?
-            i->second : rtl::Reference< ChildAccess >();
-    }
-    WeakChildMap::iterator j(children_.find(name));
-    if (j != children_.end()) {
-        rtl::Reference< ChildAccess > child;
-        if (j->second->acquireCounting() > 1) {
-            child.set(j->second); // must not throw
-        }
-        j->second->releaseNondeleting();
-        if (child.is() && child->isCurrent()) {
-            return child;
-        }
-    }
+rtl::Reference< ChildAccess > Access::getModifiedChild(
+    rtl::Reference< ChildAccess > const & child)
+{
+    return dynamic_cast< RemovedStatus const * >(child->getStatus()) == 0
+        ? child : rtl::Reference< ChildAccess >();
+}
+
+rtl::Reference< ChildAccess > Access::getUnmodifiedChild(
+    rtl::OUString const & name)
+{
+    OSL_ASSERT(modifiedChildren_.find(name) == modifiedChildren_.end());
     rtl::Reference< Node > node(getNode()->getMember(name));
     if (!node.is()) {
         return rtl::Reference< ChildAccess >();
     }
+    WeakChildMap::iterator i(cachedChildren_.find(name));
+    if (i != cachedChildren_.end()) {
+        rtl::Reference< ChildAccess > child;
+        if (i->second->acquireCounting() > 1) {
+            child.set(i->second); // must not throw
+        }
+        i->second->releaseNondeleting();
+        if (child.is()) {
+            child->setNode(node);
+            return child;
+        }
+    }
     rtl::Reference< ChildAccess > child(
         new ChildAccess(getRootAccess(), this, name, node));
-    children_[name] = child.get();
+    cachedChildren_[name] = child.get();
     return child;
+}
+
+rtl::Reference< ChildAccess > Access::getChild(rtl::OUString const & name) {
+    HardChildMap::iterator i(modifiedChildren_.find(name));
+    return i == modifiedChildren_.end() ?
+        getUnmodifiedChild(name) : getModifiedChild(i->second);
 }
 
 std::vector< rtl::Reference< ChildAccess > > Access::getAllChildren() {
@@ -872,14 +883,16 @@ std::vector< rtl::Reference< ChildAccess > > Access::getAllChildren() {
     std::vector< rtl::Reference< ChildAccess > > vec;
     for (NodeMap::iterator i(members->begin()); i != members->end(); ++i) {
         if (modifiedChildren_.find(i->first) == modifiedChildren_.end()) {
-            vec.push_back(getChild(i->first));
+            vec.push_back(getUnmodifiedChild(i->first));
+            OSL_ASSERT(vec.back().is());
         }
     }
     for (HardChildMap::iterator i(modifiedChildren_.begin());
          i != modifiedChildren_.end(); ++i)
     {
-        if (i->second->isCurrent()) {
-            vec.push_back(i->second);
+        rtl::Reference< ChildAccess > child(getModifiedChild(i->second));
+        if (child.is()) {
+            vec.push_back(child);
         }
     }
     return vec;
