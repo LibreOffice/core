@@ -125,6 +125,10 @@ LDFLAGS:=$(cairo_LDFLAGS)
 cairo_CFLAGS+=-xc99=none
 .ENDIF
 
+.IF "$(CPU)"=="I"
+cairo_CFLAGS+=-march=i486
+.ENDIF
+
 CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure
 CONFIGURE_FLAGS=--enable-xlib --enable-ft --disable-svg --disable-png --enable-gtk-doc=no --enable-test-surfaces=no --enable-static=no ZLIB3RDLIB=$(ZLIB3RDLIB) COMPRESS=$(cairo_COMPRESS)

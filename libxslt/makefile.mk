@@ -51,7 +51,7 @@ all:
 LIBXSLTVERSION=$(LIBXSLT_MAJOR).$(LIBXSLT_MINOR).$(LIBXSLT_MICRO)
 
 TARFILE_NAME=$(PRJNAME)-$(LIBXSLTVERSION)
-PATCH_FILES=$(TARFILE_NAME).patch
+PATCH_FILES=$(TARFILE_NAME).patch $(TARFILE_NAME)_win_manifest.patch
 
 # This is only for UNX environment now
 
@@ -126,7 +126,7 @@ OUT2BIN+=xslt-config
 .ELSE
 OUT2LIB+=win32$/bin.msvc$/*.lib
 OUT2BIN+=win32$/bin.msvc$/*.dll
-OUT2BIN+=win32$/bin.msvc$/*.exe*
+OUT2BIN+=win32$/bin.msvc$/*.exe
 .ENDIF
 .ELSE
 OUT2LIB+=libxslt$/.libs$/libxslt.so*
