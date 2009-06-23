@@ -433,9 +433,6 @@ End
 #endif
 
 #ifdef UNX
-#ifndef ENABLE_EVOAB2
-STD_UNO_LIB_FILE( gid_File_Lib_Evoab_1 , evoab)
-#endif
 
 #ifdef ENABLE_KAB
 
@@ -473,15 +470,15 @@ File gid_File_Lib_Macab_Drv_1
     Name = STRING(CONCAT2(libmacabdrv1,UNXSUFFIX));
 End
 
-#endif
-
-#endif
+#endif  // #ifdef ENABLE_KAB
 
 #ifdef ENABLE_EVOAB2
 
 STD_UNO_LIB_FILE( gid_File_Lib_Evoab , evoab)
 
-#endif
+#endif  // #ifdef ENABLE_EVOAB2
+
+#endif  // #ifdef UNX
 
 File gid_File_Lib_Evtatt
     TXT_FILE_BODY;

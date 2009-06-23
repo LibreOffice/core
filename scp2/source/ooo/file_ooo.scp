@@ -830,6 +830,13 @@ File gid_File_Lm_Lithuanian
     Styles = (PACKED);
 End
 
+File gid_File_Lm_Luxembourgish
+    TXT_FILE_BODY;
+    Name = "luxembourgish.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
 File gid_File_Lm_Malay
     TXT_FILE_BODY;
     Name = "malay.lm";
@@ -861,6 +868,13 @@ End
 File gid_File_Lm_Mingo
     TXT_FILE_BODY;
     Name = "mingo.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Mongolian_Cyrillic
+    TXT_FILE_BODY;
+    Name = "mongolian_cyrillic.lm";
     Dir = gid_Dir_Share_Fingerprint;
     Styles = (PACKED);
 End

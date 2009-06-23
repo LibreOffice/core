@@ -31,7 +31,9 @@
 
 package installer::simplepackage;
 
+# use Archive::Zip qw( :ERROR_CODES :CONSTANTS );
 use Cwd;
+use File::Copy;
 use installer::download;
 use installer::exiter;
 use installer::globals;
@@ -86,6 +88,14 @@ sub register_extensions
 
     my $unopkgfile = $installer::globals::unopkgfile;
 
+    my $unopkgexists = 1;
+    if (( $installer::globals::languagepack ) && ( ! -f $unopkgfile ))
+    {
+        $unopkgexists = 0;
+        $infoline = "Language packs do not contain unopkg!\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+
     # my $extensiondir = $officedir . $installer::globals::separator . "share" .
     #           $installer::globals::separator . "extension" .
     #           $installer::globals::separator . "install";
@@ -94,7 +104,7 @@ sub register_extensions
 
     my $allextensions = installer::systemactions::find_file_with_file_extension("oxt", $extensiondir);
 
-    if ( $#{$allextensions} > -1)
+    if (( $#{$allextensions} > -1 ) && ( $unopkgexists ))
     {
         my $currentdir = cwd();
         print "... current dir: $currentdir ...\n";
@@ -114,7 +124,7 @@ sub register_extensions
 
             if ( $installer::globals::iswindowsbuild )
             {
-                if (( $^O =~ /cygwin/i ) && ( $ENV{'USE_SHELL'} ne "4nt" ))
+                if ( $^O =~ /cygwin/i )
                 {
                     $localtemppath = $installer::globals::cyg_temppath;
                 }
@@ -135,7 +145,11 @@ sub register_extensions
             my @unopkgoutput = ();
 
             open (UNOPKG, $systemcall);
-            while (<UNOPKG>) {push(@unopkgoutput, $_); }
+            while (<UNOPKG>)
+            {
+                my $lastline = $_;
+                push(@unopkgoutput, $lastline);
+            }
             close (UNOPKG);
 
             for ( my $j = 0; $j <= $#unopkgoutput; $j++ ) { push( @installer::globals::logfileinfo, "$unopkgoutput[$j]"); }
@@ -157,8 +171,11 @@ sub register_extensions
     }
     else
     {
-        $infoline = "No extensions located in directory $extensiondir.\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        if ( ! ( $#{$allextensions} > -1 ))
+        {
+            $infoline = "No extensions located in directory $extensiondir.\n";
+            push( @installer::globals::logfileinfo, $infoline);
+        }
     }
 
     chdir($from);
@@ -180,13 +197,14 @@ sub create_package
     my $tempdir = $installdir . "_temp" . "." . $pid;
     my $systemcall = "";
     my $from = "";
+    my $makesystemcall = 1;
     my $return_to_start = 0;
     installer::systemactions::rename_directory($installdir, $tempdir);
 
     # creating new directory with original name
     installer::systemactions::create_directory($installdir);
 
-        my $archive =  $installdir . $installer::globals::separator . $packagename . $installer::globals::archiveformat;
+    my $archive =  $installdir . $installer::globals::separator . $packagename . $installer::globals::archiveformat;
 
     if ( $archive =~ /zip$/ )
     {
@@ -194,7 +212,12 @@ sub create_package
         $return_to_start = 1;
         chdir($tempdir);
         $systemcall = "$installer::globals::zippath -qr $archive .";
-        # $systemcall = "$installer::globals::zippath -r $archive .";
+
+        # Using Archive::Zip fails because of very long path names below "share/uno_packages/cache"
+        # my $packzip = Archive::Zip->new();
+        # $packzip->addTree(".");   # after changing into $tempdir
+        # $packzip->writeToFileNamed($archive);
+        # $makesystemcall = 0;
     }
      elsif ( $archive =~ /dmg$/ )
     {
@@ -234,20 +257,23 @@ sub create_package
         $systemcall = "cd $tempdir; $ldpreloadstring tar -cf - . | gzip > $archive";
     }
 
-    print "... $systemcall ...\n";
-    my $returnvalue = system($systemcall);
-    my $infoline = "Systemcall: $systemcall\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    if ( $makesystemcall )
+    {
+        print "... $systemcall ...\n";
+        my $returnvalue = system($systemcall);
+        my $infoline = "Systemcall: $systemcall\n";
+        push( @installer::globals::logfileinfo, $infoline);
 
-    if ($returnvalue)
-    {
-        $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
-        push( @installer::globals::logfileinfo, $infoline);
-    }
-    else
-    {
-        $infoline = "Success: Executed \"$systemcall\" successfully!\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        if ($returnvalue)
+        {
+            $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
+            push( @installer::globals::logfileinfo, $infoline);
+        }
+        else
+        {
+            $infoline = "Success: Executed \"$systemcall\" successfully!\n";
+            push( @installer::globals::logfileinfo, $infoline);
+        }
     }
 
     if ( $return_to_start ) { chdir($from); }
@@ -319,7 +345,20 @@ sub create_simple_package
         if ( $onedir->{'HostName'} )
         {
             my $destdir = $subfolderdir . $installer::globals::separator . $onedir->{'HostName'};
-            if ( ! -d $destdir ) { installer::systemactions::create_directory_structure($destdir); }
+            if ( ! -d $destdir )
+            {
+                if ( $^O =~ /cygwin/i ) # Cygwin performance check
+                {
+                    $infoline = "Try to create directory $destdir\n";
+                    push(@installer::globals::logfileinfo, $infoline);
+                    # Directories in $dirsref are sorted and all parents were added -> "mkdir" works without parent creation!
+                    if ( ! ( -d $destdir )) { mkdir($destdir, 0775); }
+                }
+                else
+                {
+                    installer::systemactions::create_directory_structure($destdir);
+                }
+            }
         }
     }
 
@@ -345,18 +384,31 @@ sub create_simple_package
         $source =~ s/\$\$/\$/;
         $destination =~ s/\$\$/\$/;
 
-        installer::systemactions::copy_one_file($source, $destination);
-
-        if (( ! $installer::globals::iswindowsbuild ) ||
-            (( $^O =~ /cygwin/i ) && ( $ENV{'USE_SHELL'} ne "4nt" )))
+        if ( $^O =~ /cygwin/i ) # Cygwin performance, do not use copy_one_file. "chmod -R" at the end
         {
+            my $copyreturn = copy($source, $destination);
+
+            if ($copyreturn)
+            {
+                $infoline = "Copy: $source to $destination\n";
+                $returnvalue = 1;
+            }
+            else
+            {
+                $infoline = "ERROR: Could not copy $source to $destination\n";
+                $returnvalue = 0;
+            }
+
+            push(@installer::globals::logfileinfo, $infoline);
+        }
+        else
+        {
+            installer::systemactions::copy_one_file($source, $destination);
+            # see issue 102274
             my $unixrights = "";
             if ( $onefile->{'UnixRights'} )
             {
                 $unixrights = $onefile->{'UnixRights'};
-
-                # special unix rights "555" on cygwin
-                if (( $^O =~ /cygwin/i ) && ( $ENV{'USE_SHELL'} ne "4nt" ) && ( $unixrights =~ /444/ )) { $unixrights = "555"; }
 
                 my $localcall = "$installer::globals::wrapcmd chmod $unixrights \'$destination\' \>\/dev\/null 2\>\&1";
                 system($localcall);
@@ -394,6 +446,17 @@ sub create_simple_package
 
         $infoline = "Creating Unix link: \"ln -sf $target $destination\"\n";
         push(@installer::globals::logfileinfo, $infoline);
+    }
+
+    # Setting privileges for cygwin globally
+
+    if ( $^O =~ /cygwin/i )
+    {
+        installer::logger::print_message( "... changing privileges in $subfolderdir ...\n" );
+        installer::logger::include_header_into_logfile("Changing privileges in $subfolderdir:");
+
+        my $localcall = "chmod -R 755 " . "\"" . $subfolderdir . "\"";
+        system($localcall);
     }
 
     # Registering the extensions

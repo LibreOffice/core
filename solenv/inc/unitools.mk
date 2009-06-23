@@ -73,7 +73,7 @@ PIPEERROR=|&
 
 # iz31658
 .IF "$(USE_SHELL)"=="bash"
-CHECKZIPRESULT:=|| if test "$$?" != "12" && "$$?" != "1" ; then exit $$? ; fi && echo "Nothing to update for zip"
+CHECKZIPRESULT:=|| ret=$$?; if [[ "$$ret" != "12" && "$$ret" != "1" ]] ; then exit $$ret ; fi && echo "Nothing to update for zip"
 .ELSE
 CHECKZIPRESULT:=|| if ("$$status" != "12" && "$$status" != "1") exit $$status && echo "Nothing to update for zip"
 .ENDIF

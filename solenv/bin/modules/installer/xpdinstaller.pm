@@ -570,10 +570,29 @@ sub get_size_value
     if (( $installer::globals::islinuxrpmbuild ) && ( $isrpmfile ))
     {
         # if ( ! $installer::globals::rpmquerycommand ) { installer::exiter::exit_program("ERROR: rpm not found for querying packages!", "get_size_value"); }
-        if ( ! $installer::globals::rpmquerycommand ) { $installer::globals::rpmquerycommand = "rpm"; } # For queries "rpm" is used, not "rpmbuild"
+        if ( ! $installer::globals::rpmquerycommand ) { $installer::globals::rpmquerycommand = "rpm"; }
 
         my $systemcall = "$installer::globals::rpmquerycommand -qp --queryformat \"\[\%\{FILESIZES\}\\n\]\" $packagename 2\>\&1 |";
-        my $rpmout = make_systemcall($systemcall, 0);
+        my $ld_library_backup = $ENV{LD_LIBRARY_PATH};
+        if ( defined $ENV{SYSBASE}) {
+            my $sysbase = $ENV{SYSBASE};
+            if ( !defined ($ld_library_backup) or ("$ld_library_backup" eq "") ) {
+                $ld_library_backup = "" if ! defined $ld_library_backup;
+                $ENV{LD_LIBRARY_PATH} = "$sysbase/usr/lib";
+            } else {
+                $ENV{LD_LIBRARY_PATH} = "$ld_library_backup:$sysbase/lib";
+            }
+        }
+        my ($rpmout, $error) = make_systemcall_allowing_error($systemcall, 0, 1);
+        # Evaluating an error, because of rpm problems with removed LD_LIBRARY_PATH
+        if ( $error )
+        {
+            installer::logger::print_message( "... trying /usr/bin/rpm ...\n" );
+            my $systemcall = "/usr/bin/rpm -qp --queryformat \"\[\%\{FILESIZES\}\\n\]\" $packagename 2\>\&1 |";
+            ($rpmout, $error) = make_systemcall_allowing_error($systemcall, 0, 0);
+            if ( $error ) { installer::exiter::exit_program("ERROR: rpm failed to query package!", "get_size_value"); }
+        }
+        $ENV{LD_LIBRARY_PATH} = $ld_library_backup;
         $value = do_sum($rpmout);       # adding all filesizes in bytes
         $value = $value/1000;
 
@@ -690,10 +709,29 @@ sub get_fullpkgname_value
         }
 
         # if ( ! $installer::globals::rpmquerycommand ) { installer::exiter::exit_program("ERROR: rpm not found for querying packages!", "get_fullpkgname_value"); }
-        if ( ! $installer::globals::rpmquerycommand ) { $installer::globals::rpmquerycommand = "rpm"; } # For queries "rpm" is used, not "rpmbuild"
+        if ( ! $installer::globals::rpmquerycommand ) { $installer::globals::rpmquerycommand = "rpm"; }
         my $systemcall = "$installer::globals::rpmquerycommand -qp $packagename |";
-        my $returnarray = make_systemcall($systemcall, 0);
+        my $ld_library_backup = $ENV{LD_LIBRARY_PATH};
+        if ( defined $ENV{SYSBASE}) {
+            my $sysbase = $ENV{SYSBASE};
+            if ( !defined ($ld_library_backup) or ("$ld_library_backup" eq "") ) {
+                $ld_library_backup = "" if ! defined $ld_library_backup;
+                $ENV{LD_LIBRARY_PATH} = "$sysbase/usr/lib";
+            } else {
+                $ENV{LD_LIBRARY_PATH} = "$ld_library_backup:$sysbase/lib";
+            }
+        }
+        my ($returnarray, $error) = make_systemcall_allowing_error($systemcall, 0, 1);
+        # Evaluating an error, because of rpm problems with removed LD_LIBRARY_PATH
+        if ( $error )
+        {
+            installer::logger::print_message( "... trying /usr/bin/rpm ...\n" );
+            my $systemcall = "/usr/bin/rpm -qp $packagename |";
+            ($returnarray, $error) = make_systemcall_allowing_error($systemcall, 0, 0);
+            if ( $error ) { installer::exiter::exit_program("ERROR: rpm failed to query package!", "get_fullpkgname_value"); }
+        }
         $value = ${$returnarray}[0];
+        $ENV{LD_LIBRARY_PATH} = $ld_library_backup;
         installer::remover::remove_leading_and_ending_whitespaces(\$value);
 
         my $rpmname = $packagename;
@@ -847,6 +885,56 @@ sub make_systemcall
     }
 
     return \@returns;
+}
+
+#######################################################
+# Executing one system call
+#######################################################
+
+sub make_systemcall_allowing_error
+{
+    my ( $systemcall, $logreturn, $can_fail ) = @_;
+
+    my @returns = ();
+
+    installer::logger::print_message( "... $systemcall ...\n" );
+
+    open (REG, "$systemcall");
+    while (<REG>) {push(@returns, $_); }
+    close (REG);
+
+    my $returnvalue = $?;   # $? contains the return value of the systemcall
+
+    my $infoline = "Systemcall: $systemcall\n";
+    push( @installer::globals::logfileinfo, $infoline);
+
+    if ( $logreturn )
+    {
+        for ( my $j = 0; $j <= $#returns; $j++ ) { push( @installer::globals::logfileinfo, "$returns[$j]"); }
+    }
+
+    if ($returnvalue)
+    {
+        if ( $can_fail )
+        {
+            $infoline = "WARNING: Failed system call:  $systemcall\n";
+            push( @installer::globals::logfileinfo, $infoline);
+            $error_occured = 1;
+        }
+        else
+        {
+            $infoline = "ERROR: $systemcall\n";
+            push( @installer::globals::logfileinfo, $infoline);
+            $error_occured = 1;
+        }
+    }
+    else
+    {
+        $infoline = "SUCCESS: $systemcall\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+
+    return (\@returns, $returnvalue);
 }
 
 ###################################################

@@ -593,6 +593,9 @@ sub create_epm_header
     # if ( $installer::globals::patch )
     # {
     #   $onepackage->{$provides} = "";
+        my $isdict = 0;
+        if ( $onepackage->{'packagename'} =~ /-dict-/ ) { $isdict = 1;  }
+
     #   $onepackage->{$requires} = "";
     # }
 
@@ -636,7 +639,7 @@ sub create_epm_header
         {
             my $onerequires = ${$allrequires}[$i];
             $onerequires =~ s/\s*$//;
-            installer::packagelist::resolve_packagevariables(\$onerequires, $variableshashref, 0);
+            installer::packagelist::resolve_packagevariables2(\$onerequires, $variableshashref, 0, $isdict);
 
             # Special handling for Solaris. In depend files, the names of the packages are required, not
             # only the abbreviation. Therefore there is a special syntax for names in packagelist:
@@ -2247,26 +2250,43 @@ sub determine_rpm_version
 {
     my $rpmversion = 0;
     my $rpmout = "";
+    my $systemcall = "";
 
-    my $systemcall = "rpm --version |";
+    # my $systemcall = "rpm --version |";
+    # "rpm --version" has problems since LD_LIBRARY_PATH was removed. Therefore the content of $RPM has to be called.
+    # "rpm --version" and "rpmbuild --version" have the same output. Therefore $RPM can be used. Its value
+    # is saved in $installer::globals::rpm
+
+    if ( $installer::globals::rpm ne "" )
+    {
+        $systemcall = "$installer::globals::rpm --version |";
+    }
+    else
+    {
+        $systemcall = "rpm --version |";
+    }
+
     open (RPM, "$systemcall");
     $rpmout = <RPM>;
     close (RPM);
 
-    $rpmout =~ s/\s*$//g;
+    if ( $rpmout ne "" )
+    {
+        $rpmout =~ s/\s*$//g;
 
-    my $infoline = "Systemcall: $systemcall\n";
-    push( @installer::globals::logfileinfo, $infoline);
+        my $infoline = "Systemcall: $systemcall\n";
+        push( @installer::globals::logfileinfo, $infoline);
 
-    if ( $rpmout eq "" ) { $infoline = "ERROR: Could not find file \"rpm\" !\n"; }
-    else { $infoline = "Success: rpm version: $rpmout\n"; }
+        if ( $rpmout eq "" ) { $infoline = "ERROR: Could not find file \"rpm\" !\n"; }
+        else { $infoline = "Success: rpm version: $rpmout\n"; }
 
-    push( @installer::globals::logfileinfo, $infoline);
+        push( @installer::globals::logfileinfo, $infoline);
 
-    if ( $rpmout =~ /(\d+)\.(\d+)\.(\d+)/ ) { $rpmversion = $1; }
-    elsif ( $rpmout =~ /(\d+)\.(\d+)/ ) { $rpmversion = $1; }
-    elsif ( $rpmout =~ /(\d+)/ ) { $rpmversion = $1; }
-    else { installer::exiter::exit_program("ERROR: Unknown format: $rpmout ! Expected: \"a.b.c\", or \"a.b\", or \"a\"", "determine_rpm_version"); }
+        if ( $rpmout =~ /(\d+)\.(\d+)\.(\d+)/ ) { $rpmversion = $1; }
+        elsif ( $rpmout =~ /(\d+)\.(\d+)/ ) { $rpmversion = $1; }
+        elsif ( $rpmout =~ /(\d+)/ ) { $rpmversion = $1; }
+        else { installer::exiter::exit_program("ERROR: Unknown format: $rpmout ! Expected: \"a.b.c\", or \"a.b\", or \"a\"", "determine_rpm_version"); }
+    }
 
     return $rpmversion;
 }
@@ -2502,7 +2522,7 @@ sub create_packages_without_epm
 
         # saving globally for later usage
         $installer::globals::rpmcommand = $rpmcommand;
-        $installer::globals::rpmquerycommand = "rpm"; # For queries "rpm" is used, not "rpmbuild" (for this call the LD_LIBRARY_PATH is not required!)
+        $installer::globals::rpmquerycommand = "rpm";
 
         my $target = "";
         if ( $installer::globals::compiler =~ /unxlngi/) { $target = "i586"; }
@@ -2519,11 +2539,12 @@ sub create_packages_without_epm
             $buildrootstring = "--buildroot=$buildroot";
         }
 
-        my $systemcall = "$rpmcommand -bb $specfilename --target $target $buildrootstring 2\>\&1 |";
+        my $systemcall = "$rpmcommand -bb --define \"_unpackaged_files_terminate_build  0\" $specfilename --target $target $buildrootstring 2\>\&1 |";
 
         installer::logger::print_message( "... $systemcall ...\n" );
 
         my $maxrpmcalls = 3;
+        my $rpm_failed = 0;
 
         for ( my $i = 1; $i <= $maxrpmcalls; $i++ )
         {
@@ -2540,7 +2561,8 @@ sub create_packages_without_epm
 
             for ( my $j = 0; $j <= $#rpmoutput; $j++ )
             {
-                if ( $i < $maxrpmcalls ) { $rpmoutput[$j] =~ s/\bERROR\b/PROBLEM/ig; }
+                # if ( $i < $maxrpmcalls ) { $rpmoutput[$j] =~ s/\bERROR\b/PROBLEM/ig; }
+                $rpmoutput[$j] =~ s/\bERROR\b/PROBLEM/ig;
                 push( @installer::globals::logfileinfo, "$rpmoutput[$j]");
             }
 
@@ -2548,15 +2570,63 @@ sub create_packages_without_epm
             {
                 $infoline = "Try $i : Could not execute \"$systemcall\"!\n";
                 push( @installer::globals::logfileinfo, $infoline);
-                if ( $i == $maxrpmcalls ) { installer::exiter::exit_program("ERROR: \"$systemcall\"!", "create_packages_without_epm"); }
+                $rpm_failed = 1;
             }
             else
             {
                 installer::logger::print_message( "Success (Try $i): \"$systemcall\"\n" );
                 $infoline = "Success: Executed \"$systemcall\" successfully!\n";
                 push( @installer::globals::logfileinfo, $infoline);
+                $rpm_failed = 0;
                 last;
             }
+        }
+
+        if ( $rpm_failed )
+        {
+            # Because of the problems with LD_LIBARY_PATH, a direct call of local "rpm" or "rpmbuild" might be successful
+            my $rpmprog = "";
+            if ( -f "/usr/bin/rpmbuild" ) { $rpmprog = "/usr/bin/rpmbuild"; }
+            elsif ( -f "/usr/bin/rpm" ) { $rpmprog = "/usr/bin/rpm"; }
+
+            if ( $rpmprog ne "" )
+            {
+                installer::logger::print_message( "... $rpmprog ...\n" );
+
+                my $helpersystemcall = "$rpmprog -bb $specfilename --target $target $buildrootstring 2\>\&1 |";
+
+                my @helperrpmoutput = ();
+
+                open (RPM, "$helpersystemcall");
+                while (<RPM>) {push(@helperrpmoutput, $_); }
+                close (RPM);
+
+                my $helperreturnvalue = $?; # $? contains the return value of the systemcall
+
+                $infoline = "\nLast try: Using $rpmprog directly (problem with LD_LIBARY_PATH)\n";
+                push( @installer::globals::logfileinfo, $infoline);
+
+                $infoline = "\nSystemcall: $helpersystemcall\n";
+                push( @installer::globals::logfileinfo, $infoline);
+
+                for ( my $j = 0; $j <= $#helperrpmoutput; $j++ ) { push( @installer::globals::logfileinfo, "$helperrpmoutput[$j]"); }
+
+                if ($helperreturnvalue)
+                {
+                    $infoline = "Could not execute \"$helpersystemcall\"!\n";
+                    push( @installer::globals::logfileinfo, $infoline);
+                }
+                else
+                {
+                    installer::logger::print_message( "Success: \"$helpersystemcall\"\n" );
+                    $infoline = "Success: Executed \"$helpersystemcall\" successfully!\n";
+                    push( @installer::globals::logfileinfo, $infoline);
+                    $rpm_failed = 0;
+                }
+            }
+
+            # Now it is really time to exit this packaging process, if the error still occurs
+            if ( $rpm_failed ) { installer::exiter::exit_program("ERROR: \"$systemcall\"!", "create_packages_without_epm"); }
         }
     }
 }

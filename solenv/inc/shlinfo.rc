@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: shlinfo.rc,v $
- * $Revision: 1.12 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -28,30 +25,11 @@
  *
  ************************************************************************/
 
-#define VERSION			3
-#define SUBVERSION		1
-#define VERVARIANT		0
-
-// .0 + VER_CONCEPT
-// .100 + VER_ALPHA
-// .200 + VER_BETA
-// .300 + VER_GAMMA
-// .500 + VER_FINAL
-//#define VER_CONCEPT		0
-//#define VER_BETA		6
-#define VER_FINAL		0
-
-#define VER_DAY			1
-#define VER_MONTH		4
-#define VER_YEAR		2009
-
-// -----------------------------------------------------------------------
-
 #if !defined(ENGLISH)
 #define LG_D 					// generate always german version
 #endif
 
-#define VER_FIRSTYEAR	VER_YEAR
+#define VER_FIRSTYEAR	2008
 
 
 #if defined(OS2)
@@ -61,30 +39,7 @@
 #else
 
 #include <windows.h>
-#include "verinfo.hrc"
-
-#ifdef WIN32
-#define FOR_WIN_X " (32 Bit)"
-#else
-#define FOR_WIN_X ""
-#endif
-
-// -----------------------------------------------------------------------
-// 				language/character set specification table
-// -----------------------------------------------------------------------
-
-RCD_LANGUAGE rcdata
-{
-#ifdef LG_D
-	"040704B0", 	// Germany -> Unicode
-	"040704E4", 	// Germany -> Windows, Multilingual
-#else
-	"040904B0", 	// Germany -> Unicode
-	"040904E4", 	// USA -> Windows, Multilingual
-#endif
-	"04090000", 	// USA -> 7-Bit-ASCII
-	0				// end of table
-}
+#include "version.hrc"
 
 // -----------------------------------------------------------------------
 // 				version information
@@ -92,11 +47,11 @@ RCD_LANGUAGE rcdata
 
 VS_VERSION_INFO versioninfo
 #ifndef SUBVERSION
-	fileversion    VERSION, 0, 0, VERVARIANT
-	productversion VERSION, 0, 0, VERVARIANT
+	fileversion    VERSION, 0, VERVARIANT, VER_COUNT
+	productversion VERSION, 0, VERVARIANT, VER_COUNT
 #else
-	fileversion    VERSION, VERVARIANT, VER_COUNT
-	productversion VERSION, VERVARIANT, VER_COUNT
+	fileversion    VERSION, SUBVERSION, VERVARIANT, VER_COUNT
+	productversion VERSION, SUBVERSION, VERVARIANT, VER_COUNT
 #endif
 	fileflagsmask 0x3F
 	fileflags
@@ -120,7 +75,7 @@ VS_VERSION_INFO versioninfo
 			block "040704E4"
 			{
 				// German StringTable
-				value "CompanyName",		"Sun Microsystems, Inc.\0"
+				value "CompanyName",		"OpenOffice.org\0"
 				value "FileVersion",		PPS(VER_LEVEL) "\0"
 				value "OriginalFilename",	PPS(ORG_NAME) "\0"
 				value "InternalName", 		PPS(INTERNAL_NAME) "\0"
@@ -133,7 +88,7 @@ VS_VERSION_INFO versioninfo
 			block "040904E4"
 			{
 				// International StringTable
-				value "CompanyName", 		"Sun Microsystems, Inc.\0"
+				value "CompanyName",		"OpenOffice.org\0"
 				value "FileVersion",		PPS(VER_LEVEL) "\0"
 				value "OriginalFilename",	PPS(ORG_NAME) "\0"
 				value "InternalName", 		PPS(INTERNAL_NAME) "\0"
@@ -154,12 +109,5 @@ VS_VERSION_INFO versioninfo
 #endif
 		}
 	}
-
-// version binary entry
-VS_VERSION_INFO rcdata
-{
-	0xF0, "sw", 0x0F, VER_YEAR, VER_MONTH, VER_DAY,
-	VERSION, VERVARIANT, VER_COUNT
-};
 
 #endif // OS2
