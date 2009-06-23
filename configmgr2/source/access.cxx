@@ -294,7 +294,7 @@ sal_Bool Access::hasByName(rtl::OUString const & aName)
 css::uno::Any Access::getByHierarchicalName(rtl::OUString const & aName)
     throw (css::container::NoSuchElementException, css::uno::RuntimeException)
 {
-    OSL_ASSERT(thisIs(IS_GROUP_OR_SET));
+    OSL_ASSERT(thisIs(IS_ANY));
     osl::MutexGuard g(lock);
     rtl::Reference< ChildAccess > child(getSubChild(aName));
     if (!child.is()) {
@@ -307,7 +307,7 @@ css::uno::Any Access::getByHierarchicalName(rtl::OUString const & aName)
 sal_Bool Access::hasByHierarchicalName(rtl::OUString const & aName)
     throw (css::uno::RuntimeException)
 {
-    OSL_ASSERT(thisIs(IS_GROUP_OR_SET));
+    OSL_ASSERT(thisIs(IS_ANY));
     osl::MutexGuard g(lock);
     return getSubChild(aName).is();
 }
@@ -316,7 +316,7 @@ void Access::addContainerListener(
     css::uno::Reference< css::container::XContainerListener > const & xListener)
     throw (css::uno::RuntimeException)
 {
-    OSL_ASSERT(thisIs(IS_GROUP_OR_SET));
+    OSL_ASSERT(thisIs(IS_ANY));
     rBHelper.addListener(
         cppu::UnoType< css::container::XContainerListener >::get(), xListener);
 }
@@ -325,7 +325,7 @@ void Access::removeContainerListener(
     css::uno::Reference< css::container::XContainerListener > const & xListener)
     throw (css::uno::RuntimeException)
 {
-    OSL_ASSERT(thisIs(IS_GROUP_OR_SET));
+    OSL_ASSERT(thisIs(IS_ANY));
     rBHelper.removeListener(
         cppu::UnoType< css::container::XContainerListener >::get(), xListener);
 }
@@ -333,7 +333,7 @@ void Access::removeContainerListener(
 rtl::OUString Access::getExactName(rtl::OUString const & /*aApproximateName*/)
     throw (css::uno::RuntimeException)
 {
-    OSL_ASSERT(thisIs(IS_GROUP_OR_SET));
+    OSL_ASSERT(thisIs(IS_ANY));
     if(true)abort();*(char*)0=0;throw 0;//TODO
 }
 
@@ -375,7 +375,7 @@ sal_Bool Access::hasPropertyByName(rtl::OUString const & Name)
 }
 
 rtl::OUString Access::getHierarchicalName() throw (css::uno::RuntimeException) {
-    OSL_ASSERT(thisIs(IS_GROUP_OR_SET));
+    OSL_ASSERT(thisIs(IS_ANY));
     if(true)abort();*(char*)0=0;throw 0;//TODO
 }
 
@@ -385,14 +385,14 @@ rtl::OUString Access::composeHierarchicalName(
         css::lang::IllegalArgumentException, css::lang::NoSupportException,
         css::uno::RuntimeException)
 {
-    OSL_ASSERT(thisIs(IS_GROUP_OR_SET));
+    OSL_ASSERT(thisIs(IS_ANY));
     if(true)abort();*(char*)0=0;throw 0;//TODO
 }
 
 void Access::setName(rtl::OUString const & /*aName*/)
     throw (css::uno::RuntimeException)
 {
-    OSL_ASSERT(thisIs(IS_GROUP_OR_SET));
+    OSL_ASSERT(thisIs(IS_ANY));
     if(true)abort();*(char*)0=0;throw 0;//TODO
 }
 
@@ -625,7 +625,7 @@ void Access::replaceByName(
         css::container::NoSuchElementException,
         css::lang::WrappedTargetException, css::uno::RuntimeException)
 {
-    OSL_ASSERT(thisIs(IS_GROUP_OR_SET|IS_UPDATE));
+    OSL_ASSERT(thisIs(IS_ANY|IS_UPDATE));
     osl::MutexGuard g(lock);
     rtl::Reference< Node > p(getNode());
     if (dynamic_cast< GroupNode * >(p.get()) != 0) {
@@ -638,6 +638,8 @@ void Access::replaceByName(
             throw css::lang::WrappedTargetException(e.Message, e.Context, ex);
         }
     } else if (dynamic_cast< SetNode * >(p.get()) != 0) {
+        if(true)abort();*(char*)0=0;throw 0;//TODO
+    } else if (dynamic_cast< LocalizedPropertyNode * >(p.get()) != 0) {
         if(true)abort();*(char*)0=0;throw 0;//TODO
     } else {
         OSL_ASSERT(false);
@@ -654,7 +656,7 @@ void Access::insertByName(
         css::container::ElementExistException,
         css::lang::WrappedTargetException, css::uno::RuntimeException)
 {
-    OSL_ASSERT(thisIs(IS_EXTGROUP_OR_SET|IS_UPDATE));
+    OSL_ASSERT(thisIs(IS_EXTENSIBLE|IS_UPDATE));
     osl::MutexGuard g(lock);
     rtl::Reference< Node > p(getNode());
     if (dynamic_cast< GroupNode * >(p.get()) != 0) {
@@ -727,6 +729,8 @@ void Access::insertByName(
             //TODO: must not throw
             //TODO: or TransferedStatus
         //TODO notify change
+    } else if (dynamic_cast< LocalizedPropertyNode * >(p.get()) != 0) {
+        if(true)abort();*(char*)0=0;throw 0;//TODO
     } else {
         OSL_ASSERT(false);
         throw css::uno::RuntimeException(
@@ -740,7 +744,7 @@ void Access::removeByName(rtl::OUString const & aName)
         css::container::NoSuchElementException,
         css::lang::WrappedTargetException, css::uno::RuntimeException)
 {
-    OSL_ASSERT(thisIs(IS_EXTGROUP_OR_SET|IS_UPDATE));
+    OSL_ASSERT(thisIs(IS_EXTENSIBLE|IS_UPDATE));
     osl::MutexGuard g(lock);
     rtl::Reference< Node > p(getNode());
     if (dynamic_cast< GroupNode * >(p.get()) != 0) {
@@ -782,6 +786,8 @@ void Access::removeByName(rtl::OUString const & aName)
         }
 */
         //TODO notify change
+    } else if (dynamic_cast< LocalizedPropertyNode * >(p.get()) != 0) {
+        if(true)abort();*(char*)0=0;throw 0;//TODO
     } else {
         OSL_ASSERT(false);
         throw css::uno::RuntimeException(
@@ -1048,13 +1054,9 @@ bool Access::thisIs(int what) {
     return !isValue() &&
         ((what & IS_GROUP) == 0 || dynamic_cast< GroupNode * >(p.get()) != 0) &&
         ((what & IS_SET) == 0 || dynamic_cast< SetNode * >(p.get()) != 0) &&
-        ((what & IS_GROUP_OR_SET) == 0 ||
-         dynamic_cast< GroupNode * >(p.get()) != 0 ||
-         dynamic_cast< SetNode * >(p.get()) != 0) &&
-        ((what & IS_EXTGROUP_OR_SET) == 0 ||
-         (dynamic_cast< GroupNode * >(p.get()) != 0 &&
-          dynamic_cast< GroupNode * >(p.get())->isExtensible()) ||
-         dynamic_cast< SetNode * >(p.get()) != 0) &&
+        ((what & IS_EXTENSIBLE) == 0 ||
+         dynamic_cast< GroupNode * >(p.get()) == 0 ||
+         dynamic_cast< GroupNode * >(p.get())->isExtensible()) &&
         ((what & IS_GROUP_MEMBER) == 0 ||
          dynamic_cast< GroupNode * >(getParentNode().get()) != 0) ||
         ((what & IS_SET_MEMBER) == 0 ||
