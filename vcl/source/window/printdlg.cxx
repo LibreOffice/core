@@ -349,7 +349,7 @@ void PrintDialog::JobTabPage::readFromSettings()
     // do not actually make copy count persistent
     // the assumption is that this would lead to a lot of unwanted copies
     aValue = pItem->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog_JobPage" ) ),
-                              rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Copies" ) ) );
+                              rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CopyCount" ) ) );
     sal_Int32 nVal = aValue.toInt32();
     maCopyCountField.SetValue( sal_Int64(nVal > 1 ? nVal : 1) );
     #endif
@@ -366,7 +366,7 @@ void PrintDialog::JobTabPage::storeToSettings()
                      rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ToFile" ) ),
                      rtl::OUString::createFromAscii( maToFileBox.IsChecked() ? "true" : "false" ) );
     pItem->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog_JobPage" ) ),
-                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Copies" ) ),
+                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CopyCount" ) ),
                      maCopyCountField.GetText() );
     pItem->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog_JobPage" ) ),
                      rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Collate" ) ),
@@ -1310,6 +1310,11 @@ IMPL_LINK( PrintDialog, ModifyHdl, Edit*, pEdit )
     {
         mnCurPage = sal_Int32( maPageEdit.GetValue() - 1 );
         preparePreview( true, true );
+    }
+    else if( pEdit == &maJobPage.maCopyCountField )
+    {
+        maPListener->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CopyCount" ) ),
+                               makeAny( sal_Int32(maJobPage.maCopyCountField.GetValue()) ) );
     }
     return 0;
 }

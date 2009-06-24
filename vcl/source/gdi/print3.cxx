@@ -307,12 +307,13 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterListener>& i_pListene
                 pListener->getPrinter()->EnablePrintFile( TRUE );
                 pListener->getPrinter()->SetPrintFile( aFile );
             }
-            pListener->getPrinter()->SetCopyCount( static_cast<USHORT>(aDlg.getCopyCount()), aDlg.isCollate() );
         }
         catch( std::bad_alloc& )
         {
         }
     }
+
+    pListener->pushPropertiesToPrinter();
 
     pListener->getPrinter()->StartJob( String( RTL_CONSTASCII_USTRINGPARAM( "FIXME: no job name" ) ),
                                        pListener );
@@ -447,6 +448,8 @@ void PrinterListener::setPrinter( const boost::shared_ptr<Printer>& i_rPrinter )
 {
     mpImplData->mpPrinter = i_rPrinter;
     Size aPaperSize( i_rPrinter->PixelToLogic( i_rPrinter->GetPaperSizePixel(), MapMode( MAP_100TH_MM ) ) );
+    setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Name" ) ),
+              makeAny( rtl::OUString( i_rPrinter->GetName() ) ) );
 }
 
 static Size modifyJobSetup( Printer* pPrinter, const Sequence< PropertyValue >& i_rProps )
@@ -965,6 +968,20 @@ void PrinterListener::setMultipage( const MultiPageSetup& i_rMPS )
 const PrinterListener::MultiPageSetup& PrinterListener::getMultipage() const
 {
     return mpImplData->maMultiPage;
+}
+
+void PrinterListener::pushPropertiesToPrinter()
+{
+    sal_Int32 nCopyCount = 1;
+    // set copycount and collate
+    const beans::PropertyValue* pVal = getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CopyCount" ) ) );
+    if( pVal )
+        pVal->Value >>= nCopyCount;
+    sal_Bool bCollate = sal_False;
+    pVal = getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CopyCount" ) ) );
+    if( pVal )
+        pVal->Value >>= bCollate;
+    mpImplData->mpPrinter->SetCopyCount( static_cast<USHORT>(nCopyCount), bCollate );
 }
 
 /*

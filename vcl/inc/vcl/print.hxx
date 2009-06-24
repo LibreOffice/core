@@ -480,16 +480,17 @@ public:
     virtual void jobFinished();   // optionally release resources bound to the job
 
     // implementation details, not usable outside vcl
-    int  SAL_DLLPRIVATE getFilteredPageCount();
-    Size SAL_DLLPRIVATE getPageFile( int i_inUnfilteredPage, GDIMetaFile& rMtf, bool i_bMayUseCache = false );
-    Size SAL_DLLPRIVATE getFilteredPageFile( int i_nFilteredPage, GDIMetaFile& o_rMtf, bool i_bMayUseCache = false );
-    void SAL_DLLPRIVATE printFilteredPage( int i_nPage );
-    void SAL_DLLPRIVATE setPrinter( const boost::shared_ptr<Printer>& );
-    void SAL_DLLPRIVATE setOptionChangeHdl( const Link& );
-    void SAL_DLLPRIVATE createProgressDialog();
-    void SAL_DLLPRIVATE setMultipage( const MultiPageSetup& );
-    const MultiPageSetup& getMultipage() const;
-    void SAL_DLLPRIVATE setLastPage( sal_Bool i_bLastPage );
+    SAL_DLLPRIVATE int getFilteredPageCount();
+    SAL_DLLPRIVATE Size getPageFile( int i_inUnfilteredPage, GDIMetaFile& rMtf, bool i_bMayUseCache = false );
+    SAL_DLLPRIVATE Size getFilteredPageFile( int i_nFilteredPage, GDIMetaFile& o_rMtf, bool i_bMayUseCache = false );
+    SAL_DLLPRIVATE void printFilteredPage( int i_nPage );
+    SAL_DLLPRIVATE void setPrinter( const boost::shared_ptr<Printer>& );
+    SAL_DLLPRIVATE void setOptionChangeHdl( const Link& );
+    SAL_DLLPRIVATE void createProgressDialog();
+    SAL_DLLPRIVATE void setMultipage( const MultiPageSetup& );
+    SAL_DLLPRIVATE const MultiPageSetup& getMultipage() const;
+    SAL_DLLPRIVATE void setLastPage( sal_Bool i_bLastPage );
+    SAL_DLLPRIVATE void pushPropertiesToPrinter();
 };
 
 class VCL_DLLPUBLIC PrinterOptionsHelper
