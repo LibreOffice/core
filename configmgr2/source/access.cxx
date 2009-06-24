@@ -658,12 +658,12 @@ void Access::insertByName(
 {
     OSL_ASSERT(thisIs(IS_EXTENSIBLE|IS_UPDATE));
     osl::MutexGuard g(lock);
+    if (getChild(aName).is()) {
+        throw css::container::ElementExistException(
+            aName, static_cast< cppu::OWeakObject * >(this));
+    }
     rtl::Reference< Node > p(getNode());
     if (dynamic_cast< GroupNode * >(p.get()) != 0) {
-        if (getChild(aName).is()) {
-            throw css::container::ElementExistException(
-                aName, static_cast< cppu::OWeakObject * >(this));
-        }
         Type type = mapType(aElement);
         if (type == TYPE_ERROR) {
             throw css::lang::IllegalArgumentException(
@@ -680,10 +680,6 @@ void Access::insertByName(
         child->setStatus(std::auto_ptr< Status >(new InsertedStatus()));
         //TODO notify change
     } else if (SetNode * set = dynamic_cast< SetNode * >(p.get())) {
-        if (getChild(aName).is()) {
-            throw css::container::ElementExistException(
-                aName, static_cast< cppu::OWeakObject * >(this));
-        }
         rtl::Reference< ChildAccess > freeAcc;
         css::uno::Reference< css::lang::XUnoTunnel > tunnel;
         aElement >>= tunnel;
@@ -746,54 +742,21 @@ void Access::removeByName(rtl::OUString const & aName)
 {
     OSL_ASSERT(thisIs(IS_EXTENSIBLE|IS_UPDATE));
     osl::MutexGuard g(lock);
-    rtl::Reference< Node > p(getNode());
-    if (dynamic_cast< GroupNode * >(p.get()) != 0) {
-        rtl::Reference< ChildAccess > child(getChild(aName));
-        if (!child.is()) {
-            throw css::container::NoSuchElementException(
-                aName, static_cast< cppu::OWeakObject * >(this));
-        }
+    rtl::Reference< ChildAccess > child(getChild(aName));
+    if (!child.is()) {
+        throw css::container::NoSuchElementException(
+            aName, static_cast< cppu::OWeakObject * >(this));
+    }
+    if (dynamic_cast< GroupNode * >(getNode().get()) != 0) {
         rtl::Reference< PropertyNode > prop(
             dynamic_cast< PropertyNode * >(child->getNode().get()));
         if (!(prop.is() && prop->isExtension())) {
             throw css::container::NoSuchElementException(
                 aName, static_cast< cppu::OWeakObject * >(this));
         }
-        child->setStatus(std::auto_ptr< Status >(new RemovedStatus()));
-        //TODO notify change
-    } else if (dynamic_cast< SetNode * >(p.get()) != 0) {
-        rtl::Reference< ChildAccess > child(getChild(aName));
-        if (!child.is()) {
-            throw css::container::NoSuchElementException(
-                aName, static_cast< cppu::OWeakObject * >(this));
-        }
-        child->setStatus(std::auto_ptr< Status >(new RemovedStatus()));
-/*TODO:
-        ChildMap::iterator j(children_.find(aName));
-        rtl::Reference< ChildAccess > oldChild;
-        ChildMap newChildren;
-        if (j != children_.end()) {
-            oldChild = j->second;
-            newChildren = children_;
-            newChildren.erase(aName);
-        }
-        rtl::Reference< Node > removed(i->second);
-        set->getMembers().erase(i);
-        removed->unbind(); // this and following must not throw
-        if (oldChild.is()) {
-            children_.swap(newChildren);
-            oldChild->unbind();
-        }
-*/
-        //TODO notify change
-    } else if (dynamic_cast< LocalizedPropertyNode * >(p.get()) != 0) {
-        if(true)abort();*(char*)0=0;throw 0;//TODO
-    } else {
-        OSL_ASSERT(false);
-        throw css::uno::RuntimeException(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("this cannot happen")),
-            static_cast< cppu::OWeakObject * >(this));
     }
+    child->setStatus(std::auto_ptr< Status >(new RemovedStatus()));
+    //TODO notify change
 }
 
 css::uno::Reference< css::uno::XInterface > Access::createInstance()
@@ -1009,28 +972,28 @@ void Access::setProperty(css::uno::Any const & value) {
     }
     bool ok;
     switch (type) {
+    case TYPE_NIL:
+        OSL_ASSERT(false);
+        // fall through (cannot happen)
     case TYPE_ERROR:
         ok = false;
         break;
     case TYPE_ANY:
         switch (mapType(value)) {
+        case TYPE_ANY:
+            OSL_ASSERT(false);
+            // fall through (cannot happen)
         case TYPE_ERROR:
             ok = false;
             break;
         case TYPE_NIL:
             ok = nillable;
             break;
-        case TYPE_ANY:
-            OSL_ASSERT(false);
-            // fall through (cannot happen)
         default:
             ok = true;
             break;
         }
         break;
-    case TYPE_NIL:
-        OSL_ASSERT(false);
-        // fall through (cannot happen)
     default:
         ok = value.hasValue() ? value.isExtractableTo(mapType(type)) : nillable;
         break;
