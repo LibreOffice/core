@@ -82,10 +82,7 @@ class SfxPrinterListener : public vcl::PrinterListener
 {
     Any                                     maCompleteSelection;
     Any                                     maSelection;
-    Any                                     maViewProperty;
     Reference< view::XRenderable >          mxRenderable;
-    sal_Bool                                mbApi;
-    sal_Bool                                mbDirect;
     mutable Printer*                        mpLastPrinter;
     mutable Reference<awt::XDevice>         mxDevice;
 
@@ -115,10 +112,7 @@ SfxPrinterListener::SfxPrinterListener( const Any& i_rComplete,
                                        )
     : maCompleteSelection( i_rComplete )
     , maSelection( i_rSelection )
-    , maViewProperty( i_rViewProp )
     , mxRenderable( i_xRender )
-    , mbApi( i_bApi )
-    , mbDirect( i_bDirect )
     , mpLastPrinter( NULL )
 {
     // initialize extra ui options
@@ -139,6 +133,12 @@ SfxPrinterListener::SfxPrinterListener( const Any& i_rComplete,
             }
         }
     }
+
+    // set some job parameters
+    setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsApi" ) ), makeAny( i_bApi ) );
+    setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsDirect" ) ), makeAny( i_bDirect ) );
+    setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsPrinter" ) ), makeAny( sal_True ) );
+    setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "View" ) ), makeAny( i_rViewProp ) );
 }
 
 SfxPrinterListener::~SfxPrinterListener()
@@ -165,17 +165,9 @@ Sequence< beans::PropertyValue > SfxPrinterListener::getMergedOptions() const
         mxDevice = Reference< awt::XDevice >( pXDevice );
     }
 
-    Sequence< beans::PropertyValue > aRenderOptions( 5 );
+    Sequence< beans::PropertyValue > aRenderOptions( 1 );
     aRenderOptions[ 0 ].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RenderDevice" ) );
     aRenderOptions[ 0 ].Value <<= mxDevice;
-    aRenderOptions[ 1 ].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsApi" ) );
-    aRenderOptions[ 1 ].Value <<= mbApi;
-    aRenderOptions[ 2 ].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsDirect" ) );
-    aRenderOptions[ 2 ].Value <<= mbDirect;
-    aRenderOptions[ 3 ].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "View" ) );
-    aRenderOptions[ 3 ].Value = maViewProperty;
-    aRenderOptions[ 4 ].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsPrinter" ) );
-    aRenderOptions[ 4 ].Value = makeAny( sal_True );
 
     aRenderOptions = getJobProperties( aRenderOptions );
     return aRenderOptions;
