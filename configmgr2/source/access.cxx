@@ -170,40 +170,7 @@ css::uno::Type Access::getElementType() throw (css::uno::RuntimeException) {
 sal_Bool Access::hasElements() throw (css::uno::RuntimeException) {
     OSL_ASSERT(thisIs(IS_ANY));
     osl::MutexGuard g(lock);
-    rtl::Reference< Node > p(getNode());
-    if (LocalizedPropertyNode * locprop =
-        dynamic_cast< LocalizedPropertyNode * >(p.get()))
-    {
-        return !locprop->getMembers().empty();
-    } else if (GroupNode * group = dynamic_cast< GroupNode * >(p.get())) {
-        return !group->getMembers().empty();
-    } else if (SetNode * set = dynamic_cast< SetNode * >(p.get())) {
-        return !set->getMembers().empty();
-    } else {
-        OSL_ASSERT(false);
-        throw css::uno::RuntimeException(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("this cannot happen")),
-            static_cast< cppu::OWeakObject * >(this));
-    }
-}
-
-NodeMap & Access::getMemberNodes() {
-    rtl::Reference< Node > p(getNode());
-    if (LocalizedPropertyNode * locprop =
-        dynamic_cast< LocalizedPropertyNode * >(p.get()))
-    {
-        return locprop->getMembers();
-    }
-    if (GroupNode * group = dynamic_cast< GroupNode * >(p.get())) {
-        return group->getMembers();
-    }
-    if (SetNode * set = dynamic_cast< SetNode * >(p.get())) {
-        return set->getMembers();
-    }
-    OSL_ASSERT(false);
-    throw css::uno::RuntimeException(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("this cannot happen")),
-        static_cast< cppu::OWeakObject * >(this));
+    return !getAllChildren().empty(); //TODO: optimize
 }
 
 css::uno::Any Access::getByName(rtl::OUString const & aName)
@@ -742,6 +709,25 @@ css::uno::Reference< css::uno::XInterface > Access::createInstanceWithArguments(
     return createInstance();
 }
 
+NodeMap & Access::getMemberNodes() {
+    rtl::Reference< Node > p(getNode());
+    if (LocalizedPropertyNode * locprop =
+        dynamic_cast< LocalizedPropertyNode * >(p.get()))
+    {
+        return locprop->getMembers();
+    }
+    if (GroupNode * group = dynamic_cast< GroupNode * >(p.get())) {
+        return group->getMembers();
+    }
+    if (SetNode * set = dynamic_cast< SetNode * >(p.get())) {
+        return set->getMembers();
+    }
+    OSL_ASSERT(false);
+    throw css::uno::RuntimeException(
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("this cannot happen")),
+        static_cast< cppu::OWeakObject * >(this));
+}
+
 rtl::Reference< ChildAccess > Access::getModifiedChild(
     HardChildMap::iterator const & childIterator)
 {
@@ -783,24 +769,9 @@ rtl::Reference< ChildAccess > Access::getChild(rtl::OUString const & name) {
 }
 
 std::vector< rtl::Reference< ChildAccess > > Access::getAllChildren() {
-    NodeMap * members;
-    rtl::Reference< Node > p(getNode());
-    if (LocalizedPropertyNode * locprop =
-        dynamic_cast< LocalizedPropertyNode * >(p.get()))
-    {
-        members = &locprop->getMembers();
-    } else if (GroupNode * group = dynamic_cast< GroupNode * >(p.get())) {
-        members = &group->getMembers();
-    } else if (SetNode * set = dynamic_cast< SetNode * >(p.get())) {
-        members = &set->getMembers();
-    } else {
-        OSL_ASSERT(false);
-        throw css::uno::RuntimeException(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("this cannot happen")),
-            static_cast< cppu::OWeakObject * >(this));
-    }
     std::vector< rtl::Reference< ChildAccess > > vec;
-    for (NodeMap::iterator i(members->begin()); i != members->end(); ++i) {
+    NodeMap & members = getMemberNodes();
+    for (NodeMap::iterator i(members.begin()); i != members.end(); ++i) {
         if (modifiedChildren_.find(i->first) == modifiedChildren_.end()) {
             vec.push_back(getUnmodifiedChild(i->first));
             OSL_ASSERT(vec.back().is());
