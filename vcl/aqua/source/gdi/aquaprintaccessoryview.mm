@@ -95,6 +95,7 @@ class ListenerProperties
         mnLastPageCount = nPages;
         if( mpState->bNeedRestart )
         {
+            #if 0
             // Warning: bad hack ahead
             // Apple does not give as a chance of changing the page count,
             // and they don't let us cancel the dialog either
@@ -113,6 +114,11 @@ class ListenerProperties
                     }
                 }
             }
+            #else
+            NSWindow* pWindow = [NSApp modalWindow];
+            if( pWindow )
+                [pWindow cancelOperation: nil];
+            #endif
             [[mpOp printInfo] setJobDisposition: NSPrintCancelJob];
         }
     }

@@ -446,10 +446,15 @@ public:
 
     /* get the PropertyValue of a Property
     */
-    com::sun::star::beans::PropertyValue* getValue( const rtl::OUString& rPropertyName );
-    const com::sun::star::beans::PropertyValue* getValue( const rtl::OUString& rPropertyName ) const;
+    com::sun::star::beans::PropertyValue* getValue( const rtl::OUString& i_rPropertyName );
+    const com::sun::star::beans::PropertyValue* getValue( const rtl::OUString& i_rPropertyName ) const;
 
-    /* return the currently active UI options. These are the same passed to setUIOptions.
+    /* set a property value - can also be used to add another UI property
+    */
+    void setValue( const rtl::OUString& i_rPropertyName, const com::sun::star::uno::Any& i_rValue );
+    void setValue( const com::sun::star::beans::PropertyValue& i_rValue );
+
+    /* return the currently active UI options. These are the same that were passed to setUIOptions.
     */
     const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& getUIOptions() const;
     /* set possible UI options. should only be done once before passing the PrinterListener

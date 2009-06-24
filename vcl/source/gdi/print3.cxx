@@ -791,14 +791,35 @@ const com::sun::star::beans::PropertyValue* PrinterListener::getValue( const rtl
     return it != mpImplData->maPropertyToIndex.end() ? &mpImplData->maUIProperties[it->second] : NULL;
 }
 
+void PrinterListener::setValue( const rtl::OUString& i_rName, const Any& i_rValue )
+{
+    beans::PropertyValue aVal;
+    aVal.Name = i_rName;
+    aVal.Value = i_rValue;
+
+    setValue( aVal );
+}
+
+void PrinterListener::setValue( const beans::PropertyValue& i_rValue )
+{
+    std::hash_map< rtl::OUString, size_t, rtl::OUStringHash >::const_iterator it =
+        mpImplData->maPropertyToIndex.find( i_rValue.Name );
+    if( it != mpImplData->maPropertyToIndex.end() )
+        mpImplData->maUIProperties[ it->second ] = i_rValue;
+    else
+    {
+        // insert correct index into property map
+        mpImplData->maPropertyToIndex[ i_rValue.Name ] = mpImplData->maUIProperties.size();
+        mpImplData->maUIProperties.push_back( i_rValue );
+        mpImplData->maUIPropertyEnabled.push_back( true );
+    }
+}
+
 void PrinterListener::setUIOptions( const Sequence< beans::PropertyValue >& i_rOptions )
 {
     DBG_ASSERT( mpImplData->maUIOptions.getLength() == 0, "setUIOptions called twice !" );
 
     mpImplData->maUIOptions = i_rOptions;
-    mpImplData->maUIProperties.clear();
-    mpImplData->maPropertyToIndex.clear();
-    mpImplData->maUIPropertyEnabled.clear();
 
     for( int i = 0; i < i_rOptions.getLength(); i++ )
     {
@@ -806,6 +827,7 @@ void PrinterListener::setUIOptions( const Sequence< beans::PropertyValue >& i_rO
         i_rOptions[i].Value >>= aOptProp;
         bool bIsEnabled = true;
         bool bHaveProperty = false;
+        rtl::OUString aPropName;
         vcl::ImplPrinterListenerData::ControlDependency aDep;
         for( int n = 0; n < aOptProp.getLength(); n++ )
         {
@@ -816,8 +838,8 @@ void PrinterListener::setUIOptions( const Sequence< beans::PropertyValue >& i_rO
                 rEntry.Value >>= aVal;
                 DBG_ASSERT( mpImplData->maPropertyToIndex.find( aVal.Name )
                             == mpImplData->maPropertyToIndex.end(), "duplicate property entry" );
-                mpImplData->maPropertyToIndex[ aVal.Name ] = mpImplData->maUIProperties.size();
-                mpImplData->maUIProperties.push_back( aVal );
+                setValue( aVal );
+                aPropName = aVal.Name;
                 bHaveProperty = true;
             }
             else if( rEntry.Name.equalsAscii( "Enabled" ) )
@@ -837,9 +859,15 @@ void PrinterListener::setUIOptions( const Sequence< beans::PropertyValue >& i_rO
         }
         if( bHaveProperty )
         {
-            mpImplData->maUIPropertyEnabled.push_back( bIsEnabled );
+            vcl::ImplPrinterListenerData::PropertyToIndexMap::const_iterator it =
+                mpImplData->maPropertyToIndex.find( aPropName );
+            // sanity check
+            if( it != mpImplData->maPropertyToIndex.end() )
+            {
+                mpImplData->maUIPropertyEnabled[ it->second ] = bIsEnabled;
+            }
             if( aDep.maDependsOnName.getLength() > 0 )
-                mpImplData->maControlDependencies[ mpImplData->maUIProperties.back().Name ] = aDep;
+                mpImplData->maControlDependencies[ aPropName ] = aDep;
         }
     }
 }
