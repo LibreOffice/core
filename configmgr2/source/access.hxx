@@ -63,6 +63,8 @@
 #include "sal/types.h"
 #include "stl/hash_map"
 
+#include "type.hxx"
+
 #if !defined INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_13
 #define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_13
 #define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 13
@@ -134,6 +136,9 @@ protected:
     virtual rtl::Reference< Access > getParentAccess() = 0;
 
     rtl::Reference< Node > getParentNode();
+
+    void checkValue(
+        com::sun::star::uno::Any const & value, Type type, bool nillable);
 
     void reportChildChanges(
         std::vector< com::sun::star::util::ElementChange > * changes);

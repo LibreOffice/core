@@ -108,6 +108,46 @@ rtl::Reference< Node > Access::getParentNode() {
     return parent.is() ? parent->getNode() : rtl::Reference< Node >();
 }
 
+void Access::checkValue(
+    com::sun::star::uno::Any const & value, Type type, bool nillable)
+{
+    bool ok;
+    switch (type) {
+    case TYPE_NIL:
+        OSL_ASSERT(false);
+        // fall through (cannot happen)
+    case TYPE_ERROR:
+        ok = false;
+        break;
+    case TYPE_ANY:
+        switch (mapType(value)) {
+        case TYPE_ANY:
+            OSL_ASSERT(false);
+            // fall through (cannot happen)
+        case TYPE_ERROR:
+            ok = false;
+            break;
+        case TYPE_NIL:
+            ok = nillable;
+            break;
+        default:
+            ok = true;
+            break;
+        }
+        break;
+    default:
+        ok = value.hasValue() ? value.isExtractableTo(mapType(type)) : nillable;
+        break;
+    }
+    if (!ok) {
+        throw css::lang::IllegalArgumentException(
+            rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "configmgr inappropriate property value")),
+            static_cast< cppu::OWeakObject * >(this), -1);
+    }
+}
+
 void Access::reportChildChanges(
     std::vector< css::util::ElementChange > * changes)
 {
@@ -585,18 +625,11 @@ void Access::insertByName(
     }
     rtl::Reference< Node > p(getNode());
     if (dynamic_cast< GroupNode * >(p.get()) != 0) {
-        Type type = mapType(aElement);
-        if (type == TYPE_ERROR) {
-            throw css::lang::IllegalArgumentException(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "configmgr insertByName inappropriate group element")),
-                static_cast< cppu::OWeakObject * >(this), 1);
-        }
+        checkValue(aElement, TYPE_ANY, true);
         rtl::Reference< ChildAccess > child(
             new ChildAccess(
                 getRootAccess(), this, aName,
-                new PropertyNode(type, true, aElement, true)));
+                new PropertyNode(TYPE_ANY, true, aElement, true)));
         child->markAsModified();
         //TODO notify change
     } else if (SetNode * set = dynamic_cast< SetNode * >(p.get())) {
@@ -640,8 +673,16 @@ void Access::insertByName(
         freeAcc->bind(root, this, aName); // must not throw
         freeAcc->markAsModified(); //TODO: must not throw
         //TODO notify change
-    } else if (dynamic_cast< LocalizedPropertyNode * >(p.get()) != 0) {
-        if(true)abort();*(char*)0=0;throw 0;//TODO
+    } else if (LocalizedPropertyNode * locprop =
+               dynamic_cast< LocalizedPropertyNode * >(p.get()))
+    {
+        checkValue(aElement, locprop->getType(), locprop->isNillable());
+        rtl::Reference< ChildAccess > child(
+            new ChildAccess(
+                getRootAccess(), this, aName,
+                new LocalizedPropertyValueNode(aElement)));
+        child->markAsModified();
+        //TODO notify change
     } else {
         OSL_ASSERT(false);
         throw css::uno::RuntimeException(

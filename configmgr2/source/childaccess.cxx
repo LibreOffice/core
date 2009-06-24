@@ -58,6 +58,7 @@
 #include "propertynode.hxx"
 #include "rootaccess.hxx"
 #include "setnode.hxx"
+#include "type.hxx"
 
 namespace configmgr {
 
@@ -197,41 +198,7 @@ void ChildAccess::setProperty(css::uno::Any const & value) {
             nillable = locprop->isNillable();
         }
     }
-    bool ok;
-    switch (type) {
-    case TYPE_NIL:
-        OSL_ASSERT(false);
-        // fall through (cannot happen)
-    case TYPE_ERROR:
-        ok = false;
-        break;
-    case TYPE_ANY:
-        switch (mapType(value)) {
-        case TYPE_ANY:
-            OSL_ASSERT(false);
-            // fall through (cannot happen)
-        case TYPE_ERROR:
-            ok = false;
-            break;
-        case TYPE_NIL:
-            ok = nillable;
-            break;
-        default:
-            ok = true;
-            break;
-        }
-        break;
-    default:
-        ok = value.hasValue() ? value.isExtractableTo(mapType(type)) : nillable;
-        break;
-    }
-    if (!ok) {
-        throw css::lang::IllegalArgumentException(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "configmgr inappropriate setProperty")),
-            static_cast< cppu::OWeakObject * >(this), -1);
-    }
+    checkValue(value, type, nillable);
     markAsModified();
     changedValue_.reset(new css::uno::Any(value));
     //TODO notify change
