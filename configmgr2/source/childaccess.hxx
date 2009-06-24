@@ -33,12 +33,10 @@
 #include "sal/config.h"
 
 #include <memory>
-#include <vector>
 
 #include "com/sun/star/container/XChild.hpp"
 #include "com/sun/star/lang/NoSupportException.hpp"
 #include "com/sun/star/lang/XUnoTunnel.hpp"
-#include "com/sun/star/uno/Any.hxx"
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/Sequence.hxx"
@@ -49,16 +47,15 @@
 
 #include "access.hxx"
 
-namespace com { namespace sun { namespace star {
-    namespace uno { class XInterface; }
-    namespace util { struct ElementChange; }
-} } }
+namespace com { namespace sun { namespace star { namespace uno {
+    class Any;
+    class XInterface;
+} } } }
 
 namespace configmgr {
 
 class Node;
 class RootAccess;
-class Status;
 
 class ChildAccess:
     public cppu::ImplInheritanceHelper2<
@@ -112,18 +109,19 @@ public:
 
     void unbind() throw ();
 
+    void markAsModified();
+
+    bool isInTransaction() const { return inTransaction_; }
+
+    void notInTransaction() { inTransaction_ = false; }
+
     void setNode(rtl::Reference< Node > const & node);
 
-    void setStatus(std::auto_ptr< Status > status);
-
-    Status const * getStatus() const { return status_.get(); }
-
-    void reportChanges(
-        std::vector< com::sun::star::util::ElementChange > * changes) const;
-
-    void commitChanges();
+    void setProperty(com::sun::star::uno::Any const & value);
 
     com::sun::star::uno::Any asValue();
+
+    void commitChanges();
 
 private:
     virtual ~ChildAccess();
@@ -132,7 +130,9 @@ private:
     rtl::Reference< Access > parent_; // null iff free node
     rtl::OUString name_;
     rtl::Reference< Node > node_;
-    std::auto_ptr< Status > status_;
+    std::auto_ptr< com::sun::star::uno::Any > changedValue_;
+    bool inTransaction_;
+        // to determine if a free node can be inserted underneath some root
 };
 
 }

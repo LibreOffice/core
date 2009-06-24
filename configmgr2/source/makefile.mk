@@ -52,7 +52,8 @@ SLOFILES = \
     $(SLO)$/propertynode.obj \
     $(SLO)$/rootaccess.obj \
     $(SLO)$/services.obj \
-    $(SLO)$/setnode.obj
+    $(SLO)$/setnode.obj \
+    $(SLO)$/type.obj
 
 SHL1OBJS = $(SLOFILES)
 SHL1STDLIBS = \

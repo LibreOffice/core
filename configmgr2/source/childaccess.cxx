@@ -30,16 +30,12 @@
 #include "precompiled_configmgr.hxx"
 #include "sal/config.h"
 
-#include <memory>
-#include <vector>
-
 #include "com/sun/star/lang/NoSupportException.hpp"
 #include "com/sun/star/uno/Any.hxx"
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/Sequence.hxx"
 #include "com/sun/star/uno/XInterface.hpp"
-#include "com/sun/star/util/ElementChange.hpp"
 #include "cppuhelper/implbase1.hxx"
 #include "cppuhelper/weak.hxx"
 #include "osl/diagnose.h"
@@ -62,7 +58,6 @@
 #include "propertynode.hxx"
 #include "rootaccess.hxx"
 #include "setnode.hxx"
-#include "status.hxx"
 
 namespace configmgr {
 
@@ -87,7 +82,8 @@ ChildAccess::ChildAccess(
     rtl::Reference< RootAccess > const & root,
     rtl::Reference< Access > const & parent, rtl::OUString const & name,
     rtl::Reference< Node > const & node):
-    root_(root), parent_(parent), name_(name), node_(node)
+    root_(root), parent_(parent), name_(name), node_(node),
+    inTransaction_(false)
 {
     OSL_ASSERT(root.is() && parent.is() && node.is());
 }
@@ -95,7 +91,7 @@ ChildAccess::ChildAccess(
 ChildAccess::ChildAccess(
     rtl::Reference< RootAccess > const & root,
     rtl::Reference< Node > const & node):
-    root_(root), node_(node)
+    root_(root), node_(node), inTransaction_(false)
 {
     OSL_ASSERT(root.is() && node.is());
 }
@@ -163,118 +159,88 @@ void ChildAccess::bind(
 
 void ChildAccess::unbind() throw () {
     OSL_ASSERT(parent_.is());
+    parent_->releaseChild(name_);
     parent_.clear();
     //TODO: clear name_?
+    inTransaction_ = true;
 }
 
-void ChildAccess::reportChanges(
-    std::vector< css::util::ElementChange > * changes) const
-{
-    OSL_ASSERT(changes != 0);
-    if (dynamic_cast< RemovedStatus * >(status_.get()) == 0) {
-        for (HardChildMap::const_iterator i(modifiedChildren_.begin());
-             i != modifiedChildren_.end(); ++i)
-        {
-            i->second->reportChanges(changes);
-        }
-    }
-    if (dynamic_cast< ChangedStatus * >(status_.get()) != 0) {
-        changes->push_back(css::util::ElementChange()); //TODO
-    } else if (dynamic_cast< RemovedStatus * >(status_.get()) != 0) {
-        changes->push_back(css::util::ElementChange()); //TODO
-    } else if (dynamic_cast< InsertedStatus * >(status_.get()) != 0) {
-        changes->push_back(css::util::ElementChange()); //TODO
-    } else if (dynamic_cast< TransferedStatus * >(status_.get()) != 0) {
-        changes->push_back(css::util::ElementChange()); //TODO
-    }
-}
-
-void ChildAccess::commitChanges() {
-    if (dynamic_cast< RemovedStatus * >(status_.get()) == 0) {
-        while (!modifiedChildren_.empty()) {
-            rtl::Reference< ChildAccess > child(
-                modifiedChildren_.begin()->second);
-            child->commitChanges();
-            modifiedChildren_.erase(modifiedChildren_.begin());
-        }
-    }
-    if (ChangedStatus * changed =
-        dynamic_cast< ChangedStatus * >(status_.get()))
-    {
-        if (PropertyNode * prop = dynamic_cast< PropertyNode * >(node_.get())) {
-            prop->setValue(changed->getValue());
-        } else if (LocalizedPropertyValueNode * locval =
-                   dynamic_cast< LocalizedPropertyValueNode * >(node_.get()))
-        {
-            locval->setValue(changed->getValue());
-        } else if (LocalizedPropertyNode * locprop =
-                   dynamic_cast< LocalizedPropertyNode * >(node_.get()))
-        {
-            locprop->setValue(
-                getRootAccess()->getLocale(), changed->getValue());
-        } else {
-            OSL_ASSERT(false);
-            throw css::uno::RuntimeException(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM("this cannot happen")),
-                static_cast< cppu::OWeakObject * >(this));
-        }
-    } else if (dynamic_cast< RemovedStatus * >(status_.get()) != 0) {
-        rtl::Reference< Node > parent(parent_->getNode());
-        if (GroupNode * group = dynamic_cast< GroupNode * >(parent.get())) {
-            //TODO: collision handling?
-            group->getMembers().erase(name_);
-        } else if (SetNode * set = dynamic_cast< SetNode * >(parent.get())) {
-            //TODO: collision handling?
-            set->getMembers().erase(name_);
-        } else {
-            OSL_ASSERT(false);
-            throw css::uno::RuntimeException(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM("this cannot happen")),
-                static_cast< cppu::OWeakObject * >(this));
-        }
-    } else if (dynamic_cast< InsertedStatus * >(status_.get()) != 0) {
-        rtl::Reference< Node > parent(parent_->getNode());
-        if (GroupNode * group = dynamic_cast< GroupNode * >(parent.get())) {
-            //TODO: collision handling?
-            group->getMembers()[name_] = node_;
-        } else if (SetNode * set = dynamic_cast< SetNode * >(parent.get())) {
-            //TODO: collision handling?
-            set->getMembers()[name_] = node_;
-        } else {
-            OSL_ASSERT(false);
-            throw css::uno::RuntimeException(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM("this cannot happen")),
-                static_cast< cppu::OWeakObject * >(this));
-        }
-    } else if (dynamic_cast< TransferedStatus * >(status_.get()) != 0) {
-        //TODO
-    }
-    status_.release();
-}
-
-void ChildAccess::setNode(rtl::Reference< Node > const & node) {
-    OSL_ASSERT(status_.get() == 0);
-    node_ = node;
-}
-
-void ChildAccess::setStatus(std::auto_ptr< Status > status) {
-    OSL_ASSERT(status.get() != 0);
+void ChildAccess::markAsModified() {
     for (ChildAccess * p = this; p != 0 && p->parent_.is();
          p = dynamic_cast< ChildAccess * >(p->parent_.get()))
     {
         p->parent_->modifiedChildren_[p->name_] = p;
     }
-    status_ = status;
+}
+
+void ChildAccess::setNode(rtl::Reference< Node > const & node) {
+    node_ = node;
+}
+
+void ChildAccess::setProperty(css::uno::Any const & value) {
+    Type type = TYPE_ERROR;
+    bool nillable = false;
+    if (PropertyNode * prop = dynamic_cast< PropertyNode * >(node_.get())) {
+        type = prop->getType();
+        nillable = prop->isNillable();
+    } else if (dynamic_cast< LocalizedPropertyValueNode * >(node_.get()) != 0) {
+        LocalizedPropertyNode * locprop =
+            dynamic_cast< LocalizedPropertyNode * >(getParentNode().get());
+        OSL_ASSERT(locprop != 0);
+        type = locprop->getType();
+        nillable = locprop->isNillable();
+    } else if (LocalizedPropertyNode * locprop =
+               dynamic_cast< LocalizedPropertyNode * >(node_.get()))
+    {
+        if (!Components::allLocales(getRootAccess()->getLocale())) {
+            type = locprop->getType();
+            nillable = locprop->isNillable();
+        }
+    }
+    bool ok;
+    switch (type) {
+    case TYPE_NIL:
+        OSL_ASSERT(false);
+        // fall through (cannot happen)
+    case TYPE_ERROR:
+        ok = false;
+        break;
+    case TYPE_ANY:
+        switch (mapType(value)) {
+        case TYPE_ANY:
+            OSL_ASSERT(false);
+            // fall through (cannot happen)
+        case TYPE_ERROR:
+            ok = false;
+            break;
+        case TYPE_NIL:
+            ok = nillable;
+            break;
+        default:
+            ok = true;
+            break;
+        }
+        break;
+    default:
+        ok = value.hasValue() ? value.isExtractableTo(mapType(type)) : nillable;
+        break;
+    }
+    if (!ok) {
+        throw css::lang::IllegalArgumentException(
+            rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "configmgr inappropriate setProperty")),
+            static_cast< cppu::OWeakObject * >(this), -1);
+    }
+    markAsModified();
+    changedValue_.reset(new css::uno::Any(value));
+    //TODO notify change
 }
 
 css::uno::Any ChildAccess::asValue() {
-    if (ChangedStatus * changed =
-        dynamic_cast< ChangedStatus * >(status_.get()))
+    if (changedValue_.get() != 0)
     {
-        return changed->getValue();
+        return *changedValue_;
     }
     if (PropertyNode * prop = dynamic_cast< PropertyNode * >(node_.get())) {
         return prop->getValue();
@@ -297,6 +263,30 @@ css::uno::Any ChildAccess::asValue() {
     return css::uno::makeAny(
         css::uno::Reference< css::uno::XInterface >(
             static_cast< cppu::OWeakObject * >(this)));
+}
+
+void ChildAccess::commitChanges() {
+    commitChildChanges();
+    if (changedValue_.get() != 0) {
+        if (PropertyNode * prop = dynamic_cast< PropertyNode * >(node_.get())) {
+            prop->setValue(*changedValue_);
+        } else if (LocalizedPropertyValueNode * locval =
+                   dynamic_cast< LocalizedPropertyValueNode * >(node_.get()))
+        {
+            locval->setValue(*changedValue_);
+        } else if (LocalizedPropertyNode * locprop =
+                   dynamic_cast< LocalizedPropertyNode * >(node_.get()))
+        {
+            locprop->setValue(getRootAccess()->getLocale(), *changedValue_);
+        } else {
+            OSL_ASSERT(false);
+            throw css::uno::RuntimeException(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM("this cannot happen")),
+                static_cast< cppu::OWeakObject * >(this));
+        }
+        changedValue_.reset();
+    }
 }
 
 ChildAccess::~ChildAccess() {

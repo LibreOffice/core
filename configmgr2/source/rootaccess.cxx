@@ -30,6 +30,8 @@
 #include "precompiled_configmgr.hxx"
 #include "sal/config.h"
 
+#include <vector>
+
 #include "com/sun/star/lang/WrappedTargetException.hpp"
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/util/ChangesSet.hpp"
@@ -123,17 +125,17 @@ void RootAccess::commitChanges()
 {
     OSL_ASSERT(thisIs(IS_ANY|IS_UPDATE));
     osl::MutexGuard g(lock);
-    while (!modifiedChildren_.empty()) {
-        rtl::Reference< ChildAccess > child(modifiedChildren_.begin()->second);
-        child->commitChanges();
-        modifiedChildren_.erase(modifiedChildren_.begin());
-    }
+    commitChildChanges();
     //TODO: write changes to disk
 }
 
 sal_Bool RootAccess::hasPendingChanges() throw (css::uno::RuntimeException) {
     OSL_ASSERT(thisIs(IS_ANY|IS_UPDATE));
-    return getPendingChanges().getLength() != 0; //TODO: optimize
+    osl::MutexGuard g(lock);
+    //TODO: Optimize:
+    std::vector< css::util::ElementChange > changes;
+    reportChildChanges(&changes);
+    return !changes.empty();
 }
 
 css::util::ChangesSet RootAccess::getPendingChanges()
@@ -142,11 +144,7 @@ css::util::ChangesSet RootAccess::getPendingChanges()
     OSL_ASSERT(thisIs(IS_ANY|IS_UPDATE));
     osl::MutexGuard g(lock);
     comphelper::SequenceAsVector< css::util::ElementChange > changes;
-    for (HardChildMap::iterator i(modifiedChildren_.begin());
-         i != modifiedChildren_.end(); ++i)
-    {
-        i->second->reportChanges(&changes);
-    }
+    reportChildChanges(&changes);
     return changes.getAsConstList();
 }
 

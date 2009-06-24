@@ -84,6 +84,7 @@ namespace com { namespace sun { namespace star {
         class Type;
         class XInterface;
     }
+    namespace util { struct ElementChange; }
 } } }
 namespace rtl {
     class OUString;
@@ -95,6 +96,7 @@ namespace configmgr {
 class Change;
 class ChildAccess;
 class Node;
+class NodeMap;
 class RootAccess;
 
 typedef
@@ -131,12 +133,19 @@ protected:
 
     virtual rtl::Reference< Access > getParentAccess() = 0;
 
+    rtl::Reference< Node > getParentNode();
+
+    void reportChildChanges(
+        std::vector< com::sun::star::util::ElementChange > * changes);
+
+    void commitChildChanges();
+
+public: //TODO
     typedef
         std::hash_map<
             rtl::OUString, rtl::Reference< ChildAccess >, rtl::OUStringHash >
         HardChildMap;
 
-public: //TODO
     HardChildMap modifiedChildren_;
 
 private:
@@ -385,10 +394,10 @@ private:
             com::sun::star::uno::Exception,
             com::sun::star::uno::RuntimeException);
 
-    rtl::Reference< Node > getParentNode();
+    NodeMap & getMemberNodes();
 
     rtl::Reference< ChildAccess > getModifiedChild(
-        rtl::Reference< ChildAccess > const & child);
+        HardChildMap::iterator const & childIterator);
 
     rtl::Reference< ChildAccess > getUnmodifiedChild(
         rtl::OUString const & name);
@@ -400,8 +409,6 @@ private:
     rtl::Reference< ChildAccess > getSubChild(rtl::OUString const & path);
 
     com::sun::star::beans::Property asProperty();
-
-    void setProperty(com::sun::star::uno::Any const & value);
 
     typedef std::hash_map< rtl::OUString, ChildAccess *, rtl::OUStringHash >
         WeakChildMap;

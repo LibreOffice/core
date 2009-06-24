@@ -32,6 +32,11 @@
 
 #include "sal/config.h"
 
+namespace com { namespace sun { namespace star { namespace uno {
+    class Any;
+    class Type;
+} } } }
+
 namespace configmgr {
 
 enum Type {
@@ -39,6 +44,10 @@ enum Type {
     TYPE_DOUBLE, TYPE_STRING, TYPE_HEXBINARY, TYPE_ANY, TYPE_BOOLEAN_LIST,
     TYPE_SHORT_LIST, TYPE_INT_LIST, TYPE_LONG_LIST, TYPE_DOUBLE_LIST,
     TYPE_STRING_LIST, TYPE_HEXBINARY_LIST };
+
+com::sun::star::uno::Type mapType(Type type);
+
+Type mapType(com::sun::star::uno::Any const & value);
 
 }
 
