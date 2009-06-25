@@ -1,0 +1,29 @@
+#!/usr/bin/perl -w
+
+use strict;
+
+# dummy 'ulfconv' / setup_native/source/ulfconv.cxx equivalent, cf. unitools.mk
+
+my ($in, $out);
+my $ignored = '';
+while (my $arg = shift @ARGV) {
+    if ($arg eq '-o') {
+	$out = shift @ARGV;
+    } elsif ($arg eq '-t') {
+	shift @ARGV; # ignore the translation table
+    } else {
+	$in = $arg;
+    }
+}
+
+print "noulfconv: in $in, out $out\n";
+
+# copy it straight ...
+my ($infile, $outfile);
+open $infile, "$in" || die "can't open $in: $!";
+open $outfile, ">$out" || die "can't open $out: $!";
+while (<$infile>) {
+    print $outfile $_;
+}
+close $outfile;
+close ($infile);

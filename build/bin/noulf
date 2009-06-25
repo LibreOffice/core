@@ -1,0 +1,29 @@
+#!/usr/bin/perl -w
+
+use strict;
+
+# dummy 'ulfex' / transex3/source/lngex.cxx equivalent, cf unitools.mk
+
+my ($in, $out);
+my $ignored = '';
+while (my $arg = shift @ARGV) {
+    if ($arg eq '-i') {
+	$in = shift @ARGV;
+    } elsif ($arg eq '-o') {
+	$out = shift @ARGV;
+    } else {
+	$ignored .= " $arg";
+    }
+}
+
+print "noulf: in $in, out $out, ignored args: '$ignored'\n";
+
+# copy it straight ...
+my ($infile, $outfile);
+open $infile, "$in" || die "can't open $in: $!";
+open $outfile, ">$out" || die "can't open $out: $!";
+while (<$infile>) {
+    print $outfile $_;
+}
+close $outfile;
+close ($infile);

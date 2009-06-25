@@ -1,0 +1,8 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+ooo_prefix=@OOO_PREFIX@
+
+Name: OpenOffice.org bootstrap
+Description: OpenOffice.org bootstrap package
+Version: @PACKAGE_VERSION@
