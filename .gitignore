@@ -1,0 +1,24 @@
+/Linux*Env.Set
+/Linux*Env.Set.sh
+/Makefile
+/Makefile.in
+/aclocal.m4
+/autom4te.cache
+/bootstrap
+/config.log
+/config.parms
+/config.status
+/configure
+/missing
+/solver
+/makefile.mk
+/set_soenv
+/visibility.cxx
+/warn
+
+/*/unxlng??.pro
+
+localize.sdf
+
+# temp files
+.*.swp

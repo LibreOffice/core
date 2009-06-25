@@ -1,0 +1,12 @@
+*.o
+Makefile
+.deps
+.dirstamp
+
+/config.h
+/config.log
+/config.status
+/dmake
+/dmakeroot.h
+/stamp-h1
+/startup/config.mk
