@@ -589,14 +589,21 @@ void Access::setHierarchicalPropertyValue(
 }
 
 css::uno::Any Access::getHierarchicalPropertyValue(
-    rtl::OUString const & /*aHierarchicalPropertyName*/)
+    rtl::OUString const & aHierarchicalPropertyName)
     throw (
         css::beans::UnknownPropertyException,
         css::lang::IllegalArgumentException, css::lang::WrappedTargetException,
         css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_GROUP));
-    if(true)abort();*(char*)0=0;throw 0;//TODO
+    osl::MutexGuard g(lock);
+    rtl::Reference< ChildAccess > child(getSubChild(aHierarchicalPropertyName));
+    if (!child.is()) {
+        throw css::beans::UnknownPropertyException(
+            aHierarchicalPropertyName,
+            static_cast< cppu::OWeakObject * >(this));
+    }
+    return child->asValue();
 }
 
 void Access::setHierarchicalPropertyValues(
