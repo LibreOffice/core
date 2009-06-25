@@ -76,43 +76,6 @@ bool LocalizedPropertyNode::isNillable() const {
     return nillable_;
 }
 
-rtl::Reference< LocalizedPropertyValueNode > LocalizedPropertyNode::getValue(
-    rtl::OUString const & locale)
-{
-    //TODO
-    NodeMap::iterator i(Components::resolveNode(locale, &members_));
-    if (i != members_.end()) {
-        return dynamic_cast< LocalizedPropertyValueNode * >(i->second.get());
-    }
-    i = Components::resolveNode(rtl::OUString(), &members_);
-    if (i != members_.end()) {
-        return dynamic_cast< LocalizedPropertyValueNode * >(i->second.get());
-    }
-    i = Components::resolveNode(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en-US")), &members_);
-    if (i != members_.end()) {
-        return dynamic_cast< LocalizedPropertyValueNode * >(i->second.get());
-    }
-    i = members_.begin();
-    if (i != members_.end()) {
-        return dynamic_cast< LocalizedPropertyValueNode * >(i->second.get());
-    }
-    return rtl::Reference< LocalizedPropertyValueNode >();
-}
-
-void LocalizedPropertyNode::setValue(
-    rtl::OUString const & locale, css::uno::Any const & value)
-{
-    NodeMap::iterator i(Components::resolveNode(locale, &members_));
-    if (i == members_.end()) {
-        members_.insert(
-            NodeMap::value_type(locale, new LocalizedPropertyValueNode(value)));
-    } else {
-        dynamic_cast< LocalizedPropertyValueNode * >(
-            i->second.get())->setValue(value);
-    }
-}
-
 NodeMap & LocalizedPropertyNode::getMembers() {
     return members_;
 }

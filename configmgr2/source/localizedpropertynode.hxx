@@ -59,12 +59,6 @@ public:
 
     bool isNillable() const;
 
-    rtl::Reference< LocalizedPropertyValueNode > getValue(
-        rtl::OUString const & locale);
-
-    void setValue(
-        rtl::OUString const & locale, com::sun::star::uno::Any const & value);
-
     NodeMap & getMembers();
 
 private:

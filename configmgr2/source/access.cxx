@@ -108,6 +108,32 @@ rtl::Reference< Node > Access::getParentNode() {
     return parent.is() ? parent->getNode() : rtl::Reference< Node >();
 }
 
+rtl::Reference< ChildAccess > Access::getChild(rtl::OUString const & name) {
+    HardChildMap::iterator i(modifiedChildren_.find(name));
+    return i == modifiedChildren_.end()
+        ? getUnmodifiedChild(name) : getModifiedChild(i);
+}
+
+std::vector< rtl::Reference< ChildAccess > > Access::getAllChildren() {
+    std::vector< rtl::Reference< ChildAccess > > vec;
+    NodeMap & members = getMemberNodes();
+    for (NodeMap::iterator i(members.begin()); i != members.end(); ++i) {
+        if (modifiedChildren_.find(i->first) == modifiedChildren_.end()) {
+            vec.push_back(getUnmodifiedChild(i->first));
+            OSL_ASSERT(vec.back().is());
+        }
+    }
+    for (HardChildMap::iterator i(modifiedChildren_.begin());
+         i != modifiedChildren_.end(); ++i)
+    {
+        rtl::Reference< ChildAccess > child(getModifiedChild(i));
+        if (child.is()) {
+            vec.push_back(child);
+        }
+    }
+    return vec;
+}
+
 void Access::checkValue(
     com::sun::star::uno::Any const & value, Type type, bool nillable)
 {
@@ -146,6 +172,21 @@ void Access::checkValue(
                     "configmgr inappropriate property value")),
             static_cast< cppu::OWeakObject * >(this), -1);
     }
+}
+
+void Access::insertLocalizedPropertyValueChild(
+    rtl::OUString const & name, com::sun::star::uno::Any const & value)
+{
+    LocalizedPropertyNode * locprop =
+        dynamic_cast< LocalizedPropertyNode * >(getNode().get());
+    OSL_ASSERT(locprop != 0);
+    checkValue(value, locprop->getType(), locprop->isNillable());
+    rtl::Reference< ChildAccess > child(
+        new ChildAccess(
+            getRootAccess(), this, name,
+            new LocalizedPropertyValueNode(value)));
+    child->markAsModified();
+    //TODO notify change
 }
 
 void Access::reportChildChanges(
@@ -676,13 +717,7 @@ void Access::insertByName(
     } else if (LocalizedPropertyNode * locprop =
                dynamic_cast< LocalizedPropertyNode * >(p.get()))
     {
-        checkValue(aElement, locprop->getType(), locprop->isNillable());
-        rtl::Reference< ChildAccess > child(
-            new ChildAccess(
-                getRootAccess(), this, aName,
-                new LocalizedPropertyValueNode(aElement)));
-        child->markAsModified();
-        //TODO notify change
+        insertLocalizedPropertyValueChild(aName, aElement);
     } else {
         OSL_ASSERT(false);
         throw css::uno::RuntimeException(
@@ -801,32 +836,6 @@ rtl::Reference< ChildAccess > Access::getUnmodifiedChild(
         new ChildAccess(getRootAccess(), this, name, node));
     cachedChildren_[name] = child.get();
     return child;
-}
-
-rtl::Reference< ChildAccess > Access::getChild(rtl::OUString const & name) {
-    HardChildMap::iterator i(modifiedChildren_.find(name));
-    return i == modifiedChildren_.end()
-        ? getUnmodifiedChild(name) : getModifiedChild(i);
-}
-
-std::vector< rtl::Reference< ChildAccess > > Access::getAllChildren() {
-    std::vector< rtl::Reference< ChildAccess > > vec;
-    NodeMap & members = getMemberNodes();
-    for (NodeMap::iterator i(members.begin()); i != members.end(); ++i) {
-        if (modifiedChildren_.find(i->first) == modifiedChildren_.end()) {
-            vec.push_back(getUnmodifiedChild(i->first));
-            OSL_ASSERT(vec.back().is());
-        }
-    }
-    for (HardChildMap::iterator i(modifiedChildren_.begin());
-         i != modifiedChildren_.end(); ++i)
-    {
-        rtl::Reference< ChildAccess > child(getModifiedChild(i));
-        if (child.is()) {
-            vec.push_back(child);
-        }
-    }
-    return vec;
 }
 
 rtl::Reference< ChildAccess > Access::getSubChild(rtl::OUString const & path) {

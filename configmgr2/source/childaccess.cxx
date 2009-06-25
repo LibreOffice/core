@@ -193,9 +193,15 @@ void ChildAccess::setProperty(css::uno::Any const & value) {
     } else if (LocalizedPropertyNode * locprop =
                dynamic_cast< LocalizedPropertyNode * >(node_.get()))
     {
-        if (!Components::allLocales(getRootAccess()->getLocale())) {
-            type = locprop->getType();
-            nillable = locprop->isNillable();
+        rtl::OUString locale(getRootAccess()->getLocale());
+        if (!Components::allLocales(locale)) {
+            rtl::Reference< ChildAccess > child(getChild(locale));
+            if (child.is()) {
+                child->setProperty(value);
+            } else {
+                insertLocalizedPropertyValueChild(locale, value);
+            }
+            return;
         }
     }
     checkValue(value, type, nillable);
@@ -222,9 +228,24 @@ css::uno::Any ChildAccess::asValue() {
     {
         rtl::OUString locale(getRootAccess()->getLocale());
         if (!Components::allLocales(locale)) {
-            rtl::Reference< LocalizedPropertyValueNode > value(
-                locprop->getValue(locale));
-            return value.is() ? value->getValue() : css::uno::Any();
+            rtl::Reference< ChildAccess > child(getChild(locale));
+            if (!child.is()) {
+                //TODO: find best match
+                child = getChild(rtl::OUString());
+                if (!child.is()) {
+                    child = getChild(
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en-US")));
+                    if (!child.is()) {
+                        std::vector< rtl::Reference< ChildAccess > > all(
+                            getAllChildren());
+                        if (all.empty()) {
+                            return css::uno::Any();
+                        }
+                        child = all.front();
+                    }
+                }
+            }
+            return child->asValue();
         }
     }
     return css::uno::makeAny(
@@ -241,10 +262,6 @@ void ChildAccess::commitChanges() {
                    dynamic_cast< LocalizedPropertyValueNode * >(node_.get()))
         {
             locval->setValue(*changedValue_);
-        } else if (LocalizedPropertyNode * locprop =
-                   dynamic_cast< LocalizedPropertyNode * >(node_.get()))
-        {
-            locprop->setValue(getRootAccess()->getLocale(), *changedValue_);
         } else {
             OSL_ASSERT(false);
             throw css::uno::RuntimeException(

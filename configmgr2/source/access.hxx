@@ -137,8 +137,15 @@ protected:
 
     rtl::Reference< Node > getParentNode();
 
+    rtl::Reference< ChildAccess > getChild(rtl::OUString const & name);
+
+    std::vector< rtl::Reference< ChildAccess > > getAllChildren();
+
     void checkValue(
         com::sun::star::uno::Any const & value, Type type, bool nillable);
+
+    void insertLocalizedPropertyValueChild(
+        rtl::OUString const & name, com::sun::star::uno::Any const & value);
 
     void reportChildChanges(
         std::vector< com::sun::star::util::ElementChange > * changes);
@@ -406,10 +413,6 @@ private:
 
     rtl::Reference< ChildAccess > getUnmodifiedChild(
         rtl::OUString const & name);
-
-    rtl::Reference< ChildAccess > getChild(rtl::OUString const & name);
-
-    std::vector< rtl::Reference< ChildAccess > > getAllChildren();
 
     rtl::Reference< ChildAccess > getSubChild(rtl::OUString const & path);
 
