@@ -1,0 +1,16 @@
+OpenOffice.org - split build
+============================
+
+This package provides the possibility to build OpenOffice.org by pieces.  This
+one is the base - bootstrap stuff that you need to be at least able to use
+dmake and build.pl - essential OpenOffice.org build tools.
+
+To build, do the usual
+
+./autogen.sh or ./configure
+make
+make install
+
+To get the rest of the needed pieces, do
+
+./download
