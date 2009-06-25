@@ -39,7 +39,7 @@ TARGETTYPE=CUI
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
-.INCLUDE :  i18npool/version.mk
+.INCLUDE :  i18npoolversion.mk
 
 .IF "$(COM)" == "MSC"
 SCPDEFS+=-D_MSC
@@ -297,10 +297,4 @@ ULFFILES=                          \
 
 # --- File ---------------------------------------------------------
 .INCLUDE :  target.mk
-
-.IF "$(SYSTEM_ICU)" != "YES"
-$(ICUVERSION_DEPENDENT_FILES) : $(SOLARINCDIR)$/icuversion.mk
-.ENDIF
-
-$(ISOLANGVERSION_DEPENDENT_FILES) : $(SOLARINCDIR)$/i18npool/version.mk
 
