@@ -1,0 +1,64 @@
+#!/bin/bash
+#
+# Clone the rest of the remote repositories to have the complete ooo-build
+# sources
+
+usage() {
+    cat 1>&2 <<EOF
+
+./download [--help] [--list] [--skip=val[,val2]] [--repo=git://XYZ]
+
+  -h,--help  This text
+  -l,--list  Return all the available components
+  --repo     The repository location; if not specified, it is guessed
+             from the current one
+             Anon repo: git://anongit.freedesktop.org/git/ooo-build
+  --skip     Don't download the selected components, eg. filters,l10n
+EOF
+    exit 1
+}
+
+COMPONENTS="artwork base bootstrap calc components extensions extras filters
+help impress l10n libs-core libs-extern libs-extern-sys libs-gui ooo-build
+postprocess sdk testing ure writer"
+
+ORIGIN=`git remote show -n origin | grep URL: | sed 's#^[[:space:]]*URL: ##'`
+
+SKIP=
+REPO=`echo "$ORIGIN" | sed 's#/[^/]\+/\?$##'`
+
+# get the params
+while [ -n "$1" ]
+do
+    case "$1" in
+        --list|-l) echo $COMPONENTS ; exit 0 ;;
+        --skip=*)  SKIP=${1#--skip=} ;;
+        --repo=*)  REPO=${1#--repo=} ;;
+        --help|-h) usage ;;
+    esac
+    shift
+done
+
+# check that everything's OK
+if [ -z "$REPO" ]
+then
+    echo "Couldn't guess the repository location, please provide that with --repo" 1>&2
+    echo 1>&2
+    usage
+fi
+
+# skip the repo where we are
+SKIP="$SKIP,`echo $ORIGIN | sed 's#.*/\([^/]\+\)/\?$#\1#'`"
+
+# do the work
+for DIR in $COMPONENTS
+do
+    # skip?
+    ( echo "$SKIP" | grep "\<$DIR\>" > /dev/null 2>&1 ) && continue
+    # already cloned?
+    [ -d ../$DIR ] && { echo "* Not clonnig $DIR, already exists" ; continue ; }
+
+    # clone!
+    echo "* Cloning $DIR..."
+    ( cd .. ; git clone "$REPO/$DIR" )
+done
