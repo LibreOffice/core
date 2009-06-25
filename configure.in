@@ -12,9 +12,11 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
+AC_INIT(OpenOffice.org,3.1.9.50)
 AC_REVISION( $Revision: 1.290 $ )
 AC_PREREQ(2.50)
-AC_INIT()
+AC_PREFIX_DEFAULT(/usr)
+
 echo "$@" >config.parms
 AC_ARG_WITH(gnu-patch,
 [  --with-gnu-patch        Specify location of GNU patch on Solaris or FreeBSD
@@ -771,6 +773,10 @@ AC_ARG_ENABLE(verbose,
   --disable-verbose       Decrease build verbosity.
 ],,)
 
+AC_ARG_WITH(ooo-prefix,
+[  --with-ooo-prefix       Where should be OOo installed
+],OOO_PREFIX="$withval",OOO_PREFIX="\${libdir}/ooo3")
+
 BUILD_TYPE="OOo"
 
 dnl ===================================================================
@@ -841,10 +847,13 @@ else
    AC_MSG_ERROR([$_solenv/inc/minor.mk missing but needed for architecture/os detecion and proper environment script generation...])
 fi
 
+PKG_PROG_PKG_CONFIG
+
 dnl ===================================================================
 dnl Checks for the operating system and processor.
 dnl ===================================================================
 AC_CANONICAL_SYSTEM
+AM_INIT_AUTOMAKE([1.8b tar-ustar])
 if test "$build" != "$host" -o "$build" != "$target" \
   -o "$host" != "$target"; then
 	AC_MSG_WARN([cross-compiling by any means is not supported (yet)!])
@@ -3505,7 +3514,6 @@ dnl ===================================================================
 dnl Check whether freetype is available
 dnl ===================================================================
 if test  "$test_freetype" = "yes"; then
-   AC_MSG_CHECKING([whether freetype is available])
 	PKG_CHECK_MODULES( FREETYPE, freetype2 >= 2.0 )
 fi
 AC_SUBST(FREETYPE_CFLAGS)
@@ -6392,10 +6400,12 @@ AC_SUBST(LOCAL_SOLVER)
 
 AC_SUBST(BUILD_TYPE)
 
+AC_SUBST(OOO_PREFIX)
+
 # make sure config.guess is +x; we execute config.guess, so it has to be so; 
 chmod +x ./config.guess
 
-AC_OUTPUT([set_soenv Makefile])
+AC_OUTPUT([set_soenv Makefile build/src/OpenOffice.org-bootstrap.pc])
 
 dnl Executing the set_soenv script to setup the environment variables.
 chmod a+x set_soenv
