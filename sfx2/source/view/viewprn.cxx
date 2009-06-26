@@ -989,6 +989,10 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                                                                                        bIsAPI,
                                                                                        nId == SID_PRINTDOCDIRECT
                                                                                        ) );
+            SfxObjectShell *pObjShell = GetObjectShell();
+            pListener->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "JobName" ) ),
+                                makeAny( rtl::OUString( pObjShell->GetTitle(0) ) ) );
+
             // FIXME: job setup
             JobSetup aJobSetup;
             if( nId == SID_PRINTDOCDIRECT )
