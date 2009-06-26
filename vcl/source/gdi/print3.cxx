@@ -1004,8 +1004,16 @@ void PrinterListener::createProgressDialog()
 {
     if( ! mpImplData->mpProgress )
     {
-        mpImplData->mpProgress = new PrintProgressDialog( NULL, getPageCount() );
-        mpImplData->mpProgress->Show();
+        sal_Bool bShow = sal_True;
+        beans::PropertyValue* pMonitor = getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MonitorVisible" ) ) );
+        if( pMonitor )
+            pMonitor->Value >>= bShow;
+
+        if( bShow )
+        {
+            mpImplData->mpProgress = new PrintProgressDialog( NULL, getPageCount() );
+            mpImplData->mpProgress->Show();
+        }
     }
 }
 

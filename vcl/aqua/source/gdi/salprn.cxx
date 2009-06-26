@@ -526,6 +526,12 @@ BOOL AquaSalInfoPrinter::StartJob( const String* i_pFileName,
     if( i_pSetupData )
         SetData( ~0, i_pSetupData );
 
+    // do we want a progress panel ?
+    sal_Bool bShowProgressPanel = sal_True;
+    beans::PropertyValue* pMonitor = i_rListener.getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MonitorVisible" ) ) );
+    if( pMonitor )
+        pMonitor->Value >>= bShowProgressPanel;
+
     // FIXME: jobStarted() should be done after the print dialog has ended (if there is one)
     // how do I know when that might be ?
     i_rListener.jobStarted();
@@ -598,7 +604,7 @@ BOOL AquaSalInfoPrinter::StartJob( const String* i_pFileName,
             NSObject* pReleaseAfterUse = nil;
             bool bShowPanel = (! bIsQuickJob && getUseNativeDialog() );
             [pPrintOperation setShowsPrintPanel: bShowPanel ? YES : NO ];
-            [pPrintOperation setShowsProgressPanel: YES];
+            [pPrintOperation setShowsProgressPanel: bShowProgressPanel ? YES : NO];
             if( bShowPanel && mnCurPageRangeStart == 0 ) // only the first range of pages gets the accesory view
                 pReleaseAfterUse = [AquaPrintAccessoryView setupPrinterPanel: pPrintOperation withListener: &i_rListener withState: &aAccViewState];
 
