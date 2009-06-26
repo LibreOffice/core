@@ -264,7 +264,7 @@ private:
     SAL_DLLPRIVATE void         ImplFindPaperFormatForUserSize( JobSetup& );
     DECL_DLLPRIVATE_LINK(       ImplDestroyPrinterAsync, void* );
 
-    SAL_DLLPRIVATE bool StartJob( const XubString& rJobName, boost::shared_ptr<vcl::PrinterListener>& );
+    SAL_DLLPRIVATE bool StartJob( const rtl::OUString& rJobName, boost::shared_ptr<vcl::PrinterListener>& );
 
     static SAL_DLLPRIVATE ULONG ImplSalPrinterErrorCodeToVCL( ULONG nError );
 

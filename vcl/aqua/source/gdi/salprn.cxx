@@ -503,6 +503,7 @@ static Size getPageSize( vcl::PrinterListener& i_rListener, sal_Int32 i_nPage )
 }
 
 BOOL AquaSalInfoPrinter::StartJob( const String* i_pFileName,
+                                   const String& i_rJobName,
                                    const String& i_rAppName,
                                    ImplJobSetup* i_pSetupData,
                                    vcl::PrinterListener& i_rListener,
@@ -605,6 +606,11 @@ BOOL AquaSalInfoPrinter::StartJob( const String* i_pFileName,
             bool bShowPanel = (! bIsQuickJob && getUseNativeDialog() );
             [pPrintOperation setShowsPrintPanel: bShowPanel ? YES : NO ];
             [pPrintOperation setShowsProgressPanel: bShowProgressPanel ? YES : NO];
+
+            // set job title (since MacOSX 10.5)
+            if( [pPrintOperation respondsToSelector: @selector(setJobTitle:)] )
+                [pPrintOperation performSelector: @selector(setJobTitle:) withObject: [CreateNSString( i_rJobName ) autorelease]];
+
             if( bShowPanel && mnCurPageRangeStart == 0 ) // only the first range of pages gets the accesory view
                 pReleaseAfterUse = [AquaPrintAccessoryView setupPrinterPanel: pPrintOperation withListener: &i_rListener withState: &aAccViewState];
 
@@ -707,6 +713,7 @@ AquaSalPrinter::~AquaSalPrinter()
 // -----------------------------------------------------------------------
 
 BOOL AquaSalPrinter::StartJob( const String* i_pFileName,
+                               const String& i_rJobName,
                                const String& i_rAppName,
                                ImplJobSetup* i_pSetupData,
                                vcl::PrinterListener& i_rListener )
@@ -721,16 +728,16 @@ BOOL AquaSalPrinter::StartJob( const String* i_pFileName,
             bIsQuickJob = true;
     }
 
-    return mpInfoPrinter->StartJob( i_pFileName, i_rAppName, i_pSetupData, i_rListener, bIsQuickJob );
+    return mpInfoPrinter->StartJob( i_pFileName, i_rJobName, i_rAppName, i_pSetupData, i_rListener, bIsQuickJob );
 }
 
 // -----------------------------------------------------------------------
 
 BOOL AquaSalPrinter::StartJob( const XubString* i_pFileName,
-                           const XubString& i_rJobName,
-                           const XubString& i_rAppName,
-                           ULONG i_nCopies, BOOL i_bCollate,
-                           ImplJobSetup* i_pSetupData )
+                               const XubString& i_rJobName,
+                               const XubString& i_rAppName,
+                               ULONG i_nCopies, BOOL i_bCollate,
+                               ImplJobSetup* i_pSetupData )
 {
     DBG_ERROR( "should never be called" );
     return FALSE;

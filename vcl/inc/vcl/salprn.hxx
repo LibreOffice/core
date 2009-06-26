@@ -113,15 +113,16 @@ public:                     // public for Sal Implementation
     SalPrinter() {}
     virtual ~SalPrinter();
 
-    virtual BOOL                    StartJob( const XubString* pFileName,
-                                              const XubString& rJobName,
-                                              const XubString& rAppName,
+    virtual BOOL                    StartJob( const String* pFileName,
+                                              const String& rJobName,
+                                              const String& rAppName,
                                               ULONG nCopies, BOOL bCollate,
                                               ImplJobSetup* pSetupData ) = 0;
 
     // implement for pull model print systems only,
     // default implementations (see salvtables.cxx) just returns FALSE
     virtual BOOL                    StartJob( const String* pFileName,
+                                              const String& rJobName,
                                               const String& rAppName,
                                               ImplJobSetup* pSetupData,
                                               vcl::PrinterListener& rListener );

@@ -103,6 +103,7 @@ class AquaSalInfoPrinter : public SalInfoPrinter
     // and concentrate the real work in one class
     // implement pull model print system
     BOOL                        StartJob( const String* i_pFileName,
+                                          const String& rJobName,
                                           const String& i_rAppName,
                                           ImplJobSetup* i_pSetupData,
                                           vcl::PrinterListener& i_rListener,
@@ -145,6 +146,7 @@ class AquaSalPrinter : public SalPrinter
                                               ImplJobSetup* i_pSetupData );
     // implement pull model print system
     virtual BOOL                    StartJob( const String* i_pFileName,
+                                              const String& rJobName,
                                               const String& i_rAppName,
                                               ImplJobSetup* i_pSetupData,
                                               vcl::PrinterListener& i_rListener );

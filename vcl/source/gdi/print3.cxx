@@ -348,13 +348,17 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterListener>& i_pListene
 
     pListener->pushPropertiesToPrinter();
 
-    pListener->getPrinter()->StartJob( String( RTL_CONSTASCII_USTRINGPARAM( "FIXME: no job name" ) ),
-                                                       pListener );
+    rtl::OUString aJobName;
+    beans::PropertyValue* pJobNameVal = pListener->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "JobName" ) ) );
+    if( pJobNameVal )
+        pJobNameVal->Value >>= aJobName;
+
+    pListener->getPrinter()->StartJob( String( aJobName ), pListener );
 
     pListener->jobFinished( pListener->getJobState() );
 }
 
-bool Printer::StartJob( const XubString& i_rJobName, boost::shared_ptr<vcl::PrinterListener>& i_pListener )
+bool Printer::StartJob( const rtl::OUString& i_rJobName, boost::shared_ptr<vcl::PrinterListener>& i_pListener )
 {
     mnError = PRINTER_OK;
 
@@ -377,7 +381,7 @@ bool Printer::StartJob( const XubString& i_rJobName, boost::shared_ptr<vcl::Prin
         else
             nDevCopy = GetCapabilities( PRINTER_CAPABILITIES_COPIES );
 
-        // Muessen Kopien selber gemacht werden?
+        // need to do copies by hand ?
         if ( nCopies > nDevCopy )
         {
             bUserCopy = TRUE;
@@ -427,6 +431,7 @@ bool Printer::StartJob( const XubString& i_rJobName, boost::shared_ptr<vcl::Prin
         // that also means it must call jobStarted when the dialog is finished
         // it also must set the JobState of the listener
         if( mpPrinter->StartJob( pPrintFile,
+                                 i_rJobName,
                                  Application::GetDisplayName(),
                                  maJobSetup.ImplGetConstData(),
                                  *i_pListener ) )
