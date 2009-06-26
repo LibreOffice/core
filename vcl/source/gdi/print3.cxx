@@ -264,8 +264,18 @@ void Printer::PrintJob( const boost::shared_ptr<PrinterListener>& i_pListener,
                         const JobSetup& i_rInitSetup
                         )
 {
-    PrintJobAsync* pAsync = new PrintJobAsync( i_pListener, i_rInitSetup );
-    Application::PostUserEvent( LINK( pAsync, PrintJobAsync, ExecJob ) );
+    sal_Bool bSynchronous = sal_False;
+    beans::PropertyValue* pVal = i_pListener->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintRange" ) ) );
+    if( pVal )
+        pVal->Value >>= bSynchronous;
+
+    if( bSynchronous )
+        ImplPrintJob( i_pListener, i_rInitSetup );
+    else
+    {
+        PrintJobAsync* pAsync = new PrintJobAsync( i_pListener, i_rInitSetup );
+        Application::PostUserEvent( LINK( pAsync, PrintJobAsync, ExecJob ) );
+    }
 }
 
 void Printer::ImplPrintJob( const boost::shared_ptr<PrinterListener>& i_pListener,
@@ -283,6 +293,27 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterListener>& i_pListene
 
     // reset last page property
     i_pListener->setLastPage( sal_False );
+
+    beans::PropertyValue* pPagesVal = i_pListener->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Pages" ) ) );
+    if( pPagesVal )
+    {
+        rtl::OUString aPagesVal;
+        pPagesVal->Value >>= aPagesVal;
+        if( aPagesVal.getLength() )
+        {
+            // "Pages" attribute from API is now equivalent to "PageRange"
+            // AND "PrintContent" = 1 except calc where it is "PrintRange" = 1
+            // Argh ! That sure needs cleaning up
+            beans::PropertyValue* pVal = i_pListener->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintRange" ) ) );
+            if( ! pVal )
+                pVal = i_pListener->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintContent" ) ) );
+            if( pVal )
+            {
+                pVal->Value = makeAny( sal_Int32( 1 ) );
+                i_pListener->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PageRange" ) ), pPagesVal->Value );
+            }
+        }
+    }
 
     // check if the printer brings up its own dialog
     // in that case leave the work to that dialog
