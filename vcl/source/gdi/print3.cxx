@@ -306,8 +306,8 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterListener>& i_pListene
                 rtl::OUString aFile = queryFile( pListener->getPrinter().get() );
                 if( ! aFile.getLength() )
                     return;
-                pListener->getPrinter()->EnablePrintFile( TRUE );
-                pListener->getPrinter()->SetPrintFile( aFile );
+                pListener->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LocalFileName" ) ),
+                                     makeAny( aFile ) );
             }
         }
         catch( std::bad_alloc& )
@@ -364,11 +364,25 @@ bool Printer::StartJob( const XubString& i_rJobName, boost::shared_ptr<vcl::Prin
     if ( !mpPrinter )
         return FALSE;
 
-    XubString* pPrintFile;
+    // remark: currently it is still possible to use EnablePrintFile and
+    // SetPrintFileName to redirect printout into file
+    // it can be argued that those methods should be removed in favor
+    // of only using the LocalFileName property
+    beans::PropertyValue* pFileValue = i_pListener->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LocalFileName" ) ) );
+    if( pFileValue )
+    {
+        rtl::OUString aFile;
+        pFileValue->Value >>= aFile;
+        if( aFile.getLength() )
+        {
+            mbPrintFile = TRUE;
+            maPrintFile = aFile;
+        }
+    }
+
+    XubString* pPrintFile = NULL;
     if ( mbPrintFile )
         pPrintFile = &maPrintFile;
-    else
-        pPrintFile = NULL;
 
     maJobName               = i_rJobName;
     mnCurPage               = 1;
