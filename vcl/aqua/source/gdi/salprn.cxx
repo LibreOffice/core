@@ -512,6 +512,7 @@ BOOL AquaSalInfoPrinter::StartJob( const String* i_pFileName,
         return FALSE;
 
     BOOL bSuccess = FALSE;
+    bool bWasAborted = false;
     AquaSalInstance* pInst = GetSalData()->mpFirstInstance;
     PrintAccessoryViewState aAccViewState;
     sal_Int32 nAllPages = 0;
@@ -525,6 +526,9 @@ BOOL AquaSalInfoPrinter::StartJob( const String* i_pFileName,
     if( i_pSetupData )
         SetData( ~0, i_pSetupData );
 
+    // FIXME: jobStarted() should be done after the print dialog has ended (if there is one)
+    // how do I know when that might be ?
+    i_rListener.jobStarted();
     do
     {
         if( aAccViewState.bNeedRestart )
@@ -603,6 +607,7 @@ BOOL AquaSalInfoPrinter::StartJob( const String* i_pFileName,
             pInst->startedPrintJob();
             [pPrintOperation runOperation];
             pInst->endedPrintJob();
+            bWasAborted = [[[pPrintOperation printInfo] jobDisposition] compare: NSPrintCancelJob] == NSOrderedSame;
             mbJob = false;
             if( pReleaseAfterUse )
                 [pReleaseAfterUse release];
@@ -623,6 +628,10 @@ BOOL AquaSalInfoPrinter::StartJob( const String* i_pFileName,
             SetupPrinterGraphics( mrContext );
         i_rListener.getFilteredPageFile( 0, aPageFile );
     }
+
+    i_rListener.setJobState( bWasAborted
+                             ? view::PrintableState_JOB_ABORTED
+                             : view::PrintableState_JOB_SPOOLED );
 
     mnCurPageRangeStart = mnCurPageRangeCount = 0;
 

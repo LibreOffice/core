@@ -42,6 +42,7 @@
 #include "tools/multisel.hxx"
 
 #include "com/sun/star/beans/PropertyValue.hpp"
+#include "com/sun/star/view/PrintableState.hpp"
 
 #include <boost/shared_ptr.hpp>
 #include <hash_map>
@@ -477,7 +478,10 @@ public:
     // must be overloaded by the app, return page size in 1/100th mm
     virtual com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > getPageParameters( int i_nPage ) const = 0;
     virtual void printPage( int i_nPage ) const = 0; // must be overloaded by the app
-    virtual void jobFinished();   // optionally release resources bound to the job
+    virtual void jobStarted(); // will be called after a possible dialog has been shown and the real printjob starts
+    virtual void jobFinished( com::sun::star::view::PrintableState );
+
+    com::sun::star::view::PrintableState getJobState() const;
 
     // implementation details, not usable outside vcl
     SAL_DLLPRIVATE int getFilteredPageCount();
@@ -491,6 +495,7 @@ public:
     SAL_DLLPRIVATE const MultiPageSetup& getMultipage() const;
     SAL_DLLPRIVATE void setLastPage( sal_Bool i_bLastPage );
     SAL_DLLPRIVATE void pushPropertiesToPrinter();
+    SAL_DLLPRIVATE void setJobState( com::sun::star::view::PrintableState );
 };
 
 class VCL_DLLPUBLIC PrinterOptionsHelper

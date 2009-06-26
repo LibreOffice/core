@@ -152,6 +152,7 @@ public:
     Link                                                        maOptionChangeHdl;
     ControlDependencyMap                                        maControlDependencies;
     sal_Bool                                                    mbLastPage;
+    view::PrintableState                                        meJobState;
 
     vcl::PrinterListener::MultiPageSetup                        maMultiPage;
 
@@ -161,6 +162,7 @@ public:
 
     ImplPrinterListenerData() :
         mbLastPage( sal_False ),
+        meJobState( view::PrintableState_JOB_STARTED ),
         mpProgress( NULL )
     {}
     ~ImplPrinterListenerData() { delete mpProgress; }
@@ -316,9 +318,9 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterListener>& i_pListene
     pListener->pushPropertiesToPrinter();
 
     pListener->getPrinter()->StartJob( String( RTL_CONSTASCII_USTRINGPARAM( "FIXME: no job name" ) ),
-                                       pListener );
+                                                       pListener );
 
-    pListener->jobFinished();
+    pListener->jobFinished( pListener->getJobState() );
 }
 
 bool Printer::StartJob( const XubString& i_rJobName, boost::shared_ptr<vcl::PrinterListener>& i_pListener )
@@ -376,6 +378,9 @@ bool Printer::StartJob( const XubString& i_rJobName, boost::shared_ptr<vcl::Prin
     {
         mbJobActive             = TRUE;
         // sallayer does all necessary page printing
+        // and also handles showing a dialog
+        // that also means it must call jobStarted when the dialog is finished
+        // it also must set the JobState of the listener
         if( mpPrinter->StartJob( pPrintFile,
                                  Application::GetDisplayName(),
                                  maJobSetup.ImplGetConstData(),
@@ -399,6 +404,11 @@ bool Printer::StartJob( const XubString& i_rJobName, boost::shared_ptr<vcl::Prin
     }
     else
     {
+        // possibly a dialog has been shown
+        // now the real job starts
+        i_pListener->setJobState( view::PrintableState_JOB_STARTED );
+        i_pListener->jobStarted();
+
         if( mpPrinter->StartJob( pPrintFile,
                                  i_rJobName,
                                  Application::GetDisplayName(),
@@ -415,9 +425,14 @@ bool Printer::StartJob( const XubString& i_rJobName, boost::shared_ptr<vcl::Prin
                 i_pListener->printFilteredPage( nPage );
             }
             EndJob();
+
+            if( i_pListener->getJobState() == view::PrintableState_JOB_STARTED )
+                i_pListener->setJobState( view::PrintableState_JOB_SPOOLED );
         }
         else
         {
+            i_pListener->setJobState( view::PrintableState_JOB_FAILED );
+
             mnError = ImplSalPrinterErrorCodeToVCL( mpPrinter->GetErrorCode() );
             if ( !mnError )
                 mnError = PRINTER_GENERALERROR;
@@ -437,6 +452,16 @@ bool Printer::StartJob( const XubString& i_rJobName, boost::shared_ptr<vcl::Prin
 PrinterListener::~PrinterListener()
 {
     delete mpImplData;
+}
+
+view::PrintableState PrinterListener::getJobState() const
+{
+    return mpImplData->meJobState;
+}
+
+void PrinterListener::setJobState( view::PrintableState i_eState )
+{
+    mpImplData->meJobState = i_eState;
 }
 
 const boost::shared_ptr<Printer>& PrinterListener::getPrinter() const
@@ -648,6 +673,9 @@ int PrinterListener::getFilteredPageCount()
 
 void PrinterListener::printFilteredPage( int i_nPage )
 {
+    if( mpImplData->meJobState != view::PrintableState_JOB_STARTED )
+        return;
+
     GDIMetaFile aPageFile;
     Size aPageSize = getFilteredPageFile( i_nPage, aPageFile );
 
@@ -655,7 +683,10 @@ void PrinterListener::printFilteredPage( int i_nPage )
     {
         // do nothing if printing is canceled
         if( mpImplData->mpProgress->isCanceled() )
-           return;
+        {
+            setJobState( view::PrintableState_JOB_ABORTED );
+            return;
+        }
     }
 
     bool bMultiPageOutput = mpImplData->maMultiPage.nRows != 1 || mpImplData->maMultiPage.nColumns != 1;
@@ -730,7 +761,11 @@ void PrinterListener::printFilteredPage( int i_nPage )
     mpImplData->mpPrinter->SetDrawMode( nRestoreDrawMode );
 }
 
-void PrinterListener::jobFinished()
+void PrinterListener::jobStarted()
+{
+}
+
+void PrinterListener::jobFinished( view::PrintableState )
 {
 }
 
