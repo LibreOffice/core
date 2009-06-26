@@ -101,7 +101,8 @@ public:
     virtual int  getPageCount() const;
     virtual Sequence< beans::PropertyValue > getPageParameters( int i_nPage ) const;
     virtual void printPage( int i_nPage ) const;
-    virtual void jobFinished();   // optional
+    virtual void jobStarted();
+    virtual void jobFinished( com::sun::star::view::PrintableState );
 };
 
 SfxPrinterListener::SfxPrinterListener( const Any& i_rComplete,
@@ -208,7 +209,11 @@ void SfxPrinterListener::printPage( int i_nPage ) const
     }
 }
 
-void SfxPrinterListener::jobFinished()
+void SfxPrinterListener::jobStarted()
+{
+}
+
+void SfxPrinterListener::jobFinished( com::sun::star::view::PrintableState )
 {
 }
 
