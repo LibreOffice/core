@@ -12,7 +12,13 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_INIT(OpenOffice.org,3.1.9.50)
+
+dnl Version X.Y.A.M
+dnl   X.Y - version
+dnl   A   - minor, or 97 for devel, 98 for alpha, 99 for beta
+dnl   M   - milestone, or micro version
+AC_INIT(OpenOffice.org-bootstrap,3.1.97.50)
+
 AC_REVISION( $Revision: 1.290 $ )
 AC_PREREQ(2.50)
 AC_PREFIX_DEFAULT(/usr)
