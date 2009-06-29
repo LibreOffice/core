@@ -83,6 +83,11 @@ namespace cppcanvas
         return (nRed << 24U)|(nGreen << 16U)|(nBlue << 8U)|(nAlpha);
     }
 
+    inline sal_Int32 makeColorARGB( sal_uInt8 nAlpha, sal_uInt8 nRed, sal_uInt8 nGreen, sal_uInt8 nBlue)
+    {
+        return (nAlpha << 24U)|(nRed << 16U)|(nGreen << 8U)|(nBlue);
+    }
+
 }
 
 #endif /* _CPPCANVAS_COLOR_HXX */
