@@ -486,6 +486,31 @@ public:
     */
     bool notifyUserPaintColor( RGBColor const& rUserColor );
 
+    /** Notify a new user paint width
+
+         Sending this notification also implies that user paint is
+         enabled. .
+
+         @return true, if this event was processed by
+         anybody. If false is returned, no handler processed
+         this event (and probably, nothing will happen at all)
+         */
+    bool notifyUserPaintStrokeWidth( double rUserStrokeWidth );
+
+
+    /** Notify a new user paint erase all ink mode
+
+     Sending this notification also implies that user paint is
+     enabled. User paint denotes the feature to draw colored lines
+     on top of the slide content.
+
+     @return true, if this event was processed by
+     anybody. If false is returned, no handler processed
+     this event (and probably, nothing will happen at all)
+     */
+    bool notifyEraseAllInk( bool const& rEraseAllInk );
+    bool notifyEraseInk( double rEraseInkSize );
+
     /** Notify that user paint is disabled
 
         User paint denotes the feature to draw colored lines on top of

@@ -33,6 +33,9 @@
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/drawing/XLayer.hpp>
+#include "unoviewcontainer.hxx"
+#include "unoview.hxx"
 
 #include "shape.hxx"
 
@@ -42,6 +45,10 @@ namespace slideshow {
 namespace internal {
 
 struct SlideShowContext;
+
+typedef ::std::vector< ::cppcanvas::PolyPolygonSharedPtr> PolyPolygonVector;
+typedef ::boost::shared_ptr< UnoView >      UnoViewSharedPtr;
+typedef ::std::vector< UnoViewSharedPtr >   UnoViewVector;
 
 /** This class imports all shapes from a given XShapes object
  */
@@ -75,6 +82,8 @@ public:
                          ::com::sun::star::drawing::XDrawPage >& xPage,
                    const ::com::sun::star::uno::Reference<
                          ::com::sun::star::drawing::XDrawPage >& xActualPage,
+                  const ::com::sun::star::uno::Reference<
+                         ::com::sun::star::drawing::XDrawPagesSupplier>& xPagesSupplier,
                    const SlideShowContext&                       rContext,
                    sal_Int32                                     nOrdNumStart,
                    bool                                          bConvertingMasterPage );
@@ -95,11 +104,13 @@ public:
         importShape() call.
     */
     bool isImportDone() const;
-
+    PolyPolygonVector getPolygons();
 private:
     bool isSkip( ::com::sun::star::uno::Reference<
                  ::com::sun::star::beans::XPropertySet> const& xPropSet,
-                 ::rtl::OUString const& shapeType ) const;
+                 ::rtl::OUString const& shapeType,
+             ::com::sun::star::uno::Reference<
+             ::com::sun::star::drawing::XLayer> const& xLayer);
 
     ShapeSharedPtr createShape(
         ::com::sun::star::uno::Reference<
@@ -107,6 +118,8 @@ private:
         ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet> const& xPropSet,
         ::rtl::OUString const& shapeType ) const;
+
+    void importPolygons(::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > const& xPropSet) ;
 
     struct XShapesEntry
     {
@@ -130,10 +143,11 @@ private:
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::drawing::XDrawPage> mxPage;
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::drawing::XDrawPagesSupplier> mxPagesSupplier;
     const SlideShowContext&                   mrContext;
-
+    PolyPolygonVector                         maPolygons;
     XShapesStack                              maShapesStack;
-
     double                                    mnAscendingPrio;
     bool                                      mbConvertingMasterPage;
 };

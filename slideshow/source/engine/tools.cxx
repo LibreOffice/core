@@ -163,10 +163,10 @@ namespace slideshow
         // =========================
 
         /// extract unary double value from Any
-        bool extractValue( double&                          o_rValue,
-                           const uno::Any&                  rSourceAny,
-                           const ShapeSharedPtr&            rShape,
-                           const ::basegfx::B2DVector&      rSlideBounds )
+        bool extractValue( double&                      o_rValue,
+                           const uno::Any&              rSourceAny,
+                           const ShapeSharedPtr&        rShape,
+                           const ::basegfx::B2DVector&  rSlideBounds )
         {
             // try to extract numeric value (double, or smaller POD, like float or int)
             if( (rSourceAny >>= o_rValue) )
@@ -637,8 +637,8 @@ namespace slideshow
                 aTransform );
         }
 
-        ::basegfx::B2DRange getShapeUpdateArea( const ::basegfx::B2DRange&      rUnitBounds,
-                                                    const ::basegfx::B2DRange&      rShapeBounds )
+        ::basegfx::B2DRange getShapeUpdateArea( const ::basegfx::B2DRange& rUnitBounds,
+                                                const ::basegfx::B2DRange& rShapeBounds )
         {
             return ::basegfx::B2DRectangle(
                 lerp( rShapeBounds.getMinX(),
@@ -708,6 +708,17 @@ namespace slideshow
                     static_cast< sal_uInt8 >( nColor >> 8U ),
                     static_cast< sal_uInt8 >( nColor ),
                     static_cast< sal_uInt8 >( nColor >> 24U ) ) );
+        }
+
+        sal_Int32 RGBAColor2UnoColor( ::cppcanvas::Color::IntSRGBA aColor )
+        {
+            return ::cppcanvas::makeColorARGB(
+                // convert from IntSRGBA color to API color
+                // (0xRRGGBBAA -> 0xAARRGGBB)
+                static_cast< sal_uInt8 >(0),
+                ::cppcanvas::getRed(aColor),
+                ::cppcanvas::getGreen(aColor),
+                ::cppcanvas::getBlue(aColor));
         }
 
         void fillRect( const ::cppcanvas::CanvasSharedPtr& rCanvas,
@@ -806,12 +817,12 @@ namespace slideshow
 
             // determine transformed page bounds
             const basegfx::B2DRange aRect( 0,0,
-                                             rSlideSize.getX(),
-                                             rSlideSize.getY() );
+                                           rSlideSize.getX(),
+                                           rSlideSize.getY() );
             basegfx::B2DRange aTmpRect;
             canvas::tools::calcTransformedRectBounds( aTmpRect,
-                                                        aRect,
-                                                        pView->getTransformation() );
+                                                      aRect,
+                                                      pView->getTransformation() );
 
             // #i42440# Returned slide size is one pixel too small, as
             // rendering happens one pixel to the right and below the

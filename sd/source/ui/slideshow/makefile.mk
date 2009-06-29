@@ -43,6 +43,10 @@ AUTOSEG=true
 .INCLUDE :  settings.mk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
+.IF "$(ENABLE_PRESENTER_EXTRA_UI)"="YES"
+CDEFS+= -DENABLE_PRESENTER_EXTRA_UI
+.ENDIF
+
 # --- Files --------------------------------------------------------
 
 

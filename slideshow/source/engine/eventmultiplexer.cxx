@@ -262,8 +262,7 @@ struct EventMultiplexerImpl
         std::vector<ShapeCursorEventHandlerSharedPtr> >   ImplShapeCursorHandlers;
     typedef ThreadUnsafeListenerContainer<
         PrioritizedHandlerEntry<HyperlinkHandler>,
-        std::vector<
-            PrioritizedHandlerEntry<HyperlinkHandler> > > ImplHyperLinkHandlers;
+        std::vector<PrioritizedHandlerEntry<HyperlinkHandler> > > ImplHyperLinkHandlers;
 
     template <typename XSlideShowViewFunc>
     void forEachView( XSlideShowViewFunc pViewMethod );
@@ -1065,10 +1064,36 @@ bool EventMultiplexer::notifyUserPaintColor( RGBColor const& rUserColor )
                     boost::cref(rUserColor)));
 }
 
+bool EventMultiplexer::notifyUserPaintStrokeWidth( double rUserStrokeWidth )
+{
+    return mpImpl->maUserPaintEventHandlers.applyAll(
+                                                    boost::bind(&UserPaintEventHandler::widthChanged,
+                                                    _1,
+                                                    rUserStrokeWidth));
+}
+
 bool EventMultiplexer::notifyUserPaintDisabled()
 {
     return mpImpl->maUserPaintEventHandlers.applyAll(
         boost::mem_fn(&UserPaintEventHandler::disable));
+}
+
+//adding erasing all ink features with UserPaintOverlay
+bool EventMultiplexer::notifyEraseAllInk( bool const& rEraseAllInk )
+{
+    return mpImpl->maUserPaintEventHandlers.applyAll(
+        boost::bind(&UserPaintEventHandler::eraseAllInkChanged,
+                    _1,
+                    boost::cref(rEraseAllInk)));
+}
+
+//adding erasing features with UserPaintOverlay
+bool EventMultiplexer::notifyEraseInk( double rEraseInkSize )
+{
+    return mpImpl->maUserPaintEventHandlers.applyAll(
+        boost::bind(&UserPaintEventHandler::eraseInkChanged,
+                    _1,
+                    boost::cref(rEraseInkSize)));
 }
 
 bool EventMultiplexer::notifyNextEffect()

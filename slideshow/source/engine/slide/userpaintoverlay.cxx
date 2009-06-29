@@ -54,7 +54,8 @@
 
 #include <boost/bind.hpp>
 #include <boost/noncopyable.hpp>
-
+#include "slide.hxx"
+#include "cursormanager.hxx"
 
 using namespace ::com::sun::star;
 
@@ -63,29 +64,40 @@ namespace slideshow
     namespace internal
     {
         class PaintOverlayHandler : public MouseEventHandler,
-                                    public ViewEventHandler
+                                    public ViewEventHandler,
+                                    public UserPaintEventHandler
         {
         public:
-            PaintOverlayHandler( const RGBColor&         rStrokeColor,
-                                 double                  nStrokeWidth,
-                                 ActivitiesQueue&        rActivitiesQueue,
-                                 ScreenUpdater&          rScreenUpdater,
-                                 const UnoViewContainer& rViews ) :
+            PaintOverlayHandler( const RGBColor&          rStrokeColor,
+                                 double                   nStrokeWidth,
+                                 ActivitiesQueue&         rActivitiesQueue,
+                                 ScreenUpdater&           rScreenUpdater,
+                                 const UnoViewContainer&  rViews,
+                                 Slide&                   rSlide,
+                                 const PolyPolygonVector& rPolygons ) :
                 mrActivitiesQueue( rActivitiesQueue ),
                 mrScreenUpdater( rScreenUpdater ),
                 maViews(),
+                maPolygons( rPolygons ),
                 maStrokeColor( rStrokeColor ),
                 mnStrokeWidth( nStrokeWidth ),
                 maLastPoint(),
                 maLastMouseDownPos(),
                 mbIsLastPointValid( false ),
-                mbIsLastMouseDownPosValid( false )
+                mbIsLastMouseDownPosValid( false ),
+                //handle the "remove all ink from slide" mode of erasing
+                mbIsEraseAllModeActivated( false ),
+                //handle the "remove stroke by stroke" mode of erasing
+                mbIsEraseModeActivated( false ),
+                mrSlide(rSlide),
+                mnSize(100.0)
             {
                 std::for_each( rViews.begin(),
                                rViews.end(),
                                boost::bind( &PaintOverlayHandler::viewAdded,
                                             this,
                                             _1 ));
+                drawPolygons();
             }
 
             virtual void dispose()
@@ -118,9 +130,103 @@ namespace slideshow
                 // polygon and repaint here.
             }
 
+            bool colorChanged( RGBColor const& rUserColor )
+            {
+                maStrokeColor = rUserColor;
+                return true;
+            }
+
+            bool widthChanged( double nUserStrokeWidth )
+            {
+                mnStrokeWidth = nUserStrokeWidth;
+                return true;
+            }
+
+            bool eraseAllInkChanged( bool const& rEraseAllInk )
+            {
+                mbIsEraseAllModeActivated= rEraseAllInk;
+                // if the erase all mode is activated it will remove all ink from slide,
+                // therefor destroy all the polygons stored
+                if(mbIsEraseAllModeActivated)
+                {
+                    // must get access to the instance to erase all polygon
+                    for( UnoViewVector::iterator aIter=maViews.begin(), aEnd=maViews.end();
+                        aIter!=aEnd;
+                        ++aIter )
+                    {
+                        // fully clear view content to background color
+                        (*aIter)->getCanvas()->clear();
+
+                        //get via SlideImpl instance the bitmap of the slide unmodified to redraw it
+                        SlideBitmapSharedPtr         pBitmap( mrSlide.getCurrentSlideBitmap( (*aIter) ) );
+                        ::cppcanvas::CanvasSharedPtr pCanvas( (*aIter)->getCanvas() );
+
+                        const ::basegfx::B2DHomMatrix   aViewTransform( (*aIter)->getTransformation() );
+                        const ::basegfx::B2DPoint       aOutPosPixel( aViewTransform * ::basegfx::B2DPoint() );
+
+                        // setup a canvas with device coordinate space, the slide
+                        // bitmap already has the correct dimension.
+                        ::cppcanvas::CanvasSharedPtr pDevicePixelCanvas( pCanvas->clone() );
+
+                        pDevicePixelCanvas->setTransformation( ::basegfx::B2DHomMatrix() );
+
+                        // render at given output position
+                        pBitmap->move( aOutPosPixel );
+
+                        // clear clip (might have been changed, e.g. from comb
+                        // transition)
+                        pBitmap->clip( ::basegfx::B2DPolyPolygon() );
+                        pBitmap->draw( pDevicePixelCanvas );
+
+                        mrScreenUpdater.notifyUpdate(*aIter,true);
+                    }
+                }
+                mbIsEraseAllModeActivated=false;
+                return true;
+            }
+
+            bool eraseInkChanged( double rEraseInkSize )
+            {
+                if(mbIsEraseModeActivated)
+                    mbIsEraseModeActivated=false;
+                else
+                    mbIsEraseModeActivated=true;
+                return true;
+            }
+
+            bool disable()
+            {
+                return true;
+            }
+
+            //Draw all registered polygons.
+            void drawPolygons()
+            {
+                for( PolyPolygonVector::iterator aIter=maPolygons.begin(), aEnd=maPolygons.end();
+                                     aIter!=aEnd;
+                                     ++aIter )
+                {
+                    (*aIter)->draw();
+                }
+                // screen update necessary to show painting
+                mrScreenUpdater.notifyUpdate();
+            }
+
+            //Retrieve all registered polygons.
+            PolyPolygonVector getPolygons()
+            {
+                return maPolygons;
+            }
+
             // MouseEventHandler methods
             virtual bool handleMousePressed( const awt::MouseEvent& e )
             {
+                if (e.Buttons == awt::MouseButton::RIGHT)
+                {
+                    mbIsLastPointValid = false;
+                    return false;
+                }
+
                 if (e.Buttons != awt::MouseButton::LEFT)
                     return false;
 
@@ -135,6 +241,12 @@ namespace slideshow
 
             virtual bool handleMouseReleased( const awt::MouseEvent& e )
             {
+                if (e.Buttons == awt::MouseButton::RIGHT)
+                {
+                    mbIsLastPointValid = false;
+                    return false;
+                }
+
                 if (e.Buttons != awt::MouseButton::LEFT)
                     return false;
 
@@ -180,42 +292,108 @@ namespace slideshow
 
             virtual bool handleMouseDragged( const awt::MouseEvent& e )
             {
-                if( !mbIsLastPointValid )
+                if(mbIsEraseModeActivated)
                 {
-                    mbIsLastPointValid = true;
-                    maLastPoint.setX( e.X );
-                    maLastPoint.setY( e.Y );
+                    //define the last point as an object
+                    //we suppose that there's no way this point could be valid
+                    ::basegfx::B2DPolygon aPoly;
+
+                    maLastPoint.setX( e.X-mnSize );
+                    maLastPoint.setY( e.Y-mnSize );
+
+                    aPoly.append( maLastPoint );
+
+                    maLastPoint.setX( e.X-mnSize );
+                    maLastPoint.setY( e.Y+mnSize );
+
+                    aPoly.append( maLastPoint );
+                    maLastPoint.setX( e.X+mnSize );
+                    maLastPoint.setY( e.Y+mnSize );
+
+                    aPoly.append( maLastPoint );
+                    maLastPoint.setX( e.X+mnSize );
+                    maLastPoint.setY( e.Y-mnSize );
+
+                    aPoly.append( maLastPoint );
+                    maLastPoint.setX( e.X-mnSize );
+                    maLastPoint.setY( e.Y-mnSize );
+
+                    aPoly.append( maLastPoint );
+
+                    //now we have defined a Polygon that is closed
+
+                    //The point is to redraw the LastPoint the way it was originally on the bitmap,
+                    //of the slide
+                    for( UnoViewVector::iterator aIter=maViews.begin(), aEnd=maViews.end();
+                        aIter!=aEnd;
+                        ++aIter )
+                    {
+
+                        //get via SlideImpl instance the bitmap of the slide unmodified to redraw it
+                        SlideBitmapSharedPtr         pBitmap( mrSlide.getCurrentSlideBitmap( (*aIter) ) );
+                        ::cppcanvas::CanvasSharedPtr pCanvas( (*aIter)->getCanvas() );
+
+                        ::basegfx::B2DHomMatrix     aViewTransform( (*aIter)->getTransformation() );
+                        const ::basegfx::B2DPoint       aOutPosPixel( aViewTransform * ::basegfx::B2DPoint() );
+
+                        // setup a canvas with device coordinate space, the slide
+                        // bitmap already has the correct dimension.
+                        ::cppcanvas::CanvasSharedPtr pDevicePixelCanvas( pCanvas->clone() );
+
+                        pDevicePixelCanvas->setTransformation( ::basegfx::B2DHomMatrix() );
+
+                        // render at given output position
+                        pBitmap->move( aOutPosPixel );
+
+                        ::basegfx::B2DPolyPolygon aPolyPoly=::basegfx::B2DPolyPolygon(aPoly);
+                        aViewTransform.translate(-aOutPosPixel.getX(), -aOutPosPixel.getY());
+                        aPolyPoly.transform(aViewTransform);
+                        // set clip so that we just redraw a part of the canvas
+                        pBitmap->clip(aPolyPoly);
+                        pBitmap->draw( pDevicePixelCanvas );
+
+                        mrScreenUpdater.notifyUpdate(*aIter,true);
+                    }
+
                 }
                 else
                 {
-                    ::basegfx::B2DPolygon aPoly;
-                    aPoly.append( maLastPoint );
-
-                    maLastPoint.setX( e.X );
-                    maLastPoint.setY( e.Y );
-
-                    aPoly.append( maLastPoint );
-
-                    // paint to all views
-                    for( UnoViewVector::iterator aIter=maViews.begin(), aEnd=maViews.end();
-                         aIter!=aEnd;
-                         ++aIter )
+                    if( !mbIsLastPointValid )
                     {
-                        ::cppcanvas::PolyPolygonSharedPtr pPolyPoly(
-                            ::cppcanvas::BaseGfxFactory::getInstance().createPolyPolygon( (*aIter)->getCanvas(),
-                                                                                          aPoly ) );
-
-                        if( pPolyPoly )
-                        {
-                            pPolyPoly->setRGBALineColor( maStrokeColor.getIntegerColor() );
-                            pPolyPoly->draw();
-                        }
+                        mbIsLastPointValid = true;
+                        maLastPoint.setX( e.X );
+                        maLastPoint.setY( e.Y );
                     }
+                    else
+                    {
+                        ::basegfx::B2DPolygon aPoly;
+                        aPoly.append( maLastPoint );
 
-                    // screen update necessary to show painting
-                    mrScreenUpdater.notifyUpdate();
+                        maLastPoint.setX( e.X );
+                        maLastPoint.setY( e.Y );
+
+                        aPoly.append( maLastPoint );
+
+                        // paint to all views
+                        for( UnoViewVector::iterator aIter=maViews.begin(), aEnd=maViews.end();
+                             aIter!=aEnd;
+                             ++aIter )
+                        {
+                            ::cppcanvas::PolyPolygonSharedPtr pPolyPoly(
+                                ::cppcanvas::BaseGfxFactory::getInstance().createPolyPolygon( (*aIter)->getCanvas(),
+                                                                                              aPoly ) );
+
+                            if( pPolyPoly )
+                            {
+                                pPolyPoly->setRGBALineColor( maStrokeColor.getIntegerColor() );
+                                pPolyPoly->draw();
+                            }
+                        }
+
+                        // screen update necessary to show painting
+                        mrScreenUpdater.notifyUpdate();
+                    }
                 }
-
                 // mouse events captured
                 return true;
             }
@@ -226,42 +404,67 @@ namespace slideshow
                 return false; // did not handle the event
             }
 
+
+
         private:
             ActivitiesQueue&        mrActivitiesQueue;
             ScreenUpdater&          mrScreenUpdater;
             UnoViewVector           maViews;
+            PolyPolygonVector       maPolygons;
             RGBColor                maStrokeColor;
             double                  mnStrokeWidth;
             basegfx::B2DPoint       maLastPoint;
             basegfx::B2DPoint       maLastMouseDownPos;
             bool                    mbIsLastPointValid;
             bool                    mbIsLastMouseDownPosValid;
+            // added bool for erasing purpose :
+            bool                    mbIsEraseAllModeActivated;
+            bool                    mbIsEraseModeActivated;
+            Slide&                  mrSlide;
+            double                  mnSize;
         };
 
-        UserPaintOverlaySharedPtr UserPaintOverlay::create( const RGBColor&         rStrokeColor,
-                                                            double                  nStrokeWidth,
-                                                            const SlideShowContext& rContext )
+        UserPaintOverlaySharedPtr UserPaintOverlay::create( const RGBColor&          rStrokeColor,
+                                                            double                   nStrokeWidth,
+                                                            const SlideShowContext&  rContext,
+                                                            const PolyPolygonVector& rPolygons )
         {
             UserPaintOverlaySharedPtr pRet( new UserPaintOverlay( rStrokeColor,
                                                                   nStrokeWidth,
-                                                                  rContext ));
+                                                                  rContext,
+                                                                  rPolygons ));
 
             return pRet;
         }
 
-        UserPaintOverlay::UserPaintOverlay( const RGBColor&         rStrokeColor,
-                                            double                  nStrokeWidth,
-                                            const SlideShowContext& rContext ) :
+        UserPaintOverlay::UserPaintOverlay( const RGBColor&          rStrokeColor,
+                                            double                   nStrokeWidth,
+                                            const SlideShowContext&  rContext,
+                                            const PolyPolygonVector& rPolygons ) :
             mpHandler( new PaintOverlayHandler( rStrokeColor,
                                                 nStrokeWidth,
                                                 rContext.mrActivitiesQueue,
                                                 rContext.mrScreenUpdater,
-                                                rContext.mrViewContainer )),
+                                                rContext.mrViewContainer,
+                                                //adding a link to Slide
+                                                dynamic_cast<Slide&>(rContext.mrCursorManager),
+                                                rPolygons )),
             mrMultiplexer( rContext.mrEventMultiplexer )
         {
             mrMultiplexer.addClickHandler( mpHandler, 3.0 );
             mrMultiplexer.addMouseMoveHandler( mpHandler, 3.0 );
             mrMultiplexer.addViewHandler( mpHandler );
+            mrMultiplexer.addUserPaintHandler(mpHandler);
+        }
+
+        PolyPolygonVector UserPaintOverlay::getPolygons()
+        {
+            return mpHandler->getPolygons();
+        }
+
+        void UserPaintOverlay::drawPolygons()
+        {
+            mpHandler->drawPolygons();
         }
 
         UserPaintOverlay::~UserPaintOverlay()
@@ -273,7 +476,8 @@ namespace slideshow
                 mrMultiplexer.removeViewHandler( mpHandler );
                 mpHandler->dispose();
             }
-            catch (uno::Exception &) {
+            catch (uno::Exception &)
+            {
                 OSL_ENSURE( false, rtl::OUStringToOString(
                                 comphelper::anyToString(
                                     cppu::getCaughtException() ),

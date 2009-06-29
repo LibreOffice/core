@@ -76,6 +76,56 @@ Menu RID_SLIDESHOW_CONTEXTMENU
         };
         MenuItem
         {
+                    Identifier = CM_WIDTH_PEN;
+                   Text [ en-US ] = "~Pen Width" ;
+
+            SubMenu = Menu
+                    {
+                ItemList =
+                {
+                    MenuItem
+                    {
+                        Identifier =  CM_WIDTH_PEN_VERY_THIN;
+                        Text [ en-US ] = "~Very thin";
+                    };
+                    MenuItem
+                    {
+                        Identifier =  CM_WIDTH_PEN_THIN;
+                        Text [ en-US ] = "~Thin";
+                    };
+                    MenuItem
+                    {
+                        Identifier =  CM_WIDTH_PEN_NORMAL;
+                        Text [ en-US ] = "~Normal";
+                    };
+                    MenuItem
+                    {
+                        Identifier =  CM_WIDTH_PEN_THICK;
+                        Text [ en-US ] = "~Thick";
+                    };
+                    MenuItem
+                    {
+                        Identifier =  CM_WIDTH_PEN_VERY_THICK;
+                        Text [ en-US ] = "~Very Thick";
+                    };
+                };
+            };
+        };
+        MenuItem
+        {
+            Separator = TRUE;
+        };
+     MenuItem
+       {
+            Identifier = CM_COLOR_PEN ;
+            Text [ en-US ] = "~Change Color" ;
+        };
+        MenuItem
+        {
+            Separator = TRUE;
+        };
+        MenuItem
+        {
             Identifier = CM_SCREEN;
             Text [ en-US ] = "~Screen" ;
 
@@ -92,6 +142,66 @@ Menu RID_SLIDESHOW_CONTEXTMENU
                     {
                         Identifier = CM_SCREEN_WHITE;
                         Text [ en-US ] = "~White";
+                    };
+                };
+            };
+        };
+        MenuItem
+        {
+            Separator = TRUE;
+        };
+        MenuItem
+        {
+            Identifier = CM_ERASE_ALLINK ;
+            Text [ en-US ] = "~Erase All Ink" ;
+        };
+        MenuItem
+        {
+            Identifier = CM_ERASE_INK ;
+            Text [ en-US ] = "~Erase Ink Mode ON/OFF" ;
+        };
+        MenuItem
+        {
+            Separator = TRUE;
+        };
+        MenuItem
+        {
+            Identifier = CM_ERASE_ALLINK ;
+            Text [ en-US ] = "~Erase All Ink" ;
+        };
+        MenuItem
+        {
+                    Identifier = CM_ERASE_INK_PEN;
+                   Text [ en-US ] = "~Eraser Size" ;
+
+            SubMenu = Menu
+                    {
+                ItemList =
+                {
+                    MenuItem
+                    {
+                        Identifier =  CM_ERASE_INK_PEN_VERY_THIN;
+                        Text [ en-US ] = "~Very thin";
+                    };
+                    MenuItem
+                    {
+                        Identifier =  CM_ERASE_INK_PEN_THIN;
+                        Text [ en-US ] = "~Thin";
+                    };
+                    MenuItem
+                    {
+                        Identifier =  CM_ERASE_INK_PEN_NORMAL;
+                        Text [ en-US ] = "~Normal";
+                    };
+                    MenuItem
+                    {
+                        Identifier =  CM_ERASE_INK_PEN_THICK;
+                        Text [ en-US ] = "~Thick";
+                    };
+                    MenuItem
+                    {
+                        Identifier =  CM_ERASE_INK_PEN_VERY_THICK;
+                        Text [ en-US ] = "~Very Thick";
                     };
                 };
             };

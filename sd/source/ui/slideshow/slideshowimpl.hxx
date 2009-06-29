@@ -200,8 +200,12 @@ public:
     virtual void SAL_CALL setMouseVisible( ::sal_Bool _mousevisible ) throw (css::uno::RuntimeException);
     virtual ::sal_Bool SAL_CALL getUsePen() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setUsePen( ::sal_Bool _usepen ) throw (css::uno::RuntimeException);
+    virtual double SAL_CALL getPenWidth() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setPenWidth( double dStrokeWidth ) throw (css::uno::RuntimeException);
     virtual ::sal_Int32 SAL_CALL getPenColor() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setPenColor( ::sal_Int32 _pencolor ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setEraseAllInk( bool bEraseAllInk ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setEraseInk( double nEraseInkSize ) throw (css::uno::RuntimeException);
     virtual ::sal_Bool SAL_CALL isRunning(  ) throw (css::uno::RuntimeException);
     virtual ::sal_Int32 SAL_CALL getSlideCount(  ) throw (css::uno::RuntimeException);
     virtual css::uno::Reference< css::drawing::XDrawPage > SAL_CALL getSlideByIndex( ::sal_Int32 Index ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException);
@@ -380,7 +384,10 @@ private:
 
     PresentationSettings maPresSettings;
     sal_Int32       mnUserPaintColor;
-
+    double          mdUserPaintStrokeWidth;
+    bool            mbEraseAllInk;
+    bool            mbEraseInk;
+    double          mnEraseInkSize;
     /// used in updateHdl to prevent recursive calls
     sal_Int32       mnEntryCounter;
 

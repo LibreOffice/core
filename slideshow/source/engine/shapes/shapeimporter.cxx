@@ -39,9 +39,22 @@
 #include <goodies/grfmgr.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/streamwrap.hxx>
+#include <basegfx/point/b2dpoint.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <cppcanvas/basegfxfactory.hxx>
+#include <cppcanvas/polypolygon.hxx>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/drawing/ColorMode.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/drawing/PointSequenceSequence.hpp>
+#include <com/sun/star/drawing/PointSequence.hpp>
+#include <com/sun/star/lang/XMultiComponentFactory.hpp>
+#include <com/sun/star/drawing/XLayerSupplier.hpp>
+#include <com/sun/star/drawing/XLayerManager.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 
 #include "drawshapesubsetting.hxx"
 #include "drawshape.hxx"
@@ -52,11 +65,13 @@
 #include "slideshowexceptions.hxx"
 #include "gdimtftools.hxx"
 #include "tools.hxx"
+#include "slideshowcontext.hxx"
 
 #include <boost/shared_ptr.hpp>
 #include <boost/scoped_ptr.hpp>
 
 using namespace com::sun::star;
+using namespace ::comphelper;
 
 namespace slideshow {
 namespace internal {
@@ -436,7 +451,8 @@ ShapeSharedPtr ShapeImporter::createShape(
 
 bool ShapeImporter::isSkip(
     uno::Reference<beans::XPropertySet> const& xPropSet,
-    rtl::OUString const& shapeType ) const
+    rtl::OUString const& shapeType,
+    uno::Reference< drawing::XLayer> const& xLayer )
 {
     // skip empty presentation objects:
     bool bEmpty = false;
@@ -446,6 +462,26 @@ bool ShapeImporter::isSkip(
         bEmpty )
     {
         return true;
+    }
+
+    //skip shapes which corresponds to annotations
+    if(xLayer.is())
+    {
+        rtl::OUString layerName;
+        uno::Reference<beans::XPropertySet> xPropLayerSet(
+                                                          xLayer, uno::UNO_QUERY );
+        const uno::Any& a(xPropLayerSet->getPropertyValue(rtl::OUString::createFromAscii("Name")) );
+        bool const bRet = (a >>= layerName);
+        if(bRet)
+        {
+            if( layerName.equals(rtl::OUString::createFromAscii("DrawnInSlideshow")))
+            {
+                //Transform shapes into PolyPolygons
+                importPolygons(xPropSet);
+
+                return true;
+            }
+        }
     }
 
     // don't export presentation placeholders on masterpage
@@ -463,6 +499,46 @@ bool ShapeImporter::isSkip(
         }
     }
     return false;
+}
+
+
+void ShapeImporter::importPolygons(uno::Reference<beans::XPropertySet> const& xPropSet) {
+
+    drawing::PointSequenceSequence aRetval;
+    sal_Int32           nLineColor=0;
+    double              fLineWidth;
+    getPropertyValue( aRetval, xPropSet, OUSTR("PolyPolygon") );
+    getPropertyValue( nLineColor, xPropSet, OUSTR("LineColor") );
+    getPropertyValue( fLineWidth, xPropSet, OUSTR("LineWidth") );
+
+    drawing::PointSequence* pOuterSequence = aRetval.getArray();
+    awt::Point* pInnerSequence = pOuterSequence->getArray();
+
+    ::basegfx::B2DPolygon aPoly;
+    basegfx::B2DPoint aPoint;
+    for( sal_Int32 nCurrPoly=0; nCurrPoly<pOuterSequence->getLength(); ++nCurrPoly )
+    {
+        aPoint.setX((*pInnerSequence).X);
+        aPoint.setY((*pInnerSequence).Y);
+        aPoly.append( aPoint );
+        *pInnerSequence++;
+    }
+    UnoViewVector::const_iterator aIter=(mrContext.mrViewContainer).begin();
+    UnoViewVector::const_iterator aEnd=(mrContext.mrViewContainer).end();
+    while(aIter != aEnd)
+    {
+        ::cppcanvas::PolyPolygonSharedPtr pPolyPoly(
+            ::cppcanvas::BaseGfxFactory::getInstance().createPolyPolygon( (*aIter)->getCanvas(),
+                                                                          aPoly ) );
+        if( pPolyPoly )
+        {
+                pPolyPoly->setRGBALineColor( unoColor2RGBColor( nLineColor ).getIntegerColor() );
+                pPolyPoly->setStrokeWidth(fLineWidth);
+                pPolyPoly->draw();
+                maPolygons.push_back(pPolyPoly);
+        }
+        aIter++;
+    }
 }
 
 ShapeSharedPtr ShapeImporter::importBackgroundShape() // throw (ShapeLoadFailedException)
@@ -506,10 +582,23 @@ ShapeSharedPtr ShapeImporter::importShape() // throw (ShapeLoadFailedException)
                 throw ShapeLoadFailedException();
             }
 
-            rtl::OUString const shapeType( xCurrShape->getShapeType() );
+            //Retrieve the layer for the current shape
+            uno::Reference< drawing::XLayer > xDrawnInSlideshow;
+
+            uno::Reference< drawing::XLayerSupplier > xLayerSupplier(mxPagesSupplier, uno::UNO_QUERY);
+            if(xLayerSupplier.is())
+            {
+                uno::Reference< container::XNameAccess > xNameAccess = xLayerSupplier->getLayerManager();
+
+                uno::Reference< drawing::XLayerManager > xLayerManager(xNameAccess, uno::UNO_QUERY);
+
+                   xDrawnInSlideshow = xLayerManager->getLayerForShape(xCurrShape);
+            }
+
+            rtl::OUString const shapeType( xCurrShape->getShapeType());
 
             // is this shape presentation-invisible?
-            if( !isSkip(xPropSet, shapeType) )
+            if( !isSkip(xPropSet, shapeType, xDrawnInSlideshow) )
             {
                 bIsGroupShape = shapeType.equalsAsciiL(
                     RTL_CONSTASCII_STRINGPARAM(
@@ -549,13 +638,21 @@ bool ShapeImporter::isImportDone() const
     return maShapesStack.empty();
 }
 
-ShapeImporter::ShapeImporter( uno::Reference<drawing::XDrawPage> const& xPage,
-                              uno::Reference<drawing::XDrawPage> const& xActualPage,
-                              const SlideShowContext&                   rContext,
-                              sal_Int32                                 nOrdNumStart,
-                              bool                                      bConvertingMasterPage ) :
+PolyPolygonVector ShapeImporter::getPolygons()
+{
+    return maPolygons;
+}
+
+ShapeImporter::ShapeImporter( uno::Reference<drawing::XDrawPage> const&          xPage,
+                              uno::Reference<drawing::XDrawPage> const&          xActualPage,
+                              uno::Reference<drawing::XDrawPagesSupplier> const& xPagesSupplier,
+                              const SlideShowContext&                            rContext,
+                              sal_Int32                                          nOrdNumStart,
+                              bool                                               bConvertingMasterPage ) :
     mxPage( xActualPage ),
+    mxPagesSupplier( xPagesSupplier ),
     mrContext( rContext ),
+    maPolygons(),
     maShapesStack(),
     mnAscendingPrio( nOrdNumStart ),
     mbConvertingMasterPage( bConvertingMasterPage )
