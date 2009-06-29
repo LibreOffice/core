@@ -395,3 +395,13 @@ ModelessDialog SV_DLG_PRINT_PROGRESS
         Center = TRUE;
     };
 };
+
+StringArray SV_PRINT_NATIVE_STRINGS
+{
+    ItemList [en-US] =
+    {
+        < "Preview"; >;
+        < "Page Number"; >;
+        < "Number of pages"; >;
+    };
+};

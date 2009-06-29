@@ -34,6 +34,13 @@
 #include "aquaprintview.h"
 #include "salinst.h"
 #include "vcl/print.hxx"
+#include "vcl/image.hxx"
+#include "vcl/virdev.hxx"
+#include "vcl/svdata.hxx"
+
+#include "vcl/svids.hrc"
+
+#include "tools/resary.hxx"
 
 #include <map>
 
@@ -44,9 +51,23 @@ using namespace com::sun::star::uno;
 
 /* Note: the accesory view as implemented here is already deprecated in Leopard. Unfortunately
    as long as our baseline is Tiger we cannot gain the advantages over multiple accessory views
-   as well havs haing accessory views AND a preview (as long as you are linked vs. 10.4 libraries
+   as well havs having accessory views AND a preview (as long as you are linked vs. 10.4 libraries
    the preview insists on not being present. This is unfortunate.
 */
+
+class ListenerProperties;
+
+@interface ControlTarget : NSObject
+{
+    ListenerProperties* mpListener;
+}
+-(id)initWithListenerMap: (ListenerProperties*)pListener;
+-(void)triggered:(id)pSender;
+-(void)triggeredNumeric:(id)pSender;
+-(void)triggeredPreview:(id)pSender;
+-(void)dealloc;
+@end
+
 
 class ListenerProperties
 {
@@ -59,11 +80,18 @@ class ListenerProperties
     sal_Int32                           mnLastPageCount;
     PrintAccessoryViewState*            mpState;
     NSPrintOperation*                   mpOp;
+    NSView*                             mpAccessoryView;
     NSTabView*                          mpTabView;
+    NSBox*                              mpPreviewBox;
+    NSImageView*                        mpPreview;
+    NSTextField*                        mpPageEdit;
+    NSStepper*                          mpStepper;
+    NSTextView*                         mpPagesLabel;
     
     public:
     ListenerProperties( vcl::PrinterListener* i_pListener,
                         NSPrintOperation* i_pOp,
+                        NSView* i_pAccessoryView,
                         NSTabView* i_pTabView,
                         PrintAccessoryViewState* i_pState )
     : mpListener( i_pListener ),
@@ -71,7 +99,13 @@ class ListenerProperties
       mnLastPageCount( i_pListener->getPageCount() ),
       mpState( i_pState ),
       mpOp( i_pOp ),
-      mpTabView( i_pTabView )
+      mpAccessoryView( i_pAccessoryView ),
+      mpTabView( i_pTabView ),
+      mpPreviewBox( nil ),
+      mpPreview( nil ),
+      mpPageEdit( nil ),
+      mpStepper( nil ),
+      mpPagesLabel( nil )
     {
         mpState->bNeedRestart = false;
     }
@@ -120,6 +154,11 @@ class ListenerProperties
                 [pWindow cancelOperation: nil];
             #endif
             [[mpOp printInfo] setJobDisposition: NSPrintCancelJob];
+        }
+        else
+        {
+            sal_Int32 nPage = [mpStepper intValue];
+            updatePreviewImage( nPage-1 );
         }
     }
     
@@ -248,6 +287,153 @@ class ListenerProperties
             }
         }
     }
+    
+    void updatePreviewImage( sal_Int32 i_nPage )
+    {
+        sal_Int32 nPages = mpListener->getFilteredPageCount();
+        NSRect aViewFrame = [mpPreview frame];
+        Size aPixelSize( static_cast<long>(aViewFrame.size.width),
+                         static_cast<long>(aViewFrame.size.height) );
+        if( i_nPage >= 0 && nPages > i_nPage )
+        {
+            GDIMetaFile aMtf;
+            Size aPageSize( mpListener->getFilteredPageFile( i_nPage, aMtf, false ) );
+            VirtualDevice aDev;
+            Size aLogicSize( aDev.PixelToLogic( aPixelSize, MapMode( MAP_100TH_MM ) ) );
+            double fScaleX = double(aLogicSize.Width())/double(aPageSize.Width());
+            double fScaleY = double(aLogicSize.Height())/double(aPageSize.Height());
+            double fScale = (fScaleX < fScaleY) ? fScaleX : fScaleY;
+            aMtf.WindStart();
+            aMtf.Scale( fScale, fScale );
+            aMtf.WindStart();
+            aLogicSize.Width() = long(double(aPageSize.Width()) * fScale);
+            aLogicSize.Height() = long(double(aPageSize.Height()) * fScale);
+            aPixelSize = aDev.LogicToPixel( aLogicSize, MapMode( MAP_100TH_MM ) );
+            aDev.SetOutputSizePixel( aPixelSize );
+            aMtf.WindStart();
+            aDev.SetMapMode( MapMode( MAP_100TH_MM ) );
+            aMtf.Play( &aDev, Point( 0, 0 ), aLogicSize );
+            aDev.EnableMapMode( FALSE );
+            Image aImage( aDev.GetBitmap( Point( 0, 0 ), aPixelSize ) );
+            NSImage* pImage = CreateNSImage( aImage );
+            [mpPreview setImage: [pImage autorelease]];
+        }
+        else
+            [mpPreview setImage: nil];
+    }
+
+    void setupPreview( ControlTarget* i_pCtrlTarget )
+    {
+        // get some needed resources
+        ResStringArray aStrings( VclResId( SV_PRINT_NATIVE_STRINGS ) );
+        
+        DBG_ASSERT( aStrings.Count() >= 3, "resources not found !" );
+        if( aStrings.Count() < 3 )
+            return;
+        
+        // get the preview control
+        NSRect aPreviewFrame = [mpAccessoryView frame];
+        aPreviewFrame.origin.x = 0;
+        aPreviewFrame.origin.y = 5;
+        aPreviewFrame.size.width = 190;
+        aPreviewFrame.size.height -= 7;
+
+        // create a box to put the preview controls in
+        mpPreviewBox = [[NSBox alloc] initWithFrame: aPreviewFrame];
+        [mpPreviewBox setTitle: [CreateNSString( aStrings.GetString( 0 ) ) autorelease]];
+        [mpAccessoryView addSubview: [mpPreviewBox autorelease]];
+
+        // now create the image view of the preview
+        NSSize aMargins = [mpPreviewBox contentViewMargins];
+        aPreviewFrame.origin.x = 0;
+        aPreviewFrame.origin.y = 34;
+        aPreviewFrame.size.height -= 61;
+        mpPreview = [[NSImageView alloc] initWithFrame: aPreviewFrame];
+        [mpPreview setImageScaling: NSScaleNone];
+        [mpPreview setImageAlignment: NSImageAlignCenter];
+        [mpPreview setImageFrameStyle: NSImageFrameNone];
+        [mpPreviewBox addSubview: [mpPreview autorelease]];
+    
+        // add a label
+        sal_Int32 nPages = mpListener->getFilteredPageCount();
+        rtl::OUStringBuffer aBuf( 16 );
+        aBuf.appendAscii( "/ " );
+        aBuf.append( rtl::OUString::valueOf( nPages ) );
+    
+        NSString* pText = CreateNSString( aBuf.makeStringAndClear() );
+        NSRect aTextRect = { { 100, 5 }, { 100, 22 } };
+        mpPagesLabel = [[NSTextView alloc] initWithFrame: aTextRect];
+        [mpPagesLabel setFont: [NSFont controlContentFontOfSize: 0]];
+        [mpPagesLabel setEditable: NO];
+        [mpPagesLabel setSelectable: NO];
+        [mpPagesLabel setDrawsBackground: NO];
+        [mpPagesLabel setString: [pText autorelease]];
+        [mpPagesLabel setToolTip: [CreateNSString( aStrings.GetString( 2 ) ) autorelease]];
+        [mpPreviewBox addSubview: [mpPagesLabel autorelease]];
+    
+        NSRect aFieldRect = { { 45, 5 }, { 35, 25 } };
+        mpPageEdit = [[NSTextField alloc] initWithFrame: aFieldRect];
+        [mpPageEdit setEditable: YES];
+        [mpPageEdit setSelectable: YES];
+        [mpPageEdit setDrawsBackground: YES];
+        [mpPageEdit setToolTip: [CreateNSString( aStrings.GetString( 1 ) ) autorelease]];
+        [mpPreviewBox addSubview: [mpPageEdit autorelease]];
+    
+        // add a stepper control
+        NSRect aStepFrame = { { 85, 5 }, { 15, 25 } };
+        mpStepper = [[NSStepper alloc] initWithFrame: aStepFrame];
+        [mpStepper setIncrement: 1];
+        [mpStepper setValueWraps: NO];
+        [mpPreviewBox addSubview: [mpStepper autorelease]];
+                        
+        // constrain the text field to decimal numbers
+        NSNumberFormatter* pFormatter = [[NSNumberFormatter alloc] init];
+        [pFormatter setFormatterBehavior: NSNumberFormatterBehavior10_4];
+        [pFormatter setMinimum: [[NSNumber numberWithInt: 1] autorelease]];
+        [pFormatter setMaximum: [[NSNumber numberWithInt: nPages] autorelease]];
+        [pFormatter setNumberStyle: NSNumberFormatterDecimalStyle];
+        [pFormatter setAllowsFloats: NO];
+        [pFormatter setMaximumFractionDigits: 0];
+        [mpPageEdit setFormatter: pFormatter];
+        [mpStepper setMinValue: 1];
+        [mpStepper setMaxValue: nPages];
+    
+        [mpPageEdit setIntValue: 1];
+        [mpStepper setIntValue: 1];
+    
+        // connect target and action
+        [mpStepper setTarget: i_pCtrlTarget];
+        [mpStepper setAction: @selector(triggeredPreview:)];
+        [mpPageEdit setTarget: i_pCtrlTarget];
+        [mpPageEdit setAction: @selector(triggeredPreview:)];
+        
+        // set first preview image
+        updatePreviewImage( 0 );
+    }
+    
+    void changePreview( NSObject* i_pSender )
+    {
+        if( [i_pSender isMemberOfClass: [NSTextField class]] )
+        {
+            NSTextField* pField = (NSTextField*)i_pSender;
+            if( pField == mpPageEdit ) // sanity check
+            {
+                sal_Int32 nPage = [pField intValue];
+                [mpStepper setIntValue: nPage];
+                updatePreviewImage( nPage-1 );
+            }
+        }
+        else if( [i_pSender isMemberOfClass: [NSStepper class]] )
+        {
+            NSStepper* pStepper = (NSStepper*)i_pSender;
+            if( pStepper == mpStepper ) // sanity check
+            {
+                sal_Int32 nPage = [pStepper intValue];
+                [mpPageEdit setIntValue: nPage];
+                updatePreviewImage( nPage-1 );
+            }
+        }
+    }
 };
 
 static void filterAccelerator( rtl::OUString& io_rText )
@@ -257,16 +443,6 @@ static void filterAccelerator( rtl::OUString& io_rText )
         aBuf.append( io_rText.getToken( 0, '~', nIndex ) );
     io_rText = aBuf.makeStringAndClear();
 }
-
-@interface ControlTarget : NSObject
-{
-    ListenerProperties* mpListener;
-}
--(id)initWithListenerMap: (ListenerProperties*)pListener;
--(void)triggered:(id)pSender;
--(void)triggeredNumeric:(id)pSender;
--(void)dealloc;
-@end
 
 @implementation ControlTarget
 -(id)initWithListenerMap: (ListenerProperties*)pListener
@@ -350,6 +526,10 @@ static void filterAccelerator( rtl::OUString& io_rText )
     }
     mpListener->updateEnableState();
 }
+-(void)triggeredPreview:(id)pSender
+{
+    mpListener->changePreview( pSender );
+}
 -(void)dealloc
 {
     delete mpListener;
@@ -390,6 +570,7 @@ static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize )
         rMaxSize.height = aUnion.size.height;
 }
 
+
 @implementation AquaPrintAccessoryView
 +(NSObject*)setupPrinterPanel: (NSPrintOperation*)pOp withListener: (vcl::PrinterListener*)pListener  withState: (PrintAccessoryViewState*)pState;
 {
@@ -400,12 +581,16 @@ static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize )
     NSView* pCurParent = 0;
     long nCurY = 0;
     long nCurX = 0;
-    NSRect aViewFrame = { { 0, 0 }, {400, 400 } };
+    NSRect aViewFrame = { { 0, 0 }, {600, 400 } };
+    NSRect aTabViewFrame = { { 200, 0 }, {400, 400 } };
     NSSize aMaxTabSize = { 0, 0 };
-    NSTabView* pTabView = [[NSTabView alloc] initWithFrame: aViewFrame];
+    NSView* pAccessoryView = [[NSView alloc] initWithFrame: aViewFrame];
+    NSTabView* pTabView = [[NSTabView alloc] initWithFrame: aTabViewFrame];
+    [pAccessoryView addSubview: [pTabView autorelease]];
+    
     sal_Bool bIgnoreSubgroup = sal_False;
     
-    ListenerProperties* pListenerProperties = new ListenerProperties( pListener, pOp, pTabView, pState );
+    ListenerProperties* pListenerProperties = new ListenerProperties( pListener, pOp, pAccessoryView, pTabView, pState );
     ControlTarget* pCtrlTarget = [[ControlTarget alloc] initWithListenerMap: pListenerProperties];
 
     for( int i = 0; i < rOptions.getLength(); i++ )
@@ -492,7 +677,7 @@ static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize )
                 NSTabViewItem* pItem = [[NSTabViewItem alloc] initWithIdentifier: pLabel ];
                 [pItem setLabel: pLabel];
                 [pTabView addTabViewItem: pItem];
-                pCurParent = [[NSView alloc] initWithFrame: aViewFrame];
+                pCurParent = [[NSView alloc] initWithFrame: aTabViewFrame];
                 [pItem setView: pCurParent];
                 [pLabel release];
                 
@@ -509,12 +694,13 @@ static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize )
                 NSString* pText = CreateNSString( aText );
                 NSRect aTextRect = { { 0, 0 }, { 300, 15 } };
                 NSTextView* pTextView = [[NSTextView alloc] initWithFrame: aTextRect];
+                [pTextView setFont: [NSFont controlContentFontOfSize: 0]];
                 [pTextView setEditable: NO];
                 [pTextView setSelectable: NO];
                 [pTextView setDrawsBackground: NO];
                 [pTextView setString: pText];
                 [pTextView sizeToFit]; // FIXME: this does nothing
-                [pCurParent addSubview: pTextView];
+                [pCurParent addSubview: [pTextView autorelease]];
 
                 aTextRect = [pTextView frame];
                 // move to nCurY
@@ -542,7 +728,7 @@ static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize )
                     pVal->Value >>= bVal;
                 [pBtn setState: bVal ? NSOnState : NSOffState];
                 [pBtn sizeToFit];
-                [pCurParent addSubview: pBtn];
+                [pCurParent addSubview: [pBtn autorelease]];
                 
                 // connect target
                 [pBtn setTarget: pCtrlTarget];
@@ -572,12 +758,13 @@ static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize )
                     NSString* pText = CreateNSString( aText );
                     NSRect aTextRect = { { nCurX + nAttachOffset, 0 }, { 300, 15 } };
                     NSTextView* pTextView = [[NSTextView alloc] initWithFrame: aTextRect];
+                    [pTextView setFont: [NSFont controlContentFontOfSize: 0]];
                     [pTextView setEditable: NO];
                     [pTextView setSelectable: NO];
                     [pTextView setDrawsBackground: NO];
                     [pTextView setString: pText];
                     [pTextView sizeToFit]; // FIXME: this does nothing
-                    [pCurParent addSubview: pTextView];
+                    [pCurParent addSubview: [pTextView autorelease]];
     
                     // move to nCurY
                     aTextRect.origin.y = nCurY - aTextRect.size.height;
@@ -634,7 +821,7 @@ static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize )
                 // move it down, so it comes to the correct position
                 aRadioRect.origin.y = nCurY - aRadioRect.size.height;
                 [pMatrix setFrame: aRadioRect];
-                [pCurParent addSubview: pMatrix];
+                [pCurParent addSubview: [pMatrix autorelease]];
 
                 // update nCurY
                 nCurY = aRadioRect.origin.y - 5;
@@ -662,6 +849,7 @@ static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize )
                 aTextSize.height += 3;
                 NSRect aTextRect = { { nCurX + nAttachOffset, 0 }, aTextSize };
                 NSTextView* pTextView = [[NSTextView alloc] initWithFrame: aTextRect];
+                [pTextView setFont: [NSFont controlContentFontOfSize: 0]];
                 [pTextView setEditable: NO];
                 [pTextView setSelectable: NO];
                 [pTextView setDrawsBackground: NO];
@@ -669,7 +857,7 @@ static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize )
                 [pTextView setVerticallyResizable: NO];
                 [pTextView setHorizontallyResizable: YES];
                 [pTextView sizeToFit]; // FIXME: this actually does nothing
-                [pCurParent addSubview: pTextView];
+                [pCurParent addSubview: [pTextView autorelease]];
                 aTextRect = [pTextView frame];
 
 
@@ -699,7 +887,7 @@ static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize )
                 [pBtn setTag: pListenerProperties->addNameTag( aPropertyName )];
 
                 [pBtn sizeToFit];
-                [pCurParent addSubview: pBtn];
+                [pCurParent addSubview: [pBtn autorelease]];
 
                 // connect target and action
                 [pBtn setTarget: pCtrlTarget];
@@ -743,12 +931,13 @@ static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize )
                     aTextSize.height += 3;
                     NSRect aTextRect = { { nCurX + nAttachOffset, 0 }, aTextSize };
                     NSTextView* pTextView = [[NSTextView alloc] initWithFrame: aTextRect];
+                    [pTextView setFont: [NSFont controlContentFontOfSize: 0]];
                     [pTextView setEditable: NO];
                     [pTextView setSelectable: NO];
                     [pTextView setDrawsBackground: NO];
                     [pTextView setString: pText];
                     [pTextView sizeToFit]; // FIXME: this does nothing
-                    [pCurParent addSubview: pTextView];
+                    [pCurParent addSubview: [pTextView autorelease]];
                     
                     // move to nCurY
                     aTextRect.origin.y = nCurY - aTextRect.size.height;
@@ -770,7 +959,7 @@ static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize )
                 [pFieldView setSelectable: YES];
                 [pFieldView setDrawsBackground: YES];
                 [pFieldView sizeToFit]; // FIXME: this does nothing
-                [pCurParent addSubview: pFieldView];
+                [pCurParent addSubview: [pFieldView autorelease]];
                 
                 // add the field to observed controls for enabled state changes
                 // also add a tag just for this purpose
@@ -795,15 +984,17 @@ static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize )
                     [pStep setIncrement: 1];
                     [pStep setValueWraps: NO];
                     [pStep setTag: nTag];
-                    [pCurParent addSubview: pStep];
+                    [pCurParent addSubview: [pStep autorelease]];
                     pListenerProperties->addObservedControl( pStep );
                     [pStep setTarget: pCtrlTarget];
                     [pStep setAction: @selector(triggered:)];
                     
                     // constrain the text field to decimal numbers
                     NSNumberFormatter* pFormatter = [[NSNumberFormatter alloc] init];
+                    [pFormatter setFormatterBehavior: NSNumberFormatterBehavior10_4];
                     [pFormatter setNumberStyle: NSNumberFormatterDecimalStyle];
                     [pFormatter setAllowsFloats: NO];
+                    [pFormatter setMaximumFractionDigits: 0];
                     if( nMinValue != nMaxValue )
                     {
                         [pFormatter setMinimum: [[NSNumber numberWithInt: nMinValue] autorelease]];
@@ -865,9 +1056,14 @@ static void adjustViewAndChildren( NSView* pView, NSSize& rMaxSize )
     if( aTabCtrlSize.width < aMaxTabSize.width + 10 )
         aTabCtrlSize.width = aMaxTabSize.width + 10;
     [pTabView setFrameSize: aTabCtrlSize];
+    aViewFrame.size.width = aTabCtrlSize.width + aTabViewFrame.origin.x;
+    aViewFrame.size.height = aTabCtrlSize.height + aTabViewFrame.origin.y;
+    [pAccessoryView setFrameSize: aViewFrame.size];
+    
+    pListenerProperties->setupPreview( pCtrlTarget );
 
     // set the accessory view
-    [pOp setAccessoryView: pTabView];
+    [pOp setAccessoryView: [pAccessoryView autorelease]];
     
     // set the current selecte tab item
     if( pState->nLastPage >= 0 && pState->nLastPage < [pTabView numberOfTabViewItems] )

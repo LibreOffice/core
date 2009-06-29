@@ -138,6 +138,7 @@
 #define SV_PRINT_PROGRESS_CANCEL            1
 #define SV_PRINT_PROGRESS_TEXT              2
 
+#define SV_PRINT_NATIVE_STRINGS           2050
 
 #define SV_HELPTEXT_CLOSE                   10000
 #define SV_HELPTEXT_MINIMIZE                10001
