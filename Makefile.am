@@ -30,11 +30,12 @@ distclean-local:
 	( . ./Linux*Env.Set.sh ; dmake distclean )
 
 install-data-local: $(stampdir)/all
-	mkdir -p $(DESTDIR)$(ooo_prefix)
-	mkdir -p $(DESTDIR)$(pkgconfigdir)
-	cp -a $(top_builddir)/solenv $(DESTDIR)$(ooo_prefix)/
-	cp -a $(top_builddir)/solver $(DESTDIR)$(ooo_prefix)/
-	$(INSTALL_SCRIPT) $(top_builddir)/Linux*Env.Set.sh $(DESTDIR)$(solverdir)/
+	$(MKDIR_P) $(DESTDIR)$(ooo_prefix)
+	$(MKDIR_P) $(DESTDIR)$(pkgconfigdir)
+	cp -r $(top_builddir)/solenv $(DESTDIR)$(ooo_prefix)/
+	cp -r $(top_builddir)/solver $(DESTDIR)$(ooo_prefix)/
+	$(INSTALL_DATA) $(top_builddir)/Linux*Env.Set.sh $(DESTDIR)$(solverdir)/
+	$(INSTALL_DATA) $(top_builddir)/build/src/buildenv-common $(DESTDIR)$(solverdir)/
 	$(INSTALL_DATA) $(top_builddir)/build/src/OpenOffice.org-bootstrap.pc $(DESTDIR)$(pkgconfigdir)/
 
 $(stampdir)/all: $(stampdir)/bootstrap

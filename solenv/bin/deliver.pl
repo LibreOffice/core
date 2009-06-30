@@ -494,7 +494,12 @@ sub init_globals
     }
 
     # Do we have common trees?
-    if ( defined($ENV{'common_build'}) && $ENV{'common_build'} eq 'TRUE' ) {
+    if ( defined($ENV{'BUILDSOLVER'}) && $ENV{'BUILDSOLVER'} ne '' )
+    {
+        $dest = $ENV{'BUILDSOLVER'}.'/'.$ENV{'UPD'}.'/'.$ENV{'INPATH'};
+        $common_dest = $dest;
+    }
+    elsif ( defined($ENV{'common_build'}) && $ENV{'common_build'} eq 'TRUE' ) {
         $common_build = 1;
         if ((defined $common_outdir) && ($common_outdir ne "")) {
             $common_outdir = $common_outdir . ".pro" if $inpath =~ /\.pro$/;

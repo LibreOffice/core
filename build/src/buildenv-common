@@ -1,0 +1,23 @@
+# Common build environment setup that is supposed to be called from every
+# project
+#
+# The following env. variables have to be setup before sourcing this:
+# ooo_prefix, buildsolverdir
+
+# more to define
+
+solenvdir="$ooo_prefix/solenv"
+
+# setting the environment itself
+
+export FORCE_SOLVER="$solverdir"
+export FORCE_SOLARENV="$solenvdir"
+
+. "$solverdir"/Linux*Env.Set.sh
+
+export SOLARLIB="$SOLARLIB -L$buildsolverdir/$UPD/$INPATH/lib"
+export SOLARINC="$SOLARINC -I$buildsolverdir/$UPD/$INPATH/inc"
+export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$buildsolverdir/$UPD/$INPATH/lib"
+export PATH="$PATH:$buildsolverdir/$UPD/$INPATH/bin"
+export CLASSPATH="$CLASSPATH:$buildsolverdir/$UPD/$INPATH/bin"
+export BUILDSOLVER="$buildsolverdir"

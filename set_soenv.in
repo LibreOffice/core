@@ -951,7 +951,7 @@ if ($STLPORT4 ne $no_stl) {
 } else {
         $ps_STLPORT_LIB         = "";
         $L_STLPORT_LIB          = "";
-        $STLPORT_stlport        = $I.$SRC_ROOT.$SOLVER.$ds.$UPD.$ds.$INPATH.$INC.$ds."stl";
+        $STLPORT_stlport        = "";
         $STLPORT_inc_stlport    = "";
 }
 
@@ -1008,17 +1008,17 @@ $DEVROOT              = '$SRC_ROOT';
 # Set solenv and solver to given or default values. 
 # Location of the solenv tree.
 if ('@LOCAL_SOLENV@' eq "DEFAULT")
-{  $SOLARENV          = $SRC_ROOT.$SOLENV;
+{  $SOLARENV          = '${FORCE_SOLARENV:-'.$SRC_ROOT.$SOLENV.'}';
 }
 else
-{  $SOLARENV          =  PathFormat('@LOCAL_SOLENV@');
+{  $SOLARENV          =  '${FORCE_SOLARENV:-'.PathFormat('@LOCAL_SOLENV@').'}';
 }
 # Location of the solver tree.
 if ('@LOCAL_SOLVER@' eq "DEFAULT")
-{  $SOLARVER          = $SRC_ROOT.$SOLVER.$ds.$UPD;
+{  $SOLARVER          = '${FORCE_SOLVER:-'.$SRC_ROOT.$SOLVER.'}'.$ds.$UPD;
 }
 else
-{  $SOLARVER          = PathFormat('@LOCAL_SOLVER@').$ds.$UPD;
+{  $SOLARVER          = '${FORCE_SOLVER:-'.PathFormat('@LOCAL_SOLVER@').'}'.$ds.$UPD;
 }
 #Location of Solar version.
 $SOLARVERSION         = '$SOLARVER';
