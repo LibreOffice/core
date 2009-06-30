@@ -9,6 +9,7 @@
 /config.parms
 /config.status
 /configure
+/install-sh
 /missing
 /solver
 /makefile.mk
