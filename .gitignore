@@ -1,0 +1,19 @@
+/Makefile
+/Makefile.in
+/aclocal.m4
+/autom4te.cache
+/buildenv
+/config.log
+/config.parms
+/config.status
+/configure
+/install-sh
+/missing
+/solver
+
+/*/unxlng??.pro
+
+localize.sdf
+
+# temp files
+.*.swp
