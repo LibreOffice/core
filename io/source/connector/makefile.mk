@@ -36,15 +36,15 @@ TARGET = connector.uno
 ENABLE_EXCEPTIONS=TRUE
 NO_BSYMBOLIC=TRUE
 COMP1TYPELIST = connectr
-COMPRDB=$(SOLARBINDIR)$/udkapi.rdb
+COMPRDB=$(BUILDSOLARBINDIR)$/udkapi.rdb
 
 # --- Settings -----------------------------------------------------
 .INCLUDE :  settings.mk
 DLLPRE =
 # ------------------------------------------------------------------
 
-UNOUCRDEP=$(SOLARBINDIR)$/udkapi.rdb
-UNOUCRRDB=$(SOLARBINDIR)$/udkapi.rdb
+UNOUCRDEP=$(COMPRDB)
+UNOUCRRDB=$(COMPRDB)
 UNOUCROUT=$(OUT)$/inc$/connector
 INCPRE+= $(UNOUCROUT)
 

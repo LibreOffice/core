@@ -51,7 +51,7 @@ UNIXVERSIONNAMES=UDK
 
 # --- Files --------------------------------------------------------
 
-UNOUCRRDB=$(SOLARBINDIR)$/udkapi.rdb
+UNOUCRRDB=$(BUILDSOLARBINDIR)$/udkapi.rdb
 UNOUCRDEP=$(UNOUCRRDB)
 UNOUCROUT=$(OUT)$/inc$/$(TARGET)
 INCPRE+=$(OUT)$/inc$/$(TARGET) $(OUT)$/inc$/private

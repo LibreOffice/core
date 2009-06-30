@@ -35,8 +35,8 @@ TARGET := javamaker
 
 .INCLUDE: settings.mk
 
-RDB = $(SOLARBINDIR)$/offapi.rdb
-EXTRA_RDB = $(SOLARBINDIR)$/udkapi.rdb
+RDB = $(BUILDSOLARBINDIR)$/offapi.rdb
+EXTRA_RDB = $(BUILDSOLARBINDIR)$/udkapi.rdb
 
 .INCLUDE: target.mk
 

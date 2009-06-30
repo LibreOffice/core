@@ -34,6 +34,7 @@ PRJNAME=remotebridges
 TARGET = uuresolver.uno
 ENABLE_EXCEPTIONS=TRUE
 COMP1TYPELIST = uuresolver
+UNOUCRRDB = $(BUILDSOLARBINDIR)$/types.rdb
 
 # --- Settings -----------------------------------------------------
 

@@ -39,8 +39,8 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Settings -----------------------------------------------------
 .INCLUDE :  settings.mk
 
-UNOUCRDEP=$(SOLARBINDIR)$/udkapi.rdb 
-UNOUCRRDB=$(SOLARBINDIR)$/udkapi.rdb
+UNOUCRDEP=$(BUILDSOLARBINDIR)$/udkapi.rdb 
+UNOUCRRDB=$(BUILDSOLARBINDIR)$/udkapi.rdb
 
 NO_OFFUH=TRUE
 CPPUMAKERFLAGS += -C

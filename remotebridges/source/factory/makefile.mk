@@ -35,6 +35,7 @@ PRJNAME=remotebridges
 TARGET = bridgefac.uno
 ENABLE_EXCEPTIONS=TRUE
 COMP1TYPELIST = brdgfctr
+UNOUCRRDB = $(BUILDSOLARBINDIR)$/types.rdb
 
 # --- Settings -----------------------------------------------------
 .INCLUDE :  settings.mk

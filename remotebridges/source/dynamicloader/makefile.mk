@@ -35,6 +35,7 @@ PRJNAME=remotebridges
 TARGET = dynamicloader.uno
 ENABLE_EXCEPTIONS=TRUE
 COMP1TYPELIST = dynamicloader
+UNOUCRRDB = $(BUILDSOLARBINDIR)$/types.rdb
 
 # --- Settings -----------------------------------------------------
 

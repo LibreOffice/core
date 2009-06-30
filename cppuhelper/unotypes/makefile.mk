@@ -40,7 +40,7 @@ UNOUCRRDB = $(BIN)$/$(TARGET).rdb
 UNOUCRDEP = $(UNOUCRRDB)
 UNOUCROUT = $(OUT)$/inc$/private
 
-CPPUMAKERFLAGS += -C -X$(SOLARBINDIR)$/types.rdb
+CPPUMAKERFLAGS += -C -X$(BUILDSOLARBINDIR)$/types.rdb
 
 UNOTYPES = \
     cppuhelper.detail.XExceptionThrower
@@ -50,7 +50,7 @@ ALLIDLFILES = \
 
 .INCLUDE : target.mk
 
-$(UNOUCRRDB) : $(ALLIDLFILES) $(SOLARBINDIR)$/types.rdb
-    $(IDLC) -I. -I$(SOLARIDLDIR) -O$(UCR) $(ALLIDLFILES)
+$(UNOUCRRDB) : $(ALLIDLFILES) $(BUILDSOLARBINDIR)$/types.rdb
+    $(IDLC) -I. -I$(BUILDSOLARIDLDIR) -O$(UCR) $(ALLIDLFILES)
     $(REGMERGE) $@ /UCR $(UCR)$/{$(?:f:s/.idl/.urd/)}
     touch $@

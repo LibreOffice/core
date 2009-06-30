@@ -48,8 +48,8 @@ nojava:
 
 # ------------------------------------------------------------------
 
-UNOUCRDEP=$(SOLARBINDIR)$/udkapi.rdb
-UNOUCRRDB=$(SOLARBINDIR)$/udkapi.rdb
+UNOUCRDEP=$(BUILDSOLARBINDIR)$/udkapi.rdb
+UNOUCRRDB=$(BUILDSOLARBINDIR)$/udkapi.rdb
 
 UNOUCROUT=$(OUT)$/inc$/comprehensive
 INCPRE+=$(OUT)$/inc$/comprehensive

@@ -160,15 +160,15 @@ ALLTAR : $(UCR)$/types.db \
        $(REGISTRYCHECKFLAG) \
        $(UNOTYPE_STATISTICS)
 
-$(UCR)$/types.db : $(UCR)$/offapi.db $(SOLARBINDIR)$/udkapi.rdb
+$(UCR)$/types.db : $(UCR)$/offapi.db $(BUILDSOLARBINDIR)$/udkapi.rdb
     -$(RM) $(REGISTRYCHECKFLAG)
     $(GNUCOPY) -f $(UCR)$/offapi.db $@
-    $(REGMERGE) $@ / $(SOLARBINDIR)$/udkapi.rdb
+    $(REGMERGE) $@ / $(BUILDSOLARBINDIR)$/udkapi.rdb
 
-$(OUT)$/ucrdoc$/types_doc.db : $(OUT)$/ucrdoc$/offapi_doc.db $(SOLARBINDIR)$/udkapi_doc.rdb
+$(OUT)$/ucrdoc$/types_doc.db : $(OUT)$/ucrdoc$/offapi_doc.db $(BUILDSOLARBINDIR)$/udkapi_doc.rdb
     -$(RM) $(REGISTRYCHECKFLAG)
     $(GNUCOPY) -f $(OUT)$/ucrdoc$/offapi_doc.db $@
-    $(REGMERGE) $@ / $(SOLARBINDIR)$/udkapi_doc.rdb
+    $(REGMERGE) $@ / $(BUILDSOLARBINDIR)$/udkapi_doc.rdb
 
 #JSC: The type library has changed, all temporary not checked types are removed
 #     and will be check from now on.

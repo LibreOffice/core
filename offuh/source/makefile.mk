@@ -39,6 +39,9 @@ TARGET=		offuh
 
 # ------------------------------------------------------------------
 
+# during the split build, the path to types.rdb might differ
+UNOUCRRDB=$(BUILDSOLARBINDIR)$/types.rdb
+
 $(MISC)$/$(TARGET).don : $(UNOUCRRDB)
     @@-$(RM) $@
     $(CPPUMAKER) -Gc $(CPPUMAKERFLAGS) -B$(UNOUCRBASE) -O$(UNOUCROUT) $(UNOUCRRDB) && echo > $@
