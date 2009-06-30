@@ -1,4 +1,4 @@
-ri ridljar : codemaker solenv udkapi NULL
+ri ridljar : codemaker udkapi NULL
 ri ridljar\javamaker nmake - all javamaker NULL
 ri ridljar\com nmake - all com javamaker NULL
 ri ridljar\util nmake - all util javamaker com NULL
