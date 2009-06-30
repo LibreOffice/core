@@ -1,0 +1,12 @@
+OpenOffice.org - split build
+============================
+
+This package provides the possibility to build OpenOffice.org by pieces.  This
+one is the URE (UNO Runtime Environment) stuff that you need to be able to
+build the rest of the OOo.
+
+To build, do the usual
+
+./autogen.sh or ./configure
+make
+make install
