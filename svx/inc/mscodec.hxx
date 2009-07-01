@@ -235,6 +235,14 @@ public:
      */
     bool                InitCipher( sal_uInt32 nCounter );
 
+    /** Creates an MD5 digest of salt digest. */
+    bool                CreateSaltDigest(
+                            const sal_uInt8 nSaltData[16], sal_uInt8 nSaltDigest[16] );
+
+    bool                Encode(
+                            const void* pData, sal_Size nDatLen,
+                            sal_uInt8* pBuffer, sal_Size nBufLen );
+
     /** Decodes a block of memory.
 
         @see rtl_cipher_decode()
@@ -274,6 +282,9 @@ public:
             Number of bytes to be skipped (cipher "seeks" forward).
      */
     bool                Skip( sal_Size nDatLen );
+
+private:
+    void                GetDigestFromSalt( const sal_uInt8 pSaltData[16], sal_uInt8 pDigest[16] );
 
 private:
                         SVX_DLLPRIVATE MSCodec_Std97( const MSCodec_Std97& );
