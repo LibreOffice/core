@@ -2121,7 +2121,7 @@ BOOL SfxViewShell::HasMouseClickListeners_Impl()
 void SfxViewShell::SetAdditionalPrintOptions( const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& rOpts )
 {
     pImp->aPrintOpts = rOpts;
-     GetObjectShell()->Broadcast( SfxPrintingHint( -3, NULL, NULL, rOpts ) );
+//  GetObjectShell()->Broadcast( SfxPrintingHint( -3, NULL, NULL, rOpts ) );
 }
 
 BOOL SfxViewShell::Escape()

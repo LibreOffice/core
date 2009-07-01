@@ -148,8 +148,9 @@ Reference< ::com::sun::star::view::XPrintable > SAL_CALL SfxPrintJob_Impl::getPr
 
 void SAL_CALL SfxPrintJob_Impl::cancelJob() throw (RuntimeException)
 {
+    // FIXME: how to cancel PrintJob via API?!
     if( m_pData->m_pObjectShell.Is() )
-        m_pData->m_pObjectShell->Broadcast( SfxPrintingHint( -2, NULL, NULL ) );
+        m_pData->m_pObjectShell->Broadcast( SfxPrintingHint( -2 ) );
 }
 
 SfxPrintHelper::SfxPrintHelper()
@@ -511,7 +512,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
     if ( !pView )
         return;
 
-    SfxAllItemSet aArgs( pView->GetPool() );
+//  SfxAllItemSet aArgs( pView->GetPool() );
     sal_Bool bMonitor = sal_False;
     // We need this information at the end of this method, if we start the vcl printer
     // by executing the slot. Because if it is a ucb relevant URL we must wait for
@@ -522,6 +523,8 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
     String sUcbUrl;
     ::utl::TempFile* pUCBPrintTempFile = NULL;
 
+    uno::Sequence < beans::PropertyValue > aCheckedArgs( rOptions.getLength() );
+    sal_Int32 nProps = 0;
     sal_Bool bWaitUntilEnd = sal_False;
     for ( int n = 0; n < rOptions.getLength(); ++n )
     {
@@ -555,10 +558,11 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
                 // converted its not an URL nor a system path. Then we can't accept
                 // this parameter and have to throw an exception.
                 ::rtl::OUString sSystemPath(sTemp);
-                ::rtl::OUString sFileURL          ;
+                ::rtl::OUString sFileURL;
                 if (::osl::FileBase::getFileURLFromSystemPath(sSystemPath,sFileURL)!=::osl::FileBase::E_None)
                     throw ::com::sun::star::lang::IllegalArgumentException();
-                aArgs.Put( SfxStringItem(SID_FILE_NAME,sTemp) );
+                aCheckedArgs[nProps].Name = rProp.Name;
+                aCheckedArgs[nProps++].Value <<= sFileURL;
             }
             else
             // It's a valid URL. but now we must know, if it is a local one or not.
@@ -569,7 +573,8 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
                 // And we have to use the system notation of the incoming URL.
                 // But it into the descriptor and let the slot be executed at
                 // the end of this method.
-                aArgs.Put( SfxStringItem(SID_FILE_NAME,sPath) );
+                aCheckedArgs[nProps].Name = rProp.Name;
+                aCheckedArgs[nProps++].Value <<= sTemp;
             }
             else
             {
@@ -584,7 +589,10 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
                 // a slot ...
                 pUCBPrintTempFile = new ::utl::TempFile();
                 pUCBPrintTempFile->EnableKillingFile();
-                aArgs.Put( SfxStringItem(SID_FILE_NAME,pUCBPrintTempFile->GetFileName()) );
+
+                //FIXME: does it work?
+                aCheckedArgs[nProps].Name = rtl::OUString::createFromAscii("LocalFileName");
+                aCheckedArgs[nProps++].Value <<= ::rtl::OUString( pUCBPrintTempFile->GetFileName() );
                 sUcbUrl = sURL;
             }
         }
@@ -595,25 +603,22 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
             sal_Int32 nCopies = 0;
             if ( ( rProp.Value >>= nCopies ) == sal_False )
                 throw ::com::sun::star::lang::IllegalArgumentException();
-            aArgs.Put( SfxInt16Item( SID_PRINT_COPIES, (USHORT) nCopies ) );
+
+            aCheckedArgs[nProps].Name = rProp.Name;
+            aCheckedArgs[nProps++].Value <<= nCopies;
         }
 
         // Collate-Property
-        else if ( rProp.Name.compareToAscii( "Collate" ) == 0 )
+        // Sort-Property (deprecated)
+        else if ( rProp.Name.compareToAscii( "Collate" ) == 0 ||
+                ( rProp.Name.compareToAscii( "Sort" ) == 0 ) )
         {
             sal_Bool bTemp = sal_Bool();
             if ( rProp.Value >>= bTemp )
-                aArgs.Put( SfxBoolItem( SID_PRINT_COLLATE, bTemp ) );
-            else
-                throw ::com::sun::star::lang::IllegalArgumentException();
-        }
-
-        // Sort-Property
-        else if ( rProp.Name.compareToAscii( "Sort" ) == 0 )
-        {
-            sal_Bool bTemp = sal_Bool();
-            if( rProp.Value >>= bTemp )
-                aArgs.Put( SfxBoolItem( SID_PRINT_SORT, bTemp ) );
+            {
+                aCheckedArgs[nProps].Name = rtl::OUString::createFromAscii("Collate");
+                aCheckedArgs[nProps++].Value <<= bTemp;
+            }
             else
                 throw ::com::sun::star::lang::IllegalArgumentException();
         }
@@ -623,7 +628,10 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
         {
             OUSTRING sTemp;
             if( rProp.Value >>= sTemp )
-                aArgs.Put( SfxStringItem( SID_PRINT_PAGES, String( sTemp ) ) );
+            {
+                aCheckedArgs[nProps].Name = rProp.Name;
+                aCheckedArgs[nProps++].Value <<= sTemp;
+            }
             else
                 throw ::com::sun::star::lang::IllegalArgumentException();
         }
@@ -633,26 +641,28 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
         {
             if( !(rProp.Value >>= bMonitor) )
                 throw ::com::sun::star::lang::IllegalArgumentException();
+            aCheckedArgs[nProps].Name = rProp.Name;
+            aCheckedArgs[nProps++].Value <<= bMonitor;
         }
 
-        // MonitorVisible
+        // Wait
         else if ( rProp.Name.compareToAscii( "Wait" ) == 0 )
         {
             if ( !(rProp.Value >>= bWaitUntilEnd) )
                 throw ::com::sun::star::lang::IllegalArgumentException();
+            aCheckedArgs[nProps].Name = rProp.Name;
+            aCheckedArgs[nProps++].Value <<= bWaitUntilEnd;
         }
     }
+
+    if ( nProps != aCheckedArgs.getLength() )
+        aCheckedArgs.realloc(nProps);
 
     // Execute the print request every time.
     // It doesn'tmatter if it is a real printer used or we print to a local file
     // nor if we print to a temp file and move it afterwards by using the ucb.
     // That will be handled later. see pUCBPrintFile below!
-    aArgs.Put( SfxBoolItem( SID_SILENT, !bMonitor ) );
-    if ( bWaitUntilEnd )
-        aArgs.Put( SfxBoolItem( SID_ASYNCHRON, sal_False ) );
-    SfxRequest aReq( SID_PRINTDOC, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_API, pView->GetPool() );
-    aReq.SetArgs( aArgs );
-    pView->ExecuteSlot( aReq );
+    pView->ExecPrint( aCheckedArgs, sal_True, sal_False );
 
     // Ok - may be execution before has finished (or started!) printing.
     // And may it was a printing to a file.
@@ -685,11 +695,11 @@ void IMPL_PrintListener_DataContainer::Notify( SfxBroadcaster& rBC, const SfxHin
         SfxPrintingHint* pPrintHint = PTR_CAST( SfxPrintingHint, &rHint );
         if ( pPrintHint )
         {
-            if ( pPrintHint->GetWhich() == -1 )     // -1 : Initialisation of PrintOptions
+            if ( pPrintHint->GetWhich() == com::sun::star::view::PrintableState_JOB_STARTED )
             {
                 if ( !m_xPrintJob.is() )
                     m_xPrintJob = new SfxPrintJob_Impl( this );
-
+/*
                 PrintDialog* pDlg = pPrintHint->GetPrintDialog();
                 Printer* pPrinter = pPrintHint->GetPrinter();
                 ::rtl::OUString aPrintFile ( ( pPrinter && pPrinter->IsPrintFileEnabled() ) ? pPrinter->GetPrintFile() : String() );
@@ -726,7 +736,10 @@ void IMPL_PrintListener_DataContainer::Notify( SfxBroadcaster& rBC, const SfxHin
                     m_aPrintOptions[nArgs-1].Name = DEFINE_CONST_UNICODE("FileName");
                     m_aPrintOptions[nArgs-1].Value <<= aPrintFile;
                 }
+*/
+                m_aPrintOptions = pPrintHint->GetOptions();
             }
+/*
             else if ( pPrintHint->GetWhich() == -3 )    // -3 : AdditionalPrintOptions
             {
                     uno::Sequence < beans::PropertyValue >& lOldOpts = m_aPrintOptions;
@@ -760,6 +773,7 @@ void IMPL_PrintListener_DataContainer::Notify( SfxBroadcaster& rBC, const SfxHin
                         // at least one new options has overwritten an old one, so we allocated too much
                         lOldOpts.realloc(  nTotal );
             }
+*/
             else if ( pPrintHint->GetWhich() != -2 )    // -2 : CancelPrintJob
             {
                 view::PrintJobEvent aEvent;

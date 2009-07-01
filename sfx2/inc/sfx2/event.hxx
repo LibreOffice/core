@@ -113,30 +113,21 @@ class PrintDialog;
 class Printer;
 class SfxPrintingHint : public SfxHint
 {
-    PrintDialog*        pDialog;
-    Printer*            pPrinter;
     sal_Int32           nWhich;
     com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > aOpts;
 public:
                         TYPEINFO();
-                        SfxPrintingHint( sal_Int32 nEvent, PrintDialog* pDlg, Printer* pPrt, const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& rOpts )
-                            : pDialog( pDlg )
-                            , pPrinter( pPrt )
-                            , nWhich( nEvent )
+                        SfxPrintingHint( sal_Int32 nEvent, const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& rOpts )
+                            : nWhich( nEvent )
                             , aOpts( rOpts )
                         {}
 
-                        SfxPrintingHint( sal_Int32 nEvent, PrintDialog* pDlg, Printer* pPrt )
-                            : pDialog( pDlg )
-                            , pPrinter( pPrt )
-                            , nWhich( nEvent )
+                        SfxPrintingHint( sal_Int32 nEvent )
+                            : nWhich( nEvent )
                         {}
 
-
-    Printer*            GetPrinter() const { return pPrinter; }
-    PrintDialog*        GetPrintDialog() const { return pDialog; }
     sal_Int32           GetWhich() const { return nWhich; }
-    const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& GetAdditionalOptions() { return aOpts; }
+    const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& GetOptions() { return aOpts; }
 };
 
 #endif
