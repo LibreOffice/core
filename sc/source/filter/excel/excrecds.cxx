@@ -100,6 +100,7 @@
 
 #include <oox/core/tokens.hxx>
 
+using ::com::sun::star::uno::Sequence;
 
 
 using ::rtl::OString;
@@ -432,7 +433,9 @@ ExcBundlesheetBase::ExcBundlesheetBase() :
 void ExcBundlesheetBase::UpdateStreamPos( XclExpStream& rStrm )
 {
     rStrm.SetSvStreamPos( nOwnPos );
+    rStrm.DisableEncryption();
     rStrm << static_cast<sal_uInt32>(nStrPos);
+    rStrm.EnableEncryption();
 }
 
 
@@ -532,7 +535,7 @@ void XclExpWsbool::SaveXml( XclExpXmlStream& rStrm )
 // XclExpWindowProtection ===============================================================
 
 XclExpWindowProtection::XclExpWindowProtection(bool bValue) :
-    XclExpBoolRecord(EXC_ID_WINDOWPROTECT,bValue)
+    XclExpBoolRecord(EXC_ID_WINDOWPROTECT, bValue)
 {
 }
 
@@ -545,9 +548,31 @@ void XclExpWindowProtection::SaveXml( XclExpXmlStream& rStrm )
 
 // XclExpDocProtection ===============================================================
 
-XclExpDocProtection::XclExpDocProtection(bool bValue) :
-    XclExpBoolRecord(EXC_ID_PROTECT,bValue)
+XclExpProtection::XclExpProtection(bool bValue) :
+    XclExpBoolRecord(EXC_ID_PROTECT, bValue)
 {
+}
+
+// ============================================================================
+
+XclExpPassHash::XclExpPassHash(const Sequence<sal_Int8>& aHash) :
+    XclExpRecord(EXC_ID_PASSWORD, 2),
+    mnHash(0x0000)
+{
+    if (aHash.getLength() >= 2)
+    {
+        mnHash  = ((aHash[0] << 8) & 0xFFFF);
+        mnHash |= (aHash[1] & 0xFF);
+    }
+}
+
+XclExpPassHash::~XclExpPassHash()
+{
+}
+
+void XclExpPassHash::WriteBody(XclExpStream& rStrm)
+{
+    rStrm << mnHash;
 }
 
 // ============================================================================

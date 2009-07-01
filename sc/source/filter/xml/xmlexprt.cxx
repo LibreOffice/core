@@ -69,6 +69,7 @@
 #include "postit.hxx"
 #include "externalrefmgr.hxx"
 #include "editutil.hxx"
+#include "tabprotection.hxx"
 
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
@@ -1469,7 +1470,11 @@ void ScXMLExport::SetBodyAttributes()
     {
         AddAttribute(XML_NAMESPACE_TABLE, XML_STRUCTURE_PROTECTED, XML_TRUE);
         rtl::OUStringBuffer aBuffer;
-        SvXMLUnitConverter::encodeBase64(aBuffer, pDoc->GetDocPassword());
+        uno::Sequence<sal_Int8> aPassHash;
+        const ScDocProtection* p = pDoc->GetDocProtection();
+        if (p)
+            aPassHash = p->getPasswordHash(PASSHASH_OOO);
+        SvXMLUnitConverter::encodeBase64(aBuffer, aPassHash);
         if (aBuffer.getLength())
             AddAttribute(XML_NAMESPACE_TABLE, XML_PROTECTION_KEY, aBuffer.makeStringAndClear());
     }
@@ -1543,7 +1548,11 @@ void ScXMLExport::_ExportContent()
                         AddAttribute(XML_NAMESPACE_TABLE, XML_PROTECTED, XML_TRUE);
                         rtl::OUStringBuffer aBuffer;
                         if (pDoc)
-                            SvXMLUnitConverter::encodeBase64(aBuffer, pDoc->GetTabPassword(static_cast<SCTAB>(nTable)));
+                        {
+                            ScTableProtection* pProtect = pDoc->GetTabProtection(static_cast<SCTAB>(nTable));
+                            if (pProtect)
+                                SvXMLUnitConverter::encodeBase64(aBuffer, pProtect->getPasswordHash(PASSHASH_OOO));
+                        }
                         if (aBuffer.getLength())
                             AddAttribute(XML_NAMESPACE_TABLE, XML_PROTECTION_KEY, aBuffer.makeStringAndClear());
                     }

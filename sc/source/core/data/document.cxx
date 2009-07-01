@@ -93,6 +93,7 @@
 #include "bcaslot.hxx"
 #include "postit.hxx"
 #include "externalrefmgr.hxx"
+#include "tabprotection.hxx"
 
 namespace WritingMode2 = ::com::sun::star::text::WritingMode2;
 
@@ -4102,24 +4103,6 @@ BOOL ScDocument::RefreshAutoFilter( SCCOL nStartCol, SCROW nStartRow,
     }
     return bChange;
 }
-
-
-//UNUSED2008-05  void ScDocument::SetAutoFilterFlags()
-//UNUSED2008-05  {
-//UNUSED2008-05      USHORT nCount = pDBCollection->GetCount();
-//UNUSED2008-05      for (USHORT i=0; i<nCount; i++)
-//UNUSED2008-05      {
-//UNUSED2008-05          ScDBData* pData = (*pDBCollection)[i];
-//UNUSED2008-05          SCTAB nDBTab;
-//UNUSED2008-05          SCCOL nDBStartCol;
-//UNUSED2008-05          SCROW nDBStartRow;
-//UNUSED2008-05          SCCOL nDBEndCol;
-//UNUSED2008-05          SCROW nDBEndRow;
-//UNUSED2008-05          pData->GetArea( nDBTab, nDBStartCol,nDBStartRow, nDBEndCol,nDBEndRow );
-//UNUSED2008-05          pData->SetAutoFilter( HasAttrib( nDBStartCol,nDBStartRow,nDBTab,
-//UNUSED2008-05                                  nDBEndCol,nDBStartRow,nDBTab, HASATTR_AUTOFILTER ) );
-//UNUSED2008-05      }
-//UNUSED2008-05  }
 
 
 BOOL ScDocument::IsHorOverlapped( SCCOL nCol, SCROW nRow, SCTAB nTab ) const

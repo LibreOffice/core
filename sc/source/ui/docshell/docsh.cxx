@@ -79,11 +79,6 @@
 #include <sot/formats.hxx>
 #define SOT_FORMATSTR_ID_STARCALC_30 SOT_FORMATSTR_ID_STARCALC
 
-//REMOVE    #ifndef SO2_DECL_SVSTORAGESTREAM_DEFINED
-//REMOVE    #define SO2_DECL_SVSTORAGESTREAM_DEFINED
-//REMOVE    SO2_DECL_REF(SotStorageStream)
-//REMOVE    #endif
-
 // INCLUDE ---------------------------------------------------------------
 
 #include "cell.hxx"
@@ -97,7 +92,6 @@
 #include "scresid.hxx"
 #include "sc.hrc"
 #include "globstr.hrc"
-//CHINA001 #include "tpstat.hxx"
 #include "scerrors.hxx"
 #include "brdcst.hxx"
 #include "stlpool.hxx"
@@ -126,6 +120,7 @@
 #include "cfgids.hxx"
 #include "warnpassword.hxx"
 #include "optsolver.hxx"
+#include "tabprotection.hxx"
 
 #include "docsh.hxx"
 #include "docshimp.hxx"
@@ -1327,6 +1322,16 @@ BOOL __EXPORT ScDocShell::SaveAs( SfxMedium& rMedium )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::SaveAs" );
 
+#if ENABLE_SHEET_PROTECTION
+    ScTabViewShell* pViewShell = GetBestViewShell();
+    if (pViewShell && ScPassHashHelper::needsPassHashRegen(aDocument, PASSHASH_OOO))
+    {
+        if (!pViewShell->ExecuteRetypePassDlg(PASSHASH_OOO))
+            // password re-type cancelled.  Don't save the document.
+            return false;
+    }
+#endif
+
     ScRefreshTimerProtector( aDocument.GetRefreshTimerControlAddress() );
 
     PrepareSaveGuard aPrepareGuard( *this);
@@ -1792,7 +1797,6 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
     rStream.SetNumberFormatInt( nOldNumberFormatInt );
 }
 
-
 BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::ConvertTo" );
@@ -1846,15 +1850,39 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
                 aDocument.SetExtDocOptions( pExtDocOpt = new ScExtDocOptions );
             pViewShell->GetViewData()->WriteExtOptions( *pExtDocOpt );
 
-            /*  #115980 #If the imported document contained an encrypted password -
-                determine if we should save without it. */
-            ScExtDocSettings& rDocSett = pExtDocOpt->GetDocSettings();
-            if( rDocSett.mbEncrypted )
+#if ENABLE_SHEET_PROTECTION
+            bool bNeedRetypePassDlg = ScPassHashHelper::needsPassHashRegen(aDocument, PASSHASH_XL);
+            if (bNeedRetypePassDlg && !pViewShell->ExecuteRetypePassDlg(PASSHASH_XL))
             {
-                bDoSave = ScWarnPassword::WarningOnPassword( rMed );
-                // #i42858# warn only on time
-                rDocSett.mbEncrypted = false;
+                SetError( ERRCODE_ABORT );
+                return false;
             }
+#else
+
+            do
+            {
+                SfxItemSet* pSet = rMed.GetItemSet();
+                if (!pSet)
+                    break;
+
+                const SfxPoolItem* pItem = NULL;
+                if (SFX_ITEM_SET != pSet->GetItemState(SID_PASSWORD, sal_True, &pItem))
+                    // password is not set.
+                    break;
+
+                /*  #115980 #If the imported document contained an encrypted password -
+                    determine if we should save without it. */
+                bDoSave = ScWarnPassword::WarningOnPassword( rMed );
+
+                if (bDoSave)
+                {
+                    // #i42858# warn only one time
+                    pSet->ClearItem(SID_PASSWORD);
+                }
+            }
+            while (false);
+
+#endif
         }
 
         if( bDoSave )

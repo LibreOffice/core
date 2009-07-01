@@ -93,7 +93,12 @@
 #include "editable.hxx"
 #include "compiler.hxx"
 #include "scui_def.hxx" //CHINA001
+#include "tabprotection.hxx"
+
+#include <memory>
+
 using namespace com::sun::star;
+using ::com::sun::star::uno::Sequence;
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -3126,103 +3131,156 @@ BOOL ScDocFunc::RemovePageBreak( BOOL bColumn, const ScAddress& rPos,
 
 //------------------------------------------------------------------------
 
-BOOL lcl_ValidPassword( ScDocument* pDoc, SCTAB nTab,
-                        const String& rPassword,
-                        uno::Sequence<sal_Int8>* pReturnOld = NULL )
+void ScDocFunc::ProtectSheet( SCTAB nTab, const ScTableProtection& rProtect )
 {
-    uno::Sequence<sal_Int8> aOldPassword;
-    if ( nTab == TABLEID_DOC )
+    ScDocument* pDoc = rDocShell.GetDocument();
+
+    pDoc->SetTabProtection(nTab, &rProtect);
+    if (pDoc->IsUndoEnabled())
     {
-        if (pDoc->IsDocProtected())
-            aOldPassword = pDoc->GetDocPassword();
+        ScTableProtection* pProtect = pDoc->GetTabProtection(nTab);
+        DBG_ASSERT(pProtect, "ScDocFunc::Unprotect: ScTableProtection pointer is NULL!");
+        if (pProtect)
+        {
+            ::std::auto_ptr<ScTableProtection> p(new ScTableProtection(*pProtect));
+            p->setProtected(true); // just in case ...
+            rDocShell.GetUndoManager()->AddUndoAction(
+                new ScUndoTabProtect(&rDocShell, nTab, p) );
+
+            // ownership of auto_ptr now transferred to ScUndoTabProtect.
+        }
+    }
+
+    rDocShell.PostPaintGridAll();
+    ScDocShellModificator aModificator(rDocShell);
+    aModificator.SetDocumentModified();
+}
+
+BOOL ScDocFunc::Protect( SCTAB nTab, const String& rPassword, BOOL /*bApi*/ )
+{
+    ScDocument* pDoc = rDocShell.GetDocument();
+    if (nTab == TABLEID_DOC)
+    {
+        // document protection
+        ScDocProtection aProtection;
+        aProtection.setProtected(true);
+        aProtection.setPassword(rPassword);
+        pDoc->SetDocProtection(&aProtection);
+        if (pDoc->IsUndoEnabled())
+        {
+            ScDocProtection* pProtect = pDoc->GetDocProtection();
+            DBG_ASSERT(pProtect, "ScDocFunc::Unprotect: ScDocProtection pointer is NULL!");
+            if (pProtect)
+            {
+                ::std::auto_ptr<ScDocProtection> p(new ScDocProtection(*pProtect));
+                p->setProtected(true); // just in case ...
+                rDocShell.GetUndoManager()->AddUndoAction(
+                    new ScUndoDocProtect(&rDocShell, p) );
+                // ownership of auto_ptr is transferred to ScUndoDocProtect.
+            }
+        }
     }
     else
     {
-        if (pDoc->IsTabProtected(nTab))
-            aOldPassword = pDoc->GetTabPassword(nTab);
-    }
+        // sheet protection
 
-    if (pReturnOld)
-        *pReturnOld = aOldPassword;
-
-    return ((aOldPassword.getLength() == 0) || SvPasswordHelper::CompareHashPassword(aOldPassword, rPassword));
-}
-
-BOOL ScDocFunc::Protect( SCTAB nTab, const String& rPassword, BOOL bApi )
-{
-    ScDocShellModificator aModificator( rDocShell );
-
-    ScDocument* pDoc = rDocShell.GetDocument();
-    BOOL bUndo(pDoc->IsUndoEnabled());
-    BOOL bOk = lcl_ValidPassword( pDoc, nTab, rPassword);
-    if ( bOk )
-    {
-        uno::Sequence<sal_Int8> aPass;
-        if (rPassword.Len())
-            SvPasswordHelper::GetHashPassword(aPass, rPassword);
-
-        if (bUndo)
+        ScTableProtection aProtection;
+        aProtection.setProtected(true);
+        aProtection.setPassword(rPassword);
+        pDoc->SetTabProtection(nTab, &aProtection);
+        if (pDoc->IsUndoEnabled())
         {
-            rDocShell.GetUndoManager()->AddUndoAction(
-                        new ScUndoProtect( &rDocShell, nTab, TRUE, aPass ) );
+            ScTableProtection* pProtect = pDoc->GetTabProtection(nTab);
+            DBG_ASSERT(pProtect, "ScDocFunc::Unprotect: ScTableProtection pointer is NULL!");
+            if (pProtect)
+            {
+                ::std::auto_ptr<ScTableProtection> p(new ScTableProtection(*pProtect));
+                p->setProtected(true); // just in case ...
+                rDocShell.GetUndoManager()->AddUndoAction(
+                    new ScUndoTabProtect(&rDocShell, nTab, p) );
+                // ownership of auto_ptr now transferred to ScUndoTabProtect.
+            }
         }
-
-        if ( nTab == TABLEID_DOC )
-            pDoc->SetDocProtection( TRUE, aPass );
-        else
-            pDoc->SetTabProtection( nTab, TRUE, aPass );
-
-        rDocShell.PostPaintGridAll();
-        aModificator.SetDocumentModified();
-    }
-    else if (!bApi)
-    {
-        //  different password was set before
-
-//!     rDocShell.ErrorMessage(...);
-
-        InfoBox aBox( rDocShell.GetActiveDialogParent(), String( ScResId( SCSTR_WRONGPASSWORD ) ) );
-        aBox.Execute();
     }
 
-    return bOk;
+    rDocShell.PostPaintGridAll();
+    ScDocShellModificator aModificator( rDocShell );
+    aModificator.SetDocumentModified();
+
+    return true;
 }
 
 BOOL ScDocFunc::Unprotect( SCTAB nTab, const String& rPassword, BOOL bApi )
 {
-    ScDocShellModificator aModificator( rDocShell );
-
     ScDocument* pDoc = rDocShell.GetDocument();
-    BOOL bUndo(pDoc->IsUndoEnabled());
-    uno::Sequence<sal_Int8> aOldPassword;
-    uno::Sequence<sal_Int8> aPass;
-    BOOL bOk = lcl_ValidPassword( pDoc, nTab, rPassword, &aOldPassword );
-    if ( bOk )
-    {
-        uno::Sequence<sal_Int8> aEmptyPass;
-        if ( nTab == TABLEID_DOC )
-            pDoc->SetDocProtection( FALSE, aEmptyPass );
-        else
-            pDoc->SetTabProtection( nTab, FALSE, aEmptyPass );
 
-        if (bUndo)
+    if (nTab == TABLEID_DOC)
+    {
+        // document protection
+
+        ScDocProtection* pDocProtect = pDoc->GetDocProtection();
+        if (!pDocProtect || !pDocProtect->isProtected())
+            // already unprotected (should not happen)!
+            return true;
+
+        // save the protection state before unprotect (for undo).
+        ::std::auto_ptr<ScDocProtection> pProtectCopy(new ScDocProtection(*pDocProtect));
+
+        if (!pDocProtect->verifyPassword(rPassword))
         {
-            rDocShell.GetUndoManager()->AddUndoAction(
-                        new ScUndoProtect( &rDocShell, nTab, FALSE, aOldPassword ) );
+            if (!bApi)
+            {
+                InfoBox aBox( rDocShell.GetActiveDialogParent(), String( ScResId( SCSTR_WRONGPASSWORD ) ) );
+                aBox.Execute();
+            }
+            return false;
         }
 
-        rDocShell.PostPaintGridAll();
-        aModificator.SetDocumentModified();
+        pDoc->SetDocProtection(NULL);
+        if (pDoc->IsUndoEnabled())
+        {
+            pProtectCopy->setProtected(false);
+            rDocShell.GetUndoManager()->AddUndoAction(
+                new ScUndoDocProtect(&rDocShell, pProtectCopy) );
+            // ownership of auto_ptr now transferred to ScUndoDocProtect.
+        }
     }
-    else if (!bApi)
+    else
     {
-//!     rDocShell.ErrorMessage(...);
+        // sheet protection
 
-        InfoBox aBox( rDocShell.GetActiveDialogParent(), String( ScResId( SCSTR_WRONGPASSWORD ) ) );
-        aBox.Execute();
+        ScTableProtection* pTabProtect = pDoc->GetTabProtection(nTab);
+        if (!pTabProtect || !pTabProtect->isProtected())
+            // already unprotected (should not happen)!
+            return true;
+
+        // save the protection state before unprotect (for undo).
+        ::std::auto_ptr<ScTableProtection> pProtectCopy(new ScTableProtection(*pTabProtect));
+        if (!pTabProtect->verifyPassword(rPassword))
+        {
+            if (!bApi)
+            {
+                InfoBox aBox( rDocShell.GetActiveDialogParent(), String( ScResId( SCSTR_WRONGPASSWORD ) ) );
+                aBox.Execute();
+            }
+            return false;
+        }
+
+        pDoc->SetTabProtection(nTab, NULL);
+        if (pDoc->IsUndoEnabled())
+        {
+            pProtectCopy->setProtected(false);
+            rDocShell.GetUndoManager()->AddUndoAction(
+                new ScUndoTabProtect(&rDocShell, nTab, pProtectCopy) );
+            // ownership of auto_ptr now transferred to ScUndoTabProtect.
+        }
     }
 
-    return bOk;
+    rDocShell.PostPaintGridAll();
+    ScDocShellModificator aModificator( rDocShell );
+    aModificator.SetDocumentModified();
+
+    return true;
 }
 
 //------------------------------------------------------------------------

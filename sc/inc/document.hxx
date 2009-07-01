@@ -90,6 +90,7 @@ class ScDBData;
 class ScDetOpData;
 class ScDetOpList;
 class ScDocOptions;
+class ScDocProtection;
 class ScDocumentPool;
 class ScDrawLayer;
 class ScExtDocOptions;
@@ -108,6 +109,7 @@ class ScRangeName;
 class ScStyleSheet;
 class ScStyleSheetPool;
 class ScTable;
+class ScTableProtection;
 class ScTokenArray;
 class ScValidationData;
 class ScValidationDataList;
@@ -286,7 +288,7 @@ private:
 
     ScFieldEditEngine*  pCacheFieldEditEngine;
 
-    com::sun::star::uno::Sequence<sal_Int8> aProtectPass;
+    ::std::auto_ptr<ScDocProtection> pDocProtection;
 
     ::std::auto_ptr<ScExternalRefManager> pExternalRefMgr;
     String              aDocName;                       // opt: Dokumentname
@@ -350,7 +352,6 @@ private:
 
     ScLkUpdMode         eLinkMode;
 
-    BOOL                bProtected;
     BOOL                bAutoCalc;                      // Automatisch Berechnen
     BOOL                bAutoCalcShellDisabled;         // in/von/fuer ScDocShell disabled
     // ob noch ForcedFormulas berechnet werden muessen,
@@ -530,13 +531,14 @@ public:
     SC_DLLPUBLIC inline SCTAB   GetTableCount() const { return nMaxTableNumber; }
     SvNumberFormatterIndexTable* GetFormatExchangeList() const { return pFormatExchangeList; }
 
-    SC_DLLPUBLIC void           SetDocProtection( BOOL bProtect, const com::sun::star::uno::Sequence <sal_Int8>& aPass );
-    SC_DLLPUBLIC void           SetTabProtection( SCTAB nTab, BOOL bProtect, const com::sun::star::uno::Sequence <sal_Int8>& aPass );
+    SC_DLLPUBLIC ScDocProtection* GetDocProtection() const;
+    SC_DLLPUBLIC void            SetDocProtection(const ScDocProtection* pProtect);
     SC_DLLPUBLIC BOOL           IsDocProtected() const;
     BOOL            IsDocEditable() const;
     SC_DLLPUBLIC BOOL           IsTabProtected( SCTAB nTab ) const;
-    const com::sun::star::uno::Sequence <sal_Int8>& GetDocPassword() const;
-    const com::sun::star::uno::Sequence <sal_Int8>& GetTabPassword( SCTAB nTab ) const;
+    SC_DLLPUBLIC    ScTableProtection* GetTabProtection( SCTAB nTab ) const;
+    SC_DLLPUBLIC void SetTabProtection(SCTAB nTab, const ScTableProtection* pProtect);
+    void            CopyTabProtection(SCTAB nTabSrc, SCTAB nTabDest);
 
     void            LockTable(SCTAB nTab);
     void            UnlockTable(SCTAB nTab);
@@ -1475,7 +1477,8 @@ public:
 
 
 private:
-//UNUSED2008-05  void               SetAutoFilterFlags();
+    ScDocument(const ScDocument& r); // disabled with no definition
+
     void                FindMaxRotCol( SCTAB nTab, RowInfo* pRowInfo, SCSIZE nArrCount,
                                         SCCOL nX1, SCCOL nX2 ) const;
 

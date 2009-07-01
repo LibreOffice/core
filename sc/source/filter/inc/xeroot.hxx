@@ -154,7 +154,12 @@ public:
         @param nRecId  Identifier that specifies which record is returned. */
     XclExpRecordRef     CreateRecord( sal_uInt16 nRecId ) const;
 
+    bool                IsDocumentEncrypted() const;
+
+    const String        GetPassword() const;
+
 private:
+
     /** Returns the local or global link manager, depending on current context. */
     XclExpRootData::XclExpLinkMgrRef GetLocalLinkMgrRef() const;
 

@@ -39,6 +39,8 @@
 #include "sortparam.hxx"
 #include "compressedarray.hxx"
 
+#include <memory>
+
 namespace utl {
     class SearchParam;
     class TextSearch;
@@ -65,6 +67,7 @@ class ScRangeList;
 class ScSortInfoArray;
 class ScStyleSheet;
 class ScTableLink;
+class ScTableProtection;
 class ScUserListData;
 class ScIndexMap;
 struct RowInfo;
@@ -102,8 +105,7 @@ private:
     SCROW           nRepeatStartY;
     SCROW           nRepeatEndY;
 
-    BOOL            bProtected;
-    com::sun::star::uno::Sequence<sal_Int8> aProtectPass;
+    ::std::auto_ptr<ScTableProtection> pTabProtection;
 
     USHORT*         pColWidth;
     ScSummableCompressedArray< SCROW, USHORT>*  pRowHeight;
@@ -218,10 +220,9 @@ public:
     void            SetPageStyle( const String& rName );
     void            PageStyleModified( const String& rNewName );
 
-    BOOL            IsProtected() const                     { return bProtected; }
-    const com::sun::star::uno::Sequence<sal_Int8>&  GetPassword() const                     { return aProtectPass; }
-    void            SetProtection( BOOL bProtect, const com::sun::star::uno::Sequence<sal_Int8>& rPasswd )
-                                        { bProtected = bProtect; aProtectPass = rPasswd; }
+    BOOL            IsProtected() const;
+    void            SetProtection(const ScTableProtection* pProtect);
+    ScTableProtection* GetProtection();
 
     Size            GetPageSize() const;
     void            SetPageSize( const Size& rSize );

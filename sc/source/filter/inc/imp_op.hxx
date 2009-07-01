@@ -135,9 +135,11 @@ protected:
     void                    Bof2( void );                   // 0x09
     void                    Eof( void );                    // 0x0A
     void                    DocProtect( void );             // 0x12
-    void                    Protect( void );                // 0x12 Sheet Protection
-    BOOL                    Password( void );               // 0x13
+    void                    SheetProtect( void );           // 0x12 Sheet Protection
+    void                    DocPasssword( void );           // 0x13 document password
+    void                    SheetPassword( void );               // 0x13 sheet password
     void                    Externsheet( void );            // 0x17
+    void                    WinProtection( void );          // 0x19
     void                    Columndefault( void );          // 0x20
     void                    Array25( void );                // 0x21
     void                    Rec1904( void );                // 0x22

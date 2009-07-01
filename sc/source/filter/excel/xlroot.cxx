@@ -92,8 +92,7 @@ XclRootData::XclRootData( XclBiff eBiff, SfxMedium& rMedium,
     mxRD( new RootData ),//!
     mnCharWidth( 110 ),
     mnScTab( 0 ),
-    mbExport( bExport ),
-    mbHasPassw( false )
+    mbExport( bExport )
 {
     // default script type, e.g. for empty cells
     switch( ScGlobal::GetDefaultScriptType() )
@@ -197,17 +196,6 @@ void XclRoot::SetCharWidth( const XclFontData& rFontData )
         DBG_ERRORFILE( "XclRoot::SetCharWidth - invalid character width (no printer?)" );
         mrData.mnCharWidth = 11 * rFontData.mnHeight / 20;
     }
-}
-
-const String& XclRoot::QueryPassword() const
-{
-    if( !mrData.mbHasPassw )
-    {
-        mrData.maPassw = ScfApiHelper::QueryPasswordForMedium( GetMedium() );
-        // set to true, even if dialog has been cancelled (never ask twice)
-        mrData.mbHasPassw = true;
-    }
-    return mrData.maPassw;
 }
 
 bool XclRoot::HasVbaStorage() const

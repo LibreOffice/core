@@ -94,6 +94,7 @@
 #include "recursionhelper.hxx"
 #include "lookupcache.hxx"
 #include "externalrefmgr.hxx"
+#include "tabprotection.hxx"
 
 // pImpl because including lookupcache.hxx in document.hxx isn't wanted, and
 // dtor plus helpers are convenient.
@@ -152,6 +153,7 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         pChangeViewSettings( NULL ),
         pScriptTypeData( NULL ),
         pCacheFieldEditEngine( NULL ),
+        pDocProtection( NULL ),
         pExternalRefMgr( NULL ),
         pViewOptions( NULL ),
         pDocOptions( NULL ),
@@ -175,7 +177,6 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         nHardRecalcState(0),
         nVisibleTab( 0 ),
         eLinkMode(LM_UNKNOWN),
-        bProtected( FALSE ),
         bAutoCalc( eMode == SCDOCMODE_DOCUMENT ),
         bAutoCalcShellDisabled( FALSE ),
         bForcedFormulaPending( FALSE ),

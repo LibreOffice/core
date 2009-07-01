@@ -79,6 +79,7 @@
 #include "AccessibilityHints.hxx"
 #include "rangeutl.hxx"
 #include "client.hxx"
+#include "tabprotection.hxx"
 
 #include <com/sun/star/chart2/data/HighlightedRange.hpp>
 
@@ -946,6 +947,17 @@ void ScTabView::MoveCursorRel( SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode,
     ScDocument* pDoc = aViewData.GetDocument();
     SCTAB nTab = aViewData.GetTabNo();
 
+    bool bSkipProtected = false, bSkipUnprotected = false;
+    ScTableProtection* pProtect = pDoc->GetTabProtection(nTab);
+    if ( pProtect && pProtect->isProtected() )
+    {
+        bSkipProtected   = !pProtect->isOptionEnabled(ScTableProtection::SELECT_LOCKED_CELLS);
+        bSkipUnprotected = !pProtect->isOptionEnabled(ScTableProtection::SELECT_UNLOCKED_CELLS);
+    }
+
+    if ( bSkipProtected && bSkipUnprotected )
+        return;
+
     SCsCOL nOldX;
     SCsROW nOldY;
     SCsCOL nCurX;
@@ -965,7 +977,7 @@ void ScTabView::MoveCursorRel( SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode,
         nCurY = (nMovY != 0) ? nOldY+nMovY : (SCsROW) aViewData.GetOldCurY();
     }
 
-    BOOL bHidden;
+    BOOL bSkipCell = FALSE;
     aViewData.ResetOldCursor();
 
     if (nMovX != 0 && VALIDCOLROW(nCurX,nCurY))
@@ -974,15 +986,20 @@ void ScTabView::MoveCursorRel( SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode,
         do
         {
             BYTE nColFlags = pDoc->GetColFlags( nCurX, nTab );
-            bHidden = (nColFlags & CR_HIDDEN) || pDoc->IsHorOverlapped( nCurX, nCurY, nTab );
-            if (bHidden)
+            bSkipCell = (nColFlags & CR_HIDDEN) || pDoc->IsHorOverlapped( nCurX, nCurY, nTab );
+            if (bSkipProtected && !bSkipCell)
+                bSkipCell = pDoc->HasAttrib(nCurX, nCurY, nTab, nCurX, nCurY, nTab, HASATTR_PROTECTED);
+            if (bSkipUnprotected && !bSkipCell)
+                bSkipCell = !pDoc->HasAttrib(nCurX, nCurY, nTab, nCurX, nCurY, nTab, HASATTR_PROTECTED);
+
+            if (bSkipCell)
             {
                 if ( nCurX<=0 || nCurX>=MAXCOL )
                 {
                     if (bHFlip)
                     {
                         nCurX = nOldX;
-                        bHidden = FALSE;
+                        bSkipCell = FALSE;
                     }
                     else
                     {
@@ -995,7 +1012,8 @@ void ScTabView::MoveCursorRel( SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode,
                     if (nMovX > 0) ++nCurX; else --nCurX;
             }
         }
-        while (bHidden);
+        while (bSkipCell);
+
         if (pDoc->IsVerOverlapped( nCurX, nCurY, nTab ))
         {
             aViewData.SetOldCursor( nCurX,nCurY );
@@ -1010,15 +1028,20 @@ void ScTabView::MoveCursorRel( SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode,
         do
         {
             BYTE nRowFlags = pDoc->GetRowFlags( nCurY, nTab );
-            bHidden = (nRowFlags & CR_HIDDEN) || pDoc->IsVerOverlapped( nCurX, nCurY, nTab );
-            if (bHidden)
+            bSkipCell = (nRowFlags & CR_HIDDEN) || pDoc->IsVerOverlapped( nCurX, nCurY, nTab );
+            if (bSkipProtected && !bSkipCell)
+                bSkipCell = pDoc->HasAttrib(nCurX, nCurY, nTab, nCurX, nCurY, nTab, HASATTR_PROTECTED);
+            if (bSkipUnprotected && !bSkipCell)
+                bSkipCell = !pDoc->HasAttrib(nCurX, nCurY, nTab, nCurX, nCurY, nTab, HASATTR_PROTECTED);
+
+            if (bSkipCell)
             {
                 if ( nCurY<=0 || nCurY>=MAXROW )
                 {
                     if (bVFlip)
                     {
                         nCurY = nOldY;
-                        bHidden = FALSE;
+                        bSkipCell = FALSE;
                     }
                     else
                     {
@@ -1031,7 +1054,8 @@ void ScTabView::MoveCursorRel( SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode,
                     if (nMovY > 0) ++nCurY; else --nCurY;
             }
         }
-        while (bHidden);
+        while (bSkipCell);
+
         if (pDoc->IsHorOverlapped( nCurX, nCurY, nTab ))
         {
             aViewData.SetOldCursor( nCurX,nCurY );

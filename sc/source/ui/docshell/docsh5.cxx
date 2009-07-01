@@ -827,7 +827,7 @@ BOOL ScDocShell::MoveTable( SCTAB nSrcTab, SCTAB nDestTab, BOOL bCopy, BOOL bRec
                 ++nAdjSource;               // new position of source table after CopyTab
 
             if ( aDocument.IsTabProtected( nAdjSource ) )
-                aDocument.SetTabProtection( nDestTab, TRUE, aDocument.GetTabPassword( nAdjSource ) );
+                aDocument.CopyTabProtection(nAdjSource, nDestTab);
 
             if (bRecord)
             {

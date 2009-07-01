@@ -42,6 +42,7 @@
 #include "docuno.hxx"
 #include "cellsuno.hxx"
 #include "XMLStylesImportHelper.hxx"
+#include "tabprotection.hxx"
 
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>
@@ -57,6 +58,10 @@
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/util/XProtectable.hpp>
 #include <com/sun/star/sheet/XArrayFormulaRange.hpp>
+
+#include <memory>
+
+using ::std::auto_ptr;
 
 //------------------------------------------------------------------
 
@@ -616,13 +621,10 @@ void ScMyTables::DeleteTable()
     {
         uno::Sequence<sal_Int8> aPass;
         SvXMLUnitConverter::decodeBase64(aPass, sPassword);
-        rImport.GetDocument()->SetTabProtection(static_cast<SCTAB>(nCurrentSheet), bProtection, aPass);
-        /*uno::Reference <util::XProtectable> xProtectable(xCurrentSheet, uno::UNO_QUERY);
-        if (xProtectable.is())
-        {
-            rtl::OUString sKey;
-            xProtectable->protect(sKey);
-        }*/
+        auto_ptr<ScTableProtection> pProtect(new ScTableProtection);
+        pProtect->setProtected(bProtection);
+        pProtect->setPasswordHash(aPass, PASSHASH_OOO);
+        rImport.GetDocument()->SetTabProtection(static_cast<SCTAB>(nCurrentSheet), pProtect.get());
     }
 
     rImport.UnlockSolarMutex();

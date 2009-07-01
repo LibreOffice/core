@@ -114,6 +114,7 @@
 #include "progress.hxx"
 #include "hints.hxx"        // fuer Paint-Broadcast
 #include "prnsave.hxx"
+#include "tabprotection.hxx"
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -132,7 +133,7 @@ ScTable::ScTable( ScDocument* pDoc, SCTAB nNewTab, const String& rNewName,
     bPageSizeValid( FALSE ),
     nRepeatStartX( SCCOL_REPEAT_NONE ),
     nRepeatStartY( SCROW_REPEAT_NONE ),
-    bProtected( FALSE ),
+    pTabProtection( NULL ),
     pColWidth( NULL ),
     pRowHeight( NULL ),
     pColFlags( NULL ),

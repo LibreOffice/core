@@ -119,6 +119,7 @@
 #include "drwlayer.hxx"
 #include "attrib.hxx"
 #include "validat.hxx"
+#include "tabprotection.hxx"
 
 // #114409#
 #include <vcl/salbtype.hxx>     // FRound
@@ -2027,8 +2028,9 @@ void __EXPORT ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
         Point aPos = rMEvt.GetPosPixel();
         SCsCOL nPosX;
         SCsROW nPosY;
+        SCTAB nTab = pViewData->GetTabNo();
         pViewData->GetPosFromPixel( aPos.X(), aPos.Y(), eWhich, nPosX, nPosY );
-        ScDPObject* pDPObj  = pDoc->GetDPAtCursor( nPosX, nPosY, pViewData->GetTabNo() );
+        ScDPObject* pDPObj  = pDoc->GetDPAtCursor( nPosX, nPosY, nTab );
         if ( pDPObj && pDPObj->GetSaveData()->GetDrillDown() )
         {
             ScAddress aCellPos( nPosX, nPosY, pViewData->GetTabNo() );
@@ -2070,16 +2072,34 @@ void __EXPORT ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
             return;
         }
 
-        //  edit cell contents
-        pViewData->GetViewShell()->UpdateInputHandler();
-        pScMod->SetInputMode( SC_INPUT_TABLE );
-        if (pViewData->HasEditView(eWhich))
+        // Check for cell protection attribute.
+        ScTableProtection* pProtect = pDoc->GetTabProtection( nTab );
+        bool bEditAllowed = true;
+        if ( pProtect && pProtect->isProtected() )
         {
-            //  Text-Cursor gleich an die geklickte Stelle setzen
-            EditView* pEditView = pViewData->GetEditView( eWhich );
-            MouseEvent aEditEvt( rMEvt.GetPosPixel(), 1, MOUSE_SYNTHETIC, MOUSE_LEFT, 0 );
-            pEditView->MouseButtonDown( aEditEvt );
-            pEditView->MouseButtonUp( aEditEvt );
+            bool bCellProtected = pDoc->HasAttrib(nPosX, nPosY, nTab, nPosX, nPosY, nTab, HASATTR_PROTECTED);
+            bool bSkipProtected = !pProtect->isOptionEnabled(ScTableProtection::SELECT_LOCKED_CELLS);
+            bool bSkipUnprotected = !pProtect->isOptionEnabled(ScTableProtection::SELECT_UNLOCKED_CELLS);
+
+            if ( bSkipProtected && bSkipUnprotected )
+                bEditAllowed = false;
+            else if ( (bCellProtected && bSkipProtected) || (!bCellProtected && bSkipUnprotected) )
+                bEditAllowed = false;
+        }
+
+        if ( bEditAllowed )
+        {
+            //  edit cell contents
+            pViewData->GetViewShell()->UpdateInputHandler();
+            pScMod->SetInputMode( SC_INPUT_TABLE );
+            if (pViewData->HasEditView(eWhich))
+            {
+                //  Text-Cursor gleich an die geklickte Stelle setzen
+                EditView* pEditView = pViewData->GetEditView( eWhich );
+                MouseEvent aEditEvt( rMEvt.GetPosPixel(), 1, MOUSE_SYNTHETIC, MOUSE_LEFT, 0 );
+                pEditView->MouseButtonDown( aEditEvt );
+                pEditView->MouseButtonUp( aEditEvt );
+            }
         }
         return;
     }

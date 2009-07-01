@@ -69,6 +69,7 @@ class Exchange;
 class ScRangeList;
 class SvxHyperlinkItem;
 class ScTransferObj;
+class ScTableProtection;
 
 namespace com { namespace sun { namespace star { namespace datatransfer { class XTransferable; } } } }
 
@@ -198,6 +199,8 @@ public:
     void            SetValidation( const ScValidationData& rNew );
 
     void            ChangeIndent( BOOL bIncrement );
+
+    void            ProtectSheet( SCTAB nTab, const ScTableProtection& rProtect );
 
     void            Protect( SCTAB nTab, const String& rPassword );
     BOOL            Unprotect( SCTAB nTab, const String& rPassword );

@@ -81,6 +81,7 @@
 #include "postit.hxx"
 #include "globstr.hrc"
 #include "ftools.hxx"
+#include "tabprotection.hxx"
 
 #include "fprogressbar.hxx"
 
@@ -1087,9 +1088,11 @@ void Sc10Import::LoadProtect()
     //rStream.Read(&SheetProtect, sizeof(SheetProtect));
     lcl_ReadSheetProtect(rStream, SheetProtect);
     nError = rStream.GetError();
-    uno::Sequence<sal_Int8> aPass;
-    SvPasswordHelper::GetHashPassword(aPass, SC10TOSTRING( SheetProtect.PassWord ));
-    pDoc->SetDocProtection( SheetProtect.Protect,  aPass);
+
+    ScDocProtection aProtection;
+    aProtection.setProtected(static_cast<bool>(SheetProtect.Protect));
+    aProtection.setPassword(SC10TOSTRING(SheetProtect.PassWord));
+    pDoc->SetDocProtection(&aProtection);
 }
 
 
@@ -1441,10 +1444,11 @@ void Sc10Import::LoadTables()
 
         //rStream.Read(&TabProtect, sizeof(TabProtect));
         lcl_ReadTabProtect(rStream, TabProtect);
-        uno::Sequence<sal_Int8> aPass;
-        SvPasswordHelper::GetHashPassword(aPass, SC10TOSTRING( TabProtect.PassWord ));
 
-        pDoc->SetTabProtection( static_cast<SCTAB>(Tab), TabProtect.Protect, aPass);
+        ScTableProtection aProtection;
+        aProtection.setProtected(static_cast<bool>(TabProtect.Protect));
+        aProtection.setPassword(SC10TOSTRING(TabProtect.PassWord));
+        pDoc->SetTabProtection(static_cast<SCTAB>(Tab), &aProtection);
 
         rStream >> TabNo;
 

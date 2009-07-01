@@ -292,7 +292,7 @@ void ScTable::DeleteArea(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, USH
             // Zellschutz auf geschuetzter Tabelle nicht setzen
             //
 
-        if ( bProtected && (nDelFlag & IDF_ATTRIB) )
+        if ( IsProtected() && (nDelFlag & IDF_ATTRIB) )
         {
             ScPatternAttr aPattern(pDocument->GetPool());
             aPattern.GetItemSet().Put( ScProtectionAttr( FALSE ) );
@@ -318,7 +318,7 @@ void ScTable::DeleteSelection( USHORT nDelFlag, const ScMarkData& rMark )
         // Zellschutz auf geschuetzter Tabelle nicht setzen
         //
 
-    if ( bProtected && (nDelFlag & IDF_ATTRIB) )
+    if ( IsProtected() && (nDelFlag & IDF_ATTRIB) )
     {
         ScDocumentPool* pPool = pDocument->GetPool();
         SfxItemSet aSet( *pPool, ATTR_PATTERN_START, ATTR_PATTERN_END );
@@ -361,7 +361,7 @@ void ScTable::CopyToClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
 
         //  ggf. Formeln durch Werte ersetzen
 
-        if (bProtected)
+        if ( IsProtected() )
             for (i = nCol1; i <= nCol2; i++)
                 pTable->aCol[i].RemoveProtected(nRow1, nRow2);
     }
@@ -406,7 +406,7 @@ void ScTable::CopyFromClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 // Zellschutz auf geschuetzter Tabelle nicht setzen
                 //
 
-            if ( bProtected && (nInsFlag & IDF_ATTRIB) )
+            if ( IsProtected() && (nInsFlag & IDF_ATTRIB) )
             {
                 ScPatternAttr aPattern(pDocument->GetPool());
                 aPattern.GetItemSet().Put( ScProtectionAttr( FALSE ) );
@@ -1457,7 +1457,7 @@ BOOL ScTable::IsBlockEditable( SCCOL nCol1, SCROW nRow1, SCCOL nCol2,
     BOOL bIsEditable = TRUE;
     if ( nLockCount )
         bIsEditable = FALSE;
-    else if ( bProtected && !pDocument->IsScenario(nTab) )
+    else if ( IsProtected() && !pDocument->IsScenario(nTab) )
     {
         if((bIsEditable = !HasAttrib( nCol1, nRow1, nCol2, nRow2, HASATTR_PROTECTED )) != FALSE)
         {
@@ -1524,7 +1524,7 @@ BOOL ScTable::IsSelectionEditable( const ScMarkData& rMark,
     BOOL bIsEditable = TRUE;
     if ( nLockCount )
         bIsEditable = FALSE;
-    else if ( bProtected && !pDocument->IsScenario(nTab))
+    else if ( IsProtected() && !pDocument->IsScenario(nTab) )
     {
         if((bIsEditable = !HasAttribSelection( rMark, HASATTR_PROTECTED )) != FALSE)
         {

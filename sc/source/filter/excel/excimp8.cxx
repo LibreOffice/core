@@ -160,12 +160,6 @@ void ImportExcel8::Iteration( void )
 }
 
 
-void ImportExcel8:: WinProtection( void )
-{
-    if( aIn.ReaduInt16() != 0 )
-        GetExtDocOptions().GetDocSettings().mbWinProtected = true;
-}
-
 void ImportExcel8::Boundsheet( void )
 {
     UINT8           nLen;
@@ -249,6 +243,11 @@ void ImportExcel8::Codename( BOOL bWorkbookGlobals )
     }
 }
 
+void ImportExcel8::SheetProtection( void )
+{
+    GetSheetProtectBuffer().ReadOptions( aIn, GetCurrScTab() );
+}
+
 bool lcl_hasVBAEnabled()
 {
     uno::Reference< beans::XPropertySet > xProps( ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY);
@@ -295,6 +294,8 @@ void ImportExcel8::PostDocLoad( void )
         pExcRoot->pAutoFilterBuffer->Apply();
 
     GetWebQueryBuffer().Apply();    //! test if extant
+    GetSheetProtectBuffer().Apply();
+    GetDocProtectBuffer().Apply();
 
     ImportExcel::PostDocLoad();
 
