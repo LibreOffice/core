@@ -81,11 +81,10 @@ using ::rtl::OUStringBuffer;
 namespace
 {
 
-OUString lcl_ConvertRange( const ::rtl::OUString & rRange, const Reference< chart2::XChartDocument > & xDoc )
+OUString lcl_ConvertRange( const ::rtl::OUString & rRange, const Reference< chart2::data::XDataProvider >& xDataProvider )
 {
     OUString aResult = rRange;
-    Reference< chart2::data::XRangeXMLConversion > xConversion(
-        SchXMLImportHelper::GetDataProvider( xDoc ), uno::UNO_QUERY );
+    Reference< chart2::data::XRangeXMLConversion > xConversion( xDataProvider, uno::UNO_QUERY );
     if( xConversion.is())
         aResult = xConversion->convertRangeFromXML( rRange );
     return aResult;
@@ -234,6 +233,54 @@ void lcl_insertErrorBarLSequencesToMap(
     }
 }
 
+Reference< chart2::data::XLabeledDataSequence > lcl_createAndAddSequenceToSeries( const rtl::OUString& rRole
+        , const rtl::OUString& rRange
+        , const Reference< chart2::data::XDataProvider >& xDataProvider
+        , const Reference< chart2::XDataSeries >& xSeries )
+{
+    Reference< chart2::data::XLabeledDataSequence > xLabeledSeq;
+
+    Reference< chart2::data::XDataSource > xSeriesSource( xSeries,uno::UNO_QUERY );
+    Reference< chart2::data::XDataSink > xSeriesSink( xSeries, uno::UNO_QUERY );
+
+    if( !(rRange.getLength() && xDataProvider.is() && xSeriesSource.is() && xSeriesSink.is()) )
+        return xLabeledSeq;
+
+    // create a new sequence
+    xLabeledSeq = SchXMLTools::GetNewLabeledDataSequence();
+
+    // set values at the new sequence
+    Reference< chart2::data::XDataSequence > xSeq;
+    try
+    {
+        xSeq.set( xDataProvider->createDataSequenceByRangeRepresentation( lcl_ConvertRange( rRange, xDataProvider )));
+        SchXMLTools::setXMLRangePropertyAtDataSequence( xSeq, rRange );
+    }
+    catch( const lang::IllegalArgumentException & ex )
+    {
+        (void)ex; // avoid warning for pro build
+        OSL_ENSURE( false, ::rtl::OUStringToOString(
+                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IllegalArgumentException caught, Message: " )) +
+                        ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
+    }
+
+    Reference< beans::XPropertySet > xSeqProp( xSeq, uno::UNO_QUERY );
+    if( xSeqProp.is())
+        xSeqProp->setPropertyValue(OUString::createFromAscii("Role"), uno::makeAny( rRole));
+    xLabeledSeq->setValues( xSeq );
+
+    // add new sequence to data series / push to front to have the correct sequence order if charttype is changed afterwards
+    Sequence< Reference< chart2::data::XLabeledDataSequence > > aOldSeq( xSeriesSource->getDataSequences());
+    sal_Int32 nOldCount = aOldSeq.getLength();
+    Sequence< Reference< chart2::data::XLabeledDataSequence > > aNewSeq( nOldCount + 1 );
+    aNewSeq[0]=xLabeledSeq;
+    for( sal_Int32 nN=0; nN<nOldCount; nN++ )
+        aNewSeq[nN+1] = aOldSeq[nN];
+    xSeriesSink->setData( aNewSeq );
+
+    return xLabeledSeq;
+}
+
 } // anonymous namespace
 
 // ================================================================================
@@ -245,15 +292,10 @@ SchXMLSeries2Context::SchXMLSeries2Context(
     std::vector< SchXMLAxis >& rAxes,
     ::std::list< DataRowPointStyle >& rStyleList,
     sal_Int32 nSeriesIndex,
-    sal_Int32& rMaxSeriesLength,
-    sal_Int32& rNumOfLines,
-    sal_Bool&  rStockHasVolume,
-    ::rtl::OUString& rFirstFirstDomainAddress,
-    sal_Int32& rFirstFirstDomainIndex,
-    sal_Bool&  rAllRangeAddressesAvailable,
+    sal_Bool bStockHasVolume,
+    GlobalSeriesImportInfo& rGlobalSeriesImportInfo,
     const OUString & aGlobalChartTypeName,
     tSchXMLLSequencesPerIndex & rLSequencesPerIndex,
-    sal_Int32& rCurrentDataIndex,
     bool& rGlobalChartTypeUsedBySeries,
     const awt::Size & rChartSize ) :
         SvXMLImportContext( rImport, XML_NAMESPACE_CHART, rLocalName ),
@@ -264,18 +306,13 @@ SchXMLSeries2Context::SchXMLSeries2Context(
         m_xSeries(0),
         mnSeriesIndex( nSeriesIndex ),
         mnDataPointIndex( 0 ),
-        mrMaxSeriesLength( rMaxSeriesLength ),
-        mrNumOfLines( rNumOfLines ),
-        mrStockHasVolume( rStockHasVolume ),
-        mrFirstFirstDomainAddress(rFirstFirstDomainAddress),
-        mrFirstFirstDomainIndex(rFirstFirstDomainIndex),
-        mrAllRangeAddressesAvailable( rAllRangeAddressesAvailable ),
+        m_bStockHasVolume( bStockHasVolume ),
+        m_rGlobalSeriesImportInfo(rGlobalSeriesImportInfo),
         mpAttachedAxis( NULL ),
         maGlobalChartTypeName( aGlobalChartTypeName ),
         maSeriesChartTypeName( aGlobalChartTypeName ),
         m_bHasDomainContext(false),
         mrLSequencesPerIndex( rLSequencesPerIndex ),
-        mrCurrentDataIndex( rCurrentDataIndex ),
         mrGlobalChartTypeUsedBySeries( rGlobalChartTypeUsedBySeries ),
         mbSymbolSizeIsMissingInFile(false),
         maChartSize( rChartSize )
@@ -369,8 +406,8 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
         OSL_ASSERT( mxNewDoc.is());
         if( mxNewDoc.is())
         {
-            if( mrAllRangeAddressesAvailable && ! bHasRange )
-                mrAllRangeAddressesAvailable = sal_False;
+            if( m_rGlobalSeriesImportInfo.rbAllRangeAddressesAvailable && ! bHasRange )
+                m_rGlobalSeriesImportInfo.rbAllRangeAddressesAvailable = sal_False;
 
             Reference< chart2::data::XDataProvider > xDataProvider( mrImportHelper.GetDataProvider( mxNewDoc ));
             if( xDataProvider.is())
@@ -383,7 +420,7 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
                 else
                 {
                     if( bIsCandleStick
-                        && mrStockHasVolume
+                        && m_bStockHasVolume
                         && mnSeriesIndex == 0 )
                     {
                         maSeriesChartTypeName = OUString::createFromAscii( "com.sun.star.chart2.ColumnChartType" );
@@ -424,7 +461,7 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
                 if( bHasRange )
                     try
                     {
-                        xSeq.set( xDataProvider->createDataSequenceByRangeRepresentation( lcl_ConvertRange( m_aSeriesRange, mxNewDoc )));
+                        xSeq.set( xDataProvider->createDataSequenceByRangeRepresentation( lcl_ConvertRange( m_aSeriesRange, xDataProvider )));
                         SchXMLTools::setXMLRangePropertyAtDataSequence( xSeq, m_aSeriesRange );
                     }
                     catch( const lang::IllegalArgumentException & ex )
@@ -438,16 +475,17 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
                 Reference< beans::XPropertySet > xSeqProp( xSeq, uno::UNO_QUERY );
                 if( xSeqProp.is())
                 {
-                    //@todo: set correct role ("main role" dependent on chart type)
-                    xSeqProp->setPropertyValue(OUString::createFromAscii("Role"),
-                                               uno::makeAny( OUString::createFromAscii("values-y")));
+                    OUString aMainRole( OUString::createFromAscii("values-y") );
+                    if( maSeriesChartTypeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.chart2.BubbleChartType") ) )
+                        aMainRole = OUString::createFromAscii("values-size");
+                    xSeqProp->setPropertyValue(OUString::createFromAscii("Role"), uno::makeAny( aMainRole ));
                 }
                 xLabeledSeq->setValues( xSeq );
 
                 // register for setting local data if external data provider is not present
                 maPostponedSequences.insert(
                     tSchXMLLSequencesPerIndex::value_type(
-                        tSchXMLIndexWithPart( mrCurrentDataIndex, SCH_XML_PART_VALUES ), xLabeledSeq ));
+                        tSchXMLIndexWithPart( m_rGlobalSeriesImportInfo.nCurrentDataIndex, SCH_XML_PART_VALUES ), xLabeledSeq ));
 
                 // label
                 if( bHasLabelRange )
@@ -456,7 +494,7 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
                     {
                         Reference< chart2::data::XDataSequence > xLabelSequence(
                             xDataProvider->createDataSequenceByRangeRepresentation(
-                                lcl_ConvertRange( m_aSeriesLabelRange, mxNewDoc )));
+                                lcl_ConvertRange( m_aSeriesLabelRange, xDataProvider )));
                         xLabeledSeq->setLabel( xLabelSequence );
                         SchXMLTools::setXMLRangePropertyAtDataSequence( xLabelSequence, m_aSeriesLabelRange );
                     }
@@ -475,7 +513,7 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
                 // used for the internal data.
                 maPostponedSequences.insert(
                     tSchXMLLSequencesPerIndex::value_type(
-                        tSchXMLIndexWithPart( mrCurrentDataIndex, SCH_XML_PART_LABEL ), xLabeledSeq ));
+                        tSchXMLIndexWithPart( m_rGlobalSeriesImportInfo.nCurrentDataIndex, SCH_XML_PART_LABEL ), xLabeledSeq ));
 
 
                 Sequence< Reference< chart2::data::XLabeledDataSequence > > aSeq( &xLabeledSeq, 1 );
@@ -519,47 +557,91 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
     }
 }
 
+struct DomainInfo
+{
+    DomainInfo( const rtl::OUString& rRole, const rtl::OUString& rRange, sal_Int32 nIndex )
+        : aRole(rRole), aRange(rRange), nIndexForLocalData(nIndex)
+    {}
+
+    rtl::OUString aRole;
+    rtl::OUString aRange;
+    sal_Int32 nIndexForLocalData;
+};
+
 void SchXMLSeries2Context::EndElement()
 {
     // special handling for different chart types.  This is necessary as the
     // roles are not yet saved in the file format
-    OUString aXValuesRange( mrFirstFirstDomainAddress );
-    sal_Int32 nCurrentDataIndexBeforeDomains = mrCurrentDataIndex;
-    sal_Int32 nDomainOffset = 0;
-    bool bCreateXValues = false;
-    bool bHasOwnDomains = false;
+    sal_Int32 nDomainCount = maDomainAddresses.size();
+    bool bIsScatterChart = maSeriesChartTypeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.chart2.ScatterChartType"));
+    bool bIsBubbleChart = maSeriesChartTypeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.chart2.BubbleChartType"));
     bool bDeleteSeries = false;
-    if( maDomainAddresses.size() == 1 ||
-        maSeriesChartTypeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.chart2.ScatterChartType")) )
+    std::vector< DomainInfo > aDomainInfos;
+
+    //different handling for different chart types necessary
+    if( bIsScatterChart || ( nDomainCount==1 && !bIsBubbleChart ) )
     {
-        bCreateXValues = true;
+        DomainInfo aDomainInfo( OUString::createFromAscii("values-x"), m_rGlobalSeriesImportInfo.aFirstFirstDomainAddress, m_rGlobalSeriesImportInfo.nFirstFirstDomainIndex ) ;
+        bool bCreateXValues = true;
         if( !maDomainAddresses.empty() )
         {
-            aXValuesRange = maDomainAddresses.front();
-            bHasOwnDomains = true;
-            if(!mrFirstFirstDomainAddress.getLength())
+            if( !m_rGlobalSeriesImportInfo.aFirstFirstDomainAddress.getLength() )
             {
-                mrFirstFirstDomainAddress=aXValuesRange;
-                mrFirstFirstDomainIndex=mrCurrentDataIndex;
+                m_rGlobalSeriesImportInfo.aFirstFirstDomainAddress = maDomainAddresses.front();
+                m_rGlobalSeriesImportInfo.nFirstFirstDomainIndex = m_rGlobalSeriesImportInfo.nCurrentDataIndex;
             }
+            aDomainInfo.aRange = maDomainAddresses.front();
+            aDomainInfo.nIndexForLocalData = m_rGlobalSeriesImportInfo.nCurrentDataIndex;
+            m_rGlobalSeriesImportInfo.nCurrentDataIndex++;
         }
-        else if( !mrFirstFirstDomainAddress.getLength() && !m_bHasDomainContext && mnSeriesIndex==0 )
+        else if( !m_rGlobalSeriesImportInfo.aFirstFirstDomainAddress.getLength() && !m_bHasDomainContext && mnSeriesIndex==0 )
         {
             if( SchXMLTools::isDocumentGeneratedWithOpenOfficeOlderThan2_3( GetImport().GetModel() ) ) //wrong old chart files:
             {
                 //for xy charts the first series needs to have a domain
                 //if this by error iss not the case the first series is taken s x values
                 //needed for wrong files created while having an addin (e.g. BoxPlot)
-                mrFirstFirstDomainAddress = m_aSeriesRange;
-                mrFirstFirstDomainIndex = mrCurrentDataIndex;
+                m_rGlobalSeriesImportInfo.aFirstFirstDomainAddress = m_aSeriesRange;
+                m_rGlobalSeriesImportInfo.nFirstFirstDomainIndex = m_rGlobalSeriesImportInfo.nCurrentDataIndex++;
                 bDeleteSeries = true;
                 bCreateXValues = false;//they will be created for the next series
             }
         }
+        if( bCreateXValues )
+            aDomainInfos.push_back( aDomainInfo );
     }
-
-    if( mrMaxSeriesLength < mnDataPointIndex )
-        mrMaxSeriesLength = mnDataPointIndex;
+    else if( bIsBubbleChart )
+    {
+        if( nDomainCount>1 )
+        {
+            DomainInfo aDomainInfo( OUString::createFromAscii("values-x"), maDomainAddresses[1], m_rGlobalSeriesImportInfo.nCurrentDataIndex ) ;
+            if( !m_rGlobalSeriesImportInfo.aFirstSecondDomainAddress.getLength() )
+            {
+                //for bubble chart the second domain contains the x values which should become an index smaller than y values for own data table
+                //->so second first
+                m_rGlobalSeriesImportInfo.aFirstSecondDomainAddress = maDomainAddresses[1];
+                m_rGlobalSeriesImportInfo.nFirstSecondDomainIndex = m_rGlobalSeriesImportInfo.nCurrentDataIndex;
+            }
+            aDomainInfos.push_back( aDomainInfo );
+            m_rGlobalSeriesImportInfo.nCurrentDataIndex++;
+        }
+        else if( m_rGlobalSeriesImportInfo.aFirstSecondDomainAddress.getLength() )
+        {
+            DomainInfo aDomainInfo( OUString::createFromAscii("values-x"), m_rGlobalSeriesImportInfo.aFirstSecondDomainAddress, m_rGlobalSeriesImportInfo.nFirstSecondDomainIndex ) ;
+            aDomainInfos.push_back( aDomainInfo );
+        }
+        if( nDomainCount>0)
+        {
+            DomainInfo aDomainInfo( OUString::createFromAscii("values-y"), maDomainAddresses.front(), m_rGlobalSeriesImportInfo.nCurrentDataIndex ) ;
+            if( !m_rGlobalSeriesImportInfo.aFirstFirstDomainAddress.getLength() )
+            {
+                m_rGlobalSeriesImportInfo.aFirstFirstDomainAddress = maDomainAddresses.front();
+                m_rGlobalSeriesImportInfo.nFirstFirstDomainIndex = m_rGlobalSeriesImportInfo.nCurrentDataIndex;
+            }
+            aDomainInfos.push_back( aDomainInfo );
+            m_rGlobalSeriesImportInfo.nCurrentDataIndex++;
+        }
+    }
 
     if( bDeleteSeries )
     {
@@ -583,71 +665,19 @@ void SchXMLSeries2Context::EndElement()
         }
     }
 
-    if( bCreateXValues && aXValuesRange.getLength())
+    Reference< chart2::data::XDataProvider > xDataProvider( mrImportHelper.GetDataProvider( mxNewDoc ));
+    for( std::vector< DomainInfo >::reverse_iterator aIt( aDomainInfos.rbegin() ); aIt!= aDomainInfos.rend(); ++aIt )
     {
-        Reference< chart2::data::XDataProvider > xDataProvider( mrImportHelper.GetDataProvider( mxNewDoc ));
-        if( !(m_xSeries.is() && xDataProvider.is()))
-            return;
-
-        Reference< chart2::data::XDataSource > xSeriesSource( m_xSeries,uno::UNO_QUERY );
-        if( ! xSeriesSource.is())
-            return;
-
-        // assume we have a scatter chart
-
-        // create new sequence for x-values
-        Reference< chart2::data::XLabeledDataSequence > xLabeledSeq(
-            SchXMLTools::GetNewLabeledDataSequence());
-
-        // values
-        Reference< chart2::data::XDataSequence > xSeq;
-        try
+        DomainInfo aDomainInfo( *aIt );
+        Reference< chart2::data::XLabeledDataSequence > xLabeledSeq =
+            lcl_createAndAddSequenceToSeries( aDomainInfo.aRole, aDomainInfo.aRange, xDataProvider, m_xSeries );
+        if( xLabeledSeq.is() )
         {
-            xSeq.set( xDataProvider->createDataSequenceByRangeRepresentation( lcl_ConvertRange( aXValuesRange, mxNewDoc )));
-            SchXMLTools::setXMLRangePropertyAtDataSequence( xSeq, aXValuesRange );
-        }
-        catch( const lang::IllegalArgumentException & ex )
-        {
-            (void)ex; // avoid warning for pro build
-            OSL_ENSURE( false, ::rtl::OUStringToOString(
-                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IllegalArgumentException caught, Message: " )) +
-                            ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
-        }
-
-        Reference< beans::XPropertySet > xSeqProp( xSeq, uno::UNO_QUERY );
-        if( xSeqProp.is())
-        {
-            xSeqProp->setPropertyValue(OUString::createFromAscii("Role"),
-                                       uno::makeAny( OUString::createFromAscii("values-x")));
-        }
-        xLabeledSeq->setValues( xSeq );
-
-        // register for setting local data if external data provider is not present
-        if( bHasOwnDomains )
-        {
+            // register for setting local data if external data provider is not present
             mrLSequencesPerIndex.insert(
                 tSchXMLLSequencesPerIndex::value_type(
-                    tSchXMLIndexWithPart( mrCurrentDataIndex, SCH_XML_PART_VALUES ), xLabeledSeq ));
-            ++mrCurrentDataIndex;
-
-            nDomainOffset = mrCurrentDataIndex - nCurrentDataIndexBeforeDomains;
+                    tSchXMLIndexWithPart( aDomainInfo.nIndexForLocalData, SCH_XML_PART_VALUES ), xLabeledSeq ));
         }
-        else
-        {
-            mrLSequencesPerIndex.insert(
-                tSchXMLLSequencesPerIndex::value_type(
-                    tSchXMLIndexWithPart( mrFirstFirstDomainIndex, SCH_XML_PART_VALUES ), xLabeledSeq ));
-        }
-
-        // @todo? export and import labels for domains?
-
-        // add new sequence to data series
-        Sequence< Reference< chart2::data::XLabeledDataSequence > > aSeq( xSeriesSource->getDataSequences());
-        aSeq.realloc( aSeq.getLength() + 1 );
-        aSeq[aSeq.getLength()-1] = xLabeledSeq;
-        Reference< chart2::data::XDataSink > xSink( xSeriesSource, uno::UNO_QUERY );
-        if( xSink.is())
-            xSink->setData( aSeq );
     }
 
     if( !bDeleteSeries )
@@ -655,18 +685,14 @@ void SchXMLSeries2Context::EndElement()
         for( tSchXMLLSequencesPerIndex::const_iterator aIt( maPostponedSequences.begin());
             aIt != maPostponedSequences.end(); ++aIt )
         {
-            sal_Int32 nNewIndex = aIt->first.first + nDomainOffset;
+            sal_Int32 nNewIndex = aIt->first.first + nDomainCount;
             mrLSequencesPerIndex.insert(
                 tSchXMLLSequencesPerIndex::value_type(
                     tSchXMLIndexWithPart( nNewIndex, aIt->first.second ), aIt->second ));
         }
+        m_rGlobalSeriesImportInfo.nCurrentDataIndex++;
     }
     maPostponedSequences.clear();
-
-    if( bHasOwnDomains )
-        mrCurrentDataIndex += nDomainOffset;
-    else
-        ++mrCurrentDataIndex;
 }
 
 SvXMLImportContext* SchXMLSeries2Context::CreateChildContext(
