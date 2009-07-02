@@ -1,0 +1,108 @@
+/*************************************************************************
+* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+*
+* Copyright 2009 by Sun Microsystems, Inc.
+*
+* OpenOffice.org - a multi-platform office productivity suite
+*
+* This file is part of OpenOffice.org.
+*
+* OpenOffice.org is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License version 3
+* only, as published by the Free Software Foundation.
+*
+* OpenOffice.org is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU Lesser General Public License version 3 for more details
+* (a copy is included in the LICENSE file that accompanied this code).
+*
+* You should have received a copy of the GNU Lesser General Public License
+* version 3 along with OpenOffice.org.  If not, see
+* <http://www.openoffice.org/license.html>
+* for a copy of the LGPLv3 License.
+************************************************************************/
+
+#ifndef __com_sun_star_container_XEnumerableMap_idl__
+#define __com_sun_star_container_XEnumerableMap_idl__
+
+#include <com/sun/star/container/XMap.idl>
+#include <com/sun/star/container/XEnumeration.idl>
+#include <com/sun/star/lang/NoSupportException.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module container {
+
+//=============================================================================
+
+/** extends <type>XMap</type> with enumeration capabilities.
+
+    <p>No assumption should be made about the ordering of the elements returned by the various enumerators.
+    In particular, you cannot assume the elements are returned in the same order as they were inserted. Also,
+    you should not expect the <code>XMap</code> implementation to make use of a possibly existing strict ordering
+    defined on the domain of all possible key values.</p>
+
+    <p>You can create enumerators for the keys of the map, its values, and its key-value pairs.</p>
+
+    <p>In all cases, you can create an <em>isolated</em> enumerator, which works on a copy of the
+    map's content. Such an iterator is not affected by changes done to the map after creation of
+    the enumerator.</p>
+
+    <p>On the contrary, an enumerator which is <em>non-isolated</em> works directly on the map data.
+    This is less expensive than an <em>isolated</em> enumerator, but means that changes to the map while
+    an enumeration is running potentially invalidate your enumerator. The concrete behavior in this
+    case is undefined, it's up to the service implementing the <code>XEnumerableMap</code> interface
+    to specify it in more detail.</p>
+
+    <p>Implementations of this interface might decide to support only <em>isolated</em> enumerators, or
+    only <em>non-isolated</em> enumerators. Again, it's up to the service to specify this. Requesting an
+    enumerator type which is not supported will generally result in an <type scope="com::sun::star::lang">NoSupportException</type>
+    being thrown.</p>
+ */
+interface XEnumerableMap : XMap
+{
+    /** creates a enumerator for the keys of the map
+
+        @param Isolated
+            controls whether the newly create enumerator should be isolated from the map.
+
+        @throws ::com::sun::star::lang::NoSupportException
+            if the specified enumerator method is not supported by the implementation.
+    */
+    XEnumeration createKeyEnumeration( [in] boolean Isolated )
+        raises ( ::com::sun::star::lang::NoSupportException );
+
+    /** creates a enumerator for the values of the map
+
+        @param Isolated
+            controls whether the newly create enumerator should be isolated from the map.
+
+        @throws ::com::sun::star::lang::NoSupportException
+            if the specified enumerator method is not supported by the implementation.
+    */
+    XEnumeration createValueEnumeration( [in] boolean Isolated )
+        raises ( ::com::sun::star::lang::NoSupportException );
+
+    /** creates a enumerator for the key-value pairs of the map
+
+        <p>The elements returned by the enumerator are instances of <type scope="com::sun::star::beans">Pair</type>,
+        holding the key-value-pairs which are part of the map.</p>
+
+        @param Isolated
+            controls whether the newly create enumerator should be isolated from the map.
+
+        @throws ::com::sun::star::lang::NoSupportException
+            if the specified enumerator method is not supported by the implementation.
+    */
+    XEnumeration createElementEnumeration( [in] boolean Isolated )
+        raises ( ::com::sun::star::lang::NoSupportException );
+};
+
+//=============================================================================
+
+}; }; }; };
+
+//=============================================================================
+
+#endif

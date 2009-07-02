@@ -40,17 +40,20 @@ PACKAGE := com$/sun$/star$/logging
 IDLFILES = \
     ConsoleHandler.idl\
     CsvLogFormatter.idl\
+    DocumentIOLogRing.idl\
     FileHandler.idl\
     LoggerPool.idl\
     LogLevel.idl\
     LogRecord.idl\
     PlainTextFormatter.idl\
+    SimpleLogRing.idl\
     XConsoleHandler.idl\
     XCsvLogFormatter.idl\
     XLogFormatter.idl\
     XLogger.idl\
     XLoggerPool.idl\
-    XLogHandler.idl
+    XLogHandler.idl\
+    XSimpleLogRing.idl
 
 .INCLUDE: target.mk
 .INCLUDE: $(PRJ)$/util$/target.pmk
