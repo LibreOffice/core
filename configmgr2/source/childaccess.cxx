@@ -30,6 +30,8 @@
 #include "precompiled_configmgr.hxx"
 #include "sal/config.h"
 
+#include <vector>
+
 #include "com/sun/star/lang/NoSupportException.hpp"
 #include "com/sun/star/uno/Any.hxx"
 #include "com/sun/star/uno/Reference.hxx"
@@ -42,6 +44,8 @@
 #include "osl/interlck.h"
 #include "osl/mutex.hxx"
 #include "rtl/ref.hxx"
+#include "rtl/string.h"
+#include "rtl/ustrbuf.hxx"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 #include "rtl/uuid.h"
@@ -110,6 +114,9 @@ rtl::Reference< Access > ChildAccess::getParentAccess() {
 }
 
 rtl::OUString ChildAccess::getName() throw (css::uno::RuntimeException) {
+    OSL_ASSERT(thisIs(IS_ANY));
+    osl::MutexGuard g(lock);
+    checkLocalizedPropertyAccess();
     return name_;
 }
 
@@ -118,6 +125,7 @@ css::uno::Reference< css::uno::XInterface > ChildAccess::getParent()
 {
     OSL_ASSERT(thisIs(IS_ANY));
     osl::MutexGuard g(lock);
+    checkLocalizedPropertyAccess();
     return static_cast< cppu::OWeakObject * >(parent_.get());
 }
 
@@ -125,6 +133,8 @@ void ChildAccess::setParent(css::uno::Reference< css::uno::XInterface > const &)
     throw (css::lang::NoSupportException, css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_ANY));
+    osl::MutexGuard g(lock);
+    checkLocalizedPropertyAccess();
     throw css::lang::NoSupportException(
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("setParent")),
         static_cast< cppu::OWeakObject * >(this));
@@ -134,6 +144,9 @@ sal_Int64 ChildAccess::getSomething(
     css::uno::Sequence< sal_Int8 > const & aIdentifier)
     throw (css::uno::RuntimeException)
 {
+    OSL_ASSERT(thisIs(IS_ANY));
+    osl::MutexGuard g(lock);
+    checkLocalizedPropertyAccess();
     return aIdentifier == getTunnelId()
         ? reinterpret_cast< sal_Int64 >(this) : 0;
 }
@@ -278,6 +291,66 @@ ChildAccess::~ChildAccess() {
     if (parent_.is()) {
         parent_->releaseChild(name_);
     }
+}
+
+rtl::OUString ChildAccess::getRelativePath() {
+    rtl::OUString templateName;
+    if (dynamic_cast< SetNode * >(getParentNode().get()) != 0) {
+        rtl::Reference< Node > node(getNode());
+        if (GroupNode * group = dynamic_cast< GroupNode * >(node.get())) {
+            templateName = group->getTemplateName();
+        } else if (SetNode * set = dynamic_cast< SetNode * >(node.get())) {
+            templateName = set->getTemplateName();
+        } else {
+            OSL_ASSERT(false);
+            throw css::uno::RuntimeException(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM("this cannot happen")),
+                static_cast< cppu::OWeakObject * >(this));
+        }
+    } else if (dynamic_cast< LocalizedPropertyValueNode * >(getNode().get()) !=
+               0)
+    {
+        templateName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*"));
+    } else {
+        return name_;
+    }
+    rtl::OUStringBuffer buf(templateName);
+        //TODO: verify template name contains no bad chars?
+    buf.appendAscii(RTL_CONSTASCII_STRINGPARAM("['"));
+    for (sal_Int32 i = 0; i < name_.getLength(); ++i) {
+        sal_Unicode c = name_[i];
+        switch (c) {
+        case '&':
+            buf.appendAscii(RTL_CONSTASCII_STRINGPARAM("&amp;"));
+            break;
+        case '"':
+            buf.appendAscii(RTL_CONSTASCII_STRINGPARAM("&quot;"));
+            break;
+        case '\'':
+            buf.appendAscii(RTL_CONSTASCII_STRINGPARAM("&apos;"));
+            break;
+        default:
+            buf.append(c);
+            break;
+        }
+    }
+    buf.appendAscii(RTL_CONSTASCII_STRINGPARAM("']"));
+    return buf.makeStringAndClear();
+}
+
+void ChildAccess::addSupportedServiceNames(
+    std::vector< rtl::OUString > * services)
+{
+    OSL_ASSERT(services != 0);
+    services->push_back(
+        dynamic_cast< GroupNode * >(getParentNode().get()) == 0
+        ? rtl::OUString(
+            RTL_CONSTASCII_USTRINGPARAM(
+                "com.sun.star.configuration.SetElement"))
+        : rtl::OUString(
+            RTL_CONSTASCII_USTRINGPARAM(
+                "com.sun.star.configuration.GroupElement")));
 }
 
 }

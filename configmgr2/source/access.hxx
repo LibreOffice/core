@@ -54,6 +54,7 @@
 #include "com/sun/star/lang/IllegalArgumentException.hpp"
 #include "com/sun/star/lang/NoSupportException.hpp"
 #include "com/sun/star/lang/WrappedTargetException.hpp"
+#include "com/sun/star/lang/XServiceInfo.hpp"
 #include "com/sun/star/lang/XSingleServiceFactory.hpp"
 #include "com/sun/star/uno/Exception.hpp"
 #include "com/sun/star/uno/Reference.hxx"
@@ -65,9 +66,9 @@
 
 #include "type.hxx"
 
-#if !defined INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_13
-#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_13
-#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 13
+#if !defined INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_14
+#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_14
+#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 14
 #include "comphelper/implbase_var.hxx"
 #undef COMPHELPER_IMPLBASE_INTERFACE_NUMBER
 #endif
@@ -102,7 +103,8 @@ class NodeMap;
 class RootAccess;
 
 typedef
-    comphelper::WeakComponentImplHelper13<
+    comphelper::WeakComponentImplHelper14<
+        com::sun::star::lang::XServiceInfo,
         com::sun::star::container::XHierarchicalNameAccess,
         com::sun::star::container::XContainer,
         com::sun::star::beans::XExactName,
@@ -135,6 +137,17 @@ protected:
 
     virtual rtl::Reference< Access > getParentAccess() = 0;
 
+    virtual rtl::OUString getRelativePath() = 0;
+
+    virtual void addSupportedServiceNames(
+        std::vector< rtl::OUString > * services) = 0;
+
+    virtual com::sun::star::uno::Any SAL_CALL queryInterface(
+        com::sun::star::uno::Type const & aType)
+        throw (com::sun::star::uno::RuntimeException);
+
+    void checkLocalizedPropertyAccess();
+
     rtl::Reference< Node > getParentNode();
 
     rtl::Reference< ChildAccess > getChild(rtl::OUString const & name);
@@ -161,6 +174,15 @@ public: //TODO
     HardChildMap modifiedChildren_;
 
 private:
+    virtual rtl::OUString SAL_CALL getImplementationName()
+        throw (com::sun::star::uno::RuntimeException);
+
+    virtual sal_Bool SAL_CALL supportsService(rtl::OUString const & ServiceName)
+        throw (com::sun::star::uno::RuntimeException);
+
+    virtual com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL
+    getSupportedServiceNames() throw (com::sun::star::uno::RuntimeException);
+
     virtual com::sun::star::uno::Type SAL_CALL getElementType()
         throw (com::sun::star::uno::RuntimeException);
 
@@ -224,9 +246,6 @@ private:
             com::sun::star::lang::IllegalArgumentException,
             com::sun::star::lang::NoSupportException,
             com::sun::star::uno::RuntimeException);
-
-    virtual rtl::OUString SAL_CALL getName()
-        throw (com::sun::star::uno::RuntimeException) = 0;
 
     virtual void SAL_CALL setName(rtl::OUString const & aName)
         throw (com::sun::star::uno::RuntimeException);

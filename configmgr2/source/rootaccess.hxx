@@ -44,19 +44,25 @@
 
 #include "access.hxx"
 
-namespace com { namespace sun { namespace star { namespace util {
-    class XChangesListener;
-} } } }
+namespace com { namespace sun { namespace star {
+    namespace uno {
+        class Any;
+        class Type;
+    }
+    namespace util { class XChangesListener; }
+} } }
 
 namespace configmgr {
 
 class Node;
 
-class RootAccess:
-    public cppu::ImplInheritanceHelper2<
+typedef
+    cppu::ImplInheritanceHelper2<
         Access, com::sun::star::util::XChangesNotifier,
-        com::sun::star::util::XChangesBatch  >
-{
+        com::sun::star::util::XChangesBatch >
+    RootAccessBase;
+
+class RootAccess: public RootAccessBase {
 public:
     RootAccess(
         rtl::OUString const & path, rtl::OUString const & locale, bool update);
@@ -73,6 +79,15 @@ private:
     virtual rtl::Reference< RootAccess > getRootAccess();
 
     virtual rtl::Reference< Access > getParentAccess();
+
+    virtual rtl::OUString getRelativePath();
+
+    virtual void addSupportedServiceNames(
+        std::vector< rtl::OUString > * services);
+
+    virtual com::sun::star::uno::Any SAL_CALL queryInterface(
+        com::sun::star::uno::Type const & aType)
+        throw (com::sun::star::uno::RuntimeException);
 
     virtual rtl::OUString SAL_CALL getName()
         throw (com::sun::star::uno::RuntimeException);

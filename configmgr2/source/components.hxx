@@ -61,7 +61,8 @@ public:
         rtl::OUString const & name, NodeMap * map);
 
     rtl::Reference< Node > resolvePath(
-        rtl::OUString const & path, rtl::OUString * finalSegment);
+        rtl::OUString const & path, rtl::OUString * firstSegment,
+        rtl::OUString * lastSegment);
 
     rtl::Reference< Node > getTemplate(rtl::OUString const & fullName) const;
 
@@ -73,6 +74,8 @@ private:
     Components();
 
     ~Components();
+
+    void parseModificationLayer(rtl::OUString const & url);
 
     TemplateMap templates_;
 

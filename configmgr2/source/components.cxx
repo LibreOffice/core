@@ -126,6 +126,23 @@ XmlString & XmlString::operator =(xmlChar * theStr) {
     return *this;
 }
 
+struct XmlParserContext: private boost::noncopyable {
+    xmlParserCtxtPtr context;
+
+    XmlParserContext();
+
+    ~XmlParserContext() { xmlFreeParserCtxt(context); }
+};
+
+XmlParserContext::XmlParserContext(): context(xmlNewParserCtxt()) {
+    if (context == 0) {
+        throw css::uno::RuntimeException(
+            rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM("xmlNewParserCtxt failed")),
+            css::uno::Reference< css::uno::XInterface >());
+    }
+}
+
 struct XmlDoc: private boost::noncopyable {
     xmlDocPtr doc;
 
@@ -197,11 +214,14 @@ xmlDocPtr parseXmlFile(rtl::OUString const & url) {
              path1),
             css::uno::Reference< css::uno::XInterface >());
     }
-    xmlDocPtr doc(xmlParseFile(path2.getStr()));
+    XmlParserContext context;
+    xmlDocPtr doc(
+        xmlCtxtReadFile(context.context, path2.getStr(), 0, XML_PARSE_NOERROR));
+        //TODO: pass (external) file URL instead of filepath?
     if (doc == 0) {
         throw css::uno::RuntimeException(
             (rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM("xmlParseFile failed for ")) +
+                RTL_CONSTASCII_USTRINGPARAM("xmlCtxtReadFile failed for ")) +
              url),
             css::uno::Reference< css::uno::XInterface >());
     }
@@ -1596,9 +1616,9 @@ NodeMap::iterator Components::resolveNode(
 }
 
 rtl::Reference< Node > Components::resolvePath(
-    rtl::OUString const & path, rtl::OUString * finalSegment)
+    rtl::OUString const & path, rtl::OUString * firstSegment,
+    rtl::OUString * lastSegment)
 {
-    OSL_ASSERT(finalSegment != 0);
     if (path.getLength() == 0 || path[0] != '/') {
         throw css::uno::RuntimeException(
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bad path ")) + path, 0);
@@ -1611,7 +1631,10 @@ rtl::Reference< Node > Components::resolvePath(
         throw css::uno::RuntimeException(
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bad path ")) + path, 0);
     }
-    NodeMap::iterator i(resolveNode(path.copy(1, n - 1), &components_));
+    if (firstSegment != 0) {
+        *firstSegment = seg;
+    }
+    NodeMap::iterator i(resolveNode(seg, &components_));
     rtl::Reference< Node > p(i == components_.end() ? 0 : i->second);
     while (p != 0 && n != path.getLength()) {
         sal_Int32 n1 = findFirst(path, '/', n + 1);
@@ -1667,7 +1690,9 @@ rtl::Reference< Node > Components::resolvePath(
         }
         n = n1;
     }
-    *finalSegment = seg;
+    if (p != 0 && lastSegment != 0) {
+        *lastSegment = seg;
+    }
     return p;
 }
 
@@ -1740,8 +1765,78 @@ Components::Components() {
                     "${$BRAND_BASE_DIR/program/bootstraprc:UserInstallation}/"
                     "user/registry"))),
         &templates_, &components_);
+    parseModificationLayer(
+        expand(
+            rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "${$BRAND_BASE_DIR/program/bootstraprc:UserInstallation}/"
+                    "user/registrymodifications"))));
 }
 
 Components::~Components() {}
+
+void Components::parseModificationLayer(rtl::OUString const & url) {
+    osl::DirectoryItem di;
+    switch (osl::DirectoryItem::get(url, di)) {
+    case osl::FileBase::E_None:
+        break;
+    case osl::FileBase::E_NOENT:
+        return;
+    default:
+        throw css::uno::RuntimeException(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("cannot stat ")) + url,
+            css::uno::Reference< css::uno::XInterface >());
+    }
+    XmlDoc doc(parseXmlFile(url)); //TODO: atomic check for existence
+    xmlNodePtr root(xmlDocGetRootElement(doc.doc));
+    if (root == 0) {
+        throw css::uno::RuntimeException(
+            (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("no root element in ")) +
+             fromXmlString(doc.doc->URL)),
+            css::uno::Reference< css::uno::XInterface >());
+    }
+    if (!xmlStrEqual(root->name, xmlString("modifications")) || root->ns != 0) {
+        throw css::uno::RuntimeException(
+            (rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "non modifications root element in ")) +
+             fromXmlString(doc.doc->URL)),
+            css::uno::Reference< css::uno::XInterface >());
+    }
+    for (xmlNodePtr p(skipBlank(root->xmlChildrenNode)); p != 0;
+         p = skipBlank(p->next))
+    {
+        if (xmlStrEqual(p->name, xmlString("set")) && p->ns == 0) {
+            XmlString path(xmlGetNoNsProp(p, xmlString("path")));
+            if (path.str == 0) {
+                throw css::uno::RuntimeException(
+                    (rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM(
+                            "missing path attribute in ")) +
+                     fromXmlString(doc.doc->URL)),
+                    css::uno::Reference< css::uno::XInterface >());
+            }
+            rtl::OUString componentName;
+            rtl::Reference< Node > node(
+                resolvePath(fromXmlString(path.str), &componentName, 0));
+            if (!node.is()) {
+                throw css::uno::RuntimeException(
+                    (rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM(
+                            "nonexisting path attribute in ")) +
+                     fromXmlString(doc.doc->URL)),
+                    css::uno::Reference< css::uno::XInterface >());
+            }
+            parseXcuNode(componentName, templates_, doc.doc, p, node);
+        } else if (xmlStrEqual(p->name, xmlString("unset")) && p->ns == 0) {
+            //TODO
+        } else {
+            throw css::uno::RuntimeException(
+                (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bad content in ")) +
+                 fromXmlString(doc.doc->URL)),
+                css::uno::Reference< css::uno::XInterface >());
+        }
+    }
+}
 
 }

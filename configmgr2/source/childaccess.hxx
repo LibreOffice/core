@@ -33,6 +33,7 @@
 #include "sal/config.h"
 
 #include <memory>
+#include <vector>
 
 #include "com/sun/star/container/XChild.hpp"
 #include "com/sun/star/lang/NoSupportException.hpp"
@@ -125,6 +126,11 @@ public:
 
 private:
     virtual ~ChildAccess();
+
+    virtual rtl::OUString getRelativePath();
+
+    virtual void addSupportedServiceNames(
+        std::vector< rtl::OUString > * services);
 
     rtl::Reference< RootAccess > root_;
     rtl::Reference< Access > parent_; // null iff free node

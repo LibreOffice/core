@@ -77,7 +77,7 @@ RootAccess::~RootAccess() {}
 
 rtl::Reference< Node > RootAccess::getNode() {
     if (!node_.is()) {
-        node_ = Components::singleton().resolvePath(path_, &name_);
+        node_ = Components::singleton().resolvePath(path_, 0, &name_);
         if (!node_.is()) {
             throw css::uno::RuntimeException(
                 (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("cannot find ")) +
@@ -96,8 +96,47 @@ rtl::Reference< Access > RootAccess::getParentAccess() {
     return rtl::Reference< Access >();
 }
 
-rtl::OUString RootAccess::getName() throw (css::uno::RuntimeException) {
+rtl::OUString RootAccess::getRelativePath() {
+    return path_;
+}
+
+void RootAccess::addSupportedServiceNames(
+    std::vector< rtl::OUString > * services)
+{
+    OSL_ASSERT(services != 0);
+    services->push_back(
+        rtl::OUString(
+            RTL_CONSTASCII_USTRINGPARAM(
+                "com.sun.star.configuration.AccessRootElement")));
+    if (update_) {
+        services->push_back(
+            rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "com.sun.star.configuration.UpdateRootElement")));
+    }
+}
+
+css::uno::Any RootAccess::queryInterface(css::uno::Type const & aType)
+    throw (css::uno::RuntimeException)
+{
+    OSL_ASSERT(thisIs(IS_ANY));
     osl::MutexGuard g(lock);
+    checkLocalizedPropertyAccess();
+    css::uno::Any res(RootAccessBase::queryInterface(aType));
+    if (res.hasValue() &&
+        aType.getTypeName().equalsAsciiL(
+            RTL_CONSTASCII_STRINGPARAM("com.sun.star.util.XChangesBatch")) &&
+        !update_)
+    {
+        res.clear();
+    }
+    return res;
+}
+
+rtl::OUString RootAccess::getName() throw (css::uno::RuntimeException) {
+    OSL_ASSERT(thisIs(IS_ANY));
+    osl::MutexGuard g(lock);
+    checkLocalizedPropertyAccess();
     getNode();
     return name_;
 }
@@ -107,6 +146,8 @@ void RootAccess::addChangesListener(
     throw (css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_ANY));
+    osl::MutexGuard g(lock);
+    checkLocalizedPropertyAccess();
     rBHelper.addListener(
         cppu::UnoType< css::util::XChangesListener >::get(), aListener);
 }
@@ -116,6 +157,8 @@ void RootAccess::removeChangesListener(
     throw (css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_ANY));
+    osl::MutexGuard g(lock);
+    checkLocalizedPropertyAccess();
     rBHelper.removeListener(
         cppu::UnoType< css::util::XChangesListener >::get(), aListener);
 }
@@ -125,6 +168,7 @@ void RootAccess::commitChanges()
 {
     OSL_ASSERT(thisIs(IS_ANY|IS_UPDATE));
     osl::MutexGuard g(lock);
+    checkLocalizedPropertyAccess();
     commitChildChanges();
     //TODO: write changes to disk
 }
@@ -132,6 +176,7 @@ void RootAccess::commitChanges()
 sal_Bool RootAccess::hasPendingChanges() throw (css::uno::RuntimeException) {
     OSL_ASSERT(thisIs(IS_ANY|IS_UPDATE));
     osl::MutexGuard g(lock);
+    checkLocalizedPropertyAccess();
     //TODO: Optimize:
     std::vector< css::util::ElementChange > changes;
     reportChildChanges(&changes);
@@ -143,6 +188,7 @@ css::util::ChangesSet RootAccess::getPendingChanges()
 {
     OSL_ASSERT(thisIs(IS_ANY|IS_UPDATE));
     osl::MutexGuard g(lock);
+    checkLocalizedPropertyAccess();
     comphelper::SequenceAsVector< css::util::ElementChange > changes;
     reportChildChanges(&changes);
     return changes.getAsConstList();

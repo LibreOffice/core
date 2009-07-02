@@ -103,6 +103,74 @@ Access::Access(): AccessBase(lock) {}
 
 Access::~Access() {}
 
+css::uno::Any Access::queryInterface(css::uno::Type const & aType)
+    throw (css::uno::RuntimeException)
+{
+    OSL_ASSERT(thisIs(IS_ANY));
+    osl::MutexGuard g(lock);
+    checkLocalizedPropertyAccess();
+    css::uno::Any res(AccessBase::queryInterface(aType));
+    if (res.hasValue()) {
+        if (aType.getTypeName().equalsAsciiL(
+                RTL_CONSTASCII_STRINGPARAM("com.sun.beans.XPropertySetInfo")) ||
+            aType.getTypeName().equalsAsciiL(
+                RTL_CONSTASCII_STRINGPARAM("com.sun.beans.XPropertySet")) ||
+            aType.getTypeName().equalsAsciiL(
+                RTL_CONSTASCII_STRINGPARAM(
+                    "com.sun.beans.XMultiPropertySet")) ||
+            aType.getTypeName().equalsAsciiL(
+                RTL_CONSTASCII_STRINGPARAM(
+                    "com.sun.beans.XHierarchicalPropertySet")) ||
+            aType.getTypeName().equalsAsciiL(
+                RTL_CONSTASCII_STRINGPARAM(
+                    "com.sun.beans.XMultiHierarchicalPropertySet")))
+        {
+            if (dynamic_cast< GroupNode * >(getNode().get()) == 0) {
+                res.clear();
+            }
+        } else if (aType.getTypeName().equalsAsciiL(
+                       RTL_CONSTASCII_STRINGPARAM(
+                           "com.sun.star.container.XNameReplace")))
+        {
+            if (!getRootAccess()->isUpdate()) {
+                res.clear();
+            }
+        } else if (aType.getTypeName().equalsAsciiL(
+                       RTL_CONSTASCII_STRINGPARAM(
+                           "com.sun.star.container.XNameContainer")))
+        {
+            GroupNode * group = dynamic_cast< GroupNode * >(getNode().get());
+            if ((group != 0 && !group->isExtensible()) ||
+                !getRootAccess()->isUpdate())
+            {
+                res.clear();
+            }
+        } else if (aType.getTypeName().equalsAsciiL(
+                       RTL_CONSTASCII_STRINGPARAM(
+                           "com.sun.star.lang.XSingleServiceFactory")))
+        {
+            if (dynamic_cast< SetNode * >(getNode().get()) == 0 ||
+                !getRootAccess()->isUpdate())
+            {
+                res.clear();
+            }
+        }
+    }
+    return res;
+}
+
+void Access::checkLocalizedPropertyAccess() {
+    if (dynamic_cast< LocalizedPropertyNode * >(getNode().get()) != 0 &&
+        !Components::allLocales(getRootAccess()->getLocale()))
+    {
+        throw css::uno::RuntimeException(
+            rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "configmgr Access to specialized LocalizedPropertyNode")),
+            static_cast< cppu::OWeakObject * >(this));
+    }
+}
+
 rtl::Reference< Node > Access::getParentNode() {
     rtl::Reference< Access > parent(getParentAccess());
     return parent.is() ? parent->getNode() : rtl::Reference< Node >();
@@ -225,9 +293,101 @@ void Access::commitChildChanges() {
     }
 }
 
+rtl::OUString Access::getImplementationName() throw (css::uno::RuntimeException)
+{
+    OSL_ASSERT(thisIs(IS_ANY));
+    osl::MutexGuard g(lock);
+    checkLocalizedPropertyAccess();
+    throw css::uno::RuntimeException(
+        rtl::OUString(
+            RTL_CONSTASCII_USTRINGPARAM(
+                "configmgr Access has no service implementation name")),
+        static_cast< cppu::OWeakObject * >(this));
+}
+
+sal_Bool Access::supportsService(rtl::OUString const & ServiceName)
+    throw (css::uno::RuntimeException)
+{
+    OSL_ASSERT(thisIs(IS_ANY));
+    osl::MutexGuard g(lock);
+    checkLocalizedPropertyAccess();
+    css::uno::Sequence< rtl::OUString > names(getSupportedServiceNames());
+    for (sal_Int32 i = 0; i < names.getLength(); ++i) {
+        if (names[i] == ServiceName) {
+            return true;
+        }
+    }
+    return false;
+}
+
+css::uno::Sequence< rtl::OUString > Access::getSupportedServiceNames()
+    throw (css::uno::RuntimeException)
+{
+    OSL_ASSERT(thisIs(IS_ANY));
+    osl::MutexGuard g(lock);
+    checkLocalizedPropertyAccess();
+    comphelper::SequenceAsVector< rtl::OUString > services;
+    services.push_back(
+        rtl::OUString(
+            RTL_CONSTASCII_USTRINGPARAM(
+                "com.sun.star.configuration.ConfigurationAccess")));
+    if (getRootAccess()->isUpdate()) {
+        services.push_back(
+            rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "com.sun.star.configuration.ConfigurationUpdateAccess")));
+    }
+    services.push_back(
+        rtl::OUString(
+            RTL_CONSTASCII_USTRINGPARAM(
+                "com.sun.star.configuration.HierarchyAccess")));
+    services.push_back(
+        rtl::OUString(
+            RTL_CONSTASCII_USTRINGPARAM(
+                "com.sun.star.configuration.HierarchyElement")));
+    if (dynamic_cast< GroupNode * >(getNode().get()) != 0) {
+        services.push_back(
+            rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "com.sun.star.configuration.GroupAccess")));
+        services.push_back(
+            rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "com.sun.star.configuration.PropertyHierarchy")));
+        if (getRootAccess()->isUpdate()) {
+            services.push_back(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "com.sun.star.configuration.GroupUpdate")));
+        }
+    } else {
+        services.push_back(
+            rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "com.sun.star.configuration.SetAccess")));
+        services.push_back(
+            rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "com.sun.star.configuration.SimpleSetAccess")));
+        if (getRootAccess()->isUpdate()) {
+            services.push_back(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "com.sun.star.configuration.SetUpdate")));
+            services.push_back(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "com.sun.star.configuration.SimpleSetUpdate")));
+        }
+    }
+    addSupportedServiceNames(&services);
+    return services.getAsConstList();
+}
+
 css::uno::Type Access::getElementType() throw (css::uno::RuntimeException) {
     OSL_ASSERT(thisIs(IS_ANY));
     osl::MutexGuard g(lock);
+    checkLocalizedPropertyAccess();
     rtl::Reference< Node > p(getNode());
     if (LocalizedPropertyNode * locprop =
         dynamic_cast< LocalizedPropertyNode * >(p.get()))
@@ -251,6 +411,7 @@ css::uno::Type Access::getElementType() throw (css::uno::RuntimeException) {
 sal_Bool Access::hasElements() throw (css::uno::RuntimeException) {
     OSL_ASSERT(thisIs(IS_ANY));
     osl::MutexGuard g(lock);
+    checkLocalizedPropertyAccess();
     return !getAllChildren().empty(); //TODO: optimize
 }
 
@@ -261,6 +422,7 @@ css::uno::Any Access::getByName(rtl::OUString const & aName)
 {
     OSL_ASSERT(thisIs(IS_ANY));
     osl::MutexGuard g(lock);
+    checkLocalizedPropertyAccess();
     rtl::Reference< ChildAccess > child(getChild(aName));
     if (!child.is()) {
         throw css::container::NoSuchElementException(
@@ -274,6 +436,7 @@ css::uno::Sequence< rtl::OUString > Access::getElementNames()
 {
     OSL_ASSERT(thisIs(IS_ANY));
     osl::MutexGuard g(lock);
+    checkLocalizedPropertyAccess();
     std::vector< rtl::Reference< ChildAccess > > children(getAllChildren());
     comphelper::SequenceAsVector< rtl::OUString > names;
     for (std::vector< rtl::Reference< ChildAccess > >::iterator i(
@@ -290,6 +453,7 @@ sal_Bool Access::hasByName(rtl::OUString const & aName)
 {
     OSL_ASSERT(thisIs(IS_ANY));
     osl::MutexGuard g(lock);
+    checkLocalizedPropertyAccess();
     return getChild(aName).is();
 }
 
@@ -298,6 +462,7 @@ css::uno::Any Access::getByHierarchicalName(rtl::OUString const & aName)
 {
     OSL_ASSERT(thisIs(IS_ANY));
     osl::MutexGuard g(lock);
+    checkLocalizedPropertyAccess();
     rtl::Reference< ChildAccess > child(getSubChild(aName));
     if (!child.is()) {
         throw css::container::NoSuchElementException(
@@ -311,6 +476,7 @@ sal_Bool Access::hasByHierarchicalName(rtl::OUString const & aName)
 {
     OSL_ASSERT(thisIs(IS_ANY));
     osl::MutexGuard g(lock);
+    checkLocalizedPropertyAccess();
     return getSubChild(aName).is();
 }
 
@@ -319,6 +485,8 @@ void Access::addContainerListener(
     throw (css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_ANY));
+    osl::MutexGuard g(lock);
+    checkLocalizedPropertyAccess();
     rBHelper.addListener(
         cppu::UnoType< css::container::XContainerListener >::get(), xListener);
 }
@@ -328,6 +496,8 @@ void Access::removeContainerListener(
     throw (css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_ANY));
+    osl::MutexGuard g(lock);
+    checkLocalizedPropertyAccess();
     rBHelper.removeListener(
         cppu::UnoType< css::container::XContainerListener >::get(), xListener);
 }
@@ -336,6 +506,8 @@ rtl::OUString Access::getExactName(rtl::OUString const & /*aApproximateName*/)
     throw (css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_ANY));
+    osl::MutexGuard g(lock);
+    checkLocalizedPropertyAccess();
     if(true)abort();*(char*)0=0;throw 0;//TODO
 }
 
@@ -378,7 +550,17 @@ sal_Bool Access::hasPropertyByName(rtl::OUString const & Name)
 
 rtl::OUString Access::getHierarchicalName() throw (css::uno::RuntimeException) {
     OSL_ASSERT(thisIs(IS_ANY));
-    if(true)abort();*(char*)0=0;throw 0;//TODO
+    osl::MutexGuard g(lock);
+    checkLocalizedPropertyAccess();
+    rtl::OUString path;
+    rtl::Reference< Access > parent(getParentAccess());
+    if (parent.is()) {
+        path = parent->getHierarchicalName();
+    }
+    if (path.getLength() != 0 && path[path.getLength() - 1] != '/') {
+        path += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+    }
+    return path + getRelativePath();
 }
 
 rtl::OUString Access::composeHierarchicalName(
@@ -388,6 +570,8 @@ rtl::OUString Access::composeHierarchicalName(
         css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_ANY));
+    osl::MutexGuard g(lock);
+    checkLocalizedPropertyAccess();
     if(true)abort();*(char*)0=0;throw 0;//TODO
 }
 
@@ -395,6 +579,8 @@ void Access::setName(rtl::OUString const & /*aName*/)
     throw (css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_ANY));
+    osl::MutexGuard g(lock);
+    checkLocalizedPropertyAccess();
     if(true)abort();*(char*)0=0;throw 0;//TODO
 }
 
@@ -402,6 +588,7 @@ css::beans::Property Access::getAsProperty() throw (css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_ANY));
     osl::MutexGuard g(lock);
+    checkLocalizedPropertyAccess();
     return asProperty();
 }
 
@@ -636,6 +823,7 @@ void Access::replaceByName(
 {
     OSL_ASSERT(thisIs(IS_ANY|IS_UPDATE));
     osl::MutexGuard g(lock);
+    checkLocalizedPropertyAccess();
     rtl::Reference< Node > p(getNode());
     if (dynamic_cast< GroupNode * >(p.get()) != 0) {
         try {
@@ -667,6 +855,7 @@ void Access::insertByName(
 {
     OSL_ASSERT(thisIs(IS_EXTENSIBLE|IS_UPDATE));
     osl::MutexGuard g(lock);
+    checkLocalizedPropertyAccess();
     if (getChild(aName).is()) {
         throw css::container::ElementExistException(
             aName, static_cast< cppu::OWeakObject * >(this));
@@ -740,6 +929,7 @@ void Access::removeByName(rtl::OUString const & aName)
 {
     OSL_ASSERT(thisIs(IS_EXTENSIBLE|IS_UPDATE));
     osl::MutexGuard g(lock);
+    checkLocalizedPropertyAccess();
     rtl::Reference< ChildAccess > child(getChild(aName));
     if (!child.is()) {
         throw css::container::NoSuchElementException(
@@ -762,7 +952,6 @@ css::uno::Reference< css::uno::XInterface > Access::createInstance()
     throw (css::uno::Exception, css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_SET|IS_UPDATE));
-    osl::MutexGuard g(lock);
     rtl::OUString tmplName(
         dynamic_cast< SetNode * >(getNode().get())->getDefaultTemplateName());
     rtl::Reference< Node > p(Components::singleton().getTemplate(tmplName));
@@ -931,7 +1120,8 @@ css::beans::Property Access::asProperty() {
 bool Access::thisIs(int what) {
     osl::MutexGuard g(lock);
     rtl::Reference< Node > p(getNode());
-    return !isValue() &&
+    return dynamic_cast< PropertyNode * >(p.get()) == 0 &&
+        dynamic_cast< LocalizedPropertyValueNode * >(p.get()) == 0 &&
         ((what & IS_GROUP) == 0 || dynamic_cast< GroupNode * >(p.get()) != 0) &&
         ((what & IS_SET) == 0 || dynamic_cast< SetNode * >(p.get()) != 0) &&
         ((what & IS_EXTENSIBLE) == 0 ||
