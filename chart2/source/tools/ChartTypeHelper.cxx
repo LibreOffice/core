@@ -108,6 +108,8 @@ sal_Bool ChartTypeHelper::isSupportingStatisticProperties( const uno::Reference<
             return sal_False;
         if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK) )
             return sal_False;
+        if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE) ) //todo: BubbleChart support error bars and trend lines
+            return sal_False;
     }
     return sal_True;
 }
@@ -281,6 +283,7 @@ uno::Sequence < sal_Int32 > ChartTypeHelper::getSupportedLabelPlacements( const 
     }
     else if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_SCATTER)
         || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_LINE)
+        || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE)
         )
     {
         aRet.realloc(5);
@@ -509,7 +512,8 @@ sal_Int32 ChartTypeHelper::getAxisType( const uno::Reference<
         return AxisType::REALNUMBER;
     if(0==nDimensionIndex)//x-axis
     {
-        if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_SCATTER) )
+        if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_SCATTER)
+         || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE) )
             return AxisType::REALNUMBER;
         return AxisType::CATEGORY;
     }
@@ -558,7 +562,8 @@ uno::Sequence < sal_Int32 > ChartTypeHelper::getSupportedMissingValueTreatments(
 
     rtl::OUString aChartTypeName = xChartType->getChartType();
     if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_COLUMN) ||
-        aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BAR) )
+        aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BAR) ||
+        aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE) )
     {
         aRet.realloc( 2 );
         sal_Int32* pSeq = aRet.getArray();
@@ -602,6 +607,38 @@ uno::Sequence < sal_Int32 > ChartTypeHelper::getSupportedMissingValueTreatments(
     }
 
     return aRet;
+}
+
+rtl::OUString ChartTypeHelper::getRoleOfSequenceForYAxisNumberFormatDetection( const uno::Reference< XChartType >& xChartType )
+{
+    rtl::OUString aRet( C2U( "values-y" ) );
+    if( !xChartType.is() )
+        return aRet;
+    rtl::OUString aChartTypeName = xChartType->getChartType();
+    if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK) )
+        aRet = xChartType->getRoleOfSequenceForSeriesLabel();
+    return aRet;
+}
+
+rtl::OUString ChartTypeHelper::getRoleOfSequenceForDataLabelNumberFormatDetection( const uno::Reference< XChartType >& xChartType )
+{
+    rtl::OUString aRet( C2U( "values-y" ) );
+    if( !xChartType.is() )
+        return aRet;
+    rtl::OUString aChartTypeName = xChartType->getChartType();
+    if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK)
+        || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE) )
+        aRet = xChartType->getRoleOfSequenceForSeriesLabel();
+    return aRet;
+}
+
+bool ChartTypeHelper::shouldLabelNumberFormatKeyBeDetectedFromYAxis( const uno::Reference< XChartType >& xChartType )
+{
+    bool bRet = true;
+    rtl::OUString aChartTypeName = xChartType->getChartType();
+    if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE) )
+        bRet = false;
+    return bRet;
 }
 
 //.............................................................................

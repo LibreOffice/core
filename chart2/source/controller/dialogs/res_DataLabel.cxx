@@ -215,6 +215,13 @@ DataLabelResources::DataLabelResources( Window* pWindow, const SfxItemSet& rInAt
     m_bNumberFormatMixedState = !lcl_ReadNumberFormatFromItemSet( rInAttrs, SID_ATTR_NUMBERFORMAT_VALUE, SID_ATTR_NUMBERFORMAT_SOURCE, m_nNumberFormatForValue, m_bSourceFormatForValue, m_bSourceFormatMixedState );
     m_bPercentFormatMixedState = !lcl_ReadNumberFormatFromItemSet( rInAttrs, SCHATTR_PERCENT_NUMBERFORMAT_VALUE, SCHATTR_PERCENT_NUMBERFORMAT_SOURCE, m_nNumberFormatForPercent, m_bSourceFormatForPercent , m_bPercentSourceMixedState);
 
+    if( rInAttrs.GetItemState(SCHATTR_DATADESCR_NO_PERCENTVALUE, TRUE, &pPoolItem) == SFX_ITEM_SET )
+    {
+        bool bForbidPercentValue = (static_cast< const SfxBoolItem & >( rInAttrs.Get( SCHATTR_DATADESCR_NO_PERCENTVALUE )).GetValue() );
+        if( bForbidPercentValue )
+            m_aCBPercent.Enable(false);
+    }
+
     m_aDC_Dial.SetLinkedField( &m_aNF_Degrees );
 }
 
@@ -286,14 +293,14 @@ IMPL_LINK( DataLabelResources, CheckHdl, CheckBox*, pBox )
 
 void DataLabelResources::EnableControls()
 {
-    m_aCBSymbol.Enable( m_aCBNumber.IsChecked() || m_aCBPercent.IsChecked() || m_aCBCategory.IsChecked() );
+    m_aCBSymbol.Enable( m_aCBNumber.IsChecked() || (m_aCBPercent.IsChecked() && m_aCBPercent.IsEnabled()) || m_aCBCategory.IsChecked() );
 
     //enable separator
     {
         long nNumberOfCheckedLabelParts = 0;
         if( m_aCBNumber.IsChecked() )
             ++nNumberOfCheckedLabelParts;
-        if( m_aCBPercent.IsChecked() )
+        if( m_aCBPercent.IsChecked() && m_aCBPercent.IsEnabled() )
             ++nNumberOfCheckedLabelParts;
         if( m_aCBCategory.IsChecked() )
             ++nNumberOfCheckedLabelParts;
@@ -307,7 +314,7 @@ void DataLabelResources::EnableControls()
     }
 
     m_aPB_NumberFormatForValue.Enable( m_pNumberFormatter && m_aCBNumber.IsChecked() );
-    m_aPB_NumberFormatForPercent.Enable( m_pNumberFormatter && m_aCBPercent.IsChecked() );
+    m_aPB_NumberFormatForPercent.Enable( m_pNumberFormatter && m_aCBPercent.IsChecked() && m_aCBPercent.IsEnabled() );
 
     bool bEnableRotation = ( m_aCBNumber.IsChecked() || m_aCBPercent.IsChecked() || m_aCBCategory.IsChecked() );
     m_aFL_Rotate.Enable( bEnableRotation );

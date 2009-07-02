@@ -1713,7 +1713,7 @@ bool XclExpChSeries::ConvertDataSeries(
     Reference< XDataSource > xDataSource( xDataSeries, UNO_QUERY );
     if( xDataSource.is() )
     {
-        Reference< XDataSequence > xYValueSeq, xTitleSeq, xXValueSeq;
+        Reference< XDataSequence > xYValueSeq, xTitleSeq, xXValueSeq, xBubbleSeq;
 
         // find first sequence with role 'values-y'
         Sequence< Reference< XLabeledDataSequence > > aLabeledSeqVec = xDataSource->getDataSequences();
@@ -1729,11 +1729,17 @@ bool XclExpChSeries::ConvertDataSeries(
                 if( !xYValueSeq.is() && (aRole == EXC_CHPROP_ROLE_YVALUES) )
                 {
                     xYValueSeq = xTmpValueSeq;
-                    xTitleSeq = (*pIt)->getLabel();     // ignore role of label sequence
+                    if( !xTitleSeq.is() )
+                        xTitleSeq = (*pIt)->getLabel(); // ignore role of label sequence
                 }
                 else if( !xXValueSeq.is() && !rTypeInfo.mbCategoryAxis && (aRole == EXC_CHPROP_ROLE_XVALUES) )
                 {
                     xXValueSeq = xTmpValueSeq;
+                }
+                else if( !xBubbleSeq.is() && (rTypeInfo.meTypeId == EXC_CHTYPEID_BUBBLES) && (aRole == EXC_CHPROP_ROLE_SIZEVALUES) )
+                {
+                    xBubbleSeq = xTmpValueSeq;
+                    xTitleSeq = (*pIt)->getLabel();     // ignore role of label sequence
                 }
             }
         }
@@ -1750,6 +1756,10 @@ bool XclExpChSeries::ConvertDataSeries(
 
             // X values of XY charts
             maData.mnCategCount = mxCategLink->ConvertDataSequence( xXValueSeq, false, maData.mnValueCount );
+
+            // size values of bubble charts
+            if( mxBubbleLink.is() )
+                mxBubbleLink->ConvertDataSequence( xBubbleSeq, false, maData.mnValueCount );
 
             // series formatting
             XclChDataPointPos aPointPos( mnSeriesIdx );

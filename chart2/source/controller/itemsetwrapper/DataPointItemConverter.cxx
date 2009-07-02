@@ -239,7 +239,8 @@ DataPointItemConverter::DataPointItemConverter(
         m_nSpecialFillColor(nSpecialFillColor),
         m_nNumberFormat(nNumberFormat),
         m_nPercentNumberFormat(nPercentNumberFormat),
-        m_aAvailableLabelPlacements()
+        m_aAvailableLabelPlacements(),
+        m_bForbidPercentValue(true)
 {
     m_aConverters.push_back( new GraphicPropertyItemConverter(
                                  rPropertySet, rItemPool, rDrawModel, xNamedPropertyContainerFactory, eMapTo ));
@@ -257,6 +258,8 @@ DataPointItemConverter::DataPointItemConverter(
     bool bAmbiguous = false;
     sal_Bool bSwapXAndY = DiagramHelper::getVertical( xDiagram, bFound, bAmbiguous );
     m_aAvailableLabelPlacements = ChartTypeHelper::getSupportedLabelPlacements( xChartType, DiagramHelper::getDimension( xDiagram ), bSwapXAndY, xSeries );
+
+    m_bForbidPercentValue = AxisType::CATEGORY != ChartTypeHelper::getAxisType( xChartType, 0 );
 }
 
 DataPointItemConverter::~DataPointItemConverter()
@@ -645,6 +648,12 @@ void DataPointItemConverter::FillSpecialItem(
             for ( sal_Int32 nN=0; nN<m_aAvailableLabelPlacements.getLength(); nN++ )
                 aList.Insert( m_aAvailableLabelPlacements[nN], sal::static_int_cast< USHORT >(nN) );
             rOutItemSet.Put( SfxIntegerListItem( nWhichId, aList ) );
+        }
+        break;
+
+        case SCHATTR_DATADESCR_NO_PERCENTVALUE:
+        {
+            rOutItemSet.Put( SfxBoolItem( nWhichId, m_bForbidPercentValue ));
         }
         break;
 

@@ -1782,6 +1782,14 @@ Reference< XDataSeries > XclImpChSeries::CreateDataSeries() const
                     CreateCategSequence( EXC_CHPROP_ROLE_XVALUES );
                 if( xXValueSeq.is() )
                     aLabeledSeqVec.push_back( xXValueSeq );
+                // add size values of bubble charts
+                if( rTypeInfo.meTypeId == EXC_CHTYPEID_BUBBLES )
+                {
+                    Reference< XLabeledDataSequence > xSizeValueSeq =
+                        lclCreateLabeledDataSequence( mxBubbleLink, EXC_CHPROP_ROLE_SIZEVALUES, mxTitleLink.get() );
+                    if( xSizeValueSeq.is() )
+                        aLabeledSeqVec.push_back( xSizeValueSeq );
+                }
             }
             // attach labeled data sequences to series
             if( !aLabeledSeqVec.empty() )
