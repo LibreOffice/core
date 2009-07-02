@@ -51,9 +51,11 @@ sub main
     use "chart2\optional\includes\wizard\ch2_lvl1_wizard.inc"
     
     Call hStatusIn ( "Chart2", "ch2_lvl1_wizard.bas" )
-        Call tCreateNew3DChart
-        Call tCreateNewLineChart
-    Call hStatusOut
+    Call tCreateNew3DChart
+    Call tCreateNewLineChart
+	Call tCreateNewBubbleChart
+    Call hStatusOut		
+	
 end sub
 '
 '-------------------------------------------------------------------------------
