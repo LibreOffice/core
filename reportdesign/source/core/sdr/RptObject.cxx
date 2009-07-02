@@ -609,16 +609,6 @@ FASTBOOL OCustomShape::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 
     return bResult;
 }
-//----------------------------------------------------------------------------
-SdrObject* OCustomShape::CheckHit( const Point& rPnt, USHORT nTol,const SetOfByte* pSet ) const
-{
-    // #109994# fixed here, because the drawing layer doesn't handle objects
-    // with a width or height of 0 in a proper way
-    if ( IsInside(aOutRect,rPnt,nTol) )
-        return const_cast<OCustomShape*>(this);
-
-    return SdrObjCustomShape::CheckHit( rPnt, nTol, pSet );
-}
 
 //----------------------------------------------------------------------------
 void OCustomShape::SetObjectItemHelper(const SfxPoolItem& rItem)
@@ -900,15 +890,7 @@ FASTBOOL OUnoObject::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 
     return aDefaultName;
 }
-//----------------------------------------------------------------------------
-SdrObject* OUnoObject::CheckHit( const Point& rPnt, USHORT nTol,const SetOfByte* pSet ) const
-{
-    DBG_CHKTHIS( rpt_OUnoObject,NULL);
-    if ( IsInside(aOutRect,rPnt,nTol) )
-        return const_cast<OUnoObject*>(this);
 
-    return SdrUnoObj::CheckHit( rPnt, nTol, pSet );
-}
 // -----------------------------------------------------------------------------
 void OUnoObject::_propertyChange( const  beans::PropertyChangeEvent& evt ) throw( uno::RuntimeException)
 {
@@ -1144,16 +1126,7 @@ FASTBOOL OOle2Obj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 
     return bResult;
 }
-//----------------------------------------------------------------------------
-SdrObject* OOle2Obj::CheckHit( const Point& rPnt, USHORT nTol,const SetOfByte* pSet ) const
-{
-    DBG_CHKTHIS( rpt_OOle2Obj,NULL);
-    if ( IsInside(aOutRect,rPnt,nTol) )
-        return const_cast<OOle2Obj*>(this);
 
-    return SdrOle2Obj::CheckHit( rPnt, nTol, pSet );
-}
-// -----------------------------------------------------------------------------
 uno::Reference< beans::XPropertySet> OOle2Obj::getAwtComponent()
 {
     return uno::Reference< beans::XPropertySet>(m_xReportComponent,uno::UNO_QUERY);

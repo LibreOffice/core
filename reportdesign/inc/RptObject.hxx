@@ -176,8 +176,6 @@ public:
     virtual ~OCustomShape();
 
     virtual sal_Int32   GetStep() const;
-
-    virtual SdrObject* CheckHit(const Point& rPnt,USHORT nTol,const SetOfByte*) const;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> getAwtComponent();
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getUnoShape();
@@ -220,8 +218,6 @@ public:
     virtual ~OOle2Obj();
 
     virtual sal_Int32   GetStep() const;
-
-    virtual SdrObject* CheckHit(const Point& rPnt,USHORT nTol,const SetOfByte*) const;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> getAwtComponent();
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getUnoShape();
@@ -266,8 +262,6 @@ public:
     TYPEINFO();
 
     virtual sal_Int32   GetStep() const;
-
-    virtual SdrObject* CheckHit(const Point& rPnt,USHORT nTol,const SetOfByte*) const;
     virtual void _propertyChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw(::com::sun::star::uno::RuntimeException);
 
     /** creates the m_xMediator when it doesn't already exist.
