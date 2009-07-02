@@ -127,13 +127,13 @@ function tRelation( sFileName, sPWD, sRelTable1, sRelTable2 )
         RelationProperties.TypeKeys "<MOD2 DOWN>",TRUE
         sleep(1)
         RelationProperties.TypeKeys "<DOWN>",TRUE
-        RelationProperties.TypeKeys "<RETURN>",TRUE
+       ' RelationProperties.TypeKeys "<RETURN>",TRUE
         sleep(1)
         RelationProperties.TypeKeys "<TAB>",TRUE
         RelationProperties.TypeKeys "<MOD2 DOWN>",TRUE
         sleep(1)
         RelationProperties.TypeKeys "<DOWN>",TRUE
-        RelationProperties.TypeKeys "<RETURN>",TRUE
+       ' RelationProperties.TypeKeys "<RETURN>",TRUE
         sleep(1)
         RelationProperties.OK
         printlog "1:1 relation between test tables created"
@@ -151,14 +151,17 @@ function tRelation( sFileName, sPWD, sRelTable1, sRelTable2 )
                  sleep(1)
                  RelationDesign.TypeKeys "<SHIFT F10>",TRUE
                  sleep(1)
-                 l = hMenuItemGetCount
+                 try
+                 	l = hMenuItemGetCount
+                 catch
+                 endcatch	
                  MenuSelect 0
                  sleep(1)
                  k = k + 1
                  'printlog "k = " + k
                  'printlog "hMenuItemGetCount = " + l
-        Loop Until k = 5 or l = 2
-        if k = 5 then
+        Loop Until k = 10 or l = 2
+        if k = 10 then
            warnlog "abort deleting relation: searching for relation connector went wrong"
         endif
         printlog "relation connector deleted"

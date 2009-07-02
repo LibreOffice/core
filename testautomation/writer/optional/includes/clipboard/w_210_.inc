@@ -84,8 +84,8 @@ testcase WriterToWriterText
                         Warnlog "Unable to remove checkbox: " + Active.Gettext
                         Active.ok
                     endcatch
-                endif
-            endif
+                end if
+            end if
             printlog " + Close saved document "
             Call hCloseDocument
         else
@@ -136,8 +136,8 @@ testcase WriterToWriterField
                         Warnlog "Unable to remove checkbox: " + Active.Gettext
                         Active.ok
                     endcatch
-                endif
-            endif            
+                end if
+            end if
             printlog " + Close saved document "
             Call hCloseDocument
         else
@@ -188,8 +188,8 @@ testcase WriterToWriterTable
                         Warnlog "Unable to remove checkbox: " + Active.Gettext
                         Active.ok
                     endcatch
-                endif
-            endif
+                end if
+            end if
             printlog " + Close saved document "
             Call hCloseDocument
         else

@@ -50,9 +50,8 @@ end sub
 
 
 testcase DrawToWriterScrollingText
-  QaErrorLog "#i95309# - DrawToWriterScrollingText outcommented due to problem when opening certain sxd-files."
-  goto endsub
-
+'  QaErrorLog "#i95309# - DrawToWriterScrollingText outcommented due to problem when opening certain sxd-files."
+'  goto endsub
 
   gApplication = "DRAW"
   printlog "  Open File '..\\writer\\optional\\input\\clipboard\\draw.sxd' "
@@ -108,8 +107,8 @@ endcase
 ' ---------------------------------------------------------------------------------
 
 testcase DrawToWriterGroupedObject
-  QaErrorLog "#i95309# - DrawToWriterGroupedObject outcommented due to problem when opening certain sxd-files."
-  goto endsub
+'  QaErrorLog "#i95309# - DrawToWriterGroupedObject outcommented due to problem when opening certain sxd-files."
+'  goto endsub
 
 
   gApplication = "DRAW"
@@ -166,8 +165,8 @@ endcase
 ' ---------------------------------------------------------------------------------
 
 testcase DrawToWriter3D
-  QaErrorLog "#i95309# - DrawToWriter3D outcommented due to problem when opening certain sxd-files."
-  goto endsub
+'  QaErrorLog "#i95309# - DrawToWriter3D outcommented due to problem when opening certain sxd-files."
+'  goto endsub
 
 
   gApplication = "DRAW"
@@ -224,8 +223,8 @@ endcase
 ' ---------------------------------------------------------------------------------
 
 testcase DrawToWriterFontwork
-  QaErrorLog "#i95309# - DrawToWriterFontwork outcommented due to problem when opening certain sxd-files."
-  goto endsub
+'  QaErrorLog "#i95309# - DrawToWriterFontwork outcommented due to problem when opening certain sxd-files."
+'  goto endsub
 
 
   gApplication = "DRAW"
@@ -282,8 +281,8 @@ endcase
 ' ---------------------------------------------------------------------------------
 
 testcase DrawToWriterBullets
-  QaErrorLog "#i95309# - DrawToWriterBullets outcommented due to problem when opening certain sxd-files."
-  goto endsub
+'  QaErrorLog "#i95309# - DrawToWriterBullets outcommented due to problem when opening certain sxd-files."
+'  goto endsub
 
 
   gApplication = "DRAW"
@@ -399,8 +398,8 @@ endcase
 ' ---------------------------------------------------------------------------------
 
 testcase DrawToWriterConnectors
-  QaErrorLog "#i95309# - DrawToWriterConnectors outcommented due to problem when opening certain sxd-files."
-  goto endsub
+'  QaErrorLog "#i95309# - DrawToWriterConnectors outcommented due to problem when opening certain sxd-files."
+'  goto endsub
 
 
   gApplication = "DRAW"

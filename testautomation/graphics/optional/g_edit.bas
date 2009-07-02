@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -48,20 +48,20 @@ sub main
     GetOLEDefaultNames
 
     PrintLog "-------------------------" + gApplication + "-------------------"
-        Call tEditDuplicate
-        Call tEditFields
-        Call tEditDeleteSlide
-        Call tEditLinks
-        Call tEditObjectEdit
+    Call tEditDuplicate
+    Call tEditFields
+    Call tEditDeleteSlide
+    Call tEditLinks
+    Call tEditObjectEdit
 
     gApplication = "DRAW"
     PrintLog "-------------------------" + gApplication + "-------------------"
-        Call tEditDuplicate
-        Call tEditFields
-        Call tEditDeleteSlide
-        Call tEditLinks
-        Call tdEditDeleteLayer
-        Call tEditObjectEdit
+    Call tEditDuplicate
+    Call tEditFields
+    Call tEditDeleteSlide
+    Call tEditLinks
+    Call tdEditDeleteLayer
+    Call tEditObjectEdit
 
     Call hStatusOut
 end sub
@@ -69,6 +69,7 @@ end sub
 sub LoadIncludeFiles
     use "global\system\includes\master.inc"
     use "global\system\includes\gvariabl.inc"
+    use "global\tools\includes\optional\t_ole.inc"
     Call GetUseFiles
     gApplication = "IMPRESS"
 end sub

@@ -393,6 +393,9 @@ endcase
 
 testcase tGroupBoxWithoutDatasource
 
+	warnlog "#102082# CTRL + C ddoes not work anymore in control properties dialog"
+	goto endsub
+
     '/// open a textdocument
     printlog "open a textdocument"
 

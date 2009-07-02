@@ -138,8 +138,10 @@ testcase tFormatPage_29
        Kontext "FindAndReplace"
      FindAndReplace.Close
 
-    Call hCloseDocument
-
+    printlog "  Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 '-------------------------------------------------------------------------------------------
@@ -203,8 +205,10 @@ testcase tFormatPage_30
      if Seitennummer.GetText <> "1" then warnlog "Something wrong in Header in 1st page!"
      fCloseNavigator
 
-    Call hCloseDocument
-
+    printlog "  Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 '-------------------------------------------------------------------------------------------
@@ -289,8 +293,10 @@ testcase tFormatPage_31
        Kontext "FindAndReplace"
      FindAndReplace.Close
 
-    Call hCloseDocument
-
+    printlog "  Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 '-------------------------------------------------------------------------------------------
@@ -354,8 +360,10 @@ testcase tFormatPage_32
      if Seitennummer.GetText <> "1" then warnlog "Something wrong in Footer in 1st page!"
      fCloseNavigator
 
-    Call hCloseDocument
-
+    printlog "  Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 '-------------------------------------------------------------------------------------------
@@ -780,8 +788,10 @@ testcase tFormatPage_39
        if Seitennummer.GetText <> "1" then warnlog "the second column isn't right!"
      fCloseNavigator
 
-    Call hCloseDocument
-
+    printlog "  Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 '-------------------------------------------------------------------------------------------
@@ -847,8 +857,10 @@ testcase tFormatPage_40
        if Seitennummer.GetText <> "1" then warnlog "the second column isn't right!"
      fCloseNavigator
 
-    Call hCloseDocument
-
+    printlog "  Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 '-------------------------------------------------------------------------------------------
@@ -931,8 +943,10 @@ testcase tFormatPage_41
     EditCopy
     if Len(GetClipboardText) > 14 then Warnlog "Something wrong in the column2"
     
-    Call hCloseDocument
-
+    printlog "  Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 '-------------------------------------------------------------------------------------------
@@ -1015,8 +1029,10 @@ testcase tFormatPage_42
      EditCopy
      if Len(GetClipboardText) > 11 then Warnlog "Somthing wrong in the column2"
 
-    Call hCloseDocument
-
+    printlog "  Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 '-------------------------------------------------------------------------------------------
@@ -1182,8 +1198,10 @@ testcase tFormatPage_45
      EditCopy
      if iTestTextLength <> Len(GetClipboardText) then Warnlog "The column isn't covered to former! #112632"
 
-    Call hCloseDocument
-
+    printlog "  Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 '-------------------------------------------------------------------------------------------

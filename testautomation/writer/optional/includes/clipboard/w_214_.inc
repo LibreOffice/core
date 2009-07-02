@@ -266,8 +266,6 @@ endcase
 
 testcase WriterToHTMLDrawingObject
   gApplication = "WRITER"
-'      QAErrorlog "Crashes unreproducable only with testtool"
-'  goto endsub
   printlog "  Open File '..\\writer\\optional\\input\\clipboard\\writer.sxw' "
   printlog " + Jump to beginning of document "
   printlog " + Select 'Drawing Object' "

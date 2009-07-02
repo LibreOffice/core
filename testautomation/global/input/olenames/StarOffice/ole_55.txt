@@ -1,7 +1,0 @@
-CALC=Planilha do StarOffice 9
-CHART=Gráfico do StarOffice 9
-DRAW=Desenho do StarOffice 9
-IMPRESS=Apresentação do StarOffice 9
-MATH=Fórmula do StarOffice 9
-WRITER=Texto do StarOffice 9
-OTHER=Objetos adicionais

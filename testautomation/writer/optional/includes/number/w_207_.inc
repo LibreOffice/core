@@ -86,7 +86,7 @@ testcase tToolsNumbering12
 				sleep 2
 				Call hFileOpen ( DocFileList(i) )
                 Call sMakeReadOnlyDocumentEditable
-				
+
 				Kontext "Filterauswahl"
 				if Filterauswahl.Exists then
 					Warnlog "  - Filter Selection dialog is up !"
@@ -102,13 +102,13 @@ testcase tToolsNumbering12
 				if SecurityWarning.Exists then
 					SecurityWarning.Cancel
 				end if
-	
+
 				'/// check if loaded
 				if GetDocumentCount >= 1 then
 					ExportFileName = ConvertPath ( gOfficePath + "user\work\" + DateiOhneExt(DateiExtract ( DocFileList(i)  ) ) &  "." & sCurrentFilterExt )
 					printlog "  - export as: " & ExportFileName
 					Call hFileSaveAsWithFilterKill ( ExportFileName, sCurrentFilter )
-					Sleep (2)				
+					Sleep (2)
 					Call hCloseDocument
 					printlog "  - load previous saved document"
 					Call hFileOpen ( ExportFileName )
@@ -130,7 +130,7 @@ testcase tToolsNumbering13
 
     Dim i as integer, iCounter as integer
     '/// #i73790 Regression testing 
-    '/// This testcase loads a Worddocument that lost all formattings 
+    '/// This testcase loads a Worddocument that lost all formattings
     printlog "#i73790 regression testing"
     '/// Load document 'writer\\optional\\input\\number\\regression\\73790.doc'
     Call hFileOpen ( gTesttoolPath + "writer\optional\input\number\regression\73790.doc" )
@@ -169,6 +169,8 @@ testcase tToolsNumbering13
         call wTypeKeys ( "<Down>" )
     next i
 
-    Call hCloseDocument
-
+    printlog "  Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase

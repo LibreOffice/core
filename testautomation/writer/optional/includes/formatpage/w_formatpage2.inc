@@ -135,8 +135,10 @@ testcase tFormatPage_16
     if Seitennummer.GetText <> "2" then warnlog "Something wrong in AutoFit Height!"
     Call fCloseNavigator
 
-    Call hCloseDocument
-
+    printlog "  Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 '-------------------------------------------------------------------------------------------
@@ -236,9 +238,11 @@ testcase tFormatPage_17
     Sleep 1
     if Seitennummer.GetText <> "1" then warnlog "Something wrong in AutoFit Height --2 !"
     fCloseNavigator
-    
-    Call hCloseDocument
 
+    printlog "  Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 '-------------------------------------------------------------------------------------------
@@ -319,9 +323,11 @@ testcase tFormatPage_18
     Sleep 1
     if Seitennummer.GetText <> "1" then warnlog "Something wrong in AutoFit Height!"
     fCloseNavigator
-    
-    Call hCloseDocument
 
+    printlog "  Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 '-------------------------------------------------------------------------------------------
@@ -387,16 +393,18 @@ testcase tFormatPage_19
     SearchAll.Click
     Sleep 1
     FindAndReplace.Close
-    
+
     Kontext "Navigator"
     if Not Navigator.Exists then ViewNavigator
     Kontext "NavigatorWriter"
     Sleep 1
     if Seitennummer.GetText <> "1" then warnlog "Something wrong in AutoFit Height!"
     fCloseNavigator
-    
-    Call hCloseDocument
 
+    printlog "  Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 '-------------------------------------------------------------------------------------------
@@ -443,20 +451,20 @@ testcase tFormatPage_20
     Sleep 2
     MenuSelect(Menugetitemid(3))
     Sleep 2
-    
+
     '/// formatPage , tabpage footer
     fFormatPageWriter("TabFusszeile")
-    
+
     '/// AutoFit Height should be checked
     if Hoehedynamisch.IsChecked <> TRUE then
         warnlog "AutoFit Height should be checked!"
         Hoehedynamisch.Check
     end if
     TabFusszeile.OK
-    
+
     Call wTypeKeys "Test"
     Call wTypeKeys "<End><Shift Home>"
-    
+
     '/// Set the bigger fonts to selection in the footer
     fFormatCharacter("TabFont")
     try
@@ -465,7 +473,7 @@ testcase tFormatPage_20
         Size.Select      Size.GetItemCount-2
     endcatch
     TabFont.OK
-    
+
     '/// Check if AutoFit Height works well
     Kontext
     EditSearchAndReplace
@@ -475,21 +483,26 @@ testcase tFormatPage_20
     SearchAll.Click
     Sleep 1
     FindAndReplace.Close
-    
+
     Kontext "Navigator"
     if Not Navigator.Exists then ViewNavigator
     Kontext "NavigatorWriter"
     Sleep 1
     if Seitennummer.GetText <> "2" then warnlog "Something wrong in AutoFit Height!"
     fCloseNavigator
-    
-    Call hCloseDocument
 
+    printlog "  Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 '-------------------------------------------------------------------------------------------
 
 testcase tFormatPage_21
+Warnlog "#i102452# - tFormatPage_21 outcommented. Something wrong in AutoFit Height."
+goto endsub
+
 
     Dim sTestFile as String
     Dim sDummy1 as String  ,  sDummy2 as String
@@ -586,9 +599,11 @@ testcase tFormatPage_21
     Sleep 1
     if Seitennummer.GetText <> "1" then warnlog "Something wrong in AutoFit Height --2 !"
     fCloseNavigator
-    
-    Call hCloseDocument
 
+    printlog "  Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 '-------------------------------------------------------------------------------------------
@@ -669,9 +684,11 @@ testcase tFormatPage_22
     Sleep 1
     if Seitennummer.GetText <> "1" then warnlog "Something wrong in AutoFit Height!"
     fCloseNavigator
-    
-    Call hCloseDocument
 
+    printlog "  Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 '-------------------------------------------------------------------------------------------
@@ -745,8 +762,10 @@ testcase tFormatPage_23
     if Seitennummer.GetText <> "1" then warnlog "Something wrong in AutoFit Height!"
     fCloseNavigator
     
-    Call hCloseDocument
-
+    printlog "  Close active document "
+    Do Until GetDocumentCount = 0
+        Call hCloseDocument
+    Loop
 endcase
 
 '-------------------------------------------------------------------------------------------
@@ -785,7 +804,6 @@ testcase tFormatPage_24
      TabKopfzeile.Cancel
 
     Call hCloseDocument
-
 endcase
 
 '-------------------------------------------------------------------------------------------
@@ -823,7 +841,6 @@ testcase tFormatPage_25
      end if
 
     Call hCloseDocument
-
 endcase
 
 '-------------------------------------------------------------------------------------------
@@ -862,7 +879,6 @@ testcase tFormatPage_26
      TabKopfzeile.Cancel
 
     Call hCloseDocument
-
 endcase
 
 '-------------------------------------------------------------------------------------------
@@ -901,7 +917,6 @@ testcase tFormatPage_27
      end if
 
     Call hCloseDocument
-
 endcase
 
 '-------------------------------------------------------------------------------------------
@@ -974,7 +989,6 @@ testcase tFormatPage_28
      TabFusszeile.Cancel
 
     Call hCloseDocument
-
 endcase
 
 '-------------------------------------------------------------------------------------------

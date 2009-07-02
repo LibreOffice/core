@@ -79,13 +79,13 @@ testcase HTMLToIMPRESSText
   printlog "  Paste 'Text' in all available clipboard formats "
   Kontext "InhaltEinfuegen"
   if InhaltEinfuegen.Exists then
-   Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"text")
    printlog "  Write Clipboard format under pasted content "
-   Call hFileSaveAsWithFilterKill (gOfficepath + "user\work\html_to_impress_text.odp", "impress8")
+  Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"text")
    printlog "  Save document as ..\user\work\html_to_impress_text.odp"
+   Call hFileSaveAsWithFilterKill (gOfficepath + "user\work\html_to_impress_text.odp", "impress8")
    Wait 500
-   Call hCloseDocument
    printlog "  Close saved document "
+   Call hCloseDocument
    wait 500
    printlog "  Reopen saved document "
    if hFileOpen (gOfficepath + "user\work\html_to_impress_text.odp",false) = false then
@@ -97,11 +97,11 @@ testcase HTMLToIMPRESSText
                 Warnlog "Unable to remove checkbox: " + Active.Gettext
                 Active.ok
             endcatch
-        endif
-   endif         
+        end if
+   end if
    Wait 500
-   Call hCloseDocument
    printlog "  Close saved document "
+   Call hCloseDocument
   else
    Warnlog "Dialog 'Paste Special' is not up!"
    Call hCloseDocument
@@ -146,19 +146,19 @@ testcase HTMLToIMPRESSField
     printlog "  Paste 'Field' in all available clipboard formats "
     Kontext "InhaltEinfuegen"
     if InhaltEinfuegen.Exists then
-     Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"field")
     printlog "  Write Clipboard format under pasted content "
-     Call hFileSaveAsWithFilterKill (gOfficepath + "user\work\html_to_impress_field.odp", "impress8")
+    Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"field")
      printlog "  Save document as ..\user\work\html_to_impress_field.odp"
+    Call hFileSaveAsWithFilterKill (gOfficepath + "user\work\html_to_impress_field.odp", "impress8")
      Wait 500
-     Call hCloseDocument
      printlog "  Close saved document "
+     Call hCloseDocument
      wait 500
-     Call hFileOpen (gOfficepath + "user\work\html_to_impress_field.odp",false)
      printlog "  Reopen saved document "
+     Call hFileOpen (gOfficepath + "user\work\html_to_impress_field.odp",false)
      Wait 500
-     Call hCloseDocument
      printlog "  Close saved document "
+     Call hCloseDocument
     else
      Warnlog "Dialog 'Paste Special' is not up!"
      Call hCloseDocument
@@ -203,19 +203,19 @@ testcase HTMLToIMPRESSTable
   printlog "  Paste 'Table' in all available clipboard formats "
   Kontext "InhaltEinfuegen"
    if InhaltEinfuegen.Exists then
-     Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"table")
      printlog "  Write Clipboard format under pasted content "
-     Call hFileSaveAsWithFilterKill (gOfficepath + "user\work\html_to_impress_table.odp", "impress8")
+     Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"table")
      printlog "  Save document as ..\user\work\html_to_impress_table.odp"
+     Call hFileSaveAsWithFilterKill (gOfficepath + "user\work\html_to_impress_table.odp", "impress8")
      Wait 500
-     Call hCloseDocument
      printlog "  Close saved document "
+     Call hCloseDocument
      wait 500
-     Call hFileOpen (gOfficepath + "user\work\html_to_impress_table.odp",false)
      printlog "  Reopen saved document "
+     Call hFileOpen (gOfficepath + "user\work\html_to_impress_table.odp",false)
      Wait 500
-     Call hCloseDocument
      printlog "  Close saved document "
+     Call hCloseDocument
    else
      Warnlog "Dialog 'Paste Special' is not up!"
      Call hCloseDocument
@@ -259,19 +259,19 @@ testcase HTMLToIMPRESSGraphicLinked
     printlog "  Paste 'Linked Graphic' in all available clipboard formats "
     Kontext "InhaltEinfuegen"
     if InhaltEinfuegen.Exists then
-        Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"graphicL")
         printlog "  Write Clipboard format under pasted content "
-        Call hFileSaveAsWithFilterKill (gOfficepath + "user\work\html_to_impress_graphic1.odp", "impress8")
+    Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"graphicL")
         printlog "  Save document as ..\user\work\html_to_impress_graphic1.odp"
+        Call hFileSaveAsWithFilterKill (gOfficepath + "user\work\html_to_impress_graphic1.odp", "impress8")
         Wait 500
-        Call hCloseDocument
         printlog "  Close saved document "
+        Call hCloseDocument
         wait 500
-        Call hFileOpen (gOfficepath + "user\work\html_to_impress_graphic1.odp",false)
         printlog "  Reopen saved document "
+        Call hFileOpen (gOfficepath + "user\work\html_to_impress_graphic1.odp",false)
         Wait 500
-        Call hCloseDocument
         printlog "  Close saved document "
+        Call hCloseDocument
     else
         Warnlog "Dialog 'Paste Special' is not up!"
         Call hCloseDocument
@@ -316,19 +316,19 @@ testcase HTMLToIMPRESSControl
     printlog "  Paste 'Control' in all available clipboard formats "
     Kontext "InhaltEinfuegen"
     if InhaltEinfuegen.Exists then
-        Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"control")
         printlog "  Write Clipboard format under pasted content "
-        Call hFileSaveAsWithFilterKill (gOfficepath + "user\work\html_to_impress_control.odp", "impress8")
+        Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"control")
         printlog "  Save document as ..\user\work\html_to_impress_control.odp"
+        Call hFileSaveAsWithFilterKill (gOfficepath + "user\work\html_to_impress_control.odp", "impress8")
         Wait 500
-        Call hCloseDocument
         printlog "  Close saved document "
+        Call hCloseDocument
         wait 500
-        Call hFileOpen (gOfficepath + "user\work\html_to_impress_control.odp",false)
         printlog "  Reopen saved document "
+        Call hFileOpen (gOfficepath + "user\work\html_to_impress_control.odp",false)
         Wait 500
-        Call hCloseDocument
         printlog "  Close saved document "
+        Call hCloseDocument
     else
         Warnlog "Dialog 'Paste Special' is not up!"
         Call hCloseDocument
@@ -378,19 +378,19 @@ testcase HTMLToIMPRESSFloatingFrame
     printlog "  Paste 'Floating Frame' in all available clipboard formats "
     Kontext "InhaltEinfuegen"
     if InhaltEinfuegen.Exists then
-        Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"control")
         printlog "  Write Clipboard format under pasted content "
-        Call hFileSaveAsWithFilterKill (gOfficepath + "user\work\html_to_impress_float.odp", "impress8")
+    Call wPasteAvailableClipboardFormats(Auswahl.GetItemCount,"control")
         printlog "  Save document as ..\user\work\html_to_impress_float.odp"
+        Call hFileSaveAsWithFilterKill (gOfficepath + "user\work\html_to_impress_float.odp", "impress8")
         Wait 500
-        Call hCloseDocument
         printlog "  Close saved document "
+        Call hCloseDocument
         wait 500
-        Call hFileOpen (gOfficepath + "user\work\html_to_impress_float.odp",false)
         printlog "  Reopen saved document "
+        Call hFileOpen (gOfficepath + "user\work\html_to_impress_float.odp",false)
         Wait 500
-        Call hCloseDocument
         printlog "  Close saved document "
+        Call hCloseDocument
     else
         Warnlog "Dialog 'Paste Special' is not up!"
         Call hCloseDocument

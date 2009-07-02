@@ -1,7 +1,7 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
+'*
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
@@ -49,39 +49,38 @@ sub main
     use "graphics\tools\id_tools_2.inc"
     use "graphics\optional\includes\global\g_load_save.inc"
 
-    GetOLEDefaultNames
     hSetLocaleStrings ( gTesttoolPath + "graphics\tools\locale_1.txt" , glLocale () )
 
     PrintLog "-------------------------" + gApplication + "-------------------"
-        Call tFileOpenSaveEtc
-        Call tFileProperties
-        Call tFilePassword52
-        Call tFileOpenImport
-        Call tTestDXF255CharBug
-        Call tDeletedTemplate
-        call tSaveLoadLayoutEmpty
-        call tSaveLoadLayoutOLE
-        call tSaveLoadLayoutText
-        call tSaveLoadLayoutOutline
-        call tSaveLoadLayoutPicture
-        call tSaveLoadLayoutChart
-        call tSaveLoadLayoutSpreadsheet
+    Call tFileOpenSaveEtc
+    Call tFileProperties
+    Call tFilePassword52
+    Call tFileOpenImport
+    Call tTestDXF255CharBug
+    Call tDeletedTemplate
+    call tSaveLoadLayoutEmpty
+    call tSaveLoadLayoutOLE
+    call tSaveLoadLayoutText
+    call tSaveLoadLayoutOutline
+    call tSaveLoadLayoutPicture
+    call tSaveLoadLayoutChart
+    call tSaveLoadLayoutSpreadsheet
 
     gApplication = "IMPRESS"
     PrintLog "-------------------------" + gApplication + "-------------------"
-        Call tFileOpenSaveEtc
-        Call tFileProperties
-        Call tFilePassword52
-        Call tFileOpenImport
-        Call tTestDXF255CharBug
-        Call tDeletedTemplate
-        call tSaveLoadLayoutEmpty
-        call tSaveLoadLayoutOLE
-        call tSaveLoadLayoutText
-        call tSaveLoadLayoutOutline
-        call tSaveLoadLayoutPicture
-        call tSaveLoadLayoutChart
-        call tSaveLoadLayoutSpreadsheet
+    Call tFileOpenSaveEtc
+    Call tFileProperties
+    Call tFilePassword52
+    Call tFileOpenImport
+    Call tTestDXF255CharBug
+    Call tDeletedTemplate
+    call tSaveLoadLayoutEmpty
+    call tSaveLoadLayoutOLE
+    call tSaveLoadLayoutText
+    call tSaveLoadLayoutOutline
+    call tSaveLoadLayoutPicture
+    call tSaveLoadLayoutChart
+    call tSaveLoadLayoutSpreadsheet
 
     Call hStatusOut
 end sub

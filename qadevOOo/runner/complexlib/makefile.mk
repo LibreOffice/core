@@ -44,7 +44,7 @@ TARGET = runner_complexlib
 
 JARFILES = ridl.jar jurt.jar unoil.jar
 
-JAVAFILES = ComplexTestCase.java MethodThread.java
+JAVAFILES = ComplexTestCase.java MethodThread.java ShowTargets.java
 
 JAVACLASSFILES=	$(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 

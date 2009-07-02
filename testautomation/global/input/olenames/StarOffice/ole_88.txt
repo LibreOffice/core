@@ -1,7 +1,0 @@
-sc=StarSuite 7 工作表
-sh=StarSuite 7 圖表
-sd=StarSuite 7 繪圖
-si=StarSuite 7 簡報
-sm=StarSuite 7 公式
-sw=StarSuite 7 文字
-ot=其他的物件

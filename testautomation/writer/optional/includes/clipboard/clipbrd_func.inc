@@ -217,6 +217,7 @@ function wSetClipboardtestDefaults(ForWhat as string) as boolean
     end select
     try
         EditCopy
+        EditCopy
         wSetClipboardtestDefaults = True
     catch
         QAErrorlog "Error jump to beginning of document!"
