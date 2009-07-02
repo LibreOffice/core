@@ -1711,7 +1711,7 @@ BOOL BrowseBox::GoToColumnId( USHORT nColId, BOOL bMakeVisible, BOOL bRowColMove
     if (!bRowColMove && !IsCursorMoveAllowed( nCurRow, nColId ) )
         return FALSE;
 
-    if ( nColId != nCurColId || bMakeVisible && !IsFieldVisible(nCurRow, nColId, TRUE))
+    if ( nColId != nCurColId || (bMakeVisible && !IsFieldVisible(nCurRow, nColId, TRUE)))
     {
         USHORT nNewPos = GetColumnPos(nColId);
         BrowserColumn* pColumn = pCols->GetObject( nNewPos );

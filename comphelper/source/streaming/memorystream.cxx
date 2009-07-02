@@ -31,17 +31,20 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_comphelper.hxx"
 
+#include "comphelper_module.hxx"
+
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/io/XSeekableInputStream.hpp>
+#include <com/sun/star/io/XTruncate.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase4.hxx>
 
 #include <string.h>
 #include <vector>
 
 using ::rtl::OUString;
 using ::cppu::OWeakObject;
-using ::cppu::WeakImplHelper3;
+using ::cppu::WeakImplHelper4;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -50,7 +53,7 @@ using namespace ::osl;
 namespace comphelper
 {
 
-class UNOMemoryStream : public WeakImplHelper3 < XStream, XSeekableInputStream, XOutputStream >
+class UNOMemoryStream : public WeakImplHelper4 < XStream, XSeekableInputStream, XOutputStream, XTruncate >
 {
 public:
     UNOMemoryStream();
@@ -76,6 +79,14 @@ public:
     virtual void SAL_CALL writeBytes( const Sequence< sal_Int8 >& aData ) throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException);
     virtual void SAL_CALL flush() throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException);
     virtual void SAL_CALL closeOutput() throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException);
+
+    // XTruncate
+    virtual void SAL_CALL truncate() throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+
+    // XServiceInfo - static versions (used for component registration)
+    static ::rtl::OUString SAL_CALL getImplementationName_static();
+    static Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames_static();
+    static Reference< XInterface > SAL_CALL Create( const Reference< ::com::sun::star::uno::XComponentContext >& );
 
 private:
     std::vector< sal_Int8 > maData;
@@ -109,8 +120,7 @@ sal_Int32 SAL_CALL UNOMemoryStream::readBytes( Sequence< sal_Int8 >& aData, sal_
         throw IOException();
 
     nBytesToRead = std::min( nBytesToRead, available() );
-    if( aData.getLength() < nBytesToRead )
-        aData.realloc( nBytesToRead );
+    aData.realloc( nBytesToRead );
 
     if( nBytesToRead )
     {
@@ -150,8 +160,12 @@ void SAL_CALL UNOMemoryStream::closeInput() throw (NotConnectedException, IOExce
 // XSeekable
 void SAL_CALL UNOMemoryStream::seek( sal_Int64 location ) throw (IllegalArgumentException, IOException, RuntimeException)
 {
-    if( (location < 0) || (location > SAL_MAX_INT32) || (location > static_cast< sal_Int64 >( maData.size() )) )
+    if( (location < 0) || (location > SAL_MAX_INT32) )
         throw IllegalArgumentException( OUString(RTL_CONSTASCII_USTRINGPARAM("this implementation does not support more than 2GB!")), Reference< XInterface >(static_cast<OWeakObject*>(this)), 0 );
+
+    // seek operation should be able to resize the stream
+    if ( location > static_cast< sal_Int64 >( maData.size() ) )
+        maData.resize( static_cast< sal_Int32 >( location ) );
 
     mnCursor = static_cast< sal_Int32 >( location );
 }
@@ -199,22 +213,35 @@ void SAL_CALL UNOMemoryStream::closeOutput() throw (NotConnectedException, Buffe
     mnCursor = 0;
 }
 
-OUString SAL_CALL UNOMemoryStream_getImplementationName() throw()
+//XTruncate
+void SAL_CALL UNOMemoryStream::truncate() throw (IOException, RuntimeException)
+{
+    maData.resize( 0 );
+    mnCursor = 0;
+}
+
+::rtl::OUString SAL_CALL UNOMemoryStream::getImplementationName_static()
 {
     static const OUString sImplName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.MemoryStream" ) );
     return sImplName;
 }
 
-Sequence< OUString > SAL_CALL UNOMemoryStream_getSupportedServiceNames() throw()
+Sequence< ::rtl::OUString > SAL_CALL UNOMemoryStream::getSupportedServiceNames_static()
 {
     Sequence< OUString > aSeq(1);
-    aSeq[0] = UNOMemoryStream_getImplementationName();
+    aSeq[0] = getImplementationName_static();
     return aSeq;
 }
 
-Reference< XInterface > SAL_CALL UNOMemoryStream_createInstance(const Reference< XComponentContext > & ) throw( Exception )
+Reference< XInterface > SAL_CALL UNOMemoryStream::Create(
+    const Reference< XComponentContext >& )
 {
     return static_cast<OWeakObject*>(new UNOMemoryStream());
 }
 
 } // namespace comphelper
+
+void createRegistryInfo_UNOMemoryStream()
+{
+    static ::comphelper::module::OAutoRegistration< ::comphelper::UNOMemoryStream > aAutoRegistration;
+}

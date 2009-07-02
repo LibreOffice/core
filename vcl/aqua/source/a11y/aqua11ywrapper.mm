@@ -178,9 +178,11 @@ static MacOSBOOL isPopupMenuOpen = NO;
 
 -(Reference < XAccessible >)getFirstRadioButtonInGroup {
     Reference < XAccessibleRelationSet > rxAccessibleRelationSet = [ self accessibleContext ] -> getAccessibleRelationSet();
-    AccessibleRelation relationMemberOf = rxAccessibleRelationSet -> getRelationByType ( AccessibleRelationType::MEMBER_OF );
-    if ( relationMemberOf.RelationType == AccessibleRelationType::MEMBER_OF && relationMemberOf.TargetSet.hasElements() ) {
-        return Reference < XAccessible > ( relationMemberOf.TargetSet[0], UNO_QUERY );
+    if( rxAccessibleRelationSet.is() )
+    {
+        AccessibleRelation relationMemberOf = rxAccessibleRelationSet -> getRelationByType ( AccessibleRelationType::MEMBER_OF );
+        if ( relationMemberOf.RelationType == AccessibleRelationType::MEMBER_OF && relationMemberOf.TargetSet.hasElements() )
+            return Reference < XAccessible > ( relationMemberOf.TargetSet[0], UNO_QUERY );
     }
     return Reference < XAccessible > ();
 }

@@ -304,7 +304,26 @@ void SourceTreeLocalizer::WorkOnFile(
             DirEntry aTemp( Export::GetTempFile());
             ByteString sTempFile( aTemp.GetFull(), RTL_TEXTENCODING_ASCII_US );
 
-            ByteString sExecutable( rExecutable );
+            ByteString sDel;
+#if defined(WNT) || defined(OS2)
+            sDel=ByteString("\\");
+#else
+            sDel=ByteString("/");
+#endif
+            ByteString sPath1( Export::GetEnv("SOLARVER") );
+            ByteString sPath2( Export::GetEnv("INPATH") );
+            ByteString sPath3( "bin" );
+            ByteString sPath4( Export::GetEnv("UPDMINOREXT") );
+            ByteString sExecutable( sPath1 );
+            sExecutable += sDel ;
+            sExecutable += sPath2 ;
+            sExecutable += sDel;
+            sExecutable += sPath3 ;
+            sExecutable += sPath4 ;
+            sExecutable += sDel ;
+            sExecutable += rExecutable ;
+
+
 #if defined(WNT) || defined(OS2)
             sExecutable += ".exe";
             String sPath( Export::GetEnv( "PATH" ), RTL_TEXTENCODING_ASCII_US );

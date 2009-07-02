@@ -27,21 +27,17 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-package complex.sequenceoutputstream;
-
-import complexlib.ComplexTestCase;
+package complex.comphelper;
 
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.io.XSequenceOutputStream;
 import com.sun.star.io.XSeekableInputStream;
-import com.sun.star.io.XOutputStream;
-import com.sun.star.io.XInputStream;
 import com.sun.star.uno.UnoRuntime;
 
 import java.util.Random;
 import share.LogWriter;
 
-public class Test01 implements SequenceOutputStreamTest {
+public class Test01 {
     XMultiServiceFactory m_xMSF = null;
     TestHelper m_aTestHelper = null;
 

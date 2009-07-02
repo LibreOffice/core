@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: pdfwriter_impl.cxx,v $
- * $Revision: 1.132.72.2 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -1930,7 +1927,7 @@ static ImplDevFontAttributes GetDevFontAttributes( const PDFWriterImpl::BuiltinF
     aDFA.maName         = String::CreateFromAscii( rBuiltin.m_pName );
     aDFA.maStyleName    = String::CreateFromAscii( rBuiltin.m_pStyleName );
     aDFA.meFamily       = rBuiltin.m_eFamily;
-    aDFA.mbSymbolFlag   = (rBuiltin.m_eCharSet == RTL_TEXTENCODING_SYMBOL);
+    aDFA.mbSymbolFlag   = (rBuiltin.m_eCharSet != RTL_TEXTENCODING_MS_1252 );
     aDFA.mePitch        = rBuiltin.m_ePitch;
     aDFA.meWeight       = rBuiltin.m_eWeight;
     aDFA.meItalic       = rBuiltin.m_eItalic;
@@ -2033,7 +2030,7 @@ PDFSalLayout::PDFSalLayout( PDFWriterImpl& rPDFWriterImpl,
     mrBuiltinFont( rBuiltinFont ),
     mnPixelPerEM( nPixelPerEM )
 {
-    mbIsSymbolFont = (rBuiltinFont.m_eCharSet == RTL_TEXTENCODING_SYMBOL);
+    mbIsSymbolFont = (rBuiltinFont.m_eCharSet != RTL_TEXTENCODING_MS_1252);
     SetOrientation( nOrientation );
 }
 
@@ -2045,41 +2042,35 @@ bool PDFSalLayout::LayoutText( ImplLayoutArgs& rArgs )
     SetText( aText );
     SetUnitsPerPixel( 1000 );
 
-    rtl_UnicodeToTextConverter aConv = rtl_createTextToUnicodeConverter( RTL_TEXTENCODING_MS_1252 );
+    rtl_UnicodeToTextConverter aConv = rtl_createTextToUnicodeConverter( mrBuiltinFont.m_eCharSet );
 
     Point aNewPos( 0, 0 );
     bool bRightToLeft;
     for( int nCharPos = -1; rArgs.GetNextPos( &nCharPos, &bRightToLeft ); )
     {
         // TODO: handle unicode surrogates
-    // on the other hand builtin fonts don't support them anyway
+        // on the other hand the PDF builtin fonts don't support them anyway
         sal_Unicode cChar = rArgs.mpStr[ nCharPos ];
         if( bRightToLeft )
             cChar = static_cast<sal_Unicode>(GetMirroredChar( cChar ));
 
-        if( cChar & 0xff00 )
+        if( 1 ) // TODO: shortcut for ASCII?
         {
-            // some characters can be used by conversion
-            if( (cChar >= 0xf000) && mbIsSymbolFont )
-                cChar -= 0xf000;
-            else
-            {
-                sal_Char aBuf[4];
-                sal_uInt32 nInfo;
-                sal_Size nSrcCvtChars;
+            sal_Char aBuf[4];
+            sal_uInt32 nInfo;
+            sal_Size nSrcCvtChars;
 
-                sal_Size nConv = rtl_convertUnicodeToText( aConv,
-                                                           NULL,
-                                                           &cChar, 1,
-                                                           aBuf, 1,
-                                                           RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR,
-                                                           &nInfo, &nSrcCvtChars );
-                // check whether conversion was possible
-                // else fallback font is needed as the standard fonts
-                // are handled via WinAnsi encoding
-                if( nConv > 0 )
-                    cChar = ((sal_Unicode)aBuf[0]) & 0x00ff;
-            }
+            sal_Size nConv = rtl_convertUnicodeToText( aConv,
+                                                       NULL,
+                                                       &cChar, 1,
+                                                       aBuf, sizeof(aBuf)/sizeof(*aBuf),
+                                                       RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR,
+                                                       &nInfo, &nSrcCvtChars );
+            // check whether conversion was possible
+            // else fallback font is needed as the standard fonts
+            // are handled via WinAnsi encoding
+            if( nConv > 0 )
+                cChar = ((sal_Unicode)aBuf[0]) & 0x00ff;
         }
         if( cChar & 0xff00 )
         {
@@ -2088,7 +2079,7 @@ bool PDFSalLayout::LayoutText( ImplLayoutArgs& rArgs )
         }
 
         long nGlyphWidth = (long)mrBuiltinFont.m_aWidths[cChar] * mnPixelPerEM;
-        long nGlyphFlags = (nGlyphWidth > 0) ? 0 : GlyphItem::IS_IN_CLUSTER;
+        long nGlyphFlags = 0; // builtin fonts don't have diacritic glyphs
         if( bRightToLeft )
             nGlyphFlags |= GlyphItem::IS_RTL_GLYPH;
         // TODO: get kerning from builtin fonts
@@ -2782,7 +2773,7 @@ sal_Int32 PDFWriterImpl::emitBuiltinFont( const ImplFontData* pFont, sal_Int32 n
                   "<</Type/Font/Subtype/Type1/BaseFont/" );
     appendName( pBuiltinFont->m_pPSName, aLine );
     aLine.append( "\n" );
-    if( pBuiltinFont->m_eCharSet != RTL_TEXTENCODING_SYMBOL )
+    if( pBuiltinFont->m_eCharSet == RTL_TEXTENCODING_MS_1252 )
          aLine.append( "/Encoding/WinAnsiEncoding\n" );
     aLine.append( ">>\nendobj\n\n" );
     CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );

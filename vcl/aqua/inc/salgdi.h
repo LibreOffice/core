@@ -157,6 +157,7 @@ public:
     void                SetVirDevGraphics( CGLayerRef, CGContextRef, int nBitDepth = 0 );
 
     void                initResolution( NSWindow* );
+    void                copyResolution( AquaSalGraphics& );
     void                updateResolution();
 
     bool                IsWindowGraphics()      const   { return mbWindow; }

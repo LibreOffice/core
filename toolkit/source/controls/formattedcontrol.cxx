@@ -323,8 +323,11 @@ namespace toolkit
                 ++pPropertyNames
             )
         {
-            bSettingValue = ( BASEPROPERTY_EFFECTIVE_VALUE == GetPropertyId( *pPropertyNames ) );
-            bSettingText = ( BASEPROPERTY_TEXT == GetPropertyId( *pPropertyNames ) );
+            if ( BASEPROPERTY_EFFECTIVE_VALUE == GetPropertyId( *pPropertyNames ) )
+                bSettingValue = true;
+
+            if ( BASEPROPERTY_TEXT == GetPropertyId( *pPropertyNames ) )
+                bSettingText = true;
         }
 
         m_bSettingValueAndText = ( bSettingValue && bSettingText );

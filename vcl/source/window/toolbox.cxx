@@ -3378,7 +3378,7 @@ static void ImplDrawButton( ToolBox* pThis, const Rectangle &rRect, USHORT highl
     }
 
     if( !bNativeOk )
-        pThis->DrawSelectionBackground( rRect, bIsWindow ? 3 : highlight, bChecked, TRUE, bIsWindow );
+        pThis->DrawSelectionBackground( rRect, bIsWindow ? 3 : highlight, bChecked, TRUE, bIsWindow, 2, NULL, NULL );
 }
 
 void ToolBox::ImplDrawItem( USHORT nPos, BOOL bHighlight, BOOL bPaint, BOOL bLayout )

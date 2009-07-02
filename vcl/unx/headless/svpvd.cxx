@@ -65,9 +65,14 @@ BOOL SvpSalVirtualDevice::SetSize( long nNewDX, long nNewDY )
     if( ! m_aDevice.get() || m_aDevice->getSize() != aDevSize )
     {
         sal_uInt32 nFormat = SVP_DEFAULT_BITMAP_FORMAT;
+        std::vector< basebmp::Color > aDevPal;
         switch( m_nBitCount )
         {
-            case 1: nFormat = Format::ONE_BIT_MSB_PAL; break;
+            case 1: nFormat = Format::ONE_BIT_MSB_PAL;
+                aDevPal.reserve(2);
+                aDevPal.push_back( basebmp::Color( 0, 0, 0 ) );
+                aDevPal.push_back( basebmp::Color( 0xff, 0xff, 0xff ) );
+                break;
             case 4: nFormat = Format::FOUR_BIT_MSB_PAL; break;
             case 8: nFormat = Format::EIGHT_BIT_PAL; break;
 #ifdef OSL_BIGENDIAN
@@ -78,7 +83,9 @@ BOOL SvpSalVirtualDevice::SetSize( long nNewDX, long nNewDY )
             case 24: nFormat = Format::TWENTYFOUR_BIT_TC_MASK; break;
             case 32: nFormat = Format::THIRTYTWO_BIT_TC_MASK; break;
         }
-        m_aDevice = createBitmapDevice( aDevSize, false, nFormat );
+        m_aDevice = aDevPal.empty()
+                    ? createBitmapDevice( aDevSize, false, nFormat )
+                    : createBitmapDevice( aDevSize, false, nFormat, PaletteMemorySharedVector( new std::vector< basebmp::Color >(aDevPal) ) );
         // update device in existing graphics
         for( std::list< SvpSalGraphics* >::iterator it = m_aGraphics.begin();
              it != m_aGraphics.end(); ++it )

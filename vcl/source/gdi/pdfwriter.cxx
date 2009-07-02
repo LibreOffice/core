@@ -246,9 +246,12 @@ void PDFWriter::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize, const
 
 void PDFWriter::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize, const Point& rSrcPtPixel, const Size& rSrcSizePixel, const BitmapEx& rBitmap )
 {
+    if ( !!rBitmap )
+    {
     BitmapEx aBitmap( rBitmap );
     aBitmap.Crop( Rectangle( rSrcPtPixel, rSrcSizePixel ) );
     ((PDFWriterImpl*)pImplementation)->drawBitmap( rDestPt, rDestSize, aBitmap );
+    }
 }
 
 void PDFWriter::DrawMask( const Point& rDestPt, const Bitmap& rBitmap, const Color& rMaskColor )

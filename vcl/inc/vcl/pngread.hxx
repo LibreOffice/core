@@ -65,6 +65,8 @@ namespace vcl
             std::vector< sal_uInt8 >    aData;
         };
         const std::vector< ChunkData >& GetChunks() const;
+
+        void SetIgnoreGammaChunk( sal_Bool b );
     };
 }
 
