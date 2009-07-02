@@ -32,7 +32,7 @@
 
 #include "resids.hrc"
 #include "buttongroup.hrc"
-#include "chinese_direction.hrc"
+#include "chinese_direction_ids.hrc"
 
 #define ED_TERM             1
 #define ED_MAPPING          2

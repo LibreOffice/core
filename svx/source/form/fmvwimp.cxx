@@ -213,7 +213,7 @@ void FmXPageViewWinRec::dispose()
             Reference< XChild > xControllerModel( xController->getModel(), UNO_QUERY );
             if ( xControllerModel.is() )
             {
-                Reference< XEventAttacherManager >  xEventManager( xControllerModel->getParent(), UNO_QUERY );
+                Reference< XEventAttacherManager >  xEventManager( xControllerModel->getParent(), UNO_QUERY_THROW );
                 Reference< XInterface > xControllerNormalized( xController, UNO_QUERY_THROW );
                 xEventManager->detach( i - m_aControllerList.begin(), xControllerNormalized );
             }
@@ -817,14 +817,20 @@ static Reference< XControl > lcl_firstFocussableControl( const Sequence< Referen
     {
         try
         {
+            if ( !pControls->is() )
+                continue;
+
+            Reference< XPropertySet > xModelProps( (*pControls)->getModel(), UNO_QUERY_THROW );
+
+            // only enabled controls are allowed to participate
+            sal_Bool bEnabled = sal_False;
+            OSL_VERIFY( xModelProps->getPropertyValue( FM_PROP_ENABLED ) >>= bEnabled );
+            if ( !bEnabled )
+                continue;
+
             // check the class id of the control model
             sal_Int16 nClassId = FormComponentType::CONTROL;
-
-            Reference< XPropertySet > xModelProps;
-            if ( pControls->is() )
-                xModelProps = xModelProps.query( (*pControls)->getModel() );
-            if ( xModelProps.is() )
-                xModelProps->getPropertyValue( FM_PROP_CLASSID ) >>= nClassId;
+            OSL_VERIFY( xModelProps->getPropertyValue( FM_PROP_CLASSID ) >>= nClassId );
 
             // controls which are not focussable
             if  (   ( FormComponentType::CONTROL != nClassId )
@@ -1115,10 +1121,10 @@ namespace
 
         Reference< XFormComponent > xFormComponent( _rSdrObj.GetUnoControlModel(), UNO_QUERY_THROW );
         Reference< XForm > xTargetForm(
-            rPage.GetImpl()->findPlaceInFormComponentHierarchy( xFormComponent, _rxDataSource, _rDataSourceName, _rCommand, _nCommandType ),
+            rPage.GetImpl().findPlaceInFormComponentHierarchy( xFormComponent, _rxDataSource, _rDataSourceName, _rCommand, _nCommandType ),
             UNO_SET_THROW );
 
-        rPage.GetImpl()->setUniqueName( xFormComponent, xTargetForm );
+        rPage.GetImpl().setUniqueName( xFormComponent, xTargetForm );
 
         Reference< XIndexContainer > xFormAsContainer( xTargetForm, UNO_QUERY_THROW );
         xFormAsContainer->insertByIndex( xFormAsContainer->getCount(), makeAny( xFormComponent ) );

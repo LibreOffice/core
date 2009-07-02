@@ -96,25 +96,38 @@ void IFrameWindow_Impl::SetBorder( sal_Bool bNewBorder )
 
 #define PROPERTY_UNBOUND 0
 
-SfxItemPropertyMap aIFramePropertyMap_Impl[] =
+#define WID_FRAME_URL                   1
+#define WID_FRAME_NAME                  2
+#define WID_FRAME_IS_AUTO_SCROLL        3
+#define WID_FRAME_IS_SCROLLING_MODE     4
+#define WID_FRAME_IS_BORDER             5
+#define WID_FRAME_IS_AUTO_BORDER        6
+#define WID_FRAME_MARGIN_WIDTH          7
+#define WID_FRAME_MARGIN_HEIGHT         8
+
+const SfxItemPropertyMapEntry* lcl_GetIFramePropertyMap_Impl()
 {
-    { "FrameIsAutoBorder",    17, 1, &::getBooleanCppuType(), PROPERTY_UNBOUND, 0 },
-    { "FrameIsAutoScroll",    17, 2, &::getBooleanCppuType(), PROPERTY_UNBOUND, 0 },
-    { "FrameIsBorder",        13, 3, &::getBooleanCppuType(), PROPERTY_UNBOUND, 0 },
-    { "FrameIsScrollingMode", 20, 4, &::getBooleanCppuType(), PROPERTY_UNBOUND, 0 },
-    { "FrameMarginHeight",    17, 5, &::getCppuType( (sal_Int32*)0 ), PROPERTY_UNBOUND, 0 },
-    { "FrameMarginWidth",     16, 6, &::getCppuType( (sal_Int32*)0 ), PROPERTY_UNBOUND, 0 },
-    { "FrameName",             9, 7, &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
-    { "FrameURL",              8, 8, &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
-    {0,0,0,0,0,0}
-};
+    static SfxItemPropertyMapEntry aIFramePropertyMap_Impl[] =
+    {
+        { MAP_CHAR_LEN("FrameIsAutoBorder"),    WID_FRAME_IS_AUTO_BORDER,   &::getBooleanCppuType(), PROPERTY_UNBOUND, 0 },
+        { MAP_CHAR_LEN("FrameIsAutoScroll"),    WID_FRAME_IS_AUTO_SCROLL,   &::getBooleanCppuType(), PROPERTY_UNBOUND, 0 },
+        { MAP_CHAR_LEN("FrameIsBorder"),        WID_FRAME_IS_BORDER,        &::getBooleanCppuType(), PROPERTY_UNBOUND, 0 },
+        { MAP_CHAR_LEN("FrameIsScrollingMode"), WID_FRAME_IS_SCROLLING_MODE, &::getBooleanCppuType(), PROPERTY_UNBOUND, 0 },
+        { MAP_CHAR_LEN("FrameMarginHeight"),    WID_FRAME_MARGIN_HEIGHT,    &::getCppuType( (sal_Int32*)0 ), PROPERTY_UNBOUND, 0 },
+        { MAP_CHAR_LEN("FrameMarginWidth"),     WID_FRAME_MARGIN_WIDTH,     &::getCppuType( (sal_Int32*)0 ), PROPERTY_UNBOUND, 0 },
+        { MAP_CHAR_LEN("FrameName"),            WID_FRAME_NAME,             &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
+        { MAP_CHAR_LEN("FrameURL"),             WID_FRAME_URL,              &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
+        {0,0,0,0,0,0}
+    };
+    return aIFramePropertyMap_Impl;
+}
 
 SFX_IMPL_XSERVICEINFO( IFrameObject, "com.sun.star.embed.SpecialEmbeddedObject", "com.sun.star.comp.sfx2.IFrameObject" )
 SFX_IMPL_SINGLEFACTORY( IFrameObject );
 
 IFrameObject::IFrameObject( const uno::Reference < lang::XMultiServiceFactory >& rFact )
     : mxFact( rFact )
-    , maPropSet( aIFramePropertyMap_Impl )
+    , maPropMap( lcl_GetIFramePropertyMap_Impl() )
 {
 }
 
@@ -213,43 +226,54 @@ void SAL_CALL IFrameObject::disposing( const com::sun::star::lang::EventObject& 
 
 uno::Reference< beans::XPropertySetInfo > SAL_CALL IFrameObject::getPropertySetInfo() throw( ::com::sun::star::uno::RuntimeException )
 {
-    return maPropSet.getPropertySetInfo();
+    static uno::Reference< beans::XPropertySetInfo > xInfo = new SfxItemPropertySetInfo( &maPropMap );
+    return xInfo;
 }
 
 void SAL_CALL IFrameObject::setPropertyValue(const ::rtl::OUString& aPropertyName, const uno::Any& aAny)
     throw ( beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    if ( aPropertyName.equalsAscii("FrameURL") )
+    const SfxItemPropertySimpleEntry*  pEntry = maPropMap.getByName( aPropertyName );
+    if( !pEntry )
+         throw beans::UnknownPropertyException();
+    switch( pEntry->nWID )
+    {
+    case WID_FRAME_URL:
     {
         ::rtl::OUString aURL;
         aAny >>= aURL;
         maFrmDescr.SetURL( String(aURL) );
     }
-    else if ( aPropertyName.equalsAscii("FrameName") )
+    break;
+    case WID_FRAME_NAME:
     {
         ::rtl::OUString aName;
         if ( aAny >>= aName )
             maFrmDescr.SetName( aName );
     }
-    else if ( aPropertyName.equalsAscii("FrameIsAutoScroll") )
+    break;
+    case WID_FRAME_IS_AUTO_SCROLL:
     {
         sal_Bool bIsAutoScroll = sal_Bool();
         if ( (aAny >>= bIsAutoScroll) && bIsAutoScroll )
             maFrmDescr.SetScrollingMode( ScrollingAuto );
     }
-    else if ( aPropertyName.equalsAscii("FrameIsScrollingMode") )
+    break;
+    case WID_FRAME_IS_SCROLLING_MODE:
     {
         sal_Bool bIsScroll = sal_Bool();
         if ( aAny >>= bIsScroll )
             maFrmDescr.SetScrollingMode( bIsScroll ? ScrollingYes : ScrollingNo );
     }
-    else if ( aPropertyName.equalsAscii("FrameIsBorder") )
+    break;
+    case WID_FRAME_IS_BORDER:
     {
         sal_Bool bIsBorder = sal_Bool();
         if ( aAny >>= bIsBorder )
             maFrmDescr.SetFrameBorder( bIsBorder );
     }
-    else if ( aPropertyName.equalsAscii("FrameIsAutoBorder") )
+    break;
+    case WID_FRAME_IS_AUTO_BORDER:
     {
         sal_Bool bIsAutoBorder = sal_Bool();
         if ( (aAny >>= bIsAutoBorder) )
@@ -260,7 +284,8 @@ void SAL_CALL IFrameObject::setPropertyValue(const ::rtl::OUString& aPropertyNam
                 maFrmDescr.SetFrameBorder( bBorder );
         }
     }
-    else if ( aPropertyName.equalsAscii("FrameMarginWidth") )
+    break;
+    case WID_FRAME_MARGIN_WIDTH:
     {
         sal_Int32 nMargin = 0;
         Size aSize = maFrmDescr.GetMargin();
@@ -270,7 +295,8 @@ void SAL_CALL IFrameObject::setPropertyValue(const ::rtl::OUString& aPropertyNam
             maFrmDescr.SetMargin( aSize );
         }
     }
-    else if ( aPropertyName.equalsAscii("FrameMarginHeight") )
+    break;
+    case WID_FRAME_MARGIN_HEIGHT:
     {
         sal_Int32 nMargin = 0;
         Size aSize = maFrmDescr.GetMargin();
@@ -280,52 +306,65 @@ void SAL_CALL IFrameObject::setPropertyValue(const ::rtl::OUString& aPropertyNam
             maFrmDescr.SetMargin( aSize );
         }
     }
-    else
-         throw beans::UnknownPropertyException();
+    break;
+    default: ;
+    }
 }
 
 uno::Any SAL_CALL IFrameObject::getPropertyValue(const ::rtl::OUString& aPropertyName)
         throw ( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
+    const SfxItemPropertySimpleEntry*  pEntry = maPropMap.getByName( aPropertyName );
+    if( !pEntry )
+         throw beans::UnknownPropertyException();
     uno::Any aAny;
-    if ( aPropertyName.equalsAscii("FrameURL") )
+    switch( pEntry->nWID )
+    {
+    case WID_FRAME_URL:
     {
         aAny <<= ::rtl::OUString( maFrmDescr.GetURL().GetMainURL( INetURLObject::NO_DECODE ) );
     }
-    else if ( aPropertyName.equalsAscii("FrameName") )
+    break;
+    case WID_FRAME_NAME:
     {
         aAny <<= ::rtl::OUString( maFrmDescr.GetName() );
     }
-    else if ( aPropertyName.equalsAscii("FrameIsAutoScroll") )
+    break;
+    case WID_FRAME_IS_AUTO_SCROLL:
     {
         sal_Bool bIsAutoScroll = ( maFrmDescr.GetScrollingMode() == ScrollingAuto );
         aAny <<= bIsAutoScroll;
     }
-    else if ( aPropertyName.equalsAscii("FrameIsScrollingMode") )
+    break;
+    case WID_FRAME_IS_SCROLLING_MODE:
     {
         sal_Bool bIsScroll = ( maFrmDescr.GetScrollingMode() == ScrollingYes );
         aAny <<= bIsScroll;
     }
-    else if ( aPropertyName.equalsAscii("FrameIsBorder") )
+    break;
+    case WID_FRAME_IS_BORDER:
     {
         sal_Bool bIsBorder = maFrmDescr.IsFrameBorderOn();
         aAny <<= bIsBorder;
     }
-    else if ( aPropertyName.equalsAscii("FrameIsAutoBorder") )
+    break;
+    case WID_FRAME_IS_AUTO_BORDER:
     {
         sal_Bool bIsAutoBorder = !maFrmDescr.IsFrameBorderSet();
         aAny <<= bIsAutoBorder;
     }
-    else if ( aPropertyName.equalsAscii("FrameMarginWidth") )
+    break;
+    case WID_FRAME_MARGIN_WIDTH:
     {
         aAny <<= (sal_Int32 ) maFrmDescr.GetMargin().Width();
     }
-    else if ( aPropertyName.equalsAscii("FrameMarginHeight") )
+    break;
+    case WID_FRAME_MARGIN_HEIGHT:
     {
         aAny <<= (sal_Int32 ) maFrmDescr.GetMargin().Height();
     }
-    else
-         throw beans::UnknownPropertyException();
+    default: ;
+    }
     return aAny;
 }
 

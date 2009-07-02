@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: LColumns.hxx,v $
- * $Revision: 1.5 $
+ * $RCSfile: XMLCalculationSettingsContext.hxx,v $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,28 +28,27 @@
  *
  ************************************************************************/
 
-#ifndef _CONNECTIVITY_EVOAB_LCOLUMNS_HXX_
-#define _CONNECTIVITY_EVOAB_LCOLUMNS_HXX_
+#ifndef _XMLOFF_SCHXMLCALCULATIONSETTINGSCONTEXT_HXX
+#define _XMLOFF_SCHXMLCALCULATIONSETTINGSCONTEXT_HXX
 
-#include "file/FColumns.hxx"
+#include <xmloff/xmlictxt.hxx>
 
-namespace connectivity
+class SchXMLCalculationSettingsContext : public SvXMLImportContext
 {
-    namespace evoab
-    {
-        class OEvoabColumns : public file::OColumns
-        {
-        protected:
-            virtual sdbcx::ObjectType createObject(const ::rtl::OUString& _rName);
-        public:
-            OEvoabColumns(file::OFileTable* _pTable,
-                            ::osl::Mutex& _rMutex,
-                            const TStringVector &_rVector
-                         ) : file::OColumns(_pTable,_rMutex,_rVector)
-            {}
+    com::sun::star::uno::Any m_aNullDate;
+public:
+    SchXMLCalculationSettingsContext( SvXMLImport& rImport,
+                                    sal_uInt16 nPrefix,
+                                    const ::rtl::OUString& rLocalName,
+                                     const ::com::sun::star::uno::Reference<
+                                         ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
-        };
-    }
-}
-#endif // _CONNECTIVITY_EVOAB_LCOLUMNS_HXX_
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
+                                   const ::rtl::OUString& rLocalName,
+                                   const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
+    virtual void EndElement();
+};
+
+
+#endif

@@ -1220,10 +1220,14 @@ void SfxDocTplService_Impl::doUpdate()
 
     // the last directory in the list must be writable
     sal_Bool bWriteableDirectory = sal_True;
+
+    // the target folder might not exist, for this reason no interaction handler should be used
+    uno::Reference< XCommandEnvironment > aQuietEnv;
+
     while ( nCountDir )
     {
         nCountDir--;
-        if ( Content::create( pDirs[ nCountDir ], maCmdEnv, aDirContent ) )
+        if ( Content::create( pDirs[ nCountDir ], aQuietEnv, aDirContent ) )
         {
             createFromContent( aGroupList, aDirContent, sal_False, bWriteableDirectory );
         }
@@ -2535,7 +2539,10 @@ void SfxDocTplService_Impl::addFsysGroup( GroupList_Impl& rList,
 
     try
     {
-        aContent = Content( rOwnURL, maCmdEnv );
+        // this method is only used during checking of the available template-folders
+        // that should happen quietly
+        uno::Reference< XCommandEnvironment > aQuietEnv;
+        aContent = Content( rOwnURL, aQuietEnv );
         ResultSetInclude eInclude = INCLUDE_DOCUMENTS_ONLY;
         xResultSet = aContent.createCursor( aProps, eInclude );
     }

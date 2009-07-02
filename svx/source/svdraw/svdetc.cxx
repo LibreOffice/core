@@ -146,10 +146,13 @@ void OLEObjCache::UnloadOnDemand()
             {
                 try
                 {
-                    sal_Bool bUnload = sal_True;
                     // it is important to get object without reinitialization to avoid reentrance
                     uno::Reference< embed::XEmbeddedObject > xUnloadObj = pUnloadObj->GetObjRef_NoInit();
-                    if ( xUnloadObj.is() )
+
+                    sal_Bool bUnload = SdrOle2Obj::CanUnloadRunningObj( xUnloadObj, pUnloadObj->GetAspect() );
+
+                    // check whether the object can be unloaded before looking for the parent objects
+                    if ( xUnloadObj.is() && bUnload )
                     {
                         uno::Reference< frame::XModel > xUnloadModel( xUnloadObj->getComponent(), uno::UNO_QUERY );
                         if ( xUnloadModel.is() )
@@ -193,11 +196,18 @@ void OLEObjCache::InsertObj(SdrOle2Obj* pObj)
             return;
     }
 
+    // get the old position of the object to know whether it is already in container
+    ULONG nOldPos = GetPos( pObj );
+
     // insert object into first position
-    Remove(pObj);
+    Remove( nOldPos );
     Insert(pObj, (ULONG) 0L);
 
-    UnloadOnDemand();
+    if ( nOldPos == CONTAINER_ENTRY_NOTFOUND )
+    {
+        // a new object was inserted, recalculate the cache
+        UnloadOnDemand();
+    }
 }
 
 void OLEObjCache::RemoveObj(SdrOle2Obj* pObj)

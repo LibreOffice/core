@@ -2106,7 +2106,7 @@ void SdrTableObj::EndTextEdit(SdrOutliner& rOutl)
 {
     if(rOutl.IsModified())
     {
-        if( GetModel() )
+        if( GetModel() && GetModel()->IsUndoEnabled() )
             GetModel()->AddUndo( GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*this) );
 
         OutlinerParaObject* pNewText = 0;

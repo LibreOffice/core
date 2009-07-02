@@ -1268,6 +1268,7 @@ SvStream& SvxTabStopItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) 
         if( nNew <= nPos + 50 )
             nNew += nDefDist;
 
+        long lA3Width = SvxPaperInfo::GetPaperSize(PAPER_A3).Width();
         nCount = (sal_uInt16)(nNew < lA3Width ? ( lA3Width - nNew ) / nDefDist + 1 : 0);
     }
 

@@ -132,7 +132,7 @@ namespace formula
         void            UpdateFunctionDesc();
         void            ResizeArgArr( const IFunctionDescription* pNewFunc );
         void            FillListboxes();
-        void            FillControls();
+        void            FillControls(BOOL &rbNext, BOOL &rbPrev);
 
         FormulaDlgMode  SetMeText(const String& _sText,xub_StrLen PrivStart, xub_StrLen PrivEnd,BOOL bMatrix,BOOL _bSelect,BOOL _bUpdate);
         void            SetMeText(const String& _sText);
@@ -675,8 +675,10 @@ void FormulaDlg_Impl::MakeTree(IStructHelper* _pTree,SvLBoxEntry* pParent,Formul
         long nParas = _pToken->GetParamCount();
         OpCode eOp = _pToken->GetOpCode();
 
+        // #i101512# for output, the original token is needed
+        FormulaToken* pOrigToken = (_pToken->GetType() == svFAP) ? _pToken->GetFAPOrigToken() : _pToken;
         uno::Sequence<sheet::FormulaToken> aArgs(1);
-        aArgs[0] = m_aTokenMap.find(_pToken)->second;
+        aArgs[0] = m_aTokenMap.find(pOrigToken)->second;
         try
         {
             const String aResult = m_pHelper->getFormulaParser()->printFormula(aArgs);
@@ -766,14 +768,21 @@ void FormulaDlg_Impl::UpdateTokenArray( const String& rStrExp)
     } // if ( pTokens && nLen == m_aTokenList.getLength() )
 
     FormulaCompiler aCompiler(*m_pTokenArray.get());
+    aCompiler.SetCompileForFAP(TRUE);   // #i101512# special handling is needed
     aCompiler.CompileTokenArray();
 }
 
 void FormulaDlg_Impl::FillDialog(BOOL nFlag)
 {
-    if ( nFlag )
-        FillControls();
+    BOOL bNext=TRUE, bPrev=TRUE;
+    if(nFlag)
+        FillControls(bNext, bPrev);
     FillListboxes();
+    if(nFlag)
+    {
+        aBtnBackward.Enable(bPrev);
+        aBtnForward.Enable(bNext);
+    }
 
     String aStrResult;
 
@@ -821,7 +830,7 @@ void FormulaDlg_Impl::FillListboxes()
     m_pParent->SetUniqueId( nOldUnique );
 }
 // -----------------------------------------------------------------------------
-void FormulaDlg_Impl::FillControls()
+void FormulaDlg_Impl::FillControls(BOOL &rbNext, BOOL &rbPrev)
 {
     //  Umschalten zwischen den "Seiten"
     FormEditData* pData = m_pHelper->getFormEditData();
@@ -917,12 +926,10 @@ void FormulaDlg_Impl::FillControls()
         //  Test, ob vorne/hinten noch mehr Funktionen sind
 
     xub_StrLen nTempStart = m_aFormulaHelper.GetArgStart( aFormula, nFStart, 0 );
-    BOOL bNext = m_aFormulaHelper.GetNextFunc( aFormula, FALSE, nTempStart );
+    rbNext = m_aFormulaHelper.GetNextFunc( aFormula, FALSE, nTempStart );
     nTempStart=(xub_StrLen)pMEdit->GetSelection().Min();
     pData->SetFStart(nTempStart);
-    BOOL bPrev = m_aFormulaHelper.GetNextFunc( aFormula, TRUE, nTempStart );
-    aBtnBackward.Enable(bPrev);
-    aBtnForward.Enable(bNext);
+    rbPrev = m_aFormulaHelper.GetNextFunc( aFormula, TRUE, nTempStart );
 }
 // -----------------------------------------------------------------------------
 

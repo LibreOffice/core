@@ -238,16 +238,16 @@ MQueryHelper::waitForResultOrComplete(  )
     }
     if (times >= 20 &&  rv == ::osl::Condition::result_timeout ) {
         OSL_TRACE("waitForResultOrComplete() : Timeout!");
-        setError( STR_TIMEOUT_WAITING );
+        m_aError.setResId( STR_TIMEOUT_WAITING );
         return sal_False;
     }
 
     if ( isError() ) {
         OSL_TRACE("waitForResultOrComplete() : Error returned!");
-        setError( STR_ERR_EXECUTING_QUERY );
+        m_aError.setResId( STR_ERR_EXECUTING_QUERY );
         return sal_False;
     }
-    resetError();
+    m_aError.reset();
     OSL_TRACE("  Out : waitForResultOrComplete()");
     return sal_True;
 }
@@ -583,7 +583,7 @@ nsIAbCard * getUpdatedCard( nsIAbCard*  card)
 #define ENSURE_MOZAB_PROFILE_NOT_LOOKED(directory)  \
     if (getDirectoryType(directory) == SDBCAddress::Mozilla && isProfileLocked(NULL))   \
     {   \
-        setError( STR_MOZILLA_IS_RUNNIG_NO_CHANGES ); \
+        m_aError.setResId( STR_MOZILLA_IS_RUNNIG_NO_CHANGES ); \
         return sal_False;   \
     }
 
@@ -620,7 +620,7 @@ sal_Int32 MQueryHelper::commitCard(const sal_Int32 rowIndex,nsIAbDirectory * dir
     }
     //We return NS_ERROR_FILE_ACCESS_DENIED in the case the mozillaAB has been changed out side of our process
     if (rv == NS_ERROR_FILE_ACCESS_DENIED )
-        setError( STR_FOREIGN_PROCESS_CHANGED_AB );
+        m_aError.setResId( STR_FOREIGN_PROCESS_CHANGED_AB );
 
     return !(NS_FAILED(rv));
 }
@@ -668,7 +668,7 @@ sal_Int32 MQueryHelper::deleteCard(const sal_Int32 rowIndex,nsIAbDirectory * dir
         resEntry->setRowStates(RowStates_Deleted);
     //We return NS_ERROR_FILE_ACCESS_DENIED in the case the mozillaAB has been changed out side of our process
     if (rv == NS_ERROR_FILE_ACCESS_DENIED )
-        setError( STR_FOREIGN_PROCESS_CHANGED_AB );
+        m_aError.setResId( STR_FOREIGN_PROCESS_CHANGED_AB );
     return !(NS_FAILED(rv));
 }
 
@@ -677,13 +677,13 @@ sal_Bool MQueryHelper::setCardValues(const sal_Int32 rowIndex)
     MQueryHelperResultEntry *resEntry = getByIndex(rowIndex);
     if (!resEntry)
     {
-        setError( STR_CANT_FIND_ROW );
+        m_aError.setResId( STR_CANT_FIND_ROW );
         return sal_False;
     }
     nsIAbCard *card=resEntry->getCard();
     if (!card)
     {
-        setError( STR_CANT_FIND_CARD_FOR_ROW );
+        m_aError.setResId( STR_CANT_FIND_CARD_FOR_ROW );
         return sal_False;
     }
 
@@ -967,7 +967,7 @@ sal_Bool MQueryHelper::resyncRow(sal_Int32 rowIndex)
     MQueryHelperResultEntry *resEntry = getByIndex(rowIndex);
     if (!resEntry)
     {
-        setError( STR_CANT_FIND_ROW );
+        m_aError.setResId( STR_CANT_FIND_ROW );
         return sal_False;
     }
     nsIAbCard *card=resEntry->getCard();

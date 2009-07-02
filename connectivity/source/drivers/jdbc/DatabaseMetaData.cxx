@@ -169,7 +169,6 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTables(
                 args[3].l = pObjArray;
             }
         }
-
         // if we are to display "all catalogs", then respect m_aCatalogRestriction
         Any aCatalogFilter( catalog );
         if ( !aCatalogFilter.hasValue() )

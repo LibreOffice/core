@@ -38,6 +38,7 @@
 #include <svtools/eitem.hxx>
 #include <svtools/stritem.hxx>
 #include <svtools/intitem.hxx>
+#include <svtools/svparser.hxx> // SvKeyValue
 #include <vos/mutex.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 
@@ -64,6 +65,7 @@
 #include <com/sun/star/embed/XEmbedPersist.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/container/XChild.hpp>
+#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 
 
 #include <com/sun/star/script/provider/XScript.hpp>
@@ -113,6 +115,7 @@ using namespace ::com::sun::star::container;
 #include <svtools/inettype.hxx>
 #include <svtools/sharecontrolfile.hxx>
 #include <osl/file.hxx>
+#include <rtl/bootstrap.hxx>
 #include <vcl/svapp.hxx>
 #include <framework/interaction.hxx>
 #include <comphelper/storagehelper.hxx>
@@ -256,10 +259,15 @@ void SfxObjectShell::FlushDocInfo()
 
 //-------------------------------------------------------------------------
 
-void SfxObjectShell::SetError(sal_uInt32 lErr)
+void SfxObjectShell::SetError( sal_uInt32 lErr, const ::rtl::OUString& aLogMessage )
 {
     if(pImp->lErr==ERRCODE_NONE)
+    {
         pImp->lErr=lErr;
+
+        if( lErr != ERRCODE_NONE && aLogMessage.getLength() )
+            AddLog( aLogMessage );
+    }
 }
 
 //-------------------------------------------------------------------------
@@ -285,6 +293,9 @@ sal_uInt32 SfxObjectShell::GetErrorCode() const
 
 void SfxObjectShell::ResetError()
 {
+    if( pImp->lErr != ERRCODE_NONE )
+        AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Resetting Error." ) ) );
+
     pImp->lErr=0;
     SfxMedium * pMed = GetMedium();
     if( pMed )
@@ -669,7 +680,7 @@ void SfxObjectShell::DisconnectFromShared()
             SfxMedium* pTmpMedium = pMedium;
             ForgetMedium();
             if( !DoSaveCompleted( pTmpMedium ) )
-                SetError( ERRCODE_IO_GENERAL );
+                SetError( ERRCODE_IO_GENERAL, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
             else
             {
                 // the medium should not dispose the storage, DoSaveCompleted() has let it to do so
@@ -1444,7 +1455,7 @@ void SfxObjectShell::TemplateDisconnectionAfterLoad()
 
             ForgetMedium();
             if( !DoSaveCompleted( pTmpMedium ) )
-                SetError( ERRCODE_IO_GENERAL );
+                SetError( ERRCODE_IO_GENERAL, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
             else
             {
                 SFX_ITEMSET_ARG( pMedium->GetItemSet(), pSalvageItem, SfxStringItem, SID_DOC_SALVAGE, sal_False );
@@ -2330,3 +2341,89 @@ void SfxObjectShell_Impl::showBrokenSignatureWarning( const uno::Reference< task
         const_cast< SfxObjectShell_Impl* >( this )->bSignatureErrorIsShown = sal_True;
     }
 }
+
+void SfxObjectShell::AddLog( const ::rtl::OUString& aMessage )
+{
+    if ( !pImp->m_xLogRing.is() )
+    {
+        try
+        {
+            ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
+            if ( aContext.is() )
+                pImp->m_xLogRing.set( aContext.getSingleton( "com.sun.star.logging.DocumentIOLogRing" ), UNO_QUERY_THROW );
+        }
+        catch( uno::Exception& )
+        {}
+    }
+
+    if ( pImp->m_xLogRing.is() )
+        pImp->m_xLogRing->logString( aMessage );
+}
+
+namespace {
+
+void WriteStringInStream( const uno::Reference< io::XOutputStream >& xOutStream, const ::rtl::OUString& aString )
+{
+    if ( xOutStream.is() )
+    {
+        ::rtl::OString aStrLog = ::rtl::OUStringToOString( aString, RTL_TEXTENCODING_UTF8 );
+        uno::Sequence< sal_Int8 > aLogData( (const sal_Int8*)aStrLog.getStr(), aStrLog.getLength() );
+        xOutStream->writeBytes( aLogData );
+
+        aLogData.realloc( 1 );
+        aLogData[0] = '\n';
+        xOutStream->writeBytes( aLogData );
+    }
+}
+
+}
+
+void SfxObjectShell::StoreLog()
+{
+    if ( !pImp->m_xLogRing.is() )
+    {
+        try
+        {
+            ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
+            if ( aContext.is() )
+                pImp->m_xLogRing.set( aContext.getSingleton( "com.sun.star.logging.DocumentIOLogRing" ), UNO_QUERY_THROW );
+        }
+        catch( uno::Exception& )
+        {}
+    }
+
+    if ( pImp->m_xLogRing.is() )
+    {
+        ::rtl::OUString aFileURL =
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "${$BRAND_BASE_DIR/program/bootstrap.ini:UserInstallation}" ) );
+        ::rtl::Bootstrap::expandMacros( aFileURL );
+
+        ::rtl::OUString aBuildID =
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "${$BRAND_BASE_DIR/program/setup.ini:buildid}" ) );
+        ::rtl::Bootstrap::expandMacros( aBuildID );
+
+        if ( aFileURL.getLength() )
+        {
+            aFileURL += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/user/temp/document_io_logring.txt" ) );
+            try
+            {
+                uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory(), uno::UNO_SET_THROW );
+                uno::Reference< ucb::XSimpleFileAccess > xSimpleFileAccess( xFactory->createInstance( DEFINE_CONST_UNICODE( "com.sun.star.ucb.SimpleFileAccess" ) ), uno::UNO_QUERY_THROW );
+                uno::Reference< io::XStream > xStream( xSimpleFileAccess->openFileReadWrite( aFileURL ), uno::UNO_SET_THROW );
+                uno::Reference< io::XOutputStream > xOutStream( xStream->getOutputStream(), uno::UNO_SET_THROW );
+                uno::Reference< io::XTruncate > xTruncate( xOutStream, uno::UNO_QUERY_THROW );
+                xTruncate->truncate();
+
+                if ( aBuildID.getLength() )
+                    WriteStringInStream( xOutStream, aBuildID );
+
+                uno::Sequence< ::rtl::OUString > aLogSeq = pImp->m_xLogRing->getCollectedLog();
+                for ( sal_Int32 nInd = 0; nInd < aLogSeq.getLength(); nInd++ )
+                    WriteStringInStream( xOutStream, aLogSeq[nInd] );
+            }
+            catch( uno::Exception& )
+            {}
+        }
+    }
+}
+

@@ -289,6 +289,10 @@ namespace connectivity
         }
 
         bool operator==(const ORowSetValue& _rRH) const;
+        bool operator!=(const ORowSetValue& _rRH) const
+        {
+            return !( *this == _rRH );
+        }
 
         sal_Bool    isNull() const
         {

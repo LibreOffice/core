@@ -1,13 +1,10 @@
- /*************************************************************************
+/*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: NStatement.cxx,v $
- * $Revision: 1.12.2.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,12 +39,16 @@
 #include "propertyids.hxx"
 #include "NStatement.hxx"
 #include "NConnection.hxx"
+#include "NDatabaseMetaData.hxx"
 #include "NResultSet.hxx"
 #include "NDebug.hxx"
+#include "resource/evoab2_res.hrc"
 #include <resource/common_res.hrc>
 #include <connectivity/dbexception.hxx>
+#include <tools/diagnose_ex.h>
 
-using namespace connectivity::evoab;
+namespace connectivity { namespace evoab {
+
 //------------------------------------------------------------------------------
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -58,25 +59,53 @@ using namespace com::sun::star::container;
 using namespace com::sun::star::io;
 using namespace com::sun::star::util;
 //------------------------------------------------------------------------------
-OStatement_Base::OStatement_Base(OEvoabConnection* _pConnection)
-    : OStatement_BASE(m_aMutex)
-    , OPropertySetHelper(OStatement_BASE::rBHelper)
+OCommonStatement::OCommonStatement(OEvoabConnection* _pConnection)
+    : OCommonStatement_IBase(m_aMutex)
+    , ::comphelper::OPropertyContainer(OCommonStatement_IBase::rBHelper)
+    , OStatement_CBase( (::cppu::OWeakObject*)_pConnection, this )
     , m_xResultSet(NULL)
     , m_pResultSet(NULL)
     , m_pConnection(_pConnection)
-    , m_aParser(_pConnection->getDriver()->getMSFactory())
+    , m_aParser(_pConnection->getDriver().getMSFactory())
     , m_aSQLIterator( _pConnection, _pConnection->createCatalog()->getTables(), m_aParser, NULL )
     , m_pParseTree(NULL)
-    , rBHelper(OStatement_BASE::rBHelper)
+    , m_nMaxFieldSize(0)
+    , m_nMaxRows(0)
+    , m_nQueryTimeOut(0)
+    , m_nFetchSize(0)
+    , m_nResultSetType(ResultSetType::FORWARD_ONLY)
+    , m_nFetchDirection(FetchDirection::FORWARD)
+    , m_nResultSetConcurrency(ResultSetConcurrency::UPDATABLE)
+    , m_bEscapeProcessing(sal_True)
+    , rBHelper(OCommonStatement_IBase::rBHelper)
 {
     m_pConnection->acquire();
+
+#define REGISTER_PROP( id, member ) \
+    registerProperty( \
+        OMetaConnection::getPropMap().getNameByIndex( id ), \
+        id, \
+        0, \
+        &member, \
+        ::getCppuType( &member ) \
+    );
+
+    REGISTER_PROP( PROPERTY_ID_CURSORNAME, m_aCursorName );
+    REGISTER_PROP( PROPERTY_ID_MAXFIELDSIZE, m_nMaxFieldSize );
+    REGISTER_PROP( PROPERTY_ID_MAXROWS, m_nMaxRows );
+    REGISTER_PROP( PROPERTY_ID_QUERYTIMEOUT, m_nQueryTimeOut );
+    REGISTER_PROP( PROPERTY_ID_FETCHSIZE, m_nFetchSize );
+    REGISTER_PROP( PROPERTY_ID_RESULTSETTYPE, m_nResultSetType );
+    REGISTER_PROP( PROPERTY_ID_FETCHDIRECTION, m_nFetchDirection );
+    REGISTER_PROP( PROPERTY_ID_ESCAPEPROCESSING, m_bEscapeProcessing );
+    REGISTER_PROP( PROPERTY_ID_RESULTSETCONCURRENCY, m_nResultSetConcurrency );
 }
 // -----------------------------------------------------------------------------
-OStatement_Base::~OStatement_Base()
+OCommonStatement::~OCommonStatement()
 {
 }
 //------------------------------------------------------------------------------
-void OStatement_Base::disposeResultSet()
+void OCommonStatement::disposeResultSet()
 {
     // free the cursor if alive
     Reference< XComponent > xComp(m_xResultSet.get(), UNO_QUERY);
@@ -85,7 +114,7 @@ void OStatement_Base::disposeResultSet()
     m_xResultSet = Reference< XResultSet>();
 }
 //------------------------------------------------------------------------------
-void OStatement_BASE2::disposing()
+void OCommonStatement::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
@@ -96,55 +125,50 @@ void OStatement_BASE2::disposing()
     m_pConnection = NULL;
 
     dispose_ChildImpl();
-    OStatement_Base::disposing();
+    OCommonStatement_IBase::disposing();
 }
 //-----------------------------------------------------------------------------
-void SAL_CALL OStatement_BASE2::release() throw()
+Any SAL_CALL OCommonStatement::queryInterface( const Type & rType ) throw(RuntimeException)
 {
-    relase_ChildImpl();
-}
-//-----------------------------------------------------------------------------
-Any SAL_CALL OStatement_Base::queryInterface( const Type & rType ) throw(RuntimeException)
-{
-    Any aRet = OStatement_BASE::queryInterface(rType);
+    Any aRet = OCommonStatement_IBase::queryInterface(rType);
     if(!aRet.hasValue())
-        aRet = OPropertySetHelper::queryInterface(rType);
+        aRet = ::comphelper::OPropertyContainer::queryInterface(rType);
     return aRet;
 }
 // -------------------------------------------------------------------------
-Sequence< Type > SAL_CALL OStatement_Base::getTypes(  ) throw(RuntimeException)
+Sequence< Type > SAL_CALL OCommonStatement::getTypes(  ) throw(RuntimeException)
 {
     ::cppu::OTypeCollection aTypes( ::getCppuType( (const Reference< XMultiPropertySet > *)0 ),
                                     ::getCppuType( (const Reference< XFastPropertySet > *)0 ),
                                     ::getCppuType( (const Reference< XPropertySet > *)0 ));
 
-    return ::comphelper::concatSequences(aTypes.getTypes(),OStatement_BASE::getTypes());
+    return ::comphelper::concatSequences(aTypes.getTypes(),OCommonStatement_IBase::getTypes());
 }
 // -------------------------------------------------------------------------
 
-//void SAL_CALL OStatement_Base::cancel(  ) throw(RuntimeException)
+//void SAL_CALL OCommonStatement::cancel(  ) throw(RuntimeException)
 //{
 //::osl::MutexGuard aGuard( m_aMutex );
-//checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+//checkDisposed(OCommonStatement_IBase::rBHelper.bDisposed);
 //// cancel the current sql statement
 //}
 
 // -------------------------------------------------------------------------
-void SAL_CALL OStatement_Base::close(  ) throw(SQLException, RuntimeException)
+void SAL_CALL OCommonStatement::close(  ) throw(SQLException, RuntimeException)
 {
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+        checkDisposed(OCommonStatement_IBase::rBHelper.bDisposed);
 
     }
     dispose();
 }
 // -------------------------------------------------------------------------
 
-void OStatement_Base::reset() throw (SQLException)
+void OCommonStatement::reset() throw (SQLException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+    checkDisposed(OCommonStatement_IBase::rBHelper.bDisposed);
 
 
     clearWarnings ();
@@ -153,10 +177,10 @@ void OStatement_Base::reset() throw (SQLException)
         clearMyResultSet();
 }
 
-void OStatement_Base::clearMyResultSet () throw (SQLException)
+void OCommonStatement::clearMyResultSet () throw (SQLException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+    checkDisposed(OCommonStatement_IBase::rBHelper.bDisposed);
 
     try
     {
@@ -170,48 +194,105 @@ void OStatement_Base::clearMyResultSet () throw (SQLException)
 }
 
 EBookQuery *
-OStatement_Base::createTrue()
+OCommonStatement::createTrue()
 { // Not the world's most efficient unconditional true but ...
     return e_book_query_from_string("(exists \"full_name\")");
 }
 
 EBookQuery *
-OStatement_Base::createTest( const ::rtl::OUString &aColumnName,
+OCommonStatement::createTest( const ::rtl::OUString &aColumnName,
                              EBookQueryTest eTest,
-                             const ::rtl::OUString &aMatch,
-                             bool bGeneric )
+                             const ::rtl::OUString &aMatch )
 {
-    rtl::OString sMatch = rtl::OUStringToOString( aMatch, RTL_TEXTENCODING_UTF8 );
-    rtl::OString sColumnName = rtl::OUStringToOString( aColumnName, RTL_TEXTENCODING_UTF8 );
-    if ( bGeneric && (aColumnName.equalsAscii("0") ||
-                        aColumnName.equalsAscii("1")))
-    {
-            if( aMatch.equals( aColumnName ) )
-                return createTrue();
-            else
-                return NULL;
-    }
+    ::rtl::OString sMatch = rtl::OUStringToOString( aMatch, RTL_TEXTENCODING_UTF8 );
+    ::rtl::OString sColumnName = rtl::OUStringToOString( aColumnName, RTL_TEXTENCODING_UTF8 );
 
     return e_book_query_field_test( e_contact_field_id( sColumnName ),
                                     eTest, sMatch );
 }
 
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL OStatement_Base::execute( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
-    executeQuery( sql );
-    return m_aSQLIterator.getStatementType() == SQL_STATEMENT_SELECT;
+::rtl::OUString OCommonStatement::impl_getColumnRefColumnName_throw( const OSQLParseNode& _rColumnRef )
+{
+    ENSURE_OR_THROW( SQL_ISRULE( &_rColumnRef, column_ref ), "internal error: only column_refs supported as LHS" );
+
+    ::rtl::OUString sColumnName;
+    switch ( _rColumnRef.count() )
+    {
+    case 3: // SQL_TOKEN_NAME '.' column_val
+    {
+        const OSQLParseNode* pPunct = _rColumnRef.getChild( 1 );
+        const OSQLParseNode* pColVal = _rColumnRef.getChild( 2 );
+        if  (   SQL_ISPUNCTUATION( pPunct, "." )
+            &&  ( pColVal->count() == 1 )
+            )
+        {
+            sColumnName = pColVal->getChild( 0 )->getTokenValue();
+        }
+    }
+    break;
+
+    case 1: // column
+    {
+        sColumnName = _rColumnRef.getChild( 0 )->getTokenValue();
+    }
+    break;
+    }
+
+    if ( !sColumnName.getLength() )
+        m_pConnection->throwGenericSQLException( STR_QUERY_TOO_COMPLEX, *this );
+
+    return sColumnName;
 }
 
-EBookQuery *OStatement_Base::whereAnalysis( const OSQLParseNode* parseTree ) throw(SQLException, RuntimeException)
+// -------------------------------------------------------------------------
+void OCommonStatement::orderByAnalysis( const OSQLParseNode* _pOrderByClause, SortDescriptor& _out_rSort )
+{
+    ENSURE_OR_THROW( _pOrderByClause, "NULL node" );
+    ENSURE_OR_THROW( SQL_ISRULE( _pOrderByClause, opt_order_by_clause ), "wrong node type" );
+
+    _out_rSort.clear();
+
+    const OSQLParseNode* pOrderList = _pOrderByClause->getByRule( OSQLParseNode::ordering_spec_commalist );
+    ENSURE_OR_THROW( pOrderList, "unexpected parse tree structure" );
+
+    for ( sal_uInt32 i=0; i<pOrderList->count(); ++i )
+    {
+        const OSQLParseNode* pOrderBy = pOrderList->getChild(i);
+        if ( !pOrderBy || !SQL_ISRULE( pOrderBy, ordering_spec ) )
+            continue;
+        const OSQLParseNode* pColumnRef = pOrderBy->count() == 2 ? pOrderBy->getChild(0) : NULL;
+        const OSQLParseNode* pAscDesc = pOrderBy->count() == 2 ? pOrderBy->getChild(1) : NULL;
+        ENSURE_OR_THROW(
+                ( pColumnRef != NULL )
+            &&  ( pAscDesc != NULL )
+            &&  SQL_ISRULE( pAscDesc, opt_asc_desc )
+            &&  ( pAscDesc->count() < 2 ),
+            "ordering_spec structure error" );
+
+        // column name -> column field
+        if ( !SQL_ISRULE( pColumnRef, column_ref ) )
+            m_pConnection->throwGenericSQLException( STR_SORT_BY_COL_ONLY, *this );
+        const ::rtl::OUString sColumnName( impl_getColumnRefColumnName_throw( *pColumnRef ) );
+        guint nField = evoab::findEvoabField( sColumnName );
+        // ascending/descending?
+        bool bAscending = true;
+        if  (   ( pAscDesc->count() == 1 )
+            &&  SQL_ISTOKEN( pAscDesc->getChild( 0 ), DESC )
+            )
+            bAscending = false;
+
+        _out_rSort.push_back( FieldSort( nField, bAscending ) );
+    }
+}
+
+// -------------------------------------------------------------------------
+EBookQuery *OCommonStatement::whereAnalysis( const OSQLParseNode* parseTree )
 {
     EBookQuery *pResult = NULL;
 
-    if (!parseTree)
-            return NULL;
+    ENSURE_OR_THROW( parseTree, "invalid parse tree" );
 
     // Nested brackets
     if( parseTree->count() == 3 &&
@@ -226,83 +307,87 @@ EBookQuery *OStatement_Base::whereAnalysis( const OSQLParseNode* parseTree ) thr
           SQL_ISRULE( parseTree, boolean_term ) ) &&
         parseTree->count() == 3 )
     {
+        ENSURE_OR_THROW(    SQL_ISTOKEN( parseTree->getChild( 1 ), OR )
+                        ||  SQL_ISTOKEN( parseTree->getChild( 1 ), AND ),
+                        "unexpected search_condition structure" );
+
         EBookQuery *pArgs[2];
         pArgs[0] = whereAnalysis( parseTree->getChild( 0 ) );
         pArgs[1] = whereAnalysis( parseTree->getChild( 2 ) );
 
         if( SQL_ISTOKEN( parseTree->getChild( 1 ), OR ) )
-                pResult = e_book_query_or( 2, pArgs, TRUE );
-        else if( SQL_ISTOKEN( parseTree->getChild( 1 ), AND ) )
-                pResult = e_book_query_and( 2, pArgs, TRUE );
+            pResult = e_book_query_or( 2, pArgs, TRUE );
         else
-        {
-            OSL_ASSERT("analyseSQL: Error in Parse Tree");
-            e_book_query_unref( pArgs[ 0 ] );
-            e_book_query_unref( pArgs[ 1 ] );
-            return NULL;
-        }
+            pResult = e_book_query_and( 2, pArgs, TRUE );
     }
     // SQL =, !=
     else if( SQL_ISRULE( parseTree, comparison_predicate ) )
     {
         OSQLParseNode *pPrec = parseTree->getChild( 1 );
 
-        if( parseTree->count() != 3 )
+        ENSURE_OR_THROW( parseTree->count() == 3, "unexpected comparison_predicate structure" );
+
+        OSQLParseNode* pLHS = parseTree->getChild( 0 );
+        OSQLParseNode* pRHS = parseTree->getChild( 2 );
+
+        if  (   (   !( SQL_ISRULE( pLHS, column_ref ) )         // on the LHS, we accept a column or a constant int value
+                &&  ( pLHS->getNodeType() != SQL_NODE_INTNUM )
+                )
+            ||  (   ( pRHS->getNodeType() != SQL_NODE_STRING )  // on the RHS, certain literals are acceptable
+                &&  ( pRHS->getNodeType() != SQL_NODE_INTNUM )
+                &&  ( pRHS->getNodeType() != SQL_NODE_APPROXNUM )
+                &&  !( SQL_ISTOKEN( pRHS, TRUE ) )
+                &&  !( SQL_ISTOKEN( pRHS, FALSE ) )
+                )
+            ||  (   ( pLHS->getNodeType() == SQL_NODE_INTNUM )  // an int on LHS requires an int on RHS
+                &&  ( pRHS->getNodeType() != SQL_NODE_INTNUM )
+                )
+            )
         {
-            OSL_ASSERT("analyseSQL: Error in Parse Tree");
-            return NULL;
+            m_pConnection->throwGenericSQLException( STR_QUERY_TOO_COMPLEX, *this );
         }
 
-        if( !( SQL_ISRULE( parseTree->getChild( 0 ), column_ref) ||
-               parseTree->getChild( 2 )->getNodeType() == SQL_NODE_STRING ||
-               parseTree->getChild( 2 )->getNodeType() == SQL_NODE_INTNUM ||
-               parseTree->getChild( 2 )->getNodeType() == SQL_NODE_APPROXNUM ||
-               SQL_ISTOKEN( parseTree->getChild( 2 ), TRUE ) ||
-               SQL_ISTOKEN( parseTree->getChild( 2 ), FALSE ) ||
-               SQL_ISRULE(  parseTree->getChild( 2 ), parameter ) ||
-               // odbc date
-               (SQL_ISRULE( parseTree->getChild( 2 ), set_fct_spec ) &&
-                SQL_ISPUNCTUATION( parseTree->getChild( 2 )->getChild( 0 ), "{" ) ) ) )
-                m_pConnection->throwGenericSQLException(STR_QUERY_TOO_COMPLEX,*this);
-
-        if (pPrec->getNodeType() != SQL_NODE_EQUAL && pPrec->getNodeType() != SQL_NODE_NOTEQUAL)
-            m_pConnection->throwGenericSQLException(STR_OPERATOR_TOO_COMPLEX,*this);
-
-        rtl::OUString aMatchString;
-        rtl::OUString aColumnName;
-        if( SQL_ISRULE( parseTree->getChild( 0 ), column_ref ) )
+        if  (   ( pPrec->getNodeType() != SQL_NODE_EQUAL )
+            &&  ( pPrec->getNodeType() != SQL_NODE_NOTEQUAL )
+            )
         {
-            aColumnName = parseTree->getChild( 0 )->getChild( 0 )->getTokenValue();
-
-            if( parseTree->getChild( 2 )->isToken() )
-                aMatchString = parseTree->getChild( 2 )->getTokenValue();
-            else
-                aMatchString = parseTree->getChild( 2 )->getChild( 0 )->getTokenValue();
+            m_pConnection->throwGenericSQLException( STR_OPERATOR_TOO_COMPLEX, *this );
         }
+
+        // recognize the special "0 = 1" condition
+        if  (   ( pLHS->getNodeType() == SQL_NODE_INTNUM )
+            &&  ( pRHS->getNodeType() == SQL_NODE_INTNUM )
+            &&  ( pPrec->getNodeType() == SQL_NODE_EQUAL )
+            )
+        {
+            const sal_Int32 nLHS = pLHS->getTokenValue().toInt64();
+            const sal_Int32 nRHS = pRHS->getTokenValue().toInt64();
+            return ( nLHS == nRHS ) ? createTrue() : NULL;
+        }
+
+        ::rtl::OUString aColumnName( impl_getColumnRefColumnName_throw( *pLHS ) );
+
+        ::rtl::OUString aMatchString;
+        if ( pRHS->isToken() )
+            aMatchString = pRHS->getTokenValue();
         else
-        {
-            aColumnName = parseTree->getChild( 0 )->getTokenValue();
-            aMatchString = parseTree->getChild( 2 )->getTokenValue();
-        }
+            aMatchString = pRHS->getChild( 0 )->getTokenValue();
 
-        pResult = createTest( aColumnName, E_BOOK_QUERY_IS, aMatchString, true );
+        pResult = createTest( aColumnName, E_BOOK_QUERY_IS, aMatchString );
 
-        if (pResult && pPrec->getNodeType() == SQL_NODE_NOTEQUAL)
+        if ( pResult && ( pPrec->getNodeType() == SQL_NODE_NOTEQUAL ) )
             pResult = e_book_query_not( pResult, TRUE );
     }
     // SQL like
     else if( SQL_ISRULE( parseTree, like_predicate ) )
     {
-        if( parseTree->count() < 4 )
-        {
-            OSL_ASSERT( "analyseSQL: Error in parsing LIKE predicate" );
-            return NULL;
-        }
+        ENSURE_OR_THROW( parseTree->count() >= 4, "unexpected like_predicate structure" );
 
         if( ! SQL_ISRULE( parseTree->getChild( 0 ), column_ref) )
             m_pConnection->throwGenericSQLException(STR_QUERY_INVALID_LIKE_COLUMN,*this);
 
-        OSQLParseNode *pColumn    = parseTree->getChild( 0 );                          // Match Item
+        ::rtl::OUString aColumnName( impl_getColumnRefColumnName_throw( *parseTree->getChild( 0 ) ) );
+
         OSQLParseNode *pAtom      = parseTree->getChild( parseTree->count() - 2 );     // Match String
         bool bNotLike             = parseTree->count() == 5;
 
@@ -318,62 +403,54 @@ EBookQuery *OStatement_Base::whereAnalysis( const OSQLParseNode* parseTree ) thr
 
         const sal_Unicode WILDCARD = '%';
 
-        rtl::OUString aColumnName;
         rtl::OUString aMatchString;
+        aMatchString = pAtom->getTokenValue();
 
-        if( SQL_ISRULE( pColumn, column_ref ))
+        // Determine where '%' character is...
+        if( aMatchString.equals( ::rtl::OUString::valueOf( WILDCARD ) ) )
         {
-            aColumnName = parseTree->getChild(0)->getChild(0)->getTokenValue();
-            aMatchString = pAtom->getTokenValue();
-
-            // Determine where '%' character is...
-            if( aMatchString.equals( ::rtl::OUString::valueOf( WILDCARD ) ) )
-            {
-                // String containing only a '%' and nothing else matches everything
-                pResult = createTest( aColumnName, E_BOOK_QUERY_CONTAINS,
-                                      rtl::OUString::createFromAscii( "" ) );
-            }
-            else if( aMatchString.indexOf( WILDCARD ) == -1 )
-            {   // Simple string , eg. "to match" "contains in evo"
-                EVO_TRACE_STRING( "Plain contains '%s'", aMatchString );
-                pResult = createTest( aColumnName, E_BOOK_QUERY_CONTAINS, aMatchString );
-                if( pResult && bNotLike )
-                    pResult = e_book_query_not( pResult, TRUE );
-            }
-            else if( bNotLike )
-            {
-                // We currently can't handle a 'NOT LIKE' when there are '%'
-                m_pConnection->throwGenericSQLException(STR_QUERY_NOT_LIKE_TOO_COMPLEX,*this);
-            }
-            else if( (aMatchString.indexOf ( WILDCARD ) == aMatchString.lastIndexOf ( WILDCARD ) ) )
-            {   // One occurance of '%'  matches...
-                if ( aMatchString.indexOf ( WILDCARD ) == 0 )
-                    pResult = createTest( aColumnName, E_BOOK_QUERY_ENDS_WITH, aMatchString.copy( 1 ) );
-                else if ( aMatchString.indexOf ( WILDCARD ) == aMatchString.getLength() - 1 )
-                    pResult = createTest( aColumnName, E_BOOK_QUERY_BEGINS_WITH, aMatchString.copy( 0, aMatchString.getLength() - 1 ) );
-                else
-                    m_pConnection->throwGenericSQLException(STR_QUERY_LIKE_WILDCARD,*this);
-
-                if( pResult && bNotLike )
-                    pResult = e_book_query_not( pResult, TRUE );
-            }
-            else if( aMatchString.getLength() >= 3 &&
-                     aMatchString.indexOf ( WILDCARD ) == 0 &&
-                     aMatchString.indexOf ( WILDCARD, 1) == aMatchString.getLength() - 1 ) {
-                // one '%' at the start and another at the end
-                pResult = createTest( aColumnName, E_BOOK_QUERY_CONTAINS, aMatchString.copy (1, aMatchString.getLength() - 2) );
-            }
+            // String containing only a '%' and nothing else matches everything
+            pResult = createTest( aColumnName, E_BOOK_QUERY_CONTAINS,
+                                  rtl::OUString::createFromAscii( "" ) );
+        }
+        else if( aMatchString.indexOf( WILDCARD ) == -1 )
+        {   // Simple string , eg. "to match" "contains in evo"
+            EVO_TRACE_STRING( "Plain contains '%s'", aMatchString );
+            pResult = createTest( aColumnName, E_BOOK_QUERY_CONTAINS, aMatchString );
+            if( pResult && bNotLike )
+                pResult = e_book_query_not( pResult, TRUE );
+        }
+        else if( bNotLike )
+        {
+            // We currently can't handle a 'NOT LIKE' when there are '%'
+            m_pConnection->throwGenericSQLException(STR_QUERY_NOT_LIKE_TOO_COMPLEX,*this);
+        }
+        else if( (aMatchString.indexOf ( WILDCARD ) == aMatchString.lastIndexOf ( WILDCARD ) ) )
+        {   // One occurance of '%'  matches...
+            if ( aMatchString.indexOf ( WILDCARD ) == 0 )
+                pResult = createTest( aColumnName, E_BOOK_QUERY_ENDS_WITH, aMatchString.copy( 1 ) );
+            else if ( aMatchString.indexOf ( WILDCARD ) == aMatchString.getLength() - 1 )
+                pResult = createTest( aColumnName, E_BOOK_QUERY_BEGINS_WITH, aMatchString.copy( 0, aMatchString.getLength() - 1 ) );
             else
-                m_pConnection->throwGenericSQLException(STR_QUERY_LIKE_WILDCARD_MANY,*this);
+                m_pConnection->throwGenericSQLException(STR_QUERY_LIKE_WILDCARD,*this);
+
+            if( pResult && bNotLike )
+                pResult = e_book_query_not( pResult, TRUE );
+        }
+        else if( aMatchString.getLength() >= 3 &&
+                 aMatchString.indexOf ( WILDCARD ) == 0 &&
+                 aMatchString.indexOf ( WILDCARD, 1) == aMatchString.getLength() - 1 ) {
+            // one '%' at the start and another at the end
+            pResult = createTest( aColumnName, E_BOOK_QUERY_CONTAINS, aMatchString.copy (1, aMatchString.getLength() - 2) );
         }
         else
-            OSL_ASSERT( "Serious internal error" );
+            m_pConnection->throwGenericSQLException(STR_QUERY_LIKE_WILDCARD_MANY,*this);
     }
 
     return pResult;
 }
 
-rtl::OUString OStatement_Base::getTableName()
+rtl::OUString OCommonStatement::getTableName()
 {
     ::rtl::OUString aTableName;
 
@@ -398,235 +475,207 @@ rtl::OUString OStatement_Base::getTableName()
                     OSQLParseNode::getTableComponents( pNodeForTableName, aCatalog, aSchema, aTableName);
             }
             else
-                OSL_ASSERT( "odd table layout" );
+                OSL_ENSURE( false,  "odd table layout" );
         }
         else
-                OSL_ASSERT( "unusual table layout" );
+                OSL_ENSURE( false,  "unusual table layout" );
     }
     return aTableName;
 }
 
-EBookQuery *OStatement_Base::parseSql( const rtl::OUString& sql,
-                                       rtl::OString &rTable,
-                                       bool &bIsWithoutWhere )
-    throw ( SQLException, RuntimeException )
+void OCommonStatement::parseSql( const rtl::OUString& sql, QueryData& _out_rQueryData )
 {
-    ::rtl::OUString aErr;
+    EVO_TRACE_STRING( "parsing %s", sql );
 
+    _out_rQueryData.eFilterType = eFilterOther;
+
+    ::rtl::OUString aErr;
     m_pParseTree = m_aParser.parseTree( aErr, sql );
     m_aSQLIterator.setParseTree( m_pParseTree );
     m_aSQLIterator.traverseAll();
 
-    const OSQLTables aTables = m_aSQLIterator.getTables();
-    rTable = rtl::OUStringToOString( getTableName(), RTL_TEXTENCODING_UTF8 );
-    m_pConnection->setCurrentTableName(getTableName());
-    const OSQLParseNode*  pParseTree = m_aSQLIterator.getWhereTree();
-    if ( pParseTree && SQL_ISRULE( pParseTree, where_clause ) )
-        return whereAnalysis( pParseTree->getChild( 1 ) );
+    _out_rQueryData.sTable = getTableName();
+
+    // to be sorted?
+    const OSQLParseNode* pOrderByClause = m_aSQLIterator.getOrderTree();
+    if ( pOrderByClause )
+    {
+    #if OSL_DEBUG_LEVEL > 0
+        ::rtl::OUString sTreeDebug;
+        pOrderByClause->showParseTree( sTreeDebug );
+        EVO_TRACE_STRING( "found order-by tree:\n%s", sTreeDebug );
+    #endif
+        orderByAnalysis( pOrderByClause, _out_rQueryData.aSortOrder );
+    }
+
+    const OSQLParseNode* pWhereClause = m_aSQLIterator.getWhereTree();
+    if ( pWhereClause && SQL_ISRULE( pWhereClause, where_clause ) )
+    {
+    #if OSL_DEBUG_LEVEL > 0
+        ::rtl::OUString sTreeDebug;
+        pWhereClause->showParseTree( sTreeDebug );
+        EVO_TRACE_STRING( "found where tree:\n%s", sTreeDebug );
+    #endif
+        EBookQuery* pQuery = whereAnalysis( pWhereClause->getChild( 1 ) );
+        if ( !pQuery )
+        {
+            _out_rQueryData.eFilterType = eFilterAlwaysFalse;
+            pQuery = createTrue();
+        }
+        _out_rQueryData.setQuery( pQuery );
+    }
     else
     {
-        bIsWithoutWhere = true;
-        return createTrue();
+        _out_rQueryData.eFilterType = eFilterNone;
+        _out_rQueryData.setQuery( createTrue() );
     }
 }
 
 // -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL OStatement_Base::executeQuery( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
+
+Reference< XConnection > SAL_CALL OStatement::getConnection(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-
-    EVO_TRACE_STRING( "NConnection::executeQuery(%s)\n", sql );
-
-    OEvoabResultSet* pResult = createResultSet();
-    Reference< XResultSet > xRS = pResult;
-
-#ifdef DEBUG
-    g_message( "Parse SQL '%s'\n",
-               (const sal_Char *)OUStringToOString( sql, RTL_TEXTENCODING_UTF8 ) );
-#endif
-
-    rtl::OString aTable;
-    bool bIsWithoutWhere = false;
-
-    EBookQuery *pQuery = parseSql( sql, aTable, bIsWithoutWhere );
-
-#ifdef DEBUG
-    char *pSexpr = pQuery ? e_book_query_to_string( pQuery ) : g_strdup( "<map failed>" );
-    g_message( "Parsed SQL to sexpr '%s'\n", pSexpr );
-    g_free( pSexpr );
-#endif
-     ::vos::ORef<connectivity::OSQLColumns> xColumns;
-    if (pQuery)
-    {
-        pResult->construct( pQuery, aTable, bIsWithoutWhere );
-        e_book_query_unref( pQuery );
-        xColumns = m_aSQLIterator.getSelectColumns();
-        if (!xColumns.isValid())
-            m_pConnection->throwGenericSQLException(STR_QUERY_TOO_COMPLEX,*this);
-
-        OEvoabResultSetMetaData *pMeta = (OEvoabResultSetMetaData *) pResult->getMetaData().get();
-        pMeta->setEvoabFields(xColumns);
-    }
-    m_xResultSet = xRS;
-
-    return xRS;
-}
-// -------------------------------------------------------------------------
-OEvoabResultSet* OStatement_Base::createResultSet()
-{
-    return new OEvoabResultSet(this,m_pConnection,m_aSQLIterator);
-}
-
-// -------------------------------------------------------------------------
-
-Reference< XConnection > SAL_CALL OStatement_Base::getConnection(  ) throw(SQLException, RuntimeException)
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+    checkDisposed(OCommonStatement_IBase::rBHelper.bDisposed);
 
     // just return our connection here
-    return (Reference< XConnection >)m_pConnection;
-}
-// -------------------------------------------------------------------------
-Any SAL_CALL OStatement::queryInterface( const Type & rType ) throw(RuntimeException)
-{
-    Any aRet = ::cppu::queryInterface(rType,static_cast< XServiceInfo*> (this));
-    if(!aRet.hasValue())
-        aRet = OStatement_Base::queryInterface(rType);
-    return aRet;
-}
-// -------------------------------------------------------------------------
-sal_Int32 SAL_CALL OStatement_Base::executeUpdate( const ::rtl::OUString& /*sql*/ ) throw(SQLException, RuntimeException)
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-    ::dbtools::throwFeatureNotImplementedException( "XStatement::executeUpdate", *this );
-    // the return values gives information about how many rows are affected by executing the sql statement
-    return 0;
+    return impl_getConnection();
 }
 
 // -------------------------------------------------------------------------
-Any SAL_CALL OStatement_Base::getWarnings(  ) throw(SQLException, RuntimeException)
+Any SAL_CALL OCommonStatement::getWarnings(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+    checkDisposed(OCommonStatement_IBase::rBHelper.bDisposed);
 
 
     return makeAny(SQLWarning());
 }
 
 // -------------------------------------------------------------------------
-void SAL_CALL OStatement_Base::clearWarnings(  ) throw(SQLException, RuntimeException)
+void SAL_CALL OCommonStatement::clearWarnings(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+    checkDisposed(OCommonStatement_IBase::rBHelper.bDisposed);
 
 }
 // -------------------------------------------------------------------------
-::cppu::IPropertyArrayHelper* OStatement_Base::createArrayHelper( ) const
+::cppu::IPropertyArrayHelper* OCommonStatement::createArrayHelper( ) const
 {
-    // this properties are define by the service statement
-    // they must in alphabetic order
-    Sequence< Property > aProps(10);
-    Property* pProperties = aProps.getArray();
-    sal_Int32 nPos = 0;
-    DECL_PROP0(CURSORNAME,  ::rtl::OUString);
-    DECL_BOOL_PROP0(ESCAPEPROCESSING);
-    DECL_PROP0(FETCHDIRECTION,sal_Int32);
-    DECL_PROP0(FETCHSIZE,   sal_Int32);
-    DECL_PROP0(MAXFIELDSIZE,sal_Int32);
-    DECL_PROP0(MAXROWS,     sal_Int32);
-    DECL_PROP0(QUERYTIMEOUT,sal_Int32);
-    DECL_PROP0(RESULTSETCONCURRENCY,sal_Int32);
-    DECL_PROP0(RESULTSETTYPE,sal_Int32);
-    DECL_BOOL_PROP0(USEBOOKMARKS);
-
-    return new ::cppu::OPropertyArrayHelper(aProps);
+    Sequence< Property > aProps;
+    describeProperties( aProps );
+    return new ::cppu::OPropertyArrayHelper( aProps );
+}
+// -------------------------------------------------------------------------
+::cppu::IPropertyArrayHelper & OCommonStatement::getInfoHelper()
+{
+    return *const_cast< OCommonStatement* >( this )->getArrayHelper();
 }
 
-// -------------------------------------------------------------------------
-::cppu::IPropertyArrayHelper & OStatement_Base::getInfoHelper()
-{
-    return *const_cast<OStatement_Base*>(this)->getArrayHelper();
-}
-// -------------------------------------------------------------------------
-sal_Bool OStatement_Base::convertFastPropertyValue(
-                            Any & /*rConvertedValue*/,
-                            Any & /*rOldValue*/,
-                            sal_Int32 /*nHandle*/,
-                            const Any& /*rValue*/ )
-                                throw (::com::sun::star::lang::IllegalArgumentException)
-{
-    sal_Bool bModified = sal_False;
-    // here we have to try to convert
-    return bModified;
-}
-// -------------------------------------------------------------------------
-void OStatement_Base::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& /*rValue*/) throw (Exception)
-{
-    // set the value to what ever is nescessary
-    switch(nHandle)
-    {
-        case PROPERTY_ID_QUERYTIMEOUT:
-        case PROPERTY_ID_MAXFIELDSIZE:
-        case PROPERTY_ID_MAXROWS:
-        case PROPERTY_ID_CURSORNAME:
-        case PROPERTY_ID_RESULTSETCONCURRENCY:
-        case PROPERTY_ID_RESULTSETTYPE:
-        case PROPERTY_ID_FETCHDIRECTION:
-        case PROPERTY_ID_FETCHSIZE:
-        case PROPERTY_ID_ESCAPEPROCESSING:
-        case PROPERTY_ID_USEBOOKMARKS:
-        default:
-            ;
-    }
-}
-// -------------------------------------------------------------------------
-void OStatement_Base::getFastPropertyValue(Any& /*rValue*/,sal_Int32 nHandle) const
-{
-    switch(nHandle)
-    {
-        case PROPERTY_ID_QUERYTIMEOUT:
-        case PROPERTY_ID_MAXFIELDSIZE:
-        case PROPERTY_ID_MAXROWS:
-        case PROPERTY_ID_CURSORNAME:
-        case PROPERTY_ID_RESULTSETCONCURRENCY:
-        case PROPERTY_ID_RESULTSETTYPE:
-        case PROPERTY_ID_FETCHDIRECTION:
-        case PROPERTY_ID_FETCHSIZE:
-        case PROPERTY_ID_ESCAPEPROCESSING:
-        case PROPERTY_ID_USEBOOKMARKS:
-        default:
-            ;
-    }
-}
-// -------------------------------------------------------------------------
-IMPLEMENT_SERVICE_INFO(OStatement,"com.sun.star.sdbcx.OStatement","com.sun.star.sdbc.Statement");
 // -----------------------------------------------------------------------------
-void SAL_CALL OStatement_Base::acquire() throw()
+void SAL_CALL OCommonStatement::acquire() throw()
 {
-    OStatement_BASE::acquire();
+    OCommonStatement_IBase::acquire();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OStatement_Base::release() throw()
+void SAL_CALL OCommonStatement::release() throw()
 {
-    OStatement_BASE::release();
+    relase_ChildImpl();
 }
-// -----------------------------------------------------------------------------
-void SAL_CALL OStatement::acquire() throw()
-{
-    OStatement_BASE2::acquire();
-}
-// -----------------------------------------------------------------------------
-void SAL_CALL OStatement::release() throw()
-{
-    OStatement_BASE2::release();
-}
-// -----------------------------------------------------------------------------
-Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OStatement_Base::getPropertySetInfo(  ) throw(RuntimeException)
-{
-    return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
-}
-// -----------------------------------------------------------------------------
 
+// -------------------------------------------------------------------------
+QueryData OCommonStatement::impl_getEBookQuery_throw( const ::rtl::OUString& _rSql )
+{
+    QueryData aData;
+    parseSql( _rSql, aData );
+
+#ifdef DEBUG
+    char *pSexpr = aData.getQuery() ? e_book_query_to_string( aData.getQuery() ) : g_strdup( "<map failed>" );
+    g_message( "Parsed SQL to sexpr '%s'\n", pSexpr );
+    g_free( pSexpr );
+#endif
+
+    if ( !aData.getQuery() )
+        m_pConnection->throwGenericSQLException( STR_QUERY_TOO_COMPLEX, *this );
+
+    // a postcondition of this method is that we properly determined the SELECT columns
+    aData.xSelectColumns = m_aSQLIterator.getSelectColumns();
+    if ( !aData.xSelectColumns.isValid() )
+        m_pConnection->throwGenericSQLException( STR_QUERY_TOO_COMPLEX, *this );
+
+    return aData;
+}
+
+// -------------------------------------------------------------------------
+Reference< XResultSet > OCommonStatement::impl_executeQuery_throw( const QueryData& _rQueryData )
+{
+    // create result set
+    OEvoabResultSet* pResult = new OEvoabResultSet( this, m_pConnection );
+    Reference< XResultSet > xRS = pResult;
+    pResult->construct( _rQueryData );
+
+    // done
+    m_xResultSet = xRS;
+    return xRS;
+}
+
+// -------------------------------------------------------------------------
+Reference< XResultSet > OCommonStatement::impl_executeQuery_throw( const ::rtl::OUString& _rSql )
+{
+    EVO_TRACE_STRING( "OCommonStatement::impl_executeQuery_throw(%s)\n", _rSql );
+
+#ifdef DEBUG
+    g_message( "Parse SQL '%s'\n",
+               (const sal_Char *)OUStringToOString( _rSql, RTL_TEXTENCODING_UTF8 ) );
+#endif
+
+    return impl_executeQuery_throw( impl_getEBookQuery_throw( _rSql ) );
+}
+
+// -----------------------------------------------------------------------------
+Reference< XPropertySetInfo > SAL_CALL OCommonStatement::getPropertySetInfo(  ) throw(RuntimeException)
+{
+    return ::cppu::OPropertySetHelper::createPropertySetInfo( getInfoHelper() );
+}
+
+// =============================================================================
+// = OStatement
+// =============================================================================
+// -----------------------------------------------------------------------------
+IMPLEMENT_SERVICE_INFO( OStatement, "com.sun.star.comp.sdbcx.evoab.OStatement", "com.sun.star.sdbc.Statement" );
+
+// -----------------------------------------------------------------------------
+IMPLEMENT_FORWARD_XINTERFACE2( OStatement, OCommonStatement, OStatement_IBase )
+
+// -----------------------------------------------------------------------------
+IMPLEMENT_FORWARD_XTYPEPROVIDER2( OStatement, OCommonStatement, OStatement_IBase )
+
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OStatement::execute( const ::rtl::OUString& _sql ) throw(SQLException, RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(OCommonStatement_IBase::rBHelper.bDisposed);
+
+    Reference< XResultSet > xRS = impl_executeQuery_throw( _sql );
+    return xRS.is();
+}
+
+// -------------------------------------------------------------------------
+Reference< XResultSet > SAL_CALL OStatement::executeQuery( const ::rtl::OUString& _sql ) throw(SQLException, RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(OCommonStatement_IBase::rBHelper.bDisposed);
+
+    return impl_executeQuery_throw( _sql );
+}
+
+// -----------------------------------------------------------------------------
+sal_Int32 SAL_CALL OStatement::executeUpdate( const ::rtl::OUString& /*sql*/ ) throw(SQLException, RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(OCommonStatement_IBase::rBHelper.bDisposed);
+    ::dbtools::throwFeatureNotImplementedException( "XStatement::executeUpdate", *this );
+    return 0;
+}
+
+} } // namespace ::connectivity::evoab

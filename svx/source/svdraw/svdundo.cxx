@@ -1179,9 +1179,15 @@ void SdrUndoObjSetText::SdrRepeat(SdrView& rView)
     if (bNewTextAvailable && rView.AreObjectsMarked())
     {
         const SdrMarkList& rML=rView.GetMarkedObjectList();
-        XubString aStr;
-        ImpTakeDescriptionStr(STR_UndoObjSetText,aStr);
-        rView.BegUndo(aStr);
+
+        const bool bUndo = rView.IsUndoEnabled();
+        if( bUndo )
+        {
+            XubString aStr;
+            ImpTakeDescriptionStr(STR_UndoObjSetText,aStr);
+            rView.BegUndo(aStr);
+        }
+
         ULONG nAnz=rML.GetMarkCount();
         for (ULONG nm=0; nm<nAnz; nm++)
         {
@@ -1189,14 +1195,18 @@ void SdrUndoObjSetText::SdrRepeat(SdrView& rView)
             SdrTextObj* pTextObj=PTR_CAST(SdrTextObj,pObj2);
             if (pTextObj!=NULL)
             {
-                rView.AddUndo(new SdrUndoObjSetText(*pTextObj,0));
+                if( bUndo )
+                    rView.AddUndo(new SdrUndoObjSetText(*pTextObj,0));
+
                 OutlinerParaObject* pText1=pNewText;
                 if (pText1!=NULL)
                     pText1 = new OutlinerParaObject(*pText1);
                 pTextObj->SetOutlinerParaObject(pText1);
             }
         }
-        rView.EndUndo();
+
+        if( bUndo )
+            rView.EndUndo();
     }
 }
 

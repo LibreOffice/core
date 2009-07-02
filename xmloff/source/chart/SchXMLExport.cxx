@@ -80,6 +80,7 @@
 #include <com/sun/star/chart/ChartSeriesAddress.hpp>
 #include <com/sun/star/chart/X3DDisplay.hpp>
 #include <com/sun/star/chart/XStatisticDisplay.hpp>
+#include <com/sun/star/chart/XSecondAxisTitleSupplier.hpp>
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
@@ -102,7 +103,8 @@
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/XVisualObject.hpp>
-#include <com/sun/star/chart/XSecondAxisTitleSupplier.hpp>
+#include <com/sun/star/container/XChild.hpp>
+
 
 #include "MultiPropertySetHandler.hxx"
 #include "PropertyMap.hxx"
@@ -1023,6 +1025,7 @@ void SchXMLExportHelper::parseDocument( Reference< chart::XChartDocument >& rCha
     sal_Bool bHasMainTitle = sal_False;
     sal_Bool bHasSubTitle = sal_False;
     sal_Bool bHasLegend = sal_False;
+    util::DateTime aNullDate(0,0,0,0,30,12,1899);
 
     std::vector< XMLPropertyState > aPropertyStates;
 
@@ -1040,10 +1043,38 @@ void SchXMLExportHelper::parseDocument( Reference< chart::XChartDocument >& rCha
             aAny = xDocPropSet->getPropertyValue(
                 OUString( RTL_CONSTASCII_USTRINGPARAM( "HasLegend" )));
             aAny >>= bHasLegend;
+            if ( bIncludeTable )
+            {
+                OUString sNullDate( RTL_CONSTASCII_USTRINGPARAM( "NullDate" ));
+                aAny = xDocPropSet->getPropertyValue(sNullDate);
+                if ( !aAny.hasValue() )
+                {
+                    Reference<container::XChild> xChild(rChartDoc, uno::UNO_QUERY );
+                    if ( xChild.is() )
+                    {
+                        Reference< beans::XPropertySet > xParentDoc( xChild->getParent(),uno::UNO_QUERY);
+                        if ( xParentDoc.is() && xParentDoc->getPropertySetInfo()->hasPropertyByName(sNullDate) )
+                            aAny = xParentDoc->getPropertyValue(sNullDate);
+                    }
+                }
+
+                aAny >>= aNullDate;
+            }
         }
         catch( beans::UnknownPropertyException & )
         {
             DBG_WARNING( "Required property not found in ChartDocument" );
+        }
+    } // if( xDocPropSet.is())
+
+    if ( bIncludeTable && (aNullDate.Day != 30 || aNullDate.Month != 12 || aNullDate.Year != 1899 ) )
+    {
+        SvXMLElementExport aSet( mrExport, XML_NAMESPACE_TABLE, XML_CALCULATION_SETTINGS, sal_True, sal_True );
+        {
+            ::rtl::OUStringBuffer sBuffer;
+            SvXMLUnitConverter::convertDateTime(sBuffer,aNullDate);
+            mrExport.AddAttribute( XML_NAMESPACE_TABLE,XML_DATE_VALUE,sBuffer.makeStringAndClear());
+            SvXMLElementExport aNull( mrExport, XML_NAMESPACE_TABLE, XML_NULL_DATE, sal_True, sal_True );
         }
     }
 

@@ -514,6 +514,9 @@ void ExtrusionBar::execute( SdrView* pSdrView, SfxRequest& rReq, SfxBindings& rB
 {
     sal_uInt16 nSID = rReq.GetSlot();
     sal_uInt16 nStrResId = 0;
+
+    const bool bUndo = pSdrView && pSdrView->IsUndoEnabled();
+
     switch( nSID )
     {
         case SID_EXTRUSION_TOOGLE:
@@ -584,14 +587,18 @@ void ExtrusionBar::execute( SdrView* pSdrView, SfxRequest& rReq, SfxBindings& rB
                 SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
                 if( pObj->ISA(SdrObjCustomShape) )
                 {
-                    String aStr( SVX_RES( nStrResId ) );
-                    pSdrView->BegUndo( aStr );
-                    pSdrView->AddUndo( pSdrView->GetModel()->GetSdrUndoFactory().CreateUndoAttrObject( *pObj ) );
+                    if( bUndo )
+                    {
+                        String aStr( SVX_RES( nStrResId ) );
+                        pSdrView->BegUndo( aStr );
+                        pSdrView->AddUndo( pSdrView->GetModel()->GetSdrUndoFactory().CreateUndoAttrObject( *pObj ) );
+                    }
                     SdrCustomShapeGeometryItem aGeometryItem( (SdrCustomShapeGeometryItem&)pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
                     impl_execute( pSdrView, rReq, aGeometryItem, pObj );
                     pObj->SetMergedItem( aGeometryItem );
                     pObj->BroadcastObjectChange();
-                    pSdrView->EndUndo();
+                    if( bUndo )
+                        pSdrView->EndUndo();
 
                     // simulate a context change:
                     // force SelectionHasChanged() being called

@@ -30,23 +30,19 @@
 #ifndef CONNECTIVITY_SCONNECTION_HXX
 #define CONNECTIVITY_SCONNECTION_HXX
 
-#include "MColumnAlias.hxx"
-#ifndef _CONNECTIVITY_MAB_CATALOG_HXX_
-#include "MCatalog.hxx"
-#endif
-
-
-#include <com/sun/star/sdbc/SQLWarning.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include "OSubComponent.hxx"
-//  #include <map>
-#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include "connectivity/CommonTools.hxx"
+
+#include "MCatalog.hxx"
+#include "MColumnAlias.hxx"
+#include "OSubComponent.hxx"
 #include "TConnection.hxx"
-#include <cppuhelper/weakref.hxx>
-#ifndef _COM_SUN_STAR_MOZILLA_MOZILLPRODUCTTYPE_HPP_
+
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/mozilla/MozillaProductType.hpp>
-#endif
+#include <com/sun/star/sdbc/SQLWarning.hpp>
+#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
+
+#include <cppuhelper/weakref.hxx>
 
 #include <memory>
 
@@ -59,6 +55,7 @@ namespace connectivity
         class MozabDriver;
         class ODatabaseMetaData;
         class MNameMapper;
+        class ErrorDescriptor;
 
         namespace SDBCAddress {
             typedef enum {
@@ -225,7 +222,12 @@ namespace connectivity
             void setForceLoadTables(sal_Bool aForce){ m_bForceLoadTable = aForce;}
             sal_Bool getForceLoadTables() { return m_bForceLoadTable;}
 
-            // End of Additions from the land of mozilla
+            void throwSQLException( const ErrorDescriptor& _rError, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext );
+            void throwSQLException( const sal_uInt16 _nErrorResourceId, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext );
+
+        private:
+            // make this private - clients should use throwSQLException instead
+            using OConnection_BASE::throwGenericSQLException;
         };
     }
 }

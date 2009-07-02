@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: NResultSet.cxx,v $
- * $Revision: 1.8.56.1 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -30,34 +27,43 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_connectivity.hxx"
-#include <comphelper/property.hxx>
-#include <comphelper/sequence.hxx>
-#include <cppuhelper/typeprovider.hxx>
-#include <comphelper/extract.hxx>
+
+#include "NDatabaseMetaData.hxx"
+#include "NConnection.hxx"
+#include "NResultSet.hxx"
+#include "propertyids.hxx"
+#include "resource/evoab2_res.hrc"
+#include "TSortIndex.hxx"
+#include <algorithm>
+
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
-#include <com/sun/star/sdbc/ResultSetType.hpp>
+#include <com/sun/star/sdb/ErrorCondition.hpp>
+#include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/FetchDirection.hpp>
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
+#include <com/sun/star/sdbc/ResultSetType.hpp>
+
+#include <comphelper/componentcontext.hxx>
+#include <comphelper/extract.hxx>
+#include <comphelper/property.hxx>
+#include <comphelper/sequence.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbexception.hxx>
-#include <TSortIndex.hxx>
-#include <rtl/string.hxx>
-#include <vector>
-#include <algorithm>
-#include "NResultSet.hxx"
-#include "NDatabaseMetaData.hxx"
-#include <com/sun/star/sdbc/DataType.hpp>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <connectivity/sqlerror.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include <com/sun/star/lang/DisposedException.hpp>
-#include "propertyids.hxx"
-#include <svtools/logindlg.hxx>
-#include "resource/evoab2_res.hrc"
+#include <rtl/string.hxx>
+#include <tools/diagnose_ex.h>
+#include <svtools/syslocale.hxx>
+#include <unotools/intlwrapper.hxx>
+
+#include <cstring>
+#include <vector>
+
+namespace connectivity { namespace evoab {
 
 using namespace ::comphelper;
-using namespace connectivity;
-using namespace connectivity::evoab;
-using namespace cppu;
+using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
@@ -65,7 +71,7 @@ using namespace com::sun::star::sdbc;
 using namespace com::sun::star::sdbcx;
 using namespace com::sun::star::container;
 using namespace com::sun::star::io;
-using namespace ::com::sun::star::util;
+namespace ErrorCondition = ::com::sun::star::sdb::ErrorCondition;
 
 //------------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OEvoabResultSet::getImplementationName(  ) throw ( RuntimeException)   \
@@ -92,9 +98,9 @@ sal_Bool SAL_CALL OEvoabResultSet::supportsService( const ::rtl::OUString& _rSer
 }
 
 // -------------------------------------------------------------------------
-OEvoabResultSet::OEvoabResultSet(OStatement_Base* pStmt,OEvoabConnection *pConnection,OSQLParseTreeIterator&    _aSQLIterator)
-    : OResultSet_BASE(m_aMutex)
-    ,OPropertySetHelper(OResultSet_BASE::rBHelper)
+OEvoabResultSet::OEvoabResultSet( OCommonStatement* pStmt, OEvoabConnection *pConnection )
+    :OResultSet_BASE(m_aMutex)
+    ,::comphelper::OPropertyContainer( OResultSet_BASE::rBHelper )
     ,m_pStatement(pStmt)
     ,m_pConnection(pConnection)
     ,m_xMetaData(NULL)
@@ -106,18 +112,24 @@ OEvoabResultSet::OEvoabResultSet(OStatement_Base* pStmt,OEvoabConnection *pConne
     ,m_pContacts(NULL)
     ,m_nIndex(-1)
     ,m_nLength(0)
-    ,m_aSQLIterator(_aSQLIterator)
 {
+    #define REGISTER_PROP( id, member ) \
+        registerProperty( \
+            OMetaConnection::getPropMap().getNameByIndex( id ), \
+            id, \
+            PropertyAttribute::READONLY, \
+            &member, \
+            ::getCppuType( &member ) \
+        );
+
+    REGISTER_PROP( PROPERTY_ID_FETCHSIZE, m_nFetchSize );
+    REGISTER_PROP( PROPERTY_ID_RESULTSETTYPE, m_nResultSetType );
+    REGISTER_PROP( PROPERTY_ID_FETCHDIRECTION, m_nFetchDirection );
+    REGISTER_PROP( PROPERTY_ID_RESULTSETCONCURRENCY, m_nResultSetConcurrency );
 }
 
 // -------------------------------------------------------------------------
 OEvoabResultSet::~OEvoabResultSet()
-{
-}
-
-// -------------------------------------------------------------------------
-
-void OEvoabResultSet::construct(void)
 {
 }
 
@@ -188,11 +200,29 @@ static rtl::OString getUserName( EBook *pBook )
     return aName;
 }
 
+static ::rtl::OUString
+valueToOUString( GValue& _rValue )
+{
+    const char *pStr = g_value_get_string( &_rValue );
+    rtl::OString aStr( pStr ? pStr : "" );
+    ::rtl::OUString sResult( ::rtl::OStringToOUString( aStr, RTL_TEXTENCODING_UTF8 ) );
+    g_value_unset( &_rValue );
+    return sResult;
+}
+
 static bool
-executeQuery (EBook *pBook, EBookQuery *pQuery, GList **ppList,
+valueToBool( GValue& _rValue )
+{
+    bool bResult = g_value_get_boolean( &_rValue );
+    g_value_unset( &_rValue );
+    return bResult;
+}
+
+static bool
+executeQuery (EBook* pBook, EBookQuery* pQuery, GList **ppList,
               rtl::OString &rPassword, GError **pError)
 {
-    ESource *pSource = e_book_get_source (pBook);
+    ESource *pSource = e_book_get_source( pBook );
     bool bSuccess = false;
     bool bAuthSuccess = true;
 
@@ -209,63 +239,6 @@ executeQuery (EBook *pBook, EBookQuery *pQuery, GList **ppList,
         bSuccess = e_book_get_contacts( pBook, pQuery, ppList, pError );
 
     return bSuccess;
-}
-
-void OEvoabResultSet::construct( EBookQuery *pQuery, rtl::OString aTable, bool bIsWithoutWhere )
-{
-    EBook *pBook = openBook( aTable );
-
-    if (pBook)
-    {
-        g_list_free(m_pContacts);
-        m_pContacts = NULL;
-        if( bIsWithoutWhere && !isLocal( pBook ) )
-        {
-            OSL_TRACE( "large query on non-local book - ignored" );
-            m_pConnection->throwGenericSQLException(STR_USE_WHERE_CRIT,*this);
-        }
-        else
-        {
-            OSL_TRACE( "Query without where ? '%d'", bIsWithoutWhere );
-            rtl::OString aPassword = m_pConnection->getPassword();
-            executeQuery( pBook, pQuery, &m_pContacts, aPassword, NULL );
-            m_pConnection->setPassword( aPassword );
-        }
-        m_nLength = g_list_length( m_pContacts );
-
-        OSL_TRACE( "Query return %d records", m_nLength );
-        m_nIndex = -1;
-    }
-}
-
-// -------------------------------------------------------------------------
-void OEvoabResultSet::disposing(void)
-{
-    OPropertySetHelper::disposing();
-
-    ::osl::MutexGuard aGuard(m_aMutex);
-    g_list_free(m_pContacts);
-    m_pContacts = NULL;
-    m_pStatement = NULL;
-    m_xMetaData = NULL;
-}
-// -------------------------------------------------------------------------
-Any SAL_CALL OEvoabResultSet::queryInterface( const Type & rType ) throw(RuntimeException)
-{
-    Any aRet = OPropertySetHelper::queryInterface(rType);
-    if(!aRet.hasValue())
-        aRet = OResultSet_BASE::queryInterface(rType);
-    return aRet;
-}
-// -------------------------------------------------------------------------
-Sequence< Type > SAL_CALL OEvoabResultSet::getTypes(  ) throw( RuntimeException)
-{
-    OTypeCollection aTypes( ::getCppuType( (const  Reference< ::com::sun::star::beans::XMultiPropertySet > *)0 ),
-                                                ::getCppuType( (const  Reference< ::com::sun::star::beans::XFastPropertySet > *)0 ),
-                                                ::getCppuType( (const  Reference< ::com::sun::star::beans::XPropertySet > *)0 ));
-
-    /* Dont know what is this yet */
-    return ::comphelper::concatSequences(aTypes.getTypes(),OResultSet_BASE::getTypes());
 }
 
 static int
@@ -311,7 +284,7 @@ whichAddress(int value)
 * The search order is Work->Home->other(defaults).
 */
 static EContactAddress *
-getDefaultContactAddress(EContact *pContact,int *value)
+getDefaultContactAddress( EContact *pContact,int *value )
 {
     EContactAddress *ec = (EContactAddress *)e_contact_get(pContact,whichAddress(WORK_ADDR_LINE1));
     if ( ec && (strlen(ec->street)>0) )
@@ -334,7 +307,7 @@ getDefaultContactAddress(EContact *pContact,int *value)
 }
 
 static EContactAddress*
-getContactAddress(EContact *pContact, int * address_enum)
+getContactAddress( EContact *pContact, int * address_enum )
 {
     EContactAddress *ec = NULL;
     switch (*address_enum) {
@@ -353,9 +326,8 @@ getContactAddress(EContact *pContact, int * address_enum)
 }
 
 static bool
-handleSplitAddress(EContact *pContact,GValue *pStackValue,int value)
+handleSplitAddress( EContact *pContact,GValue *pStackValue, int value )
 {
-
     EContactAddress *ec = getContactAddress(pContact,&value) ;
 
     if (ec==NULL)
@@ -403,64 +375,231 @@ handleSplitAddress(EContact *pContact,GValue *pStackValue,int value)
 
     }
 
-return false;
+    return false;
 }
-// -------------------------------------------------------------------------
-// XRow Interface
-
-bool
-OEvoabResultSet::getValue( sal_Int32 nColumnNum, GType nType, GValue *pStackValue)
+static bool
+getValue( EContact* pContact, sal_Int32 nColumnNum, GType nType, GValue* pStackValue, bool& _out_rWasNull )
 {
-    const ColumnProperty * pSpecs = evoab::getField (nColumnNum );
-    if (!pSpecs)
-        return sal_False;
-    GParamSpec *pSpec = pSpecs->pField;
-    gboolean bIsSplittedColumn=pSpecs->bIsSplittedValue;
-    EContact *pContact = getCur();
-
-    m_bWasNull = true;
-    if (!pSpec || !pContact) {
+    const ColumnProperty * pSpecs = evoab::getField( nColumnNum );
+    if ( !pSpecs )
         return false;
-    }
-    if (G_PARAM_SPEC_VALUE_TYPE (pSpec) != nType)
+
+    GParamSpec* pSpec = pSpecs->pField;
+    gboolean bIsSplittedColumn = pSpecs->bIsSplittedValue;
+
+    _out_rWasNull = true;
+    if ( !pSpec || !pContact)
+        return false;
+
+    if ( G_PARAM_SPEC_VALUE_TYPE (pSpec) != nType )
     {
-#ifdef DEBUG
-        g_warning ("Wrong type (0x%x) (0x%x) '%s'",
+
+        OSL_TRACE( "Wrong type (0x%x) (0x%x) '%s'",
                    (int)G_PARAM_SPEC_VALUE_TYPE (pSpec), (int) nType,
                    pSpec->name ? pSpec->name : "<noname>");
-#endif
         return false;
     }
-    g_value_init (pStackValue, nType);
-    if (bIsSplittedColumn)
+
+    g_value_init( pStackValue, nType );
+    if ( bIsSplittedColumn )
     {
         const SplitEvoColumns* evo_addr( get_evo_addr() );
         for (int i=0;i<OTHER_ZIP;i++)
         {
             if (0 == strcmp (g_param_spec_get_name ((GParamSpec *)pSpec), evo_addr[i].pColumnName))
             {
-                m_bWasNull = handleSplitAddress (pContact, pStackValue, evo_addr[i].value);
+                _out_rWasNull = handleSplitAddress( pContact, pStackValue, evo_addr[i].value );
                 return true;
             }
         }
     }
     else
     {
-        g_object_get_property (G_OBJECT (pContact),
+        g_object_get_property( G_OBJECT (pContact),
                                g_param_spec_get_name ((GParamSpec *) pSpec),
-                               pStackValue);
-        if (G_VALUE_TYPE (pStackValue) != nType)
+                               pStackValue );
+        if ( G_VALUE_TYPE( pStackValue ) != nType )
         {
-#ifdef DEBUG
-            g_warning ("Fetched type mismatch");
-#endif
-            g_value_unset (pStackValue);
+            OSL_TRACE( "Fetched type mismatch" );
+            g_value_unset( pStackValue );
             return false;
         }
     }
-    m_bWasNull = false;
+    _out_rWasNull = false;
     return true;
 }
+
+namespace
+{
+    struct ComparisonData
+    {
+        const SortDescriptor&   rSortOrder;
+        IntlWrapper             aIntlWrapper;
+
+        ComparisonData( const SortDescriptor& _rSortOrder, const Reference< XMultiServiceFactory >& _rxFactory )
+            :rSortOrder( _rSortOrder )
+            ,aIntlWrapper( _rxFactory, SvtSysLocale().GetLocaleData().getLocale() )
+        {
+        }
+    };
+}
+
+extern "C"
+int CompareContacts( gconstpointer _lhs, gconstpointer _rhs, gpointer _userData )
+{
+    EContact* lhs = static_cast< EContact* >( const_cast< gpointer >( _lhs ) );
+    EContact* rhs = static_cast< EContact* >( const_cast< gpointer >( _rhs ) );
+
+    GValue aLhsValue = { 0, { { 0 } } };
+    GValue aRhsValue = { 0, { { 0 } } };
+    bool bLhsNull = true;
+    bool bRhsNull = true;
+
+    ::rtl::OUString sLhs, sRhs;
+    bool bLhs(false), bRhs(false);
+
+    const ComparisonData& rCompData = *static_cast< const ComparisonData* >( _userData );
+    for (   SortDescriptor::const_iterator sortCol = rCompData.rSortOrder.begin();
+            sortCol != rCompData.rSortOrder.end();
+            ++sortCol
+        )
+    {
+        sal_Int32 nField = sortCol->nField;
+        GType eFieldType = evoab::getGFieldType( nField );
+
+        bool success =  getValue( lhs, nField, eFieldType, &aLhsValue, bLhsNull )
+                    &&  getValue( rhs, nField, eFieldType, &aRhsValue, bRhsNull );
+        OSL_ENSURE( success, "CompareContacts: could not retrieve both values!" );
+        if ( !success )
+            return 0;
+
+        if ( bLhsNull && !bRhsNull )
+            return -1;
+        if ( !bLhsNull && bRhsNull )
+            return 1;
+        if ( bLhsNull && bRhsNull )
+            continue;
+
+        if ( eFieldType == G_TYPE_STRING )
+        {
+            sLhs = valueToOUString( aLhsValue );
+            sRhs = valueToOUString( aRhsValue );
+            sal_Int32 nCompResult = rCompData.aIntlWrapper.getCaseCollator()->compareString( sLhs, sRhs );
+            if ( nCompResult != 0 )
+                return nCompResult;
+            continue;
+        }
+
+        bLhs = valueToBool( aLhsValue );
+        bRhs = valueToBool( aRhsValue );
+        if ( bLhs && !bRhs )
+            return -1;
+        if ( !bLhs && bRhs )
+            return 1;
+        continue;
+    }
+
+    return 0;
+}
+
+static GList*
+sortContacts( GList* _pContactList, const ComparisonData& _rCompData )
+{
+    OSL_ENSURE( !_rCompData.rSortOrder.empty(), "sortContacts: no need to call this without any sort order!" );
+    ENSURE_OR_THROW( _rCompData.aIntlWrapper.getCaseCollator(), "no collator for comparing strings" );
+
+    return g_list_sort_with_data( _pContactList, &CompareContacts, const_cast< gpointer >( static_cast< gconstpointer >( &_rCompData ) ) );
+}
+
+// -------------------------------------------------------------------------
+void OEvoabResultSet::construct( const QueryData& _rData )
+{
+    ENSURE_OR_THROW( _rData.getQuery(), "internal error: no EBookQuery" );
+
+    EBook *pBook = openBook( ::rtl::OUStringToOString( _rData.sTable, RTL_TEXTENCODING_UTF8 ) );
+    if ( !pBook )
+        m_pConnection->throwGenericSQLException( STR_CANNOT_OPEN_BOOK, *this );
+
+    g_list_free(m_pContacts);
+    m_pContacts = NULL;
+    bool bExecuteQuery = true;
+    switch ( _rData.eFilterType )
+    {
+        case eFilterNone:
+            if ( !isLocal( pBook ) )
+            {
+                SQLError aErrorFactory( m_pConnection->getDriver().getMSFactory() );
+                SQLException aAsException = aErrorFactory.getSQLException( ErrorCondition::DATA_CANNOT_SELECT_UNFILTERED, *this );
+                m_aWarnings.appendWarning( SQLWarning(
+                    aAsException.Message,
+                    aAsException.Context,
+                    aAsException.SQLState,
+                    aAsException.ErrorCode,
+                    aAsException.NextException
+                ) );
+                bExecuteQuery = false;
+            }
+            break;
+        case eFilterAlwaysFalse:
+            bExecuteQuery = false;
+            break;
+        case eFilterOther:
+            bExecuteQuery = true;
+            break;
+    }
+    if ( bExecuteQuery )
+    {
+        rtl::OString aPassword = m_pConnection->getPassword();
+        executeQuery( pBook, _rData.getQuery(), &m_pContacts, aPassword, NULL );
+        m_pConnection->setPassword( aPassword );
+
+        if ( m_pContacts && !_rData.aSortOrder.empty() )
+        {
+            ComparisonData aCompData( _rData.aSortOrder, getConnection()->getDriver().getMSFactory() );
+            m_pContacts = sortContacts( m_pContacts, aCompData );
+        }
+    }
+    m_nLength = g_list_length( m_pContacts );
+    OSL_TRACE( "Query return %d records", m_nLength );
+    m_nIndex = -1;
+
+    // create our meta data (need the EBookQuery for this)
+    OEvoabResultSetMetaData* pMeta = new OEvoabResultSetMetaData( _rData.sTable );
+    m_xMetaData = pMeta;
+
+    pMeta->setEvoabFields( _rData.xSelectColumns );
+}
+
+// -------------------------------------------------------------------------
+void OEvoabResultSet::disposing(void)
+{
+    ::comphelper::OPropertyContainer::disposing();
+
+    ::osl::MutexGuard aGuard(m_aMutex);
+    g_list_free(m_pContacts);
+    m_pContacts = NULL;
+    m_pStatement = NULL;
+    m_xMetaData = NULL;
+}
+// -------------------------------------------------------------------------
+Any SAL_CALL OEvoabResultSet::queryInterface( const Type & rType ) throw(RuntimeException)
+{
+    Any aRet = ::comphelper::OPropertyContainer::queryInterface(rType);
+    if(!aRet.hasValue())
+        aRet = OResultSet_BASE::queryInterface(rType);
+    return aRet;
+}
+// -------------------------------------------------------------------------
+Sequence< Type > SAL_CALL OEvoabResultSet::getTypes(  ) throw( RuntimeException)
+{
+    return ::comphelper::concatSequences(
+        OResultSet_BASE::getTypes(),
+        ::comphelper::OPropertyContainer::getTypes()
+    );
+}
+
+// -------------------------------------------------------------------------
+// XRow Interface
 
 /**
  * getString:
@@ -475,17 +614,12 @@ OEvoabResultSet::getValue( sal_Int32 nColumnNum, GType nType, GValue *pStackValu
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     rtl::OUString aResult;
     if ( m_xMetaData.is())
-        {
-                OEvoabResultSetMetaData *pMeta = (OEvoabResultSetMetaData *) m_xMetaData.get();
-                sal_Int32 nFieldNumber = pMeta->fieldAtColumn(nColumnNum);
-        GValue aValue = {0, {{0}}};
-        if (getValue (nFieldNumber, G_TYPE_STRING, &aValue))
-        {
-            const char *pStr = g_value_get_string (&aValue);
-            rtl::OString aStr (pStr ? pStr : "");
-            aResult = rtl::OStringToOUString( aStr, RTL_TEXTENCODING_UTF8 );
-            g_value_unset (&aValue);
-        }
+    {
+        OEvoabResultSetMetaData *pMeta = (OEvoabResultSetMetaData *) m_xMetaData.get();
+        sal_Int32 nFieldNumber = pMeta->fieldAtColumn(nColumnNum);
+        GValue aValue = { 0, { { 0 } } };
+        if ( getValue( getCur(), nFieldNumber, G_TYPE_STRING, &aValue, m_bWasNull ) )
+            aResult = valueToOUString( aValue );
     }
     return aResult;
 }
@@ -497,15 +631,12 @@ sal_Bool SAL_CALL OEvoabResultSet::getBoolean( sal_Int32 nColumnNum ) throw(SQLE
     sal_Bool bResult = sal_False;
 
     if ( m_xMetaData.is())
-        {
-                OEvoabResultSetMetaData *pMeta = (OEvoabResultSetMetaData *) m_xMetaData.get();
-                sal_Int32 nFieldNumber = pMeta->fieldAtColumn(nColumnNum);
-        GValue aValue = {0, {{0}}};
-        if (getValue (nFieldNumber, G_TYPE_BOOLEAN, &aValue))
-        {
-            bResult = g_value_get_boolean (&aValue);
-            g_value_unset (&aValue);
-        }
+    {
+        OEvoabResultSetMetaData *pMeta = (OEvoabResultSetMetaData *) m_xMetaData.get();
+        sal_Int32 nFieldNumber = pMeta->fieldAtColumn(nColumnNum);
+        GValue aValue = { 0, { { 0 } } };
+        if ( getValue( getCur(), nFieldNumber, G_TYPE_BOOLEAN, &aValue, m_bWasNull ) )
+            bResult = valueToBool( aValue );
     }
     return bResult ? sal_True : sal_False;
 }
@@ -558,7 +689,7 @@ sal_Int16 SAL_CALL OEvoabResultSet::getShort( sal_Int32 /*nColumnNum*/ ) throw(S
     return ::com::sun::star::util::Time();
 }
 // -------------------------------------------------------------------------
-DateTime SAL_CALL OEvoabResultSet::getTimestamp( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
+util::DateTime SAL_CALL OEvoabResultSet::getTimestamp( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFunctionNotSupportedException( "XRow::getTimestamp", *this );
     return ::com::sun::star::util::DateTime();
@@ -620,9 +751,8 @@ Reference< XResultSetMetaData > SAL_CALL OEvoabResultSet::getMetaData(  ) throw(
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-    OSL_TRACE("OEvoabResultSet::getMetaData");
-    if(!m_xMetaData.is())
-        m_xMetaData = new OEvoabResultSetMetaData(m_pConnection->getCurrentTableName());
+    // the meta data should have been created at construction time
+    ENSURE_OR_THROW( m_xMetaData.is(), "internal error: no meta data" );
     return m_xMetaData;
 }
 // XResultSetMetaDataSupplier Interface Ends
@@ -829,12 +959,13 @@ void SAL_CALL OEvoabResultSet::close(  ) throw(SQLException, RuntimeException)
 void SAL_CALL OEvoabResultSet::clearWarnings(  ) throw(SQLException, RuntimeException)
 {
     OSL_TRACE("In/Out: OEvoabResultSet::clearWarnings" );
+    m_aWarnings.clearWarnings();
 }
 // -------------------------------------------------------------------------
 Any SAL_CALL OEvoabResultSet::getWarnings(  ) throw(SQLException, RuntimeException)
 {
     OSL_TRACE("In/Out: OEvoabResultSet::getWarnings" );
-    return Any();
+    return m_aWarnings.getWarnings();
 }
 // -------------------------------------------------------------------------
 //XColumnLocate Interface
@@ -857,92 +988,16 @@ sal_Int32 SAL_CALL OEvoabResultSet::findColumn( const ::rtl::OUString& columnNam
 //XColumnLocate interface ends
 
 // -------------------------------------------------------------------------
-IPropertyArrayHelper* OEvoabResultSet::createArrayHelper( ) const
+::cppu::IPropertyArrayHelper* OEvoabResultSet::createArrayHelper( ) const
 {
-    Sequence< Property > aProps(6);
-    Property* pProperties = aProps.getArray();
-    sal_Int32 nPos = 0;
-    DECL_PROP1IMPL(CURSORNAME,          ::rtl::OUString) PropertyAttribute::READONLY);
-    DECL_PROP0(FETCHDIRECTION,          sal_Int32);
-    DECL_PROP0(FETCHSIZE,               sal_Int32);
-    DECL_BOOL_PROP1IMPL(ISBOOKMARKABLE) PropertyAttribute::READONLY);
-    DECL_PROP1IMPL(RESULTSETCONCURRENCY,sal_Int32) PropertyAttribute::READONLY);
-    DECL_PROP1IMPL(RESULTSETTYPE,       sal_Int32) PropertyAttribute::READONLY);
-
-    return new OPropertyArrayHelper(aProps);
+    Sequence< Property > aProps;
+    describeProperties( aProps );
+    return new ::cppu::OPropertyArrayHelper( aProps );
 }
 // -------------------------------------------------------------------------
-IPropertyArrayHelper & OEvoabResultSet::getInfoHelper()
+::cppu::IPropertyArrayHelper & OEvoabResultSet::getInfoHelper()
 {
     return *const_cast<OEvoabResultSet*>(this)->getArrayHelper();
-}
-// -------------------------------------------------------------------------
-sal_Bool OEvoabResultSet::convertFastPropertyValue(
-                            Any & /*rConvertedValue*/,
-                            Any & /*rOldValue*/,
-                            sal_Int32 nHandle,
-                            const Any& /*rValue*/ )
-                                throw (::com::sun::star::lang::IllegalArgumentException)
-{
-    switch(nHandle)
-    {
-        case PROPERTY_ID_ISBOOKMARKABLE:
-        case PROPERTY_ID_CURSORNAME:
-        case PROPERTY_ID_RESULTSETCONCURRENCY:
-        case PROPERTY_ID_RESULTSETTYPE:
-            throw ::com::sun::star::lang::IllegalArgumentException();
-            break;
-        case PROPERTY_ID_FETCHDIRECTION:
-        case PROPERTY_ID_FETCHSIZE:
-        default:
-            ;
-    }
-    return sal_False;
-}
-// -------------------------------------------------------------------------
-void OEvoabResultSet::setFastPropertyValue_NoBroadcast(
-                                sal_Int32 nHandle,
-                                const Any& /*rValue*/) throw (Exception)
-{
-    switch(nHandle)
-    {
-        case PROPERTY_ID_ISBOOKMARKABLE:
-        case PROPERTY_ID_CURSORNAME:
-        case PROPERTY_ID_RESULTSETCONCURRENCY:
-        case PROPERTY_ID_RESULTSETTYPE:
-            throw Exception();
-            break;
-        case PROPERTY_ID_FETCHDIRECTION:
-            break;
-        case PROPERTY_ID_FETCHSIZE:
-            break;
-        default:
-            ;
-    }
-}
-// -------------------------------------------------------------------------
-void OEvoabResultSet::getFastPropertyValue(
-                                Any& rValue,
-                                sal_Int32 nHandle
-                                     ) const
-{
-
-    switch(nHandle)
-    {
-        case PROPERTY_ID_RESULTSETCONCURRENCY:
-            rValue <<= (sal_Int32)m_nResultSetConcurrency;
-            break;
-        case PROPERTY_ID_RESULTSETTYPE:
-            rValue <<= m_nResultSetType;
-            break;
-        case PROPERTY_ID_FETCHDIRECTION:
-            rValue <<= m_nFetchDirection;
-            break;
-        case PROPERTY_ID_FETCHSIZE:
-            rValue <<= m_nFetchSize;
-            break;
-    }
-
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL OEvoabResultSet::acquire() throw()
@@ -961,3 +1016,5 @@ OEvoabResultSet::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeExce
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
 // -----------------------------------------------------------------------------
+
+} } // connectivity::evoab

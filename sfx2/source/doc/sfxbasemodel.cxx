@@ -1485,6 +1485,7 @@ void SAL_CALL SfxBaseModel::storeSelf( const    uno::Sequence< beans::PropertyVa
 
     if ( m_pData->m_pObjectShell.Is() )
     {
+        m_pData->m_pObjectShell->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "storeSelf" ) ) );
         SfxSaveGuard aSaveGuard(this, m_pData, sal_False);
 
         for ( sal_Int32 nInd = 0; nInd < aSeqArgs.getLength(); nInd++ )
@@ -1495,6 +1496,9 @@ void SAL_CALL SfxBaseModel::storeSelf( const    uno::Sequence< beans::PropertyVa
               && !aSeqArgs[nInd].Name.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "InteractionHandler" ) ) )
               && !aSeqArgs[nInd].Name.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StatusIndicator" ) ) ) )
             {
+                m_pData->m_pObjectShell->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "unexpected parameter for storeSelf, might be no problem if SaveAs is executed." ) ) );
+                m_pData->m_pObjectShell->StoreLog();
+
                 ::rtl::OUString aMessage( RTL_CONSTASCII_USTRINGPARAM( "Unexpected MediaDescriptor parameter: " ) );
                 aMessage += aSeqArgs[nInd].Name;
                 throw lang::IllegalArgumentException( aMessage, uno::Reference< uno::XInterface >(), 1 );
@@ -1539,12 +1543,17 @@ void SAL_CALL SfxBaseModel::storeSelf( const    uno::Sequence< beans::PropertyVa
 
         if ( bRet )
         {
+            m_pData->m_pObjectShell->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "successful saving." ) ) );
             m_pData->m_aPreusedFilterName = GetMediumFilterName_Impl();
 
             SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_SAVEDOCDONE, m_pData->m_pObjectShell ) );
         }
         else
         {
+            m_pData->m_pObjectShell->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Storing failed!" ) ) );
+            m_pData->m_pObjectShell->StoreLog();
+
+            // write the contents of the logger to the file
             SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_SAVEDOCFAILED, m_pData->m_pObjectShell ) );
 
             throw task::ErrorCodeIOException( ::rtl::OUString(), uno::Reference< uno::XInterface >(), nErrCode );
@@ -1579,6 +1588,7 @@ void SAL_CALL SfxBaseModel::storeAsURL( const   ::rtl::OUString&                
 
     if ( m_pData->m_pObjectShell.Is() )
     {
+        m_pData->m_pObjectShell->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "storeAsURL" ) ) );
         SfxSaveGuard aSaveGuard(this, m_pData, sal_False);
 
         impl_store( rURL, rArgs, sal_False );
@@ -1604,6 +1614,7 @@ void SAL_CALL SfxBaseModel::storeToURL( const   ::rtl::OUString&                
 
     if ( m_pData->m_pObjectShell.Is() )
     {
+        m_pData->m_pObjectShell->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "storeToURL" ) ) );
         SfxSaveGuard aSaveGuard(this, m_pData, sal_False);
         impl_store( rURL, rArgs, sal_True );
     }
@@ -2468,6 +2479,10 @@ void SfxBaseModel::changing()
     if ( impl_isDisposed() )
         return;
 
+    // the notification should not be sent if the document can not be modified
+    if ( !m_pData->m_pObjectShell.Is() || !m_pData->m_pObjectShell->IsEnableSetModified() )
+        return;
+
     ::cppu::OInterfaceContainerHelper* pIC = m_pData->m_aInterfaceContainer.getContainer( ::getCppuType((const uno::Reference< XMODIFYLISTENER >*)0) );
     if( pIC )
 
@@ -2589,19 +2604,48 @@ void SfxBaseModel::impl_store(  const   ::rtl::OUString&                   sURL 
                     aArgHash.erase( aFilterString );
                     aArgHash.erase( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) ) );
 
-                    try
+                    // if the password is changed SaveAs should be done
+                    // no password for encrypted document is also a change here
+                    sal_Bool bPassChanged = sal_False;
+
+                    ::comphelper::SequenceAsHashMap::iterator aNewPassIter
+                        = aArgHash.find( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Password" ) ) );
+                    SFX_ITEMSET_ARG( pMedium->GetItemSet(), pPasswordItem, SfxStringItem, SID_PASSWORD, sal_False );
+                    if ( pPasswordItem && aNewPassIter != aArgHash.end() )
                     {
-                        storeSelf( aArgHash.getAsConstPropertyValueList() );
-                        bSaved = sal_True;
+                        ::rtl::OUString aNewPass;
+                        aNewPassIter->second >>= aNewPass;
+                        bPassChanged = !aNewPass.equals( pPasswordItem->GetValue() );
                     }
-                    catch( const lang::IllegalArgumentException& )
+                    else if ( pPasswordItem || aNewPassIter != aArgHash.end() )
+                        bPassChanged = sal_True;
+
+                    if ( !bPassChanged )
                     {
-                        // some additional arguments do not allow to use saving, SaveAs should be done
-                        // but only for normal documents, the shared documents would be overwritten in this case
-                        // that would mean an information loss
-                        // TODO/LATER: need a new interaction for this case
-                        if ( m_pData->m_pObjectShell->IsDocShared() )
-                            throw;
+                        try
+                        {
+                            storeSelf( aArgHash.getAsConstPropertyValueList() );
+                            bSaved = sal_True;
+                        }
+                        catch( const lang::IllegalArgumentException& )
+                        {
+                            // some additional arguments do not allow to use saving, SaveAs should be done
+                            // but only for normal documents, the shared documents would be overwritten in this case
+                            // that would mean an information loss
+                            // TODO/LATER: need a new interaction for this case
+                            if ( m_pData->m_pObjectShell->IsDocShared() )
+                            {
+                                m_pData->m_pObjectShell->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Can't store shared document!" ) ) );
+                                m_pData->m_pObjectShell->StoreLog();
+
+                                throw;
+                            }
+                        }
+                    }
+                    else if ( m_pData->m_pObjectShell->IsDocShared() )
+                    {
+                        // if the password is changed a special error should be used in case of shared document
+                        throw task::ErrorCodeIOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Cant change password for shared document." ) ), uno::Reference< uno::XInterface >(), ERRCODE_SFX_SHARED_NOPASSWORDCHANGE );
                     }
                 }
             }
@@ -2623,9 +2667,14 @@ void SfxBaseModel::impl_store(  const   ::rtl::OUString&                   sURL 
         SFX_ITEMSET_ARG( aParams, pCopyStreamItem, SfxBoolItem, SID_COPY_STREAM_IF_POSSIBLE, sal_False );
 
         if ( pCopyStreamItem && pCopyStreamItem->GetValue() && !bSaveTo )
+        {
+            m_pData->m_pObjectShell->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Misuse of CopyStreamIfPossible!" ) ) );
+            m_pData->m_pObjectShell->StoreLog();
+
             throw frame::IllegalArgumentIOException(
                     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("CopyStreamIfPossible parameter is not acceptable for storeAsURL() call!") ),
                     uno::Reference< uno::XInterface >() );
+        }
 
         // since saving a document modifies its DocumentInfo, the current
         // DocumentInfo must be saved on "SaveTo", so it can be restored
@@ -2679,7 +2728,10 @@ void SfxBaseModel::impl_store(  const   ::rtl::OUString&                   sURL 
 
         sal_uInt32 nErrCode = m_pData->m_pObjectShell->GetErrorCode();
         if ( !bRet && !nErrCode )
+        {
+            m_pData->m_pObjectShell->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Storing has failed, no error is set!" ) ) );
             nErrCode = ERRCODE_IO_CANTWRITE;
+        }
         m_pData->m_pObjectShell->ResetError();
 
         if ( bRet )
@@ -2708,6 +2760,7 @@ void SfxBaseModel::impl_store(  const   ::rtl::OUString&                   sURL 
                 }
             }
 
+            m_pData->m_pObjectShell->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Storing succeeded!" ) ) );
             if ( !bSaveTo )
             {
                 m_pData->m_aPreusedFilterName = GetMediumFilterName_Impl();
@@ -2720,6 +2773,10 @@ void SfxBaseModel::impl_store(  const   ::rtl::OUString&                   sURL 
         }
         else
         {
+            // let the logring be stored to the related file
+            m_pData->m_pObjectShell->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Storing failed!" ) ) );
+            m_pData->m_pObjectShell->StoreLog();
+
             SFX_APP()->NotifyEvent( SfxEventHint( bSaveTo ? SFX_EVENT_SAVETODOCFAILED : SFX_EVENT_SAVEASDOCFAILED,
                                                     m_pData->m_pObjectShell ) );
 

@@ -297,6 +297,7 @@ namespace dbtools
         }
         catch( const Exception& )
         {
+            DBG_UNHANDLED_EXCEPTION();
         }
         try
         {

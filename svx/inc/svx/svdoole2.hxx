@@ -157,6 +157,8 @@ public:
     virtual void NbcSetLogicRect(const Rectangle& rRect);
     virtual void SetGeoData(const SdrObjGeoData& rGeo);
 
+    static sal_Bool CanUnloadRunningObj( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XEmbeddedObject >& xObj,
+                                         sal_Int64 nAspect );
     static sal_Bool Unload( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XEmbeddedObject >& xObj, sal_Int64 nAspect );
     BOOL Unload();
     void Connect();

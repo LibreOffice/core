@@ -1238,32 +1238,37 @@ bool SdrDragObjOwn::EndSdrDrag(bool /*bCopy*/)
 
     if(pObj)
     {
-        if(!getSdrDragView().IsInsObjPoint() && pObj->IsInserted() )
-        {
-            if (DragStat().IsEndDragChangesAttributes())
-            {
-                pUndo=getSdrDragView().GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*pObj);
+        const bool bUndo = getSdrDragView().IsUndoEnabled();
 
-                if (DragStat().IsEndDragChangesGeoAndAttributes())
+        if( bUndo )
+        {
+            if(!getSdrDragView().IsInsObjPoint() && pObj->IsInserted() )
+            {
+                if (DragStat().IsEndDragChangesAttributes())
+                {
+                    pUndo=getSdrDragView().GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*pObj);
+
+                    if (DragStat().IsEndDragChangesGeoAndAttributes())
+                    {
+                        vConnectorUndoActions = getSdrDragView().CreateConnectorUndo( *pObj );
+                        pUndo2 = getSdrDragView().GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pObj);
+                    }
+                }
+                else
                 {
                     vConnectorUndoActions = getSdrDragView().CreateConnectorUndo( *pObj );
-                    pUndo2 = getSdrDragView().GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pObj);
+                    pUndo= getSdrDragView().GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pObj);
                 }
+            }
+
+            if( pUndo )
+            {
+                getSdrDragView().BegUndo( pUndo->GetComment() );
             }
             else
             {
-                vConnectorUndoActions = getSdrDragView().CreateConnectorUndo( *pObj );
-                pUndo= getSdrDragView().GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pObj);
+                getSdrDragView().BegUndo();
             }
-        }
-
-        if( pUndo )
-        {
-            getSdrDragView().BegUndo( pUndo->GetComment() );
-        }
-        else
-        {
-            getSdrDragView().BegUndo();
         }
 
         // evtl. use opertator= for setting changed object data (do not change selection in
@@ -1290,32 +1295,39 @@ bool SdrDragObjOwn::EndSdrDrag(bool /*bCopy*/)
 
         if(bRet)
         {
-            getSdrDragView().AddUndoActions( vConnectorUndoActions );
-
-            if ( pUndo )
+            if( bUndo )
             {
-                getSdrDragView().AddUndo(pUndo);
-            }
+                getSdrDragView().AddUndoActions( vConnectorUndoActions );
 
-            if ( pUndo2 )
-            {
-                getSdrDragView().AddUndo(pUndo2);
+                if ( pUndo )
+                {
+                    getSdrDragView().AddUndo(pUndo);
+                }
+
+                if ( pUndo2 )
+                {
+                    getSdrDragView().AddUndo(pUndo2);
+                }
             }
         }
         else
         {
-            std::vector< SdrUndoAction* >::iterator vConnectorUndoIter( vConnectorUndoActions.begin() );
-
-            while( vConnectorUndoIter != vConnectorUndoActions.end() )
+            if( bUndo )
             {
-                delete *vConnectorUndoIter++;
-            }
+                std::vector< SdrUndoAction* >::iterator vConnectorUndoIter( vConnectorUndoActions.begin() );
 
-            delete pUndo;
-            delete pUndo2;
+                while( vConnectorUndoIter != vConnectorUndoActions.end() )
+                {
+                    delete *vConnectorUndoIter++;
+                }
+
+                delete pUndo;
+                delete pUndo2;
+            }
         }
 
-        getSdrDragView().EndUndo();
+        if( bUndo )
+            getSdrDragView().EndUndo();
     }
 
     return bRet;
@@ -3255,11 +3267,13 @@ bool SdrDragCrook::EndSdrDrag(bool bCopy)
     if (bResize && aFact==Fraction(1,1))
         bResize=false;
 
+    const bool bUndo = getSdrDragView().IsUndoEnabled();
+
     bool bDoCrook=aCenter!=aMarkCenter && aRad.X()!=0 && aRad.Y()!=0;
 
     if (bDoCrook || bResize)
     {
-        if (bResize)
+        if (bResize && bUndo)
         {
             XubString aStr;
             ImpTakeDescriptionStr(!bContortion?STR_EditCrook:STR_EditCrookContortion,aStr);
@@ -3301,7 +3315,8 @@ bool SdrDragCrook::EndSdrDrag(bool bCopy)
                         ResizePoint(aCtr1,aCenter,aFact,aFact1);
 
                     Size aSiz(aCtr1.X()-aCtr0.X(),aCtr1.Y()-aCtr0.Y());
-                    AddUndo(getSdrDragView().GetModel()->GetSdrUndoFactory().CreateUndoMoveObject(*pO,aSiz));
+                    if( bUndo )
+                        AddUndo(getSdrDragView().GetModel()->GetSdrUndoFactory().CreateUndoMoveObject(*pO,aSiz));
                     pO->Move(aSiz);
                 }
             }
@@ -3315,7 +3330,7 @@ bool SdrDragCrook::EndSdrDrag(bool bCopy)
             getSdrDragView().SetLastCrookCenter(aCenter);
         }
 
-        if (bResize)
+        if (bResize && bUndo)
             getSdrDragView().EndUndo();
 
         return true;
@@ -3545,11 +3560,18 @@ bool SdrDragCrop::EndSdrDrag(bool bCopy)
         return false;
 
     const SdrGrafCropItem& rOldCrop = (const SdrGrafCropItem&)pObj->GetMergedItem(SDRATTR_GRAFCROP);
-    String aUndoStr;
-    ImpTakeDescriptionStr(STR_DragMethCrop, aUndoStr);
 
-    getSdrDragView().BegUndo( aUndoStr );
-    getSdrDragView().AddUndo( getSdrDragView().GetModel()->GetSdrUndoFactory().CreateUndoGeoObject( *pObj ) );
+    const bool bUndo = getSdrDragView().IsUndoEnabled();
+
+    if( bUndo )
+    {
+        String aUndoStr;
+        ImpTakeDescriptionStr(STR_DragMethCrop, aUndoStr);
+
+        getSdrDragView().BegUndo( aUndoStr );
+        getSdrDragView().AddUndo( getSdrDragView().GetModel()->GetSdrUndoFactory().CreateUndoGeoObject( *pObj ) );
+    }
+
     Rectangle aOldRect( pObj->GetLogicRect() );
     getSdrDragView().ResizeMarkedObj(DragStat().Ref1(),aXFact,aYFact,bCopy);
     Rectangle aNewRect( pObj->GetLogicRect() );
@@ -3571,7 +3593,9 @@ bool SdrDragCrop::EndSdrDrag(bool bCopy)
     SfxItemSet aSet( rPool, SDRATTR_GRAFCROP, SDRATTR_GRAFCROP );
     aSet.Put( SdrGrafCropItem( nLeftCrop, nTopCrop, nRightCrop, nBottomCrop ) );
     getSdrDragView().SetAttributes( aSet, false );
-    getSdrDragView().EndUndo();
+
+    if( bUndo )
+        getSdrDragView().EndUndo();
 
     return true;
 }

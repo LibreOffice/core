@@ -381,7 +381,6 @@ BOOL ImpEditEngine::MouseButtonDown( const MouseEvent& rMEvt, EditView* pView )
 
 void ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
 {
-#ifndef SVX_LIGHT
     GetSelEngine().SetCurView( pView );
     SetActiveView( pView );
     if ( rCEvt.GetCommand() == COMMAND_VOICE )
@@ -642,7 +641,42 @@ void ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
             pView->GetWindow()->SetCursorRect();
         }
     }
-#endif // !SVX_LIGHT
+    else if ( rCEvt.GetCommand() == COMMAND_SELECTIONCHANGE )
+    {
+        const CommandSelectionChangeData *pData = rCEvt.GetSelectionChangeData();
+
+        ESelection aSelection = pView->GetSelection();
+        aSelection.Adjust();
+
+        if( pView->HasSelection() )
+        {
+            aSelection.nEndPos = aSelection.nStartPos;
+            aSelection.nStartPos += pData->GetStart();
+            aSelection.nEndPos += pData->GetEnd();
+        }
+        else
+        {
+            aSelection.nStartPos = pData->GetStart();
+            aSelection.nEndPos = pData->GetEnd();
+        }
+        pView->SetSelection( aSelection );
+    }
+    else if ( rCEvt.GetCommand() == COMMAND_PREPARERECONVERSION )
+    {
+        if ( pView->HasSelection() )
+        {
+            ESelection aSelection = pView->GetSelection();
+            aSelection.Adjust();
+
+            if ( aSelection.nStartPara != aSelection.nEndPara )
+            {
+                xub_StrLen aParaLen = pEditEngine->GetTextLen( aSelection.nStartPara );
+                aSelection.nEndPara = aSelection.nStartPara;
+                aSelection.nEndPos = aParaLen;
+                pView->SetSelection( aSelection );
+            }
+        }
+    }
 
     GetSelEngine().Command( rCEvt );
 }

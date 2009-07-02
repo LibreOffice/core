@@ -1,4 +1,4 @@
-cn  connectivity    :    comphelper MOZ:moz SO:moz_prebuilt svtools UNIXODBC:unixODBC unoil javaunohelper HSQLDB:hsqldb QADEVOOO:qadevOOo NULL
+cn  connectivity    :    l10n comphelper MOZ:moz SO:moz_prebuilt svtools UNIXODBC:unixODBC unoil javaunohelper HSQLDB:hsqldb QADEVOOO:qadevOOo NULL
 cn  connectivity                                    usr1    -   all cn_mkout NULL
 cn  connectivity\inc                                nmake   -   all cn_inc NULL
 cn  connectivity\com\sun\star\sdbcx\comp\hsqldb     nmake   -   all cn_jhsqldbdb cn_hsqldb cn_inc NULL
@@ -13,7 +13,6 @@ cn  connectivity\source\drivers\mozab\bootstrap     nmake   -   all cn_mozab_boo
 cn  connectivity\source\drivers\mozab               nmake   -   all cn_mozab cn_mozab_bootstrap cn_dbtools cn_inc NULL
 cn  connectivity\source\drivers\kab                 nmake   -   u   cn_kab cn_dbtools cn_inc NULL
 cn  connectivity\source\drivers\macab               nmake   -   u   cn_macab cn_dbtools cn_inc NULL
-cn  connectivity\source\drivers\evoab               nmake   -   u   cn_evoab cn_dbtools cn_file cn_inc NULL
 cn  connectivity\source\drivers\evoab2              nmake   -   u   cn_evoab2 cn_dbtools cn_file cn_inc NULL
 cn  connectivity\source\drivers\calc                nmake   -   all cn_calc cn_file cn_inc NULL
 cn  connectivity\source\drivers\odbcbase            nmake   -   all cn_odbcbase cn_dbtools cn_inc NULL

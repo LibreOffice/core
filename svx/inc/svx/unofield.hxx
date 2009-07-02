@@ -39,7 +39,7 @@
 #include <cppuhelper/component.hxx>
 #include "svx/svxdllapi.h"
 
-#include <unotools/servicehelper.hxx>
+#include <comphelper/servicehelper.hxx>
 
 #include <svx/mutxhelp.hxx>
 
@@ -74,7 +74,7 @@ class SVX_DLLPUBLIC SvxUnoTextField : public SvxMutexHelper,
 {
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > mxAnchor;
-    SfxItemPropertySet* mpPropSet;
+    const SfxItemPropertySet*   mpPropSet;
     sal_Int32               mnServiceId;
     SvxUnoFieldData_Impl*   mpImpl;
 
