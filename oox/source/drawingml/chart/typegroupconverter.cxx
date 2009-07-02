@@ -77,7 +77,7 @@ const sal_Char SERVICE_CHART2_LINE[]    = "com.sun.star.chart2.LineChartType";
 const sal_Char SERVICE_CHART2_NET[]     = "com.sun.star.chart2.NetChartType";
 const sal_Char SERVICE_CHART2_PIE[]     = "com.sun.star.chart2.PieChartType";
 const sal_Char SERVICE_CHART2_SCATTER[] = "com.sun.star.chart2.ScatterChartType";
-const sal_Char SERVICE_CHART2_BUBBLE[]  = "com.sun.star.chart2.ScatterChartType";   // Todo
+const sal_Char SERVICE_CHART2_BUBBLE[]  = "com.sun.star.chart2.BubbleChartType";
 const sal_Char SERVICE_CHART2_SURFACE[] = "com.sun.star.chart2.ColumnChartType";    // Todo
 
 namespace csscd = ::com::sun::star::chart::DataLabelPlacement;
@@ -96,7 +96,7 @@ static const TypeGroupInfo spTypeInfos[] =
     { TYPEID_DOUGHNUT,  TYPECATEGORY_PIE,     SERVICE_CHART2_PIE,     VARPOINTMODE_MULTI,  csscd::AVOID_OVERLAP, false, true,  true,  true,  false, true,  false, false, false, false },
     { TYPEID_OFPIE,     TYPECATEGORY_PIE,     SERVICE_CHART2_PIE,     VARPOINTMODE_MULTI,  csscd::AVOID_OVERLAP, false, true,  true,  true,  true,  true,  false, false, false, false },
     { TYPEID_SCATTER,   TYPECATEGORY_SCATTER, SERVICE_CHART2_SCATTER, VARPOINTMODE_SINGLE, csscd::RIGHT,         true,  true,  false, false, false, false, false, false, false, false },
-    { TYPEID_BUBBLE,    TYPECATEGORY_SCATTER, SERVICE_CHART2_BUBBLE,  VARPOINTMODE_SINGLE, csscd::RIGHT,         false, true,  false, true,  false, false, false, false, false, false },
+    { TYPEID_BUBBLE,    TYPECATEGORY_SCATTER, SERVICE_CHART2_BUBBLE,  VARPOINTMODE_SINGLE, csscd::RIGHT,         false, false, false, true,  false, false, false, false, false, false },
     { TYPEID_SURFACE,   TYPECATEGORY_SURFACE, SERVICE_CHART2_SURFACE, VARPOINTMODE_NONE,   csscd::RIGHT,         false, true,  false, true,  false, true,  false, false, false, false },
 };
 
@@ -188,11 +188,6 @@ TypeGroupConverter::TypeGroupConverter( const ConverterRoot& rParent, TypeGroupM
             if( mrModel.mnRadarStyle == XML_filled )
                 eTypeId = TYPEID_RADARAREA;
         break;
-        case TYPEID_BUBBLE:
-            // create a symbol-only scatter chart from bubble charts
-            for( TypeGroupModel::SeriesVector::iterator aIt = mrModel.maSeries.begin(), aEnd = mrModel.maSeries.end(); aIt != aEnd; ++aIt )
-                (*aIt)->mxShapeProp.getOrCreate().getLineProperties().maLineFill.moFillType = XML_noFill;
-        break;
         case TYPEID_SURFACE:
             // create a deep 3D bar chart from surface charts
             mrModel.mnGrouping = XML_standard;
@@ -202,16 +197,6 @@ TypeGroupConverter::TypeGroupConverter( const ConverterRoot& rParent, TypeGroupM
 
     // set the chart type info struct for the current chart type
     maTypeInfo = lclGetTypeInfoFromTypeId( eTypeId );
-
-    // change type info for some chart types
-    switch( eTypeId )
-    {
-        case TYPEID_BUBBLE:
-            // bubble chart has fill properties, but we create a scatter chart
-            maTypeInfo.mbSeriesIsFrame2d = false;
-        break;
-        default:;
-    }
 }
 
 TypeGroupConverter::~TypeGroupConverter()

@@ -492,6 +492,13 @@ Reference< XDataSeries > SeriesConverter::createDataSeries( const TypeGroupConve
             Reference< XLabeledDataSequence > xXValueSeq = createCategorySequence( CREATE_OUSTRING( "values-x" ) );
             if( xXValueSeq.is() )
                 aLabeledSeqVec.push_back( xXValueSeq );
+            // add size values of bubble charts
+            if( rTypeInfo.meTypeId == TYPEID_BUBBLE )
+            {
+                Reference< XLabeledDataSequence > xSizeValueSeq = createLabeledDataSequence( SeriesModel::POINTS, CREATE_OUSTRING( "values-size" ), true );
+                if( xSizeValueSeq.is() )
+                    aLabeledSeqVec.push_back( xSizeValueSeq );
+            }
         }
         // attach labeled data sequences to series
         if( !aLabeledSeqVec.empty() )
