@@ -118,33 +118,11 @@ Menu RID_SLIDESHOW_CONTEXTMENU
      MenuItem
        {
             Identifier = CM_COLOR_PEN ;
-            Text [ en-US ] = "~Change Color" ;
+            Text [ en-US ] = "~Change Pen Color" ;
         };
         MenuItem
         {
             Separator = TRUE;
-        };
-        MenuItem
-        {
-            Identifier = CM_SCREEN;
-            Text [ en-US ] = "~Screen" ;
-
-            SubMenu = Menu
-            {
-                ItemList =
-                {
-                    MenuItem
-                    {
-                        Identifier = CM_SCREEN_BLACK;
-                        Text [ en-US ] = "~Black";
-                    };
-                    MenuItem
-                    {
-                        Identifier = CM_SCREEN_WHITE;
-                        Text [ en-US ] = "~White";
-                    };
-                };
-            };
         };
         MenuItem
         {
@@ -163,11 +141,6 @@ Menu RID_SLIDESHOW_CONTEXTMENU
         MenuItem
         {
             Separator = TRUE;
-        };
-        MenuItem
-        {
-            Identifier = CM_ERASE_ALLINK ;
-            Text [ en-US ] = "~Erase All Ink" ;
         };
         MenuItem
         {
@@ -206,14 +179,36 @@ Menu RID_SLIDESHOW_CONTEXTMENU
                 };
             };
         };
+    MenuItem
+    {
+        Separator = TRUE;
+    };
         MenuItem
         {
-            Separator = TRUE;
+            Identifier = CM_SCREEN;
+            Text [ en-US ] = "~Screen" ;
+
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                    MenuItem
+                    {
+                        Identifier = CM_SCREEN_BLACK;
+                        Text [ en-US ] = "~Black";
+                    };
+                    MenuItem
+                    {
+                        Identifier = CM_SCREEN_WHITE;
+                        Text [ en-US ] = "~White";
+                    };
+                };
+            };
         };
         MenuItem
         {
             Identifier = CM_ENDSHOW ;
             Text [ en-US ] = "~End Show" ;
-        };
+    };
     };
 };

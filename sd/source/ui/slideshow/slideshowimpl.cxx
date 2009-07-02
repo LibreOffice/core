@@ -2354,8 +2354,10 @@ IMPL_LINK( SlideshowImpl, ContextMenuSelectHdl, Menu *, pMenu )
             }
         }
         break;
+
+        if( maPresSettings.mbMouseAsPen )
+        {
             case CM_COLOR_PEN:
-                if( maPresSettings.mbMouseAsPen )
                 {
                     //Open a color picker based on SvColorDialog
                     ::Color aColor( mnUserPaintColor );
@@ -2373,7 +2375,6 @@ IMPL_LINK( SlideshowImpl, ContextMenuSelectHdl, Menu *, pMenu )
                 break;
 
             case CM_WIDTH_PEN_VERY_THIN:
-                if( maPresSettings.mbMouseAsPen )
                 {
                     setPenWidth(4.0);
                     mbWasPaused = false;
@@ -2381,7 +2382,6 @@ IMPL_LINK( SlideshowImpl, ContextMenuSelectHdl, Menu *, pMenu )
                 break;
 
             case CM_WIDTH_PEN_THIN:
-                if( maPresSettings.mbMouseAsPen )
                 {
                     setPenWidth(100.0);
                     mbWasPaused = false;
@@ -2389,7 +2389,6 @@ IMPL_LINK( SlideshowImpl, ContextMenuSelectHdl, Menu *, pMenu )
                 break;
 
             case CM_WIDTH_PEN_NORMAL:
-                if( maPresSettings.mbMouseAsPen )
                 {
                     setPenWidth(150.0);
                     mbWasPaused = false;
@@ -2397,7 +2396,6 @@ IMPL_LINK( SlideshowImpl, ContextMenuSelectHdl, Menu *, pMenu )
                 break;
 
             case CM_WIDTH_PEN_THICK:
-                if( maPresSettings.mbMouseAsPen )
                 {
                     setPenWidth(200.0);
                     mbWasPaused = false;
@@ -2405,21 +2403,19 @@ IMPL_LINK( SlideshowImpl, ContextMenuSelectHdl, Menu *, pMenu )
                 break;
 
             case CM_WIDTH_PEN_VERY_THICK:
-                if( maPresSettings.mbMouseAsPen )
                 {
                     setPenWidth(400.0);
                     mbWasPaused = false;
                 }
                 break;
+#ifdef ENABLE_PRESENTER_EXTRA_UI
             case CM_ERASE_ALLINK:
-                if( maPresSettings.mbMouseAsPen )
                 {
                     setEraseAllInk(true);
                     mbWasPaused = false;
                 }
                 break;
             case CM_ERASE_INK_PEN_VERY_THIN:
-                if( maPresSettings.mbMouseAsPen )
                 {
                     setEraseInk(100.0);
                     mbWasPaused = false;
@@ -2427,7 +2423,6 @@ IMPL_LINK( SlideshowImpl, ContextMenuSelectHdl, Menu *, pMenu )
                 break;
 
             case CM_ERASE_INK_PEN_THIN:
-                if( maPresSettings.mbMouseAsPen )
                 {
                     setEraseInk(200.0);
                     mbWasPaused = false;
@@ -2435,7 +2430,6 @@ IMPL_LINK( SlideshowImpl, ContextMenuSelectHdl, Menu *, pMenu )
                 break;
 
             case CM_ERASE_INK_PEN_NORMAL:
-                if( maPresSettings.mbMouseAsPen )
                 {
                     setEraseInk(300.0);
                     mbWasPaused = false;
@@ -2443,19 +2437,19 @@ IMPL_LINK( SlideshowImpl, ContextMenuSelectHdl, Menu *, pMenu )
                 break;
 
             case CM_ERASE_INK_PEN_THICK:
-                if( maPresSettings.mbMouseAsPen )
                 {
                     setEraseInk(400.0);
                     mbWasPaused = false;
                 }
                 break;
             case CM_ERASE_INK_PEN_VERY_THICK:
-                if( maPresSettings.mbMouseAsPen )
                 {
                     setEraseInk(500.0);
                     mbWasPaused = false;
                 }
                 break;
+#endif
+        }
 
             case CM_ENDSHOW:
                 // in case the user cancels the presentation, switch to current slide
