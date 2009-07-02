@@ -133,7 +133,6 @@ CFLAGSWERRCC=-Werror
 # settings.mk):
 
 MODULES_WITH_WARNINGS := \
-    extensions \
     soldep \
     svx
 

@@ -593,6 +593,9 @@ sub create_epm_header
     # if ( $installer::globals::patch )
     # {
     #   $onepackage->{$provides} = "";
+        my $isdict = 0;
+        if ( $onepackage->{'packagename'} =~ /-dict-/ ) { $isdict = 1;  }
+
     #   $onepackage->{$requires} = "";
     # }
 
@@ -636,7 +639,7 @@ sub create_epm_header
         {
             my $onerequires = ${$allrequires}[$i];
             $onerequires =~ s/\s*$//;
-            installer::packagelist::resolve_packagevariables(\$onerequires, $variableshashref, 0);
+            installer::packagelist::resolve_packagevariables2(\$onerequires, $variableshashref, 0, $isdict);
 
             # Special handling for Solaris. In depend files, the names of the packages are required, not
             # only the abbreviation. Therefore there is a special syntax for names in packagelist:
@@ -835,6 +838,9 @@ sub find_epm_on_system
         elsif ( ($ENV{'EPM'} eq "no") || ($ENV{'EPM'} eq "internal") )
         {
             $epmname = "epm";
+            my $epmref = installer::scriptitems::get_sourcepath_from_filename_and_includepath( \$epmname, $includepatharrayref, 0);
+            if ($$epmref eq "") { installer::exiter::exit_program("ERROR: Could not find program $epmname (EPM set to \"internal\" or \"no\")!", "find_epm_on_system"); }
+            $epmname = $$epmref;
         }
         else
         {
@@ -2399,39 +2405,42 @@ sub create_packages_without_epm
 
         # compressing packages
 
-        my $faspac = "faspac-so.sh";
-
-        my $compressorref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$faspac, $includepatharrayref, 0);
-        if ($$compressorref ne "")
+        if ( ! $installer::globals::solarisdontcompress )
         {
-            # Saving original pkginfo, to set time stamp later
-            my $pkginfoorig = "$destinationdir/$packagename/pkginfo";
-            my $pkginfotmp = "$destinationdir/$packagename" . ".pkginfo.tmp";
-            $systemcall = "cp -p $pkginfoorig $pkginfotmp";
-             make_systemcall($systemcall);
+            my $faspac = "faspac-so.sh";
 
-            $faspac = $$compressorref;
-            $infoline = "Found compressor: $faspac\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            my $compressorref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$faspac, $includepatharrayref, 0);
+            if ($$compressorref ne "")
+            {
+                # Saving original pkginfo, to set time stamp later
+                my $pkginfoorig = "$destinationdir/$packagename/pkginfo";
+                my $pkginfotmp = "$destinationdir/$packagename" . ".pkginfo.tmp";
+                $systemcall = "cp -p $pkginfoorig $pkginfotmp";
+                 make_systemcall($systemcall);
 
-            installer::logger::print_message( "... $faspac ...\n" );
-            installer::logger::include_timestamp_into_logfile("Starting $faspac");
+                $faspac = $$compressorref;
+                $infoline = "Found compressor: $faspac\n";
+                push( @installer::globals::logfileinfo, $infoline);
 
-             $systemcall = "/bin/sh $faspac -a -q -d $destinationdir $packagename";  # $faspac has to be the absolute path!
-             make_systemcall($systemcall);
+                installer::logger::print_message( "... $faspac ...\n" );
+                installer::logger::include_timestamp_into_logfile("Starting $faspac");
 
-             # Setting time stamp for pkginfo, because faspac-so.sh changed the pkginfo file,
-             # updated the size and checksum, but not the time stamp.
-             $systemcall = "touch -r $pkginfotmp $pkginfoorig";
-             make_systemcall($systemcall);
-            if ( -f $pkginfotmp ) { unlink($pkginfotmp); }
+                 $systemcall = "/bin/sh $faspac -a -q -d $destinationdir $packagename";  # $faspac has to be the absolute path!
+                 make_systemcall($systemcall);
 
-            installer::logger::include_timestamp_into_logfile("End of $faspac");
-        }
-        else
-        {
-            $infoline = "Not found: $faspac\n";
-            push( @installer::globals::logfileinfo, $infoline);
+                 # Setting time stamp for pkginfo, because faspac-so.sh changed the pkginfo file,
+                 # updated the size and checksum, but not the time stamp.
+                 $systemcall = "touch -r $pkginfotmp $pkginfoorig";
+                 make_systemcall($systemcall);
+                if ( -f $pkginfotmp ) { unlink($pkginfotmp); }
+
+                installer::logger::include_timestamp_into_logfile("End of $faspac");
+            }
+            else
+            {
+                $infoline = "Not found: $faspac\n";
+                push( @installer::globals::logfileinfo, $infoline);
+            }
         }
 
         # Setting unix rights to "775" for all created directories inside the package
@@ -2519,7 +2528,7 @@ sub create_packages_without_epm
 
         # saving globally for later usage
         $installer::globals::rpmcommand = $rpmcommand;
-        $installer::globals::rpmquerycommand = "rpm"; # For queries "rpm" is used, not "rpmbuild" (for this call the LD_LIBRARY_PATH is not required!)
+        $installer::globals::rpmquerycommand = "rpm";
 
         my $target = "";
         if ( $installer::globals::compiler =~ /unxlngi/) { $target = "i586"; }
@@ -2536,7 +2545,7 @@ sub create_packages_without_epm
             $buildrootstring = "--buildroot=$buildroot";
         }
 
-        my $systemcall = "$rpmcommand -bb $specfilename --target $target $buildrootstring 2\>\&1 |";
+        my $systemcall = "$rpmcommand -bb --define \"_unpackaged_files_terminate_build  0\" $specfilename --target $target $buildrootstring 2\>\&1 |";
 
         installer::logger::print_message( "... $systemcall ...\n" );
 

@@ -8,7 +8,7 @@
 #
 # $RCSfile: unitools.mk,v $
 #
-# $Revision: 1.59 $
+# $Revision: 1.53.30.4 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -30,14 +30,22 @@
 #*************************************************************************
 
 # Common tools - move this to the end / consolidate
-TRANSEX*=$(AUGMENT_LIBRARY_PATH) transex3
-ULFEX*=$(AUGMENT_LIBRARY_PATH) ulfex
-XMLEX*=$(AUGMENT_LIBRARY_PATH) xmlex
-XRMEX*=$(AUGMENT_LIBRARY_PATH) xrmex
-CFGEX*=$(AUGMENT_LIBRARY_PATH) cfgex
-XSLTPROC*=$(AUGMENT_LIBRARY_PATH) xsltproc
+TRANSEX*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)$/transex3
+ULFEX*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)$/ulfex
+XMLEX*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)$/xmlex
+XRMEX*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)$/xrmex
+CFGEX*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)$/cfgex
+AUTODOC*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)$/autodoc
+LOCALIZE_SL*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)$/localize_sl
+GSICHECK*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)$/gsicheck
 
-ULFCONV*=$(AUGMENT_LIBRARY_PATH) ulfconv
+.IF "$(SYSTEM_LIBXSLT)"!="YES"
+XSLTPROC*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)$/xsltproc
+.ELSE			# "$(SYSTEM_LIBXSLT)"!="YES"
+XSLTPROC*=$(AUGMENT_LIBRARY_PATH) xsltproc
+.ENDIF			# "$(SYSTEM_LIBXSLT)"!="YES"
+
+ULFCONV*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)$/ulfconv
 
 MAKEDEPEND*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)$/makedepend
 
@@ -58,14 +66,17 @@ USQ:="
 
 NULLDEV:=/dev/null
 
+
 # iz29609 helpmacro to check if file exists
 .IF "$(USE_SHELL)"=="bash"
-IFEXIST:=if test -e
-THEN:= ; then
+IFEXIST:=if [ -f 
+IFNOTEXIST:= if ! test -f
+THEN:= ] ; then
 FI:= ; fi
 PIPEERROR=2>&1 |
 .ELSE
 IFEXIST:=if ( -e
+IFNOTEXIST:=if ( ! -e
 THEN:= )
 FI:=
 PIPEERROR=|&
@@ -73,7 +84,7 @@ PIPEERROR=|&
 
 # iz31658
 .IF "$(USE_SHELL)"=="bash"
-CHECKZIPRESULT:=|| if test "$$?" != "12" && "$$?" != "1" ; then exit $$? ; fi && echo "Nothing to update for zip"
+CHECKZIPRESULT:=|| ret=$$?; if [[ "$$ret" != "12" && "$$ret" != "1" ]] ; then exit $$ret ; fi && echo "Nothing to update for zip"
 .ELSE
 CHECKZIPRESULT:=|| if ("$$status" != "12" && "$$status" != "1") exit $$status && echo "Nothing to update for zip"
 .ENDIF
@@ -89,6 +100,7 @@ NULLDEV:=nul
 
 # iz29609 helpmacro to check if file exists 4nt style
 IFEXIST:=+if exist
+IFNOTEXIST:=+if not exist
 THEN:=
 FI:=
 PIPEERROR=|&
@@ -228,7 +240,7 @@ GNUTAR*:=tar
 TAR*:=tar
 
 RM+=$(RMFLAGS)
-ADJUSTVISIBILITY*=$(AUGMENT_LIBRARY_PATH) adjustvisibility
+ADJUSTVISIBILITY*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)$/adjustvisibility
 CONVERT*:=$(PERL) $(SOLARENV)$/bin$/leconvert.pl
 EXECTEST := $(PERL) -w $(SOLARENV)$/bin$/exectest.pl
 GCCINSTLIB:=$(PERL) -w $(SOLARENV)$/bin$/gccinstlib.pl

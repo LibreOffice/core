@@ -49,7 +49,6 @@
 
 # --- changes for W32-tcsh - should move into settings.mk ---
 .IF "$(USE_SHELL)"!="4nt"
-STARDEP=javadep
 JAVAC=javac
 JAVA=java
 JAVAI!:=java
@@ -59,7 +58,6 @@ PATH_SEPERATOR*=;
 .ENDIF # "$(USE_SHELL)"!="4nt"
 
 # --- general WNT settings ---
-CLIMAKER*=climaker
 
 HC=hc
 HCFLAGS=
@@ -79,3 +77,9 @@ JAVA_RUNTIME=javai_g.lib
 .ENDIF
 .ENDIF
 
+.IF "$(USE_SHELL)" == "bash"
+AUGMENT_LIBRARY_PATH *= : && \
+    PATH=$${{PATH}}:$(SOLARBINDIR:s/://:^"/cygdrive/")
+.ELSE
+AUGMENT_LIBRARY_PATH *= echos && PATH=%PATH%;$(SOLARBINDIR) &&
+.ENDIF
