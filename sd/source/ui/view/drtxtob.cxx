@@ -34,15 +34,9 @@
 #include "TextObjectBar.hxx"
 
 
-#ifndef _ULSPITEM_HXX
 #include <svx/ulspitem.hxx>
-#endif
-#ifndef _LSPCITEM_HXX
 #include <svx/lspcitem.hxx>
-#endif
-#ifndef _ADJITEM_HXX
 #include <svx/adjitem.hxx>
-#endif
 #include <vcl/vclenum.hxx>
 #include <sfx2/app.hxx>
 #include <svtools/whiter.hxx>
@@ -53,9 +47,7 @@
 #include <svx/escpitem.hxx>
 #include <svx/svdoutl.hxx>
 #include <svtools/intitem.hxx>
-#ifndef _SVX_SRIPTTYPEITEM_HXX //autogen
 #include <svx/scripttypeitem.hxx>
-#endif
 #include <svx/outlobj.hxx>
 #include <svx/writingmodeitem.hxx>
 #include <svx/frmdiritem.hxx>
@@ -92,8 +84,6 @@ namespace sd {
 |* tragen wir etwas ein, was hier (hoffentlich) nie vorkommt).
 |*
 \************************************************************************/
-
-SFX_DECL_TYPE(13);
 
 
 SFX_IMPL_INTERFACE( TextObjectBar, SfxShell, SdResId(STR_TEXTOBJECTBARSHELL) )
