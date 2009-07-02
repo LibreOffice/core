@@ -1,0 +1,174 @@
+--- misc/redland-1.0.8/librdf/rdf_digest.c	Tue Jul  1 05:10:26 2008
++++ misc/build/redland-1.0.8/librdf/rdf_digest.c	Thu Nov  6 12:44:39 2008
+@@ -248,6 +248,8 @@
+ void
+ librdf_free_digest(librdf_digest *digest) 
+ {
++  if(!digest)
++    return;
+   if(digest->context)
+     LIBRDF_FREE(digest_context, digest->context);
+   if(digest->digest)
+--- misc/redland-1.0.8/librdf/rdf_hash.c	Tue Jul  1 05:10:26 2008
++++ misc/build/redland-1.0.8/librdf/rdf_hash.c	Thu Nov  6 12:44:39 2008
+@@ -488,6 +488,8 @@
+ void
+ librdf_free_hash(librdf_hash* hash) 
+ {
++  if(!hash)
++    return;
+   if(hash->context) {
+     if(hash->is_open)
+       librdf_hash_close(hash);
+--- misc/redland-1.0.8/librdf/rdf_init.c	Tue Nov  6 16:26:18 2007
++++ misc/build/redland-1.0.8/librdf/rdf_init.c	Mon Jun 16 15:55:51 2008
+@@ -178,6 +178,9 @@
+ void
+ librdf_free_world(librdf_world *world)
+ {
++  if(!world)
++    return;
++
+   /* NOTE: raptor is always initialised as a parser and may
+    * be also used as a serializer, but it is NOT finished
+    * in the serializer_raptor registration.  Therefore, always
+--- misc/redland-1.0.8/librdf/rdf_list.c	Tue Jul  1 05:10:26 2008
++++ misc/build/redland-1.0.8/librdf/rdf_list.c	Thu Nov  6 12:44:39 2008
+@@ -106,6 +106,8 @@
+ void
+ librdf_free_list(librdf_list* list) 
+ {
++  if(!list)
++    return;
+   LIBRDF_ASSERT_RETURN(list->iterator_count,
+                        "Iterators were active on freeing list", );
+ 
+--- misc/redland-1.0.8/librdf/rdf_model.c	Tue Jul  1 05:10:26 2008
++++ misc/build/redland-1.0.8/librdf/rdf_model.c	Thu Nov  6 12:44:39 2008
+@@ -391,7 +391,8 @@
+   librdf_iterator* iterator;
+   librdf_model* m;
+ 
+-  LIBRDF_ASSERT_OBJECT_POINTER_RETURN(model, librdf_model);
++  if(!model)
++    return;
+ 
+   if(--model->usage)
+     return;
+--- misc/redland-1.0.8/librdf/rdf_node.c	Tue Jul  1 05:10:26 2008
++++ misc/build/redland-1.0.8/librdf/rdf_node.c	Thu Nov  6 12:44:39 2008
+@@ -724,7 +724,8 @@
+   librdf_world *world;
+ #endif
+ 
+-  LIBRDF_ASSERT_OBJECT_POINTER_RETURN(node, librdf_node);
++  if(!node)
++    return;
+ 
+ #ifdef WITH_THREADS
+   world = node->world;
+--- misc/redland-1.0.8/librdf/rdf_parser.c	Tue Jul  1 08:09:58 2008
++++ misc/build/redland-1.0.8/librdf/rdf_parser.c	Thu Nov  6 12:44:39 2008
+@@ -369,7 +369,8 @@
+ void
+ librdf_free_parser(librdf_parser *parser) 
+ {
+-  LIBRDF_ASSERT_OBJECT_POINTER_RETURN(parser, librdf_parser);
++  if(!parser)
++    return;
+ 
+   if(parser->context) {
+     if(parser->factory->terminate)
+--- misc/redland-1.0.8/librdf/rdf_query.c	Tue Jul  1 05:10:26 2008
++++ misc/build/redland-1.0.8/librdf/rdf_query.c	Thu Nov  6 12:44:39 2008
+@@ -386,7 +386,8 @@
+ void
+ librdf_free_query(librdf_query* query) 
+ {
+-  LIBRDF_ASSERT_OBJECT_POINTER_RETURN(query, librdf_query);
++  if(!query)
++    return;
+ 
+   if(--query->usage)
+     return;
+--- misc/redland-1.0.8/librdf/rdf_query_results.c	Tue Jul  1 05:10:26 2008
++++ misc/build/redland-1.0.8/librdf/rdf_query_results.c	Thu Nov  6 12:44:39 2008
+@@ -242,7 +242,8 @@
+ void
+ librdf_free_query_results(librdf_query_results* query_results)
+ {
+-  LIBRDF_ASSERT_OBJECT_POINTER_RETURN(query_results, librdf_query_results);
++  if(!query_results)
++    return;
+ 
+   if(query_results->query->factory->free_results)
+     query_results->query->factory->free_results(query_results);
+@@ -634,6 +635,8 @@
+ void
+ librdf_free_query_results_formatter(librdf_query_results_formatter* formatter) 
+ {
++  if(!formatter)
++    return;
+   if(formatter->query_results->query->factory->free_results_formatter)
+     formatter->query_results->query->factory->free_results_formatter(formatter);
+ }
+--- misc/redland-1.0.8/librdf/rdf_serializer.c	Tue Jul  1 05:10:26 2008
++++ misc/build/redland-1.0.8/librdf/rdf_serializer.c	Thu Nov  6 12:44:39 2008
+@@ -371,7 +371,8 @@
+ void
+ librdf_free_serializer(librdf_serializer *serializer) 
+ {
+-  LIBRDF_ASSERT_OBJECT_POINTER_RETURN(serializer, librdf_serializer);
++  if(!serializer)
++    return;
+ 
+   if(serializer->context) {
+     if(serializer->factory->terminate)
+--- misc/redland-1.0.8/librdf/rdf_statement.c	Tue Jul  1 05:10:26 2008
++++ misc/build/redland-1.0.8/librdf/rdf_statement.c	Thu Nov  6 12:44:39 2008
+@@ -253,7 +253,8 @@
+   librdf_world *world;
+ #endif
+ 
+-  LIBRDF_ASSERT_OBJECT_POINTER_RETURN(statement, librdf_statement);
++  if(!statement)
++    return;
+ 
+ #ifdef WITH_THREADS
+   world = statement->world;
+--- misc/redland-1.0.8/librdf/rdf_storage.c	Tue Jul  1 05:10:26 2008
++++ misc/build/redland-1.0.8/librdf/rdf_storage.c	Thu Nov  6 12:44:39 2008
+@@ -610,7 +610,8 @@
+ void
+ librdf_free_storage(librdf_storage* storage) 
+ {
+-  LIBRDF_ASSERT_OBJECT_POINTER_RETURN(storage, librdf_storage);
++  if(!storage)
++    return;
+ 
+   if(--storage->usage)
+     return;
+--- misc/redland-1.0.8/librdf/rdf_stream.c	Tue Jul  1 05:10:26 2008
++++ misc/build/redland-1.0.8/librdf/rdf_stream.c	Thu Nov  6 12:44:39 2008
+@@ -124,6 +124,9 @@
+ void
+ librdf_free_stream(librdf_stream* stream) 
+ {
++  if(!stream)
++    return;
++
+   if(stream->finished_method)
+     stream->finished_method(stream->context);
+ 
+--- misc/redland-1.0.8/librdf/rdf_uri.c	Tue Jul  1 05:10:26 2008
++++ misc/build/redland-1.0.8/librdf/rdf_uri.c	Thu Nov  6 12:44:39 2008
+@@ -407,7 +407,8 @@
+   librdf_world *world;
+ #endif
+ 
+-  LIBRDF_ASSERT_OBJECT_POINTER_RETURN(uri, librdf_uri);
++  if(!uri)
++    return;
+ 
+ #ifdef WITH_THREADS
+   world = uri->world;

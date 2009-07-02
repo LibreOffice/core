@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.8 $
+# $Revision: 1.8.2.2 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -48,18 +48,26 @@ all:
 
 .INCLUDE :	../redlandversion.mk
 
-RASQALVERSION=0.9.15
+RASQALVERSION=0.9.16
 
 TARFILE_NAME=rasqal-$(RASQALVERSION)
-PATCH_FILES=..$/$(TARFILE_NAME).patch
 
 ADDITIONAL_FILES=src/makefile.mk src/rasqal_config.h
 
+OOO_PATCH_FILES= \
+    $(TARFILE_NAME).patch.legal \
+    $(TARFILE_NAME).patch.autotools \
+    $(TARFILE_NAME).patch.ooo_build \
+    $(TARFILE_NAME).patch.dmake \
+    $(TARFILE_NAME).patch.win32 \
+
+
+PATCH_FILES=$(OOO_PATCH_FILES)
+
+
 .IF "$(OS)"=="OS2"
-# there is no wntmsci build environment in the tarball; we use custom dmakefile
 BUILD_ACTION=dmake
 BUILD_DIR=$(CONFIGURE_DIR)$/src
-
 .ELIF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"
 CONFIGURE_DIR=
@@ -100,11 +108,13 @@ LDFLAGS+:=-L$(SYSBASE)$/lib -L$(SYSBASE)$/usr$/lib -lpthread -ldl
 
 CPPFLAGS+:=$(EXTRA_CFLAGS)
 LDFLAGS+:=$(EXTRA_LINKFLAGS)
+XSLTLIB!:=$(XSLTLIB) # expand dmake variables for xslt-config
 
 .EXPORT: CPPFLAGS
 .EXPORT: LDFLAGS
 .EXPORT: LIBXML2LIB
 .EXPORT: ZLIB3RDLIB
+.EXPORT: XSLTLIB
 
 CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure PATH="..$/..$/..$/bin:$$PATH"
@@ -120,7 +130,7 @@ BUILD_DIR=$(CONFIGURE_DIR)
 OUT2INC+=src$/rasqal.h
 
 .IF "$(OS)"=="MACOSX"
-OUT2LIB+=src$/.libs$/librasqal.0.dylib src$/.libs$/librasqal.dylib
+OUT2LIB+=src$/.libs$/librasqal.$(RASQAL_MAJOR).dylib src$/.libs$/librasqal.dylib
 OUT2BIN+=src/rasqal-config
 .ELIF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"
@@ -130,12 +140,10 @@ OUT2BIN+=src/rasqal-config
 .ELSE
 # if we use dmake, this is done automagically
 .ENDIF
-
 .ELIF "$(OS)"=="OS2"
 # if we use dmake, this is done automagically
-
 .ELSE
-OUT2LIB+=src$/.libs$/librasqal.so.0 src$/.libs$/librasqal.so
+OUT2LIB+=src$/.libs$/librasqal.so.$(RASQAL_MAJOR) src$/.libs$/librasqal.so
 OUT2BIN+=src/rasqal-config
 .ENDIF
 
