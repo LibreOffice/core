@@ -41,7 +41,6 @@
 #include <sfx2/dispatch.hxx>
 
 #include <svx/sdr/overlay/overlaymanager.hxx>
-#include <svx/sdr/overlay/overlaysdrobject.hxx>
 #include <svx/sdr/overlay/overlaypolypolygon.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/sdrpagewindow.hxx>
@@ -67,6 +66,9 @@
 #include "ViewShell.hxx"
 #include "app.hrc"
 #include "Window.hxx"
+
+#include <svx/sdr/contact/viewcontact.hxx>
+#include <svx/sdr/overlay/overlayprimitive2dsequenceobject.hxx>
 
 using ::rtl::OUString;
 using ::sdr::PolyPolygonEditor;
@@ -310,26 +312,18 @@ void SdPathHdl::CreateB2dIAObject()
             {
                 for(sal_uInt32 b(0L); b < pPageView->PageWindowCount(); b++)
                 {
-                    // const SdrPageViewWinRec& rPageViewWinRec = rPageViewWinList[b];
                     const SdrPageWindow& rPageWindow = *pPageView->GetPageWindow(b);
 
                     if(rPageWindow.GetPaintWindow().OutputToWindow())
                     {
-                        if(rPageWindow.GetOverlayManager())
+                        if(rPageWindow.GetOverlayManager() && mpPathObj)
                         {
-                            const SdrPathObj& rPath = *mpPathObj;
+                            const sdr::contact::ViewContact& rVC = mpPathObj->GetViewContact();
+                            const drawinglayer::primitive2d::Primitive2DSequence aSequence = rVC.getViewIndependentPrimitive2DSequence();
+                            sdr::overlay::OverlayObject* pNew = new sdr::overlay::OverlayPrimitive2DSequenceObject(aSequence);
 
-                            ::sdr::overlay::OverlayObject* pNewOverlayObject = new
-                                ::sdr::overlay::OverlaySdrObject(basegfx::B2DPoint(), rPath);
-                                //::sdr::overlay::OverlayPolyPolygonStriped( maPolyPolygon );
-                            DBG_ASSERT(pNewOverlayObject, "Got NO new IAO!");
-
-                            // OVERLAYMANAGER
-                            if(pNewOverlayObject)
-                            {
-                                rPageWindow.GetOverlayManager()->add(*pNewOverlayObject);
-                                maOverlayGroup.append(*pNewOverlayObject);
-                            }
+                            rPageWindow.GetOverlayManager()->add(*pNew);
+                            maOverlayGroup.append(*pNew);
                         }
                     }
                 }
