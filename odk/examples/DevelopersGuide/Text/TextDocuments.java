@@ -235,7 +235,7 @@ public class TextDocuments {
 
             // access corresponding field master
             Object fieldMaster = xNamedFieldMasters.getByName(
-                "com.sun.star.text.FieldMaster.User." + key);
+                "com.sun.star.text.fieldmaster.User." + key);
 
             // query the XPropertySet interface, we need to set the Content property
             XPropertySet xPropertySet = (XPropertySet)UnoRuntime.queryInterface(
@@ -634,7 +634,7 @@ public class TextDocuments {
             // access it's XPropertySet interface
             XPropertySet xMasterPropSet = (XPropertySet)UnoRuntime.queryInterface(
                 XPropertySet.class, mxDocFactory.createInstance (
-                    "com.sun.star.text.FieldMaster.User" ) );
+                    "com.sun.star.text.fieldmaster.User" ) );
 
             // Set the name and value of the FieldMaster
             xMasterPropSet.setPropertyValue ( "Name", "UserEmperor" );
