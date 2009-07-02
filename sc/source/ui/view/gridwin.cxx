@@ -129,6 +129,11 @@
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <vcl/svapp.hxx>
 
+#include <drawinglayer/primitive2d/invertprimitive2d.hxx>
+#include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
+#include <drawinglayer/primitive2d/unifiedalphaprimitive2d.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+
 using namespace com::sun::star;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;
@@ -5689,112 +5694,107 @@ namespace sdr
             mePaintType( eType ),
             maRectangles( rRects )
         {
+            // no AA for selection overlays
+            allowAntiAliase(false);
         }
 
         OverlayObjectCell::~OverlayObjectCell()
         {
         }
 
-        void OverlayObjectCell::drawGeometry(OutputDevice& rOutputDevice)
+        drawinglayer::primitive2d::Primitive2DSequence OverlayObjectCell::createOverlayObjectPrimitive2DSequence()
         {
-            // safe original AA and switch off for selection
-            const sal_uInt16 nOriginalAA(rOutputDevice.GetAntialiasing());
-            rOutputDevice.SetAntialiasing(0);
+            drawinglayer::primitive2d::Primitive2DSequence aRetval;
+            const basegfx::BColor aRGBColor(getBaseColor().getBColor());
+            const sal_uInt32 nCount(maRectangles.size());
 
-            // set colors
-            rOutputDevice.SetLineColor();
-            rOutputDevice.SetFillColor(getBaseColor());
-
-            if ( mePaintType == SC_OVERLAY_BORDER_TRANSPARENT )
+            if(nCount)
             {
-                // to draw the border, all rectangles have to be collected into a PolyPolygon
+                // create fill primities for all rectangles
+                // These ranges are meant as rectangles, so it is not sufficient to replace them
+                // using the derived polygon. That would leave out the bottom and right lines
+                // in a discrete width/height due to polygon painting conventions of leaving off those.
+                // To solve, it is either possible to create a view-dependent rectangle primitive
+                // handling this internally or to additionally create a hairline primitive to
+                // cover these areas (which i will do here)
+                const bool bIsTransparent(SC_OVERLAY_BORDER_TRANSPARENT == mePaintType);
+                aRetval.realloc(nCount * 2);
 
-                PolyPolygon aPolyPoly;
-                sal_uInt32 nRectCount = maRectangles.size();
-                for(sal_uInt32 nRect=0; nRect < nRectCount; ++nRect)
-                {
-                    const basegfx::B2DRange& rRange(maRectangles[nRect]);
-                    Rectangle aRectangle(FRound(rRange.getMinX()), FRound(rRange.getMinY()), FRound(rRange.getMaxX()), FRound(rRange.getMaxY()));
-                    if ( nRectCount == 1 || nRect+1 < nRectCount )
-                    {
-                        // simply add for all except the last rect
-                        aPolyPoly.Insert( Polygon( aRectangle ) );
-                    }
-                    else
-                    {
-                        PolyPolygon aTemp( aPolyPoly );
-                        aTemp.GetUnion( PolyPolygon( Polygon( aRectangle ) ), aPolyPoly );
-                    }
-                }
-
-                rOutputDevice.DrawTransparent(aPolyPoly, 75);
-
-                rOutputDevice.SetLineColor(getBaseColor());
-                rOutputDevice.SetFillColor();
-
-                rOutputDevice.DrawPolyPolygon(aPolyPoly);
-            }
-            else
-            {
-                if ( mePaintType == SC_OVERLAY_INVERT )
-                {
-                    rOutputDevice.Push();
-                    rOutputDevice.SetRasterOp( ROP_XOR );
-                    rOutputDevice.SetFillColor( COL_WHITE );
-                }
-
-                for(sal_uInt32 a(0L);a < maRectangles.size(); a++)
+                for(sal_uInt32 a(0);a < nCount; a++)
                 {
                     const basegfx::B2DRange& rRange(maRectangles[a]);
-                    const Rectangle aRectangle(FRound(rRange.getMinX()), FRound(rRange.getMinY()), FRound(rRange.getMaxX()), FRound(rRange.getMaxY()));
+                    const basegfx::B2DPolygon aPolygon(basegfx::tools::createPolygonFromRect(rRange));
 
-                    switch(mePaintType)
-                    {
-                        case SC_OVERLAY_INVERT :
-                        {
-                            rOutputDevice.DrawRect( aRectangle );
-                            break;
-                        }
-                        case SC_OVERLAY_SOLID :
-                        {
-                            rOutputDevice.DrawRect(aRectangle);
-                            break;
-                        }
-                        default:
-                        {
-                            // SC_OVERLAY_BORDER_TRANSPARENT is handled separately
-                        }
-                    }
+                    aRetval[a * 2] = drawinglayer::primitive2d::Primitive2DReference(
+                        new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
+                            basegfx::B2DPolyPolygon(aPolygon),
+                            aRGBColor));
+                    aRetval[(a * 2) + 1] = drawinglayer::primitive2d::Primitive2DReference(
+                        new drawinglayer::primitive2d::PolyPolygonHairlinePrimitive2D(
+                            basegfx::B2DPolyPolygon(aPolygon),
+                            aRGBColor));
                 }
 
-                if ( mePaintType == SC_OVERLAY_INVERT )
+                if(SC_OVERLAY_INVERT == mePaintType)
                 {
-                    rOutputDevice.Pop();
+                    // embed all in invert primitive
+                    const drawinglayer::primitive2d::Primitive2DReference aInvert(
+                        new drawinglayer::primitive2d::InvertPrimitive2D(
+                            aRetval));
+
+                    aRetval = drawinglayer::primitive2d::Primitive2DSequence(&aInvert, 1);
+                }
+                else if(bIsTransparent)
+                {
+                    // embed all rectangles in 75% transparent paint
+                    const drawinglayer::primitive2d::Primitive2DReference aUnifiedAlpha(
+                        new drawinglayer::primitive2d::UnifiedAlphaPrimitive2D(
+                            aRetval,
+                            0.75));
+
+                    // prepare merged PolyPoygon selection outline
+                    const basegfx::B2DPolyPolygon aPolyPolygon(impGetOverlayPolyPolygon());
+                    const drawinglayer::primitive2d::Primitive2DReference aSelectionOutline(
+                        new drawinglayer::primitive2d::PolyPolygonHairlinePrimitive2D(
+                            aPolyPolygon,
+                            aRGBColor));
+
+                    // add both to result
+                    aRetval.realloc(2);
+                    aRetval[0] = aUnifiedAlpha;
+                    aRetval[1] = aSelectionOutline;
                 }
             }
 
-            // restore original AA
-            rOutputDevice.SetAntialiasing(nOriginalAA);
+            return aRetval;
         }
 
-        void OverlayObjectCell::createBaseRange(OutputDevice& /* rOutputDevice */)
+        basegfx::B2DPolyPolygon OverlayObjectCell::impGetOverlayPolyPolygon() const
         {
-            maBaseRange.reset();
+            PolyPolygon aPolyPoly;
+            const sal_uInt32 nRectCount(maRectangles.size());
 
-            for(sal_uInt32 a(0L); a < maRectangles.size(); a++)
+            for(sal_uInt32 nRect(0); nRect < nRectCount; ++nRect)
             {
-                maBaseRange.expand(maRectangles[a]);
-            }
-        }
+                const basegfx::B2DRange& rRange(maRectangles[nRect]);
+                const Rectangle aRectangle(
+                    FRound(rRange.getMinX()), FRound(rRange.getMinY()),
+                    FRound(rRange.getMaxX()), FRound(rRange.getMaxY()));
 
-        void OverlayObjectCell::transform(const basegfx::B2DHomMatrix& rMatrix)
-        {
-            for(sal_uInt32 a(0L); a < maRectangles.size(); a++)
-            {
-                maRectangles[a].transform(rMatrix);
+                if ( nRectCount == 1 || nRect+1 < nRectCount )
+                {
+                    // simply add for all except the last rect
+                    aPolyPoly.Insert( Polygon( aRectangle ) );
+                }
+                else
+                {
+                    PolyPolygon aTemp( aPolyPoly );
+                    aTemp.GetUnion( PolyPolygon( Polygon( aRectangle ) ), aPolyPoly );
+                }
             }
-        }
 
+            return aPolyPoly.getB2DPolyPolygon();
+        }
     } // end of namespace overlay
 } // end of namespace sdr
 
