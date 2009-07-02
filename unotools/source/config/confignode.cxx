@@ -150,7 +150,6 @@ namespace utl
         if (getEscape())
         {
             Reference< XStringEscape > xEscaper(m_xDirectAccess, UNO_QUERY);
-            OSL_ENSURE(xEscaper.is(), "OConfigurationNode::normalizeName: missing an interface!");
             if (xEscaper.is() && sName.getLength())
             {
                 try
@@ -328,8 +327,6 @@ namespace utl
     void OConfigurationNode::setEscape(sal_Bool _bEnable)
     {
         m_bEscapeNames = _bEnable && Reference< XStringEscape >::query(m_xDirectAccess).is();
-        OSL_ENSURE(m_bEscapeNames || !_bEnable,
-            "OConfigurationNode::setEscape: escaping not enabled - missing the appropriate interface on the node!");
     }
 
     //------------------------------------------------------------------------
