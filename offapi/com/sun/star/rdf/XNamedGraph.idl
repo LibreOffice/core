@@ -67,13 +67,13 @@ module com {   module sun {   module star {   module rdf {
 
     <p>
     Note that instances may be destroyed via
-    <method>XRepository::destroyGraph</method>.
-    If a graph is destroyed, subsequent calls to <method>addStatement</method>,
-    <method>removeStatement</method> will fail with an
+    <member>XRepository::destroyGraph</member>.
+    If a graph is destroyed, subsequent calls to <member>addStatement</member>,
+    <member>removeStatements</member> will fail with an
     <type scope="com::sun::star::container">NoSuchElementException</type>.
     </p>
 
-    @since OOo 3.0
+    @since OOo 3.2
 
     @see XRepository
  */
@@ -134,7 +134,7 @@ interface XNamedGraph : XURI
             if an error occurs when accessing the repository.
      */
     void addStatement([in] XResource Subject,
-            [in] XResource Predicate,
+            [in] XURI Predicate,
             [in] XNode Object)
         raises( com::sun::star::lang::IllegalArgumentException,
                 com::sun::star::container::NoSuchElementException,
@@ -172,7 +172,7 @@ interface XNamedGraph : XURI
             if an error occurs when accessing the repository.
      */
     void removeStatements([in] XResource Subject,
-            [in] XResource Predicate,
+            [in] XURI Predicate,
             [in] XNode Object)
         raises( com::sun::star::container::NoSuchElementException,
                 RepositoryException );
@@ -217,7 +217,7 @@ interface XNamedGraph : XURI
      */
     com::sun::star::container::XEnumeration/*<Statement>*/ getStatements(
             [in] XResource Subject,
-            [in] XResource Predicate,
+            [in] XURI Predicate,
             [in] XNode Object)
         raises( com::sun::star::container::NoSuchElementException,
                 RepositoryException );
