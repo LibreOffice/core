@@ -152,14 +152,7 @@ testcase tSVM
     hFileOpen (sDocument)
     sleep (10)
 
-    ' check if the document is writable
-    if fIsDocumentWritable = false then
-        ' make the document writable and check if it's succesfull
-        if fMakeDocumentWritable = false then
-            warnlog "The document can't be make writeable. Test stopped."
-            goto endsub
-        endif
-    endif
+    sMakeReadOnlyDocumentEditable
 
     hTypeKeys ("<escape><tab>")
     fGetSizeXY sx1, sY, TRUE
@@ -880,14 +873,8 @@ testcase tEMF
         Filterauswahl.Cancel
         goto endsub
     endif
-    ' check if the document is writable
-    if fIsDocumentWritable = false then
-        ' make the document writable and check if it's succesfull
-        if fMakeDocumentWritable = false then
-            warnlog "The document can't be make writeable. Test stopped."
-            goto endsub
-        endif
-    endif
+   printlog "making doc editable if it is readonly"
+   sMakeReadOnlyDocumentEditable
 
     hTypeKeys ("<escape><tab>")
     fGetSizeXY sx1, sY, TRUE
@@ -1075,15 +1062,9 @@ testcase tMET
     hCloseDocument ()
     hFileOpen (sDocument)
     sleep (10)
-
-    ' check if the document is writable
-    if fIsDocumentWritable = false then
-        ' make the document writable and check if it's succesfull
-        if fMakeDocumentWritable = false then
-            warnlog "The document can't be make writeable. Test stopped."
-            goto endsub
-        endif
-    endif
+   
+    printlog "making doc editable if it is readonly"
+    sMakeReadOnlyDocumentEditable
 
     hTypeKeys ("<escape><tab>")
     fGetSizeXY sx1, sY, TRUE
@@ -1283,15 +1264,9 @@ testcase tWMF
     hCloseDocument ()
     hFileOpen (sDocument)
     sleep (10)
-
-    ' check if the document is writable
-    if fIsDocumentWritable = false then
-        ' make the document writable and check if it's succesfull
-        if fMakeDocumentWritable = false then
-            warnlog "The document can't be make writeable. Test stopped."
-            goto endsub
-        endif
-    endif
+   
+    printlog "making doc editable if it is readonly"
+    sMakeReadOnlyDocumentEditable
 
     hTypeKeys ("<escape><tab>")
     fGetSizeXY sx1, sY, TRUE

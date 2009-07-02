@@ -218,6 +218,7 @@ testcase tPCT
             hFileOpen (sDocument)
             sleep (10)
 
+<<<<<<< .working
             printlog "check if the document is writable"
             if fIsDocumentWritable = false then
                 printlog "make the document writable and check if it's succesfull"
@@ -226,6 +227,9 @@ testcase tPCT
                     goto endsub
                 endif
             endif
+=======
+    sMakeReadOnlyDocumentEditable
+>>>>>>> .merge-right.r273634
 
             hTypeKeys ("<escape><tab>")
             fGetSizeXY sx1, sY, TRUE
