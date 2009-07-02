@@ -85,6 +85,10 @@ public:
     // for paints triggered form ExecutePrimitive
     void wrap_DoPaintObject() const;
 
+    // for simple access to inner and outer bounds
+    basegfx::B2DRange getOuterBound() const;
+    basegfx::B2DRange getInnerBound() const;
+
 public:
     TYPEINFO();
 
@@ -92,7 +96,6 @@ public:
     ~SwVirtFlyDrawObj();
 
     //Ueberladene Methoden der Basisklasse SdrVirtObj
-    virtual SdrObject* CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const;
     virtual void     TakeObjInfo( SdrObjTransformInfoRec& rInfo ) const;
 
     //Wir nehemen die Groessenbehandlung vollstaendig selbst in die Hand.

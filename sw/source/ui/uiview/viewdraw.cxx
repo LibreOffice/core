@@ -501,7 +501,7 @@ sal_Bool SwView::EnterDrawTextMode(const Point& aDocPos)
 
     if( pSdrView->IsMarkedHit( aDocPos ) &&
         !pSdrView->PickHandle( aDocPos ) && IsTextTool() &&
-        pSdrView->PickObj( aDocPos, pObj, pPV, SDRSEARCH_PICKTEXTEDIT ) &&
+        pSdrView->PickObj( aDocPos, pSdrView->getHitTolLog(), pObj, pPV, SDRSEARCH_PICKTEXTEDIT ) &&
 
         // #108784#
         // To allow SwDrawVirtObj text objects to be activated, allow their type, too.

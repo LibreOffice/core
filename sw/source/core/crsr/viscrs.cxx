@@ -68,6 +68,11 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <vcl/hatch.hxx>
 
+#include <drawinglayer/primitive2d/invertprimitive2d.hxx>
+#include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
+#include <drawinglayer/primitive2d/unifiedalphaprimitive2d.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+
 extern void SwCalcPixStatics( OutputDevice *pOut );
 
 //Damit beim ShowCrsr nicht immer wieder die gleiche Size teuer ermittelt
@@ -531,11 +536,8 @@ namespace sdr
             std::vector< basegfx::B2DRange >        maRanges;
             SwOverlayType                           mePaintType;
 
-            // Draw geometry
-            virtual void drawGeometry(OutputDevice& rOutputDevice);
-
-            // Create the BaseRange. This method needs to calculate maBaseRange.
-            virtual void createBaseRange(OutputDevice& rOutputDevice);
+            // geometry creation for OverlayObject
+            virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence();
 
         public:
             OverlaySwSelPaintRects(Color aBaseColor, const std::vector< basegfx::B2DRange >& rRanges, SwOverlayType eType);
@@ -544,105 +546,53 @@ namespace sdr
             // data access
             const std::vector< basegfx::B2DRange >& getB2DRanges() const { return maRanges; }
             void setB2DRanges(const std::vector< basegfx::B2DRange >& rNew);
-
-            // Hittest with logical coordinates
-            virtual sal_Bool isHit(const basegfx::B2DPoint& rPos, double fTol) const;
-
-            // transform object coordinates. Needs to transform maSecondPosition
-            // and maThirdPosition.
-            virtual void transform(const basegfx::B2DHomMatrix& rMatrix);
         };
 
-        void OverlaySwSelPaintRects::drawGeometry(OutputDevice& rOutputDevice)
+        drawinglayer::primitive2d::Primitive2DSequence OverlaySwSelPaintRects::createOverlayObjectPrimitive2DSequence()
         {
-            // safe original AA and switch off for selection
-            const sal_uInt16 nOriginalAA(rOutputDevice.GetAntialiasing());
-            rOutputDevice.SetAntialiasing(0);
+            drawinglayer::primitive2d::Primitive2DSequence aRetval;
+            const sal_uInt32 nCount(maRanges.size());
 
-            rOutputDevice.SetLineColor();
-            rOutputDevice.SetFillColor(getBaseColor());
-
-            if ( mePaintType == SW_OVERLAY_INVERT )
+            if(nCount)
             {
-                rOutputDevice.Push();
-                rOutputDevice.SetRasterOp( ROP_XOR );
-                rOutputDevice.SetFillColor( COL_WHITE );
-            }
+                const basegfx::BColor aRGBColor(getBaseColor().getBColor());
+                aRetval.realloc(nCount);
 
-            for(sal_uInt32 a(0); a < maRanges.size(); a++)
-            {
-                const basegfx::B2DRange& rRange(maRanges[a]);
-
-                switch(mePaintType)
+                // create primitives for all ranges
+                for(sal_uInt32 a(0); a < nCount; a++)
                 {
-                    default: // SW_OVERLAY_INVERT
-                    {
-                        const Rectangle aRectangle(
-                            basegfx::fround(rRange.getMinX()), basegfx::fround(rRange.getMinY()),
-                            basegfx::fround(rRange.getMaxX()) - 1, basegfx::fround(rRange.getMaxY()) - 1);
-                        Rectangle aPntRect(aRectangle);
+                    const basegfx::B2DRange& rRange(maRanges[a]);
+                    const basegfx::B2DPolygon aPolygon(basegfx::tools::createPolygonFromRect(rRange));
 
-                        // avoid single-pixel overlaps
-                        Rectangle aCalcRect( aPntRect );
-                        bool bChange(false);
+                    aRetval[a] = drawinglayer::primitive2d::Primitive2DReference(
+                        new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
+                            basegfx::B2DPolyPolygon(aPolygon),
+                            aRGBColor));
+                }
 
-                        ++aCalcRect.Bottom();
-                        ++aCalcRect.Right();
 
-                        aPntRect = rOutputDevice.LogicToPixel( aPntRect );
-                        aCalcRect = rOutputDevice.LogicToPixel( aCalcRect );
+                if( mePaintType == SW_OVERLAY_TRANSPARENT)
+                {
+                    // embed in 50% transparent paint
+                    const drawinglayer::primitive2d::Primitive2DReference aUnifiedAlpha(
+                        new drawinglayer::primitive2d::UnifiedAlphaPrimitive2D(
+                            aRetval,
+                            0.5));
 
-                        if(aPntRect.Bottom() == aCalcRect.Bottom())
-                        {
-                            --aPntRect.Bottom();
-                            bChange = true;
-                        }
+                    aRetval = drawinglayer::primitive2d::Primitive2DSequence(&aUnifiedAlpha, 1);
+                }
+                else // SW_OVERLAY_INVERT
+                {
+                    // embed in invert primitive
+                    const drawinglayer::primitive2d::Primitive2DReference aInvert(
+                        new drawinglayer::primitive2d::InvertPrimitive2D(
+                            aRetval));
 
-                        if(aPntRect.Right() == aCalcRect.Right())
-                        {
-                            --aPntRect.Right();
-                            bChange = true;
-                        }
-
-                        if(bChange)
-                        {
-                            aPntRect = rOutputDevice.PixelToLogic(aPntRect);
-                        }
-                        else
-                        {
-                            aPntRect = aRectangle;
-                        }
-
-                        rOutputDevice.DrawRect(aPntRect);
-                        break;
-                    }
-                    case SW_OVERLAY_TRANSPARENT :
-                    {
-                        const basegfx::B2DPolygon aPolygon(basegfx::tools::createPolygonFromRect(rRange));
-                        rOutputDevice.DrawTransparent(basegfx::B2DPolyPolygon(aPolygon), 0.5);
-                        break;
-                    }
+                    aRetval = drawinglayer::primitive2d::Primitive2DSequence(&aInvert, 1);
                 }
             }
 
-            if(mePaintType == SW_OVERLAY_INVERT)
-            {
-                rOutputDevice.Pop();
-            }
-
-            // restore original AA
-            rOutputDevice.SetAntialiasing(nOriginalAA);
-        }
-
-        void OverlaySwSelPaintRects::createBaseRange(OutputDevice& /*rOutputDevice*/)
-        {
-            maBaseRange.reset();
-
-            for(sal_uInt32 a(0); a < maRanges.size(); a++)
-            {
-                const basegfx::B2DRange& rCandidate = maRanges[a];
-                maBaseRange.expand(rCandidate);
-            }
+            return aRetval;
         }
 
         OverlaySwSelPaintRects::OverlaySwSelPaintRects(Color aBaseColor, const std::vector< basegfx::B2DRange >& rRanges, SwOverlayType eType)
@@ -650,6 +600,8 @@ namespace sdr
             maRanges(rRanges),
             mePaintType(eType)
         {
+            // no AA for selection overlays
+            allowAntiAliase(false);
         }
 
         OverlaySwSelPaintRects::~OverlaySwSelPaintRects()
@@ -665,39 +617,6 @@ namespace sdr
             if(rNew != maRanges)
             {
                 maRanges = rNew;
-                objectChange();
-            }
-        }
-
-        sal_Bool OverlaySwSelPaintRects::isHit(const basegfx::B2DPoint& rPos, double /*fTol*/) const
-        {
-            if(isHittable())
-            {
-                for(sal_uInt32 a(0); a < maRanges.size(); a++)
-                {
-                    const basegfx::B2DRange& rCandidate = maRanges[a];
-
-                    if(rCandidate.isInside(rPos))
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            return sal_False;
-        }
-
-        void OverlaySwSelPaintRects::transform(const basegfx::B2DHomMatrix& rMatrix)
-        {
-            if(!rMatrix.isIdentity())
-            {
-                for(sal_uInt32 a(0); a < maRanges.size(); a++)
-                {
-                    basegfx::B2DRange& rCandidate = maRanges[a];
-                    rCandidate.transform(rMatrix);
-                }
-
-                // register change (after change)
                 objectChange();
             }
         }

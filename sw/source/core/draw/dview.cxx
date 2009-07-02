@@ -153,6 +153,81 @@ sal_Bool SwDrawView::IsAntiAliasing() const
 }
 // <--
 
+//////////////////////////////////////////////////////////////////////////////
+
+SdrObject* impLocalHitCorrection(SdrObject* pRetval, const Point& rPnt, USHORT nTol, const SdrMarkList &rMrkList)
+{
+    if(!nTol)
+    {
+        // the old method forced back to outer bounds test when nTol == 0, so
+        // do not try to correct when nTol is not set (used from HelpContent)
+    }
+    else
+    {
+        // rebuild logic from former SwVirtFlyDrawObj::CheckSdrObjectHit. This is needed since
+        // the SdrObject-specific CheckHit implementations are now replaced with primitives and
+        // 'tricks' like in the old implementation (e.g. using a view from a model-data class to
+        // detect if object is selected) are no longer valid.
+        // The standard primitive hit-test for SwVirtFlyDrawObj now is the outer bound. The old
+        // implementation reduced this excluding the inner bound when the object was not selected.
+        SwVirtFlyDrawObj* pSwVirtFlyDrawObj = dynamic_cast< SwVirtFlyDrawObj* >(pRetval);
+
+        if(pSwVirtFlyDrawObj)
+        {
+            if(pSwVirtFlyDrawObj->GetFlyFrm()->Lower() && pSwVirtFlyDrawObj->GetFlyFrm()->Lower()->IsNoTxtFrm())
+            {
+                // the old method used IsNoTxtFrm (should be for SW's own OLE and
+                // graphic's) to accept hit only based on outer bounds; nothing to do
+            }
+            else
+            {
+                // check if the object is selected in this view
+                const sal_uInt32 nMarkCount(rMrkList.GetMarkCount());
+                bool bSelected(false);
+
+                for(sal_uInt32 a(0); !bSelected && a < nMarkCount; a++)
+                {
+                    if(pSwVirtFlyDrawObj == rMrkList.GetMark(a)->GetMarkedSdrObj())
+                    {
+                        bSelected = true;
+                    }
+                }
+
+                if(!bSelected)
+                {
+                    // when not selected, the object is not hit when hit position is inside
+                    // inner range. Get and shrink inner range
+                    basegfx::B2DRange aInnerBound(pSwVirtFlyDrawObj->getInnerBound());
+
+                    aInnerBound.grow(-1.0 * nTol);
+
+                    if(aInnerBound.isInside(basegfx::B2DPoint(rPnt.X(), rPnt.Y())))
+                    {
+                        // exclude this hit
+                        pRetval = 0;
+                    }
+                }
+            }
+        }
+    }
+
+    return pRetval;
+}
+
+SdrObject* SwDrawView::CheckSingleSdrObjectHit(const Point& rPnt, USHORT nTol, SdrObject* pObj, SdrPageView* pPV, ULONG nOptions, const SetOfByte* pMVisLay) const
+{
+    // call parent
+    SdrObject* pRetval = FmFormView::CheckSingleSdrObjectHit(rPnt, nTol, pObj, pPV, nOptions, pMVisLay);
+
+    if(pRetval)
+    {
+        // overloaded to allow extra handling when picking SwVirtFlyDrawObj's
+        pRetval = impLocalHitCorrection(pRetval, rPnt, nTol, GetMarkedObjectList());
+    }
+
+    return pRetval;
+}
+
 /*************************************************************************
 |*
 |*  SwDrawView::AddCustomHdl()
