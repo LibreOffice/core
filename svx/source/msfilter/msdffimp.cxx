@@ -4955,6 +4955,16 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                 ApplyAttributes( rSt, aSet, aObjData );
                 pRet->SetMergedItemSet(aSet);
             }
+            else if ( aObjData.eShapeType == mso_sptLine )
+            {
+                basegfx::B2DPolygon aPoly;
+                aPoly.append(basegfx::B2DPoint(aObjData.aBoundRect.Left(), aObjData.aBoundRect.Top()));
+                aPoly.append(basegfx::B2DPoint(aObjData.aBoundRect.Right(), aObjData.aBoundRect.Bottom()));
+                pRet = new SdrPathObj(OBJ_LINE, basegfx::B2DPolyPolygon(aPoly));
+                pRet->SetModel( pSdrModel );
+                ApplyAttributes( rSt, aSet, aObjData );
+                pRet->SetMergedItemSet(aSet);
+            }
             else
             {
                 if ( GetCustomShapeContent( aObjData.eShapeType ) || IsProperty( DFF_Prop_pVertices ) )
