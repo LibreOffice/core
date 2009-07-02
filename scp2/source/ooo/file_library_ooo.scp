@@ -1742,7 +1742,7 @@ File gid_File_Lib_Rasqal
     #endif
   #else
    #ifdef _gcc3
-    Name = "librasqal-0.dll";
+       Name = STRING(CONCAT3(librasqal-,RASQAL_MAJOR,.dll));
    #else
     Name = "rasqal.dll";
    #endif
