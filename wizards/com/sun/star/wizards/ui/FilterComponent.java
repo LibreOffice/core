@@ -163,9 +163,9 @@ public class FilterComponent
 
                             XControl xValueControl = CurUnoDialog.xDlgContainer.getControl(sControlNameTextValue);
                             XInterface xValueModel = (XInterface) UnoDialog.getModel(xValueControl);
-                            Helper.setUnoPropertyValue(xValueModel, "TreatAsNumber", new Boolean(CurFieldColumn.bIsNumberFormat));
+                            Helper.setUnoPropertyValue(xValueModel, "TreatAsNumber", Boolean.valueOf(CurFieldColumn.isNumberFormat()));
                             final NumberFormatter aNumberFormatter = oQueryMetaData.getNumberFormatter();
-                            aNumberFormatter.setNumberFormat(xValueModel, CurFieldColumn.DBFormatKey, aNumberFormatter);
+                            aNumberFormatter.setNumberFormat(xValueModel, CurFieldColumn.getDBFormatKey(), aNumberFormatter);
 //                         }
 
                         break;
@@ -313,18 +313,18 @@ public class FilterComponent
                         String sFieldName = CurControlRow.getSelectedFieldName();
                         int nOperator = (int) CurControlRow.getSelectedOperator();
                         FieldColumn aFieldColumn = oQueryMetaData.getFieldColumnByDisplayName(sFieldName);
-                        if (aFieldColumn.StandardFormatKey == oQueryMetaData.getNumberFormatter().getTextFormatKey())
+                        if (aFieldColumn.getStandardFormatKey() == oQueryMetaData.getNumberFormatter().getTextFormatKey())
                         {
                             aValue = "'" + CurControlRow.getValue() + "'";
                         }
 //// TODO the following code is bound to be deprecated as soon as the query composer is able to handle date/time values as numbers
-                        else if ((aFieldColumn.StandardFormatKey == oQueryMetaData.getNumberFormatter().getDateFormatKey()) ||
-                                (aFieldColumn.StandardFormatKey == oQueryMetaData.getNumberFormatter().getDateTimeFormatKey()))
+                        else if ((aFieldColumn.getStandardFormatKey() == oQueryMetaData.getNumberFormatter().getDateFormatKey()) ||
+                                (aFieldColumn.getStandardFormatKey() == oQueryMetaData.getNumberFormatter().getDateTimeFormatKey()))
                         {
                             String sDate = CurControlRow.getDateTimeString(true);
                             aValue = "{D '" + sDate + "' }";  // FormatsSupplier
                         }
-                        else if (aFieldColumn.StandardFormatKey == oQueryMetaData.getNumberFormatter().getTimeFormatKey())
+                        else if (aFieldColumn.getStandardFormatKey() == oQueryMetaData.getNumberFormatter().getTimeFormatKey())
                         {
                             String sTime = CurControlRow.getDateTimeString(true);
                             aValue = "'{T '" + sTime + "' }";
@@ -335,7 +335,7 @@ public class FilterComponent
                             // if void
                             if (! AnyConverter.isVoid(aValue))
                             {
-                                switch (aFieldColumn.FieldType)
+                                switch (aFieldColumn.getFieldType())
                                 {
                                     case DataType.TINYINT:
                                     case DataType.BIGINT:
@@ -383,7 +383,7 @@ public class FilterComponent
                 PropertyValue aduplicatecondition = filterconditions[iduplicate[0]][iduplicate[1]];
                 String smsgDuplicateCondition = getDisplayCondition(sDuplicateCondition, aduplicatecondition, null);
                 CurUnoDialog.showMessageBox("WarningBox", VclWindowPeerAttribute.OK, smsgDuplicateCondition);
-                CurUnoDialog.vetoableChange(new java.beans.PropertyChangeEvent(CurUnoDialog, "Steps", new Integer(1), new Integer(2)));
+                CurUnoDialog.vetoableChange(new java.beans.PropertyChangeEvent(CurUnoDialog, "Steps", Integer.valueOf(1), Integer.valueOf(2)));
                 return new PropertyValue[][]
                         {
                         };
@@ -495,7 +495,7 @@ public class FilterComponent
         {
             this.curHelpID = _firstHelpID;
             this.xMSF = _xMSF;
-            this.IStep = new Integer(iStep);
+            this.IStep = Integer.valueOf(iStep);
 
             curtabindex = UnoDialog.setInitialTabindex(iStep);
             this.CurUnoDialog = CurUnoDialog;
@@ -534,15 +534,15 @@ public class FilterComponent
                     },
                     new Object[]
                     {
-                        new Integer(9),
+                        Integer.valueOf(9),
                         "HID:" + curHelpID++,
                         soptMatchAll,
-                        new Integer(iPosX),
-                        new Integer(iPosY),
-                        new Short((short) 1),
+                        Integer.valueOf(iPosX),
+                        Integer.valueOf(iPosY),
+                        Short.valueOf((short) 1),
                         IStep,
-                        new Short(curtabindex++),
-                        new Integer(203)
+                        Short.valueOf(curtabindex++),
+                        Integer.valueOf(203)
                     });
             optMatchAny = CurUnoDialog.insertRadioButton("optMatchAny" + sIncSuffix, SOOPTORMODE, new ItemListenerImpl(),
                     new String[]
@@ -558,14 +558,14 @@ public class FilterComponent
                     },
                     new Object[]
                     {
-                        new Integer(9),
+                        Integer.valueOf(9),
                         "HID:" + curHelpID++,
                         soptMatchAny,
-                        new Integer(iPosX),
-                        new Integer(iPosY + 12),
+                        Integer.valueOf(iPosX),
+                        Integer.valueOf(iPosY + 12),
                         IStep,
-                        new Short(curtabindex++),
-                        new Integer(203)
+                        Short.valueOf(curtabindex++),
+                        Integer.valueOf(203)
                     });
             getfilterstate();
 
@@ -693,14 +693,14 @@ public class FilterComponent
                         },
                         new Object[]
                         {
-                            new Boolean(isEnabled()),
-                            new Integer(9),
+                            Boolean.valueOf(isEnabled()),
+                            Integer.valueOf(9),
                             slblFieldNames,
-                            new Integer(nPosX1),
-                            new Integer(iCompPosY + 13),
+                            Integer.valueOf(nPosX1),
+                            Integer.valueOf(iCompPosY + 13),
                             IStep,
-                            new Short(curtabindex++),
-                            new Integer(nFieldWidth)
+                            Short.valueOf(curtabindex++),
+                            Integer.valueOf(nFieldWidth)
                         });
 
                 // Label Operator
@@ -718,14 +718,14 @@ public class FilterComponent
                         },
                         new Object[]
                         {
-                            new Boolean(isEnabled()),
-                            new Integer(9),
+                            Boolean.valueOf(isEnabled()),
+                            Integer.valueOf(9),
                             slblOperators,
-                            new Integer(nPosX2),
-                            new Integer(iCompPosY + 13),
+                            Integer.valueOf(nPosX2),
+                            Integer.valueOf(iCompPosY + 13),
                             IStep,
-                            new Short(curtabindex++),
-                            new Integer(nOperatorWidth)
+                            Short.valueOf(curtabindex++),
+                            Integer.valueOf(nOperatorWidth)
                         });
 
                 // Label Value
@@ -743,14 +743,14 @@ public class FilterComponent
                         },
                         new Object[]
                         {
-                            new Boolean(isEnabled()),
-                            new Integer(9),
+                            Boolean.valueOf(isEnabled()),
+                            Integer.valueOf(9),
                             slblValue,
-                            new Integer(nPosX3),
-                            new Integer(iCompPosY + 13),
+                            Integer.valueOf(nPosX3),
+                            Integer.valueOf(iCompPosY + 13),
                             IStep,
-                            new Short(curtabindex++),
-                            new Integer(nValueWidth)
+                            Short.valueOf(curtabindex++),
+                            Integer.valueOf(nValueWidth)
                         });
 
                 // Listbox Fields
@@ -761,6 +761,7 @@ public class FilterComponent
                             "Dropdown",
                             "Height",
                             "HelpURL",
+                            "LineCount",
                             "PositionX",
                             "PositionY",
                             "Step",
@@ -769,15 +770,16 @@ public class FilterComponent
                         },
                         new Object[]
                         {
-                            new Boolean(isEnabled()),
+                            Boolean.valueOf(isEnabled()),
                             Boolean.TRUE,
-                            new Integer(13),
+                            Integer.valueOf(13),
                             "HID:" + _firstRowHelpID++,
-                            new Integer(nPosX1),
-                            new Integer(iCompPosY + 23),
+                            Short.valueOf(UnoDialog.getListBoxLineCount() /* 7 */) ,
+                            Integer.valueOf(nPosX1),
+                            Integer.valueOf(iCompPosY + 23),
                             IStep,
-                            new Short(curtabindex++),
-                            new Integer(nFieldWidth)
+                            Short.valueOf(curtabindex++),
+                            Integer.valueOf(nFieldWidth)
                         });
 
                 // Listbox Operators
@@ -798,17 +800,17 @@ public class FilterComponent
                         },
                         new Object[]
                         {
-                            new Boolean(isEnabled()),
+                            Boolean.valueOf(isEnabled()),
                             Boolean.TRUE,
-                            new Integer(13),
+                            Integer.valueOf(13),
                             "HID:" + _firstRowHelpID++,
-                            new Short((short) sLogicOperators.length /* 7 */ ),
-                            new Integer(nPosX2),
-                            new Integer(iCompPosY + 23),
+                            Short.valueOf((short) sLogicOperators.length /* 7 */ ),
+                            Integer.valueOf(nPosX2),
+                            Integer.valueOf(iCompPosY + 23),
                             IStep,
                             sLogicOperators,
-                            new Short(curtabindex++),
-                            new Integer(nOperatorWidth)
+                            Short.valueOf(curtabindex++),
+                            Integer.valueOf(nOperatorWidth)
                         });
                 ControlElements[SOTXTVALUE] = (XInterface) CurUnoDialog.insertFormattedField("txtValue" + sCompSuffix, SO_TEXTFIELDLIST[Index], new TextListenerImpl(),
                         new String[]
@@ -824,14 +826,14 @@ public class FilterComponent
                         },
                         new Object[]
                         {
-                            new Boolean(isEnabled()),
-                            new Integer(13),
+                            Boolean.valueOf(isEnabled()),
+                            Integer.valueOf(13),
                             "HID:" + _firstRowHelpID++,
-                            new Integer(nPosX3),
-                            new Integer(iCompPosY + 23),
+                            Integer.valueOf(nPosX3),
+                            Integer.valueOf(iCompPosY + 23),
                             IStep,
-                            new Short(curtabindex++),
-                            new Integer(nValueWidth)
+                            Short.valueOf(curtabindex++),
+                            Integer.valueOf(nValueWidth)
                         });
 
 //                ControlElements[6] = CurUnoDialog.insertListBox((new StringBuilder()).append("lstBoolean").append(sCompSuffix).toString(), SO_BOOLEANLIST[Index], null, new ItemListenerImpl(), new String[] {
@@ -993,7 +995,7 @@ public class FilterComponent
             // enable all Controls Fieldname, operator, value
             for (int i = 0; i < ControlElements.length; i++)
             {
-                Helper.setUnoPropertyValue(UnoDialog.getModel(ControlElements[i]), "Enabled", new Boolean(_bEnabled));
+                Helper.setUnoPropertyValue(UnoDialog.getModel(ControlElements[i]), "Enabled", Boolean.valueOf(_bEnabled));
             }
             m_bEnabled = _bEnabled;
             if (isEnabled())

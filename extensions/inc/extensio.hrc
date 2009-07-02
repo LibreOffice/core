@@ -216,7 +216,7 @@
 #define HID_PROP_SUBMIT_ENCODING                (HID_FORMS_START +  58)
 #define HID_PROP_DEFAULTVALUE                   (HID_FORMS_START +  59)
 #define HID_PROP_SUBMIT_TARGET                  (HID_FORMS_START +  60)
-#define HID_PROP_DEFAULT_CHECKED                (HID_FORMS_START +  61)
+#define HID_PROP_DEFAULT_STATE                  (HID_FORMS_START +  61)
 #define HID_PROP_IMAGE_URL                      (HID_FORMS_START +  62)
 #define HID_PROP_DEFAULT_SELECT_SEQ             (HID_FORMS_START +  63)
 #define HID_PROP_MULTISELECTION                 (HID_FORMS_START +  64)
@@ -458,9 +458,10 @@
 #define HID_PROP_IMAGEPOSITION                  (HID_FORMS_START + 339)
 #define HID_PROP_NOLABEL                        (HID_FORMS_START + 340)
 #define HID_PROP_WRITING_MODE                   (HID_FORMS_START + 341)
+#define HID_PROP_ANCHOR_TYPE                    (HID_FORMS_START + 343)
     // please adjust HID_LAST_FORMS_ID if you add new ids here!
 
-#define HID_LAST_FORMS_ID   HID_PROP_WRITING_MODE
+#define HID_LAST_FORMS_ID   HID_PROP_ANCHOR_TYPE
 
 #if HID_LAST_FORMS_ID > HID_FORMS_END
     #error id overflow

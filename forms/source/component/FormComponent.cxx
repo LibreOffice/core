@@ -1293,8 +1293,8 @@ OBoundControlModel::OBoundControlModel(
     ,m_nValuePropertyAggregateHandle( -1 )
     ,m_nFieldType( DataType::OTHER )
     ,m_bValuePropertyMayBeVoid( false )
+    ,m_aResetHelper( *this, m_aMutex )
     ,m_aUpdateListeners(m_aMutex)
-    ,m_aResetListeners(m_aMutex)
     ,m_aFormComponentListeners( m_aMutex )
     ,m_bInputRequired( sal_True )
     ,m_pAggPropMultiplexer( NULL )
@@ -1328,8 +1328,8 @@ OBoundControlModel::OBoundControlModel(
     ,m_nValuePropertyAggregateHandle( _pOriginal->m_nValuePropertyAggregateHandle )
     ,m_nFieldType( DataType::OTHER )
     ,m_bValuePropertyMayBeVoid( _pOriginal->m_bValuePropertyMayBeVoid )
+    ,m_aResetHelper( *this, m_aMutex )
     ,m_aUpdateListeners( m_aMutex )
-    ,m_aResetListeners( m_aMutex )
     ,m_aFormComponentListeners( m_aMutex )
     ,m_xValidator( _pOriginal->m_xValidator )
     ,m_bInputRequired( sal_True )
@@ -1521,8 +1521,8 @@ void OBoundControlModel::disposing()
 
     // notify all our listeners
     com::sun::star::lang::EventObject aEvt( static_cast< XWeak* >( this ) );
-    m_aResetListeners.disposeAndClear( aEvt );
     m_aUpdateListeners.disposeAndClear( aEvt );
+    m_aResetHelper.disposing();
 
     // disconnect from our database column
     // TODO: could we replace the following 5 lines with a call to impl_disconnectDatabaseColumn_noNotify?
@@ -2482,26 +2482,20 @@ void OBoundControlModel::resetNoBroadcast()
 //-----------------------------------------------------------------------------
 void OBoundControlModel::addResetListener(const Reference<XResetListener>& l) throw (RuntimeException)
 {
-    m_aResetListeners.addInterface(l);
+    m_aResetHelper.addResetListener( l );
 }
 
 //-----------------------------------------------------------------------------
 void OBoundControlModel::removeResetListener(const Reference<XResetListener>& l) throw (RuntimeException)
 {
-    m_aResetListeners.removeInterface(l);
+    m_aResetHelper.removeResetListener( l );
 }
 
 //-----------------------------------------------------------------------------
 void OBoundControlModel::reset() throw (RuntimeException)
 {
-    cppu::OInterfaceIteratorHelper aIter(m_aResetListeners);
-    EventObject aResetEvent(static_cast<XWeak*>(this));
-    sal_Bool bContinue = sal_True;
-    while ( aIter.hasMoreElements() && bContinue )
-        bContinue = static_cast< XResetListener* >( aIter.next() )->approveReset( aResetEvent );
-
-    if (!bContinue)
-        return;
+    if ( !m_aResetHelper.approveReset() )
+       return;
 
     ControlModelLock aLock( *this );
 
@@ -2616,7 +2610,7 @@ void OBoundControlModel::reset() throw (RuntimeException)
 
     aLock.release();
 
-    m_aResetListeners.notifyEach( &XResetListener::resetted, aResetEvent );
+    m_aResetHelper.notifyResetted();
 }
 
 // -----------------------------------------------------------------------------

@@ -60,10 +60,18 @@ public class Test12 implements StorageTest {
                 return false;
             }
 
+            byte pBigBytes[] = new byte[33000];
+            for ( int nInd = 0; nInd < 33000; nInd++ )
+                pBigBytes[nInd] = (byte)( nInd % 128 );
+
             byte pBytes1[] = { 1, 1, 1, 1, 1 };
 
             // open a new substream, set "MediaType" and "Compressed" properties to it and write some bytes
             if ( !m_aTestHelper.WriteBytesToSubstream( xTempSubStorage, "SubStream1", "MediaType1", true, pBytes1 ) )
+                return false;
+
+            // open a new substream, set "MediaType" and "Compressed" properties to it and write some bytes
+            if ( !m_aTestHelper.WriteBytesToSubstream( xTempSubStorage, "BigSubStream1", "MediaType1", true, pBigBytes ) )
                 return false;
 
             // set "MediaType" property for storages and check that "IsRoot" and "OpenMode" properties are set correctly
@@ -96,7 +104,7 @@ public class Test12 implements StorageTest {
             // check substorage
             // ================================================
 
-            if ( !checkSubStorages( xTempStorage, pBytes1 ) )
+            if ( !checkSubStorages( xTempStorage, pBytes1, pBigBytes ) )
                 return false;
 
             // dispose used storage to free resources
@@ -118,7 +126,7 @@ public class Test12 implements StorageTest {
             if ( !m_aTestHelper.checkStorageProperties( xResWriteStorage, "MediaType2", true, ElementModes.WRITE ) )
                 return false;
 
-            if( !checkSubStorages( xResWriteStorage, pBytes1 ) )
+            if( !checkSubStorages( xResWriteStorage, pBytes1, pBigBytes ) )
                 return false;
 
             // try to open for writing after opening for reading
@@ -135,6 +143,9 @@ public class Test12 implements StorageTest {
                 return false;
 
             if ( !m_aTestHelper.checkStream( xResWSubStorage, "SubStream1", "MediaType1", true, pBytes1 ) )
+                return false;
+
+            if ( !m_aTestHelper.checkStream( xResWSubStorage, "BigSubStream1", "MediaType1", true, pBigBytes ) )
                 return false;
 
             // dispose used storage to free resources
@@ -171,7 +182,7 @@ public class Test12 implements StorageTest {
             if ( !m_aTestHelper.checkStorageProperties( xResultStorage, "MediaType2", true, ElementModes.READ ) )
                 return false;
 
-            if( !checkSubStorages( xResultStorage, pBytes1 ) )
+            if( !checkSubStorages( xResultStorage, pBytes1, pBigBytes ) )
                 return false;
 
             return true;
@@ -183,7 +194,7 @@ public class Test12 implements StorageTest {
         }
     }
 
-    private boolean checkSubStorages( XStorage xStorage, byte[] pBytes1 )
+    private boolean checkSubStorages( XStorage xStorage, byte[] pBytes1, byte[] pBigBytes )
     {
         XStorage xReadSubStorage1 = m_aTestHelper.openSubStorage( xStorage,
                                                                 "SubStorage1",
@@ -208,7 +219,13 @@ public class Test12 implements StorageTest {
         if ( !m_aTestHelper.checkStream( xReadSubStorage1, "SubStream1", "MediaType1", true, pBytes1 ) )
             return false;
 
+        if ( !m_aTestHelper.checkStream( xReadSubStorage1, "BigSubStream1", "MediaType1", true, pBigBytes ) )
+            return false;
+
         if ( !m_aTestHelper.checkStream( xReadSubStorage2, "SubStream1", "MediaType1", true, pBytes1 ) )
+            return false;
+
+        if ( !m_aTestHelper.checkStream( xReadSubStorage2, "BigSubStream1", "MediaType1", true, pBigBytes ) )
             return false;
 
         if ( !m_aTestHelper.disposeStorage( xReadSubStorage1 ) )

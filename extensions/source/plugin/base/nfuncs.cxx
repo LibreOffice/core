@@ -122,7 +122,7 @@ static ::rtl::OString normalizeURL( XPlugin_Impl* plugin, const ::rtl::OString& 
         int nPos;
         if( ( nPos = aLoadURL.indexOf( "://" ) ) != -1 )
         {
-            if( url.getLength() && url.getStr()[ 0 ] == '/' || url.indexOf( '/' ) != -1 )
+            if( url.getLength() && (url.getStr()[ 0 ] == '/' || url.indexOf( '/' ) != -1) )
             {
                 // this means same server but new path
                 nPos = aLoadURL.indexOf( '/', nPos+3 );

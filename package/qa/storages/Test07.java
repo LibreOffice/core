@@ -48,8 +48,16 @@ public class Test07 implements StorageTest {
                 return false;
             }
 
+            byte pBigBytes[] = new byte[33000];
+            for ( int nInd = 0; nInd < 33000; nInd++ )
+                pBigBytes[nInd] = (byte)( nInd % 128 );
+
             byte pBytes1[] = { 1, 1, 1, 1, 1 };
             String sPass1 = "12345";
+
+            // open a new substream, set "MediaType" and "Compressed" properties to it and write some bytes
+            if ( !m_aTestHelper.WriteBytesToEncrSubstream( xTempStorage, "BigSubStream1", "MediaType1", true, pBigBytes, sPass1 ) )
+                return false;
 
             // open a new substream, set "MediaType" and "Compressed" properties to it and write some bytes
             if ( !m_aTestHelper.WriteBytesToEncrSubstream( xTempStorage, "SubStream1", "MediaType1", true, pBytes1, sPass1 ) )
@@ -57,6 +65,10 @@ public class Test07 implements StorageTest {
 
             byte pBytes2[] = { 2, 2, 2, 2, 2 };
             String sPass2 = "54321";
+
+            // open a new substream, set "MediaType" and "Compressed" properties to it and write some bytes
+            if ( !m_aTestHelper.WriteBytesToEncrSubstream( xTempStorage, "BigSubStream2", "MediaType2", false, pBigBytes, sPass2 ) )
+                return false;
 
             // open a new substream, set "MediaType" and "Compressed" properties to it and write some bytes
             if ( !m_aTestHelper.WriteBytesToEncrSubstream( xTempStorage, "SubStream2", "MediaType2", false, pBytes2, sPass2 ) )
@@ -112,13 +124,25 @@ public class Test07 implements StorageTest {
             if ( !m_aTestHelper.checkEncrStream( xResultStorage, "SubStream1", "MediaType1", pBytes1, sPass1 ) )
                 return false;
 
+            if ( !m_aTestHelper.checkEncrStream( xResultStorage, "BigSubStream1", "MediaType1", pBigBytes, sPass1 ) )
+                return false;
+
             if ( !m_aTestHelper.checkEncrStream( xResultStorage, "SubStream2", "MediaType2", pBytes2, sPass2 ) )
+                return false;
+
+            if ( !m_aTestHelper.checkEncrStream( xResultStorage, "BigSubStream2", "MediaType2", pBigBytes, sPass2 ) )
                 return false;
 
             if ( !m_aTestHelper.checkEncrStream( x2CopyStorage, "SubStream1", "MediaType1", pBytes1, sPass1 ) )
                 return false;
 
+            if ( !m_aTestHelper.checkEncrStream( x2CopyStorage, "BigSubStream1", "MediaType1", pBigBytes, sPass1 ) )
+                return false;
+
             if ( !m_aTestHelper.checkEncrStream( x2CopyStorage, "SubStream2", "MediaType2", pBytes2, sPass2 ) )
+                return false;
+
+            if ( !m_aTestHelper.checkEncrStream( x2CopyStorage, "BigSubStream2", "MediaType2", pBigBytes, sPass2 ) )
                 return false;
 
             // dispose used storages to free resources

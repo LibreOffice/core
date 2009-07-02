@@ -74,7 +74,7 @@ namespace pcr
     PCR_CONSTASCII_STRING( PROPERTY_XFORMS_BUTTONTYPE,      "XFormsButtonType");
     PCR_CONSTASCII_STRING( PROPERTY_STRINGITEMLIST,         "StringItemList");
     PCR_CONSTASCII_STRING( PROPERTY_DEFAULT_TEXT,           "DefaultText");
-    PCR_CONSTASCII_STRING( PROPERTY_DEFAULTCHECKED,         "DefaultState");
+    PCR_CONSTASCII_STRING( PROPERTY_DEFAULT_STATE,          "DefaultState");
     PCR_CONSTASCII_STRING( PROPERTY_FORMATKEY,              "FormatKey");
     PCR_CONSTASCII_STRING( PROPERTY_FORMATSSUPPLIER,        "FormatsSupplier");
     PCR_CONSTASCII_STRING( PROPERTY_SUBMIT_ACTION,          "SubmitAction");
@@ -130,6 +130,7 @@ namespace pcr
     PCR_CONSTASCII_STRING( PROPERTY_ECHO_CHAR,              "EchoChar");
     PCR_CONSTASCII_STRING( PROPERTY_ROWHEIGHT,              "RowHeight");
     PCR_CONSTASCII_STRING( PROPERTY_HELPTEXT,               "HelpText");
+    PCR_CONSTASCII_STRING( PROPERTY_FONT,                   "FontDescriptor");
     PCR_CONSTASCII_STRING( PROPERTY_FONT_NAME,              "FontName");
     PCR_CONSTASCII_STRING( PROPERTY_FONT_STYLENAME,         "FontStyleName");
     PCR_CONSTASCII_STRING( PROPERTY_FONT_FAMILY,            "FontFamily");
@@ -263,6 +264,11 @@ namespace pcr
     PCR_CONSTASCII_STRING( PROPERTY_BINDING_ID,             "BindingID" );
     PCR_CONSTASCII_STRING( PROPERTY_ID,                     "ID" );
     PCR_CONSTASCII_STRING( PROPERTY_WRITING_MODE,           "WritingMode" );
+    PCR_CONSTASCII_STRING( PROPERTY_TEXT_ANCHOR_TYPE,       "TextAnchorType" );
+    PCR_CONSTASCII_STRING( PROPERTY_SHEET_ANCHOR_TYPE,      "SheetAnchorType" );
+    PCR_CONSTASCII_STRING( PROPERTY_ANCHOR_TYPE,            "AnchorType" );
+    PCR_CONSTASCII_STRING( PROPERTY_ANCHOR,                 "Anchor" );
+    PCR_CONSTASCII_STRING( PROPERTY_IS_VISIBLE,             "IsVisible" );
 
     PCR_CONSTASCII_STRING( PROPERTY_MODEL,                  "Model" );
 

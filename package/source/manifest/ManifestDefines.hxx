@@ -32,6 +32,7 @@
 
 #include <PackageConstants.hxx>
 
+#define MANIFEST_NSPREFIX "manifest:"
 #define ELEMENT_MANIFEST "manifest:manifest"
 #define ATTRIBUTE_XMLNS "xmlns:manifest"
 #define MANIFEST_NAMESPACE "http://openoffice.org/2001/manifest"

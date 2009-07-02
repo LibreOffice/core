@@ -60,27 +60,27 @@ import com.sun.star.wizards.ui.XFieldSelectionListener;
 public class ScenarioSelector extends FieldSelection implements XItemListener, XFieldSelectionListener
 {
 
-    XFixedText lblExplanation;
-    XFixedText lblCategories;
-    XRadioButton optBusiness;
-    XRadioButton optPrivate;
-    XListBox xTableListBox;
-    TableWizard CurUnoDialog;
-    TableDescriptor curtabledescriptor;
-    CGCategory oCGCategory;
-    CGTable oCGTable;
-    String SELECTCATEGORY = "selectCategory";
+    private XFixedText lblExplanation;
+    private XFixedText lblCategories;
+    private XRadioButton optBusiness;
+    private XRadioButton optPrivate;
+    private XListBox xTableListBox;
+    private TableWizard CurTableWizardUnoDialog;
+    private TableDescriptor curtabledescriptor;
+    private CGCategory oCGCategory;
+    protected CGTable oCGTable;
+    private String SELECTCATEGORY = "selectCategory";
     private int curcategory;
-    public boolean bcolumnnameislimited;
+    protected boolean bcolumnnameislimited;
     private int imaxcolumnchars;
-    String smytable;
-    Locale aLocale;
-    XMultiServiceFactory xMSF;
+    private String smytable;
+    private Locale aLocale;
+    private XMultiServiceFactory xMSF;
 
     public ScenarioSelector(TableWizard _CurUnoDialog, TableDescriptor _curtabledescriptor, String _reslblFields, String _reslblSelFields)
     {
         super(_CurUnoDialog, TableWizard.SOMAINPAGE, 91, 108, 230, 80, _reslblFields, _reslblSelFields, 41209, true);
-        CurUnoDialog = (TableWizard) _CurUnoDialog;
+        CurTableWizardUnoDialog =  _CurUnoDialog;
         xMSF = CurUnoDialog.xMSF;
         aLocale = Configuration.getOfficeLocale(xMSF);
         curtabledescriptor = _curtabledescriptor;
@@ -117,7 +117,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
                     new Integer(8), sCategories, new Integer(91), new Integer(60), IMAINSTEP, new Short(pretabindex++), new Integer(100)
                 });
 
-        optBusiness = CurUnoDialog.insertRadioButton("optBusiness", SELECTCATEGORY, this,
+        optBusiness = CurTableWizardUnoDialog.insertRadioButton("optBusiness", SELECTCATEGORY, this,
                 new String[]
                 {
                     "Height", "HelpURL", "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"
@@ -127,7 +127,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
                     UIConsts.INTEGERS[8], "HID:41206", sBusiness, new Integer(98), new Integer(70), new Short((short) 1), IMAINSTEP, new Short(pretabindex++), new Integer(78)
                 });
 
-        optPrivate = CurUnoDialog.insertRadioButton("optPrivate", SELECTCATEGORY, this,
+        optPrivate = CurTableWizardUnoDialog.insertRadioButton("optPrivate", SELECTCATEGORY, this,
                 new String[]
                 {
                     "Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
@@ -219,13 +219,13 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
     public String[] getSelectedFieldNames()
     {
         String[] displayfieldnames = super.getSelectedFieldNames();
-        Vector afieldnameVector = new Vector();
+        Vector<String> afieldnameVector = new Vector<String>();
         int a = 0;
         for (int i = 0; i < displayfieldnames.length; i++)
         {
             try
             {
-                FieldDescription ofielddescription = (FieldDescription) CurUnoDialog.fielditems.get(displayfieldnames[i]);
+                FieldDescription ofielddescription = (FieldDescription) CurTableWizardUnoDialog.fielditems.get(displayfieldnames[i]);
                 if (ofielddescription != null)
                 {
                     afieldnameVector.addElement(ofielddescription.getName());
@@ -255,7 +255,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
         {
             try
             {
-                FieldDescription curfielddescription = (FieldDescription) CurUnoDialog.fielditems.get(fieldnames[i]);
+                FieldDescription curfielddescription = (FieldDescription) CurTableWizardUnoDialog.fielditems.get(fieldnames[i]);
                 PropertyValue[] aProperties = curfielddescription.getPropertyValues();
                 this.curtabledescriptor.addColumn(aProperties);
             }
@@ -276,12 +276,12 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
         String[] fieldnames = super.getSelectedFieldNames();
         if ((fieldnames.length) > 0)
         {
-            for (int i = 0; i < CurUnoDialog.fielditems.size(); i++)
+            for (int i = 0; i < CurTableWizardUnoDialog.fielditems.size(); i++)
             {
                 String stablename = "";
                 try
                 {
-                    FieldDescription ofielddescription = (FieldDescription) CurUnoDialog.fielditems.get(fieldnames[i]);
+                    FieldDescription ofielddescription = (FieldDescription) CurTableWizardUnoDialog.fielditems.get(fieldnames[i]);
                     stablename = ofielddescription.gettablename();
                 }
                 catch (RuntimeException e)
@@ -336,7 +336,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
 
     public void shiftFromLeftToRight(String[] SelItems, String[] NewItems)
     {
-        if (!CurUnoDialog.verifyfieldcount(NewItems.length))
+        if (!CurTableWizardUnoDialog.verifyfieldcount(NewItems.length))
         {
             for (int i = 0; i < SelItems.length; i++)
             {
@@ -353,7 +353,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
             for (int i = 0; i < NewItems.length; i++)
             {
                 int iduplicate;
-                if (CurUnoDialog.fielditems.containsKey(NewItems[i]))
+                if (CurTableWizardUnoDialog.fielditems.containsKey(NewItems[i]))
                 {
                     iduplicate = JavaTools.getDuplicateFieldIndex(NewItems, NewItems[i]);
                     if (iduplicate != -1)
@@ -361,31 +361,31 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
                         XNameAccess xNameAccessFieldNode;
                         String sdisplayname = Desktop.getUniqueName(NewItems, NewItems[iduplicate], "");
                         FieldDescription curfielddescription = new FieldDescription(xMSF, aLocale, this, sdisplayname, NewItems[iduplicate], imaxcolumnchars);
-                        CurUnoDialog.fielditems.put(sdisplayname, curfielddescription);
+                        CurTableWizardUnoDialog.fielditems.put(sdisplayname, curfielddescription);
                         NewItems[iduplicate] = sdisplayname;
                         setSelectedFieldNames(NewItems);
                     }
                 }
                 else
                 {
-                    CurUnoDialog.fielditems.put(NewItems[i], new FieldDescription(xMSF, aLocale, this, NewItems[i], NewItems[i], imaxcolumnchars));
+                    CurTableWizardUnoDialog.fielditems.put(NewItems[i], new FieldDescription(xMSF, aLocale, this, NewItems[i], NewItems[i], imaxcolumnchars));
                 }
             }
         }
-        CurUnoDialog.setcompleted(TableWizard.SOMAINPAGE, NewItems.length > 0);
+        CurTableWizardUnoDialog.setcompleted(TableWizard.SOMAINPAGE, NewItems.length > 0);
     }
 
     public void shiftFromRightToLeft(String[] SelItems, String[] NewItems)
     {
         for (int i = 0; i < SelItems.length; i++)
         {
-            if (CurUnoDialog.fielditems.containsKey(SelItems[i]))
+            if (CurTableWizardUnoDialog.fielditems.containsKey(SelItems[i]))
             {
-                CurUnoDialog.fielditems.remove(SelItems[i]);
+                CurTableWizardUnoDialog.fielditems.remove(SelItems[i]);
                 this.curtabledescriptor.dropColumnbyName(SelItems[i]);
             }
         }
-        CurUnoDialog.setcompleted(TableWizard.SOMAINPAGE, NewItems.length > 0);
+        CurTableWizardUnoDialog.setcompleted(TableWizard.SOMAINPAGE, NewItems.length > 0);
     }
 
     public void moveItemDown(String item)

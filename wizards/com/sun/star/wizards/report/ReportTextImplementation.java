@@ -257,9 +257,9 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
                     {
                         getRecordParser().oSQLQueryComposer = new SQLQueryComposer(getRecordParser());
                         DBMetaData.CommandObject oCommand = getRecordParser().getQueryByName(sQueryName);
-                        if (getRecordParser().hasEscapeProcessing(oCommand.xPropertySet))
+                        if (getRecordParser().hasEscapeProcessing(oCommand.getPropertySet()))
                         {
-                            getRecordParser().Command = (String) oCommand.xPropertySet.getPropertyValue("Command");
+                            getRecordParser().Command = (String) oCommand.getPropertySet().getPropertyValue("Command");
                             getRecordParser().oSQLQueryComposer.m_xQueryAnalyzer.setQuery(getRecordParser().Command);
                             getRecordParser().oSQLQueryComposer.prependSortingCriteria();
                         }

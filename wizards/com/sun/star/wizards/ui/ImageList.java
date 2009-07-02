@@ -29,11 +29,24 @@
  ************************************************************************/
 package com.sun.star.wizards.ui;
 
-import com.sun.star.awt.*;
+// import com.sun.star.awt.*;
+
+import com.sun.star.awt.Key;
+import com.sun.star.awt.KeyEvent;
+import com.sun.star.awt.MouseEvent;
+import com.sun.star.awt.Size;
+import com.sun.star.awt.XButton;
+import com.sun.star.awt.XControl;
+import com.sun.star.awt.XFixedText;
+import com.sun.star.awt.XItemEventBroadcaster;
+import com.sun.star.awt.XItemListener;
+import com.sun.star.awt.XKeyListener;
+import com.sun.star.awt.XMouseListener;
+import com.sun.star.awt.XWindow;
 import com.sun.star.lang.EventObject;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.wizards.common.Helper;
-import com.sun.star.wizards.common.Renderer;
+import com.sun.star.wizards.common.IRenderer;
 import com.sun.star.wizards.ui.event.*;
 
 
@@ -52,13 +65,13 @@ import javax.swing.event.ListDataListener;
 public class ImageList implements XItemEventBroadcaster, ListDataListener
 {
 
-    private XControl imgContainer;
+    // private XControl imgContainer;
     private XFixedText lblImageText;
     private XFixedText grbxSelectedImage;
     private XButton btnBack;
     private XButton btnNext;
     private XFixedText lblCounter;
-    private XControl images[];
+    private XControl m_aImages[];
     private boolean benabled = true;
     private UnoDialog2 oUnoDialog;
     private Size gap = new Size(4, 4);
@@ -80,9 +93,9 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
     private int pageStart = 0;
     public int helpURL = 0;
     private CommonListener uiEventListener = new CommonListener();
-    private ImageRenderer renderer;
+    private IImageRenderer renderer;
     private ListModel listModel;
-    public Renderer counterRenderer = new SimpleCounterRenderer();
+    public IRenderer counterRenderer = new SimpleCounterRenderer();
     private Object dialogModel;
     private ImageKeyListener imageKeyListener;
     private static final Integer BACKGROUND_COLOR = new Integer(16777216);  //new Integer(SystemColor.window.getRGB() + 16777216);
@@ -110,6 +123,32 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
         this.imageSize = imageSize;
     }
 
+    class OMouseListener implements XMouseListener
+    {
+        public OMouseListener()
+        {}
+        public void mousePressed(MouseEvent arg0)
+        {
+            focus(getImageIndexFor(getSelected()));
+        }
+
+        public void mouseReleased(MouseEvent arg0)
+        {
+        }
+
+        public void mouseEntered(MouseEvent arg0)
+        {
+        }
+
+        public void mouseExited(MouseEvent arg0)
+        {
+        }
+
+        public void disposing(EventObject arg0)
+        {
+        }
+    }
+
     public void create(UnoDialog2 dialog)
     {
         oUnoDialog = dialog;
@@ -121,12 +160,26 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
 
         MOVE_SELECTION_VALS[2] = step;
 
-        imgContainer = dialog.insertImage(name + "lblContainer", new String[]
+        XControl imgContainer = dialog.insertImage(name + "lblContainer",
+                new String[]
                 {
-                    "BackgroundColor", "Border", "Height", "PositionX", "PositionY", "Step", "Width"
-                }, new Object[]
+                    "BackgroundColor",
+                    "Border",
+                    "Height",
+                    "PositionX",
+                    "PositionY",
+                    "Step",
+                    "Width"
+                },
+                new Object[]
                 {
-                    BACKGROUND_COLOR, new Short((short) 1), new Integer((imageSize.Height + gap.Height) * rows + gap.Height + imageTextHeight + 1), new Integer(pos.Width), new Integer(pos.Height), step, new Integer((imageSize.Width + gap.Width) * cols + gap.Width)
+                    BACKGROUND_COLOR,
+                    new Short((short) 1),
+                    new Integer((imageSize.Height + gap.Height) * rows + gap.Height + imageTextHeight + 1),
+                    new Integer(pos.Width),
+                    new Integer(pos.Height),
+                    step,
+                    new Integer((imageSize.Width + gap.Width) * cols + gap.Width)
                 });
 
         opeerConfig.setPeerProperties(imgContainer, new String[]
@@ -143,74 +196,99 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
 
         uiEventListener.add(dName,EventNames.EVENT_WINDOW_SHOWN,"disableContainerMouseEvents",this);
          */
-        int selectionWidth = rowSelect ? (imageSize.Width + gap.Width) * cols - gap.Width + (selectionGap.Width * 2) : imageSize.Width + (selectionGap.Width * 2);
+        int selectionWidth = rowSelect ?
+            (imageSize.Width + gap.Width) * cols - gap.Width + (selectionGap.Width * 2) :
+            imageSize.Width + (selectionGap.Width * 2);
 
         grbxSelectedImage = dialog.insertLabel(name + "_grbxSelected", new String[]
                 {
-                    "BackgroundColor", "Border", "Height", "PositionX", "PositionY", "Step", "Tabstop", "Width"
+                    "BackgroundColor",
+                    "Border",
+                    "Height",
+                    "PositionX",
+                    "PositionY",
+                    "Step",
+                    "Tabstop",
+                    "Width"
                 }, new Object[]
                 {
-                    TRANSPARENT, new Short((short) 1), new Integer(imageSize.Height + (selectionGap.Height * 2)), //height
+                    TRANSPARENT,
+                    new Short((short) 1),
+                    new Integer(imageSize.Height + (selectionGap.Height * 2)),
+                    //height
                     new Integer(0), //posx
                     new Integer(0), //posy
-                    step, Boolean.TRUE, new Integer(selectionWidth)
+                    step,
+                    Boolean.TRUE,
+                    new Integer(selectionWidth)
                 });
 
         XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, grbxSelectedImage);
-        xWindow.addMouseListener(new XMouseListener()
-        {
-
-            public void mousePressed(MouseEvent arg0)
-            {
-                focus(getImageIndexFor(getSelected()));
-            }
-
-            public void mouseReleased(MouseEvent arg0)
-            {
-            }
-
-            public void mouseEntered(MouseEvent arg0)
-            {
-            }
-
-            public void mouseExited(MouseEvent arg0)
-            {
-            }
-
-            public void disposing(EventObject arg0)
-            {
-            }
-        });
-
+        xWindow.addMouseListener(new OMouseListener());
 
         final String[] pNames1 = new String[]
         {
-            "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Tabstop", "Width"
+            "Height",
+            "HelpURL",
+            "PositionX",
+            "PositionY",
+            "Step",
+            "TabIndex",
+            "Tabstop",
+            "Width"
         };
 
         lblImageText = dialog.insertLabel(name + "_imageText", pNames1, new Object[]
                 {
-                    new Integer(imageTextHeight), "", new Integer(pos.Width + 1), new Integer(pos.Height + (imageSize.Height + gap.Height) * rows + gap.Height), step, new Short((short) 0), Boolean.FALSE, new Integer(cols * (imageSize.Width + gap.Width) + gap.Width - 2)
+                    new Integer(imageTextHeight),
+                    "",
+                    new Integer(pos.Width + 1),
+                    new Integer(pos.Height + (imageSize.Height + gap.Height) * rows + gap.Height),
+                    step,
+                    new Short((short) 0),
+                    Boolean.FALSE,
+                    new Integer(cols * (imageSize.Width + gap.Width) + gap.Width - 2)
                 });
 
-        final Integer btnSize = new Integer(14);
 
         if (showButtons)
         {
+            final Integer btnSize = new Integer(14);
 
             btnBack = dialog.insertButton(name + "_btnBack", "prevPage", this, pNames1, new Object[]
                     {
-                        btnSize, "HID:" + helpURL++, new Integer(pos.Width), new Integer(pos.Height + (imageSize.Height + gap.Height) * rows + gap.Height + imageTextHeight + 1), step, new Short((short) (tabIndex + 1)), Boolean.TRUE, btnSize
+                        btnSize,
+                        "HID:" + helpURL++,
+                        new Integer(pos.Width),
+                        new Integer(pos.Height + (imageSize.Height + gap.Height) * rows + gap.Height + imageTextHeight + 1),
+                        step,
+                        new Short((short) (tabIndex + 1)),
+                        Boolean.TRUE,
+                        btnSize
                     });
 
             btnNext = dialog.insertButton(name + "_btnNext", "nextPage", this, pNames1, new Object[]
                     {
-                        btnSize, "HID:" + helpURL++, new Integer(pos.Width + (imageSize.Width + gap.Width) * cols + gap.Width - btnSize.intValue() + 1), new Integer(pos.Height + (imageSize.Height + gap.Height) * rows + gap.Height + imageTextHeight + 1), step, new Short((short) (tabIndex + 2)), Boolean.TRUE, btnSize
+                        btnSize,
+                        "HID:" + helpURL++,
+                        new Integer(pos.Width + (imageSize.Width + gap.Width) * cols + gap.Width - btnSize.intValue() + 1),
+                        new Integer(pos.Height + (imageSize.Height + gap.Height) * rows + gap.Height + imageTextHeight + 1),
+                        step,
+                        new Short((short) (tabIndex + 2)),
+                        Boolean.TRUE,
+                        btnSize
                     });
 
             lblCounter = dialog.insertLabel(name + "_lblCounter", pNames1, new Object[]
                     {
-                        new Integer(LINE_HEIGHT), "", new Integer(pos.Width + btnSize.intValue() + 1), new Integer(pos.Height + (imageSize.Height + gap.Height) * rows + gap.Height + imageTextHeight + ((btnSize.intValue() - LINE_HEIGHT) / 2)), step, new Short((short) 0), Boolean.FALSE, new Integer(cols * (imageSize.Width + gap.Width) + gap.Width - 2 * btnSize.intValue() - 1)
+                        new Integer(LINE_HEIGHT),
+                        "",
+                        new Integer(pos.Width + btnSize.intValue() + 1),
+                        new Integer(pos.Height + (imageSize.Height + gap.Height) * rows + gap.Height + imageTextHeight + ((btnSize.intValue() - LINE_HEIGHT) / 2)),
+                        step,
+                        new Short((short) 0),
+                        Boolean.FALSE,
+                        new Integer(cols * (imageSize.Width + gap.Width) + gap.Width - 2 * btnSize.intValue() - 1)
                     });
 
             Helper.setUnoPropertyValue(getModel(lblCounter), "Align", new Short((short) 1));
@@ -221,9 +299,9 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
         }
 
         imageKeyListener = new ImageKeyListener();
-        tabIndex_ = new Short((short) tabIndex);
+        m_tabIndex = new Short((short) tabIndex);
 
-        images = new XControl[rows * cols];
+        m_aImages = new XControl[rows * cols];
 
         try
         {
@@ -236,14 +314,14 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
             e.printStackTrace();
         }
 
-        _imageHeight = new Integer(imageSize.Height);
-        _imageWidth = new Integer(imageSize.Width);
+        m_imageHeight = new Integer(imageSize.Height);
+        m_imageWidth = new Integer(imageSize.Width);
 
         for (int r = 0; r < rows; r++)
         {
             for (int c = 0; c < cols; c++)
             {
-                images[r * cols + c] = createImage(dialog, r, c);
+                m_aImages[r * cols + c] = createImage(dialog, r, c);
             }
         }
         refreshImages();
@@ -251,20 +329,42 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
         listModel.addListDataListener(this);
 
     }
-    private Integer _imageHeight,  _imageWidth;
+    private Integer m_imageHeight,  m_imageWidth;
     private final static String[] IMAGE_PROPS = new String[]
     {
-        "Border", "BackgroundColor", "Height", "HelpURL", "PositionX", "PositionY", "ScaleImage", "Step", "TabIndex", "Tabstop", "Width"
+        "Border",
+        "BackgroundColor",
+        "Height",
+        "HelpURL",
+        "PositionX",
+        "PositionY",
+        "ScaleImage",
+        "Step",
+        "TabIndex",
+        "Tabstop",
+        "Width"
     };
     //used for optimization
-    private Short tabIndex_;
+    private Short m_tabIndex;
 
-    private XControl createImage(UnoDialog2 dialog, int row, int col)
-    {
-        String imageName = name + "_image" + (row * cols + col);
-        XControl image = dialog.insertImage(imageName, IMAGE_PROPS, new Object[]
+    private XControl createImage(UnoDialog2 dialog, int _row, int _col)
                 {
-                    NO_BORDER, BACKGROUND_COLOR, _imageHeight, "HID:" + helpURL++, new Integer(imagePosX(col)), new Integer(imagePosY(row)), scaleImages, step, tabIndex_, Boolean.FALSE, _imageWidth
+        String imageName = name + "_image" + (_row * cols + _col);
+        XControl image = dialog.insertImage(imageName,
+                IMAGE_PROPS,
+                new Object[]
+                {
+                    NO_BORDER,
+                    BACKGROUND_COLOR,
+                    m_imageHeight,
+                    "HID:" + helpURL++,
+                    new Integer(getImagePosX(_col)),
+                    new Integer(getImagePosY(_row)),
+                    scaleImages,
+                    step,
+                    m_tabIndex,
+                    Boolean.FALSE,
+                    m_imageWidth
                 });
 
         XWindow win = (XWindow) UnoRuntime.queryInterface(XWindow.class, image);
@@ -277,12 +377,12 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
         return image;
     }
 
-    private int imagePosX(int col)
+    private int getImagePosX(int col)
     {
         return pos.Width + col * (imageSize.Width + gap.Width) + gap.Width;
     }
 
-    private int imagePosY(int row)
+    private int getImagePosY(int row)
     {
         return pos.Height + row * (imageSize.Height + gap.Height) + gap.Height;
     }
@@ -296,29 +396,29 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
         hideSelection();
         if (refreshOverNull)
         {
-            for (int i = 0; i < images.length; i++)
+            for (int i = 0; i < m_aImages.length; i++)
             {
-                setVisible(images[i], false);
+                setVisible(m_aImages[i], false);
             }
         }
         boolean focusable = true;
-        for (int i = 0; i < images.length; i++)
+        for (int i = 0; i < m_aImages.length; i++)
         {
             Object[] oResources = renderer.getImageUrls(getObjectFor(i));
             if (oResources != null)
             {
                 if (oResources.length == 1)
                 {
-                    Helper.setUnoPropertyValue(images[i].getModel(), "ImageURL", (String) oResources[0]);
+                    Helper.setUnoPropertyValue(m_aImages[i].getModel(), "ImageURL", (String) oResources[0]);
                 }
                 else if (oResources.length == 2)
                 {
-                    oUnoDialog.getPeerConfiguration().setImageUrl(images[i].getModel(), oResources[0], oResources[1]);
+                    oUnoDialog.getPeerConfiguration().setImageUrl(m_aImages[i].getModel(), oResources[0], oResources[1]);
                 }
-                Helper.setUnoPropertyValue(images[i].getModel(), "Tabstop", focusable ? Boolean.TRUE : Boolean.FALSE);
+                Helper.setUnoPropertyValue(m_aImages[i].getModel(), "Tabstop", focusable ? Boolean.TRUE : Boolean.FALSE);
                 if (refreshOverNull)
                 {
-                    setVisible(images[i], true);
+                    setVisible(m_aImages[i], true);
                 }
                 focusable = false;
             }
@@ -377,8 +477,8 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
         int row = image / cols;
         int col = rowSelect ? 0 : image - (row * cols);
 
-        MOVE_SELECTION_VALS[0] = new Integer(imagePosX(col) - selectionGap.Width);
-        MOVE_SELECTION_VALS[1] = new Integer(imagePosY(row) - selectionGap.Height);
+        MOVE_SELECTION_VALS[0] = new Integer(getImagePosX(col) - selectionGap.Width);
+        MOVE_SELECTION_VALS[1] = new Integer(getImagePosY(row) - selectionGap.Height);
 
         Helper.setUnoPropertyValues(getModel(grbxSelectedImage), MOVE_SELECTION, MOVE_SELECTION_VALS);
 
@@ -386,7 +486,7 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
         {
             setVisible(grbxSelectedImage, true);        //now focus...
         }
-        for (int i = 0; i < images.length; i++)
+        for (int i = 0; i < m_aImages.length; i++)
         {
             if (i != image)
             {
@@ -394,7 +494,7 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
             }
             else
             {
-                Helper.setUnoPropertyValue(images[image].getModel(), "Tabstop", Boolean.TRUE);
+                Helper.setUnoPropertyValue(m_aImages[image].getModel(), "Tabstop", Boolean.TRUE);
             }
         }
     }
@@ -569,7 +669,7 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
     /**
      * @return
      */
-    public ImageRenderer getRenderer()
+    public IImageRenderer getRenderer()
     {
         return renderer;
     }
@@ -663,7 +763,7 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
     /**
      * @param renderer
      */
-    public void setRenderer(ImageRenderer renderer)
+    public void setRenderer(IImageRenderer renderer)
     {
         this.renderer = renderer;
     }
@@ -782,7 +882,7 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
     int i = getImageFromEvent(event);
     //TODO what is when the image does not display an image?
     if (getIndexFor(i) != selected)
-    setBorder(images[i],imageBorderMO);
+    setBorder(m_aImages[i],imageBorderMO);
     }
 
     public void mouseExitImage(Object event) {
@@ -790,7 +890,7 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
     int i = getImageFromEvent(event);
     //TODO what is when the image does not display an image?
     if (getIndexFor(i) != selected)
-    setBorder(images[i],imageBorder);
+    setBorder(m_aImages[i],imageBorder);
     }
      */
     private void setBorder(Object control, Short border)
@@ -829,7 +929,7 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
 
     /**
      */
-    public static interface ImageRenderer extends Renderer
+    public static interface IImageRenderer extends IRenderer
     {
 
         /**
@@ -841,7 +941,7 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
         public Object[] getImageUrls(Object listItem);
     }
 
-    private static class SimpleCounterRenderer implements Renderer
+    private static class SimpleCounterRenderer implements IRenderer
     {
 
         public String render(Object counter)
@@ -877,7 +977,7 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
         }
         else
         {
-            pageStart = (selected / images.length) * images.length;
+            pageStart = (selected / m_aImages.length) * m_aImages.length;
         }
         if (oldPageStart != pageStart)
         {
@@ -980,15 +1080,15 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
 
     private final void focus(int image)
     {
-        Helper.setUnoPropertyValue(images[image].getModel(), "Tabstop",
+        Helper.setUnoPropertyValue(m_aImages[image].getModel(), "Tabstop",
                 Boolean.TRUE);
-        XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, images[image]);
+        XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, m_aImages[image]);
         xWindow.setFocus();
     }
 
     private final void defocus(int image)
     {
-        Helper.setUnoPropertyValue(UnoDialog.getModel(images[image]), "Tabstop",
+        Helper.setUnoPropertyValue(UnoDialog.getModel(m_aImages[image]), "Tabstop",
                 Boolean.FALSE);
 
     }
@@ -1019,9 +1119,9 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
     public void setenabled(boolean b)
     {
 
-        for (int i = 0; i < images.length; i++)
+        for (int i = 0; i < m_aImages.length; i++)
         {
-            UnoDialog2.setEnabled(images[i], b);
+            UnoDialog2.setEnabled(m_aImages[i], b);
         }
         UnoDialog2.setEnabled(grbxSelectedImage, b);
         UnoDialog2.setEnabled(lblImageText, b);

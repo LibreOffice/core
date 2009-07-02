@@ -136,8 +136,13 @@ public class FileAccess
     /**
      * Further information on arguments value see in OO Developer Guide,
      * chapter 6.2.7
+     * @param xMSF
+     * @param sPath
      * @param sType use "share" or "user". Set to "" if not needed eg for the WorkPath;
      * In the return Officepath a possible slash at the end is cut off
+     * @param sSearchDir
+     * @return
+     * @throws NoValidPathException
      */
     public static String getOfficePath(XMultiServiceFactory xMSF, String sPath, String sType, String sSearchDir) throws NoValidPathException
     {
@@ -211,12 +216,12 @@ public class FileAccess
         return ResultPath;
     }
 
-    public static ArrayList getOfficePaths(XMultiServiceFactory xMSF, String _sPath, String sType, String sSearchDir) throws NoValidPathException
+    public static ArrayList<String> getOfficePaths(XMultiServiceFactory xMSF, String _sPath, String sType, String sSearchDir) throws NoValidPathException
     {
         //This method currently only works with sPath="Template"
 
         // String ResultPath = "";
-        ArrayList aPathList = new ArrayList();
+        ArrayList<String> aPathList = new ArrayList<String>();
         String Template_writable = "";
         String[] Template_internal;
         String[] Template_user;
@@ -604,8 +609,8 @@ public class FileAccess
         String[][] LocLayoutFiles = new String[2][]; //{"",""}{""};
         try
         {
-            java.util.Vector TitleVector = null;
-            java.util.Vector NameVector = null;
+            java.util.Vector<String> TitleVector = null;
+            java.util.Vector<String> NameVector = null;
 
             XInterface xDocInterface = (XInterface) xMSF.createInstance("com.sun.star.document.DocumentProperties");
             XDocumentProperties xDocProps = (XDocumentProperties) UnoRuntime.queryInterface(XDocumentProperties.class, xDocInterface);
@@ -615,8 +620,8 @@ public class FileAccess
 
             String[] nameList = xSimpleFileAccess.getFolderContents(FolderName, false);
 
-            TitleVector = new java.util.Vector(nameList.length);
-            NameVector = new java.util.Vector(nameList.length);
+            TitleVector = new java.util.Vector<String>(/*nameList.length*/);
+            NameVector = new java.util.Vector<String>(nameList.length);
 
             FilterName = FilterName == null || FilterName.equals("") ? null : FilterName + "-";
 
@@ -734,8 +739,8 @@ public class FileAccess
         {
             throw new NoValidPathException(null, "Path not given.");
         }
-        ArrayList TitleVector = new ArrayList();
-        ArrayList URLVector = new ArrayList();
+        ArrayList<String> TitleVector = new ArrayList<String>();
+        ArrayList<String> URLVector = new ArrayList<String>();
 
         com.sun.star.ucb.XSimpleFileAccess xSimpleFileAccess = null;
         try
@@ -1135,7 +1140,7 @@ public class FileAccess
         String[] sFileData = null;
         try
         {
-            Vector oDataVector = new Vector();
+            Vector<String> oDataVector = new Vector<String>();
             Object oSimpleFileAccess = _xMSF.createInstance("com.sun.star.ucb.SimpleFileAccess");
             XSimpleFileAccess xSimpleFileAccess = (XSimpleFileAccess) com.sun.star.uno.UnoRuntime.queryInterface(XSimpleFileAccess.class, oSimpleFileAccess);
             if (xSimpleFileAccess.exists(_filepath))
@@ -1147,7 +1152,7 @@ public class FileAccess
                 xActiveDataSink.setInputStream(xInputStream);
                 while (!xTextInputStream.isEOF())
                 {
-                    oDataVector.addElement((String) xTextInputStream.readLine());
+                    oDataVector.addElement( xTextInputStream.readLine());
                 }
                 xTextInputStream.closeInput();
                 sFileData = new String[oDataVector.size()];

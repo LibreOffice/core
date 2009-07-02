@@ -140,7 +140,7 @@ void SAL_CALL ZipPackageFolder::insertByName( const OUString& aName, const Any& 
         throw(IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException)
 {
     if (hasByName(aName))
-        throw ElementExistException();
+        throw ElementExistException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
     else
     {
         Reference < XUnoTunnel > xRef;
@@ -160,14 +160,14 @@ void SAL_CALL ZipPackageFolder::insertByName( const OUString& aName, const Any& 
                 pEntry = static_cast < ZipPackageEntry * > ( pStream );
             }
             else
-                throw IllegalArgumentException();
+                throw IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 0 );
 
             if (pEntry->getName() != aName )
                 pEntry->setName (aName);
             doInsertByName ( pEntry, sal_True );
         }
         else
-            throw IllegalArgumentException();
+            throw IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 0 );
     }
 }
 void SAL_CALL ZipPackageFolder::removeByName( const OUString& Name )
@@ -175,7 +175,7 @@ void SAL_CALL ZipPackageFolder::removeByName( const OUString& Name )
 {
     ContentHash::iterator aIter = maContents.find ( Name );
     if ( aIter == maContents.end() )
-        throw NoSuchElementException();
+        throw NoSuchElementException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
     maContents.erase( aIter );
 }
     // XEnumerationAccess
@@ -201,7 +201,7 @@ ContentInfo& ZipPackageFolder::doGetByName( const OUString& aName )
 {
     ContentHash::iterator aIter = maContents.find ( aName );
     if ( aIter == maContents.end())
-        throw NoSuchElementException();
+        throw NoSuchElementException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
     return *(*aIter).second;
 }
 Any SAL_CALL ZipPackageFolder::getByName( const OUString& aName )
@@ -233,7 +233,7 @@ void SAL_CALL ZipPackageFolder::replaceByName( const OUString& aName, const Any&
     if ( hasByName( aName ) )
         removeByName( aName );
     else
-        throw NoSuchElementException();
+        throw NoSuchElementException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
     insertByName(aName, aElement);
 }
 
@@ -449,25 +449,16 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
                     if ( bToBeEncrypted && !bTransportOwnEncrStreamAsRaw )
                     {
                         Sequence < sal_uInt8 > aSalt ( 16 ), aVector ( 8 );
-                        Sequence < sal_Int8 > aKey ( 16 );
                         rtl_random_getBytes ( rRandomPool, aSalt.getArray(), 16 );
                         rtl_random_getBytes ( rRandomPool, aVector.getArray(), 8 );
                         sal_Int32 nIterationCount = 1024;
 
-                        if ( pStream->HasOwnKey() )
-                            rtl_digest_PBKDF2 ( reinterpret_cast < sal_uInt8 * > (aKey.getArray()), 16,
-                                                reinterpret_cast < const sal_uInt8 * > (pStream->getKey().getConstArray()), pStream->getKey().getLength(),
-                                                reinterpret_cast < const sal_uInt8 * > ( aSalt.getConstArray() ), 16,
-                                                nIterationCount );
-                        else
-                            rtl_digest_PBKDF2 ( reinterpret_cast < sal_uInt8 * > (aKey.getArray()), 16,
-                                                reinterpret_cast < const sal_uInt8 * > (rEncryptionKey.getConstArray()), rEncryptionKey.getLength(),
-                                                reinterpret_cast < const sal_uInt8 * > ( aSalt.getConstArray() ), 16,
-                                                nIterationCount );
+                        if ( !pStream->HasOwnKey() )
+                            pStream->setKey ( rEncryptionKey );
+
                         pStream->setInitialisationVector ( aVector );
                         pStream->setSalt ( aSalt );
                         pStream->setIterationCount ( nIterationCount );
-                        pStream->setKey ( aKey );
                     }
 
                     // last property is digest, which is inserted later if we didn't have
@@ -653,7 +644,7 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
     }
 
     if( bWritingFailed )
-        throw RuntimeException();
+        throw RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 }
 
 void ZipPackageFolder::releaseUpwardRef( void )
@@ -701,7 +692,7 @@ void SAL_CALL ZipPackageFolder::setPropertyValue( const OUString& aPropertyName,
     {
         // TODO/LATER: activate when zip ucp is ready
         // if ( m_nFormat != PACKAGE_FORMAT )
-        //  throw UnknownPropertyException();
+        //  throw UnknownPropertyException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
         aValue >>= sMediaType;
     }
@@ -710,7 +701,7 @@ void SAL_CALL ZipPackageFolder::setPropertyValue( const OUString& aPropertyName,
     else if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Size") ) )
         aValue >>= aEntry.nSize;
     else
-        throw UnknownPropertyException();
+        throw UnknownPropertyException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 }
 Any SAL_CALL ZipPackageFolder::getPropertyValue( const OUString& PropertyName )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
@@ -719,7 +710,7 @@ Any SAL_CALL ZipPackageFolder::getPropertyValue( const OUString& PropertyName )
     {
         // TODO/LATER: activate when zip ucp is ready
         // if ( m_nFormat != PACKAGE_FORMAT )
-        //  throw UnknownPropertyException();
+        //  throw UnknownPropertyException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
         return makeAny ( sMediaType );
     }
@@ -728,7 +719,7 @@ Any SAL_CALL ZipPackageFolder::getPropertyValue( const OUString& PropertyName )
     else if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "Size" ) ) )
         return makeAny ( aEntry.nSize );
     else
-        throw UnknownPropertyException();
+        throw UnknownPropertyException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 }
 
 void ZipPackageFolder::doInsertByName ( ZipPackageEntry *pEntry, sal_Bool bSetParent )

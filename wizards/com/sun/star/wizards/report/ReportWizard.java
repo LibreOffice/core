@@ -72,57 +72,57 @@ public class ReportWizard extends WizardDialog implements XTextListener, XComple
 {
     // XMultiServiceFactory xMSF;
     // QueryMetaData CurDBMetaData;
-    FieldSelection CurGroupFieldSelection;
-    SortingComponent CurSortingComponent;
-    UnoDialog CurUnoProgressDialog;
-    TitlesComponent CurTitlesComponent;
-    CommandFieldSelection CurDBCommandFieldSelection;
-    GroupFieldHandler CurGroupFieldHandler;
-    ReportLayouter CurReportLayouter;
-    ReportFinalizer CurReportFinalizer;
-    PropertyValue[] DBGPROPERTYVALUE;
-    String sCommandName = "";
-    int nCommandType = -1;
-    int nReportMode = ReportFinalizer.SOCREATEDOCUMENT;
+    protected FieldSelection CurGroupFieldSelection;
+    private SortingComponent CurSortingComponent;
+    // private UnoDialog CurUnoProgressDialog;
+    private TitlesComponent CurTitlesComponent;
+    private CommandFieldSelection CurDBCommandFieldSelection;
+    private GroupFieldHandler CurGroupFieldHandler;
+    private ReportLayouter CurReportLayouter;
+    private ReportFinalizer CurReportFinalizer;
+    private PropertyValue[] DBGPROPERTYVALUE;
+    // private String sCommandName = "";
+    // private int nCommandType = -1;
+    private int nReportMode = ReportFinalizer.SOCREATEDOCUMENT;
     private String m_sReportName = "";
-    public static final String SOREPORTFORMNAME = "ReportSource";
-    final int SOSELGROUPLST = 33;
-    final int SOTXTCOLTITLE = 48;
-    final int SOTITLESCROLLBAR = 49;
-    public static final int SONULLPAGE = 0;
-    public static final int SOMAINPAGE = 1;
-    public static final int SOTITLEPAGE = 2;
-    public static final int SOGROUPPAGE = 3;
-    public static final int SOSORTPAGE = 4;
-    public static final int SOTEMPLATEPAGE = 5;
-    public static final int SOSTOREPAGE = 6;
+    protected static final String SOREPORTFORMNAME = "ReportSource";
+    // private final int SOSELGROUPLST = 33;
+    // private final int SOTXTCOLTITLE = 48;
+    // private final int SOTITLESCROLLBAR = 49;
+    // private static final int SONULLPAGE = 0;
+    private static final int SOMAINPAGE = 1;
+    private static final int SOTITLEPAGE = 2;
+    protected static final int SOGROUPPAGE = 3;
+    private static final int SOSORTPAGE = 4;
+    protected static final int SOTEMPLATEPAGE = 5;
+    protected static final int SOSTOREPAGE = 6;
 
     // ReportTextDocument CurReportDocument;
     // ReportTextImplementation CurReportDocument;
-    IReportDocument CurReportDocument;
-    static String sMsgWizardName;
-    static String slblFields;
-    static String slblSelFields;
-    static String sShowBinaryFields;
-    static String sGroupings;
-    String[] WizardHeaderText = new String[6];
-    static String[] WizardTitle = new String[6];
-    static String sWriterFilterName;
-    static String slstDatabasesDefaultText;
-    static String slstTablesDefaultText;
-    static String sMsgErrorOccured;
-    static String sMsgSavingImpossible;
-    static String sMsgNoConnection;
+    protected IReportDocument CurReportDocument;
+    private static String sMsgWizardName;
+    private static String slblFields;
+    private static String slblSelFields;
+    private static String sShowBinaryFields;
+    // private static String sGroupings;
+    private String[] WizardHeaderText = new String[6];
+    // private static String[] WizardTitle = new String[6];
+    // private static String sWriterFilterName;
+    private static String slstDatabasesDefaultText;
+    private static String slstTablesDefaultText;
+    private static String sMsgErrorOccured;
+    private static String sMsgSavingImpossible;
+    // private static String sMsgNoConnection;
     // Progress display relevant Strings
-    static String slblColumnTitles;
-    static String slblColumnNames;
-    static String sMsgNoConnectionforDataimport;
-    static String sMsgQueryCreationImpossible;
-    public static String sMsgFilePathInvalid;
-    static String slblTables;
+    private static String slblColumnTitles;
+    private static String slblColumnNames;
+    private static String sMsgNoConnectionforDataimport;
+    private static String sMsgQueryCreationImpossible;
+    private static String sMsgFilePathInvalid;
+    private static String slblTables;
 //    public static String sBlindTextNote;
-    public static boolean bCloseDocument;
-    public boolean bHasEscapeProcessing = true;
+    protected static boolean bCloseDocument;
+    private boolean bHasEscapeProcessing = true;
 
     public ReportWizard(XMultiServiceFactory xMSF)
     {
@@ -133,11 +133,27 @@ public class ReportWizard extends WizardDialog implements XTextListener, XComple
             Helper.setUnoPropertyValues(xDialogModel,
                     new String[]
                     {
-                        "Height", "Moveable", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Title", "Width"
+                        "Height",
+                        "Moveable",
+                        "Name",
+                        "PositionX",
+                        "PositionY",
+                        "Step",
+                        "TabIndex",
+                        "Title",
+                        "Width"
                     },
                     new Object[]
                     {
-                        new Integer(210), Boolean.TRUE, "DialogReport", new Integer(102), new Integer(41), new Integer(1), new Short((short) 0), sMsgWizardName, new Integer(310)
+                        Integer.valueOf(210),
+                        Boolean.TRUE,
+                        "DialogReport",
+                        new Integer(102),
+                        new Integer(41),
+                        new Integer(1),
+                        new Short((short) 0),
+                        sMsgWizardName,
+                        new Integer(310)
                     });
             drawNaviBar();
             setRightPaneHeaders(this.WizardHeaderText);
@@ -325,8 +341,8 @@ public class ReportWizard extends WizardDialog implements XTextListener, XComple
             {
                 String sQueryName = CurDBCommandFieldSelection.getSelectedCommandName();
                 DBMetaData.CommandObject oCommand = CurReportDocument.getRecordParser().getQueryByName(sQueryName);
-                bHasEscapeProcessing = CurReportDocument.getRecordParser().hasEscapeProcessing(oCommand.xPropertySet);
-                String sCommand = (String) oCommand.xPropertySet.getPropertyValue("Command");
+                bHasEscapeProcessing = CurReportDocument.getRecordParser().hasEscapeProcessing(oCommand.getPropertySet());
+                String sCommand = (String) oCommand.getPropertySet().getPropertyValue("Command");
                 if (bHasEscapeProcessing)
                 {
                     // String sCommand = (String) oCommand.xPropertySet.getPropertyValue("Command");
@@ -356,7 +372,7 @@ public class ReportWizard extends WizardDialog implements XTextListener, XComple
         }
         return bQueryCreated;
     }
-
+/*
     public static void main(String args[])
     {
         String ConnectStr = "uno:socket,host=localhost,port=8107;urp;StarOffice.NamingService";   //localhost  ;Lo-1.Germany.sun.com; 10.16.65.155
@@ -388,7 +404,8 @@ public class ReportWizard extends WizardDialog implements XTextListener, XComple
         }
         System.exit(1);
     }
-
+*/
+/*
     private static void tests(XMultiServiceFactory _xMSF)
     {
         try
@@ -467,6 +484,7 @@ public class ReportWizard extends WizardDialog implements XTextListener, XComple
         }
 
     }
+*/
 
     public void buildSteps()
     {
@@ -504,7 +522,7 @@ public class ReportWizard extends WizardDialog implements XTextListener, XComple
 
     public void finishWizard()
     {
-        int ncurStep = getCurrentStep();
+        final int ncurStep = getCurrentStep();
         if ((switchToStep(ncurStep, SOSTOREPAGE)) || (ncurStep == SOSTOREPAGE))
         {
             if (this.executeQuery())
@@ -578,7 +596,7 @@ private static void initializeLogger(XMultiServiceFactory _xMSF)
 {
     XComponentContext xContext = Helper.getComponentContext(_xMSF);
 
-    Object aLoggerPool = xContext.getValueByName("/singletons/com.sun.star.logging.LoggerPool");
+    final Object aLoggerPool = xContext.getValueByName("/singletons/com.sun.star.logging.LoggerPool");
     if (aLoggerPool == null)
     {
         System.out.println("Can't get singleton from logging");
@@ -884,7 +902,7 @@ public static XLogger getLogger()
         {
             String sQueryName = CurDBCommandFieldSelection.getSelectedCommandName();
             DBMetaData.CommandObject oCommand = CurReportDocument.getRecordParser().getQueryByName(sQueryName);
-            bdoenable = CurReportDocument.getRecordParser().hasEscapeProcessing(oCommand.xPropertySet);
+            bdoenable = CurReportDocument.getRecordParser().hasEscapeProcessing(oCommand.getPropertySet());
         }
         super.setStepEnabled(SOSORTPAGE, bdoenable);
 

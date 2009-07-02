@@ -150,7 +150,7 @@ public class QuerySummary extends QueryMetaData
         {
             CurString = BaseString;
             FieldColumn CurDBFieldColumn = super.getFieldColumnByDisplayName(FieldColumns[i].getDisplayFieldName());
-            int iAggregate = getAggregateIndex(FieldColumns[i].m_sFieldName);
+            int iAggregate = getAggregateIndex(FieldColumns[i].getFieldName());
             if (iAggregate > -1)
             {
                 String sAggregateDisplay = AggregateFieldNames[iAggregate][1] + "(" + AggregateFieldNames[iAggregate][0] + ")";

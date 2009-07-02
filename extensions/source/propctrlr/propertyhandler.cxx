@@ -34,13 +34,19 @@
 #include "formmetadata.hxx"
 #include "formbrowsertools.hxx"
 #include "handlerhelper.hxx"
+#include "formstrings.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/lang/NullPointerException.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 /** === end UNO includes === **/
+
 #include <tools/debug.hxx>
+#include <unotools/confignode.hxx>
+#include <unotools/localedatawrapper.hxx>
+#include <svtools/syslocale.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 
 #include <algorithm>
 
@@ -372,6 +378,67 @@ namespace pcr
     bool PropertyHandler::impl_componentHasProperty_throw( const ::rtl::OUString& _rPropName ) const
     {
         return m_xComponentPropertyInfo.is() && m_xComponentPropertyInfo->hasPropertyByName( _rPropName );
+    }
+
+    //--------------------------------------------------------------------
+    sal_Int16 PropertyHandler::impl_getDocumentMeasurementUnit_throw() const
+    {
+        FieldUnit eUnit = FUNIT_NONE;
+
+        Reference< XServiceInfo > xDocumentSI( impl_getContextDocument_nothrow(), UNO_QUERY );
+        OSL_ENSURE( xDocumentSI.is(), "PropertyHandlerHelper::impl_getDocumentMeasurementUnit_throw: No context document - where do I live?" );
+        if ( xDocumentSI.is() )
+        {
+            // determine the application type we live in
+            ::rtl::OUString sConfigurationLocation;
+            ::rtl::OUString sConfigurationProperty;
+            if ( xDocumentSI->supportsService( SERVICE_WEB_DOCUMENT ) )
+            {   // writer
+                sConfigurationLocation = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.WriterWeb/Layout/Other" ) );
+                sConfigurationProperty = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MeasureUnit" ) );
+            }
+            else if ( xDocumentSI->supportsService( SERVICE_TEXT_DOCUMENT ) )
+            {   // writer
+                sConfigurationLocation = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.Writer/Layout/Other" ) );
+                sConfigurationProperty = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MeasureUnit" ) );
+            }
+            else if ( xDocumentSI->supportsService( SERVICE_SPREADSHEET_DOCUMENT ) )
+            {   // calc
+                sConfigurationLocation = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.Calc/Layout/Other/MeasureUnit" ) );
+                sConfigurationProperty = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Metric" ) );
+            }
+            else if ( xDocumentSI->supportsService( SERVICE_DRAWING_DOCUMENT ) )
+            {
+                sConfigurationLocation = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.Draw/Layout/Other/MeasureUnit" ) );
+                sConfigurationProperty = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Metric" ) );
+            }
+            else if ( xDocumentSI->supportsService( SERVICE_PRESENTATION_DOCUMENT ) )
+            {
+                sConfigurationLocation = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.Impress/Layout/Other/MeasureUnit" ) );
+                sConfigurationProperty = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Metric" ) );
+            }
+
+            // read the measurement unit from the configuration
+            if ( sConfigurationLocation.getLength() && sConfigurationProperty.getLength() )
+            {
+                ::utl::OConfigurationTreeRoot aConfigTree( ::utl::OConfigurationTreeRoot::createWithServiceFactory(
+                    m_aContext.getLegacyServiceFactory(), sConfigurationLocation, -1, ::utl::OConfigurationTreeRoot::CM_READONLY ) );
+                sal_Int32 nUnitAsInt = (sal_Int32)FUNIT_NONE;
+                aConfigTree.getNodeValue( sConfigurationProperty ) >>= nUnitAsInt;
+
+                // if this denotes a valid (and accepted) unit, then use it
+                if  ( ( nUnitAsInt > FUNIT_NONE ) && ( nUnitAsInt <= FUNIT_100TH_MM ) )
+                    eUnit = static_cast< FieldUnit >( nUnitAsInt );
+            }
+        }
+
+        if ( FUNIT_NONE == eUnit )
+        {
+            MeasurementSystem eSystem = SvtSysLocale().GetLocaleData().getMeasurementSystemEnum();
+            eUnit = MEASURE_METRIC == eSystem ? FUNIT_CM : FUNIT_INCH;
+        }
+
+        return VCLUnoHelper::ConvertToMeasurementUnit( eUnit, 1 );
     }
 
     //====================================================================

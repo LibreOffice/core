@@ -31,12 +31,12 @@ package com.sun.star.wizards.ui;
 
 import com.sun.star.wizards.common.*;
 import com.sun.star.wizards.db.*;
-import com.sun.star.awt.XWindow;
+// import com.sun.star.awt.XWindow;
 import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.sdb.CommandType;
 // import com.sun.star.sdbc.SQLException;
 import com.sun.star.uno.AnyConverter;
-import com.sun.star.uno.UnoRuntime;
+// import com.sun.star.uno.UnoRuntime;
 import com.sun.star.awt.*;
 import com.sun.star.beans.PropertyValue;
 import java.text.Collator;
@@ -45,20 +45,20 @@ import java.util.Comparator;
 public class CommandFieldSelection extends FieldSelection implements Comparator
 {
 
-    CommandMetaData CurDBMetaData;
-    XListBox xTableListBox;
-    XFixedText xlblTable;
-    String SFILLUPFIELDSLISTBOX = "fillUpFieldsListbox";
-    String sTableListBoxName;
-    String sTableLabelName;
-    String sQueryPrefix;
-    String sTablePrefix;
+    private CommandMetaData CurDBMetaData;
+    private XListBox xTableListBox;
+    private XFixedText xlblTable;
+    // private String SFILLUPFIELDSLISTBOX = "fillUpFieldsListbox";
+    private String sTableListBoxName;
+    private String sTableLabelName;
+    private String sQueryPrefix;
+    private String sTablePrefix;
     private short m_iSelPos = -1;
-    short iOldSelPos = -1;
-    boolean bpreselectCommand = true;
-    boolean bgetQueries;
+    private short iOldSelPos = -1;
+    private boolean bpreselectCommand = true;
+    private boolean bgetQueries;
     // boolean AppendMode;
-    WizardDialog oWizardDialog;
+    private WizardDialog oWizardDialog;
     private Collator aCollator = null;
 
     class ItemListenerImpl implements com.sun.star.awt.XItemListener
@@ -137,6 +137,7 @@ public class CommandFieldSelection extends FieldSelection implements Comparator
             sTablePrefix = getTablePrefix();
             sQueryPrefix = getQueryPrefix();
             Integer LabelWidth = new Integer(getListboxWidth().intValue() + 6);
+            // Label 'Tables or Queries'
             xlblTable = CurUnoDialog.insertLabel(sTableLabelName,
                     new String[]
                     {
@@ -146,6 +147,7 @@ public class CommandFieldSelection extends FieldSelection implements Comparator
                     {
                         Boolean.FALSE, new Integer(8), _reslblTables, new Integer(95), new Integer(27), IStep, new Short((short) 3), LabelWidth
                     });
+            // DropDown Listbox TableNames
             xTableListBox = CurUnoDialog.insertListBox(sTableListBoxName, 0, null, new ItemListenerImpl(),
                     new String[]
                     {
@@ -232,27 +234,28 @@ public class CommandFieldSelection extends FieldSelection implements Comparator
             boolean binitialize = false;
             String curCommandName = "";
             //As the peer of the control might not yet exist we have to query the model for the SelectedItems
-            String[] sLocList = (String[]) CurUnoDialog.getControlProperty(sTableListBoxName, "StringItemList");
             short iSelPos = getselectedItemPos();
+            // String[] sLocList = (String[]) CurUnoDialog.getControlProperty(sTableListBoxName, "StringItemList");
+            final String sSelectedTableName = xTableListBox.getItem(iSelPos);
             if (!bgetQueries)
             {
-                curCommandName = sLocList[iSelPos];
+                curCommandName = sSelectedTableName; // sLocList[iSelPos];
                 CurDBMetaData.setTableByName(curCommandName);
                 binitialize = CurDBMetaData.getFieldNamesOfCommand(curCommandName, CommandType.TABLE, AppendMode);
             }
             else
             {
-                if (sLocList[iSelPos].startsWith(sTablePrefix))
+                if (sSelectedTableName.startsWith(sTablePrefix))
                 {
                     CurDBMetaData.setCommandType(CommandType.TABLE);
-                    curCommandName = JavaTools.replaceSubString(sLocList[iSelPos], "", sTablePrefix);
+                    curCommandName = JavaTools.replaceSubString(sSelectedTableName, "", sTablePrefix);
                     CurDBMetaData.setTableByName(curCommandName);
                     binitialize = CurDBMetaData.getFieldNamesOfCommand(curCommandName, CommandType.TABLE, AppendMode);
                 }
                 else
                 {
                     CurDBMetaData.setCommandType(CommandType.QUERY);
-                    curCommandName = JavaTools.replaceSubString(sLocList[iSelPos], "", sQueryPrefix);
+                    curCommandName = JavaTools.replaceSubString(sSelectedTableName, "", sQueryPrefix);
                     CurDBMetaData.setQueryByName(curCommandName);
                     binitialize = CurDBMetaData.getFieldNamesOfCommand(curCommandName, CommandType.QUERY, AppendMode);
                 }
@@ -456,22 +459,19 @@ public class CommandFieldSelection extends FieldSelection implements Comparator
             short iselpos = (short) JavaTools.FieldInList(sitems, getTablePrefix() + _selitem);
             if (iselpos > -1)
             {
-                Helper.setUnoPropertyValue(UnoDialog.getModel(xTableListBox), "SelectedItems", new short[]
-                        {
-                            iselpos
-                        });
+                Helper.setUnoPropertyValue(UnoDialog.getModel(xTableListBox), "SelectedItems", new short[] { iselpos });
             }
             this.fillUpFieldsListbox();
         }
         else
         {
-            Helper.setUnoPropertyValue(UnoDialog.getModel(xTableListBox), "SelectedItems", new short[]
-                    {
-                    });
+            Helper.setUnoPropertyValue(UnoDialog.getModel(xTableListBox), "SelectedItems", new short[] {} );
+            this.fillUpFieldsListbox();
         }
         if (_bReadOnly)
         {
             Helper.setUnoPropertyValue(UnoDialog.getModel(xTableListBox), "ReadOnly", new Boolean(_selitem.length() > 0));
         }
+        toggleListboxButtons((short)-1,(short)-1);
     }
 }

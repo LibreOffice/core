@@ -93,7 +93,7 @@ XUnbufferedStream::XUnbufferedStream( ZipEntry & rEntry,
     sal_Bool bMustDecrypt = ( nStreamMode == UNBUFF_STREAM_DATA && bHaveEncryptData && bIsEncrypted ) ? sal_True : sal_False;
 
     if ( bMustDecrypt )
-        ZipFile::StaticGetCipher ( rData, maCipher );
+        ZipFile::StaticGetCipher ( rData, maCipher, sal_True );
     if ( bHaveEncryptData && mbWrappedRaw && bIsEncrypted )
     {
         // if we have the data needed to decrypt it, but didn't want it decrypted (or
@@ -147,7 +147,7 @@ XUnbufferedStream::XUnbufferedStream( const Reference < XInputStream >& xRawStre
 
     mnZipEnd = mnZipCurrent + mnZipSize;
 
-    ZipFile::StaticGetCipher ( rData, maCipher );
+    ZipFile::StaticGetCipher ( rData, maCipher, sal_True );
 }
 
 XUnbufferedStream::~XUnbufferedStream()
