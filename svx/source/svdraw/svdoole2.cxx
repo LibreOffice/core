@@ -1578,13 +1578,6 @@ UINT16 SdrOle2Obj::GetObjIdentifier() const
 
 // -----------------------------------------------------------------------------
 
-SdrObject* SdrOle2Obj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const
-{
-    return ImpCheckHit(rPnt,nTol,pVisiLayer,TRUE,TRUE);
-}
-
-// -----------------------------------------------------------------------------
-
 void SdrOle2Obj::TakeObjNameSingul(XubString& rName) const
 {
     rName = ImpGetResStr(bFrame ? STR_ObjNameSingulFrame : STR_ObjNameSingulOLE2);

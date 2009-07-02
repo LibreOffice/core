@@ -180,7 +180,6 @@ public:
 
     virtual void            TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
     virtual UINT16          GetObjIdentifier() const;
-    virtual SdrObject*      CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const;
 
     virtual void            TakeObjNameSingul(String& rName) const;
     virtual void            TakeObjNamePlural(String& rName) const;

@@ -6,8 +6,9 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: overlaylinestriped.hxx,v $
- * $Revision: 1.3 $
+ * $RCSfile: sdrtextattribute.cxx,v $
+ *
+ * $Revision: 1.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,22 +29,38 @@
  *
  ************************************************************************/
 
-#ifndef _SDR_OVERLAY_OVERLAYLINESTRIPED_HXX
-#define _SDR_OVERLAY_OVERLAYLINESTRIPED_HXX
+#include "precompiled_svx.hxx"
 
-#include <svx/sdr/overlay/overlayline.hxx>
+#include <svx/sdr/attribute/sdrformtextoutlineattribute.hxx>
+
+//////////////////////////////////////////////////////////////////////////////
+// pointer compare define
+#define pointerOrContentEqual(p, q) ((p == q) || (p && q && *p == *q))
 
 //////////////////////////////////////////////////////////////////////////////
 
-namespace sdr
+namespace drawinglayer
 {
-    namespace overlay
+    namespace attribute
     {
-    } // end of namespace overlay
-} // end of namespace sdr
+        SdrFormTextOutlineAttribute::SdrFormTextOutlineAttribute(
+            const LineAttribute& rLineAttribute,
+            const StrokeAttribute& rStrokeAttribute,
+            sal_uInt8 nTransparence)
+        :   maLineAttribute(rLineAttribute),
+            maStrokeAttribute(rStrokeAttribute),
+            mnTransparence(nTransparence)
+        {
+        }
+
+        bool SdrFormTextOutlineAttribute::operator==(const SdrFormTextOutlineAttribute& rCandidate) const
+        {
+            return (getLineAttribute() == rCandidate.getLineAttribute()
+                && getStrokeAttribute() == rCandidate.getStrokeAttribute()
+                && getTransparence() == rCandidate.getTransparence());
+        }
+    } // end of namespace attribute
+} // end of namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
-
-#endif //_SDR_OVERLAY_OVERLAYLINESTRIPED_HXX
-
 // eof

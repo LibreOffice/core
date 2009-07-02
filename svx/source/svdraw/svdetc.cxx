@@ -31,10 +31,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 #include "forbiddencharacterstable.hxx"
-
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
-
 #include <svx/svdetc.hxx>
 #include "svditext.hxx"
 #include <svx/svdmodel.hxx>
@@ -68,15 +66,14 @@
 #include <i18npool/lang.h>
 #include <unotools/charclass.hxx>
 #include <svtools/syslocale.hxx>
-
-// #97870#
 #include <svx/xflbckit.hxx>
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>
 #include <vcl/svapp.hxx> //add CHINA001
-
-//#i80528#
 #include <svx/sdr/contact/viewcontact.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/svdotable.hxx>
+#include <svx/sdrhittesthelper.hxx>
 
 using namespace ::com::sun::star;
 
@@ -847,6 +844,258 @@ void SvdProgressInfo::ReportError()
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+// #i101872# isolate GetTextEditBackgroundColor to tooling; it woll anyways only be used as long
+// as text edit is not running on overlay
 
+namespace
+{
+    bool impGetSdrObjListFillColor(
+        const SdrObjList& rList,
+        const Point& rPnt,
+        const SdrPageView& rTextEditPV,
+        const SetOfByte& rVisLayers,
+        Color& rCol)
+    {
+        if(!rList.GetModel())
+            return false;
 
+        bool bRet(false);
+        bool bMaster(rList.GetPage() ? rList.GetPage()->IsMasterPage() : false);
 
+        for(ULONG no(rList.GetObjCount()); !bRet && no > 0; )
+        {
+            no--;
+            SdrObject* pObj = rList.GetObj(no);
+            SdrObjList* pOL = pObj->GetSubList();
+
+            if(pOL)
+            {
+                // group object
+                bRet = impGetSdrObjListFillColor(*pOL, rPnt, rTextEditPV, rVisLayers, rCol);
+            }
+            else
+            {
+                SdrTextObj* pText = dynamic_cast< SdrTextObj * >(pObj);
+
+                // #108867# Exclude zero master page object (i.e. background shape) from color query
+                if(pText
+                    && pObj->IsClosedObj()
+                    && (!bMaster || (!pObj->IsNotVisibleAsMaster() && 0 != no))
+                    && pObj->GetCurrentBoundRect().IsInside(rPnt)
+                    && !pText->IsHideContour()
+                    && SdrObjectPrimitiveHit(*pObj, rPnt, 0, rTextEditPV, &rVisLayers, false))
+                {
+                    bRet = GetDraftFillColor(pObj->GetMergedItemSet(), rCol);
+                }
+            }
+        }
+
+        return bRet;
+    }
+
+    bool impGetSdrPageFillColor(
+        const SdrPage& rPage,
+        const Point& rPnt,
+        const SdrPageView& rTextEditPV,
+        const SetOfByte& rVisLayers,
+        Color& rCol,
+        bool bSkipBackgroundShape)
+    {
+        if(!rPage.GetModel())
+            return false;
+
+        bool bRet(impGetSdrObjListFillColor(rPage, rPnt, rTextEditPV, rVisLayers, rCol));
+
+        if(!bRet && !rPage.IsMasterPage())
+        {
+            if(rPage.TRG_HasMasterPage())
+            {
+                SetOfByte aSet(rVisLayers);
+                aSet &= rPage.TRG_GetMasterPageVisibleLayers();
+                SdrPage& rMasterPage = rPage.TRG_GetMasterPage();
+
+                // #108867# Don't fall back to background shape on
+                // master pages. This is later handled by
+                // GetBackgroundColor, and is necessary to cater for
+                // the silly ordering: 1. shapes, 2. master page
+                // shapes, 3. page background, 4. master page
+                // background.
+                bRet = impGetSdrPageFillColor(rMasterPage, rPnt, rTextEditPV, aSet, rCol, true);
+            }
+        }
+
+        // #108867# Only now determine background color from background shapes
+        if(!bRet && !bSkipBackgroundShape)
+        {
+            rCol = rPage.GetPageBackgroundColor();
+            return true;
+        }
+
+        return bRet;
+    }
+
+    Color impCalcBackgroundColor(
+        const Rectangle& rArea,
+        const SdrPageView& rTextEditPV,
+        const SdrPage& rPage)
+    {
+        svtools::ColorConfig aColorConfig;
+        Color aBackground(aColorConfig.GetColorValue(svtools::DOCCOLOR).nColor);
+        const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+
+        if(!rStyleSettings.GetHighContrastMode())
+        {
+            // search in page
+            const USHORT SPOTCOUNT(5);
+            Point aSpotPos[SPOTCOUNT];
+            Color aSpotColor[SPOTCOUNT];
+            ULONG nHeight( rArea.GetSize().Height() );
+            ULONG nWidth( rArea.GetSize().Width() );
+            ULONG nWidth14  = nWidth / 4;
+            ULONG nHeight14 = nHeight / 4;
+            ULONG nWidth34  = ( 3 * nWidth ) / 4;
+            ULONG nHeight34 = ( 3 * nHeight ) / 4;
+
+            USHORT i;
+            for ( i = 0; i < SPOTCOUNT; i++ )
+            {
+                // five spots are used
+                switch ( i )
+                {
+                    case 0 :
+                    {
+                        // Center-Spot
+                        aSpotPos[i] = rArea.Center();
+                    }
+                    break;
+
+                    case 1 :
+                    {
+                        // TopLeft-Spot
+                        aSpotPos[i] = rArea.TopLeft();
+                        aSpotPos[i].X() += nWidth14;
+                        aSpotPos[i].Y() += nHeight14;
+                    }
+                    break;
+
+                    case 2 :
+                    {
+                        // TopRight-Spot
+                        aSpotPos[i] = rArea.TopLeft();
+                        aSpotPos[i].X() += nWidth34;
+                        aSpotPos[i].Y() += nHeight14;
+                    }
+                    break;
+
+                    case 3 :
+                    {
+                        // BottomLeft-Spot
+                        aSpotPos[i] = rArea.TopLeft();
+                        aSpotPos[i].X() += nWidth14;
+                        aSpotPos[i].Y() += nHeight34;
+                    }
+                    break;
+
+                    case 4 :
+                    {
+                        // BottomRight-Spot
+                        aSpotPos[i] = rArea.TopLeft();
+                        aSpotPos[i].X() += nWidth34;
+                        aSpotPos[i].Y() += nHeight34;
+                    }
+                    break;
+
+                }
+
+                aSpotColor[i] = Color( COL_WHITE );
+                impGetSdrPageFillColor(rPage, aSpotPos[i], rTextEditPV, rTextEditPV.GetVisibleLayers(), aSpotColor[i], false);
+            }
+
+            USHORT aMatch[SPOTCOUNT];
+
+            for ( i = 0; i < SPOTCOUNT; i++ )
+            {
+                // were same spot colors found?
+                aMatch[i] = 0;
+
+                for ( USHORT j = 0; j < SPOTCOUNT; j++ )
+                {
+                    if( j != i )
+                    {
+                        if( aSpotColor[i] == aSpotColor[j] )
+                        {
+                            aMatch[i]++;
+                        }
+                    }
+                }
+            }
+
+            // highest weight to center spot
+            aBackground = aSpotColor[0];
+
+            for ( USHORT nMatchCount = SPOTCOUNT - 1; nMatchCount > 1; nMatchCount-- )
+            {
+                // which spot color was found most?
+                for ( i = 0; i < SPOTCOUNT; i++ )
+                {
+                    if( aMatch[i] == nMatchCount )
+                    {
+                        aBackground = aSpotColor[i];
+                        nMatchCount = 1;   // break outer for-loop
+                        break;
+                    }
+                }
+            }
+        }
+
+        return aBackground;
+    }
+} // end of anonymous namespace
+
+Color GetTextEditBackgroundColor(const SdrObjEditView& rView)
+{
+    svtools::ColorConfig aColorConfig;
+    Color aBackground(aColorConfig.GetColorValue(svtools::DOCCOLOR).nColor);
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+
+    if(!rStyleSettings.GetHighContrastMode())
+    {
+        bool bFound(false);
+        SdrTextObj* pText = dynamic_cast< SdrTextObj * >(rView.GetTextEditObject());
+
+        if(pText && pText->IsClosedObj())
+        {
+            ::sdr::table::SdrTableObj* pTable = dynamic_cast< ::sdr::table::SdrTableObj * >( pText );
+
+            if( pTable )
+                bFound = GetDraftFillColor(pTable->GetActiveCellItemSet(), aBackground );
+
+            if( !bFound )
+                bFound=GetDraftFillColor(pText->GetMergedItemSet(), aBackground);
+        }
+
+        if(!bFound && pText)
+        {
+            SdrPageView* pTextEditPV = rView.GetTextEditPageView();
+
+            if(pTextEditPV)
+            {
+                Point aPvOfs(pText->GetTextEditOffset());
+                const SdrPage* pPg = pTextEditPV->GetPage();
+
+                if(pPg)
+                {
+                    Rectangle aSnapRect( pText->GetSnapRect() );
+                    aSnapRect.Move(aPvOfs.X(), aPvOfs.Y());
+
+                    return impCalcBackgroundColor(aSnapRect, *pTextEditPV, *pPg);
+                }
+            }
+        }
+    }
+
+    return aBackground;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// eof
