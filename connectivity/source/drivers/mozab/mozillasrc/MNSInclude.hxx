@@ -34,6 +34,9 @@
 // Only include Mozilla include files once and using this file...
 //
 
+// moved this here and in first position due to "long l;" unxsoli4 warning
+#include <rtl/ustrbuf.hxx>
+
 #include "pre_include_mozilla.h"
 #if defined __GNUC__
     #pragma GCC system_header

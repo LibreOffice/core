@@ -47,6 +47,9 @@
 #include <com/sun/star/document/XDocumentInfo.hpp>
 #include <com/sun/star/document/XDocumentInfoSupplier.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+
+#include <com/sun/star/rdf/XDocumentMetadataAccess.hpp>
+
 #include <com/sun/star/document/XEventBroadcaster.hpp>
 #include <com/sun/star/document/XEventListener.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
@@ -79,13 +82,12 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <cppuhelper/weak.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <com/sun/star/script/XStarBasicAccess.hpp>
 #include <osl/mutex.hxx>
 
-#ifndef _LINK_HXX_
 #include <tools/link.hxx>
-#endif
 
 #include <com/sun/star/document/XViewDataSupplier.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
@@ -93,9 +95,9 @@
 #include <com/sun/star/task/XInteractionHandler.hpp>
 
 //________________________________________________________________________________________________________
-#if ! defined(INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_28)
-#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_28
-#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 28
+#if ! defined(INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_29)
+#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_29
+#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 29
 #include <comphelper/implbase_var.hxx>
 #endif
 
@@ -204,11 +206,6 @@ struct  IMPL_SfxBaseModel_DataContainer     ;   // impl. struct to hold member o
 //  class declarations
 //________________________________________________________________________________________________________
 
-struct IMPL_SfxBaseModel_MutexContainer
-{
-    MUTEX m_aMutex ;
-} ;
-
 /**_______________________________________________________________________________________________________
     @short      -
 
@@ -217,7 +214,8 @@ struct IMPL_SfxBaseModel_MutexContainer
     @implements XChild
                 XComponent
                 XDocumentInfoSupplier
-                XDocumentPropertiesSupplier
+                document::XDocumentPropertiesSupplier
+                rdf::XDocumentMetadataAccess
                 XEventListener
                 XModel
                 XModifiable2
@@ -230,13 +228,14 @@ struct IMPL_SfxBaseModel_MutexContainer
                 XCloseable
                 XCloseBroadcaster
 
-    @base       IMPL_MutexContainer
+    @base       cppu::BaseMutex
                  SfxListener
 */
 
-typedef ::comphelper::WeakImplHelper28  <   XCHILD
+typedef ::comphelper::WeakImplHelper29  <   XCHILD
                                         ,   XDOCUMENTINFOSUPPLIER
                                         ,   ::com::sun::star::document::XDocumentPropertiesSupplier
+                                        ,   ::com::sun::star::rdf::XDocumentMetadataAccess
                                         ,   XEVENTBROADCASTER
                                         ,   XEVENTLISTENER
                                         ,   XEVENTSSUPPLIER
@@ -264,8 +263,8 @@ typedef ::comphelper::WeakImplHelper28  <   XCHILD
                                         ,   XUNTITLEDNUMBERS
                                         >   SfxBaseModel_Base;
 
-class SFX2_DLLPUBLIC SfxBaseModel   :   public SfxBaseModel_Base
-                                    ,   public IMPL_SfxBaseModel_MutexContainer
+class SFX2_DLLPUBLIC SfxBaseModel   :   protected ::cppu::BaseMutex
+                                    ,   public SfxBaseModel_Base
                                     ,   public SfxListener
 {
 
@@ -1290,6 +1289,114 @@ public:
         throw (css::uno::RuntimeException);
 
     //____________________________________________________________________________________________________
+
+    // ::com::sun::star::rdf::XNode:
+    virtual ::rtl::OUString SAL_CALL getStringValue()
+        throw (::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::rdf::XURI:
+    virtual ::rtl::OUString SAL_CALL getNamespace()
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getLocalName()
+        throw (::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::rdf::XRepositorySupplier:
+    virtual ::com::sun::star::uno::Reference<
+        ::com::sun::star::rdf::XRepository > SAL_CALL getRDFRepository()
+        throw (::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::rdf::XDocumentMetadataAccess:
+    virtual ::com::sun::star::uno::Reference<
+                ::com::sun::star::rdf::XMetadatable > SAL_CALL
+        getElementByMetadataReference(
+            const ::com::sun::star::beans::StringPair & i_rReference)
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference<
+                ::com::sun::star::rdf::XMetadatable > SAL_CALL
+        getElementByURI(const ::com::sun::star::uno::Reference<
+            ::com::sun::star::rdf::XURI > & i_xURI)
+        throw (::com::sun::star::uno::RuntimeException,
+            ::com::sun::star::lang::IllegalArgumentException);
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference<
+            ::com::sun::star::rdf::XURI > > SAL_CALL getMetadataGraphsWithType(
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::rdf::XURI > & i_xType)
+        throw (::com::sun::star::uno::RuntimeException,
+            ::com::sun::star::lang::IllegalArgumentException);
+    virtual ::com::sun::star::uno::Reference<
+                ::com::sun::star::rdf::XURI> SAL_CALL
+        addMetadataFile(const ::rtl::OUString & i_rFileName,
+            const ::com::sun::star::uno::Sequence<
+                ::com::sun::star::uno::Reference< ::com::sun::star::rdf::XURI >
+                > & i_rTypes)
+        throw (::com::sun::star::uno::RuntimeException,
+            ::com::sun::star::lang::IllegalArgumentException,
+            ::com::sun::star::container::ElementExistException);
+    virtual ::com::sun::star::uno::Reference<
+                ::com::sun::star::rdf::XURI> SAL_CALL
+        importMetadataFile(::sal_Int16 i_Format,
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::io::XInputStream > & i_xInStream,
+            const ::rtl::OUString & i_rFileName,
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::rdf::XURI > & i_xBaseURI,
+            const ::com::sun::star::uno::Sequence<
+                ::com::sun::star::uno::Reference< ::com::sun::star::rdf::XURI >
+                > & i_rTypes)
+        throw (::com::sun::star::uno::RuntimeException,
+            ::com::sun::star::lang::IllegalArgumentException,
+            ::com::sun::star::datatransfer::UnsupportedFlavorException,
+            ::com::sun::star::container::ElementExistException,
+            ::com::sun::star::rdf::ParseException,
+            ::com::sun::star::io::IOException);
+    virtual void SAL_CALL removeMetadataFile(
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::rdf::XURI > & i_xGraphName)
+        throw (::com::sun::star::uno::RuntimeException,
+            ::com::sun::star::lang::IllegalArgumentException,
+            ::com::sun::star::container::NoSuchElementException);
+    virtual void SAL_CALL addContentOrStylesFile(
+            const ::rtl::OUString & i_rFileName)
+        throw (::com::sun::star::uno::RuntimeException,
+            ::com::sun::star::lang::IllegalArgumentException,
+            ::com::sun::star::container::ElementExistException);
+    virtual void SAL_CALL removeContentOrStylesFile(
+            const ::rtl::OUString & i_rFileName)
+        throw (::com::sun::star::uno::RuntimeException,
+            ::com::sun::star::lang::IllegalArgumentException,
+            ::com::sun::star::container::NoSuchElementException);
+
+    virtual void SAL_CALL loadMetadataFromStorage(
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::embed::XStorage > & i_xStorage,
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::rdf::XURI > & i_xBaseURI,
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::task::XInteractionHandler> & i_xHandler)
+        throw (::com::sun::star::uno::RuntimeException,
+            ::com::sun::star::lang::IllegalArgumentException,
+            ::com::sun::star::lang::WrappedTargetException);
+    virtual void SAL_CALL storeMetadataToStorage(
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::embed::XStorage > & i_xStorage)
+        throw (::com::sun::star::uno::RuntimeException,
+            ::com::sun::star::lang::IllegalArgumentException,
+            ::com::sun::star::lang::WrappedTargetException);
+    virtual void SAL_CALL loadMetadataFromMedium(
+            const ::com::sun::star::uno::Sequence<
+                ::com::sun::star::beans::PropertyValue > & i_rMedium)
+        throw (::com::sun::star::uno::RuntimeException,
+            ::com::sun::star::lang::IllegalArgumentException,
+            ::com::sun::star::lang::WrappedTargetException);
+    virtual void SAL_CALL storeMetadataToMedium(
+            const ::com::sun::star::uno::Sequence<
+                ::com::sun::star::beans::PropertyValue > & i_rMedium)
+        throw (::com::sun::star::uno::RuntimeException,
+            ::com::sun::star::lang::IllegalArgumentException,
+            ::com::sun::star::lang::WrappedTargetException);
+
+
+    //____________________________________________________________________________________________________
     //  SfxListener
     //____________________________________________________________________________________________________
 
@@ -1369,6 +1476,7 @@ public:
 
     /** returns true if someone added a XEventListener to this XEventBroadcaster */
     sal_Bool hasEventListeners() const;
+
 
 protected:
 

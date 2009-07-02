@@ -38,9 +38,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <xmloff/uniref.hxx>
 #include <xmloff/xmlexppr.hxx>
-#ifndef _XMLOFF_STYLEEXP_HXX
 #include <xmloff/styleexp.hxx>
-#endif
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/SinglePropertySetInfoCache.hxx>
 #include <xmloff/XMLStringVector.hxx>
@@ -264,6 +262,12 @@ public:
         const ::com::sun::star::uno::Reference <
                 ::com::sun::star::beans::XPropertySetInfo > & rPropSetInfo );
 
+    void exportTextRangeEnumeration(
+        const ::com::sun::star::uno::Reference <
+            ::com::sun::star::container::XEnumeration > & rRangeEnum,
+        sal_Bool bAutoStyles, sal_Bool bProgress,
+        sal_Bool bPrvChrIsSpc = sal_True );
+
 protected:
 
     sal_Int32 addTextFrameAttributes(
@@ -316,16 +320,11 @@ protected:
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::text::XTextContent > & rTextContent,
         sal_Bool bAutoStyles, sal_Bool bProgress );
-    void exportTextRangeEnumeration(
-        const ::com::sun::star::uno::Reference <
-            ::com::sun::star::container::XEnumeration > & rRangeEnum,
-        sal_Bool bAutoStyles, sal_Bool bProgress,
-        sal_Bool bPrvChrIsSpc = sal_True  );
 
     void exportTextField(
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::text::XTextRange > & rTextRange,
-        sal_Bool bAutoStyles );
+        sal_Bool bAutoStyles, sal_Bool bProgress );
 
     void exportAnyTextFrame(
         const ::com::sun::star::uno::Reference <
@@ -483,6 +482,12 @@ protected:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet> & rPortionPropSet,
         sal_Bool bAutoStyles );
+
+    /// export a text:meta
+    void exportMeta(
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::beans::XPropertySet> & i_xMeta,
+        sal_Bool i_bAutoStyles, sal_Bool i_isProgress );
 
 public:
 

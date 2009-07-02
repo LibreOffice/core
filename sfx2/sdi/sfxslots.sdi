@@ -88,14 +88,6 @@ TypeLibFile( "sfxslots.tlb" )
         INT32       AutoReloadTime     MID_DOCINFO_AUTOLOADSECS;
         String      AutoReloadURL      MID_DOCINFO_AUTOLOADURL;
         String      AutoReloadFrame    MID_DOCINFO_DEFAULTTARGET;
-        String      Field1Title        MID_DOCINFO_FIELD1TITLE;
-        String      Field2Title        MID_DOCINFO_FIELD2TITLE;
-        String      Field3Title        MID_DOCINFO_FIELD3TITLE;
-        String      Field4Title        MID_DOCINFO_FIELD4TITLE;
-        String      Field1             MID_DOCINFO_FIELD1;
-        String      Field2             MID_DOCINFO_FIELD2;
-        String      Field3             MID_DOCINFO_FIELD3;
-        String      Field4             MID_DOCINFO_FIELD4;
     };
     item DocInfo SfxDocumentInfoItem;
 

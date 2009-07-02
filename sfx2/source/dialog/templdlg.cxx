@@ -79,7 +79,6 @@
 #include "imgmgr.hxx"
 #include "helpid.hrc"
 #include "appdata.hxx"
-#include "objshimp.hxx"
 #include <sfx2/viewfrm.hxx>
 
 #include <comphelper/configurationhelper.hxx>
@@ -883,7 +882,7 @@ void SfxCommonTemplateDialog_Impl::ReadResource()
 
     nActFilter = pCurObjShell ? static_cast< USHORT >( LoadFactoryStyleFilter( pCurObjShell ) ) : 0xFFFF;
     if ( pCurObjShell && 0xFFFF == nActFilter )
-        nActFilter = pCurObjShell->pImp->nStyleFilter;
+        nActFilter = pCurObjShell->GetAutoStyleFilterIndex();
 
         // Einfuegen in die Toolbox
         // umgekehrte Reihenfolge, da immer vorne eingefuegt wird.
@@ -1504,7 +1503,7 @@ void SfxCommonTemplateDialog_Impl::Update_Impl()
          CheckItem( nActFamily, TRUE );
          nActFilter = static_cast< USHORT >( LoadFactoryStyleFilter( pDocShell ) );
          if ( 0xFFFF == nActFilter )
-            nActFilter = pDocShell->pImp->nStyleFilter;
+            nActFilter = pDocShell->GetAutoStyleFilterIndex();
 
          nAppFilter = pItem->GetValue();
          if(!pTreeBox)
@@ -1674,7 +1673,7 @@ void SfxCommonTemplateDialog_Impl::FilterSelect(
         SfxObjectShell *pDocShell = pViewFrame->GetObjectShell();
         if (pDocShell)
         {
-            pDocShell->Get_Impl()->nStyleFilter = nActFilter;
+            pDocShell->SetAutoStyleFilterIndex(nActFilter);
             SaveFactoryStyleFilter( pDocShell, nActFilter );
         }
 
