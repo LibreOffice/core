@@ -32,6 +32,7 @@ distclean-local:
 install-data-local: $(stampdir)/all
 	$(MKDIR_P) $(DESTDIR)$(ooo_prefix)
 	$(MKDIR_P) $(DESTDIR)$(pkgconfigdir)
+	cp -r $(top_builddir)/instsetoo_native $(DESTDIR)$(ooo_prefix)/
 	cp -r $(top_builddir)/solenv $(DESTDIR)$(ooo_prefix)/
 	cp -r $(top_builddir)/solver $(DESTDIR)$(ooo_prefix)/
 	$(INSTALL_DATA) $(top_builddir)/Linux*Env.Set.sh $(DESTDIR)$(solverdir)/
