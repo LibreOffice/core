@@ -796,12 +796,21 @@ sub install_simple ($$$$$$)
         $sourcepath =~ s/\$\$/\$/;
 
         push @lines, "$destination\n";
+
+        chomp( my $instdirname = `dirname "$destdir$destination"` );
+        if ( ! -d $instdirname ) {
+            my $infoline = "WARNING: $instdirname was not created, creating it now.";
+            push( @installer::globals::logfileinfo, $infoline);
+            # printf "instdirname == $instdirname\n";
+            `mkdir -p "$instdirname"`;
+        }
+
         # printf "cp $sourcepath $destdir$destination\n";
         copy ("$sourcepath", "$destdir$destination") || die "Can't copy file: $sourcepath -> $destdir$destination $!";
         my $sourcestat = stat($sourcepath);
         utime ($sourcestat->atime, $sourcestat->mtime, "$destdir$destination");
         chmod (oct($unixrights), "$destdir$destination") || die "Can't change permissions: $!";
-         push @lines, "$destination\n";
+        push @lines, "$destination\n";
     }
 
     for ( my $i = 0; $i <= $#{$linksarray}; $i++ )
@@ -2307,7 +2316,10 @@ sub add_variables_from_inc_to_hashref
         $includefilename =~ s/^\s*//;
         $includefilename =~ s/\s*$//;
         $includefilenameref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$includefilename, $includepatharrayref, 1);
-        if ( $$includefilenameref eq "" ) { installer::exiter::exit_program("Include file $includefilename not found!\nADD_INCLUDE_FILES = $allvariables->{'ADD_INCLUDE_FILES'}", "add_variables_from_inc_to_hashref"); }
+        if ( $$includefilenameref eq "" ) {
+            next if ( $installer::globals::split );
+            installer::exiter::exit_program("Include file $includefilename not found!\nADD_INCLUDE_FILES = $allvariables->{'ADD_INCLUDE_FILES'}", "add_variables_from_inc_to_hashref");
+        }
 
         $infoline = "Including inc file: $$includefilenameref \n";
         push( @installer::globals::globallogfileinfo, $infoline);
@@ -2951,7 +2963,10 @@ sub set_spellcheckerlanguages
 
     my $spellcheckfileref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$spellcheckfilename, "", 1);
 
-    if ($$spellcheckfileref eq "") { installer::exiter::exit_program("ERROR: Could not find $spellcheckfilename!", "set_spellcheckerlanguages"); }
+    if ($$spellcheckfileref eq "") {
+        return if ( $installer::globals::split );
+        installer::exiter::exit_program("ERROR: Could not find $spellcheckfilename!", "set_spellcheckerlanguages");
+    }
 
     my $infoline = "Using spellchecker file: $$spellcheckfileref \n";
     push( @installer::globals::globallogfileinfo, $infoline);

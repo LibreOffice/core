@@ -102,6 +102,7 @@ BEGIN
 
     $destdir = "";
     $rootpath = "";
+    $split = 0;
 
     $required_dotnet_version = "2.0.0.0";
     $productextension = "";
@@ -549,6 +550,8 @@ BEGIN
     if ( $plat =~ /linux/i ) { $islinux = 1; }
     if ( $plat =~ /solaris/i ) { $issolaris = 1; }
     if ( $plat =~ /darwin/i ) { $ismacosx = 1; }
+
+    $split = 1 if ( defined $ENV{'BUILDSOLVER'} );
 
     # ToDo: Needs to be expanded for additional platforms
 

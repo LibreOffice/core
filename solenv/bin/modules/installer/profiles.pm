@@ -91,20 +91,36 @@ sub sorting_profile
 # Adding the newly created profile into the file list
 #####################################################################
 
+sub create_blank_profile
+{
+    my $profile = shift;
+
+    if ( !$installer::globals::split ) {
+        # Taking the base data from the "gid_File_Lib_Vcl"
+        my $vclgid = "gid_File_Lib_Vcl";
+        if ( $allvariables->{'GLOBALFILEGID'} ) { $vclgid = $allvariables->{'GLOBALFILEGID'}; }
+        my $vclfile = installer::existence::get_specified_file($filesarrayref, $vclgid);
+
+        # copying all base data
+        installer::converter::copy_item_object($vclfile, $profile);
+    }
+    else {
+        # hard-coded defaults instead
+        $profile->{'ismultilingual'} = 0;
+        $profile->{'haslanguagemodule'} = 0;
+        $profile->{'specificlanguage'} = '';
+        $profile->{'Styles'} = '(PACKED,UNO_COMPONENT)';
+        $profile->{'RegistryID'} = 'gid_Starregistry_Services_Rdb';
+    }
+}
+
 sub add_profile_into_filelist
 {
     my ($filesarrayref, $oneprofile, $completeprofilename, $allvariables) = @_;
 
     my %profile = ();
 
-    # Taking the base data from the "gid_File_Lib_Vcl"
-
-    my $vclgid = "gid_File_Lib_Vcl";
-    if ( $allvariables->{'GLOBALFILEGID'} ) { $vclgid = $allvariables->{'GLOBALFILEGID'}; }
-    my $vclfile = installer::existence::get_specified_file($filesarrayref, $vclgid);
-
-    # copying all base data
-    installer::converter::copy_item_object($vclfile, \%profile);
+    create_blank_profile (\%profile);
 
     # and overriding all new values
 

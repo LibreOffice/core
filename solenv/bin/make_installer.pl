@@ -305,6 +305,11 @@ if ( $$includepathref eq "" )
 
 my $includepatharrayref = installer::converter::convert_stringlist_into_array($includepathref, ",");
 if ( $installer::globals::globallogging ) { installer::files::save_file($loggingdir . "allpatharray1.log" ,$includepatharrayref); }
+if ( defined $ENV{'BUILDSOLVER'} ) {
+    my $buildsolver = "$ENV{BUILDSOLVER}/$ENV{UPD}/$ENV{INPATH}";
+    push @{$includepatharrayref}, "$buildsolver/bin";
+    push @{$includepatharrayref}, "$buildsolver/lib";
+}
 
 installer::ziplist::replace_all_variables_in_pathes($includepatharrayref, $pathvariableshashref);
 if ( $installer::globals::globallogging ) { installer::files::save_file($loggingdir . "allpatharray2.log" ,$includepatharrayref); }

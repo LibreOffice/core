@@ -1309,6 +1309,8 @@ sub remove_Files_Without_Sourcedirectory
 
             if ( ! ( $styles =~ /\bSTARREGISTRY\b/ ))   # StarRegistry files will be created later
             {
+                next if ( $installer::globals::split); # immediately when doing the split build install
+
                 my $filename = $onefile->{'Name'};
                 $infoline = "ERROR: Removing file $filename from file list.\n";
                 push( @installer::globals::logfileinfo, $infoline);

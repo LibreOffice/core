@@ -506,7 +506,10 @@ sub prepare_classpath_for_java_registration
 
         my $jarfileref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$filename, $includepatharrayref, 1);
 
-        if ( $$jarfileref eq "" ) { installer::exiter::exit_program("ERROR: Could not find file $filename for registering java components!", "prepare_classpath_for_java_registration"); }
+        if ( $$jarfileref eq "" ) {
+            next if ( $installer::globals::split );
+            installer::exiter::exit_program("ERROR: Could not find file $filename for registering java components!", "prepare_classpath_for_java_registration");
+        }
 
         my $oldclasspathstring = "";
         if ( $ENV{'CLASSPATH'} ) { $oldclasspathstring = $ENV{'CLASSPATH'}; }
