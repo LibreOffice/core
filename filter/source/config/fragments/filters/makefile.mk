@@ -52,10 +52,10 @@ ALLTAR: $(ALL_UI_FILTERS)
 .IF "$(WITH_LANG)"!=""
 $(DIR_LOCFRAG)$/filters$/%.xcu : %.xcu
     -$(MKDIRHIER) $(@:d)
-    $(WRAPCMD) $(CFGEX) -p $(PRJNAME) -i $(@:f) -o $@ -m localize.sdf -l all
+    $(WRAPCMD) $(CFGEX) -p $(PRJNAME) -i $(@:f) -o $@ -m $(LOCALIZESDF) -l all
 
 .IF "$(ALL_UI_FILTERS)"!=""
-$(ALL_UI_FILTERS) : localize.sdf
+$(ALL_UI_FILTERS) : $(LOCALIZESDF)
 .ENDIF          # "$(ALL_UI_FILTERS)"!=""
 
 .ENDIF 			# "$(WITH_LANG)"!=""

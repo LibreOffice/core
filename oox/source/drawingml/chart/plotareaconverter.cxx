@@ -172,15 +172,15 @@ void AxesSetConverter::convertFromModel( const Reference< XDiagram >& rxDiagram,
             to the data provider attached to the chart document. */
         if( xCoordSystem.is() )
         {
-            // create missing axis models
+            // convert all axes (create missing axis models)
             ModelRef< AxisModel > xXAxis = lclGetOrCreateAxis( mrModel.maAxes, API_X_AXIS, rFirstTypeGroup.getTypeInfo().mbCategoryAxis ? C_TOKEN( catAx ) : C_TOKEN( valAx ) );
             ModelRef< AxisModel > xYAxis = lclGetOrCreateAxis( mrModel.maAxes, API_Y_AXIS, C_TOKEN( valAx ) );
 
-            // convert all axes
             AxisConverter aXAxisConv( *this, *xXAxis );
             aXAxisConv.convertFromModel( xCoordSystem, rFirstTypeGroup, xYAxis.get(), nAxesSetIdx, API_X_AXIS );
             AxisConverter aYAxisConv( *this, *xYAxis );
             aYAxisConv.convertFromModel( xCoordSystem, rFirstTypeGroup, xXAxis.get(), nAxesSetIdx, API_Y_AXIS );
+
             if( rFirstTypeGroup.isDeep3dChart() )
             {
                 ModelRef< AxisModel > xZAxis = lclGetOrCreateAxis( mrModel.maAxes, API_Z_AXIS, C_TOKEN( serAx ) );

@@ -32,7 +32,10 @@
 #define OOX_HELPER_HELPER_HXX
 
 #include <algorithm>
+#include <limits>
+#include <boost/static_assert.hpp>
 #include <osl/endian.h>
+#include <rtl/math.hxx>
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
 #include <string.h>
@@ -77,6 +80,23 @@ template< typename ReturnType, typename Type >
 inline ReturnType getLimitedValue( Type nValue, Type nMin, Type nMax )
 {
     return static_cast< ReturnType >( ::std::min( ::std::max( nValue, nMin ), nMax ) );
+}
+
+template< typename ReturnType, typename Type >
+inline ReturnType getIntervalValue( Type nValue, Type nBegin, Type nEnd )
+{
+    BOOST_STATIC_ASSERT( ::std::numeric_limits< Type >::is_integer );
+    Type nInterval = nEnd - nBegin;
+    Type nCount = (nValue < nBegin) ? -((nBegin - nValue - 1) / nInterval + 1) : ((nValue - nBegin) / nInterval);
+    return static_cast< ReturnType >( nValue - nCount * nInterval );
+}
+
+template< typename ReturnType >
+inline ReturnType getDoubleIntervalValue( double fValue, double fBegin, double fEnd )
+{
+    double fInterval = fEnd - fBegin;
+    double fCount = (fValue < fBegin) ? -(::rtl::math::approxFloor( (fBegin - fValue - 1.0) / fInterval ) + 1.0) : ::rtl::math::approxFloor( (fValue - fBegin) / fInterval );
+    return static_cast< ReturnType >( fValue - fCount * fInterval );
 }
 
 // Read from bitfields --------------------------------------------------------

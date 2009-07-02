@@ -36,7 +36,6 @@
 #include <ooxml/resourceids.hxx>
 #include <tools/color.hxx>
 #include <rtl/ustrbuf.hxx>
-#   include <svx/paperinf.hxx>      //lA0Width...
 #include <algorithm>
 #include <functional>
 
@@ -484,56 +483,6 @@ sal_Int32 ConvertColor(sal_Int32 nWordColor)
         t(static_cast<sal_uInt8>((nWordColor>>24)&0xFF));
     sal_Int32 nRet = (t<<24) + (r<<16) + (g<<8) + b;
     return nRet;
-}
-/*-- 12.12.2006 08:59:42---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-class closeenough : public std::unary_function<long, bool>
-{
-private:
-    long mnValue;
-    long mnWriggleRoom;
-public:
-    closeenough(long nValue, long nWriggleRoom)
-        : mnValue(nValue), mnWriggleRoom(nWriggleRoom) {}
-    bool operator()(long nTest) const
-    {
-        return (
-                (mnValue - nTest < mnWriggleRoom) &&
-                (mnValue - nTest > -mnWriggleRoom)
-               );
-    }
-};
-/*-- 12.12.2006 08:59:42---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-sal_Int32 SnapPageDimension( sal_Int32 nVal )
-{
-    static const long aSizes[] =
-    {
-        lA0Width, lA0Height, lA1Width, lA2Width, lA3Width, lA4Width,
-        lA5Width, lB4Width, lB4Height, lB5Width, lB6Width, lC4Width,
-        lC4Height, lC5Width, lC6Width, lC65Width, lC65Height, lDLWidth,
-        lDLHeight, lJISB4Width, lJISB4Height, lJISB5Width, lJISB6Width,
-        lLetterWidth, lLetterHeight, lLegalHeight, lTabloidWidth,
-        lTabloidHeight, lDiaWidth, lDiaHeight, lScreenWidth,
-        lScreenHeight, lAWidth, lAHeight, lBHeight, lCHeight, lDHeight,
-        lEHeight, lExeWidth, lExeHeight, lLegal2Width, lLegal2Height,
-        lCom675Width, lCom675Height, lCom9Width, lCom9Height,
-        lCom10Width, lCom10Height, lCom11Width, lCom11Height,
-        lCom12Width, lMonarchHeight, lKai16Width, lKai16Height,
-        lKai32Width, lKai32BigWidth, lKai32BigHeight
-    };
-
-    const long nWriggleRoom = 5;
-    const long *pEnd = aSizes + sizeof(aSizes) / sizeof(aSizes[0]);
-    const long *pEntry =
-        std::find_if(aSizes, pEnd, closeenough(nVal, nWriggleRoom));
-
-    if (pEntry != pEnd)
-        nVal = *pEntry;
-
-    return nVal;
 }
 /*-- 27.06.2007 13:42:32---------------------------------------------------
 
