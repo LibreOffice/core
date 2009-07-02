@@ -282,6 +282,8 @@ void SwWW8Writer::ExportPoolItemsToCHP(sw::PoolItems &rItems, USHORT nScript)
     {
         const SfxPoolItem *pItem = aI->second;
         USHORT nWhich = pItem->Which();
+        if (nWhich < RES_CHRATR_BEGIN || nWhich >= RES_TXTATR_END)
+            continue;
         if (FnAttrOut pOut = aWW8AttrFnTab[nWhich - RES_CHRATR_BEGIN])
         {
             if (!isCHRATR(nWhich) && !isTXTATR(nWhich))
@@ -343,17 +345,17 @@ void SwWW8Writer::Out_SfxItemSet(const SfxItemSet& rSet, bool bPapFmt,
         if (bChpFmt)
             ExportPoolItemsToCHP(aItems, nScript);
 
-        sw::cPoolItemIter aEnd = aItems.end();
-        for (sw::cPoolItemIter aI = aItems.begin(); aI != aEnd; ++aI)
+        if (bPapFmt)
         {
-            pItem = aI->second;
-            USHORT nWhich = pItem->Which();
-            pOut = aWW8AttrFnTab[nWhich - RES_CHRATR_BEGIN];
-            if( 0 != pOut && (!bPapFmt || RES_PARATR_NUMRULE != nWhich ))
+            sw::cPoolItemIter aEnd = aItems.end();
+            for (sw::cPoolItemIter aI = aItems.begin(); aI != aEnd; ++aI)
             {
-                bool bPap = nWhich >= RES_PARATR_BEGIN
-                            && nWhich < RES_FRMATR_END;
-                if (bPapFmt && bPap)
+                pItem = aI->second;
+                USHORT nWhich = pItem->Which();
+                if (nWhich < RES_PARATR_BEGIN || nWhich >= RES_FRMATR_END || nWhich == RES_PARATR_NUMRULE)
+                    continue;
+                pOut = aWW8AttrFnTab[nWhich - RES_CHRATR_BEGIN];
+                if( 0 != pOut )
                     (*pOut)(*this, *pItem);
             }
         }
@@ -1768,6 +1770,9 @@ WW8_WrPlcFld* SwWW8Writer::CurrentFieldPlc() const
             break;
         case TXT_EDN:
             pFldP = pFldEdn;
+            break;
+        case TXT_ATN:
+            pFldP = pFldAtn;
             break;
         case TXT_TXTBOX:
             pFldP = pFldTxtBxs;
@@ -4958,6 +4963,26 @@ static Writer& OutWW8_SwTabStop(Writer& rWrt, const SfxPoolItem& rHt)
     const SvxTabStopItem & rTStops = (const SvxTabStopItem&)rHt;
     const SfxPoolItem* pLR = rWW8Wrt.HasItem( RES_LR_SPACE );
     long nCurrentLeft = pLR ? ((const SvxLRSpaceItem*)pLR)->GetTxtLeft() : 0;
+
+
+    // --> FLR 2009-03-17 #i100264#
+    if (rWW8Wrt.bStyDef
+        && rWW8Wrt.pCurrentStyle!=NULL
+        && rWW8Wrt.pCurrentStyle->DerivedFrom()!=NULL)
+    {
+        SvxTabStopItem aTabs(0, 0, SVX_TAB_ADJUST_DEFAULT, RES_PARATR_TABSTOP);
+        const SwFmt *pParentStyle=rWW8Wrt.pCurrentStyle->DerivedFrom();
+        const SvxTabStopItem* pParentTabs=HasItem<SvxTabStopItem>(pParentStyle->GetAttrSet(), RES_PARATR_TABSTOP);
+        if (pParentTabs)
+        {
+            aTabs.Insert(pParentTabs);
+        }
+
+        OutWW8_SwTabStopDelAdd(rWW8Wrt, aTabs, 0, rTStops, 0);
+        return rWrt;
+    }
+    // <--
+
 
     // StyleDef -> "einfach" eintragen || keine Style-Attrs -> dito
     const SvxTabStopItem* pStyleTabs = 0;

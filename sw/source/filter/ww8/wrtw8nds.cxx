@@ -1080,6 +1080,12 @@ void WW8_SwAttrIter::OutSwTOXMark(const SwTOXMark& rAttr,
     case TOX_INDEX:
         if( rAttr.GetPrimaryKey().Len() )
         {
+            if ( rAttr.GetSecondaryKey( ).Len( ) )
+            {
+                sTxt.Insert( ':', 0 );
+                sTxt.Insert( rAttr.GetSecondaryKey(), 0 );
+            }
+
             sTxt.Insert( ':', 0 );
             sTxt.Insert( rAttr.GetPrimaryKey(), 0 );
         }
