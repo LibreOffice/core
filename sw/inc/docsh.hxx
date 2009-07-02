@@ -299,6 +299,8 @@ public:
                                 GetController();
 
     SfxInPlaceClient* GetIPClient( const ::svt::EmbeddedObjectRef& xObjRef );
+
+    virtual const ::sfx2::IXmlIdRegistry* GetXmlIdRegistry() const;
 };
 
 class Graphic;

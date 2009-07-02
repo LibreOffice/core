@@ -247,6 +247,9 @@ SwCntntNode* SwTxtNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
 
     SwTxtNode* pTxtNd = pDoc->GetNodes().MakeTxtNode( rIdx, pColl );
 
+    // METADATA: register copy
+    pTxtNd->RegisterAsCopyOf(*pCpyTxtNd);
+
     // kopiere Attribute/Text
     if( !pCpyAttrNd->HasSwAttrSet() )
         // wurde ein AttrSet fuer die Numerierung angelegt, so loesche diesen!

@@ -90,22 +90,14 @@
 #include <tools/link.hxx>
 
 #include <IDocumentMarkAccess.hxx>
+#include <sfx2/Metadatable.hxx>
+
 
 class SwUnoCrsr;
 class SwCursor;
 class SwFmtFtn;
 class SwFmtRefMark;
 class GetCurTxtFmtColl;
-/* -----------------------------01.12.00 18:09--------------------------------
-
- ---------------------------------------------------------------------------*/
-class SwParaSelection
-{
-    SwUnoCrsr* pUnoCrsr;
-public:
-    SwParaSelection(SwUnoCrsr* pCrsr);
-    ~SwParaSelection();
-};
 
 /* -----------------29.04.98 07:35-------------------
  *
@@ -751,13 +743,11 @@ class SW_DLLPUBLIC SwXTextRange : public cppu::WeakImplHelper8
     void    DeleteAndInsert(const String& rText) throw( ::com::sun::star::uno::RuntimeException );
 protected:
     virtual ~SwXTextRange();
-public:
-    SwXTextRange(SwPaM& rPam, const ::com::sun::star::uno::Reference< ::com::sun::star::text::XText > & rxParent);
-    SwXTextRange(SwFrmFmt& rFmt, SwPaM& rPam);
-    SwXTextRange(SwFrmFmt& rTblFmt, SwTableBox& rTblBox, SwPaM& rPam);
-    SwXTextRange(SwFrmFmt& rTblFmt, const SwStartNode& rStartNode, SwPaM& rPam);
-    SwXTextRange(SwFrmFmt& rTblFmt);
 
+public:
+    SwXTextRange(SwPaM& rPam, const ::com::sun::star::uno::Reference< ::com::sun::star::text::XText > & rxParent, enum RangePosition eRange = RANGE_IN_TEXT);
+    // only for RANGE_IS_TABLE
+    SwXTextRange(SwFrmFmt& rTblFmt);
 
     TYPEINFO();
 
@@ -822,6 +812,8 @@ public:
     static ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > CreateTextRangeFromPosition(
         SwDoc* pDoc,
         const SwPosition& rPos, const SwPosition* pMark);
+    static ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >  CreateParentXText(SwDoc* pDoc,
+                        const SwPosition& rPos);
 };
 
 /* -----------------15.05.98 08:29-------------------
@@ -1146,8 +1138,9 @@ public:
 /*-----------------07.04.98 08:15-------------------
 
 --------------------------------------------------*/
-class SwXParagraph : public cppu::WeakImplHelper10
+class SwXParagraph : public cppu::ImplInheritanceHelper10
 <
+    ::sfx2::MetadatableMixin,
     ::com::sun::star::beans::XTolerantMultiPropertySet,
     ::com::sun::star::beans::XMultiPropertySet,
     ::com::sun::star::text::XTextRange,
@@ -1181,8 +1174,9 @@ protected:
     virtual ~SwXParagraph();
 public:
     SwXParagraph();
-    SwXParagraph(SwXText* pParent, SwUnoCrsr* pCrsr, sal_Int32 nSelStart = -1, sal_Int32 nSelEnd = - 1);
+    SwXParagraph(::com::sun::star::uno::Reference< ::com::sun::star::text::XText > const & i_xParent, SwTxtNode * i_pTxtNode, sal_Int32 nSelStart = -1, sal_Int32 nSelEnd = - 1);
 
+    TYPEINFO();
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 
@@ -1249,12 +1243,18 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration >  SAL_CALL createContentEnumeration(const rtl::OUString& aServiceName) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getAvailableServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
 
+    //MetadatableMixin
+    virtual ::sfx2::Metadatable* GetCoreObject();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
+        GetModel();
+
     //SwClient
     virtual void    Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
 
     BOOL            IsDescriptor() const {return m_bIsDescriptor;}
 
-    SwUnoCrsr*      GetCrsr(){return (SwUnoCrsr*)GetRegisteredIn();}
+    const SwTxtNode * GetTxtNode() const;
+          SwTxtNode * GetTxtNode();
 
     static BOOL getDefaultTextContentValue(::com::sun::star::uno::Any& rAny,
         const rtl::OUString& rPropertyName, USHORT nWID = 0);
@@ -1283,8 +1283,10 @@ class SwXParaFrameEnumeration : public cppu::WeakImplHelper2
     SwUnoCrsr*      GetCrsr(){return (SwUnoCrsr*)GetRegisteredIn();}
     BOOL            CreateNextObject();
     void            FillFrame(SwUnoCrsr& rUnoCrsr);
+
 public:
-    SwXParaFrameEnumeration(const SwUnoCrsr& rUnoCrsr, sal_uInt8 nParaFrameMode, SwFrmFmt* pFmt = 0);
+    SwXParaFrameEnumeration(const SwPaM& rPaM,
+        sal_uInt8 nParaFrameMode, SwFrmFmt* pFmt = 0);
     ~SwXParaFrameEnumeration();
 
     //XEnumeration

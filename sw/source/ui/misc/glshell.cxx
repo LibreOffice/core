@@ -49,12 +49,8 @@
 #include <sfx2/viewfrm.hxx>
 #include <uitool.hxx>
 #include <wrtsh.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
-#ifndef _GLSHELL_HXX
 #include <glshell.hxx>
-#endif
 #include <doc.hxx>
 #include <glosdoc.hxx>
 #include <shellio.hxx>
@@ -72,12 +68,8 @@
 
 #define SwWebGlosDocShell
 #define SwGlosDocShell
-#ifndef _ITEMDEF_HXX
-#include <itemdef.hxx>
-#endif
-#ifndef _SWSLOTS_HXX
+#include <sfx2/msg.hxx>
 #include <swslots.hxx>
-#endif
 
 using namespace ::com::sun::star;
 

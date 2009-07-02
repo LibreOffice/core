@@ -39,9 +39,7 @@
 #endif
 #include <hintids.hxx>
 #include <tools/urlobj.hxx>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <svtools/stritem.hxx>
 #include <svtools/whiter.hxx>
 #include <svtools/urihelper.hxx>
@@ -64,21 +62,15 @@
 #include <svx/grfflt.hxx>
 #include <svx/tbxcolor.hxx>
 #include <fmturl.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <wrtsh.hxx>
 #include <viewopt.hxx>
 #include <swmodule.hxx>
 #include <frmatr.hxx>
 #include <swundo.hxx>
 #include <uitool.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
-#ifndef _GRFSH_HXX
 #include <grfsh.hxx>
-#endif
 #include <frmmgr.hxx>
 #include <frmdlg.hxx>
 #include <frmfmt.hxx>
@@ -90,7 +82,7 @@
 #include <popup.hrc>
 
 #define SwGrfShell
-#include "itemdef.hxx"
+#include <sfx2/msg.hxx>
 #include "swslots.hxx"
 
 #include "swabstdlg.hxx"

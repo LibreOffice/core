@@ -52,15 +52,6 @@ class SwNodeIndex;
     }
 
 
-#define FOREACHCURSOR_START(pCURSH) \
-    {\
-        SwShellCrsr *_pStartCrsr = *(pCURSH)->GetSwCrsr(), *__pStartCrsr = _pStartCrsr; \
-        do {
-
-#define FOREACHCURSOR_END() \
-        } while( (_pStartCrsr=*(SwCursor*)_pStartCrsr->GetNext()) != __pStartCrsr ); \
-    }
-
 
 struct SwPamRange
 {

@@ -150,30 +150,6 @@ uno::Sequence< sal_Int8 >  CreateUnoTunnelId()
     Hilfsklassen
 ****************************************************************************/
 
-SwParaSelection::SwParaSelection(SwUnoCrsr* pCrsr) :
-    pUnoCrsr(pCrsr)
-{
-    if(pUnoCrsr->HasMark())
-        pUnoCrsr->DeleteMark();
-    // steht er schon am Anfang?
-    if(pUnoCrsr->GetPoint()->nContent != 0)
-        pUnoCrsr->MovePara(fnParaCurr, fnParaStart);
-    // oder gleichzeitig am Ende?
-    if(pUnoCrsr->GetPoint()->nContent != pUnoCrsr->GetCntntNode()->Len())
-    {
-        pUnoCrsr->SetMark();
-        pUnoCrsr->MovePara(fnParaCurr, fnParaEnd);
-    }
-}
-
-SwParaSelection::~SwParaSelection()
-{
-    if(pUnoCrsr->GetPoint()->nContent != 0)
-    {
-        pUnoCrsr->DeleteMark();
-        pUnoCrsr->MovePara(fnParaCurr, fnParaStart);
-    }
-}
 /* -----------------13.05.98 12:15-------------------
  *
  * --------------------------------------------------*/

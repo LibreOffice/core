@@ -60,14 +60,12 @@
 #include "drwbassh.hxx"
 #include "drformsh.hxx"
 #include <svtools/urihelper.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <sfx2/docfile.hxx>
 #include <docsh.hxx>
 
 #define SwDrawFormShell
-#include "itemdef.hxx"
+#include <sfx2/msg.hxx>
 #include "swslots.hxx"
 
 #include <unomid.h>

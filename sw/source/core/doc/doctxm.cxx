@@ -195,12 +195,12 @@ void SwDoc::Delete( const SwTOXMark* pTOXMark )
     {
         // fuers Undo die Attribute sichern
         ClearRedo();
-        SwUndoRstAttr* pUndo = new SwUndoRstAttr( *this, SwPosition( rTxtNd,
-                            SwIndex( &rTxtNd, *pTxtTOXMark->GetStart() ) ),
-                                    RES_TXTATR_TOXMARK );
+        SwUndoResetAttr* pUndo = new SwUndoResetAttr(
+            SwPosition( rTxtNd, SwIndex( &rTxtNd, *pTxtTOXMark->GetStart() ) ),
+            RES_TXTATR_TOXMARK );
         AppendUndo( pUndo );
 
-        SwRegHistory aRHst( rTxtNd, pUndo->GetHistory() );
+        SwRegHistory aRHst( rTxtNd, &pUndo->GetHistory() );
         rTxtNd.GetpSwpHints()->Register( &aRHst );
         rTxtNd.Delete( const_cast<SwTxtTOXMark*>( pTxtTOXMark ), TRUE );
         if( rTxtNd.GetpSwpHints() )

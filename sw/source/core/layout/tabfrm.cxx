@@ -129,6 +129,7 @@ SwTabFrm::SwTabFrm( SwTable &rTab ):
         else
             delete pNew;
     }
+    ASSERT( Lower() && Lower()->IsRowFrm(), "SwTabFrm::SwTabFrm: No rows." );
 }
 
 SwTabFrm::SwTabFrm( SwTabFrm &rTab ) :

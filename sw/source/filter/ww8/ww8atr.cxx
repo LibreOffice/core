@@ -284,7 +284,7 @@ void SwWW8Writer::ExportPoolItemsToCHP(sw::PoolItems &rItems, USHORT nScript)
         USHORT nWhich = pItem->Which();
         if (FnAttrOut pOut = aWW8AttrFnTab[nWhich - RES_CHRATR_BEGIN])
         {
-            if (nWhich < RES_CHRATR_BEGIN || nWhich >= RES_TXTATR_END)
+            if (!isCHRATR(nWhich) && !isTXTATR(nWhich))
                 continue;
             if (SwWW8Writer::CollapseScriptsforWordOk(nScript, nWhich))
                 (*pOut)(*this, *pItem);

@@ -50,7 +50,7 @@
 
 // STATIC DATA -----------------------------------------------------------
 #define SwWebFrameShell
-#include "itemdef.hxx"
+#include <sfx2/msg.hxx>
 #include "swslots.hxx"
 
 

@@ -37,15 +37,9 @@
 #include <svtools/svstdarr.hxx>
 #endif
 
-#ifndef _DIALOG_HXX //autogen
 #include <vcl/dialog.hxx>
-#endif
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
-#endif
 #include <viewopt.hxx>
 #include <frmtool.hxx>
 #include <viscrs.hxx>
@@ -907,7 +901,11 @@ SwShellCrsr::SwShellCrsr( SwShellCrsr& rICrsr )
 
 SwShellCrsr::~SwShellCrsr() {}
 
-SwShellCrsr::operator SwShellCrsr* ()   { return this; }
+
+bool SwShellCrsr::IsReadOnlyAvailable() const
+{
+    return GetShell()->IsReadOnlyAvailable();
+}
 
 void SwShellCrsr::SetMark()
 {
@@ -936,7 +934,7 @@ void SwShellCrsr::Show()
     SwShellCrsr * pTmp = this;
     do {
         pTmp->SwSelPaintRects::Show();
-    } while( this != ( pTmp = (SwShellCrsr*)*(SwCursor*)(pTmp->GetNext() )));
+    } while( this != ( pTmp = dynamic_cast<SwShellCrsr*>(pTmp->GetNext()) ) );
 
     SHOWBOOKMARKS1( 1 )
     SHOWREDLINES1( 1 )
@@ -948,7 +946,6 @@ void SwShellCrsr::Show()
 void SwShellCrsr::Invalidate( const SwRect& rRect )
 {
     SwShellCrsr * pTmp = this;
-    SwCursor* pTmpCrsr;
 
     do
     {
@@ -963,9 +960,7 @@ void SwShellCrsr::Invalidate( const SwRect& rRect )
         do
         {
             pTmpRing = pTmpRing->GetNext();
-            pTmpCrsr = dynamic_cast<SwCursor*>(pTmpRing);
-            if ( pTmpCrsr )
-                pTmp = (SwShellCrsr*)*pTmpCrsr;
+            pTmp = dynamic_cast<SwShellCrsr*>(pTmpRing);
         }
         while ( !pTmp );
     }
@@ -981,7 +976,7 @@ void SwShellCrsr::Hide()
     SwShellCrsr * pTmp = this;
     do {
         pTmp->SwSelPaintRects::Hide();
-    } while( this != ( pTmp = (SwShellCrsr*)*(SwCursor*)(pTmp->GetNext() )));
+    } while( this != ( pTmp = dynamic_cast<SwShellCrsr*>(pTmp->GetNext()) ) );
 
     SHOWBOOKMARKS1( 2 )
     SHOWREDLINES1( 2 )
@@ -1086,9 +1081,6 @@ SwShellTableCrsr::SwShellTableCrsr( const SwCrsrShell& rCrsrSh,
 SwShellTableCrsr::~SwShellTableCrsr() {}
 
 void SwShellTableCrsr::SetMark()                { SwShellCrsr::SetMark(); }
-SwShellTableCrsr::operator SwShellCrsr* ()      { return this; }
-SwShellTableCrsr::operator SwTableCursor* ()    { return this; }
-SwShellTableCrsr::operator SwShellTableCrsr* () { return this; }
 
 SwCursor* SwShellTableCrsr::Create( SwPaM* pRing ) const
 {

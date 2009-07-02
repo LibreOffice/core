@@ -65,9 +65,7 @@
 #include <itrtxt.hxx>
 #include <breakit.hxx>
 #include <com/sun/star/i18n/WordType.hpp>
-#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/ScriptType.hdl>
-#endif
 
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star;
@@ -128,11 +126,11 @@ SwAttrIter::~SwAttrIter()
 
 SwTxtAttr *SwAttrIter::GetAttr( const xub_StrLen nPosition ) const
 {
-    if( pHints )
+    if ( pHints )
     {
-        for( MSHORT i = 0; i < pHints->Count(); ++i )
+        for ( USHORT i = 0; i < pHints->Count(); ++i )
         {
-            SwTxtAttr *pPos = pHints->GetHt(i);
+            SwTxtAttr *pPos = pHints->GetTextHint(i);
             xub_StrLen nStart = *pPos->GetStart();
             if( nPosition < nStart )
                 return 0;
@@ -669,7 +667,7 @@ void SwTxtNode::GetMinMaxSize( ULONG nIndex, ULONG& rMin, ULONG &rMax,
     SwAttrIter aIter( *(SwTxtNode*)this, aScriptInfo );
     xub_StrLen nIdx = 0;
     aIter.SeekAndChgAttrIter( nIdx, pOut );
-    xub_StrLen nLen = aText.Len();
+    xub_StrLen nLen = m_Text.Len();
     long nAktWidth = 0;
     MSHORT nAdd = 0;
     SwMinMaxArgs aArg( pOut, pSh, rMin, rMax, rAbsMin );
@@ -683,7 +681,7 @@ void SwTxtNode::GetMinMaxSize( ULONG nIndex, ULONG& rMin, ULONG &rMax,
         xub_Unicode cChar = CH_BLANK;
         nStop = nIdx;
         while( nStop < nLen && nStop < nNextChg &&
-               CH_TAB != ( cChar = aText.GetChar( nStop ) ) &&
+               CH_TAB != ( cChar = m_Text.GetChar( nStop ) ) &&
                CH_BREAK != cChar && CHAR_HARDBLANK != cChar &&
                CHAR_HARDHYPHEN != cChar && CHAR_SOFTHYPHEN != cChar &&
                !pHint )
@@ -692,8 +690,10 @@ void SwTxtNode::GetMinMaxSize( ULONG nIndex, ULONG& rMin, ULONG &rMax,
                 || ( 0 == ( pHint = aIter.GetAttr( nStop ) ) ) )
                 ++nStop;
         }
-        if( lcl_MinMaxString( aArg, aIter.GetFnt(), aText, nIdx, nStop ) )
+        if ( lcl_MinMaxString( aArg, aIter.GetFnt(), m_Text, nIdx, nStop ) )
+        {
             nAdd = 20;
+        }
         nIdx = nStop;
         aIter.SeekAndChgAttrIter( nIdx, pOut );
         switch( cChar )
@@ -933,7 +933,7 @@ USHORT SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd )
         // stop at special characters in [ nIdx, nNextChg ]
         while( nStop < nEnd && nStop < nNextChg )
         {
-            cChar = aText.GetChar( nStop );
+            cChar = m_Text.GetChar( nStop );
             if( CH_TAB == cChar || CH_BREAK == cChar ||
                 CHAR_HARDBLANK == cChar || CHAR_HARDHYPHEN == cChar ||
                 CHAR_SOFTHYPHEN == cChar ||
