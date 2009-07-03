@@ -5844,18 +5844,15 @@ void Window::UpdateSettings( const AllSettings& rSettings, BOOL bChild )
     ImplInitResolutionSettings();
 
     /* #i73785#
-    *  do not overwrite a NoWheelActionWithoutFocus with false
-    *  this looks kind of a hack, but NoWheelActionWithoutFocus
+    *  do not overwrite a WheelBehavior with false
+    *  this looks kind of a hack, but WheelBehavior
     *  is always a local change, not a system property,
-    *  so we can spare all our users the hassel of reacting on
+    *  so we can spare all our users the hassle of reacting on
     *  this in their respective DataChanged.
     */
-    if( aOldSettings.GetMouseSettings().GetNoWheelActionWithoutFocus() )
-    {
-        MouseSettings aSet( maSettings.GetMouseSettings() );
-        aSet.SetNoWheelActionWithoutFocus( TRUE );
-        maSettings.SetMouseSettings( aSet );
-    }
+    MouseSettings aSet( maSettings.GetMouseSettings() );
+    aSet.SetWheelBehavior( aOldSettings.GetMouseSettings().GetWheelBehavior() );
+    maSettings.SetMouseSettings( aSet );
 
     if( (nChangeFlags & SETTINGS_STYLE) && IsBackground() )
     {

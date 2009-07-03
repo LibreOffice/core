@@ -1049,7 +1049,13 @@ void UnoControl::draw( sal_Int32 x, sal_Int32 y ) throw(RuntimeException)
     }
 
     if ( xDrawPeerView.is() )
+    {
+    Reference< XVclWindowPeer > xWindowPeer;
+    xWindowPeer.set( xDrawPeer, UNO_QUERY );
+    if ( xWindowPeer.is() )
+        xWindowPeer->setDesignMode( mbDesignMode );
         xDrawPeerView->draw( x, y );
+    }
 
     if ( bDisposeDrawPeer )
         xDrawPeer->dispose();
@@ -1420,7 +1426,6 @@ void UnoControl::setDesignMode( sal_Bool bOn ) throw(RuntimeException)
         // remember this
         mbDesignMode = bOn;
         xWindow = xWindow.query( getPeer() );
-
         // dispose our current AccessibleContext, if we have one
         // (changing the design mode implies having a new implementation for this context,
         // so the old one must be declared DEFUNC)
