@@ -113,14 +113,22 @@ extern USHORT nEditAdjust;      //! Member an ViewData
 
 //==================================================================
 
+static sal_Unicode lcl_getSheetSeparator(ScDocument* pDoc)
+{
+    ScCompiler aComp(pDoc, ScAddress());
+    aComp.SetGrammar(pDoc->GetGrammar());
+    return aComp.GetNativeAddressSymbol(ScCompiler::Convention::SHEET_SEPARATOR);
+}
+
 void ScInputHandler::InitRangeFinder( const String& rFormula )
 {
     DeleteRangeFinder();
+    ScDocShell* pDocSh = pActiveViewSh->GetViewData()->GetDocShell();
+    ScDocument* pDoc = pDocSh->GetDocument();
+    const sal_Unicode cSheetSep = lcl_getSheetSeparator(pDoc);
 
     if ( !pActiveViewSh || !SC_MOD()->GetInputOptions().GetRangeFinder() )
         return;
-    ScDocShell* pDocSh = pActiveViewSh->GetViewData()->GetDocShell();
-    ScDocument* pDoc = pDocSh->GetDocument();
 
 //  String aDelimiters = pEngine->GetWordDelimiters();
     String aDelimiters = ScEditUtil::ModifyDelimiters(
@@ -129,7 +137,7 @@ void ScInputHandler::InitRangeFinder( const String& rFormula )
     xub_StrLen nColon = aDelimiters.Search(':');
     if ( nColon != STRING_NOTFOUND )
         aDelimiters.Erase( nColon, 1 );             // Delimiter ohne Doppelpunkt
-    xub_StrLen nDot = aDelimiters.Search('.');
+    xub_StrLen nDot = aDelimiters.Search(cSheetSep);
     if ( nDot != STRING_NOTFOUND )
         aDelimiters.Erase( nDot, 1 );               // Delimiter ohne Punkt
 
@@ -702,6 +710,9 @@ void ScInputHandler::ShowTipCursor()
     HideTip();
     HideTipBelow();
     EditView* pActiveView = pTopView ? pTopView : pTableView;
+    ScDocShell* pDocSh = pActiveViewSh->GetViewData()->GetDocShell();
+    const sal_Unicode cSep = ScCompiler::GetNativeSymbol(ocSep).GetChar(0);
+    const sal_Unicode cSheetSep = lcl_getSheetSeparator(pDocSh->GetDocument());
 
     if ( bFormulaMode && pActiveView && pFormulaDataPara && pEngine->GetParagraphCount() == 1 )
     {
@@ -764,8 +775,8 @@ void ScInputHandler::ShowTipCursor()
                                 }
                                 if( bFlag )
                                 {
-                                    nCountSemicolon = aNew.GetTokenCount(';')-1;
-                                    nCountDot = aNew.GetTokenCount('.')-1;
+                                    nCountSemicolon = aNew.GetTokenCount(cSep)-1;
+                                    nCountDot = aNew.GetTokenCount(cSheetSep)-1;
 
                                     if( !nCountSemicolon )
                                     {
@@ -787,7 +798,7 @@ void ScInputHandler::ShowTipCursor()
                                             {
                                                 nStartPosition = i+1;
                                             }
-                                            else if( cNext == ';' )
+                                            else if( cNext == cSep )
                                             {
                                                 nCount ++;
                                                 nEndPosition = i;
@@ -808,7 +819,7 @@ void ScInputHandler::ShowTipCursor()
                                             {
                                                 nStartPosition = i+1;
                                             }
-                                            else if( cNext == ';' )
+                                            else if( cNext == cSep )
                                             {
                                                 nCount ++;
                                                 nEndPosition = i;
@@ -818,7 +829,7 @@ void ScInputHandler::ShowTipCursor()
                                                 }
                                                 nStartPosition = nEndPosition+1;
                                             }
-                                            else if( cNext == '.' )
+                                            else if( cNext == cSheetSep )
                                             {
                                                 continue;
                                             }
@@ -919,6 +930,9 @@ void ScInputHandler::ShowTipBelow( const String& rText )
 void ScInputHandler::UseFormulaData()
 {
     EditView* pActiveView = pTopView ? pTopView : pTableView;
+    ScDocShell* pDocSh = pActiveViewSh->GetViewData()->GetDocShell();
+    const sal_Unicode cSep = ScCompiler::GetNativeSymbol(ocSep).GetChar(0);
+    const sal_Unicode cSheetSep = lcl_getSheetSeparator(pDocSh->GetDocument());
 
     //  Formeln duerfen nur 1 Absatz haben
     if ( pActiveView && pFormulaData && pEngine->GetParagraphCount() == 1 )
@@ -1003,8 +1017,8 @@ void ScInputHandler::UseFormulaData()
                             }
                             if( bFlag )
                             {
-                                nCountSemicolon = aNew.GetTokenCount(';')-1;
-                                nCountDot = aNew.GetTokenCount('.')-1;
+                                nCountSemicolon = aNew.GetTokenCount(cSep)-1;
+                                nCountDot = aNew.GetTokenCount(cSheetSep)-1;
 
                                if( !nCountSemicolon )
                                {
@@ -1026,7 +1040,7 @@ void ScInputHandler::UseFormulaData()
                                         {
                                             nStartPosition = i+1;
                                         }
-                                        else if( cNext == ';' )
+                                        else if( cNext == cSep )
                                         {
                                             nCount ++;
                                             nEndPosition = i;
@@ -1047,7 +1061,7 @@ void ScInputHandler::UseFormulaData()
                                         {
                                             nStartPosition = i+1;
                                         }
-                                        else if( cNext == ';' )
+                                        else if( cNext == cSep )
                                         {
                                             nCount ++;
                                             nEndPosition = i;
@@ -1057,7 +1071,7 @@ void ScInputHandler::UseFormulaData()
                                             }
                                             nStartPosition = nEndPosition+1;
                                         }
-                                        else if( cNext == '.' )
+                                        else if( cNext == cSheetSep )
                                         {
                                             continue;
                                         }
@@ -2740,6 +2754,7 @@ BOOL ScInputHandler::IsModalMode( SfxObjectShell* pDocSh )
 
 void ScInputHandler::AddRefEntry()
 {
+    const sal_Unicode cSep = ScCompiler::GetNativeSymbol(ocSep).GetChar(0);
     UpdateActiveView();
     if (!pTableView && !pTopView)
         return;                             // z.B. FillMode
@@ -2748,9 +2763,9 @@ void ScInputHandler::AddRefEntry()
 
     RemoveSelection();
     if (pTableView)
-        pTableView->InsertText( ';', FALSE );
+        pTableView->InsertText( cSep, FALSE );
     if (pTopView)
-        pTopView->InsertText( ';', FALSE );
+        pTopView->InsertText( cSep, FALSE );
 
     DataChanged();
 }

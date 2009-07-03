@@ -353,6 +353,7 @@ public:
 
     static BOOL EnQuote( String& rStr );
 
+    sal_Unicode GetNativeAddressSymbol( Convention::SpecialSymbolType eType ) const;
 
     // Check if it is a valid english function name
     bool IsEnglishSymbol( const String& rName );

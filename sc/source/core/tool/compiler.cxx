@@ -5060,6 +5060,11 @@ BOOL ScCompiler::EnQuote( String& rStr )
     return TRUE;
 }
 
+sal_Unicode ScCompiler::GetNativeAddressSymbol( Convention::SpecialSymbolType eType ) const
+{
+    return pConv->getSpecialSymbol(eType);
+}
+
 void ScCompiler::fillAddInToken(::std::vector< ::com::sun::star::sheet::FormulaOpCodeMapEntry >& _rVec,bool _bIsEnglish) const
 {
     // All known AddIn functions.

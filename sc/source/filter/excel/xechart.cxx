@@ -814,10 +814,11 @@ sal_uInt16 XclExpChSourceLink::ConvertDataSequence( Reference< XDataSequence > x
     if( !xDataSeq.is() )
         return nDefCount;
 
-    // compile the range representation string into token array
+    // Compile the range representation string into token array.  Note that the
+    // source range text depends on the current grammar.
     OUString aRangeRepr = xDataSeq->getSourceRangeRepresentation();
     ScCompiler aComp( GetDocPtr(), ScAddress() );
-    aComp.SetGrammar( FormulaGrammar::GRAM_ENGLISH );
+    aComp.SetGrammar( GetDocPtr()->GetGrammar() );
     ScTokenArray* pArray = aComp.CompileString( aRangeRepr );
     if( !pArray )
         return nDefCount;

@@ -1242,6 +1242,10 @@ void __EXPORT ScCellShell::GetDBState( SfxItemSet& rSet )
                         {
                             rSet.DisableItem( nWhich );
                         }
+                        else if (pDoc->GetDPAtBlock(aDummy))
+                        {
+                            rSet.DisableItem( nWhich );
+                        }
                         else
                             rSet.Put( SfxBoolItem( nWhich, bAutoFilter ) );
                     }
