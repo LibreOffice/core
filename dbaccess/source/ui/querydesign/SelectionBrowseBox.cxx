@@ -1844,7 +1844,7 @@ void OSelectionBrowseBox::AddCondition( const OTableFieldDescRef& rInfo, const S
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
     DBG_ASSERT(rInfo.isValid() && !rInfo->IsEmpty(),"AddCondition:: OTableFieldDescRef sollte nicht Empty sein!");
 
-    OTableFieldDescRef pEntry;
+    OTableFieldDescRef pLastEntry;
     Reference<XDatabaseMetaData> xMeta = xConnection->getMetaData();
     ::comphelper::UStringMixEqual bCase(xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers());
 
@@ -1853,7 +1853,7 @@ void OSelectionBrowseBox::AddCondition( const OTableFieldDescRef& rInfo, const S
     OTableFields::iterator aEnd = rFields.end();
     for(;aIter != aEnd;++aIter)
     {
-        pEntry = *aIter;
+        OTableFieldDescRef pEntry = *aIter;
         const ::rtl::OUString   aField = pEntry->GetField();
         const ::rtl::OUString   aAlias = pEntry->GetAlias();
 
@@ -1870,22 +1870,9 @@ void OSelectionBrowseBox::AddCondition( const OTableFieldDescRef& rInfo, const S
                 if(!m_bGroupByUnRelated && pEntry->IsGroupBy())
                     pEntry->SetVisible(sal_True);
             }
-            if (!pEntry->GetCriteria(nLevel).getLength() || _bAddOrOnOneLine )
+            if (!pEntry->GetCriteria(nLevel).getLength() )
             {
-                String sCriteria = rValue;
-                if ( _bAddOrOnOneLine )
-                {
-                    String sOldCriteria = pEntry->GetCriteria( nLevel );
-                    if ( sOldCriteria.Len() )
-                    {
-                        sCriteria = String(RTL_CONSTASCII_USTRINGPARAM("("));
-                        sCriteria += sOldCriteria;
-                        sCriteria += String(RTL_CONSTASCII_USTRINGPARAM(" OR "));
-                        sCriteria += rValue;
-                        sCriteria += String(RTL_CONSTASCII_USTRINGPARAM(")"));
-                    }
-                }
-                pEntry->SetCriteria( nLevel, sCriteria);
+                pEntry->SetCriteria( nLevel, rValue);
                 if(nLevel == (m_nVisibleCount-BROW_CRIT1_ROW-1))
                 {
                     RowInserted( GetRowCount()-1, 1, TRUE );
@@ -1894,11 +1881,36 @@ void OSelectionBrowseBox::AddCondition( const OTableFieldDescRef& rInfo, const S
                 }
                 m_bVisibleRow[BROW_CRIT1_ROW + nLevel] = sal_True;
                 break;
+            } // if (!pEntry->GetCriteria(nLevel).getLength() )
+            if ( _bAddOrOnOneLine )
+            {
+                pLastEntry = pEntry;
             }
         }
+    } // for(;aIter != getFields().end();++aIter)
+    if ( pLastEntry.isValid() )
+    {
+        String sCriteria = rValue;
+        String sOldCriteria = pLastEntry->GetCriteria( nLevel );
+        if ( sOldCriteria.Len() )
+        {
+            sCriteria = String(RTL_CONSTASCII_USTRINGPARAM("( "));
+            sCriteria += sOldCriteria;
+            sCriteria += String(RTL_CONSTASCII_USTRINGPARAM(" OR "));
+            sCriteria += rValue;
+            sCriteria += String(RTL_CONSTASCII_USTRINGPARAM(" )"));
+        }
+        pLastEntry->SetCriteria( nLevel, sCriteria);
+        if(nLevel == (m_nVisibleCount-BROW_CRIT1_ROW-1))
+        {
+            RowInserted( GetRowCount()-1, 1, TRUE );
+            m_bVisibleRow.push_back(sal_True);
+            ++m_nVisibleCount;
+        }
+        m_bVisibleRow[BROW_CRIT1_ROW + nLevel] = sal_True;
     }
 
-    if (aIter == getFields().end())
+    else if (aIter == getFields().end())
     {
         OTableFieldDescRef pTmp = InsertField(rInfo, BROWSER_INVALIDID, sal_False, sal_False );
         if ( pTmp->isNumericOrAggreateFunction() && rInfo->IsGroupBy() ) // das GroupBy wird bereits von rInfo "ubernommen

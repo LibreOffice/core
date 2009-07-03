@@ -489,6 +489,7 @@ SbaXDataBrowserController::SbaXDataBrowserController(const Reference< ::com::sun
     :SbaXDataBrowserController_Base(_rM)
     ,m_pClipbordNotifier( NULL )
     ,m_aAsyncGetCellFocus(LINK(this, SbaXDataBrowserController, OnAsyncGetCellFocus))
+    ,m_aAsyncDisplayError( LINK( this, SbaXDataBrowserController, OnAsyncDisplayError ) )
     ,m_sStateSaveRecord(ModuleRes(RID_STR_SAVE_CURRENT_RECORD))
     ,m_sStateUndoRecord(ModuleRes(RID_STR_UNDO_MODIFY_RECORD))
     ,m_sModuleIdentifier( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.DataSourceBrowser" ) ) )
@@ -498,7 +499,6 @@ SbaXDataBrowserController::SbaXDataBrowserController(const Reference< ::com::sun
     ,m_nFormActionNestingLevel(0)
     ,m_bLoadCanceled( sal_False )
     ,m_bClosingKillOpen( sal_False )
-    ,m_bErrorOccured( sal_False )
     ,m_bCannotSelectUnfiltered( true )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaui", "Ocke.Janssen@sun.com", "SbaXDataBrowserController::SbaXDataBrowserController" );
@@ -608,7 +608,7 @@ sal_Bool SbaXDataBrowserController::reloadForm( const Reference< XLoadable >& _r
         }
     }
 
-    return _rxLoadable->isLoaded() && !errorOccured();
+    return _rxLoadable->isLoaded();
 }
 
 // -----------------------------------------------------------------------------
@@ -1201,6 +1201,7 @@ sal_Bool SbaXDataBrowserController::suspend(sal_Bool /*bSuspend*/) throw( Runtim
     DBG_ASSERT(m_nPendingLoadFinished == 0, "SbaXDataBrowserController::suspend : there shouldn't be a pending load !");
 
     m_aAsyncGetCellFocus.CancelCall();
+    m_aAsyncDisplayError.CancelCall();
     m_aAsyncInvalidateAll.CancelCall();
 
     sal_Bool bSuccess = SaveModified();
@@ -1345,17 +1346,30 @@ void SbaXDataBrowserController::frameAction(const ::com::sun::star::frame::Frame
 }
 
 //------------------------------------------------------------------------------
+IMPL_LINK( SbaXDataBrowserController, OnAsyncDisplayError, void*, /* _pNotInterestedIn */ )
+{
+    OSQLMessageBox aDlg( getBrowserView(), m_aCurrentError );
+    aDlg.Execute();
+    return 0L;
+}
+
+//------------------------------------------------------------------------------
 void SbaXDataBrowserController::errorOccured(const ::com::sun::star::sdb::SQLErrorEvent& aEvent) throw( RuntimeException )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaui", "Ocke.Janssen@sun.com", "SbaXDataBrowserController::errorOccured" );
-    SQLExceptionInfo aInfo(aEvent.Reason);
-    if ( aInfo.isValid() )
+    ::osl::MutexGuard aGuard( getMutex() );
+
+    SQLExceptionInfo aInfo( aEvent.Reason );
+    if ( !aInfo.isValid() )
+        return;
+
+    if ( m_nFormActionNestingLevel )
     {
-        ::vos::OGuard aGuard(Application::GetSolarMutex());
-        showError( aInfo );
+        OSL_ENSURE( !m_aCurrentError.isValid(), "SbaXDataBrowserController::errorOccured: can handle one error per transaction only!" );
+        m_aCurrentError = aInfo;
     }
-    if (m_nFormActionNestingLevel)
-        m_bErrorOccured = true;
+    else
+        m_aAsyncDisplayError.Call();
 }
 
 //------------------------------------------------------------------------------
@@ -2659,10 +2673,9 @@ void SbaXDataBrowserController::reloaded(const EventObject& /*aEvent*/) throw( R
 //------------------------------------------------------------------------------
 void SbaXDataBrowserController::enterFormAction()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaui", "Ocke.Janssen@sun.com", "SbaXDataBrowserController::enterFormAction" );
-    if (!m_nFormActionNestingLevel)
-        // first action -> reset flag
-        m_bErrorOccured = false;
+    if ( !m_nFormActionNestingLevel )
+        // first action -> reset
+        m_aCurrentError.clear();
 
     ++m_nFormActionNestingLevel;
 }
@@ -2670,9 +2683,14 @@ void SbaXDataBrowserController::enterFormAction()
 //------------------------------------------------------------------------------
 void SbaXDataBrowserController::leaveFormAction()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaui", "Ocke.Janssen@sun.com", "SbaXDataBrowserController::leaveFormAction" );
-    DBG_ASSERT(m_nFormActionNestingLevel > 0, "SbaXDataBrowserController::leaveFormAction : invalid call !");
-    --m_nFormActionNestingLevel;
+    DBG_ASSERT( m_nFormActionNestingLevel > 0, "SbaXDataBrowserController::leaveFormAction : invalid call !" );
+    if ( --m_nFormActionNestingLevel > 0 )
+        return;
+
+    if ( !m_aCurrentError.isValid() )
+        return;
+
+    m_aAsyncDisplayError.Call();
 }
 
 // -------------------------------------------------------------------------

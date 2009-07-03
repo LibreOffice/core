@@ -1432,7 +1432,7 @@ namespace
                 if ( SQL_ISRULE(pChild,search_condition) )
                     eErrorCode = GetORCriteria(_pView,_pSelectionBrw,pChild,nLevel,bHaving,bAddOrOnOneLine);
                 else
-                    eErrorCode = GetANDCriteria(_pView,_pSelectionBrw,pChild, bAddOrOnOneLine ? nLevel : nLevel++,bHaving,bAddOrOnOneLine);
+                    eErrorCode = GetANDCriteria(_pView,_pSelectionBrw,pChild, bAddOrOnOneLine ? nLevel : nLevel++,bHaving, i == 0 ? false : bAddOrOnOneLine);
             }
         }
         else
@@ -1486,8 +1486,9 @@ namespace
             eErrorCode = GetORCriteria(_pView,_pSelectionBrw,pCondition->getChild(1), nLevel2,bHaving,bMustAddOrOnOneLine );
         }
         // Das erste Element ist (wieder) eine AND-Verknuepfung
-        else if ( SQL_ISRULE(pCondition,boolean_term) && pCondition->count() == 3 )
+        else if ( SQL_ISRULE(pCondition,boolean_term) )
         {
+            OSL_ENSURE(pCondition->count() == 3,"Illegal definifiton of boolean_term");
             eErrorCode = GetANDCriteria(_pView,_pSelectionBrw,pCondition->getChild(0), nLevel,bHaving,bAddOrOnOneLine );
             if ( eErrorCode == eOk )
                 eErrorCode = GetANDCriteria(_pView,_pSelectionBrw,pCondition->getChild(2), nLevel,bHaving,bAddOrOnOneLine );
@@ -2974,6 +2975,7 @@ sal_Bool OQueryDesignView::checkStatement()
                 !pEntryField->HasCriteria()                 &&
                 pEntryField->isNoneFunction()               &&
                 pEntryField->GetOrderDir() == ORDER_NONE    &&
+                !pEntryField->IsGroupBy()                   &&
                 !pEntryField->GetFunction().getLength() )
             rUnUsedFields.push_back(pEntryField);
     }

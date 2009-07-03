@@ -1018,18 +1018,18 @@ namespace
         else
             (m_xDest.get()->*_pSetter)( m_rDestPos, value );
     }
-
-    template< typename VALUE_TYPE >
+ template< typename VALUE_TYPE >
     void transferComplexValue( VALUE_TYPE ( SAL_CALL XRow::*_pGetter )( sal_Int32 ),
         void (SAL_CALL XParameters::*_pSetter)( sal_Int32, const VALUE_TYPE& ) )
     {
-        VALUE_TYPE value( (m_xSource.get()->*_pGetter)( m_rSourcePos ) );
+        const VALUE_TYPE value( (m_xSource.get()->*_pGetter)( m_rSourcePos ) );
+               {
         if ( m_xSource->wasNull() )
             m_xDest->setNull( m_rDestPos, m_rColTypes[ m_rSourcePos ] );
         else
             (m_xDest.get()->*_pSetter)( m_rDestPos, value );
+               }
     }
-
     private:
         const sal_Int32&                    m_rSourcePos;
         const sal_Int32&                    m_rDestPos;
@@ -1193,7 +1193,9 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
             bContinue = _rxSourceResultSet->next();
 
         if ( !bContinue )
+        {
             break;
+        }
 
         ++nRowCount;
         sal_Bool bInsertAutoIncrement = sal_True;

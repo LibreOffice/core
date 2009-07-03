@@ -157,8 +157,10 @@ DBG_NAME(OKeySet)
 OKeySet::OKeySet(const connectivity::OSQLTable& _xTable,
                  const Reference< XIndexAccess>& _xTableKeys,
                  const ::rtl::OUString& _rUpdateTableName,    // this can be the alias or the full qualified name
-                 const Reference< XSingleSelectQueryAnalyzer >& _xComposer)
-            :m_pKeyColumnNames(NULL)
+                 const Reference< XSingleSelectQueryAnalyzer >& _xComposer,
+                 const ORowSetValueVector& _aParameterValueForCache)
+            :m_aParameterValueForCache(_aParameterValueForCache)
+            ,m_pKeyColumnNames(NULL)
             ,m_pColumnNames(NULL)
             ,m_pForeignColumnNames(NULL)
             ,m_xTable(_xTable)
@@ -304,6 +306,11 @@ void OKeySet::construct(const Reference< XResultSet>& _xDriverSet)
                 break;
             }
         }
+    } // if ( aSeq.getLength() > 1 ) // special handling for join
+    const ::rtl::OUString sOldFilter = xAnalyzer->getFilter();
+    if ( sOldFilter.getLength() )
+    {
+        aFilter = sOldFilter + aAnd + aFilter;
     }
     xAnalyzer->setFilter(aFilter.makeStringAndClear());
     m_xStatement = m_xConnection->prepareStatement(xAnalyzer->getQueryWithSubstitution());
@@ -1124,6 +1131,12 @@ void SAL_CALL OKeySet::refreshRow() throw(SQLException, RuntimeException)
     OSL_ENSURE(xParameter.is(),"No Parameter interface!");
     xParameter->clearParameters();
     sal_Int32 nPos=1;
+    connectivity::ORowVector< ORowSetValue >::Vector::const_iterator aParaIter = m_aParameterValueForCache.get().begin();
+    connectivity::ORowVector< ORowSetValue >::Vector::const_iterator aParaEnd = m_aParameterValueForCache.get().end();
+    for(++aParaIter;aParaIter != aParaEnd;++aParaIter,++nPos)
+    {
+        ::dbtools::setObjectWithInfo( xParameter, nPos, aParaIter->makeAny(), aParaIter->getTypeKind() );
+    }
     connectivity::ORowVector< ORowSetValue >::Vector::const_iterator aIter = m_aKeyIter->second.first->get().begin();
     SelectColumnsMetaData::const_iterator aPosIter = (*m_pKeyColumnNames).begin();
     SelectColumnsMetaData::const_iterator aPosEnd = (*m_pKeyColumnNames).end();

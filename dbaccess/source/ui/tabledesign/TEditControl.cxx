@@ -1312,9 +1312,9 @@ Any OTableEditorCtrl::GetCellData( long nRow, sal_uInt16 nColId )
 String OTableEditorCtrl::GetCellText( long nRow, sal_uInt16 nColId ) const
 {
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
-    //////////////////////////////////////////////////////////////////////
-    // Text aus Dokumentdaten holen
-    return ::comphelper::getString(const_cast<OTableEditorCtrl*>(this)->GetCellData( nRow, nColId ));
+    ::rtl::OUString sCellText;
+    const_cast< OTableEditorCtrl* >( this )->GetCellData( nRow, nColId ) >>= sCellText;
+    return sCellText;
 }
 
 //------------------------------------------------------------------------------

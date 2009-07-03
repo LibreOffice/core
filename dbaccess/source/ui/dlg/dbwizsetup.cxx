@@ -865,6 +865,7 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             ::comphelper::NamedValueCollection aArgs( xModel->getArgs() );
             aArgs.put( "Overwrite", sal_Bool( sal_True ) );
             aArgs.put( "InteractionHandler", xHandler );
+            aArgs.put( "MacroExecutionMode", MacroExecMode::USE_CONFIG );
 
             ::rtl::OUString sPath = m_pImpl->getDocumentUrl( *m_pOutSet );
             xStore->storeAsURL( sPath, aArgs.getPropertyValues() );

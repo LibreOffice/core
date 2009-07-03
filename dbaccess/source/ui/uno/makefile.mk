@@ -51,8 +51,14 @@ SRC1FILES =	\
         copytablewizard.src
 
 # ... object files ............................
+# workaround for issue http://qa.openoffice.org/issues/show_bug.cgi?id=102305 Linux specific
+.IF "$(COM)" == "GCC"
+NOOPTFILES=\
+        $(SLO)$/copytablewizard.obj
+.ENDIF
 
 SLOFILES=	\
+        $(SLO)$/copytablewizard.obj \
         $(SLO)$/composerdialogs.obj	\
         $(SLO)$/unosqlmessage.obj	\
         $(SLO)$/unoadmin.obj	\
@@ -67,7 +73,6 @@ SLOFILES=	\
         $(SLO)$/ColumnControl.obj	\
         $(SLO)$/ColumnPeer.obj	\
         $(SLO)$/dbinteraction.obj \
-        $(SLO)$/copytablewizard.obj \
         $(SLO)$/textconnectionsettings_uno.obj
 
 # --- Targets ----------------------------------

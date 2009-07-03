@@ -1716,13 +1716,14 @@ Reference< XResultSet > ORowSet::impl_prepareAndExecute_throw()
             // this exception doesn't matter here because when we catch an exception
             // then the driver doesn't support this feature
         }
-
+        m_aParameterValueForCache.get().resize(1);
         Reference< XParameters > xParam( m_xStatement, UNO_QUERY_THROW );
         size_t nParamCount( m_pParameters.is() ? m_pParameters->size() : m_aPrematureParamValues.get().size() );
         for ( size_t i=1; i<=nParamCount; ++i )
         {
             ORowSetValue& rParamValue( getParameterStorage( (sal_Int32)i ) );
             ::dbtools::setObjectWithInfo( xParam, i, rParamValue.makeAny(), rParamValue.getTypeKind() );
+            m_aParameterValueForCache.get().push_back(rParamValue);
         }
 
         xResultSet = m_xStatement->executeQuery();
@@ -1864,7 +1865,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
 
         {
             RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "frank.schoenheit@sun.com", "ORowSet::execute_NoApprove_NoNewConn: creating cache" );
-            m_pCache = new ORowSetCache( xResultSet, m_xComposer.get(), m_aContext, aComposedUpdateTableName, m_bModified, m_bNew );
+            m_pCache = new ORowSetCache( xResultSet, m_xComposer.get(), m_aContext, aComposedUpdateTableName, m_bModified, m_bNew,m_aParameterValueForCache );
             if ( m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY )
             {
                 m_nPrivileges = Privilege::SELECT;

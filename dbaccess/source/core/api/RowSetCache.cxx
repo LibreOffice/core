@@ -137,7 +137,8 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
                            const ::comphelper::ComponentContext& _rContext,
                            const ::rtl::OUString& _rUpdateTableName,
                            sal_Bool&    _bModified,
-                           sal_Bool&    _bNew)
+                           sal_Bool&    _bNew,
+                           const ORowSetValueVector& _aParameterValueForCache)
     :m_xSet(_xRs)
     ,m_xMetaData(Reference< XResultSetMetaDataSupplier >(_xRs,UNO_QUERY)->getMetaData())
     ,m_aContext( _rContext )
@@ -328,7 +329,7 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
                 }
             }
 
-            OKeySet* pKeySet = new OKeySet(m_aUpdateTable,xUpdateTableKeys,aUpdateTableName ,_xAnalyzer);
+            OKeySet* pKeySet = new OKeySet(m_aUpdateTable,xUpdateTableKeys,aUpdateTableName ,_xAnalyzer,_aParameterValueForCache);
             try
             {
                 m_pCacheSet = pKeySet;

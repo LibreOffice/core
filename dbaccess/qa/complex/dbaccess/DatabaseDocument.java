@@ -48,7 +48,6 @@ import com.sun.star.document.XDocumentEventBroadcaster;
 import com.sun.star.document.XDocumentEventListener;
 import com.sun.star.document.XEmbeddedScripts;
 import com.sun.star.document.XEventsSupplier;
-import com.sun.star.document.XScriptInvocationContext;
 import com.sun.star.frame.DoubleInitializationException;
 import com.sun.star.lang.XComponent;
 import com.sun.star.frame.XComponentLoader;

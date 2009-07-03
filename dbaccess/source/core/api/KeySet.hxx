@@ -97,6 +97,7 @@ namespace dbaccess
 
         ::std::vector< ::rtl::OUString >                        m_aAutoColumns;  // contains all columns which are autoincrement ones
 
+        ORowSetValueVector                                      m_aParameterValueForCache;
         SelectColumnsMetaData*                                  m_pKeyColumnNames;      // contains all key column names
         SelectColumnsMetaData*                                  m_pColumnNames;         // contains all column names
         SelectColumnsMetaData*                                  m_pForeignColumnNames;  // contains all column names of the rest
@@ -139,7 +140,8 @@ namespace dbaccess
         OKeySet(const connectivity::OSQLTable& _xTable,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xTableKeys,
                 const ::rtl::OUString& _rUpdateTableName,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryAnalyzer >& _xComposer);
+                const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryAnalyzer >& _xComposer,
+                const ORowSetValueVector& _aParameterValueForCache);
 
         // late ctor which can throw exceptions
         virtual void construct(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xDriverSet);
