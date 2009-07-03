@@ -1,4 +1,4 @@
-oa	offapi	:	udkapi NULL
+oa	offapi	:	udkapi idlc NULL
 oa	offapi									usr1	-	all	oa_mkout NULL
 oa	offapi\com\sun\star\script				nmake	-	all	oa_script oa_embed NULL
 oa	offapi\com\sun\star\script\browse	nmake	-	all	oa_sfbrowse NULL
