@@ -1695,6 +1695,8 @@ ToFile( "ENABLE_KAB",        "@ENABLE_KAB@",       "e" );
 ToFile( "MOC",               "@MOC@",              "e" );
 ToFile( "PSPRINT",           "TRUE",             "e" );
 ToFile( "MKDEPENDSOLVER",    "TRUE",             "e" );
+ToFile( "WITH_ICECREAM",     "@WITH_ICECREAM@",  "e" );
+ToFile( "WITH_CPUS",         "@WITH_CPUS@",      "e" );
 #
 # Writing the platform dependent constant values to file.
 # (c = comment, e = environment variable, a = alias )

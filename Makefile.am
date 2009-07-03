@@ -43,7 +43,8 @@ $(stampdir)/all: $(stampdir)/bootstrap
 	( . ./Linux*Env.Set.sh ; \
 	  export ULFEX=$(abs_srcdir)/build/bin/noulf ; \
 	  export ULFCONV=$(abs_srcdir)/build/bin/noulfconv ; \
-	  cd build ; build.pl --all ) && touch $@
+	  export WITH_LANG="" ; \
+	  cd build ; build.pl --all $$WITH_CPUS -- $$WITH_ICECREAM ) && touch $@
 
 $(stampdir)/bootstrap: Linux*Env.Set.sh
 	( . ./Linux*Env.Set.sh ; ./bootstrap ) && touch $@

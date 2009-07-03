@@ -782,6 +782,21 @@ AC_ARG_ENABLE(verbose,
 AC_ARG_WITH(ooo-prefix,
 [  --with-ooo-prefix       Where should be OOo installed
 ],OOO_PREFIX="$withval",OOO_PREFIX="\${libdir}/ooo3")
+AC_ARG_WITH(cpus,
+[  --with-cpus             Number of the CPUs to use for the parallel build.
+
+                          Usage: --with-cpus=4
+],if test "$withval" = "yes" ; then WITH_CPUS="" ; else WITH_CPUS="-P$withval" ; fi,WITH_CPUS="")
+AC_ARG_WITH(icecream,
+[  --with-icecream         Whether 'icecream' should be used to speed up the
+                          build.  The value means how many jobs (max) should
+                          be used for compilation.
+
+                          Use --with-gcc-home if you have icecream somewhere
+                          else than in /opt/icecream/bin.
+
+                          Usage: --with-icecream=10
+],if test "$withval" = "yes" ; then WITH_ICECREAM="-P10" ; else WITH_ICECREAM="-P$withval" ; fi ; PATH="/opt/icecream/bin:$PATH",WITH_ICECREAM="")
 
 BUILD_TYPE="OOo"
 
@@ -6407,6 +6422,8 @@ AC_SUBST(LOCAL_SOLVER)
 AC_SUBST(BUILD_TYPE)
 
 AC_SUBST(OOO_PREFIX)
+AC_SUBST(WITH_ICECREAM)
+AC_SUBST(WITH_CPUS)
 
 # make sure config.guess is +x; we execute config.guess, so it has to be so; 
 chmod +x ./config.guess
