@@ -1122,7 +1122,7 @@ if ($platform =~ m/cygwin|os2/)
 # The general environment path.
 if ($platform =~ m/linux|netbsd|odf1|irix|freebsd|aix|solaris/)
 {  $PATH              = $cur_dir.
-#                        $ps.'$SOLARVER'.$ds.'$INPATH'.$BIN.
+                        $ps.'$SOLARVER'.$ds.'$INPATH'.$BIN.
                         $ps.'$SOLARENV'.$ds.'$OUTPATH'.$BIN.
                         $ps.'$SOLARENV'.$BIN;
 
@@ -1153,7 +1153,7 @@ elsif ($platform =~ m/cygwin/)
    my ( $tmppath );
 
    $PATH              = $cur_dir.
-#                        $ps.CygFormat($SOLARVER).$ds.$INPATH.$BIN.
+                        $ps.CygFormat($SOLARVER).$ds.$INPATH.$BIN.
                         $ps.CygFormat($SOLARENV).$ds."bin".
                         $ps.CygFormat($SOLARENV).$ds.$OUTPATH.$BIN;
 
@@ -1291,7 +1291,7 @@ elsif ($platform =~ m/os2/)
    # needed is appended to the end.
 
    $PATH              = $cur_dir.
-#                        $ps.'$SOLARVER'.$ds.'$INPATH'.$BIN.
+                        $ps.'$SOLARVER'.$ds.'$INPATH'.$BIN.
                         $ps.'$SOLARENV'.$ds."bin".
                         $ps.'$SOLARENV'.$ds.'$OUTPATH'.$BIN;
 
@@ -1319,7 +1319,7 @@ elsif ($platform =~ m/os2/)
 
 elsif ($platform =~ m/darwin/)
 {  $PATH              = $cur_dir.
-#                        $ps.'$SOLARVER'.$ds.'$INPATH'.$BIN.
+                        $ps.'$SOLARVER'.$ds.'$INPATH'.$BIN.
                         $ps.'$SOLARENV'.$ds.'$OUTPATH'.$BIN.
                         $ps.'$SOLARENV'.$BIN;
 
