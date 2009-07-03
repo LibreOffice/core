@@ -282,12 +282,10 @@ void SwWW8Writer::ExportPoolItemsToCHP(sw::PoolItems &rItems, USHORT nScript)
     {
         const SfxPoolItem *pItem = aI->second;
         USHORT nWhich = pItem->Which();
-        if (nWhich < RES_CHRATR_BEGIN || nWhich >= RES_TXTATR_END)
+        if (!isCHRATR(nWhich) && !isTXTATR(nWhich))
             continue;
         if (FnAttrOut pOut = aWW8AttrFnTab[nWhich - RES_CHRATR_BEGIN])
         {
-            if (!isCHRATR(nWhich) && !isTXTATR(nWhich))
-                continue;
             if (SwWW8Writer::CollapseScriptsforWordOk(nScript, nWhich))
                 (*pOut)(*this, *pItem);
         }
