@@ -462,6 +462,7 @@ sub init_globals
     my $solarversion  = $ENV{'SOLARVERSION'};
     my $updater       = $ENV{'UPDATER'};
     my $updminor      = $ENV{'UPDMINOR'};
+    my $updminorext   = $ENV{'UPDMINOREXT'};
     my $work_stamp    = $ENV{'WORK_STAMP'};
 
     # special security check for release engineers
@@ -485,7 +486,7 @@ sub init_globals
     $ext = "";
     if ( ($opt_minor || $updminor) && !$dest ) {
         if ( $updminor ) {
-            $ext = ".$updminor";
+            $ext = "$updminorext";
         }
         else {
             print_error("can't determine UPDMINOR", 0);
