@@ -37,4 +37,4 @@ install-data-local: $(stampdir)/all
 	$(INSTALL_DATA) $(top_builddir)/build/src/OpenOffice.org-ure.pc $(DESTDIR)$(pkgconfigdir)/
 
 $(stampdir)/all: buildenv
-	( . buildenv ; cd build ; build.pl --all ) && touch $@
+	( . buildenv ; cd build ; build.pl --all $$WITH_CPUS -- $$WITH_ICECREAM ) && touch $@
