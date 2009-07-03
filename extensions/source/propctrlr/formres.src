@@ -51,6 +51,10 @@ String RID_STR_ENABLED
 {
     Text [ en-US ] = "Enabled" ;
 };
+String RID_STR_ENABLE_VISIBLE
+{
+    Text [ en-US ] = "Visible" ;
+};
 String RID_STR_AUTOCOMPLETE
 {
     Text [ en-US ] = "AutoFill" ;
@@ -233,6 +237,10 @@ String RID_STR_NAME
 String RID_STR_TABINDEX
 {
     Text [ en-US ] = "Tab order" ;
+};
+String RID_STR_WHEEL_BEHAVIOR
+{
+    Text [ en-US ] = "Mouse wheel scroll" ;
 };
 String RID_STR_FILTER
 {
@@ -1428,6 +1436,22 @@ Resource RID_RSC_ENUM_WRITING_MODE
     String 3
     {
         Text [ en-US ] = "Use superordinate object settings";
+    };
+};
+
+Resource RID_RSC_ENUM_WHEEL_BEHAVIOR
+{
+    String 1
+    {
+        Text [ en-US ] = "Never";
+    };
+    String 2
+    {
+        Text [ en-US ] = "When focused";
+    };
+    String 3
+    {
+        Text [ en-US ] = "Always";
     };
 };
 
