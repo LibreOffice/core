@@ -278,13 +278,26 @@ Any SAL_CALL ODriverEnumeration::nextElement(  ) throw(NoSuchElementException, W
         }
     };
 
+    /// and STL argorithm compatible predicate comparing a DriverAccess' impl name to a string
+    struct EqualDriverAccessToName : public ::std::binary_function< DriverAccess, ::rtl::OUString, bool >
+    {
+        ::rtl::OUString m_sImplName;
+        EqualDriverAccessToName(const ::rtl::OUString& _sImplName) : m_sImplName(_sImplName){}
+        //.................................................................
+        bool operator()( const DriverAccess& lhs)
+        {
+            return lhs.sImplementationName.equals(m_sImplName);
+        }
+    };
+
 //==========================================================================
 //= OSDBCDriverManager
 //==========================================================================
 //--------------------------------------------------------------------------
-    OSDBCDriverManager::OSDBCDriverManager( const Reference< XComponentContext >& _rxContext )
+OSDBCDriverManager::OSDBCDriverManager( const Reference< XComponentContext >& _rxContext )
     :m_aContext( _rxContext )
     ,m_aEventLogger( _rxContext, "org.openoffice.logging.sdbc.DriverManager" )
+    ,m_aDriverConfig(m_aContext.getLegacyServiceFactory())
     ,m_nLoginTimeout(0)
 {
     // bootstrap all objects supporting the .sdb.Driver service
@@ -375,7 +388,7 @@ void OSDBCDriverManager::bootstrapDrivers()
 //--------------------------------------------------------------------------
 void OSDBCDriverManager::initializeDriverPrecedence()
 {
-    if (!m_aDriversBS.size())
+    if ( m_aDriversBS.empty() )
         // nothing to do
         return;
 
@@ -420,7 +433,7 @@ void OSDBCDriverManager::initializeDriverPrecedence()
             {   // we have a DriverAccess with this impl name
 
                 OSL_ENSURE( ::std::distance( aPos.first, aPos.second ) == 1,
-                    "OSDBCDriverManager::initializeDriverPrecedence: move than one driver with this impl name? How this?" );
+                    "OSDBCDriverManager::initializeDriverPrecedence: more than one driver with this impl name? How this?" );
                 // move the DriverAccess pointed to by aPos.first to the position pointed to by aNoPrefDriversStart
 
                 if ( aPos.first != aNoPrefDriversStart )
@@ -686,17 +699,29 @@ Reference< XDriver > OSDBCDriverManager::implGetDriverForURL(const ::rtl::OUStri
     Reference< XDriver > xReturn;
 
     {
-        // search all bootstrapped drivers
-        DriverAccessArrayIterator aPos = ::std::find_if(
-            m_aDriversBS.begin(),       // begin of search range
-            m_aDriversBS.end(),         // end of search range
-            std::unary_compose< AcceptsURL, ExtractAfterLoad >( AcceptsURL( _rURL ), ExtractAfterLoad() )
-                                        // compose two functors: extract the driver from the access, then ask the resulting driver for acceptance
-        );
+        const ::rtl::OUString sDriverFactoryName = m_aDriverConfig.getDriverFactoryName(_rURL);
+
+        EqualDriverAccessToName aEqual(sDriverFactoryName);
+        DriverAccessArray::iterator aFind = ::std::find_if(m_aDriversBS.begin(),m_aDriversBS.end(),aEqual);
+        if ( aFind == m_aDriversBS.end() )
+        {
+            // search all bootstrapped drivers
+            aFind = ::std::find_if(
+                m_aDriversBS.begin(),       // begin of search range
+                m_aDriversBS.end(),         // end of search range
+                std::unary_compose< AcceptsURL, ExtractAfterLoad >( AcceptsURL( _rURL ), ExtractAfterLoad() )
+                                            // compose two functors: extract the driver from the access, then ask the resulting driver for acceptance
+            );
+        } // if ( m_aDriversBS.find(sDriverFactoryName ) == m_aDriversBS.end() )
+        else
+        {
+            EnsureDriver aEnsure;
+            aEnsure(*aFind);
+        }
 
         // found something?
-        if ( m_aDriversBS.end() != aPos )
-            xReturn = aPos->xDriver;
+        if ( m_aDriversBS.end() != aFind )
+            xReturn = aFind->xDriver;
     }
 
     if ( !xReturn.is() )

@@ -89,11 +89,24 @@ VISIBILITY_HIDDEN=TRUE
 ENVCFLAGS+=/FR$(SLO)$/
 .ENDIF
 
-.INCLUDE : settings.mk
+.INCLUDE : $(PRJ)$/makefile.pmk
 
 .INCLUDE :  $(PRJ)$/version.mk
 
 # --- Files -------------------------------------
+# redefine because win and linux differ
+.IF "$(OS)"=="WNT" 
+LOCALIZEDFILES= \
+    $(TARGET).xcu
+.ELSE
+LOCALIZEDFILES= \
+    $(TARGET)2.xcu
+.ENDIF
+
+XCUFILES= \
+    $(LOCALIZEDFILES) \
+
+
 
 SLOFILES=\
         $(SLO)$/MDriver.obj						\
@@ -186,7 +199,18 @@ DEF2NAME=	$(SHL2TARGET)
 
 # --- Targets ----------------------------------
 
-.INCLUDE : target.mk
+.INCLUDE : $(PRJ)$/target.pmk
+
+.IF "$(GUI)"=="WNT" 
+.ELSE
+ALLTAR: "$(PWD)$/$(MISC)$/registry$/schema$/$(PACKAGEDIR)$/$(TARGET)2.xcs" "$(PWD)$/$(MISC)$/registry$/data$/$(PACKAGEDIR)$/$(TARGET).xcu"
+"$(PWD)$/$(MISC)$/registry$/schema$/$(PACKAGEDIR)$/$(TARGET)2.xcs" : $(SOLARXMLDIR)$/registry$/schema$/$(PACKAGEDIR)$/Drivers.xcs
+    @@-$(MKDIRHIER) $(@:d)
+    $(COPY) $< $@
+"$(PWD)$/$(MISC)$/registry$/data$/$(PACKAGEDIR)$/$(TARGET).xcu" : "$(PWD)$/$(MISC)$/registry$/data$/$(PACKAGEDIR)$/$(TARGET)2.xcu" 
+    @@-$(MKDIRHIER) $(@:d)
+    $(COPY) $< $@
+.ENDIF
 
 # --- filter file ------------------------------
 

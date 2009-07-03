@@ -39,7 +39,7 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings ----------------------------------
 
-.INCLUDE : settings.mk
+.INCLUDE : $(PRJ)$/makefile.pmk
 .INCLUDE :  $(PRJ)$/version.mk
 
 .IF "$(GUI)" == "UNX"
@@ -133,5 +133,5 @@ dummy:
     @echo "Nothing to build for GUI $(GUI)"
 .ENDIF
 
-.INCLUDE : target.mk
+.INCLUDE : $(PRJ)$/target.pmk
 
