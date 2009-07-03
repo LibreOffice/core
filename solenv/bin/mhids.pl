@@ -132,6 +132,7 @@ $filebase = $filename;
 $filebase =~ s/.*[\\\/]//;
 $filebase =~ s/\..*?$//;
 $workfile = "$tmpdir/${filebase}_".$$;
+#$workfile =~ s/setup/set_up/;
 
 # now get $workfile ready for shell usage...
 $shell_workfile = $workfile;
@@ -171,8 +172,8 @@ if ( defined $ENV{"NO_HID_FILES"} ) {
 #echo "perl5 -p -e "s/=[ \t]*\".*\"/=\"\"/go; s/\".*\"[ \t]*;/\"\" ;/go ; s/(\".*)\/\/(.*\")/$1\/\\\/$2/go ;" < %filename% > %srs%\%workfile%.c0"
 #call  perl5 -p -e "s/=[ \t]*\".*\"/=\"\"/go; s/\".*\"[ \t]*;/\"\" ;/go ; s/(\".*)\/\/(.*\")/$1\/\\\/$2/go ;" < %filename% > %srs%\%workfile%.c0
 
-print  "hidc $filename ${shell_workfile}.c1 $prjname \n";
-$ret = system "hidc $filename ${shell_workfile}.c1 $prjname";
+print  "$ENV{SOLARBINDIR}/hidc $filename ${shell_workfile}.c1 $prjname \n";
+$ret = system "$ENV{SOLARBINDIR}/hidc $filename ${shell_workfile}.c1 $prjname";
 if ( $ret ) {
     push @cleanuplist, ".c1";
     cleandie("ERROR - calling \"hidc\" failed");

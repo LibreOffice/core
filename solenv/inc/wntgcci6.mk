@@ -81,7 +81,7 @@ CFLAGSNOOPT=-O0
 # Compiler flags for describing the output path
 CFLAGSOUTOBJ=-o
 #plattform hart setzen
-CDEFS+=-DWIN32 -DWINVER=0x400 -D_WIN32_IE=0x400 -D_DLL -D_M_IX86 -DSTLPORT_VERSION=450 -D_NATIVE_WCHAR_T_DEFINED
+CDEFS+=-DWIN32 -DWINVER=0x500 -D_WIN32_IE=0x500 -D_DLL -D_M_IX86 -DSTLPORT_VERSION=450 -D_NATIVE_WCHAR_T_DEFINED
 
 # -Wshadow does not work for C with nested uses of pthread_cleanup_push:
 CFLAGSWARNCC=-Wall -Wextra -Wendif-labels
