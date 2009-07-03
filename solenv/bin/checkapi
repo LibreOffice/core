@@ -8,6 +8,7 @@ fi
 JARFOLDER=$SOLARVERSION/$INPATH/bin$UPDMINOREXT
 SOLVER_LIB=$SOLARVERSION/$INPATH/lib$UPDMINOREXT
 
+# it is possible to give an other OOoRunner.jar
 if [ -n "$RUNNERJAR" ]; then
     myCLASSPATH=$RUNNERJAR
 else 
@@ -26,8 +27,12 @@ elif [ -n "$JAVA_HOME" ]; then
         JAVABIN=$JAVA_HOME/bin/java
     fi
 else
-	echo "please set environment variable JAVA_HOME"
-	exit 1
+    # there seems to be some machines without real java
+    JAVABIN=$(which java)
+    if [ -z "$JAVABIN" ]; then 
+        echo "please set environment variable JAVA_HOME"
+        exit 1
+    fi
 fi
 
 if [ x${USER}x = xx ]; then
