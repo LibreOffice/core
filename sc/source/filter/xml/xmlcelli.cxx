@@ -68,6 +68,7 @@
 #include <svx/svdocapt.hxx>
 #include <svx/outlobj.hxx>
 #include <svx/editobj.hxx>
+#include <svx/unoapi.hxx>
 #include <svtools/languageoptions.hxx>
 
 #include <com/sun/star/frame/XModel.hpp>
@@ -99,15 +100,6 @@ using namespace xmloff::token;
 
 //------------------------------------------------------------------
 
-ScMyImportAnnotation::~ScMyImportAnnotation()
-{
-    delete pRect;
-    delete pItemSet;
-    delete pOPO;
-}
-
-//------------------------------------------------------------------
-
 ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                                       USHORT nPrfx,
                                       const ::rtl::OUString& rLName,
@@ -117,7 +109,6 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                                       const sal_Int32 nTempRepeatedRows ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     pContentValidationName(NULL),
-    pMyAnnotation(NULL),
     pDetectiveObjVec(NULL),
     pCellRangeSource(NULL),
     fValue(0.0),
@@ -283,8 +274,6 @@ ScXMLTableRowCellContext::~ScXMLTableRowCellContext()
 {
     if (pContentValidationName)
         delete pContentValidationName;
-    if (pMyAnnotation)
-        delete pMyAnnotation;
     if (pDetectiveObjVec)
         delete pDetectiveObjVec;
     if (pCellRangeSource)
@@ -425,8 +414,10 @@ SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( USHORT nPrefix
     case XML_TOK_TABLE_ROW_CELL_ANNOTATION:
         {
             bIsEmpty = sal_False;
+            DBG_ASSERT( !mxAnnotationData.get(), "ScXMLTableRowCellContext::CreateChildContext - multiple annotations in one cell" );
+            mxAnnotationData.reset( new ScXMLAnnotationData );
             pContext = new ScXMLAnnotationContext( rXMLImport, nPrefix, rLName,
-                                                    xAttrList, this);
+                                                    xAttrList, *mxAnnotationData, this);
         }
         break;
     case XML_TOK_TABLE_ROW_CELL_DETECTIVE:
@@ -607,70 +598,97 @@ void ScXMLTableRowCellContext::SetCellProperties(const uno::Reference<table::XCe
 
 void ScXMLTableRowCellContext::SetAnnotation(const table::CellAddress& aCellAddress)
 {
-    /*uno::Reference<sheet::XSheetAnnotationAnchor> xSheetAnnotationAnchor(xCell, uno::UNO_QUERY);
-    if (xSheetAnnotationAnchor.is())
-    {
-        uno::Reference <sheet::XSheetAnnotation> xSheetAnnotation (xSheetAnnotationAnchor->getAnnotation());
-        uno::Reference<text::XSimpleText> xSimpleText(xSheetAnnotation, uno::UNO_QUERY);
-        if (xSheetAnnotation.is() && xSimpleText.is())
-        {
-            xSimpleText->setString(aMyAnnotation.sText);
-            //xSheetAnnotation->setAuthor(aMyAnnotation.sAuthor);
-            //xSheetAnnotation->setDate();
-            xSheetAnnotation->setIsVisible(aMyAnnotation.bDisplay);
-        }
-    }*/
-    if( pMyAnnotation )
-    {
-        double fDate;
-        rXMLImport.GetMM100UnitConverter().convertDateTime(fDate, pMyAnnotation->sCreateDate);
-        ScDocument* pDoc = rXMLImport.GetDocument();
-        if (pDoc)
-        {
-            LockSolarMutex();
-            SvNumberFormatter* pNumForm = pDoc->GetFormatTable();
-            sal_uInt32 nfIndex = pNumForm->GetFormatIndex(NF_DATE_SYS_DDMMYYYY, LANGUAGE_SYSTEM);
-            String sDate;
-            Color* pColor = NULL;
-            Color** ppColor = &pColor;
-            pNumForm->GetOutputString(fDate, nfIndex, sDate, ppColor);
+    ScDocument* pDoc = rXMLImport.GetDocument();
+    if( !pDoc || !mxAnnotationData.get() )
+        return;
 
-            ScAddress aPos;
-            ScUnoConversion::FillScAddress( aPos, aCellAddress );
-            if( ScPostIt* pNote = pDoc->GetOrCreateNote( aPos ) )
+    LockSolarMutex();
+
+    ScAddress aPos;
+    ScUnoConversion::FillScAddress( aPos, aCellAddress );
+    ScPostIt* pNote = 0;
+
+    uno::Reference< drawing::XShapes > xShapes = rXMLImport.GetTables().GetCurrentXShapes();
+    uno::Reference< container::XIndexAccess > xShapesIA( xShapes, uno::UNO_QUERY );
+    sal_Int32 nOldShapeCount = xShapesIA.is() ? xShapesIA->getCount() : 0;
+
+    DBG_ASSERT( !mxAnnotationData->mxShape.is() || mxAnnotationData->mxShapes.is(),
+        "ScXMLTableRowCellContext::SetAnnotation - shape without drawing page" );
+    if( mxAnnotationData->mxShape.is() && mxAnnotationData->mxShapes.is() )
+    {
+        DBG_ASSERT( mxAnnotationData->mxShapes.get() == xShapes.get(), "ScXMLTableRowCellContext::SetAnnotation - diffenet drawing pages" );
+        SdrObject* pObject = ::GetSdrObjectFromXShape( mxAnnotationData->mxShape );
+        DBG_ASSERT( pObject, "ScXMLTableRowCellContext::SetAnnotation - cannot get SdrObject from shape" );
+
+        /*  Try to reuse the drawing object already created (but only if the
+            note is visible, and the object is a caption object). */
+        if( mxAnnotationData->mbShown && mxAnnotationData->mbUseShapePos )
+        {
+            if( SdrCaptionObj* pCaption = dynamic_cast< SdrCaptionObj* >( pObject ) )
             {
-                pNote->SetDate( sDate );
-                pNote->SetAuthor( pMyAnnotation->sAuthor );
-                if( SdrCaptionObj* pCaption = pNote->GetCaption() )
-                {
-                    if( pMyAnnotation->pOPO )
-                    {
-                        // transfer outliner object to caption
-                        pCaption->SetOutlinerParaObject( pMyAnnotation->pOPO );
-                        // do not delete the object in ScMyImportAnnotation d'tor
-                        pMyAnnotation->pOPO = 0;
-                    }
-                    else
-                        pCaption->SetText( pMyAnnotation->sText );
-                    // copy all items and reset shadow items
-                    if( pMyAnnotation->pItemSet )
-                        pNote->SetCaptionItems( *pMyAnnotation->pItemSet );
-                    else
-                        pNote->SetCaptionDefaultItems();    // default items need to be applied to text
-                    if( pMyAnnotation->pRect )
-                        pCaption->SetLogicRect( *pMyAnnotation->pRect );
-
-                    uno::Reference<container::XIndexAccess> xShapesIndex (rXMLImport.GetTables().GetCurrentXShapes(), uno::UNO_QUERY); // make draw page
-                    if (xShapesIndex.is())
-                    {
-                        sal_Int32 nShapes = xShapesIndex->getCount();
-                        uno::Reference < drawing::XShape > xShape;
-                        rXMLImport.GetShapeImport()->shapeWithZIndexAdded(xShape, nShapes);
-                    }
-                }
-                pNote->ShowCaption( pMyAnnotation->bDisplay );
+                OSL_ENSURE( !pCaption->GetLogicRect().IsEmpty(), "ScXMLTableRowCellContext::SetAnnotation - invalid caption rectangle" );
+                // create the cell note with the caption object
+                pNote = ScNoteUtil::CreateNoteFromCaption( *pDoc, aPos, *pCaption, true );
+                // forget pointer to object (do not create note again below)
+                pObject = 0;
             }
         }
+
+        // drawing object has not been used to create a note -> use shape data
+        if( pObject )
+        {
+            // rescue settings from drawing object before the shape is removed
+            ::std::auto_ptr< SfxItemSet > xItemSet( new SfxItemSet( pObject->GetMergedItemSet() ) );
+            ::std::auto_ptr< OutlinerParaObject > xOutlinerObj;
+            if( OutlinerParaObject* pOutlinerObj = pObject->GetOutlinerParaObject() )
+                xOutlinerObj.reset( new OutlinerParaObject( *pOutlinerObj ) );
+            Rectangle aCaptionRect;
+            if( mxAnnotationData->mbUseShapePos )
+                aCaptionRect = pObject->GetLogicRect();
+            // remove the shape from the drawing page, this invalidates pObject
+            mxAnnotationData->mxShapes->remove( mxAnnotationData->mxShape );
+            pObject = 0;
+            // update current number of existing objects
+            if( xShapesIA.is() )
+                nOldShapeCount = xShapesIA->getCount();
+
+            // an outliner object is required (empty note captions not allowed)
+            if( xOutlinerObj.get() )
+            {
+                // create cell note with all data from drawing object
+                pNote = ScNoteUtil::CreateNoteFromObjectData( *pDoc, aPos,
+                    xItemSet.release(), xOutlinerObj.release(),
+                    aCaptionRect, mxAnnotationData->mbShown, false );
+            }
+        }
+    }
+    else if( mxAnnotationData->maSimpleText.getLength() > 0 )
+    {
+        // create note from simple text
+        pNote = ScNoteUtil::CreateNoteFromString( *pDoc, aPos,
+            mxAnnotationData->maSimpleText, mxAnnotationData->mbShown, false );
+    }
+
+    // set author and date
+    if( pNote )
+    {
+        double fDate;
+        rXMLImport.GetMM100UnitConverter().convertDateTime( fDate, mxAnnotationData->maCreateDate );
+        SvNumberFormatter* pNumForm = pDoc->GetFormatTable();
+        sal_uInt32 nfIndex = pNumForm->GetFormatIndex( NF_DATE_SYS_DDMMYYYY, LANGUAGE_SYSTEM );
+        String aDate;
+        Color* pColor = 0;
+        Color** ppColor = &pColor;
+        pNumForm->GetOutputString( fDate, nfIndex, aDate, ppColor );
+        pNote->SetDate( aDate );
+        pNote->SetAuthor( mxAnnotationData->maAuthor );
+    }
+
+    // register a shape that has been newly created in the ScNoteUtil functions
+    if( xShapesIA.is() && (nOldShapeCount < xShapesIA->getCount()) )
+    {
+        uno::Reference< drawing::XShape > xShape;
+        rXMLImport.GetShapeImport()->shapeWithZIndexAdded( xShape, xShapesIA->getCount() );
     }
 }
 
@@ -798,7 +816,7 @@ void ScXMLTableRowCellContext::EndElement()
 //              uno::Reference <table::XCell> xCell;
                 table::CellAddress aCurrentPos( aCellPos );
                 if ((pContentValidationName && pContentValidationName->getLength()) ||
-                    pMyAnnotation || pDetectiveObjVec || pCellRangeSource)
+                    mxAnnotationData.get() || pDetectiveObjVec || pCellRangeSource)
                     bIsEmpty = sal_False;
 
                 ScMyTables& rTables = rXMLImport.GetTables();
@@ -980,7 +998,7 @@ void ScXMLTableRowCellContext::EndElement()
                             }
                             else
                             {
-                                if (!bWasEmpty || (pMyAnnotation))
+                                if (!bWasEmpty || mxAnnotationData.get())
                                 {
                                     if (aCurrentPos.Row > MAXROW)
                                         rXMLImport.SetRangeOverflowType(SCWARN_IMPORT_ROW_OVERFLOW);

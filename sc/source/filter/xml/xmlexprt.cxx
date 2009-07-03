@@ -596,6 +596,7 @@ void ScXMLExport::CollectSharedData(sal_Int32& nTableCount, sal_Int32& nShapesCo
                 if (!pSharedData)
                     CreateSharedData(nTableCount);
                 pCellStyles->AddNewTable(nTableCount - 1);
+                pDoc->InitializeAllNoteCaptions( true );
                 if (HasDrawPages(xSpreadDoc))
                 {
                     rtl::OUString sCaptionPoint( RTL_CONSTASCII_USTRINGPARAM( "CaptionPoint" ));

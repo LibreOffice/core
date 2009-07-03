@@ -38,11 +38,13 @@
 #include "xmlstyli.hxx"
 #include "xmlimprt.hxx"
 #include "document.hxx"
+#include "markdata.hxx"
 #include "XMLConverter.hxx"
 #include "docuno.hxx"
 #include "cellsuno.hxx"
 #include "XMLStylesImportHelper.hxx"
 #include "tabprotection.hxx"
+#include <svx/svdpage.hxx>
 
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>
@@ -581,7 +583,35 @@ void ScMyTables::UpdateRowHeights()
     {
         rImport.LockSolarMutex();
         // update automatic row heights
-        ScModelObj::getImplementation(rImport.GetModel())->UpdateAllRowHeights();
+
+        // For sheets with any kind of shapes (including notes),
+        // update row heights immediately (before setting the positions).
+        // For sheets without shapes, set "pending" flag
+        // and update row heights when a sheet is shown.
+        // The current sheet (from view settings) is always updated immediately.
+
+        ScDocument* pDoc = ScXMLConverter::GetScDocument(rImport.GetModel());
+        if (pDoc)
+        {
+            SCTAB nCount = pDoc->GetTableCount();
+            ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
+
+            SCTAB nVisible = static_cast<SCTAB>( rImport.GetVisibleSheet() );
+
+            ScMarkData aUpdateSheets;
+            for (SCTAB nTab=0; nTab<nCount; ++nTab)
+            {
+                const SdrPage* pPage = pDrawLayer ? pDrawLayer->GetPage(nTab) : NULL;
+                if ( nTab == nVisible || ( pPage && pPage->GetObjCount() != 0 ) )
+                    aUpdateSheets.SelectTable( nTab, TRUE );
+                else
+                    pDoc->SetPendingRowHeights( nTab, TRUE );
+            }
+
+            if (aUpdateSheets.GetSelectCount())
+                ScModelObj::getImplementation(rImport.GetModel())->UpdateAllRowHeights(&aUpdateSheets);
+        }
+
         rImport.UnlockSolarMutex();
     }
 }

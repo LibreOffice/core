@@ -148,7 +148,7 @@ ScBaseCell* ScBaseCell::CloneWithoutNote( ScDocument& rDestDoc, const ScAddress&
     return lclCloneCell( *this, rDestDoc, rDestPos, nCloneFlags );
 }
 
-ScBaseCell* ScBaseCell::CloneWithNote( ScDocument& rDestDoc, const ScAddress& rDestPos, int nCloneFlags ) const
+ScBaseCell* ScBaseCell::CloneWithNote( const ScAddress& rOwnPos, ScDocument& rDestDoc, const ScAddress& rDestPos, int nCloneFlags ) const
 {
     ScBaseCell* pNewCell = lclCloneCell( *this, rDestDoc, rDestPos, nCloneFlags );
     if( mpNote )
@@ -156,7 +156,7 @@ ScBaseCell* ScBaseCell::CloneWithNote( ScDocument& rDestDoc, const ScAddress& rD
         if( !pNewCell )
             pNewCell = new ScNoteCell;
         bool bCloneCaption = (nCloneFlags & SC_CLONECELL_NOCAPTION) == 0;
-        pNewCell->TakeNote( ScNoteUtil::CloneNote( rDestDoc, rDestPos, *mpNote, bCloneCaption ) );
+        pNewCell->TakeNote( mpNote->Clone( rOwnPos, rDestDoc, rDestPos, bCloneCaption ) );
     }
     return pNewCell;
 }

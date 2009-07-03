@@ -847,7 +847,7 @@ XclExpNote::XclExpNote( const XclExpRoot& rRoot, const ScAddress& rScPos,
         {
             // TODO: additional text
             if( pScNote )
-                if( SdrCaptionObj* pCaption = pScNote->GetCaption() )
+                if( SdrCaptionObj* pCaption = pScNote->GetOrCreateCaption( maScPos ) )
                     if( const OutlinerParaObject* pOPO = pCaption->GetOutlinerParaObject() )
                         mnObjId = rRoot.GetOldRoot().pObjRecs->Add( new XclObjComment( rRoot, pCaption->GetLogicRect(), pOPO->GetTextObject(), pCaption, mbVisible ) );
 

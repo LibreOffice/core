@@ -32,6 +32,8 @@
 #define SC_TABLE_HXX
 
 #include <vector>
+#include <memory>
+#include <utility>
 #include <tools/gen.hxx>
 #include <tools/color.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -80,6 +82,10 @@ class ScTable
 {
 private:
     typedef ::std::vector< ScRange > ScRangeVec;
+    typedef ::std::pair< SCCOL, SCROW > ScAddress2D;
+    typedef ::std::vector< ScAddress2D > ScAddress2DVec;
+    typedef ::std::auto_ptr< ScAddress2DVec > ScAddress2DVecPtr;
+
                                             //  Daten pro Tabelle   ------------------
     ScColumn        aCol[MAXCOLCOUNT];
 
@@ -121,6 +127,7 @@ private:
 
                                             //  interne Verwaltung  ------------------
     BOOL            bVisible;
+    BOOL            bPendingRowHeights;
 
     SCTAB           nTab;
     USHORT          nRecalcLvl;             // Rekursionslevel Size-Recalc
@@ -129,6 +136,8 @@ private:
     utl::TextSearch*    pSearchText;
 
     mutable String  aUpperName;             // #i62977# filled only on demand, reset in SetName
+
+    ScAddress2DVecPtr mxUninitNotes;
 
     // SortierParameter um den Stackbedarf von Quicksort zu Minimieren
     ScSortParam     aSortParam;
@@ -183,6 +192,9 @@ public:
 
     BOOL        IsVisible() const                            { return bVisible; }
     void        SetVisible( BOOL bVis );
+
+    BOOL        IsPendingRowHeights() const                  { return bPendingRowHeights; }
+    void        SetPendingRowHeights( BOOL bSet );
 
     BOOL        IsLayoutRTL() const                          { return bLayoutRTL; }
     BOOL        IsLoadingRTL() const                         { return bLoadingRTL; }
@@ -277,6 +289,9 @@ public:
     ScPostIt*   ReleaseNote( SCCOL nCol, SCROW nRow );
     /** Deletes the note at the passed cell address. */
     void        DeleteNote( SCCOL nCol, SCROW nRow );
+    /** Creates the captions of all uninitialized cell notes.
+        @param bForced  True = always create all captions, false = skip when Undo is disabled. */
+    void        InitializeNoteCaptions( bool bForced = false );
 
     BOOL        TestInsertRow( SCCOL nStartCol, SCCOL nEndCol, SCSIZE nSize );
     void        InsertRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE nSize );

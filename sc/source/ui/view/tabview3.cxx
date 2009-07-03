@@ -1595,6 +1595,10 @@ void ScTabView::SetTabNo( SCTAB nTab, BOOL bNew, BOOL bExtendSelection )
         ScDocument* pDoc = aViewData.GetDocument();
         pDoc->MakeTable( nTab );
 
+        // Update pending row heights before switching the sheet, so Reschedule from the progress bar
+        // doesn't paint the new sheet with old heights
+        aViewData.GetDocShell()->UpdatePendingRowHeights( nTab );
+
         SCTAB nTabCount = pDoc->GetTableCount();
         SCTAB nOldPos = nTab;
         while (!pDoc->IsVisible(nTab))              // naechste sichtbare suchen

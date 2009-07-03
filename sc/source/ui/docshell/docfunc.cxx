@@ -1052,7 +1052,7 @@ bool ScDocFunc::ShowNote( const ScAddress& rPos, bool bShow )
     if( !pNote || (bShow == pNote->IsCaptionShown()) ) return false;
 
     // move the caption to internal or hidden layer and create undo action
-    pNote->ShowCaption( bShow );
+    pNote->ShowCaption( rPos, bShow );
     if( rDoc.IsUndoEnabled() )
         rDocShell.GetUndoManager()->AddUndoAction( new ScUndoShowHideNote( rDocShell, rPos, bShow ) );
 
@@ -1080,7 +1080,7 @@ bool ScDocFunc::SetNoteText( const ScAddress& rPos, const String& rText, BOOL bA
     aNewText.ConvertLineEnd();      //! ist das noetig ???
 
     if( ScPostIt* pNote = (aNewText.Len() > 0) ? pDoc->GetOrCreateNote( rPos ) : pDoc->GetNote( rPos ) )
-        pNote->SetText( aNewText );
+        pNote->SetText( rPos, aNewText );
 
     //! Undo !!!
 
@@ -1104,23 +1104,26 @@ bool ScDocFunc::ReplaceNote( const ScAddress& rPos, const String& rNoteText, con
         ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
         SfxUndoManager* pUndoMgr = (pDrawLayer && rDoc.IsUndoEnabled()) ? rDocShell.GetUndoManager() : 0;
 
+        ScNoteData aOldData;
+        ScPostIt* pOldNote = rDoc.ReleaseNote( rPos );
+        if( pOldNote )
+        {
+            // ensure existing caption object before draw undo tracking starts
+            pOldNote->GetOrCreateCaption( rPos );
+            // rescue note data for undo
+            aOldData = pOldNote->GetNoteData();
+        }
+
         // collect drawing undo actions for deleting/inserting caption obejcts
         if( pUndoMgr )
             pDrawLayer->BeginCalcUndo();
 
-        // delete old note
-        ScNoteData aOldData;
-        if( ScPostIt* pOldNote = rDoc.ReleaseNote( rPos ) )
-        {
-            // rescue note data for undo
-            aOldData = pOldNote->GetNoteData();
-            // delete the note (creates drawing undo action for the caption object)
-            delete pOldNote;
-        }
+        // delete the note (creates drawing undo action for the caption object)
+        delete pOldNote;
 
         // create new note (creates drawing undo action for the new caption object)
         ScNoteData aNewData;
-        if( ScPostIt* pNewNote = ScNoteUtil::CreateNoteFromString( rDoc, rPos, rNoteText, false ) )
+        if( ScPostIt* pNewNote = ScNoteUtil::CreateNoteFromString( rDoc, rPos, rNoteText, false, true ) )
         {
             if( pAuthor ) pNewNote->SetAuthor( *pAuthor );
             if( pDate ) pNewNote->SetDate( *pDate );

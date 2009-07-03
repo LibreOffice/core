@@ -580,6 +580,8 @@ public:
     SC_DLLPUBLIC void           TransferDrawPage(ScDocument* pSrcDoc, SCTAB nSrcPos, SCTAB nDestPos);
     SC_DLLPUBLIC void           SetVisible( SCTAB nTab, BOOL bVisible );
     SC_DLLPUBLIC BOOL           IsVisible( SCTAB nTab ) const;
+    BOOL            IsPendingRowHeights( SCTAB nTab ) const;
+    void            SetPendingRowHeights( SCTAB nTab, BOOL bSet );
     SC_DLLPUBLIC void           SetLayoutRTL( SCTAB nTab, BOOL bRTL );
     SC_DLLPUBLIC BOOL           IsLayoutRTL( SCTAB nTab ) const;
     BOOL            IsNegativePage( SCTAB nTab ) const;
@@ -774,6 +776,12 @@ public:
     SC_DLLPUBLIC ScPostIt* GetOrCreateNote( const ScAddress& rPos );
     /** Deletes the note at the passed cell address. */
     void            DeleteNote( const ScAddress& rPos );
+    /** Creates the captions of all uninitialized cell notes in the specified sheet.
+        @param bForced  True = always create all captions, false = skip when Undo is disabled. */
+    void            InitializeNoteCaptions( SCTAB nTab, bool bForced = false );
+    /** Creates the captions of all uninitialized cell notes in all sheets.
+        @param bForced  True = always create all captions, false = skip when Undo is disabled. */
+    void            InitializeAllNoteCaptions( bool bForced = false );
 
     BOOL            ExtendMergeSel( SCCOL nStartCol, SCROW nStartRow,
                                 SCCOL& rEndCol, SCROW& rEndRow, const ScMarkData& rMark,
@@ -1240,7 +1248,8 @@ public:
                                         BOOL bShrink );
     void            UpdateAllRowHeights( OutputDevice* pDev,
                                         double nPPTX, double nPPTY,
-                                        const Fraction& rZoomX, const Fraction& rZoomY );
+                                        const Fraction& rZoomX, const Fraction& rZoomY,
+                                        const ScMarkData* pTabMark = NULL );
     long            GetNeededSize( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                     OutputDevice* pDev,
                                     double nPPTX, double nPPTY,

@@ -1714,7 +1714,7 @@ void Sc10Import::LoadCol(SCCOL Col, SCTAB Tab)
                 String aNoteText( SC10TOSTRING(pNote));
                 delete [] pNote;
                 ScAddress aPos( Col, static_cast<SCROW>(Row), Tab );
-                ScNoteUtil::CreateNoteFromString( *pDoc, aPos, aNoteText, false );
+                ScNoteUtil::CreateNoteFromString( *pDoc, aPos, aNoteText, false, false );
             }
         }
         pPrgrsBar->Progress();

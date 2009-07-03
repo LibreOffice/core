@@ -2181,6 +2181,7 @@ void ScViewFunc::SetWidthOrHeight( BOOL bWidth, SCCOLROW nRangeCnt, SCCOLROW* pR
             const SCCOLROW* pTabRanges = pRanges;
 
             pDoc->IncSizeRecalcLevel( nTab );       // nicht fuer jede Spalte einzeln
+            pDoc->InitializeNoteCaptions( nTab );
             for (SCCOLROW nRangeNo=0; nRangeNo<nRangeCnt; nRangeNo++)
             {
                 SCCOLROW nStartNo = *(pTabRanges++);

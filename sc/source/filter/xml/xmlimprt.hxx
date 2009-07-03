@@ -983,6 +983,7 @@ public:
     void SetLabelRanges();
     void AddDefaultNote( const com::sun::star::table::CellAddress& aCell );
 
+    sal_Int32   GetVisibleSheet();
 
     /** If namespace prefix is an accepted formula namespace.
 

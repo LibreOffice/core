@@ -117,6 +117,7 @@ BOOL ScTable::TestInsertRow( SCCOL nStartCol, SCCOL nEndCol, SCSIZE nSize )
 void ScTable::InsertRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE nSize )
 {
     nRecalcLvl++;
+    InitializeNoteCaptions();
     if (nStartCol==0 && nEndCol==MAXCOL)
     {
         if (pRowHeight && pRowFlags)
@@ -143,6 +144,7 @@ void ScTable::DeleteRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE
                             BOOL* pUndoOutline )
 {
     nRecalcLvl++;
+    InitializeNoteCaptions();
     if (nStartCol==0 && nEndCol==MAXCOL)
     {
         if (pRowHeight && pRowFlags)
@@ -186,6 +188,7 @@ BOOL ScTable::TestInsertCol( SCROW nStartRow, SCROW nEndRow, SCSIZE nSize )
 void ScTable::InsertCol( SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE nSize )
 {
     nRecalcLvl++;
+    InitializeNoteCaptions();
     if (nStartRow==0 && nEndRow==MAXROW)
     {
         if (pColWidth && pColFlags)
@@ -236,6 +239,7 @@ void ScTable::DeleteCol( SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE
                             BOOL* pUndoOutline )
 {
     nRecalcLvl++;
+    InitializeNoteCaptions();
     if (nStartRow==0 && nEndRow==MAXROW)
     {
         if (pColWidth && pColFlags)
@@ -484,9 +488,10 @@ void ScTable::TransposeClip( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 }
                 else                            // kopieren
                 {
+                    ScAddress aOwnPos( nCol, nRow, nTab );
                     if (pCell->GetCellType() == CELLTYPE_FORMULA)
                     {
-                        pNew = pCell->CloneWithNote( *pDestDoc, aDestPos, SC_CLONECELL_STARTLISTENING );
+                        pNew = pCell->CloneWithNote( aOwnPos, *pDestDoc, aDestPos, SC_CLONECELL_STARTLISTENING );
 
                         //  Referenzen drehen
                         //  bei Cut werden Referenzen spaeter per UpdateTranspose angepasst
@@ -495,7 +500,9 @@ void ScTable::TransposeClip( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                             ((ScFormulaCell*)pNew)->TransposeReference();
                     }
                     else
-                        pNew = pCell->CloneWithNote( *pDestDoc, aDestPos );
+                    {
+                        pNew = pCell->CloneWithNote( aOwnPos, *pDestDoc, aDestPos );
+                    }
                 }
                 pTransClip->PutCell( static_cast<SCCOL>(nRow-nRow1), static_cast<SCROW>(nCol-nCol1), pNew );
             }
@@ -900,7 +907,15 @@ ScPostIt* ScTable::GetNote( SCCOL nCol, SCROW nRow )
 void ScTable::TakeNote( SCCOL nCol, SCROW nRow, ScPostIt*& rpNote )
 {
     if( ValidColRow( nCol, nRow ) )
+    {
         aCol[ nCol ].TakeNote( nRow, rpNote );
+        if( rpNote && rpNote->GetNoteData().mxInitData.get() )
+        {
+            if( !mxUninitNotes.get() )
+                mxUninitNotes.reset( new ScAddress2DVec );
+            mxUninitNotes->push_back( ScAddress2D( nCol, nRow ) );
+        }
+    }
     else
         DELETEZ( rpNote );
 }
@@ -918,6 +933,17 @@ void ScTable::DeleteNote( SCCOL nCol, SCROW nRow )
         aCol[ nCol ].DeleteNote( nRow );
 }
 
+
+void ScTable::InitializeNoteCaptions( bool bForced )
+{
+    if( mxUninitNotes.get() && (bForced || pDocument->IsUndoEnabled()) )
+    {
+        for( ScAddress2DVec::iterator aIt = mxUninitNotes->begin(), aEnd = mxUninitNotes->end(); aIt != aEnd; ++aIt )
+            if( ScPostIt* pNote = GetNote( aIt->first, aIt->second ) )
+                pNote->GetOrCreateCaption( ScAddress( aIt->first, aIt->second, nTab ) );
+        mxUninitNotes.reset();
+    }
+}
 
 CellType ScTable::GetCellType( SCCOL nCol, SCROW nRow ) const
 {
@@ -1918,6 +1944,7 @@ void ScTable::SetColWidth( SCCOL nCol, USHORT nNewWidth )
         if ( nNewWidth != pColWidth[nCol] )
         {
             nRecalcLvl++;
+            InitializeNoteCaptions();
             ScDrawLayer* pDrawLayer = pDocument->GetDrawLayer();
             if (pDrawLayer)
                 pDrawLayer->WidthChanged( nTab, nCol, ((long) nNewWidth) - (long) pColWidth[nCol] );
@@ -1947,6 +1974,7 @@ void ScTable::SetRowHeight( SCROW nRow, USHORT nNewHeight )
         if ( nNewHeight != nOldHeight )
         {
             nRecalcLvl++;
+            InitializeNoteCaptions();
             ScDrawLayer* pDrawLayer = pDocument->GetDrawLayer();
             if (pDrawLayer)
                 pDrawLayer->HeightChanged( nTab, nRow, ((long) nNewHeight) - (long) nOldHeight );
@@ -1969,6 +1997,7 @@ BOOL ScTable::SetRowHeightRange( SCROW nStartRow, SCROW nEndRow, USHORT nNewHeig
     if (VALIDROW(nStartRow) && VALIDROW(nEndRow) && pRowHeight)
     {
         nRecalcLvl++;
+        InitializeNoteCaptions();
         if (!nNewHeight)
         {
             DBG_ERROR("Zeilenhoehe 0 in SetRowHeight");
@@ -2235,6 +2264,7 @@ void ScTable::ShowCol(SCCOL nCol, BOOL bShow)
         if (bWasVis != bShow)
         {
             nRecalcLvl++;
+            InitializeNoteCaptions();
             ScDrawLayer* pDrawLayer = pDocument->GetDrawLayer();
             if (pDrawLayer)
             {
@@ -2272,6 +2302,7 @@ void ScTable::ShowRow(SCROW nRow, BOOL bShow)
         if (bWasVis != bShow)
         {
             nRecalcLvl++;
+            InitializeNoteCaptions();
             ScDrawLayer* pDrawLayer = pDocument->GetDrawLayer();
             if (pDrawLayer)
             {
@@ -2307,6 +2338,7 @@ void ScTable::DBShowRow(SCROW nRow, BOOL bShow)
         BYTE nFlags = pRowFlags->GetValue(nRow);
         BOOL bWasVis = ( nFlags & CR_HIDDEN ) == 0;
         nRecalcLvl++;
+        InitializeNoteCaptions();
         if (bWasVis != bShow)
         {
             ScDrawLayer* pDrawLayer = pDocument->GetDrawLayer();
@@ -2348,6 +2380,7 @@ void ScTable::DBShowRows(SCROW nRow1, SCROW nRow2, BOOL bShow)
 {
     SCROW nStartRow = nRow1;
     nRecalcLvl++;
+    InitializeNoteCaptions();
     while (nStartRow <= nRow2)
     {
         BYTE nOldFlag = pRowFlags->GetValue(nStartRow) & CR_HIDDEN;
@@ -2400,6 +2433,7 @@ void ScTable::ShowRows(SCROW nRow1, SCROW nRow2, BOOL bShow)
 {
     SCROW nStartRow = nRow1;
     nRecalcLvl++;
+    InitializeNoteCaptions();
     while (nStartRow <= nRow2)
     {
         BYTE nOldFlag = pRowFlags->GetValue(nStartRow) & CR_HIDDEN;

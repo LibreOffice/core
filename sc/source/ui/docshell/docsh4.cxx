@@ -1842,6 +1842,10 @@ void lcl_GetPrintData( ScDocShell* pDocShell /*in*/,
         rOptions = SC_MOD()->GetPrintOptions();
     }
 
+    // update all pending row heights with a single progress bar,
+    // instead of a separate progress for each sheet from ScPrintFunc
+    pDocShell->UpdatePendingRowHeights( MAXTAB, true );
+
     // get number of total pages
     rnTotalPages = 0;
     SCTAB nTabCount = pDocument->GetTableCount();

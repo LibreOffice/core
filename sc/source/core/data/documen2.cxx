@@ -932,6 +932,7 @@ BOOL ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
             DrawCopyPage( static_cast<sal_uInt16>(nOldPos), static_cast<sal_uInt16>(nNewPos) );
 
         pTab[nNewPos]->SetPageStyle( pTab[nOldPos]->GetPageStyle() );
+        pTab[nNewPos]->SetPendingRowHeights( pTab[nOldPos]->IsPendingRowHeights() );
 
         // Update cells containing external references.
         if (pExternalRefMgr.get())
@@ -1110,6 +1111,8 @@ ULONG ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
 
         if (bInsertNew)
             TransferDrawPage( pSrcDoc, nSrcPos, nDestPos );
+
+        pTab[nDestPos]->SetPendingRowHeights( pSrcDoc->pTab[nSrcPos]->IsPendingRowHeights() );
     }
     if (!bValid)
         nRetVal = 0;

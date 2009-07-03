@@ -507,6 +507,22 @@ BOOL ScDocument::IsVisible( SCTAB nTab ) const
 }
 
 
+BOOL ScDocument::IsPendingRowHeights( SCTAB nTab ) const
+{
+    if ( ValidTab(nTab) && pTab[nTab] )
+        return pTab[nTab]->IsPendingRowHeights();
+
+    return FALSE;
+}
+
+
+void ScDocument::SetPendingRowHeights( SCTAB nTab, BOOL bSet )
+{
+    if ( ValidTab(nTab) && pTab[nTab] )
+        pTab[nTab]->SetPendingRowHeights( bSet );
+}
+
+
 void ScDocument::SetLayoutRTL( SCTAB nTab, BOOL bRTL )
 {
     if ( ValidTab(nTab)  && pTab[nTab] )
@@ -2568,6 +2584,18 @@ void ScDocument::DeleteNote( const ScAddress& rPos )
 }
 
 
+void ScDocument::InitializeNoteCaptions( SCTAB nTab, bool bForced )
+{
+    if( ValidTab( nTab ) && pTab[ nTab ] )
+        pTab[ nTab ]->InitializeNoteCaptions( bForced );
+}
+
+void ScDocument::InitializeAllNoteCaptions( bool bForced )
+{
+    for( SCTAB nTab = 0; nTab < GetTableCount(); ++nTab )
+        InitializeNoteCaptions( nTab, bForced );
+}
+
 void ScDocument::SetDirty()
 {
     BOOL bOldAutoCalc = GetAutoCalc();
@@ -2933,14 +2961,20 @@ BOOL ScDocument::SetOptimalHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, U
 
 
 void ScDocument::UpdateAllRowHeights( OutputDevice* pDev, double nPPTX, double nPPTY,
-                                    const Fraction& rZoomX, const Fraction& rZoomY )
+                                    const Fraction& rZoomX, const Fraction& rZoomY, const ScMarkData* pTabMark )
 {
-    // one progress across all sheets
-    ScProgress aProgress( GetDocumentShell(), ScGlobal::GetRscString(STR_PROGRESS_HEIGHTING), GetWeightedCount() );
+    // one progress across all (selected) sheets
+
+    ULONG nCellCount = 0;
+    for ( SCTAB nTab=0; nTab<=MAXTAB; nTab++ )
+        if ( pTab[nTab] && ( !pTabMark || pTabMark->GetTableSelect(nTab) ) )
+            nCellCount += pTab[nTab]->GetWeightedCount();
+
+    ScProgress aProgress( GetDocumentShell(), ScGlobal::GetRscString(STR_PROGRESS_HEIGHTING), nCellCount );
 
     ULONG nProgressStart = 0;
     for ( SCTAB nTab=0; nTab<=MAXTAB; nTab++ )
-        if ( pTab[nTab] )
+        if ( pTab[nTab] && ( !pTabMark || pTabMark->GetTableSelect(nTab) ) )
         {
             pTab[nTab]->SetOptimalHeight( 0, MAXROW, 0,
                         pDev, nPPTX, nPPTY, rZoomX, rZoomY, FALSE, &aProgress, nProgressStart );

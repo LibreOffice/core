@@ -33,7 +33,6 @@
 
 #include <tools/link.hxx>
 #include "global.hxx"
-#include "postit.hxx"
 #include "formula/grammar.hxx"
 
 class ScEditEngineDefaulter;

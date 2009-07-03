@@ -120,6 +120,7 @@
 #include "attrib.hxx"
 #include "validat.hxx"
 #include "tabprotection.hxx"
+#include "postit.hxx"
 
 // #114409#
 #include <vcl/salbtype.hxx>     // FRound

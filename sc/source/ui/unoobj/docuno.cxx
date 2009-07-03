@@ -271,10 +271,10 @@ SfxObjectShell* ScModelObj::GetEmbeddedObject() const
     return pDocShell;
 }
 
-void ScModelObj::UpdateAllRowHeights()
+void ScModelObj::UpdateAllRowHeights(const ScMarkData* pTabMark)
 {
     if (pDocShell)
-        pDocShell->UpdateAllRowHeights();
+        pDocShell->UpdateAllRowHeights(pTabMark);
 }
 
 ScDrawLayer* ScModelObj::MakeDrawLayer()
@@ -2791,7 +2791,26 @@ void SAL_CALL ScTableRowsObj::setPropertyValue(
     nRowArr[1] = nEndRow;
     String aNameString(aPropertyName);
 
-    if ( aNameString.EqualsAscii( SC_UNONAME_CELLHGT ) )
+    if ( aNameString.EqualsAscii( SC_UNONAME_OHEIGHT ) )
+    {
+        sal_Int32 nNewHeight = 0;
+        if ( pDoc->IsImportingXML() && ( aValue >>= nNewHeight ) )
+        {
+            // used to set the stored row height for rows with optimal height when loading
+            pDoc->SetRowHeightRange( nStartRow, nEndRow, nTab, (USHORT)HMMToTwips(nNewHeight) );
+        }
+        else
+        {
+            BOOL bOpt = ScUnoHelpFunctions::GetBoolFromAny( aValue );
+            if (bOpt)
+                aFunc.SetWidthOrHeight( FALSE, 1, nRowArr, nTab, SC_SIZE_OPTIMAL, 0, TRUE, TRUE );
+            else
+            {
+                //! manually set old heights again?
+            }
+        }
+    }
+    else if ( aNameString.EqualsAscii( SC_UNONAME_CELLHGT ) )
     {
         sal_Int32 nNewHeight = 0;
         if ( aValue >>= nNewHeight )
@@ -2812,16 +2831,6 @@ void SAL_CALL ScTableRowsObj::setPropertyValue(
             pDoc->GetRowFlagsArrayModifiable( nTab).OrValue( nStartRow, nEndRow, CR_FILTERED);
         else
             pDoc->GetRowFlagsArrayModifiable( nTab).AndValue( nStartRow, nEndRow, sal::static_int_cast<BYTE>(~CR_FILTERED) );
-    }
-    else if ( aNameString.EqualsAscii( SC_UNONAME_OHEIGHT ) )
-    {
-        BOOL bOpt = ScUnoHelpFunctions::GetBoolFromAny( aValue );
-        if (bOpt)
-            aFunc.SetWidthOrHeight( FALSE, 1, nRowArr, nTab, SC_SIZE_OPTIMAL, 0, TRUE, TRUE );
-        else
-        {
-            //! manually set old heights again?
-        }
     }
     else if ( aNameString.EqualsAscii( SC_UNONAME_NEWPAGE) || aNameString.EqualsAscii( SC_UNONAME_MANPAGE) )
     {

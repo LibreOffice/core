@@ -907,7 +907,8 @@ ScBaseCell* ScColumn::CloneCell(SCSIZE nIndex, USHORT nFlags, ScDocument& rDestD
         {
             bool bCloneCaption = (nFlags & IDF_NOCAPTIONS) == 0;
             // #i52342# if caption is cloned, the note must be constructed with the destination document
-            ScPostIt* pNewNote = ScNoteUtil::CloneNote( rDestDoc, rDestPos, *pNote, bCloneCaption );
+            ScAddress aOwnPos( nCol, pItems[nIndex].nRow, nTab );
+            ScPostIt* pNewNote = pNote->Clone( aOwnPos, rDestDoc, rDestPos, bCloneCaption );
             if (!pNew)
                 pNew = new ScNoteCell( pNewNote );
             else

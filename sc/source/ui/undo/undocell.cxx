@@ -829,6 +829,7 @@ ScUndoReplaceNote::ScUndoReplaceNote( ScDocShell& rDocShell, const ScAddress& rP
     mpDrawUndo( pDrawUndo )
 {
     DBG_ASSERT( maOldData.mpCaption || maNewData.mpCaption, "ScUndoReplaceNote::ScUndoReplaceNote - missing note captions" );
+    DBG_ASSERT( !maOldData.mxInitData.get() && !maNewData.mxInitData.get(), "ScUndoReplaceNote::ScUndoReplaceNote - unexpected unitialized note" );
 }
 
 ScUndoReplaceNote::~ScUndoReplaceNote()
@@ -883,7 +884,7 @@ void ScUndoReplaceNote::DoInsertNote( const ScNoteData& rNoteData )
     {
         ScDocument& rDoc = *pDocShell->GetDocument();
         DBG_ASSERT( !rDoc.GetNote( maPos ), "ScUndoReplaceNote::DoInsertNote - unexpected cell note" );
-        ScPostIt* pNote = new ScPostIt( rDoc, rNoteData );
+        ScPostIt* pNote = new ScPostIt( rDoc, maPos, rNoteData, false );
         rDoc.TakeNote( maPos, pNote );
     }
 }
@@ -896,7 +897,9 @@ void ScUndoReplaceNote::DoRemoveNote( const ScNoteData& rNoteData )
         DBG_ASSERT( rDoc.GetNote( maPos ), "ScUndoReplaceNote::DoRemoveNote - missing cell note" );
         if( ScPostIt* pNote = rDoc.ReleaseNote( maPos ) )
         {
-            // forget caption (already handled in drawing undo)
+            /*  Forget pointer to caption object to suppress removing the
+                caption object from the drawing layer while deleting pNote
+                (removing the caption is done by a drawing undo action). */
             pNote->ForgetCaption();
             delete pNote;
         }
@@ -920,7 +923,7 @@ void ScUndoShowHideNote::Undo()
 {
     BeginUndo();
     if( ScPostIt* pNote = pDocShell->GetDocument()->GetNote( maPos ) )
-        pNote->ShowCaption( !mbShown );
+        pNote->ShowCaption( maPos, !mbShown );
     EndUndo();
 }
 
@@ -928,7 +931,7 @@ void ScUndoShowHideNote::Redo()
 {
     BeginRedo();
     if( ScPostIt* pNote = pDocShell->GetDocument()->GetNote( maPos ) )
-        pNote->ShowCaption( mbShown );
+        pNote->ShowCaption( maPos, mbShown );
     EndRedo();
 }
 
