@@ -4,20 +4,54 @@
 # The following env. variables have to be setup before sourcing this:
 # ooo_prefix, buildsolverdir
 
+buildenv_usage() {
+    cat <<EOT
+source buildenv - Source this file to get the environment to be able to build OOo
+
+-h|--help    This help
+-i|--install Set also the variables needed for installation
+EOT
+    # we cannot just exit here, exits the shell
+}
+
+# get the command line params
+
+buildenv_build="1"
+buildenv_install=""
+while [ "$1" != "" ] ; do
+    case "$1" in
+        -h|--help)    buildenv_usage ; buildenv_build="" ;;
+        -i|--install) buildenv_install="1" ;;
+    esac
+    shift
+done
+
 # more to define
 
 solenvdir="$ooo_prefix/solenv"
+solverdir="$ooo_prefix/solver"
 
-# setting the environment itself
+# setting the build environment
 
-export FORCE_SOLVER="$solverdir"
-export FORCE_SOLARENV="$solenvdir"
+if [ "$buildenv_build" = "1" ] ; then
+    export FORCE_SOLVER="$solverdir"
+    export FORCE_SOLARENV="$solenvdir"
 
-. "$solverdir"/Linux*Env.Set.sh
+    . "$solverdir"/Linux*Env.Set.sh
 
-export SOLARLIB="$SOLARLIB -L$buildsolverdir/$UPD/$INPATH/lib"
-export SOLARINC="$SOLARINC -I$buildsolverdir/$UPD/$INPATH/inc"
-export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$buildsolverdir/$UPD/$INPATH/lib"
-export PATH="$PATH:$buildsolverdir/$UPD/$INPATH/bin"
-export CLASSPATH="$CLASSPATH:$buildsolverdir/$UPD/$INPATH/bin"
-export BUILDSOLVER="$buildsolverdir"
+    export SOLARLIB="$SOLARLIB -L$buildsolverdir/$UPD/$INPATH/lib"
+    export SOLARINC="$SOLARINC -I$buildsolverdir/$UPD/$INPATH/inc"
+    export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$buildsolverdir/$UPD/$INPATH/lib"
+    export PATH="$PATH:$buildsolverdir/$UPD/$INPATH/bin"
+    export CLASSPATH="$CLASSPATH:$buildsolverdir/$UPD/$INPATH/bin"
+    export BUILDSOLVER="$buildsolverdir"
+fi
+
+# install-related bits
+
+if [ "$buildenv_build,$buildenv_install" = "1,1" ] ; then
+    export BUILD=$(grep '^BUILD' "$solenvdir"/inc/minor.mk | head -n 1 | sed 's/^[^=]*=//')
+    export LAST_MINOR=$(grep '^LAST_MINOR' "$solenvdir"/inc/minor.mk | head -n 1 | sed 's/^[^=]*=//')
+    export LOCAL_OUT="$BUILDSOLVER/$UPD/$INPATH"
+    export LOCAL_COMMON_OUT="$solverdir/$UPD/$INPATH"
+fi
