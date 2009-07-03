@@ -265,6 +265,9 @@ public class JPEGComparator extends EnhancedComplexTestCase
         _aParams.getTestParameters().put("current_state", sStatusRunThrough);
         _aParams.getTestParameters().put("current_info", sStatusMessage);
         _aParams.getTestParameters().put("current_ok_status", ok_status);
+
+        // if we have a ugly page, we must return this as a FAILED STATUS in Log file!
+        // assure( "There exist pages marked as ugly.", ugly == 0)
     }
 
     private void checkOnePicture(String _sDocumentName, String _sResult, ParameterHelper _aParams)

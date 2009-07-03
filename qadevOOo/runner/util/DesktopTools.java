@@ -245,6 +245,7 @@ public class DesktopTools {
         {
             throw new IllegalArgumentException("Document could not be loaded");
         }
+
         bringWindowToFront(oDoc);
         return oDoc;
     } //finish openNewDoc
@@ -254,6 +255,11 @@ public class DesktopTools {
      * @param DocumentToClose the document to close
      */
     public static void closeDoc(XInterface DocumentToClose) {
+        if (DocumentToClose == null)
+        {
+            return;
+        }
+
         String kd = System.getProperty("KeepDocument");
         if (kd != null ) {
             System.out.println("The property 'KeepDocument' is set and so the document won't be disposed");
@@ -434,7 +440,7 @@ public class DesktopTools {
     }
 
     public static void bringWindowToFront(XComponent xComponent){
-        System.out.println("DEBUG: bring to front xCompoent");
+        System.out.println("DEBUG: bring to front xComponent");
         XModel xModel = (XModel) UnoRuntime.queryInterface(XModel.class, xComponent);
         if (xModel != null){
             bringWindowToFront(xModel);
