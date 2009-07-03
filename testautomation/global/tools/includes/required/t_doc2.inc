@@ -57,7 +57,7 @@ sub hTabelleEinfuegen
         TextObjectbar.SetNextToolBox
     end if
 
-    Select Case gApplication
+    select case uCASE(gApplication)
     Case "WRITER"
         Kontext "DocumentWriter"
     Case "MASTERDOCUMENT"
@@ -189,7 +189,7 @@ function fSelectFirstOLE() as integer
 
     fSelectFirstOLE = -1
 
-    select case gApplication
+    select case uCASE(gApplication)
     case "CALC"                     :   Kontext "NavigatorCalc"
         'First check if Navigator is visible and remember result
         if NavigatorCalc.exists (10) then
@@ -252,7 +252,7 @@ function fSelectFirstOLE() as integer
         end if
 
     case "WRITER" , "HTML" , "MASTERDOCUMENT" :
-        select case gApplication
+        select case uCASE(gApplication)
         case "MASTERDOCUMENT"    :   Kontext "NavigatorGlobalDoc"
             if NavigatorGlobalDoc.Exists(10) then
                 bNavigatorWasVisible = TRUE
