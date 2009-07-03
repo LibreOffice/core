@@ -8,9 +8,7 @@ DEFLIB1NAME*=$(DEF1LIBNAME)
 .ENDIF			# "$(DEF1LIBNAME)"!=""
 
 .IF "$(DEFLIB1NAME)"!=""
-.IF "$(UPDATER)"!=""
 DEF1DEPN+=$(foreach,i,$(DEFLIB1NAME) $(SLB)$/$(i).lib)
-.ENDIF			# "$(UPDATER)"!=""
 .ENDIF
 
 .IF "$(SHL1VERSIONMAP)"!=""
@@ -293,9 +291,7 @@ DEFLIB2NAME*=$(DEF2LIBNAME)
 .ENDIF			# "$(DEF2LIBNAME)"!=""
 
 .IF "$(DEFLIB2NAME)"!=""
-.IF "$(UPDATER)"!=""
 DEF2DEPN+=$(foreach,i,$(DEFLIB2NAME) $(SLB)$/$(i).lib)
-.ENDIF			# "$(UPDATER)"!=""
 .ENDIF
 
 .IF "$(SHL2VERSIONMAP)"!=""
@@ -578,9 +574,7 @@ DEFLIB3NAME*=$(DEF3LIBNAME)
 .ENDIF			# "$(DEF3LIBNAME)"!=""
 
 .IF "$(DEFLIB3NAME)"!=""
-.IF "$(UPDATER)"!=""
 DEF3DEPN+=$(foreach,i,$(DEFLIB3NAME) $(SLB)$/$(i).lib)
-.ENDIF			# "$(UPDATER)"!=""
 .ENDIF
 
 .IF "$(SHL3VERSIONMAP)"!=""
@@ -863,9 +857,7 @@ DEFLIB4NAME*=$(DEF4LIBNAME)
 .ENDIF			# "$(DEF4LIBNAME)"!=""
 
 .IF "$(DEFLIB4NAME)"!=""
-.IF "$(UPDATER)"!=""
 DEF4DEPN+=$(foreach,i,$(DEFLIB4NAME) $(SLB)$/$(i).lib)
-.ENDIF			# "$(UPDATER)"!=""
 .ENDIF
 
 .IF "$(SHL4VERSIONMAP)"!=""
@@ -1148,9 +1140,7 @@ DEFLIB5NAME*=$(DEF5LIBNAME)
 .ENDIF			# "$(DEF5LIBNAME)"!=""
 
 .IF "$(DEFLIB5NAME)"!=""
-.IF "$(UPDATER)"!=""
 DEF5DEPN+=$(foreach,i,$(DEFLIB5NAME) $(SLB)$/$(i).lib)
-.ENDIF			# "$(UPDATER)"!=""
 .ENDIF
 
 .IF "$(SHL5VERSIONMAP)"!=""
@@ -1433,9 +1423,7 @@ DEFLIB6NAME*=$(DEF6LIBNAME)
 .ENDIF			# "$(DEF6LIBNAME)"!=""
 
 .IF "$(DEFLIB6NAME)"!=""
-.IF "$(UPDATER)"!=""
 DEF6DEPN+=$(foreach,i,$(DEFLIB6NAME) $(SLB)$/$(i).lib)
-.ENDIF			# "$(UPDATER)"!=""
 .ENDIF
 
 .IF "$(SHL6VERSIONMAP)"!=""
@@ -1718,9 +1706,7 @@ DEFLIB7NAME*=$(DEF7LIBNAME)
 .ENDIF			# "$(DEF7LIBNAME)"!=""
 
 .IF "$(DEFLIB7NAME)"!=""
-.IF "$(UPDATER)"!=""
 DEF7DEPN+=$(foreach,i,$(DEFLIB7NAME) $(SLB)$/$(i).lib)
-.ENDIF			# "$(UPDATER)"!=""
 .ENDIF
 
 .IF "$(SHL7VERSIONMAP)"!=""
@@ -2003,9 +1989,7 @@ DEFLIB8NAME*=$(DEF8LIBNAME)
 .ENDIF			# "$(DEF8LIBNAME)"!=""
 
 .IF "$(DEFLIB8NAME)"!=""
-.IF "$(UPDATER)"!=""
 DEF8DEPN+=$(foreach,i,$(DEFLIB8NAME) $(SLB)$/$(i).lib)
-.ENDIF			# "$(UPDATER)"!=""
 .ENDIF
 
 .IF "$(SHL8VERSIONMAP)"!=""
@@ -2288,9 +2272,7 @@ DEFLIB9NAME*=$(DEF9LIBNAME)
 .ENDIF			# "$(DEF9LIBNAME)"!=""
 
 .IF "$(DEFLIB9NAME)"!=""
-.IF "$(UPDATER)"!=""
 DEF9DEPN+=$(foreach,i,$(DEFLIB9NAME) $(SLB)$/$(i).lib)
-.ENDIF			# "$(UPDATER)"!=""
 .ENDIF
 
 .IF "$(SHL9VERSIONMAP)"!=""
@@ -2573,9 +2555,7 @@ DEFLIB10NAME*=$(DEF10LIBNAME)
 .ENDIF			# "$(DEF10LIBNAME)"!=""
 
 .IF "$(DEFLIB10NAME)"!=""
-.IF "$(UPDATER)"!=""
 DEF10DEPN+=$(foreach,i,$(DEFLIB10NAME) $(SLB)$/$(i).lib)
-.ENDIF			# "$(UPDATER)"!=""
 .ENDIF
 
 .IF "$(SHL10VERSIONMAP)"!=""

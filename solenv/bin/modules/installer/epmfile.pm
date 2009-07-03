@@ -838,6 +838,9 @@ sub find_epm_on_system
         elsif ( ($ENV{'EPM'} eq "no") || ($ENV{'EPM'} eq "internal") )
         {
             $epmname = "epm";
+            my $epmref = installer::scriptitems::get_sourcepath_from_filename_and_includepath( \$epmname, $includepatharrayref, 0);
+            if ($$epmref eq "") { installer::exiter::exit_program("ERROR: Could not find program $epmname (EPM set to \"internal\" or \"no\")!", "find_epm_on_system"); }
+            $epmname = $$epmref;
         }
         else
         {
@@ -2402,39 +2405,42 @@ sub create_packages_without_epm
 
         # compressing packages
 
-        my $faspac = "faspac-so.sh";
-
-        my $compressorref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$faspac, $includepatharrayref, 0);
-        if ($$compressorref ne "")
+        if ( ! $installer::globals::solarisdontcompress )
         {
-            # Saving original pkginfo, to set time stamp later
-            my $pkginfoorig = "$destinationdir/$packagename/pkginfo";
-            my $pkginfotmp = "$destinationdir/$packagename" . ".pkginfo.tmp";
-            $systemcall = "cp -p $pkginfoorig $pkginfotmp";
-             make_systemcall($systemcall);
+            my $faspac = "faspac-so.sh";
 
-            $faspac = $$compressorref;
-            $infoline = "Found compressor: $faspac\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            my $compressorref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$faspac, $includepatharrayref, 0);
+            if ($$compressorref ne "")
+            {
+                # Saving original pkginfo, to set time stamp later
+                my $pkginfoorig = "$destinationdir/$packagename/pkginfo";
+                my $pkginfotmp = "$destinationdir/$packagename" . ".pkginfo.tmp";
+                $systemcall = "cp -p $pkginfoorig $pkginfotmp";
+                 make_systemcall($systemcall);
 
-            installer::logger::print_message( "... $faspac ...\n" );
-            installer::logger::include_timestamp_into_logfile("Starting $faspac");
+                $faspac = $$compressorref;
+                $infoline = "Found compressor: $faspac\n";
+                push( @installer::globals::logfileinfo, $infoline);
 
-             $systemcall = "/bin/sh $faspac -a -q -d $destinationdir $packagename";  # $faspac has to be the absolute path!
-             make_systemcall($systemcall);
+                installer::logger::print_message( "... $faspac ...\n" );
+                installer::logger::include_timestamp_into_logfile("Starting $faspac");
 
-             # Setting time stamp for pkginfo, because faspac-so.sh changed the pkginfo file,
-             # updated the size and checksum, but not the time stamp.
-             $systemcall = "touch -r $pkginfotmp $pkginfoorig";
-             make_systemcall($systemcall);
-            if ( -f $pkginfotmp ) { unlink($pkginfotmp); }
+                 $systemcall = "/bin/sh $faspac -a -q -d $destinationdir $packagename";  # $faspac has to be the absolute path!
+                 make_systemcall($systemcall);
 
-            installer::logger::include_timestamp_into_logfile("End of $faspac");
-        }
-        else
-        {
-            $infoline = "Not found: $faspac\n";
-            push( @installer::globals::logfileinfo, $infoline);
+                 # Setting time stamp for pkginfo, because faspac-so.sh changed the pkginfo file,
+                 # updated the size and checksum, but not the time stamp.
+                 $systemcall = "touch -r $pkginfotmp $pkginfoorig";
+                 make_systemcall($systemcall);
+                if ( -f $pkginfotmp ) { unlink($pkginfotmp); }
+
+                installer::logger::include_timestamp_into_logfile("End of $faspac");
+            }
+            else
+            {
+                $infoline = "Not found: $faspac\n";
+                push( @installer::globals::logfileinfo, $infoline);
+            }
         }
 
         # Setting unix rights to "775" for all created directories inside the package

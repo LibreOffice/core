@@ -978,11 +978,12 @@ sub check_deps_hash {
     my $string;
     my $log_name;
     my $build_number = 0;
-
     do {
         $consistent = '';
         foreach $key (sort keys %deps_hash) {
             $local_deps_ref = $deps_hash{$key};
+            $little_key = $key;
+            #print "Key = $key , consi = '$consistent' ";
             if (!scalar keys %$local_deps_ref) {
                 if (defined $module) {
                     $build_number++;
@@ -1027,6 +1028,7 @@ sub check_deps_hash {
                 };
                 RemoveFromDependencies($key, \%deps_hash);
                 delete $deps_hash{$key};
+                #print " ... OK!\n";
                 $consistent++;
             };
         };

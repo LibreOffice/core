@@ -717,6 +717,8 @@ File gid_File_Lib_I18nutil
     Styles = (PACKED);
 End
 
+STD_LIB_FILE( gid_File_Lib_I18npaper, i18npaper)
+
 #ifndef SYSTEM_ICU
 
 File gid_File_Lib_Icudata

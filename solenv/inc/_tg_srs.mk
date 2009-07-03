@@ -22,10 +22,12 @@ $(MISC)$/$(TARGET).$(SRS1NAME).dprr: $(SRC1FILES) $(HIDSRS1PARTICLE) $(HID1FILES
     $(RSC) $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) -I$(INCLOCPRJ)  -I$(INCLOCAL) -I$(INC) -I$(INCCOM) $(RSCDEFS) $(RSCUPDVERDEF) -fp={$(SRS)$/$(SRS1NAME).srs} -fo=$@ -p=$(TARGET) $(SRC1FILES)
 
 .IF "$(WITH_LANG)"!=""
-$(foreach,i,$(SRC1FILES) $(COMMONMISC)$/$(TARGET)$/$i) : $$(@:f) localize.sdf 
+
+$(foreach,i,$(SRC1FILES) $(COMMONMISC)$/$(TARGET)$/$i) : $$(@:f) $(LOCALIZESDF)  
     -$(MKDIR) $(@:d)
     -$(RM) $@
-    $(TRANSEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m localize.sdf -l all
+    -$(MKDIRHIER) $(SOLARSRC)$/$(PRJNAME)$/common$(PROEXT)$/misc$/$(PRJNAME)
+    $(WRAPCMD) $(TRANSEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m $(LOCALIZESDF) -l all
     $(RENAME) $@.$(INPATH) $@
     -$(RM) $@.$(INPATH)
 
@@ -71,10 +73,12 @@ $(MISC)$/$(TARGET).$(SRS2NAME).dprr: $(SRC2FILES) $(HIDSRS2PARTICLE) $(HID2FILES
     $(RSC) $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) -I$(INCLOCPRJ)  -I$(INCLOCAL) -I$(INC) -I$(INCCOM) $(RSCDEFS) $(RSCUPDVERDEF) -fp={$(SRS)$/$(SRS2NAME).srs} -fo=$@ -p=$(TARGET) $(SRC2FILES)
 
 .IF "$(WITH_LANG)"!=""
-$(foreach,i,$(SRC2FILES) $(COMMONMISC)$/$(TARGET)$/$i) : $$(@:f) localize.sdf 
+
+$(foreach,i,$(SRC2FILES) $(COMMONMISC)$/$(TARGET)$/$i) : $$(@:f) $(LOCALIZESDF)  
     -$(MKDIR) $(@:d)
     -$(RM) $@
-    $(TRANSEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m localize.sdf -l all
+    -$(MKDIRHIER) $(SOLARSRC)$/$(PRJNAME)$/common$(PROEXT)$/misc$/$(PRJNAME)
+    $(WRAPCMD) $(TRANSEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m $(LOCALIZESDF) -l all
     $(RENAME) $@.$(INPATH) $@
     -$(RM) $@.$(INPATH)
 
@@ -120,10 +124,12 @@ $(MISC)$/$(TARGET).$(SRS3NAME).dprr: $(SRC3FILES) $(HIDSRS3PARTICLE) $(HID3FILES
     $(RSC) $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) -I$(INCLOCPRJ)  -I$(INCLOCAL) -I$(INC) -I$(INCCOM) $(RSCDEFS) $(RSCUPDVERDEF) -fp={$(SRS)$/$(SRS3NAME).srs} -fo=$@ -p=$(TARGET) $(SRC3FILES)
 
 .IF "$(WITH_LANG)"!=""
-$(foreach,i,$(SRC3FILES) $(COMMONMISC)$/$(TARGET)$/$i) : $$(@:f) localize.sdf 
+
+$(foreach,i,$(SRC3FILES) $(COMMONMISC)$/$(TARGET)$/$i) : $$(@:f) $(LOCALIZESDF)  
     -$(MKDIR) $(@:d)
     -$(RM) $@
-    $(TRANSEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m localize.sdf -l all
+    -$(MKDIRHIER) $(SOLARSRC)$/$(PRJNAME)$/common$(PROEXT)$/misc$/$(PRJNAME)
+    $(WRAPCMD) $(TRANSEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m $(LOCALIZESDF) -l all
     $(RENAME) $@.$(INPATH) $@
     -$(RM) $@.$(INPATH)
 
@@ -169,10 +175,12 @@ $(MISC)$/$(TARGET).$(SRS4NAME).dprr: $(SRC4FILES) $(HIDSRS4PARTICLE) $(HID4FILES
     $(RSC) $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) -I$(INCLOCPRJ)  -I$(INCLOCAL) -I$(INC) -I$(INCCOM) $(RSCDEFS) $(RSCUPDVERDEF) -fp={$(SRS)$/$(SRS4NAME).srs} -fo=$@ -p=$(TARGET) $(SRC4FILES)
 
 .IF "$(WITH_LANG)"!=""
-$(foreach,i,$(SRC4FILES) $(COMMONMISC)$/$(TARGET)$/$i) : $$(@:f) localize.sdf 
+
+$(foreach,i,$(SRC4FILES) $(COMMONMISC)$/$(TARGET)$/$i) : $$(@:f) $(LOCALIZESDF)  
     -$(MKDIR) $(@:d)
     -$(RM) $@
-    $(TRANSEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m localize.sdf -l all
+    -$(MKDIRHIER) $(SOLARSRC)$/$(PRJNAME)$/common$(PROEXT)$/misc$/$(PRJNAME)
+    $(WRAPCMD) $(TRANSEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m $(LOCALIZESDF) -l all
     $(RENAME) $@.$(INPATH) $@
     -$(RM) $@.$(INPATH)
 
@@ -218,10 +226,12 @@ $(MISC)$/$(TARGET).$(SRS5NAME).dprr: $(SRC5FILES) $(HIDSRS5PARTICLE) $(HID5FILES
     $(RSC) $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) -I$(INCLOCPRJ)  -I$(INCLOCAL) -I$(INC) -I$(INCCOM) $(RSCDEFS) $(RSCUPDVERDEF) -fp={$(SRS)$/$(SRS5NAME).srs} -fo=$@ -p=$(TARGET) $(SRC5FILES)
 
 .IF "$(WITH_LANG)"!=""
-$(foreach,i,$(SRC5FILES) $(COMMONMISC)$/$(TARGET)$/$i) : $$(@:f) localize.sdf 
+
+$(foreach,i,$(SRC5FILES) $(COMMONMISC)$/$(TARGET)$/$i) : $$(@:f) $(LOCALIZESDF)  
     -$(MKDIR) $(@:d)
     -$(RM) $@
-    $(TRANSEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m localize.sdf -l all
+    -$(MKDIRHIER) $(SOLARSRC)$/$(PRJNAME)$/common$(PROEXT)$/misc$/$(PRJNAME)
+    $(WRAPCMD) $(TRANSEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m $(LOCALIZESDF) -l all
     $(RENAME) $@.$(INPATH) $@
     -$(RM) $@.$(INPATH)
 
@@ -267,10 +277,12 @@ $(MISC)$/$(TARGET).$(SRS6NAME).dprr: $(SRC6FILES) $(HIDSRS6PARTICLE) $(HID6FILES
     $(RSC) $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) -I$(INCLOCPRJ)  -I$(INCLOCAL) -I$(INC) -I$(INCCOM) $(RSCDEFS) $(RSCUPDVERDEF) -fp={$(SRS)$/$(SRS6NAME).srs} -fo=$@ -p=$(TARGET) $(SRC6FILES)
 
 .IF "$(WITH_LANG)"!=""
-$(foreach,i,$(SRC6FILES) $(COMMONMISC)$/$(TARGET)$/$i) : $$(@:f) localize.sdf 
+
+$(foreach,i,$(SRC6FILES) $(COMMONMISC)$/$(TARGET)$/$i) : $$(@:f) $(LOCALIZESDF)  
     -$(MKDIR) $(@:d)
     -$(RM) $@
-    $(TRANSEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m localize.sdf -l all
+    -$(MKDIRHIER) $(SOLARSRC)$/$(PRJNAME)$/common$(PROEXT)$/misc$/$(PRJNAME)
+    $(WRAPCMD) $(TRANSEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m $(LOCALIZESDF) -l all
     $(RENAME) $@.$(INPATH) $@
     -$(RM) $@.$(INPATH)
 
@@ -316,10 +328,12 @@ $(MISC)$/$(TARGET).$(SRS7NAME).dprr: $(SRC7FILES) $(HIDSRS7PARTICLE) $(HID7FILES
     $(RSC) $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) -I$(INCLOCPRJ)  -I$(INCLOCAL) -I$(INC) -I$(INCCOM) $(RSCDEFS) $(RSCUPDVERDEF) -fp={$(SRS)$/$(SRS7NAME).srs} -fo=$@ -p=$(TARGET) $(SRC7FILES)
 
 .IF "$(WITH_LANG)"!=""
-$(foreach,i,$(SRC7FILES) $(COMMONMISC)$/$(TARGET)$/$i) : $$(@:f) localize.sdf 
+
+$(foreach,i,$(SRC7FILES) $(COMMONMISC)$/$(TARGET)$/$i) : $$(@:f) $(LOCALIZESDF)  
     -$(MKDIR) $(@:d)
     -$(RM) $@
-    $(TRANSEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m localize.sdf -l all
+    -$(MKDIRHIER) $(SOLARSRC)$/$(PRJNAME)$/common$(PROEXT)$/misc$/$(PRJNAME)
+    $(WRAPCMD) $(TRANSEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m $(LOCALIZESDF) -l all
     $(RENAME) $@.$(INPATH) $@
     -$(RM) $@.$(INPATH)
 
@@ -365,10 +379,12 @@ $(MISC)$/$(TARGET).$(SRS8NAME).dprr: $(SRC8FILES) $(HIDSRS8PARTICLE) $(HID8FILES
     $(RSC) $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) -I$(INCLOCPRJ)  -I$(INCLOCAL) -I$(INC) -I$(INCCOM) $(RSCDEFS) $(RSCUPDVERDEF) -fp={$(SRS)$/$(SRS8NAME).srs} -fo=$@ -p=$(TARGET) $(SRC8FILES)
 
 .IF "$(WITH_LANG)"!=""
-$(foreach,i,$(SRC8FILES) $(COMMONMISC)$/$(TARGET)$/$i) : $$(@:f) localize.sdf 
+
+$(foreach,i,$(SRC8FILES) $(COMMONMISC)$/$(TARGET)$/$i) : $$(@:f) $(LOCALIZESDF)  
     -$(MKDIR) $(@:d)
     -$(RM) $@
-    $(TRANSEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m localize.sdf -l all
+    -$(MKDIRHIER) $(SOLARSRC)$/$(PRJNAME)$/common$(PROEXT)$/misc$/$(PRJNAME)
+    $(WRAPCMD) $(TRANSEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m $(LOCALIZESDF) -l all
     $(RENAME) $@.$(INPATH) $@
     -$(RM) $@.$(INPATH)
 
@@ -414,10 +430,12 @@ $(MISC)$/$(TARGET).$(SRS9NAME).dprr: $(SRC9FILES) $(HIDSRS9PARTICLE) $(HID9FILES
     $(RSC) $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) -I$(INCLOCPRJ)  -I$(INCLOCAL) -I$(INC) -I$(INCCOM) $(RSCDEFS) $(RSCUPDVERDEF) -fp={$(SRS)$/$(SRS9NAME).srs} -fo=$@ -p=$(TARGET) $(SRC9FILES)
 
 .IF "$(WITH_LANG)"!=""
-$(foreach,i,$(SRC9FILES) $(COMMONMISC)$/$(TARGET)$/$i) : $$(@:f) localize.sdf 
+
+$(foreach,i,$(SRC9FILES) $(COMMONMISC)$/$(TARGET)$/$i) : $$(@:f) $(LOCALIZESDF)  
     -$(MKDIR) $(@:d)
     -$(RM) $@
-    $(TRANSEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m localize.sdf -l all
+    -$(MKDIRHIER) $(SOLARSRC)$/$(PRJNAME)$/common$(PROEXT)$/misc$/$(PRJNAME)
+    $(WRAPCMD) $(TRANSEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m $(LOCALIZESDF) -l all
     $(RENAME) $@.$(INPATH) $@
     -$(RM) $@.$(INPATH)
 
@@ -463,10 +481,12 @@ $(MISC)$/$(TARGET).$(SRS10NAME).dprr: $(SRC10FILES) $(HIDSRS10PARTICLE) $(HID10F
     $(RSC) $(SRSDEFAULT) $(RSC_SRS_CHARSET) $(RSCFLAGS) -I$(RSCEXTINC) -I$(INCLOCPRJ)  -I$(INCLOCAL) -I$(INC) -I$(INCCOM) $(RSCDEFS) $(RSCUPDVERDEF) -fp={$(SRS)$/$(SRS10NAME).srs} -fo=$@ -p=$(TARGET) $(SRC10FILES)
 
 .IF "$(WITH_LANG)"!=""
-$(foreach,i,$(SRC10FILES) $(COMMONMISC)$/$(TARGET)$/$i) : $$(@:f) localize.sdf 
+
+$(foreach,i,$(SRC10FILES) $(COMMONMISC)$/$(TARGET)$/$i) : $$(@:f) $(LOCALIZESDF)  
     -$(MKDIR) $(@:d)
     -$(RM) $@
-    $(TRANSEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m localize.sdf -l all
+    -$(MKDIRHIER) $(SOLARSRC)$/$(PRJNAME)$/common$(PROEXT)$/misc$/$(PRJNAME)
+    $(WRAPCMD) $(TRANSEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m $(LOCALIZESDF) -l all
     $(RENAME) $@.$(INPATH) $@
     -$(RM) $@.$(INPATH)
 

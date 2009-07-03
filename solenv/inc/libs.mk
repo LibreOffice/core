@@ -56,6 +56,7 @@ ICUDATALIB=-licudata
 I18NUTILLIB=-li18nutil$(COMID)
 .INCLUDE .IGNORE : i18npool$/version.mk
 I18NISOLANGLIB=-li18nisolang$(ISOLANG_MAJOR)$(COMID)
+I18NPAPERLIB=-li18npaper$(DLLPOSTFIX)
 .IF "$(WITH_GPC)"!="NO"
 GPC3RDLIB=-lgpc
 .ENDIF
@@ -355,6 +356,7 @@ ICUUCLIB=icuuc.lib
 ICUDATALIB=icudata.lib
 I18NUTILLIB=ii18nutil.lib
 I18NISOLANGLIB=ii18nisolang.lib
+I18NPAPERLIB=ii18npaper.lib
 .IF "$(WITH_GPC)"!="NO"
 GPC3RDLIB=gpc.lib
 .ENDIF
