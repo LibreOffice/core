@@ -43,6 +43,7 @@
 #include "shell.hxx"
 #include <tools/gen.hxx>
 #include <tools/errcode.hxx>
+#include <vcl/jobset.hxx>
 class SfxBaseController;
 class Size;
 class Fraction;
@@ -266,6 +267,7 @@ public:
     virtual PrintDialog*        CreatePrintDialog( Window *pParent );
     void                        LockPrinter( BOOL bLock = TRUE );
     BOOL                        IsPrinterLocked() const;
+    virtual JobSetup            GetJobSetup() const;
 
     // Workingset
     virtual void                WriteUserData( String&, BOOL bBrowse = FALSE );

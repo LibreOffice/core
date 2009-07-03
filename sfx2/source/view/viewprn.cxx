@@ -628,7 +628,7 @@ void SfxViewShell::ExecPrint( const uno::Sequence < beans::PropertyValue >& rPro
                         makeAny( rtl::OUString( pObjShell->GetTitle(0) ) ) );
 
     // FIXME: job setup
-    JobSetup aJobSetup;
+    JobSetup aJobSetup = GetJobSetup();
     if( bIsDirect )
         aJobSetup.SetValue( String( RTL_CONSTASCII_USTRINGPARAM( "IsQuickJob" ) ),
                             String( RTL_CONSTASCII_USTRINGPARAM( "true" ) ) );
@@ -986,23 +986,11 @@ SfxTabPage* SfxViewShell::CreatePrintOptionsPage
     Window*             /*pParent*/,
     const SfxItemSet&   /*rOptions*/
 )
-
-/*  [Beschreibung]
-
-    Diese Factory-Methode wird vom SFx verwendet, um die TabPage mit den
-    Print-Optionen, welche "uber das <SfxItemSet> am <SfxPrinter>
-    transportiert werden, zu erzeugen.
-
-    Abgeleitete Klassen k"onnen diese Methode also "uberladen um die zu
-    ihren SfxPrinter passenden Einstellungen vorzunehmen. Dieses sollte
-    genau die <SfxTabPage> sein, die auch unter Extras/Einstellungen
-    verwendet wird.
-
-    Die Basisimplementierung liefert einen 0-Pointer.
-*/
-
 {
     return 0;
 }
 
-
+JobSetup SfxViewShell::GetJobSetup() const
+{
+    return JobSetup();
+}
